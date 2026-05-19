@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UGC Creation Flow with AI — Handoff agente</title>
+  <style>
+    :root { --bg: #0f1419; --card: #1a2332; --text: #e7ecf3; --muted: #8b9cb3; --accent: #f97316; --accent2: #a78bfa; --border: #2d3a4d; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; margin: 0; padding: 2rem; max-width: 960px; margin-inline: auto; }
+    h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    h2 { font-size: 1.15rem; margin-top: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.35rem; color: var(--accent); }
+    h3 { font-size: 1rem; color: var(--accent2); margin-top: 1.25rem; }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+    section { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1rem 0; }
+    code, .tree-file { font-family: ui-monospace, monospace; font-size: 0.82rem; background: #0d1117; padding: 0.1em 0.35em; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; }
+    ul { margin: 0.5rem 0; padding-left: 1.25rem; }
+    .badge { display: inline-block; background: #431407; color: #fdba74; padding: 0.15rem 0.5rem; border-radius: 6px; font-size: 0.75rem; margin-right: 0.35rem; }
+    .badge.purple { background: #2e1065; color: #c4b5fd; }
+    .files { columns: 2; column-gap: 1rem; font-size: 0.78rem; }
+    .files .tree-file { display: block; break-inside: avoid; margin-bottom: 0.15rem; }
+    pre.json-link { background: #0d1117; padding: 1rem; border-radius: 8px; overflow-x: auto; font-size: 0.8rem; }
+    a { color: #60a5fa; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>UGC Creation Flow with AI</h1>
+    <p class="meta">Prototipo unificado: Fase 1 canvas de guiones (ScriptCreator) + Fase 2 wizard de contenido IA (ContentCreator) + biblioteca creativa. React + TypeScript + Vite.</p>
+    <p class="meta">Generado: 2026-05-19T18:48:15.115Z · Versión 0.1.0 · <span class="badge">CONFIDENCIAL</span></p>
+    <p class="meta">JSON estructurado: <a href="proyecto.json">agent-handoff/proyecto.json</a></p>
+  </header>
+
+  <section>
+    <h2>Comandos</h2>
+    <ul>
+      <li><code>npm i</code> — instalar dependencias</li>
+      <li><code>npm run dev</code> — servidor de desarrollo (Vite)</li>
+      <li><code>npm run build</code> — build de producción</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Stack</h2>
+    <ul>
+      <li>React 18.3 + TypeScript 5.8</li>
+      <li>Vite 6.3</li>
+      <li>Estilos: Tailwind CSS 4.1, tw-animate-css</li>
+      <li>UI: Radix UI (shadcn-style components); lucide-react icons; motion (Framer Motion successor)</li>
+      <li>Estado: Zustand 5 · Rutas: React Router DOM 6.30</li>
+      <li>Alias <code>@</code> → <code>./src</code></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Rutas (React Router)</h2>
+    <table>
+      <thead><tr><th>Ruta</th><th>Página</th><th>Descripción</th></tr></thead>
+      <tbody><tr><td><code>/</code></td><td>ProductCatalogPage</td><td>Catálogo de productos Dropi</td></tr><tr><td><code>/canvas/:productId</code></td><td>ScriptCreatorPage</td><td>Canvas Fase 1 — nodos perfil/ángulo/hook/guion</td></tr><tr><td><code>/library</code></td><td>BibliotecaCreativaPage</td><td>Índice biblioteca (tabs Copywriting / Creativos)</td></tr><tr><td><code>/library/:productId</code></td><td>ContenidoGeneradoPage</td><td>Videos e imágenes por producto</td></tr></tbody>
+    </table>
+    <h3>Overlays globales</h3>
+    <ul><li><code>CreativeFactoryWizard</code> — Wizard Fase 2 modal sobre cualquier ruta</li><li><code>MonomoWizard</code> — Flujo alternativo con creadores reales</li><li><code>ConfidentialWatermark</code> — Marca de agua confidencial en toda la app</li></ul>
+  </section>
+
+  <section>
+    <h2>Arquitectura por fases</h2>
+    <h3>ScriptCreator <code>src/features/ScriptCreator/</code></h3><p>Canvas con nodos magnéticos: Producto → Perfiles → Ángulos → Hooks → Guiones</p><h3>ContentCreator <code>src/features/ContentCreator/</code></h3><p>Wizard IA: formato → guion → avatar/B-roll → generación → checkout</p>
+    <h3>Directorios</h3>
+    <ul><li><code>src/app</code> — Shell, rutas en App.tsx, componentes UI shadcn, creativos compartidos</li><li><code>src/pages</code> — Wrappers de página por ruta</li><li><code>src/store</code> — Zustand canvasStore + mappers copywriting</li><li><code>src/layouts</code> — LibraryShell (sidebar Dropi)</li><li><code>src/data</code> — mockCatalogProducts</li><li><code>src/styles</code> — index.css, tailwind, theme, fonts</li></ul>
+  </section>
+
+  <section>
+    <h2>Estado global (Zustand)</h2>
+    <p>Archivo: <code>src/store/canvasStore.ts</code></p>
+    <ul><li>currentScript — guion desde ScriptNode, pre-llena Step2ScriptReview</li><li>selectedProfileIds / selectedAngleIds — multi-selección máx 5</li><li>creatives — generados por wizard, usados en biblioteca y canvas</li><li>wizardDrafts — borradores pausados (Ocultar y avisarme)</li><li>showWizard / wizardEntry / variationContext — apertura del asistente</li><li>copywritingByProductId — snapshot canvas por producto (solo sesión)</li><li>brandKits / activeBrandKitId — kits de marca en memoria</li></ul>
+    <p class="meta">main.tsx elimina localStorage key contenido-ia-copywriting al arrancar</p>
+  </section>
+
+  <section>
+    <h2>Wizard Fase 2</h2>
+    <p><code>Step0MethodSelection.tsx</code>: IA → CreativeFactoryWizard · Creators → MonomoWizard</p>
+    <h3>Flujo IA</h3>
+    <ol><li>Step1FormatSelection — video o imagen</li><li>Step2ScriptReview — lee canvasStore.currentScript</li><li>Step3AvatarSelection — avatar o B-roll producto</li><li>Step4VideoGeneration / Step4PostProduction</li><li>Step5VideoPreview / Step6ImageFlow</li><li>Step7Checkout / Step8PaymentValidation</li></ol>
+    <p class="meta">MonomoStep1..13 en steps/monomo/</p>
+  </section>
+
+  <section>
+    <h2>Componentes clave</h2>
+    <h3>canvas</h3><ul><li><code>Canvas.tsx</code></li><li><code>nodes/ProductNode|AvatarNode|AngleNode|HookNode|ScriptNode</code></li><li><code>SelectionToolbar</code></li><li><code>ModalVistaPrevia (tema naranja)</code></li></ul><h3>library</h3><ul><li><code>BibliotecaCreativaPage</code></li><li><code>ContenidoGeneradoPage</code></li><li><code>ModalDetalleCreativo (tema morado)</code></li><li><code>LibraryShell</code></li></ul><h3>shared</h3><ul><li><code>CreativeContentDetailModal</code></li><li><code>ProductSelectionDrawer</code></li><li><code>ConfidentialWatermark</code></li></ul>
+    <h3>Hooks del canvas</h3>
+    <p><code>useCanvasData</code> · <code>useCanvasLayout</code> · <code>useCanvasActions</code> · <code>useCanvasFocus</code> · <code>useCanvasViewport</code> · <code>useCanvasNodeDrag</code> · <code>useMagneticLayout</code> · <code>useCanvasMagneticLayoutSync</code></p>
+  </section>
+
+  <section>
+    <h2>Diseño (Figma)</h2>
+    <ul>
+      <li>Canvas Fase 1: <code>node-id=7723-137767</code></li>
+      <li>Detalles alta fidelidad: <code>node-id=7726-137768</code></li>
+      <li>Wireframes Fase 2: <code>node-id=7727-155085</code></li>
+    </ul>
+    <p>
+      <span class="badge">Canvas</span> acento naranja ·
+      <span class="badge purple">Biblioteca</span> acento morado
+    </p>
+  </section>
+
+  <section>
+    <h2>Documentación en repo</h2>
+    <ul><li><code>PLAN.md</code> — Plan maestro: arquitectura, rutas, store, componentes Figma, tareas</li><li><code>README.md</code> — npm i &amp;&amp; npm run dev</li><li><code>guidelines/Guidelines.md</code> — Plantilla de guidelines (vacía)</li></ul>
+    <p>Ver <code>PLAN.md</code> para diagrama Mermaid del flujo completo entre fases.</p>
+  </section>
+
+  <section>
+    <h2>Archivos fuente (176)</h2>
+    <div class="files"><code class="tree-file">src/app/App.tsx</code>
+<code class="tree-file">src/app/components/ColorPickerInput.tsx</code>
+<code class="tree-file">src/app/components/ConfidentialWatermark.tsx</code>
+<code class="tree-file">src/app/components/CreativeDetailModal.tsx</code>
+<code class="tree-file">src/app/components/MyUGCDashboard.tsx</code>
+<code class="tree-file">src/app/components/ProductResultsDashboard.tsx</code>
+<code class="tree-file">src/app/components/ProductSelectionDrawer.tsx</code>
+<code class="tree-file">src/app/components/UGCLibrary.tsx</code>
+<code class="tree-file">src/app/components/creatives/CreativeContentDetailModal.tsx</code>
+<code class="tree-file">src/app/components/creatives/CreativeExpandOverlay.tsx</code>
+<code class="tree-file">src/app/components/creatives/creativeDetailViewModel.ts</code>
+<code class="tree-file">src/app/components/figma/ImageWithFallback.tsx</code>
+<code class="tree-file">src/app/components/ui/accordion.tsx</code>
+<code class="tree-file">src/app/components/ui/alert-dialog.tsx</code>
+<code class="tree-file">src/app/components/ui/alert.tsx</code>
+<code class="tree-file">src/app/components/ui/aspect-ratio.tsx</code>
+<code class="tree-file">src/app/components/ui/avatar.tsx</code>
+<code class="tree-file">src/app/components/ui/badge.tsx</code>
+<code class="tree-file">src/app/components/ui/breadcrumb.tsx</code>
+<code class="tree-file">src/app/components/ui/button.tsx</code>
+<code class="tree-file">src/app/components/ui/calendar.tsx</code>
+<code class="tree-file">src/app/components/ui/card.tsx</code>
+<code class="tree-file">src/app/components/ui/carousel.tsx</code>
+<code class="tree-file">src/app/components/ui/chart.tsx</code>
+<code class="tree-file">src/app/components/ui/checkbox.tsx</code>
+<code class="tree-file">src/app/components/ui/collapsible.tsx</code>
+<code class="tree-file">src/app/components/ui/command.tsx</code>
+<code class="tree-file">src/app/components/ui/context-menu.tsx</code>
+<code class="tree-file">src/app/components/ui/dialog.tsx</code>
+<code class="tree-file">src/app/components/ui/drawer.tsx</code>
+<code class="tree-file">src/app/components/ui/dropdown-menu.tsx</code>
+<code class="tree-file">src/app/components/ui/form.tsx</code>
+<code class="tree-file">src/app/components/ui/hover-card.tsx</code>
+<code class="tree-file">src/app/components/ui/input-otp.tsx</code>
+<code class="tree-file">src/app/components/ui/input.tsx</code>
+<code class="tree-file">src/app/components/ui/label.tsx</code>
+<code class="tree-file">src/app/components/ui/menubar.tsx</code>
+<code class="tree-file">src/app/components/ui/navigation-menu.tsx</code>
+<code class="tree-file">src/app/components/ui/pagination.tsx</code>
+<code class="tree-file">src/app/components/ui/popover.tsx</code>
+<code class="tree-file">src/app/components/ui/progress.tsx</code>
+<code class="tree-file">src/app/components/ui/radio-group.tsx</code>
+<code class="tree-file">src/app/components/ui/resizable.tsx</code>
+<code class="tree-file">src/app/components/ui/scroll-area.tsx</code>
+<code class="tree-file">src/app/components/ui/select.tsx</code>
+<code class="tree-file">src/app/components/ui/separator.tsx</code>
+<code class="tree-file">src/app/components/ui/sheet.tsx</code>
+<code class="tree-file">src/app/components/ui/sidebar.tsx</code>
+<code class="tree-file">src/app/components/ui/skeleton.tsx</code>
+<code class="tree-file">src/app/components/ui/slider.tsx</code>
+<code class="tree-file">src/app/components/ui/sonner.tsx</code>
+<code class="tree-file">src/app/components/ui/switch.tsx</code>
+<code class="tree-file">src/app/components/ui/table.tsx</code>
+<code class="tree-file">src/app/components/ui/tabs.tsx</code>
+<code class="tree-file">src/app/components/ui/textarea.tsx</code>
+<code class="tree-file">src/app/components/ui/toggle-group.tsx</code>
+<code class="tree-file">src/app/components/ui/toggle.tsx</code>
+<code class="tree-file">src/app/components/ui/tooltip.tsx</code>
+<code class="tree-file">src/app/components/ui/use-mobile.ts</code>
+<code class="tree-file">src/app/components/ui/utils.ts</code>
+<code class="tree-file">src/data/mockCatalogProducts.ts</code>
+<code class="tree-file">src/features/ContentCreator/BrandKitEditorModal.tsx</code>
+<code class="tree-file">src/features/ContentCreator/CreativeFactoryWizard.tsx</code>
+<code class="tree-file">src/features/ContentCreator/ImportSourceModal.tsx</code>
+<code class="tree-file">src/features/ContentCreator/ModalDetalleCreativo.tsx</code>
+<code class="tree-file">src/features/ContentCreator/MonomoWizard.tsx</code>
+<code class="tree-file">src/features/ContentCreator/ProductDrawer.tsx</code>
+<code class="tree-file">src/features/ContentCreator/Stepper.tsx</code>
+<code class="tree-file">src/features/ContentCreator/index.ts</code>
+<code class="tree-file">src/features/ContentCreator/scriptTiming.ts</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step0MethodSelection.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step1FormatSelection.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step2ScriptReview.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step3AvatarSelection.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step4PostProduction.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step4VideoGeneration.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step5VideoPreview.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step6ImageFlow.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step7Checkout.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/Step8PaymentValidation.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/StepVideoKeyframePreview.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep10OfferParticipants.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep11MonomoIntegration.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep12Checkout.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep13PaymentValidation.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep1NeedType.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep2ProjectName.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep3ContentType.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep4ParticipantAction.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep5ProjectStyle.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep6ScriptReview.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep7PhotoSession.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep8CreatorProfile.tsx</code>
+<code class="tree-file">src/features/ContentCreator/steps/monomo/MonomoStep9BudgetDistribution.tsx</code>
+<code class="tree-file">src/features/ContentCreator/videoPricing.ts</code>
+<code class="tree-file">src/features/ScriptCreator/AIContentLibrary.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/AIContentLibraryHeader.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/AIContentView.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/Canvas.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/CanvasOnboardingOverlay.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/CanvasSecurityAlert.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/ConnectionLine.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/CustomZoomPan.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/GenerateContentButton.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/HelpPanel.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/MagneticIndicator.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/Minimap.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/ModalVistaPrevia.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/ProductCard.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/ProductCatalog.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/ProductDetail.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/ProductDetailView.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/ProductHeader.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/ProductImageGallery.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/SelectionToolbar.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/SidebarWrapper.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/SmartTag.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/SparklesAnimated.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/Tooltip.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/canvasLinkage.ts</code>
+<code class="tree-file">src/features/ScriptCreator/canvasScriptGeneration.ts</code>
+<code class="tree-file">src/features/ScriptCreator/canvasThemedScripts.ts</code>
+<code class="tree-file">src/features/ScriptCreator/canvasTypes.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useCanvasActions.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useCanvasAutoExpand.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useCanvasData.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useCanvasFocus.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useCanvasLayout.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useCanvasLayoutConstants.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useCanvasMagneticLayoutSync.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useCanvasNodeDrag.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useCanvasViewport.ts</code>
+<code class="tree-file">src/features/ScriptCreator/hooks/useMagneticLayout.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/Confidencial.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/Default.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/Escenario4InsigniaVisibleEnDetalleDelProducto.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/Frame1321316947.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/Frame1321317902.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/Frame1321317968.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/GenerarContenido.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/IconFillSparksIaAnimated.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/Id.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/Insignia.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/Sidebar.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/TooltipOficial.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-1k33a4bxec.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-2y9jhl2nm1.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-4bzq0ou13z.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-9b64qg02el.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-bjg6fvqd13.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-gowx3u2wup.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-k1dgbr3oax.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-op1enl3np6.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-qf0od442kf.ts</code>
+<code class="tree-file">src/features/ScriptCreator/imports/svg-vow24yruii.ts</code>
+<code class="tree-file">src/features/ScriptCreator/nodes/AngleNode.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/nodes/AvatarNode.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/nodes/HookNode.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/nodes/ProductNode.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/nodes/ScriptNode.tsx</code>
+<code class="tree-file">src/features/ScriptCreator/productCanvasTheme.ts</code>
+<code class="tree-file">src/features/ScriptCreator/productImages.ts</code>
+<code class="tree-file">src/features/ScriptCreator/sensitiveNicheDetector.ts</code>
+<code class="tree-file">src/layouts/LibraryShell.tsx</code>
+<code class="tree-file">src/main.tsx</code>
+<code class="tree-file">src/pages/BibliotecaCreativaPage.tsx</code>
+<code class="tree-file">src/pages/ContenidoGeneradoPage.tsx</code>
+<code class="tree-file">src/pages/ProductCatalogPage.tsx</code>
+<code class="tree-file">src/pages/ScriptCreatorPage.tsx</code>
+<code class="tree-file">src/store/canvasScriptMapper.ts</code>
+<code class="tree-file">src/store/canvasStore.ts</code>
+<code class="tree-file">src/store/copywritingSnapshot.ts</code>
+<code class="tree-file">src/styles/fonts.css</code>
+<code class="tree-file">src/styles/index.css</code>
+<code class="tree-file">src/styles/tailwind.css</code>
+<code class="tree-file">src/styles/theme.css</code></div>
+  </section>
+
+  <section>
+    <h2>Árbol completo (211 archivos)</h2>
+    <p class="meta">Incluye assets PNG, configs y docs. Lista completa en <a href="proyecto.json">proyecto.json</a> → <code>fileTree</code>.</p>
+  </section>
+
+  <section>
+    <h2>Instrucciones para el agente receptor</h2>
+    <ol>
+      <li>Leer <code>PLAN.md</code> y este handoff antes de modificar código.</li>
+      <li>Respetar alias <code>@/</code> y convenciones shadcn en <code>src/app/components/ui/</code>.</li>
+      <li>El wizard es overlay: no añadir rutas nuevas sin actualizar <code>App.tsx</code>.</li>
+      <li>Estado de sesión en Zustand; no hay backend real en el prototipo.</li>
+      <li>Fidelidad visual a Figma; temas naranja (canvas) vs morado (biblioteca).</li>
+      <li>Multi-selección en canvas: máximo 5 perfiles+ángulos combinados.</li>
+    </ol>
+  </section>
+</body>
+</html>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Settings2, RotateCcw, Activity } from "lucide-react";
+import Link from "next/link";
+import { Settings2, RotateCcw, Activity, Zap } from "lucide-react";
 
 export function AdminLabControls() {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,6 +44,16 @@ export function AdminLabControls() {
               <Activity className="w-4 h-4 text-emerald-400" />
               Simular: {hasBodega ? "Sin Bodegas" : "Con Bodegas"}
             </button>
+            <div className="border-t border-zinc-700 pt-2 mt-1">
+              <p className="text-[10px] text-zinc-500 mb-2">Variantes de activación</p>
+              <Link
+                href="/onboarding/activacion-guiada"
+                className="w-full flex items-center gap-2 px-3 py-2 text-sm bg-zinc-800 hover:bg-zinc-700 rounded-md transition-colors border border-zinc-700"
+              >
+                <Zap className="w-4 h-4 text-yellow-400" />
+                Activación Guiada (Var. D)
+              </Link>
+            </div>
             <p className="text-[10px] text-zinc-500 mt-2">
               Usa estos controles para iterar rápidamente sobre flujos sin borrar cookies manualmente.
             </p>

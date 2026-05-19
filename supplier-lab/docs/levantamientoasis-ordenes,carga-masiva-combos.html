@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>AS-IS · Órdenes masivas para combos</title>
+<style>
+:root{
+  --bg:#f4f5f8;--card:#fff;--text:#303746;--muted:#697386;--line:#e2e6ee;
+  --orange:#ff7a21;--orangeSoft:#fff3ea;--green:#22c987;--greenSoft:#eafaf3;
+  --red:#ef5b5b;--redSoft:#fff1f1;--blue:#2563eb;--blueSoft:#eef4ff;
+  --yellow:#f7b733;--yellowSoft:#fff8e8;--purple:#7c5cff;--purpleSoft:#f3f0ff;
+  --shadow:0 10px 30px rgba(30,40,60,.08)
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
+.topbar{height:72px;background:#151515;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:10;box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.brand{display:flex;align-items:center;gap:16px}.brand img{height:34px}.brand strong{display:block;font-size:16px}.brand span{display:block;color:#b8bec8;font-size:12px;margin-top:2px}.divider{width:1px;height:30px;background:rgba(255,255,255,.18)}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);height:34px;padding:0 12px;border-radius:999px;font-size:12px;font-weight:900}.dot{width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 6px rgba(255,122,33,.15)}
+.layout{display:grid;grid-template-columns:280px 1fr}.side{background:#fff;border-right:1px solid var(--line);padding:22px 16px;position:sticky;top:72px;height:calc(100vh - 72px);overflow:auto}
+.side h4{color:#9aa3b2;font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 12px 8px}.nav{display:grid;gap:4px}.nav a{color:#566073;text-decoration:none;display:flex;gap:10px;align-items:center;min-height:38px;padding:9px 10px;border-radius:10px;font-size:13px;font-weight:800}.nav a:hover{color:var(--orange);background:var(--orangeSoft)}.nav b{width:22px;height:22px;border-radius:8px;background:#f1f3f6;display:grid;place-items:center;font-size:12px}
+.note{margin-top:20px;border:1px dashed #ffc18e;background:#fff8f0;color:#8a5a34;border-radius:14px;padding:14px;font-size:12px;line-height:1.45;font-weight:750}
+.main{padding:30px;min-width:0}.hero{background:radial-gradient(circle at 84% 22%,rgba(255,122,33,.14),transparent 24%),linear-gradient(135deg,#fff,#fff8f2);border:1px solid #ffd3ad;border-radius:22px;padding:28px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 360px;gap:22px;align-items:center;margin-bottom:22px}
+.eyebrow{display:inline-flex;padding:7px 10px;border-radius:999px;background:var(--orangeSoft);border:1px solid #ffc18e;color:#c65d13;font-size:12px;font-weight:950;margin-bottom:14px}
+h1{margin:0;font-size:42px;line-height:1;letter-spacing:-1.4px}.hero p{color:#637086;line-height:1.5;font-size:16px;margin:16px 0 0;max-width:900px}
+.hero-card,.section{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.hero-card{padding:18px}.hero-card h3{margin:0 0 10px;font-size:16px}.metric{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}.metric:last-child{border-bottom:0}.metric span{color:var(--muted)}.metric strong{text-align:right}
+.section{margin-bottom:20px;overflow:hidden}.head{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start;background:#fbfcfe}.head h2{margin:0;font-size:22px;letter-spacing:-.5px}.head p{margin:6px 0 0;color:var(--muted);font-size:14px;line-height:1.45}.body{padding:22px}
+.badge{display:inline-flex;align-items:center;border-radius:999px;padding:7px 10px;font-size:12px;font-weight:950;white-space:nowrap}.orange{background:var(--orangeSoft);color:#c65d13;border:1px solid #ffc18e}.green{background:var(--greenSoft);color:#0b8c5a;border:1px solid #bcebd4}.red{background:var(--redSoft);color:#b42323;border:1px solid #ffd0d0}.blue{background:var(--blueSoft);color:#1d4ed8;border:1px solid #c8dbff}.yellow{background:var(--yellowSoft);color:#9a6507;border:1px solid #ffe1a3}.purple{background:var(--purpleSoft);color:#5b3ee6;border:1px solid #d8ceff}
+.flow{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}.flow-step{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff;min-height:116px;position:relative}.flow-step:not(:last-child):after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);color:#a6aeba;font-weight:900}.num{width:30px;height:30px;border-radius:10px;background:var(--orangeSoft);color:var(--orange);display:grid;place-items:center;font-weight:950;font-size:13px;margin-bottom:10px}.flow-step strong{display:block;font-size:13px;line-height:1.25;margin-bottom:6px}.flow-step span{color:var(--muted);font-size:12px;line-height:1.35;display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fff}.card h3{margin:0 0 12px;font-size:17px}.card p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:11px 10px;text-align:left;vertical-align:top}th{color:#5c6677;background:#f7f8fa;font-size:12px;text-transform:uppercase;letter-spacing:.04em}tr:last-child td{border-bottom:0}.yes{color:#0b8c5a;font-weight:900}.partial{color:#9a6507;font-weight:900}.no{color:#b42323;font-weight:900}.unknown{color:#5b3ee6;font-weight:900}
+.product-screen{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;border:1px solid var(--line);border-radius:18px;background:#fff;padding:18px}.product-img{height:390px;border-radius:14px;background:linear-gradient(135deg,#f3eadb,#d7c0a0);display:grid;place-items:center;color:#fff;font-size:24px;font-weight:900}.thumbs{display:flex;gap:14px;margin-top:12px}.thumb{width:90px;height:70px;border-radius:10px;background:linear-gradient(135deg,#f3eadb,#d7c0a0);border:2px solid var(--orange)}.prod-pill{display:inline-flex;border:1px solid #c9d4e8;border-radius:9px;padding:7px 10px;font-size:12px;font-weight:850;margin-right:8px}.combo{background:#58a8f7;color:#fff;border:0}.prod-title{font-size:26px;line-height:1.1;margin:14px 0 4px}.price-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}.price-label{color:#929aab;font-size:13px}.price-value{font-size:20px;font-weight:950}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:1px solid #ffc18e;background:#fff;color:var(--orange);border-radius:10px;padding:12px 14px;font-weight:950}.btn.primary{background:var(--orange);color:#fff}.icon-btn{width:44px;height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;display:grid;place-items:center;color:#5d6678;font-weight:900}
+.stock-card{border:1px solid var(--line);border-radius:14px;margin-top:18px;overflow:hidden}.stock-head{display:flex;justify-content:space-between;padding:14px 16px;border-bottom:1px solid var(--line);font-weight:900}.stock-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);font-size:13px}.stock-row:last-child{border-bottom:0}.included{margin-top:18px}.included-card{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center}.mini-img{width:58px;height:58px;border-radius:10px;background:linear-gradient(135deg,#e7edf8,#c9d5e6)}
+.sheet{border:1px solid #c9d1dc;background:#fff;border-radius:14px;overflow:auto}.sheet-top{display:flex;align-items:center;gap:14px;background:#f1f4f8;border-bottom:1px solid #c9d1dc;padding:14px 18px}.sheet-icon{width:34px;height:34px;border-radius:8px;background:#19a566;color:#fff;display:grid;place-items:center;font-weight:900}.sheet-title{font-size:20px;font-weight:900}.toolbar{height:44px;background:#eef2f7;border-bottom:1px solid #d6dde8;display:flex;align-items:center;padding:0 14px;gap:12px;color:#4d5668}.sheet-table{min-width:1550px;width:100%;border-collapse:collapse;font-family:Arial,sans-serif}.sheet-table th{background:#f8fafc;color:#111;font-size:14px;text-transform:none;letter-spacing:0;border:1px solid #d6d6d6;padding:7px;text-align:left;white-space:nowrap}.sheet-table td{border:1px solid #e0e0e0;padding:8px;color:#111;font-size:14px;height:32px}.selected-cell{outline:3px solid #2878ff;position:relative}.selected-cell:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:#2878ff;right:-6px;bottom:-6px}
+.upload-modal{background:rgba(20,25,35,.42);border-radius:18px;padding:26px;min-height:420px;display:grid;place-items:center}.modal-card{background:#fff;border-radius:10px;box-shadow:0 20px 80px rgba(0,0,0,.25);width:min(820px,100%);padding:26px}.modal-card h3{margin:0 0 20px;font-size:19px;line-height:1.25;color:#303746}.modal-row{display:flex;justify-content:space-between;gap:18px;color:#687386;margin-bottom:16px}.dropzone{border:2px dashed #d5dbe5;border-radius:10px;min-height:210px;display:grid;place-items:center;text-align:center;color:#4d5668}.process{height:40px;background:#099bc3;color:#fff;border-radius:4px;display:grid;place-items:center;font-weight:900;margin-top:16px}
+.error-table{border:1px solid #c9d1dc;background:#fff;border-radius:14px;overflow:auto}.error-table table{min-width:1200px}.error-table th{background:#f8fafc;color:#111;font-size:14px;text-transform:none;letter-spacing:0;border:1px solid #d6d6d6}.error-table td{border:1px solid #e0e0e0;color:#111;font-size:14px}.error-msg{font-weight:800;color:#111;white-space:nowrap}
+.issue-list{display:grid;gap:12px}.issue{border:1px solid var(--line);border-left:5px solid var(--orange);border-radius:14px;padding:15px;background:#fff}.issue.red{border-left-color:var(--red)}.issue.yellow{border-left-color:var(--yellow)}.issue.purple{border-left-color:var(--purple)}.issue.blue{border-left-color:var(--blue)}.issue.green{border-left-color:var(--green)}.issue h3{margin:0 0 7px;font-size:16px}.issue p{margin:0;color:var(--muted);line-height:1.45;font-size:14px}
+.questions{columns:2;column-gap:24px;margin:0;padding-left:20px}.questions li{break-inside:avoid;margin-bottom:9px;color:#4e596b;line-height:1.35;font-size:14px}.summary{background:#111827;color:#e9edf5;border-radius:18px;padding:20px;font-size:14px;line-height:1.6;overflow:auto}.summary code{color:#ffd2a8;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}.decision-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.decision-card{border:1px solid var(--line);border-radius:16px;padding:18px;background:#fff}.decision-card h3{margin:0 0 10px;font-size:17px}.decision-card p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}.decision-card strong{color:var(--text)}
+@media(max-width:1240px){.flow{grid-template-columns:1fr 1fr}.flow-step:after{display:none}.hero,.grid2,.product-screen{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}}
+@media(max-width:860px){.topbar{height:auto;min-height:72px;align-items:flex-start;flex-direction:column;padding:16px}.layout{grid-template-columns:1fr}.side{position:relative;top:0;height:auto}.main{padding:18px}.hero h1{font-size:34px}.flow{grid-template-columns:1fr}.questions{columns:1}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <img src="https://d1l4mzebo786pw.cloudfront.net/image/input/white-labels/1/logos/secondary_logo/logo-naranja.png" alt="Dropi"/>
+    <div class="divider"></div>
+    <div><strong>AS-IS · Órdenes masivas para combos</strong><span>Documentación progresiva del flujo actual</span></div>
+  </div>
+  <div class="pill"><span class="dot"></span> Proyecto Combos · Flujo Dropshipper</div>
+</header>
+
+<div class="layout">
+<aside class="side">
+  <h4>Contenido</h4>
+  <nav class="nav">
+    <a href="#contexto"><b>01</b> Contexto</a>
+    <a href="#flujo"><b>02</b> Flujo observado</a>
+    <a href="#detalle-variable"><b>03</b> Combo variable</a>
+    <a href="#detalle-simple"><b>04</b> Combo simple</a>
+    <a href="#formato"><b>05</b> Formato masivo</a>
+    <a href="#upload"><b>06</b> Carga archivo</a>
+    <a href="#errores"><b>07</b> Archivo de errores</a>
+    <a href="#segundo-intento"><b>08</b> Segundo intento</a>
+    <a href="#campos"><b>09</b> Campos plantilla</a>
+    <a href="#observaciones"><b>10</b> Observaciones</a>
+    <a href="#insight-comportamiento"><b>11</b> Insight clave</a>
+    <a href="#preguntas"><b>12</b> Pendientes</a>
+    <a href="#resumen"><b>13</b> Resumen</a>
+  </nav>
+  <div class="note">Actualizado con dos intentos de carga: primero el sistema solicita combo_combination_id; luego, al agregar el identificador correcto que el front muestra para la combinación, el sistema devuelve que las variaciones 133 y 102 no pertenecen a los productos correspondientes. El flujo queda bloqueado por validación del sistema.</div>
+</aside>
+
+<main class="main">
+<section class="hero" id="contexto">
+  <div>
+    <span class="eyebrow">🧾 AS-IS · Órdenes masivas</span>
+    <h1>Carga de órdenes masivas para productos tipo combo</h1>
+    <p>Este flujo pertenece al proyecto de combos. Se documenta desde la perspectiva del <strong>dropshipper</strong>, que toma combos ya creados en el catálogo y prepara una orden masiva usando el formato descargable desde el detalle del producto. En el intento actual se cargan dos filas: una para combo variable y otra para combo simple.</p>
+  </div>
+  <div class="hero-card">
+    <h3>Productos usados en el test</h3>
+    <div class="metric"><span>Combo variable</span><strong>ID 2152017</strong></div>
+    <div class="metric"><span>Nombre</span><strong>Producto Variable 146 Stock</strong></div>
+    <div class="metric"><span>Combo simple</span><strong>ID 2151821</strong></div>
+    <div class="metric"><span>Nombre</span><strong>Combo Simple 47 Stock</strong></div>
+    <div class="metric"><span>Resultado 1</span><strong>Error por combo_combination_id</strong></div>
+    <div class="metric"><span>Resultado 2</span><strong>Rechaza identificador correcto</strong></div>
+  </div>
+</section>
+
+<section class="section" id="flujo">
+  <div class="head"><div><h2>Flujo observado hasta ahora</h2><p>Secuencia documentada para el intento de orden masiva con combo simple y variable.</p></div><span class="badge orange">AS-IS parcial</span></div>
+  <div class="body">
+    <div class="flow">
+      <div class="flow-step"><div class="num">1</div><strong>Entrar al producto</strong><span>El dropshipper abre el detalle del combo para consultar el ID.</span></div>
+      <div class="flow-step"><div class="num">2</div><strong>Descargar formato</strong><span>Desde la acción ubicada junto al botón de corazón.</span></div>
+      <div class="flow-step"><div class="num">3</div><strong>Diligenciar archivo</strong><span>Se agregan dos filas: combo variable y combo simple.</span></div>
+      <div class="flow-step"><div class="num">4</div><strong>Cargar archivo</strong><span>Desde Mis Pedidos, modal de Formato de órdenes Masivas.</span></div>
+      <div class="flow-step"><div class="num">5</div><strong>Procesar</strong><span>El sistema procesa el archivo XLS/XLSX.</span></div>
+      <div class="flow-step"><div class="num">6</div><strong>Descargar errores</strong><span>El sistema genera archivo con filas que fallaron.</span></div>
+      <div class="flow-step"><div class="num">7</div><strong>Primer error</strong><span>Debe indicar combo_combination_id para ambos combos.</span></div>
+      <div class="flow-step"><div class="num">8</div><strong>Segundo error</strong><span>Al agregar el identificador correcto del front, el sistema indica que la variación no pertenece al producto.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="detalle-variable">
+  <div class="head"><div><h2>Detalle del producto tipo combo variable</h2><p>Vista recreada del producto desde donde se obtiene el ID del combo variable.</p></div><span class="badge blue">Producto 1</span></div>
+  <div class="body">
+    <div class="product-screen">
+      <div>
+        <div class="product-img">Imagen principal del combo</div>
+        <div class="thumbs"><div class="thumb"></div><div class="thumb" style="opacity:.65"></div><div class="thumb" style="opacity:.45"></div></div>
+        <div class="included">
+          <h3>Productos incluidos</h3>
+          <div class="included-card"><div class="mini-img"></div><div><span class="prod-pill">ID: 2088171</span><span class="prod-pill combo">Variable</span><br/><strong>Batería Portátil Solar</strong></div></div>
+        </div>
+      </div>
+
+      <div>
+        <span class="prod-pill">ID: 2152017</span><span class="prod-pill combo">Combo</span>
+        <h2 class="prod-title">Producto Variable 146 Stock</h2>
+        <div style="color:#8b94a7">SKU: 123456</div>
+        <div style="margin-top:12px"><span class="prod-pill" style="background:#f1f3f7">Bisutería</span></div>
+        <div style="margin-top:22px">Tipo de producto: <strong>Combo</strong></div>
+
+        <div class="price-grid">
+          <div><div class="price-label">Precio del proveedor</div><div class="price-value" style="color:#9198aa">$ 74.000</div></div>
+          <div><div class="price-label">Precio sugerido</div><div class="price-value">$ 74.000</div></div>
+        </div>
+
+        <div>Producto disponible en: <strong>Cali</strong></div>
+        <div style="margin-top:8px">Stock <span class="yes">38</span> <span class="prod-pill" style="background:#f3f4f7;border:0">Stock Privado: 0</span></div>
+
+        <div class="actions">
+          <button class="btn primary">Enviar al cliente</button>
+          <button class="btn">Solicitar muestra</button>
+          <button class="btn">Ver informe</button>
+          <button class="btn">Calculadora de flete</button>
+          <button class="icon-btn" title="Descargar formato orden masiva">⇩</button>
+          <button class="icon-btn">♡</button>
+          <button class="icon-btn">↗</button>
+        </div>
+
+        <div class="stock-card">
+          <div class="stock-head"><span>Stock por variantes</span><span>⌃</span></div>
+          <div class="stock-row" style="font-weight:900;color:#596176"><div>Id</div><div>Existencia</div><div>Precio sugerido</div></div>
+          <div class="stock-row"><div><span class="prod-pill">ID: 133</span></div><div class="yes">38</div><div>$ 75.000</div></div>
+          <div class="stock-row" style="grid-template-columns:1fr"><div>Batería Portátil Solar · Cantidad: 1 · Color: Negro<br/>EARCUF · Cantidad: 1 · Color: Plateado, Tamaño: Grande</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="detalle-simple">
+  <div class="head"><div><h2>Detalle del producto tipo combo simple</h2><p>Segundo producto agregado al archivo de órdenes masivas.</p></div><span class="badge blue">Producto 2</span></div>
+  <div class="body">
+    <div class="product-screen">
+      <div>
+        <div class="product-img">Imagen principal del combo simple</div>
+        <div class="thumbs"><div class="thumb"></div><div class="thumb" style="opacity:.65"></div><div class="thumb" style="opacity:.45"></div></div>
+        <div class="included">
+          <h3>Productos incluidos</h3>
+          <div class="included-card"><div class="mini-img"></div><div><span class="prod-pill">ID: 1727042</span><br/><strong>Correa para perrito 2</strong></div></div>
+        </div>
+      </div>
+
+      <div>
+        <span class="prod-pill">ID: 2151821</span><span class="prod-pill combo">Combo</span>
+        <h2 class="prod-title">Combo Simple 47 Stock</h2>
+        <div style="color:#8b94a7">SKU: ffdfgdfg</div>
+        <div style="margin-top:12px"><span class="prod-pill" style="background:#f1f3f7">Ropa Deportiva</span></div>
+        <div style="margin-top:22px">Tipo de producto: <strong>Combo</strong></div>
+
+        <div class="price-grid">
+          <div><div class="price-label">Precio del proveedor</div><div class="price-value" style="color:#9198aa">$ 19.000</div></div>
+          <div><div class="price-label">Precio sugerido</div><div class="price-value">$ 25.000</div></div>
+        </div>
+
+        <div>Producto disponible en: <strong>Cali</strong></div>
+        <div style="margin-top:8px">Stock <span class="yes">47</span> <span class="prod-pill" style="background:#f3f4f7;border:0">Stock Privado: 0</span></div>
+
+        <div class="actions">
+          <button class="btn primary">Enviar al cliente</button>
+          <button class="btn">Solicitar muestra</button>
+          <button class="btn">Ver informe</button>
+          <button class="btn">Calculadora de flete</button>
+          <button class="icon-btn" title="Descargar formato orden masiva">⇩</button>
+          <button class="icon-btn">♡</button>
+          <button class="icon-btn">↗</button>
+        </div>
+
+        <div class="stock-card">
+          <div class="stock-head"><span>Stock por variantes</span><span>⌃</span></div>
+          <div class="stock-row" style="font-weight:900;color:#596176"><div>Id</div><div>Existencia</div><div>Precio sugerido</div></div>
+          <div class="stock-row"><div><span class="prod-pill">ID: 102</span></div><div class="yes">47</div><div>$ 25.000</div></div>
+          <div class="stock-row" style="grid-template-columns:1fr"><div>prueba · Cantidad: 1</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="formato">
+  <div class="head"><div><h2>Formato diligenciado</h2><p>Archivo con dos filas: una para combo variable y otra para combo simple.</p></div><span class="badge green">Archivo XLSX</span></div>
+  <div class="body">
+    <div class="sheet">
+      <div class="sheet-top">
+        <div class="sheet-icon">▦</div>
+        <div>
+          <div class="sheet-title">FORMATO-DE-ORDENES-MASIVAS-ID(2152017)-Producto Variable 146 stock</div>
+          <div style="color:#677386;font-size:13px;margin-top:3px">Archivo .XLSX</div>
+        </div>
+      </div>
+      <div class="toolbar">↶ ↷ 🖨 100% &nbsp; $ % 123 &nbsp; B I S &nbsp; ⋮</div>
+      <table class="sheet-table">
+        <thead>
+          <tr>
+            <th>NOMBRES</th>
+            <th>APELLIDOS</th>
+            <th>DIRECCION</th>
+            <th>DEPARTAMENTO</th>
+            <th>CIUDAD</th>
+            <th>TELEFONO</th>
+            <th>ID DE PRODUCTO</th>
+            <th>CANTIDAD</th>
+            <th>PRECIO TOTAL (SIN PUNTOS NI COMAS)</th>
+            <th>CON RECAUDO</th>
+            <th>NOTA</th>
+            <th>EMAIL (NO OBLIGATORIO)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Jaime</td>
+            <td>Guevara</td>
+            <td>kra 56 # 7 o</td>
+            <td>Valle</td>
+            <td>Cali</td>
+            <td>322440078</td>
+            <td>2152017</td>
+            <td>2</td>
+            <td>80000</td>
+            <td>SI</td>
+            <td>N/A</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Jaime</td>
+            <td>Guevara</td>
+            <td>kra 56 # 7 o</td>
+            <td>Valle</td>
+            <td>Cali</td>
+            <td>322440078</td>
+            <td>2151821</td>
+            <td>1</td>
+            <td>74000</td>
+            <td>SI</td>
+            <td>N/A</td>
+            <td></td>
+          </tr>
+          <tr><td colspan="12" style="height:32px"></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="upload">
+  <div class="head"><div><h2>Carga del archivo de órdenes masivas</h2><p>Modal desde Mis Pedidos para cargar el archivo XLS/XLSX.</p></div><span class="badge blue">Procesamiento</span></div>
+  <div class="body">
+    <div class="upload-modal">
+      <div class="modal-card">
+        <h3>Se descargará un archivo con las filas donde hubo errores. Puede usar ese archivo para cargar las órdenes nuevamente; una vez que lo haya corregido. RECUERDE QUE SI HUBO ERRORES, NO DEBE VOLVER A CARGAR EL MISMO ARCHIVO QUE VA A SELECCIONAR DEBAJO, YA QUE LOS PEDIDOS SERÁN REPETIDOS.</h3>
+        <div class="modal-row">
+          <span style="color:#008ad6">Formato de órdenes Masivas</span>
+          <span>Formatos permitidos: XLS, XLSX</span>
+        </div>
+        <div class="dropzone">
+          <div>
+            <div style="font-size:34px;margin-bottom:12px">⇧</div>
+            <strong>Arrastra y suelta un archivo aquí</strong>
+            <div style="margin:18px 0;color:#687386">o</div>
+            <strong style="color:var(--orange)">Selecciona un archivo</strong>
+          </div>
+        </div>
+        <div class="process">Procesar</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="errores">
+  <div class="head"><div><h2>Archivo de errores generado</h2><p>Resultado observado después de procesar el archivo con las dos filas.</p></div><span class="badge red">Error</span></div>
+  <div class="body">
+    <div class="error-table">
+      <table>
+        <thead>
+          <tr>
+            <th>NOMBRES</th>
+            <th>APELLIDOS</th>
+            <th>DIRECCION</th>
+            <th>DEPARTAMENTO</th>
+            <th>CIUDAD</th>
+            <th>TELEFONO</th>
+            <th>ID DE PRODUCTO</th>
+            <th>CANTIDAD</th>
+            <th>PRECIO TOTAL</th>
+            <th>CON RECAUDO</th>
+            <th>NOTA</th>
+            <th>EMAIL</th>
+            <th>TRANSPORTADORA (OPCIONAL)</th>
+            <th>CEDULA (OPCIONAL)</th>
+            <th>COLONIA (OPCIONAL)</th>
+            <th>ERROR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Jaime</td><td>Guevara</td><td>kra 56 # 7 o</td><td>Valle</td><td>Cali</td><td>322440078</td><td>2152017</td><td>2</td><td>80000</td><td>SI</td><td>N/A</td><td></td><td></td><td></td><td></td>
+            <td class="error-msg">Debe indicar la combinación del combo (combo_combination_id) para el producto Producto Variable 146 stock</td>
+          </tr>
+          <tr>
+            <td>Jaime</td><td>Guevara</td><td>kra 56 # 7 o</td><td>Valle</td><td>Cali</td><td>322440078</td><td>2151821</td><td>1</td><td>74000</td><td>SI</td><td>N/A</td><td></td><td></td><td></td><td></td>
+            <td class="error-msg">Debe indicar la combinación del combo (combo_combination_id) para el producto combo simple 47 stock</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="height:18px"></div>
+    <div class="grid2">
+      <div class="card">
+        <h3>Error observado en combo variable</h3>
+        <p>El archivo de errores indica que debe informarse <strong>combo_combination_id</strong> para el producto <strong>Producto Variable 146 stock</strong>.</p>
+      </div>
+      <div class="card">
+        <h3>Error observado en combo simple</h3>
+        <p>El archivo de errores también solicita <strong>combo_combination_id</strong> para el producto <strong>combo simple 47 stock</strong>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="segundo-intento">
+  <div class="head"><div><h2>Segundo intento: usando el identificador correcto de la combinación</h2><p>Después del primer error, se agrega el identificador que el front muestra para la combinación/variación del combo. Aunque el dato corresponde al identificador visible en el producto, el sistema lo rechaza.</p></div><span class="badge red">Error bloqueante</span></div>
+  <div class="body">
+    <div class="grid2">
+      <div class="card">
+        <h3>Datos agregados desde el front</h3>
+        <table>
+          <thead><tr><th>Producto</th><th>ID producto</th><th>ID de variable agregado</th></tr></thead>
+          <tbody>
+            <tr><td>Producto Variable 146 stock</td><td>2152017</td><td><strong>133</strong></td></tr>
+            <tr><td>combo simple 47 stock</td><td>2151821</td><td><strong>102</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Resultado del procesamiento</h3>
+        <p>El proceso no continúa. El archivo de errores devuelve que las variaciones indicadas no pertenecen a los productos usados en la orden masiva, aun cuando se usaron los identificadores correctos visibles en la interfaz.</p>
+      </div>
+    </div>
+
+    <div style="height:18px"></div>
+
+    <div class="error-table">
+      <table>
+        <thead>
+          <tr>
+            <th>ID DE PRODUCTO</th>
+            <th>ID DE VARIABLE (OPCIONAL)</th>
+            <th>ERROR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>2152017</td>
+            <td>133</td>
+            <td class="error-msg">La variation 133 no pertenece al producto 2152017</td>
+          </tr>
+          <tr>
+            <td>2151821</td>
+            <td>102</td>
+            <td class="error-msg">La variation 102 no pertenece al producto 2151821</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="height:18px"></div>
+
+    <div class="issue-list">
+      <div class="issue red">
+        <h3>El flujo queda bloqueado</h3>
+        <p>Después de agregar los IDs de variable, el sistema sigue devolviendo error y no permite continuar con la creación de órdenes masivas para los combos probados.</p>
+      </div>
+      <div class="issue yellow">
+        <h3>El identificador visible no parece ser suficiente</h3>
+        <p>Los IDs 133 y 102 fueron usados como ID de variable, pero el sistema responde que esas variaciones no pertenecen a los productos 2152017 y 2151821 respectivamente.</p>
+      </div>
+      <div class="issue purple">
+        <h3>El error apunta a una falla de validación o relación interna</h3>
+        <p>El primer error pide combo_combination_id. En el segundo intento se usa el identificador correcto mostrado por el front, pero el sistema indica que no pertenece al producto. El problema observado ya no es solo de claridad para el usuario, sino de funcionamiento del procesamiento de órdenes masivas para combos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="campos">
+  <div class="head"><div><h2>Campos solicitados por la plantilla vs. error esperado</h2><p>Comparación entre el formato descargado y el campo que exige el procesamiento.</p></div><span class="badge yellow">Inconsistencia</span></div>
+  <div class="body">
+    <table>
+      <thead><tr><th>Campo / dato</th><th>Está en plantilla descargada</th><th>Está en archivo de error</th><th>Comentario AS-IS</th></tr></thead>
+      <tbody>
+        <tr><td>NOMBRES</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Campo visible en ambos archivos.</td></tr>
+        <tr><td>APELLIDOS</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Campo visible en ambos archivos.</td></tr>
+        <tr><td>DIRECCION</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Campo visible en ambos archivos.</td></tr>
+        <tr><td>DEPARTAMENTO</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Campo visible en ambos archivos.</td></tr>
+        <tr><td>CIUDAD</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Campo visible en ambos archivos.</td></tr>
+        <tr><td>TELEFONO</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Campo visible en ambos archivos.</td></tr>
+        <tr><td>ID DE PRODUCTO</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Se diligencian IDs 2152017 y 2151821.</td></tr>
+        <tr><td>CANTIDAD</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Se diligencian cantidades 2 y 1.</td></tr>
+        <tr><td>PRECIO TOTAL</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Se diligencian 80000 y 74000.</td></tr>
+        <tr><td>CON RECAUDO</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Se diligencia SI.</td></tr>
+        <tr><td>NOTA</td><td class="yes">Sí</td><td class="yes">Sí</td><td>Se diligencia N/A.</td></tr>
+        <tr><td>EMAIL</td><td class="partial">Opcional</td><td class="partial">Visible</td><td>Sin dato en el ejemplo.</td></tr>
+        <tr><td>TRANSPORTADORA / CÉDULA / COLONIA</td><td class="unknown">No visible en la primera captura</td><td class="yes">Sí aparecen</td><td>En el archivo de errores aparecen columnas adicionales opcionales.</td></tr>
+        <tr><td>ID DE VARIABLE (OPCIONAL)</td><td class="unknown">No visible en formato inicial</td><td class="yes">Visible en intento posterior / archivo de error</td><td>Se agregan los valores correctos visibles en el front: 133 y 102. El sistema responde que no pertenecen a los productos indicados.</td></tr>
+        <tr><td>combo_combination_id</td><td class="no">No visible</td><td class="no">No aparece como columna directa</td><td>El primer procesamiento lo exige en el mensaje de error. Luego, usando el identificador correcto visible en el front, el sistema igual rechaza la relación producto-combinación.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="observaciones">
+  <div class="head"><div><h2>Observaciones AS-IS</h2><p>Hallazgos descriptivos del flujo actual, sin proponer solución.</p></div><span class="badge yellow">Observado</span></div>
+  <div class="body">
+    <div class="issue-list">
+      <div class="issue green"><h3>El formato se descarga desde el detalle del producto</h3><p>El dropshipper entra al producto, consulta el ID y descarga el formato desde una acción ubicada junto al botón de corazón.</p></div>
+      <div class="issue blue"><h3>Se intentan cargar dos combos</h3><p>El archivo contiene una fila con el combo variable ID 2152017 y otra con el combo simple ID 2151821.</p></div>
+      <div class="issue yellow"><h3>El sistema exige combo_combination_id</h3><p>Después de procesar el archivo, el sistema devuelve errores indicando que debe informarse la combinación del combo para ambos productos.</p></div>
+      <div class="issue red"><h3>La plantilla descargada no incluye combo_combination_id</h3><p>En el formato descargado no se observa una columna para diligenciar el campo combo_combination_id, aunque el procesamiento lo exige.</p></div>
+      <div class="issue red"><h3>Al agregar el identificador correcto el error cambia</h3><p>Después de diligenciar los identificadores correctos visibles en el front, 133 y 102, el sistema responde que esas variaciones no pertenecen a los productos 2152017 y 2151821.</p></div>
+      <div class="issue red"><h3>El flujo no permite continuar</h3><p>Con los errores actuales no se logra crear la orden masiva para combo variable ni para combo simple.</p></div>
+      <div class="issue red"><h3>El identificador correcto no es aceptado por la carga masiva</h3><p>El dato usado corresponde al identificador que el front entrega para la combinación. Aun así, el procesamiento devuelve que la variación no pertenece al producto.</p></div>
+      <div class="issue purple"><h3>El error también ocurre para combo simple</h3><p>El mensaje no solo aparece para el combo variable, sino también para combo simple 47 stock.</p></div>
+      <div class="issue yellow"><h3>El archivo de errores agrega columnas adicionales</h3><p>En el archivo de errores se observan columnas opcionales como transportadora, cédula y colonia, además de la columna ERROR.</p></div>
+      <div class="issue blue"><h3>Existe advertencia de duplicidad al recargar</h3><p>El modal advierte que, si hubo errores, no debe volver a cargarse el mismo archivo seleccionado porque los pedidos serán repetidos.</p></div>
+      <div class="issue purple"><h3>El front sí muestra identificadores, pero la carga no los acepta</h3><p>El comportamiento observado sugiere que tanto combo simple como combo variable requieren un identificador de combinación. Ese identificador sí se puede obtener desde el front, pero al cargarlo en órdenes masivas el sistema no lo reconoce como perteneciente al producto.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="insight-comportamiento">
+  <div class="head"><div><h2>Insight clave: comportamiento del combo en órdenes masivas</h2><p>Decisión abierta identificada a partir de los errores del flujo actual.</p></div><span class="badge purple">Insight</span></div>
+  <div class="body">
+    <div class="issue-list">
+      <div class="issue purple">
+        <h3>El problema principal es de funcionamiento en la carga masiva</h3>
+        <p>El flujo actual muestra que el sistema exige una combinación del combo y que el front entrega un identificador para esa combinación. Sin embargo, al usar ese identificador en la plantilla, el procesamiento responde que la variación no pertenece al producto. El bloqueo ya no parece ser únicamente de comprensión del usuario, sino de validación o relación interna durante la carga masiva.</p>
+      </div>
+    </div>
+
+    <div style="height:18px"></div>
+
+    <div class="decision-grid">
+      <div class="decision-card">
+        <h3>Modelo posible A · Todos los combos como combinaciones</h3>
+        <p>El combo simple y el combo variable se comportan como productos que requieren identificar una <strong>combinación del combo</strong>. En ese caso, incluso el combo simple tendría una combinación única. En el AS-IS, los identificadores visibles se usan, pero el sistema los rechaza.</p>
+      </div>
+      <div class="decision-card">
+        <h3>Modelo posible B · Simple como simple, variable como variable</h3>
+        <p>El combo simple se cargaría solo con <strong>ID de producto</strong>, mientras que el combo variable requeriría identificador adicional de combinación. En el AS-IS, el sistema exige combinación para ambos casos, incluido el combo simple.</p>
+      </div>
+    </div>
+
+    <div style="height:18px"></div>
+
+    <div class="issue-list">
+      <div class="issue red">
+        <h3>Lo más importante para el AS-IS</h3>
+        <p>Independientemente del modelo correcto, el flujo actual no permite completar la carga masiva. El identificador que el front entrega para la combinación se usa en el archivo, pero el procesamiento responde que no pertenece al producto. Esto bloquea la creación de órdenes masivas para combos.</p>
+      </div>
+      <div class="issue green">
+        <h3>Criterio operativo mínimo</h3>
+        <p>El usuario debe poder completar la carga masiva de combos con una plantilla entendible y funcional. Si el sistema exige una combinación y el front muestra su identificador, ese identificador debe ser aceptado por el procesamiento y permitir crear la orden.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section" id="preguntas">
+  <div class="head"><div><h2>Preguntas pendientes para continuar el AS-IS</h2><p>Validaciones abiertas para los siguientes pasos del flujo.</p></div><span class="badge yellow">Pendiente validar</span></div>
+  <div class="body">
+    <ol class="questions">
+      <li>¿Por qué el procesamiento no acepta el identificador de combinación que sí entrega el front?</li>
+      <li>¿Por qué el formato descargado no incluye la columna combo_combination_id?</li>
+      <li>¿Qué relación interna valida el sistema entre ID de producto y combinación?</li>
+      <li>¿Por qué el ID 133, entregado por el front para la combinación, no pertenece al producto 2152017 según el archivo de errores?</li>
+      <li>¿Por qué el ID 102, entregado por el front para la combinación, no pertenece al producto 2151821 según el archivo de errores?</li>
+      <li>¿El combo simple también debe tener combo_combination_id aunque solo tenga una combinación?</li>
+      <li>¿El ID de producto representa el combo general y el combo_combination_id representa la combinación específica?</li>
+      <li>¿Qué ocurre si el usuario agrega manualmente una columna combo_combination_id?</li>
+      <li>¿El archivo de errores puede usarse como nueva plantilla corregida?</li>
+      <li>¿Se crean órdenes parcialmente si algunas filas son válidas y otras fallan?</li>
+      <li>¿La advertencia de pedidos repetidos implica que filas válidas sí se crean antes de devolver errores?</li>
+      <li>¿Qué pasa con stock y productos hijos cuando la orden se crea correctamente?</li>
+      <li>¿La orden queda visible en Mis Pedidos y se gestiona como orden normal?</li>
+      <li>¿El comportamiento es igual para combo simple y combo variable?</li>
+      <li>¿El modelo esperado es que todo combo tenga combo_combination_id, incluso cuando el combo es simple?</li>
+      <li>¿O el combo simple debe cargarse solo con ID de producto y el combo variable con combinación?</li>
+      <li>¿La carga masiva está esperando un identificador distinto al que muestra el front?</li>
+      <li>¿Hay una diferencia entre ID DE VARIABLE, combo_combination_id y el ID visible en Stock por variantes?</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section" id="resumen">
+  <div class="head"><div><h2>Resumen AS-IS parcial actualizado</h2><p>Síntesis del tramo documentado hasta ahora.</p></div><span class="badge orange">Parcial</span></div>
+  <div class="body">
+    <div class="summary"><code>
+      El dropshipper entra al detalle de productos tipo combo.<br/>
+      Se revisa el combo variable Producto Variable 146 Stock con ID 2152017.<br/>
+      Se revisa el combo simple Combo Simple 47 Stock con ID 2151821.<br/>
+      Desde el detalle del producto existe una acción para descargar el formato de órdenes masivas.<br/>
+      El formato descargado solicita datos de cliente, dirección, ubicación, teléfono, ID de producto, cantidad, precio total, recaudo, nota y email opcional.<br/>
+      El archivo se diligencia con dos filas: una para el combo variable y otra para el combo simple.<br/>
+      El archivo se carga desde el modal de órdenes masivas en Mis Pedidos.<br/>
+      El sistema procesa el archivo y genera un archivo de errores.<br/>
+      El error indica que debe informarse combo_combination_id para el producto Producto Variable 146 stock.<br/>
+      El error también indica que debe informarse combo_combination_id para el producto combo simple 47 stock.<br/>
+      La plantilla descargada no muestra una columna combo_combination_id para diligenciar ese dato.<br/>
+      En un segundo intento se agrega ID DE VARIABLE con los identificadores correctos visibles en el front: 133 y 102.<br/>
+      El sistema devuelve que la variation 133 no pertenece al producto 2152017.<br/>
+      El sistema devuelve que la variation 102 no pertenece al producto 2151821.<br/>
+      Con este resultado el flujo queda bloqueado y no se puede continuar con la creación de órdenes masivas para estos combos.<br/>
+      Insight agregado: el identificador sí existe y sí es el que entrega el front, pero el procesamiento de carga masiva no lo reconoce correctamente.<br/>
+      Sigue abierta la definición técnica de si todos los combos deben comportarse como combinaciones o si el combo simple debe cargarse como producto simple y el variable como variable.<br/>
+      Independientemente de esa decisión técnica, el flujo de carga masiva debe funcionar de punta a punta usando los identificadores que la interfaz entrega al usuario.
+    </code></div>
+  </div>
+</section>
+
+</main>
+</div>
+</body>
+</html>
