@@ -147,6 +147,7 @@ export type AgingRow = {
   stage_name: string;
   date_created: string;
   dias: number;
+  ultima_cita_confirmada: string | null;
 };
 
 export type AgingData = {
@@ -175,19 +176,22 @@ export async function getAgingData(): Promise<AgingData> {
   const query = `
     SELECT full_name, country, stage_name, date_created::text,
       ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
-      'Verificación' AS pipeline
+      'Verificación' AS pipeline,
+      ultima_cita_confirmada::text AS ultima_cita_confirmada
     FROM ${SCHEMA}.pipeline_verificacion_de_proveedores
     WHERE stage_name = 'NUEVA SOLICITUD'
     UNION ALL
     SELECT full_name, country, stage_name, date_created::text,
       ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
-      'Ascenso Verificado' AS pipeline
+      'Ascenso Verificado' AS pipeline,
+      NULL AS ultima_cita_confirmada
     FROM ${SCHEMA}.pipeline_ascensos_proveedores_verificados
     WHERE stage_name = 'NUEVA SOLICITUD'
     UNION ALL
     SELECT full_name, country, stage_name, date_created::text,
       ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
-      'Ascenso Premium' AS pipeline
+      'Ascenso Premium' AS pipeline,
+      NULL AS ultima_cita_confirmada
     FROM ${SCHEMA}.pipeline_ascensos_proveedores_premium
     WHERE stage_name = 'NUEVA SOLICITUD'
     ORDER BY dias DESC
@@ -218,7 +222,7 @@ export async function getAgingData(): Promise<AgingData> {
   `;
 
   const [rowsRes, bucketsRes] = await Promise.all([
-    pool.query<{ full_name: string; country: string; stage_name: string; date_created: string; dias: number; pipeline: string }>(query),
+    pool.query<{ full_name: string; country: string; stage_name: string; date_created: string; dias: number; pipeline: string; ultima_cita_confirmada: string | null }>(query),
     pool.query<{ rango: string; n: string }>(bucketsQuery),
   ]);
 

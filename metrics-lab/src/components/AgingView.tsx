@@ -100,7 +100,7 @@ export function AgingView({ data }: Props) {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
               <thead>
                 <tr style={{ background: "#F9FAFB", borderBottom: "1px solid var(--border)" }}>
-                  {["Supplier", "País", "Pipeline", "Desde", "Días atascado"].map((h) => (
+                  {["Supplier", "País", "Pipeline", "Fecha solicitud", "Fecha cita asignada", "Días atascado"].map((h) => (
                     <th key={h} style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600, color: "var(--muted-foreground)", whiteSpace: "nowrap" }}>{h}</th>
                   ))}
                 </tr>
@@ -120,6 +120,11 @@ export function AgingView({ data }: Props) {
                       }}>{r.pipeline}</span>
                     </td>
                     <td style={{ padding: "10px 16px", color: "var(--muted-foreground)", whiteSpace: "nowrap" }}>{fmt(r.date_created)}</td>
+                    <td style={{ padding: "10px 16px", whiteSpace: "nowrap" }}>
+                      {r.ultima_cita_confirmada
+                        ? <span style={{ color: "#10B981", fontWeight: 500 }}>{fmt(r.ultima_cita_confirmada)}</span>
+                        : <span style={{ color: "#D1D5DB", fontSize: 11 }}>—</span>}
+                    </td>
                     <td style={{ padding: "10px 16px" }}>
                       <span style={{
                         fontWeight: 700, fontSize: 12,
