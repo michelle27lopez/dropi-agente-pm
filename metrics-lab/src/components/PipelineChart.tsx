@@ -44,7 +44,7 @@ export function PipelineChart({ title, stages, color }: Props) {
             tickLine={false}
           />
           <Tooltip
-            formatter={(v: number, _: string, props: { payload?: { full?: string } }) => [v, props.payload?.full ?? ""]}
+            formatter={(v, _, props) => [v, (props.payload as { full?: string })?.full ?? ""]}
             contentStyle={{ borderRadius: 8, border: "1px solid var(--border)", fontSize: 12 }}
             cursor={{ fill: "var(--muted)" }}
           />

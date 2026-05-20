@@ -44,6 +44,100 @@ export type CRMSnapshot = {
   };
 };
 
+export type CitaStats = {
+  total: number;
+  avgDias: number;
+  medianaDias: number;
+  minDias: number;
+  maxDias: number;
+};
+
+export type CitaBucket = { rango: string; n: number };
+
+export type CitaRow = {
+  full_name: string;
+  country: string;
+  stage_name: string;
+  date_created: string;
+  ultima_cita_confirmada: string;
+  dias: number;
+};
+
+export type CitasData = {
+  stats: CitaStats;
+  buckets: CitaBucket[];
+  rows: CitaRow[];
+};
+
+export async function getCitasData(): Promise<CitasData> {
+  const [statsRes, bucketsRes, rowsRes] = await Promise.all([
+    pool.query<{
+      total: string; avg_dias: string; mediana_dias: string;
+      min_dias: string; max_dias: string;
+    }>(`
+      SELECT
+        COUNT(*)::int AS total,
+        ROUND(AVG(EXTRACT(EPOCH FROM (ultima_cita_confirmada - date_created))/86400)::numeric,1) AS avg_dias,
+        ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP (
+          ORDER BY EXTRACT(EPOCH FROM (ultima_cita_confirmada - date_created))/86400
+        )::numeric,1) AS mediana_dias,
+        ROUND(MIN(EXTRACT(EPOCH FROM (ultima_cita_confirmada - date_created))/86400)::numeric,1) AS min_dias,
+        ROUND(MAX(EXTRACT(EPOCH FROM (ultima_cita_confirmada - date_created))/86400)::numeric,1) AS max_dias
+      FROM dropi_seguimiento_proveedores.pipeline_verificacion_de_proveedores
+      WHERE ultima_cita_confirmada IS NOT NULL AND date_created IS NOT NULL
+    `),
+    pool.query<{ rango: string; n: string }>(`
+      SELECT
+        CASE
+          WHEN delta < 0     THEN '< 0 días'
+          WHEN delta = 0     THEN 'Mismo día'
+          WHEN delta <= 7    THEN '1–7 días'
+          WHEN delta <= 14   THEN '8–14 días'
+          WHEN delta <= 30   THEN '15–30 días'
+          WHEN delta <= 60   THEN '31–60 días'
+          ELSE               '> 60 días'
+        END AS rango,
+        COUNT(*)::int AS n
+      FROM (
+        SELECT ROUND(EXTRACT(EPOCH FROM (ultima_cita_confirmada - date_created))/86400) AS delta
+        FROM dropi_seguimiento_proveedores.pipeline_verificacion_de_proveedores
+        WHERE ultima_cita_confirmada IS NOT NULL AND date_created IS NOT NULL
+      ) t
+      GROUP BY rango
+      ORDER BY MIN(delta)
+    `),
+    pool.query<{
+      full_name: string; country: string; stage_name: string;
+      date_created: string; ultima_cita_confirmada: string; dias: string;
+    }>(`
+      SELECT
+        full_name,
+        country,
+        stage_name,
+        date_created::text,
+        ultima_cita_confirmada::text,
+        ROUND(EXTRACT(EPOCH FROM (ultima_cita_confirmada - date_created))/86400)::int AS dias
+      FROM dropi_seguimiento_proveedores.pipeline_verificacion_de_proveedores
+      WHERE ultima_cita_confirmada IS NOT NULL AND date_created IS NOT NULL
+      ORDER BY date_created DESC
+      LIMIT 200
+    `),
+  ]);
+
+  const s = statsRes.rows[0];
+  return {
+    stats: {
+      total: Number(s.total),
+      avgDias: Number(s.avg_dias),
+      medianaDias: Number(s.mediana_dias),
+      minDias: Number(s.min_dias),
+      maxDias: Number(s.max_dias),
+    },
+    buckets: bucketsRes.rows.map((r) => ({ rango: r.rango, n: Number(r.n) })),
+    rows: rowsRes.rows.map((r) => ({ ...r, dias: Number(r.dias) })),
+  };
+}
+
 export async function getCRMSnapshot(): Promise<CRMSnapshot> {
   const [
     verTotal, verStages,
