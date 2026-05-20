@@ -138,6 +138,167 @@ export async function getCitasData(): Promise<CitasData> {
   };
 }
 
+export type AgingBucket = { rango: string; n: number; color: string };
+
+export type AgingRow = {
+  full_name: string;
+  country: string;
+  pipeline: string;
+  stage_name: string;
+  date_created: string;
+  dias: number;
+};
+
+export type AgingData = {
+  totalAtascados: number;
+  mas90dias: number;
+  mas180dias: number;
+  buckets: AgingBucket[];
+  rows: AgingRow[];
+};
+
+export type ConversionStep = {
+  label: string;
+  total: number;
+  aprobados: number;
+  denegados: number;
+  enEspera: number;
+  tasaAprobacion: number;
+  avgDiasAprobados: number;
+};
+
+export type ConversionData = {
+  steps: ConversionStep[];
+};
+
+export async function getAgingData(): Promise<AgingData> {
+  const query = `
+    SELECT full_name, country, stage_name, date_created::text,
+      ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
+      'Verificación' AS pipeline
+    FROM ${SCHEMA}.pipeline_verificacion_de_proveedores
+    WHERE stage_name = 'NUEVA SOLICITUD'
+    UNION ALL
+    SELECT full_name, country, stage_name, date_created::text,
+      ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
+      'Ascenso Verificado' AS pipeline
+    FROM ${SCHEMA}.pipeline_ascensos_proveedores_verificados
+    WHERE stage_name = 'NUEVA SOLICITUD'
+    UNION ALL
+    SELECT full_name, country, stage_name, date_created::text,
+      ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
+      'Ascenso Premium' AS pipeline
+    FROM ${SCHEMA}.pipeline_ascensos_proveedores_premium
+    WHERE stage_name = 'NUEVA SOLICITUD'
+    ORDER BY dias DESC
+    LIMIT 300
+  `;
+
+  const bucketsQuery = `
+    SELECT
+      CASE
+        WHEN dias <= 30  THEN '0–30 días'
+        WHEN dias <= 60  THEN '31–60 días'
+        WHEN dias <= 90  THEN '61–90 días'
+        WHEN dias <= 180 THEN '91–180 días'
+        ELSE             '+180 días'
+      END AS rango,
+      COUNT(*)::int AS n
+    FROM (
+      SELECT ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400) AS dias
+      FROM ${SCHEMA}.pipeline_verificacion_de_proveedores WHERE stage_name='NUEVA SOLICITUD'
+      UNION ALL
+      SELECT ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)
+      FROM ${SCHEMA}.pipeline_ascensos_proveedores_verificados WHERE stage_name='NUEVA SOLICITUD'
+      UNION ALL
+      SELECT ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)
+      FROM ${SCHEMA}.pipeline_ascensos_proveedores_premium WHERE stage_name='NUEVA SOLICITUD'
+    ) t
+    GROUP BY rango ORDER BY MIN(dias)
+  `;
+
+  const [rowsRes, bucketsRes] = await Promise.all([
+    pool.query<{ full_name: string; country: string; stage_name: string; date_created: string; dias: number; pipeline: string }>(query),
+    pool.query<{ rango: string; n: string }>(bucketsQuery),
+  ]);
+
+  const BUCKET_COLORS: Record<string, string> = {
+    "0–30 días": "#10B981",
+    "31–60 días": "#F77F00",
+    "61–90 días": "#F59E0B",
+    "91–180 días": "#EF4444",
+    "+180 días": "#7F1D1D",
+  };
+
+  const rows = rowsRes.rows.map((r) => ({ ...r, dias: Number(r.dias) }));
+  const mas90 = rows.filter((r) => r.dias > 90).length;
+  const mas180 = rows.filter((r) => r.dias > 180).length;
+
+  return {
+    totalAtascados: rows.length,
+    mas90dias: mas90,
+    mas180dias: mas180,
+    buckets: bucketsRes.rows.map((r) => ({
+      rango: r.rango,
+      n: Number(r.n),
+      color: BUCKET_COLORS[r.rango] ?? "#6B7280",
+    })),
+    rows,
+  };
+}
+
+export async function getConversionData(): Promise<ConversionData> {
+  const [verRes, ascVRes, ascPRes] = await Promise.all([
+    pool.query<{ stage_name: string; n: string; avg_dias: string }>(`
+      SELECT stage_name,
+        COUNT(*)::int AS n,
+        ROUND(AVG(EXTRACT(EPOCH FROM (updated_at - date_created))/86400)::numeric,1) AS avg_dias
+      FROM ${SCHEMA}.pipeline_verificacion_de_proveedores
+      GROUP BY stage_name
+    `),
+    pool.query<{ stage_name: string; n: string; avg_dias: string }>(`
+      SELECT stage_name,
+        COUNT(*)::int AS n,
+        ROUND(AVG(EXTRACT(EPOCH FROM (updated_at - date_created))/86400)::numeric,1) AS avg_dias
+      FROM ${SCHEMA}.pipeline_ascensos_proveedores_verificados
+      GROUP BY stage_name
+    `),
+    pool.query<{ stage_name: string; n: string; avg_dias: string }>(`
+      SELECT stage_name,
+        COUNT(*)::int AS n,
+        ROUND(AVG(EXTRACT(EPOCH FROM (updated_at - date_created))/86400)::numeric,1) AS avg_dias
+      FROM ${SCHEMA}.pipeline_ascensos_proveedores_premium
+      GROUP BY stage_name
+    `),
+  ]);
+
+  function toStep(label: string, rows: { stage_name: string; n: string; avg_dias: string }[]): ConversionStep {
+    const find = (key: string) => rows.find((r) => r.stage_name.toUpperCase().includes(key));
+    const total = rows.reduce((s, r) => s + Number(r.n), 0);
+    const aprobRow = find("APROBADO");
+    const denRow = find("DENEGADO") ?? find("RECHAZADO");
+    const aprobados = Number(aprobRow?.n ?? 0);
+    const denegados = Number(denRow?.n ?? 0);
+    return {
+      label,
+      total,
+      aprobados,
+      denegados,
+      enEspera: total - aprobados - denegados,
+      tasaAprobacion: total > 0 ? Math.round((aprobados / total) * 1000) / 10 : 0,
+      avgDiasAprobados: Number(aprobRow?.avg_dias ?? 0),
+    };
+  }
+
+  return {
+    steps: [
+      toStep("Verificación de Proveedores", verRes.rows),
+      toStep("Ascenso a Verificado", ascVRes.rows),
+      toStep("Ascenso a Premium", ascPRes.rows),
+    ],
+  };
+}
+
 export async function getCRMSnapshot(): Promise<CRMSnapshot> {
   const [
     verTotal, verStages,
