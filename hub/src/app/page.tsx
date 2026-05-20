@@ -1,0 +1,158 @@
+"use client";
+
+const tools = [
+  {
+    key: "metrics",
+    name: "Metrics Lab",
+    description: "Dashboard CRM en vivo. Pipelines de verificación, ascensos y embudo del proveedor.",
+    url: process.env.NEXT_PUBLIC_METRICS_URL ?? "#",
+    color: "#F77F00",
+    tag: "CRM · Analytics",
+    icon: "📊",
+  },
+  {
+    key: "supplier",
+    name: "Supplier Lab",
+    description: "Clon de app.dropi.co para proveedores. Laboratorio de experimentos de UX.",
+    url: process.env.NEXT_PUBLIC_SUPPLIER_URL ?? "#",
+    color: "#10B981",
+    tag: "UX · Experimentos",
+    icon: "🏭",
+  },
+  {
+    key: "dropshipper",
+    name: "Dropshipper Lab",
+    description: "Clon de app.dropi.co para dropshippers. Canvas de flujos y variantes.",
+    url: process.env.NEXT_PUBLIC_DROPSHIPPER_URL ?? "#",
+    color: "#6366F1",
+    tag: "UX · Flujos",
+    icon: "🛒",
+  },
+  {
+    key: "research",
+    name: "Research Brain",
+    description: "Base de conocimiento de product research. Estudios, hallazgos y perfiles.",
+    url: process.env.NEXT_PUBLIC_RESEARCH_URL ?? "#",
+    color: "#EC4899",
+    tag: "Research · Knowledge",
+    icon: "🧠",
+  },
+];
+
+export default function HubPage() {
+  return (
+    <main style={{ minHeight: "100vh", padding: "0" }}>
+      {/* Header */}
+      <header style={{
+        background: "#fff",
+        borderBottom: "1px solid var(--border)",
+        padding: "20px 32px",
+        display: "flex",
+        alignItems: "center",
+        gap: "12px",
+      }}>
+        <div style={{
+          width: 36, height: 36, borderRadius: 10,
+          background: "var(--dropi)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 18,
+        }}>
+          🧩
+        </div>
+        <div>
+          <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
+            Dropi PM Tools
+          </h1>
+          <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
+            Supplier Success · Herramientas internas
+          </p>
+        </div>
+      </header>
+
+      {/* Grid */}
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
+        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 32, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
+          Proyectos activos
+        </p>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+          gap: 20,
+        }}>
+          {tools.map((tool) => (
+            <a
+              key={tool.key}
+              href={tool.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: "var(--card)",
+                border: "1px solid var(--border)",
+                borderRadius: 14,
+                padding: "24px",
+                textDecoration: "none",
+                display: "block",
+                transition: "box-shadow 0.15s, transform 0.15s",
+                cursor: tool.url === "#" ? "default" : "pointer",
+              }}
+              onMouseEnter={(e) => {
+                if (tool.url !== "#") {
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)";
+                  (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
+                (e.currentTarget as HTMLAnchorElement).style.transform = "none";
+              }}
+            >
+              {/* Icon + tag row */}
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: 12,
+                  background: `${tool.color}15`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 22,
+                }}>
+                  {tool.icon}
+                </div>
+                <span style={{
+                  fontSize: 11, fontWeight: 600,
+                  color: tool.url === "#" ? "var(--muted)" : tool.color,
+                  background: tool.url === "#" ? "var(--bg)" : `${tool.color}12`,
+                  padding: "3px 8px", borderRadius: 20,
+                  marginTop: 4,
+                }}>
+                  {tool.url === "#" ? "Próximamente" : tool.tag}
+                </span>
+              </div>
+
+              {/* Name + description */}
+              <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
+                {tool.name}
+              </h2>
+              <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.5 }}>
+                {tool.description}
+              </p>
+
+              {/* CTA */}
+              {tool.url !== "#" && (
+                <div style={{
+                  marginTop: 20, fontSize: 12, fontWeight: 600,
+                  color: tool.color, display: "flex", alignItems: "center", gap: 4,
+                }}>
+                  Abrir →
+                </div>
+              )}
+            </a>
+          ))}
+        </div>
+
+        <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 48, textAlign: "center" }}>
+          Dropi · Supplier Success · {new Date().getFullYear()}
+        </p>
+      </div>
+    </main>
+  );
+}
