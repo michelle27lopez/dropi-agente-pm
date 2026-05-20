@@ -78,7 +78,7 @@ export function CitasView({ data }: Props) {
               <XAxis dataKey="rango" tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
               <Tooltip
-                formatter={(v: number) => [v, "suppliers"]}
+                formatter={(v) => [v, "suppliers"]}
                 contentStyle={{ borderRadius: 8, border: "1px solid var(--border)", fontSize: 12 }}
                 cursor={{ fill: "#F3F4F6" }}
               />
