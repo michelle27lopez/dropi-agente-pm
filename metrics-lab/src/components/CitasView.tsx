@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import type { CitasData } from "@/lib/crm-db";
+import type { CitasData, CitaRow } from "@/lib/crm-db";
+import { ContactModal } from "@/components/ContactModal";
 
 type Props = { data: CitasData };
 
@@ -30,6 +31,7 @@ function diasColor(dias: number) {
 export function CitasView({ data }: Props) {
   const { stats, buckets, rows } = data;
   const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<CitaRow | null>(null);
 
   const filtered = rows.filter((r) =>
     r.full_name.toLowerCase().includes(search.toLowerCase()) ||
@@ -38,6 +40,7 @@ export function CitasView({ data }: Props) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+      <ContactModal contact={selected} onClose={() => setSelected(null)} />
 
       {/* KPI Stats */}
       <section>
@@ -121,7 +124,7 @@ export function CitasView({ data }: Props) {
               </thead>
               <tbody>
                 {filtered.map((r, i) => (
-                  <tr key={i} style={{ borderBottom: "1px solid var(--border)" }}>
+                  <tr key={i} onClick={() => setSelected(r)} style={{ borderBottom: "1px solid var(--border)", cursor: "pointer" }} onMouseEnter={(e) => (e.currentTarget.style.background = "#F9FAFB")} onMouseLeave={(e) => (e.currentTarget.style.background = "")}>
                     <td style={{ padding: "10px 16px", fontWeight: 500, color: "var(--foreground)", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {r.full_name}
                     </td>

@@ -56,6 +56,8 @@ export type CitaBucket = { rango: string; n: number };
 
 export type CitaRow = {
   full_name: string;
+  email: string;
+  phone: string;
   country: string;
   stage_name: string;
   date_created: string;
@@ -107,11 +109,13 @@ export async function getCitasData(): Promise<CitasData> {
       ORDER BY MIN(delta)
     `),
     pool.query<{
-      full_name: string; country: string; stage_name: string;
+      full_name: string; email: string; phone: string; country: string; stage_name: string;
       date_created: string; ultima_cita_confirmada: string; dias: string;
     }>(`
       SELECT
         full_name,
+        email,
+        phone,
         country,
         stage_name,
         date_created::text,
@@ -142,6 +146,8 @@ export type AgingBucket = { rango: string; n: number; color: string };
 
 export type AgingRow = {
   full_name: string;
+  email: string;
+  phone: string;
   country: string;
   pipeline: string;
   stage_name: string;
@@ -174,21 +180,21 @@ export type ConversionData = {
 
 export async function getAgingData(): Promise<AgingData> {
   const query = `
-    SELECT full_name, country, stage_name, date_created::text,
+    SELECT full_name, email, phone, country, stage_name, date_created::text,
       ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
       'Activar Visibilidad' AS pipeline,
       ultima_cita_confirmada::text AS ultima_cita_confirmada
     FROM ${SCHEMA}.pipeline_verificacion_de_proveedores
     WHERE stage_name = 'NUEVA SOLICITUD'
     UNION ALL
-    SELECT full_name, country, stage_name, date_created::text,
+    SELECT full_name, email, phone, country, stage_name, date_created::text,
       ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
       'Ascenso Verificado' AS pipeline,
       NULL AS ultima_cita_confirmada
     FROM ${SCHEMA}.pipeline_ascensos_proveedores_verificados
     WHERE stage_name = 'NUEVA SOLICITUD'
     UNION ALL
-    SELECT full_name, country, stage_name, date_created::text,
+    SELECT full_name, email, phone, country, stage_name, date_created::text,
       ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
       'Ascenso Premium' AS pipeline,
       NULL AS ultima_cita_confirmada
@@ -222,7 +228,7 @@ export async function getAgingData(): Promise<AgingData> {
   `;
 
   const [rowsRes, bucketsRes] = await Promise.all([
-    pool.query<{ full_name: string; country: string; stage_name: string; date_created: string; dias: number; pipeline: string; ultima_cita_confirmada: string | null }>(query),
+    pool.query<{ full_name: string; email: string; phone: string; country: string; stage_name: string; date_created: string; dias: number; pipeline: string; ultima_cita_confirmada: string | null }>(query),
     pool.query<{ rango: string; n: string }>(bucketsQuery),
   ]);
 

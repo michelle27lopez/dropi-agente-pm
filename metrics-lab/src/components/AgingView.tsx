@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import type { AgingData } from "@/lib/crm-db";
+import type { AgingData, AgingRow } from "@/lib/crm-db";
+import { ContactModal } from "@/components/ContactModal";
 
 type Props = { data: AgingData };
 
@@ -20,6 +21,7 @@ export function AgingView({ data }: Props) {
   const { totalAtascados, mas90dias, mas180dias, buckets, rows } = data;
   const [search, setSearch] = useState("");
   const [filterPipeline, setFilterPipeline] = useState("Todos");
+  const [selected, setSelected] = useState<AgingRow | null>(null);
 
   const pipelines = ["Todos", "Activar Visibilidad", "Ascenso Verificado", "Ascenso Premium"];
 
@@ -31,6 +33,7 @@ export function AgingView({ data }: Props) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+      <ContactModal contact={selected} onClose={() => setSelected(null)} />
 
       {/* KPIs */}
       <section>
@@ -107,7 +110,7 @@ export function AgingView({ data }: Props) {
               </thead>
               <tbody>
                 {filtered.map((r, i) => (
-                  <tr key={i} style={{ borderBottom: "1px solid var(--border)" }}>
+                  <tr key={i} onClick={() => setSelected(r)} style={{ borderBottom: "1px solid var(--border)", cursor: "pointer" }} onMouseEnter={(e) => (e.currentTarget.style.background = "#F9FAFB")} onMouseLeave={(e) => (e.currentTarget.style.background = "")}>
                     <td style={{ padding: "10px 16px", fontWeight: 500, color: "var(--foreground)", maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                       {r.full_name}
                     </td>
