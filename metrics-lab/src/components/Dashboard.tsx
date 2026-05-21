@@ -58,7 +58,7 @@ export function Dashboard({ snapshot, citasData, agingData, conversionData }: Pr
             <p style={{ fontSize: 11, color: "var(--muted-foreground)" }}>Dropi · Supplier Success</p>
           </div>
         </div>
-        <p style={{ fontSize: 11, color: "var(--muted-foreground)" }}>
+        <p style={{ fontSize: 11, color: "var(--muted-foreground)" }} suppressHydrationWarning>
           {new Date(fetchedAt).toLocaleString("es-CO", { dateStyle: "medium", timeStyle: "short" })}
         </p>
       </header>
@@ -98,7 +98,7 @@ export function Dashboard({ snapshot, citasData, agingData, conversionData }: Pr
             <section>
               <p style={{ fontSize: 11, fontWeight: 600, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Conversión por pipeline</p>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-                <KpiCard title="Verificación de Proveedores" total={verificacion.total} approved={verAprobados} approvalRate={approvalRate(verificacion.stages, "APROBADO")} color="#F77F00" />
+                <KpiCard title="Activar Visibilidad" total={verificacion.total} approved={verAprobados} approvalRate={approvalRate(verificacion.stages, "APROBADO")} color="#F77F00" />
                 <KpiCard title="Ascensos a Verificado" total={ascensosVerificados.total} approved={ascVAprobados} approvalRate={approvalRate(ascensosVerificados.stages, "APROBADO")} color="#10B981" />
                 <KpiCard title="Ascensos a Premium" total={ascensosPremium.total} approved={ascPDenegados} approvalLabel="Denegados" approvalRate={approvalRate(ascensosPremium.stages, "DENEGADO")} color="#6366F1" />
               </div>
@@ -107,7 +107,7 @@ export function Dashboard({ snapshot, citasData, agingData, conversionData }: Pr
             <section>
               <p style={{ fontSize: 11, fontWeight: 600, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Embudo del proveedor</p>
               <FunnelSummary steps={[
-                { label: "Solicitudes de Verificación", value: verificacion.total, color: "#F77F00" },
+                { label: "Activar Visibilidad", value: verificacion.total, color: "#F77F00" },
                 { label: "Ascensos a Verificado", value: ascensosVerificados.total, color: "#10B981" },
                 { label: "Ascensos a Premium", value: ascensosPremium.total, color: "#6366F1" },
               ]} />
@@ -116,7 +116,7 @@ export function Dashboard({ snapshot, citasData, agingData, conversionData }: Pr
             <section>
               <p style={{ fontSize: 11, fontWeight: 600, color: "var(--muted-foreground)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Detalle por pipeline</p>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 20 }}>
-                <PipelineChart title="Pipeline: Verificación" stages={verificacion.stages} color="#F77F00" />
+                <PipelineChart title="Pipeline: Activar Visibilidad" stages={verificacion.stages} color="#F77F00" />
                 <PipelineChart title="Pipeline: Ascensos Verificado" stages={ascensosVerificados.stages} color="#10B981" />
                 <PipelineChart title="Pipeline: Ascensos Premium" stages={ascensosPremium.stages} color="#6366F1" />
               </div>

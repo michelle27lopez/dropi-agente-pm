@@ -176,7 +176,7 @@ export async function getAgingData(): Promise<AgingData> {
   const query = `
     SELECT full_name, country, stage_name, date_created::text,
       ROUND(EXTRACT(EPOCH FROM (NOW() - date_created))/86400)::int AS dias,
-      'Verificación' AS pipeline,
+      'Activar Visibilidad' AS pipeline,
       ultima_cita_confirmada::text AS ultima_cita_confirmada
     FROM ${SCHEMA}.pipeline_verificacion_de_proveedores
     WHERE stage_name = 'NUEVA SOLICITUD'
@@ -296,7 +296,7 @@ export async function getConversionData(): Promise<ConversionData> {
 
   return {
     steps: [
-      toStep("Verificación de Proveedores", verRes.rows),
+      toStep("Activar Visibilidad", verRes.rows),
       toStep("Ascenso a Verificado", ascVRes.rows),
       toStep("Ascenso a Premium", ascPRes.rows),
     ],

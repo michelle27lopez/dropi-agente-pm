@@ -11,7 +11,7 @@ function fmt(dateStr: string) {
 }
 
 const PIPELINE_COLORS: Record<string, string> = {
-  "Verificación": "#F77F00",
+  "Activar Visibilidad": "#F77F00",
   "Ascenso Verificado": "#10B981",
   "Ascenso Premium": "#6366F1",
 };
@@ -21,7 +21,7 @@ export function AgingView({ data }: Props) {
   const [search, setSearch] = useState("");
   const [filterPipeline, setFilterPipeline] = useState("Todos");
 
-  const pipelines = ["Todos", "Verificación", "Ascenso Verificado", "Ascenso Premium"];
+  const pipelines = ["Todos", "Activar Visibilidad", "Ascenso Verificado", "Ascenso Premium"];
 
   const filtered = rows.filter((r) => {
     const matchSearch = r.full_name.toLowerCase().includes(search.toLowerCase()) || r.country.toLowerCase().includes(search.toLowerCase());
