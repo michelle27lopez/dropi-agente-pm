@@ -963,7 +963,7 @@ export default function BehaviorDashboard() {
                         {data?.communities && data.communities.length > 0 ? (
                           <ResponsiveContainer width="100%" height="100%">
                             <BarChart
-                              data={data.communities.slice(0, 10)}
+                              data={data.communities.filter(c => c.name !== "Orgánico / Sin comunidad").slice(0, 10)}
                               layout="vertical"
                               margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
                             >
@@ -980,7 +980,7 @@ export default function BehaviorDashboard() {
                                 contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "11px" }}
                               />
                               <Bar dataKey="count" name="Registrados" fill="#8B5CF6" radius={[0, 4, 4, 0]} barSize={12}>
-                                {data.communities.slice(0, 10).map((entry, index) => (
+                                {data.communities.filter(c => c.name !== "Orgánico / Sin comunidad").slice(0, 10).map((entry, index) => (
                                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                               </Bar>
