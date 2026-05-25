@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const country = searchParams.get("country") || "ALL";
+  const community = searchParams.get("community") || null;
 
   try {
     if (supabase) {
@@ -44,15 +45,26 @@ export async function GET(req: NextRequest) {
       }
 
       if (allData.length > 0) {
+        if (community) {
+          return NextResponse.json(analyzeCommunityDetails(allData, country, community));
+        }
         return NextResponse.json(analyzeSuppliers(allData, country, "supabase"));
       }
     }
 
-    // Fallback: Generar simulación realista de 90 días
-    return NextResponse.json(generateMockBehaviorData(country));
+    // Fallback: Generar simulación realista
+    const mockData = generateMockSuppliersList(country);
+    if (community) {
+      return NextResponse.json(analyzeCommunityDetails(mockData, country, community));
+    }
+    return NextResponse.json(analyzeSuppliers(mockData, country, "mock"));
   } catch (err: any) {
     console.error("Excepción en API de comportamiento:", err);
-    return NextResponse.json(generateMockBehaviorData(country));
+    const mockData = generateMockSuppliersList(country);
+    if (community) {
+      return NextResponse.json(analyzeCommunityDetails(mockData, country, community));
+    }
+    return NextResponse.json(analyzeSuppliers(mockData, country, "mock"));
   }
 }
 
@@ -662,8 +674,193 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
   };
 }
 
-// Simulación de datos de comportamiento en caso de no tener DB
-function generateMockBehaviorData(country: string) {
+// Analizar detalles específicos de una comunidad
+function analyzeCommunityDetails(data: any[], country: string, communityName: string) {
+  const supplierMap = new Map<string, any>();
+  data.forEach((row) => {
+    if (row.user_id) {
+      supplierMap.set(String(row.user_id).trim(), row);
+    }
+  });
+
+  const resolveCommunity = (row: any): string => {
+    if (row.belong_to_community && row.belong_to_community.trim() !== "" && row.belong_to_community.trim() !== "-") {
+      return row.belong_to_community.trim();
+    }
+    if (row.owner_of_community && row.owner_of_community.trim() !== "" && row.owner_of_community.trim() !== "-") {
+      return row.owner_of_community.trim();
+    }
+    if (row.referred_by && row.referred_by.trim() !== "" && row.referred_by.trim() !== "-") {
+      const referrerId = String(row.referred_by).trim();
+      const referrer = supplierMap.get(referrerId);
+      if (referrer) {
+        if (referrer.owner_of_community && referrer.owner_of_community.trim() !== "" && referrer.owner_of_community.trim() !== "-") {
+          return referrer.owner_of_community.trim();
+        }
+        if (referrer.belong_to_community && referrer.belong_to_community.trim() !== "" && referrer.belong_to_community.trim() !== "-") {
+          return referrer.belong_to_community.trim();
+        }
+        if (referrer.name && referrer.name.trim() !== "") {
+          return `Referido por ${referrer.name.trim()}`;
+        }
+      }
+    }
+    return "Orgánico / Sin comunidad";
+  };
+
+  const communityRows: any[] = [];
+  data.forEach((row) => {
+    const resolved = resolveCommunity(row);
+    if (resolved === communityName) {
+      communityRows.push({ ...row, resolvedCommunity: resolved });
+    }
+  });
+
+  const totalSuppliers = communityRows.length;
+  let totalSessions = 0;
+  let verifiedCount = 0;
+  let activeCount = 0;
+  let billingCount = 0;
+  let bounceCount = 0;
+  let totalInactiveDays = 0;
+  let hasInactiveDaysCount = 0;
+  let totalLifespanDays = 0;
+  let hasLifespanCount = 0;
+
+  const referenceDate = new Date("2026-05-25T10:30:00-05:00");
+
+  let volOver1000 = 0;
+  let vol301to1000 = 0;
+  let vol51to300 = 0;
+  let volUnder50 = 0;
+  let volNotSelling = 0;
+  let volNotManaging = 0;
+  let volUnspecified = 0;
+
+  let roleSupplier = 0;
+  let roleBrand = 0;
+  let roleNone = 0;
+
+  const suppliersList: any[] = [];
+
+  communityRows.forEach((row) => {
+    const { signed_up, last_seen, web_sessions, country: cName, verified, billing_information, name, email, phone } = row;
+    const sessions = web_sessions || 0;
+    totalSessions += sessions;
+    if (verified) verifiedCount++;
+    if (sessions > 7) activeCount++;
+    if (billing_information) billingCount++;
+    if (sessions === 1) bounceCount++;
+
+    const lastSeenDate = last_seen ? new Date(last_seen) : null;
+    const signUpDate = signed_up ? new Date(signed_up) : null;
+    let daysInactive = 0;
+    if (lastSeenDate) {
+      daysInactive = Math.floor((referenceDate.getTime() - lastSeenDate.getTime()) / 86400000);
+      totalInactiveDays += Math.max(0, daysInactive);
+      hasInactiveDaysCount++;
+    }
+    if (signUpDate && lastSeenDate) {
+      const lifespanDays = Math.floor((lastSeenDate.getTime() - signUpDate.getTime()) / 86400000);
+      totalLifespanDays += Math.max(0, lifespanDays);
+      hasLifespanCount++;
+    }
+
+    const sRole = row.survey_role;
+    const sVolume = row.survey_volume || row.survey_brand_sales;
+
+    if (sRole) {
+      if (sRole.toLowerCase().includes("proveedor")) roleSupplier++;
+      else if (sRole.toLowerCase().includes("marca")) roleBrand++;
+      else roleNone++;
+    } else {
+      roleNone++;
+    }
+
+    if (sVolume) {
+      if (sVolume.includes("Más de 1.000")) volOver1000++;
+      else if (sVolume.includes("301 a 1.000")) vol301to1000++;
+      else if (sVolume.includes("51 a 300")) vol51to300++;
+      else if (sVolume.includes("Menos de 50")) volUnder50++;
+      else if (sVolume.includes("Aún no vendo")) volNotSelling++;
+      else if (sVolume.includes("Aún no gestiono")) volNotManaging++;
+      else volUnspecified++;
+    } else {
+      volUnspecified++;
+    }
+
+    const isSupplier = sRole && sRole.toLowerCase().includes("proveedor");
+    const isBigVolume = sVolume && (sVolume.includes("1.000") || sVolume.includes("301 a 1.000") || sVolume.includes("51 a 300"));
+    let potentialRating: "high" | "medium" | "low" = "low";
+    if (isSupplier && isBigVolume) potentialRating = "high";
+    else if (isSupplier || isBigVolume || sRole) potentialRating = "medium";
+
+    let referrerName = "-";
+    if (row.referred_by) {
+      const ref = supplierMap.get(String(row.referred_by).trim());
+      if (ref) {
+        referrerName = ref.name || `ID ${row.referred_by}`;
+      }
+    }
+
+    suppliersList.push({
+      user_id: row.user_id,
+      name: name || "Bodega Anónima",
+      email: email || "-",
+      phone: phone || "-",
+      country: cName || "Desconocido",
+      web_sessions: sessions,
+      days_inactive: lastSeenDate ? Math.max(0, daysInactive) : 99,
+      signed_up: signed_up,
+      verified: !!verified,
+      billing_information: !!billing_information,
+      survey_role: sRole || null,
+      survey_volume: sVolume || null,
+      potentialRating,
+      referrerName
+    });
+  });
+
+  suppliersList.sort((a, b) => {
+    const potMap: Record<string, number> = { high: 3, medium: 2, low: 1 };
+    const pA = potMap[a.potentialRating] || 1;
+    const pB = potMap[b.potentialRating] || 1;
+    if (pA !== pB) return pB - pA;
+    return b.web_sessions - a.web_sessions;
+  });
+
+  return {
+    communityName,
+    stats: {
+      totalSuppliers,
+      activeRate: totalSuppliers > 0 ? Math.round((activeCount / totalSuppliers) * 100) : 0,
+      verifiedRate: totalSuppliers > 0 ? Math.round((verifiedCount / totalSuppliers) * 100) : 0,
+      billingRate: totalSuppliers > 0 ? Math.round((billingCount / totalSuppliers) * 100) : 0,
+      bounceRate: totalSuppliers > 0 ? Math.round((bounceCount / totalSuppliers) * 100) : 0,
+      avgSessions: totalSuppliers > 0 ? Math.round((totalSessions / totalSuppliers) * 10) / 10 : 0,
+      avgInactiveDays: hasInactiveDaysCount > 0 ? Math.round(totalInactiveDays / hasInactiveDaysCount) : 0,
+      avgLifespanDays: hasLifespanCount > 0 ? Math.round(totalLifespanDays / hasLifespanCount) : 0
+    },
+    volumes: [
+      { name: "Más de 1.000 al mes", value: volOver1000 },
+      { name: "301 a 1.000 al mes", value: vol301to1000 },
+      { name: "51 a 300 al mes", value: vol51to300 },
+      { name: "Menos de 50 al mes", value: volUnder50 },
+      { name: "Aún no vendo (Marcas)", value: volNotSelling },
+      { name: "Aún no gestiono pedidos", value: volNotManaging },
+      { name: "Sin datos (No completó)", value: volUnspecified }
+    ],
+    roles: [
+      { name: "Proveedores", value: roleSupplier, color: "#6366F1" },
+      { name: "Marcas", value: roleBrand, color: "#10B981" },
+      { name: "No especificado", value: roleNone, color: "#94A3B8" }
+    ],
+    suppliers: suppliersList
+  };
+}
+
+// Generador de lista de mock proveedores raw
+function generateMockSuppliersList(country: string): any[] {
   let baseCount = 500;
   if (country === "CO") baseCount = 350;
   else if (country === "MX") baseCount = 100;
@@ -677,19 +874,16 @@ function generateMockBehaviorData(country: string) {
   const countryList = country === "ALL" ? ["Colombia", "Mexico", "Ecuador"] : [country === "CO" ? "Colombia" : country === "MX" ? "Mexico" : "Ecuador"];
 
   for (let i = 0; i < baseCount; i++) {
-    // Signup hace entre 0 y 90 días
     const signedUpDaysAgo = Math.floor(Math.random() * 90);
     const signedUp = new Date(referenceDate.getTime());
     signedUp.setDate(referenceDate.getDate() - signedUpDaysAgo);
 
-    // Distribución del total de sesiones
     const rand = Math.random();
     let web_sessions = 1;
-    if (rand > 0.3) web_sessions = Math.floor(Math.random() * 3) + 2; // 2-4
-    if (rand > 0.6) web_sessions = Math.floor(Math.random() * 6) + 5; // 5-10
-    if (rand > 0.85) web_sessions = Math.floor(Math.random() * 25) + 11; // 11+
+    if (rand > 0.3) web_sessions = Math.floor(Math.random() * 3) + 2;
+    if (rand > 0.6) web_sessions = Math.floor(Math.random() * 6) + 5;
+    if (rand > 0.85) web_sessions = Math.floor(Math.random() * 25) + 11;
 
-    // Determinar última conexión
     const lastSeen = new Date(signedUp.getTime());
     if (web_sessions > 1) {
       let maxActiveDays = signedUpDaysAgo;
@@ -704,7 +898,6 @@ function generateMockBehaviorData(country: string) {
     const os = osList[Math.floor(Math.random() * osList.length)];
     const countryName = countryList[Math.floor(Math.random() * countryList.length)];
 
-    // Generar encuestas mockeadas realistas para un subconjunto
     const mockRand = Math.random();
     let survey_role = null;
     let survey_volume = null;
@@ -724,7 +917,6 @@ function generateMockBehaviorData(country: string) {
       }
     }
 
-    // Generar comunidades y referidos mock
     let belong_to_community = null;
     let owner_of_community = null;
     let referred_by = null;
@@ -748,7 +940,6 @@ function generateMockBehaviorData(country: string) {
         owner_of_community = mockComs[Math.floor(Math.random() * mockComs.length)];
       }
     } else if (Math.random() > 0.3 && i > 0) {
-      // Referido por algún ID simulado previo
       referred_by = `user_${Math.floor(Math.random() * i)}`;
     }
 
@@ -764,7 +955,6 @@ function generateMockBehaviorData(country: string) {
       device_type: device,
       os,
       verified: Math.random() > 0.7,
-      // Encuestas mock
       survey_role,
       survey_volume,
       survey_brand_sales,
@@ -776,5 +966,11 @@ function generateMockBehaviorData(country: string) {
     });
   }
 
+  return data;
+}
+
+// Simulación de datos de comportamiento en caso de no tener DB
+function generateMockBehaviorData(country: string) {
+  const data = generateMockSuppliersList(country);
   return analyzeSuppliers(data, country, "mock");
 }

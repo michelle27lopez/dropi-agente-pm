@@ -120,6 +120,40 @@ type CommunityMetric = {
   avgLifespanDays: number;
 };
 
+type CommunitySupplier = {
+  user_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  country: string;
+  web_sessions: number;
+  days_inactive: number;
+  signed_up: string;
+  verified: boolean;
+  billing_information: boolean;
+  survey_role: string | null;
+  survey_volume: string | null;
+  potentialRating: "high" | "medium" | "low";
+  referrerName: string;
+};
+
+type CommunityDetailResponse = {
+  communityName: string;
+  stats: {
+    totalSuppliers: number;
+    activeRate: number;
+    verifiedRate: number;
+    billingRate: number;
+    bounceRate: number;
+    avgSessions: number;
+    avgInactiveDays: number;
+    avgLifespanDays: number;
+  };
+  volumes: ItemData[];
+  roles: ItemData[];
+  suppliers: CommunitySupplier[];
+};
+
 type SurveyStats = {
   totalWithSurvey: number;
   roles: ItemData[];
@@ -175,6 +209,16 @@ export default function BehaviorDashboard() {
   const [filterCommunity, setFilterCommunity] = useState<string>("ALL");
   const [chartMetric, setChartMetric] = useState<"count" | "activeRate" | "billingRate" | "avgSessions" | "bounceRate" | "avgInactiveDays" | "avgLifespanDays">("count");
 
+  // Detalle de Comunidad (Modal)
+  const [detailCommunityName, setDetailCommunityName] = useState<string | null>(null);
+  const [communityDetail, setCommunityDetail] = useState<CommunityDetailResponse | null>(null);
+  const [loadingDetail, setLoadingDetail] = useState<boolean>(false);
+
+  // Filtros del listado dentro del Modal
+  const [detailSearch, setDetailSearch] = useState<string>("");
+  const [detailFilterPotential, setDetailFilterPotential] = useState<string>("ALL");
+  const [detailFilterStatus, setDetailFilterStatus] = useState<string>("ALL");
+
   // Toggle del Heatmap: % de retención vs cantidad absoluta
   const [heatmapMode, setHeatmapMode] = useState<"percentage" | "count">("percentage");
 
@@ -194,6 +238,25 @@ export default function BehaviorDashboard() {
       console.error("Error loading behavior metrics:", e);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCommunityDetail = async (comName: string) => {
+    setDetailCommunityName(comName);
+    setLoadingDetail(true);
+    setDetailSearch("");
+    setDetailFilterPotential("ALL");
+    setDetailFilterStatus("ALL");
+    try {
+      const res = await fetch(`/api/metrics/behavior?country=${country}&community=${encodeURIComponent(comName)}`);
+      if (res.ok) {
+        const json = await res.json();
+        setCommunityDetail(json);
+      }
+    } catch (e) {
+      console.error("Error loading community details:", e);
+    } finally {
+      setLoadingDetail(false);
     }
   };
 
@@ -1266,16 +1329,24 @@ export default function BehaviorDashboard() {
  
                                   {/* Acción */}
                                   <td className="px-6 py-4 text-right">
-                                    <button
-                                      onClick={() => {
-                                        setFilterCommunity(c.name);
-                                        setActiveTab("recovery");
-                                      }}
-                                      className="inline-flex items-center gap-0.5 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer"
-                                    >
-                                      <span>Ver lista</span>
-                                      <ArrowRight className="w-3 h-3" />
-                                    </button>
+                                    <div className="flex items-center justify-end gap-3">
+                                      <button
+                                        onClick={() => fetchCommunityDetail(c.name)}
+                                        className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 hover:text-emerald-800 hover:underline cursor-pointer"
+                                      >
+                                        <span>Analizar 🔍</span>
+                                      </button>
+                                      <button
+                                        onClick={() => {
+                                          setFilterCommunity(c.name);
+                                          setActiveTab("recovery");
+                                        }}
+                                        className="inline-flex items-center gap-0.5 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer"
+                                      >
+                                        <span>Ver lista</span>
+                                        <ArrowRight className="w-3 h-3" />
+                                      </button>
+                                    </div>
                                   </td>
                                 </tr>
                               );
@@ -1707,6 +1778,320 @@ export default function BehaviorDashboard() {
           </div>
         )}
       </div>
+
+      {/* Modal de Detalle de Comunidad */}
+      {detailCommunityName && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <span className="p-1 rounded bg-purple-500/10 text-purple-600">
+                    <Users className="w-4 h-4" />
+                  </span>
+                  Analizar Comunidad: <span className="text-purple-600 font-extrabold">{detailCommunityName}</span>
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Desglose analítico, volumen de pedidos y directorio de leads para este canal
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setDetailCommunityName(null);
+                  setCommunityDetail(null);
+                }}
+                className="w-8 h-8 rounded-lg hover:bg-slate-200 transition-colors flex items-center justify-center text-slate-500 font-bold text-xl cursor-pointer"
+              >
+                &times;
+              </button>
+            </div>
+            
+            {/* Content (Scrollable) */}
+            {loadingDetail ? (
+              <div className="flex-1 flex flex-col items-center justify-center py-24 gap-3">
+                <RefreshCw className="w-8 h-8 text-purple-600 animate-spin" />
+                <p className="text-slate-500 text-sm font-medium animate-pulse">Cargando datos detallados de la comunidad...</p>
+              </div>
+            ) : communityDetail ? (
+              <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+                {/* Mini KPI Cards specific to community */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Registros Totales</p>
+                    <p className="text-2xl font-extrabold text-slate-800 mt-1">{communityDetail.stats.totalSuppliers}</p>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Tasa de Activación</p>
+                    <p className="text-2xl font-extrabold text-emerald-600 mt-1">{communityDetail.stats.activeRate}%</p>
+                    <div className="w-full bg-slate-200 rounded-full h-1 mt-2">
+                      <div className="bg-emerald-500 h-full" style={{ width: `${communityDetail.stats.activeRate}%` }} />
+                    </div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Tasa Verificación</p>
+                    <p className="text-2xl font-extrabold text-indigo-600 mt-1">{communityDetail.stats.verifiedRate}%</p>
+                    <div className="w-full bg-slate-200 rounded-full h-1 mt-2">
+                      <div className="bg-indigo-500 h-full" style={{ width: `${communityDetail.stats.verifiedRate}%` }} />
+                    </div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Facturación Lista</p>
+                    <p className="text-2xl font-extrabold text-amber-600 mt-1">{communityDetail.stats.billingRate}%</p>
+                    <div className="w-full bg-slate-200 rounded-full h-1 mt-2">
+                      <div className="bg-amber-500 h-full" style={{ width: `${communityDetail.stats.billingRate}%` }} />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Charts specific to community */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                  {/* Volumen */}
+                  <div className="md:col-span-8 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                    <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Distribución de Ventas/Pedidos Declarados</h4>
+                    <div className="h-[220px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={communityDetail.volumes.filter(v => v.value > 0)} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                          <XAxis dataKey="name" tick={{ fontSize: 9, fill: "#64748b" }} stroke="#e2e8f0" />
+                          <YAxis tick={{ fontSize: 9, fill: "#64748b" }} stroke="#e2e8f0" />
+                          <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "11px" }} />
+                          <Bar dataKey="value" fill="#6366F1" radius={[4, 4, 0, 0]} barSize={24}>
+                            {communityDetail.volumes.filter(v => v.value > 0).map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                  {/* Roles */}
+                  <div className="md:col-span-4 bg-slate-50/50 p-4 rounded-xl border border-slate-100 flex flex-col justify-between">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Distribución de Roles</h4>
+                      <p className="text-[10px] text-slate-400">Composición de miembros</p>
+                    </div>
+                    <div className="h-[130px] w-full relative flex items-center justify-center my-2">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={communityDetail.roles}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={35}
+                            outerRadius={50}
+                            paddingAngle={3}
+                            dataKey="value"
+                          >
+                            {communityDetail.roles.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="flex flex-col gap-1 text-[10px] mt-2">
+                      {communityDetail.roles.map((r, index) => (
+                        <div key={r.name} className="flex items-center justify-between text-slate-600 border-b border-slate-100 pb-0.5">
+                          <div className="flex items-center gap-1">
+                            <span className="w-2 h-2 rounded-full" style={{ background: r.color || COLORS[index % COLORS.length] }} />
+                            <span>{r.name}</span>
+                          </div>
+                          <span className="font-bold text-slate-800">{r.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Members Directory */}
+                <div className="border-t border-slate-100 pt-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Directorio de Bodegas de la Comunidad</h4>
+                      <p className="text-[10px] text-slate-400 mt-0.5">Filtre por potencial comercial o estado de conexión</p>
+                    </div>
+                    
+                    {/* Filters for modal members */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      {/* Search */}
+                      <div className="relative w-44">
+                        <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="text"
+                          value={detailSearch}
+                          onChange={(e) => setDetailSearch(e.target.value)}
+                          placeholder="Buscar bodega..."
+                          className="w-full pl-7 pr-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[10px] placeholder-slate-400 focus:outline-none focus:border-slate-400 transition-colors"
+                        />
+                      </div>
+                      {/* Filter potential */}
+                      <select
+                        value={detailFilterPotential}
+                        onChange={(e) => setDetailFilterPotential(e.target.value)}
+                        className="bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg text-[10px] font-bold text-slate-700 focus:outline-none cursor-pointer"
+                      >
+                        <option value="ALL">Todos los Potenciales</option>
+                        <option value="high">Alto Potencial (Proveedor + &gt;50 pedidos)</option>
+                        <option value="medium">Medio Potencial</option>
+                        <option value="low">Bajo Potencial</option>
+                      </select>
+                      {/* Filter connection status */}
+                      <select
+                        value={detailFilterStatus}
+                        onChange={(e) => setDetailFilterStatus(e.target.value)}
+                        className="bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg text-[10px] font-bold text-slate-700 focus:outline-none cursor-pointer"
+                      >
+                        <option value="ALL">Todos los Estados</option>
+                        <option value="active">Activos recientes (Inactivo &lt;= 7d)</option>
+                        <option value="dormant">Dormantes/Inactivos (&gt;7d)</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Filtered Members table */}
+                  {(() => {
+                    const filteredSuppliers = communityDetail.suppliers.filter((s) => {
+                      const matchesSearch =
+                        s.name.toLowerCase().includes(detailSearch.toLowerCase()) ||
+                        s.email.toLowerCase().includes(detailSearch.toLowerCase());
+                      const matchesPotential =
+                        detailFilterPotential === "ALL" || s.potentialRating === detailFilterPotential;
+                      const matchesStatus = (() => {
+                        if (detailFilterStatus === "ALL") return true;
+                        if (detailFilterStatus === "active") return s.days_inactive <= 7;
+                        return s.days_inactive > 7;
+                      })();
+                      return matchesSearch && matchesPotential && matchesStatus;
+                    });
+
+                    // Generar mensaje contextualizado de WhatsApp
+                    const getDetailWhatsAppLink = (supplier: CommunitySupplier) => {
+                      const cleanPhone = supplier.phone.replace(/\s+/g, "").replace(/\+/g, "");
+                      let finalPhone = cleanPhone;
+                      if (cleanPhone.startsWith("3") && cleanPhone.length === 10) {
+                        finalPhone = `57${cleanPhone}`;
+                      }
+                      const comContext = ` Vimos que te registraste a través de la comunidad de ${detailCommunityName}.`;
+                      const volContext = supplier.survey_volume ? ` e indicaste que despachas un gran volumen de productos (${supplier.survey_volume}).` : "";
+                      
+                      let message = `Hola ${supplier.name}, te saludamos del equipo de Dropi.${comContext}${volContext} Queremos ayudarte a potenciar tus ventas y certificar tu bodega en nuestro catálogo. ¿Podemos agendar una llamada breve de 5 minutos para resolver cualquier duda y configurar tu cuenta?`;
+                      return `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
+                    };
+
+                    return (
+                      <div className="border border-slate-200/80 rounded-xl overflow-hidden shadow-sm bg-white">
+                        <div className="max-h-[300px] overflow-y-auto">
+                          <table className="w-full text-left border-collapse text-xs">
+                            <thead>
+                              <tr className="border-b border-slate-100 bg-slate-50 text-[9px] font-bold text-slate-400 uppercase tracking-wider sticky top-0">
+                                <th className="px-4 py-3">Nombre Bodega</th>
+                                <th className="px-4 py-3 text-center">Potencial</th>
+                                <th className="px-4 py-3">Referido por</th>
+                                <th className="px-4 py-3">Rol Survey</th>
+                                <th className="px-4 py-3">Volumen Survey</th>
+                                <th className="px-4 py-3 text-center">Sesiones</th>
+                                <th className="px-4 py-3 text-center">Última Conexión</th>
+                                <th className="px-4 py-3 text-center">Facturación</th>
+                                <th className="px-4 py-3 text-center">Verificado</th>
+                                <th className="px-4 py-3 text-right">Contacto</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 text-slate-600">
+                              {filteredSuppliers.length > 0 ? (
+                                filteredSuppliers.map((s) => (
+                                  <tr key={s.user_id} className="hover:bg-slate-50/40 transition-colors">
+                                    <td className="px-4 py-3">
+                                      <p className="font-bold text-slate-800">{s.name}</p>
+                                      <p className="text-[10px] text-slate-400 mt-0.5">{s.email}</p>
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                      {s.potentialRating === "high" ? (
+                                        <span className="px-2 py-0.5 text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full">
+                                          Alto
+                                        </span>
+                                      ) : s.potentialRating === "medium" ? (
+                                        <span className="px-2 py-0.5 text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-100 rounded-full">
+                                          Medio
+                                        </span>
+                                      ) : (
+                                        <span className="px-2 py-0.5 text-[9px] font-bold bg-slate-50 text-slate-500 border border-slate-200 rounded-full">
+                                          Bajo
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td className="px-4 py-3 text-[11px] text-slate-500">
+                                      {s.referrerName}
+                                    </td>
+                                    <td className="px-4 py-3 max-w-[150px] truncate text-[11px]" title={s.survey_role || ""}>
+                                      {s.survey_role ? (s.survey_role.includes("Proveedor") ? "Proveedor" : "Marca") : "-"}
+                                    </td>
+                                    <td className="px-4 py-3 text-[11px] font-semibold text-slate-700">
+                                      {s.survey_volume || "-"}
+                                    </td>
+                                    <td className="px-4 py-3 text-center font-bold text-slate-700">
+                                      {s.web_sessions}
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                      <span className={`font-semibold ${s.days_inactive > 14 ? "text-rose-600" : s.days_inactive > 7 ? "text-amber-600" : "text-emerald-600"}`}>
+                                        {s.days_inactive === 0 ? "Hoy" : `Hace ${s.days_inactive}d`}
+                                      </span>
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                      {s.billing_information ? (
+                                        <span className="text-emerald-600 font-bold">Sí</span>
+                                      ) : (
+                                        <span className="text-slate-300 font-bold">No</span>
+                                      )}
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                      {s.verified ? (
+                                        <span className="px-1.5 py-0.5 text-[9px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 rounded">Sí</span>
+                                      ) : (
+                                        <span className="px-1.5 py-0.5 text-[9px] font-bold bg-slate-50 text-slate-300 border border-slate-200 rounded">No</span>
+                                      )}
+                                    </td>
+                                    <td className="px-4 py-3 text-right">
+                                      {s.phone && s.phone !== "-" ? (
+                                        <a
+                                          href={getDetailWhatsAppLink(s)}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white rounded-lg text-[9px] font-bold transition-all shadow-sm cursor-pointer"
+                                        >
+                                          <MessageSquare className="w-3 h-3" />
+                                          <span>Contactar</span>
+                                        </a>
+                                      ) : (
+                                        <span className="text-[9px] text-slate-400">Sin teléfono</span>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan={10} className="px-4 py-8 text-center text-slate-400 font-medium italic">
+                                    No hay usuarios en esta comunidad que coincidan con la búsqueda.
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            ) : (
+              <div className="py-12 text-center text-slate-500">
+                Ocurrió un problema al cargar la información detallada.
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
