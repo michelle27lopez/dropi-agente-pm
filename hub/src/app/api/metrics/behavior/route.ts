@@ -68,6 +68,40 @@ function getMondayStr(dateStr: string): string {
 // Analizar la data cargada de la DB
 function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mock") {
   const totalSuppliers = data.length;
+
+  const supplierMap = new Map<string, any>();
+  data.forEach((row) => {
+    if (row.user_id) {
+      supplierMap.set(String(row.user_id).trim(), row);
+    }
+  });
+
+  const resolveCommunity = (row: any): string => {
+    if (row.belong_to_community && row.belong_to_community.trim() !== "" && row.belong_to_community.trim() !== "-") {
+      return row.belong_to_community.trim();
+    }
+    if (row.owner_of_community && row.owner_of_community.trim() !== "" && row.owner_of_community.trim() !== "-") {
+      return row.owner_of_community.trim();
+    }
+    if (row.referred_by && row.referred_by.trim() !== "" && row.referred_by.trim() !== "-") {
+      const referrerId = String(row.referred_by).trim();
+      const referrer = supplierMap.get(referrerId);
+      if (referrer) {
+        if (referrer.owner_of_community && referrer.owner_of_community.trim() !== "" && referrer.owner_of_community.trim() !== "-") {
+          return referrer.owner_of_community.trim();
+        }
+        if (referrer.belong_to_community && referrer.belong_to_community.trim() !== "" && referrer.belong_to_community.trim() !== "-") {
+          return referrer.belong_to_community.trim();
+        }
+        if (referrer.name && referrer.name.trim() !== "") {
+          return `Referido por ${referrer.name.trim()}`;
+        }
+      }
+    }
+    return "Orgánico / Sin comunidad";
+  };
+
+  const communityStats: Record<string, { name: string; count: number; active: number; verified: number; totalSessions: number }> = {};
   let totalSessions = 0;
   let verifiedCount = 0;
   let activatedCount = 0; // Tasa de activación: > 7 sesiones
@@ -132,6 +166,20 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
   data.forEach((row) => {
     const { signed_up, last_seen, web_sessions, country: cName, device_type, os, verified } = row;
     const sessions = web_sessions || 0;
+
+    const community = resolveCommunity(row);
+    if (!communityStats[community]) {
+      communityStats[community] = { name: community, count: 0, active: 0, verified: 0, totalSessions: 0 };
+    }
+    const cStats = communityStats[community];
+    cStats.count++;
+    cStats.totalSessions += sessions;
+    if (sessions > 7) {
+      cStats.active++;
+    }
+    if (verified) {
+      cStats.verified++;
+    }
     
     totalSessions += sessions;
     if (verified) verifiedCount++;
@@ -285,6 +333,11 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
           survey_shipping_pref: row.survey_shipping_pref || null,
           survey_sell_pref: row.survey_sell_pref || null,
           survey_source: row.survey_source || null,
+          // Campos de comunidad y referido
+          referred_by: row.referred_by || null,
+          belong_to_community: row.belong_to_community || null,
+          owner_of_community: row.owner_of_community || null,
+          resolved_community: community
         });
       }
     }
@@ -517,6 +570,16 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
     weeklyCohorts,
     ageCohorts,
     riskSuppliers: riskList.slice(0, 200),
+    communities: Object.values(communityStats)
+      .sort((a, b) => b.count - a.count)
+      .map((c) => ({
+        name: c.name,
+        count: c.count,
+        activeCount: c.active,
+        activeRate: c.count > 0 ? Math.round((c.active / c.count) * 100) : 0,
+        verifiedRate: c.count > 0 ? Math.round((c.verified / c.count) * 100) : 0,
+        avgSessions: c.count > 0 ? Math.round((c.totalSessions / c.count) * 10) / 10 : 0
+      })),
     surveyStats: {
       totalWithSurvey,
       roles: [
@@ -610,6 +673,34 @@ function generateMockBehaviorData(country: string) {
       }
     }
 
+    // Generar comunidades y referidos mock
+    let belong_to_community = null;
+    let owner_of_community = null;
+    let referred_by = null;
+
+    if (Math.random() > 0.4) {
+      const mockComs = [
+        "COMUNIDAD IVAN CAICEDO",
+        "GOCOMMER",
+        "SEVENTY",
+        "BRANDS",
+        "ESTRELLAS",
+        "ALEX ROJAS",
+        "GGP PREMIUM",
+        "RUN COMMERCE",
+        "LOGÍSTICA PREMIUM",
+        "FAMILIA ECOM"
+      ];
+      if (Math.random() > 0.6) {
+        belong_to_community = mockComs[Math.floor(Math.random() * mockComs.length)];
+      } else {
+        owner_of_community = mockComs[Math.floor(Math.random() * mockComs.length)];
+      }
+    } else if (Math.random() > 0.3 && i > 0) {
+      // Referido por algún ID simulado previo
+      referred_by = `user_${Math.floor(Math.random() * i)}`;
+    }
+
     data.push({
       user_id: `user_${i}`,
       name: `Bodega ${["Alfa", "Imperial", "Distribuciones", "Importaciones", "Sur", "Pacífico", "Ecom", "Global", "Express"][Math.floor(Math.random() * 9)]} ${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`,
@@ -628,6 +719,9 @@ function generateMockBehaviorData(country: string) {
       survey_brand_sales,
       survey_source,
       survey_purpose,
+      referred_by,
+      belong_to_community,
+      owner_of_community,
     });
   }
 

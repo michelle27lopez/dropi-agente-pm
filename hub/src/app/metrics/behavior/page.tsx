@@ -99,6 +99,19 @@ type RiskSupplier = {
   survey_shipping_pref: string | null;
   survey_sell_pref: string | null;
   survey_source: "comunidades" | "huerfanos" | null;
+  referred_by: string | null;
+  belong_to_community: string | null;
+  owner_of_community: string | null;
+  resolved_community: string | null;
+};
+
+type CommunityMetric = {
+  name: string;
+  count: number;
+  activeCount: number;
+  activeRate: number;
+  verifiedRate: number;
+  avgSessions: number;
 };
 
 type SurveyStats = {
@@ -135,6 +148,7 @@ type BehaviorResponse = {
   weeklyCohorts: WeeklyCohort[];
   ageCohorts: AgeCohort[];
   riskSuppliers: RiskSupplier[];
+  communities: CommunityMetric[];
   surveyStats: SurveyStats;
 };
 
@@ -152,6 +166,7 @@ export default function BehaviorDashboard() {
   const [filterSource, setFilterSource] = useState<string>("ALL");
   const [filterVolume, setFilterVolume] = useState<string>("ALL");
   const [filterPriority, setFilterPriority] = useState<string>("ALL");
+  const [filterCommunity, setFilterCommunity] = useState<string>("ALL");
 
   // Toggle del Heatmap: % de retención vs cantidad absoluta
   const [heatmapMode, setHeatmapMode] = useState<"percentage" | "count">("percentage");
@@ -242,6 +257,9 @@ export default function BehaviorDashboard() {
   });
   uniqueSignupWeeks.sort().reverse();
 
+  // Extraer comunidades únicas de los datos de comportamiento para el filtro
+  const uniqueCommunities = data?.communities.map((c) => c.name) || [];
+
   // Filtrado de proveedores en riesgo (Directorio)
   const filteredRisk = riskSuppliers.filter((s) => {
     const matchesSearch =
@@ -281,7 +299,12 @@ export default function BehaviorDashboard() {
       return s.priority === filterPriority;
     })();
 
-    return matchesSearch && matchesWeek && matchesRisk && matchesSource && matchesVolume && matchesPriority;
+    const matchesCommunity = (() => {
+      if (filterCommunity === "ALL") return true;
+      return s.resolved_community === filterCommunity;
+    })();
+
+    return matchesSearch && matchesWeek && matchesRisk && matchesSource && matchesVolume && matchesPriority && matchesCommunity;
   });
 
   const COLORS = ["#6366F1", "#10B981", "#F59E0B", "#EF4444", "#EC4899", "#8B5CF6", "#14B8A6", "#3B82F6"];
@@ -920,6 +943,130 @@ export default function BehaviorDashboard() {
 
                 </div>
 
+                {/* Rendimiento por Comunidades */}
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm mt-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Rendimiento y Penetración de Comunidades</h4>
+                      <p className="text-xs text-slate-400">Atribución de registros por comunidades directas, propietarios o referidos</p>
+                    </div>
+                    <span className="text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-100 px-2.5 py-1 rounded-full uppercase">
+                      Adquisición y Activación
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    {/* Top 10 Comunidades Chart */}
+                    <div className="lg:col-span-5 border-r border-slate-100 pr-0 lg:pr-6">
+                      <p className="text-xs font-bold text-slate-600 mb-4 uppercase tracking-wider">Top 10 Comunidades (Volumen de Captación)</p>
+                      <div className="h-[320px] w-full">
+                        {data?.communities && data.communities.length > 0 ? (
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                              data={data.communities.slice(0, 10)}
+                              layout="vertical"
+                              margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                              <XAxis type="number" tick={{ fontSize: 10, fill: "#64748b" }} stroke="#e2e8f0" />
+                              <YAxis
+                                dataKey="name"
+                                type="category"
+                                tick={{ fontSize: 9, fill: "#475569" }}
+                                width={120}
+                                stroke="#e2e8f0"
+                              />
+                              <Tooltip
+                                contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "11px" }}
+                              />
+                              <Bar dataKey="count" name="Registrados" fill="#8B5CF6" radius={[0, 4, 4, 0]} barSize={12}>
+                                {data.communities.slice(0, 10).map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                              </Bar>
+                            </BarChart>
+                          </ResponsiveContainer>
+                        ) : (
+                          <div className="h-full flex items-center justify-center text-slate-400 text-xs italic">
+                            No hay datos de comunidades disponibles
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Tabla de Métricas de Comunidades */}
+                    <div className="lg:col-span-7 flex flex-col">
+                      <p className="text-xs font-bold text-slate-600 mb-4 uppercase tracking-wider">Métricas de Conversión y Uso por Comunidad</p>
+                      <div className="overflow-x-auto max-h-[320px] overflow-y-auto border border-slate-100 rounded-xl">
+                        <table className="w-full text-left border-collapse">
+                          <thead className="sticky top-0 bg-slate-50 z-10 shadow-[0_1px_0_0_rgba(226,232,240,1)]">
+                            <tr className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                              <th className="px-4 py-3">Comunidad</th>
+                              <th className="px-4 py-3 text-center">Registros</th>
+                              <th className="px-4 py-3 text-center">Activos</th>
+                              <th className="px-4 py-3 text-center">% Activación</th>
+                              <th className="px-4 py-3 text-center">% Verificados</th>
+                              <th className="px-4 py-3 text-center">Sesiones Prom.</th>
+                              <th className="px-4 py-3 text-right">Acción</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100 text-xs text-slate-600">
+                            {data?.communities && data.communities.length > 0 ? (
+                              data.communities.map((c, idx) => (
+                                <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                                  <td className="px-4 py-3 font-bold text-slate-800 truncate max-w-[150px]" title={c.name}>
+                                    {c.name}
+                                  </td>
+                                  <td className="px-4 py-3 text-center font-semibold text-slate-700">
+                                    {c.count}
+                                  </td>
+                                  <td className="px-4 py-3 text-center text-slate-500">
+                                    {c.activeCount}
+                                  </td>
+                                  <td className="px-4 py-3 text-center">
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                      c.activeRate >= 30
+                                        ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                                        : c.activeRate >= 10
+                                        ? "bg-amber-50 text-amber-700 border border-amber-100"
+                                        : "bg-rose-50 text-rose-700 border border-rose-100"
+                                    }`}>
+                                      {c.activeRate}%
+                                    </span>
+                                  </td>
+                                  <td className="px-4 py-3 text-center font-medium text-slate-600">
+                                    {c.verifiedRate}%
+                                  </td>
+                                  <td className="px-4 py-3 text-center font-medium text-slate-600">
+                                    {c.avgSessions}
+                                  </td>
+                                  <td className="px-4 py-3 text-right">
+                                    <button
+                                      onClick={() => {
+                                        setFilterCommunity(c.name);
+                                        setActiveTab("recovery");
+                                      }}
+                                      className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer"
+                                    >
+                                      Filtrar
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td colSpan={7} className="px-4 py-8 text-center text-slate-400 italic">
+                                  No hay datos agregados de comunidades
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             )}
 
@@ -1105,6 +1252,23 @@ export default function BehaviorDashboard() {
                     </select>
                   </div>
 
+                  {/* Filtro de Comunidad Específica */}
+                  <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                    <span className="text-slate-400">Comunidad:</span>
+                    <select
+                      value={filterCommunity}
+                      onChange={(e) => setFilterCommunity(e.target.value)}
+                      className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs max-w-[150px]"
+                    >
+                      <option value="ALL">Todas las Comunidades</option>
+                      {uniqueCommunities.map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
                   {/* Filtro de Volumen de la Encuesta */}
                   <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
                     <span className="text-slate-400">Volumen Comercial:</span>
@@ -1222,17 +1386,24 @@ export default function BehaviorDashboard() {
 
                               {/* Origen / Canal */}
                               <td className="px-6 py-4">
-                                {s.survey_source ? (
-                                  <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider ${
-                                    s.survey_source === "comunidades" 
-                                      ? "bg-purple-50 text-purple-700 border border-purple-100" 
-                                      : "bg-slate-100 text-slate-600"
-                                  }`}>
-                                    {s.survey_source === "comunidades" ? "Comunidad" : "Huérfano"}
-                                  </span>
-                                ) : (
-                                  <span className="text-slate-400 italic">Orgánico</span>
-                                )}
+                                <div className="flex flex-col gap-0.5">
+                                  {s.survey_source ? (
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider self-start ${
+                                      s.survey_source === "comunidades" 
+                                        ? "bg-purple-50 text-purple-700 border border-purple-100" 
+                                        : "bg-slate-100 text-slate-600"
+                                    }`}>
+                                      {s.survey_source === "comunidades" ? "Comunidad" : "Huérfano"}
+                                    </span>
+                                  ) : (
+                                    <span className="text-slate-400 italic">Orgánico</span>
+                                  )}
+                                  {s.resolved_community && s.resolved_community !== "Orgánico / Sin comunidad" && (
+                                    <span className="text-[10px] font-bold text-purple-600 truncate max-w-[130px]" title={s.resolved_community}>
+                                      {s.resolved_community}
+                                    </span>
+                                  )}
+                                </div>
                               </td>
 
                               {/* País / Sesiones */}

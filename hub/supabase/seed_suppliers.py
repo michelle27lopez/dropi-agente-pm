@@ -86,6 +86,10 @@ with open(csv_path, mode='r', encoding='utf-8') as f:
         verified = row[23].strip().lower() == 'true'
         billing_info = row[30].strip().lower() == 'true'
 
+        owner_of_community = row[18].strip() if len(row) > 18 and row[18].strip() != '-' else None
+        belong_to_community = row[19].strip() if len(row) > 19 and row[19].strip() != '-' else None
+        referred_by = row[22].strip() if len(row) > 22 and row[22].strip() != '-' else None
+
         if not user_id or user_id == '-':
             continue
 
@@ -105,7 +109,10 @@ with open(csv_path, mode='r', encoding='utf-8') as f:
             "role": role,
             "phone": phone,
             "verified": verified,
-            "billing_information": billing_info
+            "billing_information": billing_info,
+            "referred_by": referred_by,
+            "belong_to_community": belong_to_community,
+            "owner_of_community": owner_of_community
         })
         
         # Agrupar registros para pm_supplier_metrics
