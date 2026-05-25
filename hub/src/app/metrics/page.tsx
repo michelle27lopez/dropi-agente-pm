@@ -784,10 +784,10 @@ export default function PMDashboard() {
                             {/* Paso 3 (Placeholder) */}
                             <div>
                               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
-                                <span>3. Aprobados Visibilidad</span>
+                                <span>3. Aprobados Visibilidad (Operaciones)</span>
                                 <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
                                   <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
-                                  Sin datos (Próximamente)
+                                  Pendiente definir cantidad (Próximamente)
                                 </span>
                               </div>
                               <div className="w-full h-6 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex items-center justify-center">
@@ -830,7 +830,7 @@ export default function PMDashboard() {
                             <h5 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Embudo: Ascenso a Proveedor Verificado</h5>
                           </div>
                           <p className="text-xs text-slate-400 mt-1">
-                            Mide la tasa de éxito de proveedores que solicitan el estatus de Proveedor Verificado.
+                            Mide el flujo completo de validación y postulación para obtener el sello de Proveedor Verificado.
                           </p>
 
                           {/* Gráfico del Embudo */}
@@ -838,18 +838,68 @@ export default function PMDashboard() {
                             {/* Paso 1 */}
                             <div>
                               <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
-                                <span>1. Solicitudes de Ascenso (CRM)</span>
-                                <span>{summary.ascenso_verificado?.value_display ?? "0"} (100%)</span>
+                                <span>1. Nuevos Registros (Userpilot)</span>
+                                <span>{summary.new_registrations?.value_display ?? "0"} (100%)</span>
                               </div>
                               <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
-                                <div className="bg-gradient-to-r from-indigo-400 to-indigo-500 h-full rounded-l-lg" style={{ width: "100%" }} />
+                                <div className="bg-gradient-to-r from-slate-400 to-slate-500 h-full rounded-l-lg" style={{ width: "100%" }} />
                               </div>
                             </div>
 
-                            {/* Paso 2 (Placeholder) */}
+                            {/* Paso 2 */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                <span>2. Solicitudes de Aprobación Visibilidad (CRM)</span>
+                                <span>
+                                  {summary.aprobacion_visibilidad?.value_display ?? "0"} ({summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? ((summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%)
+                                </span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40 flex items-center">
+                                <div 
+                                  className="bg-gradient-to-r from-indigo-300 to-indigo-400 h-full rounded-l-lg transition-all duration-500" 
+                                  style={{ 
+                                    width: `${summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? Math.max(5, Math.min(100, (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100)) : 0}%` 
+                                  }} 
+                                />
+                              </div>
+                            </div>
+
+                            {/* Paso 3 (Placeholder de Aprobados) */}
                             <div>
                               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
-                                <span>2. Solicitudes Aprobadas</span>
+                                <span>3. Aprobados Visibilidad (Operaciones)</span>
+                                <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
+                                  Pendiente definir cantidad (Próximamente)
+                                </span>
+                              </div>
+                              <div className="w-full h-6 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex items-center justify-center">
+                                <span className="text-[10px] text-slate-400 font-medium tracking-wider">CONEXIÓN DE HISTORIAL PENDIENTE</span>
+                              </div>
+                            </div>
+
+                            {/* Paso 4 */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                <span>4. Solicitudes de Ascenso a Verificado (CRM)</span>
+                                <span>
+                                  {summary.ascenso_verificado?.value_display ?? "0"} ({summary.new_registrations?.value_num && summary.ascenso_verificado?.value_num ? ((summary.ascenso_verificado.value_num / summary.new_registrations.value_num) * 100).toFixed(2) : 0}%)
+                                </span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40 flex items-center">
+                                <div 
+                                  className="bg-[#6366F1] h-full rounded-l-lg transition-all duration-500" 
+                                  style={{ 
+                                    width: `${summary.new_registrations?.value_num && summary.ascenso_verificado?.value_num ? Math.max(2, Math.min(100, (summary.ascenso_verificado.value_num / summary.new_registrations.value_num) * 100)) : 0}%` 
+                                  }} 
+                                />
+                              </div>
+                            </div>
+
+                            {/* Paso 5 (Placeholder Aprobados) */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
+                                <span>5. Ascensos Verificados Aprobados (CRM)</span>
                                 <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
                                   <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
                                   Sin datos (Próximamente)
@@ -865,16 +915,16 @@ export default function PMDashboard() {
                         {/* Panel de Diagnóstico */}
                         <div className="w-full md:w-[320px] bg-slate-50 p-5 rounded-xl border border-slate-200/50 self-stretch flex flex-col justify-between">
                           <div>
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg w-max mb-3">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-lg w-max mb-3">
                               <Compass className="w-3.5 h-3.5" />
-                              <span>Por Integrar Aprobaciones</span>
+                              <span>Tasa de Postulación: {summary.new_registrations?.value_num && summary.ascenso_verificado?.value_num ? ((summary.ascenso_verificado.value_num / summary.new_registrations.value_num) * 100).toFixed(2) : 0}%</span>
                             </div>
                             <h5 className="text-xs font-bold text-slate-700">Control de Calidad (Verificados)</h5>
                             <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
                               Se han recibido <strong>{summary.ascenso_verificado?.value_display ?? "0"}</strong> solicitudes de ascenso en los últimos {days} días.
                             </p>
                             <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
-                              El estatus "Verificado" destaca a bodegas confiables con stock y TAT bajo. La tasa de aprobación se visualizará cuando estén disponibles los datos de cierre.
+                              El estatus "Verificado" destaca a bodegas confiables con stock y TAT bajo. La tasa de aprobación de solicitudes y el número de aprobados se visualizarán tan pronto esté disponible el pipeline correspondiente.
                             </p>
                           </div>
                           <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
@@ -889,13 +939,13 @@ export default function PMDashboard() {
                       <>
                         <div className="flex-1 w-full">
                           <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-indigo-50 rounded-lg">
-                              <Compass className="w-4 h-4 text-indigo-600" />
+                            <div className="p-1.5 bg-amber-50 rounded-lg">
+                              <Sparkles className="w-4 h-4 text-amber-500" />
                             </div>
                             <h5 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Embudo: Ascenso a Proveedor Premium</h5>
                           </div>
                           <p className="text-xs text-slate-400 mt-1">
-                            Mide la conversión comercial de proveedores a la suscripción Premium.
+                            Mide el flujo completo de monetización y suscripción de proveedores a membresías Premium.
                           </p>
 
                           {/* Gráfico del Embudo */}
@@ -903,18 +953,68 @@ export default function PMDashboard() {
                             {/* Paso 1 */}
                             <div>
                               <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
-                                <span>1. Solicitudes de Membresía (CRM)</span>
-                                <span>{summary.ascenso_premium?.value_display ?? "0"} (100%)</span>
+                                <span>1. Nuevos Registros (Userpilot)</span>
+                                <span>{summary.new_registrations?.value_display ?? "0"} (100%)</span>
                               </div>
                               <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
-                                <div className="bg-gradient-to-r from-amber-400 to-amber-500 h-full rounded-l-lg" style={{ width: "100%" }} />
+                                <div className="bg-gradient-to-r from-slate-400 to-slate-500 h-full rounded-l-lg" style={{ width: "100%" }} />
                               </div>
                             </div>
 
-                            {/* Paso 2 (Placeholder) */}
+                            {/* Paso 2 */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                <span>2. Solicitudes de Aprobación Visibilidad (CRM)</span>
+                                <span>
+                                  {summary.aprobacion_visibilidad?.value_display ?? "0"} ({summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? ((summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%)
+                                </span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40 flex items-center">
+                                <div 
+                                  className="bg-gradient-to-r from-indigo-300 to-indigo-400 h-full rounded-l-lg transition-all duration-500" 
+                                  style={{ 
+                                    width: `${summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? Math.max(5, Math.min(100, (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100)) : 0}%` 
+                                  }} 
+                                />
+                              </div>
+                            </div>
+
+                            {/* Paso 3 (Placeholder de Aprobados) */}
                             <div>
                               <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
-                                <span>2. Membresías Activas / Pagadas</span>
+                                <span>3. Aprobados Visibilidad (Operaciones)</span>
+                                <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
+                                  Pendiente definir cantidad (Próximamente)
+                                </span>
+                              </div>
+                              <div className="w-full h-6 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex items-center justify-center">
+                                <span className="text-[10px] text-slate-400 font-medium tracking-wider">CONEXIÓN DE HISTORIAL PENDIENTE</span>
+                              </div>
+                            </div>
+
+                            {/* Paso 4 */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                <span>4. Solicitudes de Ascenso a Premium (CRM)</span>
+                                <span>
+                                  {summary.ascenso_premium?.value_display ?? "0"} ({summary.new_registrations?.value_num && summary.ascenso_premium?.value_num ? ((summary.ascenso_premium.value_num / summary.new_registrations.value_num) * 100).toFixed(2) : 0}%)
+                                </span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40 flex items-center">
+                                <div 
+                                  className="bg-gradient-to-r from-amber-400 to-amber-500 h-full rounded-l-lg transition-all duration-500" 
+                                  style={{ 
+                                    width: `${summary.new_registrations?.value_num && summary.ascenso_premium?.value_num ? Math.max(2, Math.min(100, (summary.ascenso_premium.value_num / summary.new_registrations.value_num) * 100)) : 0}%` 
+                                  }} 
+                                />
+                              </div>
+                            </div>
+
+                            {/* Paso 5 (Placeholder Pagadas) */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
+                                <span>5. Membresías Premium Activas / Pagadas</span>
                                 <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
                                   <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
                                   Sin datos (Próximamente)
@@ -932,14 +1032,14 @@ export default function PMDashboard() {
                           <div>
                             <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-lg w-max mb-3">
                               <Sparkles className="w-3.5 h-3.5" />
-                              <span>Interés Comercial Activo</span>
+                              <span>Tasa de Interés: {summary.new_registrations?.value_num && summary.ascenso_premium?.value_num ? ((summary.ascenso_premium.value_num / summary.new_registrations.value_num) * 100).toFixed(2) : 0}%</span>
                             </div>
                             <h5 className="text-xs font-bold text-slate-700">Monetización & Suscripción</h5>
                             <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
                               Se han registrado <strong>{summary.ascenso_premium?.value_display ?? "0"}</strong> intenciones de ascenso a Premium.
                             </p>
                             <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
-                              Los proveedores Premium pagan comisiones especiales a cambio de visibilidad prioritaria. La tasa de conversión a pago se habilitará próximamente.
+                              Los proveedores Premium pagan comisiones o cuotas especiales a cambio de visibilidad prioritaria. La tasa de conversión a membresías pagadas se habilitará próximamente en cuanto se conecte la pasarela de pagos.
                             </p>
                           </div>
                           <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
