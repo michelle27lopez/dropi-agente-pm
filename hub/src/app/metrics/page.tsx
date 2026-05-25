@@ -62,6 +62,7 @@ export default function PMDashboard() {
   const [activeTab, setActiveTab] = useState<number>(1);
   const [activeChartKey, setActiveChartKey] = useState<string>("gmv");
   const [isClient, setIsClient] = useState<boolean>(false);
+  const [activeFunnel, setActiveFunnel] = useState<"visibility" | "verified" | "premium">("visibility");
 
   useEffect(() => {
     setIsClient(true);
@@ -692,70 +693,262 @@ export default function PMDashboard() {
                 </div>
 
                 {/* Visualización del Embudo de Conversión Registros vs. Visibilidad */}
-                <div className="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm mt-6 flex flex-col md:flex-row items-center justify-between gap-6 lg:col-span-3">
-                  <div className="flex-1 w-full">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 bg-indigo-50 rounded-lg">
-                        <Compass className="w-4 h-4 text-indigo-600" />
-                      </div>
-                      <h4 className="font-bold text-slate-800 text-sm">Embudo de Conversión: Del Registro a la Visibilidad</h4>
+                <div className="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm mt-6 flex flex-col lg:col-span-3">
+                  {/* Pestañas de Selección de Embudo */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3 mb-6">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Embudos de Conversión Operativa (Últimos {days} días)</h4>
+                      <p className="text-xs text-slate-400">Analiza el flujo de aprobación y ascensos de nivel de los proveedores</p>
                     </div>
-                    <p className="text-xs text-slate-400 mt-1">
-                      Mide cuántos de los proveedores registrados inician su validación operativa.
-                    </p>
-
-                    {/* Gráfico del Embudo */}
-                    <div className="flex flex-col gap-4 mt-6">
-                      {/* Paso 1 */}
-                      <div>
-                        <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
-                          <span>1. Nuevos Registros (Userpilot)</span>
-                          <span>{summary.new_registrations?.value_display ?? "0"} (100%)</span>
-                        </div>
-                        <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
-                          <div className="bg-gradient-to-r from-slate-400 to-slate-500 h-full rounded-l-lg" style={{ width: "100%" }} />
-                        </div>
-                      </div>
-
-                      {/* Paso 2 */}
-                      <div>
-                        <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
-                          <span>2. Solicitudes de Aprobación Visibilidad (CRM)</span>
-                          <span>
-                            {summary.aprobacion_visibilidad?.value_display ?? "0"} ({summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? ((summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%)
-                          </span>
-                        </div>
-                        <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40 flex items-center">
-                          <div 
-                            className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-full rounded-l-lg transition-all duration-500" 
-                            style={{ 
-                              width: `${summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? Math.max(5, Math.min(100, (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100)) : 0}%` 
-                            }} 
-                          />
-                        </div>
-                      </div>
+                    
+                    <div className="flex bg-slate-100 p-1 rounded-xl w-max border border-slate-200/40">
+                      <button
+                        onClick={() => setActiveFunnel("visibility")}
+                        className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          activeFunnel === "visibility"
+                            ? "bg-white text-indigo-600 shadow-sm"
+                            : "text-slate-500 hover:text-slate-800"
+                        }`}
+                      >
+                        Aprobación Visibilidad
+                      </button>
+                      <button
+                        onClick={() => setActiveFunnel("verified")}
+                        className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          activeFunnel === "verified"
+                            ? "bg-white text-indigo-600 shadow-sm"
+                            : "text-slate-500 hover:text-slate-800"
+                        }`}
+                      >
+                        Ascenso a Verificado
+                      </button>
+                      <button
+                        onClick={() => setActiveFunnel("premium")}
+                        className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
+                          activeFunnel === "premium"
+                            ? "bg-white text-indigo-600 shadow-sm"
+                            : "text-slate-500 hover:text-slate-800"
+                        }`}
+                      >
+                        Ascenso a Premium
+                      </button>
                     </div>
                   </div>
 
-                  {/* Panel de Diagnóstico */}
-                  <div className="w-full md:w-[320px] bg-slate-50 p-5 rounded-xl border border-slate-200/50 self-stretch flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-lg w-max mb-3">
-                        <AlertCircle className="w-3.5 h-3.5" />
-                        <span>Fuga en Onboarding: {summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? (100 - (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%</span>
-                      </div>
-                      <h5 className="text-xs font-bold text-slate-700">Oportunidad de Activación</h5>
-                      <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                        De los <strong>{summary.new_registrations?.value_display ?? "0"}</strong> proveedores que se registraron en los últimos {days} días, solo <strong>{summary.aprobacion_visibilidad?.value_display ?? "0"}</strong> solicitaron su Aprobación de Visibilidad.
-                      </p>
-                      <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
-                        Hay una brecha de <strong>{((summary.new_registrations?.value_num || 0) - (summary.aprobacion_visibilidad?.value_num || 0)).toLocaleString("es-CO")}</strong> proveedores que crearon cuenta pero no han iniciado el proceso de visibilidad en catálogo.
-                      </p>
-                    </div>
-                    <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
-                      <span>Acción Recomendada:</span>
-                      <span className="text-indigo-600 font-bold hover:underline cursor-default">Ver Playbook Onboarding</span>
-                    </div>
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    {/* Contenido Dinámico de Embudos */}
+                    {activeFunnel === "visibility" && (
+                      <>
+                        <div className="flex-1 w-full">
+                          <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-indigo-50 rounded-lg">
+                              <Compass className="w-4 h-4 text-indigo-600" />
+                            </div>
+                            <h5 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Embudo: Del Registro a la Visibilidad</h5>
+                          </div>
+                          <p className="text-xs text-slate-400 mt-1">
+                            Mide cuántos de los proveedores registrados inician su validación operativa.
+                          </p>
+
+                          {/* Gráfico del Embudo */}
+                          <div className="flex flex-col gap-4 mt-6">
+                            {/* Paso 1 */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                <span>1. Nuevos Registros (Userpilot)</span>
+                                <span>{summary.new_registrations?.value_display ?? "0"} (100%)</span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
+                                <div className="bg-gradient-to-r from-slate-400 to-slate-500 h-full rounded-l-lg" style={{ width: "100%" }} />
+                              </div>
+                            </div>
+
+                            {/* Paso 2 */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                <span>2. Solicitudes de Aprobación Visibilidad (CRM)</span>
+                                <span>
+                                  {summary.aprobacion_visibilidad?.value_display ?? "0"} ({summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? ((summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%)
+                                </span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40 flex items-center">
+                                <div 
+                                  className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-full rounded-l-lg transition-all duration-500" 
+                                  style={{ 
+                                    width: `${summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? Math.max(5, Math.min(100, (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100)) : 0}%` 
+                                  }} 
+                                />
+                              </div>
+                            </div>
+
+                            {/* Paso 3 (Placeholder) */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
+                                <span>3. Aprobados Visibilidad</span>
+                                <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
+                                  Sin datos (Próximamente)
+                                </span>
+                              </div>
+                              <div className="w-full h-6 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex items-center justify-center">
+                                <span className="text-[10px] text-slate-400 font-medium tracking-wider">CONEXIÓN DE HISTORIAL PENDIENTE</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Panel de Diagnóstico */}
+                        <div className="w-full md:w-[320px] bg-slate-50 p-5 rounded-xl border border-slate-200/50 self-stretch flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-lg w-max mb-3">
+                              <AlertCircle className="w-3.5 h-3.5" />
+                              <span>Fuga en Onboarding: {summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? (100 - (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%</span>
+                            </div>
+                            <h5 className="text-xs font-bold text-slate-700">Oportunidad de Activación</h5>
+                            <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
+                              De los <strong>{summary.new_registrations?.value_display ?? "0"}</strong> proveedores registrados, solo <strong>{summary.aprobacion_visibilidad?.value_display ?? "0"}</strong> solicitaron su visibilidad.
+                            </p>
+                            <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
+                              Hay una brecha de <strong>{((summary.new_registrations?.value_num || 0) - (summary.aprobacion_visibilidad?.value_num || 0)).toLocaleString("es-CO")}</strong> proveedores registrados que aún no solicitan auditoría en el catálogo.
+                            </p>
+                          </div>
+                          <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
+                            <span>Acción Recomendada:</span>
+                            <span className="text-indigo-600 font-bold hover:underline cursor-default">Ver Playbook Onboarding</span>
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {activeFunnel === "verified" && (
+                      <>
+                        <div className="flex-1 w-full">
+                          <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-indigo-50 rounded-lg">
+                              <Compass className="w-4 h-4 text-indigo-600" />
+                            </div>
+                            <h5 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Embudo: Ascenso a Proveedor Verificado</h5>
+                          </div>
+                          <p className="text-xs text-slate-400 mt-1">
+                            Mide la tasa de éxito de proveedores que solicitan el estatus de Proveedor Verificado.
+                          </p>
+
+                          {/* Gráfico del Embudo */}
+                          <div className="flex flex-col gap-4 mt-6">
+                            {/* Paso 1 */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                <span>1. Solicitudes de Ascenso (CRM)</span>
+                                <span>{summary.ascenso_verificado?.value_display ?? "0"} (100%)</span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
+                                <div className="bg-gradient-to-r from-indigo-400 to-indigo-500 h-full rounded-l-lg" style={{ width: "100%" }} />
+                              </div>
+                            </div>
+
+                            {/* Paso 2 (Placeholder) */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
+                                <span>2. Solicitudes Aprobadas</span>
+                                <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
+                                  Sin datos (Próximamente)
+                                </span>
+                              </div>
+                              <div className="w-full h-6 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex items-center justify-center">
+                                <span className="text-[10px] text-slate-400 font-medium tracking-wider">CONEXIÓN DE HISTORIAL PENDIENTE</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Panel de Diagnóstico */}
+                        <div className="w-full md:w-[320px] bg-slate-50 p-5 rounded-xl border border-slate-200/50 self-stretch flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-2.5 py-1 rounded-lg w-max mb-3">
+                              <Compass className="w-3.5 h-3.5" />
+                              <span>Por Integrar Aprobaciones</span>
+                            </div>
+                            <h5 className="text-xs font-bold text-slate-700">Control de Calidad (Verificados)</h5>
+                            <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
+                              Se han recibido <strong>{summary.ascenso_verificado?.value_display ?? "0"}</strong> solicitudes de ascenso en los últimos {days} días.
+                            </p>
+                            <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
+                              El estatus "Verificado" destaca a bodegas confiables con stock y TAT bajo. La tasa de aprobación se visualizará cuando estén disponibles los datos de cierre.
+                            </p>
+                          </div>
+                          <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
+                            <span>Acción Recomendada:</span>
+                            <span className="text-indigo-600 font-bold hover:underline cursor-default">Criterios de Ascenso</span>
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {activeFunnel === "premium" && (
+                      <>
+                        <div className="flex-1 w-full">
+                          <div className="flex items-center gap-2">
+                            <div className="p-1.5 bg-indigo-50 rounded-lg">
+                              <Compass className="w-4 h-4 text-indigo-600" />
+                            </div>
+                            <h5 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Embudo: Ascenso a Proveedor Premium</h5>
+                          </div>
+                          <p className="text-xs text-slate-400 mt-1">
+                            Mide la conversión comercial de proveedores a la suscripción Premium.
+                          </p>
+
+                          {/* Gráfico del Embudo */}
+                          <div className="flex flex-col gap-4 mt-6">
+                            {/* Paso 1 */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                                <span>1. Solicitudes de Membresía (CRM)</span>
+                                <span>{summary.ascenso_premium?.value_display ?? "0"} (100%)</span>
+                              </div>
+                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
+                                <div className="bg-gradient-to-r from-amber-400 to-amber-500 h-full rounded-l-lg" style={{ width: "100%" }} />
+                              </div>
+                            </div>
+
+                            {/* Paso 2 (Placeholder) */}
+                            <div>
+                              <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
+                                <span>2. Membresías Activas / Pagadas</span>
+                                <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
+                                  Sin datos (Próximamente)
+                                </span>
+                              </div>
+                              <div className="w-full h-6 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex items-center justify-center">
+                                <span className="text-[10px] text-slate-400 font-medium tracking-wider">CONEXIÓN DE HISTORIAL PENDIENTE</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Panel de Diagnóstico */}
+                        <div className="w-full md:w-[320px] bg-slate-50 p-5 rounded-xl border border-slate-200/50 self-stretch flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-lg w-max mb-3">
+                              <Sparkles className="w-3.5 h-3.5" />
+                              <span>Interés Comercial Activo</span>
+                            </div>
+                            <h5 className="text-xs font-bold text-slate-700">Monetización & Suscripción</h5>
+                            <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
+                              Se han registrado <strong>{summary.ascenso_premium?.value_display ?? "0"}</strong> intenciones de ascenso a Premium.
+                            </p>
+                            <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
+                              Los proveedores Premium pagan comisiones especiales a cambio de visibilidad prioritaria. La tasa de conversión a pago se habilitará próximamente.
+                            </p>
+                          </div>
+                          <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
+                            <span>Acción Recomendada:</span>
+                            <span className="text-indigo-600 font-bold hover:underline cursor-default">Ver Planes & Tarifas</span>
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
