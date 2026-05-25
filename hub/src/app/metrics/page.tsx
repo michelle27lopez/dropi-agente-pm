@@ -604,25 +604,51 @@ export default function PMDashboard() {
                     <div
                       key={m.key}
                       onClick={() => setActiveChartKey(m.key)}
-                      className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+                      className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col gap-3 ${
                         activeChartKey === m.key
                           ? "bg-white border-slate-700 shadow-sm"
                           : "bg-white border-slate-200/70 shadow-sm hover:border-slate-300"
                       }`}
                     >
-                      <div>
-                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{m.name}</p>
-                        <h4 className="text-xl font-extrabold text-slate-800 mt-1">
-                          {summary[m.key]?.value_display ?? "0"}
-                        </h4>
-                      </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <div className="flex items-center gap-0.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                          {getTrendIcon(summary[m.key]?.trend, summary[m.key]?.health)}
-                          <span>{summary[m.key]?.trend_value}</span>
+                      <div className="flex items-center justify-between w-full">
+                        <div>
+                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{m.name}</p>
+                          <h4 className="text-xl font-extrabold text-slate-800 mt-1">
+                            {summary[m.key]?.value_display ?? "0"}
+                          </h4>
                         </div>
-                        {getHealthBadge(summary[m.key]?.health)}
+                        <div className="flex flex-col items-end gap-1">
+                          <div className="flex items-center gap-0.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                            {getTrendIcon(summary[m.key]?.trend, summary[m.key]?.health)}
+                            <span>{summary[m.key]?.trend_value}</span>
+                          </div>
+                          {getHealthBadge(summary[m.key]?.health)}
+                        </div>
                       </div>
+
+                      {/* Sub-indicador de conversión si es Aprobación Visibilidad */}
+                      {m.key === "aprobacion_visibilidad" && summary.new_registrations && (
+                        <div className="mt-1 text-[10px] text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100/60 flex flex-col gap-1.5 w-full">
+                          <div className="flex justify-between font-medium">
+                            <span>Conversión de registros:</span>
+                            <span className="font-bold text-slate-700">
+                              {summary.new_registrations.value_num && summary.aprobacion_visibilidad?.value_num
+                                ? ((summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1)
+                                : 0}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                            <div 
+                              className="bg-indigo-600 h-full rounded-full transition-all duration-500" 
+                              style={{ 
+                                width: `${summary.new_registrations.value_num && summary.aprobacion_visibilidad?.value_num 
+                                  ? Math.min(100, (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100) 
+                                  : 0}%` 
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -662,6 +688,74 @@ export default function PMDashboard() {
                         />
                       </BarChart>
                     </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Visualización del Embudo de Conversión Registros vs. Visibilidad */}
+                <div className="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm mt-6 flex flex-col md:flex-row items-center justify-between gap-6 lg:col-span-3">
+                  <div className="flex-1 w-full">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 bg-indigo-50 rounded-lg">
+                        <Compass className="w-4 h-4 text-indigo-600" />
+                      </div>
+                      <h4 className="font-bold text-slate-800 text-sm">Embudo de Conversión: Del Registro a la Visibilidad</h4>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Mide cuántos de los proveedores registrados inician su validación operativa.
+                    </p>
+
+                    {/* Gráfico del Embudo */}
+                    <div className="flex flex-col gap-4 mt-6">
+                      {/* Paso 1 */}
+                      <div>
+                        <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                          <span>1. Nuevos Registros (Userpilot)</span>
+                          <span>{summary.new_registrations?.value_display ?? "0"} (100%)</span>
+                        </div>
+                        <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
+                          <div className="bg-gradient-to-r from-slate-400 to-slate-500 h-full rounded-l-lg" style={{ width: "100%" }} />
+                        </div>
+                      </div>
+
+                      {/* Paso 2 */}
+                      <div>
+                        <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
+                          <span>2. Solicitudes de Aprobación Visibilidad (CRM)</span>
+                          <span>
+                            {summary.aprobacion_visibilidad?.value_display ?? "0"} ({summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? ((summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%)
+                          </span>
+                        </div>
+                        <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40 flex items-center">
+                          <div 
+                            className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-full rounded-l-lg transition-all duration-500" 
+                            style={{ 
+                              width: `${summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? Math.max(5, Math.min(100, (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100)) : 0}%` 
+                            }} 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Panel de Diagnóstico */}
+                  <div className="w-full md:w-[320px] bg-slate-50 p-5 rounded-xl border border-slate-200/50 self-stretch flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-lg w-max mb-3">
+                        <AlertCircle className="w-3.5 h-3.5" />
+                        <span>Fuga en Onboarding: {summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? (100 - (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%</span>
+                      </div>
+                      <h5 className="text-xs font-bold text-slate-700">Oportunidad de Activación</h5>
+                      <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
+                        De los <strong>{summary.new_registrations?.value_display ?? "0"}</strong> proveedores que se registraron en los últimos {days} días, solo <strong>{summary.aprobacion_visibilidad?.value_display ?? "0"}</strong> solicitaron su Aprobación de Visibilidad.
+                      </p>
+                      <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
+                        Hay una brecha de <strong>{((summary.new_registrations?.value_num || 0) - (summary.aprobacion_visibilidad?.value_num || 0)).toLocaleString("es-CO")}</strong> proveedores que crearon cuenta pero no han iniciado el proceso de visibilidad en catálogo.
+                      </p>
+                    </div>
+                    <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
+                      <span>Acción Recomendada:</span>
+                      <span className="text-indigo-600 font-bold hover:underline cursor-default">Ver Playbook Onboarding</span>
+                    </div>
                   </div>
                 </div>
               </div>
