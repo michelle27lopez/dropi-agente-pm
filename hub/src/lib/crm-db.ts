@@ -1,0 +1,97 @@
+import { Pool } from "pg";
+
+const pool = new Pool({
+  host: process.env.CRM_PG_HOST,
+  port: Number(process.env.CRM_PG_PORT) || 5432,
+  database: process.env.CRM_PG_DATABASE,
+  user: process.env.CRM_PG_USER,
+  password: process.env.CRM_PG_PASSWORD,
+  ssl: false,
+  max: 2,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 10000,
+});
+
+const SCHEMA = process.env.CRM_PG_SCHEMA || "dropi_seguimiento_proveedores";
+
+export type CRMLevel4Day = {
+  date: string;
+  new_registrations: number;
+  ascension_applications: number;
+  audit_tat: number;
+};
+
+export async function getCRMLevel4Metrics(
+  country: string,
+  startDateStr: string
+): Promise<Record<string, Partial<CRMLevel4Day>>> {
+  if (!process.env.CRM_PG_HOST) {
+    throw new Error("CRM PostgreSQL host is not configured");
+  }
+
+  const countryParam = country.toUpperCase();
+
+  const [regsRes, appsRes, tatRes] = await Promise.all([
+    // Query de Nuevos Registros
+    pool.query<{ date: string; count: number }>(
+      `SELECT date_created::date::text as date, COUNT(*)::int as count
+       FROM ${SCHEMA}.pipeline_verificacion_de_proveedores
+       WHERE date_created >= $1
+         AND ($2 = 'ALL' OR UPPER(country) = $2)
+       GROUP BY date_created::date
+       ORDER BY date ASC`,
+      [startDateStr, countryParam]
+    ),
+    // Query de Postulaciones a Ascenso
+    pool.query<{ date: string; count: number }>(
+      `SELECT date_created::date::text as date, COUNT(*)::int as count
+       FROM (
+         SELECT date_created, country FROM ${SCHEMA}.pipeline_ascensos_proveedores_verificados
+         UNION ALL
+         SELECT date_created, country FROM ${SCHEMA}.pipeline_ascensos_proveedores_premium
+       ) t
+       WHERE date_created >= $1
+         AND ($2 = 'ALL' OR UPPER(country) = $2)
+       GROUP BY date_created::date
+       ORDER BY date ASC`,
+      [startDateStr, countryParam]
+    ),
+    // Query de TAT de Auditoría (en horas)
+    pool.query<{ date: string; tat: number }>(
+      `SELECT date_created::date::text as date,
+              ROUND(AVG(EXTRACT(EPOCH FROM (updated_at - date_created))/3600)::numeric, 1)::float as tat
+       FROM (
+         SELECT date_created, updated_at, country, stage_name FROM ${SCHEMA}.pipeline_verificacion_de_proveedores
+         UNION ALL
+         SELECT date_created, updated_at, country, stage_name FROM ${SCHEMA}.pipeline_ascensos_proveedores_verificados
+         UNION ALL
+         SELECT date_created, updated_at, country, stage_name FROM ${SCHEMA}.pipeline_ascensos_proveedores_premium
+       ) t
+       WHERE date_created >= $1
+         AND ($2 = 'ALL' OR UPPER(country) = $2)
+         AND (stage_name ILIKE '%APROBADO%' OR stage_name ILIKE '%RECHAZADO%' OR stage_name ILIKE '%DENEGADO%')
+       GROUP BY date_created::date
+       ORDER BY date ASC`,
+      [startDateStr, countryParam]
+    ),
+  ]);
+
+  const merged: Record<string, Partial<CRMLevel4Day>> = {};
+
+  regsRes.rows.forEach((r) => {
+    if (!merged[r.date]) merged[r.date] = { date: r.date };
+    merged[r.date].new_registrations = r.count;
+  });
+
+  appsRes.rows.forEach((r) => {
+    if (!merged[r.date]) merged[r.date] = { date: r.date };
+    merged[r.date].ascension_applications = r.count;
+  });
+
+  tatRes.rows.forEach((r) => {
+    if (!merged[r.date]) merged[r.date] = { date: r.date };
+    merged[r.date].audit_tat = r.tat;
+  });
+
+  return merged;
+}

@@ -5,7 +5,7 @@ const tools = [
     key: "metrics",
     name: "Metrics Lab",
     description: "Dashboard CRM en vivo. Pipelines de verificación, ascensos y embudo del proveedor.",
-    url: process.env.NEXT_PUBLIC_METRICS_URL ?? "#",
+    url: "/metrics",
     color: "#F77F00",
     tag: "CRM · Analytics",
     icon: "📊",
@@ -84,8 +84,8 @@ export default function HubPage() {
             <a
               key={tool.key}
               href={tool.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={tool.url.startsWith("/") ? undefined : "_blank"}
+              rel={tool.url.startsWith("/") ? undefined : "noopener noreferrer"}
               style={{
                 background: "var(--card)",
                 border: "1px solid var(--border)",
