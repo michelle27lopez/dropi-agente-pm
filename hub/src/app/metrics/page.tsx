@@ -596,7 +596,9 @@ export default function PMDashboard() {
                 <div className="lg:col-span-1 flex flex-col gap-4">
                   {[
                     { key: "new_registrations", name: "Nuevos Registros" },
-                    { key: "ascension_applications", name: "Postulaciones Ascenso" },
+                    { key: "ascenso_verificado", name: "Postulaciones Verificado" },
+                    { key: "ascenso_premium", name: "Postulaciones Premium" },
+                    { key: "aprobacion_visibilidad", name: "Aprobación Visibilidad" },
                     { key: "audit_tat", name: "TAT de Auditoría (horas)" },
                   ].map((m) => (
                     <div
@@ -649,7 +651,13 @@ export default function PMDashboard() {
                         />
                         <Bar
                           dataKey={activeChartKey}
-                          fill={activeChartKey === "audit_tat" ? "#EF4444" : "#475569"}
+                          fill={
+                            activeChartKey === "audit_tat" ? "#EF4444" :
+                            activeChartKey === "ascenso_verificado" ? "#6366F1" :
+                            activeChartKey === "ascenso_premium" ? "#F59E0B" :
+                            activeChartKey === "aprobacion_visibilidad" ? "#10B981" :
+                            "#475569"
+                          }
                           radius={[4, 4, 0, 0]}
                         />
                       </BarChart>

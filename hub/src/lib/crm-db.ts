@@ -18,6 +18,9 @@ export type CRMLevel4Day = {
   date: string;
   new_registrations: number;
   ascension_applications: number;
+  ascenso_verificado: number;
+  ascenso_premium: number;
+  aprobacion_visibilidad: number;
   audit_tat: number;
 };
 
@@ -31,7 +34,7 @@ export async function getCRMLevel4Metrics(
 
   const countryParam = country.toUpperCase();
 
-  const [regsRes, appsRes, tatRes] = await Promise.all([
+  const [regsRes, verRes, premRes, visRes, tatRes] = await Promise.all([
     // Query de Nuevos Registros
     pool.query<{ date: string; count: number }>(
       `SELECT date_created::date::text as date, COUNT(*)::int as count
@@ -42,14 +45,30 @@ export async function getCRMLevel4Metrics(
        ORDER BY date ASC`,
       [startDateStr, countryParam]
     ),
-    // Query de Postulaciones a Ascenso
+    // Query de Postulaciones a Ascenso Verificados
     pool.query<{ date: string; count: number }>(
       `SELECT date_created::date::text as date, COUNT(*)::int as count
-       FROM (
-         SELECT date_created, country FROM ${SCHEMA}.pipeline_ascensos_proveedores_verificados
-         UNION ALL
-         SELECT date_created, country FROM ${SCHEMA}.pipeline_ascensos_proveedores_premium
-       ) t
+       FROM ${SCHEMA}.pipeline_ascensos_proveedores_verificados
+       WHERE date_created >= $1
+         AND ($2 = 'ALL' OR UPPER(country) = $2)
+       GROUP BY date_created::date
+       ORDER BY date ASC`,
+      [startDateStr, countryParam]
+    ),
+    // Query de Postulaciones a Premium
+    pool.query<{ date: string; count: number }>(
+      `SELECT date_created::date::text as date, COUNT(*)::int as count
+       FROM ${SCHEMA}.pipeline_ascensos_proveedores_premium
+       WHERE date_created >= $1
+         AND ($2 = 'ALL' OR UPPER(country) = $2)
+       GROUP BY date_created::date
+       ORDER BY date ASC`,
+      [startDateStr, countryParam]
+    ),
+    // Query de Aprobación Visibilidad (Verificación de Proveedores)
+    pool.query<{ date: string; count: number }>(
+      `SELECT date_created::date::text as date, COUNT(*)::int as count
+       FROM ${SCHEMA}.pipeline_verificacion_de_proveedores
        WHERE date_created >= $1
          AND ($2 = 'ALL' OR UPPER(country) = $2)
        GROUP BY date_created::date
@@ -83,9 +102,21 @@ export async function getCRMLevel4Metrics(
     merged[r.date].new_registrations = r.count;
   });
 
-  appsRes.rows.forEach((r) => {
+  verRes.rows.forEach((r) => {
     if (!merged[r.date]) merged[r.date] = { date: r.date };
-    merged[r.date].ascension_applications = r.count;
+    merged[r.date].ascenso_verificado = r.count;
+    merged[r.date].ascension_applications = (merged[r.date].ascension_applications || 0) + r.count;
+  });
+
+  premRes.rows.forEach((r) => {
+    if (!merged[r.date]) merged[r.date] = { date: r.date };
+    merged[r.date].ascenso_premium = r.count;
+    merged[r.date].ascension_applications = (merged[r.date].ascension_applications || 0) + r.count;
+  });
+
+  visRes.rows.forEach((r) => {
+    if (!merged[r.date]) merged[r.date] = { date: r.date };
+    merged[r.date].aprobacion_visibilidad = r.count;
   });
 
   tatRes.rows.forEach((r) => {

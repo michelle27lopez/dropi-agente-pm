@@ -232,12 +232,57 @@ export async function POST() {
           country,
           metric_level: 4,
           metric_key: "ascension_applications",
-          metric_name: "Postulaciones Ascenso",
+          metric_name: "Postulaciones Ascenso (Total)",
           value_num: appAsc,
           value_display: appAsc.toLocaleString("es-CO"),
           unit: "postulaciones",
           trend: "up",
           trend_value: "+20%",
+          health: "good",
+        });
+
+        const ascVer = Math.round(4 * finalFactor);
+        records.push({
+          metric_date: dateStr,
+          country,
+          metric_level: 4,
+          metric_key: "ascenso_verificado",
+          metric_name: "Postulaciones Verificado",
+          value_num: ascVer,
+          value_display: ascVer.toLocaleString("es-CO"),
+          unit: "postulaciones",
+          trend: "up",
+          trend_value: "+18%",
+          health: "good",
+        });
+
+        const ascPrem = Math.round(2 * finalFactor);
+        records.push({
+          metric_date: dateStr,
+          country,
+          metric_level: 4,
+          metric_key: "ascenso_premium",
+          metric_name: "Postulaciones Premium",
+          value_num: ascPrem,
+          value_display: ascPrem.toLocaleString("es-CO"),
+          unit: "postulaciones",
+          trend: "up",
+          trend_value: "+25%",
+          health: "good",
+        });
+
+        const aprVis = Math.round(15 * finalFactor);
+        records.push({
+          metric_date: dateStr,
+          country,
+          metric_level: 4,
+          metric_key: "aprobacion_visibilidad",
+          metric_name: "Aprobación Visibilidad",
+          value_num: aprVis,
+          value_display: aprVis.toLocaleString("es-CO"),
+          unit: "postulaciones",
+          trend: "up",
+          trend_value: "+15%",
           health: "good",
         });
 

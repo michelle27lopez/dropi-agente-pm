@@ -87,6 +87,9 @@ export async function GET(req: NextRequest) {
         entry.new_registrations = realDay.new_registrations ?? 0;
       }
       entry.ascension_applications = realDay.ascension_applications ?? 0;
+      entry.ascenso_verificado = realDay.ascenso_verificado ?? 0;
+      entry.ascenso_premium = realDay.ascenso_premium ?? 0;
+      entry.aprobacion_visibilidad = realDay.aprobacion_visibilidad ?? 0;
       entry.audit_tat = realDay.audit_tat ?? 0;
     }
   });
@@ -123,7 +126,10 @@ export async function GET(req: NextRequest) {
       negotiation_conversion_rate: { level: 3, name: "Conversión de Negociaciones", unit: "%", type: "avg" },
       external_sync_rate: { level: 3, name: "% Sincronización Externa", unit: "%", type: "avg" },
       new_registrations: { level: 4, name: "Nuevos Registros", unit: "proveedores", type: "sum" },
-      ascension_applications: { level: 4, name: "Postulaciones Ascenso", unit: "postulaciones", type: "sum" },
+      ascension_applications: { level: 4, name: "Postulaciones Ascenso (Total)", unit: "postulaciones", type: "sum" },
+      ascenso_verificado: { level: 4, name: "Postulaciones Verificado", unit: "postulaciones", type: "sum" },
+      ascenso_premium: { level: 4, name: "Postulaciones Premium", unit: "postulaciones", type: "sum" },
+      aprobacion_visibilidad: { level: 4, name: "Aprobación Visibilidad", unit: "postulaciones", type: "sum" },
       audit_tat: { level: 4, name: "TAT de Auditoría", unit: "horas", type: "avg" },
     };
 
@@ -185,7 +191,7 @@ export async function GET(req: NextRequest) {
         health = value_num < (k === "audit_tat" ? 24 : 7) ? "good" : "warning";
       } else if (config.unit === "%") {
         health = value_num > 60 ? "good" : "warning";
-      } else if (k === "gmv" || k === "orders" || k === "new_registrations") {
+      } else if (k === "gmv" || k === "orders" || k === "new_registrations" || k === "ascenso_verificado" || k === "ascenso_premium" || k === "aprobacion_visibilidad" || k === "ascension_applications") {
         health = value_num > 0 ? "good" : "neutral";
       }
 
@@ -249,6 +255,9 @@ function buildMockHistory(country: string, days: number): Record<string, any>[] 
       external_sync_rate: Math.round((35 + (dayIndex / (days > 1 ? days - 1 : 1)) * 8 + Math.random() * 2) * 10) / 10,
       new_registrations: Math.round(28 * finalFactor),
       ascension_applications: Math.round(6 * finalFactor),
+      ascenso_verificado: Math.round(4 * finalFactor),
+      ascenso_premium: Math.round(2 * finalFactor),
+      aprobacion_visibilidad: Math.round(15 * finalFactor),
       audit_tat: Math.round((26 - (dayIndex / (days > 1 ? days - 1 : 1)) * 8 + (Math.random() - 0.5) * 4) * 10) / 10,
     };
   });
