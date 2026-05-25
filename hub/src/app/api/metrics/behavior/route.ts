@@ -101,7 +101,7 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
     return "Orgánico / Sin comunidad";
   };
 
-  const communityStats: Record<string, { name: string; count: number; active: number; verified: number; totalSessions: number }> = {};
+  const communityStats: Record<string, any> = {};
   let totalSessions = 0;
   let verifiedCount = 0;
   let activatedCount = 0; // Tasa de activación: > 7 sesiones
@@ -166,10 +166,27 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
   data.forEach((row) => {
     const { signed_up, last_seen, web_sessions, country: cName, device_type, os, verified } = row;
     const sessions = web_sessions || 0;
+    const signUpDate = signed_up ? new Date(signed_up) : null;
+    const lastSeenDate = last_seen ? new Date(last_seen) : null;
 
     const community = resolveCommunity(row);
     if (!communityStats[community]) {
-      communityStats[community] = { name: community, count: 0, active: 0, verified: 0, totalSessions: 0 };
+      communityStats[community] = { 
+        name: community, 
+        count: 0, 
+        active: 0, 
+        verified: 0, 
+        totalSessions: 0,
+        billing: 0,
+        suppliers: 0,
+        surveyed: 0,
+        highVolume: 0,
+        bounces: 0,
+        totalInactiveDays: 0,
+        hasInactiveDaysCount: 0,
+        totalLifespanDays: 0,
+        hasLifespanCount: 0
+      };
     }
     const cStats = communityStats[community];
     cStats.count++;
@@ -179,6 +196,41 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
     }
     if (verified) {
       cStats.verified++;
+    }
+    if (row.billing_information) {
+      cStats.billing++;
+    }
+    if (sessions === 1) {
+      cStats.bounces++;
+    }
+    
+    // Encuesta
+    const sRole = row.survey_role;
+    const sVolume = row.survey_volume || row.survey_brand_sales;
+    const sSource = row.survey_source;
+    if (sRole || sVolume || sSource) {
+      cStats.surveyed++;
+      if (sRole && sRole.toLowerCase().includes("proveedor")) {
+        cStats.suppliers++;
+      }
+      if (sVolume) {
+        const isBigVal = sVolume.includes("1.000") || sVolume.includes("301 a 1.000") || sVolume.includes("51 a 300");
+        if (isBigVal) {
+          cStats.highVolume++;
+        }
+      }
+    }
+
+    if (lastSeenDate) {
+      const daysSinceLastSeen = Math.floor((referenceDate.getTime() - lastSeenDate.getTime()) / 86400000);
+      cStats.totalInactiveDays += Math.max(0, daysSinceLastSeen);
+      cStats.hasInactiveDaysCount++;
+    }
+    
+    if (signUpDate && lastSeenDate) {
+      const lifespanDays = Math.floor((lastSeenDate.getTime() - signUpDate.getTime()) / 86400000);
+      cStats.totalLifespanDays += Math.max(0, lifespanDays);
+      cStats.hasLifespanCount++;
     }
     
     totalSessions += sessions;
@@ -208,10 +260,6 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
     countryMap[normalizedCountry] = (countryMap[normalizedCountry] || 0) + 1;
 
     // 5. Encuestas
-    const sRole = row.survey_role;
-    const sVolume = row.survey_volume || row.survey_brand_sales;
-    const sSource = row.survey_source;
-
     if (sRole || sVolume || sSource) {
       totalWithSurvey++;
 
@@ -248,9 +296,6 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
     }
 
     // 6. Inactividad, Churn & Lifespan
-    const signUpDate = signed_up ? new Date(signed_up) : null;
-    const lastSeenDate = last_seen ? new Date(last_seen) : null;
-
     if (signUpDate && lastSeenDate) {
       const daysSinceSignup = Math.floor((referenceDate.getTime() - signUpDate.getTime()) / 86400000);
       const daysSinceLastSeen = Math.floor((referenceDate.getTime() - lastSeenDate.getTime()) / 86400000);
@@ -578,7 +623,13 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
         activeCount: c.active,
         activeRate: c.count > 0 ? Math.round((c.active / c.count) * 100) : 0,
         verifiedRate: c.count > 0 ? Math.round((c.verified / c.count) * 100) : 0,
-        avgSessions: c.count > 0 ? Math.round((c.totalSessions / c.count) * 10) / 10 : 0
+        avgSessions: c.count > 0 ? Math.round((c.totalSessions / c.count) * 10) / 10 : 0,
+        billingRate: c.count > 0 ? Math.round((c.billing / c.count) * 100) : 0,
+        supplierRate: c.surveyed > 0 ? Math.round((c.suppliers / c.surveyed) * 100) : 0,
+        highVolumeRate: c.surveyed > 0 ? Math.round((c.highVolume / c.surveyed) * 100) : 0,
+        bounceRate: c.count > 0 ? Math.round((c.bounces / c.count) * 100) : 0,
+        avgInactiveDays: c.hasInactiveDaysCount > 0 ? Math.round(c.totalInactiveDays / c.hasInactiveDaysCount) : 0,
+        avgLifespanDays: c.hasLifespanCount > 0 ? Math.round(c.totalLifespanDays / c.hasLifespanCount) : 0
       })),
     surveyStats: {
       totalWithSurvey,

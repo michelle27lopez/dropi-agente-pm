@@ -112,6 +112,12 @@ type CommunityMetric = {
   activeRate: number;
   verifiedRate: number;
   avgSessions: number;
+  billingRate: number;
+  supplierRate: number;
+  highVolumeRate: number;
+  bounceRate: number;
+  avgInactiveDays: number;
+  avgLifespanDays: number;
 };
 
 type SurveyStats = {
@@ -167,6 +173,7 @@ export default function BehaviorDashboard() {
   const [filterVolume, setFilterVolume] = useState<string>("ALL");
   const [filterPriority, setFilterPriority] = useState<string>("ALL");
   const [filterCommunity, setFilterCommunity] = useState<string>("ALL");
+  const [chartMetric, setChartMetric] = useState<"count" | "activeRate" | "billingRate" | "avgSessions" | "bounceRate" | "avgInactiveDays" | "avgLifespanDays">("count");
 
   // Toggle del Heatmap: % de retención vs cantidad absoluta
   const [heatmapMode, setHeatmapMode] = useState<"percentage" | "count">("percentage");
@@ -342,6 +349,49 @@ export default function BehaviorDashboard() {
     if (pct >= 5) return "bg-indigo-100 text-indigo-800";
     return "bg-indigo-50/50 text-indigo-700/60";
   };
+
+  // Encontrar insights de comunidades destacadas (excluyendo Orgánico y requiriendo un volumen mínimo de 5 registros para ser representativo)
+  const nonOrganicComs = data?.communities.filter(c => c.name !== "Orgánico / Sin comunidad" && c.count >= 5) || [];
+  
+  const bestAcquisition = nonOrganicComs.length > 0 
+    ? [...nonOrganicComs].sort((a, b) => b.count - a.count)[0] 
+    : null;
+    
+  const bestActivation = nonOrganicComs.length > 0 
+    ? [...nonOrganicComs].sort((a, b) => b.activeRate - a.activeRate)[0] 
+    : null;
+    
+  const lowestBounce = nonOrganicComs.length > 0 
+    ? [...nonOrganicComs].sort((a, b) => a.bounceRate - b.bounceRate)[0] 
+    : null;
+    
+  const bestBilling = nonOrganicComs.length > 0 
+    ? [...nonOrganicComs].sort((a, b) => b.billingRate - a.billingRate)[0] 
+    : null;
+
+  const chartMetricOptions = [
+    { key: "count", name: "Registrados", color: "#8B5CF6", unit: "proveedores" },
+    { key: "activeRate", name: "Tasa de Activación", color: "#10B981", unit: "%" },
+    { key: "billingRate", name: "Facturación Configurada", color: "#F59E0B", unit: "%" },
+    { key: "avgSessions", name: "Sesiones Promedio", color: "#3B82F6", unit: "ses" },
+    { key: "bounceRate", name: "Tasa de Rebote", color: "#EF4444", unit: "%" },
+    { key: "avgInactiveDays", name: "Inactividad Promedio", color: "#64748B", unit: "días" },
+    { key: "avgLifespanDays", name: "Permanencia Promedio", color: "#EC4899", unit: "días" },
+  ] as const;
+
+  const activeMetricOption = chartMetricOptions.find((opt) => opt.key === chartMetric) || chartMetricOptions[0];
+
+  const chartData = [...nonOrganicComs]
+    .sort((a, b) => {
+      if (chartMetric === "bounceRate" || chartMetric === "avgInactiveDays") {
+        // Para inactividad y rebote, a veces se prefiere ver de menor a mayor,
+        // pero para mantener coherencia en barras visuales ordenamos de mayor a menor (los peores o de mayor volumen).
+        // Dejamos descendente para destacar los picos de inactividad o rebote.
+        return b[chartMetric] - a[chartMetric];
+      }
+      return b[chartMetric] - a[chartMetric];
+    })
+    .slice(0, 10);
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-16 font-sans">
@@ -958,12 +1008,32 @@ export default function BehaviorDashboard() {
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     {/* Top 10 Comunidades Chart */}
                     <div className="lg:col-span-5 border-r border-slate-100 pr-0 lg:pr-6">
-                      <p className="text-xs font-bold text-slate-600 mb-4 uppercase tracking-wider">Top 10 Comunidades (Volumen de Captación)</p>
+                      <p className="text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider">
+                        Top 10 Comunidades por {activeMetricOption.name}
+                      </p>
+                      
+                      {/* Control Selector de Métrica */}
+                      <div className="flex flex-wrap items-center gap-1.5 mb-4">
+                        {chartMetricOptions.map((opt) => (
+                          <button
+                            key={opt.key}
+                            onClick={() => setChartMetric(opt.key)}
+                            className={`px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                              chartMetric === opt.key
+                                ? "bg-slate-900 text-white shadow-sm"
+                                : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                            }`}
+                          >
+                            {opt.name}
+                          </button>
+                        ))}
+                      </div>
+
                       <div className="h-[320px] w-full">
-                        {data?.communities && data.communities.length > 0 ? (
+                        {chartData && chartData.length > 0 ? (
                           <ResponsiveContainer width="100%" height="100%">
                             <BarChart
-                              data={data.communities.filter(c => c.name !== "Orgánico / Sin comunidad").slice(0, 10)}
+                              data={chartData}
                               layout="vertical"
                               margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
                             >
@@ -978,9 +1048,10 @@ export default function BehaviorDashboard() {
                               />
                               <Tooltip
                                 contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "11px" }}
+                                formatter={(value: any) => [`${value} ${activeMetricOption.unit}`, activeMetricOption.name]}
                               />
-                              <Bar dataKey="count" name="Registrados" fill="#8B5CF6" radius={[0, 4, 4, 0]} barSize={12}>
-                                {data.communities.filter(c => c.name !== "Orgánico / Sin comunidad").slice(0, 10).map((entry, index) => (
+                              <Bar dataKey={chartMetric} name={activeMetricOption.name} fill={activeMetricOption.color} radius={[0, 4, 4, 0]} barSize={12}>
+                                {chartData.map((entry, index) => (
                                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
                               </Bar>
@@ -994,79 +1065,233 @@ export default function BehaviorDashboard() {
                       </div>
                     </div>
 
-                    {/* Tabla de Métricas de Comunidades */}
-                    <div className="lg:col-span-7 flex flex-col">
-                      <p className="text-xs font-bold text-slate-600 mb-4 uppercase tracking-wider">Métricas de Conversión y Uso por Comunidad</p>
-                      <div className="overflow-x-auto max-h-[320px] overflow-y-auto border border-slate-100 rounded-xl">
-                        <table className="w-full text-left border-collapse">
-                          <thead className="sticky top-0 bg-slate-50 z-10 shadow-[0_1px_0_0_rgba(226,232,240,1)]">
-                            <tr className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                              <th className="px-4 py-3">Comunidad</th>
-                              <th className="px-4 py-3 text-center">Registros</th>
-                              <th className="px-4 py-3 text-center">Activos</th>
-                              <th className="px-4 py-3 text-center">% Activación</th>
-                              <th className="px-4 py-3 text-center">% Verificados</th>
-                              <th className="px-4 py-3 text-center">Sesiones Prom.</th>
-                              <th className="px-4 py-3 text-right">Acción</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-slate-100 text-xs text-slate-600">
-                            {data?.communities && data.communities.length > 0 ? (
-                              data.communities.map((c, idx) => (
-                                <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                                  <td className="px-4 py-3 font-bold text-slate-800 truncate max-w-[150px]" title={c.name}>
-                                    {c.name}
+                    {/* Tarjeta de Resumen / Comunidades Destacadas */}
+                    <div className="lg:col-span-7 flex flex-col justify-between bg-slate-50/50 p-5 rounded-2xl border border-slate-200/50">
+                      <div>
+                        <p className="text-xs font-bold text-slate-600 mb-4 uppercase tracking-wider">Líderes y Comunidades Destacadas</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Mejor Adquisición */}
+                          {bestAcquisition && (
+                            <div className="bg-white p-4 rounded-xl border border-slate-200/50 shadow-sm flex items-start gap-3">
+                              <span className="p-2 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold shrink-0">📈</span>
+                              <div>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase">Mayor Captación</p>
+                                <p className="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[170px]" title={bestAcquisition.name}>{bestAcquisition.name}</p>
+                                <p className="text-[11px] text-slate-500 mt-1 font-semibold">
+                                  {bestAcquisition.count} registrados
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Mejor Activación */}
+                          {bestActivation && (
+                            <div className="bg-white p-4 rounded-xl border border-slate-200/50 shadow-sm flex items-start gap-3">
+                              <span className="p-2 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold shrink-0">⚡</span>
+                              <div>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase">Mejor Activación (Retención)</p>
+                                <p className="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[170px]" title={bestActivation.name}>{bestActivation.name}</p>
+                                <p className="text-[11px] text-emerald-600 mt-1 font-bold">
+                                  {bestActivation.activeRate}% entran y continúan
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Menor Rebote */}
+                          {lowestBounce && (
+                            <div className="bg-white p-4 rounded-xl border border-slate-200/50 shadow-sm flex items-start gap-3">
+                              <span className="p-2 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold shrink-0">🎯</span>
+                              <div>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase">Menor Rebote (Bounce)</p>
+                                <p className="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[170px]" title={lowestBounce.name}>{lowestBounce.name}</p>
+                                <p className="text-[11px] text-slate-500 mt-1 font-semibold">
+                                  Solo <span className="text-rose-600 font-bold">{lowestBounce.bounceRate}%</span> abandonan al registrarse
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Mejor Facturación */}
+                          {bestBilling && (
+                            <div className="bg-white p-4 rounded-xl border border-slate-200/50 shadow-sm flex items-start gap-3">
+                              <span className="p-2 bg-amber-50 text-amber-600 rounded-lg text-xs font-bold shrink-0">💳</span>
+                              <div>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase">Facturación Lista</p>
+                                <p className="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[170px]" title={bestBilling.name}>{bestBilling.name}</p>
+                                <p className="text-[11px] text-amber-600 mt-1 font-bold">
+                                  {bestBilling.billingRate}% con facturación configurada
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-slate-200/40 text-[10px] text-slate-400 font-semibold italic">
+                        * Muestra comunidades con mínimo 5 registros. Se excluye el flujo puramente orgánico.
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tabla de Métricas de Comunidades Detallada (Full Width) */}
+                  <div className="mt-6 border-t border-slate-100 pt-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Métricas Analíticas Completas de Conversión y Uso</p>
+                      <span className="text-[10px] text-slate-400 font-medium">Mostrando {data?.communities.length} comunidades / canales detectados</span>
+                    </div>
+
+                    <div className="overflow-x-auto border border-slate-200/80 rounded-2xl shadow-sm">
+                      <table className="w-full text-left border-collapse min-w-[900px]">
+                        <thead>
+                          <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                            <th className="px-6 py-4">Comunidad / Canal</th>
+                            <th className="px-6 py-4 text-center">Registrados</th>
+                            <th className="px-6 py-4 text-center">Activos (&gt;7 ses)</th>
+                            <th className="px-6 py-4 text-center">Tasa Activación</th>
+                            <th className="px-6 py-4 text-center">Verificados</th>
+                            <th className="px-6 py-4 text-center">Rebote (1 ses)</th>
+                            <th className="px-6 py-4 text-center">Sesiones Prom.</th>
+                            <th className="px-6 py-4 text-center">Facturación Lista</th>
+                            <th className="px-6 py-4 text-center">Perfil Proveedor</th>
+                            <th className="px-6 py-4 text-center">Alto Volumen</th>
+                            <th className="px-6 py-4 text-center">Inactividad Prom.</th>
+                            <th className="px-6 py-4 text-center">Permanencia Prom.</th>
+                            <th className="px-6 py-4 text-right">Recuperación</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-xs text-slate-600">
+                          {data?.communities && data.communities.length > 0 ? (
+                            data.communities.map((c, idx) => {
+                              const isOrganic = c.name === "Orgánico / Sin comunidad";
+                              return (
+                                <tr key={idx} className={`hover:bg-slate-50/50 transition-colors ${isOrganic ? "bg-slate-50/20 font-medium" : ""}`}>
+                                  <td className="px-6 py-4 font-bold text-slate-800 flex items-center gap-2">
+                                    <span className={`w-2 h-2 rounded-full shrink-0 ${isOrganic ? "bg-slate-400" : "bg-purple-500"}`} />
+                                    <span>{c.name}</span>
                                   </td>
-                                  <td className="px-4 py-3 text-center font-semibold text-slate-700">
-                                    {c.count}
+                                  <td className="px-6 py-4 text-center font-bold text-slate-800">
+                                    {c.count.toLocaleString("es-CO")}
                                   </td>
-                                  <td className="px-4 py-3 text-center text-slate-500">
-                                    {c.activeCount}
+                                  <td className="px-6 py-4 text-center text-slate-500">
+                                    {c.activeCount.toLocaleString("es-CO")}
                                   </td>
-                                  <td className="px-4 py-3 text-center">
-                                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                                      c.activeRate >= 30
-                                        ? "bg-emerald-50 text-emerald-700 border border-emerald-100"
+                                  
+                                  {/* Tasa Activación */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold ${
+                                      c.activeRate >= 50
+                                        ? "bg-emerald-100 text-emerald-800"
+                                        : c.activeRate >= 25
+                                        ? "bg-emerald-50 text-emerald-700"
                                         : c.activeRate >= 10
-                                        ? "bg-amber-50 text-amber-700 border border-amber-100"
-                                        : "bg-rose-50 text-rose-700 border border-rose-100"
+                                        ? "bg-amber-50 text-amber-700"
+                                        : "bg-rose-50 text-rose-700"
                                     }`}>
                                       {c.activeRate}%
                                     </span>
                                   </td>
-                                  <td className="px-4 py-3 text-center font-medium text-slate-600">
-                                    {c.verifiedRate}%
+
+                                  {/* Tasa Verificados */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold ${
+                                      c.verifiedRate >= 30
+                                        ? "bg-indigo-100 text-indigo-800"
+                                        : c.verifiedRate >= 10
+                                        ? "bg-indigo-50/70 text-indigo-700"
+                                        : "bg-slate-100 text-slate-500"
+                                    }`}>
+                                      {c.verifiedRate}%
+                                    </span>
                                   </td>
-                                  <td className="px-4 py-3 text-center font-medium text-slate-600">
+ 
+                                  {/* Rebote (Bounce) */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                                      c.bounceRate > 60
+                                        ? "bg-red-50 text-red-600"
+                                        : c.bounceRate > 30
+                                        ? "bg-amber-50 text-amber-600"
+                                        : "bg-green-50 text-green-600"
+                                    }`}>
+                                      {c.bounceRate}%
+                                    </span>
+                                  </td>
+ 
+                                  {/* Sesiones Promedio */}
+                                  <td className="px-6 py-4 text-center font-semibold text-slate-700">
                                     {c.avgSessions}
                                   </td>
-                                  <td className="px-4 py-3 text-right">
+ 
+                                  {/* Facturación Lista */}
+                                  <td className="px-6 py-4 text-center">
+                                    <div className="flex items-center justify-center gap-1">
+                                      <div className="w-12 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                        <div className="bg-amber-500 h-full" style={{ width: `${c.billingRate}%` }} />
+                                      </div>
+                                      <span className="text-[10px] text-slate-500 font-bold w-7 text-right">{c.billingRate}%</span>
+                                    </div>
+                                  </td>
+ 
+                                  {/* Perfil Proveedor */}
+                                  <td className="px-6 py-4 text-center font-medium text-slate-600">
+                                    {c.supplierRate}%
+                                  </td>
+ 
+                                  {/* Alto Volumen */}
+                                  <td className="px-6 py-4 text-center">
+                                    <div className="flex items-center justify-center gap-1">
+                                      <div className="w-12 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                        <div className="bg-indigo-500 h-full" style={{ width: `${c.highVolumeRate}%` }} />
+                                      </div>
+                                      <span className="text-[10px] text-slate-500 font-bold w-7 text-right">{c.highVolumeRate}%</span>
+                                    </div>
+                                  </td>
+ 
+                                  {/* Inactividad Promedio */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`font-bold ${c.avgInactiveDays > 14 ? "text-rose-600" : "text-slate-700"}`}>
+                                      {c.avgInactiveDays}
+                                    </span>{" "}
+                                    días
+                                  </td>
+
+                                  {/* Permanencia Promedio */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`font-bold ${c.avgLifespanDays >= 30 ? "text-emerald-600" : "text-slate-700"}`}>
+                                      {c.avgLifespanDays}
+                                    </span>{" "}
+                                    días
+                                  </td>
+ 
+                                  {/* Acción */}
+                                  <td className="px-6 py-4 text-right">
                                     <button
                                       onClick={() => {
                                         setFilterCommunity(c.name);
                                         setActiveTab("recovery");
                                       }}
-                                      className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer"
+                                      className="inline-flex items-center gap-0.5 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer"
                                     >
-                                      Filtrar
+                                      <span>Ver lista</span>
+                                      <ArrowRight className="w-3 h-3" />
                                     </button>
                                   </td>
                                 </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td colSpan={7} className="px-4 py-8 text-center text-slate-400 italic">
-                                  No hay datos agregados de comunidades
-                                </td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
+                              );
+                            })
+                          ) : (
+                            <tr>
+                              <td colSpan={13} className="px-6 py-12 text-center text-slate-400 italic">
+                                No hay datos de métricas analíticas de comunidades
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
                     </div>
                   </div>
                 </div>
-
               </div>
             )}
 
