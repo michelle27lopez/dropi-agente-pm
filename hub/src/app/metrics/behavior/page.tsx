@@ -105,6 +105,13 @@ type RiskSupplier = {
   resolved_community: string | null;
 };
 
+type FunnelStep = {
+  step: string;
+  count: number;
+  pct: number;
+  color: string;
+};
+
 type CommunityMetric = {
   name: string;
   count: number;
@@ -122,6 +129,8 @@ type CommunityMetric = {
   realActiveRate: number;
   totalRealOrders: number;
   totalRealProducts: number;
+  hasProductRate: number;
+  hasOrderRate: number;
 };
 
 type CommunitySupplier = {
@@ -149,6 +158,7 @@ type CommunitySupplier = {
 
 type CommunityDetailResponse = {
   communityName: string;
+  funnel: FunnelStep[];
   stats: {
     totalSuppliers: number;
     activeRate: number;
@@ -202,6 +212,7 @@ type BehaviorResponse = {
   weeklyCohorts: WeeklyCohort[];
   ageCohorts: AgeCohort[];
   riskSuppliers: RiskSupplier[];
+  funnel: FunnelStep[];
   communities: CommunityMetric[];
   surveyStats: SurveyStats;
 };
@@ -672,6 +683,57 @@ export default function BehaviorDashboard() {
                         </div>
                       </div>
                     ))}
+                  </div>
+                </div>
+
+                {/* Embudo de Conversión Operativa Global */}
+                <div className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Embudo de Conversión Operativa (Time-to-Value)</h4>
+                      <p className="text-xs text-slate-400">Progreso real de los proveedores desde el registro hasta la actividad recurrente en Dropi</p>
+                    </div>
+                    <span className="text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-2.5 py-1 rounded-full uppercase">
+                      Hitos Críticos
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
+                    {data?.funnel && data.funnel.map((step, sIdx) => {
+                      const nextStep = data.funnel[sIdx + 1];
+                      const dropPct = nextStep ? Math.round((nextStep.count / step.count) * 100) : null;
+                      
+                      return (
+                        <div key={step.step} className="relative flex flex-col items-center w-full">
+                          <div className="w-full bg-slate-50 p-5 rounded-2xl border border-slate-200/50 flex flex-col justify-between h-36 relative overflow-hidden group hover:shadow-md transition-shadow">
+                            <div className="absolute top-0 left-0 w-1.5 h-full" style={{ backgroundColor: step.color }} />
+                            <div>
+                              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{step.step}</p>
+                              <h5 className="text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">
+                                {step.count.toLocaleString("es-CO")}
+                              </h5>
+                            </div>
+                            <div className="mt-4 flex items-center justify-between text-xs font-bold">
+                              <span className="text-slate-400">Conversión Total:</span>
+                              <span className="px-2 py-0.5 rounded text-[10px]" style={{ backgroundColor: `${step.color}15`, color: step.color }}>
+                                {step.pct}%
+                              </span>
+                            </div>
+                          </div>
+                          
+                          {nextStep && (
+                            <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white border border-slate-200 shadow-sm items-center justify-center text-[10px] font-extrabold text-slate-500" title={`Conversión de paso a paso: ${dropPct}%`}>
+                              {dropPct}%
+                            </div>
+                          )}
+                          {nextStep && (
+                            <div className="flex lg:hidden my-2 text-center text-[10px] font-extrabold text-slate-400">
+                              ↓ Conversión: {dropPct}% ↓
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -1231,6 +1293,8 @@ export default function BehaviorDashboard() {
                             <th className="px-6 py-4">Comunidad / Canal</th>
                             <th className="px-6 py-4 text-center">Registrados</th>
                             <th className="px-6 py-4 text-center">Tasa Activación</th>
+                            <th className="px-6 py-4 text-center">Catálogo Listo (%)</th>
+                            <th className="px-6 py-4 text-center">Con Venta (%)</th>
                             <th className="px-6 py-4 text-center">TTV Prom.</th>
                             <th className="px-6 py-4 text-center">Activos Dropi</th>
                             <th className="px-6 py-4 text-center">Órdenes Reales</th>
@@ -1273,6 +1337,16 @@ export default function BehaviorDashboard() {
                                     }`}>
                                       {c.activeRate}%
                                     </span>
+                                  </td>
+
+                                  {/* Catálogo Listo (>=1 Prod) */}
+                                  <td className="px-6 py-4 text-center font-bold text-indigo-600">
+                                    {c.hasProductRate}%
+                                  </td>
+
+                                  {/* Con Venta (>=1 Orden) */}
+                                  <td className="px-6 py-4 text-center font-bold text-rose-600">
+                                    {c.hasOrderRate}%
                                   </td>
 
                                   {/* TTV Prom. (días) */}
@@ -1401,7 +1475,7 @@ export default function BehaviorDashboard() {
                             })
                           ) : (
                             <tr>
-                              <td colSpan={16} className="px-6 py-12 text-center text-slate-400 italic">
+                              <td colSpan={18} className="px-6 py-12 text-center text-slate-400 italic">
                                 No hay datos de métricas analíticas de comunidades
                               </td>
                             </tr>
@@ -1903,6 +1977,49 @@ export default function BehaviorDashboard() {
                       {communityDetail.stats.totalRealProducts?.toLocaleString("es-CO") || 0}
                     </p>
                     <div className="text-[10px] text-slate-400 mt-2">En catálogo global</div>
+                  </div>
+                </div>
+
+                {/* Community Operational Funnel */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                  <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4">Embudo de Activación de la Comunidad (Time-to-Value)</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center animate-fade-in">
+                    {communityDetail.funnel && communityDetail.funnel.map((step, sIdx) => {
+                      const nextStep = communityDetail.funnel[sIdx + 1];
+                      const dropPct = nextStep ? Math.round((nextStep.count / step.count) * 100) : null;
+                      
+                      return (
+                        <div key={step.step} className="relative flex flex-col items-center w-full">
+                          <div className="w-full bg-white p-4 rounded-xl border border-slate-200/50 flex flex-col justify-between h-28 relative overflow-hidden group hover:shadow-sm transition-shadow">
+                            <div className="absolute top-0 left-0 w-1.5 h-full" style={{ backgroundColor: step.color }} />
+                            <div>
+                              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{step.step}</p>
+                              <h5 className="text-xl font-extrabold text-slate-800 mt-1 tracking-tight">
+                                {step.count.toLocaleString("es-CO")}
+                              </h5>
+                            </div>
+                            <div className="flex items-center justify-between text-[10px] font-bold mt-2">
+                              <span className="text-slate-400">Conversión:</span>
+                              <span className="px-1.5 py-0.5 rounded text-[10px]" style={{ backgroundColor: `${step.color}15`, color: step.color }}>
+                                {step.pct}%
+                              </span>
+                            </div>
+                          </div>
+                          
+                          {nextStep && (
+                            <div className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-slate-50 border border-slate-200 shadow-sm items-center justify-center text-[9px] font-extrabold text-slate-500" title={`Retención de paso a paso: ${dropPct}%`}>
+                              {dropPct}%
+                            </div>
+                          )}
+                          {nextStep && (
+                            <div className="flex md:hidden my-1 text-center text-[9px] font-extrabold text-slate-400">
+                              ↓ Conversión: {dropPct}% ↓
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 

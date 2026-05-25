@@ -202,7 +202,9 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
         hasTtvCount: 0,
         realActiveCount: 0,
         totalRealOrders: 0,
-        totalRealProducts: 0
+        totalRealProducts: 0,
+        hasProductCount: 0,
+        hasOrderCount: 0
       };
     }
     const cStats = communityStats[community];
@@ -232,6 +234,12 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
     }
     cStats.totalRealOrders += (row.real_orders_delivered || 0);
     cStats.totalRealProducts += (row.real_products_created || 0);
+    if ((row.real_products_created || 0) >= 1) {
+      cStats.hasProductCount++;
+    }
+    if ((row.real_orders_delivered || 0) >= 1) {
+      cStats.hasOrderCount++;
+    }
     
     // Encuesta
     const sRole = row.survey_role;
@@ -644,6 +652,12 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
     weeklyCohorts,
     ageCohorts,
     riskSuppliers: riskList.slice(0, 200),
+    funnel: [
+      { step: "Registrados (Userpilot)", count: totalSuppliers, pct: 100, color: "#6366F1" },
+      { step: "Catálogo Listo (>=1 Prod)", count: data.filter((row) => (row.real_products_created || 0) >= 1).length, pct: totalSuppliers > 0 ? Math.round((data.filter((row) => (row.real_products_created || 0) >= 1).length / totalSuppliers) * 100) : 0, color: "#8B5CF6" },
+      { step: "Primera Venta (>=1 Orden)", count: data.filter((row) => (row.real_orders_delivered || 0) >= 1).length, pct: totalSuppliers > 0 ? Math.round((data.filter((row) => (row.real_orders_delivered || 0) >= 1).length / totalSuppliers) * 100) : 0, color: "#EC4899" },
+      { step: "Bodega Activa (30d)", count: data.filter((row) => row.es_activo_30d === true).length, pct: totalSuppliers > 0 ? Math.round((data.filter((row) => row.es_activo_30d === true).length / totalSuppliers) * 100) : 0, color: "#10B981" }
+    ],
     communities: Object.values(communityStats)
       .sort((a, b) => b.count - a.count)
       .map((c) => ({
@@ -662,7 +676,9 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
         avgTtvDays: c.hasTtvCount > 0 ? Math.round(c.totalTtvDays / c.hasTtvCount) : 0,
         realActiveRate: c.count > 0 ? Math.round((c.realActiveCount / c.count) * 100) : 0,
         totalRealOrders: c.totalRealOrders,
-        totalRealProducts: c.totalRealProducts
+        totalRealProducts: c.totalRealProducts,
+        hasProductRate: c.count > 0 ? Math.round((c.hasProductCount / c.count) * 100) : 0,
+        hasOrderRate: c.count > 0 ? Math.round((c.hasOrderCount / c.count) * 100) : 0
       })),
     surveyStats: {
       totalWithSurvey,
@@ -875,8 +891,19 @@ function analyzeCommunityDetails(data: any[], country: string, communityName: st
     return b.web_sessions - a.web_sessions;
   });
 
+  const communityRegistered = totalSuppliers;
+  const communityHasProduct = communityRows.filter((row) => (row.real_products_created || 0) >= 1).length;
+  const communityHasOrder = communityRows.filter((row) => (row.real_orders_delivered || 0) >= 1).length;
+  const communityActiveDropi = communityRows.filter((row) => row.es_activo_30d === true).length;
+
   return {
     communityName,
+    funnel: [
+      { step: "Registrados (Userpilot)", count: communityRegistered, pct: 100, color: "#6366F1" },
+      { step: "Catálogo Listo (>=1 Prod)", count: communityHasProduct, pct: communityRegistered > 0 ? Math.round((communityHasProduct / communityRegistered) * 100) : 0, color: "#8B5CF6" },
+      { step: "Primera Venta (>=1 Orden)", count: communityHasOrder, pct: communityRegistered > 0 ? Math.round((communityHasOrder / communityRegistered) * 100) : 0, color: "#EC4899" },
+      { step: "Bodega Activa (30d)", count: communityActiveDropi, pct: communityRegistered > 0 ? Math.round((communityActiveDropi / communityRegistered) * 100) : 0, color: "#10B981" }
+    ],
     stats: {
       totalSuppliers,
       activeRate: totalSuppliers > 0 ? Math.round((activeCount / totalSuppliers) * 100) : 0,
