@@ -118,6 +118,10 @@ type CommunityMetric = {
   bounceRate: number;
   avgInactiveDays: number;
   avgLifespanDays: number;
+  avgTtvDays: number;
+  realActiveRate: number;
+  totalRealOrders: number;
+  totalRealProducts: number;
 };
 
 type CommunitySupplier = {
@@ -135,6 +139,12 @@ type CommunitySupplier = {
   survey_volume: string | null;
   potentialRating: "high" | "medium" | "low";
   referrerName: string;
+  fecha_activacion: string | null;
+  dias_en_activarse: number | null;
+  es_activo_30d: boolean;
+  real_orders_delivered: number;
+  real_products_created: number;
+  real_dropshipper_clients: number;
 };
 
 type CommunityDetailResponse = {
@@ -148,6 +158,10 @@ type CommunityDetailResponse = {
     avgSessions: number;
     avgInactiveDays: number;
     avgLifespanDays: number;
+    avgTtvDays: number;
+    realActiveRate: number;
+    totalRealOrders: number;
+    totalRealProducts: number;
   };
   volumes: ItemData[];
   roles: ItemData[];
@@ -207,7 +221,9 @@ export default function BehaviorDashboard() {
   const [filterVolume, setFilterVolume] = useState<string>("ALL");
   const [filterPriority, setFilterPriority] = useState<string>("ALL");
   const [filterCommunity, setFilterCommunity] = useState<string>("ALL");
-  const [chartMetric, setChartMetric] = useState<"count" | "activeRate" | "billingRate" | "avgSessions" | "bounceRate" | "avgInactiveDays" | "avgLifespanDays">("count");
+  const [chartMetric, setChartMetric] = useState<"count" | "activeRate" | "billingRate" | "avgSessions" | "bounceRate" | "avgInactiveDays" | "avgLifespanDays" | "avgTtvDays" | "realActiveRate">("count");
+  const [detailMinOrders, setDetailMinOrders] = useState<number>(0);
+  const [detailMinProducts, setDetailMinProducts] = useState<number>(0);
 
   // Detalle de Comunidad (Modal)
   const [detailCommunityName, setDetailCommunityName] = useState<string | null>(null);
@@ -247,6 +263,8 @@ export default function BehaviorDashboard() {
     setDetailSearch("");
     setDetailFilterPotential("ALL");
     setDetailFilterStatus("ALL");
+    setDetailMinOrders(0);
+    setDetailMinProducts(0);
     try {
       const res = await fetch(`/api/metrics/behavior?country=${country}&community=${encodeURIComponent(comName)}`);
       if (res.ok) {
@@ -440,6 +458,8 @@ export default function BehaviorDashboard() {
     { key: "bounceRate", name: "Tasa de Rebote", color: "#EF4444", unit: "%" },
     { key: "avgInactiveDays", name: "Inactividad Promedio", color: "#64748B", unit: "días" },
     { key: "avgLifespanDays", name: "Permanencia Promedio", color: "#EC4899", unit: "días" },
+    { key: "avgTtvDays", name: "Time-to-Value (TTV) Prom.", color: "#8B5CF6", unit: "días" },
+    { key: "realActiveRate", name: "Tasa de Activos Dropi", color: "#10B981", unit: "%" },
   ] as const;
 
   const activeMetricOption = chartMetricOptions.find((opt) => opt.key === chartMetric) || chartMetricOptions[0];
@@ -1210,8 +1230,11 @@ export default function BehaviorDashboard() {
                           <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                             <th className="px-6 py-4">Comunidad / Canal</th>
                             <th className="px-6 py-4 text-center">Registrados</th>
-                            <th className="px-6 py-4 text-center">Activos (&gt;7 ses)</th>
                             <th className="px-6 py-4 text-center">Tasa Activación</th>
+                            <th className="px-6 py-4 text-center">TTV Prom.</th>
+                            <th className="px-6 py-4 text-center">Activos Dropi</th>
+                            <th className="px-6 py-4 text-center">Órdenes Reales</th>
+                            <th className="px-6 py-4 text-center">Productos Reales</th>
                             <th className="px-6 py-4 text-center">Verificados</th>
                             <th className="px-6 py-4 text-center">Rebote (1 ses)</th>
                             <th className="px-6 py-4 text-center">Sesiones Prom.</th>
@@ -1236,9 +1259,6 @@ export default function BehaviorDashboard() {
                                   <td className="px-6 py-4 text-center font-bold text-slate-800">
                                     {c.count.toLocaleString("es-CO")}
                                   </td>
-                                  <td className="px-6 py-4 text-center text-slate-500">
-                                    {c.activeCount.toLocaleString("es-CO")}
-                                  </td>
                                   
                                   {/* Tasa Activación */}
                                   <td className="px-6 py-4 text-center">
@@ -1253,6 +1273,34 @@ export default function BehaviorDashboard() {
                                     }`}>
                                       {c.activeRate}%
                                     </span>
+                                  </td>
+
+                                  {/* TTV Prom. (días) */}
+                                  <td className="px-6 py-4 text-center font-bold text-slate-700">
+                                    {c.avgTtvDays > 0 ? `${c.avgTtvDays}d` : "-"}
+                                  </td>
+
+                                  {/* Activos Dropi (%) */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold ${
+                                      c.realActiveRate >= 40
+                                        ? "bg-indigo-100 text-indigo-800"
+                                        : c.realActiveRate >= 15
+                                        ? "bg-indigo-50 text-indigo-700"
+                                        : "bg-slate-100 text-slate-500"
+                                    }`}>
+                                      {c.realActiveRate}%
+                                    </span>
+                                  </td>
+
+                                  {/* Órdenes Reales */}
+                                  <td className="px-6 py-4 text-center font-semibold text-slate-700">
+                                    {c.totalRealOrders?.toLocaleString("es-CO") || 0}
+                                  </td>
+
+                                  {/* Productos Reales */}
+                                  <td className="px-6 py-4 text-center font-semibold text-slate-700">
+                                    {c.totalRealProducts?.toLocaleString("es-CO") || 0}
                                   </td>
 
                                   {/* Tasa Verificados */}
@@ -1353,7 +1401,7 @@ export default function BehaviorDashboard() {
                             })
                           ) : (
                             <tr>
-                              <td colSpan={13} className="px-6 py-12 text-center text-slate-400 italic">
+                              <td colSpan={16} className="px-6 py-12 text-center text-slate-400 italic">
                                 No hay datos de métricas analíticas de comunidades
                               </td>
                             </tr>
@@ -1816,31 +1864,45 @@ export default function BehaviorDashboard() {
             ) : communityDetail ? (
               <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
                 {/* Mini KPI Cards specific to community */}
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
                     <p className="text-[10px] text-slate-400 font-bold uppercase">Registros Totales</p>
                     <p className="text-2xl font-extrabold text-slate-800 mt-1">{communityDetail.stats.totalSuppliers}</p>
                   </div>
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Tasa de Activación</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Activación Userpilot</p>
                     <p className="text-2xl font-extrabold text-emerald-600 mt-1">{communityDetail.stats.activeRate}%</p>
                     <div className="w-full bg-slate-200 rounded-full h-1 mt-2">
                       <div className="bg-emerald-500 h-full" style={{ width: `${communityDetail.stats.activeRate}%` }} />
                     </div>
                   </div>
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Tasa Verificación</p>
-                    <p className="text-2xl font-extrabold text-indigo-600 mt-1">{communityDetail.stats.verifiedRate}%</p>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Activos Dropi (30d)</p>
+                    <p className="text-2xl font-extrabold text-indigo-600 mt-1">{communityDetail.stats.realActiveRate}%</p>
                     <div className="w-full bg-slate-200 rounded-full h-1 mt-2">
-                      <div className="bg-indigo-500 h-full" style={{ width: `${communityDetail.stats.verifiedRate}%` }} />
+                      <div className="bg-indigo-500 h-full" style={{ width: `${communityDetail.stats.realActiveRate}%` }} />
                     </div>
                   </div>
                   <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                    <p className="text-[10px] text-slate-400 font-bold uppercase">Facturación Lista</p>
-                    <p className="text-2xl font-extrabold text-amber-600 mt-1">{communityDetail.stats.billingRate}%</p>
-                    <div className="w-full bg-slate-200 rounded-full h-1 mt-2">
-                      <div className="bg-amber-500 h-full" style={{ width: `${communityDetail.stats.billingRate}%` }} />
-                    </div>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">TTV Promedio</p>
+                    <p className="text-2xl font-extrabold text-purple-600 mt-1">
+                      {communityDetail.stats.avgTtvDays > 0 ? `${communityDetail.stats.avgTtvDays} días` : "N/A"}
+                    </p>
+                    <div className="text-[10px] text-slate-400 mt-2">Time-to-Value Real</div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Órdenes Reales</p>
+                    <p className="text-2xl font-extrabold text-slate-800 mt-1">
+                      {communityDetail.stats.totalRealOrders?.toLocaleString("es-CO") || 0}
+                    </p>
+                    <div className="text-[10px] text-slate-400 mt-2">Despachadas en total</div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Productos Creados</p>
+                    <p className="text-2xl font-extrabold text-slate-800 mt-1">
+                      {communityDetail.stats.totalRealProducts?.toLocaleString("es-CO") || 0}
+                    </p>
+                    <div className="text-[10px] text-slate-400 mt-2">En catálogo global</div>
                   </div>
                 </div>
 
@@ -1947,6 +2009,28 @@ export default function BehaviorDashboard() {
                         <option value="active">Activos recientes (Inactivo &lt;= 7d)</option>
                         <option value="dormant">Dormantes/Inactivos (&gt;7d)</option>
                       </select>
+                      {/* Min Orders */}
+                      <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg text-[10px]">
+                        <span className="text-slate-400 font-medium">Min Órdenes:</span>
+                        <input
+                          type="number"
+                          value={detailMinOrders || ""}
+                          onChange={(e) => setDetailMinOrders(Number(e.target.value))}
+                          placeholder="0"
+                          className="w-12 bg-transparent text-slate-700 font-bold focus:outline-none animate-pulse"
+                        />
+                      </div>
+                      {/* Min Products */}
+                      <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg text-[10px]">
+                        <span className="text-slate-400 font-medium">Min Prod:</span>
+                        <input
+                          type="number"
+                          value={detailMinProducts || ""}
+                          onChange={(e) => setDetailMinProducts(Number(e.target.value))}
+                          placeholder="0"
+                          className="w-12 bg-transparent text-slate-700 font-bold focus:outline-none animate-pulse"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -1963,7 +2047,10 @@ export default function BehaviorDashboard() {
                         if (detailFilterStatus === "active") return s.days_inactive <= 7;
                         return s.days_inactive > 7;
                       })();
-                      return matchesSearch && matchesPotential && matchesStatus;
+                      const matchesOrders = s.real_orders_delivered >= detailMinOrders;
+                      const matchesProducts = s.real_products_created >= detailMinProducts;
+                      
+                      return matchesSearch && matchesPotential && matchesStatus && matchesOrders && matchesProducts;
                     });
 
                     // Generar mensaje contextualizado de WhatsApp
@@ -1974,9 +2061,17 @@ export default function BehaviorDashboard() {
                         finalPhone = `57${cleanPhone}`;
                       }
                       const comContext = ` Vimos que te registraste a través de la comunidad de ${detailCommunityName}.`;
-                      const volContext = supplier.survey_volume ? ` e indicaste que despachas un gran volumen de productos (${supplier.survey_volume}).` : "";
                       
-                      let message = `Hola ${supplier.name}, te saludamos del equipo de Dropi.${comContext}${volContext} Queremos ayudarte a potenciar tus ventas y certificar tu bodega en nuestro catálogo. ¿Podemos agendar una llamada breve de 5 minutos para resolver cualquier duda y configurar tu cuenta?`;
+                      let message = "";
+                      if (supplier.real_orders_delivered > 0) {
+                        message = `Hola ${supplier.name}, te saludamos de Dropi.${comContext} ¡Felicitaciones por las ${supplier.real_orders_delivered} órdenes entregadas que registras en tu cuenta! Queremos ver de qué manera podemos apoyarte a escalar el negocio, destacar tu catálogo y optimizar tus tiempos de entrega (TTV). ¿Te sirve una breve llamada de 5 minutos esta semana?`;
+                      } else if (supplier.real_products_created > 0) {
+                        message = `Hola ${supplier.name}, te saludamos de Dropi.${comContext} Notamos que ya cuentas con ${supplier.real_products_created} productos creados en tu catálogo, pero aún no registras órdenes entregadas. Queremos ayudarte a conseguir tus primeros dropshippers y activar tus ventas. ¿Podemos agendar una sesión rápida de 5 minutos para impulsarte?`;
+                      } else {
+                        const volContext = supplier.survey_volume ? ` e indicaste en la encuesta que despachas un volumen de ${supplier.survey_volume}.` : "";
+                        message = `Hola ${supplier.name}, te saludamos de Dropi.${comContext}${volContext} Queremos ayudarte a publicar tus primeros productos y certificar tu bodega en nuestro catálogo. ¿Podemos agendar una llamada breve de 5 minutos para resolver cualquier duda y configurar tu cuenta?`;
+                      }
+                      
                       return `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
                     };
 
@@ -1988,6 +2083,9 @@ export default function BehaviorDashboard() {
                               <tr className="border-b border-slate-100 bg-slate-50 text-[9px] font-bold text-slate-400 uppercase tracking-wider sticky top-0">
                                 <th className="px-4 py-3">Nombre Bodega</th>
                                 <th className="px-4 py-3 text-center">Potencial</th>
+                                <th className="px-4 py-3 text-center">TTV</th>
+                                <th className="px-4 py-3 text-center">Órdenes Reales</th>
+                                <th className="px-4 py-3 text-center">Productos Dropi</th>
                                 <th className="px-4 py-3">Referido por</th>
                                 <th className="px-4 py-3">Rol Survey</th>
                                 <th className="px-4 py-3">Volumen Survey</th>
@@ -2020,6 +2118,15 @@ export default function BehaviorDashboard() {
                                           Bajo
                                         </span>
                                       )}
+                                    </td>
+                                    <td className="px-4 py-3 text-center font-semibold text-slate-700">
+                                      {s.dias_en_activarse !== null && s.dias_en_activarse !== undefined ? `${s.dias_en_activarse}d` : "-"}
+                                    </td>
+                                    <td className="px-4 py-3 text-center font-bold text-indigo-600">
+                                      {s.real_orders_delivered?.toLocaleString("es-CO") || 0}
+                                    </td>
+                                    <td className="px-4 py-3 text-center font-bold text-slate-700">
+                                      {s.real_products_created?.toLocaleString("es-CO") || 0}
                                     </td>
                                     <td className="px-4 py-3 text-[11px] text-slate-500">
                                       {s.referrerName}
@@ -2071,7 +2178,7 @@ export default function BehaviorDashboard() {
                                 ))
                               ) : (
                                 <tr>
-                                  <td colSpan={10} className="px-4 py-8 text-center text-slate-400 font-medium italic">
+                                  <td colSpan={13} className="px-4 py-8 text-center text-slate-400 font-medium italic">
                                     No hay usuarios en esta comunidad que coincidan con la búsqueda.
                                   </td>
                                 </tr>

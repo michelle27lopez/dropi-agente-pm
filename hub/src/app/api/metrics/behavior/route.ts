@@ -197,7 +197,12 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
         totalInactiveDays: 0,
         hasInactiveDaysCount: 0,
         totalLifespanDays: 0,
-        hasLifespanCount: 0
+        hasLifespanCount: 0,
+        totalTtvDays: 0,
+        hasTtvCount: 0,
+        realActiveCount: 0,
+        totalRealOrders: 0,
+        totalRealProducts: 0
       };
     }
     const cStats = communityStats[community];
@@ -215,6 +220,18 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
     if (sessions === 1) {
       cStats.bounces++;
     }
+    
+    // Operational metrics:
+    const ttv = row.dias_en_activarse;
+    if (ttv !== null && ttv !== undefined && ttv >= 0) {
+      cStats.totalTtvDays += ttv;
+      cStats.hasTtvCount++;
+    }
+    if (row.es_activo_30d === true) {
+      cStats.realActiveCount++;
+    }
+    cStats.totalRealOrders += (row.real_orders_delivered || 0);
+    cStats.totalRealProducts += (row.real_products_created || 0);
     
     // Encuesta
     const sRole = row.survey_role;
@@ -641,7 +658,11 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
         highVolumeRate: c.surveyed > 0 ? Math.round((c.highVolume / c.surveyed) * 100) : 0,
         bounceRate: c.count > 0 ? Math.round((c.bounces / c.count) * 100) : 0,
         avgInactiveDays: c.hasInactiveDaysCount > 0 ? Math.round(c.totalInactiveDays / c.hasInactiveDaysCount) : 0,
-        avgLifespanDays: c.hasLifespanCount > 0 ? Math.round(c.totalLifespanDays / c.hasLifespanCount) : 0
+        avgLifespanDays: c.hasLifespanCount > 0 ? Math.round(c.totalLifespanDays / c.hasLifespanCount) : 0,
+        avgTtvDays: c.hasTtvCount > 0 ? Math.round(c.totalTtvDays / c.hasTtvCount) : 0,
+        realActiveRate: c.count > 0 ? Math.round((c.realActiveCount / c.count) * 100) : 0,
+        totalRealOrders: c.totalRealOrders,
+        totalRealProducts: c.totalRealProducts
       })),
     surveyStats: {
       totalWithSurvey,
@@ -726,6 +747,13 @@ function analyzeCommunityDetails(data: any[], country: string, communityName: st
   let hasInactiveDaysCount = 0;
   let totalLifespanDays = 0;
   let hasLifespanCount = 0;
+  
+  // Operational metrics:
+  let totalTtvDays = 0;
+  let hasTtvCount = 0;
+  let realActiveCount = 0;
+  let totalRealOrders = 0;
+  let totalRealProducts = 0;
 
   const referenceDate = new Date("2026-05-25T10:30:00-05:00");
 
@@ -751,6 +779,17 @@ function analyzeCommunityDetails(data: any[], country: string, communityName: st
     if (sessions > 7) activeCount++;
     if (billing_information) billingCount++;
     if (sessions === 1) bounceCount++;
+
+    const ttv = row.dias_en_activarse;
+    if (ttv !== null && ttv !== undefined && ttv >= 0) {
+      totalTtvDays += ttv;
+      hasTtvCount++;
+    }
+    if (row.es_activo_30d === true) {
+      realActiveCount++;
+    }
+    totalRealOrders += (row.real_orders_delivered || 0);
+    totalRealProducts += (row.real_products_created || 0);
 
     const lastSeenDate = last_seen ? new Date(last_seen) : null;
     const signUpDate = signed_up ? new Date(signed_up) : null;
@@ -817,7 +856,14 @@ function analyzeCommunityDetails(data: any[], country: string, communityName: st
       survey_role: sRole || null,
       survey_volume: sVolume || null,
       potentialRating,
-      referrerName
+      referrerName,
+      // Operational metrics fields:
+      fecha_activacion: row.fecha_activacion || null,
+      dias_en_activarse: row.dias_en_activarse !== undefined ? row.dias_en_activarse : null,
+      es_activo_30d: !!row.es_activo_30d,
+      real_orders_delivered: row.real_orders_delivered || 0,
+      real_products_created: row.real_products_created || 0,
+      real_dropshipper_clients: row.real_dropshipper_clients || 0,
     });
   });
 
@@ -839,7 +885,11 @@ function analyzeCommunityDetails(data: any[], country: string, communityName: st
       bounceRate: totalSuppliers > 0 ? Math.round((bounceCount / totalSuppliers) * 100) : 0,
       avgSessions: totalSuppliers > 0 ? Math.round((totalSessions / totalSuppliers) * 10) / 10 : 0,
       avgInactiveDays: hasInactiveDaysCount > 0 ? Math.round(totalInactiveDays / hasInactiveDaysCount) : 0,
-      avgLifespanDays: hasLifespanCount > 0 ? Math.round(totalLifespanDays / hasLifespanCount) : 0
+      avgLifespanDays: hasLifespanCount > 0 ? Math.round(totalLifespanDays / hasLifespanCount) : 0,
+      avgTtvDays: hasTtvCount > 0 ? Math.round(totalTtvDays / hasTtvCount) : 0,
+      realActiveRate: totalSuppliers > 0 ? Math.round((realActiveCount / totalSuppliers) * 100) : 0,
+      totalRealOrders,
+      totalRealProducts
     },
     volumes: [
       { name: "Más de 1.000 al mes", value: volOver1000 },
@@ -920,6 +970,21 @@ function generateMockSuppliersList(country: string): any[] {
     let belong_to_community = null;
     let owner_of_community = null;
     let referred_by = null;
+    
+    let dias_en_activarse = null;
+    let es_activo_30d = false;
+    let real_orders_delivered = 0;
+    let real_products_created = 0;
+    let real_dropshipper_clients = 0;
+
+    // Supposing 40% are matched/operational in mock
+    if (Math.random() > 0.6) {
+      dias_en_activarse = Math.floor(Math.random() * 30) + 1; // 1-30 days
+      es_activo_30d = Math.random() > 0.4;
+      real_orders_delivered = es_activo_30d ? Math.floor(Math.random() * 800) + 10 : Math.floor(Math.random() * 5);
+      real_products_created = Math.floor(Math.random() * 150) + 2;
+      real_dropshipper_clients = Math.floor(real_orders_delivered * 0.7) + 1;
+    }
 
     if (Math.random() > 0.4) {
       const mockComs = [
@@ -963,6 +1028,11 @@ function generateMockSuppliersList(country: string): any[] {
       referred_by,
       belong_to_community,
       owner_of_community,
+      dias_en_activarse,
+      es_activo_30d,
+      real_orders_delivered,
+      real_products_created,
+      real_dropshipper_clients,
     });
   }
 
