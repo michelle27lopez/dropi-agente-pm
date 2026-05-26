@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { getCRMAppointments } from "@/lib/crm-db";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -7,6 +8,8 @@ export async function GET(req: NextRequest) {
   const community = searchParams.get("community") || null;
 
   try {
+    const appointments = await getCRMAppointments();
+
     if (supabase) {
       let allData: any[] = [];
       let from = 0;
@@ -46,25 +49,25 @@ export async function GET(req: NextRequest) {
 
       if (allData.length > 0) {
         if (community) {
-          return NextResponse.json(analyzeCommunityDetails(allData, country, community));
+          return NextResponse.json(analyzeCommunityDetails(allData, country, community, appointments));
         }
-        return NextResponse.json(analyzeSuppliers(allData, country, "supabase"));
+        return NextResponse.json(analyzeSuppliers(allData, country, "supabase", appointments));
       }
     }
 
     // Fallback: Generar simulación realista
     const mockData = generateMockSuppliersList(country);
     if (community) {
-      return NextResponse.json(analyzeCommunityDetails(mockData, country, community));
+      return NextResponse.json(analyzeCommunityDetails(mockData, country, community, {}));
     }
-    return NextResponse.json(analyzeSuppliers(mockData, country, "mock"));
+    return NextResponse.json(analyzeSuppliers(mockData, country, "mock", {}));
   } catch (err: any) {
     console.error("Excepción en API de comportamiento:", err);
     const mockData = generateMockSuppliersList(country);
     if (community) {
-      return NextResponse.json(analyzeCommunityDetails(mockData, country, community));
+      return NextResponse.json(analyzeCommunityDetails(mockData, country, community, {}));
     }
-    return NextResponse.json(analyzeSuppliers(mockData, country, "mock"));
+    return NextResponse.json(analyzeSuppliers(mockData, country, "mock", {}));
   }
 }
 
@@ -78,7 +81,12 @@ function getMondayStr(dateStr: string): string {
 }
 
 // Analizar la data cargada de la DB
-function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mock") {
+function analyzeSuppliers(
+  data: any[],
+  country: string,
+  source: "supabase" | "mock",
+  appointments: Record<string, any> = {}
+) {
   const totalSuppliers = data.length;
 
   const supplierMap = new Map<string, any>();
@@ -130,12 +138,11 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
   const countryMap: Record<string, number> = {};
 
   // Inactividad y Abandono
-  // Snapshot baseline date
   const referenceDate = new Date("2026-05-25T10:30:00-05:00");
 
   let active = 0;       // 0-3 días inactivo
   let slightRisk = 0;   // 4-7 días inactivo
-  let churnRisk = 0;    // 8-14 días inactivo (Regla: posibilidad de churn > 10d)
+  let churnRisk = 0;    // 8-14 días inactivo
   let highRisk = 0;     // 15-30 días inactivo
   let confirmedChurn = 0; // 30+ días inactivo
 
@@ -175,6 +182,26 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
   let brandComunidad = 0;
   let brandHuerfano = 0;
 
+  // NUEVOS ACUMULADORES PARA ANÁLISIS DE VALIDACIÓN Y DESEMPEÑO
+  let noTypeCount = 0;
+  let noTypeWithOrderCount = 0; // Proveedores validados (sin tipo + al menos 1 orden)
+  const noTypeSurveyRoles: Record<string, number> = {};
+  const validatedList: any[] = [];
+
+  // Correlación para proveedores sin tipo
+  let withMeetingWithProducts = 0;
+  let withMeetingNoProducts = 0;
+  let noMeetingWithProducts = 0;
+  let noMeetingNoProducts = 0;
+
+  // Desempeño por nivel de proveedor
+  const tierStatsMap: Record<string, { count: number; orders: number; products: number; activeCount: number }> = {
+    "VERIFICADO": { count: 0, orders: 0, products: 0, activeCount: 0 },
+    "PREMIUM": { count: 0, orders: 0, products: 0, activeCount: 0 },
+    "PREMIUM EXCLUSIVO": { count: 0, orders: 0, products: 0, activeCount: 0 },
+    "Sin Tipo": { count: 0, orders: 0, products: 0, activeCount: 0 },
+  };
+
   data.forEach((row) => {
     const { signed_up, last_seen, web_sessions, country: cName, device_type, os, verified } = row;
     const sessions = web_sessions || 0;
@@ -182,6 +209,98 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
     const lastSeenDate = last_seen ? new Date(last_seen) : null;
 
     const community = resolveCommunity(row);
+
+    // Cruce de citas CRM
+    const emailKey = row.email ? String(row.email).trim().toLowerCase() : "";
+    const phoneKey = row.phone ? String(row.phone).trim() : "";
+    let has_appointment = !!row.has_appointment;
+    let ultima_cita_confirmada = row.ultima_cita_confirmada || null;
+
+    if (source === "supabase") {
+      const appt = (emailKey && appointments[emailKey]) || (phoneKey && appointments[phoneKey]) || null;
+      if (appt) {
+        has_appointment = true;
+        ultima_cita_confirmada = appt.ultima_cita_confirmada;
+      }
+    }
+
+    const ordersDelivered = row.real_orders_delivered || 0;
+    const productsCreated = row.real_products_created || 0;
+    const isActive30d = !!row.es_activo_30d;
+    const rawTipo = row.tipo_proveedor ? String(row.tipo_proveedor).trim().toUpperCase() : "";
+
+    // Agrupar por nivel para estadísticas de desempeño
+    const currentTier = (rawTipo === "VERIFICADO" || rawTipo === "PREMIUM" || rawTipo === "PREMIUM EXCLUSIVO") ? rawTipo : "Sin Tipo";
+
+    // Calcular días inactivos y estado para el directorio de validación
+    let days_inactive = 99;
+    let status = "churned";
+    if (lastSeenDate) {
+      days_inactive = Math.max(0, Math.floor((referenceDate.getTime() - lastSeenDate.getTime()) / 86400000));
+      if (days_inactive <= 7) status = "active";
+      else if (days_inactive <= 14) status = "dormant";
+      else if (days_inactive <= 30) status = "critical";
+      else status = "churned";
+    }
+
+    // Calcular antigüedad del registro en días
+    let daysSinceSignup = 999;
+    if (signUpDate) {
+      daysSinceSignup = Math.floor((referenceDate.getTime() - signUpDate.getTime()) / 86400000);
+    }
+
+    // Solo incluir en el análisis de validación y rendimiento si se registró hace <= 90 días
+    if (daysSinceSignup <= 90) {
+      const tStats = tierStatsMap[currentTier];
+      tStats.count++;
+      tStats.orders += ordersDelivered;
+      tStats.products += productsCreated;
+      if (isActive30d) tStats.activeCount++;
+
+      // Lógica para proveedores "Sin Tipo" (Potenciales / Registros nuevos sin validar por Dropi)
+      if (currentTier === "Sin Tipo") {
+        noTypeCount++;
+        
+        // Definición de validación: tiene al menos 1 orden y no tiene tipo
+        if (ordersDelivered >= 1) {
+          noTypeWithOrderCount++;
+          const sRole = row.survey_role || "No especificado";
+          noTypeSurveyRoles[sRole] = (noTypeSurveyRoles[sRole] || 0) + 1;
+        }
+
+        // Correlación de Citas y Carga de Productos
+        if (has_appointment) {
+          if (productsCreated >= 1) withMeetingWithProducts++;
+          else withMeetingNoProducts++;
+        } else {
+          if (productsCreated >= 1) noMeetingWithProducts++;
+          else noMeetingNoProducts++;
+        }
+      }
+
+      // Guardar en la lista para el directorio de control de validación (cohorte 90 días)
+      validatedList.push({
+        user_id: row.user_id,
+        name: row.name || "Proveedor Anónimo",
+        email: row.email || "-",
+        phone: row.phone || "-",
+        country: row.country || "Desconocido",
+        real_orders_delivered: ordersDelivered,
+        real_products_created: productsCreated,
+        survey_role: row.survey_role || "No especificado",
+        survey_volume: row.survey_volume || row.survey_brand_sales || "No especificado",
+        survey_source: row.survey_source || "No especificado",
+        resolved_community: community,
+        has_appointment,
+        ultima_cita_confirmada,
+        tipo_proveedor: currentTier,
+        days_inactive,
+        status,
+        signed_up: row.signed_up,
+        web_sessions: sessions
+      });
+    }
+
     if (!communityStats[community]) {
       communityStats[community] = { 
         name: community, 
@@ -229,15 +348,15 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
       cStats.totalTtvDays += ttv;
       cStats.hasTtvCount++;
     }
-    if (row.es_activo_30d === true) {
+    if (isActive30d) {
       cStats.realActiveCount++;
     }
-    cStats.totalRealOrders += (row.real_orders_delivered || 0);
-    cStats.totalRealProducts += (row.real_products_created || 0);
-    if ((row.real_products_created || 0) >= 1) {
+    cStats.totalRealOrders += ordersDelivered;
+    cStats.totalRealProducts += productsCreated;
+    if (productsCreated >= 1) {
       cStats.hasProductCount++;
     }
-    if ((row.real_orders_delivered || 0) >= 1) {
+    if (ordersDelivered >= 1) {
       cStats.hasOrderCount++;
     }
     
@@ -386,7 +505,6 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
 
         let priority: "high" | "medium" | "low" = "low";
         const isSupplier = sRole.toLowerCase().includes("proveedor");
-        // Prioridad alta si mueven más de 50 pedidos/ventas al mes
         const isBigVolume = sVolume.includes("1.000") || sVolume.includes("301 a 1.000") || sVolume.includes("51 a 300") ||
                             sBrand.includes("1.000") || sBrand.includes("301 a 1.000") || sBrand.includes("51 a 300");
 
@@ -419,7 +537,14 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
           referred_by: row.referred_by || null,
           belong_to_community: row.belong_to_community || null,
           owner_of_community: row.owner_of_community || null,
-          resolved_community: community
+          resolved_community: community,
+          // Nuevos campos operativos y de validación
+          tipo_proveedor: row.tipo_proveedor || null,
+          has_appointment,
+          ultima_cita_confirmada,
+          real_orders_delivered: ordersDelivered,
+          real_products_created: productsCreated,
+          real_dropshipper_clients: row.real_dropshipper_clients || 0,
         });
       }
     }
@@ -707,12 +832,44 @@ function analyzeSuppliers(data: any[], country: string, source: "supabase" | "mo
         brandComunidad,
         brandHuerfano
       }
-    }
+    },
+    validationStats: {
+      noTypeCount,
+      validatedCount: noTypeWithOrderCount,
+      validatedPct: noTypeCount > 0 ? Math.round((noTypeWithOrderCount / noTypeCount) * 100) : 0,
+      surveyBreakdown: Object.keys(noTypeSurveyRoles).map(name => ({
+        name,
+        value: noTypeSurveyRoles[name],
+        color: name.includes("Proveedor") ? "#6366F1" : (name.includes("Marca") ? "#10B981" : "#94A3B8")
+      })),
+      validatedList: validatedList,
+      correlation: {
+        withMeetingWithProducts,
+        withMeetingNoProducts,
+        noMeetingWithProducts,
+        noMeetingNoProducts
+      }
+    },
+    tierPerformance: Object.keys(tierStatsMap).map(tier => {
+      const ts = tierStatsMap[tier];
+      return {
+        tier,
+        count: ts.count,
+        avgOrders: ts.count > 0 ? Math.round((ts.orders / ts.count) * 10) / 10 : 0,
+        avgProducts: ts.count > 0 ? Math.round((ts.products / ts.count) * 10) / 10 : 0,
+        activeRate: ts.count > 0 ? Math.round((ts.activeCount / ts.count) * 100) : 0
+      };
+    })
   };
 }
 
 // Analizar detalles específicos de una comunidad
-function analyzeCommunityDetails(data: any[], country: string, communityName: string) {
+function analyzeCommunityDetails(
+  data: any[],
+  country: string,
+  communityName: string,
+  appointments: Record<string, any> = {}
+) {
   const supplierMap = new Map<string, any>();
   data.forEach((row) => {
     if (row.user_id) {
@@ -858,6 +1015,20 @@ function analyzeCommunityDetails(data: any[], country: string, communityName: st
       }
     }
 
+    // Cruce de citas CRM para detalle de comunidad
+    const emailKey = email ? String(email).trim().toLowerCase() : "";
+    const phoneKey = phone ? String(phone).trim() : "";
+    let has_appointment = !!row.has_appointment;
+    let ultima_cita_confirmada = row.ultima_cita_confirmada || null;
+
+    if (appointments) {
+      const appt = (emailKey && appointments[emailKey]) || (phoneKey && appointments[phoneKey]) || null;
+      if (appt) {
+        has_appointment = true;
+        ultima_cita_confirmada = appt.ultima_cita_confirmada;
+      }
+    }
+
     suppliersList.push({
       user_id: row.user_id,
       name: name || "Bodega Anónima",
@@ -880,6 +1051,10 @@ function analyzeCommunityDetails(data: any[], country: string, communityName: st
       real_orders_delivered: row.real_orders_delivered || 0,
       real_products_created: row.real_products_created || 0,
       real_dropshipper_clients: row.real_dropshipper_clients || 0,
+      // Nuevos campos de validación y tipo
+      tipo_proveedor: row.tipo_proveedor || null,
+      has_appointment,
+      ultima_cita_confirmada,
     });
   });
 
@@ -1004,6 +1179,22 @@ function generateMockSuppliersList(country: string): any[] {
     let real_products_created = 0;
     let real_dropshipper_clients = 0;
 
+    // Generar tipo_proveedor para simulación
+    let tipo_proveedor = null;
+    const tierRand = Math.random();
+    if (tierRand > 0.94) tipo_proveedor = "PREMIUM EXCLUSIVO";
+    else if (tierRand > 0.82) tipo_proveedor = "PREMIUM";
+    else if (tierRand > 0.55) tipo_proveedor = "VERIFICADO";
+
+    // Generar citas agendadas CRM para simulación
+    let has_appointment = Math.random() > 0.75;
+    let ultima_cita_confirmada = null;
+    if (has_appointment) {
+      const apptDate = new Date(signedUp.getTime());
+      apptDate.setDate(signedUp.getDate() + Math.floor(Math.random() * 7) + 1);
+      ultima_cita_confirmada = apptDate.toISOString();
+    }
+
     // Supposing 40% are matched/operational in mock
     if (Math.random() > 0.6) {
       dias_en_activarse = Math.floor(Math.random() * 30) + 1; // 1-30 days
@@ -1060,6 +1251,9 @@ function generateMockSuppliersList(country: string): any[] {
       real_orders_delivered,
       real_products_created,
       real_dropshipper_clients,
+      tipo_proveedor,
+      has_appointment,
+      ultima_cita_confirmada,
     });
   }
 

@@ -126,3 +126,42 @@ export async function getCRMLevel4Metrics(
 
   return merged;
 }
+
+export type CRMAppointment = {
+  ultima_cita_confirmada: string | null;
+  stage_name: string;
+};
+
+export async function getCRMAppointments(): Promise<Record<string, CRMAppointment>> {
+  if (!process.env.CRM_PG_HOST) {
+    console.warn("[CRM] CRM PostgreSQL host is not configured, returning empty appointments map");
+    return {};
+  }
+  try {
+    const { rows } = await pool.query<{ email: string | null; phone: string | null; ultima_cita_confirmada: Date | null; stage_name: string }>(
+      `SELECT email, phone, ultima_cita_confirmada, stage_name
+       FROM ${SCHEMA}.pipeline_verificacion_de_proveedores
+       WHERE ultima_cita_confirmada IS NOT NULL`
+    );
+    const map: Record<string, CRMAppointment> = {};
+    rows.forEach(r => {
+      const info: CRMAppointment = {
+        ultima_cita_confirmada: r.ultima_cita_confirmada ? r.ultima_cita_confirmada.toISOString() : null,
+        stage_name: r.stage_name
+      };
+      if (r.email) {
+        const cleanEmail = r.email.trim().toLowerCase();
+        if (cleanEmail) map[cleanEmail] = info;
+      }
+      if (r.phone) {
+        const cleanPhone = r.phone.trim();
+        if (cleanPhone) map[cleanPhone] = info;
+      }
+    });
+    return map;
+  } catch (err: any) {
+    console.error("[CRM] Error querying appointments:", err.message);
+    return {};
+  }
+}
+

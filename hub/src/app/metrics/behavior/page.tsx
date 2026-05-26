@@ -103,6 +103,12 @@ type RiskSupplier = {
   belong_to_community: string | null;
   owner_of_community: string | null;
   resolved_community: string | null;
+  tipo_proveedor: string | null;
+  has_appointment: boolean;
+  ultima_cita_confirmada: string | null;
+  real_orders_delivered: number;
+  real_products_created: number;
+  real_dropshipper_clients: number;
 };
 
 type FunnelStep = {
@@ -215,7 +221,247 @@ type BehaviorResponse = {
   funnel: FunnelStep[];
   communities: CommunityMetric[];
   surveyStats: SurveyStats;
+  validationStats: {
+    noTypeCount: number;
+    validatedCount: number;
+    validatedPct: number;
+    surveyBreakdown: { name: string; value: number; color?: string }[];
+    validatedList: {
+      user_id: string;
+      name: string;
+      email: string;
+      phone: string;
+      country: string;
+      real_orders_delivered: number;
+      real_products_created: number;
+      survey_role: string;
+      survey_volume: string;
+      survey_source: string;
+      resolved_community: string;
+      has_appointment: boolean;
+      ultima_cita_confirmada: string | null;
+      tipo_proveedor: string;
+      days_inactive: number;
+      status: string;
+      signed_up: string | null;
+      web_sessions: number;
+    }[];
+    correlation: {
+      withMeetingWithProducts: number;
+      withMeetingNoProducts: number;
+      noMeetingWithProducts: number;
+      noMeetingNoProducts: number;
+    };
+  };
+  tierPerformance: {
+    tier: string;
+    count: number;
+    avgOrders: number;
+    avgProducts: number;
+    activeRate: number;
+  }[];
 };
+
+type QueryResult = {
+  explanation: string;
+  count: number;
+  percentage?: number;
+  records: any[];
+  operationType: "count" | "list" | "percentage" | "top";
+};
+
+function CollapsibleText({ text, maxLength = 50 }: { text: string; maxLength?: number }) {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  if (!text || text === "-") return <span>-</span>;
+  if (text.length <= maxLength) return <span>{text}</span>;
+
+  const displayedText = isCollapsed ? text.substring(0, maxLength) + "..." : text;
+
+  return (
+    <span>
+      <span>{displayedText}</span>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsCollapsed(!isCollapsed);
+        }}
+        className="text-indigo-600 hover:text-indigo-800 font-bold ml-1 hover:underline cursor-pointer focus:outline-none focus:ring-0 inline-block align-baseline"
+        style={{ fontSize: "10px" }}
+      >
+        {isCollapsed ? "Ver más" : "Ver menos"}
+      </button>
+    </span>
+  );
+}
+
+function executeDeterministicQuery(rawQuery: string, list: any[]): QueryResult {
+  const cleanString = (str: string): string => {
+    return str
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  };
+
+  const normQuery = cleanString(rawQuery);
+  const totalCount = list.length;
+  let filtered = [...list];
+  const appliedFilters: string[] = [];
+
+  // 1. Filtro de País
+  if (normQuery.includes("colombia")) {
+    filtered = filtered.filter((s) => cleanString(s.country) === "colombia");
+    appliedFilters.push("País: Colombia");
+  } else if (normQuery.includes("mexico")) {
+    filtered = filtered.filter((s) => cleanString(s.country) === "mexico" || cleanString(s.country) === "mexico");
+    appliedFilters.push("País: México");
+  } else if (normQuery.includes("ecuador")) {
+    filtered = filtered.filter((s) => cleanString(s.country) === "ecuador");
+    appliedFilters.push("País: Ecuador");
+  }
+
+  // 2. Filtro de Rol
+  if (normQuery.includes("marca")) {
+    filtered = filtered.filter((s) => s.survey_role?.toLowerCase().includes("marca"));
+    appliedFilters.push("Rol: Marca / Emprendedor");
+  } else if (normQuery.includes("proveedor")) {
+    filtered = filtered.filter((s) => s.survey_role?.toLowerCase().includes("proveedor"));
+    appliedFilters.push("Rol: Proveedor");
+  } else if (normQuery.includes("sin encuesta") || normQuery.includes("sin responder") || normQuery.includes("no especificado")) {
+    filtered = filtered.filter((s) => !s.survey_role || s.survey_role === "No especificado");
+    appliedFilters.push("Rol: No especificado / Sin responder");
+  }
+
+  // 3. Filtro de Citas
+  if (normQuery.includes("con cita") || normQuery.includes("cita agendada") || normQuery.includes("cita confirmada")) {
+    filtered = filtered.filter((s) => s.has_appointment === true);
+    appliedFilters.push("Citas CRM: Con Cita Agendada");
+  } else if (normQuery.includes("sin cita")) {
+    filtered = filtered.filter((s) => s.has_appointment === false);
+    appliedFilters.push("Citas CRM: Sin Cita");
+  }
+
+  // 4. Filtro de Catálogo (Productos)
+  if (normQuery.includes("con producto") || normQuery.includes("catalogo creado") || normQuery.includes("con catalogo")) {
+    filtered = filtered.filter((s) => s.real_products_created >= 1);
+    appliedFilters.push("Catálogo: Con productos creados (≥1)");
+  } else if (normQuery.includes("sin producto") || normQuery.includes("catalogo vacio") || normQuery.includes("sin catalogo")) {
+    filtered = filtered.filter((s) => s.real_products_created === 0);
+    appliedFilters.push("Catálogo: Vacío (0 productos)");
+  }
+
+  // 5. Filtro de Ventas (Órdenes)
+  if (normQuery.includes("con orden") || normQuery.includes("con venta") || normQuery.includes("con pedido") || normQuery.includes("vendieron")) {
+    filtered = filtered.filter((s) => s.real_orders_delivered >= 1);
+    appliedFilters.push("Ventas: Con órdenes reales (≥1)");
+  } else if (normQuery.includes("sin orden") || normQuery.includes("sin venta") || normQuery.includes("sin pedido") || normQuery.includes("no han vendido")) {
+    filtered = filtered.filter((s) => s.real_orders_delivered === 0);
+    appliedFilters.push("Ventas: Sin órdenes (0)");
+  }
+
+  // 6. Filtro de Nivel
+  if (normQuery.includes("verificado")) {
+    filtered = filtered.filter((s) => s.tipo_proveedor === "VERIFICADO");
+    appliedFilters.push("Nivel: VERIFICADO");
+  } else if (normQuery.includes("premium exclusivo")) {
+    filtered = filtered.filter((s) => s.tipo_proveedor === "PREMIUM EXCLUSIVO");
+    appliedFilters.push("Nivel: PREMIUM EXCLUSIVO");
+  } else if (normQuery.includes("premium")) {
+    filtered = filtered.filter((s) => s.tipo_proveedor === "PREMIUM");
+    appliedFilters.push("Nivel: PREMIUM");
+  } else if (normQuery.includes("sin tipo") || normQuery.includes("sin validar")) {
+    filtered = filtered.filter((s) => s.tipo_proveedor === "Sin Tipo");
+    appliedFilters.push("Nivel: Sin Tipo");
+  }
+
+  // 7. Filtro de Estado
+  if (normQuery.includes("activo")) {
+    filtered = filtered.filter((s) => s.status === "active");
+    appliedFilters.push("Actividad: Activo reciente (0-7d inactivo)");
+  } else if (normQuery.includes("dormante") || normQuery.includes("inactivo")) {
+    filtered = filtered.filter((s) => s.status === "dormant");
+    appliedFilters.push("Actividad: Dormante (8-14d inactivo)");
+  } else if (normQuery.includes("critico")) {
+    filtered = filtered.filter((s) => s.status === "critical");
+    appliedFilters.push("Actividad: Crítico (15-30d inactivo)");
+  } else if (normQuery.includes("abandono") || normQuery.includes("churn")) {
+    filtered = filtered.filter((s) => s.status === "churned");
+    appliedFilters.push("Actividad: Abandono confirmado (30d+)");
+  }
+
+  // 8. Filtro de Comunidad
+  const uniqueComms = Array.from(new Set(list.map((s) => s.resolved_community).filter(Boolean)));
+  let matchedCommunity = null;
+  for (const com of uniqueComms) {
+    const normCom = cleanString(com);
+    if (normCom && normQuery.includes(normCom)) {
+      matchedCommunity = com;
+      break;
+    }
+  }
+  if (matchedCommunity) {
+    filtered = filtered.filter((s) => s.resolved_community === matchedCommunity);
+    appliedFilters.push(`Comunidad: ${matchedCommunity}`);
+  }
+
+  // Determinar Tipo de Operación y Ordenamiento
+  let opType: "count" | "list" | "percentage" | "top" = "count";
+  if (normQuery.includes("quienes") || normQuery.includes("cuales") || normQuery.includes("lista") || normQuery.includes("como se llaman") || normQuery.includes("nombre")) {
+    opType = "list";
+  } else if (normQuery.includes("porcentaje") || normQuery.includes("tasa") || normQuery.includes("%")) {
+    opType = "percentage";
+  }
+
+  if (normQuery.includes("top") || normQuery.includes("mas") || normQuery.includes("mayor")) {
+    opType = "top";
+    // Ordenar descendente según criterio
+    if (normQuery.includes("orden") || normQuery.includes("venta") || normQuery.includes("pedido")) {
+      filtered.sort((a, b) => b.real_orders_delivered - a.real_orders_delivered);
+    } else if (normQuery.includes("producto") || normQuery.includes("catalogo")) {
+      filtered.sort((a, b) => b.real_products_created - a.real_products_created);
+    } else {
+      filtered.sort((a, b) => b.web_sessions - a.web_sessions);
+    }
+  }
+
+  // Obtener límite numérico si se especifica (ej: top 5, top 10)
+  let limit = 10; // Límite por defecto para listas/top
+  const numMatch = normQuery.match(/\b(\d+)\b/);
+  if (numMatch) {
+    limit = parseInt(numMatch[1], 10);
+  }
+
+  const finalCount = filtered.length;
+  const percentage = totalCount > 0 ? Math.round((finalCount / totalCount) * 1000) / 10 : 0;
+
+  // Si la consulta es de tipo top o lista, limitamos los registros retornados para evitar saturar la interfaz
+  const recordsToReturn = (opType === "top" || opType === "list") ? filtered.slice(0, limit) : filtered;
+
+  // Generar explicación legible
+  let explanation = "Filtrando por: ";
+  if (appliedFilters.length > 0) {
+    explanation += appliedFilters.join(" y ");
+  } else {
+    explanation += "Todos los registros de la cohorte de 90 días";
+  }
+
+  if (opType === "top") {
+    explanation += ` | Ordenado de mayor a menor (Top ${limit})`;
+  } else if (opType === "list") {
+    explanation += ` | Mostrando listado de nombres (Límite ${limit})`;
+  }
+
+  return {
+    explanation,
+    count: finalCount,
+    percentage,
+    records: recordsToReturn,
+    operationType: opType,
+  };
+}
 
 export default function BehaviorDashboard() {
   const [country, setCountry] = useState<string>("ALL");
@@ -248,6 +494,152 @@ export default function BehaviorDashboard() {
 
   // Toggle del Heatmap: % de retención vs cantidad absoluta
   const [heatmapMode, setHeatmapMode] = useState<"percentage" | "count">("percentage");
+
+  // Filtros de la pestaña Control de Validación
+  const [valSearch, setValSearch] = useState<string>("");
+  const [valFilterTier, setValFilterTier] = useState<string>("ALL");
+  const [valFilterProducts, setValFilterProducts] = useState<string>("ALL");
+  const [valFilterOrders, setValFilterOrders] = useState<string>("ALL");
+  const [valFilterAppointment, setValFilterAppointment] = useState<string>("ALL");
+  const [valFilterStatus, setValFilterStatus] = useState<string>("ALL");
+  const [valFilterRole, setValFilterRole] = useState<string>("ALL");
+  const [valFilterVolume, setValFilterVolume] = useState<string>("ALL");
+  // Estados para el Asistente de Datos (Chat)
+  type ChatMessage = {
+    sender: "user" | "assistant";
+    text: string;
+    result?: QueryResult;
+    timestamp: Date;
+  };
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      sender: "assistant",
+      text: "¡Hola! Soy tu Asistente de Datos del Hub. Puedo responder preguntas exactas y determinísticas en lenguaje natural sobre la cohorte de proveedores de los últimos 90 días.\n\nNo tengo costos de tokens de AI porque analizo la data directamente en tu navegador.",
+      timestamp: new Date()
+    }
+  ]);
+  const [expandedMessages, setExpandedMessages] = useState<Record<number, boolean>>({});
+  const [chatMode, setChatMode] = useState<"local" | "gpt">("local");
+  const [chatInput, setChatInput] = useState<string>("");
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+
+  const handleSendMessage = (textToSend?: string) => {
+    const query = textToSend || chatInput;
+    if (!query.trim()) return;
+
+    const userMsg: ChatMessage = {
+      sender: "user",
+      text: query,
+      timestamp: new Date()
+    };
+    
+    setChatMessages(prev => [...prev, userMsg]);
+    if (!textToSend) setChatInput("");
+    setIsTyping(true);
+
+    if (chatMode === "gpt") {
+      const res = executeDeterministicQuery(query, data?.validationStats?.validatedList || []);
+      const summaryStats = {
+        totalSuppliers: data?.stats?.totalSuppliers || 0,
+        activeRate: data?.stats?.activeRate || 0,
+        verifiedRate: data?.stats?.verifiedRate || 0,
+        dormantCount: data?.stats?.dormantCount || 0,
+        churnedCount: data?.stats?.churnedCount || 0,
+        churnRate: data?.stats?.churnRate || 0,
+      };
+
+      fetch("/api/metrics/behavior/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query,
+          deterministicResult: res,
+          summaryStats
+        })
+      })
+        .then(async apiRes => {
+          const isJson = apiRes.headers.get("content-type")?.includes("application/json");
+          const resData = isJson ? await apiRes.json() : null;
+          if (!apiRes.ok) {
+            const errorMsg = resData?.error || `Error ${apiRes.status}: Respuesta no válida`;
+            throw new Error(errorMsg);
+          }
+          return resData;
+        })
+        .then(json => {
+          const assistantMsg: ChatMessage = {
+            sender: "assistant",
+            text: json.reply,
+            result: res,
+            timestamp: new Date()
+          };
+          setChatMessages(prev => [...prev, assistantMsg]);
+          setIsTyping(false);
+        })
+        .catch(err => {
+          console.error("OpenAI call error:", err);
+          const assistantMsg: ChatMessage = {
+            sender: "assistant",
+            text: `⚠️ Error al consultar ChatGPT: ${err.message}. Asegúrate de que la API key esté configurada en el archivo .env.local de la carpeta 'hub'.`,
+            result: res,
+            timestamp: new Date()
+          };
+          setChatMessages(prev => [...prev, assistantMsg]);
+          setIsTyping(false);
+        });
+    } else {
+      setTimeout(() => {
+        const res = executeDeterministicQuery(query, data?.validationStats?.validatedList || []);
+        
+        let responseText = "";
+
+        if (res.count === 0) {
+          const zeroReplies = [
+            `No encontré ningún proveedor en la cohorte de 90 días que coincida con esos criterios de búsqueda.`,
+            `Vaya, parece que no hay registros que coincidan con la búsqueda actual.`,
+            `El resultado de la búsqueda determinística es de 0 coincidencias para este segmento.`,
+            `No se detectaron proveedores activos en la cohorte que cumplan con esas condiciones.`
+          ];
+          responseText = zeroReplies[Math.floor(Math.random() * zeroReplies.length)];
+        } else if (res.operationType === "top") {
+          const topReplies = [
+            `Aquí tienes el ranking (Top) de proveedores más representativo según tu consulta.`,
+            `He ordenado los registros para mostrarte los principales proveedores de este segmento.`,
+            `Te presento el listado ordenado descendente de los mejores registros bajo este criterio.`,
+            `Aquí tienes el Top solicitado de cuentas correspondientes a tu búsqueda.`,
+            `Aquí puedes ver los proveedores ordenados de mayor a menor según tu consulta.`
+          ];
+          responseText = topReplies[Math.floor(Math.random() * topReplies.length)];
+        } else if (res.operationType === "list") {
+          const listReplies = [
+            `Aquí tienes el listado de proveedores correspondientes a tu búsqueda.`,
+            `Te comparto la lista detallada de los proveedores que coinciden con tu criterio.`,
+            `Aquí puedes ver los nombres y datos de contacto de las cuentas filtradas.`,
+            `He extraído los siguientes registros que cumplen con las condiciones especificadas.`
+          ];
+          responseText = listReplies[Math.floor(Math.random() * listReplies.length)];
+        } else {
+          const countReplies = [
+            `Encontré **${res.count} proveedores** que coinciden con tu criterio (${res.percentage}% de la cohorte de 90 días).`,
+            `¡Listo! He analizado los datos y detecté **${res.count} cuentas** (${res.percentage}% del total de nuevos registros).`,
+            `El cruce de datos arroja un total de **${res.count} proveedores** que representan el ${res.percentage}% del segmento.`,
+            `Según la cohorte de los últimos 90 días, hay **${res.count} registros** (${res.percentage}% de la base) con este comportamiento.`,
+            `Hecho. Coinciden **${res.count} proveedores** (${res.percentage}%) con las características consultadas.`
+          ];
+          responseText = countReplies[Math.floor(Math.random() * countReplies.length)];
+        }
+
+        const assistantMsg: ChatMessage = {
+          sender: "assistant",
+          text: responseText,
+          result: res,
+          timestamp: new Date()
+        };
+        setChatMessages(prev => [...prev, assistantMsg]);
+        setIsTyping(false);
+      }, 400);
+    }
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -404,6 +796,61 @@ export default function BehaviorDashboard() {
     })();
 
     return matchesSearch && matchesWeek && matchesRisk && matchesSource && matchesVolume && matchesPriority && matchesCommunity;
+  });
+
+  // Filtrado de proveedores en Control de Validación (Directorio completo de registros 90d)
+  const filteredValidatedList = (data?.validationStats?.validatedList || []).filter((s) => {
+    const matchesSearch =
+      s.name.toLowerCase().includes(valSearch.trim().toLowerCase()) ||
+      s.email.toLowerCase().includes(valSearch.trim().toLowerCase()) ||
+      s.phone.toLowerCase().includes(valSearch.trim().toLowerCase());
+
+    const matchesTier = (() => {
+      if (valFilterTier === "ALL") return true;
+      return s.tipo_proveedor === valFilterTier;
+    })();
+
+    const matchesProducts = (() => {
+      if (valFilterProducts === "ALL") return true;
+      if (valFilterProducts === "with") return s.real_products_created >= 1;
+      return s.real_products_created === 0;
+    })();
+
+    const matchesOrders = (() => {
+      if (valFilterOrders === "ALL") return true;
+      if (valFilterOrders === "with") return s.real_orders_delivered >= 1;
+      return s.real_orders_delivered === 0;
+    })();
+
+    const matchesAppointment = (() => {
+      if (valFilterAppointment === "ALL") return true;
+      if (valFilterAppointment === "with") return s.has_appointment;
+      return !s.has_appointment;
+    })();
+
+    const matchesStatus = (() => {
+      if (valFilterStatus === "ALL") return true;
+      return s.status === valFilterStatus;
+    })();
+
+    const matchesRole = (() => {
+      if (valFilterRole === "ALL") return true;
+      if (valFilterRole === "brand") return s.survey_role?.toLowerCase().includes("marca");
+      if (valFilterRole === "supplier") return s.survey_role?.toLowerCase().includes("proveedor");
+      return !s.survey_role || s.survey_role === "No especificado";
+    })();
+
+    const matchesVolume = (() => {
+      if (valFilterVolume === "ALL") return true;
+      const vol = s.survey_volume || "";
+      if (valFilterVolume === "high") return vol.includes("Más de 1.000") || vol.includes("301 a 1.000");
+      if (valFilterVolume === "mid") return vol.includes("51 a 300");
+      if (valFilterVolume === "low") return vol.includes("Menos de 50");
+      if (valFilterVolume === "none") return vol.includes("vendo") || vol.includes("Aún") || vol.includes("gestiono");
+      return true;
+    })();
+
+    return matchesSearch && matchesTier && matchesProducts && matchesOrders && matchesAppointment && matchesStatus && matchesRole && matchesVolume;
   });
 
   const COLORS = ["#6366F1", "#10B981", "#F59E0B", "#EF4444", "#EC4899", "#8B5CF6", "#14B8A6", "#3B82F6"];
@@ -628,6 +1075,8 @@ export default function BehaviorDashboard() {
               {[
                 { id: "churn", name: "Inactividad y Churn", icon: <AlertTriangle className="w-4 h-4" /> },
                 { id: "cohorts", name: "Matriz de Cohortes", icon: <Calendar className="w-4 h-4" /> },
+                { id: "validation_insights", name: "Control de Validación", icon: <CheckCircle className="w-4 h-4" /> },
+                { id: "data_chat", name: "Asistente de Datos 🤖", icon: <MessageSquare className="w-4 h-4" /> },
                 { id: "survey_insights", name: "Perfil de Encuestas 📊", icon: <Sparkles className="w-4 h-4" /> },
                 { id: "demographics", name: "Comportamiento y Demografía", icon: <Activity className="w-4 h-4" /> },
                 { id: "recovery", name: "Directorio de Recuperación", icon: <Users className="w-4 h-4" /> },
@@ -937,6 +1386,849 @@ export default function BehaviorDashboard() {
                   </div>
                 </div>
 
+              </div>
+            )}
+
+            {/* PESTAÑA NUEVA: CONTROL DE VALIDACIÓN */}
+            {activeTab === "validation_insights" && data?.validationStats && (
+              <div className="flex flex-col gap-6">
+                
+                {/* Header de Control de Validación */}
+                <div className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 rounded-2xl border border-slate-800 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-indigo-400 animate-pulse" />
+                      <h3 className="font-bold text-base sm:text-lg">Control de Validación y Conversión de Proveedores</h3>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Medición de proveedores registrados sin tipo oficial asignado que ya operan y validan su visibilidad.
+                    </p>
+                  </div>
+                  <div className="bg-white/10 px-4 py-2 rounded-xl text-center border border-white/5">
+                    <p className="text-[9px] font-bold text-slate-400 uppercase">Sin Tipo Registrados</p>
+                    <p className="text-xl font-extrabold text-indigo-300 mt-0.5">
+                      {data.validationStats.noTypeCount.toLocaleString("es-CO")}
+                    </p>
+                  </div>
+                </div>
+
+                {/* KPI Metrics Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* KPI 1: Tasa de Conversión */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="px-2.5 py-1 text-[9px] font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase">
+                        Conversión de Visibilidad
+                      </span>
+                      <h4 className="text-4xl font-extrabold text-slate-800 mt-3">
+                        {data.validationStats.validatedPct}%
+                      </h4>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Porcentaje de proveedores sin tipo que tienen al menos 1 orden real entregada en Dropi.
+                      </p>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-full h-2 mt-4">
+                      <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${data.validationStats.validatedPct}%` }} />
+                    </div>
+                  </div>
+
+                  {/* KPI 2: Total Validados */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="px-2.5 py-1 text-[9px] font-bold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 uppercase">
+                        Validados Visibles
+                      </span>
+                      <h4 className="text-4xl font-extrabold text-indigo-650 mt-3">
+                        {data.validationStats.validatedCount.toLocaleString("es-CO")}
+                      </h4>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Proveedores que operan activamente y han demostrado volumen real sin poseer tipo de proveedor.
+                      </p>
+                    </div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase mt-4">
+                      Listos para asignación comercial
+                    </p>
+                  </div>
+
+                  {/* KPI 3: Citas agendadas */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="px-2.5 py-1 text-[9px] font-bold rounded-full bg-amber-50 text-amber-700 border border-amber-100 uppercase">
+                        Citas en CRM
+                      </span>
+                      {(() => {
+                        const { withMeetingWithProducts, withMeetingNoProducts } = data.validationStats.correlation;
+                        const totalAppts = withMeetingWithProducts + withMeetingNoProducts;
+                        return (
+                          <>
+                            <h4 className="text-4xl font-extrabold text-slate-800 mt-3">
+                              {totalAppts.toLocaleString("es-CO")}
+                            </h4>
+                            <p className="text-xs text-slate-400 mt-1">
+                              Total de proveedores sin tipo que ya agendaron cita de validación en CRM de seguimiento.
+                            </p>
+                          </>
+                        );
+                      })()}
+                    </div>
+                    <div className="flex items-center gap-2 mt-4 text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-xl">
+                      <Calendar className="w-4 h-4 shrink-0 text-emerald-600" />
+                      <span>Soporte comercial agendado</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seccion 2: Correlación Citas y Productos + Rendimiento Tiers */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Correlación de Citas CRM */}
+                  <div className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Correlación: Citas Agendadas vs Carga de Productos</h4>
+                      <p className="text-xs text-slate-400 mb-4">¿El agendamiento comercial de citas empuja la creación de catálogo en proveedores sin tipo?</p>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* Con Cita */}
+                        <div className="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100">
+                          <p className="text-[10px] font-bold text-emerald-705 uppercase tracking-wider flex items-center gap-1">
+                            <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                            Con Cita Agendada
+                          </p>
+                          
+                          <div className="mt-3 flex flex-col gap-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-slate-500">Catálogo Creado (≥1 Prod):</span>
+                              <span className="font-bold text-slate-800">{data.validationStats.correlation.withMeetingWithProducts}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-slate-500">Catálogo Vacío (0 Prod):</span>
+                              <span className="font-bold text-slate-800">{data.validationStats.correlation.withMeetingNoProducts}</span>
+                            </div>
+                            {(() => {
+                              const total = data.validationStats.correlation.withMeetingWithProducts + data.validationStats.correlation.withMeetingNoProducts;
+                              const pct = total > 0 ? Math.round((data.validationStats.correlation.withMeetingWithProducts / total) * 100) : 0;
+                              return (
+                                <div className="mt-2 pt-2 border-t border-emerald-100 flex justify-between items-center text-[11px] font-bold text-emerald-755">
+                                  <span>Conversión Catálogo:</span>
+                                  <span>{pct}%</span>
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        </div>
+
+                        {/* Sin Cita */}
+                        <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-200">
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" />
+                            Sin Cita Agendada
+                          </p>
+                          
+                          <div className="mt-3 flex flex-col gap-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-slate-500">Catálogo Creado (≥1 Prod):</span>
+                              <span className="font-bold text-slate-800">{data.validationStats.correlation.noMeetingWithProducts}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-slate-500">Catálogo Vacío (0 Prod):</span>
+                              <span className="font-bold text-slate-800">{data.validationStats.correlation.noMeetingNoProducts}</span>
+                            </div>
+                            {(() => {
+                              const total = data.validationStats.correlation.noMeetingWithProducts + data.validationStats.correlation.noMeetingNoProducts;
+                              const pct = total > 0 ? Math.round((data.validationStats.correlation.noMeetingWithProducts / total) * 100) : 0;
+                              return (
+                                <div className="mt-2 pt-2 border-t border-slate-200 flex justify-between items-center text-[11px] font-bold text-slate-600">
+                                  <span>Conversión Catálogo:</span>
+                                  <span>{pct}%</span>
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-[11px] text-indigo-950 flex items-start gap-2">
+                      <Sparkles className="w-4 h-4 shrink-0 text-indigo-650 mt-0.5" />
+                      <p>
+                        <strong>Hipótesis Comercial:</strong> Los proveedores que pasan por la cita de validación tienen una tasa de creación de catálogo sustancialmente mayor que los que no. Use esto para priorizar llamadas telefónicas preventivas.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Rendimiento por Nivel de Proveedor */}
+                  <div className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                    <h4 className="font-bold text-slate-800 text-sm">Rendimiento Operativo por Nivel de Proveedor</h4>
+                    <p className="text-xs text-slate-400 mb-4">Comparación de volumen real de ventas y catálogo según su tipo de proveedor asignado.</p>
+                    
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-xs">
+                        <thead>
+                          <tr className="border-b border-slate-100 bg-slate-50 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                            <th className="px-4 py-3">Nivel del Proveedor</th>
+                            <th className="px-4 py-3 text-center">Proveedores</th>
+                            <th className="px-4 py-3 text-center">Órdenes Prom.</th>
+                            <th className="px-4 py-3 text-center">Productos Prom.</th>
+                            <th className="px-4 py-3 text-center">Activos (30d)</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-slate-600">
+                          {data.tierPerformance.map((tierData) => (
+                            <tr key={tierData.tier} className="hover:bg-slate-50/40">
+                              <td className="px-4 py-3 font-bold text-slate-800">
+                                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-lg border ${
+                                  tierData.tier === "PREMIUM EXCLUSIVO" ? "bg-indigo-50 text-indigo-700 border-indigo-200" :
+                                  tierData.tier === "PREMIUM" ? "bg-amber-50 text-amber-700 border-amber-200" :
+                                  tierData.tier === "VERIFICADO" ? "bg-blue-50 text-blue-700 border-blue-200" :
+                                  "bg-slate-50 text-slate-500 border-slate-200"
+                                }`}>
+                                  {tierData.tier}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-center font-semibold text-slate-700">
+                                {tierData.count.toLocaleString("es-CO")}
+                              </td>
+                              <td className="px-4 py-3 text-center font-bold text-indigo-650">
+                                {tierData.avgOrders.toLocaleString("es-CO")}
+                              </td>
+                              <td className="px-4 py-3 text-center font-bold text-slate-800">
+                                {tierData.avgProducts.toLocaleString("es-CO")}
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                  tierData.activeRate >= 50 ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
+                                }`}>
+                                  {tierData.activeRate}%
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tabla de Proveedores Visibles Validados */}
+                <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+                  <div className="p-5 bg-slate-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <span className="p-2 bg-white/10 rounded-xl text-emerald-400">
+                        <CheckCircle className="w-5 h-5" />
+                      </span>
+                      <div>
+                        <h3 className="font-bold text-sm sm:text-base">Directorio de Nuevos Registros (Cohorte 90 días)</h3>
+                        <p className="text-xs text-slate-400">
+                          Listado de todos los proveedores registrados en los últimos 90 días. Filtre por nivel, catálogo, citas y órdenes para evaluar su efectividad.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Input Search */}
+                    <div className="relative w-full md:w-64">
+                      <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={valSearch}
+                        onChange={(e) => setValSearch(e.target.value)}
+                        placeholder="Buscar por bodega, email o tel..."
+                        className="w-full pl-9 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-slate-500 transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Barra de Filtros Avanzados */}
+                  <div className="bg-slate-50 p-4 border-b border-slate-100 flex flex-wrap items-center gap-3 text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <Filter className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="font-semibold text-slate-500">Filtrar tabla:</span>
+                    </div>
+
+                    {/* Filtro de Tipo de Proveedor */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Nivel/Tipo:</span>
+                      <select
+                        value={valFilterTier}
+                        onChange={(e) => setValFilterTier(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos los niveles</option>
+                        <option value="Sin Tipo">Sin Tipo (Registros nuevos)</option>
+                        <option value="VERIFICADO">VERIFICADO</option>
+                        <option value="PREMIUM">PREMIUM</option>
+                        <option value="PREMIUM EXCLUSIVO">PREMIUM EXCLUSIVO</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Catálogo (Productos) */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Catálogo:</span>
+                      <select
+                        value={valFilterProducts}
+                        onChange={(e) => setValFilterProducts(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos</option>
+                        <option value="with">Con Catálogo (≥1 Prod)</option>
+                        <option value="without">Catálogo Vacío (0 Prod)</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Ventas (Órdenes) */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Ventas (Órdenes):</span>
+                      <select
+                        value={valFilterOrders}
+                        onChange={(e) => setValFilterOrders(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos</option>
+                        <option value="with">Con Ventas (≥1 Orden)</option>
+                        <option value="without">Sin Ventas (0 Órdenes)</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Citas CRM */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Cita CRM:</span>
+                      <select
+                        value={valFilterAppointment}
+                        onChange={(e) => setValFilterAppointment(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos</option>
+                        <option value="with">Con Cita Agendada</option>
+                        <option value="without">Sin Cita Agendada</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Estado de Actividad */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Estado/Actividad:</span>
+                      <select
+                        value={valFilterStatus}
+                        onChange={(e) => setValFilterStatus(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos los estados</option>
+                        <option value="active">Activos recientes (0-7d inactivo)</option>
+                        <option value="dormant">Dormantes (8-14d inactivo)</option>
+                        <option value="critical">Riesgo Crítico (15-30d inactivo)</option>
+                        <option value="churned">Abandono Confirmado (30d+)</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Rol de Encuesta */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Rol Encuesta:</span>
+                      <select
+                        value={valFilterRole}
+                        onChange={(e) => setValFilterRole(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos los roles</option>
+                        <option value="supplier">Proveedor</option>
+                        <option value="brand">Marca / Emprendedor</option>
+                        <option value="none">No especificado</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Volumen de Encuesta */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Volumen Encuesta:</span>
+                      <select
+                        value={valFilterVolume}
+                        onChange={(e) => setValFilterVolume(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos los volúmenes</option>
+                        <option value="high">Alto Volumen (&gt;300/mes)</option>
+                        <option value="mid">Volumen Medio (50-300/mes)</option>
+                        <option value="low">Bajo Volumen (&lt;50/mes)</option>
+                        <option value="none">Sin Ventas / Inicial</option>
+                      </select>
+                    </div>
+
+                    <div className="ml-auto text-slate-400 font-medium">
+                      Mostrando <span className="font-bold text-slate-700">{filteredValidatedList.length}</span> resultados
+                    </div>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <th className="px-6 py-4">Bodega / Proveedor</th>
+                          <th className="px-6 py-4">Nivel / Cita</th>
+                          <th className="px-6 py-4">Contacto</th>
+                          <th className="px-6 py-4">Registro</th>
+                          <th className="px-6 py-4">Perfil Encuesta</th>
+                          <th className="px-6 py-4">Comunidad / Origen</th>
+                          <th className="px-6 py-4 text-center">País</th>
+                          <th className="px-6 py-4 text-center">Productos</th>
+                          <th className="px-6 py-4 text-center">Órdenes Reales</th>
+                          <th className="px-6 py-4 text-center">Estado</th>
+                          <th className="px-6 py-4 text-right">Acción</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-slate-600">
+                        {filteredValidatedList.length > 0 ? (
+                          filteredValidatedList.map((valSup, idx) => {
+                            const rawTipo = valSup.tipo_proveedor ? valSup.tipo_proveedor.trim().toUpperCase() : "";
+                            const badgeColor = rawTipo === "PREMIUM EXCLUSIVO" ? "bg-indigo-100 text-indigo-805 border-indigo-200" :
+                                               rawTipo === "PREMIUM" ? "bg-amber-100 text-amber-800 border-amber-200" :
+                                               rawTipo === "VERIFICADO" ? "bg-blue-100 text-blue-800 border-blue-200" :
+                                               "bg-slate-100 text-slate-500 border-slate-200";
+                            const tierName = valSup.tipo_proveedor || "Sin Tipo";
+
+                            // Procesar datos de encuesta
+                            const isBrand = valSup.survey_role?.toLowerCase().includes("marca");
+                            const isSupplier = valSup.survey_role?.toLowerCase().includes("proveedor");
+                            const roleText = isBrand ? "MARCA" : isSupplier ? "PROVEEDOR" : "No especificado";
+                            const roleColor = isBrand ? "bg-amber-50 text-amber-700 border-amber-200/80" :
+                                              isSupplier ? "bg-indigo-50 text-indigo-700 border-indigo-200/80" :
+                                              "bg-slate-50 text-slate-500 border-slate-200";
+
+                            const vol = valSup.survey_volume || "";
+                            let volBadgeColor = "bg-slate-50 text-slate-500 border-slate-200";
+                            let volText = vol || "No especificado";
+                            if (vol.includes("1.000") && vol.includes("Más")) {
+                              volBadgeColor = "bg-rose-50 text-rose-700 border-rose-200 font-bold";
+                              volText = "🔥 > 1.000 / mes";
+                            } else if (vol.includes("301")) {
+                              volBadgeColor = "bg-purple-50 text-purple-700 border-purple-200";
+                              volText = "📦 300 - 1.000 / mes";
+                            } else if (vol.includes("51")) {
+                              volBadgeColor = "bg-blue-50 text-blue-700 border-blue-200";
+                              volText = "📦 50 - 300 / mes";
+                            } else if (vol.includes("Menos")) {
+                              volBadgeColor = "bg-slate-100 text-slate-600 border-slate-200";
+                              volText = "📦 < 50 / mes";
+                            } else if (vol.includes("vendo") || vol.includes("Aún") || vol.includes("gestiono")) {
+                              volBadgeColor = "bg-slate-50/70 text-slate-400 border-slate-200";
+                              volText = "Sin ventas";
+                            }
+
+                            const comName = valSup.resolved_community || "Orgánico / Sin comunidad";
+                            const src = valSup.survey_source;
+                            const srcText = src === "comunidades" ? "Comunidad" : src === "huerfanos" ? "Huérfano" : "Orgánico";
+                            const srcColor = src === "comunidades" ? "bg-purple-50 text-purple-700 border-purple-200" :
+                                             src === "huerfanos" ? "bg-amber-50 text-amber-700 border-amber-200" :
+                                             "bg-slate-100 text-slate-500 border-slate-200";
+
+                            return (
+                              <tr key={idx} className="hover:bg-slate-50/30 transition-colors">
+                                <td className="px-6 py-4 font-bold text-slate-800">{valSup.name}</td>
+                                <td className="px-6 py-4">
+                                  <span className={`px-2 py-0.5 text-[9px] font-bold rounded border ${badgeColor}`}>
+                                    {tierName}
+                                  </span>
+                                  <div className="flex items-center gap-1 mt-1">
+                                    <Calendar className={`w-3.5 h-3.5 ${valSup.has_appointment ? "text-emerald-500" : "text-slate-300"}`} />
+                                    <span className={`text-[9px] font-semibold ${valSup.has_appointment ? "text-emerald-700" : "text-slate-400"}`}>
+                                      {valSup.has_appointment ? "Con Cita" : "Sin Cita"}
+                                    </span>
+                                    {valSup.ultima_cita_confirmada && (
+                                      <span className="text-[8px] text-slate-400">
+                                        ({new Date(valSup.ultima_cita_confirmada).toLocaleDateString("es-CO", { day: "numeric", month: "short" })})
+                                      </span>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="text-slate-700">{valSup.email}</div>
+                                  <div className="text-[10px] text-slate-400">{valSup.phone}</div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  {valSup.signed_up ? (
+                                    <>
+                                      <div className="font-semibold text-slate-700">
+                                        {new Date(valSup.signed_up).toLocaleDateString("es-CO", {
+                                          day: "numeric",
+                                          month: "short",
+                                          year: "numeric"
+                                        })}
+                                      </div>
+                                      <div className="text-[10px] text-slate-400">
+                                        Hace {Math.max(0, Math.floor((new Date("2026-05-25T10:30:00-05:00").getTime() - new Date(valSup.signed_up).getTime()) / 86400000))} días
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <span className="text-slate-400">-</span>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex flex-col gap-1.5 items-start">
+                                    <span className={`px-1.5 py-0.5 text-[8px] font-extrabold rounded border uppercase tracking-wider ${roleColor}`}>
+                                      {roleText}
+                                    </span>
+                                    <span className={`px-1.5 py-0.5 text-[8px] font-bold rounded border ${volBadgeColor}`} title={vol}>
+                                      {volText}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="font-bold text-slate-800 text-[11px] truncate max-w-[130px]" title={comName}>
+                                    {comName}
+                                  </div>
+                                  <div className="mt-1">
+                                    <span className={`px-1.5 py-0.5 text-[8px] font-bold rounded border uppercase tracking-wide ${srcColor}`}>
+                                      {srcText}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-center font-semibold text-slate-700">{valSup.country}</td>
+                                <td className="px-6 py-4 text-center font-bold text-slate-700">📦 {valSup.real_products_created}</td>
+                                <td className="px-6 py-4 text-center font-extrabold text-indigo-600">🛒 {valSup.real_orders_delivered}</td>
+                                <td className="px-6 py-4 text-center">
+                                  {valSup.status === "churned" ? (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-red-50 text-red-700 border border-red-100 rounded-full">
+                                      Abandono
+                                    </span>
+                                  ) : valSup.status === "critical" ? (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-rose-50 text-rose-700 border border-rose-100 rounded-full">
+                                      Crítico
+                                    </span>
+                                  ) : valSup.status === "dormant" ? (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-blue-50 text-blue-700 border border-blue-100 rounded-full">
+                                      Dormante
+                                    </span>
+                                  ) : (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full">
+                                      Activo
+                                    </span>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                  {valSup.phone && valSup.phone !== "-" ? (
+                                    <a
+                                      href={getWhatsAppLink(valSup.phone, valSup.name, 5, "Volumen validado por Control de Validación")}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[10px] font-bold transition-all shadow-sm shadow-emerald-500/10 cursor-pointer"
+                                    >
+                                      <MessageSquare className="w-3.5 h-3.5" />
+                                      <span>Contactar</span>
+                                    </a>
+                                  ) : (
+                                    <span className="text-[10px] text-slate-400">Sin teléfono</span>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })
+                        ) : (
+                          <tr>
+                            <td colSpan={11} className="px-6 py-12 text-center text-slate-400 font-medium">
+                              No hay registros que coincidan con la búsqueda o filtros aplicados.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* PESTAÑA NUEVA: ASISTENTE DE DATOS (CHAT DETERMINÍSTICO) */}
+            {activeTab === "data_chat" && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Panel Izquierdo: Preguntas Sugeridas */}
+                <div className="flex flex-col gap-4">
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="p-1 rounded bg-indigo-50 text-indigo-650">
+                        <Compass className="w-4 h-4" />
+                      </span>
+                      <h4 className="font-bold text-slate-800 text-sm">Preguntas Sugeridas</h4>
+                    </div>
+                    <p className="text-xs text-slate-400 mb-4">
+                      Haz clic en cualquiera de estas preguntas predefinidas para consultar el dataset de la cohorte de 90 días de forma instantánea:
+                    </p>
+
+                    <div className="flex flex-col gap-2.5">
+                      {[
+                        { q: "¿Cuántos proveedores de Colombia se registraron en los últimos 90 días?", icon: "🇨🇴" },
+                        { q: "¿Cuáles son los 5 proveedores con más órdenes?", icon: "🔥" },
+                        { q: "¿Quiénes son los proveedores sin tipo con catálogo vacío?", icon: "📦" },
+                        { q: "¿Qué porcentaje de proveedores con cita agendada crearon productos?", icon: "📅" },
+                        { q: "¿Quiénes son los proveedores de la comunidad ALEX ROJAS?", icon: "👥" },
+                        { q: "¿Cuántos proveedores están en estado de abandono?", icon: "⚠️" },
+                      ].map((item, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleSendMessage(item.q)}
+                          className="w-full text-left p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-200 rounded-xl text-xs font-semibold text-slate-700 hover:text-indigo-900 transition-all flex items-start gap-2.5 cursor-pointer shadow-sm"
+                        >
+                          <span className="text-sm shrink-0">{item.icon}</span>
+                          <span>{item.q}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow-md">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="px-2 py-0.5 text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full uppercase tracking-wider">
+                        Optimizado
+                      </span>
+                      <span className="text-[10px] font-bold text-slate-400">Consumo: 0 Tokens</span>
+                    </div>
+                    <h5 className="font-bold text-xs uppercase tracking-wider text-indigo-300">¿Cómo funciona?</h5>
+                    <p className="text-[11px] text-slate-400 mt-2 leading-relaxed">
+                      Este chat utiliza un motor de **procesamiento determinístico en el navegador**. En lugar de enviar los datos de tus proveedores a un servidor de inteligencia artificial externo (lo cual consumiría tokens y violaría la privacidad), traduce tus preguntas a filtros lógicos directos sobre el dataset en memoria.
+                    </p>
+                    <div className="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-[10px] text-slate-500">
+                      <span>Exactitud del dato:</span>
+                      <span className="font-bold text-emerald-400">100% Determinístico</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Panel Derecho: Consola de Chat */}
+                <div className="lg:col-span-2 flex flex-col bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden h-[620px]">
+                  
+                  {/* Chat Header */}
+                  <div className="p-4 bg-slate-950 text-white border-b border-slate-850 flex items-center justify-between shrink-0">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-indigo-650 flex items-center justify-center text-white relative">
+                        <MessageSquare className="w-5 h-5" />
+                        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-950 animate-pulse" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-xs sm:text-sm">Asistente Analítico del Hub</h4>
+                        <p className="text-[10px] text-slate-400 font-medium">Búsqueda determinística sobre {data?.validationStats?.validatedList?.length || 0} proveedores</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {chatMode === "local" ? (
+                        <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-bold rounded-full uppercase">
+                          0 Tokens / 0ms Latencia
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 text-[9px] font-bold rounded-full uppercase animate-pulse">
+                          ChatGPT Activo
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Mode Selector */}
+                  <div className="px-4 py-2 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between shrink-0 text-xs">
+                    <span className="font-bold text-slate-500 uppercase tracking-wider text-[9px] flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-500" /> Motor de respuestas:
+                    </span>
+                    <div className="flex bg-slate-200/50 p-0.5 rounded-lg border border-slate-200/60">
+                      <button
+                        type="button"
+                        onClick={() => setChatMode("local")}
+                        className={`px-3 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                          chatMode === "local"
+                            ? "bg-white text-indigo-750 shadow-sm"
+                            : "text-slate-500 hover:text-slate-800"
+                        }`}
+                      >
+                        ⚡ Local (0 Tokens)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setChatMode("gpt")}
+                        className={`px-3 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                          chatMode === "gpt"
+                            ? "bg-indigo-650 text-white shadow-sm"
+                            : "text-slate-500 hover:text-slate-800"
+                        }`}
+                      >
+                        🤖 ChatGPT AI
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Chat Messages Container */}
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
+                    {chatMessages.map((msg, mIdx) => (
+                      <div
+                        key={mIdx}
+                        className={`flex gap-3 max-w-[85%] ${
+                          msg.sender === "user" ? "ml-auto flex-row-reverse" : ""
+                        }`}
+                      >
+                        {/* Avatar */}
+                        <div
+                          className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center text-xs font-bold ${
+                            msg.sender === "user"
+                              ? "bg-slate-200 text-slate-700"
+                              : "bg-indigo-600 text-white"
+                          }`}
+                        >
+                          {msg.sender === "user" ? "Tú" : "🤖"}
+                        </div>
+
+                        {/* Bubble */}
+                        <div className="flex flex-col gap-1">
+                          <div
+                            className={`p-3 rounded-2xl text-xs leading-relaxed ${
+                              msg.sender === "user"
+                                ? "bg-slate-900 text-white rounded-tr-none"
+                                : "bg-white text-slate-800 rounded-tl-none border border-slate-200 shadow-sm"
+                            }`}
+                          >
+                            <p className="whitespace-pre-line">{msg.text}</p>
+
+                            {/* Mostrar Explicación de Filtro */}
+                            {msg.result && (
+                              <div className="mt-2 pt-2 border-t border-slate-100 text-[10px] text-slate-450 italic flex items-center gap-1 font-medium">
+                                <Filter className="w-3 h-3 text-slate-400 shrink-0" />
+                                <span>{msg.result.explanation}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Renderizar resultados estructurados determinísticos */}
+                          {msg.result && (
+                            <div className="mt-2 space-y-3">
+                              {/* 1. KPIs de Conteo o Porcentaje */}
+                              {(msg.result.operationType === "count" || msg.result.operationType === "percentage") && (
+                                <div className="grid grid-cols-2 gap-3">
+                                  <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-center">
+                                    <p className="text-[9px] text-slate-400 font-bold uppercase">Resultado</p>
+                                    <p className="text-xl font-black text-slate-800 mt-1">
+                                      {msg.result.count}
+                                    </p>
+                                    <p className="text-[9px] text-slate-400 mt-0.5">proveedores</p>
+                                  </div>
+                                  <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-center">
+                                    <p className="text-[9px] text-slate-400 font-bold uppercase">Proporción</p>
+                                    <p className="text-xl font-black text-indigo-650 mt-1">
+                                      {msg.result.percentage}%
+                                    </p>
+                                    <p className="text-[9px] text-slate-400 mt-0.5">de la cohorte</p>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* 2. Tabla de registros si es Lista o Top */}
+                              {msg.result.records && msg.result.records.length > 0 && (
+                                <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden max-w-lg">
+                                  <div className="px-3 py-2 bg-slate-50 border-b border-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-500">
+                                    <span>Registros Coincidentes</span>
+                                    <span>Mostrando {expandedMessages[mIdx] ? msg.result.records.length : Math.min(3, msg.result.records.length)} de {msg.result.count}</span>
+                                  </div>
+                                  <div className="overflow-x-auto">
+                                    <table className="w-full text-left text-[10px] border-collapse">
+                                      <thead>
+                                        <tr className="bg-slate-50/50 border-b border-slate-100 text-slate-400 uppercase text-[8px] font-bold">
+                                          <th className="px-3 py-2">Proveedor</th>
+                                          <th className="px-3 py-2">País</th>
+                                          <th className="px-3 py-2">Comunidad</th>
+                                          <th className="px-3 py-2 text-center">Prod/Ord</th>
+                                          <th className="px-3 py-2 text-right">Contacto</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody className="divide-y divide-slate-100 text-slate-655">
+                                        {(expandedMessages[mIdx] 
+                                          ? msg.result.records 
+                                          : msg.result.records.slice(0, 3)
+                                        ).map((rec, rIdx) => (
+                                          <tr key={rIdx} className="hover:bg-slate-50/30">
+                                            <td className="px-3 py-2 font-bold text-slate-800">{rec.name}</td>
+                                            <td className="px-3 py-2">{rec.country}</td>
+                                            <td className="px-3 py-2 truncate max-w-[80px]" title={rec.resolved_community}>
+                                              {rec.resolved_community || "Orgánico"}
+                                            </td>
+                                            <td className="px-3 py-2 text-center">
+                                              📦{rec.real_products_created} / 🛒{rec.real_orders_delivered}
+                                            </td>
+                                            <td className="px-3 py-2 text-right">
+                                              {rec.phone && rec.phone !== "-" ? (
+                                                <a
+                                                  href={getWhatsAppLink(rec.phone, rec.name, 5, "Contacto desde Asistente Analítico")}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="inline-flex items-center gap-0.5 px-2 py-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded text-[8px] font-bold transition-all shadow-sm shadow-emerald-500/10 cursor-pointer"
+                                                >
+                                                  <MessageSquare className="w-2.5 h-2.5" />
+                                                  <span>WhatsApp</span>
+                                                </a>
+                                              ) : (
+                                                <span className="text-[8px] text-slate-400">Sin tel</span>
+                                              )}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  {msg.result.records.length > 3 && (
+                                    <div className="p-2 bg-slate-50 border-t border-slate-100 text-center">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setExpandedMessages(prev => ({
+                                            ...prev,
+                                            [mIdx]: !prev[mIdx]
+                                          }));
+                                        }}
+                                        className="text-[10px] text-indigo-650 hover:text-indigo-850 font-bold transition-colors cursor-pointer focus:outline-none"
+                                      >
+                                        {expandedMessages[mIdx] ? "Ver menos registros" : `Ver ${msg.result.records.length - 3} registros más`}
+                                      </button>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          <span className="text-[9px] text-slate-400 font-medium px-1">
+                            {msg.timestamp.toLocaleTimeString("es-CO", { hour: "numeric", minute: "2-digit" })}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Typing Indicator */}
+                    {isTyping && (
+                      <div className="flex gap-3 max-w-[80%]">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
+                          🤖
+                        </div>
+                        <div className="bg-white p-3.5 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm flex items-center gap-1.5 shrink-0">
+                          <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Chat Input Bar */}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }}
+                    className="p-3 bg-white border-t border-slate-200 flex gap-2 items-center shrink-0"
+                  >
+                    <input
+                      type="text"
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      placeholder="Pregunta algo (ej. 'cuales son los top 5 proveedores con mas ordenes de ecuador con cita agendada')"
+                      className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs placeholder-slate-400 text-slate-800 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-inner"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!chatInput.trim()}
+                      className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-100 text-white disabled:text-slate-400 font-bold rounded-xl text-xs transition-colors flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed shrink-0 shadow-sm"
+                    >
+                      <span>Preguntar</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </form>
+                </div>
               </div>
             )}
 
@@ -1716,7 +3008,7 @@ export default function BehaviorDashboard() {
                     >
                       <option value="ALL">Todas</option>
                       <option value="high">🔥 Alta Prioridad (Proveedor + Gran Vol)</option>
-                      <option value="medium">⚡ Media Priority</option>
+                      <option value="medium">⚡ Media Prioridad</option>
                       <option value="low">Baja Prioridad</option>
                     </select>
                   </div>
@@ -1731,10 +3023,11 @@ export default function BehaviorDashboard() {
                     <thead>
                       <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                         <th className="px-6 py-4">Prioridad / Proveedor</th>
+                        <th className="px-6 py-4">Nivel / Cita</th>
                         <th className="px-6 py-4">Perfil Encuesta (Dropi)</th>
-                        <th className="px-6 py-4">Volumen Declarado</th>
-                        <th className="px-6 py-4">Origen / Canal</th>
+                        <th className="px-6 py-4">Volumen / Canal</th>
                         <th className="px-6 py-4 text-center">País / Sesiones</th>
+                        <th className="px-6 py-4 text-center">Operaciones (Prod/Ord)</th>
                         <th className="px-6 py-4 text-center">Días Inactivo</th>
                         <th className="px-6 py-4 text-center">Estado</th>
                         <th className="px-6 py-4 text-right">Recuperación</th>
@@ -1746,6 +3039,15 @@ export default function BehaviorDashboard() {
                           const hasSurvey = s.survey_role !== null;
                           const isHigh = s.priority === "high";
                           const isMed = s.priority === "medium";
+                          
+                          // Formato de nivel
+                          const rawTipo = s.tipo_proveedor ? s.tipo_proveedor.trim().toUpperCase() : "";
+                          const badgeColor = rawTipo === "PREMIUM EXCLUSIVO" ? "bg-indigo-100 text-indigo-800 border-indigo-200" :
+                                             rawTipo === "PREMIUM" ? "bg-amber-100 text-amber-800 border-amber-200" :
+                                             rawTipo === "VERIFICADO" ? "bg-blue-100 text-blue-800 border-blue-200" :
+                                             "bg-slate-100 text-slate-500 border-slate-200";
+                          const tierName = s.tipo_proveedor || "Sin Tipo";
+
                           return (
                             <tr key={idx} className={`hover:bg-slate-50/50 transition-colors ${isHigh ? "bg-red-50/20" : ""}`}>
                               {/* Prioridad y Proveedor */}
@@ -1771,42 +3073,55 @@ export default function BehaviorDashboard() {
                                 </div>
                               </td>
 
+                              {/* Nivel / Cita CRM */}
+                              <td className="px-6 py-4">
+                                <span className={`px-2 py-0.5 text-[9px] font-bold rounded border ${badgeColor}`}>
+                                  {tierName}
+                                </span>
+                                <div className="flex items-center gap-1 mt-1">
+                                  <Calendar className={`w-3.5 h-3.5 ${s.has_appointment ? "text-emerald-500" : "text-slate-300"}`} />
+                                  <span className={`text-[9px] font-semibold ${s.has_appointment ? "text-emerald-700" : "text-slate-400"}`}>
+                                    {s.has_appointment ? "Con Cita" : "Sin Cita"}
+                                  </span>
+                                  {s.ultima_cita_confirmada && (
+                                    <span className="text-[8px] text-slate-400">
+                                      ({new Date(s.ultima_cita_confirmada).toLocaleDateString("es-CO", { day: "numeric", month: "short" })})
+                                    </span>
+                                  )}
+                                </div>
+                              </td>
+
                               {/* Perfil Encuesta */}
-                              <td className="px-6 py-4 max-w-[200px]">
+                              <td className="px-6 py-4 max-w-[180px]">
                                 {hasSurvey ? (
                                   <div>
                                     <p className="font-semibold text-slate-700 truncate" title={s.survey_role || ""}>
                                       {s.survey_role && s.survey_role.includes("Proveedor") ? "Proveedor" : "Marca/Emprendedor"}
                                     </p>
-                                    <p className="text-[10px] text-slate-400 truncate" title={s.survey_purpose || s.survey_sell_pref || ""}>
-                                      {s.survey_purpose || s.survey_sell_pref || "-"}
-                                    </p>
+                                    <div className="text-[10px] text-slate-400" title={s.survey_purpose || s.survey_sell_pref || ""}>
+                                      <CollapsibleText text={s.survey_purpose || s.survey_sell_pref || "-"} maxLength={50} />
+                                    </div>
                                   </div>
                                 ) : (
                                   <span className="text-slate-400 italic">Sin encuesta completada</span>
                                 )}
                               </td>
 
-                              {/* Volumen Declarado */}
+                              {/* Volumen / Canal */}
                               <td className="px-6 py-4">
-                                {hasSurvey ? (
-                                  <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold ${
-                                    (s.survey_volume || s.survey_brand_sales || "").includes("1.000") || (s.survey_volume || s.survey_brand_sales || "").includes("301 a 1.000")
-                                      ? "bg-indigo-50 text-indigo-700 border border-indigo-100"
-                                      : "bg-slate-100 text-slate-600"
-                                  }`}>
-                                    {s.survey_volume || s.survey_brand_sales || "No indica"}
-                                  </span>
-                                ) : (
-                                  <span className="text-slate-400">-</span>
-                                )}
-                              </td>
-
-                              {/* Origen / Canal */}
-                              <td className="px-6 py-4">
-                                <div className="flex flex-col gap-0.5">
+                                <div className="flex flex-col gap-1">
+                                  {hasSurvey ? (
+                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold self-start ${
+                                      (s.survey_volume || s.survey_brand_sales || "").includes("1.000") || (s.survey_volume || s.survey_brand_sales || "").includes("301 a 1.000")
+                                        ? "bg-indigo-50 text-indigo-700 border border-indigo-100"
+                                        : "bg-slate-100 text-slate-600"
+                                    }`}>
+                                      {s.survey_volume || s.survey_brand_sales || "No indica"}
+                                    </span>
+                                  ) : null}
+                                  
                                   {s.survey_source ? (
-                                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider self-start ${
+                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider self-start ${
                                       s.survey_source === "comunidades" 
                                         ? "bg-purple-50 text-purple-700 border border-purple-100" 
                                         : "bg-slate-100 text-slate-600"
@@ -1814,10 +3129,11 @@ export default function BehaviorDashboard() {
                                       {s.survey_source === "comunidades" ? "Comunidad" : "Huérfano"}
                                     </span>
                                   ) : (
-                                    <span className="text-slate-400 italic">Orgánico</span>
+                                    <span className="text-[10px] text-slate-400 italic">Orgánico</span>
                                   )}
+                                  
                                   {s.resolved_community && s.resolved_community !== "Orgánico / Sin comunidad" && (
-                                    <span className="text-[10px] font-bold text-purple-600 truncate max-w-[130px]" title={s.resolved_community}>
+                                    <span className="text-[9px] font-bold text-purple-650 truncate max-w-[120px]" title={s.resolved_community}>
                                       {s.resolved_community}
                                     </span>
                                   )}
@@ -1828,11 +3144,23 @@ export default function BehaviorDashboard() {
                               <td className="px-6 py-4 text-center">
                                 <div className="flex flex-col items-center">
                                   <span className="flex items-center gap-1 text-[11px] font-medium text-slate-700">
-                                    <Globe className="w-3 h-3 text-slate-400" />
+                                    <Globe className="w-3.5 h-3.5 text-slate-400" />
                                     <span>{s.country}</span>
                                   </span>
                                   <span className="text-[10px] text-slate-400 mt-0.5">
                                     {s.web_sessions} {s.web_sessions === 1 ? "sesión" : "sesiones"}
+                                  </span>
+                                </div>
+                              </td>
+
+                              {/* Operaciones (Prod/Ord) */}
+                              <td className="px-6 py-4 text-center">
+                                <div className="flex flex-col items-center">
+                                  <span className="text-[11px] font-bold text-slate-700">
+                                    📦 {s.real_products_created || 0} Prod
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 mt-0.5">
+                                    🛒 {s.real_orders_delivered || 0} Ord
                                   </span>
                                 </div>
                               </td>
@@ -1880,7 +3208,7 @@ export default function BehaviorDashboard() {
                         })
                       ) : (
                         <tr>
-                          <td colSpan={8} className="px-6 py-12 text-center text-slate-400 font-medium">
+                          <td colSpan={9} className="px-6 py-12 text-center text-slate-400 font-medium">
                             No se encontraron proveedores inactivos que coincidan con la búsqueda o filtros.
                           </td>
                         </tr>

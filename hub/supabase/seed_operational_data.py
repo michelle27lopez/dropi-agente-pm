@@ -105,6 +105,7 @@ with open(csv_path, mode='r', encoding='utf-8') as f:
             matches_count += 1
             
             # Extraer campos
+            tipo_proveedor = row[2].strip() if row[2].strip() and row[2].strip() != '-' else None
             fecha_activacion = row[4].strip() if row[4].strip() and row[4].strip() != '-' else None
             dias_en_activarse = clean_int(row[5])
             es_activo_30d = row[6].strip().upper() == "VERDADERO"
@@ -114,6 +115,7 @@ with open(csv_path, mode='r', encoding='utf-8') as f:
             
             update_records.append({
                 "user_id": lookup[key],
+                "tipo_proveedor": tipo_proveedor,
                 "fecha_activacion": fecha_activacion,
                 "dias_en_activarse": dias_en_activarse,
                 "es_activo_30d": es_activo_30d,
