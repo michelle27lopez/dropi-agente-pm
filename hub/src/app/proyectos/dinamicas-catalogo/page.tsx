@@ -36,6 +36,7 @@ export default function DinamicasCatalogoPage() {
   const [creating, setCreating] = useState(false);
   const [newName, setNewName] = useState("");
   const [showModal, setShowModal] = useState(false);
+  const [docsOpen, setDocsOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/campaigns")
@@ -83,13 +84,69 @@ export default function DinamicasCatalogoPage() {
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
         {/* Title */}
-        <div style={{ marginBottom: 36 }}>
+        <div style={{ marginBottom: 24 }}>
           <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
             Campañas
           </h1>
           <p style={{ fontSize: 14, color: "var(--muted)" }}>
-            Cada campaña recorre un flujo guiado de 10 nodos para estructurar el experimento de catálogo.
+            Cada campaña recorre un flujo guiado de 7 nodos para estructurar el experimento de catálogo.
           </p>
+        </div>
+
+        {/* Panel de recursos */}
+        <div style={{
+          background: "#fff", border: "1px solid var(--border)",
+          borderRadius: 14, marginBottom: 32, overflow: "hidden",
+        }}>
+          <button
+            onClick={() => setDocsOpen(!docsOpen)}
+            style={{
+              width: "100%", background: "none", border: "none", cursor: "pointer",
+              padding: "14px 20px", display: "flex", alignItems: "center", gap: 10,
+              textAlign: "left",
+            }}
+          >
+            <span style={{ fontSize: 15 }}>📂</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", flex: 1 }}>Recursos del proyecto</span>
+            <span style={{ fontSize: 12, color: "var(--muted)", marginRight: 4 }}>DCA-001 · Dinámicas de Catálogo</span>
+            <span style={{ fontSize: 16, color: "var(--muted)", transition: "transform 0.2s", display: "inline-block", transform: docsOpen ? "rotate(180deg)" : "rotate(0deg)" }}>⌄</span>
+          </button>
+
+          {docsOpen && (
+            <div style={{ borderTop: "1px solid var(--border)", padding: "16px 20px", display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <a
+                href="/proyectos/dinamicas-catalogo/docs"
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  background: "#F8FAFC", border: "1px solid var(--border)",
+                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
+                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
+                  transition: "box-shadow 0.15s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.07)")}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+              >
+                <span style={{ fontSize: 22, flexShrink: 0 }}>📋</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Documentación</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)" }}>Nodos, campos, ejemplos y casos de uso</div>
+                </div>
+              </a>
+
+              <div style={{
+                display: "flex", alignItems: "center", gap: 10,
+                background: "#F8FAFC", border: "1px dashed var(--border)",
+                borderRadius: 10, padding: "12px 16px",
+                flex: "1 1 200px", minWidth: 200, maxWidth: 260, opacity: 0.5,
+              }}>
+                <span style={{ fontSize: 22, flexShrink: 0 }}>🎯</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Metas del experimento</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)" }}>Próximamente</div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Loading */}
