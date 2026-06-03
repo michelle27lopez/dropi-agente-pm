@@ -151,6 +151,25 @@ export default function DinamicasCatalogoPage() {
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>Productividad del catálogo · ruta a 10M</div>
                 </div>
               </a>
+
+              <a
+                href="/proyectos/dinamicas-catalogo/plan"
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  background: "#F8FAFC", border: "1px solid var(--border)",
+                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
+                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
+                  transition: "box-shadow 0.15s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.07)")}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+              >
+                <span style={{ fontSize: 22, flexShrink: 0 }}>📅</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Plan de campañas</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)" }}>9 campañas · 6 meses · portafolio</div>
+                </div>
+              </a>
             </div>
           )}
         </div>
