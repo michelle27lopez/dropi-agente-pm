@@ -11,7 +11,7 @@ type Campaign = {
   created_at: string;
 };
 
-const NODE_COUNT = 10;
+const NODE_COUNT = 7;
 
 const statusLabel: Record<string, string> = {
   draft: "Borrador",
@@ -127,7 +127,7 @@ export default function DinamicasCatalogoPage() {
         {!loading && campaigns.length > 0 && (
           <div style={{ display: "grid", gap: 12 }}>
             {campaigns.map((c) => {
-              const progress = Math.round((c.current_node / NODE_COUNT) * 100);
+              const progress = Math.min(Math.round((c.current_node / NODE_COUNT) * 100), 100);
               return (
                 <div
                   key={c.id}
@@ -164,7 +164,7 @@ export default function DinamicasCatalogoPage() {
                           }} />
                         </div>
                         <span style={{ fontSize: 12, color: "var(--muted)", whiteSpace: "nowrap" }}>
-                          Nodo {c.current_node} / {NODE_COUNT}
+                          Nodo {Math.min(c.current_node, NODE_COUNT)} / {NODE_COUNT}
                         </span>
                       </div>
                     </div>

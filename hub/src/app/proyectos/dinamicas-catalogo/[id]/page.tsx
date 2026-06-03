@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { NODE_DEFINITIONS, NodeKey } from "./nodes";
+import { NODE_DEFINITIONS } from "./nodes";
 
 type Campaign = { id: string; name: string; status: string; current_node: number };
 type NodeData = Record<string, string>;
@@ -26,7 +26,7 @@ export default function CampaignWizardPage() {
     ]).then(([camp, nodes]) => {
       if (camp?.id) {
         setCampaign(camp);
-        setActiveNode(camp.current_node ?? 0);
+        setActiveNode(Math.min(camp.current_node ?? 0, NODE_DEFINITIONS.length - 1));
       }
       if (Array.isArray(nodes)) setSavedNodes(nodes);
     });
