@@ -39,6 +39,18 @@ const tools = [
   },
 ];
 
+const projects = [
+  {
+    key: "dinamicas-catalogo",
+    name: "Dinámicas de Catálogo",
+    description: "Experimento lean de catálogo preseleccionado. Validación manual de campañas con suppliers antes de desarrollar el módulo formal.",
+    url: "/proyectos/dinamicas-catalogo",
+    color: "#0EA5E9",
+    tag: "DCA-001 · Experimento",
+    icon: "🗂️",
+  },
+];
+
 export default function HubPage() {
   return (
     <main style={{ minHeight: "100vh", padding: "0" }}>
@@ -147,6 +159,71 @@ export default function HubPage() {
               )}
             </a>
           ))}
+        </div>
+
+        {/* Proyectos section */}
+        <div style={{ marginTop: 56 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 32, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
+            Proyectos
+          </p>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: 20,
+          }}>
+            {projects.map((project) => (
+              <a
+                key={project.key}
+                href={project.url}
+                style={{
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 14,
+                  padding: "24px",
+                  textDecoration: "none",
+                  display: "block",
+                  transition: "box-shadow 0.15s, transform 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)";
+                  (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
+                  (e.currentTarget as HTMLAnchorElement).style.transform = "none";
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 12,
+                    background: `${project.color}15`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 22,
+                  }}>
+                    {project.icon}
+                  </div>
+                  <span style={{
+                    fontSize: 11, fontWeight: 600,
+                    color: project.color,
+                    background: `${project.color}12`,
+                    padding: "3px 8px", borderRadius: 20,
+                    marginTop: 4,
+                  }}>
+                    {project.tag}
+                  </span>
+                </div>
+                <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
+                  {project.name}
+                </h2>
+                <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.5 }}>
+                  {project.description}
+                </p>
+                <div style={{ marginTop: 20, fontSize: 12, fontWeight: 600, color: project.color, display: "flex", alignItems: "center", gap: 4 }}>
+                  Ver proyecto →
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
 
         <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 48, textAlign: "center" }}>

@@ -3,1012 +3,495 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-} from "recharts";
-import {
-  TrendingUp,
-  TrendingDown,
-  Activity,
-  CheckCircle,
+  Layers,
   Database,
   RefreshCw,
-  ArrowLeft,
-  Sparkles,
-  Layers,
-  ShoppingBag,
-  DollarSign,
-  Users,
+  CheckCircle2,
+  AlertTriangle,
+  Upload,
+  ArrowRight,
   Compass,
-  AlertCircle,
+  Users,
+  Settings,
+  Terminal,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
-type MetricDetail = {
-  value_num: number;
-  value_display: string;
-  trend: "up" | "down" | "stable";
-  trend_value: string;
-  health: "good" | "warning" | "critical" | "neutral";
-  level: number;
-  name: string;
-  unit: string;
+type SyncStatus = {
+  count: number;
+  lastSync: string | null;
+  hasApiKey: boolean;
 };
 
-type MetricsResponse = {
-  source: "supabase" | "mock";
-  crmSource: "postgres" | "mock";
-  country: string;
-  days: number;
-  summary: Record<string, MetricDetail>;
-  history: Record<string, any>[];
-};
+export default function MetricsHubPage() {
+  const [status, setStatus] = useState<SyncStatus | null>(null);
+  const [loadingStatus, setLoadingStatus] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState<{
+    success: boolean;
+    message: string;
+    output?: string;
+    errorOutput?: string;
+  } | null>(null);
+  const [showLogs, setShowLogs] = useState(false);
+  const [startDate, setStartDate] = useState(() => {
+    // Por defecto hace 90 días
+    const d = new Date();
+    d.setDate(d.getDate() - 90);
+    return d.toISOString().split("T")[0];
+  });
 
-export default function PMDashboard() {
-  const [country, setCountry] = useState<string>("ALL");
-  const [days, setDays] = useState<number>(30);
-  const [data, setData] = useState<MetricsResponse | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [seeding, setSeeding] = useState<boolean>(false);
-  const [seedSuccess, setSeedSuccess] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<number>(1);
-  const [activeChartKey, setActiveChartKey] = useState<string>("gmv");
-  const [isClient, setIsClient] = useState<boolean>(false);
-  const [activeFunnel, setActiveFunnel] = useState<"visibility" | "verified" | "premium">("visibility");
+  const fetchStatus = async () => {
+    setLoadingStatus(true);
+    try {
+      const res = await fetch("/api/metrics/sync");
+      if (res.ok) {
+        const data = await res.json();
+        setStatus(data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch sync status:", e);
+    } finally {
+      setLoadingStatus(false);
+    }
+  };
 
   useEffect(() => {
-    setIsClient(true);
+    fetchStatus();
   }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const triggerApiSync = async () => {
+    setSyncing(true);
+    setSyncResult(null);
+    setShowLogs(false);
     try {
-      const res = await fetch(`/api/metrics?country=${country}&days=${days}`);
-      if (res.ok) {
-        const json = await res.json();
-        setData(json);
-      }
-    } catch (e) {
-      console.error("Error loading metrics:", e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [country, days]);
-
-  const handleSeed = async () => {
-    setSeeding(true);
-    setSeedSuccess(null);
-    try {
-      const res = await fetch("/api/metrics/seed", { method: "POST" });
-      if (res.ok) {
-        const json = await res.json();
-        setSeedSuccess(json.message);
-        setTimeout(() => setSeedSuccess(null), 5000);
-        fetchData(); // Volver a cargar para ver los datos de Supabase
+      const res = await fetch("/api/metrics/sync", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode: "api", startDate }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSyncResult({
+          success: true,
+          message: "Sincronización de API completada exitosamente.",
+          output: data.output,
+          errorOutput: data.errorOutput,
+        });
+        fetchStatus();
       } else {
-        const err = await res.json();
-        alert(`Error al sembrar: ${err.error || "Error desconocido"}`);
+        setSyncResult({
+          success: false,
+          message: data.error || "Ocurrió un error inesperado al sincronizar.",
+          output: data.output,
+          errorOutput: data.details || data.errorOutput,
+        });
       }
-    } catch (e) {
-      console.error(e);
-      alert("Error al conectar con la API de sembrado");
+    } catch (e: any) {
+      setSyncResult({
+        success: false,
+        message: e.message || "Fallo en la comunicación con el servidor.",
+      });
     } finally {
-      setSeeding(false);
+      setSyncing(false);
+      setShowLogs(true);
     }
   };
 
-  if (!isClient) return null;
+  const handleCsvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  const summary = data?.summary || {};
-  const history = data?.history || [];
-  const source = data?.source || "mock";
-  const crmSource = data?.crmSource || "mock";
+    setSyncing(true);
+    setSyncResult(null);
+    setShowLogs(false);
 
-  // Colores del framework
-  const primaryColor = "#F77F00"; // Naranja Dropi
-  const activeColor = "#10B981"; // Verde
-  const premiumColor = "#6366F1"; // Indigo
-
-  const getTrendIcon = (trend: string, health: string) => {
-    if (trend === "up") {
-      return <TrendingUp className={`w-4 h-4 ${health === "good" ? "text-emerald-500" : "text-amber-500"}`} />;
-    } else if (trend === "down") {
-      return <TrendingDown className={`w-4 h-4 ${health === "good" ? "text-emerald-500" : "text-rose-500"}`} />;
+    try {
+      const reader = new FileReader();
+      reader.onload = async (event) => {
+        const csvData = event.target?.result as string;
+        try {
+          const res = await fetch("/api/metrics/sync", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mode: "csv", csvData }),
+          });
+          const data = await res.json();
+          if (res.ok && data.success) {
+            setSyncResult({
+              success: true,
+              message: "Carga y procesamiento de CSV completado exitosamente.",
+              output: data.output,
+              errorOutput: data.errorOutput,
+            });
+            fetchStatus();
+          } else {
+            setSyncResult({
+              success: false,
+              message: data.error || "Error al procesar el archivo CSV.",
+              output: data.output,
+              errorOutput: data.details || data.errorOutput,
+            });
+          }
+        } catch (err: any) {
+          setSyncResult({
+            success: false,
+            message: err.message || "Error al enviar archivo al servidor.",
+          });
+        } finally {
+          setSyncing(false);
+          setShowLogs(true);
+        }
+      };
+      reader.readAsText(file);
+    } catch (err: any) {
+      console.error(err);
+      setSyncResult({
+        success: false,
+        message: "Error al leer el archivo local.",
+      });
+      setSyncing(false);
     }
-    return <Activity className="w-4 h-4 text-gray-400" />;
   };
 
-  const getHealthBadge = (health: string) => {
-    switch (health) {
-      case "good":
-        return <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">Saludable</span>;
-      case "warning":
-        return <span className="px-2 py-0.5 text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200 rounded-full">Riesgo</span>;
-      case "critical":
-        return <span className="px-2 py-0.5 text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200 rounded-full">Crítico</span>;
-      default:
-        return <span className="px-2 py-0.5 text-[10px] font-semibold bg-slate-50 text-slate-700 border border-slate-200 rounded-full">Neutro</span>;
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return "Nunca";
+    try {
+      const date = new Date(dateStr);
+      return date.toLocaleString("es-CO", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+    } catch {
+      return dateStr;
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-16 font-sans">
+    <div className="min-h-screen bg-slate-900 text-slate-100 font-sans pb-16">
+      {/* Background blur accents for rich aesthetic styling */}
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-[400px] right-1/4 w-[400px] h-[400px] bg-[#F77F00]/5 rounded-full blur-[100px] pointer-events-none" />
+
       {/* Header */}
-      <header className="bg-white border-b border-slate-200/80 sticky top-0 z-50 backdrop-blur-md bg-white/95">
+      <header className="bg-slate-950/70 border-b border-slate-800/80 sticky top-0 z-50 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-slate-100 transition-colors text-slate-500"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Link>
-            <div className="w-[1px] h-6 bg-slate-200" />
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-base">
+              📊
+            </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="p-1 rounded bg-[#F77F00]/10 text-[#F77F00]">
-                  <Layers className="w-4 h-4" />
-                </span>
-                <h1 className="font-bold text-sm sm:text-base tracking-tight text-slate-800">Metrics Lab</h1>
-              </div>
-              <p className="text-[10px] text-slate-500 font-medium">Célula Supplier Success · PM Control</p>
+              <h1 className="font-bold text-sm sm:text-base tracking-tight text-white">
+                Dropi PM Analytics Hub
+              </h1>
+              <p className="text-[10px] text-slate-400 font-medium">
+                Célula Supplier Success · Centro de Proyectos
+              </p>
             </div>
           </div>
-
-          {/* Database & CRM Status pills */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <Link
-              href="/metrics/behavior"
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#6366F1]/10 text-[#6366F1] hover:bg-[#6366F1]/20 rounded-full text-[10px] sm:text-xs font-bold transition-all shadow-sm cursor-pointer"
-            >
-              <Compass className="w-3.5 h-3.5" />
-              <span>Análisis de Comportamiento 📊</span>
-            </Link>
-
-            {/* Supabase Status */}
-            {source === "supabase" ? (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-800 text-[10px] sm:text-xs font-semibold shadow-sm">
-                <Database className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
-                <span>Supabase Live</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1">
-                <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-amber-50 border border-amber-200 rounded-full text-amber-800 text-[10px] sm:text-xs font-semibold shadow-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                  <span>Supabase Mock</span>
-                </div>
-                <button
-                  onClick={handleSeed}
-                  disabled={seeding}
-                  className="flex items-center gap-1 px-2.5 py-1.5 bg-[#F77F00] hover:bg-[#d66c00] active:scale-95 disabled:opacity-50 text-white rounded-full text-[10px] sm:text-xs font-bold transition-all shadow-sm shadow-[#F77F00]/20 cursor-pointer"
-                >
-                  <RefreshCw className={`w-3 h-3 ${seeding ? "animate-spin" : ""}`} />
-                  <span>{seeding ? "Sembrando..." : "Sincronizar"}</span>
-                </button>
-              </div>
-            )}
-
-            {/* CRM Status */}
-            {crmSource === "postgres" ? (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-800 text-[10px] sm:text-xs font-semibold shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span>CRM Live (PG)</span>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-full text-amber-800 text-[10px] sm:text-xs font-semibold shadow-sm">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-                <span>CRM Mock</span>
-              </div>
-            )}
-          </div>
+          <Link
+            href="/"
+            className="text-xs font-bold text-slate-400 hover:text-white px-3 py-1.5 rounded-lg hover:bg-slate-800 transition-colors"
+          >
+            ← Volver al Portal principal
+          </Link>
         </div>
       </header>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+      {/* Main Container */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mt-12 relative z-10">
         
-        {/* Banner de Sincronización exitosa */}
-        {seedSuccess && (
-          <div className="mb-6 p-4 bg-emerald-50 border border-emerald-300 rounded-xl flex items-center gap-3 animate-fade-in text-emerald-900 shadow-md">
-            <CheckCircle className="w-6 h-6 text-emerald-600 shrink-0" />
-            <div>
-              <p className="font-bold text-sm">Base de Datos Inicializada</p>
-              <p className="text-xs text-emerald-700">{seedSuccess}</p>
-            </div>
-          </div>
-        )}
-
-        {/* Controles superiores (Filtros) */}
-        <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-2">País:</span>
-            {[
-              { code: "ALL", name: "Todos" },
-              { code: "CO", name: "Colombia" },
-              { code: "MX", name: "México" },
-              { code: "EC", name: "Ecuador" },
-            ].map((c) => (
-              <button
-                key={c.code}
-                onClick={() => setCountry(c.code)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  country === c.code
-                    ? "bg-[#F77F00] text-white shadow-sm shadow-[#F77F00]/20"
-                    : "bg-slate-50 text-slate-600 hover:bg-slate-100"
-                }`}
-              >
-                {c.name}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-2">Período:</span>
-            {[
-              { val: 7, label: "7D" },
-              { val: 30, label: "30D" },
-              { val: 90, label: "90D" },
-            ].map((d) => (
-              <button
-                key={d.val}
-                onClick={() => setDays(d.val)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                  days === d.val
-                    ? "bg-slate-800 text-white"
-                    : "bg-slate-50 text-slate-600 hover:bg-slate-100"
-                }`}
-              >
-                {d.label}
-              </button>
-            ))}
-          </div>
+        {/* Title and Intro */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <span className="px-3 py-1 text-[10px] font-bold tracking-widest text-indigo-400 bg-indigo-500/10 rounded-full uppercase border border-indigo-500/20">
+            Metrics Project Control
+          </span>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-4 tracking-tight leading-none">
+            Centro de Proyectos de Métricas
+          </h2>
+          <p className="text-sm text-slate-400 mt-4 leading-relaxed">
+            Monitorea el comportamiento, activación y métricas operativas de nuestros proveedores en Dropi.
+            Selecciona un proyecto de análisis para generar y visualizar diagramas.
+          </p>
         </div>
 
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-32 gap-3">
-            <RefreshCw className="w-8 h-8 text-[#F77F00] animate-spin" />
-            <p className="text-slate-500 text-sm font-medium">Cargando métricas de producto...</p>
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          
+          {/* Card 1: Supplier Success */}
+          <div className="bg-slate-950/40 border border-slate-800 hover:border-[#F77F00]/50 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#F77F00]/5 flex flex-col justify-between relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-[#F77F00]/5 rounded-bl-full -z-10 group-hover:scale-105 transition-transform duration-300" />
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-12 h-12 rounded-xl bg-[#F77F00]/10 flex items-center justify-center text-2xl text-[#F77F00]">
+                  📈
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-[#F77F00] bg-[#F77F00]/10 border border-[#F77F00]/20 px-2.5 py-1 rounded-full">
+                  Negocio & Operaciones
+                </span>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">
+                Métricas de Supplier Success
+              </h3>
+              <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                Visualización detallada de KPIs de negocio: GMV, volumen de órdenes despachadas, tasas de activación mensuales y TAT de auditorías operativas en CRM.
+              </p>
+              
+              {/* Quick stats placeholder or values */}
+              <div className="grid grid-cols-3 gap-2 bg-slate-900/50 p-3 rounded-xl border border-slate-800/40 mb-6 text-center">
+                <div>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase">GMV</p>
+                  <p className="text-xs font-extrabold text-slate-300 mt-0.5">Live CRM</p>
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase">Órdenes</p>
+                  <p className="text-xs font-extrabold text-slate-300 mt-0.5">Nivel 1</p>
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase">Activación</p>
+                  <p className="text-xs font-extrabold text-slate-300 mt-0.5">Nivel 2</p>
+                </div>
+              </div>
+            </div>
+            <Link
+              href="/metrics/supplier-success"
+              className="w-full py-3 bg-gradient-to-r from-[#F77F00] to-[#d66c00] hover:brightness-110 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-[#F77F00]/10 hover:shadow-[#F77F00]/25 flex items-center justify-center gap-2"
+            >
+              <span>Abrir Métricas de Negocio</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
-        ) : (
-          <div className="mt-6 flex flex-col gap-6">
-            
-            {/* Niveles del Tablero (La Pirámide de Métricas) */}
-            <div className="flex border-b border-slate-200">
-              {[
-                { level: 1, name: "Nivel 1: Negocio & Impacto", icon: <DollarSign className="w-4 h-4" /> },
-                { level: 2, name: "Nivel 2: Adopción & Valor", icon: <ShoppingBag className="w-4 h-4" /> },
-                { level: 3, name: "Nivel 3: Eficiencia & Embudos", icon: <Compass className="w-4 h-4" /> },
-                { level: 4, name: "Nivel 4: Entradas & Gestión", icon: <Users className="w-4 h-4" /> },
-              ].map((t) => (
-                <button
-                  key={t.level}
-                  onClick={() => {
-                    setActiveTab(t.level);
-                    // Cambiar el gráfico activo por defecto de ese nivel
-                    if (t.level === 1) setActiveChartKey("gmv");
-                    else if (t.level === 2) setActiveChartKey("activation_rate");
-                    else if (t.level === 3) setActiveChartKey("time_to_first_sale");
-                    else if (t.level === 4) setActiveChartKey("new_registrations");
-                  }}
-                  className={`flex items-center gap-2 px-5 py-3 border-b-2 font-bold text-xs sm:text-sm transition-all cursor-pointer ${
-                    activeTab === t.level
-                      ? "border-[#F77F00] text-[#F77F00]"
-                      : "border-transparent text-slate-400 hover:text-slate-600"
-                  }`}
-                >
-                  {t.icon}
-                  <span className="hidden md:inline">{t.name}</span>
-                  <span className="md:hidden">Nivel {t.level}</span>
-                </button>
-              ))}
+
+          {/* Card 2: Userpilot Behavior */}
+          <div className="bg-slate-950/40 border border-slate-800 hover:border-indigo-500/50 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-indigo-500/5 flex flex-col justify-between relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/5 rounded-bl-full -z-10 group-hover:scale-105 transition-transform duration-300" />
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <div className="w-12 h-12 rounded-xl bg-indigo-600/10 flex items-center justify-center text-2xl text-indigo-400">
+                  🧭
+                </div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-1 rounded-full">
+                  Comportamiento & Retención
+                </span>
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2">
+                Análisis de Comportamiento (Userpilot)
+              </h3>
+              <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                Análisis de retención por cohortes de 90 días, rebotes en onboarding, segmentación de inactividad, respuestas de encuestas de marca/proveedor y directorio de WhatsApp para reactivación.
+              </p>
+              
+              {/* Quick stats placeholder or values */}
+              <div className="grid grid-cols-3 gap-2 bg-slate-900/50 p-3 rounded-xl border border-slate-800/40 mb-6 text-center">
+                <div>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase">Retención</p>
+                  <p className="text-xs font-extrabold text-slate-300 mt-0.5">Heatmap</p>
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase">Inactividad</p>
+                  <p className="text-xs font-extrabold text-slate-300 mt-0.5">5 Niveles</p>
+                </div>
+                <div>
+                  <p className="text-[9px] font-bold text-slate-500 uppercase">Recuperación</p>
+                  <p className="text-xs font-extrabold text-slate-300 mt-0.5">Directo WA</p>
+                </div>
+              </div>
+            </div>
+            <Link
+              href="/metrics/behavior"
+              className="w-full py-3 bg-gradient-to-r from-indigo-600 to-violet-700 hover:brightness-110 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-600/10 hover:shadow-indigo-600/25 flex items-center justify-center gap-2"
+            >
+              <span>Abrir Análisis de Comportamiento</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+        </div>
+
+        {/* Sync Control Center (Data Management) */}
+        <div className="bg-slate-950/60 border border-slate-850 rounded-2xl p-6 md:p-8 mt-16 shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-4 text-[9px] font-bold text-slate-700 uppercase flex items-center gap-1">
+            <Database className="w-3 h-3 text-indigo-500" />
+            Supabase Storage
+          </div>
+
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-8 pb-6 border-b border-slate-800">
+            <div>
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <Settings className="w-5 h-5 text-indigo-400 animate-spin-slow" />
+                Centro de Sincronización de Datos (Userpilot ↔ Supabase)
+              </h3>
+              <p className="text-xs text-slate-400 mt-1">
+                Actualiza la base de datos de proveedores para mantener al día los análisis y cohortes de comportamiento.
+              </p>
             </div>
 
-            {/* VISTA NIVEL 1 */}
-            {activeTab === 1 && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-1 flex flex-col gap-4">
-                  {/* GMV Card */}
-                  <div
-                    onClick={() => setActiveChartKey("gmv")}
-                    className={`p-6 rounded-2xl border transition-all cursor-pointer relative overflow-hidden group ${
-                      activeChartKey === "gmv"
-                        ? "bg-white border-[#F77F00] shadow-md shadow-[#F77F00]/5"
-                        : "bg-white border-slate-200/70 shadow-sm hover:border-slate-300"
-                    }`}
-                  >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#F77F00]/5 rounded-bl-full -z-1 group-hover:scale-105 transition-transform" />
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">GMV de la Célula</p>
-                    <h3 className="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
-                      {summary.gmv?.value_display ?? "$0"}
-                    </h3>
-                    <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                        {getTrendIcon(summary.gmv?.trend, summary.gmv?.health)}
-                        <span>{summary.gmv?.trend_value}</span>
-                      </div>
-                      {getHealthBadge(summary.gmv?.health)}
-                    </div>
-                  </div>
+            {/* Live Database Count */}
+            <div className="flex items-center gap-4 bg-slate-900/40 p-4 rounded-xl border border-slate-800 self-start lg:self-auto shrink-0 min-w-[240px]">
+              <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center text-xl text-emerald-400 shrink-0">
+                🗃️
+              </div>
+              <div>
+                <p className="text-[10px] font-bold text-slate-500 uppercase">Proveedores Cargados</p>
+                {loadingStatus ? (
+                  <div className="h-5 w-16 bg-slate-800 rounded animate-pulse mt-1" />
+                ) : (
+                  <p className="text-base font-extrabold text-white">
+                    {status?.count.toLocaleString("es-CO")} rows
+                  </p>
+                )}
+                <p className="text-[9px] text-slate-400 mt-0.5">
+                  Última carga: {loadingStatus ? "..." : formatDate(status ? status.lastSync : null)}
+                </p>
+              </div>
+            </div>
+          </div>
 
-                  {/* Volumen de Órdenes */}
-                  <div
-                    onClick={() => setActiveChartKey("orders")}
-                    className={`p-6 rounded-2xl border transition-all cursor-pointer relative overflow-hidden group ${
-                      activeChartKey === "orders"
-                        ? "bg-white border-[#F77F00] shadow-md shadow-[#F77F00]/5"
-                        : "bg-white border-slate-200/70 shadow-sm hover:border-slate-300"
-                    }`}
-                  >
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-[#F77F00]/5 rounded-bl-full -z-1 group-hover:scale-105 transition-transform" />
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Órdenes Despachadas</p>
-                    <h3 className="text-3xl font-extrabold text-slate-900 mt-2 tracking-tight">
-                      {summary.orders?.value_display ?? "0"}
-                    </h3>
-                    <div className="flex items-center justify-between mt-4">
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                        {getTrendIcon(summary.orders?.trend, summary.orders?.health)}
-                        <span>{summary.orders?.trend_value}</span>
-                      </div>
-                      {getHealthBadge(summary.orders?.health)}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Grafico */}
-                <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h4 className="font-bold text-slate-800 text-sm">
-                        Historial de {activeChartKey === "gmv" ? "GMV ($ USD)" : "Órdenes Totales"}
-                      </h4>
-                      <p className="text-xs text-slate-400">Tendencia histórica en el período seleccionado</p>
-                    </div>
-                    <span className="text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
-                      {days} días
-                    </span>
-                  </div>
-                  <div className="h-[280px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={history} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <defs>
-                          <linearGradient id="colorGmv" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor={primaryColor} stopOpacity={0.2} />
-                            <stop offset="95%" stopColor={primaryColor} stopOpacity={0.0} />
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                        <XAxis dataKey="date" tickFormatter={(v) => v.slice(5)} tick={{ fontSize: 10, fill: "#94a3b8" }} stroke="#e2e8f0" />
-                        <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} stroke="#e2e8f0" />
-                        <Tooltip
-                          contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "12px", boxShadow: "0 4px 12px rgba(0,0,0,0.05)" }}
-                          formatter={(value: any) => [
-                            activeChartKey === "gmv" ? `$${value.toLocaleString()}` : value,
-                            activeChartKey === "gmv" ? "GMV" : "Órdenes",
-                          ]}
-                        />
-                        <Area
-                          type="monotone"
-                          dataKey={activeChartKey}
-                          stroke={primaryColor}
-                          strokeWidth={2.5}
-                          fillOpacity={1}
-                          fill="url(#colorGmv)"
-                        />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
+          {/* Sync actions row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            
+            {/* Action 1: API Sync */}
+            <div className="flex flex-col justify-between">
+              <div>
+                <h4 className="text-sm font-bold text-slate-200 mb-2">
+                  Opción A: Sincronización Automática por API
+                </h4>
+                <p className="text-xs text-slate-400 mb-4 leading-relaxed">
+                  Genera una exportación en Userpilot vía API, espera su procesamiento en segundo plano y descarga/upserta el resultado en Supabase.
+                </p>
+                
+                {/* Date Input for Sync Range */}
+                <div className="flex flex-col gap-1.5 mb-4 max-w-[200px]">
+                  <label className="text-[10px] font-bold text-slate-500 uppercase">
+                    Fecha de Inicio de Exportación:
+                  </label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  />
                 </div>
               </div>
-            )}
 
-            {/* VISTA NIVEL 2 */}
-            {activeTab === 2 && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-1 flex flex-col gap-4">
-                  {[
-                    { key: "activation_rate", name: "Tasa de Activación (%)" },
-                    { key: "active_suppliers_a15", name: "Activos A15" },
-                    { key: "active_suppliers_a30", name: "Activos A30" },
-                    { key: "aov", name: "Ticket Promedio (AOV)" },
-                    { key: "catalog_health", name: "Salud del Catálogo" },
-                  ].map((m) => (
-                    <div
-                      key={m.key}
-                      onClick={() => setActiveChartKey(m.key)}
-                      className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
-                        activeChartKey === m.key
-                          ? "bg-white border-[#10B981] shadow-sm shadow-[#10B981]/5"
-                          : "bg-white border-slate-200/70 shadow-sm hover:border-slate-300"
-                      }`}
-                    >
-                      <div>
-                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{m.name}</p>
-                        <h4 className="text-xl font-extrabold text-slate-800 mt-1">
-                          {summary[m.key]?.value_display ?? "0"}
-                        </h4>
-                      </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <div className="flex items-center gap-0.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                          {getTrendIcon(summary[m.key]?.trend, summary[m.key]?.health)}
-                          <span>{summary[m.key]?.trend_value}</span>
-                        </div>
-                        {getHealthBadge(summary[m.key]?.health)}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Grafico */}
-                <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h4 className="font-bold text-slate-800 text-sm">
-                        Historial de {summary[activeChartKey]?.name || activeChartKey}
-                      </h4>
-                      <p className="text-xs text-slate-400">Tendencia e indicadores de valor</p>
-                    </div>
-                    <span className="text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
-                      {days} días
-                    </span>
-                  </div>
-                  <div className="h-[280px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={history} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                        <XAxis dataKey="date" tickFormatter={(v) => v.slice(5)} tick={{ fontSize: 10, fill: "#94a3b8" }} stroke="#e2e8f0" />
-                        <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} stroke="#e2e8f0" />
-                        <Tooltip
-                          contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "12px" }}
-                          formatter={(value: any) => [
-                            summary[activeChartKey]?.unit === "%"
-                              ? `${value}%`
-                              : summary[activeChartKey]?.unit === "USD"
-                              ? `$${value}`
-                              : value,
-                            summary[activeChartKey]?.name,
-                          ]}
-                        />
-                        <Line
-                          type="monotone"
-                          dataKey={activeChartKey}
-                          stroke={activeColor}
-                          strokeWidth={2.5}
-                          dot={{ r: 2 }}
-                          activeDot={{ r: 6 }}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
+              {status?.hasApiKey ? (
+                <button
+                  onClick={triggerApiSync}
+                  disabled={syncing}
+                  className="w-max px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-indigo-600/10 flex items-center gap-2 cursor-pointer"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${syncing ? "animate-spin" : ""}`} />
+                  <span>{syncing ? "Sincronizando..." : "Iniciar Sincronización API"}</span>
+                </button>
+              ) : (
+                <div className="p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-start gap-2 max-w-md">
+                  <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                  <div className="text-[11px] text-amber-400/90 leading-normal">
+                    <p className="font-bold">API Key no configurada</p>
+                    <p className="mt-0.5">
+                      Configura la variable `USERPILOT_API_KEY` en el archivo `hub/.env.local` para habilitar este método automático.
+                    </p>
                   </div>
                 </div>
+              )}
+            </div>
+
+            {/* Action 2: CSV Sync */}
+            <div className="flex flex-col justify-between border-t md:border-t-0 md:border-l border-slate-800 pt-8 md:pt-0 md:pl-8">
+              <div>
+                <h4 className="text-sm font-bold text-slate-200 mb-2">
+                  Opción B: Carga Manual de Archivo CSV
+                </h4>
+                <p className="text-xs text-slate-400 mb-6 leading-relaxed">
+                  Exporta la lista de usuarios en formato CSV desde el Dashboard de Userpilot (Users & Companies) y súbela aquí para procesarla e impactar la base de datos de manera inmediata.
+                </p>
               </div>
-            )}
 
-            {/* VISTA NIVEL 3 */}
-            {activeTab === 3 && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-1 flex flex-col gap-4">
-                  {[
-                    { key: "time_to_first_sale", name: "Time to First Sale", reverse: true },
-                    { key: "checklist_completion_rate", name: "% Completion Checklist", reverse: false },
-                    { key: "negotiation_conversion_rate", name: "Conv. de Negociaciones", reverse: false },
-                    { key: "external_sync_rate", name: "% Sincronización Externa", reverse: false },
-                  ].map((m) => (
-                    <div
-                      key={m.key}
-                      onClick={() => setActiveChartKey(m.key)}
-                      className={`p-5 rounded-2xl border transition-all cursor-pointer flex flex-col gap-3 ${
-                        activeChartKey === m.key
-                          ? "bg-white border-[#6366F1] shadow-sm shadow-[#6366F1]/5"
-                          : "bg-white border-slate-200/70 shadow-sm hover:border-slate-300"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{m.name}</p>
-                        {getHealthBadge(summary[m.key]?.health)}
-                      </div>
-                      <div className="flex items-baseline justify-between">
-                        <h4 className="text-2xl font-extrabold text-slate-800">
-                          {summary[m.key]?.value_display ?? "0"}
-                        </h4>
-                        <div className="flex items-center gap-0.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                          {getTrendIcon(summary[m.key]?.trend, summary[m.key]?.health)}
-                          <span>{summary[m.key]?.trend_value}</span>
-                        </div>
-                      </div>
-                      {/* Simple progress bar */}
-                      <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                        <div
-                          className="bg-[#6366F1] h-1.5 rounded-full transition-all duration-500"
-                          style={{
-                            width: `${
-                              m.key === "time_to_first_sale"
-                                ? Math.max(10, Math.min(100, 100 - (summary[m.key]?.value_num || 0) * 8))
-                                : summary[m.key]?.value_num || 0
-                            }%`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Grafico */}
-                <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h4 className="font-bold text-slate-800 text-sm">
-                        Historial de {summary[activeChartKey]?.name || activeChartKey}
-                      </h4>
-                      <p className="text-xs text-slate-400">Eficiencia y fluidez en el onboarding/conversiones</p>
-                    </div>
-                    <span className="text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
-                      {days} días
-                    </span>
-                  </div>
-                  <div className="h-[280px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={history} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <defs>
-                          <linearGradient id="colorLevel3" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor={premiumColor} stopOpacity={0.2} />
-                            <stop offset="95%" stopColor={premiumColor} stopOpacity={0.0} />
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                        <XAxis dataKey="date" tickFormatter={(v) => v.slice(5)} tick={{ fontSize: 10, fill: "#94a3b8" }} stroke="#e2e8f0" />
-                        <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} stroke="#e2e8f0" />
-                        <Tooltip
-                          contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "12px" }}
-                          formatter={(value: any) => [
-                            summary[activeChartKey]?.unit === "%" ? `${value}%` : `${value} ${summary[activeChartKey]?.unit}`,
-                            summary[activeChartKey]?.name,
-                          ]}
-                        />
-                        <Area
-                          type="monotone"
-                          dataKey={activeChartKey}
-                          stroke={premiumColor}
-                          strokeWidth={2.5}
-                          fillOpacity={1}
-                          fill="url(#colorLevel3)"
-                        />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
+              <div>
+                <input
+                  type="file"
+                  id="csv-file-upload"
+                  accept=".csv"
+                  onChange={handleCsvUpload}
+                  disabled={syncing}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="csv-file-upload"
+                  className={`w-max px-6 py-2.5 bg-slate-800 hover:bg-slate-700 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition-all border border-slate-700 flex items-center gap-2 cursor-pointer ${
+                    syncing ? "pointer-events-none opacity-50" : ""
+                  }`}
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{syncing ? "Procesando..." : "Subir Archivo CSV"}</span>
+                </label>
               </div>
-            )}
+            </div>
 
-            {/* VISTA NIVEL 4 */}
-            {activeTab === 4 && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-1 flex flex-col gap-4">
-                  {[
-                    { key: "new_registrations", name: "Nuevos Registros" },
-                    { key: "ascenso_verificado", name: "Postulaciones Verificado" },
-                    { key: "ascenso_premium", name: "Postulaciones Premium" },
-                    { key: "aprobacion_visibilidad", name: "Aprobación Visibilidad" },
-                    { key: "audit_tat", name: "TAT de Auditoría (horas)" },
-                  ].map((m) => (
-                    <div
-                      key={m.key}
-                      onClick={() => setActiveChartKey(m.key)}
-                      className={`p-4 rounded-xl border transition-all cursor-pointer flex flex-col gap-3 ${
-                        activeChartKey === m.key
-                          ? "bg-white border-slate-700 shadow-sm"
-                          : "bg-white border-slate-200/70 shadow-sm hover:border-slate-300"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between w-full">
-                        <div>
-                          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{m.name}</p>
-                          <h4 className="text-xl font-extrabold text-slate-800 mt-1">
-                            {summary[m.key]?.value_display ?? "0"}
-                          </h4>
-                        </div>
-                        <div className="flex flex-col items-end gap-1">
-                          <div className="flex items-center gap-0.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
-                            {getTrendIcon(summary[m.key]?.trend, summary[m.key]?.health)}
-                            <span>{summary[m.key]?.trend_value}</span>
-                          </div>
-                          {getHealthBadge(summary[m.key]?.health)}
-                        </div>
-                      </div>
+          </div>
 
-                      {/* Sub-indicador de conversión si es Aprobación Visibilidad */}
-                      {m.key === "aprobacion_visibilidad" && summary.new_registrations && (
-                        <div className="mt-1 text-[10px] text-slate-500 bg-slate-50 p-2 rounded-lg border border-slate-100/60 flex flex-col gap-1.5 w-full">
-                          <div className="flex justify-between font-medium">
-                            <span>Conversión de registros:</span>
-                            <span className="font-bold text-slate-700">
-                              {summary.new_registrations.value_num && summary.aprobacion_visibilidad?.value_num
-                                ? ((summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1)
-                                : 0}%
-                            </span>
-                          </div>
-                          <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
-                            <div 
-                              className="bg-indigo-600 h-full rounded-full transition-all duration-500" 
-                              style={{ 
-                                width: `${summary.new_registrations.value_num && summary.aprobacion_visibilidad?.value_num 
-                                  ? Math.min(100, (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100) 
-                                  : 0}%` 
-                              }}
-                            />
-                          </div>
+          {/* Sync result details block */}
+          {syncResult && (
+            <div className={`mt-8 p-4 rounded-xl border ${
+              syncResult.success 
+                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-300"
+                : "bg-rose-500/10 border-rose-500/20 text-rose-300"
+            }`}>
+              <div className="flex items-start gap-2.5">
+                {syncResult.success ? (
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+                ) : (
+                  <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                )}
+                <div className="flex-1">
+                  <p className="text-xs font-bold text-white">
+                    {syncResult.success ? "Sincronización Exitosa" : "Fallo de Sincronización"}
+                  </p>
+                  <p className="text-xs mt-1 text-slate-300">{syncResult.message}</p>
+                  
+                  {/* Collapsible logs terminal container */}
+                  {(syncResult.output || syncResult.errorOutput) && (
+                    <div className="mt-4">
+                      <button
+                        onClick={() => setShowLogs(!showLogs)}
+                        className="flex items-center gap-1 text-[11px] font-bold text-indigo-400 hover:text-indigo-300 focus:outline-none"
+                      >
+                        <Terminal className="w-3 h-3" />
+                        <span>{showLogs ? "Ocultar detalles de consola" : "Ver detalles de consola"}</span>
+                        {showLogs ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                      </button>
+
+                      {showLogs && (
+                        <div className="mt-2 bg-black/85 text-[10px] text-slate-300 font-mono p-3 rounded-lg border border-slate-800 max-h-60 overflow-y-auto whitespace-pre-wrap">
+                          {syncResult.output && (
+                            <div>
+                              <p className="text-indigo-400 font-bold border-b border-slate-850 pb-1 mb-1">STDOUT</p>
+                              {syncResult.output}
+                            </div>
+                          )}
+                          {syncResult.errorOutput && (
+                            <div className="mt-3">
+                              <p className="text-rose-400 font-bold border-b border-slate-850 pb-1 mb-1">STDERR / DETAILS</p>
+                              {syncResult.errorOutput}
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>
-                  ))}
+                  )}
                 </div>
-
-                {/* Grafico */}
-                <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm">
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h4 className="font-bold text-slate-800 text-sm">
-                        Historial de {summary[activeChartKey]?.name || activeChartKey}
-                      </h4>
-                      <p className="text-xs text-slate-400">Control operativo semanal y volumen de entrada</p>
-                    </div>
-                    <span className="text-xs font-bold bg-slate-100 text-slate-600 px-3 py-1 rounded-full">
-                      {days} días
-                    </span>
-                  </div>
-                  <div className="h-[280px] w-full">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={history} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                        <XAxis dataKey="date" tickFormatter={(v) => v.slice(5)} tick={{ fontSize: 10, fill: "#94a3b8" }} stroke="#e2e8f0" />
-                        <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} stroke="#e2e8f0" />
-                        <Tooltip
-                          contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "12px" }}
-                        />
-                        <Bar
-                          dataKey={activeChartKey}
-                          fill={
-                            activeChartKey === "audit_tat" ? "#EF4444" :
-                            activeChartKey === "ascenso_verificado" ? "#6366F1" :
-                            activeChartKey === "ascenso_premium" ? "#F59E0B" :
-                            activeChartKey === "aprobacion_visibilidad" ? "#10B981" :
-                            "#475569"
-                          }
-                          radius={[4, 4, 0, 0]}
-                        />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </div>
-
-                {/* Visualización del Embudo de Conversión Registros vs. Visibilidad */}
-                <div className="bg-white p-6 rounded-2xl border border-slate-200/70 shadow-sm mt-6 flex flex-col lg:col-span-3">
-                  {/* Pestañas de Selección de Embudo */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3 mb-6">
-                    <div>
-                      <h4 className="font-bold text-slate-800 text-sm">Embudos de Conversión Operativa (Últimos {days} días)</h4>
-                      <p className="text-xs text-slate-400">Analiza el flujo de aprobación y ascensos de nivel de los proveedores</p>
-                    </div>
-                    
-                    <div className="flex bg-slate-100 p-1 rounded-xl w-max border border-slate-200/40">
-                      <button
-                        onClick={() => setActiveFunnel("visibility")}
-                        className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                          activeFunnel === "visibility"
-                            ? "bg-white text-indigo-600 shadow-sm"
-                            : "text-slate-500 hover:text-slate-800"
-                        }`}
-                      >
-                        Aprobación Visibilidad
-                      </button>
-                      <button
-                        onClick={() => setActiveFunnel("verified")}
-                        className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                          activeFunnel === "verified"
-                            ? "bg-white text-indigo-600 shadow-sm"
-                            : "text-slate-500 hover:text-slate-800"
-                        }`}
-                      >
-                        Ascenso a Verificado
-                      </button>
-                      <button
-                        onClick={() => setActiveFunnel("premium")}
-                        className={`px-3 py-1.5 rounded-lg text-[11px] font-bold transition-all cursor-pointer ${
-                          activeFunnel === "premium"
-                            ? "bg-white text-indigo-600 shadow-sm"
-                            : "text-slate-500 hover:text-slate-800"
-                        }`}
-                      >
-                        Ascenso a Premium
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-                    {/* Contenido Dinámico de Embudos */}
-                    {activeFunnel === "visibility" && (
-                      <>
-                        <div className="flex-1 w-full">
-                          <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-indigo-50 rounded-lg">
-                              <Compass className="w-4 h-4 text-indigo-600" />
-                            </div>
-                            <h5 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Embudo: Del Registro a la Visibilidad</h5>
-                          </div>
-                          <p className="text-xs text-slate-400 mt-1">
-                            Mide cuántos de los proveedores registrados inician su validación operativa.
-                          </p>
-
-                          {/* Gráfico del Embudo */}
-                          <div className="flex flex-col gap-4 mt-6">
-                            {/* Paso 1 */}
-                            <div>
-                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
-                                <span>1. Nuevos Registros (Userpilot)</span>
-                                <span>{summary.new_registrations?.value_display ?? "0"} (100%)</span>
-                              </div>
-                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
-                                <div className="bg-gradient-to-r from-slate-400 to-slate-500 h-full rounded-l-lg" style={{ width: "100%" }} />
-                              </div>
-                            </div>
-
-                            {/* Paso 2 */}
-                            <div>
-                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
-                                <span>2. Solicitudes de Aprobación Visibilidad (CRM)</span>
-                                <span>
-                                  {summary.aprobacion_visibilidad?.value_display ?? "0"} ({summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? ((summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%)
-                                </span>
-                              </div>
-                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40 flex items-center">
-                                <div 
-                                  className="bg-gradient-to-r from-indigo-500 to-indigo-600 h-full rounded-l-lg transition-all duration-500" 
-                                  style={{ 
-                                    width: `${summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? Math.max(5, Math.min(100, (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100)) : 0}%` 
-                                  }} 
-                                />
-                              </div>
-                            </div>
-
-                            {/* Paso 3 (Placeholder) */}
-                            <div>
-                              <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
-                                <span>3. Aprobados Visibilidad (Operaciones)</span>
-                                <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
-                                  Pendiente definir cantidad (Próximamente)
-                                </span>
-                              </div>
-                              <div className="w-full h-6 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex items-center justify-center">
-                                <span className="text-[10px] text-slate-400 font-medium tracking-wider">CONEXIÓN DE HISTORIAL PENDIENTE</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Panel de Diagnóstico */}
-                        <div className="w-full md:w-[320px] bg-slate-50 p-5 rounded-xl border border-slate-200/50 self-stretch flex flex-col justify-between">
-                          <div>
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-lg w-max mb-3">
-                              <AlertCircle className="w-3.5 h-3.5" />
-                              <span>Fuga en Onboarding: {summary.new_registrations?.value_num && summary.aprobacion_visibilidad?.value_num ? (100 - (summary.aprobacion_visibilidad.value_num / summary.new_registrations.value_num) * 100).toFixed(1) : 0}%</span>
-                            </div>
-                            <h5 className="text-xs font-bold text-slate-700">Oportunidad de Activación</h5>
-                            <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                              De los <strong>{summary.new_registrations?.value_display ?? "0"}</strong> proveedores registrados, solo <strong>{summary.aprobacion_visibilidad?.value_display ?? "0"}</strong> solicitaron su visibilidad.
-                            </p>
-                            <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
-                              Hay una brecha de <strong>{((summary.new_registrations?.value_num || 0) - (summary.aprobacion_visibilidad?.value_num || 0)).toLocaleString("es-CO")}</strong> proveedores registrados que aún no solicitan auditoría en el catálogo.
-                            </p>
-                          </div>
-                          <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
-                            <span>Acción Recomendada:</span>
-                            <span className="text-indigo-600 font-bold hover:underline cursor-default">Ver Playbook Onboarding</span>
-                          </div>
-                        </div>
-                      </>
-                    )}
-
-                    {activeFunnel === "verified" && (
-                      <>
-                        <div className="flex-1 w-full">
-                          <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-indigo-50 rounded-lg">
-                              <Compass className="w-4 h-4 text-indigo-600" />
-                            </div>
-                            <h5 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Embudo: Ascenso a Proveedor Verificado</h5>
-                          </div>
-                          <p className="text-xs text-slate-400 mt-1">
-                            Mide la conversión desde la postulación en CRM hasta la aprobación final.
-                          </p>
-
-                          {/* Gráfico del Embudo */}
-                          <div className="flex flex-col gap-4 mt-6">
-                            {/* Paso 1 */}
-                            <div>
-                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
-                                <span>1. Solicitudes de Ascenso a Verificado (CRM)</span>
-                                <span>{summary.ascenso_verificado?.value_display ?? "0"} (100%)</span>
-                              </div>
-                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
-                                <div className="bg-gradient-to-r from-indigo-400 to-indigo-500 h-full rounded-l-lg" style={{ width: "100%" }} />
-                              </div>
-                            </div>
-
-                            {/* Paso 2 (Placeholder Aprobados) */}
-                            <div>
-                              <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
-                                <span>2. Ascensos Verificados Aprobados</span>
-                                <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
-                                  Sin datos (Próximamente)
-                                </span>
-                              </div>
-                              <div className="w-full h-6 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex items-center justify-center">
-                                <span className="text-[10px] text-slate-400 font-medium tracking-wider">CONEXIÓN DE HISTORIAL PENDIENTE</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Panel de Diagnóstico */}
-                        <div className="w-full md:w-[320px] bg-slate-50 p-5 rounded-xl border border-slate-200/50 self-stretch flex flex-col justify-between">
-                          <div>
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-lg w-max mb-3">
-                              <Compass className="w-3.5 h-3.5" />
-                              <span>Tasa de Aprobación: Por Integrar</span>
-                            </div>
-                            <h5 className="text-xs font-bold text-slate-700">Control de Calidad (Verificados)</h5>
-                            <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                              Se han recibido <strong>{summary.ascenso_verificado?.value_display ?? "0"}</strong> solicitudes de ascenso a Verificado en los últimos {days} días.
-                            </p>
-                            <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
-                              El estatus "Verificado" destaca a bodegas confiables con stock y TAT bajo. El embudo medirá la conversión entre solicitudes vs. aprobaciones una vez integrados los datos de cierre del CRM.
-                            </p>
-                          </div>
-                          <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
-                            <span>Acción Recomendada:</span>
-                            <span className="text-indigo-600 font-bold hover:underline cursor-default">Criterios de Ascenso</span>
-                          </div>
-                        </div>
-                      </>
-                    )}
-
-                    {activeFunnel === "premium" && (
-                      <>
-                        <div className="flex-1 w-full">
-                          <div className="flex items-center gap-2">
-                            <div className="p-1.5 bg-amber-50 rounded-lg">
-                              <Sparkles className="w-4 h-4 text-amber-500" />
-                            </div>
-                            <h5 className="font-bold text-slate-800 text-xs uppercase tracking-wider">Embudo: Ascenso a Proveedor Premium</h5>
-                          </div>
-                          <p className="text-xs text-slate-400 mt-1">
-                            Mide la conversión desde la postulación hasta la suscripción Premium pagada.
-                          </p>
-
-                          {/* Gráfico del Embudo */}
-                          <div className="flex flex-col gap-4 mt-6">
-                            {/* Paso 1 */}
-                            <div>
-                              <div className="flex justify-between text-xs font-bold text-slate-600 mb-1">
-                                <span>1. Solicitudes de Ascenso a Premium (CRM)</span>
-                                <span>{summary.ascenso_premium?.value_display ?? "0"} (100%)</span>
-                              </div>
-                              <div className="w-full bg-slate-100 h-6 rounded-lg overflow-hidden relative border border-slate-200/40">
-                                <div className="bg-gradient-to-r from-amber-400 to-amber-500 h-full rounded-l-lg" style={{ width: "100%" }} />
-                              </div>
-                            </div>
-
-                            {/* Paso 2 (Placeholder Pagadas) */}
-                            <div>
-                              <div className="flex justify-between text-xs font-bold text-slate-400 mb-1">
-                                <span>2. Membresías Premium Activas / Pagadas</span>
-                                <span className="italic text-[10px] font-normal text-slate-400 flex items-center gap-1">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
-                                  Sin datos (Próximamente)
-                                </span>
-                              </div>
-                              <div className="w-full h-6 rounded-lg border border-dashed border-slate-300 bg-slate-50/50 flex items-center justify-center">
-                                <span className="text-[10px] text-slate-400 font-medium tracking-wider">CONEXIÓN DE HISTORIAL PENDIENTE</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Panel de Diagnóstico */}
-                        <div className="w-full md:w-[320px] bg-slate-50 p-5 rounded-xl border border-slate-200/50 self-stretch flex flex-col justify-between">
-                          <div>
-                            <div className="flex items-center gap-1.5 text-xs font-bold text-amber-600 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-lg w-max mb-3">
-                              <Sparkles className="w-3.5 h-3.5" />
-                              <span>Tasa de Conversión: Por Integrar</span>
-                            </div>
-                            <h5 className="text-xs font-bold text-slate-700">Monetización & Suscripción</h5>
-                            <p className="text-[11px] text-slate-500 mt-1.5 leading-relaxed">
-                              Se han registrado <strong>{summary.ascenso_premium?.value_display ?? "0"}</strong> intenciones de ascenso a Premium en los últimos {days} días.
-                            </p>
-                            <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">
-                              Los proveedores Premium pagan comisiones o cuotas especiales a cambio de visibilidad prioritaria. La conversión medirá el porcentaje de solicitudes que completan el pago de su membresía.
-                            </p>
-                          </div>
-                          <div className="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-[10px] text-slate-400 font-medium">
-                            <span>Acción Recomendada:</span>
-                            <span className="text-indigo-600 font-bold hover:underline cursor-default">Ver Planes & Tarifas</span>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* DIAGNÓSTICOS Y PLAN DE ACCIÓN PLAYBOOK */}
-            <div className="mt-8 bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
-              <div className="p-6 bg-slate-800 text-white flex items-center gap-3">
-                <span className="p-2 bg-white/10 rounded-xl">
-                  <Sparkles className="w-5 h-5 text-amber-400" />
-                </span>
-                <div>
-                  <h3 className="font-bold text-base">Playbook de Gestión de Producto</h3>
-                  <p className="text-xs text-slate-300">Monitoreo Semanal & Plan de Acción para Caídas de Métricas</p>
-                </div>
-              </div>
-
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-slate-100 bg-slate-50 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                      <th className="px-6 py-4">Métrica</th>
-                      <th className="px-6 py-4">Meta / Línea Base</th>
-                      <th className="px-6 py-4">Pregunta Clave de Diagnóstico</th>
-                      <th className="px-6 py-4">Plan de Acción (Si la métrica cae)</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-xs text-slate-600">
-                    <tr className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-slate-800">GMV & Volumen de Órdenes (N1)</td>
-                      <td className="px-6 py-4">Crecimiento Mensual</td>
-                      <td className="px-6 py-4">¿Estamos creciendo en volumen o estamos estancados?</td>
-                      <td className="px-6 py-4 text-slate-500">Revisar si la caída es por falta de stock de proveedores "Top" o caída en conversión de dropshippers.</td>
-                    </tr>
-                    <tr className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-slate-800">Tasa de Activación (N2)</td>
-                      <td className="px-6 py-4">&gt; 65% activados &lt; 30d</td>
-                      <td className="px-6 py-4">¿Los proveedores nuevos están llegando a su primer venta rápido?</td>
-                      <td className="px-6 py-4 text-slate-500">Validar el embudo de inactividad de UserPilot. Ajustar visibilidad del checklist en UI.</td>
-                    </tr>
-                    <tr className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-slate-800">TAT de Auditoría (N4)</td>
-                      <td className="px-6 py-4">&lt; 24 horas</td>
-                      <td className="px-6 py-4">¿Tenemos cuellos de botella en la aprobación de nuevos proveedores?</td>
-                      <td className="px-6 py-4 text-slate-500">Revisar el pipeline en CRM con Emerson y redistribuir carga de validación.</td>
-                    </tr>
-                    <tr className="hover:bg-slate-50/50 transition-colors">
-                      <td className="px-6 py-4 font-bold text-slate-800">Salud del Catálogo (N2)</td>
-                      <td className="px-6 py-4">&gt; 70% catálogo activo</td>
-                      <td className="px-6 py-4">¿Tenemos demasiado "ruido" en el catálogo que confunde a dropshippers?</td>
-                      <td className="px-6 py-4 text-slate-500">Ajustar insights de clasificación de productos y sugerir depuración de stock inactivo.</td>
-                    </tr>
-                  </tbody>
-                </table>
               </div>
             </div>
+          )}
 
-          </div>
-        )}
-      </div>
+        </div>
+
+      </main>
     </div>
   );
 }
