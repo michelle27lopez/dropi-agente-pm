@@ -1,6 +1,6 @@
 export default function MetasPage() {
   return (
-    <main style={{ height: "100vh", display: "flex", flexDirection: "column", background: "#0d1117" }}>
+    <main style={{ height: "100vh", display: "flex", flexDirection: "column", background: "var(--bg)" }}>
       <header style={{
         background: "#161b22", borderBottom: "1px solid #30363d",
         padding: "12px 24px", display: "flex", alignItems: "center",
