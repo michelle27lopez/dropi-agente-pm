@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase-browser";
+import { useRouter } from "next/navigation";
+
 const tools = [
   {
     key: "metrics",
@@ -52,6 +56,23 @@ const projects = [
 ];
 
 export default function HubPage() {
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setUserEmail(data.user?.email ?? null);
+    });
+  }, []);
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  }
+
   return (
     <main style={{ minHeight: "100vh", padding: "0" }}>
       {/* Header */}
@@ -61,24 +82,46 @@ export default function HubPage() {
         padding: "20px 32px",
         display: "flex",
         alignItems: "center",
-        gap: "12px",
+        justifyContent: "space-between",
       }}>
-        <div style={{
-          width: 36, height: 36, borderRadius: 10,
-          background: "var(--dropi)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 18,
-        }}>
-          🧩
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 10,
+            background: "var(--dropi)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 18,
+          }}>
+            🧩
+          </div>
+          <div>
+            <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
+              Dropi PM Tools
+            </h1>
+            <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
+              Supplier Success · Herramientas internas
+            </p>
+          </div>
         </div>
-        <div>
-          <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
-            Dropi PM Tools
-          </h1>
-          <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
-            Supplier Success · Herramientas internas
-          </p>
-        </div>
+
+        {userEmail && (
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <span style={{ fontSize: 13, color: "var(--muted)" }}>{userEmail}</span>
+            <button
+              onClick={handleLogout}
+              style={{
+                fontSize: 12, fontWeight: 600,
+                color: "var(--muted)",
+                background: "var(--bg)",
+                border: "1px solid var(--border)",
+                borderRadius: 8,
+                padding: "6px 12px",
+                cursor: "pointer",
+              }}
+            >
+              Salir
+            </button>
+          </div>
+        )}
       </header>
 
       {/* Grid */}
