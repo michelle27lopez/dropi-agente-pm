@@ -32,12 +32,19 @@ type TimeMetric = {
   promedio_activacion_dias: number | null;
   promedio_primera_orden_dias: number | null;
 };
+type WeeklyData = {
+  id: string; month_number: number; week_number: number;
+  contactos_meta: number; contactos_real: number | null;
+  auditados_meta: number; auditados_real: number | null;
+  listos_meta: number;    listos_real:    number | null;
+};
 type TtvData = {
   monthly: MonthlyData[];
   segments6m: Segment6m[];
   monthlySegments: MonthlySegment[];
   pipelineMetrics: PipelineMetric[];
   timeMetrics: TimeMetric[];
+  weeklyData: WeeklyData[];
 };
 type Tab = "home" | "pipeline" | "mes1" | "mes2" | "mes3" | "mes4" | "mes5" | "mes6";
 
@@ -308,6 +315,72 @@ function SegmentTable<T extends {
   );
 }
 
+// ─── WeeklyTable ──────────────────────────────────────────────────────────────
+function WeeklyTable({ rows, onUpdate }: {
+  rows: WeeklyData[];
+  onUpdate: (id: string, field: string, v: string) => void;
+}) {
+  const sorted = [...rows].sort((a, b) => a.week_number - b.week_number);
+  const totals = sorted.reduce(
+    (acc, r) => ({
+      c_meta: acc.c_meta + r.contactos_meta,
+      c_real: acc.c_real + (r.contactos_real ?? 0),
+      a_meta: acc.a_meta + r.auditados_meta,
+      a_real: acc.a_real + (r.auditados_real ?? 0),
+      l_meta: acc.l_meta + r.listos_meta,
+      l_real: acc.l_real + (r.listos_real ?? 0),
+      has_c: acc.has_c || r.contactos_real !== null,
+      has_a: acc.has_a || r.auditados_real !== null,
+      has_l: acc.has_l || r.listos_real !== null,
+    }),
+    { c_meta: 0, c_real: 0, a_meta: 0, a_real: 0, l_meta: 0, l_real: 0, has_c: false, has_a: false, has_l: false }
+  );
+  return (
+    <div style={{ width: "100%", overflowX: "auto", border: "1px solid var(--border)", borderRadius: 12, background: "#fff" }}>
+      <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 680 }}>
+        <thead>
+          <tr>
+            <th style={thStyle}>Semana</th>
+            <th style={thR}>C meta</th>
+            <th style={thR}>C real</th>
+            <th style={thR}>A meta</th>
+            <th style={thR}>A real</th>
+            <th style={thR}>L meta</th>
+            <th style={thR}>L real</th>
+            <th style={thStyle}>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sorted.map(r => (
+            <tr key={r.id}>
+              <td style={{ ...tdStyle, fontWeight: 600 }}>S{r.week_number}</td>
+              <td style={tdR}>{r.contactos_meta}</td>
+              <td style={tdR}><EditCell value={r.contactos_real} onSave={v => onUpdate(r.id, "contactos_real", v)} /></td>
+              <td style={tdR}>{r.auditados_meta}</td>
+              <td style={tdR}><EditCell value={r.auditados_real} onSave={v => onUpdate(r.id, "auditados_real", v)} /></td>
+              <td style={tdR}>{r.listos_meta}</td>
+              <td style={tdR}><EditCell value={r.listos_real} onSave={v => onUpdate(r.id, "listos_real", v)} /></td>
+              <td style={tdStyle}><StatusBadge real={r.listos_real} /></td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td style={{ ...tfootTd, color: "var(--dropi)" }}>Total mes</td>
+            <td style={tfootTdR}>{totals.c_meta}</td>
+            <td style={tfootTdR}>{totals.has_c ? totals.c_real : "—"}</td>
+            <td style={tfootTdR}>{totals.a_meta}</td>
+            <td style={tfootTdR}>{totals.has_a ? totals.a_real : "—"}</td>
+            <td style={tfootTdR}>{totals.l_meta}</td>
+            <td style={tfootTdR}>{totals.has_l ? totals.l_real : "—"}</td>
+            <td style={tfootTd}><StatusBadge real={totals.has_l ? totals.l_real : null} /></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  );
+}
+
 // ─── FunnelStep ───────────────────────────────────────────────────────────────
 function FunnelRow({ steps }: { steps: { label: string; value: string; sub: string }[] }) {
   return (
@@ -490,6 +563,7 @@ function MonthTab({
   const md = data.monthly.find(m => m.month_number === monthNum);
   const segs = data.monthlySegments.filter(s => s.month_number === monthNum);
   const tm = data.timeMetrics.find(t => t.scope === `mes_${monthNum}`);
+  const weekRows = data.weeklyData.filter(w => w.month_number === monthNum);
 
   // Acumulado hasta este mes
   const acum = data.monthly
@@ -559,6 +633,23 @@ function MonthTab({
           ]} />
         </div>
       </div>
+
+      {/* Seguimiento semanal */}
+      {weekRows.length > 0 && (
+        <div style={card}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+            <div>
+              <div style={sectionTitle}>Seguimiento semanal</div>
+              <div style={sectionSub}>Avance por semana · Contactados, auditados y listos para vender.</div>
+            </div>
+            <span style={tag("#3B82F6", "#EFF6FF")}>S1 – S4</span>
+          </div>
+          <WeeklyTable
+            rows={weekRows}
+            onUpdate={(id, field, v) => onUpdate("ttv_weekly_data", id, { [field]: parseInt(v) || null })}
+          />
+        </div>
+      )}
 
       {/* TTV cohorte */}
       <div style={card}>
@@ -651,6 +742,7 @@ export default function TtvMetricasPage() {
           monthlySegments:  table === "ttv_monthly_segments" ? patch(prev.monthlySegments)  as MonthlySegment[] : prev.monthlySegments,
           pipelineMetrics:  table === "ttv_pipeline_metrics" ? patch(prev.pipelineMetrics)  as PipelineMetric[] : prev.pipelineMetrics,
           timeMetrics:      table === "ttv_time_metrics"     ? patch(prev.timeMetrics)      as TimeMetric[]     : prev.timeMetrics,
+          weeklyData:       table === "ttv_weekly_data"      ? patch(prev.weeklyData)       as WeeklyData[]     : prev.weeklyData,
         };
       });
       // Persist
