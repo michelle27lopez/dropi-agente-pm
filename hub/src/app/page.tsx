@@ -53,6 +53,15 @@ const projects = [
     tag: "DCA-001 · Experimento",
     icon: "🗂️",
   },
+  {
+    key: "time-to-value",
+    name: "Time to Value",
+    description: "Activación operativa de suppliers nuevos. Meta: 620 listos para vender en 6 meses. North Star: registro → listo en ≤ 5 días.",
+    url: "/proyectos/time-to-value",
+    color: "#F77F00",
+    tag: "TTV-001 · Activación",
+    icon: "⚡",
+  },
 ];
 
 export default function HubPage() {
