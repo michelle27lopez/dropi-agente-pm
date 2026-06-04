@@ -563,7 +563,7 @@ function MonthTab({
   const md = data.monthly.find(m => m.month_number === monthNum);
   const segs = data.monthlySegments.filter(s => s.month_number === monthNum);
   const tm = data.timeMetrics.find(t => t.scope === `mes_${monthNum}`);
-  const weekRows = data.weeklyData.filter(w => w.month_number === monthNum);
+  const weekRows = (data.weeklyData ?? []).filter(w => Number(w.month_number) === monthNum);
 
   // Acumulado hasta este mes
   const acum = data.monthly
@@ -635,21 +635,22 @@ function MonthTab({
       </div>
 
       {/* Seguimiento semanal */}
-      {weekRows.length > 0 && (
-        <div style={card}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
-            <div>
-              <div style={sectionTitle}>Seguimiento semanal</div>
-              <div style={sectionSub}>Avance por semana · Contactados, auditados y listos para vender.</div>
-            </div>
-            <span style={tag("#3B82F6", "#EFF6FF")}>S1 – S4</span>
+      <div style={card}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+          <div>
+            <div style={sectionTitle}>Seguimiento semanal</div>
+            <div style={sectionSub}>Avance por semana · Contactados, auditados y listos para vender.</div>
           </div>
-          <WeeklyTable
-            rows={weekRows}
-            onUpdate={(id, field, v) => onUpdate("ttv_weekly_data", id, { [field]: parseInt(v) || null })}
-          />
+          <span style={tag("#3B82F6", "#EFF6FF")}>S1 – S4</span>
         </div>
-      )}
+        {weekRows.length === 0
+          ? <p style={{ fontSize: 13, color: "var(--muted)" }}>Sin datos semanales. Ejecuta 008b_ttv_weekly_patch.sql en Supabase.</p>
+          : <WeeklyTable
+              rows={weekRows}
+              onUpdate={(id, field, v) => onUpdate("ttv_weekly_data", id, { [field]: parseInt(v) || null })}
+            />
+        }
+      </div>
 
       {/* TTV cohorte */}
       <div style={card}>
@@ -722,7 +723,7 @@ export default function TtvMetricasPage() {
   const load = useCallback(() => {
     fetch("/api/ttv")
       .then(r => r.json())
-      .then(d => { setData(d); setLoading(false); })
+      .then(d => { setData({ weeklyData: [], ...d }); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);
 
