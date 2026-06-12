@@ -45,6 +45,15 @@ const tools = [
 
 const projects = [
   {
+    key: "weekly",
+    name: "Weekly · Supplier Success",
+    description: "Update ejecutivo semanal: oportunidades aprobadas, hipótesis numéricas y accionables de Comercial clasificados por ruta.",
+    url: "/weekly",
+    color: "#F77F00",
+    tag: "Weekly · Jun 2026",
+    icon: "📋",
+  },
+  {
     key: "dinamicas-catalogo",
     name: "Dinámicas de Catálogo",
     description: "Experimento lean de catálogo preseleccionado. Validación manual de campañas con suppliers antes de desarrollar el módulo formal.",
