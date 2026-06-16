@@ -71,6 +71,15 @@ const projects = [
     tag: "TTV-001 · Activación",
     icon: "⚡",
   },
+  {
+    key: "categorizacion",
+    name: "Categorización y Enriquecimiento",
+    description: "Estrategia de taxonomía y enriquecimiento inteligente de catálogo. Consolidación de categorías fragmentadas y piloto de IA.",
+    url: "/proyectos/categorizacion",
+    color: "#7C3AED",
+    tag: "CAT-001 · Habilitador",
+    icon: "🏷️",
+  },
 ];
 
 export default function HubPage() {
