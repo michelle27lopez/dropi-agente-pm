@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 // ── Types ──────────────────────────────────────────────────────
-type SectionId = "intro" | "n1" | "n2" | "n3" | "n4" | "n5" | "n6" | "n7" | "conceptos";
+type SectionId = "intro" | "n1" | "n2" | "n3" | "n4" | "n5" | "n6" | "n7" | "n8" | "n9" | "n10" | "conceptos";
 
 // ── Navigation items ───────────────────────────────────────────
 const NAV: { id: SectionId; label: string; icon: string; sub?: string }[] = [
@@ -15,6 +15,9 @@ const NAV: { id: SectionId; label: string; icon: string; sub?: string }[] = [
   { id: "n5",       icon: "📣",  label: "Nodo 5 — Convocatoria",  sub: "Cómo se invita al supplier" },
   { id: "n6",       icon: "📝",  label: "Nodo 6 — Postulación",   sub: "Qué postula el supplier" },
   { id: "n7",       icon: "🛍️", label: "Nodo 7 — Vitrina",       sub: "Qué ve el dropshipper" },
+  { id: "n8",       icon: "📄",  label: "Nodo 8 — Handoff",       sub: "Documento operativo final" },
+  { id: "n9",       icon: "📊",  label: "Nodo 9 — Medición",      sub: "Framework de 3 niveles" },
+  { id: "n10",      icon: "🔀",  label: "Nodo 10 — Decisión",     sub: "Ruta de escalamiento" },
   { id: "conceptos",icon: "⚙️",  label: "Conceptos clave",        sub: "Condition builder y más" },
 ];
 
@@ -60,7 +63,11 @@ function NodeHeader({ num, icon, title, color, tagline }: { num: number; icon: s
       </div>
       <div>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-          <span style={{ fontSize: 11, fontWeight: 700, color, background: `${color}15`, padding: "2px 9px", borderRadius: 20 }}>Nodo {num} de 7</span>
+          {num > 0 && (
+            <span style={{ fontSize: 11, fontWeight: 700, color, background: `${color}15`, padding: "2px 9px", borderRadius: 20 }}>
+              Nodo {num} de 10
+            </span>
+          )}
         </div>
         <h2 style={{ fontSize: 20, fontWeight: 800, color: "#111827", margin: "0 0 4px" }}>{title}</h2>
         <p style={{ fontSize: 14, color: "#6b7280", margin: 0, lineHeight: 1.5 }}>{tagline}</p>
@@ -182,6 +189,9 @@ export default function DocsPage() {
                 { n: 5, icon: "📣", label: "Convocatoria",       desc: "Mensaje, canal, CTA al supplier", color: "#F59E0B" },
                 { n: 6, icon: "📝", label: "Postulación",        desc: "Formulario que diligencia el supplier", color: "#EC4899" },
                 { n: 7, icon: "🛍️",label: "Vitrina",            desc: "Qué ve y cómo actúa el dropshipper", color: "#10B981" },
+                { n: 8, icon: "📄", label: "Handoff final",      desc: "Documento operativo para la célula", color: "#10B981" },
+                { n: 9, icon: "📊", label: "Medición",           desc: "Framework de métricas de 3 niveles", color: "#F59E0B" },
+                { n: 10,icon: "🔀", label: "Decisión final",     desc: "Rutas post-evento comercial", color: "#EF4444" },
               ].map(({ n, icon, label, desc, color }) => (
                 <div key={n} style={{ display: "flex", gap: 10, alignItems: "flex-start", background: "#f9fafb", borderRadius: 10, padding: "10px 14px", border: "1px solid #e5e7eb" }}>
                   <span style={{ width: 26, height: 26, borderRadius: 7, background: color, color: "#fff", fontSize: 11, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{n}</span>
@@ -193,10 +203,10 @@ export default function DocsPage() {
               ))}
             </div>
 
-            <P>Al completar los 7 nodos, el sistema genera un <strong>handoff operativo</strong> con 12 secciones (resumen, objetivo, segmento, reglas, convocatoria, postulación, vitrina, comunicación, RACI, métricas, riesgos y checklist) listo para compartir con Comercial, Growth, Comunicaciones y el resto de la célula.</P>
+            <P>Al completar los nodos de definición, el sistema consolida un <strong>handoff operativo</strong> con todas las especificaciones comerciales, responsabilidades RACI, y parámetros de automatización, listo para compartir y ejecutar manualmente en la célula.</P>
 
             <H3>Estructura del experimento</H3>
-            <div style={{ overflowX: "auto" as const }}>
+            <div style={{ overflowX: "auto" as const, marginBottom: 24 }}>
               <table style={{ width: "100%", borderCollapse: "collapse" as const, fontSize: 13 }}>
                 <thead>
                   <tr style={{ background: "#f9fafb" }}>
@@ -219,6 +229,45 @@ export default function DocsPage() {
                   ))}
                 </tbody>
               </table>
+            </div>
+
+            <H3>Plan de Alineación de Campañas (Marketing)</H3>
+            <P>
+              Este plan define la estrategia de alineación entre los equipos de Célula, Producto, Comercial y Marketing para el ciclo de vida, la comunicación y la vitrina de las campañas.
+            </P>
+            
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+              <div style={{ background: "#f9fafb", borderRadius: 12, padding: "16px 20px", border: "1px solid #e5e7eb" }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: "#F77F00", marginBottom: 10 }}>1. Ciclo de Vida (4 meses)</div>
+                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "#374151", lineHeight: 1.6 }}>
+                  <li style={{ marginBottom: 6 }}><strong>Fase 1: Conceptualización (15 días)</strong> - Diseño de narrativa, hilo conductor, lives comerciales y segmentación.</li>
+                  <li style={{ marginBottom: 6 }}><strong>Fase 2: Construcción y Recepción (1 mes)</strong> - Expectativa dropshipper, Convocatoria a suppliers (Contacto 1), curaduría manual y vestido de imágenes (Contacto 2).</li>
+                  <li style={{ marginBottom: 6 }}><strong>Fase 3: Campaña Activa (1.5 - 2.5 meses)</strong> - Dropshippers pautan y venden. Termina 1 semana después del hito comercial.</li>
+                  <li><strong>Fase 4: Cierre y Medición (1 semana)</strong> - Retiro de vitrina y análisis de resultados/decisión.</li>
+                </ul>
+              </div>
+
+              <div style={{ background: "#f9fafb", borderRadius: 12, padding: "16px 20px", border: "1px solid #e5e7eb" }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: "#0EA5E9", marginBottom: 10 }}>2. Comunicación en Dos Contactos</div>
+                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "#374151", lineHeight: 1.6 }}>
+                  <li style={{ marginBottom: 6 }}><strong>Contacto 1 (Postulación):</strong> Invitar a participar sin entregar marcos (evita uso indebido). Vía popup de User Pilot (segmentado por IDs) y CRM masivo. CTA a formulario Tally.</li>
+                  <li><strong>Contacto 2 (Instrucciones):</strong> Solo a aprobados. Envío vía CRM con link a sublanding de marcos (<code>dropi.co</code>), palabra clave y categoría temporal en Admin.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div style={{ background: "#f9fafb", borderRadius: 12, padding: "16px 20px", border: "1px solid #e5e7eb" }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "#10B981", marginBottom: 10 }}>3. Vitrina y Visibilidad MVP</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "#374151", lineHeight: 1.6 }}>
+                  <li style={{ marginBottom: 6 }}><strong>Categoría Temporal Admin:</strong> Creada desde el admin de Dropi sin desarrollo. Los proveedores asocian sus productos aquí.</li>
+                  <li><strong>Banners segmentados por país:</strong> Gráfica de catálogo que redirige a URL prefiltrada por país, garantizando stock local correcto.</li>
+                </ul>
+                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "#374151", lineHeight: 1.6 }}>
+                  <li style={{ marginBottom: 6 }}><strong>Flyer en el Home:</strong> Permite la descarga en PDF del catálogo completo para dropshippers de pauta directa.</li>
+                  <li><strong>Sublanding de marcos (<code>dropi.co</code>):</strong> Herramienta web para que el proveedor sube su foto y el sistema le pegue el marco oficial de forma automática.</li>
+                </ul>
+              </div>
             </div>
           </SectionCard>
 
@@ -245,12 +294,22 @@ export default function DocsPage() {
                 <FieldRow name="Objetivo principal" req type="Multiselección" note="Qué resultado comercial se busca: GMV, órdenes, visibilidad a suppliers, activar productos quietos, validar interés de dropshippers, etc." />
                 <FieldRow name="Tipo de experimento" req type="Multiselección" note="Cómo se va a ejecutar: vitrina manual, GHL, WhatsApp, Userpilot, comunicación comercial, o una combinación." />
                 <FieldRow name="País / mercado" req type="Multiselección" note="Aplica para Colombia, México, Chile, Ecuador o multipaís. Condiciona segmentación y comunicación." />
-                <FieldRow name="Fechas base" req type="4 fechas" note="Inicio convocatoria supplier → Cierre postulación → Publicación para dropshippers → Cierre de campaña." />
+                <FieldRow name="Fechas base" req type="4 fechas" note="Inicio convocatoria supplier → Cierre postulación → Publicación para dropshippers → Cierre de campaña. Alineadas al ciclo estándar de 4 meses." />
                 <FieldRow name="Responsable" req type="Selección" note="Equipo o persona responsable de coordinar la campaña: Producto, Growth, Comercial, Supplier Success." />
                 <FieldRow name="Hipótesis" req type="Texto" note="La apuesta central que queremos validar. Debe ser falseable: '¿Qué creemos que va a pasar y por qué?'" />
                 <FieldRow name="Resultado esperado" req type="Texto" note="Qué métricas o señales indicarían que la hipótesis se confirmó. Base para el nodo de medición." />
               </tbody>
             </table>
+
+            <Callout icon="📅" color="#F77F00">
+              <strong>Ciclo de Vida Estándar de 4 Meses (Alineación con Marketing):</strong>
+              <div style={{ marginTop: 6, paddingLeft: 10 }}>
+                · <strong>Fase 1: Conceptualización (15 días)</strong>: Diseño de narrativa, hilo conductor, lives, y segmentación inicial.<br />
+                · <strong>Fase 2: Construcción y Recepción (1 mes)</strong>: Campaña de expectativa y votación de categorías para dropshippers, convocatoria a suppliers, postulación, curaduría y vestido de imágenes.<br />
+                · <strong>Fase 3: Campaña Activa (1.5 a 2.5 meses)</strong>: Tiempo para que los dropshippers prueben el producto, preparen creativos y pauten. Finaliza 1 semana después de la fecha comercial.<br />
+                · <strong>Fase 4: Cierre y Medición (1 semana)</strong>: Cierre formal del piloto, recolección de resultados y toma de decisiones.
+              </div>
+            </Callout>
 
             <H3>Ejemplos</H3>
             <Example title="Dropicup Mundial 2026" color="#F77F00">
@@ -333,6 +392,11 @@ export default function DocsPage() {
               </tbody>
             </table>
 
+            <Callout icon="👥" color="#0EA5E9">
+              <strong>Segmentación por IDs en User Pilot:</strong>
+              Es posible segmentar la comunicación in-app (popups, banners) a nivel de proveedor cargando la base de datos actualizada de IDs de proveedores Premium y Exclusivos (provista por comercial) en User Pilot. La herramienta validará estos IDs automáticamente al iniciar sesión para activar el flujo de la campaña correspondiente.
+            </Callout>
+
             <H3>Casos de uso documentados</H3>
             <Example title="Dropicup Mundial — Temporada" color="#F77F00">
               Supplier en Colombia, verificado, con contacto válido, producto activo con stock ≥ 20 y categoría relacionada con fútbol/decoración/tecnología.<br />
@@ -404,6 +468,14 @@ export default function DocsPage() {
               Este nodo valida la primera hipótesis del experimento: si Dropi ofrece visibilidad u oportunidad de remate, ¿los suppliers realmente muestran interés de participar? La respuesta a esta pregunta define si el modelo de campañas tiene tracción o no.
             </P>
 
+            <Callout icon="📣" color="#F59E0B">
+              <strong>Esquema de Comunicación en 2 Contactos (Alineación con Marketing):</strong>
+              <div style={{ marginTop: 6, paddingLeft: 10 }}>
+                · <strong>Contacto 1 (Convocatoria / Registro)</strong>: Se comunica el lanzamiento de la campaña e invita al proveedor a postularse mediante un formulario externo (Tally/Form). Se distribuye vía User Pilot popup (segmentado por IDs de premium/exclusivos) y CRM. No se envían materiales ni piezas de diseño aquí.<br />
+                · <strong>Contacto 2 (Aprobación e Instrucciones)</strong>: Solo a los proveedores y productos que hayan sido formalmente aprobados en la curaduría (Nodo 6). Se les envía por CRM las instrucciones de vestido, el enlace a la sublanding de marcos (`dropi.co`), la palabra clave y la categoría temporal asignada.
+              </div>
+            </Callout>
+
             <H3>Tipos de convocatoria</H3>
             <div style={{ display: "grid", gap: 8, marginBottom: 16 }}>
               {[
@@ -448,6 +520,11 @@ export default function DocsPage() {
             <P>
               Este nodo configura el proceso mediante el cual el supplier (o el comercial en su nombre) registra los productos que quiere incluir en la campaña. En el MVP no es un módulo en plataforma — es un formulario externo (Google Form por defecto) que captura la información mínima para que Dropi pueda revisar y aprobar.
             </P>
+
+            <Callout icon="📝" color="#EC4899">
+              <strong>Curaduría Manual y Aprobación sin Marcos:</strong>
+              La curaduría de productos es manual, llevada a cabo conjuntamente por Comercial y Supplier Success según las reglas del Nodo 4. Los proveedores <strong>no visten sus imágenes en esta etapa</strong>; el material de diseño y la sublanding se entregan únicamente después de confirmada la aprobación (Fase de Contacto 2) para proteger las piezas gráficas.
+            </Callout>
 
             <Callout icon="💡" color="#EC4899">
               <strong>El campo de motivación es estratégico.</strong> Saber por qué el supplier quiere participar (visibilidad, salir de stock, activar producto nuevo) es una de las señales más valiosas del experimento para entender qué mueve a los proveedores.
@@ -494,8 +571,18 @@ export default function DocsPage() {
             <NodeHeader num={7} icon="🛍️" title="Construir vitrina" color="#10B981" tagline="Cómo se presenta la campaña al dropshipper. La campaña solo tiene valor si el dropshipper percibe una oportunidad clara." />
 
             <P>
-              Este es el último nodo del flujo de definición. Todo lo anterior (segmento, reglas, convocatoria, postulación) sirve para llegar a este punto: mostrarle al dropshipper una vitrina curada con productos atractivos. Si la vitrina no es clara y el CTA no es obvio, el experimento no va a generar señal.
+              Este nodo unifica cómo se presentarán los productos al dropshipper de forma atractiva. La campaña solo tiene valor si el dropshipper percibe una oportunidad clara de comercialización y pauta.
             </P>
+
+            <Callout icon="🛍️" color="#10B981">
+              <strong>Componentes de la Vitrina MVP (Alineación con Marketing):</strong>
+              <div style={{ marginTop: 6, paddingLeft: 10 }}>
+                · <strong>Categoría Temporal en el Admin</strong>: Se crea una categoría temporal desde el panel de administración de Dropi sin dependencias de desarrollo de IT (ej: Dropicop). Los proveedores seleccionados asocian sus productos a esta categoría.<br />
+                · <strong>Banner prefiltrado en Catálogo</strong>: Un banner en la sección de catálogo de productos. Al hacer clic, redirige a la URL prefiltrada por la categoría/palabra clave. Los banners se segmentan por país para redirigir a los productos correctos según el stock local.<br />
+                · <strong>Flyer de Home</strong>: Imagen en el Home de la plataforma que permite descargar el catálogo completo en PDF.<br />
+                · <strong>Sublanding de marcos</strong>: Herramienta alojada en `dropi.co` (desarrollada por Juan Felipe Peña) para que el proveedor cargue su imagen de producto y la descargue ya vestida con el marco oficial aplicado de forma automática.
+              </div>
+            </Callout>
 
             <Callout icon="🛍️" color="#10B981">
               <strong>Regla de oro del MVP:</strong> La información mínima por producto es imagen + nombre + supplier + precio + stock + CTA. Sin estos 6 elementos, el dropshipper no tiene suficiente contexto para tomar una decisión.
@@ -528,8 +615,80 @@ export default function DocsPage() {
             <P>Máximo 2–3 badges por producto para no saturar. Opciones: Seleccionado por Dropi · Precio especial · Remate · Alto stock · Alto margen · Producto de temporada · Nuevo · Últimas unidades · Supplier verificado · Despacho rápido · Termina pronto · Campaña activa.</P>
 
             <Callout icon="✅" color="#10B981">
-              <strong>Al completar este nodo la campaña queda lista para handoff.</strong> El sistema genera automáticamente el documento operativo con las 12 secciones para distribuir a todos los equipos involucrados.
+              <strong>Al completar este nodo la campaña queda lista para handoff.</strong> El sistema genera el documento operativo inicial para que los equipos ejecuten la campaña manualmente.
             </Callout>
+          </SectionCard>
+
+          {/* ── NODO 8 ──────────────────────────────────────── */}
+          <SectionCard id="n8">
+            <NodeHeader num={8} icon="📄" title="Documento handoff para la célula" color="#10B981" tagline="Consolida toda la información comercial y accesos operativos para ejecutar la campaña manualmente." />
+
+            <P>
+              El objetivo de este nodo es generar el documento de trabajo definitivo que unifica los accesos a las herramientas temporales (Tally/Form, sublanding de marcos, categoría temporal del Admin) y la asignación de responsables, para que la célula pueda iniciar la operación manual sin bloqueos de IT.
+            </P>
+
+            <Callout icon="📄" color="#10B981">
+              <strong>Entregable del Handoff:</strong> Un documento maestro (Google Doc / Notion) accesible por todo el equipo que unifica plantillas, enlaces y responsabilidades.
+            </Callout>
+
+            <H3>Estructura recomendada del Handoff</H3>
+            <table style={{ width: "100%", borderCollapse: "collapse" as const, fontSize: 13, marginBottom: 16 }}>
+              <thead><tr style={{ background: "#f9fafb" }}>
+                {["Sección", "Qué debe contener"].map(h => <th key={h} style={{ padding: "8px 12px", textAlign: "left" as const, fontSize: 11, fontWeight: 700, color: "#6b7280", borderBottom: "2px solid #e5e7eb" }}>{h}</th>)}
+              </tr></thead>
+              <tbody>
+                <FieldRow name="Ficha Técnica" type="Sección" note="Resumen comercial: nombre de campaña, tipo de mecánica, país o mercado, responsable líder y objetivo principal." />
+                <FieldRow name="Enlaces Operativos" type="Sección" note="Formulario de postulación (Nodo 6), sublanding de marcos (dropi.co), Sheet de control y categoría temporal del Admin." />
+                <FieldRow name="Parámetros de Comunicación" type="Sección" note="Lista de IDs de proveedores premium/exclusivos cargados en User Pilot, y plantillas de Contacto 1 y Contacto 2." />
+                <FieldRow name="Matriz RACI" type="Sección" note="Comercial (segmentar/convocar), Marketing/Growth (diseño/comunicación dropshippers/User Pilot), Supplier Success (formularios/curaduría/categorías Admin), y Producto." />
+              </tbody>
+            </table>
+          </SectionCard>
+
+          {/* ── NODO 9 ──────────────────────────────────────── */}
+          <SectionCard id="n9">
+            <NodeHeader num={9} icon="📊" title="Medición del piloto" color="#F59E0B" tagline="Evalúa el embudo completo para medir adopción, engagement e impacto comercial neto." />
+
+            <P>
+              Este nodo recoge el framework de métricas en tres niveles fundamentales para validar las hipótesis del experimento y calentar los modelos predictivos con datos reales de la plataforma.
+            </P>
+
+            <H3>Framework de Métricas de 3 Niveles</H3>
+            {[
+              { nivel: "Métricas de Proveedor (Adopción)", color: "#8B5CF6", items: ["Convocados: Total de suppliers invitados (Contacto 1).", "Tasa de Respuesta: % de interesados sobre el total de convocados.", "Tasa de Postulación: % de suppliers que completaron el formulario.", "Curaduría: Productos postulados vs. productos aprobados.", "Tasa de Vestido: % de aprobados que colocaron el marco en dropi.co y asignaron la categoría."] },
+              { nivel: "Métricas de Dropshipper (Engagement)", color: "#0EA5E9", items: ["Expectativa: Dropshippers expuestos al popup de User Pilot y votos en categorías.", "Clics en Banners: CTR y clics absolutos del banner de catálogo prefiltrado por país.", "Descargas PDF: Descargas del catálogo desde el flyer del Home.", "Tasa de Adopción (Importación): % de dropshippers que importaron productos de la campaña."] },
+              { nivel: "Métricas de Negocio (Impacto Comercial)", color: "#10B981", items: ["Activación de Catálogo: Productos de stock quieto que lograron su primera orden.", "Lift en Activos: % de incremento en órdenes de productos que ya vendían.", "GMV Incremental: Valor total (COP) de las ventas de la campaña.", "Ticket Promedio de Campaña: GMV de campaña / órdenes de campaña (valida si la optimización de categorías de alto ticket elevó el ticket promedio)."] },
+            ].map(({ nivel, color, items }) => (
+              <div key={nivel} style={{ background: `${color}08`, border: `1px solid ${color}25`, borderRadius: 12, padding: "16px 18px", marginBottom: 12 }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color, marginBottom: 8 }}>{nivel}</div>
+                <ul style={{ margin: 0, paddingLeft: 20, fontSize: 13, color: "#374151", lineHeight: 1.7 }}>
+                  {items.map(item => <li key={item}>{item}</li>)}
+                </ul>
+              </div>
+            ))}
+          </SectionCard>
+
+          {/* ── NODO 10 ─────────────────────────────────────── */}
+          <SectionCard id="n10">
+            <NodeHeader num={10} icon="🔀" title="Decisión final" color="#EF4444" tagline="El fin del ciclo. Define si el piloto se descarta, se itera manualmente o se escala a desarrollo formal." />
+
+            <P>
+              Una semana después del evento comercial de la campaña, con base en el reporte de métricas del Nodo 9, el equipo se reúne para tomar una definición de negocio.
+            </P>
+
+            <H3>Rutas de Decisión Estratégica</H3>
+            {[
+              { ruta: "1. Apagar / Pivotar", color: "#6B7280", desc: "Si la participación supplier es menor al 10% o la conversión es marginal. Se archiva, se documentan aprendizajes y se liberan recursos." },
+              { ruta: "2. Iterar (Mantener MVP)", color: "#F59E0B", desc: "Si las ventas son positivas pero hay fricciones operativas (ej. demoras del supplier al poner marcos o errores en la categoría temporal). Se ajusta el proceso para la siguiente campaña del cronograma." },
+              { ruta: "3. Escalar (Automatizar)", color: "#10B981", desc: "Si los resultados comerciales validan el esfuerzo. Se levanta el PRD y Dropy Score para que IT automatice: (1) Renderizado nativo de marcos en plataforma, (2) Categorización y aprobación automática en el panel de Dropi, (3) Vitrina segmentada nativa por país." },
+            ].map(({ ruta, color, desc }) => (
+              <div key={ruta} style={{ background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 12, padding: "16px 18px", marginBottom: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                  <Tag color={color}>{ruta}</Tag>
+                </div>
+                <p style={{ fontSize: 13, color: "#374151", margin: 0, lineHeight: 1.6 }}>{desc}</p>
+              </div>
+            ))}
           </SectionCard>
 
           {/* ── CONCEPTOS ───────────────────────────────────── */}
@@ -555,7 +714,7 @@ export default function DocsPage() {
 
             <H3>El handoff generado</H3>
             <P>
-              Al completar los 7 nodos, el botón <strong>↓ Handoff</strong> aparece en la lista de campañas. El documento generado consolida automáticamente toda la información en 12 secciones operativas, ensamblando los responsables en una matriz RACI, mostrando las condiciones del Condition Builder de forma legible, y generando un checklist dinámico basado en los campos completados. Se puede imprimir o descargar como PDF.
+              Al completar los nodos del flujo, el botón <strong>↓ Handoff</strong> aparece en la lista de campañas. El documento generado consolida automáticamente toda la información en 12 secciones operativas, ensamblando los responsables en una matriz RACI, mostrando las condiciones del Condition Builder de forma legible, y generando un checklist dinámico basado en los campos completados. Se puede imprimir o descargar como PDF.
             </P>
 
             <H3>Estado de la campaña</H3>
@@ -563,7 +722,7 @@ export default function DocsPage() {
               {[
                 { estado: "Borrador", color: "#6B7280", desc: "Campaña creada, sin avanzar nodos." },
                 { estado: "En progreso", color: "#F77F00", desc: "Al menos un nodo guardado. El nodo 1 ya avanzó." },
-                { estado: "Completada", color: "#10B981", desc: "Los 7 nodos completos. Handoff disponible." },
+                { estado: "Completada", color: "#10B981", desc: "Todos los nodos definidos completos. Handoff disponible." },
               ].map(({ estado, color, desc }) => (
                 <div key={estado} style={{ background: `${color}0a`, border: `1px solid ${color}25`, borderRadius: 10, padding: "12px 14px", textAlign: "center" as const }}>
                   <Tag color={color}>{estado}</Tag>
