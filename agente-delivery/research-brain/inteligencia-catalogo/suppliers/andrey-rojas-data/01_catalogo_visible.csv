@@ -1,0 +1,108 @@
+﻿N°,Producto visible,Categoría visible,Categoría final,Subcategoría interpretada,Stock visible,Estado stock,Precio proveedor,Precio sugerido,Tipo visible,Etiqueta,Proveedor visible,Fuente screenshot,Notas crudas,Diferencia precio,% markup sobre proveedor,Registro válido para análisis
+1,Cinturon Vibratorio,Salud,Bienestar,Masaje / fitness,884,Disponible,49900,69900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,20000,0.40080160320641284,Sí
+2,Brakerpro,Otro,Otro,Accesorio / no claro,9,Disponible,27900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,12000,0.43010752688172044,Sí
+3,Plantillas Unas X144,Belleza,Belleza,Uñas,5,Disponible,10900,30900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,20000,1.834862385321101,Sí
+4,Arete Cristal,Bisutería,Bisutería,Aretes,14,Disponible,10900,22900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,12000,1.1009174311926606,Sí
+5,Multimetro Digital Inteligente,Herramientas,Herramientas,Medición eléctrica,12,Disponible,55900,89900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,34000,0.6082289803220036,Sí
+6,Cepillo Alisador One Step 3 En 1,Tecnología,Belleza,Cabello / alisador,253,Disponible,34900,49900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,15000,0.4297994269340974,Sí
+7,Puntas Inyectoras De Engrase,Herramientas,Herramientas,Accesorio técnico,9,Disponible,15900,35900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,20000,1.2578616352201257,Sí
+8,Conectores De Soldadura X 100 Unds,Otro,Herramientas,Soldadura,7,Disponible,29900,49900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,20000,0.6688963210702341,Sí
+9,Lampara Creativa Tablero Led De Notas,Moda,Hogar,Decoración / lámpara,85,Disponible,17900,47900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,30000,1.675977653631285,Sí
+10,Cortador De Verduras,Cocina,Cocina,Utensilio,139,Disponible,26900,58900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,32000,1.1895910780669146,Sí
+11,Pendientes Estilo Frances,Bisutería,Bisutería,Pendientes,53,Disponible,11900,29900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,18000,1.5126050420168067,Sí
+12,Set 4 Botellas De Viaje,Cocina,Hogar,Viaje / recipientes,49,Disponible,14900,34900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,20000,1.342281879194631,Sí
+13,Parches Para El Alivio Del Dolor,Salud,Bienestar,Parches alivio,3034,Disponible,9900,19900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,10000,1.0101010101010102,Sí
+14,Extension Scrunchie,Moda,Moda,Cabello / extensión,36,Disponible,16900,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,Precio sugerido variable/no visible,,,Sí
+15,Base De Maquillaje En Barra Zepcho,Belleza,Belleza,Maquillaje,196,Disponible,21900,39900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,18000,0.821917808219178,Sí
+16,Spray Gengpa Para Crecer El Pelo,Moda,Belleza,Cabello,508,Disponible,10900,40900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,30000,2.7522935779816513,Sí
+17,Estanteria De Lavadora,Hogar,Hogar,Organizador,59,Disponible,69900,99900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,30000,0.4291845493562232,Sí
+18,Levantador De Muebles,Hogar,Hogar,Herramienta doméstica,40,Disponible,25900,55900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,30000,1.1583011583011582,Sí
+19,Ventilador Deplegable Para Mesa,Cocina,Tecnología,Ventilador,240,Disponible,24900,44900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,20000,0.8032128514056225,Sí
+20,Tablero 3d Magico Pizarra,Bebé,Juguetería,Pizarra / dibujo,31,Disponible,19900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,20000,1.0050251256281406,Sí
+21,Autorele,Vehículos,Vehículos,Accesorio vehículo,26,Disponible,39900,52900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,13000,0.3258145363408521,Sí
+22,Organizador Zapatero Ajustable,Hogar,Hogar,Organizador,3000,Disponible,9900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,30000,3.0303030303030303,Sí
+23,Plumas De Bordado,Hogar,Hogar,Manualidades,12,Disponible,20900,40900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,20000,0.9569377990430622,Sí
+24,Pendiente Abejas,Bisutería,Bisutería,Pendientes,133,Disponible,10900,29900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,19000,1.7431192660550459,Sí
+25,Camping Bellhowll Linterna Led X22,Camping,Camping,Linterna,146,Disponible,19900,69900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,50000,2.512562814070352,Sí
+26,Pest Reject Repelente De Plagas,Hogar,Hogar,Control plagas,506,Disponible,26900,58500,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,,31600,1.174721189591078,Sí
+27,Filtro Para Agua,Cocina,Cocina,Filtro,,Visible sin stock capturado,9900,12900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_1,Stock no legible en screenshot,3000,0.30303030303030304,Sí
+28,Base Moisture Cushion,Belleza,Belleza,Maquillaje,1834,Disponible,15900,29900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,14000,0.8805031446540881,Sí
+29,Estanteria De Microonda,Hogar,Hogar,Organizador,104,Disponible,48900,68900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,20000,0.40899795501022496,Sí
+30,Accesorio Tubo Escape Coche,Vehículos,Vehículos,Accesorio vehículo,7872,Disponible,9500,,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,Precio sugerido no legible,,,Sí
+31,Kit Removedor De Correas,Herramientas,Herramientas,Automotriz / correas,130,Disponible,10900,30900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,20000,1.834862385321101,Sí
+32,Sticker Uñas 5d,Belleza,Belleza,Uñas,57,Disponible,6900,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,,,Sí
+33,Cinta Facial Invisible,Belleza,Belleza,Cuidado facial,406,Disponible,9900,19900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,10000,1.0101010101010102,Sí
+34,Bolso Para Llaves,Bisutería,Moda,Accesorio,21,Disponible,10900,29900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,19000,1.7431192660550459,Sí
+35,Candado Alarma,Otro,Tecnología,Seguridad,292,Disponible,18900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,21000,1.1111111111111112,Sí
+36,Pendientes Diamond,Bisutería,Bisutería,Pendientes,186,Disponible,10900,30900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,20000,1.834862385321101,Sí
+37,Amplificador Auditivo,Otro,Bienestar,Audición,5,Disponible,41900,69900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,28000,0.6682577565632458,Sí
+38,Ajustadores De Anillos,Otro,Bisutería,Accesorios anillos,1,Disponible,7900,19900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,12000,1.518987341772152,Sí
+39,Pestanas Adhesivas,Belleza,Belleza,Pestañas,8,Disponible,31900,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,,,Sí
+40,Ventilador Doble Para Coche,Tecnología,Vehículos,Accesorio vehículo,297,Disponible,28900,48900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,20000,0.6920415224913494,Sí
+41,Almohadilla De Gel Para Cuello,Belleza,Bienestar,Almohadilla / dolor,13,Disponible,28900,58900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,30000,1.0380622837370241,Sí
+42,Regla 6 Pliegues,Moda,Herramientas,Medición,0,Agotado,35900,65900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,30000,0.8356545961002786,Sí
+43,Sonido Turbo Coche,Vehículos,Vehículos,Accesorio vehículo,5301,Disponible,,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,Precio no legible,,,Sí
+44,Aqualife,Otro,Otro,Filtro / acuario,1,Disponible,22900,34900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,12000,0.5240174672489083,Sí
+45,Recipientes Para Nevera,Hogar,Cocina,Organizador nevera,8,Disponible,19900,49900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,30000,1.5075376884422111,Sí
+46,Organizador De Cajones Para Nevera,Cocina,Cocina,Organizador nevera,966,Disponible,19900,31900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,12000,0.6030150753768844,Sí
+47,Tratamiento Para El Acne,Belleza,Belleza,Cuidado facial,21,Disponible,19900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,20000,1.0050251256281406,Sí
+48,Kit Sierras Taladro,Herramientas,Herramientas,Taladro,5,Disponible,17900,37900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,20000,1.1173184357541899,Sí
+49,Flexstrap,Salud,Bienestar,Soporte / postura,252,Disponible,28900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,11000,0.3806228373702422,Sí
+50,Pedales Antideslizantes,Vehículos,Vehículos,Accesorio vehículo,94,Disponible,25900,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,,,Sí
+51,Pack Smartwatch Ultra Airpods Pro,Tecnología,Tecnología,Smartwatch / audífonos,910,Disponible,64000,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,Precio sugerido 0/no claro en screenshot,,,Sí
+52,Forro 3d Para Sillin,Deportes,Deportes,Bicicleta / sillín,33,Disponible,13900,29900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,16000,1.1510791366906474,Sí
+53,Trampa Para Cucarachas,Salud,Hogar,Control plagas,475,Disponible,14900,44900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_2,,30000,2.0134228187919465,Sí
+54,Anillo De Vida,Bisutería,Bisutería,Anillo,72,Disponible,25900,39900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,14000,0.5405405405405406,Sí
+55,Corta Metales,Otro,Herramientas,Corte,7,Disponible,35900,48900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,13000,0.362116991643454,Sí
+56,Organizador De Ropa Y Calzado,Hogar,Hogar,Organizador,79,Disponible,41900,71900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,30000,0.7159904534606205,Sí
+57,Rodillera Termica Medheat Dropi Cup,Moda,Bienestar,Rodillera,213,Disponible,29900,59900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,30000,1.0033444816053512,Sí
+58,Cerca Practica,Otro,Hogar,Organizador / separador,8,Disponible,27900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,12000,0.43010752688172044,Sí
+59,Rodillo Removedor De Pelusa Y Polvo,Mascotas,Mascotas,Limpieza mascotas,4,Disponible,15900,35900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,20000,1.2578616352201257,Sí
+60,Robot Aspirador Inteligente Art,Tecnología,Hogar,Aspiradora,1248,Disponible,48900,78900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,30000,0.6134969325153374,Sí
+61,Cinta De Kinesiologia 1 Rollo 5cm X 5m,Salud,Bienestar,Kinesiología,38,Disponible,9900,19900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,10000,1.0101010101010102,Sí
+62,Toalla Para El Cabello,Moda,Belleza,Cabello,1095,Disponible,12900,32900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,20000,1.550387596899225,Sí
+63,Brazalete Hijo,Bisutería,Bisutería,Brazalete,1,Disponible,11900,32900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,21000,1.7647058823529411,Sí
+64,Guantes Indestructibles,Moda,Herramientas,Guantes,8,Disponible,43900,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,,,Sí
+65,Sandalias Ortopedicas Fashion,Moda,Moda,Calzado,118,Disponible,55900,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,,,Sí
+66,Juego Didactico Matematico,Otro,Juguetería,Didáctico,72,Disponible,29900,49900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,20000,0.6688963210702341,Sí
+67,Aretes Colibri,Bisutería,Bisutería,Aretes,43,Disponible,8900,19900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,11000,1.2359550561797752,Sí
+68,Lampara De Botella De Vino Recargable,Hogar,Hogar,Lámpara,7,Disponible,32900,62900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,30000,0.9118541033434651,Sí
+69,Robot Aspirador Y Humidicador Pro,Tecnología,Hogar,Aspiradora / humidificador,50,Disponible,48900,99900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,51000,1.0429447852760736,Sí
+70,Bikenda Laser Portatil,Salud,Bienestar,Láser portátil,1024,Disponible,12900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,27000,2.0930232558139537,Sí
+71,Malla De Ping Pong,Deportes,Deportes,Ping pong,12,Disponible,44900,64900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,20000,0.44543429844098,Sí
+72,Varillas Titan Plus X 2,Herramientas,Herramientas,Varillas,1,Disponible,11900,31900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,20000,1.680672268907563,Sí
+73,Enhebra,Otro,Hogar,Costura,26,Disponible,28900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,11000,0.3806228373702422,Sí
+74,Mini Enfriador De Aire,Salud,Hogar,Ventilador / aire,48,Disponible,45900,75900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,30000,0.6535947712418301,Sí
+75,Avion Radiocontrol,Juguetería,Juguetería,Control remoto,80,Disponible,81900,120900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,39000,0.47619047619047616,Sí
+76,Botines Viena,Moda,Moda,Calzado,201,Disponible,64900,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,,,Sí
+77,Brazalete Mama A Hijo,Bisutería,Bisutería,Brazalete,28,Disponible,12900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,27000,2.0930232558139537,Sí
+78,Collar Ave Fenix,Bisutería,Bisutería,Collar,6,Disponible,17900,29900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,12000,0.6703910614525139,Sí
+79,Par Bocina Electric Snail,Otro,Vehículos,Bocina,8,Disponible,15900,29900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,,14000,0.8805031446540881,Sí
+80,Par Corrector De Juanetes Ortopedicos X2,Salud,Bienestar,Corrector juanetes,,Visible sin stock capturado,24900,54900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_3,Stock no legible,30000,1.2048192771084338,Sí
+81,Ventilador Portatil Para Carro,Vehículos,Vehículos,Ventilador carro,2,Disponible,27900,47900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,20000,0.7168458781362007,Sí
+82,Extensor De Manubrio,Deportes,Deportes,Bicicleta,8,Disponible,41900,61900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,20000,0.477326968973747,Sí
+83,Bateria Repuesto Aspiradora Potente,Hogar,Hogar,Repuesto aspiradora,40,Disponible,22900,42900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,20000,0.8733624454148472,Sí
+84,Marker Pen Car X3 Und,Otro,Vehículos,Marcador carro,247,Disponible,17900,29900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,12000,0.6703910614525139,Sí
+85,Aspersor Tripo Twist,Hogar,Hogar,Jardín / aspersor,72,Disponible,38900,49900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,11000,0.2827763496143959,Sí
+86,Manguera A Presion Para Limpieza,Vehículos,Vehículos,Limpieza vehículo,331,Disponible,22900,52900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,30000,1.3100436681222707,Sí
+87,Cadena De Luces Led,Navidad,Hogar,Luces / decoración,198,Disponible,34900,59900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,25000,0.7163323782234957,Sí
+88,Maestro Ranura,Herramientas,Herramientas,Herramienta,118,Disponible,68900,89900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,21000,0.3047895500725689,Sí
+89,Bolso Pocket Pro,Moda,Moda,Bolso,155,Disponible,44900,69900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,25000,0.5567928730512249,Sí
+90,Cepillo De Mascotas A Vapor,Mascotas,Mascotas,Cepillo,12,Disponible,29900,48900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,19000,0.6354515050167224,Sí
+91,Soporte Para Pulidora,Herramientas,Herramientas,Soporte,52,Disponible,13900,33900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,20000,1.4388489208633093,Sí
+92,Mini Parrilla Bbq,Natural Home,Hogar,Parrilla,38,Disponible,49900,79900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,30000,0.6012024048096193,Sí
+93,Manta A La Virgen,Hogar,Hogar,Manta / decoración,3,Disponible,29900,65900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,36000,1.2040133779264215,Sí
+94,Quemador De Grasa Lemme Burn,Salud,Bienestar,Suplemento / quemador,529,Disponible,24900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,15000,0.6024096385542169,Sí
+95,Plantilla En Gel Mujer,Moda,Bienestar,Plantilla,268,Disponible,13900,33900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,20000,1.4388489208633093,Sí
+96,Pulsera De Roca De Lava 7 Chakras,Bisutería,Bisutería,Pulsera,32,Disponible,11900,31900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,20000,1.680672268907563,Sí
+97,Masajeador Cervical Electrico Recargable,Tecnología,Bienestar,Masajeador cervical,4939,Disponible,12900,42900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,30000,2.3255813953488373,Sí
+98,Body Sin Manga Con Escote Cuadrado,Moda,Moda,Ropa,1030,Disponible,25900,89900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,64000,2.471042471042471,Sí
+99,Protesis Dental,Salud,Bienestar,Dental,816,Disponible,12900,29900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,17000,1.317829457364341,Sí
+100,Banda Antifebre,Salud,Bienestar,Cuidado infantil,826,Disponible,9900,39900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,30000,3.0303030303030303,Sí
+101,Blanqueador Dental Avanzado,Belleza,Belleza,Dental,70,Disponible,12900,29900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,17000,1.317829457364341,Sí
+102,Camisa Del Salvador,Moda,Moda,Ropa,1,Disponible,35900,52900,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,17000,0.4735376044568245,Sí
+103,Limpiador De Oidos,Belleza,Belleza,Oídos,369,Disponible,12900,42900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,30000,2.3255813953488373,Sí
+104,Flotador Bebe,Bebé,Bebé,Flotador,22,Disponible,22900,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,,,Sí
+105,Zapatos Vittoria,Moda,Moda,Calzado,110,Disponible,65900,,Variable,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,,,Sí
+106,Led Tactil Inalambrica Para Coche,Tecnología,Vehículos,Luz vehículo,546,Disponible,11900,31900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,,20000,1.680672268907563,Sí
+107,Soporte Mag,Hogar,Hogar,Soporte,,Visible sin stock capturado,45900,65900,No visible,Exclusivo,STOCKEADO + ANDREY BUSINESS,catalogo_4,Stock no legible,20000,0.4357298474945534,Sí

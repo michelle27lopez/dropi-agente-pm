@@ -1,0 +1,15 @@
+﻿Dato faltante,Nivel,Cómo obtenerlo,Estado,Notas
+Productos públicos vs privados,Proveedor,Export / query de catálogo,Pendiente,Validar si parte del catálogo no aparece en feed.
+Productos activos vs agotados,Proveedor,Data de catálogo,Pendiente,
+Productos con al menos 1 orden,Producto,Data de órdenes por SKU/producto,Pendiente,
+Órdenes y GMV por producto,Producto,Data transaccional,Pendiente,
+Órdenes y GMV por categoría,Categoría,Cruce catálogo + órdenes,Pendiente,
+Concentración top productos,Proveedor,Top SKU por órdenes/GMV,Pendiente,
+Tasa producto creado → primera orden,Producto,Fecha creación + primera orden,Pendiente,
+Reclamos/devoluciones por producto,Producto,Postventa / tickets / devoluciones,Pendiente,
+Cancelaciones por producto,Producto,Data órdenes canceladas,Pendiente,
+Dropshippers activos por producto,Producto,Data de órdenes por dropshipper,Pendiente,
+Margen real por producto,Producto,Precio proveedor + precio venta final real,Pendiente,
+Calidad de imagen,Producto,Revisión manual de detalle,Pendiente,
+Calidad de descripción,Producto,Revisión manual de detalle,Pendiente,
+Garantía visible / política,Producto,Revisión manual de detalle,Pendiente,

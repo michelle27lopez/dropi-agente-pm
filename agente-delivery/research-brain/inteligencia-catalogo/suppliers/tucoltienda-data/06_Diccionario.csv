@@ -1,0 +1,13 @@
+﻿Campo,Definición
+Producto visible,Nombre tal como se captura del pantallazo del catálogo visible.
+Categoría final,Categoría interpretada a partir del nombre del producto y/o categoría visible.
+Subcategoría interpretada,Lectura más granular del tipo de producto.
+Categoría visible plataforma,"Categoría que aparezca explícitamente en la card del producto, si fue capturada."
+Etiqueta visible,"Etiqueta del proveedor o producto: Verificado, Premium, Exclusivo, etc."
+Tipo visible,Simple / Variable si se ve en la card o detalle.
+Stock visible,Stock observado en la card o detalle. En lote puede quedar vacío si no se transcribió.
+Precio proveedor,Precio de proveedor observado.
+Precio sugerido,Precio sugerido observado.
+Fuente screenshot,Pantallazo usado como fuente de captura.
+Descripción excede screenshot,Sí cuando el contenido sigue por debajo del pantallazo y requiere scroll.
+Texto mal renderizado / JSON,Sí cuando la descripción aparece como estructura JSON o texto sin procesar.
