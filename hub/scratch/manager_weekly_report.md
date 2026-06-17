@@ -90,7 +90,7 @@ graph TD
         D_CP[Catálogo Preseleccionado]
         D_DD[Dinámicas Descuentos]
         D_CHP[Conexión Chateapro]
-        D_FAC[Facturación]
+        D_CHC[Categorización Catálogo]
     end
 
     subgraph Executing [2. En Ejecución / Tech]
@@ -104,17 +104,22 @@ graph TD
         L_NEG[Negociaciones]
     end
 
+    subgraph Terminado [4. Completado / Terminado]
+        T_FAC[Facturación]
+    end
+
     classDef disc fill:#4285f4,stroke:#333,stroke-width:1px,color:#fff;
     classDef exec fill:#8e44ad,stroke:#333,stroke-width:1px,color:#fff;
     classDef done fill:#34a853,stroke:#333,stroke-width:1px,color:#fff;
 
-    class D_IC,D_CP,D_DD,D_CHP,D_FAC disc;
+    class D_IC,D_CP,D_DD,D_CHP,D_CHC disc;
     class E_COM,E_IND,E_TTV,E_CHP exec;
-    class L_NEG done;
+    class L_NEG,T_FAC done;
 ```
 | Proyecto | Estado | Owner | Avance y Próximo Hito |
 |---|---|---|---|
 | 🔵 **Inteligencia / Data de Catálogo** | `Discovery` | Jaime Guevara | Investigación manual de los 67 suppliers de mayor rendimiento en Dropi. Objetivo: identificar patrones de catálogo que expliquen la productividad (órdenes/producto). Metodología: pantallazos de perfil + catálogo + detalle producto a producto. Avance: 5 investigados, 1 excluido (marca). Hallazgos iniciales: especialización > tamaño, operación confiable compensa ficha débil, catálogo privado puede ser gap crítico, JSON roto es issue de plataforma (HTML→texto plano). Ángulo de producto validado con jefe: no mostrar top sellers (canibaliza mercado) — encontrar productos ganadores sin movimiento con señal de mercado. |
+| 🔵 **Categorización y Homologación de Catálogo** | `Discovery` | Jaime Guevara | Planteamiento de la Fase 1 (Taxonomía y Prototipo) completado. Se diseñó un simulador de homologación mapeando las categorías planas de Dropi a un árbol de 4 niveles basado en Mercado Libre. Próximos pasos: subir este research a Cellboard para opiniones del equipo, realizar piloto conceptual de categorización manual de 20 productos para validar la taxonomía y, tras su aprobación final (cierre de Fase 1), pasar a la Fase 2 (recategorización masiva en Dropi). |
 | 🔵 **Cellboard** | `Discovery` | Jaime Guevara | Visión de producto para organizar la conversación de la célula Supplier Success alrededor de activación de suppliers, salud de catálogo, catálogo trend, combos y métricas reales de crecimiento. |
 | 🔵 **Supplier Data & Dashboard** | `Discovery` | Jaime Guevara | Levantamiento de data estructurada de suppliers (cuantitativa y cualitativa) para construir un dashboard centralizado que facilite la toma de decisiones basada en puntos de dolor. |
 | 🔵 **Outcome Signal** | `Discovery` | Jaime Guevara | Módulo de medición de efectividad de proyectos implementados. Conecta fuentes de comportamiento de usuario como (UserPilot) para evaluar si los proyectos lograron adopción, conversión y los outcomes esperados. |

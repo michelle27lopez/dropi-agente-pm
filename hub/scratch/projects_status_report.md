@@ -6,6 +6,7 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 | Proyecto | Estado | Owner | Resumen |
 |---|---|---|---|
 | **Inteligencia / Data de Catálogo** | `Discovery` | Jaime Guevara | Investigación manual de los 67 suppliers de mayor rendimiento en Dropi. Objetivo: identificar patrones de catálogo que expliquen la productividad (órdenes/producto). Metodología: pantallazos de perfil + catálogo + detalle producto a producto. Avance: 5 investigados, 1 excluido (marca). Hallazgos iniciales: especialización > tamaño, operación confiable compensa ficha débil, catálogo privado puede ser gap crítico, JSON roto es issue de plataforma (HTML→texto plano). Ángulo de producto validado con jefe: no mostrar top sellers (canibaliza mercado) — encontrar productos ganadores sin movimiento con señal de mercado. |
+| **Categorización y Homologación de Catálogo** | `Discovery` | Jaime Guevara | Planteamiento de la Fase 1 (Taxonomía y Prototipo) completado. Se diseñó un simulador de homologación mapeando las categorías planas de Dropi a un árbol de 4 niveles basado en Mercado Libre. Próximos pasos: subir este research a Cellboard para opiniones del equipo, realizar piloto conceptual de categorización manual de 20 productos para validar la taxonomía y, tras su aprobación final (cierre de Fase 1), pasar a la Fase 2 (recategorización masiva en Dropi). |
 | **Cellboard** | `Discovery` | Jaime Guevara | Visión de producto para organizar la conversación de la célula Supplier Success alrededor de activación de suppliers, salud de catálogo, catálogo trend, combos y métricas reales de crecimiento. |
 | **Supplier Data & Dashboard** | `Discovery` | Jaime Guevara | Levantamiento de data estructurada de suppliers (cuantitativa y cualitativa) para construir un dashboard centralizado que facilite la toma de decisiones basada en puntos de dolor. |
 | **Outcome Signal** | `Discovery` | Jaime Guevara | Módulo de medición de efectividad de proyectos implementados. Conecta fuentes de comportamiento de usuario como (UserPilot) para evaluar si los proyectos lograron adopción, conversión y los outcomes esperados. |
@@ -35,7 +36,7 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 - `[Open]` **Pedir top productos vendidos por semana a Miguel** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
 - `[Open]` **Recibir transcripciones de entrevistas de dropshippers (Maria)** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
 - `[Open]` **Agregar catálogo privado al data request** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
-- `[Open]` **Evaluar proyecto de categorización de productos Dropi** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
+- `[x]` **Evaluar proyecto de categorización de productos Dropi** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
 
 ### Riesgos Activos
 - `[Open]` **Data del catálogo dispersa o no estructurada** (Impacto: `Medium`, Probabilidad: `High`) — *Mitigación:* Comenzar mapeando qué data existe, dónde está y qué calidad tiene antes de analizar
@@ -49,6 +50,17 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 - `[Aprobado]` **Contexto — Inteligencia / Data de Catálogo** (Business Context) — Versión: 1, Actualizado: 2026-05-20T00:00:00+00:00
 - `[Aprobado]` **Estado deseado — Inteligencia / Data de Catálogo** (TOBE) — Versión: 1, Actualizado: 2026-05-20T00:00:00+00:00
 - `[Aprobado]` **Qué analizar — Inteligencia / Data de Catálogo** (Open Question) — Versión: 1, Actualizado: 2026-05-20T00:00:00+00:00
+
+---
+
+## Categorización y Homologación de Catálogo (Estado: `Discovery`) 
+*Planteamiento de la Fase 1 (Taxonomía y Prototipo de Homologación) finalizado mediante un simulador dinámico que mapea las categorías planas de Dropi a un árbol de 4 niveles basado en Mercado Libre Colombia (Familia ➔ Categoría ➔ Subcategoría ➔ Tipo de Producto). El objetivo es ordenar la clasificación y resolver el problema de fragmentación del catálogo.*
+
+### Compromisos Pendientes (Followups)
+- `[Open]` **Publicar research de taxonomía de 4 niveles en Cellboard** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
+- `[Open]` **Realizar piloto conceptual manual de categorización de 20 productos** — Responsable: *Jaime Guevara + Mich* (Límite: Sin fecha)
+- `[Open]` **Aprobación final de la taxonomía (Cierre de Fase 1)** — Responsable: *Célula* (Límite: Sin fecha)
+- `[Open]` **Planificar la Fase 2: recategorización de todos los productos en Dropi** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
 
 ---
 
