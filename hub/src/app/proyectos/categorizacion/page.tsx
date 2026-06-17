@@ -26,6 +26,7 @@ interface DropiCategoryRaw {
 interface TargetCategory {
   l1: string;
   l2: string;
+  l3?: string;
   alert?: "typo" | "campaign" | "trash" | null;
   suggestedFix?: string;
 }
@@ -33,278 +34,555 @@ interface TargetCategory {
 // Define the mapping dictionary from chaotic raw names to clean unifications
 const DROPI_MAPPING_DICT: Record<string, TargetCategory> = {
   // Hogar / Cocina / Jardin
-  "HOGAR": { l1: "Hogar y Decoración", l2: "Hogar General" },
-  "NATURAL HOME": { l1: "Hogar y Decoración", l2: "Hogar General" },
-  "HOGAR Y DECORACION": { l1: "Hogar y Decoración", l2: "Decoración y Diseño" },
-  "HOGAT": { l1: "Hogar y Decoración", l2: "Hogar General", alert: "typo", suggestedFix: "HOGAR" },
-  "MUEBLES": { l1: "Hogar y Decoración", l2: "Muebles y Mobiliario" },
-  "JARDIN": { l1: "Hogar y Decoración", l2: "Jardín y Exteriores" },
-  "JARDINERIA": { l1: "Hogar y Decoración", l2: "Jardín y Exteriores" },
-  "ACCESORIOS HOGAR": { l1: "Hogar y Decoración", l2: "Hogar General" },
-  "DECORACION PARA EL HOGAR": { l1: "Hogar y Decoración", l2: "Decoración y Diseño" },
-  "DECORACION": { l1: "Hogar y Decoración", l2: "Decoración y Diseño" },
-  "ESCRITORIOS": { l1: "Hogar y Decoración", l2: "Muebles y Mobiliario" },
-  "ESCRITORIOS Y MUEBLES": { l1: "Hogar y Decoración", l2: "Muebles y Mobiliario" },
-  "COCINA": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios" },
-  "COCINA Y ELECTRODOMESTICOS": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios" },
-  "UTENSLIOS DE COOKINA": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios", alert: "typo", suggestedFix: "UTENSILOS DE COCINA" },
-  "UTENSILIOS DE COCINA": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios" },
-  "LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
-  "HIGIENE Y LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
-  "ASEO": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
-  "ASEO Y BIENESTAR": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
-  "HIGIENE": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
-  "HIGIENE LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
-  "LIMPIADOR MAGNETICO": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
+  "HOGAR": { l1: "Hogar y Decoración", l2: "Hogar General", l3: "Otros Artículos de Hogar" },
+  "NATURAL HOME": { l1: "Hogar y Decoración", l2: "Hogar General", l3: "Otros Artículos de Hogar" },
+  "HOGAR Y DECORACION": { l1: "Hogar y Decoración", l2: "Decoración y Diseño", l3: "Adornos de Mesa y Pared" },
+  "HOGAT": { l1: "Hogar y Decoración", l2: "Hogar General", l3: "Otros Artículos de Hogar", alert: "typo", suggestedFix: "HOGAR" },
+  "MUEBLES": { l1: "Hogar y Decoración", l2: "Muebles y Mobiliario", l3: "Muebles de Sala" },
+  "JARDIN": { l1: "Hogar y Decoración", l2: "Jardín y Exteriores", l3: "Herramientas de Jardinería" },
+  "JARDINERIA": { l1: "Hogar y Decoración", l2: "Jardín y Exteriores", l3: "Herramientas de Jardinería" },
+  "ACCESORIOS HOGAR": { l1: "Hogar y Decoración", l2: "Hogar General", l3: "Otros Artículos de Hogar" },
+  "DECORACION PARA EL HOGAR": { l1: "Hogar y Decoración", l2: "Decoración y Diseño", l3: "Adornos de Mesa y Pared" },
+  "DECORACION": { l1: "Hogar y Decoración", l2: "Decoración y Diseño", l3: "Adornos de Mesa y Pared" },
+  "ESCRITORIOS": { l1: "Hogar y Decoración", l2: "Muebles y Mobiliario", l3: "Muebles de Oficina y Escritorios" },
+  "ESCRITORIOS Y MUEBLES": { l1: "Hogar y Decoración", l2: "Muebles y Mobiliario", l3: "Muebles de Oficina y Escritorios" },
+  "COCINA": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios", l3: "Vajilla y Servir" },
+  "COCINA Y ELECTRODOMESTICOS": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios", l3: "Electrodomésticos de Cocina" },
+  "UTENSLIOS DE COOKINA": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios", l3: "Utensilios de Preparación", alert: "typo", suggestedFix: "UTENSILIOS DE COCINA" },
+  "UTENSILIOS DE COCINA": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios", l3: "Utensilios de Preparación" },
+  "LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar", l3: "Escobas, Mopas y Limpiadores" },
+  "HIGIENE Y LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar", l3: "Escobas, Mopas y Limpiadores" },
+  "ASEO": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar", l3: "Escobas, Mopas y Limpiadores" },
+  "ASEO Y BIENESTAR": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar", l3: "Escobas, Mopas y Limpiadores" },
+  "HIGIENE": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar", l3: "Escobas, Mopas y Limpiadores" },
+  "HIGIENE LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar", l3: "Escobas, Mopas y Limpiadores" },
+  "LIMPIADOR MAGNETICO": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar", l3: "Escobas, Mopas y Limpiadores" },
 
   // Mascotas
-  "MASCOTAS": { l1: "Mascotas", l2: "Mascotas General" },
+  "MASCOTAS": { l1: "Mascotas", l2: "Mascotas General", l3: "Accesorios de Paseo y Arnés" },
 
   // Tecnología
-  "TECNOLOGIA": { l1: "Tecnología y Electrónica", l2: "Tecnología General" },
-  "TEGNOLOGIA": { l1: "Tecnología y Electrónica", l2: "Tecnología General", alert: "typo", suggestedFix: "TECNOLOGIA" },
-  "TECNOLOGIA Y ELECTRONICA": { l1: "Tecnología y Electrónica", l2: "Tecnología General" },
-  "ELECTRONICA Y TECNOLOGIA": { l1: "Tecnología y Electrónica", l2: "Tecnología General" },
-  "ELECTRONICA": { l1: "Tecnología y Electrónica", l2: "Electrónica General" },
-  "ELECTRONICOS": { l1: "Tecnología y Electrónica", l2: "Electrónica General" },
-  "GADGETS": { l1: "Tecnología y Electrónica", l2: "Gadgets y Novedades" },
-  "GATGETS": { l1: "Tecnología y Electrónica", l2: "Gadgets y Novedades", alert: "typo", suggestedFix: "GADGETS" },
-  "VIDEOJUEGOS": { l1: "Tecnología y Electrónica", l2: "Videojuegos y Consolas" },
+  "TECNOLOGIA": { l1: "Tecnología y Electrónica", l2: "Tecnología General", l3: "Novedades Tecnológicas Varias" },
+  "TEGNOLOGIA": { l1: "Tecnología y Electrónica", l2: "Tecnología General", l3: "Novedades Tecnológicas Varias", alert: "typo", suggestedFix: "TECNOLOGIA" },
+  "TECNOLOGIA Y ELECTRONICA": { l1: "Tecnología y Electrónica", l2: "Tecnología General", l3: "Novedades Tecnológicas Varias" },
+  "ELECTRONICA Y TECNOLOGIA": { l1: "Tecnología y Electrónica", l2: "Tecnología General", l3: "Novedades Tecnológicas Varias" },
+  "ELECTRONICA": { l1: "Tecnología y Electrónica", l2: "Electrónica General", l3: "Otros Artículos Electrónicos" },
+  "ELECTRONICOS": { l1: "Tecnología y Electrónica", l2: "Electrónica General", l3: "Otros Artículos Electrónicos" },
+  "GADGETS": { l1: "Tecnología y Electrónica", l2: "Gadgets y Novedades", l3: "Smartwatches y Pulseras Inteligentes" },
+  "GATGETS": { l1: "Tecnología y Electrónica", l2: "Gadgets y Novedades", l3: "Smartwatches y Pulseras Inteligentes", alert: "typo", suggestedFix: "GADGETS" },
+  "VIDEOJUEGOS": { l1: "Tecnología y Electrónica", l2: "Videojuegos y Consolas", l3: "Controles y Joysticks" },
 
   // Belleza / Cuidado
-  "BELLEZA": { l1: "Belleza y Cuidado Personal", l2: "Belleza General" },
-  "BELLEZA Y CUIDADO PERSONAL": { l1: "Belleza y Cuidado Personal", l2: "Belleza General" },
-  "BELLEZA COSMETICA": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos" },
-  "MAQUILLAJE Y BELLEZA": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos" },
-  "COSMETICOS": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos" },
-  "MAQUILLAJE": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos" },
-  "COSMETICOS Y PERFUMERIA": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos" },
-  "PERFUMERIA": { l1: "Belleza y Cuidado Personal", l2: "Perfumería y Fragancias" },
-  "PERFUMES": { l1: "Belleza y Cuidado Personal", l2: "Perfumería y Fragancias" },
-  "CUIDADO PERSONAL": { l1: "Belleza y Cuidado Personal", l2: "Higiene y Cuidado Personal" },
-  "CUIDADO": { l1: "Belleza y Cuidado Personal", l2: "Higiene y Cuidado Personal" },
-  "CAPILAR": { l1: "Belleza y Cuidado Personal", l2: "Cuidado Capilar" },
-  "CORPORAL": { l1: "Belleza y Cuidado Personal", l2: "Cuidado Corporal" },
-  "FAJAS": { l1: "Belleza y Cuidado Personal", l2: "Fajas y Ropa Control" },
+  "BELLEZA": { l1: "Belleza y Cuidado Personal", l2: "Belleza General", l3: "Organizadores de Maquillaje" },
+  "BELLEZA Y CUIDADO PERSONAL": { l1: "Belleza y Cuidado Personal", l2: "Belleza General", l3: "Organizadores de Maquillaje" },
+  "BELLEZA COSMETICA": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos", l3: "Maquillaje de Ojos y Rostro" },
+  "MAQUILLAJE Y BELLEZA": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos", l3: "Maquillaje de Ojos y Rostro" },
+  "COSMETICOS": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos", l3: "Maquillaje de Ojos y Rostro" },
+  "MAQUILLAJE": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos", l3: "Maquillaje de Ojos y Rostro" },
+  "COSMETICOS Y PERFUMERIA": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos", l3: "Maquillaje de Ojos y Rostro" },
+  "PERFUMERIA": { l1: "Belleza y Cuidado Personal", l2: "Perfumería y Fragancias", l3: "Perfumes de Dama" },
+  "PERFUMES": { l1: "Belleza y Cuidado Personal", l2: "Perfumería y Fragancias", l3: "Perfumes de Dama" },
+  "CUIDADO PERSONAL": { l1: "Belleza y Cuidado Personal", l2: "Higiene y Cuidado Personal", l3: "Rasuradoras y Cortadoras de Barba" },
+  "CUIDADO": { l1: "Belleza y Cuidado Personal", l2: "Higiene y Cuidado Personal", l3: "Rasuradoras y Cortadoras de Barba" },
+  "CAPILAR": { l1: "Belleza y Cuidado Personal", l2: "Cuidado Capilar", l3: "Tratamientos y Aceites Capilares" },
+  "CORPORAL": { l1: "Belleza y Cuidado Personal", l2: "Cuidado Corporal", l3: "Masajeadores Corporales" },
+  "FAJAS": { l1: "Belleza y Cuidado Personal", l2: "Fajas y Ropa Control", l3: "Fajas Reductoras Femeninas" },
 
   // Salud / Bienestar
-  "SALUD": { l1: "Salud y Bienestar", l2: "Salud General" },
-  "BIENESTAR": { l1: "Salud y Bienestar", l2: "Salud General" },
-  "BIENESTAR Y SALUD": { l1: "Salud y Bienestar", l2: "Salud General" },
-  "SALUD Y BIENESTAR": { l1: "Salud y Bienestar", l2: "Salud General" },
-  "SALUD BIENESTAR NATURAL": { l1: "Salud y Bienestar", l2: "Salud General" },
-  "SALUD Y CUIDADO PERSONAL": { l1: "Salud y Bienestar", l2: "Salud General" },
-  "SALUD BIENESTAR NATURAL ": { l1: "Salud y Bienestar", l2: "Salud General" },
-  "SALUD NUTRICION": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición" },
-  "NUTRICION": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición" },
-  "SUPLEMENTO": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición" },
-  "SUPLEMENTOS": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición" },
-  "ENCAPSULADOS": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición" },
-  "VAPORIZADORES": { l1: "Salud y Bienestar", l2: "Bienestar General" },
-  "PODS": { l1: "Salud y Bienestar", l2: "Bienestar General" },
+  "SALUD": { l1: "Salud y Bienestar", l2: "Salud General", l3: "Correctores de Postura" },
+  "BIENESTAR": { l1: "Salud y Bienestar", l2: "Salud General", l3: "Correctores de Postura" },
+  "BIENESTAR Y SALUD": { l1: "Salud y Bienestar", l2: "Salud General", l3: "Correctores de Postura" },
+  "SALUD Y BIENESTAR": { l1: "Salud y Bienestar", l2: "Salud General", l3: "Correctores de Postura" },
+  "SALUD BIENESTAR NATURAL": { l1: "Salud y Bienestar", l2: "Salud General", l3: "Correctores de Postura" },
+  "SALUD Y CUIDADO PERSONAL": { l1: "Salud y Bienestar", l2: "Salud General", l3: "Correctores de Postura" },
+  "SALUD BIENESTAR NATURAL ": { l1: "Salud y Bienestar", l2: "Salud General", l3: "Correctores de Postura" },
+  "SALUD NUTRICION": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición", l3: "Vitaminas y Minerales de Venta Libre" },
+  "NUTRICION": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición", l3: "Vitaminas y Minerales de Venta Libre" },
+  "SUPLEMENTO": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición", l3: "Vitaminas y Minerales de Venta Libre" },
+  "SUPLEMENTOS": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición", l3: "Vitaminas y Minerales de Venta Libre" },
+  "ENCAPSULADOS": { l1: "Salud y Bienestar", l2: "Suplementos y Nutrición", l3: "Vitaminas y Minerales de Venta Libre" },
+  "VAPORIZADORES": { l1: "Salud y Bienestar", l2: "Bienestar General", l3: "Vaporizadores Personales y Pods" },
+  "PODS": { l1: "Salud y Bienestar", l2: "Bienestar General", l3: "Vaporizadores Personales y Pods" },
 
   // Adultos
-  "SEX SHOP": { l1: "Productos para Adultos", l2: "Bienestar Sexual" },
-  "SEXSHOP": { l1: "Productos para Adultos", l2: "Bienestar Sexual" },
-  "SALUD SEXUAL": { l1: "Productos para Adultos", l2: "Bienestar Sexual" },
-  "BIENESTAR SEXUAL": { l1: "Productos para Adultos", l2: "Bienestar Sexual" },
-  "COSMETOLOGIA EROTICA": { l1: "Productos para Adultos", l2: "Bienestar Sexual" },
-  "LUBRICANTES": { l1: "Productos para Adultos", l2: "Bienestar Sexual" },
-  "ACEITES PARA MASAJES": { l1: "Productos para Adultos", l2: "Bienestar Sexual" },
-  "ADULTO": { l1: "Productos para Adultos", l2: "Bienestar Sexual" },
-  "ADULTOS": { l1: "Productos para Adultos", l2: "Bienestar Sexual" },
+  "SEX SHOP": { l1: "Productos para Adultos", l2: "Bienestar Sexual", l3: "Lubricantes y Geles Íntimos" },
+  "SEXSHOP": { l1: "Productos para Adultos", l2: "Bienestar Sexual", l3: "Lubricantes y Geles Íntimos" },
+  "SALUD SEXUAL": { l1: "Productos para Adultos", l2: "Bienestar Sexual", l3: "Preservativos y Barreras de Protección" },
+  "BIENESTAR SEXUAL": { l1: "Productos para Adultos", l2: "Bienestar Sexual", l3: "Preservativos y Barreras de Protección" },
+  "COSMETOLOGIA EROTICA": { l1: "Productos para Adultos", l2: "Bienestar Sexual", l3: "Estimuladores y Geles Sensibilizantes" },
+  "LUBRICANTES": { l1: "Productos para Adultos", l2: "Bienestar Sexual", l3: "Lubricantes y Geles Íntimos" },
+  "ACEITES PARA MASAJES": { l1: "Productos para Adultos", l2: "Bienestar Sexual", l3: "Lubricantes y Geles Íntimos" },
+  "ADULTO": { l1: "Productos para Adultos", l2: "Bienestar Sexual", l3: "Lubricantes y Geles Íntimos" },
+  "ADULTOS": { l1: "Productos para Adultos", l2: "Bienestar Sexual", l3: "Lubricantes y Geles Íntimos" },
 
   // Moda / Calzado
-  "MODA": { l1: "Moda y Calzado", l2: "Moda General" },
-  "MODA Y ACCESORIOS": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios" },
-  "ROPA": { l1: "Moda y Calzado", l2: "Prendas de Vestir" },
-  "CALZADO": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
-  "ZAPATOS": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
-  "TENIS": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
-  "TENIS NACIONALES": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
-  "SANDALIAS": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
-  "MOCASINES": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
-  "BOTINES": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
-  "ZAPATOS CASUALES MUJER": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
-  "CASUAL": { l1: "Moda y Calzado", l2: "Prendas de Vestir" },
-  "MUJER": { l1: "Moda y Calzado", l2: "Ropa Femenina (Dama)" },
-  "ACCESORIOS DAMA": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios" },
-  "DAMA": { l1: "Moda y Calzado", l2: "Ropa Femenina (Dama)" },
-  "CABALLERO": { l1: "Moda y Calzado", l2: "Ropa Masculina (Caballero)" },
-  "BOLSOS": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios" },
-  "BOLSOS MORRALES": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios" },
-  "BISUTERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes" },
-  "BISTURERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes", alert: "typo", suggestedFix: "BISUTERIA" },
-  "BISUTERIA Y JOYERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes" },
-  "JOYERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes" },
+  "MODA": { l1: "Moda y Calzado", l2: "Moda General", l3: "Gafas de Sol" },
+  "MODA Y ACCESORIOS": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios", l3: "Carteras de Dama y Crossbody" },
+  "ROPA": { l1: "Moda y Calzado", l2: "Ropa Femenina (Dama)", l3: "Blusas y Camisetas" },
+  "CALZADO": { l1: "Moda y Calzado", l2: "Calzado y Zapatos", l3: "Tenis y Zapatillas Deportivas" },
+  "ZAPATOS": { l1: "Moda y Calzado", l2: "Calzado y Zapatos", l3: "Tenis y Zapatillas Deportivas" },
+  "TENIS": { l1: "Moda y Calzado", l2: "Calzado y Zapatos", l3: "Tenis y Zapatillas Deportivas" },
+  "TENIS NACIONALES": { l1: "Moda y Calzado", l2: "Calzado y Zapatos", l3: "Tenis y Zapatillas Deportivas" },
+  "SANDALIAS": { l1: "Moda y Calzado", l2: "Calzado y Zapatos", l3: "Sandalias y Chanclas" },
+  "MOCASINES": { l1: "Moda y Calzado", l2: "Calzado y Zapatos", l3: "Zapatos Casuales y Mocasines" },
+  "BOTINES": { l1: "Moda y Calzado", l2: "Calzado y Zapatos", l3: "Botas y Botines" },
+  "ZAPATOS CASUALES MUJER": { l1: "Moda y Calzado", l2: "Calzado y Zapatos", l3: "Zapatos Casuales y Mocasines" },
+  "CASUAL": { l1: "Moda y Calzado", l2: "Moda General", l3: "Gafas de Sol" },
+  "MUJER": { l1: "Moda y Calzado", l2: "Ropa Femenina (Dama)", l3: "Blusas y Camisetas" },
+  "ACCESORIOS DAMA": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios", l3: "Carteras de Dama y Crossbody" },
+  "DAMA": { l1: "Moda y Calzado", l2: "Ropa Femenina (Dama)", l3: "Blusas y Camisetas" },
+  "CABALLERO": { l1: "Moda y Calzado", l2: "Ropa Masculina (Caballero)", l3: "Camisas y Camisetas" },
+  "BOLSOS": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios", l3: "Carteras de Dama y Crossbody" },
+  "BOLSOS MORRALES": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios", l3: "Morrales Escolares y Universitarios" },
+  "BISUTERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes", l3: "Bisutería de Acero y Fantasía" },
+  "BISTURERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes", l3: "Bisutería de Acero y Fantasía", alert: "typo", suggestedFix: "BISUTERIA" },
+  "BISUTERIA Y JOYERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes", l3: "Bisutería de Acero y Fantasía" },
+  "JOYERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes", l3: "Cadenas, Pulseras y Aretes" },
 
   // Bebes / Niños / Juguetes
-  "BEBES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
-  "BEBE": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
-  "BEBES Y NINOS": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
-  "NINOS": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
-  "MUNDO INFANTIL": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
-  "INFANTIL": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
-  "INFANTIL Y BEBES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
-  "INFANTILES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
-  "JUGUETES": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos" },
-  "JUGUETERIA": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos" },
-  "JUGUETES NINOS": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos" },
-  "JUGUETE": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos" },
-  "JUGUETES Y ENTRETENIMIENTO": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos" },
-  "JUEGOS": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos" },
+  "BEBES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)", l3: "Higiene del Bebé y Baño" },
+  "BEBE": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)", l3: "Higiene del Bebé y Baño" },
+  "BEBES Y NINOS": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)", l3: "Higiene del Bebé y Baño" },
+  "NINOS": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)", l3: "Higiene del Bebé y Baño" },
+  "MUNDO INFANTIL": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)", l3: "Higiene del Bebé y Baño" },
+  "INFANTIL": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)", l3: "Higiene del Bebé y Baño" },
+  "INFANTIL Y BEBES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)", l3: "Higiene del Bebé y Baño" },
+  "INFANTILES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)", l3: "Higiene del Bebé y Baño" },
+  "JUGUETES": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos", l3: "Juguetes Didácticos y de Madera" },
+  "JUGUETERIA": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos", l3: "Juguetes Didácticos y de Madera" },
+  "JUGUETES NINOS": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos", l3: "Juguetes Didácticos y de Madera" },
+  "JUGUETE": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos", l3: "Juguetes Didácticos y de Madera" },
+  "JUGUETES Y ENTRETENIMIENTO": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos", l3: "Juguetes Didácticos y de Madera" },
+  "JUEGOS": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos", l3: "Juegos de Mesa y Rompecabezas" },
 
   // Deportes / Outdoor
-  "DEPORTES": { l1: "Deportes y Outdoor", l2: "Deportes General" },
-  "DEPORTE": { l1: "Deportes y Outdoor", l2: "Deportes General" },
-  "DEPORTE Y FITNESS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness y Gimnasio" },
-  "FITNESS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness y Gimnasio" },
-  "FITENSS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness y Gimnasio", alert: "typo", suggestedFix: "FITNESS" },
-  "DEPORTIVO": { l1: "Deportes y Outdoor", l2: "Deportes General" },
-  "CAMPING": { l1: "Deportes y Outdoor", l2: "Camping y Pesca" },
-  "PESCA": { l1: "Deportes y Outdoor", l2: "Camping y Pesca" },
+  "DEPORTES": { l1: "Deportes y Outdoor", l2: "Deportes General", l3: "Protecciones Deportivas (Rodilleras/Coderas)" },
+  "DEPORTE": { l1: "Deportes y Outdoor", l2: "Deportes General", l3: "Protecciones Deportivas (Rodilleras/Coderas)" },
+  "DEPORTE Y FITNESS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness y Gimnasio", l3: "Bandas de Resistencia" },
+  "FITNESS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness y Gimnasio", l3: "Bandas de Resistencia" },
+  "FITENSS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness y Gimnasio", l3: "Bandas de Resistencia", alert: "typo", suggestedFix: "FITNESS" },
+  "DEPORTIVO": { l1: "Deportes y Outdoor", l2: "Deportes General", l3: "Protecciones Deportivas (Rodilleras/Coderas)" },
+  "CAMPING": { l1: "Deportes y Outdoor", l2: "Camping y Pesca", l3: "Linternas de Cabeza y Camping" },
+  "PESCA": { l1: "Deportes y Outdoor", l2: "Camping y Pesca", l3: "Artículos de Pesca" },
 
   // Automotriz
-  "VEHICULOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
-  "VEHICULO": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
-  "AUTOMOVIL": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
-  "AUTOMOVILES": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
-  "AUTOMOTRIZ": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
-  "ACCESORIOS PARA AUTOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
-  "ACCESORIOS DE CARROS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
-  "ACCESORIOS PARA VEHICULOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
-  "ACCESORIOS PARA VEHICULOS CARRO MOTO BICICLETA": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
-  "MOTOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "VEHICULOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Accesorios de Lujo para Auto" },
+  "VEHICULO": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Accesorios de Lujo para Auto" },
+  "AUTOMOVIL": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Accesorios de Lujo para Auto" },
+  "AUTOMOVILES": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Accesorios de Lujo para Auto" },
+  "AUTOMOTRIZ": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Accesorios de Lujo para Auto" },
+  "ACCESORIOS PARA AUTOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Accesorios de Lujo para Auto" },
+  "ACCESORIOS DE CARROS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Accesorios de Lujo para Auto" },
+  "ACCESORIOS PARA VEHICULOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Accesorios de Lujo para Auto" },
+  "ACCESORIOS PARA VEHICULOS CARRO MOTO BICICLETA": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Accesorios de Lujo para Auto" },
+  "MOTOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)", l3: "Cascos e Impermeables para Moto" },
 
   // Ferreteria / Herramientas
-  "FERRETERIA": { l1: "Ferretería y Herramientas", l2: "Ferretería General" },
-  "FERRETERIA Y CACHARRO": { l1: "Ferretería y Herramientas", l2: "Ferretería General" },
-  "HERRAMIENTAS": { l1: "Ferretería y Herramientas", l2: "Herramientas Manuales/Eléctricas" },
-  "BRICOLAJE Y HERRAMIENTAS": { l1: "Ferretería y Herramientas", l2: "Herramientas Manuales/Eléctricas" },
+  "FERRETERIA": { l1: "Ferretería y Herramientas", l2: "Ferretería General", l3: "Candados, Cerraduras y Cerrajería" },
+  "FERRETERIA Y CACHARRO": { l1: "Ferretería y Herramientas", l2: "Ferretería General", l3: "Candados, Cerraduras y Cerrajería" },
+  "HERRAMIENTAS": { l1: "Ferretería y Herramientas", l2: "Herramientas Manuales/Eléctricas", l3: "Taladros, Pulidoras y Soldadores" },
+  "BRICOLAJE Y HERRAMIENTAS": { l1: "Ferretería y Herramientas", l2: "Herramientas Manuales/Eléctricas", l3: "Taladros, Pulidoras y Soldadores" },
 
   // Otros / Oficina
-  "PAPELERIA Y OFICINA": { l1: "Otras Categorías", l2: "Papelería y Oficina" },
-  "PAPELERIA": { l1: "Otras Categorías", l2: "Papelería y Oficina" },
-  "OFICINA Y PAPELERIA": { l1: "Otras Categorías", l2: "Papelería y Oficina" },
-  "LIBROS": { l1: "Otras Categorías", l2: "Libros y Material Educativo" },
-  "ARTE": { l1: "Otras Categorías", l2: "Arte, Artesanías y Hobbies" },
-  "ARTE Y ARTESANIA": { l1: "Otras Categorías", l2: "Arte, Artesanías y Hobbies" },
-  "ARTESANIAS": { l1: "Otras Categorías", l2: "Arte, Artesanías y Hobbies" },
+  "PAPELERIA Y OFICINA": { l1: "Otras Categorías", l2: "Papelería y Oficina", l3: "Cuadernos, Agendas y Libretas" },
+  "PAPELERIA": { l1: "Otras Categorías", l2: "Papelería y Oficina", l3: "Cuadernos, Agendas y Libretas" },
+  "OFICINA Y PAPELERIA": { l1: "Otras Categorías", l2: "Papelería y Oficina", l3: "Cuadernos, Agendas y Libretas" },
+  "LIBROS": { l1: "Otras Categorías", l2: "Libros y Material Educativo", l3: "Libros Físicos de Interés General" },
+  "ARTE": { l1: "Otras Categorías", l2: "Arte, Artesanías y Hobbies", l3: "Kits de Pintura por Números" },
+  "ARTE Y ARTESANIA": { l1: "Otras Categorías", l2: "Arte, Artesanías y Hobbies", l3: "Kits de Pintura por Números" },
+  "ARTESANIAS": { l1: "Otras Categorías", l2: "Arte, Artesanías y Hobbies", l3: "Kits de Pintura por Números" },
 
   // Basura / Sin Categoria / General
-  "Sin Categoria": { l1: "Otras Categorías", l2: "Sin Categorizar", alert: "trash" },
-  "OTRO": { l1: "Otras Categorías", l2: "Sin Categorizar", alert: "trash" },
-  "OTROS": { l1: "Otras Categorías", l2: "Sin Categorizar", alert: "trash" },
-  "OTRA": { l1: "Otras Categorías", l2: "Sin Categorizar", alert: "trash" },
-  "GENERAL": { l1: "Otras Categorías", l2: "Sin Categorizar", alert: "trash" },
-  "NOVEDADES": { l1: "Otras Categorías", l2: "Sin Categorizar", alert: "trash" },
-  "MARIKADITAS": { l1: "Otras Categorías", l2: "Sin Categorizar", alert: "trash" },
+  "Sin Categoria": { l1: "Otras Categorías", l2: "Sin Categorizar", l3: "Productos Sin Datos Clasificados", alert: "trash" },
+  "OTRO": { l1: "Otras Categorías", l2: "Sin Categorizar", l3: "Productos Sin Datos Clasificados", alert: "trash" },
+  "OTROS": { l1: "Otras Categorías", l2: "Sin Categorizar", l3: "Productos Sin Datos Clasificados", alert: "trash" },
+  "OTRA": { l1: "Otras Categorías", l2: "Sin Categorizar", l3: "Productos Sin Datos Clasificados", alert: "trash" },
+  "GENERAL": { l1: "Otras Categorías", l2: "Sin Categorizar", l3: "Productos Sin Datos Clasificados", alert: "trash" },
+  "NOVEDADES": { l1: "Otras Categorías", l2: "Sin Categorizar", l3: "Productos Sin Datos Clasificados", alert: "trash" },
+  "MARIKADITAS": { l1: "Otras Categorías", l2: "Sin Categorizar", l3: "Productos Sin Datos Clasificados", alert: "trash" },
 
   // Campañas / Temporales
-  "BLACK SALES": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
-  "DROPI LOVE": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
-  "TELEVENTAS": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
-  "IMPORTADOS": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
-  "BLACK FRIDAY": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
-  "COINNECTA": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
-  "DROPI IMPULSA": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
-  "REMATE DE SALDOS": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
-  "REYES MAGOS": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
-  "TIENDA DEL NINJA": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
+  "BLACK SALES": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
+  "DROPI LOVE": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
+  "TELEVENTAS": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
+  "IMPORTADOS": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
+  "BLACK FRIDAY": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
+  "COINNECTA": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
+  "DROPI IMPULSA": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
+  "REMATE DE SALDOS": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
+  "REYES MAGOS": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
+  "TIENDA DEL NINJA": { l1: "Otras Categorías", l2: "Campaña Temporal", l3: "Ofertas de Temporada", alert: "campaign" },
 };
 
 
-// Complete standard taxonomy map for Dropi (Nivel 1 -> complete Nivel 2)
-const DROPI_COMPLETE_TAXONOMY: Record<string, string[]> = {
-  "Hogar y Decoración": [
-    "Hogar General",
-    "Cocina y Utensilios",
-    "Decoración y Diseño",
-    "Muebles y Mobiliario",
-    "Jardín y Exteriores",
-    "Limpieza, Aseo y Cuidado del Hogar",
-    "Organización y Almacenamiento",
-    "Iluminación",
-    "Baño y Grifería"
-  ],
-  "Mascotas": [
-    "Mascotas General",
-    "Alimento para Mascotas",
-    "Juguetes y Accesorios",
-    "Higiene y Cuidado de Mascotas",
-    "Acuarofilia y Aves"
-  ],
-  "Tecnología y Electrónica": [
-    "Tecnología General",
-    "Computación y Tablets",
-    "Celulares y Accesorios",
-    "Audio y Video",
-    "Gadgets y Novedades",
-    "Videojuegos y Consolas",
-    "Cámaras y Drones",
-    "Electrónica General"
-  ],
-  "Belleza y Cuidado Personal": [
-    "Belleza General",
-    "Maquillaje y Cosméticos",
-    "Perfumería y Fragancias",
-    "Cuidado Capilar",
-    "Cuidado Corporal",
-    "Cuidado Facial y Skincare",
-    "Fajas y Ropa Control",
-    "Higiene y Cuidado Personal"
-  ],
-  "Salud y Bienestar": [
-    "Salud General",
-    "Suplementos y Nutrición",
-    "Equipos Médicos y Cuidado de la Salud",
-    "Bienestar General",
-    "Óptica y Cuidado Ocular"
-  ],
-  "Productos para Adultos": [
-    "Bienestar Sexual",
-    "Lencería y Ropa Erótica",
-    "Juguetes para Adultos"
-  ],
-  "Moda y Calzado": [
-    "Moda General",
-    "Bolsos, Morrales y Accesorios",
-    "Ropa Femenina (Dama)",
-    "Ropa Masculina (Caballero)",
-    "Calzado y Zapatos",
-    "Bisutería, Joyas y Relojes",
-    "Ropa Interior y de Descanso",
-    "Ropa Deportiva"
-  ],
-  "Juguetes y Bebés": [
-    "Accesorios y Cuidado Infantil (Bebés)",
-    "Juguetes y Juegos",
-    "Lactancia y Alimentación",
-    "Coches y Sillas para Auto",
-    "Cuarto del Bebé y Mobiliario"
-  ],
-  "Deportes y Outdoor": [
-    "Deportes General",
-    "Equipos Fitness y Gimnasio",
-    "Camping y Pesca",
-    "Ciclismo y Movilidad",
-    "Deportes de Aventura"
-  ],
-  "Ferretería y Herramientas": [
-    "Ferretería General",
-    "Herramientas Manuales/Eléctricas",
-    "Seguridad y Cerramientos",
-    "Materiales de Construcción",
-    "Pinturas y Acabados",
-    "Automotriz y Accesorios (Carros/Motos)"
-  ],
-  "Otras Categorías": [
-    "Papelería y Oficina",
-    "Libros y Material Educativo",
-    "Arte, Artesanías y Hobbies",
-    "Sin Categorizar",
-    "Campaña Temporal"
-  ]
+const DROPI_COMPLETE_TAXONOMY: Record<string, Record<string, string[]>> = {
+  "Hogar y Decoración": {
+    "Cocina y Utensilios": [
+      "Vajilla y Servir",
+      "Sartenes, Ollas y Baterías",
+      "Utensilios de Preparación",
+      "Moldes y Repostería",
+      "Café, Té y Mate",
+      "Electrodomésticos de Cocina"
+    ],
+    "Decoración y Diseño": [
+      "Espejos y Cuadros",
+      "Floreros y Jarrones",
+      "Velas, Difusores y Aromas",
+      "Alfombras y Cortinas",
+      "Cojines y Mantas Decorativas",
+      "Adornos de Mesa y Pared"
+    ],
+    "Muebles y Mobiliario": [
+      "Muebles de Sala",
+      "Muebles de Dormitorio",
+      "Muebles de Oficina y Escritorios",
+      "Muebles de Exterior",
+      "Estantes y Organizadores"
+    ],
+    "Jardín y Exteriores": [
+      "Macetas y Jardineras",
+      "Herramientas de Jardinería",
+      "Riego, Mangueras y Aspersores",
+      "Decoración de Exterior"
+    ],
+    "Limpieza, Aseo y Cuidado del Hogar": [
+      "Escobas, Mopas y Limpiadores",
+      "Detergentes y Productos de Aseo",
+      "Organización de Lavandería"
+    ],
+    "Organización y Almacenamiento": [
+      "Cajas y Cestas de Almacenamiento",
+      "Zapateras y Colgadores",
+      "Organizadores de Clóset/Cajones"
+    ],
+    "Iluminación": [
+      "Lámparas de Techo",
+      "Lámparas de Mesa y Pie",
+      "Bombillos y Cintas LED",
+      "Iluminación Solar y Exterior"
+    ],
+    "Baño y Grifería": [
+      "Cortinas y Tapetes de Baño",
+      "Grifería y Duchas",
+      "Accesorios y Organizadores de Baño"
+    ],
+    "Hogar General": [
+      "Otros Artículos de Hogar"
+    ]
+  },
+  "Mascotas": {
+    "Mascotas General": [
+      "Accesorios de Paseo y Arnés",
+      "Camas y Casas para Mascotas",
+      "Ropa y Disfraces de Mascotas"
+    ],
+    "Alimento para Mascotas": [
+      "Concentrados para Perros",
+      "Concentrados para Gatos",
+      "Premios, Snacks y Galletas"
+    ],
+    "Juguetes y Accesorios": [
+      "Juguetes Mordedores y Pelotas",
+      "Juguetes Interactivos y Rascadores",
+      "Platos y Bebederos Automáticos"
+    ],
+    "Higiene y Cuidado de Mascotas": [
+      "Champús y Acondicionadores",
+      "Bandejas Sanitarias y Arenas",
+      "Cepillos y Cortauñas"
+    ],
+    "Acuarofilia y Aves": [
+      "Comida e Insumos para Peces",
+      "Jaulas y Accesorios de Aves"
+    ]
+  },
+  "Tecnología y Electrónica": {
+    "Tecnología General": [
+      "Cables y Adaptadores de Datos",
+      "Soportes y Fundas Tecnológicas",
+      "Baterías Portátiles y Cargadores"
+    ],
+    "Computación y Tablets": [
+      "Tablets e iPads",
+      "Teclados, Mouses y Diademas",
+      "Monitores y Accesorios de PC"
+    ],
+    "Celulares y Accesorios": [
+      "Estuches y Vidrios Templados",
+      "Audífonos Inalámbricos y Bluetooth",
+      "Cargadores Inalámbricos y Soportes para Auto"
+    ],
+    "Audio y Video": [
+      "Parlantes Portátiles y Bluetooth",
+      "Cámaras de Seguridad y Vigilancia",
+      "Proyectores y Pantallas"
+    ],
+    "Gadgets y Novedades": [
+      "Smartwatches y Pulseras Inteligentes",
+      "Lentes de Realidad Virtual",
+      "Novedades Tecnológicas Varias"
+    ],
+    "Videojuegos y Consolas": [
+      "Controles y Joysticks",
+      "Accesorios para Consolas PS5/Switch",
+      "Sillas y Teclados Gamers"
+    ],
+    "Cámaras y Drones": [
+      "Drones de Fotografía",
+      "Cámaras Deportivas y de Acción",
+      "Estabilizadores y Trípodes"
+    ],
+    "Electrónica General": [
+      "Otros Artículos Electrónicos"
+    ]
+  },
+  "Belleza y Cuidado Personal": {
+    "Belleza General": [
+      "Espejos Cosméticos con Luz LED",
+      "Organizadores de Maquillaje",
+      "Bolsos Cosméticos y Neceser"
+    ],
+    "Maquillaje y Cosméticos": [
+      "Maquillaje de Ojos y Rostro",
+      "Labiales y Brillos",
+      "Brochas, Esponjas y Aplicadores"
+    ],
+    "Perfumería y Fragancias": [
+      "Perfumes de Dama",
+      "Perfumes de Caballero",
+      "Fragancias Corporales y Splash"
+    ],
+    "Cuidado Capilar": [
+      "Planchas y Rizadores de Cabello",
+      "Secadores de Cabello",
+      "Tratamientos y Aceites Capilares",
+      "Cepillos Eléctricos y Tradicionales"
+    ],
+    "Cuidado Corporal": [
+      "Depiladores Eléctricos y Ceras",
+      "Cremas Hidratantes y Exfoliantes",
+      "Masajeadores Corporales"
+    ],
+    "Cuidado Facial y Skincare": [
+      "Limpiadores Faciales Ultrasónicos",
+      "Sueros y Cremas Faciales",
+      "Mascarillas e Hidratantes de Rostro"
+    ],
+    "Fajas y Ropa Control": [
+      "Fajas Reductoras Femeninas",
+      "Cinturillas Deportivas",
+      "Fajas Postparto/Postquirúrgicas"
+    ],
+    "Higiene y Cuidado Personal": [
+      "Cuidado Bucal e Irrigadores",
+      "Rasuradoras y Cortadoras de Barba"
+    ]
+  },
+  "Salud y Bienestar": {
+    "Salud General": [
+      "Termómetros y Tensiómetros",
+      "Correctores de Postura",
+      "Férulas, Rodilleras y Soportes"
+    ],
+    "Suplementos y Nutrición": [
+      "Proteínas y Aminoácidos",
+      "Colágeno Hidrolizado y Biotina",
+      "Vitaminas y Minerales de Venta Libre",
+      "Quemadores de Grasa y Adelgazantes"
+    ],
+    "Equipos Médicos y Cuidado de la Salud": [
+      "Nebulizadores y Concentradores",
+      "Humidificadores y Vaporizadores",
+      "Almohadillas Térmicas y Masajeadores de Terapia"
+    ],
+    "Bienestar General": [
+      "Aceites Esenciales y Aromaterapia",
+      "Vaporizadores Personales y Pods",
+      "Parches de Alivio y Relajación"
+    ],
+    "Óptica y Cuidado Ocular": [
+      "Gafas de Lectura",
+      "Estuches y Accesorios de Gafas",
+      "Limpiadores de Lentes"
+    ]
+  },
+  "Productos para Adultos": {
+    "Bienestar Sexual": [
+      "Lubricantes y Geles Íntimos",
+      "Preservativos y Barreras de Protección",
+      "Estimuladores y Geles Sensibilizantes"
+    ],
+    "Lencería y Ropa Erótica": [
+      "Lencería de Dama",
+      "Disfraces y Ropa de Noche",
+      "Accesorios Eróticos"
+    ],
+    "Juguetes para Adultos": [
+      "Vibradores y Succionadores",
+      "Juguetes de Pareja",
+      "Bolas Chinas y Ejercitadores"
+    ]
+  },
+  "Moda y Calzado": {
+    "Moda General": [
+      "Gafas de Sol",
+      "Cinturones y Correas",
+      "Sombreros, Gorras y Bufandas"
+    ],
+    "Bolsos, Morrales y Accesorios": [
+      "Morrales Escolares y Universitarios",
+      "Carteras de Dama y Crossbody",
+      "Billeteras de Caballero y Tarjeteros"
+    ],
+    "Ropa Femenina (Dama)": [
+      "Blusas y Camisetas",
+      "Vestidos y Faldas",
+      "Jeans, Pantalones y Leggings",
+      "Chaquetas y Sacos"
+    ],
+    "Ropa Masculina (Caballero)": [
+      "Camisas y Camisetas",
+      "Pantalones y Bermudas",
+      "Chaquetas y Buzos"
+    ],
+    "Calzado y Zapatos": [
+      "Tenis y Zapatillas Deportivas",
+      "Zapatos Casuales y Mocasines",
+      "Sandalias y Chanclas",
+      "Botas y Botines"
+    ],
+    "Bisutería, Joyas y Relojes": [
+      "Relojes de Pulso de Dama/Caballero",
+      "Bisutería de Acero y Fantasía",
+      "Cadenas, Pulseras y Aretes"
+    ],
+    "Ropa Interior y de Descanso": [
+      "Ropa Interior Femenina",
+      "Bóxers y Ropa Interior Masculina",
+      "Pijamas de Dama/Caballero"
+    ],
+    "Ropa Deportiva": [
+      "Leggings Deportivos",
+      "Camisetas de Secado Rápido",
+      "Conjuntos Deportivos"
+    ]
+  },
+  "Juguetes y Bebés": {
+    "Accesorios y Cuidado Infantil (Bebés)": [
+      "Pañaleras y Bolsos de Bebé",
+      "Termómetros y Aspiradores Nasales",
+      "Higiene del Bebé y Baño"
+    ],
+    "Juguetes y Juegos": [
+      "Juguetes Didácticos y de Madera",
+      "Muñecas y Figuras de Acción",
+      "Juegos de Mesa y Rompecabezas",
+      "Carros a Control Remoto y Pistas"
+    ],
+    "Lactancia y Alimentación": [
+      "Biberones y Teteros",
+      "Extractores de Leche",
+      "Baberos y Vajilla Infantil"
+    ],
+    "Coches y Sillas para Auto": [
+      "Coches Paseadores",
+      "Sillas de Seguridad para Carro",
+      "Canguros y Portabebés"
+    ],
+    "Cuarto del Bebé y Mobiliario": [
+      "Nidos y Almohadas de Lactancia",
+      "Móviles y Luces de Noche",
+      "Cunas y Corrales Portátiles"
+    ]
+  },
+  "Deportes y Outdoor": {
+    "Deportes General": [
+      "Botatodo e Hidratación",
+      "Relojes Deportivos e Instrumentos",
+      "Protecciones Deportivas (Rodilleras/Coderas)"
+    ],
+    "Equipos Fitness y Gimnasio": [
+      "Lazos para Saltar",
+      "Mancuernas y Pesas",
+      "Bandas de Resistencia",
+      "Colchonetas y Mats de Yoga"
+    ],
+    "Camping y Pesca": [
+      "Linternas de Cabeza y Camping",
+      "Navajas y Multiherramientas",
+      "Artículos de Pesca",
+      "Carpas y Sacos de Dormir"
+    ],
+    "Ciclismo y Movilidad": [
+      "Accesorios para Bicicleta y Luces",
+      "Cascos de Ciclismo",
+      "Guantes Deportivos"
+    ],
+    "Deportes de Aventura": [
+      "Otros Accesorios Outdoor"
+    ]
+  },
+  "Ferretería y Herramientas": {
+    "Ferretería General": [
+      "Candados, Cerraduras y Cerrajería",
+      "Cintas Adhesivas y Pegantes",
+      "Tornillería y Anclajes",
+      "Material Eléctrico e Interruptores"
+    ],
+    "Herramientas Manuales/Eléctricas": [
+      "Destornilladores y Llaves",
+      "Taladros, Pulidoras y Soldadores",
+      "Cajas de Herramientas and Organizadores",
+      "Brocas y Accesorios de Corte"
+    ],
+    "Seguridad y Cerramientos": [
+      "Cámaras de Seguridad Falsas",
+      "Alarmas de Puerta/Ventana",
+      "Epp: Guantes y Gafas de Seguridad"
+    ],
+    "Materiales de Construcción": [
+      "Iluminación Industrial",
+      "Medidores de Distancia Láser"
+    ],
+    "Pinturas y Acabados": [
+      "Pinceles, Rodillos y Brochas",
+      "Pintura en Spray"
+    ],
+    "Automotriz y Accesorios (Carros/Motos)": [
+      "Accesorios de Lujo para Auto",
+      "Cámaras de Reversa y Sensores",
+      "Cuidado del Auto: Ceras y Champú",
+      "Soportes de Celular para Rejilla",
+      "Cascos e Impermeables para Moto"
+    ]
+  },
+  "Otras Categorías": {
+    "Papelería y Oficina": [
+      "Cuadernos, Agendas y Libretas",
+      "Marcadores, Colores y Esferos",
+      "Organizadores de Escritorio",
+      "Calculadoras"
+    ],
+    "Libros y Material Educativo": [
+      "Libros Físicos de Interés General",
+      "Agendas de Planificación",
+      "Material Didáctico Escolar"
+    ],
+    "Arte, Artesanías y Hobbies": [
+      "Kits de Pintura por Números",
+      "Lanas, Hilos y Tejeduría",
+      "Herramientas de Costura y Manualidades"
+    ],
+    "Sin Categorizar": [
+      "Registros por Reclasificar",
+      "Productos Sin Datos Clasificados"
+    ],
+    "Campaña Temporal": [
+      "Eventos Comerciales",
+      "Ofertas de Temporada"
+    ]
+  }
 };
 
 const getCurvePath = (x1: number, y1: number, x2: number, y2: number) => {
@@ -999,6 +1277,14 @@ export default function CategorizacionPage() {
                           <span className="inline-block bg-white text-orange-600 border border-orange-200 px-3 py-1 rounded-lg text-xs font-bold shadow-2xs">
                             {DROPI_MAPPING_DICT[selectedDropiCat].l2}
                           </span>
+                          {DROPI_MAPPING_DICT[selectedDropiCat].l3 && (
+                            <>
+                              <span className="text-xs text-gray-400 block">⬇</span>
+                              <span className="inline-block bg-orange-100 text-orange-700 border border-orange-200 px-2 py-0.5 rounded text-[10px] font-bold">
+                                {DROPI_MAPPING_DICT[selectedDropiCat].l3}
+                              </span>
+                            </>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -1067,7 +1353,7 @@ export default function CategorizacionPage() {
                       );
 
                       // Get complete Level 2 list for this Level 1
-                      const l2List = DROPI_COMPLETE_TAXONOMY[selectedL1] || [];
+                      const l2List = Object.keys(DROPI_COMPLETE_TAXONOMY[selectedL1] || {});
 
                       // Group raw categories that map to each Level 2
                       const l2Groups: Record<string, { rawCats: DropiCategoryRaw[]; totalOrders: number }> = {};
@@ -1099,23 +1385,23 @@ export default function CategorizacionPage() {
                         <div className="border-t pt-5 space-y-4" style={{ borderColor: "var(--border)" }}>
                           <div className="flex justify-between items-center">
                             <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
-                              Estructura Jerárquica Completa para "{selectedL1}"
+                              Estructura Jerárquica Completa de 3 Niveles para "{selectedL1}"
                             </h4>
                             <span className="text-[10px] text-gray-400 font-mono">
-                              Nivel 1 &gt; Nivel 2 (Taxonomía Completa)
+                              Nivel 1 &gt; Nivel 2 &gt; Nivel 3 (Taxonomía Completa)
                             </span>
                           </div>
                           
                           <p className="text-xs text-gray-500 leading-relaxed">
-                            A continuación se muestra el árbol de categorías propuesto. Se listan todas las subcategorías estándar de Nivel 2 (incluso las que actualmente tienen 0 órdenes) para mostrar el mapa completo del catálogo:
+                            Este árbol muestra el mapa de catalogación completo. Se listan todas las subcategorías oficiales de Nivel 2 y sus correspondientes subcategorías de Nivel 3 (inspiradas en la granularidad de Mercado Libre). Los tags de base de datos de Dropi se agrupan en sus respectivos nodos hoja:
                           </p>
 
                           {/* Tree Visual Container */}
                           <div className="bg-slate-50 border rounded-2xl p-6 flex flex-col md:flex-row gap-4 md:gap-8 items-center md:items-stretch justify-between relative overflow-hidden" style={{ borderColor: "var(--border)" }}>
                             {/* Left Part: Level 1 Card */}
                             <div className="w-full md:w-48 flex items-center justify-center flex-shrink-0">
-                              <div className="bg-orange-500 text-white rounded-xl p-4 shadow-sm text-center w-full border border-orange-600 relative z-10 flex flex-col justify-center min-h-[100px]">
-                                <span className="text-[8px] uppercase tracking-widest font-extrabold opacity-75 block mb-1">Nivel 1 (Raíz)</span>
+                              <div className="bg-orange-500 text-white rounded-xl p-4 shadow-sm text-center w-full border border-orange-600 relative z-10 flex flex-col justify-center min-h-[120px]">
+                                <span className="text-[8px] uppercase tracking-widest font-extrabold opacity-75 block mb-1">Nivel 1 (Familia)</span>
                                 <h5 className="font-extrabold text-xs leading-snug">{selectedL1}</h5>
                                 <span className="text-[9px] bg-orange-600 px-2 py-0.5 rounded-full inline-block mt-2 font-bold font-mono w-fit mx-auto">
                                   {totalL1Orders.toLocaleString()} ord.
@@ -1140,58 +1426,124 @@ export default function CategorizacionPage() {
                               </svg>
                             </div>
 
-                            {/* Right Part: Level 2 Cards Grid */}
-                            <div className="flex-1 space-y-3 relative z-10">
+                            {/* Right Part: Level 2 Cards Grid containing Level 3 Sub-subcategories */}
+                            <div className="flex-1 space-y-4 relative z-10">
                                {sortedL2Groups.map(([l2Name, group]) => {
                                  const hasData = group.totalOrders > 0;
+                                 const l3List = (DROPI_COMPLETE_TAXONOMY[selectedL1] && DROPI_COMPLETE_TAXONOMY[selectedL1][l2Name]) || [];
+
                                  return (
                                    <div
                                      key={l2Name}
-                                     className={`border rounded-xl p-3 shadow-2xs transition-all flex flex-col gap-2 ${
-                                       hasData
-                                         ? "bg-white border-slate-200 hover:border-orange-200"
-                                         : "bg-slate-50/50 border-dashed border-slate-200 opacity-60 hover:opacity-100 transition-opacity"
-                                     }`}
+                                     className="bg-white border border-slate-200 hover:border-orange-200 rounded-xl p-4 shadow-2xs transition-all flex flex-col gap-3"
                                      style={{ borderColor: "var(--border)" }}
                                    >
-                                     <div className="flex justify-between items-center">
-                                       <span className={`text-xs font-bold flex items-center gap-1.5 ${hasData ? "text-gray-800" : "text-gray-400"}`}>
-                                         <span className={`w-1.5 h-1.5 rounded-full ${hasData ? "bg-orange-500" : "bg-slate-300"}`}></span>
+                                     {/* Nivel 2 Header */}
+                                     <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+                                       <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                                         <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
                                          {l2Name}
                                        </span>
-                                       <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${hasData ? "text-slate-700 bg-slate-100" : "text-slate-400 bg-slate-50"}`}>
+                                       <span className="text-[10px] font-mono font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
                                          {group.totalOrders.toLocaleString()} ord.
                                        </span>
                                      </div>
-                                     
-                                     {/* Merged raw categories inside */}
-                                     {hasData ? (
-                                       <div className="flex flex-wrap gap-1.5 pt-1.5 border-t border-slate-100">
-                                         {group.rawCats.sort((a,b)=>b.orders-a.orders).map((raw) => {
+
+                                     {/* Nivel 3 Subcategories List */}
+                                     <div className="space-y-2">
+                                       {l3List.map((l3Name) => {
+                                         // Find raw categories mapping to this L3
+                                         const rawCatsForL3 = group.rawCats.filter(raw => {
                                            const map = DROPI_MAPPING_DICT[raw.name];
-                                           const isTypo = map?.alert === "typo";
-                                           const isSelected = selectedDropiCat === raw.name;
-                                           return (
-                                             <span
-                                               key={raw.name}
-                                               className={`inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[9px] font-semibold border ${
-                                                 isSelected
-                                                   ? "bg-orange-500 text-white border-orange-500 shadow-2xs"
-                                                   : isTypo
-                                                   ? "bg-amber-50 text-amber-600 border-amber-200"
-                                                   : "bg-slate-50 text-gray-600 border-slate-200"
-                                               }`}
-                                             >
-                                               {raw.name} {isTypo && "⚠️"}
+                                           return map?.l3 === l3Name;
+                                         });
+
+                                         const hasL3Data = rawCatsForL3.length > 0;
+
+                                         return (
+                                           <div key={l3Name} className="bg-slate-50/50 border border-slate-100/60 rounded-lg p-2.5 flex flex-col gap-1.5">
+                                             <div className="flex justify-between items-center">
+                                               <span className="text-[10.5px] font-bold text-gray-700 flex items-center gap-1">
+                                                 📁 {l3Name}
+                                               </span>
+                                               {!hasL3Data && (
+                                                 <span className="text-[8px] bg-slate-100 text-slate-400 px-1 rounded font-semibold">
+                                                   Disponible
+                                                 </span>
+                                               )}
+                                             </div>
+
+                                             {hasL3Data ? (
+                                               <div className="flex flex-wrap gap-1">
+                                                 {rawCatsForL3.sort((a,b)=>b.orders-a.orders).map((raw) => {
+                                                   const map = DROPI_MAPPING_DICT[raw.name];
+                                                   const isTypo = map?.alert === "typo";
+                                                   const isSelected = selectedDropiCat === raw.name;
+                                                   return (
+                                                     <span
+                                                       key={raw.name}
+                                                       className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-mono text-[8.5px] font-semibold border ${
+                                                         isSelected
+                                                           ? "bg-orange-500 text-white border-orange-500 shadow-2xs"
+                                                           : isTypo
+                                                           ? "bg-amber-50 text-amber-600 border-amber-200"
+                                                           : "bg-slate-100 text-gray-600 border-slate-200"
+                                                       }`}
+                                                     >
+                                                       {raw.name} {isTypo && "⚠️"} ({raw.orders.toLocaleString()} ord.)
+                                                     </span>
+                                                   );
+                                                 })}
+                                               </div>
+                                             ) : (
+                                               <span className="text-[9px] italic text-slate-400">
+                                                 Sin tags asignados en BD actual
+                                               </span>
+                                             )}
+                                           </div>
+                                         );
+                                       })}
+
+                                       {/* Fallback for unmapped raw tags */}
+                                       {(() => {
+                                         const l3MappedNames = new Set(l3List);
+                                         const unmappedRawCats = group.rawCats.filter(raw => {
+                                           const map = DROPI_MAPPING_DICT[raw.name];
+                                           return !map?.l3 || !l3MappedNames.has(map.l3);
+                                         });
+
+                                         if (unmappedRawCats.length === 0) return null;
+
+                                         return (
+                                           <div className="bg-slate-50/50 border border-slate-100/60 rounded-lg p-2.5 flex flex-col gap-1.5">
+                                             <span className="text-[10.5px] font-bold text-gray-400 italic">
+                                               📁 Otros / Sin mapear
                                              </span>
-                                           );
-                                         })}
-                                       </div>
-                                     ) : (
-                                       <div className="text-[9px] italic text-slate-400 pt-0.5">
-                                         Sin categorías asociadas actualmente en base de datos.
-                                       </div>
-                                     )}
+                                             <div className="flex flex-wrap gap-1">
+                                               {unmappedRawCats.map((raw) => {
+                                                 const map = DROPI_MAPPING_DICT[raw.name];
+                                                 const isTypo = map?.alert === "typo";
+                                                 const isSelected = selectedDropiCat === raw.name;
+                                                 return (
+                                                   <span
+                                                     key={raw.name}
+                                                     className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded font-mono text-[8.5px] font-semibold border ${
+                                                       isSelected
+                                                         ? "bg-orange-500 text-white border-orange-500 shadow-2xs"
+                                                         : isTypo
+                                                         ? "bg-amber-50 text-amber-600 border-amber-200"
+                                                         : "bg-slate-100 text-gray-600 border-slate-200"
+                                                     }`}
+                                                   >
+                                                     {raw.name} {isTypo && "⚠️"} ({raw.orders.toLocaleString()} ord.)
+                                                   </span>
+                                                 );
+                                               })}
+                                             </div>
+                                           </div>
+                                         );
+                                       })()}
+                                     </div>
                                    </div>
                                  );
                                })}
