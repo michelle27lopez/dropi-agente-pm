@@ -313,7 +313,7 @@ const computeLayout = (
 
 export default function CategorizacionPage() {
   const [docsOpen, setDocsOpen] = useState(false);
-  const [activeMainTab, setActiveMainTab] = useState<"diagnostico" | "homologacion" | "meli">("diagnostico");
+  const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "docs">("diagnostico");
 
   // Dropi Data States
   const [dropiRawCategories, setDropiRawCategories] = useState<DropiCategoryRaw[]>([]);
@@ -614,143 +614,10 @@ export default function CategorizacionPage() {
     },
   ];
 
-  return (
-    <main id="categorizacion-project-page" className="min-h-screen pb-16" style={{ background: "var(--bg)" }}>
-      {/* Header */}
-      <header id="project-header" className="bg-white border-b flex items-center justify-between px-8 py-4" style={{ borderColor: "var(--border)" }}>
-        <div className="flex items-center gap-4">
-          <a href="/" id="back-to-home-link" className="text-sm font-medium hover:underline" style={{ color: "var(--muted)" }}>
-            ← Dropi PM Tools
-          </a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span id="breadcrumb-current" className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
-            Categorización y Enriquecimiento
-          </span>
-        </div>
-      </header>
 
-      <div className="max-w-7xl mx-auto px-6 pt-10">
-        {/* Title */}
-        <div id="project-title-container" className="mb-8">
-          <div className="flex items-center gap-3 mb-3">
-            <span id="project-code-badge" className="text-xs font-bold px-3 py-1 rounded-full" style={{ background: "#F5F3FF", color: "#7C3AED" }}>
-              CAT-001
-            </span>
-            <span id="project-status-badge" className="text-xs font-bold px-3 py-1 rounded-full" style={{ background: "#FFFBEB", color: "#D97706" }}>
-              Taxonomy Audit & Homologation Mapper
-            </span>
-          </div>
-          <h1 id="project-main-title" className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: "var(--fg)" }}>
-            Taxonomía y Enriquecimiento de Categorías Dropi
-          </h1>
-          <p id="project-description-text" className="text-sm leading-relaxed max-w-3xl" style={{ color: "var(--muted)" }}>
-            Auditoría de fragmentación de base de datos de Dropi (basada en {totalOrders.toLocaleString()} órdenes reales) y simulador de homologación a una jerarquía unificada.
-          </p>
-        </div>
-
-        {/* Accordion resources */}
-        <div id="project-resources-accordion" className="bg-white border rounded-2xl mb-8 overflow-hidden shadow-2xs" style={{ borderColor: "var(--border)" }}>
-          <button
-            id="toggle-resources-btn"
-            onClick={() => setDocsOpen(!docsOpen)}
-            className="w-full bg-none border-none cursor-pointer px-6 py-4 flex items-center gap-3 text-left focus:outline-none"
-          >
-            <span className="text-lg">📂</span>
-            <span id="accordion-title" className="text-sm font-bold flex-1" style={{ color: "var(--fg)" }}>
-              Recursos de Investigación y Documentación
-            </span>
-            <span id="accordion-project-reference" className="text-xs mr-4" style={{ color: "var(--muted)" }}>
-              CAT-001 · Taxonomías e Histórico de Ventas
-            </span>
-            <span
-              id="accordion-arrow-indicator"
-              className="text-xs transition-transform duration-200"
-              style={{
-                color: "var(--muted)",
-                transform: docsOpen ? "rotate(180deg)" : "rotate(0deg)",
-              }}
-            >
-              ▼
-            </span>
-          </button>
-
-          {docsOpen && (
-            <div id="accordion-content-panel" className="border-t p-6 bg-slate-50 grid grid-cols-1 md:grid-cols-3 gap-4" style={{ borderColor: "var(--border)" }}>
-              <div id="resource-card-taxonomy" className="bg-white border rounded-xl p-4 flex items-start gap-3 shadow-2xs" style={{ borderColor: "var(--border)" }}>
-                <span className="text-2xl">📖</span>
-                <div>
-                  <div className="text-sm font-bold mb-1" style={{ color: "var(--fg)" }}>
-                    Taxonomía Estándar
-                  </div>
-                  <div className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
-                    Propuesta para condensar más de 160 etiquetas planas de Dropi en 10 categorías jerárquicas limpias.
-                  </div>
-                </div>
-              </div>
-              <div id="resource-card-ai-pilot" className="bg-white border rounded-xl p-4 flex items-start gap-3 shadow-2xs" style={{ borderColor: "var(--border)" }}>
-                <span className="text-2xl">🤖</span>
-                <div>
-                  <div className="text-sm font-bold mb-1" style={{ color: "var(--fg)" }}>
-                    Piloto IA & Reglas
-                  </div>
-                  <div className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
-                    Algoritmos de detección automática de typos por similitud semántica y Levenshtein.
-                  </div>
-                </div>
-              </div>
-              <div id="resource-card-backlog" className="bg-white border rounded-xl p-4 flex items-start gap-3 shadow-2xs" style={{ borderColor: "var(--border)" }}>
-                <span className="text-2xl">📋</span>
-                <div>
-                  <div className="text-sm font-bold mb-1" style={{ color: "var(--fg)" }}>
-                    Mercado Libre
-                  </div>
-                  <div className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
-                    Explorador completo de la taxonomía oficial de Mercado Libre Colombia (MCO) como benchmark de la industria.
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Main Tabs Navigation */}
-        <div className="flex border-b border-gray-200 mb-8" style={{ borderColor: "var(--border)" }}>
-          <button
-            onClick={() => setActiveMainTab("diagnostico")}
-            className={`pb-4 px-6 text-sm font-bold border-b-2 transition-all ${
-              activeMainTab === "diagnostico"
-                ? "border-orange-500 text-orange-600"
-                : "border-transparent text-gray-500 hover:text-gray-900"
-            }`}
-          >
-            📊 Diagnóstico de Taxonomía Actual
-          </button>
-          <button
-            onClick={() => setActiveMainTab("homologacion")}
-            className={`pb-4 px-6 text-sm font-bold border-b-2 transition-all ${
-              activeMainTab === "homologacion"
-                ? "border-orange-500 text-orange-600"
-                : "border-transparent text-gray-500 hover:text-gray-900"
-            }`}
-          >
-            🔄 Simulador de Homologación Dropi
-          </button>
-          <button
-            onClick={() => setActiveMainTab("meli")}
-            className={`pb-4 px-6 text-sm font-bold border-b-2 transition-all ${
-              activeMainTab === "meli"
-                ? "border-orange-500 text-orange-600"
-                : "border-transparent text-gray-500 hover:text-gray-900"
-            }`}
-          >
-            🕸️ Referencia: Mercado Libre
-          </button>
-        </div>
-
-        {/* =========================================================
-            TAB 1: DIAGNÓSTICO DE LA TAXONOMÍA ACTUAL DE DROPI (PROBLEMA)
-            ========================================================= */}
-        {activeMainTab === "diagnostico" && (
+  // --- RENDERING HELPERS FOR SECTIONS ---
+  const renderDiagnostico = () => {
+    return (
           <div className="space-y-8 animate-fade-in">
             {/* Metric Grid cards */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
@@ -956,12 +823,12 @@ export default function CategorizacionPage() {
               </div>
             </div>
           </div>
-        )}
 
-        {/* =========================================================
-            TAB 2: SIMULADOR DE HOMOLOGACIÓN DROPI (SOLUCIÓN)
-            ========================================================= */}
-        {activeMainTab === "homologacion" && (
+    );
+  };
+
+  const renderHomologacion = () => {
+    return (
           <div className="space-y-6 animate-fade-in">
             {/* Header info */}
             <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
@@ -1103,12 +970,12 @@ export default function CategorizacionPage() {
               </div>
             </div>
           </div>
-        )}
 
-        {/* =========================================================
-            TAB 3: REFERENCIA - MERCADO LIBRE
-            ========================================================= */}
-        {activeMainTab === "meli" && (
+    );
+  };
+
+  const renderMeli = () => {
+    return (
           <div className="space-y-6 animate-fade-in">
             {/* Context Info */}
             <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
@@ -1566,7 +1433,156 @@ export default function CategorizacionPage() {
               </div>
             )}
           </div>
-        )}
+
+    );
+  };
+  return (
+    <main id="categorizacion-project-page" className="min-h-screen pb-16" style={{ background: "var(--bg)" }}>
+      {/* Header */}
+      <header id="project-header" className="bg-white border-b flex items-center justify-between px-8 py-4" style={{ borderColor: "var(--border)" }}>
+        <div className="flex items-center gap-4">
+          <a href="/" id="back-to-home-link" className="text-sm font-medium hover:underline" style={{ color: "var(--muted)" }}>
+            ← Dropi PM Tools
+          </a>
+          <span style={{ color: "var(--border)" }}>/</span>
+          <span id="breadcrumb-current" className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
+            Categorización y Enriquecimiento
+          </span>
+        </div>
+      </header>
+
+      <div className="max-w-7xl mx-auto px-6 pt-10">
+        {/* Title */}
+        <div id="project-title-container" className="mb-8">
+          <div className="flex items-center gap-3 mb-3">
+            <span id="project-code-badge" className="text-xs font-bold px-3 py-1 rounded-full" style={{ background: "#F5F3FF", color: "#7C3AED" }}>
+              CAT-001
+            </span>
+            <span id="project-status-badge" className="text-xs font-bold px-3 py-1 rounded-full" style={{ background: "#FFFBEB", color: "#D97706" }}>
+              Taxonomy Audit & Homologation Mapper
+            </span>
+          </div>
+          <h1 id="project-main-title" className="text-3xl font-extrabold tracking-tight mb-2" style={{ color: "var(--fg)" }}>
+            Taxonomía y Enriquecimiento de Categorías Dropi
+          </h1>
+          <p id="project-description-text" className="text-sm leading-relaxed max-w-3xl" style={{ color: "var(--muted)" }}>
+            Auditoría de fragmentación de base de datos de Dropi (basada en {totalOrders.toLocaleString()} órdenes reales) y simulador de homologación a una jerarquía unificada.
+          </p>
+        </div>
+
+        {/* Accordion resources */}
+        <div id="project-resources-accordion" className="bg-white border rounded-2xl mb-8 overflow-hidden shadow-2xs" style={{ borderColor: "var(--border)" }}>
+          <button
+            id="toggle-resources-btn"
+            onClick={() => setDocsOpen(!docsOpen)}
+            className="w-full bg-none border-none cursor-pointer px-6 py-4 flex items-center gap-3 text-left focus:outline-none"
+          >
+            <span className="text-lg">📂</span>
+            <span id="accordion-title" className="text-sm font-bold flex-1" style={{ color: "var(--fg)" }}>
+              Recursos de Investigación y Documentación
+            </span>
+            <span id="accordion-project-reference" className="text-xs mr-4" style={{ color: "var(--muted)" }}>
+              CAT-001 · Taxonomías e Histórico de Ventas
+            </span>
+            <span
+              id="accordion-arrow-indicator"
+              className="text-xs transition-transform duration-200"
+              style={{
+                color: "var(--muted)",
+                transform: docsOpen ? "rotate(180deg)" : "rotate(0deg)",
+              }}
+            >
+              ▼
+            </span>
+          </button>
+
+          {docsOpen && (
+            <div id="accordion-content-panel" className="border-t bg-slate-50 flex flex-col" style={{ borderColor: "var(--border)" }}>
+              {/* Inner Accordion Tab Navigation */}
+              <div className="flex border-b border-slate-200 bg-white px-6 pt-3 gap-2" style={{ borderColor: "var(--border)" }}>
+                <button
+                  onClick={() => setActiveResourceTab("diagnostico")}
+                  className={`pb-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-1.5 ${
+                    activeResourceTab === "diagnostico"
+                      ? "border-orange-500 text-orange-600 font-extrabold"
+                      : "border-transparent text-gray-500 hover:text-gray-900"
+                  }`}
+                >
+                  <span>📊</span> Diagnóstico de Taxonomía Actual
+                </button>
+                <button
+                  onClick={() => setActiveResourceTab("meli")}
+                  className={`pb-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-1.5 ${
+                    activeResourceTab === "meli"
+                      ? "border-orange-500 text-orange-600 font-extrabold"
+                      : "border-transparent text-gray-500 hover:text-gray-900"
+                  }`}
+                >
+                  <span>🕸️</span> Referencia: Mercado Libre
+                </button>
+                <button
+                  onClick={() => setActiveResourceTab("docs")}
+                  className={`pb-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-1.5 ${
+                    activeResourceTab === "docs"
+                      ? "border-orange-500 text-orange-600 font-extrabold"
+                      : "border-transparent text-gray-500 hover:text-gray-900"
+                  }`}
+                >
+                  <span>📖</span> Documentos y Guías
+                </button>
+              </div>
+
+              {/* Inner Tab Content */}
+              <div className="p-6">
+                {activeResourceTab === "docs" && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div id="resource-card-taxonomy" className="bg-white border rounded-xl p-4 flex items-start gap-3 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                      <span className="text-2xl">📖</span>
+                      <div>
+                        <div className="text-sm font-bold mb-1" style={{ color: "var(--fg)" }}>
+                          Taxonomía Estándar
+                        </div>
+                        <div className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
+                          Propuesta para condensar más de 160 etiquetas planas de Dropi en 10 categorías jerárquicas limpias.
+                        </div>
+                      </div>
+                    </div>
+                    <div id="resource-card-ai-pilot" className="bg-white border rounded-xl p-4 flex items-start gap-3 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                      <span className="text-2xl">🤖</span>
+                      <div>
+                        <div className="text-sm font-bold mb-1" style={{ color: "var(--fg)" }}>
+                          Piloto IA & Reglas
+                        </div>
+                        <div className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
+                          Algoritmos de detección automática de typos por similitud semántica y Levenshtein.
+                        </div>
+                      </div>
+                    </div>
+                    <div id="resource-card-backlog" className="bg-white border rounded-xl p-4 flex items-start gap-3 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                      <span className="text-2xl">📋</span>
+                      <div>
+                        <div className="text-sm font-bold mb-1" style={{ color: "var(--fg)" }}>
+                          Mercado Libre
+                        </div>
+                        <div className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
+                          Explorador completo de la taxonomía oficial de Mercado Libre Colombia (MCO) como benchmark de la industria.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeResourceTab === "diagnostico" && renderDiagnostico()}
+                {activeResourceTab === "meli" && renderMeli()}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Main Body content: Homologación Simulator directly */}
+        <div className="mt-8">
+          {renderHomologacion()}
+        </div>
       </div>
     </main>
   );
