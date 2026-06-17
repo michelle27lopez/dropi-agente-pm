@@ -35,27 +35,27 @@ const DROPI_MAPPING_DICT: Record<string, TargetCategory> = {
   // Hogar / Cocina / Jardin
   "HOGAR": { l1: "Hogar y Decoración", l2: "Hogar General" },
   "NATURAL HOME": { l1: "Hogar y Decoración", l2: "Hogar General" },
-  "HOGAR Y DECORACION": { l1: "Hogar y Decoración", l2: "Decoración" },
+  "HOGAR Y DECORACION": { l1: "Hogar y Decoración", l2: "Decoración y Diseño" },
   "HOGAT": { l1: "Hogar y Decoración", l2: "Hogar General", alert: "typo", suggestedFix: "HOGAR" },
-  "MUEBLES": { l1: "Hogar y Decoración", l2: "Muebles" },
+  "MUEBLES": { l1: "Hogar y Decoración", l2: "Muebles y Mobiliario" },
   "JARDIN": { l1: "Hogar y Decoración", l2: "Jardín y Exteriores" },
   "JARDINERIA": { l1: "Hogar y Decoración", l2: "Jardín y Exteriores" },
   "ACCESORIOS HOGAR": { l1: "Hogar y Decoración", l2: "Hogar General" },
-  "DECORACION PARA EL HOGAR": { l1: "Hogar y Decoración", l2: "Decoración" },
-  "DECORACION": { l1: "Hogar y Decoración", l2: "Decoración" },
-  "ESCRITORIOS": { l1: "Hogar y Decoración", l2: "Muebles" },
-  "ESCRITORIOS Y MUEBLES": { l1: "Hogar y Decoración", l2: "Muebles" },
+  "DECORACION PARA EL HOGAR": { l1: "Hogar y Decoración", l2: "Decoración y Diseño" },
+  "DECORACION": { l1: "Hogar y Decoración", l2: "Decoración y Diseño" },
+  "ESCRITORIOS": { l1: "Hogar y Decoración", l2: "Muebles y Mobiliario" },
+  "ESCRITORIOS Y MUEBLES": { l1: "Hogar y Decoración", l2: "Muebles y Mobiliario" },
   "COCINA": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios" },
   "COCINA Y ELECTRODOMESTICOS": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios" },
   "UTENSLIOS DE COOKINA": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios", alert: "typo", suggestedFix: "UTENSILOS DE COCINA" },
   "UTENSILIOS DE COCINA": { l1: "Hogar y Decoración", l2: "Cocina y Utensilios" },
-  "LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza y Aseo" },
-  "HIGIENE Y LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza y Aseo" },
-  "ASEO": { l1: "Hogar y Decoración", l2: "Limpieza y Aseo" },
-  "ASEO Y BIENESTAR": { l1: "Hogar y Decoración", l2: "Limpieza y Aseo" },
-  "HIGIENE": { l1: "Hogar y Decoración", l2: "Limpieza y Aseo" },
-  "HIGIENE LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza y Aseo" },
-  "LIMPIADOR MAGNETICO": { l1: "Hogar y Decoración", l2: "Limpieza y Aseo" },
+  "LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
+  "HIGIENE Y LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
+  "ASEO": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
+  "ASEO Y BIENESTAR": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
+  "HIGIENE": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
+  "HIGIENE LIMPIEZA": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
+  "LIMPIADOR MAGNETICO": { l1: "Hogar y Decoración", l2: "Limpieza, Aseo y Cuidado del Hogar" },
 
   // Mascotas
   "MASCOTAS": { l1: "Mascotas", l2: "Mascotas General" },
@@ -79,10 +79,10 @@ const DROPI_MAPPING_DICT: Record<string, TargetCategory> = {
   "COSMETICOS": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos" },
   "MAQUILLAJE": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos" },
   "COSMETICOS Y PERFUMERIA": { l1: "Belleza y Cuidado Personal", l2: "Maquillaje y Cosméticos" },
-  "PERFUMERIA": { l1: "Belleza y Cuidado Personal", l2: "Perfumería" },
-  "PERFUMES": { l1: "Belleza y Cuidado Personal", l2: "Perfumería" },
-  "CUIDADO PERSONAL": { l1: "Belleza y Cuidado Personal", l2: "Higiene y Cuidado" },
-  "CUIDADO": { l1: "Belleza y Cuidado Personal", l2: "Higiene y Cuidado" },
+  "PERFUMERIA": { l1: "Belleza y Cuidado Personal", l2: "Perfumería y Fragancias" },
+  "PERFUMES": { l1: "Belleza y Cuidado Personal", l2: "Perfumería y Fragancias" },
+  "CUIDADO PERSONAL": { l1: "Belleza y Cuidado Personal", l2: "Higiene y Cuidado Personal" },
+  "CUIDADO": { l1: "Belleza y Cuidado Personal", l2: "Higiene y Cuidado Personal" },
   "CAPILAR": { l1: "Belleza y Cuidado Personal", l2: "Cuidado Capilar" },
   "CORPORAL": { l1: "Belleza y Cuidado Personal", l2: "Cuidado Corporal" },
   "FAJAS": { l1: "Belleza y Cuidado Personal", l2: "Fajas y Ropa Control" },
@@ -116,7 +116,7 @@ const DROPI_MAPPING_DICT: Record<string, TargetCategory> = {
 
   // Moda / Calzado
   "MODA": { l1: "Moda y Calzado", l2: "Moda General" },
-  "MODA Y ACCESORIOS": { l1: "Moda y Calzado", l2: "Bolsos y Accesorios" },
+  "MODA Y ACCESORIOS": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios" },
   "ROPA": { l1: "Moda y Calzado", l2: "Prendas de Vestir" },
   "CALZADO": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
   "ZAPATOS": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
@@ -127,26 +127,26 @@ const DROPI_MAPPING_DICT: Record<string, TargetCategory> = {
   "BOTINES": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
   "ZAPATOS CASUALES MUJER": { l1: "Moda y Calzado", l2: "Calzado y Zapatos" },
   "CASUAL": { l1: "Moda y Calzado", l2: "Prendas de Vestir" },
-  "MUJER": { l1: "Moda y Calzado", l2: "Ropa Femenina" },
-  "ACCESORIOS DAMA": { l1: "Moda y Calzado", l2: "Bolsos y Accesorios" },
-  "DAMA": { l1: "Moda y Calzado", l2: "Ropa Femenina" },
-  "CABALLERO": { l1: "Moda y Calzado", l2: "Ropa Masculina" },
-  "BOLSOS": { l1: "Moda y Calzado", l2: "Bolsos y Accesorios" },
-  "BOLSOS MORRALES": { l1: "Moda y Calzado", l2: "Bolsos y Accesorios" },
-  "BISUTERIA": { l1: "Moda y Calzado", l2: "Bisutería y Joyería" },
-  "BISTURERIA": { l1: "Moda y Calzado", l2: "Bisutería y Joyería", alert: "typo", suggestedFix: "BISUTERIA" },
-  "BISUTERIA Y JOYERIA": { l1: "Moda y Calzado", l2: "Bisutería y Joyería" },
-  "JOYERIA": { l1: "Moda y Calzado", l2: "Bisutería y Joyería" },
+  "MUJER": { l1: "Moda y Calzado", l2: "Ropa Femenina (Dama)" },
+  "ACCESORIOS DAMA": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios" },
+  "DAMA": { l1: "Moda y Calzado", l2: "Ropa Femenina (Dama)" },
+  "CABALLERO": { l1: "Moda y Calzado", l2: "Ropa Masculina (Caballero)" },
+  "BOLSOS": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios" },
+  "BOLSOS MORRALES": { l1: "Moda y Calzado", l2: "Bolsos, Morrales y Accesorios" },
+  "BISUTERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes" },
+  "BISTURERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes", alert: "typo", suggestedFix: "BISUTERIA" },
+  "BISUTERIA Y JOYERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes" },
+  "JOYERIA": { l1: "Moda y Calzado", l2: "Bisutería, Joyas y Relojes" },
 
   // Bebes / Niños / Juguetes
-  "BEBES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil" },
-  "BEBE": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil" },
-  "BEBES Y NINOS": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil" },
-  "NINOS": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil" },
-  "MUNDO INFANTIL": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil" },
-  "INFANTIL": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil" },
-  "INFANTIL Y BEBES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil" },
-  "INFANTILES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil" },
+  "BEBES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
+  "BEBE": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
+  "BEBES Y NINOS": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
+  "NINOS": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
+  "MUNDO INFANTIL": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
+  "INFANTIL": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
+  "INFANTIL Y BEBES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
+  "INFANTILES": { l1: "Juguetes y Bebés", l2: "Accesorios y Cuidado Infantil (Bebés)" },
   "JUGUETES": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos" },
   "JUGUETERIA": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos" },
   "JUGUETES NINOS": { l1: "Juguetes y Bebés", l2: "Juguetes y Juegos" },
@@ -157,24 +157,24 @@ const DROPI_MAPPING_DICT: Record<string, TargetCategory> = {
   // Deportes / Outdoor
   "DEPORTES": { l1: "Deportes y Outdoor", l2: "Deportes General" },
   "DEPORTE": { l1: "Deportes y Outdoor", l2: "Deportes General" },
-  "DEPORTE Y FITNESS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness" },
-  "FITNESS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness" },
-  "FITENSS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness", alert: "typo", suggestedFix: "FITNESS" },
+  "DEPORTE Y FITNESS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness y Gimnasio" },
+  "FITNESS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness y Gimnasio" },
+  "FITENSS": { l1: "Deportes y Outdoor", l2: "Equipos Fitness y Gimnasio", alert: "typo", suggestedFix: "FITNESS" },
   "DEPORTIVO": { l1: "Deportes y Outdoor", l2: "Deportes General" },
   "CAMPING": { l1: "Deportes y Outdoor", l2: "Camping y Pesca" },
   "PESCA": { l1: "Deportes y Outdoor", l2: "Camping y Pesca" },
 
   // Automotriz
-  "VEHICULOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
-  "VEHICULO": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
-  "AUTOMOVIL": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
-  "AUTOMOVILES": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
-  "AUTOMOTRIZ": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
-  "ACCESORIOS PARA AUTOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
-  "ACCESORIOS DE CARROS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
-  "ACCESORIOS PARA VEHICULOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
-  "ACCESORIOS PARA VEHICULOS CARRO MOTO BICICLETA": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
-  "MOTOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios" },
+  "VEHICULOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "VEHICULO": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "AUTOMOVIL": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "AUTOMOVILES": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "AUTOMOTRIZ": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "ACCESORIOS PARA AUTOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "ACCESORIOS DE CARROS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "ACCESORIOS PARA VEHICULOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "ACCESORIOS PARA VEHICULOS CARRO MOTO BICICLETA": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
+  "MOTOS": { l1: "Ferretería y Herramientas", l2: "Automotriz y Accesorios (Carros/Motos)" },
 
   // Ferreteria / Herramientas
   "FERRETERIA": { l1: "Ferretería y Herramientas", l2: "Ferretería General" },
@@ -186,10 +186,10 @@ const DROPI_MAPPING_DICT: Record<string, TargetCategory> = {
   "PAPELERIA Y OFICINA": { l1: "Otras Categorías", l2: "Papelería y Oficina" },
   "PAPELERIA": { l1: "Otras Categorías", l2: "Papelería y Oficina" },
   "OFICINA Y PAPELERIA": { l1: "Otras Categorías", l2: "Papelería y Oficina" },
-  "LIBROS": { l1: "Otras Categorías", l2: "Libros" },
-  "ARTE": { l1: "Otras Categorías", l2: "Arte y Artesanías" },
-  "ARTE Y ARTESANIA": { l1: "Otras Categorías", l2: "Arte y Artesanías" },
-  "ARTESANIAS": { l1: "Otras Categorías", l2: "Arte y Artesanías" },
+  "LIBROS": { l1: "Otras Categorías", l2: "Libros y Material Educativo" },
+  "ARTE": { l1: "Otras Categorías", l2: "Arte, Artesanías y Hobbies" },
+  "ARTE Y ARTESANIA": { l1: "Otras Categorías", l2: "Arte, Artesanías y Hobbies" },
+  "ARTESANIAS": { l1: "Otras Categorías", l2: "Arte, Artesanías y Hobbies" },
 
   // Basura / Sin Categoria / General
   "Sin Categoria": { l1: "Otras Categorías", l2: "Sin Categorizar", alert: "trash" },
@@ -211,6 +211,100 @@ const DROPI_MAPPING_DICT: Record<string, TargetCategory> = {
   "REMATE DE SALDOS": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
   "REYES MAGOS": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
   "TIENDA DEL NINJA": { l1: "Otras Categorías", l2: "Campaña Temporal", alert: "campaign" },
+};
+
+
+// Complete standard taxonomy map for Dropi (Nivel 1 -> complete Nivel 2)
+const DROPI_COMPLETE_TAXONOMY: Record<string, string[]> = {
+  "Hogar y Decoración": [
+    "Hogar General",
+    "Cocina y Utensilios",
+    "Decoración y Diseño",
+    "Muebles y Mobiliario",
+    "Jardín y Exteriores",
+    "Limpieza, Aseo y Cuidado del Hogar",
+    "Organización y Almacenamiento",
+    "Iluminación",
+    "Baño y Grifería"
+  ],
+  "Mascotas": [
+    "Mascotas General",
+    "Alimento para Mascotas",
+    "Juguetes y Accesorios",
+    "Higiene y Cuidado de Mascotas",
+    "Acuarofilia y Aves"
+  ],
+  "Tecnología y Electrónica": [
+    "Tecnología General",
+    "Computación y Tablets",
+    "Celulares y Accesorios",
+    "Audio y Video",
+    "Gadgets y Novedades",
+    "Videojuegos y Consolas",
+    "Cámaras y Drones",
+    "Electrónica General"
+  ],
+  "Belleza y Cuidado Personal": [
+    "Belleza General",
+    "Maquillaje y Cosméticos",
+    "Perfumería y Fragancias",
+    "Cuidado Capilar",
+    "Cuidado Corporal",
+    "Cuidado Facial y Skincare",
+    "Fajas y Ropa Control",
+    "Higiene y Cuidado Personal"
+  ],
+  "Salud y Bienestar": [
+    "Salud General",
+    "Suplementos y Nutrición",
+    "Equipos Médicos y Cuidado de la Salud",
+    "Bienestar General",
+    "Óptica y Cuidado Ocular"
+  ],
+  "Productos para Adultos": [
+    "Bienestar Sexual",
+    "Lencería y Ropa Erótica",
+    "Juguetes para Adultos"
+  ],
+  "Moda y Calzado": [
+    "Moda General",
+    "Bolsos, Morrales y Accesorios",
+    "Ropa Femenina (Dama)",
+    "Ropa Masculina (Caballero)",
+    "Calzado y Zapatos",
+    "Bisutería, Joyas y Relojes",
+    "Ropa Interior y de Descanso",
+    "Ropa Deportiva"
+  ],
+  "Juguetes y Bebés": [
+    "Accesorios y Cuidado Infantil (Bebés)",
+    "Juguetes y Juegos",
+    "Lactancia y Alimentación",
+    "Coches y Sillas para Auto",
+    "Cuarto del Bebé y Mobiliario"
+  ],
+  "Deportes y Outdoor": [
+    "Deportes General",
+    "Equipos Fitness y Gimnasio",
+    "Camping y Pesca",
+    "Ciclismo y Movilidad",
+    "Deportes de Aventura"
+  ],
+  "Ferretería y Herramientas": [
+    "Ferretería General",
+    "Herramientas Manuales/Eléctricas",
+    "Seguridad y Cerramientos",
+    "Materiales de Construcción",
+    "Pinturas y Acabados",
+    "Automotriz y Accesorios (Carros/Motos)"
+  ],
+  "Otras Categorías": [
+    "Papelería y Oficina",
+    "Libros y Material Educativo",
+    "Arte, Artesanías y Hobbies",
+    "Sin Categorizar",
+    "Campaña Temporal"
+  ]
 };
 
 const getCurvePath = (x1: number, y1: number, x2: number, y2: number) => {
@@ -967,11 +1061,21 @@ export default function CategorizacionPage() {
                       const selectedL1 = selectedDropiCat ? DROPI_MAPPING_DICT[selectedDropiCat]?.l1 : undefined;
                       if (!selectedL1) return null;
 
+                      // Sibling categories mapping to Level 1
                       const siblingRawCats = dropiRawCategories.filter(
                         (c) => DROPI_MAPPING_DICT[c.name]?.l1 === selectedL1
                       );
 
+                      // Get complete Level 2 list for this Level 1
+                      const l2List = DROPI_COMPLETE_TAXONOMY[selectedL1] || [];
+
+                      // Group raw categories that map to each Level 2
                       const l2Groups: Record<string, { rawCats: DropiCategoryRaw[]; totalOrders: number }> = {};
+                      l2List.forEach((l2) => {
+                        l2Groups[l2] = { rawCats: [], totalOrders: 0 };
+                      });
+
+                      // Also catch any unmapped L2
                       siblingRawCats.forEach((c) => {
                         const l2 = DROPI_MAPPING_DICT[c.name]?.l2 || "General";
                         if (!l2Groups[l2]) {
@@ -981,9 +1085,13 @@ export default function CategorizacionPage() {
                         l2Groups[l2].totalOrders += c.orders;
                       });
 
-                      const sortedL2Groups = Object.entries(l2Groups).sort(
-                        (a, b) => b[1].totalOrders - a[1].totalOrders
-                      );
+                      // Sort groups by total orders descending (but keep the empty ones at the bottom)
+                      const sortedL2Groups = Object.entries(l2Groups).sort((a, b) => {
+                        if (b[1].totalOrders !== a[1].totalOrders) {
+                          return b[1].totalOrders - a[1].totalOrders;
+                        }
+                        return a[0].localeCompare(b[0]);
+                      });
 
                       const totalL1Orders = siblingRawCats.reduce((sum, c) => sum + c.orders, 0);
 
@@ -991,15 +1099,15 @@ export default function CategorizacionPage() {
                         <div className="border-t pt-5 space-y-4" style={{ borderColor: "var(--border)" }}>
                           <div className="flex justify-between items-center">
                             <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
-                              Estructura Jerárquica Propuesta para el Catálogo
+                              Estructura Jerárquica Completa para "{selectedL1}"
                             </h4>
                             <span className="text-[10px] text-gray-400 font-mono">
-                              Nivel 1 &gt; Nivel 2 (Homologación Dinámica)
+                              Nivel 1 &gt; Nivel 2 (Taxonomía Completa)
                             </span>
                           </div>
                           
                           <p className="text-xs text-gray-500 leading-relaxed">
-                            Este gráfico muestra cómo se agruparán las categorías de la base de datos bajo el nodo oficial <span className="font-bold">"{selectedL1}"</span>. Las tarjetas de la derecha representan el Nivel 2 propuesto y muestran todos los tags que absorberá cada subcategoría:
+                            A continuación se muestra el árbol de categorías propuesto. Se listan todas las subcategorías estándar de Nivel 2 (incluso las que actualmente tienen 0 órdenes) para mostrar el mapa completo del catálogo:
                           </p>
 
                           {/* Tree Visual Container */}
@@ -1012,7 +1120,7 @@ export default function CategorizacionPage() {
                                 <span className="text-[9px] bg-orange-600 px-2 py-0.5 rounded-full inline-block mt-2 font-bold font-mono w-fit mx-auto">
                                   {totalL1Orders.toLocaleString()} ord.
                                 </span>
-                               </div>
+                              </div>
                             </div>
 
                             {/* Center Part: Connector SVG lines (visible on desktop) */}
@@ -1034,44 +1142,59 @@ export default function CategorizacionPage() {
 
                             {/* Right Part: Level 2 Cards Grid */}
                             <div className="flex-1 space-y-3 relative z-10">
-                              {sortedL2Groups.map(([l2Name, group]) => {
-                                return (
-                                  <div key={l2Name} className="bg-white border rounded-xl p-3 shadow-2xs hover:border-orange-200 transition-all flex flex-col gap-2" style={{ borderColor: "var(--border)" }}>
-                                    <div className="flex justify-between items-center">
-                                      <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
-                                        {l2Name}
-                                      </span>
-                                      <span className="text-[10px] font-mono font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
-                                        {group.totalOrders.toLocaleString()} ord.
-                                      </span>
-                                    </div>
-                                    
-                                    {/* Merged raw categories inside */}
-                                    <div className="flex flex-wrap gap-1.5 pt-1.5 border-t border-slate-100">
-                                      {group.rawCats.sort((a,b)=>b.orders-a.orders).map((raw) => {
-                                        const map = DROPI_MAPPING_DICT[raw.name];
-                                        const isTypo = map?.alert === "typo";
-                                        const isSelected = selectedDropiCat === raw.name;
-                                        return (
-                                          <span
-                                            key={raw.name}
-                                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[9px] font-semibold border ${
-                                              isSelected
-                                                ? "bg-orange-500 text-white border-orange-500 shadow-2xs"
-                                                : isTypo
-                                                ? "bg-amber-50 text-amber-600 border-amber-200"
-                                                : "bg-slate-50 text-gray-600 border-slate-200"
-                                            }`}
-                                          >
-                                            {raw.name} {isTypo && "⚠️"}
-                                          </span>
-                                        );
-                                      })}
-                                    </div>
-                                  </div>
-                                );
-                              })}
+                               {sortedL2Groups.map(([l2Name, group]) => {
+                                 const hasData = group.totalOrders > 0;
+                                 return (
+                                   <div
+                                     key={l2Name}
+                                     className={`border rounded-xl p-3 shadow-2xs transition-all flex flex-col gap-2 ${
+                                       hasData
+                                         ? "bg-white border-slate-200 hover:border-orange-200"
+                                         : "bg-slate-50/50 border-dashed border-slate-200 opacity-60 hover:opacity-100 transition-opacity"
+                                     }`}
+                                     style={{ borderColor: "var(--border)" }}
+                                   >
+                                     <div className="flex justify-between items-center">
+                                       <span className={`text-xs font-bold flex items-center gap-1.5 ${hasData ? "text-gray-800" : "text-gray-400"}`}>
+                                         <span className={`w-1.5 h-1.5 rounded-full ${hasData ? "bg-orange-500" : "bg-slate-300"}`}></span>
+                                         {l2Name}
+                                       </span>
+                                       <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${hasData ? "text-slate-700 bg-slate-100" : "text-slate-400 bg-slate-50"}`}>
+                                         {group.totalOrders.toLocaleString()} ord.
+                                       </span>
+                                     </div>
+                                     
+                                     {/* Merged raw categories inside */}
+                                     {hasData ? (
+                                       <div className="flex flex-wrap gap-1.5 pt-1.5 border-t border-slate-100">
+                                         {group.rawCats.sort((a,b)=>b.orders-a.orders).map((raw) => {
+                                           const map = DROPI_MAPPING_DICT[raw.name];
+                                           const isTypo = map?.alert === "typo";
+                                           const isSelected = selectedDropiCat === raw.name;
+                                           return (
+                                             <span
+                                               key={raw.name}
+                                               className={`inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[9px] font-semibold border ${
+                                                 isSelected
+                                                   ? "bg-orange-500 text-white border-orange-500 shadow-2xs"
+                                                   : isTypo
+                                                   ? "bg-amber-50 text-amber-600 border-amber-200"
+                                                   : "bg-slate-50 text-gray-600 border-slate-200"
+                                               }`}
+                                             >
+                                               {raw.name} {isTypo && "⚠️"}
+                                             </span>
+                                           );
+                                         })}
+                                       </div>
+                                     ) : (
+                                       <div className="text-[9px] italic text-slate-400 pt-0.5">
+                                         Sin categorías asociadas actualmente en base de datos.
+                                       </div>
+                                     )}
+                                   </div>
+                                 );
+                               })}
                             </div>
                           </div>
                         </div>
