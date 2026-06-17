@@ -14,14 +14,14 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 | **Dinámicas de Descuentos** | `Discovery` | Jaime Guevara | Discovery para entender cómo deben funcionar descuentos, promociones y reglas comerciales en Dropi. Casos: remates, descuentos por volumen, liquidación, campañas, Black Friday, mover stock quieto. Sub-proyecto de DCA-000 Dinámicas de Catálogo. |
 | **Chip del Proveedor** | `In Progress` | Jaime Guevara | Mejora del perfil del proveedor: nuevos campos y enriquecimiento de datos para dar más contexto a dropshippers. Handoff de diseño completado con Alejandra. Pendiente: levantar campos adicionales y entregar historias a tech para pasar a desarrollo. |
 | **Catálogo Preseleccionado** | `Discovery` | Jaime Guevara | Discovery y AS-IS completados (2026-05-26). Pendiente: entrevistas con suppliers para cerrar investigación. Una vez cerradas, presentar a la célula para co-construcción. Producto ya tiene propuesta inicial — se busca complementar y validar con el equipo antes de definir alcance. |
-| **Panel de indicadores / métricas de proveedores** | `In Progress` | Jaime Guevara | Dashboard centralizado de métricas de proveedores para seguimiento de desempeño, adopción, clasificación y comportamiento. Primera versión lanzada, en estabilización. Datos de postulaciones en CRM: 178 total, 132 nuevas, 38 negadas, 8 aprobadas para ascenso a verificado. Componente pendiente: badge/métrica en detalle de producto (bloqueado por performance, solución de cálculo nocturno propuesta pero no validada). Pendiente: acceso a CRM, validación de fuentes (CRM vs UserPilot vs dashboard) y definición de cierre. |
-| **Negociaciones Supplier-Dropshipper** | `Discovery` | Jaime Guevara | Discovery completo para entender si Dropi debe habilitar una dinámica de negociación entre suppliers y dropshippers. Casos: precio por volumen, condiciones especiales por desempeño, reglas automáticas, Dropi como mediador. Proyecto distinto a NEG-001 (que es supplier-líder de comunidad). Sub-proyecto de DCA-000 Dinámicas de Catálogo. |
-| **Negociaciones** | `Lanzamiento` | Jaime Guevara | Liberado a producción el 2026-05-27. T&Cs entregados 2026-05-21. Nunca hubo lanzamiento formal — el relanzamiento requiere estrategia de comunicación con OCE y Comms. Pendiente: coordinar relanzamiento formal. Línea base conocida: 182 suppliers visualizaron el módulo, 39 activos en semana piloto. |
-| **Combos** | `In Progress` | Jaime Guevara | José Giraldo confirma entrega el 2026-06-16. El MVP completo de Combos incluye CAS y ECOM aunque sean de otros equipos — hay que agilizar a ambos equipos para que entreguen en paralelo antes del 16 de junio. Accionable: hacer push a CAS y ECOM. Fase 2 en definición: Shopify sync, carga masiva, CAS, Ecom Scanner. |
-| **Time to Value** | `In Progress` | Jaime Guevara | TOBE completo definido (2026-05-27). Foco: maximizar operación de tiempos de registro y activación. North Star: suppliers activos en ≤ 5 días. Outcome: primera orden en ≤ 20 días. 3 hipótesis: (H1) fast-track a auditoría para potenciales, (H2) catálogo público con stock real genera órdenes, (H3) validación operativa protege GMV. Escenario base: 620 suppliers → 31.000 productos → 80.544 órdenes/año (factor maduración 35%). Integración UserPilot→GHL pendiente (Laura+Enrique, sin fecha). Backlog de ya-registrados: responsabilidad de Comercial. Calidad de catálogo: proyecto separado. |
+| **Panel de indicadores / métricas de proveedores** | `In Progress` | Jaime Guevara | Dashboard centralizado de métricas de proveedores en estabilización. Adopción en declive; se enviará experimento desde UserPilot para motivar a proveedores a revisar su panel y postularse para ascenso. |
+| **Negociaciones Supplier-Dropshipper** | `Discovery` | Jaime Guevara | Discovery completo para entender si Dropi debe habilitar una dinámica de negociación entre suppliers y dropshippers. Esta semana se inició trabajo con Michelle en la contextualización y flujo end-to-end, con meta de pasar a desarrollo la próxima semana. |
+| **Negociaciones** | `Lanzamiento` | Jaime Guevara | Liberado a producción. Bug crítico: no visible para proveedores (redirecciona a Home y desaparece). La líder de comunidades requiere data puntual de negociaciones para arqueos (se extraerá a Excel vía Miguel/José temporalmente para evitar desarrollo). José canceló seguimiento de hoy. |
+| **Combos** | `In Progress` | Jaime Guevara | José Giraldo no asistió a la sync; nueva fecha estimada al 30 de junio de 2026, con alta incertidumbre por falta de respuestas. El MVP incluye CAS y ECOM. |
+| **Time to Value** | `In Progress` | Jaime Guevara | TOBE completo definido. Foco: maximizar tiempos de registro/activación. Comercial y Operaciones presentaron plan de implementación de pipeline (estimado 1 semana para arrancar y medir). |
 | **Conexión Chateapro** | `Discovery` | Jaime Guevara | Integración entre Dropi y Chateapro (app del holding para vender productos por WhatsApp vía agentes IA). Fase 1: token de autenticación para validar proveedores de forma segura + sincronización de stock por ID de producto Dropi. Fase futura: coronita azul en catálogo Dropi para productos con prompt optimizado en Chateapro. |
-| **Combos Dropshipper** | `Discovery` | Jaime Guevara | Habilitar que el dropshipper pueda crear sus propios combos de productos dentro de Dropi, independiente de los combos definidos por el supplier. Discovery de la dinámica, reglas de negocio, flujo de creación y experiencia del dropshipper. |
-| **Facturación Dropshipper - Suppliers** | `Discovery` | Jaime Guevara | Reporte de datos de facturación de dropshippers para proveedores cuenta principal. Permite al proveedor descargar desde Mis pedidos la información tributaria de los dropshippers con órdenes entregadas, con plantilla diferenciada por país (CO, CL, MX, EC, AR) y aceptación de acuerdo legal antes de descarga. Reemplaza el proceso manual del área de facturación. |
+| **Combos Dropshipper** | `Discovery` | Jaime Guevara | Habilitar que el dropshipper pueda crear sus propios combos. Esta semana se inició trabajo con Michelle en la contextualización y flujo end-to-end, con meta de pasar a desarrollo la próxima semana. |
+| **Facturación Dropshipper - Suppliers** | `Terminado` | Jaime Guevara | Entregado. José informó que el proyecto ya se entregó. Se marca como terminado y sale de actualizaciones activas. |
 
 ---
 
@@ -172,7 +172,7 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 ---
 
 ## Panel de indicadores / métricas de proveedores (Estado: `In Progress`) 
-*Dashboard centralizado de métricas de proveedores para seguimiento de desempeño, adopción, clasificación y comportamiento. Primera versión lanzada, en estabilización. Datos de postulaciones en CRM: 178 total, 132 nuevas, 38 negadas, 8 aprobadas para ascenso a verificado. Componente pendiente: badge/métrica en detalle de producto (bloqueado por performance, solución de cálculo nocturno propuesta pero no validada). Pendiente: acceso a CRM, validación de fuentes (CRM vs UserPilot vs dashboard) y definición de cierre.*
+*Dashboard centralizado de métricas de proveedores en estabilización. **La adopción del panel ha ido en declive**, por lo cual se implementará un experimento desde UserPilot para motivar a los proveedores a revisar su desempeño y postularse para subir de nivel (ascenso a verificado). Datos de postulaciones en CRM: 178 total, 132 nuevas, 38 negadas, 8 aprobadas.*
 
 ### Compromisos Pendientes (Followups)
 - `[Open]` **Solicitar y obtener acceso al CRM** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
@@ -218,7 +218,7 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 ---
 
 ## Negociaciones Supplier-Dropshipper (Estado: `Discovery`) 
-*Discovery completo para entender si Dropi debe habilitar una dinámica de negociación entre suppliers y dropshippers. Casos: precio por volumen, condiciones especiales por desempeño, reglas automáticas, Dropi como mediador. Proyecto distinto a NEG-001 (que es supplier-líder de comunidad). Sub-proyecto de DCA-000 Dinámicas de Catálogo.*
+*Discovery completo para entender si Dropi debe habilitar una dinámica de negociación directa entre suppliers y dropshippers. **Esta semana iniciamos trabajo con Michelle en la contextualización y flujo end-to-end**, con la meta de finalizar la definición para pasar a desarrollo la próxima semana.*
 
 ### Compromisos Pendientes (Followups)
 - `[Open]` **Iniciar discovery completo de Negociaciones Supplier-Dropshipper** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
@@ -243,7 +243,7 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 ---
 
 ## Negociaciones (Estado: `Lanzamiento`) 
-*Liberado a producción el 2026-05-27. T&Cs entregados 2026-05-21. Nunca hubo lanzamiento formal — el relanzamiento requiere estrategia de comunicación con OCE y Comms. Pendiente: coordinar relanzamiento formal. Línea base conocida: 182 suppliers visualizaron el módulo, 39 activos en semana piloto.*
+*Liberado a producción el 2026-05-27. **Alerta de bug crítico:** Actualmente el módulo no se está visualizando correctamente para proveedores (al hacer clic redirige a Home y desaparece del menú). Adicionalmente, tras reunión con la líder de comunidades, se identificó la necesidad de contar con data de las negociaciones para hacer arqueos y seguimiento con los líderes. Se trabajará en conjunto con Miguel y José para extraer esta data a un Excel de forma temporal y evitar desarrollo. **José canceló la reunión de seguimiento de hoy.***
 
 ### Compromisos Pendientes (Followups)
 - `[Open]` **Preparar comunicación de lanzamiento** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
@@ -313,7 +313,7 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 ---
 
 ## Combos (Estado: `In Progress`) 
-*José Giraldo confirma entrega el 2026-06-16. El MVP completo de Combos incluye CAS y ECOM aunque sean de otros equipos — hay que agilizar a ambos equipos para que entreguen en paralelo antes del 16 de junio. Accionable: hacer push a CAS y ECOM. Fase 2 en definición: Shopify sync, carga masiva, CAS, Ecom Scanner.*
+*José Giraldo no ingresó a la sesión de seguimiento y no ha dado respuesta. La fecha estimada de entrega se mantiene para el **30 de junio de 2026**, sin embargo, existe alta incertidumbre y falta de visibilidad técnica. El MVP incluye CAS y ECOM.*
 
 ### Compromisos Pendientes (Followups)
 - `[Open]` **Agendar sesión de validación end-to-end de Combos (60 min)** — Responsable: *Jaime Guevara* (Límite: Sin fecha)
@@ -467,7 +467,7 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 ---
 
 ## Combos Dropshipper (Estado: `Discovery`) 
-*Habilitar que el dropshipper pueda crear sus propios combos de productos dentro de Dropi, independiente de los combos definidos por el supplier. Discovery de la dinámica, reglas de negocio, flujo de creación y experiencia del dropshipper.*
+*Habilitar que el dropshipper pueda crear sus propios combos. **Esta semana iniciamos trabajo con Michelle en la contextualización y flujo end-to-end**, con la meta de finalizar la definición para pasar a desarrollo la próxima semana.*
 
 ### Estado de Memoria y Contexto
 - *No hay contexto aprobado oficial aún.*
@@ -479,8 +479,8 @@ Este reporte consolida la información activa en Supabase (proyectos, OKRs, comp
 
 ---
 
-## Facturación Dropshipper - Suppliers (Estado: `Discovery`) 
-*Reporte de datos de facturación de dropshippers para proveedores cuenta principal. Permite al proveedor descargar desde Mis pedidos la información tributaria de los dropshippers con órdenes entregadas, con plantilla diferenciada por país (CO, CL, MX, EC, AR) y aceptación de acuerdo legal antes de descarga. Reemplaza el proceso manual del área de facturación.*
+## Facturación Dropshipper - Suppliers (Estado: `Terminado`) 
+*Proyecto entregado formalmente. José Giraldo informó la semana pasada que la funcionalidad de reporte de facturación para proveedores cuenta principal fue finalizada e implementada con éxito. Ya no requiere más seguimiento o actualizaciones activas.*
 
 ### Decisiones Oficiales
 - **Texto del acuerdo legal aprobado por Legal para los 5 países**: El texto del modal de acuerdo de responsabilidad sobre tratamiento de datos personales está aprobado por Legal para Colombia, Chile, México, Ecuador y Argentina. No hay bloqueante legal para el desarrollo ni el lanzamiento. — *Razón:* Confirmado por Jaime Guevara el 2026-06-01.
