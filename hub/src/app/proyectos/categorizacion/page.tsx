@@ -968,6 +968,122 @@ export default function CategorizacionPage() {
                   </div>
                 )}
               </div>
+
+                    {/* Proposed Hierarchical Tree for Level 1 */}
+                    {(() => {
+                      const selectedL1 = selectedDropiCat ? DROPI_MAPPING_DICT[selectedDropiCat]?.l1 : undefined;
+                      if (!selectedL1) return null;
+
+                      const siblingRawCats = dropiRawCategories.filter(
+                        (c) => DROPI_MAPPING_DICT[c.name]?.l1 === selectedL1
+                      );
+
+                      const l2Groups: Record<string, { rawCats: DropiCategoryRaw[]; totalOrders: number }> = {};
+                      siblingRawCats.forEach((c) => {
+                        const l2 = DROPI_MAPPING_DICT[c.name]?.l2 || "General";
+                        if (!l2Groups[l2]) {
+                          l2Groups[l2] = { rawCats: [], totalOrders: 0 };
+                        }
+                        l2Groups[l2].rawCats.push(c);
+                        l2Groups[l2].totalOrders += c.orders;
+                      });
+
+                      const sortedL2Groups = Object.entries(l2Groups).sort(
+                        (a, b) => b[1].totalOrders - a[1].totalOrders
+                      );
+
+                      const totalL1Orders = siblingRawCats.reduce((sum, c) => sum + c.orders, 0);
+
+                      return (
+                        <div className="border-t pt-5 space-y-4" style={{ borderColor: "var(--border)" }}>
+                          <div className="flex justify-between items-center">
+                            <h4 className="text-xs font-bold text-gray-900 uppercase tracking-wider">
+                              Estructura Jerárquica Propuesta para el Catálogo
+                            </h4>
+                            <span className="text-[10px] text-gray-400 font-mono">
+                              Nivel 1 &gt; Nivel 2 (Homologación Dinámica)
+                            </span>
+                          </div>
+                          
+                          <p className="text-xs text-gray-500 leading-relaxed">
+                            Este gráfico muestra cómo se agruparán las categorías de la base de datos bajo el nodo oficial <span className="font-bold">"{selectedL1}"</span>. Las tarjetas de la derecha representan el Nivel 2 propuesto y muestran todos los tags que absorberá cada subcategoría:
+                          </p>
+
+                          {/* Tree Visual Container */}
+                          <div className="bg-slate-50 border rounded-2xl p-6 flex flex-col md:flex-row gap-4 md:gap-8 items-center md:items-stretch justify-between relative overflow-hidden" style={{ borderColor: "var(--border)" }}>
+                            {/* Left Part: Level 1 Card */}
+                            <div className="w-full md:w-48 flex items-center justify-center flex-shrink-0">
+                              <div className="bg-orange-500 text-white rounded-xl p-4 shadow-sm text-center w-full border border-orange-600 relative z-10 flex flex-col justify-center min-h-[100px]">
+                                <span className="text-[8px] uppercase tracking-widest font-extrabold opacity-75 block mb-1">Nivel 1 (Raíz)</span>
+                                <h5 className="font-extrabold text-xs leading-snug">{selectedL1}</h5>
+                                <span className="text-[9px] bg-orange-600 px-2 py-0.5 rounded-full inline-block mt-2 font-bold font-mono w-fit mx-auto">
+                                  {totalL1Orders.toLocaleString()} ord.
+                                </span>
+                               </div>
+                            </div>
+
+                            {/* Center Part: Connector SVG lines (visible on desktop) */}
+                            <div className="hidden md:block flex-shrink-0 w-20 relative">
+                              <svg className="absolute inset-0 w-full h-full" style={{ stroke: "#cbd5e1", strokeWidth: 1.5, fill: "none" }}>
+                                {sortedL2Groups.map((_, idx) => {
+                                  const n = sortedL2Groups.length;
+                                  const y1 = "50%";
+                                  const y2 = `${((idx + 0.5) / n) * 100}%`;
+                                  return (
+                                    <path
+                                      key={idx}
+                                      d={`M 0,${y1} C 40,${y1} 40,${y2} 80,${y2}`}
+                                    />
+                                  );
+                                })}
+                              </svg>
+                            </div>
+
+                            {/* Right Part: Level 2 Cards Grid */}
+                            <div className="flex-1 space-y-3 relative z-10">
+                              {sortedL2Groups.map(([l2Name, group]) => {
+                                return (
+                                  <div key={l2Name} className="bg-white border rounded-xl p-3 shadow-2xs hover:border-orange-200 transition-all flex flex-col gap-2" style={{ borderColor: "var(--border)" }}>
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-xs font-bold text-gray-800 flex items-center gap-1.5">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                                        {l2Name}
+                                      </span>
+                                      <span className="text-[10px] font-mono font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded">
+                                        {group.totalOrders.toLocaleString()} ord.
+                                      </span>
+                                    </div>
+                                    
+                                    {/* Merged raw categories inside */}
+                                    <div className="flex flex-wrap gap-1.5 pt-1.5 border-t border-slate-100">
+                                      {group.rawCats.sort((a,b)=>b.orders-a.orders).map((raw) => {
+                                        const map = DROPI_MAPPING_DICT[raw.name];
+                                        const isTypo = map?.alert === "typo";
+                                        const isSelected = selectedDropiCat === raw.name;
+                                        return (
+                                          <span
+                                            key={raw.name}
+                                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded font-mono text-[9px] font-semibold border ${
+                                              isSelected
+                                                ? "bg-orange-500 text-white border-orange-500 shadow-2xs"
+                                                : isTypo
+                                                ? "bg-amber-50 text-amber-600 border-amber-200"
+                                                : "bg-slate-50 text-gray-600 border-slate-200"
+                                            }`}
+                                          >
+                                            {raw.name} {isTypo && "⚠️"}
+                                          </span>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
             </div>
           </div>
 
