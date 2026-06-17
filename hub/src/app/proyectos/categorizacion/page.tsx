@@ -313,7 +313,7 @@ const computeLayout = (
 
 export default function CategorizacionPage() {
   const [docsOpen, setDocsOpen] = useState(false);
-  const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "docs">("diagnostico");
+  const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "taxonomy" | "ai" | null>(null);
 
   // Dropi Data States
   const [dropiRawCategories, setDropiRawCategories] = useState<DropiCategoryRaw[]>([]);
@@ -1436,6 +1436,88 @@ export default function CategorizacionPage() {
 
     );
   };
+
+  const renderTaxonomyDoc = () => {
+    return (
+      <div className="bg-white border rounded-2xl p-6 shadow-2xs space-y-4 text-xs leading-relaxed" style={{ borderColor: "var(--border)" }}>
+        <h4 className="text-sm font-bold text-gray-900">Propuesta de Taxonomía Unificada de Dropi</h4>
+        <p className="text-gray-500">
+          Para estructurar el catálogo desordenado actual, hemos unificado las más de 160 categorías planas creadas libremente en <span className="font-bold">10 familias principales (Level 1)</span>:
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">🏠 1. Hogar y Decoración</span>
+            <span className="text-gray-500 text-[10px]">Agrupa cocina, muebles, jardinería, decoración, aseo y limpieza.</span>
+          </div>
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">💻 2. Tecnología y Electrónica</span>
+            <span className="text-gray-500 text-[10px]">Computadores, celulares, consolas, videojuegos y gadgets novedosos.</span>
+          </div>
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">💅 3. Belleza y Cuidado Personal</span>
+            <span className="text-gray-500 text-[10px]">Cosméticos, maquillaje, perfumería, fajas, cuidado corporal y capilar.</span>
+          </div>
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">❤️ 4. Salud y Bienestar</span>
+            <span className="text-gray-500 text-[10px]">Suplementos vitamínicos, encapsulados, nutrición, salud general y pods.</span>
+          </div>
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">👗 5. Moda y Calzado</span>
+            <span className="text-gray-500 text-[10px]">Ropa de vestir (dama/caballero), calzado nacional, bisutería y morrales.</span>
+          </div>
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">🧸 6. Juguetes y Bebés</span>
+            <span className="text-gray-500 text-[10px]">Juguetería para niños, accesorios de bebés, cunas y entretenimiento infantil.</span>
+          </div>
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">⚽ 7. Deportes y Outdoor</span>
+            <span className="text-gray-500 text-[10px]">Equipos de gimnasio, ropa deportiva, accesorios de camping y pesca.</span>
+          </div>
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">🔧 8. Ferretería y Herramientas</span>
+            <span className="text-gray-500 text-[10px]">Herramientas manuales/eléctricas, bricolaje, insumos de construcción y cerrajería.</span>
+          </div>
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">🔞 9. Productos para Adultos</span>
+            <span className="text-gray-500 text-[10px]">Artículos de sexshop, lubricantes, aceites corporales y bienestar sexual.</span>
+          </div>
+          <div className="p-4 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+            <span className="font-bold text-slate-900 block mb-1">📁 10. Otras Categorías</span>
+            <span className="text-gray-500 text-[10px]">Papelería, oficina, arte, libros y registros pendientes de reclasificar.</span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderAiDoc = () => {
+    return (
+      <div className="bg-white border rounded-2xl p-6 shadow-2xs space-y-4 text-xs leading-relaxed" style={{ borderColor: "var(--border)" }}>
+        <h4 className="text-sm font-bold text-gray-900">Pipeline de Limpieza y Reglas de Negocio</h4>
+        <div className="space-y-3">
+          <div className="border-l-2 border-orange-500 pl-3">
+            <span className="font-bold block text-slate-900">1. Corrección de Ortografía (Typos) por Distancia Levenshtein</span>
+            <p className="text-gray-500 mt-0.5">
+              Usamos la distancia de edición de Levenshtein para medir la similitud entre etiquetas creadas manualmente por los proveedores (ej: <span className="font-mono text-red-500 font-bold">TEGNOLOGIA</span> o <span className="font-mono text-red-500 font-bold">FITENSS</span>) y las etiquetas oficiales. Si la distancia es menor a un umbral configurado (D &le; 2), el sistema propone la corrección automatizada.
+            </p>
+          </div>
+          <div className="border-l-2 border-orange-500 pl-3">
+            <span className="font-bold block text-slate-900">2. Normalización de Cadenas</span>
+            <p className="text-gray-500 mt-0.5">
+              Toda etiqueta de categoría se somete a remoción de tildes (normalización unicode NFD), eliminación de espacios en blanco excedentes y conversión a mayúsculas para detectar duplicados implícitos (ej. <span className="font-mono">Sex Shop</span> y <span className="font-mono">SEXSHOP</span>).
+            </p>
+          </div>
+          <div className="border-l-2 border-orange-500 pl-3">
+            <span className="font-bold block text-slate-900">3. Pipeline de Enriquecimiento L1 / L2 asistido por LLMs</span>
+            <p className="text-gray-500 mt-0.5">
+              Para los productos en categorías genéricas ("basura") como <span className="font-mono">OTRO</span>, un agente clasificador lee el título, la descripción y los atributos del producto para reasignarle dinámicamente un nodo hoja válido en la nueva taxonomía estandarizada.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <main id="categorizacion-project-page" className="min-h-screen pb-16" style={{ background: "var(--bg)" }}>
       {/* Header */}
@@ -1498,83 +1580,111 @@ export default function CategorizacionPage() {
 
           {docsOpen && (
             <div id="accordion-content-panel" className="border-t bg-slate-50 flex flex-col" style={{ borderColor: "var(--border)" }}>
-              {/* Inner Accordion Tab Navigation */}
-              <div className="flex border-b border-slate-200 bg-white px-6 pt-3 gap-2" style={{ borderColor: "var(--border)" }}>
-                <button
-                  onClick={() => setActiveResourceTab("diagnostico")}
-                  className={`pb-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-1.5 ${
-                    activeResourceTab === "diagnostico"
-                      ? "border-orange-500 text-orange-600 font-extrabold"
-                      : "border-transparent text-gray-500 hover:text-gray-900"
+              {/* Cards Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-slate-50">
+                {/* Card 1: Diagnóstico */}
+                <div
+                  onClick={() => setActiveResourceTab(activeResourceTab === "diagnostico" ? null : "diagnostico")}
+                  className={`bg-white border rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-orange-500 hover:shadow-xs transition-all duration-200 ${
+                    activeResourceTab === "diagnostico" ? "border-orange-500 bg-orange-50/5 ring-1 ring-orange-500/20" : "border-slate-200"
                   }`}
                 >
-                  <span>📊</span> Diagnóstico de Taxonomía Actual
-                </button>
-                <button
-                  onClick={() => setActiveResourceTab("meli")}
-                  className={`pb-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-1.5 ${
-                    activeResourceTab === "meli"
-                      ? "border-orange-500 text-orange-600 font-extrabold"
-                      : "border-transparent text-gray-500 hover:text-gray-900"
-                  }`}
-                >
-                  <span>🕸️</span> Referencia: Mercado Libre
-                </button>
-                <button
-                  onClick={() => setActiveResourceTab("docs")}
-                  className={`pb-3 px-4 text-xs font-bold border-b-2 transition-all flex items-center gap-1.5 ${
-                    activeResourceTab === "docs"
-                      ? "border-orange-500 text-orange-600 font-extrabold"
-                      : "border-transparent text-gray-500 hover:text-gray-900"
-                  }`}
-                >
-                  <span>📖</span> Documentos y Guías
-                </button>
-              </div>
-
-              {/* Inner Tab Content */}
-              <div className="p-6">
-                {activeResourceTab === "docs" && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div id="resource-card-taxonomy" className="bg-white border rounded-xl p-4 flex items-start gap-3 shadow-2xs" style={{ borderColor: "var(--border)" }}>
-                      <span className="text-2xl">📖</span>
-                      <div>
-                        <div className="text-sm font-bold mb-1" style={{ color: "var(--fg)" }}>
-                          Taxonomía Estándar
-                        </div>
-                        <div className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
-                          Propuesta para condensar más de 160 etiquetas planas de Dropi en 10 categorías jerárquicas limpias.
-                        </div>
-                      </div>
+                  <span className="text-2xl mt-0.5">📊</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Diagnóstico de Taxonomía</span>
+                      {activeResourceTab === "diagnostico" && <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />}
                     </div>
-                    <div id="resource-card-ai-pilot" className="bg-white border rounded-xl p-4 flex items-start gap-3 shadow-2xs" style={{ borderColor: "var(--border)" }}>
-                      <span className="text-2xl">🤖</span>
-                      <div>
-                        <div className="text-sm font-bold mb-1" style={{ color: "var(--fg)" }}>
-                          Piloto IA & Reglas
-                        </div>
-                        <div className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
-                          Algoritmos de detección automática de typos por similitud semántica y Levenshtein.
-                        </div>
-                      </div>
-                    </div>
-                    <div id="resource-card-backlog" className="bg-white border rounded-xl p-4 flex items-start gap-3 shadow-2xs" style={{ borderColor: "var(--border)" }}>
-                      <span className="text-2xl">📋</span>
-                      <div>
-                        <div className="text-sm font-bold mb-1" style={{ color: "var(--fg)" }}>
-                          Mercado Libre
-                        </div>
-                        <div className="text-xs leading-relaxed" style={{ color: "var(--muted)" }}>
-                          Explorador completo de la taxonomía oficial de Mercado Libre Colombia (MCO) como benchmark de la industria.
-                        </div>
-                      </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Auditoría detallada de fragmentación, typos, redundancias y volumen de órdenes afectadas en Dropi.
                     </div>
                   </div>
-                )}
+                </div>
 
-                {activeResourceTab === "diagnostico" && renderDiagnostico()}
-                {activeResourceTab === "meli" && renderMeli()}
+                {/* Card 2: Referencia ML */}
+                <div
+                  onClick={() => setActiveResourceTab(activeResourceTab === "meli" ? null : "meli")}
+                  className={`bg-white border rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-orange-500 hover:shadow-xs transition-all duration-200 ${
+                    activeResourceTab === "meli" ? "border-orange-500 bg-orange-50/5 ring-1 ring-orange-500/20" : "border-slate-200"
+                  }`}
+                >
+                  <span className="text-2xl mt-0.5">🕸️</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Referencia: Mercado Libre</span>
+                      {activeResourceTab === "meli" && <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />}
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Explorador de categorías de Mercado Libre Colombia (MCO) con visualizador de grafo de red.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 3: Taxonomía Estándar */}
+                <div
+                  onClick={() => setActiveResourceTab(activeResourceTab === "taxonomy" ? null : "taxonomy")}
+                  className={`bg-white border rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-orange-500 hover:shadow-xs transition-all duration-200 ${
+                    activeResourceTab === "taxonomy" ? "border-orange-500 bg-orange-50/5 ring-1 ring-orange-500/20" : "border-slate-200"
+                  }`}
+                >
+                  <span className="text-2xl mt-0.5">📖</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Taxonomía Estándar</span>
+                      {activeResourceTab === "taxonomy" && <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />}
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Propuesta para condensar más de 160 etiquetas en 10 categorías jerárquicas estándar de Nivel 1.
+                    </div>
+                  </div>
+                </div>
+
+                {/* Card 4: Piloto IA */}
+                <div
+                  onClick={() => setActiveResourceTab(activeResourceTab === "ai" ? null : "ai")}
+                  className={`bg-white border rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-orange-500 hover:shadow-xs transition-all duration-200 ${
+                    activeResourceTab === "ai" ? "border-orange-500 bg-orange-50/5 ring-1 ring-orange-500/20" : "border-slate-200"
+                  }`}
+                >
+                  <span className="text-2xl mt-0.5">🤖</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Piloto IA & Reglas</span>
+                      {activeResourceTab === "ai" && <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />}
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Lógica técnica y algoritmos de corrección automática de typos usando distancia Levenshtein.
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              {/* Detailed Expanded View inside Accordion */}
+              {activeResourceTab && (
+                <div className="border-t p-6 bg-slate-50/50 space-y-6" style={{ borderColor: "var(--border)" }}>
+                  {/* Header containing name and collapse button */}
+                  <div className="flex justify-between items-center pb-2 border-b border-slate-200/60" style={{ borderColor: "var(--border)" }}>
+                    <h3 className="text-xs font-bold text-slate-700 uppercase tracking-widest flex items-center gap-2">
+                      {activeResourceTab === "diagnostico" && "📊 Diagnóstico Detallado de Taxonomía Actual"}
+                      {activeResourceTab === "meli" && "🕸️ Explorador y Grafo de Mercado Libre"}
+                      {activeResourceTab === "taxonomy" && "📖 Propuesta de Taxonomía Estándar (10 Nodos Raíz)"}
+                      {activeResourceTab === "ai" && "🤖 Pipeline de Enriquecimiento IA y Distancia Levenshtein"}
+                    </h3>
+                    <button
+                      onClick={() => setActiveResourceTab(null)}
+                      className="px-2.5 py-1 text-[10px] font-bold text-slate-500 bg-white border rounded-lg hover:bg-slate-100 hover:text-slate-800 transition-colors"
+                      style={{ borderColor: "var(--border)" }}
+                    >
+                      Cerrar Vista ✕
+                    </button>
+                  </div>
+
+                  {activeResourceTab === "diagnostico" && renderDiagnostico()}
+                  {activeResourceTab === "meli" && renderMeli()}
+                  {activeResourceTab === "taxonomy" && renderTaxonomyDoc()}
+                  {activeResourceTab === "ai" && renderAiDoc()}
+                </div>
+              )}
             </div>
           )}
         </div>
