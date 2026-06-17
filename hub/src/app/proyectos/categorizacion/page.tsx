@@ -961,13 +961,6 @@ export default function CategorizacionPage() {
                         </div>
                       )}
                     </div>
-                  </div>
-                ) : (
-                  <div className="text-center py-20 bg-white border border-dashed rounded-2xl text-gray-400 text-xs">
-                    Selecciona una categoría plana de la izquierda para ver su simulación de homologación.
-                  </div>
-                )}
-              </div>
 
                     {/* Proposed Hierarchical Tree for Level 1 */}
                     {(() => {
@@ -1084,6 +1077,17 @@ export default function CategorizacionPage() {
                         </div>
                       );
                     })()}
+                  </div>
+                ) : (
+                  <div className="text-center py-20 bg-white border border-dashed rounded-2xl text-gray-400 text-xs">
+                    Selecciona una categoría plana de la izquierda para ver su simulación de homologación.
+                  </div>
+                )}
+              </div>
+
+
+
+
             </div>
           </div>
 
