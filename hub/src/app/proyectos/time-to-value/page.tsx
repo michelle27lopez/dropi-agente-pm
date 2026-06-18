@@ -79,28 +79,48 @@ export default function TimeToValuePage() {
               borderTop: "1px solid var(--border)", padding: "16px 20px",
               display: "flex", gap: 12, flexWrap: "wrap",
             }}>
-              <a
-                href="/proyectos/time-to-value/metricas"
-                style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: "#F8FAFC", border: "1px solid var(--border)",
-                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
-                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
-                  transition: "box-shadow 0.15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.07)")}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-              >
-                <span style={{ fontSize: 22, flexShrink: 0 }}>📊</span>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>
-                    Métricas
+              {[
+                {
+                  href: "/proyectos/time-to-value/asis",
+                  icon: "🔍",
+                  title: "Diagnóstico AS-IS",
+                  sub: "Embudo real · Activación · Churn · Por país",
+                },
+                {
+                  href: "/proyectos/time-to-value/alcance",
+                  icon: "🎯",
+                  title: "Alcance / Meta",
+                  sub: "TOBE · Pipeline GHL · Hipótesis · KPIs",
+                },
+                {
+                  href: "/proyectos/time-to-value/metricas",
+                  icon: "📊",
+                  title: "Métricas de seguimiento",
+                  sub: "Dashboard · Embudo mensual · TTV",
+                },
+              ].map((card) => (
+                <a
+                  key={card.href}
+                  href={card.href}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 10,
+                    background: "#F8FAFC", border: "1px solid var(--border)",
+                    borderRadius: 10, padding: "12px 16px", textDecoration: "none",
+                    flex: "1 1 200px", minWidth: 200, maxWidth: 260,
+                    transition: "box-shadow 0.15s",
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.07)")}
+                  onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+                >
+                  <span style={{ fontSize: 22, flexShrink: 0 }}>{card.icon}</span>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>
+                      {card.title}
+                    </div>
+                    <div style={{ fontSize: 12, color: "var(--muted)" }}>{card.sub}</div>
                   </div>
-                  <div style={{ fontSize: 12, color: "var(--muted)" }}>
-                    Dashboard de seguimiento · embudo · TTV
-                  </div>
-                </div>
-              </a>
+                </a>
+              ))}
             </div>
           )}
         </div>
