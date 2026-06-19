@@ -53,6 +53,17 @@ export default function WeeklyPage() {
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+      <style>{`
+        @media print {
+          @page { size: A4; margin: 16mm 14mm; }
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+          header { display: none !important; }
+          main { background: #fff !important; }
+          .no-print { display: none !important; }
+          h1 { font-size: 24px !important; }
+          h2 { font-size: 15px !important; }
+        }
+      `}</style>
 
       {/* Header */}
       <header style={{
@@ -87,6 +98,23 @@ export default function WeeklyPage() {
           }}>
             {isCurrentWeek ? "✦ Esta semana" : "Archivo"} · {data.week}
           </span>
+          <button
+            onClick={() => window.print()}
+            style={{
+              display: "flex", alignItems: "center", gap: 6,
+              fontSize: 12, fontWeight: 700,
+              background: "#111827", color: "#fff",
+              border: "none", borderRadius: 8,
+              padding: "7px 14px", cursor: "pointer",
+            }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Descargar PDF
+          </button>
         </div>
       </header>
 
