@@ -1,159 +1,147 @@
 "use client";
 
-const WEEK = "Semana 12–18 junio 2026";
-const SUBTITLE = "Estado de oportunidades, hipótesis y accionables comerciales";
+const WEEK = "Semana 19–25 jun 2026";
+const SUBTITLE = "Avances gerenciales · Proyectos activos · Dolores comerciales cerrados";
 
 const oportunidades = [
   {
-    code: "DCA-002",
-    name: "Descuentos para activar y mover catálogo",
-    status: "Aprobada · Exploración con hipótesis numérica",
-    color: "#F77F00",
-    mueve: "Órdenes / activación de catálogo",
-    hipotesis: "626.000 órdenes/año base",
-    gmv: "USD 9,39M teórico",
-    fases: "F1 descuento básico · F2 filtro/vitrina · F3 campañas",
-    next: "Validar piloto: productos con descuento vs. grupo control",
-  },
-  {
-    code: "DCA-001",
-    name: "Catálogos preseleccionados para activación comercial",
-    status: "Aprobada · MVP de campañas en curso",
-    color: "#0EA5E9",
-    mueve: "Órdenes + GMV por curaduría de ticket alto",
-    hipotesis: "149.300 órdenes/año base",
-    gmv: "USD 2,24M estándar · USD 3,73M high ticket",
-    fases: "F1 vitrina curada · F2 postulación supplier · F3 gestión campañas",
-    next: "Conectar MVP: banner/filtro de productos por campaña",
-  },
-  {
     code: "CAT-001",
-    name: "Categorización y enriquecimiento inteligente del catálogo",
-    status: "Aprobada · Habilitador estructural",
+    name: "Categorización y enriquecimiento del catálogo",
+    status: "🎯 Objetivo de célula · En definición",
+    statusColor: "#7C3AED",
     color: "#7C3AED",
     mueve: "Habilita búsqueda, campañas, IA y catálogo",
     hipotesis: "Sin proyección directa — medir lift vs. control",
-    gmv: "Medir por lift vs. control",
-    fases: "F1 taxonomía + piloto IA · F2 reprocesamiento · F3 asistente IA",
-    next: "Preparar Dropy Score / backlog con piloto por categorías críticas",
+    gmv: "Habilitador estructural",
+    avance: "Reunión de célula realizada. Todos aportaron a la problemática. Cada integrante se lleva la tarea de investigar y revisar propuestas de árbol de categorías.",
+    next: "Próxima célula: cada miembro presenta su propuesta — se decide árbol de categorías oficial y se formaliza el proyecto",
+    badge: "🔥 Esta semana",
+    badgeColor: "#7C3AED",
   },
   {
-    code: "CAZ-001",
-    name: "Caza Productos + Búsqueda Semántica como motor de demanda",
-    status: "Aprobada · Discovery / instrumentación",
-    color: "#EC4899",
-    mueve: "Demanda real → productos activados → órdenes",
-    hipotesis: "54.000 órdenes/año con semántica activa",
-    gmv: "USD 810K base · USD 1,62M alto",
-    fases: "F1 instrumentación · F2 Verificados light · F3 marketplace oportunidades",
-    next: "Instrumentar búsqueda semántica y medir respuesta supplier",
+    code: "DCA-001 + DCA-002",
+    name: "Campañas de catálogo · Experimento activo",
+    status: "🚀 Kickoff realizado · Fase de decisión",
+    statusColor: "#0EA5E9",
+    color: "#0EA5E9",
+    mueve: "Órdenes + GMV por curaduría de catálogo y descuentos",
+    hipotesis: "149.300–626.000 órdenes/año (base según fase)",
+    gmv: "USD 2,24M–9,39M potencial",
+    avance: "Kickoff realizado esta semana con el equipo. Experimento de campañas manuales activo. Plan de despliegue definido.",
+    next: "Semana 26 jun: reunión con equipo — cada uno lleva insights → se decide qué campaña lanzar → inicio del despliegue",
+    badge: "🚀 Kickoff hecho",
+    badgeColor: "#0EA5E9",
   },
   {
     code: "TTV-001",
     name: "Time to Value · Activación de suppliers",
-    status: "Aprobada · En ejecución operativa / GHL",
+    status: "⏳ Esperando implementación GHL",
+    statusColor: "#10B981",
     color: "#10B981",
-    mueve: "Nuevos suppliers activos con catálogo visible",
-    hipotesis: "620 suppliers · 80.500 órdenes/año base",
-    gmv: "USD 1,21M base · USD 3,44M maduro (año 3)",
-    fases: "F1 pipeline · F2 automatización · F3 optimización por segmentos",
-    next: "Automatizar eventos webhook GHL: registro, primera orden creada y entregada",
+    mueve: "620 nuevos suppliers activos con catálogo visible",
+    hipotesis: "~105.000 órdenes/año (revisado con datos CO)",
+    gmv: "USD 1,57M base año 1 · USD 12,6M maduro (año 3)",
+    avance: "Pipeline GHL definido (11 etapas). Hipótesis, KPIs y proyección documentados en el hub. Análisis de base real CO completado.",
+    next: "Esperando integración técnica Dropi → GHL (Laura + Enrique). Al activar: iniciar pipeline de activación de 620 suppliers",
+    badge: "⏳ Implementación",
+    badgeColor: "#10B981",
+  },
+  {
+    code: "NEG-001",
+    name: "Negociaciones · Suppliers y Líderes de Comunidad",
+    status: "📦 Handoff a comercial · Lanzamiento 6-jul",
+    statusColor: "#F77F00",
+    color: "#F77F00",
+    mueve: "Negociaciones formalizadas → comisiones acordadas → GMV",
+    hipotesis: "Métricas: negociaciones creadas, activas, acordadas / semana",
+    gmv: "Palanca de crecimiento comercial — sin proyección inicial",
+    avance: "Handoff formal realizado hoy. Bloqueante Emilille resuelto: reporte de comisiones descargable desde historial de cartera. Comunicación lista.",
+    next: "19 jun–6 jul: piloto con 5 comunidades top (Emilille). 6 jul: lanzamiento masivo con comunicación formal.",
+    badge: "📦 Handoff hoy",
+    badgeColor: "#F77F00",
+  },
+  {
+    code: "CAZ-001",
+    name: "Caza Productos + Búsqueda Semántica",
+    status: "🔍 Oportunidad · Discovery pendiente",
+    statusColor: "#EC4899",
+    color: "#EC4899",
+    mueve: "Demanda real → productos activados → órdenes",
+    hipotesis: "54.000 órdenes/año con semántica activa",
+    gmv: "USD 810K base · USD 1,62M alto",
+    avance: "Oportunidad validada. Búsqueda semántica confirmada como inexistente hoy (José, jun 2026). Pendiente de priorización formal.",
+    next: "Abordar en sprint posterior. No compromete desarrollo aún — requiere instrumentación primero.",
+    badge: "⏸ Posterior",
+    badgeColor: "#EC4899",
   },
 ];
 
 const dolores = [
   {
     frente: "Trazabilidad del ciclo de orden",
-    tag: "Accionables claros",
-    tagColor: "#0EA5E9",
+    tag: "📁 Proyecto identificado",
+    tagColor: "#7C3AED",
     salio: "360.000 cancelaciones/mes · 40.000 pendientes confirmación aprox.",
-    accionables: "Agregar motivo/texto de cancelación al reporte; visual al proveedor sobre pendiente confirmación; revisar ventana 15 días; alinear con logística.",
-    ruta: "Back Office / Data / Soporte",
-    rutaColor: "#F77F00",
-    metrica: "Cancelaciones por motivo, por stock, órdenes en pendiente, stock comprometido.",
-    decision: "Prioridad alta como quick win de visibilidad.",
+    accionables: "Motivo de cancelación en reporte, visual al proveedor sobre pendiente, revisar ventana 15 días, alinear con logística.",
+    ruta: "Logística — montar como proyecto formal",
+    rutaColor: "#7C3AED",
+    metrica: "Cancelaciones por motivo, por stock, órdenes en pendiente.",
+    decision: "Definido como proyecto. Pasa a Logística para formalización y roadmap.",
   },
   {
-    frente: "Disponibilidad real de proveedor y productos",
-    tag: "Requiere definición",
-    tagColor: "#7C3AED",
+    frente: "Disponibilidad real de proveedor",
+    tag: "→ Indexar a TTV-001",
+    tagColor: "#10B981",
     salio: "Modo vacaciones, pausas por bodega, productos privatizados sin trazabilidad.",
-    accionables: "Diseñar modo vacaciones; evaluar pausa por bodega; checklist previo; medir productos privatizados por fecha y movimiento.",
-    ruta: "Nuevo discovery / OPS + Producto",
-    rutaColor: "#6B7280",
-    metrica: "Proveedores en pausa, órdenes durante pausa, indemnizaciones evitadas.",
-    decision: "Dejar como candidato posterior; primero cerrar reglas operativas.",
+    accionables: "Modo vacaciones; pausa por bodega; checklist previo; medir privatizados.",
+    ruta: "TTV-001 · Checklist de activación / pipeline GHL",
+    rutaColor: "#10B981",
+    metrica: "Proveedores en pausa, órdenes durante pausa.",
+    decision: "Se indexa a TTV-001 como regla operativa del checklist de activación.",
   },
   {
     frente: "Descubrimiento de proveedores confiables",
-    tag: "Quick win visual",
-    tagColor: "#10B981",
+    tag: "→ Indexar a CAT-001",
+    tagColor: "#7C3AED",
     salio: "Banner actual no comunica bien exclusivos; 35 proveedores exclusivos sin visibilidad.",
-    accionables: "Mejorar banner; agregar flecha de regreso; mostrar logo; cambiar copy a proveedores exclusivos.",
-    ruta: "Marketing / WordPress primero · Producto después",
-    rutaColor: "#10B981",
-    metrica: "Impresiones, CTR, clics a proveedor, contactos, órdenes atribuidas.",
-    decision: "Acción corta con Majo/Marketing antes de convertirlo en proyecto.",
+    accionables: "Mejorar banner; logo visible; copy 'proveedores exclusivos'; flecha de regreso.",
+    ruta: "CAT-001 · Señal de confianza en taxonomía / vitrina",
+    rutaColor: "#7C3AED",
+    metrica: "Impresiones, CTR, clics a proveedor, órdenes atribuidas.",
+    decision: "Se indexa a CAT-001 como señal de calidad/confianza en la categorización.",
   },
   {
     frente: "Garantías con recolección",
-    tag: "Dolor puntual",
+    tag: "Back Office / Data",
     tagColor: "#F77F00",
     salio: "Proveedor no ve costo de recolección; flete puede hacer no rentable la garantía.",
-    accionables: "Mostrar costo de flete en reporte; cruzar costo logístico vs. valor producto; detectar garantías no rentables.",
-    ruta: "Data / Back Office / Garantías",
-    rutaColor: "#6B7280",
+    accionables: "Mostrar costo de flete en reporte; cruzar costo logístico vs. valor producto.",
+    ruta: "Back Office / Data — quick win sin desarrollo",
+    rutaColor: "#F77F00",
     metrica: "Garantías con recolección, costo promedio, casos donde flete supera margen.",
-    decision: "Quick win de información financiera, no proyecto grande inicialmente.",
+    decision: "Quick win de información financiera. No proyecto grande.",
   },
   {
     frente: "Señales de capacitación / certificación",
-    tag: "Conectar con confianza",
-    tagColor: "#EC4899",
+    tag: "→ Indexar a CAT-001",
+    tagColor: "#7C3AED",
     salio: "Insignia Dropi Academy para proveedores que completan proceso educativo.",
-    accionables: "Definir criterio 100%; definir dónde se muestra; medir impacto en selección.",
-    ruta: "Integrar con Descubrimiento de proveedores confiables",
+    accionables: "Criterio 100%; dónde se muestra; impacto en selección.",
+    ruta: "CAT-001 · Señal de calidad en taxonomía",
     rutaColor: "#7C3AED",
-    metrica: "Proveedores certificados, clics, publicaciones, órdenes, tasa de entrega.",
-    decision: "No tratarlo aislado — sumarlo como señal dentro de confianza.",
+    metrica: "Proveedores certificados, clics, órdenes, tasa de entrega.",
+    decision: "Se indexa a CAT-001 como señal de calidad/confianza.",
   },
   {
     frente: "MVP de campañas",
-    tag: "Conectado a DCA-001",
+    tag: "→ Indexado a DCA-001",
     tagColor: "#0EA5E9",
-    salio: "Banner que filtre productos de campaña sin depender de escribir nombre en buscador.",
-    accionables: "Diseñar banner; definir agrupación por tag/categoría/IDs; botón con filtro automático; revisar con Fer/José/Majo.",
-    ruta: "Integrar en DCA-001 · Catálogos preseleccionados F1",
+    salio: "Banner que filtre productos de campaña sin depender del buscador.",
+    accionables: "Banner; agrupación por tag/categoría/IDs; botón con filtro automático.",
+    ruta: "DCA-001 · Catálogos preseleccionados F1",
     rutaColor: "#0EA5E9",
     metrica: "Clics banner, productos vistos, importaciones, órdenes, GMV por campaña.",
-    decision: "Meterlo dentro de la fase 1 de Catálogos preseleccionados.",
-  },
-];
-
-const matriz = [
-  {
-    titulo: "OPS / Back Office / Data",
-    color: "#F77F00",
-    items: ["Motivos de cancelación en reporte", "Flete de recolección en garantías", "Reporte pendiente confirmación"],
-    nota: "Mover rápido, medir impacto y no esperar un proyecto grande.",
-  },
-  {
-    titulo: "Marketing / WordPress",
-    color: "#0EA5E9",
-    items: ["Banner proveedores exclusivos", "Logos y copy actualizados", "Links de contacto directo"],
-    nota: "Validar con Majo; tratar como quick win visual.",
-  },
-  {
-    titulo: "Fase aprobada",
-    color: "#10B981",
-    items: ["MVP campañas → DCA-001 F1", "Señales de confianza → Descubrimiento", "Insignia → frente de confianza"],
-    nota: "Conectar lo comercial con oportunidades ya aprobadas.",
-  },
-  {
-    titulo: "Discovery posterior",
-    color: "#7C3AED",
-    items: ["Modo vacaciones por bodega", "Reglas de productos privatizados", "Ranking robusto de proveedores"],
-    nota: "No comprometer desarrollo sin reglas y métricas base.",
+    decision: "Ya indexado. Parte de la fase 1 de Catálogos preseleccionados.",
   },
 ];
 
@@ -201,22 +189,21 @@ export default function WeeklyPage() {
             fontSize: 12, fontWeight: 700,
             marginBottom: 16,
           }}>
-            Portafolio organizado por estado
+            Avances gerenciales · Semana 19–25 jun
           </div>
           <h1 style={{
-            fontSize: "clamp(26px,4vw,46px)",
+            fontSize: "clamp(26px,4vw,42px)",
             fontWeight: 900,
             letterSpacing: "-0.04em",
             lineHeight: 1.05,
             margin: "0 0 14px",
           }}>
-            Oportunidades aprobadas<br />+ accionables de Comercial
+            Proyectos en movimiento<br />+ Dolores comerciales indexados
           </h1>
           <p style={{ color: "rgba(255,255,255,0.82)", fontSize: 15, margin: 0 }}>
             {SUBTITLE}
           </p>
 
-          {/* Metrics strip */}
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
@@ -224,11 +211,11 @@ export default function WeeklyPage() {
             marginTop: 28,
           }}>
             {[
-              { label: "Oportunidades propias", value: "5", sub: "aprobadas / alineadas" },
-              { label: "Con hipótesis numérica", value: "4", sub: "órdenes + GMV" },
-              { label: "Habilitador", value: "1", sub: "categorización" },
-              { label: "Dolores Comercial", value: "5 + 1", sub: "incluye MVP campañas" },
-              { label: "GMV base por orden", value: "USD 15", sub: "referencia mercado CO" },
+              { label: "Kickoff esta semana", value: "DCA", sub: "Campañas catálogo" },
+              { label: "Handoff realizado", value: "NEG", sub: "A comercial hoy" },
+              { label: "Objetivo de célula", value: "CAT", sub: "Categorización" },
+              { label: "Esperando impl.", value: "TTV", sub: "Pipeline GHL" },
+              { label: "Lanzamiento formal", value: "6-jul", sub: "NEG-001 masivo" },
             ].map((m) => (
               <div key={m.label} style={{
                 border: "1px solid rgba(255,255,255,0.16)",
@@ -244,77 +231,84 @@ export default function WeeklyPage() {
           </div>
         </div>
 
-        {/* ── Sección 1: Oportunidades ── */}
-        <Section title="1. Oportunidades aprobadas · estado y métricas" badge="Estratégicas"
-          sub="Iniciativas con hipótesis funcional, fases y señales numéricas para presentar como portafolio OKR.">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 16 }}>
+        {/* ── Sección 1: Proyectos y avances ── */}
+        <Section title="1. Proyectos activos · avances de la semana" badge="Gerencial"
+          sub="Estado actual, qué movió esta semana y cuál es el próximo paso concreto.">
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             {oportunidades.map((op) => (
               <div key={op.code} style={{
                 background: "#fff",
                 border: "1px solid var(--border)",
-                borderTop: `4px solid ${op.color}`,
-                borderRadius: 16,
-                padding: 20,
+                borderLeft: `4px solid ${op.color}`,
+                borderRadius: 14,
+                padding: "18px 20px",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr 1fr",
+                gap: 16,
+                alignItems: "start",
               }}>
+                {/* Col 1: Identidad */}
+                <div>
+                  <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8, flexWrap: "wrap" }}>
+                    <span style={{
+                      fontSize: 11, fontWeight: 800,
+                      background: `${op.color}18`, color: op.color,
+                      padding: "3px 9px", borderRadius: 999,
+                    }}>{op.code}</span>
+                    <span style={{
+                      fontSize: 10, fontWeight: 700,
+                      background: `${op.badgeColor}18`, color: op.badgeColor,
+                      padding: "2px 7px", borderRadius: 999,
+                    }}>{op.badge}</span>
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", marginBottom: 6, lineHeight: 1.3 }}>{op.name}</div>
+                  <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600 }}>{op.status}</div>
+                </div>
+
+                {/* Col 2: Avance */}
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 800, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
+                    Avance esta semana
+                  </div>
+                  <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.5, marginBottom: 10 }}>{op.avance}</div>
+                  <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                    {[
+                      { l: "Mueve", v: op.mueve },
+                      { l: "Hipótesis", v: op.hipotesis },
+                    ].map(m => (
+                      <div key={m.l} style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 8, padding: "6px 10px", flex: "1 1 120px" }}>
+                        <div style={{ fontSize: 10, fontWeight: 800, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>{m.l}</div>
+                        <div style={{ fontSize: 11, fontWeight: 600, color: "var(--fg)", marginTop: 3, lineHeight: 1.3 }}>{m.v}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Col 3: Siguiente paso */}
                 <div style={{
-                  display: "inline-block",
-                  fontSize: 11, fontWeight: 800,
-                  background: "#F3F4F6", color: "#374151",
-                  padding: "5px 10px", borderRadius: 999,
-                  marginBottom: 10,
+                  background: `${op.color}0d`,
+                  border: `1px solid ${op.color}30`,
+                  borderRadius: 10,
+                  padding: "12px 14px",
                 }}>
-                  {op.status}
+                  <div style={{ fontSize: 10, fontWeight: 800, color: op.color, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 6 }}>
+                    Siguiente paso
+                  </div>
+                  <div style={{ fontSize: 12, color: "#374151", lineHeight: 1.5 }}>{op.next}</div>
                 </div>
-                <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", margin: "0 0 14px", lineHeight: 1.3 }}>
-                  <span style={{ color: op.color, marginRight: 6, fontSize: 12 }}>{op.code}</span>
-                  {op.name}
-                </h3>
-
-                {/* Mini metrics */}
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 12 }}>
-                  {[
-                    { label: "Mueve", val: op.mueve },
-                    { label: "Hipótesis", val: op.hipotesis },
-                    { label: "GMV", val: op.gmv },
-                  ].map((m) => (
-                    <div key={m.label} style={{
-                      background: "#F8FAFC",
-                      border: "1px solid var(--border)",
-                      borderRadius: 10, padding: "10px 10px",
-                    }}>
-                      <span style={{ display: "block", fontSize: 10, fontWeight: 800, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>{m.label}</span>
-                      <strong style={{ display: "block", fontSize: 12, color: "var(--fg)", marginTop: 4, lineHeight: 1.3 }}>{m.val}</strong>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Fases */}
-                <div style={{
-                  background: `${op.color}12`,
-                  color: op.color,
-                  borderRadius: 10, padding: "8px 12px",
-                  fontSize: 11, fontWeight: 800,
-                  marginBottom: 12,
-                }}>
-                  {op.fases}
-                </div>
-
-                <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>
-                  <strong style={{ color: "var(--fg)" }}>Siguiente:</strong> {op.next}
-                </p>
               </div>
             ))}
           </div>
         </Section>
 
         {/* ── Sección 2: Dolores Comercial ── */}
-        <Section title="2. Dolores de Comercial · clasificación de accionables" badge="Por decidir ruta"
-          sub="No todo debe convertirse en desarrollo. Cada accionable cae en una ruta concreta.">
+        <Section title="2. Dolores de Comercial · indexados y cerrados" badge="Clasificados"
+          sub="Cada dolor queda indexado a un proyecto existente o a una ruta concreta. La lista de deuda se cierra.">
           <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 14 }}>
             <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", minWidth: 800 }}>
               <thead>
                 <tr style={{ background: "#F8FAFC" }}>
-                  {["Frente / dolor", "Qué salió", "Accionables posibles", "Ruta propuesta", "Métrica", "Decisión"].map((h) => (
+                  {["Frente / dolor", "Qué salió", "Ruta definida", "Métrica", "Decisión"].map((h) => (
                     <th key={h} style={{
                       padding: "12px 14px", textAlign: "left",
                       fontSize: 11, fontWeight: 700,
@@ -336,7 +330,6 @@ export default function WeeklyPage() {
                       }}>{d.tag}</span>
                     </td>
                     <td style={{ padding: "14px", fontSize: 12, color: "var(--muted)", verticalAlign: "top", minWidth: 180 }}>{d.salio}</td>
-                    <td style={{ padding: "14px", fontSize: 12, color: "var(--muted)", verticalAlign: "top", minWidth: 200 }}>{d.accionables}</td>
                     <td style={{ padding: "14px", verticalAlign: "top", minWidth: 160 }}>
                       <span style={{
                         fontSize: 11, fontWeight: 700,
@@ -354,42 +347,8 @@ export default function WeeklyPage() {
           </div>
         </Section>
 
-        {/* ── Sección 3: Matriz de decisión ── */}
-        <Section title="3. Matriz de decisión · próxima semana" badge="Rutas"
-          sub="Para ordenar el seguimiento y evitar una lista infinita de features.">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
-            {matriz.map((m) => (
-              <div key={m.titulo} style={{
-                background: "#fff",
-                border: "1px solid var(--border)",
-                borderLeft: `4px solid ${m.color}`,
-                borderRadius: 14,
-                padding: 18,
-              }}>
-                <strong style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", display: "block", marginBottom: 12 }}>
-                  {m.titulo}
-                </strong>
-                <ul style={{ margin: "0 0 14px", paddingLeft: 16 }}>
-                  {m.items.map((it) => (
-                    <li key={it} style={{ fontSize: 12, color: "var(--muted)", marginBottom: 4 }}>{it}</li>
-                  ))}
-                </ul>
-                <div style={{
-                  borderLeft: `3px solid ${m.color}`,
-                  background: `${m.color}0d`,
-                  borderRadius: "0 10px 10px 0",
-                  padding: "10px 12px",
-                  fontSize: 12, fontWeight: 600, color: "#374151",
-                }}>
-                  {m.nota}
-                </div>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {/* ── Sección 4: Resumen ejecutivo ── */}
-        <Section title="4. Resumen ejecutivo · para María" badge="Cierre">
+        {/* ── Sección 3: Resumen ejecutivo ── */}
+        <Section title="3. Resumen ejecutivo" badge="Cierre">
           <div style={{
             borderLeft: "4px solid var(--dropi)",
             background: "#FFFBF5",
@@ -399,28 +358,42 @@ export default function WeeklyPage() {
             color: "#374151",
             lineHeight: 1.7,
           }}>
-            Las oportunidades propias ya están organizadas como portafolio OKR: tienen hipótesis funcionales, fases y estimaciones numéricas de órdenes/GMV. En paralelo, la sesión con Comercial fue valiosa porque aterrizó dolores operativos reales; ahora el trabajo no es convertirlos todos en proyectos, sino clasificarlos. Algunos pueden resolverse rápido por reporte, Back Office, OPS o Marketing; otros pueden entrar como parte de fases ya aprobadas, como el MVP de campañas dentro de Catálogos preseleccionados; y otros, como modo vacaciones por bodega, requieren discovery posterior antes de comprometer desarrollo.
+            Esta semana la célula movió en varios frentes simultáneos. <strong>Categorización</strong> pasó de ser una iniciativa técnica a un objetivo formal de célula: se realizó la reunión de alineación y cada integrante lleva la tarea de investigar propuestas de árbol de categorías para decidirlo en la próxima sesión. <strong>Campañas / Catálogo</strong> (DCA-001 y DCA-002) tuvo kickoff esta semana; la próxima se decide qué campaña lanzar y arranca el despliegue. <strong>Negociaciones</strong> cierra su fase de producto hoy con handoff formal a comercial: el último bloqueante (reportes de comisiones descargables) está resuelto, el piloto puede iniciar ya con las 5 comunidades top y el lanzamiento masivo está fechado el 6 de julio. <strong>Time to Value</strong> tiene toda la documentación, hipótesis y proyección revisada con datos reales de CO — esperamos la implementación técnica del pipeline GHL para activar. Los dolores de comercial quedan cerrados: cada uno indexado a un proyecto existente o ruta concreta, sin deuda abierta.
           </div>
         </Section>
 
-        {/* ── Sección 5: Próximos pasos ── */}
-        <Section title="5. Próximos pasos" badge="Secuencia">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14 }}>
+        {/* ── Sección 4: Próximos pasos ── */}
+        <Section title="4. Próximos pasos" badge="Secuencia">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 14 }}>
             {[
               {
                 titulo: "Esta semana",
                 color: "#F77F00",
-                items: ["Validar con María qué accionables van por Back Office / OPS", "Revisar banner con Majo (Marketing)", "Revisar reportes con Fer/José", "Conectar MVP campañas con DCA-001"],
+                items: [
+                  "Emilille: arrancar piloto con 5 comunidades top (NEG-001)",
+                  "Jaime: activar micro-survey Happiness en UserPilot (NEG)",
+                  "Equipo: preparar insights para reunión DCA semana 26 jun",
+                  "Laura + Enrique: integración Dropi → GHL (TTV-001)",
+                ],
               },
               {
                 titulo: "Próxima célula",
-                color: "#0EA5E9",
-                items: ["Traer estado de cada accionable", "Confirmar qué se mueve sin desarrollo", "Separar quick wins de proyectos", "Asignar responsables por ruta"],
+                color: "#7C3AED",
+                items: [
+                  "Cada integrante presenta propuesta de árbol de categorías (CAT-001)",
+                  "Decisión formal: árbol de categorías que se va a implementar",
+                  "Reunión DCA: decidir campaña a lanzar → inicio despliegue",
+                  "Seguimiento semana 2 Bitácora NEG-001",
+                ],
               },
               {
-                titulo: "Para junta",
+                titulo: "6 de julio",
                 color: "#10B981",
-                items: ["Presentar portafolio aprobado con números", "Mostrar Comercial como fuente de insumos y quick wins", "Evitar prometer desarrollo sin data"],
+                items: [
+                  "Lanzamiento formal NEG-001: comunicación masiva a suppliers y líderes",
+                  "Revisión métricas semana 3 de Negociaciones",
+                  "Estado de implementación GHL (TTV-001)",
+                ],
               },
             ].map((p) => (
               <div key={p.titulo} style={{
@@ -433,7 +406,7 @@ export default function WeeklyPage() {
                 <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", margin: "0 0 12px" }}>{p.titulo}</h3>
                 <ul style={{ margin: 0, paddingLeft: 16 }}>
                   {p.items.map((it) => (
-                    <li key={it} style={{ fontSize: 13, color: "var(--muted)", marginBottom: 6, lineHeight: 1.4 }}>{it}</li>
+                    <li key={it} style={{ fontSize: 12, color: "var(--muted)", marginBottom: 6, lineHeight: 1.4 }}>{it}</li>
                   ))}
                 </ul>
               </div>
