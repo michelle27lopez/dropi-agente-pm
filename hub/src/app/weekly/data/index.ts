@@ -1,0 +1,18 @@
+import { snapshot as s_2026_06_19 } from "./2026-06-19";
+import type { WeeklySnapshot } from "./types";
+
+// ─── Registro de semanas ──────────────────────────────────────────────────────
+// Para agregar una nueva semana:
+// 1. Crear hub/src/app/weekly/data/YYYY-MM-DD.ts copiando la semana anterior
+// 2. Importarla aquí y agregarla al REGISTRY y a SEMANAS
+// 3. Actualizar CURRENT a la nueva fecha
+
+export const REGISTRY: Record<string, WeeklySnapshot> = {
+  "2026-06-19": s_2026_06_19,
+};
+
+export const SEMANAS: { date: string; label: string }[] = [
+  { date: "2026-06-19", label: "Semana 19–25 jun 2026" },
+];
+
+export const CURRENT = "2026-06-19";
