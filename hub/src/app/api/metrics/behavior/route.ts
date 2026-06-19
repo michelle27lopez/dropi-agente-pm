@@ -182,6 +182,10 @@ function analyzeSuppliers(
   let brandComunidad = 0;
   let brandHuerfano = 0;
 
+  // Churn de activación
+  let churnActivacionA = 0; // Sin ninguna orden
+  let churnActivacionB = 0; // 1–5 órdenes y ya no activo (es_activo_30d = false)
+
   // NUEVOS ACUMULADORES PARA ANÁLISIS DE VALIDACIÓN Y DESEMPEÑO
   let noTypeCount = 0;
   let noTypeWithOrderCount = 0; // Proveedores validados (sin tipo + al menos 1 orden)
@@ -227,6 +231,13 @@ function analyzeSuppliers(
     const ordersDelivered = row.real_orders_delivered || 0;
     const productsCreated = row.real_products_created || 0;
     const isActive30d = !!row.es_activo_30d;
+
+    // Churn de activación
+    if (ordersDelivered === 0) {
+      churnActivacionA++;
+    } else if (ordersDelivered >= 1 && ordersDelivered <= 5 && !isActive30d) {
+      churnActivacionB++;
+    }
     const rawTipo = row.tipo_proveedor ? String(row.tipo_proveedor).trim().toUpperCase() : "";
 
     // Agrupar por nivel para estadísticas de desempeño
@@ -762,6 +773,10 @@ function analyzeSuppliers(
       dormantCount: slightRisk + churnRisk,
       churnedCount: highRisk + confirmedChurn,
       churnRate: totalSuppliers > 0 ? Math.round(((highRisk + confirmedChurn) / totalSuppliers) * 100) : 0,
+      activationChurnRate: totalSuppliers > 0 ? Math.round(((churnActivacionA + churnActivacionB) / totalSuppliers) * 100) : 0,
+      activationChurnCount: churnActivacionA + churnActivacionB,
+      activationChurnA: churnActivacionA,
+      activationChurnB: churnActivacionB,
     },
     cohorts: [
       { name: "1 sesión", value: session1, color: "#EF4444" },
