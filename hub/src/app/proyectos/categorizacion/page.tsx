@@ -902,6 +902,11 @@ export default function CategorizacionPage() {
   const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "taxonomy" | "ai" | "google" | null>(null);
   const [mainTab, setMainTab] = useState<"simulator" | "google_mapping">("simulator");
 
+  // Right panel view toggle: node mapping vs full taxonomy tree
+  const [rightView, setRightView] = useState<"mapping" | "tree">("mapping");
+  const [treeExpandedL1, setTreeExpandedL1] = useState<Set<string>>(new Set());
+  const [treeExpandedL2, setTreeExpandedL2] = useState<Set<string>>(new Set());
+
   // Dropi Data States
   const [dropiRawCategories, setDropiRawCategories] = useState<DropiCategoryRaw[]>([]);
   const [selectedDropiCat, setSelectedDropiCat] = useState<string | null>(null);
@@ -1744,7 +1749,142 @@ export default function CategorizacionPage() {
 
               {/* Middle & Right Columns: Homologation detail comparison */}
               <div className="lg:col-span-2 space-y-6">
-                {selectedDropiCat && DROPI_MAPPING_DICT[selectedDropiCat] ? (
+
+                {/* ── View toggle ──────────────────────────────────────────── */}
+                <div className="flex items-center gap-2 bg-white border rounded-xl p-1 shadow-2xs w-fit" style={{ borderColor: "var(--border)" }}>
+                  <button
+                    onClick={() => setRightView("mapping")}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                      rightView === "mapping"
+                        ? "bg-orange-500 text-white shadow-sm"
+                        : "text-gray-500 hover:bg-slate-50"
+                    }`}
+                  >
+                    📍 Mapeo del nodo
+                  </button>
+                  <button
+                    onClick={() => setRightView("tree")}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                      rightView === "tree"
+                        ? "bg-orange-500 text-white shadow-sm"
+                        : "text-gray-500 hover:bg-slate-50"
+                    }`}
+                  >
+                    🌳 Árbol Dropi
+                  </button>
+                </div>
+
+                {/* ── Árbol Dropi: full taxonomy cascade ───────────────────── */}
+                {rightView === "tree" && (
+                  <div className="bg-white border rounded-2xl p-6 shadow-2xs space-y-3" style={{ borderColor: "var(--border)" }}>
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Árbol de Taxonomía Propuesto · Dropi</h3>
+                        <p className="text-[10px] text-gray-400 mt-0.5">{Object.keys(DROPI_COMPLETE_TAXONOMY).length} categorías L1 · {Object.values(DROPI_COMPLETE_TAXONOMY).reduce((a, l2) => a + Object.keys(l2).length, 0)} L2 totales</p>
+                      </div>
+                      <button
+                        onClick={() => { setTreeExpandedL1(new Set()); setTreeExpandedL2(new Set()); }}
+                        className="text-[10px] text-gray-400 hover:text-gray-600 px-2 py-1 rounded border hover:bg-slate-50 transition-all"
+                        style={{ borderColor: "var(--border)" }}
+                      >
+                        Colapsar todo
+                      </button>
+                    </div>
+
+                    <div className="space-y-1.5">
+                      {Object.entries(DROPI_COMPLETE_TAXONOMY).map(([l1, l2Map]) => {
+                        const l1Open = treeExpandedL1.has(l1);
+                        const l2Count = Object.keys(l2Map).length;
+                        const l3Count = Object.values(l2Map).reduce((a, l3) => a + Object.keys(l3).length, 0);
+                        const l4Count = Object.values(l2Map).reduce((a, l3Map) =>
+                          a + Object.values(l3Map).reduce((b, l4s) => b + l4s.length, 0), 0);
+
+                        return (
+                          <div key={l1} className="border rounded-xl overflow-hidden transition-all" style={{ borderColor: l1Open ? "#f97316" : "var(--border)" }}>
+                            {/* L1 Row */}
+                            <button
+                              onClick={() => {
+                                const next = new Set(treeExpandedL1);
+                                if (next.has(l1)) next.delete(l1); else next.add(l1);
+                                setTreeExpandedL1(next);
+                              }}
+                              className="w-full flex items-center justify-between px-4 py-3 text-left transition-all hover:bg-orange-50/30"
+                              style={{ background: l1Open ? "#fff7ed" : "white" }}
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <span className="text-[10px] text-gray-400 w-3 text-center">{l1Open ? "▼" : "▶"}</span>
+                                <span className="w-2 h-2 rounded-full bg-orange-500 flex-shrink-0" />
+                                <span className="text-xs font-bold text-gray-900">{l1}</span>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[9px] text-gray-400 font-mono">{l2Count} L2 · {l3Count} L3 · {l4Count} L4</span>
+                              </div>
+                            </button>
+
+                            {/* L2 rows */}
+                            {l1Open && (
+                              <div className="border-t divide-y bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+                                {Object.entries(l2Map).map(([l2, l3Map]) => {
+                                  const l2Key = `${l1}::${l2}`;
+                                  const l2Open = treeExpandedL2.has(l2Key);
+                                  const l4Total = Object.values(l3Map).reduce((a, l4s) => a + l4s.length, 0);
+
+                                  return (
+                                    <div key={l2} className="divide-y" style={{ borderColor: "var(--border)" }}>
+                                      {/* L2 button */}
+                                      <button
+                                        onClick={() => {
+                                          const next = new Set(treeExpandedL2);
+                                          if (next.has(l2Key)) next.delete(l2Key); else next.add(l2Key);
+                                          setTreeExpandedL2(next);
+                                        }}
+                                        className="w-full flex items-center justify-between px-5 py-2.5 text-left hover:bg-white transition-all"
+                                      >
+                                        <div className="flex items-center gap-2.5">
+                                          <span className="text-[9px] text-gray-300 w-3 text-center">{l2Open ? "▼" : "▶"}</span>
+                                          <span className="w-1.5 h-1.5 rounded-full bg-orange-300 flex-shrink-0" />
+                                          <span className="text-[11px] font-semibold text-gray-700">{l2}</span>
+                                        </div>
+                                        <span className="text-[9px] text-gray-400 font-mono">{Object.keys(l3Map).length} L3 · {l4Total} L4</span>
+                                      </button>
+
+                                      {/* L3 + L4 block */}
+                                      {l2Open && (
+                                        <div className="px-8 py-3 bg-white space-y-3 border-t" style={{ borderColor: "var(--border)" }}>
+                                          {Object.entries(l3Map).map(([l3, l4s]) => (
+                                            <div key={l3} className="space-y-1.5">
+                                              <div className="flex items-center gap-2">
+                                                <span className="w-1 h-1 rounded-full bg-slate-300 flex-shrink-0" />
+                                                <span className="text-[10px] font-bold text-gray-600">{l3}</span>
+                                              </div>
+                                              <div className="pl-3 flex flex-wrap gap-1.5">
+                                                {l4s.map((l4) => (
+                                                  <span
+                                                    key={l4}
+                                                    className="inline-block text-[9px] font-medium text-gray-500 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md"
+                                                  >
+                                                    {l4}
+                                                  </span>
+                                                ))}
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Mapeo del nodo (existing view) ────────────────────────── */}
+                {rightView === "mapping" && selectedDropiCat && DROPI_MAPPING_DICT[selectedDropiCat] ? (
                   <div className="bg-white border rounded-2xl p-6 shadow-2xs space-y-6" style={{ borderColor: "var(--border)" }}>
                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Mapeo del Nodo</h3>
 
@@ -2063,9 +2203,11 @@ export default function CategorizacionPage() {
                     })()}
                   </div>
                 ) : (
-                  <div className="text-center py-20 bg-white border border-dashed rounded-2xl text-gray-400 text-xs">
-                    Selecciona una categoría plana de la izquierda para ver su simulación de homologación.
-                  </div>
+                  rightView === "mapping" ? (
+                    <div className="text-center py-20 bg-white border border-dashed rounded-2xl text-gray-400 text-xs">
+                      Selecciona una categoría plana de la izquierda para ver su simulación de homologación.
+                    </div>
+                  ) : null
                 )}
               </div>
 
