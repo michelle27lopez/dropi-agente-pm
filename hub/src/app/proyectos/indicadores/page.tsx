@@ -171,6 +171,21 @@ export default function IndicadoresPage() {
                     <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>3 pasos para activar el descubrimiento del panel y motivar la postulación al siguiente nivel.</div>
                   </div>
                 </div>
+
+                {/* Card: Criterios de Avance */}
+                <div
+                  onClick={() => setActiveDoc(activeDoc === "criterios" ? null : "criterios")}
+                  style={{ background: "var(--card)", border: `1px solid ${activeDoc === "criterios" ? "#F59E0B" : "var(--border)"}`, borderRadius: 14, padding: 16, display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+                >
+                  <span style={{ fontSize: 22, marginTop: 2 }}>🏅</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span>Criterios de Avance por Nivel</span>
+                      {activeDoc === "criterios" && <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#F59E0B", display: "inline-block" }} />}
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>Variables que definen el paso de Activo → Verificado → Premium → Exclusivo. Requisitos operativos oficiales.</div>
+                  </div>
+                </div>
               </div>
 
               {/* Expanded content */}
@@ -180,6 +195,7 @@ export default function IndicadoresPage() {
                     <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
                       {activeDoc === "metricas" && "📊 Métricas del proyecto · IND-001"}
                       {activeDoc === "experimento" && "🧪 Experimento · Panel de desempeño y postulación"}
+                      {activeDoc === "criterios" && "🏅 Criterios de Avance · Verificado / Premium / Exclusivo"}
                     </div>
                     <button onClick={() => setActiveDoc(null)} style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: "4px 10px", cursor: "pointer" }}>
                       Cerrar ✕
@@ -358,6 +374,79 @@ export default function IndicadoresPage() {
                         </div>
                         <div style={{ marginTop: 12, fontSize: 11, color: "var(--muted)", background: "#F8FAFC", borderRadius: 8, padding: "8px 12px", border: "1px solid var(--border)" }}>
                           <strong style={{ color: "var(--fg)" }}>Responsables:</strong> Extracción datos → Producto · Preparación preguntas → Producto · Reclutamiento y ejecución → Producto
+                        </div>
+                      </div>
+
+                    </div>
+                  )}
+
+                  {/* ── CRITERIOS DE AVANCE ── */}
+                  {activeDoc === "criterios" && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+
+                      {/* Niveles resumen */}
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 10 }}>
+                        {[
+                          { nivel: "Activo", desc: "Sin validación. Sube productos libremente.", color: "#9CA3AF", bg: "#F9FAFB" },
+                          { nivel: "Verificado", desc: "3.000 órdenes/trim. Cumple operación base.", color: "#3B82F6", bg: "#EFF6FF" },
+                          { nivel: "Premium", desc: "20.000 órdenes/trim. Máxima operación.", color: "#F59E0B", bg: "#FFFBEB" },
+                          { nivel: "Exclusivo", desc: "Igual que Premium. Trabaja solo con Dropi.", color: "#8B5CF6", bg: "#F5F3FF" },
+                        ].map(n => (
+                          <div key={n.nivel} style={{ background: n.bg, borderRadius: 12, padding: "14px 16px", border: `1px solid ${n.color}30`, textAlign: "center" }}>
+                            <div style={{ fontSize: 13, fontWeight: 800, color: n.color, marginBottom: 6 }}>{n.nivel}</div>
+                            <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.4 }}>{n.desc}</div>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Tabla de criterios */}
+                      <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 12 }}>
+                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                          <thead>
+                            <tr style={{ background: "#F8FAFC" }}>
+                              <th style={{ padding: "10px 14px", textAlign: "left", fontWeight: 700, color: "var(--muted)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "1px solid var(--border)", width: "40%" }}>Variable a evaluar</th>
+                              <th style={{ padding: "10px 14px", textAlign: "center", fontWeight: 700, color: "#3B82F6", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "1px solid var(--border)", borderLeft: "1px solid var(--border)" }}>Verificado</th>
+                              <th style={{ padding: "10px 14px", textAlign: "center", fontWeight: 700, color: "#F59E0B", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "1px solid var(--border)", borderLeft: "1px solid var(--border)" }}>Premium</th>
+                              <th style={{ padding: "10px 14px", textAlign: "center", fontWeight: 700, color: "#8B5CF6", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", borderBottom: "1px solid var(--border)", borderLeft: "1px solid var(--border)" }}>Exclusivo</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {[
+                              { variable: "Órdenes movilizadas por trimestre", v: "3.000", p: "20.000", e: "20.000", highlight: true },
+                              { variable: "Utilización de EcomScanner",         v: "100%",  p: "100%",  e: "100%" },
+                              { variable: "Envío de manifiestos",               v: "Diario", p: "Diario", e: "Diario" },
+                              { variable: "Gestión de garantías",               v: "100%",  p: "100%",  e: "100%" },
+                              { variable: "Tiempos en garantías",               v: "48 h",  p: "24 h",  e: "24 h",  highlight: true },
+                              { variable: "% de despachos",                     v: "100%",  p: "100%",  e: "100%" },
+                              { variable: "Tiempo de despachos",                v: "48 h",  p: "24 h",  e: "24 h",  highlight: true },
+                              { variable: "Comunicación con área",              v: "Efectiva", p: "Efectiva", e: "Efectiva" },
+                              { variable: "Exclusividad con Dropi",             v: "—",    p: "—",    e: "Sí ✓", highlight: true },
+                            ].map((row, i) => (
+                              <tr key={row.variable} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff", borderBottom: "1px solid var(--border)" }}>
+                                <td style={{ padding: "9px 14px", fontWeight: row.highlight ? 700 : 500, color: "var(--fg)" }}>{row.variable}</td>
+                                <td style={{ padding: "9px 14px", textAlign: "center", fontWeight: 700, color: "#3B82F6", borderLeft: "1px solid var(--border)", background: "#EFF6FF30" }}>{row.v}</td>
+                                <td style={{ padding: "9px 14px", textAlign: "center", fontWeight: 700, color: "#F59E0B", borderLeft: "1px solid var(--border)", background: "#FFFBEB30" }}>{row.p}</td>
+                                <td style={{ padding: "9px 14px", textAlign: "center", fontWeight: 700, color: "#8B5CF6", borderLeft: "1px solid var(--border)", background: "#F5F3FF30" }}>{row.e}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Nota Exclusivo */}
+                      <div style={{ background: "#F5F3FF", borderRadius: 10, padding: "12px 16px", border: "1px solid #DDD6FE", fontSize: 12, color: "#5B21B6", display: "flex", gap: 10, alignItems: "flex-start" }}>
+                        <span style={{ fontSize: 16, flexShrink: 0 }}>💡</span>
+                        <div>
+                          <strong>Exclusivo = Premium + trabajar solo con Dropi.</strong> Todos los requisitos operativos son idénticos al nivel Premium. La diferencia es el compromiso de exclusividad: el proveedor no puede operar en otras plataformas de dropshipping simultáneamente.
+                        </div>
+                      </div>
+
+                      {/* Solicitud de data */}
+                      <div style={{ background: "#FFF7ED", borderRadius: 10, padding: "12px 16px", border: "1px solid #FED7AA", fontSize: 12, color: "#9A3412", display: "flex", gap: 10, alignItems: "flex-start" }}>
+                        <span style={{ fontSize: 16, flexShrink: 0 }}>📋</span>
+                        <div>
+                          <strong>Datos requeridos a Miguel (semanal):</strong> Para evaluar avance de proveedores, necesitamos extraer semanalmente — órdenes movilizadas por trimestre, uso de EcomScanner, frecuencia de manifiestos, % despachos y tiempos, tasa de garantías — agrupados por proveedor y nivel actual.
+                          <div style={{ marginTop: 6, fontSize: 11, color: "#C2410C" }}>Ver solicitud formal de data → <em>solicitud-data-indicadores.html</em></div>
                         </div>
                       </div>
 
