@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 // ─── Shared styles ────────────────────────────────────────────────────────────
 const card: React.CSSProperties = {
   background: "var(--card)", border: "1px solid var(--border)",
@@ -88,6 +90,9 @@ const META = [
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function IndicadoresPage() {
+  const [docsOpen, setDocsOpen] = useState(true);
+  const [activeDoc, setActiveDoc] = useState<string | null>(null);
+
   return (
     <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
       {/* Header */}
@@ -118,6 +123,250 @@ export default function IndicadoresPage() {
             Cuántos suppliers ven su tablero de desempeño y cuántos se postulan para avanzar de nivel.
             Datos reales de <strong>UserPilot</strong> — 5 semanas de seguimiento (07 mayo – 11 junio 2026).
           </p>
+        </div>
+
+        {/* Recursos de Investigación y Documentación */}
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
+          <button
+            onClick={() => { setDocsOpen(!docsOpen); if (docsOpen) setActiveDoc(null); }}
+            style={{ width: "100%", background: "none", border: "none", cursor: "pointer", padding: "16px 20px", display: "flex", alignItems: "center", gap: 12, textAlign: "left" }}
+          >
+            <span style={{ fontSize: 18 }}>📂</span>
+            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", flex: 1 }}>Recursos de Investigación y Documentación</span>
+            <span style={{ fontSize: 11, color: "var(--muted)", marginRight: 12 }}>IND-001 · Indicadores y Postulaciones</span>
+            <span style={{ fontSize: 11, color: "var(--muted)", display: "inline-block", transition: "transform 0.2s", transform: docsOpen ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
+          </button>
+
+          {docsOpen && (
+            <div style={{ borderTop: "1px solid var(--border)", background: "#FAFBFC" }}>
+              {/* Cards grid */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 14, padding: 20 }}>
+
+                {/* Card: Métricas */}
+                <div
+                  onClick={() => setActiveDoc(activeDoc === "metricas" ? null : "metricas")}
+                  style={{ background: "var(--card)", border: `1px solid ${activeDoc === "metricas" ? ACCENT : "var(--border)"}`, borderRadius: 14, padding: 16, display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+                >
+                  <span style={{ fontSize: 22, marginTop: 2 }}>📊</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span>Métricas del proyecto</span>
+                      {activeDoc === "metricas" && <span style={{ width: 8, height: 8, borderRadius: "50%", background: ACCENT, display: "inline-block" }} />}
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>5 semanas de seguimiento en UserPilot (may–jun 2026). Embudo, retención y tendencia semanal.</div>
+                  </div>
+                </div>
+
+                {/* Card: Experimento */}
+                <div
+                  onClick={() => setActiveDoc(activeDoc === "experimento" ? null : "experimento")}
+                  style={{ background: "var(--card)", border: `1px solid ${activeDoc === "experimento" ? "#6366F1" : "var(--border)"}`, borderRadius: 14, padding: 16, display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer", boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}
+                >
+                  <span style={{ fontSize: 22, marginTop: 2 }}>🧪</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span>Experimento · Activación del panel</span>
+                      {activeDoc === "experimento" && <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#6366F1", display: "inline-block" }} />}
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>3 pasos para activar el descubrimiento del panel y motivar la postulación al siguiente nivel.</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Expanded content */}
+              {activeDoc && (
+                <div style={{ borderTop: "1px solid var(--border)", padding: 24 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
+                      {activeDoc === "metricas" && "📊 Métricas del proyecto · IND-001"}
+                      {activeDoc === "experimento" && "🧪 Experimento · Panel de desempeño y postulación"}
+                    </div>
+                    <button onClick={() => setActiveDoc(null)} style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: "4px 10px", cursor: "pointer" }}>
+                      Cerrar ✕
+                    </button>
+                  </div>
+
+                  {/* ── MÉTRICAS ── */}
+                  {activeDoc === "metricas" && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
+                        {[
+                          { label: "Usuarios únicos panel", value: "137/sem", sub: "Promedio 5 semanas", color: ACCENT },
+                          { label: "Click postularme",       value: "~24/sem", sub: "Promedio 4 sem",    color: "#10B981" },
+                          { label: "Postulación completa",   value: "~10/sem", sub: "Modal superado",     color: "#F59E0B" },
+                          { label: "Conversión global",      value: "5.7%",    sub: "Panel → postulación", color: "#6366F1" },
+                        ].map(k => (
+                          <div key={k.label} style={{ background: "#F8FAFC", borderRadius: 10, padding: 12, border: "1px solid var(--border)", textAlign: "center" }}>
+                            <div style={{ fontSize: 22, fontWeight: 800, color: k.color, letterSpacing: "-0.03em" }}>{k.value}</div>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--fg)", marginTop: 4 }}>{k.label}</div>
+                            <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 2 }}>{k.sub}</div>
+                          </div>
+                        ))}
+                      </div>
+                      <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 10 }}>
+                        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                          <thead>
+                            <tr>
+                              <th style={thStyle}>Semana</th>
+                              <th style={thR}>Vieron panel</th>
+                              <th style={thR}>Click postularme</th>
+                              <th style={thR}>Postulación completa</th>
+                              <th style={thR}>Scanner</th>
+                              <th style={thR}>Retención</th>
+                              <th style={thR}>Conv.</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {WEEKLY.map((w, i) => (
+                              <tr key={w.semana} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff" }}>
+                                <td style={{ ...tdStyle, fontWeight: 600 }}>{w.semana}</td>
+                                <td style={{ ...tdR, color: ACCENT, fontWeight: 700 }}>{w.tablero ?? "—"}</td>
+                                <td style={tdR}>{w.postulacion ?? "—"}</td>
+                                <td style={{ ...tdR, color: "#10B981", fontWeight: 700 }}>{w.postuladas ?? "—"}</td>
+                                <td style={tdR}>{w.scanner ?? "—"}</td>
+                                <td style={{ ...tdR, color: "#8B5CF6" }}>{w.retencion != null ? `${w.retencion}%` : "—"}</td>
+                                <td style={tdR}>{w.postuladas != null && w.tablero != null ? `${((w.postuladas / w.tablero) * 100).toFixed(1)}%` : "—"}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div style={{ fontSize: 12, color: "var(--muted)", background: "#F8FAFC", borderRadius: 8, padding: "8px 14px", border: "1px solid var(--border)" }}>
+                        Dashboard UserPilot: <strong style={{ color: "var(--fg)" }}>run.userpilot.io/dashboards/52</strong> · Solicitar a Laura los eventos de la semana actual cada lunes.
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ── EXPERIMENTO ── */}
+                  {activeDoc === "experimento" && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+
+                      {/* Resumen 3 pasos */}
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                        {[
+                          { n: "1", titulo: "Descubrimiento del panel", desc: "Mensaje a todos los proveedores con link directo al panel. Envío a cargo de Comercial.", cuando: "Inmediato", color: "#6366F1" },
+                          { n: "2", titulo: "Postulación segmentada", desc: "Solo a quienes cumplen requisito de órdenes movilizadas. Copy diferenciado por nivel.", cuando: "Principios julio", color: "#10B981" },
+                          { n: "3", titulo: "Reunión de seguimiento", desc: "Meet con muestra de proveedores que se postularon. Preguntas preparadas.", cuando: "Post-paso 2", color: "#F59E0B" },
+                        ].map(s => (
+                          <div key={s.n} style={{ background: "#F8FAFC", borderRadius: 12, padding: 14, border: "1px solid var(--border)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                              <div style={{ width: 24, height: 24, borderRadius: "50%", background: s.color, color: "#fff", fontSize: 12, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>{s.n}</div>
+                              <span style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)" }}>{s.titulo}</span>
+                            </div>
+                            <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5, marginBottom: 8 }}>{s.desc}</div>
+                            <span style={tag(s.color, `${s.color}18`)}>{s.cuando}</span>
+                          </div>
+                        ))}
+                      </div>
+
+                      {/* Paso 1 */}
+                      <div style={{ borderLeft: "3px solid #6366F1", paddingLeft: 16 }}>
+                        <div style={{ fontSize: 13, fontWeight: 800, color: "#6366F1", marginBottom: 12 }}>Paso 1 · Mensaje de descubrimiento del panel</div>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 14 }}>
+                          <div style={{ background: "#F8FAFC", borderRadius: 10, padding: 12, border: "1px solid var(--border)" }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Objetivo e hipótesis</div>
+                            <div style={{ fontSize: 12, color: "var(--fg)", lineHeight: 1.5, marginBottom: 8 }}>Validar si una comunicación directa activa el descubrimiento del panel sin cambios en el producto.</div>
+                            <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>Solo 112–159 proveedores consultan el panel semanalmente. Hipótesis: la mayoría <strong>no sabe que existe</strong>.</div>
+                          </div>
+                          <div style={{ background: "#F8FAFC", borderRadius: 10, padding: 12, border: "1px solid var(--border)" }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Segmento · Métricas de éxito</div>
+                            <div style={{ fontSize: 12, color: "var(--fg)", marginBottom: 6 }}>Todos los proveedores activos (Colombia)</div>
+                            {["↑ Usuarios únicos en el panel la semana post-envío vs semanas sin campaña", "% proveedores que hicieron clic en el link (UTM)", "Retención: ¿cuántos vuelven la semana siguiente?"].map((m, i) => (
+                              <div key={i} style={{ fontSize: 11, color: "var(--muted)", display: "flex", gap: 6, marginBottom: 4 }}>
+                                <span style={{ color: "#6366F1", flexShrink: 0 }}>·</span><span>{m}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                        <div style={{ background: "#EEF2FF", borderRadius: 12, padding: "14px 16px", border: "1px solid #C7D2FE", marginBottom: 12 }}>
+                          <div style={{ fontSize: 10, fontWeight: 700, color: "#6366F1", textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 10 }}>Copy del mensaje</div>
+                          <div style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.6, marginBottom: 10, fontStyle: "italic" }}>
+                            "Hola [Nombre], los dropshippers revisan tu historial de despachos y cumplimiento antes de trabajar contigo.<br /><br />¿Quieres ver cómo vas?"
+                          </div>
+                          <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#6366F1", color: "#fff", borderRadius: 8, padding: "6px 14px", fontSize: 12, fontWeight: 700 }}>
+                            Ver mi desempeño →
+                          </div>
+                          <div style={{ fontSize: 10, color: "#6366F1", marginTop: 8, opacity: 0.75 }}>Link con UTM · Canal: CRM con botón interactivo · Responsable envío: Comercial</div>
+                        </div>
+                      </div>
+
+                      {/* Paso 2 */}
+                      <div style={{ borderLeft: "3px solid #10B981", paddingLeft: 16 }}>
+                        <div style={{ fontSize: 13, fontWeight: 800, color: "#10B981", marginBottom: 4 }}>Paso 2 · Mensaje de postulación segmentado</div>
+                        <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 12 }}>Principios de julio · Solo a quienes cumplen requisito de órdenes movilizadas · Solicitar data a Miguel</div>
+                        <div style={{ background: "#FFFBEB", borderRadius: 10, padding: "10px 14px", border: "1px solid #FDE68A", marginBottom: 14, fontSize: 12, color: "#78350F", lineHeight: 1.5 }}>
+                          <strong>Contexto:</strong> Requisito principal: 3.000+ órdenes movilizadas en los últimos 3 meses. Hay solicitudes represadas (130 Activo→Verificado · 30 Verificado→Premium). Enviar solo a quienes cumplen el requisito para no sobrecargar Comercial.
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 14 }}>
+                          {[
+                            { seg: "Segmento 1 · No verificados con 3.000+ órdenes", destino: "→ Verificado", color: "#3B82F6", colorBg: "#EFF6FF", beneficios: "Aprobación automática de productos · Acceso a Caza Productos · Banner destacado en catálogo" },
+                            { seg: "Segmento 2 · Verificados que cumplen requisito",  destino: "→ Premium",    color: ACCENT,    colorBg: ACCENT_BG, beneficios: "Visita comercial personalizada · Presencia en lives de Dropi · Relacionamiento con comunidades" },
+                            { seg: "Segmento 3 · Premium que cumplen requisito",       destino: "→ Exclusivo", color: "#8B5CF6",  colorBg: "#F5F3FF", beneficios: "Video corporativo · Stands gratuitos en eventos · Préstamos para importación · WMS de inventario" },
+                          ].map(s => (
+                            <div key={s.seg} style={{ background: s.colorBg, borderRadius: 10, padding: "12px 14px", border: `1px solid ${s.color}30` }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                                <span style={{ fontSize: 11, fontWeight: 700, color: s.color }}>{s.seg}</span>
+                                <span style={tag(s.color, `${s.color}20`)}>{s.destino}</span>
+                              </div>
+                              <div style={{ fontSize: 12, color: "var(--fg)", lineHeight: 1.5, marginBottom: 6, fontStyle: "italic" }}>
+                                "Hola [Nombre], ¿Sabías que como proveedor {s.destino.replace("→ ", "")} tendrías acceso a: {s.beneficios.split("·")[0].trim()}...? ¿Quieres postularte?"
+                              </div>
+                              <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 8 }}>{s.beneficios}</div>
+                              <div style={{ display: "inline-flex", alignItems: "center", background: s.color, color: "#fff", borderRadius: 8, padding: "5px 12px", fontSize: 11, fontWeight: 700 }}>
+                                Postularme {s.destino} →
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                          <div style={{ fontSize: 11, color: "var(--muted)", background: "#F8FAFC", borderRadius: 8, padding: "10px 12px", border: "1px solid var(--border)", lineHeight: 1.6 }}>
+                            <strong style={{ color: "var(--fg)" }}>Pendientes antes de ejecutar</strong><br />
+                            · Pedir a Miguel data segmentada por nivel y cumplimiento de órdenes movilizadas<br />
+                            · Confirmar con Enrique que el flujo del CRM esté funcionando
+                          </div>
+                          <div style={{ fontSize: 11, color: "var(--muted)", background: "#F8FAFC", borderRadius: 8, padding: "10px 12px", border: "1px solid var(--border)", lineHeight: 1.6 }}>
+                            <strong style={{ color: "var(--fg)" }}>Métricas de éxito</strong><br />
+                            · Formularios completados en la semana post-envío<br />
+                            · Tasa de conversión por segmento<br />
+                            · Tiempo de procesamiento por Comercial
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Paso 3 */}
+                      <div style={{ borderLeft: "3px solid #F59E0B", paddingLeft: 16 }}>
+                        <div style={{ fontSize: 13, fontWeight: 800, color: "#F59E0B", marginBottom: 4 }}>Paso 3 · Reunión de seguimiento con quienes se postularon</div>
+                        <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 12 }}>Insumo: data de UserPilot/CRM de proveedores que hicieron clic en "Postularme" en el Paso 2</div>
+                        <div style={{ background: "#FFFBEB", borderRadius: 10, padding: "10px 14px", border: "1px solid #FDE68A", marginBottom: 14, fontSize: 12, color: "var(--fg)", lineHeight: 1.5 }}>
+                          Organizar meet con muestra de proveedores que se postularon. Objetivo: entender el comportamiento e intención real, detectar fricciones en el proceso de postulación desde su propia experiencia.
+                        </div>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Preguntas preparadas</div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                          {[
+                            "¿Qué te motivó a postularte al siguiente nivel?",
+                            "¿Conocías los beneficios del nuevo nivel antes de recibir el mensaje, o fue la primera vez que los veías?",
+                            "¿Tuviste alguna dificultad o duda al momento de completar el formulario de postulación?",
+                            "¿Has recibido alguna respuesta o seguimiento después de postularte? ¿Cuánto tiempo ha pasado?",
+                            "¿Sabías que necesitabas cumplir ciertos requisitos (como un número mínimo de órdenes movilizadas) antes de postularte?",
+                            "¿Qué esperarías recibir o saber durante el proceso de espera de tu postulación?",
+                          ].map((q, i) => (
+                            <div key={i} style={{ display: "flex", gap: 10, fontSize: 12, color: "var(--fg)", background: "#F8FAFC", borderRadius: 8, padding: "8px 12px", border: "1px solid var(--border)", lineHeight: 1.4 }}>
+                              <span style={{ color: "#F59E0B", fontWeight: 700, flexShrink: 0 }}>{i + 1}.</span>
+                              <span>{q}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div style={{ marginTop: 12, fontSize: 11, color: "var(--muted)", background: "#F8FAFC", borderRadius: 8, padding: "8px 12px", border: "1px solid var(--border)" }}>
+                          <strong style={{ color: "var(--fg)" }}>Responsables:</strong> Extracción datos → Producto · Preparación preguntas → Producto · Reclutamiento y ejecución → Producto
+                        </div>
+                      </div>
+
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* KPI grid */}
