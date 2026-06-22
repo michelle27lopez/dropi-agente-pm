@@ -2929,6 +2929,112 @@ export default function CategorizacionPage() {
             </p>
           </div>
         </div>
+
+        {/* ── Estimación de costos IA ───────────────────────────────────────── */}
+        <div className="border-t pt-5 space-y-5" style={{ borderColor: "var(--border)" }}>
+          <div>
+            <h4 className="text-sm font-bold text-gray-900 mb-1">Estimación de Costo IA — Categorizador GPT-4o mini</h4>
+            <p className="text-gray-500 leading-relaxed">
+              El categorizador envía el árbol completo de <span className="font-bold">225 nodos Dropi</span> en cada llamada (~5,700 tokens de contexto) y recibe el L4 más apropiado. Los costos fueron calculados sobre la base real de <span className="font-bold">1,076,982 productos vigentes</span> en Dropi.
+            </p>
+          </div>
+
+          {/* Costo unitario */}
+          <div>
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Costo por producto individual</span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {[
+                { caso: "Proveedor sube 1 producto", n: "1 llamada", costo: "$0.0011 USD", sub: "< 1 centavo. Costo irrelevante en upload individual.", color: "emerald" },
+                { caso: "Carga masiva 100 productos", n: "100 llamadas", costo: "$0.11 USD", sub: "Sin optimización. Con batch de 20: $0.005 USD.", color: "emerald" },
+                { caso: "Carga masiva 1,000 productos", n: "1,000 llamadas", costo: "$1.08 USD", sub: "Sin optimización. Con batch de 20: $0.047 USD.", color: "amber" },
+              ].map(({ caso, n, costo, sub, color }) => (
+                <div key={caso} className={`p-4 border rounded-xl bg-${color}-50/40 border-${color}-200`}>
+                  <span className="font-bold text-gray-800 block mb-1">{caso}</span>
+                  <span className="text-[10px] text-gray-400 block mb-2">{n}</span>
+                  <span className={`text-xl font-extrabold text-${color}-600 block mb-1`}>{costo}</span>
+                  <span className="text-[10px] text-gray-500 leading-relaxed">{sub}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Costo base de datos completa */}
+          <div>
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Costo recategorización base completa (1,076,982 productos)</span>
+            <div className="overflow-x-auto">
+              <table className="w-full text-xs border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b text-[10px] font-bold text-gray-400 uppercase tracking-wider" style={{ borderColor: "var(--border)" }}>
+                    <th className="p-3 text-left">Estrategia</th>
+                    <th className="p-3 text-right">Costo total</th>
+                    <th className="p-3 text-right">Tiempo estimado</th>
+                    <th className="p-3 text-left">Notas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { estrategia: "Sin optimización (1 producto = 1 llamada)", costo: "~$1,159", tiempo: "~36 horas", nota: "Baseline. No recomendado para producción.", alert: true },
+                    { estrategia: "Batch 10 productos por llamada", costo: "~$147", tiempo: "~216 min", nota: "La taxonomía se amortiza entre 10 productos.", alert: false },
+                    { estrategia: "Batch 20 productos por llamada", costo: "~$100", tiempo: "~108 min", nota: "Punto óptimo entre costo y manejo de contexto.", alert: false },
+                    { estrategia: "Batch 20 + OpenAI Batch API (50% off)", costo: "~$50", tiempo: "24h background", nota: "Recomendado. Procesa asíncrono, descuento automático del 50%.", alert: false },
+                  ].map((row, i) => (
+                    <tr key={i} className={`border-b ${row.alert ? "bg-red-50/30" : i === 3 ? "bg-emerald-50/30" : ""}`} style={{ borderColor: "var(--border)" }}>
+                      <td className="p-3 font-semibold text-gray-800">{row.estrategia}</td>
+                      <td className={`p-3 text-right font-extrabold ${row.alert ? "text-red-600" : i === 3 ? "text-emerald-600" : "text-gray-800"}`}>{row.costo}</td>
+                      <td className="p-3 text-right text-gray-500">{row.tiempo}</td>
+                      <td className="p-3 text-gray-500">{row.nota}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Por fases */}
+          <div>
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Estrategia por fases (con Batch API)</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { fase: "Fase 1", label: "Productos con órdenes (~377k)", costo: "~$18 USD", desc: "Máximo ROI inmediato. Mejora feeds, pauta y búsqueda sobre lo que ya vende.", color: "orange" },
+                { fase: "Fase 2", label: "Resto del catálogo (~700k)", costo: "~$33 USD", desc: "Completa la taxonomía. Se corre en background sin urgencia operativa.", color: "slate" },
+              ].map(({ fase, label, costo, desc, color }) => (
+                <div key={fase} className={`p-4 border rounded-xl bg-${color}-50/40`} style={{ borderColor: `var(--border)` }}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className={`text-[10px] font-bold text-${color}-600 uppercase tracking-wider`}>{fase}</span>
+                    <span className="text-base font-extrabold text-gray-900">{costo}</span>
+                  </div>
+                  <span className="font-bold text-gray-800 block mb-1">{label}</span>
+                  <span className="text-[10px] text-gray-500 leading-relaxed">{desc}</span>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 flex items-center justify-between p-3 bg-emerald-50 border border-emerald-200 rounded-xl">
+              <span className="font-bold text-emerald-800">Costo total base completa (Fase 1 + 2)</span>
+              <span className="text-lg font-extrabold text-emerald-700">~$50 USD — una sola vez</span>
+            </div>
+          </div>
+
+          {/* Por qué es económico */}
+          <div>
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Por qué el costo baja tanto con optimización</span>
+            <div className="space-y-2">
+              {[
+                { n: "1", titulo: "El costo dominante es el contexto (taxonomía)", desc: "El árbol de 225 nodos ocupa ~5,700 tokens por llamada — el 88% del costo de input. Mandarlo una sola vez para 20 productos en lugar de 20 veces lo amortiza completamente." },
+                { n: "2", titulo: "OpenAI Batch API — 50% de descuento automático", desc: "Para tareas que no necesitan respuesta en tiempo real, OpenAI procesa en background con un 24h SLA y aplica el 50% de descuento sin configuración adicional." },
+                { n: "3", titulo: "GPT-4o mini vs GPT-4o", desc: "GPT-4o mini cuesta ~15x menos que GPT-4o con calidad suficiente para clasificación estructurada. La taxonomía es pequeña (225 nodos) y el task es de clasificación, no de razonamiento complejo." },
+                { n: "4", titulo: "El costo por consulta online es despreciable", desc: "Para uso interactivo (un proveedor subiendo productos), $0.001 por producto es ruido. El costo relevante solo aparece en operaciones masivas batch, donde la optimización lo baja 20x." },
+              ].map(({ n, titulo, desc }) => (
+                <div key={n} className="flex items-start gap-3 p-3 border rounded-xl bg-slate-50/50" style={{ borderColor: "var(--border)" }}>
+                  <span className="w-5 h-5 rounded-full bg-orange-500 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{n}</span>
+                  <div>
+                    <span className="font-bold text-gray-800 block mb-0.5">{titulo}</span>
+                    <span className="text-gray-500 leading-relaxed">{desc}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   };
