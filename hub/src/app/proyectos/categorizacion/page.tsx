@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, MouseEvent, WheelEvent } from "react";
+import React, { useEffect, useState, useRef, useCallback, MouseEvent, WheelEvent } from "react";
 
 // Types
 interface CategoryInfo {
@@ -20,6 +20,33 @@ interface Coord {
 interface DropiCategoryRaw {
   name: string;
   orders: number;
+}
+
+// Google taxonomy types
+interface GoogleTaxonomyStats {
+  count: number;
+}
+
+interface CategoryMapping {
+  id: number;
+  dropi_category_id: string;
+  dropi_category_path: string;
+  google_category_id: string;
+  google_category_path: string;
+  suggestion_rank: number;
+  match_type: string;
+  confidence_score: number;
+  confidence_label: string;
+  status: string;
+  reviewed_by: string | null;
+  notes: string | null;
+}
+
+interface SuggestResult {
+  dropi_categories: number;
+  google_categories: number;
+  mapping_rows_saved: number;
+  rank1_summary: { high: number; medium: number; low: number; needs_review: number };
 }
 
 // Homologation unified taxonomy targets
@@ -872,7 +899,8 @@ const computeLayout = (
 
 export default function CategorizacionPage() {
   const [docsOpen, setDocsOpen] = useState(false);
-  const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "taxonomy" | "ai" | null>(null);
+  const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "taxonomy" | "ai" | "google" | null>(null);
+  const [mainTab, setMainTab] = useState<"simulator" | "google_mapping">("simulator");
 
   // Dropi Data States
   const [dropiRawCategories, setDropiRawCategories] = useState<DropiCategoryRaw[]>([]);
@@ -885,7 +913,7 @@ export default function CategorizacionPage() {
   const [meliLoading, setMeliLoading] = useState(true);
 
   // Meli Navigation States
-  const [activeMeliTab, setActiveMeliTab] = useState<"columns" | "graph">("graph");
+  const [activeMeliTab, setActiveMeliTab] = useState<"columns" | "graph" | "conclusions">("conclusions");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<string[]>([]);
   const [activePath, setActivePath] = useState<string[]>([]);
@@ -901,6 +929,29 @@ export default function CategorizacionPage() {
 
   const columnsContainerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
+
+  // ── Google taxonomy states ──────────────────────────────────────────────────
+  const [googleCount, setGoogleCount] = useState<number>(0);
+  const [googleImporting, setGoogleImporting] = useState(false);
+  const [googleImportMsg, setGoogleImportMsg] = useState<string | null>(null);
+
+  // ── Mapping / homologación states ───────────────────────────────────────────
+  const [mappings, setMappings] = useState<CategoryMapping[]>([]);
+  const [mappingLoading, setMappingLoading] = useState(false);
+  const [suggesting, setSuggesting] = useState(false);
+  const [suggestResult, setSuggestResult] = useState<SuggestResult | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [confidenceFilter, setConfidenceFilter] = useState<string>("all");
+  const [expandedMappingId, setExpandedMappingId] = useState<number | null>(null);
+
+  // ── Product categorizer states ───────────────────────────────────────────────
+  const [productQuery, setProductQuery] = useState("");
+  const [productClassifying, setProductClassifying] = useState(false);
+  const [productResult, setProductResult] = useState<{
+    results: { l1: string; l2: string; l3: string; l4: string; score: number; reasoning: string }[];
+    gap: boolean; gap_note: string;
+  } | null>(null);
+  const [productError, setProductError] = useState<string | null>(null);
 
   // Load Dropi Categories
   useEffect(() => {
@@ -988,6 +1039,138 @@ export default function CategorizacionPage() {
       });
     }
   }, [activePath]);
+
+  // Load Google taxonomy count on mount
+  useEffect(() => {
+    fetch("/api/categorizacion/import-google")
+      .then(r => r.json())
+      .then((d: GoogleTaxonomyStats) => setGoogleCount(d.count ?? 0))
+      .catch(() => null);
+  }, []);
+
+  // Load mappings when tab is active
+  const fetchMappings = useCallback(async () => {
+    setMappingLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (statusFilter !== "all")     params.set("status", statusFilter);
+      if (confidenceFilter !== "all") params.set("confidence", confidenceFilter);
+      params.set("limit", "500");
+      const res = await fetch(`/api/categorizacion/mapping?${params}`);
+      const data: CategoryMapping[] = await res.json();
+      setMappings(Array.isArray(data) ? data : []);
+    } catch {
+      setMappings([]);
+    } finally {
+      setMappingLoading(false);
+    }
+  }, [statusFilter, confidenceFilter]);
+
+  useEffect(() => {
+    if (mainTab === "google_mapping") fetchMappings();
+  }, [mainTab, fetchMappings]);
+
+  // Google actions
+  const handleImportGoogle = async () => {
+    setGoogleImporting(true);
+    setGoogleImportMsg(null);
+    try {
+      const res = await fetch("/api/categorizacion/import-google", { method: "POST" });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      setGoogleCount(data.imported ?? 0);
+      setGoogleImportMsg(`${data.imported.toLocaleString()} categorías importadas correctamente.`);
+    } catch (err) {
+      setGoogleImportMsg(`Error: ${err instanceof Error ? err.message : "fallo desconocido"}`);
+    } finally {
+      setGoogleImporting(false);
+    }
+  };
+
+  const handleGenerateSuggestions = async () => {
+    setSuggesting(true);
+    setSuggestResult(null);
+    try {
+      // 1. Seed Dropi categories — check response explicitly
+      const seedRes = await fetch("/api/categorizacion/seed-dropi", { method: "POST" });
+      const seedData: { seeded?: number; error?: string } = await seedRes.json();
+      if (!seedRes.ok || seedData.error) {
+        throw new Error(`Error en seed-dropi: ${seedData.error ?? seedRes.statusText}`);
+      }
+
+      // 2. Run matching engine
+      const suggestRes = await fetch("/api/categorizacion/suggest", { method: "POST" });
+      const data: SuggestResult & { error?: string } = await suggestRes.json();
+      if (!suggestRes.ok || data.error) throw new Error(data.error ?? suggestRes.statusText);
+
+      setSuggestResult(data);
+      fetchMappings();
+    } catch (err) {
+      setSuggestResult(null);
+      alert(`Error generando sugerencias: ${err instanceof Error ? err.message : "fallo desconocido"}`);
+    } finally {
+      setSuggesting(false);
+    }
+  };
+
+  const handleUpdateMapping = async (id: number, status: string) => {
+    try {
+      await fetch("/api/categorizacion/mapping", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status, reviewed_by: "jaime.guevara@dropi.co" }),
+      });
+      setMappings(prev => prev.map(m => m.id === id ? { ...m, status } : m));
+    } catch {
+      alert("Error actualizando el mapping. Intenta de nuevo.");
+    }
+  };
+
+  const handleExportCSV = () => {
+    const approved = mappings.filter(m => m.status === "approved");
+    const all = mappings;
+    const rows = (approved.length > 0 ? approved : all);
+    const header = "dropi_category_id,dropi_category_path,google_category_id,google_category_path,confidence_score,match_type,status";
+    const csv = [header, ...rows.map(r =>
+      `${r.dropi_category_id},"${r.dropi_category_path}",${r.google_category_id},"${r.google_category_path}",${r.confidence_score},${r.match_type},${r.status}`
+    )].join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `dropi-google-mapping-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // ── Product categorizer — calls Claude API ───────────────────────────────────
+  const classifyProduct = async (query: string) => {
+    if (!query.trim()) return;
+    setProductClassifying(true);
+    setProductResult(null);
+    setProductError(null);
+    try {
+      const res = await fetch("/api/categorizacion/classify-product", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ product_name: query }),
+      });
+      const data = await res.json() as {
+        results?: { l1: string; l2: string; l3: string; l4: string; score: number; reasoning: string }[];
+        gap?: boolean; gap_note?: string; error?: string;
+      };
+      if (!res.ok || data.error) throw new Error(data.error ?? "Error desconocido");
+      setProductResult({
+        results: data.results ?? [],
+        gap: data.gap ?? false,
+        gap_note: data.gap_note ?? "",
+      });
+    } catch (err) {
+      setProductError(err instanceof Error ? err.message : "Error llamando a la IA");
+    } finally {
+      setProductClassifying(false);
+    }
+  };
 
   // Trace hierarchical path
   const getBreadcrumbPath = (id: string): { id: string; name: string }[] => {
@@ -1397,8 +1580,131 @@ export default function CategorizacionPage() {
               </p>
             </div>
 
+            {/* ── Product Categorizer (AI) ────────────────────────────────────── */}
+            <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">Categorizador con IA</h3>
+                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200">GPT-4o mini</span>
+              </div>
+              <p className="text-xs text-gray-400 mb-4">Escribe el nombre de cualquier producto y la IA lo ubica en el árbol Dropi.</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={productQuery}
+                  onChange={e => setProductQuery(e.target.value)}
+                  onKeyDown={e => { if (e.key === "Enter") classifyProduct(productQuery); }}
+                  placeholder="Ej: Timbre Puerta Inalámbrico Digital Blanco"
+                  className="flex-1 border rounded-xl px-4 py-2.5 text-xs font-medium outline-none focus:ring-2 focus:ring-orange-400 bg-slate-50"
+                  style={{ borderColor: "var(--border)" }}
+                  disabled={productClassifying}
+                />
+                <button
+                  onClick={() => classifyProduct(productQuery)}
+                  disabled={productQuery.trim().length < 3 || productClassifying}
+                  className="px-5 py-2.5 rounded-xl text-xs font-bold bg-orange-500 text-white hover:bg-orange-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm min-w-[110px]"
+                >
+                  {productClassifying ? (
+                    <span className="flex items-center gap-1.5 justify-center">
+                      <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                      Pensando...
+                    </span>
+                  ) : "Categorizar"}
+                </button>
+                {(productResult || productError) && (
+                  <button
+                    onClick={() => { setProductQuery(""); setProductResult(null); setProductError(null); }}
+                    className="px-3 py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-500 hover:bg-slate-200 transition-all"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* Error */}
+              {productError && (
+                <div className="mt-4 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                  {productError}
+                </div>
+              )}
+
+              {/* Results */}
+              {productResult && (
+                <div className="mt-5 space-y-2">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Resultados para:</span>
+                    <span className="text-xs font-bold text-orange-600 font-mono">"{productQuery}"</span>
+                  </div>
+
+                  {productResult.results.map((m, i) => {
+                    const isTop = i === 0;
+                    const scoreColor = m.score >= 70 ? "emerald" : m.score >= 50 ? "amber" : m.score >= 30 ? "orange" : "slate";
+                    const scoreLabel = m.score >= 70 ? "Alta" : m.score >= 50 ? "Media" : m.score >= 30 ? "Baja" : "Muy baja";
+                    return (
+                      <div
+                        key={i}
+                        className={`border rounded-2xl p-4 transition-all ${isTop ? "border-orange-300 bg-orange-50/40" : "border-slate-200 bg-slate-50/30"}`}
+                      >
+                        <div className="flex items-center justify-between mb-2.5">
+                          <div className="flex items-center gap-2">
+                            {isTop
+                              ? <span className="text-[10px] font-bold bg-orange-500 text-white px-2 py-0.5 rounded-full">Mejor match</span>
+                              : <span className="text-[10px] font-bold text-gray-400 bg-slate-100 px-2 py-0.5 rounded-full">#{i + 1}</span>
+                            }
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {/* Score bar */}
+                            <div className="flex items-center gap-1.5">
+                              <div className="w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                                <div
+                                  className={`h-full rounded-full bg-${scoreColor}-400 transition-all`}
+                                  style={{ width: `${m.score}%` }}
+                                />
+                              </div>
+                              <span className={`text-[10px] font-bold text-${scoreColor}-600`}>{m.score}</span>
+                            </div>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full bg-${scoreColor}-50 text-${scoreColor}-700 border border-${scoreColor}-200`}>
+                              {scoreLabel}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Path */}
+                        <div className="flex flex-wrap items-center gap-1.5 text-xs mb-2">
+                          <span className={`font-bold px-2.5 py-1 rounded-lg shadow-2xs border ${isTop ? "bg-white text-gray-800 border-orange-200" : "bg-white text-gray-700 border-slate-200"}`}>{m.l1}</span>
+                          <span className="text-gray-400 text-[10px]">›</span>
+                          <span className="text-gray-600 px-2 py-0.5 bg-white border border-slate-200 rounded-lg shadow-2xs">{m.l2}</span>
+                          <span className="text-gray-400 text-[10px]">›</span>
+                          <span className="text-gray-600 px-2 py-0.5 bg-white border border-slate-200 rounded-lg shadow-2xs">{m.l3}</span>
+                          <span className="text-gray-400 text-[10px]">›</span>
+                          <span className={`font-bold px-2.5 py-1 rounded-lg shadow-2xs border ${isTop ? "bg-orange-100 text-orange-700 border-orange-200" : "bg-slate-100 text-slate-700 border-slate-200"}`}>{m.l4}</span>
+                        </div>
+
+                        {/* Reasoning */}
+                        {m.reasoning && (
+                          <p className="text-[10px] text-gray-500 leading-relaxed">
+                            <span className="font-bold">Por qué: </span>{m.reasoning}
+                          </p>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* Gap alert */}
+                  {productResult.gap && productResult.gap_note && (
+                    <div className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 flex items-start gap-2 mt-1">
+                      <span className="text-base leading-none">⚠</span>
+                      <div>
+                        <span className="font-bold block mb-0.5">Gap de taxonomía detectado</span>
+                        <span>{productResult.gap_note}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-              
+
               {/* Left Column: Dropi Raw List Selector */}
               <div className="bg-white border rounded-2xl p-6 shadow-2xs flex flex-col max-h-[500px]" style={{ borderColor: "var(--border)" }}>
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Categorías en Base de Datos</h3>
@@ -1777,14 +2083,24 @@ export default function CategorizacionPage() {
           <div className="space-y-6 animate-fade-in">
             {/* Context Info */}
             <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
-              <h2 className="text-base font-bold text-gray-900 mb-2">Referencia de la Industria: Mercado Libre</h2>
+              <h2 className="text-base font-bold text-gray-900 mb-2">Referencias de Industria</h2>
               <p className="text-xs text-gray-500 leading-relaxed max-w-4xl">
-                Esta sección es un espacio de investigación para analizar cómo Mercado Libre Colombia (MCO) estructura jerárquicamente su taxonomía de 12,172 categorías para evitar la fragmentación. Úsala como marco de referencia para diseñar las subcategorías de Dropi.
+                Análisis comparativo de taxonomías externas como base para construir la taxonomía propia de Dropi. Incluye explorador de MercadoLibre Colombia (12,172 categorías), homologación Google Product Taxonomy y conclusiones estratégicas sobre el modelo a adoptar.
               </p>
             </div>
 
             {/* Selector Tabs */}
             <div className="flex bg-slate-100 p-1 rounded-xl w-fit border shadow-2xs" style={{ borderColor: "var(--border)" }}>
+              <button
+                onClick={() => setActiveMeliTab("conclusions")}
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+                  activeMeliTab === "conclusions"
+                    ? "bg-white text-orange-600 shadow-2xs"
+                    : "text-gray-500 hover:text-gray-900"
+                }`}
+              >
+                📋 Análisis y Conclusiones
+              </button>
               <button
                 onClick={() => setActiveMeliTab("graph")}
                 className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${
@@ -1793,7 +2109,7 @@ export default function CategorizacionPage() {
                     : "text-gray-500 hover:text-gray-900"
                 }`}
               >
-                🕸️ Grafo Interactivo (Árbol)
+                🕸️ Grafo MercadoLibre
               </button>
               <button
                 onClick={() => setActiveMeliTab("columns")}
@@ -1803,11 +2119,170 @@ export default function CategorizacionPage() {
                     : "text-gray-500 hover:text-gray-900"
                 }`}
               >
-                📁 Visor de Columnas (Miller Columns)
+                📁 Visor de Columnas
               </button>
             </div>
 
             {/* MILLER COLUMNS VIEW */}
+            {activeMeliTab === "conclusions" && (
+              <div className="space-y-6 animate-fade-in">
+
+                {/* Decision box */}
+                <div className="bg-orange-50 border border-orange-200 rounded-2xl p-6">
+                  <span className="text-[10px] font-bold text-orange-500 uppercase tracking-wider block mb-2">Decisión recomendada</span>
+                  <p className="text-sm font-bold text-gray-900 leading-snug mb-3">
+                    Construir una taxonomía propia de Dropi, tomando MercadoLibre Colombia como referencia principal de estructura, y complementarla con una capa de homologación Google Product Taxonomy.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                    {[
+                      { icon: "🟢", label: "MercadoLibre Colombia", role: "Referencia principal", desc: "Estructura jerárquica, lógica marketplace, contexto LATAM/Colombia." },
+                      { icon: "🔵", label: "Google Product Taxonomy", role: "Capa de homologación", desc: "Merchant Center, Shopping Ads, Performance Max, feeds externos." },
+                      { icon: "🟡", label: "Amazon / HS / UNSPSC / GS1", role: "Referencias secundarias", desc: "Atributos técnicos, comercio exterior, supply chain. Fase posterior." },
+                    ].map(({ icon, label, role, desc }) => (
+                      <div key={label} className="bg-white border border-orange-100 rounded-xl p-4">
+                        <span className="text-base block mb-1">{icon}</span>
+                        <span className="font-bold text-gray-900 block">{label}</span>
+                        <span className="text-[10px] font-bold text-orange-600 uppercase tracking-wider block mb-1">{role}</span>
+                        <span className="text-gray-500 leading-relaxed">{desc}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Why MercadoLibre */}
+                <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                  <h3 className="text-sm font-bold text-gray-900 mb-1">Por qué MercadoLibre como referencia principal</h3>
+                  <p className="text-xs text-gray-500 mb-4 leading-relaxed">Su estructura está más cerca del contexto de Dropi que cualquier otra alternativa.</p>
+                  <div className="space-y-2">
+                    {[
+                      "Opera en Latinoamérica y Colombia — referente conocido para sellers, proveedores y equipos comerciales.",
+                      "Lógica marketplace similar a la experiencia de navegación que necesitamos.",
+                      "Categorización pensada para publicación, búsqueda y navegación de productos.",
+                      "Estructura jerárquica que lleva al usuario desde categoría general hasta categoría final específica.",
+                      "Fácil de explicar y validar internamente — no requiere traducción de contexto.",
+                    ].map((point, i) => (
+                      <div key={i} className="flex items-start gap-2.5 text-xs text-gray-600">
+                        <span className="w-4 h-4 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 font-bold text-[9px] flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                        <span className="leading-relaxed">{point}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 p-3 bg-slate-50 border rounded-xl text-xs font-mono text-gray-600" style={{ borderColor: "var(--border)" }}>
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Ejemplo de ruta Dropi</span>
+                    Hogar y Muebles → Cocina → Utensilios → Vajillas
+                    <span className="block text-[10px] text-gray-400 mt-1">↳ Homologado contra categoría equivalente MercadoLibre + Google ID</span>
+                  </div>
+                </div>
+
+                {/* Why Google */}
+                <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                  <h3 className="text-sm font-bold text-gray-900 mb-1">Por qué incluir Google Product Taxonomy</h3>
+                  <p className="text-xs text-gray-500 mb-4 leading-relaxed">Como capa de homologación — no como taxonomía principal visible.</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                    {[
+                      "Google Merchant Center","Google Shopping","Shopping Ads","Performance Max",
+                      "Feeds de producto","Listados gratuitos","Organización de campañas por tipo","Integraciones externas futuras",
+                    ].map(use => (
+                      <div key={use} className="flex items-center gap-2 text-xs text-gray-600 bg-blue-50/40 border border-blue-100 rounded-lg px-3 py-2">
+                        <span className="text-blue-500 font-bold">→</span> {use}
+                      </div>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div className="p-3 bg-slate-50 border rounded-xl" style={{ borderColor: "var(--border)" }}>
+                      <span className="font-bold text-gray-700 block mb-0.5">google_product_category</span>
+                      <span className="text-gray-500">Categoría oficial de Google — capa de homologación.</span>
+                    </div>
+                    <div className="p-3 bg-orange-50 border border-orange-100 rounded-xl">
+                      <span className="font-bold text-orange-700 block mb-0.5">product_type</span>
+                      <span className="text-orange-600">Taxonomía propia de Dropi — visible para usuarios y catálogo.</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Why not Amazon */}
+                <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                  <h3 className="text-sm font-bold text-gray-900 mb-1">Por qué Amazon no es la base principal</h3>
+                  <p className="text-xs text-gray-500 mb-4 leading-relaxed">No se descarta — queda como referencia secundaria para atributos técnicos en fases posteriores.</p>
+                  <div className="space-y-2">
+                    {[
+                      { title: "Estructura más compleja", desc: "Separa categorías de navegación, browse nodes, product types, atributos obligatorios y reglas por marketplace." },
+                      { title: "Sin referencia directa para Colombia", desc: "Habría que elegir Amazon US, México o Brasil — cualquier opción sesga nombres y comportamiento de navegación." },
+                      { title: "Orientado a publicación técnica Amazon", desc: "Su API de Product Type Definitions es útil para atributos, no para definir experiencia de navegación de Dropi." },
+                      { title: "Complejidad innecesaria en Fase 1", desc: "El objetivo inicial es ordenar el catálogo y validar con usuarios internos. Amazon suma mejor en Fase 2 (atributos)." },
+                    ].map(({ title, desc }) => (
+                      <div key={title} className="flex items-start gap-3 text-xs border-b pb-2" style={{ borderColor: "var(--border)" }}>
+                        <span className="text-amber-500 font-bold mt-0.5">⚠</span>
+                        <div><span className="font-bold text-gray-800">{title}: </span><span className="text-gray-500">{desc}</span></div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* International standards */}
+                <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                  <h3 className="text-sm font-bold text-gray-900 mb-4">Estándares internacionales revisados</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50 border-b text-[10px] font-bold text-gray-400 uppercase tracking-wider" style={{ borderColor: "var(--border)" }}>
+                          <th className="p-3 text-left">Estándar</th>
+                          <th className="p-3 text-left">Caso de uso principal</th>
+                          <th className="p-3 text-left">Uso recomendado en Dropi</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          { name: "HS Code / Sistema Armonizado", use: "Comercio exterior, aduanas, aranceles", dropi: "Importación, proveedores internacionales, compliance" },
+                          { name: "UNSPSC", use: "Compras corporativas, procurement, análisis de gasto", dropi: "Analítica corporativa, segmentación B2B, reportes estructurados" },
+                          { name: "GS1 / GPC", use: "Retail, códigos de barras, GTIN, supply chain", dropi: "GTIN, trazabilidad, interoperabilidad con terceros (fase futura)" },
+                        ].map((row, i) => (
+                          <tr key={i} className="border-b hover:bg-slate-50 transition-colors" style={{ borderColor: "var(--border)" }}>
+                            <td className="p-3 font-bold text-gray-800">{row.name}</td>
+                            <td className="p-3 text-gray-500">{row.use}</td>
+                            <td className="p-3 text-gray-600">{row.dropi}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Model table */}
+                <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                  <h3 className="text-sm font-bold text-gray-900 mb-1">Modelo de capas recomendado para Dropi</h3>
+                  <p className="text-xs text-gray-500 mb-4 leading-relaxed">Una taxonomía propia homologable — no dependiente de una sola referencia externa.</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50 border-b text-[10px] font-bold text-gray-400 uppercase tracking-wider" style={{ borderColor: "var(--border)" }}>
+                          <th className="p-3 text-left">Capa</th>
+                          <th className="p-3 text-left">Uso</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          { layer: "Taxonomía Dropi", bg: "bg-orange-50 text-orange-700", use: "Categoría principal visible para usuarios internos, proveedores y dropshippers." },
+                          { layer: "MercadoLibre Mapping", bg: "bg-amber-50 text-amber-700", use: "Referencia marketplace para validar estructura, navegación y categoría final." },
+                          { layer: "Google Product Taxonomy Mapping", bg: "bg-blue-50 text-blue-700", use: "Homologación para feeds, pauta, Merchant Center y canales externos." },
+                          { layer: "Amazon Reference", bg: "bg-slate-100 text-slate-600", use: "Referencia secundaria para atributos técnicos por tipo de producto (Fase 2)." },
+                          { layer: "HS Code", bg: "bg-slate-100 text-slate-600", use: "Importación, aduanas y comercio exterior." },
+                          { layer: "UNSPSC", bg: "bg-slate-100 text-slate-600", use: "Procurement y analítica corporativa." },
+                          { layer: "GS1 / GPC", bg: "bg-slate-100 text-slate-600", use: "Retail, GTIN, supply chain e identificación de producto." },
+                        ].map((row, i) => (
+                          <tr key={i} className="border-b hover:bg-slate-50 transition-colors" style={{ borderColor: "var(--border)" }}>
+                            <td className="p-3"><span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${row.bg}`}>{row.layer}</span></td>
+                            <td className="p-3 text-gray-500 leading-relaxed">{row.use}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            )}
+
             {activeMeliTab === "columns" && (
               <div className="bg-white border rounded-2xl p-6 shadow-2xs flex flex-col min-h-[550px]" style={{ borderColor: "var(--border)" }}>
                 {/* Search */}
@@ -2316,6 +2791,366 @@ export default function CategorizacionPage() {
     );
   };
 
+  const renderGoogle = () => {
+    return (
+      <div className="space-y-6 animate-fade-in">
+        <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+          <h2 className="text-base font-bold text-gray-900 mb-2">Google Product Taxonomy</h2>
+          <p className="text-xs text-gray-500 leading-relaxed max-w-4xl">
+            Taxonomía oficial de Google para clasificación de productos en Google Shopping, Merchant Center y Performance Max. Se usa como capa de homologación sobre la taxonomía Dropi para canales externos (feeds, Shopping Ads, SEO comercial).
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3 text-xs">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-100 font-semibold">
+              google_product_category → referencia oficial Google
+            </span>
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 text-orange-700 border border-orange-100 font-semibold">
+              product_type → taxonomía propia Dropi
+            </span>
+          </div>
+        </div>
+
+        {/* Import status */}
+        <div className="bg-white border rounded-2xl p-6 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4" style={{ borderColor: "var(--border)" }}>
+          <div>
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">Categorías Google en Base de Datos</span>
+            <div className="flex items-baseline gap-2">
+              <span className="text-3xl font-extrabold text-gray-900">{googleCount.toLocaleString()}</span>
+              <span className="text-xs text-gray-500">categorías</span>
+              {googleCount > 0 && (
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100">Listo</span>
+              )}
+            </div>
+            {googleImportMsg && (
+              <p className={`text-xs mt-2 ${googleImportMsg.startsWith("Error") ? "text-red-600" : "text-emerald-600"} font-semibold`}>
+                {googleImportMsg}
+              </p>
+            )}
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={handleImportGoogle}
+              disabled={googleImporting}
+              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-all shadow-sm"
+            >
+              {googleImporting ? "Importando..." : googleCount > 0 ? "Reimportar Taxonomía" : "Importar Taxonomía Google"}
+            </button>
+            {googleCount > 0 && (
+              <button
+                onClick={() => { setMainTab("google_mapping"); setActiveResourceTab(null); }}
+                className="px-4 py-2.5 rounded-xl text-xs font-bold bg-orange-500 text-white hover:bg-orange-600 transition-all shadow-sm"
+              >
+                Ir a Homologación →
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Stats breakdown */}
+        {googleCount > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { label: "Total categorías", value: googleCount.toLocaleString(), color: "text-gray-900" },
+              { label: "Profundidad máx.", value: "7 niveles", color: "text-blue-600" },
+              { label: "Idioma fuente", value: "Inglés (EN-US)", color: "text-gray-600" },
+              { label: "Fuente", value: "Google Merchant", color: "text-gray-600" },
+            ].map(({ label, value, color }) => (
+              <div key={label} className="bg-white border rounded-xl p-4 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-1">{label}</span>
+                <span className={`text-sm font-extrabold ${color}`}>{value}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Source info */}
+        <div className="bg-slate-50 border rounded-2xl p-5 text-xs text-gray-500" style={{ borderColor: "var(--border)" }}>
+          <span className="font-bold text-gray-700 block mb-1">Fuente oficial</span>
+          <span className="font-mono text-blue-600 break-all">
+            https://www.google.com/basepages/producttype/taxonomy-with-ids.en-US.txt
+          </span>
+          <p className="mt-2 leading-relaxed">
+            Formato: <span className="font-mono">ID - Nivel1 &gt; Nivel2 &gt; Nivel3 ...</span> — Hasta 7 niveles de profundidad. Sin autenticación requerida.
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  const renderGoogleHomologacion = () => {
+    const pendingCount  = mappings.filter(m => m.status === "pending_review").length;
+    const approvedCount = mappings.filter(m => m.status === "approved").length;
+    const rejectedCount = mappings.filter(m => m.status === "rejected").length;
+
+    const confidenceBadge = (label: string) => {
+      if (label === "high")         return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      if (label === "medium")       return "bg-amber-50 text-amber-700 border-amber-200";
+      if (label === "low")          return "bg-orange-50 text-orange-700 border-orange-200";
+      return "bg-red-50 text-red-700 border-red-200";
+    };
+
+    const statusBadge = (status: string) => {
+      if (status === "approved")    return "bg-emerald-50 text-emerald-700 border-emerald-200";
+      if (status === "rejected")    return "bg-red-50 text-red-700 border-red-200";
+      if (status === "needs_more_context") return "bg-purple-50 text-purple-700 border-purple-200";
+      return "bg-slate-100 text-slate-600 border-slate-200";
+    };
+
+    const statusLabel = (status: string) => {
+      if (status === "approved")           return "Aprobado";
+      if (status === "rejected")           return "Rechazado";
+      if (status === "needs_more_context") return "Necesita revisión";
+      return "Pendiente";
+    };
+
+    return (
+      <div className="space-y-6 animate-fade-in">
+        {/* Header */}
+        <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+          <h2 className="text-base font-bold text-gray-900 mb-1">Homologación Dropi ↔ Google</h2>
+          <p className="text-xs text-gray-500 leading-relaxed max-w-4xl">
+            Asocia cada categoría L4 de la taxonomía Dropi con su equivalente oficial en Google Product Taxonomy. Las sugerencias son automáticas (algoritmo semántico + diccionario ES→EN) y requieren validación manual.
+          </p>
+        </div>
+
+        {/* Setup checklist */}
+        {mappings.length === 0 && !mappingLoading && (
+          <div className="bg-white border rounded-2xl p-6 shadow-2xs space-y-4" style={{ borderColor: "var(--border)" }}>
+            <h3 className="text-xs font-bold text-gray-700 uppercase tracking-wider">Setup requerido</h3>
+            <div className="space-y-3">
+              {[
+                { label: "1. Importar taxonomía Google", done: googleCount > 0, action: handleImportGoogle, actionLabel: googleImporting ? "Importando..." : "Importar", disabled: googleImporting },
+                { label: "2. Generar sugerencias automáticas", done: false, action: handleGenerateSuggestions, actionLabel: suggesting ? "Generando..." : "Generar Sugerencias", disabled: suggesting || googleCount === 0 },
+              ].map(({ label, done, action, actionLabel, disabled }) => (
+                <div key={label} className="flex items-center justify-between p-4 border rounded-xl bg-slate-50" style={{ borderColor: "var(--border)" }}>
+                  <div className="flex items-center gap-3">
+                    <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${done ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-500"}`}>
+                      {done ? "✓" : "○"}
+                    </span>
+                    <span className="text-xs font-semibold text-gray-700">{label}</span>
+                  </div>
+                  {!done && (
+                    <button
+                      onClick={action}
+                      disabled={disabled}
+                      className="px-3 py-1.5 rounded-lg text-xs font-bold bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    >
+                      {actionLabel}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Action bar */}
+        {mappings.length > 0 && (
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            {/* Stats chips */}
+            <div className="flex flex-wrap gap-2 text-xs">
+              {[
+                { label: `${mappings.length} total`, cls: "bg-slate-100 text-slate-700 border-slate-200" },
+                { label: `${pendingCount} pendientes`, cls: "bg-slate-100 text-slate-600 border-slate-200" },
+                { label: `${approvedCount} aprobados`, cls: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+                { label: `${rejectedCount} rechazados`, cls: "bg-red-50 text-red-700 border-red-200" },
+              ].map(({ label, cls }) => (
+                <span key={label} className={`px-2.5 py-1 rounded-full font-bold border ${cls}`}>{label}</span>
+              ))}
+            </div>
+            {/* Action buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={handleGenerateSuggestions}
+                disabled={suggesting || googleCount === 0}
+                className="px-3 py-2 rounded-lg text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 disabled:opacity-50 transition-all"
+              >
+                {suggesting ? "Generando..." : "Regenerar"}
+              </button>
+              <button
+                onClick={handleExportCSV}
+                className="px-3 py-2 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-all"
+              >
+                Exportar CSV
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Suggest result summary */}
+        {suggestResult && (
+          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 text-xs">
+            <span className="font-bold text-blue-800 block mb-2">Sugerencias generadas</span>
+            <div className="flex flex-wrap gap-4 text-blue-700">
+              <span>{suggestResult.dropi_categories} categorías Dropi procesadas</span>
+              <span>{suggestResult.google_categories.toLocaleString()} categorías Google analizadas</span>
+              <span className="text-emerald-700 font-bold">{suggestResult.rank1_summary.high} con confianza alta</span>
+              <span className="text-amber-700 font-bold">{suggestResult.rank1_summary.medium} confianza media</span>
+              <span className="text-orange-700 font-bold">{suggestResult.rank1_summary.low} baja</span>
+              <span className="text-red-700 font-bold">{suggestResult.rank1_summary.needs_review} requieren revisión</span>
+            </div>
+          </div>
+        )}
+
+        {/* Filters */}
+        {mappings.length > 0 && (
+          <div className="flex flex-wrap gap-3 items-center">
+            <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Filtrar:</span>
+            <div className="flex bg-slate-100 p-0.5 rounded-lg border text-[10px] font-bold" style={{ borderColor: "var(--border)" }}>
+              {[["all","Todos"],["pending_review","Pendientes"],["approved","Aprobados"],["rejected","Rechazados"]].map(([val,label]) => (
+                <button
+                  key={val}
+                  onClick={() => setStatusFilter(val)}
+                  className={`px-3 py-1.5 rounded-md transition-all ${statusFilter === val ? "bg-white text-orange-600 shadow-2xs border" : "text-gray-500 hover:text-gray-900"}`}
+                  style={{ borderColor: statusFilter === val ? "var(--border)" : "transparent" }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <div className="flex bg-slate-100 p-0.5 rounded-lg border text-[10px] font-bold" style={{ borderColor: "var(--border)" }}>
+              {[["all","Todas"],["high","Alta"],["medium","Media"],["low","Baja"],["needs_review","Revisar"]].map(([val,label]) => (
+                <button
+                  key={val}
+                  onClick={() => setConfidenceFilter(val)}
+                  className={`px-3 py-1.5 rounded-md transition-all ${confidenceFilter === val ? "bg-white text-blue-600 shadow-2xs border" : "text-gray-500 hover:text-gray-900"}`}
+                  style={{ borderColor: confidenceFilter === val ? "var(--border)" : "transparent" }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <button
+              onClick={fetchMappings}
+              className="px-3 py-1.5 rounded-lg text-[10px] font-bold bg-white border text-gray-600 hover:bg-slate-50 transition-all"
+              style={{ borderColor: "var(--border)" }}
+            >
+              Aplicar filtros
+            </button>
+          </div>
+        )}
+
+        {/* Mapping table */}
+        {mappingLoading && (
+          <div className="text-center py-20 text-gray-400 text-xs">Cargando mappings...</div>
+        )}
+
+        {!mappingLoading && mappings.length > 0 && (
+          <div className="bg-white border rounded-2xl overflow-hidden shadow-2xs" style={{ borderColor: "var(--border)" }}>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-slate-50 border-b font-bold text-gray-500 text-[10px] uppercase tracking-wider" style={{ borderColor: "var(--border)" }}>
+                    <th className="p-4">Categoría Dropi (L4)</th>
+                    <th className="p-4">Mejor Match Google</th>
+                    <th className="p-4 text-center">Score</th>
+                    <th className="p-4 text-center">Estado</th>
+                    <th className="p-4 text-center">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mappings.map((m) => (
+                    <React.Fragment key={m.id}>
+                      <tr
+                        className="border-b hover:bg-slate-50 transition-colors"
+                        style={{ borderColor: "var(--border)" }}
+                      >
+                        {/* Dropi path */}
+                        <td className="p-4 max-w-xs">
+                          <span className="font-mono text-[10px] text-gray-400 block">{m.dropi_category_id}</span>
+                          <span className="text-xs font-semibold text-gray-800 leading-tight">{m.dropi_category_path}</span>
+                        </td>
+
+                        {/* Google match */}
+                        <td className="p-4 max-w-xs">
+                          <span className="text-xs text-gray-600 leading-tight block">{m.google_category_path}</span>
+                          <span className="font-mono text-[9px] text-gray-400 mt-0.5 block">ID: {m.google_category_id} · {m.match_type}</span>
+                        </td>
+
+                        {/* Confidence score */}
+                        <td className="p-4 text-center">
+                          <div className="flex flex-col items-center gap-1">
+                            <span className="text-sm font-extrabold text-gray-900">{m.confidence_score}</span>
+                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${confidenceBadge(m.confidence_label)}`}>
+                              {m.confidence_label === "needs_review" ? "revisar" : m.confidence_label}
+                            </span>
+                          </div>
+                        </td>
+
+                        {/* Status */}
+                        <td className="p-4 text-center">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${statusBadge(m.status)}`}>
+                            {statusLabel(m.status)}
+                          </span>
+                        </td>
+
+                        {/* Actions */}
+                        <td className="p-4">
+                          <div className="flex items-center gap-1.5 justify-center">
+                            {m.status !== "approved" && (
+                              <button
+                                onClick={() => handleUpdateMapping(m.id, "approved")}
+                                className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-all"
+                              >
+                                Aprobar
+                              </button>
+                            )}
+                            {m.status !== "rejected" && (
+                              <button
+                                onClick={() => handleUpdateMapping(m.id, "rejected")}
+                                className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition-all"
+                              >
+                                Rechazar
+                              </button>
+                            )}
+                            <button
+                              onClick={() => setExpandedMappingId(expandedMappingId === m.id ? null : m.id)}
+                              className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold bg-slate-50 text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all"
+                            >
+                              {expandedMappingId === m.id ? "Cerrar" : "Ver más"}
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+
+                      {/* Expanded row: notes + reviewed info */}
+                      {expandedMappingId === m.id && (
+                        <tr className="bg-blue-50/40 border-b" style={{ borderColor: "var(--border)" }}>
+                          <td colSpan={5} className="p-5">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                              <div>
+                                <span className="font-bold text-gray-500 uppercase tracking-wider text-[9px] block mb-1">Path completo Dropi</span>
+                                <span className="text-gray-700 font-mono">{m.dropi_category_path}</span>
+                              </div>
+                              <div>
+                                <span className="font-bold text-gray-500 uppercase tracking-wider text-[9px] block mb-1">Path completo Google</span>
+                                <span className="text-gray-700 font-mono">{m.google_category_path}</span>
+                              </div>
+                              <div>
+                                <span className="font-bold text-gray-500 uppercase tracking-wider text-[9px] block mb-1">Revisión</span>
+                                <span className="text-gray-700">{m.reviewed_by ?? "Sin revisar"}</span>
+                                {m.notes && <span className="text-gray-500 block mt-1 italic">{m.notes}</span>}
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {!mappingLoading && mappings.length === 0 && googleCount > 0 && (
+          <div className="text-center py-20 bg-white border border-dashed rounded-2xl text-gray-400 text-xs" style={{ borderColor: "var(--border)" }}>
+            No hay mappings generados aún. Haz clic en "Generar Sugerencias" para iniciar el proceso.
+          </div>
+        )}
+      </div>
+    );
+  };
+
   return (
     <main id="categorizacion-project-page" className="min-h-screen pb-16" style={{ background: "var(--bg)" }}>
       {/* Header */}
@@ -2406,14 +3241,14 @@ export default function CategorizacionPage() {
                     activeResourceTab === "meli" ? "border-orange-500 bg-orange-50/5 ring-1 ring-orange-500/20" : "border-slate-200"
                   }`}
                 >
-                  <span className="text-2xl mt-0.5">🕸️</span>
+                  <span className="text-2xl mt-0.5">📊</span>
                   <div className="flex-1">
                     <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
-                      <span>Referencia: Mercado Libre</span>
+                      <span>Referencias de Industria</span>
                       {activeResourceTab === "meli" && <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />}
                     </div>
                     <div className="text-[10px] leading-relaxed text-gray-500">
-                      Explorador de categorías de Mercado Libre Colombia (MCO) con visualizador de grafo de red.
+                      Análisis comparativo MELI · Google · Amazon · estándares. Conclusiones y modelo de capas para la taxonomía Dropi.
                     </div>
                   </div>
                 </div>
@@ -2455,6 +3290,32 @@ export default function CategorizacionPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Card 5: Google Product Taxonomy */}
+                <div
+                  onClick={() => setActiveResourceTab(activeResourceTab === "google" ? null : "google")}
+                  className={`bg-white border rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-blue-500 hover:shadow-xs transition-all duration-200 ${
+                    activeResourceTab === "google" ? "border-blue-500 bg-blue-50/5 ring-1 ring-blue-500/20" : "border-slate-200"
+                  }`}
+                >
+                  <span className="text-2xl mt-0.5">🛒</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Google Product Taxonomy</span>
+                      <div className="flex items-center gap-1.5">
+                        {googleCount > 0 && (
+                          <span className="text-[9px] font-bold bg-blue-50 text-blue-600 border border-blue-100 px-1.5 py-0.5 rounded-full">
+                            {googleCount.toLocaleString()} cats.
+                          </span>
+                        )}
+                        {activeResourceTab === "google" && <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />}
+                      </div>
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Taxonomía oficial Google para Merchant Center, Shopping y feeds externos. Capa de homologación sobre Dropi.
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Detailed Expanded View inside Accordion */}
@@ -2464,9 +3325,10 @@ export default function CategorizacionPage() {
                   <div className="flex justify-between items-center pb-2 border-b border-slate-200/60" style={{ borderColor: "var(--border)" }}>
                     <h3 className="text-xs font-bold text-slate-700 uppercase tracking-widest flex items-center gap-2">
                       {activeResourceTab === "diagnostico" && "📊 Diagnóstico Detallado de Taxonomía Actual"}
-                      {activeResourceTab === "meli" && "🕸️ Explorador y Grafo de Mercado Libre"}
+                      {activeResourceTab === "meli" && "📊 Referencias de Industria — Análisis Comparativo y Explorador"}
                       {activeResourceTab === "taxonomy" && "📖 Propuesta de Taxonomía Estándar (10 Nodos Raíz)"}
                       {activeResourceTab === "ai" && "🤖 Pipeline de Enriquecimiento IA y Distancia Levenshtein"}
+                      {activeResourceTab === "google" && "🛒 Google Product Taxonomy — Importador y Referencia"}
                     </h3>
                     <button
                       onClick={() => setActiveResourceTab(null)}
@@ -2481,15 +3343,48 @@ export default function CategorizacionPage() {
                   {activeResourceTab === "meli" && renderMeli()}
                   {activeResourceTab === "taxonomy" && renderTaxonomyDoc()}
                   {activeResourceTab === "ai" && renderAiDoc()}
+                  {activeResourceTab === "google" && renderGoogle()}
                 </div>
               )}
             </div>
           )}
         </div>
 
-        {/* Main Body content: Homologación Simulator directly */}
+        {/* Main Body Tab System */}
         <div className="mt-8">
-          {renderHomologacion()}
+          {/* Tab switcher */}
+          <div className="flex bg-slate-100 p-1 rounded-xl w-fit border shadow-2xs mb-6" style={{ borderColor: "var(--border)" }}>
+            <button
+              onClick={() => setMainTab("simulator")}
+              className={`px-5 py-2.5 rounded-lg text-xs font-bold transition-all ${
+                mainTab === "simulator"
+                  ? "bg-white text-orange-600 shadow-2xs border"
+                  : "text-gray-500 hover:text-gray-900"
+              }`}
+              style={{ borderColor: mainTab === "simulator" ? "var(--border)" : "transparent" }}
+            >
+              Simulador de Homologación Dropi
+            </button>
+            <button
+              onClick={() => setMainTab("google_mapping")}
+              className={`px-5 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center gap-2 ${
+                mainTab === "google_mapping"
+                  ? "bg-white text-blue-600 shadow-2xs border"
+                  : "text-gray-500 hover:text-gray-900"
+              }`}
+              style={{ borderColor: mainTab === "google_mapping" ? "var(--border)" : "transparent" }}
+            >
+              🛒 Homologación Google
+              {googleCount > 0 && (
+                <span className="text-[9px] font-bold bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded-full">
+                  {googleCount.toLocaleString()}
+                </span>
+              )}
+            </button>
+          </div>
+
+          {mainTab === "simulator" && renderHomologacion()}
+          {mainTab === "google_mapping" && renderGoogleHomologacion()}
         </div>
       </div>
     </main>
