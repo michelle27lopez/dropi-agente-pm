@@ -80,6 +80,24 @@ const projects = [
     tag: "CAT-001 · Habilitador",
     icon: "🏷️",
   },
+  {
+    key: "indicadores",
+    name: "Indicadores · Postulaciones",
+    description: "Cuántos suppliers ven su tablero de desempeño y cuántos se postulan para avanzar de nivel. Distribución por tipo de proveedor.",
+    url: "/proyectos/indicadores",
+    color: "#6366F1",
+    tag: "IND-001 · Métricas",
+    icon: "📈",
+  },
+  {
+    key: "caza-productos",
+    name: "Caza Productos",
+    description: "Solicitudes de productos que los dropshippers no encuentran en catálogo. Señal de demanda explícita y tasa de atención de suppliers.",
+    url: "/proyectos/caza-productos",
+    color: "#EC4899",
+    tag: "CAZ-001 · Demanda",
+    icon: "🔍",
+  },
 ];
 
 export default function HubPage() {
