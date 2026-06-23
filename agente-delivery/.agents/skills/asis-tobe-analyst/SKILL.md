@@ -22,6 +22,7 @@ Trabajar iterativamente con el usuario para llegar a una versión clara y útil 
    - features
    - user stories
    - riesgos y dependencias
+   Si el proyecto tiene `requires_e2e_format = true`, utiliza el formato de Discovery y Definición detallado en [e2e_methodology.md](file:///Users/jaime.guevara/Documents/proyectos/Agente%20delivery%20manager/agente-delivery/canon/e2e_methodology.md).
 5. Mantén el resultado en modo borrador hasta aprobación explícita.
 
 ## Restricciones

@@ -2,4 +2,13 @@
 .venv/
 __pycache__/
 *.pyc
+*.DS_Store
+
+# Datos personales del PM — no se commitean
 logs/bootstrap_report.md
+Documentos/
+scratch/
+research-brain/
+
+# Contexto local generado por el agente
+context/

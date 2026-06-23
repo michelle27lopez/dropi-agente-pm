@@ -17,13 +17,15 @@ Generar el documento de kickoff de una épica o proyecto en Dropi, siguiendo el 
 
 ## Instrucciones
 
-1. Lee `canon/dropi_methodology.md` y el contexto de la épica si existe en `approved_context`.
-2. Si falta contexto, pregunta al usuario por:
+1. Verifica en la tabla `projects` si el proyecto tiene `requires_e2e_format = true`.
+2. Si `requires_e2e_format` es true, lee `canon/e2e_methodology.md` y genera el documento de Kick-off siguiendo estrictamente esa plantilla.
+3. Si `requires_e2e_format` es false, lee `canon/dropi_methodology.md` y sigue el formato tradicional que se describe a continuación.
+4. Si falta contexto, pregunta al usuario por:
    - Título del proyecto (el mismo del pitch aprobado, si existe)
    - Problema central y contexto
    - Equipo involucrado y roles
    - Tiempo y recursos asignados (apetencia)
-3. Genera el documento con las siguientes secciones EN ESTE ORDEN:
+5. Genera el documento con las siguientes secciones EN ESTE ORDEN (para formato tradicional):
 
 ---
 

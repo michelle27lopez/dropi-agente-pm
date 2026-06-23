@@ -23,10 +23,13 @@ DRAFT_TABLE = "draft_insights"
 VALID_CONTEXT_TYPES = [
     "Business Context", "ASIS", "TOBE", "Capability",
     "Feature", "User Story", "Risk", "Decision", "Operating Rule",
+    "HU", "Epica", "Definition", "Open Question", "Summary",
+    "E2E Kick-off", "E2E Discovery", "E2E Definición", "E2E Following", "E2E Hand-off"
 ]
 VALID_DRAFT_TYPES = [
     "Business Context", "ASIS", "TOBE", "Capability",
     "Feature", "User Story", "Risk", "Decision", "Summary", "Open Question",
+    "HU", "Epica", "E2E Kick-off", "E2E Discovery", "E2E Definición", "E2E Following", "E2E Hand-off"
 ]
 
 
