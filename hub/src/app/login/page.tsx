@@ -43,7 +43,7 @@ export default function LoginPage() {
     });
     setLoading(false);
     if (error) {
-      setError("No se pudo enviar el link. Verifica que el correo esté autorizado.");
+      setError(error.message);
     } else {
       setSent(true);
     }
