@@ -31,28 +31,28 @@ const thR: React.CSSProperties = { ...thStyle, textAlign: "right" };
 const ACCENT = "#EC4899";
 const ACCENT_BG = "#FDF2F8";
 
-// ─── Datos reales · Bitácora UX · 8 abr – 28 may 2026 ───────────────────────
+// ─── Datos reales · Bitácora UX · 8 abr – 11 jun 2026 ───────────────────────
 const KPIS = [
-  { label: "Dropi base plataforma", value: "6.234", sub: "Total activos · abr–may 2026",          color: "var(--fg)", bg: "#F8FAFC", note: "Fuente: Dropi DB"         },
-  { label: "Prov. activos · mayo",  value: "56",    sub: "↓ −68% desde abril (era 174)",          color: "#EF4444",   bg: "#FEF2F2", note: "Caída crítica"           },
-  { label: "Conversión dropi",      value: "17%",   sub: "Q1 mayo · mínimo histórico (S1: 28.5%)", color: "#EF4444",  bg: "#FEF2F2", note: "Fuente: UserPilot"      },
-  { label: "Abandono sostenido",    value: "~73%",  sub: "8+ semanas sin excepción",               color: "#F59E0B",   bg: "#FFFBEB", note: "Cuali + cuanti"         },
-  { label: "Acuerdos exitosos máx", value: "26.6%", sub: "Post-Live S3 · encuesta directa",        color: "#10B981",   bg: "#ECFDF5", note: "Fuente: CSAT"           },
-  { label: "Clics WhatsApp Q1",     value: "2",     sub: "Solo 2 de 882 intentos registrados",     color: "#8B5CF6",   bg: "#F5F3FF", note: "Bug parcial activo"     },
+  { label: "Dropi base plataforma", value: "6.234", sub: "Total activos · abr–jun 2026",            color: "var(--fg)", bg: "#F8FAFC", note: "Fuente: Dropi DB"        },
+  { label: "Prov. activos",         value: "56",    sub: "Estable vs mayo · era 174 en abril",       color: "#F59E0B",   bg: "#FFFBEB", note: "Crítico: ratio 1:30"    },
+  { label: "Conversión dropi",      value: "34.1%", sub: "Q2 jun · máximo histórico (Q1: 17%)",      color: "#10B981",   bg: "#ECFDF5", note: "Fuente: UserPilot"      },
+  { label: "CSAT «no avanzó»",      value: "42.9%", sub: "Q2 · bajó de 66.7% en Q1",                color: "#10B981",   bg: "#ECFDF5", note: "Mejora sostenida"       },
+  { label: "Acordó precio Q2 🆕",   value: "21.4%", sub: "Primera vez en todo el período",           color: "#10B981",   bg: "#ECFDF5", note: "Señal PMF"              },
+  { label: "Clics WhatsApp Q2",     value: "6",     sub: "↑ ×3 vs Q1 (eran 2) · KPI real",          color: "#8B5CF6",   bg: "#F5F3FF", note: "Tendencia positiva"     },
 ];
 
-// ─── Funnel Q1 (más reciente · 14–28 mayo 2026) ──────────────────────────────
+// ─── Funnel Q2 (más reciente · 28 may–11 jun 2026) ───────────────────────────
 const FUNNEL_DROPI = [
-  { label: "Intentaron crear",  value: "882",  pct: 100,  color: ACCENT },
-  { label: "Publicaron",        value: "150",  pct: 17,   color: "#F59E0B" },
-  { label: "Clic WhatsApp",     value: "2",    pct: 0.3,  color: "#EF4444" },
+  { label: "Intentaron crear",   value: "700", pct: 100,  color: ACCENT },
+  { label: "Publicaron",         value: "239", pct: 34.1, color: "#10B981" },
+  { label: "Clic WhatsApp",      value: "6",   pct: 0.86, color: "#8B5CF6" },
   { label: "Acuerdo registrado", value: "1",   pct: 0.1,  color: "#9CA3AF" },
 ];
 
 const FUNNEL_PROV = [
-  { label: "Vieron detalle",  value: "110", pct: 100,  color: "#10B981" },
-  { label: "Crearon oferta",  value: "14",  pct: 12.7, color: "#3B82F6" },
-  { label: "Enviaron oferta", value: "11",  pct: 10,   color: "#6366F1" },
+  { label: "Vieron detalle",  value: "172", pct: 100,  color: "#10B981" },
+  { label: "Crearon oferta",  value: "13",  pct: 7.6,  color: "#3B82F6" },
+  { label: "Enviaron oferta", value: "8",   pct: 4.7,  color: "#6366F1" },
 ];
 
 // ─── Evolución por período ────────────────────────────────────────────────────
@@ -64,19 +64,21 @@ type Periodo = {
 };
 
 const PERIODOS: Periodo[] = [
-  { periodo: "S1", fechas: "8–15 abr",    dropiCrearon: 368, dropiPublicaron: 105, conv: 28.5, provEnviaron: 28,   recurrencia: 45,   nota: "Bug WhatsApp 0 clics", notaColor: "#EF4444" },
-  { periodo: "S2", fechas: "15–22 abr",   dropiCrearon: 436, dropiPublicaron: 113, conv: 25.9, provEnviaron: null, recurrencia: 81.4, nota: "PMF en nicho detectado", notaColor: "#10B981" },
-  { periodo: "S3", fechas: "22–29 abr",   dropiCrearon: 430, dropiPublicaron: 113, conv: 26.3, provEnviaron: 25,   recurrencia: 96,   nota: "Live event · 26.6% acuerdos", notaColor: "#10B981" },
-  { periodo: "S4", fechas: "29 abr–12 may", dropiCrearon: 402, dropiPublicaron: 106, conv: 26.4, provEnviaron: null, recurrencia: 50.9, nota: "Post-live decay", notaColor: "#F59E0B" },
-  { periodo: "Q1", fechas: "14–28 may",   dropiCrearon: 882, dropiPublicaron: 150, conv: 17,   provEnviaron: 11,   recurrencia: null, nota: "Discovery · mínimo histórico", notaColor: "#EF4444" },
+  { periodo: "S1", fechas: "8–15 abr",      dropiCrearon: 368, dropiPublicaron: 105, conv: 28.5, provEnviaron: 28,   recurrencia: 45,   nota: "Bug WhatsApp 0 clics",        notaColor: "#EF4444" },
+  { periodo: "S2", fechas: "15–22 abr",     dropiCrearon: 436, dropiPublicaron: 113, conv: 25.9, provEnviaron: null, recurrencia: 81.4, nota: "PMF en nicho detectado",        notaColor: "#10B981" },
+  { periodo: "S3", fechas: "22–29 abr",     dropiCrearon: 430, dropiPublicaron: 113, conv: 26.3, provEnviaron: 25,   recurrencia: 96,   nota: "Live event · 26.6% acuerdos",  notaColor: "#10B981" },
+  { periodo: "S4", fechas: "29 abr–12 may", dropiCrearon: 402, dropiPublicaron: 106, conv: 26.4, provEnviaron: null, recurrencia: 50.9, nota: "Post-live decay",               notaColor: "#F59E0B" },
+  { periodo: "Q1", fechas: "14–28 may",     dropiCrearon: 882, dropiPublicaron: 150, conv: 17,   provEnviaron: 11,   recurrencia: null, nota: "Discovery · mínimo histórico", notaColor: "#EF4444" },
+  { periodo: "Q2", fechas: "28 may–11 jun", dropiCrearon: 700, dropiPublicaron: 239, conv: 34.1, provEnviaron: 8,    recurrencia: null, nota: "Máximo histórico · Clarity",    notaColor: "#10B981" },
 ];
 
 // ─── CSAT · satisfacción ──────────────────────────────────────────────────────
+// Q2: 14 respuestas
 const CSAT_ESTADO = [
-  { label: "La negociación no avanzó", pct: 67, color: "#EF4444" },
-  { label: "Negociando / conversando", pct: 14, color: "#F59E0B" },
-  { label: "Ya está vendiendo",        pct: 14, color: "#10B981" },
-  { label: "Ya hizo pedido",           pct: 5,  color: "#10B981" },
+  { label: "La negociación no avanzó",  pct: 42.9, color: "#EF4444" },
+  { label: "Estamos conversando",        pct: 28.6, color: "#F59E0B" },
+  { label: "Ya acordamos precio 🆕",    pct: 21.4, color: "#10B981" },
+  { label: "Ya estoy vendiendo",         pct: 7.1,  color: "#10B981" },
 ];
 
 const CES_PROV = [
@@ -103,7 +105,7 @@ export default function CazaProductosPage() {
           <span style={tag(ACCENT, ACCENT_BG)}>CAZ-001</span>
           <span style={tag("#3B82F6", "#EFF6FF")}>Oportunidad · Discovery</span>
           <span style={tag("#EF4444", "#FEF2F2")}>Alerta crítica activa</span>
-          <span style={tag("#10B981", "#ECFDF5")}>8 abr – 28 may 2026</span>
+          <span style={tag("#10B981", "#ECFDF5")}>8 abr – 11 jun 2026</span>
         </div>
       </header>
 
@@ -115,8 +117,8 @@ export default function CazaProductosPage() {
             Caza Productos · Adopción y Retención
           </h1>
           <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.5 }}>
-            Seguimiento del feature de matching dropi↔proveedor. 5 períodos evaluados (S1–S4 + Q1).
-            Fuente: <strong>UserPilot · Bitácora UX</strong> · actualizado 29/05/2026.
+            Seguimiento del feature de matching dropi↔proveedor. 6 períodos evaluados (S1–S4 + Q1 + Q2).
+            Fuente: <strong>UserPilot · Clarity · Bitácora UX</strong> · actualizado 11/06/2026.
           </p>
         </div>
 
@@ -140,9 +142,9 @@ export default function CazaProductosPage() {
 
         {/* Alerta crítica */}
         <div style={{ background: "linear-gradient(135deg, #EF4444, #F87171)", borderRadius: 14, padding: "18px 20px", color: "#fff" }}>
-          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 6 }}>Alerta crítica activa</div>
+          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 6 }}>Señal de recuperación en Q2 — pero supply sigue crítico</div>
           <p style={{ fontSize: 13, lineHeight: 1.6, opacity: 0.95 }}>
-            Proveedores activos cayeron <strong>−68% (174 → 56)</strong> mientras los dropi que intentan crear subieron <strong>+120% (882 en Q1)</strong>. Conversión en mínimo histórico: <strong>17%</strong>. Bug "No se envió mi oferta" sin resolver desde S1. El problema ya no es UX — es de <strong>modelo de negocio y confianza</strong>.
+            Conversión <strong>34.1% en Q2</strong> (máximo histórico, dobla el 17% de Q1). CSAT "no avanzó" bajó de 66.7% → 42.9%. Nuevo: <strong>21.4% acordó precio</strong> por primera vez. Sin embargo, proveedores activos siguen en <strong>56 — ratio 1 prov por cada 30 publicaciones</strong>. Clarity detectó nuevo bloqueante: <strong>dropis confunden el módulo con un catálogo de búsqueda</strong>.
           </p>
         </div>
 
@@ -154,10 +156,10 @@ export default function CazaProductosPage() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             {[
-              { icon: "🔴", titulo: "Trampa circular activa",        desc: "Dropi no reciben respuesta → no cierran → proveedores no ven ROI → abandonan → menos respuestas → más frustración. 174 → 56 proveedores activos en un mes." },
-              { icon: "🔴", titulo: "El 83% de abandono no es UX",   desc: "El dropi exitoso no publica porque teme que los proveedores copien o filtren su producto ganador. No es fricción del formulario: es miedo al espionaje comercial." },
-              { icon: "🐛", titulo: "Bug sin resolver desde S1",      desc: '"No se envió mi oferta" presente 8 semanas. El proveedor que lo encuentra tiene retención 0% desde el Día 1 — no regresa. Casos: Andrés Rodríguez, John Peña.' },
-              { icon: "🔵", titulo: "Éxito oculto — subestimado",     desc: "El CSAT revela que 19% de respondentes ya tiene éxito comercial real. Los cierres ocurren por WhatsApp sin registro en plataforma. La tasa de éxito real es mayor al 17%." },
+              { icon: "🟢", titulo: "Conversión histórica Q2 — 34.1%",      desc: "Dobla Q1 (17%) y supera el mejor período semanal (28.5%). Con menos intentos (700 vs 882), más dropis publicaron (239 vs 150). Primera señal real de recuperación." },
+              { icon: "🟢", titulo: "«Acordamos precio» emerge — 21.4%",     desc: "Categoría nueva en CSAT, nunca antes elegida. 50%+ de encuestados en estado activo (conversando + acordó precio). La señal de PMF más clara de todo el período." },
+              { icon: "🟡", titulo: "Clarity — modelo mental equivocado",    desc: "Patrón detectado: catálogo → Caza Productos → intento de búsqueda → salida. Los dropis llegan pensando que es otro catálogo de búsqueda, no un módulo para publicar su necesidad. La mecánica inversa no se explica en ningún punto del flujo." },
+              { icon: "🔴", titulo: "Supply sigue en mínimos críticos",       desc: "56 proveedores para 239 publicaciones en Q2. Solo 8 enviaron oferta. La mejora de conversión dropi hace más urgente el problema del lado supply — más publicaciones sin respuesta = más frustración futura." },
             ].map(h => (
               <div key={h.titulo} style={{ display: "flex", gap: 10, padding: "12px", background: "#F8FAFC", borderRadius: 10, border: "1px solid var(--border)" }}>
                 <span style={{ fontSize: 18, flexShrink: 0 }}>{h.icon}</span>
@@ -177,8 +179,8 @@ export default function CazaProductosPage() {
           <div style={card}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
               <div>
-                <div style={sectionTitle}>Embudo Dropshippers · Q1</div>
-                <div style={sectionSub}>14–28 mayo 2026 · 882 usuarios</div>
+                <div style={sectionTitle}>Embudo Dropshippers · Q2</div>
+                <div style={sectionSub}>28 may–11 jun 2026 · 700 usuarios</div>
               </div>
               <span style={tag(ACCENT, ACCENT_BG)}>Dropi</span>
             </div>
@@ -206,7 +208,7 @@ export default function CazaProductosPage() {
               ))}
             </div>
             <div style={{ marginTop: 14, padding: "10px 12px", background: "#FEF2F2", borderRadius: 8, fontSize: 12, color: "#7F1D1D", border: "1px solid #FECACA", lineHeight: 1.4 }}>
-              <strong>83% de abandono</strong> en crear publicación. El clic a WhatsApp (KPI real) bajó a 0.3% por bug parcial.
+              <strong>Conversión 34.1%</strong> — máximo histórico. 65.9% aún abandona: el modelo mental equivocado (Clarity) explica parte de ese gap.
             </div>
           </div>
 
@@ -215,7 +217,7 @@ export default function CazaProductosPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
               <div>
                 <div style={sectionTitle}>Embudo Proveedores · Q1</div>
-                <div style={sectionSub}>14–28 mayo 2026 · 110 usuarios</div>
+                <div style={sectionSub}>28 may–11 jun 2026 · 172 usuarios</div>
               </div>
               <span style={tag("#10B981", "#ECFDF5")}>Supplier</span>
             </div>
@@ -287,10 +289,10 @@ export default function CazaProductosPage() {
               </tbody>
               <tfoot>
                 <tr>
-                  <td colSpan={2} style={{ ...tdStyle, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>Acumulado S1–Q1</td>
-                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: ACCENT }}>2.518</td>
-                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>587</td>
-                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: "#F59E0B" }}>23.3%</td>
+                  <td colSpan={2} style={{ ...tdStyle, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>Acumulado S1–Q2</td>
+                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: ACCENT }}>3.218</td>
+                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>826</td>
+                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: "#10B981" }}>25.7%</td>
                   <td colSpan={3} style={{ ...tdStyle, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}></td>
                 </tr>
               </tfoot>
@@ -306,7 +308,7 @@ export default function CazaProductosPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
               <div>
                 <div style={sectionTitle}>CSAT Dropi · Estado de la negociación</div>
-                <div style={sectionSub}>Q1 · 21 respuestas acumuladas</div>
+                <div style={sectionSub}>Q2 · 14 respuestas · 28 may–11 jun 2026</div>
               </div>
               <span style={tag("#F59E0B", "#FFFBEB")}>CSAT</span>
             </div>
@@ -324,7 +326,7 @@ export default function CazaProductosPage() {
               ))}
             </div>
             <div style={{ marginTop: 14, padding: "10px 12px", background: "#ECFDF5", borderRadius: 8, fontSize: 12, color: "#065F46", border: "1px solid #A7F3D0", lineHeight: 1.4 }}>
-              <strong>Mejora vs S3:</strong> "No avanzó" bajó de 80% → 67%. Las negociaciones activas ("conversando") aparecen por primera vez como categoría (14%).
+              <strong>Mejora sostenida:</strong> "No avanzó" bajó 80% → 66.7% → 42.9%. Primera vez con "Ya acordamos precio" (21.4%) — señal de PMF más clara del período.
             </div>
           </div>
 
@@ -360,16 +362,16 @@ export default function CazaProductosPage() {
         <div style={card}>
           <div style={{ marginBottom: 14 }}>
             <div style={sectionTitle}>Próximos pasos · priorizado</div>
-            <div style={sectionSub}>Plan de acción derivado del Discovery Q1 + análisis de 5 períodos.</div>
+            <div style={sectionSub}>Plan de acción post Q2 · priorizado por impacto y urgencia · 11/06/2026.</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              { n: "1", paso: "Resolver bug 'No se envió mi oferta' — presente desde S1. Proveedor que lo encuentra tiene retención 0%. Casos: Andrés Rodríguez, John Peña.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
-              { n: "2", paso: "Diseñar y prototipar Publicaciones a Ciegas — mostrar solo métricas del dropi (precio, volumen) sin revelar el producto. Única solución estructural al 83% de abandono.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
-              { n: "3", paso: "Frenar la fuga de proveedores activos (56 y bajando). Activación directa de prov premium + comunicación con los que abandonaron en Q1.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
-              { n: "4", paso: "Implementar Score del Dropshipper visible para proveedores — volumen de ventas, entregas, CPA. Sin esto el prov descarta el 92% de publicaciones.", urgencia: "Alta", color: "#F59E0B", bg: "#FFFBEB" },
-              { n: "5", paso: "Categorización + alertas automáticas — proveedor de tecnología que ve 3 días seguidos peticiones de maquillaje abandona en Día 3. Filtro básico + notificación de nicho.", urgencia: "Alta", color: "#F59E0B", bg: "#FFFBEB" },
-              { n: "6", paso: "Instrumentar correctamente el clic a WhatsApp — es el KPI real de éxito. Agregar micro-survey post-clic para capturar el resultado de la negociación.", urgencia: "Media", color: "#3B82F6", bg: "#EFF6FF" },
+              { n: "1", paso: "Rediseñar onboarding / empty state — explicar en 3 pasos la mecánica inversa antes del formulario. CTA desde catálogo: «¿No lo encuentras? Pídelo a un proveedor». Clarity confirmó que el modelo mental equivocado genera abandono que el formulario no puede recuperar.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
+              { n: "2", paso: "Activación urgente de proveedores — «Tráfico de proveedores» ya es queja explícita en CSAT. Contacto directo con prov. premium que abandonaron + plan de reactivación. Meta Q3: >80 prov. activos.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
+              { n: "3", paso: "Cerrar bug «No se envió mi oferta» — presente desde S1. En Q2, de 13 que crearon oferta solo 8 la enviaron (38.5% pérdida). Activar CES en Q3 para confirmar si persiste.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
+              { n: "4", paso: "Análisis Clarity profundo — identificar los términos que los dropis intentan buscar cuando entran al módulo. Son el insumo directo para el roadmap de categorización y para detectar demanda no satisfecha.", urgencia: "Alta", color: "#F59E0B", bg: "#FFFBEB" },
+              { n: "5", paso: "Diseñar prototipo Publicaciones a Ciegas — mostrar solo métricas del dropi (precio, volumen) sin revelar el producto. Testear con 5 dropis exitosos.", urgencia: "Alta", color: "#F59E0B", bg: "#FFFBEB" },
+              { n: "6", paso: "Score Dropshipper + Categorización + micro-survey post-WhatsApp — Score visible para proveedores · Filtros por nicho · Survey para capturar cierres reales que hoy son invisibles para el sistema.", urgencia: "Media", color: "#3B82F6", bg: "#EFF6FF" },
             ].map(p => (
               <div key={p.n} style={{
                 display: "flex", gap: 12, alignItems: "flex-start",
@@ -395,7 +397,7 @@ export default function CazaProductosPage() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             {[
-              { icon: "📊", titulo: "Embudos y retención",   desc: "UserPilot Dashboard → Flows y Cohortes. Bitácora actualizada el 29/05/2026. Próxima actualización: cierre Q2 (segunda quincena junio)." },
+              { icon: "📊", titulo: "Embudos y retención",   desc: "UserPilot Dashboard → Flows y Cohortes. Bitácora actualizada el 11/06/2026. Próxima actualización: cierre Q3 (segunda quincena junio)." },
               { icon: "😊", titulo: "CSAT y CES",             desc: "UserPilot → Surveys. CSAT dropi activo desde S3. CES proveedores desde S3. Acumulado Q1: 21 resp. CSAT / 14 resp. CES." },
               { icon: "🗄️", titulo: "Proveedores activos",    desc: "Dropi DB. Total activos plataforma general. Para Caza Productos específico: proveedores que enviaron oferta en el período (datos parciales)." },
               { icon: "💬", titulo: "WhatsApp (KPI real)",    desc: "Clic al botón WhatsApp en plataforma. S1 tuvo bug (0 clics). Fix en S3 (22 clics). Q1 solo 2 clics — bug parcialmente activo. Agregar micro-survey post-clic." },
