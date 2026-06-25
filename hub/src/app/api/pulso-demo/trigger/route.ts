@@ -78,7 +78,7 @@ async function sendEmail(to: string, name: string, token: string, product: Pulso
   });
 }
 
-const IMAGE_SENAL = "https://fwwkesboxlbmimzyoztq.supabase.co/storage/v1/object/public/imagenes/ChatGPT%20Image%2025%20jun%202026,%2006_27_39%20p.m..png";
+const IMAGE_SENAL = "https://fwwkesboxlbmimzyoztq.supabase.co/storage/v1/object/public/imagenes/nuevasenal.png";
 
 async function sendWhatsApp(number: string, name: string, token: string, product: PulsoProduct) {
   if (!EVOLUTION_URL || !EVOLUTION_KEY) return;

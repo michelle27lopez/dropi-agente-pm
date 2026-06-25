@@ -6,7 +6,7 @@ const EVOLUTION_KEY = process.env.EVOLUTION_API_KEY ?? "";
 const EVOLUTION_INSTANCE = process.env.EVOLUTION_API_INSTANCE ?? "dropi";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3004";
 
-const IMAGE_CIERRE = "https://fwwkesboxlbmimzyoztq.supabase.co/storage/v1/object/public/imagenes/ChatGPT%20Image%2025%20jun%202026,%2006_29_46%20p.m..png";
+const IMAGE_CIERRE = "https://fwwkesboxlbmimzyoztq.supabase.co/storage/v1/object/public/imagenes/negociacioncerrada.png";
 
 type ProductData = { name: string; supplier_name: string; category: string };
 
