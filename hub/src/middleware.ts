@@ -38,7 +38,9 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isPublicPath =
     pathname.startsWith("/login") ||
-    pathname.startsWith("/auth/callback");
+    pathname.startsWith("/auth/callback") ||
+    pathname.startsWith("/pulso-demo") ||
+    pathname.startsWith("/api/pulso-demo");
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();

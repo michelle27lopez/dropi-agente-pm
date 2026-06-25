@@ -71,6 +71,15 @@ const projects = [
     tag: "CAZ-001 · Demanda",
     icon: "🔍",
   },
+  {
+    key: "pulso-demo",
+    name: "Dropi Pulso · Demo",
+    description: "Prototipo interactivo del motor de matching de catálogo. Notificaciones reales por WhatsApp y email, registro por QR, dashboard en vivo y kit de campaña.",
+    url: "/proyectos/pulso-demo",
+    color: "#F77F00",
+    tag: "Demo · Stakeholders",
+    icon: "⚡",
+  },
 ];
 
 export default function HubPage() {
