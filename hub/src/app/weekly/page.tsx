@@ -168,10 +168,12 @@ export default function WeeklyPage() {
         </Section>
 
         {/* ── Sección 2: Dolores ── */}
-        <Section title="2. Dolores de Comercial · indexados y cerrados" badge="Clasificados"
-          sub="Cada dolor queda indexado a un proyecto existente o a una ruta concreta.">
-          <DoloresTable dolores={data.dolores} />
-        </Section>
+        {data.dolores && data.dolores.length > 0 && (
+          <Section title="2. Dolores de Comercial · indexados y cerrados" badge="Clasificados"
+            sub="Cada dolor queda indexado a un proyecto existente o a una ruta concreta.">
+            <DoloresTable dolores={data.dolores} />
+          </Section>
+        )}
 
         {/* ── Sección 3: Resumen ejecutivo ── */}
         <Section title="3. Resumen ejecutivo" badge="Cierre">
