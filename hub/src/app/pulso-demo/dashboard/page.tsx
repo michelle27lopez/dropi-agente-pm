@@ -363,12 +363,12 @@ export default function PulsoDemoDashboard() {
   // ─── SUCCESS ───
   if (phase === "success" && successData) {
     return (
-      <div style={{ minHeight: "100vh", background: "linear-gradient(135deg, #0a0a0a 0%, #1a0a00 50%, #0a0a1a 100%)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", position: "relative" }}>
+      <div style={{ minHeight: "100vh", background: "#FAFAFA", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", position: "relative" }}>
         <style>{`
           @keyframes confettiFall { 0% { transform: translateY(-80px) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
-          @keyframes successPop { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
-          @keyframes cardIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-          @keyframes glow { 0%,100% { text-shadow: 0 0 40px rgba(247,127,0,0.5); } 50% { text-shadow: 0 0 80px rgba(247,127,0,0.9), 0 0 120px rgba(247,127,0,0.4); } }
+          @keyframes successPop { 0% { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.06); } 100% { transform: scale(1); opacity: 1; } }
+          @keyframes cardIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+          @keyframes titleSlide { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
         `}</style>
 
         {/* Confetti */}
@@ -383,45 +383,61 @@ export default function PulsoDemoDashboard() {
           }} />
         ))}
 
-        <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "0 24px", maxWidth: 800, width: "100%" }}>
-          <div style={{ fontSize: 80, marginBottom: 8, animation: "successPop 0.6s ease both" }}>🎉</div>
-          <div style={{ fontSize: 52, fontWeight: 900, color: "#F77F00", lineHeight: 1.1, marginBottom: 8, animation: "successPop 0.6s 0.1s ease both, glow 2s 0.7s ease infinite", opacity: 0 }}>
-            ¡Campaña Exitosa!
+        <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "40px 24px", maxWidth: 860, width: "100%" }}>
+
+          {/* Logo */}
+          <img
+            src="https://d39ru7awumhhs2.cloudfront.net/colombia/brands/1/logo/16951779761695177976GVUXDo6TWDrk6URjLWgAFjH65gE1D1c7MAfWNF6r.png"
+            alt="Dropi"
+            style={{ height: 24, marginBottom: 28, animation: "cardIn 0.4s ease both", opacity: 0 }}
+          />
+
+          <div style={{ fontSize: 72, marginBottom: 4, animation: "successPop 0.6s 0.1s ease both", opacity: 0 }}>🎉</div>
+          <div style={{ fontSize: 48, fontWeight: 900, color: "#111", lineHeight: 1.1, marginBottom: 6, animation: "titleSlide 0.5s 0.3s ease both", opacity: 0 }}>
+            ¡Campaña <span style={{ color: "#F77F00" }}>Exitosa!</span>
           </div>
-          <div style={{ fontSize: 16, color: "rgba(255,255,255,0.5)", marginBottom: 48, animation: "cardIn 0.5s 0.4s ease both", opacity: 0 }}>
+          <div style={{ fontSize: 15, color: "#888", marginBottom: 44, animation: "cardIn 0.4s 0.5s ease both", opacity: 0 }}>
             {product?.name} · {product?.category}
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 48 }}>
+          {/* Metric cards */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 40 }}>
             {[
-              { emoji: "🛒", label: "Dropshippers", value: successData.accepted.toString(), color: "#F77F00", delay: "0.5s" },
-              { emoji: "📦", label: "Órdenes comprometidas", value: successData.totalCommitted.toLocaleString("es-CO"), color: "#10B981", delay: "0.65s" },
-              { emoji: "💰", label: "GMV generado", value: `$${(successData.gmv / 1000000).toFixed(1)}M`, color: "#3B82F6", delay: "0.8s" },
-              { emoji: "⏱", label: "Tiempo total", value: formatElapsed(successData.elapsed), color: "#8B5CF6", delay: "0.95s" },
+              { emoji: "🛒", label: "Dropshippers", value: successData.accepted.toString(), color: "#F77F00", bg: "#FFF8F0", border: "#FED7AA", delay: "0.55s" },
+              { emoji: "📦", label: "Órdenes comprometidas", value: successData.totalCommitted.toLocaleString("es-CO"), color: "#10B981", bg: "#F0FDF4", border: "#BBF7D0", delay: "0.7s" },
+              { emoji: "💰", label: "GMV generado", value: `$${(successData.gmv / 1000000).toFixed(1)}M`, color: "#2563EB", bg: "#EFF6FF", border: "#BFDBFE", delay: "0.85s" },
+              { emoji: "⏱", label: "Tiempo total", value: formatElapsed(successData.elapsed), color: "#7C3AED", bg: "#F5F3FF", border: "#DDD6FE", delay: "1.0s" },
             ].map((k) => (
               <div key={k.label} style={{
-                background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)",
+                background: k.bg, border: `2px solid ${k.border}`,
                 borderRadius: 20, padding: "28px 16px", textAlign: "center",
                 animation: `cardIn 0.5s ${k.delay} ease both`, opacity: 0,
-                backdropFilter: "blur(10px)",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
               }}>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>{k.emoji}</div>
-                <div style={{ fontSize: 36, fontWeight: 900, color: k.color, lineHeight: 1, marginBottom: 8 }}>{k.value}</div>
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", lineHeight: 1.4 }}>{k.label}</div>
+                <div style={{ fontSize: 34, marginBottom: 12 }}>{k.emoji}</div>
+                <div style={{ fontSize: 38, fontWeight: 900, color: k.color, lineHeight: 1, marginBottom: 8, fontVariantNumeric: "tabular-nums" }}>{k.value}</div>
+                <div style={{ fontSize: 12, color: "#888", lineHeight: 1.4, fontWeight: 600 }}>{k.label}</div>
               </div>
             ))}
           </div>
 
-          <div style={{ display: "flex", gap: 16, justifyContent: "center", animation: "cardIn 0.5s 1.1s ease both", opacity: 0 }}>
-            <button onClick={() => { setPhase("qr"); setSuccessData(null); setTriggerDone(false); }} style={{ background: "#F77F00", border: "none", borderRadius: 14, padding: "16px 36px", color: "#fff", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: "0 8px 32px rgba(247,127,0,0.4)" }}>
+          {/* Buttons */}
+          <div style={{ display: "flex", gap: 14, justifyContent: "center", animation: "cardIn 0.5s 1.15s ease both", opacity: 0 }}>
+            <button
+              onClick={() => { setPhase("qr"); setSuccessData(null); setTriggerDone(false); }}
+              style={{ background: "#F77F00", border: "none", borderRadius: 14, padding: "16px 36px", color: "#fff", fontSize: 15, fontWeight: 800, cursor: "pointer", boxShadow: "0 8px 28px rgba(247,127,0,0.35)" }}
+            >
               ↺ Nueva demo
             </button>
-            <a href="/pulso-demo/proveedor" target="_blank" style={{ background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 14, padding: "16px 36px", color: "#fff", fontSize: 15, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center" }}>
+            <a
+              href="/pulso-demo/proveedor" target="_blank"
+              style={{ background: "#fff", border: "1px solid #E5E7EB", borderRadius: 14, padding: "16px 36px", color: "#111", fontSize: 15, fontWeight: 700, textDecoration: "none", display: "flex", alignItems: "center", boxShadow: "0 2px 8px rgba(0,0,0,0.06)" }}
+            >
               Ver portal proveedor →
             </a>
           </div>
 
-          <div style={{ marginTop: 32, fontSize: 11, color: "rgba(255,255,255,0.2)", letterSpacing: "2px", animation: "cardIn 0.5s 1.2s ease both", opacity: 0 }}>
+          <div style={{ marginTop: 32, fontSize: 11, color: "#ccc", letterSpacing: "2px", animation: "cardIn 0.5s 1.25s ease both", opacity: 0 }}>
             DROPI PULSO · MOTOR DE MATCHING DE CATÁLOGO
           </div>
         </div>
