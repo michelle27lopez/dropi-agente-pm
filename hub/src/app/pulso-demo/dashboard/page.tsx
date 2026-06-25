@@ -86,6 +86,8 @@ export default function PulsoDemoDashboard() {
   const [triggerDone, setTriggerDone] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [successData, setSuccessData] = useState<SuccessData | null>(null);
+  const [closing, setClosing] = useState(false);
+  const [closeError, setCloseError] = useState<string | null>(null);
   const prevAccepted = useRef(0);
   const sessionActive = useRef(false);
   const isFirstPoll = useRef(true);
@@ -207,7 +209,20 @@ export default function PulsoDemoDashboard() {
     setTimeout(() => setPhase("live"), 4000);
   };
 
-  const closeNegotiation = () => {
+  const closeNegotiation = async () => {
+    setCloseError(null);
+    if (!stats.supplierAccepted) {
+      setCloseError("El proveedor aún no ha aceptado las condiciones.");
+      return;
+    }
+    setClosing(true);
+    const res = await fetch("/api/pulso-demo/close", { method: "POST" });
+    const data = await res.json();
+    setClosing(false);
+    if (!data.ok) {
+      setCloseError(data.error ?? "Error al cerrar la negociación");
+      return;
+    }
     const committed = stats.totalCommitted > 0 ? stats.totalCommitted : stats.accepted * 12;
     const gmv = committed * (product?.price_suggested ?? 89900);
     setSuccessData({ accepted: stats.accepted, totalCommitted: committed, gmv, elapsed });
@@ -584,18 +599,46 @@ export default function PulsoDemoDashboard() {
 
           {/* Cerrar negociaciones */}
           <div style={{ marginTop: "auto" }}>
+            {closeError && (
+              <div style={{
+                background: "#FEF2F2", border: "1px solid #FECACA",
+                borderRadius: 10, padding: "10px 14px", marginBottom: 10,
+                fontSize: 13, color: "#DC2626", display: "flex", alignItems: "center", gap: 8,
+              }}>
+                <span>🔒</span> {closeError}
+              </div>
+            )}
             <button
               onClick={closeNegotiation}
+              disabled={closing || !stats.supplierAccepted}
+              title={!stats.supplierAccepted ? "El proveedor aún no ha aceptado" : undefined}
               style={{
-                width: "100%", background: "linear-gradient(135deg, #111, #1a1a1a)",
+                width: "100%",
+                background: closing
+                  ? "#E5E7EB"
+                  : !stats.supplierAccepted
+                  ? "#F3F4F6"
+                  : "linear-gradient(135deg, #111, #1a1a1a)",
                 border: "none", borderRadius: 14, padding: "18px",
-                color: "#fff", fontSize: 15, fontWeight: 800, cursor: "pointer",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+                color: closing || !stats.supplierAccepted ? "#aaa" : "#fff",
+                fontSize: 15, fontWeight: 800,
+                cursor: closing || !stats.supplierAccepted ? "not-allowed" : "pointer",
+                boxShadow: !stats.supplierAccepted || closing ? "none" : "0 4px 20px rgba(0,0,0,0.15)",
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+                transition: "all 0.2s",
               }}
             >
-              🏁 Cerrar negociaciones y ver resultados
+              {closing
+                ? "⏳ Enviando kits..."
+                : !stats.supplierAccepted
+                ? "🔒 Esperando al proveedor..."
+                : "🏁 Cerrar negociaciones y ver resultados"}
             </button>
+            {!stats.supplierAccepted && (
+              <div style={{ textAlign: "center", fontSize: 11, color: "#aaa", marginTop: 6 }}>
+                El proveedor debe aceptar las condiciones primero
+              </div>
+            )}
           </div>
         </div>
 
