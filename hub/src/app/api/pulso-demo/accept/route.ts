@@ -6,6 +6,8 @@ const EVOLUTION_KEY = process.env.EVOLUTION_API_KEY ?? "";
 const EVOLUTION_INSTANCE = process.env.EVOLUTION_API_INSTANCE ?? "dropi";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3004";
 
+const IMAGE_SENAL = "https://fwwkesboxlbmimzyoztq.supabase.co/storage/v1/object/public/imagenes/ChatGPT%20Image%2025%20jun%202026,%2006_27_39%20p.m..png";
+
 async function notifySuppliers(dropshipperName: string, totalAccepted: number, totalCommitted: number) {
   if (!supabase) return;
 
@@ -24,18 +26,25 @@ async function notifySuppliers(dropshipperName: string, totalAccepted: number, t
 
       if (s.whatsapp && EVOLUTION_URL && EVOLUTION_KEY) {
         const normalized = s.whatsapp.replace(/[^0-9]/g, "");
-        const text =
+        const caption =
           `⚡ *Dropi Pulso — Señal de demanda*\n\n` +
           `*${dropshipperName}* acaba de confirmar la campaña.\n\n` +
           `📊 Total confirmados: *${totalAccepted} dropshipper${totalAccepted !== 1 ? "s" : ""}*\n` +
           (totalCommitted > 0 ? `📦 Unidades comprometidas: *${totalCommitted.toLocaleString("es-CO")}*\n\n` : "\n") +
           `👉 Ver señal en tu portal:\n${portalUrl}`;
         promises.push(
-          fetch(`${EVOLUTION_URL}/message/sendText/${EVOLUTION_INSTANCE}`, {
+          fetch(`${EVOLUTION_URL}/message/sendMedia/${EVOLUTION_INSTANCE}`, {
             method: "POST",
             headers: { "Content-Type": "application/json", apikey: EVOLUTION_KEY },
-            body: JSON.stringify({ number: normalized, text, options: { delay: 1200 } }),
-          })
+            body: JSON.stringify({
+              number: normalized,
+              mediatype: "image",
+              mimetype: "image/png",
+              media: IMAGE_SENAL,
+              caption,
+              options: { delay: 1200 },
+            }),
+          }).then(() => undefined)
         );
       }
 

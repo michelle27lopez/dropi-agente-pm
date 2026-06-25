@@ -78,16 +78,17 @@ async function sendEmail(to: string, name: string, token: string, product: Pulso
   });
 }
 
+const IMAGE_SENAL = "https://fwwkesboxlbmimzyoztq.supabase.co/storage/v1/object/public/imagenes/ChatGPT%20Image%2025%20jun%202026,%2006_27_39%20p.m..png";
+
 async function sendWhatsApp(number: string, name: string, token: string, product: PulsoProduct) {
   if (!EVOLUTION_URL || !EVOLUTION_KEY) return;
   const link = `${BASE_URL}/pulso-demo/${token}`;
   const margin = Math.round((product.price_suggested - product.price_cost) * 100 / product.price_suggested);
   const profit = (product.price_suggested - product.price_cost).toLocaleString("es-CO");
 
-  // Normalizar número: quitar +, espacios, guiones
   const normalized = number.replace(/[^0-9]/g, "");
 
-  const text =
+  const caption =
     `⚡ *DROPI PULSO — Señal detectada*\n\n` +
     `Hola *${name}*,\n\n` +
     `El sistema identificó una oportunidad en *${product.category}*:\n\n` +
@@ -97,15 +98,15 @@ async function sendWhatsApp(number: string, name: string, token: string, product
     `⏱ Ventana: 15 días\n\n` +
     `👉 Revisar oferta:\n${link}`;
 
-  await fetch(`${EVOLUTION_URL}/message/sendText/${EVOLUTION_INSTANCE}`, {
+  await fetch(`${EVOLUTION_URL}/message/sendMedia/${EVOLUTION_INSTANCE}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: EVOLUTION_KEY,
-    },
+    headers: { "Content-Type": "application/json", apikey: EVOLUTION_KEY },
     body: JSON.stringify({
       number: normalized,
-      text,
+      mediatype: "image",
+      mimetype: "image/png",
+      media: IMAGE_SENAL,
+      caption,
       options: { delay: 1200 },
     }),
   });

@@ -6,15 +6,24 @@ const EVOLUTION_KEY = process.env.EVOLUTION_API_KEY ?? "";
 const EVOLUTION_INSTANCE = process.env.EVOLUTION_API_INSTANCE ?? "dropi";
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3004";
 
+const IMAGE_CIERRE = "https://fwwkesboxlbmimzyoztq.supabase.co/storage/v1/object/public/imagenes/ChatGPT%20Image%2025%20jun%202026,%2006_29_46%20p.m..png";
+
 type ProductData = { name: string; supplier_name: string; category: string };
 
-async function sendWhatsApp(number: string, text: string) {
+async function sendWhatsApp(number: string, caption: string) {
   if (!EVOLUTION_URL || !EVOLUTION_KEY) return;
   const normalized = number.replace(/[^0-9]/g, "");
-  await fetch(`${EVOLUTION_URL}/message/sendText/${EVOLUTION_INSTANCE}`, {
+  await fetch(`${EVOLUTION_URL}/message/sendMedia/${EVOLUTION_INSTANCE}`, {
     method: "POST",
     headers: { "Content-Type": "application/json", apikey: EVOLUTION_KEY },
-    body: JSON.stringify({ number: normalized, text, options: { delay: 1200 } }),
+    body: JSON.stringify({
+      number: normalized,
+      mediatype: "image",
+      mimetype: "image/png",
+      media: IMAGE_CIERRE,
+      caption,
+      options: { delay: 1200 },
+    }),
   });
 }
 
@@ -128,10 +137,14 @@ export async function POST() {
       const kitLink = `${BASE_URL}/pulso-demo/kit/${ds.token}`;
       const text =
         `🎉 *¡Negociación cerrada con éxito!*\n\n` +
-        `Hola *${ds.name}*, la campaña de *${product.name}* está confirmada.\n\n` +
-        `Ya tenés acceso a todos los materiales:\n` +
-        `📸 Gráficos · ✍️ Copies · 🎥 Videos · 📋 Brief\n\n` +
-        `👉 Tu kit de campaña:\n${kitLink}`;
+        `Hola *${ds.name}*, el proveedor *${product.supplier_name}* confirmó las condiciones.\n\n` +
+        `La campaña de *${product.name}* está lista para publicar 🚀\n\n` +
+        `En tu kit encontrás:\n` +
+        `📸 *Gráficos* — imágenes del producto listas para usar\n` +
+        `✍️ *Copies* — textos para WhatsApp, Instagram y TikTok\n` +
+        `🎥 *Videos* — brief con ángulos y guión sugerido\n` +
+        `📋 *Brief* — toda la info del producto y la campaña\n\n` +
+        `👉 Accedé a todos los repositorios acá:\n${kitLink}`;
 
       const promises = [];
       if (ds.whatsapp) promises.push(sendWhatsApp(ds.whatsapp, text));

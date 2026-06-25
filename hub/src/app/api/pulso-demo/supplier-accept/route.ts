@@ -1,6 +1,52 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
+const EVOLUTION_URL = process.env.EVOLUTION_API_URL ?? "";
+const EVOLUTION_KEY = process.env.EVOLUTION_API_KEY ?? "";
+const EVOLUTION_INSTANCE = process.env.EVOLUTION_API_INSTANCE ?? "dropi";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3004";
+
+const IMAGE_CIERRE = "https://fwwkesboxlbmimzyoztq.supabase.co/storage/v1/object/public/imagenes/ChatGPT%20Image%2025%20jun%202026,%2006_29_46%20p.m..png";
+
+async function notifyDropshippers() {
+  if (!supabase || !EVOLUTION_URL || !EVOLUTION_KEY) return;
+
+  const { data: dropshippers } = await supabase
+    .from("pulso_demo_attendees")
+    .select("name, whatsapp, token")
+    .eq("role", "dropshipper")
+    .not("accepted_at", "is", null);
+
+  if (!dropshippers || dropshippers.length === 0) return;
+
+  await Promise.allSettled(
+    dropshippers.map((ds) => {
+      if (!ds.whatsapp) return Promise.resolve();
+      const normalized = ds.whatsapp.replace(/[^0-9]/g, "");
+      const kitLink = `${BASE_URL}/pulso-demo/kit/${ds.token}`;
+      const caption =
+        `✅ *¡El proveedor aceptó la negociación!*\n\n` +
+        `Hola *${ds.name}*, las condiciones fueron confirmadas.\n\n` +
+        `La campaña está aprobada y ya podés empezar a publicar 🚀\n\n` +
+        `En breve recibirás todos los repositorios de materiales:\n` +
+        `📸 Gráficos · ✍️ Copies · 🎥 Videos · 📋 Brief\n\n` +
+        `👉 Accedé a tu kit:\n${kitLink}`;
+      return fetch(`${EVOLUTION_URL}/message/sendMedia/${EVOLUTION_INSTANCE}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", apikey: EVOLUTION_KEY },
+        body: JSON.stringify({
+          number: normalized,
+          mediatype: "image",
+          mimetype: "image/png",
+          media: IMAGE_CIERRE,
+          caption,
+          options: { delay: 1200 },
+        }),
+      });
+    })
+  );
+}
+
 export async function POST() {
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
 
@@ -20,6 +66,8 @@ export async function POST() {
     .from("pulso_demo_sessions")
     .update({ supplier_accepted_at: new Date().toISOString() })
     .eq("id", sessionRes.data.id);
+
+  notifyDropshippers().catch(() => null);
 
   return NextResponse.json({ ok: true });
 }
