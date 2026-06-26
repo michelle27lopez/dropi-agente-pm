@@ -3564,6 +3564,25 @@ export default function CategorizacionPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Card 6: DAT-001 Reporte de Inteligencia de Catálogo */}
+                <a
+                  href="/dat001-inteligencia-catalogo.html"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-violet-500 hover:shadow-xs transition-all duration-200 no-underline"
+                >
+                  <span className="text-2xl mt-0.5">🔬</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>DAT-001 · Inteligencia de Catálogo</span>
+                      <span className="text-[9px] font-bold bg-violet-50 text-violet-600 border border-violet-100 px-1.5 py-0.5 rounded-full">↗ Reporte</span>
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Análisis de salud de fichas: descripciones, imágenes, categorías. Comparación de los suppliers que más venden.
+                    </div>
+                  </div>
+                </a>
               </div>
 
               {/* Detailed Expanded View inside Accordion */}
