@@ -416,5 +416,17 @@ function startMachine(){const tEl=document.getElementById('machine-timer'),lines
 // ══ FINAL CANVAS ══
 (function(){const c=document.getElementById('final-canvas');if(!c)return;const x=c.getContext('2d');let t=0,lt=null;function resize(){c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';x.setTransform(1,0,0,1,0,0);x.scale(devicePixelRatio,devicePixelRatio);}resize();window.addEventListener('resize',resize);(function draw(ts){if(!lt)lt=ts;const dt=Math.min((ts-lt)/1000,.05);lt=ts;t+=dt;const cw=innerWidth,ch=innerHeight,cx=cw/2,cy=ch/2;x.clearRect(0,0,cw,ch);const maxR=Math.max(cx,cy)+20;for(let r=50;r<maxR;r+=65){x.beginPath();x.arc(cx,cy,r+Math.sin(t*.7+r*.018)*5,0,Math.PI*2);x.strokeStyle=`rgba(232,103,42,${.04+.03*(1-r/maxR)})`;x.lineWidth=1;x.stroke();}for(let i=0;i<20;i++){const a=t*.28+i*(Math.PI*2/20);const rad=90+Math.sin(t*.5+i)*.12*90;x.beginPath();x.arc(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad,1.8,0,Math.PI*2);x.fillStyle='rgba(232,103,42,.32)';x.fill();}requestAnimationFrame(draw);})(0);})();
 </script>
+
+<!-- Nav arrows -->
+<style>
+.nav-arrows{position:fixed;bottom:24px;right:24px;display:flex;gap:8px;z-index:300}
+.nav-arrow{width:36px;height:36px;border-radius:8px;border:1px solid rgba(232,103,42,.18);background:rgba(12,11,10,.55);backdrop-filter:blur(6px);color:rgba(255,255,255,.28);font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:color .2s,border-color .2s,background .2s;line-height:1;user-select:none;-webkit-user-select:none}
+.nav-arrow:hover{color:#e8672a;border-color:rgba(232,103,42,.55);background:rgba(232,103,42,.1)}
+.nav-arrow:active{transform:scale(.93)}
+</style>
+<div class="nav-arrows">
+  <button class="nav-arrow" onclick="goPrev()" title="Anterior">&#8592;</button>
+  <button class="nav-arrow" onclick="goNext()" title="Siguiente">&#8594;</button>
+</div>
 </body>
 </html>
