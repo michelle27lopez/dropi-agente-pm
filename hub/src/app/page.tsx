@@ -142,25 +142,42 @@ export default function HubPage() {
           </div>
         </div>
 
-        {userEmail && (
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: 13, color: "var(--muted)" }}>{userEmail}</span>
-            <button
-              onClick={handleLogout}
-              style={{
-                fontSize: 12, fontWeight: 600,
-                color: "var(--muted)",
-                background: "var(--bg)",
-                border: "1px solid var(--border)",
-                borderRadius: 8,
-                padding: "6px 12px",
-                cursor: "pointer",
-              }}
-            >
-              Salir
-            </button>
-          </div>
-        )}
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <a
+            href="/data-solicitada"
+            style={{
+              fontSize: 12, fontWeight: 700,
+              color: "#6366F1",
+              background: "#EEF2FF",
+              border: "1px solid #C7D2FE",
+              borderRadius: 8,
+              padding: "6px 14px",
+              textDecoration: "none",
+              display: "flex", alignItems: "center", gap: 6,
+            }}
+          >
+            📊 Data solicitada
+          </a>
+          {userEmail && (
+            <>
+              <span style={{ fontSize: 13, color: "var(--muted)" }}>{userEmail}</span>
+              <button
+                onClick={handleLogout}
+                style={{
+                  fontSize: 12, fontWeight: 600,
+                  color: "var(--muted)",
+                  background: "var(--bg)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 8,
+                  padding: "6px 12px",
+                  cursor: "pointer",
+                }}
+              >
+                Salir
+              </button>
+            </>
+          )}
+        </div>
       </header>
 
       {/* Grid */}
