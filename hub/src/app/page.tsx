@@ -83,6 +83,15 @@ const poc = [
     tag: "Demo · Stakeholders",
     icon: "⚡",
   },
+  {
+    key: "gali-demo",
+    name: "Gali - Demo",
+    description: "Propuesta de valor y copiloto para selección de productos ganadores (v5). Chat interactivo con mentores de comunidad, grilla con 1M de productos y generador de creativos.",
+    url: "/proyectos/gali-demo",
+    color: "#FF6102",
+    tag: "Demo · Caza Productos v5",
+    icon: "🦊",
+  },
 ];
 
 export default function HubPage() {
