@@ -1,3 +1,5 @@
+"use client";
+
 const DOCS = [
   {
     href: "/solicitud-data-campana-cyber-2026.html",
