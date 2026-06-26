@@ -61,6 +61,16 @@ const ACCESS_CARDS = [
     external: true,
     badge: "Mock",
   },
+  {
+    href: "/dropi-pulso-presentacion.html",
+    icon: "🎯",
+    title: "Presentación · Stakeholders",
+    sub: "Deck completo para la presentación a junta y equipo",
+    color: "#0EA5E9",
+    colorBg: "#F0F9FF",
+    external: true,
+    badge: "Deck",
+  },
 ];
 
 const FLOW_STEPS = [
@@ -129,7 +139,7 @@ export default function PulsoDemoProjectPage() {
               Accesos del demo
             </span>
             <span style={{ fontSize: 12, color: "var(--muted)", marginLeft: "auto" }}>
-              6 vistas · todos públicos
+              7 vistas · todos públicos
             </span>
           </div>
           <div style={{
