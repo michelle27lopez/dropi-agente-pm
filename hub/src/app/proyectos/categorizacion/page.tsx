@@ -3583,6 +3583,25 @@ export default function CategorizacionPage() {
                     </div>
                   </div>
                 </a>
+
+                {/* Card 7: Revisión de Taxonomía para la Célula */}
+                <a
+                  href="/cat001-taxonomia-revision-celula.html"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-orange-500 hover:shadow-xs transition-all duration-200 no-underline"
+                >
+                  <span className="text-2xl mt-0.5">🌳</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Revisión Célula · Árbol + 20 Productos IA</span>
+                      <span className="text-[9px] font-bold bg-orange-50 text-orange-600 border border-orange-100 px-1.5 py-0.5 rounded-full">↗ Nuevo</span>
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Árbol de taxonomía propuesta + 20 productos clasificados con IA (top 5 por producto). Para revisión del equipo.
+                    </div>
+                  </div>
+                </a>
               </div>
 
               {/* Detailed Expanded View inside Accordion */}
