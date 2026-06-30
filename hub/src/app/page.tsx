@@ -153,6 +153,21 @@ export default function HubPage() {
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <a
+            href="/iniciativas"
+            style={{
+              fontSize: 12, fontWeight: 700,
+              color: "#6366F1",
+              background: "#EEF2FF",
+              border: "1px solid #C7D2FE",
+              borderRadius: 8,
+              padding: "6px 14px",
+              textDecoration: "none",
+              display: "flex", alignItems: "center", gap: 6,
+            }}
+          >
+            📥 Iniciativas
+          </a>
+          <a
             href="/data-solicitada"
             style={{
               fontSize: 12, fontWeight: 700,

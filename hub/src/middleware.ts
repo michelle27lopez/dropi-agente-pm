@@ -49,6 +49,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Usuarios con role "contributor" solo pueden ver /iniciativas.
+  // Cualquier otra ruta del Hub los redirige ahí.
+  const role = user?.user_metadata?.role;
+  const isIniciativasPath =
+    pathname.startsWith("/iniciativas") || pathname.startsWith("/api/iniciativas");
+
+  if (role === "contributor" && !isIniciativasPath && !isPublicPath) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/iniciativas";
+    return NextResponse.redirect(url);
+  }
+
   return supabaseResponse;
 }
 
