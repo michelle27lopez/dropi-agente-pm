@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { REGISTRY, SEMANAS, CURRENT } from "./data/index";
-import type { MetricGroup, Oportunidad, Dolor, ProximoPaso, HeroChip } from "./data/types";
+import type { MetricGroup, Oportunidad, Dolor, ProximoPaso, HeroChip, Insight, Documento } from "./data/types";
 
 // ─── Componente principal ──────────────────────────────────────────────────────
 export default function WeeklyPage() {
@@ -157,8 +157,18 @@ export default function WeeklyPage() {
           </div>
         </div>
 
-        {/* ── Sección 1: Proyectos ── */}
-        <Section title="1. Proyectos activos · avances y métricas" badge="Gerencial"
+        {/* ── Sección 1: Insights de la semana ── */}
+        {data.insights && data.insights.length > 0 && (
+          <Section title="1. Insights de la semana" badge="Hallazgos"
+            sub="Los aprendizajes, datos y decisiones clave que surgieron esta semana.">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 14 }}>
+              {data.insights.map((ins: Insight) => <InsightCard key={ins.id} ins={ins} />)}
+            </div>
+          </Section>
+        )}
+
+        {/* ── Sección 2: Proyectos ── */}
+        <Section title="2. Proyectos activos · avances y métricas" badge="Gerencial"
           sub="Estado, avance semanal y métricas base / objetivo / seguimiento por proyecto.">
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             {proyectos.map((op) => (
@@ -167,16 +177,26 @@ export default function WeeklyPage() {
           </div>
         </Section>
 
-        {/* ── Sección 2: Dolores ── */}
+        {/* ── Sección 3: Documentación ── */}
+        {data.documentos && data.documentos.length > 0 && (
+          <Section title="3. Documentación de proyectos" badge="Entregables"
+            sub="Documentos E2E, discovery y TOBE generados esta semana. Haz clic para abrir el documento completo.">
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 14 }}>
+              {data.documentos.map((doc: Documento) => <DocumentoCard key={doc.code} doc={doc} />)}
+            </div>
+          </Section>
+        )}
+
+        {/* ── Sección 4: Dolores ── */}
         {data.dolores && data.dolores.length > 0 && (
-          <Section title="2. Dolores de Comercial · indexados y cerrados" badge="Clasificados"
+          <Section title="4. Dolores de Comercial · indexados y cerrados" badge="Clasificados"
             sub="Cada dolor queda indexado a un proyecto existente o a una ruta concreta.">
             <DoloresTable dolores={data.dolores} />
           </Section>
         )}
 
-        {/* ── Sección 3: Resumen ejecutivo ── */}
-        <Section title="3. Resumen ejecutivo" badge="Cierre">
+        {/* ── Sección 5: Resumen ejecutivo ── */}
+        <Section title="5. Resumen ejecutivo" badge="Cierre">
           <div style={{
             borderLeft: "4px solid var(--dropi)", background: "#FFFBF5",
             borderRadius: "0 14px 14px 0", padding: "20px 24px",
@@ -184,8 +204,8 @@ export default function WeeklyPage() {
           }} dangerouslySetInnerHTML={{ __html: data.resumen }} />
         </Section>
 
-        {/* ── Sección 4: Próximos pasos ── */}
-        <Section title="4. Próximos pasos" badge="Secuencia">
+        {/* ── Sección 6: Próximos pasos ── */}
+        <Section title="6. Próximos pasos" badge="Secuencia">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 14 }}>
             {data.proximosPasos.map((p: ProximoPaso) => (
               <div key={p.titulo} style={{
@@ -279,6 +299,59 @@ function ProyectoCard({ op }: { op: Oportunidad }) {
         ))}
       </div>
     </div>
+  );
+}
+
+// ─── InsightCard ──────────────────────────────────────────────────────────────
+function InsightCard({ ins }: { ins: Insight }) {
+  const impactoColor = ins.impacto === "Alto" ? "#DC2626" : ins.impacto === "Medio" ? "#D97706" : "#059669";
+  const impactoBg   = ins.impacto === "Alto" ? "#FEE2E2" : ins.impacto === "Medio" ? "#FEF3C7" : "#D1FAE5";
+  return (
+    <div style={{
+      background: "#fff", border: "1px solid var(--border)",
+      borderTop: `4px solid ${ins.tipoColor}`, borderRadius: 14,
+      padding: 18, display: "flex", flexDirection: "column", gap: 10,
+    }}>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+        <span style={{ fontSize: 10, fontWeight: 800, background: `${ins.tipoColor}18`, color: ins.tipoColor, padding: "3px 9px", borderRadius: 999 }}>{ins.tipo}</span>
+        <span style={{ fontSize: 10, fontWeight: 700, background: "#F3F4F6", color: "#6B7280", padding: "3px 8px", borderRadius: 999 }}>{ins.proyecto}</span>
+        <span style={{ fontSize: 10, fontWeight: 700, background: impactoBg, color: impactoColor, padding: "3px 8px", borderRadius: 999, marginLeft: "auto" }}>↑ {ins.impacto}</span>
+      </div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", lineHeight: 1.35 }}>{ins.titulo}</div>
+      <div style={{ fontSize: 12, color: "#6B7280", lineHeight: 1.65 }}>{ins.descripcion}</div>
+    </div>
+  );
+}
+
+// ─── DocumentoCard ────────────────────────────────────────────────────────────
+function DocumentoCard({ doc }: { doc: Documento }) {
+  return (
+    <a href={doc.href} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none" }}>
+      <div style={{
+        background: "#fff", border: "1px solid var(--border)",
+        borderTop: `4px solid ${doc.color}`, borderRadius: 14,
+        padding: 18, display: "flex", flexDirection: "column", gap: 10,
+        cursor: "pointer", transition: "box-shadow 0.15s",
+      }}
+        onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,0.10)")}
+        onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
+      >
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+          <span style={{ fontSize: 10, fontWeight: 800, background: `${doc.color}18`, color: doc.color, padding: "3px 9px", borderRadius: 999 }}>{doc.tipo}</span>
+          <span style={{ fontSize: 10, fontWeight: 700, background: "#F3F4F6", color: "#6B7280", padding: "3px 8px", borderRadius: 999 }}>{doc.code}</span>
+          <span style={{ fontSize: 10, fontWeight: 600, color: "#9CA3AF", marginLeft: "auto" }}>{doc.fecha}</span>
+        </div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", lineHeight: 1.35 }}>{doc.nombre}</div>
+        <div style={{ fontSize: 11, color: "#6B7280", lineHeight: 1.6 }}>{doc.descripcion}</div>
+        <div style={{ fontSize: 11, color: "#9CA3AF", fontWeight: 600 }}>{doc.proyecto}</div>
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 6, marginTop: 4,
+          fontSize: 12, fontWeight: 700, color: doc.color,
+        }}>
+          Ver documento completo →
+        </div>
+      </div>
+    </a>
   );
 }
 

@@ -1,4 +1,4 @@
-import type { WeeklySnapshot } from "./types";
+import type { WeeklySnapshot, Documento } from "./types";
 
 export const snapshot: WeeklySnapshot = {
   week: "Semana 26 jun–02 jul 2026",
@@ -11,6 +11,53 @@ export const snapshot: WeeklySnapshot = {
     { label: "Brecha a Cerrar", value: "55.2M", sub: "Adicionales requeridas" },
     { label: "Meta Iniciativas", value: "308.3K", sub: "Proyección sumada" },
     { label: "Lanzamientos", value: "Julio", sub: "Fase 2 NEG + COM + TTV" }
+  ],
+  insights: [
+    {
+      id: "INS-001",
+      titulo: "Turn de activación: solo el 2% de los suppliers registrados llegan a su primera venta",
+      descripcion: "De 14,175 suppliers registrados en ~90 días, solo el 2% (~255) generaron al menos 1 orden. El 98% entra y nunca vuelve. Es la base que justifica todo TTV-001 y la urgencia del onboarding automatizado.",
+      proyecto: "TTV-001",
+      tipo: "Dato",
+      tipoColor: "#D97706",
+      impacto: "Alto",
+    },
+    {
+      id: "INS-002",
+      titulo: "NEG-001 live en redes pero solo habilitado para 12 usuarios",
+      descripcion: "El módulo ya se está promocionando en redes sociales, pero solo está disponible para 12 usuarios. Si alguien intenta usarlo sin acceso, genera frustración con la marca. Abrir a todos antes del 6-jul es acción crítica.",
+      proyecto: "NEG-001",
+      tipo: "Riesgo",
+      tipoColor: "#EF4444",
+      impacto: "Alto",
+    },
+    {
+      id: "INS-003",
+      titulo: "83% del abandono en Caza Productos es por miedo al espionaje comercial, no por UX",
+      descripcion: "Los suppliers no participan porque no quieren revelar sus nichos rentables a competidores. El 64.3% califica la herramienta como 'muy fácil' de usar. El problema es de confianza, no de experiencia de usuario.",
+      proyecto: "CAZ-001",
+      tipo: "Hallazgo",
+      tipoColor: "#EF4444",
+      impacto: "Alto",
+    },
+    {
+      id: "INS-004",
+      titulo: "35% de las órdenes caen en la categoría 'Otros' — el catálogo está mal clasificado",
+      descripcion: "1 de cada 3 órdenes va a una categoría genérica sin valor analítico. Hay 42 categorías duplicadas y 18 con errores ortográficos. Esto bloquea campañas, búsqueda semántica y cualquier análisis de productos por nicho.",
+      proyecto: "CAT-001",
+      tipo: "Hallazgo",
+      tipoColor: "#3B82F6",
+      impacto: "Alto",
+    },
+    {
+      id: "INS-005",
+      titulo: "María propone feature 'precio antes / precio ahora' para Cyber Days",
+      descripcion: "Validar con TI esta semana si pueden hacer una funcionalidad básica de precio tachado + precio actual, solo para productos de la campaña. La recomendación es construir features pequeños y graduales que validen el modelo antes de una plataforma completa.",
+      proyecto: "DCA-001",
+      tipo: "Decisión",
+      tipoColor: "#0EA5E9",
+      impacto: "Alto",
+    },
   ],
   oportunidades: [
     {
@@ -190,7 +237,50 @@ export const snapshot: WeeklySnapshot = {
           { label: "Órdenes atribuidas", value: "GMV incremental", sub: "Métrica de negocio" }
         ]
       }
+    },
+    {
+      code: "DESC-001",
+      name: "Descuentos en Catálogo · Precio Antes/Ahora",
+      status: "📋 E2E Documentado · Validación TI pendiente",
+      statusColor: "#F59E0B",
+      color: "#F59E0B",
+      mueve: "Tasa de importación en campañas · GMV incremental Cyber Days",
+      hipotesis: "El descuento visible aumenta la importación de productos de campaña vs. sin precio tachado",
+      gmv: "Enabler de Cyber Days y todas las campañas DCA",
+      avance: "Feature recomendada por María Ossa (weekly 27-jun). E2E completo documentado con 3 fases: Fase 1 descuento básico transversal (Dropi + Shopify + WooCommerce + Tienda Nube + CAS + ECOM Scanner), Fase 2 filtros y badges en catálogo, Fase 3 inteligencia y automatización. Pendiente validación técnica con TI sobre impacto en wallet — es el único bloqueador real para Fase 1.",
+      next: "Validar con José Giraldo (TI) si la wallet tiene dependencia del campo de precio. Resultado define si Fase 1 va a Cyber Days (agosto).",
+      badge: "📋 E2E Listo",
+      badgeColor: "#F59E0B",
+      metricas: {
+        base: [
+          { label: "Canales cubiertos", value: "6", sub: "Dropi · Shopify · WooC · TN · CAS · Scanner" },
+          { label: "Fases definidas", value: "3", sub: "MVP → Filtros → Inteligencia" },
+          { label: "Riesgo principal", value: "Wallet", sub: "Confirmación pendiente con TI" }
+        ],
+        meta: [
+          { label: "Trigger", value: "Cyber Days", sub: "Agosto 2026" },
+          { label: "Alcance", value: "Transversal", sub: "Todas las campañas DCA" },
+          { label: "CTR campaña meta", value: "≥ 8%", sub: "Productos en vitrina" }
+        ],
+        seguimiento: [
+          { label: "Validación TI", value: "30-jun", sub: "Go / No-go Fase 1" },
+          { label: "Figma diseño", value: "Pendiente", sub: "Michelle López" },
+          { label: "Épica Jira", value: "Pendiente", sub: "Post validación TI" }
+        ]
+      }
     }
+  ],
+  documentos: [
+    {
+      code: "DESC-001",
+      nombre: "Precio Antes / Precio Ahora — Documentación E2E",
+      descripcion: "5 entregables completos: Kick-off, Discovery (AS-IS + benchmark 5 plataformas), Definición (3 fases), Following (métricas HEART + SEQ), Hand-off a TI (JTBD, C4, glosario, 8 reglas de negocio, 4 módulos Gherkin).",
+      tipo: "E2E",
+      color: "#F59E0B",
+      href: "/desc001-precio-antes-ahora-e2e.html",
+      proyecto: "DCA-001 / DCA-002 · Campañas de catálogo",
+      fecha: "30-jun-2026",
+    } as Documento,
   ],
   dolores: [],
   resumen: "Esta semana la célula se enfocó en el ajuste de alcance de <strong>Negociaciones</strong> tras el abordaje con un usuario real el lunes, el cual reveló que el proceso 1 a 1 no escala para catálogos grandes; se resolvió operar temporalmente con carga manual mediante Excel y programar el kickoff de la Fase 2 (con filtros y agregar todo en la UI, más negociaciones dropshipper-supplier) para la próxima semana. <strong>Combos</strong> avanzó con la entrega formal del E2E unificado (Shopify, CAS, Ecom, Icom) a Jose Giraldo y una nueva fecha compromiso de lanzamiento para el 7 de julio. <strong>Time to Value</strong> actualizó su pipeline en GHL a 13 etapas y espera el kickoff propuesto por Enrique para la próxima semana, sujeto a validar la integración de webhooks. <strong>Categorización</strong> congeló su desarrollo técnico de IA para alinearse comercialmente con Jacki antes de fin de mes, identificando 42 categorías duplicadas, 18 con errores tipográficos y un ~35% de productos erróneamente catalogados en 'Otros'. Por último, en <strong>Caza Productos</strong> el discovery evidenció una caída del -68% en proveedores activos y un bug crítico en WhatsApp (0.22% CTR, 2 clics de 882 intentos) que requiere corrección urgente.",

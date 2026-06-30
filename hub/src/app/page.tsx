@@ -71,6 +71,15 @@ const projects = [
     tag: "CAZ-001 · Demanda",
     icon: "🔍",
   },
+  {
+    key: "descuentos-catalogo",
+    name: "Descuentos en Catálogo",
+    description: "Precio antes / precio ahora visible para el dropshipper en toda campaña activa. Trigger: Cyber Days agosto 2026. Ecosistema completo: Dropi, Shopify, WooCommerce, Tienda Nube, CAS, ECOM Scanner.",
+    url: "/proyectos/descuentos",
+    color: "#F59E0B",
+    tag: "DESC-001 · Campañas",
+    icon: "🏷️",
+  },
 ];
 
 const poc = [
