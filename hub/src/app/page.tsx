@@ -98,6 +98,15 @@ const projects = [
     tag: "CAZ-001 · Demanda",
     icon: "🔍",
   },
+  {
+    key: "combos",
+    name: "Combos Dropshipper",
+    description: "Guía de flujo paso a paso para crear y editar combos. Screenshots del Figma con descripciones listas para handoff.",
+    url: "/proyectos/combos",
+    color: "#F77F00",
+    tag: "PROD-545 · Hand-off",
+    icon: "📦",
+  },
 ];
 
 export default function HubPage() {
