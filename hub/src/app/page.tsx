@@ -72,6 +72,15 @@ const projects = [
     icon: "📈",
   },
   {
+    key: "negociaciones",
+    name: "Negociaciones · Proveedor–Líder Comunidad",
+    description: "Bitácora de seguimiento semanal del rol Proveedor: adopción, engagement, funnels de creación, retención y hallazgos cualitativos.",
+    url: "/proyectos/negociaciones",
+    color: "#0D9488",
+    tag: "NEG-001 · Live",
+    icon: "🤝",
+  },
+  {
     key: "caza-productos",
     name: "Caza Productos",
     description: "Solicitudes de productos que los dropshippers no encuentran en catálogo. Señal de demanda explícita y tasa de atención de suppliers.",
