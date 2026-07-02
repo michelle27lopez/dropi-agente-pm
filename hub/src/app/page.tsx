@@ -74,7 +74,7 @@ const projects = [
   {
     key: "negociaciones",
     name: "Negociaciones · Proveedor–Líder Comunidad",
-    description: "Bitácora de seguimiento semanal del rol Proveedor: adopción, engagement, funnels de creación, retención y hallazgos cualitativos.",
+    description: "Bitácora de seguimiento semanal de ambos roles: adopción, engagement, funnels de creación/respuesta, retención y hallazgos cualitativos.",
     url: "/proyectos/negociaciones",
     color: "#0D9488",
     tag: "NEG-001 · Live",

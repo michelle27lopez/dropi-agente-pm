@@ -30,27 +30,57 @@ const thR: React.CSSProperties = { ...thStyle, textAlign: "right" };
 
 const ACCENT = "#0D9488";
 const ACCENT_BG = "#F0FDFA";
+const LIDER_COLOR = "#8B5CF6";
+const LIDER_BG = "#F5F3FF";
 
-// ─── Bitácora de Seguimiento · Rol Proveedor · NEG-001 ───────────────────────
+// ─── Bitácora de Seguimiento · NEG-001 ────────────────────────────────────────
 // Fuente: UserPilot. Feature reactivado el 8 de junio de 2026.
 // Actualizar semanalmente agregando un objeto nuevo a WEEKS.
+// El rol Líder de Comunidad solo tiene datos medibles desde Semana 3 (dashboard UserPilot
+// "Negociaciones"); Semanas 1–2 vienen de la bitácora manual (Sheet) y solo cubren Proveedor.
+type ProveedorWeek = {
+  ingresoEventos?: number;
+  ingresoUnicos: number;
+  creadasEventos: number;
+  creadasUnicos: number;
+  canceladasEventos: number;
+  canceladasUnicos: number;
+  opcionesCard: { cancelar: number; verDetalle: number; editar: number };
+  notas: number;
+  editarNeg: number;
+  historial: number;
+  clicEnviar: number;
+  funnelPct: string;
+  funnelRepresentativo: boolean;
+};
+
+type LiderWeek = {
+  ingresoEventos: number;
+  ingresoUnicos: number;
+  aprobadasEventos: number;
+  aprobadasUnicos: number;
+  rechazadasEventos: number;
+  rechazadasUnicos: number;
+  canceladasEventos: number;
+  canceladasUnicos: number;
+  opcionesCard: { verDetalle: number; rechazar: number; aprobar: number };
+  historial: number;
+  funnelAprobadaPct: string;
+  funnelAprobadaTiempo: string;
+  funnelModalAprobadaPct: string;
+  funnelRechazadaPct: string;
+  funnelRechazadaTiempo: string;
+  funnelModalRechazadaPct: string;
+};
+
 type Week = {
   id: string;
   fechas: string;
   lanzamiento: string;
-  negCreadasEventos: number;
-  negCreadasUnicos: number;
-  negCanceladas: string;
-  ingresoModulo: number;
-  opcionesCard: string;
-  notas: number;
-  editar: number;
-  historial: number;
+  proveedor: ProveedorWeek;
+  lider?: LiderWeek;
   conclusionAdopcion: string;
-  funnelPct: string;
-  funnelRepresentativo: boolean;
   conclusionTaskSuccess: string;
-  clicEnviar: number;
   retencionTendencia: string;
   conclusionRetencion: string;
   csat: string;
@@ -67,19 +97,22 @@ const WEEKS: Week[] = [
     id: "Semana 1",
     fechas: "10–17 jun 2026",
     lanzamiento: "Reactivación del feature: 8 jun 2026",
-    negCreadasEventos: 274,
-    negCreadasUnicos: 2,
-    negCanceladas: "22 / 2",
-    ingresoModulo: 131,
-    opcionesCard: "22 / 22 / 13",
-    notas: 279,
-    editar: 2,
-    historial: 6,
+    proveedor: {
+      ingresoUnicos: 131,
+      creadasEventos: 274,
+      creadasUnicos: 2,
+      canceladasEventos: 22,
+      canceladasUnicos: 2,
+      opcionesCard: { cancelar: 22, verDetalle: 22, editar: 13 },
+      notas: 279,
+      editarNeg: 2,
+      historial: 6,
+      clicEnviar: 274,
+      funnelPct: "0.76%",
+      funnelRepresentativo: true,
+    },
     conclusionAdopcion: "Solo 2 proveedores únicos crearon negociaciones esta semana (incluye 1 usuario de pruebas, Paola Angulo), consistente con la primera semana post-reactivación. El uso se concentra en revisar (ver detalle, historial) más que en crear: el alto volumen de notas (279) sugiere que el campo de comentarios se usa activamente.",
-    funnelPct: "0.76%",
-    funnelRepresentativo: true,
     conclusionTaskSuccess: "Los 4 funnels de creación tienen la misma conversión total (0.76%) esta semana. El cuello de botella está entre 'Entrar al módulo' y 'Click en Crear' (131 → 19 usuarios, 14.50%), y se profundiza al seleccionar producto y comisión (19 → 1 usuario, 5.26%).",
-    clicEnviar: 274,
     retencionTendencia: "Decreciente (~50 → ~15)",
     conclusionRetencion: "La actividad de envío de negociaciones tuvo un pico fuerte el 13 de junio, pero la recurrencia general muestra una tendencia decreciente a lo largo de la semana (de ~50 eventos el 10 de junio a ~10-25 hacia el 17).",
     csat: "Sin dato",
@@ -94,19 +127,22 @@ const WEEKS: Week[] = [
     id: "Semana 2",
     fechas: "18–24 jun 2026",
     lanzamiento: "Beta limitada a 12 proveedores: 394337, 781868, 31118, 607646, 607642, 5935, 803802, 74525, 245055, 504502",
-    negCreadasEventos: 2,
-    negCreadasUnicos: 2,
-    negCanceladas: "1 / 1",
-    ingresoModulo: 110,
-    opcionesCard: "1 / 1 / 0",
-    notas: 1,
-    editar: 0,
-    historial: 1,
+    proveedor: {
+      ingresoUnicos: 110,
+      creadasEventos: 2,
+      creadasUnicos: 2,
+      canceladasEventos: 1,
+      canceladasUnicos: 1,
+      opcionesCard: { cancelar: 1, verDetalle: 1, editar: 0 },
+      notas: 1,
+      editarNeg: 0,
+      historial: 1,
+      clicEnviar: 2,
+      funnelPct: "0%",
+      funnelRepresentativo: false,
+    },
     conclusionAdopcion: "Caída fuerte en creación frente a la Semana 1 (de 274 a 2 negociaciones, aunque ambas semanas con 2 usuarios únicos). El 22 de junio se realizó una prueba puntual con el proveedor GGP Comercializadora (ID 5935), dentro del grupo beta. El uso general bajó en todas las acciones de engagement (notas, opciones de card) frente a la semana anterior.",
-    funnelPct: "0%",
-    funnelRepresentativo: false,
     conclusionTaskSuccess: "Los 4 funnels de creación muestran 0% de conversión total esta semana, lo cual NO es representativo: el funnel está configurado en orden secuencial estricto y no captura correctamente los pasos cuando el usuario no sigue el orden exacto (se intentó modo 'any order' y tampoco refleja la conversión real). La tarjeta 'Creadas' (2/2) es la fuente confiable de adopción esta semana, no el % de conversión del funnel.",
-    clicEnviar: 2,
     retencionTendencia: "Sostenida, más alta que Semana 1 (~5 a ~30 eventos/día)",
     conclusionRetencion: "A pesar de la caída en creación de negociaciones, la actividad general de retención y recurrencia del proveedor fue sostenida y más alta que en la Semana 1, con actividad diaria entre ~5 y ~30 eventos a lo largo de toda la semana.",
     csat: "Sin dato",
@@ -117,21 +153,78 @@ const WEEKS: Week[] = [
     proximosPasos: "Validar con UserPilot el ajuste de configuración de los funnels de creación. Confirmar si la caída en creación es por la base reducida de la beta (12 proveedores) o por otro factor. Seguimiento al bug del correo uxdropi@gmail.com.",
     notasSalvedades: "Beta limitada a 12 proveedores (IDs listados arriba). El proveedor GGP (5935) está dentro de ese grupo.",
   },
+  {
+    id: "Semana 3",
+    fechas: "25 jun–1 jul 2026",
+    lanzamiento: "Sin nota de rollout registrada esta semana — confirmar con Michelle si la beta sigue limitada a los mismos 12 proveedores.",
+    proveedor: {
+      ingresoEventos: 276,
+      ingresoUnicos: 102,
+      creadasEventos: 1,
+      creadasUnicos: 1,
+      canceladasEventos: 3,
+      canceladasUnicos: 3,
+      opcionesCard: { cancelar: 3, verDetalle: 3, editar: 0 },
+      notas: 1,
+      editarNeg: 0,
+      historial: 1,
+      clicEnviar: 1,
+      funnelPct: "0%",
+      funnelRepresentativo: false,
+    },
+    lider: {
+      ingresoEventos: 16,
+      ingresoUnicos: 10,
+      aprobadasEventos: 1,
+      aprobadasUnicos: 1,
+      rechazadasEventos: 5,
+      rechazadasUnicos: 1,
+      canceladasEventos: 5,
+      canceladasUnicos: 1,
+      opcionesCard: { verDetalle: 5, rechazar: 5, aprobar: 1 },
+      historial: 2,
+      funnelAprobadaPct: "10%",
+      funnelAprobadaTiempo: "2d 6h 55m 26s",
+      funnelModalAprobadaPct: "0%",
+      funnelRechazadaPct: "10%",
+      funnelRechazadaTiempo: "10s",
+      funnelModalRechazadaPct: "0%",
+    },
+    conclusionAdopcion: "Primera semana con datos medibles del rol Líder de Comunidad en el dashboard de UserPilot: 10 usuarios únicos ingresaron (16 eventos), aprobaron 1 negociación, rechazaron 5 y cancelaron 5 — todo concentrado en 1 usuario único por acción. En Proveedor, la creación de negociaciones toca su mínimo histórico (1 negociación, 1 usuario único, vs 2 en Semana 2 y 274 en Semana 1), mientras el ingreso al módulo se mantiene alto (102 usuarios únicos, 276 eventos).",
+    conclusionTaskSuccess: "Los 4 funnels de creación del Proveedor siguen en 0% de conversión total — mismo problema de configuración reportado en semanas anteriores (no representativo). Los funnels de respuesta del Líder sí muestran conversión real: 10% en aprobación y 10% en rechazo (1 de 10 negociaciones recibidas en cada caso), con tiempo promedio de respuesta de 2d 6h 55m en aprobaciones y 10 segundos en rechazos.",
+    retencionTendencia: "Proveedor: alta al inicio de semana (25–26 jun), cae a mínimo miércoles-jueves (27–29 jun) y repunta hacia el cierre (30 jun–1 jul). Líder: actividad baja y dispersa toda la semana, con un pico puntual el 30 de junio.",
+    conclusionRetencion: "Lectura aproximada de los gráficos de barras del dashboard (no expone cifras exactas por día); el patrón general del Proveedor es de caída a mitad de semana con recuperación al cierre, mientras el Líder mantiene actividad baja y esporádica.",
+    csat: "Sin dato",
+    conclusionHappiness: "Sin dato — no hay tarjeta de CSAT/SEQ en el dashboard de esta semana. Sigue pendiente activar la micro-survey.",
+    hallazgos: "Primera semana con visibilidad completa del rol Líder de Comunidad en UserPilot (ingreso, aprobadas/rechazadas/canceladas, funnels y retención). El funnel de respuesta del Líder sí es representativo (10%), a diferencia del de creación del Proveedor. El uso de tabs dentro del modal se concentra en 'Historial' (2 aperturas) tanto en Proveedor como en Líder.",
+    dolores: "Creación de negociaciones del Proveedor cae a mínimo histórico (1). El Líder rechaza 5 de las 10 negociaciones que le llegan y solo aprueba 1 — proporción de rechazo alta. Hipótesis sin confirmar (Michelle): podría tratarse de un usuario probando el flujo más que un rechazo real de negociaciones, similar al patrón de uso de pruebas visto en Semana 1 (Paola Angulo) y Semana 2 (GGP Comercializadora).",
+    bugs: "Pendiente confirmar si el bug de los funnels de creación del Proveedor (0% no representativo) y el del correo de pruebas uxdropi@gmail.com siguen abiertos esta semana — el dashboard de UserPilot no lo confirma ni lo descarta.",
+    proximosPasos: "Confirmar si el usuario único que rechazó 5 negociaciones era una prueba (hipótesis de Michelle) o un rechazo real — de ser prueba, excluirlo del cálculo igual que se hizo con los usuarios de prueba de S1–S2. Dar seguimiento a si persisten los bugs reportados en Semana 1–2. Activar CSAT/SEQ. Definir si la bitácora manual (Sheet) se sigue llevando en paralelo al dashboard de UserPilot o si este último la reemplaza.",
+    notasSalvedades: "Datos tomados directamente del dashboard UserPilot \"Negociaciones\" (captura del 2 jul 2026), no de la bitácora manual del Sheet usada en Semana 1–2. Los valores de retención diaria son una lectura aproximada de gráficos de barras sin etiquetas numéricas — no exactos. El evento \"Historial de la negociación\" del Líder aparece truncado en el dashboard como \"Historial de la negociacion - Dro...\"; se asume Líder por su posición junto al de Proveedor, pero el nombre completo no se pudo confirmar.",
+  },
 ];
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function NegociacionesPage() {
   const latest = WEEKS[WEEKS.length - 1];
   const prev = WEEKS.length > 1 ? WEEKS[WEEKS.length - 2] : null;
+  const liderWeeks = WEEKS.filter(w => w.lider);
 
-  const kpis = [
-    { label: "Neg. creadas (eventos)", value: String(latest.negCreadasEventos), sub: prev ? `Semana anterior: ${prev.negCreadasEventos}` : "—", color: ACCENT, bg: ACCENT_BG },
-    { label: "Neg. creadas (únicos)", value: String(latest.negCreadasUnicos), sub: prev ? `Semana anterior: ${prev.negCreadasUnicos}` : "—", color: "#3B82F6", bg: "#EFF6FF" },
-    { label: "Ingreso al módulo (únicos)", value: String(latest.ingresoModulo), sub: prev ? `Semana anterior: ${prev.ingresoModulo}` : "—", color: "#8B5CF6", bg: "#F5F3FF" },
-    { label: "Canceladas (ev / únicos)", value: latest.negCanceladas, sub: "Eventos / usuarios únicos", color: "#EF4444", bg: "#FEF2F2" },
-    { label: "Clic enviar negociación", value: String(latest.clicEnviar), sub: "Total eventos", color: "#F59E0B", bg: "#FFFBEB" },
+  const kpisProveedor = [
+    { label: "Neg. creadas (eventos)", value: String(latest.proveedor.creadasEventos), sub: prev ? `Semana anterior: ${prev.proveedor.creadasEventos}` : "—", color: ACCENT, bg: ACCENT_BG },
+    { label: "Neg. creadas (únicos)", value: String(latest.proveedor.creadasUnicos), sub: prev ? `Semana anterior: ${prev.proveedor.creadasUnicos}` : "—", color: "#3B82F6", bg: "#EFF6FF" },
+    { label: "Ingreso al módulo (únicos)", value: String(latest.proveedor.ingresoUnicos), sub: prev ? `Semana anterior: ${prev.proveedor.ingresoUnicos}` : "—", color: "#8B5CF6", bg: "#F5F3FF" },
+    { label: "Canceladas (ev / únicos)", value: `${latest.proveedor.canceladasEventos} / ${latest.proveedor.canceladasUnicos}`, sub: "Eventos / usuarios únicos", color: "#EF4444", bg: "#FEF2F2" },
+    { label: "Clic enviar negociación", value: String(latest.proveedor.clicEnviar), sub: "Total eventos", color: "#F59E0B", bg: "#FFFBEB" },
     { label: "CSAT / SEQ", value: latest.csat, sub: "Survey pendiente de activar", color: "#9CA3AF", bg: "#F3F4F6" },
   ];
+
+  const kpisLider = latest.lider ? [
+    { label: "Ingreso al módulo (únicos)", value: String(latest.lider.ingresoUnicos), sub: `${latest.lider.ingresoEventos} eventos`, color: LIDER_COLOR, bg: LIDER_BG },
+    { label: "Aprobadas", value: `${latest.lider.aprobadasEventos} / ${latest.lider.aprobadasUnicos}`, sub: "Eventos / usuarios únicos", color: "#10B981", bg: "#ECFDF5" },
+    { label: "Rechazadas", value: `${latest.lider.rechazadasEventos} / ${latest.lider.rechazadasUnicos}`, sub: "Eventos / usuarios únicos", color: "#EF4444", bg: "#FEF2F2" },
+    { label: "Canceladas", value: `${latest.lider.canceladasEventos} / ${latest.lider.canceladasUnicos}`, sub: "Eventos / usuarios únicos", color: "#F59E0B", bg: "#FFFBEB" },
+  ] : [];
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -147,9 +240,9 @@ export default function NegociacionesPage() {
         <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Negociaciones</span>
         <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
           <span style={tag(ACCENT, ACCENT_BG)}>NEG-001</span>
-          <span style={tag("#10B981", "#ECFDF5")}>Live · Beta 12 proveedores</span>
-          <span style={tag("#F59E0B", "#FFFBEB")}>Bug correo pruebas abierto</span>
-          <span style={tag("var(--muted)", "#F3F4F6")}>10–24 jun 2026</span>
+          <span style={tag("#10B981", "#ECFDF5")}>Live · Beta proveedores</span>
+          <span style={tag("#F59E0B", "#FFFBEB")}>Bugs por confirmar</span>
+          <span style={tag("var(--muted)", "#F3F4F6")}>10 jun–1 jul 2026</span>
         </div>
       </header>
 
@@ -161,35 +254,63 @@ export default function NegociacionesPage() {
             Negociaciones Proveedor–Líder de Comunidad · Bitácora de Seguimiento
           </h1>
           <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.5 }}>
-            Rol Proveedor. {WEEKS.length} semanas evaluadas desde la reactivación del feature (8 jun 2026).
+            Roles Proveedor y Líder de Comunidad. {WEEKS.length} semanas evaluadas desde la reactivación del feature (8 jun 2026) —
+            el Líder solo tiene datos medibles desde {liderWeeks[0]?.id ?? "—"}.
             Fuente: <strong>UserPilot</strong> · actualizado al cierre de {latest.id.toLowerCase()} ({latest.fechas}).
           </p>
         </div>
 
-        {/* KPI strip */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(6, minmax(0,1fr))", gap: 12 }}>
-          {kpis.map(k => (
-            <div key={k.label} style={{ ...card, borderTop: `3px solid ${k.color}`, padding: "14px 16px" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--muted)", marginBottom: 8 }}>
-                {k.label}
+        {/* KPI strip · Proveedor */}
+        <div>
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 8 }}>
+            Rol Proveedor
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, minmax(0,1fr))", gap: 12 }}>
+            {kpisProveedor.map(k => (
+              <div key={k.label} style={{ ...card, borderTop: `3px solid ${k.color}`, padding: "14px 16px" }}>
+                <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--muted)", marginBottom: 8 }}>
+                  {k.label}
+                </div>
+                <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.03em", color: k.color, lineHeight: 1 }}>
+                  {k.value}
+                </div>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 5, lineHeight: 1.3 }}>{k.sub}</div>
               </div>
-              <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.03em", color: k.color, lineHeight: 1 }}>
-                {k.value}
-              </div>
-              <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 5, lineHeight: 1.3 }}>{k.sub}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
+
+        {/* KPI strip · Líder */}
+        {latest.lider && (
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 8 }}>
+              Rol Líder de Comunidad
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0,1fr))", gap: 12 }}>
+              {kpisLider.map(k => (
+                <div key={k.label} style={{ ...card, borderTop: `3px solid ${k.color}`, padding: "14px 16px" }}>
+                  <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--muted)", marginBottom: 8 }}>
+                    {k.label}
+                  </div>
+                  <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.03em", color: k.color, lineHeight: 1 }}>
+                    {k.value}
+                  </div>
+                  <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 5, lineHeight: 1.3 }}>{k.sub}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Alerta */}
         <div style={{ background: "linear-gradient(135deg, #F59E0B, #FBBF24)", borderRadius: 14, padding: "18px 20px", color: "#fff" }}>
-          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 6 }}>Beta reducida a 12 proveedores — creación cayó de 274 a 2 negociaciones</div>
+          <div style={{ fontSize: 14, fontWeight: 800, marginBottom: 6 }}>Creación del Proveedor en mínimo histórico — pero el Líder ya tiene datos medibles</div>
           <p style={{ fontSize: 13, lineHeight: 1.6, opacity: 0.95 }}>
-            {latest.dolores} Dos bugs abiertos: los <strong>funnels de creación no reflejan la conversión real</strong> (configuración UserPilot pendiente de ajustar) y el <strong>correo de pruebas uxdropi@gmail.com</strong> no ve el módulo desde el 16 de junio.
+            {latest.dolores} Bugs de semanas anteriores (funnels de creación no representativos, correo de pruebas uxdropi@gmail.com sin ver el módulo) <strong>sin confirmar si siguen abiertos</strong> esta semana.
           </p>
         </div>
 
-        {/* Evolución semanal */}
+        {/* Evolución semanal · Proveedor */}
         <div style={card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
             <div>
@@ -206,8 +327,8 @@ export default function NegociacionesPage() {
                   <th style={thStyle}>Fechas</th>
                   <th style={thR}>Creadas (ev.)</th>
                   <th style={thR}>Creadas (únicos)</th>
-                  <th style={thR}>Canceladas</th>
-                  <th style={thR}>Ingreso módulo</th>
+                  <th style={thR}>Canceladas (ev.)</th>
+                  <th style={thR}>Ingreso módulo (únicos)</th>
                   <th style={thR}>Notas</th>
                   <th style={thR}>Funnel creación</th>
                   <th style={thStyle}>Retención</th>
@@ -218,13 +339,13 @@ export default function NegociacionesPage() {
                   <tr key={w.id} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff" }}>
                     <td style={{ ...tdStyle, fontWeight: 800, color: ACCENT }}>{w.id}</td>
                     <td style={{ ...tdStyle, color: "var(--muted)", fontSize: 12 }}>{w.fechas}</td>
-                    <td style={{ ...tdR, fontWeight: 700 }}>{w.negCreadasEventos}</td>
-                    <td style={tdR}>{w.negCreadasUnicos}</td>
-                    <td style={{ ...tdR, color: "#EF4444" }}>{w.negCanceladas}</td>
-                    <td style={tdR}>{w.ingresoModulo}</td>
-                    <td style={tdR}>{w.notas}</td>
-                    <td style={{ ...tdR, fontWeight: 700, color: w.funnelRepresentativo ? "var(--fg)" : "#9CA3AF" }}>
-                      {w.funnelPct}{!w.funnelRepresentativo && " *"}
+                    <td style={{ ...tdR, fontWeight: 700 }}>{w.proveedor.creadasEventos}</td>
+                    <td style={tdR}>{w.proveedor.creadasUnicos}</td>
+                    <td style={{ ...tdR, color: "#EF4444" }}>{w.proveedor.canceladasEventos}</td>
+                    <td style={tdR}>{w.proveedor.ingresoUnicos}</td>
+                    <td style={tdR}>{w.proveedor.notas}</td>
+                    <td style={{ ...tdR, fontWeight: 700, color: w.proveedor.funnelRepresentativo ? "var(--fg)" : "#9CA3AF" }}>
+                      {w.proveedor.funnelPct}{!w.proveedor.funnelRepresentativo && " *"}
                     </td>
                     <td style={{ ...tdStyle, fontSize: 12 }}>{w.retencionTendencia}</td>
                   </tr>
@@ -236,6 +357,49 @@ export default function NegociacionesPage() {
             * Funnel no representativo esta semana — ver nota metodológica en Task Success más abajo.
           </div>
         </div>
+
+        {/* Evolución semanal · Líder */}
+        {liderWeeks.length > 0 && (
+          <div style={card}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+              <div>
+                <div style={sectionTitle}>Evolución semanal · Rol Líder de Comunidad</div>
+                <div style={sectionSub}>{liderWeeks.length} semana(s) con datos medibles. Fuente: UserPilot.</div>
+              </div>
+              <span style={tag(LIDER_COLOR, LIDER_BG)}>{liderWeeks.length} semana(s)</span>
+            </div>
+            <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 10 }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr>
+                    <th style={thStyle}>Semana</th>
+                    <th style={thStyle}>Fechas</th>
+                    <th style={thR}>Ingreso (únicos)</th>
+                    <th style={thR}>Aprobadas</th>
+                    <th style={thR}>Rechazadas</th>
+                    <th style={thR}>Canceladas</th>
+                    <th style={thR}>Funnel aprobación</th>
+                    <th style={thR}>Funnel rechazo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {liderWeeks.map((w, i) => (
+                    <tr key={w.id} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff" }}>
+                      <td style={{ ...tdStyle, fontWeight: 800, color: LIDER_COLOR }}>{w.id}</td>
+                      <td style={{ ...tdStyle, color: "var(--muted)", fontSize: 12 }}>{w.fechas}</td>
+                      <td style={tdR}>{w.lider!.ingresoUnicos}</td>
+                      <td style={{ ...tdR, color: "#10B981", fontWeight: 700 }}>{w.lider!.aprobadasEventos}</td>
+                      <td style={{ ...tdR, color: "#EF4444", fontWeight: 700 }}>{w.lider!.rechazadasEventos}</td>
+                      <td style={{ ...tdR, color: "#F59E0B" }}>{w.lider!.canceladasEventos}</td>
+                      <td style={tdR}>{w.lider!.funnelAprobadaPct} <span style={{ color: "var(--muted)", fontSize: 11 }}>({w.lider!.funnelAprobadaTiempo})</span></td>
+                      <td style={tdR}>{w.lider!.funnelRechazadaPct} <span style={{ color: "var(--muted)", fontSize: 11 }}>({w.lider!.funnelRechazadaTiempo})</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         {/* Conclusiones por dimensión — semana más reciente */}
         <div style={card}>
@@ -298,7 +462,8 @@ export default function NegociacionesPage() {
               {WEEKS.slice(0, -1).reverse().map(w => (
                 <details key={w.id} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: "10px 14px" }}>
                   <summary style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", cursor: "pointer" }}>
-                    {w.id} · {w.fechas} — {w.negCreadasEventos} negociaciones creadas ({w.negCreadasUnicos} únicos)
+                    {w.id} · {w.fechas} — {w.proveedor.creadasEventos} negociaciones creadas ({w.proveedor.creadasUnicos} únicos)
+                    {w.lider ? ` · Líder: ${w.lider.aprobadasEventos} aprobadas, ${w.lider.rechazadasEventos} rechazadas` : ""}
                   </summary>
                   <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8, fontSize: 12, color: "var(--muted)", lineHeight: 1.5 }}>
                     <div><strong style={{ color: "var(--fg)" }}>Lanzamiento:</strong> {w.lanzamiento}</div>
@@ -320,10 +485,10 @@ export default function NegociacionesPage() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             {[
-              { icon: "📊", titulo: "Bitácora fuente", desc: "Google Sheet \"Bitacora_Negociaciones_Semana1\" (bitácora de seguimiento — rol Proveedor). Cada fila nueva se agrega al array WEEKS en esta página." },
-              { icon: "🧪", titulo: "Alcance actual", desc: "Solo rol Proveedor. Falta bitácora equivalente para rol Líder de Comunidad — pendiente de crear cuando haya datos." },
+              { icon: "📊", titulo: "Bitácora fuente", desc: "Semana 1–2: Google Sheet \"Bitacora_Negociaciones_Semana1\" (rol Proveedor). Semana 3 en adelante: dashboard UserPilot \"Negociaciones\" (ambos roles). Cada semana nueva se agrega al array WEEKS en esta página." },
+              { icon: "🧑‍🤝‍🧑", titulo: "Alcance por rol", desc: "Proveedor: datos desde Semana 1. Líder de Comunidad: datos medibles recién desde Semana 3 — no hay histórico previo para ese rol." },
               { icon: "🗓️", titulo: "Cadencia", desc: "Semanal, cortes lunes a domingo. Fuente: UserPilot (eventos, funnels, retención, CSAT/SEQ)." },
-              { icon: "🐞", titulo: "Bugs abiertos a la fecha", desc: "Correo de pruebas uxdropi@gmail.com sin ver el módulo desde 16/06. Funnels de creación no representativos (config UserPilot pendiente)." },
+              { icon: "🐞", titulo: "Bugs a confirmar", desc: "Correo de pruebas uxdropi@gmail.com sin ver el módulo desde 16/06 y funnels de creación no representativos — reportados en Semana 1–2, sin confirmar si siguen abiertos en Semana 3." },
             ].map(f => (
               <div key={f.titulo} style={{ display: "flex", gap: 10 }}>
                 <span style={{ fontSize: 18, flexShrink: 0 }}>{f.icon}</span>
