@@ -45,6 +45,15 @@ const tools = [
 
 const projects = [
   {
+    key: "informe-1-1-junio",
+    name: "Informe 1:1 · Junio 2026",
+    description: "Auto-observación cuantitativa del mes: cruce de calendario y Jira, fricciones, mapa de iniciativas y simulador de rituales para el 1:1 con Laura.",
+    url: "/informes/1-1-junio-2026",
+    color: "#7C3AED",
+    tag: "Personal · 1:1",
+    icon: "🗞️",
+  },
+  {
     key: "weekly",
     name: "Weekly · Supplier Success",
     description: "Update ejecutivo semanal: oportunidades aprobadas, hipótesis numéricas y accionables de Comercial clasificados por ruta.",
