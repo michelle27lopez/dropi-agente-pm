@@ -113,14 +113,21 @@ export default function HubPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const router = useRouter();
 
+  const hasSupabase = !!(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+
   useEffect(() => {
+    if (!hasSupabase) return;
     const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => {
       setUserEmail(data.user?.email ?? null);
     });
-  }, []);
+  }, [hasSupabase]);
 
   async function handleLogout() {
+    if (!hasSupabase) return;
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/login");
