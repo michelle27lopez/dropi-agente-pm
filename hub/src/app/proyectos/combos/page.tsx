@@ -34,6 +34,7 @@ const CREAR_STEPS: Step[] = [
     img: "/tango/step01_empty_activos.png",
     w: 1280, h: 883,
     desc: "En el menú lateral, ve a Productos > Mis combos. Si todavía no tienes combos creados, verás la pantalla vacía con el banner de bienvenida.",
+    highlight: { x: 1, y: 16, w: 20, h: 14 },
     figmaUrl: `${F}6405-20327`,
   },
   {
