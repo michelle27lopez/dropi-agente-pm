@@ -38,11 +38,26 @@ export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const isPublicPath =
     pathname.startsWith("/login") ||
-    pathname.startsWith("/auth/callback");
+    pathname.startsWith("/auth/callback") ||
+    pathname.startsWith("/pulso-demo") ||
+    pathname.startsWith("/api/pulso-demo") ||
+    pathname.startsWith("/proyectos/gali-demo");
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
+  // Usuarios con role "contributor" solo pueden ver /iniciativas.
+  // Cualquier otra ruta del Hub los redirige ahí.
+  const role = user?.user_metadata?.role;
+  const isIniciativasPath =
+    pathname.startsWith("/iniciativas") || pathname.startsWith("/api/iniciativas");
+
+  if (role === "contributor" && !isIniciativasPath && !isPublicPath) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/iniciativas";
     return NextResponse.redirect(url);
   }
 

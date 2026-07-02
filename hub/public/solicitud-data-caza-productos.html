@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Solicitud de Extracción de Datos · Módulo Caza Productos (CAZ-001)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #1f4e79;
+      border-bottom: 2px solid #1f4e79;
+      padding-bottom: 10px;
+      font-size: 20pt;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      color: #2e75b6;
+      font-size: 11pt;
+      margin-bottom: 24px;
+      font-weight: bold;
+    }
+    h2 {
+      color: #2e75b6;
+      border-bottom: 1px solid #d9d9d9;
+      padding-bottom: 5px;
+      margin-top: 30px;
+      font-size: 14pt;
+    }
+    p, li {
+      font-size: 10.5pt;
+      margin: 8px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+    th, td {
+      border: 1px solid #bfbfbf;
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      color: #000;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .intro-box {
+      background-color: #f2f7fa;
+      border: 1px solid #c9dcec;
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin: 18px 0 28px 0;
+      font-size: 10.5pt;
+      color: #1a1a1a;
+    }
+    .code-box {
+      background-color: #f5f5f5;
+      border: 1px solid #e1e1e1;
+      border-radius: 4px;
+      padding: 14px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9.5pt;
+      white-space: pre-wrap;
+      color: #000;
+      margin: 14px 0;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      font-weight: bold;
+      background-color: #e1f5fe;
+      color: #0288d1;
+    }
+    ul {
+      margin: 8px 0 14px 20px;
+    }
+    .highlight-blue {
+      color: #1f4e79;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📋 Solicitud de Extracción de Datos / Datamart</h1>
+<div class="subtitle">CAZ-001 · Módulo Caza Productos · Célula Supplier Success · 23 de junio de 2026</div>
+
+<div class="intro-box">
+  <strong>Objetivo de la Solicitud:</strong> Extraer el listado de solicitudes publicadas en el módulo Caza Productos, incluyendo el conteo de ofertas y negociaciones asociadas a cada una. Esta información servirá como insumo directo para que el equipo Comercial identifique qué solicitudes no tienen respuesta de proveedor, los contacte proactivamente con el listado de demanda real y acelere negociaciones. El objetivo final es mover el indicador de <strong>negociaciones realizadas en Caza Productos</strong>.
+</div>
+
+<table>
+  <tr>
+    <th style="width: 30%;">Proyecto Asociado</th>
+    <td>Caza Productos · CAZ-001</td>
+  </tr>
+  <tr>
+    <th>Solicitante</th>
+    <td>Jaime Guevara · Delivery Manager · Supplier Success</td>
+  </tr>
+  <tr>
+    <th>Destinatario</th>
+    <td>Miguel · Equipo de Data & BI</td>
+  </tr>
+  <tr>
+    <th>Fecha de Solicitud</th>
+    <td>23 de junio de 2026</td>
+  </tr>
+  <tr>
+    <th>Frecuencia Requerida</th>
+    <td>Semanal (cada lunes) o puntual cuando se solicite</td>
+  </tr>
+  <tr>
+    <th>Ventana de datos</th>
+    <td>Últimos 60 días · solicitudes activas y finalizadas</td>
+  </tr>
+</table>
+
+<hr style="border: none; border-top: 2px solid #1f4e79; margin: 30px 0 20px 0;">
+
+<h2>1. Especificación del Dataset (Estructura de Columnas)</h2>
+<p>Necesitamos que la extracción retorne un registro por cada solicitud publicada en Caza Productos, con los siguientes campos:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 22%;">Campo</th>
+      <th style="width: 22%;">Columna Sugerida</th>
+      <th style="width: 35%;">Descripción de Negocio</th>
+      <th style="width: 21%;">Ejemplo / Valores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="highlight-blue">ID Solicitud</td>
+      <td><code>solicitud_id</code></td>
+      <td>Identificador único de la publicación de Caza Productos creada por el dropshipper.</td>
+      <td><code>CAZ-0041</code> / UUID</td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">ID Dropshipper</td>
+      <td><code>dropshipper_id</code></td>
+      <td>ID del dropshipper (dropi) que publicó la solicitud.</td>
+      <td><code>83421</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">País</td>
+      <td><code>country</code></td>
+      <td>País de operación del dropshipper.</td>
+      <td><code>CO, MX, EC</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Categoría</td>
+      <td><code>categoria</code></td>
+      <td>Categoría del producto buscado tal como está registrada en el módulo.</td>
+      <td><code>Bisutería, Calzado, Maquillaje</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Descripción del producto</td>
+      <td><code>descripcion_producto</code></td>
+      <td>Texto libre que escribió el dropshipper describiendo el producto que necesita.</td>
+      <td><code>Aretes dorados medianos tipo argolla</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Precio deseado</td>
+      <td><code>precio_deseado</code></td>
+      <td>Precio máximo que el dropshipper está dispuesto a pagar al proveedor.</td>
+      <td><code>18000</code> (COP)</td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Estado</td>
+      <td><code>estado</code></td>
+      <td>Estado actual de la publicación en la plataforma.</td>
+      <td><span class="tag">ACTIVE</span> <span class="tag">EXPIRED</span> <span class="tag">CLOSED</span></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Fecha publicación</td>
+      <td><code>fecha_publicacion</code></td>
+      <td>Fecha y hora en que el dropshipper publicó la solicitud.</td>
+      <td><code>2026-06-15 10:30:00</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Fecha vencimiento</td>
+      <td><code>fecha_vencimiento</code></td>
+      <td>Fecha en que expira la solicitud y deja de recibir ofertas.</td>
+      <td><code>2026-06-30 23:59:59</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue"># Ofertas recibidas</td>
+      <td><code>num_ofertas</code></td>
+      <td>Conteo de ofertas enviadas por proveedores a esta solicitud. <strong>0 = nadie ha respondido.</strong></td>
+      <td><code>0, 1, 3</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue"># Negociaciones iniciadas</td>
+      <td><code>num_negociaciones</code></td>
+      <td>Conteo de negociaciones formales abiertas entre el dropshipper y algún proveedor a partir de esta solicitud.</td>
+      <td><code>0, 1, 2</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr style="border: none; border-top: 2px solid #1f4e79; margin: 30px 0 20px 0;">
+
+<h2>2. Entrega y Accesibilidad</h2>
+<ul>
+  <li><strong>Opción preferida:</strong> Exportación como archivo <strong>CSV</strong> o conexión directa a <strong>Power BI</strong> (vista o tabla en la BD réplica accesible desde el conector).</li>
+  <li><strong>Opción alternativa:</strong> Exportación manual puntual como CSV o Excel cuando se solicite.</li>
+  <li><strong>Frecuencia:</strong> Semanal (lunes) para alimentar el seguimiento comercial de la semana.</li>
+  <li><strong>Ventana de datos:</strong> Últimos 60 días desde la fecha de extracción.</li>
+</ul>
+
+<hr style="border: none; border-top: 2px solid #1f4e79; margin: 30px 0 20px 0;">
+
+<h2>3. Query SQL Lógico de Referencia</h2>
+<p>Query orientativo para guiar la extracción. Los nombres reales de tablas y columnas en Chronos pueden variar — Miguel los ajusta según el esquema interno:</p>
+
+<div class="code-box">SELECT
+    cp.id                        AS solicitud_id,
+    cp.dropshipper_id            AS dropshipper_id,
+    cp.country                   AS country,
+    cp.category                  AS categoria,
+    cp.description               AS descripcion_producto,
+    cp.desired_price             AS precio_deseado,
+    cp.status                    AS estado,
+    cp.created_at                AS fecha_publicacion,
+    cp.expires_at                AS fecha_vencimiento,
+    COUNT(DISTINCT o.id)         AS num_ofertas,
+    COUNT(DISTINCT n.id)         AS num_negociaciones
+FROM dropi_prod.hunt_requests cp
+LEFT JOIN dropi_prod.hunt_offers       o ON o.request_id = cp.id
+LEFT JOIN dropi_prod.hunt_negotiations n ON n.request_id = cp.id
+WHERE cp.created_at >= NOW() - INTERVAL '60 days'
+GROUP BY
+    cp.id, cp.dropshipper_id, cp.country, cp.category,
+    cp.description, cp.desired_price, cp.status,
+    cp.created_at, cp.expires_at
+ORDER BY cp.status ASC, cp.created_at DESC;
+</div>
+
+</body>
+</html>

@@ -4,42 +4,24 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
 
-const tools = [
+const updates = [
   {
-    key: "metrics",
-    name: "Metrics Lab",
-    description: "Dashboard CRM en vivo. Pipelines de verificación, ascensos y embudo del proveedor.",
-    url: "/metrics",
+    key: "weekly-pm",
+    name: "Weekly · PM",
+    description: "Update ejecutivo semanal: oportunidades aprobadas, hipótesis numéricas y accionables clasificados por ruta.",
+    url: "/weekly",
     color: "#F77F00",
-    tag: "CRM · Analytics",
-    icon: "📊",
+    tag: "Weekly · Jun 2026",
+    icon: "📋",
   },
   {
-    key: "supplier",
-    name: "Supplier Lab",
-    description: "Clon de app.dropi.co para proveedores. Laboratorio de experimentos de UX.",
-    url: process.env.NEXT_PUBLIC_SUPPLIER_URL ?? "#",
-    color: "#10B981",
-    tag: "UX · Experimentos",
-    icon: "🏭",
-  },
-  {
-    key: "dropshipper",
-    name: "Dropshipper Lab",
-    description: "Clon de app.dropi.co para dropshippers. Canvas de flujos y variantes.",
-    url: process.env.NEXT_PUBLIC_DROPSHIPPER_URL ?? "#",
+    key: "weekly-celula",
+    name: "Weekly · Célula",
+    description: "Updates semanales de la célula Supplier Success para el jefe. Registro histórico por semana.",
+    url: "/updates-celula",
     color: "#6366F1",
-    tag: "UX · Flujos",
-    icon: "🛒",
-  },
-  {
-    key: "research",
-    name: "Research Brain",
-    description: "Base de conocimiento de product research. Estudios, hallazgos y perfiles.",
-    url: process.env.NEXT_PUBLIC_RESEARCH_URL ?? "#",
-    color: "#EC4899",
-    tag: "Research · Knowledge",
-    icon: "🧠",
+    tag: "Célula · Supplier Success",
+    icon: "🏠",
   },
 ];
 
@@ -52,15 +34,6 @@ const projects = [
     color: "#7C3AED",
     tag: "Personal · 1:1",
     icon: "🗞️",
-  },
-  {
-    key: "weekly",
-    name: "Weekly · Supplier Success",
-    description: "Update ejecutivo semanal: oportunidades aprobadas, hipótesis numéricas y accionables de Comercial clasificados por ruta.",
-    url: "/weekly",
-    color: "#F77F00",
-    tag: "Weekly · Jun 2026",
-    icon: "📋",
   },
   {
     key: "dinamicas-catalogo",
@@ -115,6 +88,36 @@ const projects = [
     color: "#F77F00",
     tag: "PROD-545 · Hand-off",
     icon: "📦",
+  },
+  {
+    key: "descuentos-catalogo",
+    name: "Descuentos en Catálogo",
+    description: "Precio antes / precio ahora visible para el dropshipper en toda campaña activa. Trigger: Cyber Days agosto 2026. Ecosistema completo: Dropi, Shopify, WooCommerce, Tienda Nube, CAS, ECOM Scanner.",
+    url: "/proyectos/descuentos",
+    color: "#F59E0B",
+    tag: "DESC-001 · Campañas",
+    icon: "🏷️",
+  },
+];
+
+const poc = [
+  {
+    key: "pulso-demo",
+    name: "Dropi Pulso · Demo",
+    description: "Prototipo interactivo del motor de matching de catálogo. Notificaciones reales por WhatsApp y email, registro por QR, dashboard en vivo y kit de campaña.",
+    url: "/proyectos/pulso-demo",
+    color: "#F77F00",
+    tag: "Demo · Stakeholders",
+    icon: "⚡",
+  },
+  {
+    key: "gali-demo",
+    name: "Gali - Demo",
+    description: "Propuesta de valor y copiloto para selección de productos ganadores (v5). Chat interactivo con mentores de comunidad, grilla con 1M de productos y generador de creativos.",
+    url: "/proyectos/gali-demo",
+    color: "#FF6102",
+    tag: "Demo · Caza Productos v5",
+    icon: "🦊",
   },
 ];
 
@@ -173,44 +176,76 @@ export default function HubPage() {
           </div>
         </div>
 
-        {userEmail && (
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: 13, color: "var(--muted)" }}>{userEmail}</span>
-            <button
-              onClick={handleLogout}
-              style={{
-                fontSize: 12, fontWeight: 600,
-                color: "var(--muted)",
-                background: "var(--bg)",
-                border: "1px solid var(--border)",
-                borderRadius: 8,
-                padding: "6px 12px",
-                cursor: "pointer",
-              }}
-            >
-              Salir
-            </button>
-          </div>
-        )}
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <a
+            href="/iniciativas"
+            style={{
+              fontSize: 12, fontWeight: 700,
+              color: "#6366F1",
+              background: "#EEF2FF",
+              border: "1px solid #C7D2FE",
+              borderRadius: 8,
+              padding: "6px 14px",
+              textDecoration: "none",
+              display: "flex", alignItems: "center", gap: 6,
+            }}
+          >
+            📥 Iniciativas
+          </a>
+          <a
+            href="/data-solicitada"
+            style={{
+              fontSize: 12, fontWeight: 700,
+              color: "#6366F1",
+              background: "#EEF2FF",
+              border: "1px solid #C7D2FE",
+              borderRadius: 8,
+              padding: "6px 14px",
+              textDecoration: "none",
+              display: "flex", alignItems: "center", gap: 6,
+            }}
+          >
+            📊 Data solicitada
+          </a>
+          {userEmail && (
+            <>
+              <span style={{ fontSize: 13, color: "var(--muted)" }}>{userEmail}</span>
+              <button
+                onClick={handleLogout}
+                style={{
+                  fontSize: 12, fontWeight: 600,
+                  color: "var(--muted)",
+                  background: "var(--bg)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 8,
+                  padding: "6px 12px",
+                  cursor: "pointer",
+                }}
+              >
+                Salir
+              </button>
+            </>
+          )}
+        </div>
       </header>
 
       {/* Grid */}
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
-        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 32, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
-          Proyectos activos
-        </p>
 
+        {/* Updates section */}
+        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
+          Updates
+        </p>
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
           gap: 20,
+          marginBottom: 56,
         }}>
-          {tools.map((tool) => (
+          {updates.map((u) => (
             <a
-              key={tool.key}
-              href={tool.url}
-              target={tool.url.startsWith("/") ? undefined : "_blank"}
-              rel={tool.url.startsWith("/") ? undefined : "noopener noreferrer"}
+              key={u.key}
+              href={u.url}
               style={{
                 background: "var(--card)",
                 border: "1px solid var(--border)",
@@ -219,64 +254,51 @@ export default function HubPage() {
                 textDecoration: "none",
                 display: "block",
                 transition: "box-shadow 0.15s, transform 0.15s",
-                cursor: tool.url === "#" ? "default" : "pointer",
               }}
               onMouseEnter={(e) => {
-                if (tool.url !== "#") {
-                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)";
-                  (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
-                }
+                (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)";
+                (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
               }}
               onMouseLeave={(e) => {
                 (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
                 (e.currentTarget as HTMLAnchorElement).style.transform = "none";
               }}
             >
-              {/* Icon + tag row */}
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
                 <div style={{
                   width: 44, height: 44, borderRadius: 12,
-                  background: `${tool.color}15`,
+                  background: `${u.color}15`,
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: 22,
                 }}>
-                  {tool.icon}
+                  {u.icon}
                 </div>
                 <span style={{
                   fontSize: 11, fontWeight: 600,
-                  color: tool.url === "#" ? "var(--muted)" : tool.color,
-                  background: tool.url === "#" ? "var(--bg)" : `${tool.color}12`,
+                  color: u.color,
+                  background: `${u.color}12`,
                   padding: "3px 8px", borderRadius: 20,
                   marginTop: 4,
                 }}>
-                  {tool.url === "#" ? "Próximamente" : tool.tag}
+                  {u.tag}
                 </span>
               </div>
-
-              {/* Name + description */}
               <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
-                {tool.name}
+                {u.name}
               </h2>
               <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.5 }}>
-                {tool.description}
+                {u.description}
               </p>
-
-              {/* CTA */}
-              {tool.url !== "#" && (
-                <div style={{
-                  marginTop: 20, fontSize: 12, fontWeight: 600,
-                  color: tool.color, display: "flex", alignItems: "center", gap: 4,
-                }}>
-                  Abrir →
-                </div>
-              )}
+              <div style={{ marginTop: 20, fontSize: 12, fontWeight: 600, color: u.color }}>
+                Ver →
+              </div>
             </a>
           ))}
         </div>
 
         {/* Proyectos section */}
-        <div style={{ marginTop: 56 }}>
-          <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 32, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
+        <div>
+          <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
             Proyectos
           </p>
           <div style={{
@@ -332,6 +354,71 @@ export default function HubPage() {
                   {project.description}
                 </p>
                 <div style={{ marginTop: 20, fontSize: 12, fontWeight: 600, color: project.color, display: "flex", alignItems: "center", gap: 4 }}>
+                  Ver proyecto →
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Pruebas de concepto section */}
+        <div style={{ marginTop: 56 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
+            Pruebas de concepto
+          </p>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: 20,
+          }}>
+            {poc.map((project) => (
+              <a
+                key={project.key}
+                href={project.url}
+                style={{
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 14,
+                  padding: "24px",
+                  textDecoration: "none",
+                  display: "block",
+                  transition: "box-shadow 0.15s, transform 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = "0 4px 20px rgba(0,0,0,0.08)";
+                  (e.currentTarget as HTMLAnchorElement).style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLAnchorElement).style.boxShadow = "none";
+                  (e.currentTarget as HTMLAnchorElement).style.transform = "none";
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 12,
+                    background: `${project.color}15`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 22,
+                  }}>
+                    {project.icon}
+                  </div>
+                  <span style={{
+                    fontSize: 11, fontWeight: 600,
+                    color: project.color,
+                    background: `${project.color}12`,
+                    padding: "3px 8px", borderRadius: 20,
+                    marginTop: 4,
+                  }}>
+                    {project.tag}
+                  </span>
+                </div>
+                <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
+                  {project.name}
+                </h2>
+                <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.5 }}>
+                  {project.description}
+                </p>
+                <div style={{ marginTop: 20, fontSize: 12, fontWeight: 600, color: project.color }}>
                   Ver proyecto →
                 </div>
               </a>

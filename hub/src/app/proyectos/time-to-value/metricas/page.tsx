@@ -556,20 +556,23 @@ function MonthTab({
   monthNum, data, onUpdate,
 }: {
   monthNum: number;
-  data: TtvData;
+  data: any;
   onUpdate: (t: string, id: string, u: Record<string, unknown>) => void;
 }) {
   const label = `Mes ${monthNum}`;
-  const md = data.monthly.find(m => m.month_number === monthNum);
-  const segs = data.monthlySegments.filter(s => s.month_number === monthNum);
-  const tm = data.timeMetrics.find(t => t.scope === `mes_${monthNum}`);
-  const weekRows = (data.weeklyData ?? []).filter(w => Number(w.month_number) === monthNum);
+  const md = data.monthly.find((m: any) => m.month_number === monthNum);
+  const segs = data.monthlySegments.filter((s: any) => s.month_number === monthNum);
+  const tm = data.timeMetrics.find((t: any) => t.scope === `mes_${monthNum}`);
+  const weekRows = (data.weeklyData ?? []).filter((w: any) => Number(w.month_number) === monthNum);
+
+  // Detail lists tab state
+  const [detailTab, setDetailTab] = useState<"brecha" | "manual" | "matched">("brecha");
 
   // Acumulado hasta este mes
   const acum = data.monthly
-    .filter(m => m.month_number <= monthNum)
+    .filter((m: any) => m.month_number <= monthNum)
     .reduce(
-      (acc, m) => ({
+      (acc: any, m: any) => ({
         c_meta: acc.c_meta + m.contactos_meta,
         a_meta: acc.a_meta + m.auditados_meta,
         l_meta: acc.l_meta + m.listos_meta,
@@ -585,8 +588,295 @@ function MonthTab({
 
   if (!md) return <p style={{ color: "var(--muted)", fontSize: 14 }}>Datos no encontrados para {label}.</p>;
 
+  // Calculations for live cut (only for Month 1)
+  const hasLiveCruce = monthNum === 1 && data.liveCruce;
+  const live = data.liveCruce;
+
+  // Stages distribution for the table
+  const allStages = [
+    'Nuevo registro',
+    'Potencial identificado',
+    'Contacto iniciado',
+    'Agendado 1 a 1',
+    'agendado sesiones grupales',
+    'Asistio reunion',
+    'no asistio',
+    'en activacion',
+    'auditoria confirmada',
+    'Auditoría confirmada',
+    'Auditoría Rechazada',
+    'Aprobado con pendientes',
+    'listo para vender',
+    'Primera Orden generada',
+    'Enfrio/no apto'
+  ];
+
+  // Helper to normalize and count stages
+  const countStages = (list: any[]) => {
+    const dist: Record<string, number> = {};
+    list.forEach(item => {
+      const stage = (item.stage_name || '').toLowerCase().trim();
+      dist[stage] = (dist[stage] || 0) + 1;
+    });
+    return dist;
+  };
+
+  const autoStageDist = hasLiveCruce ? countStages(live.matched) : {};
+  const manualStageDist = hasLiveCruce ? countStages(live.manual) : {};
+
+  // Get active stages (count > 0 in either)
+  const activeStages = allStages.filter(stage => {
+    const sNorm = stage.toLowerCase().trim();
+    return (autoStageDist[sNorm] || 0) > 0 || (manualStageDist[sNorm] || 0) > 0;
+  }).sort((a, b) => {
+    const aNorm = a.toLowerCase().trim();
+    const bNorm = b.toLowerCase().trim();
+    const aTot = (autoStageDist[aNorm] || 0) + (manualStageDist[aNorm] || 0);
+    const bTot = (autoStageDist[bNorm] || 0) + (manualStageDist[bNorm] || 0);
+    return bTot - aTot;
+  });
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      {/* SECCIÓN LIVE CRUCE - SÓLO PARA MES 1 */}
+      {hasLiveCruce && (
+        <div style={{ ...card, border: "2px solid rgba(247,127,0,0.18)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
+            <div>
+              <div style={{ ...sectionTitle, display: "flex", alignItems: "center", gap: 8 }}>
+                <span>⚡ Corte de Activación Semanal (En Vivo)</span>
+                <span style={tag("#F77F00", "#FFF7EF")}>CRM Activo</span>
+              </div>
+              <div style={sectionSub}>Cruce automático de registros Userpilot vs CRM GHL (Desde 30-Jun 2:00 PM COT).</div>
+            </div>
+            <span style={{ fontSize: 11, color: "var(--muted)" }}>Actualizado: Hace un momento</span>
+          </div>
+
+          {/* Cards resumen */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0,1fr))", gap: 12, marginBottom: 20 }}>
+            <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 4 }}>Registros Base (Userpilot)</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>{live.totalUserpilot}</div>
+              <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>Proveedores registrados</div>
+            </div>
+            <div style={{ background: "#ECFDF5", border: "1px solid rgba(16,185,129,0.18)", borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#047857", textTransform: "uppercase", marginBottom: 4 }}>Ingresos Automáticos</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#10B981" }}>
+                {live.matched.length}
+                <span style={{ fontSize: 13, fontWeight: 600, color: "#059669", marginLeft: 4 }}>
+                  ({Math.round(live.matched.length / (live.totalUserpilot || 1) * 100)}%)
+                </span>
+              </div>
+              <div style={{ fontSize: 11, color: "#047857", marginTop: 2 }}>Registraron primer login</div>
+            </div>
+            <div style={{ background: live.brecha.length > 0 ? "#FEF2F2" : "#F8FAFC", border: live.brecha.length > 0 ? "1px solid rgba(239,68,68,0.2)" : "1px solid var(--border)", borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: live.brecha.length > 0 ? "#B91C1C" : "var(--muted)", textTransform: "uppercase", marginBottom: 4 }}>Brecha (Fuga Inicial)</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: live.brecha.length > 0 ? "#EF4444" : "var(--fg)" }}>
+                {live.brecha.length}
+                <span style={{ fontSize: 13, fontWeight: 600, color: live.brecha.length > 0 ? "#DC2626" : "var(--muted)", marginLeft: 4 }}>
+                  ({Math.round(live.brecha.length / (live.totalUserpilot || 1) * 100)}%)
+                </span>
+              </div>
+              <div style={{ fontSize: 11, color: live.brecha.length > 0 ? "#B91C1C" : "var(--muted)", marginTop: 2 }}>Registrados sin 1er login</div>
+            </div>
+            <div style={{ background: "#EFF6FF", border: "1px solid rgba(59,130,246,0.18)", borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#1D4ED8", textTransform: "uppercase", marginBottom: 4 }}>Ingresos Manuales</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#3B82F6" }}>
+                {live.manual.length}
+                <span style={{ fontSize: 13, fontWeight: 600, color: "#2563EB", marginLeft: 4 }}>
+                  ({Math.round(live.manual.length / (live.totalCrm || 1) * 100)}%)
+                </span>
+              </div>
+              <div style={{ fontSize: 11, color: "#1D4ED8", marginTop: 2 }}>Fichas CRM sin Userpilot</div>
+            </div>
+            <div style={{ background: "#F5F3FF", border: "1px solid rgba(139,92,246,0.18)", borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#6D28D9", textTransform: "uppercase", marginBottom: 4 }}>Total Oportunidades CRM</div>
+              <div style={{ fontSize: 24, fontWeight: 800, color: "#8B5CF6" }}>{live.totalCrm}</div>
+              <div style={{ fontSize: 11, color: "#6D28D9", marginTop: 2 }}>{live.matched.length} auto + {live.manual.length} manual</div>
+            </div>
+          </div>
+
+          {/* Alerta de Brecha Urgente */}
+          {live.brecha.length > 0 && (
+            <div style={{ background: "#FFFBEB", border: "1px solid #F59E0B", borderRadius: 10, padding: "12px 16px", marginBottom: 20, display: "flex", gap: 10, alignItems: "center" }}>
+              <span style={{ fontSize: 20 }}>⚠️</span>
+              <div style={{ fontSize: 12, color: "#B45309", lineHeight: 1.4 }}>
+                <strong>Acción comercial urgente:</strong> Hay <strong>{live.brecha.length}</strong> proveedor(es) registrado(s) en la cohorte que no han iniciado sesión y no están en el CRM. Contáctalos directamente por WhatsApp/teléfono para guiarlos al primer login.
+              </div>
+            </div>
+          )}
+
+          {/* Tabulación Auto vs Manual */}
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 10 }}>Distribución de Etapas por Origen en el CRM (N={live.totalCrm})</div>
+            <div style={{ width: "100%", overflowX: "auto", border: "1px solid var(--border)", borderRadius: 8, background: "#fff" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                <thead>
+                  <tr>
+                    <th style={thStyle}>Etapa / Fase CRM</th>
+                    <th style={thR}>Automatizados (Userpilot)</th>
+                    <th style={thR}>Manuales (Ventas)</th>
+                    <th style={thR}>Total Fichas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {activeStages.map(stage => {
+                    const sNorm = stage.toLowerCase().trim();
+                    const auto = autoStageDist[sNorm] || 0;
+                    const manual = manualStageDist[sNorm] || 0;
+                    const total = auto + manual;
+                    return (
+                      <tr key={stage}>
+                        <td style={{ ...tdStyle, fontWeight: 600 }}>{stage}</td>
+                        <td style={tdR}>{auto}</td>
+                        <td style={tdR}>{manual}</td>
+                        <td style={{ ...tdR, fontWeight: 700, color: "var(--fg)" }}>{total}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Detalle de Listados */}
+          <div>
+            <div style={{ display: "flex", gap: 4, borderBottom: "1px solid var(--border)", marginBottom: 12 }}>
+              {[
+                { key: "brecha" as const, label: `Brecha (${live.brecha.length})`, color: "#EF4444" },
+                { key: "manual" as const, label: `Manuales (${live.manual.length})`, color: "#3B82F6" },
+                { key: "matched" as const, label: `Automatizados (${live.matched.length})`, color: "#10B981" }
+              ].map(t => (
+                <button
+                  key={t.key}
+                  onClick={() => setDetailTab(t.key)}
+                  style={{
+                    border: "none", background: "none", cursor: "pointer",
+                    padding: "8px 12px", fontSize: 12, fontWeight: 700,
+                    color: detailTab === t.key ? t.color : "var(--muted)",
+                    borderBottom: detailTab === t.key ? `2px solid ${t.color}` : "2px solid transparent",
+                    transition: "all 0.15s"
+                  }}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Contenido de listados */}
+            <div style={{ width: "100%", overflowX: "auto", border: "1px solid var(--border)", borderRadius: 8, background: "#fff", maxHeight: 300, overflowY: "auto" }}>
+              {detailTab === "brecha" && (
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr>
+                      <th style={thStyle}>#</th>
+                      <th style={thStyle}>Nombre</th>
+                      <th style={thStyle}>Email</th>
+                      <th style={thStyle}>Teléfono</th>
+                      <th style={thStyle}>País</th>
+                      <th style={thStyle}>Registro</th>
+                      <th style={thStyle}>Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {live.brecha.length === 0 ? (
+                      <tr><td colSpan={7} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)" }}>No hay proveedores en la brecha (100% de conversión).</td></tr>
+                    ) : (
+                      live.brecha.map((r: any, idx: number) => (
+                        <tr key={r.user_id}>
+                          <td style={tdStyle}>{idx + 1}</td>
+                          <td style={{ ...tdStyle, fontWeight: 600 }}>{r.name}</td>
+                          <td style={tdStyle}>{r.email}</td>
+                          <td style={tdStyle}>{r.phone ? `+57 ${r.phone}` : 'Sin Teléfono'}</td>
+                          <td style={tdStyle}>{r.country}</td>
+                          <td style={tdStyle}>{r.signed_up ? r.signed_up.replace('T', ' ').substring(0, 16) : '—'}</td>
+                          <td style={tdStyle}>
+                            {r.phone ? (
+                              <a
+                                href={`https://wa.me/57${r.phone}?text=Hola%20${encodeURIComponent(r.name || '')},%20vimos%20tu%20registro%20en%20Dropi.%20¿Pudiste%20iniciar%20sesión?`}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{ background: "#25D366", color: "#fff", textDecoration: "none", padding: "4px 8px", borderRadius: 6, fontSize: 11, fontWeight: 700 }}
+                              >
+                                WhatsApp 💬
+                              </a>
+                            ) : 'N/A'}
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              )}
+
+              {detailTab === "manual" && (
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr>
+                      <th style={thStyle}>#</th>
+                      <th style={thStyle}>Nombre Ficha</th>
+                      <th style={thStyle}>Email</th>
+                      <th style={thStyle}>Teléfono</th>
+                      <th style={thStyle}>Etapa CRM</th>
+                      <th style={thStyle}>Creado en GHL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {live.manual.length === 0 ? (
+                      <tr><td colSpan={6} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)" }}>No hay ingresos manuales.</td></tr>
+                    ) : (
+                      live.manual.map((r: any, idx: number) => (
+                        <tr key={idx}>
+                          <td style={tdStyle}>{idx + 1}</td>
+                          <td style={{ ...tdStyle, fontWeight: 600 }}>{r.opportunity_name}</td>
+                          <td style={tdStyle}>{r.email}</td>
+                          <td style={tdStyle}>{r.phone || 'N/A'}</td>
+                          <td style={{ ...tdStyle, fontWeight: 600, color: "var(--dropi)" }}>{r.stage_name}</td>
+                          <td style={tdStyle}>{r.date_created ? r.date_created.replace('T', ' ').substring(0, 16) : '—'}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              )}
+
+              {detailTab === "matched" && (
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr>
+                      <th style={thStyle}>#</th>
+                      <th style={thStyle}>Nombre</th>
+                      <th style={thStyle}>Email</th>
+                      <th style={thStyle}>Teléfono</th>
+                      <th style={thStyle}>Etapa CRM</th>
+                      <th style={thStyle}>Registro</th>
+                      <th style={thStyle}>Login / GHL</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {live.matched.length === 0 ? (
+                      <tr><td colSpan={7} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)" }}>No hay registros automatizados.</td></tr>
+                    ) : (
+                      live.matched.map((r: any, idx: number) => (
+                        <tr key={r.user_id}>
+                          <td style={tdStyle}>{idx + 1}</td>
+                          <td style={{ ...tdStyle, fontWeight: 600 }}>{r.name}</td>
+                          <td style={tdStyle}>{r.email}</td>
+                          <td style={tdStyle}>{r.phone_up || r.phone_crm || 'N/A'}</td>
+                          <td style={{ ...tdStyle, fontWeight: 600, color: "#10B981" }}>{r.stage_name}</td>
+                          <td style={tdStyle}>{r.signed_up ? r.signed_up.replace('T', ' ').substring(0, 16) : '—'}</td>
+                          <td style={tdStyle}>{r.date_created ? r.date_created.replace('T', ' ').substring(0, 16) : '—'}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Resumen + Acumulado */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
         {/* Resumen mensual */}

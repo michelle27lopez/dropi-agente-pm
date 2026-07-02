@@ -11,20 +11,25 @@
 | ID | Título | Fecha | Segmento | Iniciativa relacionada | Confianza | Tags clave |
 |---|---|---|---|---|---|---|
 | [RB-001](RB-001-dropshippers-creativos-ventas.md) | Comportamiento de Dropshippers en Creación de Creativos y Ventas | 2025-10-16 | Dropshippers (novato → avanzado) | Herramientas para Vendors, Catálogo, Supplier Success | alto | creativos, ángulos-venta, catálogo, proveedores, facebook-ads, tiktok-ads, IA-creativos |
+| [RB-002](RB-002-journey-dropshipper-registro-pauta.md) | Journey del Dropshipper: Desde Registro hasta Pauta Efectiva | 2026-06-23 | Dropshippers (novato → avanzado) | Onboarding, Catálogo, Integraciones, Pauta | alto | journey, registro, integraciones, facebook-ads, tiktok-ads, landing-page, contraentrega, postventa |
+| [RB-003](RB-003-matching-rules-dropshipper-catalogo.md) | Reglas de Negocio: Selección de Proveedores y Fórmulas de Seguridad de Stock | 2026-06-23 | Negocio / Catálogo | Catálogo, Proveedores, Pauta, Riesgo | alto | catálogo, proveedores, stock-seguridad, presupuesto, CPA, premium, verificado, fórmulas |
 
 ---
 
 ## Temas cubiertos (para búsqueda rápida)
 
-- **Creativos publicitarios**: RB-001
-- **Ángulos de venta**: RB-001
-- **Metodología dropshipping**: RB-001
-- **Herramientas IA para creativos**: RB-001
-- **Catálogo / calidad de productos Dropi**: RB-001
-- **Baneos de cuentas publicitarias**: RB-001
-- **Rentabilidad y gastos ocultos**: RB-001
+- **Creativos publicitarios**: RB-001, RB-002
+- **Ángulos de venta**: RB-001, RB-002
+- **Metodología dropshipping**: RB-001, RB-002
+- **Herramientas IA para creativos**: RB-001, RB-002
+- **Catálogo / calidad de productos Dropi**: RB-001, RB-002
+- **Baneos de cuentas publicitarias**: RB-001, RB-002
+- **Rentabilidad y gastos ocultos**: RB-001, RB-002
 - **Proveedores y verificación**: RB-001
-- **UGC (Contenido generado por usuarios)**: RB-001
+- **UGC (Contenido generado por usuarios)**: RB-001, RB-002
+- **Integraciones y Registro**: RB-002
+- **Embudos y Landing Pages**: RB-002
+- **Logística Contra Entrega (COD) y Postventa**: RB-002
 
 ---
 

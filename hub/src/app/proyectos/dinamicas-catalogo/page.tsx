@@ -170,6 +170,25 @@ export default function DinamicasCatalogoPage() {
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>9 campañas · 6 meses · portafolio</div>
                 </div>
               </a>
+
+              <a
+                href="/proyectos/dinamicas-catalogo/proximas-campanas"
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  background: "#FFF8F0", border: "1px solid rgba(247,127,0,0.25)",
+                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
+                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
+                  transition: "box-shadow 0.15s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(247,127,0,0.12)")}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+              >
+                <span style={{ fontSize: 22, flexShrink: 0 }}>🗓️</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Campañas definidas</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)" }}>Calendario 2026–2027 · 9 campañas</div>
+                </div>
+              </a>
             </div>
           )}
         </div>
