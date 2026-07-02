@@ -128,7 +128,7 @@ export const snapshot: WeeklySnapshot = {
       next: "Verificar la integración de webhooks con Enrique. Enrolar a los primeros suppliers en el Beta el 30 de junio.",
       badge: "⏳ Pipeline 13 etapas",
       badgeColor: "#D97706",
-      ttvLive: true,
+      ttvLive: false,
       metricas: {
         base: [
           { label: "Registrados (Userpilot)", value: "14.175", sub: "Total registrados en BD", tooltip: "Total de suppliers con cuenta activa en Userpilot.\n\nFuente: tabla userpilot_suppliers en Supabase.\nSe carga en tiempo real cada vez que abres esta página." },

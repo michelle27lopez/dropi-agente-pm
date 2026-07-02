@@ -101,6 +101,15 @@ const poc = [
     tag: "Demo · Caza Productos v5",
     icon: "🦊",
   },
+  {
+    key: "dropi-activa",
+    name: "Dropi Activa · ACT-001",
+    description: "POC de activación de suppliers por matching de demanda. Reduce tiempo a primera negociación de 60+ días a 7. El sistema conecta proactivamente al supplier con dropshippers que ya lo están buscando.",
+    url: "/proyectos/dropi-activa",
+    color: "#7C3AED",
+    tag: "ACT-001 · Activación",
+    icon: "🚀",
+  },
 ];
 
 export default function HubPage() {
