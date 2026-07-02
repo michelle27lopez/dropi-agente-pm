@@ -99,7 +99,7 @@ const CREAR_STEPS = [
     title: "¡Combo creado con éxito!",
     img: "/tango/gc02_guardar_exito.png",
     w: 1280, h: 992,
-    desc: "Vuelves automáticamente a Mis combos, donde tu nuevo combo aparece con el badge "Activo". Un mensaje de confirmación aparece en la esquina superior derecha.",
+    desc: 'Vuelves automáticamente a Mis combos, donde tu nuevo combo aparece con el badge "Activo". Un mensaje de confirmación aparece en la esquina superior derecha.',
   },
 ];
 
