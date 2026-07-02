@@ -277,7 +277,7 @@ export default function SupplierPortal() {
   const [loading, setLoading] = useState(true);
   const [polling, setPolling] = useState(true);
   const [expandedConv, setExpandedConv] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<"historial" | "chat">("historial");
+  const [activeTab, setActiveTab] = useState<"historial" | "chat">("chat");
 
   // Chat state
   const [messages, setMessages] = useState<Message[]>([]);
