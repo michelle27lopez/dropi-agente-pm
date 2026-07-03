@@ -27,6 +27,15 @@ const updates = [
 
 const projects = [
   {
+    key: "informe-1-1-junio",
+    name: "Informe 1:1 · Junio 2026",
+    description: "Auto-observación cuantitativa del mes: cruce de calendario y Jira, fricciones, mapa de iniciativas y simulador de rituales para el 1:1 con Laura.",
+    url: "/informes/1-1-junio-2026",
+    color: "#7C3AED",
+    tag: "Personal · 1:1",
+    icon: "🗞️",
+  },
+  {
     key: "dinamicas-catalogo",
     name: "Dinámicas de Catálogo",
     description: "Experimento lean de catálogo preseleccionado. Validación manual de campañas con suppliers antes de desarrollar el módulo formal.",
@@ -63,6 +72,15 @@ const projects = [
     icon: "📈",
   },
   {
+    key: "negociaciones",
+    name: "Negociaciones · Proveedor–Líder Comunidad",
+    description: "Bitácora de seguimiento semanal de ambos roles: adopción, engagement, funnels de creación/respuesta, retención y hallazgos cualitativos.",
+    url: "/proyectos/negociaciones",
+    color: "#0D9488",
+    tag: "NEG-001 · Live",
+    icon: "🤝",
+  },
+  {
     key: "caza-productos",
     name: "Caza Productos",
     description: "Solicitudes de productos que los dropshippers no encuentran en catálogo. Señal de demanda explícita y tasa de atención de suppliers.",
@@ -70,6 +88,15 @@ const projects = [
     color: "#EC4899",
     tag: "CAZ-001 · Demanda",
     icon: "🔍",
+  },
+  {
+    key: "combos",
+    name: "Combos Dropshipper",
+    description: "Guía de flujo paso a paso para crear y editar combos. Screenshots del Figma con descripciones listas para handoff.",
+    url: "/proyectos/combos",
+    color: "#F77F00",
+    tag: "PROD-545 · Hand-off",
+    icon: "📦",
   },
   {
     key: "descuentos-catalogo",
@@ -116,14 +143,21 @@ export default function HubPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const router = useRouter();
 
+  const hasSupabase = !!(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+
   useEffect(() => {
+    if (!hasSupabase) return;
     const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => {
       setUserEmail(data.user?.email ?? null);
     });
-  }, []);
+  }, [hasSupabase]);
 
   async function handleLogout() {
+    if (!hasSupabase) return;
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/login");

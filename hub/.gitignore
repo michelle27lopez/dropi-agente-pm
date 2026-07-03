@@ -8,3 +8,4 @@
 next-env.d.ts
 /doc hub/
 *.csv
+/scratch/
