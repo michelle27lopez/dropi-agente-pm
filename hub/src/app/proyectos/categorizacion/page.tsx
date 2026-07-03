@@ -49,6 +49,19 @@ interface SuggestResult {
   rank1_summary: { high: number; medium: number; low: number; needs_review: number };
 }
 
+interface GapRequest {
+  id: string;
+  product_name: string;
+  requested_category: string;
+  source: "ai_no_match" | "manual_no_match";
+  ai_top_suggestions: { l1: string; l2: string; l3: string; l4: string; score: number; reasoning: string }[] | null;
+  status: "pending" | "added" | "rejected";
+  reviewed_by: string | null;
+  notes: string | null;
+  created_at: string;
+  resolved_at: string | null;
+}
+
 // Homologation unified taxonomy targets
 interface TargetCategory {
   l1: string;
@@ -899,7 +912,7 @@ const computeLayout = (
 
 export default function CategorizacionPage() {
   const [docsOpen, setDocsOpen] = useState(false);
-  const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "taxonomy" | "ai" | "google" | null>(null);
+  const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "taxonomy" | "ai" | "google" | "gaps" | null>(null);
   const [mainTab, setMainTab] = useState<"simulator" | "google_mapping">("simulator");
 
   // Right panel view toggle: node mapping vs full taxonomy tree
@@ -957,6 +970,47 @@ export default function CategorizacionPage() {
     gap: boolean; gap_note: string;
   } | null>(null);
   const [productError, setProductError] = useState<string | null>(null);
+
+  // ── Solicitudes de enriquecimiento de categoría (gap requests) ──────────────
+  const [gapRequests, setGapRequests] = useState<GapRequest[]>([]);
+  const [gapRequestsLoading, setGapRequestsLoading] = useState(false);
+  const [gapStatusFilter, setGapStatusFilter] = useState<"pending" | "added" | "rejected">("pending");
+  const [gapUpdatingId, setGapUpdatingId] = useState<string | null>(null);
+
+  const fetchGapRequests = useCallback(async (status: string) => {
+    setGapRequestsLoading(true);
+    try {
+      const res = await fetch(`/api/categorizacion/gap-request?status=${status}`);
+      const data = await res.json();
+      setGapRequests(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Error loading gap requests", err);
+    } finally {
+      setGapRequestsLoading(false);
+    }
+  }, []);
+
+  async function resolveGapRequest(id: string, status: "added" | "rejected") {
+    setGapUpdatingId(id);
+    try {
+      await fetch("/api/categorizacion/gap-request", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status }),
+      });
+      await fetchGapRequests(gapStatusFilter);
+      const pending = await fetch("/api/categorizacion/gap-request?status=pending").then(r => r.json());
+      setGapPendingCount(Array.isArray(pending) ? pending.length : 0);
+    } catch (err) {
+      console.error("Error updating gap request", err);
+    } finally {
+      setGapUpdatingId(null);
+    }
+  }
+
+  useEffect(() => {
+    if (activeResourceTab === "gaps") fetchGapRequests(gapStatusFilter);
+  }, [activeResourceTab, gapStatusFilter, fetchGapRequests]);
 
   // Load Dropi Categories
   useEffect(() => {
@@ -1050,6 +1104,15 @@ export default function CategorizacionPage() {
     fetch("/api/categorizacion/import-google")
       .then(r => r.json())
       .then((d: GoogleTaxonomyStats) => setGoogleCount(d.count ?? 0))
+      .catch(() => null);
+  }, []);
+
+  // Load pending gap requests count on mount (badge on card, independiente de si el acordeón está abierto)
+  const [gapPendingCount, setGapPendingCount] = useState<number>(0);
+  useEffect(() => {
+    fetch("/api/categorizacion/gap-request?status=pending")
+      .then(r => r.json())
+      .then((d: GapRequest[]) => setGapPendingCount(Array.isArray(d) ? d.length : 0))
       .catch(() => null);
   }, []);
 
@@ -3124,6 +3187,100 @@ export default function CategorizacionPage() {
     );
   };
 
+  const renderGapRequests = () => {
+    return (
+      <div className="space-y-6 animate-fade-in">
+        <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+          <h2 className="text-base font-bold text-gray-900 mb-2">Solicitudes de Enriquecimiento de Categoría</h2>
+          <p className="text-xs text-gray-500 leading-relaxed max-w-4xl">
+            Vienen del prototipo de creación de producto: casos donde un supplier no encontró una categoría adecuada ni con la IA ni buscando manualmente en el árbol, y escribió en texto libre lo que necesitaba. Revisa cada caso y decide si se agrega al árbol (<span className="font-mono">dropi_categories</span>) o se descarta.
+          </p>
+        </div>
+
+        <div className="flex gap-2">
+          {(["pending", "added", "rejected"] as const).map((s) => (
+            <button
+              key={s}
+              onClick={() => setGapStatusFilter(s)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold border transition-colors ${
+                gapStatusFilter === s
+                  ? "bg-rose-500 text-white border-rose-500"
+                  : "bg-white text-gray-500 border-slate-200 hover:bg-slate-50"
+              }`}
+            >
+              {s === "pending" ? "Pendientes" : s === "added" ? "Agregadas" : "Descartadas"}
+            </button>
+          ))}
+        </div>
+
+        {gapRequestsLoading ? (
+          <div className="text-xs text-gray-400 py-8 text-center">Cargando...</div>
+        ) : gapRequests.length === 0 ? (
+          <div className="text-xs text-gray-400 py-8 text-center bg-white border rounded-2xl" style={{ borderColor: "var(--border)" }}>
+            No hay solicitudes {gapStatusFilter === "pending" ? "pendientes" : gapStatusFilter === "added" ? "agregadas" : "descartadas"}.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {gapRequests.map((r) => (
+              <div key={r.id} className="bg-white border rounded-2xl p-5 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-sm font-bold text-gray-900">{r.product_name}</span>
+                      <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full border ${
+                        r.source === "ai_no_match"
+                          ? "bg-amber-50 text-amber-600 border-amber-100"
+                          : "bg-sky-50 text-sky-600 border-sky-100"
+                      }`}>
+                        {r.source === "ai_no_match" ? "IA no encajó" : "No buscó con IA"}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-600">
+                      Propuesta del supplier: <span className="font-semibold text-gray-800">{r.requested_category}</span>
+                    </p>
+                    {r.ai_top_suggestions && r.ai_top_suggestions.length > 0 && (
+                      <details className="mt-2">
+                        <summary className="text-[10px] text-gray-400 cursor-pointer hover:text-gray-600">Ver sugerencias que la IA ofreció y no sirvieron</summary>
+                        <ul className="mt-1.5 space-y-1">
+                          {r.ai_top_suggestions.map((s, i) => (
+                            <li key={i} className="text-[10px] text-gray-500">
+                              {s.l1} › {s.l2} › {s.l3} › {s.l4} <span className="text-gray-400">(score {s.score})</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    )}
+                    <p className="text-[10px] text-gray-400 mt-2">
+                      {new Date(r.created_at).toLocaleString("es-CO")}
+                    </p>
+                  </div>
+                  {r.status === "pending" && (
+                    <div className="flex gap-2 shrink-0">
+                      <button
+                        onClick={() => resolveGapRequest(r.id, "added")}
+                        disabled={gapUpdatingId === r.id}
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 text-white hover:bg-emerald-600 disabled:opacity-50 transition-colors"
+                      >
+                        ✅ Agregar al árbol
+                      </button>
+                      <button
+                        onClick={() => resolveGapRequest(r.id, "rejected")}
+                        disabled={gapUpdatingId === r.id}
+                        className="px-3 py-1.5 rounded-lg text-xs font-bold bg-white text-gray-500 border border-slate-200 hover:bg-slate-50 disabled:opacity-50 transition-colors"
+                      >
+                        ✖ Descartar
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const renderGoogleHomologacion = () => {
     const pendingCount  = mappings.filter(m => m.status === "pending_review").length;
     const approvedCount = mappings.filter(m => m.status === "approved").length;
@@ -3565,7 +3722,26 @@ export default function CategorizacionPage() {
                   </div>
                 </div>
 
-                {/* Card 6: DAT-001 Reporte de Inteligencia de Catálogo */}
+                {/* Card 6: Prototipo Selección de Categoría con IA */}
+                <a
+                  href="/proyectos/categorizacion/prototipo-producto"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-emerald-500 hover:shadow-xs transition-all duration-200 no-underline"
+                >
+                  <span className="text-2xl mt-0.5">🧪</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Prototipo · Categoría con IA</span>
+                      <span className="text-[9px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 px-1.5 py-0.5 rounded-full">↗ Probar</span>
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Ficha de creación de producto con el campo Categoría sugerido por IA. Para validar con un supplier real.
+                    </div>
+                  </div>
+                </a>
+
+                {/* Card 7: DAT-001 Reporte de Inteligencia de Catálogo */}
                 <a
                   href="/dat001-inteligencia-catalogo.html"
                   target="_blank"
@@ -3584,7 +3760,7 @@ export default function CategorizacionPage() {
                   </div>
                 </a>
 
-                {/* Card 7: Revisión de Taxonomía para la Célula */}
+                {/* Card 8: Revisión de Taxonomía para la Célula */}
                 <a
                   href="/cat001-taxonomia-revision-celula.html"
                   target="_blank"
@@ -3602,6 +3778,32 @@ export default function CategorizacionPage() {
                     </div>
                   </div>
                 </a>
+
+                {/* Card 9: Solicitudes de Enriquecimiento (gap requests del prototipo) */}
+                <div
+                  onClick={() => setActiveResourceTab(activeResourceTab === "gaps" ? null : "gaps")}
+                  className={`bg-white border rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-rose-500 hover:shadow-xs transition-all duration-200 ${
+                    activeResourceTab === "gaps" ? "border-rose-500 bg-rose-50/5 ring-1 ring-rose-500/20" : "border-slate-200"
+                  }`}
+                >
+                  <span className="text-2xl mt-0.5">📥</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Solicitudes de Enriquecimiento</span>
+                      <div className="flex items-center gap-1.5">
+                        {gapPendingCount > 0 && (
+                          <span className="text-[9px] font-bold bg-rose-50 text-rose-600 border border-rose-100 px-1.5 py-0.5 rounded-full">
+                            {gapPendingCount} pendiente{gapPendingCount === 1 ? "" : "s"}
+                          </span>
+                        )}
+                        {activeResourceTab === "gaps" && <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />}
+                      </div>
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Categorías que suppliers no encontraron ni con IA ni buscando manualmente en el prototipo. Revisa y decide si se agregan al árbol.
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* Detailed Expanded View inside Accordion */}
@@ -3615,6 +3817,7 @@ export default function CategorizacionPage() {
                       {activeResourceTab === "taxonomy" && "📖 Propuesta de Taxonomía Estándar (10 Nodos Raíz)"}
                       {activeResourceTab === "ai" && "🤖 Pipeline de Enriquecimiento IA y Distancia Levenshtein"}
                       {activeResourceTab === "google" && "🛒 Google Product Taxonomy — Importador y Referencia"}
+                      {activeResourceTab === "gaps" && "📥 Solicitudes de Enriquecimiento de Categoría"}
                     </h3>
                     <button
                       onClick={() => setActiveResourceTab(null)}
@@ -3630,6 +3833,7 @@ export default function CategorizacionPage() {
                   {activeResourceTab === "taxonomy" && renderTaxonomyDoc()}
                   {activeResourceTab === "ai" && renderAiDoc()}
                   {activeResourceTab === "google" && renderGoogle()}
+                  {activeResourceTab === "gaps" && renderGapRequests()}
                 </div>
               )}
             </div>
