@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { ArrowLeft, Building, Sliders, ArrowRight } from "lucide-react";
 import { GALI_PRODUCTS_400 } from "./gali-products-400.mock";
+import { SPY_WINNING_ADS, SpyWinningAd } from "./spy-winning-ads.mock";
 import "./styles.scss";
 
 // Interfaces
@@ -11,6 +12,8 @@ interface ChatMessage {
   text: string;
   options?: string[];
   products?: ProductSuggestion[];
+  showSpyRadar?: boolean;
+  notFoundAd?: { ad: SpyWinningAd; etaDays: number };
 }
 
 interface ProductSuggestion {
@@ -82,7 +85,7 @@ const TRENDING_CATEGORIES = [
 
 export default function GaliV5PrototypePage() {
   // --- Estados de Navegación y Flujo ---
-  const [step, setStep] = useState<'discovery' | 'select' | 'estrategia' | 'landing' | 'campana' | 'launch'>('discovery');
+  const [step, setStep] = useState<'goal' | 'discovery' | 'select' | 'estrategia' | 'landing' | 'campana' | 'launch'>('goal');
   const [projectId, setProjectId] = useState<string>('');
   
   // --- Estados de Onboarding (Discovery) ---
@@ -113,6 +116,11 @@ export default function GaliV5PrototypePage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [selectedProduct, setSelectedProduct] = useState<ProductSuggestion | null>(null);
   const [simulatedSearchStats, setSimulatedSearchStats] = useState<any>(null);
+
+  // --- Estados del Radar de Anuncios Ganadores (método Espionaje) ---
+  const [spyRadarCategoryFilter, setSpyRadarCategoryFilter] = useState<string>('');
+  const [selectedWinningAd, setSelectedWinningAd] = useState<SpyWinningAd | null>(null);
+  const [showNotifyToast, setShowNotifyToast] = useState<boolean>(false);
 
   // --- Estados del Analista IA ---
   const [analystInput, setAnalystInput] = useState<string>('');
@@ -453,6 +461,96 @@ export default function GaliV5PrototypePage() {
     return '';
   };
 
+  const CATEGORY_LABELS: Record<string, string> = {
+    mascotas: 'Mascotas 🐾',
+    belleza: 'Belleza 💄',
+    hogar: 'Hogar 🏡',
+    'tecnología': 'Tecnología ⚡',
+    tecnologia: 'Tecnología ⚡',
+    salud: 'Salud & Bienestar 🧘',
+    fitness: 'Fitness 🏃',
+    'niños': 'Niños 👶',
+    ninos: 'Niños 👶',
+    moda: 'Moda 👑',
+  };
+
+  const promptPlatformAndBudget = (categoryId: string) => {
+    setChatState(2);
+    const catText = CATEGORY_LABELS[categoryId] || 'tu nicho';
+
+    setChatMessages(prev => [...prev, {
+      sender: 'agent',
+      text: `¡Excelente elección! La categoría de ${catText} tiene una rotación brutal en Colombia. Ahora, para dimensionar tu campaña y el stock de seguridad, ¿en qué red social planeas pautar y cuál es tu presupuesto diario estimado?`,
+      options: [
+        'Meta (Facebook) Ads - $40K/día 👥',
+        'TikTok Ads - $50K/día ⚡',
+        'Meta (Facebook) Ads - $100K+/día 🔥',
+        'TikTok Ads - $100K+/día 🚀'
+      ]
+    }]);
+    setIsGeneratingAgent(false);
+  };
+
+  const selectWinningAd = (ad: SpyWinningAd) => {
+    setSelectedWinningAd(ad);
+    setChatMessages(prev => [...prev, { sender: 'user', text: `Elijo: ${ad.productName}` }]);
+    setIsGeneratingAgent(true);
+
+    setTimeout(() => {
+      setChatMessages(prev => [...prev, {
+        sender: 'agent',
+        text: `Buen ojo. "${ad.productName}" lleva ${ad.daysActive} días activo en ${ad.platform} (fuente: ${ad.sourceTool}) con ${ad.ctrPct}% de CTR y ${ad.hookRatePct}% de Hook Rate. Está funcionando por su ángulo "${ad.anguloVenta}", con el gancho ${ad.hookText} y una oferta de ${ad.offerType}.`
+      }]);
+      setIsGeneratingAgent(false);
+      setIsSearching(true);
+
+      setTimeout(() => {
+        const results = searchVirtualMillionCatalog({
+          category: ad.category,
+          query: ad.matchedQuery,
+          estrategia: 'tendencias_virales',
+          plataforma: ad.platform,
+          dailyBudget: budget,
+          limit: 100
+        });
+        setIsSearching(false);
+
+        if (results.length > 0) {
+          setChatNicho(ad.category);
+          setSelectedCategory(ad.category);
+          setChatQuery(ad.matchedQuery);
+          setChatEstrategia('tendencias_virales');
+          setProducts(results);
+          setStep('select');
+        } else {
+          const etaDays = 5 + Math.floor(Math.random() * 6); // 5-10 días
+          setChatMessages(prev => [...prev, {
+            sender: 'agent',
+            text: `Busqué "${ad.productName}" en nuestro catálogo y todavía no lo tenemos disponible en Dropi.`,
+            notFoundAd: { ad, etaDays }
+          }]);
+        }
+      }, 600);
+    }, 700);
+  };
+
+  const viewSimilarInCategory = (ad: SpyWinningAd) => {
+    setIsSearching(true);
+    setTimeout(() => {
+      const results = searchVirtualMillionCatalog({ category: ad.category, dailyBudget: budget, limit: 100 });
+      setIsSearching(false);
+      setChatNicho(ad.category);
+      setSelectedCategory(ad.category);
+      setProducts(results);
+      setStep('select');
+    }, 600);
+  };
+
+  const notifyWhenAvailable = () => {
+    setShowNotifyToast(true);
+    setTimeout(() => setShowNotifyToast(false), 3000);
+  };
+
   const selectChatOption = async (optionText: string) => {
     setUserInput('');
     setChatMessages(prev => [...prev, { sender: 'user', text: optionText }]);
@@ -636,13 +734,13 @@ DEBES RESPONDER EXCLUSIVAMENTE CON UN OBJETO JSON con el siguiente formato, no a
         ];
         defaultText = `¡Brutal! El enfoque en dolores es el método de Juan Felipe para encontrar productos con alta rentabilidad y salir de la guerra de precios. Para encontrar un solucionador real, ¿qué dolor o molestia en el mercado quieres solucionar hoy? Selecciona una opción o escribe tu idea en el chat:`;
       } else if (optionText.includes('Viral')) {
-        optionsList = [
-          'Belleza / Cosméticos con antes y después 💄',
-          'Organizadores prácticos de cocina y hogar 🏡',
-          'Juguetes interactivos para mascotas en TikTok 🐾',
-          'Gadgets visuales para creadores de contenido ⚡'
-        ];
-        defaultText = `¡Al grano! El método de volumen y espionaje de Cesar Ortegón. Buscamos productos que ya tengan videos virales y alta demanda para testear rápido. ¿Qué tipo de ganador viral has visto explotando en TikTok o AdSpy? Selecciona una o escríbelo libremente:`;
+        setChatMessages(prev => [...prev, {
+          sender: 'agent',
+          text: `¡Al grano! El método de volumen y espionaje de Cesar Ortegón. Escaneé AdSpy, Minea, Foreplay, Kalodata, Ecomhunt, Dropkiller y la Biblioteca de Anuncios buscando ganadores activos ahora mismo. Elige el que más te llame — te explico exactamente por qué está funcionando antes de buscarte el producto equivalente en catálogo:`,
+          showSpyRadar: true
+        }]);
+        setIsGeneratingAgent(false);
+        return;
       } else {
         optionsList = [
           'Mascotas y Cuidado Animal 🐾',
@@ -685,28 +783,7 @@ DEBES RESPONDER EXCLUSIVAMENTE CON UN OBJETO JSON con el siguiente formato, no a
       setSelectedCategory(mappedCategory);
       const computedQuery = extractQueryFromInput(optionText);
       setChatQuery(computedQuery);
-      setChatState(2);
-
-      let catText = 'Belleza 💄';
-      if (mappedCategory === 'mascotas') catText = 'Mascotas 🐾';
-      else if (mappedCategory === 'hogar') catText = 'Hogar 🏡';
-      else if (mappedCategory === 'tecnología') catText = 'Tecnología ⚡';
-      else if (mappedCategory === 'salud') catText = 'Salud & Bienestar 🧘';
-      else if (mappedCategory === 'fitness') catText = 'Fitness 🏃';
-      else if (mappedCategory === 'niños') catText = 'Niños 👶';
-      else if (mappedCategory === 'moda') catText = 'Moda 👑';
-
-      setChatMessages(prev => [...prev, {
-        sender: 'agent',
-        text: `¡Excelente elección! La categoría de ${catText} tiene una rotación brutal en Colombia. Ahora, para dimensionar tu campaña y el stock de seguridad, ¿en qué red social planeas pautar y cuál es tu presupuesto diario estimado?`,
-        options: [
-          'Meta (Facebook) Ads - $40K/día 👥',
-          'TikTok Ads - $50K/día ⚡',
-          'Meta (Facebook) Ads - $100K+/día 🔥',
-          'TikTok Ads - $100K+/día 🚀'
-        ]
-      }]);
-      setIsGeneratingAgent(false);
+      promptPlatformAndBudget(mappedCategory);
 
     } else if (currentState === 2) {
       let platform = 'Meta';
@@ -1194,34 +1271,81 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
         </button>
         <div className="np-header__title-group">
           <h1 className="np-header__title">Nuevo proyecto</h1>
-          <span className="np-header__subtitle">Gali + ADA Spy te guían en cada paso</span>
-        </div>
-        <div className="np-steps np-steps--6">
-          <span className={`np-step ${step === 'discovery' ? 'np-step--active' : ''} ${['select','estrategia','landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
-            1 · Descubrir
-          </span>
-          <span className="np-step-line"></span>
-          <span className={`np-step ${step === 'select' ? 'np-step--active' : ''} ${['estrategia','landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
-            2 · Elegir
-          </span>
-          <span className="np-step-line"></span>
-          <span className={`np-step ${step === 'estrategia' ? 'np-step--active' : ''} ${['landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
-            3 · Estrategia
-          </span>
-          <span className="np-step-line"></span>
-          <span className={`np-step ${step === 'landing' ? 'np-step--active' : ''} ${['campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
-            4 · Landing
-          </span>
-          <span className="np-step-line"></span>
-          <span className={`np-step ${step === 'campana' ? 'np-step--active' : ''} ${step === 'launch' ? 'np-step--done' : ''}`}>
-            5 · Campaña
-          </span>
-          <span className="np-step-line"></span>
-          <span className={`np-step ${step === 'launch' ? 'np-step--active' : ''}`}>
-            6 · Lanzar
+          <span className="np-header__subtitle">
+            {step === 'goal' ? 'Elige tu objetivo para comenzar' : 'Gali + ADA Spy te guían en cada paso'}
           </span>
         </div>
+        {step !== 'goal' && (
+          <div className="np-steps np-steps--6">
+            <span className={`np-step ${step === 'discovery' ? 'np-step--active' : ''} ${['select','estrategia','landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
+              1 · Descubrir
+            </span>
+            <span className="np-step-line"></span>
+            <span className={`np-step ${step === 'select' ? 'np-step--active' : ''} ${['estrategia','landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
+              2 · Elegir
+            </span>
+            <span className="np-step-line"></span>
+            <span className={`np-step ${step === 'estrategia' ? 'np-step--active' : ''} ${['landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
+              3 · Estrategia
+            </span>
+            <span className="np-step-line"></span>
+            <span className={`np-step ${step === 'landing' ? 'np-step--active' : ''} ${['campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
+              4 · Landing
+            </span>
+            <span className="np-step-line"></span>
+            <span className={`np-step ${step === 'campana' ? 'np-step--active' : ''} ${step === 'launch' ? 'np-step--done' : ''}`}>
+              5 · Campaña
+            </span>
+            <span className="np-step-line"></span>
+            <span className={`np-step ${step === 'launch' ? 'np-step--active' : ''}`}>
+              6 · Lanzar
+            </span>
+          </div>
+        )}
       </div>
+
+      {/* ── ETAPA 0: OBJETIVO ── */}
+      {step === 'goal' && (
+        <div className="np-goals">
+          <div className="np-section-header">
+            <div className="np-gali-label">
+              <span className="np-gali-label__dot" style={{ background: '#818cf8' }}></span>
+              <strong>Gali</strong> · elige el objetivo de este proyecto
+            </div>
+            <h2 className="np-section-header__title">¿Cuál es tu objetivo?</h2>
+            <p className="np-section-header__sub">Gali adapta todo el proceso — desde la búsqueda de producto hasta la campaña — según la meta que elijas.</p>
+          </div>
+
+          <div className="np-goals__grid">
+            <button type="button" className="np-goal-card np-goal-card--active" onClick={() => setStep('discovery')}>
+              <span className="np-goal-card__icon">🎯</span>
+              <div className="np-goal-card__content">
+                <strong className="np-goal-card__title">Mi primer producto</strong>
+                <p className="np-goal-card__desc">Encuentra tu producto ganador y consigue tu primera venta, paso a paso con Gali.</p>
+              </div>
+              <ArrowRight size={18} className="np-goal-card__arrow" />
+            </button>
+
+            <div className="np-goal-card np-goal-card--locked" aria-disabled="true">
+              <span className="np-goal-card__icon">📈</span>
+              <div className="np-goal-card__content">
+                <strong className="np-goal-card__title">Escalar a varios productos</strong>
+                <p className="np-goal-card__desc">Diversifica tu catálogo activo y multiplica tus canales de venta.</p>
+              </div>
+              <span className="np-goal-card__badge">Próximamente</span>
+            </div>
+
+            <div className="np-goal-card np-goal-card--locked" aria-disabled="true">
+              <span className="np-goal-card__icon">🚀</span>
+              <div className="np-goal-card__content">
+                <strong className="np-goal-card__title">Vender 2,000 unidades</strong>
+                <p className="np-goal-card__desc">Plan de escalamiento agresivo para un producto ya validado.</p>
+              </div>
+              <span className="np-goal-card__badge">Próximamente</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── ETAPA 1: DESCUBRIMIENTO ── */}
       {step === 'discovery' && (
@@ -1249,6 +1373,81 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
                             {opt}
                           </button>
                         ))}
+                      </div>
+                    )}
+
+                    {msg.showSpyRadar && (
+                      selectedWinningAd ? (
+                        <div className="np-spy-radar__selected">
+                          ✓ Usando el ángulo de <strong>{selectedWinningAd.productName}</strong> ({selectedWinningAd.sourceTool})
+                        </div>
+                      ) : (
+                        <div className="np-spy-radar">
+                          <div className="np-spy-radar__filters">
+                            <button
+                              type="button"
+                              className={`np-spy-category-chip ${spyRadarCategoryFilter === '' ? 'np-spy-category-chip--active' : ''}`}
+                              onClick={() => setSpyRadarCategoryFilter('')}>
+                              Todas
+                            </button>
+                            {TRENDING_CATEGORIES.map(cat => (
+                              <button
+                                key={cat.id}
+                                type="button"
+                                className={`np-spy-category-chip ${spyRadarCategoryFilter === cat.id ? 'np-spy-category-chip--active' : ''}`}
+                                onClick={() => setSpyRadarCategoryFilter(cat.id)}>
+                                {cat.emoji} {cat.label}
+                              </button>
+                            ))}
+                          </div>
+
+                          <div className="np-spy-radar__grid">
+                            {SPY_WINNING_ADS
+                              .filter(ad => !spyRadarCategoryFilter || ad.category === spyRadarCategoryFilter)
+                              .map(ad => (
+                                <div key={ad.id} className="np-spy-ad-card">
+                                  <div className="np-spy-ad-card__header">
+                                    <span className="np-spy-source-badge">{ad.sourceTool}</span>
+                                    <span className="np-spy-ad-card__platform">{ad.platform === 'Meta' ? '📘 Meta' : '🎵 TikTok'}</span>
+                                  </div>
+                                  <strong className="np-spy-ad-card__name">{ad.productName}</strong>
+                                  <p className="np-spy-ad-card__hook">{ad.hookText}</p>
+                                  <div className="np-spy-ad-card__metrics">
+                                    <span><strong>{ad.ctrPct}%</strong> CTR</span>
+                                    <span><strong>{ad.hookRatePct}%</strong> Hook Rate</span>
+                                    <span><strong>${ad.cpmCop.toLocaleString('es-CO')}</strong> CPM</span>
+                                    <span><strong>{ad.daysActive}</strong> días activo</span>
+                                  </div>
+                                  <button type="button" className="np-spy-ad-card__select-btn" onClick={() => selectWinningAd(ad)}>
+                                    Usar este ángulo →
+                                  </button>
+                                </div>
+                              ))}
+                          </div>
+                        </div>
+                      )
+                    )}
+
+                    {msg.notFoundAd && (
+                      <div className="np-pulso-fallback">
+                        <div className="np-pulso-fallback__header">
+                          <span className="np-pulso-fallback__icon">🔮</span>
+                          <strong>Dropi Pulso</strong> ya está gestionando proveedores para este producto
+                        </div>
+                        <p className="np-pulso-fallback__eta">
+                          Disponible en un estimado de <strong>{msg.notFoundAd.etaDays} días</strong>.
+                        </p>
+                        <div className="np-pulso-fallback__actions">
+                          <button type="button" className="np-pulso-fallback__notify-btn" onClick={notifyWhenAvailable}>
+                            Notificarme cuando esté disponible
+                          </button>
+                          <button type="button" className="np-pulso-fallback__similar-btn" onClick={() => viewSimilarInCategory(msg.notFoundAd!.ad)}>
+                            Ver productos similares ya disponibles →
+                          </button>
+                        </div>
+                        <a className="np-pulso-fallback__link" href="/proyectos/pulso-demo" target="_blank" rel="noopener noreferrer">
+                          Ver cómo funciona Dropi Pulso →
+                        </a>
                       </div>
                     )}
 
@@ -1990,6 +2189,14 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
         <div className="np-draft-toast">
           <span className="np-draft-toast__icon">✓</span>
           Proyecto guardado como borrador. Puedes retomarlo desde Proyectos.
+        </div>
+      )}
+
+      {/* Toast de notificación Dropi Pulso */}
+      {showNotifyToast && (
+        <div className="np-draft-toast">
+          <span className="np-draft-toast__icon">✓</span>
+          Te avisaremos por WhatsApp y correo cuando el producto esté disponible.
         </div>
       )}
     </div>

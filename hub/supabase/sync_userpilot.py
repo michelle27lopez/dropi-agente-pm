@@ -441,8 +441,8 @@ def extract_user_from_event(event):
     if not user_id:
         return None
         
-    # Userpilot exporta las propiedades en un objeto anidado (usualmente 'metadata' o 'properties')
-    properties = event.get("metadata") or event.get("properties") or {}
+    # Userpilot exporta las propiedades en un objeto anidado (usualmente 'metadata', 'properties' o 'attributes')
+    properties = event.get("metadata") or event.get("properties") or event.get("attributes") or {}
     
     # Crear un diccionario plano para mapearlo con map_fields
     row_dict = {"user_id": user_id}
@@ -450,9 +450,19 @@ def extract_user_from_event(event):
         row_dict[k] = v
         
     # Asegurar que campos básicos estén en la raíz por si acaso
-    for key in ["name", "email", "first_seen", "last_seen", "signed_up", "sessions", "web_sessions"]:
+    for key in ["name", "email", "first_seen", "last_seen", "signed_up", "sessions", "web_sessions", 
+                "device_type", "browser_language", "browser", "operating_system"]:
         if key in event and key not in row_dict:
             row_dict[key] = event[key]
+            
+    # Mapear country_code a country si no está en properties
+    if "country" not in row_dict and "country_code" in event:
+        cc = event["country_code"]
+        if cc == "CO": row_dict["country"] = "Colombia"
+        elif cc == "EC": row_dict["country"] = "Ecuador"
+        elif cc == "MX": row_dict["country"] = "México"
+        elif cc == "PE": row_dict["country"] = "Perú"
+        else: row_dict["country"] = cc
             
     return map_fields(row_dict)
 
