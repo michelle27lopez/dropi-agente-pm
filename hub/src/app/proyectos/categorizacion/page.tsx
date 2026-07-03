@@ -3193,7 +3193,7 @@ export default function CategorizacionPage() {
         <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
           <h2 className="text-base font-bold text-gray-900 mb-2">Solicitudes de Enriquecimiento de Categoría</h2>
           <p className="text-xs text-gray-500 leading-relaxed max-w-4xl">
-            Vienen del prototipo de creación de producto: casos donde un supplier no encontró una categoría adecuada ni con la IA ni buscando manualmente en el árbol, y escribió en texto libre lo que necesitaba. Revisa cada caso y decide si se agrega al árbol (<span className="font-mono">dropi_categories</span>) o se descarta.
+            Vienen del formulario de creación de producto en supplier-lab: casos donde un supplier no encontró una categoría adecuada ni con la IA ni buscando manualmente en el árbol, y escribió en texto libre lo que necesitaba. Revisa cada caso y decide si se agrega al árbol (<span className="font-mono">dropi_categories</span>) o se descarta.
           </p>
         </div>
 
@@ -3722,26 +3722,7 @@ export default function CategorizacionPage() {
                   </div>
                 </div>
 
-                {/* Card 6: Prototipo Selección de Categoría con IA */}
-                <a
-                  href="/proyectos/categorizacion/prototipo-producto"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-emerald-500 hover:shadow-xs transition-all duration-200 no-underline"
-                >
-                  <span className="text-2xl mt-0.5">🧪</span>
-                  <div className="flex-1">
-                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
-                      <span>Prototipo · Categoría con IA</span>
-                      <span className="text-[9px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 px-1.5 py-0.5 rounded-full">↗ Probar</span>
-                    </div>
-                    <div className="text-[10px] leading-relaxed text-gray-500">
-                      Ficha de creación de producto con el campo Categoría sugerido por IA. Para validar con un supplier real.
-                    </div>
-                  </div>
-                </a>
-
-                {/* Card 7: DAT-001 Reporte de Inteligencia de Catálogo */}
+                {/* Card 6: DAT-001 Reporte de Inteligencia de Catálogo */}
                 <a
                   href="/dat001-inteligencia-catalogo.html"
                   target="_blank"
@@ -3760,7 +3741,7 @@ export default function CategorizacionPage() {
                   </div>
                 </a>
 
-                {/* Card 8: Revisión de Taxonomía para la Célula */}
+                {/* Card 7: Revisión de Taxonomía para la Célula */}
                 <a
                   href="/cat001-taxonomia-revision-celula.html"
                   target="_blank"
@@ -3779,7 +3760,26 @@ export default function CategorizacionPage() {
                   </div>
                 </a>
 
-                {/* Card 9: Solicitudes de Enriquecimiento (gap requests del prototipo) */}
+                {/* Card 8: Probar Categorización con IA en Supplier Lab (prod) */}
+                <a
+                  href="https://dropi-agente-pm.vercel.app/dashboard/productos?open=create"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-emerald-500 hover:shadow-xs transition-all duration-200 no-underline"
+                >
+                  <span className="text-2xl mt-0.5">🧪</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Probar Categoría IA · Supplier Lab</span>
+                      <span className="text-[9px] font-bold bg-emerald-50 text-emerald-600 border border-emerald-100 px-1.5 py-0.5 rounded-full">↗ Probar</span>
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Clon real del formulario de creación de producto de Dropi, con el campo Categoría potenciado por IA. Para validar con un supplier real.
+                    </div>
+                  </div>
+                </a>
+
+                {/* Card 9: Solicitudes de Enriquecimiento (gap requests desde supplier-lab) */}
                 <div
                   onClick={() => setActiveResourceTab(activeResourceTab === "gaps" ? null : "gaps")}
                   className={`bg-white border rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-rose-500 hover:shadow-xs transition-all duration-200 ${
@@ -3800,7 +3800,7 @@ export default function CategorizacionPage() {
                       </div>
                     </div>
                     <div className="text-[10px] leading-relaxed text-gray-500">
-                      Categorías que suppliers no encontraron ni con IA ni buscando manualmente en el prototipo. Revisa y decide si se agregan al árbol.
+                      Categorías que suppliers no encontraron ni con IA ni buscando manualmente en supplier-lab. Revisa y decide si se agregan al árbol.
                     </div>
                   </div>
                 </div>

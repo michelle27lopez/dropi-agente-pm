@@ -529,6 +529,101 @@ function WeekPanel({ week, prev }: { week: Week; prev: Week | null }) {
   );
 }
 
+// ─── Piloto MVP ───────────────────────────────────────────────────────────────
+const PILOTO = {
+  meta: { comunidades: 1, negociaciones: 5 },
+  actual: {
+    comunidades: 1,
+    negociacionesEnCurso: 1,
+    productosPendientes: 11125,
+    fechaDesbloqueo: "21 jul 2026",
+    proveedor: "GGP Comercializadora (ID 5935)",
+    bloqueante: "Funcionalidad de carga masiva en desarrollo — disponible el 21-jul-2026",
+    contexto: "El proveedor tiene ~10.000 productos bajo múltiples cuentas y marcas blancas. El importador por Excel (3 columnas: ID · tipo · valor) está en desarrollo con Giancarlos y sale el 21-jul.",
+  },
+};
+
+function PilotoMVP() {
+  const { meta, actual } = PILOTO;
+  const comPct = Math.round((actual.comunidades / meta.comunidades) * 100);
+  const negPct = Math.round((actual.negociacionesEnCurso / meta.negociaciones) * 100);
+
+  return (
+    <div style={{ ...card, border: "1px solid #D1FAE5", background: "#F0FDF4" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 18 }}>🧪</span>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: "#065F46" }}>Prueba MVP · Piloto comercial con comunidades</div>
+            <div style={{ fontSize: 11, color: "#6B7280" }}>Seguimiento independiente a las métricas de UserPilot</div>
+          </div>
+        </div>
+        <span style={tag("#D97706", "#FFFBEB")}>⏳ Bloqueado hasta 21-jul</span>
+      </div>
+
+      {/* Meta vs actual */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+        {[
+          {
+            label: "Comunidades activas",
+            actual: actual.comunidades,
+            meta: meta.comunidades,
+            pct: comPct,
+            color: "#10B981",
+          },
+          {
+            label: "Negociaciones en curso",
+            actual: actual.negociacionesEnCurso,
+            meta: meta.negociaciones,
+            pct: negPct,
+            color: "#3B82F6",
+          },
+        ].map(m => (
+          <div key={m.label} style={{ background: "#fff", borderRadius: 12, padding: "12px 14px", border: "1px solid #D1FAE5" }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#6B7280", marginBottom: 6 }}>{m.label}</div>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 8 }}>
+              <span style={{ fontSize: 28, fontWeight: 900, color: m.color, lineHeight: 1 }}>{m.actual}</span>
+              <span style={{ fontSize: 12, color: "#9CA3AF" }}>/ {m.meta} meta</span>
+            </div>
+            <div style={{ height: 6, background: "#F3F4F6", borderRadius: 999, overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${m.pct}%`, background: m.color, borderRadius: 999 }} />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Productos pendientes */}
+      <div style={{ background: "#fff", borderRadius: 12, padding: "14px 16px", border: "1px solid #FDE68A", marginBottom: 12 }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+          <span style={{ fontSize: 22, flexShrink: 0 }}>📦</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "baseline", gap: 8, marginBottom: 4 }}>
+              <span style={{ fontSize: 22, fontWeight: 900, color: "#D97706" }}>
+                {actual.productosPendientes.toLocaleString("es-CO")}
+              </span>
+              <span style={{ fontSize: 12, color: "#92400E", fontWeight: 700 }}>productos en negociación · pendientes de subir</span>
+            </div>
+            <div style={{ fontSize: 12, color: "#6B7280", lineHeight: 1.5 }}>
+              <strong>{actual.proveedor}</strong> — tiene múltiples cuentas y marcas blancas. El volumen hace imposible la carga manual uno a uno.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bloqueante + fecha */}
+      <div style={{ background: "#FEF3C7", borderRadius: 10, padding: "12px 14px", border: "1px solid #FDE68A", display: "flex", gap: 12, alignItems: "flex-start" }}>
+        <span style={{ fontSize: 18, flexShrink: 0 }}>🚧</span>
+        <div>
+          <div style={{ fontSize: 12, fontWeight: 800, color: "#92400E", marginBottom: 3 }}>
+            Bloqueante: carga masiva disponible el <span style={{ color: "#D97706" }}>21 jul 2026</span>
+          </div>
+          <div style={{ fontSize: 12, color: "#78350F", lineHeight: 1.5 }}>{actual.contexto}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── Panel de resumen (todas las semanas) ────────────────────────────────────
 function ResumenPanel({ weeks, campana }: { weeks: Week[]; campana: typeof CAMPANA }) {
   const liderWeeks = weeks.filter(w => w.lider);
@@ -569,6 +664,7 @@ function ResumenPanel({ weeks, campana }: { weeks: Week[]; campana: typeof CAMPA
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <PilotoMVP />
       <div style={card}>
         <div style={{ fontSize: 13, fontWeight: 800, color: ACCENT, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.04em" }}>
           🔎 Hallazgos clave · {weeks.length} semanas
