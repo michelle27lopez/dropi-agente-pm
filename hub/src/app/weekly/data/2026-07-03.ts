@@ -1,9 +1,9 @@
 import type { WeeklySnapshot, Documento } from "./types";
 
 export const snapshot: WeeklySnapshot = {
-  week: "Semana 01–07 jul 2026",
+  week: "Semana 03 jul 2026",
   subtitle: "TTV en operación · Handoffs desacoplados · CAT-001 a pruebas piloto",
-  heroBadge: "Semana 01 jul · Actualizado 3-jul",
+  heroBadge: "Semana 03 jul · TTV operativo",
   heroTitle: "TTV encendido en operación plena\n+ NEG-002 handoff hoy · CAT-001 avanza a pruebas piloto con usuarios reales",
   heroStrip: [
     { label: "Objetivo Anual", value: "93.6M", sub: "Órdenes/año meta OKR" },
