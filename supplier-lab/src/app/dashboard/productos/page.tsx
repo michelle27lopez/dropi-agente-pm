@@ -9,6 +9,7 @@ import {
 import { useRouter } from "next/navigation";
 import { trackEvent } from "@/lib/analytics";
 import { ProductCreateWizard } from "@/components/ProductCreateWizard";
+import { CategoryPickerIA, type CategoriaSeleccionada } from "@/components/CategoryPickerIA";
 
 type ViewMode = "list" | "select_type" | "create_form";
 
@@ -45,6 +46,9 @@ export default function ProductosPage() {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
       setIsWizard(searchParams.get("variant") === "wizard");
+      if (searchParams.get("open") === "create") {
+        setViewMode("create_form");
+      }
       if (searchParams.get("combo_created") === "1") {
         setComboCreatedToast(true);
         window.history.replaceState({}, "", "/dashboard/productos");
@@ -347,10 +351,14 @@ export default function ProductosPage() {
 // ----------------------------------------------------------------------
 function ProductCreateForm({ onBack, onSaveSuccess }: { onBack: () => void, onSaveSuccess: () => void }) {
   const [activeTab, setActiveTab] = useState("General");
-  
+
   // Estados para validación
   const [stockQuantity, setStockQuantity] = useState<number | "">("");
   const [imagesCount, setImagesCount] = useState(0);
+
+  // Nombre del producto (controlado para alimentar la categorización con IA) y categoría seleccionada
+  const [nombreProducto, setNombreProducto] = useState("jabon");
+  const [categoriaSeleccionada, setCategoriaSeleccionada] = useState<CategoriaSeleccionada | null>(null);
 
   // Estados para Garantías
   const [garantiaIncompleta, setGarantiaIncompleta] = useState(false);
@@ -604,9 +612,10 @@ function ProductCreateForm({ onBack, onSaveSuccess }: { onBack: () => void, onSa
                 {/* Nombre */}
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-zinc-700">Nombre del producto</label>
-                  <input 
-                    type="text" 
-                    defaultValue="jabon"
+                  <input
+                    type="text"
+                    value={nombreProducto}
+                    onChange={(e) => setNombreProducto(e.target.value)}
                     className="w-full px-4 py-2 border border-zinc-200 rounded-md focus:outline-none focus:border-orange-400 focus:ring-1 focus:ring-orange-400 text-sm"
                   />
                 </div>
@@ -698,12 +707,11 @@ function ProductCreateForm({ onBack, onSaveSuccess }: { onBack: () => void, onSa
                       <option>SIMPLE</option>
                     </select>
                   </div>
-                  <div className="space-y-1.5">
-                    <label className="text-sm font-semibold text-zinc-700 flex items-center gap-1">Categoría <span className="w-3.5 h-3.5 rounded-full border border-zinc-300 flex items-center justify-center text-[9px] text-zinc-400">?</span></label>
-                    <select className="w-full px-3 py-2 border border-zinc-200 rounded-md text-sm focus:outline-none focus:border-orange-400 bg-white text-zinc-400">
-                      <option>Categoría</option>
-                    </select>
-                  </div>
+                  <CategoryPickerIA
+                    productName={nombreProducto}
+                    value={categoriaSeleccionada}
+                    onChange={setCategoriaSeleccionada}
+                  />
                 </div>
 
                 {/* SKU */}

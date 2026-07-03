@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabaseAdmin";
 
-// GET — árbol completo de categorías Dropi (hojas L4) para búsqueda manual del lado del cliente
+// GET — árbol completo de categorías Dropi (hojas L4) para el explorador manual del cliente
 export async function GET() {
-  if (!supabase) return NextResponse.json([], { status: 200 });
+  if (!supabaseAdmin) return NextResponse.json([], { status: 200 });
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseAdmin
     .from("dropi_categories")
     .select("dropi_category_id,dropi_category_path,level_1,level_2,level_3,level_4")
     .eq("status", "active")
