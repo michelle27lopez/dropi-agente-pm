@@ -176,14 +176,13 @@ export default function HubPage() {
         justifyContent: "space-between",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: 10,
-            background: "var(--dropi)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 18,
-          }}>
-            🧩
-          </div>
+          <img
+            src="/logo.png"
+            alt="Dropi PM Tools"
+            width={36}
+            height={36}
+            style={{ display: "block" }}
+          />
           <div>
             <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
               Dropi PM Tools
