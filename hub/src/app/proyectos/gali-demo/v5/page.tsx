@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { ArrowLeft, Building, Sliders, ArrowRight } from "lucide-react";
 import { GALI_PRODUCTS_400 } from "./gali-products-400.mock";
-import { SPY_WINNING_ADS, SpyWinningAd } from "./spy-winning-ads.mock";
+import { SPY_WINNING_ADS, SPY_SOURCE_TOOLS, SpyWinningAd, SpySourceTool } from "./spy-winning-ads.mock";
 import "./styles.scss";
 
 // Interfaces
@@ -12,7 +12,6 @@ interface ChatMessage {
   text: string;
   options?: string[];
   products?: ProductSuggestion[];
-  showSpyRadar?: boolean;
   notFoundAd?: { ad: SpyWinningAd; etaDays: number };
 }
 
@@ -25,7 +24,7 @@ interface ProductSuggestion {
   stock: string;
   provider: string;
   trendLabel: string;
-  providerTier: 'Premium Exclusivo' | 'Premium' | 'Verificado';
+  providerTier: 'Premium Exclusivo' | 'Premium' | 'Verificado' | 'Dropi Pulso';
 }
 
 interface Angulo {
@@ -85,7 +84,7 @@ const TRENDING_CATEGORIES = [
 
 export default function GaliV5PrototypePage() {
   // --- Estados de Navegación y Flujo ---
-  const [step, setStep] = useState<'goal' | 'discovery' | 'select' | 'estrategia' | 'landing' | 'campana' | 'launch'>('goal');
+  const [step, setStep] = useState<'goal' | 'discovery' | 'espionaje' | 'select' | 'estrategia' | 'landing' | 'campana' | 'launch'>('goal');
   const [projectId, setProjectId] = useState<string>('');
   
   // --- Estados de Onboarding (Discovery) ---
@@ -119,8 +118,17 @@ export default function GaliV5PrototypePage() {
 
   // --- Estados del Radar de Anuncios Ganadores (método Espionaje) ---
   const [spyRadarCategoryFilter, setSpyRadarCategoryFilter] = useState<string>('');
+  const [spyPlatformFilter, setSpyPlatformFilter] = useState<'' | 'Meta' | 'TikTok'>('');
+  const [spySourceToolFilter, setSpySourceToolFilter] = useState<'' | SpySourceTool>('');
+  const [spySearchQuery, setSpySearchQuery] = useState<string>('');
+  const [spySortBy, setSpySortBy] = useState<'hookRate' | 'ctr' | 'cpm' | 'days'>('hookRate');
   const [selectedWinningAd, setSelectedWinningAd] = useState<SpyWinningAd | null>(null);
   const [showNotifyToast, setShowNotifyToast] = useState<boolean>(false);
+
+  // --- Estados del Asistente de Espionaje (chat izquierdo del paso dedicado) ---
+  const [spyAssistantInput, setSpyAssistantInput] = useState<string>('');
+  const [isGeneratingSpyAssistant, setIsGeneratingSpyAssistant] = useState<boolean>(false);
+  const [spyAssistantMessages, setSpyAssistantMessages] = useState<ChatMessage[]>([]);
 
   // --- Estados del Analista IA ---
   const [analystInput, setAnalystInput] = useState<string>('');
@@ -167,6 +175,7 @@ export default function GaliV5PrototypePage() {
   // Refs
   const chatBoxRef = useRef<HTMLDivElement>(null);
   const analystChatBoxRef = useRef<HTMLDivElement>(null);
+  const spyAssistantChatBoxRef = useRef<HTMLDivElement>(null);
 
   // Auto-scroll chats
   useEffect(() => {
@@ -180,6 +189,12 @@ export default function GaliV5PrototypePage() {
       analystChatBoxRef.current.scrollTop = analystChatBoxRef.current.scrollHeight;
     }
   }, [analystMessages, isGeneratingAnalyst]);
+
+  useEffect(() => {
+    if (spyAssistantChatBoxRef.current) {
+      spyAssistantChatBoxRef.current.scrollTop = spyAssistantChatBoxRef.current.scrollHeight;
+    }
+  }, [spyAssistantMessages, isGeneratingSpyAssistant]);
 
   // Cargar productos por defecto en el constructor
   useEffect(() => {
@@ -474,6 +489,37 @@ export default function GaliV5PrototypePage() {
     moda: 'Moda 👑',
   };
 
+  // Nombres de categoría sin emoji, coincidiendo con el campo `categoria` real del catálogo
+  const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
+    mascotas: 'Mascotas',
+    belleza: 'Belleza',
+    hogar: 'Hogar & Deco',
+    'tecnología': 'Tecnología',
+    tecnologia: 'Tecnología',
+    salud: 'Salud & Bienestar',
+    fitness: 'Fitness',
+    'niños': 'Niños',
+    ninos: 'Niños',
+    moda: 'Moda',
+  };
+
+  // Producto sintético cuando el usuario decide continuar con un anuncio que Dropi Pulso debe conseguir
+  const continueWithPulsoProduct = (ad: SpyWinningAd) => {
+    const syntheticProduct: ProductSuggestion = {
+      id: `pulso-${ad.id}`,
+      name: ad.productName,
+      category: CATEGORY_DISPLAY_NAMES[ad.category] || ad.category,
+      adaScore: 70,
+      margin: '35%',
+      stock: 'En gestión por Dropi Pulso',
+      provider: 'Dropi Pulso',
+      trendLabel: ad.anguloVenta,
+      providerTier: 'Dropi Pulso',
+    };
+    selectProduct(syntheticProduct);
+    setStep('estrategia');
+  };
+
   const promptPlatformAndBudget = (categoryId: string) => {
     setChatState(2);
     const catText = CATEGORY_LABELS[categoryId] || 'tu nicho';
@@ -493,16 +539,16 @@ export default function GaliV5PrototypePage() {
 
   const selectWinningAd = (ad: SpyWinningAd) => {
     setSelectedWinningAd(ad);
-    setChatMessages(prev => [...prev, { sender: 'user', text: `Elijo: ${ad.productName}` }]);
-    setIsGeneratingAgent(true);
+    setSpyAssistantMessages(prev => [...prev, { sender: 'user', text: `Elijo: ${ad.productName}` }]);
+    setIsGeneratingSpyAssistant(true);
 
     setTimeout(() => {
-      setChatMessages(prev => [...prev, {
+      setSpyAssistantMessages(prev => [...prev, {
         sender: 'agent',
-        text: `Buen ojo. "${ad.productName}" lleva ${ad.daysActive} días activo en ${ad.platform} (fuente: ${ad.sourceTool}) con ${ad.ctrPct}% de CTR y ${ad.hookRatePct}% de Hook Rate. Está funcionando por su ángulo "${ad.anguloVenta}", con el gancho ${ad.hookText} y una oferta de ${ad.offerType}.`
+        text: `Buen ojo. "${ad.productName}" lleva ${ad.daysActive} días activo en ${ad.platform} (fuente: ${ad.sourceTool}) con ${ad.ctrPct}% de CTR y ${ad.hookRatePct}% de Hook Rate. Está funcionando por su ángulo "${ad.anguloVenta}", con el gancho ${ad.hookText} y una oferta de ${ad.offerType}. Dame un segundo, reviso el catálogo de Dropi para encontrarte el equivalente...`
       }]);
-      setIsGeneratingAgent(false);
-      setIsSearching(true);
+      // isGeneratingSpyAssistant se mantiene en true — encadena directo con la búsqueda,
+      // así los "..." de carga no se apagan entre los dos mensajes.
 
       setTimeout(() => {
         const results = searchVirtualMillionCatalog({
@@ -513,23 +559,28 @@ export default function GaliV5PrototypePage() {
           dailyBudget: budget,
           limit: 100
         });
-        setIsSearching(false);
+
+        setChatNicho(ad.category);
+        setSelectedCategory(ad.category);
+        setChatQuery(ad.matchedQuery);
+        setChatEstrategia('tendencias_virales');
+        setProducts(results);
 
         if (results.length > 0) {
-          setChatNicho(ad.category);
-          setSelectedCategory(ad.category);
-          setChatQuery(ad.matchedQuery);
-          setChatEstrategia('tendencias_virales');
-          setProducts(results);
-          setStep('select');
+          setSpyAssistantMessages(prev => [...prev, {
+            sender: 'agent',
+            text: `Encontré ${results.length} opciones en catálogo Dropi para este ángulo. Estas son las 3 mejores — elige una para comparar proveedores, o explora el catálogo completo:`,
+            products: results.slice(0, 3)
+          }]);
         } else {
           const etaDays = 5 + Math.floor(Math.random() * 6); // 5-10 días
-          setChatMessages(prev => [...prev, {
+          setSpyAssistantMessages(prev => [...prev, {
             sender: 'agent',
             text: `Busqué "${ad.productName}" en nuestro catálogo y todavía no lo tenemos disponible en Dropi.`,
             notFoundAd: { ad, etaDays }
           }]);
         }
+        setIsGeneratingSpyAssistant(false);
       }, 600);
     }, 700);
   };
@@ -549,6 +600,22 @@ export default function GaliV5PrototypePage() {
   const notifyWhenAvailable = () => {
     setShowNotifyToast(true);
     setTimeout(() => setShowNotifyToast(false), 3000);
+  };
+
+  // Navegación libre entre pasos (prototipo/demo)
+  const STEP_ORDER: (typeof step)[] = ['goal', 'discovery', 'select', 'estrategia', 'landing', 'campana', 'launch'];
+
+  const goToPreviousStep = () => {
+    if (step === 'espionaje') {
+      setStep('discovery');
+      return;
+    }
+    const idx = STEP_ORDER.indexOf(step);
+    if (idx > 0) {
+      setStep(STEP_ORDER[idx - 1]);
+    } else {
+      window.history.back();
+    }
   };
 
   const selectChatOption = async (optionText: string) => {
@@ -734,11 +801,11 @@ DEBES RESPONDER EXCLUSIVAMENTE CON UN OBJETO JSON con el siguiente formato, no a
         ];
         defaultText = `¡Brutal! El enfoque en dolores es el método de Juan Felipe para encontrar productos con alta rentabilidad y salir de la guerra de precios. Para encontrar un solucionador real, ¿qué dolor o molestia en el mercado quieres solucionar hoy? Selecciona una opción o escribe tu idea en el chat:`;
       } else if (optionText.includes('Viral')) {
-        setChatMessages(prev => [...prev, {
+        setSpyAssistantMessages([{
           sender: 'agent',
-          text: `¡Al grano! El método de volumen y espionaje de Cesar Ortegón. Escaneé AdSpy, Minea, Foreplay, Kalodata, Ecomhunt, Dropkiller y la Biblioteca de Anuncios buscando ganadores activos ahora mismo. Elige el que más te llame — te explico exactamente por qué está funcionando antes de buscarte el producto equivalente en catálogo:`,
-          showSpyRadar: true
+          text: `¡Al grano! El método de volumen y espionaje de Cesar Ortegón. Escaneé AdSpy, Minea, Foreplay, Kalodata, Ecomhunt, Dropkiller y la Biblioteca de Anuncios buscando ganadores activos ahora mismo. Busca, filtra u ordena a la derecha — cuando encuentres uno que te convenza, dale "Usar este ángulo" y seguimos.`
         }]);
+        setStep('espionaje');
         setIsGeneratingAgent(false);
         return;
       } else {
@@ -912,6 +979,42 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
     setIsGeneratingAnalyst(false);
   };
 
+  // --- Asistente del Radar de Anuncios Ganadores (método Espionaje) ---
+  const askSpyAssistant = async (quickQuestion?: string) => {
+    const text = quickQuestion || spyAssistantInput.trim();
+    if (!text) return;
+
+    setSpyAssistantInput('');
+    setSpyAssistantMessages(prev => [...prev, { sender: 'user', text }]);
+    setIsGeneratingSpyAssistant(true);
+
+    const adsListText = SPY_WINNING_ADS.map(ad =>
+      `- ${ad.productName} (${ad.category}, ${ad.platform}, fuente: ${ad.sourceTool}): CTR ${ad.ctrPct}%, Hook Rate ${ad.hookRatePct}%, CPM $${ad.cpmCop}, ${ad.daysActive} días activo, ángulo: ${ad.anguloVenta}`
+    ).join('\n');
+
+    let agentText = '';
+    try {
+      const res = await fetch('/api/gali/espionaje', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: text, adsListText }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        agentText = data.content || '';
+      }
+    } catch {
+      // sin conexión al backend de IA — cae al mensaje por defecto
+    }
+
+    if (!agentText) {
+      agentText = `Mirando los datos: el Hook Rate es la señal más importante — si pasa de 60%, el gancho está reteniendo audiencia y vale la pena replicarlo. Si buscas barato para testear, fíjate en el CPM más bajo. Si quieres algo validado, prioriza los que llevan más días activos sin apagarse. ¿Sobre cuál quieres que profundice?`;
+    }
+
+    setSpyAssistantMessages(prev => [...prev, { sender: 'agent', text: agentText }]);
+    setIsGeneratingSpyAssistant(false);
+  };
+
   // --- Comparador de Proveedores ---
   const extractBaseName = (n: string) => {
     return n.split(' (')[0].replace(' Pro', '').replace(' Premium', '').replace(' Mini', '').replace(' Recargable', '').replace(' Inteligente', '').replace(' Eco', '').replace(' Ultra', '').replace(' Max', '').replace(' Plus', '');
@@ -1048,6 +1151,24 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
       setIsSearching(false);
     }
   };
+
+  // --- Filtro/orden del Radar de Anuncios Ganadores ---
+  const filteredSpyAds = useMemo(() => {
+    const q = spySearchQuery.trim().toLowerCase();
+    let list = SPY_WINNING_ADS.filter(ad =>
+      (!spyRadarCategoryFilter || ad.category === spyRadarCategoryFilter) &&
+      (!spyPlatformFilter || ad.platform === spyPlatformFilter) &&
+      (!spySourceToolFilter || ad.sourceTool === spySourceToolFilter) &&
+      (!q || `${ad.productName} ${ad.hookText} ${ad.anguloVenta}`.toLowerCase().includes(q))
+    );
+    list = [...list].sort((a, b) => {
+      if (spySortBy === 'ctr') return b.ctrPct - a.ctrPct;
+      if (spySortBy === 'cpm') return a.cpmCop - b.cpmCop;
+      if (spySortBy === 'days') return b.daysActive - a.daysActive;
+      return b.hookRatePct - a.hookRatePct;
+    });
+    return list;
+  }, [spyRadarCategoryFilter, spyPlatformFilter, spySourceToolFilter, spySearchQuery, spySortBy]);
 
   // --- Ángulos Creativos ---
   const angulos = useMemo<Angulo[]>(() => {
@@ -1266,7 +1387,7 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
     <div className="np-page">
       {/* Header con progreso */}
       <div className="np-header">
-        <button type="button" className="np-header__back" onClick={() => window.history.back()}>
+        <button type="button" className="np-header__back" onClick={goToPreviousStep}>
           <ArrowLeft size={16} />
         </button>
         <div className="np-header__title-group">
@@ -1277,29 +1398,29 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
         </div>
         {step !== 'goal' && (
           <div className="np-steps np-steps--6">
-            <span className={`np-step ${step === 'discovery' ? 'np-step--active' : ''} ${['select','estrategia','landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
+            <button type="button" className={`np-step ${['discovery','espionaje'].includes(step) ? 'np-step--active' : ''} ${['select','estrategia','landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`} onClick={() => setStep('discovery')}>
               1 · Descubrir
-            </span>
+            </button>
             <span className="np-step-line"></span>
-            <span className={`np-step ${step === 'select' ? 'np-step--active' : ''} ${['estrategia','landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
+            <button type="button" className={`np-step ${step === 'select' ? 'np-step--active' : ''} ${['estrategia','landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`} onClick={() => setStep('select')}>
               2 · Elegir
-            </span>
+            </button>
             <span className="np-step-line"></span>
-            <span className={`np-step ${step === 'estrategia' ? 'np-step--active' : ''} ${['landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
+            <button type="button" className={`np-step ${step === 'estrategia' ? 'np-step--active' : ''} ${['landing','campana','launch'].includes(step) ? 'np-step--done' : ''}`} onClick={() => setStep('estrategia')}>
               3 · Estrategia
-            </span>
+            </button>
             <span className="np-step-line"></span>
-            <span className={`np-step ${step === 'landing' ? 'np-step--active' : ''} ${['campana','launch'].includes(step) ? 'np-step--done' : ''}`}>
+            <button type="button" className={`np-step ${step === 'landing' ? 'np-step--active' : ''} ${['campana','launch'].includes(step) ? 'np-step--done' : ''}`} onClick={() => setStep('landing')}>
               4 · Landing
-            </span>
+            </button>
             <span className="np-step-line"></span>
-            <span className={`np-step ${step === 'campana' ? 'np-step--active' : ''} ${step === 'launch' ? 'np-step--done' : ''}`}>
+            <button type="button" className={`np-step ${step === 'campana' ? 'np-step--active' : ''} ${step === 'launch' ? 'np-step--done' : ''}`} onClick={() => setStep('campana')}>
               5 · Campaña
-            </span>
+            </button>
             <span className="np-step-line"></span>
-            <span className={`np-step ${step === 'launch' ? 'np-step--active' : ''}`}>
+            <button type="button" className={`np-step ${step === 'launch' ? 'np-step--active' : ''}`} onClick={() => setStep('launch')}>
               6 · Lanzar
-            </span>
+            </button>
           </div>
         )}
       </div>
@@ -1373,81 +1494,6 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
                             {opt}
                           </button>
                         ))}
-                      </div>
-                    )}
-
-                    {msg.showSpyRadar && (
-                      selectedWinningAd ? (
-                        <div className="np-spy-radar__selected">
-                          ✓ Usando el ángulo de <strong>{selectedWinningAd.productName}</strong> ({selectedWinningAd.sourceTool})
-                        </div>
-                      ) : (
-                        <div className="np-spy-radar">
-                          <div className="np-spy-radar__filters">
-                            <button
-                              type="button"
-                              className={`np-spy-category-chip ${spyRadarCategoryFilter === '' ? 'np-spy-category-chip--active' : ''}`}
-                              onClick={() => setSpyRadarCategoryFilter('')}>
-                              Todas
-                            </button>
-                            {TRENDING_CATEGORIES.map(cat => (
-                              <button
-                                key={cat.id}
-                                type="button"
-                                className={`np-spy-category-chip ${spyRadarCategoryFilter === cat.id ? 'np-spy-category-chip--active' : ''}`}
-                                onClick={() => setSpyRadarCategoryFilter(cat.id)}>
-                                {cat.emoji} {cat.label}
-                              </button>
-                            ))}
-                          </div>
-
-                          <div className="np-spy-radar__grid">
-                            {SPY_WINNING_ADS
-                              .filter(ad => !spyRadarCategoryFilter || ad.category === spyRadarCategoryFilter)
-                              .map(ad => (
-                                <div key={ad.id} className="np-spy-ad-card">
-                                  <div className="np-spy-ad-card__header">
-                                    <span className="np-spy-source-badge">{ad.sourceTool}</span>
-                                    <span className="np-spy-ad-card__platform">{ad.platform === 'Meta' ? '📘 Meta' : '🎵 TikTok'}</span>
-                                  </div>
-                                  <strong className="np-spy-ad-card__name">{ad.productName}</strong>
-                                  <p className="np-spy-ad-card__hook">{ad.hookText}</p>
-                                  <div className="np-spy-ad-card__metrics">
-                                    <span><strong>{ad.ctrPct}%</strong> CTR</span>
-                                    <span><strong>{ad.hookRatePct}%</strong> Hook Rate</span>
-                                    <span><strong>${ad.cpmCop.toLocaleString('es-CO')}</strong> CPM</span>
-                                    <span><strong>{ad.daysActive}</strong> días activo</span>
-                                  </div>
-                                  <button type="button" className="np-spy-ad-card__select-btn" onClick={() => selectWinningAd(ad)}>
-                                    Usar este ángulo →
-                                  </button>
-                                </div>
-                              ))}
-                          </div>
-                        </div>
-                      )
-                    )}
-
-                    {msg.notFoundAd && (
-                      <div className="np-pulso-fallback">
-                        <div className="np-pulso-fallback__header">
-                          <span className="np-pulso-fallback__icon">🔮</span>
-                          <strong>Dropi Pulso</strong> ya está gestionando proveedores para este producto
-                        </div>
-                        <p className="np-pulso-fallback__eta">
-                          Disponible en un estimado de <strong>{msg.notFoundAd.etaDays} días</strong>.
-                        </p>
-                        <div className="np-pulso-fallback__actions">
-                          <button type="button" className="np-pulso-fallback__notify-btn" onClick={notifyWhenAvailable}>
-                            Notificarme cuando esté disponible
-                          </button>
-                          <button type="button" className="np-pulso-fallback__similar-btn" onClick={() => viewSimilarInCategory(msg.notFoundAd!.ad)}>
-                            Ver productos similares ya disponibles →
-                          </button>
-                        </div>
-                        <a className="np-pulso-fallback__link" href="/proyectos/pulso-demo" target="_blank" rel="noopener noreferrer">
-                          Ver cómo funciona Dropi Pulso →
-                        </a>
                       </div>
                     )}
 
@@ -1543,6 +1589,254 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
                   <ArrowRight size={16} />
                 </button>
               ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── ETAPA 1.5: RADAR DE ANUNCIOS GANADORES (método Espionaje, split-screen) ── */}
+      {step === 'espionaje' && (
+        <div className="np-select">
+          <div className="np-select__header">
+            <div>
+              <h2 className="np-select__title">Radar de Anuncios Ganadores</h2>
+              <p className="np-select__subtitle">Explora qué está funcionando ahora mismo en AdSpy, Minea, Foreplay y más — elige un ángulo para pautar.</p>
+            </div>
+            <button type="button" className="np-select__back-btn" onClick={() => setStep('discovery')}>
+              ← Volver
+            </button>
+          </div>
+
+          <div className="np-select-split">
+            {/* Panel Izquierdo: Asistente de Espionaje */}
+            <div className="np-analyst-panel">
+              <div className="np-analyst-panel__header">
+                <span className="np-analyst-panel__status-dot"></span>
+                <strong>Gali · Analista de Espionaje</strong>
+              </div>
+
+              <div className="np-analyst-chat__box" ref={spyAssistantChatBoxRef}>
+                {spyAssistantMessages.map((msg, idx) => (
+                  <div key={idx} className={`np-analyst-bubble ${msg.sender === 'agent' ? 'np-analyst-bubble--agent' : 'np-analyst-bubble--user'}`}>
+                    <div className="np-analyst-bubble__avatar">
+                      {msg.sender === 'agent' ? '🎯' : '👤'}
+                    </div>
+                    <div className="np-analyst-bubble__content">
+                      <p className="np-analyst-bubble__text">{msg.text}</p>
+
+                      {msg.notFoundAd && (
+                        <div className="np-pulso-fallback">
+                          <div className="np-pulso-fallback__header">
+                            <span className="np-pulso-fallback__icon">🔮</span>
+                            <strong>Dropi Pulso</strong> ya está gestionando proveedores para este producto
+                          </div>
+                          <p className="np-pulso-fallback__eta">
+                            Disponible en un estimado de <strong>{msg.notFoundAd.etaDays} días</strong>. Si quieres, puedes continuar con todos los pasos igual — Dropi Pulso se encargará de conseguir este producto con un proveedor mientras armas tu estrategia y lanzas la campaña.
+                          </p>
+                          <div className="np-pulso-fallback__actions">
+                            <button type="button" className="np-pulso-fallback__continue-btn" onClick={() => continueWithPulsoProduct(msg.notFoundAd!.ad)}>
+                              Continuar con este producto →
+                            </button>
+                            <button type="button" className="np-pulso-fallback__similar-btn" onClick={() => viewSimilarInCategory(msg.notFoundAd!.ad)}>
+                              Ver productos similares ya disponibles
+                            </button>
+                            <button type="button" className="np-pulso-fallback__notify-btn" onClick={notifyWhenAvailable}>
+                              Notificarme cuando esté disponible
+                            </button>
+                          </div>
+                          <a className="np-pulso-fallback__link" href="/proyectos/pulso-demo" target="_blank" rel="noopener noreferrer">
+                            Ver cómo funciona Dropi Pulso →
+                          </a>
+                        </div>
+                      )}
+
+                      {msg.products && msg.products.length > 0 && (
+                        <div className="np-chat-bubble__products">
+                          {msg.products.map(p => (
+                            <div key={p.id} className="np-chat-product-card">
+                              <div className="np-chat-product-card__header">
+                                <div className="np-chat-product-card__score" data-level={getScoreClass(p.adaScore)}>
+                                  {p.adaScore}
+                                </div>
+                                <div className="np-chat-product-card__title-group">
+                                  <strong className="np-chat-product-card__name">{p.name}</strong>
+                                  <span className="np-chat-product-card__meta">
+                                    {p.category} · Margen: {p.margin} · Prov: {p.provider}
+                                    <span className="np-badge np-badge--tier" data-tier={p.providerTier}>{p.providerTier}</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="np-chat-product-card__body">
+                                <p className="np-chat-product-card__tip">
+                                  <strong>💡 Secreto de Escala:</strong> {p.trendLabel}
+                                </p>
+                                {p.providerTier === 'Verificado' && (
+                                  <div className="np-chat-product-card__warning">
+                                    ⚠️ <strong>Proveedor Verificado:</strong> Mayor riesgo de devoluciones por demoras. Te sugiero activar <strong>Chatea Pro</strong> para confirmación activa de WhatsApp.
+                                  </div>
+                                )}
+                              </div>
+                              <button type="button" className="np-chat-product-card__select-btn" onClick={() => { selectProduct(p); setStep('select'); }}>
+                                Seleccionar Producto y Continuar →
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {msg.products && msg.products.length > 0 && (
+                        <div className="np-chat-bubble__escape-row">
+                          <button type="button" className="np-discovery__browse-catalog-btn" onClick={() => setStep('select')}>
+                            Explorar catálogo completo con este enfoque (100+ opciones) →
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {isGeneratingSpyAssistant && (
+                  <div className="np-analyst-bubble np-analyst-bubble--agent">
+                    <div className="np-analyst-bubble__avatar">🎯</div>
+                    <div className="np-analyst-bubble__content">
+                      <div className="np-chat-loading-dots">
+                        <span></span><span></span><span></span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="np-analyst-chat__quick-questions">
+                <button type="button" className="np-analyst-quick-btn" onClick={() => askSpyAssistant('¿Cuál tiene mejor Hook Rate?')}>
+                  🎣 Mejor Hook Rate
+                </button>
+                <button type="button" className="np-analyst-quick-btn" onClick={() => askSpyAssistant('¿Cuál es más barato de pautar (CPM)?')}>
+                  💰 Más barato (CPM)
+                </button>
+                <button type="button" className="np-analyst-quick-btn" onClick={() => askSpyAssistant('¿Cuál lleva más tiempo activo (más validado)?')}>
+                  ⏳ Más validado
+                </button>
+              </div>
+
+              <div className="np-analyst-chat__input-row">
+                <input
+                  type="text"
+                  className="np-analyst-chat__input"
+                  placeholder="Pregúntale a Gali sobre estos anuncios..."
+                  value={spyAssistantInput}
+                  onChange={e => setSpyAssistantInput(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && askSpyAssistant()}
+                  disabled={isGeneratingSpyAssistant} />
+                <button type="button" className="np-analyst-chat__send-btn" onClick={() => askSpyAssistant()} disabled={!spyAssistantInput.trim() || isGeneratingSpyAssistant}>
+                  Preguntar
+                </button>
+              </div>
+            </div>
+
+            {/* Panel Derecho: Herramienta de Espionaje */}
+            <div className="np-catalog-panel">
+              <div className="np-spy-toolbar">
+                <input
+                  type="text"
+                  className="np-spy-search-input"
+                  placeholder="Buscar por producto, gancho o ángulo..."
+                  value={spySearchQuery}
+                  onChange={e => setSpySearchQuery(e.target.value)} />
+
+                <select className="np-spy-sort-select" value={spySortBy} onChange={e => setSpySortBy(e.target.value as typeof spySortBy)}>
+                  <option value="hookRate">Ordenar: mejor Hook Rate</option>
+                  <option value="ctr">Ordenar: mejor CTR</option>
+                  <option value="cpm">Ordenar: menor CPM</option>
+                  <option value="days">Ordenar: más días activo</option>
+                </select>
+
+                <div className="np-spy-radar__filters">
+                  <button
+                    type="button"
+                    className={`np-spy-category-chip ${spyRadarCategoryFilter === '' ? 'np-spy-category-chip--active' : ''}`}
+                    onClick={() => setSpyRadarCategoryFilter('')}>
+                    Todas las categorías
+                  </button>
+                  {TRENDING_CATEGORIES.map(cat => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      className={`np-spy-category-chip ${spyRadarCategoryFilter === cat.id ? 'np-spy-category-chip--active' : ''}`}
+                      onClick={() => setSpyRadarCategoryFilter(cat.id)}>
+                      {cat.emoji} {cat.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="np-spy-radar__filters">
+                  <button
+                    type="button"
+                    className={`np-spy-category-chip ${spyPlatformFilter === '' ? 'np-spy-category-chip--active' : ''}`}
+                    onClick={() => setSpyPlatformFilter('')}>
+                    Todas las plataformas
+                  </button>
+                  <button
+                    type="button"
+                    className={`np-spy-category-chip ${spyPlatformFilter === 'Meta' ? 'np-spy-category-chip--active' : ''}`}
+                    onClick={() => setSpyPlatformFilter('Meta')}>
+                    📘 Meta
+                  </button>
+                  <button
+                    type="button"
+                    className={`np-spy-category-chip ${spyPlatformFilter === 'TikTok' ? 'np-spy-category-chip--active' : ''}`}
+                    onClick={() => setSpyPlatformFilter('TikTok')}>
+                    🎵 TikTok
+                  </button>
+                </div>
+
+                <div className="np-spy-radar__filters">
+                  <button
+                    type="button"
+                    className={`np-spy-category-chip ${spySourceToolFilter === '' ? 'np-spy-category-chip--active' : ''}`}
+                    onClick={() => setSpySourceToolFilter('')}>
+                    Todas las herramientas
+                  </button>
+                  {SPY_SOURCE_TOOLS.map(tool => (
+                    <button
+                      key={tool}
+                      type="button"
+                      className={`np-spy-category-chip ${spySourceToolFilter === tool ? 'np-spy-category-chip--active' : ''}`}
+                      onClick={() => setSpySourceToolFilter(tool)}>
+                      {tool}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="np-spy-radar__grid">
+                {filteredSpyAds.map(ad => (
+                  <div key={ad.id} className={`np-spy-ad-card ${selectedWinningAd?.id === ad.id ? 'np-spy-ad-card--selected' : ''}`}>
+                    <div className="np-spy-ad-card__header">
+                      <span className="np-spy-source-badge">{ad.sourceTool}</span>
+                      <span className="np-spy-ad-card__platform">{ad.platform === 'Meta' ? '📘 Meta' : '🎵 TikTok'}</span>
+                      {ad.demoNotInCatalog && (
+                        <span className="np-spy-ad-card__pulso-tag" title="Demo: no tiene match en catálogo — dispara el flujo de Dropi Pulso">
+                          🔮 Pulso
+                        </span>
+                      )}
+                    </div>
+                    <strong className="np-spy-ad-card__name">{ad.productName}</strong>
+                    <p className="np-spy-ad-card__hook">{ad.hookText}</p>
+                    <div className="np-spy-ad-card__metrics">
+                      <span><strong>{ad.ctrPct}%</strong> CTR</span>
+                      <span><strong>{ad.hookRatePct}%</strong> Hook Rate</span>
+                      <span><strong>${ad.cpmCop.toLocaleString('es-CO')}</strong> CPM</span>
+                      <span><strong>{ad.daysActive}</strong> días activo</span>
+                    </div>
+                    <button type="button" className="np-spy-ad-card__select-btn" onClick={() => selectWinningAd(ad)}>
+                      Usar este ángulo →
+                    </button>
+                  </div>
+                ))}
+                {filteredSpyAds.length === 0 && (
+                  <p className="np-select__subtitle">No hay anuncios que coincidan con estos filtros.</p>
+                )}
+              </div>
             </div>
           </div>
         </div>

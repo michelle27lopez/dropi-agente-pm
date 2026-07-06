@@ -157,15 +157,28 @@ $ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
   color: $gray-400;
   padding: $size-1 $size-2;
   border-radius: $radius-sm;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: $gray-100;
+    color: $gray-600;
+  }
 
   &--active {
     color: $primary-500;
     background: rgba($primary-500, 0.08);
     font-weight: $font-bold;
+
+    &:hover { background: rgba($primary-500, 0.14); }
   }
 
   &--done {
     color: #22c55e;
+
+    &:hover { background: rgba(#22c55e, 0.1); }
   }
 }
 
@@ -2520,15 +2533,35 @@ $ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
     box-shadow: 0 6px 16px rgba(0,0,0,0.08);
   }
 
+  &--selected {
+    border-color: $primary-500;
+    box-shadow: 0 0 0 3px rgba($primary-500, 0.12);
+  }
+
   &__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
   &__platform {
     font-size: 11px;
     color: #64748b;
+  }
+
+  &__pulso-tag {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+    background: #eef2ff;
+    color: #4338ca;
+    border: 1px dashed #a5b4fc;
+    border-radius: 100px;
+    padding: 2px 8px;
+    font-size: 10px;
+    font-weight: 700;
   }
 
   &__name {
@@ -2586,6 +2619,45 @@ $ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
   letter-spacing: 0.03em;
 }
 
+// Toolbar del paso dedicado "Radar de Anuncios Ganadores"
+.np-spy-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: $size-4;
+}
+
+.np-spy-search-input {
+  height: 40px;
+  padding: 0 $size-3;
+  border: 1px solid $gray-200;
+  border-radius: $radius-md;
+  font-family: $font-primary;
+  font-size: $font-sm;
+  color: $gray-800;
+  outline: none;
+  width: 100%;
+  max-width: 420px;
+
+  &:focus { border-color: $primary-500; }
+  &::placeholder { color: $gray-400; }
+}
+
+.np-spy-sort-select {
+  height: 36px;
+  padding: 0 $size-3;
+  border: 1px solid $gray-200;
+  border-radius: $radius-md;
+  font-family: $font-primary;
+  font-size: 12px;
+  color: $gray-700;
+  background: #fff;
+  cursor: pointer;
+  width: fit-content;
+
+  &:focus { border-color: $primary-500; }
+}
+
 // Fallback "Dropi Pulso lo consigue" cuando el producto no existe en catálogo
 .np-pulso-fallback {
   display: flex;
@@ -2624,7 +2696,7 @@ $ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
     margin-top: 4px;
   }
 
-  &__notify-btn {
+  &__continue-btn {
     background: #4338ca;
     color: #fff;
     border: none;
@@ -2650,6 +2722,18 @@ $ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
     cursor: pointer;
     transition: background 0.15s;
     &:hover { background: #eef2ff; }
+  }
+
+  &__notify-btn {
+    background: none;
+    color: #6d28d9;
+    border: none;
+    padding: 8px 4px;
+    font-family: $font-primary;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
   }
 
   &__link {

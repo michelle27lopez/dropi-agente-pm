@@ -12,6 +12,17 @@ export type SpySourceTool =
   | 'Scalboost'
   | 'Biblioteca de Anuncios';
 
+export const SPY_SOURCE_TOOLS: SpySourceTool[] = [
+  'AdSpy',
+  'Minea',
+  'Foreplay',
+  'Kalodata',
+  'Ecomhunt',
+  'Dropkiller',
+  'Scalboost',
+  'Biblioteca de Anuncios',
+];
+
 export interface SpyWinningAd {
   id: string;
   productName: string;
@@ -26,6 +37,8 @@ export interface SpyWinningAd {
   offerType: string;
   anguloVenta: string;
   matchedQuery: string;
+  /** true = a propósito no tiene match en el catálogo de 400, para demostrar el flujo de Dropi Pulso al presentar */
+  demoNotInCatalog?: boolean;
 }
 
 export const SPY_WINNING_ADS: SpyWinningAd[] = [
@@ -238,6 +251,7 @@ export const SPY_WINNING_ADS: SpyWinningAd[] = [
     offerType: 'Escasez — stock global agotándose',
     anguloVenta: 'Aspiracional/entretenimiento — fiestas y piscina sin cables ni cuidado',
     matchedQuery: 'bocina',
+    demoNotInCatalog: true,
   },
   {
     id: 'spy-015',
@@ -253,5 +267,6 @@ export const SPY_WINNING_ADS: SpyWinningAd[] = [
     offerType: 'Preventa con descuento anticipado',
     anguloVenta: 'Dolor estacional — frío como barrera para mantener rutina de ejercicio',
     matchedQuery: 'guantes',
+    demoNotInCatalog: true,
   },
 ];
