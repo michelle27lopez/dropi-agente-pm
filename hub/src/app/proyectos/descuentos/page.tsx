@@ -99,6 +99,15 @@ export default function DescuentosPage() {
                   badgeColor: COLOR,
                   external: true,
                 },
+                {
+                  href: "/proyectos/descuentos/prototipo",
+                  icon: "🖱️",
+                  title: "Prototipo interactivo",
+                  sub: "Vista Proveedor (crear descuento) + Vista Dropshipper (precio antes/ahora)",
+                  badge: "Fase 1",
+                  badgeColor: "#10B981",
+                  external: false,
+                },
               ].map((card) => (
                 <a
                   key={card.href}
