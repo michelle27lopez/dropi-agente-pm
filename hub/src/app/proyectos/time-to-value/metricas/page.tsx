@@ -1,5 +1,5 @@
 "use client";
-
+// TTV dashboard metrics UI component page
 import { useEffect, useState, useCallback } from "react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -566,7 +566,7 @@ function MonthTab({
   const weekRows = (data.weeklyData ?? []).filter((w: any) => Number(w.month_number) === monthNum);
 
   // Detail lists tab state
-  const [detailTab, setDetailTab] = useState<"brecha" | "manual" | "matched">("brecha");
+  const [detailTab, setDetailTab] = useState<"brecha" | "manual" | "matched" | "alto_valor">("brecha");
 
   // Acumulado hasta este mes
   const acum = data.monthly
@@ -592,7 +592,31 @@ function MonthTab({
   const hasLiveCruce = monthNum === 1 && data.liveCruce;
   const live = data.liveCruce;
 
-  // Stages distribution for the table
+  const altoValorList = hasLiveCruce ? [
+    ...live.matched.filter((r: any) => ['50_300', '300_1000', '1000_plus'].includes(r.segment_key)).map((r: any) => ({ ...r, tipo_cruce: "Automatizado" })),
+    ...live.brecha.filter((r: any) => ['50_300', '300_1000', '1000_plus'].includes(r.segment_key)).map((r: any) => ({ ...r, tipo_cruce: "Brecha (Fuga)", stage_name: "Sin login / No en CRM", phone_up: r.phone })),
+    ...live.manual.filter((r: any) => ['50_300', '300_1000', '1000_plus'].includes(r.segment_key)).map((r: any) => ({ ...r, tipo_cruce: "Manual (Ventas)", belong_to_community: "N/A", phone_up: r.phone }))
+  ] : [];
+
+  const SEGMENT_LABELS: Record<string, string> = {
+    "50_300": "50–300 pedidos",
+    "300_1000": "300–1.000 pedidos",
+    "1000_plus": "+1.000 pedidos"
+  };
+  
+  const SEGMENT_COLORS: Record<string, { bg: string, text: string }> = {
+    "50_300": { bg: "#EFF6FF", text: "#1D4ED8" },
+    "300_1000": { bg: "#F5F3FF", text: "#6D28D9" },
+    "1000_plus": { bg: "#FFF7EF", text: "#F77F00" }
+  };
+
+  const getWhatsAppMessage = (name: string, segment: string) => {
+    const segText = segment === "1000_plus" ? "más de 1.000 pedidos al mes" :
+                    segment === "300_1000" ? "entre 300 y 1.000 pedidos al mes" :
+                    "entre 50 y 300 pedidos al mes";
+    return `Hola ${name}, bienvenido a Dropi. Vimos que completaste tu registro e indicaste en el perfil que despachas ${segText}. Me gustaría contactarte para darte acceso prioritario Fast-Track y ayudarte a subir tus productos hoy mismo. ¿Te queda bien una breve llamada?`;
+  };
+
   const allStages = [
     'Nuevo registro',
     'Potencial identificado',
@@ -706,6 +730,44 @@ function MonthTab({
             </div>
           )}
 
+          {/* Distribución de Comunidades vs Huérfanos */}
+          <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 12, padding: "16px 20px", marginBottom: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>Distribución por Origen de Registro (Userpilot)</span>
+              <span style={{ fontSize: 12, color: "var(--muted)" }}>
+                Comunidades: <strong>{live.comunidadCount}</strong> vs Huérfanos/Orgánicos: <strong>{live.huerfanoCount}</strong>
+              </span>
+            </div>
+            <div style={{ display: "flex", height: 10, background: "#E2E8F0", borderRadius: 999, overflow: "hidden" }}>
+              <div
+                style={{
+                  width: `${Math.round((live.comunidadCount / (live.totalUserpilot || 1)) * 100)}%`,
+                  background: "var(--dropi)",
+                  transition: "width 0.3s ease"
+                }}
+                title={`Comunidades: ${Math.round((live.comunidadCount / (live.totalUserpilot || 1)) * 100)}%`}
+              />
+              <div
+                style={{
+                  width: `${Math.round((live.huerfanoCount / (live.totalUserpilot || 1)) * 100)}%`,
+                  background: "#94A3B8",
+                  transition: "width 0.3s ease"
+                }}
+                title={`Huérfanos/Orgánicos: ${Math.round((live.huerfanoCount / (live.totalUserpilot || 1)) * 100)}%`}
+              />
+            </div>
+            <div style={{ display: "flex", gap: 16, marginTop: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--muted)" }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--dropi)" }} />
+                Comunidades ({Math.round((live.comunidadCount / (live.totalUserpilot || 1)) * 100)}%)
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--muted)" }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#94A3B8" }} />
+                Huérfanos / Orgánicos ({Math.round((live.huerfanoCount / (live.totalUserpilot || 1)) * 100)}%)
+              </div>
+            </div>
+          </div>
+
           {/* Tabulación Auto vs Manual */}
           <div style={{ marginBottom: 24 }}>
             <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 10 }}>Distribución de Etapas por Origen en el CRM (N={live.totalCrm})</div>
@@ -745,7 +807,8 @@ function MonthTab({
               {[
                 { key: "brecha" as const, label: `Brecha (${live.brecha.length})`, color: "#EF4444" },
                 { key: "manual" as const, label: `Manuales (${live.manual.length})`, color: "#3B82F6" },
-                { key: "matched" as const, label: `Automatizados (${live.matched.length})`, color: "#10B981" }
+                { key: "matched" as const, label: `Automatizados (${live.matched.length})`, color: "#10B981" },
+                { key: "alto_valor" as const, label: `Alto Valor ⭐ (${altoValorList.length})`, color: "#8B5CF6" }
               ].map(t => (
                 <button
                   key={t.key}
@@ -773,6 +836,7 @@ function MonthTab({
                       <th style={thStyle}>Nombre</th>
                       <th style={thStyle}>Email</th>
                       <th style={thStyle}>Teléfono</th>
+                      <th style={thStyle}>Comunidad</th>
                       <th style={thStyle}>País</th>
                       <th style={thStyle}>Registro</th>
                       <th style={thStyle}>Acción</th>
@@ -780,7 +844,7 @@ function MonthTab({
                   </thead>
                   <tbody>
                     {live.brecha.length === 0 ? (
-                      <tr><td colSpan={7} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)" }}>No hay proveedores en la brecha (100% de conversión).</td></tr>
+                      <tr><td colSpan={8} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)" }}>No hay proveedores en la brecha (100% de conversión).</td></tr>
                     ) : (
                       live.brecha.map((r: any, idx: number) => (
                         <tr key={r.user_id}>
@@ -788,6 +852,9 @@ function MonthTab({
                           <td style={{ ...tdStyle, fontWeight: 600 }}>{r.name}</td>
                           <td style={tdStyle}>{r.email}</td>
                           <td style={tdStyle}>{r.phone ? `+57 ${r.phone}` : 'Sin Teléfono'}</td>
+                          <td style={{ ...tdStyle, color: r.belong_to_community ? "var(--dropi)" : "var(--muted)", fontWeight: r.belong_to_community ? 600 : 400 }}>
+                            {r.belong_to_community || 'Huérfano'}
+                          </td>
                           <td style={tdStyle}>{r.country}</td>
                           <td style={tdStyle}>{r.signed_up ? r.signed_up.replace('T', ' ').substring(0, 16) : '—'}</td>
                           <td style={tdStyle}>
@@ -848,6 +915,7 @@ function MonthTab({
                       <th style={thStyle}>Nombre</th>
                       <th style={thStyle}>Email</th>
                       <th style={thStyle}>Teléfono</th>
+                      <th style={thStyle}>Comunidad</th>
                       <th style={thStyle}>Etapa CRM</th>
                       <th style={thStyle}>Registro</th>
                       <th style={thStyle}>Login / GHL</th>
@@ -855,7 +923,7 @@ function MonthTab({
                   </thead>
                   <tbody>
                     {live.matched.length === 0 ? (
-                      <tr><td colSpan={7} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)" }}>No hay registros automatizados.</td></tr>
+                      <tr><td colSpan={8} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)" }}>No hay registros automatizados.</td></tr>
                     ) : (
                       live.matched.map((r: any, idx: number) => (
                         <tr key={r.user_id}>
@@ -863,11 +931,98 @@ function MonthTab({
                           <td style={{ ...tdStyle, fontWeight: 600 }}>{r.name}</td>
                           <td style={tdStyle}>{r.email}</td>
                           <td style={tdStyle}>{r.phone_up || r.phone_crm || 'N/A'}</td>
+                          <td style={{ ...tdStyle, color: r.belong_to_community ? "var(--dropi)" : "var(--muted)", fontWeight: r.belong_to_community ? 600 : 400 }}>
+                            {r.belong_to_community || 'Huérfano'}
+                          </td>
                           <td style={{ ...tdStyle, fontWeight: 600, color: "#10B981" }}>{r.stage_name}</td>
                           <td style={tdStyle}>{r.signed_up ? r.signed_up.replace('T', ' ').substring(0, 16) : '—'}</td>
                           <td style={tdStyle}>{r.date_created ? r.date_created.replace('T', ' ').substring(0, 16) : '—'}</td>
                         </tr>
                       ))
+                    )}
+                  </tbody>
+                </table>
+              )}
+
+              {detailTab === "alto_valor" && (
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr>
+                      <th style={thStyle}>#</th>
+                      <th style={thStyle}>Nombre</th>
+                      <th style={thStyle}>Email</th>
+                      <th style={thStyle}>Teléfono</th>
+                      <th style={thStyle}>Segmento</th>
+                      <th style={thStyle}>Comunidad</th>
+                      <th style={thStyle}>Origen</th>
+                      <th style={thStyle}>Etapa CRM</th>
+                      <th style={thStyle}>Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {altoValorList.length === 0 ? (
+                      <tr><td colSpan={9} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)" }}>No hay proveedores de alto valor en esta cohorte.</td></tr>
+                    ) : (
+                      altoValorList.map((r: any, idx: number) => {
+                        const sColor = SEGMENT_COLORS[r.segment_key] || { bg: "#F3F4F6", text: "var(--muted)" };
+                        const sLabel = SEGMENT_LABELS[r.segment_key] || r.segment_key;
+                        const phoneClean = r.phone_up || r.phone_crm || '';
+                        const phoneDigits = phoneClean.replace(/\D/g, '').replace(/^57/, '');
+                        
+                        return (
+                          <tr key={idx}>
+                            <td style={tdStyle}>{idx + 1}</td>
+                            <td style={{ ...tdStyle, fontWeight: 600 }}>{r.name || r.opportunity_name}</td>
+                            <td style={tdStyle}>{r.email || '—'}</td>
+                            <td style={tdStyle}>{phoneClean || 'Sin Teléfono'}</td>
+                            <td style={tdStyle}>
+                              <span style={{
+                                display: "inline-block",
+                                padding: "2px 8px",
+                                borderRadius: 6,
+                                fontSize: 11,
+                                fontWeight: 700,
+                                background: sColor.bg,
+                                color: sColor.text
+                              }}>
+                                {sLabel}
+                              </span>
+                            </td>
+                            <td style={{ ...tdStyle, color: r.belong_to_community && r.belong_to_community !== 'N/A' ? "var(--dropi)" : "var(--muted)", fontWeight: r.belong_to_community && r.belong_to_community !== 'N/A' ? 600 : 400 }}>
+                              {r.belong_to_community || 'Huérfano'}
+                            </td>
+                            <td style={tdStyle}>
+                              <span style={{
+                                display: "inline-block",
+                                padding: "2px 6px",
+                                borderRadius: 4,
+                                fontSize: 10,
+                                fontWeight: 700,
+                                border: "1px solid var(--border)",
+                                background: "#F8FAFC",
+                                color: "var(--muted)"
+                              }}>
+                                {r.tipo_cruce}
+                              </span>
+                            </td>
+                            <td style={{ ...tdStyle, fontWeight: 600, color: r.stage_name.toLowerCase().includes("listo") || r.stage_name.toLowerCase().includes("aprobada") || r.stage_name.toLowerCase().includes("orden") ? "#10B981" : "var(--muted)" }}>
+                              {r.stage_name}
+                            </td>
+                            <td style={tdStyle}>
+                              {phoneDigits ? (
+                                <a
+                                  href={`https://wa.me/57${phoneDigits}?text=${encodeURIComponent(getWhatsAppMessage(r.name || r.opportunity_name || '', r.segment_key))}`}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  style={{ background: "#25D366", color: "#fff", textDecoration: "none", padding: "4px 8px", borderRadius: 6, fontSize: 11, fontWeight: 700, display: "inline-block" }}
+                                >
+                                  WhatsApp 💬
+                                </a>
+                              ) : 'N/A'}
+                            </td>
+                          </tr>
+                        );
+                      })
                     )}
                   </tbody>
                 </table>
