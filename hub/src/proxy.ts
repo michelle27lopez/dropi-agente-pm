@@ -41,7 +41,8 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/auth/callback") ||
     pathname.startsWith("/pulso-demo") ||
     pathname.startsWith("/api/pulso-demo") ||
-    pathname.startsWith("/proyectos/gali-demo");
+    pathname.startsWith("/proyectos/gali-demo") ||
+    pathname.startsWith("/api/gali");
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();

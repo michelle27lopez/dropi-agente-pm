@@ -46,9 +46,6 @@ export default function ProductosPage() {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
       setIsWizard(searchParams.get("variant") === "wizard");
-      if (searchParams.get("open") === "create") {
-        setViewMode("create_form");
-      }
       if (searchParams.get("combo_created") === "1") {
         setComboCreatedToast(true);
         window.history.replaceState({}, "", "/dashboard/productos");

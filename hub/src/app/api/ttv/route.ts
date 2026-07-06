@@ -1,3 +1,4 @@
+// TTV dynamic dashboard metrics api endpoint
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
@@ -127,6 +128,80 @@ export async function GET() {
     };
   });
 
+  // 3. Fetch master suppliers for community mapping
+  const emails = [
+    ...upSuppliers.map(s => s.email),
+    ...crmOpps.map(o => o.email)
+  ].filter(Boolean);
+
+  const { data: masterSuppliersRes } = await supabase
+    .from("userpilot_suppliers")
+    .select("user_id, email, belong_to_community, referred_by")
+    .in("email", emails);
+
+  const masterSuppliers = masterSuppliersRes || [];
+  const masterMap = new Map(masterSuppliers.map(s => [(s.email || '').toLowerCase().trim(), s]));
+
+  // Calculate dynamic segment monthly and 6m reals
+  const segmentMonthlyReal: Record<string, { contactos: number; auditados: number; listos: number }> = {};
+  
+  crmOpps.forEach(opp => {
+    const wm = getWeekAndMonth(opp.date_created);
+    const segKey = opp.segment_key || 'pequenos';
+    if (wm && wm.month <= 6) {
+      const key = `${wm.month}_${segKey}`;
+      if (!segmentMonthlyReal[key]) {
+        segmentMonthlyReal[key] = { contactos: 0, auditados: 0, listos: 0 };
+      }
+      segmentMonthlyReal[key].contactos++;
+      
+      const normalizedStage = (opp.stage_name || '').toLowerCase().trim();
+      const isAudited = auditedStages.some(s => s.toLowerCase() === normalizedStage);
+      const isReady = readyStages.some(s => s.toLowerCase() === normalizedStage);
+
+      if (isAudited) {
+        segmentMonthlyReal[key].auditados++;
+      }
+      if (isReady) {
+        segmentMonthlyReal[key].listos++;
+      }
+    }
+  });
+
+  const mappedMonthlySegments = (monthlySegmentsRes.data || []).map(ms => {
+    const key = `${ms.month_number}_${ms.segment_key}`;
+    const real = segmentMonthlyReal[key] || { contactos: 0, auditados: 0, listos: 0 };
+    return {
+      ...ms,
+      contactos_real: real.contactos || null,
+      auditados_real: real.auditados || null,
+      listos_real: real.listos || null,
+    };
+  });
+
+  const segment6mReal: Record<string, { contactos: number; auditados: number; listos: number }> = {};
+  (segmentsRes.data || []).forEach(s => {
+    segment6mReal[s.segment_key] = { contactos: 0, auditados: 0, listos: 0 };
+  });
+
+  mappedMonthlySegments.forEach(ms => {
+    if (segment6mReal[ms.segment_key]) {
+      segment6mReal[ms.segment_key].contactos += (ms.contactos_real || 0);
+      segment6mReal[ms.segment_key].auditados += (ms.auditados_real || 0);
+      segment6mReal[ms.segment_key].listos += (ms.listos_real || 0);
+    }
+  });
+
+  const mappedSegments6m = (segmentsRes.data || []).map(s => {
+    const real = segment6mReal[s.segment_key] || { contactos: 0, auditados: 0, listos: 0 };
+    return {
+      ...s,
+      contactos_real: real.contactos || null,
+      auditados_real: real.auditados || null,
+      listos_real: real.listos || null,
+    };
+  });
+
   // Match individuals for detail view
   const crmMap = new Map(crmOpps.map(o => [(o.email || '').toLowerCase().trim(), o]));
   const upMap = new Map(upSuppliers.map(s => [(s.email || '').toLowerCase().trim(), s]));
@@ -135,8 +210,20 @@ export async function GET() {
   const brecha: any[] = [];
   const manual: any[] = [];
 
+  let comunidadCount = 0;
+  let huerfanoCount = 0;
+
   upSuppliers.forEach(s => {
     const email = (s.email || '').toLowerCase().trim();
+    const masterInfo = masterMap.get(email);
+    const belongToCommunity = masterInfo?.belong_to_community || null;
+
+    if (belongToCommunity && belongToCommunity !== '-' && belongToCommunity !== '') {
+      comunidadCount++;
+    } else {
+      huerfanoCount++;
+    }
+
     if (crmMap.has(email)) {
       const crmOpp = crmMap.get(email);
       matched.push({
@@ -147,7 +234,9 @@ export async function GET() {
         phone_crm: crmOpp.phone,
         stage_name: crmOpp.stage_name,
         date_created: crmOpp.date_created,
-        signed_up: s.signed_up
+        signed_up: s.signed_up,
+        belong_to_community: belongToCommunity,
+        segment_key: s.segment_key || 'pequenos'
       });
     } else {
       brecha.push({
@@ -156,7 +245,9 @@ export async function GET() {
         email: s.email,
         phone: s.phone,
         country: s.country,
-        signed_up: s.signed_up
+        signed_up: s.signed_up,
+        belong_to_community: belongToCommunity,
+        segment_key: s.segment_key || 'pequenos'
       });
     }
   });
@@ -169,15 +260,16 @@ export async function GET() {
         email: o.email,
         phone: o.phone,
         stage_name: o.stage_name,
-        date_created: o.date_created
+        date_created: o.date_created,
+        segment_key: o.segment_key || 'pequenos'
       });
     }
   });
 
   return NextResponse.json({
     monthly: mappedMonthly,
-    segments6m: segmentsRes.data ?? [],
-    monthlySegments: monthlySegmentsRes.data ?? [],
+    segments6m: mappedSegments6m,
+    monthlySegments: mappedMonthlySegments,
     pipelineMetrics: pipelineRes.data ?? [],
     timeMetrics: timeRes.data ?? [],
     weeklyData: mappedWeekly,
@@ -186,7 +278,9 @@ export async function GET() {
       brecha,
       manual,
       totalUserpilot: upSuppliers.length,
-      totalCrm: crmOpps.length
+      totalCrm: crmOpps.length,
+      comunidadCount,
+      huerfanoCount
     }
   });
 }

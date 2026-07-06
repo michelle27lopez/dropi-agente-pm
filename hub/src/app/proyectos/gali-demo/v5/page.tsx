@@ -992,20 +992,19 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
       `- ${ad.productName} (${ad.category}, ${ad.platform}, fuente: ${ad.sourceTool}): CTR ${ad.ctrPct}%, Hook Rate ${ad.hookRatePct}%, CPM $${ad.cpmCop}, ${ad.daysActive} días activo, ángulo: ${ad.anguloVenta}`
     ).join('\n');
 
-    const prompt = `El usuario está explorando anuncios ganadores espiados en herramientas como AdSpy, Minea, Foreplay, Kalodata, Ecomhunt y Dropkiller.
-Pregunta del usuario: "${text}"
-
-Anuncios disponibles:
-${adsListText}
-
-Responde como Gali (el mentor dropshipper experto de la comunidad). Analiza CTR, Hook Rate, CPM y días activo para darle un consejo directo y valioso en español latino, usando jerga colombiana.
-Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
-
     let agentText = '';
-    if (isLiveOpenAi()) {
-      const systemPrompt = `Eres Gali, el mentor y analista de espionaje de anuncios de Dropi Colombia. Responde de forma muy concisa (máximo 4 frases), usa jerga de pauta (hook rate, CTR, CPM, ángulo de venta). Responde con datos basados únicamente en los anuncios provistos.`;
-      const res = await callChatGpt(systemPrompt, prompt);
-      if (res.success) agentText = res.content;
+    try {
+      const res = await fetch('/api/gali/espionaje', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: text, adsListText }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        agentText = data.content || '';
+      }
+    } catch {
+      // sin conexión al backend de IA — cae al mensaje por defecto
     }
 
     if (!agentText) {
