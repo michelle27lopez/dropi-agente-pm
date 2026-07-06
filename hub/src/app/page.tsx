@@ -81,6 +81,15 @@ const projects = [
     icon: "🤝",
   },
   {
+    key: "negociaciones-dropshipper",
+    name: "Negociaciones · Proveedor–Dropshipper",
+    description: "Guía de flujo paso a paso para crear una negociación directa con un dropshipper. Screenshots del Figma con descripciones listas para hand-off.",
+    url: "/proyectos/negociaciones-dropshipper",
+    color: "#F77F00",
+    tag: "NEG-002 · Wireframes",
+    icon: "🤝",
+  },
+  {
     key: "caza-productos",
     name: "Caza Productos",
     description: "Solicitudes de productos que los dropshippers no encuentran en catálogo. Señal de demanda explícita y tasa de atención de suppliers.",
