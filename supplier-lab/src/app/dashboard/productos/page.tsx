@@ -696,13 +696,21 @@ function ProductCreateForm({ onBack, onSaveSuccess }: { onBack: () => void, onSa
                   </div>
                 </div>
 
-                {/* Tipo y Categoría */}
+                {/* Tipo */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-1.5">
                     <label className="text-sm font-semibold text-zinc-700">Tipo</label>
                     <select className="w-full px-3 py-2 border border-zinc-200 rounded-md text-sm focus:outline-none focus:border-orange-400 bg-white text-zinc-700">
                       <option>SIMPLE</option>
                     </select>
+                  </div>
+                </div>
+
+                {/* Categoría — fila propia, resaltada: es la funcionalidad piloto con IA */}
+                <div className="rounded-xl border-2 border-orange-200 bg-orange-50/40 p-4">
+                  <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wide text-orange-600 mb-3">
+                    <Bot className="w-3.5 h-3.5" />
+                    Piloto · Categorización con IA
                   </div>
                   <CategoryPickerIA
                     productName={nombreProducto}
