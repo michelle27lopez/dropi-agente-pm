@@ -3762,7 +3762,7 @@ export default function CategorizacionPage() {
 
                 {/* Card 8: Probar Categorización con IA en Supplier Lab (prod) */}
                 <a
-                  href="https://dropi-agente-pm.vercel.app/dashboard/productos?open=create"
+                  href="https://dropi-agente-pm.vercel.app/dashboard/productos"
                   target="_blank"
                   rel="noreferrer"
                   className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-emerald-500 hover:shadow-xs transition-all duration-200 no-underline"
