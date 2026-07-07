@@ -80,6 +80,8 @@ const DEV_QUEUE: DevProject[] = [
   {
     name: "Herramienta Campañas", code: "DCA · Campañas",
     devLeft: "36.2%", devWidth: "11.5%", devEnd: "47.7%", endLabel: "22-dic",
+    pmReady: true, pmReadyLabel: "Listo · ~oct 31",
+    queueLeft: "33.4%", queueWidth: "2.8%", queueWeeks: "~10d",
   },
   {
     name: "Categorización Catálogo", code: "CAT-001",
