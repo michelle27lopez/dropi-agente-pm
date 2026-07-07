@@ -438,6 +438,56 @@ export default function RoadmapS2Page() {
           ))}
         </div>
 
+        {/* ══ Proyección S2 · Iniciativas activas ══ */}
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 24px", marginBottom: 28 }}>
+          {/* Header row */}
+          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 18, flexWrap: "wrap", gap: 8 }}>
+            <div>
+              <span style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)" }}>Proyección S2 · Iniciativas activas</span>
+              <span style={{ fontSize: 10, color: "var(--muted)", marginLeft: 10 }}>datos semana 03 jul 2026</span>
+            </div>
+            <div style={{ display: "flex", gap: 20 }}>
+              {[
+                { label: "Base actual", value: "38.4M", color: "var(--muted)" },
+                { label: "Brecha a cerrar", value: "55.2M", color: RED },
+                { label: "Próximo hito", value: "21-jul · carga masiva NEG-001", color: AMBER },
+              ].map((s) => (
+                <div key={s.label} style={{ textAlign: "right" }}>
+                  <div style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)" }}>{s.label}</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: s.color, fontVariantNumeric: "tabular-nums" }}>{s.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* Per-project bars */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {[
+              { code: "TTV-001",       name: "Time to Value",        orders: 105000, label: "~105K",  sub: "620 suppliers activos · USD 1.57M GMV",    color: AMBER,      pct: 70 },
+              { code: "DCA · Campañas", name: "Campañas Catálogo",   orders: 149300, label: "149.3K", sub: "Cyber Days + DCA-001 · USD 2.24M GMV est.", color: QUEUE_COL,  pct: 100 },
+              { code: "CAZ-001",       name: "Caza Productos",       orders:  54000, label: "~54K",   sub: "Búsqueda semántica activa",                 color: SLATE,      pct: 36 },
+            ].map((p) => (
+              <div key={p.code} style={{ display: "grid", gridTemplateColumns: "130px 1fr 70px 260px", alignItems: "center", gap: 12 }}>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: "var(--fg)" }}>{p.name}</div>
+                  <div style={{ fontSize: 10, fontFamily: "monospace", color: "var(--muted)" }}>{p.code}</div>
+                </div>
+                <div style={{ height: 8, background: "var(--bg)", borderRadius: 99, overflow: "hidden" }}>
+                  <div style={{ height: "100%", width: `${p.pct}%`, background: p.color, borderRadius: 99, transition: "width 0.4s" }} />
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: p.color, fontVariantNumeric: "tabular-nums", textAlign: "right" }}>{p.label}</div>
+                <div style={{ fontSize: 10, color: "var(--muted)" }}>{p.sub}</div>
+              </div>
+            ))}
+            {/* Total */}
+            <div style={{ display: "grid", gridTemplateColumns: "130px 1fr 70px 260px", alignItems: "center", gap: 12, borderTop: "1px solid var(--border)", paddingTop: 10, marginTop: 2 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)" }}>Total proyectado</div>
+              <div />
+              <div style={{ fontSize: 16, fontWeight: 800, color: GREEN, fontVariantNumeric: "tabular-nums", textAlign: "right" }}>308.3K</div>
+              <div style={{ fontSize: 10, color: "var(--muted)" }}>órdenes/año adicionales · proyección sumada de iniciativas S2</div>
+            </div>
+          </div>
+        </div>
+
         {/* ══ GANTT 1: Cola de desarrollo ══ */}
         <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 10 }}>Cola de desarrollo</p>
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "18px 20px 20px", marginBottom: 24, overflowX: "auto" }}>
