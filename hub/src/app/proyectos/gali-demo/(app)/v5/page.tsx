@@ -4,6 +4,8 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { ArrowLeft, Building, Sliders, ArrowRight } from "lucide-react";
 import { GALI_PRODUCTS_400 } from "./gali-products-400.mock";
 import { SPY_WINNING_ADS, SPY_SOURCE_TOOLS, SpyWinningAd, SpySourceTool } from "./spy-winning-ads.mock";
+import type { GaliProject } from "./project-storage";
+import { getLocalProject, saveLocalProject } from "./project-storage";
 import "./styles.scss";
 
 // Interfaces
@@ -32,27 +34,6 @@ interface Angulo {
   titulo: string;
   hook: string;
   guion: string;
-}
-
-interface GaliProject {
-  id: string;
-  nombre: string;
-  estado: string;
-  step_actual: string;
-  producto_id?: string;
-  producto_nombre?: string;
-  costo_base?: number;
-  precio_venta?: number;
-  presupuesto_diario?: number;
-  landing_titulo?: string;
-  landing_subtitulo?: string;
-  creative_script?: string;
-  agentes?: {
-    roax?: boolean;
-    vigilante?: boolean;
-    ada?: boolean;
-    chatea?: boolean;
-  };
 }
 
 const SIMULATED_PRODUCTS_BASES = GALI_PRODUCTS_400.map(p => ({
@@ -200,6 +181,25 @@ export default function GaliV5PrototypePage() {
   useEffect(() => {
     const defaultProds = searchVirtualMillionCatalog({ limit: 12 });
     setProducts(defaultProds);
+  }, []);
+
+  // Reanudar un proyecto guardado desde la vista "Proyectos" (?resume=<id>)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const resumeId = params.get('resume');
+    if (!resumeId) return;
+
+    const project = getLocalProject(resumeId);
+    if (!project) return;
+
+    setProjectId(project.id);
+    setProjectName(project.nombre);
+    if (typeof project.presupuesto_diario === 'number') setBudget(project.presupuesto_diario);
+    if (typeof project.costo_base === 'number') setCogs(project.costo_base);
+    if (typeof project.precio_venta === 'number') setPrecioVenta(project.precio_venta);
+
+    const validSteps = ['discovery', 'espionaje', 'select', 'estrategia', 'landing', 'campana', 'launch'];
+    setStep(validSteps.includes(project.step_actual) ? (project.step_actual as typeof step) : 'launch');
   }, []);
 
   // OpenAI live status check
@@ -1288,14 +1288,7 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
     setLaunchSuccess(false);
 
     setTimeout(() => {
-      // Persistir localmente en localStorage
-      const local = localStorage.getItem('gali_local_projects');
-      let projects: GaliProject[] = [];
-      if (local) {
-        try { projects = JSON.parse(local); } catch {}
-      }
-
-      const updates: GaliProject = {
+      saveLocalProject({
         id: finalId,
         nombre: projectName || selectedProduct?.name || 'Mi Proyecto Gali',
         estado: 'activo',
@@ -1314,10 +1307,7 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
           ada: !!agentesProyecto['ada'],
           chatea: !!agentesProyecto['chatea']
         }
-      };
-
-      projects.unshift(updates);
-      localStorage.setItem('gali_local_projects', JSON.stringify(projects));
+      });
       setProjectId(finalId);
       setLaunchSuccess(true);
     }, 2200);
@@ -1336,14 +1326,7 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
       .replace(/^-|-$/g, '');
     const finalId = projectId || `${slug}-${Date.now().toString(36)}`;
 
-    const local = localStorage.getItem('gali_local_projects');
-    let projects: GaliProject[] = [];
-    if (local) {
-      try { projects = JSON.parse(local); } catch {}
-    }
-
-    const index = projects.findIndex(p => p.id === finalId);
-    const updates: GaliProject = {
+    saveLocalProject({
       id: finalId,
       nombre: projectName || selectedProduct?.name || 'Borrador Gali',
       estado: 'borrador',
@@ -1362,15 +1345,7 @@ Mantén tu respuesta corta y al grano (máx 3-4 frases).`;
         ada: !!agentesProyecto['ada'],
         chatea: !!agentesProyecto['chatea']
       }
-    };
-
-    if (index !== -1) {
-      projects[index] = updates;
-    } else {
-      projects.unshift(updates);
-    }
-
-    localStorage.setItem('gali_local_projects', JSON.stringify(projects));
+    });
     setProjectId(finalId);
     setShowDraftToast(true);
     setTimeout(() => setShowDraftToast(false), 3000);
