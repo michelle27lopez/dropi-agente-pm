@@ -107,24 +107,29 @@ export async function GET() {
   }
 
   // Map to tables
+  // Nota: usamos "hay contactos > 0" para decidir si el período ya tiene datos en vivo.
+  // Si se usara `real.listos || null`, un 0 legítimo (contactados pero ninguno listo aún)
+  // se confundía con "sin datos todavía" y ocultaba el hallazgo real.
   const mappedWeekly = (weeklyRes.data || []).map(w => {
     const key = `${w.month_number}_${w.week_number}`;
     const real = weeklyReal[key] || { contactos: 0, auditados: 0, listos: 0 };
+    const hasData = real.contactos > 0;
     return {
       ...w,
-      contactos_real: real.contactos || null,
-      auditados_real: real.auditados || null,
-      listos_real: real.listos || null,
+      contactos_real: hasData ? real.contactos : null,
+      auditados_real: hasData ? real.auditados : null,
+      listos_real: hasData ? real.listos : null,
     };
   });
 
   const mappedMonthly = (monthlyRes.data || []).map(m => {
     const real = monthlyReal[m.month_number] || { contactos: 0, auditados: 0, listos: 0 };
+    const hasData = real.contactos > 0;
     return {
       ...m,
-      contactos_real: real.contactos || null,
-      auditados_real: real.auditados || null,
-      listos_real: real.listos || null,
+      contactos_real: hasData ? real.contactos : null,
+      auditados_real: hasData ? real.auditados : null,
+      listos_real: hasData ? real.listos : null,
     };
   });
 
@@ -171,11 +176,12 @@ export async function GET() {
   const mappedMonthlySegments = (monthlySegmentsRes.data || []).map(ms => {
     const key = `${ms.month_number}_${ms.segment_key}`;
     const real = segmentMonthlyReal[key] || { contactos: 0, auditados: 0, listos: 0 };
+    const hasData = real.contactos > 0;
     return {
       ...ms,
-      contactos_real: real.contactos || null,
-      auditados_real: real.auditados || null,
-      listos_real: real.listos || null,
+      contactos_real: hasData ? real.contactos : null,
+      auditados_real: hasData ? real.auditados : null,
+      listos_real: hasData ? real.listos : null,
     };
   });
 
@@ -194,11 +200,12 @@ export async function GET() {
 
   const mappedSegments6m = (segmentsRes.data || []).map(s => {
     const real = segment6mReal[s.segment_key] || { contactos: 0, auditados: 0, listos: 0 };
+    const hasData = real.contactos > 0;
     return {
       ...s,
-      contactos_real: real.contactos || null,
-      auditados_real: real.auditados || null,
-      listos_real: real.listos || null,
+      contactos_real: hasData ? real.contactos : null,
+      auditados_real: hasData ? real.auditados : null,
+      listos_real: hasData ? real.listos : null,
     };
   });
 
