@@ -15,17 +15,17 @@ const QUEUE_COL  = "#6366F1";
 const RESEARCH_BG = "#F8FAFC"; const RESEARCH_BD = "#CBD5E1"; const RESEARCH_TX = "#64748B";
 const EXP_BG      = "#F0FDF4"; const EXP_BD      = "#86EFAC"; const EXP_TX      = "#15803D";
 
-// ─── Day positions (Jul 1 = 0, total 184 days, pct = n/184*100) ───────────────
-// Jul 7=3.3%  Jul 20=10.3%  Jul 21=10.9%  Jul 28=14.7%  Jul 31=16.3%
-// Aug 1=16.8% Aug 3=17.9%  Aug 10=21.7%  Aug 18=26.1%  Aug 31=33.2%
-// Sep 28=48.4% Sep 29=48.9% Sep 30=49.5%  Oct 10=54.9%  Oct 31=66.3%
-// Nov 10=71.7% Nov 30=82.6% Dec 22=94.6%
+// ─── 6-month scale (S2 2026): Jul 1=day 0, Dec 31=day 183, total 184d ──────────
+// Jul 7=3.3%  Jul 21=10.9%  Jul 28=14.7%  Aug 18=26.1%  Aug 31=33.2%
+// Sep 30=49.5%  Oct 31=66.3%  Nov 30=82.6%  Dec 22=94.6%
+// ─── 12-month scale (S2+H1): Jul 1 2026=day 0, Jun 30 2027=day 364, total 365d ─
+// Jul 7=1.6%  Jul 28=7.4%  Aug 18=13.2%  Sep 29=24.7%
+// Nov 10=36.2%  Dec 22=47.7%  Jan 1=50.4%  Feb 2=59.2%
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface DevProject {
   name: string; code: string;
-  devLeft?: string; devWidth?: string; devEnd?: string;
-  noDevInS2?: true;
+  devLeft?: string; devWidth?: string; devEnd?: string; endLabel?: string;
   pmReady?: true; pmReadyLabel?: string;
   queueLeft?: string; queueWidth?: string; queueWeeks?: string;
 }
@@ -58,35 +58,34 @@ interface ProjectCard {
   dev: string; kr: string; note: string;
 }
 
-// ─── Dev queue ────────────────────────────────────────────────────────────────
+// ─── Dev queue  (12-month scale: Jul 2026 → Jun 2027, 365 days) ──────────────
 const DEV_QUEUE: DevProject[] = [
   {
     name: "Negociaciones S↔D", code: "NEG-001 / NEG-002",
-    devLeft: "3.3%", devWidth: "22.8%", devEnd: "26.1%",
+    devLeft: "1.6%", devWidth: "11.6%", devEnd: "13.2%", endLabel: "18-ago",
     pmReady: true, pmReadyLabel: "Listo · 7-jul",
   },
   {
     name: "Combos Dropshipper", code: "COM-002",
-    devLeft: "26.1%", devWidth: "22.8%", devEnd: "48.9%",
+    devLeft: "13.2%", devWidth: "11.5%", devEnd: "24.7%", endLabel: "29-sep",
     pmReady: true, pmReadyLabel: "Listo · 7-jul",
-    queueLeft: "3.3%", queueWidth: "22.8%", queueWeeks: "~6 sem en cola",
+    queueLeft: "1.6%", queueWidth: "11.6%", queueWeeks: "~6 sem en cola",
   },
   {
     name: "Descuentos · Antes/Ahora", code: "DESC-001",
-    devLeft: "48.9%", devWidth: "22.8%", devEnd: "71.7%",
+    devLeft: "24.7%", devWidth: "11.5%", devEnd: "36.2%", endLabel: "10-nov",
     pmReady: true, pmReadyLabel: "Listo · 7-jul",
-    queueLeft: "3.3%", queueWidth: "45.6%", queueWeeks: "~12 sem en cola",
+    queueLeft: "1.6%", queueWidth: "23.1%", queueWeeks: "~12 sem en cola",
   },
   {
     name: "Herramienta Campañas", code: "DCA · Campañas",
-    devLeft: "71.7%", devWidth: "22.9%", devEnd: "94.6%",
+    devLeft: "36.2%", devWidth: "11.5%", devEnd: "47.7%", endLabel: "22-dic",
   },
   {
-    // CAT-001: handoff ready ~Jul 28, but dev queue is full → dev 2027
     name: "Categorización Catálogo", code: "CAT-001",
-    noDevInS2: true,
+    devLeft: "47.7%", devWidth: "11.5%", devEnd: "59.2%", endLabel: "~feb 2027",
     pmReady: true, pmReadyLabel: "Listo · ~28-jul",
-    queueLeft: "14.7%", queueWidth: "79.9%", queueWeeks: "~22 sem en cola · dev 2027",
+    queueLeft: "7.4%", queueWidth: "40.3%", queueWeeks: "~22 sem en cola",
   },
 ];
 
@@ -97,11 +96,11 @@ const OP_TRACKS: OpTrack[] = [
     segments: [{ left: "0%", width: "100%", bg: AMBER_BG, border: AMBER, color: AMBER, label: "Pipeline GHL activo" }],
     // Cortes mensuales — acumulado de suppliers "listos"
     milestones: [
-      { left: "16.3%", label: "C1 · 104",  color: AMBER },
-      { left: "33.2%", label: "C2 · 207",  color: AMBER },
-      { left: "49.5%", label: "C3 · 310",  color: AMBER },
-      { left: "66.3%", label: "C4 · 517",  color: AMBER },
-      { left: "82.6%", label: "C5 · 620",  color: AMBER },
+      { left: "33.2%", label: "C1 · 104",  color: AMBER },
+      { left: "49.5%", label: "C2 · 207",  color: AMBER },
+      { left: "66.3%", label: "C3 · 310",  color: AMBER },
+      { left: "82.6%", label: "C4 · 517",  color: AMBER },
+      { left: "99.5%", label: "C5 · 620",  color: AMBER },
     ],
   },
   {
@@ -205,8 +204,43 @@ function TrackBg() {
     </div>
   );
 }
-function TodayLine() {
-  return <div style={{ position: "absolute", left: "2.72%", top: 0, bottom: 0, width: 1.5, background: GREEN, opacity: 0.2, zIndex: 3, pointerEvents: "none" }} />;
+// 12-col background (S2 2026 | H1 2027). Bold divider at col 6 (Jan boundary).
+function TrackBg12() {
+  return (
+    <div style={{ position: "absolute", inset: 0, display: "grid", gridTemplateColumns: "repeat(12,1fr)", pointerEvents: "none" }}>
+      {Array.from({ length: 12 }, (_, i) => (
+        <div key={i} style={{ borderRight: i === 5 ? "1.5px solid #D1D5DB" : i < 11 ? "1px solid #F3F4F6" : "none" }} />
+      ))}
+    </div>
+  );
+}
+function TodayLine({ pos = "3.3%" }: { pos?: string }) {
+  return <div style={{ position: "absolute", left: pos, top: 0, bottom: 0, width: 1.5, background: GREEN, opacity: 0.2, zIndex: 3, pointerEvents: "none" }} />;
+}
+// 12-month ruler with quarterly bands (Jul 2026 → Jun 2027)
+function MonthRuler12() {
+  const months = ["Jul","Ago","Sep","Oct","Nov","Dic","Ene","Feb","Mar","Abr","May","Jun"];
+  return (
+    <div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(12,1fr)", marginBottom: 4 }}>
+        {[
+          { label: "Q3 2026", col: "1/4", color: GREEN,  bg: GREEN_BG  },
+          { label: "Q4 2026", col: "4/7", color: AMBER,  bg: AMBER_BG  },
+          { label: "Q1 2027", col: "7/10", color: QUEUE_COL, bg: "#EEF2FF" },
+          { label: "Q2 2027", col: "10/13", color: SLATE, bg: SLATE_BG  },
+        ].map((q) => (
+          <div key={q.label} style={{ gridColumn: q.col, background: q.bg, borderTop: `2px solid ${q.color}`, padding: "2px 6px" }}>
+            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase" as const, color: q.color }}>{q.label}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(12,1fr)", borderBottom: "1px solid var(--border)", paddingBottom: 5, marginBottom: 10 }}>
+        {months.map((m, i) => (
+          <div key={i} style={{ fontSize: 9, fontWeight: 700, letterSpacing: "0.07em", textTransform: "uppercase" as const, color: i >= 6 ? QUEUE_COL : "var(--muted)", textAlign: "center" }}>{m}</div>
+        ))}
+      </div>
+    </div>
+  );
 }
 function RowLabel({ name, code, dimmed }: { name: string; code: string; dimmed?: boolean }) {
   return (
@@ -249,60 +283,54 @@ function SubHead({ title, note }: { title: string; note?: string }) {
   );
 }
 
-// ─── Dev queue row ────────────────────────────────────────────────────────────
+// ─── Dev queue row (12-month scale: today = 1.6%) ────────────────────────────
 function DevRow({ p }: { p: DevProject }) {
   const hasTwoTracks = !!p.pmReady;
-  const rowH = hasTwoTracks ? 60 : 44;
+  // Track A (24px) + gap (4px) + Track B (24px) + endLabel (14px) = 66px with two tracks
+  // Single track: Track B (28px) + endLabel (14px) = 46px
+  const rowH = hasTwoTracks ? (p.endLabel ? 70 : 54) : (p.endLabel ? 50 : 44);
+  // Track B vertical top position (absolute within rowH container)
+  const barTop = hasTwoTracks ? 28 : 8;
+  const barH = 24;
   return (
     <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", alignItems: "center", minHeight: rowH, marginBottom: 5 }}>
       <RowLabel name={p.name} code={p.code} />
-      <div style={{ position: "relative", height: rowH, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-        <TrackBg />
-        <TodayLine />
-        {hasTwoTracks ? (
+      <div style={{ position: "relative", height: rowH }}>
+        <TrackBg12 />
+        <TodayLine pos="1.6%" />
+
+        {/* Track A — PM ready chip + queue wait bar */}
+        {hasTwoTracks && (
           <>
-            {/* Track A — PM ready + queue */}
-            <div style={{ position: "relative", height: 20, marginBottom: 4 }}>
-              <div style={{ position: "absolute", left: p.queueLeft ?? "3.3%", top: 0, bottom: 0, width: 2, background: QUEUE_COL, zIndex: 4, borderRadius: 1 }} />
-              <div style={{ position: "absolute", left: p.queueLeft ?? "3.3%", top: 2, marginLeft: 5, fontSize: 9, fontWeight: 700, color: QUEUE_COL, background: "#EEF2FF", padding: "1px 6px", borderRadius: 3, whiteSpace: "nowrap", zIndex: 5, border: `1px solid ${QUEUE_COL}40` }}>
-                {p.pmReadyLabel ?? "Listo PM"}
-              </div>
-              {p.queueLeft && p.queueWidth && (
-                <div style={{ position: "absolute", left: p.queueLeft, width: p.queueWidth, top: "50%", marginTop: -9, height: 18, background: "#F5F3FF", border: `1.5px dashed ${QUEUE_COL}80`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: QUEUE_COL, opacity: 0.9, whiteSpace: "nowrap", overflow: "hidden", zIndex: 1 }}>
-                  {p.queueWeeks}
-                </div>
-              )}
-              {p.pmReady && !p.queueLeft && (
-                <div style={{ position: "absolute", left: "3.3%", top: "50%", marginTop: -9, marginLeft: 5, fontSize: 9, color: GREEN, fontWeight: 600 }}>entra inmediato →</div>
-              )}
+            <div style={{ position: "absolute", left: p.queueLeft ?? "1.6%", top: 0, bottom: 0, width: 2, background: QUEUE_COL, zIndex: 4, borderRadius: 1 }} />
+            <div style={{ position: "absolute", left: p.queueLeft ?? "1.6%", top: 3, marginLeft: 5, fontSize: 9, fontWeight: 700, color: QUEUE_COL, background: "#EEF2FF", padding: "1px 6px", borderRadius: 3, whiteSpace: "nowrap", zIndex: 5, border: `1px solid ${QUEUE_COL}40` }}>
+              {p.pmReadyLabel ?? "Listo PM"}
             </div>
-            {/* Track B — dev bar (or "→ 2027" label) */}
-            {p.noDevInS2 ? (
-              <div style={{ position: "relative", height: 24, display: "flex", alignItems: "center" }}>
-                <span style={{ position: "absolute", right: 0, fontSize: 10, fontWeight: 600, color: "var(--muted)", background: "var(--bg)", padding: "2px 8px", borderRadius: 4 }}>
-                  → dev 2027
-                </span>
+            {p.queueLeft && p.queueWidth ? (
+              <div style={{ position: "absolute", left: p.queueLeft, width: p.queueWidth, top: 3, height: 18, background: "#F5F3FF", border: `1.5px dashed ${QUEUE_COL}80`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: QUEUE_COL, whiteSpace: "nowrap", overflow: "hidden", zIndex: 1 }}>
+                {p.queueWeeks}
               </div>
             ) : (
-              <div style={{ position: "relative", height: 24 }}>
-                <div style={{ position: "absolute", left: p.devLeft, width: p.devWidth, height: 24, background: GREEN, color: "#fff", display: "flex", alignItems: "center", padding: "0 9px", fontSize: 11, fontWeight: 600, zIndex: 2, whiteSpace: "nowrap" }}>
-                  {p.name.split("·")[0].trim()}
-                </div>
-                {[p.devLeft!, p.devEnd!].map((pos, i) => (
-                  <div key={i} style={{ position: "absolute", left: pos, marginLeft: -5, width: 10, height: 10, background: GREEN, border: "2px solid var(--card)", transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4 }} />
-                ))}
+              <div style={{ position: "absolute", left: "1.6%", top: 10, marginLeft: 5, fontSize: 9, color: GREEN, fontWeight: 600 }}>entra inmediato →</div>
+            )}
+          </>
+        )}
+
+        {/* Track B — dev bar */}
+        {p.devLeft && (
+          <>
+            <div style={{ position: "absolute", left: p.devLeft, width: p.devWidth, top: barTop, height: barH, background: GREEN, color: "#fff", display: "flex", alignItems: "center", padding: "0 9px", fontSize: 11, fontWeight: 600, zIndex: 2, whiteSpace: "nowrap", overflow: "hidden" }}>
+              {p.name.split("·")[0].trim()}
+            </div>
+            {[p.devLeft, p.devEnd!].map((pos, i) => (
+              <div key={i} style={{ position: "absolute", left: pos, marginLeft: -5, width: 10, height: 10, background: GREEN, border: "2px solid var(--card)", transform: "rotate(45deg)", top: barTop + barH / 2 - 5, zIndex: 4 }} />
+            ))}
+            {p.endLabel && (
+              <div style={{ position: "absolute", left: p.devEnd, top: barTop + barH + 3, marginLeft: -20, fontSize: 9, fontWeight: 700, color: GREEN, whiteSpace: "nowrap", zIndex: 3 }}>
+                ✓ {p.endLabel}
               </div>
             )}
           </>
-        ) : (
-          <div style={{ position: "relative", height: 28 }}>
-            <div style={{ position: "absolute", left: p.devLeft, width: p.devWidth, height: 28, background: GREEN, color: "#fff", display: "flex", alignItems: "center", padding: "0 9px", fontSize: 11, fontWeight: 600, zIndex: 2, whiteSpace: "nowrap" }}>
-              {p.name.split("·")[0].trim()}
-            </div>
-            {[p.devLeft!, p.devEnd!].map((pos, i) => (
-              <div key={i} style={{ position: "absolute", left: pos, marginLeft: -5, width: 10, height: 10, background: GREEN, border: "2px solid var(--card)", transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4 }} />
-            ))}
-          </div>
         )}
       </div>
     </div>
@@ -412,7 +440,7 @@ export default function RoadmapS2Page() {
         <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 10 }}>Cola de desarrollo</p>
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "18px 20px 20px", marginBottom: 24, overflowX: "auto" }}>
           <div style={{ minWidth: 580 }}>
-            <div style={{ display: "grid", gridTemplateColumns: "192px 1fr" }}><div /><MonthRuler showQ /></div>
+            <div style={{ display: "grid", gridTemplateColumns: "192px 1fr" }}><div /><MonthRuler12 /></div>
             {DEV_QUEUE.map((p) => <DevRow key={p.code} p={p} />)}
             {/* Legend */}
             <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginTop: 14, paddingTop: 12, borderTop: "1px solid var(--border)" }}>
