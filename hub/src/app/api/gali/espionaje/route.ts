@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-import { ESPIONAJE_RESEARCH_CONTEXT } from "@/app/proyectos/gali-demo/v5/espionaje-context";
+import { ESPIONAJE_RESEARCH_CONTEXT } from "@/app/proyectos/gali-demo/(app)/v5/espionaje-context";
 
 export async function POST(req: NextRequest) {
   const apiKey = process.env.OPENAI_API_KEY;

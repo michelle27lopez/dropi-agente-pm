@@ -6,6 +6,15 @@ import { useRouter } from "next/navigation";
 
 const updates = [
   {
+    key: "roadmap-s2-2026",
+    name: "Roadmap S2 2026",
+    description: "Proyección Jul–Dic: cola de desarrollo (NEG → COM-002 → DESC-001 → DCA Campañas), frentes paralelos, KRs y KPIs por trimestre.",
+    url: "/roadmap-s2-2026",
+    color: "#1A6B52",
+    tag: "S2 2026 · Jul→Dic",
+    icon: "🗺️",
+  },
+  {
     key: "weekly-pm",
     name: "Weekly · PM",
     description: "Update ejecutivo semanal: oportunidades aprobadas, hipótesis numéricas y accionables clasificados por ruta.",
