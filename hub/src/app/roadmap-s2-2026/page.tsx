@@ -1,32 +1,44 @@
 "use client";
 
 // ─── Palette ──────────────────────────────────────────────────────────────────
-const GREEN = "#1A6B52";
-const GREEN_BG = "#E2EFE9";
-const AMBER = "#B45309";
-const AMBER_BG = "#FEF3C7";
-const RED = "#B91C1C";
-const RED_BG = "#FEE2E2";
-const SLATE = "#475569";
-const SLATE_BG = "#F1F5F9";
+const GREEN      = "#1A6B52";
+const GREEN_BG   = "#E2EFE9";
+const AMBER      = "#B45309";
+const AMBER_BG   = "#FEF3C7";
+const RED        = "#B91C1C";
+const RED_BG     = "#FEE2E2";
+const SLATE      = "#475569";
+const SLATE_BG   = "#F1F5F9";
+const QUEUE_COL  = "#6366F1"; // indigo for "en cola" track
 
 // ─── Day-accurate Gantt math: Jul 1 → Dec 31 = 184 days ──────────────────────
 // pct(n) = (n / 184) * 100  where n = days since Jul 1 (Jul 1 = 0)
-// Jul 6  (today) = 5  →  2.72%
-// Jul 7  (start) = 6  →  3.26%
-// Jul 21 (NEG carga masiva) = 20 → 10.87%
-// Aug 18 = 48  → 26.09%
-// Sep 29 = 90  → 48.91%
-// Nov 10 = 132 → 71.74%
-// Dec 22 = 174 → 94.57%
+// Jul 6  (today)  = 5   →  2.72%
+// Jul 7  (handoff)= 6   →  3.26%
+// Jul 21          = 20  → 10.87%
+// Aug 18          = 48  → 26.09%
+// Sep 29          = 90  → 48.91%
+// Nov 10          = 132 → 71.74%
+// Dec 22          = 174 → 94.57%
+//
+// Queue waits (PM listo 7-jul at 3.3%):
+//   NEG:   0 wait  — dev empieza el mismo día
+//   COM:   3.3% → 26.1% = 22.8% wide  (~6 sem)
+//   DESC:  3.3% → 48.9% = 45.6% wide  (~12 sem)
+//   DCA:   sin cola (PM aún no listo)
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface DevProject {
   name: string;
   code: string;
-  left: string;
-  width: string;
-  endLeft: string;
+  devLeft: string;
+  devWidth: string;
+  devEnd: string;
+  pmReady?: true;               // PM+diseño listo para handoff
+  pmReadyLabel?: string;        // e.g. "Listo · 7 jul"
+  queueLeft?: string;           // start of "en cola" bar
+  queueWidth?: string;          // width of "en cola" bar
+  queueWeeks?: string;          // human label e.g. "~6 sem en cola"
 }
 
 interface ParallelTrack {
@@ -49,10 +61,29 @@ interface ProjectCard {
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const DEV_QUEUE: DevProject[] = [
-  { name: "Negociaciones S↔D",   code: "NEG-001 / NEG-002", left: "3.3%",  width: "22.8%", endLeft: "26.1%" },
-  { name: "Combos Dropshipper",  code: "COM-002",            left: "26.1%", width: "22.8%", endLeft: "48.9%" },
-  { name: "Descuentos · Antes/Ahora", code: "DESC-001",     left: "48.9%", width: "22.8%", endLeft: "71.7%" },
-  { name: "Herramienta Campañas", code: "DCA · Campañas",   left: "71.7%", width: "22.9%", endLeft: "94.6%" },
+  {
+    name: "Negociaciones S↔D", code: "NEG-001 / NEG-002",
+    devLeft: "3.3%", devWidth: "22.8%", devEnd: "26.1%",
+    pmReady: true, pmReadyLabel: "Listo · 7-jul",
+    // sin cola — entra a dev el mismo día del handoff
+  },
+  {
+    name: "Combos Dropshipper", code: "COM-002",
+    devLeft: "26.1%", devWidth: "22.8%", devEnd: "48.9%",
+    pmReady: true, pmReadyLabel: "Listo · 7-jul",
+    queueLeft: "3.3%", queueWidth: "22.8%", queueWeeks: "~6 sem en cola",
+  },
+  {
+    name: "Descuentos · Antes/Ahora", code: "DESC-001",
+    devLeft: "48.9%", devWidth: "22.8%", devEnd: "71.7%",
+    pmReady: true, pmReadyLabel: "Listo · 7-jul",
+    queueLeft: "3.3%", queueWidth: "45.6%", queueWeeks: "~12 sem en cola",
+  },
+  {
+    name: "Herramienta Campañas", code: "DCA · Campañas",
+    devLeft: "71.7%", devWidth: "22.9%", devEnd: "94.6%",
+    // PM no listo — pendiente insights experimento
+  },
 ];
 
 const PARALLEL_TRACKS: ParallelTrack[] = [
@@ -63,8 +94,8 @@ const PARALLEL_TRACKS: ParallelTrack[] = [
   {
     name: "Caza Productos", code: "CAZ-001 · Bug crítico",
     segments: [
-      { left: "0%",   width: "16%",  color: RED,   bg: RED_BG,   border: RED,   label: "Bug WhatsApp" },
-      { left: "16%",  width: "84%",  color: SLATE,  bg: SLATE_BG, border: "#CBD5E1", label: "Adopción · apertura países + verificados" },
+      { left: "0%",  width: "16%",  color: RED,   bg: RED_BG,   border: RED,       label: "Bug WhatsApp" },
+      { left: "16%", width: "84%",  color: SLATE, bg: SLATE_BG, border: "#CBD5E1", label: "Adopción · apertura países + verificados" },
     ],
   },
   {
@@ -95,15 +126,15 @@ const PROJECTS: ProjectCard[] = [
   },
   {
     name: "Combos desde Dropshipper",
-    code: "COM-002", statusLabel: "Cola Q3", statusColor: GREEN, statusBg: GREEN_BG,
+    code: "COM-002", statusLabel: "Listo PM", statusColor: QUEUE_COL, statusBg: "#EEF2FF",
     dev: "Ago 18 → Sep 29 · 6 semanas", kr: "KR1.1 · KR1.2 — aumenta ticket promedio",
-    note: "Discovery + TOBE aprobado en junta",
+    note: "Handoff 7-jul · ~6 sem en cola de dev",
   },
   {
     name: "Descuentos · Precio Antes/Ahora",
-    code: "DESC-001", statusLabel: "Cola Q4", statusColor: AMBER, statusBg: AMBER_BG,
+    code: "DESC-001", statusLabel: "Listo PM", statusColor: QUEUE_COL, statusBg: "#EEF2FF",
     dev: "Sep 29 → Nov 10 · 6 semanas", kr: "KR1.2 — incentiva GMV vía precio percibido",
-    note: "Validar alcance técnico con TI",
+    note: "Handoff 7-jul · ~12 sem en cola de dev",
   },
   {
     name: "Herramienta Campañas DCA",
@@ -130,7 +161,7 @@ function MonthRuler({ showQ }: { showQ?: boolean }) {
   const months = ["Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
   return (
     <div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", borderBottom: "1px solid var(--border)", paddingBottom: 5, marginBottom: showQ ? 4 : 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(6,1fr)", borderBottom: "1px solid var(--border)", paddingBottom: 5, marginBottom: showQ ? 4 : 10 }}>
         {months.map((m) => (
           <div key={m} style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--muted)", textAlign: "center" }}>
             {m}
@@ -161,32 +192,176 @@ function TrackBg() {
   );
 }
 
+function TodayLine() {
+  return <div style={{ position: "absolute", left: "2.72%", top: 0, bottom: 0, width: 1.5, background: GREEN, opacity: 0.25, zIndex: 3 }} />;
+}
+
 function Diamond({ left, color, marginLeft = -5 }: { left: string; color: string; marginLeft?: number }) {
   return (
     <div style={{
       position: "absolute", left, marginLeft,
       width: 10, height: 10,
-      background: color,
-      border: "2px solid var(--card)",
+      background: color, border: "2px solid var(--card)",
       transform: "rotate(45deg)",
-      top: "50%", marginTop: -5,
-      zIndex: 2,
+      top: "50%", marginTop: -5, zIndex: 4,
     }} />
   );
 }
 
-function GanttRow({ label, code, children }: { label: string; code: string; children: React.ReactNode }) {
+// Dev queue row — two tracks when pmReady, single track otherwise
+function DevRow({ p }: { p: DevProject }) {
+  const hasTwoTracks = !!p.pmReady;
+  const rowHeight = hasTwoTracks ? 60 : 44;
+
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", alignItems: "center", minHeight: rowHeight, marginBottom: 5 }}>
+      {/* Label */}
+      <div style={{ paddingRight: 14 }}>
+        <div style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.name}</div>
+        <div style={{ fontSize: 10, color: "var(--muted)", fontFamily: "monospace" }}>{p.code}</div>
+      </div>
+
+      {/* Track area */}
+      <div style={{ position: "relative", height: rowHeight, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <TrackBg />
+        <TodayLine />
+
+        {hasTwoTracks ? (
+          <>
+            {/* ── Track A: PM ready + En cola ──────────────────────────── */}
+            <div style={{ position: "relative", height: 20, marginBottom: 4 }}>
+
+              {/* "Listo PM" vertical tick at 3.3% */}
+              <div style={{
+                position: "absolute", left: "3.3%", top: 0, bottom: 0,
+                width: 2, background: QUEUE_COL, zIndex: 4, borderRadius: 1,
+              }} />
+
+              {/* Label chip */}
+              <div style={{
+                position: "absolute", left: "3.3%",
+                top: 2, marginLeft: 5,
+                fontSize: 9, fontWeight: 700, color: QUEUE_COL,
+                background: "#EEF2FF",
+                padding: "1px 6px", borderRadius: 3,
+                whiteSpace: "nowrap", zIndex: 5,
+                border: `1px solid ${QUEUE_COL}40`,
+              }}>
+                {p.pmReadyLabel ?? "Listo PM"}
+              </div>
+
+              {/* En cola bar (only when there's a wait) */}
+              {p.queueLeft && p.queueWidth && (
+                <div style={{
+                  position: "absolute",
+                  left: p.queueLeft, width: p.queueWidth,
+                  top: "50%", marginTop: -9, height: 18,
+                  background: "#F5F3FF",
+                  border: `1.5px dashed ${QUEUE_COL}80`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 10, fontWeight: 600, color: QUEUE_COL, opacity: 0.9,
+                  whiteSpace: "nowrap", overflow: "hidden",
+                  zIndex: 1,
+                }}>
+                  {p.queueWeeks}
+                </div>
+              )}
+
+              {/* NEG: "Sin espera" label when no queue */}
+              {p.pmReady && !p.queueLeft && (
+                <div style={{
+                  position: "absolute", left: "3.3%", top: "50%", marginTop: -9, marginLeft: 5,
+                  fontSize: 9, color: GREEN, fontWeight: 600,
+                }}>
+                  entra inmediato →
+                </div>
+              )}
+            </div>
+
+            {/* ── Track B: Dev bar ─────────────────────────────────────── */}
+            <div style={{ position: "relative", height: 24 }}>
+              <div style={{
+                position: "absolute",
+                left: p.devLeft, width: p.devWidth,
+                height: 24, background: GREEN, color: "#fff",
+                display: "flex", alignItems: "center",
+                padding: "0 9px", fontSize: 11, fontWeight: 600,
+                zIndex: 2, whiteSpace: "nowrap",
+              }}>
+                {p.name.split("·")[0].trim()}
+              </div>
+              {/* start milestone on dev bar */}
+              <div style={{
+                position: "absolute", left: p.devLeft, marginLeft: -5,
+                width: 10, height: 10, background: GREEN, border: "2px solid var(--card)",
+                transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4,
+              }} />
+              {/* end milestone */}
+              <div style={{
+                position: "absolute", left: p.devEnd, marginLeft: -5,
+                width: 10, height: 10, background: GREEN, border: "2px solid var(--card)",
+                transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4,
+              }} />
+            </div>
+          </>
+        ) : (
+          /* Single track for DCA (no PM ready yet) */
+          <div style={{ position: "relative", height: 28 }}>
+            <div style={{
+              position: "absolute",
+              left: p.devLeft, width: p.devWidth,
+              height: 28, background: GREEN, color: "#fff",
+              display: "flex", alignItems: "center",
+              padding: "0 9px", fontSize: 11, fontWeight: 600,
+              zIndex: 2, whiteSpace: "nowrap",
+            }}>
+              {p.name.split("·")[0].trim()}
+            </div>
+            <div style={{
+              position: "absolute", left: p.devLeft, marginLeft: -5,
+              width: 10, height: 10, background: GREEN, border: "2px solid var(--card)",
+              transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4,
+            }} />
+            <div style={{
+              position: "absolute", left: p.devEnd, marginLeft: -5,
+              width: 10, height: 10, background: GREEN, border: "2px solid var(--card)",
+              transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4,
+            }} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function ParallelRow({ t }: { t: ParallelTrack }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", alignItems: "center", minHeight: 44, marginBottom: 5 }}>
       <div style={{ paddingRight: 14 }}>
-        <div style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{label}</div>
-        <div style={{ fontSize: 10, color: "var(--muted)", fontFamily: "monospace" }}>{code}</div>
+        <div style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{t.name}</div>
+        <div style={{ fontSize: 10, color: "var(--muted)", fontFamily: "monospace" }}>{t.code}</div>
       </div>
       <div style={{ position: "relative", height: 44, display: "flex", alignItems: "center" }}>
         <TrackBg />
-        {/* today line — Jul 6 = 2.72% */}
-        <div style={{ position: "absolute", left: "2.72%", top: 0, bottom: 0, width: 1.5, background: GREEN, opacity: 0.3, zIndex: 3 }} />
-        {children}
+        <div style={{ position: "absolute", left: "2.72%", top: 0, bottom: 0, width: 1.5, background: GREEN, opacity: 0.25, zIndex: 3 }} />
+        {t.segments.map((seg, si) => (
+          <div key={si} style={{
+            position: "absolute", left: seg.left, width: seg.width,
+            height: 26, background: seg.bg, border: `1px solid ${seg.border}`,
+            display: "flex", alignItems: "center",
+            padding: "0 8px", fontSize: 11, color: seg.color, fontWeight: 600,
+            zIndex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+          }}>
+            {seg.label}
+          </div>
+        ))}
+        {t.milestone && (
+          <div style={{
+            position: "absolute", left: t.milestone.left, marginLeft: -5,
+            width: 10, height: 10, background: t.milestone.color, border: "2px solid var(--card)",
+            transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4,
+          }} />
+        )}
       </div>
     </div>
   );
@@ -197,11 +372,8 @@ export default function RoadmapS2Page() {
   return (
     <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
 
-      {/* Nav header */}
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
-      }}>
+      {/* Nav */}
+      <header style={{ background: "#fff", borderBottom: "1px solid var(--border)", padding: "16px 32px", display: "flex", alignItems: "center", gap: 16 }}>
         <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
         <span style={{ color: "var(--border)" }}>/</span>
         <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Roadmap S2 2026</span>
@@ -212,15 +384,9 @@ export default function RoadmapS2Page() {
         {/* Title */}
         <div style={{ marginBottom: 32 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 11, fontWeight: 700, background: GREEN_BG, color: GREEN, padding: "3px 9px", borderRadius: 20 }}>
-              Supplier Success
-            </span>
-            <span style={{ fontSize: 11, fontWeight: 700, background: "#EEF2FF", color: "#6366F1", padding: "3px 9px", borderRadius: 20 }}>
-              S2 2026
-            </span>
-            <span style={{ fontSize: 11, fontWeight: 700, background: AMBER_BG, color: AMBER, padding: "3px 9px", borderRadius: 20 }}>
-              Jul → Dic 2026
-            </span>
+            <span style={{ fontSize: 11, fontWeight: 700, background: GREEN_BG, color: GREEN, padding: "3px 9px", borderRadius: 20 }}>Supplier Success</span>
+            <span style={{ fontSize: 11, fontWeight: 700, background: "#EEF2FF", color: "#6366F1", padding: "3px 9px", borderRadius: 20 }}>S2 2026</span>
+            <span style={{ fontSize: 11, fontWeight: 700, background: AMBER_BG, color: AMBER, padding: "3px 9px", borderRadius: 20 }}>Jul → Dic 2026</span>
           </div>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)", marginBottom: 6 }}>Roadmap S2 2026</h1>
           <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6, maxWidth: 640 }}>
@@ -230,127 +396,78 @@ export default function RoadmapS2Page() {
         </div>
 
         {/* KR strip */}
-        <div style={{
-          display: "grid", gridTemplateColumns: "1fr 1fr",
-          gap: 1, background: "var(--border)",
-          border: "1px solid var(--border)", borderRadius: 14,
-          overflow: "hidden", marginBottom: 36,
-        }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: "var(--border)", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden", marginBottom: 36 }}>
           {[
             { label: "KR 1.1 · Volumen", value: "93.6M", sub: "órdenes anuales · 7.8M / mes" },
             { label: "KR 1.2 · GMV",     value: "$3.74B", sub: "COP · meta anual" },
           ].map((kr) => (
             <div key={kr.label} style={{ background: "var(--card)", padding: "20px 24px" }}>
-              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>
-                {kr.label}
-              </div>
-              <div style={{ fontSize: 30, fontWeight: 800, color: GREEN, fontVariantNumeric: "tabular-nums", letterSpacing: "-0.02em", lineHeight: 1 }}>
-                {kr.value}
-              </div>
+              <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>{kr.label}</div>
+              <div style={{ fontSize: 30, fontWeight: 800, color: GREEN, fontVariantNumeric: "tabular-nums", letterSpacing: "-0.02em", lineHeight: 1 }}>{kr.value}</div>
               <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>{kr.sub}</div>
             </div>
           ))}
         </div>
 
         {/* ── Gantt 1: Dev queue ── */}
-        <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 10 }}>
-          Cola de desarrollo
-        </p>
+        <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 10 }}>Cola de desarrollo</p>
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "18px 20px 20px", marginBottom: 24, overflowX: "auto" }}>
           <div style={{ minWidth: 560 }}>
 
-            {/* ruler */}
-            <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", marginBottom: 0 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "192px 1fr" }}>
               <div />
               <MonthRuler showQ />
             </div>
 
-            {/* rows */}
-            {DEV_QUEUE.map((p) => (
-              <GanttRow key={p.code} label={p.name} code={p.code}>
-                <div style={{
-                  position: "absolute", left: p.left, width: p.width,
-                  height: 28, background: GREEN, color: "#fff",
-                  display: "flex", alignItems: "center",
-                  padding: "0 9px", fontSize: 11, fontWeight: 600,
-                  zIndex: 1, whiteSpace: "nowrap",
-                }}>
-                  {p.name.split("·")[0].trim()}
-                </div>
-                <Diamond left={p.left}    color={GREEN} />
-                <Diamond left={p.endLeft} color={GREEN} />
-              </GanttRow>
-            ))}
+            {DEV_QUEUE.map((p) => <DevRow key={p.code} p={p} />)}
 
             {/* Dropi Pulso aspiracional */}
-            <GanttRow label="Dropi Pulso" code="Aspiracional · 2027">
-              <div style={{
-                position: "absolute", left: "86.9%", width: "11%",
-                height: 26, border: "1.5px dashed var(--border)", background: "transparent",
-                display: "flex", alignItems: "center",
-                padding: "0 9px", fontSize: 11, color: "var(--muted)",
-                zIndex: 1,
-              }}>
-                Piloto
+            <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", alignItems: "center", minHeight: 44, marginBottom: 5 }}>
+              <div style={{ paddingRight: 14 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)" }}>Dropi Pulso</div>
+                <div style={{ fontSize: 10, color: "var(--muted)", fontFamily: "monospace" }}>Aspiracional · 2027</div>
               </div>
-            </GanttRow>
+              <div style={{ position: "relative", height: 44, display: "flex", alignItems: "center" }}>
+                <TrackBg />
+                <div style={{ position: "absolute", left: "86.9%", width: "11%", height: 26, border: "1.5px dashed var(--border)", background: "transparent", display: "flex", alignItems: "center", padding: "0 9px", fontSize: 11, color: "var(--muted)", zIndex: 1 }}>
+                  Piloto
+                </div>
+              </div>
+            </div>
 
-            {/* legend */}
+            {/* Legend */}
             <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginTop: 14, paddingTop: 12, borderTop: "1px solid var(--border)" }}>
               {[
-                { swatch: <div style={{ width: 18, height: 11, background: GREEN }} />, label: "Desarrollo activo" },
-                { swatch: <div style={{ width: 18, height: 11, border: "1.5px dashed var(--border)", background: "transparent" }} />, label: "Aspiracional" },
-                { swatch: <div style={{ width: 10, height: 10, background: GREEN, transform: "rotate(45deg)" }} />, label: "Hito / entrega" },
-                { swatch: <div style={{ width: 1.5, height: 14, background: GREEN, opacity: 0.4 }} />, label: "Hoy (6-jul)" },
+                { el: <div style={{ width: 18, height: 11, background: GREEN }} />, label: "Desarrollo activo" },
+                { el: <div style={{ width: 18, height: 14, background: "#F5F3FF", border: `1.5px dashed ${QUEUE_COL}80` }} />, label: "En cola TI (listo PM, esperando slot)" },
+                { el: <div style={{ width: 2, height: 14, background: QUEUE_COL, borderRadius: 1 }} />, label: "Handoff PM → TI" },
+                { el: <div style={{ width: 10, height: 10, background: GREEN, transform: "rotate(45deg)" }} />, label: "Hito / entrega" },
+                { el: <div style={{ width: 1.5, height: 14, background: GREEN, opacity: 0.4 }} />, label: "Hoy (6-jul)" },
               ].map((l, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 10, color: "var(--muted)" }}>
-                  <div style={{ flexShrink: 0 }}>{l.swatch}</div>
+                  <div style={{ flexShrink: 0 }}>{l.el}</div>
                   {l.label}
                 </div>
               ))}
             </div>
-
           </div>
         </div>
 
         {/* ── Gantt 2: Parallel tracks ── */}
-        <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 10 }}>
-          Frentes paralelos
-        </p>
+        <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 10 }}>Frentes paralelos</p>
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "18px 20px 20px", marginBottom: 32, overflowX: "auto" }}>
           <div style={{ minWidth: 560 }}>
-
-            <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", marginBottom: 0 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "192px 1fr" }}>
               <div />
               <MonthRuler />
             </div>
+            {PARALLEL_TRACKS.map((t) => <ParallelRow key={t.code} t={t} />)}
 
-            {PARALLEL_TRACKS.map((t) => (
-              <GanttRow key={t.code} label={t.name} code={t.code}>
-                {t.segments.map((seg, si) => (
-                  <div key={si} style={{
-                    position: "absolute", left: seg.left, width: seg.width,
-                    height: 26, background: seg.bg,
-                    border: `1px solid ${seg.border}`,
-                    display: "flex", alignItems: "center",
-                    padding: "0 8px", fontSize: 11, color: seg.color, fontWeight: 600,
-                    zIndex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
-                  }}>
-                    {seg.label}
-                  </div>
-                ))}
-                {t.milestone && (
-                  <Diamond left={t.milestone.left} color={t.milestone.color} />
-                )}
-              </GanttRow>
-            ))}
-
-            {/* legend */}
             <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginTop: 14, paddingTop: 12, borderTop: "1px solid var(--border)" }}>
               {[
-                { bg: AMBER_BG, border: AMBER, color: AMBER, label: "Operacional" },
-                { bg: SLATE_BG, border: "#CBD5E1", color: SLATE, label: "Frente paralelo" },
-                { bg: RED_BG,   border: RED,      color: RED,   label: "Crítico" },
+                { bg: AMBER_BG, border: AMBER,      label: "Operacional" },
+                { bg: SLATE_BG, border: "#CBD5E1",  label: "Frente paralelo" },
+                { bg: RED_BG,   border: RED,         label: "Crítico" },
               ].map((l) => (
                 <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 7, fontSize: 10, color: "var(--muted)" }}>
                   <div style={{ width: 18, height: 11, background: l.bg, border: `1px solid ${l.border}`, flexShrink: 0 }} />
@@ -362,22 +479,17 @@ export default function RoadmapS2Page() {
                 Hito paralelo
               </div>
             </div>
-
           </div>
         </div>
 
         {/* ── Project cards ── */}
-        <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 12 }}>
-          Proyectos
-        </p>
+        <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 12 }}>Proyectos</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px,1fr))", gap: 12, marginBottom: 32 }}>
           {PROJECTS.map((p) => (
             <div key={p.code} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "16px 18px" }}>
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8, marginBottom: 10 }}>
                 <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", lineHeight: 1.3 }}>{p.name}</div>
-                <div style={{ fontFamily: "monospace", fontSize: 10, color: "var(--muted)", background: "var(--bg)", padding: "2px 7px", whiteSpace: "nowrap", borderRadius: 4, flexShrink: 0 }}>
-                  {p.code}
-                </div>
+                <div style={{ fontFamily: "monospace", fontSize: 10, color: "var(--muted)", background: "var(--bg)", padding: "2px 7px", whiteSpace: "nowrap", borderRadius: 4, flexShrink: 0 }}>{p.code}</div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                 {[
@@ -397,32 +509,20 @@ export default function RoadmapS2Page() {
         </div>
 
         {/* ── Quarter KPIs ── */}
-        <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 12 }}>
-          KPI por trimestre
-        </p>
+        <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 12 }}>KPI por trimestre</p>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
           <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px" }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", marginBottom: 14 }}>Q3 · Jul – Sep</div>
-            {[
-              "Activación de proveedores",
-              "Time to Value — pipeline GHL en operación",
-              "Destrabar regulación que trunca activación",
-              "NEG completo · COM-002 entregado en cierre Q3",
-            ].map((item) => (
+            {["Activación de proveedores", "Time to Value — pipeline GHL en operación", "Destrabar regulación que trunca activación", "NEG completo · COM-002 entregado en cierre Q3"].map((item) => (
               <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "var(--muted)", marginBottom: 7, lineHeight: 1.4 }}>
                 <div style={{ width: 6, height: 6, background: GREEN, flexShrink: 0, marginTop: 4 }} />
                 {item}
               </div>
             ))}
           </div>
-          <div style={{ background: "var(--card)", border: `1px solid var(--border)`, borderLeft: `3px solid ${AMBER}`, borderRadius: 14, padding: "20px 22px" }}>
+          <div style={{ background: "var(--card)", borderLeft: `3px solid ${AMBER}`, border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px" }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: AMBER, marginBottom: 14 }}>Q4 · Oct – Dic</div>
-            {[
-              "Por definir — sale del wonder del Product Backlog",
-              "Impacto de nuevos proveedores en órdenes",
-              "DESC-001 + DCA Campañas entregados",
-              "Cronograma se planifica al cierre de Q3",
-            ].map((item) => (
+            {["Por definir — sale del wonder del Product Backlog", "Impacto de nuevos proveedores en órdenes", "DESC-001 + DCA Campañas entregados", "Cronograma se planifica al cierre de Q3"].map((item) => (
               <div key={item} style={{ display: "flex", alignItems: "flex-start", gap: 8, fontSize: 13, color: "var(--muted)", marginBottom: 7, lineHeight: 1.4 }}>
                 <div style={{ width: 6, height: 6, background: AMBER, flexShrink: 0, marginTop: 4 }} />
                 {item}
@@ -432,10 +532,8 @@ export default function RoadmapS2Page() {
         </div>
 
         {/* ── Constraints ── */}
-        <div style={{ borderLeft: "3px solid var(--border)", paddingLeft: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, padding: "14px 18px" }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>
-            Supuestos y restricciones
-          </div>
+        <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, padding: "14px 18px", borderLeft: "3px solid var(--border)" }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>Supuestos y restricciones</div>
           <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.75 }}>
             1 desarrollador (Giancarlos) · capacidad secuencial · ~6 semanas por proyecto · handoff incluye buffer de refinamiento.<br />
             Cola confirmada: NEG → COM-002 → DESC-001 → DCA Campañas. Ajuste posible si María cambia prioridad al cierre de Q3.<br />
