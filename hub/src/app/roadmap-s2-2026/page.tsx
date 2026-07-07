@@ -12,32 +12,26 @@ const SLATE_BG   = "#F1F5F9";
 const QUEUE_COL  = "#6366F1";
 
 // POC phase colors
-const RESEARCH_BG  = "#F8FAFC"; const RESEARCH_BD = "#CBD5E1"; const RESEARCH_TX = "#64748B";
-const IMPL_BG      = "#EFF6FF"; const IMPL_BD     = "#BFDBFE"; const IMPL_TX     = "#3B82F6";
-const EXP_BG       = "#F0FDF4"; const EXP_BD      = "#86EFAC"; const EXP_TX      = "#15803D";
+const RESEARCH_BG = "#F8FAFC"; const RESEARCH_BD = "#CBD5E1"; const RESEARCH_TX = "#64748B";
+const EXP_BG      = "#F0FDF4"; const EXP_BD      = "#86EFAC"; const EXP_TX      = "#15803D";
 
-// ─── Day-accurate positions: Jul 1 = 0, Dec 31 = 183, total 184 days ─────────
-// n / 184 * 100 = %
-// Jul 7  = 6   →  3.26%    Jul 20 = 19  → 10.33%    Jul 21 = 20  → 10.87%
-// Jul 28 = 27  → 14.67%    Jul 31 = 30  → 16.30%    Aug 3  = 33  → 17.93%
-// Aug 10 = 40  → 21.74%    Aug 18 = 48  → 26.09%    Aug 31 = 61  → 33.15%
-// Sep 28 = 89  → 48.37%    Sep 29 = 90  → 48.91%    Sep 30 = 91  → 49.46%
-// Oct 10 = 101 → 54.89%    Oct 31 = 122 → 66.30%    Nov 10 = 132 → 71.74%
-// Nov 30 = 152 → 82.61%    Dec 22 = 174 → 94.57%
+// ─── Day positions (Jul 1 = 0, total 184 days, pct = n/184*100) ───────────────
+// Jul 7=3.3%  Jul 20=10.3%  Jul 21=10.9%  Jul 28=14.7%  Jul 31=16.3%
+// Aug 1=16.8% Aug 3=17.9%  Aug 10=21.7%  Aug 18=26.1%  Aug 31=33.2%
+// Sep 28=48.4% Sep 29=48.9% Sep 30=49.5%  Oct 10=54.9%  Oct 31=66.3%
+// Nov 10=71.7% Nov 30=82.6% Dec 22=94.6%
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface DevProject {
   name: string; code: string;
-  devLeft: string; devWidth: string; devEnd: string;
+  devLeft?: string; devWidth?: string; devEnd?: string;
+  noDevInS2?: true;
   pmReady?: true; pmReadyLabel?: string;
   queueLeft?: string; queueWidth?: string; queueWeeks?: string;
 }
 
 interface Milestone {
-  left: string;
-  label: string;
-  color?: string;
-  conditional?: boolean; // adds "?" to label
+  left: string; label: string; color?: string; conditional?: boolean;
 }
 
 interface TrackSeg {
@@ -52,9 +46,8 @@ interface OpTrack {
 }
 
 interface PocProject {
-  name: string; code: string; startLabel: string;
+  name: string; code: string;
   researchLeft: string; researchWidth: string;
-  implLeft: string;     implWidth: string;
   expLeft: string;      expWidth: string;
   handoffLeft: string;  handoffDate: string;
 }
@@ -65,7 +58,7 @@ interface ProjectCard {
   dev: string; kr: string; note: string;
 }
 
-// ─── Dev queue data ───────────────────────────────────────────────────────────
+// ─── Dev queue ────────────────────────────────────────────────────────────────
 const DEV_QUEUE: DevProject[] = [
   {
     name: "Negociaciones S↔D", code: "NEG-001 / NEG-002",
@@ -88,6 +81,13 @@ const DEV_QUEUE: DevProject[] = [
     name: "Herramienta Campañas", code: "DCA · Campañas",
     devLeft: "71.7%", devWidth: "22.9%", devEnd: "94.6%",
   },
+  {
+    // CAT-001: handoff ready ~Jul 28, but dev queue is full → dev 2027
+    name: "Categorización Catálogo", code: "CAT-001",
+    noDevInS2: true,
+    pmReady: true, pmReadyLabel: "Listo · ~28-jul",
+    queueLeft: "14.7%", queueWidth: "79.9%", queueWeeks: "~22 sem en cola · dev 2027",
+  },
 ];
 
 // ─── Operational parallel tracks ─────────────────────────────────────────────
@@ -95,41 +95,50 @@ const OP_TRACKS: OpTrack[] = [
   {
     name: "Time to Value", code: "TTV-001 · desde 30-jun",
     segments: [{ left: "0%", width: "100%", bg: AMBER_BG, border: AMBER, color: AMBER, label: "Pipeline GHL activo" }],
+    // Cortes mensuales — acumulado de suppliers "listos"
     milestones: [
-      { left: "16.3%",  label: "Cohorte 1",     color: AMBER },
-      { left: "33.2%",  label: "Ajuste flujo",   color: AMBER },
-      { left: "49.5%",  label: "Meta 20%",        color: AMBER },
-      { left: "66.3%",  label: "200 activos",     color: AMBER },
-      { left: "82.6%",  label: "620 suppliers",   color: AMBER },
+      { left: "16.3%", label: "C1 · 104",  color: AMBER },
+      { left: "33.2%", label: "C2 · 207",  color: AMBER },
+      { left: "49.5%", label: "C3 · 310",  color: AMBER },
+      { left: "66.3%", label: "C4 · 517",  color: AMBER },
+      { left: "82.6%", label: "C5 · 620",  color: AMBER },
     ],
   },
   {
     name: "Caza Productos", code: "CAZ-001 · Bug crítico",
     segments: [
       { left: "0%",  width: "16%",  bg: RED_BG,   border: RED,       color: RED,   label: "Bug WhatsApp" },
-      { left: "16%", width: "84%",  bg: SLATE_BG, border: "#CBD5E1", color: SLATE, label: "Adopción · apertura países" },
+      { left: "16%", width: "84%",  bg: SLATE_BG, border: "#CBD5E1", color: SLATE, label: "Adopción · apertura países · seguimiento órdenes" },
     ],
     milestones: [
-      { left: "21.7%", label: "Seguimiento órdenes", color: SLATE },
+      { left: "16.8%", label: "Apertura países",      color: SLATE },
+      { left: "33.2%", label: "Def. metas × órdenes", color: SLATE },
     ],
   },
   {
-    name: "Categorías Catálogo", code: "CAT-001 · Piloto 10 suppliers",
-    segments: [{ left: "0%", width: "54%", bg: SLATE_BG, border: "#CBD5E1", color: SLATE, label: "Piloto comercial → decisión técnica" }],
+    name: "Categorías Catálogo", code: "CAT-001 · Piloto usuarios",
+    segments: [
+      { left: "0%",    width: "14.7%", bg: SLATE_BG, border: "#CBD5E1", color: SLATE,    label: "Discovery + Piloto usuarios" },
+      { left: "14.7%", width: "85.3%", bg: "#FAFAFA", border: "#E5E7EB", color: "#9CA3AF", label: "Seguimiento · pendiente slot dev (→ 2027)" },
+    ],
+    milestones: [
+      { left: "14.7%", label: "Listo handoff", color: GREEN },
+    ],
   },
   {
     name: "Indicadores Proveedores", code: "IND-001 · UserPilot",
-    segments: [{ left: "0%", width: "100%", bg: SLATE_BG, border: "#CBD5E1", color: SLATE, label: "Monitoreo continuo · exp. 3 pasos" }],
+    segments: [{ left: "0%", width: "100%", bg: SLATE_BG, border: "#CBD5E1", color: SLATE, label: "Discovery metas saludables + Dashboard Comercial + seguimiento pipeline" }],
     milestones: [
-      { left: "10.87%", label: "Levantamiento metas", color: SLATE },
-      { left: "49.5%",  label: "Meta verificados",    color: SLATE, conditional: true },
+      { left: "10.9%", label: "Levantamiento",   color: SLATE },
+      { left: "49.5%", label: "Dashboard listo",  color: SLATE },
+      { left: "66.3%", label: "Meta verificados", color: SLATE, conditional: true },
     ],
   },
   {
     name: "NEG · Piloto adopción", code: "NEG-001 · Emilille",
     segments: [{ left: "0%", width: "50%", bg: SLATE_BG, border: "#CBD5E1", color: SLATE, label: "1 comunidad · 5 neg. meta" }],
     milestones: [
-      { left: "10.87%", label: "Carga masiva", color: AMBER },
+      { left: "10.9%", label: "Carga masiva", color: AMBER },
     ],
   },
   {
@@ -142,21 +151,19 @@ const OP_TRACKS: OpTrack[] = [
   },
 ];
 
-// ─── POC Experiment data ──────────────────────────────────────────────────────
+// ─── POC experiments (Research 2s → Experimento 2m → Handoff TI ?) ───────────
 const POC_PROJECTS: PocProject[] = [
   {
-    name: "Dropi Pulso", code: "POC-Pulso · desde 7-jul", startLabel: "7-jul",
-    researchLeft: "3.3%",   researchWidth: "7.6%",
-    implLeft:     "10.9%",  implWidth:     "3.8%",
-    expLeft:      "14.7%",  expWidth:      "33.7%",
-    handoffLeft:  "48.4%",  handoffDate:   "sep 28",
+    name: "Dropi Pulso", code: "POC-Pulso · desde 7-jul",
+    researchLeft: "3.3%",  researchWidth: "7.6%",
+    expLeft:      "10.9%", expWidth:      "37.5%",   // Jul 21 → Sep 28
+    handoffLeft:  "48.4%", handoffDate:   "sep 28",
   },
   {
-    name: "Dropi Activa", code: "POC-Activa · desde 20-jul", startLabel: "20-jul",
-    researchLeft: "10.3%",  researchWidth: "7.6%",
-    implLeft:     "17.9%",  implWidth:     "3.8%",
-    expLeft:      "21.7%",  expWidth:      "33.2%",
-    handoffLeft:  "54.9%",  handoffDate:   "oct 10",
+    name: "Dropi Activa", code: "POC-Activa · desde 20-jul",
+    researchLeft: "10.3%", researchWidth: "7.6%",
+    expLeft:      "17.9%", expWidth:      "37.0%",   // Aug 3 → Oct 10
+    handoffLeft:  "54.9%", handoffDate:   "oct 10",
   },
 ];
 
@@ -178,17 +185,17 @@ const PROJECTS: ProjectCard[] = [
     statusLabel: "Cola Q4", statusColor: AMBER, statusBg: AMBER_BG,
     dev: "Nov 10 → Dic 22 · 6 semanas", kr: "KR1.1 · KR1.2 — activa catálogo durmiente",
     note: "Insights del experimento manual S2" },
-  { name: "Caza Productos + Búsqueda Semántica", code: "CAZ-001",
+  { name: "Categorización Catálogo", code: "CAT-001",
+    statusLabel: "Listo PM", statusColor: QUEUE_COL, statusBg: "#EEF2FF",
+    dev: "Dev 2027 — cola llena S2", kr: "KR1.1 — calidad y conversión de catálogo",
+    note: "Handoff listo ~28-jul · ~22 sem en cola" },
+  { name: "Caza Productos + Búsqueda", code: "CAZ-001",
     statusLabel: "Bug crítico", statusColor: RED, statusBg: RED_BG,
-    dev: "Fix prioritario Jul · luego operativo", kr: "KR1.1 — −68% proveedores · 17% conversión",
+    dev: "Fix Jul · Apertura países Ago", kr: "KR1.1 — −68% proveedores · 17% conversión",
     note: "Paralelo · no bloquea cola dev" },
-  { name: "Dropi Pulso", code: "POC",
-    statusLabel: "POC activo", statusColor: EXP_TX, statusBg: EXP_BG,
-    dev: "Exp. Jul-Sep · Handoff TI ¿Sep 28?", kr: "KR1.1 — proveeduría puente, comunidades",
-    note: "Condicional si funciona → dev 2027" },
 ];
 
-// ─── Shared Gantt atoms ───────────────────────────────────────────────────────
+// ─── Gantt atoms ──────────────────────────────────────────────────────────────
 function TrackBg() {
   return (
     <div style={{ position: "absolute", inset: 0, display: "grid", gridTemplateColumns: "repeat(6,1fr)", pointerEvents: "none" }}>
@@ -198,11 +205,9 @@ function TrackBg() {
     </div>
   );
 }
-
 function TodayLine() {
   return <div style={{ position: "absolute", left: "2.72%", top: 0, bottom: 0, width: 1.5, background: GREEN, opacity: 0.2, zIndex: 3, pointerEvents: "none" }} />;
 }
-
 function RowLabel({ name, code, dimmed }: { name: string; code: string; dimmed?: boolean }) {
   return (
     <div style={{ paddingRight: 14 }}>
@@ -211,7 +216,6 @@ function RowLabel({ name, code, dimmed }: { name: string; code: string; dimmed?:
     </div>
   );
 }
-
 function MonthRuler({ showQ }: { showQ?: boolean }) {
   return (
     <div>
@@ -233,23 +237,34 @@ function MonthRuler({ showQ }: { showQ?: boolean }) {
     </div>
   );
 }
+function SubHead({ title, note }: { title: string; note?: string }) {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", marginBottom: 8, marginTop: 16 }}>
+      <div />
+      <div style={{ display: "flex", alignItems: "center", gap: 10, borderBottom: "1px dashed var(--border)", paddingBottom: 5 }}>
+        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)" }}>{title}</span>
+        {note && <span style={{ fontSize: 10, color: "var(--muted)" }}>{note}</span>}
+      </div>
+    </div>
+  );
+}
 
-// ─── Dev queue row (two-track with PM ready) ──────────────────────────────────
+// ─── Dev queue row ────────────────────────────────────────────────────────────
 function DevRow({ p }: { p: DevProject }) {
   const hasTwoTracks = !!p.pmReady;
-  const rowHeight = hasTwoTracks ? 60 : 44;
+  const rowH = hasTwoTracks ? 60 : 44;
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", alignItems: "center", minHeight: rowHeight, marginBottom: 5 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", alignItems: "center", minHeight: rowH, marginBottom: 5 }}>
       <RowLabel name={p.name} code={p.code} />
-      <div style={{ position: "relative", height: rowHeight, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+      <div style={{ position: "relative", height: rowH, display: "flex", flexDirection: "column", justifyContent: "center" }}>
         <TrackBg />
         <TodayLine />
         {hasTwoTracks ? (
           <>
-            {/* Track A: PM ready + queue */}
+            {/* Track A — PM ready + queue */}
             <div style={{ position: "relative", height: 20, marginBottom: 4 }}>
-              <div style={{ position: "absolute", left: "3.3%", top: 0, bottom: 0, width: 2, background: QUEUE_COL, zIndex: 4, borderRadius: 1 }} />
-              <div style={{ position: "absolute", left: "3.3%", top: 2, marginLeft: 5, fontSize: 9, fontWeight: 700, color: QUEUE_COL, background: "#EEF2FF", padding: "1px 6px", borderRadius: 3, whiteSpace: "nowrap", zIndex: 5, border: `1px solid ${QUEUE_COL}40` }}>
+              <div style={{ position: "absolute", left: p.queueLeft ?? "3.3%", top: 0, bottom: 0, width: 2, background: QUEUE_COL, zIndex: 4, borderRadius: 1 }} />
+              <div style={{ position: "absolute", left: p.queueLeft ?? "3.3%", top: 2, marginLeft: 5, fontSize: 9, fontWeight: 700, color: QUEUE_COL, background: "#EEF2FF", padding: "1px 6px", borderRadius: 3, whiteSpace: "nowrap", zIndex: 5, border: `1px solid ${QUEUE_COL}40` }}>
                 {p.pmReadyLabel ?? "Listo PM"}
               </div>
               {p.queueLeft && p.queueWidth && (
@@ -261,22 +276,30 @@ function DevRow({ p }: { p: DevProject }) {
                 <div style={{ position: "absolute", left: "3.3%", top: "50%", marginTop: -9, marginLeft: 5, fontSize: 9, color: GREEN, fontWeight: 600 }}>entra inmediato →</div>
               )}
             </div>
-            {/* Track B: dev bar */}
-            <div style={{ position: "relative", height: 24 }}>
-              <div style={{ position: "absolute", left: p.devLeft, width: p.devWidth, height: 24, background: GREEN, color: "#fff", display: "flex", alignItems: "center", padding: "0 9px", fontSize: 11, fontWeight: 600, zIndex: 2, whiteSpace: "nowrap" }}>
-                {p.name.split("·")[0].trim()}
+            {/* Track B — dev bar (or "→ 2027" label) */}
+            {p.noDevInS2 ? (
+              <div style={{ position: "relative", height: 24, display: "flex", alignItems: "center" }}>
+                <span style={{ position: "absolute", right: 0, fontSize: 10, fontWeight: 600, color: "var(--muted)", background: "var(--bg)", padding: "2px 8px", borderRadius: 4 }}>
+                  → dev 2027
+                </span>
               </div>
-              {[p.devLeft, p.devEnd].map((pos, i) => (
-                <div key={i} style={{ position: "absolute", left: pos, marginLeft: -5, width: 10, height: 10, background: GREEN, border: "2px solid var(--card)", transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4 }} />
-              ))}
-            </div>
+            ) : (
+              <div style={{ position: "relative", height: 24 }}>
+                <div style={{ position: "absolute", left: p.devLeft, width: p.devWidth, height: 24, background: GREEN, color: "#fff", display: "flex", alignItems: "center", padding: "0 9px", fontSize: 11, fontWeight: 600, zIndex: 2, whiteSpace: "nowrap" }}>
+                  {p.name.split("·")[0].trim()}
+                </div>
+                {[p.devLeft!, p.devEnd!].map((pos, i) => (
+                  <div key={i} style={{ position: "absolute", left: pos, marginLeft: -5, width: 10, height: 10, background: GREEN, border: "2px solid var(--card)", transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4 }} />
+                ))}
+              </div>
+            )}
           </>
         ) : (
           <div style={{ position: "relative", height: 28 }}>
             <div style={{ position: "absolute", left: p.devLeft, width: p.devWidth, height: 28, background: GREEN, color: "#fff", display: "flex", alignItems: "center", padding: "0 9px", fontSize: 11, fontWeight: 600, zIndex: 2, whiteSpace: "nowrap" }}>
               {p.name.split("·")[0].trim()}
             </div>
-            {[p.devLeft, p.devEnd].map((pos, i) => (
+            {[p.devLeft!, p.devEnd!].map((pos, i) => (
               <div key={i} style={{ position: "absolute", left: pos, marginLeft: -5, width: 10, height: 10, background: GREEN, border: "2px solid var(--card)", transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4 }} />
             ))}
           </div>
@@ -286,10 +309,10 @@ function DevRow({ p }: { p: DevProject }) {
   );
 }
 
-// ─── Operational track row (with optional milestone labels below) ──────────────
+// ─── Operational track row ────────────────────────────────────────────────────
 function OpRow({ t }: { t: OpTrack }) {
-  const hasMilestones = !!(t.milestones && t.milestones.length > 0);
-  const rowH = hasMilestones ? 68 : 44;
+  const hasMilestones = !!(t.milestones?.length);
+  const rowH = hasMilestones ? 70 : 44;
   return (
     <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", alignItems: "flex-start", minHeight: rowH, marginBottom: 5 }}>
       <div style={{ paddingRight: 14, paddingTop: hasMilestones ? 10 : 0, alignSelf: "center" }}>
@@ -299,19 +322,15 @@ function OpRow({ t }: { t: OpTrack }) {
       <div style={{ position: "relative", height: rowH }}>
         <TrackBg />
         <div style={{ position: "absolute", left: "2.72%", top: 0, bottom: 0, width: 1.5, background: GREEN, opacity: 0.2, zIndex: 3, pointerEvents: "none" }} />
-        {/* bar segments */}
         {t.segments.map((seg, si) => (
           <div key={si} style={{ position: "absolute", top: 10, left: seg.left, width: seg.width, height: 26, background: seg.bg, border: `1px solid ${seg.border}`, display: "flex", alignItems: "center", padding: "0 8px", fontSize: 11, color: seg.color, fontWeight: 600, zIndex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
             {seg.label}
           </div>
         ))}
-        {/* milestones */}
         {t.milestones?.map((m, mi) => (
           <div key={mi}>
-            {/* diamond */}
             <div style={{ position: "absolute", left: m.left, marginLeft: -5, width: 10, height: 10, background: m.color ?? GREEN, border: "2px solid var(--card)", transform: "rotate(45deg)", top: 18, zIndex: 4 }} />
-            {/* label below */}
-            <div style={{ position: "absolute", left: m.left, top: 36, transform: "translateX(-50%)", fontSize: 9, fontWeight: 700, color: m.color ?? GREEN, whiteSpace: "nowrap", textAlign: "center", zIndex: 3 }}>
+            <div style={{ position: "absolute", left: m.left, top: 37, transform: "translateX(-50%)", fontSize: 9, fontWeight: 700, color: m.color ?? GREEN, whiteSpace: "nowrap", zIndex: 3 }}>
               {m.label}{m.conditional ? " ?" : ""}
             </div>
           </div>
@@ -321,7 +340,7 @@ function OpRow({ t }: { t: OpTrack }) {
   );
 }
 
-// ─── POC experiment row (3-phase bar) ─────────────────────────────────────────
+// ─── POC experiment row (Research + Experiment operativo) ─────────────────────
 function PocRow({ p }: { p: PocProject }) {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", alignItems: "center", minHeight: 52, marginBottom: 5 }}>
@@ -329,38 +348,21 @@ function PocRow({ p }: { p: PocProject }) {
       <div style={{ position: "relative", height: 52, display: "flex", alignItems: "center" }}>
         <TrackBg />
         <TodayLine />
-        {/* Research */}
-        <div style={{ position: "absolute", left: p.researchLeft, width: p.researchWidth, height: 26, background: RESEARCH_BG, border: `1px solid ${RESEARCH_BD}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: RESEARCH_TX, zIndex: 1, whiteSpace: "nowrap" }}>
-          Research
+        {/* Research segment */}
+        <div style={{ position: "absolute", left: p.researchLeft, width: p.researchWidth, height: 26, background: RESEARCH_BG, border: `1px solid ${RESEARCH_BD}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: RESEARCH_TX, zIndex: 1 }}>
+          Research 2s
         </div>
-        {/* Impl */}
-        <div style={{ position: "absolute", left: p.implLeft, width: p.implWidth, height: 26, background: IMPL_BG, border: `1px solid ${IMPL_BD}`, borderLeft: "none", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: IMPL_TX, zIndex: 1, overflow: "hidden" }}>
-          {parseFloat(p.implWidth) > 4 ? "Impl" : ""}
-        </div>
-        {/* Experiment */}
-        <div style={{ position: "absolute", left: p.expLeft, width: p.expWidth, height: 26, background: EXP_BG, border: `1px solid ${EXP_BD}`, borderLeft: "none", display: "flex", alignItems: "center", padding: "0 8px", fontSize: 11, fontWeight: 600, color: EXP_TX, zIndex: 1, whiteSpace: "nowrap", overflow: "hidden" }}>
+        {/* Experiment segment */}
+        <div style={{ position: "absolute", left: p.expLeft, width: p.expWidth, height: 26, background: EXP_BG, border: `1px solid ${EXP_BD}`, borderLeft: "none", display: "flex", alignItems: "center", padding: "0 8px", fontSize: 11, fontWeight: 600, color: EXP_TX, zIndex: 1, overflow: "hidden", whiteSpace: "nowrap" }}>
           Experimento operativo
-        </div>
-        {/* Handoff TI? diamond + label */}
-        <div style={{ position: "absolute", left: p.handoffLeft, marginLeft: -5, width: 10, height: 10, background: AMBER, border: "2px solid var(--card)", transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4 }} />
-        <div style={{ position: "absolute", left: p.handoffLeft, top: "50%", marginTop: 8, marginLeft: -30, fontSize: 9, fontWeight: 700, color: AMBER, whiteSpace: "nowrap", zIndex: 3 }}>
-          Handoff TI ? · {p.handoffDate}
         </div>
         {/* Start marker */}
         <div style={{ position: "absolute", left: p.researchLeft, marginLeft: -5, width: 10, height: 10, background: RESEARCH_TX, border: "2px solid var(--card)", transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4 }} />
-      </div>
-    </div>
-  );
-}
-
-// ─── Subsection header ────────────────────────────────────────────────────────
-function SubHead({ title, note }: { title: string; note?: string }) {
-  return (
-    <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", marginBottom: 8, marginTop: 16 }}>
-      <div />
-      <div style={{ display: "flex", alignItems: "center", gap: 10, borderBottom: "1px dashed var(--border)", paddingBottom: 5 }}>
-        <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--muted)" }}>{title}</span>
-        {note && <span style={{ fontSize: 10, color: "var(--muted)" }}>{note}</span>}
+        {/* Handoff TI? */}
+        <div style={{ position: "absolute", left: p.handoffLeft, marginLeft: -5, width: 10, height: 10, background: AMBER, border: "2px solid var(--card)", transform: "rotate(45deg)", top: "50%", marginTop: -5, zIndex: 4 }} />
+        <div style={{ position: "absolute", left: p.handoffLeft, top: "50%", marginTop: 8, marginLeft: -32, fontSize: 9, fontWeight: 700, color: AMBER, whiteSpace: "nowrap", zIndex: 3 }}>
+          Handoff TI ? · {p.handoffDate}
+        </div>
       </div>
     </div>
   );
@@ -382,9 +384,9 @@ export default function RoadmapS2Page() {
         {/* Title */}
         <div style={{ marginBottom: 32 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
-            <span style={{ fontSize: 11, fontWeight: 700, background: GREEN_BG, color: GREEN, padding: "3px 9px", borderRadius: 20 }}>Supplier Success</span>
+            <span style={{ fontSize: 11, fontWeight: 700, background: GREEN_BG,   color: GREEN,    padding: "3px 9px", borderRadius: 20 }}>Supplier Success</span>
             <span style={{ fontSize: 11, fontWeight: 700, background: "#EEF2FF", color: "#6366F1", padding: "3px 9px", borderRadius: 20 }}>S2 2026</span>
-            <span style={{ fontSize: 11, fontWeight: 700, background: AMBER_BG, color: AMBER, padding: "3px 9px", borderRadius: 20 }}>Jul → Dic 2026</span>
+            <span style={{ fontSize: 11, fontWeight: 700, background: AMBER_BG,  color: AMBER,    padding: "3px 9px", borderRadius: 20 }}>Jul → Dic 2026</span>
           </div>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)", marginBottom: 6 }}>Roadmap S2 2026</h1>
           <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6, maxWidth: 640 }}>
@@ -412,19 +414,11 @@ export default function RoadmapS2Page() {
           <div style={{ minWidth: 580 }}>
             <div style={{ display: "grid", gridTemplateColumns: "192px 1fr" }}><div /><MonthRuler showQ /></div>
             {DEV_QUEUE.map((p) => <DevRow key={p.code} p={p} />)}
-            {/* Dropi Pulso aspiracional */}
-            <div style={{ display: "grid", gridTemplateColumns: "192px 1fr", alignItems: "center", minHeight: 44, marginBottom: 5 }}>
-              <RowLabel name="Dropi Pulso" code="Aspiracional · 2027" dimmed />
-              <div style={{ position: "relative", height: 44, display: "flex", alignItems: "center" }}>
-                <TrackBg />
-                <div style={{ position: "absolute", left: "86.9%", width: "11%", height: 26, border: "1.5px dashed var(--border)", background: "transparent", display: "flex", alignItems: "center", padding: "0 9px", fontSize: 11, color: "var(--muted)", zIndex: 1 }}>Piloto</div>
-              </div>
-            </div>
             {/* Legend */}
             <div style={{ display: "flex", gap: 20, flexWrap: "wrap", marginTop: 14, paddingTop: 12, borderTop: "1px solid var(--border)" }}>
               {[
                 { el: <div style={{ width: 18, height: 11, background: GREEN }} />, label: "Desarrollo activo" },
-                { el: <div style={{ width: 18, height: 14, background: "#F5F3FF", border: `1.5px dashed ${QUEUE_COL}80` }} />, label: "En cola TI" },
+                { el: <div style={{ width: 18, height: 14, background: "#F5F3FF", border: `1.5px dashed ${QUEUE_COL}80` }} />, label: "En cola TI (listo PM, sin slot)" },
                 { el: <div style={{ width: 2, height: 14, background: QUEUE_COL, borderRadius: 1 }} />, label: "Handoff PM → TI" },
                 { el: <div style={{ width: 10, height: 10, background: GREEN, transform: "rotate(45deg)" }} />, label: "Hito" },
                 { el: <div style={{ width: 1.5, height: 14, background: GREEN, opacity: 0.4 }} />, label: "Hoy" },
@@ -446,26 +440,24 @@ export default function RoadmapS2Page() {
             <SubHead title="Seguimiento operativo" />
             {OP_TRACKS.map((t) => <OpRow key={t.code} t={t} />)}
 
-            <SubHead title="Experimentos POC" note="Research 2s · Impl 1s · Experimento operativo · Handoff TI si funciona" />
+            <SubHead title="Experimentos POC" note="Research 2s → Experimento 2m → Handoff TI si funciona" />
             {POC_PROJECTS.map((p) => <PocRow key={p.code} p={p} />)}
 
             {/* Legend */}
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginTop: 16, paddingTop: 12, borderTop: "1px solid var(--border)" }}>
               {[
-                { bg: AMBER_BG,    border: AMBER,       label: "Operacional" },
-                { bg: SLATE_BG,    border: "#CBD5E1",   label: "Frente paralelo" },
-                { bg: RED_BG,      border: RED,          label: "Crítico" },
-                { bg: RESEARCH_BG, border: RESEARCH_BD, label: "Research" },
-                { bg: IMPL_BG,     border: IMPL_BD,     label: "Implementación" },
-                { bg: EXP_BG,      border: EXP_BD,      label: "Experimento" },
+                { bg: AMBER_BG,    border: AMBER,      label: "Operacional" },
+                { bg: SLATE_BG,    border: "#CBD5E1",  label: "Frente paralelo" },
+                { bg: RED_BG,      border: RED,         label: "Crítico" },
+                { bg: RESEARCH_BG, border: RESEARCH_BD, label: "Research POC" },
+                { bg: EXP_BG,      border: EXP_BD,      label: "Experimento POC" },
               ].map((l) => (
                 <div key={l.label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 10, color: "var(--muted)" }}>
                   <div style={{ width: 16, height: 10, background: l.bg, border: `1px solid ${l.border}`, flexShrink: 0 }} />{l.label}
                 </div>
               ))}
               <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 10, color: "var(--muted)" }}>
-                <div style={{ width: 10, height: 10, background: AMBER, transform: "rotate(45deg)", flexShrink: 0 }} />
-                Handoff TI (condicional)
+                <div style={{ width: 10, height: 10, background: AMBER, transform: "rotate(45deg)", flexShrink: 0 }} />Handoff TI (condicional)
               </div>
             </div>
           </div>
@@ -482,7 +474,7 @@ export default function RoadmapS2Page() {
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                 {[
-                  { k: "Estado", v: <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 4, background: p.statusBg, color: p.statusColor }}>{p.statusLabel}</span> },
+                  { k: "Estado", v: <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase" as const, padding: "2px 7px", borderRadius: 4, background: p.statusBg, color: p.statusColor }}>{p.statusLabel}</span> },
                   { k: "Dev",  v: p.dev },
                   { k: "KR",   v: p.kr },
                   { k: "Nota", v: p.note },
@@ -502,7 +494,7 @@ export default function RoadmapS2Page() {
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 28 }}>
           <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px" }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", marginBottom: 14 }}>Q3 · Jul – Sep</div>
-            {["Activación de proveedores · TTV en operación", "Destrabar regulación que trunca activación", "NEG completo · COM-002 entregado", "Experimentos Pulso + Activa en curso"].map((item) => (
+            {["Activación de proveedores · TTV en operación", "Destrabar regulación que trunca activación", "NEG completo · COM-002 entregado", "Experimentos Pulso + Activa en curso · C3 TTV: 310 listos"].map((item) => (
               <div key={item} style={{ display: "flex", gap: 8, fontSize: 13, color: "var(--muted)", marginBottom: 7, lineHeight: 1.4 }}>
                 <div style={{ width: 6, height: 6, background: GREEN, flexShrink: 0, marginTop: 5 }} />{item}
               </div>
@@ -510,7 +502,7 @@ export default function RoadmapS2Page() {
           </div>
           <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${AMBER}`, borderRadius: 14, padding: "20px 22px" }}>
             <div style={{ fontSize: 16, fontWeight: 700, color: AMBER, marginBottom: 14 }}>Q4 · Oct – Dic</div>
-            {["Por definir — sale del wonder del Product Backlog", "DESC-001 + DCA Campañas entregados", "Handoff TI experimentos (si resultados positivos)", "Cronograma se planifica al cierre de Q3"].map((item) => (
+            {["Por definir — sale del wonder del Product Backlog", "DESC-001 + DCA Campañas entregados", "Handoff TI experimentos (si resultados positivos)", "C5 TTV: meta 620 suppliers listos"].map((item) => (
               <div key={item} style={{ display: "flex", gap: 8, fontSize: 13, color: "var(--muted)", marginBottom: 7, lineHeight: 1.4 }}>
                 <div style={{ width: 6, height: 6, background: AMBER, flexShrink: 0, marginTop: 5 }} />{item}
               </div>
@@ -522,9 +514,9 @@ export default function RoadmapS2Page() {
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, padding: "14px 18px" }}>
           <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.09em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>Supuestos y restricciones</div>
           <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.75 }}>
-            1 dev (Giancarlos) · capacidad secuencial · ~6 sem/proyecto. Cola: NEG → COM-002 → DESC-001 → DCA Campañas.<br />
-            Experimentos POC (Pulso + Activa) no ocupan slot de dev — son construction from product side. Si funcionan → handoff TI condicional.<br />
-            Dropi Pulso en cola de dev 2027 salvo capacidad extraordinaria en Dic.
+            1 dev (Giancarlos) · capacidad secuencial · ~6 sem/proyecto. Cola confirmada: NEG → COM-002 → DESC-001 → DCA Campañas.<br />
+            CAT-001 listo para handoff ~Jul 28 — sin slot disponible en S2 (primera oportunidad: 2027).<br />
+            Experimentos POC (Pulso + Activa): construcción desde producto, sin slot de dev formal. Handoff a TI es condicional a resultados.
           </p>
         </div>
 
