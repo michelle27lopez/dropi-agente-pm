@@ -70,7 +70,17 @@ export default function PlaneacionListPage() {
         <a href="/proyectos/dinamicas-catalogo" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>Dinámicas de Catálogo</a>
         <span style={{ color: "var(--border)" }}>/</span>
         <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Planeación</span>
-        <div style={{ marginLeft: "auto" }}>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
+          <button
+            onClick={() => router.push("/proyectos/dinamicas-catalogo/planeacion/dashboard")}
+            style={{
+              background: "#EEF2FF", color: "#6366F1", border: "1px solid rgba(99,102,241,.25)",
+              borderRadius: 9, padding: "8px 16px", fontWeight: 700,
+              fontSize: 13, cursor: "pointer",
+            }}
+          >
+            📊 Dashboard general
+          </button>
           <button
             onClick={() => setShowModal(true)}
             style={{
