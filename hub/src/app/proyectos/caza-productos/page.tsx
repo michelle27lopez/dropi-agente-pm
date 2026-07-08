@@ -51,6 +51,19 @@ const PROV_BG = "#ECFDF5";
 const PROV_ACTIVOS_META = 80;
 const PROV_ACTIVOS_ACTUAL = 56; // Fuente: Dropi DB, última cifra conocida (Q2), sin dato nuevo en Q3.
 
+// Experimento activo · sin desarrollo — definido 06/07/2026.
+const EXPERIMENTO = {
+  nombre: "Reactivación manual de proveedores premium inactivos",
+  estado: "Por iniciar",
+  hipotesis: "Si Ops/CS contacta directamente (WhatsApp o llamada) a proveedores premium/verificados que entraron al módulo pero nunca enviaron oferta, o que enviaron antes y pararon, un % relevante vuelve a activarse.",
+  muestra: "15–20 proveedores premium/verificados inactivos en Caza Productos.",
+  accion: "Contacto directo 1:1 ofreciendo ayuda para publicar/enviar su primera oferta esta semana.",
+  ventana: "1 semana de contacto + 1 semana de observación.",
+  metrica: "% de los contactados que envía al menos 1 oferta en los 7 días posteriores al contacto.",
+  metaExito: "20–30% reactivados (4–6 de 15–20).",
+  aprendizaje: "Si funciona: el problema es de fricción/confianza, arreglable con soporte humano u onboarding. Si no reactiva a nadie pese al contacto 1:1: el problema es más estructural — el canal no les interesa y hay que replantear la propuesta de valor para proveedores.",
+};
+
 const axisTick = { fontSize: 11, fill: "#6B7280" };
 const gridStroke = "#E5E7EB";
 const tooltipStyle = { fontSize: 12, borderRadius: 8, border: "1px solid #E5E7EB", boxShadow: "0 4px 12px rgba(0,0,0,0.08)" };
@@ -451,6 +464,35 @@ function ResumenPanel({ periodos }: { periodos: Periodo[] }) {
         <Meter label="Proveedores activos (Dropi DB)" value={PROV_ACTIVOS_ACTUAL} target={PROV_ACTIVOS_META} color="#F59E0B" />
       </div>
 
+      {/* Experimento activo */}
+      <div style={{ ...card, border: "1px solid #FDE68A", background: "#FFFBEB" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: 18 }}>🧪</span>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "#78350F" }}>Experimento activo · {EXPERIMENTO.nombre}</div>
+              <div style={{ fontSize: 11, color: "#92400E" }}>Sin desarrollo — ataca el cuello de botella de supply (56 proveedores activos vs meta 80)</div>
+            </div>
+          </div>
+          <span style={tag("#D97706", "#FFFBEB")}>{EXPERIMENTO.estado}</span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          {[
+            { titulo: "Hipótesis", texto: EXPERIMENTO.hipotesis },
+            { titulo: "Muestra", texto: EXPERIMENTO.muestra },
+            { titulo: "Acción", texto: EXPERIMENTO.accion },
+            { titulo: "Ventana", texto: EXPERIMENTO.ventana },
+            { titulo: "Métrica de éxito", texto: `${EXPERIMENTO.metrica} Meta: ${EXPERIMENTO.metaExito}` },
+            { titulo: "Qué aprendemos", texto: EXPERIMENTO.aprendizaje },
+          ].map(b => (
+            <div key={b.titulo} style={{ padding: "10px 12px", background: "#fff", borderRadius: 8, border: "1px solid #FDE68A" }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#78350F", marginBottom: 3 }}>{b.titulo}</div>
+              <div style={{ fontSize: 12, color: "var(--fg)", lineHeight: 1.4 }}>{b.texto}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Hallazgos clave */}
       <div style={card}>
         <div style={{ fontSize: 13, fontWeight: 800, color: ACCENT, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.04em" }}>
@@ -458,9 +500,8 @@ function ResumenPanel({ periodos }: { periodos: Periodo[] }) {
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
           {[
-            { icon: "🟢", titulo: "Conversión sigue en máximo histórico — 44.1% Q3",      desc: "Sube de 34.1% (Q2) a 44.1% (Q3). Con menos intentos (469 vs 700 en Q2), más dropis publicaron proporcionalmente. Tercer período consecutivo de mejora en esta métrica." },
-            { icon: "🔴", titulo: "CSAT se deteriora pese a mejor conversión",     desc: "«No avanzó» sube de 42.9% (Q2) a 55.6% (Q3, 18 resp.). «Acordamos precio» cae de 21.4% a 0% — la opción sigue activa en la encuesta, simplemente nadie la marcó. El embudo mejora pero la percepción del dropi empeora: posible desconexión entre publicar y cerrar con el proveedor." },
-            { icon: "🟡", titulo: "Clarity — modelo mental equivocado",    desc: "Patrón detectado: catálogo → Caza Productos → intento de búsqueda → salida. Los dropis llegan pensando que es otro catálogo de búsqueda, no un módulo para publicar su necesidad. Sin confirmación de fix a jul 2026." },
+            { icon: "🟢", titulo: "Conversión sigue en máximo histórico — 44.1% Q3",      desc: "Sube de 34.1% (Q2) a 44.1% (Q3) — segundo período consecutivo de mejora (Q1 fue el mínimo histórico con 17%). Ojo: es una mejora de tasa, no de volumen — publicaron menos dropis en términos absolutos (207 vs 239 en Q2), pero cayeron menos que los que intentaron crear (469 vs 700). Sin dato aún de si es mejor calidad de tráfico o solo menos exposición al feature." },
+            { icon: "🟡", titulo: "CSAT: posible retroceso, pero muestra chica",     desc: "«No avanzó» sube de 42.9% a 55.6% — en personas reales, 6 de 14 (Q2) → 10 de 18 (Q3). «Acordamos precio» cae de 21.4% a 0%, pero en Q2 eso eran solo 3 personas. Con muestras tan chicas, mover 3-4 respuestas cambia el % ~15 puntos — vigilar con más datos antes de confirmar un retroceso real." },
             { icon: "🔴", titulo: "Supply sigue en mínimos críticos",       desc: "56 proveedores (sin cifra nueva) para 207 publicaciones en Q3. Solo 12 enviaron oferta. La mejora de conversión dropi hace más urgente el problema del lado supply." },
           ].map(h => (
             <div key={h.titulo} style={{ display: "flex", gap: 10, padding: "12px", background: "#F8FAFC", borderRadius: 10, border: "1px solid var(--border)" }}>
@@ -567,7 +608,7 @@ function ResumenPanel({ periodos }: { periodos: Periodo[] }) {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {[
-            { n: "1", paso: "Rediseñar onboarding / empty state — explicar en 3 pasos la mecánica inversa antes del formulario. CTA desde catálogo: «¿No lo encuentras? Pídelo a un proveedor». Clarity confirmó que el modelo mental equivocado genera abandono que el formulario no puede recuperar.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
+            { n: "1", paso: "Medir el CTA «¿No lo encuentras? Pídelo a un proveedor» — ya implementado en el catálogo. Falta instrumentar el clic en UserPilot (evento + funnel) para confirmar si está resolviendo el modelo mental equivocado que generaba abandono antes del formulario.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
             { n: "2", paso: "Activación urgente de proveedores — «Tráfico de proveedores» ya es queja explícita en CSAT. Contacto directo con prov. premium que abandonaron + plan de reactivación. Meta: >80 prov. activos.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
             { n: "3", paso: "Cerrar bug «No se envió mi oferta» — presente desde S1. En Q2, de 13 que crearon oferta solo 8 la enviaron (38.5% pérdida). CES sin respuestas nuevas en Q3 (0 de 2) — no se puede confirmar si persiste.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
             { n: "4", paso: "Investigar por qué el CSAT empeora pese a mejor conversión — «no avanzó» sube a 55.6% en Q3 y «acordamos precio» cae a 0%. Posible desconexión entre publicar y cerrar con el proveedor.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },

@@ -3779,7 +3779,24 @@ export default function CategorizacionPage() {
                   </div>
                 </a>
 
-                {/* Card 9: Solicitudes de Enriquecimiento (gap requests desde supplier-lab) */}
+                {/* Card 9: Prototipo — Catálogo del Dropshipper por categoría */}
+                <a
+                  href="/proyectos/categorizacion/prototipo"
+                  className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-orange-500 hover:shadow-xs transition-all duration-200 no-underline"
+                >
+                  <span className="text-2xl mt-0.5">🛍️</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Prototipo · Catálogo del Dropshipper</span>
+                      <span className="text-[9px] font-bold bg-orange-50 text-orange-600 border border-orange-100 px-1.5 py-0.5 rounded-full">Nuevo</span>
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Cómo el dropshipper navegaría y filtraría el catálogo usando la taxonomía unificada L1→L4, en vez de nombres de categoría libres.
+                    </div>
+                  </div>
+                </a>
+
+                {/* Card 10: Solicitudes de Enriquecimiento (gap requests desde supplier-lab) */}
                 <div
                   onClick={() => setActiveResourceTab(activeResourceTab === "gaps" ? null : "gaps")}
                   className={`bg-white border rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-rose-500 hover:shadow-xs transition-all duration-200 ${

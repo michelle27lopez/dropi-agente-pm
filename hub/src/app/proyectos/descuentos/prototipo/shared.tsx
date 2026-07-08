@@ -215,20 +215,29 @@ export const IconTruck = () => icon(<><rect x="1" y="7" width="13" height="9" rx
 export const IconExternal = () => icon(<><path d="M14 4h6v6" /><path d="M20 4 10 14" /><path d="M8 6H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3" /></>, 15);
 export const IconLogo = () => (
   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-    <div style={{ width: 26, height: 26, borderRadius: "50%", background: C.orange, display: "flex", alignItems: "center", justifyContent: "center" }}>
-      <div style={{ display: "flex", gap: 3 }}>
-        <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#fff" }} />
-        <span style={{ width: 4, height: 4, borderRadius: "50%", background: "#fff" }} />
-      </div>
-    </div>
+    {/* eslint-disable-next-line @next/next/no-img-element */}
+    <img src="/logo.png" alt="Dropi" width={28} height={28} style={{ display: "block" }} />
     <span style={{ fontFamily: FONT_HEAD, fontWeight: 700, fontSize: 19, color: C.orange }}>dropi</span>
   </div>
 );
 
 // ─── Piezas reutilizables de UI (según design system real) ───────────────────
+// Anillo de foco visible: los inputs nativos van con outline:none, así que el
+// wrapper necesita su propio indicador de :focus-within para no dejar la
+// navegación por teclado sin ninguna señal visual.
+export function FocusRingStyle() {
+  return (
+    <style>{`
+      .dsc-focus-ring:focus-within, .dsc-focus-ring:focus-visible {
+        box-shadow: 0 0 0 3px rgba(255,97,2,.25);
+        border-color: ${C.orange};
+      }
+    `}</style>
+  );
+}
 export function Input({ value, onChange, placeholder, type = "text" }: { value: string | number; onChange: (v: string) => void; placeholder?: string; type?: string }) {
   return (
-    <div style={{ border: `1px solid ${C.border}`, borderRadius: 4, height: 38, background: "#fff", display: "flex", alignItems: "center", padding: "0 12px" }}>
+    <div className="dsc-focus-ring" style={{ border: `1px solid ${C.border}`, borderRadius: 4, height: 38, background: "#fff", display: "flex", alignItems: "center", padding: "0 12px" }}>
       <input
         type={type}
         value={value}
@@ -299,14 +308,21 @@ export function Row({ label, value }: { label: string; value: React.ReactNode })
 }
 
 // ─── Shell: Header + Rail + Sidebar (misma apariencia en ambas vistas) ────────
-function RailIcon({ active, children }: { active?: boolean; children: React.ReactNode }) {
+function RailIcon({ active, label, children }: { active?: boolean; label: string; children: React.ReactNode }) {
   return (
-    <div style={{
-      width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
-      background: active ? C.orange : "transparent", color: active ? "#fff" : "#9AA1B9",
-    }}>
+    <button
+      type="button"
+      title={label}
+      aria-label={label}
+      aria-current={active ? "page" : undefined}
+      className="dsc-focus-ring"
+      style={{
+        width: 40, height: 40, borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
+        background: active ? C.orange : "transparent", color: active ? "#fff" : "#9AA1B9", border: "none", cursor: "pointer",
+      }}
+    >
       {children}
-    </div>
+    </button>
   );
 }
 function Header() {
@@ -334,15 +350,16 @@ export function AppShell({
 }) {
   return (
     <div style={{ background: "#fff", minHeight: "100vh" }} className={`${inter.variable} ${plex.variable}`}>
+      <FocusRingStyle />
       <Header />
       <div style={{ display: "flex", minHeight: "calc(100vh - 53px)" }}>
         <div style={{ width: 56, background: "#fff", borderRight: `1px solid ${C.borderLight}`, display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "12px 8px", flexShrink: 0 }}>
-          <RailIcon><IconHome /></RailIcon>
-          <RailIcon><IconChart /></RailIcon>
-          <RailIcon active={activeIcon === "search"}><IconSearch /></RailIcon>
-          <RailIcon active={activeIcon === "cart"}><IconCart /></RailIcon>
-          <RailIcon><IconBox /></RailIcon>
-          <RailIcon><IconMegaphone /></RailIcon>
+          <RailIcon label="Inicio"><IconHome /></RailIcon>
+          <RailIcon label="Estadísticas"><IconChart /></RailIcon>
+          <RailIcon label="Productos" active={activeIcon === "search"}><IconSearch /></RailIcon>
+          <RailIcon label="Pedidos" active={activeIcon === "cart"}><IconCart /></RailIcon>
+          <RailIcon label="Inventario"><IconBox /></RailIcon>
+          <RailIcon label="Marketing"><IconMegaphone /></RailIcon>
         </div>
         <div style={{ width: 200, background: C.bgGraySide, flexShrink: 0, padding: "16px 8px" }}>
           {sidebar}
@@ -464,9 +481,9 @@ export function ProductDetail({
             <div style={{ flex: "1 1 160px" }}><GhostButton>Calculadora de flete</GhostButton></div>
           </div>
           <div style={{ display: "flex", gap: 8, marginBottom: 24 }}>
-            <span style={{ width: 38, height: 38, border: `1px solid ${C.border}`, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: C.textMuted }}><IconExport /></span>
-            <span style={{ width: 38, height: 38, border: `1px solid ${C.border}`, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: C.textMuted }}><IconHeart /></span>
-            <span style={{ width: 38, height: 38, border: `1px solid ${C.border}`, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: C.textMuted }}><IconShare /></span>
+            <button type="button" title="Exportar" aria-label="Exportar" className="dsc-focus-ring" style={{ width: 38, height: 38, border: `1px solid ${C.border}`, borderRadius: 4, background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: C.textMuted }}><IconExport /></button>
+            <button type="button" title="Agregar a favoritos" aria-label="Agregar a favoritos" className="dsc-focus-ring" style={{ width: 38, height: 38, border: `1px solid ${C.border}`, borderRadius: 4, background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: C.textMuted }}><IconHeart /></button>
+            <button type="button" title="Compartir" aria-label="Compartir" className="dsc-focus-ring" style={{ width: 38, height: 38, border: `1px solid ${C.border}`, borderRadius: 4, background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: C.textMuted }}><IconShare /></button>
           </div>
 
           {/* Ficha proveedor */}

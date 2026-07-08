@@ -3,6 +3,7 @@ export type NodeKey =
   | "invite" | "submission" | "showcase" | "handoff";
 
 export type FieldType = "text" | "textarea" | "select" | "multiselect";
+export type NodeData = Record<string, string>;
 
 export interface Field {
   key: string;
@@ -14,6 +15,8 @@ export interface Field {
   options?: string[];
   optionDescriptions?: Record<string, string>;
   ranked?: boolean;
+  /** Oculta el campo cuando devuelve true. Recibe los datos de TODOS los nodos, indexados por NodeKey. */
+  hidden?: (allData: Partial<Record<NodeKey, NodeData>>) => boolean;
 }
 
 export interface SectionDefinition {
@@ -23,10 +26,14 @@ export interface SectionDefinition {
   fields: Field[];
 }
 
+export type NodeIconKey =
+  | "file-text" | "tag" | "check-circle-2" | "calendar"
+  | "megaphone" | "clipboard-list" | "store" | "file-check-2";
+
 export interface NodeDefinition {
   key: NodeKey;
   title: string;
-  icon: string;
+  icon: NodeIconKey;
   description: string;
   sections: SectionDefinition[];
 }
@@ -36,7 +43,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
   {
     key: "base",
     title: "Ficha base",
-    icon: "➕",
+    icon: "file-text",
     description: "Define la identidad de la campaña. Qué es, para qué existe y cuándo ocurre.",
     sections: [
       {
@@ -146,7 +153,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
   {
     key: "type",
     title: "Tipo y mecánica",
-    icon: "🏷️",
+    icon: "tag",
     description: "Clasifica la dinámica y define el motivador principal del supplier.",
     sections: [
       {
@@ -212,7 +219,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
   {
     key: "eligibility",
     title: "Segmento y elegibilidad",
-    icon: "✅",
+    icon: "check-circle-2",
     description: "Define quién puede entrar a la campaña — qué suppliers y qué productos aplican.",
     sections: [
       {
@@ -251,14 +258,6 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
         subtitle: "Criterios mínimos de participación",
         fields: [
           {
-            key: "eligibility_criteria",
-            label: "Criterios de elegibilidad",
-            type: "textarea",
-            required: true,
-            placeholder: "ej. Suppliers verificados en Colombia con stock mayor a 300 unidades, productos activos, públicos y con ficha completa.",
-            hint: "Describe en lenguaje claro quién entra y quién no. El comercial o Supplier Success usará esto para filtrar manualmente."
-          },
-          {
             key: "min_stock",
             label: "Stock mínimo requerido (unidades)",
             type: "text",
@@ -284,14 +283,15 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
             key: "min_discount",
             label: "Descuento mínimo (%) — si aplica",
             type: "text",
-            placeholder: "ej. 15% — dejar vacío si no aplica"
+            placeholder: "ej. 15% — dejar vacío si no aplica",
+            hidden: (allData) => allData.type?.requires_discount === "No requiere descuento"
           },
           {
-            key: "segment_size",
-            label: "Tamaño esperado del segmento",
-            type: "text",
-            required: true,
-            placeholder: "ej. 20–40 suppliers / 100–150 productos"
+            key: "eligibility_notes",
+            label: "Notas o excepciones de elegibilidad",
+            type: "textarea",
+            placeholder: "Solo agrega excepciones o matices que los campos de arriba no cubran. No repitas stock, tipo de supplier ni categorías — ya quedaron definidos.",
+            hint: "Opcional. Los campos estructurados de arriba ya son suficientes para filtrar; usa esto solo para casos especiales."
           },
           {
             key: "segment_responsible",
@@ -309,7 +309,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
   {
     key: "calendar",
     title: "Calendario operativo",
-    icon: "📅",
+    icon: "calendar",
     description: "Define cuándo ocurre cada fase. Planear hacia atrás desde el evento: el supplier necesita tiempo para postular, el dropshipper para pautar.",
     sections: [
       {
@@ -385,7 +385,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
   {
     key: "invite",
     title: "Convocatoria supplier",
-    icon: "📣",
+    icon: "megaphone",
     description: "Define cómo se entera el supplier de la campaña y cómo se le lleva a postular.",
     sections: [
       {
@@ -462,7 +462,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
   {
     key: "submission",
     title: "Postulación de productos",
-    icon: "📝",
+    icon: "clipboard-list",
     description: "Define cómo entran los productos a la campaña y qué datos se capturan.",
     sections: [
       {
@@ -542,7 +542,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
   {
     key: "showcase",
     title: "Vitrina para dropshippers",
-    icon: "🛍️",
+    icon: "store",
     description: "Define cómo se presentan los productos al dropshipper y cómo llegan a verlos.",
     sections: [
       {
@@ -653,7 +653,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
   {
     key: "handoff",
     title: "Handoff final",
-    icon: "📋",
+    icon: "file-check-2",
     description: "Consolida todo en el documento operativo para ejecutar y alinear a todas las áreas.",
     sections: [
       {
