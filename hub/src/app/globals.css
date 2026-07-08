@@ -19,3 +19,54 @@
     -webkit-font-smoothing: antialiased;
   }
 }
+
+/* Hub home: hover/entrance motion — ease-out-quart, sin bounce (DESIGN.md) */
+@keyframes hub-card-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hub-card {
+  animation: hub-card-in 0.4s cubic-bezier(0.25, 1, 0.5, 1) backwards;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.hub-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.hub-card-icon,
+.hub-card-arrow {
+  display: inline-flex;
+  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.hub-card:hover .hub-card-icon { transform: scale(1.06); }
+.hub-card:hover .hub-card-arrow { transform: translateX(3px); }
+
+.hub-link {
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition: background-color 0.15s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.hub-link:hover {
+  background: var(--dropi-light);
+  border-color: var(--dropi);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hub-card {
+    animation: none;
+    transition: none;
+  }
+  .hub-card:hover {
+    transform: none;
+  }
+  .hub-card-icon,
+  .hub-card-arrow,
+  .hub-link {
+    transition: none;
+  }
+  .hub-card:hover .hub-card-icon,
+  .hub-card:hover .hub-card-arrow {
+    transform: none;
+  }
+}

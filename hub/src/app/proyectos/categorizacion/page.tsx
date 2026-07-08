@@ -3557,7 +3557,7 @@ export default function CategorizacionPage() {
   };
 
   return (
-    <main id="categorizacion-project-page" className="min-h-screen pb-16" style={{ background: "var(--bg)" }}>
+    <main id="categorizacion-project-page" className="min-h-screen pb-16" style={{ background: "var(--card)" }}>
       {/* Header */}
       <header id="project-header" className="bg-white border-b flex items-center justify-between px-8 py-4" style={{ borderColor: "var(--border)" }}>
         <div className="flex items-center gap-4">

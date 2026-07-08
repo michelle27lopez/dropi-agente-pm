@@ -26,7 +26,7 @@ export default function GaliDemoDashboard() {
   const [docsOpen, setDocsOpen] = useState(true);
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+    <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
       <header style={{
         background: "#fff", borderBottom: "1px solid var(--border)",

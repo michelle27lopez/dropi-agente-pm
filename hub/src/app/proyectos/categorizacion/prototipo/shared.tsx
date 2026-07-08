@@ -358,11 +358,20 @@ function RailIcon({ active, children }: { active?: boolean; children: React.Reac
     </div>
   );
 }
+// URL real del piloto de Categorización con IA (Card 8 del panel de recursos
+// de CAT-001) — se embebe como "Vista Proveedor" en vez de duplicar su
+// formulario "Crear Producto" + CategoryPickerIA en este prototipo.
+export const SUPPLIER_LAB_URL = "https://dropi-agente-pm.vercel.app/dashboard/productos";
+
 function Header() {
   return (
-    <header style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "8px 16px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-      <IconLogo />
-      <span style={{ fontFamily: FONT_UI, fontSize: 11, fontWeight: 500, color: C.textMuted, letterSpacing: "0.04em" }}>PROTOTIPO</span>
+    <header style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "8px 16px", display: "flex", alignItems: "center", gap: 12 }}>
+      <a href="/proyectos/categorizacion" style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textMuted, textDecoration: "none" }}>← Categorización y Enriquecimiento</a>
+      <span style={{ color: C.border }}>/</span>
+      <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <IconLogo />
+        <span style={{ fontFamily: FONT_UI, fontSize: 11, fontWeight: 500, color: C.textMuted, letterSpacing: "0.04em" }}>PROTOTIPO</span>
+      </div>
     </header>
   );
 }

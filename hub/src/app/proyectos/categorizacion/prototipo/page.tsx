@@ -4,16 +4,46 @@ import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   C, FONT_UI, RADIUS, PRODUCTS, Product, CATEGORY_TREE, CategoryNode, SUPPLIERS, BANNER_IMG,
+  SUPPLIER_LAB_URL,
   money, findNode, pathToNode, descendantIds, countProductsIn, categoryNamesFor,
   AppShell, Input, GhostButton, PrimaryButton, RealSwitch,
   IconHeart, IconChevronDown, IconLock, IconCart, IconCamera, IconCheck, IconClose,
 } from "./shared";
 
 export default function CategorizacionPrototipoPage() {
+  const [tab, setTab] = useState<"proveedor" | "dropshipper">("dropshipper");
+
   return (
-    <Suspense fallback={null}>
-      <CatalogoDropshipperCategorias />
-    </Suspense>
+    <div>
+      <div style={{ background: "#fff", borderBottom: `1px solid ${C.border}`, padding: "10px 24px", display: "flex", alignItems: "center", gap: 12 }}>
+        <a href="/proyectos/categorizacion" style={{ fontSize: 13, color: C.textMuted, textDecoration: "none", fontFamily: FONT_UI }}>← Categorización y Enriquecimiento</a>
+        <span style={{ color: C.border }}>/</span>
+        <span style={{ fontSize: 13, color: C.textHeader, fontWeight: 600, fontFamily: FONT_UI }}>Prototipo · catálogo por taxonomía unificada</span>
+        <div style={{ marginLeft: "auto", display: "flex", gap: 4, background: "#F3F4F6", padding: 4, borderRadius: 10 }}>
+          {[{ k: "proveedor", l: "🏭 Vista Proveedor" }, { k: "dropshipper", l: "🛒 Vista Dropshipper" }].map((t) => (
+            <button key={t.k} onClick={() => setTab(t.k as "proveedor" | "dropshipper")} style={{
+              border: "none", cursor: "pointer", padding: "7px 14px", borderRadius: 7,
+              background: tab === t.k ? "#fff" : "transparent", boxShadow: tab === t.k ? "0 1px 3px rgba(0,0,0,0.12)" : "none",
+              fontSize: 12.5, fontWeight: 700, color: tab === t.k ? C.textHeader : C.textMuted, fontFamily: FONT_UI,
+            }}>
+              {t.l}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {tab === "proveedor" ? (
+        <iframe
+          src={SUPPLIER_LAB_URL}
+          title="Piloto · Categorización con IA (supplier-lab)"
+          style={{ width: "100%", height: "calc(100vh - 53px)", border: "none", display: "block" }}
+        />
+      ) : (
+        <Suspense fallback={null}>
+          <CatalogoDropshipperCategorias />
+        </Suspense>
+      )}
+    </div>
   );
 }
 

@@ -248,7 +248,7 @@ export default function CombosPage() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", flexDirection: "column" }}>
+    <div style={{ minHeight: "100vh", background: "var(--card)", display: "flex", flexDirection: "column" }}>
 
       {/* Header */}
       <div style={{

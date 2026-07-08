@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { campaignsSupabase as supabase } from "@/lib/supabase-campaigns";
 
 const PROJECT_ID = "d64b428a-3c99-412f-8100-53e07bd20ed8"; // DCA-001
 
