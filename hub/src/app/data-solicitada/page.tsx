@@ -45,7 +45,7 @@ const DOCS = [
 
 export default function DataSolicitadaPage() {
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+    <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       <header style={{
         background: "#fff", borderBottom: "1px solid var(--border)",
         padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between",

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { campaignsSupabase as supabase } from "@/lib/supabase-campaigns";
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   if (!supabase) return NextResponse.json([]);

@@ -111,7 +111,7 @@ export default function DocsPage() {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", flexDirection: "column" }}>
+    <div style={{ minHeight: "100vh", background: "var(--card)", display: "flex", flexDirection: "column" }}>
       {/* Header */}
       <header style={{
         background: "#fff", borderBottom: "1px solid #e5e7eb",

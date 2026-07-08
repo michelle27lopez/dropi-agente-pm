@@ -11,7 +11,7 @@ type Campaign = {
   created_at: string;
 };
 
-const NODE_COUNT = 7;
+const NODE_COUNT = 8;
 
 const statusLabel: Record<string, string> = {
   draft: "Borrador",
@@ -59,7 +59,7 @@ export default function DinamicasCatalogoPage() {
   };
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+    <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
       <header style={{
         background: "#fff", borderBottom: "1px solid var(--border)",
@@ -89,7 +89,7 @@ export default function DinamicasCatalogoPage() {
             Campañas
           </h1>
           <p style={{ fontSize: 14, color: "var(--muted)" }}>
-            Cada campaña recorre un flujo guiado de 7 nodos para estructurar el experimento de catálogo.
+            Cada campaña recorre un flujo guiado de 8 nodos para estructurar el experimento de catálogo.
           </p>
         </div>
 
@@ -168,6 +168,25 @@ export default function DinamicasCatalogoPage() {
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Plan de campañas</div>
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>9 campañas · 6 meses · portafolio</div>
+                </div>
+              </a>
+
+              <a
+                href="/proyectos/dinamicas-catalogo/planeacion"
+                style={{
+                  display: "flex", alignItems: "center", gap: 10,
+                  background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.25)",
+                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
+                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
+                  transition: "box-shadow 0.15s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(99,102,241,0.12)")}
+                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
+              >
+                <span style={{ fontSize: 22, flexShrink: 0 }}>🧪</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Planeación (experimento)</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)" }}>Modelo nuevo · planea + genera handoff</div>
                 </div>
               </a>
 

@@ -60,9 +60,12 @@ export default function DescuentosPrototipoPage() {
             <EditarProducto
               product={PRODUCTS.find((p) => p.id === selectedId)!}
               discount={discounts[selectedId]}
-              onChange={(patch) => updateDiscount(selectedId, patch)}
               onBack={() => setStep("list")}
-              onSave={() => { setSavedFlash(true); setTimeout(() => setSavedFlash(false), 1800); }}
+              onSave={(draft) => {
+                updateDiscount(selectedId, draft);
+                setSavedFlash(true);
+                setTimeout(() => setSavedFlash(false), 1800);
+              }}
               saved={savedFlash}
             />
           )}
@@ -76,10 +79,33 @@ export default function DescuentosPrototipoPage() {
   );
 }
 
+function FilterCheckbox({ label, checked, onToggle }: { label: string; checked: boolean; onToggle: () => void }) {
+  return (
+    <button onClick={onToggle} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+      <span style={{
+        width: 16, height: 16, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        border: checked ? "none" : `1.5px solid ${C.border}`, background: checked ? C.orange : "#fff",
+      }}>
+        {checked && (
+          <svg width="10" height="10" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        )}
+      </span>
+      <span style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textHeader }}>{label}</span>
+    </button>
+  );
+}
+
 // ─── VISTA PROVEEDOR · paso 1: tabla real "Mis productos" ─────────────────────
 function MisProductosTable({ discounts, onEdit }: { discounts: Record<string, Discount>; onEdit: (id: string) => void }) {
+  const [privados, setPrivados] = useState(true);
+  const [noAprobados, setNoAprobados] = useState(true);
+  const [aprobados, setAprobados] = useState(false);
+  const [onlyDiscount, setOnlyDiscount] = useState(false);
+
   const th: React.CSSProperties = { textAlign: "left", fontFamily: FONT_UI, fontWeight: 600, fontSize: 13, color: C.gray700, padding: "12px 10px", borderBottom: `1px solid ${C.borderLight}` };
   const td: React.CSSProperties = { padding: "14px 10px", borderBottom: `1px solid ${C.borderLight}`, fontFamily: FONT_UI, fontSize: 13.5, color: C.textHeader, verticalAlign: "middle" };
+
+  const rows = onlyDiscount ? PRODUCTS.filter((p) => isLive(discounts[p.id])) : PRODUCTS;
 
   return (
     <div>
@@ -91,10 +117,11 @@ function MisProductosTable({ discounts, onEdit }: { discounts: Record<string, Di
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: 20, marginBottom: 16 }}>
-        {["Privados y no privados ✓", "No aprobados ✓", "Aprobados y no aprobados"].map((f) => (
-          <span key={f} style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textHeader, display: "flex", alignItems: "center", gap: 6 }}>{f}</span>
-        ))}
+      <div style={{ display: "flex", gap: 24, marginBottom: 16, flexWrap: "wrap" }}>
+        <FilterCheckbox label="Privados y no privados" checked={privados} onToggle={() => setPrivados((v) => !v)} />
+        <FilterCheckbox label="No aprobados" checked={noAprobados} onToggle={() => setNoAprobados((v) => !v)} />
+        <FilterCheckbox label="Aprobados y no aprobados" checked={aprobados} onToggle={() => setAprobados((v) => !v)} />
+        <FilterCheckbox label="Con descuento activo" checked={onlyDiscount} onToggle={() => setOnlyDiscount((v) => !v)} />
       </div>
 
       <div style={{ display: "flex", gap: 24, borderBottom: `1px solid ${C.borderLight}`, marginBottom: 16 }}>
@@ -122,7 +149,13 @@ function MisProductosTable({ discounts, onEdit }: { discounts: Record<string, Di
             </tr>
           </thead>
           <tbody>
-            {PRODUCTS.map((p) => {
+            {rows.length === 0 ? (
+              <tr>
+                <td colSpan={9} style={{ ...td, textAlign: "center", color: C.textMuted, padding: "32px 10px" }}>
+                  Ningún producto tiene un descuento activo en este momento.
+                </td>
+              </tr>
+            ) : rows.map((p) => {
               const d = discounts[p.id];
               const live = isLive(d);
               return (
@@ -171,20 +204,33 @@ function MisProductosTable({ discounts, onEdit }: { discounts: Record<string, Di
 
 // ─── VISTA PROVEEDOR · paso 2: "Editar producto" con pestaña Descuento ───────
 function EditarProducto({
-  product, discount, onChange, onBack, onSave, saved,
+  product, discount, onBack, onSave, saved,
 }: {
-  product: Product; discount: Discount; onChange: (p: Partial<Discount>) => void;
-  onBack: () => void; onSave: () => void; saved: boolean;
+  product: Product; discount: Discount;
+  onBack: () => void; onSave: (draft: Discount) => void; saved: boolean;
 }) {
-  const finalPrice = computeFinalPrice(product.providerPrice, discount);
+  const [draft, setDraft] = useState<Discount>(discount);
+  const [showUnsavedModal, setShowUnsavedModal] = useState(false);
+  const isDirty = JSON.stringify(draft) !== JSON.stringify(discount);
+
+  const finalPrice = computeFinalPrice(product.providerPrice, draft);
   const savings = product.providerPrice - finalPrice;
-  const isEnded = endedByVolume(discount) || endedByDate(discount);
+  const isEnded = endedByVolume(draft) || endedByDate(draft);
+  const noEndCondition = draft.active && !draft.endDate && !draft.endVolume;
 
   const tabs = ["General", "Existencias", "Imagen del producto", "Recursos adicionales", "Productos privados", "Garantías"];
 
+  const handleBack = () => {
+    if (isDirty) setShowUnsavedModal(true);
+    else onBack();
+  };
+
   return (
     <div>
-      <button onClick={onBack} style={{ background: "none", border: "none", cursor: "pointer", color: C.textMuted, fontFamily: FONT_UI, fontSize: 13, marginBottom: 12, padding: 0 }}>
+      {showUnsavedModal && (
+        <UnsavedChangesModal onCancel={() => setShowUnsavedModal(false)} onDiscard={onBack} />
+      )}
+      <button onClick={handleBack} style={{ background: "none", border: "none", cursor: "pointer", color: C.textMuted, fontFamily: FONT_UI, fontSize: 13, marginBottom: 12, padding: 0 }}>
         ← Volver a Mis productos
       </button>
       <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
@@ -193,7 +239,7 @@ function EditarProducto({
           <div style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, marginBottom: 4 }}>{product.supplier} · SKU {product.sku}</div>
           <h1 style={{ fontFamily: FONT_HEAD, fontWeight: 700, fontSize: 22, color: C.gray700 }}>Editar producto — {product.name}</h1>
         </div>
-        <PrimaryButton onClick={onSave}>💾 {saved ? "Guardado" : "Guardar"}</PrimaryButton>
+        <PrimaryButton onClick={() => onSave(draft)} disabled={!isDirty}>💾 {saved && !isDirty ? "Guardado" : "Guardar"}</PrimaryButton>
       </div>
 
       <div style={{ display: "flex", gap: 32 }}>
@@ -217,28 +263,34 @@ function EditarProducto({
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
             <p style={{ fontFamily: FONT_UI, fontWeight: 600, fontSize: 15, color: C.gray700 }}>Descuento en catálogo</p>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ fontFamily: FONT_UI, fontSize: 13, fontWeight: 600, color: discount.active ? C.orange : C.textMuted }}>
-                {discount.active ? "Activo" : "Inactivo"}
+              <span style={{ fontFamily: FONT_UI, fontSize: 13, fontWeight: 600, color: !draft.active ? C.textMuted : isEnded ? C.textMuted : C.orange }}>
+                {!draft.active ? "Inactivo" : isEnded ? "Finalizado" : "Activo"}
               </span>
-              <RealSwitch on={discount.active} onToggle={() => onChange({ active: !discount.active })} />
+              <RealSwitch on={draft.active} onToggle={() => setDraft((prev) => ({ ...prev, active: !prev.active }))} />
             </div>
           </div>
 
-          {!discount.active ? (
+          {!draft.active ? (
             <div style={{ padding: "36px 20px", textAlign: "center", background: C.bgGray, borderRadius: 8, border: `1px dashed ${C.border}` }}>
               <p style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textMuted }}>Este producto no tiene descuento activo. Actívalo con el switch de arriba.</p>
             </div>
           ) : (
             <>
+              {isEnded && (
+                <div style={{ background: C.dangerBg, border: `1px solid ${C.dangerBorder}`, borderRadius: 8, padding: "10px 14px", marginBottom: 20, fontFamily: FONT_UI, fontSize: 13, color: "#8C2F3D" }}>
+                  ⏹ Este descuento ya finalizó automáticamente — {endedByVolume(draft) ? "se alcanzó el límite de unidades" : "se venció la fecha límite"}. El proveedor puede editar las condiciones y reactivarlo con el switch de arriba.
+                </div>
+              )}
+
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
                 <div>
                   <Label>Tipo de descuento</Label>
                   <div style={{ display: "flex", gap: 8 }}>
                     {(["percent", "fixed"] as DiscountType[]).map((t) => (
-                      <button key={t} onClick={() => onChange({ type: t })} style={{
+                      <button key={t} onClick={() => setDraft((prev) => ({ ...prev, type: t, value: t === "percent" ? Math.min(prev.value, 100) : Math.min(prev.value, product.providerPrice) }))} style={{
                         flex: 1, height: 38, borderRadius: 4, cursor: "pointer", fontFamily: FONT_UI, fontSize: 13, fontWeight: 600,
-                        border: discount.type === t ? `1.5px solid ${C.blue}` : `1px solid ${C.border}`,
-                        background: discount.type === t ? C.infoBg : "#fff", color: discount.type === t ? C.blue : C.textHeader,
+                        border: draft.type === t ? `1.5px solid ${C.blue}` : `1px solid ${C.border}`,
+                        background: draft.type === t ? C.infoBg : "#fff", color: draft.type === t ? C.blue : C.textHeader,
                       }}>
                         {t === "percent" ? "% Porcentaje" : "$ Valor fijo"}
                       </button>
@@ -246,38 +298,84 @@ function EditarProducto({
                   </div>
                 </div>
                 <div>
-                  <Label>{discount.type === "percent" ? "Porcentaje de descuento" : "Valor a descontar (COP)"}</Label>
-                  <Input value={discount.value} onChange={(v) => onChange({ value: Number(v) })} placeholder={discount.type === "percent" ? "ej. 25" : "ej. 8000"} type="number" />
+                  <Label>{draft.type === "percent" ? "Porcentaje de descuento" : "Valor a descontar (COP)"}</Label>
+                  <Input
+                    value={draft.value}
+                    onChange={(v) => {
+                      const max = draft.type === "percent" ? 100 : product.providerPrice;
+                      const clamped = Math.min(Math.max(Number(v) || 0, 0), max);
+                      setDraft((prev) => ({ ...prev, value: clamped }));
+                    }}
+                    placeholder={draft.type === "percent" ? "ej. 25" : "ej. 8000"}
+                    type="number"
+                  />
+                  <p style={{ fontFamily: FONT_UI, fontSize: 11, color: C.textMuted, marginTop: 4 }}>
+                    {draft.type === "percent" ? "Máximo 100%." : `Máximo ${money(product.providerPrice)} (el precio del producto).`}
+                  </p>
                 </div>
               </div>
 
               <Label>Condiciones de finalización automática <span style={{ fontWeight: 400, color: C.textMuted }}>(gana la primera que se cumpla)</span></Label>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20, marginBottom: 20 }}>
-                <div><p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, marginBottom: 6 }}>Fecha fin</p><Input type="date" value={discount.endDate} onChange={(v) => onChange({ endDate: v })} /></div>
-                <div><p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, marginBottom: 6 }}>Límite de unidades</p><Input type="number" value={discount.endVolume} onChange={(v) => onChange({ endVolume: v })} placeholder="ej. 50" /></div>
-                <div><p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, marginBottom: 6 }}>Unidades vendidas (simulado)</p><Input type="number" value={discount.soldUnits} onChange={(v) => onChange({ soldUnits: Number(v) })} /></div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 8 }}>
+                <div><p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, marginBottom: 6 }}>Fecha fin</p><Input type="date" value={draft.endDate} onChange={(v) => setDraft((prev) => ({ ...prev, endDate: v }))} /></div>
+                <div>
+                  <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, marginBottom: 6 }}>Límite de unidades</p>
+                  <Input type="number" value={draft.endVolume} onChange={(v) => setDraft((prev) => ({ ...prev, endVolume: v }))} placeholder="ej. 50" />
+                  {!!draft.endVolume && Number(draft.endVolume) > 0 && (() => {
+                    const limit = Number(draft.endVolume);
+                    const pct = Math.min(100, (draft.soldUnits / limit) * 100);
+                    const barColor = pct >= 100 ? C.textMuted : pct >= 70 ? C.warning : C.info;
+                    return (
+                      <div style={{ marginTop: 8 }}>
+                        <div style={{ height: 6, borderRadius: 999, background: C.bgGray, overflow: "hidden" }}>
+                          <div style={{ height: "100%", width: `${pct}%`, background: barColor, borderRadius: 999 }} />
+                        </div>
+                        <p style={{ fontFamily: FONT_UI, fontSize: 11, color: C.textMuted, marginTop: 4 }}>
+                          {draft.soldUnits} / {limit} unidades vendidas
+                        </p>
+                      </div>
+                    );
+                  })()}
+                </div>
               </div>
 
-              {isEnded && (
-                <div style={{ background: C.dangerBg, border: `1px solid ${C.dangerBorder}`, borderRadius: 8, padding: "10px 14px", marginBottom: 20, fontFamily: FONT_UI, fontSize: 13, color: "#8C2F3D" }}>
-                  ⏹ Este descuento ya finalizó automáticamente — {endedByVolume(discount) ? "se alcanzó el límite de unidades" : "se venció la fecha límite"}.
-                </div>
+              {noEndCondition && (
+                <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.info, marginBottom: 20 }}>
+                  ℹ️ Sin fecha ni límite de unidades — este descuento permanecerá activo hasta que lo desactives manualmente.
+                </p>
               )}
 
-              <div style={{ background: C.infoBg, border: `1px solid ${C.infoBorder}`, borderRadius: 8, padding: "12px 16px", marginBottom: 24 }}>
+              <div style={{ background: C.infoBg, border: `1px solid ${C.infoBorder}`, borderRadius: 8, padding: "12px 16px", marginTop: noEndCondition ? 0 : 16, marginBottom: 24 }}>
                 <p style={{ fontFamily: FONT_UI, fontSize: 12, fontWeight: 600, color: C.textHeader, marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.04em" }}>Así lo verá el dropshipper</p>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
                   <span style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textDisabled, textDecoration: "line-through" }}>{money(product.providerPrice)}</span>
                   <span style={{ fontFamily: FONT_UI, fontSize: 22, fontWeight: 700, color: isEnded ? C.gray700 : C.success }}>{money(isEnded ? product.providerPrice : finalPrice)}</span>
                   {!isEnded && (
                     <span style={{ fontFamily: FONT_UI, fontSize: 11, fontWeight: 700, background: C.dangerBg, color: C.danger, padding: "2px 8px", borderRadius: 999 }}>
-                      -{discount.type === "percent" ? `${discount.value}%` : money(savings)}
+                      -{draft.type === "percent" ? `${draft.value}%` : money(savings)}
                     </span>
                   )}
                 </div>
               </div>
             </>
           )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function UnsavedChangesModal({ onCancel, onDiscard }: { onCancel: () => void; onDiscard: () => void }) {
+  return (
+    <div style={{ position: "fixed", inset: 0, background: "rgba(15,18,25,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 50 }}>
+      <div style={{ background: "#fff", borderRadius: 10, padding: 24, width: 360, boxShadow: "0 12px 32px rgba(0,0,0,0.18)" }}>
+        <h3 style={{ fontFamily: FONT_HEAD, fontWeight: 700, fontSize: 16, color: C.gray700, marginBottom: 8 }}>Cambios sin guardar</h3>
+        <p style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textMuted, marginBottom: 20, lineHeight: 1.5 }}>
+          Editaste el descuento de este producto pero no le diste clic a &quot;Guardar&quot;. Si sales ahora, se pierden los cambios.
+        </p>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+          <GhostButton onClick={onCancel}>Seguir editando</GhostButton>
+          <PrimaryButton color={C.danger} onClick={onDiscard}>Salir sin guardar</PrimaryButton>
         </div>
       </div>
     </div>
@@ -376,15 +474,12 @@ function CatalogoDropshipper({ discounts }: { discounts: Record<string, Discount
           <span style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textHeader }}>🛒 Con ordenes</span>
           <RealSwitch on={false} onToggle={() => {}} />
         </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, background: C.orangeLight, padding: "6px 12px", borderRadius: 999 }}>
+          <span style={{ fontFamily: FONT_UI, fontSize: 13, color: C.orange, fontWeight: 700 }}>🏷️ Con descuento</span>
+          <RealSwitch on={onlyDiscount} onToggle={() => setOnlyDiscount((v) => !v)} />
+        </div>
         <div style={{ flex: 1, minWidth: 180 }}><Input value="" onChange={() => {}} placeholder="Buscar" /></div>
         <GhostButton>📷 Buscar por imagen</GhostButton>
-      </div>
-
-      {/* Filtro Con descuento — único agregado del prototipo, resto es fiel al real */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-        <span style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textHeader, fontWeight: 700 }}>🏷️ Con descuento</span>
-        <RealSwitch on={onlyDiscount} onToggle={() => setOnlyDiscount((v) => !v)} />
-        <span style={{ fontFamily: FONT_UI, fontSize: 11.5, color: C.textMuted }}>— filtro Fase 2, agregado aquí para ver el concepto completo (no está en el catálogo real hoy)</span>
       </div>
 
       {/* Fila de filtros dropdown (decorativa) */}

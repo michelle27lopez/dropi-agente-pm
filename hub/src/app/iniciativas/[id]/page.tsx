@@ -205,7 +205,7 @@ export default function IniciativaDetalle() {
 
   if (loading) {
     return (
-      <main style={{ minHeight: "100vh", background: "var(--bg)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <main style={{ minHeight: "100vh", background: "var(--card)", display: "flex", alignItems: "center", justifyContent: "center" }}>
         <p style={{ color: "var(--muted)", fontSize: 14 }}>Cargando...</p>
       </main>
     );
@@ -213,7 +213,7 @@ export default function IniciativaDetalle() {
 
   if (!iniciativa) {
     return (
-      <main style={{ minHeight: "100vh", background: "var(--bg)", padding: 32 }}>
+      <main style={{ minHeight: "100vh", background: "var(--card)", padding: 32 }}>
         <p style={{ color: "#EF4444" }}>Iniciativa no encontrada.</p>
         <a href="/iniciativas" style={{ fontSize: 13, color: "#6366F1" }}>← Volver al inbox</a>
       </main>
@@ -221,7 +221,7 @@ export default function IniciativaDetalle() {
   }
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+    <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
       <header style={{
         background: "#fff", borderBottom: "1px solid var(--border)",
