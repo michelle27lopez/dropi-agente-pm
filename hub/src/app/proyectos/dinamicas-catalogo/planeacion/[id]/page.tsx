@@ -391,7 +391,7 @@ export default function PlaneacionWizardPage() {
         .step-sublabel { font-size: 11px; color: var(--muted-light); margin-top: 2px; }
         .step-sublabel.err { color: var(--warn); }
 
-        #form-panel { flex: 1; overflow-y: auto; background: var(--bg); padding-bottom: 80px; }
+        #form-panel { flex: 1; overflow-y: auto; background: #fff; padding-bottom: 80px; }
         #form-inner { max-width: 680px; margin: 0 auto; padding: 28px 24px 120px; }
 
         .node-eyebrow { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
