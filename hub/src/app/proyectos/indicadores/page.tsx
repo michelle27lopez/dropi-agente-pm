@@ -94,7 +94,7 @@ export default function IndicadoresPage() {
   const [activeDoc, setActiveDoc] = useState<string | null>(null);
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+    <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
       <header style={{
         background: "#fff", borderBottom: "1px solid var(--border)",

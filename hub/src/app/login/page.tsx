@@ -67,7 +67,7 @@ export default function LoginPage() {
       alignItems: "center",
       justifyContent: "center",
       padding: "24px",
-      background: "var(--bg)",
+      background: "var(--card)",
     }}>
       <div style={{ width: "100%", maxWidth: 380 }}>
 

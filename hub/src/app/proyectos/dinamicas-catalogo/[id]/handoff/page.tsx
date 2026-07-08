@@ -304,7 +304,7 @@ export default function HandoffPage() {
         {/* 3. Segmento supplier */}
         <Section num={3} title="Segmento supplier" color="#0EA5E9">
           <Row label="Universo base" value={n3.universe} />
-          <Row label="Tamaño esperado" value={n3.segment_size} />
+          <Row label="Tamaño esperado" value={n1.expected_result} />
           <Row label="Responsable de segm." value={n3.segment_responsible} />
           <Row label="Fuentes de datos">
             <Chips value={n3.data_source} color="#0EA5E9" />
@@ -322,6 +322,9 @@ export default function HandoffPage() {
           </Row>
           {n3.segment_notes && (
             <Row label="Notas del segmento" value={n3.segment_notes} />
+          )}
+          {n3.eligibility_notes && (
+            <Row label="Notas o excepciones" value={n3.eligibility_notes} />
           )}
         </Section>
 
@@ -345,9 +348,6 @@ export default function HandoffPage() {
           <Row label="Vigencia de precio" value={n4.requires_price_validity} />
           {n4.campaign_specific_rules && (
             <Row label="Reglas específicas de esta campaña" value={n4.campaign_specific_rules} />
-          )}
-          {n4.eligibility_criteria && (
-            <Row label="Criterios de elegibilidad" value={n4.eligibility_criteria} />
           )}
         </Section>
 

@@ -44,12 +44,11 @@ INSERT INTO campaign_nodes (campaign_id, node_index, node_key, completed, data) 
   "universe": "Suppliers + productos",
   "supplier_type": "Verificado||Premium",
   "categories_theme": "Accesorios y bisutería, cuidado personal y belleza, tecnología portátil (audífonos, cargadores), hogar y decoración, detalles y regalos (velas, kits, sets), moda (bufandas, bolsos, carteras). Excluir: productos de uso exclusivo industrial, alimentos perecederos, productos sin relación con regalos o celebración.",
-  "eligibility_criteria": "Suppliers verificados o premium en Colombia, con al menos un producto activo y público, stock mínimo de 300 unidades, ficha de producto completa (nombre descriptivo, imágenes de calidad, precio definido). El producto debe ser coherente con la temática de regalo o celebración del Día del Amor y la Amistad.",
   "min_stock": "300",
   "keyword_marco": "AmorYAmistad2026",
   "max_products_per_supplier": "5",
   "min_discount": "",
-  "segment_size": "25–40 suppliers / 80–150 productos",
+  "eligibility_notes": "El producto debe ser coherente con la temática de regalo o celebración del Día del Amor y la Amistad, más allá de cumplir las condiciones de arriba.",
   "segment_responsible": "Supplier Success"
 }'::jsonb),
 

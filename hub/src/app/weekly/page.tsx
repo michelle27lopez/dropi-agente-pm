@@ -52,7 +52,7 @@ export default function WeeklyPage() {
   });
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+    <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       <style>{`
         @media print {
           @page { size: A4; margin: 16mm 14mm; }

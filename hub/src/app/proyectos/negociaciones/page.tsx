@@ -41,11 +41,14 @@ const ACCENT_BG = "#F0FDFA";
 const LIDER_COLOR = "#8B5CF6";
 const LIDER_BG = "#F5F3FF";
 
-// Base elegible de proveedores para Negociaciones: Verificado (358) + Premium (50) +
-// Premium Exclusivo (29) = 437. Negociaciones no está disponible para proveedores "Activo"
-// (no verificado). Cifra tomada de /proyectos/indicadores (snapshot Dropi DB, jun 2026),
-// confirmada por Michelle el 03/07/2026 como base válida para Negociaciones.
-const BASE_ELEGIBLE = 437;
+// Base elegible de proveedores para Negociaciones: Verificado + Premium + Premium Exclusivo.
+// Negociaciones no está disponible para proveedores "Activo" (no verificado). Cifras tomadas
+// de /proyectos/indicadores (snapshot Dropi DB, jun 2026), confirmadas por Michelle el 03/07/2026
+// como base válida para Negociaciones.
+const PROV_VERIFICADO = 358;
+const PROV_PREMIUM = 50;
+const PROV_PREMIUM_EXCLUSIVO = 29;
+const BASE_ELEGIBLE = PROV_VERIFICADO + PROV_PREMIUM + PROV_PREMIUM_EXCLUSIVO;
 const basePct = (n: number) => {
   const p = (n / BASE_ELEGIBLE) * 100;
   return p < 1 ? p.toFixed(1) : p.toFixed(0);
@@ -424,6 +427,88 @@ function KpiCard({ label, value, color, delta, note }: { label: string; value: s
   );
 }
 
+// ─── KPI strip reutilizable (Resumen y cada semana) ──────────────────────────
+type KpiStripItem = { label: string; value: string; sub: string; color: string; bg: string; note?: string };
+
+function KpiStrip({ items }: { items: KpiStripItem[] }) {
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(items.length, 7)}, minmax(0,1fr))`, gap: 12 }}>
+      {items.map(k => (
+        <div key={k.label} style={{ ...card, borderTop: `3px solid ${k.color}`, padding: "14px 16px" }}>
+          <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--muted)", marginBottom: 8 }}>
+            {k.label}
+          </div>
+          <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.03em", color: k.color, lineHeight: 1 }}>
+            {k.value}
+          </div>
+          <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 5, lineHeight: 1.3 }}>{k.sub}</div>
+          {k.note && (
+            <div style={{ marginTop: 6, fontSize: 10, background: "#F8FAFC", color: "var(--muted)", padding: "2px 7px", borderRadius: 20, display: "inline-block", fontWeight: 600 }}>
+              {k.note}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function buildKpiStripSemana(week: Week, prev: Week | null): KpiStripItem[] {
+  const p = week.proveedor;
+  const l = week.lider;
+  const deltaFmt = (d: number) => `${d >= 0 ? "↑" : "↓"} ${Math.abs(d)} vs. semana anterior`;
+  const deltaIngresoProv = prev ? p.ingresoUnicos - prev.proveedor.ingresoUnicos : null;
+  const deltaCreadas = prev ? p.creadasEventos - prev.proveedor.creadasEventos : null;
+
+  const items: KpiStripItem[] = [
+    {
+      label: "Universo elegible (proveedores)", value: String(BASE_ELEGIBLE),
+      sub: `${PROV_VERIFICADO} Verificado + ${PROV_PREMIUM} Premium + ${PROV_PREMIUM_EXCLUSIVO} Premium Exclusivo`,
+      color: "var(--fg)", bg: "#F8FAFC", note: "Fuente: Dropi DB",
+    },
+    {
+      label: "Proveedor · ingreso al módulo", value: String(p.ingresoUnicos),
+      sub: `${basePct(p.ingresoUnicos)}% del universo elegible`,
+      color: ACCENT, bg: ACCENT_BG,
+      note: deltaIngresoProv != null ? deltaFmt(deltaIngresoProv) : "Fuente: UserPilot",
+    },
+    {
+      label: "Proveedor · negociaciones creadas", value: String(p.creadasEventos),
+      sub: deltaCreadas != null ? deltaFmt(deltaCreadas) : "Eventos esta semana",
+      color: "#EF4444", bg: "#FEF2F2",
+      note: p.funnelRepresentativo ? "" : "Funnel no representativo",
+    },
+    {
+      label: "Proveedor · conversión de creación", value: p.funnelPct,
+      sub: p.funnelRepresentativo ? "Cifra representativa esta semana" : "No representativa — bug de funnel",
+      color: "#F59E0B", bg: "#FFFBEB", note: `Meta: ${META_CONVERSION_CREACION}%`,
+    },
+  ];
+
+  if (l) {
+    const deltaIngresoLider = prev?.lider ? l.ingresoUnicos - prev.lider.ingresoUnicos : null;
+    items.push(
+      {
+        label: "Líder · ingreso al módulo", value: String(l.ingresoUnicos),
+        sub: deltaIngresoLider != null ? deltaFmt(deltaIngresoLider) : "Únicos esta semana",
+        color: LIDER_COLOR, bg: LIDER_BG, note: "Fuente: UserPilot",
+      },
+      {
+        label: "Líder · aprobación directa", value: l.funnelAprobacionSinModalPct,
+        sub: `Sin modal · vía modal: ${l.funnelAprobacionViaModalPct}`,
+        color: LIDER_COLOR, bg: LIDER_BG, note: `Meta: ${META_APROBACION_LIDER}% de lo respondido`,
+      },
+      {
+        label: "Líder · rechazo directo", value: l.funnelRechazoSinModalPct,
+        sub: `Sin modal · vía modal: ${l.funnelRechazoViaModalPct}`,
+        color: "#EF4444", bg: "#FEF2F2",
+      },
+    );
+  }
+
+  return items;
+}
+
 // ─── Panel de una semana ────────────────────────────────────────────────────────
 function WeekPanel({ week, prev }: { week: Week; prev: Week | null }) {
   const p = week.proveedor;
@@ -448,6 +533,8 @@ function WeekPanel({ week, prev }: { week: Week; prev: Week | null }) {
         <span style={{ fontSize: 13, color: "var(--muted)" }}>{week.fechas}</span>
         <span style={{ fontSize: 12, color: "var(--muted)" }}>· {week.lanzamiento}</span>
       </div>
+
+      <KpiStrip items={buildKpiStripSemana(week, prev)} />
 
       <div style={{ ...card, background: "#FAFAF9" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14 }}>
@@ -662,8 +749,54 @@ function ResumenPanel({ weeks, campana }: { weeks: Week[]; campana: typeof CAMPA
   const pctAprobadasDeTop = totalCreadas ? (totalAprobadas / totalCreadas) * 100 : 0;
   const pctAprobadasDeRespondidas = totalRespondidas ? (totalAprobadas / totalRespondidas) * 100 : 0;
 
+  // KPI strip: mismo estilo que Caza Productos (6 tarjetas resumen), derivado en vivo de `weeks`.
+  const repWeek = weeks.find(w => w.proveedor.funnelRepresentativo);
+  const lastLiderWeek = liderWeeks[liderWeeks.length - 1] ?? null;
+  const lider = lastLiderWeek?.lider;
+  const shortId = (id: string) => id.replace("Semana ", "S");
+
+  const KPIS_RESUMEN = [
+    {
+      label: "Universo elegible (proveedores)", value: String(BASE_ELEGIBLE),
+      sub: `${PROV_VERIFICADO} Verificado + ${PROV_PREMIUM} Premium + ${PROV_PREMIUM_EXCLUSIVO} Premium Exclusivo`,
+      color: "var(--fg)", bg: "#F8FAFC", note: "Fuente: Dropi DB · confirmado 03/07/2026",
+    },
+    {
+      label: "Proveedor · ingreso al módulo", value: String(last.proveedor.ingresoUnicos),
+      sub: `Únicos · ${shortId(last.id)} → ${basePct(last.proveedor.ingresoUnicos)}% del universo elegible`,
+      color: ACCENT, bg: ACCENT_BG, note: "Fuente: UserPilot",
+    },
+    {
+      label: "Proveedor · negociaciones creadas", value: String(last.proveedor.creadasEventos),
+      sub: `${weeks.map(w => w.proveedor.creadasEventos).join(" → ")} (${shortId(first.id)}→${shortId(last.id)})`,
+      color: "#EF4444", bg: "#FEF2F2", note: "Mínimo histórico",
+    },
+    {
+      label: "Proveedor · conversión de creación", value: repWeek ? repWeek.proveedor.funnelPct : "—",
+      sub: repWeek ? `Última cifra confiable (${shortId(repWeek.id)}) · semanas siguientes no representativas` : "Sin cifra representativa",
+      color: "#F59E0B", bg: "#FFFBEB", note: `Meta: ${META_CONVERSION_CREACION}%`,
+    },
+    {
+      label: "Líder · ingreso al módulo", value: lider ? String(lider.ingresoUnicos) : "—",
+      sub: `Únicos · ${liderWeeks.map(w => w.lider!.ingresoUnicos).join(" → ")} (${liderWeeks.map(w => shortId(w.id)).join("→")})`,
+      color: LIDER_COLOR, bg: LIDER_BG, note: "Fuente: UserPilot",
+    },
+    {
+      label: "Líder · aprobación directa", value: lider ? lider.funnelAprobacionSinModalPct : "—",
+      sub: lastLiderWeek ? `Sin modal · ${shortId(lastLiderWeek.id)} · vía modal: ${lider?.funnelAprobacionViaModalPct ?? "—"}` : "Sin dato",
+      color: LIDER_COLOR, bg: LIDER_BG, note: `Meta: ${META_APROBACION_LIDER}% de lo respondido`,
+    },
+    {
+      label: "Líder · rechazo directo", value: lider ? lider.funnelRechazoSinModalPct : "—",
+      sub: "Ruta más usada en S1–S2 (hasta 71%)",
+      color: "#EF4444", bg: "#FEF2F2", note: "Patrón: modal pierde conversión",
+    },
+  ];
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <KpiStrip items={KPIS_RESUMEN} />
+
       <PilotoMVP />
       <div style={card}>
         <div style={{ fontSize: 13, fontWeight: 800, color: ACCENT, marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.04em" }}>

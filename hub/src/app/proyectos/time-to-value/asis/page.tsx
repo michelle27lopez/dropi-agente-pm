@@ -170,7 +170,7 @@ export default function AsisTtvPage() {
   const displayTotal = country !== "ALL" ? data?.stats.totalSuppliers ?? 0 : adjustedTotal;
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)" }}>
+    <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
       <header style={{
         background: "#fff", borderBottom: "1px solid var(--border)",
