@@ -195,15 +195,15 @@ export default function HubPage() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <img
-            src="/logo.png"
-            alt="Dropi PM Tools"
+            src="/darwin-logo.png"
+            alt="Darwin"
             width={36}
             height={36}
-            style={{ display: "block" }}
+            style={{ display: "block", borderRadius: 8 }}
           />
           <div>
             <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
-              Dropi PM Tools
+              Darwin
             </h1>
             <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
               Supplier Success · Herramientas internas
@@ -241,6 +241,21 @@ export default function HubPage() {
             }}
           >
             📊 Data solicitada
+          </a>
+          <a
+            href="/celulas"
+            style={{
+              fontSize: 12, fontWeight: 700,
+              color: "#6366F1",
+              background: "#EEF2FF",
+              border: "1px solid #C7D2FE",
+              borderRadius: 8,
+              padding: "6px 14px",
+              textDecoration: "none",
+              display: "flex", alignItems: "center", gap: 6,
+            }}
+          >
+            🧬 Células
           </a>
           {userEmail && (
             <>
