@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Dropi PM Tools",
+  title: "Darwin",
   description: "Hub de herramientas de Supplier Success",
 };
 
