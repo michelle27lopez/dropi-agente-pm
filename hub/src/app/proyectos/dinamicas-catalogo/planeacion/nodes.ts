@@ -24,7 +24,7 @@ export type NodeKey =
 
 export type Phase = "planeacion" | "cierre";
 
-export type FieldType = "text" | "textarea" | "select" | "multiselect";
+export type FieldType = "text" | "number" | "textarea" | "select" | "multiselect";
 export type NodeData = Record<string, string>;
 
 export type NodeIconKey =
@@ -470,21 +470,36 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
     sections: [
       {
         key: "metricas",
-        title: "Métricas reales",
-        subtitle: "Los tres niveles: supplier, dropshipper, negocio",
+        title: "Métricas — Supplier",
+        subtitle: "Embudo de participación",
         fields: [
-          {
-            key: "supplier_metrics", label: "Supplier", type: "textarea", required: true,
-            placeholder: "Invitados / respondieron / postularon / aprobados / con marco aplicado",
-          },
-          {
-            key: "dropshipper_metrics", label: "Dropshipper", type: "textarea", required: true,
-            placeholder: "Impactados / clics en vitrina / productos vistos / productos tomados",
-          },
-          {
-            key: "business_metrics", label: "Negocio", type: "textarea", required: true,
-            placeholder: "Órdenes / GMV / productos con primera orden / productos quietos activados",
-          },
+          { key: "suppliers_invited", label: "Invitados", type: "number", required: true, placeholder: "ej. 60" },
+          { key: "suppliers_applied", label: "Postularon", type: "number", required: true, placeholder: "ej. 28" },
+          { key: "suppliers_approved", label: "Aprobados", type: "number", required: true, placeholder: "ej. 22" },
+          { key: "suppliers_with_frame", label: "Con marco aplicado", type: "number", placeholder: "ej. 20" },
+        ],
+      },
+      {
+        key: "metricas_dropshipper",
+        title: "Métricas — Dropshipper",
+        subtitle: "Alcance y actividad en la vitrina",
+        fields: [
+          { key: "dropshippers_impacted", label: "Impactados", type: "number", required: true, placeholder: "ej. 250" },
+          { key: "banner_clicks", label: "Clics en vitrina/banner", type: "number", placeholder: "ej. 90" },
+          { key: "products_viewed", label: "Productos vistos", type: "number", placeholder: "ej. 340" },
+          { key: "products_taken", label: "Productos tomados", type: "number", required: true, placeholder: "ej. 150" },
+        ],
+      },
+      {
+        key: "metricas_negocio",
+        title: "Métricas — Negocio",
+        subtitle: "Impacto comercial",
+        fields: [
+          { key: "orders_generated", label: "Órdenes generadas", type: "number", required: true, placeholder: "ej. 45" },
+          { key: "gmv_generated", label: "GMV generado ($)", type: "number", required: true, placeholder: "ej. 3200000" },
+          { key: "products_first_order", label: "Productos con primera orden", type: "number", placeholder: "ej. 18" },
+          { key: "products_reactivated", label: "Productos quietos activados", type: "number", placeholder: "ej. 30" },
+          { key: "suppliers_with_sales", label: "Suppliers con al menos una venta", type: "number", placeholder: "ej. 15" },
         ],
       },
       {

@@ -430,17 +430,18 @@ export default function PlaneacionWizardPage() {
         .ai-suggest-btn:hover:not(:disabled) { background: rgba(99,102,241,.16); }
         .ai-suggest-btn:disabled { opacity: .6; cursor: default; }
         .ai-error-msg { font-size: 12px; color: var(--error); margin-bottom: 8px; font-weight: 500; }
-        #form-panel input[type=text], #form-panel textarea, #form-panel select {
+        #form-panel input[type=text], #form-panel input[type=number], #form-panel textarea, #form-panel select {
           width: 100% !important; max-width: 100% !important; border: 1px solid #D1D5DB !important;
           border-radius: var(--radius-sm) !important; padding: 10px 14px !important; font-size: 14px !important;
           outline: none !important; font-family: inherit !important; background: var(--bg) !important;
           color: var(--fg) !important; box-sizing: border-box !important; display: block !important;
           transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease !important;
         }
-        #form-panel input[type=text]:focus, #form-panel textarea:focus, #form-panel select:focus {
+        #form-panel input[type=text]:focus, #form-panel input[type=number]:focus, #form-panel textarea:focus, #form-panel select:focus {
           border-color: var(--dropi) !important; background: var(--card) !important; box-shadow: 0 0 0 3px rgba(247,127,0,.12) !important;
         }
-        .fld-error input[type=text], .fld-error textarea, .fld-error select { border-color: var(--error) !important; background: var(--error-light) !important; }
+        #form-panel textarea { min-height: 140px !important; resize: vertical !important; line-height: 1.5 !important; }
+        .fld-error input[type=text], .fld-error input[type=number], .fld-error textarea, .fld-error select { border-color: var(--error) !important; background: var(--error-light) !important; }
 
         .opt-desc { margin-top: 8px; padding: 10px 14px; background: #FFF8F0; border: 1px solid var(--dropi-border); border-radius: var(--radius-sm); font-size: 13px; color: #7a4f1e; line-height: 1.5; }
 
@@ -661,6 +662,10 @@ export default function PlaneacionWizardPage() {
 
                           {f.type === "text" && (
                             <input type="text" placeholder={f.placeholder || ""} value={val}
+                              onChange={(e) => handleFieldChange(f.key, e.target.value)} onBlur={() => markTouched(f.key)} />
+                          )}
+                          {f.type === "number" && (
+                            <input type="number" placeholder={f.placeholder || ""} value={val}
                               onChange={(e) => handleFieldChange(f.key, e.target.value)} onBlur={() => markTouched(f.key)} />
                           )}
                           {f.type === "textarea" && (

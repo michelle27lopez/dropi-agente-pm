@@ -202,11 +202,14 @@ export default function PlaneacionHandoffPage() {
 
         {hasResultados && (
           <Section num={7} title="Resultados (Cierre)" color="#F77F00">
-            <Row label="Supplier" value={resultados.supplier_metrics} />
-            <Row label="Dropshipper" value={resultados.dropshipper_metrics} />
-            <Row label="Negocio" value={resultados.business_metrics} />
+            <Row label="Invitados → Postularon → Aprobados" value={`${resultados.suppliers_invited || "—"} → ${resultados.suppliers_applied || "—"} → ${resultados.suppliers_approved || "—"}`} />
+            <Row label="Dropshippers impactados / productos tomados" value={`${resultados.dropshippers_impacted || "—"} / ${resultados.products_taken || "—"}`} />
+            <Row label="Órdenes / GMV" value={`${resultados.orders_generated || "—"} / $${resultados.gmv_generated || "—"}`} />
             <Row label="Real vs. esperado" value={resultados.vs_expected} />
             <Row label="Aprendizajes" value={resultados.learnings} />
+            <Row label="Dashboard">
+              <a href={`/proyectos/dinamicas-catalogo/planeacion/${id}/dashboard`} style={{ color: "#F77F00", fontWeight: 600 }}>Ver dashboard de esta campaña →</a>
+            </Row>
           </Section>
         )}
 
