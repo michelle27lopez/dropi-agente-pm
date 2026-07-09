@@ -1,6 +1,7 @@
 "use client";
 // TTV dashboard metrics UI component page
 import { useEffect, useState, useCallback } from "react";
+import { useIsEmbedded } from "@/lib/use-is-embedded";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type MonthlyData = {
@@ -1161,6 +1162,7 @@ function MonthTab({
 
 // ─── Main page ────────────────────────────────────────────────────────────────
 export default function TtvMetricasPage() {
+  const isEmbedded = useIsEmbedded();
   const [activeTab, setActiveTab] = useState<Tab>("home");
   const [data, setData] = useState<TtvData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -1215,21 +1217,23 @@ export default function TtvMetricasPage() {
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "16px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-      }}>
-        <a href="/proyectos/time-to-value" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-          ← Time to Value
-        </a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Métricas</span>
-        <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap" }}>
-          <span style={tag("var(--dropi)", "var(--dropi-light)")}>TTV-001</span>
-          <span style={tag("var(--muted)", "#F3F4F6")}>📅 6 meses</span>
-          <span style={tag("#10B981", "#ECFDF5")}>🎯 620 listos</span>
-        </div>
-      </header>
+      {!isEmbedded && (
+        <header style={{
+          background: "#fff", borderBottom: "1px solid var(--border)",
+          padding: "16px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+        }}>
+          <a href="/proyectos/time-to-value" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+            ← Time to Value
+          </a>
+          <span style={{ color: "var(--border)" }}>/</span>
+          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Métricas</span>
+          <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <span style={tag("var(--dropi)", "var(--dropi-light)")}>TTV-001</span>
+            <span style={tag("var(--muted)", "#F3F4F6")}>📅 6 meses</span>
+            <span style={tag("#10B981", "#ECFDF5")}>🎯 620 listos</span>
+          </div>
+        </header>
+      )}
 
       {/* Tabs */}
       <div style={{

@@ -1,25 +1,29 @@
 "use client";
 
 import { useState } from "react";
+import { useIsEmbedded } from "@/lib/use-is-embedded";
 
 const COLOR = "#F59E0B";
 
 export default function DescuentosPage() {
+  const isEmbedded = useIsEmbedded();
   const [docsOpen, setDocsOpen] = useState(true);
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
-      }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-          ← Dropi PM Tools
-        </a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Descuentos en Catálogo</span>
-      </header>
+      {!isEmbedded && (
+        <header style={{
+          background: "#fff", borderBottom: "1px solid var(--border)",
+          padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
+        }}>
+          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+            ← Dropi PM Tools
+          </a>
+          <span style={{ color: "var(--border)" }}>/</span>
+          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Descuentos en Catálogo</span>
+        </header>
+      )}
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
 
@@ -273,10 +277,47 @@ export default function DescuentosPage() {
           </div>
         </div>
 
+        {/* Bitácora de validación con proveedores */}
+        <div style={{
+          background: "#fff", border: "1px solid var(--border)",
+          borderRadius: 14, overflow: "hidden", marginBottom: 32,
+        }}>
+          <div style={{
+            padding: "14px 20px", borderBottom: "1px solid var(--border)",
+            fontSize: 13, fontWeight: 700, color: "var(--fg)",
+          }}>
+            🗣️ Sesiones de validación con proveedores · 08/07/2026
+          </div>
+          <div style={{ padding: "18px 20px" }}>
+            <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 14, lineHeight: 1.5 }}>
+              2 entrevistas moderadas sobre el prototipo (Vista Proveedor · crear descuento por % o valor fijo, con fecha fin o límite de unidades).
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16, marginBottom: 14 }}>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>Gisela · Gold Stone International</div>
+                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "var(--muted)", lineHeight: 1.6 }}>
+                  <li>Validó el set de reglas como completo — no pidió nada adicional.</li>
+                  <li>Usaría más el valor fijo (ya tiene el precio pre-calculado).</li>
+                  <li>La fecha fin automática le resuelve un problema real: hoy se le olvida revertir el precio manualmente y el descuento se queda activo por error.</li>
+                </ul>
+              </div>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>Andrés · Katz Supply</div>
+                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "var(--muted)", lineHeight: 1.6 }}>
+                  <li>Reacción muy positiva a la vista "antes/ahora" tachada.</li>
+                  <li>Riesgo señalado: sugirió poder subir el precio antes de aplicar el descuento para que se vea más grande — patrón de precio-ancla falso a prevenir con política de producto.</li>
+                  <li>Propuso que el feature sea exclusivo para bodegas premium/verificadas.</li>
+                  <li>Aparte (fuera de alcance de Descuentos): señaló que hay "bodegas falsas" (revendedores comprando por unidad) que distorsionan la comparación de precios en catálogo — pasar como hallazgo a verificación de proveedores.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Próximos pasos */}
         <div style={{
           background: `${COLOR}0d`, border: `1px solid ${COLOR}30`,
-          borderRadius: 14, padding: "18px 20px",
+          borderRadius: 14, padding: "18px 20px", marginBottom: 16,
         }}>
           <div style={{ fontSize: 12, fontWeight: 800, color: COLOR, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
             Próximo paso crítico
@@ -288,6 +329,22 @@ export default function DescuentosPage() {
             Si la wallet calcula comisiones sobre el campo de precio del producto, cambiar el precio durante la campaña puede afectar márgenes internos.
             Esta es la única pregunta que puede bloquear la Fase 1 antes de Cyber Days.
             Si TI confirma que no hay dependencia → crear épica en Jira + estimación de esfuerzo.
+          </div>
+        </div>
+
+        <div style={{
+          background: "#7C3AED0d", border: "1px solid #7C3AED30",
+          borderRadius: 14, padding: "18px 20px",
+        }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: "#7C3AED", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
+            Próximo paso adicional · de sesión 08/07
+          </div>
+          <div style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
+            Definir política anti-manipulación de precio ancla antes de construir Fase 1
+          </div>
+          <div style={{ fontSize: 13, color: "#374151", lineHeight: 1.6 }}>
+            Un proveedor premium sugirió inflar el precio antes de aplicar el descuento para que se vea más grande visualmente.
+            Evaluar validación contra histórico de precio o un piso mínimo de descuento antes de habilitar la Fase 1.
           </div>
         </div>
 
