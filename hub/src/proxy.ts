@@ -62,6 +62,19 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // pruebas@dropi.co solo puede ver la vista de Pruebas con Usuarios y los
+  // prototipos que esta enlaza.
+  const isPruebasUsuariosPath =
+    pathname.startsWith("/pruebas-usuarios") ||
+    pathname.startsWith("/proyectos/descuentos/prototipo") ||
+    pathname.startsWith("/proyectos/categorizacion/prototipo");
+
+  if (user?.email === "pruebas@dropi.co" && !isPruebasUsuariosPath && !isPublicPath) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/pruebas-usuarios";
+    return NextResponse.redirect(url);
+  }
+
   return supabaseResponse;
 }
 
