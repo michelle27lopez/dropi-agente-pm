@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { campaignsSupabase as supabase } from "@/lib/supabase-campaigns";
 import { localListCampaigns, localCreateCampaign } from "@/lib/local-store-planeacion";
 
 export async function GET() {

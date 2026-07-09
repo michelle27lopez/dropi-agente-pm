@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef, useCallback, MouseEvent, WheelEvent } from "react";
+import { useIsEmbedded } from "@/lib/use-is-embedded";
 
 // Types
 interface CategoryInfo {
@@ -911,8 +912,9 @@ const computeLayout = (
 };
 
 export default function CategorizacionPage() {
+  const isEmbedded = useIsEmbedded();
   const [docsOpen, setDocsOpen] = useState(false);
-  const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "taxonomy" | "ai" | "google" | "gaps" | null>(null);
+  const [activeResourceTab, setActiveResourceTab] = useState<"diagnostico" | "meli" | "taxonomy" | "ai" | "google" | "gaps" | "sesiones" | null>(null);
   const [mainTab, setMainTab] = useState<"simulator" | "google_mapping">("simulator");
 
   // Right panel view toggle: node mapping vs full taxonomy tree
@@ -3281,6 +3283,60 @@ export default function CategorizacionPage() {
     );
   };
 
+  const renderSesionesValidacion = () => {
+    return (
+      <div className="space-y-6 animate-fade-in">
+        <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+          <h2 className="text-base font-bold text-gray-900 mb-2">Sesiones de Validación con Proveedores · 08/07/2026</h2>
+          <p className="text-xs text-gray-500 leading-relaxed max-w-4xl">
+            3 entrevistas moderadas (30 min c/u) sobre el simulador de categorización con IA — Michelle + Jaime. En cada caso se simuló crear un producto nuevo y evaluar si la sugerencia top de la IA hacía match con lo que el proveedor esperaba.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="bg-white border rounded-2xl p-5 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+            <div className="text-sm font-bold text-gray-900 mb-1">Gisela · Gold Stone International</div>
+            <div className="text-[10px] text-gray-400 mb-3">Multicategoría · 4 años en Dropi</div>
+            <ul className="space-y-1.5 text-xs text-gray-600 list-disc pl-4">
+              <li>Probó con "olla naranja" → la IA sugirió <span className="font-semibold text-gray-800">Hogar › Ollas y cacerolas</span> como primera opción.</li>
+              <li>Aceptó la sugerencia sin objeción — las otras opciones (relacionadas a repostería) no aplicaban.</li>
+              <li>Hoy categoriza manualmente alineando el producto a la categoría más cercana de las ~6-7 que usa.</li>
+            </ul>
+          </div>
+          <div className="bg-white border rounded-2xl p-5 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+            <div className="text-sm font-bold text-gray-900 mb-1">Andrés · Katz Supply (Cup Play)</div>
+            <div className="text-[10px] text-gray-400 mb-3">Bodega premium/verificada · importador</div>
+            <ul className="space-y-1.5 text-xs text-gray-600 list-disc pl-4">
+              <li>Probó con un producto de baño → la IA sugirió "elemento decorativo y accesorio para baño"; lo aceptó.</li>
+              <li>Preguntó si el criterio es categorizar <span className="font-semibold text-gray-800">por el artículo en sí o por su función final</span> — ambigüedad conceptual a resolver en el copy.</li>
+            </ul>
+          </div>
+          <div className="bg-white border rounded-2xl p-5 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+            <div className="text-sm font-bold text-gray-900 mb-1">Manuela · Black Swan Accesos</div>
+            <div className="text-[10px] text-gray-400 mb-3">Laboratorio nacional · suplementos/alimentos dietarios</div>
+            <ul className="space-y-1.5 text-xs text-gray-600 list-disc pl-4">
+              <li>Probó con un suplemento propio → la IA sugirió una categoría que le pareció acertada.</li>
+              <li>Hoy categoriza todos sus productos igual, con etiquetas genéricas separadas (Salud, Bienestar, Belleza) sin más detalle.</li>
+              <li>Pidió más profundidad: por <span className="font-semibold text-gray-800">función/ingrediente activo</span> (ej. colágeno hidrolizado + biotina, rendimiento deportivo), no solo "salud y bienestar".</li>
+              <li>Dato clave: sus productos son técnicamente "alimentos dietarios" (registro INVIMA), no "suplementos" — pero el mercado (y sus dropshippers) los busca como "suplementos". La taxonomía debe seguir el modelo mental del comprador, no solo la clasificación regulatoria.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5">
+          <div className="text-xs font-bold text-emerald-700 mb-1">Próximos pasos</div>
+          <ul className="space-y-1 text-xs text-emerald-800 list-disc pl-4">
+            <li>Aclarar en el microcopy si la categorización sigue el criterio "qué es" vs. "para qué sirve".</li>
+            <li>Profundizar el árbol por función/ingrediente en categorías como Salud y Bienestar — Manuela evidenció que el nivel actual es insuficiente para su catálogo.</li>
+            <li>Priorizar el modelo mental del comprador sobre la clasificación técnica/regulatoria cuando ambos difieran (ej. "alimento dietario" vs. "suplemento").</li>
+            <li>Avanzar a piloto con más proveedores — feedback consistentemente positivo en las tres sesiones.</li>
+            <li>Coordinar timing con Caza Productos (CAZ-001): es una dependencia directa para resolver el mismatch de categoría reportado ahí.</li>
+          </ul>
+        </div>
+      </div>
+    );
+  };
+
   const renderGoogleHomologacion = () => {
     const pendingCount  = mappings.filter(m => m.status === "pending_review").length;
     const approvedCount = mappings.filter(m => m.status === "approved").length;
@@ -3559,17 +3615,19 @@ export default function CategorizacionPage() {
   return (
     <main id="categorizacion-project-page" className="min-h-screen pb-16" style={{ background: "var(--card)" }}>
       {/* Header */}
-      <header id="project-header" className="bg-white border-b flex items-center justify-between px-8 py-4" style={{ borderColor: "var(--border)" }}>
-        <div className="flex items-center gap-4">
-          <a href="/" id="back-to-home-link" className="text-sm font-medium hover:underline" style={{ color: "var(--muted)" }}>
-            ← Dropi PM Tools
-          </a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span id="breadcrumb-current" className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
-            Categorización y Enriquecimiento
-          </span>
-        </div>
-      </header>
+      {!isEmbedded && (
+        <header id="project-header" className="bg-white border-b flex items-center justify-between px-8 py-4" style={{ borderColor: "var(--border)" }}>
+          <div className="flex items-center gap-4">
+            <a href="/" id="back-to-home-link" className="text-sm font-medium hover:underline" style={{ color: "var(--muted)" }}>
+              ← Dropi PM Tools
+            </a>
+            <span style={{ color: "var(--border)" }}>/</span>
+            <span id="breadcrumb-current" className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
+              Categorización y Enriquecimiento
+            </span>
+          </div>
+        </header>
+      )}
 
       <div className="max-w-7xl mx-auto px-6 pt-10">
         {/* Title */}
@@ -3796,6 +3854,25 @@ export default function CategorizacionPage() {
                   </div>
                 </a>
 
+                {/* Card 11: Sesiones de Validación con Proveedores */}
+                <div
+                  onClick={() => setActiveResourceTab(activeResourceTab === "sesiones" ? null : "sesiones")}
+                  className={`bg-white border rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-emerald-500 hover:shadow-xs transition-all duration-200 ${
+                    activeResourceTab === "sesiones" ? "border-emerald-500 bg-emerald-50/5 ring-1 ring-emerald-500/20" : "border-slate-200"
+                  }`}
+                >
+                  <span className="text-2xl mt-0.5">🗣️</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Sesiones de Validación</span>
+                      {activeResourceTab === "sesiones" && <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />}
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Entrevistas 08/07/2026 con proveedores probando el simulador de categorización con IA. Hallazgos y próximos pasos.
+                    </div>
+                  </div>
+                </div>
+
                 {/* Card 10: Solicitudes de Enriquecimiento (gap requests desde supplier-lab) */}
                 <div
                   onClick={() => setActiveResourceTab(activeResourceTab === "gaps" ? null : "gaps")}
@@ -3835,6 +3912,7 @@ export default function CategorizacionPage() {
                       {activeResourceTab === "ai" && "🤖 Pipeline de Enriquecimiento IA y Distancia Levenshtein"}
                       {activeResourceTab === "google" && "🛒 Google Product Taxonomy — Importador y Referencia"}
                       {activeResourceTab === "gaps" && "📥 Solicitudes de Enriquecimiento de Categoría"}
+                      {activeResourceTab === "sesiones" && "🗣️ Sesiones de Validación con Proveedores"}
                     </h3>
                     <button
                       onClick={() => setActiveResourceTab(null)}
@@ -3851,6 +3929,7 @@ export default function CategorizacionPage() {
                   {activeResourceTab === "ai" && renderAiDoc()}
                   {activeResourceTab === "google" && renderGoogle()}
                   {activeResourceTab === "gaps" && renderGapRequests()}
+                  {activeResourceTab === "sesiones" && renderSesionesValidacion()}
                 </div>
               )}
             </div>

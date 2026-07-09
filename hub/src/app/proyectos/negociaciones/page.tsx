@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useIsEmbedded } from "@/lib/use-is-embedded";
 import {
   BarChart,
   Bar,
@@ -1070,6 +1071,7 @@ function CampanaPanel({ campana }: { campana: typeof CAMPANA }) {
 export default function NegociacionesPage() {
   const [tabId, setTabId] = useState("resumen");
   const latest = WEEKS[WEEKS.length - 1];
+  const isEmbedded = useIsEmbedded();
 
   const tabs = [
     { id: "resumen", label: "Resumen" },
@@ -1082,21 +1084,23 @@ export default function NegociacionesPage() {
   return (
     <main style={{ minHeight: "100vh", background: "#fff" }}>
       {/* Header */}
-      <header style={{
-        background: "#fff",
-        borderBottom: "1px solid #EDEDED",
-        padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-      }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-          ← Dropi PM Tools
-        </a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>🤝 Negociaciones</span>
-        <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-          <span style={tag(ACCENT, ACCENT_BG)}>NEG-001</span>
-          <span style={tag("#10B981", "#ECFDF5")}>Live · Beta proveedores</span>
-        </div>
-      </header>
+      {!isEmbedded && (
+        <header style={{
+          background: "#fff",
+          borderBottom: "1px solid #EDEDED",
+          padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+        }}>
+          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+            ← Dropi PM Tools
+          </a>
+          <span style={{ color: "var(--border)" }}>/</span>
+          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>🤝 Negociaciones</span>
+          <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+            <span style={tag(ACCENT, ACCENT_BG)}>NEG-001</span>
+            <span style={tag("#10B981", "#ECFDF5")}>Live · Beta proveedores</span>
+          </div>
+        </header>
+      )}
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
 

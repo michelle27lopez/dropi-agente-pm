@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useIsEmbedded } from "@/lib/use-is-embedded";
 import {
   BarChart,
   Bar,
@@ -600,21 +601,68 @@ function ResumenPanel({ periodos }: { periodos: Periodo[] }) {
         </div>
       </details>
 
+      {/* Sesiones de validación con proveedores */}
+      <div style={card}>
+        <div style={{ marginBottom: 14 }}>
+          <div style={sectionTitle}>🗣️ Sesiones de validación con proveedores · 08/07/2026</div>
+          <div style={sectionSub}>3 entrevistas moderadas (30 min c/u) · Michelle + Jaime · recorrido en vivo de Caza Productos, Categorización y Descuentos.</div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 12, marginBottom: 14 }}>
+          <div style={{ padding: "14px 16px", borderRadius: 10, background: "#F8FAFC", border: "1px solid var(--border)" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "var(--fg)", marginBottom: 4 }}>Gisela · Gold Stone International S.A.S.</div>
+            <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 8 }}>Multicategoría · 4 años en Dropi</div>
+            <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "var(--fg)", lineHeight: 1.6 }}>
+              <li>Usó la herramienta a diario al inicio, luego bajó la frecuencia; ha hecho ofertas pero <strong>nunca cerró un negocio</strong> a través del módulo.</li>
+              <li>Motivo principal: después de ofertar <strong>no hay contraoferta ni respuesta</strong> del dropi dentro de la plataforma.</li>
+              <li>Mismatch de categoría: en las últimas semanas la mayoría de búsquedas eran de laboratorio/cremas/calzado — ella no maneja esos nichos.</li>
+              <li>Evita deliberadamente productos de temporada (mundial, navidad) por riesgo de devoluciones/inventario muerto — y eso es justo lo que veía publicado.</li>
+              <li>Sigue negociando por fuera (WhatsApp, base de contactos propia de 4 años) porque le funciona mejor.</li>
+              <li>No reporta bugs: el flujo de crear oferta funcionó bien en el recorrido en vivo.</li>
+            </ul>
+          </div>
+          <div style={{ padding: "14px 16px", borderRadius: 10, background: "#F8FAFC", border: "1px solid var(--border)" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "var(--fg)", marginBottom: 4 }}>Andrés · Katz Supply (Cup Play)</div>
+            <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 8 }}>Bodega premium/verificada · importador</div>
+            <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "var(--fg)", lineHeight: 1.6 }}>
+              <li>~8 de 10 productos buscados no son de su nicho (Amazon, otro país, dimensiones no transportables).</li>
+              <li>No sabe si un producto buscado ya tiene <strong>campaña activa</strong> (demanda validada) o si es solo tanteo — le hace dudar si vale la pena cotizar.</li>
+              <li>Ha ofertado y no recibido respuesta dentro de la plataforma; toda la negociación real ocurre por WhatsApp externo.</li>
+              <li>Su foco es productos/órdenes/garantías; el resto lo percibe como «más administrativo».</li>
+            </ul>
+          </div>
+          <div style={{ padding: "14px 16px", borderRadius: 10, background: "#F8FAFC", border: "1px solid var(--border)" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "var(--fg)", marginBottom: 4 }}>Manuela · Black Swan Accesos</div>
+            <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 8 }}>Laboratorio nacional · suplementos/alimentos dietarios · maquila y marca blanca</div>
+            <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "var(--fg)", lineHeight: 1.6 }}>
+              <li>Solo la usó 1 vez (hace ~2 meses); el resto del tiempo no encuentra productos de su nicho publicados.</li>
+              <li>Esa única vez, contactó al dropi <strong>por WhatsApp</strong> (ya tenía su número) porque la publicación <strong>no tenía precio deseado ni descripción</strong> de lo que el dropi buscaba — sugiere que ese campo debería ser obligatorio.</li>
+              <li>No es prioridad revisar el módulo: en su modelo, son los dropshippers quienes la contactan a ella (inbound), no al revés — Dropi no le pasa contactos nuevos salvo que ella pida un reporte.</li>
+              <li>Propone: indicador de "¿ya vendiste con este dropshipper antes?" en cada oferta, y notificación cuando se publique una búsqueda relacionada a su categoría.</li>
+            </ul>
+          </div>
+        </div>
+        <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.5, padding: "10px 14px", background: "#FFFBEB", border: "1px solid var(--border)", borderRadius: 10 }}>
+          Las tres entrevistas apuntan a la misma causa raíz detrás del CSAT «no avanzó» (55.6% en Q3) y el 0% de acuerdos de precio: no es solo fricción/confianza — hay un <strong>mismatch estructural de categoría</strong>, <strong>ausencia de un loop de negociación dentro del producto</strong> (sin contraoferta ni señal de demanda validada) y <strong>solicitudes incompletas</strong> (sin precio deseado ni descripción). Esto valida y complementa el experimento de reactivación manual ya definido.
+        </div>
+      </div>
+
       {/* Próximos pasos */}
       <div style={card}>
         <div style={{ marginBottom: 14 }}>
           <div style={sectionTitle}>Próximos pasos · priorizado</div>
-          <div style={sectionSub}>Plan de acción post Q3 · priorizado por impacto y urgencia · 01/07/2026.</div>
+          <div style={sectionSub}>Plan de acción post Q3 · priorizado por impacto y urgencia · actualizado 08/07/2026 con hallazgos de sesiones de validación.</div>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {[
             { n: "1", paso: "Medir el CTA «¿No lo encuentras? Pídelo a un proveedor» — ya implementado en el catálogo. Falta instrumentar el clic en UserPilot (evento + funnel) para confirmar si está resolviendo el modelo mental equivocado que generaba abandono antes del formulario.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
             { n: "2", paso: "Activación urgente de proveedores — «Tráfico de proveedores» ya es queja explícita en CSAT. Contacto directo con prov. premium que abandonaron + plan de reactivación. Meta: >80 prov. activos.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
             { n: "3", paso: "Cerrar bug «No se envió mi oferta» — presente desde S1. En Q2, de 13 que crearon oferta solo 8 la enviaron (38.5% pérdida). CES sin respuestas nuevas en Q3 (0 de 2) — no se puede confirmar si persiste.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
-            { n: "4", paso: "Investigar por qué el CSAT empeora pese a mejor conversión — «no avanzó» sube a 55.6% en Q3 y «acordamos precio» cae a 0%. Posible desconexión entre publicar y cerrar con el proveedor.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
+            { n: "4", paso: "Investigar por qué el CSAT empeora pese a mejor conversión — «no avanzó» sube a 55.6% en Q3 y «acordamos precio» cae a 0%. Confirmado en sesión 08/07: ambas proveedoras entrevistadas nunca cerraron un negocio por falta de contraoferta/respuesta dentro de la plataforma.", urgencia: "Crítico", color: "#EF4444", bg: "#FEF2F2" },
             { n: "5", paso: "Análisis Clarity profundo — identificar los términos que los dropis intentan buscar cuando entran al módulo. Insumo directo para el roadmap de categorización.", urgencia: "Alta", color: "#F59E0B", bg: "#FFFBEB" },
             { n: "6", paso: "Diseñar prototipo Publicaciones a Ciegas — mostrar solo métricas del dropi (precio, volumen) sin revelar el producto. Testear con 5 dropis exitosos.", urgencia: "Alta", color: "#F59E0B", bg: "#FFFBEB" },
             { n: "7", paso: "Score Dropshipper + Categorización + micro-survey post-WhatsApp — Score visible para proveedores · Filtros por nicho · Survey para capturar cierres reales que hoy son invisibles para el sistema.", urgencia: "Media", color: "#3B82F6", bg: "#EFF6FF" },
+            { n: "8", paso: "Habilitar loop de contraoferta dentro de la plataforma — Gold Stone y Katz Supply confirman que hoy la negociación real ocurre 100% por WhatsApp externo porque no hay respuesta/contraoferta visible dentro de Caza Productos tras enviar una oferta.", urgencia: "Alta", color: "#F59E0B", bg: "#FFFBEB" },
+            { n: "9", paso: "Mostrar señal de demanda validada (campaña activa) en cada producto buscado — Katz Supply no sabe si un producto pedido ya tiene campaña real o es solo tanteo, lo que le hace dudar si vale la pena cotizar.", urgencia: "Alta", color: "#F59E0B", bg: "#FFFBEB" },
           ].map(p => (
             <div key={p.n} style={{
               display: "flex", gap: 12, alignItems: "flex-start",
@@ -638,6 +686,7 @@ function ResumenPanel({ periodos }: { periodos: Periodo[] }) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function CazaProductosPage() {
+  const isEmbedded = useIsEmbedded();
   const [tabId, setTabId] = useState("resumen");
   const latest = PERIODOS[PERIODOS.length - 1];
 
@@ -651,22 +700,24 @@ export default function CazaProductosPage() {
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-      }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-          ← Dropi PM Tools
-        </a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Caza Productos</span>
-        <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-          <span style={tag(ACCENT, ACCENT_BG)}>CAZ-001</span>
-          <span style={tag("#3B82F6", "#EFF6FF")}>Oportunidad · Discovery</span>
-          <span style={tag("#EF4444", "#FEF2F2")}>Alerta crítica activa</span>
-          <span style={tag("#10B981", "#ECFDF5")}>8 abr – 1 jul 2026</span>
-        </div>
-      </header>
+      {!isEmbedded && (
+        <header style={{
+          background: "#fff", borderBottom: "1px solid var(--border)",
+          padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+        }}>
+          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+            ← Dropi PM Tools
+          </a>
+          <span style={{ color: "var(--border)" }}>/</span>
+          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Caza Productos</span>
+          <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+            <span style={tag(ACCENT, ACCENT_BG)}>CAZ-001</span>
+            <span style={tag("#3B82F6", "#EFF6FF")}>Oportunidad · Discovery</span>
+            <span style={tag("#EF4444", "#FEF2F2")}>Alerta crítica activa</span>
+            <span style={tag("#10B981", "#ECFDF5")}>8 abr – 1 jul 2026</span>
+          </div>
+        </header>
+      )}
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
 
