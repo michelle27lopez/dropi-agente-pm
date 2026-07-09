@@ -490,6 +490,21 @@ export default function RoadmapS2Page() {
 
         {/* ══ GANTT 1: Cola de desarrollo ══ */}
         <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--muted)", marginBottom: 10 }}>Cola de desarrollo</p>
+
+        {/* Alerta cola */}
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 12, background: "#FFFBEB", border: "1px solid #FCD34D", borderRadius: 10, padding: "12px 16px", marginBottom: 16 }}>
+          <span style={{ fontSize: 18, lineHeight: 1, flexShrink: 0 }}>⚠️</span>
+          <div>
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "#92400E" }}>
+              4 proyectos con handoff PM listo — esperando slot en desarrollo
+            </p>
+            <p style={{ margin: "4px 0 0", fontSize: 12, color: "#B45309", lineHeight: 1.5 }}>
+              NEG · COM-002 · DESC-001 · CAT-001 tienen la documentación entregada a TI pero no tienen fecha de sprint asignada.
+              El cuello de botella es la capacidad de desarrollo: <strong>1 dev · ~6 sem/proyecto · secuencial</strong>.
+              CAT-001 espera hasta <strong>~feb 2027</strong>.
+            </p>
+          </div>
+        </div>
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "18px 20px 20px", marginBottom: 24, overflowX: "auto" }}>
           <div style={{ minWidth: 580 }}>
             <div style={{ display: "grid", gridTemplateColumns: "192px 1fr" }}><div /><MonthRuler12 /></div>

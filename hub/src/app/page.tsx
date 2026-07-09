@@ -284,9 +284,15 @@ function matchesQuery(item: Item, query: string) {
   );
 }
 
+type CelulaLink = { nombre: string; slug: string };
+
 export default function HubPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [otrasCelulas, setOtrasCelulas] = useState<CelulaLink[]>([]);
+  const [checkingRole, setCheckingRole] = useState(true);
+  const [celulaMenuOpen, setCelulaMenuOpen] = useState(false);
   const router = useRouter();
 
   const hasSupabase = !!(
@@ -302,12 +308,49 @@ export default function HubPage() {
     });
   }, [hasSupabase]);
 
+  // Este home es el de Suppliers (tu célula). Si quien entra es de otra
+  // célula, lo mandamos a la home de su propia célula. Solo el super admin
+  // se queda aquí y ve el resto de células como navegación.
+  useEffect(() => {
+    if (!hasSupabase) { setCheckingRole(false); return; }
+    fetch("/api/me")
+      .then((res) => res.json())
+      .then((data) => {
+        const profile = data?.profile;
+        if (!profile) { setCheckingRole(false); return; }
+
+        if (profile.is_super_admin) {
+          setIsSuperAdmin(true);
+          fetch("/api/celulas")
+            .then((res) => res.json())
+            .then((celulas) => {
+              if (Array.isArray(celulas)) {
+                setOtrasCelulas(celulas.map((c) => ({ nombre: c.nombre, slug: c.slug })));
+              }
+            })
+            .finally(() => setCheckingRole(false));
+          return;
+        }
+
+        const mySlug = profile.celulas?.slug;
+        if (mySlug && mySlug !== "suppliers") {
+          router.replace(`/celula/${mySlug}`);
+        } else {
+          setCheckingRole(false);
+        }
+      });
+  }, [hasSupabase, router]);
+
   async function handleLogout() {
     if (!hasSupabase) return;
     const supabase = createClient();
     await supabase.auth.signOut();
     router.push("/login");
     router.refresh();
+  }
+
+  if (checkingRole) {
+    return <main style={{ minHeight: "100vh" }} />;
   }
 
   const filteredUpdates = updates.filter((item) => matchesQuery(item, query));
@@ -326,28 +369,73 @@ export default function HubPage() {
         alignItems: "center",
         justifyContent: "space-between",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", position: "relative" }}>
           <img
-            src="/logo.png"
-            alt="Dropi PM Tools"
+            src="/darwin-logo.png"
+            alt="Darwin"
             width={36}
             height={36}
-            style={{ display: "block" }}
+            style={{ display: "block", borderRadius: 8 }}
           />
-          <div>
-            <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
-              Dropi PM Tools
-            </h1>
-            <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
-              Supplier Success · Herramientas internas
-            </p>
-          </div>
+          {isSuperAdmin ? (
+            <div style={{ position: "relative" }}>
+              <button
+                onClick={() => setCelulaMenuOpen((v) => !v)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left",
+                }}
+              >
+                <div>
+                  <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2, display: "flex", alignItems: "center", gap: 6 }}>
+                    Darwin <span style={{ fontSize: 11, color: "var(--muted)" }}>▾</span>
+                  </h1>
+                  <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
+                    Supplier Success · Herramientas internas
+                  </p>
+                </div>
+              </button>
+              {celulaMenuOpen && (
+                <div style={{
+                  position: "absolute", top: "100%", left: 0, marginTop: 8,
+                  background: "#fff", border: "1px solid var(--border)", borderRadius: 10,
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.08)", minWidth: 200, zIndex: 10, overflow: "hidden",
+                }}>
+                  {otrasCelulas.map((c) => (
+                    <a
+                      key={c.slug}
+                      href={c.slug === "suppliers" ? "/" : `/celula/${c.slug}`}
+                      onClick={() => setCelulaMenuOpen(false)}
+                      style={{
+                        display: "block", padding: "10px 14px", fontSize: 13,
+                        color: "var(--fg)", textDecoration: "none",
+                        background: c.slug === "suppliers" ? "var(--bg)" : "transparent",
+                        fontWeight: c.slug === "suppliers" ? 700 : 500,
+                      }}
+                    >
+                      🏠 {c.nombre}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div>
+              <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
+                Darwin
+              </h1>
+              <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
+                Supplier Success · Herramientas internas
+              </p>
+            </div>
+          )}
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <HeaderLink href="/iniciativas">📥 Iniciativas</HeaderLink>
           <HeaderLink href="/data-solicitada">📊 Data solicitada</HeaderLink>
           <HeaderLink href="/metricas">📈 Métricas</HeaderLink>
+          <HeaderLink href="/celulas">🧬 Células</HeaderLink>
           <HeaderLink href="/pruebas-usuarios">🧪 Pruebas con Usuarios</HeaderLink>
           {userEmail && (
             <>
