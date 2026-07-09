@@ -112,6 +112,15 @@ export default function DescuentosPage() {
                   badgeColor: "#10B981",
                   external: false,
                 },
+                {
+                  href: "http://localhost:4200/new/productos/mis-productos/editar/DESC-003",
+                  icon: "🚀",
+                  title: "Prototipo Rapid Prototypes",
+                  sub: "Tab \"Descuento\" en el flujo real de editar producto (requiere ng serve corriendo)",
+                  badge: "Fase 1",
+                  badgeColor: "#7C3AED",
+                  external: true,
+                },
               ].map((card) => (
                 <a
                   key={card.href}
