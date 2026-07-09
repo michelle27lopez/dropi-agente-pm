@@ -2,6 +2,7 @@ import { snapshot as s_2026_06_19 } from "./2026-06-19";
 import { snapshot as s_2026_06_26 } from "./2026-06-26";
 import { snapshot as s_2026_07_03 } from "./2026-07-03";
 import { snapshot as s_2026_07_08 } from "./2026-07-08";
+import { snapshot as s_2026_07_10 } from "./2026-07-10";
 import type { WeeklySnapshot } from "./types";
 
 // ─── Registro de semanas ──────────────────────────────────────────────────────
@@ -11,6 +12,7 @@ import type { WeeklySnapshot } from "./types";
 // 3. Actualizar CURRENT a la nueva fecha
 
 export const REGISTRY: Record<string, WeeklySnapshot> = {
+  "2026-07-10": s_2026_07_10,
   "2026-07-08": s_2026_07_08,
   "2026-07-03": s_2026_07_03,
   "2026-06-26": s_2026_06_26,
@@ -18,10 +20,11 @@ export const REGISTRY: Record<string, WeeklySnapshot> = {
 };
 
 export const SEMANAS: { date: string; label: string }[] = [
+  { date: "2026-07-10", label: "Semana 10 jul 2026" },
   { date: "2026-07-08", label: "Semana 08 jul 2026" },
   { date: "2026-07-03", label: "Semana 03 jul 2026" },
   { date: "2026-06-26", label: "Semana 26 jun–02 jul 2026" },
   { date: "2026-06-19", label: "Semana 19–25 jun 2026" },
 ];
 
-export const CURRENT = "2026-07-08";
+export const CURRENT = "2026-07-10";
