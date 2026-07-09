@@ -69,7 +69,7 @@ export default function UpdatesCelulaPage() {
           Updates Semanales
         </h1>
         <p style={{ fontSize: 14, color: "var(--muted)", marginTop: 4 }}>
-          Registro histórico de updates de la célula para el jefe de Supplier Success.
+          Registro histórico de updates semanales de la célula de Supplier Success.
         </p>
       </div>
 

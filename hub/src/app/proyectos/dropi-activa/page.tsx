@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useIsEmbedded } from "@/lib/use-is-embedded";
 
 const COLOR = "#7C3AED";
 
@@ -63,27 +64,30 @@ const HIPOTESIS = [
 ];
 
 export default function DropiActivaPage() {
+  const isEmbedded = useIsEmbedded();
   const [docsOpen, setDocsOpen] = useState(true);
   const [researchOpen, setResearchOpen] = useState(false);
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-      }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-          ← Dropi PM Tools
-        </a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Dropi Activa</span>
-        <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-          <span style={tag(COLOR, "#FFF8F0")}>ACT-001</span>
-          <span style={tag("#3B82F6", "#EFF6FF")}>Prueba de Concepto</span>
-          <span style={tag("#F59E0B", "#FFFBEB")}>En diseño</span>
-        </div>
-      </header>
+      {!isEmbedded && (
+        <header style={{
+          background: "#fff", borderBottom: "1px solid var(--border)",
+          padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+        }}>
+          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+            ← Dropi PM Tools
+          </a>
+          <span style={{ color: "var(--border)" }}>/</span>
+          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Dropi Activa</span>
+          <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+            <span style={tag(COLOR, "#FFF8F0")}>ACT-001</span>
+            <span style={tag("#3B82F6", "#EFF6FF")}>Prueba de Concepto</span>
+            <span style={tag("#F59E0B", "#FFFBEB")}>En diseño</span>
+          </div>
+        </header>
+      )}
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
 

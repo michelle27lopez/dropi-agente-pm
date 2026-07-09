@@ -14,6 +14,17 @@ type Item = {
   icon: string;
 };
 
+const TEAM_NAMES: Record<string, string> = {
+  "jaime.guevara@dropi.co": "Jaime",
+  "michelle.lopez@dropi.co": "Michelle",
+};
+
+function greetingFor(email: string | null): string {
+  if (!email) return "Hola";
+  const name = TEAM_NAMES[email.toLowerCase()];
+  return name ? `Hola, ${name}` : "Hola";
+}
+
 const updates: Item[] = [
   {
     key: "roadmap-s2-2026",
@@ -54,6 +65,15 @@ const updates: Item[] = [
 ];
 
 const projects: Item[] = [
+  {
+    key: "celula",
+    name: "Célula",
+    description: "Presentaciones semanales del cellboard con el equipo — registro histórico por semana, con demo en vivo y decisiones a cerrar por tema.",
+    url: "/proyectos/celula",
+    tag: "Supplier Success · Semanal",
+    color: "#0891B2",
+    icon: "🧬",
+  },
   {
     key: "dinamicas-catalogo",
     name: "Dinámicas de Catálogo",
@@ -168,6 +188,7 @@ const poc: Item[] = [
 ];
 
 function Section({ title, items, ctaLabel }: { title: string; items: Item[]; ctaLabel: string }) {
+  if (items.length === 0) return null;
   return (
     <div>
       <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
@@ -253,10 +274,21 @@ function HeaderLink({ href, children }: { href: string; children: React.ReactNod
   );
 }
 
+function matchesQuery(item: Item, query: string) {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  return (
+    item.name.toLowerCase().includes(q) ||
+    item.description.toLowerCase().includes(q) ||
+    item.tag.toLowerCase().includes(q)
+  );
+}
+
 type CelulaLink = { nombre: string; slug: string };
 
 export default function HubPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [otrasCelulas, setOtrasCelulas] = useState<CelulaLink[]>([]);
   const [checkingRole, setCheckingRole] = useState(true);
@@ -320,6 +352,11 @@ export default function HubPage() {
   if (checkingRole) {
     return <main style={{ minHeight: "100vh" }} />;
   }
+
+  const filteredUpdates = updates.filter((item) => matchesQuery(item, query));
+  const filteredProjects = projects.filter((item) => matchesQuery(item, query));
+  const filteredPoc = poc.filter((item) => matchesQuery(item, query));
+  const hasResults = filteredUpdates.length + filteredProjects.length + filteredPoc.length > 0;
 
   return (
     <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)" }}>
@@ -397,11 +434,12 @@ export default function HubPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <HeaderLink href="/iniciativas">📥 Iniciativas</HeaderLink>
           <HeaderLink href="/data-solicitada">📊 Data solicitada</HeaderLink>
+          <HeaderLink href="/metricas">📈 Métricas</HeaderLink>
           <HeaderLink href="/celulas">🧬 Células</HeaderLink>
           <HeaderLink href="/pruebas-usuarios">🧪 Pruebas con Usuarios</HeaderLink>
           {userEmail && (
             <>
-              <span style={{ fontSize: 13, color: "var(--muted)" }}>{userEmail}</span>
+              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>{greetingFor(userEmail)}</span>
               <button
                 onClick={handleLogout}
                 className="hub-link"
@@ -422,14 +460,43 @@ export default function HubPage() {
 
       {/* Grid */}
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
-        <div style={{ marginBottom: 56 }}>
-          <Section title="Updates" items={updates} ctaLabel="Ver →" />
+        <div style={{ position: "relative", marginBottom: 40 }}>
+          <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--muted)", fontSize: 14 }}>
+            🔍
+          </span>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar proyectos, updates o pruebas de concepto…"
+            className="hub-search"
+            style={{
+              width: "100%",
+              fontSize: 13,
+              color: "var(--fg)",
+              background: "var(--card)",
+              border: "1px solid var(--border)",
+              borderRadius: 8,
+              padding: "10px 12px 10px 38px",
+              fontFamily: "inherit",
+            }}
+          />
         </div>
 
-        <Section title="Proyectos" items={projects} ctaLabel="Ver proyecto →" />
+        {!hasResults && (
+          <p style={{ fontSize: 13, color: "var(--muted)", padding: "24px 0", textAlign: "center" }}>
+            Sin resultados para “{query}”.
+          </p>
+        )}
 
-        <div style={{ marginTop: 56 }}>
-          <Section title="Pruebas de concepto" items={poc} ctaLabel="Ver proyecto →" />
+        <div style={{ marginBottom: filteredUpdates.length ? 56 : 0 }}>
+          <Section title="Updates" items={filteredUpdates} ctaLabel="Ver →" />
+        </div>
+
+        <Section title="Proyectos" items={filteredProjects} ctaLabel="Ver proyecto →" />
+
+        <div style={{ marginTop: filteredPoc.length ? 56 : 0 }}>
+          <Section title="Pruebas de concepto" items={filteredPoc} ctaLabel="Ver proyecto →" />
         </div>
 
         <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 48, textAlign: "center" }}>

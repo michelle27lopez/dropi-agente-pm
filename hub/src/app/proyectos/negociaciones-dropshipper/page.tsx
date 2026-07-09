@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useIsEmbedded } from "@/lib/use-is-embedded";
 import Image from "next/image";
 
 const DROPI = "#F77F00";
@@ -271,6 +272,7 @@ function StepButton({ step, active, onClick }: {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function NegociacionesDropshipperPage() {
+  const isEmbedded = useIsEmbedded();
   const [tab, setTab] = useState<"proveedor" | "dropshipper">("proveedor");
   const [active, setActive] = useState(0);
 
@@ -286,6 +288,7 @@ export default function NegociacionesDropshipperPage() {
     <div style={{ minHeight: "100vh", background: "var(--card)", display: "flex", flexDirection: "column" }}>
 
       {/* Header */}
+      {!isEmbedded && (
       <div style={{
         borderBottom: "1px solid var(--border)", background: "var(--card)",
         padding: "14px 24px", display: "flex", alignItems: "center", gap: 16,
@@ -310,6 +313,7 @@ export default function NegociacionesDropshipperPage() {
           </span>
         </div>
       </div>
+      )}
 
       {/* Body */}
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>

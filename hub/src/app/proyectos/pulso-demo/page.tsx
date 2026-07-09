@@ -1,5 +1,7 @@
 "use client";
 
+import { useIsEmbedded } from "@/lib/use-is-embedded";
+
 const ACCESS_CARDS = [
   {
     href: "/pulso-demo/dashboard",
@@ -83,19 +85,22 @@ const FLOW_STEPS = [
 ];
 
 export default function PulsoDemoProjectPage() {
+  const isEmbedded = useIsEmbedded();
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
-      }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-          ← Dropi PM Tools
-        </a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Dropi Pulso · Demo</span>
-      </header>
+      {!isEmbedded && (
+        <header style={{
+          background: "#fff", borderBottom: "1px solid var(--border)",
+          padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
+        }}>
+          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+            ← Dropi PM Tools
+          </a>
+          <span style={{ color: "var(--border)" }}>/</span>
+          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Dropi Pulso · Demo</span>
+        </header>
+      )}
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px 60px" }}>
 

@@ -52,6 +52,23 @@
   border-color: var(--dropi);
 }
 
+.hub-search {
+  transition: border-color 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.hub-search:focus {
+  outline: none;
+  border-color: var(--dropi);
+}
+
+.hub-nav-item {
+  background: transparent;
+  transition: background-color 0.15s cubic-bezier(0.25, 1, 0.5, 1), color 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.hub-nav-item:hover {
+  background: var(--item-tint);
+  color: var(--item-accent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hub-card {
     animation: none;
@@ -62,7 +79,9 @@
   }
   .hub-card-icon,
   .hub-card-arrow,
-  .hub-link {
+  .hub-link,
+  .hub-search,
+  .hub-nav-item {
     transition: none;
   }
   .hub-card:hover .hub-card-icon,
