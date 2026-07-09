@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import HubFooter from "@/components/HubFooter";
 
 type Miembro = {
   id: string;
@@ -24,6 +25,7 @@ type Celula = {
   slug: string;
   lead: string | null;
   area: string | null;
+  ve_hub_completo: boolean;
   miembros: Miembro[];
   proyectos: Proyecto[];
 };
@@ -105,8 +107,22 @@ export default function CelulasPage() {
     loadCelulas();
   }
 
+  async function toggleVeHubCompleto(celula: Celula) {
+    setCelulas((prev) => prev.map((c) => c.id === celula.id ? { ...c, ve_hub_completo: !c.ve_hub_completo } : c));
+    const res = await fetch(`/api/celulas/${celula.slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ve_hub_completo: !celula.ve_hub_completo }),
+    });
+    if (!res.ok) {
+      // revertir si falló (ej. no autorizado)
+      setCelulas((prev) => prev.map((c) => c.id === celula.id ? { ...c, ve_hub_completo: celula.ve_hub_completo } : c));
+    }
+  }
+
   return (
-    <main style={{ minHeight: "100vh", padding: "0" }}>
+    <main style={{ minHeight: "100vh", padding: "0", display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 1 }}>
       <header style={{
         background: "#fff",
         borderBottom: "1px solid var(--border)",
@@ -211,7 +227,23 @@ export default function CelulasPage() {
                 </div>
               </div>
               {celula.area && (
-                <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 16 }}>{celula.area}</p>
+                <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 8 }}>{celula.area}</p>
+              )}
+
+              {isSuperAdmin && (
+                <label style={{
+                  display: "flex", alignItems: "center", gap: 8, marginBottom: 16,
+                  fontSize: 12, color: "var(--muted)", cursor: "pointer", width: "fit-content",
+                }}>
+                  <input
+                    type="checkbox"
+                    checked={celula.ve_hub_completo}
+                    onChange={() => toggleVeHubCompleto(celula)}
+                  />
+                  {celula.ve_hub_completo
+                    ? "Ve todo el hub (puede navegar a las demás células)"
+                    : "Solo ve su propia home"}
+                </label>
               )}
 
               {/* Miembros */}
@@ -265,6 +297,8 @@ export default function CelulasPage() {
           ))}
         </div>
       </div>
+      </div>
+      <HubFooter />
     </main>
   );
 }

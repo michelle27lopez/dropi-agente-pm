@@ -73,19 +73,18 @@ export default function LoginPage() {
 
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <div style={{
-            width: 48, height: 48, borderRadius: 14,
-            background: "var(--dropi)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontSize: 24, margin: "0 auto 16px",
-          }}>
-            🧩
-          </div>
+          <img
+            src="/darwin-logo.png"
+            alt="Darwin"
+            width={48}
+            height={48}
+            style={{ display: "block", borderRadius: 14, margin: "0 auto 16px" }}
+          />
           <h1 style={{ fontSize: 20, fontWeight: 700, color: "var(--fg)" }}>
-            Dropi PM Tools
+            Darwin
           </h1>
           <p style={{ fontSize: 13, color: "var(--muted)", marginTop: 4 }}>
-            Supplier Success · Acceso interno
+            Product Lab · Acceso interno
           </p>
         </div>
 

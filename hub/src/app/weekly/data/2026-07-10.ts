@@ -1,4 +1,4 @@
-import type { WeeklySnapshot, Documento } from "./types";
+import type { WeeklySnapshot } from "./types";
 
 export const snapshot: WeeklySnapshot = {
   week: "Semana 10 jul 2026",
@@ -76,6 +76,33 @@ export const snapshot: WeeklySnapshot = {
       tipoColor: "#3B82F6",
       impacto: "Medio",
     },
+    {
+      id: "INS-007",
+      titulo: "Cellboard 10-jul · Comercial y TI no asistieron — temas clave no llegaron a quienes pueden ejecutar",
+      descripcion: "La reunión de célula del 10-jul tuvo buena participación de producto y marketing, pero los interlocutores de Comercial (equipo completo) y TI estuvieron ausentes. Esto implica que los temas de mayor urgencia operativa — TTV 0 activaciones, cola de desarrollo bloqueada, brecha de ascensos de nivel — no llegaron en vivo a quienes pueden accionarlos. Juan Sebastian (Comercial) participó y llevará los puntos de TTV e IND-001 a su equipo, pero el alineamiento con TI sobre la cola de dev sigue pendiente. Señal a monitorear: si la célula no tiene espacios de conversación con TI, el cuello de botella de desarrollo permanece invisible para ellos.",
+      proyecto: "Cellboard",
+      tipo: "Riesgo",
+      tipoColor: "#F59E0B",
+      impacto: "Medio",
+    },
+    {
+      id: "INS-008",
+      titulo: "CAZ-001 · 6 entrevistas con suppliers: el concepto gusta a todos, ninguno enganchó de verdad",
+      descripcion: "Patrón claro en las 6 sesiones de esta semana: 100% de los suppliers entrevistados dijo que Caza Productos le parece interesante. 0% generó un momento de 'aha' real. Causas identificadas: (1) Matching roto — los providers ven oportunidades de categorías que no corresponden a lo que venden; (2) Sin notificaciones — deben entrar manualmente a revisar, lo que en la práctica nadie hace; (3) Conversación muere — cuando hay postulación, ni provider ni dropshipper responde. El valor real identificado: la AGILIDAD para hacer el primer contacto, no la negociación en sí. Los dropshippers experimentados ya negocian por fuera (WhatsApp, grupos), pero valorarían tener ese primer contacto centralizado. Insight adicional: existe Nexus (herramienta interna de Comercial) que hace un cruce similar — investigar si son duplicados o complementarios.",
+      proyecto: "CAZ-001",
+      tipo: "Hallazgo",
+      tipoColor: "#EC4899",
+      impacto: "Alto",
+    },
+    {
+      id: "INS-009",
+      titulo: "Insight estratégico (Lucho): el supplier es el principal captador de dropshippers de Dropi",
+      descripcion: "Insight compartido por Lucho en la semana: si un supplier está bien atendido en Dropi, recomienda activamente la plataforma a todos sus dropshippers ('véndanme por Dropi, ahí me atienden bien'). El efecto multiplicador es significativo: un supplier contento puede traer múltiples dropshippers a la plataforma. Esto refuerza la lógica de IND-001 y TTV: no es solo un OKR de activación — es una palanca de adquisición de dropshippers sin costo de marketing. Las 2 solicitudes de Premium sin respuesta (identificadas hoy) son una pérdida concreta de este efecto multiplicador.",
+      proyecto: "IND-001 / Estrategia",
+      tipo: "Hallazgo",
+      tipoColor: "#10B981",
+      impacto: "Alto",
+    },
   ],
   oportunidades: [
     {
@@ -121,8 +148,8 @@ export const snapshot: WeeklySnapshot = {
       mueve: "Avance de nivel → retención, GMV y acceso a beneficios",
       hipotesis: "Contactar a los que ya cumplen el umbral activa la palanca más rápida de mejora de tier",
       gmv: "Meta: 88.6% → 20% en Activo · 9.3% → 40% en Verificado",
-      avance: "Análisis de 1.000 suppliers en panel de prospectos (Supabase · supplier_ascenso_panel). Resultado: 208 Activos ya cumplen el umbral de 3.000 órdenes/90d para ser Verificados — nadie los ha contactado. 102 más están al 83% del umbral. En la ruta Verificado→Premium: 29 ya cumplen las 20.000 órdenes y 24 están al 84%. Palanca inmediata: campañas de contacto a estos segmentos no requieren desarrollo.",
-      next: "Diseñar campaña de contacto para los 208 Activo→Verificado que ya cumplen. Priorizar los 29 Verificado→Premium. Coordinar con Comercial.",
+      avance: "Análisis de 1.000 suppliers en panel de prospectos (Supabase · supplier_ascenso_panel). Resultado: 208 Activos ya cumplen el umbral de 3.000 órdenes/90d para ser Verificados — nadie los ha contactado. 102 más están al 83% del umbral. En la ruta Verificado→Premium: 29 ya cumplen las 20.000 órdenes y 24 están al 84%. Palanca inmediata: campañas de contacto a estos segmentos no requieren desarrollo. ⚠️ Brecha operativa identificada en Cellboard (10-jul): 2 de los 6 suppliers entrevistados hicieron solicitud de Premium hace tiempo y NO han recibido respuesta de Comercial. El proceso de ascenso requiere aprobación manual de Comercial (Juan Sebastian confirmó). Si esto es sistemático, estamos perdiendo el efecto multiplicador: un supplier Premium contento trae sus dropshippers a Dropi.",
+      next: "Coordinar con Comercial: (1) revisar solicitudes de Premium represadas, (2) diseñar campaña de contacto a los 208 Activo→Verificado. Juan Sebastian escalará internamente.",
       badge: "🟢 208 listos · sin contactar",
       badgeColor: "#10B981",
       metricas: {
@@ -260,29 +287,30 @@ export const snapshot: WeeklySnapshot = {
     },
     {
       code: "CAT-001 / CAZ-001",
-      name: "Categorías · Caza Productos · Piloto",
-      status: "🟡 Piloto en curso · 3 frentes",
+      name: "Categorías · Caza Productos · Piloto + Cellboard",
+      status: "🟡 Insights Cellboard + Piloto en curso",
       statusColor: "#3B82F6",
       color: "#3B82F6",
       mueve: "Árbol comercial aprobado → categorización IA + búsqueda semántica activa",
       hipotesis: "Pruebas con usuarios reales entregan insights para aprobación stakeholders",
       gmv: "Habilitador de búsqueda, SEO y campañas",
-      avance: "Sesiones iniciadas el 8-jul con 2 suppliers (3 frentes: árbol CAT-001 + interfaz CAZ-001 + prototipo DESC-001). Sesiones en curso. Insights pendientes de consolidar.",
-      next: "Completar sesiones con los 10 suppliers. Con insights completos: agendar mesa con Jacki y Category Manager.",
-      badge: "🟡 Piloto en curso",
+      avance: "CAT-001: piloto con 10 suppliers en curso desde 8-jul (árbol + IA). Feedback positivo: la IA categoriza bien y reduce el trabajo del proveedor al crear productos. CAZ-001: 6 entrevistas Cellboard revelaron patrón claro — 100% dice que el concepto es interesante, 0% enganchó de verdad. Las 3 causas: matching roto (ven categorías irrelevantes), sin notificaciones (tienen que entrar a buscar manualmente), y conversación muerta (nadie responde postulaciones). El valor real está en la agilidad del primer contacto. Existe Nexus (Comercial) que hace algo similar — investigar superposición. Siguiente experimento propuesto: contacto manual por CRM para validar si el matching activo genera negociaciones. Llevar a Dropi Pulso.",
+      next: "CAT: completar sesiones piloto → mesa con Jacki. CAZ: experimento contacto manual + revisar Nexus con Juanse. Llevar CAZ a reunión Dropi Pulso.",
+      badge: "🟡 Piloto + Cellboard insights",
       badgeColor: "#3B82F6",
       metricas: {
         base: [
-          { label: "Suppliers en piloto", value: "10", sub: "Usuarios reales" },
-          { label: "Frentes", value: "3", sub: "CAT + CAZ + DESC" },
-          { label: "Sesiones iniciadas", value: "2 de 10", sub: "Desde 8-jul" },
+          { label: "Entrevistas CAZ", value: "6", sub: "100% interés · 0% aha moment" },
+          { label: "Suppliers en piloto CAT", value: "10", sub: "Usuarios reales" },
+          { label: "Sesiones CAT iniciadas", value: "2 de 10", sub: "Desde 8-jul" },
         ],
         meta: [
-          { label: "Mesa stakeholders", value: "Post-piloto", sub: "Jacki + Category Manager" },
-          { label: "Handoff dev CAT", value: "~28-jul", sub: "Si piloto aprueba árbol" },
+          { label: "Mesa stakeholders CAT", value: "Post-piloto", sub: "Jacki + Category Manager" },
+          { label: "Experimento CAZ", value: "Contacto manual", sub: "CRM → matching activo" },
         ],
         seguimiento: [
-          { label: "Insights consolidados", value: "Pendiente", sub: "Al cerrar todas las sesiones" },
+          { label: "Nexus (Comercial)", value: "Por revisar", sub: "¿Duplica CAZ?" },
+          { label: "Dropi Pulso", value: "11-jul · reunión", sub: "Llevar CAZ ahí" },
           { label: "Bug CAZ WhatsApp", value: "Sin resolver", sub: "Se prueba en piloto" },
         ]
       }
