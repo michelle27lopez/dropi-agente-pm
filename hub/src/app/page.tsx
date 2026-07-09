@@ -311,6 +311,7 @@ export default function HubPage() {
           <HeaderLink href="/iniciativas">📥 Iniciativas</HeaderLink>
           <HeaderLink href="/data-solicitada">📊 Data solicitada</HeaderLink>
           <HeaderLink href="/celulas">🧬 Células</HeaderLink>
+          <HeaderLink href="/pruebas-usuarios">🧪 Pruebas con Usuarios</HeaderLink>
           {userEmail && (
             <>
               <span style={{ fontSize: 13, color: "var(--muted)" }}>{userEmail}</span>
