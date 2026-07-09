@@ -21,6 +21,7 @@ type Proyecto = {
 type Celula = {
   id: string;
   nombre: string;
+  slug: string;
   lead: string | null;
   area: string | null;
   miembros: Miembro[];
@@ -57,13 +58,52 @@ function Badge({ label, color }: { label: string; color: string }) {
 export default function CelulasPage() {
   const [celulas, setCelulas] = useState<Celula[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
 
-  useEffect(() => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [celulaId, setCelulaId] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [formOk, setFormOk] = useState<string | null>(null);
+
+  function loadCelulas() {
     fetch("/api/celulas")
       .then((res) => res.json())
       .then((data) => setCelulas(Array.isArray(data) ? data : []))
       .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    loadCelulas();
+    fetch("/api/me")
+      .then((res) => res.json())
+      .then((data) => setIsSuperAdmin(!!data?.profile?.is_super_admin));
   }, []);
+
+  async function handleCreatePerson(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setFormError(null);
+    setFormOk(null);
+
+    const res = await fetch("/api/admin/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, nombre: nombre || null, celula_id: celulaId }),
+    });
+    const data = await res.json();
+    setSaving(false);
+
+    if (!res.ok) {
+      setFormError(data.error ?? "Error al crear la cuenta");
+      return;
+    }
+    setFormOk(`Cuenta creada para ${email}`);
+    setEmail(""); setPassword(""); setNombre(""); setCelulaId("");
+    loadCelulas();
+  }
 
   return (
     <main style={{ minHeight: "100vh", padding: "0" }}>
@@ -93,6 +133,54 @@ export default function CelulasPage() {
       </header>
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
+        {isSuperAdmin && (
+          <div style={{
+            background: "var(--card)", border: "1px solid var(--border)",
+            borderRadius: 16, padding: 24, marginBottom: 32,
+          }}>
+            <h2 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>
+              ➕ Agregar persona
+            </h2>
+            <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 16 }}>
+              Solo visible para super admin. Crea la cuenta y la asigna a una célula.
+            </p>
+            <form onSubmit={handleCreatePerson} style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "flex-end" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <label style={{ fontSize: 11, color: "var(--muted)" }}>Nombre</label>
+                <input value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Juan Diego"
+                  style={{ padding: "8px 10px", border: "1px solid var(--border)", borderRadius: 8, fontSize: 13, background: "var(--bg)", color: "var(--fg)" }} />
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <label style={{ fontSize: 11, color: "var(--muted)" }}>Email</label>
+                <input required type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="persona@dropi.co"
+                  style={{ padding: "8px 10px", border: "1px solid var(--border)", borderRadius: 8, fontSize: 13, background: "var(--bg)", color: "var(--fg)" }} />
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <label style={{ fontSize: 11, color: "var(--muted)" }}>Clave inicial</label>
+                <input required type="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="mín. 8 caracteres"
+                  style={{ padding: "8px 10px", border: "1px solid var(--border)", borderRadius: 8, fontSize: 13, background: "var(--bg)", color: "var(--fg)" }} />
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <label style={{ fontSize: 11, color: "var(--muted)" }}>Célula</label>
+                <select required value={celulaId} onChange={(e) => setCelulaId(e.target.value)}
+                  style={{ padding: "8px 10px", border: "1px solid var(--border)", borderRadius: 8, fontSize: 13, background: "var(--bg)", color: "var(--fg)" }}>
+                  <option value="">Seleccionar…</option>
+                  {celulas.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
+                </select>
+              </div>
+              <button type="submit" disabled={saving} style={{
+                padding: "8px 16px", background: "var(--dropi)", color: "#fff",
+                border: "none", borderRadius: 8, fontSize: 13, fontWeight: 600,
+                cursor: saving ? "not-allowed" : "pointer",
+              }}>
+                {saving ? "Creando…" : "Crear cuenta"}
+              </button>
+            </form>
+            {formError && <p style={{ fontSize: 12, color: "#DC2626", marginTop: 10 }}>{formError}</p>}
+            {formOk && <p style={{ fontSize: 12, color: "#16A34A", marginTop: 10 }}>{formOk}</p>}
+          </div>
+        )}
+
         {loading && (
           <p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p>
         )}
@@ -113,9 +201,14 @@ export default function CelulasPage() {
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
                 <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--fg)" }}>{celula.nombre}</h2>
-                {celula.lead && (
-                  <span style={{ fontSize: 12, color: "var(--muted)" }}>Lead: {celula.lead}</span>
-                )}
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  {celula.lead && (
+                    <span style={{ fontSize: 12, color: "var(--muted)" }}>Lead: {celula.lead}</span>
+                  )}
+                  <a href={`/celula/${celula.slug}`} style={{ fontSize: 12, fontWeight: 600, color: "#6366F1", textDecoration: "none" }}>
+                    Ir a su home →
+                  </a>
+                </div>
               </div>
               {celula.area && (
                 <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 16 }}>{celula.area}</p>
