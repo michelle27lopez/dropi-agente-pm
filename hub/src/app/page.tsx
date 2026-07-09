@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
+import HubFooter from "@/components/HubFooter";
 
 type Item = {
   key: string;
@@ -257,7 +258,7 @@ type CelulaLink = { nombre: string; slug: string };
 
 export default function HubPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [canSwitchCelulas, setCanSwitchCelulas] = useState(false);
   const [otrasCelulas, setOtrasCelulas] = useState<CelulaLink[]>([]);
   const [checkingRole, setCheckingRole] = useState(true);
   const [celulaMenuOpen, setCelulaMenuOpen] = useState(false);
@@ -287,24 +288,27 @@ export default function HubPage() {
         const profile = data?.profile;
         if (!profile) { setCheckingRole(false); return; }
 
-        if (profile.is_super_admin) {
-          setIsSuperAdmin(true);
+        const mySlug = profile.celulas?.slug;
+        const fullAccess = profile.is_super_admin || !!profile.celulas?.ve_hub_completo;
+
+        // Con ve_hub_completo (o super admin), "/" es el origen: aterriza
+        // siempre aquí y navega libre entre células con el dropdown. Sin
+        // ve_hub_completo, queda restringido a su propia home.
+        if (mySlug && mySlug !== "suppliers" && !fullAccess) {
+          router.replace(`/celula/${mySlug}`);
+          return;
+        }
+
+        setCheckingRole(false);
+        if (fullAccess) {
+          setCanSwitchCelulas(true);
           fetch("/api/celulas")
             .then((res) => res.json())
             .then((celulas) => {
               if (Array.isArray(celulas)) {
                 setOtrasCelulas(celulas.map((c) => ({ nombre: c.nombre, slug: c.slug })));
               }
-            })
-            .finally(() => setCheckingRole(false));
-          return;
-        }
-
-        const mySlug = profile.celulas?.slug;
-        if (mySlug && mySlug !== "suppliers") {
-          router.replace(`/celula/${mySlug}`);
-        } else {
-          setCheckingRole(false);
+            });
         }
       });
   }, [hasSupabase, router]);
@@ -322,7 +326,8 @@ export default function HubPage() {
   }
 
   return (
-    <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)" }}>
+    <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 1 }}>
       {/* Header */}
       <header style={{
         background: "#fff",
@@ -340,7 +345,7 @@ export default function HubPage() {
             height={36}
             style={{ display: "block", borderRadius: 8 }}
           />
-          {isSuperAdmin ? (
+          {canSwitchCelulas ? (
             <div style={{ position: "relative" }}>
               <button
                 onClick={() => setCelulaMenuOpen((v) => !v)}
@@ -436,6 +441,8 @@ export default function HubPage() {
           Dropi · Supplier Success · {new Date().getFullYear()}
         </p>
       </div>
+      </div>
+      <HubFooter />
     </main>
   );
 }

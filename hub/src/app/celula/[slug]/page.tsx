@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import HubFooter from "@/components/HubFooter";
 
 type Miembro = { id: string; email: string; nombre: string | null; is_super_admin: boolean };
 type Proyecto = {
@@ -91,7 +92,8 @@ export default function CelulaHomePage() {
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
   return (
-    <main style={{ minHeight: "100vh" }}>
+    <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 1 }}>
       <header style={{
         background: "#fff", borderBottom: "1px solid var(--border)",
         padding: "20px 32px", display: "flex", alignItems: "center", gap: 12,
@@ -209,6 +211,8 @@ export default function CelulaHomePage() {
           </div>
         </Section>
       </div>
+      </div>
+      <HubFooter />
     </main>
   );
 }

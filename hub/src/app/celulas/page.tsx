@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import HubFooter from "@/components/HubFooter";
 
 type Miembro = {
   id: string;
@@ -120,7 +121,8 @@ export default function CelulasPage() {
   }
 
   return (
-    <main style={{ minHeight: "100vh", padding: "0" }}>
+    <main style={{ minHeight: "100vh", padding: "0", display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 1 }}>
       <header style={{
         background: "#fff",
         borderBottom: "1px solid var(--border)",
@@ -295,6 +297,8 @@ export default function CelulasPage() {
           ))}
         </div>
       </div>
+      </div>
+      <HubFooter />
     </main>
   );
 }
