@@ -11,7 +11,7 @@ const FONT_HAND = "var(--font-caveat), cursive";
 const FONT_MONO = "var(--font-mono), ui-monospace, monospace";
 
 // ─── Paleta "Expediente Célula" ────────────────────────────────────────────
-const BG = "#171B1D";
+const BG = "#E8DCC0";
 const BG_PANEL = "#1D2326";
 const PAPER = "#F5F0E3";
 const PAPER2 = "#FFFCF5";
@@ -35,7 +35,7 @@ const GOOD_BG = "#E4F5EC";
 const WARN = "#D64545";
 const WARN_BG = "#FBE7E7";
 
-const DOTS_BG = `radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0) 0 0/24px 24px, ${BG}`;
+const DOTS_BG = `radial-gradient(circle at 1px 1px, rgba(0,0,0,0.05) 1px, transparent 0) 0 0/24px 24px, ${BG}`;
 
 type SegmentDef = {
   id: string;
@@ -320,15 +320,15 @@ function TimerStamp({ remaining, over, running }: { remaining: number; over: boo
 }
 
 function FolderTab({ seg, isActive, isPast }: { seg: SegmentDef; isActive: boolean; isPast: boolean }) {
-  const bg = isActive ? seg.accent : isPast ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.03)";
-  const color = isActive ? "#fff" : isPast ? TEXT_LIGHT : MUTED_LIGHT;
+  const bg = isActive ? seg.accent : isPast ? "rgba(0,0,0,0.05)" : "rgba(0,0,0,0.015)";
+  const color = isActive ? "#fff" : INK_SOFT;
   return (
     <a
       href={`#${seg.id}`}
       style={{
         flex: "0 0 auto", fontFamily: FONT_MONO, fontSize: 11, fontWeight: 700, textDecoration: "none",
         color, background: bg,
-        border: `1px solid ${isActive ? seg.accent : "rgba(255,255,255,0.12)"}`,
+        border: `1px solid ${isActive ? seg.accent : "rgba(0,0,0,0.1)"}`,
         padding: "7px 13px 6px", borderRadius: "6px 6px 2px 2px", whiteSpace: "nowrap",
         transform: isActive ? "translateY(-3px)" : "translateY(0)",
         boxShadow: isActive ? "0 4px 10px rgba(0,0,0,0.35)" : "none",
@@ -449,8 +449,8 @@ export default function Cellboard20260709Page() {
         <nav style={{
           position: "sticky", top: 0, zIndex: 10,
           display: "flex", gap: 5, overflowX: "auto", padding: "14px 4px 10px",
-          background: "rgba(23,27,29,0.88)", backdropFilter: "blur(8px)",
-          borderBottom: "1px solid rgba(255,255,255,0.08)", marginTop: -1,
+          background: "rgba(245,240,227,0.92)", backdropFilter: "blur(8px)",
+          borderBottom: `1px solid ${LINE}`, marginTop: -1,
         }}>
           {SEGMENTS.map((s) => (
             <FolderTab key={s.id} seg={s} isActive={activeId === s.id} isPast={running && elapsedMin >= s.end} />

@@ -3289,11 +3289,11 @@ export default function CategorizacionPage() {
         <div className="bg-white border rounded-2xl p-6 shadow-2xs" style={{ borderColor: "var(--border)" }}>
           <h2 className="text-base font-bold text-gray-900 mb-2">Sesiones de Validación con Proveedores · 08/07/2026</h2>
           <p className="text-xs text-gray-500 leading-relaxed max-w-4xl">
-            2 entrevistas moderadas (30 min c/u) sobre el simulador de categorización con IA — Michelle + Jaime. En ambos casos se simuló crear un producto nuevo y evaluar si la sugerencia top de la IA hacía match con lo que el proveedor esperaba.
+            3 entrevistas moderadas (30 min c/u) sobre el simulador de categorización con IA — Michelle + Jaime. En cada caso se simuló crear un producto nuevo y evaluar si la sugerencia top de la IA hacía match con lo que el proveedor esperaba.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <div className="bg-white border rounded-2xl p-5 shadow-2xs" style={{ borderColor: "var(--border)" }}>
             <div className="text-sm font-bold text-gray-900 mb-1">Gisela · Gold Stone International</div>
             <div className="text-[10px] text-gray-400 mb-3">Multicategoría · 4 años en Dropi</div>
@@ -3311,13 +3311,25 @@ export default function CategorizacionPage() {
               <li>Preguntó si el criterio es categorizar <span className="font-semibold text-gray-800">por el artículo en sí o por su función final</span> — ambigüedad conceptual a resolver en el copy.</li>
             </ul>
           </div>
+          <div className="bg-white border rounded-2xl p-5 shadow-2xs" style={{ borderColor: "var(--border)" }}>
+            <div className="text-sm font-bold text-gray-900 mb-1">Manuela · Black Swan Accesos</div>
+            <div className="text-[10px] text-gray-400 mb-3">Laboratorio nacional · suplementos/alimentos dietarios</div>
+            <ul className="space-y-1.5 text-xs text-gray-600 list-disc pl-4">
+              <li>Probó con un suplemento propio → la IA sugirió una categoría que le pareció acertada.</li>
+              <li>Hoy categoriza todos sus productos igual, con etiquetas genéricas separadas (Salud, Bienestar, Belleza) sin más detalle.</li>
+              <li>Pidió más profundidad: por <span className="font-semibold text-gray-800">función/ingrediente activo</span> (ej. colágeno hidrolizado + biotina, rendimiento deportivo), no solo "salud y bienestar".</li>
+              <li>Dato clave: sus productos son técnicamente "alimentos dietarios" (registro INVIMA), no "suplementos" — pero el mercado (y sus dropshippers) los busca como "suplementos". La taxonomía debe seguir el modelo mental del comprador, no solo la clasificación regulatoria.</li>
+            </ul>
+          </div>
         </div>
 
         <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-5">
           <div className="text-xs font-bold text-emerald-700 mb-1">Próximos pasos</div>
           <ul className="space-y-1 text-xs text-emerald-800 list-disc pl-4">
             <li>Aclarar en el microcopy si la categorización sigue el criterio "qué es" vs. "para qué sirve".</li>
-            <li>Avanzar a piloto con más proveedores — feedback consistentemente positivo en ambas sesiones.</li>
+            <li>Profundizar el árbol por función/ingrediente en categorías como Salud y Bienestar — Manuela evidenció que el nivel actual es insuficiente para su catálogo.</li>
+            <li>Priorizar el modelo mental del comprador sobre la clasificación técnica/regulatoria cuando ambos difieran (ej. "alimento dietario" vs. "suplemento").</li>
+            <li>Avanzar a piloto con más proveedores — feedback consistentemente positivo en las tres sesiones.</li>
             <li>Coordinar timing con Caza Productos (CAZ-001): es una dependencia directa para resolver el mismatch de categoría reportado ahí.</li>
           </ul>
         </div>

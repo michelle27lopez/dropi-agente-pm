@@ -290,7 +290,7 @@ export default function DescuentosPage() {
           </div>
           <div style={{ padding: "18px 20px" }}>
             <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 14, lineHeight: 1.5 }}>
-              2 entrevistas moderadas sobre el prototipo (Vista Proveedor · crear descuento por % o valor fijo, con fecha fin o límite de unidades).
+              3 entrevistas moderadas sobre el prototipo (Vista Proveedor · crear descuento por % o valor fijo, con fecha fin o límite de unidades).
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16, marginBottom: 14 }}>
               <div>
@@ -310,6 +310,19 @@ export default function DescuentosPage() {
                   <li>Aparte (fuera de alcance de Descuentos): señaló que hay "bodegas falsas" (revendedores comprando por unidad) que distorsionan la comparación de precios en catálogo — pasar como hallazgo a verificación de proveedores.</li>
                 </ul>
               </div>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>Manuela · Black Swan Accesos</div>
+                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "var(--muted)", lineHeight: 1.6 }}>
+                  <li>Lo usaría por porcentaje, para productos que no se mueven en stock.</li>
+                  <li><strong>Fin por stock remanente, no por unidades vendidas</strong>: necesita que el descuento pare cuando queden ej. 100 unidades (no cuando se vendan 400 de 500) — usan ese umbral para planificar el traslado de inventario entre su bodega secundaria (stock) y la principal (despacho).</li>
+                  <li>Para productos descontinuados: sin límite, hasta agotar existencias.</li>
+                  <li>Propuso descuentos exclusivos para dropshippers que ya tuvieron ventas previas con ellos (fidelización).</li>
+                  <li>Hoy ya hace descuentos por volumen, pero por fuera: crea un producto privado duplicado con precio más bajo y comparte el stock solo con ese dropshipper.</li>
+                </ul>
+              </div>
+            </div>
+            <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.5, padding: "10px 14px", background: "#FFFBEB", border: "1px solid var(--border)", borderRadius: 10 }}>
+              El campo "límite de unidades" del prototipo es ambiguo: Manuela lo necesita como <strong>umbral de stock restante</strong> (parar cuando queden X unidades), no como <strong>cantidad vendida</strong> (parar tras vender X). Son lógicas inversas — definir cuál construir, o si deben coexistir como dos modos.
             </div>
           </div>
         </div>

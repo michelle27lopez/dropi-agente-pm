@@ -605,7 +605,7 @@ function ResumenPanel({ periodos }: { periodos: Periodo[] }) {
       <div style={card}>
         <div style={{ marginBottom: 14 }}>
           <div style={sectionTitle}>🗣️ Sesiones de validación con proveedores · 08/07/2026</div>
-          <div style={sectionSub}>2 entrevistas moderadas (30 min c/u) · Michelle + Jaime · recorrido en vivo de Caza Productos, Categorización y Descuentos.</div>
+          <div style={sectionSub}>3 entrevistas moderadas (30 min c/u) · Michelle + Jaime · recorrido en vivo de Caza Productos, Categorización y Descuentos.</div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: 12, marginBottom: 14 }}>
           <div style={{ padding: "14px 16px", borderRadius: 10, background: "#F8FAFC", border: "1px solid var(--border)" }}>
@@ -630,9 +630,19 @@ function ResumenPanel({ periodos }: { periodos: Periodo[] }) {
               <li>Su foco es productos/órdenes/garantías; el resto lo percibe como «más administrativo».</li>
             </ul>
           </div>
+          <div style={{ padding: "14px 16px", borderRadius: 10, background: "#F8FAFC", border: "1px solid var(--border)" }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: "var(--fg)", marginBottom: 4 }}>Manuela · Black Swan Accesos</div>
+            <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 8 }}>Laboratorio nacional · suplementos/alimentos dietarios · maquila y marca blanca</div>
+            <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "var(--fg)", lineHeight: 1.6 }}>
+              <li>Solo la usó 1 vez (hace ~2 meses); el resto del tiempo no encuentra productos de su nicho publicados.</li>
+              <li>Esa única vez, contactó al dropi <strong>por WhatsApp</strong> (ya tenía su número) porque la publicación <strong>no tenía precio deseado ni descripción</strong> de lo que el dropi buscaba — sugiere que ese campo debería ser obligatorio.</li>
+              <li>No es prioridad revisar el módulo: en su modelo, son los dropshippers quienes la contactan a ella (inbound), no al revés — Dropi no le pasa contactos nuevos salvo que ella pida un reporte.</li>
+              <li>Propone: indicador de "¿ya vendiste con este dropshipper antes?" en cada oferta, y notificación cuando se publique una búsqueda relacionada a su categoría.</li>
+            </ul>
+          </div>
         </div>
         <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.5, padding: "10px 14px", background: "#FFFBEB", border: "1px solid var(--border)", borderRadius: 10 }}>
-          Ambas entrevistas apuntan a la misma causa raíz detrás del CSAT «no avanzó» (55.6% en Q3) y el 0% de acuerdos de precio: no es solo fricción/confianza — hay un <strong>mismatch estructural de categoría</strong> y <strong>ausencia de un loop de negociación dentro del producto</strong> (sin contraoferta ni señal de demanda validada). Esto valida y complementa el experimento de reactivación manual ya definido.
+          Las tres entrevistas apuntan a la misma causa raíz detrás del CSAT «no avanzó» (55.6% en Q3) y el 0% de acuerdos de precio: no es solo fricción/confianza — hay un <strong>mismatch estructural de categoría</strong>, <strong>ausencia de un loop de negociación dentro del producto</strong> (sin contraoferta ni señal de demanda validada) y <strong>solicitudes incompletas</strong> (sin precio deseado ni descripción). Esto valida y complementa el experimento de reactivación manual ya definido.
         </div>
       </div>
 
