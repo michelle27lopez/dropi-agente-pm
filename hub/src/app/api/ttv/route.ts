@@ -141,7 +141,7 @@ export async function GET() {
 
   const { data: masterSuppliersRes } = await supabase
     .from("userpilot_suppliers")
-    .select("user_id, email, belong_to_community, referred_by")
+    .select("user_id, email, belong_to_community, referred_by, device_type")
     .in("email", emails);
 
   const masterSuppliers = masterSuppliersRes || [];
@@ -219,6 +219,9 @@ export async function GET() {
 
   let comunidadCount = 0;
   let huerfanoCount = 0;
+  let desktopCount = 0;
+  let mobileCount = 0;
+  let deviceDesconocidoCount = 0;
 
   upSuppliers.forEach(s => {
     const email = (s.email || '').toLowerCase().trim();
@@ -229,6 +232,15 @@ export async function GET() {
       comunidadCount++;
     } else {
       huerfanoCount++;
+    }
+
+    const deviceType = (masterInfo?.device_type || '').toLowerCase().trim();
+    if (deviceType === 'desktop') {
+      desktopCount++;
+    } else if (deviceType === 'mobile') {
+      mobileCount++;
+    } else {
+      deviceDesconocidoCount++;
     }
 
     if (crmMap.has(email)) {
@@ -287,7 +299,10 @@ export async function GET() {
       totalUserpilot: upSuppliers.length,
       totalCrm: crmOpps.length,
       comunidadCount,
-      huerfanoCount
+      huerfanoCount,
+      desktopCount,
+      mobileCount,
+      deviceDesconocidoCount
     }
   });
 }
