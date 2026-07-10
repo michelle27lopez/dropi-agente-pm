@@ -3,61 +3,55 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
+import { type Item, Section } from "@/components/HomeSections";
 
-type Miembro = { id: string; email: string; nombre: string | null; is_super_admin: boolean };
 type Proyecto = {
   id: string; name: string; project_code: string | null;
   status: string | null; type: string | null; handoff_status: string | null;
+  summary: string | null; business_area: string | null; prototype_url: string | null;
 };
 type Update = { id: string; week_date: string; title: string; content: string };
-type RoadmapItem = {
-  id: string; title: string; description: string | null;
-  quarter: string | null; status: string; target_date: string | null;
-};
 
 type CelulaHome = {
   id: string; nombre: string; slug: string; lead: string | null; area: string | null;
   ve_hub_completo: boolean;
-  miembros: Miembro[]; proyectos: Proyecto[]; updates: Update[]; roadmap: RoadmapItem[];
+  proyectos: Proyecto[]; updates: Update[];
 };
 
 type CelulaLink = { nombre: string; slug: string };
 
-const TYPE_COLOR: Record<string, string> = {
-  Idea: "#94A3B8", Oportunidad: "#0EA5E9", POC: "#7C3AED", Proyecto: "#1A6B52",
-};
 const HANDOFF_COLOR: Record<string, string> = {
   "Experimentación": "#F59E0B", "Listo para handoff": "#0EA5E9", "Handoff hecho": "#22C55E",
 };
-const ROADMAP_COLOR: Record<string, string> = {
-  Planeado: "#94A3B8", "En curso": "#0EA5E9", Hecho: "#22C55E", Movido: "#F59E0B",
+const TYPE_ICON: Record<string, string> = {
+  Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀",
 };
 
-function Badge({ label, color }: { label: string; color: string }) {
-  return (
-    <span style={{
-      fontSize: 11, fontWeight: 700, color,
-      background: color + "18", border: `1px solid ${color}33`,
-      borderRadius: 6, padding: "2px 8px", whiteSpace: "nowrap",
-    }}>
-      {label}
-    </span>
-  );
+function truncate(text: string, max: number) {
+  return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
 }
 
-function Section({ title, count, children, emptyLabel }: {
-  title: string; count: number; children: React.ReactNode; emptyLabel: string;
-}) {
-  return (
-    <div style={{ marginBottom: 32 }}>
-      <p style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 12 }}>
-        {title} ({count})
-      </p>
-      {count === 0 ? (
-        <p style={{ fontSize: 13, color: "var(--muted)" }}>{emptyLabel}</p>
-      ) : children}
-    </div>
-  );
+function proyectoToItem(p: Proyecto): Item {
+  return {
+    key: p.id,
+    name: p.name,
+    description: truncate(p.summary ?? p.business_area ?? "Sin descripción aún.", 160),
+    url: p.prototype_url ?? undefined,
+    tag: p.project_code ?? p.handoff_status ?? "Sin código",
+    color: (p.handoff_status && HANDOFF_COLOR[p.handoff_status]) ?? "#94A3B8",
+    icon: (p.type && TYPE_ICON[p.type]) ?? "📁",
+  };
+}
+
+function updateToItem(u: Update): Item {
+  return {
+    key: u.id,
+    name: u.title,
+    description: truncate(u.content, 160),
+    tag: u.week_date,
+    color: "#6366F1",
+    icon: "📋",
+  };
 }
 
 export default function CelulaHomePage() {
@@ -91,8 +85,12 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
+  const updates = celula.updates.map(updateToItem);
+  const proyectos = celula.proyectos.filter((p) => p.type !== "POC").map(proyectoToItem);
+  const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
+
   return (
-    <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1 }}>
       <header style={{
         background: "#fff", borderBottom: "1px solid var(--border)",
@@ -150,66 +148,27 @@ export default function CelulaHomePage() {
         )}
       </header>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
-        <Section title="Proyectos" count={celula.proyectos.length} emptyLabel="Aún no hay proyectos cargados para esta célula.">
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {celula.proyectos.map((p) => (
-              <div key={p.id} style={{
-                display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
-                fontSize: 13, color: "var(--fg)", padding: "10px 14px",
-                background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8,
-              }}>
-                <span style={{ fontWeight: 600 }}>{p.name}</span>
-                {p.project_code && <span style={{ color: "var(--muted)" }}>{p.project_code}</span>}
-                {p.type && <Badge label={p.type} color={TYPE_COLOR[p.type] ?? "#94A3B8"} />}
-                {p.handoff_status && <Badge label={p.handoff_status} color={HANDOFF_COLOR[p.handoff_status] ?? "#94A3B8"} />}
-              </div>
-            ))}
-          </div>
-        </Section>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
+        <div style={{ marginBottom: 56 }}>
+          <Section title="Updates" items={updates} ctaLabel="Ver →" />
+          {updates.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
+          )}
+        </div>
 
-        <Section title="Updates semanales" count={celula.updates.length} emptyLabel="Aún no hay updates registrados.">
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {celula.updates.map((u) => (
-              <div key={u.id} style={{
-                padding: "12px 16px", background: "var(--card)",
-                border: "1px solid var(--border)", borderRadius: 8,
-              }}>
-                <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 4 }}>{u.week_date}</p>
-                <p style={{ fontSize: 14, fontWeight: 600, color: "var(--fg)" }}>{u.title}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
+        <div style={{ marginBottom: 56 }}>
+          <Section title="Proyectos" items={proyectos} ctaLabel="Ver proyecto →" />
+          {proyectos.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
+          )}
+        </div>
 
-        <Section title="Roadmap" count={celula.roadmap.length} emptyLabel="Aún no hay roadmap cargado.">
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {celula.roadmap.map((r) => (
-              <div key={r.id} style={{
-                display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
-                fontSize: 13, color: "var(--fg)", padding: "10px 14px",
-                background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8,
-              }}>
-                <span style={{ fontWeight: 600 }}>{r.title}</span>
-                {r.quarter && <span style={{ color: "var(--muted)" }}>{r.quarter}</span>}
-                <Badge label={r.status} color={ROADMAP_COLOR[r.status] ?? "#94A3B8"} />
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        <Section title="Personas" count={celula.miembros.length} emptyLabel="Nadie registrado aún en esta célula.">
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-            {celula.miembros.map((m) => (
-              <span key={m.id} style={{
-                fontSize: 12, color: "var(--fg)", background: "var(--bg)",
-                border: "1px solid var(--border)", borderRadius: 8, padding: "4px 10px",
-              }}>
-                {m.nombre ?? m.email}
-              </span>
-            ))}
-          </div>
-        </Section>
+        <div>
+          <Section title="Pruebas de concepto" items={poc} ctaLabel="Ver proyecto →" />
+          {poc.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
+          )}
+        </div>
       </div>
       </div>
       <HubFooter />
