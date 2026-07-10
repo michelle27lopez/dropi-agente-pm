@@ -85,7 +85,7 @@ export default function LoginPage() {
             Dropi PM Tools
           </h1>
           <p style={{ fontSize: 13, color: "var(--muted)", marginTop: 4 }}>
-            Supplier Success · Acceso interno
+            Brands Success · Acceso interno
           </p>
         </div>
 

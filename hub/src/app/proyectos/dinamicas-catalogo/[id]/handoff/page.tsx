@@ -158,9 +158,9 @@ export default function HandoffPage() {
   // RACI: assemble from responsible fields
   const raciRows = [
     { frente: "Campaña general", responsable: n1.responsible || "Producto", apoyo: "Growth", entregable: "Handoff final aprobado" },
-    { frente: "Segmentación supplier", responsable: n3.segment_responsible || "Supplier Success", apoyo: "Comercial", entregable: "Lista de suppliers contactados" },
+    { frente: "Segmentación supplier", responsable: n3.segment_responsible || "Brands Success", apoyo: "Comercial", entregable: "Lista de suppliers contactados" },
     { frente: "Convocatoria supplier", responsable: n5.send_responsible || "Comercial", apoyo: "Comunicaciones", entregable: "Mensajes enviados" },
-    { frente: "Gestión de postulaciones", responsable: n6.submission_responsible || "Supplier Success", apoyo: n3.segment_responsible || "Comercial", entregable: "Productos aprobados / rechazados" },
+    { frente: "Gestión de postulaciones", responsable: n6.submission_responsible || "Brands Success", apoyo: n3.segment_responsible || "Comercial", entregable: "Productos aprobados / rechazados" },
     { frente: "Vitrina dropshipper", responsable: n7.publication_responsible || "Producto", apoyo: "Growth", entregable: "Vitrina publicada y link validado" },
     { frente: "Activación dropshippers", responsable: "Growth", apoyo: "Comunicaciones", entregable: "Comunicación enviada" },
     { frente: "Medición y reporte", responsable: "Producto / Data", apoyo: "Comercial", entregable: "Reporte de resultados" },
@@ -236,7 +236,7 @@ export default function HandoffPage() {
           borderRadius: 18, padding: "40px 40px 36px", marginBottom: 32, color: "#fff",
         }}>
           <div style={{ fontSize: 11, fontWeight: 700, opacity: 0.8, marginBottom: 8, letterSpacing: "0.1em", textTransform: "uppercase" as const }}>
-            Dropi · Supplier Success · Handoff de Campaña
+            Dropi · Brands Success · Handoff de Campaña
           </div>
           <h1 style={{ fontSize: 28, fontWeight: 800, margin: "0 0 8px", lineHeight: 1.2 }}>
             {n1.name || campaign.name}
@@ -559,7 +559,7 @@ export default function HandoffPage() {
 
         {/* Footer */}
         <div style={{ textAlign: "center" as const, fontSize: 12, color: "#9ca3af", marginTop: 40 }}>
-          Dropi · Supplier Success · Generado el {today}
+          Dropi · Brands Success · Generado el {today}
         </div>
       </div>
     </>

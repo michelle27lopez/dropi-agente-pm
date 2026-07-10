@@ -72,7 +72,7 @@ export default function WeeklyPage() {
       }}>
         <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
         <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Weekly · Supplier Success</span>
+        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Weekly · Brands Success</span>
 
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
           {SEMANAS.length > 1 && (
@@ -204,7 +204,7 @@ export default function WeeklyPage() {
         </Section>
 
         <p style={{ fontSize: 12, color: "var(--muted)", textAlign: "center", marginTop: 32 }}>
-          Dropi · Supplier Success · {data.week}
+          Dropi · Brands Success · {data.week}
         </p>
       </div>
     </main>

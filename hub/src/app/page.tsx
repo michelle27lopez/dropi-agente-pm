@@ -6,6 +6,15 @@ import { useRouter } from "next/navigation";
 
 const updates = [
   {
+    key: "pm-os",
+    name: "PM OS · Proyectos",
+    description: "Vista de proyectos del agente delivery. Datos locales desde context/projects/.",
+    url: "/proyectos/pm-os",
+    color: "#0EA5E9",
+    tag: "Local · sin BD",
+    icon: "📋",
+  },
+  {
     key: "weekly-pm",
     name: "Weekly · PM",
     description: "Update ejecutivo semanal: oportunidades aprobadas, hipótesis numéricas y accionables clasificados por ruta.",
@@ -17,15 +26,24 @@ const updates = [
   {
     key: "weekly-celula",
     name: "Weekly · Célula",
-    description: "Updates semanales de la célula Supplier Success para el jefe. Registro histórico por semana.",
+    description: "Updates semanales de la célula Brands Success para el jefe. Registro histórico por semana.",
     url: "/updates-celula",
     color: "#6366F1",
-    tag: "Célula · Supplier Success",
+    tag: "Célula · Brands Success",
     icon: "🏠",
   },
 ];
 
 const projects = [
+  {
+    key: "marcas",
+    name: "Marcas · Plan de Ataque",
+    description: "Evidencia y plan de ataque del ecosistema Marcas/Emprendedores: funnel, mapa de madurez y 3 ataques priorizados para mover la aguja hacia 600K.",
+    url: "/proyectos/marcas",
+    color: "#DC2626",
+    tag: "Ecosistema · Discovery",
+    icon: "🎯",
+  },
   {
     key: "dinamicas-catalogo",
     name: "Dinámicas de Catálogo",
@@ -125,7 +143,7 @@ export default function HubPage() {
               Dropi PM Tools
             </h1>
             <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
-              Supplier Success · Herramientas internas
+              Brands Success · Herramientas internas
             </p>
           </div>
         </div>
@@ -284,7 +302,7 @@ export default function HubPage() {
         </div>
 
         <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 48, textAlign: "center" }}>
-          Dropi · Supplier Success · {new Date().getFullYear()}
+          Dropi · Brands Success · {new Date().getFullYear()}
         </p>
       </div>
     </main>

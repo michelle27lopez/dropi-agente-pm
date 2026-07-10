@@ -190,7 +190,7 @@ export default function MetricsHubPage() {
                 Dropi PM Analytics Hub
               </h1>
               <p className="text-[10px] text-slate-400 font-medium">
-                Célula Supplier Success · Centro de Proyectos
+                Célula Brands Success · Centro de Proyectos
               </p>
             </div>
           </div>
@@ -223,7 +223,7 @@ export default function MetricsHubPage() {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
           
-          {/* Card 1: Supplier Success */}
+          {/* Card 1: Brands Success */}
           <div className="bg-slate-950/40 border border-slate-800 hover:border-[#F77F00]/50 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#F77F00]/5 flex flex-col justify-between relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#F77F00]/5 rounded-bl-full -z-10 group-hover:scale-105 transition-transform duration-300" />
             <div>
@@ -236,7 +236,7 @@ export default function MetricsHubPage() {
                 </span>
               </div>
               <h3 className="text-xl font-bold text-white mb-2">
-                Métricas de Supplier Success
+                Métricas de Brands Success
               </h3>
               <p className="text-xs text-slate-400 mb-6 leading-relaxed">
                 Visualización detallada de KPIs de negocio: GMV, volumen de órdenes despachadas, tasas de activación mensuales y TAT de auditorías operativas en CRM.

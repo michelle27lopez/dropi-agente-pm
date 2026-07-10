@@ -1,5 +1,17 @@
 # Reglas operativas del PM Operating System
 
+## Contexto del PM
+
+| Campo | Valor |
+|---|---|
+| **Nombre** | Katerine |
+| **Rol** | Product Manager |
+| **Empresa** | Dropi |
+| **Frente / Equipo** | Brands |
+
+---
+
+
 ## Principios
 
 1. **Transcripts es evidencia inmutable.**

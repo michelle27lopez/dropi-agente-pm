@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Dropi PM Tools",
-  description: "Hub de herramientas de Supplier Success",
+  description: "Hub de herramientas de Brands Success",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
