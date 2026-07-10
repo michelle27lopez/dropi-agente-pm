@@ -103,6 +103,24 @@ export const snapshot: WeeklySnapshot = {
       tipoColor: "#10B981",
       impacto: "Alto",
     },
+    {
+      id: "INS-010",
+      titulo: "TI 10-jul · Reorganización del equipo de José bloquea toda la cola de dev S2",
+      descripcion: "En la reunión del 10-jul, José confirmó que le cambiaron el equipo de desarrollo por una reorganización interna. Esto tiene impacto directo en tres frentes: (1) NEG-001 — el handoff se hizo el lunes 7-jul pero la estimación quedó detenida indefinidamente; (2) COM-001 — detenido por Dropify sin terminar, sin fecha de reactivación posible; (3) Cola S2 — si el equipo está reorganizándose, las estimaciones para NEG-002, COM-002, DESC-001 y CAT-001 tampoco tienen base sólida. Este es el riesgo más alto del S2: no es solo un cuello de botella de capacidad, es una incertidumbre estructural en el equipo de TI.",
+      proyecto: "Cola Dev / TI",
+      tipo: "Riesgo",
+      tipoColor: "#EF4444",
+      impacto: "Alto",
+    },
+    {
+      id: "INS-011",
+      titulo: "COM-001 detenido por Dropify · NEG-001 sin estimación · TTV bug → Soporte",
+      descripcion: "Tres señales concretas del update de TI del 10-jul: (1) COM-001 (Combos Shopify + CAS + ECOM Scanner) queda detenido porque Dropify no está terminado — José no pudo dar fecha tentativa de reactivación. (2) NEG-001 — la estimación de desarrollo queda congelada por la reorganización del equipo. El handoff ya está hecho; el bloqueo es en TI. (3) TTV bug post-registro (111 suppliers en el limbo): José indicó que se reporte a Soporte como bug, no lo asumió como desarrollo directo. Cada uno de estos es un bloqueo independiente que afecta la operación de la célula esta semana.",
+      proyecto: "COM-001 / NEG-001 / TTV-001",
+      tipo: "Riesgo",
+      tipoColor: "#EF4444",
+      impacto: "Alto",
+    },
   ],
   oportunidades: [
     {
