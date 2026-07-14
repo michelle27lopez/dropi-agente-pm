@@ -13,7 +13,9 @@ import requests
 from supabase import create_client
 
 # Cargar variables de entorno del archivo .env.local
-ENV_PATH = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/.env.local"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+HUB_DIR = os.path.dirname(SCRIPT_DIR)
+ENV_PATH = os.path.join(HUB_DIR, ".env.local")
 env_vars = {}
 
 try:

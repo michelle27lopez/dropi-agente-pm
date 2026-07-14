@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     const { mode, csvData, startDate } = body;
 
     // Resolver rutas
-    const projectRoot = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub";
+    const projectRoot = process.cwd();
     const scriptPath = path.join(projectRoot, "supabase", "sync_userpilot.py");
     const scratchDir = path.join(projectRoot, "scratch");
 
