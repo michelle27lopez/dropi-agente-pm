@@ -1,0 +1,11 @@
+﻿Dato faltante,Estado,Por qué importa,Pregunta para Data / BI
+Productos privados / no visibles,No disponible en revisión manual,Saber si el catálogo total visible coincide con los productos del sistema.,"De los 684 productos del supplier, ¿cuántos son públicos visibles, privados, inactivos, agotados o despublicados?"
+Órdenes por producto,No disponible,Identificar productos estrella vs productos sin tracción.,¿Cuáles son los productos con más órdenes históricas y recientes?
+GMV por producto,No disponible,"Medir valor generado, no solo cantidad de órdenes.",¿Cuánto GMV genera cada producto y categoría?
+Productos con 0 órdenes,No disponible,Medir ruido o catálogo dormido.,¿Cuántos productos nunca han vendido?
+Fecha de creación del producto,No disponible,Calcular tiempo a primera orden.,¿Cuándo se creó cada producto y cuándo tuvo su primera orden?
+Stock histórico,No disponible,Detectar quiebres de stock o disponibilidad real.,¿Qué productos han tenido rupturas de stock?
+Cancelaciones por producto,No disponible,Conectar catálogo con cumplimiento.,¿Qué productos concentran cancelaciones?
+Devoluciones / reclamos por producto,No disponible,Entender riesgo de postventa.,¿Qué productos o categorías generan más reclamos?
+Visitas / clics / envíos a cliente,No disponible,Detectar interés sin conversión.,¿Qué productos tienen alto interés pero baja venta?
+Calidad de contenido a escala,Parcial manual,Medir completitud de fichas de todo el catálogo.,"¿Qué % tiene imágenes, descripción, especificaciones y recursos?"

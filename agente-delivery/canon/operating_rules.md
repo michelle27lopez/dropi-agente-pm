@@ -1,5 +1,12 @@
 # Reglas operativas del PM Operating System
 
+## Contexto del PM
+
+- **Nombre:** Michelle
+- **Rol:** Product Designer
+- **Empresa:** Dropi
+- **Frente:** Suppliers
+
 ## Principios
 
 1. **Transcripts es evidencia inmutable.**

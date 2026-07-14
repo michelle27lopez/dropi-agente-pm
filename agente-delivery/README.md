@@ -2,6 +2,9 @@
 
 Sistema operativo de gestión de proyectos para PMs que trabajan con IA conversacional (Claude Code / Claude Desktop). Integra Supabase como base de datos y Claude como agente de análisis, síntesis y seguimiento.
 
+> **Punto de entrada de cada chat nuevo:** leer [`ESTADO.md`](ESTADO.md) primero (dónde vamos,
+> próximo paso, bloqueos) y [`equipo/_index.md`](equipo/_index.md) para saber quién es quién.
+
 ## ¿Qué hace este sistema?
 
 Te permite trabajar de forma estructurada con transcripciones de reuniones, borradores iterativos y contexto oficial aprobado, usando un agente de IA como copiloto de PM.

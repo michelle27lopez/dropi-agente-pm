@@ -17,6 +17,7 @@ create table if not exists projects (
   owner        text,
   team         text,
   summary      text,
+  requires_e2e_format boolean default false,
   created_at   timestamptz default now()
 );
 
@@ -59,7 +60,7 @@ create table if not exists draft_insights (
   draft_id     text unique not null,
   project      text,
   meeting_id   text,
-  draft_type   text check (draft_type in ('Business Context','ASIS','TOBE','Capability','Feature','User Story','Risk','Decision','Summary','Open Question')),
+  draft_type   text check (draft_type in ('Business Context','ASIS','TOBE','Capability','Feature','User Story','Risk','Decision','Summary','Open Question','HU','Epica','E2E Kick-off','E2E Discovery','E2E Definición','E2E Following','E2E Hand-off')),
   title        text,
   content      text,
   status       text check (status in ('Draft','In Review','Approved Candidate','Rejected','Archived')) default 'Draft',
@@ -72,7 +73,7 @@ create table if not exists approved_context (
   id               uuid primary key default gen_random_uuid(),
   context_id       text unique not null,
   project          text,
-  context_type     text check (context_type in ('Business Context','ASIS','TOBE','Capability','Feature','User Story','Risk','Decision','Operating Rule')),
+  context_type     text check (context_type in ('Business Context','ASIS','TOBE','Capability','Feature','User Story','Risk','Decision','Operating Rule','HU','Epica','Definition','Open Question','Summary','E2E Kick-off','E2E Discovery','E2E Definición','E2E Following','E2E Hand-off')),
   title            text,
   approved_content text,
   version          int default 1,
@@ -181,9 +182,11 @@ create table if not exists risks (
   project     text,
   title       text,
   description text,
-  impact      text check (impact in ('High','Medium','Low')),
-  probability text check (probability in ('High','Medium','Low')),
+  impact      integer check (impact between 1 and 5),
+  probability integer check (probability between 1 and 5),
+  risk_zone   text check (risk_zone in ('Verde', 'Amarilla', 'Roja')),
   mitigation  text,
+  owner       text,
   status      text check (status in ('Open','Watching','Mitigated','Closed')) default 'Open',
   created_at  timestamptz default now()
 );

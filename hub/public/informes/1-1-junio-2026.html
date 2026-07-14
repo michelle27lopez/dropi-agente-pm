@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Un mes en el radar — Michelle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5EFE2;
+  --paper2:#FFFCF5;
+  --ink:#2B2A28;
+  --ink-soft:#5B564E;
+  --line:#DAD2BE;
+
+  --yellow:#FFD84D; --yellow-ink:#6B4E00;
+  --pink:#FF9CB3; --pink-ink:#7A1F3D;
+  --teal:#5FD1C7; --teal-ink:#0B5E58;
+  --coral:#FF8464; --coral-ink:#7A2A16;
+  --purple:#8B7BF2; --purple-ink:#2E2470;
+  --green:#8FCB7E; --green-ink:#1F5C1A;
+  --gray:#CFC9BB; --gray-ink:#5B564E;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 1px 1px, rgba(0,0,0,0.035) 1px, transparent 0) 0 0/22px 22px,
+    var(--paper);
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  line-height:1.6;
+}
+.wrap{max-width:960px;margin:0 auto;padding:2.5rem 1.5rem 6rem;}
+
+.hand{font-family:'Caveat',cursive;}
+.mono{font-family:'Space Mono',monospace;}
+
+/* ---------- HEADER / CASE FILE COVER ---------- */
+.cover{
+  background:var(--paper2);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:2.5rem 2rem 2rem;
+  position:relative;
+  box-shadow:0 10px 30px rgba(43,42,40,0.08);
+  transform:rotate(-0.4deg);
+}
+.tape{
+  position:absolute; top:-14px; left:40px; width:110px; height:32px;
+  background:repeating-linear-gradient(45deg, rgba(255,216,77,0.85), rgba(255,216,77,0.85) 6px, rgba(255,196,20,0.85) 6px, rgba(255,196,20,0.85) 12px);
+  transform:rotate(-5deg);
+  opacity:0.9;
+  box-shadow:0 2px 4px rgba(0,0,0,0.1);
+}
+.tape.two{left:auto; right:60px; top:-12px; transform:rotate(6deg); background:repeating-linear-gradient(45deg, rgba(143,203,126,0.85), rgba(143,203,126,0.85) 6px, rgba(111,178,92,0.85) 6px, rgba(111,178,92,0.85) 12px);}
+.eyebrow{
+  font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.14em;
+  text-transform:uppercase; color:var(--ink-soft); margin:0 0 .5rem;
+}
+.cover h1{
+  font-family:'Caveat',cursive; font-weight:700; font-size:56px; line-height:1.05;
+  margin:0 0 .5rem; color:var(--ink);
+}
+.cover .sub{font-size:16px; color:var(--ink-soft); margin:0;}
+.stamp{
+  position:absolute; bottom:1.5rem; right:1.8rem;
+  border:2.5px solid var(--coral); color:var(--coral-ink);
+  font-family:'Space Mono',monospace; font-size:11px; letter-spacing:.08em;
+  padding:6px 12px; border-radius:3px; transform:rotate(-8deg);
+  text-transform:uppercase; opacity:0.85;
+}
+
+/* ---------- SECTION SHELL ---------- */
+section{margin-top:3.5rem;}
+.sec-head{display:flex; align-items:baseline; gap:.6rem; margin-bottom:1.2rem;}
+.sec-num{font-family:'Space Mono',monospace; font-size:13px; color:var(--ink-soft); border:1px solid var(--line); border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; flex:none;}
+.sec-head h2{font-family:'Caveat',cursive; font-weight:700; font-size:34px; margin:0; color:var(--ink);}
+.sec-note{font-size:14px; color:var(--ink-soft); margin:0 0 1.2rem; max-width:640px;}
+
+/* ---------- INDEX CARD ---------- */
+.card{
+  background:var(--paper2); border:1px solid var(--line); border-radius:4px;
+  padding:1.4rem 1.6rem; box-shadow:0 3px 10px rgba(43,42,40,0.06);
+}
+
+/* ---------- STAT GRID ---------- */
+.stat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+.stat{
+  background:var(--paper2); border:1px solid var(--line); border-radius:4px;
+  padding:1rem 1.1rem; text-align:left; position:relative;
+}
+.stat:nth-child(odd){transform:rotate(-0.6deg);}
+.stat:nth-child(even){transform:rotate(0.5deg);}
+.stat .n{font-family:'Space Mono',monospace; font-weight:700; font-size:30px; color:var(--ink); display:block;}
+.stat .l{font-size:12.5px; color:var(--ink-soft); margin-top:2px;}
+.stat .pin{position:absolute; top:-7px; left:50%; transform:translateX(-50%); width:12px; height:12px; border-radius:50%; background:var(--coral); box-shadow:0 2px 3px rgba(0,0,0,0.25);}
+
+/* ---------- STICKY NOTES ---------- */
+.sticky-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:16px;}
+.sticky{
+  padding:1.1rem 1.2rem 1.3rem; border-radius:2px; position:relative;
+  box-shadow:0 6px 14px rgba(43,42,40,0.12);
+  font-size:14.5px; color:var(--ink);
+}
+.sticky:nth-child(1){transform:rotate(-1.4deg);}
+.sticky:nth-child(2){transform:rotate(1.1deg);}
+.sticky:nth-child(3){transform:rotate(0.8deg);}
+.sticky:nth-child(4){transform:rotate(-0.9deg);}
+.sticky b{display:block; font-family:'Caveat',cursive; font-size:20px; margin-bottom:4px; font-weight:700;}
+.sticky.green{background:var(--green); color:var(--green-ink);}
+.sticky.coral{background:var(--coral); color:var(--coral-ink);}
+.sticky.yellow{background:var(--yellow); color:var(--yellow-ink);}
+.sticky.teal{background:var(--teal); color:var(--teal-ink);}
+.sticky.pink{background:var(--pink); color:var(--pink-ink);}
+
+/* ---------- CONTINUITY / QUOTE ---------- */
+.quote-card{
+  background:var(--paper2); border:1px dashed var(--line); border-radius:4px;
+  padding:1.2rem 1.4rem; margin-bottom:1.3rem; transform:rotate(-0.3deg);
+}
+.quote-card .who{font-family:'Space Mono',monospace; font-size:11px; color:var(--ink-soft); margin-bottom:.4rem;}
+.quote-card p{font-family:'Caveat',cursive; font-size:22px; margin:0; color:var(--ink); line-height:1.3;}
+.thread{display:flex; flex-direction:column; gap:10px;}
+.thread-item{display:flex; gap:12px; align-items:flex-start; background:var(--paper2); border:1px solid var(--line); border-radius:4px; padding:.8rem 1rem;}
+.thread-item .icon{font-family:'Space Mono',monospace; font-size:18px; flex:none;}
+.thread-item .txt b{display:block; font-size:14px; margin-bottom:2px;}
+.thread-item .txt span{font-size:13.5px; color:var(--ink-soft);}
+.tag{display:inline-block; font-family:'Space Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; padding:2px 7px; border-radius:3px; margin-left:6px; vertical-align:middle;}
+.tag.progreso{background:var(--yellow); color:var(--yellow-ink);}
+.tag.avance{background:var(--green); color:var(--green-ink);}
+.tag.dato{background:var(--purple); color:#fff;}
+
+/* ---------- BUBBLE BOARD ---------- */
+.board{
+  background:
+    linear-gradient(var(--paper2), var(--paper2)) padding-box,
+    repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(43,42,40,0.035) 28px);
+  border:1px solid var(--line); border-radius:4px; padding:1.5rem;
+  box-shadow:0 3px 10px rgba(43,42,40,0.06);
+}
+.board-legend{display:flex; gap:18px; flex-wrap:wrap; font-size:12.5px; color:var(--ink-soft); margin-bottom:.6rem;}
+.board-legend span{display:inline-flex; align-items:center; gap:6px;}
+.dot{width:10px; height:10px; border-radius:50%; display:inline-block;}
+
+/* ---------- RITUALS TABLE ---------- */
+table.rituals{width:100%; border-collapse:collapse; font-size:13.5px;}
+table.rituals th{
+  font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.04em;
+  color:var(--ink-soft); text-align:left; padding:8px 10px; border-bottom:2px solid var(--ink);
+}
+table.rituals td{padding:10px; border-bottom:1px solid var(--line); vertical-align:top;}
+table.rituals tr:hover td{background:rgba(255,216,77,0.12);}
+.badge{font-family:'Space Mono',monospace; font-size:10.5px; padding:3px 8px; border-radius:10px; white-space:nowrap; display:inline-block;}
+.badge.must{background:var(--green); color:var(--green-ink);}
+.badge.should{background:var(--yellow); color:var(--yellow-ink);}
+.badge.could{background:var(--gray); color:var(--gray-ink);}
+
+/* ---------- OPEN QUESTION ---------- */
+.question-card{
+  background:var(--purple); color:#fff; border-radius:4px; padding:1.6rem 1.8rem;
+  position:relative; box-shadow:0 8px 18px rgba(43,42,40,0.15);
+}
+.question-card .qmark{font-family:'Caveat',cursive; font-size:64px; position:absolute; top:-6px; right:22px; opacity:0.35;}
+.question-card h3{font-family:'Caveat',cursive; font-size:26px; margin:0 0 .6rem;}
+.question-card p{font-size:14.5px; margin:0 0 .5rem; max-width:620px; opacity:0.95;}
+
+/* ---------- RECOMMENDATIONS ---------- */
+.reco{display:flex; flex-direction:column; gap:10px;}
+.reco-item{display:flex; gap:14px; align-items:flex-start; background:var(--paper2); border:1px solid var(--line); border-left:6px solid var(--teal); border-radius:4px; padding:.9rem 1.1rem;}
+.reco-item.should{border-left-color:var(--yellow);}
+.reco-item.could{border-left-color:var(--gray);}
+.reco-item .badge{flex:none; margin-top:2px;}
+.reco-item p{margin:0; font-size:14px;}
+.reco-item p b{display:block; font-size:14.5px; margin-bottom:2px;}
+
+footer{margin-top:4rem; text-align:center; font-family:'Space Mono',monospace; font-size:11px; color:var(--ink-soft);}
+
+/* ---------- ANIMATIONS ---------- */
+section{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+section.visible{opacity:1; transform:translateY(0);}
+.sticky, .stat, .reco-item, .thread-item{transition:transform .25s ease, box-shadow .25s ease;}
+.sticky:hover{transform:translateY(-4px) rotate(0deg) !important; box-shadow:0 10px 20px rgba(43,42,40,0.18);}
+.stat:hover{transform:translateY(-3px) rotate(0deg) !important;}
+.board-bubble{opacity:0; transform:scale(0.4); transform-origin:center; animation:bubbleIn .5s cubic-bezier(.34,1.56,.64,1) forwards;}
+.board-strings{stroke-dasharray:900; stroke-dashoffset:900; animation:drawStrings 1.4s ease forwards; animation-delay:.1s;}
+@keyframes bubbleIn{to{opacity:1; transform:scale(1);}}
+@keyframes drawStrings{to{stroke-dashoffset:0;}}
+.sim-row{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:.55rem .8rem; border:1px solid var(--line); border-radius:4px; background:var(--paper2); font-size:13.5px;}
+.sim-row label{cursor:pointer;}
+.chart-insight{margin-top:.7rem; padding:.55rem .8rem; background:rgba(139,123,242,0.08); border-left:3px solid var(--purple); border-radius:2px; font-size:12.5px; color:var(--ink-soft);}
+.chart-insight b{color:var(--ink);}
+.sim-row input[type="checkbox"]{accent-color:var(--purple); width:16px; height:16px;}
+.sim-row.disabled{opacity:0.6;}
+@media (prefers-reduced-motion: reduce){
+  section, .board-bubble, .board-strings{animation:none !important; transition:none !important; opacity:1 !important; transform:none !important;}
+}
+
+@media(max-width:640px){
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .sticky-grid{grid-template-columns:1fr;}
+  .cover h1{font-size:38px;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="tape"></div>
+    <div class="tape two"></div>
+    <p class="eyebrow">Case file · research report</p>
+    <h1>Un mes en el radar</h1>
+    <p class="sub">Michelle López · Product Designer, célula Supplier Success · 1 jun — 1 jul 2026</p>
+    <div class="stamp">confidencial · 1:1</div>
+  </div>
+
+  <!-- 0. BRIEF -->
+  <section>
+    <div class="sec-head"><span class="sec-num">0</span><h2>Brief de investigación</h2></div>
+    <div class="card">
+      <p style="margin:0 0 .8rem;"><b>Pregunta de investigación:</b> ¿cómo es realmente mi experiencia ejecutando en medio de la carga actual de reuniones — y qué explica la sensación de estar haciendo muchas cosas al tiempo?</p>
+      <p style="margin:0 0 .8rem;"><b>Método:</b> auto-observación cuantitativa — cruce de Google Calendar y Jira del período, más el hilo de continuidad con mi 1:1 anterior del 3 de junio.</p>
+      <p style="margin:0; color:var(--ink-soft); font-size:13.5px;">Nota metodológica: se excluyen del análisis espacios personales (almuerzo, gym) — el foco es tiempo hábil real vs. tiempo institucional.</p>
+    </div>
+  </section>
+
+  <!-- 1. SNAPSHOT -->
+  <section>
+    <div class="sec-head"><span class="sec-num">1</span><h2>Snapshot del mes</h2></div>
+    <p class="sec-note">20 días hábiles reales en el período (23 días calendario menos 3 lunes festivos: Corpus Christi, Sagrado Corazón, San Pedro y San Pablo).</p>
+    <div class="stat-grid">
+      <div class="stat"><span class="pin"></span><span class="n">160h</span><span class="l">horas hábiles disponibles</span></div>
+      <div class="stat"><span class="pin"></span><span class="n">76h</span><span class="l">horas en reuniones</span></div>
+      <div class="stat"><span class="pin"></span><span class="n">47.5%</span><span class="l">del tiempo hábil en reuniones</span></div>
+      <div class="stat"><span class="pin"></span><span class="n">101</span><span class="l">reuniones totales</span></div>
+      <div class="stat"><span class="pin"></span><span class="n">54%</span><span class="l">de las reuniones involucran a Jaime</span></div>
+      <div class="stat"><span class="pin"></span><span class="n">26</span><span class="l">transiciones sin margen (&lt;15 min)</span></div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div style="position:relative; width:100%; height:240px;">
+        <canvas id="chartDaily" role="img" aria-label="Gráfico de barras de horas en reuniones por día hábil, del 1 de junio al 1 de julio de 2026">Horas en reuniones por día: valores entre 2.25 y 5.75 horas a lo largo de junio.</canvas>
+      </div>
+      <p class="chart-insight">La primera semana de junio (1–5 jun) concentra <b>23.75h</b> de reuniones en solo 5 días — casi <b>un tercio</b> del total del mes en la primera semana.</p>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <p style="font-size:12.5px; color:var(--ink-soft); margin:0 0 .6rem;">Panorama histórico — cantidad de reuniones por mes (enero–junio; julio no se incluye por estar incompleto, solo 1 día de data).</p>
+      <div style="position:relative; width:100%; height:220px;">
+        <canvas id="chartMonthly" role="img" aria-label="Gráfico de barras de la cantidad de reuniones por mes, de enero a junio de 2026">Reuniones por mes: enero 74, febrero 65, marzo 61, abril 47, mayo 53, junio 96.</canvas>
+      </div>
+      <p class="chart-insight">Junio no es solo el pico del semestre — es más alto incluso que enero, que ya venía cargado. El salto de mayo a junio (<b>53 — 96</b>) es el quiebre real: coincide con la transición de célula, no es una tendencia gradual.</p>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <p style="font-size:12.5px; color:var(--ink-soft); margin:0 0 .6rem;">¿Quién explica el salto de junio? Comparación mayo vs junio, top organizadores.</p>
+      <div style="position:relative; width:100%; height:220px;">
+        <canvas id="chartOrganizers" role="img" aria-label="Gráfico de barras comparando la cantidad de reuniones organizadas por Jaime, Laura, Diana y Michelle en mayo vs junio de 2026">Reuniones organizadas: Jaime pasó de 4 en mayo a 19 en junio, Laura de 8 a 19, Diana de 4 a 14, y las que organizo yo bajaron de 18 a 13.</canvas>
+      </div>
+      <p class="chart-insight">Jaime (+15), Laura (+11) y Diana (+10) explican <b>36 de las 43 reuniones extra</b> de junio — casi todo el salto viene de tres personas, exactamente las que lideran los rituales de la célula Suppliers a la que me integré. No es que "de repente hay más reuniones en la empresa" — es que empecé a aparecer en la agenda de alguien más.</p>
+    </div>
+    <div class="card" style="margin-top:14px; background:rgba(139,123,242,0.06); border-color:var(--purple);">
+      <p class="eyebrow" style="margin:0 0 .6rem;">Lectura desde productividad</p>
+      <div style="display:flex; flex-direction:column; gap:10px; font-size:13.5px;">
+        <p style="margin:0;"><b>Ratio de propiedad de agenda cayó de ~46% a 13.5%.</b> En enero, casi la mitad de tus reuniones las organizabas tú. En junio, solo 1 de cada 8. Es normal al integrarte a un equipo nuevo — heredas su cadencia antes de poder darle forma — pero es una señal a monitorear en julio: si sigue así de bajo, es agenda reactiva, no propia.</p>
+        <p style="margin:0;"><b>Costo organizacional: 570 horas-persona en junio</b> (duración × asistentes sumado), más del doble de enero (272h). No es solo tu tiempo — es cuánto tiempo de la empresa se mueve alrededor tuyo. Las reuniones de +15 personas (cellboard, cell board) pesan desproporcionadamente aquí.</p>
+        <p style="margin:0;"><b>59% de tus reuniones de junio son recurrentes institucionales</b> — solo 41% son puntuales. La mayoría de tu calendario no se negocia reunión por reunión, se negocia ritual por ritual — por eso el simulador de la sección 9 importa más que cancelar reuniones sueltas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. CONTINUIDAD -->
+  <section>
+    <div class="sec-head"><span class="sec-num">2</span><h2>Hilo de continuidad</h2></div>
+    <p class="sec-note">Qué pasó con lo que hablamos el 3 de junio.</p>
+    <div class="quote-card">
+      <div class="who">Laura, 1:1 · 3 jun</div>
+      <p>"Respetar espacio de focus time y organizar calendario. Entendamos la segmentación de proveedores — levantemos esta iniciativa."</p>
+    </div>
+    <div class="thread">
+      <div class="thread-item">
+        <div class="icon">✓</div>
+        <div class="txt"><b>Focus time y organización de calendario <span class="tag progreso">en progreso</span></b><span>Dato real de este mes: 47.5% del tiempo hábil en reuniones y 26 transiciones sin margen. Todavía no se logra del todo — y está bien nombrarlo así de directo.</span></div>
+      </div>
+      <div class="thread-item">
+        <div class="icon">✓</div>
+        <div class="txt"><b>Segmentación de proveedores <span class="tag avance">en marcha</span></b><span>Sesión con Emerson para entender niveles y cómo llegan/gestionan las postulaciones — en el marco del experimento del panel de desempeño (fase 1: ver panel — fase 2: postularse al siguiente nivel). Ya está en el radar activo.</span></div>
+      </div>
+      <div class="thread-item">
+        <div class="icon">✓</div>
+        <div class="txt"><b>Aprender de la actitud tranquila de Jaime <span class="tag dato">dato curioso</span></b><span>Jaime es también quien más peso tiene en mi calendario este mes (54% de las reuniones). No es una contradicción negativa, solo un dato interesante para tener presente en la conversación.</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px; display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+      <div style="position:relative; width:160px; height:160px; flex:none;">
+        <canvas id="chartJaime" role="img" aria-label="Gráfico de dona mostrando que 55 de 101 reuniones de junio involucran a Jaime como organizador o invitado">55 de 101 reuniones involucran a Jaime.</canvas>
+      </div>
+      <div style="font-size:13.5px; color:var(--ink-soft); max-width:340px;">De 101 reuniones en junio, <b style="color:var(--ink);">55 involucran a Jaime</b> — 19 las organiza él directamente (18h), y aparece invitado en otras 36.
+      <span class="chart-insight" style="display:block; margin-top:.6rem;">Jaime aparece en más de la mitad de mis reuniones — ninguna otra persona se acerca a ese peso en mi calendario.</span></div>
+    </div>
+  </section>
+
+  <!-- 3. LO QUE FUNCIONÓ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">3</span><h2>Lo que funcionó bien</h2></div>
+    <div class="sticky-grid">
+      <div class="sticky green"><b>Dailies que se respetan</b>El daily de Suppliers Success dura exactamente 15 min. Ritual corto que cumple su función sin dispersarse.</div>
+      <div class="sticky teal"><b>Cierre limpio de transición</b>Los 24 tickets heredados de la célula Brands (Transportadoras IA + Vertical Marcas/Perfil Marcas) quedaron cerrados — sin cabos sueltos al entrar a Suppliers.</div>
+      <div class="sticky yellow"><b>Liderazgo cross-funcional</b>Organicé varios kickoffs propios este mes (Negociaciones, Dinámicas de catálogo) — señal de que otros equipos cuentan conmigo para liderar, no solo para asistir.</div>
+      <div class="sticky pink"><b>Alto throughput</b>Pese a la fragmentación, el volumen de tickets cerrados en Jira este mes fue alto — la ejecución no se detuvo.</div>
+    </div>
+  </section>
+
+  <!-- 4. FRICCIONES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">4</span><h2>Fricciones</h2></div>
+    <div class="sticky-grid">
+      <div class="sticky coral"><b>Casi la mitad del mes en reuniones</b>47.5% del tiempo hábil real (160h disponibles, 76h en reuniones).</div>
+      <div class="sticky coral"><b>7 frentes activos a la vez</b>Negociaciones, combos, time to value, catálogo (x2), descuentos, QA — todo dentro de la célula Suppliers, sumado a la carga administrativa recurrente (17 tickets más).</div>
+      <div class="sticky coral"><b>Cero fechas de entrega en Jira</b>Ninguna tarea activa tiene duedate cargado — incluida la de categorías de producto, con deadline real en 3 días.</div>
+      <div class="sticky coral"><b>Transiciones sin respiro</b>26 veces en el mes pasé de una reunión a otra con menos de 15 min de por medio.</div>
+    </div>
+  </section>
+
+  <!-- 5. MAPA DE INICIATIVAS -->
+  <section>
+    <div class="sec-head"><span class="sec-num">5</span><h2>Mapa de iniciativas</h2></div>
+    <p class="sec-note">60 tickets de Jira tocados este mes (excluí 2 épicos viejos sin trabajo real en junio), agrupados por iniciativa real. El tamaño de cada burbuja combina cantidad de tickets <b>y</b> horas estimadas — no es solo volumen, es esfuerzo. A la izquierda, lo que cerré en transición desde Brands. A la derecha, los 7 frentes activos de Suppliers — todos abiertos en menos de un mes — más la carga administrativa recurrente arriba.</p>
+    <div class="board">
+      <div class="board-legend">
+        <span><span class="dot" style="background:var(--gray);"></span>Cerrado en transición (Brands)</span>
+        <span><span class="dot" style="background:var(--purple);"></span>Frente activo (Suppliers)</span>
+        <span><span class="dot" style="background:var(--ink-soft);"></span>Carga administrativa recurrente</span>
+      </div>
+      <svg viewBox="0 0 900 480" style="width:100%; height:auto;" role="img" aria-label="Mapa de burbujas donde el tamaño combina cantidad de tickets y horas estimadas: 2 iniciativas cerradas de la célula Brands, 7 iniciativas activas de la célula Suppliers y 1 burbuja de carga administrativa, conectadas a un nodo central que representa a Michelle" id="bubble-svg">
+        <!-- strings -->
+        <g stroke="#C9BFA0" stroke-width="1.2" opacity="0.7" class="board-strings">
+          <line x1="450" y1="240" x2="120" y2="110"/>
+          <line x1="450" y1="240" x2="115" y2="290"/>
+          <line x1="450" y1="240" x2="450" y2="90"/>
+          <line x1="450" y1="240" x2="700" y2="90"/>
+          <line x1="450" y1="240" x2="800" y2="190"/>
+          <line x1="450" y1="240" x2="790" y2="320"/>
+          <line x1="450" y1="240" x2="680" y2="410"/>
+          <line x1="450" y1="240" x2="540" y2="450"/>
+          <line x1="450" y1="240" x2="400" y2="450"/>
+          <line x1="450" y1="240" x2="270" y2="420"/>
+        </g>
+        <!-- center pin: Michelle -->
+        <g class="board-bubble" style="animation-delay:0ms;">
+          <circle cx="450" cy="240" r="34" fill="#8B7BF2"/>
+          <text x="450" y="245" text-anchor="middle" font-family="Caveat" font-weight="700" font-size="20" fill="#fff">yo</text>
+        </g>
+        <!-- closed bubbles (gray), inside text, size = tickets x hours -->
+        <g class="board-bubble" style="animation-delay:80ms;">
+          <circle cx="120" cy="110" r="36" fill="#CFC9BB"/>
+          <text x="120" y="103" text-anchor="middle" font-family="Inter" font-size="11" fill="#5B564E">Transportadoras</text>
+          <text x="120" y="116" text-anchor="middle" font-family="Inter" font-size="11" fill="#5B564E">IA ✓</text>
+          <text x="120" y="128" text-anchor="middle" font-family="Space Mono" font-size="9" fill="#5B564E">9t · 66h</text>
+        </g>
+        <g class="board-bubble" style="animation-delay:140ms;">
+          <circle cx="115" cy="290" r="41" fill="#CFC9BB"/>
+          <text x="115" y="282" text-anchor="middle" font-family="Inter" font-size="11" fill="#5B564E">Vertical Marcas /</text>
+          <text x="115" y="295" text-anchor="middle" font-family="Inter" font-size="11" fill="#5B564E">Perfil Marcas ✓</text>
+          <text x="115" y="308" text-anchor="middle" font-family="Space Mono" font-size="9" fill="#5B564E">15t · 58.5h</text>
+        </g>
+        <!-- admin bubble (dark gray), inside text -->
+        <g class="board-bubble" style="animation-delay:200ms;">
+          <circle cx="450" cy="90" r="50" fill="#8A8477"/>
+          <text x="450" y="82" text-anchor="middle" font-family="Inter" font-size="11" fill="#fff">Carga admin /</text>
+          <text x="450" y="95" text-anchor="middle" font-family="Inter" font-size="11" fill="#fff">operativo</text>
+          <text x="450" y="108" text-anchor="middle" font-family="Space Mono" font-size="9.5" fill="#fff">17t · 88.5h</text>
+        </g>
+        <!-- active bubbles (purple family), size = tickets x hours, label above -->
+        <g class="board-bubble" style="animation-delay:260ms;">
+          <circle cx="700" cy="90" r="25" fill="#7566D9"/>
+          <text x="700" y="40" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">Combos</text>
+          <text x="700" y="51" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">dropshipper</text>
+          <text x="700" y="62" text-anchor="middle" font-family="Space Mono" font-size="9" fill="#5B564E">5t · 34h</text>
+        </g>
+        <g class="board-bubble" style="animation-delay:320ms;">
+          <circle cx="800" cy="190" r="24.5" fill="#6152C4"/>
+          <text x="800" y="141" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">Negociaciones</text>
+          <text x="800" y="152" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">supplier-dropshipper</text>
+          <text x="800" y="163" text-anchor="middle" font-family="Space Mono" font-size="9" fill="#5B564E">4t · 39h</text>
+        </g>
+        <g class="board-bubble" style="animation-delay:380ms;">
+          <circle cx="790" cy="320" r="16.4" fill="#A79CF5"/>
+          <text x="790" y="288" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">Time to value</text>
+          <text x="790" y="299" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">activación</text>
+          <text x="790" y="310" text-anchor="middle" font-family="Space Mono" font-size="9" fill="#5B564E">3t · 6h</text>
+        </g>
+        <g class="board-bubble" style="animation-delay:440ms;">
+          <circle cx="680" cy="410" r="19.3" fill="#9D8FF5"/>
+          <text x="680" y="378" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">Dinámica de</text>
+          <text x="680" y="389" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">catálogo</text>
+          <text x="680" y="400" text-anchor="middle" font-family="Space Mono" font-size="9" fill="#5B564E">4t · 13h</text>
+        </g>
+        <g class="board-bubble" style="animation-delay:500ms;">
+          <circle cx="540" cy="450" r="15.1" fill="#B3A8F7"/>
+          <text x="540" y="418" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">Categorización</text>
+          <text x="540" y="429" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">de catálogo</text>
+          <text x="540" y="440" text-anchor="middle" font-family="Space Mono" font-size="9" fill="#5B564E">1t · 8h</text>
+        </g>
+        <g class="board-bubble" style="animation-delay:560ms;">
+          <circle cx="400" cy="450" r="15.1" fill="#5A4BB8"/>
+          <text x="400" y="418" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">Descuentos</text>
+          <text x="400" y="429" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">precio antes/ahora</text>
+          <text x="400" y="440" text-anchor="middle" font-family="Space Mono" font-size="9" fill="#5B564E">1t · 8h</text>
+        </g>
+        <g class="board-bubble" style="animation-delay:620ms;">
+          <circle cx="270" cy="420" r="14" fill="#8B7BF2"/>
+          <text x="270" y="389" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">QA caza</text>
+          <text x="270" y="400" text-anchor="middle" font-family="Inter" font-size="10.5" fill="#2B2A28">productos</text>
+          <text x="270" y="411" text-anchor="middle" font-family="Space Mono" font-size="9" fill="#5B564E">1t · 3h</text>
+        </g>
+      </svg>
+    </div>
+    <p style="font-size:13px; color:var(--ink-soft); margin-top:.6rem;">Nota: "Categorización de catálogo" es una de las burbujas más chicas — pero es la de mayor prioridad y deadline más próximo (3 días). Tamaño no siempre es igual a importancia.</p>
+  </section>
+
+  <!-- 6. RITUALES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">6</span><h2>Rituales fijos — ¿de verdad los necesito así?</h2></div>
+    <p class="sec-note">Comparativo de las reuniones recurrentes de la célula. La columna de la derecha no es un veredicto — son preguntas para conversar.</p>
+    <div class="card" style="overflow-x:auto;">
+      <table class="rituals">
+        <tr><th>Ritual</th><th>Cadencia</th><th>Duración/sem.</th><th>Organiza</th><th>Para conversar</th></tr>
+        <tr><td>Daily Suppliers Success</td><td>Diaria (L–V)</td><td>~1.25h</td><td>Laura</td><td><span class="badge must">must</span></td></tr>
+        <tr><td>1:1 Michelle / Laura</td><td>Mensual</td><td>0.5h/mes</td><td>Laura</td><td><span class="badge must">must</span></td></tr>
+        <tr><td>Cellboard suppliers</td><td>Semanal (jue)</td><td>1h</td><td>Jaime</td><td><span class="badge should">¿ajustar prep?</span> — +15 personas, y en 2 de 4 semanas de junio solo hubo 3 días hábiles para prepararla por festivo</td></tr>
+        <tr><td>Weekly suppliers</td><td>Semanal (mié)</td><td>1h</td><td>Jaime</td><td><span class="badge should">should</span></td></tr>
+        <tr><td>Alineación registro de suppliers</td><td>Semanal (mar)</td><td>1h</td><td>Jaime</td><td><span class="badge should">should</span> — específica del proyecto de registro de proveedores</td></tr>
+        <tr><td>Planning supplier</td><td>Semanal</td><td>1h</td><td>Jaime</td><td><span class="badge should">should</span> — planning general del equipo, tema distinto al registro</td></tr>
+        <tr><td>Design lab</td><td>Semanal</td><td>0.5h</td><td>Diana</td><td><span class="badge must">must</span> — corta y útil</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- 7. LUNES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">7</span><h2>El caso de los lunes</h2></div>
+    <div class="question-card">
+      <span class="qmark">?</span>
+      <h3>¿El día que más necesita protección es justo el que menos la tiene?</h3>
+      <p>Los lunes 8, 15 y 29 de junio no tuvieron reuniones — pero fueron festivos, así que no cuentan. Los dos lunes reales de cierre de sprint del mes (1 y 22 de junio) tuvieron 5.75h y 4.25h de reuniones respectivamente: entre el 53% y el 72% de una jornada de 8h ya comprometida en reuniones, justo el día en que se supone que cierro todo.</p>
+      <p style="opacity:0.85; font-size:13px; margin-top:.8rem;">No es una recomendación cerrada — es la pregunta que vale la pena llevar: ¿el día de cierre de sprint debería tener otro tratamiento en la agenda?</p>
+    </div>
+    <div class="stat-grid" style="margin-top:1rem; grid-template-columns:repeat(2,1fr);">
+      <div class="stat"><span class="pin"></span><span class="n">Lun</span><span class="l">día individual más pesado de junio — 1 jun, 5.75h</span></div>
+      <div class="stat"><span class="pin"></span><span class="n">Jue</span><span class="l">día más liviano en promedio — 2.42h/sem</span></div>
+    </div>
+    <p style="font-size:13px; color:var(--ink-soft); margin:.6rem 0 1rem;">Con más data (marzo–junio, 78 días hábiles sin festivos) el patrón real es distinto al de solo junio: <b style="color:var(--ink);">jueves es el día más liviano en promedio</b>, no miércoles. Y aunque lunes sigue siendo el más cargado en promedio, la diferencia entre días es chica — junio fue puntualmente más pesado que el promedio histórico, no necesariamente "el patrón".</p>
+    <div class="card">
+      <div style="position:relative; width:100%; height:220px;">
+        <canvas id="chartWeekday" role="img" aria-label="Gráfico de barras del promedio de horas en reuniones por día de la semana entre marzo y junio de 2026">Promedio de horas en reuniones por día de semana: lunes 2.92h, martes 2.81h, miércoles 2.74h, jueves 2.42h, viernes 2.80h.</canvas>
+      </div>
+      <p class="chart-insight">La diferencia entre el día más pesado (lunes) y el más liviano (jueves) es de solo <b>0.5h</b> en promedio — el problema real no es qué día trabajo, es cuánto en total.</p>
+    </div>
+  </section>
+
+  <!-- 8. RECOMENDACIONES -->
+  <section>
+    <div class="sec-head"><span class="sec-num">8</span><h2>Recomendaciones</h2></div>
+    <div class="reco">
+      <div class="reco-item must"><span class="badge must">must</span><p><b>Fechas de entrega en Jira</b>Empezar por las tareas críticas (categorización de catálogo, combos) — sin duedate no hay forma de priorizar con datos.</p></div>
+      <div class="reco-item must"><span class="badge must">must</span><p><b>Proteger el día de cierre de sprint</b>Explorar con Laura si el día de cierre necesita un tratamiento distinto en la agenda del equipo.</p></div>
+      <div class="reco-item should"><span class="badge should">should</span><p><b>Revisar prep time del cellboard</b>Sobre todo en semanas con festivo — 3 días de prep para una sesión de +15 personas es ajustado.</p></div>
+      <div class="reco-item should"><span class="badge should">should</span><p><b>Buffers de 15 min entre reuniones</b>Esto no es solo comodidad. Sin margen entre una reunión y otra pasan dos cosas: no alcanzo a cerrar mentalmente el tema anterior antes de entrar al siguiente (ahí está la desconcentración que siento), y tampoco tengo los 2-3 minutos que necesito para mirar de qué trata la próxima reunión y llegar con contexto. Es difícil de resolver del todo porque las reuniones vienen de áreas distintas y cada quien agenda en el primer espacio libre que encuentra — no depende solo de mí. Por eso lo llevo como conversación de equipo, no como algo que puedo arreglar organizando mejor mi calendario.</p></div>
+      <div class="reco-item could"><span class="badge could">could</span><p><b>Probar jueves como día ancla de foco</b>Es el día que sale más liviano en promedio viendo marzo–junio (2.42h). No es una regla, es una hipótesis para probar: si protejo ese día a propósito, ¿cambia algo en cómo avanzo la semana?</p></div>
+    </div>
+  </section>
+
+  <!-- 9. SIMULADOR -->
+  <section>
+    <div class="sec-head"><span class="sec-num">9</span><h2>Simulador de rituales</h2></div>
+    <p class="sec-note">Para jugar en vivo con Laura: desmarca rituales y mira cuántas horas por semana se liberan. Los "must" no se pueden desmarcar — son innegociables.</p>
+    <div class="card">
+      <div id="sim-list" style="display:flex; flex-direction:column; gap:8px; margin-bottom:1rem;"></div>
+      <div style="border-top:1px solid var(--line); padding-top:.9rem; display:flex; justify-content:space-between; align-items:baseline;">
+        <span style="font-size:13.5px; color:var(--ink-soft);">horas/semana en rituales seleccionados</span>
+        <span id="sim-total" class="mono" style="font-size:22px; font-weight:700;">6.25h</span>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:4px;">
+        <span style="font-size:13.5px; color:var(--ink-soft);">% de una semana laboral de 40h</span>
+        <span id="sim-pct" class="mono" style="font-size:16px; font-weight:700; color:var(--ink-soft);">15.6%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. QUIZ -->
+  <section>
+    <div class="sec-head"><span class="sec-num">10</span><h2>¿Qué tanto conoces mi mes?</h2></div>
+    <p class="sec-note">Antes de leer las conclusiones, prueba a adivinar. Para jugar con Laura en el 1:1.</p>
+    <div class="card" id="quiz-card" style="min-height:230px;">
+      <div id="quiz-score" style="font-family:'Space Mono',monospace; font-size:12px; color:var(--ink-soft); text-align:right; margin-bottom:.6rem;">0 / 0</div>
+      <div id="quiz-q" class="hand" style="font-size:24px; font-weight:700; margin-bottom:1rem;"></div>
+      <div id="quiz-opts" style="display:flex; flex-direction:column; gap:8px;"></div>
+      <div id="quiz-feedback" style="margin-top:.8rem; font-size:13.5px; min-height:20px;"></div>
+      <button id="quiz-next" style="display:none; margin-top:1rem; font-family:'Space Mono',monospace; font-size:12px; background:var(--ink); color:#fff; border:none; border-radius:20px; padding:8px 18px; cursor:pointer;">siguiente →</button>
+    </div>
+  </section>
+
+  <footer>fuente: google calendar + jira · elaborado por mí, sobre mí · jul 2026</footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+/* ---- scroll reveal ---- */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:0.12});
+document.querySelectorAll('section').forEach(s => io.observe(s));
+
+/* ---- count-up for stat numbers ---- */
+function animateStat(el){
+  const raw = el.textContent.trim();
+  const m = raw.match(/^([\d.]+)(.*)$/);
+  if(!m) return; // non-numeric (Lun, Jue, etc) - skip
+  const target = parseFloat(m[1]);
+  const suffix = m[2];
+  const decimals = m[1].includes('.') ? 1 : 0;
+  let start = null; const dur = 900;
+  function step(ts){
+    if(!start) start = ts;
+    const p = Math.min((ts-start)/dur, 1);
+    const val = target * (1 - Math.pow(1-p,3));
+    el.textContent = val.toFixed(decimals) + suffix;
+    if(p < 1) requestAnimationFrame(step); else el.textContent = target.toFixed(decimals) + suffix;
+  }
+  requestAnimationFrame(step);
+}
+const statIO = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){ animateStat(e.target); statIO.unobserve(e.target); }
+  });
+}, {threshold:0.5});
+document.querySelectorAll('.stat .n').forEach(el => statIO.observe(el));
+
+/* ---- chart chrome ---- */
+Chart.defaults.font.family = 'Inter, sans-serif';
+Chart.defaults.color = '#5B564E';
+
+new Chart(document.getElementById('chartDaily'), {
+  type:'bar',
+  data:{
+    labels:['1 jun','2 jun','3 jun','4 jun','5 jun','9 jun','10 jun','11 jun','12 jun','16 jun','17 jun','18 jun','19 jun','22 jun','23 jun','24 jun','25 jun','26 jun','30 jun','1 jul'],
+    datasets:[{data:[5.75,3.75,4.0,5.25,5.0,5.25,3.25,3.75,3.0,4.75,2.25,3.75,3.0,4.25,2.75,3.75,2.25,4.75,2.75,2.75], backgroundColor:'#8B7BF2', borderRadius:4, maxBarThickness:22}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>c.parsed.y+'h en reuniones'}}},
+    scales:{
+      x:{grid:{display:false}, ticks:{maxRotation:45, font:{size:10}}},
+      y:{title:{display:true, text:'Horas', font:{size:11}}, grid:{color:'#E4DDC9'}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartMonthly'), {
+  type:'bar',
+  data:{
+    labels:['Enero','Febrero','Marzo','Abril','Mayo','Junio'],
+    datasets:[{data:[74,65,61,47,53,96], backgroundColor:['#B3A8F7','#B3A8F7','#B3A8F7','#B3A8F7','#B3A8F7','#6152C4'], borderRadius:6, maxBarThickness:50}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>c.parsed.y+' reuniones'}}},
+    scales:{
+      x:{grid:{display:false}},
+      y:{title:{display:true, text:'Reuniones', font:{size:11}}, grid:{color:'#E4DDC9'}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartOrganizers'), {
+  type:'bar',
+  data:{
+    labels:['Jaime','Laura','Diana','Michelle (yo)'],
+    datasets:[
+      {label:'Mayo', data:[4,8,4,18], backgroundColor:'#DAD2BE', borderRadius:4, maxBarThickness:28},
+      {label:'Junio', data:[19,19,14,13], backgroundColor:'#6152C4', borderRadius:4, maxBarThickness:28}
+    ]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:true, position:'top', labels:{boxWidth:10, font:{size:11}}}, tooltip:{callbacks:{label:(c)=>c.dataset.label+': '+c.parsed.y+' reuniones'}}},
+    scales:{
+      x:{grid:{display:false}},
+      y:{title:{display:true, text:'Reuniones organizadas', font:{size:11}}, grid:{color:'#E4DDC9'}}
+    }
+  }
+});
+
+new Chart(document.getElementById('chartWeekday'), {
+  type:'bar',
+  data:{
+    labels:['Lun','Mar','Mié','Jue','Vie'],
+    datasets:[{data:[2.92,2.81,2.74,2.42,2.80], backgroundColor:['#8B7BF2','#8B7BF2','#8B7BF2','#5FD1C7','#8B7BF2'], borderRadius:6, maxBarThickness:40}]
+  },
+  options:{
+    indexAxis:'y', responsive:true, maintainAspectRatio:false,
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>c.parsed.x+'h promedio'}}},
+    scales:{ x:{grid:{color:'#E4DDC9'}, title:{display:true, text:'Horas promedio/día', font:{size:11}}}, y:{grid:{display:false}} }
+  }
+});
+
+new Chart(document.getElementById('chartJaime'), {
+  type:'doughnut',
+  data:{
+    labels:['Con Jaime','Otras'],
+    datasets:[{data:[55,46], backgroundColor:['#8B7BF2','#DAD2BE'], borderColor:'#FFFCF5', borderWidth:3}]
+  },
+  options:{
+    responsive:true, maintainAspectRatio:false, cutout:'68%',
+    plugins:{legend:{display:false}, tooltip:{callbacks:{label:(c)=>c.label+': '+c.parsed+' reuniones'}}}
+  }
+});
+
+/* ---- simulador de rituales ---- */
+const RITUALS = [
+  {name:'Daily Suppliers Success', hours:1.25, must:true},
+  {name:'1:1 Michelle / Laura (mensual)', hours:0.12, must:true},
+  {name:'Cellboard suppliers', hours:1, must:false},
+  {name:'Weekly suppliers', hours:1, must:false},
+  {name:'Alineación registro de suppliers', hours:1, must:false},
+  {name:'Planning supplier', hours:1, must:false},
+  {name:'Design lab', hours:0.5, must:true}
+];
+const simList = document.getElementById('sim-list');
+RITUALS.forEach((r, idx) => {
+  const row = document.createElement('div');
+  row.className = 'sim-row' + (r.must ? ' disabled' : '');
+  row.innerHTML = `<label style="display:flex; align-items:center; gap:10px;"><input type="checkbox" data-idx="${idx}" ${r.must ? 'checked disabled' : 'checked'}> ${r.name}${r.must ? ' <span class="badge must" style="margin-left:4px;">must</span>' : ''}</label><span class="mono">${r.hours}h/sem</span>`;
+  simList.appendChild(row);
+});
+function updateSim(){
+  let total = 0;
+  simList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    if(cb.checked) total += RITUALS[cb.dataset.idx].hours;
+  });
+  document.getElementById('sim-total').textContent = total.toFixed(2) + 'h';
+  document.getElementById('sim-pct').textContent = (total/40*100).toFixed(1) + '%';
+}
+simList.addEventListener('change', updateSim);
+updateSim();
+</script>
+
+<script>
+const QUIZ = [
+  {q:"¿Qué % de mis reuniones de junio tuvieron a Jaime como organizador o invitado?", opts:["25%","54%","80%"], correct:1, note:"55 de 101 reuniones — la persona con más peso en mi calendario después de mí."},
+  {q:"¿Cuántas iniciativas de producto distintas activé dentro de la célula Suppliers este mes?", opts:["5","7","10"], correct:1, note:"7 frentes abiertos, sin contar la carga administrativa recurrente (17 tickets más)."},
+  {q:"¿Cuál fue el día individual con más horas de reuniones en junio (sin contar festivos)?", opts:["Martes 9 de junio","Lunes 1 de junio","Viernes 26 de junio"], correct:1, note:"Lunes 1 de junio, con 5.75h — justo un día de cierre de sprint."},
+  {q:"Viendo marzo–junio, ¿qué día de la semana tiende a ser el más liviano en reuniones?", opts:["Lunes","Jueves","Viernes"], correct:1, note:"Jueves, con 2.42h promedio — candidato a día ancla de foco."},
+  {q:"¿Cuántas veces en el mes pasé de una reunión a otra con menos de 15 min de por medio?", opts:["10","18","26"], correct:2, note:"26 transiciones sin margen — casi 1.3 veces por día hábil."},
+  {q:"¿Qué % de mi tiempo hábil real (20 días, sin festivos) se fue en reuniones?", opts:["32%","47.5%","60%"], correct:1, note:"47.5% — casi la mitad del mes."}
+];
+let qi = 0, score = 0, attempted = 0;
+const colors = ['#FFD84D','#FF9CB3','#5FD1C7','#FF8464','#8FCB7E'];
+function renderQ(){
+  const item = QUIZ[qi];
+  document.getElementById('quiz-q').textContent = item.q;
+  document.getElementById('quiz-feedback').textContent = '';
+  document.getElementById('quiz-next').style.display = 'none';
+  document.getElementById('quiz-score').textContent = score + ' / ' + attempted;
+  const optsDiv = document.getElementById('quiz-opts');
+  optsDiv.innerHTML = '';
+  item.opts.forEach((opt, idx) => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.style.cssText = 'text-align:left; padding:10px 14px; border-radius:4px; border:1px solid var(--line); background:var(--paper2); font-family:Inter,sans-serif; font-size:14px; cursor:pointer;';
+    btn.onclick = () => {
+      attempted++;
+      const correct = idx === item.correct;
+      if(correct) score++;
+      Array.from(optsDiv.children).forEach((b,i) => {
+        b.style.pointerEvents = 'none';
+        if(i === item.correct){ b.style.background = colors[2]; b.style.borderColor = colors[2]; }
+        else if(i === idx){ b.style.background = colors[3]; b.style.borderColor = colors[3]; }
+      });
+      document.getElementById('quiz-feedback').textContent = (correct ? '¡Sí! ' : 'No — ') + item.note;
+      document.getElementById('quiz-score').textContent = score + ' / ' + attempted;
+      document.getElementById('quiz-next').style.display = (qi < QUIZ.length - 1) ? 'inline-block' : 'none';
+      if(qi === QUIZ.length - 1){
+        document.getElementById('quiz-feedback').textContent += '  ·  fin del quiz.';
+      }
+    };
+    optsDiv.appendChild(btn);
+  });
+}
+document.getElementById('quiz-next').onclick = () => { qi++; renderQ(); };
+renderQ();
+</script>
+
+</body>
+</html>

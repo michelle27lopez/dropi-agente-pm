@@ -1,0 +1,20 @@
+Lectura PM individual · ADMA,Unnamed: 1,Unnamed: 2,Unnamed: 3
+,,,
+Estado,Pendiente de completar con detalle de productos,,
+Tipo preliminar por catálogo visible,Generalista multcategoría,,
+Categorías visibles iniciales,"Hogar, Tecnología, Belleza, Bienestar, Vehículos, Cocina, Deportes, Juguetería, Herramientas, Bebé, Moda, Otro",,
+Observación metodológica,La lectura PM final debe hacerse después de la muestra de detalle 1 a 1.,,
+Comparación posterior,Comparar contra GOLDBOX y TIENDA OSHOP cuando se complete detalle.,,
+Pregunta principal para BI,"De los 3086 productos, ¿cuántos han tenido al menos una orden y qué categorías concentran GMV/órdenes?",,
+,,,
+Bloque,Disponible,Estado,Comentario
+Perfil supplier,Sí,Capturado,Datos del perfil principal
+Catálogo visible,Sí,Muestra inicial,116 productos visibles registrados desde pantallazos
+Detalle producto,No,Pendiente,Esperando pantallazos de detalle
+Data faltante,Sí,Documentada,Datos que requieren BI/backend
+Lectura PM final,No,Pendiente,Se genera tras muestra de detalle
+,,,
+Ajuste metodológico,Categoría interpretada por nombre,Se agregó columna L en 01_Catalogo_visible,La interpretación se basa solo en el nombre del producto; categorías con confianza Media/Baja requieren validación.
+Data faltante,Categoría real del sistema,Pendiente BI/backend,Sirve para contrastar contra la categoría interpretada y detectar problemas de clasificación.
+Data faltante,Subcategoría real,Pendiente BI/backend,Necesaria para análisis fino por vertical.
+Data faltante,Ventas por categoría,Pendiente BI/backend,Necesaria para saber qué categorías mueven órdenes/GMV.

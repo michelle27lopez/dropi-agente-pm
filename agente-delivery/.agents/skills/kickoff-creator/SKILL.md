@@ -7,14 +7,19 @@ description: Use this skill when the user asks to create a kickoff document for 
 
 ## Objetivo
 
-Generar el documento de kickoff de una épica o proyecto en Dropi, extrayendo información de documentos existentes antes de preguntar.
+Generar el documento de kickoff de una épica o proyecto en Dropi, extrayendo información de documentos existentes antes de preguntar, siguiendo el formato oficial de la compañía.
 
 ## Cuándo usarlo
 
 - "crea un documento de kickoff para [épica / proyecto]"
 - "prepara el kickoff de [iniciativa]"
+- Cuando el usuario necesita estructurar la sesión de arranque de una iniciativa
 
 ## Instrucciones
+
+1. Verifica en la tabla `projects` si el proyecto tiene `requires_e2e_format = true`.
+2. Si `requires_e2e_format` es true, lee `canon/e2e_methodology.md` y genera el documento de Kick-off siguiendo estrictamente esa plantilla (priorizando la extracción de información existente y minimizando preguntas).
+3. Si `requires_e2e_format` es false, lee `canon/dropi_methodology.md` y sigue el flujo tradicional que se describe a continuación:
 
 ### Paso 1 — Buscar información existente (antes de preguntar nada)
 
