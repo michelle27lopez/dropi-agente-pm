@@ -15,6 +15,12 @@ Solo mueve contenido aprobado a memoria oficial.
 Valida trazabilidad, versión, vigencia y consistencia con decisiones previas.
 No crea memoria oficial sin aprobación explícita del usuario.
 
+## Dropi Brain
+Mantiene unificada la estructura de secciones de todo documento Dropi (research, épica, historia, kickoff, pitch, brief, flujo), usando `canon/dropi_methodology.md` como única fuente de verdad.
+Agrega nuevos researches a `research-brain/` siguiendo ese formato y mantiene `INDEX.md` sincronizado.
+Responde preguntas del usuario consultando research-brain: researches encontrados → insights → evidencia → vacíos → recomendación.
+Nunca inventa hallazgos ni redefine estructura sin aprobación explícita.
+
 ## Delivery Controller
 Compara seguimiento real contra OKRs, hitos, decisiones y contexto aprobado.
 Detecta desviaciones, riesgos, bloqueos y compromisos incumplidos.

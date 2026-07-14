@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dropi × WhatsApp — POC</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --wa-dark:   #111b21;
+  --wa-panel:  #202c33;
+  --wa-mid:    #2a3942;
+  --wa-green:  #00a884;
+  --wa-bubble-in:  #202c33;
+  --wa-bubble-out: #005c4b;
+  --wa-text:   #e9edef;
+  --wa-muted:  #8696a0;
+  --wa-border: rgba(134,150,160,0.15);
+  --wa-bg: #0b141a;
+  --wa-tick: #53bdeb;
+}
+html, body { height: 100%; }
+body {
+  font-family: -apple-system, 'Segoe UI', sans-serif;
+  background: #090e13;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; padding: 20px;
+}
+.wa-shell {
+  display: flex;
+  width: 1080px;
+  height: 720px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+}
+
+/* ── Left panel ── */
+.wa-left {
+  width: 380px; flex-shrink: 0;
+  background: var(--wa-panel);
+  display: flex; flex-direction: column;
+  border-right: 1px solid var(--wa-border);
+}
+.wa-left-head {
+  height: 59px; background: var(--wa-mid);
+  display: flex; align-items: center;
+  padding: 0 16px; gap: 10px; flex-shrink: 0;
+}
+.wa-av {
+  width: 38px; height: 38px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.wa-search {
+  margin: 8px 12px; flex-shrink: 0;
+  background: var(--wa-dark); border-radius: 8px;
+  padding: 8px 14px; display: flex; align-items: center; gap: 8px;
+}
+.wa-search input {
+  background: none; border: none; outline: none;
+  color: var(--wa-text); font-size: 13px; flex: 1;
+  font-family: inherit;
+}
+.wa-search input::placeholder { color: var(--wa-muted); }
+.wa-convlist { flex: 1; overflow-y: auto; }
+.wa-conv {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 16px; cursor: pointer;
+  border-bottom: 1px solid var(--wa-border);
+  transition: background 0.15s;
+}
+.wa-conv:hover { background: var(--wa-mid); }
+.wa-conv.active { background: var(--wa-mid); }
+.wa-conv-info { flex: 1; min-width: 0; }
+.wa-conv-name { font-size: 13.5px; font-weight: 600; color: var(--wa-text); margin-bottom: 2px; }
+.wa-conv-preview { font-size: 12px; color: var(--wa-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wa-conv-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.wa-conv-time { font-size: 11px; color: var(--wa-muted); }
+.wa-conv-badge {
+  min-width: 18px; height: 18px; border-radius: 9px;
+  background: var(--wa-green); color: #fff;
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 4px;
+}
+
+/* ── Right / Chat ── */
+.wa-right { flex: 1; display: flex; flex-direction: column; background: var(--wa-bg); position: relative; }
+
+/* chat bg pattern */
+.wa-right::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23182229' fill-opacity='0.5'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.wa-chat-head {
+  height: 59px; background: var(--wa-mid);
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 16px; flex-shrink: 0; position: relative; z-index: 2;
+}
+.wa-chat-name { font-size: 14px; font-weight: 600; color: var(--wa-text); }
+.wa-chat-status { font-size: 11.5px; color: var(--wa-green); }
+.wa-chat-icons { margin-left: auto; display: flex; gap: 20px; }
+.wa-chat-icons i { font-size: 20px; color: var(--wa-muted); cursor: pointer; }
+
+.wa-msgs {
+  flex: 1; overflow-y: auto; padding: 16px 8%;
+  display: flex; flex-direction: column; gap: 3px;
+  position: relative; z-index: 1;
+}
+.wa-msgs::-webkit-scrollbar { width: 5px; }
+.wa-msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+/* Date separator */
+.date-sep {
+  text-align: center; margin: 10px 0;
+}
+.date-sep span {
+  background: var(--wa-mid); color: var(--wa-muted);
+  font-size: 11.5px; padding: 4px 12px; border-radius: 8px;
+}
+
+/* Message bubbles */
+.wa-msg { display: flex; flex-direction: column; max-width: 72%; }
+.wa-msg.in { align-self: flex-start; margin-bottom: 2px; }
+.wa-msg.out { align-self: flex-end; margin-bottom: 2px; }
+.wa-bubble {
+  padding: 8px 12px 6px;
+  border-radius: 8px;
+  font-size: 13.5px; line-height: 1.6;
+  position: relative; word-wrap: break-word;
+}
+.wa-msg.in  .wa-bubble { background: var(--wa-bubble-in); color: var(--wa-text); border-top-left-radius: 0; }
+.wa-msg.out .wa-bubble { background: var(--wa-bubble-out); color: var(--wa-text); border-top-right-radius: 0; }
+.wa-meta {
+  display: flex; align-items: center; gap: 4px;
+  justify-content: flex-end; margin-top: 3px;
+}
+.wa-meta-time { font-size: 10.5px; color: var(--wa-muted); }
+.wa-tick i { font-size: 14px; color: var(--wa-tick); }
+
+/* Typing */
+.wa-typing .wa-bubble { padding: 12px 14px; }
+.wa-typing-dots { display: flex; gap: 4px; align-items: center; }
+.tdot { width: 8px; height: 8px; border-radius: 50%; background: var(--wa-muted); animation: tb 1.2s infinite; }
+.tdot:nth-child(2){ animation-delay:.2s }
+.tdot:nth-child(3){ animation-delay:.4s }
+@keyframes tb { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-5px);opacity:1} }
+
+/* Sender name in group */
+.wa-sender-name { font-size: 12px; font-weight: 700; color: var(--wa-green); margin-bottom: 3px; padding-left: 2px; }
+
+/* ── Dropi Cards inside WA ── */
+.wa-card {
+  background: #1e2d35; border-radius: 8px; overflow: hidden;
+  margin-top: 4px; max-width: 320px; border: 1px solid rgba(0,168,132,0.2);
+}
+.wa-card-img {
+  height: 80px; display: flex; align-items: center; justify-content: center;
+  font-size: 36px;
+}
+.wa-card-body { padding: 10px 12px; }
+.wa-card-title { font-size: 13px; font-weight: 700; color: var(--wa-text); margin-bottom: 3px; }
+.wa-card-sub { font-size: 11.5px; color: var(--wa-muted); margin-bottom: 8px; line-height: 1.5; }
+.wa-card-link {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--wa-green); color: #fff;
+  padding: 7px 12px; border-radius: 6px;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  justify-content: center; border: none; width: 100%;
+  transition: opacity 0.15s;
+}
+.wa-card-link:hover { opacity: 0.85; }
+.wa-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 2px 0; }
+
+/* Route inside WA */
+.wa-route {
+  background: #1e2d35; border-radius: 8px; overflow: hidden;
+  margin-top: 4px; width: 320px; border: 1px solid rgba(0,168,132,0.2);
+}
+.wa-route-head {
+  background: var(--wa-green); padding: 10px 14px;
+  font-size: 13px; font-weight: 700; color: #fff;
+  display: flex; align-items: center; gap: 8px;
+}
+.wa-route-step {
+  padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.wa-route-step:last-child { border-bottom: none; }
+.wa-step-n {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(0,168,132,0.2); color: var(--wa-green);
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.wa-step-title { font-size: 12.5px; font-weight: 700; color: var(--wa-text); margin-bottom: 2px; }
+.wa-step-sub { font-size: 11px; color: var(--wa-muted); line-height: 1.5; }
+.wa-step-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 700; color: var(--wa-green);
+  background: rgba(0,168,132,0.12); padding: 3px 9px;
+  border-radius: 12px; margin-top: 5px; cursor: pointer; border: none;
+}
+
+/* Stats card */
+.wa-stats {
+  background: #1e2d35; border-radius: 8px; overflow: hidden;
+  margin-top: 4px; width: 320px; border: 1px solid rgba(0,168,132,0.2);
+}
+.wa-stats-head {
+  background: #1a1a2e; padding: 10px 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+.wa-stats-head-text { font-size: 13px; font-weight: 700; color: #fff; }
+.wa-stats-head-sub { font-size: 11px; color: rgba(255,255,255,0.5); }
+.wa-stat-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.06); }
+.wa-stat-cell { background: #1e2d35; padding: 10px 8px; text-align: center; }
+.wa-stat-num { font-size: 19px; font-weight: 800; color: var(--wa-text); line-height: 1; }
+.wa-stat-num em { font-size: 12px; font-style: normal; color: var(--wa-green); }
+.wa-stat-lbl { font-size: 10px; color: var(--wa-muted); margin-top: 2px; line-height: 1.3; }
+.wa-bar-wrap { padding: 10px 14px; }
+.wa-bar-row { margin-bottom: 8px; }
+.wa-bar-labels { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--wa-muted); margin-bottom: 4px; }
+.wa-bar-bg { background: rgba(255,255,255,0.08); border-radius: 3px; height: 5px; overflow: hidden; }
+.wa-bar-fill { height: 100%; border-radius: 3px; background: var(--wa-green); transition: width 1.4s ease; }
+.wa-quote {
+  margin: 0 14px 12px; padding: 9px 12px;
+  background: rgba(0,168,132,0.08); border-left: 2px solid var(--wa-green);
+  border-radius: 0 6px 6px 0;
+}
+.wa-quote p { font-size: 11.5px; color: var(--wa-text); line-height: 1.5; font-style: italic; }
+.wa-quote small { font-size: 10.5px; color: var(--wa-muted); margin-top: 3px; display: block; }
+
+/* WA buttons row */
+.wa-btn-row {
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.wa-btn {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 11px 14px; cursor: pointer; font-size: 13px;
+  font-weight: 600; color: var(--wa-green);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.15s;
+}
+.wa-btn:last-child { border-bottom: none; }
+.wa-btn:hover { background: rgba(0,168,132,0.08); }
+.wa-btn i { font-size: 16px; }
+
+/* Quick replies */
+.wa-qr-row { display: flex; flex-wrap: wrap; gap: 6px; align-self: flex-end; margin-top: 4px; margin-bottom: 6px; }
+.wa-qr {
+  background: var(--wa-mid); border: 1px solid var(--wa-green);
+  color: var(--wa-green); border-radius: 18px;
+  padding: 7px 16px; font-size: 12.5px; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+}
+.wa-qr:hover { background: var(--wa-green); color: #fff; }
+
+/* Input bar */
+.wa-input-bar {
+  height: 62px; background: var(--wa-mid); flex-shrink: 0;
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 16px; position: relative; z-index: 2;
+}
+.wa-input-box {
+  flex: 1; background: var(--wa-panel); border-radius: 24px;
+  padding: 10px 18px; color: var(--wa-text);
+  font-size: 14px; border: none; outline: none;
+  font-family: inherit;
+}
+.wa-input-box::placeholder { color: var(--wa-muted); }
+.wa-mic {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--wa-green); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.wa-mic i { color: #fff; font-size: 20px; }
+
+/* link preview */
+.wa-link-preview {
+  background: rgba(0,168,132,0.08); border-left: 3px solid var(--wa-green);
+  border-radius: 0 6px 6px 0; padding: 8px 10px; margin-top: 5px;
+}
+.wa-link-title { font-size: 12px; font-weight: 700; color: var(--wa-text); margin-bottom: 2px; }
+.wa-link-url { font-size: 11px; color: var(--wa-green); }
+
+/* Profile chip */
+.wa-profile-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(0,168,132,0.1); border-radius: 8px; padding: 8px 12px; margin-top: 5px;
+}
+
+.fade-in { animation: fi 0.3s ease; }
+@keyframes fi { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+<div class="wa-shell">
+
+  <!-- Left: conversation list -->
+  <div class="wa-left">
+    <div class="wa-left-head">
+      <div class="wa-av" style="background:#25D366;color:#fff;font-size:11px;font-weight:700">LC</div>
+      <span style="color:var(--wa-text);font-size:14px;font-weight:600;flex:1">Laura</span>
+      <i class="ti ti-message-plus" style="color:var(--wa-muted);font-size:20px;cursor:pointer"></i>
+      <i class="ti ti-dots-vertical" style="color:var(--wa-muted);font-size:20px;cursor:pointer;margin-left:16px"></i>
+    </div>
+    <div class="wa-search">
+      <i class="ti ti-search" style="color:var(--wa-muted);font-size:16px"></i>
+      <input type="text" placeholder="Buscar o iniciar un chat" />
+    </div>
+    <div class="wa-convlist">
+      <div class="wa-conv active">
+        <div class="wa-av" style="background:#00a884;color:#fff;font-size:15px">🛒</div>
+        <div class="wa-conv-info">
+          <div class="wa-conv-name">Dropi — Tu asistente</div>
+          <div class="wa-conv-preview">🚀 Tu tienda está lista para vender</div>
+        </div>
+        <div class="wa-conv-meta">
+          <div class="wa-conv-time">ahora</div>
+          <div class="wa-conv-badge">3</div>
+        </div>
+      </div>
+      <div class="wa-conv">
+        <div class="wa-av" style="background:#5c6bc0;color:#fff;font-size:11px;font-weight:700">DS</div>
+        <div class="wa-conv-info">
+          <div class="wa-conv-name">Dropi Soporte</div>
+          <div class="wa-conv-preview">Tu pedido #4821 fue enviado ✓</div>
+        </div>
+        <div class="wa-conv-meta"><div class="wa-conv-time">ayer</div></div>
+      </div>
+      <div class="wa-conv">
+        <div class="wa-av" style="background:#ef5350;color:#fff;font-size:11px;font-weight:700">SC</div>
+        <div class="wa-conv-info">
+          <div class="wa-conv-name">Suppliers Club</div>
+          <div class="wa-conv-preview">📦 Nuevo catálogo disponible</div>
+        </div>
+        <div class="wa-conv-meta"><div class="wa-conv-time">lun</div></div>
+      </div>
+      <div class="wa-conv">
+        <div class="wa-av" style="background:#ff7043;color:#fff;font-size:11px;font-weight:700">ME</div>
+        <div class="wa-conv-info">
+          <div class="wa-conv-name">Mega Live — Mayo</div>
+          <div class="wa-conv-preview">¡Inscríbete antes del viernes!</div>
+        </div>
+        <div class="wa-conv-meta"><div class="wa-conv-time">dom</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: chat -->
+  <div class="wa-right">
+    <div class="wa-chat-head">
+      <div class="wa-av" style="background:#00a884;color:#fff;font-size:18px;width:40px;height:40px">🛒</div>
+      <div>
+        <div class="wa-chat-name">Dropi — Tu asistente</div>
+        <div class="wa-chat-status">● en línea</div>
+      </div>
+      <div class="wa-chat-icons" style="margin-left:auto">
+        <i class="ti ti-video" style="color:var(--wa-muted)"></i>
+        <i class="ti ti-phone" style="color:var(--wa-muted)"></i>
+        <i class="ti ti-dots-vertical" style="color:var(--wa-muted)"></i>
+      </div>
+    </div>
+
+    <div class="wa-msgs" id="msgs"></div>
+
+    <div class="wa-input-bar">
+      <i class="ti ti-mood-smile" style="font-size:24px;color:var(--wa-muted);cursor:pointer"></i>
+      <i class="ti ti-paperclip" style="font-size:22px;color:var(--wa-muted);cursor:pointer"></i>
+      <input class="wa-input-box" id="userInput" placeholder="Escribe un mensaje" onkeydown="handleKey(event)" />
+      <button class="wa-mic" id="sendBtn" onclick="sendMsg()"><i class="ti ti-send"></i></button>
+    </div>
+  </div>
+</div>
+
+<script>
+const msgs = document.getElementById('msgs');
+let t = 0;
+
+/* ── helpers ── */
+const delay = ms => new Promise(r => setTimeout(r, ms));
+
+function getTime() {
+  const now = new Date();
+  let h = now.getHours(), m = now.getMinutes();
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+
+function addDateSep(label) {
+  msgs.insertAdjacentHTML('beforeend', `<div class="date-sep"><span>${label}</span></div>`);
+  scroll();
+}
+
+function addMsg(dir, content, opts = {}) {
+  const wrap = document.createElement('div');
+  wrap.className = `wa-msg ${dir} fade-in`;
+  const ticks = dir === 'out'
+    ? `<span class="wa-tick"><i class="ti ti-checks"></i></span>` : '';
+  wrap.innerHTML = `
+    ${opts.sender ? `<div class="wa-sender-name">${opts.sender}</div>` : ''}
+    <div class="wa-bubble">${content}
+      <div class="wa-meta">
+        <span class="wa-meta-time">${opts.time || getTime()}</span>
+        ${ticks}
+      </div>
+    </div>`;
+  msgs.appendChild(wrap);
+  scroll();
+  return wrap;
+}
+
+function addCard(dir, html) {
+  const wrap = document.createElement('div');
+  wrap.className = `wa-msg ${dir} fade-in`;
+  wrap.innerHTML = html;
+  msgs.appendChild(wrap);
+  scroll();
+  return wrap;
+}
+
+function addTyping() {
+  const d = document.createElement('div');
+  d.className = 'wa-msg in wa-typing fade-in';
+  d.id = 'typing';
+  d.innerHTML = `<div class="wa-bubble"><div class="wa-typing-dots"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>`;
+  msgs.appendChild(d);
+  scroll();
+}
+function removeTyping() { const t = document.getElementById('typing'); if(t) t.remove(); }
+function scroll() { msgs.scrollTop = msgs.scrollHeight; }
+
+function addQR(options) {
+  const wrap = document.createElement('div');
+  wrap.className = 'wa-qr-row fade-in';
+  wrap.id = 'qrRow';
+  wrap.innerHTML = options.map((o,i) =>
+    `<div class="wa-qr" onclick="chooseQR(this,'${o.text}','${o.val}')">${o.text}</div>`
+  ).join('');
+  msgs.appendChild(wrap);
+  scroll();
+}
+
+function chooseQR(el, text, val) {
+  document.getElementById('qrRow') && document.getElementById('qrRow').remove();
+  addMsg('out', text);
+  window._qrVal = val;
+  window._qrCallback && window._qrCallback(val);
+}
+
+/* ── Main sequence ── */
+async function run() {
+  addDateSep('Hoy');
+  await delay(500);
+
+  /* ── BLOQUE 1: Bienvenida ── */
+  addTyping();
+  await delay(1800);
+  removeTyping();
+  addMsg('in', `¡Hola Laura! 👋 Soy tu asistente de Dropi.\n\nRegistré tu ingreso y *preparé todo* para que empieces a vender hoy mismo. Te lo comparto en 3 partes.`, {time: getTime()});
+
+  await delay(900);
+  addTyping();
+  await delay(1400);
+  removeTyping();
+
+  /* Card 1: Tienda */
+  addMsg('in', `*1 de 3 — Tu tienda está lista* 🏪`);
+  await delay(300);
+  addCard('in', `
+    <div class="wa-card" style="max-width:320px">
+      <div class="wa-card-img" style="background:linear-gradient(135deg,#003d29,#00a884)">
+        <span>🛒</span>
+      </div>
+      <div class="wa-card-body">
+        <div class="wa-card-title">Tu tienda en Dropi</div>
+        <div class="wa-card-sub">Todo configurado. Solo comparte tu link y empieza a recibir pedidos.</div>
+        <div class="wa-link-preview">
+          <div class="wa-link-title">dropi.co/tienda/laura-contreras</div>
+          <div class="wa-link-url">dropi.co</div>
+        </div>
+      </div>
+      <div class="wa-btn-row">
+        <div class="wa-btn" onclick="copyLink(this)"><i class="ti ti-copy"></i> Copiar link</div>
+        <div class="wa-divider"></div>
+        <div class="wa-btn"><i class="ti ti-brand-whatsapp"></i> Compartir por WhatsApp</div>
+      </div>
+    </div>
+    <div class="wa-meta" style="padding-right:2px;justify-content:flex-start;margin-top:3px">
+      <span class="wa-meta-time">${getTime()}</span>
+    </div>`);
+
+  await delay(1200);
+  addTyping();
+  await delay(1600);
+  removeTyping();
+
+  /* Card 2: Producto */
+  addMsg('in', `*2 de 3 — Tu primer producto estrella* 📦`);
+  await delay(300);
+  addCard('in', `
+    <div class="wa-card" style="max-width:320px">
+      <div class="wa-card-img" style="background:linear-gradient(135deg,#1a237e,#283593)">
+        <span>🎧</span>
+      </div>
+      <div class="wa-card-body">
+        <div class="wa-card-title">Audífonos Bluetooth Pro X</div>
+        <div class="wa-card-sub">
+          <span style="font-size:16px;font-weight:800;color:#00a884">$89.900</span>
+          <span style="text-decoration:line-through;color:var(--wa-muted);font-size:11px;margin-left:6px">$129.900</span>
+          <span style="color:#f06292;font-size:11px;margin-left:4px">−31%</span><br/>
+          Margen aprox. <strong style="color:#e9edef">$42.000</strong> · Envío 2–4 días · 1.247 vendidos este mes
+        </div>
+        <button class="wa-card-link"><i class="ti ti-external-link" style="font-size:14px"></i> Ver en mi tienda</button>
+      </div>
+    </div>
+    <div class="wa-meta" style="padding-right:2px;justify-content:flex-start;margin-top:3px">
+      <span class="wa-meta-time">${getTime()}</span>
+    </div>`);
+
+  await delay(1400);
+  addTyping();
+  await delay(1600);
+  removeTyping();
+
+  /* Card 3: Kit comunicación */
+  addMsg('in', `*3 de 3 — Tu kit de comunicación* 📣`);
+  await delay(300);
+  addCard('in', `
+    <div class="wa-card" style="max-width:320px">
+      <div class="wa-card-img" style="background:linear-gradient(135deg,#4a148c,#7b1fa2)">
+        <span>📣</span>
+      </div>
+      <div class="wa-card-body">
+        <div class="wa-card-title">Kit listo para usar hoy</div>
+        <div class="wa-card-sub">4 piezas personalizadas para tus productos. Usa cualquiera en segundos.</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px">
+          ${['📱 Story IG','💬 Script WA','📣 Facebook','📧 Email'].map(k =>
+            `<span style="font-size:10.5px;padding:3px 8px;border-radius:10px;background:rgba(0,168,132,0.15);color:#00a884;font-weight:600">${k}</span>`
+          ).join('')}
+        </div>
+        <button class="wa-card-link"><i class="ti ti-layout-grid" style="font-size:14px"></i> Abrir mis plantillas</button>
+      </div>
+    </div>
+    <div class="wa-meta" style="padding-right:2px;justify-content:flex-start;margin-top:3px">
+      <span class="wa-meta-time">${getTime()}</span>
+    </div>`);
+
+  await delay(1200);
+  addTyping();
+  await delay(1500);
+  removeTyping();
+
+  addMsg('in', `Todo lo anterior ya está personalizado con tu nombre y tus productos. *¿Listo para arrancar?* 💪\n\nAntes de irte, cuéntame — ¿cuánto quieres vender en tu *primer mes*?`);
+
+  await delay(600);
+  addQR([
+    {text:'$500.000', val:'500k'},
+    {text:'$1.000.000 🎯', val:'1M'},
+    {text:'$2.000.000', val:'2M'},
+    {text:'$5.000.000+', val:'5M+'},
+  ]);
+
+  /* Esperar elección */
+  await new Promise(resolve => {
+    window._qrCallback = (val) => {
+      window._qrCallback = null;
+      resolve(val);
+    };
+  });
+
+  /* ── BLOQUE 2: Meta + Ruta ── */
+  await delay(500);
+  addTyping();
+  await delay(2000);
+  removeTyping();
+
+  addMsg('in', `¡Excelente meta, Laura! 🔥\n\nRegistré tu objetivo: *$1.000.000 en el mes 1*.\n\nAnalicé *1.247 dropshippers* que empezaron exactamente donde estás tú. El *89% lo logró* siguiendo esta ruta:`);
+
+  await delay(700);
+
+  /* Ruta card */
+  addCard('in', `
+    <div class="wa-route">
+      <div class="wa-route-head">
+        <span style="font-size:18px">🗺️</span>
+        <div>
+          <div style="font-size:13px;font-weight:800">Tu ruta a $1.000.000</div>
+          <div style="font-size:10.5px;opacity:0.75">4 semanas · 5 pasos · basado en casos reales</div>
+        </div>
+      </div>
+      ${[
+        {n:'1', icon:'🏪', title:'Activa tu tienda', sub:'Completa perfil y datos de pago. Las tiendas completas convierten 3.2× más.', lbl:'Ir a Configuración', week:'Sem 1'},
+        {n:'2', icon:'📦', title:'Elige 3 productos ganadores', sub:'Máximo 3 al inicio. Margen >$40k y envío <7 días.', lbl:'Ir a Productos', week:'Sem 1'},
+        {n:'3', icon:'📣', title:'Lanza tu kit de comunicación', sub:'Story, WhatsApp y Facebook Ads ya están listos con tu info.', lbl:'Ir a Plantillas', week:'Sem 2'},
+        {n:'4', icon:'📊', title:'Monitorea con ROAX c/3 días', sub:'Los que monitorean activamente logran la meta 2.1× más rápido.', lbl:'Ir a ROAX', week:'Sem 2–3'},
+        {n:'5', icon:'🎓', title:'Academy: Primeras 10 ventas', sub:'91% de quienes completan este módulo vende en <7 días.', lbl:'Ir a Academy', week:'Sem 1'},
+      ].map(s => `
+        <div class="wa-route-step">
+          <div class="wa-step-n">${s.n}</div>
+          <div style="flex:1;min-width:0">
+            <div class="wa-step-title">${s.icon} ${s.title}</div>
+            <div class="wa-step-sub">${s.sub}</div>
+            <button class="wa-step-btn"><i class="ti ti-external-link" style="font-size:12px"></i> ${s.lbl}</button>
+          </div>
+          <span style="font-size:9.5px;font-weight:700;color:var(--wa-muted);background:rgba(255,255,255,0.06);padding:2px 7px;border-radius:8px;white-space:nowrap;align-self:flex-start;margin-top:2px">${s.week}</span>
+        </div>`).join('')}
+    </div>
+    <div class="wa-meta" style="padding-right:2px;justify-content:flex-start;margin-top:3px">
+      <span class="wa-meta-time">${getTime()}</span>
+    </div>`);
+
+  await delay(900);
+  addTyping();
+  await delay(1800);
+  removeTyping();
+
+  addMsg('in', `Y no te lo digo solo yo — acá están los *datos reales* de quienes siguieron esta misma ruta 👇`);
+  await delay(400);
+
+  /* Stats card */
+  addCard('in', `
+    <div class="wa-stats">
+      <div class="wa-stats-head">
+        <i class="ti ti-chart-dots-3" style="color:#00a884;font-size:20px"></i>
+        <div>
+          <div class="wa-stats-head-text">Resultados reales · Mes 1</div>
+          <div class="wa-stats-head-sub">Meta $1.000.000 · mismo perfil que el tuyo</div>
+        </div>
+      </div>
+      <div class="wa-stat-grid">
+        <div class="wa-stat-cell">
+          <div class="wa-stat-num">1.247</div>
+          <div class="wa-stat-lbl">siguieron esta ruta</div>
+        </div>
+        <div class="wa-stat-cell">
+          <div class="wa-stat-num">89<em>%</em></div>
+          <div class="wa-stat-lbl">alcanzaron la meta</div>
+        </div>
+        <div class="wa-stat-cell">
+          <div class="wa-stat-num">$1.3<em>M</em></div>
+          <div class="wa-stat-lbl">promedio mes 1</div>
+        </div>
+      </div>
+      <div class="wa-bar-wrap">
+        <div class="wa-bar-row">
+          <div class="wa-bar-labels"><span>Lograron la meta</span><span style="color:var(--wa-text);font-weight:700">89%</span></div>
+          <div class="wa-bar-bg"><div class="wa-bar-fill" id="b1" style="width:0%"></div></div>
+        </div>
+        <div class="wa-bar-row">
+          <div class="wa-bar-labels"><span>Primera venta en &lt;7 días</span><span style="color:var(--wa-text);font-weight:700">74%</span></div>
+          <div class="wa-bar-bg"><div class="wa-bar-fill" id="b2" style="width:0%;background:#4fc3f7"></div></div>
+        </div>
+        <div class="wa-bar-row">
+          <div class="wa-bar-labels"><span>Superaron la meta</span><span style="color:var(--wa-text);font-weight:700">61%</span></div>
+          <div class="wa-bar-bg"><div class="wa-bar-fill" id="b3" style="width:0%;background:#ce93d8"></div></div>
+        </div>
+      </div>
+      <div class="wa-quote">
+        <p>"Seguí la ruta paso a paso y en la semana 3 ya había superado el millón. Los scripts de WhatsApp lo cambiaron todo."</p>
+        <small>— Santiago K. · Medellín · Electrónica · Mes 1: $1.38M</small>
+      </div>
+    </div>
+    <div class="wa-meta" style="padding-right:2px;justify-content:flex-start;margin-top:3px">
+      <span class="wa-meta-time">${getTime()}</span>
+    </div>`);
+
+  /* Animar barras */
+  await delay(400);
+  document.getElementById('b1') && (document.getElementById('b1').style.width = '89%');
+  document.getElementById('b2') && (document.getElementById('b2').style.width = '74%');
+  document.getElementById('b3') && (document.getElementById('b3').style.width = '61%');
+
+  await delay(1000);
+  addTyping();
+  await delay(1500);
+  removeTyping();
+
+  addMsg('in', `Tu ruta quedó guardada en tu perfil. Puedes volver aquí cuando quieras para ver tu progreso 📍\n\n¿Por dónde arrancamos? 👇`);
+
+  await delay(400);
+  const finalQR = document.createElement('div');
+  finalQR.className = 'wa-qr-row fade-in';
+  finalQR.innerHTML = [
+    '🏪 Activar mi tienda',
+    '📦 Ver mis productos',
+    '📣 Usar mi kit de comunicación',
+    '📊 Ver mi ruta completa'
+  ].map(o => `<div class="wa-qr" onclick="finalChoice(this,'${o}')">${o}</div>`).join('');
+  msgs.appendChild(finalQR);
+  scroll();
+}
+
+function finalChoice(el, text) {
+  el.parentElement.style.display = 'none';
+  addMsg('out', text);
+  setTimeout(() => {
+    addTyping();
+    setTimeout(() => {
+      removeTyping();
+      addMsg('in', `Perfecto 🚀 Te llevo directo ahí. Todo ya está listo con tu nombre y tu producto.\n\n*Un momento...*`);
+    }, 1500);
+  }, 400);
+}
+
+function copyLink(btn) {
+  btn.innerHTML = '<i class="ti ti-check"></i> ¡Copiado!';
+  btn.style.color = '#4caf50';
+  setTimeout(() => {
+    btn.innerHTML = '<i class="ti ti-copy"></i> Copiar link';
+    btn.style.color = '';
+  }, 2000);
+}
+
+function sendMsg() {
+  const v = document.getElementById('userInput').value.trim();
+  if (!v) return;
+  document.getElementById('userInput').value = '';
+  addMsg('out', v);
+  setTimeout(() => {
+    addTyping();
+    setTimeout(() => {
+      removeTyping();
+      addMsg('in', `Entendido 👍 Procesando tu mensaje y actualizando tu ruta si es necesario.`);
+    }, 1600);
+  }, 400);
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter') { e.preventDefault(); sendMsg(); }
+}
+
+run();
+</script>
+</body>
+</html>

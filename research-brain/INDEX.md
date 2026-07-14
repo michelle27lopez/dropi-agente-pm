@@ -42,9 +42,11 @@
 
 ## Cómo usar este índice
 
-Cuando Jaime pregunta algo al agente, el agente:
+Cuando el usuario pregunta algo o quiere agregar un research nuevo, se usa el skill `dropi-brain` (`agente-delivery/.agents/skills/dropi-brain/SKILL.md`), que:
 1. Lee este INDEX primero para ver qué hay disponible
 2. Lee los archivos relevantes según la consulta
 3. Responde con estructura: researches encontrados → insights → evidencia → vacíos → recomendación
 
 **Regla dura:** Si no hay evidencia suficiente, el agente lo dice. Nunca inventa hallazgos.
+
+**Estructura de cada RB-XXX:** la lista oficial y el orden de secciones vive en `agente-delivery/canon/dropi_methodology.md` → "Documento de Research (RB-XXX)". No se redefine aquí ni en cada archivo — así se evita que un research nuevo se desvíe del formato de los anteriores.
