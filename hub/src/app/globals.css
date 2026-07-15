@@ -69,6 +69,10 @@
   color: var(--item-accent);
 }
 
+.notas-filtro-item:hover .notas-filtro-delete {
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hub-card {
     animation: none;
