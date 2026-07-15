@@ -1,0 +1,28 @@
+name: Ownership check
+
+# pull_request_target (no pull_request): da permisos de escritura para
+# comentar incluso en PRs que vienen de un fork (caso Michelle). Por
+# seguridad, NUNCA se debe ejecutar código de la rama de la PR bajo este
+# trigger — el checkout de abajo trae la rama base (main) por defecto,
+# y el script solo consulta la lista de archivos vía la API de GitHub,
+# nunca los ejecuta.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Ejecutar chequeo de ownership
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node .github/scripts/ownership-check.mjs

@@ -1,0 +1,44 @@
+{
+  "_comment": "Mapea usuario de GitHub -> célula, y célula -> carpetas propias. Lo usa .github/workflows/ownership-check.yml para avisar en el PR cuando alguien toca algo fuera de su zona. Solo informa, no bloquea el merge.",
+
+  "people": {
+    "jaimeguevara-dropi": "suppliers",
+    "michelle27lopez": "suppliers",
+    "katerine93": "brands",
+    "JuanBautista0209": "logistica",
+    "santiagoherreraacosta-cyber": "sellers",
+    "lauracontreras-beep": "product-designers"
+  },
+
+  "_comment_celula_paths": "Carpetas propias de cada célula dentro del repo. Si alguien de otra célula las toca, se marca en el comentario. Growth (Catherin Salazar) todavía no tiene usuario de GitHub registrado en 'people' — agregarlo cuando lo tengamos. Brands, Growth, Sellers, Logística y Product Designers aún no tienen carpetas propias en el repo (sus proyectos viven en Supabase, no en archivos) — agregar aquí cuando las tengan.",
+  "celula_paths": {
+    "suppliers": [
+      "hub/src/app/proyectos/",
+      "hub/src/app/informes/"
+    ]
+  },
+
+  "_comment_core_paths": "Rutas núcleo: siempre se marcan sin importar quién sea el autor, porque afectan a todas las células o son de uso exclusivo de Jaime (ver también CODEOWNERS en la raíz del repo).",
+  "core_paths": [
+    "agente-delivery/",
+    "research-brain/",
+    "dropshipper-lab/",
+    "metrics-lab/",
+    "supplier-lab/",
+    "hub/supabase/",
+    "hub/src/proxy.ts",
+    "hub/src/lib/",
+    "hub/src/app/login/",
+    "hub/src/app/auth/",
+    "hub/src/app/layout.tsx",
+    "hub/src/app/page.tsx",
+    "hub/src/app/celula/",
+    "hub/src/app/celulas/",
+    "hub/src/app/api/admin/",
+    "hub/src/app/api/celulas/",
+    "hub/src/app/api/me/",
+    "hub/.env.example",
+    "hub/next.config.ts",
+    "hub/package.json"
+  ]
+}
