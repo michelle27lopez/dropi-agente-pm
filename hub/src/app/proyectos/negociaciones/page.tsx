@@ -109,6 +109,7 @@ type LiderWeek = RoleWeek & {
   funnelAprobacionSinModalPct: string;
   funnelAprobacionSinModalTiempo?: string;
   funnelAprobacionViaModalPct: string;
+  funnelAprobacionViaModalTiempo?: string;
   funnelRechazoSinModalPct: string;
   funnelRechazoSinModalTiempo?: string;
   funnelRechazoViaModalPct: string;
@@ -295,36 +296,189 @@ const WEEKS: Week[] = [
       notasSalvedades: "Datos tomados directamente del dashboard UserPilot \"Negociaciones\" (captura del 2 jul 2026). El evento de historial del Líder aparece en UserPilot bajo la etiqueta 'Dropshipper' — confirmado por la bitácora manual que esa etiqueta equivale a Líder de Comunidad mientras el feature no esté disponible para dropshippers.",
     },
   },
+  {
+    id: "Semana 4",
+    fechas: "02–08 jul 2026",
+    lanzamiento: "Comunicación oficial de lanzamiento de Negociaciones: 6 de julio de 2026 — cae dentro de esta semana. Primera semana con tráfico y creación post-anuncio.",
+    proveedor: {
+      ingresoEventos: 501,
+      ingresoUnicos: 121,
+      creadasEventos: 174,
+      creadasUnicos: 4,
+      canceladasEventos: 5,
+      canceladasUnicos: 2,
+      opcionesCard: { cancelar: 5, verDetalle: 5, editar: 0 },
+      notas: 176,
+      editarNeg: 1,
+      historial: 2,
+      clicEnviar: 174,
+      funnelPct: "0%–2.48%",
+      funnelRepresentativo: true,
+      conclusionAdopcion: "Salto fuerte frente a Semana 3: ingreso al módulo pasa de 276 a 501 eventos (102 → 121 usuarios únicos) y las negociaciones creadas de 1 a 174 eventos (1 → 4 usuarios únicos) — coincide con la comunicación oficial de lanzamiento del 6 de julio, dentro de esta misma semana.",
+      conclusionTaskSuccess: "Por primera vez los 4 funnels de creación no dan el mismo resultado: las 2 variantes con comisión porcentual (productos específicos y catálogo completo) siguen en 0%, mientras las 2 variantes con comisión fija sí convierten (2.48% y 1.65%). Esto sugiere que el problema no es solo de configuración del funnel — hay una fricción real y específica en el paso de seleccionar comisión porcentual que no existe con comisión fija.",
+      retencionTendencia: "Entró al módulo (únicos) por día: 30, 37, 20, 9, 36, 32, 39 (2–8 jul) — promedio 29.0. Realizó una acción: 3, 4, 0, 1, 3, 4, 4 — promedio 2.71. Clics de envío por proveedor: 22, 25, 0, 0, 44, 34, 12.25 — promedio 19.61.",
+      conclusionRetencion: "Patrón claro de fin de semana: actividad en cero el sábado 4 y domingo 5 de julio en las tres métricas. Pica el lunes 6 (día del lanzamiento oficial): clics de envío llegan a 44 (máximo de la semana) y entrada al módulo a 36, y se mantiene alto el martes 7 (34 clics) antes de bajar el miércoles 8 (12.25).",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Proveedor.",
+      hallazgos: "Primera semana con impacto claro del lanzamiento oficial (6 jul): ingreso y creación se disparan frente a Semana 3. También primera semana donde el funnel de creación diferencia entre comisión porcentual (0%) y comisión fija (>0%) — antes todos daban 0% por igual.",
+      dolores: "Las 2 variantes de comisión porcentual del funnel de creación siguen en 0% de conversión — a diferencia de comisión fija, sugiere una fricción específica de ese paso, no solo un problema de medición. Además, el salto de 'creadas' está muy concentrado: 174 eventos / 4 usuarios únicos (~43 c/u) — no es adopción amplia. Confirmado con la lista de creadores filtrada por fecha (1–14 jul): son 4 cuentas — Curren Latam Latam (9928), Maria Hernandez (746186), Diamond DTECH (39510) y JUAN RODRIGUEZ (10135) — ninguna coincide con las cuentas de prueba conocidas de semanas anteriores (Paola Angulo, Test soporte TI, GGP Comercializadora). Su condición de proveedores reales vs. de prueba no está confirmada, pero son cuentas nuevas y distintas a las ya señaladas.",
+      bugs: "Sin confirmar si persisten los bugs reportados en semanas anteriores (funnel de orden estricto, correo de pruebas uxdropi@gmail.com) — el dashboard de UserPilot no lo dice explícitamente, pero la diferenciación entre funnels esta semana sugiere que la medición del funnel sí está capturando señal real.",
+      proximosPasos: "Investigar por qué las variantes de comisión porcentual no convierten (0% en ambas) mientras comisión fija sí. Confirmar con UserPilot si el bug de funnel de orden estricto sigue activo. Activar micro-survey de CSAT/SEQ.",
+      notasSalvedades: "Datos tomados del dashboard UserPilot \"Negociaciones\" (capturas del 14 jul 2026), rango 2–8 jul 2026. Las tablas de tendencia diaria (Retención y Recurrencia, Promedio de clic) se leyeron en vista de tabla (cifras exactas por día), no de barras como en Semana 3. Los % y tiempos de los 4 funnels de creación se leyeron de la vista de gráfica (no tabla) — confianza algo menor que las tablas de tendencia.",
+    },
+    lider: {
+      ingresoEventos: 32,
+      ingresoUnicos: 22,
+      aprobadasEventos: 4,
+      aprobadasUnicos: 3,
+      rechazadasEventos: 25,
+      rechazadasUnicos: 13,
+      canceladasEventos: 25,
+      canceladasUnicos: 13,
+      opcionesCard: { rechazar: 25, verDetalle: 25, aprobar: 2 },
+      historial: 7,
+      funnelAprobacionSinModalPct: "9.09%",
+      funnelAprobacionSinModalTiempo: "1d 2h 57m 38s",
+      funnelAprobacionViaModalPct: "9.09%",
+      funnelAprobacionViaModalTiempo: "1d 2h 50m 30s",
+      funnelRechazoSinModalPct: "63.64%",
+      funnelRechazoSinModalTiempo: "10h 5m 4s",
+      funnelRechazoViaModalPct: "0%",
+      conclusionAdopcion: "Ingreso al módulo sube de 16 a 32 eventos (10 → 22 usuarios únicos) frente a Semana 3. Aprobadas suben de 1 a 4, rechazadas y canceladas de 5 a 25 cada una (1 → 13 usuarios únicos) — mismo salto post-lanzamiento que se ve en Proveedor, aunque el líder sigue rechazando/cancelando muchas más de las que aprueba.",
+      conclusionTaskSuccess: "El rechazo sin modal sigue siendo la ruta más efectiva (63.64%, tiempo promedio 10h 5m), mientras el rechazo vía modal vuelve a dar 0% — mismo patrón de pérdida de conversión al pasar por el modal visto en semanas anteriores. La aprobación converge a la misma tasa (9.09%) sin importar si pasa por modal o no, aunque el tiempo promedio es similar (~1d 3h) en ambas rutas.",
+      retencionTendencia: "Negociaciones con acción (únicos) por día: 4, 3, 0, 2, 5, 3, 8 (2–8 jul) — promedio 3.57. Múltiples eventos (únicos): 2, 1, 0, 1, 2, 0, 8 — promedio 2.0.",
+      conclusionRetencion: "Mismo patrón de fin de semana en cero (sábado 4 y domingo 5), pero el pico no coincide con el de Proveedor: el líder alcanza su máximo el miércoles 8 de julio (8 en ambas métricas), dos días después del lanzamiento oficial (lunes 6), no el mismo día.",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Líder.",
+      hallazgos: "El pico de actividad del líder llega 2 días después del lanzamiento oficial (miércoles 8 jul), no el mismo día como en Proveedor (lunes 6 jul) — posible desfase natural entre que el proveedor crea la negociación y el líder alcanza a responderla.",
+      dolores: "El líder sigue rechazando/cancelando muchas más negociaciones (25 cada una) que las que aprueba (4) — misma proporción de rechazo alta ya vista en semanas anteriores. El rechazo vía modal se mantiene en 0% de conversión.",
+      bugs: "Sin bugs nuevos reportados esta semana para el rol Líder.",
+      proximosPasos: "Confirmar si el desfase de 2 días entre el pico de Proveedor y el de Líder es un patrón estable o solo de esta semana. Activar micro-survey de CSAT/SEQ para Líder.",
+      notasSalvedades: "Datos tomados del dashboard UserPilot \"Negociaciones\" (capturas del 14 jul 2026), rango 2–8 jul 2026. En UserPilot, la etiqueta 'Dropshipper' corresponde en realidad a Líder de Comunidad. La tabla de tendencia diaria del Líder venía con la columna del 8 de jul recortada en la primera captura — se confirmó con una segunda captura y los promedios cuadran con los 7 días completos.",
+    },
+  },
+  {
+    id: "Semana 5",
+    fechas: "09–14 jul 2026 (parcial)",
+    lanzamiento: "Semana parcial — corte al 14 de julio 2026 (hoy), 6 días en vez de 7. Primera semana completa después de la de lanzamiento (Semana 4).",
+    proveedor: {
+      ingresoEventos: 319,
+      ingresoUnicos: 81,
+      creadasEventos: 116,
+      creadasUnicos: 2,
+      canceladasEventos: 4,
+      canceladasUnicos: 1,
+      opcionesCard: { cancelar: 4, verDetalle: 4, editar: 0 },
+      notas: 115,
+      editarNeg: 0,
+      historial: 1,
+      clicEnviar: 116,
+      funnelPct: "0%",
+      funnelRepresentativo: false,
+      conclusionAdopcion: "Normalización tras la semana de lanzamiento: ingreso al módulo baja de 501 a 319 eventos (121 → 81 usuarios únicos) y creadas de 174 a 116 eventos (4 → 2 usuarios únicos) — aunque esta semana solo tiene 6 días de los 7 habituales, así que la baja real es menor de lo que parece a simple vista.",
+      conclusionTaskSuccess: "Las 4 variantes del funnel de creación vuelven a dar 0% esta semana, a diferencia de Semana 4 donde comisión fija sí convertía — con solo 2 usuarios únicos creando negociaciones, la muestra es muy pequeña para sacar una conclusión sobre si el problema de comisión porcentual persiste o si esta semana simplemente ninguno de los 2 creadores completó por esa vía.",
+      retencionTendencia: "Entró al módulo (únicos) por día: 34, 28, 14, 5, 12, 22 (9–14 jul) — promedio 19.17. Realizó una acción: 5, 2, 1, 3, 1, 0 — promedio 2.0. Clics de envío por proveedor: 51, 64, 1, 0, 0, 0 — promedio 19.33.",
+      conclusionRetencion: "Actividad muy concentrada al inicio de la semana (jueves 9 y viernes 10 de julio) y prácticamente en cero del sábado 11 al martes 14, con un repunte solo en 'entró al módulo' el martes 14 (22) que no se traduce en acciones ni clics de envío (ambos en 0 ese día) — sugiere tráfico de visita sin conversión hacia el cierre de la semana.",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Proveedor.",
+      hallazgos: "La actividad de la semana de lanzamiento (Semana 4) no se sostiene: esta semana el pico de clics de envío ocurre lunes-martes (9-10 jul) y luego cae a casi cero, sin otro repunte como el que trajo el día del lanzamiento.",
+      dolores: "El funnel de creación vuelve a 0% en las 4 variantes — no se puede confirmar todavía si el problema de comisión porcentual visto en Semana 4 persiste, por el tamaño de muestra tan chico esta semana (2 creadores). Igual que en Semana 4, la creación está concentrada en muy pocos usuarios: 116 eventos / 2 únicos (~58 c/u). Con la lista filtrada 8–14 jul se confirma que los creadores de esta semana están dentro del mismo grupo de 4 cuentas de Semana 4 (Curren Latam Latam, Maria Hernandez, Diamond DTECH, JUAN RODRIGUEZ) — no son las cuentas de prueba conocidas (Paola Angulo, Test soporte TI, GGP Comercializadora).",
+      bugs: "Sin confirmar si persisten los bugs de semanas anteriores (funnel de orden estricto, correo de pruebas uxdropi@gmail.com).",
+      proximosPasos: "Dar seguimiento con más semanas de datos para saber si el problema de comisión porcentual del funnel es real o fue ruido de Semana 4. Activar micro-survey de CSAT/SEQ. Completar esta semana con los datos del 15 jul en adelante cuando cierre el ciclo de 7 días. Confirmar con Comercial si Curren Latam Latam, Maria Hernandez, Diamond DTECH y JUAN RODRIGUEZ son proveedores reales u otro tipo de cuenta.",
+      notasSalvedades: "Datos tomados del dashboard UserPilot \"Negociaciones\" (capturas del 14 jul 2026), rango 9–14 jul 2026 — semana parcial, corte al día de hoy (6 de 7 días). Tablas de tendencia diaria y donuts de opciones leídos en vista de tabla/zoom, cifras exactas confirmadas contra los promedios mostrados.",
+    },
+    lider: {
+      ingresoEventos: 24,
+      ingresoUnicos: 16,
+      aprobadasEventos: 1,
+      aprobadasUnicos: 1,
+      rechazadasEventos: 18,
+      rechazadasUnicos: 11,
+      canceladasEventos: 17,
+      canceladasUnicos: 11,
+      opcionesCard: { rechazar: 17, verDetalle: 17, aprobar: 0 },
+      historial: 9,
+      funnelAprobacionSinModalPct: "0%",
+      funnelAprobacionSinModalTiempo: "0sec",
+      funnelAprobacionViaModalPct: "6.25%",
+      funnelAprobacionViaModalTiempo: "~1h 8m",
+      funnelRechazoSinModalPct: "68.75%",
+      funnelRechazoSinModalTiempo: "~32s",
+      funnelRechazoViaModalPct: "6.25%",
+      conclusionAdopcion: "Ingreso al módulo baja de 32 a 24 eventos (22 → 16 usuarios únicos) frente a Semana 4, con menos días en el corte. Aprobadas cae a 1 (de 4), rechazadas y canceladas bajan levemente (25 → 18 y 25 → 17) — actividad general más baja, coherente con la normalización post-lanzamiento vista también en Proveedor.",
+      conclusionTaskSuccess: "A diferencia de Semana 4 (donde aprobación sin modal y vía modal daban igual, 9.09%), esta semana la única aprobación registrada pasó por el modal (0% sin modal vs 6.25% vía modal) — con solo 1 aprobación en toda la semana, no alcanza para confirmar si es un patrón real. El rechazo sin modal se mantiene como la ruta dominante (68.75%), y el rechazo vía modal subió de 0% a 6.25%.",
+      retencionTendencia: "Negociaciones con acción (únicos) por día: 5, 4, 2, 1, 2, 4 (9–14 jul) — promedio 3.0. Múltiples eventos (únicos): 5, 2, 2, 0, 2, 2 — promedio 2.17.",
+      conclusionRetencion: "Actividad más pareja que la de Proveedor esta semana — sin el mismo apagón de fin de semana marcado (sábado 11 jul cae a 0 en 'multiple events' pero 'negociaciones con acción' se mantiene en 2), y con un repunte hacia el cierre (martes 14 jul).",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Líder.",
+      hallazgos: "El líder mantiene actividad más estable a lo largo de la semana que el Proveedor, sin el mismo vacío de fin de semana — puede ser porque sigue respondiendo negociaciones creadas en días anteriores, no solo reaccionando a tráfico nuevo del mismo día.",
+      dolores: "Rechazadas y canceladas (18 y 17) siguen muy por encima de aprobadas (1) — misma proporción de rechazo alta de semanas anteriores, sin señal de que esté cambiando.",
+      bugs: "Sin bugs nuevos reportados esta semana para el rol Líder.",
+      proximosPasos: "Seguir la proporción de aprobación vs rechazo con más semanas de datos. Activar micro-survey de CSAT/SEQ para Líder. Completar el resto de la semana (15 jul en adelante) cuando cierre el ciclo de 7 días.",
+      notasSalvedades: "Datos tomados del dashboard UserPilot \"Negociaciones\" (capturas del 14 jul 2026), rango 9–14 jul 2026 — semana parcial (6 de 7 días). Los tiempos promedio de conversión del funnel de aprobación/rechazo vía modal se leyeron con menor confianza que los porcentajes (texto más pequeño en la captura original).",
+    },
+  },
 ];
 
 // ─── Campaña de activación · UserPilot Workflow "[Experimento] Negociaciones Proveedor" ──
-const CAMPANA = {
-  fechas: "25 jun–1 jul 2026",
-  enrolled: 5,
-  enrolledDeltaPct: -99.17,
-  completed: 36,
-  completedDeltaPct: 500,
-  achievedGoal: 0,
-  achievedGoalDeltaPct: 0,
-  avgTimeToComplete: "7d 19h 54m 57s",
-  avgTimeDeltaPct: 0,
-  steps: [
-    { step: "Recordatorio Negociaciones proveedores", reachedStep: 94, contentTriggered: "50 (53%)" },
-    { step: "Recordatorio 2 Negociaciones proveedores", reachedStep: 50, contentTriggered: "29 (58%)" },
-    { step: "Hotspot negociaciones", reachedStep: 49, contentTriggered: "50 (102%)" },
-    { step: "hotsport negociaciones (typo original)", reachedStep: 26, contentTriggered: "95 (365%)" },
-    { step: "[Experimento] Negociaciones Proveedor", reachedStep: 5, contentTriggered: "25 (500%)" },
-  ],
-  secuencia: [
-    { paso: "Trigger", detalle: "Coincide con condición · segmento Custom · ambiente Production." },
-    { paso: "Flow inicial", detalle: "Entra al flow \"[Experimento] Negociaciones Proveedor\"." },
-    { paso: "Chequeo de condición", detalle: "True → sale del workflow (ya cumplió el objetivo). False → continúa." },
-    { paso: "1er recordatorio", detalle: "Spotlight \"hotsport negociaciones\" (typo así en la herramienta) + Flow \"Recordatorio Negociaciones proveedores\"." },
-    { paso: "Espera 1 sesión", detalle: "Vuelve a chequear la condición. True → sale. False → continúa." },
-    { paso: "2do recordatorio", detalle: "Spotlight \"Hotspot negociaciones\" + Flow \"Recordatorio 2 Negociaciones proveedores\"." },
-    { paso: "Espera 5 días + 5 días", detalle: "Chequeo final y salida del workflow (\"Reach the end\")." },
-  ],
+// La secuencia del workflow es configuración fija (no cambia por período). Los snapshots sí
+// cambian — cada vez que se consulta el dashboard con un rango de fechas distinto.
+type CampanaSnapshot = {
+  fechas: string;
+  enrolled?: number;
+  enrolledDeltaPct?: number;
+  completed?: number;
+  completedDeltaPct?: number;
+  achievedGoal?: number;
+  achievedGoalDeltaPct?: number;
+  avgTimeToComplete?: string;
+  avgTimeDeltaPct?: number;
+  steps: { step: string; reachedStep: number; contentTriggered: string }[];
+  nota?: string;
 };
+
+const CAMPANA_SECUENCIA = [
+  { paso: "Trigger", detalle: "Coincide con condición · segmento Custom · ambiente Production." },
+  { paso: "Flow inicial", detalle: "Entra al flow \"[Experimento] Negociaciones Proveedor\"." },
+  { paso: "Chequeo de condición", detalle: "True → sale del workflow (ya cumplió el objetivo). False → continúa." },
+  { paso: "1er recordatorio", detalle: "Spotlight \"hotsport negociaciones\" (typo así en la herramienta) + Flow \"Recordatorio Negociaciones proveedores\"." },
+  { paso: "Espera 1 sesión", detalle: "Vuelve a chequear la condición. True → sale. False → continúa." },
+  { paso: "2do recordatorio", detalle: "Spotlight \"Hotspot negociaciones\" + Flow \"Recordatorio 2 Negociaciones proveedores\"." },
+  { paso: "Espera 5 días + 5 días", detalle: "Chequeo final y salida del workflow (\"Reach the end\")." },
+];
+
+const CAMPANA_SNAPSHOTS: CampanaSnapshot[] = [
+  {
+    fechas: "25 jun–1 jul 2026",
+    enrolled: 5,
+    enrolledDeltaPct: -99.17,
+    completed: 36,
+    completedDeltaPct: 500,
+    achievedGoal: 0,
+    achievedGoalDeltaPct: 0,
+    avgTimeToComplete: "7d 19h 54m 57s",
+    avgTimeDeltaPct: 0,
+    steps: [
+      { step: "Recordatorio Negociaciones proveedores", reachedStep: 94, contentTriggered: "50 (53%)" },
+      { step: "Recordatorio 2 Negociaciones proveedores", reachedStep: 50, contentTriggered: "29 (58%)" },
+      { step: "Hotspot negociaciones", reachedStep: 49, contentTriggered: "50 (102%)" },
+      { step: "hotsport negociaciones (typo original)", reachedStep: 26, contentTriggered: "95 (365%)" },
+      { step: "[Experimento] Negociaciones Proveedor", reachedStep: 5, contentTriggered: "25 (500%)" },
+    ],
+  },
+  {
+    fechas: "09–14 jul 2026 (parcial, tab \"Content analytics\")",
+    steps: [
+      { step: "Hotspot negociaciones", reachedStep: 33, contentTriggered: "33 (100%)" },
+      { step: "Recordatorio 2 Negociaciones proveedores", reachedStep: 32, contentTriggered: "12 (38%)" },
+      { step: "Recordatorio Negociaciones proveedores", reachedStep: 28, contentTriggered: "33 (118%)" },
+      { step: "hotsport negociaciones (typo original)", reachedStep: 3, contentTriggered: "28 (933%)" },
+      { step: "[Experimento] Negociaciones Proveedor", reachedStep: 0, contentTriggered: "3" },
+    ],
+    achievedGoal: 0,
+    nota: "Solo se capturó la tabla \"Workflow content\" (Achieved workflow goal en 0% en todos los pasos) — no se capturaron las tarjetas resumen (enrolled, completed, tiempo promedio) que sí existen para el período anterior.",
+  },
+];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 const pct = (s: string) => parseFloat(s.replace("%", ""));
@@ -713,7 +867,8 @@ function PilotoMVP() {
 }
 
 // ─── Panel de resumen (todas las semanas) ────────────────────────────────────
-function ResumenPanel({ weeks, campana }: { weeks: Week[]; campana: typeof CAMPANA }) {
+function ResumenPanel({ weeks, campana }: { weeks: Week[]; campana: CampanaSnapshot[] }) {
+  const campanaLatest = campana[campana.length - 1];
   const liderWeeks = weeks.filter(w => w.lider);
   const first = weeks[0];
   const last = weeks[weeks.length - 1];
@@ -979,7 +1134,7 @@ function ResumenPanel({ weeks, campana }: { weeks: Week[]; campana: typeof CAMPA
       <div style={{ ...card, background: ACCENT_BG, border: `1px solid ${ACCENT}33` }}>
         <div style={{ fontSize: 12, fontWeight: 700, color: ACCENT, marginBottom: 6 }}>Campaña de activación (resumen)</div>
         <div style={{ fontSize: 12, color: "var(--fg)", lineHeight: 1.5 }}>
-          Workflow de recordatorios: {campana.enrolled} enrolled, {campana.completed} completed, <strong>0% de goal alcanzado en todos los pasos</strong> — ver detalle en la pestaña Campaña.
+          Workflow de recordatorios ({campanaLatest.fechas}): {campanaLatest.enrolled != null ? `${campanaLatest.enrolled} enrolled, ${campanaLatest.completed} completed, ` : ""}<strong>0% de goal alcanzado en todos los pasos</strong> — ver detalle en la pestaña Campaña.
         </div>
       </div>
     </div>
@@ -987,36 +1142,79 @@ function ResumenPanel({ weeks, campana }: { weeks: Week[]; campana: typeof CAMPA
 }
 
 // ─── Panel de campaña ────────────────────────────────────────────────────────
-function CampanaPanel({ campana }: { campana: typeof CAMPANA }) {
+function CampanaSnapshotCard({ snapshot }: { snapshot: CampanaSnapshot }) {
+  const kpis = [
+    { label: "Proveedores en la campaña", desc: "Entraron al flujo de recordatorios (cumplían la condición del trigger)", value: snapshot.enrolled, delta: snapshot.enrolledDeltaPct, color: "#3B82F6" },
+    { label: "Completaron el recorrido", desc: "Veces que alguien llegó al final del flujo (puede ser > proveedores si repiten el recorrido)", value: snapshot.completed, delta: snapshot.completedDeltaPct, color: "#10B981" },
+    { label: "Cumplieron el objetivo real", desc: "De los que pasaron por la campaña, cuántos hicieron la acción que buscábamos (crear una negociación)", value: snapshot.achievedGoal, delta: snapshot.achievedGoalDeltaPct, color: "#EF4444" },
+    { label: "Tiempo prom. en completarlo", desc: "El workflow espera 1 sesión + 5 días + 5 días entre recordatorios, por eso tarda días", value: snapshot.avgTimeToComplete, delta: snapshot.avgTimeDeltaPct, color: "#9CA3AF" },
+  ].filter(k => k.value != null);
+
+  return (
+    <div style={card}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>{snapshot.fechas}</div>
+      </div>
+
+      {kpis.length > 0 && (
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${kpis.length}, minmax(0,1fr))`, gap: 12, marginBottom: 16 }}>
+          {kpis.map(k => (
+            <div key={k.label} style={{ background: "#F8FAFC", borderRadius: 10, border: "1px solid var(--border)", padding: "12px 14px" }}>
+              <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 8 }}>{k.label}</div>
+              <div style={{ fontSize: 20, fontWeight: 800, color: k.color }}>{k.value}</div>
+              {k.delta != null && (
+                <div style={{ fontSize: 11, color: k.delta >= 0 ? "#10B981" : "#EF4444", marginTop: 5, fontWeight: 600 }}>
+                  {k.delta === 0 ? "— 0% vs. período anterior" : `${k.delta > 0 ? "↑" : "↓"} ${Math.abs(k.delta)}% vs. período anterior`}
+                </div>
+              )}
+              <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 6, lineHeight: 1.3 }}>{k.desc}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 10 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr>
+              <th style={thStyle}>Paso del workflow</th>
+              <th style={thR}>Alcanzó el paso</th>
+              <th style={thR}>Contenido activado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {snapshot.steps.map((s, i) => (
+              <tr key={s.step} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff" }}>
+                <td style={tdStyle}>{s.step}</td>
+                <td style={tdR}>{s.reachedStep}</td>
+                <td style={tdR}>{s.contentTriggered}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ marginTop: 12, padding: "10px 12px", background: "#FFFBEB", borderRadius: 8, fontSize: 12, color: "#78350F", border: "1px solid #FDE68A", lineHeight: 1.4 }}>
+        <strong>Achieved goal en 0% en todos los pasos</strong> — a confirmar si el objetivo del workflow está bien configurado en UserPilot, o si de verdad nadie completa la acción esperada tras el recordatorio/hotspot.
+      </div>
+      {snapshot.nota && (
+        <div style={{ marginTop: 8, fontSize: 11, color: "var(--muted)", lineHeight: 1.4 }}>{snapshot.nota}</div>
+      )}
+    </div>
+  );
+}
+
+function CampanaPanel({ snapshots }: { snapshots: CampanaSnapshot[] }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div>
         <div style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>Campaña de activación · Recordatorios y hotspots</div>
-        <div style={{ fontSize: 13, color: "var(--muted)" }}>Workflow "[Experimento] Negociaciones Proveedor" en UserPilot · {campana.fechas}.</div>
-      </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0,1fr))", gap: 12 }}>
-        {[
-          { label: "Proveedores en la campaña", desc: "Entraron al flujo de recordatorios (cumplían la condición del trigger)", value: String(campana.enrolled), delta: campana.enrolledDeltaPct, color: "#3B82F6" },
-          { label: "Completaron el recorrido", desc: "Veces que alguien llegó al final del flujo (puede ser > proveedores si repiten el recorrido)", value: String(campana.completed), delta: campana.completedDeltaPct, color: "#10B981" },
-          { label: "Cumplieron el objetivo real", desc: "De los que pasaron por la campaña, cuántos hicieron la acción que buscábamos (crear una negociación)", value: String(campana.achievedGoal), delta: campana.achievedGoalDeltaPct, color: "#EF4444" },
-          { label: "Tiempo prom. en completarlo", desc: "El workflow espera 1 sesión + 5 días + 5 días entre recordatorios, por eso tarda días", value: campana.avgTimeToComplete, delta: campana.avgTimeDeltaPct, color: "#9CA3AF" },
-        ].map(k => (
-          <div key={k.label} style={{ ...card, borderTop: `3px solid ${k.color}`, padding: "14px 16px" }}>
-            <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 8 }}>{k.label}</div>
-            <div style={{ fontSize: 22, fontWeight: 800, color: k.color }}>{k.value}</div>
-            <div style={{ fontSize: 11, color: k.delta >= 0 ? "#10B981" : "#EF4444", marginTop: 5, fontWeight: 600 }}>
-              {k.delta === 0 ? "— 0% vs. período anterior" : `${k.delta > 0 ? "↑" : "↓"} ${Math.abs(k.delta)}% vs. período anterior`}
-            </div>
-            <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 6, lineHeight: 1.3 }}>{k.desc}</div>
-          </div>
-        ))}
+        <div style={{ fontSize: 13, color: "var(--muted)" }}>Workflow "[Experimento] Negociaciones Proveedor" en UserPilot · {snapshots.length} snapshots capturados.</div>
       </div>
 
       <div style={card}>
         <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 10 }}>🔗 Cómo funciona el workflow</div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          {campana.secuencia.map((s, i) => (
+          {CAMPANA_SECUENCIA.map((s, i) => (
             <div key={s.paso} style={{ display: "flex", gap: 12 }}>
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <div style={{
@@ -1024,7 +1222,7 @@ function CampanaPanel({ campana }: { campana: typeof CAMPANA }) {
                   color: "#fff", fontSize: 11, fontWeight: 800, flexShrink: 0,
                   display: "flex", alignItems: "center", justifyContent: "center",
                 }}>{i + 1}</div>
-                {i < campana.secuencia.length - 1 && (
+                {i < CAMPANA_SECUENCIA.length - 1 && (
                   <div style={{ width: 2, flex: 1, background: "var(--border)", minHeight: 18 }} />
                 )}
               </div>
@@ -1037,30 +1235,10 @@ function CampanaPanel({ campana }: { campana: typeof CAMPANA }) {
         </div>
       </div>
 
-      <div style={card}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 12 }}>📋 Contenido del workflow</div>
-        <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 10 }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr>
-                <th style={thStyle}>Paso del workflow</th>
-                <th style={thR}>Alcanzó el paso</th>
-                <th style={thR}>Contenido activado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {campana.steps.map((s, i) => (
-                <tr key={s.step} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff" }}>
-                  <td style={tdStyle}>{s.step}</td>
-                  <td style={tdR}>{s.reachedStep}</td>
-                  <td style={tdR}>{s.contentTriggered}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div style={{ marginTop: 12, padding: "10px 12px", background: "#FFFBEB", borderRadius: 8, fontSize: 12, color: "#78350F", border: "1px solid #FDE68A", lineHeight: 1.4 }}>
-          <strong>Achieved goal en 0% en todos los pasos</strong> — a confirmar si el objetivo del workflow está bien configurado en UserPilot, o si de verdad nadie completa la acción esperada tras el recordatorio/hotspot.
+      <div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 12 }}>📋 Contenido del workflow por período</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {snapshots.map(snap => <CampanaSnapshotCard key={snap.fechas} snapshot={snap} />)}
         </div>
       </div>
     </div>
@@ -1153,11 +1331,11 @@ export default function NegociacionesPage() {
         </div>
 
         {/* Tab content */}
-        {tabId === "resumen" && <ResumenPanel weeks={WEEKS} campana={CAMPANA} />}
+        {tabId === "resumen" && <ResumenPanel weeks={WEEKS} campana={CAMPANA_SNAPSHOTS} />}
         {activeWeekIndex >= 0 && (
           <WeekPanel week={WEEKS[activeWeekIndex]} prev={activeWeekIndex > 0 ? WEEKS[activeWeekIndex - 1] : null} />
         )}
-        {tabId === "campana" && <CampanaPanel campana={CAMPANA} />}
+        {tabId === "campana" && <CampanaPanel snapshots={CAMPANA_SNAPSHOTS} />}
 
         {/* Fuente de datos */}
         <details style={{ ...card, background: "#F8FAFC", border: "1px solid #E5E7EB" }}>
