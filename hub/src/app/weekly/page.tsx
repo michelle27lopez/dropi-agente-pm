@@ -1,17 +1,32 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { REGISTRY, SEMANAS, CURRENT } from "./data/index";
+import { useSearchParams } from "next/navigation";
+import { REGISTRY, SEMANAS, CELULA_LABELS, CURRENT } from "./data/index";
 import type { MetricGroup, Oportunidad, Dolor, ProximoPaso, HeroChip, Insight, Documento } from "./data/types";
 
 // ─── Componente principal ──────────────────────────────────────────────────────
 export default function WeeklyPage() {
-  const [selectedDate, setSelectedDate] = useState(CURRENT);
+  return (
+    <Suspense fallback={null}>
+      <WeeklyPageContent />
+    </Suspense>
+  );
+}
+
+function WeeklyPageContent() {
+  const searchParams = useSearchParams();
+  const requestedWeek = searchParams.get("week");
+  const initialDate = requestedWeek && REGISTRY[requestedWeek] ? requestedWeek : CURRENT;
+
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [ttvData, setTtvData] = useState<Record<string, string>>({});
 
   const data = REGISTRY[selectedDate] ?? REGISTRY[CURRENT];
   const isCurrentWeek = selectedDate === CURRENT;
+  const celulaSlug = SEMANAS.find((s) => s.date === selectedDate)?.celula ?? "suppliers";
+  const celulaLabel = CELULA_LABELS[celulaSlug] ?? "Supplier Success";
 
   useEffect(() => {
     if (!isCurrentWeek) { setTtvData({}); return; }
@@ -72,7 +87,7 @@ export default function WeeklyPage() {
       }}>
         <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
         <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Weekly · Brands Success</span>
+        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Weekly · {celulaLabel}</span>
 
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
           {SEMANAS.length > 1 && (
@@ -224,7 +239,7 @@ export default function WeeklyPage() {
         </Section>
 
         <p style={{ fontSize: 12, color: "var(--muted)", textAlign: "center", marginTop: 32 }}>
-          Dropi · Brands Success · {data.week}
+          Dropi · {celulaLabel} · {data.week}
         </p>
       </div>
     </main>

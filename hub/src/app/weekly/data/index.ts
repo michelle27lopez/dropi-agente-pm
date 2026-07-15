@@ -23,14 +23,21 @@ export const REGISTRY: Record<string, WeeklySnapshot> = {
   "2026-06-19": s_2026_06_19,
 };
 
-export const SEMANAS: { date: string; label: string }[] = [
-  { date: "2026-07-10", label: "Semana 10 jul 2026" },
-  { date: "2026-07-15-brands", label: "Semana 14–20 jul 2026 · Brands" },
-  { date: "2026-07-10-brands", label: "Semana 07–13 jul 2026 · Brands" },
-  { date: "2026-07-08", label: "Semana 08 jul 2026" },
-  { date: "2026-07-03", label: "Semana 03 jul 2026" },
-  { date: "2026-06-26", label: "Semana 26 jun–02 jul 2026" },
-  { date: "2026-06-19", label: "Semana 19–25 jun 2026" },
+// `celula`: slug de la célula dueña de esa semana (usado para el header/pie
+// dinámico de /weekly y para la tarjeta "Weekly" en /celula/[slug]).
+export const SEMANAS: { date: string; label: string; celula: string }[] = [
+  { date: "2026-07-10", label: "Semana 10 jul 2026", celula: "suppliers" },
+  { date: "2026-07-15-brands", label: "Semana 14–20 jul 2026 · Brands", celula: "brands" },
+  { date: "2026-07-10-brands", label: "Semana 07–13 jul 2026 · Brands", celula: "brands" },
+  { date: "2026-07-08", label: "Semana 08 jul 2026", celula: "suppliers" },
+  { date: "2026-07-03", label: "Semana 03 jul 2026", celula: "suppliers" },
+  { date: "2026-06-26", label: "Semana 26 jun–02 jul 2026", celula: "suppliers" },
+  { date: "2026-06-19", label: "Semana 19–25 jun 2026", celula: "suppliers" },
 ];
+
+export const CELULA_LABELS: Record<string, string> = {
+  suppliers: "Supplier Success",
+  brands: "Brands Success",
+};
 
 export const CURRENT = "2026-07-10";
