@@ -3,6 +3,7 @@ import { snapshot as s_2026_06_26 } from "./2026-06-26";
 import { snapshot as s_2026_07_03 } from "./2026-07-03";
 import { snapshot as s_2026_07_08 } from "./2026-07-08";
 import { snapshot as s_2026_07_10 } from "./2026-07-10";
+import { snapshot as s_2026_07_10_brands } from "./2026-07-10-brands";
 import type { WeeklySnapshot } from "./types";
 
 // ─── Registro de semanas ──────────────────────────────────────────────────────
@@ -13,6 +14,7 @@ import type { WeeklySnapshot } from "./types";
 
 export const REGISTRY: Record<string, WeeklySnapshot> = {
   "2026-07-10": s_2026_07_10,
+  "2026-07-10-brands": s_2026_07_10_brands,
   "2026-07-08": s_2026_07_08,
   "2026-07-03": s_2026_07_03,
   "2026-06-26": s_2026_06_26,
@@ -21,6 +23,7 @@ export const REGISTRY: Record<string, WeeklySnapshot> = {
 
 export const SEMANAS: { date: string; label: string }[] = [
   { date: "2026-07-10", label: "Semana 10 jul 2026" },
+  { date: "2026-07-10-brands", label: "Semana 07–13 jul 2026 · Brands" },
   { date: "2026-07-08", label: "Semana 08 jul 2026" },
   { date: "2026-07-03", label: "Semana 03 jul 2026" },
   { date: "2026-06-26", label: "Semana 26 jun–02 jul 2026" },
