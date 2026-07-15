@@ -63,16 +63,19 @@ type Dataset = {
 type Oferta = {
   token: string;
   supplier_id: number;
-  estado: "enviada" | "aceptada" | "rechazada";
+  nivel_objetivo: string;
+  estado: "pendiente_envio" | "enviada" | "aceptada" | "rechazada";
   motivo_rechazo: string | null;
 };
 
 const OFERTA_COLOR: Record<string, [string, string]> = {
+  "pendiente_envio": ["#6366F1", "#EEF2FF"],
   "enviada": ["#F59E0B", "#FFFBEB"],
   "aceptada": ["#10B981", "#ECFDF5"],
   "rechazada": ["#9CA3AF", "#F3F4F6"],
 };
 const OFERTA_LABEL: Record<string, string> = {
+  "pendiente_envio": "En cola · sin enviar",
   "enviada": "Enviada · esperando",
   "aceptada": "Aceptó ascenso",
   "rechazada": "Rechazó",
@@ -256,6 +259,20 @@ export default function ProspectosAscensoPage() {
   const [ofertas, setOfertas] = useState<Record<string, Oferta>>({});
   const [sendingId, setSendingId] = useState<string | null>(null);
   const [sentNotice, setSentNotice] = useState<string | null>(null);
+  const [encolandoNivel, setEncolandoNivel] = useState<string | null>(null);
+  const [procesandoLote, setProcesandoLote] = useState(false);
+
+  function recargarOfertas() {
+    return fetch("/api/proyectos/ascenso-ofertas")
+      .then(r => r.ok ? r.json() : [])
+      .then((rows: Oferta[]) => {
+        const map: Record<string, Oferta> = {};
+        rows.forEach(o => { map[String(o.supplier_id)] = o; });
+        setOfertas(map);
+        return rows;
+      })
+      .catch(() => [] as Oferta[]);
+  }
 
   useEffect(() => {
     fetch("/api/proyectos/prospectos-ascenso")
@@ -267,15 +284,46 @@ export default function ProspectosAscensoPage() {
       .catch(() => setError(true))
       .finally(() => setLoading(false));
 
-    fetch("/api/proyectos/ascenso-ofertas")
-      .then(r => r.ok ? r.json() : [])
-      .then((rows: Oferta[]) => {
-        const map: Record<string, Oferta> = {};
-        rows.forEach(o => { map[String(o.supplier_id)] = o; });
-        setOfertas(map);
-      })
-      .catch(() => null);
+    recargarOfertas();
   }, []);
+
+  async function handleEncolar(nivelObjetivo: "Verificado" | "Premium") {
+    setEncolandoNivel(nivelObjetivo);
+    setSentNotice(null);
+    try {
+      const res = await fetch("/api/proyectos/ascenso-ofertas/batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nivelObjetivo }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        await recargarOfertas();
+        setSentNotice(`${json.encoladas} proveedores encolados para ${nivelObjetivo} (${json.yaExistian} ya tenían oferta).`);
+      } else {
+        setSentNotice(`Error: ${json.error}`);
+      }
+    } finally {
+      setEncolandoNivel(null);
+    }
+  }
+
+  async function handleProcesarLote() {
+    setProcesandoLote(true);
+    setSentNotice(null);
+    try {
+      const res = await fetch("/api/proyectos/ascenso-ofertas/procesar-lote", { method: "POST" });
+      const json = await res.json();
+      if (res.ok) {
+        await recargarOfertas();
+        setSentNotice(`Lote procesado: ${json.procesados} enviados (modo prueba) · ${json.restantes} siguen en cola.`);
+      } else {
+        setSentNotice(`Error: ${json.error}`);
+      }
+    } finally {
+      setProcesandoLote(false);
+    }
+  }
 
   async function handleEnviarOferta(p: Prospecto) {
     setSendingId(p.id);
@@ -308,6 +356,18 @@ export default function ProspectosAscensoPage() {
 
   const aVerificado = useMemo(() => data?.prospectos.filter(p => p.nivelObjetivo === "Verificado") ?? [], [data]);
   const aPremium = useMemo(() => data?.prospectos.filter(p => p.nivelObjetivo === "Premium") ?? [], [data]);
+
+  const cola = useMemo(() => {
+    const rows = Object.values(ofertas);
+    const pendientes = rows.filter(o => o.estado === "pendiente_envio");
+    return {
+      totalPendientes: pendientes.length,
+      pendientesVerificado: pendientes.filter(o => o.nivel_objetivo === "Verificado").length,
+      pendientesPremium: pendientes.filter(o => o.nivel_objetivo === "Premium").length,
+      faltanEncolarVerificado: aVerificado.filter(p => p.pctUmbral >= 1 && !ofertas[p.id]).length,
+      faltanEncolarPremium: aPremium.filter(p => p.pctUmbral >= 1 && !ofertas[p.id]).length,
+    };
+  }, [ofertas, aVerificado, aPremium]);
 
   const resumen = useMemo(() => {
     if (!data) return null;
@@ -400,6 +460,53 @@ export default function ProspectosAscensoPage() {
                 <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.07em", color: "var(--muted)", marginBottom: 8 }}>En camino · 50–99% (global)</div>
                 <div style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-0.03em", color: "#F59E0B", lineHeight: 1 }}>{resumen.totalEnCamino.toLocaleString("es-CO")}</div>
                 <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 6 }}>{resumen.aVerificadoEnCamino.toLocaleString("es-CO")} → Verificado · {resumen.aPremiumEnCamino.toLocaleString("es-CO")} → Premium</div>
+              </div>
+            </div>
+
+            {/* Cola de envío por lotes */}
+            <div style={card}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6, flexWrap: "wrap", gap: 12 }}>
+                <div>
+                  <div style={sectionTitle}>Cola de envío · por lotes</div>
+                  <div style={sectionSub}>Encolar no envía nada — solo registra quién falta. Procesar manda en tandas pequeñas (máx. 5, con pausa entre cada uno) para no saturar el canal ni acercarse al límite de tiempo de la función.</div>
+                </div>
+                <span style={tag("#EF4444", "#FEF2F2")}>Modo prueba · todo va a tu contacto</span>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, margin: "16px 0" }}>
+                <div style={{ background: "#EFF6FF", borderRadius: 10, padding: "12px 14px", border: "1px solid #BFDBFE" }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#1E40AF", marginBottom: 8 }}>Rumbo a Verificado</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 10 }}>{cola.pendientesVerificado} en cola · {cola.faltanEncolarVerificado} por encolar</div>
+                  <button
+                    onClick={() => handleEncolar("Verificado")}
+                    disabled={encolandoNivel === "Verificado" || cola.faltanEncolarVerificado === 0}
+                    style={{ ...selectStyle, background: "#3B82F6", color: "#fff", border: "none", width: "100%", opacity: cola.faltanEncolarVerificado === 0 ? 0.5 : 1, cursor: cola.faltanEncolarVerificado === 0 ? "not-allowed" : "pointer" }}
+                  >
+                    {encolandoNivel === "Verificado" ? "Encolando…" : `Encolar los que faltan (${cola.faltanEncolarVerificado})`}
+                  </button>
+                </div>
+                <div style={{ background: ACCENT_BG, borderRadius: 10, padding: "12px 14px", border: "1px solid #C7D2FE" }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: ACCENT, marginBottom: 8 }}>Rumbo a Premium</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 10 }}>{cola.pendientesPremium} en cola · {cola.faltanEncolarPremium} por encolar</div>
+                  <button
+                    onClick={() => handleEncolar("Premium")}
+                    disabled={encolandoNivel === "Premium" || cola.faltanEncolarPremium === 0}
+                    style={{ ...selectStyle, background: ACCENT, color: "#fff", border: "none", width: "100%", opacity: cola.faltanEncolarPremium === 0 ? 0.5 : 1, cursor: cola.faltanEncolarPremium === 0 ? "not-allowed" : "pointer" }}
+                  >
+                    {encolandoNivel === "Premium" ? "Encolando…" : `Encolar los que faltan (${cola.faltanEncolarPremium})`}
+                  </button>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, paddingTop: 4, borderTop: "1px solid var(--border)", marginTop: 4 }}>
+                <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, paddingTop: 12 }}>{cola.totalPendientes} en cola total, listos para procesar</span>
+                <button
+                  onClick={handleProcesarLote}
+                  disabled={procesandoLote || cola.totalPendientes === 0}
+                  style={{ ...selectStyle, background: "#10B981", color: "#fff", border: "none", marginTop: 12, opacity: cola.totalPendientes === 0 ? 0.5 : 1, cursor: cola.totalPendientes === 0 ? "not-allowed" : "pointer" }}
+                >
+                  {procesandoLote ? "Procesando lote…" : "Procesar siguiente lote (≤5) →"}
+                </button>
               </div>
             </div>
 
