@@ -201,14 +201,14 @@ export default function UpdatesCelulaPage() {
             borderRadius: 999, padding: "3px 10px",
             fontSize: 11, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase",
           }}>
-            Célula · Brands Success
+            Célula · Supplier Success
           </div>
         </div>
         <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)", margin: 0 }}>
           Updates Semanales
         </h1>
         <p style={{ fontSize: 14, color: "var(--muted)", marginTop: 4 }}>
-          Registro histórico de updates de la célula para el jefe de Brands Success.
+          Registro histórico de updates de la célula para el jefe de Supplier Success.
         </p>
       </div>
 

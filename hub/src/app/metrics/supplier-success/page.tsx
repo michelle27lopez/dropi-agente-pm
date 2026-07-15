@@ -163,7 +163,7 @@ export default function PMDashboard() {
                 </span>
                 <h1 className="font-bold text-sm sm:text-base tracking-tight text-slate-800">Metrics Lab</h1>
               </div>
-              <p className="text-[10px] text-slate-500 font-medium">Célula Brands Success · PM Control</p>
+              <p className="text-[10px] text-slate-500 font-medium">Célula Supplier Success · PM Control</p>
             </div>
           </div>
 
