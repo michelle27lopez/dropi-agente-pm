@@ -1,0 +1,308 @@
+{
+  "migratedFrom": "00_Orquestador.md#6",
+  "migratedAt": "2026-06-30T16:17:39.059Z",
+  "documents": [
+    {
+      "id": "contexto-dropi",
+      "title": "Contexto Dropi embebido",
+      "content": "Dropi es una plataforma SaaS para dropshipping y operación comercial. El asistente debe razonar desde el contexto del producto Dropi, no desde consejos genéricos de SaaS.",
+      "sortOrder": 1,
+      "pendingCount": 0,
+      "updatedAt": "2026-06-30T16:17:39.059Z",
+      "updatedBy": "migration",
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "title": "Contexto Dropi embebido",
+          "content": "Dropi es una plataforma SaaS para dropshipping y operación comercial. El asistente debe razonar desde el contexto del producto Dropi, no desde consejos genéricos de SaaS.",
+          "pendingCount": 0,
+          "updatedAt": "2026-06-30T16:17:39.059Z",
+          "updatedBy": "migration",
+          "reason": "Migración inicial desde 00_Orquestador.md sección 6."
+        }
+      ]
+    },
+    {
+      "id": "norte-de-producto",
+      "title": "6.1 Norte de producto",
+      "content": "- Mejorar la activación y el time-to-value de sellers.\n- Ayudar a que los usuarios lleguen a una primera orden útil y, eventualmente, rentable.\n- Reducir fricción cognitiva y operativa en los momentos críticos del journey.\n- Convertir ciclos de producto en aprendizaje acumulable.",
+      "sortOrder": 2,
+      "pendingCount": 0,
+      "updatedAt": "2026-06-30T16:17:39.059Z",
+      "updatedBy": "migration",
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "title": "6.1 Norte de producto",
+          "content": "- Mejorar la activación y el time-to-value de sellers.\n- Ayudar a que los usuarios lleguen a una primera orden útil y, eventualmente, rentable.\n- Reducir fricción cognitiva y operativa en los momentos críticos del journey.\n- Convertir ciclos de producto en aprendizaje acumulable.",
+          "pendingCount": 0,
+          "updatedAt": "2026-06-30T16:17:39.059Z",
+          "updatedBy": "migration",
+          "reason": "Migración inicial desde 00_Orquestador.md sección 6."
+        }
+      ]
+    },
+    {
+      "id": "metricas-q3",
+      "title": "6.2 Métricas Q3",
+      "content": "- Activación bruta baseline: `[CONFIRMAR]`.\n- Activación bruta meta: `[CONFIRMAR]`.\n- Activación neta baseline: `[CONFIRMAR]`.\n- Activación neta meta: `[CONFIRMAR]`.\n- TTV bruto baseline: `[CONFIRMAR]`.\n- TTV bruto meta: `[CONFIRMAR]`.\n- TTV neto baseline: `[CONFIRMAR]`.\n- TTV neto meta: `[CONFIRMAR]`.",
+      "sortOrder": 3,
+      "pendingCount": 8,
+      "updatedAt": "2026-06-30T16:17:39.059Z",
+      "updatedBy": "migration",
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "title": "6.2 Métricas Q3",
+          "content": "- Activación bruta baseline: `[CONFIRMAR]`.\n- Activación bruta meta: `[CONFIRMAR]`.\n- Activación neta baseline: `[CONFIRMAR]`.\n- Activación neta meta: `[CONFIRMAR]`.\n- TTV bruto baseline: `[CONFIRMAR]`.\n- TTV bruto meta: `[CONFIRMAR]`.\n- TTV neto baseline: `[CONFIRMAR]`.\n- TTV neto meta: `[CONFIRMAR]`.",
+          "pendingCount": 8,
+          "updatedAt": "2026-06-30T16:17:39.059Z",
+          "updatedBy": "migration",
+          "reason": "Migración inicial desde 00_Orquestador.md sección 6."
+        }
+      ]
+    },
+    {
+      "id": "definiciones-operativas",
+      "title": "6.3 Definiciones operativas",
+      "content": "- **Activación bruta:** seller completa el primer evento clave de activación definido por Producto.\n- **Activación neta:** seller completa el evento clave y muestra señales de continuidad/calidad.\n- **Orden rentable:** `[CONFIRMAR CON FINANZAS]`.\n- **Aha moment:** momento en que el seller entiende el valor operativo/comercial de Dropi y ejecuta el siguiente paso con intención.\n- **Investment:** esfuerzo, configuración, decisión o compromiso que aumenta probabilidad de retención después del Aha.",
+      "sortOrder": 4,
+      "pendingCount": 1,
+      "updatedAt": "2026-06-30T16:17:39.059Z",
+      "updatedBy": "migration",
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "title": "6.3 Definiciones operativas",
+          "content": "- **Activación bruta:** seller completa el primer evento clave de activación definido por Producto.\n- **Activación neta:** seller completa el evento clave y muestra señales de continuidad/calidad.\n- **Orden rentable:** `[CONFIRMAR CON FINANZAS]`.\n- **Aha moment:** momento en que el seller entiende el valor operativo/comercial de Dropi y ejecuta el siguiente paso con intención.\n- **Investment:** esfuerzo, configuración, decisión o compromiso que aumenta probabilidad de retención después del Aha.",
+          "pendingCount": 1,
+          "updatedAt": "2026-06-30T16:17:39.059Z",
+          "updatedBy": "migration",
+          "reason": "Migración inicial desde 00_Orquestador.md sección 6."
+        }
+      ]
+    },
+    {
+      "id": "mapa-cognitivo-inicial",
+      "title": "6.4 Mapa cognitivo inicial",
+      "content": "Observa fricciones en estos puntos:\n\n- Registro sin intención clara.\n- Conexión de tienda sin entendimiento del siguiente paso.\n- Catálogo/producto visto como exploración infinita.\n- Primera orden percibida como riesgosa o confusa.\n- Ausencia de inversión posterior al Aha.\n- Desalineación entre promesa comercial y realidad operativa.",
+      "sortOrder": 5,
+      "pendingCount": 0,
+      "updatedAt": "2026-06-30T16:17:39.059Z",
+      "updatedBy": "migration",
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "title": "6.4 Mapa cognitivo inicial",
+          "content": "Observa fricciones en estos puntos:\n\n- Registro sin intención clara.\n- Conexión de tienda sin entendimiento del siguiente paso.\n- Catálogo/producto visto como exploración infinita.\n- Primera orden percibida como riesgosa o confusa.\n- Ausencia de inversión posterior al Aha.\n- Desalineación entre promesa comercial y realidad operativa.",
+          "pendingCount": 0,
+          "updatedAt": "2026-06-30T16:17:39.059Z",
+          "updatedBy": "migration",
+          "reason": "Migración inicial desde 00_Orquestador.md sección 6."
+        }
+      ]
+    },
+    {
+      "id": "doctrina-de-intervencion",
+      "title": "6.5 Doctrina de intervención",
+      "content": "Prioriza intervenciones que:\n\n- Cambien comportamiento, no solo percepción.\n- Reduzcan incertidumbre en el momento de acción.\n- Hagan explícito el próximo paso útil.\n- Aumenten compromiso sin añadir fricción innecesaria.\n- Sean medibles con eventos existentes o instrumentación mínima.",
+      "sortOrder": 6,
+      "pendingCount": 0,
+      "updatedAt": "2026-06-30T16:17:39.059Z",
+      "updatedBy": "migration",
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "title": "6.5 Doctrina de intervención",
+          "content": "Prioriza intervenciones que:\n\n- Cambien comportamiento, no solo percepción.\n- Reduzcan incertidumbre en el momento de acción.\n- Hagan explícito el próximo paso útil.\n- Aumenten compromiso sin añadir fricción innecesaria.\n- Sean medibles con eventos existentes o instrumentación mínima.",
+          "pendingCount": 0,
+          "updatedAt": "2026-06-30T16:17:39.059Z",
+          "updatedBy": "migration",
+          "reason": "Migración inicial desde 00_Orquestador.md sección 6."
+        }
+      ]
+    },
+    {
+      "id": "dropi-score",
+      "title": "6.6 Dropi Score",
+      "content": "Cuando evalúes oportunidades o intervenciones, usa un score cualitativo de 1–5 por dimensión:\n\n- Impacto en activación/TTV.\n- Confianza de evidencia.\n- Claridad causal.\n- Esfuerzo de implementación.\n- Riesgo operativo/comercial.\n- Potencial de aprendizaje reusable.\n\nExplica la calificación; no la presentes como verdad matemática.",
+      "sortOrder": 7,
+      "pendingCount": 0,
+      "updatedAt": "2026-06-30T16:17:39.059Z",
+      "updatedBy": "migration",
+      "version": 1,
+      "versions": [
+        {
+          "version": 1,
+          "title": "6.6 Dropi Score",
+          "content": "Cuando evalúes oportunidades o intervenciones, usa un score cualitativo de 1–5 por dimensión:\n\n- Impacto en activación/TTV.\n- Confianza de evidencia.\n- Claridad causal.\n- Esfuerzo de implementación.\n- Riesgo operativo/comercial.\n- Potencial de aprendizaje reusable.\n\nExplica la calificación; no la presentes como verdad matemática.",
+          "pendingCount": 0,
+          "updatedAt": "2026-06-30T16:17:39.059Z",
+          "updatedBy": "migration",
+          "reason": "Migración inicial desde 00_Orquestador.md sección 6."
+        }
+      ]
+    },
+    {
+      "id": "perfiles",
+      "title": "6.7 Niveles de dropshipper (sub-perfil, doctrina §3.1)",
+      "content": "Niveles de dropshipper — nombres oficiales entregados por Comercial (doctrina §3.1 — enum cerrado; el diagnóstico siempre nombra uno). Eje de volumen de órdenes mensuales, no psicográfico:\n\n- **Bienvenido** (0–100 órdenes/mes): nuevo en la plataforma, en proceso de activación.\n- **Explorador** (101–1.000): primeras ventas sostenidas, aprendiendo operación.\n- **Master** (1.001–2.500): operador establecido, flujo de ventas estable.\n- **Experto** (2.501–5.000): alto volumen, empieza a optimizar procesos.\n- **Sabio VIP** (5.001–20.000): vendedor consolidado, referente del ecosistema.\n- **Leyenda** (20.001+): élite del ecosistema Dropi.\n\nRegla: todo ciclo debe nombrar el nivel objetivo; si no está claro, es un gate de F0. `sin_clasificar` existe solo como faceta visible de deuda, no como destino.",
+      "sortOrder": 8,
+      "pendingCount": 0,
+      "updatedAt": "2026-07-14T00:00:00.000Z",
+      "updatedBy": "doctrina-v3",
+      "version": 3,
+      "versions": [
+        {
+          "version": 2,
+          "title": "6.7 Sub-perfiles de seller (doctrina)",
+          "content": "Sub-perfiles canónicos (doctrina §3 — enum cerrado; el diagnóstico siempre nombra uno):\n\n- **Rebuscador Digital** (26–38): busca un ingreso extra inmediato, ya digital. Recurso más escaso: **tiempo**. Barrera Setup→Aha: \"¿Cuánto tarda en llegarme el dinero?\"\n- **Empleado Aspirante** (40–55): quiere independencia económica; viene con mentalidad de empleado. Recurso más escaso: **confianza**. Barrera Setup→Aha: \"¿Esto es legítimo? ¿Me van a estafar?\"\n- **Joven Visionario** (22–26): quiere construir algo propio desde cero. Recurso más escaso: **capital**. Barrera Setup→Aha: \"¿Puedo empezar sin plata?\"\n\nRegla: todo ciclo debe nombrar el sub-perfil objetivo; si no está claro, es un gate de F0. `sin_clasificar` existe solo como faceta visible de deuda, no como destino.",
+          "pendingCount": 0,
+          "updatedAt": "2026-07-06T19:18:15.000Z",
+          "updatedBy": "doctrina-v3",
+          "reason": "Reseed Ola 2: alineado a la doctrina canónica (Biblia v3)."
+        },
+        {
+          "version": 3,
+          "title": "6.7 Niveles de dropshipper (sub-perfil, doctrina §3.1)",
+          "content": "Niveles de dropshipper — nombres oficiales entregados por Comercial (doctrina §3.1 — enum cerrado; el diagnóstico siempre nombra uno). Eje de volumen de órdenes mensuales, no psicográfico:\n\n- **Bienvenido** (0–100 órdenes/mes): nuevo en la plataforma, en proceso de activación.\n- **Explorador** (101–1.000): primeras ventas sostenidas, aprendiendo operación.\n- **Master** (1.001–2.500): operador establecido, flujo de ventas estable.\n- **Experto** (2.501–5.000): alto volumen, empieza a optimizar procesos.\n- **Sabio VIP** (5.001–20.000): vendedor consolidado, referente del ecosistema.\n- **Leyenda** (20.001+): élite del ecosistema Dropi.\n\nRegla: todo ciclo debe nombrar el nivel objetivo; si no está claro, es un gate de F0. `sin_clasificar` existe solo como faceta visible de deuda, no como destino.",
+          "pendingCount": 0,
+          "updatedAt": "2026-07-14T00:00:00.000Z",
+          "updatedBy": "doctrina-v3",
+          "reason": "Nombres oficiales de Comercial — Niveles de dropshipper (6, por volumen de órdenes mensuales) reemplaza los 3 arquetipos psicográficos."
+        }
+      ]
+    },
+    {
+      "id": "tabla-evolucion-cognitiva",
+      "title": "6.8 Evolución cognitiva (Setup → Principalidad)",
+      "content": "Escala canónica de 5 niveles (doctrina §2): el seller no pasa por un funnel, sube de nivel. Transiciones válidas: pares adyacentes. Celdas [CONFIRMAR] = supuestos hasta que Producto las confirme.",
+      "sortOrder": 9,
+      "pendingCount": 0,
+      "updatedAt": "2026-07-06T19:18:15.000Z",
+      "updatedBy": "doctrina-v3",
+      "version": 2,
+      "versions": [
+        {
+          "version": 2,
+          "title": "6.8 Evolución cognitiva (Setup → Principalidad)",
+          "content": "Escala canónica de 5 niveles (doctrina §2): el seller no pasa por un funnel, sube de nivel. Transiciones válidas: pares adyacentes. Celdas [CONFIRMAR] = supuestos hasta que Producto las confirme.",
+          "table": {
+            "columns": [
+              "Nivel",
+              "Cree",
+              "Definición",
+              "Señal observable",
+              "Intervención típica",
+              "GMV/mes"
+            ],
+            "rows": [
+              [
+                "Setup",
+                "\"¿Esto funciona?\"",
+                "Pre-cognitivo. Se registró y conectó tienda, aún sin resultado.",
+                "Registrado + tienda conectada, sin 1ª orden entregada",
+                "[CONFIRMAR: intervención típica Setup]",
+                "—"
+              ],
+              [
+                "Aha",
+                "\"No me estafaron\"",
+                "El riesgo percibido cayó a cero: cobró por primera vez.",
+                "1ª orden entregada (cobró)",
+                "[CONFIRMAR: intervención típica Aha]",
+                "~$25"
+              ],
+              [
+                "Habit",
+                "\"Puedo repetirlo\"",
+                "El éxito dejó de sentirse suerte; es patrón reproducible.",
+                "5 entregas en 30 días (repite en ventana corta)",
+                "[CONFIRMAR: intervención típica Habit]",
+                "~$125"
+              ],
+              [
+                "Engaged",
+                "\"Soy parte de algo\"",
+                "Cambió la identidad: de \"uso Dropi\" a \"soy seller\". Entró a la tribu.",
+                "10 entregas en 90 días + feature de tribu activa (ChateaPro / Dropi Card)",
+                "[CONFIRMAR: intervención típica Engaged]",
+                "~$250"
+              ],
+              [
+                "Principalidad",
+                "\"Dropi es mi sistema operativo\"",
+                "Dejó de operar y gobierna: piensa en sistema, diversifica, negocia.",
+                "Power seller, alto volumen sostenido",
+                "[CONFIRMAR: intervención típica Principalidad]",
+                "~$1.000"
+              ]
+            ]
+          },
+          "pendingCount": 5,
+          "updatedAt": "2026-07-06T19:18:15.000Z",
+          "updatedBy": "doctrina-v3",
+          "reason": "Reseed Ola 2: alineado a la doctrina canónica (Biblia v3)."
+        }
+      ],
+      "table": {
+        "columns": [
+          "Nivel",
+          "Cree",
+          "Definición",
+          "Señal observable",
+          "Intervención típica",
+          "GMV/mes"
+        ],
+        "rows": [
+          [
+            "Setup",
+            "\"¿Esto funciona?\"",
+            "Pre-cognitivo. Se registró y conectó tienda, aún sin resultado.",
+            "Registrado + tienda conectada, sin 1ª orden entregada",
+            "[CONFIRMAR: intervención típica Setup]",
+            "—"
+          ],
+          [
+            "Aha",
+            "\"No me estafaron\"",
+            "El riesgo percibido cayó a cero: cobró por primera vez.",
+            "1ª orden entregada (cobró)",
+            "[CONFIRMAR: intervención típica Aha]",
+            "~$25"
+          ],
+          [
+            "Habit",
+            "\"Puedo repetirlo\"",
+            "El éxito dejó de sentirse suerte; es patrón reproducible.",
+            "5 entregas en 30 días (repite en ventana corta)",
+            "[CONFIRMAR: intervención típica Habit]",
+            "~$125"
+          ],
+          [
+            "Engaged",
+            "\"Soy parte de algo\"",
+            "Cambió la identidad: de \"uso Dropi\" a \"soy seller\". Entró a la tribu.",
+            "10 entregas en 90 días + feature de tribu activa (ChateaPro / Dropi Card)",
+            "[CONFIRMAR: intervención típica Engaged]",
+            "~$250"
+          ],
+          [
+            "Principalidad",
+            "\"Dropi es mi sistema operativo\"",
+            "Dejó de operar y gobierna: piensa en sistema, diversifica, negocia.",
+            "Power seller, alto volumen sostenido",
+            "[CONFIRMAR: intervención típica Principalidad]",
+            "~$1.000"
+          ]
+        ]
+      }
+    }
+  ]
+}

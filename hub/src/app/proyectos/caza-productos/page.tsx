@@ -711,6 +711,26 @@ export default function CazaProductosPage() {
           <span style={{ color: "var(--border)" }}>/</span>
           <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Caza Productos</span>
           <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+            <a
+              href="/proyectos/caza-productos/discovery"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4,
+                fontSize: 12,
+                fontWeight: 700,
+                color: "#fff",
+                background: "var(--dropi, #F77F00)",
+                padding: "4px 10px",
+                borderRadius: 6,
+                textDecoration: "none",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+            >
+              🔍 Discovery B=MAP
+            </a>
             <span style={tag(ACCENT, ACCENT_BG)}>CAZ-001</span>
             <span style={tag("#3B82F6", "#EFF6FF")}>Oportunidad · Discovery</span>
             <span style={tag("#EF4444", "#FEF2F2")}>Alerta crítica activa</span>
