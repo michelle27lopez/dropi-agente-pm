@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
+import { RPP_BASE_URL } from "@/lib/rpp";
 
 const COLOR = "#F59E0B";
 
@@ -113,7 +114,7 @@ export default function DescuentosPage() {
                   external: false,
                 },
                 {
-                  href: "http://localhost:4200/new/productos/mis-productos",
+                  href: `${RPP_BASE_URL}/new/productos/mis-productos`,
                   icon: "🚀",
                   title: "Rapid Prototype (Angular RPP)",
                   sub: "Mis productos → Editar → pestaña Descuento (proveedor) + Catálogo y Detalle con precio antes/ahora (dropshipper). Requiere ng serve corriendo en dropi-prototypes.",
