@@ -442,6 +442,7 @@ export default function HubPage() {
           <HeaderLink href="/metricas">📈 Métricas</HeaderLink>
           <HeaderLink href="/celulas">🧬 Células</HeaderLink>
           <HeaderLink href="/pruebas-usuarios">🧪 Pruebas con Usuarios</HeaderLink>
+          <HeaderLink href="/notas">📝 Mis notas</HeaderLink>
           {userEmail && (
             <>
               <span style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>{greetingFor(userEmail)}</span>
