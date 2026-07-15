@@ -54,6 +54,15 @@ const updates: Item[] = [
     color: "#7C3AED",
     icon: "🗞️",
   },
+  {
+    key: "bugs-tracking",
+    name: "Seguimiento de Bugs",
+    description: "HUs de bug publicadas en Jira (PROD) con asignado, épica y estado — para que todo el equipo le haga seguimiento sin entrar a Jira.",
+    url: "/bugs",
+    tag: "Jira · PROD",
+    color: "#EF4444",
+    icon: "🐞",
+  },
 ];
 
 const projects: Item[] = [
