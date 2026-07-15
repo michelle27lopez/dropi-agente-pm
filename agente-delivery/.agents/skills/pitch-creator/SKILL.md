@@ -7,7 +7,7 @@ description: Use this skill when the user asks to create a pitch for a Dropi epi
 
 ## Objetivo
 
-Generar un pitch ejecutivo para una épica o iniciativa de Dropi, siguiendo el formato oficial de la compañía. El objetivo del pitch es generar interés y obtener aprobación para pasar a la fase de shaping.
+Generar un pitch ejecutivo para una épica o iniciativa de Dropi, extrayendo información de documentos existentes antes de preguntar.
 
 ## Cuándo usarlo
 
@@ -17,77 +17,54 @@ Generar un pitch ejecutivo para una épica o iniciativa de Dropi, siguiendo el f
 
 ## Instrucciones
 
-1. Lee `canon/dropi_methodology.md` y el contexto de la iniciativa si existe en `approved_context`.
-2. Si falta contexto, pregunta al usuario por lo mínimo necesario:
-   - ¿Qué problema estamos resolviendo?
-   - ¿A quién afecta?
-   - ¿Cuánto tiempo estamos dispuestos a invertir?
-3. Genera el pitch con las siguientes secciones EN ESTE ORDEN:
+### Paso 1 — Buscar información existente
 
----
+1. **Revisar `docs-sync/`** para documentos relacionados:
+   - Research → datos, dolores, usuarios afectados
+   - Kickoffs → contexto, equipo, apetencia
+   - MoSCoW → priorización de features
+2. **Revisar `approved_context`** para contexto oficial.
+3. **Extraer automáticamente:**
+   - El problema (de research o kickoff)
+   - Usuarios afectados (de research)
+   - Datos de respaldo (de research)
 
-### Título del Pitch
-Breve y descriptivo. Debe capturar la esencia de la idea en pocas palabras.
+### Paso 2 — Solo preguntar lo esencial
 
----
+**Preguntar solo si NO se encontró:**
+- ¿Qué problema estamos resolviendo? (si no hay research ni kickoff)
+- ¿Cuánto tiempo estamos dispuestos a invertir?
 
-### 1. Problema
+**Todo lo demás → inferir o marcar como `[por confirmar]`.**
 
-**¿Qué problema estamos resolviendo?**
-Describe el problema específico que afecta a los usuarios o al negocio. Claro y conciso.
+### Paso 3 — Generar el pitch
 
-**¿Por qué es importante este problema?**
-Impacto en los usuarios, el negocio o ambos. Usar datos o ejemplos concretos para ilustrar la magnitud.
+Las secciones y su orden oficial viven en `canon/dropi_methodology.md` → "Pitch" (no redefinir esta lista aquí; si cambia, se actualiza solo ahí):
 
-**¿Cómo se está resolviendo actualmente?**
-Soluciones actuales (o falta de ellas) y sus limitaciones.
+**Título del Pitch** — breve y descriptivo.
 
----
+**1. Problema**
+- Qué problema, por qué es importante, cómo se resuelve hoy.
 
-### 2. Apetencia
+**2. Apetencia**
+- Tiempo máximo, restricciones.
 
-**¿Cuánto tiempo estamos dispuestos a invertir?**
-Tiempo máximo que el equipo puede dedicar. Realista, considerando recursos disponibles.
+**3. Solución** *(Opcional — generar si hay suficiente contexto)*
 
-**¿Qué restricciones tenemos?**
-Limitaciones técnicas, presupuestarias o de recursos que podrían afectar el desarrollo.
+**4. Consideraciones Adicionales** *(Opcional)*
 
----
+### Paso 4 — Presentar y publicar
 
-### 3. Solución *(Opcional)*
-
-**¿Cómo podríamos resolver este problema?**
-Una o varias ideas de solución en líneas generales. Sin entrar en detalles técnicos en esta etapa.
-
-**¿Qué beneficios aportaría esta solución?**
-Resultados esperados para los usuarios y para el negocio.
-
-**¿Qué riesgos existen?**
-Posibles riesgos y desafíos que podrían surgir durante el desarrollo.
-
----
-
-### 4. Consideraciones Adicionales *(Opcional)*
-
-**¿Qué datos o investigaciones respaldan esta idea?**
-Datos de mercado, investigación o feedback de usuarios que justifiquen la necesidad.
-
-**¿Qué preguntas abiertas tenemos?**
-Preguntas que deben responderse en la fase de shaping.
-
-**¿Quién sería el responsable del proyecto?**
-Persona o equipo que lideraría el proyecto si se aprueba.
-
----
+1. Presenta como borrador.
+2. Si el usuario aprueba → ofrecer: "¿Quieres publicarlo en Confluence?" → `/publish-to-confluence`
 
 ## Restricciones
 
-- Las secciones 3 y 4 son opcionales; no forzarlas si el usuario no tiene esa información aún.
-- No inventar datos, cifras o nombres; usar `[dato por confirmar]` como placeholder.
-- El título debe ser concreto y memorable, no genérico.
-- Tono directo y ejecutivo. Sin jerga técnica innecesaria.
-- Longitud: lo suficiente para generar interés, no para explicar la solución completa.
+- Secciones 3 y 4 son opcionales; no forzar sin información.
+- No inventar datos; usar `[dato por confirmar]`.
+- Tono directo y ejecutivo.
+- **Extraer de documentos existentes primero.**
 
 ## Salida esperada
 
-Un pitch completo en el formato oficial de Dropi, listo para presentar a los responsables de tomar decisiones y obtener aprobación para pasar a la fase de shaping.
+Un pitch completo listo para presentar a stakeholders.

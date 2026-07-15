@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product Lens · Asistente Dropi</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Login screen (shown when no valid token) -->
+    <div id="loginView" class="login-screen" hidden>
+      <div class="login-aurora" aria-hidden="true"></div>
+      <div class="login-card">
+        <div class="login-brand">
+          <span class="brand-mark brand-mark--lg" aria-hidden="true">
+            <svg viewBox="0 0 128 128" role="img" aria-label="Product Lens"><path d="M82.9 106.4 A48 48 0 1 1 104.2 87.3" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><circle cx="64" cy="64" r="16" fill="#FF6B00"/></svg>
+          </span>
+          <div class="login-brand-text"><strong>Asistente Dropi</strong><span>Product Lens</span></div>
+        </div>
+        <h1>Del comportamiento al patrón, con rigor.</h1>
+        <p class="login-subtitle">Entra para retomar tus ciclos de decisión.</p>
+        <form id="loginForm" novalidate>
+          <div class="field-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" autocomplete="email" placeholder="admin@dropi.co" required />
+          </div>
+          <div class="field-group">
+            <label for="loginPassword">Contraseña</label>
+            <input type="password" id="loginPassword" autocomplete="current-password" placeholder="••••••••" required />
+          </div>
+          <p id="loginError" class="login-error" hidden></p>
+          <button class="login-submit" type="submit">Entrar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main app (shown after login) -->
+    <div id="workspace" class="workspace" data-theme="light" hidden>
+      <div id="appLoadingOverlay" class="app-loading-overlay" hidden>Cargando…</div>
+      <div id="readonlyBanner" class="readonly-banner" hidden>Ciclo cerrado · Solo lectura</div>
+      <aside class="rail scrim" aria-label="Navegación del workspace">
+        <header class="rail-top">
+          <div class="brand-lockup">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 128 128" role="img" aria-label="Product Lens"><path d="M82.9 106.4 A48 48 0 1 1 104.2 87.3" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><circle cx="64" cy="64" r="16" fill="#FF6B00"/></svg>
+            </span>
+            <strong>Asistente Dropi</strong>
+          </div>
+          <div class="rail-top-actions">
+            <button id="themeToggle" class="icon-button" type="button" aria-label="Alternar tema">☾</button>
+            <button id="railToggle" class="icon-button" type="button" aria-label="Colapsar navegación" aria-pressed="false" title="Colapsar navegación">«</button>
+          </div>
+        </header>
+
+        <section class="rail-section active-cycle-section">
+          <p class="section-label">Ciclo activo</p>
+          <article class="cycle-card" id="activeCycleCard">
+            <p class="muted">Sin ciclo activo</p>
+          </article>
+        </section>
+
+        <section class="rail-section">
+          <p class="section-label">Fases</p>
+          <nav id="phaseStepper" class="phase-list" aria-label="Fases del ciclo"></nav>
+        </section>
+
+        <footer class="rail-footer">
+          <button class="rail-link" type="button" data-view-target="home" title="Ciclos">
+            <span aria-hidden="true">⌂</span>
+            <span class="rail-link-label">Ciclos</span>
+          </button>
+          <button class="rail-link" type="button" data-view-target="library" title="Biblioteca de Patrones">
+            <span aria-hidden="true">□</span>
+            <span class="rail-link-label">Biblioteca de Patrones</span>
+          </button>
+          <button class="rail-link" type="button" data-view-target="context" title="Contexto Dropi">
+            <span aria-hidden="true">ⓘ</span>
+            <span class="rail-link-label">Contexto Dropi</span>
+          </button>
+          <button class="rail-link" type="button" data-view-target="analytics" title="Métricas">
+            <span aria-hidden="true">▤</span>
+            <span class="rail-link-label">Métricas</span>
+          </button>
+          <button id="logoutButton" class="rail-link rail-link--logout" type="button" title="Cerrar sesión">
+            <span aria-hidden="true">↩</span>
+            <span id="userEmail" class="user-email rail-link-label"></span>
+          </button>
+        </footer>
+      </aside>
+
+      <main class="conversation-shell">
+        <section id="homeView" class="app-view home-view scrim" hidden>
+          <header class="page-header">
+            <div><p class="eyebrow">Home</p><h1>Ciclos</h1><p>Retoma decisiones en curso o arranca desde un comportamiento, no desde una feature.</p></div>
+            <button id="newCycleButton" class="primary-action" type="button">Nuevo ciclo</button>
+          </header>
+          <div class="cycles-filter-bar">
+            <div id="statusFilters" class="segmented-control" role="tablist" aria-label="Estado del ciclo">
+              <button class="segment active" type="button" role="tab" aria-selected="true" data-statusfilter="all">Todos</button>
+              <button class="segment" type="button" role="tab" aria-selected="false" data-statusfilter="activo">En curso</button>
+              <button class="segment" type="button" role="tab" aria-selected="false" data-statusfilter="cerrado">Cerrados</button>
+            </div>
+            <div id="causeFilters" class="filter-bar" role="group" aria-label="Causa B=MAP">
+              <button class="filter active" type="button" data-causefilter="all">Todas las causas</button>
+              <button class="filter cause-filter motivation" type="button" data-causefilter="M"><span></span>Motivación</button>
+              <button class="filter cause-filter ability" type="button" data-causefilter="A"><span></span>Ability</button>
+              <button class="filter cause-filter prompt" type="button" data-causefilter="P"><span></span>Prompt</button>
+            </div>
+            <button id="clearCyclesFilters" class="clear-filters" type="button" hidden>Limpiar filtros</button>
+          </div>
+          <div id="cyclesList" aria-label="Ciclos"></div>
+          <section class="empty-teacher" id="emptyCycles">
+            <p>Empieza por un comportamiento, no por una feature. ¿Qué seller, haciendo qué, no está haciendo qué?</p>
+            <div class="example-chips">
+              <button type="button" data-example-cycle="Activación post-Aha: el seller Explorador no configura su 2º envío en 72h">Activación post-Aha</button>
+              <button type="button" data-example-cycle="Recompra día 7: el seller Bienvenido no vuelve a comprar tras el primer pedido">Recompra día 7</button>
+              <button type="button" data-example-cycle="Abandono de checkout: el seller nuevo no completa su primer envío">Abandono de checkout</button>
+            </div>
+            <button class="primary-action" type="button" id="newCycleEmpty">Nuevo ciclo</button>
+          </section>
+        </section>
+
+        <section id="workspaceView" class="workspace-view">
+          <header class="conversation-header">
+            <div class="phase-chip">
+              <span class="live-dot"></span>
+              <strong id="activePhaseLabel">—</strong>
+              <span class="chip-divider"></span>
+              <span id="activePhaseNote"></span>
+            </div>
+            <span class="cycle-name" id="activeCycleName">Sin ciclo activo</span>
+            <button id="advancePhaseBtn" class="advance-phase-btn" type="button" hidden>Avanzar a F2 ✓</button>
+            <button id="commandButton" class="command-button" type="button">⌘K</button>
+            <button id="exportBriefBtn" class="command-button" type="button" title="Exportar brief" aria-label="Exportar brief">▤</button>
+          </header>
+
+          <div id="phaseBar" class="phase-bar" role="tablist" aria-label="Fases del ciclo" hidden></div>
+
+          <div id="phaseGuide" class="phase-guide" hidden></div>
+
+          <section id="messageStream" class="message-stream scrim" aria-live="polite"></section>
+
+          <section id="closePanel" class="close-panel" hidden>
+            <h2>Cerrar ciclo — F5 Aprendizaje</h2>
+            <div class="close-grid">
+              <div class="field-group">
+                <label id="decisionLabel">Decisión</label>
+                <div id="decisionPicker" class="decision-picker" role="group" aria-labelledby="decisionLabel">
+                  <button type="button" class="dp-btn active" data-decision="escalar">Escalar</button>
+                  <button type="button" class="dp-btn" data-decision="matar">Matar</button>
+                  <button type="button" class="dp-btn" data-decision="iterar">Iterar</button>
+                </div>
+                <input type="hidden" id="closureDecision" value="escalar" />
+              </div>
+              <div class="field-group">
+                <label for="closureDelta">Delta métrica</label>
+                <input id="closureDelta" placeholder="ej: +12pp activación" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="closureLearning">¿Qué aprendimos? <em>(se convierte en el patrón)</em></label>
+              <textarea id="closureLearning" rows="3" placeholder="Aprendizaje accionable…"></textarea>
+            </div>
+            <div class="close-grid">
+              <div class="field-group">
+                <label for="patternName">Nombre del patrón</label>
+                <input id="patternName" placeholder="Verbo + segmento + contexto" />
+              </div>
+              <div class="field-group">
+                <label for="patternType">Tipo</label>
+                <select id="patternType">
+                  <option value="patron">Patrón</option>
+                  <option value="anti_patron">Anti-patrón</option>
+                </select>
+              </div>
+            </div>
+            <button id="closeCycleButton" class="primary-action" type="button">Cerrar ciclo y crear patrón</button>
+          </section>
+
+          <form id="chatForm" class="chat-input-wrap">
+            <div class="chat-input">
+              <label class="sr-only" for="messageInput">Mensaje</label>
+              <textarea id="messageInput" rows="2" autocomplete="off"></textarea>
+              <div class="placeholder-line" id="rotatingPlaceholder" aria-hidden="true">
+                ¿Qué comportamiento debe ocurrir, y por qué no ocurre hoy?<span class="caret"></span>
+              </div>
+              <div class="input-meta-row">
+                <div class="command-chips">
+                  <button type="button" data-command="/nuevo-ciclo">/nuevo-ciclo</button>
+                  <button type="button" data-command="/brief">/brief</button>
+                  <button type="button" data-command="/experimento">/experimento</button>
+                </div>
+                <div class="send-area">
+                  <span>⌘↵ enviar</span>
+                  <button class="send-button" type="submit" aria-label="Enviar">➜</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <section id="libraryView" class="app-view library-view scrim" hidden>
+          <header class="page-header">
+            <div><p class="eyebrow">Memoria del equipo</p><h1>Biblioteca de Patrones</h1><p>Patrones y anti-patrones aprendidos al cerrar ciclos en F5.</p></div>
+            <input id="patternSearch" class="search-input" placeholder="Busca por segmento, causa o palabra…" />
+          </header>
+          <div id="patternFilters" class="filter-row">
+            <button class="filter active" data-filter="all">Todos</button>
+            <button class="filter" data-filter="patron">Patrón</button>
+            <button class="filter" data-filter="anti_patron">Anti-patrón</button>
+            <button class="filter cause-filter motivation" data-filter="m"><span></span>Motivación</button>
+            <button class="filter cause-filter ability" data-filter="a"><span></span>Ability</button>
+            <button class="filter cause-filter prompt" data-filter="p"><span></span>Prompt</button>
+            <select id="patternSubProfile" class="filter-select" aria-label="Sub-perfil"><option value="">Sub-perfil</option></select>
+            <select id="patternLevel" class="filter-select" aria-label="Transición cognitiva"><option value="">Transición cognitiva</option></select>
+          </div>
+          <div id="patternsList" class="pattern-grid" aria-live="polite"></div>
+        </section>
+
+        <section id="contextView" class="app-view context-view scrim" hidden>
+          <aside class="toc" id="contextToc"><a href="#doctrina">Contexto Dropi</a><a href="#memoria">Memoria del equipo</a></aside>
+          <article class="doc-body">
+            <div id="contextPendingBanner" class="confirm-banner">Cargando contexto…</div>
+            <h1 id="doctrina">Contexto Dropi</h1>
+            <p>Base de conocimiento persistida, versionada y editable por admins.</p>
+            <div id="contextDocuments" class="context-documents" aria-live="polite"></div>
+
+            <section class="ledger-section">
+              <div class="ledger-head">
+                <h2 id="memoria">Memoria del equipo · Decisiones y aprendizajes</h2>
+                <button id="addLearningBtn" class="primary-action" type="button">Guardar aprendizaje</button>
+              </div>
+              <p class="ledger-help">Se registran solos al cerrar un ciclo (decisión + aprendizaje). Aquí puedes añadir aprendizajes que no vienen de un ciclo. El asistente lee esta memoria en <strong>todos</strong> los ciclos.</p>
+              <div id="decisionsList" class="decisions-list" aria-live="polite"></div>
+            </section>
+          </article>
+        </section>
+
+        <section id="analyticsView" class="app-view analytics-view scrim" hidden>
+          <header class="page-header">
+            <div><p class="eyebrow">Proceso</p><h1>Métricas</h1><p>Cómo decide el equipo: rigor de los gates, iteraciones y patrones aprendidos.</p></div>
+          </header>
+          <div id="analyticsGrid" class="analytics-grid" aria-live="polite"></div>
+        </section>
+      </main>
+
+      <aside class="brief-panel scrim" aria-label="Entregable en vivo">
+        <header class="brief-header">
+          <div class="brief-title-row">
+            <div class="doc-title">
+              <span aria-hidden="true">▤</span>
+              <strong id="deliverableTitle">Intervention Brief</strong>
+              <span class="deliverable-switch">
+                <button id="briefSwitch" class="active" type="button">Brief</button>
+                <button id="experimentSwitch" type="button">Experiment Card</button>
+              </span>
+              <span class="live-badge"><span class="dot"></span>En vivo</span>
+            </div>
+            <button id="exportBrief" class="export-button" type="button">↧ Exportar brief</button>
+          </div>
+          <div class="progress-row" title="Campos con un valor confirmado. No necesitas todos para avanzar — cada gate pide solo los suyos.">
+            <div class="progress-track"><span id="briefProgressFill"></span></div>
+            <strong id="briefProgressText">0 / 11 campos</strong>
+          </div>
+        </header>
+
+        <section id="briefBody" class="brief-body">
+          <p class="brief-help">Este entregable se arma <strong>solo</strong> mientras conversas con el asistente. Los campos se habilitan a medida que avanzas de fase — como en el checklist de la izquierda. <strong>Haz clic en cualquier campo desbloqueado</strong> para escribirlo tú.</p>
+          <div class="brief-block">
+            <p class="section-label">Ciclo</p>
+            <p class="mono-value" id="briefCycleTitle">Sin definir</p>
+          </div>
+          <div class="brief-block">
+            <p class="section-label">Comportamiento objetivo</p>
+            <p id="briefBehavior" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+            <p class="field-hint">Qué seller, haciendo qué, no está haciendo qué.</p>
+          </div>
+          <div class="brief-block">
+            <p class="section-label">Señal cuantitativa</p>
+            <p id="metricField" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+            <p class="field-hint">El dato que muestra que el comportamiento es un problema. Ej: "solo 12% configura en 72h".</p>
+          </div>
+          <div class="brief-block">
+            <p class="section-label">Segmento (cohorte)</p>
+            <p id="briefSegment" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+            <p class="field-hint">La cohorte conductual concreta. Ej: "sellers inactivos 30d", "registrados sin 1ª orden en 7d".</p>
+          </div>
+          <div class="brief-grid">
+            <div class="brief-block">
+              <label class="section-label" for="briefSubProfile">Sub-perfil</label>
+              <select id="briefSubProfile" class="filter-select"></select>
+            </div>
+            <div class="brief-block">
+              <label class="section-label" for="briefCogLevel">Transición cognitiva</label>
+              <select id="briefCogLevel" class="filter-select"></select>
+            </div>
+          </div>
+          <div class="brief-block phase-gated" data-unlock-phase="F1">
+            <p class="section-label">Causa (B=MAP)</p>
+            <p class="field-hint">¿Por qué no ocurre el comportamiento? Elige la causa raíz.</p>
+            <div class="bmap-selector" id="briefCauseSelector">
+              <button class="bmap-btn" data-cause="M" title="El seller no quiere hacerlo — falta Motivación">M · Motivación</button>
+              <button class="bmap-btn" data-cause="A" title="El seller no puede hacerlo — falta Ability">A · Ability</button>
+              <button class="bmap-btn" data-cause="P" title="El seller no recuerda / no se le pide — falta Prompt">P · Prompt</button>
+            </div>
+            <p id="briefCause" class="confirm-field"><span class="field-cta">Elige una causa arriba</span></p>
+            <div id="subCausaRow" class="sub-causa-row" hidden>
+              <label class="section-label" for="briefSubCausa">Sub-causa (opcional)</label>
+              <select id="briefSubCausa" class="filter-select"></select>
+            </div>
+            <p class="lock-note">🔒 Se habilita en F1 · Diagnóstico</p>
+          </div>
+          <div class="brief-block phase-gated" data-unlock-phase="F1">
+            <p class="section-label">Evidencia</p>
+            <p class="field-hint">El gate de F1 pide 2 fuentes que converjan en la misma causa.</p>
+            <p id="briefEvidence" class="confirm-field"><span class="field-cta">Clic para escribir la 1ª fuente</span></p>
+            <p class="field-hint">Un dato que ya existe. Ej: "dashboard de operaciones: 12% configura en 72h".</p>
+            <p id="secondSource" class="confirm-field"><span class="field-cta">Clic para escribir la 2ª fuente</span></p>
+            <p class="field-hint">Una fuente distinta que confirma lo mismo. Ej: "encuesta de soporte: no saben que deben hacerlo".</p>
+            <p class="lock-note">🔒 Se habilita en F1 · Diagnóstico</p>
+          </div>
+          <div class="brief-block phase-gated" data-unlock-phase="F2">
+            <p class="section-label">Intervención</p>
+            <p id="briefIntervention" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+            <p class="field-hint">El cambio mínimo diseñado sobre la causa confirmada. Ej: "checklist post-compra con el siguiente paso explícito".</p>
+            <p class="lock-note">🔒 Se habilita en F2 · Intervención</p>
+          </div>
+          <div class="brief-block phase-gated" data-unlock-phase="F2">
+            <p class="section-label">Hipótesis de intervención</p>
+            <p id="hypothesisField" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+            <p class="field-hint">Ej: "Si agregamos un checklist post-compra, sube la configuración del 2º envío".</p>
+            <p class="lock-note">🔒 Se habilita en F2 · Intervención</p>
+          </div>
+        </section>
+
+        <section id="experimentBody" class="brief-body" hidden>
+          <p class="brief-help">La ficha del experimento: cómo vas a probar la hipótesis. Se dimensiona en F3 y corre en F4. <strong>Haz clic en cualquier campo</strong> para completarlo.</p>
+          <div class="brief-block">
+            <p class="section-label">Hipótesis</p>
+            <p id="experimentHypothesis" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+            <p class="field-hint">Ej: "Si mostramos un checklist post-compra, sube el 2º envío en 72h de 12% a 30%".</p>
+          </div>
+          <div class="brief-block">
+            <p class="section-label">Variable / intervención</p>
+            <p id="experimentVariable" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+            <p class="field-hint">Qué cambia exactamente para el seller. Ej: "checklist post-compra dentro de la app".</p>
+          </div>
+          <div class="brief-grid">
+            <div class="brief-block">
+              <p class="section-label">Métrica primaria</p>
+              <p id="experimentMetric" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">El número que decide éxito o fracaso. Ej: "% con 2º envío en 72h".</p>
+              <div class="metric-type" id="metricTypeToggle" role="radiogroup" aria-label="Tipo de métrica">
+                <button type="button" class="mt-btn" data-mtype="outcome" title="Mueve el resultado del seller (activación, recompra, GMV)">Outcome</button>
+                <button type="button" class="mt-btn" data-mtype="actividad" title="Mide uso/adopción, no resultado">Actividad</button>
+              </div>
+              <p id="metricTypeWarn" class="metric-warn" hidden>Mide actividad, no outcome — el éxito de un experimento no es adopción.</p>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Criterio de stop</p>
+              <p id="experimentStop" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">Cuándo dejas de mirar y decides. Ej: "14 días o 400 sellers por grupo".</p>
+            </div>
+          </div>
+          <div class="brief-grid">
+            <div class="brief-block">
+              <p class="section-label">Tamaño muestra</p>
+              <p id="experimentSample" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">Cuántos sellers por grupo. Ej: "200 control + 200 tratamiento".</p>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Duración</p>
+              <p id="experimentDuration" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">Ej: "14 días".</p>
+            </div>
+          </div>
+          <div class="brief-block">
+            <p class="section-label">Tracking</p>
+            <p id="experimentTracking" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+            <p class="field-hint">El evento que el sistema registra para medir esto. Ej: "evento segundo_envio_configurado".</p>
+          </div>
+          <div id="experimentStatus" class="running-status"><span></span>Borrador · listo para F3</div>
+        </section>
+
+        <footer class="risk-footer">
+          <p class="section-label">Riesgos asumidos</p>
+          <div id="riskTag" class="risk-list is-hidden"></div>
+        </footer>
+      </aside>
+    </div>
+
+    <div id="commandPalette" class="palette" hidden>
+      <div class="palette-card">
+        <p class="section-label">Comandos</p>
+        <input id="paletteSearch" class="palette-input" placeholder="Escribe un comando o destino…" />
+        <p class="palette-group" data-palette-group>Navegación</p>
+        <button type="button" data-palette-command="home">Ir a Ciclos</button>
+        <button type="button" data-palette-command="workspace">Abrir Workspace</button>
+        <button type="button" data-palette-command="library">Abrir Biblioteca</button>
+        <button type="button" data-palette-command="context">Abrir Contexto Dropi</button>
+        <p class="palette-group" data-palette-group>Ir a fase</p>
+        <button type="button" data-palette-command="F0">F0 · Detección</button>
+        <button type="button" data-palette-command="F1">F1 · Diagnóstico</button>
+        <button type="button" data-palette-command="F2">F2 · Intervención</button>
+        <button type="button" data-palette-command="F3">F3 · Experimento</button>
+        <button type="button" data-palette-command="F4">F4 · Despliegue</button>
+        <button type="button" data-palette-command="F5">F5 · Aprendizaje</button>
+        <p class="palette-group" data-palette-group>Ciclo</p>
+        <button type="button" data-palette-command="brief">Exportar brief Markdown</button>
+        <button type="button" data-palette-command="experiment">Mostrar Experiment Card</button>
+        <button type="button" data-palette-command="resumen">Exportar resumen ejecutivo</button>
+        <button type="button" data-palette-command="advance">Avanzar de fase (cerrar gate)</button>
+        <p class="palette-group" data-palette-group>Preferencias</p>
+        <button type="button" data-palette-command="theme">Alternar tema</button>
+      </div>
+    </div>
+
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

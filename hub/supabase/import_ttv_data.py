@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """
 import_ttv_data.py
-Script para procesar y cargar los datos de TTV de registros Userpilot, CRM GHL y encuestas del 6 de julio.
+Script para procesar y cargar los datos de TTV de registros Userpilot, CRM GHL y encuestas.
 Determina el segmento y la comunidad para cada registro.
 """
 
 import os
 import sys
 import csv
-from datetime import datetime
 from supabase import create_client
 
 # Cargar variables de entorno del archivo .env.local de hub
-ENV_PATH = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/.env.local"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+HUB_DIR = os.path.dirname(SCRIPT_DIR)
+ENV_PATH = os.path.join(HUB_DIR, ".env.local")
 env_vars = {}
 
 try:
@@ -36,14 +37,13 @@ if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
 supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 # Rutas de los archivos
-DATA_DIR = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/doc hub/data ttv"
-COMUNIDADES_MASTER_PATH = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/doc hub/Comunidades.csv"
+DATA_DIR = os.path.join(HUB_DIR, "doc hub", "data ttv")
+COMUNIDADES_MASTER_PATH = os.path.join(HUB_DIR, "doc hub", "Comunidades.csv")
 
-CRM_PATH = os.path.join(DATA_DIR, "CRM 6 julio.csv")
-UP_REGISTERS_PATH = os.path.join(DATA_DIR, "registros Userpilot 6 julio.csv")
-SURVEY_1_PATH = os.path.join(DATA_DIR, "encuesta 6 julio.csv")
-SURVEY_2_PATH = os.path.join(DATA_DIR, "encuesta 6 julio 2.csv")
-SURVEY_3_PATH = os.path.join(DATA_DIR, "encuesta 6 julio 3.csv")
+CRM_PATH = os.path.join(DATA_DIR, "crm 14 jul.csv")
+UP_REGISTERS_PATH = os.path.join(DATA_DIR, "singups 14 juli userpilot.csv")
+SURVEY_COMUNIDADES_PATH = os.path.join(DATA_DIR, "encuesta comunidades 16jul.csv")
+SURVEY_HUERFANOS_PATH = os.path.join(DATA_DIR, "encuesta huerfanos 16 jul.csv")
 
 def normalize_email(email):
     if not email:
@@ -94,40 +94,66 @@ if os.path.exists(COMUNIDADES_MASTER_PATH):
 else:
     print("Advertencia: No se encontró Comunidades.csv en el maestro. Se saltará el mapeo de referidos.")
 
-# 2. Cargar encuestas del 6 de julio
+# 2. Cargar encuestas (vienen pre-separadas por origen: comunidades vs huérfanos)
 survey_responses = {} # user_id -> dict de respuestas
+survey_community_ids = set() # user_ids confirmados como comunidad por el archivo de origen
 
-def process_8q_survey(file_path, source_name):
+def process_8q_survey(file_path, source_name, is_community_source=False):
+    """
+    Encuesta ramificada Proveedor/Marca (16 columnas).
+    Col 5 (pregunta 1) decide la rama: si empieza con "Proveedor" responde
+    2-6 (cols 6-10); si es "Marca" responde 7-11 (cols 11-15). Las dos ramas
+    comparten los mismos textos de pregunta duplicados en distintas columnas,
+    por eso se lee por posición y no por nombre de encabezado.
+    """
     if not os.path.exists(file_path):
         print(f"Archivo no encontrado: {file_path}")
         return
-    print(f"Procesando encuesta de 8 preguntas desde: {file_path}...")
+    print(f"Procesando encuesta desde: {file_path}...")
+
+    def clean(v):
+        v = v.strip()
+        return v if v and v != '-' else None
+
     with open(file_path, mode='r', encoding='utf-8') as f:
         reader = csv.reader(f)
         header = next(reader)
         for row in reader:
-            if len(row) < 13:
+            if len(row) < 16:
                 continue
             user_id = row[0].strip()
             if not user_id or user_id == '-':
                 continue
-            
-            # Columnas fijas
-            survey_role = row[5].strip() if row[5].strip() != '-' else None
-            survey_stage = row[6].strip() if row[6].strip() != '-' else None
-            survey_volume = row[7].strip() if row[7].strip() != '-' else None
-            survey_purpose = row[8].strip() if row[8].strip() != '-' else None
-            survey_brand_sales = row[9].strip() if row[9].strip() != '-' else None
-            survey_shipping_pref = row[10].strip() if row[10].strip() != '-' else None
-            survey_sell_pref = row[11].strip() if row[11].strip() != '-' else None
-            survey_category = row[12].strip() if row[12].strip() != '-' else None
-            
+
+            if is_community_source:
+                survey_community_ids.add(user_id)
+
+            role_raw = clean(row[5])
+            is_proveedor = bool(role_raw) and role_raw.lower().startswith("proveedor")
+
+            if is_proveedor:
+                survey_stage = clean(row[6])
+                survey_volume = clean(row[7])
+                survey_sell_pref = clean(row[9])
+                survey_category = clean(row[10])
+                survey_brand_sales = None
+                survey_shipping_pref = None
+                survey_purpose = None
+            else:
+                survey_stage = None
+                survey_volume = None
+                survey_brand_sales = clean(row[11])
+                survey_shipping_pref = clean(row[12])
+                survey_purpose = clean(row[14])
+                survey_category = clean(row[15])
+                survey_sell_pref = None
+
             # Determinar volumen final para segment_key
             vol_val = survey_volume or survey_brand_sales
             segment_key = map_volume_to_segment(vol_val)
-            
+
             survey_responses[user_id] = {
-                "survey_role": survey_role,
+                "survey_role": role_raw,
                 "survey_stage": survey_stage,
                 "survey_volume": survey_volume,
                 "survey_purpose": survey_purpose,
@@ -139,53 +165,81 @@ def process_8q_survey(file_path, source_name):
                 "tipo_proveedor": survey_category
             }
 
-def process_2q_survey(file_path, source_name):
-    if not os.path.exists(file_path):
-        print(f"Archivo no encontrado: {file_path}")
-        return
-    print(f"Procesando encuesta de 2 preguntas desde: {file_path}...")
-    with open(file_path, mode='r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        header = next(reader)
-        for row in reader:
-            if len(row) < 7:
-                continue
-            user_id = row[0].strip()
-            if not user_id or user_id == '-':
-                continue
-            
-            survey_volume = row[5].strip() if row[5].strip() != '-' else None
-            survey_sell_pref = row[6].strip() if row[6].strip() != '-' else None
-            
-            segment_key = map_volume_to_segment(survey_volume)
-            
-            # Si ya existía, no machacar campos de la de 8q, sino mezclar
-            if user_id in survey_responses:
-                survey_responses[user_id]["survey_volume"] = survey_responses[user_id]["survey_volume"] or survey_volume
-                survey_responses[user_id]["survey_sell_pref"] = survey_responses[user_id]["survey_sell_pref"] or survey_sell_pref
-                if segment_key != "pequenos":
-                    survey_responses[user_id]["segment_key"] = segment_key
-            else:
-                survey_responses[user_id] = {
-                    "survey_role": None,
-                    "survey_stage": None,
-                    "survey_volume": survey_volume,
-                    "survey_purpose": None,
-                    "survey_brand_sales": None,
-                    "survey_shipping_pref": None,
-                    "survey_sell_pref": survey_sell_pref,
-                    "survey_source": source_name,
-                    "segment_key": segment_key,
-                    "tipo_proveedor": None
-                }
-
-process_8q_survey(SURVEY_1_PATH, "encuesta_6_julio")
-process_2q_survey(SURVEY_2_PATH, "encuesta_6_julio_2")
-process_8q_survey(SURVEY_3_PATH, "encuesta_6_julio_3")
+process_8q_survey(SURVEY_COMUNIDADES_PATH, "encuesta_comunidades_16jul", is_community_source=True)
+process_8q_survey(SURVEY_HUERFANOS_PATH, "encuesta_huerfanos_16jul", is_community_source=False)
 
 print(f"Total de respuestas de encuestas recolectadas: {len(survey_responses)}")
 
-# 3. Procesar registros de Userpilot
+# 3. Procesar Oportunidades del CRM GHL (antes que Userpilot: el CRM ya trae
+#    comunidad/huerfano/nombre_comunidad, señal más fresca que el mapeo viejo
+#    por "Referido por" contra Comunidades.csv)
+crm_records = []
+crm_email_to_community_name = {}
+crm_email_to_comunidad_flag = {}
+if os.path.exists(CRM_PATH):
+    print(f"Procesando CRM oportunidades desde: {CRM_PATH}...")
+    with open(CRM_PATH, mode='r', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        header = next(reader)
+
+        opp_name_idx = header.index("Nombre de la oportunidad")
+        contact_name_idx = header.index("Nombre del contacto")
+        phone_idx = header.index("teléfono")
+        email_idx = header.index("correo electrónico")
+        seq_idx = header.index("secuencia")
+        stage_idx = header.index("fase")
+        assigned_idx = header.index("asignado")
+        created_idx = header.index("Creado el")
+        updated_idx = header.index("Actualizado el")
+        tags_idx = header.index("etiquetas")
+        status_idx = header.index("estado")
+        opp_id_idx = header.index("ID de oportunidad")
+        contact_id_idx = header.index("ID de contacto")
+        comunidad_idx = header.index("comunidad")
+        nombre_comunidad_idx = header.index("nombre_comunidad")
+
+        for row in reader:
+            if len(row) <= max(opp_name_idx, email_idx, stage_idx, opp_id_idx):
+                continue
+
+            opp_id = row[opp_id_idx].strip()
+            if not opp_id:
+                continue
+
+            email = normalize_email(row[email_idx].strip())
+            phone = normalize_phone(row[phone_idx].strip())
+
+            nombre_comunidad = row[nombre_comunidad_idx].strip() if len(row) > nombre_comunidad_idx else ""
+            comunidad_flag = row[comunidad_idx].strip().upper() if len(row) > comunidad_idx else ""
+            if email:
+                if nombre_comunidad and nombre_comunidad != '-':
+                    crm_email_to_community_name[email] = nombre_comunidad
+                elif comunidad_flag == "SI":
+                    crm_email_to_comunidad_flag[email] = True
+
+            # Parsear tags
+            tags_str = row[tags_idx].strip()
+            tags = [t.strip() for t in tags_str.split(",") if t.strip()] if tags_str else []
+
+            crm_records.append({
+                "opportunity_id": opp_id,
+                "contact_id": row[contact_id_idx].strip(),
+                "contact_name": row[contact_name_idx].strip(),
+                "opportunity_name": row[opp_name_idx].strip(),
+                "phone": row[phone_idx].strip(),
+                "email": row[email_idx].strip(),
+                "stage_name": row[stage_idx].strip(),
+                "status": row[status_idx].strip(),
+                "date_created": row[created_idx].strip(),
+                "date_updated": row[updated_idx].strip(),
+                "tags": tags,
+                "assigned_to": row[assigned_idx].strip(),
+                "sequence": row[seq_idx].strip(),
+                "segment_key": None,  # se completa más abajo, tras procesar Userpilot/encuestas
+                "is_manual": False # se calcula en vivo comparando si existe en Userpilot
+            })
+
+# 4. Procesar registros de Userpilot
 userpilot_cohort_records = []
 userpilot_suppliers_records = []
 
@@ -202,7 +256,7 @@ if os.path.exists(UP_REGISTERS_PATH):
     with open(UP_REGISTERS_PATH, mode='r', encoding='utf-8') as f:
         reader = csv.reader(f)
         header = next(reader)
-        
+
         id_idx = header.index("User Id")
         name_idx = header.index("Name")
         email_idx = header.index("Email")
@@ -217,22 +271,22 @@ if os.path.exists(UP_REGISTERS_PATH):
         role_idx = header.index("Role")
         verified_idx = header.index("Verified")
         billing_idx = header.index("Billing Information")
-        
+
         for row in reader:
             if len(row) <= max(id_idx, name_idx, email_idx, signed_idx, phone_idx, country_idx, ref_idx):
                 continue
-            
+
             user_id = row[id_idx].strip()
             if not user_id or user_id == '-':
                 continue
-                
+
             name = row[name_idx].strip()
             email = normalize_email(row[email_idx].strip())
             signed_up = row[signed_idx].strip()
             phone = normalize_phone(row[phone_idx].strip())
             country = row[country_idx].strip()
             referred_by = row[ref_idx].strip()
-            
+
             device_type = row[device_idx].strip() if row[device_idx].strip() != '-' else None
             browser_lang = row[lang_idx].strip() if row[lang_idx].strip() != '-' else None
             browser = row[browser_idx].strip() if row[browser_idx].strip() != '-' else None
@@ -240,32 +294,41 @@ if os.path.exists(UP_REGISTERS_PATH):
             role = row[role_idx].strip() if row[role_idx].strip() != '-' else 'SUPPLIER'
             verified = row[verified_idx].strip().lower() == 'true'
             billing_info = row[billing_idx].strip().lower() == 'true'
-            
+
             # Guardar mappings
             if email:
                 user_id_to_email[user_id] = email
             if phone:
                 user_id_to_phone[user_id] = phone
-                
-            # Resolver comunidad
+
+            # Resolver comunidad (prioridad: referido histórico > CRM con nombre >
+            # CRM sin nombre > encuesta de origen). El mapeo por "Referido por" contra
+            # Comunidades.csv quedó desactualizado (mayo), por eso el CRM y la encuesta
+            # pesan más si el histórico no resuelve nada.
             belong_to_community = None
             if referred_by and referred_by != '-' and referred_by != '':
                 belong_to_community = ref_to_community.get(referred_by)
-                
+            if not belong_to_community and email in crm_email_to_community_name:
+                belong_to_community = crm_email_to_community_name[email]
+            if not belong_to_community and crm_email_to_comunidad_flag.get(email):
+                belong_to_community = "Comunidad (CRM, sin nombre)"
+            if not belong_to_community and user_id in survey_community_ids:
+                belong_to_community = "Comunidad (encuesta)"
+
             if email and belong_to_community:
                 email_to_community[email] = belong_to_community
             if phone and belong_to_community:
                 phone_to_community[phone] = belong_to_community
-                
+
             # Buscar respuestas de encuesta
             survey = survey_responses.get(user_id)
             segment_key = survey.get("segment_key") if survey else "pequenos"
-            
+
             if email:
                 email_to_segment[email] = segment_key
             if phone:
                 phone_to_segment[phone] = segment_key
-                
+
             # Record para userpilot_suppliers (maestro)
             supplier_record = {
                 "user_id": user_id,
@@ -297,7 +360,7 @@ if os.path.exists(UP_REGISTERS_PATH):
                     "tipo_proveedor": survey["tipo_proveedor"]
                 })
             userpilot_suppliers_records.append(supplier_record)
-            
+
             # Record para ttv_userpilot_cohort
             userpilot_cohort_records.append({
                 "user_id": user_id,
@@ -312,71 +375,18 @@ else:
     print(f"Error: No se encontró {UP_REGISTERS_PATH}")
     sys.exit(1)
 
-# 4. Procesar Oportunidades del CRM GHL
-crm_records = []
-if os.path.exists(CRM_PATH):
-    print(f"Procesando CRM oportunidades desde: {CRM_PATH}...")
-    with open(CRM_PATH, mode='r', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        header = next(reader)
-        
-        opp_name_idx = header.index("Nombre de la oportunidad")
-        contact_name_idx = header.index("Nombre del contacto")
-        phone_idx = header.index("teléfono")
-        email_idx = header.index("correo electrónico")
-        seq_idx = header.index("secuencia")
-        stage_idx = header.index("fase")
-        assigned_idx = header.index("asignado")
-        created_idx = header.index("Creado el")
-        updated_idx = header.index("Actualizado el")
-        tags_idx = header.index("etiquetas")
-        status_idx = header.index("estado")
-        opp_id_idx = header.index("ID de oportunidad")
-        contact_id_idx = header.index("ID de contacto")
-        
-        for row in reader:
-            if len(row) <= max(opp_name_idx, email_idx, stage_idx, opp_id_idx):
-                continue
-                
-            opp_id = row[opp_id_idx].strip()
-            if not opp_id:
-                continue
-                
-            email = normalize_email(row[email_idx].strip())
-            phone = normalize_phone(row[phone_idx].strip())
-            
-            # Determinar segmento del lead
-            segment_key = None
-            if email and email in email_to_segment:
-                segment_key = email_to_segment[email]
-            elif phone and phone in phone_to_segment:
-                segment_key = phone_to_segment[phone]
-            else:
-                segment_key = "pequenos" # default
-                
-            # Parsear tags
-            tags_str = row[tags_idx].strip()
-            tags = [t.strip() for t in tags_str.split(",") if t.strip()] if tags_str else []
-            
-            crm_records.append({
-                "opportunity_id": opp_id,
-                "contact_id": row[contact_id_idx].strip(),
-                "contact_name": row[contact_name_idx].strip(),
-                "opportunity_name": row[opp_name_idx].strip(),
-                "phone": row[phone_idx].strip(),
-                "email": row[email_idx].strip(),
-                "stage_name": row[stage_idx].strip(),
-                "status": row[status_idx].strip(),
-                "date_created": row[created_idx].strip(),
-                "date_updated": row[updated_idx].strip(),
-                "tags": tags,
-                "assigned_to": row[assigned_idx].strip(),
-                "sequence": row[seq_idx].strip(),
-                "segment_key": segment_key,
-                "is_manual": False # se calcula en vivo comparando si existe en Userpilot
-            })
+# 5. Completar segment_key de las oportunidades CRM ya con email_to_segment listo
+for rec in crm_records:
+    email = normalize_email(rec["email"])
+    phone = normalize_phone(rec["phone"])
+    if email and email in email_to_segment:
+        rec["segment_key"] = email_to_segment[email]
+    elif phone and phone in phone_to_segment:
+        rec["segment_key"] = phone_to_segment[phone]
+    else:
+        rec["segment_key"] = "pequenos"
 
-# 5. Guardar en Supabase en lotes
+# 6. Guardar en Supabase en lotes
 def upload_batches(table, records, on_conflict=None):
     if not records:
         print(f"Sin registros para la tabla {table}")

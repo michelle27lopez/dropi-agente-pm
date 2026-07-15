@@ -252,6 +252,102 @@ Nombre oficial del producto o funcionalidad.
 
 ---
 
+## Documento de Research (Research Brain, RB-XXX)
+
+Vive en `research-brain/` (un archivo por research, indexado en `research-brain/INDEX.md`) y se sincroniza con la tabla `research_documents` en Supabase. Es la fuente de verdad para cualquier pregunta sobre usuarios, dolores u oportunidades.
+
+### Formato del ID y título
+`RB-[número secuencial]-[slug del tema]` — ej. `RB-001-dropshippers-creativos-ventas.md`
+
+### Estructura oficial (secciones EN ESTE ORDEN)
+
+**Metadatos** (tabla): ID, Fecha de investigación, Iniciativa relacionada, Segmento investigado, Etapa del journey, Fuente, Tipo de fuente, Nivel de confianza, Tags.
+
+**Problema investigado** — qué bloqueo o pregunta motivó el research.
+
+**Preguntas de investigación** — lista numerada.
+
+**Participantes** (tabla): Participante, Perfil, Tiempo/antigüedad, Nicho o segmento.
+
+**Hallazgos principales** — subsecciones numeradas, cada una con evidencia o cita de respaldo.
+
+**Dolores detectados** (tabla): #, Dolor, Intensidad (Crítico/Alto/Medio/Bajo), Segmento afectado, Evidencia.
+
+**Oportunidades identificadas** (tabla): #, Oportunidad, Quién la señaló, Relacionada con (dolor(es)).
+
+**Hipótesis** — subsecciones `Validadas ✅` y `Descartadas ❌`, cada hipótesis con su evidencia.
+
+**Evidencia y citas relevantes** — citas textuales en blockquote con atribución.
+
+**Métricas mencionadas** (tabla): Métrica, Qué mide, Umbral/referencia, Quién la usa.
+
+**Herramientas mencionadas** (tabla): Categoría, Herramientas, Uso reportado.
+
+**Análisis de herramientas competencia (benchmark)** *(Opcional — solo si el research incluyó benchmark competitivo)*.
+
+**Relación con iniciativas Dropi** (tabla): Iniciativa/Área, Conexión con este research.
+
+**Vacíos de información** — limitaciones del research (sesgo de muestra, falta de datos cuantitativos, etc.).
+
+**Recomendaciones para nuevo research** — qué continuar, qué research nuevo se necesita, qué datos recopilar.
+
+**Fuentes** (tabla): Tipo, Descripción (incluir ruta al documento original si existe).
+
+### Regla dura
+Ningún hallazgo, dolor u oportunidad se registra sin evidencia (cita o dato) que lo respalde. Si no hay evidencia suficiente, el research lo dice explícitamente en "Vacíos de información" en vez de inventar.
+
+---
+
+## Flujo de Usuario (User Flow)
+
+### Estructura oficial (secciones EN ESTE ORDEN)
+
+**a) Flujo narrativo** — lista numerada de pasos desde el punto de entrada hasta el resultado final, indicando qué hace el usuario y qué hace el sistema en cada paso, con bifurcaciones (si X entonces Y, si no entonces Z).
+
+**b) Diagrama Mermaid** — el mismo flujo en `flowchart TD` válido y ejecutable.
+
+**c) Casos alternativos y de error** — al menos 2-3 escenarios relevantes con su propio flujo.
+
+El nivel de detalle se ajusta según la etiqueta de la historia a la que pertenece (UX: perspectiva y emociones del usuario; Frontend: navegación y estados de UI; Backend: llamadas a API y validaciones).
+
+---
+
+## Página de Conocimiento de Módulo (Confluence — Dropi Brain)
+
+Vive en Confluence, dentro de la carpeta del módulo correspondiente (Home, Dashboard, Productos, Pedidos/Órdenes, Logística, Reportes, Financiero, Marketing, CAS, Academy, Configuraciones, Dropi app, Ecomscanner — todas bajo "Dropi CORE" en el espacio Product Discovery). Es la traducción del "cerebro del negocio" (sesiones de Product Lab u otras fuentes) a cada sección funcional de la plataforma. **Confluence es el registro del Dropi Brain**: esta es la estructura oficial que toda página de conocimiento de módulo debe seguir para que ese registro sea consistente, citable y fácil de recuperar (por humanos y por IA).
+
+### Regla de fuente única
+Un tema vive en **una sola página canónica**. Antes de crear una página nueva, se busca si ya existe contenido relacionado (misma carpeta u otra) y se enriquece esa página en vez de duplicar. Si un módulo tiene dos nombres (ej. "Órdenes" internamente / "Mis Pedidos" en la plataforma), se usa un solo nombre canónico y se deja explícita la equivalencia en la página. Antes de publicar, se consulta el "Mapa de fuente única" (página índice en Confluence) para confirmar dónde vive cada tema.
+
+### Estructura oficial (secciones EN ESTE ORDEN)
+
+**Ficha de fuente** (tabla, al inicio de la página):
+
+| Campo | Valor |
+|---|---|
+| Fuente | Nombre y fecha de la sesión/documento origen |
+| Facilitador/a | Quién lideró la sesión |
+| Grabación | Link a Drive |
+| Notas / Transcripción | Link a Drive |
+| Estado del contenido | `Validado` / `Pendiente de validar` / `Hipótesis` |
+
+Si la página se amplía con una sesión nueva, se **agrega una fila nueva** a la ficha de fuente (no se reemplaza la anterior) para conservar el historial de de dónde vino cada parte del contenido.
+
+**Contenido** — secciones con encabezados según el tema, redactadas en lenguaje de negocio (nunca transcripción cruda pegada). Usa paneles: `info` para contexto importante, `warning` para riesgos/gaps operativos, `error` para un dato en disputa pendiente de validar.
+
+**Gaps de conocimiento y acciones pendientes** — panel al final de la página con lo que quedó sin resolver, y con quién debería resolverlo si se mencionó a alguien responsable.
+
+### Regla dura
+Ningún dato numérico (tiempos, porcentajes, montos) se afirma como definitivo si dos fuentes lo contradicen entre sí. Se marca `Estado del contenido: Pendiente de validar`, se deja un panel `error` señalando el conflicto y el link a ambas fuentes, y se avisa a quien pueda confirmarlo — nunca se elige arbitrariamente cuál de los dos dueños tiene razón.
+
+### Labels obligatorios en Confluence
+- `dropi-brain` — en toda página de conocimiento de módulo.
+- `modulo-[nombre]` — uno por carpeta/módulo (ej. `modulo-ordenes`, `modulo-productos`, `modulo-logistica`).
+- `product-lab` (u otra etiqueta que identifique el tipo de fuente, si no es Product Lab).
+- Estado: `validado` / `pendiente-validar` / `hipotesis`.
+
+---
+
 ## Tipos de usuarios en Dropi
 
 - Dropshipper

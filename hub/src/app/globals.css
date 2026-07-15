@@ -8,6 +8,15 @@
   --border: #E5E7EB;
   --fg: #111827;
   --muted: #6B7280;
+  /* Vocabulario de estado semántico — DESIGN.md §2 */
+  --success: #10B981;
+  --success-tint: #ECFDF5;
+  --warning: #F59E0B;
+  --warning-tint: #FFFBEB;
+  --danger: #EF4444;
+  --danger-tint: #FEF2F2;
+  --info: #3B82F6;
+  --info-tint: #EFF6FF;
 }
 
 @layer base {
@@ -69,6 +78,33 @@
   color: var(--item-accent);
 }
 
+.notas-filtro-item:hover .notas-filtro-delete {
+  opacity: 1;
+}
+
+.bug-row {
+  transition: background-color 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.bug-row:hover {
+  background: #FAFBFC;
+}
+
+.bug-key-link {
+  transition: text-decoration-color 0.15s cubic-bezier(0.25, 1, 0.5, 1);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+}
+.bug-key-link:hover,
+.bug-key-link:focus-visible {
+  text-decoration-color: currentColor;
+}
+.bug-key-link:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hub-card {
     animation: none;
@@ -81,7 +117,9 @@
   .hub-card-arrow,
   .hub-link,
   .hub-search,
-  .hub-nav-item {
+  .hub-nav-item,
+  .bug-row,
+  .bug-key-link {
     transition: none;
   }
   .hub-card:hover .hub-card-icon,

@@ -42,7 +42,10 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/pulso-demo") ||
     pathname.startsWith("/api/pulso-demo") ||
     pathname.startsWith("/proyectos/gali-demo") ||
-    pathname.startsWith("/api/gali");
+    pathname.startsWith("/api/gali") ||
+    pathname.startsWith("/proyectos/indicadores/ascenso") ||
+    pathname.startsWith("/api/proyectos/ascenso-ofertas") ||
+    pathname.startsWith("/api/public");
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();

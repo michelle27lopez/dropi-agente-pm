@@ -10,6 +10,7 @@ export const plex = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "
 export const C = {
   orange: "#FF6102",
   orangeLight: "#FFE0CC",
+  orangeSubtle: "#FFF7F2",
   blue: "#0092C6",
   info: "#50A5F1",
   infoBg: "#EEF6FE",
@@ -28,6 +29,11 @@ export const C = {
   bgGray: "#F5F6F8",
   bgGraySide: "#F0F4F9",
   gray700: "#32394D",
+  // Fundations actualizados de "General - default" (Productos v2.0): los inputs,
+  // selects y botones reales usan borde gray-200 + radius-3 (pill), no el
+  // radius-4 cuadrado que tenía el prototipo antes.
+  borderInput: "#C3C9D9",
+  radiusInput: 12,
 };
 
 export const FONT_UI = "var(--font-plex)";
@@ -45,10 +51,16 @@ export const SUPPLIER_LOGOS = {
 
 export type DiscountType = "percent" | "fixed";
 
+// Política de descuento: piso y techo del % real, sin importar si el proveedor
+// lo configura por porcentaje o por valor fijo (se calcula el % equivalente).
+export const MIN_DISCOUNT_PERCENT = 5;
+export const MAX_DISCOUNT_PERCENT = 70;
+
 export type Discount = {
   active: boolean;
   type: DiscountType;
   value: number;
+  startDate: string;
   endDate: string;
   endVolume: string;
   soldUnits: number;
@@ -68,12 +80,15 @@ export type Product = {
   typeBadge?: "Variable" | "Combo";
   tier?: "Exclusivo" | "Premium" | "Verificado";
   private?: boolean;
+  // Historial de precios (mock): usado para calcular el "precio de referencia"
+  // anti-manipulación — ver referencePrice() más abajo.
+  priceHistory?: { date: string; price: number }[];
 };
 
 // Mismos 8 productos, mismas fotos, mismos badges y mismos precios ($62.000 /
 // $120.000 para todos) que el catálogo real de "Productos v2.0" en Figma.
 export const PRODUCTS: Product[] = [
-  { id: "p1", sku: "2014761", name: "Organizador de closet-OR84", image: "/dropi-catalog/p1.png", providerPrice: 62000, suggestedPrice: 120000, supplier: "Tienda Proveedor", category: "Hogar", stock: 126, city: "Bogotá", typeBadge: "Variable", tier: "Exclusivo" },
+  { id: "p1", sku: "2014761", name: "Organizador de closet-OR84", image: "/dropi-catalog/p1.png", providerPrice: 62000, suggestedPrice: 120000, supplier: "Tienda Proveedor", category: "Hogar", stock: 126, city: "Bogotá", typeBadge: "Variable", tier: "Exclusivo", priceHistory: [{ date: "2026-06-20", price: 55000 }] },
   { id: "p2", sku: "2014762", name: "Y68 Reloj Inteligente Gps Pulso Cardiaco", image: "/dropi-catalog/p2.png", providerPrice: 62000, suggestedPrice: 120000, supplier: "Tienda Proveedor", category: "Tecnología", stock: 996, city: "Bogotá", typeBadge: "Variable", tier: "Premium", private: true },
   { id: "p3", sku: "2014763", name: "Crispetera De Silicona Para Microonda", image: "/dropi-catalog/p3.png", providerPrice: 62000, suggestedPrice: 120000, supplier: "Tienda Proveedor", category: "Cocina", stock: 9, city: "Bogotá", typeBadge: "Combo", tier: "Verificado" },
   { id: "p4", sku: "2014764", name: "Adidas Suela Liviana Rosado Dama", image: "/dropi-catalog/p4.png", providerPrice: 62000, suggestedPrice: 120000, supplier: "Tienda Proveedor", category: "Moda", stock: 0, city: "Bogotá", typeBadge: "Variable", tier: "Exclusivo", private: true },
@@ -140,6 +155,15 @@ export function computeFinalPrice(base: number, d: Discount): number {
   if (d.type === "percent") return Math.round(base * (1 - Math.min(Math.max(d.value, 0), 100) / 100));
   return Math.max(base - d.value, 0);
 }
+// Precio de referencia anti-manipulación: el "antes" que se muestra a
+// dropshippers/compradores nunca es el precio que el proveedor tenga hoy en
+// el campo Precio — es el más bajo de los últimos `days` días. Así, subir el
+// precio justo antes de activar un descuento no infla el "antes" mostrado.
+export function referencePrice(product: Product, days = 30): number {
+  const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+  const relevant = (product.priceHistory ?? []).filter((h) => new Date(h.date).getTime() >= cutoff);
+  return Math.min(product.providerPrice, ...relevant.map((h) => h.price));
+}
 export function endedByVolume(d: Discount): boolean {
   const limit = Number(d.endVolume);
   return d.active && !!d.endVolume && limit > 0 && d.soldUnits >= limit;
@@ -149,16 +173,21 @@ export function endedByDate(d: Discount): boolean {
   const end = new Date(d.endDate);
   return !isNaN(end.getTime()) && end.getTime() < Date.now();
 }
+export function notStartedYet(d: Discount): boolean {
+  if (!d.active || !d.startDate) return false;
+  const start = new Date(d.startDate);
+  return !isNaN(start.getTime()) && start.getTime() > Date.now();
+}
 export function isLive(d: Discount) {
-  return d.active && !endedByVolume(d) && !endedByDate(d);
+  return d.active && !endedByVolume(d) && !endedByDate(d) && !notStartedYet(d);
 }
 
-export const emptyDiscount: Discount = { active: false, type: "percent", value: 20, endDate: "", endVolume: "", soldUnits: 0 };
+export const emptyDiscount: Discount = { active: false, type: "percent", value: 20, startDate: "", endDate: "", endVolume: "", soldUnits: 0 };
 
 export const DEFAULT_DISCOUNTS: Record<string, Discount> = {
-  p1: { active: true, type: "percent", value: 25, endDate: "2026-08-20", endVolume: "50", soldUnits: 31 },
+  p1: { active: true, type: "percent", value: 25, startDate: "2026-07-01", endDate: "2026-08-20", endVolume: "50", soldUnits: 31 },
   p2: { ...emptyDiscount },
-  p3: { active: true, type: "fixed", value: 8000, endDate: "", endVolume: "30", soldUnits: 30 },
+  p3: { active: true, type: "fixed", value: 8000, startDate: "2026-06-15", endDate: "", endVolume: "30", soldUnits: 30 },
   p4: { ...emptyDiscount },
   p5: { ...emptyDiscount },
   p6: { ...emptyDiscount },
@@ -235,13 +264,14 @@ export function FocusRingStyle() {
     `}</style>
   );
 }
-export function Input({ value, onChange, placeholder, type = "text" }: { value: string | number; onChange: (v: string) => void; placeholder?: string; type?: string }) {
+export function Input({ value, onChange, onBlur, placeholder, type = "text", invalid = false }: { value: string | number; onChange: (v: string) => void; onBlur?: () => void; placeholder?: string; type?: string; invalid?: boolean }) {
   return (
-    <div className="dsc-focus-ring" style={{ border: `1px solid ${C.border}`, borderRadius: 4, height: 38, background: "#fff", display: "flex", alignItems: "center", padding: "0 12px" }}>
+    <div className="dsc-focus-ring" style={{ border: `1px solid ${invalid ? C.danger : C.borderInput}`, borderRadius: C.radiusInput, height: 40, background: "#fff", display: "flex", alignItems: "center", padding: "0 12px" }}>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onBlur={onBlur}
         placeholder={placeholder}
         style={{ border: "none", outline: "none", width: "100%", fontSize: 14, color: C.textHeader, fontFamily: FONT_UI, background: "transparent" }}
       />
@@ -287,6 +317,124 @@ export function GhostButton({ children, onClick }: { children: React.ReactNode; 
     </button>
   );
 }
+// ─── Tarjeta de producto del catálogo (réplica de "Card-product" en Figma) ────
+// Reutilizada tanto en la grilla del catálogo dropshipper como en la previsualización
+// en vivo del paso "Descuentos" del formulario de producto.
+export const TIER_BG: Record<string, string> = {
+  Exclusivo: "linear-gradient(90deg, #0E111A, #FF6102)",
+  Premium: "linear-gradient(90deg, #FFC10D, #FF6102)",
+  Verificado: "#FFC10D",
+};
+export const TYPE_BG: Record<string, string> = { Variable: "#F49A3D", Combo: "#50A5F1" };
+export function ProductCard({
+  product, discount, onClick, onOrder, interactive = true,
+}: { product: Product; discount: Discount; onClick?: () => void; onOrder?: () => void; interactive?: boolean }) {
+  const live = isLive(discount);
+  const ref = referencePrice(product);
+  const finalP = computeFinalPrice(product.providerPrice, discount);
+  return (
+    <div
+      onClick={interactive ? onClick : undefined}
+      style={{
+        textAlign: "left", cursor: interactive && onClick ? "pointer" : "default", background: "#fff", padding: 4,
+        border: `1px solid ${C.borderLight}`, borderRadius: 12, overflow: "hidden",
+        width: interactive ? undefined : 216, flexShrink: 0,
+      }}
+    >
+      {/* Imagen + badges */}
+      <div style={{ position: "relative", height: 214, borderRadius: 12, overflow: "hidden" }}>
+        <img
+          src={product.image}
+          alt={product.name}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", background: C.bgGray }}
+        />
+        {(product.typeBadge || product.private) && (
+          <div style={{ position: "absolute", top: 8, left: 8, display: "flex", gap: 6, alignItems: "center" }}>
+            {product.typeBadge && (
+              <span style={{
+                fontFamily: FONT_UI, fontSize: 12, fontWeight: 500, color: "#fff", padding: "4px 8px", borderRadius: 999,
+                background: TYPE_BG[product.typeBadge],
+              }}>{product.typeBadge}</span>
+            )}
+            {product.private && (
+              <span style={{ width: 24, height: 24, borderRadius: "50%", background: C.orange, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
+                <IconLock />
+              </span>
+            )}
+          </div>
+        )}
+        {live && (
+          <span style={{
+            position: "absolute", top: 8, right: interactive ? 52 : 8, fontFamily: FONT_UI, fontSize: 10, fontWeight: 800, color: "#fff",
+            background: C.danger, padding: "3px 8px", borderRadius: 999,
+          }}>
+            {discount.type === "percent" ? `-${Math.round((1 - finalP / ref) * 100)}%` : `-${money(Math.max(ref - finalP, 0))}`}
+          </span>
+        )}
+        {interactive && (
+          <button
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "absolute", bottom: 5, right: 6, width: 40, height: 40, borderRadius: 12,
+              background: "#fff", border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center",
+              color: C.textHeader, cursor: "pointer",
+            }}
+          ><IconHeart /></button>
+        )}
+        {product.tier && (
+          <span style={{
+            position: "absolute", bottom: -9, left: 2, display: "flex", alignItems: "center", gap: 4,
+            fontFamily: FONT_UI, fontSize: 10, fontWeight: 700, color: "#fff", background: TIER_BG[product.tier], padding: "3px 10px 3px 8px", borderRadius: 999,
+          }}>
+            <IconStar />{product.tier}
+          </span>
+        )}
+      </div>
+
+      {/* Info */}
+      <div style={{ padding: "12px 8px 8px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+          <span style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted }}>{product.category}</span>
+          <span style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted }}>Stock: <strong style={{ color: product.stock > 0 ? "#0ABB87" : C.danger, fontWeight: 500 }}>{product.stock}</strong></span>
+        </div>
+        <p style={{ fontFamily: FONT_UI, fontWeight: 500, fontSize: 16, color: C.gray700, marginBottom: 4, lineHeight: 1.3 }}>{product.name}</p>
+        <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, marginBottom: 10 }}>
+          Proveedor: <span style={{ color: C.info }}>{product.supplier}</span>
+        </p>
+        <div style={{ display: "flex", gap: 16, marginBottom: interactive ? 10 : 0 }}>
+          <div>
+            <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, marginBottom: 2 }}>Precio proveedor</p>
+            {live ? (
+              <>
+                <p style={{ fontFamily: FONT_UI, fontSize: 11.5, color: C.textDisabled, textDecoration: "line-through" }}>{money(ref)}</p>
+                <p style={{ fontFamily: FONT_UI, fontWeight: 700, fontSize: 14, color: C.success }}>{money(finalP)}</p>
+              </>
+            ) : (
+              <p style={{ fontFamily: FONT_UI, fontWeight: 700, fontSize: 14, color: C.gray700 }}>{money(product.providerPrice)}</p>
+            )}
+          </div>
+          <div>
+            <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, marginBottom: 2 }}>Precio sugerido</p>
+            <p style={{ fontFamily: FONT_UI, fontWeight: 700, fontSize: 14, color: C.gray700 }}>{money(product.suggestedPrice)}</p>
+          </div>
+        </div>
+      </div>
+      {interactive && onOrder && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onOrder(); }}
+          style={{
+            width: "100%", height: 40, border: "none", borderTop: `1px solid ${C.borderLight}`, background: "#fff",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8, cursor: "pointer",
+            fontFamily: FONT_UI, fontSize: 14, fontWeight: 700, color: C.orange,
+          }}
+        >
+          <IconCart />Enviar a cliente
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function ProductImg({ product, size, radius = 8 }: { product: Product; size: number; radius?: number }) {
   return (
     <img
@@ -303,6 +451,249 @@ export function Row({ label, value }: { label: string; value: React.ReactNode })
     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
       <span style={{ fontFamily: FONT_UI, fontSize: 12.5, color: C.textMuted }}>{label}</span>
       <span style={{ fontFamily: FONT_UI, fontSize: 12.5, color: C.textHeader }}>{value}</span>
+    </div>
+  );
+}
+
+// ─── Stepper del formulario de producto (réplica de "Steps" en Productos v2.0) ─
+export type StepKey = "general" | "stock" | "imagenes" | "recursos" | "privados" | "garantias" | "descuentos";
+export const STEPS: { key: StepKey; label: string }[] = [
+  { key: "general", label: "General" },
+  { key: "stock", label: "Stock" },
+  { key: "imagenes", label: "Imágenes" },
+  { key: "recursos", label: "Recursos adicionales" },
+  { key: "privados", label: "Productos privados" },
+  { key: "garantias", label: "Garantías" },
+  { key: "descuentos", label: "Descuentos" },
+];
+export function Stepper({ active, onSelect }: { active: StepKey; onSelect: (k: StepKey) => void }) {
+  return (
+    <div style={{ position: "relative", width: 224, flexShrink: 0, alignSelf: "flex-start" }}>
+      <div style={{ position: "absolute", left: 11, top: 12, bottom: 12, width: 2, background: C.borderLight }} />
+      {STEPS.map((s) => {
+        const isActive = s.key === active;
+        return (
+          <button
+            key={s.key}
+            onClick={() => onSelect(s.key)}
+            className="dsc-focus-ring"
+            style={{
+              position: "relative", display: "flex", alignItems: "center", gap: 12,
+              width: "100%", background: "none", border: "none", cursor: "pointer",
+              padding: "10px 0", textAlign: "left",
+            }}
+          >
+            <span style={{
+              width: 24, height: 24, borderRadius: "50%", flexShrink: 0, background: "#fff",
+              border: isActive ? `2px solid ${C.orange}` : `2px solid ${C.border}`,
+              display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1,
+            }}>
+              {isActive && <span style={{ width: 10, height: 10, borderRadius: "50%", background: C.orange }} />}
+            </span>
+            <span style={{
+              fontFamily: FONT_UI, fontSize: 13, color: isActive ? C.gray700 : C.textMuted,
+              fontWeight: isActive ? 600 : 400,
+            }}>
+              {s.label}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Piezas del formulario "General" (réplica de "General - default") ────────
+function Checkbox({ checked, onToggle, label }: { checked: boolean; onToggle: () => void; label: string }) {
+  return (
+    <button onClick={onToggle} className="dsc-focus-ring" style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", cursor: "pointer", padding: 0 }}>
+      <span style={{
+        width: 20, height: 20, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        border: checked ? "none" : `2px solid ${C.borderInput}`, background: checked ? C.orange : "#fff",
+      }}>
+        {checked && (
+          <svg width="12" height="12" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6" stroke="#fff" strokeWidth="3" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        )}
+      </span>
+      <span style={{ fontFamily: FONT_UI, fontSize: 14, color: C.textHeader }}>{label}</span>
+    </button>
+  );
+}
+// Punto de radio button (réplica del átomo "Radio" de Productos v2.0) — naranja
+// Dropi al seleccionar, nunca azul.
+export function RadioDot({ selected, size = 20 }: { selected: boolean; size?: number }) {
+  return (
+    <span style={{
+      width: size, height: size, borderRadius: "50%", flexShrink: 0, background: "#fff",
+      border: selected ? `${Math.round(size * 0.3)}px solid ${C.orange}` : `2px solid ${C.borderInput}`,
+      boxSizing: "border-box",
+    }} />
+  );
+}
+function VisibilityCard({ label, desc, selected, onSelect }: { label: string; desc: string; selected: boolean; onSelect: () => void }) {
+  return (
+    <button onClick={onSelect} className="dsc-focus-ring" style={{
+      flex: 1, display: "flex", gap: 12, alignItems: "flex-start", textAlign: "left", cursor: "pointer",
+      padding: 16, borderRadius: 12, border: selected ? `1.5px solid ${C.orange}` : `1px solid ${C.borderLight}`,
+      background: selected ? C.orangeSubtle : C.bgGraySide,
+    }}>
+      <span style={{ marginTop: 2 }}><RadioDot selected={selected} /></span>
+      <span>
+        <p style={{ fontFamily: FONT_UI, fontSize: 14, fontWeight: 600, color: selected ? C.gray700 : C.textMuted, marginBottom: 4 }}>{label}</p>
+        <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, lineHeight: 1.4 }}>{desc}</p>
+      </span>
+    </button>
+  );
+}
+// ─── Alert (réplica del componente "Alert" en Productos v2.0) ────────────────
+export function Alert({ variant = "info", children }: { variant?: "info" | "danger"; children: React.ReactNode }) {
+  const palette = variant === "info"
+    ? { bg: C.infoBg, border: C.infoBorder, icon: C.info }
+    : { bg: C.dangerBg, border: C.dangerBorder, icon: C.danger };
+  return (
+    <div style={{ background: palette.bg, border: `1px solid ${palette.border}`, borderRadius: 8, padding: "10px 14px", display: "flex", gap: 8, alignItems: "flex-start" }}>
+      <span style={{ color: palette.icon, flexShrink: 0, marginTop: 1, lineHeight: 0 }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="9" />
+          <path d="M12 11v5" />
+          <circle cx="12" cy="7.5" r="0.9" fill="currentColor" stroke="none" />
+        </svg>
+      </span>
+      <div style={{ fontFamily: FONT_UI, fontSize: 13, fontWeight: 500, color: C.textHeader, lineHeight: 1.5 }}>{children}</div>
+    </div>
+  );
+}
+function FieldSelect({ label, value, onChange, options, hint }: { label: string; value: string; onChange: (v: string) => void; options: string[]; hint?: string }) {
+  return (
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 8 }}>
+        <span style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textHeader }}>{label}</span>
+        {hint && <span title={hint} style={{ fontSize: 11, color: C.textMuted, cursor: "help" }}>ⓘ</span>}
+      </div>
+      <div className="dsc-focus-ring" style={{ border: `1px solid ${C.borderInput}`, borderRadius: C.radiusInput, height: 40, background: "#fff", display: "flex", alignItems: "center", padding: "0 10px 0 12px" }}>
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          style={{ border: "none", outline: "none", width: "100%", fontSize: 14, color: C.textHeader, fontFamily: FONT_UI, background: "transparent" }}
+        >
+          {options.map((o) => <option key={o} value={o}>{o}</option>)}
+        </select>
+      </div>
+    </div>
+  );
+}
+function MeasureInput({ label, value, onChange, unit }: { label: string; value: string; onChange: (v: string) => void; unit: string }) {
+  return (
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textHeader, marginBottom: 8 }}>{label}</p>
+      <div style={{ position: "relative" }}>
+        <Input type="number" value={value} onChange={onChange} placeholder="0" />
+        <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontFamily: FONT_UI, fontSize: 12, color: C.textMuted, pointerEvents: "none" }}>{unit}</span>
+      </div>
+    </div>
+  );
+}
+export function GeneralSection({
+  product, mode, onGoToDiscount,
+}: { product: Product; mode: "create" | "edit"; onGoToDiscount: () => void }) {
+  const [nombre, setNombre] = useState(product.name);
+  const [nombreGuia, setNombreGuia] = useState(false);
+  const [visibilidad, setVisibilidad] = useState<"publico" | "privado">(product.private ? "privado" : "publico");
+  const [peso, setPeso] = useState("0");
+  const [longitud, setLongitud] = useState("0");
+  const [ancho, setAncho] = useState("0");
+  const [alto, setAlto] = useState("0");
+  const [precio, setPrecio] = useState(product.providerPrice ? String(product.providerPrice) : "");
+  const [precioSugerido, setPrecioSugerido] = useState(product.suggestedPrice ? String(product.suggestedPrice) : "");
+  const [tipo, setTipo] = useState(product.typeBadge === "Combo" ? "Combo" : "Simple");
+  const [categoria, setCategoria] = useState(product.category || "Selecciona");
+  const [sku, setSku] = useState(product.sku);
+  const [descripcion, setDescripcion] = useState("");
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <div>
+        <Label>Nombre del producto</Label>
+        <Input value={nombre} onChange={setNombre} placeholder="Escribe el nombre del producto" />
+      </div>
+
+      <Checkbox checked={nombreGuia} onToggle={() => setNombreGuia((v) => !v)} label="Crear un nombre diferente para la guía de envío" />
+
+      <div>
+        <Label>Elige cómo quieres publicar tu producto:</Label>
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+          <VisibilityCard label="Público" desc="Disponible para todos los dropshippers en el catálogo." selected={visibilidad === "publico"} onSelect={() => setVisibilidad("publico")} />
+          <VisibilityCard label="Privado" desc="Solo tú podrás ver y vender este producto." selected={visibilidad === "privado"} onSelect={() => setVisibilidad("privado")} />
+        </div>
+      </div>
+
+      <div>
+        <p style={{ fontFamily: FONT_UI, fontWeight: 500, fontSize: 14, color: C.textHeader, marginBottom: 6 }}>Medidas del producto</p>
+        <p style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textMuted, lineHeight: 1.5, marginBottom: 12 }}>
+          Para calcular el valor del envío, tenemos en cuenta el peso real y el peso volumétrico del producto. Este se calcula con la fórmula: longitud × ancho × alto.
+        </p>
+        <div style={{ marginBottom: 16 }}>
+          <Alert>Asegúrate de ingresar medidas reales y precisas para evitar refacturaciones en el valor del flete.</Alert>
+        </div>
+        <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+          <MeasureInput label="Peso" value={peso} onChange={setPeso} unit="g" />
+          <MeasureInput label="Longitud" value={longitud} onChange={setLongitud} unit="cm" />
+          <MeasureInput label="Ancho" value={ancho} onChange={setAncho} unit="cm" />
+          <MeasureInput label="Alto" value={alto} onChange={setAlto} unit="cm" />
+        </div>
+        <p style={{ fontFamily: FONT_UI, fontSize: 11, color: C.textMuted, marginTop: 6 }}>Máximo permitido: 5.000 g</p>
+      </div>
+
+      <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+        <div style={{ flex: 1, minWidth: 180 }}>
+          <Label>Precio</Label>
+          <Input type="number" value={precio} onChange={setPrecio} placeholder="$0" />
+          {mode === "edit" && (
+            <button onClick={onGoToDiscount} className="dsc-focus-ring" style={{
+              marginTop: 8, background: "none", border: "none", padding: 0, cursor: "pointer",
+              display: "inline-flex", alignItems: "center", gap: 6,
+              fontFamily: FONT_UI, fontSize: 12.5, fontWeight: 700, color: C.orange,
+            }}>
+              🏷️ Crear descuento
+            </button>
+          )}
+        </div>
+        <div style={{ flex: 1, minWidth: 180 }}>
+          <Label>Precio sugerido</Label>
+          <Input type="number" value={precioSugerido} onChange={setPrecioSugerido} placeholder="$0" />
+        </div>
+      </div>
+
+      <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+        <FieldSelect label="Tipo" value={tipo} onChange={setTipo} options={["Simple", "Variable", "Combo"]} />
+        <FieldSelect label="Categoría" value={categoria} onChange={setCategoria} options={["Selecciona", "Hogar", "Tecnología", "Cocina", "Moda", "Ropa deportiva"]} hint="Categoría del producto en el catálogo" />
+      </div>
+
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 8 }}>
+          <span style={{ fontFamily: FONT_UI, fontWeight: 500, fontSize: 14, color: C.textHeader }}>SKU (Opcional)</span>
+          <span title="Identificador interno del producto" style={{ fontSize: 11, color: C.textMuted, cursor: "help" }}>ⓘ</span>
+        </div>
+        <Input value={sku} onChange={setSku} placeholder="ej. 2014761" />
+      </div>
+
+      <div>
+        <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 6 }}>
+          <span style={{ fontFamily: FONT_UI, fontWeight: 500, fontSize: 14, color: C.textHeader }}>Descripción</span>
+          <span title="Explica qué es el producto, cómo funciona y sus características" style={{ fontSize: 11, color: C.textMuted, cursor: "help" }}>ⓘ</span>
+        </div>
+        <p style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textMuted, marginBottom: 8 }}>
+          Indica qué es el producto, cómo funciona y cuáles son sus principales características. Mínimo 200 caracteres.
+        </p>
+        <textarea
+          value={descripcion}
+          onChange={(e) => setDescripcion(e.target.value)}
+          rows={5}
+          placeholder="Escribe la descripción del producto…"
+          className="dsc-focus-ring"
+          style={{ width: "100%", border: `1px solid ${C.borderInput}`, borderRadius: C.radiusInput, padding: 12, fontFamily: FONT_UI, fontSize: 14, color: C.textHeader, resize: "vertical", boxSizing: "border-box" }}
+        />
+      </div>
     </div>
   );
 }
@@ -422,6 +813,7 @@ export function ProductDetail({
   const desc = DESCRIPTIONS[product.id];
   const meta = SUPPLIER_META[product.supplier];
   const finalPrice = computeFinalPrice(product.providerPrice, discount);
+  const ref = referencePrice(product);
   const privateStock = Math.round(product.stock * 0.3);
   const [tab, setTab] = useState<"detalles" | "garantias" | "recursos">("detalles");
 
@@ -450,7 +842,7 @@ export function ProductDetail({
               <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textMuted }}>Precio del proveedor:</p>
               {live ? (
                 <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
-                  <span style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textDisabled, textDecoration: "line-through" }}>{money(product.providerPrice)}</span>
+                  <span style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textDisabled, textDecoration: "line-through" }}>{money(ref)}</span>
                   <span style={{ fontFamily: FONT_UI, fontWeight: 700, fontSize: 18, color: C.success }}>{money(finalPrice)}</span>
                 </div>
               ) : (
@@ -464,7 +856,7 @@ export function ProductDetail({
             </div>
             {live && (
               <span style={{ fontFamily: FONT_UI, fontSize: 11, fontWeight: 700, background: C.dangerBg, color: C.danger, padding: "3px 9px", borderRadius: 999 }}>
-                -{discount.type === "percent" ? `${discount.value}%` : money(product.providerPrice - finalPrice)}
+                -{discount.type === "percent" ? `${Math.round((1 - finalPrice / ref) * 100)}%` : money(Math.max(ref - finalPrice, 0))}
               </span>
             )}
           </div>
@@ -556,6 +948,7 @@ export function CrearOrdenModal({
   const [carrier, setCarrier] = useState<string | null>(null);
 
   const providerUnit = computeFinalPrice(product.providerPrice, discount);
+  const providerRef = referencePrice(product);
   const totalProveedor = providerUnit * cantidad;
   const totalVenta = ventaPrice * cantidad;
   const shipping = carrier ? CARRIERS.find((c) => c.name === carrier)!.price : null;
@@ -606,7 +999,7 @@ export function CrearOrdenModal({
                     <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textHeader }}>
                       Precio proveedor: {live ? (
                         <>
-                          <span style={{ textDecoration: "line-through", color: C.textDisabled, marginRight: 6 }}>{money(product.providerPrice)}</span>
+                          <span style={{ textDecoration: "line-through", color: C.textDisabled, marginRight: 6 }}>{money(providerRef)}</span>
                           <strong style={{ color: C.success }}>{money(providerUnit)}</strong>
                         </>
                       ) : <strong>{money(product.providerPrice)}</strong>}
@@ -683,7 +1076,7 @@ export function CrearOrdenModal({
               <span style={{ fontFamily: FONT_UI, fontSize: 13.5, fontWeight: 700, color: C.gray700 }}>Total a recaudar:</span>
               <span style={{ fontFamily: FONT_UI, fontSize: 13.5, fontWeight: 700, color: C.gray700 }}>{money(totalRecaudar)}</span>
             </div>
-            <Row label="Precio proveedor:" value={live ? <><s style={{ color: C.textDisabled, marginRight: 6 }}>{money(product.providerPrice * cantidad)}</s>{money(totalProveedor)}</> : money(totalProveedor)} />
+            <Row label="Precio proveedor:" value={live ? <><s style={{ color: C.textDisabled, marginRight: 6 }}>{money(providerRef * cantidad)}</s>{money(totalProveedor)}</> : money(totalProveedor)} />
             <Row label="Precio de envío:" value={shipping != null ? money(shipping) : "—"} />
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
               <span style={{ fontFamily: FONT_UI, fontSize: 12.5, color: C.textMuted }}>Comisión de la plataforma <span style={{ fontSize: 10, background: C.successBg, color: C.success, padding: "1px 6px", borderRadius: 999, marginLeft: 4 }}>Exento</span></span>
