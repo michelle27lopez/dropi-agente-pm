@@ -103,6 +103,24 @@ export const snapshot: WeeklySnapshot = {
       tipoColor: "#10B981",
       impacto: "Alto",
     },
+    {
+      id: "INS-010",
+      titulo: "TI 10-jul · Reorganización del equipo de José bloquea toda la cola de dev S2",
+      descripcion: "En la reunión del 10-jul, José confirmó que le cambiaron el equipo de desarrollo por una reorganización interna. Esto tiene impacto directo en tres frentes: (1) NEG-001 — el handoff se hizo el lunes 7-jul pero la estimación quedó detenida indefinidamente; (2) COM-001 — detenido por Dropify sin terminar, sin fecha de reactivación posible; (3) Cola S2 — si el equipo está reorganizándose, las estimaciones para NEG-002, COM-002, DESC-001 y CAT-001 tampoco tienen base sólida. Este es el riesgo más alto del S2: no es solo un cuello de botella de capacidad, es una incertidumbre estructural en el equipo de TI.",
+      proyecto: "Cola Dev / TI",
+      tipo: "Riesgo",
+      tipoColor: "#EF4444",
+      impacto: "Alto",
+    },
+    {
+      id: "INS-011",
+      titulo: "COM-001 detenido por Dropify · NEG-001 sin estimación · TTV bug → Soporte",
+      descripcion: "Tres señales concretas del update de TI del 10-jul: (1) COM-001 (Combos Shopify + CAS + ECOM Scanner) queda detenido porque Dropify no está terminado — José no pudo dar fecha tentativa de reactivación. (2) NEG-001 — la estimación de desarrollo queda congelada por la reorganización del equipo. El handoff ya está hecho; el bloqueo es en TI. (3) TTV bug post-registro (111 suppliers en el limbo): José indicó que se reporte a Soporte como bug, no lo asumió como desarrollo directo. Cada uno de estos es un bloqueo independiente que afecta la operación de la célula esta semana.",
+      proyecto: "COM-001 / NEG-001 / TTV-001",
+      tipo: "Riesgo",
+      tipoColor: "#EF4444",
+      impacto: "Alto",
+    },
   ],
   oportunidades: [
     {
@@ -114,8 +132,8 @@ export const snapshot: WeeklySnapshot = {
       mueve: "620 nuevos suppliers activos con catálogo visible",
       hipotesis: "North Star: registro → activo en ≤5 días",
       gmv: "~105.000 órdenes/año · USD 1,57M GMV proyectado",
-      avance: "11 días de operación. Pipeline real: 243 UP → 165 CRM (111 en limbo por bug post-registro). Del CRM: 20 auditoría confirmada, 42 estancados en Nuevo registro, 0 listos para vender. Meta C1: 104 activos al 31-ago (53 días). A ritmo actual el C1 está en riesgo — necesitamos resolver el bug de auto-login y acelerar la conversión en Nuevo registro.",
-      next: "Resolver bug post-registro con TI (José). Reunión seguimiento 15-jul: dashboard tiempos entre etapas (Enrique) + auditoría #1.",
+      avance: "11 días de operación. Pipeline real: 243 UP → 165 CRM (111 en limbo por bug post-registro). Del CRM: 20 auditoría confirmada, 42 estancados en Nuevo registro, 0 listos para vender. Meta C1: 104 activos al 31-ago (53 días). A ritmo actual el C1 está en riesgo. Bug de auto-login post-registro: José (10-jul) indicó que se debe reportar a Soporte como bug — no lo tomó como desarrollo directo.",
+      next: "Reportar bug post-registro a Soporte con descripción técnica. Reunión seguimiento 15-jul: dashboard tiempos entre etapas (Enrique) + auditoría #1.",
       badge: "🔴 0/104 · C1 en riesgo",
       badgeColor: "#EF4444",
       ttvLive: true,
@@ -175,26 +193,27 @@ export const snapshot: WeeklySnapshot = {
     {
       code: "NEG-001",
       name: "Negociaciones · Supplier↔Comunidad",
-      status: "🔴 Detenida · Espera NEG-002",
+      status: "🔴 Bloqueada · Reorganización TI + espera NEG-002",
       statusColor: "#EF4444",
       color: "#10B981",
       mueve: "Negociaciones formalizadas → comisiones acordadas → GMV",
       hipotesis: "Carga masiva de negociaciones habilita el escalado a toda la base",
       gmv: "Fase 1: Transacciones controladas",
-      avance: "TI detuvo la carga masiva de negociaciones. Solo se ejecutará cuando NEG-002 arranque y entregue la funcionalidad de carga masiva. Sin estimación de NEG-002, NEG-001 no puede escalar. La funcionalidad base existe y está disponible para todos los suppliers — el bloqueo es en la operativa de carga a escala.",
-      next: "Esperar estimación de NEG-002 de TI. Sin esa fecha, NEG-001 queda en pausa operativa.",
-      badge: "🔴 Detenida · Depende NEG-002",
+      avance: "Doble bloqueo. (1) Reunión de handoff con TI se realizó el lunes 7-jul. Se esperaba estimación esta semana. José confirmó (10-jul) que la estimación queda detenida indefinidamente porque le cambiaron el equipo de TI por una reorganización interna — sin ETA. (2) La carga masiva de negociaciones requiere NEG-002 primero, y NEG-002 tampoco tiene estimación. La funcionalidad base existe y está disponible para todos los suppliers, pero el escalado operativo está bloqueado.",
+      next: "Monitorear cuándo se estabiliza el equipo TI de José. Sin ese dato, NEG-001 y toda la cola de dev quedan sin fecha.",
+      badge: "🔴 Bloqueada · Reorganización TI",
       badgeColor: "#EF4444",
       metricas: {
         base: [
-          { label: "Estado", value: "Detenida", sub: "TI pausó carga masiva" },
+          { label: "Estado", value: "Bloqueada", sub: "Reorganización equipo TI" },
+          { label: "Handoff", value: "Realizado 7-jul", sub: "Estimación no llegó" },
           { label: "Funcionalidad base", value: "Disponible", sub: "Para todos los suppliers" },
         ],
         meta: [
-          { label: "Desbloqueo", value: "NEG-002", sub: "Sin estimación aún" },
+          { label: "Desbloqueo", value: "Sin ETA", sub: "Depende de reorg TI + NEG-002" },
         ],
         seguimiento: [
-          { label: "Estimación NEG-002", value: "Pendiente TI", sub: "Bloquea NEG-001" },
+          { label: "Estimación NEG-002", value: "Sin fecha", sub: "Equipo TI reorganizado" },
           { label: "Bug Excel", value: "Sin resolver", sub: "Solo exporta 120 productos" },
         ]
       }
@@ -202,26 +221,26 @@ export const snapshot: WeeklySnapshot = {
     {
       code: "COM-001",
       name: "Combos · Shopify + CAS + ECOM Scanner",
-      status: "🔴 Pendiente · Sin fecha TI",
+      status: "🔴 Detenido · Dropify sin terminar · Sin fecha",
       statusColor: "#EF4444",
       color: "#7C3AED",
       mueve: "Canal Shopify completo con combos + CAS + ECOM Scanner",
       hipotesis: "Lanzamiento unificado habilita el canal Shopify para suppliers con combos",
       gmv: "Habilita canal completo para suppliers multi-canal",
-      avance: "Todo listo del lado de PM. Dependemos de la fecha de lanzamiento que confirme José (TI). El weekly del 8-jul fue cancelado — seguimos sin fecha.",
-      next: "Reagendar con José para obtener fecha de lanzamiento.",
-      badge: "🔴 Sin fecha TI",
+      avance: "José (10-jul) confirmó que COM-001 queda detenido porque Dropify aún no está terminado. No pudo dar fecha tentativa de reactivación. Todo listo del lado de PM pero sin posibilidad de avanzar hasta que Dropify esté completo en TI.",
+      next: "Monitorear estado de Dropify con José. Sin eso, COM-001 no tiene ventana de lanzamiento.",
+      badge: "🔴 Detenido · Dropify pendiente",
       badgeColor: "#EF4444",
       metricas: {
         base: [
-          { label: "Frentes", value: "4 de 4", sub: "Shopify, CAS, Ecom, Icom listos" },
-          { label: "Estado PM", value: "Listo", sub: "Esperando fecha TI" },
+          { label: "Estado PM", value: "Listo", sub: "4 frentes documentados" },
+          { label: "Bloqueante", value: "Dropify", sub: "TI aún no lo termina" },
         ],
         meta: [
-          { label: "Fecha lanzamiento", value: "Pendiente José", sub: "Weekly cancelado 8-jul" },
+          { label: "Fecha reactivación", value: "Sin ETA", sub: "José no pudo dar fecha" },
         ],
         seguimiento: [
-          { label: "Respuesta TI", value: "Sin fecha", sub: "Reagendar urgente" },
+          { label: "Próximo check", value: "Monitorear", sub: "Cuando Dropify esté listo" },
         ]
       }
     },
@@ -311,7 +330,10 @@ export const snapshot: WeeklySnapshot = {
         seguimiento: [
           { label: "Nexus (Comercial)", value: "Por revisar", sub: "¿Duplica CAZ?" },
           { label: "Dropi Pulso", value: "11-jul · reunión", sub: "Llevar CAZ ahí" },
-          { label: "Bug CAZ WhatsApp", value: "Sin resolver", sub: "Se prueba en piloto" },
+          { label: "Bug búsqueda catálogo", value: "Reportado Soporte", sub: "Inconsistencias + semántica" },
+          { label: "Beta Dropi", value: "Revisar bien", sub: "José: hay cambios de comportamiento" },
+          { label: "Orden resultados", value: "Pendiente negocio", sub: "Aleatorio · priorizar Premium requiere validación" },
+          { label: "Nomenclatura Premium Excl.", value: "Evaluar proyecto", sub: "Puede romper código · nombre hardcoded" },
         ]
       }
     },
@@ -324,20 +346,20 @@ export const snapshot: WeeklySnapshot = {
       titulo: "Urgente · esta semana",
       color: "#EF4444",
       items: [
-        "TTV-001: resolver bug post-registro con TI (auto-login) — impacta 46% del pipeline.",
-        "IND-001: coordinar con Comercial campaña de contacto a los 208 Activo→Verificado que ya cumplen umbral.",
-        "IND-001: contactar los 29 Verificado→Premium que ya cumplen las 20.000 órdenes.",
-        "Cola dev: agendar reunión de priorización de capacidad con TI — 4 proyectos PM listos sin fecha.",
-        "COM-001: reagendar con José para obtener fecha de lanzamiento.",
+        "TTV-001: reportar bug post-registro a Soporte con descripción técnica (sin auto-login → 111 en el limbo).",
+        "IND-001: coordinar con Comercial solicitudes de Premium represadas + campaña contacto a 208 A→V.",
+        "CAZ-001: reportar bugs búsqueda catálogo y búsqueda semántica a Soporte. Revisar beta Dropi.",
+        "Nomenclatura Premium Exclusivo: evaluar si es proyecto formal (riesgo de hardcoding en código).",
+        "Cola dev: escalar con María reorganización de equipo TI — impacta toda la cola S2.",
       ]
     },
     {
       titulo: "Esta semana (hasta 12 jul)",
       color: "#F77F00",
       items: [
-        "Cyber Days: cerrar productos elegibles y fecha exacta (post-reunión hoy).",
+        "Cyber Days: cerrar productos elegibles (post-reunión hoy).",
         "Piloto CAT/CAZ/DESC: completar las 10 sesiones y consolidar insights.",
-        "DESC-001: Go/No-go de wallet con TI — crítico para Cyber Days agosto.",
+        "Orden de resultados CAZ: llevar a validación de negocio (¿priorizar Premium/Exclusivo?).",
         "NEG-002: agendar reunión de contexto con Juan Diego.",
       ]
     },

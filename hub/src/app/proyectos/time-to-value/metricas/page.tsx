@@ -1156,6 +1156,49 @@ function MonthTab({
           ))}
         </div>
       </div>
+
+      {/* Datos curiosos */}
+      {hasLiveCruce && (
+        <div style={{ ...card, opacity: 0.85 }}>
+          <div style={{ marginBottom: 16 }}>
+            <div style={sectionTitle}>Datos curiosos</div>
+            <div style={sectionSub}>Detalles secundarios de la cohorte, sin impacto directo en las metas.</div>
+          </div>
+          <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 12, padding: "16px 20px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>Registro desde Mobile vs Desktop (Userpilot)</span>
+              <span style={{ fontSize: 12, color: "var(--muted)" }}>
+                Desktop: <strong>{live.desktopCount}</strong> · Mobile: <strong>{live.mobileCount}</strong>
+                {live.deviceDesconocidoCount > 0 && <> · Desconocido: <strong>{live.deviceDesconocidoCount}</strong></>}
+              </span>
+            </div>
+            <div style={{ display: "flex", height: 10, background: "#E2E8F0", borderRadius: 999, overflow: "hidden" }}>
+              <div
+                style={{ width: `${Math.round((live.desktopCount / (live.totalUserpilot || 1)) * 100)}%`, background: "var(--dropi)" }}
+                title={`Desktop: ${Math.round((live.desktopCount / (live.totalUserpilot || 1)) * 100)}%`}
+              />
+              <div
+                style={{ width: `${Math.round((live.mobileCount / (live.totalUserpilot || 1)) * 100)}%`, background: "#F59E0B" }}
+                title={`Mobile: ${Math.round((live.mobileCount / (live.totalUserpilot || 1)) * 100)}%`}
+              />
+              <div
+                style={{ width: `${Math.round((live.deviceDesconocidoCount / (live.totalUserpilot || 1)) * 100)}%`, background: "#94A3B8" }}
+                title="Desconocido"
+              />
+            </div>
+            <div style={{ display: "flex", gap: 16, marginTop: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--muted)" }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--dropi)" }} />
+                Desktop ({Math.round((live.desktopCount / (live.totalUserpilot || 1)) * 100)}%)
+              </div>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--muted)" }}>
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#F59E0B" }} />
+                Mobile ({Math.round((live.mobileCount / (live.totalUserpilot || 1)) * 100)}%)
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
