@@ -20,7 +20,8 @@ import os
 import sys
 from supabase import create_client
 
-HUB_DIR = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+HUB_DIR = os.path.dirname(SCRIPT_DIR)
 ENV_PATH = os.path.join(HUB_DIR, ".env.local")
 DOC_HUB_DIR = os.path.join(HUB_DIR, "doc hub")
 

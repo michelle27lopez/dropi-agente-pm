@@ -1,9 +1,12 @@
+import os
 import csv
 import sys
 from supabase import create_client
 
 # Cargar variables de entorno del archivo env
-env_path = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/.env.local"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+HUB_DIR = os.path.dirname(SCRIPT_DIR)
+env_path = os.path.join(HUB_DIR, ".env.local")
 env_vars = {}
 
 try:
@@ -25,7 +28,7 @@ if not url or not key:
 
 supabase = create_client(url, key)
 
-csv_path = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/doc hub/Data proveedores.csv"
+csv_path = os.path.join(HUB_DIR, "doc hub", "Data proveedores.csv")
 
 # 1. Obtener los proveedores actuales de Supabase para cruzar
 print("Obteniendo proveedores de Supabase para cruzar...")
