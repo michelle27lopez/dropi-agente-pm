@@ -11,7 +11,9 @@ import csv
 from supabase import create_client
 
 # Cargar variables de entorno del archivo .env.local de hub
-ENV_PATH = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/.env.local"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+HUB_DIR = os.path.dirname(SCRIPT_DIR)
+ENV_PATH = os.path.join(HUB_DIR, ".env.local")
 env_vars = {}
 
 try:
@@ -35,8 +37,8 @@ if not SUPABASE_URL or not SUPABASE_SERVICE_KEY:
 supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 
 # Rutas de los archivos
-DATA_DIR = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/doc hub/data ttv"
-COMUNIDADES_MASTER_PATH = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/doc hub/Comunidades.csv"
+DATA_DIR = os.path.join(HUB_DIR, "doc hub", "data ttv")
+COMUNIDADES_MASTER_PATH = os.path.join(HUB_DIR, "doc hub", "Comunidades.csv")
 
 CRM_PATH = os.path.join(DATA_DIR, "crm 14 jul.csv")
 UP_REGISTERS_PATH = os.path.join(DATA_DIR, "singups 14 juli userpilot.csv")

@@ -11,11 +11,14 @@ Ejecutar desde: hub/supabase/
   python seed_ttv_sample.py
 """
 
+import os
 import sys
 from supabase import create_client
 
 # ── Cargar .env.local ──────────────────────────────────────────────────────────
-ENV_PATH = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/.env.local"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+HUB_DIR = os.path.dirname(SCRIPT_DIR)
+ENV_PATH = os.path.join(HUB_DIR, ".env.local")
 env = {}
 try:
     with open(ENV_PATH) as f:

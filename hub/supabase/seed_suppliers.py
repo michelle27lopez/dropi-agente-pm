@@ -1,3 +1,4 @@
+import os
 import csv
 import sys
 from datetime import datetime
@@ -5,7 +6,9 @@ from collections import defaultdict
 from supabase import create_client
 
 # Cargar variables de entorno del archivo .env.local de hub
-env_path = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/.env.local"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+HUB_DIR = os.path.dirname(SCRIPT_DIR)
+env_path = os.path.join(HUB_DIR, ".env.local")
 env_vars = {}
 
 try:
@@ -27,7 +30,7 @@ if not url or not key:
 
 supabase = create_client(url, key)
 
-csv_path = "/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/hub/doc hub/auth0_69fce8b962d8ef610433002e-3EDnm2IionkHnb5eaBegeGCzCVs.csv"
+csv_path = os.path.join(HUB_DIR, "doc hub", "auth0_69fce8b962d8ef610433002e-3EDnm2IionkHnb5eaBegeGCzCVs.csv")
 
 # Diccionario para mapear países a códigos
 country_map = {

@@ -7,7 +7,7 @@ description: Use this skill when the user asks to create, draft or describe a Dr
 
 ## Objetivo
 
-Generar la descripción completa de una épica siguiendo la metodología oficial de Dropi.
+Generar la descripción completa de una épica siguiendo la metodología oficial de Dropi, extrayendo la mayor cantidad de información posible de documentos ya existentes.
 
 ## Cuándo usarlo
 
@@ -17,28 +17,54 @@ Generar la descripción completa de una épica siguiendo la metodología oficial
 
 ## Instrucciones
 
-1. Lee `canon/dropi_methodology.md` para refrescar el formato oficial.
-2. Si el usuario no especificó todos los datos, pregunta lo mínimo necesario:
-   - Sigla del producto (DROPI / DROPI APP / ADMIN / CAS)
-   - Nombre de la iniciativa
-   - País y usuarios afectados
-   - Problema que resuelve (contexto)
-3. Genera la épica con TODAS las secciones del formato oficial:
-   - Título (formato: `[Sigla]: [Nombre]_[País]_[Usuarios]`)
-   - Contexto y descripción del problema
-   - ¿Qué buscamos?
-   - Fases del proceso
-   - Criterios de éxito y métricas
-   - Público objetivo
-   - Sección de documentación (con placeholders si no se tiene el link)
-4. Presenta el resultado como borrador para aprobación del usuario.
-5. Si el usuario aprueba, usa el skill `canon-keeper` para guardarlo en `approved_context`.
+### Paso 1 — Buscar información existente (antes de preguntar nada)
+
+1. **Revisar `docs-sync/`** para documentos sincronizados de Drive relacionados con la iniciativa:
+   - Kickoffs → extraer contexto, problema, equipo, fases
+   - Research → extraer dolores, usuarios afectados, datos de respaldo
+   - Planning → extraer fases, cronograma
+   - Pitches → extraer problema, apetencia, solución propuesta
+2. **Revisar `approved_context`** en Supabase para contexto ya aprobado del proyecto.
+3. **Revisar `research-brain/`** para investigaciones relevantes.
+
+### Paso 2 — Completar con lo que falta
+
+Solo después de haber revisado las fuentes anteriores, verificar qué campos faltan.
+
+**Campos obligatorios** (preguntar SOLO si no se pudieron inferir):
+- Sigla del producto (DROPI / DROPI APP / ADMIN / CAS)
+- Nombre de la iniciativa
+
+**Campos con default inteligente** (NO preguntar, usar default):
+- País → si no se menciona, usar `Colombia` (mercado principal)
+- Usuarios afectados → inferir del documento fuente o usar `Todos los usuarios`
+- Métricas → usar `[Métricas por definir con el equipo de datos]`
+- Links de documentación → usar `[Por agregar]` como placeholder
+
+### Paso 3 — Generar la épica
+
+Leer `canon/dropi_methodology.md` y generar con TODAS las secciones:
+- **Título** (formato: `[Sigla]: [Nombre]_[País]_[Usuarios]`)
+- **Contexto y descripción del problema** — extraído del kickoff/research/pitch
+- **¿Qué buscamos?** — extraído del kickoff o inferido del problema
+- **Fases del proceso** — extraídas del planning o propuestas basadas en el contexto
+- **Criterios de éxito y métricas** — del kickoff si existen, o `[por definir]`
+- **Público objetivo** — inferido de los documentos
+- **Documentación** — links a los documentos sincronizados
+
+### Paso 4 — Presentar y publicar
+
+1. Presenta como borrador para aprobación del usuario.
+2. Si el usuario aprueba:
+   - Usar `canon-keeper` para guardarlo en `approved_context`
+   - Ofrecer: "¿Quieres que la publique en JIRA?" → usar `/publish-to-jira`
 
 ## Restricciones
 
-- Nunca inventar métricas o datos que el usuario no haya proporcionado; usar placeholders claros como `[métricas por definir]`.
-- No crear la épica sin al menos el contexto del problema.
+- Nunca inventar métricas o datos; usar placeholders claros.
+- No crear la épica sin al menos el contexto del problema (de un documento o del usuario).
 - El título debe seguir EXACTAMENTE el formato oficial.
+- **Priorizar extraer información de documentos existentes** antes de preguntar al usuario.
 
 ## Salida esperada
 

@@ -4,8 +4,9 @@
 -- Sections:
 --   1. Core tables (projects, teams, meetings, transcripts)
 --   2. Memory tables (draft_insights, approved_context)
---   3. Execution tables (okrs, capabilities, features, user_stories, decisions, risks, followups, milestones)
---   4. Dropi-specific tables (epics, subtasks)
+--   3. Research tables (research_documents)
+--   4. Execution tables (okrs, capabilities, features, user_stories, decisions, risks, followups, milestones)
+--   5. Dropi-specific tables (epics, subtasks)
 
 create table if not exists projects (
   id           uuid primary key default gen_random_uuid(),
@@ -80,6 +81,23 @@ create table if not exists approved_context (
   source_references text,
   approved_by      text,
   approved_at      timestamptz,
+  created_at       timestamptz default now()
+);
+
+create table if not exists research_documents (
+  id               uuid primary key default gen_random_uuid(),
+  research_id      text unique not null, -- RB-XXX
+  title            text not null,
+  research_date    timestamptz,
+  initiative       text,
+  segment          text,
+  journey_stage    text,
+  source_type      text check (source_type in ('transcripcion','encuesta','social_listening','benchmark','otro')),
+  confidence_level text check (confidence_level in ('Alto','Medio','Bajo')),
+  tags             text,
+  content          text,
+  file_path        text,
+  status           text check (status in ('Draft','Published','Superseded')) default 'Published',
   created_at       timestamptz default now()
 );
 
@@ -270,3 +288,33 @@ alter table user_stories
   add column if not exists design_system_version text check (design_system_version in ('1.0','2.0')),
   add column if not exists is_redesign   boolean default false,
   add column if not exists resolutions   text;
+
+-- ─────────────────────────────────────────────
+-- Integration tracking (Drive ↔ JIRA ↔ Confluence)
+-- ─────────────────────────────────────────────
+
+-- Track synced Google Drive documents
+create table if not exists drive_sync_log (
+  id               uuid primary key default gen_random_uuid(),
+  drive_file_id    text unique not null,
+  file_name        text not null,
+  mime_type        text,
+  doc_type         text,          -- kickoff, pitch, research, epic, etc.
+  local_path       text,
+  drive_modified_at timestamptz,
+  synced_at        timestamptz default now(),
+  project          text,          -- linked project (if identified)
+  metadata_json    jsonb          -- full metadata sidecar
+);
+
+-- Add JIRA + Confluence traceability to epics
+alter table epics
+  add column if not exists jira_key          text,   -- e.g. DROPI-1234
+  add column if not exists confluence_page_id text,  -- Confluence page ID
+  add column if not exists drive_file_id     text;   -- Source Drive doc
+
+-- Add JIRA + Confluence traceability to user_stories
+alter table user_stories
+  add column if not exists jira_key          text,
+  add column if not exists confluence_page_id text,
+  add column if not exists drive_file_id     text;
