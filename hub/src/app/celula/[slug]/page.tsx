@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
+import { SEMANAS } from "@/app/weekly/data/index";
 
 type Proyecto = {
   id: string; name: string; project_code: string | null;
@@ -111,6 +112,9 @@ export default function CelulaHomePage() {
   const proyectos = celula.proyectos.filter((p) => p.type !== "POC").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
+  const semanaReciente = SEMANAS
+    .filter((s) => s.celula === celula.slug)
+    .sort((a, b) => b.date.localeCompare(a.date))[0];
 
   return (
     <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
@@ -122,6 +126,22 @@ export default function CelulaHomePage() {
       />
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
+        {semanaReciente && (
+          <a
+            href={`/weekly?week=${semanaReciente.date}`}
+            style={{
+              display: "flex", alignItems: "center", justifyContent: "space-between",
+              border: "1px solid var(--border)", borderRadius: 12, padding: "16px 20px",
+              marginBottom: 40, textDecoration: "none", background: "var(--card)",
+            }}
+          >
+            <span style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>
+              📅 Weekly · {semanaReciente.label}
+            </span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)" }}>Ver →</span>
+          </a>
+        )}
+
         <div style={{ marginBottom: 56 }}>
           <Section title="Updates" items={updates} ctaLabel="Ver →" />
           {updates.length === 0 && (
