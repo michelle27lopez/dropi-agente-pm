@@ -60,6 +60,24 @@ type Dataset = {
   prospectos: Prospecto[];
 };
 
+type Oferta = {
+  token: string;
+  supplier_id: number;
+  estado: "enviada" | "aceptada" | "rechazada";
+  motivo_rechazo: string | null;
+};
+
+const OFERTA_COLOR: Record<string, [string, string]> = {
+  "enviada": ["#F59E0B", "#FFFBEB"],
+  "aceptada": ["#10B981", "#ECFDF5"],
+  "rechazada": ["#9CA3AF", "#F3F4F6"],
+};
+const OFERTA_LABEL: Record<string, string> = {
+  "enviada": "Enviada · esperando",
+  "aceptada": "Aceptó ascenso",
+  "rechazada": "Rechazó",
+};
+
 function estadoDe(pct: number): "Cumple" | "En camino" | "Lejano" {
   if (pct >= 1) return "Cumple";
   if (pct >= 0.5) return "En camino";
@@ -75,7 +93,7 @@ const ESTADO_COLOR: Record<string, [string, string]> = {
 const PAGE_SIZE = 50;
 
 function NivelSection({
-  titulo, sub, color, bg, prospectos, umbral,
+  titulo, sub, color, bg, prospectos, umbral, ofertas, sendingId, onEnviarOferta,
 }: {
   titulo: string;
   sub: string;
@@ -83,6 +101,9 @@ function NivelSection({
   bg: string;
   prospectos: Prospecto[];
   umbral: number;
+  ofertas: Record<string, Oferta>;
+  sendingId: string | null;
+  onEnviarOferta: (p: Prospecto) => void;
 }) {
   const [estadoFiltro, setEstadoFiltro] = useState<"Cumple" | "En camino" | "Todos">("Cumple");
   const [search, setSearch] = useState("");
@@ -152,12 +173,14 @@ function NivelSection({
               <th style={thR}>Despachos %</th>
               <th style={thR}>Garantías gestión %</th>
               <th style={thStyle}>Estado</th>
+              <th style={thStyle}>Oferta de ascenso</th>
             </tr>
           </thead>
           <tbody>
             {pageRows.map((p, i) => {
               const estado = estadoDe(p.pctUmbral);
               const [ec, eb] = ESTADO_COLOR[estado];
+              const oferta = ofertas[p.id];
               return (
                 <tr key={p.id} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff" }}>
                   <td style={{ ...tdStyle, fontWeight: 600 }}>
@@ -170,12 +193,29 @@ function NivelSection({
                   <td style={tdR}>{p.despachosPct != null ? `${(p.despachosPct * 100).toFixed(1)}%` : "—"}</td>
                   <td style={tdR}>{p.garantiasGestionPct != null ? `${(p.garantiasGestionPct * 100).toFixed(1)}%` : "—"}</td>
                   <td style={tdStyle}><span style={tag(ec, eb)}>{estado}</span></td>
+                  <td style={tdStyle}>
+                    {oferta ? (
+                      <span style={tag(...OFERTA_COLOR[oferta.estado])} title={oferta.motivo_rechazo ?? undefined}>
+                        {OFERTA_LABEL[oferta.estado]}
+                      </span>
+                    ) : estado === "Cumple" ? (
+                      <button
+                        onClick={() => onEnviarOferta(p)}
+                        disabled={sendingId === p.id}
+                        style={{ ...selectStyle, background: ACCENT, color: "#fff", border: "none", cursor: sendingId === p.id ? "wait" : "pointer", opacity: sendingId === p.id ? 0.6 : 1 }}
+                      >
+                        {sendingId === p.id ? "Enviando…" : "Enviar oferta →"}
+                      </button>
+                    ) : (
+                      <span style={{ fontSize: 11, color: "var(--muted)" }}>—</span>
+                    )}
+                  </td>
                 </tr>
               );
             })}
             {pageRows.length === 0 && (
               <tr>
-                <td colSpan={7} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)", padding: "24px 12px" }}>
+                <td colSpan={8} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)", padding: "24px 12px" }}>
                   Sin resultados para estos filtros.
                 </td>
               </tr>
@@ -213,6 +253,9 @@ export default function ProspectosAscensoPage() {
   const [data, setData] = useState<Dataset | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [ofertas, setOfertas] = useState<Record<string, Oferta>>({});
+  const [sendingId, setSendingId] = useState<string | null>(null);
+  const [sentNotice, setSentNotice] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/proyectos/prospectos-ascenso")
@@ -223,7 +266,45 @@ export default function ProspectosAscensoPage() {
       .then((d: Dataset) => setData(d))
       .catch(() => setError(true))
       .finally(() => setLoading(false));
+
+    fetch("/api/proyectos/ascenso-ofertas")
+      .then(r => r.ok ? r.json() : [])
+      .then((rows: Oferta[]) => {
+        const map: Record<string, Oferta> = {};
+        rows.forEach(o => { map[String(o.supplier_id)] = o; });
+        setOfertas(map);
+      })
+      .catch(() => null);
   }, []);
+
+  async function handleEnviarOferta(p: Prospecto) {
+    setSendingId(p.id);
+    setSentNotice(null);
+    try {
+      const res = await fetch("/api/proyectos/ascenso-ofertas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          supplierId: p.id,
+          supplierName: p.nombre,
+          email: p.email,
+          nivelActual: p.nivelActual,
+          nivelObjetivo: p.nivelObjetivo,
+          ordenesMovilizadas90d: p.ordenesMovilizadas90d,
+          umbralObjetivo: p.umbralObjetivo,
+        }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        setOfertas(prev => ({ ...prev, [p.id]: json.oferta }));
+        setSentNotice(`Oferta enviada (modo prueba → ${json.testRecipients?.email} / WhatsApp ${json.testRecipients?.whatsapp})`);
+      } else {
+        setSentNotice(`Error: ${json.error}`);
+      }
+    } finally {
+      setSendingId(null);
+    }
+  }
 
   const aVerificado = useMemo(() => data?.prospectos.filter(p => p.nivelObjetivo === "Verificado") ?? [], [data]);
   const aPremium = useMemo(() => data?.prospectos.filter(p => p.nivelObjetivo === "Premium") ?? [], [data]);
@@ -287,6 +368,12 @@ export default function ProspectosAscensoPage() {
           </div>
         )}
 
+        {sentNotice && (
+          <div style={{ background: sentNotice.startsWith("Error") ? "#FEF2F2" : "#ECFDF5", border: `1px solid ${sentNotice.startsWith("Error") ? "#FECACA" : "#A7F3D0"}`, borderRadius: 10, padding: "10px 16px", fontSize: 12, color: sentNotice.startsWith("Error") ? "#7F1D1D" : "#065F46" }}>
+            {sentNotice}
+          </div>
+        )}
+
         {resumen && (
           <>
             {/* Nota de criterios pendientes */}
@@ -324,6 +411,9 @@ export default function ProspectosAscensoPage() {
               bg="#EFF6FF"
               prospectos={aVerificado}
               umbral={3000}
+              ofertas={ofertas}
+              sendingId={sendingId}
+              onEnviarOferta={handleEnviarOferta}
             />
 
             {/* Tabla 2: Verificado → Premium */}
@@ -334,6 +424,9 @@ export default function ProspectosAscensoPage() {
               bg={ACCENT_BG}
               prospectos={aPremium}
               umbral={20000}
+              ofertas={ofertas}
+              sendingId={sendingId}
+              onEnviarOferta={handleEnviarOferta}
             />
 
             {/* Nota Premium → Exclusivo */}

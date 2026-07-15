@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef, useCallback, MouseEvent, WheelEvent } from "react";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
+import { RPP_BASE_URL } from "@/lib/rpp";
 
 // Types
 interface CategoryInfo {
@@ -3839,7 +3840,7 @@ export default function CategorizacionPage() {
 
                 {/* Card 9b: Rapid Prototype (Angular RPP) — Catálogo por taxonomía */}
                 <a
-                  href="http://localhost:4200/productos/categorizacion"
+                  href={`${RPP_BASE_URL}/productos/categorizacion`}
                   target="_blank"
                   rel="noreferrer"
                   className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-orange-500 hover:shadow-xs transition-all duration-200 no-underline"
@@ -3848,7 +3849,7 @@ export default function CategorizacionPage() {
                   <div className="flex-1">
                     <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
                       <span>Rapid Prototype · Catálogo por Categorías</span>
-                      <span className="text-[9px] font-bold bg-orange-50 text-orange-600 border border-orange-100 px-1.5 py-0.5 rounded-full">↗ localhost:4200</span>
+                      <span className="text-[9px] font-bold bg-orange-50 text-orange-600 border border-orange-100 px-1.5 py-0.5 rounded-full">↗ {RPP_BASE_URL.replace(/^https?:\/\//, "")}</span>
                     </div>
                     <div className="text-[10px] leading-relaxed text-gray-500">
                       Misma vista, construida en el pipeline Angular RPP con los componentes reales del Design System de Dropi. Requiere <code>ng serve</code> corriendo en <code>dropi-prototypes</code>.

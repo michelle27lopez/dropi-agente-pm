@@ -98,6 +98,12 @@ export default function TimeToValuePage() {
                   title: "Métricas de seguimiento",
                   sub: "Dashboard · Embudo mensual · TTV",
                 },
+                {
+                  href: "/proyectos/time-to-value/propuesta",
+                  icon: "💡",
+                  title: "Propuesta: Activar → Vender",
+                  sub: "Auditar deja de ser la puerta",
+                },
               ].map((card) => (
                 <a
                   key={card.href}
