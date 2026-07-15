@@ -12,6 +12,53 @@ export const snapshot: WeeklySnapshot = {
     { label: "Pruebas Emp. Plus", value: "15-jul", sub: "Primera usuaria piloto confirmada" },
     { label: "Semanas a Beta", value: "~10", sub: "Migración de usuarios aún sin definir técnicamente" }
   ],
+  insights: [
+    {
+      id: "ins-2026-07-10-01",
+      titulo: "Feature de Emprendedores Plus no requiere lanzamiento formal",
+      descripcion: "Laura Catherine Torres Ciendua confirmó que este feature no requiere Lanzamiento formal — no hay fecha estimada de salida a producción porque depende directamente de los resultados de las pruebas piloto.",
+      proyecto: "EMP-PLUS",
+      tipo: "Decisión",
+      tipoColor: "#15803D",
+      impacto: "Medio"
+    },
+    {
+      id: "ins-2026-07-10-02",
+      titulo: "Error 500 en autenticación de doble factor ya resuelto",
+      descripcion: "Tecnología ya solucionó el error 500 en la autenticación de doble factor que afectaba a Emprendedores Plus. Queda pendiente validarlo en la sesión de pruebas con QA.",
+      proyecto: "EMP-PLUS",
+      tipo: "Hallazgo",
+      tipoColor: "#0EA5E9",
+      impacto: "Medio"
+    },
+    {
+      id: "ins-2026-07-10-03",
+      titulo: "Rearquitectura V1 no impacta el cronograma de Perfil de Marcas",
+      descripcion: "El alcance de la Rearquitectura Dropi V1 (login + foundation de pantallas principales) ya estaba contemplado desde el handoff de Marcas. El foundation de flujos internos queda para una V2 posterior al lanzamiento, pendiente de estimación con tecnología.",
+      proyecto: "PRM-1331",
+      tipo: "Decisión",
+      tipoColor: "#15803D",
+      impacto: "Alto"
+    },
+    {
+      id: "ins-2026-07-10-04",
+      titulo: "Usuarios híbridos no se migran forzosamente",
+      descripcion: "Regla definida en la Épica: los usuarios mixtos/híbridos (marca + proveedor) permanecen como proveedor y no se migran forzosamente al nuevo perfil de marcas — la única de las 5 reglas de migración marcada como excepción, y origen del riesgo de fricción identificado en semanas posteriores.",
+      proyecto: "PRM-1331",
+      tipo: "Hallazgo",
+      tipoColor: "#0EA5E9",
+      impacto: "Alto"
+    },
+    {
+      id: "ins-2026-07-10-05",
+      titulo: "Migración de usuarios sigue sin definición técnica",
+      descripcion: "Aunque las 5 reglas de negocio de la migración ya están definidas en la Épica, la ejecución técnica (cómo se migra realmente cada usuario) sigue sin definirse. José Giraldo evalúa el impacto en tiempos; urge resolverlo porque quedan ~10 semanas hasta la fecha de Beta.",
+      proyecto: "PRM-1331",
+      tipo: "Riesgo",
+      tipoColor: "#DC2626",
+      impacto: "Alto"
+    }
+  ],
   oportunidades: [
     {
       code: "PRM-1331",
