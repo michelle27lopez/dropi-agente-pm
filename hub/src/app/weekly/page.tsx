@@ -27,6 +27,8 @@ function WeeklyPageContent() {
   const isCurrentWeek = selectedDate === CURRENT;
   const celulaSlug = SEMANAS.find((s) => s.date === selectedDate)?.celula ?? "suppliers";
   const celulaLabel = CELULA_LABELS[celulaSlug] ?? "Supplier Success";
+  // "suppliers" vive en "/", el resto de células en su propia home.
+  const homeHref = celulaSlug === "suppliers" ? "/" : `/celula/${celulaSlug}`;
   // Cada célula solo ve el historial de sus propias semanas, no el de todas.
   const semanasCelula = SEMANAS.filter((s) => s.celula === celulaSlug);
 
@@ -87,7 +89,7 @@ function WeeklyPageContent() {
         background: "#fff", borderBottom: "1px solid var(--border)",
         padding: "16px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
       }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
+        <a href={homeHref} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
         <span style={{ color: "var(--border)" }}>/</span>
         <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Weekly · {celulaLabel}</span>
 
