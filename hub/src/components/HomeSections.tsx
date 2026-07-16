@@ -22,9 +22,11 @@ export function Section({ title, items, ctaLabel }: { title: string; items: Item
   if (items.length === 0) return null;
   return (
     <div>
-      <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
-        {title}
-      </p>
+      {title && (
+        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20, textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600 }}>
+          {title}
+        </p>
+      )}
       <div style={{
         display: "grid",
         gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",

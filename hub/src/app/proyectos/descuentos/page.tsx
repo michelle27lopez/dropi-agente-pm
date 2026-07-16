@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
+import { RPP_BASE_URL } from "@/lib/rpp";
 
 const COLOR = "#F59E0B";
 
@@ -22,6 +23,27 @@ export default function DescuentosPage() {
           </a>
           <span style={{ color: "var(--border)" }}>/</span>
           <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Descuentos en Catálogo</span>
+          <a
+            href="/proyectos/descuentos/discovery"
+            style={{
+              marginLeft: "auto",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
+              fontSize: 12,
+              fontWeight: 700,
+              color: "#fff",
+              background: "var(--dropi, #F77F00)",
+              padding: "4px 10px",
+              borderRadius: 6,
+              textDecoration: "none",
+              transition: "opacity 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+          >
+            🔍 Discovery B=MAP
+          </a>
         </header>
       )}
 
@@ -113,7 +135,7 @@ export default function DescuentosPage() {
                   external: false,
                 },
                 {
-                  href: "http://localhost:4200/new/productos/mis-productos",
+                  href: `${RPP_BASE_URL}/new/productos/mis-productos`,
                   icon: "🚀",
                   title: "Rapid Prototype (Angular RPP)",
                   sub: "Mis productos → Editar → pestaña Descuento (proveedor) + Catálogo y Detalle con precio antes/ahora (dropshipper). Requiere ng serve corriendo en dropi-prototypes.",
