@@ -29,14 +29,26 @@ type CampaignNode = {
   updated_at: string;
 };
 
-type Store = { campaigns: Campaign[]; nodes: CampaignNode[] };
+type CampaignSend = {
+  id: string;
+  campaign_id: string;
+  file_name: string;
+  row_count: number;
+  message: string;
+  status: "sent" | "failed" | "not_configured";
+  response_summary: string;
+  created_at: string;
+};
+
+type Store = { campaigns: Campaign[]; nodes: CampaignNode[]; sends?: CampaignSend[] };
 
 async function readStore(): Promise<Store> {
   try {
     const raw = await readFile(STORE_PATH, "utf-8");
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    return { campaigns: [], nodes: [], sends: [], ...parsed };
   } catch {
-    return { campaigns: [], nodes: [] };
+    return { campaigns: [], nodes: [], sends: [] };
   }
 }
 
@@ -102,4 +114,20 @@ export async function localUpsertNode(
   store.nodes.push(node);
   await writeStore(store);
   return node;
+}
+
+export async function localListSends(campaignId: string): Promise<CampaignSend[]> {
+  const store = await readStore();
+  return (store.sends ?? []).filter((s) => s.campaign_id === campaignId).sort((a, b) => b.created_at.localeCompare(a.created_at));
+}
+
+export async function localAddSend(
+  campaignId: string,
+  entry: Omit<CampaignSend, "id" | "campaign_id" | "created_at">
+): Promise<CampaignSend> {
+  const store = await readStore();
+  const send: CampaignSend = { id: randomUUID(), campaign_id: campaignId, created_at: new Date().toISOString(), ...entry };
+  store.sends = [...(store.sends ?? []), send];
+  await writeStore(store);
+  return send;
 }

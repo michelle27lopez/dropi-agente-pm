@@ -2,382 +2,212 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { NodeKey, NodeData } from "./planeacion/nodes";
+import { Sidebar } from "./Sidebar";
 
-type Campaign = {
-  id: string;
-  name: string;
-  status: string;
-  current_node: number;
-  created_at: string;
-};
+type Campaign = { id: string; name: string; status: string; current_node: number };
+type SavedNode = { node_index: number; node_key: string; data: NodeData; completed: boolean };
+type CampaignWithResults = Campaign & { resultados: NodeData; hasResultados: boolean };
 
-const NODE_COUNT = 8;
+function num(v: string | undefined): number {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : 0;
+}
 
-const statusLabel: Record<string, string> = {
-  draft: "Borrador",
-  in_progress: "En progreso",
-  completed: "Completada",
-};
-const statusColor: Record<string, string> = {
-  draft: "#6B7280",
-  in_progress: "#F77F00",
-  completed: "#10B981",
-};
-const statusBg: Record<string, string> = {
-  draft: "#F3F4F6",
-  in_progress: "#FFF3E0",
-  completed: "#ECFDF5",
-};
+function fmt(n: number): string {
+  return n.toLocaleString("es-CO");
+}
 
-export default function DinamicasCatalogoPage() {
+function StatCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 12, padding: "16px 18px" }}>
+      <div style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600, marginBottom: 6 }}>{label}</div>
+      <div style={{ fontSize: 24, fontWeight: 800, color: "var(--dropi)" }}>{value}</div>
+    </div>
+  );
+}
+
+export default function DinamicasCatalogoDashboardPage() {
   const router = useRouter();
-  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
+  const [campaigns, setCampaigns] = useState<CampaignWithResults[]>([]);
   const [loading, setLoading] = useState(true);
-  const [creating, setCreating] = useState(false);
-  const [newName, setNewName] = useState("");
-  const [showModal, setShowModal] = useState(false);
   const [docsOpen, setDocsOpen] = useState(false);
 
   useEffect(() => {
-    fetch("/api/campaigns")
+    fetch("/api/campaigns-planeacion")
       .then((r) => r.json())
-      .then((d) => { setCampaigns(Array.isArray(d) ? d : []); setLoading(false); })
+      .then(async (list: Campaign[]) => {
+        const arr = Array.isArray(list) ? list : [];
+        const withResults = await Promise.all(
+          arr.map(async (c) => {
+            const nodes: SavedNode[] = await fetch(`/api/campaigns-planeacion/${c.id}/nodes`).then((r) => r.json()).catch(() => []);
+            const resultados = (Array.isArray(nodes) ? nodes : []).find((n: SavedNode) => n.node_key === ("resultados" as NodeKey))?.data ?? {};
+            return { ...c, resultados, hasResultados: Object.keys(resultados).length > 0 };
+          })
+        );
+        setCampaigns(withResults);
+        setLoading(false);
+      })
       .catch(() => setLoading(false));
   }, []);
 
-  const createCampaign = async () => {
-    if (!newName.trim()) return;
-    setCreating(true);
-    const res = await fetch("/api/campaigns", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newName.trim() }),
-    });
-    const data = await res.json();
-    if (data?.id) router.push(`/proyectos/dinamicas-catalogo/${data.id}`);
-    setCreating(false);
-  };
+  if (loading) {
+    return <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", color: "var(--muted)", fontSize: 14 }}>Cargando dashboard...</div>;
+  }
+
+  const withResults = campaigns.filter((c) => c.hasResultados);
+  const withoutResults = campaigns.filter((c) => !c.hasResultados);
+
+  const totals = withResults.reduce(
+    (acc, c) => ({
+      invited: acc.invited + num(c.resultados.suppliers_invited),
+      applied: acc.applied + num(c.resultados.suppliers_applied),
+      approved: acc.approved + num(c.resultados.suppliers_approved),
+      orders: acc.orders + num(c.resultados.orders_generated),
+      gmv: acc.gmv + num(c.resultados.gmv_generated),
+    }),
+    { invited: 0, applied: 0, approved: 0, orders: 0, gmv: 0 }
+  );
+
+  const gmvByCampaign = withResults.map((c) => ({ name: c.name, value: num(c.resultados.gmv_generated) }));
+  const ordersByCampaign = withResults.map((c) => ({ name: c.name, value: num(c.resultados.orders_generated) }));
 
   return (
-    <main style={{ minHeight: "100vh", background: "var(--card)" }}>
-      {/* Header */}
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "16px 32px", display: "flex", alignItems: "center", gap: "16px",
-      }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Dinámicas de Catálogo</span>
-        <div style={{ marginLeft: "auto" }}>
-          <button
-            onClick={() => setShowModal(true)}
-            style={{
-              background: "var(--dropi)", color: "#fff", border: "none",
-              borderRadius: 9, padding: "8px 16px", fontWeight: 700,
-              fontSize: 13, cursor: "pointer",
-            }}
-          >
-            + Nueva campaña
-          </button>
-        </div>
-      </header>
-
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
-        {/* Title */}
-        <div style={{ marginBottom: 24 }}>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
-            Campañas
-          </h1>
-          <p style={{ fontSize: 14, color: "var(--muted)" }}>
-            Cada campaña recorre un flujo guiado de 8 nodos para estructurar el experimento de catálogo.
-          </p>
-        </div>
-
-        {/* Panel de recursos */}
+    <div style={{ display: "flex", minHeight: "100vh", background: "#fff" }}>
+      <Sidebar />
+      <main style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 32px 80px" }}>
         <div style={{
           background: "#fff", border: "1px solid var(--border)",
-          borderRadius: 14, marginBottom: 32, overflow: "hidden",
+          borderRadius: 14, marginBottom: 28, overflow: "hidden",
         }}>
           <button
             onClick={() => setDocsOpen(!docsOpen)}
             style={{
               width: "100%", background: "none", border: "none", cursor: "pointer",
-              padding: "14px 20px", display: "flex", alignItems: "center", gap: 10,
+              padding: "12px 18px", display: "flex", alignItems: "center", gap: 10,
               textAlign: "left",
             }}
           >
-            <span style={{ fontSize: 15 }}>📂</span>
+            <span style={{ fontSize: 14 }}>📂</span>
             <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", flex: 1 }}>Recursos del proyecto</span>
             <span style={{ fontSize: 12, color: "var(--muted)", marginRight: 4 }}>DCA-001 · Dinámicas de Catálogo</span>
             <span style={{ fontSize: 16, color: "var(--muted)", transition: "transform 0.2s", display: "inline-block", transform: docsOpen ? "rotate(180deg)" : "rotate(0deg)" }}>⌄</span>
           </button>
 
           {docsOpen && (
-            <div style={{ borderTop: "1px solid var(--border)", padding: "16px 20px", display: "flex", gap: 12, flexWrap: "wrap" }}>
-              <a
-                href="/proyectos/dinamicas-catalogo/docs"
-                style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: "#F8FAFC", border: "1px solid var(--border)",
-                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
-                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
-                  transition: "box-shadow 0.15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.07)")}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-              >
-                <span style={{ fontSize: 22, flexShrink: 0 }}>📋</span>
+            <div style={{ borderTop: "1px solid var(--border)", padding: "14px 18px", display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <a href="/proyectos/dinamicas-catalogo/docs" style={{ display: "flex", alignItems: "center", gap: 10, background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 16px", textDecoration: "none", flex: "1 1 200px", minWidth: 200, maxWidth: 260 }}>
+                <span style={{ fontSize: 20, flexShrink: 0 }}>📋</span>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Documentación</div>
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>Nodos, campos, ejemplos y casos de uso</div>
                 </div>
               </a>
-
-              <a
-                href="/proyectos/dinamicas-catalogo/metas"
-                style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: "#F8FAFC", border: "1px solid var(--border)",
-                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
-                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
-                  transition: "box-shadow 0.15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.07)")}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-              >
-                <span style={{ fontSize: 22, flexShrink: 0 }}>🎯</span>
+              <a href="/proyectos/dinamicas-catalogo/metas" style={{ display: "flex", alignItems: "center", gap: 10, background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 16px", textDecoration: "none", flex: "1 1 200px", minWidth: 200, maxWidth: 260 }}>
+                <span style={{ fontSize: 20, flexShrink: 0 }}>🎯</span>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Metas del experimento</div>
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>Productividad del catálogo · ruta a 10M</div>
-                </div>
-              </a>
-
-              <a
-                href="/proyectos/dinamicas-catalogo/plan"
-                style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: "#F8FAFC", border: "1px solid var(--border)",
-                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
-                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
-                  transition: "box-shadow 0.15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.07)")}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-              >
-                <span style={{ fontSize: 22, flexShrink: 0 }}>📅</span>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Plan de campañas</div>
-                  <div style={{ fontSize: 12, color: "var(--muted)" }}>9 campañas · 6 meses · portafolio</div>
-                </div>
-              </a>
-
-              <a
-                href="/proyectos/dinamicas-catalogo/planeacion"
-                style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: "#EEF2FF", border: "1px solid rgba(99,102,241,0.25)",
-                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
-                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
-                  transition: "box-shadow 0.15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(99,102,241,0.12)")}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-              >
-                <span style={{ fontSize: 22, flexShrink: 0 }}>🧪</span>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Planeación (experimento)</div>
-                  <div style={{ fontSize: 12, color: "var(--muted)" }}>Modelo nuevo · planea + genera handoff</div>
-                </div>
-              </a>
-
-              <a
-                href="/proyectos/dinamicas-catalogo/proximas-campanas"
-                style={{
-                  display: "flex", alignItems: "center", gap: 10,
-                  background: "#FFF8F0", border: "1px solid rgba(247,127,0,0.25)",
-                  borderRadius: 10, padding: "12px 16px", textDecoration: "none",
-                  flex: "1 1 200px", minWidth: 200, maxWidth: 260,
-                  transition: "box-shadow 0.15s",
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 2px 12px rgba(247,127,0,0.12)")}
-                onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-              >
-                <span style={{ fontSize: 22, flexShrink: 0 }}>🗓️</span>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Campañas definidas</div>
-                  <div style={{ fontSize: 12, color: "var(--muted)" }}>Calendario 2026–2027 · 9 campañas</div>
                 </div>
               </a>
             </div>
           )}
         </div>
 
-        {/* Loading */}
-        {loading && (
-          <p style={{ color: "var(--muted)", fontSize: 14 }}>Cargando campañas...</p>
-        )}
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>Dashboard general de campañas</h1>
+        <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 28, maxWidth: 620, lineHeight: 1.6 }}>
+          Compara los resultados reales de todas las campañas que ya tienen datos cargados en el nodo Resultados.
+        </p>
 
-        {/* Empty state */}
-        {!loading && campaigns.length === 0 && (
-          <div style={{
-            background: "#fff", border: "2px dashed var(--border)",
-            borderRadius: 14, padding: "56px 24px", textAlign: "center",
-          }}>
-            <div style={{ fontSize: 36, marginBottom: 12 }}>🗂️</div>
-            <p style={{ fontSize: 15, fontWeight: 600, color: "var(--fg)", marginBottom: 6 }}>
-              Sin campañas todavía
-            </p>
-            <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20 }}>
-              Crea tu primera campaña para empezar a construir el experimento nodo por nodo.
-            </p>
-            <button
-              onClick={() => setShowModal(true)}
-              style={{
-                background: "var(--dropi)", color: "#fff", border: "none",
-                borderRadius: 9, padding: "10px 20px", fontWeight: 700,
-                fontSize: 13, cursor: "pointer",
-              }}
-            >
-              + Nueva campaña
-            </button>
+        {withResults.length === 0 ? (
+          <div style={{ background: "#fff", border: "2px dashed var(--border)", borderRadius: 14, padding: "56px 24px", textAlign: "center" }}>
+            <p style={{ fontSize: 15, fontWeight: 600, color: "var(--fg)", marginBottom: 6 }}>Todavía no hay campañas con resultados</p>
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>En cuanto una campaña llegue al nodo Resultados y se llenen los números, aparece aquí comparada contra las demás.</p>
           </div>
+        ) : (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 28 }}>
+              <StatCard label="Campañas medidas" value={fmt(withResults.length)} />
+              <StatCard label="Suppliers invitados (total)" value={fmt(totals.invited)} />
+              <StatCard label="Suppliers aprobados (total)" value={fmt(totals.approved)} />
+              <StatCard label="Órdenes generadas (total)" value={fmt(totals.orders)} />
+              <StatCard label="GMV generado (total)" value={`$${fmt(totals.gmv)}`} />
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 28 }}>
+              <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px" }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", margin: "0 0 12px" }}>GMV por campaña</h3>
+                <div style={{ width: "100%", height: 220 }}>
+                  <ResponsiveContainer>
+                    <BarChart data={gmvByCampaign} margin={{ left: 0, right: 12, top: 8, bottom: 8 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 12, fill: "#6B7280" }} axisLine={false} tickLine={false} />
+                      <Tooltip formatter={(v) => `$${fmt(Number(v))}`} />
+                      <Bar dataKey="value" fill="#F77F00" radius={[6, 6, 0, 0]} barSize={32} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+              <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px" }}>
+                <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", margin: "0 0 12px" }}>Órdenes por campaña</h3>
+                <div style={{ width: "100%", height: 220 }}>
+                  <ResponsiveContainer>
+                    <BarChart data={ordersByCampaign} margin={{ left: 0, right: 12, top: 8, bottom: 8 }}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                      <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 12, fill: "#6B7280" }} axisLine={false} tickLine={false} />
+                      <Tooltip formatter={(v) => fmt(Number(v))} />
+                      <Bar dataKey="value" fill="#6366F1" radius={[6, 6, 0, 0]} barSize={32} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                <thead>
+                  <tr style={{ background: "var(--bg)", textAlign: "left" }}>
+                    {["Campaña", "Invitados", "Aprobados", "Órdenes", "GMV"].map((h) => (
+                      <th key={h} style={{ padding: "10px 16px", fontWeight: 700, color: "var(--muted)", fontSize: 11.5, textTransform: "uppercase", letterSpacing: "0.03em" }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {withResults.map((c) => (
+                    <tr key={c.id} onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${c.id}/dashboard`)}
+                      style={{ borderTop: "1px solid var(--border)", cursor: "pointer" }}>
+                      <td style={{ padding: "12px 16px", fontWeight: 600, color: "var(--fg)" }}>{c.name}</td>
+                      <td style={{ padding: "12px 16px", color: "var(--fg)" }}>{fmt(num(c.resultados.suppliers_invited))}</td>
+                      <td style={{ padding: "12px 16px", color: "var(--fg)" }}>{fmt(num(c.resultados.suppliers_approved))}</td>
+                      <td style={{ padding: "12px 16px", color: "var(--fg)" }}>{fmt(num(c.resultados.orders_generated))}</td>
+                      <td style={{ padding: "12px 16px", color: "var(--fg)" }}>${fmt(num(c.resultados.gmv_generated))}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
 
-        {/* Campaign list */}
-        {!loading && campaigns.length > 0 && (
-          <div style={{ display: "grid", gap: 12 }}>
-            {campaigns.map((c) => {
-              const progress = Math.min(Math.round((c.current_node / NODE_COUNT) * 100), 100);
-              return (
-                <div
-                  key={c.id}
-                  onClick={() => router.push(`/proyectos/dinamicas-catalogo/${c.id}`)}
-                  style={{
-                    background: "#fff", border: "1px solid var(--border)",
-                    borderRadius: 14, padding: "20px 24px", cursor: "pointer",
-                    transition: "box-shadow 0.15s",
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.07)")}
-                  onMouseLeave={(e) => (e.currentTarget.style.boxShadow = "none")}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                        <span style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)" }}>{c.name}</span>
-                        <span style={{
-                          fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 20,
-                          color: statusColor[c.status] ?? "#6B7280",
-                          background: statusBg[c.status] ?? "#F3F4F6",
-                        }}>
-                          {statusLabel[c.status] ?? c.status}
-                        </span>
-                      </div>
-                      {/* Progress bar */}
-                      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        <div style={{
-                          flex: 1, height: 6, background: "#F3F4F6", borderRadius: 99, overflow: "hidden",
-                        }}>
-                          <div style={{
-                            height: "100%", width: `${progress}%`,
-                            background: progress === 100 ? "#10B981" : "var(--dropi)",
-                            borderRadius: 99, transition: "width 0.3s",
-                          }} />
-                        </div>
-                        <span style={{ fontSize: 12, color: "var(--muted)", whiteSpace: "nowrap" }}>
-                          Nodo {Math.min(c.current_node, NODE_COUNT)} / {NODE_COUNT}
-                        </span>
-                      </div>
-                    </div>
-                    {c.current_node >= NODE_COUNT && (
-                      <a
-                        href={`/proyectos/dinamicas-catalogo/${c.id}/handoff`}
-                        onClick={(e) => e.stopPropagation()}
-                        style={{
-                          background: "#ECFDF5", color: "#10B981",
-                          border: "1.5px solid #10B98130",
-                          borderRadius: 9, padding: "7px 14px",
-                          fontSize: 12, fontWeight: 700, textDecoration: "none",
-                          whiteSpace: "nowrap", flexShrink: 0,
-                          display: "flex", alignItems: "center", gap: 5,
-                        }}
-                      >
-                        ↓ Handoff
-                      </a>
-                    )}
-                    <span style={{ fontSize: 20, color: "var(--muted)" }}>→</span>
-                  </div>
-                </div>
-              );
-            })}
+        {withoutResults.length > 0 && (
+          <div style={{ marginTop: 28 }}>
+            <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)", marginBottom: 10 }}>Sin resultados todavía</h3>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {withoutResults.map((c) => (
+                <span key={c.id} onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${c.id}/dashboard`)}
+                  style={{ fontSize: 12.5, background: "#fff", border: "1px solid var(--border)", borderRadius: 20, padding: "6px 14px", cursor: "pointer", color: "var(--muted)" }}>
+                  {c.name}
+                </span>
+              ))}
+            </div>
           </div>
         )}
       </div>
-
-      {/* Modal nueva campaña */}
-      {showModal && (
-        <div
-          style={{
-            position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)",
-            display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100,
-          }}
-          onClick={() => setShowModal(false)}
-        >
-          <div
-            style={{
-              background: "#fff", borderRadius: 18, padding: "32px",
-              width: 440, boxShadow: "0 24px 60px rgba(0,0,0,0.16)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
-              Nueva campaña
-            </h2>
-            <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 24 }}>
-              Dale un nombre a esta campaña. Podrás completar todos los detalles en el flujo guiado.
-            </p>
-            <label style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", display: "block", marginBottom: 8 }}>
-              Nombre de la campaña *
-            </label>
-            <input
-              autoFocus
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && createCampaign()}
-              placeholder="ej. Dropicup Mundial, Black Week, Remates Junio..."
-              style={{
-                width: "100%", border: "1px solid var(--border)", borderRadius: 10,
-                padding: "10px 14px", fontSize: 14, outline: "none",
-                marginBottom: 24,
-              }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "var(--dropi)")}
-              onBlur={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
-            />
-            <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
-              <button
-                onClick={() => setShowModal(false)}
-                style={{
-                  background: "var(--bg)", border: "1px solid var(--border)",
-                  borderRadius: 9, padding: "9px 18px", fontSize: 13, fontWeight: 600, cursor: "pointer",
-                }}
-              >
-                Cancelar
-              </button>
-              <button
-                onClick={createCampaign}
-                disabled={!newName.trim() || creating}
-                style={{
-                  background: newName.trim() ? "var(--dropi)" : "#D1D5DB",
-                  color: "#fff", border: "none", borderRadius: 9,
-                  padding: "9px 18px", fontSize: 13, fontWeight: 700,
-                  cursor: newName.trim() ? "pointer" : "default",
-                }}
-              >
-                {creating ? "Creando..." : "Crear y comenzar →"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </main>
+      </main>
+    </div>
   );
 }

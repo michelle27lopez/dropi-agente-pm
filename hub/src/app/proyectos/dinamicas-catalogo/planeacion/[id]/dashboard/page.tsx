@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { NodeKey, NodeData } from "../../nodes";
+import { NodeKey, NodeData, SavedNode, isPlanningComplete, EXECUTION_NODE_INDEX } from "../../nodes";
+import { PhaseTabs } from "../../PhaseTabs";
 
 type Campaign = { id: string; name: string; status: string };
-type SavedNode = { node_index: number; node_key: string; data: NodeData; completed: boolean };
 
 const TOKENS = `
   :root {
-    --dropi: #F77F00; --bg: #F8F9FA; --card: #fff; --border: #E5E7EB; --fg: #111827; --muted: #6B7280;
+    --dropi: #F77F00; --bg: #fff; --card: #fff; --border: #E5E7EB; --fg: #111827; --muted: #6B7280;
     --success: #10B981; --success-light: #ECFDF5; --info: #6366F1; --info-light: #EEF2FF;
   }
 `;
@@ -81,6 +81,11 @@ export default function CampaignDashboardPage() {
   const resultados = nd("resultados");
   const hasResultados = Object.keys(resultados).length > 0;
 
+  const planningComplete = isPlanningComplete(nodes);
+  const executionNode = nodes.find((n) => n.node_index === EXECUTION_NODE_INDEX);
+  const isActive = executionNode?.data?.status === "active";
+  const closingDone = !!nd("decision").decision;
+
   const supplierFunnel = [
     { name: "Invitados", value: num(resultados.suppliers_invited) },
     { name: "Postularon", value: num(resultados.suppliers_applied) },
@@ -108,26 +113,28 @@ export default function CampaignDashboardPage() {
         background: "#fff", borderBottom: "1px solid var(--border)", padding: "0 24px", height: 52,
         display: "flex", alignItems: "center", gap: 12, position: "sticky", top: 0, zIndex: 10,
       }}>
-        <button onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${id}`)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--muted)", fontSize: 13, padding: 0 }}>
-          ← Wizard
-        </button>
+        <a href="/proyectos/dinamicas-catalogo" style={{ color: "var(--muted)", fontSize: 13, textDecoration: "none" }}>← Dropi PM Tools</a>
         <span style={{ color: "var(--border)" }}>/</span>
-        <button onClick={() => router.push("/proyectos/dinamicas-catalogo/planeacion")} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--muted)", fontSize: 13, padding: 0 }}>
-          Planeación
+        <button onClick={() => router.push("/proyectos/dinamicas-catalogo/campanas")} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--muted)", fontSize: 13, padding: 0 }}>
+          Panel de campañas
         </button>
         <span style={{ color: "var(--border)" }}>/</span>
         <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>{campaign.name}</span>
-        <span style={{ fontSize: 11, fontWeight: 600, color: "var(--info)", background: "var(--info-light)", padding: "2px 8px", borderRadius: 20 }}>Dashboard</span>
-        <div style={{ marginLeft: "auto" }}>
-          <button onClick={() => router.push("/proyectos/dinamicas-catalogo/planeacion/dashboard")}
-            style={{ background: "var(--dropi)", color: "#fff", border: "none", borderRadius: 9, padding: "8px 16px", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
-            Ver todas las campañas →
-          </button>
-        </div>
       </header>
 
       <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px 24px 80px" }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)", margin: "0 0 4px" }}>{identidad.name || campaign.name}</h1>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)", margin: "0 0 16px" }}>{identidad.name || campaign.name}</h1>
+
+        <div style={{ marginBottom: 24 }}>
+          <PhaseTabs
+            campaignId={id}
+            active="resumen"
+            planningComplete={planningComplete}
+            isActive={isActive}
+            closingDone={closingDone}
+          />
+        </div>
+
         {identidad.expected_result && (
           <p style={{ fontSize: 13.5, color: "var(--muted)", margin: "0 0 28px", lineHeight: 1.5 }}>
             <strong style={{ color: "var(--fg)" }}>Meta:</strong> {identidad.expected_result}
@@ -137,11 +144,23 @@ export default function CampaignDashboardPage() {
         {!hasResultados ? (
           <div style={{ background: "var(--card)", border: "1px dashed var(--border)", borderRadius: 14, padding: "48px 24px", textAlign: "center" }}>
             <p style={{ fontSize: 14, color: "var(--muted)", margin: "0 0 16px" }}>
-              Todavía no hay resultados cargados para esta campaña.
+              {!planningComplete
+                ? "La campaña todavía está en planeación."
+                : !isActive
+                ? "La planeación está lista. Falta iniciar la campaña en Ejecución."
+                : "La campaña está en curso. Los resultados se cargan cuando termine, en Cierre."}
             </p>
-            <button onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${id}`)}
-              style={{ background: "var(--dropi)", color: "#fff", border: "none", borderRadius: 9, padding: "10px 20px", fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
-              Ir al nodo Resultados →
+            <button
+              onClick={() => router.push(
+                !planningComplete
+                  ? `/proyectos/dinamicas-catalogo/planeacion/${id}`
+                  : !isActive
+                  ? `/proyectos/dinamicas-catalogo/planeacion/${id}/ejecucion`
+                  : `/proyectos/dinamicas-catalogo/planeacion/${id}?phase=cierre`
+              )}
+              style={{ background: "var(--dropi)", color: "#fff", border: "none", borderRadius: 9, padding: "10px 20px", fontWeight: 700, fontSize: 13, cursor: "pointer" }}
+            >
+              {!planningComplete ? "Continuar planeación →" : !isActive ? "Ir a Ejecución →" : "Ir a Resultados →"}
             </button>
           </div>
         ) : (
