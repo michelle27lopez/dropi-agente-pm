@@ -170,7 +170,7 @@ export default function DocsPage() {
               <strong>DCA-001 es un experimento lean</strong> que busca responder una pregunta central antes de construir cualquier módulo formal en Dropi: <em>¿podemos hacer que suppliers participen activamente en campañas curadas por Dropi, y que los dropshippers adopten esos productos?</em>
             </P>
             <P>
-              En lugar de desarrollar un módulo complejo, se construyó un <strong>prototipo funcional interno</strong>: un wizard de 7 nodos que permite a la célula de Supplier Success estructurar, documentar y ejecutar campañas de catálogo de forma manual, con toda la información operativa organizada en un solo lugar.
+              En lugar de desarrollar un módulo complejo, se construyó un <strong>prototipo funcional interno</strong>: un wizard de 7 nodos que permite a la célula de Brands Success estructurar, documentar y ejecutar campañas de catálogo de forma manual, con toda la información operativa organizada en un solo lugar.
             </P>
 
             <Callout icon="💡" color="#F77F00">
@@ -295,7 +295,7 @@ export default function DocsPage() {
                 <FieldRow name="Tipo de experimento" req type="Multiselección" note="Cómo se va a ejecutar: vitrina manual, GHL, WhatsApp, Userpilot, comunicación comercial, o una combinación." />
                 <FieldRow name="País / mercado" req type="Multiselección" note="Aplica para Colombia, México, Chile, Ecuador o multipaís. Condiciona segmentación y comunicación." />
                 <FieldRow name="Fechas base" req type="4 fechas" note="Inicio convocatoria supplier → Cierre postulación → Publicación para dropshippers → Cierre de campaña. Alineadas al ciclo estándar de 4 meses." />
-                <FieldRow name="Responsable" req type="Selección" note="Equipo o persona responsable de coordinar la campaña: Producto, Growth, Comercial, Supplier Success." />
+                <FieldRow name="Responsable" req type="Selección" note="Equipo o persona responsable de coordinar la campaña: Producto, Growth, Comercial, Brands Success." />
                 <FieldRow name="Hipótesis" req type="Texto" note="La apuesta central que queremos validar. Debe ser falseable: '¿Qué creemos que va a pasar y por qué?'" />
                 <FieldRow name="Resultado esperado" req type="Texto" note="Qué métricas o señales indicarían que la hipótesis se confirmó. Base para el nodo de medición." />
               </tbody>
@@ -388,7 +388,7 @@ export default function DocsPage() {
                 <FieldRow name="Exclusiones" req type="Condition builder OR" note="Si se cumple cualquiera, queda fuera. Ejemplo: OR alerta operativa crítica OR cancelaciones > 20%." />
                 <FieldRow name="Tamaño esperado" req type="Texto" note="Estimado de cuántos suppliers/productos entran. MVP recomendado: 20-50 suppliers o 50-150 productos." />
                 <FieldRow name="Fuente de datos" req type="Multiselección" note="Comercial, CRM/GHL, reporte de stock, reporte de órdenes, base de productos, sheet manual, etc." />
-                <FieldRow name="Responsable" req type="Selección" note="Quién construye y valida la lista final: Supplier Success, Comercial, Data, Producto." />
+                <FieldRow name="Responsable" req type="Selección" note="Quién construye y valida la lista final: Brands Success, Comercial, Data, Producto." />
               </tbody>
             </table>
 
@@ -523,7 +523,7 @@ export default function DocsPage() {
 
             <Callout icon="📝" color="#EC4899">
               <strong>Curaduría Manual y Aprobación sin Marcos:</strong>
-              La curaduría de productos es manual, llevada a cabo conjuntamente por Comercial y Supplier Success según las reglas del Nodo 4. Los proveedores <strong>no visten sus imágenes en esta etapa</strong>; el material de diseño y la sublanding se entregan únicamente después de confirmada la aprobación (Fase de Contacto 2) para proteger las piezas gráficas.
+              La curaduría de productos es manual, llevada a cabo conjuntamente por Comercial y Brands Success según las reglas del Nodo 4. Los proveedores <strong>no visten sus imágenes en esta etapa</strong>; el material de diseño y la sublanding se entregan únicamente después de confirmada la aprobación (Fase de Contacto 2) para proteger las piezas gráficas.
             </Callout>
 
             <Callout icon="💡" color="#EC4899">
@@ -640,7 +640,7 @@ export default function DocsPage() {
                 <FieldRow name="Ficha Técnica" type="Sección" note="Resumen comercial: nombre de campaña, tipo de mecánica, país o mercado, responsable líder y objetivo principal." />
                 <FieldRow name="Enlaces Operativos" type="Sección" note="Formulario de postulación (Nodo 6), sublanding de marcos (dropi.co), Sheet de control y categoría temporal del Admin." />
                 <FieldRow name="Parámetros de Comunicación" type="Sección" note="Lista de IDs de proveedores premium/exclusivos cargados en User Pilot, y plantillas de Contacto 1 y Contacto 2." />
-                <FieldRow name="Matriz RACI" type="Sección" note="Comercial (segmentar/convocar), Marketing/Growth (diseño/comunicación dropshippers/User Pilot), Supplier Success (formularios/curaduría/categorías Admin), y Producto." />
+                <FieldRow name="Matriz RACI" type="Sección" note="Comercial (segmentar/convocar), Marketing/Growth (diseño/comunicación dropshippers/User Pilot), Brands Success (formularios/curaduría/categorías Admin), y Producto." />
               </tbody>
             </table>
           </SectionCard>
@@ -734,7 +734,7 @@ export default function DocsPage() {
 
           {/* Footer */}
           <div style={{ textAlign: "center" as const, fontSize: 12, color: "#9ca3af", padding: "20px 0 40px" }}>
-            Dropi · Supplier Success · DCA-001 · Dinámicas de Catálogo
+            Dropi · Brands Success · DCA-001 · Dinámicas de Catálogo
           </div>
 
         </main>
