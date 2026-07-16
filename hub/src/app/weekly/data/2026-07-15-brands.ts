@@ -1,7 +1,7 @@
 import type { WeeklySnapshot } from "./types";
 
 export const snapshot: WeeklySnapshot = {
-  week: "Semana 14–20 jul 2026",
+  week: "Semana 14–21 jul 2026",
   subtitle: "Weekly Células Brands | Seller PL-PO-PM · Emprendedores Plus bloqueado · Perfil de Marcas sin atraso",
   heroBadge: "Weekly Brands · Semana 14 jul",
   heroTitle: "Emprendedores Plus bloqueado por acceso de la usuaria piloto\n+ Perfil de Marcas confirma fechas sin atraso, identifica usuarios híbridos",
@@ -144,7 +144,7 @@ export const snapshot: WeeklySnapshot = {
   resumen: "Esta semana <strong>Emprendedores Plus</strong> quedó bloqueado: tecnología ya creó el usuario piloto (Isabella@dellaterra.co) y la transportadora Coordinadora está confirmada con credenciales, pero la usuaria está de viaje y no ha entregado el acceso para iniciar pruebas — como alternativa se evalúa un correo de prueba autorizado, y se acordó incluir a QA en la sesión en paralelo con TI. En <strong>Perfil de Marcas</strong> no hay atraso: Diana confirmó con José que las 4 fases de la rearquitectura ya estaban contempladas dentro de las 10 semanas originales, manteniendo Beta el 8 de septiembre y Producción el 22 de septiembre. Kate entregó y socializó la data de usuarios de marcas, identificando ~6-9 usuarios híbridos (marca + dropshipper/proveedor) que podrían generar fricción en la migración. José dedicará esta semana a definir el esquema de migración (mismo correo vs. correos distintos), y Katerine organizará una reunión con los involucrados para alinear contexto y estrategia de comunicación.",
   proximosPasos: [
     {
-      titulo: "Esta semana (14–20 jul 2026)",
+      titulo: "Esta semana (14–21 jul 2026)",
       color: "#6366F1",
       items: [
         "José Giraldo: asignar y convocar a QA para la sesión de pruebas de Emprendedores Plus en paralelo con TI.",

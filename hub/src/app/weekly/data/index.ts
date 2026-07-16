@@ -27,7 +27,7 @@ export const REGISTRY: Record<string, WeeklySnapshot> = {
 // dinámico de /weekly y para la tarjeta "Weekly" en /celula/[slug]).
 export const SEMANAS: { date: string; label: string; celula: string }[] = [
   { date: "2026-07-10", label: "Semana 10 jul 2026", celula: "suppliers" },
-  { date: "2026-07-15-brands", label: "Semana 14–20 jul 2026 · Brands", celula: "brands" },
+  { date: "2026-07-15-brands", label: "Semana 14–21 jul 2026 · Brands", celula: "brands" },
   { date: "2026-07-10-brands", label: "Semana 07–13 jul 2026 · Brands", celula: "brands" },
   { date: "2026-07-08", label: "Semana 08 jul 2026", celula: "suppliers" },
   { date: "2026-07-03", label: "Semana 03 jul 2026", celula: "suppliers" },
