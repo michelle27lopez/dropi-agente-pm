@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase-browser";
 import { useRouter } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import { type Item, Section, matchesQuery } from "@/components/HomeSections";
+import { isSprintAllowed } from "@/lib/sprint-access";
 
 const TEAM_NAMES: Record<string, string> = {
   "jaime.guevara@dropi.co": "Jaime",
@@ -279,7 +280,22 @@ export default function HubPage() {
     return <main style={{ minHeight: "100vh" }} />;
   }
 
-  const filteredUpdates = updates.filter((item) => matchesQuery(item, query));
+  // /sprint solo es visible para Michelle y Jaime (alcance confirmado
+  // 2026-07-15) — no se agrega al array estático `updates` porque ese
+  // mismo home lo ven otras personas de la célula Suppliers.
+  const visibleUpdates = isSprintAllowed(userEmail)
+    ? [...updates, {
+        key: "sprint-checklist",
+        name: "Sprint · Checklist",
+        description: "Checklist de documentación por tarea del sprint activo — objetivo, qué se hizo, hallazgos y links, con estado por bloque.",
+        url: "/sprint",
+        tag: "Solo tú y Jaime",
+        color: "#1A6B52",
+        icon: "🗓️",
+      }]
+    : updates;
+
+  const filteredUpdates = visibleUpdates.filter((item) => matchesQuery(item, query));
   const filteredProjects = projects.filter((item) => matchesQuery(item, query));
   const filteredPoc = poc.filter((item) => matchesQuery(item, query));
   const hasResults = filteredUpdates.length + filteredProjects.length + filteredPoc.length > 0;
