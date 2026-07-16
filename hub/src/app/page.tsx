@@ -181,6 +181,7 @@ const poc: Item[] = [
 export default function HubPage() {
   const [query, setQuery] = useState("");
   const [checkingRole, setCheckingRole] = useState(true);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const router = useRouter();
 
   const hasSupabase = !!(
@@ -197,6 +198,7 @@ export default function HubPage() {
       .then((res) => res.json())
       .then((data) => {
         const profile = data?.profile;
+        setUserEmail(data?.user?.email ?? profile?.email ?? null);
         if (!profile) { setCheckingRole(false); return; }
 
         const mySlug = profile.celulas?.slug;
