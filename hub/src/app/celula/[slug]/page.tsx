@@ -60,7 +60,7 @@ function weeklyToItem(semana: { date: string; label: string }): Item {
   const snapshot = REGISTRY[semana.date];
   return {
     key: `weekly-${semana.date}`,
-    name: snapshot.heroTitle.split("\n")[0],
+    name: "Weekly PM",
     description: truncate(snapshot.subtitle, 160),
     url: `/weekly?week=${semana.date}`,
     tag: semana.date.slice(0, 10),
