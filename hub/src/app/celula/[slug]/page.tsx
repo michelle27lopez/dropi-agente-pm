@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
-import { SEMANAS } from "@/app/weekly/data/index";
+import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
 
 type Proyecto = {
   id: string; name: string; project_code: string | null;
@@ -53,6 +53,19 @@ function updateToItem(u: Update): Item {
     tag: u.week_date,
     color: "#6366F1",
     icon: "📋",
+  };
+}
+
+function weeklyToItem(semana: { date: string; label: string }): Item {
+  const snapshot = REGISTRY[semana.date];
+  return {
+    key: `weekly-${semana.date}`,
+    name: snapshot.heroTitle.split("\n")[0],
+    description: truncate(snapshot.subtitle, 160),
+    url: `/weekly?week=${semana.date}`,
+    tag: semana.date.slice(0, 10),
+    color: "#F77F00",
+    icon: "📅",
   };
 }
 
@@ -108,13 +121,19 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const updates = celula.updates.map(updateToItem);
   const proyectos = celula.proyectos.filter((p) => p.type !== "POC").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
-  const semanaReciente = SEMANAS
-    .filter((s) => s.celula === celula.slug)
-    .sort((a, b) => b.date.localeCompare(a.date))[0];
+
+  // "Updates" mezcla los registros de celula_updates con el historial del
+  // Weekly PM de esta célula (si tiene alguno) — mismo look de tarjeta,
+  // ordenado por fecha descendente.
+  const semanasCelula = SEMANAS.filter((s) => s.celula === celula.slug && REGISTRY[s.date]);
+  const updateEntries = [
+    ...celula.updates.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
+    ...semanasCelula.map((s) => ({ item: weeklyToItem(s), sortKey: s.date.slice(0, 10) })),
+  ].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
+  const updates = updateEntries.map((e) => e.item);
 
   return (
     <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
@@ -126,22 +145,6 @@ export default function CelulaHomePage() {
       />
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
-        {semanaReciente && (
-          <a
-            href={`/weekly?week=${semanaReciente.date}`}
-            style={{
-              display: "flex", alignItems: "center", justifyContent: "space-between",
-              border: "1px solid var(--border)", borderRadius: 12, padding: "16px 20px",
-              marginBottom: 40, textDecoration: "none", background: "var(--card)",
-            }}
-          >
-            <span style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>
-              📅 Weekly · {semanaReciente.label}
-            </span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)" }}>Ver →</span>
-          </a>
-        )}
-
         <div style={{ marginBottom: 56 }}>
           <Section title="Updates" items={updates} ctaLabel="Ver →" />
           {updates.length === 0 && (

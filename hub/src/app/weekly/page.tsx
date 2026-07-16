@@ -27,6 +27,8 @@ function WeeklyPageContent() {
   const isCurrentWeek = selectedDate === CURRENT;
   const celulaSlug = SEMANAS.find((s) => s.date === selectedDate)?.celula ?? "suppliers";
   const celulaLabel = CELULA_LABELS[celulaSlug] ?? "Supplier Success";
+  // Cada célula solo ve el historial de sus propias semanas, no el de todas.
+  const semanasCelula = SEMANAS.filter((s) => s.celula === celulaSlug);
 
   useEffect(() => {
     if (!isCurrentWeek) { setTtvData({}); return; }
@@ -90,7 +92,7 @@ function WeeklyPageContent() {
         <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Weekly · {celulaLabel}</span>
 
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-          {SEMANAS.length > 1 && (
+          {semanasCelula.length > 1 && (
             <select
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
@@ -100,7 +102,7 @@ function WeeklyPageContent() {
                 padding: "5px 10px", background: "#fff", cursor: "pointer",
               }}
             >
-              {SEMANAS.map((s) => (
+              {semanasCelula.map((s) => (
                 <option key={s.date} value={s.date}>{s.label}</option>
               ))}
             </select>
