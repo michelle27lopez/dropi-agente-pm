@@ -1,11 +1,11 @@
 ---
 name: bug-jira
-description: Sube a Jira una o varias HU de bug ya redactadas en el formato de Dropi (título "[Etiqueta] Sigla: Nombre", Historia, Descripción del proceso, flujo actual/esperado, Criterios de aceptación en Gherkin, Condiciones adicionales, Definición de Hecho). Úsala cuando Michelle pida "sube esta HU de bug a jira", "crea este bug en jira", "publica este bug en jira", "sube estos bugs a jira" y ya tenga el texto completo de la HU.
+description: Sube a Jira una o varias HU de bug en el formato de Dropi (título "[Etiqueta] Sigla: Nombre", Historia, Descripción del proceso, flujo actual/esperado, Criterios de aceptación en Gherkin, Condiciones adicionales, Definición de Hecho). Úsala cuando Michelle pida "sube esta HU de bug a jira", "crea este bug en jira", "publica este bug en jira", "sube estos bugs a jira", "ayúdame a reportar este bug", ya sea que traiga el texto completo o que solo describa el bug y haya que redactarlo primero.
 ---
 
 # Subir HU de bug a Jira
 
-Publica directo en Jira vía el MCP de Atlassian ya autenticado — sin scripts, sin tokens, sin `.env`. Objetivo: que subir una HU de bug sea un paso, no una sesión de formateo manual.
+Publica directo en Jira vía el MCP de Atlassian ya autenticado — sin scripts, sin tokens, sin `.env`. Objetivo: que subir una HU de bug sea un paso, no una sesión de formateo manual. Si todavía no existe el texto de la HU, la skill ayuda a redactarla primero (Paso 0) antes de publicar.
 
 ## Config fija (confirmada con Michelle el 2026-07-15, no volver a preguntar)
 
@@ -14,6 +14,17 @@ Publica directo en Jira vía el MCP de Atlassian ya autenticado — sin scripts,
 - Tipo de issue: **Error** (el tipo "Bug" nativo de Jira) — aunque el texto venga en formato de HU completo, no usar "Historia".
 - Herramienta: `mcp__claude_ai_Atlassian_Rovo__createJiraIssue` directo, con `contentFormat: "markdown"`. No usar `agente-delivery/scripts/jira_publisher.py` (ese requiere `JIRA_BASE_URL`/`JIRA_EMAIL`/`JIRA_API_TOKEN` en `.env`) ni pedirle credenciales a Michelle.
 - Cada bug creado se registra además en la tabla `jira_bug_tracking` del Supabase de Jaime (`fwwkesboxlbmimzyoztq`) — ver Paso 5. Es el único proyecto Supabase válido para el hub, nunca uno personal/aislado.
+
+## Paso 0 — Si no hay texto de HU todavía, redactarla primero
+
+Si piden subir un bug pero no llega el texto completo en el formato de Dropi, no saltar directo a preguntar todo desde cero:
+
+1. **Revisar primero el resto de la conversación actual.** Si el bug ya se discutió antes en esta misma conversación (una sesión de debug, un hallazgo de investigación, una queja reportada, datos o capturas ya compartidas), sacar de ahí todo lo que se pueda: qué pasa, quién lo reporta, qué evidencia hay, flujo actual, causa probable. No volver a preguntar algo que la persona ya dijo en el chat.
+2. Con lo que haya (del chat o de lo que diga ahora), armar un borrador completo en el mismo formato del Paso 1: título `[Etiqueta] Sigla: Nombre`, Historia (Como/Puedo/Para), Descripción del proceso, Flujo actual/esperado, Criterios de aceptación en Gherkin, Condiciones adicionales, Definición de Hecho.
+3. Preguntar explícitamente solo lo que falte y no se pueda inferir con confianza del contexto (ej. la Etiqueta o la Sigla del producto si no es obvia, el flujo esperado si no se discutió, evidencia/datos si no hay ninguno mencionado). No inventar datos técnicos, cifras o causas que no estén respaldados por la conversación o por lo que la persona confirme.
+4. Mostrar el borrador completo y pedir aprobación antes de seguir — nunca continuar al Paso 1 en adelante (parsear/crear en Jira) con una HU que la persona no vio ni aprobó todavía.
+
+Si ya llega el texto completo y listo, saltar directo al Paso 1.
 
 ## Paso 1 — Parsear cada HU
 
@@ -91,3 +102,4 @@ reported_by: <nombre de quien pidió subir la HU>
 - No reescribir ni resumir el contenido de la HU — se sube tal cual la redactó Michelle (o quien la escribió).
 - No crear un issue sin asignado confirmado.
 - Nunca hardcodear la `SUPABASE_SERVICE_KEY` en un script ni imprimirla en la conversación — cargarla siempre desde `hub/.env.local` en tiempo de ejecución.
+- Al redactar una HU desde cero (Paso 0), no inventar datos, cifras o causas — solo usar lo que la conversación o la persona confirmen, y mostrar el borrador para aprobación antes de publicar.
