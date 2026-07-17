@@ -2,17 +2,26 @@ import type { WeeklySnapshot } from "./types";
 
 export const snapshot: WeeklySnapshot = {
   week: "Semana 17 jul 2026",
-  subtitle: "Reinoso desbloqueó 4 frentes · Ascensos = regulador contractual · TTV primeras auditorías",
-  heroBadge: "Semana 17 jul · En progreso",
-  heroTitle: "Jaime Reinoso desbloqueó 4 frentes en 1 reunión\n+ Ascensos reencuadrados como regulador contractual · TTV: 15 auditorías arrancaron",
+  subtitle: "27-jul: activación + Dropi Pulso desde plataforma propia · Reinoso desbloqueó 4 frentes · Ascensos = regulador contractual",
+  heroBadge: "Semana 17 jul · Lanzamiento 27-jul",
+  heroTitle: "Lanzamiento 27-jul · Activación + Dropi Pulso desde nuestra plataforma\n+ Reinoso desbloqueó 4 frentes · Ascensos = regulador contractual",
   heroStrip: [
     { label: "Objetivo Anual", value: "93.6M", sub: "Órdenes/año meta OKR" },
     { label: "Órdenes Actuales", value: "38.4M", sub: "Órdenes/año base" },
     { label: "Brecha a Cerrar", value: "55.2M", sub: "Adicionales requeridas" },
     { label: "Meta C1 · TTV", value: "104", sub: "Activos al 31-ago" },
-    { label: "Próximo hito", value: "24-jul", sub: "Kick-off suppliers Cyber Days" }
+    { label: "Lanzamiento propio", value: "27-jul", sub: "Activación + Dropi Pulso · T0 medición" }
   ],
   insights: [
+    {
+      id: "INS-009",
+      titulo: "Decisión · 27-jul: activamos y medimos desde nuestra plataforma — sin depender de TI ni de BD",
+      descripcion: "La semana confirmó un patrón: los dos frentes más críticos (TTV y Dropi Pulso) tienen bloqueantes fuera de nuestro control — José sin weekly, bug en Jira sin respuesta, Reinoso esperando mantenimiento de BD. La respuesta no es esperar — es activar desde lo que ya construimos. El 27 de julio es el T0 de medición de ambos frentes. (1) Activación automática (TTV-001): el pipeline GHL está operativo y el onboarding tour activo — lanzamos seguimiento automatizado desde nuestra plataforma. El bug de auto-login no bloquea el arranque; si José lo resuelve antes del 27-jul, el impacto se amplifica, no se condiciona. (2) Dropi Pulso: la plataforma + CRM WA ya están listos — el piloto arranca el 27-jul con la comunidad de Iván, con data manual si el endpoint de Reinoso no está disponible aún. Sin depender enteramente de otras áreas: TI y BD siguen siendo aliados, pero el arranque de medición no espera su disponibilidad.",
+      proyecto: "Estrategia",
+      tipo: "Decisión",
+      tipoColor: "#7C3AED",
+      impacto: "Alto",
+    },
     {
       id: "INS-001",
       titulo: "Jaime Reinoso (IA y BD) · nuevo interlocutor TI — 4 frentes desbloqueados en 1 reunión",
@@ -97,7 +106,7 @@ export const snapshot: WeeklySnapshot = {
       hipotesis: "North Star: registro → activo en ≤5 días",
       gmv: "~105.000 órdenes/año · USD 1,57M GMV proyectado",
       avance: "463 registrados en UserPilot desde 30-jun (al 14-jul). 15 auditorías planificadas para el 16-jul no se ejecutaron — sin movimiento en el CRM esta semana. Bug de auto-login (46% rebote) subido a Jira a José según su indicación — esperando respuesta. José canceló el weekly de esta semana, sin update de TI. María amplió el scope: activación = velocidad + políticas de productos + anti-fraude. Plan de seguimiento estructurado a nuevos suppliers pendiente de crear.",
-      next: "Seguimiento al bug en Jira — José debe responder. Reagendar weekly con José. Iniciar borrador del plan de seguimiento a nuevos (3 dimensiones). Confirmar con equipo comercial por qué las auditorías del 16-jul no se ejecutaron.",
+      next: "27-jul: T0 de medición — activación automática desde nuestra plataforma (GHL + onboarding tour ya están operativos). El bug de José no condiciona el arranque; si lo resuelve antes del 27, el impacto se amplifica. Seguimiento al bug en Jira. Reagendar weekly con José. Iniciar borrador del plan de seguimiento a nuevos (3 dimensiones). Confirmar con equipo comercial por qué las auditorías del 16-jul no se ejecutaron.",
       badge: "🔴 0 activos · Sin movimiento",
       badgeColor: "#EF4444",
       ttvLive: true,
@@ -113,7 +122,7 @@ export const snapshot: WeeklySnapshot = {
           { label: "TTA meta", value: "≤ 5 días", sub: "Registro → activo" },
         ],
         seguimiento: [
-          { label: "Listos para vender", value: "0", sub: "Sin conversiones esta semana" },
+          { label: "T0 medición", value: "27-jul", sub: "Activación automática · desde plataforma propia" },
           { label: "José weekly", value: "Cancelado", sub: "Sin update de TI esta semana" },
           { label: "Plan seguimiento nuevos", value: "Pendiente crear", sub: "3 dimensiones · María lo pidió" },
         ]
@@ -190,7 +199,7 @@ export const snapshot: WeeklySnapshot = {
       hipotesis: "El matching activo de demanda→catálogo reduce el tiempo de primera campaña y activa proveedores sin gestión manual",
       gmv: "Piloto: comunidad de Iván (proveeduría puente) · sin proyección confirmada aún",
       avance: "Plataforma construida con flujo completo. CRM para envío de WA ya conectado. Con la data disponible (endpoint de Reinoso), Pulso se puede activar de inmediato — no hay más blocker de producto. Reinoso construirá el endpoint de datos (catálogo, stock, proveedores) una vez termine el mantenimiento de BD. Próxima semana: refinar proceso con Comercial. Piloto previsto: comunidad de Iván (proveeduría puente). Riesgo activo: stock fantasma — validar antes de activar.",
-      next: "Follow-up a Reinoso sobre ventana de mantenimiento BD. Reunión de refinamiento con Comercial (próxima semana). Preparar guión de piloto con comunidad de Iván.",
+      next: "27-jul: lanzamiento del piloto con comunidad de Iván — con data manual si el endpoint de Reinoso no está listo. Cerrar con Comercial el guión + kit de materiales antes del 27-jul. Follow-up a Reinoso sobre ventana de mantenimiento BD.",
       badge: "🟢 Lista para activar · Esperando data",
       badgeColor: "#10B981",
       metricas: {
@@ -204,8 +213,9 @@ export const snapshot: WeeklySnapshot = {
           { label: "Riesgo crítico", value: "Stock fantasma", sub: "Validar antes de activar" },
         ],
         seguimiento: [
-          { label: "Follow-up Reinoso", value: "Próximos días", sub: "¿Cuándo termina mantenimiento BD?" },
-          { label: "Refinamiento Comercial", value: "Próxima semana", sub: "Juan Guillermo + equipo Emerson" },
+          { label: "Piloto · T0", value: "27-jul", sub: "Comunidad de Iván · data manual si es necesario" },
+          { label: "Follow-up Reinoso", value: "Esta semana", sub: "¿Cuándo termina mantenimiento BD?" },
+          { label: "Refinamiento Comercial", value: "Antes del 27-jul", sub: "Juan Guillermo + equipo Emerson" },
         ]
       }
     },
@@ -324,15 +334,24 @@ export const snapshot: WeeklySnapshot = {
   ],
   documentos: [],
   dolores: [],
-  resumen: "Semana 17-jul · El cambio más significativo fue establecer contacto con <strong>Jaime Reinoso</strong> (IA y Base de Datos), quien en una sola reunión desbloqueó 4 iniciativas: endpoint para Dropi Pulso, tracción técnica para CAT-001, endpoint de aprobación de ascensos IND-001, e identificó la solución técnica al bug de TTV (cronjob). María Ossa validó y amplió: los ascensos de nivel son ahora <strong>reguladores contractuales</strong> — el proveedor firma compromisos de servicio y Dropi le da visibilidad a cambio. Legal (DocuSign) y Comercial (beneficios por nivel) definen los términos antes de que Reinoso construya el endpoint. En <strong>TTV-001</strong>, la semana fue negativa: las 15 auditorías planificadas para el 16-jul no se ejecutaron, no hubo movimiento en el CRM, y José canceló el weekly — sin update de TI. El bug de auto-login está en Jira esperando respuesta. <strong>Dropi Pulso</strong> avanzó: plataforma lista + CRM WA conectado — con la data de Reinoso se puede activar de inmediato. En <strong>CAT-001</strong>, demo con Lucho confirmó tracción política y los devs se desbloquean el jueves. En <strong>DCA-001</strong>, kick-off con suppliers el 24-jul.",
+  resumen: "Semana 17-jul · La decisión más importante: el <strong>27 de julio</strong> lanzamos y empezamos a medir desde nuestra propia plataforma, sin condicionar el arranque a otras áreas. <strong>Activación (TTV-001)</strong>: el pipeline GHL y el onboarding tour ya están operativos — el 27-jul es el T0 de medición. El bug de auto-login de José sigue en Jira sin respuesta y las 15 auditorías del 16-jul no se ejecutaron, pero eso no frena el arranque; si José resuelve el bug antes del 27, el impacto se amplifica. <strong>Dropi Pulso</strong>: plataforma lista + CRM WA conectado — el piloto con la comunidad de Iván arranca también el 27-jul, con data manual si el endpoint de Reinoso no está disponible aún. Este movimiento lo habilitaron dos conversaciones clave de la semana: <strong>Jaime Reinoso</strong> (IA y BD) desbloqueó 4 frentes técnicos en una sola reunión — endpoint Pulso, tracción CAT-001, endpoint de ascensos IND-001, y solución al bug TTV. <strong>María Ossa</strong> validó, amplió el scope de activación (velocidad + políticas de productos + anti-fraude) y reencuadró los ascensos de IND-001 como <strong>reguladores contractuales</strong> — Legal (DocuSign) + Comercial definen los términos antes de que Reinoso construya el endpoint. <strong>CAT-001</strong> tiene tracción política con Lucho; devs se desbloquean el jueves. <strong>DCA-001</strong>: kick-off con suppliers el 24-jul.",
   proximosPasos: [
+    {
+      titulo: "Prioridad absoluta · lanzamiento 27-jul",
+      color: "#7C3AED",
+      items: [
+        "Activación (TTV-001): confirmar que el pipeline GHL corre de punta a punta — el 27-jul es T0 de medición. El bug de José no frena el arranque.",
+        "Dropi Pulso: cerrar con Comercial el guión + kit del piloto con comunidad de Iván antes del 27-jul — data manual si el endpoint de Reinoso no está listo.",
+        "Definir qué se mide desde el 27-jul en cada frente y cómo se reporta en el Cell Board.",
+      ]
+    },
     {
       titulo: "Esta semana · urgente",
       color: "#EF4444",
       items: [
         "TTV-001: hacer seguimiento al bug en Jira — José debe responder. Reagendar weekly con José.",
         "TTV-001: confirmar con equipo comercial por qué las auditorías del 16-jul no se ejecutaron.",
-        "IND-001: conectar CRM para envío WA a candidatos a ascenso (16-17 jul).",
+        "IND-001: conectar CRM para envío WA a candidatos a ascenso (hoy 17-jul).",
         "IND-001: agendar reunión con Legal — DocuSign + instrumento contractual por nivel.",
         "IND-001: agendar reunión con Comercial — beneficios y compromisos por nivel.",
         "CAT-001: asistir reunión del jueves con María — llevar demo lista para desbloqueo de devs.",
@@ -342,19 +361,18 @@ export const snapshot: WeeklySnapshot = {
       titulo: "Esta semana · seguimiento",
       color: "#F77F00",
       items: [
-        "TTV-001: reunión de seguimiento semanal con equipo (martes).",
         "TTV-001: iniciar borrador del plan de seguimiento a nuevos suppliers (velocidad + calidad + anti-fraude).",
-        "Dropi Pulso: follow-up a Reinoso en 3-5 días sobre ventana de mantenimiento BD.",
+        "Dropi Pulso: follow-up a Reinoso sobre ventana de mantenimiento BD.",
         "DCA-001: preparar convocatoria CRM para kick-off suppliers 24-jul.",
       ]
     },
     {
-      titulo: "Próxima semana · 24-jul",
+      titulo: "Próxima semana · 24–27 jul",
       color: "#6366F1",
       items: [
         "DCA-001: kick-off con suppliers vía CRM + Meet con Comercial (24-jul).",
+        "27-jul: lanzamiento Activación automática + Dropi Pulso — T0 de medición de ambos frentes.",
         "IND-001: primera reunión con Legal sobre instrumento contractual.",
-        "TTV: primera activación esperada si las auditorías del 16-jul avanzan bien.",
         "CAT-001: si devs se asignan el jueves 17-jul, arrancar planeación técnica de integración.",
         "NEG-002: agendar reunión con Juan Diego (contexto PM anterior).",
       ]
