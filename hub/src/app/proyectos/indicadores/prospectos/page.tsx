@@ -261,6 +261,8 @@ export default function ProspectosAscensoPage() {
   const [sentNotice, setSentNotice] = useState<string | null>(null);
   const [encolandoNivel, setEncolandoNivel] = useState<string | null>(null);
   const [procesandoLote, setProcesandoLote] = useState(false);
+  const [enviandoWebhook, setEnviandoWebhook] = useState(false);
+  const [previewWebhook, setPreviewWebhook] = useState<{ enCola: number; proveedores: { supplier_id: number; nombre: string }[] } | null>(null);
 
   function recargarOfertas() {
     return fetch("/api/proyectos/ascenso-ofertas")
@@ -322,6 +324,46 @@ export default function ProspectosAscensoPage() {
       }
     } finally {
       setProcesandoLote(false);
+    }
+  }
+
+  async function handlePreviewWebhook() {
+    setEnviandoWebhook(true);
+    setSentNotice(null);
+    try {
+      const res = await fetch("/api/proyectos/ascenso-ofertas/enviar-webhook", { method: "POST" });
+      const json = await res.json();
+      if (res.ok && json.dryRun) {
+        setPreviewWebhook({ enCola: json.enCola, proveedores: json.proveedores });
+      } else if (res.ok) {
+        setSentNotice(json.mensaje ?? "No hay nada pendiente en la cola.");
+      } else {
+        setSentNotice(`Error: ${json.error}`);
+      }
+    } finally {
+      setEnviandoWebhook(false);
+    }
+  }
+
+  async function handleConfirmarWebhook() {
+    setEnviandoWebhook(true);
+    setSentNotice(null);
+    try {
+      const res = await fetch("/api/proyectos/ascenso-ofertas/enviar-webhook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmar: true }),
+      });
+      const json = await res.json();
+      setPreviewWebhook(null);
+      if (res.ok) {
+        await recargarOfertas();
+        setSentNotice(`Webhook confirmado: ${json.enviados} proveedores mandados a n8n en un solo POST.`);
+      } else {
+        setSentNotice(`Error: ${json.error}`);
+      }
+    } finally {
+      setEnviandoWebhook(false);
     }
   }
 
@@ -500,14 +542,45 @@ export default function ProspectosAscensoPage() {
 
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, paddingTop: 4, borderTop: "1px solid var(--border)", marginTop: 4 }}>
                 <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, paddingTop: 12 }}>{cola.totalPendientes} en cola total, listos para procesar</span>
-                <button
-                  onClick={handleProcesarLote}
-                  disabled={procesandoLote || cola.totalPendientes === 0}
-                  style={{ ...selectStyle, background: "#10B981", color: "#fff", border: "none", marginTop: 12, opacity: cola.totalPendientes === 0 ? 0.5 : 1, cursor: cola.totalPendientes === 0 ? "not-allowed" : "pointer" }}
-                >
-                  {procesandoLote ? "Procesando lote…" : "Procesar siguiente lote (≤5) →"}
-                </button>
+                <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+                  <button
+                    onClick={handleProcesarLote}
+                    disabled={procesandoLote || cola.totalPendientes === 0}
+                    style={{ ...selectStyle, background: "#10B981", color: "#fff", border: "none", opacity: cola.totalPendientes === 0 ? 0.5 : 1, cursor: cola.totalPendientes === 0 ? "not-allowed" : "pointer" }}
+                  >
+                    {procesandoLote ? "Procesando lote…" : "Procesar siguiente lote (≤5) →"}
+                  </button>
+                  <button
+                    onClick={handlePreviewWebhook}
+                    disabled={enviandoWebhook || cola.totalPendientes === 0}
+                    style={{ ...selectStyle, background: "#0EA5E9", color: "#fff", border: "none", opacity: cola.totalPendientes === 0 ? 0.5 : 1, cursor: cola.totalPendientes === 0 ? "not-allowed" : "pointer" }}
+                  >
+                    {enviandoWebhook ? "Consultando…" : "Enviar todo por webhook n8n →"}
+                  </button>
+                </div>
               </div>
+
+              {previewWebhook && (
+                <div style={{ marginTop: 14, background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10, padding: "14px 16px" }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "#78350F", marginBottom: 8 }}>
+                    Vista previa · esto va a salir en UN solo POST a pulso_suppliers (tipo: &quot;ascenso&quot;)
+                  </div>
+                  <div style={{ fontSize: 12, color: "#78350F", marginBottom: 10 }}>
+                    {previewWebhook.enCola} proveedores: {previewWebhook.proveedores.slice(0, 8).map(p => p.nombre).join(", ")}
+                    {previewWebhook.proveedores.length > 8 ? ` y ${previewWebhook.proveedores.length - 8} más…` : ""}
+                  </div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button
+                      onClick={handleConfirmarWebhook}
+                      disabled={enviandoWebhook}
+                      style={{ ...selectStyle, background: "#EF4444", color: "#fff", border: "none" }}
+                    >
+                      {enviandoWebhook ? "Enviando…" : "Sí, confirmar envío real →"}
+                    </button>
+                    <button onClick={() => setPreviewWebhook(null)} style={selectStyle}>Cancelar</button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Tabla 1: Activo → Verificado */}

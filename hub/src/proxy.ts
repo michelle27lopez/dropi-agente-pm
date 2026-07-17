@@ -45,7 +45,8 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/api/gali") ||
     pathname.startsWith("/proyectos/indicadores/ascenso") ||
     pathname.startsWith("/api/proyectos/ascenso-ofertas") ||
-    pathname.startsWith("/api/public");
+    pathname.startsWith("/api/public") ||
+    pathname.startsWith("/docs");
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();
