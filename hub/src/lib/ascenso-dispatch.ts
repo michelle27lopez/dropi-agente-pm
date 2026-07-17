@@ -126,3 +126,58 @@ export async function dispatchOferta(oferta: OfertaParaEnvio) {
 export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+// ─── Envío por lote vía webhook n8n (Enrique) ────────────────────────────────
+// Un solo POST con el array completo — n8n resuelve destinatario (busca el
+// WhatsApp del proveedor por supplier_id en su propio CRM/GHL) y hace el
+// throttling real de envío del lado de él, con la API oficial de WhatsApp
+// Business. Nosotros no reenviamos uno por uno acá.
+//
+// Contrato en borrador (Enrique aún no lo confirmó): "tipo" distingue este
+// payload del que ya usa Dropi Pulso en el mismo webhook compartido.
+
+const PULSO_SUPPLIERS_WEBHOOK_URL = process.env.PULSO_SUPPLIERS_WEBHOOK_URL ?? "";
+
+export type OfertaParaWebhook = {
+  supplier_id: number;
+  supplier_name: string;
+  email: string | null;
+  nivel_actual: string;
+  nivel_objetivo: string;
+  token: string;
+};
+
+export async function dispatchBatchWebhook(ofertas: OfertaParaWebhook[]) {
+  if (!PULSO_SUPPLIERS_WEBHOOK_URL) {
+    throw new Error("PULSO_SUPPLIERS_WEBHOOK_URL no está configurado");
+  }
+  if (ofertas.length === 0) return { ok: true, enviados: 0 };
+
+  const beneficiosDe = (nivel: string) => BENEFICIOS[nivel] ?? [];
+
+  const payload = {
+    tipo: "ascenso",
+    ofertas: ofertas.map(o => ({
+      supplier_id: o.supplier_id,
+      nombre: o.supplier_name,
+      email: o.email,
+      nivel_actual: o.nivel_actual,
+      nivel_objetivo: o.nivel_objetivo,
+      beneficios: beneficiosDe(o.nivel_objetivo),
+      link: `${BASE_URL}/proyectos/indicadores/ascenso/${o.token}`,
+    })),
+  };
+
+  const res = await fetch(PULSO_SUPPLIERS_WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Webhook respondió ${res.status}: ${body}`);
+  }
+
+  return { ok: true, enviados: ofertas.length };
+}
