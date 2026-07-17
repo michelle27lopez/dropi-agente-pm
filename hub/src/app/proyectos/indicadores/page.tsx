@@ -368,6 +368,23 @@ export default function IndicadoresPage() {
                     <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>Ranking de proveedores según cumplimiento del umbral de órdenes para ascender a Verificado o Premium. →</div>
                   </div>
                 </a>
+
+                {/* Card: Webhook n8n · doc para Enrique (link a HTML estático) */}
+                <a
+                  href="/docs/webhook-ascenso-enrique.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 16, display: "flex", alignItems: "flex-start", gap: 12, cursor: "pointer", boxShadow: "0 1px 3px rgba(0,0,0,0.06)", textDecoration: "none" }}
+                >
+                  <span style={{ fontSize: 22, marginTop: 2 }}>🔗</span>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                      <span>Webhook n8n · doc para Enrique</span>
+                      <span style={tag("#F59E0B", "#FFFBEB")}>Borrador</span>
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>Contrato del payload pulso_suppliers (tipo ascenso) + plantillas de WhatsApp para Meta. →</div>
+                  </div>
+                </a>
               </div>
 
               {/* Expanded content */}
