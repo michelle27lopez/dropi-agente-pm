@@ -3,11 +3,11 @@
 import { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
-  C, FONT_UI, RADIUS, PRODUCTS, Product, CATEGORY_TREE, CategoryNode, SUPPLIERS, BANNER_IMG,
-  SUPPLIER_LAB_URL,
-  money, findNode, pathToNode, descendantIds, countProductsIn, categoryNamesFor,
+  C, FONT_UI, RADIUS, PRODUCTS, Product, CATEGORY_TREE, SUPPLIERS, BANNER_IMG,
+  SUPPLIER_LAB_URL, CATEGORY_NOTES,
+  money, findNode, pathToNode, descendantIds, categoryNamesFor,
   AppShell, Input, GhostButton, PrimaryButton, RealSwitch,
-  IconHeart, IconChevronDown, IconLock, IconCart, IconCamera, IconCheck, IconClose,
+  IconHeart, IconChevronDown, IconChevronRight, IconLock, IconCart, IconCamera, IconCheck, IconClose,
 } from "./shared";
 
 export default function CategorizacionPrototipoPage() {
@@ -47,59 +47,111 @@ export default function CategorizacionPrototipoPage() {
   );
 }
 
-// ─── Sidebar de categorías — patrón universal de marketplace (Amazon,
-// MercadoLibre, AliExpress): árbol siempre visible en columna izquierda,
-// solo la rama activa se expande, el resto queda colapsado como lista corta.
-// Cada nivel es clicable y muestra el agregado de productos de su subárbol —
-// nunca un callejón sin salida, la grilla de la derecha siempre tiene algo. ─
-function CategorySidebar({ categoryId, onSelect }: { categoryId: string | null; onSelect: (id: string | null) => void }) {
+// ─── Mega-menú de categorías — patrón MercadoLibre: se abre con un clic
+// sobre el trigger (no ocupa espacio fijo como el sidebar anterior), riel
+// izquierdo con L1 que cambia el panel derecho al hover, columnas agrupadas
+// por L2 con L3 como subtítulo y las hojas L4 (las que realmente filtran)
+// listadas debajo. Cada nivel sigue siendo clicable y filtra el agregado de
+// su subárbol — nunca un callejón sin salida — pero ahora sin conteo visible
+// (se simplifica el panel; el conteo real aparece en el título de la grilla).
+function CategoryMegaMenu({ categoryId, onSelect }: { categoryId: string | null; onSelect: (id: string | null) => void }) {
+  const [open, setOpen] = useState(false);
+  const [hoverL1, setHoverL1] = useState<string | null>(null);
+
   const activePath = categoryId ? pathToNode(categoryId) ?? [] : [];
-  const activePathIds = new Set(activePath.map((n) => n.id));
+  const activeL1Id = activePath[0]?.id ?? null;
+  const shownL1Id = hoverL1 ?? activeL1Id ?? CATEGORY_TREE[0].id;
+  const shownL1 = findNode(shownL1Id);
+  const selectedNode = categoryId ? findNode(categoryId) : null;
+
+  const pick = (id: string | null) => {
+    onSelect(id);
+    setOpen(false);
+    setHoverL1(null);
+  };
 
   return (
-    <aside style={{ width: 232, flexShrink: 0, position: "sticky", top: 16, alignSelf: "flex-start" }}>
-      <p style={{ fontFamily: FONT_UI, fontWeight: 600, fontSize: 14, color: C.textHeader, marginBottom: 8, padding: "0 8px" }}>Categorías</p>
-      <SidebarRow label="Todas las categorías" count={PRODUCTS.length} active={!categoryId} bold={!categoryId} depth={0} onClick={() => onSelect(null)} />
-      {CATEGORY_TREE.map((n) => (
-        <SidebarBranch key={n.id} node={n} depth={0} categoryId={categoryId} activePathIds={activePathIds} onSelect={onSelect} />
-      ))}
-    </aside>
-  );
-}
-function SidebarBranch({
-  node, depth, categoryId, activePathIds, onSelect,
-}: { node: CategoryNode; depth: number; categoryId: string | null; activePathIds: Set<string>; onSelect: (id: string) => void }) {
-  const isActive = categoryId === node.id;
-  const isOnPath = activePathIds.has(node.id);
-  const showChildren = isOnPath && !!node.children?.length;
-  return (
-    <div>
-      <SidebarRow label={node.name} count={countProductsIn(node)} active={isActive} bold={isOnPath} depth={depth} onClick={() => onSelect(node.id)} />
-      {showChildren && node.children!.map((c) => (
-        <SidebarBranch key={c.id} node={c} depth={depth + 1} categoryId={categoryId} activePathIds={activePathIds} onSelect={onSelect} />
-      ))}
+    <div style={{ flex: "1 1 180px", minWidth: 180, position: "relative" }}>
+      <p style={{ fontFamily: FONT_UI, fontSize: 12, color: C.textHeader, marginBottom: 6 }}>Categoría</p>
+      <button
+        onClick={() => setOpen((o) => !o)}
+        style={{
+          width: "100%", border: `1px solid ${C.border}`, borderRadius: RADIUS.sm, height: 38, background: "#fff",
+          display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 12px", cursor: "pointer",
+        }}
+      >
+        <span style={{ fontFamily: FONT_UI, fontSize: 13, color: selectedNode ? C.textHeader : C.textMuted, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {selectedNode ? selectedNode.name : "Todas las categorías"}
+        </span>
+        <span style={{ color: C.textMuted, display: "flex", flexShrink: 0 }}><IconChevronDown /></span>
+      </button>
+
+      {open && (
+        <>
+          <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, zIndex: 40 }} />
+          <div style={{
+            position: "absolute", top: "calc(100% + 6px)", left: 0, zIndex: 50, display: "flex",
+            background: "#fff", border: `1px solid ${C.border}`, borderRadius: RADIUS.md,
+            boxShadow: "0 8px 24px rgba(0,0,0,0.14)", minWidth: 720, maxHeight: 460, overflow: "hidden",
+          }}>
+            <div style={{ width: 216, flexShrink: 0, background: C.bgGraySide, padding: 8, overflowY: "auto", borderRight: `1px solid ${C.border}` }}>
+              <MegaMenuRow label="Todas las categorías" active={!categoryId} onClick={() => pick(null)} />
+              {CATEGORY_TREE.map((n) => (
+                <MegaMenuRow
+                  key={n.id} label={n.name} active={shownL1Id === n.id} hasChildren
+                  onClick={() => pick(n.id)} onMouseEnter={() => setHoverL1(n.id)}
+                />
+              ))}
+            </div>
+            <div style={{ flex: 1, padding: 16, overflowY: "auto", display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(190px, 1fr))", gap: 20 }}>
+              {shownL1?.children?.map((l2) => (
+                <div key={l2.id}>
+                  <p onClick={() => pick(l2.id)} style={{ fontFamily: FONT_UI, fontWeight: 700, fontSize: 13, color: C.textHeader, marginBottom: 8, cursor: "pointer" }}>
+                    {l2.name}
+                  </p>
+                  {l2.children?.map((l3) => (
+                    <div key={l3.id} style={{ marginBottom: 10 }}>
+                      <p onClick={() => pick(l3.id)} style={{ fontFamily: FONT_UI, fontWeight: 600, fontSize: 11.5, color: C.textMuted, marginBottom: 4, cursor: "pointer" }}>
+                        {l3.name}
+                      </p>
+                      {l3.children?.map((l4) => (
+                        <p
+                          key={l4.id} onClick={() => pick(l4.id)}
+                          style={{ fontFamily: FONT_UI, fontSize: 12.5, color: categoryId === l4.id ? C.info : C.textHeader, fontWeight: categoryId === l4.id ? 600 : 400, cursor: "pointer", padding: "3px 0" }}
+                        >
+                          {l4.name}
+                        </p>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
-function SidebarRow({
-  label, count, active, bold, depth, onClick,
-}: { label: string; count: number; active: boolean; bold: boolean; depth: number; onClick: () => void }) {
+function MegaMenuRow({
+  label, active, hasChildren, onClick, onMouseEnter,
+}: { label: string; active: boolean; hasChildren?: boolean; onClick: () => void; onMouseEnter?: () => void }) {
   return (
     <div
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
       style={{
-        display: "flex", alignItems: "center", gap: 8, cursor: "pointer", height: 32,
-        padding: `0 8px 0 ${8 + depth * 14}px`, borderRadius: RADIUS.sm,
-        background: active ? C.infoBg : "transparent",
+        display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, cursor: "pointer", height: 34,
+        padding: "0 10px", borderRadius: RADIUS.sm, background: active ? C.infoBg : "transparent",
       }}
     >
       <span style={{
-        fontFamily: FONT_UI, fontSize: depth === 0 ? 13 : 12.5, color: active ? C.info : bold ? C.textHeader : C.textMuted,
-        fontWeight: active || bold ? 600 : 400, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+        fontFamily: FONT_UI, fontSize: 13, color: active ? C.info : C.textHeader, fontWeight: active ? 600 : 400,
+        overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
       }}>
         {label}
       </span>
-      <span style={{ fontFamily: FONT_UI, fontSize: 11, color: C.textMuted, flexShrink: 0 }}>{count}</span>
+      {hasChildren && <span style={{ color: C.textMuted, display: "flex", flexShrink: 0 }}><IconChevronRight /></span>}
     </div>
   );
 }
@@ -172,6 +224,20 @@ function CatalogoDropshipperCategorias() {
         ))}
       </div>
 
+      {/* Nota de criterio — aparece solo al navegar dentro de una categoría
+          con ambigüedad conocida (ver CATEGORY_NOTES en shared.tsx) */}
+      {selectedNode && CATEGORY_NOTES[selectedNode.id] && (
+        <div style={{
+          background: C.infoBg, border: `1px solid ${C.infoBorder}`, borderRadius: RADIUS.md,
+          padding: "10px 14px", marginBottom: 16, display: "flex", gap: 10, alignItems: "flex-start",
+        }}>
+          <span style={{ fontSize: 14, lineHeight: 1.4 }}>💡</span>
+          <p style={{ fontFamily: FONT_UI, fontSize: 12.5, color: C.textHeader, lineHeight: 1.5, margin: 0 }}>
+            {CATEGORY_NOTES[selectedNode.id]}
+          </p>
+        </div>
+      )}
+
       {/* Banner IA — mismo asset del mock real */}
       {bannerOpen && (
         <div style={{ position: "relative", borderRadius: RADIUS.md, overflow: "hidden", marginBottom: 24 }}>
@@ -243,38 +309,33 @@ function CatalogoDropshipperCategorias() {
         <GhostButton><IconCamera />Buscar por imagen</GhostButton>
       </div>
 
-      {/* Fila de filtros — mismos campos del catálogo real; "Categorías" ahora vive en el sidebar */}
+      {/* Fila de filtros — Categoría abre el mega-menú, el resto son los mismos campos del catálogo real */}
       <div style={{ display: "flex", gap: 12, alignItems: "flex-end", marginBottom: 24, flexWrap: "wrap" }}>
+        <CategoryMegaMenu categoryId={categoryId} onSelect={selectCategory} />
         <FakeSelect label="Tipo de proveedor" placeholder="Proveedor" />
         <FakeSelect label="Stock" placeholder="Cantidad" />
         <FakeSelect label="Ciudad" placeholder="Ciudad" />
         <PrimaryButton>Aplicar filtros</PrimaryButton>
       </div>
 
-      {/* Cuerpo: sidebar de categorías (patrón universal) + grilla de productos */}
-      <div style={{ display: "flex", gap: 28, alignItems: "flex-start" }}>
-        <CategorySidebar categoryId={categoryId} onSelect={selectCategory} />
-
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
-            <p style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textHeader }}>
-              <strong>{visible.length}</strong> producto{visible.length === 1 ? "" : "s"} {selectedNode && <>en <strong>{selectedNode.name}</strong></>} · clic en una tarjeta abre el detalle en pestaña nueva
-            </p>
-          </div>
-
-          {visible.length === 0 ? (
-            <div style={{ border: `1px dashed ${C.border}`, borderRadius: RADIUS.md, padding: 40, textAlign: "center" }}>
-              <p style={{ fontFamily: FONT_UI, fontSize: 14, color: C.textMuted }}>No hay productos en esta categoría con ese filtro.</p>
-            </div>
-          ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
-              {visible.map((p) => (
-                <ProductCard key={p.id} product={p} onClick={() => openDetail(p.id)} />
-              ))}
-            </div>
-          )}
-        </div>
+      {/* Grilla de productos — ya no comparte fila con el sidebar, ahora usa todo el ancho */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 8 }}>
+        <p style={{ fontFamily: FONT_UI, fontSize: 13, color: C.textHeader }}>
+          <strong>{visible.length}</strong> producto{visible.length === 1 ? "" : "s"} {selectedNode && <>en <strong>{selectedNode.name}</strong></>} · clic en una tarjeta abre el detalle en pestaña nueva
+        </p>
       </div>
+
+      {visible.length === 0 ? (
+        <div style={{ border: `1px dashed ${C.border}`, borderRadius: RADIUS.md, padding: 40, textAlign: "center" }}>
+          <p style={{ fontFamily: FONT_UI, fontSize: 14, color: C.textMuted }}>No hay productos en esta categoría con ese filtro.</p>
+        </div>
+      ) : (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 18 }}>
+          {visible.map((p) => (
+            <ProductCard key={p.id} product={p} onClick={() => openDetail(p.id)} />
+          ))}
+        </div>
+      )}
     </AppShell>
   );
 }

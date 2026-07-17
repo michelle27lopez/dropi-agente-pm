@@ -163,7 +163,31 @@ export const CATEGORY_TREE: CategoryNode[] = [
       ] },
     ],
   },
+  // Rama tomada tal cual de la taxonomía oficial de CAT-001 (misma page.tsx
+  // principal). Resuelve el hallazgo de Manuela (validación 08/07): estas 4
+  // hojas por función/ingrediente activo ya existían en el árbol oficial —
+  // lo que faltaba era representarlas en el catálogo del dropshipper, donde
+  // hoy el mapeo automático de tags legados las agrupa todas en una sola.
+  {
+    id: "salud", name: "Salud y Bienestar", children: [
+      { id: "salud-suplementos", name: "Suplementos y Nutrición", children: [
+        { id: "salud-suplementos-dietarios", name: "Suplementos Dietarios", children: [
+          { id: "salud-suplementos-dietarios-proteinas", name: "Proteínas y Aminoácidos" },
+          { id: "salud-suplementos-dietarios-colageno", name: "Colágeno Hidrolizado y Biotina" },
+          { id: "salud-suplementos-dietarios-vitaminas", name: "Vitaminas y Minerales de Venta Libre" },
+          { id: "salud-suplementos-dietarios-quemadores", name: "Quemadores de Grasa y Adelgazantes" },
+        ] },
+      ] },
+    ],
+  },
 ];
+
+// Copy contextual por nodo — resuelve el hallazgo de Manuela explicando el
+// criterio de clasificación directamente donde el dropshipper lo necesita,
+// no solo en la bitácora del proyecto.
+export const CATEGORY_NOTES: Record<string, string> = {
+  "salud-suplementos-dietarios": "Estos productos se agrupan por función o ingrediente activo (colágeno, proteína, quemadores de grasa...), no por su clasificación regulatoria — un mismo producto puede estar registrado como \"alimento dietario\" ante INVIMA, pero aquí se cataloga como lo busca el comprador: \"suplemento\".",
+};
 
 // ─── Helpers de árbol ─────────────────────────────────────────────────────
 export function findNode(id: string, nodes: CategoryNode[] = CATEGORY_TREE): CategoryNode | null {
@@ -229,6 +253,13 @@ export const PRODUCTS: Product[] = [
   { id: "c15", sku: "3010015", name: "Tratamiento capilar aceite de argán", image: IMG(1), providerPrice: 18000, suggestedPrice: 34000, supplier: "Tienda Proveedor", stock: 190, categoryLeafId: "belleza-capilar-prod-tratamientos" },
   { id: "c16", sku: "3010016", name: "Paleta de maquillaje 12 tonos", image: IMG(1), providerPrice: 20000, suggestedPrice: 38000, supplier: "Tienda Proveedor", stock: 300, categoryLeafId: "belleza-maquillaje-rostro-r" },
   { id: "c17", sku: "3010017", name: "Arnés y correa para mascota reflectiva", image: IMG(6), providerPrice: 16000, suggestedPrice: 30000, supplier: "Tienda Proveedor", stock: 112, categoryLeafId: "mascotas-general-accesorios-paseo" },
+  // Escenario Manuela (validación 08/07): 4 productos, uno por hoja funcional
+  // de Suplementos Dietarios — antes todos habrían caído en un único bucket
+  // genérico "Salud y Bienestar" bajo el mapeo de tags legados.
+  { id: "c18", sku: "3010018", name: "Proteína whey sabor chocolate 1kg", image: IMG(1), providerPrice: 68000, suggestedPrice: 128000, supplier: "Tienda Proveedor", stock: 154, categoryLeafId: "salud-suplementos-dietarios-proteinas" },
+  { id: "c19", sku: "3010019", name: "Colágeno hidrolizado + biotina en polvo", image: IMG(1), providerPrice: 42000, suggestedPrice: 79000, supplier: "Tienda Proveedor", stock: 203, categoryLeafId: "salud-suplementos-dietarios-colageno" },
+  { id: "c20", sku: "3010020", name: "Multivitamínico diario 60 cápsulas", image: IMG(3), providerPrice: 25000, suggestedPrice: 47000, supplier: "Tienda Proveedor", stock: 310, categoryLeafId: "salud-suplementos-dietarios-vitaminas" },
+  { id: "c21", sku: "3010021", name: "Quemador de grasa termogénico 60 cápsulas", image: IMG(3), providerPrice: 38000, suggestedPrice: 72000, supplier: "Tienda Proveedor", stock: 87, categoryLeafId: "salud-suplementos-dietarios-quemadores" },
 ];
 
 export function categoryNamesFor(product: Product): string[] {
