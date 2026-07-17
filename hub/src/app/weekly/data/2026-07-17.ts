@@ -2,9 +2,9 @@ import type { WeeklySnapshot } from "./types";
 
 export const snapshot: WeeklySnapshot = {
   week: "Semana 17 jul 2026",
-  subtitle: "27-jul: activación + Dropi Pulso desde plataforma propia · Reinoso desbloqueó 4 frentes · Ascensos = regulador contractual",
+  subtitle: "27-jul: lanzamiento controlado de activación automática + Dropi Pulso desde plataforma propia · Ascensos = regulador contractual",
   heroBadge: "Semana 17 jul · Lanzamiento 27-jul",
-  heroTitle: "Lanzamiento 27-jul · Activación + Dropi Pulso desde nuestra plataforma\n+ Reinoso desbloqueó 4 frentes · Ascensos = regulador contractual",
+  heroTitle: "Lanzamiento controlado 27-jul · Activación automática + Dropi Pulso desde nuestra plataforma\n+ Ascensos = regulador contractual · María amplió scope de activación",
   heroStrip: [
     { label: "Objetivo Anual", value: "93.6M", sub: "Órdenes/año meta OKR" },
     { label: "Órdenes Actuales", value: "38.4M", sub: "Órdenes/año base" },
