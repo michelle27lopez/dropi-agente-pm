@@ -1,17 +1,36 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { REGISTRY, SEMANAS, CURRENT } from "./data/index";
+import { useSearchParams } from "next/navigation";
+import { REGISTRY, SEMANAS, CELULA_LABELS, CURRENT } from "./data/index";
 import type { MetricGroup, Oportunidad, Dolor, ProximoPaso, HeroChip, Insight, Documento } from "./data/types";
 
 // ─── Componente principal ──────────────────────────────────────────────────────
 export default function WeeklyPage() {
-  const [selectedDate, setSelectedDate] = useState(CURRENT);
+  return (
+    <Suspense fallback={null}>
+      <WeeklyPageContent />
+    </Suspense>
+  );
+}
+
+function WeeklyPageContent() {
+  const searchParams = useSearchParams();
+  const requestedWeek = searchParams.get("week");
+  const initialDate = requestedWeek && REGISTRY[requestedWeek] ? requestedWeek : CURRENT;
+
+  const [selectedDate, setSelectedDate] = useState(initialDate);
   const [ttvData, setTtvData] = useState<Record<string, string>>({});
 
   const data = REGISTRY[selectedDate] ?? REGISTRY[CURRENT];
   const isCurrentWeek = selectedDate === CURRENT;
+  const celulaSlug = SEMANAS.find((s) => s.date === selectedDate)?.celula ?? "suppliers";
+  const celulaLabel = CELULA_LABELS[celulaSlug] ?? "Supplier Success";
+  // "suppliers" vive en "/", el resto de células en su propia home.
+  const homeHref = celulaSlug === "suppliers" ? "/" : `/celula/${celulaSlug}`;
+  // Cada célula solo ve el historial de sus propias semanas, no el de todas.
+  const semanasCelula = SEMANAS.filter((s) => s.celula === celulaSlug);
 
   useEffect(() => {
     if (!isCurrentWeek) { setTtvData({}); return; }
@@ -70,12 +89,12 @@ export default function WeeklyPage() {
         background: "#fff", borderBottom: "1px solid var(--border)",
         padding: "16px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
       }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
+        <a href={homeHref} style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
         <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Weekly · Supplier Success</span>
+        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Weekly · {celulaLabel}</span>
 
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-          {SEMANAS.length > 1 && (
+          {semanasCelula.length > 1 && (
             <select
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
@@ -85,7 +104,7 @@ export default function WeeklyPage() {
                 padding: "5px 10px", background: "#fff", cursor: "pointer",
               }}
             >
-              {SEMANAS.map((s) => (
+              {semanasCelula.map((s) => (
                 <option key={s.date} value={s.date}>{s.label}</option>
               ))}
             </select>
@@ -224,7 +243,7 @@ export default function WeeklyPage() {
         </Section>
 
         <p style={{ fontSize: 12, color: "var(--muted)", textAlign: "center", marginTop: 32 }}>
-          Dropi · Supplier Success · {data.week}
+          Dropi · {celulaLabel} · {data.week}
         </p>
       </div>
     </main>

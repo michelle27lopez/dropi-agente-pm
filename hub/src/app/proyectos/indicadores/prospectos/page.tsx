@@ -60,6 +60,27 @@ type Dataset = {
   prospectos: Prospecto[];
 };
 
+type Oferta = {
+  token: string;
+  supplier_id: number;
+  nivel_objetivo: string;
+  estado: "pendiente_envio" | "enviada" | "aceptada" | "rechazada";
+  motivo_rechazo: string | null;
+};
+
+const OFERTA_COLOR: Record<string, [string, string]> = {
+  "pendiente_envio": ["#6366F1", "#EEF2FF"],
+  "enviada": ["#F59E0B", "#FFFBEB"],
+  "aceptada": ["#10B981", "#ECFDF5"],
+  "rechazada": ["#9CA3AF", "#F3F4F6"],
+};
+const OFERTA_LABEL: Record<string, string> = {
+  "pendiente_envio": "En cola · sin enviar",
+  "enviada": "Enviada · esperando",
+  "aceptada": "Aceptó ascenso",
+  "rechazada": "Rechazó",
+};
+
 function estadoDe(pct: number): "Cumple" | "En camino" | "Lejano" {
   if (pct >= 1) return "Cumple";
   if (pct >= 0.5) return "En camino";
@@ -75,7 +96,7 @@ const ESTADO_COLOR: Record<string, [string, string]> = {
 const PAGE_SIZE = 50;
 
 function NivelSection({
-  titulo, sub, color, bg, prospectos, umbral,
+  titulo, sub, color, bg, prospectos, umbral, ofertas, sendingId, onEnviarOferta,
 }: {
   titulo: string;
   sub: string;
@@ -83,6 +104,9 @@ function NivelSection({
   bg: string;
   prospectos: Prospecto[];
   umbral: number;
+  ofertas: Record<string, Oferta>;
+  sendingId: string | null;
+  onEnviarOferta: (p: Prospecto) => void;
 }) {
   const [estadoFiltro, setEstadoFiltro] = useState<"Cumple" | "En camino" | "Todos">("Cumple");
   const [search, setSearch] = useState("");
@@ -152,12 +176,14 @@ function NivelSection({
               <th style={thR}>Despachos %</th>
               <th style={thR}>Garantías gestión %</th>
               <th style={thStyle}>Estado</th>
+              <th style={thStyle}>Oferta de ascenso</th>
             </tr>
           </thead>
           <tbody>
             {pageRows.map((p, i) => {
               const estado = estadoDe(p.pctUmbral);
               const [ec, eb] = ESTADO_COLOR[estado];
+              const oferta = ofertas[p.id];
               return (
                 <tr key={p.id} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff" }}>
                   <td style={{ ...tdStyle, fontWeight: 600 }}>
@@ -170,12 +196,29 @@ function NivelSection({
                   <td style={tdR}>{p.despachosPct != null ? `${(p.despachosPct * 100).toFixed(1)}%` : "—"}</td>
                   <td style={tdR}>{p.garantiasGestionPct != null ? `${(p.garantiasGestionPct * 100).toFixed(1)}%` : "—"}</td>
                   <td style={tdStyle}><span style={tag(ec, eb)}>{estado}</span></td>
+                  <td style={tdStyle}>
+                    {oferta ? (
+                      <span style={tag(...OFERTA_COLOR[oferta.estado])} title={oferta.motivo_rechazo ?? undefined}>
+                        {OFERTA_LABEL[oferta.estado]}
+                      </span>
+                    ) : estado === "Cumple" ? (
+                      <button
+                        onClick={() => onEnviarOferta(p)}
+                        disabled={sendingId === p.id}
+                        style={{ ...selectStyle, background: ACCENT, color: "#fff", border: "none", cursor: sendingId === p.id ? "wait" : "pointer", opacity: sendingId === p.id ? 0.6 : 1 }}
+                      >
+                        {sendingId === p.id ? "Enviando…" : "Enviar oferta →"}
+                      </button>
+                    ) : (
+                      <span style={{ fontSize: 11, color: "var(--muted)" }}>—</span>
+                    )}
+                  </td>
                 </tr>
               );
             })}
             {pageRows.length === 0 && (
               <tr>
-                <td colSpan={7} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)", padding: "24px 12px" }}>
+                <td colSpan={8} style={{ ...tdStyle, textAlign: "center", color: "var(--muted)", padding: "24px 12px" }}>
                   Sin resultados para estos filtros.
                 </td>
               </tr>
@@ -213,6 +256,23 @@ export default function ProspectosAscensoPage() {
   const [data, setData] = useState<Dataset | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [ofertas, setOfertas] = useState<Record<string, Oferta>>({});
+  const [sendingId, setSendingId] = useState<string | null>(null);
+  const [sentNotice, setSentNotice] = useState<string | null>(null);
+  const [encolandoNivel, setEncolandoNivel] = useState<string | null>(null);
+  const [procesandoLote, setProcesandoLote] = useState(false);
+
+  function recargarOfertas() {
+    return fetch("/api/proyectos/ascenso-ofertas")
+      .then(r => r.ok ? r.json() : [])
+      .then((rows: Oferta[]) => {
+        const map: Record<string, Oferta> = {};
+        rows.forEach(o => { map[String(o.supplier_id)] = o; });
+        setOfertas(map);
+        return rows;
+      })
+      .catch(() => [] as Oferta[]);
+  }
 
   useEffect(() => {
     fetch("/api/proyectos/prospectos-ascenso")
@@ -223,10 +283,91 @@ export default function ProspectosAscensoPage() {
       .then((d: Dataset) => setData(d))
       .catch(() => setError(true))
       .finally(() => setLoading(false));
+
+    recargarOfertas();
   }, []);
+
+  async function handleEncolar(nivelObjetivo: "Verificado" | "Premium") {
+    setEncolandoNivel(nivelObjetivo);
+    setSentNotice(null);
+    try {
+      const res = await fetch("/api/proyectos/ascenso-ofertas/batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nivelObjetivo }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        await recargarOfertas();
+        setSentNotice(`${json.encoladas} proveedores encolados para ${nivelObjetivo} (${json.yaExistian} ya tenían oferta).`);
+      } else {
+        setSentNotice(`Error: ${json.error}`);
+      }
+    } finally {
+      setEncolandoNivel(null);
+    }
+  }
+
+  async function handleProcesarLote() {
+    setProcesandoLote(true);
+    setSentNotice(null);
+    try {
+      const res = await fetch("/api/proyectos/ascenso-ofertas/procesar-lote", { method: "POST" });
+      const json = await res.json();
+      if (res.ok) {
+        await recargarOfertas();
+        setSentNotice(`Lote procesado: ${json.procesados} enviados (modo prueba) · ${json.restantes} siguen en cola.`);
+      } else {
+        setSentNotice(`Error: ${json.error}`);
+      }
+    } finally {
+      setProcesandoLote(false);
+    }
+  }
+
+  async function handleEnviarOferta(p: Prospecto) {
+    setSendingId(p.id);
+    setSentNotice(null);
+    try {
+      const res = await fetch("/api/proyectos/ascenso-ofertas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          supplierId: p.id,
+          supplierName: p.nombre,
+          email: p.email,
+          nivelActual: p.nivelActual,
+          nivelObjetivo: p.nivelObjetivo,
+          ordenesMovilizadas90d: p.ordenesMovilizadas90d,
+          umbralObjetivo: p.umbralObjetivo,
+        }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        setOfertas(prev => ({ ...prev, [p.id]: json.oferta }));
+        setSentNotice(`Oferta enviada (modo prueba → ${json.testRecipients?.email} / WhatsApp ${json.testRecipients?.whatsapp})`);
+      } else {
+        setSentNotice(`Error: ${json.error}`);
+      }
+    } finally {
+      setSendingId(null);
+    }
+  }
 
   const aVerificado = useMemo(() => data?.prospectos.filter(p => p.nivelObjetivo === "Verificado") ?? [], [data]);
   const aPremium = useMemo(() => data?.prospectos.filter(p => p.nivelObjetivo === "Premium") ?? [], [data]);
+
+  const cola = useMemo(() => {
+    const rows = Object.values(ofertas);
+    const pendientes = rows.filter(o => o.estado === "pendiente_envio");
+    return {
+      totalPendientes: pendientes.length,
+      pendientesVerificado: pendientes.filter(o => o.nivel_objetivo === "Verificado").length,
+      pendientesPremium: pendientes.filter(o => o.nivel_objetivo === "Premium").length,
+      faltanEncolarVerificado: aVerificado.filter(p => p.pctUmbral >= 1 && !ofertas[p.id]).length,
+      faltanEncolarPremium: aPremium.filter(p => p.pctUmbral >= 1 && !ofertas[p.id]).length,
+    };
+  }, [ofertas, aVerificado, aPremium]);
 
   const resumen = useMemo(() => {
     if (!data) return null;
@@ -287,6 +428,12 @@ export default function ProspectosAscensoPage() {
           </div>
         )}
 
+        {sentNotice && (
+          <div style={{ background: sentNotice.startsWith("Error") ? "#FEF2F2" : "#ECFDF5", border: `1px solid ${sentNotice.startsWith("Error") ? "#FECACA" : "#A7F3D0"}`, borderRadius: 10, padding: "10px 16px", fontSize: 12, color: sentNotice.startsWith("Error") ? "#7F1D1D" : "#065F46" }}>
+            {sentNotice}
+          </div>
+        )}
+
         {resumen && (
           <>
             {/* Nota de criterios pendientes */}
@@ -316,6 +463,53 @@ export default function ProspectosAscensoPage() {
               </div>
             </div>
 
+            {/* Cola de envío por lotes */}
+            <div style={card}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6, flexWrap: "wrap", gap: 12 }}>
+                <div>
+                  <div style={sectionTitle}>Cola de envío · por lotes</div>
+                  <div style={sectionSub}>Encolar no envía nada — solo registra quién falta. Procesar manda en tandas pequeñas (máx. 5, con pausa entre cada uno) para no saturar el canal ni acercarse al límite de tiempo de la función.</div>
+                </div>
+                <span style={tag("#EF4444", "#FEF2F2")}>Modo prueba · todo va a tu contacto</span>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, margin: "16px 0" }}>
+                <div style={{ background: "#EFF6FF", borderRadius: 10, padding: "12px 14px", border: "1px solid #BFDBFE" }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: "#1E40AF", marginBottom: 8 }}>Rumbo a Verificado</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 10 }}>{cola.pendientesVerificado} en cola · {cola.faltanEncolarVerificado} por encolar</div>
+                  <button
+                    onClick={() => handleEncolar("Verificado")}
+                    disabled={encolandoNivel === "Verificado" || cola.faltanEncolarVerificado === 0}
+                    style={{ ...selectStyle, background: "#3B82F6", color: "#fff", border: "none", width: "100%", opacity: cola.faltanEncolarVerificado === 0 ? 0.5 : 1, cursor: cola.faltanEncolarVerificado === 0 ? "not-allowed" : "pointer" }}
+                  >
+                    {encolandoNivel === "Verificado" ? "Encolando…" : `Encolar los que faltan (${cola.faltanEncolarVerificado})`}
+                  </button>
+                </div>
+                <div style={{ background: ACCENT_BG, borderRadius: 10, padding: "12px 14px", border: "1px solid #C7D2FE" }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: ACCENT, marginBottom: 8 }}>Rumbo a Premium</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 10 }}>{cola.pendientesPremium} en cola · {cola.faltanEncolarPremium} por encolar</div>
+                  <button
+                    onClick={() => handleEncolar("Premium")}
+                    disabled={encolandoNivel === "Premium" || cola.faltanEncolarPremium === 0}
+                    style={{ ...selectStyle, background: ACCENT, color: "#fff", border: "none", width: "100%", opacity: cola.faltanEncolarPremium === 0 ? 0.5 : 1, cursor: cola.faltanEncolarPremium === 0 ? "not-allowed" : "pointer" }}
+                  >
+                    {encolandoNivel === "Premium" ? "Encolando…" : `Encolar los que faltan (${cola.faltanEncolarPremium})`}
+                  </button>
+                </div>
+              </div>
+
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12, paddingTop: 4, borderTop: "1px solid var(--border)", marginTop: 4 }}>
+                <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, paddingTop: 12 }}>{cola.totalPendientes} en cola total, listos para procesar</span>
+                <button
+                  onClick={handleProcesarLote}
+                  disabled={procesandoLote || cola.totalPendientes === 0}
+                  style={{ ...selectStyle, background: "#10B981", color: "#fff", border: "none", marginTop: 12, opacity: cola.totalPendientes === 0 ? 0.5 : 1, cursor: cola.totalPendientes === 0 ? "not-allowed" : "pointer" }}
+                >
+                  {procesandoLote ? "Procesando lote…" : "Procesar siguiente lote (≤5) →"}
+                </button>
+              </div>
+            </div>
+
             {/* Tabla 1: Activo → Verificado */}
             <NivelSection
               titulo="Rumbo a Verificado"
@@ -324,6 +518,9 @@ export default function ProspectosAscensoPage() {
               bg="#EFF6FF"
               prospectos={aVerificado}
               umbral={3000}
+              ofertas={ofertas}
+              sendingId={sendingId}
+              onEnviarOferta={handleEnviarOferta}
             />
 
             {/* Tabla 2: Verificado → Premium */}
@@ -334,6 +531,9 @@ export default function ProspectosAscensoPage() {
               bg={ACCENT_BG}
               prospectos={aPremium}
               umbral={20000}
+              ofertas={ofertas}
+              sendingId={sendingId}
+              onEnviarOferta={handleEnviarOferta}
             />
 
             {/* Nota Premium → Exclusivo */}

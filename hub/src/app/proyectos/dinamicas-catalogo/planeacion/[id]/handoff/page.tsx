@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { NODE_DEFINITIONS, NodeKey, NodeData } from "../../nodes";
+import { NODE_DEFINITIONS, NodeKey, NodeData, parseMilestones } from "../../nodes";
 
 type Campaign = { id: string; name: string; status: string; current_node: number };
 type SavedNode = { node_index: number; node_key: string; data: NodeData; completed: boolean };
@@ -88,6 +88,8 @@ export default function PlaneacionHandoffPage() {
   const mecanica = nd("mecanica");
   const elegibilidad = nd("elegibilidad");
   const calendario = nd("calendario");
+  const milestones = parseMilestones(calendario.milestones);
+  const lastMilestone = milestones[milestones.length - 1];
   const convocatoria = nd("convocatoria");
   const vitrina = nd("vitrina");
   const handoff = nd("handoff");
@@ -111,8 +113,8 @@ export default function PlaneacionHandoffPage() {
           ← Wizard
         </button>
         <span style={{ color: "#e5e7eb" }}>/</span>
-        <button onClick={() => router.push("/proyectos/dinamicas-catalogo/planeacion")} style={{ background: "none", border: "none", cursor: "pointer", color: "#9ca3af", fontSize: 13, padding: 0 }}>
-          Planeación
+        <button onClick={() => router.push("/proyectos/dinamicas-catalogo/campanas")} style={{ background: "none", border: "none", cursor: "pointer", color: "#9ca3af", fontSize: 13, padding: 0 }}>
+          Panel de campañas
         </button>
         <span style={{ color: "#e5e7eb" }}>/</span>
         <span style={{ fontSize: 13, fontWeight: 700, color: "#111827" }}>{campaign.name}</span>
@@ -139,7 +141,7 @@ export default function PlaneacionHandoffPage() {
               { label: "Objetivo", value: identidad.objective || "—" },
               { label: "País", value: chips(identidad.country).join(", ") || "—" },
               { label: "Responsable", value: identidad.responsible || "—" },
-              { label: "Cierre", value: calendario.date_campaign_end || "—" },
+              { label: "Cierre", value: lastMilestone?.date || "—" },
               { label: "Generado", value: today },
             ].map(({ label, value }) => (
               <div key={label} style={{ fontSize: 13 }}>
@@ -167,10 +169,21 @@ export default function PlaneacionHandoffPage() {
         </Section>
 
         <Section num={3} title="Calendario" color="#8B5CF6">
-          <Row label="Convocatoria" value={calendario.date_convocation_start} />
-          <Row label="Cierre postulación" value={calendario.date_submission_end} />
-          <Row label="Publicación vitrina" value={calendario.date_showcase_publish} />
-          <Row label="Cierre de campaña" value={calendario.date_campaign_end} />
+          {milestones.length === 0 ? (
+            <Row label="Hitos" value="" />
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {milestones.map((m, i) => (
+                <div key={i} style={{ display: "grid", gridTemplateColumns: "140px 1fr", gap: 16, alignItems: "start" }}>
+                  <div style={{ fontSize: 12.5, fontWeight: 700, color: "#8B5CF6" }}>{m.date || "Sin fecha"}</div>
+                  <div>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: "#111827" }}>{m.label}</div>
+                    {m.notes && <div style={{ fontSize: 12.5, color: "#6b7280", marginTop: 2, whiteSpace: "pre-wrap" }}>{m.notes}</div>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
           {calendario.calendar_notes && <Row label="Notas" value={calendario.calendar_notes} />}
         </Section>
 

@@ -16,6 +16,13 @@
 #   /hub/src/app/proyectos/sellers-*  @usuario-de-juan-diego
 # ═══════════════════════════════════════════════════════════════════════════
 
+# Directorios personales / de PM, fuera del hub
+/agente-delivery/                     @jaimeguevara-dropi
+/research-brain/                      @jaimeguevara-dropi
+/dropshipper-lab/                     @jaimeguevara-dropi
+/metrics-lab/                         @jaimeguevara-dropi
+/supplier-lab/                        @jaimeguevara-dropi
+
 # Esquema de datos — núcleo inamovible
 /hub/supabase/                        @jaimeguevara-dropi
 

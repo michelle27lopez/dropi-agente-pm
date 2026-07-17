@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Write(/Users/jaime.guevara/Documents/proyectos/Agente delivery manager/*)"
+      "Write(/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/agente-delivery/**)"
     ]
   }
 }

@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
+import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
+import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
 
 type Proyecto = {
   id: string; name: string; project_code: string | null;
@@ -12,13 +14,13 @@ type Proyecto = {
 };
 type Update = { id: string; week_date: string; title: string; content: string };
 
+type Profile = { celula_id: string | null; is_super_admin: boolean };
+
 type CelulaHome = {
   id: string; nombre: string; slug: string; lead: string | null; area: string | null;
   ve_hub_completo: boolean;
   proyectos: Proyecto[]; updates: Update[];
 };
-
-type CelulaLink = { nombre: string; slug: string };
 
 const HANDOFF_COLOR: Record<string, string> = {
   "Experimentación": "#F59E0B", "Listo para handoff": "#0EA5E9", "Handoff hecho": "#22C55E",
@@ -54,99 +56,93 @@ function updateToItem(u: Update): Item {
   };
 }
 
+function weeklyToItem(semana: { date: string; label: string }): Item {
+  const snapshot = REGISTRY[semana.date];
+  return {
+    key: `weekly-${semana.date}`,
+    name: "Weekly PM",
+    description: truncate(snapshot.subtitle, 160),
+    url: `/weekly?week=${semana.date}`,
+    tag: semana.date.slice(0, 10),
+    color: "#F77F00",
+    icon: "📅",
+  };
+}
+
 export default function CelulaHomePage() {
   const params = useParams<{ slug: string }>();
   const [celula, setCelula] = useState<CelulaHome | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
-  const [otrasCelulas, setOtrasCelulas] = useState<CelulaLink[]>([]);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ name: "", summary: "" });
+  const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   useEffect(() => {
-    setMenuOpen(false);
     fetch(`/api/celulas/${params.slug}`)
       .then(async (res) => {
         if (!res.ok) { setNotFound(true); return; }
         const data = await res.json();
         setCelula(data);
-        if (data.ve_hub_completo) {
-          fetch("/api/celulas")
-            .then((r) => r.json())
-            .then((celulas) => {
-              if (Array.isArray(celulas)) {
-                setOtrasCelulas(celulas.map((c) => ({ nombre: c.nombre, slug: c.slug })));
-              }
-            });
-        }
       })
       .finally(() => setLoading(false));
+
+    fetch("/api/me")
+      .then((res) => res.json())
+      .then((data) => setProfile(data?.profile ?? null))
+      .catch(() => setProfile(null));
   }, [params.slug]);
+
+  async function handleCreate(e: React.FormEvent) {
+    e.preventDefault();
+    setSubmitting(true);
+    setFormError(null);
+
+    const res = await fetch(`/api/celulas/${params.slug}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    const data = await res.json();
+    setSubmitting(false);
+
+    if (!res.ok) {
+      setFormError(data.error ?? "No se pudo crear el proyecto.");
+      return;
+    }
+
+    setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, data] } : prev);
+    setForm({ name: "", summary: "" });
+    setShowForm(false);
+  }
 
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const updates = celula.updates.map(updateToItem);
   const proyectos = celula.proyectos.filter((p) => p.type !== "POC").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
+  const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
+
+  // "Updates" mezcla los registros de celula_updates con el historial del
+  // Weekly PM de esta célula (si tiene alguno) — mismo look de tarjeta,
+  // ordenado por fecha descendente.
+  const semanasCelula = SEMANAS.filter((s) => s.celula === celula.slug && REGISTRY[s.date]);
+  const updateEntries = [
+    ...celula.updates.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
+    ...semanasCelula.map((s) => ({ item: weeklyToItem(s), sortKey: s.date.slice(0, 10) })),
+  ].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
+  const updates = updateEntries.map((e) => e.item);
 
   return (
     <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1 }}>
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "20px 32px", display: "flex", alignItems: "center", gap: 12,
-      }}>
-        <img src="/darwin-logo.png" alt="Darwin" width={36} height={36} style={{ display: "block", borderRadius: 8 }} />
-        {celula.ve_hub_completo ? (
-          <div style={{ position: "relative" }}>
-            <button
-              onClick={() => setMenuOpen((v) => !v)}
-              style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", cursor: "pointer", padding: 0, textAlign: "left" }}
-            >
-              <div>
-                <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2, display: "flex", alignItems: "center", gap: 6 }}>
-                  {celula.nombre} <span style={{ fontSize: 11, color: "var(--muted)" }}>▾</span>
-                </h1>
-                <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
-                  {celula.lead ? `Lead: ${celula.lead}` : "Home de célula · Darwin"}
-                </p>
-              </div>
-            </button>
-            {menuOpen && (
-              <div style={{
-                position: "absolute", top: "100%", left: 0, marginTop: 8,
-                background: "#fff", border: "1px solid var(--border)", borderRadius: 10,
-                boxShadow: "0 4px 16px rgba(0,0,0,0.08)", minWidth: 200, zIndex: 10, overflow: "hidden",
-              }}>
-                {otrasCelulas.map((c) => (
-                  <a
-                    key={c.slug}
-                    href={c.slug === "suppliers" ? "/" : `/celula/${c.slug}`}
-                    onClick={() => setMenuOpen(false)}
-                    style={{
-                      display: "block", padding: "10px 14px", fontSize: 13,
-                      color: "var(--fg)", textDecoration: "none",
-                      background: c.slug === celula.slug ? "var(--bg)" : "transparent",
-                      fontWeight: c.slug === celula.slug ? 700 : 500,
-                    }}
-                  >
-                    🏠 {c.nombre}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
-        ) : (
-          <div>
-            <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
-              {celula.nombre}
-            </h1>
-            <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
-              {celula.lead ? `Lead: ${celula.lead}` : "Home de célula · Darwin"}
-            </p>
-          </div>
-        )}
-      </header>
+      <HubHeader
+        title={celula.nombre}
+        subtitle={celula.lead ? `Lead: ${celula.lead}` : "Home de célula · Darwin"}
+        currentSlug={celula.slug}
+      />
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
         <div style={{ marginBottom: 56 }}>
@@ -157,7 +153,71 @@ export default function CelulaHomePage() {
         </div>
 
         <div style={{ marginBottom: 56 }}>
-          <Section title="Proyectos" items={proyectos} ctaLabel="Ver proyecto →" />
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
+              Proyectos
+            </p>
+            {canCreate && (
+              <button
+                onClick={() => { setShowForm((v) => !v); setFormError(null); }}
+                style={{
+                  fontSize: 12, fontWeight: 700, color: "var(--dropi)",
+                  background: "none", border: "1px solid var(--border)", borderRadius: 8,
+                  padding: "6px 12px", cursor: "pointer",
+                }}
+              >
+                {showForm ? "Cancelar" : "+ Nuevo proyecto"}
+              </button>
+            )}
+          </div>
+
+          {showForm && (
+            <form
+              onSubmit={handleCreate}
+              style={{
+                border: "1px solid var(--border)", borderRadius: 12, padding: 20,
+                marginBottom: 20, display: "flex", flexDirection: "column", gap: 12,
+                background: "var(--card)",
+              }}
+            >
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <label style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)" }}>Nombre</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                  required
+                  placeholder="Nombre del proyecto"
+                  style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--fg)" }}
+                />
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <label style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)" }}>Resumen</label>
+                <textarea
+                  value={form.summary}
+                  onChange={(e) => setForm((f) => ({ ...f, summary: e.target.value }))}
+                  required
+                  rows={3}
+                  placeholder="De qué se trata este proyecto"
+                  style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--fg)", fontFamily: "inherit", resize: "vertical" }}
+                />
+              </div>
+              {formError && <p style={{ fontSize: 12, color: "#DC2626", margin: 0 }}>{formError}</p>}
+              <button
+                type="submit"
+                disabled={submitting}
+                style={{
+                  fontSize: 13, fontWeight: 700, color: "#fff", background: "var(--dropi)",
+                  border: "none", borderRadius: 8, padding: "10px 16px", cursor: submitting ? "default" : "pointer",
+                  opacity: submitting ? 0.7 : 1, alignSelf: "flex-start",
+                }}
+              >
+                {submitting ? "Creando…" : "Crear proyecto"}
+              </button>
+            </form>
+          )}
+
+          <Section title="" items={proyectos} ctaLabel="Ver proyecto →" />
           {proyectos.length === 0 && (
             <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
           )}
