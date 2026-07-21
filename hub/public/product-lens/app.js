@@ -1371,8 +1371,7 @@ function setDeliverable(next) {
   specSwitch?.classList.toggle("active", next === "spec");
   const DELIVERABLE_TITLE = { brief: "Intervention Brief", experiment: "Experiment Card", spec: "Spec conductual" };
   deliverableTitle.textContent = DELIVERABLE_TITLE[next] ?? DELIVERABLE_TITLE.brief;
-  progressText.textContent = next === "brief" ? `${filled} / 11 campos` : "0 / 9 campos";
-  progressFill.style.width = next === "brief" ? `${Math.round((filled / 11) * 100)}%` : "0%";
+  updateDeliverableProgress(getCurrentCycle());
 }
 
 function applyTheme(theme) {
@@ -2026,11 +2025,68 @@ async function resolveRisk(riskId) {
 // por doctrina §1, "no maneja el filtro"). Debe coincidir con lo que cuenta
 // loadBriefFromCycle más abajo.
 const BRIEF_PROGRESS_TOTAL = 10;
-function setBriefProgress(value) {
-  filled = Math.min(value, BRIEF_PROGRESS_TOTAL);
-  progressText.textContent = `${filled} / ${BRIEF_PROGRESS_TOTAL} campos`;
-  progressText.title = "Campos con un valor confirmado. No necesitas todos para avanzar — cada gate pide solo los suyos.";
-  progressFill.style.width = `${Math.round((filled / BRIEF_PROGRESS_TOTAL) * 100)}%`;
+
+function computeExperimentProgress(cycle) {
+  const exp = cycle?.experiment ?? {};
+  const baseFields = [
+    exp.supuesto_mas_riesgoso, exp.tipo_supuesto, exp.test_elegido, exp.por_que_este,
+    exp.resultado_confirma, exp.resultado_refuta, exp.costo_de_equivocarse, exp.hipotesis,
+    exp.variable, exp.tracking_eventos, exp.confianza, exp.decision
+  ];
+  let cnt = baseFields.filter(f => f != null && f !== "").length;
+  const isAb = exp.test_elegido === "ab";
+  if (isAb) {
+    const abFields = [exp.metrica_primaria, exp.criterio_stop, exp.tamano_muestra, exp.duracion];
+    cnt += abFields.filter(f => f != null && f !== "").length;
+    return { filled: cnt, total: 16 };
+  }
+  return { filled: cnt, total: 12 };
+}
+
+function computeSpecProgress(cycle) {
+  const spec = cycle?.spec_conductual ?? {};
+  const loop = spec.loop_completo ?? {};
+  const friccion = spec.friccion ?? {};
+  const fields = [
+    spec.comportamiento_objetivo, spec.criterio_exito_conductual,
+    loop.trigger, loop.action, loop.reward, loop.investment,
+    friccion.elimina, friccion.preserva, friccion.invierte,
+    spec.copy_por_nivel_cognitivo, spec.anti_patrones
+  ];
+  let cnt = fields.filter(f => {
+    if (Array.isArray(f)) return f.length > 0;
+    return f != null && f !== "";
+  }).length;
+  return { filled: cnt, total: 11 };
+}
+
+function updateDeliverableProgress(cycle) {
+  if (!cycle) {
+    progressText.textContent = "0 / 10 campos";
+    progressFill.style.width = "0%";
+    return;
+  }
+  let filledCount = 0;
+  let totalCount = 0;
+  
+  if (deliverable === "brief") {
+    filledCount = Math.min(computeBriefProgress(cycle), BRIEF_PROGRESS_TOTAL);
+    totalCount = BRIEF_PROGRESS_TOTAL;
+    progressText.title = "Campos con un valor confirmado. No necesitas todos para avanzar — cada gate pide solo los suyos.";
+  } else if (deliverable === "experiment") {
+    const res = computeExperimentProgress(cycle);
+    filledCount = res.filled;
+    totalCount = res.total;
+    progressText.title = "Campos del Experiment Card para la validación de supuestos.";
+  } else if (deliverable === "spec") {
+    const res = computeSpecProgress(cycle);
+    filledCount = res.filled;
+    totalCount = res.total;
+    progressText.title = "Campos del Spec conductual para el handoff técnico.";
+  }
+  
+  progressText.textContent = `${filledCount} / ${totalCount} campos`;
+  progressFill.style.width = `${Math.round((filledCount / Math.max(totalCount, 1)) * 100)}%`;
 }
 
 // --- Deep merge and path utilities ---
@@ -2217,7 +2273,7 @@ function loadBriefFromCycle(cycle) {
   renderF2Guardrails(cycle);
   renderExperimentCard(cycle);
   renderSpecConductual(cycle);
-  setBriefProgress(computeBriefProgress(cycle));
+  updateDeliverableProgress(cycle);
   applyPhaseGating(cycle);
 }
 
