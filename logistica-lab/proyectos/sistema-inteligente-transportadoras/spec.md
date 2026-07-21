@@ -77,6 +77,38 @@ María Ossa + asignación de squad + dependencias técnicas.
 - ⚠️ El copy del CTA dice *"efectividad, costo de flete y **precisión de datos**"* — pero el modelo V1 usa pesos **50% efectividad / 50% costo** (días=0). Revisar si "precisión de datos" es un 3er factor real o solo copy → alinear UX ↔ modelo (Kate/Michelle/Jaime).
 - El **catálogo** ("Detalle transportadoras") es el punto donde aterriza tu caracterización de atributos (cobertura, telemercadeo, datáfono, ConfioPago, etc.).
 
+## 5.2 · Score de una transportadora — fórmula de ganancia esperada  `[🔵 en diseño · fuente: screenshot Juan, 2026-07-21]`
+Aterriza en fórmula el prior bayesiano de §5 (Golden Users + factor K). El score de cada
+transportadora es la **ganancia esperada**, una mezcla ponderada entre la experiencia propia del
+dropshipper y la de la comunidad:
+
+```
+G_esperada = W · G_user + (1 − W) · G_global
+```
+- **G_user** = ganancia esperada del **dropshipper** (su propio historial con ese carrier).
+- **G_global** = ganancia esperada de la **comunidad** (o de los **GOLDEN**) — el prior.
+- **W** = cuánto se confía en el dato propio vs. el global.
+
+**Peso de credibilidad** (ya en §5 como `W = n/(n+K)`):
+```
+W = n / (n + K)
+```
+- **n** = número de pedidos del dropshipper **en esa transportadora**.
+- Con **n pequeño → W→0** (manda el global/GOLDEN); a medida que el dropshipper acumula pedidos,
+  **W→1** (manda su propia experiencia). Es la transición suave que evita juzgar un carrier con 2 pedidos.
+
+**Factor K** (tamaño de muestra, fórmula de Cochran):
+```
+K = ( Z² · R_global · (1 − R_global) ) / E²
+```
+- **Z = 1,96** (95% de confianza) · **E = 15%** de error.
+- **R_global** = tasa base global de la comunidad. ⚠️ **Por confirmar qué métrica es** (efectividad de
+  entrega, presumiblemente) — no está explícita en la fuente; cerrar con Kate/Data antes de construir.
+
+> Coherente con §5 ("criterio en lenguaje claro, no caja negra"): K sale de estadística estándar, no
+> de un número arbitrario. Pendiente reconciliar **G_esperada (ganancia)** con la **U = We·Efectividad +
+> Wf·Flete + Wd·Días** de §5 — ¿la "ganancia" es la utilidad U, o un factor aparte? Alinear con el doc.
+
 ## 6 · Estrategia de apertura  `[🟡 doc §5]`
 - **Fase 0 — Beta cerrado** (Shopi + perfiles de prueba), 2-3 meses, tráfico real.
 - **Fase 1** no-Golden bajo volumen (1–100 ord/mes) · **Fase 2** medio (101–500) · **Fase 3** 501–1.500 · **Fase 4** Golden/alto volumen (solo con controles maduros + **validación legal de decisiones por IA**).
@@ -128,6 +160,7 @@ María Ossa + asignación de squad + dependencias técnicas.
 - Reacción cuando la sugerencia se basa en Golden y no en historial propio.
 
 ## 11 · Changelog
+- 2026-07-21 — **Fórmula de score añadida (§5.2)** desde screenshot de Juan: `G_esperada = W·G_user + (1−W)·G_global`, con `W = n/(n+K)` y `K = Z²·R_global·(1−R_global)/E²` (Z=1,96 · E=15%). Aterriza el prior bayesiano de §5. Abiertas: qué métrica es R_global, y cómo se reconcilia "ganancia esperada" con la utilidad U del doc §4.
 - 2026-06-24 (b) — **Revisión a fondo del Figma** (flujo "Optimizar por único departamento"): documentado el flujo UX en §5.1 (pantalla base, modo IA de 2 pasos, 3 estados, 3 granularidades, marca origen-config por ciudad). Hallazgo: posible inconsistencia copy CTA ("precisión de datos") vs modelo V1 (50/50).
 - 2026-06-24 — Spec sembrado desde el Kickoff (Doc) + Figma. Jira (PRM-1513/DROP-17946) por leer cuando reconecte. Foco: rastrear las dependencias de Juan (Carrier Ops).
 - 2026-06-24 (tarde) — **Jira reconectado, ambos tickets leídos.** Corregido el grafo de trazabilidad (PRM-1513 = Proyecto OKR vacío de Maria Ossa, no la idea; discovery real en PRM-1219, solución en PRM-203, implementada por DROP-17946 que está In Progress 72%). Fix Kronos→**Cronos**. Añadidos: los 4 docs de Drive del catálogo, reunión de viabilidad 31-mar (§8.1), bloqueo de índices Cronos, criterio <30s. Detectadas 2 cosas a confirmar: KR2.1 vs KR2.2 y PRM-1513 sin descripción.
