@@ -477,26 +477,44 @@ textarea { background: transparent; border: 0; color: var(--text); display: bloc
 }
 .brief-title-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
-.doc-title {
+.doc-title-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.doc-title-top {
   display: flex;
   align-items: center;
-  gap: 16px;
-  flex: 1;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
 }
-.doc-icon {
+.doc-title-top .doc-icon {
   font-size: 20px;
   color: var(--orange);
+  flex-shrink: 0;
 }
-.doc-title h1 {
-  font-size: 22px;
+.doc-title-top h1 {
+  font-size: 24px;
   font-weight: 700;
-  margin: 0;
   color: var(--text);
-  letter-spacing: -0.02em;
+  margin: 0;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  flex: 1;
+  min-width: 200px;
+}
+.doc-title-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 4px;
+  border-top: 1px solid var(--border2);
+  padding-top: 12px;
+  flex-wrap: wrap;
 }
 .live-badge { align-items: center; background: var(--orange-soft); border-radius: 999px; color: var(--orange); display: inline-flex; font-size: 10.5px; font-weight: 600; gap: 5px; padding: 4px 6px; }
 .live-badge .dot { background: var(--orange); }
@@ -506,8 +524,8 @@ textarea { background: transparent; border: 0; color: var(--text); display: bloc
 .progress-track span { background: var(--orange); display: block; height: 100%; width: 55%; }
 .progress-row strong { color: var(--text2); font-size: 11px; font-weight: 600; }
 .brief-body { flex: 1; padding: 16px 0 0; }
-.brief-block { margin-bottom: 16px; }
-.brief-grid { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+.brief-block { margin-bottom: 24px; }
+.brief-grid { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
 .mono-value { color: var(--text); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; line-height: 1.5; margin: 0; }
 .confirm-field { background: var(--code); border: 1px dashed var(--border); border-radius: 7px; color: var(--text2); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 13px; line-height: 1.5; margin: 7px 0 0; padding: 7px 8px; }
 .confirm-field strong { color: var(--amber); font-weight: 600; }
@@ -1163,4 +1181,96 @@ button.drill-item:hover { border-color: var(--orange); background: color-mix(in 
 
 @media (max-width: 1120px) {
   .chat-drawer { display: none !important; }
+}
+
+/* ==========================================================================
+   Product Design & Form Control Unification (Inter/Clean Grid)
+   ========================================================================== */
+.brief-body .brief-block {
+  margin-bottom: 24px;
+}
+.brief-body .section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text3);
+  margin-bottom: 8px;
+  display: block;
+}
+.brief-body input,
+.brief-body select,
+.brief-body textarea,
+.brief-body .confirm-field {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13.5px;
+  padding: 10px 12px;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+  box-shadow: none;
+  outline: none;
+  min-height: 40px;
+}
+
+.brief-body input[type="checkbox"] {
+  width: auto;
+  min-height: auto;
+}
+
+/* Hover and Focus States */
+.brief-body input:hover,
+.brief-body select:hover,
+.brief-body textarea:hover,
+.brief-body .confirm-field:hover {
+  border-color: var(--brand-tint-br);
+  background-color: var(--panel);
+}
+
+.brief-body input:focus,
+.brief-body select:focus,
+.brief-body textarea:focus,
+.brief-body .brief-inline-input:focus {
+  border-color: var(--orange);
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.12);
+  background-color: var(--panel);
+}
+
+/* Overriding filter-select inside brief body to look like unified selects */
+.brief-body select.filter-select {
+  border-radius: 8px;
+  font-weight: 500;
+  color: var(--text);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 36px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* Confirm Field click affordance */
+.brief-body .confirm-field {
+  border-left: 3px solid var(--orange-soft);
+  cursor: pointer;
+  background: var(--code);
+  font-family: var(--mono);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.brief-body .confirm-field:hover {
+  border-left-color: var(--orange);
+}
+
+/* Drawer Header Long Cycle Title Truncation */
+.chat-drawer .cycle-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
 }

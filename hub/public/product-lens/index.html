@@ -137,18 +137,22 @@
           <div class="brief-document">
             <header class="brief-header">
               <div class="brief-title-row">
-                <div class="doc-title">
-                  <span class="doc-icon" aria-hidden="true">▤</span>
-                  <h1 id="briefCycleTitle">Sin definir</h1>
-                  <span id="deliverableTitle" class="sr-only">Intervention Brief</span>
-                  <span class="deliverable-switch">
-                    <button id="briefSwitch" class="active" type="button">Brief</button>
-                    <button id="experimentSwitch" type="button">Experiment Card</button>
-                    <button id="specSwitch" type="button">Spec conductual</button>
-                  </span>
-                  <span class="live-badge"><span class="dot"></span>En vivo</span>
+                <div class="doc-title-container">
+                  <div class="doc-title-top">
+                    <span class="doc-icon" aria-hidden="true">▤</span>
+                    <h1 id="briefCycleTitle">Sin definir</h1>
+                    <span class="live-badge"><span class="dot"></span>En vivo</span>
+                  </div>
+                  <div class="doc-title-meta">
+                    <span class="deliverable-switch">
+                      <button id="briefSwitch" class="active" type="button">Brief</button>
+                      <button id="experimentSwitch" type="button">Experiment Card</button>
+                      <button id="specSwitch" type="button">Spec conductual</button>
+                    </span>
+                    <span id="deliverableTitle" class="sr-only">Intervention Brief</span>
+                    <button id="exportBrief" class="export-button" type="button">↧ Exportar brief</button>
+                  </div>
                 </div>
-                <button id="exportBrief" class="export-button" type="button">↧ Exportar brief</button>
               </div>
               <div class="progress-row" title="Campos con un valor confirmado. No necesitas todos para avanzar — cada gate pide solo los suyos.">
                 <div class="progress-track"><span id="briefProgressFill"></span></div>
