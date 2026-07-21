@@ -114,19 +114,25 @@ K = ( Z² · R_global · (1 − R_global) ) / E²
 No se compara la ganancia esperada de cada carrier con un solo número, sino con su **distribución**.
 Aterriza el "Bootstrap 5.000 iteraciones" de §5.
 
-**Mecánica:**
-1. Cada transportadora (T1, T2, …, Tn) tiene su **distribución** de ganancia (de su historial, ponderada
-   con §5.2). No un promedio: una distribución.
-2. En cada **trial** (se corren **5.000**), se saca una **muestra** de la distribución de cada carrier
-   → una ganancia simulada por transportadora en ese trial.
-3. El **ganador del trial** = la transportadora con la mayor ganancia muestreada esa vez (la celda
-   resaltada de la fila). Un trial gana T1, otro gana T3, etc. — según cómo caiga el muestreo.
-4. Sobre los 5.000 trials: **probabilidad_mejor** de un carrier = nº de trials que gana / 5.000.
-   Es la probabilidad de ser la mejor opción para ese `user_id` × `city_id`.
+**Mecánica (bootstrap con reemplazo):**
+1. Por transportadora, se corre una **simulación bootstrap de 5.000 muestras con reemplazo** sobre las
+   **órdenes propias** del dropshipper **y**, por separado, sobre las **órdenes de los golden** en ese
+   carrier×ciudad.
+2. Las dos simulaciones se **combinan ponderando por `W / (1−W)`** (el peso de §5.2): así, un dropshipper
+   con poco historial propio queda dominado por el golden, y uno con mucho por lo suyo.
+3. El resultado es, por transportadora, una **distribución** simulada (no un promedio). El **ganador de
+   cada trial** = el de mayor valor muestreado esa vez.
+4. Sobre los 5.000 trials: **`probabilidad_mejor`** de un carrier = nº de trials que gana / 5.000 = la
+   probabilidad de ser la mejor opción para ese `user_id` × `city_id`.
+
+**Dos métricas de salida (se rankea por cada una — §5.4):**
+- **Ganancia Esperada** — sobre `resultado_neto` en **pesos reales** (es la del ejemplo de abajo,
+  `ganancia_promedio_simulada`).
+- **Utilidad Logística** — combinación ponderada 0–1 `We·Efectividad + Wf·Flete_std + Wd·Días_std`
+  (pesos configurables; hoy **We=50% · Wf=50% · Wd=0**).
 
 **Salida por (dropshipper × ciudad):** `probabilidad_mejor` · `ganancia_promedio_simulada` ·
-`mediana_simulada`. El **ranking se ordena por `probabilidad_mejor`**, no por la ganancia promedio
-(matiz importante: precisa el "ranking por utilidad esperada" de §5).
+`mediana_simulada`. El **ranking se ordena por `probabilidad_mejor`**, no por el promedio.
 
 Ejemplo de la fuente (`user 36655` × `ciudad 1221`, ilustrativo):
 
@@ -176,7 +182,19 @@ transportadora **que los golden ya usaron ahí**:
 1. Peso bayesiano **`W = n_propias / (n_propias + k_final)`**: poco historial propio → **W→0**, manda el
    golden; mucho → **W→1**, manda el propio. **K y W solo deciden cuánto peso va al golden vs. al
    dropshipper** — nada más.
-2. Mezcla `G_esperada = W·G_user + (1−W)·G_global` (§5.2) y simula 5.000 trials (§5.3) → `probabilidad_mejor`.
+2. Simulación **bootstrap 5.000 con reemplazo** sobre órdenes propias y golden por separado, combinadas
+   por `W/(1−W)` (§5.3).
+3. Salen **dos métricas → dos rankings de transportadoras**:
+   - **Utilidad Logística** = `We·Efectividad + Wf·Flete_std + Wd·Días_std` (normalizado; hoy **We=Wf=50%,
+     Wd=0**).
+   - **Ganancia Esperada** = lo mismo pero sobre `resultado_neto` en **pesos reales**.
+
+> **Backtesting** (`02_simulacion.ipynb`): la misma Parte 2 corrida **en masa** sobre muchas ciudades y
+> muchos dropshippers (golden y no-golden), para validar el modelo. Guarda en **`ia.st_simulacion_ul`**
+> con soporte para **reanudar** una corrida larga.
+
+> ✅ Cierra el flag de §5.1: el modelo V1 es 50/50 (efectividad/flete), así que el copy del CTA
+> "precisión de datos" **es solo copy, no un tercer factor** — alinear UX.
 
 ## 6 · Estrategia de apertura  `[🟡 doc §5]`
 - **Fase 0 — Beta cerrado** (Shopi + perfiles de prueba), 2-3 meses, tráfico real.
@@ -229,6 +247,7 @@ transportadora **que los golden ya usaron ahí**:
 - Reacción cuando la sugerencia se basa en Golden y no en historial propio.
 
 ## 11 · Changelog
+- 2026-07-21 (d) — **Precisado el bootstrap y las 2 métricas (§5.3/§5.4)**: 5.000 muestras CON reemplazo sobre órdenes propias y golden por separado, combinadas por W/(1−W). Dos salidas → dos rankings: Utilidad Logística (efectividad/flete/días normalizados, We=Wf=50% Wd=0) y Ganancia Esperada (resultado_neto en pesos). `02_simulacion` = backtesting masivo → `ia.st_simulacion_ul`, reanudable. Confirma que "precisión de datos" del CTA (§5.1) es solo copy.
 - 2026-07-21 (c) — **Arquitectura de cómputo (§5.4)**: 2 notebooks Jupyter directo a PostgreSQL, sin API. Parte 1 (pipeline nocturno, `01_carga_datos §2`): muestra ENTREGADO/DEVOLUCIÓN, `resultado_neto`, normalización 0–1 por ciudad, definición de golden (percentil ≥75 pedidos + >mediana ganancia), `k_final`, caché Parquet. Parte 2 (bajo demanda por dropshipper, `02_simulacion`). **Cerradas las 2 preguntas de §5.2:** R_global = efectividad de los golden; la "ganancia" G = `resultado_neto` (ganancia si entregó, −flete si devolvió). K y W solo deciden peso golden vs. propio.
 - 2026-07-21 (b) — **Bootstrapping añadido (§5.3)** desde screenshot de Juan: 5.000 trials muestreando la distribución de cada carrier → `probabilidad_mejor` (nº de trials que gana / 5.000). El ranking se ordena por probabilidad de ser el mejor, no por ganancia promedio; salida por dropshipper×ciudad con prob_mejor + promedio + mediana. Ejemplo user 36655 × ciudad 1221.
 - 2026-07-21 — **Fórmula de score añadida (§5.2)** desde screenshot de Juan: `G_esperada = W·G_user + (1−W)·G_global`, con `W = n/(n+K)` y `K = Z²·R_global·(1−R_global)/E²` (Z=1,96 · E=15%). Aterriza el prior bayesiano de §5. Abiertas: qué métrica es R_global, y cómo se reconcilia "ganancia esperada" con la utilidad U del doc §4.
