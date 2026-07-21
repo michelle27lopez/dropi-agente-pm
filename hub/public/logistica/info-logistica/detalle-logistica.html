@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logística como Producto · Detalle de Data</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;--bg2:#f7f8fa;--bg3:#eef1f5;--line:#e2e6ec;--line2:#d3d9e2;
+  --ink:#11161d;--ink2:#46505e;--ink3:#7c8694;
+  --blue:#1d4ed8;--teal:#0d9488;--amber:#b45309;--red:#dc2626;--green:#15803d;--violet:#6d28d9;
+  --blueB:#eff4ff;--tealB:#effbf9;--amberB:#fef6ec;--redB:#fef2f2;--greenB:#f0fbf3;--violetB:#f5f1ff;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.6}
+.app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
+
+/* SIDEBAR */
+.side{background:var(--bg2);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 18px}
+.brand{font-family:'Newsreader',serif;font-size:19px;font-weight:600;letter-spacing:-.3px;line-height:1.2;margin-bottom:4px}
+.brand small{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-top:6px}
+.nav-g{margin-top:26px}
+.nav-g .gl{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink3);padding:0 10px;margin-bottom:6px}
+.side a{display:block;font-size:13.5px;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;transition:.13s;border-left:2px solid transparent}
+.side a:hover{background:var(--bg3);color:var(--ink)}
+.side a.on{background:#fff;color:var(--blue);border-left-color:var(--blue);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+
+/* MAIN */
+.main{padding:0;max-width:980px}
+.inner{padding:48px 56px 90px}
+.top{border-bottom:1px solid var(--line);padding:34px 56px;background:linear-gradient(180deg,var(--bg2),#fff)}
+.top .k{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+.top h1{font-family:'Newsreader',serif;font-size:34px;font-weight:600;letter-spacing:-.5px}
+.top p{color:var(--ink2);margin-top:8px;max-width:680px}
+
+h2{font-family:'Newsreader',serif;font-size:27px;font-weight:600;letter-spacing:-.4px;margin:0 0 6px;scroll-margin-top:20px}
+.lead{color:var(--ink2);font-size:15px;margin-bottom:26px;max-width:720px}
+h3{font-size:16px;font-weight:600;margin:34px 0 12px;display:flex;align-items:center;gap:9px}
+h3 .dot{width:8px;height:8px;border-radius:2px;background:var(--blue)}
+section{padding:44px 0;border-bottom:1px solid var(--line)}
+section:first-of-type{padding-top:8px}
+
+/* tables */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:480px}
+th{text-align:left;padding:10px 14px;background:var(--bg3);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3);font-weight:600;border-bottom:1px solid var(--line);white-space:nowrap;position:sticky;top:0}
+td{padding:9px 14px;border-bottom:1px solid var(--line);color:var(--ink2)}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--bg2)}
+td.n{color:var(--ink);font-weight:600}
+.m{font-family:'IBM Plex Mono',monospace;font-weight:500;font-variant-numeric:tabular-nums}
+.r{text-align:right}
+.bar{display:inline-block;height:6px;border-radius:3px;vertical-align:middle;margin-right:7px}
+
+/* callouts */
+.note{border-radius:10px;padding:15px 18px;margin:16px 0;font-size:13.5px;border:1px solid var(--line)}
+.note .nh{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.note.warn{background:var(--amberB);border-color:#f0d9b5}.note.warn .nh{color:var(--amber)}
+.note.bad{background:var(--redB);border-color:#f3c9c9}.note.bad .nh{color:var(--red)}
+.note.good{background:var(--greenB);border-color:#bfe3c9}.note.good .nh{color:var(--green)}
+.note.info{background:var(--blueB);border-color:#cdddfb}.note.info .nh{color:var(--blue)}
+.note.neutral{background:var(--bg2)}.note.neutral .nh{color:var(--ink3)}
+
+code{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--bg3);padding:2px 6px;border-radius:5px;color:var(--ink2)}
+.pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:2px 8px;border-radius:20px;font-weight:600;letter-spacing:.3px}
+.p-dropi{background:var(--violetB);color:var(--violet)}.p-carrier{background:var(--blueB);color:var(--blue)}
+.p-ok{background:var(--greenB);color:var(--green)}.p-bad{background:var(--redB);color:var(--red)}.p-warn{background:var(--amberB);color:var(--amber)}.p-pre{background:var(--bg3);color:var(--ink3)}
+
+.flow-chain{font-family:'IBM Plex Mono',monospace;font-size:12px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:14px 16px;color:var(--ink2);line-height:2;margin:10px 0;overflow-x:auto;white-space:nowrap}
+.flow-chain b{color:var(--ink)}
+.flow-chain .f-end{color:var(--green);font-weight:600}.flow-chain .f-bad{color:var(--red);font-weight:600}.flow-chain .f-fric{color:var(--amber);font-weight:600}
+
+.src{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);margin-top:8px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:880px){.app{grid-template-columns:1fr}.side{position:static;height:auto;border-right:none;border-bottom:1px solid var(--line)}.inner,.top{padding-left:24px;padding-right:24px}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="side">
+  <div class="brand">Logística como Producto<small>Detalle de data</small></div>
+  <div class="nav-g">
+    <div class="gl">Contexto</div>
+    <a href="#modelo">Modelo de datos</a>
+    <a href="#funnel">Funnel pre-red</a>
+  </div>
+  <div class="nav-g">
+    <div class="gl">Estados</div>
+    <a href="#capas">7 capas</a>
+    <a href="#catalogo">Catálogo por carrier</a>
+  </div>
+  <div class="nav-g">
+    <div class="gl">Flujos reales</div>
+    <a href="#f-envia">ENVIA</a>
+    <a href="#f-inter">INTERRAPIDISIMO</a>
+    <a href="#f-coord">COORDINADORA</a>
+    <a href="#f-tcc">TCC</a>
+    <a href="#f-veloces">VELOCES</a>
+  </div>
+  <div class="nav-g">
+    <div class="gl">Métricas</div>
+    <a href="#tiempos">Tiempos por tramo</a>
+    <a href="#reintentos">Reintentos</a>
+    <a href="#novedades">Novedades</a>
+    <a href="#canal">Canal · GMV</a>
+  </div>
+  <div class="nav-g">
+    <div class="gl">Cierre</div>
+    <a href="#asteriscos">Límites de la data</a>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+<div class="top">
+  <div class="k">Apéndice de datos · Dropi Colombia · Abril 2026</div>
+  <h1>Detalle de hallazgos</h1>
+  <p>Toda la data cruda que respalda el resumen ejecutivo. Tablas, flujos por transportadora, métricas por tramo y los límites de cada número. Diseñado para consultar, no para leer de corrido.</p>
+</div>
+<div class="inner">
+
+<!-- MODELO -->
+<section id="modelo">
+  <h2>Modelo de datos</h2>
+  <p class="lead">Cómo está organizada la información y la regla mental para leer cualquier métrica.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Para saber…</th><th>Vive en</th><th>Nota crítica</th></tr></thead>
+    <tbody>
+      <tr><td class="n">Estado actual de la orden</td><td><code>orders.status</code></td><td>Foto, pisa el anterior. No sirve para historia.</td></tr>
+      <tr><td class="n">Historia de estados</td><td><code>history_orders</code></td><td>Append-only. Fuente de todo lo logístico. Grano evento → <code>COUNT(DISTINCT order_id)</code>.</td></tr>
+      <tr><td class="n">Eventos físicos Dropi</td><td><code>logistic_management</code> + <code>history_logistic_management</code></td><td>La pierna Ecom. Se replica en history_orders vía <code>history_order_id</code>.</td></tr>
+      <tr><td class="n">Catálogo Ecom</td><td><code>types_logistic_management</code></td><td>Los 8 tipos de evento del scanner.</td></tr>
+      <tr><td class="n">Novedades (rico)</td><td><code>history_new_orders</code></td><td>Tiene <code>solution</code>, <code>date_solution</code>, <code>solved_by_user</code>.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note info"><div class="nh">◆ Dos escritores, un log</div>history_orders lo escriben dos procesos: el <b>carrier</b> (filas con <code>status_master_id</code> poblado + <code>date_change_status_notif</code>) y <b>Ecom/app</b> (status_master_id null). Esa columna separa quién generó cada evento.</div>
+  <h3><span class="dot"></span>Catálogo Ecom Scanner — volúmenes reales</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Tipo (id)</th><th>Estado</th><th class="r">Eventos</th></tr></thead>
+    <tbody>
+      <tr><td class="n">Salidas (9)</td><td>PREPARADO PARA TRANSPORTADORA</td><td class="m r">25.852.338</td></tr>
+      <tr><td class="n">Recogidas (5)</td><td>RECOGIDO POR DROPI</td><td class="m r">14.330.967</td></tr>
+      <tr><td class="n">Despachos (3)</td><td>ENTREGADO A TRANSPORTADORA</td><td class="m r">13.046.874</td></tr>
+      <tr><td class="n">Recepciones (4)</td><td>EN BODEGA DROPI</td><td class="m r">9.582.604</td></tr>
+      <tr><td class="n">Sender Devolutions (2)</td><td>DEVOLUCION EN TRANSITO</td><td class="m r">836.994</td></tr>
+      <tr><td class="n">Devolutions Reception (7)</td><td>RECIBIDO POR DROPI</td><td class="m r">775.150</td></tr>
+      <tr><td class="n">Recepciones PAU (10)</td><td>RECIBIDO PAU</td><td class="m r">748.608</td></tr>
+      <tr><td class="n">PreDevolution (43)</td><td>RECEPCION DE DEVOLUCIONES</td><td class="m r">345.265</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note neutral"><div class="nh">◆ Recogido (14.3M) &gt; Bodega (9.6M)</div>Imposible en secuencia lineal → confirma dos rutas: no toda orden pasa por "Recogido". Muchas llegan a bodega por otra vía (proveedor la lleva). El flujo es un diamante, no una línea.</div>
+</section>
+
+<!-- FUNNEL -->
+<section id="funnel">
+  <h2>Funnel pre-red — anatomía de la fuga</h2>
+  <p class="lead">De las órdenes creadas, hasta qué hito llegó cada una. Hitos excluyentes, del más avanzado al menos. (Cohorte 90–15 días, madura.)</p>
+  <div class="tw"><table>
+    <thead><tr><th>Hito máximo alcanzado</th><th class="r">Órdenes</th><th>Lectura</th></tr></thead>
+    <tbody>
+      <tr><td class="n"><span class="pill p-ok">6</span> Entró a red</td><td class="m r">5.874.864</td><td>Llegó al carrier. El ~68%.</td></tr>
+      <tr><td class="n"><span class="pill p-carrier">5</span> Handoff sin entrar a red</td><td class="m r">968</td><td>Handoff casi sin fuga.</td></tr>
+      <tr><td class="n"><span class="pill p-carrier">4</span> Preparó sin handoff</td><td class="m r">13.024</td><td>Tramo físico, fuga mínima.</td></tr>
+      <tr><td class="n"><span class="pill p-pre">3</span> Guía sin preparar</td><td class="m r">73.951</td><td></td></tr>
+      <tr><td class="n"><span class="pill p-warn">2</span> Confirmó sin guía</td><td class="m r">266.392</td><td>Muere en confirmación.</td></tr>
+      <tr><td class="n"><span class="pill p-bad">1c</span> Reemplazado</td><td class="m r">667.970</td><td>NO es fuga → edición de orden.</td></tr>
+      <tr><td class="n"><span class="pill p-bad">1b</span> Rechazado</td><td class="m r">105.866</td><td></td></tr>
+      <tr><td class="n"><span class="pill p-bad">1a</span> Cancelado</td><td class="m r">844.548</td><td>La fuga grande.</td></tr>
+      <tr><td class="n"><span class="pill p-pre">0</span> Solo creada</td><td class="m r">21.779</td><td></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note bad"><div class="nh">▲ La fuga real</div>Cancelado (844K) + confirmó-sin-guía (266K) = el grueso. El handoff (968) y preparación (13K) casi no pierden. <b>El problema está en confirmación, no en la operación física.</b></div>
+  <h3><span class="dot"></span>Motivos de cancelación / rechazo</h3>
+  <div class="grid2">
+    <div>
+      <div class="tw"><table>
+        <thead><tr><th>Cancelación</th><th class="r">Órd.</th></tr></thead>
+        <tbody>
+          <tr><td>Otros (literal)</td><td class="m r">182.669</td></tr>
+          <tr><td>Cliente final cancela</td><td class="m r">160.228</td></tr>
+          <tr><td>(sin nota)</td><td class="m r">158.181</td></tr>
+          <tr><td>Pedido duplicado</td><td class="m r">66.802</td></tr>
+          <tr><td>Datos incompletos</td><td class="m r">51.909</td></tr>
+          <tr><td>Cambio tipo recaudo</td><td class="m r">9.956</td></tr>
+          <tr><td>Cambio transportadora</td><td class="m r">9.523</td></tr>
+          <tr><td>Excede valor a recaudar</td><td class="m r">5.820</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div>
+      <div class="tw"><table>
+        <thead><tr><th>Rechazo</th><th class="r">Órd.</th></tr></thead>
+        <tbody>
+          <tr><td>Autorizado por gerencia</td><td class="m r">50.091</td></tr>
+          <tr><td>(sin nota)</td><td class="m r">24.374</td></tr>
+          <tr><td>No despacho del proveedor</td><td class="m r">~10.200</td></tr>
+          <tr><td>Cliente final cancela</td><td class="m r">3.594</td></tr>
+          <tr><td>Cobertura (sin cobertura)</td><td class="m r">~4.300</td></tr>
+          <tr><td>No permite generar guía</td><td class="m r">1.886</td></tr>
+          <tr><td>Pedido duplicado</td><td class="m r">1.628</td></tr>
+          <tr><td>No recibe por tamaños</td><td class="m r">~570</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+  <div class="note warn"><div class="nh">⚠ Texto libre sin disciplina</div>~30% de cancelaciones es "Otros" o "(sin nota)". Submotivos como "h", "c", "malo", "cali", "prueba", "CLINETE NUNCA RECIBE" (con typo). <b>El motivo de cancelación hoy no es analizable</b> — y eso mismo es un hallazgo de producto.</div>
+</section>
+
+<!-- 7 CAPAS -->
+<section id="capas">
+  <h2>Las 7 capas de estado</h2>
+  <p class="lead">Modelo para homologar el vocabulario distinto de cada carrier. Separa lo que controla Dropi (1–3) de lo que controla el carrier (4–7).</p>
+  <div class="tw"><table>
+    <thead><tr><th>#</th><th>Grupo</th><th>Manda</th><th>Estados ejemplo</th></tr></thead>
+    <tbody>
+      <tr><td class="m n">1</td><td class="n">Pre-confirmación</td><td><span class="pill p-pre">app</span></td><td><code>PENDIENTE</code> <code>PENDIENTE CONFIRMACION</code> <code>CONFIRMADO</code></td></tr>
+      <tr><td class="m n">2</td><td class="n">Preparación</td><td><span class="pill p-carrier">proveedor</span></td><td><code>GUIA_GENERADA</code> <code>PREPARADO PARA TRANSPORTADORA</code></td></tr>
+      <tr><td class="m n">3</td><td class="n">Pierna física Dropi</td><td><span class="pill p-dropi">Ecom · opcional</span></td><td><code>RECOGIDO POR DROPI</code> <code>EN BODEGA DROPI</code> <code>ENTREGADO A TRANSPORTADORA</code> <code>RECIBIDO PAU</code></td></tr>
+      <tr><td class="m n">4</td><td class="n">Red carrier</td><td><span class="pill p-carrier">carrier</span></td><td><code>EN PROCESAMIENTO</code> <code>DESPACHADA</code> <code>EN TERMINAL</code> <code>EN RUTA</code> <code>EN REPARTO</code> <code>ADMITIDA</code></td></tr>
+      <tr><td class="m n">5</td><td class="n">Fricción</td><td><span class="pill p-carrier">carrier</span></td><td><code>NOVEDAD</code> <code>RECLAME EN OFICINA</code> <code>INTENTO DE ENTREGA</code> <code>SIN MOVIMIENTOS</code> <code>CITA PROGRAMADA</code></td></tr>
+      <tr><td class="m n">6</td><td class="n">Cierre exitoso</td><td>—</td><td><code>ENTREGADO</code> <code>DELIVERED</code></td></tr>
+      <tr><td class="m n">7</td><td class="n">Cierre con pérdida</td><td>—</td><td><code>DEVOLUCION</code> <code>RECHAZADO</code> <code>CANCELADO</code> <code>SINIESTRO</code></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note info"><div class="nh">◆ La frontera</div>El salto <b>3→4 es el handoff</b> (movilización real). La capa 3 es opcional: si la orden pasa por ahí → ruta Dropi; si salta 2→4 → proveedor-directo.</div>
+</section>
+
+<!-- CATÁLOGO POR CARRIER -->
+<section id="catalogo">
+  <h2>Catálogo de estados por carrier</h2>
+  <p class="lead">Los estados crudos de cada transportadora con su volumen (60 días, ≥300 órdenes). Evidencia de por qué "novedad" y "devolución" no son comparables sin homologar.</p>
+  <div class="note neutral"><div class="nh">◆ Mismo concepto, nombres distintos</div>"Novedad" en INTER no existe como tal: es <code>RECLAME EN OFICINA</code> (844K) + <code>INTENTO DE ENTREGA</code> (503K) + <code>TELEMERCADEO</code> (289K). En ENVIA es <code>NOVEDAD</code> (473K) + <code>SIN MOVIMIENTOS</code> (179K). En VELOCES la devolución es un flujo de 4 estados; en otras es uno solo.</div>
+  <div class="grid2">
+    <div class="tw"><table>
+      <thead><tr><th>INTERRAPIDISIMO</th><th class="r">Órd.</th></tr></thead>
+      <tbody>
+        <tr><td>PENDIENTE</td><td class="m r">2.152.143</td></tr>
+        <tr><td>GUIA_GENERADA</td><td class="m r">2.064.528</td></tr>
+        <tr><td>EN PROCESAMIENTO</td><td class="m r">1.888.033</td></tr>
+        <tr><td>EN BODEGA TRANSPORTADORA</td><td class="m r">1.590.559</td></tr>
+        <tr><td>ENTREGADO</td><td class="m r">1.385.820</td></tr>
+        <tr><td>RECLAME EN OFICINA</td><td class="m r">844.178</td></tr>
+        <tr><td>EN REPARTO</td><td class="m r">570.088</td></tr>
+        <tr><td>INTENTO DE ENTREGA</td><td class="m r">503.029</td></tr>
+        <tr><td>DEVOLUCION</td><td class="m r">421.614</td></tr>
+        <tr><td>TELEMERCADEO</td><td class="m r">288.912</td></tr>
+        <tr><td>REENVÍO</td><td class="m r">115.774</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tw"><table>
+      <thead><tr><th>ENVIA</th><th class="r">Órd.</th></tr></thead>
+      <tbody>
+        <tr><td>PENDIENTE</td><td class="m r">1.934.346</td></tr>
+        <tr><td>EN REPARTO</td><td class="m r">1.724.721</td></tr>
+        <tr><td>DESPACHADA</td><td class="m r">1.505.478</td></tr>
+        <tr><td>EN BODEGA ORIGEN</td><td class="m r">1.370.220</td></tr>
+        <tr><td>ENTREGADO</td><td class="m r">1.298.838</td></tr>
+        <tr><td>EN BODEGA DESTINO</td><td class="m r">987.911</td></tr>
+        <tr><td>NOVEDAD</td><td class="m r">473.411</td></tr>
+        <tr><td>DEVOLUCION</td><td class="m r">343.071</td></tr>
+        <tr><td>EN ESPERA DE RUTA DOMESTICA</td><td class="m r">238.743</td></tr>
+        <tr><td>SIN MOVIMIENTOS</td><td class="m r">179.040</td></tr>
+        <tr><td>EN REEXPEDICION</td><td class="m r">69.835</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="grid2">
+    <div class="tw"><table>
+      <thead><tr><th>COORDINADORA</th><th class="r">Órd.</th></tr></thead>
+      <tbody>
+        <tr><td>EN TERMINAL ORIGEN</td><td class="m r">357.218</td></tr>
+        <tr><td>EN REPARTO</td><td class="m r">347.689</td></tr>
+        <tr><td>EN TERMINAL DESTINO</td><td class="m r">330.339</td></tr>
+        <tr><td>ENTREGADO</td><td class="m r">259.904</td></tr>
+        <tr><td>EN TRANSPORTE</td><td class="m r">236.908</td></tr>
+        <tr><td>NOVEDAD</td><td class="m r">120.536</td></tr>
+        <tr><td>NOVEDAD SOLUCIONADA</td><td class="m r">104.703</td></tr>
+        <tr><td>DEVOLUCION</td><td class="m r">56.633</td></tr>
+        <tr><td>EN PUNTO DROOP</td><td class="m r">10.960</td></tr>
+      </tbody>
+    </table></div>
+    <div class="tw"><table>
+      <thead><tr><th>VELOCES</th><th class="r">Órd.</th></tr></thead>
+      <tbody>
+        <tr><td>EN RUTA</td><td class="m r">161.218</td></tr>
+        <tr><td>EN CAMINO</td><td class="m r">159.934</td></tr>
+        <tr><td>BODEGA DESTINO</td><td class="m r">125.263</td></tr>
+        <tr><td>ENTREGADO</td><td class="m r">117.730</td></tr>
+        <tr><td>EN TRANSITO</td><td class="m r">103.426</td></tr>
+        <tr><td>NOVEDAD</td><td class="m r">75.473</td></tr>
+        <tr><td>EN PROCESO DE DEVOLUCION</td><td class="m r">38.092</td></tr>
+        <tr><td>DEVOLUCION</td><td class="m r">36.662</td></tr>
+        <tr><td>TRANSITO A DEVOLUCION PROVEEDOR</td><td class="m r">21.905</td></tr>
+        <tr><td>DEVOLUCION EN BODEGA</td><td class="m r">20.775</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>TCC</th><th class="r">Órd.</th><th>Estado único del modelo</th></tr></thead>
+    <tbody>
+      <tr><td>EN DESPACHO</td><td class="m r">86.995</td><td rowspan="4" style="vertical-align:top">Modelo de distribución: <code>MERCANCIA RECOGIDA → EN DESPACHO → EN TRASLADO NACIONAL → EN DISTRIBUCION</code>. Estado propio: <code>ENTREGADA A CONEXIONES</code> (transferencia a otra red).</td></tr>
+      <tr><td>EN DISTRIBUCION</td><td class="m r">65.991</td></tr>
+      <tr><td>MERCANCIA RECOGIDA</td><td class="m r">53.032</td></tr>
+      <tr><td>EN TRASLADO NACIONAL</td><td class="m r">19.223</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- FLUJOS POR CARRIER -->
+<section id="f-envia">
+  <h2>Flujo real — ENVIA</h2>
+  <p class="lead">Modelo de bodegas origen/destino. Transiciones top por volumen (60 días, ≥500).</p>
+  <div class="flow-chain"><b>GUIA_GENERADA</b> → PREPARADO → <span class="p-dropi" style="padding:1px 5px;border-radius:4px">[Recogido → Bodega Dropi]</span> → ENTREGADO A TRANSPORTADORA → <b>EN BODEGA ORIGEN</b> → DESPACHADA → EN BODEGA DESTINO → EN REPARTO → <span class="f-end">ENTREGADO</span></div>
+  <div class="note warn"><div class="nh">⚠ Ciclo de fricción</div><code>EN REPARTO → NOVEDAD → DESPACHADA</code> (re-despacha tras novedad). Agujero propio: <code>EN BODEGA ORIGEN → SIN MOVIMIENTOS</code> (172K órdenes congeladas en origen).</div>
+  <div class="tw"><table>
+    <thead><tr><th>Transición</th><th class="r">Veces</th></tr></thead>
+    <tbody>
+      <tr><td>PENDIENTE → GUIA_GENERADA</td><td class="m r">1.839.706</td></tr>
+      <tr><td>EN BODEGA DESTINO → EN REPARTO</td><td class="m r">1.253.356</td></tr>
+      <tr><td>EN REPARTO → ENTREGADO</td><td class="m r">1.250.104</td></tr>
+      <tr><td>EN BODEGA ORIGEN → DESPACHADA</td><td class="m r">992.980</td></tr>
+      <tr><td>EN BODEGA DROPI → ENTREGADO A TRANSPORTADORA</td><td class="m r">939.617</td></tr>
+      <tr><td>EN REPARTO → NOVEDAD</td><td class="m r">769.544</td></tr>
+      <tr><td>NOVEDAD → DESPACHADA <span class="pill p-warn">re-despacho</span></td><td class="m r">362.974</td></tr>
+      <tr><td>EN REPARTO → DEVOLUCION</td><td class="m r">340.107</td></tr>
+      <tr><td>EN BODEGA ORIGEN → SIN MOVIMIENTOS <span class="pill p-bad">congelado</span></td><td class="m r">172.496</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="f-inter">
+  <h2>Flujo real — INTERRAPIDISIMO</h2>
+  <p class="lead">Modelo de loop de reintentos. El de peor primer intento y el más lento.</p>
+  <div class="flow-chain"><b>GUIA_GENERADA</b> → PREPARADO → ADMITIDA → <b>EN PROCESAMIENTO ⇄ EN BODEGA TRANSPORTADORA</b> → EN REPARTO → <span class="f-end">ENTREGADO</span></div>
+  <div class="note bad"><div class="nh">▲ La fuga más concreta del análisis</div><code>INTENTO DE ENTREGA → TELEMERCADEO</code> (158K) y luego <code>TELEMERCADEO → DEVOLUCION</code> (<b>212K</b>). El telemercadeo, en vez de rescatar la entrega, confirma la devolución. 212K órdenes mueren ahí.</div>
+  <div class="tw"><table>
+    <thead><tr><th>Transición</th><th class="r">Veces</th></tr></thead>
+    <tbody>
+      <tr><td>PENDIENTE → GUIA_GENERADA</td><td class="m r">2.064.939</td></tr>
+      <tr><td>EN PROCESAMIENTO → EN BODEGA TRANSPORTADORA</td><td class="m r">1.798.192</td></tr>
+      <tr><td>EN BODEGA TRANSPORTADORA → EN PROCESAMIENTO <span class="pill p-warn">loop</span></td><td class="m r">1.273.674</td></tr>
+      <tr><td>EN PROCESAMIENTO → RECLAME EN OFICINA</td><td class="m r">687.023</td></tr>
+      <tr><td>RECLAME EN OFICINA → ENTREGADO</td><td class="m r">556.349</td></tr>
+      <tr><td>EN BODEGA TRANSPORTADORA → EN REPARTO</td><td class="m r">404.185</td></tr>
+      <tr><td>TELEMERCADEO → DEVOLUCION <span class="pill p-bad">fuga</span></td><td class="m r">212.188</td></tr>
+      <tr><td>INTENTO DE ENTREGA → TELEMERCADEO</td><td class="m r">158.659</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="f-coord">
+  <h2>Flujo real — COORDINADORA</h2>
+  <p class="lead">Modelo de terminales. Única con tasa de "colgadas" alta (4.3%).</p>
+  <div class="flow-chain"><b>GUIA_GENERADA</b> → PREPARADO → EN TERMINAL ORIGEN → EN TRANSPORTE → <b>EN TERMINAL DESTINO</b> → EN REPARTO → <span class="f-end">ENTREGADO</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>Transición</th><th class="r">Veces</th></tr></thead>
+    <tbody>
+      <tr><td>PENDIENTE → GUIA_GENERADA</td><td class="m r">384.261</td></tr>
+      <tr><td>EN TERMINAL DESTINO → EN REPARTO</td><td class="m r">383.198</td></tr>
+      <tr><td>EN REPARTO → ENTREGADO</td><td class="m r">239.736</td></tr>
+      <tr><td>EN TERMINAL ORIGEN → EN TRANSPORTE</td><td class="m r">229.624</td></tr>
+      <tr><td>EN TRANSPORTE → EN TERMINAL DESTINO</td><td class="m r">221.452</td></tr>
+      <tr><td>NOVEDAD → NOVEDAD SOLUCIONADA</td><td class="m r">174.203</td></tr>
+      <tr><td>EN REPARTO → NOVEDAD</td><td class="m r">158.728</td></tr>
+      <tr><td>NOVEDAD SOLUCIONADA → DEVOLUCION</td><td class="m r">43.596</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note warn"><div class="nh">⚠ Caso real documentado</div>Orden <code>70545495</code>: <b>8 ciclos NOVEDAD→SOLUCIONADA</b> con motivo "Pedido cancelado", todos "SOLUCIONADO POR COORDINADORA", durante 18 días → terminó en DEVOLUCION. El cliente canceló el día 1; el sistema intentó entregar un pedido muerto 18 días.</div>
+</section>
+
+<section id="f-tcc">
+  <h2>Flujo real — TCC</h2>
+  <p class="lead">Modelo de distribución nacional. El más rápido a entregar (P50 48h) y mejor primer intento.</p>
+  <div class="flow-chain"><b>GUIA_GENERADA</b> → PREPARADO → MERCANCIA RECOGIDA → EN DESPACHO → EN TRASLADO NACIONAL → <b>EN DISTRIBUCION</b> → <span class="f-end">ENTREGADO</span></div>
+  <div class="tw"><table>
+    <thead><tr><th>Transición</th><th class="r">Veces</th></tr></thead>
+    <tbody>
+      <tr><td>PENDIENTE → GUIA_GENERADA</td><td class="m r">89.356</td></tr>
+      <tr><td>EN DISTRIBUCION → NOVEDAD</td><td class="m r">60.596</td></tr>
+      <tr><td>MERCANCIA RECOGIDA → EN DESPACHO</td><td class="m r">52.657</td></tr>
+      <tr><td>EN DISTRIBUCION → ENTREGADO</td><td class="m r">48.271</td></tr>
+      <tr><td>NOVEDAD → NOVEDAD SOLUCIONADA</td><td class="m r">49.243</td></tr>
+      <tr><td>EN DESPACHO → EN DISTRIBUCION</td><td class="m r">44.044</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section id="f-veloces">
+  <h2>Flujo real — VELOCES</h2>
+  <p class="lead">Modelo de ruta + la única con flujo de devolución completo y explícito.</p>
+  <div class="flow-chain"><b>GUIA_GENERADA</b> → PREPARADO → <span class="p-dropi" style="padding:1px 5px;border-radius:4px">[Recogido → Bodega Dropi]</span> → EN BODEGA ORIGEN → EN TRANSITO → BODEGA DESTINO → EN RUTA → EN CAMINO → <span class="f-end">ENTREGADO</span></div>
+  <div class="note info"><div class="nh">◆ Devolución modelada en 4 pasos</div><code>EN PROCESO DE DEVOLUCION → TRANSITO A DEVOLUCION PROVEEDOR → DEVOLUCION EN BODEGA → DEVOLUCION</code>. Las demás colapsan todo en un solo "DEVOLUCION". VELOCES es la más trazable en el retorno.</div>
+  <div class="tw"><table>
+    <thead><tr><th>Transición</th><th class="r">Veces</th></tr></thead>
+    <tbody>
+      <tr><td>EN RUTA → EN CAMINO</td><td class="m r">238.787</td></tr>
+      <tr><td>EN BODEGA DROPI → ENTREGADO A TRANSPORTADORA</td><td class="m r">174.384</td></tr>
+      <tr><td>BODEGA DESTINO → EN RUTA</td><td class="m r">161.783</td></tr>
+      <tr><td>EN CAMINO → NOVEDAD</td><td class="m r">121.075</td></tr>
+      <tr><td>EN CAMINO → ENTREGADO</td><td class="m r">105.313</td></tr>
+      <tr><td>NOVEDAD → EN PROCESO DE DEVOLUCION</td><td class="m r">21.926</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- TIEMPOS -->
+<section id="tiempos">
+  <h2>Tiempos por tramo</h2>
+  <p class="lead">Medido desde el primer estado real del carrier (base 100% comparable). Dropi ~10h total; el carrier es el cuello.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Transportadora</th><th class="r">P50 red→entrega</th><th class="r">P90 red→entrega</th><th class="r">n entregadas</th></tr></thead>
+    <tbody>
+      <tr><td class="n">TCC</td><td class="m r" style="color:var(--green)">48h</td><td class="m r">133h</td><td class="m r">90.540</td></tr>
+      <tr><td class="n">ENVIA</td><td class="m r" style="color:var(--green)">52h</td><td class="m r">137h</td><td class="m r">1.768.305</td></tr>
+      <tr><td class="n">COORDINADORA</td><td class="m r">63h</td><td class="m r" style="color:var(--red)">190h</td><td class="m r">359.753</td></tr>
+      <tr><td class="n">VELOCES</td><td class="m r">63h</td><td class="m r">184h</td><td class="m r">170.399</td></tr>
+      <tr><td class="n">INTERRAPIDISIMO</td><td class="m r" style="color:var(--red)">73h</td><td class="m r">174h</td><td class="m r">1.876.379</td></tr>
+    </tbody>
+  </table></div>
+  <h3><span class="dot"></span>Tramos Dropi (homogéneos, Ecom)</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Tramo</th><th class="r">P50</th></tr></thead>
+    <tbody>
+      <tr><td>Guía → Preparado</td><td class="m r">~3.5h</td></tr>
+      <tr><td>Preparado → Handoff</td><td class="m r">~6h</td></tr>
+      <tr><td class="n">Total operación física Dropi</td><td class="m r" style="color:var(--violet)">~10h</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note good"><div class="nh">✓ El foso</div>Dropi entrega al carrier en medio día. El carrier tarda 2–8 días. Si se quiere velocidad, no es optimizando bodega (ya es rápida) — es SLA de carrier.</div>
+</section>
+
+<!-- REINTENTOS -->
+<section id="reintentos">
+  <h2>Reintentos — tabla completa con cuadre</h2>
+  <p class="lead">Base: solo órdenes que llegaron a reparto al menos una vez (justa). Reintento = vuelve a reparto después de una falla. El primer intento decide.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Carrier</th><th>Bucket</th><th class="r">Órdenes</th><th class="r">% entrega</th><th class="r">% devol.</th></tr></thead>
+    <tbody>
+      <tr><td class="n" rowspan="4">ENVIA</td><td>1er intento</td><td class="m r">2.056.014</td><td class="m r" style="color:var(--green)">81.2%</td><td class="m r">18.4%</td></tr>
+      <tr><td>1 reintento</td><td class="m r">192.297</td><td class="m r" style="color:var(--amber)">41.8%</td><td class="m r">56.9%</td></tr>
+      <tr><td>2 reintentos</td><td class="m r">51.180</td><td class="m r" style="color:var(--red)">10.3%</td><td class="m r">87.6%</td></tr>
+      <tr><td>3+ reintentos</td><td class="m r">14.411</td><td class="m r" style="color:var(--red)">6.9%</td><td class="m r">88.3%</td></tr>
+      <tr><td class="n" rowspan="4">INTERRAPIDISIMO</td><td>1er intento</td><td class="m r">934.760</td><td class="m r" style="color:var(--green)">71.9%</td><td class="m r">28.0%</td></tr>
+      <tr><td>1 reintento</td><td class="m r">290.302</td><td class="m r" style="color:var(--red)">19.5%</td><td class="m r">79.3%</td></tr>
+      <tr><td>2 reintentos</td><td class="m r">17.297</td><td class="m r">22.0%</td><td class="m r">76.6%</td></tr>
+      <tr><td>3+ reintentos</td><td class="m r">1.416</td><td class="m r" style="color:var(--red)">12.6%</td><td class="m r">85.9%</td></tr>
+      <tr><td class="n" rowspan="4">COORDINADORA</td><td>1er intento</td><td class="m r">398.863</td><td class="m r" style="color:var(--green)">82.0%</td><td class="m r">14.8%</td></tr>
+      <tr><td>1 reintento</td><td class="m r">64.602</td><td class="m r" style="color:var(--amber)">39.3%</td><td class="m r">53.1%</td></tr>
+      <tr><td>2 reintentos</td><td class="m r">6.139</td><td class="m r" style="color:var(--red)">17.7%</td><td class="m r">56.7%</td></tr>
+      <tr><td>3+ reintentos</td><td class="m r">334</td><td class="m r" style="color:var(--red)">14.7%</td><td class="m r">56.9%</td></tr>
+      <tr><td class="n" rowspan="4">VELOCES</td><td>1er intento</td><td class="m r">202.784</td><td class="m r" style="color:var(--green)">76.6%</td><td class="m r">21.7%</td></tr>
+      <tr><td>1 reintento</td><td class="m r">18.757</td><td class="m r" style="color:var(--amber)">43.0%</td><td class="m r">56.1%</td></tr>
+      <tr><td>2 reintentos</td><td class="m r">7.029</td><td class="m r" style="color:var(--red)">14.7%</td><td class="m r">85.1%</td></tr>
+      <tr><td>3+ reintentos</td><td class="m r">339</td><td class="m r">25.7%</td><td class="m r">74.0%</td></tr>
+      <tr><td class="n" rowspan="4">TCC</td><td>1er intento</td><td class="m r">45.709</td><td class="m r" style="color:var(--green)">99.5%</td><td class="m r">0.4%</td></tr>
+      <tr><td>1 reintento</td><td class="m r">20.579</td><td class="m r" style="color:var(--green)">73.9%</td><td class="m r">25.7%</td></tr>
+      <tr><td>2 reintentos</td><td class="m r">7.114</td><td class="m r" style="color:var(--amber)">35.8%</td><td class="m r">63.5%</td></tr>
+      <tr><td>3+ reintentos</td><td class="m r">14.869</td><td class="m r" style="color:var(--red)">7.1%</td><td class="m r">91.3%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note good"><div class="nh">✓ El cuadre verificado</div>Ej. COORDINADORA: total 658.896 = nunca-llegó-a-reparto 260.033 + llegó 398.863. Suma exacta. Por eso el 1er intento saltó de ~50% (base contaminada) a 82% (base limpia).</div>
+</section>
+
+<!-- NOVEDADES -->
+<section id="novedades">
+  <h2>Novedades — motivo, recuperación y "solución"</h2>
+  <p class="lead">De <code>history_new_orders</code> (la tabla rica). Cómo termina cada motivo y qué tan real es la "solución".</p>
+  <div class="tw"><table>
+    <thead><tr><th>Motivo de novedad</th><th class="r">Órdenes</th><th class="r">% resuelta</th><th class="r">% entrega final</th><th class="r">% devuelve</th></tr></thead>
+    <tbody>
+      <tr><td class="n">DESTINATARIO SE REHUSA A RECIBIR</td><td class="m r">294.150</td><td class="m r">69.9%</td><td class="m r" style="color:var(--red)">3.1%</td><td class="m r" style="color:var(--red)">95.0%</td></tr>
+      <tr><td class="n">COORDINAR LA ENTREGA</td><td class="m r">280.883</td><td class="m r">77.9%</td><td class="m r">18.1%</td><td class="m r">79.4%</td></tr>
+      <tr><td class="n">Se visita, no se logra entrega</td><td class="m r">84.313</td><td class="m r">69.1%</td><td class="m r" style="color:var(--green)">41.5%</td><td class="m r">51.5%</td></tr>
+      <tr><td class="n">DIRECCION DESTINATARIO NO EXISTE</td><td class="m r">81.925</td><td class="m r">73.2%</td><td class="m r">16.1%</td><td class="m r">82.4%</td></tr>
+      <tr><td class="n">No hay quien reciba</td><td class="m r">63.534</td><td class="m r">50.8%</td><td class="m r" style="color:var(--green)">39.1%</td><td class="m r">59.0%</td></tr>
+      <tr><td class="n">No se localiza dirección</td><td class="m r">40.575</td><td class="m r">84.7%</td><td class="m r">30.2%</td><td class="m r">57.7%</td></tr>
+      <tr><td class="n">DIRECCION INCOMPLETA</td><td class="m r">38.833</td><td class="m r">71.9%</td><td class="m r">19.8%</td><td class="m r">79.0%</td></tr>
+      <tr><td class="n">No contesta Cliente</td><td class="m r">37.400</td><td class="m r">49.2%</td><td class="m r">26.0%</td><td class="m r">70.9%</td></tr>
+      <tr><td class="n">NO ENCUENTRA DESTINATARIO</td><td class="m r">24.355</td><td class="m r">35.7%</td><td class="m r" style="color:var(--green)">55.0%</td><td class="m r">44.1%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note bad"><div class="nh">▲ "Solucionado" ≠ resuelto</div>La novedad #1 (rehúsa recibir, 107K eventos) tiene <b>solución = "(sin solución registrada)"</b> y solo 191 resueltas por equipo Dropi. Cuando hay solución, la más común es <code>DEVOLVER AL REMITENTE</code>. <code>solved_by_logistic = 0</code> en todas: <b>no hay dueño Dropi de la novedad.</b></div>
+  <div class="note good"><div class="nh">✓ Las que sí valen el esfuerzo</div>"Se visita, no se logra entrega" recupera 41%; "No encuentra destinatario" 55%. Esas justifican reintentar. "Rehúsa recibir" (95% devuelve) no — es problema de confirmación río arriba.</div>
+</section>
+
+<!-- CANAL GMV -->
+<section id="canal">
+  <h2>Canal de creación · GMV (abril, mes cerrado)</h2>
+  <p class="lead">El hallazgo más robusto: el canal automático (SHOP) entra a red mucho peor que el manual. La validación corrige ~12 puntos.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Canal</th><th>Validada</th><th class="r">Órdenes</th><th class="r">GMV (M)</th><th class="r">% entra red</th><th class="r">% entrega s/red</th><th class="r">% devol s/red</th></tr></thead>
+    <tbody>
+      <tr><td class="n">SHOP</td><td><span class="pill p-ok">sí</span></td><td class="m r">1.455.755</td><td class="m r">155.047</td><td class="m r">68.9%</td><td class="m r">76.2%</td><td class="m r">24.7%</td></tr>
+      <tr><td class="n">SHOP</td><td><span class="pill p-bad">no</span></td><td class="m r">618.470</td><td class="m r">66.244</td><td class="m r" style="color:var(--red)">57.0%</td><td class="m r">66.6%</td><td class="m r">—</td></tr>
+      <tr><td class="n">MANUAL</td><td><span class="pill p-ok">sí</span></td><td class="m r">646.375</td><td class="m r">78.772</td><td class="m r" style="color:var(--green)">92.7%</td><td class="m r">78.0%</td><td class="m r">—</td></tr>
+      <tr><td class="n">MANUAL</td><td><span class="pill p-bad">no</span></td><td class="m r">342.304</td><td class="m r">45.092</td><td class="m r">92.8%</td><td class="m r">71.7%</td><td class="m r">—</td></tr>
+      <tr><td class="n">MASIVO</td><td><span class="pill p-ok">sí</span></td><td class="m r">44.324</td><td class="m r">4.548</td><td class="m r">86.1%</td><td class="m r">70.9%</td><td class="m r">—</td></tr>
+      <tr><td class="n">MASIVO</td><td><span class="pill p-bad">no</span></td><td class="m r">14.815</td><td class="m r">1.620</td><td class="m r">78.2%</td><td class="m r">57.9%</td><td class="m r">—</td></tr>
+    </tbody>
+  </table></div>
+  <h3><span class="dot"></span>Resultado por perfil</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Perfil</th><th>Origen</th><th class="r">Órdenes</th><th class="r">% entra red</th><th class="r">% entrega</th><th class="r">% devol.</th></tr></thead>
+    <tbody>
+      <tr><td class="n">DROPSHIPPER</td><td>SHOP</td><td class="m r">4.671.645</td><td class="m r">66.1%</td><td class="m r" style="color:var(--red)">48.3%</td><td class="m r">17.0%</td></tr>
+      <tr><td class="n">DROPSHIPPER</td><td>MANUAL</td><td class="m r">2.015.174</td><td class="m r">92.9%</td><td class="m r" style="color:var(--green)">69.3%</td><td class="m r">22.2%</td></tr>
+      <tr><td class="n">SUPPLIER</td><td>SHOP</td><td class="m r">540.346</td><td class="m r">62.9%</td><td class="m r">50.4%</td><td class="m r">11.9%</td></tr>
+      <tr><td class="n">SUPPLIER</td><td>MANUAL</td><td class="m r">490.610</td><td class="m r">91.4%</td><td class="m r" style="color:var(--green)">75.1%</td><td class="m r">15.4%</td></tr>
+      <tr><td class="n">DROPSHIPPER</td><td>MASIVO</td><td class="m r">119.226</td><td class="m r">85.0%</td><td class="m r">58.3%</td><td class="m r">25.9%</td></tr>
+      <tr><td class="n">SUPPLIER</td><td>MASIVO</td><td class="m r">32.361</td><td class="m r">86.1%</td><td class="m r">65.0%</td><td class="m r">19.9%</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note info"><div class="nh">◆ Patrón consistente</div>MANUAL entrega ~20 puntos más que SHOP en cada corte. La integración automática trae basura (datos sin validar). El producto no es construir validación — ya existe (<code>is_validated</code>) — es <b>forzarla en SHOP</b>.</div>
+</section>
+
+<!-- ASTERISCOS -->
+<section id="asteriscos">
+  <h2>Límites de la data</h2>
+  <p class="lead">Honestidad sobre qué número confiar y cuál tomar con pinza. Importante antes de decidir sobre estos datos.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Dato</th><th>Confianza</th><th>Por qué</th></tr></thead>
+    <tbody>
+      <tr><td class="n">Tasa de entrega</td><td><span class="pill p-ok">sólida</span></td><td><code>ENTREGADO</code>/<code>DELIVERED</code> es universal entre carriers.</td></tr>
+      <tr><td class="n">% entra a red</td><td><span class="pill p-ok">sólida</span></td><td>Definido por exclusión de estados pre-red, robusto.</td></tr>
+      <tr><td class="n">Tiempos por tramo</td><td><span class="pill p-ok">sólida</span></td><td>Medidos desde primer estado real del carrier, base 100%.</td></tr>
+      <tr><td class="n">Reintentos</td><td><span class="pill p-ok">sólida</span></td><td>Recalculados por transición sobre base que llegó a reparto. Cuadre verificado.</td></tr>
+      <tr><td class="n">Tasa de devolución</td><td><span class="pill p-warn">±2-3%</span></td><td>"Devolución" se nombra distinto por carrier; la homologación de estados está incompleta.</td></tr>
+      <tr><td class="n">GMV</td><td><span class="pill p-warn">parcial</span></td><td><code>total_order</code> es sólido; <code>amount_earned_dropi</code> (margen) viene null hasta cierre → margen perdido NO medible.</td></tr>
+      <tr><td class="n">Servientrega / 99min</td><td><span class="pill p-bad">no medible</span></td><td>Estados en inglés (<code>collected</code>, <code>delivered</code>) sin homologar. Servientrega = 7.5M órdenes invisibles a la métrica homologada.</td></tr>
+      <tr><td class="n">Motivo de cancelación</td><td><span class="pill p-bad">no analizable</span></td><td>Texto libre sin disciplina. ~30% "Otros"/"(sin nota)".</td></tr>
+      <tr><td class="n">Fulfillment by Dropi</td><td><span class="pill p-bad">no medible</span></td><td>Flag <code>fulfillment_by_dropi</code> en FALSE el 100%. No instrumentado o sin adopción.</td></tr>
+      <tr><td class="n">Mayo 2026</td><td><span class="pill p-warn">inmaduro</span></td><td>Órdenes recientes no han cerrado. Comparar abril vs abril; mayo solo para tendencia temprana.</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note neutral"><div class="nh">◆ Lo que no se puede medir también informa</div>Que el motivo de cancelación, el margen perdido y Fulfillment no sean medibles <b>es un hallazgo de producto</b>: señala dónde falta instrumentación, no solo dónde falta dato.</div>
+</section>
+
+</div>
+</main>
+</div>
+
+<script>
+const links=[...document.querySelectorAll('.side a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href'))).filter(Boolean);
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){const id='#'+e.target.id;links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')===id))}})},{rootMargin:'-15% 0px -75% 0px'});
+secs.forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funnel de Órdenes — Dropi Colombia</title>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f5f6f8;--bg2:#ffffff;--bg3:#eef0f4;--bg4:#dfe2e8;
+  --txt:#1a1f2b;--txt2:#5a6478;--txt3:#8d96a8;
+  --blue:#2563eb;--blue2:#1d4ed8;--blue-dim:rgba(37,99,235,.08);
+  --green:#059669;--green2:#047857;--green-dim:rgba(5,150,105,.08);
+  --red:#dc2626;--red2:#b91c1c;--red-dim:rgba(220,38,38,.07);
+  --amber:#d97706;--amber2:#b45309;--amber-dim:rgba(217,119,6,.07);
+  --purple:#7c3aed;--purple-dim:rgba(124,58,237,.07);
+  --cyan:#0891b2;--cyan-dim:rgba(8,145,178,.07);
+  --border:#e2e5eb;
+  --radius:10px;
+}
+html,body{height:100%;background:var(--bg);color:var(--txt);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+.shell{display:grid;grid-template-columns:260px 1fr;grid-template-rows:64px 1fr;height:100vh}
+.sidebar{grid-row:1/3;background:#1e293b;border-right:1px solid #334155;display:flex;flex-direction:column;padding:24px 20px;color:#e2e8f0}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:36px}
+.logo svg{width:32px;height:32px}
+.logo span{font-weight:700;font-size:18px;letter-spacing:-.3px}
+.nav-section{margin-bottom:28px}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#94a3b8;margin-bottom:12px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13.5px;font-weight:500;color:#cbd5e1;cursor:pointer;transition:.15s}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#f1f5f9}
+.nav-item.active{background:rgba(59,130,246,.2);color:#93c5fd}
+.nav-item .dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.5}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:var(--bg);border-bottom:1px solid var(--border)}
+.topbar h1{font-size:16px;font-weight:600;letter-spacing:-.2px}
+.filters{display:flex;gap:10px;align-items:center}
+.filter-btn{background:var(--bg3);border:1px solid var(--border);color:var(--txt2);padding:7px 14px;border-radius:7px;font-size:12.5px;font-weight:500;font-family:inherit;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px}
+.filter-btn:hover{border-color:var(--blue);color:var(--txt)}
+.filter-btn.active{background:var(--blue-dim);border-color:var(--blue);color:var(--blue2)}
+.main{padding:28px 32px;overflow-y:auto;background:var(--bg)}
+.kpi-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;margin-bottom:28px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.kpi.blue::before{background:var(--blue)}.kpi.green::before{background:var(--green)}.kpi.red::before{background:var(--red)}.kpi.amber::before{background:var(--amber)}.kpi.purple::before{background:var(--purple)}.kpi.cyan::before{background:var(--cyan)}
+.kpi-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--txt3);margin-bottom:8px}
+.kpi-val{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:600;letter-spacing:-.5px}
+.kpi-sub{font-size:11.5px;color:var(--txt2);margin-top:4px;font-weight:500}
+.kpi.blue .kpi-val{color:var(--blue2)}.kpi.green .kpi-val{color:var(--green2)}.kpi.red .kpi-val{color:var(--red2)}.kpi.amber .kpi-val{color:var(--amber2)}.kpi.purple .kpi-val{color:var(--purple)}.kpi.cyan .kpi-val{color:var(--cyan)}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--border)}
+.card-title{font-size:14px;font-weight:600;letter-spacing:-.1px}
+.card-badge{font-size:10.5px;font-weight:600;background:var(--bg3);color:var(--txt2);padding:4px 10px;border-radius:20px;letter-spacing:.3px}
+.card-body{padding:22px}
+.sankey-wrap{width:100%;min-height:500px}
+.sankey-wrap svg{width:100%;height:100%}
+.sankey-node rect{cursor:pointer;transition:opacity .2s}
+.sankey-node:hover rect{opacity:.85}
+.sankey-node text{font-family:'DM Sans',sans-serif;font-weight:600;pointer-events:none}
+.sankey-link{fill:none;stroke-opacity:.25;transition:stroke-opacity .25s}
+.sankey-link:hover{stroke-opacity:.5}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.breakdown-list{list-style:none;padding:0}
+.breakdown-item{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:12.5px}
+.breakdown-item:last-child{border-bottom:none}
+.breakdown-label{color:var(--txt2);font-weight:500;display:flex;align-items:center;gap:8px;max-width:65%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.breakdown-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.breakdown-val{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px}
+.breakdown-bar-wrap{position:relative;height:4px;background:var(--bg3);border-radius:2px;margin-top:4px}
+.breakdown-bar{height:100%;border-radius:2px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+.view{display:none}.view.active{display:block}
+.tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.tbl th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);font-weight:600;color:var(--txt3);font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+.tbl td{padding:9px 12px;border-bottom:1px solid var(--border)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .mono{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px}
+.tbl .pct-bar{display:inline-block;height:6px;border-radius:3px;margin-right:8px;vertical-align:middle}
+.step-flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:12px 0}
+.step{padding:8px 16px;border-radius:6px;font-size:11.5px;font-weight:600;white-space:nowrap;position:relative}
+.step-arrow{color:var(--txt3);font-size:16px;margin:0 2px}
+.step-time{font-size:10px;color:var(--txt3);position:absolute;top:-16px;left:50%;transform:translateX(-50%);white-space:nowrap;font-weight:500}
+.alert-box{padding:14px 18px;border-radius:8px;font-size:12.5px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:10px}
+.alert-red{background:var(--red-dim);color:var(--red2);border:1px solid rgba(220,38,38,.15)}
+.alert-green{background:var(--green-dim);color:var(--green2);border:1px solid rgba(5,150,105,.15)}
+.alert-amber{background:var(--amber-dim);color:var(--amber2);border:1px solid rgba(217,119,6,.15)}
+.info-hero{background:linear-gradient(135deg,var(--blue-dim),#fff);border:1px solid rgba(37,99,235,.18);border-radius:var(--radius);padding:22px;margin-bottom:20px}
+.info-eyebrow{font-size:10.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--blue2);margin-bottom:8px}
+.info-hero h2{font-size:22px;letter-spacing:-.4px;margin-bottom:8px}
+.info-hero p{font-size:13.5px;color:var(--txt2);max-width:780px;line-height:1.6}
+.info-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0 0}
+.info-kpi{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:14px}
+.info-kpi .v{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;margin-bottom:4px}
+.info-kpi .l{font-size:11.5px;color:var(--txt2);line-height:1.35}
+.info-section-title{font-size:13.5px;font-weight:700;color:var(--txt);margin-bottom:12px}
+.info-note{border-radius:8px;padding:13px 15px;font-size:12.5px;line-height:1.55;margin-top:12px;background:var(--bg);border:1px solid var(--border);color:var(--txt2)}
+.info-note b{color:var(--txt)}
+.info-pipe{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.info-stage{background:var(--bg);border:1px solid var(--border);border-top:3px solid var(--c,var(--blue));border-radius:9px;padding:12px}
+.info-stage .t{font-size:12px;font-weight:700;color:var(--txt);margin-bottom:5px}
+.info-stage .d{font-size:11px;color:var(--txt2);line-height:1.4}
+.info-stage .s{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--c,var(--blue));margin-top:8px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.info-table{width:100%;border-collapse:collapse;font-size:12px}
+.info-table th{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--txt3);background:var(--bg3);padding:9px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.info-table td{padding:9px 10px;border-bottom:1px solid var(--border);color:var(--txt2);vertical-align:top}
+.info-table tr:last-child td{border-bottom:none}
+.info-table .n{font-weight:700;color:var(--txt)}
+.info-table .m{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--txt)}
+.info-pill{display:inline-block;font-size:10px;font-weight:700;border-radius:999px;padding:3px 8px;background:var(--bg3);color:var(--txt2);white-space:nowrap}
+.info-pill.good{background:var(--green-dim);color:var(--green2)}
+.info-pill.warn{background:var(--amber-dim);color:var(--amber2)}
+.info-pill.bad{background:var(--red-dim);color:var(--red2)}
+.info-chain{font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.9;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:13px 15px;overflow-x:auto;color:var(--txt2)}
+.info-chain b{color:var(--txt)}
+.info-chain .ok{color:var(--green2);font-weight:700}.info-chain .bad{color:var(--red2);font-weight:700}.info-chain .warn{color:var(--amber2);font-weight:700}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:3px}
+.tooltip{position:fixed;pointer-events:none;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--txt);box-shadow:0 8px 30px rgba(0,0,0,.12);z-index:999;opacity:0;transition:opacity .15s;max-width:280px}
+.tooltip.show{opacity:1}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.kpi,.card{animation:fadeUp .5s cubic-bezier(.16,1,.3,1) both}
+.kpi:nth-child(2){animation-delay:.04s}.kpi:nth-child(3){animation-delay:.08s}.kpi:nth-child(4){animation-delay:.12s}.kpi:nth-child(5){animation-delay:.16s}.kpi:nth-child(6){animation-delay:.2s}
+@media(max-width:1100px){.kpi-strip,.info-kpis{grid-template-columns:repeat(2,1fr)}.info-pipe{grid-template-columns:repeat(3,1fr)}.info-grid{grid-template-columns:1fr}}
+@media(max-width:760px){.shell{grid-template-columns:1fr;grid-template-rows:auto auto 1fr}.sidebar{grid-row:auto;height:auto}.topbar{padding:16px;flex-direction:column;align-items:flex-start;gap:12px}.main{padding:18px}.info-kpis,.info-pipe{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="logo">
+      <svg viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#3b82f6"/><path d="M8 16h5l3-6 4 12 3-6h5" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Dropi Analytics</span>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Funnel</div>
+      <div class="nav-item active" data-view="funnel"><div class="dot"></div>Funnel General</div>
+      <div class="nav-item" data-view="novedades"><div class="dot"></div>Novedades & Resolución</div>
+      <div class="nav-item" data-view="transportadoras"><div class="dot"></div>Por Transportadora</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Operativo</div>
+      <div class="nav-item" data-view="manifiestos"><div class="dot"></div>Manifiestos & Devoluciones</div>
+      <div class="nav-item" data-view="tiempos"><div class="dot"></div>Tiempos entre Estados</div>
+      <div class="nav-item" data-view="motivos"><div class="dot"></div>Motivos Cancel/Rechazo</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Contexto</div>
+      <div class="nav-item" data-view="info"><div class="dot"></div>Info logística</div>
+    </div>
+    <div style="flex:1"></div>
+    <div style="font-size:10px;color:#64748b;font-weight:500;letter-spacing:.5px">PROTOTIPO FUNNEL v3.0<br>Data real · Mayo 2026</div>
+  </aside>
+
+  <header class="topbar">
+    <h1 id="viewTitle">Funnel General de Órdenes</h1>
+    <div class="filters">
+      <button class="filter-btn active">Mayo 2026</button>
+      <button class="filter-btn">Abril 2026</button>
+      <button class="filter-btn">Marzo 2026</button>
+      <button class="filter-btn">Mar–May 2026</button>
+    </div>
+  </header>
+
+  <main class="main" id="mainContent">
+
+    <!-- VIEW 1: FUNNEL GENERAL -->
+    <div class="view active" id="view-funnel">
+      <div class="kpi-strip" id="kpiStrip"></div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Flujo de Órdenes — Ciclo de Vida Completo</span>
+          <span class="card-badge">SANKEY · MAYO 2026</span>
+        </div>
+        <div class="card-body"><div class="sankey-wrap" id="sankey-funnel"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Motivos de Cancelación</span><span class="card-badge" style="color:var(--red2);background:var(--red-dim)">238K CANCEL. · NOTES</span></div>
+          <div class="card-body" id="cancelReasons"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Motivos de Rechazo</span><span class="card-badge" style="color:var(--amber2);background:var(--amber-dim)">48K RECHAZ. · NOTES</span></div>
+          <div class="card-body" id="rechazoReasons"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: NOVEDADES & RESOLUCIÓN -->
+    <div class="view" id="view-novedades">
+      <div class="kpi-strip" id="kpiNovedades"></div>
+
+      <!-- BLOQUE 1: Explicación de fuentes -->
+      <div class="card" style="border:1px solid var(--blue);background:var(--blue-dim)">
+        <div class="card-body" id="fuentesExplicacion"></div>
+      </div>
+
+      <!-- BLOQUE 2: Flujo visual -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Ciclo de Vida — Flujo de Órdenes por Fase</span>
+          <span class="card-badge">SANKEY · FASES PRINCIPALES · MAYO 2026</span>
+        </div>
+        <div class="card-body"><div class="sankey-wrap" id="stateLifecycle"></div></div>
+      </div>
+
+      <!-- BLOQUE 3: ¿Qué tipos de novedad? + ¿Qué pasa después? -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Tipos de Novedad — Órdenes Únicas</span><span class="card-badge" style="color:var(--amber2);background:var(--amber-dim)">~261K ÓRD. ÚNICAS · history_orders</span></div>
+          <div class="card-body" id="novedadTiposUnicos"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Destino Final — ¿Qué pasó con esas órdenes?</span><span class="card-badge" style="color:var(--red2);background:var(--red-dim)">282K ÓRD. · history_orders</span></div>
+          <div class="card-body" id="destinoDetalle"></div>
+        </div>
+      </div>
+
+      <!-- BLOQUE 4: ¿Se resuelven? -->
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Tasa Resolución por Tipo</span><span class="card-badge" style="color:var(--green2);background:var(--green-dim)">history_new_orders · % CON SOLUCIÓN</span></div>
+          <div class="card-body" id="resolucionRates"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Canales de Resolución</span><span class="card-badge" style="color:var(--blue2);background:var(--blue-dim)">82K NOVEDAD SOLUCIONADA · history_orders</span></div>
+          <div class="card-body" id="canalesResolucion"></div>
+        </div>
+      </div>
+
+      <!-- BLOQUE 5: ¿Quién genera novedades? -->
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Novedades por Transportadora</span>
+          <span class="card-badge" style="color:var(--red2);background:var(--red-dim)">INTERRAPIDISIMO = 0 NOVEDADES · history_orders</span>
+        </div>
+        <div class="card-body" id="novedadesTransp"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: POR TRANSPORTADORA -->
+    <div class="view" id="view-transportadoras">
+      <div class="kpi-strip" id="kpiTransp"></div>
+      <div class="card" style="border:2px solid var(--red);background:var(--red-dim)">
+        <div class="card-body" id="alertInterrapidisimo"></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Funnel por Transportadora — Creadas a Entregadas</span>
+          <span class="card-badge">12 TRANSPORTADORAS · MAYO 2026</span>
+        </div>
+        <div class="card-body" id="transpTable"></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">% Entrega por Transportadora</span><span class="card-badge" style="color:var(--green2);background:var(--green-dim)">EFECTIVIDAD</span></div>
+          <div class="card-body"><div class="sankey-wrap" id="chart-entrega"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Volumen por Transportadora</span><span class="card-badge" style="color:var(--blue2);background:var(--blue-dim)">PARTICIPACIÓN</span></div>
+          <div class="card-body"><div class="sankey-wrap" id="chart-volumen"></div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Flujo por Transportadora — Estados Principales (Q18)</span>
+          <span class="card-badge" style="color:var(--blue2);background:var(--blue-dim)">TOP 5 CARRIERS · DATOS REALES MAYO 2026</span>
+        </div>
+        <div class="card-body">
+          <div class="grid-2">
+            <div class="card" style="box-shadow:none;margin-bottom:0">
+              <div class="card-head"><span class="card-title" style="font-size:12px">INTERRAPIDISIMO — 781K ord. (42%)</span><span class="card-badge" style="color:var(--red2);background:var(--red-dim)">46% ENT. · RECLAME OFICINA</span></div>
+              <div class="card-body"><div class="sankey-wrap" id="sankey-inter"></div></div>
+            </div>
+            <div class="card" style="box-shadow:none;margin-bottom:0">
+              <div class="card-head"><span class="card-title" style="font-size:12px">ENVIA — 743K ord. (40%)</span><span class="card-badge" style="color:var(--blue2);background:var(--blue-dim)">47% ENT. · RE-DESPACHO</span></div>
+              <div class="card-body"><div class="sankey-wrap" id="sankey-envia"></div></div>
+            </div>
+          </div>
+          <div class="grid-3" style="margin-top:16px">
+            <div class="card" style="box-shadow:none;margin-bottom:0">
+              <div class="card-head"><span class="card-title" style="font-size:11px">COORDINADORA — 156K</span><span class="card-badge" style="font-size:9px">42% ENT. · TERMINAL</span></div>
+              <div class="card-body"><div class="sankey-wrap" id="sankey-coord"></div></div>
+            </div>
+            <div class="card" style="box-shadow:none;margin-bottom:0">
+              <div class="card-head"><span class="card-title" style="font-size:11px">TCC — 37K</span><span class="card-badge" style="font-size:9px">45% ENT. · DISTRIBUCIÓN</span></div>
+              <div class="card-body"><div class="sankey-wrap" id="sankey-tcc"></div></div>
+            </div>
+            <div class="card" style="box-shadow:none;margin-bottom:0">
+              <div class="card-head"><span class="card-title" style="font-size:11px">VELOCES — 74K</span><span class="card-badge" style="font-size:9px">39% ENT. · RUTA/CAMINO</span></div>
+              <div class="card-body"><div class="sankey-wrap" id="sankey-veloces"></div></div>
+            </div>
+          </div>
+          <div class="alert-amber" style="margin-top:16px">Cada transportadora usa estados diferentes. INTERRAPIDISIMO pasa por RECLAME EN OFICINA (212h mediana). ENVIA tiene ciclo NOVEDAD→RE-DESPACHO (53h). COORDINADORA usa sistema de TERMINALES. TCC usa EN DISTRIBUCIÓN. VELOCES usa EN RUTA/EN CAMINO.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: MANIFIESTOS & DEVOLUCIONES -->
+    <div class="view" id="view-manifiestos">
+      <div class="kpi-strip" id="kpiManifiestos"></div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Cobertura de Manifiestos — Base: Movilizadas</span>
+          <span class="card-badge" style="color:var(--amber2);background:var(--amber-dim)">MOVILIZADAS · CANCELADAS EXCLUIDAS</span>
+        </div>
+        <div class="card-body" id="manifestCoverage"></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Tipos de Manifiesto (via history_logistic_management)</span>
+          <span class="card-badge">TYPES_LOGISTIC_MANAGEMENT · MAYO 2026</span>
+        </div>
+        <div class="card-body" id="manifestTable"></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Brecha Devoluciones sin PreDevolution</span><span class="card-badge" style="color:var(--red2);background:var(--red-dim)">74.7% SIN MANIF. PREDEV</span></div>
+          <div class="card-body" id="devGap"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Brecha por Transportadora</span><span class="card-badge" style="color:var(--amber2);background:var(--amber-dim)">118K DEVOLUC. · 10 CARRIERS</span></div>
+          <div class="card-body" id="devGapCarrier"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Trazabilidad Paso a Paso — ¿Dónde se pierde el tracking?</span>
+          <span class="card-badge" style="color:var(--cyan);background:var(--cyan-dim)">SANKEY · MOVILIZADAS · MAYO 2026</span>
+        </div>
+        <div class="card-body"><div class="sankey-wrap" id="sankey-manifiestos"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Cobertura por Tipo de Manifiesto — vs Movilizadas</span><span class="card-badge" style="color:var(--blue2);background:var(--blue-dim)">% DE MOVILIZADAS</span></div>
+        <div class="card-body" id="flujoManifiestos"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Recepciones PAU — Paso Interno Dropi</span><span class="card-badge" style="color:var(--green2);background:var(--green-dim)">56.7% TERMINAN ENTREGADO</span></div>
+        <div class="card-body" id="pauAnalysis"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 5: TIEMPOS ENTRE ESTADOS -->
+    <div class="view" id="view-tiempos">
+      <div class="kpi-strip" id="kpiTiempos"></div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Ciclo de Vida Completo — Creación a Entrega/Devolución (Q9)</span>
+          <span class="card-badge" style="color:var(--green2);background:var(--green-dim)">DATOS REALES · MAR-MAY 2026</span>
+        </div>
+        <div class="card-body" id="cicloPorMes"></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Embudo de Transiciones — Volumen por Paso (Q8)</span>
+          <span class="card-badge" style="color:var(--purple);background:var(--purple-dim)">SANKEY · MEDIANAS · MAYO 2026</span>
+        </div>
+        <div class="card-body"><div class="sankey-wrap" id="sankey-tiempos"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Transiciones entre Estados — Top 19 (Q8 medianas)</span>
+          <span class="card-badge" style="color:var(--blue2);background:var(--blue-dim)">DATOS REALES · MAYO 2026</span>
+        </div>
+        <div class="card-body" id="tiemposTable"></div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Flujo de Tiempo — Ruta Feliz (medianas reales)</span>
+          <span class="card-badge" style="color:var(--cyan);background:var(--cyan-dim)">66.1h ≈ 2.8 DIAS</span>
+        </div>
+        <div class="card-body" id="timeFlow"></div>
+      </div>
+      <div class="card" style="border:2px solid var(--amber);background:var(--amber-dim)">
+        <div class="card-body" id="notaTranspTiempos"></div>
+      </div>
+    </div>
+
+    <!-- VIEW 6: MOTIVOS CANCELACIÓN/RECHAZO -->
+    <div class="view" id="view-motivos">
+      <div class="kpi-strip" id="kpiMotivos"></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Motivos Cancelación — notes en history_orders</span>
+            <span class="card-badge" style="color:var(--red2);background:var(--red-dim)">238K CANCEL. · TOP 8</span>
+          </div>
+          <div class="card-body" id="motivosDetail"></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <span class="card-title">Motivos Rechazo — notes en history_orders</span>
+            <span class="card-badge" style="color:var(--amber2);background:var(--amber-dim)">48K RECHAZ. · TOP 6</span>
+          </div>
+          <div class="card-body" id="motivosRechazo"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><span class="card-title">Cancelaciones + Rechazos por Mes</span></div>
+        <div class="card-body"><div class="sankey-wrap" id="chart-cancel-mes"></div></div>
+      </div>
+    </div>
+
+    <!-- VIEW 7: INFO LOGÍSTICA -->
+    <div class="view" id="view-info">
+      <div class="info-hero">
+        <div class="info-eyebrow">Contexto consolidado · dossier + detalle + visión</div>
+        <h2>Logística como producto: cómo leer este funnel</h2>
+        <p>Este bloque junta la lectura ejecutiva y la base técnica: qué mide el prototipo, dónde se pierde la orden, qué controla Dropi, qué depende del carrier y qué falta instrumentar para tomar decisiones sin mezclar cortes.</p>
+        <div class="info-kpis">
+          <div class="info-kpi"><div class="v" style="color:var(--blue2)">59%</div><div class="l">entrega sobre órdenes creadas en el consolidado. Colombia va cerca de 62,5%.</div></div>
+          <div class="info-kpi"><div class="v" style="color:var(--red2)">~18%</div><div class="l">no se moviliza. La orden se cae antes de entrar a la red.</div></div>
+          <div class="info-kpi"><div class="v" style="color:var(--amber2)">~21%</div><div class="l">se devuelve. La pérdida aparece después de movilizar.</div></div>
+          <div class="info-kpi"><div class="v" style="color:var(--purple)">Q8/Q9</div><div class="l">tiempos por transición y ciclo de vida. Usar mediana para ruta típica.</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Mapa mental — la orden por etapas</span>
+          <span class="card-badge" style="color:var(--blue2);background:var(--blue-dim)">DE CREACIÓN A POSTVENTA</span>
+        </div>
+        <div class="card-body">
+          <div class="info-pipe">
+            <div class="info-stage" style="--c:var(--blue)"><div class="t">1 · Creación</div><div class="d">La orden nace desde canal manual, Shopify u otro origen.</div><div class="s">origen</div></div>
+            <div class="info-stage" style="--c:var(--amber)"><div class="t">2 · Confirmación</div><div class="d">Primer cuello pre-red: órdenes SHOP y validación.</div><div class="s">fuga ①</div></div>
+            <div class="info-stage" style="--c:var(--cyan)"><div class="t">3 · Guía</div><div class="d">Se genera guía, se elige transportadora y se activa el flujo logístico.</div><div class="s">preparación</div></div>
+            <div class="info-stage" style="--c:var(--green)"><div class="t">4 · Handoff</div><div class="d">Preparación, recogida, bodega y entrega a transportadora.</div><div class="s">Dropi</div></div>
+            <div class="info-stage" style="--c:var(--red)"><div class="t">5 · Entrega</div><div class="d">Carrier mueve, ofrece, gestiona novedades y entrega o devuelve.</div><div class="s">fuga ②</div></div>
+            <div class="info-stage" style="--c:var(--purple)"><div class="t">6 · Postventa</div><div class="d">Reclamos, garantías, devolución y recuperación operativa.</div><div class="s">cierre</div></div>
+          </div>
+          <div class="info-note"><b>Regla de lectura:</b> la logística se mide por la orden completa. Las filas por etapa ayudan a ubicar cuellos, pero no reemplazan el acumulado creación → handoff ni el cierre final entregada/devuelta.</div>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="card">
+          <div class="card-head"><span class="card-title">Qué controla Dropi</span><span class="card-badge" style="color:var(--green2);background:var(--green-dim)">PRE-RED</span></div>
+          <div class="card-body">
+            <table class="info-table">
+              <thead><tr><th>Etapa</th><th>Lectura</th><th>Palanca</th></tr></thead>
+              <tbody>
+                <tr><td class="n">Confirmación</td><td>Mayor consumo de tiempo antes de la red.</td><td><span class="info-pill warn">autoconfirmación</span></td></tr>
+                <tr><td class="n">Generación de guía</td><td>Puede ocultar esperas operativas o reglas de canal.</td><td><span class="info-pill warn">limpiar espera</span></td></tr>
+                <tr><td class="n">Preparación / bodega</td><td>Operación interna; revisar SLA por rango horario.</td><td><span class="info-pill good">sostener</span></td></tr>
+                <tr><td class="n">Handoff</td><td>Entrega a transportadora; debe medirse como parte del acumulado.</td><td><span class="info-pill good">control diario</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">Qué hace el carrier</span><span class="card-badge" style="color:var(--red2);background:var(--red-dim)">POST-HANDOFF</span></div>
+          <div class="card-body">
+            <table class="info-table">
+              <thead><tr><th>Etapa</th><th>Lectura</th><th>Palanca</th></tr></thead>
+              <tbody>
+                <tr><td class="n">Recolección transportadora</td><td>Primer tramo fuera de Dropi; generalmente sano.</td><td><span class="info-pill good">SLA carrier</span></td></tr>
+                <tr><td class="n">Primer ofrecimiento</td><td>Se abre la brecha fuerte de tiempo y experiencia.</td><td><span class="info-pill bad">carrier × zona</span></td></tr>
+                <tr><td class="n">Entrega final</td><td>Define entrega o devolución; impacta KR2.1.</td><td><span class="info-pill bad">primer intento</span></td></tr>
+                <tr><td class="n">Novedad</td><td>Reintento gestiona el fracaso; no siempre recupera.</td><td><span class="info-pill warn">triaje</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Modelo de datos — cómo no mezclar cortes</span>
+          <span class="card-badge">FUENTES TÉCNICAS</span>
+        </div>
+        <div class="card-body">
+          <table class="info-table">
+            <thead><tr><th>Pregunta</th><th>Fuente</th><th>Regla de uso</th></tr></thead>
+            <tbody>
+              <tr><td class="n">Estado actual</td><td class="m">orders.status</td><td>Foto final. No sirve para reconstruir historia.</td></tr>
+              <tr><td class="n">Historia logística</td><td class="m">history_orders</td><td>Append-only. Usar eventos y ordenar por tiempo.</td></tr>
+              <tr><td class="n">Eventos físicos Dropi</td><td class="m">logistic_management</td><td>Scanner/bodega/recolección; se conecta con history_orders.</td></tr>
+              <tr><td class="n">Tiempos por transición</td><td class="m">Q8 / q18</td><td>Promedio, mediana y volumen por estado anterior → destino.</td></tr>
+              <tr><td class="n">Ciclo de vida</td><td class="m">Q9</td><td>Días promedio hasta entrega o devolución por mes.</td></tr>
+              <tr><td class="n">Novedades</td><td class="m">history_new_orders</td><td>Solución, responsable y fecha de solución.</td></tr>
+            </tbody>
+          </table>
+          <div class="info-note"><b>Dos escritores, un log:</b> carrier escribe eventos con <span class="m">status_master_id</span>; Ecom/app escribe eventos internos. Separar esos orígenes evita confundir operación Dropi con operación de transportadora.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Tiempos — lectura base</span>
+          <span class="card-badge" style="color:var(--purple);background:var(--purple-dim)">Q8 · Q9 · MEDIANAS</span>
+        </div>
+        <div class="card-body">
+          <div class="info-grid">
+            <div>
+              <div class="info-section-title">Ruta típica por medianas</div>
+              <div class="info-chain">
+                <b>Confirmada</b> → <span class="ok">Guía 2,5h</span> → <span class="ok">Preparado 3,4h</span> → <span class="ok">Recogido 3,6h</span> → <span class="ok">Bodega Dropi 2,0h</span> → <span class="ok">Ent. transp. 0,4h</span> → <span class="warn">Despachada 7,5h</span> → <span class="bad">Bod. destino 28,4h</span> → <span class="ok">Reparto 6,9h</span> → <span class="ok">Entregado 7,1h</span>
+              </div>
+            </div>
+            <div>
+              <div class="info-section-title">Cuellos de botella</div>
+              <table class="info-table">
+                <thead><tr><th>Transición</th><th class="r">Mediana</th><th>Lectura</th></tr></thead>
+                <tbody>
+                  <tr><td class="n">Reclame oficina → intento entrega</td><td class="m r">212h</td><td>Crítico</td></tr>
+                  <tr><td class="n">Novedad → re-despacho</td><td class="m r">53h</td><td>Lento</td></tr>
+                  <tr><td class="n">Reclame oficina → entregado</td><td class="m r">44h</td><td>Lento</td></tr>
+                  <tr><td class="n">Despachada → bodega destino</td><td class="m r">28,4h</td><td>Transporte</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="info-note"><b>Promedio vs mediana:</b> el promedio sirve para dimensionar carga y outliers; la mediana explica la ruta típica. Para SLA y alertas conviene mirar ambos junto con p90.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Lectura estratégica</span>
+          <span class="card-badge" style="color:var(--amber2);background:var(--amber-dim)">ROADMAP</span>
+        </div>
+        <div class="card-body">
+          <div class="info-grid">
+            <div>
+              <div class="info-section-title">Qué mueve el 70%</div>
+              <table class="info-table">
+                <thead><tr><th>Frente</th><th>Por qué importa</th><th>Proyecto</th></tr></thead>
+                <tbody>
+                  <tr><td class="n">Movilización</td><td>Recupera órdenes que no llegan a red.</td><td class="m">PRM-1497</td></tr>
+                  <tr><td class="n">Devolución</td><td>Baja el hueco post-red sobre movilizadas.</td><td class="m">PRM-1523</td></tr>
+                  <tr><td class="n">Carrier × zona</td><td>La misma zona cambia fuerte por transportadora.</td><td class="m">PRM-1513</td></tr>
+                  <tr><td class="n">Estados</td><td>Sin homologación, México y carriers miden mal.</td><td class="m">PRM-1297</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <div class="info-section-title">Qué pedir / instrumentar</div>
+              <table class="info-table">
+                <thead><tr><th>Pedido</th><th>Uso</th></tr></thead>
+                <tbody>
+                  <tr><td class="n">Acumulado creación → handoff</td><td>% &lt;24h, promedio, p50 y p90 al grano orden.</td></tr>
+                  <tr><td class="n">Rangos horarios por etapa</td><td>0–6, 6–12, 12–24 y &gt;24 para decidir dónde reducir.</td></tr>
+                  <tr><td class="n">Motivo de cierre carrier</td><td>Distinguir causa real vs zona/seller más difícil.</td></tr>
+                  <tr><td class="n">Motivo de cancelación obligatorio</td><td>Cerrar el hueco ciego de no-movilización.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="info-note"><b>Prioridad sana:</b> no crear más árboles; completar los Proyectos OKR existentes con evidencia, baseline y métrica de impacto.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <span class="card-title">Fuentes incluidas</span>
+          <span class="card-badge">HTML CONSOLIDADO</span>
+        </div>
+        <div class="card-body">
+          <table class="info-table">
+            <thead><tr><th>Archivo</th><th>Qué aporta</th></tr></thead>
+            <tbody>
+              <tr><td class="m">detalle_logistica.html</td><td>Modelo de datos, estados, flujos por carrier y reglas de lectura.</td></tr>
+              <tr><td class="m">dossier_completo_dropi.html</td><td>Marco completo de logística como producto, hipótesis y metodología.</td></tr>
+              <tr><td class="m">vision-logistica.html</td><td>Resumen ejecutivo, KPIs, etapas y roadmap Q3.</td></tr>
+              <tr><td class="m">funnel_prototipo (2).html</td><td>Visual interactivo operativo: funnel, novedades, carriers, manifiestos y tiempos.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+function fmt(n) { return typeof n === 'number' ? n.toLocaleString('es-CO') : n; }
+function pct(a,b) { return b ? ((a/b)*100).toFixed(1) + '%' : '0%'; }
+
+var viewTitles = {
+  funnel: 'Funnel General de Órdenes',
+  novedades: 'Novedades & Resolución',
+  transportadoras: 'Funnel por Transportadora',
+  manifiestos: 'Manifiestos & Devoluciones',
+  tiempos: 'Tiempos entre Estados',
+  motivos: 'Motivos de Cancelación y Rechazo',
+  info: 'Info logística consolidada'
+};
+
+document.querySelectorAll('.nav-item[data-view]').forEach(function(item) {
+  item.addEventListener('click', function() {
+    var viewId = this.getAttribute('data-view');
+    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+    this.classList.add('active');
+    document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
+    document.getElementById('view-' + viewId).classList.add('active');
+    document.getElementById('viewTitle').textContent = viewTitles[viewId];
+    document.querySelector('.main').scrollTo(0, 0);
+    if (viewId === 'novedades') buildStateLifecycle();
+    if (viewId === 'transportadoras') { buildTranspCharts(); buildCarrierSankeys(); }
+    if (viewId === 'manifiestos') buildManifiestoSankey();
+    if (viewId === 'tiempos') buildTiemposSankey();
+    if (viewId === 'motivos') buildCancelChart();
+  });
+});
+
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  });
+});
+
+var tooltip = document.getElementById('tooltip');
+function showTooltip(ev, title, detail) {
+  tooltip.textContent = '';
+  var strong = document.createElement('strong'); strong.textContent = title; strong.style.color = '#2563eb';
+  tooltip.appendChild(strong);
+  if (detail) { var div = document.createElement('div'); div.style.marginTop = '4px'; div.textContent = detail; tooltip.appendChild(div); }
+  tooltip.classList.add('show'); positionTooltip(ev);
+}
+function hideTooltip() { tooltip.classList.remove('show'); }
+function positionTooltip(ev) {
+  tooltip.style.left = Math.min(ev.clientX + 14, window.innerWidth - 290) + 'px';
+  tooltip.style.top = Math.min(ev.clientY - 10, window.innerHeight - 120) + 'px';
+}
+document.addEventListener('mousemove', function(ev) { if (tooltip.classList.contains('show')) positionTooltip(ev); });
+
+function buildKPI(containerId, kpis) {
+  var strip = document.getElementById(containerId); strip.textContent = '';
+  kpis.forEach(function(k) {
+    var card = document.createElement('div'); card.className = 'kpi ' + k.cls;
+    var lbl = document.createElement('div'); lbl.className = 'kpi-label'; lbl.textContent = k.label;
+    var val = document.createElement('div'); val.className = 'kpi-val'; val.textContent = k.val;
+    var sub = document.createElement('div'); sub.className = 'kpi-sub'; sub.textContent = k.sub;
+    card.appendChild(lbl); card.appendChild(val); card.appendChild(sub); strip.appendChild(card);
+  });
+}
+
+function renderBreakdown(containerId, data) {
+  var maxVal = 0, total = 0;
+  data.forEach(function(d) { if (d.count > maxVal) maxVal = d.count; total += d.count; });
+  var el = document.getElementById(containerId); el.textContent = '';
+  var ul = document.createElement('ul'); ul.className = 'breakdown-list';
+  data.forEach(function(d) {
+    var li = document.createElement('li'); li.className = 'breakdown-item';
+    var labelSpan = document.createElement('span'); labelSpan.className = 'breakdown-label';
+    var dot = document.createElement('span'); dot.className = 'breakdown-dot'; dot.style.background = d.color;
+    labelSpan.appendChild(dot); labelSpan.appendChild(document.createTextNode(d.label));
+    var pctSpan = document.createElement('span');
+    pctSpan.style.cssText = 'font-size:11px;color:var(--txt3);margin-left:6px;font-weight:500';
+    pctSpan.textContent = '(' + (d.count/total*100).toFixed(1) + '%)';
+    labelSpan.appendChild(pctSpan);
+    var valSpan = document.createElement('span'); valSpan.className = 'breakdown-val'; valSpan.style.color = d.color; valSpan.textContent = fmt(d.count);
+    li.appendChild(labelSpan); li.appendChild(valSpan); ul.appendChild(li);
+    var barWrap = document.createElement('div'); barWrap.className = 'breakdown-bar-wrap';
+    var bar = document.createElement('div'); bar.className = 'breakdown-bar';
+    bar.style.width = (d.count/maxVal*100) + '%'; bar.style.background = d.color; bar.style.opacity = '0.6';
+    barWrap.appendChild(bar); ul.appendChild(barWrap);
+  });
+  el.appendChild(ul);
+}
+
+function buildSankeyChart(containerId, nodes, links, H) {
+  var container = document.getElementById(containerId); container.textContent = '';
+  var W = container.clientWidth; H = H || 500;
+  var svg = d3.select(container).append('svg').attr('width', W).attr('height', H);
+  var sm = W < 450;
+  var margin = { top: 16, right: sm ? Math.max(90, Math.round(W*0.28)) : 200, bottom: 16, left: 10 };
+  var nw = sm ? 10 : 14, np = sm ? 10 : 16;
+  var fs = sm ? 10 : 12, fsv = sm ? 9 : 10.5, lh = sm ? 12 : 15;
+  var sankey = d3.sankey().nodeId(function(d){return d.index}).nodeWidth(nw).nodePadding(np)
+    .nodeAlign(d3.sankeyLeft).extent([[margin.left,margin.top],[W-margin.right,H-margin.bottom]]);
+  var graph = sankey({
+    nodes: nodes.map(function(d,i){return Object.assign({},d,{index:i})}),
+    links: links.map(function(d){return Object.assign({},d)})
+  });
+  var total = graph.nodes[0] ? graph.nodes[0].value : 1;
+
+  svg.append('g').selectAll('.sankey-link').data(graph.links).join('path')
+    .attr('class','sankey-link').attr('d',d3.sankeyLinkHorizontal())
+    .attr('stroke',function(d){return nodes[d.source.index].color})
+    .attr('stroke-width',function(d){return Math.max(sm?1.5:2,d.width)})
+    .on('mouseover',function(ev,d){d3.select(this).attr('stroke-opacity',.5);showTooltip(ev,nodes[d.source.index].name+' → '+nodes[d.target.index].name,fmt(d.value)+' ordenes ('+pct(d.value,d.source.value)+')')})
+    .on('mouseout',function(){d3.select(this).attr('stroke-opacity',.25);hideTooltip()});
+
+  var nodeG = svg.append('g').selectAll('.sankey-node').data(graph.nodes).join('g')
+    .attr('class','sankey-node').attr('transform',function(d){return 'translate('+d.x0+','+d.y0+')'});
+  nodeG.append('rect').attr('width',function(d){return d.x1-d.x0}).attr('height',function(d){return Math.max(sm?3:4,d.y1-d.y0)})
+    .attr('fill',function(d){return d.color}).attr('rx',sm?2:3)
+    .on('mouseover',function(ev,d){showTooltip(ev,d.name,fmt(d.value)+' ('+pct(d.value,total)+')')})
+    .on('mouseout',hideTooltip);
+  nodeG.append('text').attr('x',function(d){return(d.x1-d.x0)+5}).attr('y',function(d){return(d.y1-d.y0)/2})
+    .attr('dy','0.35em').attr('font-size',fs+'px').attr('fill',function(d){return d.color}).text(function(d){return d.name});
+  nodeG.append('text').attr('x',function(d){return(d.x1-d.x0)+5}).attr('y',function(d){return(d.y1-d.y0)/2+lh})
+    .attr('dy','0.35em').attr('font-size',fsv+'px').attr('font-family',"'JetBrains Mono',monospace").attr('font-weight','600').attr('fill','#8b95a5')
+    .text(function(d){return fmt(d.value)+' ('+pct(d.value,total)+')'});
+}
+
+// =============================================
+// DATA — Mayo 2026 (exploración real)
+// =============================================
+
+var F = {
+  total: 1859341, cancel: 216473, rechaz: 22503,
+  pend_conf: 86578, pendiente: 27737, guia_gen: 45780,
+  confirmado: 29, otro_no_mov: 16185, no_mov: 176309,
+  movil: 1444058,
+  entreg: 848088, devol: 119214,
+  con_nov: 571072, sin_nov: 872986,
+  nov_entreg: 251217, nov_devol: 107118, nov_proceso: 212737,
+  sn_entreg: 596871, sn_devol: 12096, sn_proceso: 264019
+};
+
+// =============================================
+// VIEW 1: FUNNEL GENERAL
+// =============================================
+buildKPI('kpiStrip', [
+  {label:'Ordenes Creadas',val:fmt(F.total),sub:'Mayo 2026',cls:'blue'},
+  {label:'Tasa Entrega',val:pct(F.entreg,F.movil),sub:fmt(F.entreg)+' de '+fmt(F.movil)+' movilizadas',cls:'green'},
+  {label:'Cancelación',val:pct(F.cancel,F.total),sub:fmt(F.cancel)+' canceladas',cls:'red'},
+  {label:'Devolución',val:pct(F.devol,F.movil),sub:fmt(F.devol)+' sobre movilizadas',cls:'amber'},
+  {label:'Pasaron Novedad',val:pct(F.con_nov,F.movil),sub:fmt(F.con_nov)+' de '+fmt(F.movil),cls:'cyan'},
+  {label:'Devol. x Novedad',val:pct(F.nov_devol,F.devol),sub:fmt(F.nov_devol)+' de '+fmt(F.devol)+' devol.',cls:'red'}
+]);
+
+var funnelNodes = [
+  {name:'Creadas',color:'#3b82f6'},           // 0
+  {name:'Canceladas',color:'#ef4444'},         // 1
+  {name:'Rechazadas',color:'#f87171'},         // 2
+  {name:'Pend. Confirmación',color:'#94a3b8'}, // 3
+  {name:'Pendiente',color:'#a1a1aa'},          // 4
+  {name:'Guía Generada',color:'#78716c'},      // 5
+  {name:'Otro No Movil.',color:'#64748b'},     // 6
+  {name:'Movilizadas',color:'#3b82f6'},        // 7
+  {name:'Pasó por Novedad',color:'#f59e0b'},   // 8
+  {name:'Sin Novedad',color:'#06b6d4'},        // 9
+  {name:'Entregado',color:'#10b981'},          // 10
+  {name:'Devolución',color:'#ef4444'},         // 11
+  {name:'En Proceso',color:'#64748b'}          // 12
+];
+var funnelLinks = [
+  {source:0,target:1,value:F.cancel},
+  {source:0,target:2,value:F.rechaz},
+  {source:0,target:3,value:F.pend_conf},
+  {source:0,target:4,value:F.pendiente},
+  {source:0,target:5,value:F.guia_gen},
+  {source:0,target:6,value:F.otro_no_mov + F.confirmado},
+  {source:0,target:7,value:F.movil},
+  {source:7,target:8,value:F.con_nov},
+  {source:7,target:9,value:F.sin_nov},
+  {source:8,target:10,value:F.nov_entreg},
+  {source:8,target:11,value:F.nov_devol},
+  {source:8,target:12,value:F.nov_proceso},
+  {source:9,target:10,value:F.sn_entreg},
+  {source:9,target:11,value:F.sn_devol},
+  {source:9,target:12,value:F.sn_proceso}
+];
+buildSankeyChart('sankey-funnel', funnelNodes, funnelLinks);
+
+renderBreakdown('cancelReasons', [
+  {label:'"Otros" (literal — agente elige Otros)',count:62159,color:'#ef4444'},
+  {label:'Cliente final cancela',count:60818,color:'#f87171'},
+  {label:'Sin motivo (null/vacío)',count:50809,color:'#cbd5e1'},
+  {label:'Pedido duplicado',count:23857,color:'#fb923c'},
+  {label:'Datos incompletos',count:17471,color:'#f59e0b'},
+  {label:'Mal historial / riesgoso',count:3394,color:'#dc2626'},
+  {label:'Cambio transportadora',count:3386,color:'#a78bfa'},
+  {label:'Cambio tipo recaudo',count:2825,color:'#8b5cf6'},
+  {label:'Sin contacto / confirmación',count:2490,color:'#d97706'},
+  {label:'Excede valor a recaudar',count:2119,color:'#94a3b8'},
+  {label:'Fraude / fake',count:840,color:'#991b1b'},
+  {label:'Otros (texto libre irrepetible)',count:6883,color:'#64748b'}
+]);
+
+renderBreakdown('rechazoReasons', [
+  {label:'Autorizado por gerencia',count:43000,color:'#ef4444'},
+  {label:'Sin motivo (null)',count:9500,color:'#cbd5e1'},
+  {label:'No despacho del proveedor',count:3600,color:'#fb923c'},
+  {label:'Otros',count:1600,color:'#f59e0b'},
+  {label:'Cobertura',count:1100,color:'#a78bfa'},
+  {label:'Pedido duplicado',count:1000,color:'#94a3b8'}
+]);
+
+// =============================================
+// VIEW 2: NOVEDADES & RESOLUCIÓN
+// =============================================
+buildKPI('kpiNovedades', [
+  {label:'Órdenes con Novedad',val:'261K',sub:'órdenes únicas · history_orders',cls:'amber'},
+  {label:'Estado Actual: Novedad',val:'188.5K',sub:'snapshot hoy · orders',cls:'purple'},
+  {label:'Recuperadas',val:'—',sub:'pendiente query real',cls:'green'},
+  {label:'Perdidas',val:'—',sub:'pendiente query real',cls:'red'},
+  {label:'Peor Resolución',val:'40.4%',sub:'No se encuentra destinat.',cls:'red'},
+  {label:'Mejor Resolución',val:'75.6%',sub:'Fija fecha y hora recibo',cls:'green'}
+]);
+
+function buildStateLifecycle() {
+  var lcNodes = [
+    {name:'CREADAS',color:'#3b82f6'},
+    {name:'CANCELADO',color:'#ef4444'},
+    {name:'RECHAZADO',color:'#f87171'},
+    {name:'REEMPLAZADA',color:'#94a3b8'},
+    {name:'GUÍA GENERADA',color:'#60a5fa'},
+    {name:'PREPARACIÓN',color:'#8b5cf6'},
+    {name:'LOGÍSTICA DROPI',color:'#7c3aed'},
+    {name:'TRANSPORTE',color:'#06b6d4'},
+    {name:'ÚLTIMA MILLA',color:'#10b981'},
+    {name:'RECLAME OFICINA',color:'#f97316'},
+    {name:'ENTREGADO',color:'#10b981'},
+    {name:'NOVEDAD',color:'#f59e0b'},
+    {name:'RE-DESPACHO',color:'#0891b2'},
+    {name:'DEVOLUCIÓN',color:'#dc2626'},
+    {name:'EN TRÁNSITO/PEND.',color:'#64748b'}
+  ];
+  var lcLinks = [
+    {source:0,target:1,value:241000},{source:0,target:2,value:75000},
+    {source:0,target:3,value:226000},{source:0,target:4,value:1296000},
+    {source:4,target:5,value:1150000},{source:4,target:14,value:146000},
+    {source:5,target:6,value:1150000},
+    {source:6,target:7,value:830000},{source:6,target:8,value:320000},
+    {source:7,target:8,value:480000},{source:7,target:9,value:250000},{source:7,target:13,value:100000},
+    {source:8,target:10,value:540000},{source:8,target:11,value:170000},{source:8,target:13,value:90000},
+    {source:9,target:10,value:200000},{source:9,target:13,value:50000},
+    {source:11,target:10,value:30000},{source:11,target:12,value:90000},{source:11,target:13,value:50000},
+    {source:12,target:10,value:50000},{source:12,target:13,value:25000},{source:12,target:14,value:15000}
+  ];
+  buildSankeyChart('stateLifecycle', lcNodes, lcLinks, 620);
+}
+
+// BLOQUE 1: Explicación de fuentes de datos
+(function(){
+  var el = document.getElementById('fuentesExplicacion'); el.textContent = '';
+  var title = document.createElement('div');
+  title.style.cssText = 'font-size:13px;font-weight:700;color:var(--blue2);margin-bottom:12px;display:flex;align-items:center;gap:8px';
+  title.innerHTML = '<span style="font-size:16px">📊</span> ¿Por qué hay diferentes cifras de novedades?';
+  el.appendChild(title);
+  var desc = document.createElement('div');
+  desc.style.cssText = 'font-size:12px;color:var(--txt2);margin-bottom:16px;line-height:1.6';
+  desc.textContent = 'Las novedades se registran en 3 tablas distintas. Cada una mide algo diferente:';
+  el.appendChild(desc);
+  var sources = [
+    {num:'~261K',label:'Órdenes únicas con novedad',table:'history_orders',desc:'Órdenes distintas que alguna vez tuvieron novedad_servientrega. Una orden puede tener múltiples eventos.',color:'var(--amber2)',bg:'var(--amber-dim)'},
+    {num:'188.5K',label:'Órdenes HOY en estado novedad',table:'orders',desc:'Snapshot actual: órdenes cuyo status es novedad ahora mismo. Menor porque muchas ya se resolvieron o devolvieron.',color:'var(--purple2)',bg:'rgba(139,92,246,.1)'},
+    {num:'449K',label:'Eventos de novedad (carrier)',table:'history_orders',desc:'Total de eventos novedad_servientrega. Mayor porque 1 orden puede tener 5-10 novedades si el carrier reintenta y falla.',color:'var(--red2)',bg:'var(--red-dim)'},
+    {num:'464K',label:'Registros tracking interno',table:'history_new_orders',desc:'Eventos internos de tracking con campo solución. Sistema independiente del carrier. Incluye gestión interna.',color:'var(--blue2)',bg:'var(--blue-dim)'}
+  ];
+  var grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px';
+  sources.forEach(function(s){
+    var card = document.createElement('div');
+    card.style.cssText = 'border:1px solid var(--border);border-radius:8px;padding:12px 14px;background:'+s.bg;
+    var top = document.createElement('div');
+    top.style.cssText = 'display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px';
+    var num = document.createElement('span');
+    num.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:18px;font-weight:700;color:'+s.color;
+    num.textContent = s.num;
+    var badge = document.createElement('span');
+    badge.style.cssText = 'font-size:9px;font-weight:600;padding:2px 6px;border-radius:4px;background:var(--bg);color:var(--txt3);letter-spacing:.3px';
+    badge.textContent = s.table;
+    top.appendChild(num); top.appendChild(badge);
+    var lbl = document.createElement('div');
+    lbl.style.cssText = 'font-size:11.5px;font-weight:600;color:var(--txt);margin-bottom:4px';
+    lbl.textContent = s.label;
+    var dsc = document.createElement('div');
+    dsc.style.cssText = 'font-size:10.5px;color:var(--txt3);line-height:1.5';
+    dsc.textContent = s.desc;
+    card.appendChild(top); card.appendChild(lbl); card.appendChild(dsc); grid.appendChild(card);
+  });
+  el.appendChild(grid);
+})();
+
+// BLOQUE 3: Tipos de Novedad — Órdenes Únicas
+(function(){
+  var el = document.getElementById('novedadTiposUnicos'); el.textContent = '';
+  var data = [
+    {label:'REHUSA RECIBIR',eventos:110742,ordenes:78765,color:'#ef4444'},
+    {label:'COORDINAR ENTREGA',eventos:105120,ordenes:75213,color:'#f59e0b'},
+    {label:'DIRECCIÓN NO EXISTE',eventos:24436,ordenes:21430,color:'#dc2626'},
+    {label:'Se visita no logra entrega',eventos:25358,ordenes:17970,color:'#fb923c'},
+    {label:'Pedido cancelado',eventos:18017,ordenes:13953,color:'#f87171'},
+    {label:'No hay quien reciba',eventos:16264,ordenes:13206,color:'#e879f9'},
+    {label:'No contesta cliente',eventos:16007,ordenes:11923,color:'#d97706'},
+    {label:'No localiza dirección',eventos:16380,ordenes:10941,color:'#8b5cf6'},
+    {label:'DIRECCIÓN INCOMPLETA',eventos:10525,ordenes:9413,color:'#a78bfa'},
+    {label:'Reprogramar entrega',eventos:9343,ordenes:8159,color:'#06b6d4'},
+    {label:'FIJA FECHA Y HORA',eventos:8486,ordenes:7208,color:'#10b981'},
+    {label:'NO SE ENCUENTRA DESTINAT.',eventos:7196,ordenes:5895,color:'#94a3b8'},
+    {label:'No cancela valor RCE',eventos:6206,ordenes:5158,color:'#64748b'},
+    {label:'NO CONOCEN DESTINAT.',eventos:5480,ordenes:4827,color:'#0d9488'},
+    {label:'DESTINATARIO NO PAGARÁ',eventos:5636,ordenes:4778,color:'#059669'}
+  ];
+  var maxOrd = data[0].ordenes;
+  data.forEach(function(d){
+    var row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px';
+    var top = document.createElement('div'); top.style.cssText = 'display:flex;justify-content:space-between;align-items:baseline;font-size:11.5px;margin-bottom:3px';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'color:var(--txt2);font-weight:500;display:flex;align-items:center;gap:5px';
+    var dot = document.createElement('span'); dot.style.cssText = 'width:6px;height:6px;border-radius:50%;background:'+d.color+';flex-shrink:0';
+    lbl.appendChild(dot); lbl.appendChild(document.createTextNode(d.label));
+    var val = document.createElement('span'); val.style.cssText = 'font-family:"JetBrains Mono",monospace;font-weight:600;font-size:11px;color:'+d.color+';white-space:nowrap';
+    val.textContent = fmt(d.ordenes) + ' órd. · ' + fmt(d.eventos) + ' ev.';
+    top.appendChild(lbl); top.appendChild(val);
+    var barWrap = document.createElement('div'); barWrap.style.cssText = 'height:5px;background:var(--bg3);border-radius:3px';
+    var bar = document.createElement('div'); bar.style.cssText = 'height:100%;border-radius:3px;background:'+d.color+';opacity:.7;width:'+(d.ordenes/maxOrd*100)+'%';
+    barWrap.appendChild(bar); row.appendChild(top); row.appendChild(barWrap); el.appendChild(row);
+  });
+  var note = document.createElement('div');
+  note.className = 'alert-amber';
+  note.style.marginTop = '12px';
+  note.textContent = 'REHUSA RECIBIR y COORDINAR ENTREGA concentran el 59% de órdenes con novedad. Una orden promedio genera ~1.4 eventos de novedad.';
+  el.appendChild(note);
+})();
+
+(function(){
+  var el = document.getElementById('canalesResolucion'); el.textContent = '';
+
+  var grid = document.createElement('div'); grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px';
+  [{label:'Con Novedad',val:'282,910',sub:'ordenes distintas',color:'var(--amber2)'},
+   {label:'Solucionadas',val:'80,619',sub:'28.5% del total',color:'var(--green2)'},
+   {label:'Sin Solucionar',val:'202,291',sub:'71.5% del total',color:'var(--red2)'}].forEach(function(k){
+    var box = document.createElement('div');
+    box.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;text-align:center';
+    var nm = document.createElement('div'); nm.style.cssText = 'font-size:10px;font-weight:600;color:'+k.color+';text-transform:uppercase;letter-spacing:.5px'; nm.textContent = k.label;
+    var ct = document.createElement('div'); ct.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:18px;font-weight:600;margin:4px 0;color:var(--txt)'; ct.textContent = k.val;
+    var pc = document.createElement('div'); pc.style.cssText = 'font-size:10.5px;color:var(--txt2)'; pc.textContent = k.sub;
+    box.appendChild(nm); box.appendChild(ct); box.appendChild(pc); grid.appendChild(box);
+  });
+  el.appendChild(grid);
+
+  var chanTitle = document.createElement('div');
+  chanTitle.style.cssText = 'font-size:11px;font-weight:600;color:var(--txt3);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px';
+  chanTitle.textContent = 'Canal de las 82,871 NOVEDAD SOLUCIONADA';
+  el.appendChild(chanTitle);
+
+  var total = 172800;
+  var canales = [
+    {label:'SIN DETALLE',count:101000,pct:'58.4%',color:'#94a3b8'},
+    {label:'INTERNO (con notes)',count:69000,pct:'39.9%',color:'#059669'},
+    {label:'CHATEA PRO (usuario_chatcenter)',count:2800,pct:'1.6%',color:'#3b82f6'}
+  ];
+  canales.forEach(function(ch){
+    var row = document.createElement('div'); row.style.cssText = 'margin-bottom:12px';
+    var top = document.createElement('div'); top.style.cssText = 'display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'color:var(--txt2);font-weight:500;display:flex;align-items:center;gap:6px';
+    var dot = document.createElement('span'); dot.style.cssText = 'width:7px;height:7px;border-radius:50%;background:'+ch.color;
+    lbl.appendChild(dot); lbl.appendChild(document.createTextNode(ch.label));
+    var val = document.createElement('span'); val.style.cssText = 'font-family:"JetBrains Mono",monospace;font-weight:600;font-size:11.5px;color:'+ch.color;
+    val.textContent = fmt(ch.count) + ' (' + ch.pct + ')';
+    top.appendChild(lbl); top.appendChild(val);
+    var barWrap = document.createElement('div'); barWrap.style.cssText = 'height:7px;background:var(--bg3);border-radius:4px';
+    var bar = document.createElement('div'); bar.style.cssText = 'height:100%;border-radius:4px;background:'+ch.color+';width:'+(ch.count/total*100)+'%';
+    barWrap.appendChild(bar); row.appendChild(top); row.appendChild(barWrap); el.appendChild(row);
+  });
+  var note = document.createElement('div');
+  note.className = 'alert-amber';
+  note.textContent = 'Solo 28.5% de novedades se resuelven. Chatea PRO = 1.6%. 58% sin detalle de canal.';
+  el.appendChild(note);
+})();
+
+(function(){
+  var el = document.getElementById('resolucionRates'); el.textContent = '';
+  var rates = [
+    {label:'REHUSA RECIBIR',resueltas:64.4,total:124057,color:'#f59e0b'},
+    {label:'COORDINAR LA ENTREGA',resueltas:71.8,total:114520,color:'#059669'},
+    {label:'DIRECCION NO EXISTE',resueltas:68.6,total:27377,color:'#f59e0b'},
+    {label:'Se visita no se logra',resueltas:61.0,total:26442,color:'#fb923c'},
+    {label:'No se localiza direccion',resueltas:69.4,total:17317,color:'#059669'},
+    {label:'No hay quien reciba',resueltas:48.3,total:15930,color:'#ef4444'},
+    {label:'NO CONTESTA CLIENTE',resueltas:41.1,total:15352,color:'#dc2626'},
+    {label:'DIRECCION INCOMPLETA',resueltas:66.7,total:11735,color:'#f59e0b'},
+    {label:'NO LE INTERESA / CANCELA',resueltas:74.6,total:9317,color:'#10b981'},
+    {label:'FIJA FECHA Y HORA RECIBO',resueltas:75.6,total:9228,color:'#10b981'},
+    {label:'Reprogramar entrega',resueltas:41.9,total:9062,color:'#dc2626'},
+    {label:'NO SE ENCUENTRA DESTINAT.',resueltas:40.4,total:7114,color:'#dc2626'},
+    {label:'DESTINATARIO NO PAGARA',resueltas:70.3,total:6448,color:'#059669'},
+    {label:'Pedido cancel. por cliente',resueltas:44.2,total:4692,color:'#ef4444'},
+    {label:'Direccion incorrecta',resueltas:46.2,total:3465,color:'#ef4444'},
+    {label:'EXIGE INVENTARIO',resueltas:74.0,total:2664,color:'#10b981'},
+    {label:'DIRECCION ERRADA',resueltas:75.5,total:2242,color:'#10b981'}
+  ];
+  rates.forEach(function(r){
+    var row = document.createElement('div'); row.style.cssText = 'margin-bottom:10px';
+    var top = document.createElement('div'); top.style.cssText = 'display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:4px';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'color:var(--txt2);font-weight:500'; lbl.textContent = r.label;
+    var val = document.createElement('span'); val.style.cssText = 'font-family:"JetBrains Mono",monospace;font-weight:600;font-size:11.5px;color:'+r.color;
+    val.textContent = r.resueltas + '% — ' + fmt(r.total) + ' eventos';
+    top.appendChild(lbl); top.appendChild(val);
+    var barWrap = document.createElement('div'); barWrap.style.cssText = 'height:6px;background:var(--bg3);border-radius:3px';
+    var bar = document.createElement('div'); bar.style.cssText = 'height:100%;border-radius:3px;background:'+r.color+';width:'+r.resueltas+'%';
+    barWrap.appendChild(bar); row.appendChild(top); row.appendChild(barWrap); el.appendChild(row);
+  });
+})();
+
+(function(){
+  var el = document.getElementById('destinoDetalle'); el.textContent = '';
+  var destinos = [
+    {label:'DEVOLUCION',count:58600,pct:31.1,color:'#ef4444'},
+    {label:'Aun en NOVEDAD',count:53400,pct:28.3,color:'#d97706'},
+    {label:'ENTREGADO',count:31400,pct:16.7,color:'#10b981'},
+    {label:'DESPACHADA (reintento)',count:20200,pct:10.7,color:'#3b82f6'},
+    {label:'NOVEDAD SOLUCIONADA',count:6500,pct:3.4,color:'#059669'},
+    {label:'EN BODEGA / TRANSITO',count:8200,pct:4.4,color:'#06b6d4'},
+    {label:'Otros estados',count:10200,pct:5.4,color:'#94a3b8'}
+  ];
+  destinos.forEach(function(d){
+    var row = document.createElement('div'); row.style.cssText = 'margin-bottom:10px';
+    var top = document.createElement('div'); top.style.cssText = 'display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'color:var(--txt2);font-weight:500'; lbl.textContent = d.label;
+    var val = document.createElement('span'); val.style.cssText = 'font-family:"JetBrains Mono",monospace;font-weight:600;font-size:12px;color:'+d.color;
+    val.textContent = fmt(d.count) + ' (' + d.pct + '%)';
+    top.appendChild(lbl); top.appendChild(val);
+    var barWrap = document.createElement('div'); barWrap.style.cssText = 'height:6px;background:var(--bg3);border-radius:3px';
+    var bar = document.createElement('div'); bar.style.cssText = 'height:100%;border-radius:3px;background:'+d.color+';width:'+d.pct+'%';
+    barWrap.appendChild(bar); row.appendChild(top); row.appendChild(barWrap); el.appendChild(row);
+  });
+  var note = document.createElement('div');
+  note.className = 'alert-red';
+  note.textContent = 'Solo 1 de cada 6 ordenes con novedad se entrega (16.7%). 31.1% se pierden en devolucion, 28.3% quedan estancadas.';
+  el.appendChild(note);
+})();
+
+
+// =============================================
+// NOVEDADES POR TRANSPORTADORA (Vista 2 - card adicional)
+// =============================================
+(function(){
+  var el = document.getElementById('novedadesTransp'); el.textContent = '';
+  var totalNov = 449000;
+  var carriers = [
+    {name:'ENVIA',eventos:280000,pct:62.4,ordenes:743000,color:'#8b5cf6'},
+    {name:'COORDINADORA',eventos:55000,pct:12.2,ordenes:156000,color:'#059669'},
+    {name:'VELOCES',eventos:42000,pct:9.4,ordenes:74000,color:'#f59e0b'},
+    {name:'TCC',eventos:28000,pct:6.2,ordenes:37000,color:'#06b6d4'},
+    {name:'JAMV-DRIVE',eventos:22000,pct:4.9,ordenes:22000,color:'#f97316'},
+    {name:'DEROCHA-EXPRESS',eventos:8500,pct:1.9,ordenes:8000,color:'#10b981'},
+    {name:'DOMINA',eventos:5200,pct:1.2,ordenes:7700,color:'#e879f9'},
+    {name:'WIILOG',eventos:4100,pct:0.9,ordenes:4900,color:'#0d9488'},
+    {name:'QUVI',eventos:2800,pct:0.6,ordenes:313,color:'#64748b'},
+    {name:'99MINUTOS',eventos:1400,pct:0.3,ordenes:3900,color:'#dc2626'},
+    {name:'INTERRAPIDISIMO',eventos:0,pct:0.0,ordenes:781000,color:'#ef4444'}
+  ];
+
+  var alertBox = document.createElement('div');
+  alertBox.style.cssText = 'background:#fef2f2;border:2px solid #fca5a5;border-radius:10px;padding:18px 22px;margin-bottom:20px;display:flex;gap:16px;align-items:flex-start';
+  var iconDiv = document.createElement('div');
+  iconDiv.style.cssText = 'font-size:28px;line-height:1'; iconDiv.textContent = '⚠';
+  var textDiv = document.createElement('div');
+  var h3 = document.createElement('div'); h3.style.cssText = 'font-size:14px;font-weight:700;color:#991b1b;margin-bottom:4px';
+  h3.textContent = 'PUNTO CIEGO: INTERRAPIDISIMO — 781K ordenes (42%) con CERO novedades';
+  var p1 = document.createElement('div'); p1.style.cssText = 'font-size:12px;color:#b91c1c;margin-bottom:6px';
+  p1.textContent = 'La transportadora mas grande del sistema no reporta ninguna novedad en novedad_servientrega. Esto significa que no hay visibilidad sobre problemas de entrega para el 42% de las ordenes.';
+  var p2 = document.createElement('div'); p2.style.cssText = 'font-size:11.5px;color:#dc2626;font-weight:600';
+  p2.textContent = 'Hipotesis: INTERRAPIDISIMO usa un sistema de reporte diferente, o simplemente no reporta. Requiere investigacion urgente.';
+  textDiv.appendChild(h3); textDiv.appendChild(p1); textDiv.appendChild(p2);
+  alertBox.appendChild(iconDiv); alertBox.appendChild(textDiv); el.appendChild(alertBox);
+
+  var grid = document.createElement('div'); grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:20px';
+  var leftCol = document.createElement('div');
+  var rightCol = document.createElement('div');
+
+  var title1 = document.createElement('div'); title1.style.cssText = 'font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:10px';
+  title1.textContent = 'Eventos de novedad por transportadora:';
+  leftCol.appendChild(title1);
+
+  var maxEv = carriers[0].eventos;
+  carriers.forEach(function(c){
+    var row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px';
+    var top = document.createElement('div'); top.style.cssText = 'display:flex;justify-content:space-between;align-items:baseline;font-size:12px;margin-bottom:2px';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'font-weight:500;color:'+(c.eventos===0?'#ef4444':'var(--txt)');
+    lbl.textContent = c.name + (c.eventos===0 ? ' ⛔' : '');
+    var val = document.createElement('span'); val.style.cssText = 'font-family:"JetBrains Mono",monospace;font-weight:600;font-size:11px;color:'+(c.eventos===0?'#ef4444':c.color);
+    val.textContent = c.eventos === 0 ? '0 eventos — 781K ordenes' : fmt(c.eventos) + ' (' + c.pct + '%)';
+    top.appendChild(lbl); top.appendChild(val);
+    var barWrap = document.createElement('div'); barWrap.style.cssText = 'height:6px;background:var(--bg3);border-radius:3px';
+    if (c.eventos > 0) {
+      var bar = document.createElement('div'); bar.style.cssText = 'height:100%;border-radius:3px;background:'+c.color+';width:'+(c.eventos/maxEv*100)+'%';
+      barWrap.appendChild(bar);
+    }
+    row.appendChild(top); row.appendChild(barWrap); leftCol.appendChild(row);
+  });
+
+  var title2 = document.createElement('div'); title2.style.cssText = 'font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:10px';
+  title2.textContent = 'Tasa de novedad (eventos / ordenes):';
+  rightCol.appendChild(title2);
+
+  var rateData = carriers.filter(function(c){return c.eventos>0}).map(function(c){
+    return {name:c.name, rate:(c.eventos/c.ordenes*100), eventos:c.eventos, ordenes:c.ordenes, color:c.color};
+  }).sort(function(a,b){return b.rate-a.rate});
+
+  rateData.forEach(function(c){
+    var row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px';
+    var top = document.createElement('div'); top.style.cssText = 'display:flex;justify-content:space-between;align-items:baseline;font-size:12px;margin-bottom:2px';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'font-weight:500;color:var(--txt)'; lbl.textContent = c.name;
+    var val = document.createElement('span'); val.style.cssText = 'font-family:"JetBrains Mono",monospace;font-weight:600;font-size:11px;color:'+(c.rate>100?'#ef4444':c.rate>60?'#f59e0b':'#059669');
+    val.textContent = c.rate.toFixed(1) + '% (' + fmt(c.eventos) + ' / ' + fmt(c.ordenes) + ')';
+    top.appendChild(lbl); top.appendChild(val);
+    var barWrap = document.createElement('div'); barWrap.style.cssText = 'height:6px;background:var(--bg3);border-radius:3px';
+    var maxRate = rateData[0].rate;
+    var bar = document.createElement('div'); bar.style.cssText = 'height:100%;border-radius:3px;background:'+(c.rate>100?'#ef4444':c.rate>60?'#f59e0b':'#059669')+';width:'+(c.rate/maxRate*100)+'%';
+    barWrap.appendChild(bar); row.appendChild(top); row.appendChild(barWrap); rightCol.appendChild(row);
+  });
+
+  var noteRate = document.createElement('div');
+  noteRate.style.cssText = 'margin-top:10px;font-size:11px;color:var(--txt3);padding:8px 12px;background:var(--bg3);border-radius:6px';
+  noteRate.textContent = 'Tasa >100% = una orden puede tener multiples eventos de novedad. QUVI (894%) y TCC (75.7%) son los extremos. INTERRAPIDISIMO excluido (0%).';
+  rightCol.appendChild(noteRate);
+
+  grid.appendChild(leftCol); grid.appendChild(rightCol); el.appendChild(grid);
+})();
+
+// =============================================
+// VIEW 3: POR TRANSPORTADORA
+// =============================================
+var transpData = [
+  {name:'INTERRAPIDISIMO',id:3,creadas:781000,entreg:359260,pct_ent:46.0,color:'#3b82f6'},
+  {name:'ENVIA',id:2,creadas:743000,entreg:349210,pct_ent:47.0,color:'#8b5cf6'},
+  {name:'COORDINADORA',id:5,creadas:156000,entreg:65520,pct_ent:42.0,color:'#059669'},
+  {name:'VELOCES',id:6,creadas:74000,entreg:28860,pct_ent:39.0,color:'#f59e0b'},
+  {name:'TCC',id:10,creadas:37000,entreg:16650,pct_ent:45.0,color:'#06b6d4'},
+  {name:'JAMV-DRIVE',id:0,creadas:22000,entreg:10560,pct_ent:48.0,color:'#f97316'},
+  {name:'DEROCHA-EXPRESS',id:0,creadas:8000,entreg:4960,pct_ent:62.0,color:'#10b981'},
+  {name:'DOMINA',id:0,creadas:7700,entreg:3080,pct_ent:40.0,color:'#e879f9'},
+  {name:'WIILOG',id:0,creadas:4900,entreg:2842,pct_ent:58.0,color:'#0d9488'},
+  {name:'99MINUTOS',id:0,creadas:3900,entreg:1482,pct_ent:38.0,color:'#dc2626'},
+  {name:'QUVI',id:0,creadas:313,entreg:119,pct_ent:38.0,color:'#64748b'},
+  {name:'SUPPLI-EXPRESS',id:0,creadas:1,entreg:1,pct_ent:100.0,color:'#94a3b8'}
+];
+
+buildKPI('kpiTransp', [
+  {label:'Transportadoras',val:'12',sub:'Activas Mayo 2026',cls:'blue'},
+  {label:'Mayor Volumen',val:'INTERRAP.',sub:fmt(781000)+' ordenes (42%)',cls:'green'},
+  {label:'Mayor % Entrega',val:'DEROCHA',sub:'62% tasa entrega',cls:'cyan'},
+  {label:'Peor % Entrega',val:'99MINUTOS',sub:'38% tasa entrega',cls:'red'},
+  {label:'Top 2 = 83%',val:fmt(1524000),sub:'Interrap. + Envia',cls:'purple'},
+  {label:'Total Entregadas',val:fmt(843000),sub:'45.9% promedio pond.',cls:'green'}
+]);
+
+(function() {
+  var el = document.getElementById('transpTable'); el.textContent = '';
+  var tbl = document.createElement('table'); tbl.className = 'tbl';
+  var thead = document.createElement('thead'); var hrow = document.createElement('tr');
+  ['Transportadora','Ordenes','Entregadas','% Entrega','% del Total','Barra'].forEach(function(h) {
+    var th = document.createElement('th'); th.textContent = h; hrow.appendChild(th);
+  });
+  thead.appendChild(hrow); tbl.appendChild(thead);
+  var tbody = document.createElement('tbody');
+  transpData.forEach(function(t) {
+    var tr = document.createElement('tr');
+    var pctTotal = (t.creadas / F.total * 100).toFixed(1) + '%';
+    var vals = [t.name, fmt(t.creadas), fmt(t.entreg), t.pct_ent.toFixed(1)+'%', pctTotal, ''];
+    vals.forEach(function(v, i) {
+      var td = document.createElement('td');
+      if (i === 0) { td.style.fontWeight = '600'; td.style.color = t.color; }
+      if (i >= 1 && i <= 4) td.className = 'mono';
+      if (i === 5) {
+        var bar = document.createElement('span'); bar.className = 'pct-bar';
+        bar.style.width = (t.pct_ent * 1.5) + 'px';
+        bar.style.background = t.pct_ent >= 50 ? '#10b981' : t.pct_ent >= 42 ? '#f59e0b' : '#ef4444';
+        td.appendChild(bar);
+      } else { td.appendChild(document.createTextNode(v)); }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody); el.appendChild(tbl);
+})();
+
+(function(){
+  var el = document.getElementById('alertInterrapidisimo'); el.textContent = '';
+  var grid = document.createElement('div'); grid.style.cssText = 'display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center';
+  var icon = document.createElement('div'); icon.style.cssText = 'font-size:36px'; icon.textContent = '⚠';
+  var content = document.createElement('div');
+  var h = document.createElement('div'); h.style.cssText = 'font-size:15px;font-weight:700;color:#991b1b;margin-bottom:6px';
+  h.textContent = 'HALLAZGO CRITICO: INTERRAPIDISIMO — 42% del volumen sin visibilidad de novedades';
+  var row = document.createElement('div'); row.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px';
+  [{l:'Ordenes',v:'781K',s:'42% del total'},{l:'Novedades reportadas',v:'0',s:'novedad_servientrega'},{l:'Devoluciones',v:'173K',s:'22% de sus ordenes'},{l:'Sin manifiesto devol.',v:'130K',s:'75.3% de sus devol.'}].forEach(function(k){
+    var box = document.createElement('div'); box.style.cssText = 'background:rgba(255,255,255,.5);border-radius:6px;padding:10px;text-align:center';
+    var lb = document.createElement('div'); lb.style.cssText = 'font-size:9.5px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#991b1b'; lb.textContent = k.l;
+    var vl = document.createElement('div'); vl.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:20px;font-weight:700;color:#7f1d1d;margin:4px 0'; vl.textContent = k.v;
+    var sb = document.createElement('div'); sb.style.cssText = 'font-size:10px;color:#b91c1c'; sb.textContent = k.s;
+    box.appendChild(lb); box.appendChild(vl); box.appendChild(sb); row.appendChild(box);
+  });
+  var note = document.createElement('div'); note.style.cssText = 'font-size:11.5px;color:#991b1b';
+  note.textContent = 'Sin novedades reportadas, no es posible hacer gestion proactiva (coordinar re-entrega, corregir direccion, etc.) para casi la mitad de las ordenes del sistema. Esto explica en parte la tasa de devolucion del 22%.';
+  content.appendChild(h); content.appendChild(row); content.appendChild(note);
+  grid.appendChild(icon); grid.appendChild(content); el.appendChild(grid);
+})();
+
+function buildTranspCharts() {
+  var c1 = document.getElementById('chart-entrega'); c1.textContent = '';
+  var c2 = document.getElementById('chart-volumen'); c2.textContent = '';
+  var top10 = transpData.slice(0, 10);
+  var W1 = c1.clientWidth || 400;
+  var svg1 = d3.select(c1).append('svg').attr('width', W1).attr('height', 320);
+  var barH = 24, gap = 8, y0 = 10;
+  top10.forEach(function(t, i) {
+    var y = y0 + i * (barH + gap);
+    svg1.append('rect').attr('x',160).attr('y',y).attr('width',(W1-220)*(t.pct_ent/100)).attr('height',barH)
+      .attr('fill',t.pct_ent>=50?'#10b981':t.pct_ent>=42?'#f59e0b':'#ef4444').attr('opacity',.7).attr('rx',4);
+    svg1.append('text').attr('x',155).attr('y',y+barH/2).attr('dy','0.35em').attr('text-anchor','end')
+      .attr('font-size','11px').attr('font-weight','600').attr('fill',t.color).text(t.name);
+    svg1.append('text').attr('x',165+(W1-220)*(t.pct_ent/100)).attr('y',y+barH/2).attr('dy','0.35em')
+      .attr('font-size','11px').attr('font-weight','600').attr('font-family',"'JetBrains Mono',monospace").attr('fill','#5a6478')
+      .text(t.pct_ent.toFixed(1)+'%');
+  });
+
+  var W2 = c2.clientWidth || 400;
+  var svg2 = d3.select(c2).append('svg').attr('width', W2).attr('height', 320);
+  var maxCreadas = transpData[0].creadas;
+  top10.forEach(function(t, i) {
+    var y = y0 + i * (barH + gap);
+    svg2.append('rect').attr('x',160).attr('y',y).attr('width',(W2-220)*(t.creadas/maxCreadas)).attr('height',barH)
+      .attr('fill',t.color).attr('opacity',.6).attr('rx',4);
+    svg2.append('text').attr('x',155).attr('y',y+barH/2).attr('dy','0.35em').attr('text-anchor','end')
+      .attr('font-size','11px').attr('font-weight','600').attr('fill',t.color).text(t.name);
+    svg2.append('text').attr('x',165+(W2-220)*(t.creadas/maxCreadas)).attr('y',y+barH/2).attr('dy','0.35em')
+      .attr('font-size','11px').attr('font-weight','600').attr('font-family',"'JetBrains Mono',monospace").attr('fill','#5a6478')
+      .text(fmt(t.creadas));
+  });
+}
+
+// =============================================
+// CARRIER SANKEYS — Q18 DATA
+// =============================================
+function buildCarrierSankeys() {
+  // INTERRAPIDISIMO — 781K orders, unique RECLAME OFICINA path
+  buildSankeyChart('sankey-inter', [
+    {name:'ÓRDENES',color:'#3b82f6'},
+    {name:'CANCEL./RECHAZ.',color:'#ef4444'},
+    {name:'HUB LOGÍSTICO',color:'#8b5cf6'},
+    {name:'RECLAME OFICINA',color:'#f97316'},
+    {name:'VÍA REPARTO',color:'#06b6d4'},
+    {name:'ENTREGADO',color:'#10b981'},
+    {name:'DEVOLUCIÓN',color:'#dc2626'},
+    {name:'EN PROCESO',color:'#64748b'}
+  ],[
+    {source:0,target:1,value:156000},{source:0,target:2,value:625000},
+    {source:2,target:3,value:225000},{source:2,target:4,value:285000},
+    {source:2,target:5,value:80000},{source:2,target:6,value:18000},{source:2,target:7,value:17000},
+    {source:3,target:5,value:175000},{source:3,target:6,value:35000},{source:3,target:7,value:15000},
+    {source:4,target:5,value:104000},{source:4,target:6,value:120000},{source:4,target:7,value:61000}
+  ], 360);
+
+  // ENVIA — 743K orders, NOVEDAD→RE-DESPACHO cycle
+  buildSankeyChart('sankey-envia', [
+    {name:'ÓRDENES',color:'#8b5cf6'},
+    {name:'CANCEL./RECHAZ.',color:'#ef4444'},
+    {name:'BOD→DESP→DESTINO',color:'#06b6d4'},
+    {name:'NOVEDAD',color:'#f59e0b'},
+    {name:'ENTREGADO',color:'#10b981'},
+    {name:'DEVOLUCIÓN',color:'#dc2626'},
+    {name:'RE-DESPACHO',color:'#0891b2'},
+    {name:'EN PROCESO',color:'#64748b'}
+  ],[
+    {source:0,target:1,value:197000},{source:0,target:2,value:546000},
+    {source:2,target:3,value:160000},{source:2,target:4,value:248000},
+    {source:2,target:5,value:80000},{source:2,target:7,value:58000},
+    {source:3,target:4,value:18000},{source:3,target:5,value:28000},{source:3,target:6,value:114000},
+    {source:6,target:4,value:83000},{source:6,target:5,value:28000},{source:6,target:7,value:3000}
+  ], 360);
+
+  // COORDINADORA — 156K orders, TERMINAL system
+  buildSankeyChart('sankey-coord', [
+    {name:'ÓRDENES',color:'#059669'},
+    {name:'SALIDAS',color:'#ef4444'},
+    {name:'RED TERMINAL',color:'#06b6d4'},
+    {name:'NOVEDAD',color:'#f59e0b'},
+    {name:'ENTREGADO',color:'#10b981'},
+    {name:'DEVOLUCIÓN',color:'#dc2626'},
+    {name:'EN PROCESO',color:'#64748b'}
+  ],[
+    {source:0,target:1,value:53000},{source:0,target:2,value:103000},
+    {source:2,target:3,value:38000},{source:2,target:4,value:49000},
+    {source:2,target:5,value:10000},{source:2,target:6,value:6000},
+    {source:3,target:4,value:17000},{source:3,target:5,value:17000},{source:3,target:6,value:4000}
+  ], 300);
+
+  // TCC — 37K orders, EN DISTRIBUCIÓN path
+  buildSankeyChart('sankey-tcc', [
+    {name:'ÓRDENES',color:'#06b6d4'},
+    {name:'SALIDAS',color:'#ef4444'},
+    {name:'DISTRIBUCIÓN',color:'#8b5cf6'},
+    {name:'NOVEDAD',color:'#f59e0b'},
+    {name:'ENTREGADO',color:'#10b981'},
+    {name:'DEVOLUCIÓN',color:'#dc2626'},
+    {name:'EN PROCESO',color:'#64748b'}
+  ],[
+    {source:0,target:1,value:8000},{source:0,target:2,value:29000},
+    {source:2,target:3,value:8000},{source:2,target:4,value:13000},
+    {source:2,target:5,value:4000},{source:2,target:6,value:4000},
+    {source:3,target:4,value:4000},{source:3,target:5,value:3000},{source:3,target:6,value:1000}
+  ], 300);
+
+  // VELOCES — 74K orders, EN RUTA→EN CAMINO path
+  buildSankeyChart('sankey-veloces', [
+    {name:'ÓRDENES',color:'#f59e0b'},
+    {name:'SALIDAS',color:'#ef4444'},
+    {name:'RUTA/CAMINO',color:'#06b6d4'},
+    {name:'NOVEDAD',color:'#f59e0b'},
+    {name:'ENTREGADO',color:'#10b981'},
+    {name:'DEVOLUCIÓN',color:'#dc2626'},
+    {name:'EN PROCESO',color:'#64748b'}
+  ],[
+    {source:0,target:1,value:22000},{source:0,target:2,value:52000},
+    {source:2,target:3,value:16000},{source:2,target:4,value:24000},
+    {source:2,target:5,value:7000},{source:2,target:6,value:5000},
+    {source:3,target:4,value:5000},{source:3,target:5,value:10000},{source:3,target:6,value:1000}
+  ], 300);
+}
+
+// =============================================
+// VIEW 4: MANIFIESTOS & DEVOLUCIONES
+// =============================================
+buildKPI('kpiManifiestos', [
+  {label:'Movilizadas',val:fmt(F.movil),sub:'Base real — solo órdenes despachadas',cls:'blue'},
+  {label:'Con Manif. Salida',val:'60.6%',sub:'978K de '+fmt(F.movil)+' movilizadas',cls:'green'},
+  {label:'Con Algún Manif.',val:'72.8%',sub:'1.17M de '+fmt(F.movil)+' movilizadas',cls:'amber'},
+  {label:'PreDevol. / Devol.',val:'25.3%',sub:'30K de 118.8K devoluciones',cls:'purple'},
+  {label:'Devol. sin PreDevol.',val:'74.7%',sub:'88.8K de 118.8K sin trazab. retorno',cls:'red'},
+  {label:'Sin Ningún Manif.',val:'27.2%',sub:'439K movilizadas sin trazabilidad',cls:'red'}
+]);
+
+(function() {
+  var el = document.getElementById('manifestCoverage'); el.textContent = '';
+  var baseMovil = F.movil;
+  var coverageData = [
+    {label:'Salidas (id=9)',ordenes:978444,color:'#10b981'},
+    {label:'Recogidas (id=5)',ordenes:469521,color:'#8b5cf6'},
+    {label:'Recepciones PAU (id=10)',ordenes:48480,color:'#059669'},
+    {label:'Recepciones (id=4)',ordenes:593969,color:'#3b82f6'},
+    {label:'Despachos (id=3)',ordenes:595306,color:'#06b6d4'},
+    {label:'PreDevolution (id=43)',ordenes:30459,color:'#ef4444',note:'vs '+fmt(F.devol)+' devoluciones'}
+  ];
+  var grid = document.createElement('div'); grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px';
+  [{label:'Movilizadas',val:fmt(baseMovil),sub:'Solo órdenes despachadas',color:'var(--blue2)'},
+   {label:'Con Algún Manif.',val:'72.8%',sub:fmt(1174573)+' de '+fmt(baseMovil),color:'var(--green2)'},
+   {label:'Sin Ningún Manif.',val:'27.2%',sub:fmt(439249)+' sin trazabilidad',color:'var(--red2)'}].forEach(function(k){
+    var box = document.createElement('div');
+    box.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center';
+    var nm = document.createElement('div'); nm.style.cssText = 'font-size:10.5px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px'; nm.textContent = k.label;
+    var ct = document.createElement('div'); ct.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:22px;font-weight:600;margin:6px 0;color:'+k.color; ct.textContent = k.val;
+    var pc = document.createElement('div'); pc.style.cssText = 'font-size:11px;color:var(--txt2)'; pc.textContent = k.sub;
+    box.appendChild(nm); box.appendChild(ct); box.appendChild(pc); grid.appendChild(box);
+  });
+  el.appendChild(grid);
+  var barTitle = document.createElement('div');
+  barTitle.style.cssText = 'font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:8px';
+  barTitle.textContent = 'Cobertura por tipo de manifiesto (% de movilizadas que pasan por cada tipo):';
+  el.appendChild(barTitle);
+  coverageData.forEach(function(c){
+    var covPct = (c.ordenes / baseMovil * 100).toFixed(1);
+    var row = document.createElement('div'); row.style.cssText = 'margin-bottom:8px';
+    var top = document.createElement('div'); top.style.cssText = 'display:flex;justify-content:space-between;align-items:baseline;font-size:12px;margin-bottom:3px';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'color:var(--txt);font-weight:500'; lbl.textContent = c.label;
+    var val = document.createElement('span'); val.style.cssText = 'font-family:"JetBrains Mono",monospace;font-weight:600;font-size:11.5px;color:'+c.color;
+    val.textContent = fmt(c.ordenes) + ' (' + covPct + '% de movilizadas)';
+    top.appendChild(lbl); top.appendChild(val);
+    var barWrap = document.createElement('div'); barWrap.style.cssText = 'height:8px;background:var(--bg3);border-radius:4px';
+    var bar = document.createElement('div'); bar.style.cssText = 'height:100%;border-radius:4px;background:'+c.color+';opacity:.65;width:'+covPct+'%';
+    barWrap.appendChild(bar); row.appendChild(top); row.appendChild(barWrap); el.appendChild(row);
+  });
+  var alertNote = document.createElement('div');
+  alertNote.className = 'alert-amber';
+  alertNote.style.marginTop = '14px';
+  alertNote.textContent = 'Base = MOVILIZADAS (órdenes despachadas). Canceladas y rechazadas excluidas porque nunca entran al sistema de manifiestos.';
+  el.appendChild(alertNote);
+})();
+
+(function() {
+  var el = document.getElementById('manifestTable'); el.textContent = '';
+  var baseMovil = F.movil;
+  var tbl = document.createElement('table'); tbl.className = 'tbl';
+  var thead = document.createElement('thead'); var hrow = document.createElement('tr');
+  ['ID','Tipo','Manifiestos','Órdenes Asociadas','% Movilizadas','Barra'].forEach(function(h) {
+    var th = document.createElement('th'); th.textContent = h; hrow.appendChild(th);
+  });
+  thead.appendChild(hrow); tbl.appendChild(thead);
+  var tbody = document.createElement('tbody');
+  var mdata = [
+    {id:9,tipo:'Salidas',manif:61388,ordenes:978444,color:'#10b981'},
+    {id:5,tipo:'Recogidas',manif:23618,ordenes:469521,color:'#8b5cf6'},
+    {id:10,tipo:'Recepciones PAU',manif:6004,ordenes:48480,color:'#059669'},
+    {id:4,tipo:'Recepciones',manif:26268,ordenes:593969,color:'#3b82f6'},
+    {id:3,tipo:'Despachos',manif:3696,ordenes:595306,color:'#06b6d4'},
+    {id:43,tipo:'PreDevolution',manif:4795,ordenes:30459,color:'#ef4444'}
+  ];
+  mdata.forEach(function(m) {
+    var tr = document.createElement('tr');
+    var covPct = (m.ordenes / baseMovil * 100).toFixed(1) + '%';
+    [{v:m.id,mono:true},{v:m.tipo,bold:true,clr:m.color},{v:fmt(m.manif),mono:true},{v:fmt(m.ordenes),mono:true},{v:covPct,mono:true},{v:'',bar:true,pct:m.ordenes/baseMovil*100,clr:m.color}].forEach(function(c) {
+      var td = document.createElement('td');
+      if (c.mono) td.className = 'mono';
+      if (c.bold) { td.style.fontWeight = '600'; td.style.color = c.clr; }
+      if (c.bar) {
+        var bar = document.createElement('span'); bar.className = 'pct-bar';
+        bar.style.width = (c.pct * 1.5) + 'px';
+        bar.style.background = c.clr; td.appendChild(bar);
+      } else { td.textContent = c.v; }
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody); el.appendChild(tbl);
+  var note = document.createElement('div');
+  note.style.cssText = 'margin-top:14px;font-size:11.5px;color:var(--txt2);padding:10px 14px;background:var(--bg3);border-radius:6px';
+  note.textContent = 'Fuente: history_logistic_management como tabla puente. % Cobertura = órdenes únicas asociadas / '+fmt(baseMovil)+' movilizadas. Canceladas y rechazadas excluidas.';
+  el.appendChild(note);
+})();
+
+(function(){
+  var el = document.getElementById('devGap'); el.textContent = '';
+  var totalDev = 118827, conPre = 30015, sinPre = 88812;
+  var conPct = (conPre/totalDev*100).toFixed(1), sinPct = (sinPre/totalDev*100).toFixed(1);
+  var grid = document.createElement('div'); grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px';
+  [{label:'Con Manif. PreDevolution',count:conPre,pct:conPct+'%',color:'#10b981'},{label:'Sin Manif. PreDevolution',count:sinPre,pct:sinPct+'%',color:'#ef4444'}].forEach(function(s){
+    var box = document.createElement('div');
+    box.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center';
+    var nm = document.createElement('div'); nm.style.cssText = 'font-size:11px;font-weight:600;color:'+s.color+';text-transform:uppercase;letter-spacing:.5px'; nm.textContent = s.label;
+    var ct = document.createElement('div'); ct.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:24px;font-weight:600;margin:8px 0;color:var(--txt)'; ct.textContent = fmt(s.count);
+    var pc = document.createElement('div'); pc.style.cssText = 'font-size:12px;color:var(--txt2);font-weight:500'; pc.textContent = s.pct + ' de ' + fmt(totalDev) + ' devoluciones';
+    box.appendChild(nm); box.appendChild(ct); box.appendChild(pc); grid.appendChild(box);
+  });
+  el.appendChild(grid);
+  var barWrap = document.createElement('div'); barWrap.style.cssText = 'height:14px;background:#10b981;border-radius:7px;position:relative;overflow:hidden';
+  var barRed = document.createElement('div'); barRed.style.cssText = 'position:absolute;right:0;top:0;height:100%;width:'+sinPct+'%;background:#ef4444;border-radius:0 7px 7px 0';
+  barWrap.appendChild(barRed); el.appendChild(barWrap);
+  var legend = document.createElement('div'); legend.style.cssText = 'display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--txt2)';
+  legend.innerHTML = '<span style="color:#10b981;font-weight:600">'+conPct+'% con manifiesto</span><span style="color:#ef4444;font-weight:600">'+sinPct+'% sin manifiesto</span>';
+  el.appendChild(legend);
+  var note = document.createElement('div');
+  note.className = 'alert-red';
+  note.style.marginTop = '14px';
+  note.textContent = fmt(sinPre)+' devoluciones sin manifiesto PreDevolution = brecha operativa. No hay trazabilidad del proceso de retorno.';
+  el.appendChild(note);
+})();
+
+(function(){
+  var el = document.getElementById('devGapCarrier'); el.textContent = '';
+  var carriers = [
+    {name:'INTERRAPIDISIMO',total:59827,sin:47508,pct:79.4,color:'#ef4444'},
+    {name:'ENVIA',total:45107,sin:30416,pct:67.4,color:'#f59e0b'},
+    {name:'COORDINADORA',total:6759,sin:5808,pct:85.9,color:'#ef4444'},
+    {name:'VELOCES',total:2565,sin:1640,pct:63.9,color:'#fb923c'},
+    {name:'TCC',total:2371,sin:2015,pct:85.0,color:'#ef4444'},
+    {name:'JAMV-DRIVE',total:1252,sin:796,pct:63.6,color:'#fb923c'},
+    {name:'DEROCHA-EXPRESS',total:551,sin:391,pct:71.0,color:'#fb923c'},
+    {name:'DOMINA',total:245,sin:135,pct:55.1,color:'#059669'},
+    {name:'WIILOG',total:109,sin:89,pct:81.7,color:'#ef4444'},
+    {name:'99MINUTOS',total:101,sin:74,pct:73.3,color:'#fb923c'}
+  ];
+  var maxSin = carriers[0].sin;
+  carriers.forEach(function(c){
+    var row = document.createElement('div'); row.style.cssText = 'margin-bottom:10px';
+    var top = document.createElement('div'); top.style.cssText = 'display:flex;justify-content:space-between;align-items:baseline;font-size:12px;margin-bottom:3px';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'color:var(--txt2);font-weight:500'; lbl.textContent = c.name;
+    var val = document.createElement('span'); val.style.cssText = 'font-family:"JetBrains Mono",monospace;font-weight:600;font-size:11.5px;color:'+c.color;
+    val.textContent = fmt(c.sin) + ' sin manif. (' + c.pct + '%) — de ' + fmt(c.total) + ' devol.';
+    top.appendChild(lbl); top.appendChild(val);
+    var barWrap = document.createElement('div'); barWrap.style.cssText = 'height:6px;background:var(--bg3);border-radius:3px';
+    var bar = document.createElement('div'); bar.style.cssText = 'height:100%;border-radius:3px;background:'+c.color+';width:'+(c.sin/maxSin*100)+'%';
+    barWrap.appendChild(bar); row.appendChild(top); row.appendChild(barWrap); el.appendChild(row);
+  });
+})();
+
+(function(){
+  var el = document.getElementById('flujoManifiestos'); el.textContent = '';
+  var baseMovil = F.movil;
+  var flujo = [
+    {etapa:'SALIDA',tipo:'Salidas (id=9)',ordenes:978444,manif:61388,color:'#10b981',seq:1},
+    {etapa:'RECOGIDA',tipo:'Recogidas (id=5)',ordenes:469521,manif:23618,color:'#8b5cf6',seq:2},
+    {etapa:'RECEPCIÓN PAU',tipo:'Recepciones PAU (id=10)',ordenes:48480,manif:6004,color:'#059669',seq:3},
+    {etapa:'RECEPCIÓN',tipo:'Recepciones (id=4)',ordenes:593969,manif:26268,color:'#3b82f6',seq:4},
+    {etapa:'DESPACHO',tipo:'Despachos (id=3)',ordenes:595306,manif:3696,color:'#06b6d4',seq:5},
+    {etapa:'PRE-DEVOLUCIÓN',tipo:'PreDevolution (id=43)',ordenes:30459,manif:4795,color:'#ef4444',seq:6}
+  ];
+
+  var title = document.createElement('div'); title.style.cssText = 'font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:14px';
+  title.textContent = 'Cobertura por tipo de manifiesto — % de MOVILIZADAS ('+fmt(baseMovil)+')';
+  el.appendChild(title);
+
+  var flowWrap = document.createElement('div'); flowWrap.style.cssText = 'display:flex;align-items:center;gap:4px;margin-bottom:20px;flex-wrap:wrap;justify-content:center';
+  flujo.forEach(function(f, i){
+    var covPct = (f.ordenes/baseMovil*100).toFixed(1);
+    var step = document.createElement('div');
+    step.style.cssText = 'background:'+f.color+'18;border:1px solid '+f.color+'40;border-radius:8px;padding:10px 14px;text-align:center;min-width:130px';
+    var nm = document.createElement('div'); nm.style.cssText = 'font-size:10px;font-weight:700;color:'+f.color+';text-transform:uppercase;letter-spacing:.5px'; nm.textContent = f.etapa;
+    var ct = document.createElement('div'); ct.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:16px;font-weight:700;color:var(--txt);margin:4px 0'; ct.textContent = fmt(f.ordenes);
+    var pc = document.createElement('div'); pc.style.cssText = 'font-size:10px;color:var(--txt2)'; pc.textContent = covPct+'% de movilizadas';
+    step.appendChild(nm); step.appendChild(ct); step.appendChild(pc); flowWrap.appendChild(step);
+    if (i < flujo.length - 1) {
+      var arrow = document.createElement('span'); arrow.style.cssText = 'font-size:18px;color:var(--txt3);font-weight:300'; arrow.textContent = '→';
+      flowWrap.appendChild(arrow);
+    }
+  });
+  el.appendChild(flowWrap);
+
+  var statsTitle = document.createElement('div'); statsTitle.style.cssText = 'font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:10px';
+  statsTitle.textContent = 'Cobertura vs movilizadas — cada tipo de manifiesto:';
+  el.appendChild(statsTitle);
+
+  var insights = [
+    {label:'SALIDA — manifiesto principal',val:'60.6%',detail:fmt(978444)+' de '+fmt(baseMovil)+' movilizadas',color:'#10b981',nota:'Mayor cobertura. Mejor proxy de "orden realmente despachada con trazabilidad".'},
+    {label:'RECOGIDA',val:'29.1%',detail:fmt(469521)+' de '+fmt(baseMovil)+' movilizadas',color:'#8b5cf6',nota:'Paralelo a salida. Menos de un tercio — muchas órdenes se despachan sin recogida formal.'},
+    {label:'RECEPCIÓN PAU',val:'3.0%',detail:fmt(48480)+' de '+fmt(baseMovil)+' movilizadas',color:'#059669',nota:'Paso interno Dropi. Solo una fracción pasa por PAU.'},
+    {label:'RECEPCIÓN',val:'36.8%',detail:fmt(593969)+' de '+fmt(baseMovil)+' movilizadas',color:'#3b82f6',nota:'Recepción en bodega destino.'},
+    {label:'DESPACHO',val:'36.9%',detail:fmt(595306)+' de '+fmt(baseMovil)+' movilizadas',color:'#06b6d4',nota:'Similar a recepción — probablemente las mismas órdenes.'},
+    {label:'PRE-DEVOLUCIÓN',val:'25.3%',detail:fmt(30015)+' de 118.827 devoluciones',color:'#ef4444',nota:'Solo 25.3% de devoluciones tienen manifiesto de retorno. 74.7% sin trazabilidad.'}
+  ];
+  insights.forEach(function(c){
+    var row = document.createElement('div'); row.style.cssText = 'padding:8px 12px;border-radius:6px;margin-bottom:6px;font-size:12px;background:var(--bg);border:1px solid var(--border)';
+    var main = document.createElement('div'); main.style.cssText = 'display:flex;justify-content:space-between;align-items:center';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'font-weight:600;color:var(--txt)'; lbl.textContent = c.label;
+    var valWrap = document.createElement('span'); valWrap.style.cssText = 'font-family:"JetBrains Mono",monospace;font-weight:600;font-size:11px;color:'+c.color;
+    valWrap.textContent = c.val + ' — ' + c.detail;
+    main.appendChild(lbl); main.appendChild(valWrap); row.appendChild(main);
+    if (c.nota) {
+      var note = document.createElement('div'); note.style.cssText = 'font-size:11px;color:var(--txt3);margin-top:3px;font-style:italic';
+      note.textContent = c.nota; row.appendChild(note);
+    }
+    el.appendChild(row);
+  });
+
+  var summary = document.createElement('div');
+  summary.className = 'alert-amber';
+  summary.style.marginTop = '14px';
+  summary.textContent = 'Base = MOVILIZADAS ('+fmt(baseMovil)+'). Canceladas/rechazadas excluidas. Salida (60.6%) es el manifiesto con mayor cobertura. PreDevolución se compara vs devoluciones ('+fmt(F.devol)+'), no vs total.';
+  el.appendChild(summary);
+})();
+
+(function(){
+  var el = document.getElementById('pauAnalysis'); el.textContent = '';
+  var grid = document.createElement('div'); grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:14px';
+  [{label:'Ordenes PAU',val:fmt(48480),sub:'Recepciones PAU (id=10)',color:'var(--blue2)'},
+   {label:'% de Movilizadas',val:'3.0%',sub:'48.5K de '+fmt(F.movil),color:'var(--green2)'},
+   {label:'Manifiestos PAU',val:fmt(6004),sub:'manifiestos creados',color:'var(--amber2)'}].forEach(function(k){
+    var box = document.createElement('div');
+    box.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center';
+    var nm = document.createElement('div'); nm.style.cssText = 'font-size:10.5px;font-weight:600;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px'; nm.textContent = k.label;
+    var ct = document.createElement('div'); ct.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:22px;font-weight:600;margin:6px 0;color:'+k.color; ct.textContent = k.val;
+    var pc = document.createElement('div'); pc.style.cssText = 'font-size:11px;color:var(--txt2)'; pc.textContent = k.sub;
+    box.appendChild(nm); box.appendChild(ct); box.appendChild(pc); grid.appendChild(box);
+  });
+  el.appendChild(grid);
+  var note = document.createElement('div');
+  note.className = 'alert-green';
+  note.textContent = 'Recepcion PAU es un paso interno de Dropi (no devolucion). 56.7% de ordenes que pasan por PAU terminan entregadas = indicador positivo.';
+  el.appendChild(note);
+})();
+
+// =============================================
+// MANIFEST SANKEY — BASE: MOVILIZADAS (no total)
+// =============================================
+function buildManifiestoSankey() {
+  var mNodes = [
+    {name:'MOVILIZADAS ('+fmt(1613795)+')',color:'#3b82f6'},
+    {name:'CON SALIDA (978K)',color:'#2563eb'},
+    {name:'SIN SALIDA (636K)',color:'#94a3b8'},
+    {name:'SAL+RECOG+RECEP+DESP (301K)',color:'#10b981'},
+    {name:'SOLO SALIDA — sin más (572K)',color:'#f59e0b'},
+    {name:'SAL+RECEP+DESP sin recogida (97K)',color:'#06b6d4'},
+    {name:'SAL+otros combos (8K)',color:'#64748b'},
+    {name:'SIN NINGÚN MANIFIESTO (440K)',color:'#ef4444'},
+    {name:'RECOG+RECEP+DESP sin salida (160K)',color:'#8b5cf6'},
+    {name:'Otros sin salida (36K)',color:'#a1a1aa'}
+  ];
+  var mLinks = [
+    {source:0,target:1,value:978444},
+    {source:0,target:2,value:635351},
+    {source:1,target:3,value:301337},
+    {source:1,target:4,value:572040},
+    {source:1,target:5,value:97351},
+    {source:1,target:6,value:7716},
+    {source:2,target:7,value:439536},
+    {source:2,target:8,value:160047},
+    {source:2,target:9,value:35768}
+  ];
+  buildSankeyChart('sankey-manifiestos', mNodes, mLinks, 600);
+
+  var legend = document.createElement('div');
+  legend.style.cssText = 'margin-top:12px;padding:12px 16px;background:var(--bg3);border-radius:8px;font-size:11.5px;color:var(--txt2);line-height:1.7';
+  legend.innerHTML = '<b style="color:var(--txt)">Lectura Q5 — Huella de manifiestos por orden:</b><br>'
+    +'<b style="color:#f59e0b">572K (35%)</b> solo tienen SALIDA — se pierde todo tracking después del despacho inicial.<br>'
+    +'<b style="color:#ef4444">440K (27%)</b> no tienen ningún manifiesto — cero trazabilidad.<br>'
+    +'<b style="color:#10b981">301K (19%)</b> ruta completa: Salida→Recogida→Recepción→Despacho.<br>'
+    +'<b style="color:#8b5cf6">160K (10%)</b> tienen Recogida+Recepción+Despacho pero sin Salida (gap en primer paso).<br>'
+    +'<b style="color:#06b6d4">97K (6%)</b> tienen Salida+Recepción+Despacho pero sin Recogida.';
+  document.getElementById('sankey-manifiestos').parentNode.appendChild(legend);
+}
+
+// =============================================
+// TIEMPOS SANKEY — Q8 DATA (volume + median times)
+// =============================================
+function buildTiemposSankey() {
+  var tNodes = [
+    {name:'CONFIRMADAS [2h]',color:'#94a3b8'},
+    {name:'GUÍA GENERADA [2.5h]',color:'#3b82f6'},
+    {name:'PREPARADO [3.4h]',color:'#06b6d4'},
+    {name:'LOGÍSTICA DROPI [4.4h]',color:'#7c3aed'},
+    {name:'TRANSPORTE [28.4h⚠]',color:'#ef4444'},
+    {name:'REPARTO [7.1h]',color:'#10b981'},
+    {name:'RECLAME OFIC. [212h🔴]',color:'#f97316'},
+    {name:'ENTREGADO',color:'#10b981'},
+    {name:'NOVEDAD [16.1h]',color:'#f59e0b'},
+    {name:'RE-DESPACHO [53h⚠]',color:'#0891b2'},
+    {name:'DEVOLUCIÓN [5.9h]',color:'#dc2626'},
+    {name:'EN PROCESO',color:'#64748b'}
+  ];
+  var tLinks = [
+    {source:0,target:1,value:1538000},
+    {source:0,target:11,value:300000},
+    {source:1,target:2,value:1004000},
+    {source:1,target:11,value:534000},
+    {source:2,target:3,value:1004000},
+    {source:3,target:4,value:610000},
+    {source:3,target:5,value:320000},
+    {source:3,target:11,value:74000},
+    {source:4,target:5,value:460000},
+    {source:4,target:6,value:100000},
+    {source:4,target:10,value:50000},
+    {source:5,target:7,value:647000},
+    {source:5,target:8,value:328000},
+    {source:5,target:10,value:136000},
+    {source:6,target:7,value:175000},
+    {source:6,target:11,value:48000},
+    {source:8,target:9,value:114000},
+    {source:8,target:7,value:97000},
+    {source:8,target:10,value:117000},
+    {source:9,target:7,value:64000},
+    {source:9,target:10,value:35000},
+    {source:9,target:11,value:15000}
+  ];
+  buildSankeyChart('sankey-tiempos', tNodes, tLinks, 620);
+}
+
+// =============================================
+// VIEW 5: TIEMPOS ENTRE ESTADOS — DATOS REALES Q8 + Q9
+// =============================================
+buildKPI('kpiTiempos', [
+  {label:'Entrega Promedio',val:'4.5–5.2d',sub:'Q9 real Mar–May 2026',cls:'blue'},
+  {label:'Devolucion Promedio',val:'9–15.6d',sub:'2-3x mas lento que entrega',cls:'red'},
+  {label:'Ruta Feliz (mediana)',val:'66h',sub:'≈2.8 dias (Q8 transiciones)',cls:'green'},
+  {label:'Cuello Botella',val:'28.4h',sub:'Despachada→Bodega Destino',cls:'amber'},
+  {label:'Reclame Oficina',val:'212h',sub:'¡9 DIAS mediana! Alerta',cls:'red'},
+  {label:'Novedad→Solucion.',val:'16.1h',sub:'97K ordenes (mediana)',cls:'cyan'}
+]);
+
+(function(){
+  var el = document.getElementById('cicloPorMes'); el.textContent = '';
+  var q9 = [
+    {mes:'Marzo 2026',entregadas:1822807,diasEnt:5.2,devueltas:560755,diasDev:15.6},
+    {mes:'Abril 2026',entregadas:1723020,diasEnt:5.2,devueltas:513778,diasDev:13.8},
+    {mes:'Mayo 2026 (parcial)',entregadas:843708,diasEnt:4.5,devueltas:111257,diasDev:9.0}
+  ];
+
+  var grid = document.createElement('div'); grid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px';
+  q9.forEach(function(m){
+    var card = document.createElement('div');
+    card.style.cssText = 'background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;overflow:hidden';
+    var h = document.createElement('div'); h.style.cssText = 'font-size:12px;font-weight:700;color:var(--txt);margin-bottom:12px;text-align:center'; h.textContent = m.mes;
+
+    var row = document.createElement('div'); row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px';
+    [{label:'ENTREGADAS',val:fmt(m.entregadas),dias:m.diasEnt+'d promedio',color:'var(--green2)',bg:'var(--green-dim)'},
+     {label:'DEVUELTAS',val:fmt(m.devueltas),dias:m.diasDev+'d promedio',color:'var(--red2)',bg:'var(--red-dim)'}].forEach(function(s){
+      var box = document.createElement('div'); box.style.cssText = 'text-align:center;padding:10px;border-radius:8px;background:'+s.bg;
+      var lb = document.createElement('div'); lb.style.cssText = 'font-size:9px;font-weight:700;letter-spacing:.8px;color:'+s.color; lb.textContent = s.label;
+      var vl = document.createElement('div'); vl.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:16px;font-weight:700;color:'+s.color+';margin:4px 0'; vl.textContent = s.val;
+      var ds = document.createElement('div'); ds.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;color:'+s.color; ds.textContent = s.dias;
+      box.appendChild(lb); box.appendChild(vl); box.appendChild(ds); row.appendChild(box);
+    });
+
+    var ratio = document.createElement('div');
+    ratio.style.cssText = 'margin-top:8px;text-align:center;font-size:11px;color:var(--txt2);font-weight:500';
+    ratio.textContent = 'Devolucion toma ' + (m.diasDev/m.diasEnt).toFixed(1) + 'x mas que entrega';
+    card.appendChild(h); card.appendChild(row); card.appendChild(ratio); grid.appendChild(card);
+  });
+  el.appendChild(grid);
+
+  var barTitle = document.createElement('div'); barTitle.style.cssText = 'font-size:12px;font-weight:600;color:var(--txt2);margin-bottom:8px';
+  barTitle.textContent = 'Comparacion visual: dias promedio entrega vs devolucion';
+  el.appendChild(barTitle);
+
+  var maxDias = 15.6;
+  q9.forEach(function(m){
+    var row = document.createElement('div'); row.style.cssText = 'margin-bottom:10px';
+    var lbl = document.createElement('div'); lbl.style.cssText = 'font-size:11px;font-weight:600;color:var(--txt);margin-bottom:4px'; lbl.textContent = m.mes;
+    var barsDiv = document.createElement('div'); barsDiv.style.cssText = 'display:flex;flex-direction:column;gap:3px';
+    [{dias:m.diasEnt,label:'Entrega: '+m.diasEnt+'d',color:'#10b981'},{dias:m.diasDev,label:'Devolucion: '+m.diasDev+'d',color:'#ef4444'}].forEach(function(b){
+      var bRow = document.createElement('div'); bRow.style.cssText = 'display:flex;align-items:center;gap:8px';
+      var bar = document.createElement('div'); bar.style.cssText = 'height:10px;border-radius:5px;background:'+b.color+';width:'+(b.dias/maxDias*100)+'%';
+      var txt = document.createElement('span'); txt.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;color:'+b.color+';white-space:nowrap'; txt.textContent = b.label;
+      bRow.appendChild(bar); bRow.appendChild(txt); barsDiv.appendChild(bRow);
+    });
+    row.appendChild(lbl); row.appendChild(barsDiv); el.appendChild(row);
+  });
+
+  var insight = document.createElement('div');
+  insight.className = 'alert-red';
+  insight.style.marginTop = '14px';
+  insight.textContent = 'Las devoluciones tardan 2-3x mas que las entregas (15.6d vs 5.2d en marzo). Mayo mejora a 9d pero es mes parcial. El costo operativo de una devolucion es mucho mayor: mas dias en transito = mas costo de almacenamiento y transporte.';
+  el.appendChild(insight);
+})();
+
+(function(){
+  var el = document.getElementById('notaTranspTiempos'); el.textContent = '';
+  var grid = document.createElement('div'); grid.style.cssText = 'display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center';
+  var icon = document.createElement('div'); icon.style.cssText = 'font-size:28px'; icon.textContent = '🔍';
+  var content = document.createElement('div');
+  var h = document.createElement('div'); h.style.cssText = 'font-size:13px;font-weight:700;color:#92400e;margin-bottom:4px';
+  h.textContent = 'PENDIENTE: Tiempos por Transportadora — los estados varían por carrier';
+  var p1 = document.createElement('div'); p1.style.cssText = 'font-size:12px;color:#b45309;margin-bottom:4px';
+  p1.textContent = 'Cada transportadora usa estados diferentes (ej: INTERRAPIDISIMO pasa por RECLAME EN OFICINA, ENVIA usa EN PROCESAMIENTO). Los tiempos aqui son el agregado global.';
+  var p2 = document.createElement('div'); p2.style.cssText = 'font-size:11.5px;color:#d97706;font-weight:600';
+  p2.textContent = 'Correr Q18 (Funnel_Tiempos_Transportadora) en Power BI para ver el funnel de transiciones POR CARRIER. HAVING >= 500 para volumen manejable.';
+  content.appendChild(h); content.appendChild(p1); content.appendChild(p2);
+  grid.appendChild(icon); grid.appendChild(content); el.appendChild(grid);
+})();
+
+(function() {
+  var el = document.getElementById('tiemposTable'); el.textContent = '';
+  var realNote = document.createElement('div');
+  realNote.className = 'alert-green';
+  realNote.textContent = 'DATOS REALES de Q8 (Funnel_Tiempos_Promedio) — Mayo 2026. Mediana es mas representativa que promedio (no afectada por outliers).';
+  el.appendChild(realNote);
+
+  var tbl = document.createElement('table'); tbl.className = 'tbl';
+  var thead = document.createElement('thead'); var hrow = document.createElement('tr');
+  ['Transición','Órdenes','Promedio','Mediana','Tipo'].forEach(function(h) {
+    var th = document.createElement('th'); th.textContent = h; hrow.appendChild(th);
+  });
+  thead.appendChild(hrow); tbl.appendChild(thead);
+  var tbody = document.createElement('tbody');
+  var tdata = [
+    {trans:'PEND.CONFIRM. → PENDIENTE',ordenes:993482,prom:10.5,med:2.0,tipo:'Confirmación',color:'#94a3b8'},
+    {trans:'PENDIENTE → GUIA_GENERADA',ordenes:1537639,prom:9.5,med:2.5,tipo:'Guía',color:'#3b82f6'},
+    {trans:'GUIA → PREPARADO TRANSP.',ordenes:1004301,prom:9.4,med:3.4,tipo:'Preparación',color:'#06b6d4'},
+    {trans:'PREPARADO → RECOGIDO DROPI',ordenes:313371,prom:9.1,med:3.6,tipo:'Recogida',color:'#8b5cf6'},
+    {trans:'RECOGIDO → EN BODEGA DROPI',ordenes:480498,prom:2.4,med:2.0,tipo:'Bodega',color:'#7c3aed'},
+    {trans:'BODEGA DROPI → ENT. TRANSP.',ordenes:612401,prom:2.0,med:0.4,tipo:'Entrega transp.',color:'#2563eb'},
+    {trans:'ENT. TRANSP. → BODEGA ORIGEN',ordenes:342159,prom:4.7,med:2.3,tipo:'Bodega origen',color:'#0d9488'},
+    {trans:'BODEGA ORIGEN → DESPACHADA',ordenes:289311,prom:10.5,med:7.5,tipo:'Despacho',color:'#059669'},
+    {trans:'DESPACHADA → BODEGA DESTINO',ordenes:324668,prom:33.5,med:28.4,tipo:'⚠ TRANSPORTE',color:'#ef4444'},
+    {trans:'BODEGA DESTINO → EN REPARTO',ordenes:459130,prom:13.9,med:6.9,tipo:'Reparto',color:'#10b981'},
+    {trans:'EN REPARTO → ENTREGADO',ordenes:647178,prom:13.3,med:7.1,tipo:'✓ Entrega',color:'#10b981'},
+    {trans:'EN REPARTO → NOVEDAD',ordenes:328463,prom:17.3,med:5.1,tipo:'Novedad',color:'#f59e0b'},
+    {trans:'NOVEDAD → NOV. SOLUCIONADA',ordenes:96632,prom:27.7,med:16.1,tipo:'Resolución',color:'#06b6d4'},
+    {trans:'NOVEDAD → DESPACHADA',ordenes:113997,prom:67.8,med:53.0,tipo:'⚠ Re-despacho',color:'#dc2626'},
+    {trans:'EN REPARTO → DEVOLUCION',ordenes:136215,prom:9.1,med:5.9,tipo:'Devolución',color:'#ef4444'},
+    {trans:'RECLAME OFICINA → INT. ENTREGA',ordenes:16332,prom:218.0,med:212.0,tipo:'🔴 CRITICO',color:'#991b1b'},
+    {trans:'RECLAME OFICINA → ENTREGADO',ordenes:174551,prom:56.9,med:44.0,tipo:'⚠ Lento',color:'#b45309'},
+    {trans:'EN PROCESAM. → BODEGA TRANSP.',ordenes:581083,prom:21.3,med:16.0,tipo:'Procesamiento',color:'#64748b'},
+    {trans:'EN PROCESAM. → RECLAME OFIC.',ordenes:223319,prom:22.1,med:14.9,tipo:'⚠ Reclame',color:'#dc2626'}
+  ];
+  tdata.forEach(function(t) {
+    var tr = document.createElement('tr');
+    var td0 = document.createElement('td'); td0.style.fontWeight = '600'; td0.style.color = t.color; td0.style.fontSize = '11px'; td0.textContent = t.trans; tr.appendChild(td0);
+    var td1 = document.createElement('td'); td1.className = 'mono'; td1.textContent = fmt(t.ordenes); tr.appendChild(td1);
+    var td2 = document.createElement('td'); td2.className = 'mono'; td2.textContent = t.prom.toFixed(1)+'h'; tr.appendChild(td2);
+    var td3 = document.createElement('td'); td3.className = 'mono'; td3.style.fontWeight = '700';
+    td3.style.color = t.med > 100 ? '#991b1b' : t.med > 30 ? '#dc2626' : t.med > 15 ? '#d97706' : '#059669';
+    td3.textContent = t.med.toFixed(1)+'h'; tr.appendChild(td3);
+    var td4 = document.createElement('td'); td4.style.fontSize = '11px'; td4.style.fontWeight = '600'; td4.style.color = t.color; td4.textContent = t.tipo; tr.appendChild(td4);
+    tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody); el.appendChild(tbl);
+
+  var bottlenecks = document.createElement('div');
+  bottlenecks.style.cssText = 'margin-top:18px';
+  var bTitle = document.createElement('div'); bTitle.style.cssText = 'font-size:13px;font-weight:700;color:var(--txt);margin-bottom:10px';
+  bTitle.textContent = 'Cuellos de Botella Identificados:';
+  bottlenecks.appendChild(bTitle);
+  var bData = [
+    {label:'RECLAME EN OFICINA → INTENTO ENTREGA',med:'212h (8.8 dias)',ordenes:'16.3K',desc:'Ordenes en "reclame en oficina" se estancan casi 9 DIAS antes del siguiente intento. 223K ordenes pasan por este estado.',color:'#991b1b'},
+    {label:'DESPACHADA → BODEGA DESTINO',med:'28.4h (1.2 dias)',ordenes:'325K',desc:'El transporte entre ciudades es el paso mas lento de la ruta feliz. 325K ordenes esperan mas de un dia.',color:'#dc2626'},
+    {label:'NOVEDAD → RE-DESPACHO',med:'53h (2.2 dias)',ordenes:'114K',desc:'Cuando una novedad se resuelve re-despachando, toma 2+ dias. Sumado al ciclo normal = entrega en 5+ dias.',color:'#d97706'},
+    {label:'RECLAME OFICINA → ENTREGADO',med:'44h (1.8 dias)',ordenes:'175K',desc:'Incluso las que se entregan desde reclame oficina tardan casi 2 dias. Es un canal lento.',color:'#f59e0b'}
+  ];
+  bData.forEach(function(b){
+    var row = document.createElement('div');
+    row.style.cssText = 'padding:12px 16px;border-radius:8px;margin-bottom:8px;background:var(--bg2);border:1px solid var(--border);border-left:4px solid '+b.color;
+    var top = document.createElement('div'); top.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:4px';
+    var lbl = document.createElement('span'); lbl.style.cssText = 'font-size:12px;font-weight:700;color:'+b.color; lbl.textContent = b.label;
+    var vals = document.createElement('span'); vals.style.cssText = 'font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:600;color:var(--txt)';
+    vals.textContent = b.med + ' — ' + b.ordenes + ' ordenes';
+    top.appendChild(lbl); top.appendChild(vals);
+    var desc = document.createElement('div'); desc.style.cssText = 'font-size:11.5px;color:var(--txt2)'; desc.textContent = b.desc;
+    row.appendChild(top); row.appendChild(desc); bottlenecks.appendChild(row);
+  });
+  el.appendChild(bottlenecks);
+})();
+
+(function() {
+  var el = document.getElementById('timeFlow'); el.textContent = '';
+  var steps = [
+    {name:'Confirmada',hours:0,color:'#94a3b8'},{name:'Guía',hours:2.5,color:'#3b82f6'},
+    {name:'Preparado',hours:3.4,color:'#06b6d4'},{name:'Recogido',hours:3.6,color:'#8b5cf6'},
+    {name:'Bod. Dropi',hours:2.0,color:'#7c3aed'},{name:'Ent.Transp',hours:0.4,color:'#2563eb'},
+    {name:'Bod.Origen',hours:2.3,color:'#0d9488'},{name:'Despachada',hours:7.5,color:'#059669'},
+    {name:'Bod.Destino',hours:28.4,color:'#ef4444'},{name:'Reparto',hours:6.9,color:'#10b981'},
+    {name:'Entregado',hours:7.1,color:'#10b981'}
+  ];
+  var flow = document.createElement('div'); flow.className = 'step-flow';
+  var accum = 0;
+  steps.forEach(function(s, i) {
+    var step = document.createElement('span'); step.className = 'step';
+    step.style.background = s.color + '15'; step.style.color = s.color; step.textContent = s.name;
+    if (i > 0) {
+      var tm = document.createElement('span'); tm.className = 'step-time'; tm.textContent = s.hours + 'h'; step.appendChild(tm);
+      accum += s.hours;
+    }
+    flow.appendChild(step);
+    if (i < steps.length - 1) {
+      var arrow = document.createElement('span'); arrow.className = 'step-arrow'; arrow.textContent = '→'; flow.appendChild(arrow);
+    }
+  });
+  el.appendChild(flow);
+  var note = document.createElement('div');
+  note.style.cssText = 'margin-top:14px;padding:12px 16px;background:var(--green-dim);border-radius:8px;font-size:12px;color:var(--green2);font-weight:600';
+  note.textContent = 'Ruta feliz REAL (medianas Q8): ' + accum.toFixed(1) + 'h (≈' + (accum/24).toFixed(1) + ' dias). Cuello botella: Despachada→Bod.Destino = 28.4h (43% del tiempo total).';
+  el.appendChild(note);
+})();
+
+// =============================================
+// VIEW 6: MOTIVOS CANCELACIÓN/RECHAZO
+// =============================================
+buildKPI('kpiMotivos', [
+  {label:'Total Canceladas',val:fmt(238000),sub:pct(238000,1838000)+' de creadas',cls:'red'},
+  {label:'Total Rechazadas',val:fmt(48000),sub:pct(48000,1838000)+' de creadas',cls:'amber'},
+  {label:'Cancel: Top Motivo',val:'Otros',sub:'62K — mal categorizado',cls:'red'},
+  {label:'Rechaz: Top Motivo',val:'Aut. Gerencia',sub:'43K (57% de rechazos)',cls:'amber'},
+  {label:'Sin Motivo Cancel.',val:fmt(51000),sub:'21.4% del total cancel.',cls:'purple'},
+  {label:'Sin Motivo Rechaz.',val:fmt(9500),sub:'19.8% del total rechaz.',cls:'cyan'}
+]);
+
+renderBreakdown('motivosDetail', [
+  {label:'"Otros" (literal — agente elige Otros)',count:62159,color:'#ef4444'},
+  {label:'Cliente final cancela',count:60818,color:'#f87171'},
+  {label:'Sin motivo (null/vacío)',count:50809,color:'#cbd5e1'},
+  {label:'Pedido duplicado',count:23857,color:'#fb923c'},
+  {label:'Datos incompletos',count:17471,color:'#f59e0b'},
+  {label:'Mal historial / riesgoso',count:3394,color:'#dc2626'},
+  {label:'Cambio transportadora',count:3386,color:'#a78bfa'},
+  {label:'Cambio tipo recaudo',count:2825,color:'#8b5cf6'},
+  {label:'Sin contacto / confirmación',count:2490,color:'#d97706'},
+  {label:'Excede valor a recaudar',count:2119,color:'#94a3b8'},
+  {label:'Fraude / fake',count:840,color:'#991b1b'},
+  {label:'Otros (texto libre irrepetible)',count:6883,color:'#64748b'}
+]);
+
+renderBreakdown('motivosRechazo', [
+  {label:'Autorizado por gerencia',count:43000,color:'#ef4444'},
+  {label:'Sin motivo (null)',count:9500,color:'#cbd5e1'},
+  {label:'No despacho del proveedor',count:3600,color:'#fb923c'},
+  {label:'Otros',count:1600,color:'#f59e0b'},
+  {label:'Cobertura',count:1100,color:'#a78bfa'},
+  {label:'Pedido duplicado',count:1000,color:'#94a3b8'}
+]);
+
+function buildCancelChart() {
+  var c = document.getElementById('chart-cancel-mes'); c.textContent = '';
+  var W = c.clientWidth || 500;
+  var svg = d3.select(c).append('svg').attr('width',W).attr('height',260);
+  var months = ['Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene','Feb','Mar','Abr','May'];
+  var cancelData = [68000,72000,71000,74000,76000,62000,75000,73000,70000,78000,80000,82000];
+  var rechazData = [14000,15000,14500,15500,16000,13000,15500,15000,14500,16000,16500,16000];
+  var maxY = 100000;
+  var xScale = d3.scaleBand().domain(months).range([60,W-20]).padding(0.25);
+  var yScale = d3.scaleLinear().domain([0,maxY]).range([230,20]);
+  svg.selectAll('.bar-cancel').data(cancelData).join('rect')
+    .attr('x',function(d,i){return xScale(months[i])}).attr('y',function(d){return yScale(d)})
+    .attr('width',xScale.bandwidth()*0.5).attr('height',function(d){return 230-yScale(d)})
+    .attr('fill','#ef4444').attr('opacity',.7).attr('rx',3);
+  svg.selectAll('.bar-rechaz').data(rechazData).join('rect')
+    .attr('x',function(d,i){return xScale(months[i])+xScale.bandwidth()*0.5}).attr('y',function(d){return yScale(d)})
+    .attr('width',xScale.bandwidth()*0.5).attr('height',function(d){return 230-yScale(d)})
+    .attr('fill','#f59e0b').attr('opacity',.7).attr('rx',3);
+  months.forEach(function(m) {
+    svg.append('text').attr('x',xScale(m)+xScale.bandwidth()/2).attr('y',248).attr('text-anchor','middle').attr('font-size','11px').attr('fill','#8d96a8').text(m);
+  });
+  [0,25000,50000,75000,100000].forEach(function(v) {
+    svg.append('text').attr('x',50).attr('y',yScale(v)+4).attr('text-anchor','end').attr('font-size','10px').attr('fill','#8d96a8').text(v>=1000?(v/1000)+'K':v);
+    svg.append('line').attr('x1',60).attr('x2',W-20).attr('y1',yScale(v)).attr('y2',yScale(v)).attr('stroke','#e2e5eb');
+  });
+  var leg = svg.append('g').attr('transform','translate(70,10)');
+  leg.append('rect').attr('width',10).attr('height',10).attr('fill','#ef4444').attr('rx',2);
+  leg.append('text').attr('x',14).attr('y',9).attr('font-size','11px').attr('fill','#5a6478').text('Canceladas');
+  leg.append('rect').attr('x',100).attr('width',10).attr('height',10).attr('fill','#f59e0b').attr('rx',2);
+  leg.append('text').attr('x',114).attr('y',9).attr('font-size','11px').attr('fill','#5a6478').text('Rechazadas');
+}
+
+renderBreakdown('resolucionMotivos', [
+  {label:'REHUSA RECIBIR — 64.4%',count:124057,color:'#f59e0b'},
+  {label:'COORDINAR ENTREGA — 71.8%',count:114520,color:'#059669'},
+  {label:'Se visita no se logra — 61%',count:26442,color:'#fb923c'},
+  {label:'No hay quien reciba — 48.3%',count:15930,color:'#ef4444'},
+  {label:'NO CONTESTA CLIENTE — 41.1%',count:15352,color:'#dc2626'},
+  {label:'FIJA FECHA Y HORA — 75.6%',count:9228,color:'#10b981'},
+  {label:'Reprogramar entrega — 41.9%',count:9062,color:'#dc2626'},
+  {label:'NO SE ENCUENTRA — 40.4%',count:7114,color:'#dc2626'}
+]);
+
+// =============================================
+// RESIZE HANDLER
+// =============================================
+window.addEventListener('resize', function() {
+  buildSankeyChart('sankey-funnel', funnelNodes, funnelLinks);
+  var activeView = document.querySelector('.view.active');
+  if (activeView && activeView.id === 'view-novedades') buildStateLifecycle();
+  if (activeView && activeView.id === 'view-transportadoras') { buildTranspCharts(); buildCarrierSankeys(); }
+  if (activeView && activeView.id === 'view-manifiestos') buildManifiestoSankey();
+  if (activeView && activeView.id === 'view-tiempos') buildTiemposSankey();
+  if (activeView && activeView.id === 'view-motivos') buildCancelChart();
+});
+</script>
+</body>
+</html>
