@@ -102,12 +102,13 @@ W = n / (n + K)
 K = ( Z² · R_global · (1 − R_global) ) / E²
 ```
 - **Z = 1,96** (95% de confianza) · **E = 15%** de error.
-- **R_global** = tasa base global de la comunidad. ⚠️ **Por confirmar qué métrica es** (efectividad de
-  entrega, presumiblemente) — no está explícita en la fuente; cerrar con Kate/Data antes de construir.
+- **R_global** = la **efectividad de los golden** por transportadora×ciudad (resuelto en §5.4: es el `p`
+  de `k_final`). `[🟢 aclarado 2026-07-21]`
 
-> Coherente con §5 ("criterio en lenguaje claro, no caja negra"): K sale de estadística estándar, no
-> de un número arbitrario. Pendiente reconciliar **G_esperada (ganancia)** con la **U = We·Efectividad +
-> Wf·Flete + Wd·Días** de §5 — ¿la "ganancia" es la utilidad U, o un factor aparte? Alinear con el doc.
+> Coherente con §5 ("criterio en lenguaje claro, no caja negra"): K sale de estadística estándar, no de
+> un número arbitrario. **Qué es la "ganancia" G — resuelto (§5.4):** es `resultado_neto` = ganancia si la
+> orden entregó, **−flete si se devolvió**, sobre la muestra de últimos 3 meses (solo ENTREGADO/DEVOLUCIÓN).
+> No es la utilidad U completa; U añade `flete_std` y `dias_entrega_std` normalizados por ciudad.
 
 ## 5.3 · Cómo se comparan las transportadoras — bootstrapping  `[🔵 en diseño · fuente: screenshot Juan, 2026-07-21]`
 No se compara la ganancia esperada de cada carrier con un solo número, sino con su **distribución**.
@@ -145,6 +146,37 @@ Ejemplo de la fuente (`user 36655` × `ciudad 1221`, ilustrativo):
 > (DOMINA 48.083). Confirma que el criterio de orden es **probabilidad de ser el mejor**, no el
 > promedio — y por eso se muestran las tres columnas, para no esconder esa diferencia al usuario
 > (coherente con §5, "no caja negra").
+
+## 5.4 · Arquitectura de cómputo — 2 notebooks, sin API  `[🟢 describe el código real · fuente: explicación del código + Juan, 2026-07-21]`
+El motor le dice a un dropshipper **qué transportadora usar en una ciudad dada**, combinando su propio
+historial con el de los mejores dropshippers ("golden"). **Es un modelo NO determinista** (usa muestreo,
+§5.3). Corre desde **dos notebooks Jupyter conectados directo a PostgreSQL — sin capa de API.**
+
+### Parte 1 · Estadísticas generales — pipeline nocturno  `[01_carga_datos.ipynb §2]`
+No depende de ningún dropshipper: es una **"foto" del mercado por país**, que se recalcula **todas las
+noches** y se guarda para no golpear la base en cada consulta.
+1. **Muestra de órdenes** (`ia.st_orders`): últimos 3 meses (configurable), **solo ENTREGADO / DEVOLUCIÓN**.
+   Calcula **`resultado_neto`** = ganancia si entregó · **−flete si hubo devolución**; y `dias_entrega`
+   (fecha de guía generada → fecha de entrega). ← **esto es la "ganancia" G de §5.2.**
+2. **Normaliza** `flete` y `dias_entrega` a escala **0–1 por ciudad** (`flete_std`, `dias_entrega_std`),
+   donde **1 siempre es mejor** (son los `Flete_std`/`Días_std` de la U de §5).
+3. **Golden** = dropshippers en el **percentil ≥75 de nº de pedidos** (el top 25% por volumen) **y por
+   encima de la mediana** (percentil ≥50) **en ganancia promedio**. Es el patrón de referencia de "buen
+   comportamiento".
+4. **`k_final`** por transportadora×ciudad: tamaño de muestra estilo intervalo de confianza
+   `(Z²·p·(1−p))/E²` **sobre la efectividad de los golden** (← **esto es el `R_global` de §5.2**). Define
+   "cuánta evidencia propia necesita un dropshipper para que se confíe en su propio historial".
+5. **Guarda en Postgres + cachea en Parquet** (`estadisticas_golden_CO.parquet`,
+   `estadisticas_todos_CO.parquet`, `transportadoras_CO.parquet`, `ordenes_golden_CO.parquet`) para que la
+   Parte 2 no vuelva a la base en cada consulta.
+
+### Parte 2 · Comparación por dropshipper — bajo demanda  `[01_carga_datos.ipynb §3 · 02_simulacion.ipynb (a escala)]`
+Se calcula **cuando el dropshipper lo pide** (no de noche): dado `dropshipper_id` + `ciudad`, para cada
+transportadora **que los golden ya usaron ahí**:
+1. Peso bayesiano **`W = n_propias / (n_propias + k_final)`**: poco historial propio → **W→0**, manda el
+   golden; mucho → **W→1**, manda el propio. **K y W solo deciden cuánto peso va al golden vs. al
+   dropshipper** — nada más.
+2. Mezcla `G_esperada = W·G_user + (1−W)·G_global` (§5.2) y simula 5.000 trials (§5.3) → `probabilidad_mejor`.
 
 ## 6 · Estrategia de apertura  `[🟡 doc §5]`
 - **Fase 0 — Beta cerrado** (Shopi + perfiles de prueba), 2-3 meses, tráfico real.
@@ -197,6 +229,7 @@ Ejemplo de la fuente (`user 36655` × `ciudad 1221`, ilustrativo):
 - Reacción cuando la sugerencia se basa en Golden y no en historial propio.
 
 ## 11 · Changelog
+- 2026-07-21 (c) — **Arquitectura de cómputo (§5.4)**: 2 notebooks Jupyter directo a PostgreSQL, sin API. Parte 1 (pipeline nocturno, `01_carga_datos §2`): muestra ENTREGADO/DEVOLUCIÓN, `resultado_neto`, normalización 0–1 por ciudad, definición de golden (percentil ≥75 pedidos + >mediana ganancia), `k_final`, caché Parquet. Parte 2 (bajo demanda por dropshipper, `02_simulacion`). **Cerradas las 2 preguntas de §5.2:** R_global = efectividad de los golden; la "ganancia" G = `resultado_neto` (ganancia si entregó, −flete si devolvió). K y W solo deciden peso golden vs. propio.
 - 2026-07-21 (b) — **Bootstrapping añadido (§5.3)** desde screenshot de Juan: 5.000 trials muestreando la distribución de cada carrier → `probabilidad_mejor` (nº de trials que gana / 5.000). El ranking se ordena por probabilidad de ser el mejor, no por ganancia promedio; salida por dropshipper×ciudad con prob_mejor + promedio + mediana. Ejemplo user 36655 × ciudad 1221.
 - 2026-07-21 — **Fórmula de score añadida (§5.2)** desde screenshot de Juan: `G_esperada = W·G_user + (1−W)·G_global`, con `W = n/(n+K)` y `K = Z²·R_global·(1−R_global)/E²` (Z=1,96 · E=15%). Aterriza el prior bayesiano de §5. Abiertas: qué métrica es R_global, y cómo se reconcilia "ganancia esperada" con la utilidad U del doc §4.
 - 2026-06-24 (b) — **Revisión a fondo del Figma** (flujo "Optimizar por único departamento"): documentado el flujo UX en §5.1 (pantalla base, modo IA de 2 pasos, 3 estados, 3 granularidades, marca origen-config por ciudad). Hallazgo: posible inconsistencia copy CTA ("precisión de datos") vs modelo V1 (50/50).
