@@ -109,6 +109,43 @@ K = ( Z² · R_global · (1 − R_global) ) / E²
 > de un número arbitrario. Pendiente reconciliar **G_esperada (ganancia)** con la **U = We·Efectividad +
 > Wf·Flete + Wd·Días** de §5 — ¿la "ganancia" es la utilidad U, o un factor aparte? Alinear con el doc.
 
+## 5.3 · Cómo se comparan las transportadoras — bootstrapping  `[🔵 en diseño · fuente: screenshot Juan, 2026-07-21]`
+No se compara la ganancia esperada de cada carrier con un solo número, sino con su **distribución**.
+Aterriza el "Bootstrap 5.000 iteraciones" de §5.
+
+**Mecánica:**
+1. Cada transportadora (T1, T2, …, Tn) tiene su **distribución** de ganancia (de su historial, ponderada
+   con §5.2). No un promedio: una distribución.
+2. En cada **trial** (se corren **5.000**), se saca una **muestra** de la distribución de cada carrier
+   → una ganancia simulada por transportadora en ese trial.
+3. El **ganador del trial** = la transportadora con la mayor ganancia muestreada esa vez (la celda
+   resaltada de la fila). Un trial gana T1, otro gana T3, etc. — según cómo caiga el muestreo.
+4. Sobre los 5.000 trials: **probabilidad_mejor** de un carrier = nº de trials que gana / 5.000.
+   Es la probabilidad de ser la mejor opción para ese `user_id` × `city_id`.
+
+**Salida por (dropshipper × ciudad):** `probabilidad_mejor` · `ganancia_promedio_simulada` ·
+`mediana_simulada`. El **ranking se ordena por `probabilidad_mejor`**, no por la ganancia promedio
+(matiz importante: precisa el "ranking por utilidad esperada" de §5).
+
+Ejemplo de la fuente (`user 36655` × `ciudad 1221`, ilustrativo):
+
+| # | Transportadora | prob_mejor | ganancia_prom_sim | mediana_sim |
+|---|---|---|---|---|
+| 1 | SERVIENTREGA | 17,1% | 50.028 | 36.225 |
+| 2 | DOMINA | 15,9% | 45.535 | 48.083 |
+| 3 | COORDINADORA | 15,2% | 39.590 | 36.929 |
+| 4 | VELOCES | 15,1% | 49.430 | 44.503 |
+| 5 | TCC | 13,5% | 38.337 | 37.976 |
+| 6 | ENVIA | 10,1% | 30.842 | 34.649 |
+| 7 | INTERRAPIDISIMO | 9,5% | 30.541 | 32.281 |
+| 8 | 99MINUTOS | 3,7% | 25.253 | 27.743 |
+
+> Ojo (para reconciliar con el doc): en el ejemplo el #1 por probabilidad (SERVIENTREGA, prob 17,1%,
+> mediana 36.225) **no** es el de mayor ganancia promedio (VELOCES 49.430) ni de mayor mediana
+> (DOMINA 48.083). Confirma que el criterio de orden es **probabilidad de ser el mejor**, no el
+> promedio — y por eso se muestran las tres columnas, para no esconder esa diferencia al usuario
+> (coherente con §5, "no caja negra").
+
 ## 6 · Estrategia de apertura  `[🟡 doc §5]`
 - **Fase 0 — Beta cerrado** (Shopi + perfiles de prueba), 2-3 meses, tráfico real.
 - **Fase 1** no-Golden bajo volumen (1–100 ord/mes) · **Fase 2** medio (101–500) · **Fase 3** 501–1.500 · **Fase 4** Golden/alto volumen (solo con controles maduros + **validación legal de decisiones por IA**).
@@ -160,6 +197,7 @@ K = ( Z² · R_global · (1 − R_global) ) / E²
 - Reacción cuando la sugerencia se basa en Golden y no en historial propio.
 
 ## 11 · Changelog
+- 2026-07-21 (b) — **Bootstrapping añadido (§5.3)** desde screenshot de Juan: 5.000 trials muestreando la distribución de cada carrier → `probabilidad_mejor` (nº de trials que gana / 5.000). El ranking se ordena por probabilidad de ser el mejor, no por ganancia promedio; salida por dropshipper×ciudad con prob_mejor + promedio + mediana. Ejemplo user 36655 × ciudad 1221.
 - 2026-07-21 — **Fórmula de score añadida (§5.2)** desde screenshot de Juan: `G_esperada = W·G_user + (1−W)·G_global`, con `W = n/(n+K)` y `K = Z²·R_global·(1−R_global)/E²` (Z=1,96 · E=15%). Aterriza el prior bayesiano de §5. Abiertas: qué métrica es R_global, y cómo se reconcilia "ganancia esperada" con la utilidad U del doc §4.
 - 2026-06-24 (b) — **Revisión a fondo del Figma** (flujo "Optimizar por único departamento"): documentado el flujo UX en §5.1 (pantalla base, modo IA de 2 pasos, 3 estados, 3 granularidades, marca origen-config por ciudad). Hallazgo: posible inconsistencia copy CTA ("precisión de datos") vs modelo V1 (50/50).
 - 2026-06-24 — Spec sembrado desde el Kickoff (Doc) + Figma. Jira (PRM-1513/DROP-17946) por leer cuando reconecte. Foco: rastrear las dependencias de Juan (Carrier Ops).
