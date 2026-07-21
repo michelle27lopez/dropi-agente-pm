@@ -9,10 +9,10 @@
 
 | Campo | Valor |
 |---|---|
-| **Nombre** | Katerine |
-| **Rol** | Product Manager |
+| **Nombre** | Santiago Herrera |
+| **Rol** | Product Manager (PM) |
 | **Empresa** | Dropi |
-| **Frente / Equipo** | Brands |
+| **Frente / Equipo** | Seller Success |
 
 ---
 

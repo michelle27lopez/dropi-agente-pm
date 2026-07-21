@@ -3,11 +3,10 @@
 import { useRouter } from "next/navigation";
 import { Check, Lock } from "lucide-react";
 
-export type PhaseTabKey = "resumen" | "planeacion" | "ejecucion" | "cierre";
+export type PhaseTabKey = "resumen" | "ejecucion" | "cierre";
 
 const TABS: { key: PhaseTabKey; label: string }[] = [
   { key: "resumen", label: "Resumen" },
-  { key: "planeacion", label: "Planeación" },
   { key: "ejecucion", label: "Ejecución" },
   { key: "cierre", label: "Cierre" },
 ];
@@ -31,13 +30,11 @@ export function PhaseTabs({
 
   const locked: Record<PhaseTabKey, boolean> = {
     resumen: false,
-    planeacion: false,
     ejecucion: !planningComplete,
     cierre: !isActive,
   };
   const done: Record<PhaseTabKey, boolean> = {
     resumen: false,
-    planeacion: planningComplete,
     ejecucion: isActive,
     cierre: closingDone,
   };
@@ -46,9 +43,8 @@ export function PhaseTabs({
     if (locked[tab] || tab === active) return;
     const base = `/proyectos/dinamicas-catalogo/planeacion/${campaignId}`;
     if (tab === "resumen") router.push(`${base}/dashboard`);
-    if (tab === "planeacion") router.push(base);
     if (tab === "ejecucion") router.push(`${base}/ejecucion`);
-    if (tab === "cierre") router.push(`${base}?phase=cierre`);
+    if (tab === "cierre") router.push(`${base}/cierre`);
   };
 
   return (
