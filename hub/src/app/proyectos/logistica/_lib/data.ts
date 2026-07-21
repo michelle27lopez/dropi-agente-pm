@@ -155,55 +155,51 @@ export function proyectoPorSlug(slug: string) {
   return proyectos.find((p) => p.slug === slug);
 }
 
+// Orden = prioridad de trabajo, derivada del roadmap Q3 (estrategia/roadmap-q3-logistica.md):
+// Fase 0 enabler → Fase 1 apuestas activas → Fase 2 construcción → Fase 3 terceros → casi cerrados.
+// NO es orden por cadena de valor (ese es el eje del mapa /mapa). Ajustar aquí si cambia la prioridad.
 export const proyectos: Proyecto[] = [
-  {
-    nombre: "Selección inteligente de transportadoras",
-    slug: "seleccion-transportadoras",
-    etapa: "Generación", fase: "Ejecución", ticket: "PRM-1513",
-    descripcion: "Elegir automáticamente la mejor transportadora por zona para bajar la devolución y mejorar la entrega.",
-    foco: "Ranking carrier × zona (POC 72%, gate Maria Ossa). Juan = Carrier Ops.",
-  },
-  {
-    nombre: "Parametrización de tarifas",
-    slug: "tarifas",
-    etapa: "Generación", fase: "Definición",
-    descripcion: "Parametrizar el costo por orden (fletes) de forma clara y automática.",
-    foco: "Discovery completo, doc E2E rehecho. Bloqueada tras Venezuela.",
-  },
   {
     nombre: "Movilización: rescatar confirmación (SHOP)",
     slug: "movilizacion",
     etapa: "Confirmación", fase: "Discovery", ticket: "PRM-1497", destacado: true,
     descripcion: "Rescatar las órdenes que se crean pero no entran a la red por fallar la confirmación en integraciones.",
-    foco: "Fuga #1. 317K órdenes >24h en confirmar (prom. 11,18h). Experimento: autoconfirmación por madurez + instrumentar motivo de cancelación.",
+    foco: "Fuga #1 (apuesta 2, Fase 1). 317K órdenes >24h en confirmar (prom. 11,18h). Experimento: autoconfirmación por madurez + instrumentar motivo de cancelación.",
   },
   {
     nombre: "Dirección confiable + geo",
     slug: "direccion-geo",
     etapa: "Confirmación", fase: "Discovery", ticket: "PRM-91", destacado: true,
     descripcion: "Capturar y validar la dirección/ubicación del comprador para prevenir y recuperar novedades.",
-    foco: "Dos hermanas: prevención (capturar ubicación) + recuperación (reintento con ubicación).",
+    foco: "Fase 1 (forzar validación en SHOP). Dos hermanas: prevención (capturar ubicación) + recuperación (reintento con ubicación).",
   },
   {
-    nombre: "Same Day",
-    slug: "same-day",
-    etapa: "Despacho", fase: "Ejecución", ticket: "PRM-1366", destacado: true,
-    descripcion: "Entrega el mismo día para bodegas propias y Veloces.",
-    foco: "MVP: flag SD + hora de corte + validación geo + selección guiada. Épica PROD-1127.",
+    nombre: "Dueño y triaje de la novedad",
+    slug: "novedad-triaje",
+    etapa: "Novedad / Posventa", fase: "Discovery", ticket: "PRM-1512",
+    descripcion: "Dar dueño, SLA y triaje por motivo a las novedades para recuperar la orden.",
+    foco: "Apuesta 4 (Fase 1, PRM-1512 a finalizar). Fuga ④. Capa transversal + posventa (recompra/garantía).",
   },
   {
     nombre: "Torre de control / Tiempo por fases",
     slug: "torre-control",
     etapa: "Tránsito", fase: "Discovery",
     descripcion: "Medir el tiempo de la orden por fases (F1→F5) para ver dónde se estanca.",
-    foco: "Habilitador del KPI de tiempo. Detecta órdenes estancadas y da ETA.",
+    foco: "Fase 0 · enabler que desbloquea medir todo. Habilitador del KPI de tiempo. Detecta órdenes estancadas y da ETA.",
+  },
+  {
+    nombre: "Selección inteligente de transportadoras",
+    slug: "seleccion-transportadoras",
+    etapa: "Generación", fase: "Ejecución", ticket: "PRM-1513",
+    descripcion: "Elegir automáticamente la mejor transportadora por zona para bajar la devolución y mejorar la entrega.",
+    foco: "Apuesta 3 (Fase 2). Ranking carrier × zona (POC 72%, gate Maria Ossa). Juan = Carrier Ops.",
   },
   {
     nombre: "Normalización de estados",
     slug: "normalizacion-estados",
     etapa: "Tránsito", fase: "Represado", ticket: "PRM-1297",
     descripcion: "Homologar los estados del carrier para poder medir bien (sin-cierre, tiempo por fases).",
-    foco: "Represado. Pre-requisito de medición.",
+    foco: "Apuesta 5 (Fase 2, habilita medir MX). Represado. Pre-requisito de medición.",
   },
   {
     nombre: "Reducir devoluciones (COD)",
@@ -213,18 +209,25 @@ export const proyectos: Proyecto[] = [
     foco: "Fuga ②. Score de riesgo + triaje por motivo + anticipo/ConfioPagos.",
   },
   {
-    nombre: "Dueño y triaje de la novedad",
-    slug: "novedad-triaje",
-    etapa: "Novedad / Posventa", fase: "Discovery", ticket: "PRM-1512",
-    descripcion: "Dar dueño, SLA y triaje por motivo a las novedades para recuperar la orden.",
-    foco: "Fuga ④. Capa transversal + posventa (recompra/garantía).",
+    nombre: "Same Day",
+    slug: "same-day",
+    etapa: "Despacho", fase: "Ejecución", ticket: "PRM-1366", destacado: true,
+    descripcion: "Entrega el mismo día para bodegas propias y Veloces.",
+    foco: "Fase 3 (terceros). MVP: flag SD + hora de corte + validación geo + selección guiada. Épica PROD-1127.",
+  },
+  {
+    nombre: "Parametrización de tarifas",
+    slug: "tarifas",
+    etapa: "Generación", fase: "Definición",
+    descripcion: "Parametrizar el costo por orden (fletes) de forma clara y automática.",
+    foco: "Discovery completo, doc E2E rehecho. BLOQUEADA tras la prioridad de Venezuela en TI.",
   },
   {
     nombre: "Guías reemplazatorias (Ecom Scanner)",
     slug: "guias-reemplazatorias",
     etapa: "Novedad / Posventa", fase: "Beta", ticket: "PRM-745",
     descripcion: "Generar guías cuando el carrier no lee el código de barras (Ecom Scanner).",
-    foco: "En beta: Interrap, Coordinadora y TCC.",
+    foco: "Casi cerrado · en beta: Interrap, Coordinadora y TCC.",
   },
   {
     nombre: "Notificaciones prevención de devoluciones",
@@ -292,6 +295,15 @@ export const experimentos: Experimento[] = [
     estado: "Diseñado",
     impacto: "Falta solo la URL/pantalla + Figma para lanzar (PROD-1086)",
     proyecto: "Dirección confiable + geo",
+  },
+  {
+    nombre: "Vigía — extensión Chrome sobre el módulo de órdenes",
+    hipotesis:
+      "Una extensión que lee las guías del módulo de órdenes y le anticipa al usuario el resultado probable (qué revisar, qué tener en cuenta) le permite corregir antes de que la orden se caiga y mejorar su operación.",
+    metrica: "[por definir con datos] — candidatas: % de guías corregidas tras la alerta · efecto en devolución/novedad de quien la usa",
+    estado: "Idea",
+    impacto: "Herramienta predictiva/advisory sobre la orden creada. Actúa antes del desenlace, así que cruza las fugas ② devolución y ④ novedad.",
+    proyecto: "Dueño y triaje de la novedad",
   },
 ];
 
