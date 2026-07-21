@@ -329,6 +329,7 @@ Un tema vive en **una sola página canónica**. Antes de crear una página nueva
 | Facilitador/a | Quién lideró la sesión |
 | Grabación | Link a Drive |
 | Notas / Transcripción | Link a Drive |
+| Enlace(s) en Dropi | Link(s) directo(s) a la(s) pantalla(s) de la plataforma de la(s) que habla la página (opcional — se agrega cuando se consigue) |
 | Estado del contenido | `Validado` / `Pendiente de validar` / `Hipótesis` |
 
 Si la página se amplía con una sesión nueva, se **agrega una fila nueva** a la ficha de fuente (no se reemplaza la anterior) para conservar el historial de de dónde vino cada parte del contenido.

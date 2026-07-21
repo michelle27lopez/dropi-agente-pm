@@ -125,6 +125,12 @@ export default function TimeToValuePage() {
                   title: "Propuesta: Activar → Vender",
                   sub: "Auditar deja de ser la puerta",
                 },
+                {
+                  href: "/proyectos/time-to-value/plan-lanzamiento",
+                  icon: "🚀",
+                  title: "Plan de Choque — Lanzamiento",
+                  sub: "Dueños, aprobaciones, fases",
+                },
               ].map((card) => (
                 <a
                   key={card.href}

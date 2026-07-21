@@ -46,6 +46,7 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/proyectos/indicadores/ascenso") ||
     pathname.startsWith("/api/proyectos/ascenso-ofertas") ||
     pathname.startsWith("/api/public") ||
+    pathname.startsWith("/docs") ||
     // Página de "productos elegibles" que se le manda a cada proveedor por
     // WhatsApp — pública a propósito, el token opaco en la URL es el control
     // de acceso (ver hub/src/lib/local-store-planeacion.ts). OJO: las rutas
