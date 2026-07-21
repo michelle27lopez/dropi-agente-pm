@@ -162,7 +162,7 @@ export default function CelulaHomePage() {
         <div style={{ marginBottom: 56 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
             <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
-              Proyectos
+              Discovery projects
             </p>
             {canCreate && (
               <div style={{ display: "flex", gap: 8 }}>
