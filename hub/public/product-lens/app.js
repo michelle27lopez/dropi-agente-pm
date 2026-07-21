@@ -105,6 +105,7 @@ const briefCycleTitle = document.querySelector("#briefCycleTitle");
 const viewButtons = document.querySelectorAll("[data-view-target]");
 const homeView = document.querySelector("#homeView");
 const workspaceView = document.querySelector("#workspaceView");
+const chatDrawer = document.querySelector("#chatDrawer");
 const libraryView = document.querySelector("#libraryView");
 const contextView = document.querySelector("#contextView");
 const analyticsView = document.querySelector("#analyticsView");
@@ -968,6 +969,7 @@ function setView(view) {
   workspace.dataset.view = view;
   homeView.hidden = view !== "home";
   workspaceView.hidden = view !== "workspace";
+  if (chatDrawer) chatDrawer.hidden = view !== "workspace";
   libraryView.hidden = view !== "library";
   contextView.hidden = view !== "context";
   if (analyticsView) analyticsView.hidden = view !== "analytics";
