@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
@@ -24,24 +25,62 @@
   body {
     background: var(--bg);
     color: var(--fg);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
 
-/* Hub home: hover/entrance motion — ease-out-quart, sin bounce (DESIGN.md) */
+/* Hub home: Usabilidad Lens — Spring bounce y sombras profundas */
 @keyframes hub-card-in {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .hub-card {
-  animation: hub-card-in 0.4s cubic-bezier(0.25, 1, 0.5, 1) backwards;
-  transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+  animation: hub-card-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s ease, box-shadow 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .hub-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+  border-color: #FFCBA6;
+  box-shadow: 0 10px 30px rgba(20,20,20,.07);
+}
+
+/* Glassmorphism Login (Lens) */
+.login-screen {
+  align-items: center;
+  background: radial-gradient(120% 90% at 50% -10%, #FFF4EC 0%, #FAFAF8 46%), #FAFAF8;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  overflow: hidden;
+  padding: 24px;
+  position: relative;
+}
+.login-aurora {
+  background:
+    radial-gradient(closest-side, rgba(255,107,0,.20), transparent 70%) 18% 22% / 55vmax 55vmax no-repeat,
+    radial-gradient(closest-side, rgba(139,92,246,.12), transparent 70%) 82% 78% / 48vmax 48vmax no-repeat,
+    radial-gradient(closest-side, rgba(20,184,166,.10), transparent 70%) 78% 12% / 40vmax 40vmax no-repeat;
+  filter: blur(8px);
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  animation: aurora-float 18s ease-in-out infinite alternate;
+}
+@keyframes aurora-float { from { transform: translateY(-2%) scale(1); } to { transform: translateY(2%) scale(1.06); } }
+.login-card-glass {
+  background: rgba(255,255,255,.82);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 22px;
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset, 0 20px 60px rgba(31,35,40,.14), 0 2px 8px rgba(31,35,40,.06);
+  max-width: 408px;
+  padding: 34px 34px 32px;
+  position: relative;
+  width: 100%;
+  z-index: 1;
 }
 .hub-card-icon,
 .hub-card-arrow {
