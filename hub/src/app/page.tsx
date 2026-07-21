@@ -161,7 +161,10 @@ const poc: Item[] = [
   {
     key: "gali-demo",
     name: "Gali - Demo",
-    description: "Propuesta de valor y copiloto para selección de productos ganadores (v5). Chat interactivo con mentores de comunidad, grilla con 1M de productos y generador de creativos.",
+    description: "Propuesta de valor y copiloto para selección de productos ganadores (v5). Chat interactivo con mentores de comunidad, grilla con 1M de productos y generador de creativos. Ahora vive en su propio repo con login propio.",
+    // TODO: reemplazar por la URL real una vez desplegado el repo Gali-experiment
+    // (github.com/jaimeguevara-dropi/Gali-experiment). Mientras no exista, apunta
+    // a la versión que sigue intacta dentro de este hub.
     url: "/proyectos/gali-demo",
     tag: "Demo · Caza Productos v5",
     color: "#FF6102",
@@ -284,7 +287,7 @@ export default function HubPage() {
           <Section title="Updates" items={filteredUpdates} ctaLabel="Ver →" />
         </div>
 
-        <Section title="Proyectos" items={filteredProjects} ctaLabel="Ver proyecto →" />
+        <Section title="Discovery projects" items={filteredProjects} ctaLabel="Ver proyecto →" />
 
         <div style={{ marginTop: filteredPoc.length ? 56 : 0 }}>
           <Section title="Pruebas de concepto" items={filteredPoc} ctaLabel="Ver proyecto →" />

@@ -40,10 +40,10 @@ supabase = create_client(SUPABASE_URL, SUPABASE_SERVICE_KEY)
 DATA_DIR = os.path.join(HUB_DIR, "doc hub", "data ttv")
 COMUNIDADES_MASTER_PATH = os.path.join(HUB_DIR, "doc hub", "Comunidades.csv")
 
-CRM_PATH = os.path.join(DATA_DIR, "crm 14 jul.csv")
-UP_REGISTERS_PATH = os.path.join(DATA_DIR, "singups 14 juli userpilot.csv")
-SURVEY_COMUNIDADES_PATH = os.path.join(DATA_DIR, "encuesta comunidades 16jul.csv")
-SURVEY_HUERFANOS_PATH = os.path.join(DATA_DIR, "encuesta huerfanos 16 jul.csv")
+CRM_PATH = os.path.join(DATA_DIR, "crm 21 jul.csv")
+UP_REGISTERS_PATH = os.path.join(DATA_DIR, "signups 21 jul.csv")
+SURVEY_COMUNIDADES_PATH = os.path.join(DATA_DIR, "encuesta comunidades 21 jul.csv")
+SURVEY_HUERFANOS_PATH = os.path.join(DATA_DIR, "Encuesta 21 jl.csv")
 
 def normalize_email(email):
     if not email:

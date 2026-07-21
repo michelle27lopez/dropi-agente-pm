@@ -42,9 +42,12 @@ export function Section({ title, items, ctaLabel }: { title: string; items: Item
 
 export function Card({ item, ctaLabel, index }: { item: Item; ctaLabel: string; index: number }) {
   const Tag = item.url ? "a" : "div";
+  const isExternal = item.url?.startsWith("http");
   return (
     <Tag
       href={item.url}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       className="hub-card"
       style={{
         background: "var(--card)",
