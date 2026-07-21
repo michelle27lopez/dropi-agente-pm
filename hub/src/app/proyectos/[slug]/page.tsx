@@ -120,8 +120,19 @@ export default function ProjectDashboardPage() {
         
         {/* Navigation Breadcrumb */}
         <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 24, fontSize: 13 }}>
-          <a href={cellSlug ? `/celula/${cellSlug}` : "/"} style={{ color: "var(--muted)", textDecoration: "none" }}>
-            ← Volver a Célula {cellName}
+          <a
+            href={cellSlug ? `/celula/${cellSlug}` : "/"}
+            onClick={(e) => {
+              e.preventDefault();
+              if (window.history.length > 1) {
+                router.back();
+              } else {
+                router.push(cellSlug ? `/celula/${cellSlug}` : "/");
+              }
+            }}
+            style={{ color: "var(--muted)", textDecoration: "none" }}
+          >
+            ← Volver
           </a>
         </div>
 
