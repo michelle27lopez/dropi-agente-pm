@@ -118,7 +118,7 @@ def render_page(projects):
       <div class="logo-icon">📋</div>
       <div>
         <h1>PM OS · Proyectos</h1>
-        <p class="subtitle">Katerine · Dropi · Brands · modo local</p>
+        <p class="subtitle">Santiago Herrera · Dropi · Seller Success · modo local</p>
       </div>
     </div>
     <a class="refresh" href="/">↻ Refrescar</a>

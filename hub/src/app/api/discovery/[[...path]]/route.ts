@@ -8,17 +8,35 @@ import { getContextDocuments, updateContextDocument } from "@/lib/product-lens/c
 import { assembleSystemContext } from "@/lib/product-lens/memory";
 import { acceptRisk, getMissingGateRequirements, getGateRequirements, PHASES } from "@/lib/product-lens/phaseEngine";
 import { looksLikeFeature, applyBriefUpdates, resolveRisk } from "@/lib/product-lens/cycleLogic";
-import { TRANSITIONS, SUB_CAUSA, Phase, normalizeSubPerfil, normalizeTransition, normalizeCausa, normalizeSubCausa, patternTypeFromDecision } from "@/lib/product-lens/doctrina";
+import { TRANSITIONS, SUB_CAUSA, Phase, normalizeSubPerfil, normalizeTransition, normalizeCausa, normalizeSubCausa, patternTypeFromDecision, normalizeSesgo, normalizeTestElegido, FASE_LABEL } from "@/lib/product-lens/doctrina";
 
 // Default stepper phases seed
-const defaultPhases = () => [
-  { key: "F0", label: "Detección", state: "active" },
-  { key: "F1", label: "Diagnóstico", state: "todo" },
-  { key: "F2", label: "Intervención", state: "todo" },
-  { key: "F3", label: "Experimento", state: "todo" },
-  { key: "F4", label: "Despliegue", state: "todo" },
-  { key: "F5", label: "Aprendizaje", state: "todo" },
-];
+const defaultPhases = (startPhase: Phase = "F0") => {
+  const order = ["F0", "F1", "F2", "F3", "F4", "F5"] as const;
+  const startIdx = order.indexOf(startPhase);
+  return order.map((key, i) => ({
+    key,
+    label: FASE_LABEL[key],
+    state: i === startIdx ? "active" : i < startIdx ? "done" : "todo",
+    skipped: i < startIdx ? true : false,
+    note: i < startIdx ? "salteado por inicio en Validar" : "",
+  }));
+};
+
+// parseDurationMs converts duration strings to ms
+function parseDurationMs(duracion: any): number | null {
+  const raw = typeof duracion === "string" ? duracion : duracion?.value;
+  if (typeof raw !== "string") return null;
+  const m = raw.toLowerCase().match(/(\d+(?:[.,]\d+)?)\s*(dias?|d\b|semanas?|sem\b|horas?|h\b)?/);
+  if (!m) return null;
+  const n = parseFloat(m[1].replace(",", "."));
+  if (!Number.isFinite(n) || n <= 0) return null;
+  const unit = m[2] ?? "d";
+  const DAY = 24 * 60 * 60 * 1000;
+  if (unit.startsWith("sem")) return n * 7 * DAY;
+  if (unit.startsWith("h")) return n * 60 * 60 * 1000;
+  return n * DAY;
+}
 
 // Helper to check user auth from Supabase and map their role to 'admin' or 'pm'
 async function getCurrentUser() {
@@ -295,7 +313,12 @@ export async function POST(req: NextRequest, context: any) {
     const body = await req.json();
     if (!body.title) return NextResponse.json({ error: "title required" }, { status: 400 });
 
-    const featureFramed = looksLikeFeature(body.title);
+    const coldStart = body.fase_actual === "F3" && body.cold_start === true;
+    let startPhase: Phase = "F0";
+    if (coldStart) startPhase = "F3";
+    else if (body.fase_actual && PHASES.includes(body.fase_actual as Phase)) startPhase = body.fase_actual as Phase;
+
+    const featureFramed = !coldStart && looksLikeFeature(body.title);
     if (!body.force && featureFramed) {
       await logAudit(currentUser.email, "behavior_rejected", "new", { reason: "feature", title: body.title });
       return NextResponse.json({
@@ -318,22 +341,32 @@ export async function POST(req: NextRequest, context: any) {
       sub_causa: normalizeSubCausa(body.sub_causa, body.causa),
       causa: body.causa ?? null,
       causa_source: body.causa_source ?? null,
-      fase_actual: body.fase_actual ?? "F0",
+      sesgo: null,
+      proxy_y_segunda_senal: null,
+      fase_actual: startPhase,
+      cold_start: coldStart,
       estado: "activo",
       resultado_cierre: null,
       risks: [],
       brief: body.brief ?? {},
       experiment: body.experiment ?? {},
+      spec_conductual: null,
       cierre: null,
       messages: [],
-      phases: body.phases ?? defaultPhases(),
-      activePhase: body.activePhase ?? "F0",
+      phases: body.phases ?? defaultPhases(startPhase),
+      activePhase: startPhase,
       riskAccepted: false,
       createdAt: now,
       updatedAt: now,
       last_activity_at: now,
       createdBy: currentUser.id,
     };
+
+    if (coldStart) {
+      cycle = acceptRisk(cycle, "F3", "Ciclo cold-start: arrancó directo en F3 (Validar) sin diagnóstico previo (F0–F2). El supuesto a validar no viene de una causa B=MAP confirmada.", { id: currentUser.id, name: currentUser.email });
+      cycle.riskAccepted = true;
+      await logAudit(currentUser.email, "cycle_cold_started", cycle.id, { title: body.title });
+    }
 
     if (featureFramed && body.force) {
       cycle = acceptRisk(cycle, "F0", "Ciclo creado con encuadre de feature (guardrail conducta-vs-feature anulado). El comportamiento a intervenir no quedó explícito de entrada.", { id: currentUser.id, name: currentUser.email });
@@ -433,29 +466,91 @@ export async function POST(req: NextRequest, context: any) {
     if (cycle.estado && cycle.estado !== "activo") return NextResponse.json({ error: "Cycle is closed" }, { status: 409 });
 
     const body = await req.json();
-    if (!body.decision) return NextResponse.json({ error: "decision required" }, { status: 400 });
+    const decision = String(body.decision ?? body.resultado_cierre ?? "").trim() || null;
+    
+    if (decision === "iterar") {
+      const now = new Date().toISOString();
+      const phases = (cycle.phases ?? []).map((p: any) =>
+        p.key === "F1" ? { ...p, state: "active", note: "iteración" } : { ...p, state: p.key === "F0" ? "done" : "todo" });
+      const iterated = {
+        ...cycle,
+        fase_actual: "F1",
+        activePhase: "F1",
+        phases,
+        iterated: true,
+        iterationCount: (cycle.iterationCount ?? 1) + 1,
+        riskAccepted: true,
+        updatedAt: now,
+        last_activity_at: now,
+      };
+      cyclesList[idx] = iterated;
+      await save("cycles", cyclesList);
+
+      const decisionsList = await load("decisions");
+      const dec = {
+        id: `dec-${crypto.randomUUID()}`,
+        cycleId: id,
+        fecha: now,
+        tipo: "decision",
+        causa: cycle.causa,
+        sub_perfil: cycle.sub_perfil,
+        texto: `Iterar (iteración ${iterated.iterationCount}) en "${cycle.title}": de vuelta a F1 para re-diagnosticar.`,
+        actor: currentUser.email,
+      };
+      decisionsList.push(dec);
+      await save("decisions", decisionsList);
+
+      await logAudit(currentUser.email, "cycle_iterated", id, { iterationCount: iterated.iterationCount });
+      return NextResponse.json({ cycle: iterated, iterated: true });
+    }
+
+    if (!body.learning?.trim() || !(body.patternName || body.pattern_name)?.trim()) {
+      return NextResponse.json({ error: "learning and pattern_name required" }, { status: 400 });
+    }
 
     const now = new Date().toISOString();
-    const missing = getMissingGateRequirements(cycle, "F5");
-    if (missing.length) return NextResponse.json({ error: "F5 gate not met", missing }, { status: 422 });
+    let updatedCycle = { ...cycle };
 
-    const pType = patternTypeFromDecision(body.decision);
+    // 2D - no-peeking
+    let peeking = false;
+    const currentPhase = updatedCycle.fase_actual ?? updatedCycle.activePhase;
+    const durMs = parseDurationMs(updatedCycle.experiment?.duracion);
+    const startedAt = updatedCycle.experiment?.started_at ? Date.parse(updatedCycle.experiment.started_at) : null;
+    if (currentPhase === "F4" && durMs && startedAt && (Date.now() - startedAt) < durMs) {
+      const elapsedD = Math.floor((Date.now() - startedAt) / 86400000);
+      const totalD = Math.round(durMs / 86400000);
+      peeking = true;
+      updatedCycle = acceptRisk(updatedCycle, "F4", `Cierre temprano (peeking): experimento leído en el día ${elapsedD} de ${totalD} declarados. La decisión puede estar contaminada por ruido.`, { id: currentUser.id, name: currentUser.email });
+      await logAudit(currentUser.email, "experiment_peeked", id, { elapsedDays: elapsedD, declaredDays: totalD });
+    }
+
+    // Cierre sin completar gates previos
+    const skippedGates = ["F1", "F2", "F3", "F4"]
+      .filter((ph) => getMissingGateRequirements(updatedCycle, ph as Phase).length > 0);
+    if (skippedGates.length) {
+      updatedCycle = acceptRisk(updatedCycle, "F5", `Cierre sin completar gates previos: ${skippedGates.join(", ")}. El patrón se destila de un recorrido incompleto.`, { id: currentUser.id, name: currentUser.email });
+      await logAudit(currentUser.email, "cycle_closed_skipping_gates", id, { skipped: skippedGates });
+    }
+
+    const pType = patternTypeFromDecision(decision ?? "");
     let pattern: any = null;
 
     if (pType) {
       pattern = {
         id: `pat-${crypto.randomUUID()}`,
         tipo: pType,
-        nombre: body.patternName || `Patrón de ${cycle.title}`,
+        nombre: body.patternName || body.pattern_name || `Patrón de ${cycle.title}`,
         causa: cycle.causa,
-        sub_perfil: cycle.sub_perfil,
+        sub_perfil: (cycle.sub_perfil && String(cycle.sub_perfil).trim()) || "sin_clasificar",
         transicion: cycle.transicion,
-        aprendizaje: body.learning || "",
-        delta_metrica: body.delta || "",
+        test_elegido: normalizeTestElegido(cycle.experiment?.test_elegido) ?? null,
+        aprendizaje: body.learning.trim(),
+        delta_metrica: body.delta?.trim() || null,
+        evidencia: body.evidencia?.trim() || null,
+        ciclo_origen_id: id,
         veces_reutilizado: 0,
         createdAt: now,
         createdBy: currentUser.id,
-        cycleId: id,
       };
       const patternsList = await load("patterns");
       patternsList.push(pattern);
@@ -463,24 +558,32 @@ export async function POST(req: NextRequest, context: any) {
       await logAudit(currentUser.email, "pattern_created", pattern.id, { cycleId: id });
     }
 
-    const execSummary = await generateExecutiveSummary(cycle, body);
+    const execSummary = await generateExecutiveSummary(updatedCycle, body);
 
     const closeObj = {
       closedAt: now,
       closedBy: { id: currentUser.id, name: currentUser.email },
-      decision: body.decision,
-      learning: body.learning || "",
-      delta: body.delta || "",
+      decision: decision ?? "[CONFIRMAR]",
+      learning: body.learning.trim(),
+      delta: body.delta?.trim() || null,
+      metric_result: body.metric_result ?? null,
+      actividad: body.actividad?.trim() || null,
+      outcome: body.outcome?.trim() || null,
+      churn_por_nivel: body.churn_por_nivel?.trim() || null,
       pattern_id: pattern?.id ?? null,
       summary: execSummary || "Sin resumen ejecutivo.",
     };
 
-    const phases = (cycle.phases ?? []).map((p: any) => p.key === "F5" ? { ...p, state: "done", note: "completo" } : p);
+    const phases = (updatedCycle.phases ?? []).map((p: any) => 
+      p.key === "F5" ? { ...p, state: "done", note: "completo" } : p.state === "active" ? { ...p, state: "done" } : p
+    );
 
-    const updatedCycle = {
-      ...cycle,
+    updatedCycle = {
+      ...updatedCycle,
       estado: "cerrado",
-      resultado_cierre: body.decision,
+      fase_actual: "F5",
+      activePhase: "F5",
+      resultado_cierre: decision,
       cierre: closeObj,
       phases,
       updatedAt: now,
@@ -496,17 +599,17 @@ export async function POST(req: NextRequest, context: any) {
       id: `dec-${crypto.randomUUID()}`,
       cycleId: id,
       fecha: now,
-      tipo: "cierre",
+      tipo: "decision",
       causa: cycle.causa,
       sub_perfil: cycle.sub_perfil,
-      texto: `Cierre del ciclo con decisión de ${body.decision.toUpperCase()}. Aprendizaje: ${body.learning || ""}`,
+      texto: `${decision ? decision.toUpperCase() : "[CONFIRMAR]"} "${cycle.title}": ${body.learning.trim()}${body.delta?.trim() ? ` (${body.delta.trim()})` : ""}`,
       actor: currentUser.email,
     };
     decisionsList.push(dec);
     await save("decisions", decisionsList);
 
-    await logAudit(currentUser.email, "cycle_closed", id, { decision: body.decision });
-    return NextResponse.json({ cycle: updatedCycle, pattern });
+    await logAudit(currentUser.email, "cycle_closed", id, { decision: decision });
+    return NextResponse.json({ cycle: updatedCycle, pattern, peeking });
   }
 
   // 6. POST /api/discovery/patterns
@@ -831,19 +934,37 @@ export async function PATCH(req: NextRequest, context: any) {
     const body = await req.json();
     const now = new Date().toISOString();
 
+    // Evitar avance directo de fase
+    if ("fase_actual" in body || "activePhase" in body) {
+      const requested = body.fase_actual ?? body.activePhase;
+      const currentIdx = PHASES.indexOf(cycle.fase_actual ?? cycle.activePhase ?? "F0");
+      const requestedIdx = PHASES.indexOf(requested);
+      if (requestedIdx > currentIdx) {
+        return NextResponse.json({ error: "No se puede avanzar de fase por PATCH directo — usa POST /api/cycles/:id/advance (aplica el gate)." }, { status: 422 });
+      }
+    }
+
+    // Normalizadores
+    if ("sub_perfil" in body) body.sub_perfil = normalizeSubPerfil(body.sub_perfil);
+    if ("transicion" in body) body.transicion = normalizeTransition(body.transicion);
+    if ("sub_causa" in body) body.sub_causa = normalizeSubCausa(body.sub_causa, body.causa ?? cycle.causa);
+
     // Use deepMerge for nested updates (journeys, brief, experiment)
     const merged = {
       ...cycle,
       title: body.title !== undefined ? body.title : cycle.title,
-      sub_perfil: body.sub_perfil !== undefined ? normalizeSubPerfil(body.sub_perfil) : cycle.sub_perfil,
-      transicion: body.transicion !== undefined ? normalizeTransition(body.transicion) : cycle.transicion,
+      sub_perfil: body.sub_perfil !== undefined ? body.sub_perfil : cycle.sub_perfil,
+      transicion: body.transicion !== undefined ? body.transicion : cycle.transicion,
       causa: body.causa !== undefined ? normalizeCausa(body.causa) : cycle.causa,
-      sub_causa: body.sub_causa !== undefined ? normalizeSubCausa(body.sub_causa, body.causa ?? cycle.causa) : cycle.sub_causa,
+      sub_causa: body.sub_causa !== undefined ? body.sub_causa : cycle.sub_causa,
+      sesgo: body.sesgo !== undefined ? normalizeSesgo(body.sesgo) : cycle.sesgo,
+      proxy_y_segunda_senal: body.proxy_y_segunda_senal !== undefined ? body.proxy_y_segunda_senal : cycle.proxy_y_segunda_senal,
       segmento_objetivo: body.segmento_objetivo !== undefined ? body.segmento_objetivo : cycle.segmento_objetivo,
       fase_actual: body.fase_actual !== undefined ? body.fase_actual : cycle.fase_actual,
       activePhase: body.activePhase !== undefined ? body.activePhase : cycle.activePhase,
       brief: body.brief !== undefined ? { ...(cycle.brief ?? {}), ...body.brief } : cycle.brief,
       experiment: body.experiment !== undefined ? { ...(cycle.experiment ?? {}), ...body.experiment } : cycle.experiment,
+      spec_conductual: body.spec_conductual !== undefined ? (typeof body.spec_conductual === "object" ? { ...(cycle.spec_conductual ?? {}), ...body.spec_conductual } : body.spec_conductual) : cycle.spec_conductual,
       phases: body.phases !== undefined ? body.phases : cycle.phases,
       riskAccepted: body.riskAccepted !== undefined ? body.riskAccepted : cycle.riskAccepted,
       updatedAt: now,
