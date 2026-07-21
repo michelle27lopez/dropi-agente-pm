@@ -95,7 +95,7 @@
         </footer>
       </aside>
 
-      <main class="conversation-shell">
+      <main class="center-stage">
         <section id="homeView" class="app-view home-view scrim" hidden>
           <header class="page-header">
             <div><p class="eyebrow">Home</p><h1>Ciclos</h1><p>Retoma decisiones en curso o arranca desde un comportamiento, no desde una feature.</p></div>
@@ -132,98 +132,291 @@
           </section>
         </section>
 
-        <section id="workspaceView" class="workspace-view">
-          <header class="conversation-header">
-            <div class="phase-chip">
-              <span class="live-dot"></span>
-              <strong id="activePhaseLabel">—</strong>
-              <span class="chip-divider"></span>
-              <span id="activePhaseNote"></span>
+        <!-- Active Cycle Spec Staging Area (Center Stage) -->
+        <section id="workspaceView" class="workspace-view brief-panel scrim" hidden>
+          <header class="brief-header">
+            <div class="brief-title-row">
+              <div class="doc-title">
+                <span aria-hidden="true">▤</span>
+                <strong id="deliverableTitle">Intervention Brief</strong>
+                <span class="deliverable-switch">
+                  <button id="briefSwitch" class="active" type="button">Brief</button>
+                  <button id="experimentSwitch" type="button">Experiment Card</button>
+                  <button id="specSwitch" type="button">Spec conductual</button>
+                </span>
+                <span class="live-badge"><span class="dot"></span>En vivo</span>
+              </div>
+              <button id="exportBrief" class="export-button" type="button">↧ Exportar brief</button>
             </div>
-            <span class="cycle-name" id="activeCycleName">Sin ciclo activo</span>
-            <button id="advancePhaseBtn" class="advance-phase-btn" type="button" hidden>Avanzar a F2 ✓</button>
-            <button id="commandButton" class="command-button" type="button">⌘K</button>
-            <button id="exportBriefBtn" class="command-button" type="button" title="Exportar brief" aria-label="Exportar brief">▤</button>
+            <div class="progress-row" title="Campos con un valor confirmado. No necesitas todos para avanzar — cada gate pide solo los suyos.">
+              <div class="progress-track"><span id="briefProgressFill"></span></div>
+              <strong id="briefProgressText">0 / 11 campos</strong>
+            </div>
           </header>
 
-          <div id="phaseBar" class="phase-bar" role="tablist" aria-label="Fases del ciclo" hidden></div>
-
-          <div id="phaseGuide" class="phase-guide" hidden></div>
-
-          <section id="messageStream" class="message-stream scrim" aria-live="polite"></section>
-
-          <section id="closePanel" class="close-panel" hidden>
-            <h2>Cerrar ciclo — F5 Aprendizaje</h2>
-            <div class="close-grid">
-              <div class="field-group">
-                <label id="decisionLabel">Decisión</label>
-                <div id="decisionPicker" class="decision-picker" role="group" aria-labelledby="decisionLabel">
-                  <button type="button" class="dp-btn active" data-decision="escalar">Escalar</button>
-                  <button type="button" class="dp-btn" data-decision="matar">Matar</button>
-                  <button type="button" class="dp-btn" data-decision="iterar">Iterar</button>
+          <section id="briefBody" class="brief-body">
+            <p class="brief-help">Este entregable se arma <strong>solo</strong> mientras conversas con el asistente. Los campos se habilitan a medida que avanzas de fase — como en el checklist de la izquierda. <strong>Haz clic en cualquier campo desbloqueado</strong> para escribirlo tú.</p>
+            <div class="brief-block">
+              <p class="section-label">Ciclo</p>
+              <p class="mono-value" id="briefCycleTitle">Sin definir</p>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Comportamiento objetivo</p>
+              <p id="briefBehavior" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">Qué seller, haciendo qué, no está haciendo qué.</p>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Señal cuantitativa</p>
+              <p id="metricField" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">El dato que muestra que el comportamiento es un problema. Ej: "solo 12% configura en 72h".</p>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Segmento (cohorte)</p>
+              <p id="briefSegment" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">La cohorte conductual concreta. Ej: "sellers inactivos 30d", "registrados sin 1ª orden en 7d".</p>
+            </div>
+            <div class="brief-grid">
+              <div class="brief-block">
+                <label class="section-label" for="briefSubProfile">Sub-perfil</label>
+                <select id="briefSubProfile" class="filter-select"></select>
+              </div>
+              <div class="brief-block">
+                <label class="section-label" for="briefCogLevel">Transición cognitiva</label>
+                <select id="briefCogLevel" class="filter-select"></select>
+              </div>
+            </div>
+            <div class="brief-block phase-gated" data-unlock-phase="F1">
+              <p class="section-label">Causa (B=MAP)</p>
+              <p class="field-hint">¿Por qué no ocurre el comportamiento? Elige la causa raíz.</p>
+              <div class="bmap-selector" id="briefCauseSelector">
+                <button class="bmap-btn" data-cause="M" title="El seller no quiere hacerlo — falta Motivación">M · Motivación</button>
+                <button class="bmap-btn" data-cause="A" title="El seller no puede hacerlo — falta Ability">A · Ability</button>
+                <button class="bmap-btn" data-cause="P" title="El seller no recuerda / no se le pide — falta Prompt">P · Prompt</button>
+              </div>
+              <p id="briefCause" class="confirm-field"><span class="field-cta">Elige una causa arriba</span></p>
+              <div id="subCausaRow" class="sub-causa-row" hidden>
+                <label class="section-label" for="briefSubCausa">Sub-causa (opcional)</label>
+                <select id="briefSubCausa" class="filter-select"></select>
+              </div>
+              <p class="lock-note">🔒 Se habilita en F1 · Diagnóstico</p>
+            </div>
+            <div class="brief-block phase-gated" data-unlock-phase="F1">
+              <p class="section-label">Evidencia</p>
+              <p class="field-hint">El gate de F1 pide 2 fuentes que converjan en la misma causa.</p>
+              <p id="briefEvidence" class="confirm-field"><span class="field-cta">Clic para escribir la 1ª fuente</span></p>
+              <p class="field-hint">Un dato que ya existe. Ej: "dashboard de operaciones: 12% configura en 72h".</p>
+              <p id="secondSource" class="confirm-field"><span class="field-cta">Clic para escribir la 2ª fuente</span></p>
+              <p class="field-hint">Una fuente distinta que confirma lo mismo. Ej: "encuesta de soporte: no saben que deben hacerlo".</p>
+              <p class="lock-note">🔒 Se habilita en F1 · Diagnóstico</p>
+            </div>
+            <div class="brief-block phase-gated" data-unlock-phase="F1">
+              <p class="section-label">Sesgo</p>
+              <p class="field-hint">Cada sesgo tiene su antídoto — nómbralo para elegir la intervención correcta.</p>
+              <select id="briefSesgo" class="filter-select" aria-label="Sesgo"></select>
+            </div>
+            <div class="brief-block phase-gated" data-unlock-phase="F1">
+              <p class="section-label">Proxy y 2ª señal</p>
+              <p class="field-hint">El evento que vas a medir es proxy de un shift cognitivo, no el shift en sí.</p>
+              <p id="briefProxy" class="confirm-field"><span class="field-cta">Clic para escribir el proxy</span></p>
+              <p id="briefSegundaSenal" class="confirm-field"><span class="field-cta">Clic para escribir la 2ª señal que lo confirma</span></p>
+            </div>
+            <div class="brief-block phase-gated" data-unlock-phase="F2">
+              <p class="section-label">Intervención</p>
+              <p id="briefIntervention" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">El cambio mínimo diseñado sobre la causa confirmada. Ej: "checklist post-compra con el siguiente paso explícito".</p>
+              <p class="lock-note">🔒 Se habilita en F2 · Intervención</p>
+            </div>
+            <div class="brief-block phase-gated" data-unlock-phase="F2">
+              <p class="section-label">Hipótesis de intervención</p>
+              <p id="hypothesisField" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">Ej: "Si agregamos un checklist post-compra, sube la configuración del 2º envío".</p>
+              <p class="lock-note">🔒 Se habilita en F2 · Intervención</p>
+            </div>
+            <div class="brief-block phase-gated" data-unlock-phase="F2">
+              <p class="section-label">Guardrails SDT <em>(los 3 checks del gate F2)</em></p>
+              <div class="sdt-checks" id="sdtChecks">
+                <div class="sdt-check">
+                  <label><input type="checkbox" id="sdtAutonomiaCheck" /> Autonomía</label>
+                  <input id="sdtAutonomiaNota" class="sdt-nota" placeholder="Nota…" aria-label="Nota de Autonomía" />
                 </div>
-                <input type="hidden" id="closureDecision" value="escalar" />
+                <div class="sdt-check">
+                  <label><input type="checkbox" id="sdtMasteryCheck" /> Mastery</label>
+                  <input id="sdtMasteryNota" class="sdt-nota" placeholder="¿Construye un seller que ya no nos necesita, o dependencia?" aria-label="Nota de Mastery" />
+                </div>
+                <div class="sdt-check">
+                  <label><input type="checkbox" id="sdtRelatednessCheck" /> Relatedness</label>
+                  <input id="sdtRelatednessNota" class="sdt-nota" placeholder="Nota…" aria-label="Nota de Relatedness" />
+                </div>
+                <div class="sdt-check">
+                  <label><input type="checkbox" id="juevesTardeCheck" /> Jueves en la tarde <em>(¿funciona sin alta motivación?)</em></label>
+                </div>
+                <div class="sdt-check">
+                  <label><input type="checkbox" id="antiRoadmapCheck" /> Anti-roadmap <em>(confirmo que NO toca shaming/leaderboard/social proof negativo/engagement theater)</em></label>
+                </div>
               </div>
-              <div class="field-group">
-                <label for="closureDelta">Delta métrica</label>
-                <input id="closureDelta" placeholder="ej: +12pp activación" />
+              <p class="lock-note">🔒 Se habilita en F2 · Intervención</p>
+            </div>
+            <div class="brief-block phase-gated" data-unlock-phase="F2">
+              <p class="section-label">Trilema de fricción <em>(una fricción por línea)</em></p>
+              <div class="brief-grid">
+                <div><label class="field-hint" for="friccionEliminar">Eliminar (roba energía)</label><textarea id="friccionEliminar" rows="2"></textarea></div>
+                <div><label class="field-hint" for="friccionPreservar">Preservar (skill/ownership)</label><textarea id="friccionPreservar" rows="2"></textarea></div>
+                <div><label class="field-hint" for="friccionInversion">Es inversión</label><textarea id="friccionInversion" rows="2"></textarea></div>
               </div>
             </div>
-            <div class="close-grid">
-              <div class="field-group">
-                <label for="closureActividad">Actividad <em>(¿ocurrió el comportamiento?)</em></label>
-                <input id="closureActividad" placeholder="ej: 34% configuró el 2º envío en 72h" />
-              </div>
-              <div class="field-group">
-                <label for="closureOutcome">Outcome <em>(¿produjo el valor?)</em></label>
-                <input id="closureOutcome" placeholder="ej: GMV/seller +8% en la cohorte" />
-              </div>
-            </div>
-            <p class="field-hint">Nunca uses uno como proxy del otro sin evidencia — declara los dos por separado.</p>
-            <div class="field-group">
-              <label for="closureLearning">¿Qué aprendimos? <em>(se convierte en el patrón)</em></label>
-              <textarea id="closureLearning" rows="3" placeholder="Aprendizaje accionable…"></textarea>
-            </div>
-            <div class="field-group">
-              <label for="closureChurn">Churn por nivel <em>(Good Churn ≠ fracaso)</em></label>
-              <input id="closureChurn" placeholder="ej: 3 sellers graduaron a Principalidad y bajaron uso — good churn" />
-            </div>
-            <div class="close-grid">
-              <div class="field-group">
-                <label for="patternName">Nombre del patrón</label>
-                <input id="patternName" placeholder="Verbo + segmento + contexto" />
-              </div>
-              <div class="field-group">
-                <label for="patternType">Tipo</label>
-                <select id="patternType">
-                  <option value="patron">Patrón</option>
-                  <option value="anti_patron">Anti-patrón</option>
-                </select>
+            <div class="brief-block phase-gated" data-unlock-phase="F2">
+              <p class="section-label">Hook <em>(si aplica un loop)</em></p>
+              <div class="brief-grid">
+                <div><label class="field-hint" for="hookTrigger">Trigger</label><input id="hookTrigger" /></div>
+                <div><label class="field-hint" for="hookAction">Action</label><input id="hookAction" /></div>
+                <div><label class="field-hint" for="hookReward">Variable reward</label><input id="hookReward" /></div>
+                <div><label class="field-hint" for="hookInvestment">Investment (siempre después del reward)</label><input id="hookInvestment" /></div>
               </div>
             </div>
-            <button id="closeCycleButton" class="primary-action" type="button">Cerrar ciclo y crear patrón</button>
           </section>
 
-          <form id="chatForm" class="chat-input-wrap">
-            <div class="chat-input">
-              <label class="sr-only" for="messageInput">Mensaje</label>
-              <textarea id="messageInput" rows="2" autocomplete="off"></textarea>
-              <div class="placeholder-line" id="rotatingPlaceholder" aria-hidden="true">
-                ¿Qué comportamiento debe ocurrir, y por qué no ocurre hoy?<span class="caret"></span>
+          <section id="experimentBody" class="brief-body" hidden>
+            <p class="brief-help">F3 · Validar: elige el test más barato que pueda <strong>falsificar</strong> el supuesto más riesgoso. El A/B es un escalón más de la escalera, no el default. <strong>Haz clic en cualquier campo</strong> para completarlo.</p>
+            <div class="brief-block">
+              <p class="section-label">Supuesto más riesgoso</p>
+              <p id="experimentSupuesto" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">Si esto es falso, todo se cae. Ej: "los sellers confían en el checklist sin necesitar soporte humano".</p>
+            </div>
+            <div class="brief-grid">
+              <div class="brief-block">
+                <label class="section-label" for="experimentTipoSupuesto">Tipo de supuesto</label>
+                <select id="experimentTipoSupuesto" class="filter-select"></select>
               </div>
-              <div class="input-meta-row">
-                <div class="command-chips">
-                  <button type="button" data-command="/nuevo-ciclo">/nuevo-ciclo</button>
-                  <button type="button" data-command="/brief">/brief</button>
-                  <button type="button" data-command="/experimento">/experimento</button>
+              <div class="brief-block">
+                <label class="section-label" for="experimentTestElegido">Test elegido <em>(escalera §8)</em></label>
+                <select id="experimentTestElegido" class="filter-select"></select>
+              </div>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Por qué este test</p>
+              <p id="experimentPorQueEste" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">El más barato que puede FALSIFICAR el supuesto — no el más completo.</p>
+            </div>
+            <div class="brief-grid">
+              <div class="brief-block">
+                <p class="section-label">Resultado que confirma</p>
+                <p id="experimentResultadoConfirma" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              </div>
+              <div class="brief-block">
+                <p class="section-label">Resultado que refuta</p>
+                <p id="experimentResultadoRefuta" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              </div>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Costo de equivocarse</p>
+              <p id="experimentCostoEquivocarse" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">Downside / deuda estratégica si el supuesto era falso y avanzamos igual.</p>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Hipótesis</p>
+              <p id="experimentHypothesis" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">Ej: "Si mostramos un checklist post-compra, sube el 2º envío en 72h de 12% a 30%".</p>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Variable / intervención</p>
+              <p id="experimentVariable" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">Qué cambia exactamente para el seller. Ej: "checklist post-compra dentro de la app".</p>
+            </div>
+            <div id="experimentAbOnly">
+              <p class="field-hint ab-only-note">Los campos siguientes solo aplican cuando el test elegido es A/B.</p>
+              <div class="brief-grid">
+                <div class="brief-block">
+                  <p class="section-label">Métrica primaria</p>
+                  <p id="experimentMetric" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+                  <p class="field-hint">El número que decide éxito o fracaso. Ej: "% con 2º envío en 72h".</p>
+                  <div class="metric-type" id="metricTypeToggle" role="radiogroup" aria-label="Tipo de métrica">
+                    <button type="button" class="mt-btn" data-mtype="outcome" title="Mueve el resultado del seller (activación, recompra, GMV)">Outcome</button>
+                    <button type="button" class="mt-btn" data-mtype="actividad" title="Mide uso/adopción, no resultado">Actividad</button>
+                  </div>
+                  <p id="metricTypeWarn" class="metric-warn" hidden>Mide actividad, no outcome — el éxito de un experimento no es adopción.</p>
                 </div>
-                <div class="send-area">
-                  <span>⌘↵ enviar</span>
-                  <button class="send-button" type="submit" aria-label="Enviar">➜</button>
+                <div class="brief-block">
+                  <p class="section-label">Criterio de stop</p>
+                  <p id="experimentStop" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+                  <p class="field-hint">Cuándo dejas de mirar y decides. Ej: "14 días o 400 sellers por grupo".</p>
+                </div>
+              </div>
+              <div class="brief-grid">
+                <div class="brief-block">
+                  <p class="section-label">Tamaño muestra</p>
+                  <p id="experimentSample" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+                  <p class="field-hint">Cuántos sellers por grupo. Ej: "200 control + 200 tratamiento".</p>
+                </div>
+                <div class="brief-block">
+                  <p class="section-label">Duración</p>
+                  <p id="experimentDuration" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+                  <p class="field-hint">Ej: "14 días".</p>
                 </div>
               </div>
             </div>
-          </form>
+            <div class="brief-block">
+              <p class="section-label">Tracking</p>
+              <p id="experimentTracking" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">El evento que el sistema registra para medir esto. Ej: "evento segundo_envio_configurado".</p>
+            </div>
+            <div class="brief-grid">
+              <div class="brief-block">
+                <label class="section-label" for="experimentConfianza">Confianza (1–5)</label>
+                <select id="experimentConfianza" class="filter-select">
+                  <option value="">—</option>
+                  <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option>
+                </select>
+              </div>
+              <div class="brief-block">
+                <label class="section-label" for="experimentDecisionF3">Decisión</label>
+                <select id="experimentDecisionF3" class="filter-select"></select>
+              </div>
+            </div>
+            <div id="experimentStatus" class="running-status"><span></span>Borrador · listo para F3</div>
+          </section>
+
+          <section id="specBody" class="brief-body" hidden>
+            <p class="brief-help">F4 · Build/Spec: el handoff a tech. Sin esto, la implementación adivina la intención conductual.</p>
+            <div class="brief-block">
+              <p class="section-label">Comportamiento objetivo</p>
+              <p id="specComportamiento" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Loop completo</p>
+              <div class="brief-grid">
+                <div><label class="field-hint" for="specTrigger">Trigger</label><input id="specTrigger" /></div>
+                <div><label class="field-hint" for="specAction">Action</label><input id="specAction" /></div>
+                <div><label class="field-hint" for="specReward">Reward</label><input id="specReward" /></div>
+                <div><label class="field-hint" for="specInvestment">Investment</label><input id="specInvestment" /></div>
+              </div>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Fricción</p>
+              <div class="brief-grid">
+                <div><label class="field-hint" for="specFriccionElimina">Elimina</label><textarea id="specFriccionElimina" rows="2"></textarea></div>
+                <div><label class="field-hint" for="specFriccionPreserva">Preserva</label><textarea id="specFriccionPreserva" rows="2"></textarea></div>
+                <div><label class="field-hint" for="specFriccionInvierte">Invierte</label><textarea id="specFriccionInvierte" rows="2"></textarea></div>
+              </div>
+            </div>
+            <div class="brief-block">
+              <p class="section-label" id="specCopyPorNivelLabel">Copy por nivel cognitivo</p>
+              <textarea id="specCopyPorNivel" rows="2" aria-labelledby="specCopyPorNivelLabel"></textarea>
+            </div>
+            <div class="brief-block">
+              <p class="section-label" id="specAntiPatronesLabel">Anti-patrones <em>(uno por línea — qué NO debe hacer la implementación)</em></p>
+              <textarea id="specAntiPatrones" rows="3" aria-labelledby="specAntiPatronesLabel"></textarea>
+            </div>
+            <div class="brief-block">
+              <p class="section-label">Criterio de éxito conductual</p>
+              <p id="specCriterioExito" class="confirm-field"><span class="field-cta">Clic para escribir</span></p>
+              <p class="field-hint">No "se entregó la feature" — "el comportamiento ocurrió".</p>
+            </div>
+          </section>
+
+          <footer class="risk-footer">
+            <p class="section-label">Riesgos asumidos</p>
+            <div id="riskTag" class="risk-list is-hidden"></div>
+          </footer>
         </section>
 
         <section id="libraryView" class="app-view library-view scrim" hidden>
@@ -272,32 +465,99 @@
         </section>
       </main>
 
-      <aside class="brief-panel scrim" aria-label="Entregable en vivo">
-        <header class="brief-header">
-          <div class="brief-title-row">
-            <div class="doc-title">
-              <span aria-hidden="true">▤</span>
-              <strong id="deliverableTitle">Intervention Brief</strong>
-              <span class="deliverable-switch">
-                <button id="briefSwitch" class="active" type="button">Brief</button>
-                <button id="experimentSwitch" type="button">Experiment Card</button>
-                <button id="specSwitch" type="button">Spec conductual</button>
-              </span>
-              <span class="live-badge"><span class="dot"></span>En vivo</span>
-            </div>
-            <button id="exportBrief" class="export-button" type="button">↧ Exportar brief</button>
+      <!-- Active Cycle Assistant Chat (Right Sidebar/Drawer) -->
+      <aside id="chatDrawer" class="chat-drawer conversation-shell" hidden>
+        <header class="conversation-header">
+          <div class="phase-chip">
+            <span class="live-dot"></span>
+            <strong id="activePhaseLabel">—</strong>
+            <span class="chip-divider"></span>
+            <span id="activePhaseNote"></span>
           </div>
-          <div class="progress-row" title="Campos con un valor confirmado. No necesitas todos para avanzar — cada gate pide solo los suyos.">
-            <div class="progress-track"><span id="briefProgressFill"></span></div>
-            <strong id="briefProgressText">0 / 11 campos</strong>
-          </div>
+          <span class="cycle-name" id="activeCycleName">Sin ciclo activo</span>
+          <button id="advancePhaseBtn" class="advance-phase-btn" type="button" hidden>Avanzar a F2 ✓</button>
+          <button id="commandButton" class="command-button" type="button">⌘K</button>
+          <button id="exportBriefBtn" class="command-button" type="button" title="Exportar brief" aria-label="Exportar brief">▤</button>
         </header>
 
-        <section id="briefBody" class="brief-body">
-          <p class="brief-help">Este entregable se arma <strong>solo</strong> mientras conversas con el asistente. Los campos se habilitan a medida que avanzas de fase — como en el checklist de la izquierda. <strong>Haz clic en cualquier campo desbloqueado</strong> para escribirlo tú.</p>
-          <div class="brief-block">
-            <p class="section-label">Ciclo</p>
-            <p class="mono-value" id="briefCycleTitle">Sin definir</p>
+        <div id="phaseBar" class="phase-bar" role="tablist" aria-label="Fases del ciclo" hidden></div>
+        <div id="phaseGuide" class="phase-guide" hidden></div>
+
+        <section id="messageStream" class="message-stream scrim" aria-live="polite"></section>
+
+        <section id="closePanel" class="close-panel" hidden>
+          <h2>Cerrar ciclo — F5 Aprendizaje</h2>
+          <div class="close-grid">
+            <div class="field-group">
+              <label id="decisionLabel">Decisión</label>
+              <div id="decisionPicker" class="decision-picker" role="group" aria-labelledby="decisionLabel">
+                <button type="button" class="dp-btn active" data-decision="escalar">Escalar</button>
+                <button type="button" class="dp-btn" data-decision="matar">Matar</button>
+                <button type="button" class="dp-btn" data-decision="iterar">Iterar</button>
+              </div>
+              <input type="hidden" id="closureDecision" value="escalar" />
+            </div>
+            <div class="field-group">
+              <label for="closureDelta">Delta métrica</label>
+              <input id="closureDelta" placeholder="ej: +12pp activación" />
+            </div>
+          </div>
+          <div class="close-grid">
+            <div class="field-group">
+              <label for="closureActividad">Actividad <em>(¿ocurrió el comportamiento?)</em></label>
+              <input id="closureActividad" placeholder="ej: 34% configuró el 2º envío en 72h" />
+            </div>
+            <div class="field-group">
+              <label for="closureOutcome">Outcome <em>(¿produjo el valor?)</em></label>
+              <input id="closureOutcome" placeholder="ej: GMV/seller +8% en la cohorte" />
+            </div>
+          </div>
+          <p class="field-hint">Nunca uses uno como proxy del otro sin evidencia — declara los dos por separado.</p>
+          <div class="field-group">
+            <label for="closureLearning">¿Qué aprendimos? <em>(se convierte en el patrón)</em></label>
+            <textarea id="closureLearning" rows="3" placeholder="Aprendizaje accionable…"></textarea>
+          </div>
+          <div class="field-group">
+            <label for="closureChurn">Churn por nivel <em>(Good Churn ≠ fracaso)</em></label>
+            <input id="closureChurn" placeholder="ej: 3 sellers graduaron a Principalidad y bajaron uso — good churn" />
+          </div>
+          <div class="close-grid">
+            <div class="field-group">
+              <label for="patternName">Nombre del patrón</label>
+              <input id="patternName" placeholder="Verbo + segmento + contexto" />
+            </div>
+            <div class="field-group">
+              <label for="patternType">Tipo</label>
+              <select id="patternType">
+                <option value="patron">Patrón</option>
+                <option value="anti_patron">Anti-patrón</option>
+              </select>
+            </div>
+          </div>
+          <button id="closeCycleButton" class="primary-action" type="button">Cerrar ciclo y crear patrón</button>
+        </section>
+
+        <form id="chatForm" class="chat-input-wrap">
+          <div class="chat-input">
+            <label class="sr-only" for="messageInput">Mensaje</label>
+            <textarea id="messageInput" rows="2" autocomplete="off"></textarea>
+            <div class="placeholder-line" id="rotatingPlaceholder" aria-hidden="true">
+              ¿Qué comportamiento debe ocurrir, y por qué no ocurre hoy?<span class="caret"></span>
+            </div>
+            <div class="input-meta-row">
+              <div class="command-chips">
+                <button type="button" data-command="/nuevo-ciclo">/nuevo-ciclo</button>
+                <button type="button" data-command="/brief">/brief</button>
+                <button type="button" data-command="/experimento">/experimento</button>
+              </div>
+              <div class="send-area">
+                <span>⌘↵ enviar</span>
+                <button class="send-button" type="submit" aria-label="Enviar">➜</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </aside>
           </div>
           <div class="brief-block">
             <p class="section-label">Comportamiento objetivo</p>
