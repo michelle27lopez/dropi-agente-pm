@@ -1,0 +1,41 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# logistica-lab — qué NUNCA entra a Darwin
+#
+# Este repo lo comparten 6 PMs de distintas células. Estas rutas se quedan en el
+# repo bóveda privado de Juan (JuanBautista0209/cerebro-logistica-dropi) por dos
+# razones distintas:
+#
+#   1. Material crudo → la regla del propio cerebro: "la data cruda vive en
+#      Drive; no copiar todo, apuntar a la fuente". Son 38 MB de xlsx que cada
+#      PM del repo descargaría al clonar sin necesitarlos nunca.
+#   2. Material de juicio → actas y reportes escritos para uso propio, con
+#      evaluaciones de personas y cifras de negocio sin contexto.
+#
+# Si necesitas uno de estos archivos, no lo copies aquí: cítalo apuntando al
+# repo bóveda o a su carpeta de Drive.
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Data cruda (38 MB de xlsx) y originales de research
+conocimiento/Data/
+conocimiento/fuentes/
+
+# Registro de fuentes externas
+fuentes/
+
+# Actas de reunión y reportes de uso propio
+reuniones/
+reportes/
+
+# Dashboard previo al tablero, reemplazado por hub/src/app/proyectos/logistica/
+index.html
+
+# El tablero ya vive en el hub — no debe duplicarse aquí
+tablero/
+
+# AGENTS.md es byte a byte idéntico a CLAUDE.md: una sola copia
+AGENTS.md
+
+# Ruido local
+.DS_Store
+node_modules/
+.claude/worktrees/
