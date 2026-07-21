@@ -1,8 +1,8 @@
-import { normalizeTransition, normalizeCausa, normalizeSubCausa } from "./doctrina";
+import { normalizeTransition, normalizeCausa, normalizeSubCausa, normalizeSesgo } from "./doctrina";
 
 export function deepMerge(target: any, source: any): any {
   if (source === null || typeof source !== "object" || Array.isArray(source)) return source;
-  const out = { ...(target && typeof target === "object" && !Array.isArray(target) ? target : {}) };
+  const out = { ...(target && typeof target === "object" && !Array.isArray(target) ? target : {}) } as any;
   for (const key of Object.keys(source)) {
     const sv = source[key];
     if (sv && typeof sv === "object" && !Array.isArray(sv)) {
@@ -27,11 +27,12 @@ export function looksLikeFeature(title: string): boolean {
 }
 
 export const BRIEF_FIELD_KEYS = ["behavior_statement", "evidencia_primaria", "segunda_fuente", "intervencion", "hipotesis", "senal_cuantitativa"];
-export const CYCLE_TOP_KEYS = ["transicion", "causa", "segmento_objetivo"];
+export const CYCLE_TOP_KEYS = ["transicion", "causa", "segmento_objetivo", "sesgo"];
 
 const TOP_KEY_NORMALIZERS: Record<string, (v: any) => any> = {
   transicion: normalizeTransition,
   causa: normalizeCausa,
+  sesgo: normalizeSesgo,
 };
 
 export function applyBriefUpdates(cycle: any, updates: any) {
@@ -64,6 +65,16 @@ export function applyBriefUpdates(cycle: any, updates: any) {
     if (sc) {
       patch.sub_causa = sc;
       changed.push("sub_causa");
+    }
+  }
+
+  const proxyUpdate = updates.proxy_y_segunda_senal;
+  if (proxyUpdate && typeof proxyUpdate === "object" && !cycle.proxy_y_segunda_senal) {
+    const proxy = typeof proxyUpdate.proxy === "string" ? proxyUpdate.proxy.trim() : "";
+    const segundaSenal = typeof proxyUpdate.segunda_senal === "string" ? proxyUpdate.segunda_senal.trim() : "";
+    if (proxy || segundaSenal) {
+      patch.proxy_y_segunda_senal = { proxy, segunda_senal: segundaSenal };
+      changed.push("proxy_y_segunda_senal");
     }
   }
   
