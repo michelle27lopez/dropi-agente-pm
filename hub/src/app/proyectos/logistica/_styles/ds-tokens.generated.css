@@ -1,0 +1,77 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   GENERADO — no editar a mano. Fuente: ds-registry del RPP
+   (producto-rpplab/dropi-prototypes · Figma -WEB- components ONiVQJJ2qrJ6tmJnpNrrKE).
+   Regenerar: npm run tokens · Resync desde el RPP: npm run ds:sync
+   ───────────────────────────────────────────────────────────────────────── */
+:root {
+  --dropi-primary-300: #f2bc85;
+  --dropi-primary-500: #f49a3d;
+  --dropi-primary-600: #e58017;
+  --dropi-secondary-300: #62bad9;
+  --dropi-secondary-500: #008dbf;
+  --dropi-secondary-600: #007199;
+  --dropi-gray-50: #f7f8fa;
+  --dropi-gray-100: #eef0f4;
+  --dropi-gray-200: #c3c9d9;
+  --dropi-gray-300: #a3abbf;
+  --dropi-gray-400: #858ea6;
+  --dropi-gray-500: #69738c;
+  --dropi-gray-600: #475066;
+  --dropi-gray-700: #333b4d;
+  --dropi-gray-800: #232938;
+  --dropi-gray-900: #151921;
+  --dropi-white: #ffffff;
+  --dropi-semantic-success: #4caf50;
+  --dropi-semantic-warning: #ff9800;
+  --dropi-semantic-error: #f46a6b;
+  --dropi-semantic-info: #008dbf;
+  --dropi-status-pending: #ff9800;
+  --dropi-status-confirmed: #008dbf;
+  --dropi-status-shipped: #9c27b0;
+  --dropi-status-delivered: #4caf50;
+  --dropi-status-returned: #f46a6b;
+  --dropi-status-cancelled: #858ea6;
+  --dropi-space-0: 0;
+  --dropi-space-1: 4px;
+  --dropi-space-2: 8px;
+  --dropi-space-3: 12px;
+  --dropi-space-4: 16px;
+  --dropi-space-5: 20px;
+  --dropi-space-6: 24px;
+  --dropi-space-8: 32px;
+  --dropi-space-10: 40px;
+  --dropi-space-12: 48px;
+  --dropi-space-16: 64px;
+  --dropi-space-20: 80px;
+  --dropi-radius-none: 0;
+  --dropi-radius-xs: 3px;
+  --dropi-radius-sm: 4px;
+  --dropi-radius-md: 8px;
+  --dropi-radius-lg: 12px;
+  --dropi-radius-xl: 16px;
+  --dropi-radius-pill: 17px;
+  --dropi-radius-full: 50px;
+  --dropi-radius-circle: 9999px;
+  --dropi-shadow-small: 0 0 12px rgba(0, 0, 0, 0.04);
+  --dropi-shadow-medium: 0.5px 4px 8px rgba(0, 0, 0, 0.08);
+  --dropi-font-primary: 'Inter', sans-serif;
+  --dropi-font-secondary: 'IBM Plex Sans', sans-serif;
+  --dropi-font-mono: 'JetBrains Mono', monospace;
+  --dropi-text-xs: 12px;
+  --dropi-text-sm: 14px;
+  --dropi-text-md: 15px;
+  --dropi-text-base: 16px;
+  --dropi-text-lg: 18px;
+  --dropi-text-xl: 20px;
+  --dropi-text-2xl: 24px;
+  --dropi-text-3xl: 30px;
+  --dropi-text-4xl: 36px;
+  --dropi-weight-regular: 400;
+  --dropi-weight-medium: 500;
+  --dropi-weight-semibold: 600;
+  --dropi-weight-bold: 700;
+  --dropi-weight-extrabold: 800;
+  --dropi-leading-tight: 1.25;
+  --dropi-leading-normal: 1.5;
+  --dropi-leading-relaxed: 1.75;
+}
