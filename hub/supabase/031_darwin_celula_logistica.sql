@@ -80,11 +80,11 @@ from (values
    'Confirmación → Desenlace', 'Juan Diego Bautista', 'Logistic Success',
    'Rama muestra (usuario). Cruza PRM-1497 / PRM-1512 / PRM-1523; coordina con PRM-91. Cubre fugas 1 y 2.'),
 
-  ('Sistema Inteligente de Transportadoras', 'LOG-004', 'In Progress', 'POC', 'Listo para handoff',
+  ('Selección inteligente de transportadoras', 'LOG-004', 'In Progress', 'POC', 'Listo para handoff',
    'Generación / selección de transportadora', 'Kate Pencue', 'Logistic Success',
    'PRM-1513 · épica DROP-17946 · Delivery Backlog EJECUTAR. POC listo, pendiente gate de la CPO. Juan actúa como Carrier Ops, la PM es Kate Pencue.'),
 
-  ('Same Day (proveedores, marcas y fulfillment)', 'LOG-005', 'In Progress', 'Proyecto', 'Experimentación',
+  ('Same Day', 'LOG-005', 'In Progress', 'Proyecto', 'Experimentación',
    'Despacho / tránsito', 'Juan Diego Bautista', 'Logistic Success',
    'PRM-1366 · épica PROD-1127 · Delivery Backlog EJECUTAR. Discovery completo (board Figma de Michelle López). MVP: flag SD + hora de corte + validación geo. Riesgo activo: hoy salen guías same day sin lógica de geografía.'),
 
@@ -92,11 +92,11 @@ from (values
    'Costo por orden / tarifas', 'Juan Diego Bautista', 'Logistic Success',
    'OKR 3 de compañía. Discovery completado, doc E2E en review de José Giraldo. BLOQUEADO: TI priorizó el cambio de moneda de Venezuela.'),
 
-  ('Normalización / Homologación de estados', 'LOG-007', 'Discovery', 'Proyecto', 'Experimentación',
+  ('Normalización de estados', 'LOG-007', 'Discovery', 'Proyecto', 'Experimentación',
    'Tránsito / estados', 'Juan Diego Bautista', 'Logistic Success',
    'PRM-1297 · Delivery Backlog EJECUTAR. Discovery levantado con datos reales (133.555 órdenes / 52.636 guías CO). Propuesta de catálogo v0.1: modelo por capas crudo→homologado(26)→fase→vista cliente(8).'),
 
-  ('Dueño y triaje de la novedad (+posventa)', 'LOG-008', 'Discovery', 'Oportunidad', 'Experimentación',
+  ('Dueño y triaje de la novedad', 'LOG-008', 'Discovery', 'Oportunidad', 'Experimentación',
    'Novedad → Posventa', 'Juan Diego Bautista', 'Logistic Success',
    'PRM-1512 (OKR2/KR entrega) · coordina PRM-1294. Fuga 4, capa transversal.'),
 
