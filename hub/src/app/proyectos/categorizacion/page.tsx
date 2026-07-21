@@ -3679,6 +3679,25 @@ export default function CategorizacionPage() {
             <div id="accordion-content-panel" className="border-t bg-slate-50 flex flex-col" style={{ borderColor: "var(--border)" }}>
               {/* Cards Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-6 bg-slate-50">
+                {/* Card 0: Documento E2E del proyecto (vive durante todo el proyecto) */}
+                <a
+                  href="https://docs.google.com/document/d/1ezMvY0gRbgOPrT9eCjJqqOoWNdNFAKBZTL1_1VmkbxY/edit"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-sky-500 hover:shadow-xs transition-all duration-200 no-underline"
+                >
+                  <span className="text-2xl mt-0.5">📘</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Documento E2E · CAT-001</span>
+                      <span className="text-[9px] font-bold bg-sky-50 text-sky-600 border border-sky-100 px-1.5 py-0.5 rounded-full">↗ Google Docs</span>
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Documentación viva del proyecto de inicio a fin: Kick-off, Discovery, Definición, Following y Hand-off.
+                    </div>
+                  </div>
+                </a>
+
                 {/* Card 1: Diagnóstico */}
                 <div
                   onClick={() => setActiveResourceTab(activeResourceTab === "diagnostico" ? null : "diagnostico")}

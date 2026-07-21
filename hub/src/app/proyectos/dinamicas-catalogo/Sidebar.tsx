@@ -16,6 +16,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   const active: Section = pathname?.startsWith("/proyectos/dinamicas-catalogo/campanas")
+    || pathname?.startsWith("/proyectos/dinamicas-catalogo/planeacion")
     ? "campanas"
     : pathname?.startsWith("/proyectos/dinamicas-catalogo/calendario")
     ? "calendario"
