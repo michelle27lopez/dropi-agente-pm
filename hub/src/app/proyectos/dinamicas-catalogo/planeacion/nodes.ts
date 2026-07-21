@@ -24,13 +24,33 @@ export type NodeKey =
 
 export type Phase = "planeacion" | "cierre";
 
-export type FieldType = "text" | "number" | "textarea" | "select" | "multiselect" | "milestones";
+export type FieldType = "text" | "number" | "textarea" | "select" | "multiselect" | "milestones" | "messages";
 export type NodeData = Record<string, string>;
 
 /** Un hito operativo del calendario: nombre, fecha (texto libre) y notas de qué pasa en ese paso. Serializado como JSON dentro de un campo tipo "milestones". */
 export type Milestone = { label: string; date: string; notes?: string };
 
 export function parseMilestones(value: string | undefined): Milestone[] {
+  if (!value || !value.trim()) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Un mensaje redactado para un momento puntual de la campaña (proveedor).
+ * `milestoneLabel` lo liga a un hito del Calendario por nombre — al
+ * sincronizar, se agregan mensajes nuevos para hitos sin mensaje todavía,
+ * pero nunca se pisa el texto de un mensaje que ya existe. `null` = mensaje
+ * independiente, no ligado a ningún hito. Serializado como JSON dentro de
+ * un campo tipo "messages".
+ */
+export type CampaignMessage = { id: string; milestoneLabel: string | null; label?: string; body: string };
+
+export function parseMessages(value: string | undefined): CampaignMessage[] {
   if (!value || !value.trim()) return [];
   try {
     const parsed = JSON.parse(value);
@@ -87,6 +107,23 @@ export function milestoneStartDate(dateText: string | undefined): Date | null {
   const month = SPANISH_MONTHS[monthKey];
   if (month === undefined) return null;
   return new Date(year, month, day);
+}
+
+export type MilestoneState = "hecho" | "hoy" | "proximo" | "sin_fecha";
+export const MILESTONE_LABEL: Record<MilestoneState, { text: string; color: string; bg: string }> = {
+  hecho: { text: "Hecho", color: "#10B981", bg: "#ECFDF5" },
+  hoy: { text: "Hoy", color: "#F77F00", bg: "#FFF3E0" },
+  proximo: { text: "Próximo", color: "#6B7280", bg: "#F8F9FA" },
+  sin_fecha: { text: "Sin fecha", color: "#9CA3AF", bg: "#F8F9FA" },
+};
+
+export function milestoneState(dateText: string): MilestoneState {
+  const end = milestoneEndDate(dateText);
+  if (!end) return "sin_fecha";
+  const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  if (end.getTime() === todayStart.getTime()) return "hoy";
+  return end < todayStart ? "hecho" : "proximo";
 }
 
 export type NodeIconKey =
@@ -276,7 +313,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
           },
           {
             key: "supplier_type", label: "Tipo de supplier", type: "multiselect", required: true,
-            options: ["Verificado", "Premium", "Exclusivo", "Todos los verificados"],
+            options: ["Verificado", "Premium", "Premium Exclusivo", "Todos los verificados"],
           },
           {
             key: "categories_scope", label: "¿Aplica a todas las categorías?", type: "select", required: true,
@@ -411,6 +448,14 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
           },
         ],
       },
+      {
+        key: "mensajes",
+        title: "Mensajes por hito",
+        subtitle: "Se pre-llenan con los hitos del Calendario — usa {{Nombre de columna}} para personalizar cada envío con datos del Excel de cada proveedor (ej. {{Productos aprobados}})",
+        fields: [
+          { key: "messages", label: "Mensajes", type: "messages" },
+        ],
+      },
     ],
   },
 
@@ -466,6 +511,14 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
             key: "publication_responsible", label: "Responsable de publicación", type: "select", required: true,
             options: ["Producto", "Growth", "Comercial", "Comunicaciones", "Supplier Success", "Diseño"],
           },
+        ],
+      },
+      {
+        key: "mensajes",
+        title: "Mensajes por hito",
+        subtitle: "Para dropshippers — mismo mecanismo que Convocatoria, sincronizado con el Calendario. Hoy quedan redactados aquí; el envío desde Ejecución llega cuando exista una lista de dropshippers cargable.",
+        fields: [
+          { key: "messages", label: "Mensajes", type: "messages" },
         ],
       },
     ],

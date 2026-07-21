@@ -45,7 +45,15 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/api/gali") ||
     pathname.startsWith("/proyectos/indicadores/ascenso") ||
     pathname.startsWith("/api/proyectos/ascenso-ofertas") ||
-    pathname.startsWith("/api/public");
+    pathname.startsWith("/api/public") ||
+    // Página de "productos elegibles" que se le manda a cada proveedor por
+    // WhatsApp — pública a propósito, el token opaco en la URL es el control
+    // de acceso (ver hub/src/lib/local-store-planeacion.ts). OJO: las rutas
+    // internas del equipo bajo /elegibles/ (aprobar, export) deben quedar
+    // excluidas aquí — si agregas otra subruta interna, exclúyela también.
+    (pathname.includes("/dinamicas-catalogo/planeacion/") && pathname.includes("/elegibles/")) ||
+    (pathname.startsWith("/api/campaigns-planeacion/") && pathname.includes("/elegibles/") &&
+      !pathname.endsWith("/elegibles/aprobar") && !pathname.endsWith("/elegibles/export"));
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();
