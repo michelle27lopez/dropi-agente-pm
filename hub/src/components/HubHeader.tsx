@@ -107,7 +107,7 @@ export default function HubHeader({
                 {otrasCelulas.map((c) => (
                   <a
                     key={c.slug}
-                    href={c.slug === "suppliers" ? "/" : `/celula/${c.slug}`}
+                    href={`/celula/${c.slug}`}
                     onClick={() => setMenuOpen(false)}
                     style={{
                       display: "block", padding: "10px 14px", fontSize: 13,
