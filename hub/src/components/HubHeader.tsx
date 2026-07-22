@@ -10,6 +10,7 @@ type Profile = {
   nombre: string | null;
   email: string | null;
   is_super_admin: boolean;
+  is_stakeholder?: boolean;
   celulas?: { slug: string; ve_hub_completo: boolean } | null;
 };
 
@@ -54,7 +55,7 @@ export default function HubHeader({
         const p: Profile | null = data?.profile ?? null;
         setProfile(p);
         setLoaded(true);
-        const fullAccess = p?.is_super_admin || !!p?.celulas?.ve_hub_completo;
+        const fullAccess = p?.is_super_admin || p?.is_stakeholder || !!p?.celulas?.ve_hub_completo;
         if (fullAccess) {
           fetch("/api/celulas")
             .then((r) => r.json())
@@ -75,7 +76,7 @@ export default function HubHeader({
     router.refresh();
   }
 
-  const fullAccess = !!(profile?.is_super_admin || profile?.celulas?.ve_hub_completo);
+  const fullAccess = !!(profile?.is_super_admin || profile?.is_stakeholder || profile?.celulas?.ve_hub_completo);
   const isSuperAdmin = !!profile?.is_super_admin;
 
   return (
