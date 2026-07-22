@@ -24,8 +24,107 @@ export type NodeKey =
 
 export type Phase = "planeacion" | "cierre";
 
-export type FieldType = "text" | "number" | "textarea" | "select" | "multiselect";
+export type FieldType = "text" | "number" | "textarea" | "select" | "multiselect" | "milestones" | "messages";
 export type NodeData = Record<string, string>;
+
+/** Un hito operativo del calendario: nombre, fecha (texto libre) y notas de qué pasa en ese paso. Serializado como JSON dentro de un campo tipo "milestones". */
+export type Milestone = { label: string; date: string; notes?: string };
+
+export function parseMilestones(value: string | undefined): Milestone[] {
+  if (!value || !value.trim()) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Un mensaje redactado para un momento puntual de la campaña (proveedor).
+ * `milestoneLabel` lo liga a un hito del Calendario por nombre — al
+ * sincronizar, se agregan mensajes nuevos para hitos sin mensaje todavía,
+ * pero nunca se pisa el texto de un mensaje que ya existe. `null` = mensaje
+ * independiente, no ligado a ningún hito. Serializado como JSON dentro de
+ * un campo tipo "messages".
+ */
+export type CampaignMessage = { id: string; milestoneLabel: string | null; label?: string; body: string };
+
+export function parseMessages(value: string | undefined): CampaignMessage[] {
+  if (!value || !value.trim()) return [];
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+const SPANISH_MONTHS: Record<string, number> = {
+  ene: 0, enero: 0, feb: 1, febrero: 1, mar: 2, marzo: 2, abr: 3, abril: 3,
+  may: 4, mayo: 4, jun: 5, junio: 5, jul: 6, julio: 6, ago: 7, agosto: 7,
+  sep: 8, sept: 8, septiembre: 8, oct: 9, octubre: 9, nov: 10, noviembre: 10,
+  dic: 11, diciembre: 11,
+};
+
+/**
+ * Fecha "de referencia" de un hito para calcular su estado (pasado/hoy/futuro).
+ * Si la fecha es un rango (ej. "31/jul-3/ago/2026"), toma el ÚLTIMO día/mes
+ * que aparece en el texto — el fin del rango es lo que importa para saber
+ * si el hito ya se completó.
+ */
+export function milestoneEndDate(dateText: string | undefined): Date | null {
+  if (!dateText) return null;
+  const yearMatch = dateText.match(/(\d{4})/);
+  if (!yearMatch) return null;
+  const year = parseInt(yearMatch[1], 10);
+  const tokens = [...dateText.matchAll(/(\d{1,2})\s*\/\s*([a-zA-Zé]+)/g)];
+  if (tokens.length === 0) return null;
+  const last = tokens[tokens.length - 1];
+  const day = parseInt(last[1], 10);
+  const monthKey = last[2].toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const month = SPANISH_MONTHS[monthKey];
+  if (month === undefined) return null;
+  return new Date(year, month, day);
+}
+
+/**
+ * Fecha de INICIO de un hito — el primer día/mes que aparece en el texto.
+ * Para hitos de un solo día, coincide con milestoneEndDate(). Para rangos
+ * (ej. "31/jul-3/ago/2026"), es el inicio del rango — usado para dibujar
+ * el hito como una barra en el calendario visual.
+ */
+export function milestoneStartDate(dateText: string | undefined): Date | null {
+  if (!dateText) return null;
+  const yearMatch = dateText.match(/(\d{4})/);
+  if (!yearMatch) return null;
+  const year = parseInt(yearMatch[1], 10);
+  const tokens = [...dateText.matchAll(/(\d{1,2})\s*\/\s*([a-zA-Zé]+)/g)];
+  if (tokens.length === 0) return null;
+  const first = tokens[0];
+  const day = parseInt(first[1], 10);
+  const monthKey = first[2].toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const month = SPANISH_MONTHS[monthKey];
+  if (month === undefined) return null;
+  return new Date(year, month, day);
+}
+
+export type MilestoneState = "hecho" | "hoy" | "proximo" | "sin_fecha";
+export const MILESTONE_LABEL: Record<MilestoneState, { text: string; color: string; bg: string }> = {
+  hecho: { text: "Hecho", color: "#10B981", bg: "#ECFDF5" },
+  hoy: { text: "Hoy", color: "#F77F00", bg: "#FFF3E0" },
+  proximo: { text: "Próximo", color: "#6B7280", bg: "#F8F9FA" },
+  sin_fecha: { text: "Sin fecha", color: "#9CA3AF", bg: "#F8F9FA" },
+};
+
+export function milestoneState(dateText: string): MilestoneState {
+  const end = milestoneEndDate(dateText);
+  if (!end) return "sin_fecha";
+  const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  if (end.getTime() === todayStart.getTime()) return "hoy";
+  return end < todayStart ? "hecho" : "proximo";
+}
 
 export type NodeIconKey =
   | "sparkles" | "tag" | "check-circle-2" | "calendar"
@@ -214,7 +313,7 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
           },
           {
             key: "supplier_type", label: "Tipo de supplier", type: "multiselect", required: true,
-            options: ["Verificado", "Premium", "Exclusivo", "Todos los verificados"],
+            options: ["Verificado", "Premium", "Premium Exclusivo", "Todos los verificados"],
           },
           {
             key: "categories_scope", label: "¿Aplica a todas las categorías?", type: "select", required: true,
@@ -269,18 +368,17 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
     phase: "planeacion",
     title: "Calendario",
     icon: "calendar",
-    description: "Cuándo ocurre cada fase. Planea hacia atrás desde el evento: el supplier necesita tiempo para postular, el dropshipper para pautar.",
+    description: "Cuándo ocurre cada hito operativo, desde la convocatoria hasta el cierre. Cada hito es un paso con su propia fecha y qué pasa en ese momento.",
     sections: [
       {
         key: "fechas",
-        title: "Fechas clave",
-        subtitle: "Desde la convocatoria hasta el cierre",
+        title: "Hitos del calendario",
+        subtitle: "En orden cronológico, con la acción de cada uno",
         fields: [
-          { key: "date_convocation_start", label: "Inicio convocatoria supplier", type: "text", required: true, placeholder: "ej. 22/jul/2026" },
-          { key: "date_submission_end", label: "Cierre postulación supplier", type: "text", required: true, placeholder: "ej. 29/jul/2026" },
-          { key: "date_review_close", label: "Curaduría y aprobación", type: "text", placeholder: "ej. 31/jul/2026 (opcional)" },
-          { key: "date_showcase_publish", label: "Publicación de vitrina", type: "text", required: true, placeholder: "ej. 3/ago/2026" },
-          { key: "date_campaign_end", label: "Cierre de campaña", type: "text", required: true, placeholder: "ej. 16/ago/2026" },
+          {
+            key: "milestones", label: "Hitos", type: "milestones", required: true,
+            hint: "Un hito por paso operativo (pieza de difusión, forms, curaduría, publicación...). La fecha puede ser un día o un rango.",
+          },
           { key: "calendar_notes", label: "Notas sobre el calendario", type: "textarea", placeholder: "Restricciones, dependencias de diseño, semanas sin disponibilidad...", aiSuggest: true },
         ],
       },
@@ -350,6 +448,14 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
           },
         ],
       },
+      {
+        key: "mensajes",
+        title: "Mensajes por hito",
+        subtitle: "Se pre-llenan con los hitos del Calendario — usa {{Nombre de columna}} para personalizar cada envío con datos del Excel de cada proveedor (ej. {{Productos aprobados}})",
+        fields: [
+          { key: "messages", label: "Mensajes", type: "messages" },
+        ],
+      },
     ],
   },
 
@@ -405,6 +511,14 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
             key: "publication_responsible", label: "Responsable de publicación", type: "select", required: true,
             options: ["Producto", "Growth", "Comercial", "Comunicaciones", "Supplier Success", "Diseño"],
           },
+        ],
+      },
+      {
+        key: "mensajes",
+        title: "Mensajes por hito",
+        subtitle: "Para dropshippers — mismo mecanismo que Convocatoria, sincronizado con el Calendario. Hoy quedan redactados aquí; el envío desde Ejecución llega cuando exista una lista de dropshippers cargable.",
+        fields: [
+          { key: "messages", label: "Mensajes", type: "messages" },
         ],
       },
     ],
@@ -567,3 +681,66 @@ export const NODE_DEFINITIONS: NodeDefinition[] = [
 
 export const PLANNING_NODES = NODE_DEFINITIONS.filter((n) => n.phase === "planeacion");
 export const CLOSING_NODES = NODE_DEFINITIONS.filter((n) => n.phase === "cierre");
+
+/** ¿Están todos los campos requeridos de la fase de planeación llenos? Usa node_key, no índice — sirve tanto en el wizard como en Ejecución. */
+export function isPlanningComplete(savedNodes: { node_key: string; data: NodeData }[]): boolean {
+  const byKey = new Map(savedNodes.map((n) => [n.node_key, n.data]));
+  return PLANNING_NODES.every((node) => {
+    const data = byKey.get(node.key) ?? {};
+    const allData: Partial<Record<NodeKey, NodeData>> = {};
+    NODE_DEFINITIONS.forEach((n) => { allData[n.key] = byKey.get(n.key) ?? {}; });
+    return node.sections.every((sec) =>
+      sec.fields.every((f) => {
+        if (!f.required) return true;
+        if (f.hidden && f.hidden(allData)) return true;
+        const v = data[f.key];
+        return !!v && v.trim() !== "";
+      })
+    );
+  });
+}
+
+// ── Estado de ejecución/cierre de una campaña — compartido entre /planeacion y el panel raíz de Dinámicas de Catálogo ──
+
+export type SavedNode = { node_index: number; node_key: string; data: NodeData; completed: boolean };
+export const EXECUTION_NODE_INDEX = 9;
+
+export type CampaignPhase = "planeacion" | "lista" | "activa" | "cierre" | "cerrada";
+export type CampaignExtra = { phase: CampaignPhase; nextMilestone: Milestone | null };
+
+export const PHASE_LABEL: Record<CampaignPhase, { text: string; color: string; bg: string }> = {
+  planeacion: { text: "En planeación", color: "#6B7280", bg: "#F3F4F6" },
+  lista: { text: "Lista para iniciar", color: "#F77F00", bg: "#FFF3E0" },
+  activa: { text: "Campaña activa", color: "#10B981", bg: "#ECFDF5" },
+  cierre: { text: "En cierre", color: "#6366F1", bg: "#EEF2FF" },
+  cerrada: { text: "Cerrada", color: "#374151", bg: "#F3F4F6" },
+};
+
+export function computeCampaignExtra(nodes: SavedNode[]): CampaignExtra {
+  const planningComplete = isPlanningComplete(nodes);
+  const executionNode = nodes.find((n) => n.node_index === EXECUTION_NODE_INDEX);
+  const isActive = executionNode?.data?.status === "active";
+  const decisionNode = nodes.find((n) => n.node_key === "decision");
+  const decisionDone = !!decisionNode?.data?.decision;
+  const closingStarted = CLOSING_NODES.some((cn) => {
+    const data = nodes.find((n) => n.node_key === cn.key)?.data;
+    return data && Object.keys(data).length > 0;
+  });
+
+  let phase: CampaignPhase = "planeacion";
+  if (decisionDone) phase = "cerrada";
+  else if (closingStarted) phase = "cierre";
+  else if (isActive) phase = "activa";
+  else if (planningComplete) phase = "lista";
+
+  const calendario = nodes.find((n) => n.node_key === "calendario")?.data;
+  const milestones = parseMilestones(calendario?.milestones);
+  const today = new Date();
+  const todayStart = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const nextMilestone = milestones.find((m) => {
+    const end = milestoneEndDate(m.date);
+    return end && end >= todayStart;
+  }) ?? null;
+
+  return { phase, nextMilestone };
+}

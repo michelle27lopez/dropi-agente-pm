@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section, matchesQuery } from "@/components/HomeSections";
+import { isSprintAllowed } from "@/lib/sprint-access";
 
 const updates: Item[] = [
   {
@@ -28,9 +29,9 @@ const updates: Item[] = [
   {
     key: "weekly-celula",
     name: "Weekly · Célula",
-    description: "Updates semanales de la célula Supplier Success para el jefe. Registro histórico por semana.",
+    description: "Updates semanales de la célula Seller Success para el jefe. Registro histórico por semana.",
     url: "/updates-celula",
-    tag: "Célula · Supplier Success",
+    tag: "Célula · Seller Success",
     color: "#6366F1",
     icon: "🏠",
   },
@@ -60,7 +61,7 @@ const projects: Item[] = [
     name: "Célula",
     description: "Presentaciones semanales del cellboard con el equipo — registro histórico por semana, con demo en vivo y decisiones a cerrar por tema.",
     url: "/proyectos/celula",
-    tag: "Supplier Success · Semanal",
+    tag: "Seller Success · Semanal",
     color: "#0891B2",
     icon: "🧬",
   },
@@ -160,7 +161,10 @@ const poc: Item[] = [
   {
     key: "gali-demo",
     name: "Gali - Demo",
-    description: "Propuesta de valor y copiloto para selección de productos ganadores (v5). Chat interactivo con mentores de comunidad, grilla con 1M de productos y generador de creativos.",
+    description: "Propuesta de valor y copiloto para selección de productos ganadores (v5). Chat interactivo con mentores de comunidad, grilla con 1M de productos y generador de creativos. Ahora vive en su propio repo con login propio.",
+    // TODO: reemplazar por la URL real una vez desplegado el repo Gali-experiment
+    // (github.com/jaimeguevara-dropi/Gali-experiment). Mientras no exista, apunta
+    // a la versión que sigue intacta dentro de este hub.
     url: "/proyectos/gali-demo",
     tag: "Demo · Caza Productos v5",
     color: "#FF6102",
@@ -180,6 +184,7 @@ const poc: Item[] = [
 export default function HubPage() {
   const [query, setQuery] = useState("");
   const [checkingRole, setCheckingRole] = useState(true);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const router = useRouter();
 
   const hasSupabase = !!(
@@ -196,10 +201,18 @@ export default function HubPage() {
       .then((res) => res.json())
       .then((data) => {
         const profile = data?.profile;
+        setUserEmail(data?.user?.email ?? profile?.email ?? null);
         if (!profile) { setCheckingRole(false); return; }
 
         const mySlug = profile.celulas?.slug;
         const fullAccess = profile.is_super_admin || !!profile.celulas?.ve_hub_completo;
+
+        // Aislamiento seguro para el entorno del nuevo PM (Santiago)
+        // Redirigir su sesión a un dashboard completamente limpio de su célula
+        if (userEmail === "santiago.herrera@dropi.co") {
+          router.replace(`/seller-success`);
+          return;
+        }
 
         // Con ve_hub_completo (o super admin), "/" es el origen: aterriza
         // siempre aquí y navega libre entre células con el dropdown. Sin
@@ -211,13 +224,28 @@ export default function HubPage() {
 
         setCheckingRole(false);
       });
-  }, [hasSupabase, router]);
+  }, [hasSupabase, router, userEmail]);
 
   if (checkingRole) {
     return <main style={{ minHeight: "100vh" }} />;
   }
 
-  const filteredUpdates = updates.filter((item) => matchesQuery(item, query));
+  // /sprint solo es visible para Michelle y Jaime (alcance confirmado
+  // 2026-07-15) — no se agrega al array estático `updates` porque ese
+  // mismo home lo ven otras personas de la célula Suppliers.
+  const visibleUpdates = isSprintAllowed(userEmail)
+    ? [...updates, {
+        key: "sprint-checklist",
+        name: "Sprint · Checklist",
+        description: "Checklist de documentación por tarea del sprint activo — objetivo, qué se hizo, hallazgos y links, con estado por bloque.",
+        url: "/sprint",
+        tag: "Solo tú y Jaime",
+        color: "#1A6B52",
+        icon: "🗓️",
+      }]
+    : updates;
+
+  const filteredUpdates = visibleUpdates.filter((item) => matchesQuery(item, query));
   const filteredProjects = projects.filter((item) => matchesQuery(item, query));
   const filteredPoc = poc.filter((item) => matchesQuery(item, query));
   const hasResults = filteredUpdates.length + filteredProjects.length + filteredPoc.length > 0;
@@ -227,7 +255,7 @@ export default function HubPage() {
       <div style={{ flex: 1 }}>
       <HubHeader
         title="Darwin"
-        subtitle="Supplier Success · Herramientas internas"
+        subtitle="Seller Success · Herramientas internas"
         currentSlug="suppliers"
       />
 
@@ -266,14 +294,14 @@ export default function HubPage() {
           <Section title="Updates" items={filteredUpdates} ctaLabel="Ver →" />
         </div>
 
-        <Section title="Proyectos" items={filteredProjects} ctaLabel="Ver proyecto →" />
+        <Section title="Discovery projects" items={filteredProjects} ctaLabel="Ver proyecto →" />
 
         <div style={{ marginTop: filteredPoc.length ? 56 : 0 }}>
           <Section title="Pruebas de concepto" items={filteredPoc} ctaLabel="Ver proyecto →" />
         </div>
 
         <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 48, textAlign: "center" }}>
-          Dropi · Supplier Success · {new Date().getFullYear()}
+          Dropi · Seller Success · {new Date().getFullYear()}
         </p>
       </div>
       </div>

@@ -46,10 +46,13 @@ export function Card({ item, ctaLabel, index, onItemClick }: { item: Item; ctaLa
   // — ahí se abren en un modal en vez de intentar navegar a ningún lado.
   const clickable = !item.url && !!onItemClick;
   const Tag = item.url ? "a" : "div";
+  const isExternal = item.url?.startsWith("http");
   return (
     <Tag
       href={item.url}
       onClick={clickable ? () => onItemClick!(item) : undefined}
+      target={isExternal ? "_blank" : undefined}
+      rel={isExternal ? "noopener noreferrer" : undefined}
       className="hub-card"
       style={{
         background: "var(--card)",

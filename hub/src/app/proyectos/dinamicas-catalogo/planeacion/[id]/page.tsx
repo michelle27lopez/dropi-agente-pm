@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   Sparkles, Tag, CheckCircle2, Calendar, Megaphone, Store, FileCheck2,
-  BarChart3, GitBranch, Check, ChevronDown, X, ChevronUp, Lock, Wand2,
+  BarChart3, GitBranch, Check, ChevronDown, X, ChevronUp, Wand2, Plus, Trash2,
 } from "lucide-react";
-import { NODE_DEFINITIONS, PLANNING_NODES, Field, SectionDefinition, NodeKey, NodeData, NodeIconKey } from "../nodes";
+import { NODE_DEFINITIONS, PLANNING_NODES, Field, SectionDefinition, NodeKey, NodeData, NodeIconKey, Milestone, parseMilestones, CampaignMessage, parseMessages } from "../nodes";
 
 type Campaign = { id: string; name: string; status: string; current_node: number };
 type SavedNode = { node_index: number; node_key: string; data: NodeData; completed: boolean };
@@ -42,12 +42,6 @@ const CONTEXT_REFS: Partial<Record<NodeKey, ContextRef[]>> = {
   handoff: [
     { fromKey: "identidad", field: "expected_result", label: "Resultado esperado" },
   ],
-  resultados: [
-    { fromKey: "identidad", field: "expected_result", label: "Resultado esperado (compara tu número real contra esto)" },
-  ],
-  decision: [
-    { fromKey: "resultados", field: "vs_expected", label: "Resultado real vs. esperado" },
-  ],
 };
 
 function formatVal(v: string): string {
@@ -63,6 +57,7 @@ function buildAllDataByKey(data: Record<number, NodeData>): Partial<Record<NodeK
 export default function PlaneacionWizardPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [campaignData, setCampaignData] = useState<Record<number, NodeData>>({});
@@ -84,7 +79,9 @@ export default function PlaneacionWizardPage() {
     ]).then(([camp, nodes]) => {
       if (camp?.id) {
         setCampaign(camp);
-        setActiveNode(Math.min(camp.current_node ?? 0, NODE_DEFINITIONS.length - 1));
+        const wantedKey = searchParams.get("node") as NodeKey | null;
+        const wantedIdx = wantedKey ? NODE_DEFINITIONS.slice(0, PLANNING_COUNT).findIndex((n) => n.key === wantedKey) : -1;
+        setActiveNode(wantedIdx >= 0 ? wantedIdx : Math.min(camp.current_node ?? 0, PLANNING_COUNT - 1));
       }
 
       const loadedData: Record<number, NodeData> = {};
@@ -93,6 +90,7 @@ export default function PlaneacionWizardPage() {
 
       if (Array.isArray(nodes)) {
         nodes.forEach((n: SavedNode) => {
+          if (n.node_index >= NODE_DEFINITIONS.length) return;
           loadedData[n.node_index] = n.data ?? {};
           if (n.completed || Object.keys(n.data ?? {}).length > 0) {
             started.add(n.node_index);
@@ -105,6 +103,7 @@ export default function PlaneacionWizardPage() {
     }).catch((err) => {
       console.error("Error loading campaign data:", err);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {
@@ -173,6 +172,17 @@ export default function PlaneacionWizardPage() {
         body: JSON.stringify({ node_index: nodeIdx, node_key: def.key, data, completed: missing === 0 }),
       });
       setStartedNodes((prev) => { const next = new Set(prev); next.add(nodeIdx); return next; });
+
+      // El nombre visible de la campaña en las listas (Panel, Dashboard, Calendario) vive en
+      // campaigns_planeacion.name — se mantiene sincronizado con lo que se escribe acá.
+      if (def.key === "identidad" && data.name?.trim() && data.name !== campaign?.name) {
+        await fetch(`/api/campaigns-planeacion/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: data.name.trim() }),
+        });
+        setCampaign((prev) => prev ? { ...prev, name: data.name.trim() } : null);
+      }
     } catch (err) {
       console.error("Failed to save node:", err);
     } finally {
@@ -184,10 +194,10 @@ export default function PlaneacionWizardPage() {
     if (!campaign) return;
     await saveNodeData(activeNode);
 
-    const isLast = activeNode === NODE_DEFINITIONS.length - 1;
+    const isLast = activeNode === PLANNING_COUNT - 1;
     if (isLast) {
       let hasMissing = false;
-      for (let i = 0; i < NODE_DEFINITIONS.length; i++) {
+      for (let i = 0; i < PLANNING_COUNT; i++) {
         if (getRequiredMissing(i) > 0) hasMissing = true;
       }
       if (hasMissing) {
@@ -197,12 +207,12 @@ export default function PlaneacionWizardPage() {
           await fetch(`/api/campaigns-planeacion/${id}`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ status: "completed", current_node: NODE_DEFINITIONS.length }),
+            body: JSON.stringify({ current_node: PLANNING_COUNT }),
           });
-          setCampaign((prev) => prev ? { ...prev, status: "completed", current_node: NODE_DEFINITIONS.length } : null);
+          setCampaign((prev) => prev ? { ...prev, current_node: PLANNING_COUNT } : null);
           router.push(`/proyectos/dinamicas-catalogo/planeacion/${id}/handoff`);
         } catch (err) {
-          console.error("Error finalizing campaign:", err);
+          console.error("Error finalizing planning:", err);
         }
       }
       return;
@@ -284,7 +294,7 @@ export default function PlaneacionWizardPage() {
     let completedRequired = 0;
     const allData = buildAllDataByKey(campaignData);
 
-    NODE_DEFINITIONS.forEach((node, nodeIdx) => {
+    NODE_DEFINITIONS.slice(0, PLANNING_COUNT).forEach((node, nodeIdx) => {
       const nodeData = campaignData[nodeIdx] || {};
       node.sections.forEach((sec) => {
         sec.fields.forEach((f) => {
@@ -311,12 +321,11 @@ export default function PlaneacionWizardPage() {
 
   const campaignName = campaignData[0]?.name || campaign.name || "";
   const progressPct = calculateProgress();
-  const isLast = activeNode === NODE_DEFINITIONS.length - 1;
-  const isPlanningToClosingBoundary = activeNode === PLANNING_COUNT - 1;
+  const isLast = activeNode === PLANNING_COUNT - 1;
   const contextRefs = CONTEXT_REFS[nodeDef.key] || [];
 
   const stepsWithErrors: { idx: number; title: string; missing: number }[] = [];
-  NODE_DEFINITIONS.forEach((node, idx) => {
+  NODE_DEFINITIONS.slice(0, PLANNING_COUNT).forEach((node, idx) => {
     const missing = getRequiredMissing(idx);
     if (missing > 0) stepsWithErrors.push({ idx, title: node.title, missing });
   });
@@ -485,6 +494,20 @@ export default function PlaneacionWizardPage() {
         .ms-opt.on { border-color: var(--dropi); background: var(--dropi-light); color: var(--dropi); font-weight: 600; }
         .ms-opt.on.rk { border-color: transparent; background: var(--bg); color: var(--muted-light); text-decoration: line-through; }
 
+        .ml-list { display: flex; flex-direction: column; gap: 10px; }
+        .ml-row { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; background: var(--bg); }
+        .ml-row-top { display: grid; grid-template-columns: 20px minmax(0, 1fr) 140px auto; gap: 8px; align-items: center; }
+        .ml-row-num { font-size: 11px; font-weight: 700; color: var(--muted-light); text-align: center; }
+        .ml-row-actions { display: flex; align-items: center; gap: 2px; }
+        .ml-row-actions button { background: none; border: none; cursor: pointer; color: var(--muted-light); padding: 2px; display: flex; }
+        .ml-row-actions button:disabled { opacity: .25; cursor: default; }
+        .ml-row-actions button:not(:disabled):hover { color: var(--fg); }
+        .ml-row-actions button.rm:not(:disabled):hover { color: var(--error); }
+        .ml-row textarea { margin-top: 8px; font-size: 12.5px; min-height: 44px; }
+        .ml-add-btn { margin-top: 2px; background: none; border: 1px dashed var(--muted-light); border-radius: var(--radius-sm); padding: 8px 14px; font-size: 12.5px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: inherit; width: 100%; }
+        .ml-add-btn:hover { border-color: var(--dropi); color: var(--dropi); }
+        .ml-empty { font-size: 12.5px; color: var(--muted-light); padding: 8px 0; }
+
         #bottom-bar { position: fixed; bottom: 0; right: 0; width: calc(100% - 226px); background: var(--card); border-top: 1px solid var(--border); padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 100; }
         .btn-prev { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 20px; font-size: 14px; font-weight: 500; color: var(--fg); cursor: pointer; font-family: inherit; }
         .btn-prev:disabled { opacity: .4; cursor: default; }
@@ -504,34 +527,31 @@ export default function PlaneacionWizardPage() {
         <div className="hdr-left">
           <a className="crumb" href="/">← Dropi PM Tools</a>
           <span className="crumb-sep">/</span>
-          <button className="crumb" onClick={() => router.push("/proyectos/dinamicas-catalogo/planeacion")}>Planeación</button>
+          <button className="crumb" onClick={() => router.push("/proyectos/dinamicas-catalogo/campanas")}>Panel de campañas</button>
           <span className="crumb-sep">/</span>
           <span className="crumb current">{campaignName || "Nueva campaña"}</span>
           <div className="hdr-pills">
             {campaignData[0]?.objective && <span className="hdr-pill">{campaignData[0].objective}</span>}
-            {nodeDef.phase === "cierre" && <span className="hdr-pill exp">🧪 Cierre — experimento</span>}
           </div>
         </div>
         <div className="hdr-right">
           {saving && <span className="saving-indicator">Guardando…</span>}
-          <button className="btn-exit" onClick={() => router.push("/proyectos/dinamicas-catalogo/planeacion")}>Salir</button>
+          <button className="btn-exit" onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${id}/dashboard`)}>← Volver al resumen</button>
         </div>
       </header>
 
       <div id="layout">
         <aside id="stepper-panel">
           <div className="phase-label">Planeación</div>
-          {NODE_DEFINITIONS.map((node, idx) => {
+          {NODE_DEFINITIONS.slice(0, PLANNING_COUNT).map((node, idx) => {
             const done = startedNodes.has(idx) && getRequiredMissing(idx) === 0;
             const active = idx === activeNode;
             const started = startedNodes.has(idx) && !done && !active;
             const missing = getRequiredMissing(idx);
             const hasErrors = !done && missing > 0 && startedNodes.has(idx) && !active;
-            const locked = node.phase === "cierre" && !planningComplete;
 
             let iconClass = "step-icon";
-            if (locked) iconClass += " locked";
-            else if (done) iconClass += " done";
+            if (done) iconClass += " done";
             else if (active) iconClass += " active";
             else if (hasErrors) iconClass += " has-errors";
             else if (started) iconClass += " started";
@@ -541,34 +561,29 @@ export default function PlaneacionWizardPage() {
             else if (done) labelClass += " done";
 
             const StepIcon = ICONS[node.icon];
-            const isPhaseStart = idx === PLANNING_COUNT;
 
             return (
-              <div key={node.key}>
-                {isPhaseStart && <div className="phase-label closing">Cierre · después de lanzar</div>}
-                <div
-                  className={`step-item ${locked ? "locked" : ""}`}
-                  onClick={async () => {
-                    if (locked) return;
-                    await saveNodeData(activeNode);
-                    setActiveNode(idx);
-                  }}
-                >
-                  <div className="step-left">
-                    <div className={iconClass}>
-                      {locked ? <Lock size={12} strokeWidth={2.3} /> : done ? <Check size={13} strokeWidth={3} /> : <StepIcon size={13} strokeWidth={2.3} />}
-                    </div>
-                    {idx < NODE_DEFINITIONS.length - 1 && <div className={`step-line ${done ? "done" : ""}`} />}
+              <div
+                key={node.key}
+                className="step-item"
+                onClick={async () => {
+                  await saveNodeData(activeNode);
+                  setActiveNode(idx);
+                }}
+              >
+                <div className="step-left">
+                  <div className={iconClass}>
+                    {done ? <Check size={13} strokeWidth={3} /> : <StepIcon size={13} strokeWidth={2.3} />}
                   </div>
-                  <div className="step-content">
-                    <div className={labelClass}>{node.title}</div>
-                    {active && missing > 0 && (
-                      <div className="step-sublabel err">{missing} campo{missing > 1 ? "s" : ""} pendiente{missing > 1 ? "s" : ""}</div>
-                    )}
-                    {!active && hasErrors && <div className="step-sublabel err">{missing} pendiente{missing > 1 ? "s" : ""}</div>}
-                    {done && <div className="step-sublabel" style={{ color: "var(--success)" }}>Completo</div>}
-                    {locked && <div className="step-sublabel">Completa planeación primero</div>}
-                  </div>
+                  {idx < PLANNING_COUNT - 1 && <div className={`step-line ${done ? "done" : ""}`} />}
+                </div>
+                <div className="step-content">
+                  <div className={labelClass}>{node.title}</div>
+                  {active && missing > 0 && (
+                    <div className="step-sublabel err">{missing} campo{missing > 1 ? "s" : ""} pendiente{missing > 1 ? "s" : ""}</div>
+                  )}
+                  {!active && hasErrors && <div className="step-sublabel err">{missing} pendiente{missing > 1 ? "s" : ""}</div>}
+                  {done && <div className="step-sublabel" style={{ color: "var(--success)" }}>Completo</div>}
                 </div>
               </div>
             );
@@ -579,7 +594,7 @@ export default function PlaneacionWizardPage() {
           <div id="form-inner">
             {isLast && showValidation && stepsWithErrors.length > 0 && (
               <div className="val-banner">
-                <div className="val-banner-title">Faltan campos obligatorios para cerrar la campaña</div>
+                <div className="val-banner-title">Faltan campos obligatorios para terminar la planeación</div>
                 <ul className="val-banner-list">
                   {stepsWithErrors.map(({ idx, title, missing }) => (
                     <li key={idx} onClick={() => { setActiveNode(idx); setShowValidation(false); }}>
@@ -591,7 +606,7 @@ export default function PlaneacionWizardPage() {
             )}
 
             <div className="node-eyebrow">
-              {nodeDef.phase === "planeacion" ? "Planeación" : "Cierre"} · Paso {activeNode + 1} de {NODE_DEFINITIONS.length}
+              Planeación · Paso {activeNode + 1} de {PLANNING_COUNT}
             </div>
             <div className="node-title">{nodeDef.title}</div>
             <div className="node-desc">{nodeDef.description}</div>
@@ -695,6 +710,17 @@ export default function PlaneacionWizardPage() {
                           {f.type === "multiselect" && (
                             <MultiSelectField field={f} value={val} onChange={(v) => handleFieldChange(f.key, v)} />
                           )}
+                          {f.type === "milestones" && (
+                            <MilestoneListField value={val} onChange={(v) => handleFieldChange(f.key, v)} />
+                          )}
+                          {f.type === "messages" && (
+                            <MessageListField
+                              value={val}
+                              onChange={(v) => handleFieldChange(f.key, v)}
+                              milestones={parseMilestones(allDataByKey.calendario?.milestones)}
+                              allData={allDataByKey}
+                            />
+                          )}
 
                           {isInvalid && <p className="fld-error-msg">Este campo es obligatorio.</p>}
                         </div>
@@ -742,7 +768,7 @@ export default function PlaneacionWizardPage() {
           <div className="sum-divider" />
           <div className="sum-title" style={{ marginBottom: 8 }}>Progreso</div>
           <div className="seg-bar">
-            {NODE_DEFINITIONS.map((n, idx) => {
+            {NODE_DEFINITIONS.slice(0, PLANNING_COUNT).map((n, idx) => {
               const done = startedNodes.has(idx) && getRequiredMissing(idx) === 0;
               const active = idx === activeNode;
               const hasErrors = !done && !active && startedNodes.has(idx) && getRequiredMissing(idx) > 0;
@@ -750,7 +776,6 @@ export default function PlaneacionWizardPage() {
               if (done) cls += " done";
               else if (active) cls += " active";
               else if (hasErrors) cls += " warn";
-              else if (n.phase === "cierre") cls += " closing";
               return <div key={n.key} className={cls} title={n.title} />;
             })}
           </div>
@@ -762,10 +787,8 @@ export default function PlaneacionWizardPage() {
         <button className="btn-prev" disabled={activeNode === 0} onClick={handlePrev}>← Anterior</button>
         <button className="btn-next" onClick={handleNext}>
           {isLast
-            ? (saving ? "Guardando..." : "✓ Cerrar campaña")
-            : isPlanningToClosingBoundary
-              ? (saving ? "Guardando..." : "Pasar a Cierre →")
-              : (saving ? "Guardando..." : "Siguiente →")}
+            ? (saving ? "Guardando..." : "✓ Finalizar planeación →")
+            : (saving ? "Guardando..." : "Siguiente →")}
         </button>
       </footer>
     </div>
@@ -820,6 +843,176 @@ function MultiSelectField({ field, value, onChange }: { field: Field; value: str
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function MilestoneListField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const items = parseMilestones(value);
+
+  const commit = (next: Milestone[]) => onChange(JSON.stringify(next));
+
+  const update = (idx: number, patch: Partial<Milestone>) => {
+    const next = items.map((m, i) => (i === idx ? { ...m, ...patch } : m));
+    commit(next);
+  };
+  const remove = (idx: number) => commit(items.filter((_, i) => i !== idx));
+  const add = () => commit([...items, { label: "", date: "", notes: "" }]);
+  const move = (idx: number, dir: -1 | 1) => {
+    const target = idx + dir;
+    if (target < 0 || target >= items.length) return;
+    const next = [...items];
+    [next[idx], next[target]] = [next[target], next[idx]];
+    commit(next);
+  };
+
+  return (
+    <div>
+      {items.length === 0 && <p className="ml-empty">Todavía no hay hitos. Agrega el primero.</p>}
+      <div className="ml-list">
+        {items.map((m, idx) => (
+          <div key={idx} className="ml-row">
+            <div className="ml-row-top">
+              <span className="ml-row-num">{idx + 1}</span>
+              <input type="text" placeholder="Nombre del hito" value={m.label} onChange={(e) => update(idx, { label: e.target.value })} />
+              <input type="text" className="ml-date" placeholder="ej. 24/jul/2026" value={m.date} onChange={(e) => update(idx, { date: e.target.value })} />
+              <span className="ml-row-actions">
+                <button type="button" disabled={idx === 0} onClick={() => move(idx, -1)} title="Subir"><ChevronUp size={14} /></button>
+                <button type="button" disabled={idx === items.length - 1} onClick={() => move(idx, 1)} title="Bajar"><ChevronDown size={14} /></button>
+                <button type="button" className="rm" onClick={() => remove(idx)} title="Eliminar"><Trash2 size={14} /></button>
+              </span>
+            </div>
+            <textarea
+              placeholder="Qué pasa en este hito: CTA, mensaje, responsable... (opcional)"
+              value={m.notes || ""}
+              onChange={(e) => update(idx, { notes: e.target.value })}
+            />
+          </div>
+        ))}
+      </div>
+      <button type="button" className="ml-add-btn" onClick={add}>
+        <Plus size={13} style={{ display: "inline", verticalAlign: -2, marginRight: 4 }} />
+        Agregar hito
+      </button>
+    </div>
+  );
+}
+
+// Mensajes ligados a hitos del Calendario por nombre (no por índice, para
+// sobrevivir a reordenamientos). "Sincronizar" solo AGREGA mensajes para
+// hitos nuevos sin mensaje todavía — nunca pisa el texto de uno que ya
+// existe, aunque el hito relacionado haya cambiado de fecha o se haya
+// borrado (en ese caso queda marcado como huérfano, no se borra solo).
+function MessageListField({
+  value, onChange, milestones, allData,
+}: { value: string; onChange: (v: string) => void; milestones: Milestone[]; allData: Partial<Record<NodeKey, NodeData>> }) {
+  const items = parseMessages(value);
+  const [aiLoadingIds, setAiLoadingIds] = useState<Set<string>>(new Set());
+  const [aiErrors, setAiErrors] = useState<Record<string, string>>({});
+
+  const commit = (next: CampaignMessage[]) => onChange(JSON.stringify(next));
+
+  const update = (idx: number, patch: Partial<CampaignMessage>) => {
+    commit(items.map((m, i) => (i === idx ? { ...m, ...patch } : m)));
+  };
+  const remove = (idx: number) => commit(items.filter((_, i) => i !== idx));
+  const addBlank = () => commit([...items, { id: crypto.randomUUID(), milestoneLabel: null, body: "" }]);
+
+  const sync = () => {
+    const existingLabels = new Set(items.map((m) => m.milestoneLabel).filter(Boolean));
+    const additions: CampaignMessage[] = milestones
+      .filter((m) => m.label.trim() && !existingLabels.has(m.label))
+      .map((m) => ({ id: crypto.randomUUID(), milestoneLabel: m.label, body: "" }));
+    if (additions.length) commit([...items, ...additions]);
+  };
+
+  const milestoneFor = (label: string | null) => (label ? milestones.find((m) => m.label === label) ?? null : null);
+  const newMilestonesCount = milestones.filter((m) => m.label.trim() && !items.some((i) => i.milestoneLabel === m.label)).length;
+
+  const suggestFor = async (idx: number) => {
+    const item = items[idx];
+    if (item.body.trim() && !window.confirm("Esto va a reemplazar lo que ya escribiste en este mensaje. ¿Continuar?")) return;
+
+    setAiLoadingIds((prev) => new Set(prev).add(item.id));
+    setAiErrors((prev) => { const next = { ...prev }; delete next[item.id]; return next; });
+
+    try {
+      const linked = milestoneFor(item.milestoneLabel);
+      const displayLabel = item.label || item.milestoneLabel || "este momento de la campaña";
+      const res = await fetch("/api/campaigns-planeacion/ai-suggest", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          nodeKey: "convocatoria",
+          fieldKey: "messages",
+          fieldLabel: `Mensaje de WhatsApp/CRM para el proveedor — "${displayLabel}"`,
+          hint: linked?.notes?.trim()
+            ? `Qué pasa en este momento (según el Calendario): ${linked.notes}`
+            : "Mensaje breve, tono directo, con un CTA claro para el proveedor.",
+          allData,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok || json.error) throw new Error(json.error || "No se pudo generar la sugerencia.");
+      update(idx, { body: json.suggestion });
+    } catch (err) {
+      setAiErrors((prev) => ({ ...prev, [item.id]: err instanceof Error ? err.message : "Error desconocido" }));
+    } finally {
+      setAiLoadingIds((prev) => { const next = new Set(prev); next.delete(item.id); return next; });
+    }
+  };
+
+  return (
+    <div>
+      <button type="button" className="ml-add-btn" onClick={sync} style={{ marginBottom: 10, borderStyle: "solid" }}>
+        🔄 Sincronizar con hitos del Calendario{newMilestonesCount > 0 ? ` (${newMilestonesCount} nuevo${newMilestonesCount > 1 ? "s" : ""})` : ""}
+      </button>
+      {items.length === 0 && <p className="ml-empty">Sin mensajes todavía. Sincroniza con el Calendario o agrega uno independiente.</p>}
+      <div className="ml-list">
+        {items.map((m, idx) => {
+          const linked = milestoneFor(m.milestoneLabel);
+          const orphan = !!m.milestoneLabel && !linked;
+          const isAiLoading = aiLoadingIds.has(m.id);
+          const aiError = aiErrors[m.id];
+          return (
+            <div key={m.id} className="ml-row">
+              <div className="ml-row-top" style={{ gridTemplateColumns: "1fr auto auto" }}>
+                <div style={{ fontSize: 12.5, fontWeight: 700, color: "var(--fg)", display: "flex", alignItems: "baseline", gap: 4 }}>
+                  <input
+                    type="text"
+                    value={m.label || ""}
+                    placeholder={m.milestoneLabel || "Nombre de este mensaje (ej. Recordatorio, Confirmación...)"}
+                    onChange={(e) => update(idx, { label: e.target.value })}
+                    style={{
+                      border: "none", borderBottom: "1px dashed var(--muted-light)", background: "transparent",
+                      fontSize: 12.5, fontWeight: 700, color: "var(--fg)", padding: "2px 0", fontFamily: "inherit", flex: "0 1 auto", minWidth: 120,
+                    }}
+                  />
+                  {linked && <span style={{ color: "var(--muted)", fontWeight: 500 }}>· {linked.date || "sin fecha"}</span>}
+                  {orphan && <span style={{ color: "var(--warn)", fontWeight: 600 }}>· el hito ya no existe en el Calendario</span>}
+                </div>
+                <button type="button" className="ai-suggest-btn" disabled={isAiLoading} onClick={() => suggestFor(idx)}>
+                  <Wand2 size={12} strokeWidth={2.4} />
+                  {isAiLoading ? "Generando..." : "Sugerir con IA"}
+                </button>
+                <span className="ml-row-actions">
+                  <button type="button" className="rm" onClick={() => remove(idx)} title="Eliminar"><Trash2 size={14} /></button>
+                </span>
+              </div>
+              {aiError && <p className="ai-error-msg">{aiError}</p>}
+              <textarea
+                placeholder="Mensaje listo para copiar/enviar en este momento de la campaña..."
+                value={m.body}
+                onChange={(e) => update(idx, { body: e.target.value })}
+              />
+            </div>
+          );
+        })}
+      </div>
+      <button type="button" className="ml-add-btn" onClick={addBlank}>
+        <Plus size={13} style={{ display: "inline", verticalAlign: -2, marginRight: 4 }} />
+        Agregar mensaje independiente
+      </button>
     </div>
   );
 }

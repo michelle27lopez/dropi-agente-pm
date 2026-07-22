@@ -1,6 +1,6 @@
 import { getGateRequirements } from "./src/phaseEngine.js";
 import { markdownToPdfHtml } from "./src/exportService.js";
-import { PHASES, FASE_LABEL, COGNITIVE_LABEL, COGNITIVE_LEVELS, SUB_PERFILES, SUB_PERFIL_LABEL, TRANSITIONS, transitionLabel, subPerfilLabel, SUB_CAUSA, SUB_CAUSA_LABEL } from "./src/doctrina.js";
+import { PHASES, FASE_LABEL, COGNITIVE_LABEL, COGNITIVE_LEVELS, SUB_PERFILES, SUB_PERFIL_LABEL, TRANSITIONS, transitionLabel, subPerfilLabel, SUB_CAUSA, SUB_CAUSA_LABEL, SESGOS, SESGO_LABEL, TIPOS_SUPUESTO, TIPO_SUPUESTO_LABEL, TEST_ESCALERA, TEST_ELEGIDO_LABEL, TEST_ELEGIDO_GLOSA, DECISIONS_F3 } from "./src/doctrina.js";
 
 // Global fetch interceptor to adapt Product Lens API calls to Next.js routing
 const originalFetch = window.fetch;
@@ -47,6 +47,26 @@ const subPerfilOptions = (cur = "") =>
 const transitionOptions = (cur = "") =>
   ['<option value="">Transición…</option>']
     .concat(TRANSITIONS.map((t) => `<option value="${t}"${t === cur ? " selected" : ""}>${transitionLabel(t)}</option>`))
+    .join("");
+const sesgoOptions = (cur = "") =>
+  ['<option value="">Sesgo…</option>']
+    .concat(SESGOS.map((s) => `<option value="${s}"${s === cur ? " selected" : ""}>${SESGO_LABEL[s]}</option>`))
+    .join("");
+const tipoSupuestoOptions = (cur = "") =>
+  ['<option value="">Tipo de supuesto…</option>']
+    .concat(TIPOS_SUPUESTO.map((t) => `<option value="${t}"${t === cur ? " selected" : ""}>${TIPO_SUPUESTO_LABEL[t] ?? t}</option>`))
+    .join("");
+const testElegidoOptions = (cur = "") =>
+  ['<option value="">Elige un test (del más barato al más caro)…</option>']
+    .concat(TEST_ESCALERA.map((t) => {
+      const glosa = TEST_ELEGIDO_GLOSA[t] ? ` — ${TEST_ELEGIDO_GLOSA[t]}` : "";
+      return `<option value="${t}"${t === cur ? " selected" : ""}>${TEST_ELEGIDO_LABEL[t]}${glosa}</option>`;
+    }))
+    .join("");
+const decisionF3Labels = { avanzar_f4: "Avanzar a F4", re_diagnosticar: "Re-diagnosticar", matar: "Matar" };
+const decisionF3Options = (cur = "") =>
+  ['<option value="">Decisión…</option>']
+    .concat(DECISIONS_F3.map((d) => `<option value="${d}"${d === cur ? " selected" : ""}>${decisionF3Labels[d]}</option>`))
     .join("");
 
 // --- Constants ---
@@ -98,9 +118,11 @@ const cyclesList = document.querySelector("#cyclesList");
 const patternsList = document.querySelector("#patternsList");
 const briefSwitch = document.querySelector("#briefSwitch");
 const experimentSwitch = document.querySelector("#experimentSwitch");
+const specSwitch = document.querySelector("#specSwitch");
 const deliverableTitle = document.querySelector("#deliverableTitle");
 const briefBody = document.querySelector("#briefBody");
 const experimentBody = document.querySelector("#experimentBody");
+const specBody = document.querySelector("#specBody");
 const paletteSearch = document.querySelector("#paletteSearch");
 const logoutButton = document.querySelector("#logoutButton");
 const userEmailEl = document.querySelector("#userEmail");
@@ -548,10 +570,10 @@ function renderCyclesList() {
 // objective and a live checklist of its gate requirements.
 const PHASE_META = {
   F0: { label: FASE_LABEL.F0, goal: "Detecta un comportamiento anómalo: ¿qué seller, haciendo qué, no está haciendo qué? Añade una señal cuantitativa y el segmento." },
-  F1: { label: FASE_LABEL.F1, goal: "Encuentra la causa raíz con B=MAP. Necesitas ≥2 fuentes confirmadas y la causa (Motivación / Ability / Prompt) confirmada por ti." },
-  F2: { label: FASE_LABEL.F2, goal: "Diseña la intervención sobre la causa detectada y formula una hipótesis falsable." },
-  F3: { label: FASE_LABEL.F3, goal: "Dimensiona el experimento: métrica de éxito (outcome), tamaño/duración y criterio de stop." },
-  F4: { label: FASE_LABEL.F4, goal: "Despliega y observa: experimento corriendo y tracking confirmado. No leas resultados antes del criterio de stop." },
+  F1: { label: FASE_LABEL.F1, goal: "Encuentra por qué no pasa el comportamiento: la causa raíz (Motivación / Ability / Prompt), respaldada por ≥2 fuentes que apunten a lo mismo, y el sesgo específico que la explica." },
+  F2: { label: FASE_LABEL.F2, goal: "Diseña el cambio mínimo sobre esa causa, con una hipótesis falsable, y pásalo por los 3 filtros de SDT (autonomía / mastery / relatedness)." },
+  F3: { label: FASE_LABEL.F3, goal: "Valida barato: elige el test más económico que pueda tumbar tu supuesto más riesgoso antes de construir. El A/B es solo un escalón más de la escalera, no el punto de partida." },
+  F4: { label: FASE_LABEL.F4, goal: "Traduce la intervención ya validada en un spec conductual que el equipo técnico pueda construir sin adivinar la intención. Confirma también el tracking." },
   F5: { label: FASE_LABEL.F5, goal: "Mide, decide (escalar/matar/iterar) y destila el patrón nombrado." },
 };
 
@@ -565,20 +587,74 @@ function renderPhaseGuide(cycle) {
   let reqs = [];
   try { reqs = getGateRequirements(cycle, phase); } catch { reqs = []; }
   const done = reqs.filter((r) => r.met).length;
+  const remaining = reqs.length - done;
+  // Cada pendiente es clicable y salta a su campo (data-gatekey → focusGateField).
   const items = reqs.map((r) =>
-    `<li class="${r.met ? "is-met" : ""}"><span class="pg-check">${r.met ? "✓" : "○"}</span>${escapeHtml(r.message.replace(/^Falta (la |el |confirmar el )?/i, ""))}</li>`
+    `<li class="${r.met ? "is-met" : "is-pending"}" data-gatekey="${escapeHtml(r.key)}" role="button" tabindex="0"><span class="pg-check">${r.met ? "✓" : "○"}</span>${escapeHtml(r.message.replace(/^(Falta|Marca) (la |el |confirmar el |al menos )?/i, ""))}</li>`
   ).join("");
-  // F1 needs ≥2 convergent evidence sources; offer a shortcut into the fields.
-  const evidenceAction = phase === "F1"
-    ? `<button type="button" class="pg-action" id="pgAddEvidence">+ Adjuntar evidencia</button>`
-    : "";
+  // Contador en lenguaje llano: qué falta para el siguiente paso, no "cerrar el gate".
+  const order = ["F0", "F1", "F2", "F3", "F4", "F5"];
+  const action = phase === "F5" ? "cerrar el ciclo" : `avanzar a ${order[order.indexOf(phase) + 1]}`;
+  const countText = reqs.length === 0 ? ""
+    : remaining === 0 ? `✓ Listo para ${action}`
+    : `Te falta${remaining === 1 ? "" : "n"} ${remaining} para ${action}`;
+  const hint = remaining > 0 ? `<p class="pg-hint">Haz clic en un pendiente para ir al campo.</p>` : "";
   el.hidden = false;
   el.innerHTML = `
-    <div class="pg-head"><strong>${escapeHtml(phase)} · ${escapeHtml(meta.label)}</strong><span class="pg-count">${done}/${reqs.length} para cerrar el gate</span></div>
+    <div class="pg-head"><strong>${escapeHtml(phase)} · ${escapeHtml(meta.label)}</strong><span class="pg-count ${remaining === 0 ? "is-ready" : ""}">${escapeHtml(countText)}</span></div>
     <p class="pg-goal">${escapeHtml(meta.goal)}</p>
     ${reqs.length ? `<ul class="pg-checklist">${items}</ul>` : ""}
-    ${evidenceAction}`;
-  document.getElementById("pgAddEvidence")?.addEventListener("click", focusEvidenceField);
+    ${hint}`;
+  el.querySelectorAll(".pg-checklist li[data-gatekey]").forEach((li) => {
+    const go = () => focusGateField(li.dataset.gatekey);
+    li.addEventListener("click", go);
+    li.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+}
+
+// Cada requisito del gate → el campo que lo satisface (panel + id del elemento).
+// null en deliverable = vive en el panel de cierre F5 (siempre visible en F5).
+const GATE_FIELD_MAP = {
+  behaviorStatement: { deliverable: "brief", elId: "briefBehavior" },
+  quantitativeSignal: { deliverable: "brief", elId: "metricField" },
+  segment: { deliverable: "brief", elId: "briefSegment" },
+  sources: { deliverable: "brief", elId: "briefEvidence" },
+  bmapCause: { deliverable: "brief", elId: "briefCauseSelector" },
+  sesgo: { deliverable: "brief", elId: "briefSesgo" },
+  intervention: { deliverable: "brief", elId: "briefIntervention" },
+  falsifiableHypothesis: { deliverable: "brief", elId: "hypothesisField" },
+  sdtAutonomia: { deliverable: "brief", elId: "sdtAutonomiaCheck" },
+  sdtMastery: { deliverable: "brief", elId: "sdtMasteryCheck" },
+  sdtRelatedness: { deliverable: "brief", elId: "sdtRelatednessCheck" },
+  supuestoMasRiesgoso: { deliverable: "experiment", elId: "experimentSupuesto" },
+  testElegido: { deliverable: "experiment", elId: "experimentTestElegido" },
+  causalidadValidada: { deliverable: "experiment", elId: "experimentTestElegido" },
+  metric: { deliverable: "experiment", elId: "experimentMetric" },
+  outcomeMetric: { deliverable: "experiment", elId: "metricTypeToggle" },
+  sizeAndDuration: { deliverable: "experiment", elId: "experimentSample" },
+  stopCriteria: { deliverable: "experiment", elId: "experimentStop" },
+  specConductual: { deliverable: "spec", elId: "specComportamiento" },
+  trackingConfirmed: { deliverable: "experiment", elId: "experimentTracking" },
+  decision: { deliverable: null, elId: "decisionPicker" },
+  namedPattern: { deliverable: null, elId: "patternName" },
+};
+
+// Click en un pendiente del checklist → abre el panel correcto, despliega el
+// bloque si está colapsado en "Profundizar", hace scroll y enfoca el campo.
+// "sources" conserva la lógica fina (evidencia 1ª vs 2ª que aún falta).
+function focusGateField(key) {
+  if (key === "sources") return focusEvidenceField();
+  const map = GATE_FIELD_MAP[key];
+  if (!map) return;
+  if (map.deliverable) setDeliverable(map.deliverable);
+  const target = document.getElementById(map.elId);
+  if (!target) return;
+  const advanced = target.closest("details.brief-advanced");
+  if (advanced) advanced.open = true;
+  target.scrollIntoView({ behavior: "smooth", block: "center" });
+  restartAnimation(target, "fillpop");
+  const focusable = target.matches("input,select,textarea,button") ? target : target.querySelector("input,select,textarea,button");
+  (focusable ?? target).focus?.();
 }
 
 // F1 evidence shortcut: switch to the Brief, then scroll + focus + highlight the
@@ -591,6 +667,8 @@ function focusEvidenceField() {
   const needsAction = (el) => !el || !(el.dataset.value || "").trim() || el.classList.contains("is-pending-confirm");
   const target = needsAction(primary) ? primary : (needsAction(second) ? second : primary);
   if (!target) return;
+  const advanced = target.closest("details.brief-advanced");
+  if (advanced) advanced.open = true;
   target.scrollIntoView({ behavior: "smooth", block: "center" });
   restartAnimation(target, "fillpop");
   target.focus?.();
@@ -692,6 +770,9 @@ async function closeCycle() {
   const closureDecision = document.getElementById("closureDecision");
   const closureLearning = document.getElementById("closureLearning");
   const closureDelta = document.getElementById("closureDelta");
+  const closureActividad = document.getElementById("closureActividad");
+  const closureOutcome = document.getElementById("closureOutcome");
+  const closureChurn = document.getElementById("closureChurn");
   const patternName = document.getElementById("patternName");
   const patternType = document.getElementById("patternType");
   const learning = closureLearning?.value.trim() ?? "";
@@ -712,6 +793,9 @@ async function closeCycle() {
         decision: closureDecision?.value ?? "escalar",
         learning,
         delta: closureDelta?.value.trim() ?? null,
+        actividad: closureActividad?.value.trim() || null,
+        outcome: closureOutcome?.value.trim() || null,
+        churn_por_nivel: closureChurn?.value.trim() || null,
         pattern_name,
         tipo: patternType?.value ?? "patron",
       }),
@@ -772,34 +856,35 @@ async function loadPatterns() {
 const causeLabelEs = (c) => c === "M" ? "Motivación" : c === "A" ? "Ability" : c === "P" ? "Prompt" : c;
 
 // A4 · unified library filtering state + facets
-const libFilters = { tipoCausa: "all", sub: "", level: "", search: "" };
+const libFilters = { tipoCausa: "all", sub: "", level: "", test: "", search: "" };
 function populateLibraryFacets() {
   const subs = [...new Set(patterns.map((p) => p.sub_perfil).filter(Boolean))].sort((a, b) => a.localeCompare(b));
   const levels = [...new Set(patterns.map((p) => p.transicion).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+  const tests = [...new Set(patterns.map((p) => p.test_elegido).filter(Boolean))]
+    .sort((a, b) => TEST_ESCALERA.indexOf(a) - TEST_ESCALERA.indexOf(b));
   // Rebuild options fully (placeholder + values) — no querySelector, so no
   // possible null dereference.
-  const fill = (sel, placeholder, values, cur, arrow) => {
+  const fill = (sel, placeholder, values, cur, labelFn) => {
     if (!sel) return;
     const opts = [`<option value="">${placeholder}</option>`].concat(
-      values.map((v) => {
-        const label = arrow ? transitionLabel(v) : subPerfilLabel(v);
-        return `<option value="${escapeHtml(v)}"${v === cur ? " selected" : ""}>${escapeHtml(label)}</option>`;
-      })
+      values.map((v) => `<option value="${escapeHtml(v)}"${v === cur ? " selected" : ""}>${escapeHtml(labelFn(v))}</option>`)
     );
     sel.innerHTML = opts.join("");
   };
-  fill(document.getElementById("patternSubProfile"), "Sub-perfil", subs, libFilters.sub, false);
-  fill(document.getElementById("patternLevel"), "Nivel cognitivo", levels, libFilters.level, true);
+  fill(document.getElementById("patternSubProfile"), "Sub-perfil", subs, libFilters.sub, subPerfilLabel);
+  fill(document.getElementById("patternLevel"), "Nivel cognitivo", levels, libFilters.level, transitionLabel);
+  fill(document.getElementById("patternTest"), "Test (F3)", tests, libFilters.test, (v) => TEST_ELEGIDO_LABEL[v] ?? v);
 }
 function applyLibraryFilters() {
-  const { tipoCausa, sub, level, search } = libFilters;
+  const { tipoCausa, sub, level, test, search } = libFilters;
   let list = patterns;
   if (tipoCausa === "patron" || tipoCausa === "anti_patron") list = list.filter((p) => p.tipo === tipoCausa);
   else if (["m", "a", "p"].includes(tipoCausa)) list = list.filter((p) => (p.causa ?? "").toUpperCase() === tipoCausa.toUpperCase());
   if (sub) list = list.filter((p) => p.sub_perfil === sub);
   if (level) list = list.filter((p) => p.transicion === level);
+  if (test) list = list.filter((p) => p.test_elegido === test);
   if (search) list = list.filter((p) =>
-    [p.nombre, p.aprendizaje, p.sub_perfil, p.causa, p.transicion].some((x) => (x ?? "").toLowerCase().includes(search)));
+    [p.nombre, p.aprendizaje, p.sub_perfil, p.causa, p.transicion, p.test_elegido].some((x) => (x ?? "").toLowerCase().includes(search)));
   renderPatternsList(list);
 }
 
@@ -1278,9 +1363,12 @@ function setDeliverable(next) {
   deliverable = next;
   briefBody.hidden = next !== "brief";
   experimentBody.hidden = next !== "experiment";
+  if (specBody) specBody.hidden = next !== "spec";
   briefSwitch.classList.toggle("active", next === "brief");
   experimentSwitch.classList.toggle("active", next === "experiment");
-  deliverableTitle.textContent = next === "brief" ? "Intervention Brief" : "Experiment Card";
+  specSwitch?.classList.toggle("active", next === "spec");
+  const DELIVERABLE_TITLE = { brief: "Intervention Brief", experiment: "Experiment Card", spec: "Spec conductual" };
+  deliverableTitle.textContent = DELIVERABLE_TITLE[next] ?? DELIVERABLE_TITLE.brief;
   progressText.textContent = next === "brief" ? `${filled} / 11 campos` : "0 / 9 campos";
   progressFill.style.width = next === "brief" ? `${Math.round((filled / 11) * 100)}%` : "0%";
 }
@@ -1384,22 +1472,88 @@ function renderPhaseBar(phases, active, selected) {
 
 // --- Messages ---
 // Convert LLM Markdown output to safe HTML — no external dependencies
+// The LLM doesn't always put real line breaks between elements — despite the
+// system prompt asking for it (00_Orquestador.md §3), it sometimes still
+// concatenates a heading, an hr, and a table's rows into one run-on sentence
+// ("### Título | col | col | |---|---| | val | val |" instead of an actual
+// table). Recover the intended line structure before the real markdown pass
+// runs, so the renderer below — which is line-based — has something to work
+// with. Runs per-line (not as one whole-string regex pass) so it can't reach
+// into an already-well-formed row and split it on an internal cell pipe —
+// only a line that does NOT already start with "|" gets the prose-vs-table
+// split, and the concatenated-row fixup only applies to the part recognized
+// as a table row.
+function normalizeInlineMarkdown(text) {
+  let t = text;
+
+  // 1. Inline horizontal rule ("texto --- más texto") → its own line.
+  // Requires exactly one literal space on each side (not a table's "|---|"
+  // separator row, which has no whitespace at all) — a bounded, single-width
+  // requirement instead of a quantified one avoids ambiguous backtracking.
+  // Excluding "-" from the prefix keeps a run of 4+ dashes from matching
+  // itself (the first dash captured as "prose", the rest as the rule).
+  t = t.replace(/([^\n-]) (-{3,}) (?=\S)/g, "$1\n\n$2\n\n");
+
+  // 2. Inline heading marker ("texto ### Encabezado") → its own line.
+  // Same reasoning: excluding "#" from the prefix keeps "### " from matching
+  // itself (first "#" as "prose", remaining "## " as the marker).
+  t = t.replace(/([^\n#]) (#{1,3} )/g, "$1\n\n$2");
+
+  // 3/4. Table recovery, line by line.
+  const collapseRowBoundaries = (row) => row.replaceAll("|  |", "|\n|").replaceAll("| |", "|\n|").replaceAll("||", "|\n|");
+  t = t.split("\n").map((line) => {
+    if (line.trimStart().startsWith("|")) {
+      // Already its own row — only fix concatenated rows within it (the
+      // run-on boundary between two rows always looks like "| |": end-of-row
+      // pipe, whitespace, start-of-next-row pipe — a genuinely empty middle
+      // cell is rare enough in this app's use, comparison/Dropi Score
+      // tables, that the trade-off is fine).
+      return collapseRowBoundaries(line);
+    }
+    // Prose immediately followed by a table row on the same line
+    // ("cada fila? | col | col |") → break before the row starts. Anchored
+    // to the end of the line ($) so it only matches when the *rest* of the
+    // line is entirely pipe-delimited — never a mid-sentence "|" aside.
+    const m = /^([^|]*?[^|\s]) ?(\|(?:[^|]+\|)+)$/.exec(line);
+    return m ? `${m[1]}\n\n${collapseRowBoundaries(m[2])}` : line;
+  }).join("\n");
+
+  return t;
+}
+
 function renderMarkdown(text) {
   if (!text) return "";
-  // 1. Escape HTML entities first (XSS protection)
-  let s = text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  // 1. Fenced code blocks come out first — behind a placeholder — so a code
+  // sample that itself demonstrates markdown (a table, a heading, **bold**)
+  // isn't touched by normalizeInlineMarkdown() or re-interpreted as real
+  // markup by the steps below. Restored verbatim as the very last step.
+  const escapeHtmlEntities = (str) => str
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+  const codeBlocks = [];
+  const raw = text.replace(/```\w*\n([\s\S]*?)```/g, (_, code) => {
+    codeBlocks.push(`<pre><code>${escapeHtmlEntities(code.trimEnd())}</code></pre>`);
+    return ` CODEBLOCK${codeBlocks.length - 1} `;
+  });
 
-  // 2. Fenced code blocks (must run before inline code)
-  s = s.replace(/```[\w]*\n?([\s\S]*?)```/g, (_, code) =>
-    `<pre><code>${code.trimEnd()}</code></pre>`);
+  // 1b. Inline code spans come out the same way, for the same reason — a
+  // span like `foo --- bar` or `a | b` must never have its punctuation
+  // reinterpreted as an hr/heading/table cell boundary by the steps below.
+  const inlineCodes = [];
+  const rawNoInline = raw.replace(/`([^`\n]+)`/g, (_, code) => {
+    inlineCodes.push(`<code>${escapeHtmlEntities(code)}</code>`);
+    return `INLINECODE${inlineCodes.length - 1}`;
+  });
 
-  // 3. Inline code
-  s = s.replace(/`([^`\n]+)`/g, "<code>$1</code>");
+  // 2. Recover run-on markdown, then escape the rest for display.
+  let s = escapeHtmlEntities(normalizeInlineMarkdown(rawNoInline));
 
-  // 4. Line-by-line pass for headings, lists, blockquotes, HR
+  // 3. Restore inline code now — splitRow()'s <code>-span protection (below)
+  // and the bold/italic pass both expect real <code> tags, not placeholders.
+  s = s.replace(/INLINECODE(\d+)/g, (_, idx) => inlineCodes[Number(idx)]);
+
+  // 4. Line-by-line pass for headings, lists, tables, blockquotes, HR
   const lines = s.split("\n");
   const out = [];
   let inUl = false, inOl = false;
@@ -1409,24 +1563,113 @@ function renderMarkdown(text) {
     if (inOl) { out.push("</ol>"); inOl = false; }
   };
 
-  for (const raw of lines) {
-    const line = raw.trimEnd();
-    if (/^### /.test(line))     { closeLists(); out.push(`<h4>${line.slice(4)}</h4>`); continue; }
-    if (/^## /.test(line))      { closeLists(); out.push(`<h3>${line.slice(3)}</h3>`); continue; }
-    if (/^# /.test(line))       { closeLists(); out.push(`<h3>${line.slice(2)}</h3>`); continue; }
-    if (/^&gt; /.test(line))    { closeLists(); out.push(`<blockquote>${line.slice(5)}</blockquote>`); continue; }
-    if (/^---+$/.test(line))    { closeLists(); out.push("<hr>"); continue; }
+  // Even after normalizeInlineMarkdown() gives a heading its own line, the
+  // model sometimes still writes it as one run-on sentence ("### ¿Qué es X?
+  // Es un resumen de...") with no break before the explanation. Cut at the
+  // first sentence-ending punctuation so the explanation becomes its own
+  // paragraph instead of being swallowed into the <h3>/<h4>.
+  const splitHeadingContent = (content) => {
+    const m = /[.?!]\s+\S/.exec(content);
+    if (!m) return { heading: content, rest: null };
+    const cutAt = m.index + 1;
+    return { heading: content.slice(0, cutAt), rest: content.slice(cutAt).trimStart() };
+  };
+
+  // GFM pipe tables (the LLM regularly answers with "| col | col |" style
+  // comparisons — e.g. "Lectura | Causa | Intervención" — and without this
+  // they fell through to a plain <p>, showing the raw pipes to the user).
+  const isTableRow = (line) => line.includes("|") && line.trim().replaceAll("|", "").trim().length > 0;
+  const isSeparatorRow = (line) => /^\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?$/.test(line.trim());
+  // A `\|` escape or a pipe inside an (already-converted) <code> span must
+  // not create a phantom extra column — e.g. "| `a | b` | ok |" or
+  // "| a \| b | ok |". Shielding both behind placeholders before a plain
+  // split("|") is simpler (and less error-prone) than scanning char-by-char.
+  const ESCAPED_PIPE = String.raw`\|`;
+  const splitRow = (line) => {
+    let t = line.trim();
+    if (t.startsWith("|")) t = t.slice(1);
+    if (t.endsWith("|") && !t.endsWith(ESCAPED_PIPE)) t = t.slice(0, -1);
+    const codeSpans = [];
+    t = t.replace(/<code>[\s\S]*?<\/code>/g, (m) => {
+      codeSpans.push(m);
+      return `@@CODE${codeSpans.length - 1}@@`;
+    });
+    t = t.replaceAll(ESCAPED_PIPE, "@@PIPE@@");
+    return t.split("|").map((c) => c.trim()
+      .replaceAll("@@PIPE@@", "|")
+      .replace(/@@CODE(\d+)@@/g, (_, idx) => codeSpans[Number(idx)]));
+  };
+  const cellAlign = (sepCell) => {
+    const left = sepCell.startsWith(":"), right = sepCell.endsWith(":");
+    if (left && right) return "center";
+    if (right) return "right";
+    if (left) return "left";
+    return "";
+  };
+
+  let i = 0;
+  const pushHeading = (tag, content) => {
+    closeLists();
+    const { heading, rest } = splitHeadingContent(content);
+    out.push(`<${tag}>${heading}</${tag}>`);
+    // A blank "line" here becomes a real \n\n once out.join("\n") runs, so
+    // step 6 below treats the heading and the leftover text as separate
+    // blocks — otherwise the leftover text rides along inside the same
+    // block as the heading tag and never gets wrapped in a <p>.
+    if (rest) { out.push(""); lines[i] = rest; return; }
+    i++;
+  };
+
+  while (i < lines.length) {
+    const line = lines[i].trimEnd();
+
+    if (isTableRow(line) && i + 1 < lines.length && isSeparatorRow(lines[i + 1])) {
+      closeLists();
+      const header = splitRow(line);
+      const aligns = splitRow(lines[i + 1]).map(cellAlign);
+      const rows = [];
+      let j = i + 2;
+      while (j < lines.length && lines[j].trim() && isTableRow(lines[j])) {
+        rows.push(splitRow(lines[j]));
+        j++;
+      }
+      const cellStyle = (idx) => (aligns[idx] ? ` style="text-align:${aligns[idx]}"` : "");
+      const renderCell = (tag) => (c, idx) => `<${tag}${cellStyle(idx)}>${c}</${tag}>`;
+      const renderRow = (r) => `<tr>${r.map(renderCell("td")).join("")}</tr>`;
+      const thead = header.map(renderCell("th")).join("");
+      const tbody = rows.map(renderRow).join("");
+      out.push(`<div class="md-table-wrap"><table><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table></div>`);
+      i = j;
+      continue;
+    }
+
+    if (line.startsWith("### ")) { pushHeading("h4", line.slice(4)); continue; }
+    if (line.startsWith("## "))  { pushHeading("h3", line.slice(3)); continue; }
+    if (line.startsWith("# "))   { pushHeading("h3", line.slice(2)); continue; }
+    if (line.startsWith("&gt; ")) { closeLists(); out.push(`<blockquote>${line.slice(5)}</blockquote>`); i++; continue; }
+    if (/^---+$/.test(line))    { closeLists(); out.push("<hr>"); i++; continue; }
+    const task = /^[-*] \[([ xX])\] (.*)$/.exec(line);
+    if (task) {
+      // Styling lives on the <li> (md-task), not the <ul> — a task item can
+      // follow a plain bullet within the same list, and the parent <ul> is
+      // only opened once (by whichever item — plain or task — comes first).
+      if (!inUl) { if (inOl) { out.push("</ol>"); inOl = false; } out.push("<ul>"); inUl = true; }
+      const checked = task[1].toLowerCase() === "x";
+      out.push(`<li class="md-task"><label><input type="checkbox" disabled${checked ? " checked" : ""}> ${task[2]}</label></li>`);
+      i++; continue;
+    }
     if (/^[-*] /.test(line)) {
       if (!inUl) { if (inOl) { out.push("</ol>"); inOl = false; } out.push("<ul>"); inUl = true; }
-      out.push(`<li>${line.slice(2)}</li>`); continue;
+      out.push(`<li>${line.slice(2)}</li>`); i++; continue;
     }
     if (/^\d+\. /.test(line)) {
       if (!inOl) { if (inUl) { out.push("</ul>"); inUl = false; } out.push("<ol>"); inOl = true; }
-      out.push(`<li>${line.replace(/^\d+\. /, "")}</li>`); continue;
+      out.push(`<li>${line.replace(/^\d+\. /, "")}</li>`); i++; continue;
     }
     closeLists();
-    if (!line.trim()) { out.push(""); continue; }
+    if (!line.trim()) { out.push(""); i++; continue; }
     out.push(line);
+    i++;
   }
   closeLists();
   s = out.join("\n");
@@ -1436,14 +1679,20 @@ function renderMarkdown(text) {
   s = s.replace(/\*([^*\n]+)\*/g, "<em>$1</em>");
   s = s.replace(/_([^_\n]+)_/g, "<em>$1</em>");
 
-  // 6. Wrap plain-text runs in <p>, convert single \n to <br> within paragraphs
+  // 6. Wrap plain-text runs in <p>, convert single \n to <br> within paragraphs.
+  // A lone code-block placeholder is left unwrapped too (restored to <pre> next).
+  const isCodeBlockPlaceholder = (t) => /^CODEBLOCK\d+$/.test(t);
   const blocks = s.split(/\n{2,}/);
   s = blocks.map((block) => {
     const t = block.trim();
     if (!t) return "";
-    if (/^<(h[2-4]|ul|ol|pre|hr|blockquote)/.test(t)) return t;
+    if (/^<(h[2-4]|ul|ol|pre|hr|blockquote|div)/.test(t) || isCodeBlockPlaceholder(t)) return t;
     return `<p>${t.replace(/\n/g, "<br>")}</p>`;
   }).join("\n");
+
+  // 7. Restore fenced code blocks verbatim — nothing above (tables, headings,
+  // bold/italic, inline code) ever saw their real content.
+  s = s.replace(/CODEBLOCK(\d+)/g, (_, idx) => codeBlocks[Number(idx)]);
 
   return s;
 }
@@ -1803,6 +2052,37 @@ function setNestedPath(obj, path, value) {
   cur[keys[keys.length - 1]] = value;
 }
 
+const linesToArray = (text) => String(text ?? "").split("\n").map((s) => s.trim()).filter(Boolean);
+
+// Wires a native input/select/checkbox/textarea (added for the F1–F5
+// structured fields, doctrina §4.1) to PATCH the cycle on change/blur.
+// Unlike makeFieldEditable (click-to-edit <p>), these elements are already
+// editable controls — wire once (guarded by dataset.structBound) and patch.
+function bindStructuredField(el, getPatch, evt = "change") {
+  if (!el || el.dataset.structBound) return;
+  el.dataset.structBound = "1";
+  el.addEventListener(evt, async () => {
+    if (!currentCycleId) return;
+    const patch = getPatch(el);
+    cycles = cycles.map((c) => c.id === currentCycleId ? deepMerge(c, patch) : c);
+    try {
+      await updateCycle(patch);
+    } catch {
+      showToast("Error al guardar el campo.", true);
+    }
+    renderActiveCycle();
+  });
+}
+
+// Plain-scalar structured fields (doctrina §4.1) written by makeFieldEditable
+// without the {value,confirmed} wrapper the LLM-suggested brief.* fields use.
+const PLAIN_SCALAR_PATHS = new Set([
+  "proxy_y_segunda_senal.proxy", "proxy_y_segunda_senal.segunda_senal",
+  "experiment.supuesto_mas_riesgoso", "experiment.por_que_este",
+  "experiment.resultado_confirma", "experiment.resultado_refuta", "experiment.costo_de_equivocarse",
+  "spec_conductual.comportamiento_objetivo", "spec_conductual.criterio_exito_conductual",
+]);
+
 // Make a brief/experiment panel field inline-editable. cyclePath is "brief.behavior_statement", "sub_perfil", etc.
 function makeFieldEditable(el, cyclePath) {
   if (!el) return;
@@ -1837,6 +2117,10 @@ function makeFieldEditable(el, cyclePath) {
       if (cyclePath === "sub_perfil" || cyclePath === "segmento_objetivo") {
         // Top-level scalar cycle fields (server normalizes sub_perfil to enum).
         patch[cyclePath] = val || null;
+      } else if (PLAIN_SCALAR_PATHS.has(cyclePath)) {
+        // Plain-scalar structured fields (doctrina §4.1) — no {value,confirmed}
+        // wrapper, unlike the LLM-suggested brief.* fields.
+        setNestedPath(patch, cyclePath, val || null);
       } else {
         setNestedPath(patch, cyclePath, { value: val, confirmed: !!val });
       }
@@ -1922,21 +2206,33 @@ function flashBriefFields(changed) {
 }
 
 // Read cycle.brief{} and cycle top-level fields → populate all brief panel DOM elements
+// Orchestrates the brief/experiment/spec panel refresh — split into one
+// function per section (below) to keep each piece's cognitive complexity low.
 function loadBriefFromCycle(cycle) {
-  const b = cycle?.brief ?? {};
-  const causeMap = { M: "Motivación", A: "Ability", P: "Prompt" };
+  renderBriefCoreFields(cycle);
+  renderBriefCauseSection(cycle);
+  renderF1SesgoProxy(cycle);
+  renderF2Guardrails(cycle);
+  renderExperimentCard(cycle);
+  renderSpecConductual(cycle);
+  setBriefProgress(computeBriefProgress(cycle));
+  applyPhaseGating(cycle);
+}
 
-  // Brief panel fields
+// Comportamiento/segmento/evidencia/intervención/hipótesis/métrica — los
+// campos base del brief (F0–F2), presentes desde el arranque del panel.
+function renderBriefCoreFields(cycle) {
+  const b = cycle?.brief ?? {};
   const briefBehavior = document.querySelector("#briefBehavior");
   const briefSubProfile = document.querySelector("#briefSubProfile");
   const briefCogLevel = document.querySelector("#briefCogLevel");
   const briefEvidence = document.querySelector("#briefEvidence");
   const briefIntervention = document.querySelector("#briefIntervention");
+  const briefSegment = document.querySelector("#briefSegment");
 
   setField(briefBehavior, b.behavior_statement?.value ?? null);
   if (briefSubProfile) briefSubProfile.innerHTML = subPerfilOptions(cycle?.sub_perfil ?? "");
   if (briefCogLevel) briefCogLevel.innerHTML = transitionOptions(cycle?.transicion ?? "");
-  const briefSegment = document.querySelector("#briefSegment");
   setField(briefSegment, cycle?.segmento_objetivo ?? null);
   setConfirmableField(briefEvidence, b.evidencia_primaria);
   setConfirmableField(secondSource, b.segunda_fuente);
@@ -1944,60 +2240,6 @@ function loadBriefFromCycle(cycle) {
   setField(hypothesisField, b.hipotesis?.value ?? null);
   setField(metricField, b.senal_cuantitativa?.value ?? null);
 
-  // B=MAP selector sync + estado de confirmación. El botón activo por sí solo
-  // no distingue "la IA lo sugirió" de "tú lo confirmaste" — pero el gate F1
-  // sí exige justo esa distinción (causa_source === "pm_confirmed"). Sin este
-  // texto, el botón resaltado podía hacer creer que la causa ya quedó
-  // confirmada cuando en realidad el gate seguía pidiendo el clic.
-  const activeCause = cycle?.causa;
-  document.querySelectorAll(".bmap-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.cause === activeCause));
-  const briefCauseEl = document.getElementById("briefCause");
-  if (briefCauseEl) {
-    const causaConfirmed = cycle?.causa_source === "pm_confirmed" || b.causa?.confirmed === true;
-    if (!activeCause) {
-      briefCauseEl.innerHTML = '<span class="field-cta">Elige una causa arriba</span>';
-      briefCauseEl.classList.add("confirm-field");
-      briefCauseEl.classList.remove("mono-value");
-    } else if (causaConfirmed) {
-      briefCauseEl.textContent = `Confirmada: ${causeMap[activeCause] ?? activeCause}`;
-      briefCauseEl.classList.remove("confirm-field");
-      briefCauseEl.classList.add("mono-value");
-    } else {
-      briefCauseEl.innerHTML = `<strong>Sugerida por la IA:</strong> ${causeMap[activeCause] ?? activeCause} — clic arriba para confirmarla`;
-      briefCauseEl.classList.add("confirm-field");
-      briefCauseEl.classList.remove("mono-value");
-    }
-  }
-  renderSubCausa(cycle);
-
-  // Experiment card — all fields
-  const exp = cycle?.experiment ?? {};
-  const expStr = (v) => v?.value ?? (typeof v === "string" ? v : null);
-  const expHypothesis = document.querySelector("#experimentHypothesis");
-  const expVariable = document.querySelector("#experimentVariable");
-  const expMetric = document.querySelector("#experimentMetric");
-  const expStop = document.querySelector("#experimentStop");
-  const expSample = document.querySelector("#experimentSample");
-  const expDuration = document.querySelector("#experimentDuration");
-  const expTracking = document.querySelector("#experimentTracking");
-
-  setField(expHypothesis, expStr(exp.hipotesis));
-  setField(expVariable, expStr(exp.variable));
-  setField(expMetric, expStr(exp.metrica_primaria));
-  setField(expStop, expStr(exp.criterio_stop));
-  setField(expSample, expStr(exp.tamano_muestra));
-  setField(expDuration, expStr(exp.duracion));
-  const trackVal = Array.isArray(exp.tracking_eventos) && exp.tracking_eventos.length
-    ? exp.tracking_eventos.join(", ") : expStr(exp.tracking_eventos);
-  setField(expTracking, trackVal);
-
-  // 2D - honestidad: estado del toggle outcome/actividad + advertencia.
-  const mType = exp.metrica_tipo ?? null;
-  document.querySelectorAll("#metricTypeToggle .mt-btn").forEach((b) => b.classList.toggle("active", b.dataset.mtype === mType));
-  const mWarn = document.getElementById("metricTypeWarn");
-  if (mWarn) mWarn.hidden = mType !== "actividad";
-
-  // Make brief fields inline-editable (sub_perfil/nivel cognitivo son <select>, no free-text)
   makeFieldEditable(briefBehavior, "brief.behavior_statement");
   makeFieldEditable(briefSegment, "segmento_objetivo");
   makeFieldEditable(briefEvidence, "brief.evidencia_primaria");
@@ -2005,28 +2247,218 @@ function loadBriefFromCycle(cycle) {
   makeFieldEditable(briefIntervention, "brief.intervencion");
   makeFieldEditable(hypothesisField, "brief.hipotesis");
   makeFieldEditable(metricField, "brief.senal_cuantitativa");
+}
 
-  // Make experiment fields inline-editable
-  makeFieldEditable(expHypothesis, "experiment.hipotesis");
-  makeFieldEditable(expVariable, "experiment.variable");
-  makeFieldEditable(expMetric, "experiment.metrica_primaria");
-  makeFieldEditable(expStop, "experiment.criterio_stop");
-  makeFieldEditable(expSample, "experiment.tamano_muestra");
-  makeFieldEditable(expDuration, "experiment.duracion");
+// B=MAP selector sync + estado de confirmación. El botón activo por sí solo
+// no distingue "la IA lo sugirió" de "tú lo confirmaste" — pero el gate F1
+// sí exige justo esa distinción (causa_source === "pm_confirmed"). Sin este
+// texto, el botón resaltado podía hacer creer que la causa ya quedó
+// confirmada cuando en realidad el gate seguía pidiendo el clic.
+function renderBriefCauseSection(cycle) {
+  const causeMap = { M: "Motivación", A: "Ability", P: "Prompt" };
+  const activeCause = cycle?.causa;
+  document.querySelectorAll(".bmap-btn").forEach((btn) => btn.classList.toggle("active", btn.dataset.cause === activeCause));
+  const briefCauseEl = document.getElementById("briefCause");
+  if (briefCauseEl) {
+    const causaConfirmed = cycle?.causa_source === "pm_confirmed" || cycle?.brief?.causa?.confirmed === true;
+    briefCauseEl.classList.toggle("confirm-field", !activeCause || !causaConfirmed);
+    briefCauseEl.classList.toggle("mono-value", !!activeCause && causaConfirmed);
+    if (!activeCause) {
+      briefCauseEl.innerHTML = '<span class="field-cta">Elige una causa arriba</span>';
+    } else if (causaConfirmed) {
+      briefCauseEl.textContent = `Confirmada: ${causeMap[activeCause] ?? activeCause}`;
+    } else {
+      briefCauseEl.innerHTML = `<strong>Sugerida por la IA:</strong> ${causeMap[activeCause] ?? activeCause} — clic arriba para confirmarla`;
+    }
+  }
+  renderSubCausa(cycle);
+}
+
+// F1 — sesgo + proxy/2ª señal (doctrina §4.1)
+function renderF1SesgoProxy(cycle) {
+  const briefSesgo = document.querySelector("#briefSesgo");
+  if (briefSesgo) briefSesgo.innerHTML = sesgoOptions(cycle?.sesgo ?? "");
+  const proxyData = cycle?.proxy_y_segunda_senal ?? {};
+  const briefProxy = document.querySelector("#briefProxy");
+  const briefSegundaSenal = document.querySelector("#briefSegundaSenal");
+  setField(briefProxy, proxyData.proxy || null);
+  setField(briefSegundaSenal, proxyData.segunda_senal || null);
+  makeFieldEditable(briefProxy, "proxy_y_segunda_senal.proxy");
+  makeFieldEditable(briefSegundaSenal, "proxy_y_segunda_senal.segunda_senal");
+  bindStructuredField(briefSesgo, (el) => ({ sesgo: el.value || null }));
+}
+
+// Binds a group of DOM elements (checkbox/input/textarea) to nested cycle
+// patch paths, populating the current value first. Shared by the SDT/hook/
+// fricción loops below so each caller stays a flat, low-branching block.
+function bindFieldGroup(els, readValue, applyValue, patchFor, evt) {
+  for (const [key, el] of Object.entries(els)) {
+    if (el) applyValue(el, key);
+    bindStructuredField(el, (e) => patchFor(key, readValue(e)), evt);
+  }
+}
+
+// F2 — guardrails SDT + jueves en la tarde + anti-roadmap + fricción + hook
+function renderF2Guardrails(cycle) {
+  const sdt = cycle?.brief?.sdt ?? {};
+  for (const dim of ["autonomia", "mastery", "relatedness"]) {
+    const label = dim[0].toUpperCase() + dim.slice(1);
+    const checkEl = document.getElementById(`sdt${label}Check`);
+    const notaEl = document.getElementById(`sdt${label}Nota`);
+    if (checkEl) checkEl.checked = sdt[dim]?.check === true;
+    if (notaEl) notaEl.value = sdt[dim]?.nota ?? "";
+    bindStructuredField(checkEl, (el) => ({ brief: { sdt: { [dim]: { check: el.checked } } } }));
+    bindStructuredField(notaEl, (el) => ({ brief: { sdt: { [dim]: { nota: el.value } } } }), "blur");
+  }
+
+  const juevesEl = document.getElementById("juevesTardeCheck");
+  if (juevesEl) juevesEl.checked = cycle?.brief?.jueves_en_la_tarde?.check === true;
+  bindStructuredField(juevesEl, (el) => ({ brief: { jueves_en_la_tarde: { check: el.checked } } }));
+  const antiRoadmapEl = document.getElementById("antiRoadmapCheck");
+  if (antiRoadmapEl) antiRoadmapEl.checked = cycle?.brief?.anti_roadmap?.check === true;
+  bindStructuredField(antiRoadmapEl, (el) => ({ brief: { anti_roadmap: { check: el.checked } } }));
+
+  const friccion = cycle?.brief?.friccion ?? {};
+  const friccionEls = {
+    eliminar: document.getElementById("friccionEliminar"),
+    preservar: document.getElementById("friccionPreservar"),
+    es_inversion: document.getElementById("friccionInversion"),
+  };
+  bindFieldGroup(friccionEls,
+    (e) => linesToArray(e.value),
+    (el, key) => { el.value = (friccion[key] ?? []).join("\n"); },
+    (key, val) => ({ brief: { friccion: { [key]: val } } }),
+    "blur");
+
+  const hook = cycle?.brief?.hook ?? {};
+  const hookEls = {
+    trigger: document.getElementById("hookTrigger"),
+    action: document.getElementById("hookAction"),
+    variable_reward: document.getElementById("hookReward"),
+    investment_phase: document.getElementById("hookInvestment"),
+  };
+  bindFieldGroup(hookEls,
+    (e) => e.value,
+    (el, key) => { el.value = hook[key] ?? ""; },
+    (key, val) => ({ brief: { hook: { [key]: val } } }),
+    "blur");
+}
+
+// Experiment Card — hipótesis/variable/tracking + escalera de validación F3
+// (supuesto más riesgoso, test elegido, confianza, decisión) + A/B opcional.
+function renderExperimentCard(cycle) {
+  const exp = cycle?.experiment ?? {};
+  const expStr = (v) => v?.value ?? (typeof v === "string" ? v : null);
+  const fields = {
+    experimentHypothesis: ["hipotesis", "experiment.hipotesis"],
+    experimentVariable: ["variable", "experiment.variable"],
+    experimentMetric: ["metrica_primaria", "experiment.metrica_primaria"],
+    experimentStop: ["criterio_stop", "experiment.criterio_stop"],
+    experimentSample: ["tamano_muestra", "experiment.tamano_muestra"],
+    experimentDuration: ["duracion", "experiment.duracion"],
+  };
+  for (const [elId, [expKey, path]] of Object.entries(fields)) {
+    const el = document.querySelector(`#${elId}`);
+    setField(el, expStr(exp[expKey]));
+    makeFieldEditable(el, path);
+  }
+  const expTracking = document.querySelector("#experimentTracking");
+  const trackVal = Array.isArray(exp.tracking_eventos) && exp.tracking_eventos.length
+    ? exp.tracking_eventos.join(", ") : expStr(exp.tracking_eventos);
+  setField(expTracking, trackVal);
   makeFieldEditable(expTracking, "experiment.tracking_eventos");
 
-  // Progress: count confirmed brief sub-objects + filled top-level scalars.
-  // causa cuenta UNA vez vía cycle.causa (no también vía brief.causa.confirmed,
-  // que se escribe en paralelo) para no duplicar el mismo dato.
+  // 2D - honestidad: estado del toggle outcome/actividad + advertencia.
+  const mType = exp.metrica_tipo ?? null;
+  document.querySelectorAll("#metricTypeToggle .mt-btn").forEach((b) => b.classList.toggle("active", b.dataset.mtype === mType));
+  const mWarn = document.getElementById("metricTypeWarn");
+  if (mWarn) mWarn.hidden = mType !== "actividad";
+
+  renderF3ValidationLadder(exp);
+}
+
+// F3 — escalera de validación (§8): supuesto más riesgoso, test elegido, etc.
+function renderF3ValidationLadder(exp) {
+  const textFields = {
+    experimentSupuesto: ["supuesto_mas_riesgoso", "experiment.supuesto_mas_riesgoso"],
+    experimentPorQueEste: ["por_que_este", "experiment.por_que_este"],
+    experimentResultadoConfirma: ["resultado_confirma", "experiment.resultado_confirma"],
+    experimentResultadoRefuta: ["resultado_refuta", "experiment.resultado_refuta"],
+    experimentCostoEquivocarse: ["costo_de_equivocarse", "experiment.costo_de_equivocarse"],
+  };
+  for (const [elId, [expKey, path]] of Object.entries(textFields)) {
+    const el = document.querySelector(`#${elId}`);
+    setField(el, exp[expKey] || null);
+    makeFieldEditable(el, path);
+  }
+
+  const expTipoSupuesto = document.getElementById("experimentTipoSupuesto");
+  const expTestElegido = document.getElementById("experimentTestElegido");
+  const expConfianza = document.getElementById("experimentConfianza");
+  const expDecisionF3 = document.getElementById("experimentDecisionF3");
+  if (expTipoSupuesto) expTipoSupuesto.innerHTML = tipoSupuestoOptions(exp.tipo_supuesto ?? "");
+  if (expTestElegido) expTestElegido.innerHTML = testElegidoOptions(exp.test_elegido ?? "");
+  if (expConfianza) expConfianza.value = exp.confianza != null ? String(exp.confianza) : "";
+  if (expDecisionF3) expDecisionF3.innerHTML = decisionF3Options(exp.decision ?? "");
+  bindStructuredField(expTipoSupuesto, (el) => ({ experiment: { tipo_supuesto: el.value || null } }));
+  bindStructuredField(expTestElegido, (el) => ({ experiment: { test_elegido: el.value || null } }));
+  bindStructuredField(expConfianza, (el) => ({ experiment: { confianza: el.value ? Number(el.value) : null } }));
+  bindStructuredField(expDecisionF3, (el) => ({ experiment: { decision: el.value || null } }));
+}
+
+// F4 — spec conductual (el handoff a tech, doctrina §4.1)
+function renderSpecConductual(cycle) {
+  const spec = cycle?.spec_conductual ?? {};
+  const specComportamiento = document.querySelector("#specComportamiento");
+  const specCriterioExito = document.querySelector("#specCriterioExito");
+  setField(specComportamiento, spec.comportamiento_objetivo || null);
+  setField(specCriterioExito, spec.criterio_exito_conductual || null);
+  makeFieldEditable(specComportamiento, "spec_conductual.comportamiento_objetivo");
+  makeFieldEditable(specCriterioExito, "spec_conductual.criterio_exito_conductual");
+
+  const loop = spec.loop_completo ?? {};
+  const loopEls = {
+    trigger: document.getElementById("specTrigger"), action: document.getElementById("specAction"),
+    reward: document.getElementById("specReward"), investment: document.getElementById("specInvestment"),
+  };
+  bindFieldGroup(loopEls,
+    (e) => e.value,
+    (el, key) => { el.value = loop[key] ?? ""; },
+    (key, val) => ({ spec_conductual: { loop_completo: { [key]: val } } }),
+    "blur");
+
+  const specFriccion = spec.friccion ?? {};
+  const specFriccionEls = {
+    elimina: document.getElementById("specFriccionElimina"),
+    preserva: document.getElementById("specFriccionPreserva"),
+    invierte: document.getElementById("specFriccionInvierte"),
+  };
+  bindFieldGroup(specFriccionEls,
+    (e) => linesToArray(e.value),
+    (el, key) => { el.value = (specFriccion[key] ?? []).join("\n"); },
+    (key, val) => ({ spec_conductual: { friccion: { [key]: val } } }),
+    "blur");
+
+  const specCopy = document.getElementById("specCopyPorNivel");
+  if (specCopy) specCopy.value = spec.copy_por_nivel_cognitivo ?? "";
+  bindStructuredField(specCopy, (e) => ({ spec_conductual: { copy_por_nivel_cognitivo: e.value } }), "blur");
+  const specAnti = document.getElementById("specAntiPatrones");
+  if (specAnti) specAnti.value = (spec.anti_patrones ?? []).join("\n");
+  bindStructuredField(specAnti, (e) => ({ spec_conductual: { anti_patrones: linesToArray(e.value) } }), "blur");
+}
+
+// Progress: cuenta sub-objetos confirmados del brief + escalares top-level
+// llenos. causa cuenta UNA vez vía cycle.causa (no también vía
+// brief.causa.confirmed, que se escribe en paralelo) para no duplicar el dato.
+function computeBriefProgress(cycle) {
+  const b = cycle?.brief ?? {};
   const confirmedFields = [b.behavior_statement, b.senal_cuantitativa, b.evidencia_primaria, b.segunda_fuente, b.intervencion, b.hipotesis];
   let cnt = confirmedFields.filter((f) => f?.confirmed).length;
   if (cycle?.segmento_objetivo) cnt++;
   if (cycle?.sub_perfil) cnt++;
   if (cycle?.transicion) cnt++;
   if (cycle?.causa) cnt++;
-  setBriefProgress(cnt);
-
-  applyPhaseGating(cycle);
+  return cnt;
 }
 
 // Hilo conductor: los campos de fases futuras quedan visibles pero bloqueados
@@ -2044,9 +2476,19 @@ function applyPhaseGating(cycle) {
   const expLocked = activeIdx < PHASES.indexOf("F3");
   if (experimentSwitch) {
     experimentSwitch.disabled = expLocked;
-    experimentSwitch.title = expLocked ? "Se habilita en F3 · Experimento" : "";
+    experimentSwitch.title = expLocked ? `Se habilita en F3 · ${FASE_LABEL.F3}` : "";
     experimentSwitch.classList.toggle("is-locked", expLocked);
   }
+  const specLocked = activeIdx < PHASES.indexOf("F4");
+  if (specSwitch) {
+    specSwitch.disabled = specLocked;
+    specSwitch.title = specLocked ? `Se habilita en F4 · ${FASE_LABEL.F4}` : "";
+    specSwitch.classList.toggle("is-locked", specLocked);
+  }
+  // A/B fields solo aplican cuando test_elegido = "ab" (doctrina §4.1 — el A/B
+  // ya no es el default de F3).
+  const abOnly = document.getElementById("experimentAbOnly");
+  if (abOnly) abOnly.classList.toggle("is-locked", (cycle?.experiment?.test_elegido ?? null) !== "ab");
 }
 
 // Fields required for a complete Intervention Brief; those without a value are
@@ -2397,11 +2839,11 @@ function restartAnimation(el, cls) {
 // --- Escape HTML ---
 function escapeHtml(str) {
   return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
 // --- Event listeners ---
@@ -2677,8 +3119,21 @@ document.querySelectorAll("[data-example-cycle]").forEach((btn) => {
   btn.addEventListener("click", () => createCycle(btn.dataset.exampleCycle));
 });
 
+// Quickstart (Cambio 7): un clic, un comportamiento real, directo a F0 — sin
+// pasar por el manual. Usa el primer ejemplo como punto de partida.
+document.getElementById("quickstartButton")?.addEventListener("click", async () => {
+  const firstExample = document.querySelector("[data-example-cycle]")?.dataset.exampleCycle;
+  if (!firstExample) { openNewCycleModal(); return; }
+  await createCycle(firstExample);
+  showToast("Ciclo creado. Sigue el checklist de la izquierda — cada campo se habilita al llegar a su fase.");
+});
+document.querySelectorAll("[data-open-context]").forEach((el) => {
+  el.addEventListener("click", (e) => { e.preventDefault(); setView("context"); });
+});
+
 briefSwitch?.addEventListener("click", () => setDeliverable("brief"));
 experimentSwitch?.addEventListener("click", () => setDeliverable("experiment"));
+specSwitch?.addEventListener("click", () => setDeliverable("spec"));
 
 // Library filters — unified (A4). Scoped to #patternFilters (not the Home row).
 document.querySelector("#patternFilters")?.addEventListener("click", (e) => {
@@ -2691,6 +3146,7 @@ document.querySelector("#patternFilters")?.addEventListener("click", (e) => {
 });
 document.querySelector("#patternSubProfile")?.addEventListener("change", (e) => { libFilters.sub = e.target.value; applyLibraryFilters(); });
 document.querySelector("#patternLevel")?.addEventListener("change", (e) => { libFilters.level = e.target.value; applyLibraryFilters(); });
+document.querySelector("#patternTest")?.addEventListener("change", (e) => { libFilters.test = e.target.value; applyLibraryFilters(); });
 
 let _searchTimer = null;
 document.querySelector("#patternSearch")?.addEventListener("input", (e) => {

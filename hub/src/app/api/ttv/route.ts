@@ -2,6 +2,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   if (!supabase) {
     return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
