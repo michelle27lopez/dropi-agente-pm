@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 const TAXONOMY_URL =
   "https://www.google.com/basepages/producttype/taxonomy-with-ids.en-US.txt";
@@ -50,6 +51,9 @@ function parseLine(line: string): TaxonomyRecord | null {
 
 // GET — check how many categories are already imported
 export async function GET() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ count: 0 });
 
   const { count, error } = await supabase
@@ -62,6 +66,9 @@ export async function GET() {
 
 // POST — fetch from Google, parse, upsert to Supabase
 export async function POST() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase)
     return NextResponse.json({ error: "No Supabase client" }, { status: 500 });
 

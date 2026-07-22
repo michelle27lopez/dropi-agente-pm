@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 const BUCKET = "iniciativas-archivos";
 
 export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ id: string; archivoId: string }> }) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
 
   const { archivoId } = await params;

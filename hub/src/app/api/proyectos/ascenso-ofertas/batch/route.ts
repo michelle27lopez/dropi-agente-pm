@@ -1,12 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 // Encola ofertas de ascenso para todo un segmento (Verificado o Premium) sin
 // enviar nada todavía — solo crea las filas en ascenso_ofertas con estado
 // 'pendiente_envio'. El envío real lo hace /procesar-lote, en tandas
 // pequeñas, para no intentar mandar cientos de mensajes en una sola llamada.
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
 
   const { nivelObjetivo } = await req.json();

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { requireUser } from "@/lib/require-auth";
 
 const DROPI_TAXONOMY_FLAT: { l1: string; l2: string; l3: string; l4: string }[] = [
   // Hogar y Decoración
@@ -245,6 +246,9 @@ const TAXONOMY_TEXT = DROPI_TAXONOMY_FLAT
   .join("\n");
 
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "OPENAI_API_KEY not configured" }, { status: 500 });

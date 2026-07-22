@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jiraConfigured, searchAllIssues, type JiraIssue } from "@/lib/jira";
 import { celulasDeAssignee } from "@/app/proyectos/monthly-update/data/pm-celula-map";
+import { requireUser } from "@/lib/require-auth";
 
 // Resumen mensual agregado por célula, usando el mapeo PM→célula como sustituto
 // del campo "Celula" de Jira (vacío en todos los tickets — ver pm-celula-map.ts).
@@ -35,6 +36,9 @@ function monthRange(month: string): { start: string; end: string } {
 }
 
 export async function GET(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!jiraConfigured) {
     return NextResponse.json(
       { error: "Jira no configurado — faltan JIRA_BASE_URL, JIRA_EMAIL o JIRA_API_TOKEN en .env.local" },

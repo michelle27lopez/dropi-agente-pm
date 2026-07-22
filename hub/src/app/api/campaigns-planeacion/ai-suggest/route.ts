@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { NODE_DEFINITIONS, NodeKey, NodeData } from "@/app/proyectos/dinamicas-catalogo/planeacion/nodes";
+import { requireUser } from "@/lib/require-auth";
 
 function formatContext(allData: Partial<Record<NodeKey, NodeData>>, skipNode: NodeKey, skipField: string): string {
   const lines: string[] = [];
@@ -20,6 +21,9 @@ function formatContext(allData: Partial<Record<NodeKey, NodeData>>, skipNode: No
 }
 
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "Falta configurar OPENAI_API_KEY en el servidor." }, { status: 500 });

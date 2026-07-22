@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { campaignsSupabase as supabase } from "@/lib/supabase-campaigns";
 import { localListNodes, localUpsertNode } from "@/lib/local-store-planeacion";
+import { requireUser } from "@/lib/require-auth";
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const { id } = await params;
 
   if (supabase) {
@@ -18,6 +22,9 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
 }
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const { id } = await params;
   const body = await req.json();
 
