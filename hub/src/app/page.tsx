@@ -207,13 +207,6 @@ export default function HubPage() {
         const mySlug = profile.celulas?.slug;
         const fullAccess = profile.is_super_admin || !!profile.celulas?.ve_hub_completo;
 
-        // Aislamiento seguro para el entorno del nuevo PM (Santiago)
-        // Redirigir su sesión a un dashboard completamente limpio de su célula
-        if (userEmail === "santiago.herrera@dropi.co") {
-          router.replace(`/seller-success`);
-          return;
-        }
-
         // Con ve_hub_completo (o super admin), "/" es el origen: aterriza
         // siempre aquí y navega libre entre células con el dropdown. Sin
         // ve_hub_completo, queda restringido a su propia home.
