@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { renderMessageTemplate } from "@/lib/message-template";
+import { requireUser } from "@/lib/require-auth";
 
 // Envío de PRUEBA de la convocatoria por WhatsApp (Evolution API) — nunca al
 // proveedor real. Sirve para validar el canal antes de decidir si complementa
@@ -22,6 +23,9 @@ function normalizeCoWhatsapp(number: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!EVOLUTION_URL || !EVOLUTION_KEY) {
     return NextResponse.json(
       { error: "Evolution API no está configurada todavía (falta EVOLUTION_API_URL / EVOLUTION_API_KEY en el entorno)." },
