@@ -192,9 +192,11 @@ export default function HubPage() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 
-  // Este home es el de Suppliers (tu célula). Si quien entra es de otra
-  // célula, lo mandamos a la home de su propia célula. Solo el super admin
-  // se queda aquí y ve el resto de células como navegación.
+  // Este home es el de Suppliers (tu célula). Cada quien aterriza siempre en
+  // la home de su propia célula, sin importar si tiene ve_hub_completo — ese
+  // flag solo controla si puede navegar a otras células con el switcher, no
+  // dónde aterriza. Únicamente el super admin (Jaime, Michelle) usa "/" como
+  // panel de control por defecto.
   useEffect(() => {
     if (!hasSupabase) { setCheckingRole(false); return; }
     fetch("/api/me")
@@ -205,12 +207,8 @@ export default function HubPage() {
         if (!profile) { setCheckingRole(false); return; }
 
         const mySlug = profile.celulas?.slug;
-        const fullAccess = profile.is_super_admin || !!profile.celulas?.ve_hub_completo;
 
-        // Con ve_hub_completo (o super admin), "/" es el origen: aterriza
-        // siempre aquí y navega libre entre células con el dropdown. Sin
-        // ve_hub_completo, queda restringido a su propia home.
-        if (mySlug && mySlug !== "suppliers" && !fullAccess) {
+        if (mySlug && mySlug !== "suppliers" && !profile.is_super_admin) {
           router.replace(`/celula/${mySlug}`);
           return;
         }
