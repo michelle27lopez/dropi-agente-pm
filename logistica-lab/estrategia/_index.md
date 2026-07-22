@@ -20,6 +20,7 @@
 | [`primera-medicion-kpis-y-meta.md`](primera-medicion-kpis-y-meta.md) ⭐ | **Baseline de los 2 KPIs de la célula + meta propuesta** (ítem #1 del Product Backlog). 3 decisiones cerradas (KR s/creadas · KR2.1 · <24h). | (síntesis desde `conocimiento/temas/18` + Monitor junio + dossier) |
 | [`roadmap-q3-logistica.md`](roadmap-q3-logistica.md) ⭐ | **La ruta completa Q3** (ítem #2): idea → norte → etapas → apuestas → **5 fases con dueño, métrica y secuencia**. Integra los demás docs de estrategia. | (síntesis desde primera-medición + mapa-etapas + roadmap-okr-impacto + direccionamiento) |
 | [`backlogs-y-priorizacion.md`](backlogs-y-priorizacion.md) ⭐ | **Vista única y de fácil acceso** de Product Backlog (discovery, con énfasis de Maria) + Delivery Backlog (ejecución) + **priorización única** (Dropi Score). El acceso rápido a "qué investigamos / qué ejecutamos". | (síntesis desde direccionamiento + roadmap-okr-impacto + ESTADO + todos) |
+| [`mapa-proyectos-3-ejes.md`](mapa-proyectos-3-ejes.md) ⭐ | **Dónde está cada proyecto en los 3 sistemas que lo miran** (Jira · backlog de Maria · documentación del repo) y **dónde no coinciden**. El paso previo a documentar: incluye los huecos reales (Fulfillment, Pruebas de entrega) y el trabajo fuera del radar. | (Jira PRM + Confluence PD/1485471746, verificados 22-jul-2026) |
 
 ## Cómo se relaciona con el resto del cerebro
 - **`metodologia/product-logistics.md`** = el filtro "duro" de la ORDEN (DoR/DoD, cadena de
