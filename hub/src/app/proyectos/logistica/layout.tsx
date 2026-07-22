@@ -1,26 +1,26 @@
 import type { Metadata } from "next";
 import "./_styles/tablero.css";
-import Header from "./_components/Header";
+import Sidebar from "./_components/Sidebar";
 
 // Layout de la sección de Logistic Success dentro del hub.
 //
-// El tablero venía de un Next propio con su RootLayout, su login y su
-// middleware de Supabase. Aquí no hacen falta: el hub ya autentica antes de
-// llegar a esta ruta. Lo único que se conserva es la navegación interna del
-// tablero y su hoja de estilos, aislada bajo `.log-root` para que los ~370
-// selectores del tablero no toquen el resto del hub (ver _styles/tablero.css).
+// Estructura sidebar + main, el mismo patrón que ya usa Suppliers en
+// `proyectos/dinamicas-catalogo`. La navegación del tablero vive en el panel
+// lateral (segunda capa neutra) en vez de una barra superior propia, para que
+// el chrome no compita con el de Darwin al entrar desde /celula/logistica.
+//
+// Los estilos del tablero quedan aislados bajo `.log-root` (ver _styles/tablero.css).
 
 export const metadata: Metadata = {
-  title: "Tablero PM · Logística — Dropi",
+  title: "Tablero · Logística — Dropi",
   description: "Proyectos, indicadores y updates de Logistic Success.",
 };
 
 export default function LogisticaLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="log-root">
-      <Header />
-      {children}
-      <div className="footer">Dropi · Logistic Success · 2026</div>
+    <div className="log-root" style={{ display: "flex", alignItems: "flex-start", minHeight: "100vh" }}>
+      <Sidebar />
+      <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
     </div>
   );
 }
