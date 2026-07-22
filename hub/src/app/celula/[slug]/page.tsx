@@ -79,6 +79,7 @@ export default function CelulaHomePage() {
   const [form, setForm] = useState({ name: "", summary: "" });
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [openUpdate, setOpenUpdate] = useState<Update | null>(null);
 
   useEffect(() => {
     fetch(`/api/celulas/${params.slug}`)
@@ -134,6 +135,7 @@ export default function CelulaHomePage() {
     ...semanasCelula.map((s) => ({ item: weeklyToItem(s), sortKey: s.date.slice(0, 10) })),
   ].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
   const updates = updateEntries.map((e) => e.item);
+  const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
 
   return (
     <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
@@ -146,7 +148,15 @@ export default function CelulaHomePage() {
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
         <div style={{ marginBottom: 56 }}>
-          <Section title="Updates" items={updates} ctaLabel="Ver →" />
+          <Section
+            title="Updates"
+            items={updates}
+            ctaLabel="Ver →"
+            onItemClick={(item) => {
+              const u = updatesById.get(item.key);
+              if (u) setOpenUpdate(u);
+            }}
+          />
           {updates.length === 0 && (
             <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
           )}
@@ -232,6 +242,46 @@ export default function CelulaHomePage() {
       </div>
       </div>
       <HubFooter />
+      {openUpdate && (
+        <div
+          onClick={() => setOpenUpdate(null)}
+          style={{
+            position: "fixed", inset: 0, background: "rgba(10,22,40,0.55)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: 24, zIndex: 50,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "var(--card)", borderRadius: 16, maxWidth: 640, width: "100%",
+              maxHeight: "80vh", overflowY: "auto", padding: "28px 28px 24px",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
+              <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--fg)", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
+              <button
+                onClick={() => setOpenUpdate(null)}
+                style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "var(--muted)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                aria-label="Cerrar"
+              >
+                ×
+              </button>
+            </div>
+            <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
+            <div style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7 }}>
+              {openUpdate.content.split("\n").map((line, i) => {
+                const trimmed = line.trim();
+                if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid var(--border)", margin: "16px 0" }} />;
+                if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
+                if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
+                return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
