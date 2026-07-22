@@ -208,6 +208,13 @@ export default function HubPage() {
 
         const mySlug = profile.celulas?.slug;
 
+        // Stakeholder (Lucho, María): no pertenece a ninguna célula — su
+        // origen es el resumen ejecutivo cross-célula, no "/" ni /celula/x.
+        if (profile.is_stakeholder && !profile.is_super_admin) {
+          router.replace("/resumen");
+          return;
+        }
+
         if (mySlug && mySlug !== "suppliers" && !profile.is_super_admin) {
           router.replace(`/celula/${mySlug}`);
           return;
