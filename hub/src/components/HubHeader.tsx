@@ -105,6 +105,21 @@ export default function HubHeader({
                 background: "#fff", border: "1px solid var(--border)", borderRadius: 10,
                 boxShadow: "0 4px 16px rgba(0,0,0,0.08)", minWidth: 200, zIndex: 10, overflow: "hidden",
               }}>
+                {(profile?.is_super_admin || profile?.is_stakeholder) && (
+                  <a
+                    href="/resumen"
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      display: "block", padding: "10px 14px", fontSize: 13,
+                      color: "var(--fg)", textDecoration: "none",
+                      background: currentSlug === "resumen" ? "var(--bg)" : "transparent",
+                      fontWeight: currentSlug === "resumen" ? 700 : 500,
+                      borderBottom: "1px solid var(--border)",
+                    }}
+                  >
+                    📊 Resumen ejecutivo
+                  </a>
+                )}
                 {otrasCelulas.map((c) => (
                   <a
                     key={c.slug}
