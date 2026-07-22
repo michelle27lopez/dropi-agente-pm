@@ -16,6 +16,16 @@
 | Estado global | ⚪ discovery (borrador 25-jun) · 🧪 experimento autoconfirmación en montaje (09-jul) |
 | Última actualización | 2026-07-09 |
 
+> **🆕 16-jul · reclasificación + el gate de ChateaPro** `[fuente: Juan, 16-jul]` · detalle en [`planning/cronograma-pruebas-poc.md`](../../planning/cronograma-pruebas-poc.md) §3-4
+> - **Autoconfirmación pasa a "prueba con usuarios"** y **autogeneración a "proyecto de discovery"** (deja de ser "2º experimento listo"). Objetivo: **entender la funcionalidad**, no medir impacto todavía.
+> - **🔑 El gate de ChateaPro.** Hoy, cuando la orden entra en **"pendiente confirmación"**, el flujo de Chatea **se dispara de inmediato**. Propuesta de Juan: **que no se dispare hasta que el sistema decida si autoconfirma o no.**
+>   - **Sin ese gate hay una carrera:** Chatea sale a confirmar **y** el sistema autoconfirma en paralelo → el cliente recibe contacto por una orden ya confirmada y **no se sabe quién confirmó** → rompe la trazabilidad que el propio experimento necesita.
+>   - **Chatea es hoy la ÚNICA fuente con la marca** manual vs. automática → es a la vez el **riesgo de integración** y el **instrumento de medición**.
+>   - **A entender con ellos:** ¿cómo confirman hoy? · ¿qué hacen con la orden después? · **¿cómo impacta a sus sistemas meter el gate?** · ¿su flujo tolera esperar o asume disparo inmediato?
+>   - ⚠️ **La tercera pregunta puede matar la idea:** si el flujo de Chatea no tolera espera, autoconfirmación **no es "activar una regla"** sino **rediseñar el trigger de un sistema de un tercero** → otro tamaño de proyecto. Averiguarlo **antes de prometer fecha**.
+> - **Entrevistas a dropshippers:** ¿cómo confirman hoy y **qué variables usan**? Alimenta las **reglas de madurez** (pendientes con Michel), que hoy salieron de *data agregada* (constancia + ≥50 órd/mes) y no de preguntarle a nadie — la data no dice el *por qué*.
+> - **🆕 Variable "órdenes duplicadas"** (Juan, 16-jul): ya está abajo como rescatable (**80K**, §1.C / Sol B1). **Doble uso:** (a) señal de rescate y (b) **guardarraíl → si es duplicada, NO autoconfirmar.** Se suma a ⛔ zona rural (veredas/fincas) y ⛔ variantes (talla/color).
+
 > **🆕 09-jul · experimentos en montaje** `[fuente: update de Juan a Maria, 09-jul]`
 > - **Autoconfirmación por madurez** (del Cell Board 1-jul): ya **socializado con Santiago** (contexto dado); **a la espera de las personas** para correr la prueba. Reglas de madurez (constancia mensual + ≥50 órd/mes) se cerraban con Michel. Recordar: hoy el sistema no distingue confirmación manual vs. automática → el experimento debe dejar esa trazabilidad.
 > - **Autogeneración de guías:** 2º experimento **listo para probar** (falta con quién correrlo). Ataca la fuga posterior a la confirmación (confirmó pero no genera guía → no entra a red).
