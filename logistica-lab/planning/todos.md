@@ -15,8 +15,8 @@
 - 🔴 [Jira] Arreglar estados ANTES de documentar: asignar el paraguas PRM-1517 · sacar PRM-1513 y PRM-1512 de "En Ruta" · resolver ownership de PRM-91 (hoy es de Kate) con Maria
 - 🔴 [Fulfillment] Levantar `spec.md` de PRM-1446 — está en "Listo para hand off" sin nada documentado (hueco #1)
 - 🔴 [Pruebas de entrega] Consolidar los 8 tickets en un solo spec, recogiendo el dato del 80% de PRM-618
-- 🟡 [Darwin] Commitear el trabajo de UI (`Sidebar.tsx` + 3 archivos) — existe solo como cambios sin guardar
-- 🟡 [Darwin] Pushear `juan/mapa-proyectos-handoff` y abrir PR (CODEOWNERS no exige aprobación para `logistica-lab/`)
+- 🟡 [Darwin] Commitear `prototipo-recolecciones.html` del worktree `claude/dropi-logistics-queue-482601` — sigue sin guardar
+- 🟡 [Darwin] Pushear `juan/logistica-22jul` (4 commits: rescate 16-jul + mapa 3 ejes + cierre ESTADO + Sidebar WIP) y abrir PR. CODEOWNERS no exige aprobación; el check de ownership sí marcará el PR porque `hub/src/app/proyectos/` figura como zona de suppliers → registrar las rutas de logística en `.github/ownership.json`
 - 🔴 [Cronograma Q3/Q4] Crear cronograma de proyectos y presentarlo a Maria la próxima semana
 - 🔴 [KPIs + meta] Insight/presentación Weekly Product (vie) + Seguimiento de métricas (jue, con Diana)
 - 🔴 [KPIs + meta] Correr baseline creación→handoff (<24h) y proponer la meta a Maria
