@@ -192,9 +192,13 @@ export default function HubPage() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 
-  // Este home es el de Suppliers (tu célula). Si quien entra es de otra
-  // célula, lo mandamos a la home de su propia célula. Solo el super admin
-  // se queda aquí y ve el resto de células como navegación.
+  // Este home es el de Suppliers (tu célula). Cada quien aterriza siempre en
+  // la home de su propia célula, sin importar ve_hub_completo NI is_super_admin
+  // — ambos flags controlan permisos (navegar con el switcher, ver botones de
+  // admin), no dónde aterriza. Solo quien es literalmente de la célula
+  // Suppliers (Jaime, Michelle) usa "/" como panel de control por defecto.
+  // Un super admin de otra célula (ej. Laura, Product Designers) aterriza en
+  // la suya, igual que cualquiera.
   useEffect(() => {
     if (!hasSupabase) { setCheckingRole(false); return; }
     fetch("/api/me")
@@ -205,19 +209,15 @@ export default function HubPage() {
         if (!profile) { setCheckingRole(false); return; }
 
         const mySlug = profile.celulas?.slug;
-        const fullAccess = profile.is_super_admin || !!profile.celulas?.ve_hub_completo;
 
-        // Aislamiento seguro para el entorno del nuevo PM (Santiago)
-        // Redirigir su sesión a un dashboard completamente limpio de su célula
-        if (userEmail === "santiago.herrera@dropi.co") {
-          router.replace(`/seller-success`);
+        // Stakeholder (Lucho, María): no pertenece a ninguna célula — su
+        // origen es el resumen ejecutivo cross-célula, no "/" ni /celula/x.
+        if (profile.is_stakeholder && !profile.is_super_admin) {
+          router.replace("/resumen");
           return;
         }
 
-        // Con ve_hub_completo (o super admin), "/" es el origen: aterriza
-        // siempre aquí y navega libre entre células con el dropdown. Sin
-        // ve_hub_completo, queda restringido a su propia home.
-        if (mySlug && mySlug !== "suppliers" && !fullAccess) {
+        if (mySlug && mySlug !== "suppliers") {
           router.replace(`/celula/${mySlug}`);
           return;
         }
