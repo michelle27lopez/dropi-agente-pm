@@ -72,6 +72,7 @@ export default function HubHeader({
   async function handleLogout() {
     const supabase = createClient();
     await supabase.auth.signOut();
+    sessionStorage.removeItem("darwin-home-routed");
     router.push("/login");
     router.refresh();
   }
@@ -123,7 +124,7 @@ export default function HubHeader({
                 {otrasCelulas.map((c) => (
                   <a
                     key={c.slug}
-                    href={`/celula/${c.slug}`}
+                    href={c.slug === "suppliers" ? "/" : `/celula/${c.slug}`}
                     onClick={() => setMenuOpen(false)}
                     style={{
                       display: "block", padding: "10px 14px", fontSize: 13,
