@@ -11,6 +11,12 @@ export const metadata = { title: "Registro de iniciativas · Tablero Logística"
 
 // Orden de lectura: primero lo que ya se puede tomar, al final lo que todavía
 // no existe. Un backlog arriba engaña sobre cuánto trabajo hay realmente vivo.
+const DOC_LABEL: Record<NonNullable<Proyecto["doc"]>, string> = {
+  completo: "spec completo ✅",
+  parcial: "spec parcial 🟡",
+  ninguno: "sin documentar ❌",
+};
+
 const ORDEN: { tipo: TipoIniciativa; titulo: string; nota: string }[] = [
   { tipo: "Lanzamiento", titulo: "Lanzamientos", nota: "Ya construido. Se acompaña, no se descubre." },
   { tipo: "Proyecto", titulo: "Proyectos", nota: "Alcance definido. Van a desarrollo (o ya están)." },
@@ -38,6 +44,16 @@ function Fila({ p }: { p: Proyecto }) {
         )}
       </div>
       <p className="ini-desc">{p.descripcion}</p>
+      {(p.jira || p.doc) && (
+        <p className="ini-jira">
+          {p.jira && (
+            <span className={p.jira.startsWith("⚠️") ? "ini-desalineado" : undefined}>
+              <b>Jira:</b> {p.jira}
+            </span>
+          )}
+          {p.doc && <span><b>Doc:</b> {DOC_LABEL[p.doc]}</span>}
+        </p>
+      )}
       {p.bloqueo && <p className="ini-bloqueo">⛔ {p.bloqueo}</p>}
       <LinkList links={links} />
       {faltantes > 0 && (
@@ -52,6 +68,10 @@ function Fila({ p }: { p: Proyecto }) {
 export default function IniciativasPage() {
   const sinCodigo = proyectos.filter((p) => !p.codigo).length;
   const sinLink = proyectos.filter((p) => linksDe(p).some((l) => l.falta || !l.href)).length;
+  // El hallazgo del mapa de los 3 ejes, como contador vivo en vez de párrafo en
+  // un .md que nadie abre: cuántas iniciativas tienen Jira desalineado.
+  const desalineadas = proyectos.filter((p) => p.jira?.startsWith("⚠️")).length;
+  const sinDoc = proyectos.filter((p) => p.doc === "ninguno").length;
 
   return (
     <main className="page">
@@ -71,9 +91,15 @@ export default function IniciativasPage() {
         <div>
           <strong>Qué falta para que todo sea alcanzable desde todo lado</strong>
           <p>
-            {sinCodigo} iniciativas no están registradas en Darwin (sin código LOG-XXX) y {sinLink}{" "}
-            tienen enlaces pendientes de conectar. Los huecos se muestran a propósito: un
-            <em> falta link</em> visible es un pendiente; un hueco invisible es una mentira.
+            <b>{desalineadas}</b> iniciativas tienen el estado de Jira desalineado con cómo se
+            trabajan · <b>{sinDoc}</b> no tienen spec en el repo · <b>{sinCodigo}</b> no están
+            registradas en Darwin (sin código LOG-XXX) · <b>{sinLink}</b> tienen enlaces
+            pendientes de conectar.
+          </p>
+          <p>
+            Los huecos se muestran a propósito: un <em>falta link</em> visible es un pendiente;
+            un hueco invisible es una mentira. Estados de Jira verificados uno por uno el
+            22-jul (<code>logistica-lab/estrategia/mapa-proyectos-3-ejes.md</code>).
           </p>
         </div>
       </div>

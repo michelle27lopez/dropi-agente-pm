@@ -10,6 +10,13 @@
 > Vercel solo con el próximo `git push` que toque este bloque — no hay que tocar código.
 > Formato: `- emoji [Proyecto] texto`.
 <!-- tablero:pendientes:start -->
+- 🔴 [Local] Agregar `SUPABASE_URL` y `SUPABASE_SERVICE_KEY` a `hub/.env.local` (valores desde Vercel) — sin ellas el hub local no lee la base
+- 🔴 [Seguridad] Rotar 3 claves: `SUPABASE_SERVICE_KEY` (en 7 archivos de `origin/main`, es de Jaime) + OpenAI + Evolution API
+- 🔴 [Jira] Arreglar estados ANTES de documentar: asignar el paraguas PRM-1517 · sacar PRM-1513 y PRM-1512 de "En Ruta" · resolver ownership de PRM-91 (hoy es de Kate) con Maria
+- 🔴 [Fulfillment] Levantar `spec.md` de PRM-1446 — está en "Listo para hand off" sin nada documentado (hueco #1)
+- 🔴 [Pruebas de entrega] Consolidar los 8 tickets en un solo spec, recogiendo el dato del 80% de PRM-618
+- 🟡 [Darwin] Commitear `prototipo-recolecciones.html` del worktree `claude/dropi-logistics-queue-482601` — sigue sin guardar
+- 🟡 [Darwin] Pushear `juan/logistica-22jul` (4 commits: rescate 16-jul + mapa 3 ejes + cierre ESTADO + Sidebar WIP) y abrir PR. CODEOWNERS no exige aprobación; el check de ownership sí marcará el PR porque `hub/src/app/proyectos/` figura como zona de suppliers → registrar las rutas de logística en `.github/ownership.json`
 - 🔴 [Cronograma Q3/Q4] Crear cronograma de proyectos y presentarlo a Maria la próxima semana
 - 🔴 [KPIs + meta] Insight/presentación Weekly Product (vie) + Seguimiento de métricas (jue, con Diana)
 - 🔴 [KPIs + meta] Correr baseline creación→handoff (<24h) y proponer la meta a Maria
@@ -21,6 +28,19 @@
 - 🔴 [Confirmación] Segmentar confirmación por volumen y categoría de dropshipper (con Michel) — el prom ~11h oculta segmentos
 - 🔴 [Cell Board] Preparar propuesta de experimento para "Preparación de guía" → llevar al Cell Board #3
 - 🔴 [Árbol OKR] Validar el reajuste del árbol v2 con Juan/Maria antes de tocar Jira
+- 🔴 [Delivery] EL FOCO = Normalización de estados: subirlo en el roadmap y terminar la propuesta (WIP=1)
+- 🔴 [Delivery] Traslapar diseño solo sobre lo cerrado (vista cliente 8 estados), NO sobre el catálogo en disputa
+- 🔴 [Delivery] Escalar Same Day como riesgo aceptado con dueño — un riesgo no se pone en cola en silencio
+- 🔴 [Product] Decidir EL uno del Product Roadmap (hay 4 ítems y WIP=1) — recomendado: Autoconfirmación
+- 🔴 [Pruebas POC] Poner las fechas del cronograma de pruebas de POC → llevarlo al Product Roadmap
+- 🔴 [Pruebas POC] Aclarar qué es "Notificación de optimización" (iniciativa de producto nuestra, sin definir)
+- 🔴 [Autoconfirmación] Sesión con ChateaPro: hoy el flujo se dispara al entrar la orden — entender cómo confirman y cómo les impacta esperar la decisión de autoconfirmar
+- 🔴 [Autoconfirmación] Entrevistas con dropshippers: ¿cómo confirman hoy y qué variables usan? (alimenta las reglas de madurez)
+- 🔴 [Autogeneración] Levantar el discovery — pasa de "experimento listo" a proyecto de discovery (hoy no tiene spec)
+- 🔴 [Selección transportadoras] Cerrar con Paula Macías la caracterización de los 4 docs de Drive (catálogo) — prerrequisito del discovery con usuarios
+- 🟡 [Selección transportadoras] Llevar a Kate Pencue el protocolo de discovery con ≥20 usuarios (Cronos NO bloquea a N=20)
+- 🟡 [Selección transportadoras] Alinear el copy del CTA ("precisión de datos") con el modelo V1 (50% efectividad / 50% costo) antes de las sesiones
+- 🟡 [Autoconfirmación] Variable "órdenes duplicadas" → guardarraíl: si es duplicada, NO autoconfirmar
 - 🟡 [Autoconfirmación] PRM-1497 socializado — conseguir las personas para correr la prueba y traer avance
 - 🟡 [Autogeneración] 2º experimento listo para probar — conseguir con quién correrlo
 - 🟡 [Supplier] Autoconfirmación también impacta brands (Maria): interiorizar que los sellers también son brands
@@ -34,6 +54,55 @@
 - 🟢 [Cell Board] Coordinar fecha/logística del Cell Board #3 presencial (Laura + Michel)
 - 🟢 [Operación] Limpiar backlog DROP heredado (bulk desasignar/cerrar en UI)
 <!-- tablero:pendientes:end -->
+
+## 🆕 WIP = 1 + 1 — foco de los dos roadmaps (16-jul)
+> Decisión de Juan (16-jul): **una** cosa activa en **Delivery** y **una** en **Product**. De a una.
+> Reemplaza el cap de 2–3 de la metodología. → [backlogs-y-priorizacion.md](../estrategia/backlogs-y-priorizacion.md).
+> ⚠️ **Solo sirve si se sostiene el costo:** lo que queda en cola **se frena de verdad**. Un WIP=1 declarado
+> con 5 cosas avanzando en paralelo es peor que un WIP=3 honesto — además miente en el update.
+
+**🎯 DELIVERY — el uno = Normalización de estados** *(decidido)*
+- [ ] 🔴 **Subir Normalización de estados en el Delivery Roadmap y terminar la propuesta** *(Juan, 16-jul)*. Falta: mapeo crudo→homologado de los ~50 reales · devolución con su ciclo de reintento · `Entregado` confirmado vs. observado · ubicar `Guía anulada`.
+- [ ] 🔴 **Traslapar diseño SOBRE LO CERRADO, no sobre lo abierto.** El precedente (Selección transportadoras §8.1: *"diseño avanza en paralelo sin esperar"*) funcionó **porque la viabilidad ya estaba aprobada**. Aquí el catálogo **sigue abierto**: `INTENTO DE ENTREGA`, `Proceso finalizado` y los flags contables son **decisiones de negocio sin cerrar** → diseñar sobre eso es retrabajo.
+  - ✅ **Traslapar sobre:** la **vista cliente (8 estados)** + los avisos ("va en camino" / "va llegando" / "disponible para retiro") — ya definidos y es lo que ve el usuario.
+  - ⛔ **NO traslapar sobre:** el mapeo crudo→homologado ni los 3 puntos en disputa.
+- [ ] 🔴 **Escalar Same Day como riesgo ACEPTADO, no ponerlo en la fila en silencio.** Los falsos SD siguen en producción (Cali→Santa Marta sale SD sin validación geo) = promesas incumplidas a clientes reales. **Un riesgo no se pone en cola: se acepta o se mitiga, con dueño.** → decirlo explícito a Maria/Carlos. *(Es la diferencia entre "priorizamos" y "se nos olvidó".)*
+
+**🎯 PRODUCT — falta decidir cuál es la una**
+- [ ] 🔴 **Decidir EL uno del Product Roadmap.** El 16-jul entraron **4 ítems** y el WIP declarado es 1 → hoy hay 4 cosas y una regla que dice una. **Recomendación: Autoconfirmación** — es la fuga #1, la más avanzada (prototipo funcional) y **tiene una pregunta que puede matarla** (¿ChateaPro tolera el gate?): *lo que puede morir barato se prueba primero*. **Selección de transportadoras no debería gastar el slot: no es proyecto de Juan** (PM = Kate); el catálogo con Paula es **una dependencia que debe, no su foco**.
+
+## 🆕 CRONOGRAMA DE PRUEBAS DE POC → Product Roadmap (16-jul)
+> Pedido de Juan (16-jul): montar el **cronograma de pruebas de POC** para llevarlo al **Product Roadmap**;
+> objetivo = **entender la funcionalidad** (no medir impacto todavía).
+> 📄 [planning/cronograma-pruebas-poc.md](cronograma-pruebas-poc.md) (🟠 borrador).
+> **Reclasificación:** Selección transportadoras = **discovery/pruebas de usuarios** · Autoconfirmación = **prueba con usuarios** ·
+> Autogeneración = **proyecto de discovery** · Notificación de optimización = **iniciativa de producto nuestra**.
+> ⚠️ **No es el Cronograma Q3/Q4** (ése sigue 🔴 corrido y es de ejecución/Delivery). No mezclarlos.
+
+- [ ] 🔴 **Poner las FECHAS del cronograma de POC** (4 ítems, hoy todas *por definir*) — sin fechas no es presentable en el Product Roadmap. *(Juan, con Kate y Michel)*
+- [ ] 🔴 **Aclarar qué es "Notificación de optimización"** — Juan la nombra como iniciativa de producto nuestra pero no está en ningún doc. ¿Es la notificación que empuja el banner *"Optimiza tu logística con IA"* (Selección de transportadoras), o algo distinto de Notif. Prevención de Devoluciones (PRM-1512)? **No se asumió nada.** *(Juan)*
+- [ ] 🟡 **Actualizar el Product Backlog en Polaris** con la reclasificación (hoy autoconfirmación/autogeneración figuran como "experimentos a la espera de personas").
+
+### 🚚 Selección de transportadoras — discovery con ≥20 usuarios
+> 📄 [protocolo](../proyectos/sistema-inteligente-transportadoras/prueba-fase0-20-usuarios.md) · ⚠️ **Juan NO es el owner** (PM = Kate Pencue; gate = María Ossa) → se **propone**, no se ejecuta solo.
+> ✅ El reencuadre a discovery **resuelve** el problema de poder: para *entender*, N=20 sobra. Titular = preguntas del Kickoff §10, **no** la distribución.
+
+- [ ] 🔴 **Cerrar con Paula Macías la caracterización de los 4 docs de Drive** (recaudo / sin recaudo / trayectos especiales / métodos de pago e intentos) = el botón "Detalle transportadoras". **Es dependencia de Juan y ahora es EL prerrequisito**: si el catálogo está vacío, el usuario evalúa media feature y el aprendizaje sale sesgado.
+- [ ] 🟡 **Llevar el protocolo a Kate Pencue** — ¿lo acepta como el discovery del proyecto? ¿Cómo estratificar los ≥20 (departamento · con/sin historial propio · volumen)? + fecha.
+- [ ] 🟡 **Alinear el copy del CTA con el modelo antes de sentar a nadie** — el Figma dice *"efectividad, costo de flete y precisión de datos"* pero V1 pesa **50% efectividad / 50% costo**. Si un usuario pregunta por "precisión de datos" en sesión, no hay respuesta. *(Kate/Michelle/Jaime)*
+- [ ] 🟡 **Preguntar a Juan Felipe Cubillos: ¿la orden registra el origen de la config** (global/IA/ajuste post-IA/manual)? El Figma lo marca en la *pantalla*, no en la guía. **Ya no bloquea** (en sesión observada se ve directo) pero define si hay observaciones secundarias. *(Precedente: en autoconfirmación el sistema no distingue manual vs. automática salvo Chatea.)*
+- [ ] 🟢 **Sumar los 20 usuarios a la petición EXISTENTE de personas** en la carta a Maria *(bóveda: reportes/para-maria-carta-al-nino-dios.md)* — mismo cuello que autoconfirmación y autogeneración. **3 cosas bloqueadas por la misma causa pesa; 3 pedidos sueltos es ruido.**
+- 💡 **Argumento para no esperar:** el bloqueo de **índices en Cronos NO aplica a N=20** (solo al batch nocturno Golden y a la carga de 20K concurrentes) → **esquiva lo que tiene el proyecto parado en 72%**.
+
+### 💬 Autoconfirmación — prueba con usuarios vía ChateaPro
+- [ ] 🔴 **Sesión con ChateaPro** — hoy, cuando la orden entra en *"pendiente confirmación"*, **su flujo se dispara de inmediato**. Juan propone que **no se dispare hasta que el sistema decida si autoconfirma o no**. Entender: (1) ¿cómo confirman hoy?, (2) ¿qué hacen con la orden después?, (3) **¿cómo impacta a sus sistemas meter ese gate?**, (4) ¿su flujo tolera esperar o asume disparo inmediato? *(Juan, 16-jul)*
+  - ⚠️ **Por qué es condición de existencia y no un detalle:** sin el gate hay una **carrera** — Chatea sale a confirmar **y** el sistema autoconfirma en paralelo → el cliente recibe contacto por una orden ya confirmada y **no se sabe quién confirmó**. Y recordar: **Chatea es hoy la ÚNICA fuente con la marca** manual vs. automática → es a la vez el riesgo de integración **y** el instrumento de medición.
+  - ⚠️ **La pregunta (3) puede matar la idea:** si el flujo de Chatea no tolera espera, autoconfirmación no es "activar una regla" sino **rediseñar el trigger de un sistema de un tercero** → otro tamaño de proyecto. **Averiguarlo antes de prometer fecha.**
+- [ ] 🔴 **Entrevistas con dropshippers: ¿cómo confirman hoy y qué variables usan?** Alimenta las **reglas de madurez** (que seguían pendientes con Michel) y los guardarraíles. **Vale porque** las reglas actuales (constancia + ≥50 órd/mes) salieron de *data agregada*, no de preguntarle a nadie — la data no dice *por qué*. Conecta con la crítica de Juan Camilo (el prom. ~11h oculta segmentos). *(Juan, 16-jul)*
+- [ ] 🟡 **Variable "órdenes duplicadas"** — ya está en el spec como rescatable (**80K órdenes**, §1.C + Sol B1 "fricción al cancelar duplicado"). **Doble uso:** (a) señal de rescate y (b) **guardarraíl → si es duplicada, NO autoconfirmar.** Se suma a ⛔ zona rural y ⛔ variantes (talla/color). *(Juan, 16-jul)*
+
+### 📄 Autogeneración de guías — pasa a proyecto de discovery
+- [ ] 🔴 **Levantar el discovery de autogeneración** — hoy figura como "2º experimento listo para probar" pero **no tiene spec**. Como proyecto de discovery necesita problema raíz, hipótesis, métrica y definición de datos (DoR). *(Juan, 16-jul)*
 
 ## 🆕 DEL CELL BOARD #2 (08-jul) — acta *(bóveda: ../reuniones/2026-07-08-cell-board.md)*
 - [ ] 🔴 **Segmentar confirmación por volumen y categoría de dropshipper (con Michel)** — el promedio de ~11h oculta segmentos (crítica de Juan Camilo). Refina el experimento de autoconfirmación y desglosa el "iceberg" de valor. Insumo: data store [tema 18](../conocimiento/temas/18-metricas-operacion-2026-04-05.md) + pedir export por segmento. *(Cell Board 08-jul · dueños: Michel + Juan Diego)*

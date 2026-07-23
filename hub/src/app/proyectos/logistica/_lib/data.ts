@@ -205,6 +205,22 @@ export type Proyecto = {
   foco: string;
   links?: LinkRef[];
   experimentos?: string[]; // slugs de `experimentos` — relación explícita, no adivinada
+  /**
+   * Estado operativo tal como está HOY en Jira, literal. No es lo mismo que
+   * `fase` (nuestra lectura) ni que `handoff`: es lo que ve cualquiera que abra
+   * el ticket. Cuando no coincide con `fase`, esa diferencia es el hallazgo —
+   * verificado ticket por ticket el 22-jul en
+   * logistica-lab/estrategia/mapa-proyectos-3-ejes.md.
+   */
+  jira?: string;
+  /** Estado de la documentación en el repo: ¿hay spec y está completo? */
+  doc?: "completo" | "parcial" | "ninguno";
+  /**
+   * Ruta del entregable propio del proyecto, cuando tiene uno.
+   * Si está, la ficha genérica NO se muestra: `proyecto/[slug]` redirige aquí y el
+   * entregable lleva el contexto de la ficha en su cabecera. Un proyecto, una URL.
+   */
+  entregable?: string;
 };
 
 export function proyectoPorSlug(slug: string) {
@@ -259,10 +275,12 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Vigía — extensión sobre el módulo de órdenes",
     slug: "vigia",
-    etapa: "Generación", tipo: "Experimento", fase: "Research", handoff: "No aplica",
+    etapa: "Generación", tipo: "Experimento", fase: "Diseño", handoff: "No aplica",
+    jira: "⚠️ No existe en Jira",
+    doc: "ninguno",
     descripcion:
       "Una extensión de Chrome que lee las guías del módulo de órdenes y le anticipa al usuario el resultado probable, para que corrija antes de que la orden se caiga.",
-    foco: "Cruza las fugas ② devolución y ④ novedad porque actúa ANTES del desenlace. Métrica todavía por definir con datos. Sin ticket ni código LOG.",
+    foco: "Dueño: Michel Pino. Diseño en curso, sin desarrollo técnico (confirmado 22-jul). Cruza las fugas ② devolución y ④ novedad porque actúa ANTES del desenlace. GATE: mientras sea diseño está bien, pero el día que entre a desarrollo necesita ticket, métrica y spec o se construye a ciegas.",
     links: [{ tipo: "prototipo", label: "Prototipo de la extensión", href: "", falta: true }],
     experimentos: ["vigia"],
   },
@@ -285,6 +303,8 @@ export const proyectos: Proyecto[] = [
     codigo: "LOG-004",
     etapa: "Generación", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
     ticket: "PRM-1513",
+    jira: "⚠️ En Ruta (backlog), SIN ASIGNAR — aunque el Delivery Backlog lo da en ejecución",
+    doc: "completo",
     bloqueo:
       "Sin acceso a Chronos para crear las tablas que faltan → el PoC no se puede volver a levantar en la cuenta de AWS de IA. Juan Felipe Cubillos coordina los accesos con Jaime.",
     descripcion: "Elegir automáticamente la mejor transportadora por zona para bajar la devolución y mejorar la entrega.",
@@ -302,8 +322,11 @@ export const proyectos: Proyecto[] = [
     codigo: "LOG-007",
     etapa: "Tránsito", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
     ticket: "PRM-1297", destacado: true,
+    jira: "Investigación y definición",
+    doc: "completo",
+    entregable: "/proyectos/logistica/normalizacion-estados",
     descripcion: "Homologar los estados del carrier para poder medir bien (sin-cierre, tiempo por fases).",
-    foco: "Prioridad #1 del Delivery Roadmap (WIP = 1). Discovery levantado con datos reales (133.555 órdenes / 52.636 guías CO). Catálogo v0.1: crudo → homologado(26) → fase → vista cliente(8). Colombia primero, luego países.",
+    foco: "Prioridad #1 del Delivery Roadmap (WIP = 1). El mejor documentado de la célula (spec + CONTEXTO + propuesta + vista interactiva). Catálogo v0.1: crudo → homologado(26) → fase → vista cliente(8). Pendiente: 7 gates de decisión, 2 críticos y externos.",
     links: [{ tipo: "tablero", label: "Mapa de estados interactivo", href: "/proyectos/logistica/normalizacion-estados" }],
   },
   {
@@ -312,7 +335,12 @@ export const proyectos: Proyecto[] = [
     codigo: "LOG-006",
     etapa: "Generación", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
     ticket: "PRM-1362",
-    bloqueo: "Capacidad de TI: el dev está en el cambio de moneda de Venezuela (cierra jul). No es un bloqueo de producto — el discovery y el doc E2E están cerrados.",
+    // Ojo: en Jira el ticket figura como `Hand off hecho` desde el 14-jul, pero
+    // el estado que manda para la célula es "Listo para hand off" (decisión de
+    // Juan, 22-jul): el E2E todavía necesita ajuste, así que no está entregado.
+    jira: "Hand off hecho (14-jul) — pero el E2E aún necesita ajuste",
+    doc: "completo",
+    bloqueo: "Capacidad de TI: el dev está en el cambio de moneda de Venezuela (cierra jul). No es un bloqueo de producto.",
     descripcion: "Parametrizar el costo por orden (fletes) de forma clara y automática.",
     foco: "OKR 3 de compañía. Prototipo RPP construido (3 vistas). ⚠️ El doc E2E todavía necesita ajuste — no está listo para entregar tal cual. Espera slot de desarrollo.",
     links: [
@@ -328,9 +356,11 @@ export const proyectos: Proyecto[] = [
     slug: "fulfillment",
     etapa: "Despacho", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
     ticket: "PRM-1446", destacado: true,
+    jira: "Listo para hand off (14-jul), asignado a Juan",
+    doc: "ninguno",
     bloqueo: "Capacidad de TI (cola de dev) + negociación de la mesa logística.",
     descripcion: "Parametrizar el cobro de fulfillment con sus dos esquemas (mensual y diario).",
-    foco: "El de mayor impacto declarado: +$380M COP/mes en Colombia desde el mes siguiente a su salida. Prototipo RPP construido (PROD-648, fase 2 de cobros). ⚠️ El doc E2E todavía necesita ajuste. NO registrado en Darwin (sin código LOG) pese a estar listo.",
+    foco: "🔴 HUECO DE DOCUMENTACIÓN #1: es el único en 'Listo para hand off' sin nada en el repo. Bodegas 2PL en Bogotá, Cali y Medellín = 92.000 órdenes/mes; el cobro se activa solo al llegar a Entregado, así que 20–25% de las órdenes preparadas y despachadas nunca se cobran. Servicios prestados y no cobrados: almacenamiento, etiquetado manual, armado de kits y combos, multi-unidad. Prototipo RPP construido (PROD-648). NO registrado en Darwin pese a estar listo.",
     links: [
       { tipo: "prototipo", label: "RPP · Parametrizar fulfillment", href: rpp("old/fulfillment/parametrizar") },
       { tipo: "figma", label: "Diseño en Figma", href: "", falta: true },
@@ -358,12 +388,16 @@ export const proyectos: Proyecto[] = [
     foco: "Ya no es discovery: está en lanzamiento con Laura (comunicación), operativo en Interrapidísimo, Coordinadora y TCC. Monitoreo de 3 semanas antes del despliegue global.",
   },
   {
-    nombre: "Notificaciones prevención de devoluciones",
-    slug: "notificaciones-devoluciones",
-    etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "En desarrollo", handoff: "Handoff hecho",
-    ticket: "PRM-1294",
-    descripcion: "Avisar al comprador para prevenir la devolución antes de que ocurra.",
-    foco: "Por finalizar, alinear con Seller Success. ⚠️ El ticket estaba duplicado con 'Dueño y triaje de la novedad' (ambos apuntaban a PRM-1512) — verificar cuál es el correcto antes de publicar.",
+    nombre: "Pruebas de entrega (POD)",
+    slug: "pruebas-entrega",
+    etapa: "Entrega / Devolución", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    ticket: "PRM-1517",
+    jira: "⚠️ Paraguas En Ruta y SIN ASIGNAR · PRM-1361 y PRM-1455 en Impedimentos",
+    doc: "ninguno",
+    bloqueo: "El proyecto paraguas (PRM-1517) no tiene dueño, y dos de las soluciones por transportadora están en Impedimentos. No se puede escribir el spec sobre eso.",
+    descripcion: "Evidencia de los intentos de entrega (SLAs, foto con geolocalización), con una solución por transportadora.",
+    foco: "🔴 HUECO DE DOCUMENTACIÓN #2. No es un ticket: son 8 — paraguas PRM-1517 (conectado a KR2.1) + solicitudes PRM-1364/1361 + soluciones por carrier PRM-1462 ENVIA, PRM-1455 Interrapidísimo, PRM-1610 Domina, PRM-1611 TIUI, PRM-618 Coordinadora. 💎 Dato enterrado en PRM-618: el 80% de las solicitudes del equipo de logística a las transportadoras son pruebas de entrega — es la solicitud más común.",
+    links: [{ tipo: "doc", label: "Kickoff POD (PDF sin versionar)", href: "", falta: true }],
   },
   {
     nombre: "Validación y normalización de direcciones",
@@ -371,9 +405,11 @@ export const proyectos: Proyecto[] = [
     codigo: "LOG-002",
     etapa: "Confirmación", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-91",
-    bloqueo: "Es un proyecto de plataforma/TI, no de la célula: la célula aporta el discovery y el experimento, la construcción es de TI.",
+    jira: "En Ruta (backlog) · ⚠️ el dueño en Jira es Katerine Pencue, no Juan",
+    doc: "completo",
+    bloqueo: "Conflicto de ownership: el Delivery Backlog lo pone a EJECUTAR en la célula, pero en Jira el dueño es Katerine Pencue. Resolver con Maria antes de trabajarlo.",
     descripcion: "Normalizar y validar la dirección en el momento de crearla, a nivel de plataforma.",
-    foco: "Delivery Backlog EJECUTAR. Discovery del taller 24-jun. Está registrado en Darwin (LOG-002) pero no aparecía en este tablero.",
+    foco: "Discovery del taller 24-jun. Está registrado en Darwin (LOG-002) pero no aparecía en este tablero.",
   },
   {
     nombre: "Dirección confiable + geo",
@@ -385,13 +421,16 @@ export const proyectos: Proyecto[] = [
     experimentos: ["validacion-shop", "encuesta-direccion"],
   },
   {
-    nombre: "Dueño y triaje de la novedad",
+    nombre: "Herramienta preventiva de novedades (dueño y triaje)",
     slug: "novedad-triaje",
     codigo: "LOG-008",
-    etapa: "Novedad / Posventa", tipo: "Idea", fase: "Backlog", handoff: "No aplica",
+    etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-1512",
-    descripcion: "Dar dueño, SLA y triaje por motivo a las novedades para recuperar la orden.",
-    foco: "Backlog: todavía es idea, sin discovery propio ni alcance. Fuga ④, capa transversal + posventa.",
+    jira: "⚠️ En Ruta (backlog), SIN ASIGNAR — aunque el Delivery Backlog pide FINALIZARLO",
+    doc: "completo",
+    bloqueo: "Nadie lo tiene asignado en Jira. Alinear con Seller Success.",
+    descripcion: "Dar dueño, SLA y triaje por motivo a las novedades para recuperar la orden, y avisar al comprador antes de que la devolución ocurra.",
+    foco: "Absorbe lo que antes figuraba aparte como 'Notificaciones prevención de devoluciones': era el mismo PRM-1512 duplicado en dos fichas. Fuga ④, capa transversal + posventa.",
   },
   {
     nombre: "Reducir devoluciones (COD)",
@@ -408,8 +447,79 @@ export const proyectos: Proyecto[] = [
     codigo: "LOG-011",
     etapa: "Tránsito", tipo: "Oportunidad", fase: "Discovery", handoff: "No aplica",
     descripcion: "Medir el tiempo de la orden por fases (F1→F5) para ver dónde se estanca.",
+    jira: "⚠️ Sin ticket — falta crear el Proyecto OKR",
+    doc: "completo",
     foco: "Enabler transversal: habilita el KPI de tiempo y a Normalización de estados. Hoy vive como medición, no como producto construido.",
     links: [{ tipo: "tablero", label: "Tiempo por fases (weekly)", href: "/proyectos/logistica/updates" }],
+  },
+
+  // ── Fuera del radar ────────────────────────────────────────────────────────
+  // Salieron de barrer Jira por estado el 22-jul. Están a nombre de Juan, sin
+  // documentación ni mención en ningún tablero. Se registran aquí justamente
+  // para que dejen de ser invisibles: dos llevan 7 semanas en "Listo para hand
+  // off" sin moverse, y eso es lo que infla esa columna.
+  {
+    nombre: "QR de recolección Veloces a proveedores",
+    slug: "qr-recoleccion-veloces",
+    etapa: "Despacho", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
+    ticket: "PRM-407",
+    jira: "Listo para hand off desde el 01-jun",
+    doc: "ninguno",
+    bloqueo: "7 semanas parado sin moverse. Decisión pendiente: documentarlo y sacarlo, o bajarlo de estado.",
+    descripcion: "QR de recolección de Veloces para los proveedores (Ecom).",
+    foco: "Salió del barrido de Jira del 22-jul. Es uno de los dos que inflan la columna de hand-off.",
+  },
+  {
+    nombre: "Embebido de imágenes",
+    slug: "embebido-imagenes",
+    etapa: "Generación", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
+    ticket: "PRM-796",
+    jira: "Listo para hand off desde el 01-jun",
+    doc: "ninguno",
+    bloqueo: "7 semanas parado sin moverse. Misma decisión que PRM-407: sacarlo o bajarlo de estado.",
+    descripcion: "Embebido de imágenes.",
+    foco: "Salió del barrido de Jira del 22-jul. Sin contexto documentado — hay que abrir el ticket para saber de qué se trata.",
+  },
+  {
+    nombre: "Garantías: de recolección a entrega",
+    slug: "garantias-recoleccion-entrega",
+    etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    ticket: "PRM-118",
+    jira: "Pre Hand off desde el 01-jun",
+    doc: "ninguno",
+    bloqueo: "Sin confirmar si sigue vivo.",
+    descripcion: "Cubrir el tramo de garantías desde la recolección hasta la entrega.",
+    foco: "Salió del barrido de Jira del 22-jul.",
+  },
+  {
+    nombre: "Suppli CO · validación de transportadora",
+    slug: "suppli-co",
+    etapa: "Generación", tipo: "Proyecto", fase: "En desarrollo", handoff: "Handoff hecho",
+    ticket: "PRM-1431",
+    jira: "En Desarrollo desde el 22-jun",
+    doc: "ninguno",
+    descripcion: "Validación de transportadora para Suppli en Colombia.",
+    foco: "Ya está en desarrollo y no figuraba en ningún tablero de la célula.",
+  },
+  {
+    nombre: "Velocidad y calidad de integración de transportadoras",
+    slug: "integracion-transportadoras",
+    etapa: "Tránsito", tipo: "Proyecto", fase: "En desarrollo", handoff: "Handoff hecho",
+    ticket: "PRM-1265",
+    jira: "En Desarrollo desde el 05-jun",
+    doc: "ninguno",
+    descripcion: "Optimizar la velocidad y la calidad con que se integran nuevas transportadoras.",
+    foco: "Ya está en desarrollo y no figuraba en ningún tablero de la célula.",
+  },
+  {
+    nombre: "Reportes dashboard · fase 1",
+    slug: "reportes-dashboard",
+    etapa: "Tránsito", tipo: "Proyecto", fase: "En desarrollo", handoff: "Handoff hecho",
+    ticket: "PRM-1067",
+    jira: "En Desarrollo desde el 11-jun",
+    doc: "ninguno",
+    descripcion: "Primera fase de los reportes del dashboard.",
+    foco: "Ya está en desarrollo y no figuraba en ningún tablero de la célula.",
   },
 ];
 
