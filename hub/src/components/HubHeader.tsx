@@ -10,6 +10,7 @@ type Profile = {
   nombre: string | null;
   email: string | null;
   is_super_admin: boolean;
+  is_stakeholder?: boolean;
   celulas?: { slug: string; ve_hub_completo: boolean } | null;
 };
 
@@ -54,7 +55,7 @@ export default function HubHeader({
         const p: Profile | null = data?.profile ?? null;
         setProfile(p);
         setLoaded(true);
-        const fullAccess = p?.is_super_admin || !!p?.celulas?.ve_hub_completo;
+        const fullAccess = p?.is_super_admin || p?.is_stakeholder || !!p?.celulas?.ve_hub_completo;
         if (fullAccess) {
           fetch("/api/celulas")
             .then((r) => r.json())
@@ -71,11 +72,12 @@ export default function HubHeader({
   async function handleLogout() {
     const supabase = createClient();
     await supabase.auth.signOut();
+    sessionStorage.removeItem("darwin-home-routed");
     router.push("/login");
     router.refresh();
   }
 
-  const fullAccess = !!(profile?.is_super_admin || profile?.celulas?.ve_hub_completo);
+  const fullAccess = !!(profile?.is_super_admin || profile?.is_stakeholder || profile?.celulas?.ve_hub_completo);
   const isSuperAdmin = !!profile?.is_super_admin;
 
   return (
@@ -104,6 +106,21 @@ export default function HubHeader({
                 background: "#fff", border: "1px solid var(--border)", borderRadius: 10,
                 boxShadow: "0 4px 16px rgba(0,0,0,0.08)", minWidth: 200, zIndex: 10, overflow: "hidden",
               }}>
+                {(profile?.is_super_admin || profile?.is_stakeholder) && (
+                  <a
+                    href="/resumen"
+                    onClick={() => setMenuOpen(false)}
+                    style={{
+                      display: "block", padding: "10px 14px", fontSize: 13,
+                      color: "var(--fg)", textDecoration: "none",
+                      background: currentSlug === "resumen" ? "var(--bg)" : "transparent",
+                      fontWeight: currentSlug === "resumen" ? 700 : 500,
+                      borderBottom: "1px solid var(--border)",
+                    }}
+                  >
+                    📊 Resumen ejecutivo
+                  </a>
+                )}
                 {otrasCelulas.map((c) => (
                   <a
                     key={c.slug}

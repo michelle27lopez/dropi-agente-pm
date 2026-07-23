@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 // GET — listar solicitudes de enriquecimiento de categoría (para cola de revisión)
 // Query params: status (default: pending), limit (default: 200)
 export async function GET(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json([], { status: 200 });
 
   const { searchParams } = new URL(req.url);
@@ -26,6 +30,9 @@ export async function GET(req: NextRequest) {
 // POST — crear una solicitud de enriquecimiento (supplier no encontró categoría adecuada)
 // Body: { product_name, requested_category, source, ai_top_suggestions? }
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase)
     return NextResponse.json({ error: "No Supabase client" }, { status: 500 });
 
@@ -65,6 +72,9 @@ export async function POST(req: NextRequest) {
 // PATCH — marcar solicitud como agregada / descartada
 // Body: { id, status, reviewed_by?, notes? }
 export async function PATCH(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase)
     return NextResponse.json({ error: "No Supabase client" }, { status: 500 });
 

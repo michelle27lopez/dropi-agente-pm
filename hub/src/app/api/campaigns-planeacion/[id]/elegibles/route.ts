@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { localListEligibleProducts } from "@/lib/local-store-planeacion";
 import { supabaseListEligibleProducts } from "@/lib/supabase-store-planeacion";
+import { requireUser } from "@/lib/require-auth";
 
 // Uso interno (detrás del login) — lista los links de "productos elegibles"
 // de todos los proveedores, para que el equipo los encuentre rápido desde
 // Resumen. La ruta pública de solo un proveedor vive en ./[token]/route.ts.
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const { id } = await params;
   const entries = (await supabaseListEligibleProducts(id)) ?? (await localListEligibleProducts(id));
   return NextResponse.json(

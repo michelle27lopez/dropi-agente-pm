@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { localUpdateSupplierStatus, localUpdateSupplierNote, SupplierStatus } from "@/lib/local-store-planeacion";
 import { supabaseUpdateSupplierStatus, supabaseUpdateSupplierNote } from "@/lib/supabase-store-planeacion";
+import { requireUser } from "@/lib/require-auth";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string; supplierId: string }> }) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const { id, supplierId } = await params;
   const body = await req.json();
   const { status, note } = body as { status?: SupplierStatus; note?: string };

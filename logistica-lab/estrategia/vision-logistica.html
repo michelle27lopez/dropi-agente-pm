@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logística como producto — Dropi · Q3 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#ffffff;--bg2:#f7f8fa;--bg3:#eef1f5;--line:#e2e6ec;
+  --ink:#11161d;--ink2:#46505e;--ink3:#7c8694;
+  --blue:#1d4ed8;--teal:#0d9488;--amber:#b45309;--red:#dc2626;--green:#15803d;
+  --blueB:#eff4ff;--tealB:#effbf9;--amberB:#fef6ec;--redB:#fef2f2;--greenB:#f0fbf3;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;font-size:15px;line-height:1.62}
+.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+.side{background:var(--bg2);border-right:1px solid var(--line);position:sticky;top:0;height:100vh;overflow-y:auto;padding:26px 16px}
+.brand{font-size:16px;font-weight:700;line-height:1.25}
+.brand small{display:block;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--ink3);font-weight:500;margin-top:6px}
+.side a{display:block;font-size:13px;color:var(--ink2);text-decoration:none;padding:7px 10px;border-radius:7px;margin-top:2px;border-left:2px solid transparent}
+.side a:hover{background:var(--bg3);color:var(--ink)}
+.side a.on{background:#fff;color:var(--blue);border-left-color:var(--blue);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.side .num{font-family:'IBM Plex Mono',monospace;color:var(--ink3);font-size:11px;margin-right:7px}
+.main{max-width:1000px}
+.top{border-bottom:1px solid var(--line);padding:40px 56px 30px;background:linear-gradient(180deg,var(--bg2),#fff)}
+.top h1{font-size:30px;font-weight:700;letter-spacing:-.5px;line-height:1.12}
+.top p{color:var(--ink2);margin-top:10px;max-width:720px}
+.top .upd{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);margin-top:14px}
+.inner{padding:20px 56px 100px}
+section{padding:38px 0;border-bottom:1px solid var(--line)}
+h2{font-size:23px;font-weight:700;letter-spacing:-.3px;scroll-margin-top:16px;margin-bottom:4px}
+h2 .n{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--teal);font-weight:600;margin-right:10px}
+.lead{color:var(--ink2);margin-bottom:18px;max-width:730px}
+h3{font-size:15px;font-weight:600;margin:24px 0 9px}
+p{margin-bottom:11px}
+ul{margin:8px 0 13px;padding-left:20px}li{margin-bottom:6px;color:var(--ink2)}
+b{color:var(--ink);font-weight:600}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px;margin:14px 0}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:460px}
+th{text-align:left;padding:10px 13px;background:var(--bg3);font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.4px;text-transform:uppercase;color:var(--ink3);font-weight:600;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:9px 13px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:var(--bg2)}
+td.name{color:var(--ink);font-weight:600}
+.m{font-family:'IBM Plex Mono',monospace;font-weight:500;font-variant-numeric:tabular-nums}
+.r{text-align:right}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:13px;margin:14px 0}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:11px;padding:16px;border-top:3px solid var(--c,var(--teal))}
+.kpi .v{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;color:var(--c,var(--teal));letter-spacing:-.5px}
+.kpi .l{font-size:12px;color:var(--ink2);margin-top:6px;line-height:1.4}
+.note{border-radius:9px;padding:13px 16px;margin:14px 0;font-size:13.5px;border:1px solid var(--line);background:var(--bg2)}
+.note b{color:var(--ink)}
+.note.blue{background:var(--blueB);border-color:#cdddfb}
+.note.green{background:var(--greenB);border-color:#bfe3c9}
+.note.amber{background:var(--amberB);border-color:#f0d9b5}
+.note.red{background:var(--redB);border-color:#f3c9c9}
+.pill{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;padding:2px 9px;border-radius:20px;font-weight:600}
+.p-ok{background:var(--greenB);color:var(--green)}.p-bad{background:var(--redB);color:var(--red)}.p-mid{background:var(--amberB);color:var(--amber)}
+.pipe{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0}
+.stage{flex:1;min-width:130px;border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:#fff;border-top:3px solid var(--sc,var(--ink3))}
+.stage .t{font-weight:600;font-size:13px;margin-bottom:5px}
+.stage .d{font-size:11.5px;color:var(--ink2);line-height:1.45}
+.stage .s{font-family:'IBM Plex Mono',monospace;font-size:10px;margin-top:8px;font-weight:600}
+.disc{border:1px solid var(--line);border-radius:11px;padding:18px 20px;margin:14px 0;background:#fff}
+.disc h4{font-size:15px;font-weight:700;margin-bottom:10px}
+.disc .row{display:grid;grid-template-columns:130px 1fr;gap:10px;font-size:13px;padding:6px 0;border-top:1px solid var(--line)}
+.disc .row:first-of-type{border-top:none}
+.disc .k{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);text-transform:uppercase;letter-spacing:.4px;padding-top:2px}
+.disc .val{color:var(--ink2)}
+.phase{border-left:3px solid var(--blue);padding:4px 0 4px 16px;margin:16px 0}
+.phase .ph{font-weight:700;font-size:14px}
+.phase .pw{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink3);margin-left:8px}
+@media(max-width:880px){.app{grid-template-columns:1fr}.side{position:static;height:auto}.inner,.top{padding-left:22px;padding-right:22px}.disc .row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<aside class="side">
+  <div class="brand">Logística como producto<small>Dropi · Q3 2026</small></div>
+  <a href="#resumen"><span class="num">01</span>Resumen</a>
+  <a href="#quees"><span class="num">02</span>Qué es la logística aquí</a>
+  <a href="#kpis"><span class="num">03</span>Cómo estamos hoy</a>
+  <a href="#data"><span class="num">04</span>Qué dice la data</a>
+  <a href="#etapas"><span class="num">05</span>La orden por etapas</a>
+  <a href="#prioridad"><span class="num">06</span>Por dónde empezar</a>
+  <a href="#roadmap"><span class="num">07</span>El camino (fases)</a>
+  <a href="#discovery"><span class="num">08</span>Lo que sigue explorando</a>
+  <a href="#medir"><span class="num">09</span>Qué falta para medir bien</a>
+  <a href="#pido"><span class="num">10</span>Qué necesito de Dirección</a>
+</aside>
+
+<main class="main">
+<div class="top">
+  <h1>Logística como producto</h1>
+  <p>Dónde estamos, qué nos dice la data y hacia dónde vamos con la orden. Somos dueños de la orden desde que se crea en Dropi hasta que llega al cliente.</p>
+  <div class="upd">Logistic Success · Colombia y multipaís · datos de mes cerrado, órdenes por mes</div>
+</div>
+<div class="inner">
+
+<!-- 01 RESUMEN -->
+<section id="resumen">
+  <h2><span class="n">01</span>Resumen</h2>
+  <p class="lead">La logística de Dropi funciona bien en lo que Dropi controla. El valor se pierde en dos momentos: antes de que la orden entre a la red del transportador, y cuando ya está en la calle y se devuelve.</p>
+  <div class="kpis">
+    <div class="kpi" style="--c:var(--blue)"><div class="v">59%</div><div class="l">de las órdenes creadas se entregan hoy (Colombia 62,5%). La meta de la compañía es 70%.</div></div>
+    <div class="kpi" style="--c:var(--red)"><div class="v">~700K</div><div class="l">órdenes al mes no llegan siquiera a entrar a la red (no se movilizan)</div></div>
+    <div class="kpi" style="--c:var(--red)"><div class="v">~823K</div><div class="l">órdenes movilizadas al mes se devuelven</div></div>
+    <div class="kpi" style="--c:var(--green)"><div class="v">~10h</div><div class="l">tarda Dropi en dejar la orden con el transportador. Rápido y confiable: este es el fuerte.</div></div>
+  </div>
+  <p>La entrega no cae por la operación de Dropi. Cae en <b>confirmación</b> (antes de la red) y en <b>devolución</b> (después). Todo lo que sigue explica esos dos huecos y qué hacemos con ellos.</p>
+</section>
+
+<!-- 02 QUE ES -->
+<section id="quees">
+  <h2><span class="n">02</span>Qué es la logística en Dropi</h2>
+  <p class="lead">La unidad de valor no es la guía ni el escaneo: es la orden que llega bien al cliente. La célula acompaña esa orden en todo su recorrido.</p>
+  <ul>
+    <li>Dropi no tiene flota propia masiva: <b>moviliza por su cuenta menos del 1%</b>. El negocio es orquestar transportadores terceros y cobrar contra entrega (COD).</li>
+    <li>Dos transportadores concentran la operación en Colombia: <b>Interrapidísimo (32%) y Envía (29%)</b> = 60% del volumen.</li>
+    <li>Una vez la orden entra a la red, todos los transportadores entregan parecido (72–77%). La diferencia grande no está en la última milla.</li>
+  </ul>
+  <div class="note blue">La logística toca la orden en seis etapas. En dos ya somos buenos. El trabajo está en las otras.</div>
+</section>
+
+<!-- 03 KPIS -->
+<section id="kpis">
+  <h2><span class="n">03</span>Cómo estamos hoy</h2>
+  <p class="lead">Dos indicadores mandan: cuántas órdenes creadas terminan entregadas, y en cuánto tiempo dejamos la orden con el transportador.</p>
+
+  <h3>Entrega sobre órdenes creadas — por país</h3>
+  <div class="tw"><table>
+    <thead><tr><th>País</th><th class="r">Órdenes/mes</th><th class="r">Movilizan</th><th class="r">Entregan (s/creadas)</th><th class="r">Falta para 70%</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Colombia</td><td class="m r">2.886.306</td><td class="m r">83,3%</td><td class="m r">62,5%</td><td class="m r">−7,5</td></tr>
+      <tr><td class="name">Guatemala</td><td class="m r">138.265</td><td class="m r">86,6%</td><td class="m r">62,7%</td><td class="m r">−7,3</td></tr>
+      <tr><td class="name">Ecuador</td><td class="m r">314.448</td><td class="m r">80,0%</td><td class="m r">57,8%</td><td class="m r">−12</td></tr>
+      <tr><td class="name">Chile</td><td class="m r">323.629</td><td class="m r">77,2%</td><td class="m r">53,7%</td><td class="m r">−16</td></tr>
+      <tr><td class="name">México</td><td class="m r">289.396</td><td class="m r">79,0%</td><td class="m r">43,4%</td><td class="m r">−27</td></tr>
+      <tr><td class="name">Argentina</td><td class="m r">19.652</td><td class="m r">87,9%</td><td class="m r">40,3%</td><td class="m r">−30</td></tr>
+      <tr><td class="name">Perú</td><td class="m r">1.310</td><td class="m r">64,8%</td><td class="m r">42,1%</td><td class="m r">−28</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Colombia es el 74% del volumen y el que está más cerca de la meta. <b>Ahí se pelea y se gana el 70%.</b> México y Argentina están muy abajo pero pesan poco, y además México hoy se mide mal (ver sección 09).</div>
+
+  <h3>Tiempo de la orden hasta el transportador — se mide como % que cumple menos de 24h</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Fase (lo que controla Dropi)</th><th class="r">Cumple &lt; 24h</th><th class="r">Se pasan de 24h</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Confirmación de la orden</td><td class="m r">85,5%</td><td class="m r">314.126</td></tr>
+      <tr><td class="name">Generación de guía</td><td class="m r">90,1%</td><td class="m r">324.089</td></tr>
+      <tr><td class="name">Preparación</td><td class="m r">89,9%</td><td class="m r">207.043</td></tr>
+      <tr><td class="name">Recogida por Dropi</td><td class="m r">81,7%</td><td class="m r">90.480</td></tr>
+      <tr><td class="name">Entrega al transportador</td><td class="m r">99,4%</td><td class="m r">6.123</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note green">En lo nuestro cumplimos entre 82% y 99%. Los que se pasan de 24h están sobre todo en <b>confirmación y recogida</b>. El tiempo grave viene después, y es del transportador: en el primer ofrecimiento al cliente solo el 31% ocurre en menos de 24h.</div>
+</section>
+
+<!-- 04 DATA -->
+<section id="data">
+  <h2><span class="n">04</span>Qué dice la data</h2>
+  <p class="lead">De cada 100 órdenes que se crean, 82 entran a la red y 59 terminan entregadas. Los 41 que se pierden se van en dos huecos.</p>
+
+  <h3>El recorrido, en órdenes por mes</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Momento</th><th class="r">Órdenes/mes</th><th class="r">% de creadas</th></tr></thead>
+    <tbody>
+      <tr><td class="name">Creadas</td><td class="m r">~3.860.000</td><td class="m r">100%</td></tr>
+      <tr><td class="name">Entran a la red (se movilizan)</td><td class="m r">~3.160.000</td><td class="m r">82%</td></tr>
+      <tr><td class="name">No entran a la red</td><td class="m r">~700.000</td><td class="m r">18%</td></tr>
+      <tr><td class="name">Se entregan</td><td class="m r">~2.290.000</td><td class="m r">59%</td></tr>
+      <tr><td class="name">Se devuelven</td><td class="m r">~823.000</td><td class="m r">21%</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Hueco 1 — se cae antes de la red (confirmación)</h3>
+  <ul>
+    <li>Las órdenes que entran por integración (Shopify) entran a la red el <b>66%</b>; las manuales, el <b>93%</b>. La integración trae datos sin revisar.</li>
+    <li>Unas <b>840.000 órdenes al mes de Shopify mueren en confirmación</b>. En más de la mitad (~428.000) el motivo es "otros" o queda en blanco: <b>no sabemos por qué se cayeron</b>.</li>
+    <li>Confirmar no es cuestión de rapidez, es de que ocurra: la orden que no se confirma se cancela el 51% de las veces.</li>
+  </ul>
+
+  <h3>Hueco 2 — se devuelve (ya en la calle)</h3>
+  <ul>
+    <li><b>~823.000 devoluciones al mes</b> (1 de cada 4 movilizadas). Colombia es más sana; México y Argentina, las peores.</li>
+    <li>El primer intento decide: entrega el 72–99%. Reintentar casi no recupera (cae a 10–40%).</li>
+    <li>En la misma zona, un transportador devuelve 20 a 27 puntos más que otro. Ejemplo Antioquia: Envía devuelve 16%, Interrapidísimo 43%.</li>
+    <li>La devolución es sobre todo de pago: contra entrega se devuelve 25%, prepago 1,3%.</li>
+  </ul>
+
+  <h3>Dónde entrega mejor y peor (Colombia)</h3>
+  <ul>
+    <li>Centro del país entrega bien: Quindío 81%, Boyacá 80%, Santander 78%.</li>
+    <li>Periferia entrega mal: Chocó 64%, Tumaco 56%, Buenaventura 65%. Ahí la devolución sube a 28–32%.</li>
+  </ul>
+
+  <h3>El volumen está en pocas cuentas</h3>
+  <ul>
+    <li><b>564 vendedores mueven el 47%</b> del volumen. A igual tamaño, unos entregan 34% y otros 90%: la gestión del vendedor pesa.</li>
+    <li>Subir a los ~282 vendedores grandes que están por debajo del promedio daría cerca de <b>287.000 entregas más</b>.</li>
+  </ul>
+</section>
+
+<!-- 05 ETAPAS -->
+<section id="etapas">
+  <h2><span class="n">05</span>La orden por etapas</h2>
+  <p class="lead">Seis etapas. En cada una: qué pasa, cuántas órdenes se pierden ahí, y si es un problema o no.</p>
+  <div class="pipe">
+    <div class="stage" style="--sc:var(--amber)"><div class="t">1. Creación</div><div class="d">Nace la orden (manual o integración). Por integración entra mucha sin revisar.</div><div class="s" style="color:var(--amber)">ORIGEN DEL PROBLEMA</div></div>
+    <div class="stage" style="--sc:var(--red)"><div class="t">2. Confirmación</div><div class="d">Se revisa dirección y datos. Aquí mueren ~840K al mes; la mitad sin saber por qué.</div><div class="s" style="color:var(--red)">HUECO</div></div>
+    <div class="stage" style="--sc:var(--green)"><div class="t">3. Alistamiento</div><div class="d">Guía, empaque. Rápido (~3–4h) y casi no pierde.</div><div class="s" style="color:var(--green)">SANO</div></div>
+    <div class="stage" style="--sc:var(--green)"><div class="t">4. Entrega al transportador</div><div class="d">La orden entra a la red. ~10h y casi no pierde. Nuestro fuerte.</div><div class="s" style="color:var(--green)">SANO</div></div>
+    <div class="stage" style="--sc:var(--red)"><div class="t">5. Reparto y entrega</div><div class="d">El transportador reparte. Se devuelve 1 de cada 4. El primer intento decide.</div><div class="s" style="color:var(--red)">HUECO</div></div>
+    <div class="stage" style="--sc:var(--red)"><div class="t">6. Novedades y devolución</div><div class="d">La novedad no tiene dueño; se recupera menos del 5%.</div><div class="s" style="color:var(--red)">SIN DUEÑO</div></div>
+  </div>
+  <div class="note">De seis etapas, dos ya funcionan bien (alistamiento y entrega al transportador). El trabajo está en confirmación, en el reparto y en la novedad.</div>
+</section>
+
+<!-- 06 PRIORIDAD -->
+<section id="prioridad">
+  <h2><span class="n">06</span>Por dónde empezar</h2>
+  <p class="lead">Se ordena por cuánto mueve la meta, qué tan barato es y qué tan claro está el dato. Con eso, el orden se decide solo.</p>
+  <div class="tw"><table>
+    <thead><tr><th>Orden</th><th>Apuesta</th><th>Qué hueco ataca</th><th>Órdenes en juego</th><th>Costo</th></tr></thead>
+    <tbody>
+      <tr><td class="m">1</td><td class="name">Saber por qué se cae la orden (motivo de cancelación)</td><td>Confirmación</td><td class="m">~428K ciegas hoy</td><td>bajo</td></tr>
+      <tr><td class="m">2</td><td class="name">Forzar la revisión de dirección en Shopify</td><td>Confirmación</td><td class="m">618K sin revisar</td><td>bajo</td></tr>
+      <tr><td class="m">3</td><td class="name">Ponerle dueño a la novedad</td><td>Novedad</td><td class="m">~946K novedades/mes</td><td>bajo</td></tr>
+      <tr><td class="m">4</td><td class="name">Transportador correcto por zona</td><td>Devolución</td><td class="m">~823K devol./mes</td><td>medio</td></tr>
+      <tr><td class="m">5</td><td class="name">Normalizar estados (medir bien)</td><td>Medición</td><td class="m">habilita México</td><td>medio</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note amber"><b>Empezamos por el motivo de cancelación.</b> Es lo más barato, no depende de los transportadores, y hoy no sabemos por qué se cae media fuga. No se puede arreglar lo que no se sabe por qué murió.</div>
+</section>
+
+<!-- 07 ROADMAP -->
+<section id="roadmap">
+  <h2><span class="n">07</span>El camino (fases)</h2>
+  <p class="lead">Primero medir bien, luego lo barato que ya mueve, luego lo que hay que construir. Máximo 2–3 cosas activas a la vez.</p>
+
+  <div class="phase"><span class="ph">Fase 0 · Ver claro</span><span class="pw">julio</span>
+    <p>Poner lista cerrada y obligatoria de motivos de cancelación. Pedir dos datos que faltan: el tiempo total hasta el transportador y el motivo real de la devolución. <b>Métrica: pasar de la mitad ciega al 100% de cancelaciones con motivo.</b></p>
+  </div>
+  <div class="phase"><span class="ph">Fase 1 · Ganancias rápidas</span><span class="pw">julio–agosto</span>
+    <p>Forzar la revisión de dirección en Shopify. Ponerle dueño y triaje a la novedad (pelear las que se recuperan, soltar las perdidas). <b>Métrica: más órdenes entran a la red · más novedades recuperadas.</b></p>
+  </div>
+  <div class="phase"><span class="ph">Fase 2 · Construcción</span><span class="pw">agosto–septiembre</span>
+    <p>Elegir el transportador que mejor entrega en cada zona. Normalizar estados para medir bien (sobre todo México). <b>Métrica: menos devolución por zona · estados homologados.</b></p>
+  </div>
+  <div class="phase"><span class="ph">Fase 3 · Lo más grande</span><span class="pw">septiembre en adelante</span>
+    <p>Same Day y pagos dentro del contra entrega. Dependen de terceros; se planean al cerrar el trimestre.</p>
+  </div>
+  <div class="note">Los proyectos ya aprobados (transportadora por zona, Same Day, prevención de novedades, normalización, validación de direcciones) entran todos en estas fases. No es trabajo nuevo: es ponerles orden.</div>
+</section>
+
+<!-- 08 DISCOVERY -->
+<section id="discovery">
+  <h2><span class="n">08</span>Lo que sigue explorando</h2>
+  <p class="lead">Tres frentes están abiertos. En cada uno: qué no sabemos todavía, qué haremos, qué impacto tendría y cómo lo comprobamos.</p>
+
+  <div class="disc">
+    <h4>Cancelaciones — por qué se cae la orden antes de la red</h4>
+    <div class="row"><div class="k">Qué no sabemos</div><div class="val">La mitad de las cancelaciones queda en "otros" o en blanco. No sabemos por qué se cae ~428K al mes.</div></div>
+    <div class="row"><div class="k">Qué haremos</div><div class="val">Lista cerrada y obligatoria de motivos al cancelar. Separar lo que se puede rescatar (duplicados ~67K, datos incompletos ~52K) de lo que no.</div></div>
+    <div class="row"><div class="k">Impacto</div><div class="val">Vuelve visible la mitad ciega de la fuga y permite recuperar órdenes que hoy se pierden sin razón.</div></div>
+    <div class="row"><div class="k">Cómo se comprueba</div><div class="val">% de cancelaciones con motivo real, y luego % de órdenes recuperadas.</div></div>
+  </div>
+
+  <div class="disc">
+    <h4>Novedad — se puede recuperar la orden cuando algo sale mal</h4>
+    <div class="row"><div class="k">Qué no sabemos</div><div class="val">Hoy nadie de Dropi gestiona la novedad; se "soluciona" sola hacia la devolución. Se recupera menos del 5%.</div></div>
+    <div class="row"><div class="k">Qué haremos</div><div class="val">Ponerle dueño y triaje: pelear las que sí se recuperan ("no se encuentra al cliente" recupera 55%, "se visita y no se logra" 41%) y soltar las perdidas ("se rehúsa a recibir" devuelve 95%).</div></div>
+    <div class="row"><div class="k">Impacto</div><div class="val">Sobre ~946K novedades al mes, recuperar la parte que hoy se abandona.</div></div>
+    <div class="row"><div class="k">Cómo se comprueba</div><div class="val">% de recuperación en las novedades que sí se pueden salvar.</div></div>
+  </div>
+
+  <div class="disc">
+    <h4>Direcciones — validar cómo funciona hoy y qué impacto tiene</h4>
+    <div class="row"><div class="k">Qué no sabemos</div><div class="val">La revisión de direcciones ya existe en el producto y suma +12 puntos de entrada a la red en Shopify, pero no se fuerza y no captura la ubicación real (solo 116 de 7,9M órdenes tienen coordenada). Falta validar de fondo cómo funciona y qué tanto sirve.</div></div>
+    <div class="row"><div class="k">Qué haremos</div><div class="val">Forzarla donde hoy se salta, y probar pedirle la ubicación al cliente por WhatsApp en las direcciones de riesgo.</div></div>
+    <div class="row"><div class="k">Impacto</div><div class="val">Hay 618K órdenes de Shopify sin revisar al mes; activarlas pone en juego cerca de 90K entregas.</div></div>
+    <div class="row"><div class="k">Cómo se comprueba</div><div class="val">Prueba A/B: activar la revisión en un grupo y comparar cuántas entran a la red y se entregan.</div></div>
+  </div>
+</section>
+
+<!-- 09 MEDIR -->
+<section id="medir">
+  <h2><span class="n">09</span>Qué falta para medir bien</h2>
+  <p class="lead">Hay un problema de fondo: no toda la operación se mide igual, y falta cerrar algunos datos antes de comprometer números.</p>
+  <ul>
+    <li><b>Estados sin homologar.</b> Cada transportador nombra sus estados distinto y algunos no se traducen. Por eso México se ve peor de lo que es y hay guías que no cierran. Sin esto no se puede medir bien la entrega en varios países.</li>
+    <li><b>Falta el tiempo total hasta el transportador como un solo número.</b> Hoy lo tenemos por tramo (confirmación, guía, recogida), no el acumulado de la orden completa.</li>
+    <li><b>Falta el motivo real de la devolución.</b> Sin él no sabemos si la culpa es del transportador o de la zona.</li>
+    <li><b>El motivo de cancelación es texto libre.</b> La mitad queda en "otros", así que no podemos leer por qué se cae media fuga. Este es el primer frente del camino.</li>
+  </ul>
+</section>
+
+<!-- 10 PIDO -->
+<section id="pido">
+  <h2><span class="n">10</span>Qué necesito de Dirección</h2>
+  <p class="lead">Tres cosas para dejar todo alineado y arrancar.</p>
+  <ul>
+    <li>Confirmar que la meta de entrega se mide <b>sobre órdenes creadas</b> (así, el punto de partida real es 59%, no 72%).</li>
+    <li>Confirmar que arrancamos por <b>el motivo de cancelación</b> como primer frente.</li>
+    <li>Definir juntos la <b>meta del trimestre</b> una vez cerrada la medición, y el orden de los proyectos ya aprobados.</li>
+  </ul>
+</section>
+
+</div>
+</main>
+</div>
+</body>
+</html>

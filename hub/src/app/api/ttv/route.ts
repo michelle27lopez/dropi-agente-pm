@@ -1,8 +1,14 @@
 // TTV dynamic dashboard metrics api endpoint
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) {
     return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
   }
@@ -319,6 +325,9 @@ const ALLOWED_TABLES = [
 type AllowedTable = (typeof ALLOWED_TABLES)[number];
 
 export async function PATCH(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) {
     return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
   }

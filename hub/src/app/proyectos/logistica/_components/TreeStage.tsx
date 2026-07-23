@@ -1,0 +1,41 @@
+import type { CSSProperties } from "react";
+import Link from "next/link";
+import type { Etapa, Proyecto } from "@/app/proyectos/logistica/_lib/data";
+
+// Una rama del árbol: la etapa como nodo en el tronco + sus proyectos como hojas.
+// Cada hoja lleva a la ficha del proyecto.
+export default function TreeStage({
+  etapa,
+  proyectos,
+  last,
+}: {
+  etapa: Etapa;
+  proyectos: Proyecto[];
+  last: boolean;
+}) {
+  const style = { ["--sc"]: etapa.color } as CSSProperties;
+  return (
+    <div className="branch" style={style}>
+      <div className="spine">
+        <span className="node">{etapa.n}</span>
+        {!last && <span className="line" />}
+      </div>
+      <div className="branch-body">
+        <div className="branch-head">
+          <span className="stage-name">{etapa.nombre}</span>
+          <span className="stage-sub">{etapa.sub}</span>
+        </div>
+        {etapa.fuga && <div className={`fuga ${etapa.fuga.tono}`}>{etapa.fuga.label}</div>}
+        <div className="leaves">
+          {proyectos.length === 0 && <span className="chip empty">sin proyecto</span>}
+          {proyectos.map((p) => (
+            <Link key={p.slug} className="chip leaf" href={`/proyecto/${p.slug}`}>
+              {p.destacado ? "⭐ " : ""}
+              {p.nombre}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 // Canonical Dropi taxonomy L1 > L2 > L3 > L4
 // Source of truth: page.tsx DROPI_COMPLETE_TAXONOMY
@@ -169,6 +170,9 @@ function buildId(l1: string, l2: string, l3: string, l4: string): string {
 
 // GET — count seeded Dropi categories
 export async function GET() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ count: 0 });
   const { count, error } = await supabase
     .from("dropi_categories")
@@ -179,6 +183,9 @@ export async function GET() {
 
 // POST — seed all L4 leaf nodes from DROPI_TAXONOMY
 export async function POST() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase)
     return NextResponse.json({ error: "No Supabase client" }, { status: 500 });
 
