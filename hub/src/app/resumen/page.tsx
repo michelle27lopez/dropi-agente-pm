@@ -176,8 +176,6 @@ function CelulaCard({ celula }: { celula: Celula }) {
         <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", margin: 0 }}>{celula.nombre}</h2>
         <a href={`/celula/${celula.slug}`} style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}>Ver →</a>
       </div>
-      {celula.lead && <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 14 }}>Lead: {celula.lead}</p>}
-
       <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: riesgos.length ? 18 : 0 }}>
         <span style={{ fontSize: 11, fontWeight: 700, color: "var(--fg)", background: "var(--bg)", borderRadius: 999, padding: "3px 9px" }}>
           {celula.proyectos.length} proyecto{celula.proyectos.length === 1 ? "" : "s"}

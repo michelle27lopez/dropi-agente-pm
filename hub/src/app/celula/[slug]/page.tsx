@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
@@ -97,13 +97,11 @@ function weeklyToItem(semana: { date: string; label: string }): Item {
 
 export default function CelulaHomePage() {
   const params = useParams<{ slug: string }>();
-  const router = useRouter();
   const [celula, setCelula] = useState<CelulaHome | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [launchLens, setLaunchLens] = useState(false);
   const [form, setForm] = useState({ name: "", summary: "" });
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -154,11 +152,6 @@ export default function CelulaHomePage() {
     setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, data] } : prev);
     setForm({ name: "", summary: "" });
     setShowForm(false);
-
-    if (launchLens) {
-      const code = data.project_code ? data.project_code.toLowerCase() : data.id;
-      router.push(`/proyectos/${code}/discovery`);
-    }
   }
 
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
@@ -466,7 +459,7 @@ export default function CelulaHomePage() {
                 ) : (
                   <>
                     <button
-                      onClick={() => { setShowForm(true); setLaunchLens(false); setFormError(null); }}
+                      onClick={() => { setShowForm(true); setFormError(null); }}
                       style={{
                         fontSize: 12, fontWeight: 700, color: "var(--dropi)",
                         background: "none", border: "1px solid var(--border)", borderRadius: 8,
@@ -474,16 +467,6 @@ export default function CelulaHomePage() {
                       }}
                     >
                       + Proyecto vacío
-                    </button>
-                    <button
-                      onClick={() => { setShowForm(true); setLaunchLens(true); setFormError(null); }}
-                      style={{
-                        fontSize: 12, fontWeight: 700, color: "#fff",
-                        background: "var(--dropi)", border: "none", borderRadius: 8,
-                        padding: "6px 12px", cursor: "pointer",
-                      }}
-                    >
-                      🚀 Iniciar con Lente B=MAP
                     </button>
                   </>
                 )}
@@ -532,7 +515,7 @@ export default function CelulaHomePage() {
                   opacity: submitting ? 0.7 : 1, alignSelf: "flex-start",
                 }}
               >
-                {submitting ? "Creando…" : launchLens ? "Crear e Iniciar Lente B=MAP 🚀" : "Crear proyecto"}
+                {submitting ? "Creando…" : "Crear proyecto"}
               </button>
             </form>
           )}
