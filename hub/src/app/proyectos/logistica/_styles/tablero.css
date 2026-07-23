@@ -1555,3 +1555,88 @@ a.chip:hover { border-color: var(--brand); color: var(--brand); }
   .hero h1 { font-size: 23px; }
   .branch { gap: 14px; }
 }
+
+/* ── Registro de iniciativas · badges, links y ventanas tentativas ──────────
+   `.badge` se usaba en la ficha de proyecto desde el principio pero NUNCA se
+   definió, así que los tres ejes salían como texto suelto. Aquí quedan los
+   estilos base + los tres ejes (tipo · fase · handoff) + el bloqueo. */
+.badge {
+  display: inline-flex; align-items: center; font-size: 11px; font-weight: 700;
+  letter-spacing: .3px; padding: 4px 10px; border-radius: 999px;
+  background: var(--soft); border: 1px solid var(--border); color: var(--muted);
+  white-space: nowrap;
+}
+.badge.b-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.badge.b-warn { background: #fdeaef; border-color: #f5c2ce; color: #a3143a; }
+.badge.b-phase { background: #eef2ff; border-color: #d6def8; color: #3a45a8; }
+
+/* Tipo: qué ES la iniciativa. El color va de "no existe" a "ya está". */
+.b-tipo.t-Idea         { background: #f4f4f6; border-color: #e2e2e8; color: #6b7280; }
+.b-tipo.t-Oportunidad  { background: #f3ecfd; border-color: #e0d1fa; color: #6b3fc0; }
+.b-tipo.t-Experimento  { background: #fdf1e0; border-color: #f7ddb6; color: #a15c00; }
+.b-tipo.t-Proyecto     { background: #eaf1ff; border-color: #cfdcfb; color: #1e50c0; }
+.b-tipo.t-Lanzamiento  { background: #e7f7ee; border-color: #c2e8d3; color: #1b7d3f; }
+
+/* Handoff: si TI ya puede tomarlo. */
+.b-handoff.h-No-aplica          { background: var(--soft); color: var(--muted); }
+.b-handoff.h-Pendiente          { background: #fdf1e0; border-color: #f7ddb6; color: #a15c00; }
+.b-handoff.h-Listo-para-handoff { background: #e0f4fd; border-color: #b9e3f6; color: #06699a; }
+.b-handoff.h-Handoff-hecho      { background: #e7f7ee; border-color: #c2e8d3; color: #1b7d3f; }
+
+.detail-bloqueo {
+  font-size: 14px; color: #7a1029; line-height: 1.55; background: #fdeaef;
+  border-left: 3px solid var(--red, #d3244f); border-radius: 8px;
+  padding: 12px 14px; margin-bottom: 18px;
+}
+.detail-bloqueo b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
+
+/* Enlaces de una iniciativa (Jira · Figma · prototipo · doc · Drive). */
+.lnks { margin: 12px 0 4px; }
+.lnks-t { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 6px; }
+.lnks-row { display: flex; flex-wrap: wrap; gap: 7px; }
+.lnk {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600;
+  color: var(--brand); background: var(--accent-soft); border: 1px solid #ffd9bf;
+  padding: 6px 11px; border-radius: 999px;
+}
+.lnk:hover { background: #ffe6d3; }
+.lnk-ic { font-size: 12px; }
+/* Hueco visible a propósito: el pendiente se ve, no se esconde. */
+.lnk-falta {
+  color: var(--muted); background: repeating-linear-gradient(45deg, #fafafc, #fafafc 6px, #f2f2f6 6px, #f2f2f6 12px);
+  border: 1px dashed var(--border); cursor: default;
+}
+.lnk-falta em { font-style: normal; font-size: 10.5px; font-weight: 700; opacity: .75; }
+
+/* Lista del registro. */
+.ini-nota { font-size: 12.5px; color: var(--muted); margin: -6px 0 12px; }
+.ini-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+.ini {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; box-shadow: var(--shadow);
+}
+.ini-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+.ini-nombre { font-size: 15px; font-weight: 800; color: var(--text); margin-right: 4px; }
+.ini-nombre:hover { color: var(--brand); }
+.ini-desc { font-size: 13.5px; color: #39415a; line-height: 1.5; margin: 0 0 6px; }
+.ini-bloqueo { font-size: 12.5px; color: #a3143a; background: #fdeaef; border-radius: 8px; padding: 8px 11px; margin: 0 0 6px; line-height: 1.45; }
+.ini-faltan { font-size: 11.5px; color: var(--muted); margin: 8px 0 0; }
+.ini-alert {
+  display: flex; gap: 12px; align-items: flex-start; background: #eef2ff; border: 1px solid #d6def8;
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 26px;
+}
+.ini-alert strong { display: block; font-size: 13.5px; margin-bottom: 3px; }
+.ini-alert p { font-size: 12.5px; color: #39415a; line-height: 1.5; margin: 0; }
+
+.chip-tipo { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: .4px; opacity: .6; margin-left: 6px; }
+.exp-proj-link:hover { color: var(--brand); }
+
+/* Cronograma: ventana planeada pero NO activa hoy. Punteada para que no se
+   lea como trabajo en curso — esa confusión era la contradicción entre el
+   Gantt y el weekly (Same Day "activo" vs. "parqueado"). */
+.cr-tent { opacity: .55; background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.5), rgba(255,255,255,.5) 5px, transparent 5px, transparent 10px); border-style: dashed !important; }
+.cr-row-tent .cr-label-col strong { opacity: .85; }
+.cr-estado-hoy { display: inline-block; margin-left: 6px; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: #e7f7ee; color: #1b7d3f; }
+.cr-estado-hoy.tent { background: #f4f4f6; color: #6b7280; }
+.cr-estado-hoy.bloq { background: #fdeaef; color: #a3143a; }
+.cr-leg.lg-tent::before { background: repeating-linear-gradient(45deg, #c9cde0, #c9cde0 3px, transparent 3px, transparent 6px); }

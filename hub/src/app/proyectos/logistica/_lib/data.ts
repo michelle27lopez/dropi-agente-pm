@@ -4,7 +4,19 @@
 // Datos fijos por ahora; en Fase 2 se mueve a Supabase.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { RPP_BASE_URL } from "@/lib/rpp";
+
 const JIRA = "https://dropi-it.atlassian.net/browse/";
+
+// Prototipo en el Rapid Prototype (repo dropi-prototypes, Angular). En prod
+// resuelve a dropitesters.co; en local al `ng serve` en :4200 — por eso se
+// construye con RPP_BASE_URL y no con la URL escrita a mano.
+//
+// ⚠️ Solo enlazar rutas que estén en `main` de dropi-prototypes: es lo que se
+// despliega. Una ruta que vive solo en una rama da 404 en dropitesters.co.
+function rpp(ruta: string) {
+  return `${RPP_BASE_URL}/${ruta}`;
+}
 export function jiraUrl(ticket?: string) {
   return ticket ? JIRA + ticket : undefined;
 }
@@ -138,21 +150,72 @@ export const etapas: Etapa[] = [
   { n: 6, nombre: "Novedad / Posventa", sub: "Recuperación y recompra", color: "#a855f7", fuga: { label: "Fuga ④ · novedades sin recuperar", tono: "alerta" } },
 ];
 
-// ── Proyectos, clavados a su etapa ───────────────────────────────────────────
-export type Fase = "Discovery" | "Definición" | "Ejecución" | "Beta" | "Represado";
+// ── Registro único de iniciativas, clavadas a su etapa ───────────────────────
+//
+// Antes había un solo enum `fase` que mezclaba tres cosas distintas (qué es,
+// en qué punto va, y si está bloqueado), y por eso el tablero se contradecía
+// con el cronograma y con el weekly. Ahora son TRES ejes explícitos, los
+// mismos que ya usa Darwin en Supabase (`projects.type` / `status` /
+// `handoff_status`, ver hub/supabase/016_darwin_core.sql y
+// 031_darwin_celula_logistica.sql):
+//
+//   tipo    → QUÉ es (Idea · Oportunidad · Experimento · Proyecto · Lanzamiento)
+//   fase    → DÓNDE va dentro de su ciclo
+//   handoff → si TI ya puede tomarlo
+//   bloqueo → por qué NO avanza (nunca se codifica como si fuera una fase)
+//
+// `codigo` es el LOG-XXX de Supabase: es la llave para cruzar este tablero con
+// /celula/logistica. Si un proyecto no tiene código todavía, es que aún no está
+// registrado en Darwin — eso mismo es un pendiente visible.
+export type TipoIniciativa = "Idea" | "Oportunidad" | "Experimento" | "Proyecto" | "Lanzamiento";
+export type FaseIniciativa =
+  | "Backlog"
+  | "Research"
+  | "Discovery"
+  | "Definición"
+  | "Diseño"
+  | "Listo para handoff"
+  | "En desarrollo"
+  | "Beta"
+  | "Lanzado";
+export type Handoff = "No aplica" | "Pendiente" | "Listo para handoff" | "Handoff hecho";
+
+// Un link es un link: Jira, Figma, prototipo, doc E2E, carpeta de Drive. Todo
+// lo que exista de una iniciativa cuelga de aquí para que sea alcanzable desde
+// cualquier vista (mapa, ficha, registro, experimentos, cronograma).
+export type LinkTipo = "jira" | "figma" | "prototipo" | "poc" | "doc" | "drive" | "tablero";
+export type LinkRef = { tipo: LinkTipo; label: string; href: string; falta?: boolean };
+
+export const LINK_ICONO: Record<LinkTipo, string> = {
+  jira: "🎫", figma: "🎨", prototipo: "🖥️", poc: "🧪", doc: "📄", drive: "📁", tablero: "🧭",
+};
+
 export type Proyecto = {
   nombre: string;
   slug: string;
+  codigo?: string; // LOG-XXX en Supabase (undefined = no registrado en Darwin)
   etapa: string;
-  fase: Fase;
+  tipo: TipoIniciativa;
+  fase: FaseIniciativa;
+  handoff: Handoff;
+  bloqueo?: string;
   ticket?: string;
   destacado?: boolean;
   descripcion: string;
   foco: string;
+  links?: LinkRef[];
+  experimentos?: string[]; // slugs de `experimentos` — relación explícita, no adivinada
 };
 
 export function proyectoPorSlug(slug: string) {
   return proyectos.find((p) => p.slug === slug);
+}
+
+// Link de Jira construido desde el ticket — no necesita la API de Jira, solo la
+// clave. Se antepone a los links propios de cada iniciativa.
+export function linksDe(p: Proyecto): LinkRef[] {
+  const jira = p.ticket ? [{ tipo: "jira" as const, label: p.ticket, href: JIRA + p.ticket }] : [];
+  return [...jira, ...(p.links ?? [])];
 }
 
 // Orden = prioridad de trabajo, derivada del roadmap Q3 (estrategia/roadmap-q3-logistica.md):
@@ -160,99 +223,221 @@ export function proyectoPorSlug(slug: string) {
 // NO es orden por cadena de valor (ese es el eje del mapa /mapa). Ajustar aquí si cambia la prioridad.
 export const proyectos: Proyecto[] = [
   {
-    nombre: "Movilización: rescatar confirmación (SHOP)",
+    nombre: "Autoconfirmación de órdenes (movilización)",
     slug: "movilizacion",
-    etapa: "Confirmación", fase: "Discovery", ticket: "PRM-1497", destacado: true,
-    descripcion: "Rescatar las órdenes que se crean pero no entran a la red por fallar la confirmación en integraciones.",
-    foco: "Fuga #1 (apuesta 2, Fase 1). 317K órdenes >24h en confirmar (prom. 11,18h). Experimento: autoconfirmación por madurez + instrumentar motivo de cancelación.",
+    codigo: "LOG-001",
+    etapa: "Confirmación", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
+    ticket: "PRM-1497", destacado: true,
+    descripcion:
+      "Confirmar automáticamente las órdenes de los dropshippers maduros, para que dejen de quedarse fuera de la red esperando una acción manual.",
+    foco: "Fuga #1. 317K órdenes >24h en confirmar (prom. 11,18h). Se valida con experimento antes de comprometer desarrollo; el handoff a TI es condicional al resultado.",
+    links: [
+      { tipo: "prototipo", label: "Simulador de reglas (aquí en el tablero)", href: "/proyectos/logistica/experimentos/autoconfirmacion" },
+      // El prototipo RPP existe (old/configuraciones/configuracion-de-tienda,
+      // commit 8d2bd14) pero vive SOLO en la rama
+      // wireframe/DROP-configuracion-pedidos-autoconfirmacion. Hasta que se
+      // mergee a main no está en dropitesters.co, así que enlazarlo daría 404.
+      { tipo: "prototipo", label: "RPP · Configuración de tienda (falta merge a main)", href: "", falta: true },
+    ],
+    experimentos: ["autoconfirmacion"],
   },
   {
-    nombre: "Dirección confiable + geo",
-    slug: "direccion-geo",
-    etapa: "Confirmación", fase: "Discovery", ticket: "PRM-91", destacado: true,
-    descripcion: "Capturar y validar la dirección/ubicación del comprador para prevenir y recuperar novedades.",
-    foco: "Fase 1 (forzar validación en SHOP). Dos hermanas: prevención (capturar ubicación) + recuperación (reintento con ubicación).",
+    nombre: "Autogeneración de guías",
+    slug: "autogeneracion-guias",
+    etapa: "Despacho", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
+    ticket: "PRM-1469",
+    descripcion:
+      "Al confirmar la orden, generar la guía automáticamente para que el alistamiento no espere una acción manual más.",
+    foco: "Hermano de autoconfirmación: ataca la fase 'Generación de guía' (10,37h prom.). No es una pantalla aparte — es una pestaña de la MISMA configuración, pero vista desde el PERFIL PROVEEDOR (el de autoconfirmación es el del dropshipper). Listo para probar; beneficia a proveedores de alto volumen. NO registrado todavía en Darwin (sin código LOG).",
+    links: [
+      // Misma pantalla que autoconfirmación (old/configuraciones/configuracion-de-tienda),
+      // otra pestaña y otro perfil. Igual que aquella, espera el merge a main.
+      { tipo: "prototipo", label: "RPP · Config. de tienda · perfil proveedor (falta merge a main)", href: "", falta: true },
+    ],
+    experimentos: ["autogeneracion-guias"],
   },
   {
-    nombre: "Dueño y triaje de la novedad",
-    slug: "novedad-triaje",
-    etapa: "Novedad / Posventa", fase: "Discovery", ticket: "PRM-1512",
-    descripcion: "Dar dueño, SLA y triaje por motivo a las novedades para recuperar la orden.",
-    foco: "Apuesta 4 (Fase 1, PRM-1512 a finalizar). Fuga ④. Capa transversal + posventa (recompra/garantía).",
+    nombre: "Vigía — extensión sobre el módulo de órdenes",
+    slug: "vigia",
+    etapa: "Generación", tipo: "Experimento", fase: "Research", handoff: "No aplica",
+    descripcion:
+      "Una extensión de Chrome que lee las guías del módulo de órdenes y le anticipa al usuario el resultado probable, para que corrija antes de que la orden se caiga.",
+    foco: "Cruza las fugas ② devolución y ④ novedad porque actúa ANTES del desenlace. Métrica todavía por definir con datos. Sin ticket ni código LOG.",
+    links: [{ tipo: "prototipo", label: "Prototipo de la extensión", href: "", falta: true }],
+    experimentos: ["vigia"],
   },
   {
-    nombre: "Torre de control / Tiempo por fases",
-    slug: "torre-control",
-    etapa: "Tránsito", fase: "Discovery",
-    descripcion: "Medir el tiempo de la orden por fases (F1→F5) para ver dónde se estanca.",
-    foco: "Fase 0 · enabler que desbloquea medir todo. Habilitador del KPI de tiempo. Detecta órdenes estancadas y da ETA.",
+    nombre: "Recolección proactiva",
+    slug: "recoleccion-proactiva",
+    etapa: "Despacho", tipo: "Experimento", fase: "Research", handoff: "No aplica",
+    descripcion:
+      "Que Dropi programe la recolección a la transportadora en vez de esperarla: saber qué está listo, quién recoge y quién no recogió.",
+    foco: "Conecta con la fase 'Recogido por Dropi' (8,28h, cumplimiento 80,64% — el peor de la ruta Dropi). Ya hay prototipo: mapa de guías preparadas sin recoger por territorio DANE, con datos mock (falta la respuesta de Data sobre cobertura por municipio). Sin ticket ni código LOG.",
+    links: [
+      { tipo: "prototipo", label: "Control de recolecciones", href: "/proyectos/logistica/recolecciones" },
+      { tipo: "doc", label: "Hallazgos de recolecciones (Growth Ops)", href: "", falta: true },
+    ],
+    experimentos: ["recoleccion-proactiva"],
   },
   {
     nombre: "Selección inteligente de transportadoras",
     slug: "seleccion-transportadoras",
-    etapa: "Generación", fase: "Ejecución", ticket: "PRM-1513",
+    codigo: "LOG-004",
+    etapa: "Generación", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
+    ticket: "PRM-1513",
+    bloqueo:
+      "Sin acceso a Chronos para crear las tablas que faltan → el PoC no se puede volver a levantar en la cuenta de AWS de IA. Juan Felipe Cubillos coordina los accesos con Jaime.",
     descripcion: "Elegir automáticamente la mejor transportadora por zona para bajar la devolución y mejorar la entrega.",
-    foco: "Apuesta 3 (Fase 2). Ranking carrier × zona (POC 72%, gate Maria Ossa). Juan = Carrier Ops.",
+    foco: "Ranking carrier × zona (POC 72%). PM: Kate Pencue; Juan actúa como Carrier Ops. Épica dev DROP-17946. Δ 20–27 pp de devolución entre carriers en la misma zona. Es el único con documentación completa.",
+    links: [
+      { tipo: "poc", label: "PoC en AWS (cuenta de IA)", href: "", falta: true },
+      { tipo: "figma", label: "Diseño en Figma", href: "", falta: true },
+      { tipo: "doc", label: "Documentación completa", href: "", falta: true },
+    ],
+    experimentos: ["ruteo-carrier-zona"],
   },
   {
     nombre: "Normalización de estados",
     slug: "normalizacion-estados",
-    etapa: "Tránsito", fase: "Represado", ticket: "PRM-1297",
+    codigo: "LOG-007",
+    etapa: "Tránsito", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
+    ticket: "PRM-1297", destacado: true,
     descripcion: "Homologar los estados del carrier para poder medir bien (sin-cierre, tiempo por fases).",
-    foco: "Apuesta 5 (Fase 2, habilita medir MX). Represado. Pre-requisito de medición.",
-  },
-  {
-    nombre: "Reducir devoluciones (COD)",
-    slug: "devoluciones-cod",
-    etapa: "Entrega / Devolución", fase: "Discovery", ticket: "PRM-1523",
-    descripcion: "Reducir la devolución atacándola DENTRO del COD (pago/gestión), nunca empujando prepago.",
-    foco: "Fuga ②. Score de riesgo + triaje por motivo + anticipo/ConfioPagos.",
-  },
-  {
-    nombre: "Same Day",
-    slug: "same-day",
-    etapa: "Despacho", fase: "Ejecución", ticket: "PRM-1366", destacado: true,
-    descripcion: "Entrega el mismo día para bodegas propias y Veloces.",
-    foco: "Fase 3 (terceros). MVP: flag SD + hora de corte + validación geo + selección guiada. Épica PROD-1127.",
+    foco: "Prioridad #1 del Delivery Roadmap (WIP = 1). Discovery levantado con datos reales (133.555 órdenes / 52.636 guías CO). Catálogo v0.1: crudo → homologado(26) → fase → vista cliente(8). Colombia primero, luego países.",
+    links: [{ tipo: "tablero", label: "Mapa de estados interactivo", href: "/proyectos/logistica/normalizacion-estados" }],
   },
   {
     nombre: "Parametrización de tarifas",
     slug: "tarifas",
-    etapa: "Generación", fase: "Definición",
+    codigo: "LOG-006",
+    etapa: "Generación", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
+    ticket: "PRM-1362",
+    bloqueo: "Capacidad de TI: el dev está en el cambio de moneda de Venezuela (cierra jul). No es un bloqueo de producto — el discovery y el doc E2E están cerrados.",
     descripcion: "Parametrizar el costo por orden (fletes) de forma clara y automática.",
-    foco: "Discovery completo, doc E2E rehecho. BLOQUEADA tras la prioridad de Venezuela en TI.",
+    foco: "OKR 3 de compañía. Prototipo RPP construido (3 vistas). ⚠️ El doc E2E todavía necesita ajuste — no está listo para entregar tal cual. Espera slot de desarrollo.",
+    links: [
+      { tipo: "prototipo", label: "RPP · Parametrizar tarifas", href: rpp("old/parametrizar-tarifas") },
+      { tipo: "prototipo", label: "RPP · Tarifas industrial", href: rpp("old/parametrizar-tarifas-industrial") },
+      { tipo: "doc", label: "RPP · Docs de tarifas", href: rpp("old/parametrizar-tarifas-docs") },
+      { tipo: "figma", label: "Diseño en Figma", href: "", falta: true },
+      { tipo: "doc", label: "Doc E2E (falta ajustar)", href: "", falta: true },
+    ],
+  },
+  {
+    nombre: "Parametrización de fulfillment",
+    slug: "fulfillment",
+    etapa: "Despacho", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
+    ticket: "PRM-1446", destacado: true,
+    bloqueo: "Capacidad de TI (cola de dev) + negociación de la mesa logística.",
+    descripcion: "Parametrizar el cobro de fulfillment con sus dos esquemas (mensual y diario).",
+    foco: "El de mayor impacto declarado: +$380M COP/mes en Colombia desde el mes siguiente a su salida. Prototipo RPP construido (PROD-648, fase 2 de cobros). ⚠️ El doc E2E todavía necesita ajuste. NO registrado en Darwin (sin código LOG) pese a estar listo.",
+    links: [
+      { tipo: "prototipo", label: "RPP · Parametrizar fulfillment", href: rpp("old/fulfillment/parametrizar") },
+      { tipo: "figma", label: "Diseño en Figma", href: "", falta: true },
+      { tipo: "doc", label: "Doc E2E (falta ajustar)", href: "", falta: true },
+    ],
+  },
+  {
+    nombre: "Same Day",
+    slug: "same-day",
+    codigo: "LOG-005",
+    etapa: "Despacho", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    ticket: "PRM-1366",
+    bloqueo: "Parqueado por WIP = 1 (Normalización de estados es la iniciativa activa). La ventana del cronograma es tentativa.",
+    descripcion: "Entrega el mismo día para bodegas propias y Veloces.",
+    foco: "MVP: flag SD + hora de corte + validación geo + selección guiada. Épica PROD-1127. Riesgo vivo: hoy con Veloces salen guías same day sin validación geográfica (Cali→Santa Marta).",
+    links: [{ tipo: "figma", label: "Board de discovery (Michelle López)", href: "", falta: true }],
   },
   {
     nombre: "Guías reemplazatorias (Ecom Scanner)",
     slug: "guias-reemplazatorias",
-    etapa: "Novedad / Posventa", fase: "Beta", ticket: "PRM-745",
+    codigo: "LOG-009",
+    etapa: "Novedad / Posventa", tipo: "Lanzamiento", fase: "Beta", handoff: "Handoff hecho",
+    ticket: "PRM-745",
     descripcion: "Generar guías cuando el carrier no lee el código de barras (Ecom Scanner).",
-    foco: "Casi cerrado · en beta: Interrap, Coordinadora y TCC.",
+    foco: "Ya no es discovery: está en lanzamiento con Laura (comunicación), operativo en Interrapidísimo, Coordinadora y TCC. Monitoreo de 3 semanas antes del despliegue global.",
   },
   {
     nombre: "Notificaciones prevención de devoluciones",
     slug: "notificaciones-devoluciones",
-    etapa: "Novedad / Posventa", fase: "Ejecución", ticket: "PRM-1512",
+    etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "En desarrollo", handoff: "Handoff hecho",
+    ticket: "PRM-1294",
     descripcion: "Avisar al comprador para prevenir la devolución antes de que ocurra.",
-    foco: "Por finalizar, alinear con Seller Success.",
+    foco: "Por finalizar, alinear con Seller Success. ⚠️ El ticket estaba duplicado con 'Dueño y triaje de la novedad' (ambos apuntaban a PRM-1512) — verificar cuál es el correcto antes de publicar.",
+  },
+  {
+    nombre: "Validación y normalización de direcciones",
+    slug: "validacion-direcciones",
+    codigo: "LOG-002",
+    etapa: "Confirmación", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    ticket: "PRM-91",
+    bloqueo: "Es un proyecto de plataforma/TI, no de la célula: la célula aporta el discovery y el experimento, la construcción es de TI.",
+    descripcion: "Normalizar y validar la dirección en el momento de crearla, a nivel de plataforma.",
+    foco: "Delivery Backlog EJECUTAR. Discovery del taller 24-jun. Está registrado en Darwin (LOG-002) pero no aparecía en este tablero.",
+  },
+  {
+    nombre: "Dirección confiable + geo",
+    slug: "direccion-geo",
+    codigo: "LOG-003",
+    etapa: "Confirmación", tipo: "Oportunidad", fase: "Discovery", handoff: "No aplica",
+    descripcion: "Capturar y validar la ubicación del comprador para prevenir y recuperar novedades.",
+    foco: "Todavía es oportunidad, no proyecto: no tiene alcance ni ticket propio. Cruza PRM-1497 / PRM-1512 / PRM-1523 y coordina con PRM-91. Experimento asociado: activar la validación en SHOP.",
+    experimentos: ["validacion-shop", "encuesta-direccion"],
+  },
+  {
+    nombre: "Dueño y triaje de la novedad",
+    slug: "novedad-triaje",
+    codigo: "LOG-008",
+    etapa: "Novedad / Posventa", tipo: "Idea", fase: "Backlog", handoff: "No aplica",
+    ticket: "PRM-1512",
+    descripcion: "Dar dueño, SLA y triaje por motivo a las novedades para recuperar la orden.",
+    foco: "Backlog: todavía es idea, sin discovery propio ni alcance. Fuga ④, capa transversal + posventa.",
+  },
+  {
+    nombre: "Reducir devoluciones (COD)",
+    slug: "devoluciones-cod",
+    codigo: "LOG-010",
+    etapa: "Entrega / Devolución", tipo: "Idea", fase: "Backlog", handoff: "No aplica",
+    ticket: "PRM-1523",
+    descripcion: "Reducir la devolución atacándola DENTRO del COD (pago/gestión), nunca empujando prepago.",
+    foco: "Backlog: no hay trabajo hecho todavía. Fuga ②. Direcciones a explorar: score de riesgo, triaje por motivo, anticipo/ConfioPagos.",
+  },
+  {
+    nombre: "Torre de control / Tiempo por fases",
+    slug: "torre-control",
+    codigo: "LOG-011",
+    etapa: "Tránsito", tipo: "Oportunidad", fase: "Discovery", handoff: "No aplica",
+    descripcion: "Medir el tiempo de la orden por fases (F1→F5) para ver dónde se estanca.",
+    foco: "Enabler transversal: habilita el KPI de tiempo y a Normalización de estados. Hoy vive como medición, no como producto construido.",
+    links: [{ tipo: "tablero", label: "Tiempo por fases (weekly)", href: "/proyectos/logistica/updates" }],
   },
 ];
 
 // ── Experimentos / hipótesis ─────────────────────────────────────────────────
 export type EstadoExp = "Idea" | "Diseñado" | "Corriendo" | "Validado" | "Descartado";
 export type Experimento = {
+  slug: string;
   nombre: string;
   hipotesis: string;
   metrica: string;
   estado: EstadoExp;
   impacto: string;
   proyecto: string;
+  proyectoSlug?: string; // relación explícita con `proyectos` (antes se adivinaba por texto)
   aprendizaje?: string;
   demoHref?: string;
+  links?: LinkRef[];
 };
+
+export function experimentoPorSlug(slug: string) {
+  return experimentos.find((e) => e.slug === slug);
+}
 
 export const experimentos: Experimento[] = [
   {
+    slug: "autoconfirmacion",
+    proyectoSlug: "movilizacion",
+    links: [{ tipo: "figma", label: "Prototipo funcional", href: "", falta: true }],
     nombre: "Autoconfirmación por madurez del dropshipper",
     hipotesis:
       "Autoconfirmar a dropshippers maduros (constantes, ≥50 órd/mes) baja el tiempo de confirmación y sube movilización, sin subir devolución.",
@@ -265,6 +450,38 @@ export const experimentos: Experimento[] = [
       "Ojo: en zonas rurales (veredas/fincas) la devolución ya es alta, así que ahí no se autoconfirma sin revisar. Hoy tampoco distinguimos confirmación manual de automática (salvo Chatea) — el experimento deja esa trazabilidad.",
   },
   {
+    slug: "autogeneracion-guias",
+    proyectoSlug: "autogeneracion-guias",
+    nombre: "Autogeneración de guías al confirmar",
+    hipotesis:
+      "Generar la guía automáticamente al confirmar la orden recorta la fase de generación (10,37h prom.) sin degradar el alistamiento en bodega.",
+    metrica: "Horas de la fase 'Generación de guía' + % de cumplimiento <24h (A/B sobre proveedores de alto volumen)",
+    estado: "Diseñado",
+    impacto: "3,20M órdenes pasan por esta fase · 325K críticas · cumplimiento 89,84%",
+    proyecto: "Autogeneración de guías (PRM-1469)",
+    aprendizaje:
+      "Prototipo listo para probar; falta conseguir con quién correrlo. También impacta a brands, no solo a dropshippers (nota de Maria).",
+    links: [{ tipo: "figma", label: "Prototipo funcional", href: "", falta: true }],
+  },
+  {
+    slug: "recoleccion-proactiva",
+    proyectoSlug: "recoleccion-proactiva",
+    nombre: "Recolección proactiva a la transportadora",
+    hipotesis:
+      "Si Dropi programa la recolección en vez de esperarla —sabiendo qué está listo, quién recoge y quién no— baja el tiempo de la fase 'Recogido por Dropi' y se mueven más paquetes por ruta.",
+    metrica:
+      "[por cerrar con Growth Ops] — candidatas: horas de la fase Recogido por Dropi · % de recolecciones cumplidas · paquetes por ruta",
+    estado: "Idea",
+    impacto:
+      "Fase 'Recogido por Dropi': 8,28h prom. y 80,64% de cumplimiento — el peor tramo de la ruta Dropi. 96K órdenes críticas.",
+    proyecto: "Recolección proactiva",
+    aprendizaje:
+      "Tres palancas identificadas por Juan (10-jul): que Dropi programe la recolección; ir por el proveedor con muchos paquetes aunque no llegue al mínimo; agrupar proveedores cercanos en una ruta. Investigación E2E hecha con Growth Ops, falta cerrar hallazgos.",
+    links: [{ tipo: "doc", label: "Hallazgos de recolecciones (Growth Ops)", href: "", falta: true }],
+  },
+  {
+    slug: "validacion-shop",
+    proyectoSlug: "direccion-geo",
     nombre: "Activar validación de dirección en SHOP",
     hipotesis: "Forzar la validación de dirección en integraciones sube la movilización.",
     metrica: "% de movilización / entregas netas (A/B sobre is_validated)",
@@ -273,6 +490,8 @@ export const experimentos: Experimento[] = [
     proyecto: "Movilización · Dirección+geo",
   },
   {
+    slug: "motivos-cancelacion",
+    proyectoSlug: "movilizacion",
     nombre: "Catálogo de motivos de cancelación (Colombia)",
     hipotesis: "Instrumentar el motivo revela la mitad ciega del no-mov (53%).",
     metrica: "% de no-movilización con causa registrada",
@@ -281,6 +500,8 @@ export const experimentos: Experimento[] = [
     proyecto: "Movilización",
   },
   {
+    slug: "ruteo-carrier-zona",
+    proyectoSlug: "seleccion-transportadoras",
     nombre: "Ruteo por mejor carrier × zona",
     hipotesis: "Enrutar por el mejor carrier según zona baja la devolución.",
     metrica: "% de devolución por zona (post-ranking)",
@@ -289,6 +510,8 @@ export const experimentos: Experimento[] = [
     proyecto: "Selección de transportadoras (PRM-1513)",
   },
   {
+    slug: "encuesta-direccion",
+    proyectoSlug: "direccion-geo",
     nombre: "Encuesta: ¿por qué no validan la dirección?",
     hipotesis: "El seller no valida por fricción/desconocimiento, no por falta de valor.",
     metrica: "Respuestas + motivos (Userpilot)",
@@ -297,13 +520,16 @@ export const experimentos: Experimento[] = [
     proyecto: "Dirección confiable + geo",
   },
   {
+    slug: "vigia",
+    proyectoSlug: "vigia",
+    links: [{ tipo: "prototipo", label: "Prototipo de la extensión", href: "", falta: true }],
     nombre: "Vigía — extensión Chrome sobre el módulo de órdenes",
     hipotesis:
       "Una extensión que lee las guías del módulo de órdenes y le anticipa al usuario el resultado probable (qué revisar, qué tener en cuenta) le permite corregir antes de que la orden se caiga y mejorar su operación.",
     metrica: "[por definir con datos] — candidatas: % de guías corregidas tras la alerta · efecto en devolución/novedad de quien la usa",
     estado: "Idea",
     impacto: "Herramienta predictiva/advisory sobre la orden creada. Actúa antes del desenlace, así que cruza las fugas ② devolución y ④ novedad.",
-    proyecto: "Dueño y triaje de la novedad",
+    proyecto: "Vigía (sin ticket todavía)",
   },
 ];
 
@@ -1018,15 +1244,22 @@ export type ColaItem = {
 export type FaseTono = "explora" | "define" | "disena" | "dev" | "pais";
 export type FrenteFase = { label: string; inicio: number; fin: number; tono: FaseTono };
 export type FrenteItem = {
-  proyecto: string; ticket?: string;
+  proyecto: string; ticket?: string; slug?: string;
   fases: FrenteFase[];
   handoffMes?: number; // hand off = 1 punto
   nota?: string;
+  // `tentativa` = la ventana está planeada pero el frente NO está activo hoy
+  // (p. ej. parqueado por WIP = 1). Se dibuja punteada para no leerse como
+  // trabajo en curso — que era justo la contradicción con el weekly.
+  tentativa?: boolean;
+  estadoHoy?: string;
 };
 export type ExperimentoCrono = {
-  proyecto: string; ticket?: string;
+  proyecto: string; ticket?: string; slug?: string;
   researchInicio: number; researchFin: number;
   expInicio: number; expFin: number; handoff: string; nota?: string;
+  tentativa?: boolean;
+  bloqueo?: string;
 };
 
 export const cronograma = {
@@ -1047,7 +1280,7 @@ export const cronograma = {
   },
   cola: [
     { proyecto: "Venezuela · cambio de moneda (Binance)", listoLabel: "En dev · jul", listoMes: 0, devInicio: 0, devFin: 1, hito: "√ ~jul", estado: "En dev", tono: "verde", kr: "desbloquea Tarifas + operación VE", nota: "En desarrollo ahora. Cierra en julio; al liberar arranca Selección de transportadoras (IA)." },
-    { proyecto: "Selección de transportadoras (IA)", ticket: "PRM-1219", listoLabel: "Listo · jul", listoMes: 0, devInicio: 1, devFin: 2.5, hito: "√ ~sep", estado: "En cola de dev", tono: "azul", kr: "KR2.1 · baja devolución por zona", nota: "Arranca al cerrar Venezuela. Ranking carrier×zona (IA). Épica dev DROP-17946." },
+    { proyecto: "Selección de transportadoras (IA)", ticket: "PRM-1219", listoLabel: "Listo · jul", listoMes: 0, devInicio: 1, devFin: 2.5, hito: "√ ~sep", estado: "Bloqueado · accesos", tono: "rojo", kr: "KR2.1 · baja devolución por zona", nota: "⚠️ El bloqueo real NO es Venezuela: falta acceso a Chronos para crear las tablas y volver a levantar el PoC en la cuenta de AWS de IA (Juan Felipe Cubillos ↔ Jaime). Ranking carrier×zona. Épica dev DROP-17946." },
     { proyecto: "Parametrización de fulfillment", ticket: "PRM-1446", listoLabel: "Listo · 9-jul", listoMes: 0, devInicio: 2.5, devFin: 4, hito: "√ ~nov", estado: "En cola de dev", tono: "azul", kr: "+$380M COP/mes (Colombia)", nota: "Listo YA. Alto impacto (+$380M/mes) — candidato a adelantar si se libera el dev." },
     { proyecto: "Parametrización de tarifas", ticket: "PRM-1362", listoLabel: "Listo · jul", listoMes: 0, devInicio: 4, devFin: 5.5, hito: "√ ~dic", estado: "En cola de dev", tono: "azul", kr: "KR3.1 · margen del flete", nota: "Listo PM; se desbloquea al cerrar el cambio de moneda de Venezuela." },
     { proyecto: "Pruebas de entrega (POD)", ticket: "PRM-1364", listoLabel: "Listo · jul", listoMes: 0, devInicio: 5.5, devFin: 7, hito: "√ ~feb", estado: "Despriorizado · listo", tono: "gris", kr: "evidencia en reclamos", nota: "Despriorizado pero listo para hand off. Doble verificación EcomScanner + carrier." },
@@ -1056,12 +1289,12 @@ export const cronograma = {
   // Frentes de discovery — fases diferenciadas (definición → diseño → hand off • → desarrollo → países).
   // Discovery corre 2 en paralelo (WIP 2): al cerrar Same Day arranca Notif. de optimización.
   frentes: [
-    { proyecto: "Same Day", ticket: "PRM-1366", handoffMes: 3.4, fases: [
+    { proyecto: "Same Day", ticket: "PRM-1366", slug: "same-day", handoffMes: 3.4, tentativa: true, estadoHoy: "Parqueado · WIP = 1", fases: [
       { label: "Exploración", inicio: 0, fin: 1.3, tono: "explora" },
       { label: "Definición", inicio: 1.3, fin: 2.6, tono: "define" },
       { label: "Diseño", inicio: 2.6, fin: 3.4, tono: "disena" },
-    ], nota: "Metodología completa: exploración → definición → diseño → hand off → desarrollo." },
-    { proyecto: "Normalización de estados", ticket: "PRM-1297", handoffMes: 2, fases: [
+    ], nota: "Ventana TENTATIVA: hoy está parqueado porque el WIP activo es Normalización de estados. Se conserva la planeación, pero no está corriendo." },
+    { proyecto: "Normalización de estados", ticket: "PRM-1297", slug: "normalizacion-estados", estadoHoy: "Activo · prioridad #1", handoffMes: 2, fases: [
       { label: "Propuesta / definición", inicio: 0, fin: 1, tono: "define" },
       { label: "Diseño", inicio: 1, fin: 2, tono: "disena" },
       { label: "Desarrollo · Colombia", inicio: 2, fin: 4, tono: "dev" },
@@ -1075,8 +1308,11 @@ export const cronograma = {
   ] as FrenteItem[],
 
   experimentos: [
-    { proyecto: "Autoconfirmación", ticket: "PRM-1497", researchInicio: 0, researchFin: 0.4, expInicio: 0.4, expFin: 2, handoff: "Handoff TI ? · ~sep", nota: "Prototipo en pruebas; guardarraíl zona rural." },
-    { proyecto: "Autogeneración de guías", ticket: "PRM-1469", researchInicio: 0.3, researchFin: 0.7, expInicio: 0.7, expFin: 2.3, handoff: "Handoff TI ? · ~sep", nota: "Listo para probar; proveedores de alto volumen." },
+    { proyecto: "Autoconfirmación", ticket: "PRM-1497", slug: "movilizacion", researchInicio: 0, researchFin: 0.4, expInicio: 0.4, expFin: 2, handoff: "Handoff TI ? · ~sep", nota: "Prototipo en pruebas; guardarraíl zona rural." },
+    { proyecto: "Autogeneración de guías", ticket: "PRM-1469", slug: "autogeneracion-guias", researchInicio: 0.3, researchFin: 0.7, expInicio: 0.7, expFin: 2.3, handoff: "Handoff TI ? · ~sep", nota: "Listo para probar; proveedores de alto volumen." },
+    { proyecto: "Selección de transportadoras", ticket: "PRM-1513", slug: "seleccion-transportadoras", researchInicio: 0, researchFin: 0.6, expInicio: 0.6, expFin: 2.2, handoff: "Handoff TI ? · ~sep", tentativa: true, bloqueo: "Sin acceso a Chronos", nota: "El PoC existe pero no se puede levantar: faltan accesos a Chronos para crear las tablas en la cuenta de AWS de IA (Juan Felipe ↔ Jaime). La ventana es tentativa hasta que se resuelvan los accesos." },
+    { proyecto: "Vigía (extensión de órdenes)", slug: "vigia", researchInicio: 0.5, researchFin: 1.5, expInicio: 1.5, expFin: 3, handoff: "Handoff TI ? · ~oct", tentativa: true, nota: "Nuevo. Research primero: falta definir la métrica y conseguir el prototipo. Sin ticket todavía." },
+    { proyecto: "Recolección proactiva", slug: "recoleccion-proactiva", researchInicio: 0.4, researchFin: 1.6, expInicio: 1.6, expFin: 3.2, handoff: "Handoff TI ? · ~oct", tentativa: true, nota: "Nuevo. Research E2E hecho con Growth Ops; falta cerrar hallazgos y definir la métrica. Sin ticket todavía." },
   ] as ExperimentoCrono[],
 
   kpiTrimestre: [

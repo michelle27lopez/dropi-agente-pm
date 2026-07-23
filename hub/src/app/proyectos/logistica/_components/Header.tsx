@@ -18,6 +18,7 @@ export default function Header() {
       <nav className="nav">
         <Link href="/proyectos/logistica">Indicadores</Link>
         <Link href="/proyectos/logistica/mapa">Mapa de la orden</Link>
+        <Link href="/proyectos/logistica/iniciativas">Iniciativas</Link>
         <Link href="/proyectos/logistica/info-logistica">Info logística</Link>
         <Link href="/proyectos/logistica/normalizacion-estados">Estados</Link>
         <Link href="/proyectos/logistica/experimentos">Experimentos</Link>
