@@ -1,16 +1,24 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
+import { etapas, proyectoPorSlug } from "@/app/proyectos/logistica/_lib/data";
 import {
   carriers,
   clientStates,
   countries,
   decisions,
+  exercisedNodeIds,
   flowEdges,
   flowNodes,
   guideExamples,
+  nodeById,
   normalizacionSummary,
   routeLabels,
+  traceCycles,
+  traceFindings,
+  unexercisedNodes,
+  type GuideExample,
   type RouteMode,
 } from "@/app/proyectos/logistica/_lib/normalizacion-estados-data";
 
@@ -24,16 +32,65 @@ const tabs: { id: Tab; label: string }[] = [
   { id: "decisiones", label: "Decisiones" },
 ];
 
-function MapView() {
-  const [mode, setMode] = useState<RouteMode>("dropi");
+type MapViewProps = {
+  guide: GuideExample | null;
+  onClearGuide: () => void;
+};
+
+function MapView({ guide, onClearGuide }: MapViewProps) {
+  // Directo por defecto: es la ruta que mueve el grueso del volumen. Antes abría en
+  // "ECOM + Dropi", que es la más rara (~1%) — la primera pantalla mostraba la excepción.
+  const [mode, setMode] = useState<RouteMode>("directo");
   const [focus, setFocus] = useState<"completo" | "feliz" | "excepciones">("completo");
+  const [coverage, setCoverage] = useState(false);
   const [selectedId, setSelectedId] = useState("received");
   const selected = flowNodes.find((node) => node.id === selectedId) ?? flowNodes[0];
+
+  // Por nodo: en qué posiciones de la traza aparece (1-indexadas) y cuántas veces se repite.
+  const traceHits = useMemo(() => {
+    const hits = new Map<string, number[]>();
+    if (!guide) return hits;
+    guide.steps.forEach((step, index) => {
+      if (!step.node) return;
+      hits.set(step.node, [...(hits.get(step.node) ?? []), index + 1]);
+    });
+    return hits;
+  }, [guide]);
+
+  const unmappedSteps = guide?.steps.filter((step) => !step.node) ?? [];
+
+  // Segmentos del recorrido: centro de nodo a centro de nodo, en el orden de la traza.
+  // Los pasos sin nodo se saltan (no hay dónde dibujarlos) y se avisan en el banner.
+  const traceSegments = useMemo(() => {
+    if (!guide) return [];
+    const points = guide.steps
+      .map((step) => (step.node ? nodeById.get(step.node) : undefined))
+      .filter((node): node is NonNullable<typeof node> => Boolean(node))
+      .map((node) => ({ x: node.x + 70, y: node.y + 36 }));
+
+    return points.slice(0, -1).map((from, index) => {
+      const to = points[index + 1];
+      // Curva suave: separa los tramos de ida y vuelta entre el mismo par de nodos.
+      const dx = to.x - from.x;
+      const dy = to.y - from.y;
+      const bend = 0.14;
+      const control = { x: (from.x + to.x) / 2 - dy * bend, y: (from.y + to.y) / 2 + dx * bend };
+      return {
+        key: `${index}-${from.x}-${from.y}-${to.x}-${to.y}`,
+        order: index + 1,
+        path: `M${from.x} ${from.y} Q${control.x} ${control.y} ${to.x} ${to.y}`,
+        mid: { x: (from.x + to.x) / 4 + control.x / 2, y: (from.y + to.y) / 4 + control.y / 2 },
+      };
+    });
+  }, [guide]);
 
   const nodeState = (node: typeof flowNodes[number]) => {
     const routeActive = node.modes.includes(mode);
     const focusMuted = focus === "feliz" ? node.kind === "exception" : focus === "excepciones" ? node.kind === "main" || node.kind === "optional" : false;
-    return { routeActive, muted: !routeActive || focusMuted };
+    const inTrace = traceHits.has(node.id);
+    // Con una guía activa manda la traza: lo que la guía no toca se apaga.
+    if (guide) return { routeActive, muted: !inTrace, inTrace };
+    return { routeActive, muted: !routeActive || focusMuted, inTrace };
   };
 
   return (
@@ -49,8 +106,9 @@ function MapView() {
             <span>Ruta</span>
             <div className="ne-segmented" aria-label="Ruta operativa">
               {(Object.keys(routeLabels) as RouteMode[]).map((key) => (
-                <button key={key} type="button" className={mode === key ? "is-active" : ""} onClick={() => setMode(key)}>
+                <button key={key} type="button" className={mode === key ? "is-active" : ""} onClick={() => setMode(key)} title="Participación estimada, pendiente de medición">
                   {routeLabels[key].label}
+                  <i className="ne-route-peso">{routeLabels[key].peso}</i>
                 </button>
               ))}
             </div>
@@ -65,8 +123,32 @@ function MapView() {
               ))}
             </div>
           </div>
+          <div>
+            <span>Evidencia</span>
+            <div className="ne-segmented is-neutral" aria-label="Cobertura por guías reales">
+              <button type="button" className={coverage ? "is-active" : ""} onClick={() => setCoverage((value) => !value)}>
+                Marcar sin validar ({unexercisedNodes.length})
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+
+      {guide && (
+        <div className="ne-trace-banner">
+          <div>
+            <span>Traza sobre el mapa</span>
+            <strong>{guide.carrier} · {guide.id}</strong>
+            <p>{guide.steps.length} pasos · {guide.highlight}</p>
+          </div>
+          {unmappedSteps.length > 0 && (
+            <p className="ne-trace-banner-warn">
+              {unmappedSteps.length} paso{unmappedSteps.length > 1 ? "s" : ""} sin nodo homologado: {unmappedSteps.map((step) => step.raw).join(", ")} — no se puede pintar porque el catálogo no lo contempla.
+            </p>
+          )}
+          <button type="button" onClick={onClearGuide}>Quitar traza</button>
+        </div>
+      )}
 
       <div className="ne-journey-shell">
         <div className="ne-journey-scroll">
@@ -82,28 +164,51 @@ function MapView() {
                     <path d="M 0 0 L 10 5 L 0 10 z" className={`arrow-${tone}`} />
                   </marker>
                 ))}
+                <marker id="arrow-trace" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                  <path d="M 0 0 L 10 5 L 0 10 z" className="arrow-trace" />
+                </marker>
               </defs>
+
+              {/* Recorrido real de la guía: se deriva de los pasos, no de las aristas dibujadas.
+                  Por eso hace visibles los saltos que el mapa no modela (ej. Entregado → En reparto). */}
+              {traceSegments.map((segment) => (
+                <g key={segment.key} className="ne-trace-seg">
+                  <path d={segment.path} className="ne-trace-line" markerEnd="url(#arrow-trace)" />
+                  <circle cx={segment.mid.x} cy={segment.mid.y} r="9" className="ne-trace-seg-bg" />
+                  <text x={segment.mid.x} y={segment.mid.y + 3} className="ne-trace-seg-num">{segment.order}</text>
+                </g>
+              ))}
               {flowEdges.map((edge) => {
                 const routeActive = edge.modes.includes(mode);
                 const focusMuted = focus === "feliz" ? edge.kind === "exception" : focus === "excepciones" ? edge.kind === "main" : false;
-                return <path key={edge.id} d={edge.path} className={`ne-edge edge-${edge.tone}${!routeActive || focusMuted ? " is-muted" : ""}`} markerEnd={`url(#arrow-${edge.tone})`} />;
+                const muted = guide ? true : !routeActive || focusMuted;
+                return <path key={edge.id} d={edge.path} className={`ne-edge edge-${edge.tone}${muted ? " is-muted" : ""}`} markerEnd={`url(#arrow-${edge.tone})`} />;
               })}
             </svg>
 
             {flowNodes.map((node) => {
               const state = nodeState(node);
+              const hits = traceHits.get(node.id);
+              const unvalidated = coverage && !exercisedNodeIds.has(node.id);
               return (
                 <button
                   key={node.id}
                   type="button"
-                  className={`ne-flow-node tone-${node.tone} kind-${node.kind}${state.muted ? " is-muted" : ""}${selected.id === node.id ? " is-selected" : ""}`}
+                  className={`ne-flow-node tone-${node.tone} kind-${node.kind}${state.muted ? " is-muted" : ""}${selected.id === node.id ? " is-selected" : ""}${state.inTrace ? " in-trace" : ""}${unvalidated ? " is-unvalidated" : ""}`}
                   style={{ left: node.x, top: node.y }}
                   onClick={() => setSelectedId(node.id)}
                   aria-pressed={selected.id === node.id}
                 >
                   <span className="ne-node-dot" />
-                  <strong>{node.short ?? node.label}</strong>
+                  <strong>{node.label}</strong>
                   <small>{node.client}</small>
+                  {hits && (
+                    <span className="ne-node-steps" title={`Pasos ${hits.join(", ")} de la traza`}>
+                      {hits.join("·")}
+                      {hits.length > 1 && <b>×{hits.length}</b>}
+                    </span>
+                  )}
+                  {unvalidated && <span className="ne-node-unvalidated" title="Ninguna de las 14 guías recorre este estado">sin validar</span>}
                 </button>
               );
             })}
@@ -115,8 +220,24 @@ function MapView() {
           <span><i className="warning" /> Recuperable</span>
           <span><i className="danger" /> Cierre negativo</span>
           <span><i className="return" /> Devolución</span>
+          {guide && <span><i className="trace" /> Paso de la traza · el número es el orden</span>}
+          {coverage && <span><i className="unvalidated" /> Sin guía que lo recorra</span>}
         </div>
       </div>
+
+      {coverage && (
+        <div className="ne-coverage-panel">
+          <div>
+            <strong>{exercisedNodeIds.size} de {flowNodes.length} estados</strong>
+            <span>los recorre al menos una de las 14 guías reales</span>
+          </div>
+          <p>
+            Los otros {unexercisedNodes.length} están en el catálogo porque el macroproceso los define, no porque la muestra los pruebe:{" "}
+            {unexercisedNodes.map((node) => node.label).join(" · ")}. Todo el tramo ECOM sin Dropi, el ciclo de recolección fallida,
+            el retiro en punto, el siniestro y el rechazo entran a TI como propuesta, no como comportamiento observado.
+          </p>
+        </div>
+      )}
 
       <aside className={`ne-node-detail detail-${selected.tone}`}>
         <div className="ne-detail-title">
@@ -284,7 +405,7 @@ function CarriersView() {
   );
 }
 
-function ExamplesView() {
+function ExamplesView({ onOpenInMap }: { onOpenInMap: (guide: GuideExample) => void }) {
   const [carrier, setCarrier] = useState("Todos");
   const [outcome, setOutcome] = useState("Todos");
   const carrierOptions = ["Todos", ...Array.from(new Set(guideExamples.map((guide) => guide.carrier)))];
@@ -296,9 +417,9 @@ function ExamplesView() {
     <div className="ne-view">
       <div className="ne-view-head">
         <div>
-          <span className="ne-kicker">Trazas de punta a punta</span>
-          <h2>14 guías reales muestran dónde el catálogo teórico se rompe</h2>
-          <p>Las secuencias están deduplicadas por repetición consecutiva para hacer visibles rebotes, reintentos y cierres falsos.</p>
+          <span className="ne-kicker">Trazas de punta a punta · muestra del camino difícil</span>
+          <h2>14 guías reales del camino difícil, no una muestra representativa</h2>
+          <p>Cada paso está normalizado a un estado del mapa; al lado va lo que veía el cliente en ese momento. Si un paso crudo no tiene nodo, se muestra así en vez de inventarle uno.</p>
         </div>
         <div className="ne-filters">
           <label>Carrier<select value={carrier} onChange={(event) => setCarrier(event.target.value)}>{carrierOptions.map((option) => <option key={option}>{option}</option>)}</select></label>
@@ -310,23 +431,73 @@ function ExamplesView() {
         <span><b>3</b> entregadas en la muestra completa</span>
         <span><b>11</b> devueltas en la muestra completa</span>
       </div>
-      <div className="ne-example-list">
-        {filtered.map((guide) => (
-          <article className="ne-example" key={`${guide.carrier}-${guide.id}`}>
-            <header>
-              <div><span>{guide.carrier}</span><strong>{guide.id}</strong></div>
-              <span className={`ne-outcome ${guide.outcome === "Entregado" ? "done" : "returned"}`}>{guide.outcome}</span>
-            </header>
-            <p>{guide.highlight}</p>
-            <div className="ne-trace">
-              {guide.steps.map((step, index) => (
-                <span key={`${step}-${index}`} className={step.includes("Novedad") || step.includes("Cancelado") ? "is-alert" : step.includes("Entregado") ? "is-done" : step.includes("Devolución") ? "is-return" : ""}>
-                  {step}
-                </span>
-              ))}
-            </div>
-          </article>
+
+      <div className="ne-callout warning">
+        <strong>Esta muestra sobre-representa el fracaso a propósito. No la uses para dimensionar.</strong>
+        <p>
+          11 de 14 guías terminan en devolución (79%) cuando la devolución es ~8% del volumen; 9 de 14 pasan
+          por recolección Dropi (64%) cuando esa ruta es ~1%. <b>Cancelado no tiene ni una guía</b>, siendo
+          1 de cada 7 órdenes. Sirve para estresar el catálogo — que es donde el vocabulario se rompe —
+          pero <b>no prueba cobertura</b>.
+        </p>
+        <p>
+          Los porcentajes de contraste salen de la ventana auditada (133.555 órdenes / 52.636 guías),
+          que es ~0,7% del volumen anual. Son orden de magnitud, no medición: pendiente el conteo sobre
+          el universo completo.
+        </p>
+      </div>
+      <div className="ne-findings">
+        {traceFindings.map((finding) => (
+          <div key={finding.title} className={`ne-finding level-${finding.level}`}>
+            <strong>{finding.title}</strong>
+            <p>{finding.detail}</p>
+          </div>
         ))}
+      </div>
+
+      <div className="ne-example-list">
+        {filtered.map((guide) => {
+          const cycles = traceCycles(guide.steps);
+          return (
+            <article className="ne-example" key={`${guide.carrier}-${guide.id}`}>
+              <header>
+                <div><span>{guide.carrier}</span><strong>{guide.id}</strong></div>
+                <span className={`ne-outcome ${guide.outcome === "Entregado" ? "done" : "returned"}`}>{guide.outcome}</span>
+              </header>
+              <p>{guide.highlight}</p>
+              <ol className="ne-trace-table">
+                <li className="is-head"><span>#</span><span>Estado homologado</span><span>Veía el cliente</span></li>
+                {guide.steps.map((step, index) => {
+                  const node = step.node ? nodeById.get(step.node) : undefined;
+                  const cycle = cycles[index];
+                  const client = node ? node.client : step.clientRaw;
+                  // La vista cliente solo se escribe cuando CAMBIA. Repetirla es ruido y
+                  // esconde el dato importante: cuántos estados de operador colapsan en uno.
+                  const previous = guide.steps[index - 1];
+                  const previousClient = previous
+                    ? (previous.node ? nodeById.get(previous.node)?.client : previous.clientRaw)
+                    : undefined;
+                  const clientChanged = client !== previousClient;
+                  return (
+                    <li key={`${step.node ?? step.raw}-${index}`} className={node ? `tone-${node.tone}` : "is-unmapped"}>
+                      <span className="ne-trace-num">{index + 1}</span>
+                      <span className="ne-trace-state">
+                        {node ? node.label : step.raw}
+                        {cycle && <b title="Rebote: la traza vuelve a un estado ya visitado">ciclo {cycle}</b>}
+                        {!node && <em>sin nodo homologado</em>}
+                        {node && step.raw && step.raw !== node.label && <i title="Etiqueta original de la hoja de campo">crudo: {step.raw}</i>}
+                      </span>
+                      {clientChanged
+                        ? <span className="ne-trace-client">{client}</span>
+                        : <span className="ne-trace-client is-same" title={`Sigue en "${client}" — el cliente no ve ningún cambio`} aria-label="sin cambio para el cliente" />}
+                    </li>
+                  );
+                })}
+              </ol>
+              <button type="button" className="ne-trace-map-link" onClick={() => onOpenInMap(guide)}>Ver esta traza sobre el mapa →</button>
+            </article>
+          );
+        })}
       </div>
     </div>
   );
@@ -357,8 +528,20 @@ function DecisionsView() {
 
 export default function NormalizacionEstadosView() {
   const [tab, setTab] = useState<Tab>("mapa");
+  const [activeGuide, setActiveGuide] = useState<GuideExample | null>(null);
+  const openInMap = (guide: GuideExample) => {
+    setActiveGuide(guide);
+    setTab("mapa");
+  };
+  const proyecto = proyectoPorSlug("normalizacion-estados");
+  const idxEtapa = proyecto
+    ? etapas.findIndex((e) => proyecto.etapa.startsWith(e.nombre) || e.nombre.startsWith(proyecto.etapa))
+    : -1;
+
   return (
     <main className="page ne-page">
+      <Link href="/celula/logistica" className="back">← Célula Logística</Link>
+
       <header className="ne-titlebar">
         <div>
           <span className="ne-status">Borrador de definición · PRM-1297</span>
@@ -367,6 +550,26 @@ export default function NormalizacionEstadosView() {
         </div>
         <a href="https://dropi-it.atlassian.net/browse/PRM-1297" target="_blank" rel="noreferrer">Abrir PRM-1297 ↗</a>
       </header>
+
+      {/* Contexto que antes vivía en una ficha aparte: foco y posición en la cadena de valor. */}
+      {proyecto && (
+        <section className="ne-project-context">
+          <div>
+            <b>Foco</b>
+            <p>{proyecto.foco}</p>
+          </div>
+          {idxEtapa >= 0 && (
+            <div>
+              <b>Etapa de la orden</b>
+              <div className="fx-chain">
+                {etapas.map((etapa, index) => (
+                  <span key={etapa.n} className={`fx-chain-step${index === idxEtapa ? " is-current" : ""}`}>{etapa.nombre}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+      )}
 
       <section className="ne-summary" aria-label="Resumen de evidencia">
         {normalizacionSummary.map((item) => (
@@ -387,10 +590,10 @@ export default function NormalizacionEstadosView() {
         ))}
       </nav>
 
-      {tab === "mapa" && <MapView />}
+      {tab === "mapa" && <MapView guide={activeGuide} onClearGuide={() => setActiveGuide(null)} />}
       {tab === "paises" && <CountriesView />}
       {tab === "carriers" && <CarriersView />}
-      {tab === "ejemplos" && <ExamplesView />}
+      {tab === "ejemplos" && <ExamplesView onOpenInMap={openInMap} />}
       {tab === "decisiones" && <DecisionsView />}
     </main>
   );
