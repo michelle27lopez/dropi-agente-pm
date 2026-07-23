@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section, matchesQuery } from "@/components/HomeSections";
-import { isSprintAllowed } from "@/lib/sprint-access";
+import { isSprintAllowed, isMiDiaOwner } from "@/lib/sprint-access";
+import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
+import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
 
 const updates: Item[] = [
   {
@@ -176,6 +178,15 @@ const poc: Item[] = [
     color: "#7C3AED",
     icon: "🚀",
   },
+  {
+    key: "campanas",
+    name: "Panel de Campañas",
+    description: "Track A (Planeación) de Dinámicas de Catálogo — cada campaña recorre nodos de planeación y cierre, con dashboard propio por campaña. Única fuente activa del experimento.",
+    url: "/proyectos/dinamicas-catalogo/campanas",
+    tag: "DCA-001 · Planeación",
+    color: "#0EA5E9",
+    icon: "🗂️",
+  },
 ];
 
 export default function HubPage() {
@@ -225,6 +236,28 @@ export default function HubPage() {
 
   if (checkingRole) {
     return <main style={{ minHeight: "100vh" }} />;
+  }
+
+  // Home privada: este es el home real de Michelle (célula "suppliers" cae
+  // aquí, no en celula/[slug]) — reemplaza el grid estándar por el
+  // dashboard de "mi día". Ver [[project_darwin_pd_dashboard]].
+  if (isMiDiaOwner(userEmail)) {
+    return (
+      <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1, display: "flex", alignItems: "flex-start" }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <HubHeader title="Darwin" subtitle="Tu día · Darwin" currentSlug="suppliers" />
+            <div style={{ display: "flex", alignItems: "flex-start" }}>
+              <ProjectSidebar allProjects={projects} allPoc={poc} />
+              <div style={{ flex: 1, minWidth: 0, maxWidth: 900, padding: "48px 32px" }}>
+                <HomeDashboard />
+              </div>
+            </div>
+          </div>
+        </div>
+        <HubFooter />
+      </main>
+    );
   }
 
   // /sprint solo es visible para Michelle y Jaime (alcance confirmado

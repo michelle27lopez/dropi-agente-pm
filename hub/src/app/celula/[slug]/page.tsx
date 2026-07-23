@@ -6,6 +6,9 @@ import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
 import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
+import { isMiDiaOwner } from "@/lib/sprint-access";
+import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
+import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
 
 type Proyecto = {
   id: string; name: string; project_code: string | null;
@@ -14,7 +17,7 @@ type Proyecto = {
 };
 type Update = { id: string; week_date: string; title: string; content: string };
 
-type Profile = { celula_id: string | null; is_super_admin: boolean };
+type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
 
 type CelulaHome = {
   id: string; nombre: string; slug: string; lead: string | null; area: string | null;
@@ -131,6 +134,27 @@ export default function CelulaHomePage() {
   const proyectos = celula.proyectos.filter((p) => p.type !== "POC").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
+
+  // Home privada: solo para MI_DIA_OWNER_EMAIL, reemplaza el body estándar de
+  // célula por el dashboard de "mi día" — ver [[project_darwin_pd_dashboard]].
+  if (isMiDiaOwner(profile?.email)) {
+    return (
+      <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1, display: "flex", alignItems: "flex-start" }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <HubHeader title={celula.nombre} subtitle="Tu día · Darwin" currentSlug={celula.slug} />
+            <div style={{ display: "flex", alignItems: "flex-start" }}>
+              <ProjectSidebar allProjects={proyectos} allPoc={poc} />
+              <div style={{ flex: 1, minWidth: 0, maxWidth: 900, padding: "48px 32px" }}>
+                <HomeDashboard />
+              </div>
+            </div>
+          </div>
+        </div>
+        <HubFooter />
+      </main>
+    );
+  }
 
   // "Updates" mezcla los registros de celula_updates con el historial del
   // Weekly PM de esta célula (si tiene alguno) — mismo look de tarjeta,

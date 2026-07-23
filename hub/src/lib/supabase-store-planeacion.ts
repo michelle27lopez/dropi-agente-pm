@@ -6,6 +6,7 @@ import {
   type EligibleProduct,
   type ReadyChecklistKey,
   type ReadyChecklist,
+  type CampaignFeedback,
 } from "@/lib/local-store-planeacion";
 
 // Contraparte en Supabase (tablas campaign_planeacion_suppliers /
@@ -43,6 +44,7 @@ type EligibleRow = {
   selection_updated_at: string | null;
   approved_at: string | null;
   ready_checklist: ReadyChecklist | null;
+  feedback: CampaignFeedback | null;
   view_count: number | null;
   first_viewed_at: string | null;
   last_viewed_at: string | null;
@@ -61,6 +63,7 @@ function fromEligibleRow(row: EligibleRow): EligibleEntry {
     selection_updated_at: row.selection_updated_at,
     approved_at: row.approved_at,
     readyChecklist: row.ready_checklist ?? undefined,
+    feedback: row.feedback ?? undefined,
     view_count: row.view_count ?? 0,
     first_viewed_at: row.first_viewed_at,
     last_viewed_at: row.last_viewed_at,
@@ -308,6 +311,24 @@ export async function supabaseSetChecklistItem(
   const { data, error } = await supabase
     .from("campaign_planeacion_eligible")
     .update({ ready_checklist: { ...prev.readyChecklist, [key]: value } })
+    .eq("campaign_id", campaignId)
+    .eq("token", token)
+    .select()
+    .single();
+  if (error) return null;
+  return fromEligibleRow(data as EligibleRow);
+}
+
+export async function supabaseSetFeedback(
+  campaignId: string,
+  token: string,
+  rating: number,
+  comment: string | undefined
+): Promise<EligibleEntry | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("campaign_planeacion_eligible")
+    .update({ feedback: { rating, comment, submitted_at: new Date().toISOString() } })
     .eq("campaign_id", campaignId)
     .eq("token", token)
     .select()
