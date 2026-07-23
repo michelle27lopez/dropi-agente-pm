@@ -128,7 +128,9 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const proyectos = celula.proyectos.filter((p) => p.type !== "POC").map(proyectoToItem);
+  const noPoc = celula.proyectos.filter((p) => p.type !== "POC");
+  const discovery = noPoc.filter((p) => p.handoff_status === "Experimentación" || !p.handoff_status).map(proyectoToItem);
+  const delivery = noPoc.filter((p) => p.handoff_status === "Listo para handoff" || p.handoff_status === "Handoff hecho").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
 
@@ -162,7 +164,7 @@ export default function CelulaHomePage() {
         <div style={{ marginBottom: 56 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
             <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
-              Discovery projects
+              Discovery Projects
             </p>
             {canCreate && (
               <div style={{ display: "flex", gap: 8 }}>
@@ -251,9 +253,19 @@ export default function CelulaHomePage() {
             </form>
           )}
 
-          <Section title="" items={proyectos} ctaLabel="Ver proyecto →" />
-          {proyectos.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
+          <Section title="" items={discovery} ctaLabel="Ver proyecto →" />
+          {discovery.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos en Discovery para esta célula.</p>
+          )}
+        </div>
+
+        <div style={{ marginBottom: 56 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: "0 0 20px" }}>
+            Delivery Projects
+          </p>
+          <Section title="" items={delivery} ctaLabel="Ver proyecto →" />
+          {delivery.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos en Delivery para esta célula.</p>
           )}
         </div>
 

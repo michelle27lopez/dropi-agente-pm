@@ -193,8 +193,12 @@ export default function HubPage() {
   );
 
   // Este home es el de Suppliers (tu célula). Si quien entra es de otra
-  // célula, lo mandamos a la home de su propia célula. Solo el super admin
-  // se queda aquí y ve el resto de células como navegación.
+  // célula sin acceso completo, lo mandamos a la home de su propia célula.
+  // Con acceso completo (super admin o ve_hub_completo), "/" lo manda al
+  // overview de todas las células (/celulas) en vez de quedarse viendo el
+  // contenido específico de Suppliers — así el equipo Suppliers conserva
+  // su landing de trabajo intacta y solo cambia lo que ve quien navega
+  // el hub completo.
   useEffect(() => {
     if (!hasSupabase) { setCheckingRole(false); return; }
     fetch("/api/me")
@@ -214,10 +218,12 @@ export default function HubPage() {
           return;
         }
 
-        // Con ve_hub_completo (o super admin), "/" es el origen: aterriza
-        // siempre aquí y navega libre entre células con el dropdown. Sin
-        // ve_hub_completo, queda restringido a su propia home.
-        if (mySlug && mySlug !== "suppliers" && !fullAccess) {
+        if (fullAccess) {
+          router.replace(`/celulas`);
+          return;
+        }
+
+        if (mySlug && mySlug !== "suppliers") {
           router.replace(`/celula/${mySlug}`);
           return;
         }
