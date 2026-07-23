@@ -281,6 +281,62 @@ export default function CelulaHomePage() {
           </div>
         )}
 
+        {/* Direccionamiento Estratégico Section */}
+        {params.slug === "sellers" && metrics && (
+          <div style={{
+            background: "#fff", border: "1px solid var(--border)",
+            borderRadius: 16, padding: 24, marginBottom: 36,
+            boxShadow: "0 1px 3px rgba(0,0,0,0.06)"
+          }}>
+            <h3 style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
+              <span>🎯</span> Direccionamiento Estratégico & Lentes PM OS
+            </h3>
+            
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 20 }}>
+              <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
+                  Norte & Propósito
+                </div>
+                <p style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, margin: "0 0 4px" }}>
+                  Que cada dropshipper gane dinero vendiendo en la plataforma.
+                </p>
+                <span style={{ fontSize: 11, color: "var(--muted)" }}>
+                  Activación = 1ª orden rentable · Retención = ganancia sostenida.
+                </span>
+              </div>
+
+              <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
+                  Territorio & Perfil
+                </div>
+                <p style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, margin: "0 0 4px" }}>
+                  Territorio E-commerce (Seller Success)
+                </p>
+                <span style={{ fontSize: 11, color: "var(--muted)" }}>
+                  Foco: Dropshippers (Rebuscador, Empleado Aspirante, Joven Visionario).
+                </span>
+              </div>
+
+              <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
+                  Lentes & Madurez (Q3 Focus)
+                </div>
+                <p style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, margin: "0 0 4px" }}>
+                  Nivel A (Iniciando) → TTV/Reptiliano
+                </p>
+                <span style={{ fontSize: 11, color: "var(--muted)" }}>
+                  Q3: Reducir fricción de activación neta (5.2%) y bruta (7.6%).
+                </span>
+              </div>
+            </div>
+            
+            <div style={{ marginTop: 16, fontSize: 11, color: "var(--muted)", display: "flex", flexWrap: "wrap", gap: 16, borderTop: "1px dashed var(--border)", paddingTop: 12 }}>
+              <span>🔑 <strong>Ownership:</strong> Módulo de marketing y herramientas de ventas/marketing.</span>
+              <span>📈 <strong>Alineación OKR:</strong> Todas las iniciativas empujan el KR1.1 de la holding (7.8M órdenes/mes).</span>
+            </div>
+          </div>
+        )}
+
         {/* Conversion Funnel Section */}
         {params.slug === "sellers" && metrics && (
           <>

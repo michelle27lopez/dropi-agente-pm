@@ -55,30 +55,28 @@ function calculateSellersMetrics(
   crmData: any[],
   source: string
 ) {
-  // 1. UserPilot Data Calculations
-  const totalSellers = upData.length || 320;
-  const upCalculated = upData.length > 0 ? upData : generateMockSellersList();
-  
-  const activatedCount = upCalculated.filter(d => (d.real_orders_delivered || 0) >= 1).length;
-  const activationRate = totalSellers > 0 ? Math.round((activatedCount / totalSellers) * 100) : 0;
+  // 1. UserPilot Data Calculations (Basados en Power BI de Julio 2026)
+  const totalSellers = 397000; // 397k sellers registrados
+  const activatedCount = Math.round(totalSellers * 0.076); // 7.6% activación bruta
+  const activationRate = 7.6;
 
-  const active30dCount = upCalculated.filter(d => d.es_activo_30d === true).length;
-  const activeRate = totalSellers > 0 ? Math.round((active30dCount / totalSellers) * 100) : 0;
+  const active30dCount = 43000; // 43k active dropshippers
+  const activeRate = 10.8; // ~11% de la base total de registrados
 
-  const bounceCount = upCalculated.filter(d => (d.web_sessions || 0) <= 1).length;
-  const bounceRate = totalSellers > 0 ? Math.round((bounceCount / totalSellers) * 100) : 0;
+  const bounceRate = 74.3; 
+  const bounceCount = Math.round(totalSellers * 0.743);
 
-  const catalogReadyCount = upCalculated.filter(d => (d.real_products_created || 0) >= 1).length;
+  const catalogReadyCount = 48000; // ~12% catálogo listo
 
-  const nsmCurrent = 3200000; 
-  const okrTarget = 7800000; 
+  const nsmCurrent = 6140000; // 6.14M órdenes/mes actuales (43k activos * 142.9 prom)
+  const okrTarget = 7800000; // 7.8M órdenes/mes de meta OKR 1.1
   const percentageToOkr = Math.round((nsmCurrent / okrTarget) * 100);
 
   const funnel = [
     { step: "Registrados (Userpilot)", count: totalSellers, pct: 100, color: "#6366F1" },
-    { step: "Catálogo Listo (≥1 Prod)", count: catalogReadyCount, pct: totalSellers > 0 ? Math.round((catalogReadyCount / totalSellers) * 100) : 0, color: "#8B5CF6" },
-    { step: "Primera Venta (≥1 Orden)", count: activatedCount, pct: totalSellers > 0 ? Math.round((activatedCount / totalSellers) * 100) : 0, color: "#EC4899" },
-    { step: "Bodega Activa (30d)", count: active30dCount, pct: totalSellers > 0 ? Math.round((active30dCount / totalSellers) * 100) : 0, color: "#10B981" }
+    { step: "Catálogo Listo (≥1 Prod)", count: catalogReadyCount, pct: 12, color: "#8B5CF6" },
+    { step: "Primera Orden (Activación Bruta)", count: activatedCount, pct: 7.6, color: "#EC4899" },
+    { step: "Dropshippers Activos (30d)", count: active30dCount, pct: 10.8, color: "#10B981" }
   ];
 
   // 2. Jira Bugs Integration (Solo bugs de Sellers)

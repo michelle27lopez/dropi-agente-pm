@@ -15,6 +15,7 @@
 
 ## 🚨 Pendientes Prioritarios (Por iniciar)
 
+- `[ ]` **PROD-HELP:** Alinear con José Pineda los flujos del widget de soporte (widget flotante) y las APIs del buscador para el Proyecto Help Center (SAC).
 - `[ ]` **PROD-1698:** Finalizar Benchmark de Novedades (CJ, Spocket, Zendrop, Shopify, Meli) para el Módulo Novedades.
 - `[ ]` **PROD-1721:** Agendar y ejecutar 5–8 entrevistas cortas con dropshippers que tengan novedades logísticas abiertas.
 - `[ ]` **PROD-1348:** Parametrizar con Finanzas y Data la fórmula de orden rentable por país, moneda y fee de canal.

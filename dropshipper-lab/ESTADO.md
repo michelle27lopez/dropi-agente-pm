@@ -68,3 +68,16 @@
 *   **Próximos Pasos (Santiago/Alejandra):**
     1.  Monitorear desarrollo de Diego Pérez en backend de sincronización y frontend de Shopify 2.0.
     2.  Alejandra finaliza las especificaciones de Tienda Nube (PROD-1519) en el sprint activo (27-28).
+
+---
+
+## 📋 Proyectos del Roadmap (Por iniciar)
+
+### 5. Biblia de AI / Proyecto Help Center (SAC) — Planificado
+*   **Objetivo:** Exponer la librería de preguntas frecuentes para incentivar la autogestión de dudas técnicas y reducir la carga de soporte.
+*   **Colaborador:** José Pineda Pitre.
+*   **Superficies:** Home, Botón Flotante (widget tipo Intercom con pestañas *Inicio, Mensajes, Ayuda, Novedades, Tareas*) y Website (actual sección blog).
+*   **Problema actual:** El usuario debe entrar al botón flotante solo para hablar con Soporte (sin filtro intermedio de FAQs). El blog tiene las FAQs desconectadas de la app.
+*   **Benchmarks:** [Shopify Help](https://help.shopify.com/en) · [MercadoLibre Ayuda](https://www.mercadolibre.com.co/ayuda) · [Alibaba Help](https://helpcenter.alibaba.com/s/ggs) · [Amazon Ayuda](https://www.amazon.com/-/es/gp/help/customer/display.html?nodeId=GSD587LKW72HKU2V).
+*   **Próximos Pasos:**
+    1.  Alinear con José Pineda los flujos del widget de soporte y APIs disponibles para el buscador.

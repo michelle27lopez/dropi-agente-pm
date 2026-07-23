@@ -29,7 +29,7 @@ Este documento centraliza el direccionamiento estratégico, los objetivos, los K
 ## 2. Diferenciación: Huérfano vs Comunidad
 
 *   **Huérfanos (Foco estratégico de activación):**
-    *   *Contexto:* Entran directo sin formación ni comunidad. Desconocen el e-commerce/dropshipping. Tasa de activación neta actual: **2.9%**.
+    *   *Contexto:* Entran directo sin formación ni comunidad. Desconocen el e-commerce/dropshipping. Tasa de activación neta actual: **5.2%**.
     *   *Comportamiento:* Inician con órdenes manuales. Su barrera es entender el modelo logístico y encontrar productos.
     *   *Implicación:* Requieren onboarding auto-guiado, tour guiado, y reducción de fricción inicial.
 *   **Comunidades:**
@@ -54,6 +54,44 @@ Donde:
 *   **Pp (Precio de Producto):** El costo del proveedor.
 *   **F (Flete):** Costo del transporte/envío.
 *   **D (Fee de Dropi):** Comisión cobrada por la plataforma.
+
+---
+
+## 📊 Requerimiento de Data e Instrumentación (PROD-1341)
+
+Especificaciones enviadas a Miguel Ángel (Data Analyst) para auditar el baseline y preparar la sesión con Finanzas:
+
+### 1. Métricas Solicitadas y Rangos de Fechas Calculados
+*   **Activación bruta:** % de sellers registrados que crean su 1ª orden.
+    *   *Rango 90 días:* **24 de abril de 2026 a 23 de julio de 2026**.
+    *   *Rango histórico (6 meses):* **1 de enero de 2026 a 30 de junio de 2026** (meses cerrados) + Julio 2026 (en curso).
+*   **Activación neta:** % de sellers registrados cuya 1ª orden llega a "entregada".
+    *   *Rango 90 días:* **24 de abril de 2026 a 23 de julio de 2026**.
+    *   *Rango histórico (6 meses):* **1 de enero de 2026 a 30 de junio de 2026** (meses cerrados) + Julio 2026 (en curso).
+*   **TTV bruto:** Mediana de días entre registro y 1ª orden creada (Rango 90 días: **24 de abril a 23 de julio de 2026**).
+*   **TTV neto:** Mediana de días entre registro y 1ª orden entregada (Rango 90 días: **24 de abril a 23 de julio de 2026**).
+*   **Cohorte de supervivencia post 1ª orden:** % de dropshippers con $\ge 1$ orden adicional en los 30 días posteriores a la primera (Cohortes de los últimos 3 meses cerrados: **Abril 2026, Mayo 2026 y Junio 2026**).
+*   **Órdenes por dropshipper activo:** Promedio mensual de sellers con $\ge 1$ orden en el mes (Últimos 3 meses cerrados: **Abril 2026, Mayo 2026 y Junio 2026**).
+
+### 2. Desagregaciones Requeridas
+*   Total acumulado y por país.
+*   Origen de la orden (Manual vs. Integración).
+
+### 3. Checklist de Cobertura de Eventos a Confirmar
+*   `[ ]` Registro completado.
+*   `[ ]` Configuración de tienda (nombre, logo, datos bancarios).
+*   `[ ]` Primer producto publicado (importado o manual).
+*   `[ ]` Primera orden creada.
+*   `[ ]` Primera orden pagada por comprador.
+*   `[ ]` Primera orden despachada.
+*   `[ ]` Primera orden entregada.
+*   `[ ]` Primera orden con ganancia positiva (Orden Rentable).
+
+### 4. Data de Orden Rentable (Para sesión con Finanzas)
+*   Ingreso por orden desglosado por país y moneda.
+*   Fee de Dropi por orden.
+*   Costo de flete por orden.
+*   Canal de venta (verificar existencia en BD o instrumentar).
 
 ---
 
@@ -85,10 +123,38 @@ Donde:
 *   **Métrica:** Conversión de Registro a Primera Orden Manual.
 *   **Estado:** Planificado.
 
-### 6. Biblia de AI (Colaboración SAC)
-*   **Descripción:** Integración de herramientas de IA para soporte self-service y reducción de tickets.
+### 6. Biblia de AI / Proyecto Help Center (Colaboración SAC)
+*   **Descripción:** Integración de herramientas de IA y exposición de la librería de preguntas frecuentes (FAQs) para incentivar la autogestión de dudas técnicas dentro del ecosistema y reducir la carga de tickets en la mesa de ayuda.
 *   **Colaborador:** José Pineda Pitre.
-*   **Estado:** Planificado.
+*   **Superficies de Impacto:**
+    *   *Home:* Acceso directo y contextual a guías de ayuda.
+    *   *Botón Flotante:* Rediseño estilo widget interactivo (tipo Intercom) con barra de búsqueda de artículos de ayuda y pestañas organizadas (*Inicio, Mensajes, Help/Ayuda, News, Tasks*).
+    *   *Website:* Reutilización y rediseño de las FAQs que hoy están aisladas en la sección de blog.
+*   **Problema Actual:** El usuario solo entra al botón flotante para hablar con la mesa de ayuda (sin capa intermedia de autogestión). El blog del website recoge FAQs de manera desarticulada del flujo de la app.
+*   **Benchmarks de Referencia:**
+    *   [Shopify Help Center](https://help.shopify.com/en)
+    *   [MercadoLibre Ayuda](https://www.mercadolibre.com.co/ayuda)
+    *   [Alibaba HelpCenter](https://helpcenter.alibaba.com/s/ggs)
+    *   [Amazon Servicio al Cliente](https://www.amazon.com/-/es/gp/help/customer/display.html?nodeId=GSD587LKW72HKU2V)
+*   **Estado:** Planificado (Fase inicial de definición / Benchmark).
+
+---
+
+## 🧭 Alineación de Iniciativas con el Direccionamiento de la Holding
+
+Toda la planeación de la célula se estructura para que cada iniciativa responda de forma directa a las dimensiones del Universo Dropi:
+
+| Proyecto / Iniciativa | Territorio Principal | Nivel de Madurez | Etapa Cadena de Valor | Lente Cognitivo (Métrica) |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. Simplificación de Registro** | E-commerce | A. Iniciando | 1. Educación / Registro | Reptiliano (Bounce) |
+| **2. Prototipo Lovable (Buddy)** | E-commerce | A. Iniciando | 2. Producto (Descubrimiento) | Reptiliano (Time-to-Value) |
+| **3. Personalización UserPilot** | E-commerce | A. Iniciando | 1. Educación / Onboarding | Reptiliano (Registro $\to$ 1ª orden) |
+| **4. Dropy Academy (7 días)** | E-commerce | A. Iniciando | 1. Educación (Ventas) | Límbico (Hábito de venta) |
+| **5. Experimento Pide tu Muestra**| Logística | A. Iniciando | 4. Logística (Orden manual) | Reptiliano (Seguridad operativa) |
+| **6. Proyecto Help Center (SAC)** | Logística / Finanzas| A. Iniciando / B. Consolidando | 5. Posventa (Autogestión) | Reptiliano (Reducción tickets) |
+| **7. Refactor Dropify (CMS 2.0)**| Tecnología | B. Consolidando | 4. Logística / 3. Mercadeo | Límbico (Automatización/Hábito) |
+| **8. Bugs Tienda Nube** | Logística | B. Consolidando | 4. Logística (Stock/Webhook) | Reptiliano (Corrección fallas) |
+| **9. Loop Hábito / Churn** | E-commerce | B. Consolidando | 6. Fidelización (CRM/Recompra) | Límbico (Retención 30d) |
 
 ---
 
@@ -102,6 +168,7 @@ Donde:
 
 ## 6. Métricas de Éxito (KPIs)
 
-*   **Activación Neta (Huérfanos):** Incrementar del 2.9% al `[Meta]%`.
-*   **Retención Prematura:** $\ge 70\%$ de recurrencia tras la primera orden entregada.
-*   **Adopción de Integraciones:** Transición de órdenes manuales a automatizadas (Shopify/WooCommerce).
+*   **Activación Neta (Huérfanos):** Incrementar del 5.2% al `[Meta]%`.
+*   **Retención Prematura:** $\ge 70\%$ de recurrencia tras la primera orden entregada (Mediana de cohortes).
+*   **Adopción de Integraciones:** Transición de órdenes manuales a automatizadas (Shopify/WooCommerce/Tienda Nube).
+
