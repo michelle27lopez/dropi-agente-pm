@@ -83,9 +83,9 @@ def main():
             nivel = r["nivel_actual"]
             if nivel not in UMBRAL:
                 continue
-            if r["es_activo_operativo"] != "True":
+            if r["es_activo_operativo"].strip().lower() != "true":
                 continue
-            if r["es_interno_dropi"] == "True":
+            if r["es_interno_dropi"].strip().lower() == "true":
                 continue
             pu = f(r["pct_umbral_siguiente_nivel"])
             if pu is None:

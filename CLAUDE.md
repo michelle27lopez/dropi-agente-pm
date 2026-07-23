@@ -97,9 +97,7 @@ Generan más órdenes propias que las que reciben de terceros. Su operación pri
 ### Lente 1 — Portafolio comercial de Marcas
 *(Cumplimiento, gestión comercial, contribución a la meta de 600.000 órdenes mensuales)*
 
-El portafolio se conforma de dos fuentes — **el ID comercial siempre prevalece sobre la comunidad**:
-- **Por ID comercial:** usuarios asignados a los ID comerciales **71445 o 21553**. ⚠️ El ID `11445` no existe en data — fue documentado por error. No usarlo.
-- **Por comunidad:** usuarios de la comunidad **BRANDS (ID 410)** que no tienen ninguno de esos dos ID comerciales asignados. Pueden tener otros IDs por gestión anterior.
+El portafolio se conforma **únicamente** por usuarios asignados a los ID comerciales **71445 o 21553**. ⚠️ El ID `11445` no existe en data — fue documentado por error. No usarlo. La comunidad BRANDS (ID 410) **ya no es un camino alterno de entrada** al portafolio (regla cerrada 2026-07-17) — solo el ID comercial define pertenencia.
 
 Úsalo cuando Kate pregunte por: cumplimiento de meta, comportamiento del portafolio, usuarios con comercial asignado, comunidad Brands, gestión comercial.
 
@@ -110,9 +108,7 @@ Va más allá del portafolio comercial. Incluye todos los usuarios con comportam
 
 **Principio clave:** no se trata de quitar usuarios de otros portafolios ni disputar gestión comercial. Es identificar emprendedores sub-acompañados o huérfanos y encontrar oportunidades de crecimiento. La meta de 600K es referencia de dirección, no único criterio.
 
-**Regla de detección de huérfanos:** dentro de Lente 2, cualquier usuario que cumpla ambas condiciones es un "huérfano":
-1. No tiene ID comercial asignado (ni 71445 ni 21553).
-2. No pertenece a la comunidad BRANDS (ID 410).
+**Regla de detección de huérfanos (actualizada 2026-07-17):** huérfano = usuario que **no está en la unión de comercial_id 71445 o 21553**. La comunidad **BRANDS (ID 410) ya no protege** de esta categoría — antes se excluía a quien perteneciera a BRANDS aunque no tuviera comercial asignado; esa regla quedó descontinuada. Solo importa el ID comercial.
 
 Si además tiene órdenes propias registradas → es una oportunidad de gestión pendiente de asignar.
 

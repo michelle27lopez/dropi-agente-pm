@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { campaignsSupabase as supabase } from "@/lib/supabase-campaigns";
 import { localListCampaigns, localCreateCampaign } from "@/lib/local-store-planeacion";
+import { requireUser } from "@/lib/require-auth";
 
 export async function GET() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (supabase) {
     const { data, error } = await supabase
       .from("campaigns_planeacion")
@@ -14,6 +18,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const body = await req.json();
 
   if (supabase) {
