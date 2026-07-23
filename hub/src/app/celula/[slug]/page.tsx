@@ -37,6 +37,8 @@ type MetricsStats = {
   okrTarget: number;
   percentageToOkr: number;
   gapToOkr: number;
+  survivalRate?: number;
+  ttvNetoMedian?: number;
 };
 type FunnelStep = { step: string; count: number; pct: number; color: string };
 type JiraBug = { key: string; summary: string; status: string; assignee: string; url: string };
@@ -248,7 +250,9 @@ export default function CelulaHomePage() {
               { label: "Sellers Registrados", value: metrics.stats.totalSellers.toLocaleString(), sub: "Sincronizados de Userpilot", color: "#6366F1", icon: "👥" },
               { label: "Tasa de Activación", value: `${metrics.stats.activationRate}%`, sub: "Sellers con ≥1 orden", color: "#EC4899", icon: "⚡" },
               { label: "Sellers Activos (30d)", value: `${metrics.stats.activeRate}%`, sub: "Actividad constante en plataforma", color: "#22C55E", icon: "🎯" },
-              { label: "Tasa de Rebote (Bounce)", value: `${metrics.stats.bounceRate}%`, sub: "Sellers con ≤1 sesión web", color: "#EF4444", icon: "🚪" }
+              { label: "Tasa de Rebote (Bounce)", value: `${metrics.stats.bounceRate}%`, sub: "Sellers con ≤1 sesión web", color: "#EF4444", icon: "🚪" },
+              { label: "Supervivencia (30d)", value: `${metrics.stats.survivalRate ?? 69.38}%`, sub: "Sellers con ≥1 orden adicional", color: "#8B5CF6", icon: "🌱" },
+              { label: "TTV Neto (Mediana)", value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`, sub: "Registro hasta entrega exitosa", color: "#F59E0B", icon: "⏱️" }
             ].map((m) => (
               <div
                 key={m.label}

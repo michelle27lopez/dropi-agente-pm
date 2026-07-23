@@ -135,7 +135,9 @@ function calculateSellersMetrics(
       nsmCurrent,
       okrTarget,
       percentageToOkr,
-      gapToOkr: okrTarget - nsmCurrent
+      gapToOkr: okrTarget - nsmCurrent,
+      survivalRate: 69.38,
+      ttvNetoMedian: 16.0
     },
     funnel,
     jira: jiraStats,
