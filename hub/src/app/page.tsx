@@ -110,13 +110,13 @@ export default function HubPage() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 
-  // Este home es el de Suppliers (tu célula). Cada quien aterriza siempre en
-  // la home de su propia célula, sin importar ve_hub_completo NI is_super_admin
-  // — ambos flags controlan permisos (navegar con el switcher, ver botones de
-  // admin), no dónde aterriza. Solo quien es literalmente de la célula
-  // Suppliers (Jaime, Michelle) usa "/" como panel de control por defecto.
-  // Un super admin de otra célula (ej. Laura, Product Designers) aterriza en
-  // la suya, igual que cualquiera.
+  // Este home es el de Suppliers (tu célula). Recién logueado, cada quien
+  // aterriza en la home de su propia célula (o /resumen si es stakeholder) —
+  // sin importar ve_hub_completo NI is_super_admin, ambos flags controlan
+  // permisos, no dónde aterriza. Pero ese rebote solo debe pasar UNA VEZ por
+  // sesión: si alguien ya está navegando y vuelve a "/" a propósito (ej. el
+  // switcher del header, que para Suppliers apunta aquí), no lo mandamos de
+  // vuelta a su célula — si no, nadie podría ver este home salvo Jaime.
   useEffect(() => {
     if (!hasSupabase) { setCheckingRole(false); return; }
     fetch("/api/me")
@@ -125,6 +125,10 @@ export default function HubPage() {
         const profile = data?.profile;
         setUserEmail(data?.user?.email ?? profile?.email ?? null);
         if (!profile) { setCheckingRole(false); return; }
+
+        const yaRedirigido = sessionStorage.getItem("darwin-home-routed") === "1";
+        sessionStorage.setItem("darwin-home-routed", "1");
+        if (yaRedirigido) { setCheckingRole(false); return; }
 
         const mySlug = profile.celulas?.slug;
 
