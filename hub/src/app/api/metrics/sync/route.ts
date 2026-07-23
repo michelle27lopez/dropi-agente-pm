@@ -4,10 +4,14 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import fs from "fs/promises";
 import path from "path";
+import { requireUser } from "@/lib/require-auth";
 
 const execPromise = promisify(exec);
 
 export async function GET(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   try {
     if (!supabase) {
       return NextResponse.json(
@@ -50,6 +54,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   try {
     const body = await req.json();
     const { mode, csvData, startDate } = body;

@@ -1,18 +1,30 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 export async function GET(req: NextRequest, context: any) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const { slug } = await context.params;
   if (!supabase) {
     return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
   }
 
-  // Find the project by project_code (case-insensitive) or by id
-  const { data: project, error: projectError } = await supabase
+  // Find the project by project_code (case-insensitive) or by id safely avoiding UUID cast errors
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(slug);
+
+  let query = supabase
     .from("projects")
-    .select("*, celulas(nombre, slug)")
-    .or(`project_code.ilike.${slug},id.eq.${slug}`)
-    .maybeSingle();
+    .select("*, celulas(nombre, slug)");
+
+  if (isUuid) {
+    query = query.or(`project_code.ilike.${slug},id.eq.${slug}`);
+  } else {
+    query = query.ilike("project_code", slug);
+  }
+
+  const { data: project, error: projectError } = await query.maybeSingle();
 
   if (projectError) {
     return NextResponse.json({ error: projectError.message }, { status: 500 });
@@ -47,9 +59,14 @@ export async function GET(req: NextRequest, context: any) {
     }
   }
 
+  const mappedCycles = cycles?.map((c: any) => ({
+    ...c,
+    ...c.data
+  })) || [];
+
   return NextResponse.json({
     project,
-    cycles: cycles || [],
+    cycles: mappedCycles,
     decisions,
   });
 }

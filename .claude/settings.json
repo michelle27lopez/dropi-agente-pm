@@ -47,7 +47,10 @@
       "Bash(npx --yes playwright screenshot --viewport-size=1080,1350 --full-page \"file://$\\(pwd\\)/cellboard-poster.html\" cellboard-poster.png)",
       "Bash(git fetch *)",
       "Bash(gh auth *)",
-      "Bash(security find-internet-password *)"
+      "Bash(security find-internet-password *)",
+      "Bash(python3 mapear_caminos.py)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

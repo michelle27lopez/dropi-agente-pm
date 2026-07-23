@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { localListEligibleProducts } from "@/lib/local-store-planeacion";
 import { supabaseListEligibleProducts } from "@/lib/supabase-store-planeacion";
+import { requireUser } from "@/lib/require-auth";
 
 // Uso interno (detrás del login) — descarga las selecciones postuladas como
 // CSV para trabajar la curaduría en Excel. BOM UTF-8 para que Excel muestre
 // bien las tildes y separador ";" que es el que espera Excel en es-CO.
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const { id } = await params;
   const entries = (await supabaseListEligibleProducts(id)) ?? (await localListEligibleProducts(id));
 

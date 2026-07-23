@@ -110,7 +110,7 @@ export default function OnboardingTTFOPage() {
         background: "#fff", borderBottom: "1px solid var(--border)",
         padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
       }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
+        <a href="/celula/brands" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
           ← Dropi PM Tools
         </a>
         <span style={{ color: "var(--border)" }}>/</span>

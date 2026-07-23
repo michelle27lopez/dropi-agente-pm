@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { dispatchOferta, sleep } from "@/lib/ascenso-dispatch";
+import { requireUser } from "@/lib/require-auth";
 
 // En prueba real: 15 envíos (WA + email cada uno) tardaron ~60s, muy cerca
 // o por encima del límite por defecto de una función serverless en Vercel
@@ -17,6 +18,9 @@ export const maxDuration = 30;
 // porque una función serverless no aguanta cientos de envíos secuenciales
 // en una sola invocación.
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
 
   const body = await req.json().catch(() => ({}));

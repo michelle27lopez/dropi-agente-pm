@@ -18,7 +18,7 @@ export function matchesQuery(item: Item, query: string) {
   );
 }
 
-export function Section({ title, items, ctaLabel }: { title: string; items: Item[]; ctaLabel: string }) {
+export function Section({ title, items, ctaLabel, onItemClick }: { title: string; items: Item[]; ctaLabel: string; onItemClick?: (item: Item) => void }) {
   if (items.length === 0) return null;
   return (
     <div>
@@ -33,19 +33,24 @@ export function Section({ title, items, ctaLabel }: { title: string; items: Item
         gap: 20,
       }}>
         {items.map((item, index) => (
-          <Card key={item.key} item={item} ctaLabel={ctaLabel} index={index} />
+          <Card key={item.key} item={item} ctaLabel={ctaLabel} index={index} onItemClick={onItemClick} />
         ))}
       </div>
     </div>
   );
 }
 
-export function Card({ item, ctaLabel, index }: { item: Item; ctaLabel: string; index: number }) {
+export function Card({ item, ctaLabel, index, onItemClick }: { item: Item; ctaLabel: string; index: number; onItemClick?: (item: Item) => void }) {
+  // Las cards con url navegan directo (proyectos, weekly). Las que no tienen
+  // url (ej. celula_updates) solo son interactivas si el padre pasa onItemClick
+  // — ahí se abren en un modal en vez de intentar navegar a ningún lado.
+  const clickable = !item.url && !!onItemClick;
   const Tag = item.url ? "a" : "div";
   const isExternal = item.url?.startsWith("http");
   return (
     <Tag
       href={item.url}
+      onClick={clickable ? () => onItemClick!(item) : undefined}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       className="hub-card"
@@ -57,6 +62,7 @@ export function Card({ item, ctaLabel, index }: { item: Item; ctaLabel: string; 
         textDecoration: "none",
         display: "block",
         animationDelay: `${index * 60}ms`,
+        cursor: clickable ? "pointer" : undefined,
       }}
     >
       <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 16 }}>
@@ -85,7 +91,7 @@ export function Card({ item, ctaLabel, index }: { item: Item; ctaLabel: string; 
       <p style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.5 }}>
         {item.description}
       </p>
-      {item.url && (
+      {(item.url || clickable) && (
         <div className="hub-card-arrow" style={{ marginTop: 20, fontSize: 12, fontWeight: 600, color: "var(--dropi)" }}>
           {ctaLabel}
         </div>
