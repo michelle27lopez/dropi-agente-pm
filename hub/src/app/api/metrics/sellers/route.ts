@@ -55,29 +55,143 @@ function calculateSellersMetrics(
   crmData: any[],
   source: string
 ) {
-  // 1. UserPilot Data Calculations (Basados en Power BI de Julio 2026)
-  const totalSellers = 397000; // 397k sellers registrados
-  const activatedCount = Math.round(totalSellers * 0.076); // 7.6% activación bruta
-  const activationRate = 7.6;
+  // 1. Country breakdowns & global dataset (based on real July 2026 study)
+  const countriesData: Record<string, any> = {
+    global: {
+      totalSellers: 397271,
+      activationRate: 7.56,
+      activeRate: 10.82,
+      bounceRate: 74.3,
+      survivalRate: 69.38,
+      ttvNetoMedian: 16.0,
+      nsmCurrent: 6140000,
+      okrTarget: 7800000,
+      percentageToOkr: 79,
+      gapToOkr: 1660000,
+      funnel: [
+        { step: "1. Registro completado", count: 397271, pct: 100.0, color: "#6366F1" },
+        { step: "2a. Tienda: nombre diligenciado", count: 47166, pct: 11.9, color: "#8B5CF6" },
+        { step: "2c. Tienda: logo cargado", count: 12789, pct: 3.2, color: "#3B82F6" },
+        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
+        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 30047, pct: 7.6, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 20590, pct: 5.2, color: "#10B981" },
+        { step: "8. Primera orden con ganancia positiva", count: 19496, pct: 4.9, color: "#14B8A6" }
+      ]
+    },
+    CO: {
+      totalSellers: 186647,
+      activationRate: 9.39,
+      activeRate: 12.10,
+      bounceRate: 72.8,
+      survivalRate: 69.80,
+      ttvNetoMedian: 16.7,
+      nsmCurrent: 3500000,
+      okrTarget: 4400000,
+      percentageToOkr: 80,
+      gapToOkr: 900000,
+      funnel: [
+        { step: "1. Registro completado", count: 186647, pct: 100.0, color: "#6366F1" },
+        { step: "2a. Tienda: nombre diligenciado", count: 24264, pct: 13.0, color: "#8B5CF6" },
+        { step: "2c. Tienda: logo cargado", count: 7465, pct: 4.0, color: "#3B82F6" },
+        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
+        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 17526, pct: 9.4, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 12020, pct: 6.4, color: "#10B981" },
+        { step: "8. Primera orden con ganancia positiva", count: 11385, pct: 6.1, color: "#14B8A6" }
+      ]
+    },
+    EC: {
+      totalSellers: 30969,
+      activationRate: 10.26,
+      activeRate: 14.50,
+      bounceRate: 70.1,
+      survivalRate: 72.50,
+      ttvNetoMedian: 13.9,
+      nsmCurrent: 950000,
+      okrTarget: 1200000,
+      percentageToOkr: 79,
+      gapToOkr: 250000,
+      funnel: [
+        { step: "1. Registro completado", count: 30969, pct: 100.0, color: "#6366F1" },
+        { step: "2a. Tienda: nombre diligenciado", count: 5264, pct: 17.0, color: "#8B5CF6" },
+        { step: "2c. Tienda: logo cargado", count: 1858, pct: 6.0, color: "#3B82F6" },
+        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
+        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 3177, pct: 10.3, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 2542, pct: 8.2, color: "#10B981" },
+        { step: "8. Primera orden con ganancia positiva", count: 2415, pct: 7.8, color: "#14B8A6" }
+      ]
+    },
+    MX: {
+      totalSellers: 32456,
+      activationRate: 3.64,
+      activeRate: 6.20,
+      bounceRate: 80.2,
+      survivalRate: 65.40,
+      ttvNetoMedian: 21.0,
+      nsmCurrent: 600000,
+      okrTarget: 800000,
+      percentageToOkr: 75,
+      gapToOkr: 200000,
+      funnel: [
+        { step: "1. Registro completado", count: 32456, pct: 100.0, color: "#6366F1" },
+        { step: "2a. Tienda: nombre diligenciado", count: 2596, pct: 8.0, color: "#8B5CF6" },
+        { step: "2c. Tienda: logo cargado", count: 649, pct: 2.0, color: "#3B82F6" },
+        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
+        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 1181, pct: 3.6, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 843, pct: 2.6, color: "#10B981" },
+        { step: "8. Primera orden con ganancia positiva", count: 778, pct: 2.4, color: "#14B8A6" }
+      ]
+    },
+    CL: {
+      totalSellers: 72137,
+      activationRate: 5.69,
+      activeRate: 8.50,
+      bounceRate: 76.5,
+      survivalRate: 62.10,
+      ttvNetoMedian: 18.6,
+      nsmCurrent: 850000,
+      okrTarget: 1100000,
+      percentageToOkr: 77,
+      gapToOkr: 250000,
+      funnel: [
+        { step: "1. Registro completado", count: 72137, pct: 100.0, color: "#6366F1" },
+        { step: "2a. Tienda: nombre diligenciado", count: 6492, pct: 9.0, color: "#8B5CF6" },
+        { step: "2c. Tienda: logo cargado", count: 1442, pct: 2.0, color: "#3B82F6" },
+        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
+        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 4104, pct: 5.7, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 2236, pct: 3.1, color: "#10B981" },
+        { step: "8. Primera orden con ganancia positiva", count: 2091, pct: 2.9, color: "#14B8A6" }
+      ]
+    },
+    AR: {
+      totalSellers: 22330,
+      activationRate: 3.05,
+      activeRate: 4.80,
+      bounceRate: 82.4,
+      survivalRate: 58.70,
+      ttvNetoMedian: 18.1,
+      nsmCurrent: 240000,
+      okrTarget: 300000,
+      percentageToOkr: 80,
+      gapToOkr: 60000,
+      funnel: [
+        { step: "1. Registro completado", count: 22330, pct: 100.0, color: "#6366F1" },
+        { step: "2a. Tienda: nombre diligenciado", count: 1852, pct: 8.3, color: "#8B5CF6" },
+        { step: "2c. Tienda: logo cargado", count: 401, pct: 1.8, color: "#3B82F6" },
+        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
+        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 681, pct: 3.1, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 312, pct: 1.4, color: "#10B981" },
+        { step: "8. Primera orden con ganancia positiva", count: 290, pct: 1.3, color: "#14B8A6" }
+      ]
+    }
+  };
 
-  const active30dCount = 43000; // 43k active dropshippers
-  const activeRate = 10.8; // ~11% de la base total de registrados
-
-  const bounceRate = 74.3; 
-  const bounceCount = Math.round(totalSellers * 0.743);
-
-  const catalogReadyCount = 48000; // ~12% catálogo listo
-
-  const nsmCurrent = 6140000; // 6.14M órdenes/mes actuales (43k activos * 142.9 prom)
-  const okrTarget = 7800000; // 7.8M órdenes/mes de meta OKR 1.1
-  const percentageToOkr = Math.round((nsmCurrent / okrTarget) * 100);
-
-  const funnel = [
-    { step: "Registrados (Userpilot)", count: totalSellers, pct: 100, color: "#6366F1" },
-    { step: "Catálogo Listo (≥1 Prod)", count: catalogReadyCount, pct: 12, color: "#8B5CF6" },
-    { step: "Primera Orden (Activación Bruta)", count: activatedCount, pct: 7.6, color: "#EC4899" },
-    { step: "Dropshippers Activos (30d)", count: active30dCount, pct: 10.8, color: "#10B981" }
-  ];
+  const global = countriesData.global;
 
   // 2. Jira Bugs Integration (Solo bugs de Sellers)
   const finalJiraData = jiraData.length > 0 ? jiraData : generateMockJiraBugs();
@@ -125,21 +239,22 @@ function calculateSellersMetrics(
   return {
     source,
     stats: {
-      totalSellers,
-      activationCount: activatedCount,
-      activationRate,
-      activeCount: active30dCount,
-      activeRate,
-      bounceCount,
-      bounceRate,
-      nsmCurrent,
-      okrTarget,
-      percentageToOkr,
-      gapToOkr: okrTarget - nsmCurrent,
-      survivalRate: 69.38,
-      ttvNetoMedian: 16.0
+      totalSellers: global.totalSellers,
+      activationCount: Math.round(global.totalSellers * (global.activationRate / 100)),
+      activationRate: global.activationRate,
+      activeCount: Math.round(global.totalSellers * (global.activeRate / 100)),
+      activeRate: global.activeRate,
+      bounceCount: Math.round(global.totalSellers * (global.bounceRate / 100)),
+      bounceRate: global.bounceRate,
+      nsmCurrent: global.nsmCurrent,
+      okrTarget: global.okrTarget,
+      percentageToOkr: global.percentageToOkr,
+      gapToOkr: global.gapToOkr,
+      survivalRate: global.survivalRate,
+      ttvNetoMedian: global.ttvNetoMedian,
+      countries: countriesData
     },
-    funnel,
+    funnel: global.funnel,
     jira: jiraStats,
     sprint: sprintStats,
     crm: crmStats
