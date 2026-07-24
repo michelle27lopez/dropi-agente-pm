@@ -81,6 +81,7 @@ const PROJECT_STYLE: Record<string, { url: string; color: string; icon: string }
   "PUL-001":   { url: "/proyectos/pulso-demo", color: "#EC4899", icon: "🔭" },
   "GALI-001": { url: "/proyectos/gali-demo", color: "#FF6102", icon: "🦊" },
   "ACT-001": { url: "/proyectos/dropi-activa", color: "#7C3AED", icon: "🚀" },
+  "ESP-001": { url: "/proyectos/espionaje", color: "#10B981", icon: "🕵️" },
 };
 
 function truncate(text: string, max: number) {
