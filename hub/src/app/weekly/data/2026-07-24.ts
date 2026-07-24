@@ -2,9 +2,9 @@ import type { WeeklySnapshot } from "./types";
 
 export const snapshot: WeeklySnapshot = {
   week: "Semana 21–27 jul 2026",
-  subtitle: "27-jul T0 en 3 días · Pulso: 535 Pareto, señal Stock, auto-señal · DCA-001 meet 1-ago · Cyber Days imágenes listas",
-  heroBadge: "Semana 24 jul · T-3 al lanzamiento",
-  heroTitle: "T-3 al 27-jul · Activación + Dropi Pulso arrancan\n+ Pulso: 535 Pareto, señal Stock requerida · DCA-001 meet 1-ago",
+  subtitle: "27-jul T0 · Kevin activa 10 fast track · DCA-001 frames auto + etiqueta Lucho · ESP-001 validado en célula · Pulso 535 Pareto",
+  heroBadge: "Semana 24 jul · Célula · T-3 al 27-jul",
+  heroTitle: "T-3 al 27-jul · Kevin activa Fast Track hoy · DCA-001 frames automáticos listos\n+ ESP-001 validado en célula · Pulso 535 Pareto · señal Stock urgente",
   heroStrip: [
     { label: "T0 medición", value: "27-jul", sub: "Activación + Dropi Pulso · en 3 días" },
     { label: "Pareto Pulso", value: "535", sub: "Usuarios gestionados · 4→2 campañas/u" },
@@ -15,8 +15,8 @@ export const snapshot: WeeklySnapshot = {
   insights: [
     {
       id: "INS-001",
-      titulo: "TTV-001 · Plan de choque activo — Fast Track / alto potencial, semana del 28-jul entrevistas",
-      descripcion: "El plan de choque fue socializado y la célula lo aprobó. El segmento target no es toda la base sino los suppliers Fast Track o de alto potencial — quienes declararon en la encuesta que pueden mover bastante volumen. La semana del 28-jul, Jaime y Michelle los contactarán para sacar insights: qué están esperando para activarse, qué tipo de proveedor necesitan. Esos insights van directo a Comercial para acelerar o no la auditoría. Mientras tanto: los dejan publicar y el equipo queda pendiente. Si se consiguen órdenes → se proratea el modelo y se lleva a Lucho/TI como evidencia de valor percibido para agilizar la automatización a escala. Pendiente crítico: validación de Emerson (llegó el lunes de licencia de paternidad).",
+      titulo: "TTV-001 · Fast Track en movimiento — Kevin activa 10 providers hoy, CRM bug en fix, Jaime + Michelle los contactan esta semana",
+      descripcion: "La reunión de célula cerró el loop de activación Fast Track. Kevin Castro (Verificados) confirmó la acción concreta: comparte lista de 10 providers fast track / alto potencial → los activa de forma automática primero → Jaime y Michelle los contactan directamente para entrevistas y acompañamiento. Blocker activo: el CRM tiene un bug donde la plantilla WA se envía pero el mensaje personalizado no llega — Osman (equipo de Kique) está en fix. Una vez resuelto, arranca el contacto. Objetivo del experimento: entender qué están esperando para activarse, qué tipo de proveedor necesitan → insights a Comercial para acelerar o no la auditoría. Si se consiguen órdenes → prorratear el modelo y llevarlo a Lucho/TI como evidencia de valor percibido.",
       proyecto: "TTV-001",
       tipo: "Decisión",
       tipoColor: "#7C3AED",
@@ -33,8 +33,8 @@ export const snapshot: WeeklySnapshot = {
     },
     {
       id: "INS-003",
-      titulo: "DCA-001 · Cyber Days — meet corrido al 1-ago, curaduría eliminada, imágenes de productos listas",
-      descripcion: "El meet con proveedores (kick-off) se corrió al viernes 1-ago — el timing de la semana pasada era muy ajustado. La etapa de curaduría fue eliminada del plan original, lo que libera una semana. Imágenes de productos para Cyber Days ya están recopiladas y listas en Desktop (formato para Canva). Dependencia activa: autorización de Meta para la plantilla de WhatsApp — fallback: Jaime envía manual desde su celular (son pocos proveedores, es viable). Michelle finaliza copies esta semana para pasarlos a Enrique. El lanzamiento del 11-ago se mantiene.",
+      titulo: "DCA-001 · Michelle mostró el sistema en la célula — link personalizado + frames auto + etiqueta Lucho + popup UserPilot confirmado",
+      descripcion: "Michelle presentó el sistema completo en la reunión de célula (24-jul). Flujo: cada proveedor recibe un link personalizado → selecciona hasta 10 productos (stock ≥500, sin ventas últimas 2 semanas) → descarga sus fotos ya con el marco Cyber Days aplicado (ZIP automático) → sube al catálogo Canva → desde el 16-ago cambia foto + keyword en nombre + categoría 'CyberDays'. Dos decisiones clave que salieron de la reunión: (1) Lucho sugirió usar etiquetas en Dropy — aunque el proveedor no actualice la foto, el producto participa via tag + categoría, garantizando participación masiva sin depender de cada proveedor. (2) Laura Catherine (UserPilot) confirmó que sí se puede hacer un popup personalizado en Dropy con el link único de cada proveedor para invitarlos a participar. Majo propuso integrar el flujo al dominio de Dropy (existe landing de campañas de Dropicop que se puede reusar). Las campañas anteriores (Dropicop, Black Days) no se midieron — este sistema cierra ese gap. Meet kick-off: 1-ago. Lanzamiento: 11-ago.",
       proyecto: "DCA-001",
       tipo: "Dato",
       tipoColor: "#F59E0B",
@@ -84,6 +84,24 @@ export const snapshot: WeeklySnapshot = {
       tipo: "Hallazgo",
       tipoColor: "#F59E0B",
       impacto: "Alto",
+    },
+    {
+      id: "INS-011",
+      titulo: "ESP-001 · Escucha de canales validada en célula — Kate ve valor para TARS, Laura para experimentos, Majo para contenidos semanales",
+      descripcion: "La reunión de célula (24-jul) validó ESP-001 con tres usos de negocio distintos: (1) Kate (Cate Salazar) ve valor directo para el proyecto TARS — escuchar en tiempo real qué dicen los usuarios sobre las funcionalidades de la plataforma, complementando data cuantitativa con cualitativa. (2) Laura Contreras propuso usarlo de forma transversal en todas las células: que cada experimento (ej. autoconfirmación) tenga su propio tema de escucha y los insights soporten y escalen los argumentos del experimento. (3) Majo quiere análisis semanales por temática (Cordi, CAS, recolección) para nutrir contenidos en grupos de difusión, canales WA y redes sociales — hasta hacer un resumen mensual de preguntas clave. Michelle explicó que hoy el sistema puede clasificar temas automáticamente (lo que encontró en los grupos) o bajo demanda (que le definamos el tema y traiga los mensajes relacionados). Kevin tiene grupos de providers verificados y puede compartir acceso. Decisión: pedir a todos que compartan links de grupos para ampliar la escucha.",
+      proyecto: "ESP-001",
+      tipo: "Decisión",
+      tipoColor: "#10B981",
+      impacto: "Alto",
+    },
+    {
+      id: "INS-012",
+      titulo: "ESP-001 · Decisión — se necesita WA dedicado para el área · expandir a Facebook y YouTube",
+      descripcion: "La escucha de canales actual está corriendo desde el WA de Mit, que se va a llenar de grupos. Decisión de Jaime: solicitar un WhatsApp dedicado para el área. Por ahora solo hay acceso a grupos de WhatsApp; Majo mencionó que Dropi compró los dominios de grupos de Facebook hace ~2 años para controlar información negativa — esos canales también son relevantes para escuchar. Michelle señaló que los comentarios de YouTube y Facebook tienen mucho volumen. Próximo paso: todos comparten links de grupos a Jaime para centralizar el acceso antes de migrar al WA dedicado.",
+      proyecto: "ESP-001",
+      tipo: "Decisión",
+      tipoColor: "#0EA5E9",
+      impacto: "Medio",
     },
     {
       id: "INS-009",
@@ -308,39 +326,43 @@ export const snapshot: WeeklySnapshot = {
       decision: "Señal Stock entra al roadmap de Pulso como prioridad — validar alcance técnico con Reinoso"
     },
   ],
-  resumen: "Semana 24-jul · Estamos a <strong>3 días del 27-jul</strong> — el T0 de medición de activación automática y del piloto de <strong>Dropi Pulso</strong>. En <strong>TTV-001</strong> el plan de choque con el segmento Fast Track está activo; solo falta la validación de Emerson y que el pipeline GHL corra de punta a punta antes del domingo. La semana del 28-jul arranca el contacto directo con los suppliers de alto potencial. En <strong>IND-001</strong> el proceso se simplificó — sin firma ni DocuSign — y solo espera el visto bueno de María con Legal. En <strong>DCA-001</strong> las imágenes de productos Cyber Days ya están listas, el meet con suppliers se corre al <strong>1-ago</strong> y el lanzamiento del 11-ago se mantiene. Lo más rico de la semana viene del <strong>research RB-005 (Dropi Pulso)</strong>: el equipo de Cuidado de Campañas gestiona 535 usuarios del Pareto con 3 herramientas paralelas, lleva la meta de campañas al 50%, y Valentina pidió explícitamente agregar la señal <strong>'Stock'</strong> a Pulso — es la funcionalidad más urgente. El riesgo de concentración de dropshippers ya causó un colapso de stock real (50 drops → aires acondicionados sin inventario). El bug de IDs de producto (111K sin estandarizar) es el mismo cuello de botella de <strong>CAT-001</strong>. Del lado de <strong>TI</strong>: José canceló por segunda semana — es momento de escalar con María.",
+  resumen: "Semana 24-jul · La <strong>reunión de célula de hoy</strong> cerró tres loops importantes. En <strong>TTV-001</strong>: Kevin Castro activa hoy los 10 providers Fast Track automáticamente — Jaime y Michelle los contactan esta semana para entrevistas. Blocker: bug en el CRM (Osman en fix). En <strong>DCA-001</strong>: Michelle mostró el sistema completo — link personalizado + frames automáticos + Canva. Dos decisiones de la reunión que amplifican el alcance: Lucho propuso usar <strong>etiquetas en Dropy</strong> para que el producto participe aunque el proveedor no actualice la foto, y Laura Catherine confirmó que <strong>UserPilot puede enviar el popup personalizado</strong> a cada proveedor con su link. Meet kick-off: 1-ago. Lanzamiento: 11-ago. <strong>ESP-001</strong> fue validado por toda la célula: Kate lo ve para TARS (escuchar bugs y frictions), Laura para soportar experimentos con data cualitativa, Majo para contenidos semanales y resúmenes mensuales. Decisión: pedir WA dedicado para el área + compartir todos los links de grupos. Estamos a <strong>3 días del 27-jul</strong> — T0 de medición de activación automática y piloto de <strong>Dropi Pulso</strong>. Lo más rico de la semana viene del <strong>RB-005</strong>: 535 usuarios del Pareto gestionados manualmente, meta de campañas al 50%, señal <strong>'Stock'</strong> urgente pedida por Valentina, riesgo de concentración ya colapsó stock real (50 drops → AC sin inventario). Del lado de <strong>TI</strong>: José canceló por segunda semana — escalar con María esta semana.",
   proximosPasos: [
     {
-      titulo: "Esta semana · prioridad absoluta",
+      titulo: "Hoy y mañana · urgente",
       color: "#7C3AED",
       items: [
-        "27-jul: confirmar que el pipeline GHL corre de punta a punta — T0 de medición activa (TTV-001 + Dropi Pulso).",
+        "Kevin Castro: lista de 10 fast track → activación automática → confirmación a Jaime para arrancar contacto.",
+        "Osman: fix bug CRM (plantilla WA sin personalización) — bloquea contacto directo a Fast Track.",
+        "27-jul: confirmar que el pipeline GHL corre de punta a punta — T0 de medición (TTV-001 + Dropi Pulso).",
         "Dropi Pulso: piloto con comunidad de Iván el 27-jul — data manual si Reinoso no entrega endpoint.",
-        "Validar plan de choque TTV con Emerson esta semana.",
-        "IND-001: esperar confirmación de María sobre validación con Legal.",
-        "Escalar con María la falta de respuesta de TI — ya lleva 2 semanas. DESC-001 tiene deadline externo 11-ago.",
+        "Solicitar WA dedicado para el área (ESP-001 — hoy usa el de Mit).",
       ]
     },
     {
-      titulo: "Esta semana · campañas",
+      titulo: "Esta semana · campañas y escaladas",
       color: "#0EA5E9",
       items: [
-        "DCA-001: Michelle finaliza copies y los pasa a Enrique para CRM.",
-        "Confirmar autorización plantilla Meta WA — fallback: Jaime envía manual.",
-        "Dropi Pulso: agregar señal 'Stock' al roadmap como prioridad — validar con Reinoso alcance técnico.",
-        "Definir umbral de alerta de concentración de dropshippers (¿20 o 30 drops/producto?).",
+        "DCA-001: Michelle finaliza copies y los pasa a Enrique. Confirmar autorización plantilla Meta WA (fallback: Jaime manual).",
+        "DCA-001: explorar con Lucho la implementación de etiquetas en Dropy para participación sin foto actualizada.",
+        "DCA-001: activar popup UserPilot personalizado (Laura Catherine confirmó viabilidad).",
+        "Escalar con María la falta de respuesta de TI — 2ª semana, DESC-001 tiene deadline 11-ago.",
+        "IND-001: esperar confirmación de María sobre Legal para arrancar con los 208 candidatos.",
+        "ESP-001: todos comparten links de grupos de WA / Facebook con Jaime para ampliar escucha.",
+        "Dropi Pulso: agregar señal 'Stock' al roadmap como prioridad — validar alcance técnico con Reinoso.",
       ]
     },
     {
       titulo: "Semana del 28-jul",
       color: "#6366F1",
       items: [
-        "TTV-001: contactar suppliers Fast Track — entrevistas + insights a Comercial.",
-        "Resultados día 1 del T0 de medición (activación automática + Dropi Pulso).",
+        "TTV-001: Jaime + Michelle contactan Fast Track — entrevistas + insights a Comercial.",
+        "Resultados día 1 del T0 (activación automática + Dropi Pulso).",
         "DCA-001: meet kick-off con suppliers (1-ago, viernes).",
-        "Dropi Pulso: agendar sesión con Ronald/Bogotá (flujo de búsqueda física no documentado).",
-        "Dropi Pulso: agendar sesión con Diego/Miguel Ángel (bug de IDs de producto Cronos ≠ Dropy).",
-        "CAT-001: conectar explícitamente el caso de Valentina (proyecciones por producto) para argumentar prioridad de devs con Lucho.",
+        "Dropi Pulso: sesión con Ronald/Bogotá (flujo físico de búsqueda de producto, no documentado).",
+        "Dropi Pulso: sesión con Diego/Miguel Ángel (bug IDs de producto Cronos ≠ Dropy).",
+        "CAT-001: conectar caso de Valentina (111K IDs, proyecciones imposibles) para argumentar prioridad de devs con Lucho.",
+        "ESP-001: definir con Kate qué tema de TARS empezamos a escuchar primero.",
       ]
     },
   ]
