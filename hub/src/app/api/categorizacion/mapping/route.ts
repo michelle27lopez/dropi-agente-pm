@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 // GET — fetch mappings (only rank=1, optionally filtered)
 // Query params: status, confidence, limit (default 500)
 export async function GET(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json([], { status: 200 });
 
   const { searchParams } = new URL(req.url);
@@ -29,6 +33,9 @@ export async function GET(req: NextRequest) {
 // PATCH — approve / reject / override a mapping
 // Body: { id, status, reviewed_by?, notes?, google_category_id?, google_category_path? }
 export async function PATCH(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase)
     return NextResponse.json({ error: "No Supabase client" }, { status: 500 });
 

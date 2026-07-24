@@ -15,12 +15,29 @@
 # repo bóveda o a su carpeta de Drive.
 # ═══════════════════════════════════════════════════════════════════════════
 
-# Data cruda (38 MB de xlsx) y originales de research
-conocimiento/Data/
-conocimiento/fuentes/
+# Data: NADA de esta carpeta entra a Darwin (decisión de Juan, 22-jul-2026).
+# Ni la data cruda (37,7 MB de xlsx) ni su capa de síntesis —diccionario,
+# modelo Power BI, CSV reconciliados—: son cifras de negocio sin contexto.
+# Citar como (bóveda: conocimiento/Data/...).
+/conocimiento/Data/
 
-# Registro de fuentes externas
-fuentes/
+# Originales de research y su destilado en .md: nada entra.
+/conocimiento/fuentes/
+
+# Registro de fuentes externas: nada entra, tampoco el _index.md.
+# Los 4 dossiers HTML ya viven servidos en hub/public/logistica/info-logistica/
+# (ahí es donde van, no aquí).
+/fuentes/
+
+# Fuentes crudas dentro de un proyecto (xlsx, PDF de trabajo de campo): tampoco
+# entran. Los spec ya las citan como *(bóveda: fuentes/)*.
+/proyectos/*/fuentes/
+
+# ⚠️ OJO con los patrones sin anclar: "fuentes/" (sin la barra inicial) ignora
+# CUALQUIER carpeta llamada fuentes a cualquier nivel — así se perdieron sin
+# aviso las fuentes de proyectos/normalizacion-estados/ en la mudanza del 21-jul
+# (existían en disco pero nunca se commitearon). Por eso todas estas rutas van
+# ancladas con "/" inicial. Verificar siempre con: git check-ignore -v <ruta>
 
 # Actas de reunión y reportes de uso propio
 reuniones/

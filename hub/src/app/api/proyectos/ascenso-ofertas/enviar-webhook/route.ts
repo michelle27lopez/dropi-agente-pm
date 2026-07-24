@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { dispatchBatchWebhook } from "@/lib/ascenso-dispatch";
+import { requireUser } from "@/lib/require-auth";
 
 // Envía TODA la cola pendiente en un solo POST al webhook de n8n (Enrique) —
 // a diferencia de /procesar-lote (Evolution API, tandas chicas con pausa),
@@ -13,6 +14,9 @@ import { dispatchBatchWebhook } from "@/lib/ascenso-dispatch";
 // flag explícito — evita que un llamado accidental (o una prueba de
 // conectividad) saque datos reales de proveedores sin querer.
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
 
   const body = await req.json().catch(() => ({}));

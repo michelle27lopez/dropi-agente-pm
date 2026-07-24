@@ -8,11 +8,11 @@ import { supabaseGetEligibleByToken, supabaseRegisterEligibleView } from "@/lib/
 // un número en la URL, porque no hay número: solo el token sirve.
 
 export type JourneyStep = {
-  key: "seleccion" | "curaduria" | "fotos" | "vivo";
+  key: "seleccion" | "fotos" | "vivo";
   label: string;
   window: string;
   state: "hecho" | "actual" | "bloqueado";
-  /** Fecha ISO de cierre de la fase — el frontend arma cronómetros con esto. */
+  /** Fecha ISO de cierre de la fase — el frontend muestra esto como fecha exacta. */
   end: string;
 };
 
@@ -20,14 +20,18 @@ export type JourneyStep = {
 // 54944bdf-...). Campaña de un solo uso — se hardcodea aquí igual que el "24
 // JULIO" de la página, en vez de armar un fetch genérico multi-campaña que
 // hoy nadie más necesita.
+//
+// Sin paso de curaduría: "fotos" empieza el mismo día que cierra "seleccion"
+// (no hay gate manual de aprobación entre medio — decidido con Kate/Michelle,
+// el equipo revisa por dentro pero el proveedor no espera a nadie).
 const PHASES: { key: JourneyStep["key"]; label: string; window: string; start: string; end: string }[] = [
-  // ⚠️ TEMPORAL PARA QA (18/07): la selección abre de verdad el 25 jul —
-  // start real "2026-07-25". Adelantada para que Michelle pruebe el flujo
-  // postular → recibo → editar de punta a punta. REVERTIR antes del deploy.
-  { key: "seleccion", label: "Elige tus productos", window: "25 – 31 jul", start: "2026-07-18", end: "2026-07-31" },
-  { key: "curaduria", label: "Curaduría", window: "31 jul – 3 ago", start: "2026-07-31", end: "2026-08-03" },
-  { key: "fotos", label: "Prepara tus productos", window: "3 – 10 ago", start: "2026-08-03", end: "2026-08-10" },
-  { key: "vivo", label: "Cyber Days en vivo", window: "11 – 24 ago", start: "2026-08-11", end: "2026-08-24" },
+  // ⚠️ TEMPORAL PARA QA (18/07): la selección abre de verdad el 7 ago —
+  // start real "2026-08-07" (Meet movido a 7 ago, difusión el 31 jul).
+  // Adelantada para que Michelle pruebe el flujo postular → recibo → editar
+  // de punta a punta. REVERTIR antes del deploy.
+  { key: "seleccion", label: "Elige tus productos", window: "7 – 14 ago", start: "2026-07-18", end: "2026-08-14" },
+  { key: "fotos", label: "Prepara tus productos", window: "14 – 16 ago", start: "2026-08-14", end: "2026-08-16" },
+  { key: "vivo", label: "Cyber Days en vivo", window: "17 – 31 ago", start: "2026-08-17", end: "2026-08-31" },
 ];
 
 function computeJourney(): JourneyStep[] {

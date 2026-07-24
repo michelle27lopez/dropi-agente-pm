@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { cronograma, jiraUrl } from "@/app/proyectos/logistica/_lib/data";
 import PrintButton from "@/app/proyectos/logistica/_components/PrintButton";
 
@@ -107,16 +108,21 @@ export default function CronogramaPage() {
         {c.frentes.map((f) => {
           const url = jiraUrl(f.ticket);
           return (
-            <div key={f.proyecto} className="cr-row">
+            <div key={f.proyecto} className={`cr-row${f.tentativa ? " cr-row-tent" : ""}`}>
               <div className="cr-label-col">
-                <strong>{f.proyecto}</strong>
-                <span className="cr-meta">{url ? <a href={url} target="_blank" rel="noreferrer" className="cr-ticket">{f.ticket}</a> : f.ticket}</span>
+                <strong>
+                  {f.slug ? <Link href={`/proyectos/logistica/proyecto/${f.slug}`}>{f.proyecto}</Link> : f.proyecto}
+                </strong>
+                <span className="cr-meta">
+                  {url ? <a href={url} target="_blank" rel="noreferrer" className="cr-ticket">{f.ticket}</a> : f.ticket}
+                  {f.estadoHoy && <span className={`cr-estado-hoy${f.tentativa ? " tent" : ""}`}>{f.estadoHoy}</span>}
+                </span>
                 {f.nota && <small>{f.nota}</small>}
               </div>
               <div className="cr-track cr-track-frente">
                 <Gridlines />
                 {f.fases.map((ph) => (
-                  <div key={ph.label} className={`cr-fase f-${ph.tono}`} style={{ left: pc(ph.inicio), width: pc(ph.fin - ph.inicio) }} title={ph.label}>
+                  <div key={ph.label} className={`cr-fase f-${ph.tono}${f.tentativa ? " cr-tent" : ""}`} style={{ left: pc(ph.inicio), width: pc(ph.fin - ph.inicio) }} title={f.tentativa ? `${ph.label} · ventana tentativa` : ph.label}>
                     <span>{ph.label}</span>
                   </div>
                 ))}
@@ -139,16 +145,21 @@ export default function CronogramaPage() {
         {c.experimentos.map((e) => {
           const url = jiraUrl(e.ticket);
           return (
-            <div key={e.proyecto} className="cr-row">
+            <div key={e.proyecto} className={`cr-row${e.tentativa ? " cr-row-tent" : ""}`}>
               <div className="cr-label-col">
-                <strong>{e.proyecto}</strong>
-                <span className="cr-meta">{url ? <a href={url} target="_blank" rel="noreferrer" className="cr-ticket">{e.ticket}</a> : e.ticket}</span>
+                <strong>
+                  {e.slug ? <Link href={`/proyectos/logistica/proyecto/${e.slug}`}>{e.proyecto}</Link> : e.proyecto}
+                </strong>
+                <span className="cr-meta">
+                  {url ? <a href={url} target="_blank" rel="noreferrer" className="cr-ticket">{e.ticket}</a> : e.ticket ?? <em>sin ticket</em>}
+                  {e.bloqueo && <span className="cr-estado-hoy bloq">⛔ {e.bloqueo}</span>}
+                </span>
                 {e.nota && <small>{e.nota}</small>}
               </div>
               <div className="cr-track cr-track-frente">
                 <Gridlines />
-                <span className="cr-research" style={{ left: pc(e.researchInicio), width: pc(e.researchFin - e.researchInicio) }}>Research</span>
-                <div className="cr-band cr-band-exp" style={{ left: pc(e.expInicio), width: pc(e.expFin - e.expInicio) }}>
+                <span className={`cr-research${e.tentativa ? " cr-tent" : ""}`} style={{ left: pc(e.researchInicio), width: pc(e.researchFin - e.researchInicio) }}>Research</span>
+                <div className={`cr-band cr-band-exp${e.tentativa ? " cr-tent" : ""}`} style={{ left: pc(e.expInicio), width: pc(e.expFin - e.expInicio) }}>
                   <span>Experimento operativo</span>
                 </div>
                 <span className="cr-hito cr-hito-cond" style={{ left: pc(e.expFin) }}>
@@ -186,6 +197,7 @@ export default function CronogramaPage() {
         <span className="cr-leg lg-exp">Experimento POC</span>
         <span className="cr-leg lg-hito">Hito</span>
         <span className="cr-leg lg-hoy">Hoy</span>
+        <span className="cr-leg lg-tent">Ventana tentativa (planeada, no activa hoy)</span>
       </div>
     </main>
   );

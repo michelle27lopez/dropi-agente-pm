@@ -103,7 +103,7 @@ export default async function PMOSPage() {
           </div>
         </div>
         <a
-          href="/"
+          href="/celula/brands"
           style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}
         >
           ← Hub

@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { getCRMAppointments } from "@/lib/crm-db";
+import { requireUser } from "@/lib/require-auth";
 
 export async function GET(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   const { searchParams } = new URL(req.url);
   const country = searchParams.get("country") || "ALL";
   const community = searchParams.get("community") || null;

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 // ─── Synonym dictionary: Spanish keyword → English keywords ───────────────────
 const SYNONYMS: Record<string, string[]> = {
@@ -174,6 +175,9 @@ async function fetchAll<T>(table: string, select: string): Promise<T[]> {
 
 // POST — generate top-5 suggestions for all (or specified) Dropi categories
 export async function POST() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase)
     return NextResponse.json({ error: "No Supabase client" }, { status: 500 });
 

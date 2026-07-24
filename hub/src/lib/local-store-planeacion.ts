@@ -75,6 +75,11 @@ export type EligibleProduct = { id: string | number; name: string; category?: st
 export type ReadyChecklistKey = "nombre" | "categoria" | "fotoDropi" | "fotoCanva";
 export type ReadyChecklist = Partial<Record<ReadyChecklistKey, boolean>>;
 
+// Feedback opcional del proveedor al cerrar la campaña ("ayúdanos a
+// mejorar") — rating 1-5 obligatorio, comentario libre opcional. Se guarda
+// una sola vez por proveedor (la pantalla de cierre no deja reenviar).
+export type CampaignFeedback = { rating: number; comment?: string; submitted_at: string };
+
 /**
  * Lista de productos elegibles por proveedor — la página pública de
  * "productos elegibles" la busca por `token` (no por ID de proveedor, para
@@ -104,6 +109,7 @@ export type EligibleEntry = {
    */
   approved_at?: string | null;
   readyChecklist?: ReadyChecklist;
+  feedback?: CampaignFeedback;
   /** Veces que se cargó la página pública de este proveedor (GET real, no los
    * fetches internos de otros endpoints al leer la misma fila). */
   view_count?: number;
@@ -434,6 +440,25 @@ export async function localSetChecklistItem(
   store.eligibleProducts[idx] = {
     ...store.eligibleProducts[idx],
     readyChecklist: { ...store.eligibleProducts[idx].readyChecklist, [key]: value },
+  };
+  await writeStore(store);
+  return store.eligibleProducts[idx];
+}
+
+// Guarda el feedback de cierre ("ayúdanos a mejorar") — una sola vez por
+// proveedor, sobrescribe si ya existía (el endpoint decide si permite reenvío).
+export async function localSetFeedback(
+  campaignId: string,
+  token: string,
+  rating: number,
+  comment: string | undefined
+): Promise<EligibleEntry | null> {
+  const store = await readStore();
+  const idx = (store.eligibleProducts ?? []).findIndex((e) => e.campaign_id === campaignId && e.token === token);
+  if (idx < 0 || !store.eligibleProducts) return null;
+  store.eligibleProducts[idx] = {
+    ...store.eligibleProducts[idx],
+    feedback: { rating, comment, submitted_at: new Date().toISOString() },
   };
   await writeStore(store);
   return store.eligibleProducts[idx];

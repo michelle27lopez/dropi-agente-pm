@@ -285,7 +285,7 @@ export default function MarcasPage() {
   return (
     <main style={{ minHeight: "100vh", padding: "0 0 60px" }}>
       <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 24px 0" }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
+        <a href="/celula/brands" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
       </div>
 
       {/* Header */}

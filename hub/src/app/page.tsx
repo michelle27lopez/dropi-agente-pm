@@ -5,7 +5,9 @@ import { useRouter } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section, matchesQuery } from "@/components/HomeSections";
-import { isSprintAllowed } from "@/lib/sprint-access";
+import { isSprintAllowed, isMiDiaOwner } from "@/lib/sprint-access";
+import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
+import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
 
 const updates: Item[] = [
   {
@@ -29,9 +31,9 @@ const updates: Item[] = [
   {
     key: "weekly-celula",
     name: "Weekly · Célula",
-    description: "Updates semanales de la célula Seller Success para el jefe. Registro histórico por semana.",
+    description: "Updates semanales de la célula Supplier Success para el jefe. Registro histórico por semana.",
     url: "/updates-celula",
-    tag: "Célula · Seller Success",
+    tag: "Célula · Supplier Success",
     color: "#6366F1",
     icon: "🏠",
   },
@@ -55,136 +57,56 @@ const updates: Item[] = [
   },
 ];
 
-const projects: Item[] = [
-  {
-    key: "celula",
-    name: "Célula",
-    description: "Presentaciones semanales del cellboard con el equipo — registro histórico por semana, con demo en vivo y decisiones a cerrar por tema.",
-    url: "/proyectos/celula",
-    tag: "Seller Success · Semanal",
-    color: "#0891B2",
-    icon: "🧬",
-  },
-  {
-    key: "dinamicas-catalogo",
-    name: "Dinámicas de Catálogo",
-    description: "Experimento lean de catálogo preseleccionado. Validación manual de campañas con suppliers antes de desarrollar el módulo formal.",
-    url: "/proyectos/dinamicas-catalogo",
-    tag: "DCA-001 · Experimento",
-    color: "#0EA5E9",
-    icon: "🗂️",
-  },
-  {
-    key: "time-to-value",
-    name: "Time to Value",
-    description: "Activación operativa de suppliers nuevos. Meta: 620 listos para vender en 6 meses. North Star: registro → listo en ≤ 5 días.",
-    url: "/proyectos/time-to-value",
-    tag: "TTV-001 · Activación",
-    color: "#F77F00",
-    icon: "⚡",
-  },
-  {
-    key: "categorizacion",
-    name: "Categorización y Enriquecimiento",
-    description: "Estrategia de taxonomía y enriquecimiento inteligente de catálogo. Consolidación de categorías fragmentadas y piloto de IA.",
-    url: "/proyectos/categorizacion",
-    tag: "CAT-001 · Habilitador",
-    color: "#7C3AED",
-    icon: "🏷️",
-  },
-  {
-    key: "indicadores",
-    name: "Indicadores · Postulaciones",
-    description: "Cuántos suppliers ven su tablero de desempeño y cuántos se postulan para avanzar de nivel. Distribución por tipo de proveedor.",
-    url: "/proyectos/indicadores",
-    tag: "IND-001 · Métricas",
-    color: "#6366F1",
-    icon: "📈",
-  },
-  {
-    key: "negociaciones",
-    name: "Negociaciones · Proveedor–Líder Comunidad",
-    description: "Bitácora de seguimiento semanal de ambos roles: adopción, engagement, funnels de creación/respuesta, retención y hallazgos cualitativos.",
-    url: "/proyectos/negociaciones",
-    tag: "NEG-001 · Live",
-    color: "#0D9488",
-    icon: "🤝",
-  },
-  {
-    key: "negociaciones-dropshipper",
-    name: "Negociaciones · Proveedor–Dropshipper",
-    description: "Guía de flujo paso a paso para crear una negociación directa con un dropshipper. Screenshots del Figma con descripciones listas para hand-off.",
-    url: "/proyectos/negociaciones-dropshipper",
-    tag: "NEG-002 · Wireframes",
-    color: "#F77F00",
-    icon: "🤝",
-  },
-  {
-    key: "caza-productos",
-    name: "Caza Productos",
-    description: "Solicitudes de productos que los dropshippers no encuentran en catálogo. Señal de demanda explícita y tasa de atención de suppliers.",
-    url: "/proyectos/caza-productos",
-    tag: "CAZ-001 · Demanda",
-    color: "#EC4899",
-    icon: "🔍",
-  },
-  {
-    key: "combos",
-    name: "Combos Dropshipper",
-    description: "Guía de flujo paso a paso para crear y editar combos. Screenshots del Figma con descripciones listas para handoff.",
-    url: "/proyectos/combos",
-    tag: "PROD-545 · Hand-off",
-    color: "#F77F00",
-    icon: "📦",
-  },
-  {
-    key: "descuentos-catalogo",
-    name: "Descuentos en Catálogo",
-    description: "Precio antes / precio ahora visible para el dropshipper en toda campaña activa. Trigger: Cyber Days agosto 2026. Ecosistema completo: Dropi, Shopify, WooCommerce, Tienda Nube, CAS, ECOM Scanner.",
-    url: "/proyectos/descuentos",
-    tag: "DESC-001 · Campañas",
-    color: "#F59E0B",
-    icon: "🏷️",
-  },
-];
+type Proyecto = {
+  id: string; name: string; project_code: string | null;
+  handoff_status: string | null; type: string | null; summary: string | null;
+};
 
-const poc: Item[] = [
-  {
-    key: "pulso-demo",
-    name: "Dropi Pulso · Demo",
-    description: "Prototipo interactivo del motor de matching de catálogo. Notificaciones reales por WhatsApp y email, registro por QR, dashboard en vivo y kit de campaña.",
-    url: "/proyectos/pulso-demo",
-    tag: "Demo · Stakeholders",
-    color: "#F77F00",
-    icon: "⚡",
-  },
-  {
-    key: "gali-demo",
-    name: "Gali - Demo",
-    description: "Propuesta de valor y copiloto para selección de productos ganadores (v5). Chat interactivo con mentores de comunidad, grilla con 1M de productos y generador de creativos. Ahora vive en su propio repo con login propio.",
-    // TODO: reemplazar por la URL real una vez desplegado el repo Gali-experiment
-    // (github.com/jaimeguevara-dropi/Gali-experiment). Mientras no exista, apunta
-    // a la versión que sigue intacta dentro de este hub.
-    url: "/proyectos/gali-demo",
-    tag: "Demo · Caza Productos v5",
-    color: "#FF6102",
-    icon: "🦊",
-  },
-  {
-    key: "dropi-activa",
-    name: "Dropi Activa · ACT-001",
-    description: "POC de activación de suppliers por matching de demanda. Reduce tiempo a primera negociación de 60+ días a 7. El sistema conecta proactivamente al supplier con dropshippers que ya lo están buscando.",
-    url: "/proyectos/dropi-activa",
-    tag: "ACT-001 · Activación",
-    color: "#7C3AED",
-    icon: "🚀",
-  },
-];
+// Home curado de Suppliers: solo estos 13 proyectos reales de la tabla
+// `projects` se muestran aquí (10 Discovery projects + 3 POC), aunque la
+// célula tenga más filas en la base — el resto vive en /celula/suppliers.
+// color/icon no existen en la tabla, así que se mantienen aquí por código.
+const PROJECT_STYLE: Record<string, { url: string; color: string; icon: string }> = {
+  "CELL-001": { url: "/proyectos/celula", color: "#0891B2", icon: "🧬" },
+  "DCA-001": { url: "/proyectos/dinamicas-catalogo", color: "#0EA5E9", icon: "🗂️" },
+  "TTV-001": { url: "/proyectos/time-to-value", color: "#F77F00", icon: "⚡" },
+  "CAT-001": { url: "/proyectos/categorizacion", color: "#7C3AED", icon: "🏷️" },
+  "IND-001": { url: "/proyectos/indicadores", color: "#6366F1", icon: "📈" },
+  "NEG-001": { url: "/proyectos/negociaciones", color: "#0D9488", icon: "🤝" },
+  "NEG-002": { url: "/proyectos/negociaciones-dropshipper", color: "#F77F00", icon: "🤝" },
+  "CAZ-001": { url: "/proyectos/caza-productos", color: "#EC4899", icon: "🔍" },
+  "COM-002": { url: "/proyectos/combos", color: "#F77F00", icon: "📦" },
+  "DESC-001": { url: "/proyectos/descuentos", color: "#F59E0B", icon: "🏷️" },
+  "PULSO-001": { url: "/proyectos/pulso-demo", color: "#F77F00", icon: "⚡" },
+  "PUL-001":   { url: "/proyectos/pulso-demo", color: "#EC4899", icon: "🔭" },
+  "GALI-001": { url: "/proyectos/gali-demo", color: "#FF6102", icon: "🦊" },
+  "ACT-001": { url: "/proyectos/dropi-activa", color: "#7C3AED", icon: "🚀" },
+  "ESP-001": { url: "/proyectos/espionaje", color: "#10B981", icon: "🕵️" },
+};
+
+function truncate(text: string, max: number) {
+  return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
+}
+
+function proyectoToItem(p: Proyecto): Item | null {
+  const style = p.project_code ? PROJECT_STYLE[p.project_code] : undefined;
+  if (!style) return null;
+  return {
+    key: p.id,
+    name: p.name,
+    description: truncate(p.summary ?? "Sin descripción aún.", 160),
+    url: style.url,
+    tag: p.project_code ?? p.handoff_status ?? "Sin código",
+    color: style.color,
+    icon: style.icon,
+  };
+}
 
 export default function HubPage() {
   const [query, setQuery] = useState("");
   const [checkingRole, setCheckingRole] = useState(true);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [proyectosReales, setProyectosReales] = useState<Proyecto[]>([]);
   const router = useRouter();
 
   const hasSupabase = !!(
@@ -192,9 +114,13 @@ export default function HubPage() {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 
-  // Este home es el de Suppliers (tu célula). Si quien entra es de otra
-  // célula, lo mandamos a la home de su propia célula. Solo el super admin
-  // se queda aquí y ve el resto de células como navegación.
+  // Este home es el de Suppliers (tu célula). Recién logueado, cada quien
+  // aterriza en la home de su propia célula (o /resumen si es stakeholder) —
+  // sin importar ve_hub_completo NI is_super_admin, ambos flags controlan
+  // permisos, no dónde aterriza. Pero ese rebote solo debe pasar UNA VEZ por
+  // sesión: si alguien ya está navegando y vuelve a "/" a propósito (ej. el
+  // switcher del header, que para Suppliers apunta aquí), no lo mandamos de
+  // vuelta a su célula — si no, nadie podría ver este home salvo Jaime.
   useEffect(() => {
     if (!hasSupabase) { setCheckingRole(false); return; }
     fetch("/api/me")
@@ -204,30 +130,68 @@ export default function HubPage() {
         setUserEmail(data?.user?.email ?? profile?.email ?? null);
         if (!profile) { setCheckingRole(false); return; }
 
-        const mySlug = profile.celulas?.slug;
-        const fullAccess = profile.is_super_admin || !!profile.celulas?.ve_hub_completo;
+        const yaRedirigido = sessionStorage.getItem("darwin-home-routed") === "1";
+        sessionStorage.setItem("darwin-home-routed", "1");
+        if (yaRedirigido) { setCheckingRole(false); return; }
 
-        // Aislamiento seguro para el entorno del nuevo PM (Santiago)
-        // Redirigir su sesión a un dashboard completamente limpio de su célula
-        if (userEmail === "santiago.herrera@dropi.co") {
-          router.replace(`/seller-success`);
+        const mySlug = profile.celulas?.slug;
+
+        // Stakeholder (Lucho, María): no pertenece a ninguna célula — su
+        // origen es el resumen ejecutivo cross-célula, no "/" ni /celula/x.
+        if (profile.is_stakeholder && !profile.is_super_admin) {
+          router.replace("/resumen");
           return;
         }
 
-        // Con ve_hub_completo (o super admin), "/" es el origen: aterriza
-        // siempre aquí y navega libre entre células con el dropdown. Sin
-        // ve_hub_completo, queda restringido a su propia home.
-        if (mySlug && mySlug !== "suppliers" && !fullAccess) {
+        if (mySlug && mySlug !== "suppliers") {
           router.replace(`/celula/${mySlug}`);
           return;
         }
 
         setCheckingRole(false);
       });
+
+    fetch("/api/celulas/suppliers")
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data?.proyectos)) setProyectosReales(data.proyectos);
+      })
+      .catch(() => {});
   }, [hasSupabase, router, userEmail]);
 
   if (checkingRole) {
     return <main style={{ minHeight: "100vh" }} />;
+  }
+
+  const projects = proyectosReales
+    .filter((p) => p.type !== "POC")
+    .map(proyectoToItem)
+    .filter((item): item is Item => item !== null);
+  const poc = proyectosReales
+    .filter((p) => p.type === "POC")
+    .map(proyectoToItem)
+    .filter((item): item is Item => item !== null);
+
+  // Home privada: este es el home real de Michelle (célula "suppliers" cae
+  // aquí, no en celula/[slug]) — reemplaza el grid estándar por el
+  // dashboard de "mi día". Ver [[project_darwin_pd_dashboard]].
+  if (isMiDiaOwner(userEmail)) {
+    return (
+      <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1, display: "flex", alignItems: "flex-start" }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <HubHeader title="Darwin" subtitle="Tu día · Darwin" currentSlug="suppliers" />
+            <div style={{ display: "flex", alignItems: "flex-start" }}>
+              <ProjectSidebar allProjects={projects} allPoc={poc} />
+              <div style={{ flex: 1, minWidth: 0, maxWidth: 900, padding: "48px 32px" }}>
+                <HomeDashboard />
+              </div>
+            </div>
+          </div>
+        </div>
+        <HubFooter />
+      </main>
+    );
   }
 
   // /sprint solo es visible para Michelle y Jaime (alcance confirmado
@@ -255,7 +219,7 @@ export default function HubPage() {
       <div style={{ flex: 1 }}>
       <HubHeader
         title="Darwin"
-        subtitle="Seller Success · Herramientas internas"
+        subtitle="Supplier Success · Herramientas internas"
         currentSlug="suppliers"
       />
 
@@ -301,7 +265,7 @@ export default function HubPage() {
         </div>
 
         <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 48, textAlign: "center" }}>
-          Dropi · Seller Success · {new Date().getFullYear()}
+          Dropi · Supplier Success · {new Date().getFullYear()}
         </p>
       </div>
       </div>
