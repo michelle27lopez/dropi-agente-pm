@@ -11,6 +11,7 @@
 # Vive dentro de esta carpeta pero NUNCA se sube al repo del equipo.
 /cerebro/
 
-# Data generada del pipeline de recolecciones (se regenera local, no se sube).
-hub/public/logistica/recolecciones/datos-recolecciones.json
+# Data del pipeline de recolecciones. `datos-recolecciones.json` SÍ se versiona:
+# el prototipo lo necesita para renderizar en Vercel (si no, 404). `centroides.json`
+# es intermedio de build (no runtime) y se queda local.
 hub/public/logistica/recolecciones/pipeline/centroides.json
