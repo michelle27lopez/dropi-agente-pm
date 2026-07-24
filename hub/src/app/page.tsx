@@ -78,6 +78,7 @@ const PROJECT_STYLE: Record<string, { url: string; color: string; icon: string }
   "COM-002": { url: "/proyectos/combos", color: "#F77F00", icon: "📦" },
   "DESC-001": { url: "/proyectos/descuentos", color: "#F59E0B", icon: "🏷️" },
   "PULSO-001": { url: "/proyectos/pulso-demo", color: "#F77F00", icon: "⚡" },
+  "PUL-001":   { url: "/proyectos/pulso-demo", color: "#EC4899", icon: "🔭" },
   "GALI-001": { url: "/proyectos/gali-demo", color: "#FF6102", icon: "🦊" },
   "ACT-001": { url: "/proyectos/dropi-activa", color: "#7C3AED", icon: "🚀" },
 };

@@ -73,6 +73,16 @@ const ACCESS_CARDS = [
     external: true,
     badge: "Deck",
   },
+  {
+    href: "/proyectos/pulso-demo/research",
+    icon: "🔬",
+    title: "Research · RB-005",
+    sub: "Cuidado de Campañas — flujos, dolores y oportunidades descubiertas en sesión 21-jul",
+    color: "#059669",
+    colorBg: "#F0FDF4",
+    external: false,
+    badge: "Research",
+  },
 ];
 
 const FLOW_STEPS = [
@@ -144,7 +154,7 @@ export default function PulsoDemoProjectPage() {
               Accesos del demo
             </span>
             <span style={{ fontSize: 12, color: "var(--muted)", marginLeft: "auto" }}>
-              7 vistas · todos públicos
+              8 vistas · todos públicos
             </span>
           </div>
           <div style={{

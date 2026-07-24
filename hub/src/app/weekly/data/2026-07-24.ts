@@ -42,12 +42,12 @@ export const snapshot: WeeklySnapshot = {
     },
     {
       id: "INS-004",
-      titulo: "Dropi Pulso · Reunión hoy con Natalia (Nexus) — feedback operativo antes del 27-jul",
-      descripcion: "Jaime se reúne hoy con Natalia, quien pasó información sobre Nexus (herramienta comercial interna). El objetivo es entender operativamente si el flujo de Dropi Pulso funciona, qué agregaría o quitaría. Natalia es un stakeholder clave del frente comercial, no solo UX — interesa saber si la herramienta encaja en los flujos que ya usa Comercial. Los ajustes de esa reunión pasan a Michelle para trabajo de UI/diseño. El 27-jul sigue siendo la fecha del lanzamiento del piloto con comunidad de Iván.",
+      titulo: "Dropi Pulso · Reunión con equipo de Cuidado de Campañas — hallazgo: 535 usuarios gestionados manualmente en Excel, señal 'Stock' requerida",
+      descripcion: "La reunión con Natalia reveló el workflow real del equipo: Valentina, Luisa y Juliana gestionan el 'cuidado de campañas' de 535 usuarios del Pareto (505 base + 30 de la comunidad de Iván). Meta: 4 campañas por usuario, promedio actual 2. El proceso es 100% manual: revisan el BI a diario, consultan stock en Dropy uno a uno, calculan días de stock restante y priorizan en Excel con colores (🔴 ≤5 días, 🟡 media, 🟢 baja). Valentina pidió agregar 'stock' como tipo de señal en Dropi Pulso para escalar alertas al proveedor cuando el stock es crítico. Blocker de datos: Diego (analítica) intentó automatizar el stock pero los IDs de producto no coinciden en la BD. La reunión se cortó por caída de internet (min ~10) — no se llegó al feedback de interfaz. Jaime hará seguimiento directo con Natalia.",
       proyecto: "Dropi Pulso",
       tipo: "Hallazgo",
       tipoColor: "#10B981",
-      impacto: "Medio",
+      impacto: "Alto",
     },
     {
       id: "INS-005",
