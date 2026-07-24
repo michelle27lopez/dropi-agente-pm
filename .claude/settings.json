@@ -50,7 +50,10 @@
       "Bash(security find-internet-password *)",
       "Bash(python3 mapear_caminos.py)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(open \"/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/agente-delivery/Documentos/experimento-retencion-escalando-preescalando-jul2026.html\")",
+      "Bash(python3 build_piloto5.py)",
+      "Bash(python3 build_piloto5_v2.py)"
     ]
   }
 }
