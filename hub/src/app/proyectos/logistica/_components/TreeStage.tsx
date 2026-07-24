@@ -29,9 +29,13 @@ export default function TreeStage({
         <div className="leaves">
           {proyectos.length === 0 && <span className="chip empty">sin proyecto</span>}
           {proyectos.map((p) => (
-            <Link key={p.slug} className="chip leaf" href={`/proyecto/${p.slug}`}>
+            // Ojo: la ruta es /proyectos/logistica/proyecto/<slug>. Estuvo
+            // apuntando a /proyecto/<slug> (sin el prefijo de la sección), así
+            // que TODAS las hojas del mapa daban 404.
+            <Link key={p.slug} className="chip leaf" href={`/proyectos/logistica/proyecto/${p.slug}`}>
               {p.destacado ? "⭐ " : ""}
               {p.nombre}
+              <small className={`chip-tipo t-${p.tipo}`}>{p.tipo}</small>
             </Link>
           ))}
         </div>
