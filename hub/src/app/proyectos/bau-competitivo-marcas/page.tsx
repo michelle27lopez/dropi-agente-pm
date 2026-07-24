@@ -1,5 +1,6 @@
 // Fuente: agente-delivery/Documentos/Agente de Investigación BAU Competitivo para Marcas.docx
 // Fuente: agente-delivery/Documentos/avance-bau-competitivo-marcas.html (17 jul 2026)
+// Fuente: Insumo BAU Competitivo — Marcas.pdf (Equipo Comercial/Marcas, 22-jul-2026)
 // Datos ecosistema: fact_marcas.csv · dim_marcas.csv · act. 14-jul-2026 · Diagnostico_Marcas_CSAT_16jul2026.xlsx
 
 import { Fragment } from "react";
@@ -15,6 +16,7 @@ const BLU_BG = "#EFF6FF";
 const GREEN_BG = "#ECFDF5";
 const ORANGE = "#EA580C";
 const ORANGE_BG = "#FFF7ED";
+const MUTED_BG = "#F1F5F9";
 
 const card: React.CSSProperties = {
   background: "var(--card)",
@@ -60,6 +62,15 @@ const tdStyle: React.CSSProperties = {
   padding: "10px 12px", borderBottom: "1px solid var(--border)", fontSize: 13, color: "var(--fg)",
 };
 
+// ─── Norte — 5 frentes del "Próximo paso 2: reunirse con equipos internos" (doc madre)
+const FRENTES = [
+  { icono: "✅", nombre: "Comercial", desc: "Negocios perdidos, competidores, objeciones, funcionalidades solicitadas, promesas — recibido 22-jul-2026.", estado: "done" },
+  { icono: "⏳", nombre: "Customer Success", desc: "Marcas en riesgo, casos de acompañamiento, problemas de activación, workarounds.", estado: "pending" },
+  { icono: "⏳", nombre: "Soporte y CAS", desc: "Tickets recurrentes, problemas sin resolver, tiempos de respuesta, escalamientos.", estado: "pending" },
+  { icono: "⏳", nombre: "Logística", desc: "Intentos de entrega, evidencias, gestión de novedades, tiempos antes de devolución.", estado: "pending" },
+  { icono: "⏳", nombre: "Data", desc: "Cuantificar frecuencia, impacto, volumen, retención, abandono, uso.", estado: "pending" },
+] as const;
+
 // ─── Metodología ────────────────────────────────────────────────────────
 const FASES = [
   { n: 1, name: "Consolidación de evidencia existente", desc: "CSAT, respuestas abiertas, entrevistas, tickets, backlog", active: true },
@@ -104,6 +115,7 @@ const ESTADO_COLOR: Record<string, { color: string; bg: string; label: string }>
   ampliar: { color: ORANGE, bg: ORANGE_BG, label: "Pendiente de ampliar" },
   validar: { color: RED, bg: RED_BG, label: "Pendiente de validar" },
   pendiente: { color: RED, bg: RED_BG, label: "Pendiente" },
+  nuevo: { color: BLUE, bg: BLU_BG, label: "Nuevo · Comercial" },
 };
 
 const CAPACIDADES = [
@@ -119,6 +131,16 @@ const CAPACIDADES = [
   { cap: "Operación internacional", ev: "Una entrevista", niveles: "Creciendo (único caso)", estado: "ampliar" },
   { cap: "Huella del comprador", ev: "Una entrevista", niveles: "Creciendo (único caso)", estado: "validar" },
   { cap: "Roles y permisos", ev: "Sin evidencia directa", niveles: "—", estado: "pendiente" },
+  { cap: "Integración SIIGO / ERPs", ev: "1 negocio perdido (Benjamín de la Torre) + promesa ya comunicada", niveles: "—", estado: "nuevo" },
+  { cap: "Integración masiva e-commerce (Shopify)", ev: "Solicitud de prospectos/clientes", niveles: "—", estado: "nuevo" },
+  { cap: "Envíos B2B / mayoristas", ev: "Solicitud de prospectos + promesa ya comunicada", niveles: "—", estado: "nuevo" },
+  { cap: "Generación de guía sin crear producto", ev: "1 negocio perdido (Andrés Castro) + solicitud + research externo 24-jul-2026: 4/8 competidores (Skydropx, 99 Envíos, Interrapidísimo, Coordinadora) no lo exigen", niveles: "—", estado: "nuevo" },
+  { cap: "Autocompletado de datos (pedido manual recurrente)", ev: "Solicitud de prospectos/clientes", niveles: "—", estado: "nuevo" },
+  { cap: "Cobro contra entrega flexible (solo flete)", ev: "Solicitud de prospectos/clientes", niveles: "—", estado: "nuevo" },
+  { cap: "Seguro de flete anti-devolución (Básico/Plus)", ev: "Solicitud + referencia de precios de competencia", niveles: "—", estado: "nuevo" },
+  { cap: "Domiciliarios propios como transportadora", ev: "Solicitud de prospectos/clientes", niveles: "—", estado: "nuevo" },
+  { cap: "Entregas SAMEDAY en ciudades principales", ev: "1 negocio perdido (Parchita) + solicitud", niveles: "—", estado: "nuevo" },
+  { cap: "Notificación automática al comprador post-despacho", ev: "Research externo 24-jul-2026: 5/8 competidores (Skydropx, Envía.com, Coordinadora, Mastershop, Melonn) ya lo tienen en producción; en Dropi sin evidencia pública, depende de apps de terceros", niveles: "—", estado: "nuevo" },
 ] as const;
 
 // ─── Entrevistas cualitativas ───────────────────────────────────────────
@@ -130,22 +152,49 @@ const ENTREVISTAS = [
   { marca: "Distribuidora Natural (María Paula Arrechea)", tipo: "Marca", antiguedad: "~6 meses (cuenta actual)", volumen: "~2.712/mes (confirmado CSAT)", segmento: "Alto volumen (Escalando) · comercial sin gestión percibida" },
 ] as const;
 
+// ─── Negocios perdidos — insumo Comercial 22-jul-2026 (Fase 2: llena el sesgo de cobertura) ──
+const NEGOCIOS_PERDIDOS = [
+  { categoria: "+1000 órdenes", marca: "Parchita", plataforma: "Melonn", motivo: "Bodega y tiempos — requería SAMEDAY en 4 ciudades, RFID, cuarto propio y mejor transporte." },
+  { categoria: "+500 órdenes", marca: "Duja Kids", plataforma: "Otra (no responde)", motivo: "Mejores tarifas. Última duda: facturación. Inactiva, no responde a contacto." },
+  { categoria: "+500 órdenes", marca: "Hello Patch", plataforma: "No responde", motivo: "Fricción en parametrización de envíos (selección de bodega de despacho)." },
+  { categoria: "+500 órdenes", marca: "Benjamín de la Torre", plataforma: "Mastershop", motivo: "Falta de integración con SIIGO — operación ya 100% automatizada, no quiso migrar sin esa solución." },
+  { categoria: "100–499 órdenes", marca: "Beaulife - Apiflower", plataforma: "Melonn", motivo: "Melonn ofreció mejores tarifas en fletes sin recaudo." },
+  { categoria: "100–499 órdenes", marca: "Andrés Castro", plataforma: "99 envíos", motivo: "Productos personalizados — prefiere generar guía sin crear producto." },
+] as const;
+
+const COMPETIDORES = ["Melonn", "Mastershop", "99 envíos", "Coordinadora", "Interrapidísimo", "Skydrop", "Envía", "Efficommerce"] as const;
+
+const PROMESAS = [
+  { titulo: "Integración con SIIGO", texto: "Comunicada como “próxima a finalizar”. Ya costó al menos 1 negocio perdido (Benjamín de la Torre, +500 órdenes/mes) que migró a Mastershop por esto." },
+  { titulo: "Tracking de guías", texto: "Comunicado que “más adelante” se habilitará el rastreo con notificación al comprador." },
+  { titulo: "Envíos mayoristas", texto: "Comunicado que quedará definido junto con los nuevos SLAs de transportadoras, aún en negociación." },
+] as const;
+
 // ─── Hallazgos e hipótesis ──────────────────────────────────────────────
-const HALLAZGOS = [
+type Hallazgo = { n: number; titulo: string; texto: string; fuente?: string };
+const HALLAZGOS: Hallazgo[] = [
   { n: 1, titulo: "La necesidad va más allá de funciones corporativas", texto: "Las marcas necesitan confiabilidad, automatización, trazabilidad, control, escalabilidad y capacidad de resolución — no solo roles/permisos/aprobaciones." },
   { n: 2, titulo: "El mayor riesgo está después del despacho", texto: "Tracking, novedades, devoluciones, garantías y comunicación con transportadoras concentran las fricciones." },
   { n: 3, titulo: "Las marcas activas usan soluciones temporales", texto: "Inflan inventario, descargan guías a mano, revisan novedades a diario, usan Excel para finanzas, resuelven garantías fuera de Dropi." },
   { n: 4, titulo: "Permanecer no significa estar satisfecho", texto: "Cambiar de plataforma tiene costos y riesgos propios. Continuidad en Dropi ≠ fidelidad." },
   { n: 5, titulo: "El servicio hace parte del BAU", texto: "Para marcas de mayor volumen, acompañamiento y resolución son parte de la experiencia esperada — no todo se resuelve con funcionalidades nuevas." },
-] as const;
+  { n: 6, titulo: "La pérdida de negocio ya ocurre en Adquisición/Activación, no solo en Retención", texto: "A diferencia de las 5 entrevistas de Fase 1 (todas marcas activas), los 6 negocios perdidos reportados por Comercial muestran fricción temprana — bodega, SAMEDAY, tarifas, parametrización de envíos e integración contable — que hizo salir cuentas de entre 100 y +1000 órdenes/mes hacia Melonn, Mastershop y 99 envíos antes de consolidar operación en Dropi.", fuente: "Insumo Comercial 22-jul-2026 — 6 negocios perdidos" },
+  { n: 7, titulo: "La terminología y los flujos heredados del rol Dropshipper confunden a marcas tradicionales", texto: "Comercial reporta informes con lenguaje de dropshipping (“ganancia dropshipper”) y la obligación de crear una bodega pese a que Dropi hace el fulfillment — fricción de comprensión coherente con que Marcas y Suppliers comparten el mismo rol técnico.", fuente: "Insumo Comercial 22-jul-2026 — objeciones de venta y onboarding" },
+  { n: 8, titulo: "Una promesa sin fecha ya generó una pérdida de negocio medible", texto: "La integración con SIIGO se comunicó como “próxima a finalizar” sin fecha — y ya costó 1 negocio de +500 órdenes/mes (Benjamín de la Torre, migró a Mastershop). Primera evidencia que conecta directamente una promesa incumplida con una pérdida cuantificada.", fuente: "Insumo Comercial 22-jul-2026 — negocio perdido + promesa no cumplida" },
+  { n: 9, titulo: "La competencia ya resuelve dos fricciones estructurales que Dropi no confirma tener", texto: "Research externo (mismo rigor para Dropi y 8 competidores) encontró que 5/8 ya notifican automáticamente al comprador tras el despacho y 4/8 no exigen bodega/producto previo para generar guía — en Dropi ninguna de las dos está confirmada en producción. Además, la promesa interna de “pago el mismo día de la entrega” no se pudo confirmar en Términos y Condiciones oficiales (bloqueados) y una fuente externa describe hasta 7 días hábiles en al menos un escenario — pendiente validar con Finanzas. Es investigación standalone, no es la Fase 5 oficial (ver sección de Competidores).", fuente: "Research externo competitivo 24-jul-2026 — analisis-competitivo-bau-marcas-24jul2026.html" },
+];
 
-const HIPOTESIS = [
-  "Las marcas abandonan o reducen operación por combinación de fallas operativas, trabajo manual y falta de resolución.",
-  "Las capacidades más críticas están después de la generación de la guía.",
-  "Las marcas de mayor volumen requieren un modelo de servicio diferente.",
-  "La confiabilidad de la operación es más urgente que algunas funciones corporativas tradicionales.",
-  "Roles, permisos y aprobaciones pueden ser relevantes, pero requieren validación adicional.",
-] as const;
+type Hipotesis = { texto: string; fuente?: string };
+const HIPOTESIS: Hipotesis[] = [
+  { texto: "Las marcas abandonan o reducen operación por combinación de fallas operativas, trabajo manual y falta de resolución." },
+  { texto: "Las capacidades más críticas están después de la generación de la guía." },
+  { texto: "Las marcas de mayor volumen requieren un modelo de servicio diferente." },
+  { texto: "La confiabilidad de la operación es más urgente que algunas funciones corporativas tradicionales." },
+  { texto: "Roles, permisos y aprobaciones pueden ser relevantes, pero requieren validación adicional." },
+  { texto: "Las marcas evalúan Dropi y no convierten, o abandonan tempranamente, por fricciones de bodega/tiempos de despacho e integraciones contables — antes incluso de llegar a los problemas post-despacho ya identificados en marcas activas.", fuente: "A validar con Data — sin cifra de conversión/abandono temprano todavía" },
+  { texto: "El lenguaje y los flujos heredados del modelo dropshipping (bodegas, “ganancia dropshipper”) reducen la comprensión y confianza inicial de una marca tradicional durante el onboarding.", fuente: "A validar con CS/Soporte — sin cifra de abandono en onboarding todavía" },
+  { texto: "Cumplir o comunicar con fecha las promesas ya hechas a marcas (SIIGO, tracking, mayoristas) reduce el riesgo de fuga hacia competidores que ya ofrecen esas capacidades.", fuente: "A validar — 1 caso confirmado (Benjamín de la Torre), no es aún patrón" },
+];
 
 function Stat({ n, sub, ordenes, label }: { n: string; sub?: string; ordenes?: string; label: string }) {
   return (
@@ -190,11 +239,21 @@ export default function BauCompetitivoMarcasPage() {
             <span style={tagChip(BLUE, BLU_BG)}>No es conclusión definitiva</span>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
-            <Stat n="5" label="Entrevistas analizadas" />
-            <Stat n="5" label="Hallazgos preliminares" />
-            <Stat n="5" label="Hipótesis activas" />
+            <Stat n={String(ENTREVISTAS.length)} label="Entrevistas analizadas" />
+            <Stat n={String(HALLAZGOS.length)} label="Hallazgos preliminares" />
+            <Stat n={String(HIPOTESIS.length)} label="Hipótesis activas" />
             <Stat n="1/6" label="Fases completadas" />
           </div>
+        </div>
+
+        {/* NORTE */}
+        <div style={{ ...card, borderLeft: `4px solid ${BLUE}`, borderRadius: 10, marginTop: 16 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: BLUE, marginBottom: 6 }}>
+            🧭 Norte — próxima acción
+          </div>
+          <p style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", lineHeight: 1.5, margin: 0 }}>
+            Cerrar los 4 frentes internos que faltan (CS, Soporte/CAS, Logística, Data) con el mismo formato que ya usó Comercial. Solo entonces se pasa a Fase 3 (validación cuantitativa). Hoy: 1 de 5 frentes cerrado.
+          </p>
         </div>
 
         {/* METODOLOGIA */}
@@ -208,6 +267,23 @@ export default function BauCompetitivoMarcasPage() {
                 <div style={{ fontSize: 12, color: "var(--muted)" }}>{f.desc}</div>
               </div>
               {f.active && <span style={tagChip(AMBER, AMB_BG)}>En progreso</span>}
+            </div>
+          ))}
+        </div>
+
+        {/* 5 FRENTES */}
+        <div style={sectionLabel}>Los 5 frentes del &quot;Próximo paso 2&quot; (doc madre) — reunirse con equipos internos</div>
+        <div style={{ border: "1px solid var(--border)", borderRadius: 10, overflow: "hidden" }}>
+          {FRENTES.map((f, i) => (
+            <div key={f.nombre} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderBottom: i < FRENTES.length - 1 ? "1px solid var(--border)" : "none" }}>
+              <div style={{ fontSize: 15, flexShrink: 0 }}>{f.icono}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13.5, fontWeight: 600, color: "var(--fg)" }}>{f.nombre}</div>
+                <div style={{ fontSize: 12, color: "var(--muted)" }}>{f.desc}</div>
+              </div>
+              <span style={tagChip(f.estado === "done" ? GREEN : "var(--muted)", f.estado === "done" ? GREEN_BG : MUTED_BG)}>
+                {f.estado === "done" ? "Cerrado" : "Pendiente"}
+              </span>
             </div>
           ))}
         </div>
@@ -389,6 +465,53 @@ export default function BauCompetitivoMarcasPage() {
           0 de 5 entrevistas corresponden a marcas abandonadas o que evaluaron Dropi y no ingresaron — sesgo de cobertura hacia activas, ya señalado en el documento fuente.
         </p>
 
+        {/* NEGOCIOS PERDIDOS — insumo Comercial, Fase 2 */}
+        <div style={sectionLabel}>Negocios perdidos — insumo Comercial, 22-jul-2026 (llena el sesgo de cobertura de arriba)</div>
+        <div style={{ border: "1px solid var(--border)", borderRadius: 10, overflow: "hidden" }}>
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead><tr><th style={thStyle}>Categoría</th><th style={thStyle}>Marca</th><th style={thStyle}>Fue a</th><th style={thStyle}>Motivo principal</th></tr></thead>
+              <tbody>
+                {NEGOCIOS_PERDIDOS.map((n, i) => (
+                  <tr key={n.marca}>
+                    <td style={{ ...tdStyle, fontWeight: 700, borderBottom: i === NEGOCIOS_PERDIDOS.length - 1 ? "none" : undefined }}>{n.categoria}</td>
+                    <td style={{ ...tdStyle, borderBottom: i === NEGOCIOS_PERDIDOS.length - 1 ? "none" : undefined }}>{n.marca}</td>
+                    <td style={{ ...tdStyle, borderBottom: i === NEGOCIOS_PERDIDOS.length - 1 ? "none" : undefined }}>{n.plataforma}</td>
+                    <td style={{ ...tdStyle, borderBottom: i === NEGOCIOS_PERDIDOS.length - 1 ? "none" : undefined }}>{n.motivo}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 8 }}>
+          ⚠️ Son 6 cuentas puntuales reportadas por comercial, no una muestra representativa — evidencia cualitativa adicional, no validación estadística. Los volúmenes son estimaciones comerciales, no cifras de <code>fact_marcas.csv</code>.
+        </p>
+
+        {/* COMPETIDORES — insumo para Fase 5, aún no se ejecuta */}
+        <div style={sectionLabel}>Competidores mencionados explícitamente — insumo guardado para Fase 5 (benchmark)</div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {COMPETIDORES.map((c) => (
+            <span key={c} style={tagChip(BLUE, BLU_BG)}>{c}</span>
+          ))}
+        </div>
+        <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 8, lineHeight: 1.5 }}>
+          Melonn, Mastershop, 99 envíos, Coordinadora e Interrapidísimo vienen del insumo Comercial (22-jul-2026). <b>Skydrop</b> y <b>Envía</b> se agregan por conocimiento directo de Kate — no vienen del PDF ni de <code>fact_marcas.csv</code>. Envía domina el volumen de órdenes en México y también tiene presencia en Colombia. <b>Efficommerce</b> (<a href="https://efficommerce.com" target="_blank" rel="noopener noreferrer" style={{ color: BLUE }}>efficommerce.com</a>) fue mencionado por María Paula Arrechea (Distribuidora Natural) en su entrevista de Fase 1 — evidencia de entrevista, no del insumo Comercial.
+        </p>
+
+        <div style={{ ...card, borderLeft: `4px solid ${BLUE}`, borderRadius: 10, marginTop: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: BLUE }}>🔎 Investigación externa disponible</span>
+            <span style={tagChip(BLUE, BLU_BG)}>Standalone — no es la Fase 5 oficial</span>
+          </div>
+          <p style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.6, margin: "0 0 6px" }}>
+            El 24-jul-2026 se investigó a Dropi y a estos 8 competidores con el mismo rigor externo (sitio oficial, centro de ayuda, App Store/Google Play, Trustpilot, Capterra, reviews reales — con verificación de fecha de las reseñas) en 7 aspectos: notificación al cliente, tracking, modelos de pago, palancamiento financiero, facilidad operativa, soporte y puntuación general. Se hizo a pedido explícito de Kate, aparte del semáforo de fases — no adelanta ni reemplaza la Fase 5, que sigue esperando a que cierren los 4 frentes internos pendientes de Fase 1.
+          </p>
+          <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6, margin: 0 }}>
+            Documento completo: <a href="/analisis-competitivo-bau-marcas-24jul2026.html" target="_blank" rel="noopener noreferrer" style={{ color: BLUE, fontWeight: 700 }}>ver análisis competitivo →</a>. Priorizado por amplitud de brecha frente a competidores (cuántos ya tienen algo que Dropi no), no por conteo de negocios perdidos — los 6 casos de Comercial se usan ahí solo como contexto, nunca como criterio de prioridad. Ver Hallazgo 9 abajo para el resumen.
+          </p>
+        </div>
+
         {/* HALLAZGOS */}
         <div style={sectionLabel}>Hallazgos preliminares — evidencia, no conclusiones cerradas</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
@@ -397,6 +520,7 @@ export default function BauCompetitivoMarcasPage() {
               <div style={{ fontSize: 10, fontWeight: 700, color: BLUE, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 4 }}>Hallazgo {h.n}</div>
               <div style={{ fontSize: 14, fontWeight: 700, color: NAVY, marginBottom: 6 }}>{h.titulo}</div>
               <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.5 }}>{h.texto}</div>
+              {h.fuente && <div style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 6, fontStyle: "italic" }}>Fuente: {h.fuente}</div>}
             </div>
           ))}
         </div>
@@ -405,15 +529,36 @@ export default function BauCompetitivoMarcasPage() {
         <div style={sectionLabel}>Hipótesis actuales — sin validar, no presentar como certeza</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {HIPOTESIS.map((h, i) => (
-            <div key={i} style={{ display: "flex", gap: 10, ...card, padding: "10px 14px" }}>
-              <span style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: "var(--muted)", background: "var(--bg)", borderRadius: 5, padding: "2px 6px", height: "fit-content" }}>H{i + 1}</span>
-              <span style={{ fontSize: 13, color: "var(--fg)" }}>{h}</span>
+            <div key={i} style={{ display: "flex", flexDirection: "column", gap: 4, ...card, padding: "10px 14px" }}>
+              <div style={{ display: "flex", gap: 10 }}>
+                <span style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, color: "var(--muted)", background: "var(--bg)", borderRadius: 5, padding: "2px 6px", height: "fit-content" }}>H{i + 1}</span>
+                <span style={{ fontSize: 13, color: "var(--fg)" }}>{h.texto}</span>
+              </div>
+              {h.fuente && <span style={{ fontSize: 10.5, color: "var(--muted)", fontStyle: "italic", marginLeft: 34 }}>{h.fuente}</span>}
             </div>
           ))}
         </div>
 
+        {/* RIESGO: PROMESAS NO CUMPLIDAS */}
+        <div style={sectionLabel}>⚠️ Se ofrece pero no se cumple — riesgo activo, no es research</div>
+        <div style={{ border: `1px solid ${RED}`, background: RED_BG, borderRadius: 10, padding: "16px 18px" }}>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 10 }}>
+            Promesas ya comunicadas a marcas, sin fecha de cumplimiento confirmada
+          </div>
+          <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12.5, color: "var(--fg)", lineHeight: 1.6 }}>
+            {PROMESAS.map((p, i) => (
+              <li key={p.titulo} style={{ marginBottom: i === PROMESAS.length - 1 ? 0 : 6 }}>
+                <b>{p.titulo}</b> — {p.texto}
+              </li>
+            ))}
+          </ul>
+          <div style={{ fontSize: 11.5, color: "var(--muted)", marginTop: 10, paddingTop: 10, borderTop: "1px solid var(--border)" }}>
+            Esto no es un hallazgo de investigación — es una brecha entre lo que Comercial ya prometió y lo que Producto/Tech tiene en roadmap. Revisar con José Giraldo antes del próximo contacto comercial con estas cuentas, para no seguir prometiendo sin fecha.
+          </div>
+        </div>
+
         <div style={{ marginTop: 30, padding: "12px 0", borderTop: "1px solid var(--border)", fontSize: 11, color: "var(--muted)", textAlign: "center", lineHeight: 1.6 }}>
-          Fuente: Agente de Investigación BAU Competitivo para Marcas.docx · fact_marcas.csv · dim_marcas.csv act. 14-jul-2026 · Diagnostico_Marcas_CSAT_16jul2026.xlsx<br />
+          Fuente: Agente de Investigación BAU Competitivo para Marcas.docx · Insumo Comercial 22-jul-2026 · fact_marcas.csv · dim_marcas.csv act. 14-jul-2026 · Diagnostico_Marcas_CSAT_16jul2026.xlsx · Research externo competitivo 24-jul-2026 (analisis-competitivo-bau-marcas-24jul2026.html, standalone)<br />
           Análisis agente Data_Brands · Uso interno Célula Brands Success · Jul 2026
         </div>
       </div>

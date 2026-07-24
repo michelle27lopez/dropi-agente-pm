@@ -1,0 +1,557 @@
+<title>Análisis Competitivo Dropi — BAU Marcas · 24 jul 2026</title>
+<style>
+  .viz-root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.10);
+    --series-blue:    #2a78d6;
+    --series-violet:  #4a3aa7;
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --serious:        #ec835a;
+    --critical:       #d03b3b;
+    --good-bg:        rgba(12,163,12,0.10);
+    --warning-bg:     rgba(250,178,25,0.16);
+    --serious-bg:     rgba(236,131,90,0.14);
+    --critical-bg:    rgba(208,59,59,0.10);
+    --muted-bg:       rgba(137,135,129,0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    .viz-root {
+      --surface-1:      #1a1a19;
+      --page-plane:     #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --gridline:       #2c2c2a;
+      --border:         rgba(255,255,255,0.10);
+      --series-blue:    #3987e5;
+      --series-violet:  #9085e9;
+      --good-bg:        rgba(12,163,12,0.16);
+      --warning-bg:     rgba(250,178,25,0.14);
+      --serious-bg:     rgba(236,131,90,0.16);
+      --critical-bg:    rgba(208,59,59,0.16);
+      --muted-bg:       rgba(137,135,129,0.16);
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    --surface-1:      #1a1a19;
+    --page-plane:     #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --text-muted:     #898781;
+    --gridline:       #2c2c2a;
+    --border:         rgba(255,255,255,0.10);
+    --series-blue:    #3987e5;
+    --series-violet:  #9085e9;
+    --good-bg:        rgba(12,163,12,0.16);
+    --warning-bg:     rgba(250,178,25,0.14);
+    --serious-bg:     rgba(236,131,90,0.16);
+    --critical-bg:    rgba(208,59,59,0.16);
+    --muted-bg:       rgba(137,135,129,0.16);
+  }
+  :root[data-theme="light"] .viz-root {
+    --surface-1:      #fcfcfb;
+    --page-plane:     #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --border:         rgba(11,11,11,0.10);
+    --series-blue:    #2a78d6;
+    --series-violet:  #4a3aa7;
+    --good-bg:        rgba(12,163,12,0.10);
+    --warning-bg:     rgba(250,178,25,0.16);
+    --serious-bg:     rgba(236,131,90,0.14);
+    --critical-bg:    rgba(208,59,59,0.10);
+    --muted-bg:       rgba(137,135,129,0.12);
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+  .viz-root {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: var(--page-plane);
+    color: var(--text-primary);
+    padding: 32px 16px 64px;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+
+  header.top { margin-bottom: 28px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--series-blue); margin: 0 0 6px; }
+  h1 { font-size: 26px; margin: 0 0 6px; line-height: 1.25; }
+  .subtitle { color: var(--text-secondary); font-size: 14px; margin: 0; max-width: 720px; }
+  .meta-row { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; font-size: 12.5px; color: var(--text-muted); }
+  .meta-row span b { color: var(--text-secondary); font-weight: 600; }
+
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; padding: 3px 10px 3px 8px;
+    border-radius: 999px; white-space: nowrap;
+  }
+  .badge.warning { background: var(--warning-bg); color: #8a5a00; }
+  .badge.good { background: var(--good-bg); color: var(--good); }
+  .badge.critical { background: var(--critical-bg); color: var(--critical); }
+  :root[data-theme="dark"] .badge.warning, @media (prefers-color-scheme: dark) { .badge.warning { color: #fab219; } }
+  .badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+  section { margin-bottom: 36px; }
+  h2 { font-size: 15px; margin: 0 0 14px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-secondary); font-weight: 700; }
+  h3 { font-size: 13px; font-weight: 700; margin: 22px 0 10px; }
+  .section-note { font-size: 12.5px; color: var(--text-muted); margin: -8px 0 14px; }
+
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stat { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 16px 16px 14px; }
+  .stat .n { font-size: 24px; font-weight: 700; line-height: 1.1; }
+  .stat .label { font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; }
+
+  table { width: 100%; border-collapse: collapse; background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; font-size: 12.5px; }
+  thead th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .03em; color: var(--text-muted); font-weight: 600; padding: 9px 12px; border-bottom: 1px solid var(--gridline); white-space: nowrap; }
+  tbody td { padding: 9px 12px; border-bottom: 1px solid var(--gridline); color: var(--text-secondary); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.cap { color: var(--text-primary); font-weight: 700; white-space: nowrap; }
+  .table-scroll { overflow-x: auto; }
+  .cmp-table td, .cmp-table th { min-width: 168px; }
+  .cmp-table td:first-child, .cmp-table th:first-child { min-width: 140px; position: sticky; left: 0; background: var(--surface-1); }
+  .cmp-table td.dropi { background: var(--good-bg); }
+
+  .colbox { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .cols2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .colbox .title { font-size: 13px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .colbox .title.good::before { content: "●"; color: var(--good); font-size: 10px; }
+  .colbox .title.bad::before { content: "●"; color: var(--critical); font-size: 10px; }
+  .colbox ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--text-secondary); }
+  .colbox li { margin-bottom: 5px; }
+
+  .priority { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; }
+  .priority .n { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; background:var(--series-blue); color:#fff; font-size:11px; font-weight:700; margin-right:8px; }
+  .priority .t { font-size: 14px; font-weight: 700; display:inline; }
+  .priority .tags { margin-top: 8px; display:flex; gap:8px; flex-wrap:wrap; }
+  .priority p { font-size: 12.5px; color: var(--text-secondary); margin: 8px 0 0; }
+
+  details { background: var(--surface-1); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; padding: 4px 0; }
+  details summary { cursor: pointer; padding: 12px 16px; font-size: 14px; font-weight: 700; list-style: none; display:flex; align-items:center; justify-content:space-between; }
+  details summary::-webkit-details-marker { display:none; }
+  details summary::after { content: "+"; font-size:16px; color: var(--text-muted); font-weight:400; }
+  details[open] summary::after { content: "–"; }
+  details .body { padding: 4px 16px 16px; font-size: 13px; color: var(--text-secondary); line-height: 1.55; }
+  details .body b { color: var(--text-primary); }
+  details .body .asp { margin-bottom: 12px; }
+  details .body .asp .h { color: var(--text-primary); font-weight: 700; font-size: 12.5px; margin-bottom: 2px; }
+  details .body .src { color: var(--text-muted); font-size: 11.5px; word-break: break-all; }
+  details .body .nd { color: var(--warning); font-weight: 600; }
+
+  .hyp-list { display: flex; flex-direction: column; gap: 8px; }
+  .hyp { display: flex; gap: 10px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; font-size: 13px; }
+  .hyp .tag { flex: none; font-size: 11px; font-weight: 700; color: var(--text-muted); background: var(--muted-bg); border-radius: 5px; padding: 2px 6px; height: fit-content; }
+  .hyp .txt { color: var(--text-secondary); }
+
+  .footnote { font-size: 12px; color: var(--text-muted); border-top: 1px solid var(--gridline); padding-top: 14px; margin-top: 8px; }
+
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .cols2 { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="viz-root">
+  <div class="wrap">
+
+    <header class="top">
+      <p class="eyebrow">Data_Brands · Investigación externa · Célula Brands Success</p>
+      <h1>Análisis Competitivo Dropi — BAU Marcas</h1>
+      <p class="subtitle">Comparación de Dropi contra 8 competidores en 7 aspectos del flujo operativo, financiero y de servicio, para identificar qué tiene la competencia que Dropi no tiene — no un ranking basado en por qué se fueron casos puntuales.</p>
+      <div class="meta-row">
+        <span><b>Fecha:</b> 24 jul 2026</span>
+        <span><b>Segmento evaluado:</b> Marcas/Emprendedores con clientes fijos</span>
+        <span><b>Competidores:</b> Skydropx, Efficommerce, Mastershop, Melonn, 99 Envíos, Coordinadora, Interrapidísimo, Envía.com</span>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="badge warning">Research standalone — no es la Fase 5 del tracker BAU Competitivo</span>
+        <span class="badge critical">No presentar como decisiones tomadas — insumo para discusión de equipo</span>
+      </div>
+    </header>
+
+    <section>
+      <div class="colbox" style="border-left:3px solid var(--series-blue);">
+        <p style="font-size:12.5px; color:var(--text-secondary); margin:0; line-height:1.6;">
+          <b style="color:var(--text-primary);">Por qué este documento es standalone:</b> el proyecto <b style="color:var(--text-primary);">BAU Competitivo para Marcas</b> (tracker en el hub) define su Fase 5 como "Benchmark competitivo — solo sobre capacidades ya priorizadas, no comparación general", y hoy solo la Fase 1 (insumo Comercial) está cerrada. Este documento sí hace una comparación general de 7 aspectos, a pedido explícito de Kate, como investigación externa aparte del semáforo de fases — no reemplaza ni adelanta la Fase 5 oficial.
+        </p>
+      </div>
+      <div class="colbox" style="border-left:3px solid var(--critical); margin-top:12px;">
+        <p style="font-size:12.5px; color:var(--text-secondary); margin:0; line-height:1.6;">
+          <b style="color:var(--critical);">Discrepancia a validar antes de seguir citándola:</b> la investigación externa sobre Dropi (misma metodología que los 8 competidores, ver detalle abajo) encontró que la promesa interna <b style="color:var(--text-primary);">"pago al vendedor el mismo día de la entrega"</b> tiene respaldo parcial en marketing de terceros, pero al menos una fuente describe una ventana de liquidación de <b style="color:var(--text-primary);">hasta 7 días hábiles</b> según cuándo la transportadora le consigna a Dropi primero — y no se pudo confirmar en Términos y Condiciones oficiales (dropi.co bloqueó el acceso directo). No se está afirmando que la promesa sea falsa: se está señalando que el research no encontró la confirmación oficial que esperaría, y sí encontró una fuente que la contradice parcialmente. Recomendable validar con Finanzas/José antes de seguir comunicándolo como diferenciador absoluto en materiales externos.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Nota metodológica y límites de la evidencia</h2>
+      <div class="cols2">
+        <div class="colbox">
+          <div class="title bad">Aclaraciones de identidad</div>
+          <ul>
+            <li><b>"Envía"</b> son dos empresas distintas: <b>envia.co</b> (Envía Colvanes, courier tradicional colombiano con flota propia) y <b>envia.com</b> (plataforma SaaS multi-carrier con presencia en 11+ países). Este research cubre <b>envia.com</b>, que coincide con la descripción de "publica SLAs y métricas" del research previo.</li>
+            <li><b>"99 Envíos"</b> (99envios.com) es una empresa distinta de <b>"99 Minutos"</b> — no confundir. El research se enfocó en 99 Envíos.</li>
+            <li><b>Skydrop</b> se investigó como <b>Skydropx</b> (skydropx.com / skydropx.com.co), el nombre comercial vigente.</li>
+          </ul>
+        </div>
+        <div class="colbox">
+          <div class="title bad">Accesos bloqueados durante la investigación</div>
+          <ul>
+            <li>Trustpilot bloqueó fetch directo (403) en varios casos — esos datos vienen de snippets de búsqueda, señalados en cada punto.</li>
+            <li><code>ayuda.effi.com.co</code> (Efficommerce) y <code>99envios.com</code> no resolvieron por fetch directo — sus datos financieros/operativos vienen de resultados indexados, no de verificación directa del texto fuente.</li>
+            <li>Todo dato marcado <span class="nd">N/D</span> significa "no encontrado con evidencia pública accesible en este research" — no significa que el servicio no exista.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Tabla comparativa — 7 aspectos</h2>
+      <p class="section-note">Dropi fue investigado con el mismo rigor externo que los 8 competidores (sitio oficial, centro de ayuda, App Store/Google Play, Trustpilot, reviews reales) — dropi.co bloqueó el acceso directo (403) en todas las URLs oficiales, así que gran parte de la evidencia viene de snippets indexados y sitios de terceros/afiliados, señalado en el detalle. Detalle completo con fuentes de cada empresa (incluida Dropi) en la sección siguiente.</p>
+      <div class="table-scroll">
+        <table class="cmp-table">
+          <thead>
+            <tr>
+              <th>Aspecto</th><th>Dropi</th><th>Skydropx</th><th>Efficommerce</th><th>Mastershop</th><th>Melonn</th><th>99 Envíos</th><th>Coordinadora</th><th>Interrapidísimo</th><th>Envía.com</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="cap">Notificación cliente</td>
+              <td class="dropi">Confirmación pre-despacho vía IVR/WhatsApp (anti-fraude COD). Sin evidencia pública de notificación proactiva multicanal al comprador tras el despacho — el estado se expone en la tienda del vendedor, no como push directo de Dropi. Apps de terceros (TrackingMania, DropTracking) cubren el hueco</td>
+              <td>Email + WhatsApp, personalizable</td>
+              <td class="nd">N/D — no publicado</td>
+              <td>WhatsApp automático por etapa</td>
+              <td>WhatsApp automático (al vendedor: email también)</td>
+              <td>WhatsApp "en cada etapa" (no verificado directo)</td>
+              <td>App/web/mensaje + WhatsApp en Recaudo Anticipado</td>
+              <td>Solo SMS de confirmación de entrega</td>
+              <td>Email + SMS + WhatsApp, activables/desactivables</td>
+            </tr>
+            <tr>
+              <td class="cap">Tracking — calidad</td>
+              <td class="dropi">Dashboard con estados por transportadora; reviews documentan desincronía (pedidos marcados "domicilio no encontrado" sin intento real de entrega) y restricción geográfica de la app móvil reportada (funcional solo en CO para un usuario en EC)</td>
+              <td>Centraliza envíos propios + externos, reviews destacan tiempo real</td>
+              <td>Declara tiempo real, agrega ~10 transportadoras CO</td>
+              <td class="nd">Sin landing pública de rastreo propia documentada</td>
+              <td>Dashboard Órbita en tiempo real + mapas en vivo</td>
+              <td>Agrega TCC/Coordinadora/Inter/Servientrega/Envía en 1 panel</td>
+              <td>Tiempo real vía app/web/N° guía, integra Shopify/Woo</td>
+              <td>Tracking básico, indexado por agregadores terceros</td>
+              <td>Tiempo real post-despacho, 100+ carriers</td>
+            </tr>
+            <tr>
+              <td class="cap">Modelos de pago</td>
+              <td class="dropi nd">Cifras contradictorias entre fuentes de terceros (2%, 3%, 5%, o planes Básico/Estándar/Avanzado con 2.5%/2.0%/1.5%) — sin tarifario oficial centralizado accesible públicamente</td>
+              <td>Pay-as-you-go + billetera prepagada, sin mensualidad</td>
+              <td>Sin comisión de venta en logística; ERP $0–$174.000 COP/mes; 1% en dropshipping</td>
+              <td>Sin cuota mensual; comisión ~$1.500–2.500 COP/orden (fuente no oficial)</td>
+              <td>Sin tarifa pública; 3 tiers CO por gasto mensual ($5M–$30M+ COP)</td>
+              <td>"Sin contratos ni cuotas"; plan Plus con $0 envío/devolución/seguro; comisión exacta N/D</td>
+              <td>Flete fijo por zona/peso + 1% costo de manejo (público)</td>
+              <td>Tarifa por peso/zona desde ~$7.500 COP/kg; recaudo ~5%</td>
+              <td>No publica tarifas, cotización personalizada</td>
+            </tr>
+            <tr>
+              <td class="cap">Palancamiento financiero</td>
+              <td class="dropi">Promesa interna: pago el <b>mismo día de la entrega</b>. Respaldo parcial en marketing de terceros, pero una fuente describe hasta 7 días hábiles según ciclo de liquidación transportadora→Dropi — <b style="color:var(--critical);">no confirmado en T&amp;C oficiales</b> (bloqueados)</td>
+              <td>Crédito inmediato interno o transferencia semanal (jueves)</td>
+              <td>Consignación 3x/semana (mar-jue-sáb) si saldo &gt;$100.000 COP (con reserva de verificación)</td>
+              <td>Saldo comprometido/líquido; libera al salir a tránsito; retiro en minutos-días</td>
+              <td>Corte miér./transfiere vier. (dato con reserva, no confirmado con cita directa)</td>
+              <td>"Liquidaciones súper rápidas" sin plazo exacto documentado</td>
+              <td>Abonos diarios/semanales/quincenales a elección, sin default público</td>
+              <td>"Pago en Casa": consignación reportada minutos post-entrega, sin SLA exacto</td>
+              <td>Liquidación semanal jueves (fuente secundaria, no oficial)</td>
+            </tr>
+            <tr>
+              <td class="cap">Facilidad operativa</td>
+              <td class="dropi">Confirmado vigente en 2026 (Academia Dropi): flujo bodega → producto → pedido sigue sin simplificar para el proveedor/marca. Automatización solo del lado del dropshipper vía integraciones (Shopify/Woo/Tiendanube)</td>
+              <td>No requiere bodega ni producto previo; integra Shopify/Woo/Tiendanube/Wix/PrestaShop</td>
+              <td>Exige bodega → producto antes de despachar (según su propia Academia) — más rígido que Skydropx</td>
+              <td>No requiere bodega si usa catálogo de proveedor; automatiza selección de transportadora ("Inteliflete")</td>
+              <td>3PL — la marca conecta su tienda, Melonn gestiona todo el flujo (no hay "crear guía" manual)</td>
+              <td>No requiere bodega, recogida a domicilio; integra Shopify/Woo/API/Excel</td>
+              <td>No aplica bodega/producto; requiere registro Suite Logística + documentos para activar COD</td>
+              <td>No aplica bodega/producto; plugin/API con códigos de integración</td>
+              <td>Cotización simple; módulo Fulfillment sí exige configurar producto/inventario/lotes</td>
+            </tr>
+            <tr>
+              <td class="cap">Calidad de soporte</td>
+              <td class="dropi">Predominantemente reactivo. Quejas verificables en Trustpilot, Shopify reviews, Reclamos.cl y TuQuejaSuma: chats cerrados sin resolver, falta de respuesta por email (CO, CL). Horario documentado solo WhatsApp Colombia 8am-5pm</td>
+              <td>WhatsApp/chat/email/tickets, horario L-V 9-19h; quejas de reclamos sin resolución real</td>
+              <td>Teléfono + WhatsApp + email PQRS; sin horario público; evidencia limitada</td>
+              <td>Chat + email; reseñas 4.7/5 pero muestra muy chica (7)</td>
+              <td>Teléfono + email + chat + HubSpot; atiende a la marca, no al comprador final</td>
+              <td>"Equipo humano especializado" declarado; canales/horarios sin verificar</td>
+              <td>PQR con SLA máx. 15 días hábiles; modelo reactivo</td>
+              <td>Línea + PQR; reviews reportan esperas de hasta 1h sin resolver</td>
+              <td>Email/teléfono/WhatsApp/tickets multi-idioma; Capterra 3.0/5</td>
+            </tr>
+            <tr>
+              <td class="cap">Puntuación de flujo (1-5)</td>
+              <td class="dropi nd">Sin promedio único confiable — Trustpilot dropi.co ~3.4-3.8/5, pero lo más reciente (nov-25 a may-26) es casi todo 1★ ⚠️</td>
+              <td><b>3.5/5</b> (propia, evidencia parcial) — Trustpilot activo y reciente (jun-jul-26), mezcla sin tendencia clara</td>
+              <td class="nd">No calificable — la única reseña que había ya no existe</td>
+              <td>Referencial 3.5–4/5 — y desactualizada, sin reseñas nuevas en ~9 meses</td>
+              <td class="nd">No calificable — 0 reseñas en Shopify/Capterra/Trustpilot</td>
+              <td class="nd">No calificable — sin reseñas independientes encontradas</td>
+              <td><b>3.5/5</b> — pero las 3 reseñas son de 2020-2025, ninguna reciente ⚠️</td>
+              <td class="nd">No calificable propia — ref. externa Trustpilot 1.1/5, 414 reseñas, estable y sin mejora ⚠️</td>
+              <td class="nd">No calificable propia — Trustpilot y Capterra contradictorios, y ambos caen en lo reciente vs. su propio histórico</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2>¿Qué tan recientes son estas reseñas?</h2>
+      <p class="section-note">Kate preguntó si las puntuaciones de la tabla eran recientes — no lo eran: la primera versión usó promedios acumulados históricos sin verificar fecha. Se corrió una segunda ronda de research (24-jul-2026) filtrando por "más reciente" en cada fuente donde fue posible. Varios hallazgos cambian la lectura de las puntuaciones de la tabla de arriba.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Empresa</th><th>Fuente</th><th>Rango verificado</th><th>En últimos 12 meses (ago-25 a jul-26)</th><th>Tendencia reciente</th></tr></thead>
+          <tbody>
+            <tr><td class="cap">Dropi</td><td>Trustpilot dropi.co (180 total)</td><td>jul-2025 a may-2026 (parcial)</td><td>Mayoría de lo revisado, pero sin ninguna nueva desde may-2026</td><td style="color:var(--critical); font-weight:600;">Casi todas las de nov-25 a may-26 son 1★; el bloque positivo (5★/4★) se concentra en ago-sep-25 — señal de deterioro reciente</td></tr>
+            <tr><td class="cap">Dropi</td><td>TuQuejaSuma (20 total)</td><td>abr-2024 a jul-2024</td><td>0%</td><td>Fuente inactiva desde 2024 — no aporta señal de hoy, no debería pesar en la lectura actual</td></tr>
+            <tr><td class="cap">Skydropx</td><td>Trustpilot (139 total — creció vs. 70 del research anterior)</td><td>jun-jul 2026 confirmado activo</td><td>Alto volumen reciente</td><td>Mezcla de positivas y negativas (quejas de sobrepesos y fallas de integración) — sin tendencia clara</td></tr>
+            <tr><td class="cap">Skydropx</td><td>Shopify "Rates and shipping" (47 total)</td><td>sep-2021 a mar-2026</td><td>Solo 1 de ~10 revisadas, y es negativa (1★)</td><td>Actividad reciente muy baja — mayoría de reseñas de abr-2025 o antes</td></tr>
+            <tr><td class="cap">Efficommerce</td><td>—</td><td>—</td><td>—</td><td>La única reseña que teníamos (Shopify) ya no existe (404) — hoy no hay ninguna fuente de terceros verificable</td></tr>
+            <tr><td class="cap">Mastershop</td><td>Shopify (7 total)</td><td>22-may-2025 a 30-oct-2025</td><td>Solo 1 de 7</td><td>Sin ninguna reseña nueva en los últimos ~9 meses</td></tr>
+            <tr><td class="cap">Melonn</td><td>—</td><td>—</td><td>—</td><td>Reconfirmado: 0 reseñas en Shopify, Capterra y Trustpilot</td></tr>
+            <tr><td class="cap">99 Envíos</td><td>—</td><td>—</td><td>—</td><td>Reconfirmado: ninguna reseña independiente encontrada en ninguna plataforma</td></tr>
+            <tr><td class="cap">Coordinadora</td><td>Shopify (3 total)</td><td>dic-2020 a feb-2025</td><td>0 de 3</td><td>Sin actividad reciente. No tiene página Trustpilot propia — no confundir con "Coordinadora USA" (empresa distinta, ~1.6-1.7/5, no evaluada aquí)</td></tr>
+            <tr><td class="cap">Interrapidísimo</td><td>Trustpilot (414 total, confirmado)</td><td>ene-2026 a jul-2026 (muestra revisada)</td><td>Alta actividad reciente</td><td style="color:var(--critical); font-weight:600;">19 de las 20 más recientes son 1★ — estable en el tiempo, sin ninguna señal de mejora</td></tr>
+            <tr><td class="cap">Envía.com</td><td>Trustpilot (total no confirmado)</td><td>jun-jul 2026</td><td>Alta actividad reciente</td><td>Promedio de las 20 más recientes ≈3.5/5 — por debajo del agregado histórico (4.3/5)</td></tr>
+            <tr><td class="cap">Envía.com</td><td>Capterra (26 total, confirmado)</td><td>2018-2026 (orden no cronológico)</td><td>5 de 26 (≈19%)</td><td>Promedio reciente 2.0/5 — por debajo del agregado histórico (2.8/5)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="colbox" style="margin-top:12px; border-left:3px solid var(--critical);">
+        <p style="font-size:12.5px; color:var(--text-secondary); margin:0; line-height:1.6;">
+          <b style="color:var(--text-primary);">Hallazgo más importante de esta verificación:</b> en Dropi, las reseñas más recientes de Trustpilot (nov-2025 a may-2026) son casi todas de 1 estrella, mientras que las reseñas positivas se concentran en un bloque de ago-sep-2025. Esto es una señal (no una tendencia estadísticamente confirmada, la muestra revisada es parcial) de que la percepción reciente podría ser peor que el promedio histórico de 3.4-3.8/5 que muestra el agregado. En Interrapidísimo pasa lo contrario en el sentido de estabilidad: su 1.1/5 no es un promedio arrastrado por reseñas viejas — lo reciente es igual de malo que lo histórico. En Envía.com, tanto Trustpilot como Capterra muestran que lo reciente rinde peor que el agregado de cada plataforma, aunque los niveles base siguen siendo muy distintos entre ambas (posible sesgo de quién reseña en cada una).
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Matriz de fortalezas / debilidades — Dropi vs. competencia</h2>
+      <p class="section-note">Basada en la comparación de los 7 aspectos entre las 9 empresas, no en casos individuales de negocios perdidos (esos se presentan aparte, como contexto, en la siguiente sección).</p>
+      <div class="cols2">
+        <div class="colbox">
+          <div class="title good">Fortalezas Dropi</div>
+          <ul>
+            <li><b>Dropshipping nativo + fulfillment propio + catálogo de +160k productos con proveedores locales.</b> Ningún competidor de este research combina las tres cosas: son couriers tradicionales (Coordinadora, Interrapidísimo), agregadores multi-carrier (Skydropx, 99 Envíos, Envía.com) o 3PL sin catálogo propio (Melonn).</li>
+            <li><b>Cobertura 10+ países</b> (memoria de research previo) — más amplia que los competidores mayormente locales de Colombia, aunque con una brecha funcional detectada: la app móvil reportó restricciones geográficas para al menos un país (Ecuador).</li>
+            <li><b>Confirmación pre-despacho anti-fraude (IVR/WhatsApp)</b> — práctica que en espíritu se parece a "Inteliflete" de Mastershop, aunque no se pudo verificar públicamente su efecto en tasa de devoluciones.</li>
+            <li><b>Dropi Academy</b> — diferenciador educativo no encontrado en ningún competidor de este research.</li>
+          </ul>
+        </div>
+        <div class="colbox">
+          <div class="title bad">Debilidades Dropi</div>
+          <ul>
+            <li><b>Notificación proactiva al comprador:</b> 5 de 8 competidores (Skydropx, Envía.com, Coordinadora, Mastershop, Melonn) la tienen confirmada en producción; en Dropi no hay evidencia pública de esto — depende de apps de terceros que instala el vendedor.</li>
+            <li><b>Flujo bodega → producto → pedido:</b> 4 de 8 competidores (Skydropx, 99 Envíos, Interrapidísimo, Coordinadora) no lo exigen para generar guía. Confirmado que en Dropi sigue vigente en 2026.</li>
+            <li><b>Transparencia de tarifario:</b> Coordinadora publica su fórmula completa de cobro; en Dropi las cifras de comisión son inconsistentes entre fuentes externas (2%-5%, o esquema de planes) y no hay tarifario oficial accesible públicamente.</li>
+            <li><b>Palancamiento financiero sin confirmación oficial:</b> la promesa de "mismo día" no está respaldada en fuente oficial accesible, y hay evidencia de una ventana de hasta 7 días hábiles en al menos un escenario — ver nota de discrepancia al inicio del documento.</li>
+            <li><b>Calidad de soporte:</b> no es una debilidad exclusiva de Dropi (Skydropx, Interrapidísimo y Efficommerce también tienen quejas documentadas), pero el volumen y variedad de reclamos de Dropi (Trustpilot, Reclamos.cl, TuQuejaSuma, Shopify reviews) está entre los más altos de las 9 empresas evaluadas.</li>
+            <li><b>Tendencia reciente en Trustpilot, no solo promedio histórico:</b> verificado en la segunda ronda de research — las reseñas de Dropi en Trustpilot de nov-2025 a may-2026 son casi todas de 1★, mientras que el bloque positivo se concentra meses atrás (ago-sep-2025). Señal de posible deterioro reciente, a diferencia de competidores como Skydropx donde lo reciente es una mezcla sin tendencia clara. Ver sección "¿Qué tan recientes son estas reseñas?".</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Dolor documentado — contexto, no criterio de priorización</h2>
+      <div class="colbox" style="border-left:3px solid var(--warning);">
+        <p style="font-size:12.5px; color:var(--text-secondary); margin:0; line-height:1.6;">
+          Los 6 negocios perdidos reportados por Comercial (22-jul-2026) le dan color y coherencia al análisis — son la evidencia más concreta que existe hoy de fricción real — pero <b style="color:var(--text-primary);">una muestra de 6 casos no representa a las miles de marcas activas del ecosistema</b>, y cada uno pidió algo distinto (solo 1 de 6 mencionó SIIGO, por ejemplo). Se listan aquí como contexto y para mantener coherencia con la evidencia ya recogida por Comercial — no se usan para ordenar prioridad. La sección siguiente prioriza por otro criterio: cuántos de los 8 competidores ya tienen la capacidad que a Dropi le falta.
+        </p>
+      </div>
+      <div class="table-scroll" style="margin-top:12px;">
+        <table>
+          <thead><tr><th>Marca</th><th>Volumen</th><th>Se fue a</th><th>Motivo puntual</th></tr></thead>
+          <tbody>
+            <tr><td class="cap">Parchita</td><td>+1000 órdenes</td><td>Melonn</td><td>Bodega y tiempos — requería SAMEDAY en 4 ciudades</td></tr>
+            <tr><td class="cap">Duja Kids</td><td>+500 órdenes</td><td>Otra (no responde)</td><td>Mejores tarifas</td></tr>
+            <tr><td class="cap">Hello Patch</td><td>+500 órdenes</td><td>No responde</td><td>Fricción en parametrización de bodega de despacho</td></tr>
+            <tr><td class="cap">Benjamín de la Torre</td><td>+500 órdenes</td><td>Mastershop</td><td>Falta de integración con SIIGO</td></tr>
+            <tr><td class="cap">Beaulife - Apiflower</td><td>100-499 órdenes</td><td>Melonn</td><td>Mejores tarifas en fletes sin recaudo</td></tr>
+            <tr><td class="cap">Andrés Castro</td><td>100-499 órdenes</td><td>99 Envíos</td><td>Prefería generar guía sin crear producto</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="section-note" style="margin-top:8px;">Fuente: insumo Comercial 22-jul-2026, ya documentado en el tracker BAU Competitivo. No se recalcula "impacto" en órdenes/mes agregado aquí porque 6 casos no son base estadística suficiente para eso — es la razón exacta por la que este documento no los usa para priorizar.</p>
+    </section>
+
+    <section>
+      <h2>Brechas de capacidad frente a la competencia — criterio de priorización</h2>
+      <p class="section-note">Ordenadas por amplitud de la brecha: cuántos de los 8 competidores investigados ya tienen la capacidad que Dropi no tiene confirmada públicamente. Este criterio no depende de cuántos usuarios lo pidieron — depende de qué tan generalizado está en el mercado.</p>
+      <div class="priority">
+        <span class="n">1</span><span class="t">Notificación proactiva al comprador tras el despacho</span>
+        <div class="tags"><span class="badge critical">Brecha: 5 de 8 competidores ya la tienen</span></div>
+        <p>Skydropx, Envía.com, Coordinadora, Mastershop y Melonn ya notifican automáticamente (mínimo WhatsApp) en producción documentada. En Dropi solo se confirmó confirmación pre-despacho (anti-fraude); el seguimiento post-despacho depende de apps de terceros que el vendedor debe instalar por su cuenta.</p>
+      </div>
+      <div class="priority">
+        <span class="n">2</span><span class="t">Generar guía sin exigir bodega/producto previo</span>
+        <div class="tags"><span class="badge critical">Brecha: 4 de 8 competidores no lo exigen</span></div>
+        <p>Skydropx, 99 Envíos, Interrapidísimo y Coordinadora no requieren bodega ni producto previos para generar una guía. Confirmado que en Dropi el flujo bodega → producto → pedido sigue vigente en 2026 (Academia Dropi), sin evidencia pública de cambio.</p>
+      </div>
+      <div class="priority">
+        <span class="n">3</span><span class="t">Tarifario de comisión público y consistente</span>
+        <div class="tags"><span class="badge warning">Brecha: 1 de 8 (Coordinadora) lo publica completo — pero destaca por opacidad general del mercado</span></div>
+        <p>Coordinadora es el único que publica su fórmula de cobro completa (flete + 1% de manejo). En Dropi, las fuentes externas dan cifras contradictorias (2%-5%, o distintos esquemas por plan) porque no hay tarifario oficial accesible — esto genera desconfianza incluso si la tarifa real fuera competitiva.</p>
+      </div>
+      <p class="section-note" style="margin-top:8px;"><b style="color:var(--text-primary);">Sobre SIIGO/ERP:</b> no se incluye en esta lista priorizada. Es un dolor real (le costó a Dropi 1 negocio de +500 órdenes/mes), pero la evidencia disponible es 1 caso sobre 6 — insuficiente para generalizar la necesidad a todo el ecosistema. Se mantiene como hipótesis a validar con Data/Comercial sobre una muestra mayor antes de tratarla como prioridad confirmada, no como decisión tomada aquí.</p>
+    </section>
+
+    <section>
+      <h2>Detalle completo — Dropi y competidores — 7 aspectos con fuentes</h2>
+      <p class="section-note">Investigación vía búsqueda web y acceso directo a sitios oficiales, centros de ayuda, App Store/Capterra/Trustpilot. Cada punto indica su fuente; donde el acceso directo falló (403/DNS), se señala explícitamente.</p>
+
+      <details open>
+        <summary>Dropi</summary>
+        <div class="body">
+          <p class="section-note" style="margin:0 0 10px;">dropi.co bloqueó el acceso directo (403) en todas las URLs oficiales (home, contáctanos, términos y condiciones, servicio logístico, integraciones). Gran parte de la evidencia "oficial" viene de snippets indexados y sitios de terceros/afiliados (Andrey Business, Academia Dropi) que replican o interpretan contenido de Dropi, no de la fuente primaria completa verificada.</p>
+          <div class="asp"><div class="h">1. Notificación al cliente final</div>Confirmación de pedido pre-despacho vía IVR y WhatsApp (anti-fraude COD) — no es notificación de estado de envío. El tracking se expone en la tienda del vendedor vía token/integración, no como notificación proactiva de Dropi. Sin comunicado público sobre roadmap de notificación directa al comprador. Apps de terceros (TrackingMania, DropTracking, iTrack) cubren ese hueco — señal indirecta de que la notificación nativa no es suficiente.<div class="src nd">Fuente: snippets de dropi.co/blog · apps.shopify.com/trackingmania, /droptracking, /itrack</div></div>
+          <div class="asp"><div class="h">2. Calidad del tracking</div>Dashboard con estados por transportadora (confirmado, en ruta, entregado, con novedad). Reviews reales reportan desincronía: pedidos nunca entregados aparecen como "domicilio no encontrado" sin intento real de entrega. Reseña de Google Play reporta restricción geográfica de la app (funcional solo en CO para un usuario en EC).<div class="src">Fuente: apps.shopify.com/dropify-5/reviews · play.google.com/store/apps/details?id=com.dropi.dropiapp</div></div>
+          <div class="asp"><div class="h">3. Modelos de pago</div>Cifras contradictorias entre fuentes de terceros: comisión 5% descontada del wallet al confirmarse entrega (una fuente); esquema de planes Básico gratis (2.5%/pedido), Estándar $29.90 USD/mes (2.0%), Avanzado $99.90 USD/mes (1.5%) (otra fuente); tercer rango citado "2%-5% según país". <b>No hay tarifario oficial centralizado verificable</b> — dropi.co bloqueado, hay que reconstruirlo desde blogs de afiliados.<div class="src nd">Fuentes no oficiales: andreybusiness.com/blog/comisiones-dropi-cuanto-cobra-por-cada-pedido · andreybusiness.com/blog/dropi-mexico-plataforma-dropshipping-operador-2026</div></div>
+          <div class="asp"><div class="h">4. Palancamiento financiero</div>Fuentes de terceros coinciden parcialmente en pago rápido, pero no de forma unánime en "mismo día": una fuente dice "el dinero entra el mismo día que el cliente recibe el producto"; otra dice "se acredita en Wallet el mismo día, disponible en las siguientes 24h"; una tercera describe liquidación de <b>2 a 7 días hábiles</b> dependiendo de cuándo la transportadora le paga a Dropi primero. <b style="color:var(--critical);">No confirmado en Términos y Condiciones oficiales</b> (bloqueados, 403). Sin evidencia pública de adelantos de dinero (factoring). Comisión de retiro variable según método (ej. Global66 3.5%, USDT TRC20 0%).<div class="src nd">Fuentes no oficiales: andreybusiness.com/blog/dropi-como-funciona-2026-guia-para-dropshipper-proveedor-y-emprendedor · andreybusiness.com/blog/dropi-wallet-retiros-sacar-dinero-2026 · andreybusiness.com/blog/comisiones-dropi-cuanto-cobra-por-cada-pedido</div></div>
+          <div class="asp"><div class="h">5. Facilidad operativa</div>Confirmado por la Academia Dropi (recurso educativo de la marca): el flujo de proveedor sigue requiriendo crear bodega ("agregar el nombre de tu bodega y la dirección donde se recogerá la mercancía") como paso base — sin evidencia pública de que el flujo bodega → producto → pedido haya cambiado o se haya simplificado en 2026. La automatización real (sincronización cada 5-10 min, vía token) está del lado del dropshipper que integra Shopify/WooCommerce/Tiendanube — no elimina el flujo base del proveedor/marca.<div class="src nd">Fuente: academiadropi.co/como-crear-tu-bodega-como-proveedor (snippet, DNS falló en fetch directo) · apps.shopify.com/dropify-5</div></div>
+          <div class="asp"><div class="h">6. Calidad de soporte</div>Canales: WhatsApp +57 312 3186390 (horario 8am-5pm Colombia, no confirmado para otros países), email soporte.dropi@dropi.co, formulario web. Reviews consistentemente negativas: Trustpilot dropi.com (3 reseñas) "customer support is poor"; Trustpilot dropi.co (179 reseñas) menciona retrasos de entrega y calidad; Shopify App Store (Dropify, 55 reseñas, 3.3/5) con 31% de reseñas de 1 estrella, quejas de chats cerrados sin resolución; Reclamos.cl (CL, 2024) reporta "nula respuesta", 5 correos sin respuesta; TuQuejaSuma reporta tickets que no se pueden generar. Soporte predominantemente <b>reactivo</b>, sin evidencia de outreach proactivo.<div class="src">Fuente: trustpilot.com/review/dropi.com · es.trustpilot.com/review/dropi.co · apps.shopify.com/dropify-5/reviews · reclamos.cl/reclamo/2024/jul/dropi-chile-nula-respuesta-por-parte-de-la-empresa · tuquejasuma.com/dropi</div></div>
+          <div class="asp"><div class="h">7. Puntuación general (1-5)</div><span class="nd">No hay promedio único confiable</span> — Trustpilot dropi.co (180 reseñas) ~3.4-3.8/5 con inconsistencia entre capturas; App Store iOS 1.8/5 pero muestra chica (11 reseñas, solo 1 con texto); Shopify App "Dropify" 3.3/5 (55 reseñas, no es Dropi en sí sino su app de integración). Sin listado en Capterra/G2. <b style="color:var(--critical);">Verificación de recencia (2ª ronda):</b> las reseñas de Trustpilot de nov-2025 a may-2026 son casi todas 1★; el bloque de reseñas positivas se concentra en ago-sep-2025 — señal de que el promedio histórico podría estar mejor de lo que refleja la percepción reciente. TuQuejaSuma (20 reclamos) es de 2024 completo, 0% en los últimos 12 meses — fuente desactualizada, no debería pesar en la lectura de hoy.</div>
+          <div class="asp"><div class="h">Hallazgos adicionales no cubiertos por los 7 aspectos</div>Reclamos independientes (Reclamos.cl, TuQuejaSuma) reportan producto recibido distinto al pedido, con Dropi remitiendo al usuario a "solo maneja logística" sin dirigirlo al área correcta. Cobros duplicados sin reembolso reportados en Chile (2024). Queja recurrente no cuantificada de inestabilidad de la plataforma web. Varias quejas apuntan a que la fricción real es del carrier tercerizado (no notifica, no intenta entrega genuina, retiene dinero en wallet) mientras Dropi actúa como intermediario — un usuario reportó haber escalado ante la SIC (Colombia).<div class="src nd">Fuentes: reclamos.cl · tuquejasuma.com/dropi (snippets)</div></div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Skydropx</summary>
+        <div class="body">
+          <div class="asp"><div class="h">1. Notificación al cliente final</div>Notificaciones automáticas por email y WhatsApp, personalizables con marca del vendedor (nombre, logo, colores). No se detalla la lista completa de estatus disponibles.<div class="src">Fuente: help.skydropx.com/preguntas-frecuentes</div></div>
+          <div class="asp"><div class="h">2. Calidad del tracking</div>Tracking centralizado para envíos propios y externos de terceros. Reviews destacan "visibilidad en tiempo real".<div class="src">Fuentes: help.skydropx.com/preguntas-frecuentes · cubbo.com/en/posts/precios-skydropx</div></div>
+          <div class="asp"><div class="h">3. Modelos de pago</div>Sin tarifa mensual — modelo pay-as-you-go, se cobra el mayor entre peso físico y volumétrico. Billetera prepagada (vigencia 1 año). Recargas por transferencia/PayPal, reflejadas en &lt;2h; comisión hasta 3.5% con tarjeta. Advertencia propia: "el precio al crear la etiqueta no siempre es el precio final" por ajustes de auditoría del transportista.<div class="src">Fuente: cubbo.com/en/posts/precios-skydropx</div></div>
+          <div class="asp"><div class="h">4. Palancamiento financiero</div>Pago contra entrega (Colombia): crédito inmediato dentro de Skydropx, o transferencia bancaria hasta 1 día hábil, acreditada los jueves, con descuento de comisión. Requiere solicitud manual del vendedor.<div class="src nd">Fuente vía snippet, fetch directo bloqueado (403): ayuda.skydropx.com.co/finanzas/contra-entrega/retirar-pagos</div></div>
+          <div class="asp"><div class="h">5. Facilidad operativa</div>No requiere producto ni bodega previos — solo código postal origen/destino, tipo de empaque, dimensiones y peso. Importación masiva vía Sheets. Integra Shopify, WooCommerce, Tiendanube, Wix, PrestaShop, con sincronización automática de órdenes.<div class="src">Fuente: help.skydropx.com/preguntas-frecuentes</div></div>
+          <div class="asp"><div class="h">6. Calidad de soporte</div>WhatsApp, chat en vivo, email, Messenger, tickets. Horario L-V 9:00-19:00h, sáb 10:00-14:00h. Trustpilot ~4/5 (70 reseñas): elogios a facilidad de uso y soporte, pero reclamos serios de paquetes perdidos sin resolución real. Shopify App Store: 4.9/5 (40 reseñas) y 3.9/5 (50 reseñas).<div class="src">Fuentes: skydropx.com/contacto/soporte · es.trustpilot.com/review/www.skydropx.com (snippet, 403 directo) · apps.shopify.com/skydropx-pro/reviews</div></div>
+          <div class="asp"><div class="h">7. Puntuación general (1-5)</div><b>3.5/5 aproximado</b> — evidencia suficiente pero con señal de riesgo: manejo de reclamos por pérdidas/retrasos percibido como lento, y falta de transparencia total en precio final de etiqueta. <b>Verificación de recencia (2ª ronda):</b> Trustpilot sí tiene actividad reciente confirmada (jun-jul 2026), aunque el conteo total creció de 70 a 139 reseñas entre ambas rondas (posible variación del snapshot) y la app "Rates and shipping" (47 reseñas) está mayormente estancada desde abr-2025, con solo 1 reseña reciente y negativa.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Efficommerce (Grupo Effi)</summary>
+        <div class="body">
+          <div class="asp"><div class="h">Nota de identidad</div>Sí es una empresa real y activa, parte de Grupo Effi (Effi ERP + Efficommerce), presencia en Colombia, Ecuador, Rep. Dominicana, Guatemala, Costa Rica. El centro de ayuda (ayuda.effi.com.co) no resolvió por DNS en esta investigación — esos datos vienen de snippets de búsqueda, no de fetch directo.</div>
+          <div class="asp"><div class="h">1. Notificación al cliente final</div><span class="nd">N/D</span> — no se encontró documentación pública de canales/timing de notificación automatizada al comprador final.</div>
+          <div class="asp"><div class="h">2. Calidad del tracking</div>Declaran "rastreo en tiempo real" para vendedor y comprador. Integran ~10 transportadoras (Servientrega, Coordinadora, Envía, Interrapidísimo, TCC, Domina, etc.) en un solo panel. Sin dato público de precisión ni UX específica.<div class="src">Fuente: grupoeffi.com/logistica-efficommerce-una-opcion-de-envio-para-tu-tienda-en-colombia</div></div>
+          <div class="asp"><div class="h">3. Modelos de pago</div>"Sin comisiones por venta" en el servicio de envío/logística. Software Effi ERP con planes: Free ($0), Nuevo Emprendedor ($90.000 COP/mes), Emprendedor ($120.000 COP/mes), Emprendedor Experto ($174.000 COP/mes). Para dropshipping específicamente sí hay comisión (ver punto 4).<div class="src">Fuente: efficommerce.com (fetch directo)</div></div>
+          <div class="asp"><div class="h">4. Palancamiento financiero</div>Pagos se consignan 3 veces por semana (martes/jueves/sábado), automático si el saldo supera $100.000 COP. Comisión de liquidación del 1% sobre el valor de venta en dropshipping. Sin información pública de adelantos.<div class="src nd">Fuente vía snippet, no verificado por fetch directo: ayuda.effi.com.co/help/preguntas-frecuentes-tesoreria</div></div>
+          <div class="asp"><div class="h">5. Facilidad operativa</div>Su propia Academia enseña el flujo: Bodegas → Artículos (productos) → Integración Shopify → Seguimientos — indica que sí requiere bodega y producto antes de operar guías (más rígido que Skydropx). Ofrece "crear convenios de Dropshipping" como paso documentado.<div class="src">Fuente: efficommerce.com/curso/academia-effi-erp (estructura de lecciones vía snippet)</div></div>
+          <div class="asp"><div class="h">6. Calidad de soporte</div>Teléfono y WhatsApp, email PQRS, WhatsApp de Tesorería específico. Sin horarios públicos. Una reseña negativa en Shopify App Store reporta ausencia de soporte técnico real ante errores — sin score agregado tipo Trustpilot encontrado.<div class="src">Fuente: efficommerce.com · apps.shopify.com/reviews/1789124 (snippet)</div></div>
+          <div class="asp"><div class="h">7. Puntuación general (1-5)</div><span class="nd">No calificable</span> — sin fuente de reviews agregadas y públicas comparable a Trustpilot/App Store con volumen suficiente. <b>Verificación de recencia (2ª ronda):</b> la única reseña que teníamos (Shopify #1789124) ya no existe (404) — hoy no hay ninguna fuente de terceros verificable, ni siquiera la puntual que se citó en la primera versión de este documento.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Mastershop</summary>
+        <div class="body">
+          <div class="asp"><div class="h">1. Notificación al cliente final</div>Mensajes automáticos por WhatsApp con número de guía y actualizaciones en cada etapa, activable en 3 clics. Permite programar mensajes de seguimiento con plantillas (requisito WhatsApp Business API tras 24h). Canal email/SMS no documentado.<div class="src">Fuente: ayuda.mastershop.com/es/category/configuraciones-2dmpi0 (vía LucidBot)</div></div>
+          <div class="asp"><div class="h">2. Calidad del tracking</div>Centro de ayuda documenta trazabilidad de devoluciones, pero no hay documentación pública sobre precisión de tracking en tiempo real ni landing propia de rastreo para el comprador. <span class="nd">N/D</span> en UX específica.</div>
+          <div class="asp"><div class="h">3. Modelos de pago</div>Sin cuota mensual. Comisión estimada externamente en $1.500-2.500 COP/orden (fuente de tercero, no confirmada en sitio oficial). Retiros de billetera desde $4.000 COP (nacional), con comisión 4x1000 + $3.900-35.000 COP según método.<div class="src">Fuentes: stockeado.co/blog/dropi-vs-mastershop-vs-effi-comparativa-2026 (no oficial) · ayuda.mastershop.com/es/article/como-solicitar-retiros-de-mi-billetera-3ttqdh (oficial)</div></div>
+          <div class="asp"><div class="h">4. Palancamiento financiero</div>Modelo de "saldo comprometido" (no retirable) vs. "saldo líquido" (retirable). Se libera al salir a tránsito o al mejorar la tasa de devolución del vendedor. Retiro: minutos (Bancolombia/Nequi) a un par de días (otros bancos). Incumplimiento de políticas retiene 100% del costo de envío por un mes. Sin adelantos documentados.<div class="src">Fuente: ayuda.mastershop.com/es/article/como-entender-el-saldo-comprometido-y-el-saldo-liquido-de-la-billetera-de-mastershop-6yjyrl</div></div>
+          <div class="asp"><div class="h">5. Facilidad operativa</div>Crear pedido manual: Operación → Gestión de pedidos → "+ Nuevo pedido" → producto/variante → datos cliente (autocompletado si es recurrente) → método de pago → transportadora → confirmar. No requiere bodega si se usa producto del catálogo de proveedores existente. "Inteliflete" automatiza selección de transportadora según tasa histórica de devolución. Integra Shopify y Tiendanube.<div class="src">Fuentes: ayuda.mastershop.com/es/article/como-crear-un-pedido-manual-en-mastershop-unzlgy · mastershop.com · apps.shopify.com/mastershop</div></div>
+          <div class="asp"><div class="h">6. Calidad de soporte</div>Chat y email documentados. Reviews en Shopify App Store destacan acompañamiento y respuesta rápida, pero muestra muy pequeña (7 reseñas). Comunidad activa no oficial por WhatsApp/Facebook. Sin horarios ni SLA públicos.<div class="src">Fuente: apps.shopify.com/mastershop/reviews</div></div>
+          <div class="asp"><div class="h">7. Puntuación general (1-5)</div>4.7/5 en Shopify App Store, pero con solo 7 reseñas (6 de 5 estrellas, 1 de 1 estrella) — muestra estadísticamente poco fiable. Sin presencia verificable en Trustpilot. <b>Referencial 3.5-4/5, no robusta.</b> <b style="color:var(--critical);">Verificación de recencia (2ª ronda):</b> las 7 reseñas van de 22-may-2025 a 30-oct-2025 — solo 1 cae en los últimos 12 meses, sin ninguna reseña nueva desde entonces (~9 meses sin actividad).</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Melonn</summary>
+        <div class="body">
+          <div class="asp"><div class="h">1. Notificación al cliente final</div>Dashboard Órbita envía notificaciones automáticas por WhatsApp en cada cambio de estado (picking, empacado, en tránsito, entregado), más reportes programados por email al vendedor.<div class="src">Fuente: melonn.com/plataforma-fulfillment</div></div>
+          <div class="asp"><div class="h">2. Calidad del tracking</div>Órbita muestra estado en tiempo real, mapas de entrega en vivo, KPIs personalizables. Página pública de rastreo (melonn.com/rastreo-de-pedido-col), pero Melonn aclara al comprador "esta no es la tienda donde compraste" y remite dudas a la marca. Integra con Shopify, WooCommerce, VTEX, MercadoLibre, Amazon, Rappi, Liverpool, Walmart, TikTok Shop, Coppel.<div class="src">Fuente: melonn.com/plataforma-fulfillment · melonn.com/rastreo-de-pedido-col</div></div>
+          <div class="asp"><div class="h">3. Modelos de pago</div>Sin tarifa única pública — combina inbound, almacenamiento, picking, packing y envío, cotizados según volumen. 3 tiers en Colombia por gasto logístico mensual: Plus ($5M-14,9M COP), Top ($15M-30M COP), Enterprise (&gt;$30M COP). México: punto de entrada 600 órdenes/mes. Facturación mensual + IVA 16% (CO).<div class="src">Fuente: melonn.com/faq</div></div>
+          <div class="asp"><div class="h">4. Palancamiento financiero</div>Dato de "corte miércoles, transfiere viernes" para COD apareció en snippet de búsqueda pero <b>no se pudo confirmar con cita textual directa</b> al reintentar el fetch completo — se marca con reserva. Facturación de fulfillment es mensual (mes vencido). Sin datos públicos de adelantos.<div class="src nd">Fuente no confirmable al 100%: melonn.com/faq</div></div>
+          <div class="asp"><div class="h">5. Facilidad operativa</div>Órbita centraliza inventario multi-bodega, alertas de bajo stock, trazabilidad FIFO. Pedidos D2C/B2B recibidos automáticamente de múltiples canales. Integración nativa con 10 canales + API REST, 1-3 semanas de implementación. Asistente IA "Orbi.AI". Opera como 3PL — no hay flujo de "crear guía manual" equivalente al de Mastershop.<div class="src">Fuente: melonn.com/plataforma-fulfillment · melonn.com/faq</div></div>
+          <div class="asp"><div class="h">6. Calidad de soporte</div>Teléfono (+57 301 317 7758), email (dominio de cliente, confianza media), chat, base de conocimiento. Caso de estudio externo documenta atención automatizada con HubSpot + WhatsApp. Sin SLA ni horarios públicos. Para el comprador final, Melonn redirige consultas a la marca, no atiende directo.<div class="src">Fuentes: capterra.ec/software/1030950/melonn · blog.grows.pro (caso HubSpot)</div></div>
+          <div class="asp"><div class="h">7. Puntuación general (1-5)</div><span class="nd">No calificable</span> — Shopify App Store: 0 reseñas; Capterra: "0 usuarios lo han valorado"; sin presencia verificable en Trustpilot. Solo hay cifras de rendimiento propias no auditadas por terceros (99,2% reducción de errores, etc.). <b>Verificación de recencia (2ª ronda):</b> reconfirmado, sigue en 0 reseñas en Shopify y Capterra; no existe página de Trustpilot para melonn.com (verificado por ausencia en búsquedas indexadas, no solo por bloqueo de acceso).</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>99 Envíos</summary>
+        <div class="body">
+          <p class="section-note" style="margin:0 0 10px;">Acceso directo a 99envios.com bloqueado consistentemente (ECONNREFUSED / 403) — toda la información viene de snippets indexados por búsqueda, no de fetch directo del HTML.</p>
+          <div class="asp"><div class="h">1. Notificación al cliente final</div>Notificaciones automáticas por WhatsApp en cada etapa del envío (declarado). <span class="nd">N/D</span> si también usa SMS/email, y momentos exactos más allá de "cada etapa".<div class="src">Fuente: snippet de 99envios.com</div></div>
+          <div class="asp"><div class="h">2. Calidad del tracking</div>Plataforma multitransportadora — agrega TCC, Coordinadora, Interrapidísimo, Servientrega y Envía en un panel. Orientada al vendedor, sin portal de tracking propio de cara al comprador identificado.<div class="src">Fuente: snippet de 99envios.com</div></div>
+          <div class="asp"><div class="h">3. Modelos de pago</div>"Sin contratos, sin cuotas mensuales", primer envío gratis. Plan "Plus": $0 en envío de ida, devolución y seguro (cubre no-recibo del cliente). Términos mencionan "comisión justa por transacción exitosa" sin publicar el % o valor exacto. Flete, sobrepeso y contracargos del operador se facturan aparte.<div class="src">Fuentes: 99envios.com/ads · 99envios.com/politica-privacidad (snippets)</div></div>
+          <div class="asp"><div class="h">4. Palancamiento financiero</div>"Liquidaciones súper rápidas" declaradas, sin plazo exacto en días documentado. El único plazo numérico encontrado es el de despacho del vendedor (máx. 3 días hábiles), no de pago.<div class="src">Fuentes: 99envios.com/politica-privacidad · 99envios.com (snippets)</div></div>
+          <div class="asp"><div class="h">5. Facilidad operativa</div>No requiere bodega — el transportador recoge en el domicilio del vendedor. Registro gratuito "en segundos, sin documentos". Onboarding/capacitación gratuita entrega la primera guía. Integra Shopify, WooCommerce, API REST, o carga masiva Excel/CSV. Recolección con 1 clic para guías de TCC y Coordinadora.<div class="src">Fuentes: 99envios.com · 99envios.com/ads (snippets)</div></div>
+          <div class="asp"><div class="h">6. Calidad de soporte</div>Declara "equipo humano especializado en logística" y capacitación gratuita. Sin canales de contacto públicos verificados (teléfono/WhatsApp/horario) ni reseñas independientes encontradas (Trustpilot/Google).<div class="src">Fuente: snippet de 99envios.com</div></div>
+          <div class="asp"><div class="h">7. Puntuación general (1-5)</div><span class="nd">No calificable</span> — acceso directo bloqueado y sin reseñas independientes que sustenten una nota; los únicos datos son marketing autodeclarado. <b>Verificación de recencia (2ª ronda):</b> reconfirmado — se intentó de nuevo específicamente buscar reseñas fechadas (Trustpilot, Google, redes) y no se encontró ninguna en ninguna plataforma.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Coordinadora</summary>
+        <div class="body">
+          <div class="asp"><div class="h">1. Notificación al cliente final</div>Notificaciones automáticas en recolección/ruta/entrega vía app, web o mensaje. Para "Recaudo Anticipado": WhatsApp con valor a pagar y link de pago seguro antes de la entrega (4.5% de los servicios COD, +50.000 guías procesadas desde fin de 2023). Pago a crédito (aliado Approbe): solicitud vía WhatsApp o QR del mensajero en el momento de entrega.<div class="src">Fuentes: valoraanalitik.com (Recaudo Anticipado) · coordinadora.com/blog/que-es-tracking</div></div>
+          <div class="asp"><div class="h">2. Calidad del tracking</div>Tiempo real desde origen a destino vía app, web o número de guía. Integraciones con Shopify/WooCommerce/Tiendanube generan link de consulta para el comprador final.<div class="src">Fuente: coordinadora.com/blog/que-es-tracking · coordinadora.com/servicios/integraciones-web-service</div></div>
+          <div class="asp"><div class="h">3. Modelos de pago</div>Estructura pública (fetch directo confirmado): flete fijo por zona (Local/Regional/Nacional/Zonal) y peso, + costo de manejo del 1% sobre valor declarado (obligatorio declarar valor). Ejemplos 1-2kg: Local $8.040 COP, Nacional $15.920 COP, Destinos especiales $37.630 COP. Sin costos ocultos identificados en la metodología publicada.<div class="src">Fuente: coordinadora.com/envios/tarifas-e-informacion-general (fetch directo, oficial)</div></div>
+          <div class="asp"><div class="h">4. Palancamiento financiero</div>Abonos al vendedor "de forma programada": diarios, semanales o quincenales (sin default único especificado). Recaudo Anticipado y Pago a crédito permiten cobrar antes de la entrega física, pero no se encontró el plazo exacto de transferencia al vendedor tras ese cobro anticipado.<div class="src">Fuente: coordinadora.com/servicios/pago-contra-entrega (fetch directo)</div></div>
+          <div class="asp"><div class="h">5. Facilidad operativa</div>No aplica bodega/producto (courier tradicional). Activar COD requiere registro en Suite Logística + acuerdo comercial + RUT + cédula + certificación bancaria. Integra plugin oficial WooCommerce, app Shopify (requiere plan anual o Advance), Tiendanube, y API/web service propio. App Shopify: 4.1/5 (solo 3 reseñas).<div class="src">Fuente: coordinadora.com/servicios/pago-contra-entrega · coordinadora.com/servicios/plugin-logistico · apps.shopify.com/coordinadora-1</div></div>
+          <div class="asp"><div class="h">6. Calidad de soporte</div>Línea PQR 310 315 7444, línea general 01 8000 520555 + números locales, email atencionalusuario@coordinadora.com, formulario web. SLA de PQR: máximo 15 días hábiles. Modelo mayormente reactivo, sin evidencia de outreach proactivo.<div class="src">Fuente: coordinadora.com/pqr · coordinadora.com/documentos-e-informacion/proceso-de-recepcion-y-tramites-de-reclamos</div></div>
+          <div class="asp"><div class="h">7. Puntuación general (1-5)</div><b>3.5/5, evidencia parcial.</b> Documentación oficial sólida en tarifas e integraciones, pero plazo de pago no estandarizado públicamente (resta previsibilidad financiera) y SLA de PQR de 15 días hábiles es relativamente lento. Única reseña cuantitativa (Shopify, 4.1/5) con muestra muy pequeña (3). <b style="color:var(--critical);">Verificación de recencia (2ª ronda):</b> las 3 reseñas de Shopify van de dic-2020 a feb-2025 — ninguna de los últimos 12 meses, la más reciente (feb-2025, negativa) ya tiene más de un año. No existe página de Trustpilot para coordinadora.com (no confundir con "Coordinadora USA", entidad distinta, ~1.6-1.7/5, no evaluada en este research).</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Interrapidísimo</summary>
+        <div class="body">
+          <div class="asp"><div class="h">1. Notificación al cliente final</div>La app confirma la entrega vía SMS. Sin documentación pública sobre notificaciones en otras etapas (creación de guía, en tránsito) ni otros canales.<div class="src">Fuente: apps.apple.com/us/app/inter-rapidísimo/id945717986 · interrapidisimo.com/conoce-tu-prueba-de-entrega</div></div>
+          <div class="asp"><div class="h">2. Calidad del tracking</div>Disponible vía web y app. Sin documentación sobre precisión de eventos o frecuencia de actualización. Indexado como carrier estándar por agregadores terceros (17TRACK, Track123, Parcel Monitor).<div class="src">Fuente: apps.apple.com/us/app/inter-rapidísimo/id945717986 · 17track.net</div></div>
+          <div class="asp"><div class="h">3. Modelos de pago</div>Tarifas por peso/zona: mensajería expresa desde ~$7.500 COP el kilo inicial local; servicios diferenciados $10.800-59.700 COP según servicio/distancia. Comisión por recaudo contra-entrega: 5% del valor comercial (rango 3-5% según fuente secundaria). Sin planes tipo suscripción — tarifario por transacción/peso.<div class="src">Fuente: envioyrastreo.com/interrapidisimo/envios · andreybusiness.com (tarifario, puede estar desactualizado)</div></div>
+          <div class="asp"><div class="h">4. Palancamiento financiero</div>Servicio "Pago en Casa": recoge, entrega y cobra; consignación "unos minutos después" de que el cliente recibe, revisa y paga — sin SLA exacto en horas/días hábiles especificado. Sin información sobre adelantos de cartera.<div class="src">Fuente: interrapidisimo.com ("Pago en Casa")</div></div>
+          <div class="asp"><div class="h">5. Facilidad operativa</div>No aplica bodega/producto (courier tradicional con recogida a domicilio). Plugin/API con códigos de integración provistos por Interrapidísimo para generar guías/tracking automático. Agregadores terceros (DrEnvío) lo integran junto a Shopify, WooCommerce, Mercado Libre, Tiendanube. Ofrece también "Fulfillment", "Alcarrito" e "Inter Pay" sin documentación pública de flujo detallado.<div class="src">Fuente: interrapidisimo.com · drenvio.com/es-CO/paqueterias/interrapidisimo</div></div>
+          <div class="asp"><div class="h">6. Calidad de soporte</div>Línea telefónica 323 255 4455 y centro de ayuda/PQR. Reviews (Trustpilot, TikTok) reportan esperas en chat de hasta 1 hora, chats cerrados sin resolver, y procesos PQR percibidos como inefectivos.<div class="src">Fuente: interrapidisimo.com · es.trustpilot.com/review/interrapidisimo.com</div></div>
+          <div class="asp"><div class="h">7. Puntuación general (1-5)</div><span class="nd">No calificable con evidencia propia.</span> Referencia externa: <b>Trustpilot 1.1/5 ("Muy malo")</b>, impulsado principalmente por quejas de soporte y entregas. <b style="color:var(--critical);">Verificación de recencia (2ª ronda):</b> total confirmado en 414 reseñas (no ~395). De las 20 más recientes (ene-jul 2026), 19 son de 1★ y 1 de 2★ — <b>sin ninguna señal de mejora</b>, lo reciente es igual de malo que el histórico, no es un promedio arrastrado por reseñas viejas.</div>
+        </div>
+      </details>
+
+      <details>
+        <summary>Envía.com</summary>
+        <div class="body">
+          <p class="section-note" style="margin:0 0 10px;">Ver aclaración de identidad arriba: envia.com (plataforma SaaS multi-carrier) ≠ envia.co (Envía Colvanes, courier tradicional). Este detalle cubre envia.com.</p>
+          <div class="asp"><div class="h">1. Notificación al cliente final</div>Notificaciones personalizables por email, SMS y WhatsApp, activables/desactivables por el vendedor. Mapeo evento-por-canal no detallado en la página pública (remite a help.envia.com, no accesible en esta investigación).<div class="src">Fuente: envia.com/en-US/notificaciones-de-envio</div></div>
+          <div class="asp"><div class="h">2. Calidad del tracking</div>Tiempo real una vez el pedido sale del centro de fulfillment, con notificaciones de seguimiento integradas. Integra 100+ transportadoras globalmente, comparación de tarifas y guías multi-carrier desde una interfaz. Sin dato cuantitativo de precisión.<div class="src">Fuente: help-fulfillment.envia.com · envia.com/en-US/carriers</div></div>
+          <div class="asp"><div class="h">3. Modelos de pago</div>No publica tarifas ni comisiones — cotizador online, remite a contacto comercial. Reviews de Capterra mencionan "tarifas competitivas" sin cifras. Modelo aparente: transacción/volumen negociado, sin precio de lista público.<div class="src">Fuente: envia.com · capterra.com/p/192179/Envia</div></div>
+          <div class="asp"><div class="h">4. Palancamiento financiero</div>Fuente secundaria (enviame.io, no doc oficial de envia.com) indica liquidación semanal los jueves para COD, correspondiente a entregas de lunes a domingo de la semana anterior. Dato a tratar con cautela — no confirmado en documentación oficial directa. Sin información pública de adelantos.<div class="src nd">Fuente no oficial: enviame.io/contra-entrega</div></div>
+          <div class="asp"><div class="h">5. Facilidad operativa</div>Cotización descrita como simple: comparar precios/servicios y elegir. Módulo de Fulfillment sí exige integrar tienda y configurar productos/lotes/vencimientos — a diferencia de envíos simples (solo cotizar y generar guía). Reglas de envío automáticas, sincronización de pedidos, 40+ integraciones e-commerce confirmadas.<div class="src">Fuente: help-fulfillment.envia.com (integración de tienda y reglas de envío)</div></div>
+          <div class="asp"><div class="h">6. Calidad de soporte</div>Email, teléfono/WhatsApp, tickets en dashboard, centro de ayuda con FAQs/videos. Disponible en varios idiomas (inglés, español, portugués, francés, hindi, italiano, chino mandarín). Sin horarios públicos. Capterra Customer Service: 3.0/5 — comentarios mixtos, incluye quejas de que la plataforma no asume responsabilidad cuando el problema es del carrier subcontratado.<div class="src">Fuente: envia.com/en-US/service-desk · capterra.com/p/192179/Envia</div></div>
+          <div class="asp"><div class="h">7. Puntuación general (1-5)</div><span class="nd">No calificable con evidencia propia rigurosa</span> — señales contradictorias entre fuentes: Trustpilot reportado 4.3-4.5/5 (conteo total no confirmable) vs. Capterra 2.8/5 general (26 reseñas, Value for Money 2.9/5). Poblaciones de reseñantes distintas (consumidor final vs. comprador B2B de software) — no promediables. <b>Verificación de recencia (2ª ronda):</b> en ambas fuentes, lo reciente rinde peor que el agregado histórico de cada una (Trustpilot: 20 más recientes ≈3.5/5 vs. 4.3/5 agregado; Capterra: 5 de los últimos 12 meses ≈2.0/5 vs. 2.8/5 agregado) — la brecha entre plataformas no se explica solo por periodos distintos, ambas muestran actividad reciente y ambas caen frente a su propio histórico.</div>
+        </div>
+      </details>
+    </section>
+
+    <section>
+      <h2>Preguntas abiertas para el Cell Board</h2>
+      <div class="hyp-list">
+        <div class="hyp"><span class="tag">Q1</span><span class="txt">La promesa "pago el mismo día de la entrega" — ¿aplica siempre, o solo en ciertos países/planes/transportadoras? El research externo encontró al menos una fuente que describe hasta 7 días hábiles en un escenario, y no se pudo confirmar en Términos y Condiciones oficiales. Vale la pena confirmarlo con Finanzas/José antes de seguir comunicándolo como diferenciador absoluto.</span></div>
+        <div class="hyp"><span class="tag">Q2</span><span class="txt">¿Existe un tarifario de comisión oficial y centralizado en algún lugar accesible para el equipo? Las fuentes externas son contradictorias (2%-5%, o esquema de planes) — no se pudo verificar con fuente oficial en este research, y eso en sí mismo es una brecha de confianza frente a competidores que sí publican su fórmula (Coordinadora).</span></div>
+        <div class="hyp"><span class="tag">Q3</span><span class="txt">¿Dropi mide hoy tiempo de respuesta de soporte (CS/CAS)? No se pudo comparar contra competidores porque no hay dato interno documentado — es uno de los 4 frentes internos aún pendientes del tracker BAU Competitivo.</span></div>
+        <div class="hyp"><span class="tag">Q4</span><span class="txt">Más allá de los 6 casos de Comercial, ¿existe (o se puede construir con Data) una muestra más grande de marcas que se fueron o dejaron de crecer, para saber si la falta de notificación al comprador o el flujo bodega/producto son causas frecuentes o solo anecdóticas?</span></div>
+        <div class="hyp"><span class="tag">Q5</span><span class="txt">¿Este research debería convertirse en el insumo de partida de la Fase 5 oficial del tracker BAU Competitivo, o se mantiene como documento aparte? (Ver nota de alcance al inicio del documento.)</span></div>
+      </div>
+    </section>
+
+    <p class="footnote">
+      Fuentes primarias del research: 10 investigaciones paralelas vía búsqueda web y fetch directo, 24-jul-2026 — 5 en la primera ronda (4 sobre competidores + 1 sobre Dropi, mismo rigor externo) y 5 en una segunda ronda enfocada solo en verificar la recencia de las reseñas usadas, a pedido de Kate. Contexto interno: bau-competitivo-marcas (tracker hub), insumo Comercial 22-jul-2026 (negocios perdidos y promesas, usado solo como contexto — ver nota sobre tamaño de muestra), memoria de research previo "Benchmark competitivo". Ningún dato de este documento reemplaza la Fase 5 oficial del tracker; es investigación externa standalone solicitada explícitamente por Kate el 24-jul-2026. La priorización de este documento se basa en amplitud de brecha frente a competidores, no en conteo de negocios perdidos — corrección metodológica pedida explícitamente por Kate tras la primera versión. Las puntuaciones de "flujo" deben leerse junto con la sección "¿Qué tan recientes son estas reseñas?" — varios promedios agregados no reflejan necesariamente la percepción actual.
+    </p>
+
+  </div>
+</div>
