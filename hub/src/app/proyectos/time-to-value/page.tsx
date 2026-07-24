@@ -131,6 +131,12 @@ export default function TimeToValuePage() {
                   title: "Plan de Choque — Lanzamiento",
                   sub: "Dueños, aprobaciones, fases",
                 },
+                {
+                  href: "/proyectos/time-to-value/piloto-seguimiento",
+                  icon: "🎯",
+                  title: "Seguimiento del Piloto",
+                  sub: "4 de 10 · avance conversación a conversación",
+                },
               ].map((card) => (
                 <a
                   key={card.href}
