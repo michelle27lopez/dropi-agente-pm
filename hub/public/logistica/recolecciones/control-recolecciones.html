@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Control de Recolecciones · Dropi · Logística</title>
+<meta name="description" content="Guías preparadas sin recoger por territorio DANE. Datos de Chronos." />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand-orange:#F49A3D;--brand-blue:#008DBF;--brand-blue-dark:#0A5E80;
+  --ok:#4CAF50;--warn:#FF9800;--err:#F46A6B;--nodata:#98A2B3;
+  --bg:#F7F8FA;--surface:#FFF;--surface-2:#FBFCFD;--border:#EEF0F4;--border-strong:#E1E5EC;
+  --ink:#232938;--ink-2:#69738C;--ink-3:#8E97AC;--r:9px;--r-sm:6px;
+  --shadow:0 6px 20px rgba(35,41,56,.10),0 1px 2px rgba(35,41,56,.06);--h-header:52px;--h-banner:26px}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:13px;line-height:1.4;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+table{border-collapse:collapse;width:100%}.tnum{font-variant-numeric:tabular-nums}
+header.top{height:var(--h-header);background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:18px;padding:0 14px;position:relative;z-index:900}
+.brand{display:flex;align-items:center;gap:9px;min-width:180px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--brand-orange);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+.brand b{font-size:13.5px;font-weight:600;display:block;line-height:1.15}
+.brand span{font-size:10px;letter-spacing:.09em;color:var(--ink-3);text-transform:uppercase}
+nav.tabs{display:flex;gap:2px;flex:1}
+nav.tabs button{padding:7px 13px;border-radius:var(--r-sm);color:var(--ink-2);font-size:13px;font-weight:500;white-space:nowrap}
+nav.tabs button:hover{background:var(--surface-2);color:var(--ink)}
+nav.tabs button[aria-current="page"]{background:#EAF6FA;color:var(--brand-blue-dark);font-weight:600}
+.meta{color:var(--ink-2);font-size:11.5px;white-space:nowrap}
+.banner{height:var(--h-banner);background:#EAF6FA;color:#0A5E80;font-size:11px;display:flex;align-items:center;
+  gap:6px;padding:0 14px;border-bottom:1px solid #D8EAF1}
+main{height:calc(100vh - var(--h-header) - var(--h-banner));overflow:hidden}
+.view{display:none;height:100%;flex-direction:column}.view.active{display:flex}
+.ctx{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 14px 10px}
+.crumbs{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);margin-bottom:8px;flex-wrap:wrap}
+.crumbs button{color:var(--brand-blue);font-weight:500;padding:2px 4px;border-radius:4px}
+.crumbs button:hover{background:#EAF6FA}.crumbs .sep{color:var(--ink-3)}.crumbs .cur{color:var(--ink);font-weight:600}
+.crumbs .dane{font-size:10.5px;color:var(--ink-3);background:#F2F4F7;border-radius:4px;padding:1px 6px;font-weight:600}
+.crumbs .back{margin-left:auto;border:1px solid var(--border-strong);padding:3px 9px;border-radius:999px;font-size:11.5px;color:var(--ink-2);font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.kpi{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:8px 11px;text-align:left;position:relative}
+.kpi[aria-pressed="true"]{background:#FFF6EC;border-color:#F3D8B4}
+.kpi[aria-pressed="true"]::after{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--brand-orange)}
+.kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kpi .l{font-size:11.5px;color:var(--ink-2);margin-top:1px}.kpi .h{font-size:10.5px;color:var(--ink-3)}
+.kpi.crit .v{color:var(--err)}.kpi.warn .v{color:#C77400}.kpi.ok .v{color:var(--brand-blue-dark)}
+.filters{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:nowrap;overflow:hidden}
+.filters input[type=search],.filters select{border:1px solid var(--border-strong);background:var(--surface);
+  border-radius:var(--r-sm);padding:6px 9px;font-size:12px;color:var(--ink);min-width:0}
+.filters input[type=search]{flex:0 1 210px}
+.seg{display:flex;border:1px solid var(--border-strong);border-radius:var(--r-sm);overflow:hidden}
+.seg button{padding:6px 10px;font-size:12px;color:var(--ink-2);border-right:1px solid var(--border)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:#EAF6FA;color:var(--brand-blue-dark);font-weight:600}
+.ghost{border:1px solid var(--border-strong);border-radius:var(--r-sm);padding:6px 11px;font-size:12px;color:var(--ink-2);font-weight:500}
+.chips{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:5px;background:#EFF3F7;border-radius:999px;padding:3px 6px 3px 10px;font-size:11.5px;color:var(--ink-2)}
+.chip button{width:15px;height:15px;border-radius:50%;background:#DCE3EB;display:grid;place-items:center;font-size:10px;line-height:1}
+.more{font-size:11.5px;color:var(--brand-blue);font-weight:500}
+.work{flex:1;display:flex;min-height:0;padding:10px;gap:10px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#territoryPanel{width:315px;flex:0 0 315px}
+#mapWrap{flex:1;position:relative;min-width:0;min-height:470px}
+#queuePanel{width:31%;flex:0 0 31%;min-width:300px}
+.p-head{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.p-head h2{margin:0;font-size:13.5px;font-weight:600}.p-head .sub{font-size:11px;color:var(--ink-3);width:100%}
+.p-body{overflow:auto;flex:1;min-height:0}
+table.terr{font-size:12px}
+table.terr th{position:sticky;top:0;background:var(--surface);z-index:2;text-align:right;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:600;padding:7px 8px;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap}
+table.terr th:first-child{text-align:left}
+table.terr td{padding:7px 8px;border-bottom:1px solid var(--border);text-align:right}
+table.terr td:first-child{text-align:left;font-weight:500}
+table.terr tr{cursor:pointer}table.terr tbody tr:hover{background:var(--surface-2)}
+table.terr tr.sel{background:#FFF6EC}table.terr tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--brand-orange)}
+table.terr tfoot td{position:sticky;bottom:0;background:var(--surface-2);font-weight:700;border-top:1px solid var(--border-strong);padding:8px}
+.dcode{font-size:10px;color:var(--ink-3);background:#F2F4F7;border-radius:3px;padding:0 4px;margin-right:6px;font-variant-numeric:tabular-nums}
+.bar{display:inline-block;height:4px;border-radius:2px;background:var(--err);vertical-align:middle;margin-right:6px;opacity:.85}
+#map,#conMap{position:absolute;inset:0;border-radius:var(--r);background:#E8EDF2}
+#mapWrap,#conMapWrap{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);background:var(--surface)}
+.leaflet-container{font:inherit;background:#EAF0F5}
+.map-float{position:absolute;z-index:600;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow)}
+.mctrl{top:10px;right:10px;display:flex;flex-direction:column;overflow:hidden}
+.mctrl button{width:32px;height:30px;display:grid;place-items:center;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--border)}
+.mctrl button:last-child{border-bottom:0}.mctrl button:hover{background:var(--surface-2)}
+.layers{top:10px;left:10px;padding:8px 10px;font-size:11.5px}
+.layers b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-bottom:5px}
+.layers label{display:flex;align-items:center;gap:6px;padding:2px 0;color:var(--ink-2);cursor:pointer}
+.seg2{display:flex;border:1px solid var(--border-strong);border-radius:var(--r-sm);overflow:hidden;margin-bottom:2px}
+.seg2 button{flex:1;padding:4px 6px;font-size:11px;color:var(--ink-2);border-right:1px solid var(--border)}
+.seg2 button:last-child{border-right:0}
+.seg2 button[aria-pressed="true"]{background:#EAF6FA;color:var(--brand-blue-dark);font-weight:600}
+.layers input[type=range]{accent-color:var(--brand-orange)}
+.lg-sizes{display:flex;align-items:flex-end;gap:9px;padding:2px 2px 0}
+.lg-sizes span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9.5px;color:var(--ink-3)}
+.lg-sizes i{display:block;border-radius:50%;background:#C6D0DC;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.10)}
+.legend{bottom:22px;left:10px;padding:8px 10px;font-size:11.5px;max-width:245px}
+.legend summary{cursor:pointer;font-weight:600;font-size:11.5px;list-style:none}
+.legend summary::-webkit-details-marker{display:none}.legend summary::before{content:"▾ ";color:var(--ink-3)}
+.legend[open] .lg-body{margin-top:7px}
+.lg-row{display:flex;align-items:center;gap:7px;color:var(--ink-2);padding:1.5px 0}
+.sw{width:11px;height:11px;border-radius:50%;flex:0 0 11px;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.lg-note{margin-top:7px;padding-top:6px;border-top:1px solid var(--border);color:var(--ink-3);font-size:10.5px;line-height:1.45}
+.mapstate{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:650;background:rgba(255,255,255,.94);
+  border:1px solid var(--border-strong);border-radius:var(--r);padding:14px 18px;text-align:center;box-shadow:var(--shadow);display:none}
+.mapstate.show{display:block}
+.tilewarn{position:absolute;bottom:22px;right:10px;z-index:600;background:#FEF6EC;border:1px solid #F6E6CF;color:#8A5A16;
+  font-size:11px;padding:5px 9px;border-radius:var(--r-sm);display:none}.tilewarn.show{display:block}
+.freshtag{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:600;background:rgba(255,255,255,.92);
+  border:1px solid var(--border);border-radius:999px;padding:3px 11px;font-size:11px;color:var(--ink-2)}
+.mk{display:grid;place-items:center;border-radius:50%;color:#fff;font-weight:700;border:2px solid #fff;
+  box-shadow:0 2px 6px rgba(35,41,56,.28);transition:transform .12s}
+.mk:hover{transform:scale(1.09)}
+.mk.crit{background:var(--err)}.mk.crit.ring{box-shadow:0 0 0 5px rgba(244,106,107,.22),0 2px 6px rgba(35,41,56,.28)}
+.mk.risk{background:var(--warn)}.mk.norm{background:var(--brand-blue)}.mk.nodata{background:var(--nodata)}
+.mk.apx{border-style:dashed;opacity:.85}
+.mk.active{box-shadow:0 0 0 4px rgba(244,154,61,.55),0 2px 6px rgba(35,41,56,.3)}
+.mk-lab{font-size:10.5px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.86);border-radius:4px;
+  padding:0 4px;white-space:nowrap;text-align:center;margin-top:2px}
+.leaflet-tooltip.tt{font-size:11.5px;border-radius:var(--r-sm);border:1px solid var(--border-strong);box-shadow:var(--shadow);padding:7px 9px}
+.tt b{display:block;font-size:12.5px;margin-bottom:2px}.tt .r{color:var(--err)}
+.qcard{padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer}
+.qcard:hover{background:var(--surface-2)}
+.qcard.sel{background:#FFF8F0;box-shadow:inset 3px 0 0 var(--brand-orange)}
+.qtop{display:flex;align-items:center;gap:6px;margin-bottom:3px;flex-wrap:wrap}
+.sev{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em}
+.sev.crit{background:#FDECEC;color:#B03236}.sev.risk{background:#FFF3E0;color:#A35C00}
+.sev.nodata{background:#F0F2F5;color:#5C6579}
+.tag{font-size:10.5px;color:var(--ink-2);background:#F2F4F7;border-radius:999px;padding:2px 7px}
+.tag.new{background:#EAF6FA;color:var(--brand-blue-dark)}
+.tag.apx{background:#FFF3E0;color:#A35C00}
+.qname{font-size:13.5px;font-weight:600;margin:1px 0 2px}
+.qline{font-size:11.5px;color:var(--ink-2);display:flex;gap:10px;flex-wrap:wrap}
+.qaddr{font-size:11px;color:var(--ink-3);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.split{display:flex;height:5px;border-radius:3px;overflow:hidden;margin-top:6px;background:#EEF0F4}
+.split i{display:block;height:100%}.split .p{background:var(--err)}.split .g{background:#FFD9A0}
+.qgo{margin-left:auto;color:var(--ink-3)}
+.empty{padding:34px 20px;text-align:center;color:var(--ink-3);font-size:12.5px}
+.empty b{display:block;color:var(--ink-2);font-size:13px;margin-bottom:4px}
+.scrim{position:fixed;inset:0;background:rgba(35,41,56,.28);z-index:1000;display:none}.scrim.open{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:440px;max-width:92vw;background:var(--surface);z-index:1001;
+  box-shadow:var(--shadow);display:none;flex-direction:column}.drawer.open{display:flex}
+.d-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+.d-body{flex:1;overflow:auto;padding:0 14px}
+.grp{padding:12px 0;border-bottom:1px solid var(--border)}.grp:last-child{border-bottom:0}
+.grp h3{margin:0 0 8px;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);font-weight:600}
+.kv{display:grid;grid-template-columns:1fr auto;gap:3px 12px;font-size:12.5px}
+.kv span{color:var(--ink-2)}.kv b{font-weight:600}
+.rz{font-size:10.5px;padding:2px 7px;border-radius:var(--r-sm);background:#F7F8FA;color:var(--ink-2);
+  border:1px solid var(--border);display:inline-block;margin:2px 3px 0 0}
+.rz.bad{background:#FDF0F0;color:#B03236;border-color:#F6DADA}
+.rz.good{background:#EFF8F0;color:#2E7D32;border-color:#DCEEDD}
+.src{font-size:10px;color:var(--ink-3);font-family:ui-monospace,Menlo,monospace}
+.con{flex:1;display:flex;min-height:0;padding:10px;gap:10px}
+#conMapWrap{flex:1;position:relative;min-width:0}#conPanel{width:395px;flex:0 0 395px}
+.cgroup{padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer}
+.cgroup:hover{background:var(--surface-2)}
+.cgroup.sel{background:#FFF8F0;box-shadow:inset 3px 0 0 var(--brand-orange)}
+.cgroup h4{margin:0 0 3px;font-size:13px;font-weight:600}
+.cgroup ul{margin:6px 0 0;padding-left:16px;font-size:11.5px;color:var(--ink-2)}
+.cov{flex:1;overflow:auto;padding:10px}
+table.data{font-size:12px;background:var(--surface)}
+table.data th{position:sticky;top:0;background:var(--surface);z-index:2;text-align:left;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
+table.data td{padding:9px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
+.gauge{display:inline-block;width:70px;height:6px;border-radius:3px;background:#EEF0F4;vertical-align:middle;margin-right:7px;overflow:hidden}
+.gauge i{display:block;height:100%;background:var(--brand-blue)}.gauge.low i{background:var(--err)}
+.rules{flex:1;overflow:auto;padding:10px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.card h3{margin:0 0 9px;font-size:13.5px}
+.pill{font-size:10.5px;border-radius:999px;padding:2px 8px;font-weight:600}
+.pill.a{background:#EAF6EB;color:#2E7D32}.pill.p{background:#FFF3E0;color:#A35C00}.pill.n{background:#FDECEC;color:#B03236}
+code{background:#F2F4F7;border-radius:3px;padding:1px 5px;font-size:11.5px;font-family:ui-monospace,Menlo,monospace}
+.loading{position:fixed;inset:0;background:var(--bg);z-index:2000;display:grid;place-items:center;font-size:13px;color:var(--ink-2)}
+.loading.hide{display:none}
+@media(max-width:1330px){#territoryPanel{width:280px;flex:0 0 280px}#conPanel{width:340px;flex:0 0 340px}}
+@media(max-width:980px){
+  :root{--h-header:auto}
+  header.top{flex-wrap:wrap;gap:8px;padding:8px 12px}.brand{min-width:auto}
+  nav.tabs{order:3;width:100%;overflow-x:auto}
+  main{height:auto;overflow:auto}body{overflow:auto}.view.active{height:auto}
+  .kpis{grid-template-columns:repeat(2,1fr)}.filters{flex-wrap:wrap;overflow:visible}
+  .work,.con{flex-direction:column}
+  #territoryPanel,#queuePanel,#conPanel{width:100%;flex:0 0 auto;max-height:420px}
+  #mapWrap,#conMapWrap{min-height:440px;height:440px;flex:0 0 auto}.drawer{width:100%}}
+</style>
+</head>
+<body>
+<div class="loading" id="loading">Cargando datos de recolección…</div>
+
+<header class="top">
+  <div class="brand"><div class="logo">D</div>
+    <div><b>Control de Recolecciones</b><span>Dropi · Logística</span></div></div>
+  <nav class="tabs" id="tabs">
+    <button data-view="control" aria-current="page">Control</button>
+    <button data-view="con">Consolidación</button>
+    <button data-view="cov">Cobertura scanner</button>
+    <button data-view="rules">Reglas y datos</button>
+  </nav>
+  <div class="meta" id="metaFuente">—</div>
+</header>
+<div class="banner">Datos de Chronos · ventana <code>updated_at</code> 2 días · ubicación aproximada, no apta para navegar</div>
+
+<main>
+  <section class="view active" id="view-control">
+    <div class="ctx">
+      <div class="crumbs" id="crumbs"></div>
+      <div class="kpis" id="kpis"></div>
+      <div class="filters">
+        <input type="search" id="fSearch" placeholder="Buscar bodega, dirección, municipio…" />
+        <div class="seg" role="group" aria-label="Señal">
+          <button data-sig="all" aria-pressed="true">Todas</button>
+          <button data-sig="prep" aria-pressed="false">Con preparadas</button>
+          <button data-sig="guia" aria-pressed="false">Solo guía generada</button>
+        </div>
+        <select id="fTerr"></select>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)">
+          <input type="checkbox" id="fNuevas" /> Solo nuevas</label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)">
+          <input type="checkbox" id="fExacta" /> Solo ubicación precisa</label>
+        <span style="flex:1"></span>
+        <button class="ghost" id="btnCollapseQueue">Ampliar mapa ⇥</button>
+      </div>
+      <div class="chips" id="activeChips"></div>
+    </div>
+    <div class="work">
+      <div class="panel" id="territoryPanel">
+        <div class="p-head"><h2>Guías por recoger, por territorio</h2>
+          <div class="sub" id="terrSub">Departamentos por código DANE</div></div>
+        <div class="p-body"><table class="terr" id="terrTable"></table></div>
+      </div>
+      <div id="mapWrap">
+        <div id="map"></div>
+        <div class="freshtag" id="mapScope">Colombia</div>
+        <div class="map-float layers"><b>Escala del mapa</b>
+          <div class="seg2" role="group" aria-label="Métrica del tamaño">
+            <button data-met="t" aria-pressed="true">Todas</button>
+            <button data-met="p" aria-pressed="false">Preparadas</button>
+          </div>
+          <label style="margin-top:7px;display:block">
+            <span id="minLbl" style="color:var(--ink-2)">Guías ≥ 0</span>
+            <input type="range" id="minGuias" min="0" max="500" step="10" value="0" style="width:100%;margin-top:3px">
+          </label>
+          <label style="margin-top:2px"><input type="checkbox" id="lyPoints" checked> Mostrar puntos</label>
+        </div>
+        <div class="map-float mctrl">
+          <button id="mZoomIn" title="Acercar">＋</button>
+          <button id="mZoomOut" title="Alejar">−</button>
+          <button id="mFit" title="Ajustar a Colombia">⤢</button>
+          <button id="mBack" title="Nivel anterior">↰</button></div>
+        <details class="map-float legend" open><summary>Leyenda</summary>
+          <div class="lg-body">
+            <div class="lg-row"><i class="sw" style="background:#F46A6B"></i> Con guías preparadas</div>
+            <div class="lg-row"><i class="sw" style="background:#FF9800"></i> Solo guía generada</div>
+            <div class="lg-row"><i class="sw" style="background:#98A2B3"></i> Sin ubicar (centroide depto)</div>
+            <div class="lg-row"><i class="sw" style="background:#008DBF"></i> Clúster agregado</div>
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin:7px 0 3px">Tamaño = guías</div>
+            <div class="lg-sizes" id="lgSizes"></div>
+            <div class="lg-note">Borde punteado = ubicación aproximada. Color = señal · Número del clúster = <b>bodegas</b>.</div>
+          </div></details>
+        <div class="mapstate" id="mapState"></div>
+        <div class="tilewarn" id="tileWarn">Mapa base no disponible — se conserva el contorno de Colombia.</div>
+      </div>
+      <div class="panel" id="queuePanel">
+        <div class="p-head"><h2>Cola de recolección</h2><span class="tag" id="qCount">—</span>
+          <span style="flex:1"></span><span style="font-size:11px;color:var(--ink-3)">Preparadas primero</span></div>
+        <div class="p-body" id="queueBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="view-con">
+    <div class="ctx" style="padding-bottom:9px">
+      <div class="crumbs"><b style="font-size:14px">Consolidación · bodegas en la misma cuadra</b>
+        <span class="sep">·</span><span id="conScope">—</span></div></div>
+    <div class="con">
+      <div id="conMapWrap"><div id="conMap"></div>
+        <div class="freshtag">Grupos a ~110 m · sólo direcciones ubicadas con precisión</div></div>
+      <div class="panel" id="conPanel">
+        <div class="p-head"><h2>Grupos con 2+ bodegas</h2>
+          <div class="sub">Una sola visita puede recoger de varias bodegas.</div></div>
+        <div class="p-body" id="conBody"></div></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-cov">
+    <div class="ctx" style="padding-bottom:9px">
+      <div class="crumbs"><b style="font-size:14px">Cobertura de Ecom Scanner por municipio</b>
+        <span class="sep">·</span><span>qué parte de la carga llega a <code>PREPARADO PARA TRANSPORTADORA</code></span></div>
+      <div class="kpis" id="covKpis" style="margin-top:8px"></div></div>
+    <div class="cov"><div class="panel"><div class="p-body"><table class="data" id="covTable"></table></div></div></div>
+  </section>
+
+  <section class="view" id="view-rules"><div class="rules"><div class="rgrid" id="rulesGrid"></div></div></section>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-label="Detalle de la bodega">
+  <div class="d-head"><div style="flex:1">
+      <div id="dTags" style="display:flex;gap:6px;margin-bottom:4px;flex-wrap:wrap"></div>
+      <div style="font-size:16px;font-weight:600" id="dName">—</div>
+      <div style="font-size:11.5px;color:var(--ink-2)" id="dAddr">—</div></div>
+    <button class="ghost" id="dClose">✕</button></div>
+  <div class="d-body" id="dBody"></div>
+</aside>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const fmt=n=>new Intl.NumberFormat('es-CO').format(n);
+const DEPTS={'05':['Antioquia',6.55,-75.82,8],'08':['Atlántico',10.75,-74.90,9],'11':['Bogotá D.C.',4.65,-74.08,10],
+ '13':['Bolívar',9.00,-74.50,8],'15':['Boyacá',5.55,-73.37,8],'17':['Caldas',5.30,-75.30,9],'18':['Caquetá',1.00,-74.50,8],
+ '19':['Cauca',2.40,-76.80,8],'20':['Cesar',9.40,-73.50,8],'23':['Córdoba',8.35,-75.80,8],'25':['Cundinamarca',4.90,-74.30,9],
+ '27':['Chocó',5.70,-76.70,8],'41':['Huila',2.55,-75.55,8],'44':['La Guajira',11.35,-72.60,8],'47':['Magdalena',10.40,-74.40,8],
+ '50':['Meta',3.50,-73.00,7],'52':['Nariño',1.30,-77.60,8],'54':['Norte de Santander',7.95,-72.90,8],'63':['Quindío',4.45,-75.68,10],
+ '66':['Risaralda',5.05,-75.90,9],'68':['Santander',6.90,-73.30,8],'70':['Sucre',9.10,-75.15,8],'73':['Tolima',4.10,-75.20,8],
+ '76':['Valle del Cauca',3.80,-76.40,8],'81':['Arauca',6.80,-70.80,8],'85':['Casanare',5.40,-71.80,7],'86':['Putumayo',0.80,-76.30,8],
+ '88':['San Andrés',12.55,-81.72,11],'91':['Amazonas',-2.20,-71.50,7],'94':['Guainía',2.70,-68.50,7],'95':['Guaviare',1.80,-72.60,7],
+ '97':['Vaupés',0.60,-70.70,7],'99':['Vichada',4.90,-69.30,7]};
+const COL_OUTLINE={type:'Feature',properties:{},geometry:{type:'Polygon',coordinates:[[
+[-71.30,12.40],[-72.90,11.70],[-74.20,11.30],[-75.60,10.70],[-76.90,8.60],[-77.40,8.50],[-77.35,7.90],[-77.90,7.20],
+[-77.70,6.20],[-77.40,4.20],[-78.60,2.50],[-79.00,1.80],[-78.20,1.40],[-77.70,0.80],[-77.40,0.40],[-76.40,0.40],
+[-75.30,-0.10],[-74.80,-0.20],[-73.70,-1.20],[-72.90,-2.40],[-71.80,-2.30],[-70.70,-2.20],[-70.05,-2.70],[-69.60,-1.10],
+[-69.40,0.60],[-69.80,1.10],[-68.20,1.70],[-67.30,2.10],[-67.90,2.80],[-67.50,3.80],[-67.85,5.30],[-67.40,6.20],
+[-67.80,6.30],[-69.40,6.10],[-70.10,6.90],[-71.00,6.90],[-72.00,7.00],[-72.40,7.40],[-72.70,8.60],[-72.20,9.20],
+[-71.10,9.30],[-71.90,10.60],[-71.30,11.80],[-71.30,12.40]]]}};
+const COL_BOUNDS=L.latLngBounds([[-4.3,-79.6],[13.6,-66.6]]);
+const GEO_URL='https://raw.githubusercontent.com/johan/world.geo.json/master/countries/COL.geo.json';
+
+let PUNTOS=[],META={};
+const ubicada=p=>p.geo&&(p.geo.startsWith('geo')||p.geo==='malla');
+const precisa=p=>p.geo&&p.geo.startsWith('geo');
+const S={level:'nacional',dept:null,mun:null,selected:null,queueCollapsed:false,conSel:null,tilesOk:true,
+  filters:{q:'',sig:'all',terr:'all',nuevas:false,exacta:false,sinUbicar:false,kpi:null,minGuias:0,metrica:'t'}};
+// Guías según la métrica activa (todas / sólo preparadas). Es la variable que dimensiona el mapa.
+const gval=p=>S.filters.metrica==='p'?p.p:p.t;
+// Símbolos graduados: 5 rangos fijos de guías -> 5 tamaños. Cubre bodega (1..5k) y clúster (1..25k).
+const BUCKETS=[[100,20],[500,27],[2000,35],[8000,45]];
+const LBLS=['<100','100–500','500–2K','2K–8K','8K+'];
+const tam=v=>{for(const[lim,sz]of BUCKETS)if(v<lim)return sz;return 57};
+
+const inScope=p=>(!S.dept||p.dep===S.dept)&&(!S.mun||p.dane===S.mun);
+function pass(p){const f=S.filters;
+  if(f.q){const q=f.q.toLowerCase();
+    if(!((p.b||'').toLowerCase().includes(q)||(p.a||'').toLowerCase().includes(q)||
+         (p.m||'').toLowerCase().includes(q)||p.dane.includes(q)))return false}
+  if(f.terr!=='all'&&p.dep!==f.terr)return false;
+  if(f.sig==='prep'&&p.p===0)return false;
+  if(f.sig==='guia'&&p.p>0)return false;
+  if(f.nuevas&&!p.nu)return false;
+  if(f.exacta&&!precisa(p))return false;
+  if(f.sinUbicar&&ubicada(p))return false;
+  if(f.kpi==='prep'&&p.p===0)return false;
+  if(f.kpi==='nuevas'&&!p.nu)return false;
+  if(f.minGuias>0&&gval(p)<f.minGuias)return false;
+  return true}
+const visible=()=>PUNTOS.filter(p=>inScope(p)&&pass(p));
+function agg(l){const a={n:l.length,t:0,p:0,g:0,conPrep:0,nuevas:0,exactas:0};
+  l.forEach(x=>{a.t+=x.t;a.p+=x.p;a.g+=x.g;if(x.p>0)a.conPrep++;if(x.nu)a.nuevas++;if(precisa(x))a.exactas++});return a}
+const estado=p=>p.geo==='depto'?'nodata':(p.p>0?'crit':'risk');
+const groupBy=(l,f)=>{const m=new Map();l.forEach(x=>{const k=f(x);if(!m.has(k))m.set(k,[]);m.get(k).push(x)});return m};
+
+let map,layerPoints,layerOutline,conMap,conLayer,conInit=false;
+function baseTiles(){
+  const t=L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
+  let ok=false,tm=setTimeout(()=>{if(!ok)tileFail()},7000);
+  t.on('tileload',()=>{ok=true;clearTimeout(tm);document.getElementById('tileWarn').classList.remove('show')});
+  t.on('tileerror',()=>{if(!ok)tileFail()});return t}
+function tileFail(){S.tilesOk=false;document.getElementById('tileWarn').classList.add('show');
+  if(layerOutline)layerOutline.setStyle({fillOpacity:.5,weight:1.6})}
+let initTries=0;
+function initMap(){
+  const el=document.getElementById('map');
+  if((!el.clientHeight||!el.clientWidth)&&initTries++<50){setTimeout(initMap,60);return}
+  map=L.map(el,{zoomControl:false,attributionControl:true});
+  map.attributionControl.setPrefix('');
+  baseTiles().addTo(map);
+  layerOutline=L.geoJSON(COL_OUTLINE,{style:{color:'#0A5E80',weight:1.2,fillColor:'#9FC5D6',fillOpacity:.10}}).addTo(map);
+  layerPoints=L.layerGroup().addTo(map);
+  map.fitBounds(COL_BOUNDS,{padding:[18,18]});
+  fetch(GEO_URL).then(r=>{if(!r.ok)throw 0;return r.json()}).then(gj=>{
+    const real=L.geoJSON(gj,{style:{color:'#0A5E80',weight:1.4,opacity:.75,fillColor:'#9FC5D6',
+      fillOpacity:S.tilesOk?.06:.5},interactive:false}).addTo(map);
+    real.bringToBack();if(layerOutline)map.removeLayer(layerOutline);layerOutline=real}).catch(()=>{});
+  map.on('zoomend',renderMarkers);window.__map=map;
+  new ResizeObserver(()=>{map.invalidateSize();
+    if(S.level==='nacional')map.fitBounds(COL_BOUNDS,{padding:[18,18],animate:false})}).observe(document.getElementById('mapWrap'));
+  let sc=0;(function ensure(){if(!map||sc++>50)return;map.invalidateSize();
+    const s=map.getSize();if(!s.x||!s.y){setTimeout(ensure,100);return}
+    if(S.level==='nacional')map.fitBounds(COL_BOUNDS,{padding:[18,18],animate:false});
+    if(sc<4)setTimeout(ensure,400)})();
+  renderAll()}
+function mkIcon(kind,label,size,sub){const s=Math.max(20,Math.min(58,size));
+  return L.divIcon({className:'',iconSize:[s,s],iconAnchor:[s/2,s/2],
+    html:`<div class="mk ${kind}" style="width:${s}px;height:${s}px;font-size:${s>40?13:11}px">${label}</div>`+
+      (sub?`<div class="mk-lab">${sub}</div>`:'')})}
+
+function renderMarkers(){
+  if(!map||!layerPoints)return;
+  layerPoints.clearLayers();
+  const list=visible(),z=map.getZoom();
+  const mode=S.level==='nacional'?(z>=9?'mun':'dep'):S.level==='departamento'?(z>=11?'pt':'mun'):'pt';
+  const st=document.getElementById('mapState');
+  st.classList.toggle('show',list.length===0);
+  if(!list.length)st.innerHTML='<b>Sin bodegas para estos filtros</b><div style="color:var(--ink-2);margin-top:4px">Baja el umbral de guías o limpia los filtros.</div>';
+  if(!document.getElementById('lyPoints').checked)return;
+  if(mode==='pt'){
+    // Sólo se dibujan como punto las bodegas cuya dirección se pudo interpretar.
+    // Las demás NO se esparcen por el municipio (sería inventar una ubicación):
+    // se agrupan en un único marcador sobre el centroide, declarado como tal.
+    const ubicadas=list.filter(ubicada), sinUbicar=list.filter(p=>!ubicada(p));
+    ubicadas.forEach(p=>{
+      const cls=estado(p)+(p.p>0?' ring':'')+(S.selected===p.id?' active':'');
+      const m=L.marker([p.lat,p.lng],{icon:mkIcon(cls,'',tam(gval(p)))}).addTo(layerPoints);
+      m.bindTooltip(`<div class="tt"><b>${p.b}</b>${p.a||''}<br>${p.m} · <span class="src">${p.dane}</span><br>
+        <b style="display:inline">${fmt(p.t)}</b> guías · ${fmt(p.p)} prep. · ${fmt(p.g)} guía gen.
+        ${p.geo==='malla'?'<br><span style="color:var(--ink-3)">Interpolado (malla) · error de cientos de metros</span>':'<br><span style="color:var(--ink-3)">Geocodificado · nivel de vía</span>'}</div>`,
+        {className:'tt',direction:'top',offset:[0,-8]});
+      m.on('click',()=>selectPoint(p.id))});
+    groupBy(sinUbicar,p=>p.dane).forEach(g=>{
+      const a=agg(g);
+      const m=L.marker([g[0].lat,g[0].lng],{icon:mkIcon('nodata apx',String(g.length),
+        tam(S.filters.metrica==='p'?a.p:a.t),'sin ubicar')}).addTo(layerPoints);
+      m.bindTooltip(`<div class="tt"><b>${g.length} bodegas sin ubicación exacta</b>
+        ${g[0].m} · ${fmt(a.t)} guías · ${fmt(a.p)} preparadas<br>
+        <span class="r">No están aquí: este punto es el centro del municipio.</span><br>
+        <span style="color:var(--ink-3)">Su dirección no se pudo interpretar. Ver la lista de la derecha.</span></div>`,
+        {className:'tt',direction:'top',offset:[0,-10]});
+      m.on('click',()=>{S.filters.sinUbicar=true;S.filters.exacta=false;
+        document.getElementById('fExacta').checked=false;renderAll()});
+    });
+    return}
+  const key=mode==='dep'?(p=>p.dep):(p=>p.dane);
+  groupBy(list,key).forEach(g=>{const a=agg(g);
+    const lat=g.reduce((s,p)=>s+p.lat,0)/g.length,lng=g.reduce((s,p)=>s+p.lng,0)/g.length;
+    const kind=a.p/Math.max(1,a.t)>=.5?'crit ring':a.conPrep>0?'crit':'norm';
+    const label=mode==='dep'?(DEPTS[g[0].dep]?DEPTS[g[0].dep][0]:g[0].dp):g[0].m;
+    const m=L.marker([lat,lng],{icon:mkIcon(kind,String(g.length),tam(S.filters.metrica==='p'?a.p:a.t),label)}).addTo(layerPoints);
+    m.bindTooltip(`<div class="tt"><b>${label} <span class="src">${mode==='dep'?g[0].dep:g[0].dane}</span></b>
+      ${g.length} bodegas · ${fmt(a.t)} guías por recoger<br>
+      <span class="r">${fmt(a.p)} preparadas (${Math.round(a.p/a.t*100)}%)</span><br>
+      <span style="color:var(--ink-3)">${a.exactas} con ubicación precisa · el número = bodegas</span></div>`,
+      {className:'tt',direction:'top',offset:[0,-10]});
+    m.on('click',()=>mode==='dep'?drillDept(g[0].dep):drillMun(g[0].dep,g[0].dane))})}
+
+function drillDept(d){const i=DEPTS[d];if(!i)return;
+  S.level='departamento';S.dept=d;S.mun=null;S.selected=null;
+  if(map)map.setView([i[1],i[2]],i[3],{animate:true,duration:.7});renderAll()}
+function drillMun(dep,dane){S.level='municipio';S.dept=dep;S.mun=dane;
+  const pts=PUNTOS.filter(inScope);
+  if(map&&pts.length)map.fitBounds(L.latLngBounds(pts.map(p=>[p.lat,p.lng])),{padding:[60,60],animate:true,duration:.7});
+  renderAll()}
+function goNat(){S.level='nacional';S.dept=null;S.mun=null;S.selected=null;closeDrawer();
+  if(map)map.fitBounds(COL_BOUNDS,{padding:[18,18],animate:true,duration:.7});renderAll()}
+const levelUp=()=>S.level==='municipio'?drillDept(S.dept):goNat();
+
+function renderCrumbs(){
+  const c=document.getElementById('crumbs'),p=[];
+  p.push(S.dept?`<button data-n="col">Colombia</button>`:`<span class="cur">Colombia</span>`);
+  if(S.dept){const d=DEPTS[S.dept];
+    p.push(`<span class="sep">/</span>`+(S.mun?`<button data-n="dep">${d[0]}</button>`:`<span class="cur">${d[0]}</span>`)+`<span class="dane">${S.dept}</span>`)}
+  if(S.mun){const m=PUNTOS.find(x=>x.dane===S.mun);
+    p.push(`<span class="sep">/</span><span class="cur">${m?m.m:S.mun}</span><span class="dane">${S.mun}</span>`)}
+  c.innerHTML=p.join('')+(S.level!=='nacional'?`<button class="back" id="bCol">↰ Volver a Colombia</button>`:'');
+  c.querySelectorAll('[data-n]').forEach(b=>b.onclick=()=>b.dataset.n==='col'?goNat():drillDept(S.dept));
+  const bc=document.getElementById('bCol');if(bc)bc.onclick=goNat;
+  document.getElementById('mapScope').textContent=
+    S.level==='nacional'?'Colombia · '+groupBy(PUNTOS,p=>p.dep).size+' departamentos':
+    S.level==='departamento'?DEPTS[S.dept][0]:(PUNTOS.find(x=>x.dane===S.mun)||{m:''}).m}
+function renderKpis(){
+  const a=agg(visible());
+  const k=[{id:'t',v:fmt(a.t),l:'Guías por recoger',h:`en ${fmt(a.n)} bodegas`,c:'crit'},
+    {id:'prep',v:fmt(a.p),l:'Preparadas para transportadora',h:a.t?Math.round(a.p/a.t*100)+'% del total':'—',c:'crit'},
+    {id:'cp',v:fmt(a.conPrep),l:'Bodegas con carga confirmada',h:'al menos 1 preparada',c:'warn'},
+    {id:'nuevas',v:fmt(a.nuevas),l:'Bodegas nuevas (2026)',h:'creadas este año',c:'ok'}];
+  document.getElementById('kpis').innerHTML=k.map(x=>`<button class="kpi ${x.c}" data-k="${x.id}"
+    aria-pressed="${S.filters.kpi===x.id}"><div class="v tnum">${x.v}</div><div class="l">${x.l}</div><div class="h">${x.h}</div></button>`).join('');
+  document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{const id=b.dataset.k;
+    if(id==='t'||id==='cp')return;S.filters.kpi=S.filters.kpi===id?null:id;renderAll()})}
+function renderChips(){
+  const f=S.filters,ch=[];
+  if(f.q)ch.push(['q','Búsqueda: “'+f.q+'”']);
+  if(f.sig!=='all')ch.push(['sig',f.sig==='prep'?'Con preparadas':'Solo guía generada']);
+  if(f.terr!=='all')ch.push(['terr','Depto: '+(DEPTS[f.terr]?DEPTS[f.terr][0]:f.terr)]);
+  if(f.nuevas)ch.push(['nuevas','Solo nuevas']);
+  if(f.exacta)ch.push(['exacta','Solo ubicación precisa']);
+  if(f.sinUbicar)ch.push(['sinUbicar','Solo sin ubicar']);
+  if(f.kpi)ch.push(['kpi','KPI: '+(f.kpi==='prep'?'con preparadas':'nuevas')]);
+  if(f.minGuias>0)ch.push(['minGuias',(f.metrica==='p'?'Preparadas':'Guías')+' ≥ '+f.minGuias]);
+  const el=document.getElementById('activeChips');
+  el.innerHTML=ch.map(([k,t])=>`<span class="chip">${t}<button data-rm="${k}">✕</button></span>`).join('')+
+    (ch.length?`<button class="more" id="clr" style="margin-left:4px">Limpiar todo</button>`:'');
+  el.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{const k=b.dataset.rm;
+    if(k==='q'){f.q='';document.getElementById('fSearch').value=''}
+    else if(k==='nuevas'){f.nuevas=false;document.getElementById('fNuevas').checked=false}
+    else if(k==='exacta'){f.exacta=false;document.getElementById('fExacta').checked=false}
+    else if(k==='sinUbicar')f.sinUbicar=false;
+    else if(k==='minGuias'){f.minGuias=0;document.getElementById('minGuias').value=0;
+      document.getElementById('minLbl').textContent=(f.metrica==='p'?'Preparadas':'Guías')+' ≥ 0'}
+    else if(k==='kpi')f.kpi=null;
+    else if(k==='sig'){f.sig='all';document.querySelectorAll('[data-sig]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.sig==='all'))}
+    else{f.terr='all';document.getElementById('fTerr').value='all'}
+    renderAll()});
+  const c=document.getElementById('clr');if(c)c.onclick=()=>{
+    S.filters={q:'',sig:'all',terr:'all',nuevas:false,exacta:false,sinUbicar:false,kpi:null,minGuias:0,metrica:'t'};
+    document.getElementById('fSearch').value='';
+    ['fNuevas','fExacta'].forEach(i=>document.getElementById(i).checked=false);
+    document.getElementById('fTerr').value='all';
+    document.getElementById('minGuias').value=0;
+    document.getElementById('minLbl').textContent='Guías ≥ 0';
+    document.querySelectorAll('[data-sig]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.sig==='all'));
+    document.querySelectorAll('[data-met]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.met==='t'));
+    renderAll()}}
+let tsort={k:'t',d:-1};
+function renderTerr(){
+  const el=document.getElementById('territoryPanel');
+  const nat=S.level==='nacional'||S.level==='departamento';
+  el.style.display=nat?'flex':'none';if(!nat)return;
+  const byNat=S.level==='nacional';
+  const src=PUNTOS.filter(p=>pass(p)&&(byNat||p.dep===S.dept));
+  const rows=[...groupBy(src,p=>byNat?p.dep:p.dane).entries()].map(([k,g])=>{
+    const a=agg(g);return{key:k,label:byNat?(DEPTS[k]?DEPTS[k][0]:k):g[0].m,...a}});
+  rows.sort((x,y)=>(y[tsort.k]-x[tsort.k])*(tsort.d<0?1:-1));
+  const max=Math.max(1,...rows.map(r=>r.t));
+  const T=rows.reduce((s,r)=>({t:s.t+r.t,p:s.p+r.p,n:s.n+r.n}),{t:0,p:0,n:0});
+  document.getElementById('terrSub').textContent=byNat?'Departamentos por código DANE · clic para entrar':'Municipios de '+DEPTS[S.dept][0];
+  document.getElementById('terrTable').innerHTML=`
+    <thead><tr><th data-k="label">${byNat?'Departamento':'Municipio'}</th>
+      <th data-k="t">Guías</th><th data-k="p">Prep.</th><th data-k="n">Bod.</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr data-key="${r.key}" class="${(byNat?S.dept:S.mun)===r.key?'sel':''}">
+      <td><i class="bar" style="width:${Math.round(3+r.t/max*24)}px"></i><span class="dcode">${r.key}</span>${r.label}</td>
+      <td class="tnum">${fmt(r.t)}</td><td class="tnum">${fmt(r.p)}</td><td class="tnum">${r.n}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td>${byNat?'Total Colombia':'Total '+DEPTS[S.dept][0]}</td>
+      <td class="tnum">${fmt(T.t)}</td><td class="tnum">${fmt(T.p)}</td><td class="tnum">${T.n}</td></tr></tfoot>`;
+  document.querySelectorAll('#terrTable th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;
+    if(k==='label')return;tsort={k,d:tsort.k===k?-tsort.d:-1};renderTerr()});
+  document.querySelectorAll('#terrTable tbody tr').forEach(tr=>tr.onclick=()=>
+    byNat?drillDept(tr.dataset.key):drillMun(S.dept,tr.dataset.key))}
+function renderQueue(){
+  const el=document.getElementById('queuePanel');
+  const show=(S.level==='municipio'||S.level==='departamento')&&!S.queueCollapsed;
+  el.style.display=show?'flex':'none';
+  const b=document.getElementById('btnCollapseQueue');
+  b.style.display=(S.level==='municipio'||S.level==='departamento')?'':'none';
+  b.textContent=S.queueCollapsed?'Mostrar cola ⇤':'Ampliar mapa ⇥';
+  if(!show)return;
+  const all=visible(),a=agg(all);
+  const list=[...all].sort((x,y)=>(y.p-x.p)||(y.t-x.t)).slice(0,300);
+  document.getElementById('qCount').textContent=`${fmt(a.n)} bodegas · ${fmt(a.t)} guías`;
+  const body=document.getElementById('queueBody');
+  if(!list.length){body.innerHTML='<div class="empty"><b>Sin bodegas aquí</b>Ajusta los filtros.</div>';return}
+  body.innerHTML=list.map(p=>{const e=estado(p),pc=p.t?p.p/p.t*100:0;
+    return `<div class="qcard ${S.selected===p.id?'sel':''}" data-id="${p.id}">
+      <div class="qtop"><span class="sev ${e}">${e==='crit'?'Con preparadas':e==='risk'?'Solo guía generada':'Sin ubicar'}</span>
+        ${p.nu?'<span class="tag new">Nueva</span>':''}
+        ${!ubicada(p)?'<span class="tag apx">Sin ubicar</span>':(p.geo==='geo_alta'?'':'')}
+        <span class="tag">${p.m}</span><span class="qgo">›</span></div>
+      <div class="qname">${p.b}</div>
+      <div class="qline"><span class="tnum"><b>${fmt(p.t)}</b> guías</span>
+        <span class="tnum">${fmt(p.p)} prep.</span><span class="tnum">${fmt(p.g)} guía gen.</span></div>
+      <div class="qaddr">${p.a||'sin dirección'}</div>
+      <div class="split"><i class="p" style="width:${pc}%"></i><i class="g" style="width:${100-pc}%"></i></div>
+    </div>`}).join('')+(a.n>300?`<div class="empty">Mostrando 300 de ${fmt(a.n)}.</div>`:'');
+  body.querySelectorAll('.qcard').forEach(c=>c.onclick=()=>selectPoint(c.dataset.id,true))}
+function selectPoint(id,center){
+  const p=PUNTOS.find(x=>String(x.id)===String(id));if(!p)return;
+  S.selected=p.id;
+  if(center&&map)map.setView([p.lat,p.lng],Math.max(map.getZoom(),14),{animate:true});
+  renderMarkers();renderQueue();openDrawer(p)}
+function openDrawer(p){
+  const e=estado(p);
+  const near=ubicada(p)?PUNTOS.filter(x=>x.id!==p.id&&ubicada(x)&&
+    Math.abs(x.lat-p.lat)<0.0015&&Math.abs(x.lng-p.lng)<0.0015):[];
+  document.getElementById('dTags').innerHTML=
+    `<span class="sev ${e}">${e==='crit'?'Con preparadas':e==='risk'?'Solo guía generada':'Sin ubicar'}</span>
+     ${p.nu?'<span class="tag new">Bodega nueva</span>':''}<span class="tag">${p.dp}</span>`;
+  document.getElementById('dName').textContent=p.b;
+  document.getElementById('dAddr').innerHTML=`${p.a||'sin dirección'} · ${p.m} <span class="src">DANE ${p.dane}</span>`;
+  document.getElementById('dBody').innerHTML=`
+    <div class="grp"><h3>Guías por recoger</h3>
+      <div class="kv"><span>Total</span><b class="tnum">${fmt(p.t)}</b>
+        <span>Preparadas para transportadora</span><b class="tnum">${fmt(p.p)}</b>
+        <span>Solo guía generada</span><b class="tnum">${fmt(p.g)}</b>
+        <span>Cobertura de scanner</span><b class="tnum">${p.t?Math.round(p.p/p.t*100):0}%</b></div>
+      <div class="split" style="height:7px;margin-top:8px"><i class="p" style="width:${p.t?p.p/p.t*100:0}%"></i><i class="g" style="width:${p.t?p.g/p.t*100:0}%"></i></div></div>
+    <div class="grp"><h3>Solicitud de recogida</h3>
+      <div class="kv"><span>Estado</span><b>${p.e}</b></div>
+      <div class="rz bad" style="display:block;margin-top:8px"><code>pick_ups</code> vino vacío para las 1.604 bodegas del export. Pendiente de verificar con Data.</div></div>
+    <div class="grp"><h3>Ubicación</h3>
+      <div class="kv"><span>Precisión</span><b>${({geo:'Geocodificado · nivel de vía',geo_alta:'Geocodificado · nivel de predio',geo_baja:'Geocodificado · sólo barrio',malla:'Malla (interpolado)',municipio:'Centroide del municipio',depto:'Centroide del departamento'})[p.geo]||p.geo}</b>
+        <span>Coordenada</span><b class="src">${p.lat}, ${p.lng}</b></div>
+      ${!ubicada(p)?'<div class="rz bad" style="display:block;margin-top:8px">La dirección no se pudo geocodificar. El punto está en el centroide del municipio, no en la puerta.</div>':(p.geo!=='geo_alta'?'<div class="rz" style="display:block;margin-top:8px">Nivel de vía: sirve para agrupar y priorizar, verificar antes de navegar.</div>':'')}</div>
+    ${near.length?`<div class="grp"><h3>Consolidación</h3>
+      <div class="rz good" style="display:block;margin-bottom:6px">${near.length} bodega(s) a menos de ~150 m</div>
+      ${near.slice(0,6).map(x=>`<div style="font-size:12px;padding:3px 0"><b>${fmt(x.t)}</b> guías · ${x.b}<br><span class="src">${x.a||''}</span></div>`).join('')}
+      <div class="kv" style="margin-top:7px"><span>Total del grupo</span><b class="tnum">${fmt(p.t+near.reduce((s,x)=>s+x.t,0))} guías</b></div></div>`:''}`;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('scrim').classList.add('open')}
+const closeDrawer=()=>{document.getElementById('drawer').classList.remove('open');
+  document.getElementById('scrim').classList.remove('open')};
+
+function grupos(){
+  const m=new Map();
+  PUNTOS.filter(ubicada).forEach(p=>{const k=p.lat.toFixed(3)+','+p.lng.toFixed(3);
+    if(!m.has(k))m.set(k,[]);m.get(k).push(p)});
+  return [...m.entries()].filter(([,g])=>g.length>1).map(([k,g])=>({k,g,
+    t:g.reduce((s,x)=>s+x.t,0),p:g.reduce((s,x)=>s+x.p,0),lat:g[0].lat,lng:g[0].lng,mun:g[0].m}))
+    .sort((a,b)=>b.t-a.t)}
+function renderCon(){
+  const el=document.getElementById('conMap');
+  if(!conInit){if(!el.clientWidth||!el.clientHeight){setTimeout(renderCon,120);return}
+    conMap=L.map(el,{zoomControl:true,attributionControl:true});conMap.attributionControl.setPrefix('');
+    baseTiles().addTo(conMap);conLayer=L.layerGroup().addTo(conMap);
+    conMap.setView([4.65,-74.09],11);conInit=true}
+  conMap.invalidateSize();
+  const G=grupos();
+  document.getElementById('conScope').textContent=
+    `${G.length} grupos · ${fmt(G.reduce((s,x)=>s+x.t,0))} guías consolidables`;
+  conLayer.clearLayers();
+  G.slice(0,250).forEach(gr=>{
+    L.marker([gr.lat,gr.lng],{icon:mkIcon(gr.p>0?'crit':'risk',String(gr.g.length),22+Math.min(26,Math.sqrt(gr.t)*2))})
+      .bindTooltip(`<div class="tt"><b>${gr.g.length} bodegas · ${fmt(gr.t)} guías</b>${gr.mun}<br>
+        ${gr.g.slice(0,4).map(x=>x.b).join('<br>')}</div>`,{className:'tt'})
+      .on('click',()=>{S.conSel=gr.k;conMap.setView([gr.lat,gr.lng],16,{animate:true});renderCon()})
+      .addTo(conLayer)});
+  document.getElementById('conBody').innerHTML=G.slice(0,80).map(gr=>`
+    <div class="cgroup ${S.conSel===gr.k?'sel':''}" data-k="${gr.k}">
+      <h4>${fmt(gr.t)} guías · ${gr.g.length} bodegas</h4>
+      <div style="font-size:11.5px;color:var(--ink-2)">${gr.mun} · ${fmt(gr.p)} preparadas</div>
+      <ul>${gr.g.slice(0,5).map(x=>`<li>${x.b} — <b>${fmt(x.t)}</b><br><span class="src">${x.a||''}</span></li>`).join('')}
+        ${gr.g.length>5?`<li>+${gr.g.length-5} más</li>`:''}</ul></div>`).join('')
+    ||'<div class="empty"><b>Sin grupos</b>Ninguna dirección se pudo ubicar a nivel de cuadra.</div>';
+  document.querySelectorAll('.cgroup').forEach(d=>d.onclick=()=>{
+    const gr=G.find(x=>x.k===d.dataset.k);S.conSel=gr.k;
+    conMap.setView([gr.lat,gr.lng],16,{animate:true});renderCon()})}
+function renderCov(){
+  const by=[...groupBy(PUNTOS,p=>p.dane).entries()].map(([k,g])=>{const a=agg(g);
+    return{dane:k,mun:g[0].m,dp:g[0].dp,...a,pct:a.t?a.p/a.t*100:0}})
+    .filter(x=>x.t>=100).sort((a,b)=>b.t-a.t);
+  const T=agg(PUNTOS);
+  document.getElementById('covKpis').innerHTML=[
+    {v:Math.round(T.p/T.t*100)+'%',l:'Cobertura nacional',h:'guías que llegan a PREPARADO',c:'crit'},
+    {v:fmt(T.p),l:'Guías preparadas',h:'señal confiable',c:''},
+    {v:fmt(T.g),l:'Solo guía generada',h:'no sabemos si están listas',c:'warn'},
+    {v:fmt(T.conPrep),l:'Bodegas con scanner',h:`de ${fmt(T.n)} activas`,c:'ok'}
+  ].map(x=>`<div class="kpi ${x.c}"><div class="v tnum">${x.v}</div><div class="l">${x.l}</div><div class="h">${x.h}</div></div>`).join('');
+  document.getElementById('covTable').innerHTML=`
+    <thead><tr><th>Municipio</th><th>DANE</th><th>Departamento</th><th>Guías</th><th>Preparadas</th><th>Cobertura</th><th>Bodegas</th></tr></thead>
+    <tbody>${by.map(x=>`<tr><td><b>${x.mun}</b></td><td class="src">${x.dane}</td><td>${x.dp}</td>
+      <td class="tnum">${fmt(x.t)}</td><td class="tnum">${fmt(x.p)}</td>
+      <td><span class="gauge ${x.pct<20?'low':''}"><i style="width:${x.pct}%"></i></span><span class="tnum">${Math.round(x.pct)}%</span></td>
+      <td class="tnum">${x.n}</td></tr>`).join('')}</tbody>`}
+function renderRules(){
+  const T=agg(PUNTOS),g={};PUNTOS.forEach(p=>g[p.geo]=(g[p.geo]||0)+1);
+  const gt={};PUNTOS.forEach(p=>gt[p.geo]=(gt[p.geo]||0)+p.t);
+  document.getElementById('rulesGrid').innerHTML=`
+  <div class="card"><h3>De dónde salen estos datos</h3>
+    <div class="kv"><span>Fuente</span><b class="src">Chronos · raw.orders_co</b>
+      <span>Ventana</span><b><code>updated_at</code> 2 días</b>
+      <span>Filtro</span><b class="src">status IN (PREPARADO…, GUIA_GENERADA)</b>
+      <span>Bodegas</span><b class="tnum">${fmt(T.n)}</b>
+      <span>Guías</span><b class="tnum">${fmt(T.t)}</b>
+      <span>Generado</span><b>${META.generado||'—'}</b></div>
+    <div class="lg-note">Es <b>flujo reciente</b>, no el stock completo de guías varadas. Para la cola operativa la ventana debe subir a 30 días o quitarse.</div></div>
+  <div class="card"><h3>Las dos señales no valen igual</h3>
+    <div class="kv"><span><code>PREPARADO PARA TRANSPORTADORA</code></span><b class="tnum">${fmt(T.p)} (${Math.round(T.p/T.t*100)}%)</b>
+      <span><code>GUIA_GENERADA</code></span><b class="tnum">${fmt(T.g)} (${Math.round(T.g/T.t*100)}%)</b>
+      <span>Bodegas con alguna preparada</span><b class="tnum">${fmt(T.conPrep)}</b></div>
+    <div class="lg-note">Guía generada <b>no</b> significa que el paquete esté empacado. Mandar un vehículo por esas ${fmt(T.g)} puede ser un viaje en vano. La cola accionable son las ${fmt(T.conPrep)} bodegas con carga confirmada.</div></div>
+  <div class="card"><h3>Cómo se ubicó cada bodega</h3>
+    <div class="kv" style="gap:6px 12px">
+      <span>Geocodificado (LocationIQ, validado)</span><span class="pill a">${(g.geo||0)+(g.geo_alta||0)+(g.geo_baja||0)} bodegas · ${fmt((gt.geo||0)+(gt.geo_alta||0)+(gt.geo_baja||0))} guías</span>
+      <span>Malla interpolada (respaldo)</span><span class="pill p">${g.malla||0} · ${fmt(gt.malla||0)}</span>
+      <span>Centroide, sin ubicar</span><span class="pill n">${(g.municipio||0)+(g.depto||0)} · ${fmt((gt.municipio||0)+(gt.depto||0))}</span></div>
+    <div class="lg-note">Cada dirección se geocodifica con <b>LocationIQ</b> y se <b>valida contra su municipio DANE</b>: si el resultado cae lejos del municipio del dato, se descarta (así no aparece una bodega de Cali a 700 km). Precisión a <b>nivel de vía</b> — sirve para agrupar y priorizar; verificar antes de navegar. Las no resueltas caen al centroide y se marcan "sin ubicar".</div></div>
+  <div class="card"><h3>Lo que falta</h3>
+    <ul style="margin:0;padding-left:18px;color:var(--ink-2);line-height:1.7">
+      <li><b><code>pick_ups</code> vacío</b> — las ${fmt(T.n)} bodegas salen "sin solicitud".</li>
+      <li><b>Antigüedad</b> — no hay "hace cuánto está preparada".</li>
+      <li><b>~197 bodegas sin ubicar</b> (12%) — direcciones que ni el geocoder resolvió: rurales, informales o mal escritas.</li>
+      <li><b>Precisión de puerta</b> — para Bogotá, Medellín y Cali, cruzar con catastro abierto (IDECA/Medellín/Cali) daría nivel de predio, gratis.</li>
+      <li><b>Marca de gestión</b> — nada indica si ya se despachó a alguien.</li>
+    </ul></div>
+  <div class="card"><h3>Ojo con la geografía</h3>
+    <div class="lg-note" style="border:0;margin:0;padding:0">
+      <code>cities.department_id</code> es interno de Dropi y <b>no coincide</b> con el DANE: Bogotá aparece como
+      Cundinamarca (id 3) pero su <code>cod_dane</code> es <code>11001000</code> → departamento 11, Bogotá D.C.
+      Aquí se agrupa por <b>código DANE</b>: los 5 primeros dígitos son el municipio, los 2 primeros el departamento.
+      Un registro llegó sin el cero inicial, así que hay que aplicar siempre <code>LPAD(cod_dane, 8, '0')</code>.</div></div>`}
+
+function switchView(v){
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.view===v?'page':'false'));
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='view-'+v));
+  if(v==='con')renderCon();if(v==='cov')renderCov();if(v==='rules')renderRules();
+  setTimeout(()=>{if(v==='control'&&map)map.invalidateSize();if(v==='con'&&conMap)conMap.invalidateSize()},60)}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+document.getElementById('scrim').onclick=closeDrawer;
+document.getElementById('dClose').onclick=closeDrawer;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
+document.getElementById('fSearch').oninput=e=>{S.filters.q=e.target.value.trim();renderAll()};
+document.getElementById('fNuevas').onchange=e=>{S.filters.nuevas=e.target.checked;renderAll()};
+document.getElementById('fExacta').onchange=e=>{S.filters.exacta=e.target.checked;renderAll()};
+document.querySelectorAll('[data-sig]').forEach(b=>b.onclick=()=>{S.filters.sig=b.dataset.sig;
+  document.querySelectorAll('[data-sig]').forEach(x=>x.setAttribute('aria-pressed',x===b));renderAll()});
+document.getElementById('btnCollapseQueue').onclick=()=>{S.queueCollapsed=!S.queueCollapsed;renderQueue();
+  setTimeout(()=>map&&map.invalidateSize(),150)};
+document.getElementById('lyPoints').onchange=renderMarkers;
+// Escala: métrica (todas/preparadas) y umbral mínimo de guías.
+document.querySelectorAll('[data-met]').forEach(b=>b.onclick=()=>{
+  S.filters.metrica=b.dataset.met;
+  document.querySelectorAll('[data-met]').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  document.getElementById('minLbl').textContent=(S.filters.metrica==='p'?'Preparadas':'Guías')+' ≥ '+S.filters.minGuias;
+  renderAll();});
+document.getElementById('minGuias').oninput=e=>{
+  S.filters.minGuias=+e.target.value;
+  document.getElementById('minLbl').textContent=(S.filters.metrica==='p'?'Preparadas':'Guías')+' ≥ '+S.filters.minGuias;
+  renderAll();};
+document.getElementById('mZoomIn').onclick=()=>map.zoomIn();
+document.getElementById('mZoomOut').onclick=()=>map.zoomOut();
+document.getElementById('mFit').onclick=goNat;
+document.getElementById('mBack').onclick=levelUp;
+function renderLegendSizes(){
+  const sizes=[16,22,30,40,50]; // muestra proporcional a los buckets reales (20..57)
+  document.getElementById('lgSizes').innerHTML=LBLS.map((l,i)=>
+    `<span><i style="width:${sizes[i]}px;height:${sizes[i]}px"></i>${l}</span>`).join('');
+}
+function renderAll(){renderCrumbs();renderKpis();renderChips();renderTerr();renderQueue();renderMarkers();renderLegendSizes()}
+
+fetch('./datos-recolecciones.json').then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
+ .then(d=>{PUNTOS=d.puntos;META=d.meta;
+   document.getElementById('metaFuente').textContent=`${fmt(META.bodegas)} bodegas · ${fmt(META.guias)} guías · ${META.generado}`;
+   const deps=[...new Set(PUNTOS.map(p=>p.dep))].sort();
+   const sel=document.getElementById('fTerr');
+   sel.innerHTML='<option value="all">Todos los departamentos</option>'+
+     deps.map(d=>`<option value="${d}">${d} · ${DEPTS[d]?DEPTS[d][0]:d}</option>`).join('');
+   sel.onchange=e=>{S.filters.terr=e.target.value;e.target.value!=='all'?drillDept(e.target.value):renderAll()};
+   document.getElementById('loading').classList.add('hide');
+   initMap()})
+ .catch(err=>{document.getElementById('loading').innerHTML=
+   `<div style="text-align:center;max-width:420px"><b style="display:block;margin-bottom:6px">No se pudieron cargar los datos</b>
+    <span style="color:var(--ink-3)">${err.message} — falta <code>datos-recolecciones.json</code> junto a este archivo.</span></div>`});
+window.addEventListener('resize',()=>{if(map)map.invalidateSize();if(conMap)conMap.invalidateSize()});
+</script>
+</body>
+</html>
