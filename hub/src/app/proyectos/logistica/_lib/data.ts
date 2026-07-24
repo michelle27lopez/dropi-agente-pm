@@ -778,7 +778,6 @@ export const weeklies: Weekly[] = [
       "Recolección proactiva: leer el resultado de las 2.000 guías enviadas y decidir si escala — Responsable: Juan Diego / William.",
       "POC Selección de transportadoras: cerrar el siguiente paso tras el análisis técnico con TI (Francisco Ramírez) — Responsable: Juan (Carrier Ops) / Kate (PM).",
       "Normalización de estados: cerrar la propuesta tras la reunión de homologación — Responsable: Juan Diego.",
-      "Dashboard de indicadores: dejar en firme lo acordado con Diana (indicadores, fuente, cadencia).",
     ],
 
     indicadores: [
