@@ -113,6 +113,7 @@ export default function CelulaHomePage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [metrics, setMetrics] = useState<SellersMetrics | null>(null);
   const [openUpdate, setOpenUpdate] = useState<Update | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState("global");
 
   useEffect(() => {
     fetch(`/api/celulas/${params.slug}`)
@@ -200,7 +201,6 @@ export default function CelulaHomePage() {
   const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
 
   const isSellers = params.slug === "sellers";
-  const [selectedCountry, setSelectedCountry] = useState("global");
 
   // Get active country stats
   const activeStats = (metrics?.stats?.countries as any)?.[selectedCountry] || metrics?.stats;

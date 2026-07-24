@@ -1724,6 +1724,27 @@ a.chip:hover { border-color: var(--brand); color: var(--brand); }
   color: var(--brand);
   font-weight: 700;
 }
+.fx-chain-step.is-related {
+  background: #EEF2FF;
+  border-color: #818CF8;
+  color: #6366F1;
+  font-weight: 600;
+}
+.vigia-etapas {
+  display: flex; flex-direction: column; gap: 6px; margin-top: 10px;
+}
+.vigia-etapa-row {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 8px 12px; background: var(--soft); border-radius: 8px;
+  border-left: 3px solid var(--brand);
+}
+.vigia-etapa-name {
+  font-size: 12px; font-weight: 700; color: var(--fg);
+  min-width: 140px; flex-shrink: 0;
+}
+.vigia-etapa-role {
+  font-size: 12px; color: var(--muted); line-height: 1.4;
+}
 .detail-hint {
   display: block; font-size: 13px; color: var(--muted);
   line-height: 1.55; margin: 2px 0 0;
