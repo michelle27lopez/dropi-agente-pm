@@ -3857,9 +3857,9 @@ export default function CategorizacionPage() {
                   </div>
                 </a>
 
-                {/* Card 9b: Rapid Prototype (Angular RPP) — Catálogo por taxonomía */}
+                {/* Card 9b: Rapid Prototype (Angular RPP) — Vista Proveedor */}
                 <a
-                  href={`${RPP_BASE_URL}/productos/categorizacion`}
+                  href={`${RPP_BASE_URL}/new/productos/categorizacion/mis-productos?profile=proveedor`}
                   target="_blank"
                   rel="noreferrer"
                   className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-orange-500 hover:shadow-xs transition-all duration-200 no-underline"
@@ -3867,11 +3867,30 @@ export default function CategorizacionPage() {
                   <span className="text-2xl mt-0.5">🚀</span>
                   <div className="flex-1">
                     <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
-                      <span>Rapid Prototype · Catálogo por Categorías</span>
+                      <span>Rapid Prototype · Categorización (Proveedor)</span>
                       <span className="text-[9px] font-bold bg-orange-50 text-orange-600 border border-orange-100 px-1.5 py-0.5 rounded-full">↗ {RPP_BASE_URL.replace(/^https?:\/\//, "")}</span>
                     </div>
                     <div className="text-[10px] leading-relaxed text-gray-500">
-                      Misma vista, construida en el pipeline Angular RPP con los componentes reales del Design System de Dropi. Requiere <code>ng serve</code> corriendo en <code>dropi-prototypes</code>.
+                      Vista Proveedor: cómo categoriza sus productos usando la taxonomía unificada L1→L4. Construida en el pipeline Angular RPP con los componentes reales del Design System de Dropi.
+                    </div>
+                  </div>
+                </a>
+
+                {/* Card 9c: Rapid Prototype (Angular RPP) — Vista Dropshipper */}
+                <a
+                  href={`${RPP_BASE_URL}/new/productos/categorizacion?profile=dropshipper`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white border border-slate-200 rounded-2xl p-4 flex items-start gap-3 shadow-2xs cursor-pointer hover:border-orange-500 hover:shadow-xs transition-all duration-200 no-underline"
+                >
+                  <span className="text-2xl mt-0.5">🚀</span>
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-gray-900 mb-1 flex items-center justify-between">
+                      <span>Rapid Prototype · Catálogo por Categorías (Dropshipper)</span>
+                      <span className="text-[9px] font-bold bg-orange-50 text-orange-600 border border-orange-100 px-1.5 py-0.5 rounded-full">↗ {RPP_BASE_URL.replace(/^https?:\/\//, "")}</span>
+                    </div>
+                    <div className="text-[10px] leading-relaxed text-gray-500">
+                      Vista Dropshipper: cómo navega y filtra el catálogo usando la taxonomía unificada L1→L4. Construida en el pipeline Angular RPP con los componentes reales del Design System de Dropi.
                     </div>
                   </div>
                 </a>

@@ -6,3 +6,11 @@
 !.claude/skills/bug-jira/
 .mcp.json
 .impeccable/
+
+# Cerebro privado (repo anidado propio: cerebro-logistica-dropi).
+# Vive dentro de esta carpeta pero NUNCA se sube al repo del equipo.
+/cerebro/
+
+# Data generada del pipeline de recolecciones (se regenera local, no se sube).
+hub/public/logistica/recolecciones/datos-recolecciones.json
+hub/public/logistica/recolecciones/pipeline/centroides.json
