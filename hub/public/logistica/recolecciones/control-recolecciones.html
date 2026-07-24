@@ -1,0 +1,1356 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Control de Recolecciones · Dropi · Logística</title>
+<meta name="description" content="Guías preparadas sin recoger, por territorio DANE. Navegación Colombia → departamento → municipio → punto. Datos simulados." />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand-orange:#F49A3D; --brand-orange-ink:#B9670F;
+  --brand-blue:#008DBF; --brand-blue-dark:#0A5E80;
+  --ok:#4CAF50; --warn:#FF9800; --err:#F46A6B; --nodata:#98A2B3;
+  --bg:#F7F8FA; --surface:#FFFFFF; --surface-2:#FBFCFD;
+  --border:#EEF0F4; --border-strong:#E1E5EC;
+  --ink:#232938; --ink-2:#69738C; --ink-3:#8E97AC;
+  --r:9px; --r-sm:6px;
+  --shadow:0 6px 20px rgba(35,41,56,.10), 0 1px 2px rgba(35,41,56,.06);
+  --h-header:52px; --h-banner:26px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:13px;line-height:1.4;
+  -webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+table{border-collapse:collapse;width:100%}
+.tnum{font-variant-numeric:tabular-nums}
+
+header.top{height:var(--h-header);background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:18px;padding:0 14px;position:relative;z-index:900}
+.brand{display:flex;align-items:center;gap:9px;min-width:190px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--brand-orange);color:#fff;
+  display:grid;place-items:center;font-weight:700;font-size:14px}
+.brand b{font-size:13.5px;font-weight:600;display:block;line-height:1.15}
+.brand span{font-size:10px;letter-spacing:.09em;color:var(--ink-3);text-transform:uppercase}
+nav.tabs{display:flex;gap:2px;flex:1}
+nav.tabs button{padding:7px 13px;border-radius:var(--r-sm);color:var(--ink-2);font-size:13px;font-weight:500;white-space:nowrap}
+nav.tabs button:hover{background:var(--surface-2);color:var(--ink)}
+nav.tabs button[aria-current="page"]{background:#EAF6FA;color:var(--brand-blue-dark);font-weight:600}
+.meta{display:flex;align-items:center;gap:14px;color:var(--ink-2);font-size:11.5px;white-space:nowrap}
+.meta .dot{width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block;margin-right:5px}
+.cta{background:var(--brand-orange);color:#fff;font-weight:600;font-size:12.5px;padding:8px 14px;border-radius:var(--r-sm)}
+.cta:hover{filter:brightness(.96)}
+.banner{height:var(--h-banner);background:#FEF6EC;color:#8A5A16;font-size:11px;display:flex;align-items:center;
+  gap:6px;padding:0 14px;border-bottom:1px solid #F6E6CF}
+
+main{height:calc(100vh - var(--h-header) - var(--h-banner));overflow:hidden}
+.view{display:none;height:100%;flex-direction:column}
+.view.active{display:flex}
+
+.ctx{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 14px 10px}
+.crumbs{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);margin-bottom:8px;flex-wrap:wrap}
+.crumbs button{color:var(--brand-blue);font-weight:500;padding:2px 4px;border-radius:4px}
+.crumbs button:hover{background:#EAF6FA}
+.crumbs .sep{color:var(--ink-3)} .crumbs .cur{color:var(--ink);font-weight:600}
+.crumbs .dane{font-size:10.5px;color:var(--ink-3);background:#F2F4F7;border-radius:4px;padding:1px 6px;font-weight:600}
+.crumbs .back{margin-left:auto;border:1px solid var(--border-strong);padding:3px 9px;border-radius:999px;font-size:11.5px;color:var(--ink-2);font-weight:500}
+.crumbs .back:hover{background:var(--surface-2);color:var(--ink)}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.kpi{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:8px 11px;text-align:left;position:relative;transition:.12s}
+.kpi:hover{background:#fff;border-color:var(--border-strong)}
+.kpi[aria-pressed="true"]{background:#FFF6EC;border-color:#F3D8B4}
+.kpi[aria-pressed="true"]::after{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--brand-orange)}
+.kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kpi .l{font-size:11.5px;color:var(--ink-2);margin-top:1px}
+.kpi .h{font-size:10.5px;color:var(--ink-3)}
+.kpi.crit .v{color:var(--err)} .kpi.warn .v{color:#C77400} .kpi.ok .v{color:var(--brand-blue-dark)}
+.more{margin-top:7px;font-size:11.5px;color:var(--brand-blue);font-weight:500}
+.more-panel{display:none;margin-top:7px;gap:8px;grid-template-columns:repeat(4,1fr)}
+.more-panel.open{display:grid}
+.mini{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-sm);padding:6px 9px}
+.mini b{font-size:15px;font-weight:700} .mini span{display:block;font-size:10.5px;color:var(--ink-2)}
+
+.filters{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:nowrap;overflow:hidden}
+.filters input[type=search],.filters select{border:1px solid var(--border-strong);background:var(--surface);
+  border-radius:var(--r-sm);padding:6px 9px;font-size:12px;color:var(--ink);min-width:0}
+.filters input[type=search]{flex:0 1 210px}
+.seg{display:flex;border:1px solid var(--border-strong);border-radius:var(--r-sm);overflow:hidden}
+.seg button{padding:6px 10px;font-size:12px;color:var(--ink-2);border-right:1px solid var(--border)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:#EAF6FA;color:var(--brand-blue-dark);font-weight:600}
+.ghost{border:1px solid var(--border-strong);border-radius:var(--r-sm);padding:6px 11px;font-size:12px;color:var(--ink-2);font-weight:500}
+.ghost:hover{background:var(--surface-2)}
+.trigger{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-2);
+  background:#F4FAFC;border:1px solid #D8EAF1;border-radius:var(--r-sm);padding:4px 8px}
+.trigger b{color:var(--brand-blue-dark);font-weight:600}
+.chips{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:5px;background:#EFF3F7;border-radius:999px;padding:3px 6px 3px 10px;font-size:11.5px;color:var(--ink-2)}
+.chip button{width:15px;height:15px;border-radius:50%;background:#DCE3EB;display:grid;place-items:center;font-size:10px;line-height:1}
+
+.work{flex:1;display:flex;min-height:0;padding:10px;gap:10px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#territoryPanel{width:320px;flex:0 0 320px}
+#mapWrap{flex:1;position:relative;min-width:0;min-height:520px}
+#queuePanel{width:31%;flex:0 0 31%;min-width:300px}
+.p-head{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.p-head h2{margin:0;font-size:13.5px;font-weight:600}
+.p-head .sub{font-size:11px;color:var(--ink-3);width:100%}
+.p-body{overflow:auto;flex:1;min-height:0}
+
+table.terr{font-size:12px}
+table.terr th{position:sticky;top:0;background:var(--surface);z-index:2;text-align:right;font-size:10.5px;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:600;padding:7px 8px;border-bottom:1px solid var(--border);cursor:pointer;white-space:nowrap}
+table.terr th:first-child{text-align:left}
+table.terr td{padding:7px 8px;border-bottom:1px solid var(--border);text-align:right}
+table.terr td:first-child{text-align:left;font-weight:500}
+table.terr tr{cursor:pointer}
+table.terr tbody tr:hover{background:var(--surface-2)}
+table.terr tr.sel{background:#FFF6EC}
+table.terr tr.sel td:first-child{box-shadow:inset 3px 0 0 var(--brand-orange)}
+table.terr tfoot td{position:sticky;bottom:0;background:var(--surface-2);font-weight:700;border-top:1px solid var(--border-strong);padding:8px}
+.dcode{font-size:10px;color:var(--ink-3);background:#F2F4F7;border-radius:3px;padding:0 4px;margin-right:6px;font-variant-numeric:tabular-nums}
+.riskbar{display:inline-block;height:4px;border-radius:2px;background:var(--err);vertical-align:middle;margin-right:6px;opacity:.85}
+
+#map,#planMap,#miniMap{position:absolute;inset:0;border-radius:var(--r);background:#E8EDF2}
+#mapWrap,#planMapWrap{border-radius:var(--r);overflow:hidden;border:1px solid var(--border);background:var(--surface)}
+.leaflet-container{font:inherit;background:#EAF0F5}
+.map-float{position:absolute;z-index:600;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r);box-shadow:var(--shadow)}
+.mctrl{top:10px;right:10px;display:flex;flex-direction:column;overflow:hidden}
+.mctrl button{width:32px;height:30px;display:grid;place-items:center;font-size:14px;color:var(--ink-2);border-bottom:1px solid var(--border)}
+.mctrl button:last-child{border-bottom:0}
+.mctrl button:hover{background:var(--surface-2);color:var(--ink)}
+.layers{top:10px;left:10px;padding:8px 10px;font-size:11.5px}
+.layers b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-bottom:5px}
+.layers label{display:flex;align-items:center;gap:6px;padding:2px 0;color:var(--ink-2);cursor:pointer}
+.legend{bottom:22px;left:10px;padding:8px 10px;font-size:11.5px;max-width:238px}
+.legend summary{cursor:pointer;font-weight:600;font-size:11.5px;list-style:none}
+.legend summary::-webkit-details-marker{display:none}
+.legend summary::before{content:"▾ ";color:var(--ink-3)}
+.legend[open] .lg-body{margin-top:7px}
+.lg-row{display:flex;align-items:center;gap:7px;color:var(--ink-2);padding:1.5px 0}
+.sw{width:11px;height:11px;border-radius:50%;flex:0 0 11px;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.lg-note{margin-top:7px;padding-top:6px;border-top:1px solid var(--border);color:var(--ink-3);font-size:10.5px;line-height:1.45}
+.mapstate{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:650;background:rgba(255,255,255,.94);
+  border:1px solid var(--border-strong);border-radius:var(--r);padding:14px 18px;text-align:center;box-shadow:var(--shadow);display:none}
+.mapstate.show{display:block}
+.tilewarn{position:absolute;bottom:22px;right:10px;z-index:600;background:#FEF6EC;border:1px solid #F6E6CF;color:#8A5A16;
+  font-size:11px;padding:5px 9px;border-radius:var(--r-sm);display:none}
+.tilewarn.show{display:block}
+.freshtag{position:absolute;top:10px;left:50%;transform:translateX(-50%);z-index:600;background:rgba(255,255,255,.92);
+  border:1px solid var(--border);border-radius:999px;padding:3px 11px;font-size:11px;color:var(--ink-2)}
+
+.mk{display:grid;place-items:center;border-radius:50%;color:#fff;font-weight:700;
+  border:2px solid #fff;box-shadow:0 2px 6px rgba(35,41,56,.28);transition:transform .12s}
+.mk:hover{transform:scale(1.09)}
+.mk.crit{background:var(--err)} .mk.crit.ring{box-shadow:0 0 0 5px rgba(244,106,107,.22),0 2px 6px rgba(35,41,56,.28)}
+.mk.risk{background:var(--warn)} .mk.assigned{background:var(--brand-blue-dark)}
+.mk.norm{background:var(--brand-blue)} .mk.verified{background:var(--ok)} .mk.nodata{background:var(--nodata)}
+.mk.active{box-shadow:0 0 0 4px rgba(244,154,61,.55),0 2px 6px rgba(35,41,56,.3)}
+.mk-lab{font-size:10.5px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.86);border-radius:4px;
+  padding:0 4px;white-space:nowrap;text-align:center;margin-top:2px}
+.leaflet-tooltip.tt{font-size:11.5px;border-radius:var(--r-sm);border:1px solid var(--border-strong);box-shadow:var(--shadow);padding:7px 9px}
+.tt b{display:block;font-size:12.5px;margin-bottom:2px}
+.tt .r{color:var(--err)}
+
+.qcard{padding:10px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:.12s}
+.qcard:hover{background:var(--surface-2)}
+.qcard.sel{background:#FFF8F0;box-shadow:inset 3px 0 0 var(--brand-orange)}
+.qtop{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.sev{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:999px;text-transform:uppercase;letter-spacing:.03em}
+.sev.crit{background:#FDECEC;color:#B03236} .sev.risk{background:#FFF3E0;color:#A35C00}
+.sev.assigned{background:#E7F2F7;color:var(--brand-blue-dark)} .sev.verified{background:#EAF6EB;color:#2E7D32}
+.sev.nodata{background:#F0F2F5;color:#5C6579}
+.tag{font-size:10.5px;color:var(--ink-2);background:#F2F4F7;border-radius:999px;padding:2px 7px}
+.tag.scan{background:#E7F2F7;color:var(--brand-blue-dark)}
+.tag.veloces{background:#FFF1E3;color:var(--brand-orange-ink);font-weight:600}
+.qname{font-size:13.5px;font-weight:600;margin:1px 0 2px}
+.qline{font-size:11.5px;color:var(--ink-2);display:flex;gap:10px;flex-wrap:wrap}
+.qreasons{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+.rz{font-size:10.5px;padding:2px 7px;border-radius:var(--r-sm);background:#F7F8FA;color:var(--ink-2);border:1px solid var(--border)}
+.rz.bad{background:#FDF0F0;color:#B03236;border-color:#F6DADA}
+.rz.good{background:#EFF8F0;color:#2E7D32;border-color:#DCEEDD}
+.qgo{margin-left:auto;color:var(--ink-3)}
+.empty{padding:34px 20px;text-align:center;color:var(--ink-3);font-size:12.5px}
+.empty b{display:block;color:var(--ink-2);font-size:13px;margin-bottom:4px}
+
+.scrim{position:fixed;inset:0;background:rgba(35,41,56,.28);z-index:1000;display:none}
+.scrim.open{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:440px;max-width:92vw;background:var(--surface);z-index:1001;
+  box-shadow:var(--shadow);display:none;flex-direction:column}
+.drawer.open{display:flex}
+.d-head{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start}
+.d-body{flex:1;overflow:auto;padding:0 14px}
+.d-foot{padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:8px}
+.grp{padding:12px 0;border-bottom:1px solid var(--border)}
+.grp:last-child{border-bottom:0}
+.grp h3{margin:0 0 8px;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);font-weight:600}
+.kv{display:grid;grid-template-columns:1fr auto;gap:3px 12px;font-size:12.5px}
+.kv span{color:var(--ink-2)} .kv b{font-weight:600}
+.tl{list-style:none;margin:0;padding:0;font-size:12px}
+.tl li{position:relative;padding:0 0 12px 20px;color:var(--ink-2)}
+.tl li::before{content:"";position:absolute;left:3px;top:3px;width:9px;height:9px;border-radius:50%;background:#DCE3EB;border:2px solid #fff;box-shadow:0 0 0 1px #DCE3EB}
+.tl li::after{content:"";position:absolute;left:7px;top:12px;bottom:0;width:1px;background:#E4E9EF}
+.tl li:last-child::after{display:none}
+.tl li.done{color:var(--ink)} .tl li.done::before{background:var(--ok);box-shadow:0 0 0 1px var(--ok)}
+.tl li.now{color:var(--ink);font-weight:600} .tl li.now::before{background:var(--brand-orange);box-shadow:0 0 0 1px var(--brand-orange)}
+.tl small{display:block;color:var(--ink-3);font-size:10.5px}
+.btn{padding:9px 13px;border-radius:var(--r-sm);font-size:12.5px;font-weight:600}
+.btn.pri{background:var(--brand-orange);color:#fff;flex:1}
+.btn.sec{border:1px solid var(--border-strong);color:var(--ink-2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.reco{background:#F4FAFC;border:1px solid #D8EAF1;border-radius:var(--r);padding:10px 11px;font-size:12.5px}
+.reco b{display:block;margin-bottom:3px}
+.src{font-size:10px;color:var(--ink-3);font-family:ui-monospace,Menlo,monospace}
+
+.plan{flex:1;display:flex;min-height:0;padding:10px;gap:10px}
+#planMapWrap{flex:1;position:relative;min-width:0}
+#altPanel{width:380px;flex:0 0 380px}
+.stop{padding:9px 12px;border-bottom:1px solid var(--border);display:flex;gap:9px;align-items:flex-start}
+.stopn{width:22px;height:22px;border-radius:50%;background:var(--brand-blue);color:#fff;display:grid;place-items:center;
+  font-size:11px;font-weight:700;flex:0 0 22px}
+.stop.excl .stopn{background:var(--nodata)}
+.assign{padding:11px 12px;border-top:1px solid var(--border);background:var(--surface-2)}
+.assign label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin:7px 0 3px;font-weight:600}
+.assign select,.assign input{width:100%;border:1px solid var(--border-strong);border-radius:var(--r-sm);padding:6px 8px;font-size:12px;background:#fff}
+
+.track{flex:1;display:flex;min-height:0;padding:10px;gap:10px}
+#trackMain{flex:1;min-width:0}
+#trackDetail{width:28%;flex:0 0 28%;min-width:290px;display:none}
+#trackDetail.open{display:flex}
+table.data{font-size:12px}
+table.data th{position:sticky;top:0;background:var(--surface);z-index:2;text-align:left;font-size:10.5px;text-transform:uppercase;
+  letter-spacing:.05em;color:var(--ink-3);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
+table.data td{padding:9px 10px;border-bottom:1px solid var(--border);white-space:nowrap}
+table.data tr{cursor:pointer}
+table.data tbody tr:hover{background:var(--surface-2)}
+table.data tr.sel{background:#FFF8F0}
+.gap{background:#FDECEC;color:#B03236;border-radius:4px;padding:1px 6px;font-weight:600}
+#miniMapWrap{position:relative;height:150px;border-radius:var(--r-sm);overflow:hidden;border:1px solid var(--border);margin-bottom:10px}
+
+.rules{flex:1;overflow:auto;padding:10px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:10px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px}
+.card h3{margin:0 0 9px;font-size:13.5px}
+.pill{font-size:10.5px;border-radius:999px;padding:2px 8px;font-weight:600}
+.pill.a{background:#EAF6EB;color:#2E7D32} .pill.p{background:#FFF3E0;color:#A35C00}
+.pill.n{background:#FDECEC;color:#B03236} .pill.i{background:#EEF1F6;color:#5C6579}
+code{background:#F2F4F7;border-radius:3px;padding:1px 5px;font-size:11.5px;font-family:ui-monospace,Menlo,monospace}
+
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);z-index:1200;
+  background:var(--ink);color:#fff;padding:10px 16px;border-radius:999px;font-size:12.5px;box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;transition:.25s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:1330px){ #territoryPanel{width:285px;flex:0 0 285px} #altPanel{width:330px;flex:0 0 330px} .meta .hide-md{display:none} }
+@media(max-width:980px){
+  :root{--h-header:auto}
+  header.top{flex-wrap:wrap;gap:8px;padding:8px 12px}
+  .brand{min-width:auto}
+  nav.tabs{order:3;width:100%;overflow-x:auto;padding-bottom:2px}
+  .meta{margin-left:auto} .meta .hide-md{display:none}
+  main{height:auto;overflow:auto} body{overflow:auto} .view.active{height:auto}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .filters{flex-wrap:wrap;overflow:visible}
+  .work,.plan,.track{flex-direction:column}
+  #territoryPanel,#queuePanel,#altPanel,#trackDetail{width:100%;flex:0 0 auto;max-height:420px}
+  #mapWrap,#planMapWrap{min-height:440px;height:440px;flex:0 0 auto}
+  .drawer{width:100%}
+}
+@media(max-width:1100px) and (min-width:981px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  #territoryPanel{width:250px;flex:0 0 250px}
+  #queuePanel{width:320px;flex:0 0 320px}
+  nav.tabs button{padding:7px 9px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <div class="logo">D</div>
+    <div><b>Control de Recolecciones</b><span>Dropi · Logística</span></div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-view="control" aria-current="page">Control en vivo</button>
+    <button data-view="plan">Asignación</button>
+    <button data-view="track">Seguimiento</button>
+    <button data-view="rules">Reglas y datos</button>
+  </nav>
+  <div class="meta">
+    <span><span class="dot"></span>Frescura &lt; 60s</span>
+    <span class="hide-md" id="simClock">12:00 · CO · 22 jul 2026</span>
+    <button class="cta" id="btnScenario">▶ Cargar escenario 12:00 p. m.</button>
+  </div>
+</header>
+<div class="banner">⚠ Prototipo con datos simulados — no representa operación real de Dropi. Geografía por código DANE; umbrales ilustrativos.</div>
+
+<main>
+  <!-- ============ CONTROL EN VIVO ============ -->
+  <section class="view active" id="view-control">
+    <div class="ctx">
+      <div class="crumbs" id="crumbs"></div>
+      <div class="kpis" id="kpis"></div>
+      <button class="more" id="btnMore">＋ Ver más indicadores</button>
+      <div class="more-panel" id="morePanel"></div>
+      <div class="filters">
+        <input type="search" id="fSearch" placeholder="Buscar bodega, proveedor, municipio…" aria-label="Buscar" />
+        <div class="trigger" title="Estado que dispara el conteo de guías por recoger">
+          Disparador:
+          <select id="fTrigger" style="border:0;background:transparent;font-weight:600;color:var(--brand-blue-dark);padding:2px">
+            <option value="both">Ambos estados</option>
+            <option value="scanner">Preparado para transportadora</option>
+            <option value="guia">Guía generada (sin Ecom Scanner)</option>
+          </select>
+        </div>
+        <select id="fTerr" aria-label="Territorio"></select>
+        <div class="seg" role="group" aria-label="Solicitud de pickup">
+          <button data-pk="all" aria-pressed="true">Todas</button>
+          <button data-pk="none" aria-pressed="false">Sin solicitud</button>
+          <button data-pk="pending" aria-pressed="false">Pendiente</button>
+          <button data-pk="approved" aria-pressed="false">Aprobada</button>
+        </div>
+        <select id="fCarrier" aria-label="Transportadora"></select>
+        <button class="ghost" id="btnMoreFilters">Más filtros ▾</button>
+        <span style="flex:1"></span>
+        <button class="ghost" id="btnCollapseQueue">Ampliar mapa ⇥</button>
+      </div>
+      <div class="chips" id="activeChips"></div>
+    </div>
+
+    <div class="work">
+      <div class="panel" id="territoryPanel">
+        <div class="p-head">
+          <h2>Guías por recoger, por territorio</h2>
+          <div class="sub" id="terrSub">Agrupado por código DANE · clic para hacer zoom</div>
+        </div>
+        <div class="p-body"><table class="terr" id="terrTable"></table></div>
+      </div>
+
+      <div id="mapWrap">
+        <div id="map"></div>
+        <div class="freshtag" id="mapScope">Colombia · vista nacional</div>
+        <div class="map-float layers">
+          <b>Capas</b>
+          <label><input type="checkbox" id="lyPoints" checked> Puntos de recolección</label>
+          <label><input type="checkbox" id="lyHeat"> Densidad de guías</label>
+          <label><input type="checkbox" id="lyPau" checked> Bodegas Dropi / PAU</label>
+        </div>
+        <div class="map-float mctrl">
+          <button id="mZoomIn" title="Acercar">＋</button>
+          <button id="mZoomOut" title="Alejar">−</button>
+          <button id="mFit" title="Ajustar vista a Colombia">⤢</button>
+          <button id="mBack" title="Volver al nivel anterior">↰</button>
+        </div>
+        <details class="map-float legend" open>
+          <summary>Leyenda</summary>
+          <div class="lg-body">
+            <div style="font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-bottom:3px">Estado</div>
+            <div class="lg-row"><i class="sw" style="background:#F46A6B"></i> Crítico · sin solicitud y +24 h</div>
+            <div class="lg-row"><i class="sw" style="background:#FF9800"></i> En riesgo · sin solicitud o pendiente</div>
+            <div class="lg-row"><i class="sw" style="background:#0A5E80"></i> Pickup aprobado</div>
+            <div class="lg-row"><i class="sw" style="background:#4CAF50"></i> Con manifiesto (recogido)</div>
+            <div class="lg-row"><i class="sw" style="background:#98A2B3"></i> Sin código DANE</div>
+            <div class="lg-row"><i class="sw" style="background:#008DBF"></i> Clúster agregado</div>
+            <div class="lg-note">Color = estado · Tamaño = guías por recoger · Número del clúster = <b>puntos de recolección</b>.</div>
+          </div>
+        </details>
+        <div class="mapstate" id="mapState"></div>
+        <div class="tilewarn" id="tileWarn">Mapa base temporalmente no disponible — se muestra el contorno de Colombia.</div>
+      </div>
+
+      <div class="panel" id="queuePanel">
+        <div class="p-head">
+          <h2>Cola de recolección</h2>
+          <span class="tag" id="qCount">0 puntos</span>
+          <span style="flex:1"></span>
+          <span style="font-size:11px;color:var(--ink-3)">Sin solicitud primero, luego antigüedad</span>
+        </div>
+        <div class="p-body" id="queueBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ASIGNACIÓN (manual) ============ -->
+  <section class="view" id="view-plan">
+    <div class="ctx" style="padding-bottom:9px">
+      <div class="crumbs"><b style="font-size:14px">Asignación manual de recolección</b>
+        <span class="sep">·</span><span id="planScope">sin puntos seleccionados</span>
+        <button class="back" id="planToControl">Ir a Control en vivo</button></div>
+    </div>
+    <div class="plan">
+      <div id="planMapWrap"><div id="planMap"></div>
+        <div class="freshtag">Orden de visita definido a mano — no hay optimizador</div>
+      </div>
+      <div class="panel" id="altPanel">
+        <div class="p-head"><h2>Puntos y responsable</h2>
+          <div class="sub">Sin capacidad ni costo: esos datos no existen en el modelo. El orden se arrastra a mano.</div></div>
+        <div class="p-body" id="altBody"></div>
+        <div class="assign">
+          <label for="aActor">Quién recoge</label>
+          <select id="aActor">
+            <option>Veloces (transportadora del holding)</option>
+            <option>Ruta propia Dropi</option>
+            <option>Pickup del carrier asignado</option>
+            <option>El proveedor lleva a PAU</option>
+          </select>
+          <label for="aOwner">Responsable</label>
+          <input id="aOwner" placeholder="Nombre del coordinador" value="Coordinación Bogotá" />
+          <label for="aWindow">Ventana</label>
+          <input id="aWindow" placeholder="13:00 – 15:00" value="13:00 – 15:00" />
+        </div>
+        <div class="d-foot"><button class="btn pri" id="btnAssign" disabled>Registrar asignación</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SEGUIMIENTO ============ -->
+  <section class="view" id="view-track">
+    <div class="ctx" style="padding-bottom:9px">
+      <div class="crumbs"><b style="font-size:14px">Plan vs. real · solicitud contra manifiesto</b>
+        <span class="sep">·</span><span>lo prometido en <code>pick_ups</code> contra el manifiesto de <code>logistic_management</code></span></div>
+      <div class="kpis" id="trackKpis" style="margin-top:8px"></div>
+      <div class="filters">
+        <div class="seg" id="trackSeg" role="group" aria-label="Segmento">
+          <button data-seg="all" aria-pressed="true">Todos</button>
+          <button data-seg="gap" aria-pressed="false">Con brecha</button>
+          <button data-seg="noman" aria-pressed="false">Sin manifiesto</button>
+          <button data-seg="ok" aria-pressed="false">Cumplidos</button>
+        </div>
+      </div>
+    </div>
+    <div class="track">
+      <div class="panel" id="trackMain"><div class="p-body"><table class="data" id="trackTable"></table></div></div>
+      <div class="panel" id="trackDetail">
+        <div class="p-head"><h2 id="tdName">—</h2><span style="flex:1"></span><button class="ghost" id="tdClose">✕</button></div>
+        <div class="p-body" id="tdBody" style="padding:12px"></div>
+        <div class="d-foot"><button class="btn sec" style="flex:1" id="tdReassign">Reasignar</button><button class="btn pri" id="tdClose2">Cerrar con motivo</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REGLAS Y DATOS ============ -->
+  <section class="view" id="view-rules">
+    <div class="rules"><div class="rgrid" id="rulesGrid"></div></div>
+  </section>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-label="Detalle del punto">
+  <div class="d-head">
+    <div style="flex:1">
+      <div id="dTags" style="display:flex;gap:6px;margin-bottom:4px;flex-wrap:wrap"></div>
+      <div style="font-size:16px;font-weight:600" id="dName">—</div>
+      <div style="font-size:11.5px;color:var(--ink-2)" id="dAddr">—</div>
+    </div>
+    <button class="ghost" id="dClose">✕</button>
+  </div>
+  <div class="d-body" id="dBody"></div>
+  <div class="d-foot"><button class="btn pri" id="dPrimary">Acción</button><button class="btn sec" id="dSecondary">Descartar</button></div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+/* =========================================================================
+   0. Utilidades y RNG determinista
+   ========================================================================= */
+const fmt = n => new Intl.NumberFormat('es-CO').format(n);
+const cop = n => '$ ' + new Intl.NumberFormat('es-CO',{maximumFractionDigits:0}).format(n);
+const hm  = m => (m>=60? Math.floor(m/60)+'h '+(m%60)+'m' : m+'m');
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const rnd = mulberry32(20260722);
+const pick = arr => arr[Math.floor(rnd()*arr.length)];
+const ri = (a,b) => a + Math.floor(rnd()*(b-a+1));
+function toast(msg,ms=3600){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),ms)}
+
+/* =========================================================================
+   1. Geografía por CÓDIGO DANE
+   Los 2 primeros dígitos de cities.cod_dane = departamento oficial.
+   Ojo: cities.department_id es interno de Dropi y NO coincide con el DANE.
+   ========================================================================= */
+const DEPTS = [
+  {dane:'11',name:'Bogotá D.C.',lat:4.652,lng:-74.096,zoom:10,cities:[
+      {dane:'11001',name:'Bogotá D.C.',lat:4.652,lng:-74.096,zoom:11,w:1,barrios:[
+        {name:'Puente Aranda',lat:4.6250,lng:-74.1130},{name:'Fontibón',lat:4.6780,lng:-74.1460},
+        {name:'Kennedy',lat:4.6280,lng:-74.1560},{name:'Chapinero',lat:4.6510,lng:-74.0620},
+        {name:'Suba',lat:4.7440,lng:-74.0840},{name:'Usaquén',lat:4.7020,lng:-74.0300},
+        {name:'Barrios Unidos',lat:4.6680,lng:-74.0790},{name:'Engativá',lat:4.7050,lng:-74.1120}]}]},
+  {dane:'25',name:'Cundinamarca',lat:4.75,lng:-74.18,zoom:10,cities:[
+      {dane:'25754',name:'Soacha',lat:4.579,lng:-74.216,zoom:12,w:.30,barrios:[{name:'Centro Soacha',lat:4.5790,lng:-74.2160},{name:'Ciudad Verde',lat:4.5610,lng:-74.1970}]},
+      {dane:'25175',name:'Chía',lat:4.861,lng:-74.058,zoom:12,w:.18,barrios:[{name:'Centro Chía',lat:4.8610,lng:-74.0580}]},
+      {dane:'25286',name:'Funza',lat:4.7160,lng:-74.2120,zoom:12,w:.14,barrios:[{name:'Zona Franca Funza',lat:4.7160,lng:-74.2120}]}]},
+  {dane:'05',name:'Antioquia',lat:6.25,lng:-75.57,zoom:10,cities:[
+      {dane:'05001',name:'Medellín',lat:6.2442,lng:-75.5812,zoom:12,w:.62,barrios:[{name:'Guayabal',lat:6.2110,lng:-75.5850},{name:'Belén',lat:6.2320,lng:-75.6030},{name:'El Poblado',lat:6.2090,lng:-75.5670},{name:'Castilla',lat:6.2960,lng:-75.5710}]},
+      {dane:'05360',name:'Itagüí',lat:6.1720,lng:-75.6110,zoom:13,w:.2,barrios:[{name:'Santamaría',lat:6.1720,lng:-75.6110}]},
+      {dane:'05088',name:'Bello',lat:6.3390,lng:-75.5570,zoom:13,w:.14,barrios:[{name:'Niquía',lat:6.3390,lng:-75.5570}]}]},
+  {dane:'76',name:'Valle del Cauca',lat:3.44,lng:-76.52,zoom:10,cities:[
+      {dane:'76001',name:'Cali',lat:3.4516,lng:-76.5320,zoom:12,w:.55,barrios:[{name:'Aguablanca',lat:3.4180,lng:-76.4820},{name:'Sur',lat:3.3720,lng:-76.5390},{name:'Centro',lat:3.4516,lng:-76.5320}]},
+      {dane:'76520',name:'Palmira',lat:3.5390,lng:-76.3030,zoom:13,w:.15,barrios:[{name:'Zona Industrial',lat:3.5390,lng:-76.3030}]},
+      {dane:'76892',name:'Yumbo',lat:3.5850,lng:-76.4920,zoom:13,w:.12,barrios:[{name:'Acopi',lat:3.5850,lng:-76.4920}]}]},
+  {dane:'08',name:'Atlántico',lat:10.96,lng:-74.80,zoom:11,cities:[
+      {dane:'08001',name:'Barranquilla',lat:10.9685,lng:-74.7813,zoom:12,w:.42,barrios:[{name:'Vía 40',lat:10.9930,lng:-74.7860},{name:'Sur',lat:10.9310,lng:-74.7930}]},
+      {dane:'08758',name:'Soledad',lat:10.9170,lng:-74.7650,zoom:13,w:.13,barrios:[{name:'Centro Soledad',lat:10.9170,lng:-74.7650}]}]},
+  {dane:'68',name:'Santander',lat:7.12,lng:-73.12,zoom:10,cities:[
+      {dane:'68001',name:'Bucaramanga',lat:7.1193,lng:-73.1227,zoom:12,w:.30,barrios:[{name:'Cabecera',lat:7.1130,lng:-73.1080},{name:'Norte',lat:7.1450,lng:-73.1240}]},
+      {dane:'68276',name:'Floridablanca',lat:7.0620,lng:-73.0860,zoom:13,w:.10,barrios:[{name:'Cañaveral',lat:7.0620,lng:-73.0860}]}]},
+  {dane:'66',name:'Risaralda',lat:4.81,lng:-75.69,zoom:11,cities:[
+      {dane:'66001',name:'Pereira',lat:4.8133,lng:-75.6961,zoom:12,w:.22,barrios:[{name:'Centro',lat:4.8133,lng:-75.6961}]},
+      {dane:'66170',name:'Dosquebradas',lat:4.8350,lng:-75.6740,zoom:13,w:.11,barrios:[{name:'La Badea',lat:4.8350,lng:-75.6740}]}]},
+  {dane:'17',name:'Caldas',lat:5.07,lng:-75.52,zoom:11,cities:[
+      {dane:'17001',name:'Manizales',lat:5.0703,lng:-75.5138,zoom:12,w:.16,barrios:[{name:'Centro',lat:5.0703,lng:-75.5138}]}]},
+  {dane:'13',name:'Bolívar',lat:10.39,lng:-75.51,zoom:10,cities:[
+      {dane:'13001',name:'Cartagena',lat:10.3910,lng:-75.4794,zoom:12,w:.26,barrios:[{name:'Mamonal',lat:10.3300,lng:-75.4930},{name:'Centro',lat:10.4210,lng:-75.5450}]}]},
+  {dane:'54',name:'Norte de Santander',lat:7.89,lng:-72.50,zoom:11,cities:[
+      {dane:'54001',name:'Cúcuta',lat:7.8939,lng:-72.5078,zoom:12,w:.17,barrios:[{name:'Centro',lat:7.8939,lng:-72.5078}]}]},
+  {dane:'73',name:'Tolima',lat:4.44,lng:-75.24,zoom:11,cities:[
+      {dane:'73001',name:'Ibagué',lat:4.4389,lng:-75.2322,zoom:12,w:.13,barrios:[{name:'Centro',lat:4.4389,lng:-75.2322}]}]},
+  {dane:'41',name:'Huila',lat:2.93,lng:-75.28,zoom:11,cities:[
+      {dane:'41001',name:'Neiva',lat:2.9273,lng:-75.2819,zoom:12,w:.10,barrios:[{name:'Centro',lat:2.9273,lng:-75.2819}]}]},
+  {dane:'47',name:'Magdalena',lat:11.24,lng:-74.20,zoom:11,cities:[
+      {dane:'47001',name:'Santa Marta',lat:11.2408,lng:-74.1990,zoom:12,w:.11,barrios:[{name:'Centro',lat:11.2408,lng:-74.1990}]}]},
+  {dane:'52',name:'Nariño',lat:1.21,lng:-77.28,zoom:11,cities:[
+      {dane:'52001',name:'Pasto',lat:1.2136,lng:-77.2811,zoom:12,w:.09,barrios:[{name:'Centro',lat:1.2136,lng:-77.2811}]}]},
+  {dane:'50',name:'Meta',lat:4.14,lng:-73.63,zoom:11,cities:[
+      {dane:'50001',name:'Villavicencio',lat:4.1420,lng:-73.6266,zoom:12,w:.09,barrios:[{name:'Centro',lat:4.1420,lng:-73.6266}]}]},
+  {dane:'23',name:'Córdoba',lat:8.75,lng:-75.88,zoom:11,cities:[
+      {dane:'23001',name:'Montería',lat:8.7479,lng:-75.8814,zoom:12,w:.08,barrios:[{name:'Centro',lat:8.7479,lng:-75.8814}]}]},
+  {dane:'19',name:'Cauca',lat:2.44,lng:-76.61,zoom:11,cities:[
+      {dane:'19001',name:'Popayán',lat:2.4448,lng:-76.6147,zoom:12,w:.07,barrios:[{name:'Centro',lat:2.4448,lng:-76.6147}]}]},
+];
+
+const NAMES_A = ['Nova','Casa','Andina','Bahía','Sierra','Vento','Kali','Mundo','Prisma','Origen','Lumbre','Trébol','Marea','Sendero','Aurora','Puerto','Vértice','Rumbo','Aloe','Zafiro','Cumbre','Delta','Faro'];
+const NAMES_B = ['Hogar','Moda','Retail','Express','Distribución','Store','Market','Fácil','Andina','Import','Textil','Kids','Beauty','Tech','Deco','Sport','Pro','Total'];
+// is_veloces = transportadora del holding que hace las recolecciones (opera como Dropi)
+const CARRIERS = [
+  {id:1,name:'Veloces',veloces:true},{id:2,name:'Servientrega',veloces:false},
+  {id:3,name:'Interrapidísimo',veloces:false},{id:4,name:'Coordinadora',veloces:false},
+  {id:5,name:'Envía',veloces:false},{id:6,name:'TCC',veloces:false}];
+
+let PID = 40000;
+function makePoint(dept, city, barrio, forced){
+  const jit = () => (rnd()-.5) * (city.dane==='11001' ? .014 : .020);
+  const carrier = pick(CARRIERS);
+  // signal: de dónde sale la señal de "listo para recoger"
+  //   'scanner' → evento PREPARADO PARA TRANSPORTADORA (Ecom Scanner, type_management_id 9)
+  //   'guia'    → sólo GUIA_GENERADA (el proveedor no usa Ecom Scanner)
+  const signal = rnd()<.62 ? 'scanner' : 'guia';
+  const pickupStatus = forced ? forced.pk : (()=>{const r=rnd();
+      return r<.30?'none': r<.46?'pending': r<.72?'approved':'manifested';})();
+  const oldest = forced ? forced.old : ri(25, 2100);
+  const guides = forced ? forced.g : ri(3, 42);
+  const whDays = rnd()<.14 ? ri(1,29) : ri(60,1400);      // warehouses.created_at
+  const firstDispatchDays = whDays<30 ? whDays : (rnd()<.08 ? ri(0,6) : ri(30,900));
+  const geo = rnd()<.06 ? 'sin_dane' : 'dane';
+  return {
+    id:'wh-'+(++PID),
+    name: pick(NAMES_A)+' '+pick(NAMES_B),
+    supplier: pick(NAMES_A)+' S.A.S.',
+    deptDane:dept.dane, deptName:dept.name, cityDane:city.dane, cityName:city.name, barrio:barrio.name,
+    lat: barrio.lat + jit(), lng: barrio.lng + jit(),
+    guides, oldestMin: oldest, signal, pickupStatus,
+    cod: guides * ri(90000,240000),
+    carrier: carrier.name, isVeloces: carrier.veloces,
+    whDays, firstDispatchDays, geo,
+    manifest: pickupStatus==='manifested' ? {user:'op.'+ri(100,999), at: ri(10,180)} : null,
+    address:'Calle '+ri(10,80)+' # '+ri(2,90)+'-'+ri(2,90)
+  };
+}
+
+const POINTS = [];
+DEPTS.forEach(d=>d.cities.forEach(c=>{
+  const n = Math.max(3, Math.round((c.w||.1)*24));
+  for(let i=0;i<n;i++) POINTS.push(makePoint(d,c, c.barrios[i % c.barrios.length]));
+}));
+
+/* Escenario dirigido: clúster Puente Aranda */
+const PA = DEPTS[0].cities[0].barrios[0];
+const SEED = [
+  ['Nova Hogar',       28,'none',    1580,'scanner'],
+  ['Nueva Moda BTA',   34,'none',    1320,'scanner'],
+  ['Cocina Fácil',     19,'none',    1490,'guia'],
+  ['Andina Textil',    22,'pending',  760,'scanner'],
+  ['Zafiro Deco',      16,'pending',  640,'guia'],
+  ['Delta Import',     25,'none',     880,'scanner'],
+  ['Sendero Kids',     14,'pending',  520,'scanner'],
+  ['Faro Beauty',      18,'approved', 410,'guia'],
+  ['Cumbre Sport',     21,'approved', 300,'scanner'],
+  ['Rumbo Market',     12,'manifested',180,'scanner'],
+];
+const CLUSTER = SEED.map((s,i)=>{
+  const p = makePoint(DEPTS[0], DEPTS[0].cities[0], PA, {g:s[1],pk:s[2],old:s[3]});
+  p.name=s[0]; p.signal=s[4]; p.geo='dane';
+  p.whDays = i<3 ? ri(4,26) : ri(120,900);
+  p.firstDispatchDays = i<3 ? p.whDays : (i===5? 3 : ri(60,700));
+  p.carrier = i%4===0 ? 'Veloces' : CARRIERS[1+(i%5)].name;
+  p.isVeloces = p.carrier==='Veloces';
+  p.manifest = s[2]==='manifested' ? {user:'op.412', at:95} : null;
+  p.lat = PA.lat + (i%4-1.5)*0.0055 + (i%3)*0.0012;
+  p.lng = PA.lng + (Math.floor(i/4)-1)*0.0075 + (i%2)*0.0011;
+  return p;
+});
+POINTS.push(...CLUSTER);
+const NOVA = CLUSTER[0];
+
+const PAUS = [
+  {name:'PAU Puente Aranda',lat:4.6182,lng:-74.1055},{name:'PAU Fontibón',lat:4.6790,lng:-74.1400},
+  {name:'Bodega Dropi Guayabal',lat:6.2120,lng:-75.5880},{name:'PAU Yumbo',lat:3.5320,lng:-76.4980},
+  {name:'PAU Vía 40',lat:10.9910,lng:-74.7870},
+];
+
+/* Contorno de Colombia inline — último recurso si fallan teselas y GeoJSON remoto */
+const COL_OUTLINE = {type:'Feature',properties:{name:'Colombia'},geometry:{type:'Polygon',coordinates:[[
+[-71.30,12.40],[-72.90,11.70],[-74.20,11.30],[-75.60,10.70],[-76.90,8.60],[-77.40,8.50],[-77.35,7.90],
+[-77.90,7.20],[-77.70,6.20],[-77.40,4.20],[-78.60,2.50],[-79.00,1.80],[-78.20,1.40],[-77.70,0.80],
+[-77.40,0.40],[-76.40,0.40],[-75.30,-0.10],[-74.80,-0.20],[-73.70,-1.20],[-72.90,-2.40],[-71.80,-2.30],
+[-70.70,-2.20],[-70.05,-2.70],[-69.60,-1.10],[-69.40,0.60],[-69.80,1.10],[-68.20,1.70],[-67.30,2.10],
+[-67.90,2.80],[-67.50,3.80],[-67.85,5.30],[-67.40,6.20],[-67.80,6.30],[-69.40,6.10],[-70.10,6.90],
+[-71.00,6.90],[-72.00,7.00],[-72.40,7.40],[-72.70,8.60],[-72.20,9.20],[-71.10,9.30],[-71.90,10.60],
+[-71.30,11.80],[-71.30,12.40]]]}};
+const COL_BOUNDS = L.latLngBounds([[-4.3,-79.6],[13.6,-66.6]]);
+const GEOJSON_URLS = [
+  'https://raw.githubusercontent.com/johan/world.geo.json/master/countries/COL.geo.json',
+  'https://unpkg.com/world-countries@5.0.0/data/col.geo.json'
+];
+
+/* =========================================================================
+   2. Estado
+   ========================================================================= */
+const S = {
+  view:'control', level:'nacional', dept:null, city:null, barrio:null,
+  filters:{q:'',pickup:'all',carrier:'all',terr:'all',kpi:null,trigger:'both'},
+  selected:null, cluster:[], queueCollapsed:false, target:null,
+  trackSeg:'all', trackRow:null, tilesOk:true
+};
+const UMBRAL_CRIT = 24*60;   // min sin recoger para marcar crítico
+const NUEVO_DIAS  = 30;      // bodega nueva / primer despacho
+
+/* =========================================================================
+   3. Filtros y agregados
+   ========================================================================= */
+function inScope(p){
+  if(S.dept && p.deptDane!==S.dept) return false;
+  if(S.city && p.cityDane!==S.city) return false;
+  if(S.barrio && p.barrio!==S.barrio) return false;
+  return true;
+}
+function estado(p){
+  if(p.geo==='sin_dane') return 'nodata';
+  if(p.pickupStatus==='manifested') return 'verified';
+  if(p.pickupStatus==='approved')   return 'assigned';
+  if(p.pickupStatus==='none' && p.oldestMin>UMBRAL_CRIT) return 'crit';
+  return 'risk';
+}
+const esNuevo = p => p.whDays<NUEVO_DIAS || p.firstDispatchDays<NUEVO_DIAS;
+function passFilters(p){
+  const f=S.filters;
+  if(f.trigger!=='both' && p.signal!==f.trigger) return false;
+  if(f.q){ const q=f.q.toLowerCase();
+    if(!(p.name.toLowerCase().includes(q)||p.supplier.toLowerCase().includes(q)||
+         p.barrio.toLowerCase().includes(q)||p.cityName.toLowerCase().includes(q)||
+         p.deptName.toLowerCase().includes(q)||p.cityDane.includes(q))) return false; }
+  if(f.terr!=='all' && p.deptDane!==f.terr) return false;
+  if(f.pickup!=='all' && p.pickupStatus!==f.pickup) return false;
+  if(f.carrier!=='all' && p.carrier!==f.carrier) return false;
+  if(f.kpi==='guides' && p.pickupStatus==='manifested') return false;
+  if(f.kpi==='nosol'  && p.pickupStatus!=='none') return false;
+  if(f.kpi==='pend'   && p.pickupStatus!=='pending') return false;
+  if(f.kpi==='old'    && p.oldestMin<=UMBRAL_CRIT) return false;
+  return true;
+}
+const visible = () => POINTS.filter(p=>inScope(p)&&passFilters(p));
+function agg(list){
+  const a={points:list.length,guides:0,cod:0,nosol:0,pend:0,appr:0,man:0,old:0,oldGuides:0,nuevas:0,scanner:0,veloces:0,crit:0,risk:0};
+  list.forEach(p=>{
+    a.guides+=p.guides; a.cod+=p.cod;
+    if(p.pickupStatus==='none')a.nosol++;
+    if(p.pickupStatus==='pending')a.pend++;
+    if(p.pickupStatus==='approved')a.appr++;
+    if(p.pickupStatus==='manifested')a.man++;
+    if(p.oldestMin>UMBRAL_CRIT){a.old++;a.oldGuides+=p.guides}
+    if(esNuevo(p))a.nuevas++;
+    if(p.signal==='scanner')a.scanner++;
+    if(p.isVeloces)a.veloces++;
+    const e=estado(p); if(e==='crit')a.crit++; if(e==='crit'||e==='risk')a.risk++;
+  });
+  return a;
+}
+
+/* =========================================================================
+   4. Mapa
+   ========================================================================= */
+let map, layerPoints, layerPau, layerHeat, layerOutline, tileLayer, planMap, planLayer, miniMap;
+
+function baseTiles(){
+  const t = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:18, attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'});
+  let ok=false, timer=setTimeout(()=>{ if(!ok) tileFail(); }, 7000);
+  t.on('tileload',()=>{ ok=true; clearTimeout(timer); S.tilesOk=true; document.getElementById('tileWarn').classList.remove('show'); });
+  t.on('tileerror',()=>{ if(!ok) tileFail(); });
+  return t;
+}
+function tileFail(){ S.tilesOk=false; document.getElementById('tileWarn').classList.add('show');
+  if(layerOutline) layerOutline.setStyle({fillOpacity:.5,weight:1.6}); }
+
+let initTries = 0;
+function initMap(){
+  const el = document.getElementById('map');
+  // Espera a que el contenedor tenga ancho y alto reales. Si tras ~3s no los tiene
+  // (pestaña oculta, panel colapsado), inicializa igual: ensureSize corrige el
+  // tamaño en cuanto el layout resuelva. Mejor un mapa corregible que ninguno.
+  if((!el.clientHeight || !el.clientWidth) && initTries++ < 50){ setTimeout(initMap,60); return; }
+  map = L.map(el,{zoomControl:false, attributionControl:true});
+  map.attributionControl.setPrefix('');
+  tileLayer = baseTiles().addTo(map);
+  layerOutline = L.geoJSON(COL_OUTLINE,{style:{color:'#0A5E80',weight:1.2,fillColor:'#9FC5D6',fillOpacity:.10}}).addTo(map);
+  layerPau=L.layerGroup().addTo(map); layerHeat=L.layerGroup(); layerPoints=L.layerGroup().addTo(map);
+  map.fitBounds(COL_BOUNDS,{padding:[18,18]});
+  loadCountryGeo();
+  map.on('zoomend', renderMarkers);
+  renderAll();
+  window.__map = map;
+  const ro = new ResizeObserver(()=>{ map.invalidateSize();
+    if(S.level==='nacional') map.fitBounds(COL_BOUNDS,{padding:[18,18],animate:false}); });
+  ro.observe(document.getElementById('mapWrap'));
+  // El contenedor puede reportar ancho 0 al inicializar (layout flex sin resolver).
+  // Leaflet cachearía ese tamaño y fitBounds daría un zoom absurdo: se reintenta
+  // hasta que el tamaño sea válido y se reencuadra un par de veces más por si cambia.
+  let sizeChecks = 0;
+  (function ensureSize(){
+    if(!map || sizeChecks++ > 50) return;
+    map.invalidateSize();
+    const s = map.getSize();
+    if(s.x === 0 || s.y === 0){ setTimeout(ensureSize,100); return; }
+    if(S.level === 'nacional') map.fitBounds(COL_BOUNDS,{padding:[18,18],animate:false});
+    if(sizeChecks < 4) setTimeout(ensureSize,400);
+  })();
+}
+function loadCountryGeo(i=0){
+  if(i>=GEOJSON_URLS.length) return;   // se conserva el contorno inline
+  fetch(GEOJSON_URLS[i]).then(r=>{ if(!r.ok) throw 0; return r.json(); }).then(gj=>{
+    const real = L.geoJSON(gj,{style:{color:'#0A5E80',weight:1.4,opacity:.75,
+      fillColor:'#9FC5D6',fillOpacity:S.tilesOk?.06:.5},interactive:false}).addTo(map);
+    real.bringToBack();
+    if(layerOutline) map.removeLayer(layerOutline);
+    layerOutline = real;
+  }).catch(()=>loadCountryGeo(i+1));
+}
+function mkIcon(kind,label,size,sub){
+  const s=Math.max(26,Math.min(56,size));
+  return L.divIcon({className:'',iconSize:[s,s],iconAnchor:[s/2,s/2],
+    html:`<div class="mk ${kind}" style="width:${s}px;height:${s}px;font-size:${s>40?13:11.5}px">${label}</div>`+
+         (sub?`<div class="mk-lab">${sub}</div>`:'')});
+}
+const groupBy=(l,f)=>{const m=new Map();l.forEach(p=>{const k=f(p);if(!m.has(k))m.set(k,[]);m.get(k).push(p)});return m};
+
+function renderMarkers(){
+  if(!map||!layerPoints) return;
+  layerPoints.clearLayers(); layerHeat.clearLayers();
+  const list = visible(), z = map.getZoom();
+  const mode = S.level==='nacional'     ? (z>=9 ? 'city'  : 'dept')
+             : S.level==='departamento' ? (z>=12? 'point' : 'city')
+             : S.level==='ciudad'       ? (z>=12? 'point' : 'barrio') : 'point';
+
+  const st=document.getElementById('mapState');
+  st.classList.toggle('show', list.length===0);
+  if(!list.length) st.innerHTML='<b>Sin puntos para los filtros</b><div style="color:var(--ink-2);margin-top:4px">Ajusta el territorio, el disparador o limpia los filtros.</div>';
+
+  if(document.getElementById('lyHeat').checked){
+    groupBy(list,p=>p.cityDane).forEach(g=>{ const a=agg(g);
+      const c=[g.reduce((s,p)=>s+p.lat,0)/g.length, g.reduce((s,p)=>s+p.lng,0)/g.length];
+      L.circle(c,{radius:900+a.guides*70,color:'#F46A6B',weight:0,fillColor:'#F46A6B',
+        fillOpacity:Math.min(.32,.06+a.crit*.03)}).addTo(layerHeat); });
+    if(!map.hasLayer(layerHeat)) layerHeat.addTo(map);
+  } else if(map.hasLayer(layerHeat)) map.removeLayer(layerHeat);
+
+  if(!document.getElementById('lyPoints').checked) return;
+
+  if(mode==='point'){
+    list.forEach(p=>{
+      const ic = mkIcon(estado(p)+(estado(p)==='crit'?' ring':'')+(S.selected===p.id?' active':''),
+        p.geo==='sin_dane'?'?':'', 24+Math.min(26,p.guides*.9));
+      const m=L.marker([p.lat,p.lng],{icon:ic}).addTo(layerPoints);
+      m.bindTooltip(`<div class="tt"><b>${p.name}</b>${p.barrio} · ${p.cityName} <span class="src">${p.cityDane}</span><br>
+        ${p.guides} guías por recoger · ${hm(p.oldestMin)} sin recoger<br>
+        <span class="r">${razones(p)[0]||'Sin alerta'}</span></div>`,{className:'tt',direction:'top',offset:[0,-8]});
+      m.on('click',()=>selectPoint(p.id));
+    });
+    return;
+  }
+  const keyFn = mode==='dept'? (p=>p.deptDane) : mode==='city'? (p=>p.cityDane) : (p=>p.barrio);
+  groupBy(list,keyFn).forEach(g=>{
+    const a=agg(g);
+    const lat=g.reduce((s,p)=>s+p.lat,0)/g.length, lng=g.reduce((s,p)=>s+p.lng,0)/g.length;
+    const kind = a.crit/g.length>=.4 ? 'crit ring' : a.risk/g.length>=.5 ? 'risk' : 'norm';
+    const label = mode==='dept'? g[0].deptName : mode==='city'? g[0].cityName : g[0].barrio;
+    const code  = mode==='dept'? g[0].deptDane : mode==='city'? g[0].cityDane : '';
+    const m=L.marker([lat,lng],{icon:mkIcon(kind,String(g.length),28+Math.min(24,a.guides*.16),label)}).addTo(layerPoints);
+    m.bindTooltip(`<div class="tt"><b>${label} ${code?'<span class="src">DANE '+code+'</span>':''}</b>
+      ${g.length} puntos de recolección · ${fmt(a.guides)} guías por recoger<br>
+      <span class="r">${a.nosol} sin solicitud · ${a.old} con más de 24 h</span><br>
+      <span style="color:var(--ink-3)">El número del clúster = puntos, no guías.</span></div>`,
+      {className:'tt',direction:'top',offset:[0,-10]});
+    m.on('click',()=>{
+      if(mode==='dept') drillDept(g[0].deptDane);
+      else if(mode==='city') drillCity(g[0].deptDane,g[0].cityDane);
+      else drillBarrio(g[0].barrio);
+    });
+  });
+}
+function renderPau(){
+  if(!layerPau) return; layerPau.clearLayers();
+  if(!document.getElementById('lyPau').checked) return;
+  PAUS.forEach(b=>L.marker([b.lat,b.lng],{icon:L.divIcon({className:'',iconSize:[18,18],iconAnchor:[9,9],
+    html:`<div style="width:18px;height:18px;border-radius:5px;background:#fff;border:2px solid #0A5E80;display:grid;place-items:center;font-size:9px;color:#0A5E80;font-weight:700">P</div>`})})
+    .bindTooltip(`<div class="tt"><b>${b.name}</b>Bodega Dropi / punto alterno</div>`,{className:'tt'}).addTo(layerPau));
+}
+
+/* =========================================================================
+   5. Navegación geográfica (por código DANE)
+   ========================================================================= */
+function drillDept(dane){
+  const d=DEPTS.find(x=>x.dane===dane); if(!d) return;
+  S.level='departamento'; S.dept=dane; S.city=null; S.barrio=null; S.selected=null;
+  S.target={c:[d.lat,d.lng],z:d.zoom};
+  if(map) map.setView([d.lat,d.lng],d.zoom,{animate:true,duration:.8});
+  renderAll();
+}
+function drillCity(deptDane,cityDane){
+  const d=DEPTS.find(x=>x.dane===deptDane), c=d&&d.cities.find(x=>x.dane===cityDane); if(!c) return;
+  S.level='ciudad'; S.dept=deptDane; S.city=cityDane; S.barrio=null;
+  S.target={c:[c.lat,c.lng],z:c.zoom};
+  if(map) map.setView([c.lat,c.lng],c.zoom,{animate:true,duration:.8});
+  renderAll();
+}
+function drillBarrio(b){
+  S.level='barrio'; S.barrio=b;
+  const pts=POINTS.filter(inScope);
+  S.target = pts.length? {bounds:L.latLngBounds(pts.map(p=>[p.lat,p.lng]))} : null;
+  if(map&&pts.length) map.fitBounds(S.target.bounds,{padding:[60,60],animate:true,duration:.8});
+  renderAll();
+}
+function goNational(){
+  S.level='nacional'; S.dept=null; S.city=null; S.barrio=null; S.selected=null; closeDrawer();
+  S.target={bounds:COL_BOUNDS,pad:[18,18]};
+  if(map) map.fitBounds(COL_BOUNDS,{padding:[18,18],animate:true,duration:.8});
+  renderAll();
+}
+function levelUp(){
+  if(S.level==='barrio') return drillCity(S.dept,S.city);
+  if(S.level==='ciudad') return drillDept(S.dept);
+  return goNational();
+}
+
+/* =========================================================================
+   6. Render
+   ========================================================================= */
+function renderCrumbs(){
+  const c=document.getElementById('crumbs'); const parts=[];
+  parts.push(S.dept? `<button data-nav="col">Colombia</button>` : `<span class="cur">Colombia</span>`);
+  if(S.dept){ const d=DEPTS.find(x=>x.dane===S.dept);
+    parts.push(`<span class="sep">/</span>`+(S.city?`<button data-nav="dept">${d.name}</button>`:`<span class="cur">${d.name}</span>`)
+      +`<span class="dane">${d.dane}</span>`); }
+  if(S.city){ const d=DEPTS.find(x=>x.dane===S.dept), ct=d.cities.find(x=>x.dane===S.city);
+    parts.push(`<span class="sep">/</span>`+(S.barrio?`<button data-nav="city">${ct.name}</button>`:`<span class="cur">${ct.name}</span>`)
+      +`<span class="dane">${ct.dane}</span>`); }
+  if(S.barrio) parts.push(`<span class="sep">/</span><span class="cur">${S.barrio}</span>`);
+  c.innerHTML = parts.join('') + (S.level!=='nacional'?`<button class="back" id="btnBackCol">↰ Volver a Colombia</button>`:'');
+  c.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{
+    const n=b.dataset.nav; if(n==='col')goNational(); else if(n==='dept')drillDept(S.dept); else drillCity(S.dept,S.city);});
+  const bb=document.getElementById('btnBackCol'); if(bb) bb.onclick=goNational;
+  const d=DEPTS.find(x=>x.dane===S.dept);
+  document.getElementById('mapScope').textContent =
+    S.level==='nacional'?'Colombia · 33 departamentos DANE':
+    S.level==='departamento'?`${d.name} · municipios`:
+    S.level==='ciudad'?`${d.cities.find(x=>x.dane===S.city).name} · puntos de recolección`:`${S.barrio} · detalle`;
+}
+function renderKpis(){
+  const a=agg(visible());
+  const k=[
+    {id:'guides',v:fmt(a.guides),l:'Guías preparadas sin recoger', h:`en ${a.points} puntos`, cls:'crit'},
+    {id:'nosol', v:fmt(a.nosol), l:'Puntos sin solicitud de pickup', h:'ninguna en pick_ups hoy', cls:'crit'},
+    {id:'pend',  v:fmt(a.pend),  l:'Solicitudes pendientes de aprobar', h:'status = pending', cls:'warn'},
+    {id:'old',   v:fmt(a.oldGuides),l:'Guías con más de 24 h', h:`${a.old} puntos afectados`, cls:'warn'},
+  ];
+  document.getElementById('kpis').innerHTML = k.map(x=>`
+    <button class="kpi ${x.cls}" data-kpi="${x.id}" aria-pressed="${S.filters.kpi===x.id}"
+      title="Filtrar por ${x.l.toLowerCase()}"><div class="v tnum">${x.v}</div>
+      <div class="l">${x.l}</div><div class="h">${x.h}</div></button>`).join('');
+  document.querySelectorAll('[data-kpi]').forEach(b=>b.onclick=()=>{
+    const id=b.dataset.kpi; S.filters.kpi = S.filters.kpi===id?null:id; renderAll();});
+  document.getElementById('morePanel').innerHTML = `
+    <div class="mini"><b class="tnum">${fmt(a.points)}</b><span>Puntos de recolección</span></div>
+    <div class="mini"><b class="tnum">${cop(a.cod)}</b><span>Valor COD retenido</span></div>
+    <div class="mini"><b class="tnum">${a.nuevas}</b><span>Bodegas nuevas (&lt;30 d)</span></div>
+    <div class="mini"><b class="tnum">${a.points?Math.round(a.scanner/a.points*100):0}%</b><span>Con Ecom Scanner</span></div>`;
+}
+function renderChips(){
+  const f=S.filters, ch=[];
+  if(f.q) ch.push(['q','Búsqueda: “'+f.q+'”']);
+  if(f.trigger!=='both') ch.push(['trigger','Disparador: '+(f.trigger==='scanner'?'Preparado para transportadora':'Guía generada')]);
+  if(f.terr!=='all') ch.push(['terr','Territorio: '+DEPTS.find(d=>d.dane===f.terr).name]);
+  if(f.pickup!=='all') ch.push(['pickup','Pickup: '+({none:'sin solicitud',pending:'pendiente',approved:'aprobada'})[f.pickup]]);
+  if(f.carrier!=='all') ch.push(['carrier','Transportadora: '+f.carrier]);
+  if(f.kpi) ch.push(['kpi','KPI: '+({guides:'guías sin recoger',nosol:'sin solicitud',pend:'pendientes',old:'más de 24 h'})[f.kpi]]);
+  const el=document.getElementById('activeChips');
+  el.innerHTML = ch.map(([k,t])=>`<span class="chip">${t}<button data-rm="${k}" aria-label="Quitar filtro">✕</button></span>`).join('')
+    + (ch.length?`<button class="more" id="clearAll" style="margin:0 0 0 4px">Limpiar todo</button>`:'');
+  el.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.rm;
+    if(k==='q'){f.q='';document.getElementById('fSearch').value=''}
+    else if(k==='kpi'){f.kpi=null}
+    else if(k==='trigger'){f.trigger='both';document.getElementById('fTrigger').value='both'}
+    else {f[k]='all';
+      if(k==='terr')document.getElementById('fTerr').value='all';
+      if(k==='carrier')document.getElementById('fCarrier').value='all';
+      if(k==='pickup')document.querySelectorAll('[data-pk]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.pk==='all'));}
+    renderAll();});
+  const ca=document.getElementById('clearAll'); if(ca) ca.onclick=()=>{
+    S.filters={q:'',pickup:'all',carrier:'all',terr:'all',kpi:null,trigger:'both'};
+    document.getElementById('fSearch').value=''; document.getElementById('fTerr').value='all';
+    document.getElementById('fCarrier').value='all'; document.getElementById('fTrigger').value='both';
+    document.querySelectorAll('[data-pk]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.pk==='all'));
+    renderAll();};
+}
+let terrSort={k:'guides',dir:-1};
+function renderTerritory(){
+  const p=document.getElementById('territoryPanel');
+  const nat = (S.level==='nacional'||S.level==='departamento');
+  p.style.display = nat?'flex':'none';
+  if(!nat) return;
+  const byNat = S.level==='nacional';
+  const rows = byNat
+    ? DEPTS.map(d=>{const a=agg(POINTS.filter(x=>x.deptDane===d.dane&&passFilters(x)));return{key:d.dane,code:d.dane,label:d.name,...a}})
+    : DEPTS.find(d=>d.dane===S.dept).cities.map(c=>{const a=agg(POINTS.filter(x=>x.cityDane===c.dane&&passFilters(x)));return{key:c.dane,code:c.dane,label:c.name,...a}});
+  rows.sort((x,y)=>(y[terrSort.k]-x[terrSort.k])*(terrSort.dir<0?1:-1));
+  const max=Math.max(1,...rows.map(r=>r.guides));
+  const t=rows.reduce((s,r)=>({guides:s.guides+r.guides,nosol:s.nosol+r.nosol,pend:s.pend+r.pend,old:s.old+r.old,points:s.points+r.points}),{guides:0,nosol:0,pend:0,old:0,points:0});
+  document.getElementById('terrSub').textContent = byNat
+    ? 'Departamentos por código DANE · clic para hacer zoom'
+    : 'Municipios de '+DEPTS.find(d=>d.dane===S.dept).name+' · clic para operar';
+  document.getElementById('terrTable').innerHTML = `
+    <thead><tr>
+      <th data-k="label">${byNat?'Departamento':'Municipio'}</th>
+      <th data-k="guides" title="Guías preparadas sin recoger">Guías</th>
+      <th data-k="nosol" title="Puntos sin solicitud de pickup">S/sol.</th>
+      <th data-k="pend" title="Solicitudes pendientes">Pend.</th>
+      <th data-k="old" title="Puntos con guías de más de 24 h">+24h</th>
+    </tr></thead>
+    <tbody>${rows.map(r=>`<tr data-key="${r.key}" class="${(byNat?S.dept:S.city)===r.key?'sel':''}">
+      <td><i class="riskbar" style="width:${Math.round(3+r.guides/max*22)}px"></i><span class="dcode">${r.code}</span>${r.label}</td>
+      <td class="tnum">${fmt(r.guides)}</td><td class="tnum">${r.nosol}</td>
+      <td class="tnum">${r.pend}</td><td class="tnum">${r.old}</td></tr>`).join('')}</tbody>
+    <tfoot><tr><td>${byNat?'Total Colombia':'Total '+DEPTS.find(d=>d.dane===S.dept).name}</td>
+      <td class="tnum">${fmt(t.guides)}</td><td class="tnum">${t.nosol}</td>
+      <td class="tnum">${t.pend}</td><td class="tnum">${t.old}</td></tr></tfoot>`;
+  document.querySelectorAll('#terrTable th').forEach(th=>th.onclick=()=>{
+    const k=th.dataset.k; if(k==='label')return;
+    terrSort={k,dir:terrSort.k===k?-terrSort.dir:-1}; renderTerritory();});
+  document.querySelectorAll('#terrTable tbody tr').forEach(tr=>tr.onclick=()=>{
+    byNat ? drillDept(tr.dataset.key) : drillCity(S.dept,tr.dataset.key);});
+}
+function razones(p){
+  const r=[];
+  if(p.pickupStatus==='none') r.push('Sin solicitud de pickup');
+  if(p.pickupStatus==='pending') r.push('Solicitud pendiente de aprobar');
+  if(p.oldestMin>UMBRAL_CRIT) r.push('Guía más antigua: '+hm(p.oldestMin));
+  if(esNuevo(p)) r.push(p.whDays<NUEVO_DIAS?'Bodega creada hace '+p.whDays+' d':'Primer despacho reciente');
+  if(p.signal==='guia') r.push('Sin Ecom Scanner · señal = guía generada');
+  if(p.geo==='sin_dane') r.push('Sin código DANE — ubicación no confiable');
+  return r;
+}
+function priority(p){
+  let s=0;
+  if(p.pickupStatus==='none')s+=100; else if(p.pickupStatus==='pending')s+=50;
+  if(p.oldestMin>UMBRAL_CRIT)s+=40;
+  if(esNuevo(p))s+=15;
+  return s + p.oldestMin/60 + p.guides*.4;
+}
+function renderQueue(){
+  const panel=document.getElementById('queuePanel');
+  const show=(S.level==='ciudad'||S.level==='barrio')&&!S.queueCollapsed;
+  panel.style.display=show?'flex':'none';
+  const btn=document.getElementById('btnCollapseQueue');
+  btn.style.display=(S.level==='ciudad'||S.level==='barrio')?'':'none';
+  btn.textContent=S.queueCollapsed?'Mostrar cola ⇤':'Ampliar mapa ⇥';
+  if(!show) return;
+  const list=visible().filter(p=>p.pickupStatus!=='manifested').sort((a,b)=>priority(b)-priority(a));
+  document.getElementById('qCount').textContent=`${list.length} puntos · ${fmt(agg(list).guides)} guías`;
+  const body=document.getElementById('queueBody');
+  if(!list.length){ body.innerHTML=`<div class="empty"><b>Nada por recoger aquí</b>Todos los puntos visibles ya tienen manifiesto.</div>`; return; }
+  body.innerHTML=list.map(p=>{
+    const e=estado(p);
+    return `<div class="qcard ${S.selected===p.id?'sel':''}" data-id="${p.id}">
+      <div class="qtop">
+        <span class="sev ${e}">${({crit:'Crítico',risk:'En riesgo',assigned:'Pickup aprobado',nodata:'Sin DANE'})[e]}</span>
+        ${esNuevo(p)?'<span class="tag">Bodega nueva</span>':''}
+        ${p.isVeloces?'<span class="tag veloces">Veloces</span>':`<span class="tag">${p.carrier}</span>`}
+        <span class="qgo" title="Ver detalle">›</span>
+      </div>
+      <div class="qname">${p.name}</div>
+      <div class="qline"><span>${p.barrio}</span><span class="tnum"><b>${p.guides}</b> guías</span>
+        <span class="tnum">${hm(p.oldestMin)} sin recoger</span></div>
+      <div class="qreasons">${razones(p).slice(0,3).map(r=>`<span class="rz bad">${r}</span>`).join('')}
+        ${p.signal==='scanner'?'<span class="rz good">Preparado p/ transportadora</span>':''}</div>
+    </div>`}).join('');
+  body.querySelectorAll('.qcard').forEach(c=>c.onclick=()=>selectPoint(c.dataset.id,true));
+}
+function selectPoint(id,center){
+  const p=POINTS.find(x=>x.id===id); if(!p) return;
+  S.selected=id;
+  if(center&&map) map.setView([p.lat,p.lng],Math.max(map.getZoom(),14),{animate:true});
+  renderMarkers(); renderQueue(); openDrawer(p);
+}
+
+/* ---------- Drawer ---------- */
+function openDrawer(p){
+  const e=estado(p);
+  document.getElementById('dTags').innerHTML=
+    `<span class="sev ${e}">${({crit:'Crítico',risk:'En riesgo',assigned:'Pickup aprobado',verified:'Con manifiesto',nodata:'Sin DANE'})[e]}</span>
+     ${esNuevo(p)?'<span class="tag">Bodega nueva</span>':''}
+     ${p.isVeloces?'<span class="tag veloces">Veloces</span>':`<span class="tag">${p.carrier}</span>`}
+     <span class="tag ${p.signal==='scanner'?'scan':''}">${p.signal==='scanner'?'Ecom Scanner':'Sin scanner'}</span>`;
+  document.getElementById('dName').textContent=p.name;
+  document.getElementById('dAddr').innerHTML=`${p.address} · ${p.barrio}, ${p.cityName} <span class="src">DANE ${p.cityDane}</span>`;
+  const near=POINTS.filter(x=>x.barrio===p.barrio&&x.id!==p.id&&x.pickupStatus!=='manifested').length;
+  document.getElementById('dBody').innerHTML=`
+    <div class="grp"><h3>Situación ahora</h3>
+      <div class="kv"><span>Guías preparadas sin recoger</span><b class="tnum">${p.guides}</b>
+        <span>Más antigua</span><b class="tnum">${hm(p.oldestMin)}</b>
+        <span>Valor COD retenido</span><b class="tnum">${cop(p.cod)}</b>
+        <span>Transportadora</span><b>${p.carrier}${p.isVeloces?' (holding)':''}</b></div></div>
+
+    <div class="grp"><h3>Señal de origen</h3>
+      <div class="kv"><span>Disparador</span><b>${p.signal==='scanner'?'PREPARADO PARA TRANSPORTADORA':'GUIA_GENERADA'}</b>
+        <span>Fuente</span><b class="src">${p.signal==='scanner'?'logistic_management · type 9':'Historyorder.status'}</b></div>
+      ${p.signal==='guia'?`<div class="rz" style="margin-top:8px;display:block">Este proveedor no usa Ecom Scanner: no hay evento físico de preparación, la señal es el cambio de estado de la guía.</div>`:''}</div>
+
+    <div class="grp"><h3>Solicitud de pickup</h3>
+      <div class="kv"><span>Estado</span><b>${({none:'sin solicitud',pending:'pendiente',approved:'aprobada',manifested:'recogida'})[p.pickupStatus]}</b>
+        <span>Fuente</span><b class="src">pick_ups.status</b></div>
+      ${p.pickupStatus==='none'?`<div class="rz bad" style="margin-top:8px;display:block">No hay registro en <code>pick_ups</code> para esta bodega hoy.</div>`:''}</div>
+
+    <div class="grp"><h3>Alertas</h3>
+      <div class="qreasons">${razones(p).map(r=>`<span class="rz bad">${r}</span>`).join('')||'<span class="rz good">Sin alertas</span>'}</div>
+      <div class="kv" style="margin-top:8px"><span>Otros puntos por recoger en ${p.barrio}</span><b class="tnum">${near}</b>
+        <span>Bodega creada hace</span><b class="tnum">${p.whDays} días</b></div></div>
+
+    <div class="grp"><h3>Cadena física</h3>
+      <ul class="tl">
+        <li class="done">Guía generada</li>
+        <li class="${p.signal==='scanner'?'done':''}">Preparado para transportadora<small>${p.signal==='scanner'?'evento registrado':'no aplica — sin Ecom Scanner'}</small></li>
+        <li class="${p.pickupStatus!=='none'?'done':'now'}">Solicitud de pickup<small>${p.pickupStatus==='none'?'falta crearla':'pick_ups.status = '+p.pickupStatus}</small></li>
+        <li class="${p.manifest?'done':''}">Recogido por Dropi / Veloces<small>${p.manifest?'manifiesto '+p.manifest.user+' hace '+hm(p.manifest.at):'sin manifiesto'}</small></li>
+        <li class="">Entregado a transportadora</li>
+      </ul></div>
+
+    ${near>=2?`<div class="grp"><h3>Consolidación</h3>
+      <div class="reco"><b>Hay ${near} puntos más por recoger en ${p.barrio}</b>
+        Sumados van ${fmt(agg(POINTS.filter(x=>x.barrio===p.barrio&&x.pickupStatus!=='manifested')).guides)} guías.</div>
+      <button class="btn sec" style="margin-top:8px;width:100%" id="dCluster">Llevar a Asignación</button></div>`:''}`;
+
+  const prim=document.getElementById('dPrimary');
+  prim.textContent = p.pickupStatus==='none' ? 'Crear solicitud de pickup'
+                   : p.pickupStatus==='pending' ? 'Aprobar solicitud'
+                   : p.pickupStatus==='approved' ? 'Registrar manifiesto' : 'Ver manifiesto';
+  prim.onclick=()=>{
+    if(p.pickupStatus==='none'){ p.pickupStatus='pending'; toast('Solicitud creada · '+p.name+' (pending)'); }
+    else if(p.pickupStatus==='pending'){ p.pickupStatus='approved'; toast('Solicitud aprobada · '+p.name); }
+    else if(p.pickupStatus==='approved'){ p.pickupStatus='manifested'; p.manifest={user:'op.412',at:0};
+      toast('Manifiesto registrado · '+p.guides+' guías de '+p.name); }
+    else toast('Manifiesto '+p.manifest.user+' — registrado hace '+hm(p.manifest.at));
+    renderAll(); openDrawer(p);
+  };
+  document.getElementById('dSecondary').onclick=()=>{
+    if(confirm('¿Descartar '+p.name+' de la cola? Queda registrado el motivo (simulado).')){
+      p.pickupStatus='approved'; toast('Descartado de la cola · '+p.name); closeDrawer(); renderAll(); }};
+  const dc=document.getElementById('dCluster');
+  if(dc) dc.onclick=()=>{ S.cluster=POINTS.filter(x=>x.barrio===p.barrio&&x.pickupStatus!=='manifested');
+    closeDrawer(); switchView('plan'); };
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('scrim').classList.add('open');
+}
+function closeDrawer(){ document.getElementById('drawer').classList.remove('open');
+  document.getElementById('scrim').classList.remove('open'); }
+
+/* ---------- Asignación manual ---------- */
+function initPlanMap(){
+  const el=document.getElementById('planMap'); if(!el.clientHeight){ setTimeout(initPlanMap,120); return; }
+  if(planMap){ planMap.invalidateSize(); return; }
+  planMap=L.map(el,{zoomControl:true,attributionControl:true});
+  planMap.attributionControl.setPrefix('');
+  baseTiles().addTo(planMap);
+  L.geoJSON(COL_OUTLINE,{style:{color:'#0A5E80',weight:1,fillColor:'#9FC5D6',fillOpacity:.08}}).addTo(planMap);
+  planLayer=L.layerGroup().addTo(planMap);
+  planMap.fitBounds(COL_BOUNDS,{padding:[18,18]});
+}
+function renderPlan(){
+  initPlanMap();
+  const c=S.cluster.length? S.cluster : visible().filter(p=>p.pickupStatus==='none'||p.pickupStatus==='pending');
+  const a=agg(c);
+  document.getElementById('planScope').textContent = c.length
+    ? `${c.length} puntos · ${fmt(a.guides)} guías · ${c[0].barrio}, ${c[0].cityName}` : 'sin puntos seleccionados';
+  const body=document.getElementById('altBody');
+  if(!planLayer) return;
+  planLayer.clearLayers();
+  if(!c.length){ body.innerHTML=`<div class="empty"><b>No hay puntos seleccionados</b>Entra a un punto en Control en vivo y usa “Llevar a Asignación”.</div>`;
+    document.getElementById('btnAssign').disabled=true; return; }
+  const orden=[...c].sort((x,y)=>priority(y)-priority(x));
+  orden.forEach((p,i)=>{
+    const excl = p.geo==='sin_dane';
+    L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',iconSize:[26,26],iconAnchor:[13,13],
+      html:`<div class="mk ${excl?'nodata':estado(p)}" style="width:26px;height:26px;font-size:11px">${i+1}</div>`})})
+      .bindTooltip(`<div class="tt"><b>Parada ${i+1} · ${p.name}</b>${p.guides} guías · ${hm(p.oldestMin)} sin recoger</div>`,{className:'tt'})
+      .addTo(planLayer);
+  });
+  const rutables=orden.filter(p=>p.geo!=='sin_dane');
+  L.polyline(rutables.map(p=>[p.lat,p.lng]),{color:'#F49A3D',weight:4,opacity:.9}).addTo(planLayer);
+  planMap.fitBounds(L.latLngBounds(orden.map(p=>[p.lat,p.lng])),{padding:[70,70],animate:true,duration:.7});
+
+  body.innerHTML = orden.map((p,i)=>`
+    <div class="stop ${p.geo==='sin_dane'?'excl':''}">
+      <div class="stopn">${i+1}</div>
+      <div style="flex:1">
+        <div style="font-weight:600">${p.name}</div>
+        <div style="font-size:11.5px;color:var(--ink-2)">${p.barrio} · <b class="tnum">${p.guides}</b> guías · ${hm(p.oldestMin)}</div>
+        ${p.geo==='sin_dane'?'<div class="rz bad" style="margin-top:4px;display:inline-block">Sin código DANE — confirmar dirección antes de ir</div>':''}
+      </div>
+    </div>`).join('') +
+    `<div style="padding:10px 12px;font-size:11.5px;color:var(--ink-3)">
+      Total: <b>${fmt(a.guides)} guías</b> en ${orden.length} puntos · COD ${cop(a.cod)}</div>`;
+  document.getElementById('btnAssign').disabled=false;
+}
+document.getElementById('btnAssign').onclick=()=>{
+  const actor=document.getElementById('aActor').value, owner=document.getElementById('aOwner').value,
+        win=document.getElementById('aWindow').value;
+  if(!confirm(`¿Registrar asignación?\n\n${S.cluster.length||visible().length} puntos · ${actor}\nResponsable: ${owner}\nVentana: ${win}`)) return;
+  (S.cluster.length?S.cluster:visible()).forEach(p=>{ if(p.geo!=='sin_dane'&&p.pickupStatus!=='manifested') p.pickupStatus='approved'; });
+  toast('Asignación registrada · '+actor+' · '+win);
+  switchView('control');
+};
+document.getElementById('planToControl').onclick=()=>switchView('control');
+
+/* ---------- Seguimiento: solicitud vs manifiesto ---------- */
+const TRACK = CLUSTER.map((p,i)=>{
+  const prometida=['13:15','11:30','11:15','10:30','13:45','12:20','12:50','11:05','13:30','14:00'][i];
+  const real=[null,'11:42','11:20','10:55',null,'12:28',null,'11:02','13:52','13:58'][i];
+  const enManifiesto=[0,30,19,20,0,25,0,18,15,12][i];
+  return {id:p.id,name:p.name,barrio:p.barrio,carrier:p.carrier,isVeloces:p.isVeloces,
+    solicitud:i===4?'inexistente':(['none','pending'].includes(p.pickupStatus)?'pending':'approved'),
+    prometida, real, manifiesto: real? 'MAN-'+(4100+i) : null, operador: real? 'op.'+(410+i) : null,
+    preparadas:p.guides, enManifiesto,
+    delta: real? (toMin(real)-toMin(prometida)) : null,
+    result: !real ? 'noman' : (enManifiesto<p.guides ? 'gap':'ok')};
+});
+function toMin(t){const[a,b]=t.split(':').map(Number);return a*60+b}
+function renderTrack(){
+  const rows=TRACK.filter(r=>S.trackSeg==='all'||r.result===S.trackSeg||(S.trackSeg==='ok'&&r.result==='ok'));
+  const ok=TRACK.filter(r=>r.result==='ok').length;
+  const gPrep=TRACK.reduce((s,r)=>s+r.preparadas,0), gMan=TRACK.reduce((s,r)=>s+r.enManifiesto,0);
+  document.getElementById('trackKpis').innerHTML=[
+    {v:`${ok}/${TRACK.length}`,l:'Puntos con manifiesto completo',h:'solicitud vs. manifiesto',cls:''},
+    {v:`${gMan}/${gPrep}`,l:'Guías en manifiesto',h:'contra preparadas',cls:'warn'},
+    {v:TRACK.filter(r=>r.result==='noman').length,l:'Sin manifiesto',h:'no se registró recogida',cls:'crit'},
+    {v:TRACK.filter(r=>r.solicitud==='inexistente').length,l:'Recogidas sin solicitud',h:'manifiesto sin pick_up',cls:'warn'},
+  ].map(x=>`<div class="kpi ${x.cls}"><div class="v tnum">${x.v}</div><div class="l">${x.l}</div><div class="h">${x.h}</div></div>`).join('');
+  document.getElementById('trackTable').innerHTML=`
+    <thead><tr><th>Punto</th><th>Transportadora</th><th>Solicitud</th><th>Hora prometida</th><th>Recogida real</th>
+      <th>Δ min</th><th>Manifiesto</th><th>Operador</th><th>Guías en manifiesto</th><th>Resultado</th></tr></thead>
+    <tbody>${rows.map(r=>`<tr data-id="${r.id}" class="${S.trackRow===r.id?'sel':''}">
+      <td><b>${r.name}</b><div style="color:var(--ink-3);font-size:11px">${r.barrio}</div></td>
+      <td>${r.isVeloces?'<span class="tag veloces">Veloces</span>':r.carrier}</td>
+      <td>${r.solicitud==='inexistente'?'<span class="gap">inexistente</span>':r.solicitud}</td>
+      <td class="tnum">${r.prometida}</td><td class="tnum">${r.real||'—'}</td>
+      <td class="tnum">${r.delta==null?'—':(r.delta>15?`<span class="gap">+${r.delta}</span>`:r.delta)}</td>
+      <td>${r.manifiesto||'—'}</td><td class="src">${r.operador||'—'}</td>
+      <td class="tnum">${r.enManifiesto<r.preparadas?`<span class="gap">${r.enManifiesto}/${r.preparadas}</span>`:`${r.enManifiesto}/${r.preparadas}`}</td>
+      <td><span class="sev ${r.result==='ok'?'verified':r.result==='gap'?'risk':'nodata'}">${r.result==='ok'?'Cumplido':r.result==='gap'?'Parcial':'Sin manifiesto'}</span></td>
+    </tr>`).join('')}</tbody>`;
+  document.querySelectorAll('#trackTable tbody tr').forEach(tr=>tr.onclick=()=>{S.trackRow=tr.dataset.id;renderTrack()});
+  const det=document.getElementById('trackDetail'), r=TRACK.find(x=>x.id===S.trackRow);
+  det.classList.toggle('open',!!r);
+  if(!r) return;
+  document.getElementById('tdName').textContent=r.name;
+  document.getElementById('tdBody').innerHTML=`
+    <div id="miniMapWrap"><div id="miniMap"></div></div>
+    <div class="grp" style="padding-top:0"><h3>Prometido vs. real</h3>
+      <ul class="tl">
+        <li class="${r.solicitud!=='inexistente'?'done':''}">Solicitud de pickup<small>${r.solicitud}</small></li>
+        <li class="done">Hora prometida<small>${r.prometida}</small></li>
+        <li class="${r.real?'done':'now'}">Recogida real<small>${r.real||'no se registró'}</small></li>
+        <li class="${r.manifiesto?'done':''}">Manifiesto<small>${r.manifiesto? r.manifiesto+' · '+r.operador : 'sin manifiesto'}</small></li>
+      </ul></div>
+    <div class="grp"><h3>Guías</h3>
+      <div class="kv"><span>Preparadas</span><b class="tnum">${r.preparadas}</b>
+        <span>En manifiesto</span><b class="tnum">${r.enManifiesto}</b>
+        <span>Diferencia</span><b class="tnum" style="color:${r.preparadas-r.enManifiesto?'var(--err)':'inherit'}">${r.preparadas-r.enManifiesto}</b></div>
+      <div class="lg-note">La diferencia son guías que estaban listas y no entraron al manifiesto: se quedan en bodega.</div></div>`;
+  const p=POINTS.find(x=>x.id===r.id);
+  setTimeout(()=>{ const el=document.getElementById('miniMap'); if(!el||!p) return;
+    if(miniMap){miniMap.remove();miniMap=null}
+    miniMap=L.map(el,{zoomControl:false,attributionControl:false,dragging:false,scrollWheelZoom:false});
+    baseTiles().addTo(miniMap);
+    L.marker([p.lat,p.lng],{icon:L.divIcon({className:'',iconSize:[22,22],iconAnchor:[11,11],
+      html:`<div class="mk ${estado(p)}" style="width:22px;height:22px"></div>`})}).addTo(miniMap);
+    miniMap.setView([p.lat,p.lng],14); setTimeout(()=>miniMap.invalidateSize(),80); },40);
+}
+document.getElementById('tdClose').onclick=()=>{S.trackRow=null;renderTrack()};
+document.getElementById('tdClose2').onclick=()=>{toast('Cerrado con motivo (simulado)');S.trackRow=null;renderTrack()};
+document.getElementById('tdReassign').onclick=()=>toast('Reasignación registrada (simulado)');
+document.querySelectorAll('#trackSeg button').forEach(b=>b.onclick=()=>{
+  S.trackSeg=b.dataset.seg;
+  document.querySelectorAll('#trackSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  renderTrack();});
+
+/* ---------- Reglas y datos ---------- */
+document.getElementById('rulesGrid').innerHTML=`
+  <div class="card"><h3>Disparador del módulo</h3>
+    <p style="margin:0 0 9px;color:var(--ink-2)">Una guía entra a la cola cuando su último estado es uno de estos y no existe evento de recogida posterior.</p>
+    <div class="kv">
+      <span><code>PREPARADO PARA TRANSPORTADORA</code></span><b class="src">logistic_management · type 9</b>
+      <span><code>GUIA_GENERADA</code> (sin Ecom Scanner)</span><b class="src">Historyorder.status</b>
+      <span>Sale de la cola con</span><b class="src">type 5 · RECOGIDO POR DROPI</b>
+      <span>o con</span><b class="src">type 3 · ENTREGADO A TRANSPORTADORA</b></div>
+    <div class="lg-note">Configurable arriba en “Disparador”. Los proveedores sin Ecom Scanner nunca generan el evento tipo 9: para ellos la única señal es el estado de la guía.</div></div>
+
+  <div class="card"><h3>Semántica verificada del modelo</h3>
+    <div class="kv" style="gap:5px 12px">
+      <span>type 10 · Recepciones PAU</span><b class="src">RECIBIDO PAU</b>
+      <span>type 4 · Recepciones</span><b class="src">EN BODEGA DROPI</b>
+      <span>type 9 · Salidas</span><b class="src">PREPARADO PARA TTE</b>
+      <span>type 5 · Recogidas</span><b class="src">RECOGIDO POR DROPI</b>
+      <span>type 3 · Despachos</span><b class="src">ENTREGADO A TTE</b>
+      <span><code>pick_ups.status</code></span><b class="src">pending · approved · refused</b></div></div>
+
+  <div class="card"><h3>Reglas operativas <span class="pill i">ILUSTRATIVAS</span></h3>
+    <div class="kv"><span>Crítico</span><b>sin solicitud y &gt; 24 h</b>
+      <span>En riesgo</span><b>sin solicitud o pendiente</b>
+      <span>Bodega nueva</span><b>creada &lt; 30 d <i>o</i> primer despacho &lt; 30 d</b>
+      <span>Consolidación</span><b>≥ 3 puntos en el mismo barrio</b></div>
+    <div class="lg-note">El umbral de 24 h es un supuesto. Debe calibrarse con la distribución horaria real de los eventos tipo 3 por transportadora.</div></div>
+
+  <div class="card"><h3>Geografía</h3>
+    <div class="kv"><span>Ruta del dato</span><b class="src">warehouses.city_id → cities.id</b>
+      <span>Departamento</span><b class="src">LEFT(cities.cod_dane, 2)</b>
+      <span>Municipio</span><b class="src">cities.cod_dane (5 díg.)</b>
+      <span>Coordenadas</span><b class="src">centroide DANE</b></div>
+    <div class="lg-note"><b>Ojo:</b> <code>cities.department_id</code> es interno de Dropi y no coincide con el DANE
+      (Puerto Rico: department_id 38, cod_dane 18592 → depto 18). Se usa siempre <code>cod_dane</code>.
+      Bogotá D.C. es el departamento 11, separado de Cundinamarca (25).</div></div>
+
+  <div class="card"><h3>Disponibilidad del dato</h3>
+    <div class="kv" style="gap:6px 12px">
+      <span>Guías preparadas sin recoger</span><span class="pill a">Disponible</span>
+      <span>Antigüedad (timestamp del evento)</span><span class="pill a">Disponible</span>
+      <span>Solicitud de pickup y su estado</span><span class="pill a">Disponible</span>
+      <span>Manifiesto + operador</span><span class="pill a">Disponible</span>
+      <span>Municipio / departamento DANE</span><span class="pill a">Disponible</span>
+      <span>Bodega nueva</span><span class="pill a">warehouses.created_at</span>
+      <span>Relación pick_ups ↔ guía</span><span class="pill n">No existe FK</span>
+      <span>Coordenadas exactas del punto</span><span class="pill p">Centroide municipal</span>
+      <span>Rutas / capacidad / costo</span><span class="pill n">Fuera del sistema</span>
+      <span>Cutoff por transportadora</span><span class="pill p">Derivable, no es campo</span></div></div>
+
+  <div class="card"><h3>Lo que este módulo NO hace</h3>
+    <ul style="margin:0;padding-left:18px;color:var(--ink-2);line-height:1.7">
+      <li>No optimiza rutas — el orden de visita se define a mano.</li>
+      <li>No cuenta paquetes, sólo guías/órdenes.</li>
+      <li>No infiere si el paquete está físicamente empacado: confía en el estado registrado.</li>
+      <li>No reconcilia guía por guía contra <code>pick_ups</code> mientras no exista la FK.</li>
+    </ul></div>`;
+
+/* =========================================================================
+   7. Interacciones
+   ========================================================================= */
+function switchView(v){
+  S.view=v;
+  document.querySelectorAll('nav.tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.view===v?'page':'false'));
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id==='view-'+v));
+  if(v==='plan') renderPlan();
+  if(v==='track') renderTrack();
+  setTimeout(()=>{ if(v==='control'&&map)map.invalidateSize();
+                   if(v==='plan'&&planMap)planMap.invalidateSize();
+                   if(v==='track'&&miniMap)miniMap.invalidateSize(); },60);
+}
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+document.getElementById('scrim').onclick=closeDrawer;
+document.getElementById('dClose').onclick=closeDrawer;
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
+document.getElementById('btnMore').onclick=e=>{
+  const p=document.getElementById('morePanel'); p.classList.toggle('open');
+  e.target.textContent=p.classList.contains('open')?'− Ocultar indicadores secundarios':'＋ Ver más indicadores';
+  if(map) setTimeout(()=>map.invalidateSize(),160);};
+document.getElementById('fSearch').oninput=e=>{S.filters.q=e.target.value.trim();renderAll()};
+document.getElementById('fTrigger').onchange=e=>{S.filters.trigger=e.target.value;renderAll()};
+document.querySelectorAll('[data-pk]').forEach(b=>b.onclick=()=>{
+  S.filters.pickup=b.dataset.pk;
+  document.querySelectorAll('[data-pk]').forEach(x=>x.setAttribute('aria-pressed',x===b));renderAll();});
+document.getElementById('btnMoreFilters').onclick=()=>toast('Filtros avanzados (antigüedad, guías ≥, bodega nueva, con/sin DANE) — popover pendiente');
+document.getElementById('btnCollapseQueue').onclick=()=>{S.queueCollapsed=!S.queueCollapsed;renderQueue();
+  setTimeout(()=>map&&map.invalidateSize(),160)};
+['lyPoints','lyHeat','lyPau'].forEach(id=>document.getElementById(id).onchange=()=>{renderMarkers();renderPau()});
+document.getElementById('mZoomIn').onclick=()=>map.zoomIn();
+document.getElementById('mZoomOut').onclick=()=>map.zoomOut();
+document.getElementById('mFit').onclick=goNational;
+document.getElementById('mBack').onclick=levelUp;
+(function fill(){
+  const t=document.getElementById('fTerr');
+  t.innerHTML='<option value="all">Todos los territorios</option>'+
+    DEPTS.map(d=>`<option value="${d.dane}">${d.dane} · ${d.name}</option>`).join('');
+  t.onchange=e=>{S.filters.terr=e.target.value; e.target.value!=='all'?drillDept(e.target.value):renderAll();};
+  const c=document.getElementById('fCarrier');
+  c.innerHTML='<option value="all">Todas las transportadoras</option>'+CARRIERS.map(x=>`<option>${x.name}</option>`).join('');
+  c.onchange=e=>{S.filters.carrier=e.target.value;renderAll()};
+})();
+
+/* Escenario 12:00 — Colombia → Bogotá D.C. → Puente Aranda */
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const settled=()=>new Promise(r=>{ if(!map) return r();
+  let done=false;
+  const fin=()=>{ if(done)return; done=true; map.off('moveend',fin);
+    if(S.target){ S.target.bounds ? map.fitBounds(S.target.bounds,{padding:S.target.pad||[60,60],animate:false})
+                                  : map.setView(S.target.c,S.target.z,{animate:false}); }
+    r(); };
+  map.once('moveend',fin); setTimeout(fin,1200); });
+
+document.getElementById('btnScenario').onclick=async()=>{
+  const btn=document.getElementById('btnScenario'); if(btn.disabled)return; btn.disabled=true;
+  S.filters.kpi=null;
+  toast('Escenario 12:00 p. m. — enfocando Bogotá D.C. (DANE 11)…',2200);
+  goNational();                 await settled(); await wait(250);
+  drillDept('11');              await settled(); await wait(250);
+  drillCity('11','11001');      await settled(); await wait(250);
+  drillBarrio('Puente Aranda'); await settled();
+  S.cluster=CLUSTER.filter(p=>p.pickupStatus!=='manifested'); S.selected=NOVA.id; S.queueCollapsed=false;
+  renderAll();
+  const a=agg(S.cluster);
+  toast(`${S.cluster.length} puntos en Puente Aranda · ${fmt(a.guides)} guías sin recoger · ${a.nosol} sin solicitud`,5200);
+  btn.disabled=false;
+};
+
+/* =========================================================================
+   8. Render maestro
+   ========================================================================= */
+function renderAll(){
+  renderCrumbs(); renderKpis(); renderChips(); renderTerritory(); renderQueue();
+  renderMarkers(); renderPau();
+  if(S.view==='plan') renderPlan();
+}
+window.addEventListener('resize',()=>{ if(map)map.invalidateSize(); if(planMap)planMap.invalidateSize(); if(miniMap)miniMap.invalidateSize(); });
+if(window.L) initMap();
+else{
+  document.getElementById('mapState').classList.add('show');
+  document.getElementById('mapState').innerHTML='<b>No se pudo cargar la librería del mapa</b><div style="color:var(--ink-2)">Revisa la conexión y recarga.</div>';
+  renderCrumbs(); renderKpis(); renderChips(); renderTerritory(); renderQueue();
+}
+</script>
+</body>
+</html>
