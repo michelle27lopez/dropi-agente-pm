@@ -740,7 +740,170 @@ export type Weekly = {
 // Cada semana es una entrada. La primera del array es la más reciente (la que se
 // muestra por defecto). NO borrar semanas viejas: el switch de /updates las conserva.
 export const weeklies: Weekly[] = [
-  // ── Semana 13 – 17 jul 2026 (actual) ────────────────────────────────────────
+  // ── Semana 21 – 25 jul 2026 (actual) ────────────────────────────────────────
+  {
+    id: "2026-w30",
+    fecha: "Jueves 24 de julio de 2026",
+    semana: "Semana 21 – 25 jul",
+    foco:
+      "Semana de discovery y validación en campo: se revisó Recolecciones, arrancaron las entrevistas de Autoconfirmación (6 hechas) y se lanzó la prueba de Recolección proactiva (2.000 guías nuevas). El indicador mensual no tiene cierre nuevo desde junio; el avance de la semana fue definir el dashboard de indicadores con Diana.",
+
+    comparacionMensual: {
+      titulo: "Cierre junio — sin cierre nuevo esta semana",
+      alcance: "Consolidado de 9 países, ponderado por volumen. Junio sigue siendo el último mes cerrado.",
+      lectura:
+        "No hay dato mensual nuevo: el cierre de julio aún no madura. El movimiento del indicador esta semana fue de gobierno, no de cifra — se trabajó con Diana la definición del dashboard de indicadores (qué entra, quién lo alimenta y con qué cadencia). La movilización de junio sigue plana; las palancas para moverla (Autoconfirmación, Recolección proactiva) están justo en validación.",
+      entregaNota:
+        "% entrega sigue sin ser comparable hasta tener el export por cohorte de Data. Sin novedad frente al 17-jul.",
+      filas: [
+        { metrica: "Movilización", abril: "81,9%", mayo: "82,3%", junio: "82,3%", delta: "≈ 0 · plano", tono: "alerta" },
+        { metrica: "No movilizado", abril: "700.281", mayo: "716.957", junio: "737.865", delta: "+20.908", tono: "malo" },
+        { metrica: "Órdenes", abril: "3,86M", mayo: "4,04M", junio: "4,17M", delta: "+3,3%", tono: "bueno" },
+      ],
+    },
+
+    avanceInvestigacion: {
+      titulo: "Investigación de oportunidades por fase",
+      descripcion: "La fase 'Recogido por Dropi' pasa de mapeo a validación en campo: Recolecciones (control de guías sin recoger) + la prueba de Recolección proactiva.",
+      pasos: [
+        { nombre: "Confirmación", detalle: "Oportunidades levantadas + entrevistas Autoconfirmación (6)", estado: "listo" },
+        { nombre: "Generación de guía", detalle: "Oportunidades levantadas", estado: "listo" },
+        { nombre: "Recogido por Dropi", detalle: "Recolecciones revisado + prueba proactiva (2.000 guías)", estado: "activo" },
+        { nombre: "Conectar el flujo", detalle: "Siguiente paso", estado: "siguiente" },
+      ],
+    },
+
+    focoSiguienteSemana: [
+      "Autoconfirmación: sintetizar las 6 entrevistas (ChateaPro, Mauricio Corzo, líderes de comunidad, dropshipper grande) en aprendizajes y guardarraíles — Responsable: Juan Diego.",
+      "Recolección proactiva: leer el resultado de las 2.000 guías enviadas y decidir si escala — Responsable: Juan Diego / William.",
+      "POC Selección de transportadoras: cerrar el siguiente paso tras el análisis técnico con TI (Francisco Ramírez) — Responsable: Juan (Carrier Ops) / Kate (PM).",
+      "Normalización de estados: cerrar la propuesta tras la reunión de homologación — Responsable: Juan Diego.",
+      "Dashboard de indicadores: dejar en firme lo acordado con Diana (indicadores, fuente, cadencia).",
+    ],
+
+    indicadores: [
+      {
+        nombre: "Movilización consolidada",
+        valor: "82,3%",
+        tono: "alerta",
+        estado: "Plano",
+        nota: "Sin cierre nuevo desde junio. Se mantiene el último dato consolidado.",
+      },
+      {
+        nombre: "Órdenes no movilizadas",
+        valor: "737.865",
+        tono: "malo",
+        estado: "+20.908",
+        nota: "Dato de junio. Las palancas para moverlo (Autoconfirmación, Recolección proactiva) están en validación esta semana.",
+      },
+      {
+        nombre: "Dashboard de indicadores",
+        valor: "En definición",
+        tono: "alerta",
+        estado: "Acuerdos con Diana",
+        nota: "Se trabajó qué indicadores entran, quién los alimenta y con qué cadencia. [confirmar detalle con Juan]",
+      },
+    ] as IndicadorHoy[],
+
+    // Formato ejecutivo: usa comparación mensual + secciones. Estos campos se
+    // conservan por compatibilidad con el render de semanas históricas.
+    brecha: {
+      actual: 73.5, actualLabel: "73,5% crudo CO",
+      meta: 70, metaLabel: "70%",
+      gap: "No comparable", metaQ3: "Pendiente cohorte",
+      paisFoco: "Colombia representa 73% del negocio.",
+      lectura: "Junio sigue madurando; no se usa esta cifra para evaluar el KR.",
+      fugas: [],
+    },
+    tiempo: {
+      lectura: "La investigación de reducción de tiempos avanza en la fase 'Recogido por Dropi' con Recolecciones y la prueba de Recolección proactiva.",
+      dropi: [
+        { fase: "Ruta Dropi hasta transportadora", horas: 44.9, metaHoras: 24, responsable: "Célula", palanca: "validación en campo de la fase de recolección" },
+      ],
+      carrier: [
+        { fase: "Maduración de entrega", horas: 24, metaHoras: 24, palanca: "comparar cohortes cerradas" },
+      ],
+      proximosPasos: ["Leer el resultado de la prueba de Recolección proactiva (2.000 guías) y del control de Recolecciones."],
+    },
+    hallazgos: [],
+
+    secciones: [
+      {
+        titulo: "Product Road map · investigación",
+        nota: "Discovery con datos antes de comprometer desarrollo.",
+        proyectos: [
+          {
+            nombre: "Recolecciones",
+            estado: "Revisado esta semana",
+            estadoTono: "verde",
+            nota: "Se revisó el control de recolecciones (guías preparadas sin recoger por territorio DANE: 1.604 bodegas, 61.106 guías). Conecta con la fase 'Recogido por Dropi', el cumplimiento más bajo de la ruta Dropi. El prototipo ya carga con datos reales en el tablero.",
+          },
+          {
+            nombre: "POC selección de transportadoras",
+            ticket: "PRM-1513",
+            estado: "Análisis técnico con TI",
+            estadoTono: "ambar",
+            nota: "Reunión con Katerine (PM) sobre el POC + análisis técnico-conceptual con TI (Francisco Ramírez, Cubillos, Reinoso). Jira sigue En Ruta / backlog, sin asignar. [confirmar conclusión del análisis técnico con Juan]",
+          },
+          {
+            nombre: "Normalización de estados",
+            ticket: "PRM-1297",
+            estado: "Inv. y definición",
+            estadoTono: "azul",
+            nota: "Reunión de homologación de estados esta semana. Homologa estados de orden y guía en un catálogo común para mejorar trazabilidad, medición y experiencia. [confirmar si la propuesta quedó cerrada]",
+          },
+        ],
+      },
+      {
+        titulo: "Experimentos",
+        nota: "Validar la palanca y su impacto antes de escalar desarrollo.",
+        proyectos: [
+          {
+            nombre: "Autoconfirmación de órdenes",
+            ticket: "PRM-1497",
+            estado: "Entrevistas en curso (6)",
+            estadoTono: "ambar",
+            nota: "Se hicieron 6 entrevistas para entender cómo confirman hoy: ChateaPro, Mauricio Corzo, líderes de comunidad y 1 dropshipper grande. Alimentan las reglas de madurez y los guardarraíles del experimento. Siguiente hito: sintetizar aprendizajes.",
+          },
+          {
+            nombre: "Recolección proactiva",
+            estado: "Prueba lanzada",
+            estadoTono: "verde",
+            nota: "Se enviaron 2.000 guías nuevas como prueba de recolección proactiva. Ataca la fase 'Recogido por Dropi'. Pendiente: leer el resultado y decidir si escala.",
+          },
+        ],
+      },
+      {
+        titulo: "Delivery Road map · WIP = 1",
+        nota: "Una iniciativa activa; el resto conserva su posición explícita.",
+        proyectos: [
+          {
+            nombre: "Normalización de estados",
+            ticket: "PRM-1297",
+            estado: "Activo",
+            estadoTono: "verde",
+            nota: "Prioridad #1 del Delivery. Discovery y definición del catálogo en curso.",
+          },
+          {
+            nombre: "Same Day",
+            ticket: "PRM-1366",
+            estado: "Inv. y definición",
+            estadoTono: "gris",
+            nota: "En cola; no compite con el WIP activo.",
+          },
+          {
+            nombre: "Fulfillment",
+            ticket: "PRM-1446",
+            estado: "Listo para hand off",
+            estadoTono: "ambar",
+            nota: "Diseño validado, en 'Listo para hand off' pero sin documentación en el repo (hueco #1). Bodegas 2PL Bogotá/Cali/Medellín, 92.000 órdenes/mes; 20–25% se despacha y nunca se cobra.",
+          },
+        ],
+      },
+    ] as SeccionProyectos[],
+  },
+
+  // ── Semana 13 – 17 jul 2026 ─────────────────────────────────────────────────
   {
     id: "2026-w29",
     fecha: "Viernes 17 de julio de 2026",
