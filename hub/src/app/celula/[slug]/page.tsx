@@ -60,7 +60,8 @@ const TYPE_ICON: Record<string, string> = {
   Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀",
 };
 
-function truncate(text: string, max: number) {
+function truncate(text: string | undefined | null, max: number) {
+  if (!text) return "";
   return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
 }
 
