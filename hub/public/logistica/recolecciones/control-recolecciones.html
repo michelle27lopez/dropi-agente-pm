@@ -11,10 +11,27 @@
 :root{
   --brand-orange:#F49A3D;--brand-blue:#008DBF;--brand-blue-dark:#0A5E80;
   --ok:#4CAF50;--warn:#FF9800;--err:#F46A6B;--nodata:#98A2B3;
+  /* Tonos de los marcadores del mapa: llevan el conteo en blanco encima, así que
+     necesitan contraste propio. Los --warn/--err de arriba (2.1:1 y 3.0:1 contra
+     blanco) sirven de relleno, no de fondo de texto. */
+  --mk-crit:#C4383A;--mk-risk:#A35C00;--mk-nodata:#5E6878;
   --bg:#F7F8FA;--surface:#FFF;--surface-2:#FBFCFD;--border:#EEF0F4;--border-strong:#E1E5EC;
-  --ink:#232938;--ink-2:#69738C;--ink-3:#8E97AC;--r:9px;--r-sm:6px;
+  /* Rampa de texto verificada contra #FFF: 14.5 / 6.9 / 4.7 — los tres pasos
+     pasan AA. La anterior tenía el escalón más claro en 2.93:1 justo donde va el
+     texto más chico (fuente del dato, precisión, dirección). */
+  --ink:#232938;--ink-2:#4F5A73;--ink-3:#6A738D;--r:9px;--r-sm:6px;
   --shadow:0 6px 20px rgba(35,41,56,.10),0 1px 2px rgba(35,41,56,.06);--h-header:52px;--h-banner:26px}
 *{box-sizing:border-box}html,body{height:100%}
+/* Foco visible en todo lo operable. Antes no había ninguna regla de :focus y
+   varios elementos clicables (filas de territorio, tarjetas de la cola) eran
+   div/tr con onclick: imposibles de alcanzar con teclado. */
+:where(button,[href],input,select,textarea,summary,[tabindex]):focus-visible{
+  outline:2px solid var(--brand-blue);outline-offset:2px;border-radius:var(--r-sm)}
+tr[tabindex]:focus-visible,.qcard:focus-visible,.cgroup:focus-visible{
+  outline:2px solid var(--brand-blue);outline-offset:-2px}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;scroll-behavior:auto !important}}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;
   font-size:13px;line-height:1.4;-webkit-font-smoothing:antialiased;overflow:hidden}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
@@ -47,7 +64,7 @@ main{height:calc(100vh - var(--h-header) - var(--h-banner));overflow:hidden}
 .kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
 .kpi .l{font-size:11.5px;color:var(--ink-2);margin-top:1px}.kpi .h{font-size:10.5px;color:var(--ink-3)}
 .kpi.crit .v{color:var(--err)}.kpi.warn .v{color:#C77400}.kpi.ok .v{color:var(--brand-blue-dark)}
-.filters{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:nowrap;overflow:hidden}
+.filters{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap}
 .filters input[type=search],.filters select{border:1px solid var(--border-strong);background:var(--surface);
   border-radius:var(--r-sm);padding:6px 9px;font-size:12px;color:var(--ink);min-width:0}
 .filters input[type=search]{flex:0 1 210px}
@@ -114,8 +131,8 @@ table.terr tfoot td{position:sticky;bottom:0;background:var(--surface-2);font-we
 .mk{display:grid;place-items:center;border-radius:50%;color:#fff;font-weight:700;border:2px solid #fff;
   box-shadow:0 2px 6px rgba(35,41,56,.28);transition:transform .12s}
 .mk:hover{transform:scale(1.09)}
-.mk.crit{background:var(--err)}.mk.crit.ring{box-shadow:0 0 0 5px rgba(244,106,107,.22),0 2px 6px rgba(35,41,56,.28)}
-.mk.risk{background:var(--warn)}.mk.norm{background:var(--brand-blue)}.mk.nodata{background:var(--nodata)}
+.mk.crit{background:var(--mk-crit)}.mk.crit.ring{box-shadow:0 0 0 5px rgba(244,106,107,.22),0 2px 6px rgba(35,41,56,.28)}
+.mk.risk{background:var(--mk-risk)}.mk.norm{background:var(--brand-blue)}.mk.nodata{background:var(--mk-nodata)}
 .mk.apx{border-style:dashed;opacity:.85}
 .mk.active{box-shadow:0 0 0 4px rgba(244,154,61,.55),0 2px 6px rgba(35,41,56,.3)}
 .mk-lab{font-size:10.5px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.86);border-radius:4px;
@@ -177,6 +194,21 @@ table.data td{padding:9px 10px;border-bottom:1px solid var(--border);white-space
 code{background:#F2F4F7;border-radius:3px;padding:1px 5px;font-size:11.5px;font-family:ui-monospace,Menlo,monospace}
 .loading{position:fixed;inset:0;background:var(--bg);z-index:2000;display:grid;place-items:center;font-size:13px;color:var(--ink-2)}
 .loading.hide{display:none}
+.primary{background:var(--brand-blue-dark);color:#fff;border-radius:var(--r-sm);padding:6px 13px;font-size:12px;font-weight:600}
+.primary:disabled{opacity:.5;cursor:default}
+/* Panel de ingesta: aparece bajo el banner, empuja el contenido en vez de taparlo. */
+.ingesta{background:var(--surface);border-bottom:1px solid var(--border-strong);box-shadow:var(--shadow)}
+.ing-head{display:flex;align-items:center;gap:8px;padding:9px 14px 0}
+.ing-head b{font-size:13px}.ing-head button{margin-left:auto}
+.ing-body{padding:8px 14px;font-size:12px;color:var(--ink-2);display:flex;gap:22px;flex-wrap:wrap}
+.ing-body .col{display:grid;grid-template-columns:auto auto;gap:2px 10px;align-items:baseline}
+.ing-body .col span{color:var(--ink-3)}.ing-body .col b{font-weight:600;color:var(--ink)}
+.ing-foot{display:flex;gap:8px;justify-content:flex-end;padding:0 14px 10px}
+.ing-msg{padding:8px 11px;border-radius:var(--r-sm);font-size:12px;width:100%}
+.ing-msg.err{background:#FDF0F0;color:#B03236;border:1px solid #F6DADA}
+.ing-msg.ok{background:#EFF8F0;color:#2E7D32;border:1px solid #DCEEDD}
+.delta{font-variant-numeric:tabular-nums;font-weight:600}
+.delta.up{color:#2E7D32}.delta.down{color:#B03236}
 @media(max-width:1330px){#territoryPanel{width:280px;flex:0 0 280px}#conPanel{width:340px;flex:0 0 340px}}
 @media(max-width:980px){
   :root{--h-header:auto}
@@ -202,8 +234,24 @@ code{background:#F2F4F7;border-radius:3px;padding:1px 5px;font-size:11.5px;font-
     <button data-view="rules">Reglas y datos</button>
   </nav>
   <div class="meta" id="metaFuente">—</div>
+  <button class="ghost" id="btnActualizar" title="Subir el export de Chronos">Actualizar datos</button>
+  <input type="file" id="fileExport" accept=".xlsx,.xls,.csv" hidden />
 </header>
-<div class="banner">Datos de Chronos · ventana <code>updated_at</code> 2 días · ubicación aproximada, no apta para navegar</div>
+<div class="banner" id="banner">Cargando…</div>
+
+<!-- Ingesta: preview antes de escribir. Inline bajo el banner, no modal —
+     hay que poder seguir viendo el tablero mientras se compara el delta. -->
+<div class="ingesta" id="ingesta" hidden>
+  <div class="ing-head">
+    <b id="ingTitulo">Revisá antes de guardar</b>
+    <button class="ghost" id="ingCerrar" aria-label="Cerrar">✕</button>
+  </div>
+  <div class="ing-body" id="ingBody"></div>
+  <div class="ing-foot">
+    <button class="ghost" id="ingCancelar">Cancelar</button>
+    <button class="primary" id="ingConfirmar">Guardar en la base</button>
+  </div>
+</div>
 
 <main>
   <section class="view active" id="view-control">
@@ -218,8 +266,7 @@ code{background:#F2F4F7;border-radius:3px;padding:1px 5px;font-size:11.5px;font-
           <button data-sig="guia" aria-pressed="false">Solo guía generada</button>
         </div>
         <select id="fTerr"></select>
-        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)">
-          <input type="checkbox" id="fNuevas" /> Solo nuevas</label>
+        <select id="fTrans"></select>
         <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2)">
           <input type="checkbox" id="fExacta" /> Solo ubicación precisa</label>
         <span style="flex:1"></span>
@@ -334,7 +381,7 @@ let PUNTOS=[],META={};
 const ubicada=p=>p.geo&&(p.geo.startsWith('geo')||p.geo==='malla');
 const precisa=p=>p.geo&&p.geo.startsWith('geo');
 const S={level:'nacional',dept:null,mun:null,selected:null,queueCollapsed:false,conSel:null,tilesOk:true,
-  filters:{q:'',sig:'all',terr:'all',nuevas:false,exacta:false,sinUbicar:false,kpi:null,minGuias:0,metrica:'t'}};
+  filters:{q:'',sig:'all',terr:'all',trans:'all',exacta:false,sinUbicar:false,kpi:null,minGuias:0,metrica:'t'}};
 // Guías según la métrica activa (todas / sólo preparadas). Es la variable que dimensiona el mapa.
 const gval=p=>S.filters.metrica==='p'?p.p:p.t;
 // Símbolos graduados: 5 rangos fijos de guías -> 5 tamaños. Cubre bodega (1..5k) y clúster (1..25k).
@@ -350,17 +397,31 @@ function pass(p){const f=S.filters;
   if(f.terr!=='all'&&p.dep!==f.terr)return false;
   if(f.sig==='prep'&&p.p===0)return false;
   if(f.sig==='guia'&&p.p>0)return false;
-  if(f.nuevas&&!p.nu)return false;
   if(f.exacta&&!precisa(p))return false;
   if(f.sinUbicar&&ubicada(p))return false;
   if(f.kpi==='prep'&&p.p===0)return false;
-  if(f.kpi==='nuevas'&&!p.nu)return false;
+  if(f.kpi==='sinub'&&ubicada(p))return false;
   if(f.minGuias>0&&gval(p)<f.minGuias)return false;
   return true}
-const visible=()=>PUNTOS.filter(p=>inScope(p)&&pass(p));
-function agg(l){const a={n:l.length,t:0,p:0,g:0,conPrep:0,nuevas:0,exactas:0};
-  l.forEach(x=>{a.t+=x.t;a.p+=x.p;a.g+=x.g;if(x.p>0)a.conPrep++;if(x.nu)a.nuevas++;if(precisa(x))a.exactas++});return a}
+// Con filtro de transportadora el punto se proyecta a la carga DE ESA transportadora:
+// si no, se filtraría por una y se seguirían mostrando los totales de toda la bodega.
+function proj(p){const t=S.filters.trans;
+  if(t==='all')return p;
+  const r=(p.tr||[]).find(x=>x[0]===t);
+  return r?{...p,p:r[1],g:r[2],t:r[1]+r[2]}:null}
+const visible=()=>PUNTOS.filter(inScope).map(proj).filter(p=>p&&pass(p));
+function agg(l){const a={n:l.length,t:0,p:0,g:0,conPrep:0,sinUb:0,gSinUb:0,exactas:0};
+  l.forEach(x=>{a.t+=x.t;a.p+=x.p;a.g+=x.g;if(x.p>0)a.conPrep++;
+    if(!ubicada(x)){a.sinUb++;a.gSinUb+=x.t}if(precisa(x))a.exactas++});return a}
 const estado=p=>p.geo==='depto'?'nodata':(p.p>0?'crit':'risk');
+// Hace operable con teclado un elemento que no es <button>. La tabla de
+// territorios, la cola y los grupos de consolidación son tr/div con onclick:
+// sin esto quedan fuera del alcance de cualquiera que no use ratón.
+function activable(el,fn){
+  el.tabIndex=0;el.setAttribute('role','button');
+  el.onclick=fn;
+  el.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();fn()}};
+}
 const groupBy=(l,f)=>{const m=new Map();l.forEach(x=>{const k=f(x);if(!m.has(k))m.set(k,[]);m.get(k).push(x)});return m};
 
 let map,layerPoints,layerOutline,conMap,conLayer,conInit=false;
@@ -418,7 +479,7 @@ function renderMarkers(){
       const m=L.marker([p.lat,p.lng],{icon:mkIcon(cls,'',tam(gval(p)))}).addTo(layerPoints);
       m.bindTooltip(`<div class="tt"><b>${p.b}</b>${p.a||''}<br>${p.m} · <span class="src">${p.dane}</span><br>
         <b style="display:inline">${fmt(p.t)}</b> guías · ${fmt(p.p)} prep. · ${fmt(p.g)} guía gen.
-        ${p.geo==='malla'?'<br><span style="color:var(--ink-3)">Interpolado (malla) · error de cientos de metros</span>':'<br><span style="color:var(--ink-3)">Geocodificado · nivel de vía</span>'}</div>`,
+        <br><span style="color:var(--ink-3)">${p.geo==='geo_alta'?'Geocodificado · nivel de predio':p.geo==='geo_baja'?'Geocodificado · sólo barrio':'Geocodificado · nivel de vía'}</span></div>`,
         {className:'tt',direction:'top',offset:[0,-8]});
       m.on('click',()=>selectPoint(p.id))});
     groupBy(sinUbicar,p=>p.dane).forEach(g=>{
@@ -476,27 +537,27 @@ function renderKpis(){
   const k=[{id:'t',v:fmt(a.t),l:'Guías por recoger',h:`en ${fmt(a.n)} bodegas`,c:'crit'},
     {id:'prep',v:fmt(a.p),l:'Preparadas para transportadora',h:a.t?Math.round(a.p/a.t*100)+'% del total':'—',c:'crit'},
     {id:'cp',v:fmt(a.conPrep),l:'Bodegas con carga confirmada',h:'al menos 1 preparada',c:'warn'},
-    {id:'nuevas',v:fmt(a.nuevas),l:'Bodegas nuevas (2026)',h:'creadas este año',c:'ok'}];
+    {id:'sinub',v:fmt(a.gSinUb),l:'Guías sin ubicación real',h:`${a.t?Math.round(a.gSinUb/a.t*100):0}% en centroide · ${fmt(a.sinUb)} bodegas`,c:'warn'}];
   document.getElementById('kpis').innerHTML=k.map(x=>`<button class="kpi ${x.c}" data-k="${x.id}"
     aria-pressed="${S.filters.kpi===x.id}"><div class="v tnum">${x.v}</div><div class="l">${x.l}</div><div class="h">${x.h}</div></button>`).join('');
-  document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{const id=b.dataset.k;
+  document.querySelectorAll('#kpis [data-k]').forEach(b=>b.onclick=()=>{const id=b.dataset.k;
     if(id==='t'||id==='cp')return;S.filters.kpi=S.filters.kpi===id?null:id;renderAll()})}
 function renderChips(){
   const f=S.filters,ch=[];
   if(f.q)ch.push(['q','Búsqueda: “'+f.q+'”']);
   if(f.sig!=='all')ch.push(['sig',f.sig==='prep'?'Con preparadas':'Solo guía generada']);
   if(f.terr!=='all')ch.push(['terr','Depto: '+(DEPTS[f.terr]?DEPTS[f.terr][0]:f.terr)]);
-  if(f.nuevas)ch.push(['nuevas','Solo nuevas']);
+  if(f.trans!=='all')ch.push(['trans','Transportadora: '+f.trans]);
   if(f.exacta)ch.push(['exacta','Solo ubicación precisa']);
   if(f.sinUbicar)ch.push(['sinUbicar','Solo sin ubicar']);
-  if(f.kpi)ch.push(['kpi','KPI: '+(f.kpi==='prep'?'con preparadas':'nuevas')]);
+  if(f.kpi)ch.push(['kpi','KPI: '+(f.kpi==='prep'?'con preparadas':'sin ubicar')]);
   if(f.minGuias>0)ch.push(['minGuias',(f.metrica==='p'?'Preparadas':'Guías')+' ≥ '+f.minGuias]);
   const el=document.getElementById('activeChips');
   el.innerHTML=ch.map(([k,t])=>`<span class="chip">${t}<button data-rm="${k}">✕</button></span>`).join('')+
     (ch.length?`<button class="more" id="clr" style="margin-left:4px">Limpiar todo</button>`:'');
   el.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{const k=b.dataset.rm;
     if(k==='q'){f.q='';document.getElementById('fSearch').value=''}
-    else if(k==='nuevas'){f.nuevas=false;document.getElementById('fNuevas').checked=false}
+    else if(k==='trans'){f.trans='all';document.getElementById('fTrans').value='all'}
     else if(k==='exacta'){f.exacta=false;document.getElementById('fExacta').checked=false}
     else if(k==='sinUbicar')f.sinUbicar=false;
     else if(k==='minGuias'){f.minGuias=0;document.getElementById('minGuias').value=0;
@@ -506,9 +567,9 @@ function renderChips(){
     else{f.terr='all';document.getElementById('fTerr').value='all'}
     renderAll()});
   const c=document.getElementById('clr');if(c)c.onclick=()=>{
-    S.filters={q:'',sig:'all',terr:'all',nuevas:false,exacta:false,sinUbicar:false,kpi:null,minGuias:0,metrica:'t'};
+    S.filters={q:'',sig:'all',terr:'all',trans:'all',exacta:false,sinUbicar:false,kpi:null,minGuias:0,metrica:'t'};
     document.getElementById('fSearch').value='';
-    ['fNuevas','fExacta'].forEach(i=>document.getElementById(i).checked=false);
+    document.getElementById('fExacta').checked=false;document.getElementById('fTrans').value='all';
     document.getElementById('fTerr').value='all';
     document.getElementById('minGuias').value=0;
     document.getElementById('minLbl').textContent='Guías ≥ 0';
@@ -538,8 +599,8 @@ function renderTerr(){
       <td class="tnum">${fmt(T.t)}</td><td class="tnum">${fmt(T.p)}</td><td class="tnum">${T.n}</td></tr></tfoot>`;
   document.querySelectorAll('#terrTable th').forEach(th=>th.onclick=()=>{const k=th.dataset.k;
     if(k==='label')return;tsort={k,d:tsort.k===k?-tsort.d:-1};renderTerr()});
-  document.querySelectorAll('#terrTable tbody tr').forEach(tr=>tr.onclick=()=>
-    byNat?drillDept(tr.dataset.key):drillMun(S.dept,tr.dataset.key))}
+  document.querySelectorAll('#terrTable tbody tr').forEach(tr=>activable(tr,()=>
+    byNat?drillDept(tr.dataset.key):drillMun(S.dept,tr.dataset.key)))}
 function renderQueue(){
   const el=document.getElementById('queuePanel');
   const show=(S.level==='municipio'||S.level==='departamento')&&!S.queueCollapsed;
@@ -556,7 +617,7 @@ function renderQueue(){
   body.innerHTML=list.map(p=>{const e=estado(p),pc=p.t?p.p/p.t*100:0;
     return `<div class="qcard ${S.selected===p.id?'sel':''}" data-id="${p.id}">
       <div class="qtop"><span class="sev ${e}">${e==='crit'?'Con preparadas':e==='risk'?'Solo guía generada':'Sin ubicar'}</span>
-        ${p.nu?'<span class="tag new">Nueva</span>':''}
+        
         ${!ubicada(p)?'<span class="tag apx">Sin ubicar</span>':(p.geo==='geo_alta'?'':'')}
         <span class="tag">${p.m}</span><span class="qgo">›</span></div>
       <div class="qname">${p.b}</div>
@@ -565,7 +626,7 @@ function renderQueue(){
       <div class="qaddr">${p.a||'sin dirección'}</div>
       <div class="split"><i class="p" style="width:${pc}%"></i><i class="g" style="width:${100-pc}%"></i></div>
     </div>`}).join('')+(a.n>300?`<div class="empty">Mostrando 300 de ${fmt(a.n)}.</div>`:'');
-  body.querySelectorAll('.qcard').forEach(c=>c.onclick=()=>selectPoint(c.dataset.id,true))}
+  body.querySelectorAll('.qcard').forEach(c=>activable(c,()=>selectPoint(c.dataset.id,true)))}
 function selectPoint(id,center){
   const p=PUNTOS.find(x=>String(x.id)===String(id));if(!p)return;
   S.selected=p.id;
@@ -577,7 +638,7 @@ function openDrawer(p){
     Math.abs(x.lat-p.lat)<0.0015&&Math.abs(x.lng-p.lng)<0.0015):[];
   document.getElementById('dTags').innerHTML=
     `<span class="sev ${e}">${e==='crit'?'Con preparadas':e==='risk'?'Solo guía generada':'Sin ubicar'}</span>
-     ${p.nu?'<span class="tag new">Bodega nueva</span>':''}<span class="tag">${p.dp}</span>`;
+     <span class="tag">${p.dp}</span>`;
   document.getElementById('dName').textContent=p.b;
   document.getElementById('dAddr').innerHTML=`${p.a||'sin dirección'} · ${p.m} <span class="src">DANE ${p.dane}</span>`;
   document.getElementById('dBody').innerHTML=`
@@ -587,11 +648,12 @@ function openDrawer(p){
         <span>Solo guía generada</span><b class="tnum">${fmt(p.g)}</b>
         <span>Cobertura de scanner</span><b class="tnum">${p.t?Math.round(p.p/p.t*100):0}%</b></div>
       <div class="split" style="height:7px;margin-top:8px"><i class="p" style="width:${p.t?p.p/p.t*100:0}%"></i><i class="g" style="width:${p.t?p.g/p.t*100:0}%"></i></div></div>
-    <div class="grp"><h3>Solicitud de recogida</h3>
-      <div class="kv"><span>Estado</span><b>${p.e}</b></div>
-      <div class="rz bad" style="display:block;margin-top:8px"><code>pick_ups</code> vino vacío para las 1.604 bodegas del export. Pendiente de verificar con Data.</div></div>
+    <div class="grp"><h3>Transportadoras</h3>
+      <div class="kv">${(p.tr||[]).map(([n,pp,gg])=>
+        `<span>${n}</span><b class="tnum">${fmt(pp+gg)} <span class="src">(${fmt(pp)} prep.)</span></b>`).join('')}</div>
+      <div class="rz" style="display:block;margin-top:8px">Último evento en esta bodega: <b>${(p.ue||'—').slice(0,16)}</b>. Es la última vez que se <i>tocó</i> el registro, no hace cuánto está preparada.</div></div>
     <div class="grp"><h3>Ubicación</h3>
-      <div class="kv"><span>Precisión</span><b>${({geo:'Geocodificado · nivel de vía',geo_alta:'Geocodificado · nivel de predio',geo_baja:'Geocodificado · sólo barrio',malla:'Malla (interpolado)',municipio:'Centroide del municipio',depto:'Centroide del departamento'})[p.geo]||p.geo}</b>
+      <div class="kv"><span>Precisión</span><b>${({geo:'Geocodificado · nivel de vía',geo_alta:'Geocodificado · nivel de predio',geo_baja:'Geocodificado · sólo barrio',municipio:'Centroide del municipio',depto:'Centroide del departamento'})[p.geo]||p.geo}</b>
         <span>Coordenada</span><b class="src">${p.lat}, ${p.lng}</b></div>
       ${!ubicada(p)?'<div class="rz bad" style="display:block;margin-top:8px">La dirección no se pudo geocodificar. El punto está en el centroide del municipio, no en la puerta.</div>':(p.geo!=='geo_alta'?'<div class="rz" style="display:block;margin-top:8px">Nivel de vía: sirve para agrupar y priorizar, verificar antes de navegar.</div>':'')}</div>
     ${near.length?`<div class="grp"><h3>Consolidación</h3>
@@ -634,9 +696,9 @@ function renderCon(){
       <ul>${gr.g.slice(0,5).map(x=>`<li>${x.b} — <b>${fmt(x.t)}</b><br><span class="src">${x.a||''}</span></li>`).join('')}
         ${gr.g.length>5?`<li>+${gr.g.length-5} más</li>`:''}</ul></div>`).join('')
     ||'<div class="empty"><b>Sin grupos</b>Ninguna dirección se pudo ubicar a nivel de cuadra.</div>';
-  document.querySelectorAll('.cgroup').forEach(d=>d.onclick=()=>{
+  document.querySelectorAll('.cgroup').forEach(d=>activable(d,()=>{
     const gr=G.find(x=>x.k===d.dataset.k);S.conSel=gr.k;
-    conMap.setView([gr.lat,gr.lng],16,{animate:true});renderCon()})}
+    conMap.setView([gr.lat,gr.lng],16,{animate:true});renderCon()}))}
 function renderCov(){
   const by=[...groupBy(PUNTOS,p=>p.dane).entries()].map(([k,g])=>{const a=agg(g);
     return{dane:k,mun:g[0].m,dp:g[0].dp,...a,pct:a.t?a.p/a.t*100:0}})
@@ -659,13 +721,15 @@ function renderRules(){
   const gt={};PUNTOS.forEach(p=>gt[p.geo]=(gt[p.geo]||0)+p.t);
   document.getElementById('rulesGrid').innerHTML=`
   <div class="card"><h3>De dónde salen estos datos</h3>
-    <div class="kv"><span>Fuente</span><b class="src">Chronos · raw.orders_co</b>
-      <span>Ventana</span><b><code>updated_at</code> 2 días</b>
+    <div class="kv"><span>Fuente</span><b class="src">${META.fuente||'Chronos · raw.orders_co'}</b>
+      <span>Ventana</span><b>${META.ventana||'no declarada en el export'}</b>
+      <span>Rango de eventos</span><b class="src">${META.evento_min?String(META.evento_min).slice(0,10)+' → '+String(META.evento_max).slice(0,10):'—'}</b>
       <span>Filtro</span><b class="src">status IN (PREPARADO…, GUIA_GENERADA)</b>
       <span>Bodegas</span><b class="tnum">${fmt(T.n)}</b>
       <span>Guías</span><b class="tnum">${fmt(T.t)}</b>
-      <span>Generado</span><b>${META.generado||'—'}</b></div>
-    <div class="lg-note">Es <b>flujo reciente</b>, no el stock completo de guías varadas. Para la cola operativa la ventana debe subir a 30 días o quitarse.</div></div>
+      <span>Generado</span><b>${META.generado||'—'}</b>
+      ${META.ultima_importacion?`<span>Última carga</span><b>${String(META.ultima_importacion.created_at).slice(0,16).replace('T',' ')} · ${META.ultima_importacion.usuario||''}</b>`:''}</div>
+    <div class="lg-note"><b>La antigüedad no se puede leer de acá.</b> <code>ultimo_evento</code> es <code>MAX(updated_at)</code>: la última vez que se tocó el registro, no hace cuánto la guía está preparada — el 95,7% viene de las últimas 24h porque algo refresca la fila a diario. Las cubetas de antigüedad están pedidas a Data.</div></div>
   <div class="card"><h3>Las dos señales no valen igual</h3>
     <div class="kv"><span><code>PREPARADO PARA TRANSPORTADORA</code></span><b class="tnum">${fmt(T.p)} (${Math.round(T.p/T.t*100)}%)</b>
       <span><code>GUIA_GENERADA</code></span><b class="tnum">${fmt(T.g)} (${Math.round(T.g/T.t*100)}%)</b>
@@ -702,7 +766,7 @@ document.getElementById('scrim').onclick=closeDrawer;
 document.getElementById('dClose').onclick=closeDrawer;
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDrawer()});
 document.getElementById('fSearch').oninput=e=>{S.filters.q=e.target.value.trim();renderAll()};
-document.getElementById('fNuevas').onchange=e=>{S.filters.nuevas=e.target.checked;renderAll()};
+document.getElementById('fTrans').onchange=e=>{S.filters.trans=e.target.value;renderAll()};
 document.getElementById('fExacta').onchange=e=>{S.filters.exacta=e.target.checked;renderAll()};
 document.querySelectorAll('[data-sig]').forEach(b=>b.onclick=()=>{S.filters.sig=b.dataset.sig;
   document.querySelectorAll('[data-sig]').forEach(x=>x.setAttribute('aria-pressed',x===b));renderAll()});
@@ -730,19 +794,145 @@ function renderLegendSizes(){
 }
 function renderAll(){renderCrumbs();renderKpis();renderChips();renderTerr();renderQueue();renderMarkers();renderLegendSizes()}
 
-fetch('./datos-recolecciones.json').then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json()})
- .then(d=>{PUNTOS=d.puntos;META=d.meta;
-   document.getElementById('metaFuente').textContent=`${fmt(META.bodegas)} bodegas · ${fmt(META.guias)} guías · ${META.generado}`;
-   const deps=[...new Set(PUNTOS.map(p=>p.dep))].sort();
-   const sel=document.getElementById('fTerr');
-   sel.innerHTML='<option value="all">Todos los departamentos</option>'+
-     deps.map(d=>`<option value="${d}">${d} · ${DEPTS[d]?DEPTS[d][0]:d}</option>`).join('');
-   sel.onchange=e=>{S.filters.terr=e.target.value;e.target.value!=='all'?drillDept(e.target.value):renderAll()};
-   document.getElementById('loading').classList.add('hide');
-   initMap()})
+// ─── Carga de datos ────────────────────────────────────────────────────────
+// Primero la base (Supabase, vía la API del hub). Si no responde —porque el
+// archivo se está viendo suelto, sin el Next detrás— cae al JSON local. El
+// banner siempre dice de dónde salió lo que estás viendo: nunca hay que
+// adivinar si la data es la de la base o una copia vieja del disco.
+let FUENTE='';
+
+async function cargarDatos(){
+  try{
+    const r=await fetch('/api/logistica/recolecciones',{credentials:'same-origin'});
+    if(r.ok){const d=await r.json();
+      if(d.meta&&d.meta.sin_datos)throw new Error('base vacía');
+      FUENTE='base';return d}
+    throw new Error('HTTP '+r.status);
+  }catch(e){
+    const r=await fetch('./datos-recolecciones.json');
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    FUENTE='archivo';return r.json();
+  }
+}
+
+function pintarBanner(){
+  const m=META||{};
+  const ventana=m.ventana||'ventana no declarada';
+  const rango=m.evento_min&&m.evento_max
+    ? ` · ${String(m.evento_min).slice(0,10)} → ${String(m.evento_max).slice(0,10)}`:'';
+  const cob=m.cobertura_geocodificada!=null
+    ? ` · ${m.cobertura_geocodificada}% de las guías con ubicación real`:'';
+  const origen=FUENTE==='base'?'base':'archivo local';
+  document.getElementById('banner').innerHTML=
+    `Datos de Chronos (${origen}) · ${ventana}${rango}${cob} · ` +
+    `<b>nivel “vía” = una vía con ese nombre, no la puerta</b> — verificar antes de navegar`;
+}
+
+function aplicarDatos(d){
+  PUNTOS=d.puntos;META=d.meta;
+  document.getElementById('metaFuente').textContent=
+    `${fmt(META.bodegas)} bodegas · ${fmt(META.guias)} guías · ${META.generado}`;
+  const deps=[...new Set(PUNTOS.map(p=>p.dep))].sort();
+  const sel=document.getElementById('fTerr');
+  sel.innerHTML='<option value="all">Todos los departamentos</option>'+
+    deps.map(d=>`<option value="${d}">${d} · ${DEPTS[d]?DEPTS[d][0]:d}</option>`).join('');
+  sel.onchange=e=>{S.filters.terr=e.target.value;e.target.value!=='all'?drillDept(e.target.value):renderAll()};
+  const st=document.getElementById('fTrans');
+  st.innerHTML='<option value="all">Todas las transportadoras</option>'+
+    (META.transportadoras||[]).map(t=>`<option value="${t.n}">${t.n} · ${fmt(t.t)}</option>`).join('');
+  pintarBanner();
+}
+
+cargarDatos()
+ .then(d=>{aplicarDatos(d);document.getElementById('loading').classList.add('hide');initMap()})
  .catch(err=>{document.getElementById('loading').innerHTML=
    `<div style="text-align:center;max-width:420px"><b style="display:block;margin-bottom:6px">No se pudieron cargar los datos</b>
-    <span style="color:var(--ink-3)">${err.message} — falta <code>datos-recolecciones.json</code> junto a este archivo.</span></div>`});
+    <span style="color:var(--ink-3)">${err.message} — ni la base ni <code>datos-recolecciones.json</code> respondieron.</span></div>`});
+
+// ─── Ingesta: subir el export sin correr scripts ───────────────────────────
+// Dos pasos siempre. El primer POST es dry-run: devuelve el preview y el delta
+// contra lo último cargado, sin escribir. Recién al confirmar toca la base.
+const $ing=document.getElementById('ingesta'), $ingBody=document.getElementById('ingBody');
+const $file=document.getElementById('fileExport'), $confirmar=document.getElementById('ingConfirmar');
+let archivoPendiente=null;
+
+const cerrarIngesta=()=>{$ing.hidden=true;archivoPendiente=null;$file.value='';
+  if(map)setTimeout(()=>map.invalidateSize(),210)};
+document.getElementById('ingCerrar').onclick=cerrarIngesta;
+document.getElementById('ingCancelar').onclick=cerrarIngesta;
+document.getElementById('btnActualizar').onclick=()=>$file.click();
+
+const msg=(t,cls)=>`<div class="ing-msg ${cls}">${t}</div>`;
+const signo=n=>(n>0?'+':'')+fmt(n);
+
+function pintarPreview(d){
+  const r=d.resumen,dl=d.delta;
+  $ingBody.innerHTML=`
+    <div class="col">
+      <span>Archivo</span><b>${d.archivo}</b>
+      <span>Fecha de los datos</span><b>${d.fecha_datos}</b>
+      <span>Filas</span><b class="tnum">${fmt(r.filas)}</b>
+    </div>
+    <div class="col">
+      <span>Bodegas</span><b class="tnum">${fmt(r.bodegas)}</b>
+      <span>Guías</span><b class="tnum">${fmt(r.guias)}</b>
+      <span>Preparadas</span><b class="tnum">${fmt(r.preparadas)}</b>
+    </div>
+    <div class="col">
+      <span>Transportadoras</span><b class="tnum">${r.transportadoras.length}</b>
+      <span>Último evento</span><b>${(r.evento_max||'—').slice(0,16)}</b>
+    </div>
+    ${dl?`<div class="col">
+      <span>vs. ${dl.anterior.fecha_datos||'la carga anterior'}</span>
+      <b class="delta ${dl.bodegas>=0?'up':'down'}">${signo(dl.bodegas)} bodegas</b>
+      <span></span><b class="delta ${dl.guias>=0?'up':'down'}">${signo(dl.guias)} guías</b>
+    </div>`:''}
+    ${d.pisa_carga_del_dia
+      ? msg(`Ya hay datos cargados del <b>${d.fecha_datos}</b>. Guardar los reemplaza (no duplica).`,'ok')
+      : ''}`;
+  $confirmar.disabled=false;
+  $ing.hidden=false;
+}
+
+async function enviar(confirmar){
+  const fd=new FormData();
+  fd.append('archivo',archivoPendiente);
+  if(confirmar)fd.append('confirmar','true');
+  const r=await fetch('/api/logistica/recolecciones/importar',
+    {method:'POST',body:fd,credentials:'same-origin'});
+  const d=await r.json().catch(()=>({error:'Respuesta ilegible del servidor'}));
+  if(!r.ok)throw new Error(d.error||('HTTP '+r.status));
+  return d;
+}
+
+$file.onchange=async e=>{
+  archivoPendiente=e.target.files[0];
+  if(!archivoPendiente)return;
+  $ing.hidden=false;$confirmar.disabled=true;
+  $ingBody.innerHTML=`<div class="ing-msg">Leyendo <b>${archivoPendiente.name}</b>…</div>`;
+  try{pintarPreview(await enviar(false))}
+  catch(err){
+    $ingBody.innerHTML=msg(`No se pudo procesar: ${err.message}`,'err');
+    $confirmar.disabled=true;
+  }
+};
+
+$confirmar.onclick=async()=>{
+  $confirmar.disabled=true;
+  $ingBody.innerHTML=`<div class="ing-msg">Guardando…</div>`;
+  try{
+    const d=await enviar(true);
+    $ingBody.innerHTML=msg(
+      `Guardado: ${fmt(d.resumen.bodegas)} bodegas · ${fmt(d.resumen.guias)} guías del ${d.fecha_datos}.`,'ok');
+    aplicarDatos(await cargarDatos());
+    renderAll();
+    setTimeout(cerrarIngesta,1800);
+  }catch(err){
+    $ingBody.innerHTML=msg(`No se guardó: ${err.message}`,'err');
+    $confirmar.disabled=false;
+  }
+};
+
 window.addEventListener('resize',()=>{if(map)map.invalidateSize();if(conMap)conMap.invalidateSize()});
 </script>
 </body>

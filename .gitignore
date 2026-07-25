@@ -12,5 +12,10 @@
 /cerebro/
 
 # Data generada del pipeline de recolecciones (se regenera local, no se sube).
-hub/public/logistica/recolecciones/datos-recolecciones.json
+# Todo lo que lleva direcciones de bodegas o coordenadas resueltas es data interna.
+hub/public/logistica/recolecciones/datos-recolecciones*.json
 hub/public/logistica/recolecciones/pipeline/centroides.json
+hub/public/logistica/recolecciones/pipeline/geocache-*.json
+hub/public/logistica/recolecciones/pipeline/por-geocodificar.json
+hub/public/logistica/recolecciones/pipeline/geocode-final.json
+hub/public/logistica/recolecciones/pipeline/*.csv
