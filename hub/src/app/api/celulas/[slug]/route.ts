@@ -1,58 +1,7 @@
 import { NextResponse } from "next/server";
-import { createClient as createServerSupabase } from "@/lib/supabase-server";
 import { supabase } from "@/lib/supabase";
-
-async function requireSuperAdmin() {
-  const authClient = await createServerSupabase();
-  const { data: { user } } = await authClient.auth.getUser();
-  if (!user || !supabase) return null;
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("is_super_admin")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  return profile?.is_super_admin ? user : null;
-}
-
-// Solo deja crear proyectos a alguien de la propia célula (o super admin) —
-// el celula_id sale siempre del perfil autenticado, nunca del body.
-async function requireCelulaMember(celulaId: string) {
-  const authClient = await createServerSupabase();
-  const { data: { user } } = await authClient.auth.getUser();
-  if (!user || !supabase) return null;
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("id, celula_id, is_super_admin")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  if (!profile) return null;
-  return profile.is_super_admin || profile.celula_id === celulaId ? profile : null;
-}
-
-// Reusa el prefijo que la célula ya tenga en uso (el de mayor número, si hay
-// varios) e incrementa; si no tiene ninguno todavía, deriva uno de su slug.
-function nextProjectCode(slug: string, existentes: { project_code: string | null }[]): string {
-  const maxByPrefix = new Map<string, number>();
-  for (const { project_code } of existentes) {
-    if (!project_code) continue;
-    const [prefix, numStr] = project_code.split("-");
-    const num = parseInt(numStr, 10);
-    if (!prefix || Number.isNaN(num)) continue;
-    maxByPrefix.set(prefix, Math.max(maxByPrefix.get(prefix) ?? 0, num));
-  }
-
-  if (maxByPrefix.size > 0) {
-    const [prefix, max] = [...maxByPrefix.entries()].sort((a, b) => b[1] - a[1])[0];
-    return `${prefix}-${String(max + 1).padStart(3, "0")}`;
-  }
-
-  const prefix = slug.replace(/[^a-z]/gi, "").slice(0, 3).toUpperCase() || "PRJ";
-  return `${prefix}-001`;
-}
+import { requireSuperAdmin, requireCelulaMember } from "@/lib/require-celula-member";
+import { nextProjectCode } from "@/lib/project-code";
 
 export async function GET(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
   if (!supabase) return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
@@ -70,7 +19,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 
   const [{ data: miembros }, { data: proyectos }, { data: updates }, { data: roadmap }] = await Promise.all([
     supabase.from("profiles").select("id, email, nombre, is_super_admin").eq("celula_id", celula.id),
-    supabase.from("projects").select("id, name, project_code, status, type, handoff_status, summary, business_area, prototype_url").eq("celula_owner_id", celula.id),
+    supabase.from("projects").select("id, name, project_code, status, type, handoff_status, summary, business_area, prototype_url, parent_project_id, estado_interno, vpv").eq("celula_owner_id", celula.id),
     supabase.from("celula_updates").select("*").eq("celula_id", celula.id).order("week_date", { ascending: false }),
     supabase.from("roadmap_items").select("*").eq("celula_id", celula.id).order("target_date", { ascending: true }),
   ]);

@@ -205,6 +205,9 @@ export type Proyecto = {
   foco: string;
   links?: LinkRef[];
   experimentos?: string[]; // slugs de `experimentos` — relación explícita, no adivinada
+  /** Etapas adicionales que el proyecto toca (transversales). Se muestran como
+   *  highlight secundario en la cadena de valor de la ficha detalle. */
+  etapasRelacionadas?: { etapa: string; rol: string }[];
   /**
    * Estado operativo tal como está HOY en Jira, literal. No es lo mismo que
    * `fase` (nuestra lectura) ni que `handoff`: es lo que ve cualquiera que abra
@@ -273,15 +276,26 @@ export const proyectos: Proyecto[] = [
     experimentos: ["autogeneracion-guias"],
   },
   {
-    nombre: "Vigía — extensión sobre el módulo de órdenes",
+    nombre: "Vigía — control operativo en tiempo real",
     slug: "vigia",
-    etapa: "Generación", tipo: "Experimento", fase: "Diseño", handoff: "No aplica",
+    etapa: "Tránsito", tipo: "Experimento", fase: "Diseño", handoff: "No aplica",
     jira: "⚠️ No existe en Jira",
-    doc: "ninguno",
+    doc: "parcial",
+    destacado: true,
     descripcion:
-      "Una extensión de Chrome que lee las guías del módulo de órdenes y le anticipa al usuario el resultado probable, para que corrija antes de que la orden se caiga.",
-    foco: "Dueño: Michel Pino. Diseño en curso, sin desarrollo técnico (confirmado 22-jul). Cruza las fugas ② devolución y ④ novedad porque actúa ANTES del desenlace. GATE: mientras sea diseño está bien, pero el día que entre a desarrollo necesita ticket, métrica y spec o se construye a ciegas.",
-    links: [{ tipo: "prototipo", label: "Prototipo de la extensión", href: "", falta: true }],
+      "Extensión de Chrome (Manifest V3) que intercepta el API de Dropi, calcula SLAs automáticamente por estado de orden e inyecta alertas accionables directamente en el dashboard — para ambos roles (Dropshipper y Proveedor). Actúa ANTES del desenlace: da visibilidad sobre qué órdenes están en riesgo para que el usuario corrija antes de que se caigan.",
+    foco: "Dueño: Michel Pino. Diseño en curso, sin desarrollo técnico (confirmado 22-jul). Es la única iniciativa transversal a toda la cadena de valor: monitorea desde Confirmación (POR CONFIRMAR 12h, PENDIENTE 24h) hasta Novedad (24h), pasando por Despacho (GUÍA GENERADA 48h, RECOGIDO 24h) y Tránsito (EN TRÁNSITO 72h). Cruza directamente las fugas ② devolución (~26%) y ④ novedad porque su valor es anticipar el problema, no reaccionar después. Para el Dropshipper: SLA por orden, WhatsApp directo al proveedor con número real del API, breakdown por estado, $ en riesgo. Para el Proveedor: SLA sobre lo que controla (confirmar, despachar, generar guía) + monitor de stock por bodega con alertas de quiebre. Stack: interceptor fetch/XHR en MAIN world → motor SLA puro → inyección visual Angular-resilient con polling 2s. GATE: mientras sea diseño está bien, pero el día que entre a desarrollo necesita ticket, métrica y spec o se construye a ciegas.",
+    etapasRelacionadas: [
+      { etapa: "Confirmación", rol: "POR CONFIRMAR (12h) · PENDIENTE (24h) — el proveedor no confirma o no despacha" },
+      { etapa: "Despacho", rol: "GUÍA GENERADA (48h) · RECOGIDO (24h) — alerta si la guía no se recoge a tiempo" },
+      { etapa: "Tránsito", rol: "EN TRÁNSITO (72h) — monitoreo activo del paquete en la red del carrier" },
+      { etapa: "Entrega / Devolución", rol: "Prevención: el usuario ve el riesgo ANTES del desenlace y puede actuar" },
+      { etapa: "Novedad / Posventa", rol: "NOVEDAD (24h) — escalamiento inmediato al carrier o al líder" },
+    ],
+    links: [
+      { tipo: "prototipo", label: "Conceptualización interactiva", href: "/proyectos/logistica/experimentos/vigia" },
+      { tipo: "doc", label: "Arquitectura v4 (Claude Code prompt)", href: "", falta: true },
+    ],
     experimentos: ["vigia"],
   },
   {
@@ -632,14 +646,17 @@ export const experimentos: Experimento[] = [
   {
     slug: "vigia",
     proyectoSlug: "vigia",
-    links: [{ tipo: "prototipo", label: "Prototipo de la extensión", href: "", falta: true }],
-    nombre: "Vigía — extensión Chrome sobre el módulo de órdenes",
+    links: [{ tipo: "prototipo", label: "Conceptualización interactiva", href: "/proyectos/logistica/experimentos/vigia" }],
+    nombre: "Vigía — control operativo en tiempo real para Dropi",
+    demoHref: "/proyectos/logistica/experimentos/vigia",
     hipotesis:
-      "Una extensión que lee las guías del módulo de órdenes y le anticipa al usuario el resultado probable (qué revisar, qué tener en cuenta) le permite corregir antes de que la orden se caiga y mejorar su operación.",
-    metrica: "[por definir con datos] — candidatas: % de guías corregidas tras la alerta · efecto en devolución/novedad de quien la usa",
-    estado: "Idea",
-    impacto: "Herramienta predictiva/advisory sobre la orden creada. Actúa antes del desenlace, así que cruza las fugas ② devolución y ④ novedad.",
+      "Si el usuario (dropshipper o proveedor) puede ver en tiempo real qué órdenes están fuera de SLA, con acciones de un click (WhatsApp al proveedor/carrier, escalar, exportar), corrige antes de que la orden se caiga — reduciendo devoluciones y novedades sin recuperar.",
+    metrica: "Candidatas: % de órdenes intervenidas que se recuperan vs. control · reducción de tiempo de reacción ante novedades (h) · efecto en tasa de devolución de usuarios con la extensión vs. sin ella",
+    estado: "Diseñado",
+    impacto: "Transversal a 5 de 6 etapas de la orden. Hoy el 59% se entrega (meta 70%). La fuga ② (devolución ~26%) y la fuga ④ (novedades sin recuperar) son las dos que Vigía ataca directamente porque actúa ANTES del desenlace. Con 3.4M órdenes/mes, cada punto porcentual de recuperación = ~34K órdenes. Los 6 umbrales SLA (12h–72h) cubren: POR CONFIRMAR, PENDIENTE, GUÍA GENERADA, RECOGIDO, EN TRÁNSITO, NOVEDAD. Para proveedores además incluye monitor de stock por bodega (rojo <10, naranja <50, amarillo <100 uds).",
     proyecto: "Vigía (sin ticket todavía)",
+    aprendizaje:
+      "La conceptualización v4 define dos módulos completos (Dropshipper + Proveedor) con auto-discovery de campos del API. El interceptor fetch/XHR en MAIN world ya funciona en la v3.2 actual. El riesgo principal es que Angular destruye el DOM — resuelto con polling 2s. El valor no es solo la alerta: es que el WhatsApp sale con el número REAL del proveedor, pre-armado con el contexto de la orden. Sin eso, el dropshipper tiene que buscar el contacto manualmente.",
   },
 ];
 
