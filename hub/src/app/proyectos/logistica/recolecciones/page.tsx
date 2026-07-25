@@ -3,6 +3,7 @@ import Link from "next/link";
 import { cargarFoto, cargarReglas } from "@/lib/recolecciones/datos";
 import { armarTablero } from "@/lib/recolecciones/tablero";
 import { ETIQUETA_VEREDICTO } from "@/lib/recolecciones/elegibilidad";
+import ArmarSolicitud from "./ArmarSolicitud";
 import "./recolecciones.css";
 
 // Control de Recolecciones — tablero del día.
@@ -151,38 +152,12 @@ export default async function RecoleccionesPage() {
 
                   {f.elegibles.length > 0 && (
                     <details className="rec-t-detalle">
-                      <summary>Ver las {f.elegibles.length} bodegas</summary>
-                      <div className="rec-tabla-wrap">
-                        <table className="rec-tabla">
-                          <thead>
-                            <tr>
-                              <th>Bodega</th>
-                              <th>Municipio</th>
-                              <th className="num">Paquetes</th>
-                              <th>Ubicación</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {f.elegibles.slice(0, 40).map(c => (
-                              <tr key={c.warehouse_id}>
-                                <td>{c.nombre}</td>
-                                <td>{c.municipio}</td>
-                                <td className="num tnum">{fmt(c.paquetes)}</td>
-                                <td>
-                                  {c.ubicacion_confiable
-                                    ? <span className="rec-ok">verificada</span>
-                                    : <span className="rec-warn">sin ubicar</span>}
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      {f.elegibles.length > 40 && (
-                        <p className="rec-mas">
-                          + {fmt(f.elegibles.length - 40)} más. El listado completo va en el archivo.
-                        </p>
-                      )}
+                      <summary>Armar la solicitud · {f.elegibles.length} bodegas</summary>
+                      <ArmarSolicitud
+                        transportadora={f.transportadora}
+                        elegibles={f.elegibles}
+                        minInicial={f.min_paquetes}
+                      />
                     </details>
                   )}
                 </article>

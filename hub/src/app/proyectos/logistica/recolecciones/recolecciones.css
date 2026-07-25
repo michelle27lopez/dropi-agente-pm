@@ -228,3 +228,116 @@
 @media (prefers-reduced-motion: reduce) {
   .rec-btn { transition: none; }
 }
+
+/* ── Armar solicitud ─────────────────────────────────────────────────────── */
+/* La selección es por filtros, no casilla por casilla: con 363 candidatas,
+   marcar una por una no es trabajo, es castigo. Los filtros mandan y el
+   resumen dice al instante qué se va a pedir. */
+
+.sol { margin-top: 10px; }
+
+.sol-filtros {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;          /* nunca nowrap: un control oculto es un control perdido */
+  align-items: center;
+  padding: 10px;
+  background: var(--soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.sol-input {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 9px;
+  font-size: 12.5px;
+  font-family: inherit;
+  color: var(--text);
+  background: var(--card);
+  min-width: 0;
+}
+.sol-input[type="search"] { flex: 1 1 210px; }
+.sol-input--num { width: 68px; }
+.sol-input:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+.sol-min, .sol-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--rec-ink-2);
+  white-space: nowrap;
+}
+.sol-limpiar, .sol-link {
+  font-size: 12px;
+  color: var(--brand);
+  font-weight: 500;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+.sol-limpiar:focus-visible, .sol-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+.sol-resumen {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 11px 2px 9px;
+}
+.sol-cuenta { font-size: 13px; color: var(--rec-ink-2); }
+.sol-cuenta b { font-size: 16px; font-weight: 700; color: var(--text); }
+.sol-fuera { color: var(--muted); font-size: 12px; }
+
+.sol-aviso {
+  font-size: 11.5px;
+  color: #7A4E12;
+  background: #FEF6EC;
+  border: 1px solid #F6E6CF;
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.sol-acciones { margin-left: auto; display: flex; gap: 8px; }
+.sol-btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: 7px;
+  padding: 7px 13px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--rec-ink-2);
+  cursor: pointer;
+}
+.sol-btn:hover:not(:disabled) { border-color: var(--brand); color: var(--text); }
+.sol-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.sol-btn:disabled { opacity: .45; cursor: default; }
+.sol-btn--primary {
+  background: var(--brand);
+  border-color: var(--brand);
+  color: #fff;
+  font-weight: 600;
+}
+.sol-btn--primary:hover:not(:disabled) { filter: brightness(.95); color: #fff; }
+
+.sol-quitadas { margin: 0 0 8px; font-size: 12px; color: var(--rec-ink-2); }
+
+/* Discreto a propósito: quitar una bodega es la excepción, no el flujo. */
+.sol-quitar {
+  font-size: 11.5px;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+.sol-quitar:hover { color: var(--red); background: var(--soft); }
+.sol-quitar:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+@media (max-width: 700px) {
+  .sol-acciones { margin-left: 0; width: 100%; }
+  .sol-btn { flex: 1; }
+}

@@ -14,6 +14,12 @@ export type CandidataEntrada = {
   nombre: string;
   municipio: string;
   cod_dane: string;
+  // Lo que va en el archivo que recibe la transportadora: el conductor necesita
+  // la dirección aunque la coordenada no sea confiable.
+  direccion: string;
+  dpto: string;
+  lat: number | null;
+  lng: number | null;
   transportadora: string;
   paquetes: number;                 // preparadas + guia_generada del día
   preparadas: number;
