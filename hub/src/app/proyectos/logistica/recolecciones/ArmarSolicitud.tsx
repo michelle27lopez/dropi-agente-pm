@@ -198,7 +198,16 @@ export default function ArmarSolicitud({ transportadora, elegibles, minInicial }
           <tbody>
             {seleccionadas.slice(0, 60).map(c => (
               <tr key={c.warehouse_id}>
-                <td>{c.nombre}</td>
+                {/* La dirección va bajo el nombre y no en su propia columna:
+                    es lo más largo de la fila y como columna empujaría las
+                    cifras fuera de la pantalla. Juntas se leen como lo que son
+                    — la identidad de la bodega — y las cifras quedan alineadas. */}
+                <td>
+                  <span className="sol-bodega">{c.nombre}</span>
+                  <span className="sol-dir" title={c.direccion}>
+                    {c.direccion || "sin dirección registrada"}
+                  </span>
+                </td>
                 <td>{c.municipio}</td>
                 <td className="num tnum">{fmt(c.paquetes)}</td>
                 <td>

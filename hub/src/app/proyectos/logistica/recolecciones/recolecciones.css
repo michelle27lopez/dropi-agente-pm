@@ -341,3 +341,18 @@
   .sol-acciones { margin-left: 0; width: 100%; }
   .sol-btn { flex: 1; }
 }
+
+/* Bodega + dirección en la misma celda. La dirección es lo que el conductor va
+   a usar cuando la coordenada no es confiable, así que se muestra siempre —
+   pero en segundo plano, para que la fila se siga leyendo por el nombre. */
+.sol-bodega { display: block; color: var(--text); font-weight: 500; }
+.sol-dir {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 1px;
+  max-width: 40ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
