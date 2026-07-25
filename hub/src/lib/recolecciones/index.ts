@@ -229,3 +229,40 @@ export function resumir(filas: FilaExport[], bodegas: BodegaAgregada[]): Resumen
 export function fechaDelExport(resumen: ResumenExport): string {
   return (resumen.evento_max ?? new Date().toISOString()).slice(0, 10);
 }
+
+
+// ── Tipos de dominio ───────────────────────────────────────────────────────
+// Viven acá y no en datos.ts a propósito: datos.ts habla con Supabase y con el
+// disco, y la lógica que usa estos tipos no tiene por qué arrastrar esa
+// dependencia solo para saber qué forma tiene una bodega.
+
+export type BodegaConCarga = {
+  warehouse_id: string;
+  nombre: string;
+  direccion: string;
+  municipio: string;
+  dpto: string;
+  cod_dane: string;
+  lat: number | null;
+  lng: number | null;
+  nivel_precision: Precision;
+  supplier_id: string | null;
+  supplier_nombre: string | null;
+  telefono: string | null;
+  telefono_proveedor: string | null;
+  fulfillment_by_dropi: boolean | null;
+  preparadas: number;
+  guia_generada: number;
+  total: number;
+  /** [transportadora, preparadas, guia_generada] */
+  transportadoras: Array<[string, number, number]>;
+  antiguedad_max: number | null;
+};
+
+export type Foto = {
+  fecha: string | null;
+  /** De dónde salió: la pantalla tiene que poder decirlo. */
+  fuente: "base" | "archivo" | "vacio";
+  bodegas: BodegaConCarga[];
+  totales: { bodegas: number; guias: number; preparadas: number; sin_ubicar_guias: number };
+};

@@ -1,0 +1,230 @@
+/* Control de recolecciones — tablero del día.
+ *
+ * Usa las variables que el layout de logística ya define bajo `.log-root`
+ * (--text, --muted, --brand, --border…), que a su vez salen de los tokens
+ * generados desde Figma. El prototipo HTML mantenía su propia copia de esos
+ * colores y ya se había desincronizado: acá no se declara ni un hex de marca.
+ *
+ * Excepción deliberada: --rec-ink-2. El --muted del tablero es gray-500
+ * (4.74:1 sobre blanco), que en texto de 12px se lee con esfuerzo. Para los
+ * datos que hay que leer todo el día se usa gray-600 (8.05:1). No se cambia
+ * --muted global para no alterar el resto del tablero.
+ */
+
+.rec {
+  --rec-ink-2: var(--dropi-gray-600);
+  --rec-gap: 16px;
+  padding: 22px 26px 40px;
+  max-width: 1180px;
+  color: var(--text);
+}
+
+/* ── Encabezado ─────────────────────────────────────────────────────────── */
+
+.rec-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.rec-head h1 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.rec-sub {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  color: var(--rec-ink-2);
+}
+.rec-btn {
+  margin-left: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 13px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--rec-ink-2);
+  background: var(--card);
+  white-space: nowrap;
+  transition: border-color .15s ease, color .15s ease;
+}
+.rec-btn:hover { border-color: var(--brand); color: var(--text); }
+
+/* ── De dónde salen los datos ────────────────────────────────────────────── */
+/* Tres estados con peso visual distinto: leer de un archivo local no es lo
+   mismo que leer de la base, y la pantalla tiene que decirlo sin que haya que
+   preguntar. */
+
+.rec-fuente {
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 9px 13px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--soft);
+  color: var(--rec-ink-2);
+  margin-bottom: 18px;
+}
+.rec-fuente code {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 11.5px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+.rec-fuente--archivo { background: #FEF6EC; border-color: #F6E6CF; color: #7A4E12; }
+.rec-fuente--vacio   { background: #FDF0F0; border-color: #F6DADA; color: #A32C30; }
+
+/* ── KPIs ────────────────────────────────────────────────────────────────── */
+
+.rec-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.rec-kpi {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 13px 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.rec-kpi b { font-size: 25px; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+.rec-kpi span { font-size: 12.5px; color: var(--rec-ink-2); }
+.rec-kpi small { font-size: 11.5px; color: var(--muted); }
+
+/* El de calidad del dato no es una métrica de operación: se distingue con un
+   fondo tenue, no con otro color de cifra, para que no compita con los tres
+   que sí dicen cuánto trabajo hay. */
+.rec-kpi--dato { background: var(--soft); }
+.rec-kpi--dato b { color: #8A5A16; }
+
+/* ── Una tarjeta por transportadora ──────────────────────────────────────── */
+
+.rec-lista { display: flex; flex-direction: column; gap: 10px; }
+
+.rec-t {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+}
+.rec-t-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.rec-t-head h2 { margin: 0; font-size: 14.5px; font-weight: 600; letter-spacing: .01em; }
+.rec-t-tot { margin-left: auto; font-size: 12px; color: var(--muted); }
+
+.rec-t-body {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.rec-t-cifra { display: flex; align-items: baseline; gap: 6px; }
+.rec-t-cifra b { font-size: 21px; font-weight: 700; letter-spacing: -.02em; }
+.rec-t-cifra span { font-size: 12px; color: var(--rec-ink-2); }
+
+.rec-t-barra {
+  flex: 1;
+  min-width: 120px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--soft);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.rec-t-barra i { display: block; height: 100%; background: var(--brand); }
+
+.rec-t-reglas { display: flex; gap: 6px; flex-wrap: wrap; }
+.rec-chip {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--rec-ink-2);
+  background: var(--soft);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+.rec-chip--dato { background: #FEF6EC; border-color: #F6E6CF; color: #7A4E12; }
+
+.rec-t-fuera {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--rec-ink-2);
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
+}
+.rec-t-fuera b { font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* ── Detalle desplegable ─────────────────────────────────────────────────── */
+
+.rec-t-detalle { margin-top: 10px; }
+.rec-t-detalle summary {
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--brand);
+  list-style: none;
+  padding: 4px 0;
+  border-radius: 6px;
+}
+.rec-t-detalle summary::-webkit-details-marker { display: none; }
+.rec-t-detalle summary::before { content: "▸ "; color: var(--muted); }
+.rec-t-detalle[open] summary::before { content: "▾ "; }
+.rec-t-detalle summary:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* La tabla scrollea dentro de su caja; la página nunca se va de lado. */
+.rec-tabla-wrap { overflow-x: auto; margin-top: 8px; }
+.rec-tabla { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.rec-tabla th {
+  text-align: left;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.rec-tabla td {
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--border);
+  color: var(--rec-ink-2);
+}
+.rec-tabla tbody tr:hover { background: var(--soft); }
+.rec-tabla .num { text-align: right; }
+.rec-tabla td.num { color: var(--text); font-weight: 500; }
+
+.rec-ok   { color: var(--green); font-size: 11.5px; }
+.rec-warn { color: #8A5A16; font-size: 11.5px; }
+
+.rec-mas { margin: 8px 0 0; font-size: 11.5px; color: var(--muted); }
+
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .rec { padding: 16px 14px 32px; }
+  .rec-btn { margin-left: 0; }
+  .rec-t-body { gap: 14px; }
+  .rec-t-barra { order: 3; flex-basis: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rec-btn { transition: none; }
+}
