@@ -1,4 +1,4 @@
-// Verifica que la migración 033 quedó bien aplicada.
+// Verifica que la migración 037 quedó bien aplicada.
 //
 //   cd hub && node --env-file=.env.local scripts/verificar-migracion-recolecciones.mjs
 //

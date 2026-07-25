@@ -3,7 +3,7 @@
 import fs from "node:fs";
 
 import path from "node:path";
-const f = path.resolve(import.meta.dirname, "../supabase/033_recolecciones.sql");
+const f = path.resolve(import.meta.dirname, "../supabase/037_recolecciones.sql");
 const sql = fs.readFileSync(f, "utf8");
 
 // Quitar comentarios para no analizar SQL que está apagado

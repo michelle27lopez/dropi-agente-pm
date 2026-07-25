@@ -1,5 +1,5 @@
 // Carga inicial de Supabase: pasa lo que hoy vive en archivos a las tablas de
-// la migración 033. Sube tres cosas:
+// la migración 037. Sube tres cosas:
 //
 //   rec_bodega    las 2.055 bodegas del export, con las coordenadas ya
 //                 geocodificadas (1.407 rescatadas del JSON anterior). Este es

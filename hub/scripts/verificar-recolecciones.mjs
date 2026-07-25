@@ -7,7 +7,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const HUB = path.resolve(import.meta.dirname, "..");
-const sql = fs.readFileSync(`${HUB}/supabase/033_recolecciones.sql`, "utf8");
+const sql = fs.readFileSync(`${HUB}/supabase/037_recolecciones.sql`, "utf8");
 
 // Columnas declaradas por tabla
 const tablas = new Map();
