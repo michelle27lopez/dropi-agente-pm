@@ -25,6 +25,9 @@ export const dynamic = "force-dynamic";
 
 const fmt = (n: number) => n.toLocaleString("es-CO");
 
+// Ancla estable para saltar a una transportadora desde la franja de arriba.
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
 export default async function RecoleccionesPage() {
   const foto = await cargarFoto();
   const reglas = await cargarReglas();
@@ -68,6 +71,35 @@ export default async function RecoleccionesPage() {
 
       {foto.bodegas.length > 0 && (
         <>
+          {/* Dónde está el trabajo. NO colapsa las transportadoras chicas: su
+              flujo es idéntico al de las grandes —armar, generar, enviar— así
+              que esconderlas solo agregaría un clic. Esto es un atajo a las que
+              concentran el volumen, no una jerarquía que las degrade. */}
+          {(() => {
+            const conCarga = filas.filter(f => f.elegibles.length > 0);
+            const foco: typeof conCarga = [];
+            let acumulado = 0;
+            for (const f of conCarga) {
+              foco.push(f);
+              acumulado += f.paquetes_elegibles;
+              if (acumulado >= totalPaquetes * 0.8) break;
+            }
+            if (foco.length < 2 || foco.length === conCarga.length) return null;
+            return (
+              <nav className="rec-foco" aria-label="Transportadoras que concentran el volumen">
+                <span className="rec-foco-lbl">
+                  El {Math.round(100 * acumulado / totalPaquetes)}% de los paquetes está en{" "}
+                  {foco.length} de {conCarga.length}:
+                </span>
+                {foco.map(f => (
+                  <a key={f.transportadora} href={`#t-${slug(f.transportadora)}`}>
+                    {f.transportadora} <b className="tnum">{fmt(f.paquetes_elegibles)}</b>
+                  </a>
+                ))}
+              </nav>
+            );
+          })()}
+
           <section className="rec-kpis">
             <div className="rec-kpi">
               <b className="tnum">{fmt(totalElegibles)}</b>
@@ -105,7 +137,7 @@ export default async function RecoleccionesPage() {
               const pct = f.guias_totales
                 ? Math.round(100 * f.paquetes_elegibles / f.guias_totales) : 0;
               return (
-                <article key={f.transportadora} className="rec-t">
+                <article key={f.transportadora} id={`t-${slug(f.transportadora)}`} className="rec-t">
                   <div className="rec-t-head">
                     <h2>{f.transportadora}</h2>
                     <span className="rec-t-tot tnum">
