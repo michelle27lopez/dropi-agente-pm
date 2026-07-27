@@ -38,6 +38,10 @@
   --rec-r-md: 12px;
   --rec-r-pill: 999px;
 
+  /* Sombra del marcador sobre el mapa: el tile de fondo puede ser claro u
+     oscuro, así que necesita un contorno propio para no perderse. */
+  --rec-sombra-mk: 0 1px 4px rgba(0, 0, 0, .3);
+
   /* Texto secundario. El --muted del tablero es gray-500 (4.74:1), que a 12px
      se lee con esfuerzo; para datos que se miran todo el día va gray-600
      (8.05:1). No se cambia --muted global para no alterar el resto. */
@@ -475,3 +479,80 @@
 @media (prefers-reduced-motion: reduce) {
   .rec-btn { transition: none; }
 }
+
+/* ── Mapa ────────────────────────────────────────────────────────────────── */
+/* Dentro del módulo, no en una pestaña aparte. Los marcadores distinguen tres
+   cosas y una de ellas es la más importante: si el punto es real o es el
+   centro del municipio. */
+
+.mapa { margin-top: var(--rec-sp-5); }
+.mapa-head h2 { margin: 0 0 var(--rec-sp-1); font-size: var(--rec-fs-lg); font-weight: 600; }
+.mapa-nota {
+  margin: 0 0 var(--rec-sp-3);
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+  max-width: 72ch;
+}
+.mapa-nota b { color: var(--rec-warn-ink); }
+
+.mapa-caja {
+  position: relative;
+  height: 460px;
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-md);
+  overflow: hidden;
+  background: var(--soft);
+}
+.mapa-lienzo { position: absolute; inset: 0; }
+
+.mapa-estado {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: var(--rec-sp-4);
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+  background: var(--soft);
+}
+.mapa-estado--error { color: var(--rec-err-ink); background: var(--rec-err-bg); }
+
+/* Marcadores. El tamaño lo pone el volumen (en el componente); acá solo el
+   lenguaje visual. */
+.mapa-mk {
+  border-radius: var(--rec-r-pill);
+  border: 2px solid #fff;
+  box-shadow: var(--rec-sombra-mk);
+  display: grid;
+  place-items: center;
+  font-size: var(--rec-fs-xs);
+  font-weight: 700;
+  color: #fff;
+}
+.mapa-mk--crit { background: var(--red); }
+.mapa-mk--risk { background: var(--amber); }
+
+/* Sin ubicación confiable: borde punteado y relleno tenue. Tiene que ser
+   evidente de un vistazo que ese punto NO es la puerta de la bodega. */
+.mapa-mk--sinubicar {
+  background: var(--dropi-gray-400);
+  border-style: dashed;
+  border-color: var(--dropi-gray-600);
+  color: var(--dropi-gray-900);
+}
+
+.leaflet-tooltip .mapa-tt-nota { color: var(--muted); font-size: var(--rec-fs-xs); }
+
+.mapa-leyenda {
+  display: flex;
+  gap: var(--rec-sp-4);
+  flex-wrap: wrap;
+  margin: var(--rec-sp-3) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+}
+.mapa-leyenda li { display: flex; align-items: center; gap: 6px; }
+.mapa-leyenda i { width: 13px; height: 13px; flex: 0 0 13px; }

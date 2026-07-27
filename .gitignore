@@ -30,4 +30,5 @@ hub/public/logistica/recolecciones/pipeline/centroides.json
 hub/public/logistica/recolecciones/pipeline/geocache-*.json
 hub/public/logistica/recolecciones/pipeline/por-geocodificar.json
 hub/public/logistica/recolecciones/pipeline/geocode-final.json
+hub/public/logistica/recolecciones/pipeline/cruces-resultado.json
 hub/public/logistica/recolecciones/pipeline/*.csv

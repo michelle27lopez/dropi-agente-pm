@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { cargarFoto, cargarReglas } from "@/lib/recolecciones/datos";
 import { armarTablero } from "@/lib/recolecciones/tablero";
 import { ETIQUETA_VEREDICTO } from "@/lib/recolecciones/elegibilidad";
 import ArmarSolicitud from "./ArmarSolicitud";
+import Mapa from "./Mapa";
 import "./recolecciones.css";
 
 // Control de Recolecciones — tablero del día.
@@ -14,7 +14,9 @@ import "./recolecciones.css";
 // de a qué puerta ir. Lo que sí la sostiene es la lista: por transportadora,
 // qué se le puede pedir hoy, y qué queda fuera y por qué.
 //
-// El mapa sigue disponible como vista de apoyo (el prototipo en public/).
+// El mapa vive DENTRO de esta página (componente Mapa), al final: primero se
+// decide con la lista, después se mira dónde queda. Dejó de ser un iframe con
+// su propio sistema visual y su propia carga de datos.
 
 export const metadata: Metadata = {
   title: "Control de recolecciones · Logística — Dropi",
@@ -49,9 +51,7 @@ export default async function RecoleccionesPage() {
               : <>Sin datos cargados</>}
           </p>
         </div>
-        <Link className="rec-btn" href="/logistica/recolecciones/control-recolecciones.html" target="_blank">
-          Ver mapa ↗
-        </Link>
+        <a className="rec-btn" href="#mapa">Ver el mapa ↓</a>
       </header>
 
       {/* De dónde salen los datos. Nunca implícito: la diferencia entre la base
@@ -196,6 +196,8 @@ export default async function RecoleccionesPage() {
               );
             })}
           </section>
+
+          <div id="mapa"><Mapa bodegas={foto.bodegas} /></div>
         </>
       )}
     </main>
