@@ -38,17 +38,18 @@ Este documento traduce los objetivos subjetivos y las intenciones del portafolio
 
 ## 3. Módulo de Notificaciones (PROD-1664)
 
-*   **Fase de Ciclo:** **Wonder** (Investigación y benchmark).
+*   **Fase de Ciclo:** **Explore** (Prototipo finalizado).
 *   **Comportamiento Específico:** Un dropshipper que tiene una novedad logística abierta en sus despachos responde al prompt in-app o notificación de WhatsApp, autorizando el reintento de entrega en $\le 24$ horas.
 *   **Business Outcome (Lagging):** Reducir el porcentaje total de devoluciones de la plataforma.
 *   **Product Outcome (Leading):** % de novedades logísticas gestionadas con éxito por el seller en menos de 24 horas del reporte.
+*   **Prototipo Interactivo (WhatsApp QuickActions):** [/prototipos/wa-dropi-poc.html](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/hub/public/prototipos/wa-dropi-poc.html).
 *   **Baseline & Meta:**
     *   *Baseline:* `[DATO FALTANTE]` (las novedades no se miden por tiempo de respuesta in-app).
     *   *Meta:* $\ge 60\%$ de novedades resueltas por autogestión en la primera ventana de 24h.
 *   **Diagnóstico B=MAP & Sesgo:** Falta de **Prompt (P)** efectivo. El usuario sufre de *Inattention bias* / saliencia baja: los prompts actuales se pierden en el dashboard o se envían de forma duplicada/molesta, rompiendo la atención.
 *   **Supuesto más Riesgoso:** El dropshipper ignorará los prompts automáticos si no van acompañados de una sugerencia de acción clara y un clic de resolución directa.
 *   **Test de Validación más Barato:** Envío manual y selectivo del prompt de novedad vía WhatsApp Business por parte del Account Manager a 15 sellers activos, midiendo la tasa de confirmación y el tiempo de respuesta.
-*   **Bloqueante Actual & Siguiente Paso:** Ninguno. *Acción:* Ejecutar el benchmark comparativo con CJ y Shopify (`PROD-1698`) y mapear catálogo de eventos en backend.
+*   **Bloqueante Actual & Siguiente Paso:** Ninguno. *Acción:* Presentar el prototipo de WhatsApp a María Ossa y al equipo técnico de notificaciones para planificar la API de mensajería interactiva.
 
 ---
 
