@@ -8,6 +8,13 @@ const guias = [
     description: "Clonar el repo, configurar tu .env.local, correr el hub en local, entrar a tu home de célula y abrir tu primer PR.",
     tag: "Onboarding · Nueva célula",
   },
+  {
+    slug: "skills-disponibles",
+    icon: "🧩",
+    title: "Directorio de Skills",
+    description: "Qué skills hay disponibles, agrupadas por categoría, y cuándo usar cada una en el trabajo de un PD.",
+    tag: "Referencia · Skills",
+  },
 ];
 
 export default function GuiasIndexPage() {
@@ -19,9 +26,11 @@ export default function GuiasIndexPage() {
           borderBottom: "1px solid var(--border)",
           padding: "20px 32px",
           display: "flex",
-          alignItems: "center",
-          gap: 12,
+          flexDirection: "column",
+          gap: 10,
         }}>
+          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <img src="/darwin-logo.png" alt="Darwin" width={36} height={36} style={{ display: "block", borderRadius: 8 }} />
           <div>
             <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
@@ -30,6 +39,7 @@ export default function GuiasIndexPage() {
             <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
               Cómo se hacen las cosas en Darwin, paso a paso.
             </p>
+          </div>
           </div>
         </header>
 
