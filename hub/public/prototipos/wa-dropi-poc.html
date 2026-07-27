@@ -603,12 +603,12 @@ function cancelSecondBest(btn) {
 // ── PASO 3: Novedad Logística & Rescate (Capa 2) ──
 async function triggerNovedad() {
   addTyping(); await delay(1200); removeTyping();
-  addMsg('in', `🚨 *Alerta Logística: Dirección Incompleta*`);
+  addMsg('in', `🚨 *Alerta Logística: Destinatario No Responde*`);
   
   await delay(600); addTyping(); await delay(1600); removeTyping();
-  addInteractiveCard('in', '🚨', '#ea580c', 'Guía Coordinadora CO-99281-COD', 'Novedad: Dirección no encontrada (Cali)\nDirección original: Calle 5 #23-45\n\nEl bot de Dropi contactó al cliente por WhatsApp y normalizó los datos:\nDirección Nueva: Calle 5 #23-45, Apto 402, Torre B (Cali)', [
-    { text: '📍 [QuickAction] Autorizar Reintento con Dirección Nueva', handler: 'resolveNovelty(this)' },
-    { text: '✗ Devolver a Bodega', handler: 'rejectNovelty(this)' }
+  addInteractiveCard('in', '🚨', '#ea580c', 'Guía Envía #12511073', 'Novedad: El destinatario no contesta llamadas (2 visitas realizadas)\nCliente: Maria Guadalupe Prada\nDirección: Carrera 7 # 25-20, Barrio La Flora, Cali\n\nEl bot de Dropi contactó automáticamente a Maria por WhatsApp. Ella confirmó que sí desea el pedido y estará atenta para recibirlo.', [
+    { text: '📍 [QuickAction] Autorizar Reintento de Entrega', handler: 'resolveNovelty(this)' },
+    { text: '✗ Devolver Orden a Bodega', handler: 'rejectNovelty(this)' }
   ]);
 }
 
@@ -616,11 +616,11 @@ async function triggerNovedad() {
 function resolveNovelty(btn) {
   const actions = btn.closest('.wa-card-actions');
   actions.innerHTML = `<div style="padding:12px; font-size:12.5px; font-weight:800; color:#00a884; text-align:center;">✓ Reintento Autorizado</div>`;
-  addMsg('out', 'Autorizar reintento de la guía CO-99281-COD con la dirección corregida en Cali.');
+  addMsg('out', 'Autorizar reintento de la guía Envía #12511073. El cliente ya confirmó.');
   
   setTimeout(async () => {
     addTyping(); await delay(1500); removeTyping();
-    addMsg('in', `¡Listo! 🚚 Actualizamos la dirección en la orden de Coordinadora. El reintento de entrega quedó agendado para mañana a primera hora. ¡Salvamos la entrega neta!`);
+    addMsg('in', `¡Listo! 🚚 Notificamos a Envía. Programaron el reintento de entrega de la orden #12511073 para mañana a primera hora. ¡Salvamos la venta neta!`);
     
     // Disparar Paso 4: Liquidación despues de un delay
     await delay(2500);
@@ -631,7 +631,7 @@ function resolveNovelty(btn) {
 function rejectNovelty(btn) {
   const actions = btn.closest('.wa-card-actions');
   actions.innerHTML = `<div style="padding:12px; font-size:12.5px; font-weight:800; color:#f43f5e; text-align:center;">✗ Retorno Solicitado</div>`;
-  addMsg('out', 'Solicitar retorno a bodega del pedido.');
+  addMsg('out', 'Devolver orden #12511073 al remitente.');
 }
 
 // ── PASO 4: Entrega & Liquidación (Cierre de Wallet) ──
