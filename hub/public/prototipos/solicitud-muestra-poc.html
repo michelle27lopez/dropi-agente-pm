@@ -8,217 +8,297 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --bg-dark: #090e11;
-    --panel-dark: #1f2c34;
-    --border-dark: rgba(255,255,255,0.06);
-    --green-dropi: #00a884;
-    --orange-dropi: #ff5722;
-    --text-primary: #e9edef;
-    --text-secondary: #8696a0;
-    --shadow: 0 10px 40px rgba(0,0,0,0.5);
+    --bg-light: #f4f6f9;
+    --border-color: #e2e8f0;
+    --orange-primary: #ff6b35;
+    --orange-hover: #e0531f;
+    --blue-primary: #5ba2da;
+    --blue-hover: #4a91c9;
+    --text-main: #2d3748;
+    --text-muted: #718096;
+    --sidebar-width: 240px;
+    --header-height: 60px;
     --ease: cubic-bezier(.16, 1, .3, 1);
   }
 
   body {
-    background: radial-gradient(circle at center, #1b262c 0%, #090e11 100%);
-    color: var(--text-primary);
+    background-color: var(--bg-light);
+    color: var(--text-main);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     min-height: 100vh;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    overflow-y: auto;
+    overflow-x: hidden;
   }
 
-  .demo-container {
-    width: 1200px;
-    height: 780px;
-    background: #111b21;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-dark);
-    display: flex;
-    position: relative;
-  }
-
-  /* Left: Product Detail (fiel al catálogo original) */
-  .product-details-pane {
-    flex: 7;
-    border-right: 1px solid var(--border-dark);
+  /* Sidebar styling (fiel a app.dropi.co) */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: #fff;
+    border-right: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    background: #0b141a;
+    flex-shrink: 0;
   }
-
-  .pane-header {
-    height: 56px;
-    border-bottom: 1px solid var(--border-dark);
+  .sidebar-logo {
+    height: var(--header-height);
     display: flex;
     align-items: center;
     padding: 0 20px;
-    font-size: 13px;
-    color: var(--text-secondary);
-    gap: 8px;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .sidebar-logo img {
+    height: 32px;
+  }
+  .sidebar-logo span {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--orange-primary);
+  }
+  .sidebar-menu {
+    flex: 1;
+    padding: 15px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 24px;
+    gap: 12px;
+    color: var(--text-main);
+    font-size: 13.5px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+  }
+  .menu-item:hover, .menu-item.active {
+    background: #f8fafc;
+    color: var(--orange-primary);
+    border-left: 3px solid var(--orange-primary);
+  }
+  .menu-item i {
+    font-size: 18px;
+    color: var(--text-muted);
+  }
+  .menu-item:hover i, .menu-item.active i {
+    color: var(--orange-primary);
+  }
+  .badge-new {
+    background: #10b981;
+    color: #fff;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 700;
+    margin-left: auto;
   }
 
-  .product-grid {
+  /* Main Area */
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  /* Top Header */
+  .top-header {
+    height: var(--header-height);
+    background: #fff;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+  }
+  .header-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .profile-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--orange-primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  /* Product Details layout */
+  .workspace-grid {
     flex: 1;
     display: flex;
     padding: 30px;
-    gap: 40px;
-    overflow-y: auto;
+    gap: 30px;
   }
 
-  .product-gallery {
-    flex: 1.2;
+  .product-card-container {
+    flex: 2;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .breadcrumb-nav {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .product-info-grid {
+    display: flex;
+    gap: 30px;
+  }
+
+  .gallery-section {
+    flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
   }
-
-  .main-image-wrap {
+  .main-img-box {
     width: 100%;
     height: 300px;
-    background: #182229;
-    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid var(--border-dark);
+    background: #fff;
   }
-  .main-image-wrap img {
-    max-height: 80%;
-    max-width: 80%;
+  .main-img-box img {
+    max-height: 85%;
+    max-width: 85%;
     object-fit: contain;
   }
 
-  .product-info {
-    flex: 1.5;
+  .info-section {
+    flex: 1.2;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
   }
-
-  .sku-badge {
-    align-self: flex-start;
-    background: rgba(255,255,255,0.06);
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    color: var(--text-secondary);
-    font-weight: 600;
-  }
-
-  .product-title {
-    font-size: 22px;
+  .info-title {
+    font-size: 20px;
     font-weight: 800;
-    line-height: 1.3;
+    color: var(--text-main);
   }
-
-  .pricing-card {
-    background: #1f2c34;
-    border-radius: 10px;
+  .info-price-card {
+    background: #f8fafc;
+    border-radius: 8px;
     padding: 14px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
-    border: 1px solid var(--border-dark);
+    border: 1px solid var(--border-color);
   }
-
-  .price-item {
+  .price-col {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
   }
-  .price-label {
-    font-size: 10px;
-    color: var(--text-secondary);
+  .price-lbl {
+    font-size: 10.5px;
+    color: var(--text-muted);
   }
-  .price-value {
-    font-size: 18px;
+  .price-val {
+    font-size: 16px;
     font-weight: 700;
   }
-  .price-value.supplier {
-    color: var(--green-dropi);
+  .price-val.supplier {
+    color: var(--orange-primary);
   }
 
-  .metadata-row {
-    font-size: 12.5px;
+  .info-details {
+    font-size: 13px;
+    color: var(--text-muted);
     display: flex;
     flex-direction: column;
     gap: 6px;
-    border-top: 1px solid var(--border-dark);
-    border-bottom: 1px solid var(--border-dark);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
     padding: 12px 0;
-    color: var(--text-secondary);
   }
-  .metadata-row strong { color: var(--text-primary); }
+  .info-details strong { color: var(--text-main); }
 
-  .actions-row {
+  .actions-box {
     display: flex;
-    gap: 12px;
-    margin-top: 10px;
+    gap: 10px;
+    margin-top: 5px;
   }
-
-  .btn-primary {
+  .btn-envias {
     flex: 1.2;
-    background: var(--orange-dropi);
+    background: var(--orange-primary);
     color: #fff;
     border: none;
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 700;
     cursor: pointer;
     font-size: 13.5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    transition: opacity 0.2s;
+    gap: 6px;
+    transition: background 0.2s;
   }
-  .btn-secondary {
+  .btn-envias:hover { background: var(--orange-hover); }
+
+  .btn-muestra {
     flex: 1;
     background: none;
-    border: 1px solid var(--green-dropi);
-    color: var(--green-dropi);
+    border: 1px solid var(--orange-primary);
+    color: var(--orange-primary);
     padding: 12px;
-    border-radius: 8px;
+    border-radius: 6px;
     font-weight: 700;
     cursor: pointer;
     font-size: 13.5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     transition: all 0.2s;
   }
-  .btn-secondary:hover {
-    background: rgba(0, 168, 132, 0.08);
-  }
+  .btn-muestra:hover { background: rgba(255, 107, 53, 0.05); }
 
-  /* Right: Frictionless Drawer */
-  .checkout-pane {
-    flex: 5;
-    background: #111b21;
+  /* Right Drawer Panel (1-Clic flow) */
+  .drawer-container {
+    flex: 1;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    position: relative;
+    overflow: hidden;
   }
-
-  .checkout-header {
+  .drawer-header {
     height: 56px;
-    border-bottom: 1px solid var(--border-dark);
+    background: #f8fafc;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    background: #1f2c34;
   }
-
-  .checkout-body {
+  .drawer-body {
     flex: 1;
     padding: 20px;
     display: flex;
@@ -227,102 +307,122 @@
     overflow-y: auto;
   }
 
-  .step-label {
-    font-size: 10px;
-    font-weight: 850;
-    color: var(--green-dropi);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  .checkout-card {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
+  .box-card {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
     padding: 14px;
+    background: #fafafb;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+  }
+  .box-title {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--orange-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
   }
 
-  .card-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 13px;
-  }
-
-  .input-field {
-    width: 100%;
-    background: #182229;
-    border: 1px solid var(--border-dark);
+  .carrier-badge {
+    border: 1px solid var(--orange-primary);
+    background: rgba(255, 107, 53, 0.04);
     border-radius: 8px;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .btn-blue {
+    background: var(--blue-primary);
     color: #fff;
-    font-size: 13px;
-    outline: none;
-  }
-  .input-field:focus {
-    border-color: var(--green-dropi);
-  }
-
-  .carrier-selector {
-    border: 1px solid var(--border-dark);
-    border-radius: 8px;
-    padding: 10px;
-    background: #182229;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .carrier-selector.active {
-    border-color: var(--green-dropi);
-    background: rgba(0, 168, 132, 0.03);
-  }
-
-  .wallet-warning {
-    background: rgba(0, 168, 132, 0.08);
-    border: 1px solid rgba(0, 168, 132, 0.2);
-    border-radius: 8px;
-    padding: 12px;
-    font-size: 12px;
-    color: var(--green-dropi);
-    display: flex;
-    gap: 10px;
-    line-height: 1.4;
-  }
-
-  .purchase-btn {
-    width: 100%;
-    background: var(--green-dropi);
-    color: #111b21;
     border: none;
     padding: 14px;
-    border-radius: 8px;
-    font-weight: 800;
+    border-radius: 6px;
+    font-weight: 700;
     font-size: 13.5px;
     cursor: pointer;
-    transition: opacity 0.2s;
+    width: 100%;
+    transition: background 0.2s;
   }
-  .purchase-btn:hover {
-    opacity: 0.9;
-  }
+  .btn-blue:hover { background: var(--blue-hover); }
 
-  .btn-demo-toggle {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid var(--border-dark);
+  /* First-Time Setup Modal (Seteo de datos una sola vez) */
+  .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .setup-modal {
+    background: #fff;
+    width: 440px;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    animation: scaleIn 0.3s var(--ease);
+  }
+  @keyframes scaleIn { from{transform:scale(0.95); opacity:0;} to{transform:scale(1); opacity:1;} }
+
+  .modal-head {
+    background: var(--orange-primary);
     color: #fff;
+    padding: 16px 20px;
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .modal-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .input-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .form-control {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .form-control label {
     font-size: 11px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 20px;
-    cursor: pointer;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+  .form-input {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 13px;
+    outline: none;
+    color: var(--text-main);
+  }
+  .form-input:focus {
+    border-color: var(--orange-primary);
+  }
+  .form-select {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 13px;
+    background: #fff;
+    outline: none;
   }
 
+  /* Success Screen */
   .success-overlay {
     position: absolute;
     inset: 0;
-    background: #111b21;
+    background: #fff;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -332,317 +432,295 @@
     gap: 16px;
     z-index: 100;
   }
-
   .success-icon {
     width: 60px;
     height: 60px;
     border-radius: 50%;
     background: rgba(0, 168, 132, 0.1);
-    color: var(--green-dropi);
+    color: #10b981;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 30px;
   }
-
-  /* Toast Notification Simulation */
-  .toast-sync {
-    position: absolute;
-    bottom: 24px;
-    left: 24px;
-    background: #1f2c34;
-    border: 1px solid var(--green-dropi);
-    border-radius: 12px;
-    padding: 16px;
-    width: 340px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    display: none;
-    z-index: 200;
-    animation: slideUp 0.3s var(--ease);
-  }
-  @keyframes slideUp { from{transform:translateY(30px); opacity:0;} to{transform:translateY(0); opacity:1;} }
 </style>
 </head>
 <body>
 
-<div class="demo-container">
+<!-- Left Menu Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <span>dropi</span>
+  </div>
+  <div class="sidebar-menu">
+    <div class="menu-item"><i class="ti ti-home"></i> Inicio</div>
+    <div class="menu-item"><i class="ti ti-dashboard"></i> Dashboard</div>
+    <div class="menu-item active"><i class="ti ti-package"></i> Productos <span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-shopping-cart"></i> Mis Pedidos</div>
+    <div class="menu-item"><i class="ti ti-shield-check"></i> Mis Garantías</div>
+    <div class="menu-item"><i class="ti ti-users"></i> Clientes</div>
+    <div class="menu-item"><i class="ti ti-api"></i> Mis Integraciones</div>
+  </div>
+</div>
 
-  <!-- Toast: Success Sync + Recurring sample request prompt -->
-  <div class="toast-sync" id="toast-sync">
-    <div style="display:flex; gap:12px; align-items:flex-start;">
-      <span style="font-size:20px;">🚀</span>
-      <div style="flex:1;">
-        <strong style="font-size:13px; color:#fff; display:block; margin-bottom:2px;">¡Producto Importado a Shopify!</strong>
-        <span style="font-size:11.5px; color:var(--text-secondary); line-height:1.4; display:block; margin-bottom:10px;">
-          ¿Deseas pedir una muestra física de este producto a tu dirección guardada en Cali?
-        </span>
-        <div style="display:flex; gap:8px;">
-          <button onclick="acceptToastSample()" style="background:var(--green-dropi); color:#111b21; border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:800; cursor:pointer;">
-            Sí, pedir muestra ($59.000)
-          </button>
-          <button onclick="closeToast()" style="background:none; border:1px solid var(--border-dark); color:var(--text-secondary); padding:5px 10px; border-radius:6px; font-size:11px; cursor:pointer;">
-            No, gracias
-          </button>
-        </div>
-      </div>
+<!-- Main Area -->
+<div class="main-content">
+  <!-- Top Header -->
+  <div class="top-header">
+    <div style="font-size: 13px; font-weight: 500; color: var(--text-muted);">app.dropi.co/dashboard/product-details</div>
+    <div class="header-profile">
+      <span>Santiago Herrera</span>
+      <div class="profile-avatar">S</div>
     </div>
   </div>
 
-  <!-- Left: Product Detail view -->
-  <div class="product-details-pane">
-    <div class="pane-header">
-      <i class="ti ti-chevron-left"></i> Todos los productos / Proveedor: Fabio / Mini Cámara Wifi
-    </div>
-    
-    <div class="product-grid">
-      <div class="product-gallery">
-        <div class="main-image-wrap">
-          <img src="https://img.icons8.com/color/256/cctv-camera.png" alt="Mini Cámara" />
-        </div>
-        <div class="thumbnail-row">
-          <div class="thumbnail active">📷</div>
-          <div class="thumbnail">🔌</div>
-        </div>
+  <div class="workspace-grid">
+    <!-- Product detail card -->
+    <div class="product-card-container">
+      <div class="breadcrumb-nav">
+        Todos los productos <i class="ti ti-chevron-right"></i> Proveedor: Fabio <i class="ti ti-chevron-right"></i> Mini Cámara Wifi
       </div>
 
-      <div class="product-info">
-        <div class="sku-badge">SKU: 9781974627127</div>
-        <h1 class="product-title">Mini Camara Wifi Robotica Hd Ip</h1>
-        <div style="font-size:12px; color:var(--text-secondary);">Tecnología · Tipo: Simple</div>
-
-        <div class="pricing-card">
-          <div class="price-item">
-            <span class="price-label">Precio del proveedor (dropshipper)</span>
-            <span class="price-value supplier">$59.000 COP</span>
-          </div>
-          <div class="price-item">
-            <span class="price-label">Precio sugerido de venta</span>
-            <span class="price-value">$65.800 COP</span>
+      <div class="product-info-grid">
+        <div class="gallery-section">
+          <div class="main-img-box">
+            <img src="https://img.icons8.com/color/256/cctv-camera.png" alt="Mini Cámara" />
           </div>
         </div>
 
-        <div class="metadata-row">
-          <div>Bodega origen: <strong>Bogotá</strong></div>
-          <div>Stock físico real: <strong style="color:var(--green-dropi)">100 unidades</strong></div>
-          <div>Proveedor: <strong>Hepa Tecnología</strong></div>
-        </div>
+        <div class="info-section">
+          <div class="sku-badge">SKU: 9781974627127</div>
+          <h1 class="info-title">Mini Camara Wifi Robotica Hd Ip</h1>
+          <div style="font-size: 12px; color: var(--text-muted);">Tecnología · Tipo de producto: **Simple**</div>
 
-        <div class="actions-row">
-          <button class="btn-primary" onclick="simulateImport()"><i class="ti ti-cloud-upload"></i> Agregar a mi Tienda (Shopify)</button>
-          <button class="btn-secondary" onclick="openSampleCheckout()"><i class="ti ti-package"></i> Solicitar muestra</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Right: Frictionless Drawer (Onboarding vs 1-Click) -->
-  <div class="checkout-pane" id="checkout-pane">
-    
-    <!-- Blank state initially -->
-    <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; text-align:center; color:var(--text-secondary);" id="blank-checkout-state">
-      <i class="ti ti-package" style="font-size:48px; margin-bottom:12px; color:var(--green-dropi);"></i>
-      <h3>Solicitud de Muestra en 1 Clic</h3>
-      <p style="font-size:12.5px; margin-top:8px; max-width:280px;">Presiona "Solicitar muestra" a la izquierda o "Agregar a mi Tienda" para simular el embudo.</p>
-    </div>
-
-    <!-- FLOW 1: First-time Setup Journey -->
-    <div style="display:none; flex-direction:column; height:100%;" id="onboarding-flow">
-      <div class="checkout-header">
-        <span style="font-size:13px; font-weight:700;">Configurar Muestras de 1-Clic</span>
-        <button class="btn-demo-toggle" onclick="toggleFlows('recurring')">Simular Recurrente 🔄</button>
-      </div>
-      
-      <div class="checkout-body" id="onboarding-step1">
-        <span class="step-label">Paso 1 de 2: Dirección de Muestras</span>
-        <p style="font-size:12px; color:var(--text-secondary); line-height:1.4;">
-          Configura a dónde enviaremos tus muestras físicas de forma predeterminada. **Nunca volveremos a preguntarte esto.**
-        </p>
-
-        <div class="checkout-card">
-          <label style="font-size:11px; color:var(--text-secondary);">Dirección de Despacho Única</label>
-          <input class="input-field" id="setup-address" placeholder="Ej: Calle 5 #23-45, Cali" value="Calle 5 #23-45, Cali" />
-          <input class="input-field" placeholder="Barrio, Edificio, Apto..." value="Apto 402, Torre B" />
-        </div>
-
-        <button class="purchase-btn" onclick="saveStep1()">Siguiente paso <i class="ti ti-arrow-right"></i></button>
-      </div>
-
-      <div class="checkout-body" style="display:none;" id="onboarding-step2">
-        <span class="step-label">Paso 2 de 2: Pago Predeterminado</span>
-        <p style="font-size:12px; color:var(--text-secondary); line-height:1.4;">
-          Asigna un método de pago por defecto para descontar el costo de envío y proveedor automáticamente en cada solicitud:
-        </p>
-
-        <div class="checkout-card">
-          <div class="carrier-selector active" style="margin-bottom:8px; cursor:pointer;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:16px;">💳</span>
-              <strong>Descontar de Wallet Dropi</strong>
+          <div class="info-price-card">
+            <div class="price-col">
+              <span class="price-lbl">Precio del proveedor</span>
+              <span class="price-val supplier">$59.000 COP</span>
             </div>
-            <i class="ti ti-circle-check" style="color:var(--green-dropi); font-size:18px;"></i>
-          </div>
-          <div class="carrier-selector" style="cursor:pointer; opacity:0.6;">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:16px;">🏦</span>
-              <strong>Recarga PSE Directa</strong>
+            <div class="price-col">
+              <span class="price-lbl">Precio sugerido</span>
+              <span class="price-val">$65.800 COP</span>
             </div>
           </div>
-        </div>
 
-        <button class="purchase-btn" onclick="completeOnboarding()">Guardar Configuración y Solicitar Muestra</button>
+          <div class="info-details">
+            <div>Bodega origen: <strong>BOGOTA</strong></div>
+            <div>Stock físico real: <strong style="color:#10b981;">100 unidades</strong></div>
+            <div>Vendido por: <strong>Hepa Tecnología</strong></div>
+          </div>
+
+          <div class="actions-box">
+            <button class="btn-envias"><i class="ti ti-send"></i> Enviar al cliente</button>
+            <button class="btn-muestra" onclick="clickSolicitarMuestra()"><i class="ti ti-package"></i> Solicitar muestra</button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- FLOW 2: Recurring Zero-Friction 1-Click Request -->
-    <div style="display:none; flex-direction:column; height:100%;" id="recurring-flow">
-      <div class="checkout-header">
-        <span style="font-size:13px; font-weight:700;">Confirmación Directa</span>
-        <button class="btn-demo-toggle" onclick="toggleFlows('onboarding')">Simular Onboarding 🛠️</button>
+    <!-- Right Drawer: 1-Clic sample checkout -->
+    <div class="drawer-container">
+      <div class="drawer-header">
+        <span style="font-size: 13.5px; font-weight: 700;">Solicitud de Muestra</span>
+        <span style="font-size: 10px; font-weight: 850; color: var(--orange-primary); text-transform: uppercase;">1-Clic Activo</span>
       </div>
 
-      <div class="checkout-body">
-        <span class="step-label">Acción de 1 Clic</span>
+      <div class="drawer-body" id="blank-drawer-state">
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; color:var(--text-muted); gap:10px; margin-top: 100px;">
+          <i class="ti ti-package" style="font-size:40px; color:var(--orange-primary);"></i>
+          <h3>Resolución en 1 Clic</h3>
+          <p style="font-size:12px; max-width:240px;">Presiona "Solicitar muestra" a la izquierda para simular el autocompletado definitivo.</p>
+        </div>
+      </div>
+
+      <!-- Active pre-populated drawer (Hidden initially) -->
+      <div class="drawer-body" style="display:none; flex-direction:column; gap:16px;" id="active-drawer-state">
         
-        <!-- Pre-populated Address -->
-        <div class="checkout-card">
+        <!-- Predetermined destination -->
+        <div class="box-card">
+          <span class="box-title">Destinatario Predeterminado</span>
           <div class="card-row">
             <div>
-              <span class="step-label">Dirección Guardada</span>
-              <strong style="display:block; margin-top:2px;" id="saved-address-text">Calle 5 #23-45, Apto 402, Cali</strong>
+              <strong id="label-name" style="font-size: 13px;">Santiago Herrera Acosta</strong>
+              <span id="label-address" style="display:block; font-size:12px; color:var(--text-muted);">Calle 5 #23-45, Cali, Valle del Cauca</span>
+              <span id="label-phone" style="display:block; font-size:11.5px; color:var(--text-muted); margin-top:2px;">📞 +57 300 123 4567</span>
             </div>
-            <i class="ti ti-lock" style="color:var(--green-dropi);"></i>
+            <i class="ti ti-circle-check" style="color:#10b981; font-size:18px;"></i>
           </div>
         </div>
 
-        <!-- Carrier Auto-Selected -->
-        <div class="checkout-card">
-          <span class="step-label">Transportadora Homologada</span>
-          <div class="carrier-selector active">
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span>🚚</span>
-              <strong>Coordinadora (Económico)</strong>
+        <!-- Cheapest courier auto-selected -->
+        <div class="box-card">
+          <span class="box-title">Transportadora Optimizada</span>
+          <div class="carrier-badge">
+            <div>
+              <strong style="font-size: 13px;">Coordinadora</strong>
+              <span style="display:block; font-size:11.5px; color:var(--text-muted);">Entrega en 2 días habiles</span>
             </div>
-            <strong style="color:var(--green-dropi);">$10.800 COP</strong>
+            <strong style="color:#10b981;">$10.800 COP</strong>
           </div>
         </div>
 
-        <!-- Breakdown -->
-        <div class="checkout-card">
-          <span class="step-label">Resumen</span>
-          <div class="card-row" style="font-size:12.5px; margin-top:4px;">
+        <!-- Cost breakdown -->
+        <div class="box-card">
+          <span class="box-title">Desglose de Caja</span>
+          <div class="card-row">
             <span>Muestra (Costo Proveedor):</span>
             <strong>$59.000 COP</strong>
           </div>
-          <div class="card-row" style="font-size:12.5px;">
-            <span>Flete Coordinadora:</span>
+          <div class="card-row">
+            <span>Flete de envío:</span>
             <strong>$10.800 COP</strong>
           </div>
-          <hr style="border:none; border-top:1px solid var(--border-dark); margin:4px 0;" />
-          <div class="card-row" style="font-size:13.5px; font-weight:800; color:var(--text-primary);">
+          <hr style="border:none; border-top:1px solid var(--border-color); margin:4px 0;" />
+          <div class="card-row" style="font-size:14px; font-weight:700;">
             <span>Total a debitar:</span>
             <span>$69.800 COP</span>
           </div>
         </div>
 
         <div class="wallet-warning">
-          <i class="ti ti-wallet"></i>
+          <i class="ti ti-wallet" style="font-size:18px;"></i>
           <div>
-            <strong>Pago Automático Habilitado</strong><br/>
-            Se debitará de tu saldo de Wallet pre-guardado.
+            <strong>Wallet Sincronizada</strong><br/>
+            Se cargará de forma automática en 1-Clic.
           </div>
         </div>
 
-        <button class="purchase-btn" onclick="executeSamplePurchase()">Confirmar Solicitud en 1 Clic</button>
+        <button class="btn-blue" onclick="confirmSampleRequest()"><i class="ti ti-wallet"></i> Confirmar y Despachar Muestra</button>
       </div>
-    </div>
 
-    <!-- Success state -->
-    <div style="display:none;" id="success-checkout-state" class="success-overlay">
-      <div class="success-icon"><i class="ti ti-circle-check"></i></div>
-      <h2 id="success-title">¡Muestra Solicitada!</h2>
-      <p style="font-size:13px; color:var(--text-secondary); line-height:1.6; max-width:320px;" id="success-desc">
-        La dirección y preferencias fueron guardadas. Descontamos los <strong>$59.000 COP</strong> del proveedor. La guía de Coordinadora quedó generada automáticamente.
-      </p>
-      <button class="btn-secondary" style="margin-top:15px; width:100%;" onclick="resetCheckout()"><i class="ti ti-refresh"></i> Volver a empezar</button>
-    </div>
+      <!-- Success panel -->
+      <div style="display:none;" id="success-state" class="success-overlay">
+        <div class="success-icon"><i class="ti ti-circle-check"></i></div>
+        <h2>¡Muestra Solicitada!</h2>
+        <p style="font-size:12.5px; color:var(--text-muted); line-height:1.5; max-width:280px;">
+          Descontado de tu Wallet. Guía Coordinadora creada. No volveremos a preguntar tu dirección en próximas muestras de este catálogo.
+        </p>
+        <button class="btn-muestra" style="width:100%;" onclick="resetState()"><i class="ti ti-refresh"></i> Simular Nuevamente</button>
+      </div>
 
+    </div>
   </div>
+</div>
 
+<!-- Modal: Seteo Único de Datos (Una sola vez) -->
+<div class="modal-overlay" id="setup-modal" style="display:none;">
+  <div class="setup-modal">
+    <div class="modal-head">Seteo Único: Dirección de Muestras</div>
+    <div class="modal-body">
+      <p style="font-size:12.5px; color:var(--text-muted); line-height:1.4; margin-bottom:8px;">
+        Registra tu dirección única de muestras. **Guardaremos este seteo de forma predeterminada para que tus futuras solicitudes de muestra sean en un solo clic.**
+      </p>
+      
+      <div class="input-group">
+        <div class="form-control">
+          <label>Nombres</label>
+          <input class="form-input" id="inp-name" value="Santiago" />
+        </div>
+        <div class="form-control">
+          <label>Apellidos</label>
+          <input class="form-input" id="inp-lastname" value="Herrera Acosta" />
+        </div>
+      </div>
+
+      <div class="form-control">
+        <label>Número de teléfono</label>
+        <input class="form-input" id="inp-phone" value="3001234567" />
+      </div>
+
+      <div class="input-group">
+        <div class="form-control">
+          <label>Departamento</label>
+          <select class="form-select" id="inp-dept" onchange="updateCities()">
+            <option value="Valle del Cauca">Valle del Cauca</option>
+            <option value="Antioquia">Antioquia</option>
+            <option value="Bogotá D.C.">Bogotá D.C.</option>
+          </select>
+        </div>
+        <div class="form-control">
+          <label>Ciudad</label>
+          <select class="form-select" id="inp-city">
+            <option value="Cali">Cali</option>
+            <option value="Medellín">Medellín</option>
+            <option value="Bogotá">Bogotá</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-control">
+        <label>Dirección y complementos</label>
+        <input class="form-input" id="inp-address" value="Calle 5 #23-45, Apto 402, Torre B" />
+      </div>
+
+      <div class="form-control">
+        <label>Correo electrónico</label>
+        <input class="form-input" id="inp-email" value="santiago@dropi.co" />
+      </div>
+
+      <button class="btn-blue" style="margin-top:10px;" onclick="saveSetup()"><i class="ti ti-device-floppy"></i> Guardar y Habilitar 1-Clic</button>
+    </div>
+  </div>
 </div>
 
 <script>
-  let addressConfigured = false;
-  let userAddress = "Calle 5 #23-45, Apto 402, Cali";
+  let dataSet = false;
 
-  function openSampleCheckout() {
-    document.getElementById('blank-checkout-state').style.display = 'none';
-    document.getElementById('success-checkout-state').style.display = 'none';
+  function clickSolicitarMuestra() {
+    document.getElementById('blank-drawer-state').style.display = 'none';
+    document.getElementById('success-state').style.display = 'none';
     
-    if (!addressConfigured) {
-      document.getElementById('onboarding-flow').style.display = 'flex';
-      document.getElementById('onboarding-step1').style.display = 'flex';
-      document.getElementById('onboarding-step2').style.display = 'none';
-      document.getElementById('recurring-flow').style.display = 'none';
+    if (!dataSet) {
+      // Abre el modal de seteo por única vez
+      document.getElementById('setup-modal').style.display = 'flex';
     } else {
-      document.getElementById('onboarding-flow').style.display = 'none';
-      document.getElementById('recurring-flow').style.display = 'flex';
+      // Abre el drawer pre-guardado
+      document.getElementById('active-drawer-state').style.display = 'flex';
     }
   }
 
-  function saveStep1() {
-    const val = document.getElementById('setup-address').value.trim();
-    if(val) userAddress = val;
-    document.getElementById('onboarding-step1').style.display = 'none';
-    document.getElementById('onboarding-step2').style.display = 'flex';
+  function saveSetup() {
+    const name = document.getElementById('inp-name').value;
+    const lastname = document.getElementById('inp-lastname').value;
+    const phone = document.getElementById('inp-phone').value;
+    const dept = document.getElementById('inp-dept').value;
+    const city = document.getElementById('inp-city').value;
+    const address = document.getElementById('inp-address').value;
+
+    // Actualiza etiquetas en el drawer
+    document.getElementById('label-name').innerText = `${name} ${lastname}`;
+    document.getElementById('label-address').innerText = `${address}, ${city}, ${dept}`;
+    document.getElementById('label-phone').innerText = `📞 +57 ${phone}`;
+
+    dataSet = true;
+    
+    // Cierra modal y muestra el drawer pre-guardado de 1-Clic
+    document.getElementById('setup-modal').style.display = 'none';
+    document.getElementById('active-drawer-state').style.display = 'flex';
   }
 
-  function completeOnboarding() {
-    addressConfigured = true;
-    document.getElementById('saved-address-text').innerText = userAddress;
-    document.getElementById('onboarding-flow').style.display = 'none';
-    document.getElementById('success-title').innerText = "¡Muestra Solicitada & Configurada!";
-    document.getElementById('success-desc').innerText = "Guardamos tu dirección y método por defecto para futuras solicitudes. El pedido fue enviado con Coordinadora.";
-    document.getElementById('success-checkout-state').style.display = 'flex';
+  function confirmSampleRequest() {
+    document.getElementById('active-drawer-state').style.display = 'none';
+    document.getElementById('success-state').style.display = 'flex';
   }
 
-  function executeSamplePurchase() {
-    document.getElementById('recurring-flow').style.display = 'none';
-    document.getElementById('success-title').innerText = "¡Muestra de 1-Clic Exitosa!";
-    document.getElementById('success-desc').innerText = `Debitado de tu Wallet. El flete fue cotizado y despachado de forma automática a tu dirección guardada: ${userAddress}.`;
-    document.getElementById('success-checkout-state').style.display = 'flex';
+  function resetState() {
+    document.getElementById('success-state').style.display = 'none';
+    document.getElementById('blank-drawer-state').style.display = 'flex';
+    document.getElementById('active-drawer-state').style.display = 'none';
   }
 
-  function simulateImport() {
-    // Show toast for recurring inline request
-    document.getElementById('toast-sync').style.display = 'block';
-  }
-
-  function acceptToastSample() {
-    closeToast();
-    addressConfigured = true; // Auto-activate recurring flow
-    document.getElementById('blank-checkout-state').style.display = 'none';
-    document.getElementById('recurring-flow').style.display = 'flex';
-  }
-
-  function closeToast() {
-    document.getElementById('toast-sync').style.display = 'none';
-  }
-
-  function toggleFlows(flow) {
-    if (flow === 'onboarding') {
-      addressConfigured = false;
-      openSampleCheckout();
+  function updateCities() {
+    const dept = document.getElementById('inp-dept').value;
+    const citySelect = document.getElementById('inp-city');
+    citySelect.innerHTML = '';
+    if (dept === 'Valle del Cauca') {
+      citySelect.innerHTML = '<option value="Cali">Cali</option><option value="Palmira">Palmira</option>';
+    } else if (dept === 'Antioquia') {
+      citySelect.innerHTML = '<option value="Medellín">Medellín</option><option value="Envigado">Envigado</option>';
     } else {
-      addressConfigured = true;
-      openSampleCheckout();
+      citySelect.innerHTML = '<option value="Bogotá">Bogotá</option>';
     }
-  }
-
-  function resetCheckout() {
-    document.getElementById('blank-checkout-state').style.display = 'flex';
-    document.getElementById('onboarding-flow').style.display = 'none';
-    document.getElementById('recurring-flow').style.display = 'none';
-    document.getElementById('success-checkout-state').style.display = 'none';
   }
 </script>
 </body>
