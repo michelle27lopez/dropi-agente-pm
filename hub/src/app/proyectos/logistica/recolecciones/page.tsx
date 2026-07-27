@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { cargarFoto, cargarReglas } from "@/lib/recolecciones/datos";
 import { armarTablero } from "@/lib/recolecciones/tablero";
 import { ETIQUETA_VEREDICTO } from "@/lib/recolecciones/elegibilidad";
 import ArmarSolicitud from "./ArmarSolicitud";
-import Mapa from "./Mapa";
+// Mapa.tsx sigue en la carpeta: es la base del port, todavía incompleta. No se
+// monta acá para no mostrar dos mapas distintos en la misma página.
 import "./recolecciones.css";
 
 // Control de Recolecciones — tablero del día.
@@ -51,7 +53,7 @@ export default async function RecoleccionesPage() {
               : <>Sin datos cargados</>}
           </p>
         </div>
-        <a className="rec-btn" href="#mapa">Ver el mapa ↓</a>
+        <Link className="rec-btn" href="/proyectos/logistica/recolecciones/mapa">Ver el mapa</Link>
       </header>
 
       {/* De dónde salen los datos. Nunca implícito: la diferencia entre la base
@@ -197,7 +199,36 @@ export default async function RecoleccionesPage() {
             })}
           </section>
 
-          <div id="mapa"><Mapa bodegas={foto.bodegas} /></div>
+          {/* El mapa completo.
+              Bajar el mapa de jerarquía —porque la geocodificación tiene 5 km de
+              error mediano y no puede decidir a qué puerta ir— no era razón para
+              perder lo que el mapa sí hace bien: navegar por territorio, buscar,
+              filtrar, ver el detalle de una bodega y subir el export.
+
+              No es un placeholder a la espera de un port: este HTML ya consume
+              /api/logistica/recolecciones (la base), con el JSON de public/ solo
+              como respaldo, y ya trae la ingesta conectada a /importar. O sea que
+              funciona igual en producción. Lo que queda de deuda es visual —dos
+              sistemas de estilo conviviendo—, no funcional, y eso no justifica
+              reescribir 750 líneas. Mapa.tsx queda como base por si algún día se
+              decide unificar el estilo. */}
+          {/* No se embebe acá: en una caja chica el mapa queda inservible —tiene
+              su propia navegación por territorio, filtros y panel de detalle— y
+              obliga a hacer scroll dentro del scroll. Va a su propia página, a
+              pantalla completa. */}
+          <section id="mapa" className="rec-mapa-cta">
+            <div>
+              <h2>Mapa de recolecciones</h2>
+              <p>
+                Navegá por territorio, buscá una bodega, filtrá por transportadora,
+                mirá el detalle o subí el export del día. Lee de la misma base que
+                este tablero.
+              </p>
+            </div>
+            <Link className="rec-btn rec-btn--fuerte" href="/proyectos/logistica/recolecciones/mapa">
+              Abrir el mapa →
+            </Link>
+          </section>
         </>
       )}
     </main>
