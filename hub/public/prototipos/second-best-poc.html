@@ -139,11 +139,11 @@
   /* SCREEN A: Orders Emergency Alert Drawer */
   .orders-view {
     display: flex;
-    gap: 30px;
+    gap: 24px;
     flex: 1;
   }
   .orders-table-card {
-    flex: 2;
+    flex: 1.8;
     background: #fff;
     border-radius: 12px;
     border: 1px solid var(--border-color);
@@ -170,24 +170,24 @@
     border-bottom: 1px solid var(--border-color);
   }
   .sim-table tr.active td {
-    background: rgba(239, 68, 68, 0.03);
+    background: rgba(239, 68, 68, 0.02);
   }
 
   .alert-banner {
     background: rgba(239, 68, 68, 0.08);
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.15);
     border-radius: 8px;
     padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 12.5px;
+    font-size: 12px;
     color: #c53030;
   }
 
   /* Emergency Drawer styling */
   .emergency-drawer {
-    flex: 1.1;
+    flex: 1.4;
     background: #fff;
     border-radius: 12px;
     border: 1px solid var(--border-color);
@@ -207,9 +207,51 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     flex: 1;
     overflow-y: auto;
+  }
+
+  /* Product affected list */
+  .product-affected-box {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    background: #f8fafc;
+  }
+  .product-item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-color);
+  }
+  .product-item-row:last-child {
+    border-bottom: none;
+  }
+  .product-thumb {
+    width: 36px;
+    height: 36px;
+    background: #edf2f7;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .product-status-tag {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+  }
+  .product-status-tag.ok {
+    background: rgba(16, 185, 129, 0.08);
+    color: var(--green-success);
+  }
+  .product-status-tag.stockout {
+    background: rgba(239, 68, 68, 0.08);
+    color: var(--red-alert);
   }
 
   .backup-card {
@@ -219,14 +261,17 @@
     cursor: pointer;
     background: #fafafb;
     transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
   }
   .backup-card:hover {
     border-color: var(--orange-primary);
   }
   .backup-card.active {
     border-color: var(--green-success);
-    background: rgba(16, 185, 129, 0.02);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.05);
+    background: rgba(16, 185, 129, 0.01);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.04);
   }
 
   .flex-row {
@@ -386,7 +431,7 @@
               <th>ID Orden</th>
               <th>Fecha</th>
               <th>Cliente</th>
-              <th>Producto</th>
+              <th>Producto Afectado</th>
               <th>Estado</th>
             </tr>
           </thead>
@@ -417,58 +462,94 @@
           <div class="success-icon"><i class="ti ti-circle-check"></i></div>
           <h2 style="font-size:16px; font-weight:800;">¡Orden Re-enrutada!</h2>
           <p style="font-size:12.5px; color:var(--text-muted); line-height:1.5;">
-            La orden fue reasignada a **JP Distribuciones**. La transportadora ya fue notificada y el stock quedó bloqueado en su bodega.
+            El producto **Organizador de Closet** fue reasignado a **JP Distribuciones**. La orden #12511073 continúa su despacho normal.
           </p>
           <button class="btn-orange" style="margin-top:10px;" onclick="resetDrawer()"><i class="ti ti-refresh"></i> Probar de Nuevo</button>
         </div>
 
         <div class="drawer-head">
           <div>
-            <strong style="display:block; font-size:13px; color:#c53030;">Resolución Second Best</strong>
-            <span style="font-size:11.5px; color:var(--text-muted);">Salva la venta re-enrutando el pedido</span>
+            <strong style="display:block; font-size:13px; color:#c53030;">Resolución de Múltiples Productos</strong>
+            <span style="font-size:11.5px; color:var(--text-muted);">Pedido #12511073 · Total: $118.000 COP</span>
           </div>
-          <i class="ti ti-sparkles" style="color:var(--orange-primary); font-size:18px;"></i>
+          <i class="ti ti-package" style="color:var(--orange-primary); font-size:18px;"></i>
         </div>
 
         <div class="drawer-body">
-          <p style="font-size:12.5px; color:var(--text-muted); line-height:1.4;">
-            El proveedor principal (*Hepa Tecnología*) no tiene existencias. Encontramos **2 bodegas de respaldo** homologadas con stock disponible para despachar hoy:
+          
+          <!-- Product Breakdown Section (Resolves the user's issue!) -->
+          <div class="product-affected-box">
+            <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px;">Productos en este Pedido</div>
+            
+            <!-- Item 1: Stockout -->
+            <div class="product-item-row">
+              <div class="product-thumb">📦</div>
+              <div style="flex:1; min-width:0;">
+                <strong style="font-size:12px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Organizador de Closet par...</strong>
+                <span style="font-size:11px; color:var(--text-muted);">2 unidades · SKU-4821</span>
+              </div>
+              <span class="product-status-tag stockout">Falta de Stock ⚠️</span>
+            </div>
+
+            <!-- Item 2: OK -->
+            <div class="product-item-row" style="opacity:0.7;">
+              <div class="product-thumb">🔌</div>
+              <div style="flex:1; min-width:0;">
+                <strong style="font-size:12px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Termo digital 500 ML</strong>
+                <span style="font-size:11px; color:var(--text-muted);">2 unidades · SKU-9102</span>
+              </div>
+              <span class="product-status-tag ok">En Bodega ✓</span>
+            </div>
+
+            <!-- Item 3: OK -->
+            <div class="product-item-row" style="opacity:0.7;">
+              <div class="product-thumb">💇</div>
+              <div style="flex:1; min-width:0;">
+                <strong style="font-size:12px; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Encrespador Eléctrico</strong>
+                <span style="font-size:11px; color:var(--text-muted);">4 unidades · SKU-5540</span>
+              </div>
+              <span class="product-status-tag ok">En Bodega ✓</span>
+            </div>
+          </div>
+
+          <p style="font-size:12px; color:var(--text-muted); line-height:1.4;">
+            Selecciona un proveedor alternativo para despachar las **2 unidades de Organizador de Closet** faltantes:
           </p>
 
           <!-- Alternative 1 (Cheapest - Active by default) -->
           <div class="backup-card active" id="card-alt1" onclick="selectAlt(1)">
-            <div class="flex-row" style="margin-bottom:6px;">
+            <div class="flex-row">
               <strong style="font-size:13px;">JP Distribuciones</strong>
-              <span style="font-size:10px; font-weight:800; color:var(--green-success); background:rgba(16,185,129,0.06); padding:2px 6px; border-radius:10px;">Más Económico</span>
+              <span style="font-size:10px; font-weight:800; color:var(--green-success); background:rgba(16,185,129,0.06); padding:2px 6px; border-radius:10px;">Opción Recomendada</span>
             </div>
-            <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;">
+            <div style="font-size:11.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:3px;">
               <div>Stock disponible: <strong>180 unidades</strong></div>
-              <div>Costo de Producto: <strong>$59.000 COP</strong> (Igual al original)</div>
+              <div>Costo de Producto: <strong>$59.000 COP</strong> (Mismo precio)</div>
               <div>Flete de envío: <strong>$15.000 COP</strong> (+$2.000 COP flete de respaldo)</div>
-              <div style="margin-top:4px; border-top:1px dashed #e2e8f0; padding-top:4px; color:var(--text-main);">
-                Utilidad Ajustada: <strong style="color:var(--orange-primary);">$63.000 COP</strong> (antes $65.000)
+              <div style="margin-top:4px; border-top:1px dashed #e2e8f0; padding-top:4px; color:var(--text-main); font-size:12px;">
+                Nueva Utilidad del Pedido: <strong style="color:var(--orange-primary);">$63.000 COP</strong> (antes $65.000)
               </div>
             </div>
           </div>
 
           <!-- Alternative 2 (Fastest) -->
           <div class="backup-card" id="card-alt2" onclick="selectAlt(2)">
-            <div class="flex-row" style="margin-bottom:6px;">
+            <div class="flex-row">
               <strong style="font-size:13px;">CueroStyle Premium</strong>
               <span style="font-size:10px; font-weight:800; color:var(--blue-primary); background:rgba(91,162,218,0.06); padding:2px 6px; border-radius:10px;">Despacho Express</span>
             </div>
-            <div style="font-size:12px; color:var(--text-muted); display:flex; flex-direction:column; gap:4px;">
+            <div style="font-size:11.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:3px;">
               <div>Stock disponible: <strong>50 unidades</strong></div>
-              <div>Costo de Producto: <strong>$62.000 COP</strong> (+$3.000 COP sobrecosto proveedor)</div>
+              <div>Costo de Producto: <strong>$62.000 COP</strong> (+$3.000 COP sobrecosto)</div>
               <div>Flete de envío: <strong>$13.000 COP</strong> (Flete estándar)</div>
-              <div style="margin-top:4px; border-top:1px dashed #e2e8f0; padding-top:4px; color:var(--text-main);">
-                Utilidad Ajustada: <strong style="color:var(--orange-primary);">$62.000 COP</strong> (antes $65.000)
+              <div style="margin-top:4px; border-top:1px dashed #e2e8f0; padding-top:4px; color:var(--text-main); font-size:12px;">
+                Nueva Utilidad del Pedido: <strong style="color:var(--orange-primary);">$62.000 COP</strong> (antes $65.000)
               </div>
             </div>
           </div>
 
-          <div style="margin-top:auto;">
-            <button class="btn-orange" style="width:100%; padding:14px;" onclick="executeRoute()"><i class="ti ti-circle-check"></i> Redirigir a Proveedor Seleccionado</button>
+          <div style="margin-top:auto; padding-top:10px;">
+            <button class="btn-orange" style="width:100%; padding:14px;" onclick="executeRoute()"><i class="ti ti-shopping-cart-plus"></i> Desviar y Salvar Venta</button>
           </div>
         </div>
 
