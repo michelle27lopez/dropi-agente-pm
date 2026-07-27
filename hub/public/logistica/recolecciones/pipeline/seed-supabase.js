@@ -70,7 +70,7 @@ const bodegas = puntos.map(p => {
 const cargaDiaria = [];
 for (const p of puntos) {
   for (const [transportadora, preparadas, guia_generada] of p.tr || []) {
-    carga.push({
+    cargaDiaria.push({
       fecha,
       warehouse_id: String(p.id),
       transportadora,
