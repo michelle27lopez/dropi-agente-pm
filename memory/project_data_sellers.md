@@ -120,11 +120,12 @@ Especificaciones enviadas a Miguel Ángel (Data Analyst) para auditar el baselin
 *   **Descripción:** Flujo educativo asociado al CRM para acompañar a los nuevos dropshippers.
 *   **Estado:** Operativo / pendiente de auditoría de contenido.
 
-### 5. Experimento: "Pide tu Muestra"
+### 5. Experimento: "Pide tu Muestra" (PROD-MUESTRA)
 *   **Descripción:** Incentivar que el dropshipper cree una primera orden manual para sí mismo como prueba logística ("sé tu primer cliente").
 *   **Hipótesis:** Comprar su propio producto reduce el miedo, enseña el flujo logístico y valida la entrega física.
 *   **Métrica:** Conversión de Registro a Primera Orden Manual.
-*   **Estado:** Planificado.
+*   **Prototipo Interactivo (1-Clic & Setup Único):** [/prototipos/solicitud-muestra-poc.html](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/hub/public/prototipos/solicitud-muestra-poc.html).
+*   **Estado:** En curso (Prototipo finalizado).
 
 ### 6. Biblia de AI / Proyecto Help Center (SAC)
 *   **Descripción:** Widget flotante buscador de FAQs para incentivar la autogestión de dudas técnicas y reducir tickets de soporte de nivel 1. Ver [Materialización Help Center](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#7-biblia-de-ai--proyecto-help-center-sac).
