@@ -147,9 +147,10 @@ Especificaciones enviadas a Miguel Ángel (Data Analyst) para auditar el baselin
 *   **Descripción:** Segmentación y rescate de la cohorte del Pareto activa. Ver [Materialización Diagnóstico de Churn](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#10-diagnóstico-de-churn-prod-1666).
 *   **Estado:** Planificado (Q4 / Preparación en Q3).
 
-### 11. [DISCOVERY Q4] Enrutamiento dinámico y multi-proveedor - Second Best
+### 11. [DISCOVERY Q4] Enrutamiento dinámico y multi-proveedor - Second Best (PROD-SEC-BEST)
 *   **Descripción:** Redirección automática de órdenes a respaldo pre-seleccionado y subasta in-app de despacho (Pulso). Ver [Materialización Second Best](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#11-enrutamiento-dinámico-second-best---prod-sec-best).
-*   **Estado:** Planificado (Q4 / Discovery en Backlog).
+*   **Prototipo Interactivo (Emergency & Setup):** [/prototipos/second-best-poc.html](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/hub/public/prototipos/second-best-poc.html).
+*   **Estado:** En curso (Prototipo finalizado).
 
 ### 12. [DISCOVERY Q4] Dropi Wrapped para Dropshippers
 *   **Descripción:** Retrospectiva interactiva personalizada de percentiles y racha para reactivación inter-campaña. Ver [Materialización Dropi Wrapped](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#12-dropi-wrapped-para-dropshippers-prod-wrapped).

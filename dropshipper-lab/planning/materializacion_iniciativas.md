@@ -167,17 +167,18 @@ Este documento traduce los objetivos subjetivos y las intenciones del portafolio
 
 ## 11. Enrutamiento Dinámico (Second Best - PROD-SEC-BEST)
 
-*   **Fase de Ciclo:** **Explore** (Diseño de especificaciones de matching).
+*   **Fase de Ciclo:** **Explore** (Prototipo finalizado).
 *   **Comportamiento Específico:** Un dropshipper con órdenes creadas y proveedor principal sin stock o inactivo por 24 horas aprueba el desvío inmediato de esas órdenes a un proveedor de respaldo pre-seleccionado en su catálogo.
 *   **Business Outcome (Lagging):** Reducir cancelaciones de órdenes Pareto y retener el GMV de los sellers estrella.
 *   **Product Outcome (Leading):** % de órdenes de compra exitosamente re-enrutadas y despachadas por un proveedor de respaldo calificado.
+*   **Prototipo Interactivo (Emergency & Setup):** [/prototipos/second-best-poc.html](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/hub/public/prototipos/second-best-poc.html).
 *   **Baseline & Meta:**
     *   *Baseline:* 0% (proceso 100% manual).
     *   *Meta:* $\ge 75\%$ de órdenes re-enrutadas exitosamente ante stockouts.
 *   **Diagnóstico B=MAP & Sesgo:** **Loss Aversion** (miedo a perder reputación con el comprador final) vs **Present Bias** (miedo a pagar un sobrecosto menor hoy).
 *   **Supuesto más Riesgoso:** Los dropshippers del Pareto están dispuestos a sacrificar hasta un 10% de su margen neto por orden con tal de salvar la entrega a su cliente final.
 *   **Test de Validación más Barato:** Test de guerrilla interactivo con Figma con 5 dropshippers del Pareto para medir su aceptación del sobrecosto en el prompt de emergencia.
-*   **Bloqueante Actual & Siguiente Paso:** Estructuración de UI. *Acción:* Alejandra Melo inicia el diseño del prompt de emergencia "Un Clic" y la sección de precarga en catálogo.
+*   **Bloqueante Actual & Siguiente Paso:** Estructuración de UI. *Acción:* Presentar el prototipo a Alejandra Melo y Diego Pérez para iniciar la estimación de desarrollo del sprint de Q4.
 
 ---
 
