@@ -48,7 +48,19 @@ nav.tabs button:hover{background:var(--surface-2);color:var(--ink)}
 nav.tabs button[aria-current="page"]{background:#EAF6FA;color:var(--brand-blue-dark);font-weight:600}
 .meta{color:var(--ink-2);font-size:11.5px;white-space:nowrap}
 .banner{height:var(--h-banner);background:#EAF6FA;color:#0A5E80;font-size:11px;display:flex;align-items:center;
-  gap:6px;padding:0 14px;border-bottom:1px solid #D8EAF1}
+  gap:6px;padding:0 14px;border-bottom:1px solid #D8EAF1;position:relative}
+/* La procedencia del dato se abre por encima, nunca empuja: el alto del banner
+   entra en el calc() que le da altura al mapa, así que si crece, el mapa se
+   desborda. Por eso el panel es absolute y el banner conserva su alto fijo. */
+.banner-mas{margin-left:auto;position:relative}
+.banner-mas summary{cursor:pointer;list-style:none;white-space:nowrap;text-decoration:underline dotted;text-underline-offset:2px}
+.banner-mas summary::-webkit-details-marker{display:none}
+.banner-mas summary:focus-visible{outline:2px solid var(--brand-orange);outline-offset:2px;border-radius:3px}
+.banner-mas .bm-body{position:absolute;right:0;top:calc(100% + 6px);z-index:700;width:300px;
+  background:var(--surface);border:1px solid var(--border-strong);border-radius:var(--r);
+  box-shadow:var(--shadow);padding:9px 11px;color:var(--ink-2);line-height:1.55;font-size:11px;
+  display:flex;flex-direction:column;gap:3px}
+.banner-mas .bm-body b{color:var(--ink-1);font-weight:600}
 main{height:calc(100vh - var(--h-header) - var(--h-banner));overflow:hidden}
 .view{display:none;height:100%;flex-direction:column}.view.active{display:flex}
 .ctx{background:var(--surface);border-bottom:1px solid var(--border);padding:8px 14px 10px}
@@ -61,7 +73,12 @@ main{height:calc(100vh - var(--h-header) - var(--h-banner));overflow:hidden}
 .kpi{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:8px 11px;text-align:left;position:relative}
 .kpi[aria-pressed="true"]{background:#FFF6EC;border-color:#F3D8B4}
 .kpi[aria-pressed="true"]::after{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--brand-orange)}
-.kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kpi .v{font-size:19px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+/* Solo los que filtran responden al puntero y muestran el cursor de acción.
+   Los de lectura se quedan quietos: si todo reacciona, nada indica nada. */
+.kpi--f{cursor:pointer;transition:border-color .15s ease}
+.kpi--f:hover{border-color:var(--brand-orange)}
+.kpi--f:focus-visible{outline:2px solid var(--brand-orange);outline-offset:2px}
 .kpi .l{font-size:11.5px;color:var(--ink-2);margin-top:1px}.kpi .h{font-size:10.5px;color:var(--ink-3)}
 .kpi.crit .v{color:var(--err)}.kpi.warn .v{color:#C77400}.kpi.ok .v{color:var(--brand-blue-dark)}
 .filters{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap}
@@ -115,9 +132,15 @@ table.terr tfoot td{position:sticky;bottom:0;background:var(--surface-2);font-we
 .lg-sizes span{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9.5px;color:var(--ink-3)}
 .lg-sizes i{display:block;border-radius:50%;background:#C6D0DC;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.10)}
 .legend{bottom:22px;left:10px;padding:8px 10px;font-size:11.5px;max-width:245px}
-.legend summary{cursor:pointer;font-weight:600;font-size:11.5px;list-style:none}
-.legend summary::-webkit-details-marker{display:none}.legend summary::before{content:"▾ ";color:var(--ink-3)}
-.legend[open] .lg-body{margin-top:7px}
+/* Un solo estilo de plegable para los paneles del mapa: escala y leyenda se
+   ven y se comportan igual, así el usuario aprende el gesto una vez. */
+.map-float summary{cursor:pointer;font-weight:600;font-size:11.5px;list-style:none;color:var(--ink-2)}
+.map-float summary::-webkit-details-marker{display:none}
+.map-float summary::before{content:"▸ ";color:var(--ink-3)}
+.map-float[open]>summary::before{content:"▾ "}
+.map-float summary:hover{color:var(--ink-1)}
+.map-float summary:focus-visible{outline:2px solid var(--brand-orange);outline-offset:2px;border-radius:3px}
+.map-float[open] .lg-body{margin-top:7px}
 .lg-row{display:flex;align-items:center;gap:7px;color:var(--ink-2);padding:1.5px 0}
 .sw{width:11px;height:11px;border-radius:50%;flex:0 0 11px;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
 .lg-note{margin-top:7px;padding-top:6px;border-top:1px solid var(--border);color:var(--ink-3);font-size:10.5px;line-height:1.45}
@@ -283,23 +306,29 @@ code{background:#F2F4F7;border-radius:3px;padding:1px 5px;font-size:11.5px;font-
       <div id="mapWrap">
         <div id="map"></div>
         <div class="freshtag" id="mapScope">Colombia</div>
-        <div class="map-float layers"><b>Escala del mapa</b>
-          <div class="seg2" role="group" aria-label="Métrica del tamaño">
-            <button data-met="t" aria-pressed="true">Todas</button>
-            <button data-met="p" aria-pressed="false">Preparadas</button>
+        <!-- Plegados por defecto: son ajustes que se tocan una vez y después
+             estorban. Abiertos se comían casi un tercio del mapa, que es lo
+             único que esta pantalla tiene para mostrar. El contenido sigue en
+             el DOM aunque esté cerrado, así que los listeners no cambian. -->
+        <details class="map-float layers"><summary>Escala del mapa</summary>
+          <div class="lg-body">
+            <div class="seg2" role="group" aria-label="Métrica del tamaño">
+              <button data-met="t" aria-pressed="true">Todas</button>
+              <button data-met="p" aria-pressed="false">Preparadas</button>
+            </div>
+            <label style="margin-top:7px;display:block">
+              <span id="minLbl" style="color:var(--ink-2)">Guías ≥ 0</span>
+              <input type="range" id="minGuias" min="0" max="500" step="10" value="0" style="width:100%;margin-top:3px">
+            </label>
+            <label style="margin-top:2px"><input type="checkbox" id="lyPoints" checked> Mostrar puntos</label>
           </div>
-          <label style="margin-top:7px;display:block">
-            <span id="minLbl" style="color:var(--ink-2)">Guías ≥ 0</span>
-            <input type="range" id="minGuias" min="0" max="500" step="10" value="0" style="width:100%;margin-top:3px">
-          </label>
-          <label style="margin-top:2px"><input type="checkbox" id="lyPoints" checked> Mostrar puntos</label>
-        </div>
+        </details>
         <div class="map-float mctrl">
           <button id="mZoomIn" title="Acercar">＋</button>
           <button id="mZoomOut" title="Alejar">−</button>
           <button id="mFit" title="Ajustar a Colombia">⤢</button>
           <button id="mBack" title="Nivel anterior">↰</button></div>
-        <details class="map-float legend" open><summary>Leyenda</summary>
+        <details class="map-float legend"><summary>Leyenda</summary>
           <div class="lg-body">
             <div class="lg-row"><i class="sw" style="background:#F46A6B"></i> Con guías preparadas</div>
             <div class="lg-row"><i class="sw" style="background:#FF9800"></i> Solo guía generada</div>
@@ -534,12 +563,21 @@ function renderCrumbs(){
     S.level==='departamento'?DEPTS[S.dept][0]:(PUNTOS.find(x=>x.dane===S.mun)||{m:''}).m}
 function renderKpis(){
   const a=agg(visible());
-  const k=[{id:'t',v:fmt(a.t),l:'Guías por recoger',h:`en ${fmt(a.n)} bodegas`,c:'crit'},
-    {id:'prep',v:fmt(a.p),l:'Preparadas para transportadora',h:a.t?Math.round(a.p/a.t*100)+'% del total':'—',c:'crit'},
-    {id:'cp',v:fmt(a.conPrep),l:'Bodegas con carga confirmada',h:'al menos 1 preparada',c:'warn'},
-    {id:'sinub',v:fmt(a.gSinUb),l:'Guías sin ubicación real',h:`${a.t?Math.round(a.gSinUb/a.t*100):0}% en centroide · ${fmt(a.sinUb)} bodegas`,c:'warn'}];
-  document.getElementById('kpis').innerHTML=k.map(x=>`<button class="kpi ${x.c}" data-k="${x.id}"
-    aria-pressed="${S.filters.kpi===x.id}"><div class="v tnum">${x.v}</div><div class="l">${x.l}</div><div class="h">${x.h}</div></button>`).join('');
+  // `f` = filtra al clicarlo. Los otros dos son solo lectura: antes también se
+  // dibujaban como <button> y al hacer clic no pasaba nada, que es la peor
+  // señal posible — el operador prueba, no responde, y deja de confiar en los
+  // que sí filtran. Ahora solo es botón lo que de verdad hace algo.
+  const k=[{id:'t',v:fmt(a.t),l:'Guías por recoger',h:`en ${fmt(a.n)} bodegas`,c:'crit',f:false},
+    {id:'prep',v:fmt(a.p),l:'Preparadas para transportadora',h:a.t?Math.round(a.p/a.t*100)+'% del total':'—',c:'crit',f:true},
+    {id:'cp',v:fmt(a.conPrep),l:'Bodegas con carga confirmada',h:'al menos 1 preparada',c:'warn',f:false},
+    {id:'sinub',v:fmt(a.gSinUb),l:'Guías sin ubicación real',h:`${a.t?Math.round(a.gSinUb/a.t*100):0}% en centroide · ${fmt(a.sinUb)} bodegas`,c:'warn',f:true}];
+  document.getElementById('kpis').innerHTML=k.map(x=>{
+    const cuerpo=`<div class="v tnum">${x.v}</div><div class="l">${x.l}</div><div class="h">${x.h}</div>`;
+    return x.f
+      ? `<button class="kpi kpi--f ${x.c}" data-k="${x.id}" aria-pressed="${S.filters.kpi===x.id}"
+           title="Filtrar por ${x.l.toLowerCase()}">${cuerpo}</button>`
+      : `<div class="kpi ${x.c}">${cuerpo}</div>`;
+  }).join('');
   document.querySelectorAll('#kpis [data-k]').forEach(b=>b.onclick=()=>{const id=b.dataset.k;
     if(id==='t'||id==='cp')return;S.filters.kpi=S.filters.kpi===id?null:id;renderAll()})}
 function renderChips(){
@@ -823,9 +861,25 @@ function pintarBanner(){
   const cob=m.cobertura_geocodificada!=null
     ? ` · ${m.cobertura_geocodificada}% de las guías con ubicación real`:'';
   const origen=FUENTE==='base'?'base':'archivo local';
+
+  // Dos cosas distintas que antes iban en la misma frase, separadas por puntos
+  // medios: una ADVERTENCIA que hay que leer antes de salir a la calle, y la
+  // PROCEDENCIA del dato, que se consulta de vez en cuando. Juntas, la
+  // advertencia se perdía en el medio de la línea. Ahora la advertencia queda
+  // sola y visible; la procedencia está a un clic, sin ocupar alto.
   document.getElementById('banner').innerHTML=
-    `Datos de Chronos (${origen}) · ${ventana}${rango}${cob} · ` +
-    `<b>nivel “vía” = una vía con ese nombre, no la puerta</b> — verificar antes de navegar`;
+    `<b>nivel “vía” = una vía con ese nombre, no la puerta</b> — verificar antes de navegar` +
+    `<details class="banner-mas"><summary>procedencia del dato</summary>` +
+      `<div class="bm-body">` +
+        `<span><b>Origen:</b> Chronos (${origen})</span>` +
+        `<span><b>Ventana:</b> ${ventana}${rango?` (${rango.replace(' · ','')})`:''}</span>` +
+        (cob?`<span><b>Ubicación real:</b> ${m.cobertura_geocodificada}% de las guías</span>`:'') +
+      `</div></details>`;
+
+  // Cerrar al hacer clic afuera: un panel que se queda abierto tapando el
+  // encabezado es peor que no tenerlo.
+  const d=document.querySelector('.banner-mas');
+  if(d)document.addEventListener('click',e=>{if(!d.contains(e.target))d.removeAttribute('open')});
 }
 
 function aplicarDatos(d){

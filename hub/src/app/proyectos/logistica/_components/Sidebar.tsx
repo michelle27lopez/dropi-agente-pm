@@ -28,8 +28,18 @@ const SECCIONES = [
   { href: `${BASE}/pendientes`, label: "Pendientes", icon: ListTodo },
 ];
 
+// Rutas que se llevan la ventana entera y por eso no muestran el panel.
+//
+// Son las que tienen su propia navegación adentro y compiten con la de acá: el
+// mapa navega país → departamento → municipio, y 232 px de panel al lado le
+// quitan justo el ancho que necesita para eso. Cada una de estas rutas debe
+// ofrecer su propia vuelta al tablero, porque acá se queda sin ella.
+const SIN_PANEL = [`${BASE}/recolecciones/mapa`];
+
 export default function Sidebar() {
   const pathname = usePathname() ?? "";
+
+  if (SIN_PANEL.includes(pathname)) return null;
 
   return (
     <aside

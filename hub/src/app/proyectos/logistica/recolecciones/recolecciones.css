@@ -99,6 +99,17 @@
 .rec-btn:hover { border-color: var(--brand); color: var(--text); }
 .rec-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
+/* Variante sólida: solo para la acción principal de un bloque. Si hubiera dos
+   en la misma vista dejarían de señalar nada. Texto blanco sobre el morado de
+   marca da 7,4:1 — bien por encima del 4,5:1 que pide AA. */
+.rec-btn--fuerte {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+  padding: var(--rec-sp-2) var(--rec-sp-4);
+}
+.rec-btn--fuerte:hover { color: #fff; filter: brightness(1.08); }
+
 /* ── De dónde salen los datos ────────────────────────────────────────────── */
 /* Leer de un archivo local no es lo mismo que leer de la base, y la pantalla
    tiene que decirlo sin que haya que preguntar. */
@@ -556,3 +567,50 @@
 }
 .mapa-leyenda li { display: flex; align-items: center; gap: 6px; }
 .mapa-leyenda i { width: 13px; height: 13px; flex: 0 0 13px; }
+
+/* ── Acceso al mapa desde el tablero ───────────────────────────────────────
+   No embebe el mapa: lo anuncia y lleva a él. Ver page.tsx para el porqué. */
+.rec-mapa-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rec-sp-4);
+  flex-wrap: wrap;
+  margin: var(--rec-sp-6) 0 0;
+  padding: var(--rec-sp-4) var(--rec-sp-5);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-md);
+  background: #fff;
+}
+.rec-mapa-cta h2 {
+  margin: 0;
+  font-size: var(--rec-fs-lg);
+  font-weight: 600;
+  color: var(--rec-ink-1, var(--fg));
+}
+.rec-mapa-cta p {
+  margin: var(--rec-sp-1) 0 0;
+  max-width: 62ch;
+  font-size: var(--rec-fs-sm);
+  line-height: 1.5;
+  color: var(--rec-ink-2);
+}
+
+/* ── El mapa en su propia página ───────────────────────────────────────────
+   La ventana entera, sin barra propia ni panel lateral: el mapa ya trae su
+   encabezado y sus migas adentro, y cualquier chrome del hub encima le roba
+   alto para repetir lo que ya dice. Un mapa con poco alto no se puede usar. */
+.rec-mapa-pagina {
+  display: block;
+  height: 100vh;
+  min-width: 0;
+  overflow: hidden;        /* el scroll es del mapa, no de la página */
+  background: #fff;
+}
+
+.rec-mapa-pagina iframe {
+  display: block;          /* sin esto el iframe es inline y deja 4px abajo */
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
