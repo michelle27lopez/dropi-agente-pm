@@ -9,12 +9,7 @@ import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
 import { isMiDiaOwner } from "@/lib/sprint-access";
 import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
 import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
-
-type Proyecto = {
-  id: string; name: string; project_code: string | null;
-  status: string | null; type: string | null; handoff_status: string | null;
-  summary: string | null; business_area: string | null; prototype_url: string | null;
-};
+import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 type Update = { id: string; week_date: string; title: string; content: string };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
@@ -61,7 +56,8 @@ const TYPE_ICON: Record<string, string> = {
   Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀",
 };
 
-function truncate(text: string, max: number) {
+function truncate(text: string | undefined | null, max: number) {
+  if (!text) return "";
   return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
 }
 
@@ -167,6 +163,48 @@ export default function CelulaHomePage() {
   const proyectos = celula.proyectos.filter((p) => p.type !== "POC").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
+
+  const pocsByParent = new Map<string, Proyecto[]>();
+  for (const p of celula.proyectos) {
+    if (p.type === "POC" && p.parent_project_id) {
+      const list = pocsByParent.get(p.parent_project_id) ?? [];
+      list.push(p);
+      pocsByParent.set(p.parent_project_id, list);
+    }
+  }
+
+  async function handleEstadoChange(id: string, estado: string) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado_interno: estado }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: prev.proyectos.map((p) => (p.id === updated.id ? updated : p)) } : prev);
+  }
+
+  async function handleVpvChange(id: string, vpv: number | null) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ vpv }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: prev.proyectos.map((p) => (p.id === updated.id ? updated : p)) } : prev);
+  }
+
+  async function handleCrearPoc(parent: Proyecto, name: string, summary: string) {
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary }),
+    });
+    if (!res.ok) return;
+    const created = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, created] } : prev);
+  }
 
   // Home privada: solo para MI_DIA_OWNER_EMAIL, reemplaza el body estándar de
   // célula por el dashboard de "mi día" — ver [[project_darwin_pd_dashboard]].
@@ -661,31 +699,18 @@ export default function CelulaHomePage() {
 
             {/* Custom dark list wrapper */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-              {celula.proyectos.filter((p) => p.type !== "POC").map((p) => {
-                const item = proyectoToItem(p);
-                return (
-                  <a
-                    key={item.key}
-                    href={item.url}
-                    className="glass-card"
-                    style={{ textDecoration: "none", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 20 }}
-                  >
-                    <div>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                        <span style={{ fontSize: 10, fontWeight: 800, background: `${item.color}25`, color: item.color, padding: "2px 8px", borderRadius: 4, textTransform: "uppercase" }}>
-                          {item.tag}
-                        </span>
-                        <span style={{ fontSize: 14 }}>{item.icon}</span>
-                      </div>
-                      <h4 style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{item.name}</h4>
-                      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>{item.description}</p>
-                    </div>
-                    <div style={{ marginTop: 14, fontSize: 11, fontWeight: 700, color: "#F77F00", display: "flex", alignItems: "center", gap: 4 }}>
-                      Ver proyecto →
-                    </div>
-                  </a>
-                );
-              })}
+              {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark
+                  canCreate={canCreate}
+                  pocs={pocsByParent.get(p.id) ?? []}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                />
+              ))}
             </div>
           </div>
 
@@ -695,31 +720,18 @@ export default function CelulaHomePage() {
               Pruebas de concepto
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-              {celula.proyectos.filter((p) => p.type === "POC").map((p) => {
-                const item = proyectoToItem(p);
-                return (
-                  <a
-                    key={item.key}
-                    href={item.url}
-                    className="glass-card"
-                    style={{ textDecoration: "none", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 20 }}
-                  >
-                    <div>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                        <span style={{ fontSize: 10, fontWeight: 800, background: `${item.color}25`, color: item.color, padding: "2px 8px", borderRadius: 4, textTransform: "uppercase" }}>
-                          {item.tag}
-                        </span>
-                        <span style={{ fontSize: 14 }}>{item.icon}</span>
-                      </div>
-                      <h4 style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{item.name}</h4>
-                      <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>{item.description}</p>
-                    </div>
-                    <div style={{ marginTop: 14, fontSize: 11, fontWeight: 700, color: "#F77F00", display: "flex", alignItems: "center", gap: 4 }}>
-                      Ver proyecto →
-                    </div>
-                  </a>
-                );
-              })}
+              {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark
+                  canCreate={canCreate}
+                  pocs={[]}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                />
+              ))}
               {poc.length === 0 && (
                 <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay POCs cargadas para esta célula.</p>
               )}
@@ -1180,14 +1192,43 @@ export default function CelulaHomePage() {
             </form>
           )}
 
-          <Section title="" items={proyectos} ctaLabel="Ver proyecto →" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={pocsByParent.get(p.id) ?? []}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+              />
+            ))}
+          </div>
           {proyectos.length === 0 && (
             <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
           )}
         </div>
 
         <div>
-          <Section title="Pruebas de concepto" items={poc} ctaLabel="Ver proyecto →" />
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Pruebas de concepto
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={[]}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+              />
+            ))}
+          </div>
           {poc.length === 0 && (
             <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
           )}

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vigía — Conceptualización Interactiva</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg: #0d1117;
+  --bg1: #151b24;
+  --bg2: #1c232e;
+  --bg3: #242d3a;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e6edf3;
+  --text2: rgba(255,255,255,0.65);
+  --text3: rgba(255,255,255,0.35);
+  --dropi: #FF6B35;
+  --red: #f85149;
+  --orange: #f97316;
+  --yellow: #e3b341;
+  --green: #3fb950;
+  --gray: #8b949e;
+}
+
+body { font-family: 'IBM Plex Sans', -apple-system, sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+.container { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+
+/* ── Hero ── */
+.hero { text-align: center; padding: 40px 0 32px; }
+.hero-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 20px; background: rgba(255,107,53,0.12); border: 1px solid rgba(255,107,53,0.25); font-size: 11px; font-weight: 600; color: var(--dropi); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
+.hero h1 { font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+.hero h1 span { color: var(--dropi); }
+.hero p { font-size: 16px; color: var(--text2); margin-top: 12px; max-width: 580px; margin-left: auto; margin-right: auto; line-height: 1.5; }
+
+/* ── Problem ── */
+.problem { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 32px 0; }
+.problem-card { background: var(--bg1); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; }
+.problem-num { font-size: 36px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; line-height: 1; }
+.problem-num.bad { color: var(--red); }
+.problem-num.target { color: var(--green); }
+.problem-num.vol { color: var(--dropi); }
+.problem-label { font-size: 12px; color: var(--text3); margin-top: 6px; }
+
+/* ── Role Tabs ── */
+.role-tabs { display: flex; gap: 4px; background: var(--bg1); border-radius: 12px; padding: 4px; margin: 32px 0 20px; border: 1px solid var(--border); }
+.role-tab { flex: 1; padding: 12px 16px; border-radius: 10px; border: none; background: none; color: var(--text3); font-size: 14px; font-weight: 600; font-family: 'IBM Plex Sans', sans-serif; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.role-tab:hover { color: var(--text2); }
+.role-tab.active { background: var(--dropi); color: white; }
+.role-tab svg { width: 18px; height: 18px; }
+
+/* ── Demo Panel ── */
+.demo-panel { display: none; animation: fadeIn 0.3s ease; }
+.demo-panel.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+.demo-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+.demo-label .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: blink 2s infinite; }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+/* ── Simulated Bar ── */
+.sim-bar { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--bg); border-radius: 10px; border: 1px solid rgba(255,107,53,0.25); margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.sim-bar-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.sim-bar-logo { font-size: 14px; font-weight: 600; color: var(--dropi); }
+.sim-bar-count { font-size: 24px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; color: var(--red); }
+.sim-bar-text { font-size: 12px; color: var(--text2); }
+.sim-bar-risk { font-size: 12px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; color: var(--red); }
+.sim-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.sim-chip { padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 600; font-family: 'IBM Plex Mono', monospace; }
+
+/* ── Simulated Table ── */
+.sim-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--bg1); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+.sim-table th { text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.04em; background: var(--bg2); border-bottom: 1px solid var(--border); }
+.sim-table td { padding: 12px; font-size: 13px; border-bottom: 1px solid var(--border); transition: background 0.3s; vertical-align: middle; }
+.sim-table tr:last-child td { border-bottom: none; }
+.sim-table tr:hover td { background: var(--bg2); }
+
+.sim-id { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px; }
+.sim-product { color: var(--text2); font-size: 12px; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.sim-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+.sim-badge.abandono { background: rgba(139,148,158,0.12); color: var(--gray); }
+.sim-badge.critico { background: rgba(248,81,73,0.12); color: var(--red); }
+.sim-badge.alerta { background: rgba(249,115,22,0.12); color: var(--orange); }
+.sim-badge.atencion { background: rgba(227,179,65,0.10); color: var(--yellow); }
+.sim-badge.saludable { background: rgba(63,185,80,0.12); color: var(--green); }
+
+.sim-actions { display: flex; gap: 4px; }
+.sim-abtn { width: 28px; height: 28px; border-radius: 7px; border: 1px solid var(--border2); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.15s; padding: 0; font-size: 14px; background: var(--bg3); }
+.sim-abtn:hover { transform: translateY(-1px); }
+.sim-abtn.wa { background: #25D366; border-color: #25D366; color: white; }
+.sim-abtn.esc { background: rgba(248,81,73,0.12); border-color: rgba(248,81,73,0.2); color: var(--red); }
+.sim-abtn.view { background: var(--bg3); color: var(--text3); }
+
+/* ── Stock Cards ── */
+.stock-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+.stock-card { background: var(--bg1); border: 1px solid var(--border); border-radius: 10px; padding: 14px; display: flex; align-items: center; gap: 12px; transition: border-color 0.2s; cursor: default; }
+.stock-card:hover { border-color: var(--border2); }
+.stock-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+.stock-info { flex: 1; min-width: 0; }
+.stock-name { font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stock-meta { font-size: 11px; color: var(--text3); margin-top: 2px; }
+.stock-badge { font-size: 10px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; padding: 2px 8px; border-radius: 6px; white-space: nowrap; }
+
+/* ── How It Works ── */
+.how { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 32px 0; }
+.how-step { background: var(--bg1); border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px; text-align: center; }
+.how-num { width: 24px; height: 24px; border-radius: 12px; background: var(--dropi); color: white; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+.how-title { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.how-desc { font-size: 11px; color: var(--text3); line-height: 1.4; }
+
+/* ── Section titles ── */
+.section-title { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin: 28px 0 12px; }
+
+/* ── Footer ── */
+.footer { text-align: center; padding: 32px 0 16px; font-size: 11px; color: var(--text3); border-top: 1px solid var(--border); margin-top: 40px; }
+.footer strong { color: var(--dropi); font-weight: 600; }
+
+/* ── Tooltip ── */
+.tooltip { position: fixed; background: var(--bg); border: 1px solid var(--dropi); border-radius: 10px; padding: 12px 16px; font-size: 12px; color: var(--text); max-width: 260px; z-index: 100; pointer-events: none; opacity: 0; transition: opacity 0.2s; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.tooltip.show { opacity: 1; }
+.tooltip-title { font-weight: 600; color: var(--dropi); margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* ── Row tints ── */
+.tint-abandono td { background: rgba(139,148,158,0.06); }
+.tint-critico td { background: rgba(248,81,73,0.06); }
+.tint-alerta td { background: rgba(249,115,22,0.06); }
+.tint-atencion td { background: rgba(227,179,65,0.04); }
+.tint-saludable td { background: rgba(63,185,80,0.04); }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 28px; }
+  .problem { grid-template-columns: 1fr; }
+  .how { grid-template-columns: repeat(2, 1fr); }
+  .stock-grid { grid-template-columns: 1fr; }
+  .sim-table { font-size: 12px; }
+  .sim-bar { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Chrome Extension &middot; Manifest V3
+    </div>
+    <h1>Vig&iacute;a &mdash; <span>Control operativo</span><br>en tiempo real para Dropi</h1>
+    <p>Extensi&oacute;n que intercepta el API de Dropi, calcula SLAs autom&aacute;ticamente e inyecta alertas accionables directamente en el dashboard. Cero configuraci&oacute;n. Dos roles. Una decisi&oacute;n m&aacute;s r&aacute;pida.</p>
+  </div>
+
+  <!-- PROBLEM -->
+  <div class="problem">
+    <div class="problem-card">
+      <div class="problem-num bad">59%</div>
+      <div class="problem-label">Tasa de entrega actual</div>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num target">70%</div>
+      <div class="problem-label">Meta de entrega</div>
+    </div>
+    <div class="problem-card">
+      <div class="problem-num vol">3.4M</div>
+      <div class="problem-label">&Oacute;rdenes / mes</div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="section-title">C&oacute;mo funciona</div>
+  <div class="how">
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div class="how-title">Intercepta</div>
+      <div class="how-desc">Parcha fetch/XHR y captura cada respuesta de api.dropi.co en tiempo real</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div class="how-title">Calcula</div>
+      <div class="how-desc">Motor SLA eval&uacute;a cada orden contra umbrales por estado (12h&ndash;72h)</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div class="how-title">Inyecta</div>
+      <div class="how-desc">Badges, tints y CTAs aparecen directo en la tabla de Dropi</div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">4</div>
+      <div class="how-title">Acciona</div>
+      <div class="how-desc">WhatsApp al proveedor/carrier, escalar, exportar &mdash; un click</div>
+    </div>
+  </div>
+
+  <!-- ROLE TABS -->
+  <div class="section-title">Demo interactiva por rol</div>
+  <div class="role-tabs">
+    <button class="role-tab active" data-role="dropshipper" onclick="switchRole('dropshipper')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Dropshipper
+    </button>
+    <button class="role-tab" data-role="proveedor" onclick="switchRole('proveedor')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      Proveedor
+    </button>
+  </div>
+
+  <!-- DROPSHIPPER DEMO -->
+  <div class="demo-panel active" id="panel-dropshipper">
+    <div class="demo-label"><span class="dot"></span> Vista en vivo &mdash; /dashboard/orders</div>
+    <div class="sim-bar">
+      <div class="sim-bar-left">
+        <span class="sim-bar-logo">&#128065; Vig&iacute;a</span>
+        <span class="sim-bar-count">22</span>
+        <span class="sim-bar-text">&oacute;rdenes necesitan acci&oacute;n</span>
+        <span class="sim-bar-risk">&middot; $2,389,376 en riesgo</span>
+      </div>
+      <div class="sim-chips">
+        <span class="sim-chip" style="background:rgba(249,115,22,0.12);color:#f97316">EN TR&Aacute;NSITO 42</span>
+        <span class="sim-chip" style="background:rgba(248,81,73,0.12);color:#f85149">NOVEDAD 12</span>
+        <span class="sim-chip" style="background:rgba(227,179,65,0.10);color:#e3b341">PENDIENTE 8</span>
+      </div>
+    </div>
+    <table class="sim-table">
+      <thead><tr><th>ID</th><th>Producto</th><th>Estado</th><th>SLA</th><th>Proveedor</th><th></th></tr></thead>
+      <tbody>
+        <tr class="tint-abandono" onmouseenter="showTip(event,'Acción sugerida','Orden posiblemente perdida. Iniciar proceso de indemnización con el carrier.')" onmouseleave="hideTip()">
+          <td><span class="sim-id">83086735</span></td>
+          <td><span class="sim-product">DR.MELAXIN KOJIC-PEEL</span></td>
+          <td>EN TR&Aacute;NSITO</td>
+          <td><span class="sim-badge abandono">5d &middot; Abandono</span></td>
+          <td style="font-size:12px;color:var(--text3)">BeautyLab CO</td>
+          <td><div class="sim-actions"><button class="sim-abtn wa" title="WhatsApp al carrier">&#128172;</button><button class="sim-abtn esc" title="Escalar">&#11014;</button></div></td>
+        </tr>
+        <tr class="tint-critico" onmouseenter="showTip(event,'Acción sugerida','Contactar carrier por WhatsApp. Exigir actualización de estado en las próximas 4h.')" onmouseleave="hideTip()">
+          <td><span class="sim-id">83086732</span></td>
+          <td><span class="sim-product">Zapatos Ortop&eacute;dicos Cuero</span></td>
+          <td>NOVEDAD</td>
+          <td><span class="sim-badge critico">38h &middot; Cr&iacute;tico</span></td>
+          <td style="font-size:12px;color:var(--text3)">CueroStyle</td>
+          <td><div class="sim-actions"><button class="sim-abtn wa" title="WhatsApp al proveedor">&#128172;</button><button class="sim-abtn esc" title="Escalar">&#11014;</button></div></td>
+        </tr>
+        <tr class="tint-alerta" onmouseenter="showTip(event,'Acción sugerida','Verificar novedad y coordinar nueva entrega con carrier.')" onmouseleave="hideTip()">
+          <td><span class="sim-id">82914485</span></td>
+          <td><span class="sim-product">FILTRO PRENSA PORTATIL</span></td>
+          <td>NOVEDAD</td>
+          <td><span class="sim-badge alerta">28h &middot; Alerta</span></td>
+          <td style="font-size:12px;color:var(--text3)">Caf&eacute;Tools</td>
+          <td><div class="sim-actions"><button class="sim-abtn wa" title="WhatsApp al carrier">&#128172;</button><button class="sim-abtn view" title="Ver detalle">&#128065;</button></div></td>
+        </tr>
+        <tr class="tint-atencion" onmouseenter="showTip(event,'Acción sugerida','Proveedor no ha confirmado. Contactar por WhatsApp inmediatamente.')" onmouseleave="hideTip()">
+          <td><span class="sim-id">82925818</span></td>
+          <td><span class="sim-product">INSIGNIA LED</span></td>
+          <td>PENDIENTE</td>
+          <td><span class="sim-badge atencion">14h &middot; Atenci&oacute;n</span></td>
+          <td style="font-size:12px;color:var(--text3)">Wiilog CO</td>
+          <td><div class="sim-actions"><button class="sim-abtn wa" title="WhatsApp al proveedor">&#128172;</button><button class="sim-abtn view" title="Ver detalle">&#128065;</button></div></td>
+        </tr>
+        <tr class="tint-saludable">
+          <td><span class="sim-id">82887155</span></td>
+          <td><span class="sim-product">Bolsa gato PRIVADO</span></td>
+          <td>GU&Iacute;A GENERADA</td>
+          <td><span class="sim-badge saludable">6h &middot; Saludable</span></td>
+          <td style="font-size:12px;color:var(--text3)">PetWorld</td>
+          <td><div class="sim-actions"><button class="sim-abtn view" title="Ver detalle">&#128065;</button></div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="section-title" style="margin-top:20px">Acci&oacute;n clave: WhatsApp directo al proveedor</div>
+    <div style="background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:12px;color:var(--text2);line-height:1.5">
+      Cuando una orden no se ha despachado, Vig&iacute;a extrae el <strong style="color:var(--text)">n&uacute;mero de WhatsApp del proveedor</strong> directamente del objeto API y pre-arma el mensaje:<br><br>
+      <div style="background:var(--bg);border-radius:8px;padding:10px 12px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#25D366;border-left:3px solid #25D366">
+        &#128680; Orden #83086732 &mdash; PENDIENTE hace 14h.<br>
+        Producto: INSIGNIA LED<br>
+        SLA: 24h | Nivel: Atenci&oacute;n<br>
+        &iquest;Puedes confirmar disponibilidad y despacho?
+      </div>
+    </div>
+  </div>
+
+  <!-- PROVEEDOR DEMO -->
+  <div class="demo-panel" id="panel-proveedor">
+    <div class="demo-label"><span class="dot"></span> Vista en vivo &mdash; /dashboard/orders/supplier</div>
+    <div class="sim-bar">
+      <div class="sim-bar-left">
+        <span class="sim-bar-logo">&#128065; Vig&iacute;a &middot; Proveedor</span>
+        <span class="sim-bar-count">8</span>
+        <span class="sim-bar-text">&oacute;rdenes por gestionar</span>
+        <span class="sim-bar-risk">&middot; $868,864 en riesgo</span>
+      </div>
+      <div class="sim-chips">
+        <span class="sim-chip" style="background:rgba(248,81,73,0.12);color:#f85149">POR CONFIRMAR 5</span>
+        <span class="sim-chip" style="background:rgba(249,115,22,0.12);color:#f97316">SIN GU&Iacute;A 3</span>
+      </div>
+    </div>
+    <table class="sim-table">
+      <thead><tr><th>ID</th><th>Producto</th><th>Estado</th><th>SLA</th><th>Dropshipper</th><th></th></tr></thead>
+      <tbody>
+        <tr class="tint-critico" onmouseenter="showTip(event,'Acción requerida','Confirmar disponibilidad de producto y generar guía inmediatamente. SLA superado.')" onmouseleave="hideTip()">
+          <td><span class="sim-id">83091201</span></td>
+          <td><span class="sim-product">S&eacute;rum Vitamina C 30ml</span></td>
+          <td>POR CONFIRMAR</td>
+          <td><span class="sim-badge critico">18h &middot; Cr&iacute;tico</span></td>
+          <td style="font-size:12px;color:var(--text3)">TiendaSalud</td>
+          <td><div class="sim-actions"><button class="sim-abtn wa">&#128172;</button><button class="sim-abtn esc">&#11014;</button></div></td>
+        </tr>
+        <tr class="tint-alerta" onmouseenter="showTip(event,'Acción requerida','Generar guía de envío y programar recogida con el carrier.')" onmouseleave="hideTip()">
+          <td><span class="sim-id">83088744</span></td>
+          <td><span class="sim-product">Faja Reductora T&eacute;rmica</span></td>
+          <td>PENDIENTE</td>
+          <td><span class="sim-badge alerta">32h &middot; Alerta</span></td>
+          <td style="font-size:12px;color:var(--text3)">FitStore</td>
+          <td><div class="sim-actions"><button class="sim-abtn wa">&#128172;</button><button class="sim-abtn view">&#128065;</button></div></td>
+        </tr>
+        <tr class="tint-atencion">
+          <td><span class="sim-id">83090102</span></td>
+          <td><span class="sim-product">Cargador Inal&aacute;mbrico 15W</span></td>
+          <td>POR CONFIRMAR</td>
+          <td><span class="sim-badge atencion">8h &middot; Atenci&oacute;n</span></td>
+          <td style="font-size:12px;color:var(--text3)">TechMundo</td>
+          <td><div class="sim-actions"><button class="sim-abtn view">&#128065;</button></div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="section-title" style="margin-top:24px">Monitor de Stock &mdash; /dashboard/products</div>
+    <div class="sim-bar" style="border-color:rgba(248,81,73,0.25)">
+      <div class="sim-bar-left">
+        <span class="sim-bar-logo">&#128230; Stock</span>
+        <span class="sim-bar-count" style="font-size:20px">4</span>
+        <span class="sim-bar-text">productos en riesgo de quiebre</span>
+      </div>
+    </div>
+    <div class="stock-grid">
+      <div class="stock-card" style="border-color:rgba(248,81,73,0.2)" onmouseenter="showTip(event,'Stock por bodega','Bogotá: 3 uds · Medellín: 0 uds · Cali: 12 uds')" onmouseleave="hideTip()">
+        <div class="stock-icon" style="background:rgba(248,81,73,0.12)">&#128308;</div>
+        <div class="stock-info"><div class="stock-name">S&eacute;rum Vitamina C 30ml</div><div class="stock-meta">3 bodegas &middot; SKU-4821</div></div>
+        <span class="stock-badge" style="background:rgba(248,81,73,0.12);color:var(--red)">3 uds</span>
+      </div>
+      <div class="stock-card" style="border-color:rgba(248,81,73,0.2)" onmouseenter="showTip(event,'Stock por bodega','Bogotá: 8 uds · Barranquilla: 0 uds')" onmouseleave="hideTip()">
+        <div class="stock-icon" style="background:rgba(248,81,73,0.12)">&#128308;</div>
+        <div class="stock-info"><div class="stock-name">Faja Reductora T&eacute;rmica</div><div class="stock-meta">2 bodegas &middot; SKU-7733</div></div>
+        <span class="stock-badge" style="background:rgba(248,81,73,0.12);color:var(--red)">8 uds</span>
+      </div>
+      <div class="stock-card" onmouseenter="showTip(event,'Stock por bodega','Bogotá: 42 uds · Medellín: 15 uds')" onmouseleave="hideTip()">
+        <div class="stock-icon" style="background:rgba(249,115,22,0.12)">&#128992;</div>
+        <div class="stock-info"><div class="stock-name">Cargador Inal&aacute;mbrico 15W</div><div class="stock-meta">2 bodegas &middot; SKU-9102</div></div>
+        <span class="stock-badge" style="background:rgba(249,115,22,0.12);color:var(--orange)">42 uds</span>
+      </div>
+      <div class="stock-card" onmouseenter="showTip(event,'Stock por bodega','Bogotá: 88 uds · Cali: 5 uds')" onmouseleave="hideTip()">
+        <div class="stock-icon" style="background:rgba(227,179,65,0.10)">&#128993;</div>
+        <div class="stock-info"><div class="stock-name">Aud&iacute;fonos Bluetooth TWS</div><div class="stock-meta">2 bodegas &middot; SKU-5540</div></div>
+        <span class="stock-badge" style="background:rgba(227,179,65,0.10);color:var(--yellow)">88 uds</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLA TABLE -->
+  <div class="section-title">Umbrales SLA por estado</div>
+  <table class="sim-table">
+    <thead><tr><th>Estado</th><th>SLA</th><th>Qui&eacute;n controla</th><th>Acci&oacute;n Vig&iacute;a</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">POR CONFIRMAR</td><td><span class="sim-badge atencion">12h</span></td><td style="font-size:12px;color:var(--text3)">Proveedor</td><td style="font-size:12px">WhatsApp al proveedor</td></tr>
+      <tr><td style="font-weight:600">PENDIENTE</td><td><span class="sim-badge atencion">24h</span></td><td style="font-size:12px;color:var(--text3)">Proveedor</td><td style="font-size:12px">Confirmar y despachar</td></tr>
+      <tr><td style="font-weight:600">GU&Iacute;A GENERADA</td><td><span class="sim-badge alerta">48h</span></td><td style="font-size:12px;color:var(--text3)">Carrier</td><td style="font-size:12px">Verificar recogida</td></tr>
+      <tr><td style="font-weight:600">RECOGIDO</td><td><span class="sim-badge atencion">24h</span></td><td style="font-size:12px;color:var(--text3)">Carrier</td><td style="font-size:12px">Monitorear tr&aacute;nsito</td></tr>
+      <tr><td style="font-weight:600">EN TR&Aacute;NSITO</td><td><span class="sim-badge alerta">72h</span></td><td style="font-size:12px;color:var(--text3)">Carrier</td><td style="font-size:12px">Rastrear paquete</td></tr>
+      <tr><td style="font-weight:600">NOVEDAD</td><td><span class="sim-badge critico">24h</span></td><td style="font-size:12px;color:var(--text3)">Carrier + Dropshipper</td><td style="font-size:12px">Escalar a l&iacute;der carrier</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer">
+    <strong>Vig&iacute;a v4</strong> &middot; Chrome Extension &middot; Manifest V3 &middot; Dropi Product Team<br>
+    Interceptor API-first &middot; Hybrid DOM fallback &middot; Angular-resilient polling
+  </div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="tooltip-title"></div>
+  <div class="tooltip-body"></div>
+</div>
+
+<script>
+function switchRole(role) {
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.toggle('active', t.dataset.role === role));
+  document.querySelectorAll('.demo-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + role).classList.add('active');
+}
+
+const tip = document.getElementById('tooltip');
+function showTip(e, title, body) {
+  tip.querySelector('.tooltip-title').textContent = title;
+  tip.querySelector('.tooltip-body').textContent = body;
+  const rect = e.currentTarget.getBoundingClientRect();
+  tip.style.left = Math.min(rect.left, window.innerWidth - 280) + 'px';
+  tip.style.top = (rect.bottom + 8) + 'px';
+  tip.classList.add('show');
+}
+function hideTip() { tip.classList.remove('show'); }
+</script>
+</body>
+</html>

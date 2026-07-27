@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin as supabase } from "@/lib/supabaseAdmin";
 import OpenAI from "openai";
+import { requireUser } from "@/lib/require-auth";
 
 const PROFILES: Record<string, string> = {
   novato_offline: `
@@ -91,14 +92,30 @@ const STOCHASTIC_METRICS = {
 };
 
 export async function POST(request: Request) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   try {
     const body = await request.json();
-    const { variant = "a_tabs", engine = "determinist", totalUsers = 2212, novatoCount = 2, expertoCount = 2 } = body;
+    const {
+      variant = "a_tabs",
+      engine = "determinist",
+      totalUsers: rawTotalUsers = 2212,
+      novatoCount: rawNovatoCount = 2,
+      expertoCount: rawExpertoCount = 2,
+    } = body;
+
+    // Topes contra abuso: sin esto, un body con números arbitrarios puede
+    // tumbar el servicio (loop gigante) o disparar miles de llamadas reales
+    // a OpenAI (motor "llm") pagadas por Dropi.
+    const totalUsers = Math.min(Math.max(Number(rawTotalUsers) || 0, 0), 10_000);
+    const novatoCount = Math.min(Math.max(Number(rawNovatoCount) || 0, 0), 20);
+    const expertoCount = Math.min(Math.max(Number(rawExpertoCount) || 0, 0), 20);
 
     if (engine === "llm") {
       const agentProfiles = [
-        ...Array(Number(novatoCount)).fill("novato_offline"),
-        ...Array(Number(expertoCount)).fill("experto_impaciente"),
+        ...Array(novatoCount).fill("novato_offline"),
+        ...Array(expertoCount).fill("experto_impaciente"),
       ];
 
       const results = await Promise.all(

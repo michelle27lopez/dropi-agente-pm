@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
 import { ESPIONAJE_RESEARCH_CONTEXT } from "@/app/proyectos/gali-demo/(app)/v5/espionaje-context";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
+
+// Público a propósito (demo de Gali para dropshippers). Sin login, así que
+// el único freno contra abuso de costo de OpenAI es este rate-limit por IP.
+const RATE_LIMIT = 10;
+const RATE_WINDOW_MS = 60_000;
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  if (isRateLimited(`gali-espionaje:${ip}`, RATE_LIMIT, RATE_WINDOW_MS)) {
+    return NextResponse.json({ error: "Demasiadas solicitudes, intenta de nuevo en un minuto" }, { status: 429 });
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "OPENAI_API_KEY not configured" }, { status: 500 });

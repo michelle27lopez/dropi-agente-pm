@@ -1,0 +1,164 @@
+{
+ "generado": "2026-07-25",
+ "con_pista": false,
+ "metodo": "distancia al barrio nombrado en la propia dirección (OSM place=suburb/neighbourhood)",
+ "nota": "Sólo el grupo APARTADO mide precisión: esos nombres nunca se usan para ubicar. La distancia es cota superior del error.",
+ "informe": {
+  "BOGOTA": {
+   "ubicadas": 182391,
+   "con_barrio": 88447,
+   "apartados": {
+    "n": 13293,
+    "p50": 605,
+    "p75": 3837,
+    "p90": 14042,
+    "bajo1k": 61.1,
+    "sobre3k": 27.4
+   },
+   "por_cruce": {
+    "n": 12820,
+    "p50": 606,
+    "p75": 4084,
+    "p90": 14129,
+    "bajo1k": 61,
+    "sobre3k": 27.5
+   },
+   "por_cercania": {
+    "n": 473,
+    "p50": 498,
+    "p75": 2597,
+    "p90": 12945,
+    "bajo1k": 63.8,
+    "sobre3k": 22.8
+   },
+   "empieza_por_via": {
+    "n": 12687,
+    "p50": 603,
+    "p75": 3837,
+    "p90": 14042,
+    "bajo1k": 61.2,
+    "sobre3k": 27.4
+   },
+   "barrio_antes": {
+    "n": 606,
+    "p50": 653,
+    "p75": 4146,
+    "p90": 14133,
+    "bajo1k": 59.7,
+    "sobre3k": 27.1
+   },
+   "usados_como_pista_circular": {
+    "n": 75154,
+    "p50": 760,
+    "p75": 4023,
+    "p90": 13963,
+    "bajo1k": 56.4,
+    "sobre3k": 27.7
+   }
+  },
+  "MEDELLIN": {
+   "ubicadas": 75927,
+   "con_barrio": 40921,
+   "apartados": {
+    "n": 7091,
+    "p50": 475,
+    "p75": 830,
+    "p90": 1405,
+    "bajo1k": 81.1,
+    "sobre3k": 6.9
+   },
+   "por_cruce": {
+    "n": 6733,
+    "p50": 474,
+    "p75": 814,
+    "p90": 1370,
+    "bajo1k": 81.4,
+    "sobre3k": 6.8
+   },
+   "por_cercania": {
+    "n": 358,
+    "p50": 677,
+    "p75": 943,
+    "p90": 2290,
+    "bajo1k": 76,
+    "sobre3k": 9.5
+   },
+   "empieza_por_via": {
+    "n": 6626,
+    "p50": 475,
+    "p75": 819,
+    "p90": 1397,
+    "bajo1k": 81.1,
+    "sobre3k": 6.8
+   },
+   "barrio_antes": {
+    "n": 465,
+    "p50": 477,
+    "p75": 864,
+    "p90": 1609,
+    "bajo1k": 80.9,
+    "sobre3k": 8.4
+   },
+   "usados_como_pista_circular": {
+    "n": 33830,
+    "p50": 502,
+    "p75": 1150,
+    "p90": 4897,
+    "bajo1k": 71.8,
+    "sobre3k": 12.3
+   }
+  },
+  "CALI": {
+   "ubicadas": 66236,
+   "con_barrio": 29437,
+   "apartados": {
+    "n": 4316,
+    "p50": 337,
+    "p75": 718,
+    "p90": 3667,
+    "bajo1k": 78.3,
+    "sobre3k": 13.2
+   },
+   "por_cruce": {
+    "n": 4146,
+    "p50": 327,
+    "p75": 613,
+    "p90": 3504,
+    "bajo1k": 79.8,
+    "sobre3k": 12.6
+   },
+   "por_cercania": {
+    "n": 170,
+    "p50": 1376,
+    "p75": 3565,
+    "p90": 5659,
+    "bajo1k": 41.2,
+    "sobre3k": 26.5
+   },
+   "empieza_por_via": {
+    "n": 4066,
+    "p50": 337,
+    "p75": 712,
+    "p90": 3667,
+    "bajo1k": 78.3,
+    "sobre3k": 13.3
+   },
+   "barrio_antes": {
+    "n": 250,
+    "p50": 347,
+    "p75": 803,
+    "p90": 3535,
+    "bajo1k": 78,
+    "sobre3k": 12
+   },
+   "usados_como_pista_circular": {
+    "n": 25121,
+    "p50": 404,
+    "p75": 801,
+    "p90": 3607,
+    "bajo1k": 78.5,
+    "sobre3k": 11.4
+   }
+  }
+ }
+}

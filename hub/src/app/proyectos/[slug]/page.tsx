@@ -10,11 +10,20 @@ type ProjectDetails = {
   project_code: string | null;
   status: string | null;
   summary: string | null;
+  type: string | null;
+  parent_project_id: string | null;
+  estado_interno: string | null;
+  vpv: number | null;
   celulas?: {
     nombre: string;
     slug: string;
   } | null;
 };
+
+type ProjectRef = { id: string; name: string; project_code: string | null; estado_interno?: string | null };
+
+const ESTADOS_DISCOVERY = ["Research", "Ideación", "Concepción de experimento"];
+const ESTADOS_POC = ["Seguimiento", "En definición", "En priorización"];
 
 type Cycle = {
   id: string;
@@ -47,10 +56,20 @@ export default function ProjectDashboardPage() {
   const slug = typeof params?.slug === "string" ? params.slug : "";
 
   const [project, setProject] = useState<ProjectDetails | null>(null);
+  const [parentProject, setParentProject] = useState<ProjectRef | null>(null);
+  const [children, setChildren] = useState<ProjectRef[]>([]);
+  const [discoveryOptions, setDiscoveryOptions] = useState<ProjectRef[]>([]);
+  const [selectedParentId, setSelectedParentId] = useState("");
+  const [linkingParent, setLinkingParent] = useState(false);
   const [cycles, setCycles] = useState<Cycle[]>([]);
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const [showPocForm, setShowPocForm] = useState(false);
+  const [pocName, setPocName] = useState("");
+  const [pocSummary, setPocSummary] = useState("");
+  const [pocSubmitting, setPocSubmitting] = useState(false);
 
   const [docsOpen, setDocsOpen] = useState(true);
   const [briefOpen, setBriefOpen] = useState(true);
@@ -97,6 +116,9 @@ export default function ProjectDashboardPage() {
         }
         const data = await res.json();
         setProject(data.project);
+        setParentProject(data.parent || null);
+        setChildren(data.children || []);
+        setDiscoveryOptions(data.discoveryOptions || []);
         setCycles(data.cycles || []);
         setDecisions(data.decisions || []);
       })
@@ -131,6 +153,61 @@ export default function ProjectDashboardPage() {
     }, 4000);
     return () => clearInterval(interval);
   }, [slug, shopifyBlocked, generationState]);
+
+  async function handleEstadoChange(estado: string) {
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado_interno: estado }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setProject(updated);
+  }
+
+  async function handleVpvChange(vpv: number | null) {
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ vpv }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setProject(updated);
+  }
+
+  async function handleVincularPadre() {
+    if (!selectedParentId) return;
+    setLinkingParent(true);
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ parent_project_id: selectedParentId }),
+    });
+    setLinkingParent(false);
+    if (!res.ok) return;
+    const elegido = discoveryOptions.find((d) => d.id === selectedParentId);
+    if (elegido) setParentProject(elegido);
+    setDiscoveryOptions([]);
+  }
+
+  async function handleCrearPoc(e: React.FormEvent) {
+    e.preventDefault();
+    if (!pocName.trim() || !pocSummary.trim()) return;
+    setPocSubmitting(true);
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: pocName.trim(), summary: pocSummary.trim() }),
+    });
+    setPocSubmitting(false);
+    if (!res.ok) return;
+    const created = await res.json();
+    setChildren((prev) => [...prev, created]);
+    setShowPocForm(false);
+    setPocName("");
+    setPocSummary("");
+  }
 
   if (loading) {
     return (
@@ -206,6 +283,141 @@ export default function ProjectDashboardPage() {
           <p style={{ fontSize: 14, color: "var(--fg)", lineHeight: 1.6, margin: 0 }}>
             {project.summary || "Sin resumen registrado."}
           </p>
+        </div>
+
+        {/* Estado interno · Jerarquía Discovery ↔ POC · VPV */}
+        <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 24, marginBottom: 32 }}>
+          {parentProject && (
+            <div style={{ marginBottom: 16, fontSize: 12.5, color: "var(--muted)" }}>
+              Viene de:{" "}
+              <a
+                href={`/proyectos/${parentProject.project_code ? parentProject.project_code.toLowerCase() : parentProject.id}`}
+                style={{ color: "var(--dropi)", fontWeight: 600, textDecoration: "none" }}
+              >
+                {parentProject.name}
+              </a>
+            </div>
+          )}
+
+          {!parentProject && project.type === "POC" && discoveryOptions.length > 0 && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+              <label style={{ fontSize: 12.5, color: "var(--muted)" }}>Vincular a proyecto padre:</label>
+              <select
+                value={selectedParentId}
+                onChange={(e) => setSelectedParentId(e.target.value)}
+                style={{ fontSize: 13, padding: "6px 8px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+              >
+                <option value="">Elige un Discovery project…</option>
+                {discoveryOptions.map((d) => (
+                  <option key={d.id} value={d.id}>{d.project_code ? `${d.project_code} · ${d.name}` : d.name}</option>
+                ))}
+              </select>
+              <button
+                onClick={handleVincularPadre}
+                disabled={!selectedParentId || linkingParent}
+                style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "6px 12px", cursor: selectedParentId ? "pointer" : "default" }}
+              >
+                {linkingParent ? "Vinculando…" : "Vincular"}
+              </button>
+            </div>
+          )}
+
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 24, marginBottom: children.length > 0 || project.type !== "POC" ? 20 : 0 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 220 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                Estado interno
+              </label>
+              <select
+                value={project.estado_interno ?? ""}
+                onChange={(e) => handleEstadoChange(e.target.value)}
+                style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+              >
+                <option value="" disabled>Sin definir</option>
+                {(project.type === "POC" ? ESTADOS_POC : ESTADOS_DISCOVERY).map((estado) => (
+                  <option key={estado} value={estado}>{estado}</option>
+                ))}
+              </select>
+            </div>
+
+            {project.type === "POC" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 220 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  VPV · Valor Potencial Validado
+                </label>
+                <input
+                  type="number"
+                  defaultValue={project.vpv ?? ""}
+                  onBlur={(e) => handleVpvChange(e.target.value === "" ? null : Number(e.target.value))}
+                  placeholder="Sin definir"
+                  style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                />
+              </div>
+            )}
+          </div>
+
+          {project.type !== "POC" && (
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
+                POCs de este proyecto
+              </div>
+              {children.length > 0 && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+                  {children.map((c) => (
+                    <a
+                      key={c.id}
+                      href={`/proyectos/${c.project_code ? c.project_code.toLowerCase() : c.id}`}
+                      style={{ fontSize: 12, fontWeight: 700, color: "#F77F00", background: "#FFF7ED", padding: "4px 10px", borderRadius: 999, textDecoration: "none" }}
+                    >
+                      🧪 {c.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {showPocForm ? (
+                <form onSubmit={handleCrearPoc} style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 420 }}>
+                  <input
+                    value={pocName}
+                    onChange={(e) => setPocName(e.target.value)}
+                    placeholder="Nombre del POC"
+                    required
+                    style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                  />
+                  <textarea
+                    value={pocSummary}
+                    onChange={(e) => setPocSummary(e.target.value)}
+                    placeholder="De qué se trata"
+                    required
+                    rows={2}
+                    style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", resize: "vertical" }}
+                  />
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button
+                      type="submit"
+                      disabled={pocSubmitting}
+                      style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "#F77F00", border: "none", borderRadius: 8, padding: "8px 14px", cursor: pocSubmitting ? "default" : "pointer" }}
+                    >
+                      {pocSubmitting ? "Creando…" : "Crear"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowPocForm(false)}
+                      style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <button
+                  onClick={() => setShowPocForm(true)}
+                  style={{ fontSize: 12, fontWeight: 700, color: "#F77F00", background: "none", border: "1px dashed #F77F00", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
+                >
+                  + Crear POC
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Dynamic Metric Cards Grid */}

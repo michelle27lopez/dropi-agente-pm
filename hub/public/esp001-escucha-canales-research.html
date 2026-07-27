@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Research E2E: ESP-001 · Escucha de Canales (Espionaje)</title>
+<style>
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #1a1a1a; max-width: 900px; margin: 40px auto; padding: 0 32px; line-height: 1.6; }
+  h1 { font-size: 20pt; font-weight: bold; color: #1a1a1a; border-bottom: 3px solid #1a1a1a; padding-bottom: 8px; margin-top: 0; }
+  h2 { font-size: 14pt; font-weight: bold; color: #1a1a1a; border-bottom: 1.5px solid #cccccc; padding-bottom: 4px; margin-top: 32px; }
+  h3 { font-size: 12pt; font-weight: bold; color: #1a1a1a; margin-top: 24px; }
+  h4 { font-size: 11pt; font-weight: bold; color: #444444; margin-top: 20px; }
+  p { margin: 8px 0; }
+  blockquote { border-left: 4px solid #10B981; margin: 12px 0; padding: 8px 16px; background: #f0faf5; font-style: italic; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  th { background: #1a1a1a; color: #ffffff; font-weight: bold; padding: 8px 10px; text-align: left; font-size: 10pt; }
+  td { border: 1px solid #cccccc; padding: 7px 10px; font-size: 10pt; vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f5f5; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin-bottom: 6px; }
+  code { font-family: Consolas, monospace; font-size: 9.5pt; background: #f0f0f0; padding: 1px 4px; border-radius: 3px; }
+  .nota { background: #e6f7f0; border-left: 4px solid #10B981; padding: 10px 14px; margin: 12px 0; font-size: 10pt; }
+  .separador { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+  .pie { font-size: 9pt; color: #888888; margin-top: 40px; border-top: 1px solid #cccccc; padding-top: 12px; }
+</style>
+</head>
+<body>
+
+<h1>Documentación de Research: ESP-001 · Escucha de canales (espionaje)</h1>
+
+<p>Este documento consolida el diagnóstico de producto, el marco estratégico y los insights recopilados por la célula de <strong>Supplier Success</strong> respecto a la iniciativa de escucha y análisis cualitativo automatizado de canales de dropshipping.</p>
+
+<div class="nota">
+  <strong>Contexto de origen:</strong> Proyecto propuesto en julio de 2026 para suplir el vacío de evidencia cualitativa de primera mano sobre lo que hablan los dropshippers y proveedores en comunidades y grupos externos de WhatsApp. Presentado y refinado en la sesión de célula del 23 de julio de 2026.
+</div>
+
+<hr class="separador">
+
+<h2>1. Diagnóstico de Producto (F0 &amp; F1)</h2>
+
+<h3>1.1 Planteamiento del Problema</h3>
+<p>Actualmente, el equipo de producto depende casi exclusivamente de datos cuantitativos agregados (Jira, Google Analytics, base de datos) y entrevistas a demanda. Sin embargo, las fricciones operativas reales, los quiebres de stock informales, los rumores de mercado y las quejas sobre transportadoras se discuten de manera inmediata en <strong>grupos y canales de WhatsApp externos</strong>. Al no estar en esos canales de forma sistemática, producto reacciona tarde a las fricciones de la plataforma.</p>
+
+<h3>1.2 Análisis B=MAP (Fogg)</h3>
+<ul>
+  <li><strong>Comportamiento objetivo (Behavior):</strong> El usuario (dropshipper/proveedor) debe poder comunicar fricciones operativas y logísticas a Dropi oportunamente.</li>
+  <li><strong>Motivación (M):</strong> Alta para quejarse y buscar soluciones rápidas con sus pares en grupos de WhatsApp. Moderada para abrir reportes formales a Dropi debido al tiempo que requiere.</li>
+  <li><strong>Habilidad / Ability (A):</strong> WhatsApp es su canal de comunicación por defecto (fricción cero). Abrir un ticket o buscar soporte dentro de la plataforma tiene mayor fricción cognitiva y procedimental.</li>
+  <li><strong>Disparador / Prompt (P):</strong> El bot pasivo en WhatsApp actúa capturando el prompt natural cuando el usuario escribe en la comunidad.</li>
+</ul>
+
+<hr class="separador">
+
+<h2>2. Insights y Refinamientos de la Célula (23 de Julio de 2026)</h2>
+
+<p>En la reunión de presentación de la iniciativa con la célula, surgieron las siguientes ideas de optimización y valor agregado para el proyecto:</p>
+
+<blockquote>
+  "Si pudiéramos llegar a hacerlo con una periodicidad mucho más alta, es decir, semanalmente... nos vamos como con contenidos de nutrición... y al final de mes cuáles fueron las preguntas clave" <br>
+  <strong>— Maria Jose Calderon (Comunidades)</strong>
+</blockquote>
+
+<blockquote>
+  "Cada vez que entre un mensaje o grupo de mensajes, la IA interprete los mensajes y lo asocie si es necesario a una de las funcionalidades... de esa manera vamos teniendo data por funcionalidad" <br>
+  <strong>— Jaime Guevara (PM Suppliers)</strong>
+</blockquote>
+
+<ul>
+  <li><strong>Clasificación por Campañas y Acciones Especiales (Majo Calderón / Michelle Lopez):</strong> El sistema debe permitir segmentar temporalmente los mensajes para auditar el impacto cualitativo de decisiones del negocio (ej. lanzar la transportadora <em>Cordia</em> en México, afectaciones de recolección en días festivos).</li>
+  <li><strong>Mapeo de Funcionalidades de Plataforma (Cate Salazar / Jaime):</strong> La IA debe analizar la conversación e indexar los comentarios en base a features específicos de Dropi (ej. el buscador, la pasarela). Esto alimentará cualitativamente el proyecto <em>Tars</em> (desarrollado por Laura C. y Diana Aldana) para complementar la data cuantitativa.</li>
+  <li><strong>Soporte a Experimentos Activos (Laura Contreras):</strong> Utilizar la escucha para verificar la salud de experimentos del sprint (ej. monitorear problemas en estados <em>Pendiente</em> y <em>Pendiente por confirmar</em> para escalar el experimento de **Autoconfirmación**).</li>
+  <li><strong>Nutrición y Mitigación de Ruido (Majo Calderón):</strong> Consolidar reportes de dolor semanales/mensuales para responder preventivamente en las mismas comunidades y mitigar la publicidad maliciosa o malentendidos de soporte.</li>
+  <li><strong>Línea de WhatsApp Dedicada:</strong> Para evitar saturar las cuentas de uso personal del equipo de UX/PM, se tramitará un número celular exclusivo del área para la escucha activa.</li>
+</ul>
+
+<hr class="separador">
+
+<h2>3. Arquitectura del Piloto y Flujo Técnico</h2>
+
+<p>El piloto opera conectando una instancia en Evolution API configurada bajo un número dedicado. El bot captura los mensajes y los transmite a un orquestador que ejecuta el procesamiento cualitativo mediante IA (clasificando por temáticas y sentimientos).</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fase de Flujo</th>
+      <th>Descripción Operativa</th>
+      <th>Métrica de Control</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>1. Captura en Vivo</strong></td>
+      <td>Evolution API lee y sincroniza mensajes de grupos configurados en tiempo real.</td>
+      <td>Uptime de instancia y latencia de webhook.</td>
+    </tr>
+    <tr>
+      <td><strong>2. Enriquecimiento AI</strong></td>
+      <td>El agente AI procesa el texto, asocia a un feature de Dropi y asigna un tag de sentimiento y urgencia.</td>
+      <td>Precisión de categorización AI (&gt;90%).</td>
+    </tr>
+    <tr>
+      <td><strong>3. Visualización y Alerta</strong></td>
+      <td>Los insights se consolidan en el hub y se envían alertas de picos de quejas a los KAM/PMs correspondientes.</td>
+      <td>Tasa de adopción de reportes por parte de PMs.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pie">
+  Documento de especificación interna · Dropi · Célula de Supplier Success · 2026
+</div>
+
+</body>
+</html>
