@@ -28,20 +28,22 @@
     align-items: center;
     justify-content: center;
     padding: 20px;
+    overflow-y: auto;
   }
 
   .demo-container {
     width: 1200px;
-    height: 760px;
+    height: 780px;
     background: #111b21;
     border-radius: 16px;
     overflow: hidden;
     box-shadow: var(--shadow);
     border: 1px solid var(--border-dark);
     display: flex;
+    position: relative;
   }
 
-  /* Left: Product Detail (Fiel a la captura original pero modernizado en Dark Mode) */
+  /* Left: Product Detail (fiel al catálogo original) */
   .product-details-pane {
     flex: 7;
     border-right: 1px solid var(--border-dark);
@@ -79,13 +81,12 @@
 
   .main-image-wrap {
     width: 100%;
-    height: 320px;
+    height: 300px;
     background: #182229;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     border: 1px solid var(--border-dark);
   }
   .main-image-wrap img {
@@ -94,31 +95,11 @@
     object-fit: contain;
   }
 
-  .thumbnail-row {
-    display: flex;
-    gap: 10px;
-  }
-  .thumbnail {
-    width: 60px;
-    height: 60px;
-    background: #182229;
-    border-radius: 6px;
-    border: 1px solid var(--border-dark);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-  }
-  .thumbnail.active {
-    border-color: var(--green-dropi);
-  }
-
   .product-info {
     flex: 1.5;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
   }
 
   .sku-badge {
@@ -140,7 +121,7 @@
   .pricing-card {
     background: #1f2c34;
     border-radius: 10px;
-    padding: 16px;
+    padding: 14px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
@@ -153,7 +134,7 @@
     gap: 4px;
   }
   .price-label {
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-secondary);
   }
   .price-value {
@@ -171,7 +152,7 @@
     gap: 6px;
     border-top: 1px solid var(--border-dark);
     border-bottom: 1px solid var(--border-dark);
-    padding: 14px 0;
+    padding: 12px 0;
     color: var(--text-secondary);
   }
   .metadata-row strong { color: var(--text-primary); }
@@ -183,7 +164,7 @@
   }
 
   .btn-primary {
-    flex: 1;
+    flex: 1.2;
     background: var(--orange-dropi);
     color: #fff;
     border: none;
@@ -218,7 +199,7 @@
     background: rgba(0, 168, 132, 0.08);
   }
 
-  /* Right: Comparison / Interactive New UI (Capa 0) */
+  /* Right: Frictionless Drawer */
   .checkout-pane {
     flex: 5;
     background: #111b21;
@@ -239,10 +220,10 @@
 
   .checkout-body {
     flex: 1;
-    padding: 24px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
     overflow-y: auto;
   }
 
@@ -254,15 +235,14 @@
     letter-spacing: 0.08em;
   }
 
-  /* Glassmorphism checkout card */
   .checkout-card {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    padding: 16px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 
   .card-row {
@@ -272,58 +252,44 @@
     font-size: 13px;
   }
 
-  .address-badge {
-    background: rgba(0, 168, 132, 0.1);
-    color: var(--green-dropi);
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 700;
+  .input-field {
+    width: 100%;
+    background: #182229;
+    border: 1px solid var(--border-dark);
+    border-radius: 8px;
+    padding: 10px;
+    color: #fff;
+    font-size: 13px;
+    outline: none;
+  }
+  .input-field:focus {
+    border-color: var(--green-dropi);
   }
 
   .carrier-selector {
     border: 1px solid var(--border-dark);
     border-radius: 8px;
-    padding: 12px;
+    padding: 10px;
     background: #182229;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    cursor: pointer;
   }
   .carrier-selector.active {
     border-color: var(--green-dropi);
     background: rgba(0, 168, 132, 0.03);
   }
 
-  .breakdown-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    color: var(--text-secondary);
-  }
-
   .wallet-warning {
-    background: rgba(255, 152, 0, 0.08);
-    border: 1px solid rgba(255, 152, 0, 0.2);
+    background: rgba(0, 168, 132, 0.08);
+    border: 1px solid rgba(0, 168, 132, 0.2);
     border-radius: 8px;
     padding: 12px;
     font-size: 12px;
-    color: #ffb74d;
+    color: var(--green-dropi);
     display: flex;
     gap: 10px;
     line-height: 1.4;
-  }
-
-  /* Compare modal view */
-  .switch-container {
-    position: absolute;
-    bottom: 24px;
-    left: 24px;
-    right: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
   }
 
   .purchase-btn {
@@ -334,12 +300,23 @@
     padding: 14px;
     border-radius: 8px;
     font-weight: 800;
-    font-size: 14px;
+    font-size: 13.5px;
     cursor: pointer;
     transition: opacity 0.2s;
   }
   .purchase-btn:hover {
     opacity: 0.9;
+  }
+
+  .btn-demo-toggle {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border-dark);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    cursor: pointer;
   }
 
   .success-overlay {
@@ -357,48 +334,85 @@
   }
 
   .success-icon {
-    width: 64px;
-    height: 64px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     background: rgba(0, 168, 132, 0.1);
     color: var(--green-dropi);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
+    font-size: 30px;
   }
+
+  /* Toast Notification Simulation */
+  .toast-sync {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background: #1f2c34;
+    border: 1px solid var(--green-dropi);
+    border-radius: 12px;
+    padding: 16px;
+    width: 340px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    display: none;
+    z-index: 200;
+    animation: slideUp 0.3s var(--ease);
+  }
+  @keyframes slideUp { from{transform:translateY(30px); opacity:0;} to{transform:translateY(0); opacity:1;} }
 </style>
 </head>
 <body>
 
 <div class="demo-container">
 
-  <!-- Left: Product Detail view (mocking app.dropi.co) -->
+  <!-- Toast: Success Sync + Recurring sample request prompt -->
+  <div class="toast-sync" id="toast-sync">
+    <div style="display:flex; gap:12px; align-items:flex-start;">
+      <span style="font-size:20px;">🚀</span>
+      <div style="flex:1;">
+        <strong style="font-size:13px; color:#fff; display:block; margin-bottom:2px;">¡Producto Importado a Shopify!</strong>
+        <span style="font-size:11.5px; color:var(--text-secondary); line-height:1.4; display:block; margin-bottom:10px;">
+          ¿Deseas pedir una muestra física de este producto a tu dirección guardada en Cali?
+        </span>
+        <div style="display:flex; gap:8px;">
+          <button onclick="acceptToastSample()" style="background:var(--green-dropi); color:#111b21; border:none; padding:5px 12px; border-radius:6px; font-size:11px; font-weight:800; cursor:pointer;">
+            Sí, pedir muestra ($59.000)
+          </button>
+          <button onclick="closeToast()" style="background:none; border:1px solid var(--border-dark); color:var(--text-secondary); padding:5px 10px; border-radius:6px; font-size:11px; cursor:pointer;">
+            No, gracias
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left: Product Detail view -->
   <div class="product-details-pane">
     <div class="pane-header">
-      <i class="ti ti-chevron-left"></i> Todos los productos / Proveedor: Fabio / Mini Cámara Wifi Robótica
+      <i class="ti ti-chevron-left"></i> Todos los productos / Proveedor: Fabio / Mini Cámara Wifi
     </div>
     
     <div class="product-grid">
       <div class="product-gallery">
         <div class="main-image-wrap">
-          <img src="https://img.icons8.com/color/256/cctv-camera.png" alt="Mini Cámara" style="opacity: 0.9;" />
+          <img src="https://img.icons8.com/color/256/cctv-camera.png" alt="Mini Cámara" />
         </div>
         <div class="thumbnail-row">
           <div class="thumbnail active">📷</div>
           <div class="thumbnail">🔌</div>
-          <div class="thumbnail">📦</div>
         </div>
       </div>
 
       <div class="product-info">
         <div class="sku-badge">SKU: 9781974627127</div>
-        <h1 class="product-title">Mini Cámara Wifi Robótica Hd Ip</h1>
+        <h1 class="product-title">Mini Camara Wifi Robotica Hd Ip</h1>
         <div style="font-size:12px; color:var(--text-secondary);">Tecnología · Tipo: Simple</div>
 
         <div class="pricing-card">
           <div class="price-item">
-            <span class="price-label">Precio del proveedor ( dropshipper )</span>
+            <span class="price-label">Precio del proveedor (dropshipper)</span>
             <span class="price-value supplier">$59.000 COP</span>
           </div>
           <div class="price-item">
@@ -408,108 +422,146 @@
         </div>
 
         <div class="metadata-row">
-          <div>Disponibilidad en bodega: <strong>Bogotá</strong></div>
+          <div>Bodega origen: <strong>Bogotá</strong></div>
           <div>Stock físico real: <strong style="color:var(--green-dropi)">100 unidades</strong></div>
-          <div>Vendido por: <strong>Hepa Tecnología</strong></div>
+          <div>Proveedor: <strong>Hepa Tecnología</strong></div>
         </div>
 
         <div class="actions-row">
-          <button class="btn-primary"><i class="ti ti-users"></i> Enviar al cliente</button>
-          <button class="btn-secondary" onclick="openSampleCheckout()"><i class="ti ti-package-export"></i> Solicitar muestra</button>
+          <button class="btn-primary" onclick="simulateImport()"><i class="ti ti-cloud-upload"></i> Agregar a mi Tienda (Shopify)</button>
+          <button class="btn-secondary" onclick="openSampleCheckout()"><i class="ti ti-package"></i> Solicitar muestra</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Right: Frictionless solicitation (Checkout pane) -->
+  <!-- Right: Frictionless Drawer (Onboarding vs 1-Click) -->
   <div class="checkout-pane" id="checkout-pane">
+    
     <!-- Blank state initially -->
     <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px; text-align:center; color:var(--text-secondary);" id="blank-checkout-state">
       <i class="ti ti-package" style="font-size:48px; margin-bottom:12px; color:var(--green-dropi);"></i>
       <h3>Solicitud de Muestra en 1 Clic</h3>
-      <p style="font-size:12.5px; margin-top:8px; max-width:280px;">Presiona "Solicitar muestra" a la izquierda para ver el nuevo flujo sin fricción.</p>
+      <p style="font-size:12.5px; margin-top:8px; max-width:280px;">Presiona "Solicitar muestra" a la izquierda o "Agregar a mi Tienda" para simular el embudo.</p>
     </div>
 
-    <!-- Active checkout state (Hidden until trigger) -->
-    <div style="display:none; flex-direction:column; height:100%;" id="active-checkout-state">
+    <!-- FLOW 1: First-time Setup Journey -->
+    <div style="display:none; flex-direction:column; height:100%;" id="onboarding-flow">
       <div class="checkout-header">
-        <span style="font-size:13.5px; font-weight:700;">Solicitud de Muestra Express</span>
-        <span class="step-label">Capa 0 Onboarding</span>
+        <span style="font-size:13px; font-weight:700;">Configurar Muestras de 1-Clic</span>
+        <button class="btn-demo-toggle" onclick="toggleFlows('recurring')">Simular Recurrente 🔄</button>
+      </div>
+      
+      <div class="checkout-body" id="onboarding-step1">
+        <span class="step-label">Paso 1 de 2: Dirección de Muestras</span>
+        <p style="font-size:12px; color:var(--text-secondary); line-height:1.4;">
+          Configura a dónde enviaremos tus muestras físicas de forma predeterminada. **Nunca volveremos a preguntarte esto.**
+        </p>
+
+        <div class="checkout-card">
+          <label style="font-size:11px; color:var(--text-secondary);">Dirección de Despacho Única</label>
+          <input class="input-field" id="setup-address" placeholder="Ej: Calle 5 #23-45, Cali" value="Calle 5 #23-45, Cali" />
+          <input class="input-field" placeholder="Barrio, Edificio, Apto..." value="Apto 402, Torre B" />
+        </div>
+
+        <button class="purchase-btn" onclick="saveStep1()">Siguiente paso <i class="ti ti-arrow-right"></i></button>
+      </div>
+
+      <div class="checkout-body" style="display:none;" id="onboarding-step2">
+        <span class="step-label">Paso 2 de 2: Pago Predeterminado</span>
+        <p style="font-size:12px; color:var(--text-secondary); line-height:1.4;">
+          Asigna un método de pago por defecto para descontar el costo de envío y proveedor automáticamente en cada solicitud:
+        </p>
+
+        <div class="checkout-card">
+          <div class="carrier-selector active" style="margin-bottom:8px; cursor:pointer;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:16px;">💳</span>
+              <strong>Descontar de Wallet Dropi</strong>
+            </div>
+            <i class="ti ti-circle-check" style="color:var(--green-dropi); font-size:18px;"></i>
+          </div>
+          <div class="carrier-selector" style="cursor:pointer; opacity:0.6;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:16px;">🏦</span>
+              <strong>Recarga PSE Directa</strong>
+            </div>
+          </div>
+        </div>
+
+        <button class="purchase-btn" onclick="completeOnboarding()">Guardar Configuración y Solicitar Muestra</button>
+      </div>
+    </div>
+
+    <!-- FLOW 2: Recurring Zero-Friction 1-Click Request -->
+    <div style="display:none; flex-direction:column; height:100%;" id="recurring-flow">
+      <div class="checkout-header">
+        <span style="font-size:13px; font-weight:700;">Confirmación Directa</span>
+        <button class="btn-demo-toggle" onclick="toggleFlows('onboarding')">Simular Onboarding 🛠️</button>
       </div>
 
       <div class="checkout-body">
+        <span class="step-label">Acción de 1 Clic</span>
         
-        <!-- Address card pre-populated -->
+        <!-- Pre-populated Address -->
         <div class="checkout-card">
-          <div class="step-label">Destino de la Muestra</div>
           <div class="card-row">
             <div>
-              <strong style="display:block;">Santiago Herrera Acosta</strong>
-              <span style="color:var(--text-secondary); font-size:12px;">Calle 5 #23-45, Cali</span>
+              <span class="step-label">Dirección Guardada</span>
+              <strong style="display:block; margin-top:2px;" id="saved-address-text">Calle 5 #23-45, Apto 402, Cali</strong>
             </div>
-            <span class="address-badge">Pre-guardado (Perfil)</span>
+            <i class="ti ti-lock" style="color:var(--green-dropi);"></i>
           </div>
         </div>
 
-        <!-- Couriers (Auto-Optimized: Cheapest pre-selected) -->
+        <!-- Carrier Auto-Selected -->
         <div class="checkout-card">
-          <div class="step-label">Transportadora Optimizada</div>
+          <span class="step-label">Transportadora Homologada</span>
           <div class="carrier-selector active">
-            <div style="display:flex; align-items:center; gap:10px;">
-              <span style="font-size:18px;">🚚</span>
-              <div>
-                <strong>Coordinadora</strong>
-                <span style="display:block; font-size:11px; color:var(--text-secondary);">Entrega estimada: 2–3 días</span>
-              </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span>🚚</span>
+              <strong>Coordinadora (Económico)</strong>
             </div>
-            <strong style="color:var(--green-dropi); font-size:13.5px;">$10.800 COP</strong>
-          </div>
-          <div style="font-size:11px; color:var(--text-secondary); text-align:center; margin-top:2px;">
-            <i class="ti ti-sparkles" style="color:var(--green-dropi);"></i> Seleccionamos la opción más económica y confiable para tu ciudad.
+            <strong style="color:var(--green-dropi);">$10.800 COP</strong>
           </div>
         </div>
 
-        <!-- Breakdown & Wallet Status -->
+        <!-- Breakdown -->
         <div class="checkout-card">
-          <div class="step-label">Resumen de Pago</div>
-          <div class="breakdown-row" style="margin-top:4px;">
+          <span class="step-label">Resumen</span>
+          <div class="card-row" style="font-size:12.5px; margin-top:4px;">
             <span>Muestra (Costo Proveedor):</span>
-            <span style="color:var(--text-primary); font-weight:600;">$59.000 COP</span>
+            <strong>$59.000 COP</strong>
           </div>
-          <div class="breakdown-row">
+          <div class="card-row" style="font-size:12.5px;">
             <span>Flete Coordinadora:</span>
-            <span style="color:var(--text-primary); font-weight:600;">$10.800 COP</span>
+            <strong>$10.800 COP</strong>
           </div>
           <hr style="border:none; border-top:1px solid var(--border-dark); margin:4px 0;" />
-          <div class="card-row" style="font-size:14px; font-weight:700;">
-            <span>Total a Descontar:</span>
+          <div class="card-row" style="font-size:13.5px; font-weight:800; color:var(--text-primary);">
+            <span>Total a debitar:</span>
             <span>$69.800 COP</span>
           </div>
         </div>
 
-        <!-- Wallet alert -->
         <div class="wallet-warning">
-          <i class="ti ti-wallet" style="font-size:20px; flex-shrink:0;"></i>
+          <i class="ti ti-wallet"></i>
           <div>
-            <strong>Saldo de tu Wallet: $29.200 COP</strong><br/>
-            Para confirmar la muestra, requieres recargar <strong>$40.600 COP</strong>.
+            <strong>Pago Automático Habilitado</strong><br/>
+            Se debitará de tu saldo de Wallet pre-guardado.
           </div>
         </div>
 
-      </div>
-
-      <!-- Action buttons -->
-      <div class="switch-container">
-        <button class="purchase-btn" onclick="executeSamplePurchase()"><i class="ti ti-wallet"></i> Pagar con PSE y Confirmar Muestra</button>
+        <button class="purchase-btn" onclick="executeSamplePurchase()">Confirmar Solicitud en 1 Clic</button>
       </div>
     </div>
 
-    <!-- Success state (Hidden) -->
+    <!-- Success state -->
     <div style="display:none;" id="success-checkout-state" class="success-overlay">
       <div class="success-icon"><i class="ti ti-circle-check"></i></div>
-      <h2>¡Muestra Solicitada!</h2>
-      <p style="font-size:13px; color:var(--text-secondary); line-height:1.6; max-width:320px;">
-        Descontamos los <strong>$59.000 COP</strong> del proveedor. La guía de Coordinadora quedó generada automáticamente. Te avisaremos por WhatsApp cuando salga de bodega.
+      <h2 id="success-title">¡Muestra Solicitada!</h2>
+      <p style="font-size:13px; color:var(--text-secondary); line-height:1.6; max-width:320px;" id="success-desc">
+        La dirección y preferencias fueron guardadas. Descontamos los <strong>$59.000 COP</strong> del proveedor. La guía de Coordinadora quedó generada automáticamente.
       </p>
       <button class="btn-secondary" style="margin-top:15px; width:100%;" onclick="resetCheckout()"><i class="ti ti-refresh"></i> Volver a empezar</button>
     </div>
@@ -519,20 +571,77 @@
 </div>
 
 <script>
+  let addressConfigured = false;
+  let userAddress = "Calle 5 #23-45, Apto 402, Cali";
+
   function openSampleCheckout() {
     document.getElementById('blank-checkout-state').style.display = 'none';
-    document.getElementById('active-checkout-state').style.display = 'flex';
     document.getElementById('success-checkout-state').style.display = 'none';
+    
+    if (!addressConfigured) {
+      document.getElementById('onboarding-flow').style.display = 'flex';
+      document.getElementById('onboarding-step1').style.display = 'flex';
+      document.getElementById('onboarding-step2').style.display = 'none';
+      document.getElementById('recurring-flow').style.display = 'none';
+    } else {
+      document.getElementById('onboarding-flow').style.display = 'none';
+      document.getElementById('recurring-flow').style.display = 'flex';
+    }
+  }
+
+  function saveStep1() {
+    const val = document.getElementById('setup-address').value.trim();
+    if(val) userAddress = val;
+    document.getElementById('onboarding-step1').style.display = 'none';
+    document.getElementById('onboarding-step2').style.display = 'flex';
+  }
+
+  function completeOnboarding() {
+    addressConfigured = true;
+    document.getElementById('saved-address-text').innerText = userAddress;
+    document.getElementById('onboarding-flow').style.display = 'none';
+    document.getElementById('success-title').innerText = "¡Muestra Solicitada & Configurada!";
+    document.getElementById('success-desc').innerText = "Guardamos tu dirección y método por defecto para futuras solicitudes. El pedido fue enviado con Coordinadora.";
+    document.getElementById('success-checkout-state').style.display = 'flex';
   }
 
   function executeSamplePurchase() {
-    document.getElementById('active-checkout-state').style.display = 'none';
+    document.getElementById('recurring-flow').style.display = 'none';
+    document.getElementById('success-title').innerText = "¡Muestra de 1-Clic Exitosa!";
+    document.getElementById('success-desc').innerText = `Debitado de tu Wallet. El flete fue cotizado y despachado de forma automática a tu dirección guardada: ${userAddress}.`;
     document.getElementById('success-checkout-state').style.display = 'flex';
+  }
+
+  function simulateImport() {
+    // Show toast for recurring inline request
+    document.getElementById('toast-sync').style.display = 'block';
+  }
+
+  function acceptToastSample() {
+    closeToast();
+    addressConfigured = true; // Auto-activate recurring flow
+    document.getElementById('blank-checkout-state').style.display = 'none';
+    document.getElementById('recurring-flow').style.display = 'flex';
+  }
+
+  function closeToast() {
+    document.getElementById('toast-sync').style.display = 'none';
+  }
+
+  function toggleFlows(flow) {
+    if (flow === 'onboarding') {
+      addressConfigured = false;
+      openSampleCheckout();
+    } else {
+      addressConfigured = true;
+      openSampleCheckout();
+    }
   }
 
   function resetCheckout() {
     document.getElementById('blank-checkout-state').style.display = 'flex';
-    document.getElementById('active-checkout-state').style.display = 'none';
+    document.getElementById('onboarding-flow').style.display = 'none';
+    document.getElementById('recurring-flow').style.display = 'none';
     document.getElementById('success-checkout-state').style.display = 'none';
   }
 </script>
