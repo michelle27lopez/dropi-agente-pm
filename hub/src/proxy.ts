@@ -39,8 +39,17 @@ export async function proxy(request: NextRequest) {
   const isPublicPath =
     pathname.startsWith("/login") ||
     pathname.startsWith("/auth/callback") ||
-    pathname.startsWith("/pulso-demo") ||
-    pathname.startsWith("/api/pulso-demo") ||
+    // Pulso Demo — piloto externo (los asistentes llegan por WhatsApp/QR,
+    // sin cuenta en el hub). Las páginas y rutas de lectura/registro/
+    // aceptación quedan públicas; el panel de control (/pulso-demo/admin)
+    // y las rutas que disparan envíos reales o borran el estado del piloto
+    // (trigger, reset) quedan afuera — esas exigen login vía requireUser()
+    // en sus handlers. Si agregas otra ruta administrativa bajo pulso-demo,
+    // exclúyela aquí también.
+    ((pathname.startsWith("/pulso-demo") || pathname.startsWith("/api/pulso-demo")) &&
+      !pathname.startsWith("/pulso-demo/admin") &&
+      !pathname.startsWith("/api/pulso-demo/trigger") &&
+      !pathname.startsWith("/api/pulso-demo/reset")) ||
     pathname.startsWith("/proyectos/gali-demo") ||
     pathname.startsWith("/api/gali") ||
     pathname.startsWith("/proyectos/indicadores/ascenso") ||

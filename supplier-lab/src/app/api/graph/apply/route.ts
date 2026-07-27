@@ -2,11 +2,27 @@ import { NextRequest, NextResponse } from "next/server";
 import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { validateGraphUpdate, type GraphData } from "@/lib/graph-validator";
+import { requireUser } from "@/lib/require-auth";
 
 export async function POST(request: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   try {
     const body = await request.json();
     const proposed: Partial<GraphData> = body.proposed ?? body;
+
+    // Escritura anónima permitida a propósito, pero acotada: sin esto un
+    // request podía escribir un archivo arbitrariamente grande en disco.
+    const MAX_ITEMS_PER_REQUEST = 50;
+    const nodeCount = proposed.nodes?.length ?? 0;
+    const edgeCount = proposed.edges?.length ?? 0;
+    if (nodeCount > MAX_ITEMS_PER_REQUEST || edgeCount > MAX_ITEMS_PER_REQUEST) {
+      return NextResponse.json(
+        { error: `Máximo ${MAX_ITEMS_PER_REQUEST} nodos/aristas por request` },
+        { status: 400 }
+      );
+    }
 
     const graphPath = join(process.cwd(), "src/data/supplier-success-graph.json");
     const rawCurrent = readFileSync(graphPath, "utf-8");

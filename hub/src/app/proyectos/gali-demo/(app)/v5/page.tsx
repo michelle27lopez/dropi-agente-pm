@@ -424,14 +424,13 @@ export default function GaliV5PrototypePage() {
   };
 
   // --- OpenAI Client-Side Call Helper ---
+  // Solo usa la llave que el propio usuario pega en su navegador (modo "live"
+  // opcional). Nunca leer una llave de Dropi desde una variable NEXT_PUBLIC_*
+  // — esas se compilan dentro del bundle que llega al navegador de cualquiera.
   const callChatGpt = async (systemPrompt: string, userPrompt: string) => {
-    let key = localStorage.getItem('gali_openai_api_key');
+    const key = localStorage.getItem('gali_openai_api_key');
     if (!key || !key.startsWith('sk-')) {
-      key = process.env.NEXT_PUBLIC_OPENAI_API_KEY || '';
-      if (key) {
-        localStorage.setItem('gali_openai_api_key', key);
-        localStorage.setItem('gali_openai_live_mode', 'true');
-      }
+      return { success: false, content: '', error: 'Configura tu llave de OpenAI en modo live para usar esta función.' };
     }
 
     try {
