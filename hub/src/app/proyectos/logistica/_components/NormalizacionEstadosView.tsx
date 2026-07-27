@@ -8,7 +8,6 @@ import {
   clientStates,
   countries,
   decisions,
-  exercisedNodeIds,
   flowEdges,
   flowNodes,
   guideExamples,
@@ -17,19 +16,38 @@ import {
   routeLabels,
   traceCycles,
   traceFindings,
-  unexercisedNodes,
   type GuideExample,
   type RouteMode,
 } from "@/app/proyectos/logistica/_lib/normalizacion-estados-data";
+import {
+  evidenciaMeta,
+  gateIntento,
+  gateTerminalidad,
+  hallazgoMapeo,
+  reboteTerminales,
+  topEstadosCarrier,
+  topEstadosOrden,
+  vocabularios,
+} from "@/app/proyectos/logistica/_lib/normalizacion-evidencia-data";
+import {
+  crudos,
+  destinoDe,
+  estadosSinCrudo,
+  flujoModal,
+  propuestas,
+  resumenes,
+  resumirPropuesta,
+  type PropuestaId,
+} from "@/app/proyectos/logistica/_lib/normalizacion-catalogos-data";
 
-type Tab = "mapa" | "paises" | "carriers" | "ejemplos" | "decisiones";
+type Tab = "mapa" | "homologacion" | "evidencia" | "decisiones";
 
-const tabs: { id: Tab; label: string }[] = [
-  { id: "mapa", label: "Mapa objetivo" },
-  { id: "paises", label: "Países" },
-  { id: "carriers", label: "Carriers" },
-  { id: "ejemplos", label: "Ejemplos reales" },
-  { id: "decisiones", label: "Decisiones" },
+/** Cada pestaña responde UNA pregunta. Antes eran 6 y dos de ellas mostraban evidencia. */
+const tabs: { id: Tab; label: string; pregunta: string }[] = [
+  { id: "mapa", label: "Mapa", pregunta: "¿Cómo es el flujo?" },
+  { id: "homologacion", label: "Homologación", pregunta: "¿Cómo se traduce cada crudo?" },
+  { id: "evidencia", label: "Evidencia", pregunta: "¿Qué dicen los datos?" },
+  { id: "decisiones", label: "Decisiones", pregunta: "¿Qué falta decidir?" },
 ];
 
 type MapViewProps = {
@@ -38,12 +56,33 @@ type MapViewProps = {
 };
 
 function MapView({ guide, onClearGuide }: MapViewProps) {
-  // Directo por defecto: es la ruta que mueve el grueso del volumen. Antes abría en
-  // "ECOM + Dropi", que es la más rara (~1%) — la primera pantalla mostraba la excepción.
-  const [mode, setMode] = useState<RouteMode>("directo");
+  // ECOM + Dropi por defecto: medido, es el recorrido que sigue el grueso del tráfico
+  // (68,5% pasa por ECOM, 44,2% por recolección Dropi sobre las órdenes con guía).
+  const [mode, setMode] = useState<RouteMode>("dropi");
   const [focus, setFocus] = useState<"completo" | "feliz" | "excepciones">("completo");
-  const [coverage, setCoverage] = useState(false);
+  const [capa, setCapa] = useState<"operador" | "cliente">("operador");
   const [selectedId, setSelectedId] = useState("received");
+
+  /**
+   * Respaldo real de cada nodo: cuántos crudos caen en él y qué % del tráfico mueven.
+   * Sale del mismo reparto que la pestaña Homologación (propuesta macroproceso), así que
+   * el mapa y la tabla nunca pueden decir cosas distintas.
+   */
+  const evidenciaNodo = useMemo(() => {
+    const mapa = new Map<string, { crudos: number; pct: number }>();
+    for (const grupo of resumirPropuesta("macroproceso").grupos) {
+      mapa.set(grupo.estado, { crudos: grupo.crudos, pct: grupo.pct });
+    }
+    return mapa;
+  }, []);
+
+  const nivelDe = (label: string): "observado" | "raro" | "propuesto" => {
+    const ev = evidenciaNodo.get(label);
+    if (!ev) return "propuesto";
+    return ev.pct >= 0.5 ? "observado" : "raro";
+  };
+
+  const conteoPropuestos = flowNodes.filter((n) => nivelDe(n.label) === "propuesto").length;
   const selected = flowNodes.find((node) => node.id === selectedId) ?? flowNodes[0];
 
   // Por nodo: en qué posiciones de la traza aparece (1-indexadas) y cuántas veces se repite.
@@ -124,11 +163,13 @@ function MapView({ guide, onClearGuide }: MapViewProps) {
             </div>
           </div>
           <div>
-            <span>Evidencia</span>
-            <div className="ne-segmented is-neutral" aria-label="Cobertura por guías reales">
-              <button type="button" className={coverage ? "is-active" : ""} onClick={() => setCoverage((value) => !value)}>
-                Marcar sin validar ({unexercisedNodes.length})
-              </button>
+            <span>Capa</span>
+            <div className="ne-segmented is-neutral" aria-label="Capa mostrada en el mapa">
+              {(["operador", "cliente"] as const).map((key) => (
+                <button key={key} type="button" className={capa === key ? "is-active" : ""} onClick={() => setCapa(key)}>
+                  {key === "operador" ? "Operador" : "Cliente"}
+                </button>
+              ))}
             </div>
           </div>
         </div>
@@ -189,26 +230,29 @@ function MapView({ guide, onClearGuide }: MapViewProps) {
             {flowNodes.map((node) => {
               const state = nodeState(node);
               const hits = traceHits.get(node.id);
-              const unvalidated = coverage && !exercisedNodeIds.has(node.id);
+              const ev = evidenciaNodo.get(node.label);
+              const nivel = nivelDe(node.label);
               return (
                 <button
                   key={node.id}
                   type="button"
-                  className={`ne-flow-node tone-${node.tone} kind-${node.kind}${state.muted ? " is-muted" : ""}${selected.id === node.id ? " is-selected" : ""}${state.inTrace ? " in-trace" : ""}${unvalidated ? " is-unvalidated" : ""}`}
+                  className={`ne-flow-node tone-${node.tone} kind-${node.kind} nivel-${nivel}${state.muted ? " is-muted" : ""}${selected.id === node.id ? " is-selected" : ""}${state.inTrace ? " in-trace" : ""}`}
                   style={{ left: node.x, top: node.y }}
                   onClick={() => setSelectedId(node.id)}
                   aria-pressed={selected.id === node.id}
+                  title={ev ? `${ev.crudos} estados crudos caen acá · ${ev.pct}% del tráfico` : "Estado propuesto: ningún crudo lo alimenta todavía"}
                 >
                   <span className="ne-node-dot" />
-                  <strong>{node.label}</strong>
-                  <small>{node.client}</small>
+                  <strong>{capa === "cliente" ? node.client : node.label}</strong>
+                  <small>
+                    {ev ? `${ev.crudos} crudo${ev.crudos > 1 ? "s" : ""} · ${ev.pct}%` : "propuesto · sin crudo"}
+                  </small>
                   {hits && (
                     <span className="ne-node-steps" title={`Pasos ${hits.join(", ")} de la traza`}>
                       {hits.join("·")}
                       {hits.length > 1 && <b>×{hits.length}</b>}
                     </span>
                   )}
-                  {unvalidated && <span className="ne-node-unvalidated" title="Ninguna de las 14 guías recorre este estado">sin validar</span>}
                 </button>
               );
             })}
@@ -221,23 +265,14 @@ function MapView({ guide, onClearGuide }: MapViewProps) {
           <span><i className="danger" /> Cierre negativo</span>
           <span><i className="return" /> Devolución</span>
           {guide && <span><i className="trace" /> Paso de la traza · el número es el orden</span>}
-          {coverage && <span><i className="unvalidated" /> Sin guía que lo recorra</span>}
         </div>
       </div>
 
-      {coverage && (
-        <div className="ne-coverage-panel">
-          <div>
-            <strong>{exercisedNodeIds.size} de {flowNodes.length} estados</strong>
-            <span>los recorre al menos una de las 14 guías reales</span>
-          </div>
-          <p>
-            Los otros {unexercisedNodes.length} están en el catálogo porque el macroproceso los define, no porque la muestra los pruebe:{" "}
-            {unexercisedNodes.map((node) => node.label).join(" · ")}. Todo el tramo ECOM sin Dropi, el ciclo de recolección fallida,
-            el retiro en punto, el siniestro y el rechazo entran a TI como propuesta, no como comportamiento observado.
-          </p>
-        </div>
-      )}
+      <div className="ne-niveles">
+        <div className="nivel-observado"><b>Observado</b><span>tiene estados crudos detrás y volumen real</span></div>
+        <div className="nivel-raro"><b>Raro</b><span>tiene crudo, pero mueve menos del 0,5% del tráfico</span></div>
+        <div className="nivel-propuesto"><b>Propuesto ({conteoPropuestos})</b><span>ningún crudo lo alimenta: hay que derivarlo o pedírselo al carrier</span></div>
+      </div>
 
       <aside className={`ne-node-detail detail-${selected.tone}`}>
         <div className="ne-detail-title">
@@ -433,17 +468,11 @@ function ExamplesView({ onOpenInMap }: { onOpenInMap: (guide: GuideExample) => v
       </div>
 
       <div className="ne-callout warning">
-        <strong>Esta muestra sobre-representa el fracaso a propósito. No la uses para dimensionar.</strong>
+        <strong>Ojo: estas 14 guías son casi todas devoluciones. El grueso de las órdenes no se ve acá.</strong>
         <p>
-          11 de 14 guías terminan en devolución (79%) cuando la devolución es ~8% del volumen; 9 de 14 pasan
-          por recolección Dropi (64%) cuando esa ruta es ~1%. <b>Cancelado no tiene ni una guía</b>, siendo
-          1 de cada 7 órdenes. Sirve para estresar el catálogo — que es donde el vocabulario se rompe —
-          pero <b>no prueba cobertura</b>.
-        </p>
-        <p>
-          Los porcentajes de contraste salen de la ventana auditada (133.555 órdenes / 52.636 guías),
-          que es ~0,7% del volumen anual. Son orden de magnitud, no medición: pendiente el conteo sobre
-          el universo completo.
+          11 de 14 terminan devueltas, cuando la devolución es ~8% del volumen real. Y <b>ninguna guía es
+          de una orden cancelada</b>, que es 1 de cada 7. Sirven para ver dónde se rompe el vocabulario,
+          no para dimensionar.
         </p>
       </div>
       <div className="ne-findings">
@@ -499,6 +528,276 @@ function ExamplesView({ onOpenInMap }: { onOpenInMap: (guide: GuideExample) => v
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function HomologacionView() {
+  const [propuesta, setPropuesta] = useState<PropuestaId>("macroproceso");
+  const activa = propuestas.find((p) => p.id === propuesta) ?? propuestas[0];
+  const resumen = resumirPropuesta(propuesta);
+  const sinCrudo = estadosSinCrudo[propuesta];
+
+  // Los crudos que caen en cada estado destino, para poder abrir el grupo.
+  const crudosPorDestino = useMemo(() => {
+    const mapa = new Map<string, typeof crudos>();
+    for (const row of crudos) {
+      const destino = destinoDe(row, propuesta);
+      if (!destino) continue;
+      mapa.set(destino, [...(mapa.get(destino) ?? []), row]);
+    }
+    return mapa;
+  }, [propuesta]);
+
+  return (
+    <div className="ne-view">
+      <div className="ne-view-head">
+        <div>
+          <span className="ne-kicker">Crudo → homologado · 51 estados observados</span>
+          <h2>Cuatro catálogos posibles sobre el mismo tráfico real</h2>
+          <p>Cada propuesta reparte los mismos {crudos.length} estados crudos de forma distinta. Elegí una y mirá qué colapsa en qué.</p>
+        </div>
+      </div>
+
+      <div className="ne-props">
+        {propuestas.map((item) => {
+          const r = resumenes.find((x) => x.id === item.id)!;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              className={`ne-prop${propuesta === item.id ? " is-active" : ""}`}
+              onClick={() => setPropuesta(item.id)}
+              aria-pressed={propuesta === item.id}
+            >
+              <strong>{item.nombre}</strong>
+              <small>{item.origen}</small>
+              <div className="ne-prop-nums">
+                <div><b>{r.estados}</b><span>estados</span></div>
+                <div><b>{r.baldeMayor.crudos}</b><span>crudos en el balde mayor</span></div>
+                <div className={r.sinCrudo > 0 ? "is-warn" : ""}><b>{r.sinCrudo}</b><span>sin crudo</span></div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="ne-prop-detail">
+        <div><b>Para qué sirve</b><p>{activa.intencion}</p></div>
+        <div><b>Qué se paga</b><p>{activa.riesgo}</p></div>
+      </div>
+
+      <h3 className="ne-sub">Reparto de los {crudos.length} crudos · {activa.nombre}</h3>
+      <p className="ne-note">
+        El balde más grande es <b>{resumen.baldeMayor.estado}</b>: absorbe <b>{resumen.baldeMayor.crudos} crudos</b> distintos
+        ({resumen.baldeMayor.pct}% del tráfico). Cuanto más grande, menos se puede medir dónde se traba la orden.
+      </p>
+
+      <div className="ne-grupos">
+        {resumen.grupos.map((grupo) => (
+          <details className="ne-grupo" key={grupo.estado}>
+            <summary>
+              <strong>{grupo.estado}</strong>
+              <span className="ne-grupo-crudos">{grupo.crudos} crudo{grupo.crudos > 1 ? "s" : ""}</span>
+              <span className="ne-grupo-bar"><i style={{ width: `${Math.max(grupo.pct, 0.6)}%` }} /></span>
+              <b>{grupo.pct}%</b>
+            </summary>
+            <ul>
+              {(crudosPorDestino.get(grupo.estado) ?? []).map((row) => (
+                <li key={row.crudo}>
+                  <code>{row.crudo}</code>
+                  <span>{row.eventos.toLocaleString("es-CO")}</span>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))}
+      </div>
+
+      {sinCrudo.length > 0 && (
+        <>
+          <h3 className="ne-sub">Estados que esta propuesta define pero ningún crudo alimenta</h3>
+          <div className="ne-sincrudo">
+            {sinCrudo.map((item) => (
+              <div key={item.estado}>
+                <strong>{item.estado}</strong>
+                <p>{item.porQue}</p>
+              </div>
+            ))}
+          </div>
+          <p className="ne-note">
+            No es un defecto por sí solo: varios existen para medir una ventana de tiempo que hoy no se registra.
+            Pero <b>no llegan solos</b> — hay que derivarlos por regla o pedírselos al transportador. Eso es trabajo de TI, y hay que decirlo en el hand-off.
+          </p>
+        </>
+      )}
+
+      <h3 className="ne-sub">{flujoModal.titulo} · traducido por {activa.nombre}</h3>
+      <p className="ne-note">{flujoModal.nota}</p>
+      <ol className="ne-modal-flow">
+        {flujoModal.pasos.map((paso, index) => {
+          const row = crudos.find((c) => c.crudo === paso.crudo);
+          const destino = row ? destinoDe(row, propuesta) : null;
+          const previo = index > 0 ? flujoModal.pasos[index - 1] : null;
+          const destinoPrevio = previo ? destinoDe(crudos.find((c) => c.crudo === previo.crudo)!, propuesta) : null;
+          const colapsa = destino !== null && destino === destinoPrevio;
+          return (
+            <li key={paso.crudo} className={colapsa ? "is-colapsado" : ""}>
+              <code>{paso.crudo}</code>
+              <span className="ne-modal-arrow">→</span>
+              <strong>{destino ?? "sin destino"}</strong>
+              {colapsa && <em>se funde con el paso anterior</em>}
+            </li>
+          );
+        })}
+      </ol>
+      <p className="ne-note">
+        Los pasos marcados <b>se funden</b> con el anterior bajo esta propuesta: el cliente no vería ningún cambio ahí.
+        Es la forma más directa de ver si un catálogo es demasiado grueso o demasiado fino.
+      </p>
+    </div>
+  );
+}
+
+function EvidenceView() {
+  const [vocab, setVocab] = useState<"A" | "C">("A");
+  const activo = vocabularios.find((item) => item.id === vocab) ?? vocabularios[0];
+  const top = vocab === "A" ? topEstadosOrden : topEstadosCarrier;
+  const maxN = Math.max(...top.map((row) => row.n));
+
+  return (
+    <div className="ne-view">
+      <div className="ne-view-head">
+        <div>
+          <span className="ne-kicker">Corrida de análisis · {evidenciaMeta.fecha}</span>
+          <h2>Lo que los datos dicen, separado de lo que proponemos</h2>
+          <p>{evidenciaMeta.fuente} · ventana {evidenciaMeta.ventana}. Esta pestaña no propone nada: mide.</p>
+        </div>
+      </div>
+
+      <div className="ne-callout warning">
+        <strong>Alcance real de la medición</strong>
+        <p>{evidenciaMeta.advertencia}</p>
+      </div>
+
+      <h3 className="ne-sub">Hay dos vocabularios, y no dan la misma respuesta</h3>
+      <div className="ne-vocab-grid">
+        {vocabularios.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            className={`ne-vocab tono-${item.tono}${vocab === item.id ? " is-active" : ""}`}
+            onClick={() => setVocab(item.id as "A" | "C")}
+            aria-pressed={vocab === item.id}
+          >
+            <span className="ne-vocab-id">{item.id}</span>
+            <strong>{item.nombre}</strong>
+            <code>{item.fuente}</code>
+            <div className="ne-vocab-nums">
+              <div><b>{item.eventos.toLocaleString("es-CO")}</b><span>eventos</span></div>
+              <div><b>{item.estadosDistintos.toLocaleString("es-CO")}</b><span>estados distintos</span></div>
+            </div>
+            <div className="ne-vocab-cortes">
+              {item.cortes.map((corte) => (
+                <span key={corte.pct}><b>{corte.estados}</b> estados = {corte.pct}</span>
+              ))}
+            </div>
+            <p>{item.lectura}</p>
+          </button>
+        ))}
+      </div>
+
+      <h3 className="ne-sub">Estados más frecuentes · vocabulario {activo.id}</h3>
+      <div className="ne-freq">
+        {top.map((row) => (
+          <div className="ne-freq-row" key={row.estado}>
+            <strong>{row.estado}</strong>
+            <div><i style={{ width: `${Math.max((row.n / maxN) * 100, 1.5)}%` }} /></div>
+            <b>{row.n.toLocaleString("es-CO")}</b>
+            <small>{row.pct}%</small>
+            <em>acum {row.cum}%</em>
+          </div>
+        ))}
+      </div>
+      <p className="ne-note">
+        Sin clasificar en este vocabulario: <b>{activo.sinClasificar}</b> — {activo.sinClasificarDetalle}.
+      </p>
+
+      <h3 className="ne-sub">🟢 Gate resuelto · INTENTO DE ENTREGA</h3>
+      <div className="ne-gate resuelto">
+        <div className="ne-gate-head">
+          <span>Resuelto con datos</span>
+          <strong>{gateIntento.titular}</strong>
+          <p>{gateIntento.ocurrenciasInter.toLocaleString("es-CO")} de {gateIntento.ocurrenciasTotales.toLocaleString("es-CO")} ocurrencias son de Interrapidísimo ({gateIntento.concentracion}%).</p>
+        </div>
+        <div className="ne-gate-table">
+          <div className="is-head"><span>Transportadora</span><span>Término</span><span>n</span><span>→ entregado</span><span>→ falla</span><span>Lectura</span></div>
+          {gateIntento.filas.map((fila) => (
+            <div key={fila.carrier + fila.termino}>
+              <strong>{fila.carrier}</strong>
+              <span>{fila.termino}</span>
+              <span>{fila.n.toLocaleString("es-CO")}</span>
+              <span className={fila.entregado > 30 ? "is-good" : ""}>{fila.entregado}%</span>
+              <span className={fila.falla > 50 ? "is-bad" : ""}>{fila.falla}%</span>
+              <b>{fila.lectura}</b>
+            </div>
+          ))}
+        </div>
+        <p className="ne-gate-consecuencia">{gateIntento.consecuencia}</p>
+        <p className="ne-note">⚠️ {gateIntento.reserva}</p>
+      </div>
+
+      <div className="ne-callout danger">
+        <strong>Hallazgo colateral: {hallazgoMapeo.estado} está mal clasificado hoy</strong>
+        <p>
+          Mapeado a <code>{hallazgoMapeo.mapeoActual}</code> cuando los datos dicen <code>{hallazgoMapeo.mapeoCorrecto}</code>.
+          Son <b>{hallazgoMapeo.ocurrencias.toLocaleString("es-CO")} eventos</b> ({hallazgoMapeo.pctTrafico}% del tráfico). {hallazgoMapeo.impacto}
+        </p>
+      </div>
+
+      <h3 className="ne-sub">🟡 Gate abierto · ¿cuándo Entregado es terminal?</h3>
+      <div className="ne-gate abierto">
+        <div className="ne-gate-head">
+          <span>Requiere decisión, no más datos</span>
+          <strong>{gateTerminalidad.titular}</strong>
+          <p>{gateTerminalidad.pregunta}</p>
+        </div>
+        <div className="ne-lecturas">
+          {gateTerminalidad.lecturas.map((lectura) => (
+            <div key={lectura.vocab}>
+              <span>{lectura.vocab}</span>
+              <b>{lectura.pregunta}</b>
+              <div className="ne-lectura-nums">
+                <div><strong>{lectura.rebotePct}%</strong><small>rebota</small></div>
+                <div><strong>{lectura.p99h} h</strong><small>p99</small></div>
+                <div><strong>{lectura.maxh} h</strong><small>máximo</small></div>
+              </div>
+              <p>{lectura.conclusion}</p>
+              <small className="ne-reserva">⚠️ {lectura.reserva}</small>
+            </div>
+          ))}
+        </div>
+        <p className="ne-gate-consecuencia">{gateTerminalidad.recomendacion}</p>
+      </div>
+
+      <h3 className="ne-sub">Estados «terminales» que rebotan</h3>
+      <div className="ne-rebote">
+        <div className="ne-rebote-row is-head"><span>Transportadora</span><span>Estado terminal</span><span>Alcanzado</span><span>Rebota</span><span>p99</span></div>
+        {reboteTerminales.map((row) => (
+          <div className={`ne-rebote-row${row.alerta ? " is-alert" : ""}`} key={row.carrier + row.terminal}>
+            <strong>{row.carrier}</strong>
+            <span>{row.terminal}</span>
+            <span>{row.alcanzado.toLocaleString("es-CO")}</span>
+            <b>{row.pct}%</b>
+            <span>{row.p99h} h</span>
+          </div>
+        ))}
+      </div>
+      <p className="ne-note">
+        <b>PEDIDO CANCELADO de Coordinadora rebota el 99,59%</b>, con mediana de 3 minutos hasta el evento
+        siguiente. No es un estado terminal: es una etiqueta que se emite junto con otras. Quien lo trate
+        como cierre, cuenta mal.
+      </p>
     </div>
   );
 }
@@ -584,16 +883,31 @@ export default function NormalizacionEstadosView() {
 
       <nav className="ne-tabs" role="tablist" aria-label="Vistas de normalización">
         {tabs.map((item) => (
-          <button key={item.id} type="button" role="tab" aria-selected={tab === item.id} className={tab === item.id ? "is-active" : ""} onClick={() => setTab(item.id)}>
+          <button key={item.id} type="button" role="tab" aria-selected={tab === item.id} className={tab === item.id ? "is-active" : ""} onClick={() => setTab(item.id)} title={item.pregunta}>
             {item.label}
+            <i>{item.pregunta}</i>
           </button>
         ))}
       </nav>
 
-      {tab === "mapa" && <MapView guide={activeGuide} onClearGuide={() => setActiveGuide(null)} />}
-      {tab === "paises" && <CountriesView />}
-      {tab === "carriers" && <CarriersView />}
-      {tab === "ejemplos" && <ExamplesView onOpenInMap={openInMap} />}
+      {tab === "mapa" && (
+        <>
+          <MapView guide={activeGuide} onClearGuide={() => setActiveGuide(null)} />
+          <ExamplesView onOpenInMap={openInMap} />
+        </>
+      )}
+      {tab === "homologacion" && (
+        <>
+          <HomologacionView />
+          <CarriersView />
+        </>
+      )}
+      {tab === "evidencia" && (
+        <>
+          <EvidenceView />
+          <CountriesView />
+        </>
+      )}
       {tab === "decisiones" && <DecisionsView />}
     </main>
   );

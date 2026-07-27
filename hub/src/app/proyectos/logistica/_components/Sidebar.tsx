@@ -18,7 +18,6 @@ const BASE = "/proyectos/logistica";
 const SECCIONES = [
   { href: BASE, label: "Indicadores", icon: Activity, exact: true },
   { href: `${BASE}/mapa`, label: "Mapa de la orden", icon: Map },
-  { href: `${BASE}/iniciativas`, label: "Iniciativas", icon: FolderKanban },
   { href: `${BASE}/info-logistica`, label: "Info logística", icon: BookOpen },
   { href: `${BASE}/normalizacion-estados`, label: "Normalización de estados", icon: Layers },
   { href: `${BASE}/recolecciones`, label: "Recolecciones", icon: Truck },
