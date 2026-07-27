@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Same Day · densidad de demanda — Dropi</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --brand-orange:#F49A3D;--brand-blue:#008DBF;--brand-blue-dark:#0A5E80;
+  --ok:#4CAF50;--warn:#FF9800;--err:#F46A6B;--nodata:#98A2B3;
+  --bg:#F7F8FA;--surface:#FFF;--surface-2:#FBFCFD;--border:#EEF0F4;--border-strong:#E1E5EC;
+  --ink:#232938;--ink-2:#69738C;--ink-3:#8E97AC;--r:9px;--r-sm:6px;
+  --shadow:0 6px 20px rgba(35,41,56,.10),0 1px 2px rgba(35,41,56,.06);--h-header:52px;--h-banner:26px}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:13px;line-height:1.4;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+table{border-collapse:collapse;width:100%}.tnum{font-variant-numeric:tabular-nums}
+header.top{height:var(--h-header);background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:18px;padding:0 14px;position:relative;z-index:900}
+.brand{display:flex;align-items:center;gap:9px;min-width:170px}
+.logo{width:26px;height:26px;border-radius:7px;background:var(--brand-orange);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+.brand b{font-size:13.5px;font-weight:600;display:block;line-height:1.15}
+.brand span{font-size:10px;letter-spacing:.09em;color:var(--ink-3);text-transform:uppercase}
+nav.tabs{display:flex;gap:2px;flex:1}
+nav.tabs button{padding:7px 13px;border-radius:var(--r-sm);color:var(--ink-2);font-size:13px;font-weight:500}
+nav.tabs button:hover{background:var(--surface-2);color:var(--ink)}
+nav.tabs button[aria-current="page"]{background:#EAF6FA;color:var(--brand-blue-dark);font-weight:600}
+.meta{color:var(--ink-2);font-size:11.5px;white-space:nowrap}
+.banner{height:var(--h-banner);background:#FEF6EC;color:#8A5A16;font-size:11px;display:flex;align-items:center;
+  gap:6px;padding:0 14px;border-bottom:1px solid #F6E6CF}
+main{height:calc(100vh - var(--h-header) - var(--h-banner));overflow:hidden;display:flex;flex-direction:column}
+.ctx{background:var(--surface);border-bottom:1px solid var(--border);padding:9px 14px 10px}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.kpi{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:8px 11px}
+.kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.kpi .l{font-size:11.5px;color:var(--ink-2);margin-top:1px}.kpi .h{font-size:10.5px;color:var(--ink-3)}
+.kpi.ok .v{color:var(--brand-blue-dark)}.kpi.acc .v{color:#C77400}
+.work{flex:1;display:flex;min-height:0;padding:10px;gap:10px}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+#mapWrap{flex:1;position:relative;min-width:0;border-radius:var(--r);overflow:hidden;border:1px solid var(--border);background:var(--surface)}
+#map{position:absolute;inset:0;background:#EAF0F5}
+.leaflet-container{font:inherit;background:#EAF0F5}
+#side{width:330px;flex:0 0 330px}
+.p-head{padding:10px 12px;border-bottom:1px solid var(--border)}
+.p-head h2{margin:0;font-size:13.5px;font-weight:600}
+.p-head .sub{font-size:11px;color:var(--ink-3);margin-top:2px}
+.p-body{overflow:auto;flex:1;min-height:0;padding:11px 12px}
+.map-float{position:absolute;z-index:600;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow)}
+.layers{top:10px;left:10px;padding:9px 11px;font-size:11.5px}
+.layers b{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-bottom:5px}
+.seg2{display:flex;border:1px solid var(--border-strong);border-radius:var(--r-sm);overflow:hidden;margin-bottom:6px}
+.seg2 button{flex:1;padding:5px 9px;font-size:11px;color:var(--ink-2);border-right:1px solid var(--border)}
+.seg2 button:last-child{border-right:0}
+.seg2 button[aria-pressed="true"]{background:#EAF6FA;color:var(--brand-blue-dark);font-weight:600}
+.layers label{display:flex;align-items:center;gap:6px;padding:2px 0;color:var(--ink-2);cursor:pointer}
+.legend{bottom:22px;left:10px;padding:9px 11px;font-size:11.5px;max-width:250px}
+.lg-row{display:flex;align-items:center;gap:7px;color:var(--ink-2);padding:1.5px 0}
+.sw{width:11px;height:11px;border-radius:50%;flex:0 0 11px;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+.lg-note{margin-top:7px;padding-top:6px;border-top:1px solid var(--border);color:var(--ink-3);font-size:10.5px;line-height:1.45}
+.tool{margin-bottom:13px}
+.tool h3{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600}
+.tool input[type=range]{width:100%;accent-color:var(--brand-orange)}
+.big{font-size:27px;font-weight:700;letter-spacing:-.02em;line-height:1.05;color:var(--brand-blue-dark)}
+.big small{font-size:12px;font-weight:600;color:var(--ink-2);letter-spacing:0}
+.row{display:flex;justify-content:space-between;gap:8px;padding:3px 0;font-size:12px;color:var(--ink-2)}
+.row b{color:var(--ink);font-weight:600}
+.hint{font-size:11px;color:var(--ink-3);line-height:1.45;margin-top:5px}
+table.top{font-size:12px;margin-top:3px}
+table.top th{text-align:right;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);font-weight:600;padding:5px 6px;border-bottom:1px solid var(--border)}
+table.top th:first-child{text-align:left}
+table.top td{padding:5px 6px;border-bottom:1px solid var(--border);text-align:right}
+table.top td:first-child{text-align:left}
+table.top tr{cursor:pointer}table.top tbody tr:hover{background:var(--surface-2)}
+.bar{display:inline-block;height:4px;border-radius:2px;background:var(--brand-orange);vertical-align:middle;margin-right:5px;opacity:.85}
+.pill{display:inline-block;background:#F2F4F7;border-radius:999px;padding:1px 8px;font-size:10.5px;color:var(--ink-2);font-weight:600}
+.mapstate{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:650;background:rgba(255,255,255,.94);
+  border:1px solid var(--border-strong);border-radius:var(--r);padding:14px 18px;text-align:center;box-shadow:var(--shadow)}
+.mapstate.hide{display:none}
+/* Semáforo de precisión. El umbral es el % de puntos que caen a más de 3 km del barrio
+   que la propia dirección menciona (ver pipeline/verificar.js). */
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.dot.ok{background:#12805C}.dot.med{background:#B54708}.dot.mal{background:#B42318}
+.prec-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0;font-size:11.5px}
+.prec-row.on{font-weight:700}
+.prec-row .v{font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.prec-row.on .v{color:var(--ink)}
+#precBadge{margin-left:auto;white-space:nowrap;font-weight:600}
+/* Simulador */
+.sl{display:block;font-size:11.5px;color:var(--ink-2);margin:9px 0 0}
+.sl b{color:var(--ink);font-variant-numeric:tabular-nums}
+.sl input{width:100%;margin-top:3px}
+.btn{width:100%;margin-top:6px;padding:6px 10px;font:inherit;font-size:11.5px;font-weight:600;
+  color:var(--ink);background:#fff;border:1px solid var(--border-strong);border-radius:7px;cursor:pointer}
+.btn:hover{background:#F7F9FC}
+.curva{display:flex;align-items:flex-end;gap:2px;height:46px;margin:8px 0 4px}
+.curva i{flex:1;background:#CFE6F2;border-radius:2px 2px 0 0;position:relative}
+.curva i.on{background:#008DBF}
+.curva-x{display:flex;justify-content:space-between;font-size:9.5px;color:var(--ink-3)}
+.no{color:#B42318;font-weight:700}.si{color:#12805C;font-weight:700}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand"><div class="logo">D</div><div><b>Same Day · demanda</b><span>Logistic Success</span></div></div>
+  <nav class="tabs" id="tabs"></nav>
+  <div class="meta" id="meta">cargando…</div>
+</header>
+
+<div class="banner">
+  <span>⚠</span>
+  <span id="aviso">La ubicación es el <b>cruce de las dos vías</b> de la dirección, no el domicilio. Resolución útil: cuadra. No usar como geolocalización de clientes.</span>
+  <span id="precBadge"></span>
+</div>
+
+<main>
+  <div class="ctx">
+    <div class="kpis" id="kpis"></div>
+  </div>
+
+  <div class="work">
+    <div id="mapWrap">
+      <div id="map"></div>
+      <div class="map-float layers">
+        <b>Capa</b>
+        <div class="seg2" id="modo">
+          <button data-m="calor" aria-pressed="true">Calor</button>
+          <button data-m="celdas" aria-pressed="false">Celdas</button>
+          <button data-m="zonas" aria-pressed="false">Zonas</button>
+          <button data-m="simular" aria-pressed="false">Simulación</button>
+        </div>
+        <label><input type="checkbox" id="soloCruce"> sólo ubicación por cruce</label>
+      </div>
+      <div class="map-float legend">
+        <b id="lgTitulo" style="display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);margin-bottom:5px">Órdenes por celda de 250 m</b>
+        <div id="lgBody"></div>
+        <div class="lg-note" id="lgNote"></div>
+      </div>
+      <div class="mapstate" id="estado">cargando datos…</div>
+    </div>
+
+    <aside class="panel" id="side">
+      <div class="p-head">
+        <h2>Polígono de cobertura</h2>
+        <div class="sub">Arrastra el centro o haz clic en el mapa. Ajusta el radio.</div>
+      </div>
+      <div class="p-body">
+        <div class="tool">
+          <div class="big"><span id="dentroN">—</span> <small>órdenes dentro</small></div>
+          <div class="row"><span>de las ubicadas en la ciudad</span><b id="dentroPct">—</b></div>
+          <div class="row"><span>del total de las 3 ciudades</span><b id="dentroPct3">—</b></div>
+        </div>
+        <div class="tool">
+          <h3>Radio · <span id="radioLbl">8 km</span></h3>
+          <input type="range" id="radio" min="1" max="30" step="0.5" value="8">
+          <div class="hint">Cuánta demanda captura un centro de operación a esa distancia.</div>
+        </div>
+        <div class="tool">
+          <h3>Radio necesario desde este centro</h3>
+          <div class="row"><span>para el 50% de la demanda</span><b id="r50">—</b></div>
+          <div class="row"><span>para el 80%</span><b id="r80">—</b></div>
+          <div class="row"><span>para el 90%</span><b id="r90">—</b></div>
+          <div class="hint">Es la pregunta operativa de fondo: qué tan lejos hay que llegar para que el same-day valga la pena.</div>
+        </div>
+        <div class="tool">
+          <h3>Zona operativa <span class="pill" id="zonaPill"></span></h3>
+          <table class="top"><thead><tr><th>Localidad / comuna</th><th>Órdenes</th><th>%</th></tr></thead><tbody id="zonaBody"></tbody></table>
+          <div class="hint">La unidad con la que hablan la bodega y la transportadora. Una ruta no se define por cuadras.</div>
+        </div>
+        <div class="tool">
+          <h3>Celdas más densas <span class="pill" id="topPill"></span></h3>
+          <table class="top"><thead><tr><th>Celda</th><th>Órdenes</th><th>% ciudad</th></tr></thead><tbody id="topBody"></tbody></table>
+        </div>
+        <!-- Simulación. Los deslizadores son SUPUESTOS del usuario, no datos: por eso están a
+             la vista y agrupados aparte de lo medido. Ver la tabla A/B/C/D del README. -->
+        <div class="tool sim" style="display:none">
+          <h3>Bodega <span class="pill" id="simBodega">—</span></h3>
+          <div class="hint">Arrastra el punto o haz clic en el mapa. Las zonas se colorean por
+            minutos de viaje desde ahí.</div>
+          <button type="button" id="simOptima" class="btn">Ubicar donde conviene ↧</button>
+          <div class="hint" id="simOptimaNota"></div>
+        </div>
+
+        <div class="tool sim" style="display:none">
+          <div class="big"><span id="simServibles">—</span> <small>órdenes/día servibles el mismo día</small></div>
+          <div class="row"><span>de la demanda de la ciudad</span><b id="simPct">—</b></div>
+          <div class="row"><span>vehículos necesarios</span><b id="simVeh">—</b></div>
+          <div class="hint" id="simVehNota"></div>
+          <div class="row"><span>zonas dentro / fuera</span><b id="simZonas">—</b></div>
+          <div class="row"><span>tiempo medio a la demanda</span><b id="simMedio">—</b></div>
+          <div class="hint" id="simMedioNota"></div>
+        </div>
+
+        <div class="tool sim" style="display:none">
+          <h3>Hora de corte · <span id="lblCorte">11:00</span></h3>
+          <input type="range" id="pCorte" min="6" max="18" step="1" value="11">
+          <div id="curvaCorte"></div>
+          <div class="hint"><b>Simulado, no medido.</b> No hay timestamps en la data, así que la
+            curva de llegada de pedidos es un supuesto. Lee la <b>forma</b> —cuánto se gana o se
+            pierde moviendo el corte una hora— no el valor absoluto.</div>
+        </div>
+
+        <div class="tool sim" style="display:none">
+          <h3>Supuestos <span class="pill">ajustables</span></h3>
+          <label class="sl">Días de reparto del mes · <b id="lblPeriodo">20 días</b>
+            <input type="range" id="pPeriodo" min="10" max="31" step="1" value="20"></label>
+          <div class="hint" style="margin:-2px 0 8px">El archivo es <b>junio completo</b> y la
+            operación entrega <b>de lunes a viernes</b> (el sábado es día corto y no da), así que
+            son <b>20 días</b>. No se divide entre los 30 del calendario: repartir entre días en
+            los que no se despacha subestimaría la carga diaria un 33%.
+            El deslizador queda sólo para ver sensibilidad.</div>
+          <label class="sl">Día pico sobre el promedio · <b id="lblPico">1,4×</b>
+            <input type="range" id="pPico" min="1" max="2" step="0.05" value="1.4"></label>
+          <div class="hint" style="margin:-2px 0 8px">⚠️ La flota <b>no se dimensiona con el día
+            promedio</b>: si se hace, la operación se queda corta la mitad de los días. Esto
+            escala la demanda al día malo. 1,0× = promedio (subdimensiona).</div>
+          <label class="sl">Factor de tráfico · <b id="lblFactor">1,8×</b>
+            <input type="range" id="pFactor" min="1" max="3" step="0.1" value="1.8"></label>
+          <label class="sl">Velocidad dentro de la zona · <b id="lblVintra">15 km/h</b>
+            <input type="range" id="pVintra" min="5" max="35" step="1" value="15"></label>
+          <label class="sl">Tiempo por entrega · <b id="lblServicio">5 min</b>
+            <input type="range" id="pServicio" min="2" max="15" step="1" value="5"></label>
+          <label class="sl">Ventana de reparto · <b id="lblVentana">8 h</b>
+            <input type="range" id="pVentana" min="3" max="12" step="0.5" value="8"></label>
+          <label class="sl">Paradas por vehículo · <b id="lblQ">40</b>
+            <input type="range" id="pQ" min="10" max="80" step="5" value="40"></label>
+        </div>
+
+        <div class="tool sim" style="display:none">
+          <h3>Por zona</h3>
+          <table class="top"><thead><tr><th>Zona</th><th>min</th><th>demanda</th><th>SD</th><th>veh.</th><th></th></tr></thead>
+            <tbody id="simBody"></tbody></table>
+          <div class="hint"><b>demanda</b> = todas las órdenes/día de la zona · <b>SD</b> = sólo
+            las que alcanzan el corte y salen hoy. Los vehículos se calculan sobre <b>SD</b>,
+            no sobre demanda.<br><br>
+            <b>veh.</b> son carros enteros donde la zona justifica ruta propia. Las que dicen
+            <b>«comparte»</b> piden menos de un carro y se cubren junto a sus vecinas en una
+            misma ruta: se redondean agrupadas, no una por una. Redondear cada zona por separado
+            metería un piso de un carro por zona y dispararía la flota sin razón operativa.<br><br>
+            ✗ marca la zona a la que no se alcanza a ir, repartir y volver dentro de la ventana.</div>
+        </div>
+
+        <div class="tool">
+          <h3>Precisión del dato <span class="pill">medida</span></h3>
+          <div id="precBody"><div class="hint">sin medición disponible</div></div>
+          <div class="hint" id="precNota"></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+<script>
+(function(){
+'use strict';
+var D=null, ciudad=null, map=null, capaCalor=null, capaCeldas=null, capaZonas=null, centro=null, circulo=null, modo='calor';
+var NOMBRE={BOGOTA:'Bogotá',MEDELLIN:'Medellín',CALI:'Cali'};
+var fmt=function(n){return (n||0).toLocaleString('es-CO')};
+var pct=function(a,b){return b?((a/b)*100).toFixed(1)+'%':'—'};
+var ESCALA=[[0,'#FFEDA0'],[.08,'#FED976'],[.18,'#FEB24C'],[.34,'#FD8D3C'],[.55,'#F03B20'],[.78,'#BD0026']];
+
+function haversine(a,b,c,d){var R=6371,t=function(x){return x*Math.PI/180};
+  var dp=t(c-a),dl=t(d-b);
+  var h=Math.sin(dp/2)*Math.sin(dp/2)+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dl/2)*Math.sin(dl/2);
+  return 2*R*Math.asin(Math.sqrt(h));}
+
+function celdas(){ // respeta el filtro de precisión
+  var c=D.ciudades[ciudad].celdas;
+  return document.getElementById('soloCruce').checked
+    ? c.map(function(x){return [x[0],x[1],x[3],x[3]]}).filter(function(x){return x[2]>0})
+    : c;
+}
+function maxCelda(cs){var m=0;for(var i=0;i<cs.length;i++)if(cs[i][2]>m)m=cs[i][2];return m||1}
+function color(v,max){var t=v/max,c=ESCALA[0][1];
+  for(var i=0;i<ESCALA.length;i++) if(t>=ESCALA[i][0]) c=ESCALA[i][1];
+  return c;}
+
+function pintarZonas(){
+  var c=D.ciudades[ciudad], tot=c.ubicadas||1;
+  var share={}; c.zonas.forEach(function(z){share[z.nombre]=z.ordenes});
+  var max=c.zonas.length?c.zonas[0].ordenes:1;
+  // Renderer SVG explícito: son ~84 polígonos, el costo es irrelevante y a cambio quedan
+  // como nodos del DOM (inspeccionables y con hover nítido en los bordes).
+  var svg=L.svg({padding:.3});
+  var capas=[];
+  c.contornos.forEach(function(z){
+    var n=share[z.n]||0;
+    z.a.forEach(function(anillo){
+      capas.push(L.polygon(anillo,{renderer:svg,color:'#fff',weight:1.5,
+        fillColor:color(n,max),fillOpacity:(n>0?0.62:0.06),opacity:0.9})
+        .bindTooltip('<b>'+z.n+'</b><br>'+fmt(n)+' órdenes · '+pct(n,tot),{sticky:true}));
+    });
+  });
+  capaZonas=L.layerGroup(capas).addTo(map);
+}
+
+// --- Simulador ---------------------------------------------------------------------------
+// Modelo de Daganzo (1984) para ruteo: L ≈ 2·r·n/Q + 0,57·√(n·A). Es la aproximación estándar
+// de planeación estratégica de última milla. La clave del modelo: el same-day NO lo decide la
+// distancia a la zona sino cuántas paradas caben en la jornada — dos zonas a los mismos 25
+// minutos se comportan distinto si una tiene 400 órdenes juntas y la otra 40 dispersas.
+var SIM=null, capaSim=null;
+// Perfil horario de creación de pedidos. SUPUESTO: no hay timestamps en la data. Forma típica
+// de e-commerce, con pico a media mañana y pico nocturno.
+var PERFIL=[1,.5,.3,.3,.4,.8,1.5,2.5,4,6,7,7.5,7,6.5,6,5.5,5,5,5.5,6.5,7.5,7,5,2.5];
+var ESC_MIN=[[0,'#12805C'],[15,'#7CB342'],[25,'#F9C74F'],[35,'#F3722C'],[50,'#B42318']];
+
+function acumHasta(h){var t=0,a=0;for(var i=0;i<24;i++){t+=PERFIL[i];if(i<h)a+=PERFIL[i]}return a/t}
+function colorMin(m){var c=ESC_MIN[0][1];for(var i=0;i<ESC_MIN.length;i++)if(m>=ESC_MIN[i][0])c=ESC_MIN[i][1];return c}
+function val(id){return +document.getElementById(id).value}
+
+// Candidata precalculada más cercana al punto donde el usuario puso la bodega.
+function candidataCerca(s,lat,lng){
+  var mejor=0,md=Infinity;
+  for(var i=0;i<s.candidatas.length;i++){
+    var d=haversine(lat,lng,s.candidatas[i][0],s.candidatas[i][1]);
+    if(d<md){md=d;mejor=i}
+  }
+  return {i:mejor,dist:md};
+}
+
+function simular(){
+  if(!SIM||!SIM.ciudades[ciudad]||!centro) return null;
+  var s=SIM.ciudades[ciudad];
+  var cand=candidataCerca(s,centro.lat,centro.lng);
+  var fila=s.t[cand.i];
+  var P={periodo:val('pPeriodo'),factor:val('pFactor'),vintra:val('pVintra'),
+         servicio:val('pServicio'),ventana:val('pVentana')*60,Q:val('pQ'),corte:val('pCorte'),
+         pico:val('pPico')};
+  var fCorte=acumHasta(P.corte);
+  var out=[],servibles=0,vehiculos=0,dentro=0,total=0,accMin=0,accOrd=0;
+  var vehEnteros=0,vehCompartido=0;   // carro propio · zonas que comparten ruta
+  for(var i=0;i<s.zonas.length;i++){
+    var z=s.zonas[i], min=fila[i];
+    // Órdenes del DÍA PICO, no del promedio: la flota se dimensiona con el día malo o se queda
+    // corta la mitad de los días.
+    var n=z.ordenes/P.periodo*P.pico;
+    total+=n;
+    if(min<0){out.push({z:z,min:null,n:n,m:0,ok:false,motivo:'sin red'});continue}
+    var tr=min*P.factor;                        // minutos bodega→zona con tráfico
+    accMin+=tr*n; accOrd+=n;                    // para el tiempo medio ponderado por demanda
+    var den=P.ventana-2*tr;                     // ¿alcanza siquiera a ir y volver?
+    var nEf=n*fCorte;                           // sólo lo que entró antes del corte sale hoy
+    var distIntra=0.57*Math.sqrt(nEf*z.area);   // recorrido dentro de la zona (Daganzo)
+    var tIntra=distIntra/P.vintra*60;
+    // VEHÍCULOS-EQUIVALENTE, fraccionarios y no enteros por zona.
+    // Redondear hacia arriba en cada zona daba un piso de 1 vehículo por zona: 37 zonas → 37
+    // vehículos mínimo, aunque muchas tuvieran 12 órdenes/día. Salían 42 vehículos para 541
+    // órdenes (13 por vehículo con capacidad 40) — un artefacto del modelo, no una necesidad:
+    // en la práctica un carro cubre varias zonas pequeñas en la misma ruta. El redondeo se
+    // hace UNA vez, sobre el total de la ciudad.
+    // Daganzo completo: el trayecto de ida y vuelta se escala por cargas (nEf/Q), no por viaje.
+    var tTotal=2*tr*(nEf/P.Q)+tIntra+nEf*P.servicio;   // minutos-vehículo que pide la zona
+    var vEq=Math.max(nEf/P.Q,tTotal/P.ventana);
+    var ok=den>0&&isFinite(vEq);
+    if(ok){servibles+=nEf;vehiculos+=vEq;dentro++;
+      // Una zona que pide 1 carro o más lleva carro propio y se redondea hacia arriba.
+      // La que pide menos NO justifica un carro: se agrupa con las vecinas en una misma ruta
+      // y se redondea una sola vez el total del grupo. Es la diferencia entre 86 vehículos
+      // y los 42 incoherentes que salían al redondear zona por zona.
+      if(vEq>=1) vehEnteros+=Math.ceil(vEq); else vehCompartido+=vEq;
+    }
+    out.push({z:z,min:min,tr:tr,n:n,nEf:nEf,m:ok?vEq:0,ok:ok,
+      motivo:den<=0?'no alcanza a ir y volver':''});
+  }
+  return {zonas:out,servibles:servibles,vehiculos:vehiculos,dentro:dentro,
+          vehEnteros:vehEnteros,vehCompartido:Math.ceil(vehCompartido),
+          zonasCompartidas:out.filter(function(x){return x.ok&&x.m<1}).length,
+          fuera:s.zonas.length-dentro,total:total,fCorte:fCorte,cand:cand,P:P,
+          // Tiempo medio a la demanda: es LA métrica que responde a mover la bodega. A los
+          // volúmenes actuales el total servible lo decide el corte, no la posición, así que
+          // sin esto arrastrar la bodega parecía no hacer nada.
+          medio:accOrd?accMin/accOrd:null};
+}
+
+function pintarSimulacion(){
+  var r=simular(); if(!r) return;
+  var c=D.ciudades[ciudad];
+  var minPorZona={}; r.zonas.forEach(function(x){minPorZona[x.z.n]={min:x.min,ok:x.ok,m:x.m,n:x.nEf}});
+  var svg=L.svg({padding:.3}), capas=[];
+  c.contornos.forEach(function(z){
+    var d=minPorZona[z.n];
+    z.a.forEach(function(anillo){
+      capas.push(L.polygon(anillo,{renderer:svg,color:'#fff',weight:1.5,
+        fillColor:d&&d.min!=null?colorMin(d.min*r.P.factor):'#D0D5DD',
+        fillOpacity:d?(d.ok?0.66:0.22):0.06,opacity:.9})
+        .bindTooltip('<b>'+z.n+'</b><br>'+(d&&d.min!=null?Math.round(d.min*r.P.factor)+' min · '+
+          fmt(Math.round(d.n))+' órd/día · '+d.m+' vehículos':'sin datos')+
+          (d&&!d.ok?'<br><b>fuera de alcance</b>':''),{sticky:true}));
+    });
+  });
+  capaSim=L.layerGroup(capas).addTo(map);
+  refrescarPanelSim(r);
+}
+
+function refrescarPanelSim(r){
+  if(!r){r=simular();if(!r)return}
+  var s=SIM.ciudades[ciudad];
+  document.getElementById('simBodega').textContent=r.cand.dist<1.2
+    ? 'a '+(r.cand.dist*1000).toFixed(0)+' m del punto' : 'ajustada '+r.cand.dist.toFixed(1)+' km';
+  document.getElementById('simServibles').textContent=fmt(Math.round(r.servibles));
+  document.getElementById('simPct').textContent=pct(r.servibles,r.total);
+  // Carros enteros: los de zonas con carro propio + los del grupo que comparte ruta.
+  var veh=r.vehEnteros+r.vehCompartido;
+  document.getElementById('simVeh').textContent=fmt(veh)+
+    (veh?' · '+(r.servibles/veh).toFixed(0)+' órd c/u':'');
+  document.getElementById('simVehNota').innerHTML=veh
+    ? fmt(r.vehEnteros)+' con ruta propia · <b>'+fmt(r.vehCompartido)+'</b> para las '+
+      r.zonasCompartidas+' zonas pequeñas, que comparten ruta entre ellas.'
+    : '';
+  document.getElementById('simZonas').textContent=r.dentro+' / '+r.fuera;
+  var mejorMin=s.medio[s.mejor]*r.P.factor;
+  document.getElementById('simMedio').textContent=r.medio==null?'—':r.medio.toFixed(1).replace('.',',')+' min';
+  document.getElementById('simMedioNota').innerHTML=r.medio==null?'':
+    'El óptimo de esta ciudad logra <b>'+mejorMin.toFixed(1).replace('.',',')+' min</b>. '+
+    // 0,2 min de tolerancia: `medio` viene redondeado a 2 decimales del precálculo y luego se
+    // multiplica por el factor, así que estando en el óptimo la resta no da exactamente 0.
+    (r.medio<=mejorMin+0.2 ? 'Estás en él.'
+      : 'Desde aquí son <b>'+(r.medio-mejorMin).toFixed(1).replace('.',',')+' min más</b> por entrega.')+
+    '<br>A los volúmenes actuales el total servible lo decide el corte, no la posición de la '+
+    'bodega: <b>ésta es la métrica que sí responde a moverla</b>.';
+  document.getElementById('simOptimaNota').textContent=
+    'La mejor de las '+s.candidatas.length+' posiciones evaluadas promedia '+s.medio[s.mejor]+
+    ' min a la demanda (flujo libre).';
+
+  // curva de corte: % servible por hora, para leer la forma y no un número
+  var barras='',ejes='';
+  for(var h=6;h<=18;h++){
+    var v=acumHasta(h);
+    barras+='<i class="'+(h===r.P.corte?'on':'')+'" style="height:'+Math.max(3,v*100)+'%" title="'+
+      h+':00 → '+(v*100).toFixed(0)+'%"></i>';
+  }
+  document.getElementById('curvaCorte').innerHTML='<div class="curva">'+barras+'</div>'+
+    '<div class="curva-x"><span>6:00</span><span>'+(r.fCorte*100).toFixed(0)+
+    '% alcanza el corte de las '+r.P.corte+':00</span><span>18:00</span></div>';
+
+  // "demanda" = órdenes/día de la zona. "SD" = las que alcanzan el corte y por tanto salen hoy;
+  // es sobre ésas que se calculan los vehículos, y separarlas evita leer que se reparte todo.
+  var filas=r.zonas.slice().sort(function(a,b){return b.n-a.n}).slice(0,14).map(function(x){
+    return '<tr><td>'+x.z.n+'</td><td class="tnum">'+(x.min==null?'—':Math.round(x.min*r.P.factor))+
+      '</td><td class="tnum">'+fmt(Math.round(x.n))+'</td><td class="tnum">'+fmt(Math.round(x.nEf||0))+
+      // Carros enteros donde hay ruta propia; "comparte" donde no justifica un carro.
+      '</td><td class="tnum">'+(x.ok?(x.m<1?'<span style="color:var(--ink-3)">comparte</span>':Math.ceil(x.m)):'—')+
+      '</td><td class="'+(x.ok?'si':'no')+'" title="'+(x.motivo||'servible')+'">'+(x.ok?'✓':'✗')+'</td></tr>';
+  }).join('');
+  document.getElementById('simBody').innerHTML=filas;
+}
+
+function modoSim(){return modo==='simular'}
+function alternarPaneles(){
+  [].forEach.call(document.querySelectorAll('#side .tool'),function(t){
+    var esSim=t.classList.contains('sim');
+    t.style.display=(modoSim()===esSim||t.querySelector('#precBody'))?'':'none';
+  });
+  document.querySelector('#side .p-head h2').textContent=modoSim()?'Simulación same-day':'Polígono de cobertura';
+  document.querySelector('#side .p-head .sub').textContent=modoSim()
+    ? 'Qué es servible el mismo día desde una bodega, con estos supuestos.'
+    : 'Arrastra el centro o haz clic en el mapa. Ajusta el radio.';
+}
+
+// Quitar las capas ANTES de mover el mapa, no sólo al repintar. leaflet.heat se engancha a
+// `moveend` y redibuja sobre su canvas; si el contenedor todavía no tiene tamaño, revienta con
+// "getImageData: source width is 0" y se lleva por delante la función que hizo el setView.
+// Así se rompía el cambio de ciudad: irA() moría a mitad y el panel se quedaba con los datos
+// de la ciudad anterior.
+function limpiarCapas(){
+  if(capaCalor){map.removeLayer(capaCalor);capaCalor=null}
+  if(capaCeldas){map.removeLayer(capaCeldas);capaCeldas=null}
+  if(capaZonas){map.removeLayer(capaZonas);capaZonas=null}
+  if(capaSim){map.removeLayer(capaSim);capaSim=null}
+}
+
+function pintar(){
+  var cs=celdas(), max=maxCelda(cs);
+  limpiarCapas();
+  alternarPaneles();
+
+  if(modo==='simular'){
+    pintarSimulacion();
+  }else if(modo==='zonas'){
+    pintarZonas();
+  }else if(modo==='calor' && window.L && L.heatLayer && map.getSize().x > 0){
+    // El guarda de tamaño y el try/catch no sobran: leaflet.heat pinta sobre un canvas y si el
+    // contenedor mide 0 (pestaña oculta, iframe todavía sin layout) lanza
+    // "getImageData: source width is 0". Sin esto la excepción sube y se lleva por delante a
+    // quien llamó a pintar() — se rompía el cambio de ciudad, no sólo la capa.
+    try{
+      capaCalor=L.heatLayer(cs.map(function(x){return [x[0],x[1],Math.sqrt(x[2]/max)]}),
+        {radius:22,blur:26,maxZoom:15,minOpacity:.25,
+         gradient:{0:'#FFEDA0',.25:'#FEB24C',.5:'#FD8D3C',.75:'#F03B20',1:'#BD0026'}}).addTo(map);
+    }catch(e){
+      if(capaCalor){try{map.removeLayer(capaCalor)}catch(_){} capaCalor=null}
+    }
+  }else{
+    var r=L.canvas({padding:.4});
+    capaCeldas=L.layerGroup(cs.map(function(x){
+      return L.circleMarker([x[0],x[1]],{renderer:r,radius:Math.max(3,Math.sqrt(x[2]/max)*15),
+        color:'#fff',weight:.7,fillColor:color(x[2],max),fillOpacity:.82})
+        .bindTooltip(fmt(x[2])+' órdenes<br><span style="color:#8E97AC">'+x[0].toFixed(4)+', '+x[1].toFixed(4)+'</span>',{sticky:true});
+    })).addTo(map);
+  }
+  leyenda(max);
+  tabla(cs);
+  recalcular();
+}
+
+function leyenda(max){
+  var c0=D.ciudades[ciudad];
+  if(modo==='zonas'){ max=c0.zonas.length?c0.zonas[0].ordenes:1; }
+  document.getElementById('lgTitulo').textContent=
+    modo==='zonas'?'Órdenes por localidad / comuna':'Órdenes por celda de 250 m';
+  document.getElementById('lgBody').innerHTML=ESCALA.map(function(e,i){
+    var lo=Math.round(e[0]*max), hi=i<ESCALA.length-1?Math.round(ESCALA[i+1][0]*max):max;
+    return '<div class="lg-row"><i class="sw" style="background:'+e[1]+'"></i>'+fmt(lo)+(i<ESCALA.length-1?'–'+fmt(hi):'+')+'</div>';
+  }).join('');
+  var c=D.ciudades[ciudad];
+  document.getElementById('lgNote').innerHTML=
+    'Sólo se dibujan órdenes con ubicación confiable: <b>'+fmt(c.ubicadas)+'</b> de <b>'+fmt(c.total)+'</b> ('+c.cobertura+'%).<br>'+
+    'Las '+fmt(c.precision.via)+' que sólo resolvieron una vía y las '+fmt(c.precision.sin_parseo)+' sin nomenclatura legible <b>no</b> se dibujan.';
+}
+
+function tablaZonas(){
+  var c=D.ciudades[ciudad], tot=c.ubicadas||1;
+  var max=c.zonas.length?c.zonas[0].ordenes:1;
+  document.getElementById('zonaPill').textContent=c.zonas.length+' zonas';
+  document.getElementById('zonaBody').innerHTML=c.zonas.map(function(z){
+    return '<tr><td><span class="bar" style="width:'+Math.round(z.ordenes/max*34)+'px"></span>'+z.nombre+
+      '</td><td class="tnum">'+fmt(z.ordenes)+'</td><td class="tnum">'+pct(z.ordenes,tot)+'</td></tr>';
+  }).join('')+(c.sin_zona?'<tr><td style="color:var(--ink-3)">sin zona asignada</td><td class="tnum">'+
+    fmt(c.sin_zona)+'</td><td class="tnum">'+pct(c.sin_zona,tot)+'</td></tr>':'');
+}
+
+function tabla(cs){
+  var tot=cs.reduce(function(s,x){return s+x[2]},0);
+  var top=cs.slice().sort(function(a,b){return b[2]-a[2]}).slice(0,12);
+  var max=top.length?top[0][2]:1;
+  document.getElementById('topPill').textContent=fmt(cs.length)+' celdas';
+  document.getElementById('topBody').innerHTML=top.map(function(x){
+    return '<tr data-lat="'+x[0]+'" data-lng="'+x[1]+'"><td><span class="bar" style="width:'+Math.round(x[2]/max*34)+'px"></span>'+
+      x[0].toFixed(3)+', '+x[1].toFixed(3)+'</td><td class="tnum">'+fmt(x[2])+'</td><td class="tnum">'+pct(x[2],tot)+'</td></tr>';
+  }).join('');
+  [].forEach.call(document.querySelectorAll('#topBody tr'),function(tr){
+    tr.onclick=function(){map.setView([+tr.dataset.lat,+tr.dataset.lng],15)};
+  });
+}
+
+function recalcular(){
+  if(!centro) return;
+  var cs=celdas(), R=+document.getElementById('radio').value;
+  var dentro=0, tot=0, dists=[];
+  for(var i=0;i<cs.length;i++){
+    var d=haversine(centro.lat,centro.lng,cs[i][0],cs[i][1]);
+    tot+=cs[i][2]; dists.push([d,cs[i][2]]);
+    if(d<=R) dentro+=cs[i][2];
+  }
+  var tot3=0; for(var k in D.ciudades) tot3+=D.ciudades[k].ubicadas;
+  document.getElementById('dentroN').textContent=fmt(dentro);
+  document.getElementById('dentroPct').textContent=pct(dentro,tot);
+  document.getElementById('dentroPct3').textContent=pct(dentro,tot3);
+  document.getElementById('radioLbl').textContent=R+' km';
+
+  dists.sort(function(a,b){return a[0]-b[0]});
+  var acc=0, hitos={50:null,80:null,90:null};
+  for(var j=0;j<dists.length;j++){
+    acc+=dists[j][1];
+    for(var h in hitos) if(hitos[h]===null && acc/tot>=h/100) hitos[h]=dists[j][0];
+  }
+  ['50','80','90'].forEach(function(h){
+    document.getElementById('r'+h).textContent=hitos[h]==null?'—':hitos[h].toFixed(1)+' km';
+  });
+  if(circulo) circulo.setRadius(R*1000).setLatLng(centro);
+  // En simulación el panel se refresca en cada frame del arrastre (es aritmética barata),
+  // pero los polígonos sólo al soltar: redibujar 84 polígonos por frame arrastra el mapa.
+  if(modoSim()) refrescarPanelSim();
+}
+
+function irA(nombre){
+  ciudad=nombre;
+  if(map) limpiarCapas();          // antes del setView de abajo — ver nota en limpiarCapas()
+  [].forEach.call(document.querySelectorAll('#tabs button'),function(b){
+    b.setAttribute('aria-current',b.dataset.c===nombre?'page':'false');});
+  var c=D.ciudades[nombre];
+  document.getElementById('kpis').innerHTML=
+    kpi(fmt(c.total),'órdenes en la ciudad','',' ')+
+    kpi(fmt(c.ubicadas),'ubicadas en el mapa',c.cobertura+'% de la ciudad','ok')+
+    kpi(fmt(c.precision.cruce),'por cruce de vías','ubicación más precisa','ok')+
+    kpi(fmt(c.precision.via+c.precision.sin_parseo),'no ubicadas','sólo una vía o sin nomenclatura','acc')+
+    kpi(fmt(c.celdas.length),'celdas con demanda','de 250 m de lado',' ');
+  map.setView(c.nucleo,11);
+  centro=L.latLng(c.nucleo[0],c.nucleo[1]);
+  if(circulo) map.removeLayer(circulo);
+  circulo=L.circle(centro,{radius:+document.getElementById('radio').value*1000,
+    color:'#008DBF',weight:2,dashArray:'5,4',fillColor:'#008DBF',fillOpacity:.05,interactive:false}).addTo(map);
+  if(window._mk) map.removeLayer(window._mk);
+  window._mk=L.marker(centro,{draggable:true}).addTo(map).bindTooltip('Centro de operación · arrástrame');
+  window._mk.on('drag',function(e){centro=e.target.getLatLng();recalcular()});
+  window._mk.on('dragend',function(){if(modoSim())pintar()});
+  tablaZonas();
+  pintarPrecision();
+  pintar();
+}
+function kpi(v,l,h,cls){return '<div class="kpi '+(cls||'')+'"><div class="v tnum">'+v+'</div><div class="l">'+l+'</div><div class="h">'+(h||'')+'</div></div>'}
+
+// --- Precisión -------------------------------------------------------------------------
+// Se lee de verificacion-barrios.json, que produce pipeline/verificar.js. NUNCA escribir
+// estas cifras a mano aquí: si el pipeline mejora y el mapa sigue mostrando lo viejo, el
+// mapa miente sobre su propia confiabilidad, que es peor que no mostrar nada.
+var PREC=null;
+var UMBRAL_PP=1.5;   // ver nota de lectura abajo
+function nivel(p){return p<10?'ok':p<20?'med':'mal'}
+function pintarPrecision(){
+  var badge=document.getElementById('precBadge'), body=document.getElementById('precBody'),
+      nota=document.getElementById('precNota');
+  if(!PREC){badge.textContent='';return}
+  var mio=PREC[ciudad];
+  if(mio) badge.innerHTML='<span class="dot '+nivel(mio.sobre3k)+'"></span>'+
+    'Error '+Math.round(mio.sobre3k)+'% de ubicación · mediana '+fmt(mio.p50)+' m';
+  body.innerHTML=Object.keys(PREC).map(function(c){
+    var v=PREC[c];
+    return '<div class="prec-row'+(c===ciudad?' on':'')+'"><span><span class="dot '+nivel(v.sobre3k)+'"></span>'+
+      (NOMBRE[c]||c)+'</span><span class="v">'+v.sobre3k.toFixed(1).replace('.',',')+'% &gt;3 km · '+
+      fmt(v.p50)+' m mediana</span></div>';
+  }).join('');
+  nota.innerHTML='Medido contra el barrio que la propia dirección menciona, apartando el 20% de '+
+    'los nombres para que la prueba no sea circular (n='+fmt(mio?mio.n:0)+' en esta ciudad). '+
+    'La distancia es <b>cota superior</b> del error: el barrio de referencia mide cientos de metros, '+
+    'así que una dirección bien puesta en su borde ya marca 400–600 m. Lo que sí son errores reales '+
+    'es la cola de <b>&gt;3 km</b>.<br><br><b>Cómo leerlo:</b> arreglar el método movió zonas hasta '+
+    UMBRAL_PP.toFixed(1).replace('.',',')+' pp, así que <b>diferencias menores entre dos zonas no se '+
+    'sostienen</b>. Sirve para leer concentración, no para rematar una zona contra su vecina.';
+}
+
+fetch('datos-sameday.json').then(function(r){return r.json()}).then(function(j){
+  D=j;
+  document.getElementById('estado').classList.add('hide');
+  document.getElementById('meta').textContent=
+    fmt(j.meta.ordenes)+' órdenes · '+j.meta.cobertura+'% ubicadas · '+j.meta.generado;
+  map=L.map('map',{zoomControl:true,preferCanvas:true}).setView([4.65,-74.08],11);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+    {maxZoom:19,attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(map);
+  map.on('click',function(e){centro=e.latlng;window._mk.setLatLng(centro);recalcular()});
+
+  document.getElementById('tabs').innerHTML=Object.keys(j.ciudades).map(function(c){
+    return '<button data-c="'+c+'">'+(NOMBRE[c]||c)+'</button>'}).join('');
+  [].forEach.call(document.querySelectorAll('#tabs button'),function(b){
+    b.onclick=function(){irA(b.dataset.c)};});
+  [].forEach.call(document.querySelectorAll('#modo button'),function(b){
+    b.onclick=function(){modo=b.dataset.m;
+      [].forEach.call(document.querySelectorAll('#modo button'),function(x){x.setAttribute('aria-pressed',x===b)});
+      pintar();};});
+  document.getElementById('soloCruce').onchange=pintar;
+  document.getElementById('radio').oninput=recalcular;
+
+  // Deslizadores de supuestos. Cambian el modelo, así que repintan el mapa entero.
+  var UNI={pPeriodo:function(v){return v+' días'},pFactor:function(v){return v.toFixed(1).replace('.',',')+'×'},
+    pVintra:function(v){return v+' km/h'},pServicio:function(v){return v+' min'},
+    pVentana:function(v){return String(v).replace('.',',')+' h'},pQ:function(v){return v},
+    pCorte:function(v){return v+':00'},pPico:function(v){return v.toFixed(2).replace('.',',')+'×'}};
+  Object.keys(UNI).forEach(function(id){
+    var el=document.getElementById(id), lbl=document.getElementById('lbl'+id.slice(1));
+    var pinta=function(){ if(lbl) lbl.textContent=UNI[id](+el.value); if(modoSim()) pintar(); };
+    el.oninput=function(){ if(lbl) lbl.textContent=UNI[id](+el.value); if(modoSim()) refrescarPanelSim(); };
+    el.onchange=pinta;
+    if(lbl) lbl.textContent=UNI[id](+el.value);
+  });
+  document.getElementById('simOptima').onclick=function(){
+    var s=SIM&&SIM.ciudades[ciudad]; if(!s)return;
+    var p=s.candidatas[s.mejor];
+    centro=L.latLng(p[0],p[1]); window._mk.setLatLng(centro); map.panTo(centro);
+    recalcular(); pintar();
+  };
+
+  irA('BOGOTA');
+  // Handle de depuración: permite inspeccionar capas y forzar un redibujado desde la
+  // consola. Necesario porque el renderer de canvas de Leaflet pinta dentro de
+  // requestAnimationFrame, que no dispara si la pestaña no está compositando.
+  window.__sd={map:map,datos:function(){return D},capas:function(){return {calor:capaCalor,celdas:capaCeldas,zonas:capaZonas}}};
+}).catch(function(e){
+  document.getElementById('estado').textContent='No se pudo cargar datos-sameday.json — '+e.message;
+});
+
+// La medición va aparte del mapa a propósito: la produce `verificar.js`, que corre DESPUÉS
+// de generar los datos. Embeberla en datos-sameday.json obligaría a mostrar la medición de
+// la corrida anterior. Si el archivo falta, el mapa funciona igual y el panel lo dice.
+// Precálculo de rutas (Dijkstra por bodega candidata). Si falta, el mapa funciona igual y el
+// modo Simulación se desactiva en vez de mostrar números inventados.
+fetch('datos-simulacion.json').then(function(r){
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}).then(function(j){
+  SIM=j;
+  if(modoSim()) pintar();
+}).catch(function(){
+  var b=document.querySelector('#modo button[data-m="simular"]');
+  if(b){ b.disabled=true; b.title='Falta datos-simulacion.json — correr: node pipeline/simular.js'; }
+});
+
+fetch('pipeline/verificacion-barrios.json').then(function(r){
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}).then(function(v){
+  PREC={};
+  Object.keys(v.informe).forEach(function(c){ PREC[c]=v.informe[c].apartados; });
+  if(ciudad) pintarPrecision();
+}).catch(function(){
+  document.getElementById('precBody').innerHTML=
+    '<div class="hint">Sin medición disponible. Correr <code>node pipeline/verificar.js</code>.</div>';
+});
+})();
+</script>
+</body>
+</html>
