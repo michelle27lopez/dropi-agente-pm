@@ -1,0 +1,558 @@
+/* Control de recolecciones.
+ *
+ * Consume las variables que el layout de logística define bajo `.log-root`
+ * (--text, --muted, --brand, --border…), que salen de los tokens generados
+ * desde Figma. Acá no se declara ni un hex de marca.
+ *
+ * ── Sobre la escala ───────────────────────────────────────────────────────
+ * DESIGN.md declara 5 tamaños (32/22/16/13/11) y 4 radios. Esta hoja llegó a
+ * usar 11 tamaños y 8 radios; `tablero.css` —las otras diez pantallas de
+ * logística— usa 31 y 18. O sea: el sistema está documentado y no se aplica
+ * en ninguna parte.
+ *
+ * Acá se hace lo acotado: 6 pasos de tipografía y 3 de radio, eligiendo
+ * valores que el tablero YA usa para no verse ajena. Alinear las otras diez
+ * pantallas es un proyecto aparte, anotado en DESIGN.md.
+ */
+
+.rec {
+  /* Tipografía — 6 pasos. Cuatro salen del ramp de DESIGN.md; 12.5 es el
+     cuerpo denso que el tablero usa masivamente. */
+  --rec-fs-xs: 11px;     /* etiquetas, notas al pie */
+  --rec-fs-sm: 12.5px;   /* cuerpo denso: tablas, chips, filtros */
+  --rec-fs-md: 13px;     /* cuerpo */
+  --rec-fs-lg: 16px;     /* título de transportadora */
+  --rec-fs-xl: 22px;     /* cifras de tarjeta */
+  --rec-fs-2xl: 26px;    /* cifra de KPI */
+
+  /* Espaciado — múltiplos de 4. */
+  --rec-sp-1: 4px;
+  --rec-sp-2: 8px;
+  --rec-sp-3: 12px;
+  --rec-sp-4: 16px;
+  --rec-sp-5: 24px;
+  --rec-sp-6: 40px;
+
+  /* Radios — los de DESIGN.md. */
+  --rec-r-sm: 8px;
+  --rec-r-md: 12px;
+  --rec-r-pill: 999px;
+
+  /* Sombra del marcador sobre el mapa: el tile de fondo puede ser claro u
+     oscuro, así que necesita un contorno propio para no perderse. */
+  --rec-sombra-mk: 0 1px 4px rgba(0, 0, 0, .3);
+
+  /* Texto secundario. El --muted del tablero es gray-500 (4.74:1), que a 12px
+     se lee con esfuerzo; para datos que se miran todo el día va gray-600
+     (8.05:1). No se cambia --muted global para no alterar el resto. */
+  --rec-ink-2: var(--dropi-gray-600);
+
+  /* Avisos. Antes eran 7 hex sueltos repetidos; acá tienen nombre y un solo
+     lugar donde cambiarlos. Todos verificados ≥4.5:1 sobre su fondo. */
+  --rec-warn-bg: #FEF6EC;
+  --rec-warn-bd: #F6E6CF;
+  --rec-warn-ink: #7A4E12;
+  --rec-err-bg: #FDF0F0;
+  --rec-err-bd: #F6DADA;
+  --rec-err-ink: #A32C30;
+  --rec-ok-bg: #EFF8F0;
+  --rec-ok-bd: #DCEEDD;
+  --rec-ok-ink: #2E7D32;
+
+  padding: var(--rec-sp-5) var(--rec-sp-5) var(--rec-sp-6);
+  max-width: 1180px;
+  color: var(--text);
+}
+
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ── Encabezado ─────────────────────────────────────────────────────────── */
+
+.rec-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--rec-sp-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--rec-sp-3);
+}
+.rec-head h1 {
+  margin: 0;
+  font-size: var(--rec-fs-xl);
+  font-weight: 600;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+.rec-sub { margin: var(--rec-sp-1) 0 0; font-size: var(--rec-fs-sm); color: var(--rec-ink-2); }
+
+.rec-btn {
+  margin-left: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-sm);
+  padding: var(--rec-sp-2) var(--rec-sp-3);
+  font-size: var(--rec-fs-sm);
+  font-weight: 500;
+  color: var(--rec-ink-2);
+  background: var(--card);
+  white-space: nowrap;
+  transition: border-color .15s ease, color .15s ease;
+}
+.rec-btn:hover { border-color: var(--brand); color: var(--text); }
+.rec-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* ── De dónde salen los datos ────────────────────────────────────────────── */
+/* Leer de un archivo local no es lo mismo que leer de la base, y la pantalla
+   tiene que decirlo sin que haya que preguntar. */
+
+.rec-fuente {
+  font-size: var(--rec-fs-sm);
+  line-height: 1.5;
+  padding: var(--rec-sp-2) var(--rec-sp-3);
+  border-radius: var(--rec-r-sm);
+  border: 1px solid var(--border);
+  background: var(--soft);
+  color: var(--rec-ink-2);
+  margin-bottom: var(--rec-sp-4);
+}
+.rec-fuente code {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: var(--rec-fs-xs);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-sm);
+  padding: 1px 5px;
+}
+.rec-fuente--archivo { background: var(--rec-warn-bg); border-color: var(--rec-warn-bd); color: var(--rec-warn-ink); }
+.rec-fuente--vacio   { background: var(--rec-err-bg);  border-color: var(--rec-err-bd);  color: var(--rec-err-ink); }
+
+/* ── Dónde está el trabajo ───────────────────────────────────────────────── */
+/* No colapsa nada: las diez transportadoras conservan su tarjeta y su flujo.
+   Esto solo es un atajo a las que concentran el volumen. */
+
+.rec-foco {
+  display: flex;
+  gap: var(--rec-sp-2);
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: var(--rec-sp-4);
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+}
+.rec-foco-lbl { font-weight: 500; }
+.rec-foco a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 5px var(--rec-sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-pill);
+  background: var(--card);
+  color: var(--rec-ink-2);
+  text-decoration: none;
+}
+.rec-foco a:hover { border-color: var(--brand); color: var(--text); }
+.rec-foco a:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.rec-foco b { color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* ── KPIs ────────────────────────────────────────────────────────────────── */
+
+.rec-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--rec-sp-2);
+  margin-bottom: var(--rec-sp-5);
+}
+.rec-kpi {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-md);
+  padding: var(--rec-sp-3) var(--rec-sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.rec-kpi b { font-size: var(--rec-fs-2xl); font-weight: 700; letter-spacing: -.02em; line-height: 1.1; }
+.rec-kpi span { font-size: var(--rec-fs-md); color: var(--rec-ink-2); }
+.rec-kpi small { font-size: var(--rec-fs-xs); color: var(--muted); }
+
+/* El de calidad del dato no es una métrica de operación: se distingue con un
+   fondo tenue, no con otro color de cifra, para que no compita con los tres
+   que sí dicen cuánto trabajo hay. */
+.rec-kpi--dato { background: var(--soft); }
+.rec-kpi--dato b { color: var(--rec-warn-ink); }
+
+/* ── Una tarjeta por transportadora ──────────────────────────────────────── */
+
+.rec-lista { display: flex; flex-direction: column; gap: var(--rec-sp-2); }
+
+.rec-t {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-md);
+  padding: var(--rec-sp-3) var(--rec-sp-4);
+  scroll-margin-top: var(--rec-sp-4);
+}
+.rec-t-head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--rec-sp-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--rec-sp-2);
+}
+.rec-t-head h2 { margin: 0; font-size: var(--rec-fs-lg); font-weight: 600; }
+.rec-t-tot { margin-left: auto; font-size: var(--rec-fs-sm); color: var(--muted); }
+
+.rec-t-body { display: flex; align-items: center; gap: var(--rec-sp-5); flex-wrap: wrap; }
+.rec-t-cifra { display: flex; align-items: baseline; gap: 6px; }
+.rec-t-cifra b { font-size: var(--rec-fs-xl); font-weight: 700; letter-spacing: -.02em; }
+.rec-t-cifra span { font-size: var(--rec-fs-sm); color: var(--rec-ink-2); }
+
+.rec-t-barra {
+  flex: 1;
+  min-width: 120px;
+  height: 6px;
+  border-radius: var(--rec-r-pill);
+  background: var(--soft);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.rec-t-barra i { display: block; height: 100%; background: var(--brand); }
+
+.rec-t-reglas { display: flex; gap: 6px; flex-wrap: wrap; }
+.rec-chip {
+  font-size: var(--rec-fs-xs);
+  font-weight: 500;
+  color: var(--rec-ink-2);
+  background: var(--soft);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-pill);
+  padding: 3px 9px;
+  white-space: nowrap;
+}
+.rec-chip--dato { background: var(--rec-warn-bg); border-color: var(--rec-warn-bd); color: var(--rec-warn-ink); }
+
+.rec-t-fuera {
+  margin: var(--rec-sp-2) 0 0;
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+  padding-top: var(--rec-sp-2);
+  border-top: 1px solid var(--border);
+}
+.rec-t-fuera b { font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+
+/* ── Detalle desplegable ─────────────────────────────────────────────────── */
+
+.rec-t-detalle { margin-top: var(--rec-sp-2); }
+.rec-t-detalle summary {
+  cursor: pointer;
+  font-size: var(--rec-fs-sm);
+  font-weight: 500;
+  color: var(--brand);
+  list-style: none;
+  padding: var(--rec-sp-1) 0;
+  border-radius: var(--rec-r-sm);
+}
+.rec-t-detalle summary::-webkit-details-marker { display: none; }
+.rec-t-detalle summary::before { content: "▸ "; color: var(--muted); }
+.rec-t-detalle[open] summary::before { content: "▾ "; }
+.rec-t-detalle summary:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+/* ── Tabla ───────────────────────────────────────────────────────────────── */
+/* Scrollea dentro de su caja; la página nunca se va de lado. */
+
+.rec-tabla-wrap { overflow-x: auto; margin-top: var(--rec-sp-2); }
+.rec-tabla { width: 100%; border-collapse: collapse; font-size: var(--rec-fs-sm); }
+.rec-tabla th {
+  text-align: left;
+  font-size: var(--rec-fs-xs);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--muted);
+  font-weight: 600;
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.rec-tabla td {
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--border);
+  color: var(--rec-ink-2);
+}
+.rec-tabla tbody tr:hover { background: var(--soft); }
+.rec-tabla .num { text-align: right; }
+.rec-tabla td.num { color: var(--text); font-weight: 500; }
+
+.rec-ok   { color: var(--rec-ok-ink);   font-size: var(--rec-fs-xs); }
+.rec-warn { color: var(--rec-warn-ink); font-size: var(--rec-fs-xs); }
+.rec-mas  { margin: var(--rec-sp-2) 0 0; font-size: var(--rec-fs-xs); color: var(--muted); }
+
+/* ── Armar solicitud ─────────────────────────────────────────────────────── */
+/* La selección es por filtros, no casilla por casilla: con 363 candidatas,
+   marcar una por una no es trabajo, es castigo. */
+
+.sol { margin-top: var(--rec-sp-2); }
+
+.sol-filtros {
+  display: flex;
+  gap: var(--rec-sp-2);
+  flex-wrap: wrap;          /* nunca nowrap: un control oculto es un control perdido */
+  align-items: center;
+  padding: var(--rec-sp-2);
+  background: var(--soft);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-sm);
+}
+.sol-input {
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-sm);
+  padding: 6px 9px;
+  font-size: var(--rec-fs-sm);
+  font-family: inherit;
+  color: var(--text);
+  background: var(--card);
+  min-width: 0;
+}
+.sol-input[type="search"] { flex: 1 1 210px; }
+.sol-input--num { width: 68px; }
+.sol-input:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+.sol-min, .sol-check {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+  white-space: nowrap;
+}
+.sol-limpiar, .sol-link {
+  font-size: var(--rec-fs-sm);
+  color: var(--brand);
+  font-weight: 500;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: var(--rec-sp-1) 6px;
+  border-radius: var(--rec-r-sm);
+}
+.sol-limpiar:focus-visible, .sol-link:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+.sol-resumen {
+  display: flex;
+  align-items: center;
+  gap: var(--rec-sp-3);
+  flex-wrap: wrap;
+  padding: var(--rec-sp-3) 2px var(--rec-sp-2);
+}
+.sol-cuenta { font-size: var(--rec-fs-md); color: var(--rec-ink-2); }
+.sol-cuenta b { font-size: var(--rec-fs-lg); font-weight: 700; color: var(--text); }
+.sol-fuera { color: var(--muted); font-size: var(--rec-fs-sm); }
+
+.sol-aviso {
+  font-size: var(--rec-fs-xs);
+  color: var(--rec-warn-ink);
+  background: var(--rec-warn-bg);
+  border: 1px solid var(--rec-warn-bd);
+  border-radius: var(--rec-r-pill);
+  padding: 3px var(--rec-sp-3);
+}
+
+.sol-acciones { margin-left: auto; display: flex; gap: var(--rec-sp-2); }
+.sol-btn {
+  border: 1px solid var(--border);
+  background: var(--card);
+  border-radius: var(--rec-r-sm);
+  padding: 7px var(--rec-sp-3);
+  font-size: var(--rec-fs-sm);
+  font-weight: 500;
+  color: var(--rec-ink-2);
+  cursor: pointer;
+}
+.sol-btn:hover:not(:disabled) { border-color: var(--brand); color: var(--text); }
+.sol-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+.sol-btn:disabled { opacity: .45; cursor: default; }
+.sol-btn--primary { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 600; }
+.sol-btn--primary:hover:not(:disabled) { filter: brightness(.95); color: #fff; }
+
+.sol-quitadas { margin: 0 0 var(--rec-sp-2); font-size: var(--rec-fs-sm); color: var(--rec-ink-2); }
+
+/* Discreto a propósito: quitar una bodega es la excepción, no el flujo. */
+.sol-quitar {
+  font-size: var(--rec-fs-xs);
+  color: var(--muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--rec-r-sm);
+}
+.sol-quitar:hover { color: var(--red); background: var(--soft); }
+.sol-quitar:focus-visible { outline: 2px solid var(--brand); outline-offset: 1px; }
+
+/* Bodega + dirección en la misma celda. La dirección es lo que el conductor va
+   a usar cuando la coordenada no es confiable, así que se muestra siempre —
+   pero en segundo plano, para que la fila se siga leyendo por el nombre. */
+.sol-bodega { display: block; color: var(--text); font-weight: 500; }
+.sol-dir {
+  display: block;
+  font-size: var(--rec-fs-xs);
+  color: var(--muted);
+  margin-top: 1px;
+  max-width: 40ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Feedback de las acciones ────────────────────────────────────────────── */
+/* Una acción sin respuesta visible se lee como "no funcionó", y el usuario la
+   repite. Copiar y descargar confirman; si fallan, lo dicen. */
+
+.sol-feedback {
+  margin: var(--rec-sp-2) 0 0;
+  padding: 7px var(--rec-sp-3);
+  border-radius: var(--rec-r-sm);
+  font-size: var(--rec-fs-sm);
+  border: 1px solid transparent;
+}
+.sol-feedback--ok    { background: var(--rec-ok-bg);   border-color: var(--rec-ok-bd);   color: var(--rec-ok-ink); }
+.sol-feedback--error { background: var(--rec-warn-bg); border-color: var(--rec-warn-bd); color: var(--rec-warn-ink); }
+
+/* Respaldo cuando navigator.clipboard no existe (pasa fuera de HTTPS). */
+.sol-copia-manual {
+  width: 100%;
+  margin-top: var(--rec-sp-2);
+  padding: var(--rec-sp-2) var(--rec-sp-3);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-sm);
+  font-family: inherit;
+  font-size: var(--rec-fs-sm);
+  color: var(--text);
+  background: var(--card);
+  resize: vertical;
+}
+
+/* ── Ordenar por columna ─────────────────────────────────────────────────── */
+
+.sol-orden {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+.sol-orden:hover { color: var(--text); }
+.sol-orden:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: var(--rec-r-sm); }
+.sol-orden[aria-pressed="true"] { color: var(--text); }
+
+/* ── Estado vacío que enseña ─────────────────────────────────────────────── */
+/* "No hay resultados" obliga a probar filtros de a uno hasta adivinar cuál fue.
+   Este nombra al culpable y trae el arreglo. */
+
+.sol-vacio {
+  display: flex;
+  align-items: center;
+  gap: var(--rec-sp-2);
+  flex-wrap: wrap;
+  padding: var(--rec-sp-4);
+  margin-top: var(--rec-sp-2);
+  border: 1px dashed var(--border);
+  border-radius: var(--rec-r-md);
+  background: var(--soft);
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+}
+.sol-vacio b { color: var(--text); font-size: var(--rec-fs-md); }
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .rec { padding: var(--rec-sp-4) var(--rec-sp-3) var(--rec-sp-6); }
+  .rec-btn { margin-left: 0; }
+  .rec-t-body { gap: var(--rec-sp-3); }
+  .rec-t-barra { order: 3; flex-basis: 100%; }
+  .sol-acciones { margin-left: 0; width: 100%; }
+  .sol-btn { flex: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rec-btn { transition: none; }
+}
+
+/* ── Mapa ────────────────────────────────────────────────────────────────── */
+/* Dentro del módulo, no en una pestaña aparte. Los marcadores distinguen tres
+   cosas y una de ellas es la más importante: si el punto es real o es el
+   centro del municipio. */
+
+.mapa { margin-top: var(--rec-sp-5); }
+.mapa-head h2 { margin: 0 0 var(--rec-sp-1); font-size: var(--rec-fs-lg); font-weight: 600; }
+.mapa-nota {
+  margin: 0 0 var(--rec-sp-3);
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+  max-width: 72ch;
+}
+.mapa-nota b { color: var(--rec-warn-ink); }
+
+.mapa-caja {
+  position: relative;
+  height: 460px;
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-md);
+  overflow: hidden;
+  background: var(--soft);
+}
+.mapa-lienzo { position: absolute; inset: 0; }
+
+.mapa-estado {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: var(--rec-sp-4);
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+  background: var(--soft);
+}
+.mapa-estado--error { color: var(--rec-err-ink); background: var(--rec-err-bg); }
+
+/* Marcadores. El tamaño lo pone el volumen (en el componente); acá solo el
+   lenguaje visual. */
+.mapa-mk {
+  border-radius: var(--rec-r-pill);
+  border: 2px solid #fff;
+  box-shadow: var(--rec-sombra-mk);
+  display: grid;
+  place-items: center;
+  font-size: var(--rec-fs-xs);
+  font-weight: 700;
+  color: #fff;
+}
+.mapa-mk--crit { background: var(--red); }
+.mapa-mk--risk { background: var(--amber); }
+
+/* Sin ubicación confiable: borde punteado y relleno tenue. Tiene que ser
+   evidente de un vistazo que ese punto NO es la puerta de la bodega. */
+.mapa-mk--sinubicar {
+  background: var(--dropi-gray-400);
+  border-style: dashed;
+  border-color: var(--dropi-gray-600);
+  color: var(--dropi-gray-900);
+}
+
+.leaflet-tooltip .mapa-tt-nota { color: var(--muted); font-size: var(--rec-fs-xs); }
+
+.mapa-leyenda {
+  display: flex;
+  gap: var(--rec-sp-4);
+  flex-wrap: wrap;
+  margin: var(--rec-sp-3) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--rec-fs-sm);
+  color: var(--rec-ink-2);
+}
+.mapa-leyenda li { display: flex; align-items: center; gap: 6px; }
+.mapa-leyenda i { width: 13px; height: 13px; flex: 0 0 13px; }

@@ -1,20 +1,27 @@
 // TTV dynamic dashboard metrics api endpoint
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
+
+export const dynamic = "force-dynamic";
 
 export async function GET() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) {
     return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
   }
 
   // 1. Fetch metadata tables
-  const [monthlyRes, segmentsRes, monthlySegmentsRes, pipelineRes, timeRes, weeklyRes] = await Promise.all([
+  const [monthlyRes, segmentsRes, monthlySegmentsRes, pipelineRes, timeRes, weeklyRes, pilotoFase0Res] = await Promise.all([
     supabase.from("ttv_monthly_data").select("*").order("month_number"),
     supabase.from("ttv_segments_6m").select("*").order("sort_order"),
     supabase.from("ttv_monthly_segments").select("*").order("month_number").order("sort_order"),
     supabase.from("ttv_pipeline_metrics").select("*").order("sort_order"),
     supabase.from("ttv_time_metrics").select("*").order("scope"),
     supabase.from("ttv_weekly_data").select("*").order("month_number").order("week_number"),
+    supabase.from("ttv_piloto_fase0").select("*").order("sort_order").order("created_at"),
   ]);
 
   // 2. Fetch live data for cohort calculations
@@ -292,6 +299,7 @@ export async function GET() {
     pipelineMetrics: pipelineRes.data ?? [],
     timeMetrics: timeRes.data ?? [],
     weeklyData: mappedWeekly,
+    pilotoFase0: pilotoFase0Res.data ?? [],
     liveCruce: {
       matched,
       brecha,
@@ -314,11 +322,15 @@ const ALLOWED_TABLES = [
   "ttv_pipeline_metrics",
   "ttv_time_metrics",
   "ttv_weekly_data",
+  "ttv_piloto_fase0",
 ] as const;
 
 type AllowedTable = (typeof ALLOWED_TABLES)[number];
 
 export async function PATCH(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) {
     return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
   }

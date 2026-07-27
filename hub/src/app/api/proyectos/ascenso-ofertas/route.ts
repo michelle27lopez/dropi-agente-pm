@@ -2,8 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
 import { supabase } from "@/lib/supabase";
 import { dispatchOferta, TEST_RECIPIENT_EMAIL, TEST_RECIPIENT_WHATSAPP } from "@/lib/ascenso-dispatch";
+import { requireUser } from "@/lib/require-auth";
 
 export async function GET() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
   const { data, error } = await supabase.from("ascenso_ofertas").select("*");
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
@@ -11,6 +15,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
 
   const body = await req.json();
