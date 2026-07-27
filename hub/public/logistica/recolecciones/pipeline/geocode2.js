@@ -61,11 +61,42 @@ async function geocodificar(q) {
   return { lat: +h.lat, lng: +h.lon, tipo: h.type, clase: h.class, match: h.display_name };
 }
 
+// ¿El resultado es de la MISMA VÍA que pedimos?
+//
+// Caso real (GoldBox, "CR 158B # 136C 08" en Bogotá): el geocodificador no
+// encuentra la nomenclatura colombiana completa, y en vez de decir "no sé"
+// devuelve lo más parecido que tenga. Devolvió un punto a 5.729 m de la
+// Carrera 158B real — y la validación por municipio lo aceptó, porque 5,7 km
+// sigue estando "en Bogotá".
+//
+// Comparar el tipo y el número de vía es la guarda que faltaba: si pedimos
+// CARRERA 158B y responde con una Calle, o con la Carrera 7, no es un match
+// aproximado, es otra dirección.
+function mismaVia(consultada, devuelta) {
+  const norm = s => String(s || '').toUpperCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '');
+  const leer = s => {
+    const m = norm(s).match(/\b(CALLE|CARRERA|AVENIDA|DIAGONAL|TRANSVERSAL)\s*(\d{1,3})\s*([A-Z]?)/);
+    return m ? { tipo: m[1], num: m[2], letra: m[3] || '' } : null;
+  };
+  const a = leer(consultada), b = leer(devuelta);
+  // Sin datos suficientes para comparar: no se bloquea, pero tampoco se afirma.
+  if (!a || !b) return { ok: true, motivo: 'sin_comparar' };
+  if (a.tipo !== b.tipo) return { ok: false, motivo: `pedimos ${a.tipo}, devolvió ${b.tipo}` };
+  if (a.num !== b.num) return { ok: false, motivo: `pedimos ${a.tipo} ${a.num}, devolvió ${b.num}` };
+  return { ok: true, motivo: 'ok' };
+}
+
 // El resultado sólo vale si cae donde el dato dice que está la bodega.
-function valida(g, dane, dep) {
+function valida(g, dane, dep, consulta) {
   if (!g || !isFinite(g.lat)) return { ok: false, motivo: 'no_encontrado' };
   if (g.lat < -4.3 || g.lat > 13.6 || g.lng < -79.6 || g.lng > -66.6)
     return { ok: false, motivo: 'fuera_de_colombia' };
+
+  // Antes que la distancia: si es otra vía, da igual lo cerca que esté.
+  const via = mismaVia(consulta, g.match);
+  if (!via.ok) return { ok: false, motivo: 'otra_via', detalle: via.motivo };
+
   const c = MUN[dane];
   if (c) {
     const d = hav(c[0], c[1], g.lat, g.lng);
@@ -109,7 +140,7 @@ function confianza(g) {
       try { g = await geocodificar(`${limpiar(p.a)}, ${p.m}, Colombia`); }
       catch (e) { g = { error: e.message }; }
       if (g && !g.error) {
-        const v = valida(g, p.dane, p.dep);
+        const v = valida(g, p.dane, p.dep, limpiar(p.a));
         g.valido = v.ok; g.motivo = v.motivo; g.dist_centro = v.dist;
         g.conf = v.ok ? confianza(g) : 'descartado';
       }

@@ -9,15 +9,6 @@ export function generateStaticParams() {
   return proyectos.map((p) => ({ slug: p.slug }));
 }
 
-// Ficha de una iniciativa: qué es, dónde va, si TI puede tomarla, qué la
-// bloquea, dónde cae en la cadena de valor, y TODO lo que existe de ella
-// enlazado en un solo lugar.
-//
-// Cuando falta información se dice explícitamente en vez de dejar el hueco: un
-// empty state que enseña qué falta, no un vacío mudo. Antes la ficha mostraba
-// solo título + descripción + foco, así que los proyectos sin ticket ni
-// experimentos (ej. torre-control) quedaban como una tarjeta suelta en una
-// pantalla vacía.
 export default async function ProyectoPage({
   params,
 }: {
@@ -27,18 +18,17 @@ export default async function ProyectoPage({
   const p = proyectoPorSlug(slug);
   if (!p) notFound();
 
-  // Si el proyecto tiene entregable propio, esa ES su página. La ficha genérica
-  // existía en paralelo y partía el proyecto en dos URLs que no se conocían.
   if (p.entregable) redirect(p.entregable);
 
-  // Antes esto se adivinaba comparando substrings del nombre — bastaba con
-  // renombrar un proyecto para que se perdieran sus experimentos. Ahora la
-  // relación es explícita en los datos y se cruza por slug en los dos sentidos.
   const exps = experimentos.filter(
     (e) => e.proyectoSlug === p.slug || p.experimentos?.includes(e.slug)
   );
-  // Posición en la cadena de valor de la orden (mismo eje que /mapa).
   const idxEtapa = etapas.findIndex((e) => p.etapa.startsWith(e.nombre) || e.nombre.startsWith(p.etapa));
+
+  const relatedSet = new Set(
+    (p.etapasRelacionadas ?? []).map((r) => r.etapa)
+  );
+  const isTransversal = relatedSet.size > 1;
 
   return (
     <main className="page">
@@ -51,7 +41,11 @@ export default async function ProyectoPage({
           <span className={`badge b-tipo t-${p.tipo}`}>{p.tipo}</span>
           <span className="badge b-phase">{p.fase}</span>
           <span className={`badge b-handoff h-${p.handoff.replace(/\s/g, "-")}`}>{p.handoff}</span>
-          <span className="badge b-code">{p.etapa}</span>
+          {isTransversal ? (
+            <span className="badge b-phase">Transversal</span>
+          ) : (
+            <span className="badge b-code">{p.etapa}</span>
+          )}
           {p.codigo ? (
             <span className="badge b-code">{p.codigo}</span>
           ) : (
@@ -81,8 +75,39 @@ export default async function ProyectoPage({
           {p.foco}
         </div>
 
-        {/* Dónde vive este proyecto dentro de la cadena de valor de la orden. */}
-        {idxEtapa >= 0 && (
+        {/* Cadena de valor: etapa única o transversal con detalle por etapa */}
+        {isTransversal ? (
+          <div className="detail-field">
+            <b>Cobertura en la cadena de valor</b>
+            <div className="fx-chain">
+              {etapas.map((e) => {
+                const isRelated = relatedSet.has(e.nombre);
+                const isPrimary = e.nombre === p.etapa || p.etapa.startsWith(e.nombre) || e.nombre.startsWith(p.etapa);
+                return (
+                  <span
+                    key={e.n}
+                    className={`fx-chain-step${isPrimary ? " is-current" : isRelated ? " is-related" : ""}`}
+                  >
+                    {e.nombre}
+                  </span>
+                );
+              })}
+            </div>
+            <div className="vigia-etapas">
+              {p.etapasRelacionadas!.map((r) => {
+                const et = etapas.find((e) => e.nombre === r.etapa);
+                return (
+                  <div key={r.etapa} className="vigia-etapa-row">
+                    <span className="vigia-etapa-name" style={{ borderLeftColor: et?.color ?? "#6366f1" }}>
+                      {r.etapa}
+                    </span>
+                    <span className="vigia-etapa-role">{r.rol}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ) : idxEtapa >= 0 ? (
           <div className="detail-field">
             <b>Etapa de la orden</b>
             <div className="fx-chain">
@@ -94,7 +119,7 @@ export default async function ProyectoPage({
             </div>
             <small>{etapas[idxEtapa].sub}</small>
           </div>
-        )}
+        ) : null}
 
         <LinkList links={linksDe(p)} titulo="Enlaces" />
         {linksDe(p).length === 0 && (

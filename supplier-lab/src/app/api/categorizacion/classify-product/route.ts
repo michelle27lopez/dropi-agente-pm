@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
+import { requireUser } from "@/lib/require-auth";
 
 const DROPI_TAXONOMY_FLAT: { l1: string; l2: string; l3: string; l4: string }[] = [
   // Hogar y Decoración
@@ -245,6 +247,14 @@ const TAXONOMY_TEXT = DROPI_TAXONOMY_FLAT
   .join("\n");
 
 export async function POST(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
+  const ip = getClientIp(req);
+  if (isRateLimited(`classify-product:${ip}`, 20, 60_000)) {
+    return NextResponse.json({ error: "Demasiadas solicitudes, intenta de nuevo en un minuto" }, { status: 429 });
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
     return NextResponse.json({ error: "OPENAI_API_KEY not configured" }, { status: 500 });

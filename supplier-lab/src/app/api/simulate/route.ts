@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { requireUser } from "@/lib/require-auth";
 
 const PROFILES: Record<string, string> = {
   novato_offline: `
@@ -59,6 +60,9 @@ Reglas:
 - El novato abandona ante errores multiples. El experto siempre termina.`;
 
 export async function POST(request: Request) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   try {
     const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     const body = await request.json();

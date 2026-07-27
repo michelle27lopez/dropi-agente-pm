@@ -266,8 +266,9 @@ export const traceFindings = [
 ];
 
 export const decisions = [
-  { level: "critico", title: "INTENTO DE ENTREGA", question: "¿Significa salida a reparto o intento fallido?", action: "Confirmar con Interrapidísimo y Veloces. Define si existe override por carrier." },
-  { level: "critico", title: "Terminalidad de Entregado", question: "¿Cuántas horas sin rebote confirman el cierre?", action: "Definir N horas y separar estado observado de estado confirmado." },
+  { level: "resuelto", title: "INTENTO DE ENTREGA", question: "¿Significa salida a reparto o intento fallido?", action: "RESUELTO con datos (22-jul): es término propio de Interrapidísimo (99,2% de 145.733 ocurrencias) y ahí significa intento fallido (92,08% → falla). No hay colisión entre carriers → el modelo NO necesita eje por transportadora. Queda validarlo con Interrapidísimo, ya con el número en la mano." },
+  { level: "critico", title: "Terminalidad de Entregado", question: "¿Qué capa define el cierre: estado de orden o eventos del carrier?", action: "Ya no falta dato, falta decisión. En estado de orden rebota 0,11% y el máximo es 31h; en eventos de carrier el p99 va de 153h a 495h. Para la vista del cliente manda el estado de orden → umbral del orden de 24–48h." },
+  { level: "critico", title: "Re-mapear INTENTO DE ENTREGA", question: "Hoy está clasificado como EN_TRANSITO; los datos dicen NOVEDAD.", action: "145.733 eventos (7,74% del tráfico) contados como tránsito normal en vez de novedad. Corregir el mapeo antes del hand-off: hoy la medición esconde el problema." },
   { level: "alto", title: "Catálogo 26+", question: "¿Reintentos son estados o nivel/contador?", action: "Cerrar el modelo para recolección, entrega y devolución sin inflar la taxonomía." },
   { level: "alto", title: "Vista cliente 8+1", question: "¿Disponible para retiro es un noveno estado?", action: "Recomendación: sí; habilita aviso y fecha límite de recogida." },
   { level: "alto", title: "Implicaciones físicas", question: "¿Cada estado mueve stock, cierre y movilización correctamente?", action: "Completar salida de bodega, reversible, terminal y efecto stock antes de TI." },
@@ -276,14 +277,18 @@ export const decisions = [
 ];
 
 /**
- * `peso` = participación estimada de cada ruta, derivada de conteos de estado sobre las
- * 52.636 guías auditadas (CONTEXTO §4.2) asumiendo que toda guía con recolección Dropi pasó
- * antes por ECOM. Es orden de magnitud, NO medición: la ventana cubre ~0,7% del volumen anual
- * y el supuesto ECOM ⊃ Dropi está sin confirmar. Se reemplaza con el conteo del modelo Power BI
- * (ver peticion-data-particion-rutas.md). Hasta entonces se muestra marcado como estimación.
+ * `peso` = participación MEDIDA de cada ruta sobre las 7.001 órdenes que generaron guía
+ * en la ventana mar–jul 2026. Señal usada: presencia del estado que marca cada tramo.
+ *   ECOM  → PREPARADO PARA TRANSPORTADORA = 4.799 órdenes (68,5%)
+ *   Dropi → RECOGIDO POR DROPI            = 3.096 órdenes (44,2%)
+ * Las rutas NO son excluyentes: una orden con Dropi pasó antes por ECOM, por eso no suman 100.
+ * Directo = las que no registran ninguna de las dos señales.
+ *
+ * ⚠️ Corrige una estimación previa (98/0,8/1,2) que era falsa: dividía conteos de un universo
+ * por el total de otro. La cifra de acá sí sale del mismo denominador.
  */
 export const routeLabels: Record<RouteMode, { label: string; detail: string; peso: string }> = {
-  directo: { label: "Directo", detail: "Proveedor entrega al carrier; salta ECOM y Dropi", peso: "~98%" },
-  ecom: { label: "ECOM", detail: "Preparación ECOM y entrega directa al carrier", peso: "~0,8%" },
-  dropi: { label: "ECOM + Dropi", detail: "ECOM obligatorio y recolección operada por Dropi", peso: "~1,2%" },
+  directo: { label: "Directo", detail: "Proveedor entrega al carrier; salta ECOM y Dropi", peso: "~31%" },
+  ecom: { label: "ECOM", detail: "Preparación ECOM y entrega directa al carrier", peso: "68,5%" },
+  dropi: { label: "ECOM + Dropi", detail: "ECOM obligatorio y recolección operada por Dropi", peso: "44,2%" },
 };

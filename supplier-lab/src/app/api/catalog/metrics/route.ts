@@ -1,5 +1,6 @@
 import { supabaseAdmin as supabase } from "@/lib/supabaseAdmin";
 import { NextResponse } from "next/server";
+import { requireUser } from "@/lib/require-auth";
 
 export interface CatalogMetricRow {
   node_id: string;
@@ -15,6 +16,9 @@ export interface CatalogMetricRow {
 }
 
 export async function GET() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) {
     return NextResponse.json(
       { error: "Supabase not configured", metrics: [] },

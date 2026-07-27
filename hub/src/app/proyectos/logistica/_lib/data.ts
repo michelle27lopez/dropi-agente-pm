@@ -205,6 +205,9 @@ export type Proyecto = {
   foco: string;
   links?: LinkRef[];
   experimentos?: string[]; // slugs de `experimentos` — relación explícita, no adivinada
+  /** Etapas adicionales que el proyecto toca (transversales). Se muestran como
+   *  highlight secundario en la cadena de valor de la ficha detalle. */
+  etapasRelacionadas?: { etapa: string; rol: string }[];
   /**
    * Estado operativo tal como está HOY en Jira, literal. No es lo mismo que
    * `fase` (nuestra lectura) ni que `handoff`: es lo que ve cualquiera que abra
@@ -273,15 +276,26 @@ export const proyectos: Proyecto[] = [
     experimentos: ["autogeneracion-guias"],
   },
   {
-    nombre: "Vigía — extensión sobre el módulo de órdenes",
+    nombre: "Vigía — control operativo en tiempo real",
     slug: "vigia",
-    etapa: "Generación", tipo: "Experimento", fase: "Diseño", handoff: "No aplica",
+    etapa: "Tránsito", tipo: "Experimento", fase: "Diseño", handoff: "No aplica",
     jira: "⚠️ No existe en Jira",
-    doc: "ninguno",
+    doc: "parcial",
+    destacado: true,
     descripcion:
-      "Una extensión de Chrome que lee las guías del módulo de órdenes y le anticipa al usuario el resultado probable, para que corrija antes de que la orden se caiga.",
-    foco: "Dueño: Michel Pino. Diseño en curso, sin desarrollo técnico (confirmado 22-jul). Cruza las fugas ② devolución y ④ novedad porque actúa ANTES del desenlace. GATE: mientras sea diseño está bien, pero el día que entre a desarrollo necesita ticket, métrica y spec o se construye a ciegas.",
-    links: [{ tipo: "prototipo", label: "Prototipo de la extensión", href: "", falta: true }],
+      "Extensión de Chrome (Manifest V3) que intercepta el API de Dropi, calcula SLAs automáticamente por estado de orden e inyecta alertas accionables directamente en el dashboard — para ambos roles (Dropshipper y Proveedor). Actúa ANTES del desenlace: da visibilidad sobre qué órdenes están en riesgo para que el usuario corrija antes de que se caigan.",
+    foco: "Dueño: Michel Pino. Diseño en curso, sin desarrollo técnico (confirmado 22-jul). Es la única iniciativa transversal a toda la cadena de valor: monitorea desde Confirmación (POR CONFIRMAR 12h, PENDIENTE 24h) hasta Novedad (24h), pasando por Despacho (GUÍA GENERADA 48h, RECOGIDO 24h) y Tránsito (EN TRÁNSITO 72h). Cruza directamente las fugas ② devolución (~26%) y ④ novedad porque su valor es anticipar el problema, no reaccionar después. Para el Dropshipper: SLA por orden, WhatsApp directo al proveedor con número real del API, breakdown por estado, $ en riesgo. Para el Proveedor: SLA sobre lo que controla (confirmar, despachar, generar guía) + monitor de stock por bodega con alertas de quiebre. Stack: interceptor fetch/XHR en MAIN world → motor SLA puro → inyección visual Angular-resilient con polling 2s. GATE: mientras sea diseño está bien, pero el día que entre a desarrollo necesita ticket, métrica y spec o se construye a ciegas.",
+    etapasRelacionadas: [
+      { etapa: "Confirmación", rol: "POR CONFIRMAR (12h) · PENDIENTE (24h) — el proveedor no confirma o no despacha" },
+      { etapa: "Despacho", rol: "GUÍA GENERADA (48h) · RECOGIDO (24h) — alerta si la guía no se recoge a tiempo" },
+      { etapa: "Tránsito", rol: "EN TRÁNSITO (72h) — monitoreo activo del paquete en la red del carrier" },
+      { etapa: "Entrega / Devolución", rol: "Prevención: el usuario ve el riesgo ANTES del desenlace y puede actuar" },
+      { etapa: "Novedad / Posventa", rol: "NOVEDAD (24h) — escalamiento inmediato al carrier o al líder" },
+    ],
+    links: [
+      { tipo: "prototipo", label: "Conceptualización interactiva", href: "/proyectos/logistica/experimentos/vigia" },
+      { tipo: "doc", label: "Arquitectura v4 (Claude Code prompt)", href: "", falta: true },
+    ],
     experimentos: ["vigia"],
   },
   {
@@ -632,14 +646,17 @@ export const experimentos: Experimento[] = [
   {
     slug: "vigia",
     proyectoSlug: "vigia",
-    links: [{ tipo: "prototipo", label: "Prototipo de la extensión", href: "", falta: true }],
-    nombre: "Vigía — extensión Chrome sobre el módulo de órdenes",
+    links: [{ tipo: "prototipo", label: "Conceptualización interactiva", href: "/proyectos/logistica/experimentos/vigia" }],
+    nombre: "Vigía — control operativo en tiempo real para Dropi",
+    demoHref: "/proyectos/logistica/experimentos/vigia",
     hipotesis:
-      "Una extensión que lee las guías del módulo de órdenes y le anticipa al usuario el resultado probable (qué revisar, qué tener en cuenta) le permite corregir antes de que la orden se caiga y mejorar su operación.",
-    metrica: "[por definir con datos] — candidatas: % de guías corregidas tras la alerta · efecto en devolución/novedad de quien la usa",
-    estado: "Idea",
-    impacto: "Herramienta predictiva/advisory sobre la orden creada. Actúa antes del desenlace, así que cruza las fugas ② devolución y ④ novedad.",
+      "Si el usuario (dropshipper o proveedor) puede ver en tiempo real qué órdenes están fuera de SLA, con acciones de un click (WhatsApp al proveedor/carrier, escalar, exportar), corrige antes de que la orden se caiga — reduciendo devoluciones y novedades sin recuperar.",
+    metrica: "Candidatas: % de órdenes intervenidas que se recuperan vs. control · reducción de tiempo de reacción ante novedades (h) · efecto en tasa de devolución de usuarios con la extensión vs. sin ella",
+    estado: "Diseñado",
+    impacto: "Transversal a 5 de 6 etapas de la orden. Hoy el 59% se entrega (meta 70%). La fuga ② (devolución ~26%) y la fuga ④ (novedades sin recuperar) son las dos que Vigía ataca directamente porque actúa ANTES del desenlace. Con 3.4M órdenes/mes, cada punto porcentual de recuperación = ~34K órdenes. Los 6 umbrales SLA (12h–72h) cubren: POR CONFIRMAR, PENDIENTE, GUÍA GENERADA, RECOGIDO, EN TRÁNSITO, NOVEDAD. Para proveedores además incluye monitor de stock por bodega (rojo <10, naranja <50, amarillo <100 uds).",
     proyecto: "Vigía (sin ticket todavía)",
+    aprendizaje:
+      "La conceptualización v4 define dos módulos completos (Dropshipper + Proveedor) con auto-discovery de campos del API. El interceptor fetch/XHR en MAIN world ya funciona en la v3.2 actual. El riesgo principal es que Angular destruye el DOM — resuelto con polling 2s. El valor no es solo la alerta: es que el WhatsApp sale con el número REAL del proveedor, pre-armado con el contexto de la orden. Sin eso, el dropshipper tiene que buscar el contacto manualmente.",
   },
 ];
 
@@ -740,7 +757,169 @@ export type Weekly = {
 // Cada semana es una entrada. La primera del array es la más reciente (la que se
 // muestra por defecto). NO borrar semanas viejas: el switch de /updates las conserva.
 export const weeklies: Weekly[] = [
-  // ── Semana 13 – 17 jul 2026 (actual) ────────────────────────────────────────
+  // ── Semana 21 – 25 jul 2026 (actual) ────────────────────────────────────────
+  {
+    id: "2026-w30",
+    fecha: "Jueves 24 de julio de 2026",
+    semana: "Semana 21 – 25 jul",
+    foco:
+      "Semana de discovery y validación en campo: se revisó Recolecciones, arrancaron las entrevistas de Autoconfirmación (6 hechas) y se lanzó la prueba de Recolección proactiva (2.000 guías nuevas). El indicador mensual no tiene cierre nuevo desde junio; el avance de la semana fue definir el dashboard de indicadores con Diana.",
+
+    comparacionMensual: {
+      titulo: "Cierre junio — sin cierre nuevo esta semana",
+      alcance: "Consolidado de 9 países, ponderado por volumen. Junio sigue siendo el último mes cerrado.",
+      lectura:
+        "No hay dato mensual nuevo: el cierre de julio aún no madura. El movimiento del indicador esta semana fue de gobierno, no de cifra — se trabajó con Diana la definición del dashboard de indicadores (qué entra, quién lo alimenta y con qué cadencia). La movilización de junio sigue plana; las palancas para moverla (Autoconfirmación, Recolección proactiva) están justo en validación.",
+      entregaNota:
+        "% entrega sigue sin ser comparable hasta tener el export por cohorte de Data. Sin novedad frente al 17-jul.",
+      filas: [
+        { metrica: "Movilización", abril: "81,9%", mayo: "82,3%", junio: "82,3%", delta: "≈ 0 · plano", tono: "alerta" },
+        { metrica: "No movilizado", abril: "700.281", mayo: "716.957", junio: "737.865", delta: "+20.908", tono: "malo" },
+        { metrica: "Órdenes", abril: "3,86M", mayo: "4,04M", junio: "4,17M", delta: "+3,3%", tono: "bueno" },
+      ],
+    },
+
+    avanceInvestigacion: {
+      titulo: "Investigación de oportunidades por fase",
+      descripcion: "La fase 'Recogido por Dropi' pasa de mapeo a validación en campo: Recolecciones (control de guías sin recoger) + la prueba de Recolección proactiva.",
+      pasos: [
+        { nombre: "Confirmación", detalle: "Oportunidades levantadas + entrevistas Autoconfirmación (6)", estado: "listo" },
+        { nombre: "Generación de guía", detalle: "Oportunidades levantadas", estado: "listo" },
+        { nombre: "Recogido por Dropi", detalle: "Recolecciones revisado + prueba proactiva (2.000 guías)", estado: "activo" },
+        { nombre: "Conectar el flujo", detalle: "Siguiente paso", estado: "siguiente" },
+      ],
+    },
+
+    focoSiguienteSemana: [
+      "Autoconfirmación: sintetizar las 6 entrevistas (ChateaPro, Mauricio Corzo, líderes de comunidad, dropshipper grande) en aprendizajes y guardarraíles — Responsable: Juan Diego.",
+      "Recolección proactiva: leer el resultado de las 2.000 guías enviadas y decidir si escala — Responsable: Juan Diego / William.",
+      "POC Selección de transportadoras: cerrar el siguiente paso tras el análisis técnico con TI (Francisco Ramírez) — Responsable: Juan (Carrier Ops) / Kate (PM).",
+      "Normalización de estados: cerrar la propuesta tras la reunión de homologación — Responsable: Juan Diego.",
+    ],
+
+    indicadores: [
+      {
+        nombre: "Movilización consolidada",
+        valor: "82,3%",
+        tono: "alerta",
+        estado: "Plano",
+        nota: "Sin cierre nuevo desde junio. Se mantiene el último dato consolidado.",
+      },
+      {
+        nombre: "Órdenes no movilizadas",
+        valor: "737.865",
+        tono: "malo",
+        estado: "+20.908",
+        nota: "Dato de junio. Las palancas para moverlo (Autoconfirmación, Recolección proactiva) están en validación esta semana.",
+      },
+      {
+        nombre: "Dashboard de indicadores",
+        valor: "En definición",
+        tono: "alerta",
+        estado: "Acuerdos con Diana",
+        nota: "Se trabajó qué indicadores entran, quién los alimenta y con qué cadencia. [confirmar detalle con Juan]",
+      },
+    ] as IndicadorHoy[],
+
+    // Formato ejecutivo: usa comparación mensual + secciones. Estos campos se
+    // conservan por compatibilidad con el render de semanas históricas.
+    brecha: {
+      actual: 73.5, actualLabel: "73,5% crudo CO",
+      meta: 70, metaLabel: "70%",
+      gap: "No comparable", metaQ3: "Pendiente cohorte",
+      paisFoco: "Colombia representa 73% del negocio.",
+      lectura: "Junio sigue madurando; no se usa esta cifra para evaluar el KR.",
+      fugas: [],
+    },
+    tiempo: {
+      lectura: "La investigación de reducción de tiempos avanza en la fase 'Recogido por Dropi' con Recolecciones y la prueba de Recolección proactiva.",
+      dropi: [
+        { fase: "Ruta Dropi hasta transportadora", horas: 44.9, metaHoras: 24, responsable: "Célula", palanca: "validación en campo de la fase de recolección" },
+      ],
+      carrier: [
+        { fase: "Maduración de entrega", horas: 24, metaHoras: 24, palanca: "comparar cohortes cerradas" },
+      ],
+      proximosPasos: ["Leer el resultado de la prueba de Recolección proactiva (2.000 guías) y del control de Recolecciones."],
+    },
+    hallazgos: [],
+
+    secciones: [
+      {
+        titulo: "Product Road map · investigación",
+        nota: "Discovery con datos antes de comprometer desarrollo.",
+        proyectos: [
+          {
+            nombre: "Recolecciones",
+            estado: "Revisado esta semana",
+            estadoTono: "verde",
+            nota: "Se revisó el control de recolecciones (guías preparadas sin recoger por territorio DANE: 1.604 bodegas, 61.106 guías). Conecta con la fase 'Recogido por Dropi', el cumplimiento más bajo de la ruta Dropi. El prototipo ya carga con datos reales en el tablero.",
+          },
+          {
+            nombre: "POC selección de transportadoras",
+            ticket: "PRM-1513",
+            estado: "Análisis técnico con TI",
+            estadoTono: "ambar",
+            nota: "Reunión con Katerine (PM) sobre el POC + análisis técnico-conceptual con TI (Francisco Ramírez, Cubillos, Reinoso). Jira sigue En Ruta / backlog, sin asignar. [confirmar conclusión del análisis técnico con Juan]",
+          },
+          {
+            nombre: "Normalización de estados",
+            ticket: "PRM-1297",
+            estado: "Inv. y definición",
+            estadoTono: "azul",
+            nota: "Reunión de homologación de estados esta semana. Homologa estados de orden y guía en un catálogo común para mejorar trazabilidad, medición y experiencia. [confirmar si la propuesta quedó cerrada]",
+          },
+        ],
+      },
+      {
+        titulo: "Experimentos",
+        nota: "Validar la palanca y su impacto antes de escalar desarrollo.",
+        proyectos: [
+          {
+            nombre: "Autoconfirmación de órdenes",
+            ticket: "PRM-1497",
+            estado: "Entrevistas en curso (6)",
+            estadoTono: "ambar",
+            nota: "Se hicieron 6 entrevistas para entender cómo confirman hoy: ChateaPro, Mauricio Corzo, líderes de comunidad y 1 dropshipper grande. Alimentan las reglas de madurez y los guardarraíles del experimento. Siguiente hito: sintetizar aprendizajes.",
+          },
+          {
+            nombre: "Recolección proactiva",
+            estado: "Prueba lanzada",
+            estadoTono: "verde",
+            nota: "Se enviaron 2.000 guías nuevas como prueba de recolección proactiva. Ataca la fase 'Recogido por Dropi'. Pendiente: leer el resultado y decidir si escala.",
+          },
+        ],
+      },
+      {
+        titulo: "Delivery Road map · WIP = 1",
+        nota: "Una iniciativa activa; el resto conserva su posición explícita.",
+        proyectos: [
+          {
+            nombre: "Normalización de estados",
+            ticket: "PRM-1297",
+            estado: "Activo",
+            estadoTono: "verde",
+            nota: "Prioridad #1 del Delivery. Discovery y definición del catálogo en curso.",
+          },
+          {
+            nombre: "Same Day",
+            ticket: "PRM-1366",
+            estado: "Inv. y definición",
+            estadoTono: "gris",
+            nota: "En cola; no compite con el WIP activo.",
+          },
+          {
+            nombre: "Fulfillment",
+            ticket: "PRM-1446",
+            estado: "Listo para hand off",
+            estadoTono: "ambar",
+            nota: "Diseño validado, en 'Listo para hand off' pero sin documentación en el repo (hueco #1). Bodegas 2PL Bogotá/Cali/Medellín, 92.000 órdenes/mes; 20–25% se despacha y nunca se cobra.",
+          },
+        ],
+      },
+    ] as SeccionProyectos[],
+  },
+
+  // ── Semana 13 – 17 jul 2026 ─────────────────────────────────────────────────
   {
     id: "2026-w29",
     fecha: "Viernes 17 de julio de 2026",

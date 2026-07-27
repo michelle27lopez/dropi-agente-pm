@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Activity, Map, BookOpen, Layers, FlaskConical,
-  CalendarDays, GanttChartSquare, ListTodo, Truck, FolderKanban,
+  CalendarDays, GanttChartSquare, ListTodo, Truck, FolderKanban, Flame,
 } from "lucide-react";
 
 // Navegación del tablero de logística.
@@ -18,10 +18,10 @@ const BASE = "/proyectos/logistica";
 const SECCIONES = [
   { href: BASE, label: "Indicadores", icon: Activity, exact: true },
   { href: `${BASE}/mapa`, label: "Mapa de la orden", icon: Map },
-  { href: `${BASE}/iniciativas`, label: "Iniciativas", icon: FolderKanban },
   { href: `${BASE}/info-logistica`, label: "Info logística", icon: BookOpen },
   { href: `${BASE}/normalizacion-estados`, label: "Normalización de estados", icon: Layers },
   { href: `${BASE}/recolecciones`, label: "Recolecciones", icon: Truck },
+  { href: `${BASE}/same-day`, label: "Same Day · demanda", icon: Flame },
   { href: `${BASE}/experimentos`, label: "Experimentos", icon: FlaskConical },
   { href: `${BASE}/updates`, label: "Updates", icon: CalendarDays },
   { href: `${BASE}/cronograma`, label: "Cronograma", icon: GanttChartSquare },
