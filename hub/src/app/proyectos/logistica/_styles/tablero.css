@@ -1792,6 +1792,31 @@ a.chip:hover { border-color: var(--brand); color: var(--brand); }
 .vigia-etapa-role {
   font-size: 12px; color: var(--muted); line-height: 1.4;
 }
+/* ── Experiment tabs ── */
+.exp-tabs {
+  display: flex; gap: 4px; margin: 16px 0 20px;
+  background: var(--soft); border: 1px solid var(--border);
+  border-radius: 10px; padding: 4px;
+}
+.exp-tab {
+  flex: 1; padding: 10px 16px; border-radius: 8px; border: none;
+  background: none; color: var(--muted); font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.exp-tab:hover { color: var(--fg); }
+.exp-tab--active {
+  background: var(--brand); color: #fff;
+}
+.exp-tab-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 7px;
+  border-radius: 10px; background: rgba(255,255,255,0.2);
+}
+.exp-tab--active .exp-tab-badge { background: rgba(255,255,255,0.25); }
+.exp-tab:not(.exp-tab--active) .exp-tab-badge {
+  background: var(--border); color: var(--muted);
+}
+
 .detail-hint {
   display: block; font-size: 13px; color: var(--muted);
   line-height: 1.55; margin: 2px 0 0;
