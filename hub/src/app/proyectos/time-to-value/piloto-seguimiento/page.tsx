@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 // ─── Shared styles ────────────────────────────────────────────────────────────
 const card: React.CSSProperties = {
@@ -37,39 +37,16 @@ const ETAPAS: Record<string, { label: string; color: string; bg: string }> = {
   sin_respuesta: { label: "Sin respuesta", color: "#9CA3AF", bg: "#F3F4F6" },
 };
 
-// ─── Data — se va alimentando conversación a conversación ─────────────────────
-const SUPPLIERS = [
-  {
-    email: "vitalshop1234@gmail.com",
-    telefono: "311 5991045",
-    etapa: "activado",
-    notas: "",
-    ultimaActualizacion: "",
-  },
-  {
-    email: "bodegasmokpiercing@gmail.com",
-    telefono: "324 6884731",
-    etapa: "activado",
-    notas: "",
-    ultimaActualizacion: "",
-  },
-  {
-    email: "calzadoweppa@gmail.com",
-    telefono: "314 2035182",
-    etapa: "activado",
-    notas: "",
-    ultimaActualizacion: "",
-  },
-  {
-    email: "huecobodega@gmail.com",
-    telefono: "321 9466505",
-    etapa: "activado",
-    notas: "",
-    ultimaActualizacion: "",
-  },
-];
-
 const META_PILOTO = 10;
+
+type PilotoRow = {
+  id: string;
+  email: string;
+  nombre: string | null;
+  telefono: string | null;
+  etapa: string;
+  notas: string | null;
+};
 
 // ─── Plantillas de conversación — copiar y pegar ───────────────────────────────
 const PLANTILLAS = [
@@ -114,6 +91,18 @@ const PLANTILLAS = [
   },
 ];
 
+function mensajeActivacion(nombre: string | null) {
+  const saludo = nombre ? `¡Hola ${nombre.split(" ")[0]}!` : "¡Hola!";
+  return `${saludo} 👋 Soy de Dropi. Tengo buenas noticias: ya tienes acceso para publicar tus productos y empezar a vender — no necesitas esperar más. Nuestro equipo está terminando de revisar tu perfil en paralelo, así que ya puedes ir publicando. Te voy a acompañar personalmente hasta que logres tu primera venta. ¿Tienes 5 minutos para contarme de tu negocio?`;
+}
+
+function waLink(telefono: string | null, nombre: string | null) {
+  const digits = (telefono || "").replace(/\D/g, "");
+  if (!digits) return null;
+  const withCountry = digits.startsWith("57") ? digits : `57${digits}`;
+  return `https://wa.me/${withCountry}?text=${encodeURIComponent(mensajeActivacion(nombre))}`;
+}
+
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
   return (
@@ -136,11 +125,72 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
+function EtapaSelect({ value, onSave }: { value: string; onSave: (v: string) => void }) {
+  const et = ETAPAS[value] || ETAPAS.activado;
+  return (
+    <select
+      value={value}
+      onChange={e => onSave(e.target.value)}
+      style={{
+        border: "none", cursor: "pointer", fontSize: 11, fontWeight: 700,
+        padding: "4px 8px", borderRadius: 999, color: et.color, background: et.bg,
+        outline: "none", appearance: "none",
+      }}
+    >
+      {Object.entries(ETAPAS).map(([key, e]) => (
+        <option key={key} value={key}>{e.label}</option>
+      ))}
+    </select>
+  );
+}
+
+function NotaCell({ value, onSave }: { value: string; onSave: (v: string) => void }) {
+  const [v, setV] = useState(value);
+  useEffect(() => { setV(value); }, [value]);
+  return (
+    <textarea
+      value={v}
+      onChange={e => setV(e.target.value)}
+      onBlur={() => { if (v !== value) onSave(v); }}
+      placeholder="Escribe la nota mientras hablas con él/ella..."
+      rows={2}
+      style={{
+        width: "100%", minWidth: 180, border: "1px dashed var(--border)", borderRadius: 6,
+        padding: "6px 8px", fontSize: 12.5, background: "#FBFCFF", color: "var(--fg)",
+        outline: "none", fontFamily: "inherit", resize: "vertical",
+      }}
+      onFocus={e => (e.currentTarget.style.borderColor = "var(--dropi)")}
+      onBlurCapture={e => (e.currentTarget.style.borderColor = "var(--border)")}
+    />
+  );
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 export default function PilotoSeguimientoTtvPage() {
-  const conVenta = SUPPLIERS.filter(s => s.etapa === "venta").length;
-  const conProducto = SUPPLIERS.filter(s => s.etapa === "producto" || s.etapa === "venta").length;
-  const conContacto = SUPPLIERS.filter(s => s.etapa !== "activado").length;
+  const [rows, setRows] = useState<PilotoRow[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const load = useCallback(() => {
+    fetch("/api/ttv")
+      .then(r => r.json())
+      .then(d => { setRows(d.pilotoFase0 || []); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
+
+  useEffect(() => { load(); }, [load]);
+
+  const onUpdate = useCallback(async (id: string, updates: Record<string, unknown>) => {
+    setRows(prev => prev.map(r => (r.id === id ? { ...r, ...updates } : r)));
+    await fetch("/api/ttv", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ table: "ttv_piloto_fase0", id, updates }),
+    });
+  }, []);
+
+  const conVenta = rows.filter(s => s.etapa === "venta").length;
+  const conProducto = rows.filter(s => s.etapa === "producto" || s.etapa === "venta").length;
+  const conContacto = rows.filter(s => s.etapa !== "activado").length;
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
@@ -162,97 +212,123 @@ export default function PilotoSeguimientoTtvPage() {
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
 
-        {/* Resumen */}
-        <div style={{
-          ...card,
-          background: "linear-gradient(135deg, var(--dropi) 0%, #FF8A2B 100%)",
-          color: "#fff", position: "relative", overflow: "hidden",
-        }}>
-          <div style={{
-            position: "absolute", width: 300, height: 300, borderRadius: "50%",
-            background: "rgba(255,255,255,0.08)", right: -120, top: -100, pointerEvents: "none",
-          }} />
-          <div style={{ position: "relative", zIndex: 1 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(255,255,255,0.75)", marginBottom: 6 }}>
-              Seguimiento en vivo · Fase 0
+        {loading ? (
+          <div style={{ ...card, textAlign: "center", color: "var(--muted)" }}>Cargando...</div>
+        ) : rows.length === 0 ? (
+          <div style={{ ...card, border: "1px solid #FDE68A", background: "#FFFBEB" }}>
+            <div style={{ fontSize: 13, color: "#78350F", lineHeight: 1.6 }}>
+              <strong>Sin datos todavía.</strong> Falta correr la migración <code>037_ttv_piloto_fase0.sql</code> en
+              Supabase y sembrar los 10 proveedores del piloto — avísame cuando la migración esté aplicada y los cargo.
             </div>
-            <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 8 }}>
-              {SUPPLIERS.length} de {META_PILOTO} — acompañamiento uno a uno hasta la primera venta
-            </div>
-            <div style={{ fontSize: 14, color: "rgba(255,255,255,0.9)", maxWidth: 680, lineHeight: 1.55 }}>
-              Ya activados automáticamente. Jaime/Michelle los contactan directo y comparten aquí el avance de
-              cada conversación, desde el primer mensaje hasta que generen su primera orden.
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, maxWidth: 500, marginTop: 16 }}>
-              {[
-                { v: `${conContacto}/${SUPPLIERS.length}`, l: "Contactados" },
-                { v: `${conProducto}/${SUPPLIERS.length}`, l: "Con producto publicado" },
-                { v: `${conVenta}/${SUPPLIERS.length}`, l: "Primera venta" },
-              ].map(({ v, l }) => (
-                <div key={l} style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, padding: "10px 12px" }}>
-                  <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.02em" }}>{v}</div>
-                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.75)", marginTop: 3 }}>{l}</div>
+          </div>
+        ) : (
+          <>
+            {/* Resumen */}
+            <div style={{
+              ...card,
+              background: "linear-gradient(135deg, var(--dropi) 0%, #FF8A2B 100%)",
+              color: "#fff", position: "relative", overflow: "hidden",
+            }}>
+              <div style={{
+                position: "absolute", width: 300, height: 300, borderRadius: "50%",
+                background: "rgba(255,255,255,0.08)", right: -120, top: -100, pointerEvents: "none",
+              }} />
+              <div style={{ position: "relative", zIndex: 1 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "rgba(255,255,255,0.75)", marginBottom: 6 }}>
+                  Seguimiento en vivo · Fase 0
                 </div>
-              ))}
+                <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 8 }}>
+                  {rows.length} de {META_PILOTO} — acompañamiento uno a uno hasta la primera venta
+                </div>
+                <div style={{ fontSize: 14, color: "rgba(255,255,255,0.9)", maxWidth: 680, lineHeight: 1.55 }}>
+                  Ya activados automáticamente. Jaime/Michelle los contactan directo con el botón de WhatsApp de
+                  cada fila, y las notas se guardan al instante mientras van hablando.
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, maxWidth: 500, marginTop: 16 }}>
+                  {[
+                    { v: `${conContacto}/${rows.length}`, l: "Contactados" },
+                    { v: `${conProducto}/${rows.length}`, l: "Con producto publicado" },
+                    { v: `${conVenta}/${rows.length}`, l: "Primera venta" },
+                  ].map(({ v, l }) => (
+                    <div key={l} style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, padding: "10px 12px" }}>
+                      <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: "-0.02em" }}>{v}</div>
+                      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.75)", marginTop: 3 }}>{l}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Listado */}
-        <div style={card}>
-          <div style={sectionTitle}>Proveedores del piloto</div>
-          <div style={sectionSub}>Se alimenta conversación a conversación — cada actualización queda aquí.</div>
-          <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 10 }}>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr>
-                  <th style={thStyle}>Email</th>
-                  <th style={thStyle}>Teléfono</th>
-                  <th style={thStyle}>Etapa</th>
-                  <th style={thStyle}>Notas</th>
-                  <th style={{ ...thStyle, textAlign: "right" }}>Última actualización</th>
-                </tr>
-              </thead>
-              <tbody>
-                {SUPPLIERS.map((s, i) => {
-                  const et = ETAPAS[s.etapa] || ETAPAS.activado;
-                  return (
-                    <tr key={s.email} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff" }}>
-                      <td style={{ ...tdStyle, fontWeight: 600, color: "var(--fg)" }}>{s.email}</td>
-                      <td style={{ ...tdStyle, color: "var(--muted)", whiteSpace: "nowrap" }}>{s.telefono}</td>
-                      <td style={tdStyle}>
-                        <span style={tag(et.color, et.bg)}>{et.label}</span>
-                      </td>
-                      <td style={{ ...tdStyle, color: "var(--muted)" }}>{s.notas || "—"}</td>
-                      <td style={{ ...tdStyle, textAlign: "right", color: "var(--muted)", whiteSpace: "nowrap" }}>
-                        {s.ultimaActualizacion || "—"}
-                      </td>
+            {/* Listado */}
+            <div style={card}>
+              <div style={sectionTitle}>Proveedores del piloto</div>
+              <div style={sectionSub}>Etapa y notas se guardan al instante — colabora en vivo con quien más esté hablando con ellos.</div>
+              <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 10 }}>
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr>
+                      <th style={thStyle}>Nombre</th>
+                      <th style={thStyle}>Email</th>
+                      <th style={thStyle}>Teléfono</th>
+                      <th style={thStyle}>Etapa</th>
+                      <th style={thStyle}>Notas</th>
+                      <th style={{ ...thStyle, textAlign: "center" }}>WhatsApp</th>
                     </tr>
-                  );
-                })}
-                {Array.from({ length: Math.max(0, META_PILOTO - SUPPLIERS.length) }).map((_, i) => (
-                  <tr key={`pending-${i}`} style={{ background: SUPPLIERS.length % 2 === 0 ? (i % 2 === 0 ? "#F8FAFC" : "#fff") : (i % 2 === 0 ? "#fff" : "#F8FAFC") }}>
-                    <td style={{ ...tdStyle, color: "var(--faint, #9CA3AF)", fontStyle: "italic" }} colSpan={5}>
-                      Pendiente de sumar al piloto
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+                  </thead>
+                  <tbody>
+                    {rows.map((s, i) => {
+                      const link = waLink(s.telefono, s.nombre);
+                      return (
+                        <tr key={s.id} style={{ background: i % 2 === 0 ? "#F8FAFC" : "#fff" }}>
+                          <td style={{ ...tdStyle, fontWeight: 600, color: "var(--fg)" }}>{s.nombre || "—"}</td>
+                          <td style={{ ...tdStyle, color: "var(--muted)" }}>{s.email}</td>
+                          <td style={{ ...tdStyle, color: "var(--muted)", whiteSpace: "nowrap" }}>{s.telefono || "—"}</td>
+                          <td style={tdStyle}>
+                            <EtapaSelect value={s.etapa} onSave={v => onUpdate(s.id, { etapa: v })} />
+                          </td>
+                          <td style={{ ...tdStyle, minWidth: 200 }}>
+                            <NotaCell value={s.notas || ""} onSave={v => onUpdate(s.id, { notas: v })} />
+                          </td>
+                          <td style={{ ...tdStyle, textAlign: "center" }}>
+                            {link ? (
+                              <a
+                                href={link}
+                                target="_blank"
+                                rel="noreferrer"
+                                style={{
+                                  display: "inline-flex", alignItems: "center", gap: 6,
+                                  background: "#25D366", color: "#fff", textDecoration: "none",
+                                  padding: "6px 12px", borderRadius: 8, fontSize: 12, fontWeight: 700,
+                                  whiteSpace: "nowrap",
+                                }}
+                              >
+                                💬 Escribir
+                              </a>
+                            ) : (
+                              <span style={{ fontSize: 11, color: "var(--muted)" }}>Sin teléfono</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-        {/* Leyenda de etapas */}
-        <div style={{ ...card, background: "#F8FAFC" }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
-            Etapas de seguimiento
-          </div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            {Object.values(ETAPAS).map(et => (
-              <span key={et.label} style={tag(et.color, et.bg)}>{et.label}</span>
-            ))}
-          </div>
-        </div>
+            {/* Leyenda de etapas */}
+            <div style={{ ...card, background: "#F8FAFC" }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
+                Etapas de seguimiento
+              </div>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {Object.values(ETAPAS).map(et => (
+                  <span key={et.label} style={tag(et.color, et.bg)}>{et.label}</span>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Plantillas de conversación */}
         <div style={card}>
