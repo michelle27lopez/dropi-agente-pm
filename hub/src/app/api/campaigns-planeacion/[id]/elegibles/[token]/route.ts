@@ -25,11 +25,7 @@ export type JourneyStep = {
 // (no hay gate manual de aprobación entre medio — decidido con Kate/Michelle,
 // el equipo revisa por dentro pero el proveedor no espera a nadie).
 const PHASES: { key: JourneyStep["key"]; label: string; window: string; start: string; end: string }[] = [
-  // ⚠️ TEMPORAL PARA QA (18/07): la selección abre de verdad el 7 ago —
-  // start real "2026-08-07" (Meet movido a 7 ago, difusión el 31 jul).
-  // Adelantada para que Michelle pruebe el flujo postular → recibo → editar
-  // de punta a punta. REVERTIR antes del deploy.
-  { key: "seleccion", label: "Elige tus productos", window: "7 – 14 ago", start: "2026-07-18", end: "2026-08-14" },
+  { key: "seleccion", label: "Elige tus productos", window: "6 – 14 ago", start: "2026-08-06", end: "2026-08-14" },
   { key: "fotos", label: "Prepara tus productos", window: "14 – 17 ago", start: "2026-08-14", end: "2026-08-17" },
   { key: "vivo", label: "Cyber Days en vivo", window: "18 – 31 ago", start: "2026-08-18", end: "2026-08-31" },
 ];

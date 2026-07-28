@@ -63,7 +63,8 @@ export async function proxy(request: NextRequest) {
     // excluidas aquí — si agregas otra subruta interna, exclúyela también.
     (pathname.includes("/dinamicas-catalogo/planeacion/") && pathname.includes("/elegibles/")) ||
     (pathname.startsWith("/api/campaigns-planeacion/") && pathname.includes("/elegibles/") &&
-      !pathname.endsWith("/elegibles/aprobar") && !pathname.endsWith("/elegibles/export")) ||
+      !pathname.endsWith("/elegibles/aprobar") && !pathname.endsWith("/elegibles/export") &&
+      !pathname.endsWith("/elegibles/export-links")) ||
     // Link corto /c/[token] que redirige a la ruta de arriba — mismo token
     // opaco como control de acceso, ver hub/src/app/c/[token]/page.tsx.
     pathname.startsWith("/c/");
