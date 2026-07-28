@@ -4,6 +4,7 @@
 .claude/skills/*
 !.claude/skills/sync-diario/
 !.claude/skills/bug-jira/
+!.claude/skills/salsa/
 .mcp.json
 .impeccable/
 
