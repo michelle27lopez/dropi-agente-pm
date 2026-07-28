@@ -30,8 +30,8 @@ const PHASES: { key: JourneyStep["key"]; label: string; window: string; start: s
   // Adelantada para que Michelle pruebe el flujo postular → recibo → editar
   // de punta a punta. REVERTIR antes del deploy.
   { key: "seleccion", label: "Elige tus productos", window: "7 – 14 ago", start: "2026-07-18", end: "2026-08-14" },
-  { key: "fotos", label: "Prepara tus productos", window: "14 – 16 ago", start: "2026-08-14", end: "2026-08-16" },
-  { key: "vivo", label: "Cyber Days en vivo", window: "17 – 31 ago", start: "2026-08-17", end: "2026-08-31" },
+  { key: "fotos", label: "Prepara tus productos", window: "14 – 17 ago", start: "2026-08-14", end: "2026-08-17" },
+  { key: "vivo", label: "Cyber Days en vivo", window: "18 – 31 ago", start: "2026-08-18", end: "2026-08-31" },
 ];
 
 function computeJourney(): JourneyStep[] {

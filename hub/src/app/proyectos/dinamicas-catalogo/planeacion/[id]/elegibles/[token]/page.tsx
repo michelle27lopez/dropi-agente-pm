@@ -915,7 +915,7 @@ const IntroOverlay = memo(function IntroOverlay({ onDone }: { onDone: () => void
       <HeroGrainient />
       <div className="cd-intro-scrim" />
       <div className="cd-intro-copy">
-        <div className="cd-intro-eyebrow">Del 17 al 31 de agosto</div>
+        <div className="cd-intro-eyebrow">Del 18 al 31 de agosto</div>
         <div className="cd-intro-title">Cyber Days</div>
       </div>
     </div>
@@ -1451,7 +1451,7 @@ export default function ElegiblesPage() {
           <div className="cd-hero-spacer" />
 
           <div className="cd-hero-copy">
-            <div className="cd-eyebrow" data-reveal>Del 17 al 31 de agosto</div>
+            <div className="cd-eyebrow" data-reveal>Del 18 al 31 de agosto</div>
             <h1 className="cd-title"><TwoToneTitle text="Los Cyber Days te eligieron" anim={anim} /></h1>
             <p className="cd-stat-sentence" data-reveal data-delay="0.08">
               Puedes seleccionar <b><CountUp value={eligibleCount} anim={anim} /></b> producto{eligibleCount === 1 ? "" : "s"} para Cyber Days, con hasta{" "}
@@ -1733,7 +1733,7 @@ export default function ElegiblesPage() {
                           <div className="cd-step-num">2</div>
                           <div className="cd-step-body">
                             <div className="cd-step-title">Súbelos a tu Catálogo de difusión</div>
-                            <div className="cd-step-sub">El catálogo que reciben los dropshippers por WhatsApp: foto con marco, precio con descuento y nombre. Fecha límite <b style={{ color: "var(--cd-accent)" }}>16 de agosto</b> — lo que no esté montado ese día no sale.</div>
+                            <div className="cd-step-sub">El catálogo que reciben los dropshippers por WhatsApp: foto con marco, precio con descuento y nombre. Fecha límite <b style={{ color: "var(--cd-accent)" }}>17 de agosto</b> — lo que no esté montado ese día no sale.</div>
                             <div className="cd-step-checks">
                               <label className="cd-check-item">
                                 <input type="checkbox" checked={!!checklist.pasoCatalogo} onChange={() => toggleChecklist("pasoCatalogo")} />
@@ -1759,7 +1759,7 @@ export default function ElegiblesPage() {
                           <div className="cd-step-num">3</div>
                           <div className="cd-step-body">
                             <div className="cd-step-title">Actualiza tus productos en Dropi</div>
-                            <div className="cd-step-sub">Hazlo <b style={{ color: "var(--cd-ink)" }}>después del paso 2</b>, el <b style={{ color: "var(--cd-accent)" }}>16 de agosto</b>. Antes no — tus productos se verían vestidos de una campaña que todavía no empieza.</div>
+                            <div className="cd-step-sub">Hazlo <b style={{ color: "var(--cd-ink)" }}>después del paso 2</b>, el <b style={{ color: "var(--cd-accent)" }}>17 de agosto</b>. Antes no — tus productos se verían vestidos de una campaña que todavía no empieza.</div>
                             <div className="cd-step-checks">
                               <label className="cd-check-item">
                                 <input type="checkbox" checked={!!checklist.fotoDropi} onChange={() => toggleChecklist("fotoDropi")} />
@@ -1890,7 +1890,7 @@ export default function ElegiblesPage() {
               )}
 
               {vivoStep?.state === "bloqueado" && (
-                <div className="cd-phase-note"><Lock size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 5 }} />Del 17 al 31 de agosto tus productos aparecen en el catálogo para dropshippers.</div>
+                <div className="cd-phase-note"><Lock size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 5 }} />Del 18 al 31 de agosto tus productos aparecen en el catálogo para dropshippers.</div>
               )}
               </div>
           </div>
