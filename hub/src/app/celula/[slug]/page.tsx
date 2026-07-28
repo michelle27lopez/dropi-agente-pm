@@ -164,6 +164,7 @@ export default function CelulaHomePage() {
   const discovery = noPoc.filter((p) => p.handoff_status === "Experimentación" || !p.handoff_status).map(proyectoToItem);
   const delivery = noPoc.filter((p) => p.handoff_status === "Listo para handoff" || p.handoff_status === "Handoff hecho").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
+  const proyectos = noPoc.map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
 
   const pocsByParent = new Map<string, Proyecto[]>();
