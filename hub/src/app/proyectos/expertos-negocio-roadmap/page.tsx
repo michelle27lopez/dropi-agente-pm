@@ -1,23 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type Status = "Backlog" | "Programada" | "Hecha" | "Documentada";
 type Source = "Programa" | "Comunidad";
+type Resource = { label: string; url: string };
 
 type Sesion = {
   id: string;
   title: string;
-  track: string | null;
   facilitator: string | null;
+  track: string | null;
   description: string | null;
-  status: Status;
-  source: Source;
   session_date: string | null;
-  proposed_by: string | null;
-  doc_url: string | null;
-  recording_url: string | null;
+  duration: string | null;
+  status: Status;
+  resources: Resource[];
   notes: string | null;
+  proposed_by: string | null;
+  source: Source;
   sort_order: number;
   created_at: string;
 };
@@ -27,44 +28,22 @@ type Me = {
   profile: { nombre: string | null } | null;
 };
 
-type Draft = {
-  status: Status;
-  session_date: string;
-  doc_url: string;
-  recording_url: string;
-  notes: string;
+type FormState = {
+  id: string | null;
+  title: string;
   facilitator: string;
+  track: string;
+  description: string;
+  session_date: string;
+  duration: string;
+  status: Status;
+  resources: Resource[];
+  notes: string;
 };
 
-const TRACKS = ["Célula", "E-commerce", "Chatea Pro", "Shopi", "Estados", "ROAX", "ATOM", "Fennix", "Otro"];
+const DURATION_PRESETS = ["30 min", "1 hora", "1.5 horas", "2 horas"];
 
-// Vista previa mientras no exista la tabla `expertos_sessions` en Supabase (migración 023).
-// En cuanto la migración corra, el fetch real trae filas y esto deja de usarse.
-const FALLBACK_SESIONES: Sesion[] = [
-  { title: "Intensivo células", track: "Célula", facilitator: null, sort_order: 1 },
-  { title: "Capacitación de e-commerce", track: "E-commerce", facilitator: "María Ossa", sort_order: 2 },
-  { title: "Chatea Pro: socialicemos el modelo de chateo y las posibilidades", track: "Chatea Pro", facilitator: null, sort_order: 3 },
-  { title: "Conozcamos Shopi", track: "Shopi", facilitator: null, sort_order: 4 },
-  { title: "Estados a profundidad", track: "Estados", facilitator: null, sort_order: 5 },
-  { title: "Conozcamos ROAX", track: "ROAX", facilitator: null, sort_order: 6 },
-  { title: "Conozcamos ATOM", track: "ATOM", facilitator: null, sort_order: 7 },
-  { title: "Conozcamos Fennix", track: "Fennix", facilitator: null, sort_order: 8 },
-].map((s, i) => ({
-  id: `fallback-${i + 1}`,
-  title: s.title,
-  track: s.track,
-  facilitator: s.facilitator,
-  description: null,
-  status: "Backlog",
-  source: "Programa",
-  session_date: null,
-  proposed_by: null,
-  doc_url: null,
-  recording_url: null,
-  notes: null,
-  sort_order: s.sort_order,
-  created_at: new Date().toISOString(),
-}));
+const TRACKS = ["Célula", "E-commerce", "Chatea Pro", "Shopi", "Estados", "ROAX", "ATOM", "Fennix", "Otro"];
 
 const TRACK_COLOR: Record<string, string> = {
   "Célula": "#7C3AED",
@@ -85,42 +64,59 @@ const STATUS_META: Record<Status, { bg: string; fg: string }> = {
   Documentada: { bg: "#F5F3FF", fg: "#7C3AED" },
 };
 
-function fmtDate(iso: string) {
-  const d = new Date(iso + "T00:00:00");
-  return d.toLocaleDateString("es-CO", { weekday: "short", day: "numeric", month: "short" });
+const WEEKDAYS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+
+// Vista previa mientras no exista la tabla `expertos_sessions` en Supabase (migración 023).
+// En cuanto la migración corra, el fetch real trae filas y esto deja de usarse.
+const FALLBACK_SESIONES: Sesion[] = [
+  { title: "Intensivo células", track: "Célula", facilitator: null, sort_order: 1 },
+  { title: "Capacitación de e-commerce", track: "E-commerce", facilitator: "María Ossa", sort_order: 2 },
+  { title: "Chatea Pro: socialicemos el modelo de chateo y las posibilidades", track: "Chatea Pro", facilitator: null, sort_order: 3 },
+  { title: "Conozcamos Shopi", track: "Shopi", facilitator: null, sort_order: 4 },
+  { title: "Estados a profundidad", track: "Estados", facilitator: null, sort_order: 5 },
+  { title: "Conozcamos ROAX", track: "ROAX", facilitator: null, sort_order: 6 },
+  { title: "Conozcamos ATOM", track: "ATOM", facilitator: null, sort_order: 7 },
+  { title: "Conozcamos Fennix", track: "Fennix", facilitator: null, sort_order: 8 },
+].map((s, i) => ({
+  id: `fallback-${i + 1}`,
+  title: s.title,
+  facilitator: s.facilitator,
+  track: s.track,
+  description: null,
+  session_date: null,
+  duration: null,
+  status: "Backlog" as Status,
+  resources: [],
+  notes: null,
+  proposed_by: null,
+  source: "Programa" as Source,
+  sort_order: s.sort_order,
+  created_at: new Date().toISOString(),
+}));
+
+function pad2(n: number) {
+  return String(n).padStart(2, "0");
 }
 
-function weekLabel(iso: string) {
-  const d = new Date(iso + "T00:00:00");
-  const day = d.getDay();
-  const diff = (day === 0 ? -6 : 1) - day;
-  const monday = new Date(d);
-  monday.setDate(d.getDate() + diff);
-  return `Semana del ${monday.toLocaleDateString("es-CO", { day: "numeric", month: "long" })}`;
+function dateKey(d: Date) {
+  return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
 }
 
-function TrackBadge({ track }: { track: string | null }) {
-  const color = TRACK_COLOR[track ?? "Otro"] ?? "#64748B";
-  return (
-    <span style={{
-      fontSize: 10.5, fontWeight: 700, color, background: `${color}1A`,
-      padding: "2px 8px", borderRadius: 20, whiteSpace: "nowrap",
-    }}>
-      {track ?? "Otro"}
-    </span>
-  );
+function isSameDay(a: Date, b: Date) {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
 }
 
-function StatusBadge({ status }: { status: Status }) {
-  const meta = STATUS_META[status];
-  return (
-    <span style={{
-      fontSize: 11, fontWeight: 700, background: meta.bg, color: meta.fg,
-      padding: "3px 9px", borderRadius: 20, whiteSpace: "nowrap",
-    }}>
-      {status}
-    </span>
-  );
+function buildCalendarGrid(monthStart: Date): Date[] {
+  const year = monthStart.getFullYear();
+  const month = monthStart.getMonth();
+  const lastDay = new Date(year, month + 1, 0);
+  const firstWeekday = (monthStart.getDay() + 6) % 7; // 0 = lunes
+  const lastWeekday = (lastDay.getDay() + 6) % 7;
+  const days: Date[] = [];
+  for (let i = firstWeekday; i > 0; i--) days.push(new Date(year, month, 1 - i));
+  for (let d = 1; d <= lastDay.getDate(); d++) days.push(new Date(year, month, d));
+  for (let i = 1; i <= 6 - lastWeekday; i++) days.push(new Date(year, month, lastDay.getDate() + i));
+  return days;
 }
 
 function inputStyle(): React.CSSProperties {
@@ -130,116 +126,165 @@ function inputStyle(): React.CSSProperties {
   };
 }
 
-function draftFromSesion(s: Sesion): Draft {
+function labelStyle(): React.CSSProperties {
+  return { fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em", display: "block", marginBottom: 4 };
+}
+
+function emptyForm(dateKeyStr?: string): FormState {
   return {
-    status: s.status,
-    session_date: s.session_date ?? "",
-    doc_url: s.doc_url ?? "",
-    recording_url: s.recording_url ?? "",
-    notes: s.notes ?? "",
-    facilitator: s.facilitator ?? "",
+    id: null,
+    title: "",
+    facilitator: "",
+    track: TRACKS[0],
+    description: "",
+    session_date: dateKeyStr ?? "",
+    duration: "",
+    status: dateKeyStr ? "Programada" : "Backlog",
+    resources: [],
+    notes: "",
   };
 }
 
-function SessionRow({
-  sesion, canEdit, editing, draft, onStartEdit, onCancelEdit, onChangeDraft, onSave, showProposer,
-}: {
-  sesion: Sesion;
-  canEdit: boolean;
-  editing: boolean;
-  draft: Draft | null;
-  onStartEdit: () => void;
-  onCancelEdit: () => void;
-  onChangeDraft: (d: Draft) => void;
-  onSave: () => void;
-  showProposer?: boolean;
-}) {
-  return (
-    <div style={{ padding: "14px 16px", borderTop: "1px solid #F3F4F6" }}>
-      <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-            <span style={{ fontSize: 13.5, fontWeight: 700, color: "var(--fg)" }}>{sesion.title}</span>
-            <TrackBadge track={sesion.track} />
-            <StatusBadge status={sesion.status} />
-          </div>
-          {sesion.description && (
-            <div style={{ fontSize: 12.5, color: "var(--muted)", lineHeight: 1.5, marginBottom: 4 }}>
-              {sesion.description}
-            </div>
-          )}
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", fontSize: 12, color: "var(--muted)" }}>
-            {sesion.facilitator && <span>🎤 {sesion.facilitator}</span>}
-            {showProposer && sesion.proposed_by && <span>💬 Propuesta por {sesion.proposed_by}</span>}
-            {sesion.doc_url && (
-              <a href={sesion.doc_url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--dropi)", textDecoration: "none", fontWeight: 600 }}>
-                📄 Ficha en el cerebro ↗
-              </a>
-            )}
-            {sesion.recording_url && (
-              <a href={sesion.recording_url} target="_blank" rel="noopener noreferrer" style={{ color: "var(--dropi)", textDecoration: "none", fontWeight: 600 }}>
-                🎥 Grabación ↗
-              </a>
-            )}
-          </div>
-          {sesion.notes && (
-            <div style={{ fontSize: 12, color: "var(--fg)", background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 8, padding: "6px 10px", marginTop: 8, lineHeight: 1.4 }}>
-              🧠 {sesion.notes}
-            </div>
-          )}
-        </div>
-        {canEdit && !editing && (
-          <button
-            onClick={onStartEdit}
-            style={{ fontSize: 11.5, fontWeight: 700, color: "var(--dropi)", background: "none", border: "1px solid var(--border)", borderRadius: 20, padding: "4px 10px", cursor: "pointer", whiteSpace: "nowrap" }}
-          >
-            ✎ Editar
-          </button>
-        )}
-      </div>
+function formFromSesion(s: Sesion): FormState {
+  return {
+    id: s.id,
+    title: s.title,
+    facilitator: s.facilitator ?? "",
+    track: s.track ?? TRACKS[0],
+    description: s.description ?? "",
+    session_date: s.session_date ?? "",
+    duration: s.duration ?? "",
+    status: s.status,
+    resources: s.resources ?? [],
+    notes: s.notes ?? "",
+  };
+}
 
-      {editing && draft && (
-        <div style={{ marginTop: 12, padding: 14, background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 10 }}>
+function SessionModal({
+  mode, form, onChange, onCancel, onSave, saving, error, extra,
+}: {
+  mode: "create" | "edit";
+  form: FormState;
+  onChange: (f: FormState) => void;
+  onCancel: () => void;
+  onSave: () => void;
+  saving: boolean;
+  error: string | null;
+  extra?: { proposedBy: string | null; createdAt: string } | null;
+}) {
+  function updateResource(i: number, field: keyof Resource, value: string) {
+    const next = form.resources.slice();
+    next[i] = { ...next[i], [field]: value };
+    onChange({ ...form, resources: next });
+  }
+  function addResource() {
+    onChange({ ...form, resources: [...form.resources, { label: "", url: "" }] });
+  }
+  function removeResource(i: number) {
+    onChange({ ...form, resources: form.resources.filter((_, idx) => idx !== i) });
+  }
+
+  return (
+    <div
+      onClick={onCancel}
+      style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,0.45)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: 16 }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{ background: "#fff", borderRadius: 16, width: "min(560px, 100%)", maxHeight: "88vh", overflowY: "auto", padding: 24, boxShadow: "0 20px 60px rgba(0,0,0,0.25)" }}
+      >
+        <h3 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", marginBottom: 16 }}>
+          {mode === "create" ? "Nueva capacitación" : "Editar capacitación"}
+        </h3>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
           <div>
-            <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>Estado</label>
-            <select
-              value={draft.status}
-              onChange={(e) => onChangeDraft({ ...draft, status: e.target.value as Status })}
-              style={inputStyle()}
-            >
-              {(["Backlog", "Programada", "Hecha", "Documentada"] as Status[]).map((s) => <option key={s} value={s}>{s}</option>)}
-            </select>
+            <label style={labelStyle()}>Tema</label>
+            <input type="text" value={form.title} onChange={(e) => onChange({ ...form, title: e.target.value })} placeholder="Ej. Conozcamos el módulo de facturación" style={inputStyle()} />
           </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div>
+              <label style={labelStyle()}>Moderador</label>
+              <input type="text" value={form.facilitator} onChange={(e) => onChange({ ...form, facilitator: e.target.value })} style={inputStyle()} />
+            </div>
+            <div>
+              <label style={labelStyle()}>Categoría</label>
+              <select value={form.track} onChange={(e) => onChange({ ...form, track: e.target.value })} style={inputStyle()}>
+                {TRACKS.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+            <div>
+              <label style={labelStyle()}>Fecha</label>
+              <input type="date" value={form.session_date} onChange={(e) => onChange({ ...form, session_date: e.target.value, status: e.target.value ? "Programada" : "Backlog" })} style={inputStyle()} />
+            </div>
+            <div>
+              <label style={labelStyle()}>Duración</label>
+              <input type="text" list="duracion-presets" placeholder="ej. 1 hora" value={form.duration} onChange={(e) => onChange({ ...form, duration: e.target.value })} style={inputStyle()} />
+              <datalist id="duracion-presets">
+                {DURATION_PRESETS.map((d) => <option key={d} value={d} />)}
+              </datalist>
+            </div>
+            <div>
+              <label style={labelStyle()}>Estado</label>
+              <select value={form.status} onChange={(e) => onChange({ ...form, status: e.target.value as Status })} style={inputStyle()}>
+                {(["Backlog", "Programada", "Hecha", "Documentada"] as Status[]).map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          </div>
+
           <div>
-            <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>Fecha</label>
-            <input type="date" value={draft.session_date} onChange={(e) => onChangeDraft({ ...draft, session_date: e.target.value })} style={inputStyle()} />
+            <label style={labelStyle()}>Descripción / preguntas esenciales</label>
+            <textarea rows={3} value={form.description} onChange={(e) => onChange({ ...form, description: e.target.value })} style={{ ...inputStyle(), resize: "vertical" }} />
           </div>
+
           <div>
-            <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>Facilitador</label>
-            <input type="text" value={draft.facilitator} onChange={(e) => onChangeDraft({ ...draft, facilitator: e.target.value })} style={inputStyle()} />
+            <label style={labelStyle()}>Recursos (grabación, transcripción, material previo…)</label>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {form.resources.map((r, i) => (
+                <div key={i} style={{ display: "flex", gap: 6 }}>
+                  <input type="text" placeholder="Etiqueta (ej. Grabación)" value={r.label} onChange={(e) => updateResource(i, "label", e.target.value)} style={{ ...inputStyle(), flex: "0 0 40%" }} />
+                  <input type="url" placeholder="https://…" value={r.url} onChange={(e) => updateResource(i, "url", e.target.value)} style={{ ...inputStyle(), flex: 1 }} />
+                  <button type="button" onClick={() => removeResource(i)} style={{ border: "1px solid var(--border)", background: "#fff", borderRadius: 8, width: 32, cursor: "pointer", color: "var(--muted)" }}>×</button>
+                </div>
+              ))}
+              <button
+                type="button"
+                onClick={addResource}
+                style={{ alignSelf: "flex-start", fontSize: 12, fontWeight: 700, color: "var(--dropi)", background: "none", border: "none", cursor: "pointer", padding: "4px 0" }}
+              >
+                + Agregar recurso
+              </button>
+            </div>
           </div>
+
           <div>
-            <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>Ficha en Confluence</label>
-            <input type="url" placeholder="https://…" value={draft.doc_url} onChange={(e) => onChangeDraft({ ...draft, doc_url: e.target.value })} style={inputStyle()} />
+            <label style={labelStyle()}>Aprendizaje clave (opcional, para después de la sesión)</label>
+            <textarea rows={2} value={form.notes} onChange={(e) => onChange({ ...form, notes: e.target.value })} style={{ ...inputStyle(), resize: "vertical" }} />
           </div>
-          <div>
-            <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>Grabación</label>
-            <input type="url" placeholder="https://…" value={draft.recording_url} onChange={(e) => onChangeDraft({ ...draft, recording_url: e.target.value })} style={inputStyle()} />
-          </div>
-          <div style={{ gridColumn: "1 / -1" }}>
-            <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>Aprendizaje clave</label>
-            <textarea rows={2} value={draft.notes} onChange={(e) => onChangeDraft({ ...draft, notes: e.target.value })} style={{ ...inputStyle(), resize: "vertical" }} />
-          </div>
-          <div style={{ gridColumn: "1 / -1", display: "flex", gap: 8, justifyContent: "flex-end" }}>
-            <button onClick={onCancelEdit} style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "7px 14px", cursor: "pointer" }}>
+
+          {extra && (
+            <div style={{ fontSize: 11.5, color: "var(--muted)" }}>
+              {extra.proposedBy && <>Agregada por {extra.proposedBy} · </>}
+              {new Date(extra.createdAt).toLocaleDateString("es-CO", { day: "numeric", month: "long", year: "numeric" })}
+            </div>
+          )}
+
+          {error && <div style={{ fontSize: 12, color: "#B91C1C" }}>{error}</div>}
+
+          <div style={{ display: "flex", gap: 8, justifyContent: "flex-end", marginTop: 6 }}>
+            <button onClick={onCancel} style={{ fontSize: 12.5, fontWeight: 600, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "9px 16px", cursor: "pointer" }}>
               Cancelar
             </button>
-            <button onClick={onSave} style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "7px 14px", cursor: "pointer" }}>
-              Guardar
+            <button onClick={onSave} disabled={saving} style={{ fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "9px 16px", cursor: "pointer", opacity: saving ? 0.6 : 1 }}>
+              {saving ? "Guardando…" : "Guardar"}
             </button>
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -247,15 +292,13 @@ function SessionRow({
 export default function ExpertosNegocioRoadmapPage() {
   const [sesiones, setSesiones] = useState<Sesion[] | null>(null);
   const [me, setMe] = useState<Me | null>(null);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [draft, setDraft] = useState<Draft | null>(null);
-  const [showForm, setShowForm] = useState(false);
+  const [viewMonth, setViewMonth] = useState(() => { const d = new Date(); return new Date(d.getFullYear(), d.getMonth(), 1); });
+  const [modalMode, setModalMode] = useState<"create" | "edit" | null>(null);
+  const [form, setForm] = useState<FormState | null>(null);
+  const [modalExtra, setModalExtra] = useState<{ proposedBy: string | null; createdAt: string } | null>(null);
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
-  const [newTitle, setNewTitle] = useState("");
-  const [newTrack, setNewTrack] = useState(TRACKS[0]);
-  const [newDate, setNewDate] = useState("");
-  const [newDescription, setNewDescription] = useState("");
+  const [dragOverKey, setDragOverKey] = useState<string | null>(null);
 
   function refetchSesiones() {
     fetch("/api/expertos-sesiones")
@@ -269,50 +312,82 @@ export default function ExpertosNegocioRoadmapPage() {
     fetch("/api/me").then((r) => r.json()).then(setMe);
   }, []);
 
-  function startEdit(s: Sesion) {
-    setEditingId(s.id);
-    setDraft(draftFromSesion(s));
-  }
+  const usingFallback = !!sesiones && sesiones.length > 0 && sesiones[0].id.startsWith("fallback-");
+  const canEdit = !!me?.user && !usingFallback;
 
-  async function saveEdit(id: string) {
-    if (!draft) return;
-    setSaving(true);
-    await fetch(`/api/expertos-sesiones/${id}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...draft, session_date: draft.session_date || null }),
+  const byDate = useMemo(() => {
+    const map: Record<string, Sesion[]> = {};
+    (sesiones ?? []).forEach((s) => {
+      if (s.session_date) (map[s.session_date] ??= []).push(s);
     });
-    setSaving(false);
-    setEditingId(null);
-    setDraft(null);
-    refetchSesiones();
+    return map;
+  }, [sesiones]);
+
+  const backlog = useMemo(
+    () => (sesiones ?? []).filter((s) => !s.session_date).sort((a, b) => a.sort_order - b.sort_order || a.created_at.localeCompare(b.created_at)),
+    [sesiones]
+  );
+
+  function openCreate(dateStr?: string) {
+    if (!canEdit) return;
+    setModalExtra(null);
+    setForm(emptyForm(dateStr));
+    setModalMode("create");
+    setFormError(null);
   }
 
-  async function submitProposal(e: React.FormEvent) {
-    e.preventDefault();
-    if (!newTitle.trim()) return;
+  function openEdit(s: Sesion) {
+    if (!canEdit) return;
+    setModalExtra({ proposedBy: s.proposed_by, createdAt: s.created_at });
+    setForm(formFromSesion(s));
+    setModalMode("edit");
+    setFormError(null);
+  }
+
+  function closeModal() {
+    setModalMode(null);
+    setForm(null);
+    setModalExtra(null);
+  }
+
+  async function saveForm() {
+    if (!form) return;
+    if (!form.title.trim()) {
+      setFormError("El tema es requerido.");
+      return;
+    }
     setSaving(true);
     setFormError(null);
-    const res = await fetch("/api/expertos-sesiones", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: newTitle.trim(),
-        track: newTrack,
-        session_date: newDate || null,
-        description: newDescription.trim() || null,
-      }),
-    });
+    const payload = {
+      title: form.title.trim(),
+      facilitator: form.facilitator.trim() || null,
+      track: form.track,
+      description: form.description.trim() || null,
+      session_date: form.session_date || null,
+      duration: form.duration.trim() || null,
+      status: form.status,
+      resources: form.resources.filter((r) => r.label.trim() || r.url.trim()),
+      notes: form.notes.trim() || null,
+    };
+    const res = modalMode === "create"
+      ? await fetch("/api/expertos-sesiones", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+      : await fetch(`/api/expertos-sesiones/${form.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     setSaving(false);
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
-      setFormError(body.error || "No se pudo guardar la propuesta.");
+      setFormError(body.error || "No se pudo guardar.");
       return;
     }
-    setNewTitle("");
-    setNewDate("");
-    setNewDescription("");
-    setShowForm(false);
+    closeModal();
+    refetchSesiones();
+  }
+
+  async function scheduleViaDrop(sessionId: string, dateStr: string) {
+    await fetch(`/api/expertos-sesiones/${sessionId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ session_date: dateStr, status: "Programada" }),
+    });
     refetchSesiones();
   }
 
@@ -320,33 +395,9 @@ export default function ExpertosNegocioRoadmapPage() {
     return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   }
 
-  const usingFallback = sesiones.length > 0 && sesiones[0].id.startsWith("fallback-");
-  const canEdit = !!me?.user && !usingFallback;
-  const proximas = sesiones.filter((s) => s.session_date);
-  const backlogPrograma = sesiones
-    .filter((s) => s.source === "Programa" && s.status === "Backlog")
-    .sort((a, b) => a.sort_order - b.sort_order);
-  const propuestasComunidad = sesiones.filter((s) => s.source === "Comunidad" && s.status === "Backlog");
-  const documentadas = sesiones.filter((s) => s.status === "Documentada").length;
-  const en4Semanas = proximas.filter((s) => {
-    const d = new Date(s.session_date + "T00:00:00");
-    const diffDays = (d.getTime() - Date.now()) / 86400000;
-    return diffDays >= -1 && diffDays <= 28;
-  }).length;
-
-  let lastWeek = "";
-
-  const rowProps = (s: Sesion, showProposer?: boolean) => ({
-    sesion: s,
-    canEdit,
-    editing: editingId === s.id,
-    draft: editingId === s.id ? draft : null,
-    onStartEdit: () => startEdit(s),
-    onCancelEdit: () => { setEditingId(null); setDraft(null); },
-    onChangeDraft: setDraft,
-    onSave: () => saveEdit(s.id),
-    showProposer,
-  });
+  const today = new Date();
+  const days = buildCalendarGrid(viewMonth);
+  const monthLabel = viewMonth.toLocaleDateString("es-CO", { month: "long", year: "numeric" });
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
@@ -358,165 +409,163 @@ export default function ExpertosNegocioRoadmapPage() {
           ← Dropi PM Tools
         </a>
         <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Expertos en el Negocio · Roadmap</span>
+        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Expertos en el Negocio · Calendario</span>
       </header>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px 80px" }}>
-        {/* Title */}
-        <div style={{ marginBottom: 28 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, background: "#F5F3FF", color: "#7C3AED", padding: "3px 9px", borderRadius: 20 }}>
-              EXP-001
-            </span>
-          </div>
-          <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
-            Expertos en el Negocio · Roadmap
+      <div style={{ maxWidth: 980, margin: "0 auto", padding: "40px 24px 80px" }}>
+        <div style={{ marginBottom: 20 }}>
+          <span style={{ fontSize: 11, fontWeight: 700, background: "#F5F3FF", color: "#7C3AED", padding: "3px 9px", borderRadius: 20 }}>
+            EXP-001
+          </span>
+          <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--fg)", margin: "8px 0 6px" }}>
+            Expertos en el Negocio · Calendario de capacitaciones
           </h1>
           <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6, maxWidth: 680 }}>
-            Programa de capacitación y contextualización del equipo en el negocio Dropi. Tiene dos partes:
-            <strong> capacitarnos</strong> en sesiones semanales sobre cómo funciona cada módulo, y{" "}
-            <strong>documentar</strong> lo aprendido para construir el cerebro de negocio-producto — la
-            traducción de la estrategia y la lógica detrás de las definiciones de producto.
+            Programación mes a mes de las sesiones para volvernos expertos en el negocio Dropi:
+            <strong> capacitarnos</strong> semana a semana y <strong>documentar</strong> lo aprendido para
+            construir el cerebro de negocio-producto.
           </p>
         </div>
 
         {usingFallback && (
-          <div style={{
-            background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10,
-            padding: "10px 14px", marginBottom: 24, fontSize: 12.5, color: "#B45309",
-          }}>
+          <div style={{ background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10, padding: "10px 14px", marginBottom: 20, fontSize: 12.5, color: "#B45309" }}>
             👀 Vista previa con el backlog de ejemplo — falta conectar la tabla en Supabase para que sea
-            interactiva (editar, agendar y recibir propuestas). En cuanto se aplique la migración, esta
-            sección se reemplaza sola con los datos reales.
+            interactiva (agendar, editar y agregar capacitaciones).
           </div>
         )}
 
-        {/* KPI strip */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 16, marginBottom: 28 }}>
-          {[
-            { label: "Sesiones totales", value: String(sesiones.length), color: "var(--dropi)" },
-            { label: "Documentadas en el cerebro", value: String(documentadas), color: "#7C3AED" },
-            { label: "Próximas 4 semanas", value: String(en4Semanas), color: "#1D4ED8" },
-            { label: "Propuestas pendientes", value: String(propuestasComunidad.length), color: "#DC2626" },
-          ].map((c) => (
-            <div key={c.label} style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 16, boxShadow: "0 1px 3px rgba(0,0,0,0.06)" }}>
-              <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 8 }}>
-                {c.label}
-              </div>
-              <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.03em", color: "var(--fg)" }}>{c.value}</div>
+        {/* Controles del calendario */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
+          <button onClick={() => setViewMonth(new Date(viewMonth.getFullYear(), viewMonth.getMonth() - 1, 1))} style={{ border: "1px solid var(--border)", background: "#fff", borderRadius: 8, width: 30, height: 30, cursor: "pointer", fontSize: 14 }}>‹</button>
+          <button onClick={() => setViewMonth(new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 1))} style={{ border: "1px solid var(--border)", background: "#fff", borderRadius: 8, width: 30, height: 30, cursor: "pointer", fontSize: 14 }}>›</button>
+          <button onClick={() => setViewMonth(new Date(today.getFullYear(), today.getMonth(), 1))} style={{ border: "1px solid var(--border)", background: "#fff", borderRadius: 8, padding: "0 12px", height: 30, cursor: "pointer", fontSize: 12.5, fontWeight: 600, color: "var(--fg)" }}>Hoy</button>
+          <span style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", textTransform: "capitalize", marginLeft: 4 }}>{monthLabel}</span>
+          <div style={{ flex: 1 }} />
+          <button
+            onClick={() => openCreate()}
+            disabled={!canEdit}
+            title={!me?.user ? "Inicia sesión para agregar capacitaciones" : undefined}
+            style={{ fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "9px 16px", cursor: canEdit ? "pointer" : "not-allowed", opacity: canEdit ? 1 : 0.5 }}
+          >
+            + Nueva capacitación
+          </button>
+        </div>
+
+        {!me?.user && !usingFallback && (
+          <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 10 }}>
+            <a href="/login" style={{ color: "var(--dropi)", fontWeight: 700, textDecoration: "none" }}>Inicia sesión</a> para agendar o editar capacitaciones.
+          </p>
+        )}
+
+        {/* Grid del calendario */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 1, background: "var(--border)", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden", marginBottom: 32 }}>
+          {WEEKDAYS.map((w) => (
+            <div key={w} style={{ background: "#F8FAFC", padding: "8px 6px", fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textAlign: "center", textTransform: "uppercase", letterSpacing: "0.04em" }}>
+              {w}
             </div>
           ))}
+          {days.map((d) => {
+            const key = dateKey(d);
+            const daySessions = byDate[key] ?? [];
+            const inMonth = d.getMonth() === viewMonth.getMonth();
+            const isToday = isSameDay(d, today);
+            const isDragOver = dragOverKey === key;
+            return (
+              <div
+                key={key}
+                onClick={() => openCreate(key)}
+                onDragOver={(e) => { if (canEdit) { e.preventDefault(); setDragOverKey(key); } }}
+                onDragLeave={() => setDragOverKey((k) => (k === key ? null : k))}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setDragOverKey(null);
+                  if (!canEdit) return;
+                  const sessionId = e.dataTransfer.getData("text/plain");
+                  if (sessionId) scheduleViaDrop(sessionId, key);
+                }}
+                style={{
+                  minHeight: 92, background: isDragOver ? "#F0F9FF" : "#fff", padding: 6, opacity: inMonth ? 1 : 0.4,
+                  cursor: canEdit ? "pointer" : "default", display: "flex", flexDirection: "column", gap: 3,
+                  outline: isDragOver ? "2px dashed var(--dropi)" : "none", outlineOffset: -2,
+                }}
+              >
+                <span style={{
+                  alignSelf: "flex-end", fontSize: 11, fontWeight: isToday ? 800 : 600,
+                  color: isToday ? "#fff" : "var(--fg)", background: isToday ? "var(--dropi)" : "transparent",
+                  width: 20, height: 20, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  {d.getDate()}
+                </span>
+                {daySessions.slice(0, 3).map((s) => (
+                  <div
+                    key={s.id}
+                    onClick={(e) => { e.stopPropagation(); openEdit(s); }}
+                    style={{
+                      fontSize: 10.5, fontWeight: 700, color: "#fff",
+                      background: TRACK_COLOR[s.track ?? "Otro"] ?? "#64748B",
+                      borderRadius: 6, padding: "2px 6px", whiteSpace: "nowrap",
+                      overflow: "hidden", textOverflow: "ellipsis", cursor: canEdit ? "pointer" : "default",
+                    }}
+                    title={`${s.title}${s.duration ? " · " + s.duration : ""}`}
+                  >
+                    {s.title}
+                  </div>
+                ))}
+                {daySessions.length > 3 && (
+                  <div style={{ fontSize: 10, color: "var(--muted)", fontWeight: 700 }}>+{daySessions.length - 3} más</div>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-        {/* Próximas sesiones */}
-        <div style={{ marginBottom: 36 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>📅 Próximas sesiones</h2>
-          <p style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 14 }}>Cadencia semanal, ordenadas por fecha.</p>
-          <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden" }}>
-            {proximas.length === 0 && (
-              <p style={{ fontSize: 13, color: "var(--muted)", padding: 16 }}>Aún no hay sesiones agendadas con fecha.</p>
-            )}
-            {proximas.map((s) => {
-              const wl = weekLabel(s.session_date!);
-              const showHeader = wl !== lastWeek;
-              lastWeek = wl;
-              return (
-                <div key={s.id}>
-                  {showHeader && (
-                    <div style={{ padding: "10px 16px 4px", fontSize: 11, fontWeight: 700, color: "var(--dropi)", textTransform: "uppercase", letterSpacing: "0.04em", background: "#FAFAFA" }}>
-                      {wl} · {fmtDate(s.session_date!)}
-                    </div>
-                  )}
-                  <SessionRow {...rowProps(s, true)} />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Backlog oficial */}
-        <div style={{ marginBottom: 36 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>🗂️ Backlog del programa</h2>
-          <p style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 14 }}>
-            Sesiones ya definidas, pendientes de agendar semana a semana.
-          </p>
-          <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden" }}>
-            {backlogPrograma.length === 0 && (
-              <p style={{ fontSize: 13, color: "var(--muted)", padding: 16 }}>Backlog vacío.</p>
-            )}
-            {backlogPrograma.map((s) => <SessionRow key={s.id} {...rowProps(s)} />)}
-          </div>
-        </div>
-
-        {/* Propuestas de la comunidad */}
-        <div style={{ marginBottom: 36 }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>💡 Propuestas de la comunidad</h2>
-          <p style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 14 }}>
-            Temas que cualquier persona del equipo propuso para sumar a la cola.
-          </p>
-          <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden" }}>
-            {propuestasComunidad.length === 0 && (
-              <p style={{ fontSize: 13, color: "var(--muted)", padding: 16 }}>Todavía no hay propuestas de la comunidad.</p>
-            )}
-            {propuestasComunidad.map((s) => <SessionRow key={s.id} {...rowProps(s, true)} />)}
-          </div>
-        </div>
-
-        {/* Sugerir un tema */}
+        {/* Backlog sin programar */}
         <div>
-          <h2 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>✍️ Sugerir un tema</h2>
-          <p style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 14 }}>
-            ¿Tienes un tema o taller que quieras traer al equipo? Agrégalo aquí con la fecha en la que te gustaría presentarlo.
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", marginBottom: 4 }}>🗂️ Sin programar</h2>
+          <p style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 12 }}>
+            Temas ya definidos, pendientes de una fecha. {canEdit ? "Arrastra uno hacia un día del calendario para agendarlo, o haz clic para editarlo." : "Haz clic para ver el detalle."}
           </p>
-
-          {usingFallback ? (
-            <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 20, fontSize: 13, color: "var(--muted)" }}>
-              El formulario se activa en cuanto se conecte la base de datos (ver aviso arriba).
-            </div>
-          ) : !me?.user ? (
-            <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 20, fontSize: 13, color: "var(--muted)" }}>
-              <a href="/login" style={{ color: "var(--dropi)", fontWeight: 700, textDecoration: "none" }}>Inicia sesión</a> para proponer un tema.
-            </div>
-          ) : !showForm ? (
-            <button
-              onClick={() => setShowForm(true)}
-              style={{ fontSize: 13, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 10, padding: "10px 18px", cursor: "pointer" }}
-            >
-              + Proponer un tema
-            </button>
-          ) : (
-            <form onSubmit={submitProposal} style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 20, display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
-              <div style={{ gridColumn: "1 / -1" }}>
-                <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>Tema</label>
-                <input type="text" required value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="Ej. Conozcamos el módulo de facturación" style={inputStyle()} />
+          <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden" }}>
+            {backlog.length === 0 && (
+              <p style={{ fontSize: 13, color: "var(--muted)", padding: 16 }}>No hay temas sin programar.</p>
+            )}
+            {backlog.map((s, idx) => (
+              <div
+                key={s.id}
+                onClick={() => openEdit(s)}
+                draggable={canEdit}
+                onDragStart={(e) => { e.dataTransfer.setData("text/plain", s.id); e.dataTransfer.effectAllowed = "move"; }}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10, padding: "12px 16px",
+                  borderTop: idx === 0 ? "none" : "1px solid #F3F4F6", cursor: canEdit ? "grab" : "default",
+                }}
+              >
+                {canEdit && <span style={{ color: "var(--muted)", fontSize: 13, cursor: "grab" }}>⠿</span>}
+                <span style={{ width: 8, height: 8, borderRadius: "50%", background: TRACK_COLOR[s.track ?? "Otro"] ?? "#64748B", flexShrink: 0 }} />
+                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)", flex: 1 }}>{s.title}</span>
+                {s.duration && <span style={{ fontSize: 12, color: "var(--muted)" }}>⏱ {s.duration}</span>}
+                {s.facilitator && <span style={{ fontSize: 12, color: "var(--muted)" }}>🎤 {s.facilitator}</span>}
+                <span style={{ fontSize: 11, fontWeight: 700, background: STATUS_META[s.status].bg, color: STATUS_META[s.status].fg, padding: "2px 8px", borderRadius: 20 }}>
+                  {s.status}
+                </span>
               </div>
-              <div>
-                <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>Categoría</label>
-                <select value={newTrack} onChange={(e) => setNewTrack(e.target.value)} style={inputStyle()}>
-                  {TRACKS.map((t) => <option key={t} value={t}>{t}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>Fecha deseada (opcional)</label>
-                <input type="date" value={newDate} onChange={(e) => setNewDate(e.target.value)} style={inputStyle()} />
-              </div>
-              <div style={{ gridColumn: "1 / -1" }}>
-                <label style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>¿Por qué es útil? (opcional)</label>
-                <textarea rows={2} value={newDescription} onChange={(e) => setNewDescription(e.target.value)} style={{ ...inputStyle(), resize: "vertical" }} />
-              </div>
-              {formError && <div style={{ gridColumn: "1 / -1", fontSize: 12, color: "#B91C1C" }}>{formError}</div>}
-              <div style={{ gridColumn: "1 / -1", display: "flex", gap: 8, justifyContent: "flex-end" }}>
-                <button type="button" onClick={() => setShowForm(false)} style={{ fontSize: 12, fontWeight: 600, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 16px", cursor: "pointer" }}>
-                  Cancelar
-                </button>
-                <button type="submit" disabled={saving} style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", opacity: saving ? 0.6 : 1 }}>
-                  {saving ? "Guardando…" : "Agregar a la cola"}
-                </button>
-              </div>
-            </form>
-          )}
+            ))}
+          </div>
         </div>
       </div>
+
+      {modalMode && form && (
+        <SessionModal
+          mode={modalMode}
+          form={form}
+          onChange={setForm}
+          onCancel={closeModal}
+          onSave={saveForm}
+          saving={saving}
+          error={formError}
+          extra={modalExtra}
+        />
+      )}
     </main>
   );
 }

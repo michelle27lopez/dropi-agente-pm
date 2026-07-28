@@ -5,8 +5,8 @@ import { supabase } from "@/lib/supabase";
 const EDITABLE_FIELDS = [
   "status",
   "session_date",
-  "doc_url",
-  "recording_url",
+  "duration",
+  "resources",
   "notes",
   "facilitator",
   "track",

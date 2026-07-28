@@ -1,25 +1,25 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- EXP-001 — Expertos en el Negocio: sesiones de capacitación (roadmap + backlog)
+-- EXP-001 — Expertos en el Negocio: calendario de capacitaciones
 -- ═══════════════════════════════════════════════════════════════════════════
 
 create table if not exists expertos_sessions (
   id            uuid primary key default gen_random_uuid(),
-  title         text not null,
-  track         text,        -- Célula / E-commerce / Chatea Pro / Shopi / Estados / ROAX / ATOM / Fennix / Otro
-  facilitator   text,
-  description   text,
+  title         text not null,                 -- tema
+  facilitator   text,                           -- moderador
+  track         text,                           -- Célula / E-commerce / Chatea Pro / Shopi / Estados / ROAX / ATOM / Fennix / Otro
+  description   text,                           -- descripción / preguntas esenciales
+  session_date  date,                           -- null = sin programar todavía (backlog)
+  duration      text,                           -- ej. "30 min", "1 hora", "1.5 horas"
   status        text check (status in ('Backlog','Programada','Hecha','Documentada')) default 'Backlog',
-  source        text check (source in ('Programa','Comunidad')) default 'Programa',
-  session_date  date,        -- null hasta que se agenda
+  resources     jsonb not null default '[]'::jsonb, -- [{label, url}] — grabación, transcripción, material previo
+  notes         text,                           -- aprendizaje clave / resumen post-sesión
   proposed_by   text,
-  doc_url       text,        -- liga a la ficha resultante en Confluence (cerebro de negocio)
-  recording_url text,
-  notes         text,        -- aprendizaje clave / resumen post-sesión
+  source        text check (source in ('Programa','Comunidad')) default 'Programa',
   sort_order    integer default 0,
   created_at    timestamptz default now()
 );
 
--- Backlog oficial ya definido — se agenda progresivamente desde la página.
+-- Backlog oficial ya definido — se agenda progresivamente desde el calendario.
 -- Guardado contra doble-inserción si la migración se corre más de una vez.
 insert into expertos_sessions (title, track, facilitator, source, status, sort_order)
 select v.title, v.track, v.facilitator, 'Programa', 'Backlog', v.sort_order

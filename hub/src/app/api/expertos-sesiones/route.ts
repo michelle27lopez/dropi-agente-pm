@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: "Inicia sesión para proponer un tema" }, { status: 401 });
 
   const body = await req.json();
-  const { title, track, session_date, description } = body;
+  const { title, track, session_date, description, facilitator, resources, status, duration } = body;
 
   if (!title) {
     return NextResponse.json({ error: "title es requerido" }, { status: 400 });
@@ -41,9 +41,12 @@ export async function POST(req: NextRequest) {
       title,
       track: track || "Otro",
       description: description || null,
+      facilitator: facilitator || null,
       session_date: session_date || null,
+      duration: duration || null,
+      resources: Array.isArray(resources) ? resources : [],
+      status: status || (session_date ? "Programada" : "Backlog"),
       source: "Comunidad",
-      status: "Backlog",
       proposed_by: profile?.nombre || user.email,
     })
     .select()
