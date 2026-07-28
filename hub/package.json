@@ -6,7 +6,13 @@
     "dev": "next dev --port 3004",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sameday": "npm run sameday:datos && npm run sameday:geo && npm run sameday:simular && npm run sameday:verificar",
+    "sameday:datos": "node public/logistica/same-day/pipeline/xlsx2json.js",
+    "sameday:fuentes": "cd public/logistica/same-day/pipeline && node osm.js --fetch && node zonas.js --fetch && node barrios.js --fetch && node red-vial.js --fetch",
+    "sameday:geo": "node --max-old-space-size=6144 public/logistica/same-day/pipeline/geo-sameday.js",
+    "sameday:simular": "node --max-old-space-size=6144 public/logistica/same-day/pipeline/simular.js",
+    "sameday:verificar": "node --max-old-space-size=6144 public/logistica/same-day/pipeline/verificar.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
@@ -16,6 +22,7 @@
     "d3-sankey": "^0.12.3",
     "d3-shape": "^3.2.0",
     "gsap": "^3.15.0",
+    "jszip": "^3.10.1",
     "lucide-react": "^1.16.0",
     "next": "16.2.6",
     "nodemailer": "^9.0.1",

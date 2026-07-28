@@ -17,7 +17,8 @@ type EligibleListEntry = {
   submitted_at?: string | null; approved_at?: string | null; selected: EligibleSelected[];
 };
 
-const ENRIQUE_DOC_URL = "https://claude.ai/code/artifact/ddfa6912-03f8-415c-bee1-e38d45dcf678";
+const ENRIQUE_DOC_URL = "https://claude.ai/code/artifact/9c320e5b-a72f-44ac-b8a4-3e8ab86bd72c";
+const SUPPLIER_PREVIEW_TOKEN = "14kC0tM0fztALhbD8jrVNw";
 
 const TOKENS = `
   :root {
@@ -247,7 +248,7 @@ export default function CampaignDashboardPage() {
       </header>
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px 80px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 16 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 8 }}>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)", margin: 0 }}>{identidad.name || campaign.name}</h1>
           <button
             onClick={() => router.push(base)}
@@ -255,6 +256,25 @@ export default function CampaignDashboardPage() {
           >
             ✎ Editar
           </button>
+        </div>
+
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginBottom: 16 }}>
+          <a
+            href={ENRIQUE_DOC_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}
+          >
+            📄 Plantillas WhatsApp (Claude) →
+          </a>
+          <a
+            href={`${base}/elegibles/${SUPPLIER_PREVIEW_TOKEN}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}
+          >
+            🔗 Vista proveedor · prueba →
+          </a>
         </div>
 
         <div style={{ marginBottom: 24 }}>

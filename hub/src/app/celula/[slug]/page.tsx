@@ -6,15 +6,13 @@ import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
 import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
-
-type Proyecto = {
-  id: string; name: string; project_code: string | null;
-  status: string | null; type: string | null; handoff_status: string | null;
-  summary: string | null; business_area: string | null; prototype_url: string | null;
-};
+import { isMiDiaOwner } from "@/lib/sprint-access";
+import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
+import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
+import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 type Update = { id: string; week_date: string; title: string; content: string };
 
-type Profile = { celula_id: string | null; is_super_admin: boolean };
+type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
 
 type CelulaHome = {
   id: string; nombre: string; slug: string; lead: string | null; area: string | null;
@@ -34,6 +32,9 @@ type MetricsStats = {
   okrTarget: number;
   percentageToOkr: number;
   gapToOkr: number;
+  survivalRate?: number;
+  ttvNetoMedian?: number;
+  countries?: Record<string, any>;
 };
 type FunnelStep = { step: string; count: number; pct: number; color: string };
 type JiraBug = { key: string; summary: string; status: string; assignee: string; url: string };
@@ -55,7 +56,8 @@ const TYPE_ICON: Record<string, string> = {
   Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀",
 };
 
-function truncate(text: string, max: number) {
+function truncate(text: string | undefined | null, max: number) {
+  if (!text) return "";
   return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
 }
 
@@ -107,6 +109,7 @@ export default function CelulaHomePage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [metrics, setMetrics] = useState<SellersMetrics | null>(null);
   const [openUpdate, setOpenUpdate] = useState<Update | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState("global");
 
   useEffect(() => {
     fetch(`/api/celulas/${params.slug}`)
@@ -163,6 +166,69 @@ export default function CelulaHomePage() {
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
 
+  const pocsByParent = new Map<string, Proyecto[]>();
+  for (const p of celula.proyectos) {
+    if (p.type === "POC" && p.parent_project_id) {
+      const list = pocsByParent.get(p.parent_project_id) ?? [];
+      list.push(p);
+      pocsByParent.set(p.parent_project_id, list);
+    }
+  }
+
+  async function handleEstadoChange(id: string, estado: string) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado_interno: estado }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: prev.proyectos.map((p) => (p.id === updated.id ? updated : p)) } : prev);
+  }
+
+  async function handleVpvChange(id: string, vpv: number | null) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ vpv }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: prev.proyectos.map((p) => (p.id === updated.id ? updated : p)) } : prev);
+  }
+
+  async function handleCrearPoc(parent: Proyecto, name: string, summary: string) {
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary }),
+    });
+    if (!res.ok) return;
+    const created = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, created] } : prev);
+  }
+
+  // Home privada: solo para MI_DIA_OWNER_EMAIL, reemplaza el body estándar de
+  // célula por el dashboard de "mi día" — ver [[project_darwin_pd_dashboard]].
+  if (isMiDiaOwner(profile?.email)) {
+    return (
+      <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1, display: "flex", alignItems: "flex-start" }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <HubHeader title={celula.nombre} subtitle="Tu día · Darwin" currentSlug={celula.slug} />
+            <div style={{ display: "flex", alignItems: "flex-start" }}>
+              <ProjectSidebar allProjects={proyectos} allPoc={poc} />
+              <div style={{ flex: 1, minWidth: 0, maxWidth: 900, padding: "48px 32px" }}>
+                <HomeDashboard />
+              </div>
+            </div>
+          </div>
+        </div>
+        <HubFooter />
+      </main>
+    );
+  }
+
   // "Updates" mezcla los registros de celula_updates con el historial del
   // Weekly PM de esta célula (si tiene alguno) — mismo look de tarjeta,
   // ordenado por fecha descendente.
@@ -173,6 +239,554 @@ export default function CelulaHomePage() {
   ].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
   const updates = updateEntries.map((e) => e.item);
   const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
+
+  const isSellers = params.slug === "sellers";
+
+  // Get active country stats
+  const activeStats = (metrics?.stats?.countries as any)?.[selectedCountry] || metrics?.stats;
+  const activeFunnel = activeStats?.funnel || metrics?.funnel || [];
+
+  const sellersCss = `
+    .glass-card {
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(247, 127, 0, 0.4);
+      box-shadow: 0 12px 40px rgba(247, 127, 0, 0.08);
+    }
+    .neon-text-orange {
+      color: #F77F00;
+      text-shadow: 0 0 10px rgba(247, 127, 0, 0.3);
+    }
+    .country-tab {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.6);
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .country-tab:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.08);
+    }
+    .country-tab.active {
+      background: linear-gradient(90deg, #F77F00 0%, #ffaa44 100%);
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(247, 127, 0, 0.35);
+    }
+    .glow-border {
+      position: relative;
+    }
+    .glow-border::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(247,127,0,0.5), transparent, rgba(99,102,241,0.5));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+  `;
+
+  if (isSellers) {
+    const totalSellers = activeStats?.totalSellers ?? 0;
+    const activationRate = activeStats?.activationRate ?? 0;
+    const activeRate = activeStats?.activeRate ?? 0;
+    const bounceRate = activeStats?.bounceRate ?? 0;
+    const survivalRate = activeStats?.survivalRate ?? 0;
+    const ttvNetoMedian = activeStats?.ttvNetoMedian ?? 0;
+    const nsmCurrent = activeStats?.nsmCurrent ?? 0;
+    const okrTarget = activeStats?.okrTarget ?? 0;
+    const percentageToOkr = activeStats?.percentageToOkr ?? 0;
+    const gapToOkr = activeStats?.gapToOkr ?? 0;
+
+    return (
+      <main style={{ minHeight: "100vh", padding: "0", background: "radial-gradient(120% 90% at 50% -10%, #0c1020 0%, #030712 100%)", color: "#f1f5f9", display: "flex", flexDirection: "column", fontFamily: "'Inter', sans-serif" }}>
+        <style dangerouslySetInnerHTML={{ __html: sellersCss }} />
+        
+        {/* Header Section */}
+        <div style={{ position: "relative", overflow: "hidden", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(3,7,18,0.4)" }}>
+          <div className="login-aurora" style={{ opacity: 0.4 }} />
+          <HubHeader
+            title={celula.nombre}
+            subtitle={celula.lead ? `Lead: ${celula.lead} · Control Tower PM OS` : "Control Tower de Célula · Darwin"}
+            currentSlug={celula.slug}
+          />
+        </div>
+
+        <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px", width: "100%", flex: 1 }}>
+          
+          {/* Country Filter Tab Bar */}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, background: "rgba(255,255,255,0.02)", padding: 6, borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
+            {[
+              { key: "global", label: "🌍 Global" },
+              { key: "CO", label: "🇨🇴 Colombia" },
+              { key: "EC", label: "🇪🇨 Ecuador" },
+              { key: "CL", label: "🇨🇱 Chile" },
+              { key: "MX", label: "🇲🇽 México" },
+              { key: "AR", label: "🇦🇷 Argentina" }
+            ].map((country) => (
+              <button
+                key={country.key}
+                onClick={() => setSelectedCountry(country.key)}
+                className={`country-tab ${selectedCountry === country.key ? "active" : ""}`}
+                style={{
+                  padding: "8px 16px",
+                  borderRadius: 8,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6
+                }}
+              >
+                {country.label}
+              </button>
+            ))}
+          </div>
+
+          {/* OKR Progress Card */}
+          {metrics && (
+            <div className="glow-border" style={{
+              background: "linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.9) 100%)",
+              borderRadius: 16, padding: "28px 32px", marginBottom: 24, color: "#fff",
+              boxShadow: "0 10px 40px rgba(0,0,0,0.4)"
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
+                <div>
+                  <span style={{ fontSize: 10, fontWeight: 850, background: "rgba(247, 127, 0, 0.15)", color: "#F77F00", border: "1px solid rgba(247, 127, 0, 0.3)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    OKR 1.1 · ESCALAR VOLUMEN DE VENTAS
+                  </span>
+                  <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
+                    Órdenes de Sellers Activos (NSM)
+                  </h3>
+                </div>
+                <div style={{ textAlign: "right" }}>
+                  <span className="neon-text-orange" style={{ fontSize: 28, fontWeight: 900 }}>{percentageToOkr}%</span>
+                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}> de la meta</span>
+                </div>
+              </div>
+              
+              {/* Progress Bar */}
+              <div style={{ height: 10, background: "rgba(255,255,255,0.08)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
+                <div style={{ height: "100%", width: `${percentageToOkr}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999, boxShadow: "0 0 10px rgba(247, 127, 0, 0.5)" }} />
+              </div>
+              
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
+                <span>Actual: <strong style={{ color: "#fff" }}>{(nsmCurrent / 1000000).toFixed(2)}M/mes</strong></span>
+                <span>Meta: <strong style={{ color: "#fff" }}>{(okrTarget / 1000000).toFixed(2)}M/mes</strong></span>
+                <span>Brecha: <strong style={{ color: "#fff" }}>{(gapToOkr / 1000000).toFixed(2)}M/mes</strong></span>
+              </div>
+            </div>
+          )}
+
+          {/* Metrics Grid */}
+          {metrics && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, marginBottom: 28 }}>
+              {[
+                { label: "Sellers Registrados", value: totalSellers.toLocaleString(), sub: "Total histórico en cohorte", color: "#6366F1", icon: "👥", sparkline: "M0,25 Q15,10 30,20 T60,5 T90,15 T100,2" },
+                { label: "Tasa de Activación", value: `${activationRate}%`, sub: "Sellers con ≥1 orden creada", color: "#EC4899", icon: "⚡", sparkline: "M0,20 Q15,25 30,12 T60,28 T90,5 T100,8" },
+                { label: "Sellers Activos (30d)", value: `${activeRate}%`, sub: "Con actividad constante", color: "#22C55E", icon: "🎯", sparkline: "M0,15 Q15,5 30,18 T60,8 T90,25 T100,3" },
+                { label: "Tasa de Rebote (Bounce)", value: `${bounceRate}%`, sub: "Sellers con ≤1 sesión web", color: "#EF4444", icon: "🚪", sparkline: "M0,5 Q15,22 30,10 T60,25 T90,12 T100,28" },
+                { label: "Supervivencia (30d)", value: `${survivalRate}%`, sub: "Sellers con ≥1 orden adicional", color: "#8B5CF6", icon: "🌱", sparkline: "M0,22 Q15,12 30,15 T60,5 T90,18 T100,4" },
+                { label: "TTV Neto (Mediana)", value: `${ttvNetoMedian} días`, sub: "Registro hasta entrega exitosa", color: "#F59E0B", icon: "⏱️", sparkline: "M0,10 Q15,28 30,14 T60,22 T90,5 T100,12" }
+              ].map((m) => (
+                <div key={m.label} className="glass-card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                      <span style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                        {m.label}
+                      </span>
+                      <span style={{ fontSize: 16 }}>{m.icon}</span>
+                    </div>
+                    <div style={{ fontSize: 26, fontWeight: 900, letterSpacing: "-0.03em", color: "#fff", marginBottom: 2 }}>
+                      {m.value}
+                    </div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginBottom: 8 }}>{m.sub}</div>
+                    
+                    {/* Simulated Sparkline */}
+                    <div style={{ height: 24, position: "relative", marginBottom: 4 }}>
+                      <svg viewBox="0 0 100 30" style={{ width: "100%", height: "100%", overflow: "visible" }}>
+                        <path d={m.sparkline} fill="none" stroke={m.color} strokeWidth="2" strokeLinecap="round" opacity="0.8" />
+                        <path d={`${m.sparkline} L100,30 L0,30 Z`} fill={`url(#gradient-${m.color.replace("#","")})`} opacity="0.06" />
+                        <defs>
+                          <linearGradient id={`gradient-${m.color.replace("#","")}`} x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={m.color} />
+                            <stop offset="100%" stopColor="transparent" />
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Strategic OS Frame Card */}
+          <div className="glass-card" style={{ marginBottom: 28 }}>
+            <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}>
+              <span>🔭</span> Direccionamiento Estratégico & Lentes PM OS
+            </h3>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
+              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 10, padding: 14 }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 6 }}>
+                  Norte & Propósito
+                </div>
+                <p style={{ fontSize: 13, color: "#fff", fontWeight: 700, margin: "0 0 4px" }}>
+                  Que cada dropshipper gane dinero vendiendo en la plataforma.
+                </p>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+                  Activación = 1ª orden rentable · Retención = ganancia sostenida.
+                </span>
+              </div>
+              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 10, padding: 14 }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 6 }}>
+                  Territorio & Perfil
+                </div>
+                <p style={{ fontSize: 13, color: "#fff", fontWeight: 700, margin: "0 0 4px" }}>
+                  Territorio E-commerce (Seller Success)
+                </p>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+                  Foco: Dropshippers (Rebuscador, Empleado Aspirante, Joven Visionario).
+                </span>
+              </div>
+              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 10, padding: 14 }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 6 }}>
+                  Lentes & Madurez (Q3 Focus)
+                </div>
+                <p style={{ fontSize: 13, color: "#fff", fontWeight: 700, margin: "0 0 4px" }}>
+                  Nivel A (Iniciando) → TTV / Reptiliano
+                </p>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+                  Q3: Aumentar la activación neta y bajar TTV.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Onboarding Funnel Redesign */}
+          {metrics && (
+            <div className="glass-card" style={{ marginBottom: 28 }}>
+              <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>
+                🎛️ EMBUDO DE CONVERSIÓN DE SELLERS & COVERAGE FUNNEL
+              </h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {activeFunnel.map((step: any, idx: number) => {
+                  const isGap = step.pct === 0 || isNaN(step.pct);
+                  const alignmentPct = isGap ? 8 : step.pct;
+                  
+                  return (
+                    <div key={step.step} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.3)", width: 20 }}>
+                        {idx + 1}
+                      </span>
+                      <div style={{
+                        flex: 1, background: "rgba(255,255,255,0.01)", border: isGap ? "1px dashed rgba(239, 68, 68, 0.4)" : "1px solid rgba(255, 255, 255, 0.05)",
+                        borderRadius: 10, padding: "12px 16px", display: "flex",
+                        justifyContent: "space-between", alignItems: "center",
+                        position: "relative", overflow: "hidden"
+                      }}>
+                        <div style={{
+                          position: "absolute", top: 0, left: 0, bottom: 0,
+                          width: `${alignmentPct}%`, background: isGap ? "rgba(239, 68, 68, 0.08)" : `${step.color}15`,
+                          zIndex: 0
+                        }} />
+                        <span style={{ fontSize: 13, fontWeight: 700, color: isGap ? "rgba(239, 68, 68, 0.85)" : "#fff", zIndex: 1, display: "flex", alignItems: "center", gap: 6 }}>
+                          {isGap && <span>⚠️</span>}
+                          {step.step}
+                          {isGap && <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(239, 68, 68, 0.15)", color: "#EF4444", padding: "1px 6px", borderRadius: 4, marginLeft: 8 }}>DEUDA DE TRACKING</span>}
+                        </span>
+                        <div style={{ display: "flex", alignItems: "center", gap: 12, zIndex: 1 }}>
+                          <span style={{ fontSize: 12, fontWeight: 800, color: isGap ? "#EF4444" : "#fff" }}>
+                            {isGap ? "[DATO FALTANTE]" : step.count.toLocaleString()}
+                          </span>
+                          <span style={{
+                            fontSize: 10, fontWeight: 700, background: isGap ? "rgba(239,68,68,0.15)" : `${step.color}25`,
+                            color: isGap ? "#EF4444" : step.color, padding: "2px 8px", borderRadius: 20
+                          }}>
+                            {isGap ? "NaN%" : `${step.pct}%`}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Jira and Sprints Card Container */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px, 1fr))", gap: 24, marginBottom: 28 }}>
+            
+            {/* GoHighLevel CRM Onboarding Pipeline Card */}
+            <div className="glass-card">
+              <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
+                <span>🤝</span> CRM GoHighLevel Onboarding
+              </h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {metrics?.crm?.stages ? (
+                  Object.entries(metrics.crm.stages).map(([stage, count]) => (
+                    <div key={stage} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px dashed rgba(255,255,255,0.06)", paddingBottom: 8 }}>
+                      <span style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>{stage}</span>
+                      <span style={{ fontSize: 12, fontWeight: 800, background: "rgba(255,255,255,0.05)", color: "#fff", padding: "3px 10px", borderRadius: 20 }}>
+                        {count} leads
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", margin: 0 }}>Cargando datos del CRM...</p>
+                )}
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginTop: 6, fontStyle: "italic" }}>
+                  Fuente: Oportunidades GHL en tiempo real.
+                </div>
+              </div>
+            </div>
+
+            {/* Sprint Active Checklist Card */}
+            <div className="glass-card">
+              <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
+                <span>📅</span> Sprint Activo (Checklist de Producto)
+              </h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                {metrics?.sprint?.tasksList ? (
+                  metrics.sprint.tasksList.map((task) => (
+                    <div key={task.key} style={{ border: "1px solid rgba(255,255,255,0.05)", borderRadius: 10, padding: 12, background: "rgba(255,255,255,0.01)" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
+                        <a href={task.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 700, color: "#F77F00", textDecoration: "none" }}>
+                          {task.key}
+                        </a>
+                        <span style={{
+                          fontSize: 9, fontWeight: 800, textTransform: "uppercase",
+                          padding: "2px 6px", borderRadius: 4,
+                          background: task.status === "Listo" || task.status === "Done" || task.status === "Finished" ? "rgba(34, 197, 94, 0.15)" : "rgba(245, 158, 11, 0.15)",
+                          color: task.status === "Listo" || task.status === "Done" || task.status === "Finished" ? "#22C55E" : "#F59E0B"
+                        }}>
+                          {task.status}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 12, color: "#fff", fontWeight: 700, marginBottom: 8 }}>{task.summary}</div>
+                      {task.sections && task.sections.length > 0 && (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4, borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 8 }}>
+                          {task.sections.map((sec: any) => (
+                            <div key={sec.name} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11 }}>
+                              <span>{sec.status === "hecho" ? "✅" : "⏳"}</span>
+                              <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>{sec.name}:</span>
+                              <span style={{ color: "rgba(255,255,255,0.4)" }}>{sec.notes}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", margin: 0 }}>Cargando checklist del sprint...</p>
+                )}
+              </div>
+            </div>
+
+          </div>
+
+          {/* Jira Bugs Tracking Card */}
+          {metrics && (
+            <div className="glass-card" style={{ marginBottom: 28 }}>
+              <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
+                <span>🐛</span> Bugs Activos en Jira (Caza-productos / Notificaciones)
+              </h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {metrics.jira?.bugsList ? (
+                  metrics.jira.bugsList.map((bug) => (
+                    <div key={bug.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px dashed rgba(255,255,255,0.06)", paddingBottom: 10 }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <a href={bug.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 700, color: "#F77F00", textDecoration: "none" }}>
+                            {bug.key}
+                          </a>
+                          <span style={{ fontSize: 12, color: "#fff", fontWeight: 700 }}>{bug.summary}</span>
+                        </div>
+                        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>Asignado a: <strong>{bug.assignee}</strong></div>
+                      </div>
+                      <span style={{
+                        fontSize: 10, fontWeight: 700, textTransform: "uppercase",
+                        padding: "4px 8px", borderRadius: 6,
+                        background: bug.status === "Done" || bug.status === "Resuelto" || bug.status === "Finished" ? "rgba(34, 197, 94, 0.15)" : "rgba(239, 68, 68, 0.15)",
+                        color: bug.status === "Done" || bug.status === "Resuelto" || bug.status === "Finished" ? "#22C55E" : "#EF4444"
+                      }}>
+                        {bug.status}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", margin: 0 }}>Cargando bugs activos...</p>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Updates list */}
+          <div style={{ marginBottom: 40 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: 0 }}>
+                Updates
+              </p>
+            </div>
+            
+            {/* Custom dark list wrapper */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+              {updates.map((item) => (
+                <div
+                  key={item.key}
+                  onClick={() => {
+                    const u = updatesById.get(item.key);
+                    if (u) setOpenUpdate(u);
+                  }}
+                  className="glass-card"
+                  style={{ cursor: "pointer", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 20 }}
+                >
+                  <div>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                      <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(99, 102, 241, 0.15)", color: "#6366F1", padding: "2px 8px", borderRadius: 4, textTransform: "uppercase" }}>
+                        {item.tag}
+                      </span>
+                      <span style={{ fontSize: 14 }}>{item.icon}</span>
+                    </div>
+                    <h4 style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{item.name}</h4>
+                    <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>{item.description}</p>
+                  </div>
+                  <div style={{ marginTop: 14, fontSize: 11, fontWeight: 700, color: "#F77F00", display: "flex", alignItems: "center", gap: 4 }}>
+                    Ver →
+                  </div>
+                </div>
+              ))}
+              {updates.length === 0 && (
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay updates registrados.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Discovery projects list */}
+          <div style={{ marginBottom: 40 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: 0 }}>
+                Discovery Projects
+              </p>
+              {canCreate && (
+                <button
+                  onClick={() => { setShowForm(true); setFormError(null); }}
+                  style={{
+                    fontSize: 12, fontWeight: 700, color: "#F77F00",
+                    background: "rgba(247, 127, 0, 0.08)", border: "1px solid rgba(247, 127, 0, 0.2)", borderRadius: 8,
+                    padding: "6px 12px", cursor: "pointer",
+                  }}
+                >
+                  + Proyecto vacío
+                </button>
+              )}
+            </div>
+
+            {/* Custom dark list wrapper */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+              {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark
+                  canCreate={canCreate}
+                  pocs={pocsByParent.get(p.id) ?? []}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Pruebas de concepto list */}
+          <div style={{ marginBottom: 40 }}>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
+              Pruebas de concepto
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+              {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark
+                  canCreate={canCreate}
+                  pocs={[]}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                />
+              ))}
+              {poc.length === 0 && (
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay POCs cargadas para esta célula.</p>
+              )}
+            </div>
+          </div>
+
+        </div>
+
+        <HubFooter />
+        
+        {openUpdate && (
+          <div
+            onClick={() => setOpenUpdate(null)}
+            style={{
+              position: "fixed", inset: 0, background: "rgba(3,7,18,0.75)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              padding: 24, zIndex: 50, backdropFilter: "blur(4px)"
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                background: "#0c1020", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 16, maxWidth: 640, width: "100%",
+                maxHeight: "80vh", overflowY: "auto", padding: "28px",
+                boxShadow: "0 20px 60px rgba(0,0,0,0.5)", color: "#fff"
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
+                <h2 style={{ fontSize: 17, fontWeight: 800, color: "#fff", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
+                <button
+                  onClick={() => setOpenUpdate(null)}
+                  style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "rgba(255,255,255,0.4)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                  aria-label="Cerrar"
+                >
+                  ×
+                </button>
+              </div>
+              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
+              <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.8)", lineHeight: 1.7 }}>
+                {openUpdate.content.split("\n").map((line, i) => {
+                  const trimmed = line.trim();
+                  if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid rgba(255,255,255,0.1)", margin: "16px 0" }} />;
+                  if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
+                  if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
+                  return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
+                })}
+              </div>
+            </div>
+          </div>
+        )}
+      </main>
+    );
+  }
 
   return (
     <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
@@ -226,7 +840,9 @@ export default function CelulaHomePage() {
               { label: "Sellers Registrados", value: metrics.stats.totalSellers.toLocaleString(), sub: "Sincronizados de Userpilot", color: "#6366F1", icon: "👥" },
               { label: "Tasa de Activación", value: `${metrics.stats.activationRate}%`, sub: "Sellers con ≥1 orden", color: "#EC4899", icon: "⚡" },
               { label: "Sellers Activos (30d)", value: `${metrics.stats.activeRate}%`, sub: "Actividad constante en plataforma", color: "#22C55E", icon: "🎯" },
-              { label: "Tasa de Rebote (Bounce)", value: `${metrics.stats.bounceRate}%`, sub: "Sellers con ≤1 sesión web", color: "#EF4444", icon: "🚪" }
+              { label: "Tasa de Rebote (Bounce)", value: `${metrics.stats.bounceRate}%`, sub: "Sellers con ≤1 sesión web", color: "#EF4444", icon: "🚪" },
+              { label: "Supervivencia (30d)", value: `${metrics.stats.survivalRate ?? 69.38}%`, sub: "Sellers con ≥1 orden adicional", color: "#8B5CF6", icon: "🌱" },
+              { label: "TTV Neto (Mediana)", value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`, sub: "Registro hasta entrega exitosa", color: "#F59E0B", icon: "⏱️" }
             ].map((m) => (
               <div
                 key={m.label}
@@ -256,6 +872,62 @@ export default function CelulaHomePage() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Direccionamiento Estratégico Section */}
+        {params.slug === "sellers" && metrics && (
+          <div style={{
+            background: "#fff", border: "1px solid var(--border)",
+            borderRadius: 16, padding: 24, marginBottom: 36,
+            boxShadow: "0 1px 3px rgba(0,0,0,0.06)"
+          }}>
+            <h3 style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
+              <span>🎯</span> Direccionamiento Estratégico & Lentes PM OS
+            </h3>
+            
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 20 }}>
+              <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
+                  Norte & Propósito
+                </div>
+                <p style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, margin: "0 0 4px" }}>
+                  Que cada dropshipper gane dinero vendiendo en la plataforma.
+                </p>
+                <span style={{ fontSize: 11, color: "var(--muted)" }}>
+                  Activación = 1ª orden rentable · Retención = ganancia sostenida.
+                </span>
+              </div>
+
+              <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
+                  Territorio & Perfil
+                </div>
+                <p style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, margin: "0 0 4px" }}>
+                  Territorio E-commerce (Seller Success)
+                </p>
+                <span style={{ fontSize: 11, color: "var(--muted)" }}>
+                  Foco: Dropshippers (Rebuscador, Empleado Aspirante, Joven Visionario).
+                </span>
+              </div>
+
+              <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 16 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
+                  Lentes & Madurez (Q3 Focus)
+                </div>
+                <p style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, margin: "0 0 4px" }}>
+                  Nivel A (Iniciando) → TTV/Reptiliano
+                </p>
+                <span style={{ fontSize: 11, color: "var(--muted)" }}>
+                  Q3: Reducir fricción de activación neta (5.2%) y bruta (7.6%).
+                </span>
+              </div>
+            </div>
+            
+            <div style={{ marginTop: 16, fontSize: 11, color: "var(--muted)", display: "flex", flexWrap: "wrap", gap: 16, borderTop: "1px dashed var(--border)", paddingTop: 12 }}>
+              <span>🔑 <strong>Ownership:</strong> Módulo de marketing y herramientas de ventas/marketing.</span>
+              <span>📈 <strong>Alineación OKR:</strong> Todas las iniciativas empujan el KR1.1 de la holding (7.8M órdenes/mes).</span>
+            </div>
           </div>
         )}
 
@@ -522,24 +1194,43 @@ export default function CelulaHomePage() {
             </form>
           )}
 
-          <Section title="" items={discovery} ctaLabel="Ver proyecto →" />
-          {discovery.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos en Discovery para esta célula.</p>
-          )}
-        </div>
-
-        <div style={{ marginBottom: 56 }}>
-          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: "0 0 20px" }}>
-            Delivery Projects
-          </p>
-          <Section title="" items={delivery} ctaLabel="Ver proyecto →" />
-          {delivery.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos en Delivery para esta célula.</p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={pocsByParent.get(p.id) ?? []}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+              />
+            ))}
+          </div>
+          {proyectos.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
           )}
         </div>
 
         <div>
-          <Section title="Pruebas de concepto" items={poc} ctaLabel="Ver proyecto →" />
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Pruebas de concepto
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={[]}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+              />
+            ))}
+          </div>
           {poc.length === 0 && (
             <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
           )}

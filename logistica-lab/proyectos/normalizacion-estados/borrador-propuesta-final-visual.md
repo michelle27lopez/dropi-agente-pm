@@ -42,6 +42,36 @@ crudos que caigan en `Por clasificar`.
   99minutos/Futura. La validación final debe cruzar ambas listas.
 - 🔴 **El diff de 145 ajustes está desactualizado:** usa estados DB retirados; debe recalcularse.
 
+### 3.1 Incoherencia del propio entregable — corregida el 22-jul
+
+Las trazas de las 14 guías vivían como chips de texto libre, con vocabulario propio, sin tocar el mapa.
+**Es el error de capas que el proyecto denuncia, cometido dentro del entregable.** Corregido: cada paso
+es ahora un `id` de nodo del mapa y la vista cliente se **deriva** del nodo, no se escribe a mano.
+
+Lo que la normalización dejó a la vista:
+
+| Hallazgo | Detalle |
+|---|---|
+| 🔴 2 pasos eran de la capa cliente | `En preparación` → reclasificado a `Preparado para transportadora`. `Proceso finalizado` **no tiene nodo** y se muestra así: es el mismo gate abierto (no es terminal en crudo). |
+| 🟡 4 etiquetas no existían como nodo | `Pendiente confirmación`→`Por confirmar` · `Recibido transportadora`→`Recibido por transportadora` · `Devolución`→`En devolución` · `Devolución en proceso`→`En devolución` |
+| 🔴 **Ninguna guía llega al cierre de la devolución** | Corregido el 22-jul (lo detectó Juan): el crudo `Devolución` **no** es `Devolución confirmada por bodega`. Ese estado **lo marca el PROVEEDOR** cuando bodega recibe físicamente (§10.A, fase 7), así que una traza de carrier no puede contenerlo. Las 11 devoluciones de la muestra terminan con el paquete **en retorno**, sin prueba de recepción. **El cierre de la fase 7 no está validado por ningún dato.** |
+| 🟡 Dos crudos para el mismo estado | `Devolución` y `Devolución en proceso` caen ambos en `En devolución` — es el problema **P2** del catálogo (etiquetas destino inconsistentes), ahora visible en las trazas. |
+| 🟡 El nodo `Reintento de entrega` no aparece nunca | Las trazas reales vuelven directo a `En reparto`. O el nodo sobra, o el reintento no se registra como evento propio. |
+
+### 3.2 Cobertura real del catálogo: 14 de 24 nodos
+
+Las 14 guías recorren **14 nodos**. Los otros **10 están en el catálogo porque el macroproceso los define,
+no porque la muestra los pruebe**: `Pendiente de recolección` · `Entregado a transportadora` (todo el tramo
+ECOM sin Dropi) · `Recolección fallida` · `Reintento de recolección` · `Disponible para retiro` ·
+`Reintento de entrega` · `Siniestro` · `Indemnizado` · `Rechazado` · **`Devolución confirmada`**.
+
+⚠️ El más grave es el último: **el desenlace más frecuente de la muestra (11 de 14 guías) no tiene su
+estado de cierre validado.** Sabemos que el paquete vuelve; no tenemos un solo dato de que alguien
+confirme que llegó.
+
+El mapa ahora los marca con el interruptor **«Marcar sin validar»**. Entran a TI como propuesta, no como
+comportamiento observado — y eso debe decirse en la presentación.
+
 ## 4 · Gates para declarar la propuesta final
 
 1. 🔴 Confirmar `INTENTO DE ENTREGA` con Interrapidísimo y Veloces.

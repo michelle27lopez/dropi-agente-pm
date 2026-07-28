@@ -19,8 +19,12 @@ export async function GET(req: NextRequest) {
     );
   }
 
+  // El jql ya no lo controla el request — cualquier usuario logueado podía
+  // consultar issues de proyectos fuera de su alcance. Fijo al proyecto PROD;
+  // si se necesita un filtro distinto, se agrega como parámetro validado
+  // contra una lista blanca, no como JQL crudo.
+  const jql = DEFAULT_JQL;
   const { searchParams } = new URL(req.url);
-  const jql = searchParams.get("jql") ?? DEFAULT_JQL;
   const maxResults = Number(searchParams.get("maxResults") ?? "20");
 
   try {

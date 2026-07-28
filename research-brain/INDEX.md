@@ -14,6 +14,7 @@
 | [RB-002](RB-002-journey-dropshipper-registro-pauta.md) | Journey del Dropshipper: Desde Registro hasta Pauta Efectiva | 2026-06-23 | Dropshippers (novato → avanzado) | Onboarding, Catálogo, Integraciones, Pauta | alto | journey, registro, integraciones, facebook-ads, tiktok-ads, landing-page, contraentrega, postventa |
 | [RB-003](RB-003-matching-rules-dropshipper-catalogo.md) | Reglas de Negocio: Selección de Proveedores y Fórmulas de Seguridad de Stock | 2026-06-23 | Negocio / Catálogo | Catálogo, Proveedores, Pauta, Riesgo | alto | catálogo, proveedores, stock-seguridad, presupuesto, CPA, premium, verificado, fórmulas |
 | [RB-004](RB-004-personas-journey-proveedores.md) | Segmentos, Personas y Journey del Proveedor (Supplier) | 2026-07-08 | Suppliers (No Verificado, Verificado, Premium, Premium Exclusivo) | NEG-002, DCA-001, DESC-001, Combos, Supplier Lab | alto en segmentos/journey (hechos confirmados) · bajo en personas (inferencia razonada, sin entrevistas) | proveedores, suppliers, personas, journey, segmentos, verificado, premium, premium-exclusivo, ascenso |
+| [RB-005](RB-005-cuidado-campanas-dropi-pulso.md) | Cuidado de Campañas — Flujos, Dolores y Oportunidades para Dropi Pulso | 2026-07-21 | Equipo interno Cuidado de Campañas + Proveedores (Fran, Natalia) | PUL-001, CAT-001, CAZ-001, NEG-002 | alto (2 sesiones, pantallas compartidas, 40 min) | cuidado-campanas, pareto, stock, señal, dropi-pulso, nexus, excel-manual, BI, dias-de-stock, escalacion, concentracion-riesgo, product-intelligence, estandarizacion-ids, busqueda-producto, Franshesca, Ronald-Bogota |
 
 ---
 
@@ -32,6 +33,8 @@
 - **Embudos y Landing Pages**: RB-002
 - **Logística Contra Entrega (COD) y Postventa**: RB-002
 - **Segmentos y journey de suppliers (No Verificado/Verificado/Premium/Exclusivo)**: RB-004
+- **Cuidado de Campañas · Pareto · señal de stock**: RB-005
+- **Dropi Pulso · caso de uso operativo interno**: RB-005
 
 ---
 

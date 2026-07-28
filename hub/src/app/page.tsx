@@ -5,7 +5,10 @@ import { useRouter } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section, matchesQuery } from "@/components/HomeSections";
-import { isSprintAllowed } from "@/lib/sprint-access";
+import { isSprintAllowed, isMiDiaOwner } from "@/lib/sprint-access";
+import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
+import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
+import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 
 const updates: Item[] = [
   {
@@ -55,11 +58,6 @@ const updates: Item[] = [
   },
 ];
 
-type Proyecto = {
-  id: string; name: string; project_code: string | null;
-  handoff_status: string | null; type: string | null; summary: string | null;
-};
-
 // Home curado de Suppliers: solo estos 13 proyectos reales de la tabla
 // `projects` se muestran aquí (10 Discovery projects + 3 POC), aunque la
 // célula tenga más filas en la base — el resto vive en /celula/suppliers.
@@ -76,12 +74,24 @@ const PROJECT_STYLE: Record<string, { url: string; color: string; icon: string }
   "COM-002": { url: "/proyectos/combos", color: "#F77F00", icon: "📦" },
   "DESC-001": { url: "/proyectos/descuentos", color: "#F59E0B", icon: "🏷️" },
   "PULSO-001": { url: "/proyectos/pulso-demo", color: "#F77F00", icon: "⚡" },
+  "PUL-001":   { url: "/proyectos/pulso-demo", color: "#EC4899", icon: "🔭" },
   "GALI-001": { url: "/proyectos/gali-demo", color: "#FF6102", icon: "🦊" },
   "ACT-001": { url: "/proyectos/dropi-activa", color: "#7C3AED", icon: "🚀" },
+  "ESP-001": { url: "/proyectos/espionaje", color: "#10B981", icon: "🕵️" },
 };
 
 function truncate(text: string, max: number) {
   return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
+}
+
+function matchesProyectoQuery(p: Proyecto, q: string) {
+  const query = q.trim().toLowerCase();
+  if (!query) return true;
+  return (
+    p.name.toLowerCase().includes(query) ||
+    (p.summary ?? "").toLowerCase().includes(query) ||
+    (p.project_code ?? "").toLowerCase().includes(query)
+  );
 }
 
 function proyectoToItem(p: Proyecto): Item | null {
@@ -102,6 +112,8 @@ export default function HubPage() {
   const [query, setQuery] = useState("");
   const [checkingRole, setCheckingRole] = useState(true);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [profile, setProfile] = useState<{ is_super_admin: boolean; celula_id: string | null } | null>(null);
+  const [celulaId, setCelulaId] = useState<string | null>(null);
   const [proyectosReales, setProyectosReales] = useState<Proyecto[]>([]);
   const router = useRouter();
 
@@ -125,6 +137,7 @@ export default function HubPage() {
         const profile = data?.profile;
         setUserEmail(data?.user?.email ?? profile?.email ?? null);
         if (!profile) { setCheckingRole(false); return; }
+        setProfile({ is_super_admin: !!profile.is_super_admin, celula_id: profile.celula_id ?? null });
 
         const yaRedirigido = sessionStorage.getItem("darwin-home-routed") === "1";
         sessionStorage.setItem("darwin-home-routed", "1");
@@ -151,12 +164,92 @@ export default function HubPage() {
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data?.proyectos)) setProyectosReales(data.proyectos);
+        if (data?.id) setCelulaId(data.id);
       })
       .catch(() => {});
   }, [hasSupabase, router, userEmail]);
 
   if (checkingRole) {
     return <main style={{ minHeight: "100vh" }} />;
+  }
+
+  const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celulaId);
+
+  // Aunque este home muestre solo la lista curada de PROJECT_STYLE, los
+  // badges de POC hijos se calculan sobre TODOS los proyectos reales — así
+  // un POC nuevo se ve como acceso directo desde su padre aunque su propio
+  // código no esté (todavía) en la curaduría.
+  const pocsByParent = new Map<string, Proyecto[]>();
+  for (const p of proyectosReales) {
+    if (p.type === "POC" && p.parent_project_id) {
+      const list = pocsByParent.get(p.parent_project_id) ?? [];
+      list.push(p);
+      pocsByParent.set(p.parent_project_id, list);
+    }
+  }
+
+  async function handleEstadoChange(id: string, estado: string) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado_interno: estado }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setProyectosReales((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  }
+
+  async function handleVpvChange(id: string, vpv: number | null) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ vpv }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setProyectosReales((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  }
+
+  async function handleCrearPoc(parent: Proyecto, name: string, summary: string) {
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary }),
+    });
+    if (!res.ok) return;
+    const created = await res.json();
+    setProyectosReales((prev) => [...prev, created]);
+  }
+
+  const projects = proyectosReales
+    .filter((p) => p.type !== "POC")
+    .map(proyectoToItem)
+    .filter((item): item is Item => item !== null);
+  const poc = proyectosReales
+    .filter((p) => p.type === "POC")
+    .map(proyectoToItem)
+    .filter((item): item is Item => item !== null);
+
+  // Home privada: este es el home real de Michelle (célula "suppliers" cae
+  // aquí, no en celula/[slug]) — reemplaza el grid estándar por el
+  // dashboard de "mi día". Ver [[project_darwin_pd_dashboard]].
+  if (isMiDiaOwner(userEmail)) {
+    return (
+      <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1, display: "flex", alignItems: "flex-start" }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <HubHeader title="Darwin" subtitle="Tu día · Darwin" currentSlug="suppliers" />
+            <div style={{ display: "flex", alignItems: "flex-start" }}>
+              <ProjectSidebar allProjects={projects} allPoc={poc} />
+              <div style={{ flex: 1, minWidth: 0, maxWidth: 900, padding: "48px 32px" }}>
+                <HomeDashboard />
+              </div>
+            </div>
+          </div>
+        </div>
+        <HubFooter />
+      </main>
+    );
   }
 
   // /sprint solo es visible para Michelle y Jaime (alcance confirmado
@@ -174,19 +267,15 @@ export default function HubPage() {
       }]
     : updates;
 
-  const projects = proyectosReales
-    .filter((p) => p.type !== "POC")
-    .map(proyectoToItem)
-    .filter((item): item is Item => item !== null);
-  const poc = proyectosReales
-    .filter((p) => p.type === "POC")
-    .map(proyectoToItem)
-    .filter((item): item is Item => item !== null);
-
   const filteredUpdates = visibleUpdates.filter((item) => matchesQuery(item, query));
-  const filteredProjects = projects.filter((item) => matchesQuery(item, query));
-  const filteredPoc = poc.filter((item) => matchesQuery(item, query));
-  const hasResults = filteredUpdates.length + filteredProjects.length + filteredPoc.length > 0;
+
+  // Lista curada (PROJECT_STYLE) pero ya con los datos reales de `projects`
+  // — así el select de estado y el VPV quedan conectados a la base.
+  const curatedProjects = proyectosReales.filter((p) => p.type !== "POC" && p.project_code && PROJECT_STYLE[p.project_code]);
+  const curatedPoc = proyectosReales.filter((p) => p.type === "POC" && p.project_code && PROJECT_STYLE[p.project_code]);
+  const filteredCuratedProjects = curatedProjects.filter((p) => matchesProyectoQuery(p, query));
+  const filteredCuratedPoc = curatedPoc.filter((p) => matchesProyectoQuery(p, query));
+  const hasResults = filteredUpdates.length + filteredCuratedProjects.length + filteredCuratedPoc.length > 0;
 
   return (
     <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
@@ -232,10 +321,56 @@ export default function HubPage() {
           <Section title="Updates" items={filteredUpdates} ctaLabel="Ver →" />
         </div>
 
-        <Section title="Discovery projects" items={filteredProjects} ctaLabel="Ver proyecto →" />
+        <div>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Discovery projects
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {filteredCuratedProjects.map((p) => {
+              const style = p.project_code ? PROJECT_STYLE[p.project_code] : undefined;
+              return (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={pocsByParent.get(p.id) ?? []}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                  urlOverride={style?.url}
+                  colorOverride={style?.color}
+                  iconOverride={style?.icon}
+                />
+              );
+            })}
+          </div>
+        </div>
 
-        <div style={{ marginTop: filteredPoc.length ? 56 : 0 }}>
-          <Section title="Pruebas de concepto" items={filteredPoc} ctaLabel="Ver proyecto →" />
+        <div style={{ marginTop: filteredCuratedPoc.length ? 56 : 0 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Pruebas de concepto
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {filteredCuratedPoc.map((p) => {
+              const style = p.project_code ? PROJECT_STYLE[p.project_code] : undefined;
+              return (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                  urlOverride={style?.url}
+                  colorOverride={style?.color}
+                  iconOverride={style?.icon}
+                />
+              );
+            })}
+          </div>
         </div>
 
         <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 48, textAlign: "center" }}>
