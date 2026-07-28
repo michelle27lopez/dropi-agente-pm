@@ -25,7 +25,7 @@ function truncate(text: string | undefined | null, max: number) {
 }
 
 export function projectUrl(p: Proyecto) {
-  return p.prototype_url ?? `/proyectos/${p.project_code ? p.project_code.toLowerCase() : p.id}`;
+  return `/proyectos/${p.project_code ? p.project_code.toLowerCase() : p.id}`;
 }
 
 export function ProjectCard({
