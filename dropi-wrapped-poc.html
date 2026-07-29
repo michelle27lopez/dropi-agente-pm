@@ -3,22 +3,32 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Dropi Wrapped 2025</title>
-<!-- Google Fonts: Outfit -->
+<title>Leyendas Dropi — Tu Wrapped 2025</title>
+<!-- Google Fonts: Chakra Petch & Rationale -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700;800&family=Rationale&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #07030e;
-    --paper: #faf7ff;
+    --ink: #050209;
+    --paper: #f4f2f7;
     --ease: cubic-bezier(.16, 1, .3, 1);
-    --primary-gradient: linear-gradient(135deg, #00f5d4, #7b2ff7);
-    --pink-gradient: linear-gradient(135deg, #f72585, #7209b7);
-    --gold-gradient: linear-gradient(135deg, #ffd23f, #ff5714);
-    --cyan-glow: 0 0 30px rgba(0, 245, 212, 0.4);
-    --pink-glow: 0 0 30px rgba(247, 37, 131, 0.4);
-    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    
+    /* Leyendas Palette */
+    --color-iniciado: #EAEAEA;
+    --color-experto: #7f7f7f;
+    --color-maestro: #FF8500;
+    --color-sabia: #FF4800;
+    --color-leyenda: #FF0000;
+    
+    --primary-gradient: linear-gradient(135deg, var(--color-maestro), var(--color-leyenda));
+    --pink-gradient: linear-gradient(135deg, var(--color-sabia), var(--color-leyenda));
+    --gold-gradient: linear-gradient(135deg, #ffd23f, var(--color-maestro));
+    
+    --orange-glow: 0 0 30px rgba(255, 133, 0, 0.45);
+    --red-glow: 0 0 30px rgba(255, 0, 0, 0.45);
+    
+    font-family: 'Chakra Petch', -apple-system, BlinkMacSystemFont, sans-serif;
   }
   
   * {
@@ -30,7 +40,7 @@
   
   html, body {
     height: 100%;
-    background: #020106;
+    background: #020104;
     overflow: hidden;
     overscroll-behavior: none;
   }
@@ -39,7 +49,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: radial-gradient(circle at center, #180933 0%, #030107 100%);
+    background: radial-gradient(circle at center, #1b0c03 0%, #030107 100%);
   }
 
   /* ---------- Stage (Premium Smartphone frame on desktop) ---------- */
@@ -52,7 +62,7 @@
     background: var(--ink);
     overflow: hidden;
     user-select: none;
-    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(123, 47, 247, 0.25);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 72, 0, 0.2);
     transition: all 0.5s var(--ease);
   }
   
@@ -108,17 +118,17 @@
     100% { background-position: 0% 50% }
   }
 
-  /* ---------- Gradients per slide (vibrant, dark & premium) ---------- */
-  .g0 { background: radial-gradient(circle at 10% 10%, #7b2ff7 0%, #1a083a 50%, #07030e 100%); }
-  .g1 { background: radial-gradient(circle at 90% 10%, #f72585 0%, #3a0ca3 60%, #07030e 100%); }
-  .g2 { background: radial-gradient(circle at 10% 90%, #00f5d4 0%, #051937 50%, #020106 100%); }
-  .g3 { background: radial-gradient(circle at 90% 90%, #ff5714 0%, #3a0007 55%, #07030e 100%); }
-  .g4 { background: radial-gradient(circle at 50% 10%, #4cc9f0 0%, #0b2545 60%, #07030e 100%); }
-  .g5 { background: radial-gradient(circle at 20% 50%, #b5179e 0%, #240046 55%, #05010a 100%); }
-  .g6 { background: radial-gradient(circle at 80% 80%, #ff007f 0%, #1e0035 60%, #05010a 100%); }
-  .g7 { background: radial-gradient(circle at 50% 20%, #ffbe0b 0%, #5c1d00 65%, #07030e 100%); }
-  .g8 { background: radial-gradient(circle at 50% 50%, #7209b7 0%, #10002b 60%, #040108 100%); }
-  .g9 { background: radial-gradient(circle at 50% 0%, #00f5d4 0%, #560bad 50%, #07030e 100%); }
+  /* ---------- Gradients per slide (Leyendas brand palette) ---------- */
+  .g0 { background: radial-gradient(circle at 10% 10%, rgba(234, 234, 234, 0.25) 0%, #0d0d0d 60%, #050209 100%); } /* Iniciado */
+  .g1 { background: radial-gradient(circle at 90% 10%, rgba(127, 127, 127, 0.3) 0%, #141414 60%, #050209 100%); } /* Experto */
+  .g2 { background: radial-gradient(circle at 10% 90%, #FF8500 0%, #241100 60%, #050209 100%); } /* Maestro */
+  .g3 { background: radial-gradient(circle at 90% 90%, #FF4800 0%, #2e0800 60%, #050209 100%); } /* Sabia */
+  .g4 { background: radial-gradient(circle at 50% 10%, #FF0000 0%, #300000 60%, #050209 100%); } /* Leyenda */
+  .g5 { background: radial-gradient(circle at 20% 50%, #FF8500 0%, #1b092c 55%, #050209 100%); }
+  .g6 { background: radial-gradient(circle at 80% 80%, #FF4800 0%, #260020 60%, #050209 100%); }
+  .g7 { background: radial-gradient(circle at 50% 20%, #FF0000 0%, #2d000a 65%, #050209 100%); }
+  .g8 { background: radial-gradient(circle at 50% 50%, #7f7f7f 0%, #150920 60%, #050209 100%); }
+  .g9 { background: radial-gradient(circle at 50% 0%, #FF0000 0%, #2b0b00 50%, #050209 100%); }
 
   /* ---------- Typography & Elements ---------- */
   .kicker {
@@ -126,58 +136,58 @@
     font-weight: 800;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: #00f5d4;
-    text-shadow: 0 0 10px rgba(0,245,212,0.3);
+    color: var(--color-maestro);
+    text-shadow: 0 0 10px rgba(255,133,0,0.3);
     margin-bottom: 16px;
   }
   
   .big {
-    font-size: clamp(60px, 20vw, 102px);
-    font-weight: 900;
+    font-size: clamp(52px, 16vw, 92px);
+    font-weight: 800;
     line-height: 0.88;
-    letter-spacing: -0.05em;
-    background: linear-gradient(to right, #fff, #d2c4ff);
+    letter-spacing: -0.04em;
+    background: linear-gradient(to right, #fff, #ffe2cc);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
   
   .med {
-    font-size: clamp(32px, 9.5vw, 42px);
-    font-weight: 900;
+    font-size: clamp(30px, 9vw, 40px);
+    font-weight: 800;
     line-height: 1.05;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
   }
   
   .lede {
-    font-size: clamp(18px, 5.2vw, 22px);
+    font-size: clamp(17px, 5vw, 21px);
     font-weight: 500;
     line-height: 1.4;
     opacity: 0.92;
   }
   
   .sub {
-    font-size: 14.5px;
+    font-size: 14px;
     font-weight: 400;
-    color: #dfd5f5;
+    color: #e5def5;
     margin-top: 14px;
     line-height: 1.5;
   }
   
   .accent {
-    color: #00f5d4;
-    background: rgba(0, 245, 212, 0.12);
-    padding: 0.1em 0.35em;
+    color: var(--color-maestro);
+    background: rgba(255, 133, 0, 0.12);
+    padding: 0.15em 0.4em;
     border-radius: 8px;
-    border: 1px solid rgba(0, 245, 212, 0.2);
+    border: 1px solid rgba(255, 133, 0, 0.2);
     font-weight: 600;
-    text-shadow: 0 0 8px rgba(0,245,212,0.25);
+    text-shadow: 0 0 8px rgba(255, 133, 0, 0.25);
   }
   
   .up {
     display: inline-block;
   }
 
-  /* Animación de entrada de elementos */
+  /* Entry animation */
   .reveal {
     opacity: 0;
     transform: translateY(22px);
@@ -261,9 +271,6 @@
     align-items: center;
     justify-content: space-between;
     z-index: 30;
-    font-weight: 800;
-    font-size: 13.5px;
-    letter-spacing: 0.04em;
     color: rgba(255, 255, 255, 0.95);
   }
   
@@ -274,32 +281,22 @@
   }
   
   #brand .logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-family: 'Rationale', sans-serif;
+    font-size: 22px;
+    letter-spacing: 6px;
     text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 0.12em;
+    color: var(--color-leyenda);
+    text-shadow: 0 0 12px rgba(255, 0, 0, 0.5);
   }
   
   #brand .logo-wrapped {
-    font-weight: 900;
-    background: linear-gradient(135deg, #00f5d4, #f72585);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
-  #brand .dot {
-    width: 20px;
-    height: 20px;
-    border-radius: 6px;
-    background: linear-gradient(135deg, #00f5d4, #f72585);
-    display: grid;
-    place-items: center;
+    font-family: 'Chakra Petch', sans-serif;
     font-size: 11px;
-    font-weight: 900;
-    color: #12021f;
-    box-shadow: 0 0 15px rgba(247, 37, 133, 0.4);
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0.8;
   }
 
   /* ---------- Nav touch zones ---------- */
@@ -333,7 +330,7 @@
   .metric .unit {
     font-size: 24px;
     font-weight: 800;
-    color: #bfaaff;
+    color: #ffd9bf;
   }
   
   .delta {
@@ -343,15 +340,15 @@
     margin-top: 18px;
     font-size: 14.5px;
     font-weight: 800;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 10px 16px;
     border-radius: 99px;
     backdrop-filter: blur(10px);
   }
   
   .delta b {
-    color: #00f5d4;
+    color: var(--color-maestro);
   }
 
   /* Progress Ring gradient-styled */
@@ -372,9 +369,9 @@
     display: grid;
     place-items: center;
     font-size: 52px;
-    font-weight: 900;
+    font-weight: 800;
     letter-spacing: -0.04em;
-    background: linear-gradient(135deg, #fff, #00f5d4);
+    background: linear-gradient(135deg, #fff, var(--color-maestro));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -387,7 +384,7 @@
     stroke: url(#ringGrad);
     stroke-linecap: round;
     transition: stroke-dashoffset 1.4s var(--ease) 0.3s;
-    filter: drop-shadow(0 0 8px rgba(0, 245, 212, 0.5));
+    filter: drop-shadow(0 0 8px rgba(255, 133, 0, 0.5));
   }
 
   /* Goal bar */
@@ -398,9 +395,9 @@
   .goal .track {
     height: 18px;
     border-radius: 99px;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
   }
   
@@ -409,8 +406,8 @@
     height: 100%;
     width: 0;
     border-radius: 99px;
-    background: linear-gradient(90deg, #00f5d4, #7b2ff7);
-    box-shadow: 0 0 12px rgba(0, 245, 212, 0.4);
+    background: linear-gradient(90deg, var(--color-maestro), var(--color-leyenda));
+    box-shadow: 0 0 12px rgba(255, 133, 0, 0.4);
     transition: width 1.6s var(--ease) 0.4s;
   }
   
@@ -420,7 +417,7 @@
     margin-top: 10px;
     font-size: 13.5px;
     font-weight: 800;
-    color: #dfd5f5;
+    color: #e5def5;
   }
 
   /* Chips leaderboards (Glassmorphic cards) */
@@ -435,8 +432,8 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 18px;
     padding: 14px 18px;
     backdrop-filter: blur(12px);
@@ -446,14 +443,14 @@
   .chip:hover {
     transform: translateX(4px);
     border-color: rgba(255, 255, 255, 0.15);
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.06);
   }
   
   .chip .rank {
     font-size: 19px;
-    font-weight: 900;
+    font-weight: 800;
     width: 24px;
-    color: #bfaaff;
+    color: var(--color-maestro);
   }
   
   .chip .name {
@@ -463,19 +460,19 @@
   
   .chip .qty {
     margin-left: auto;
-    font-weight: 900;
+    font-weight: 800;
     font-size: 16px;
-    color: #00f5d4;
+    color: #fff;
   }
   
   .chip.first {
-    background: linear-gradient(100deg, rgba(255, 210, 63, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
-    border-color: rgba(255, 210, 63, 0.28);
+    background: linear-gradient(100deg, rgba(255, 133, 0, 0.15) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-color: rgba(255, 133, 0, 0.3);
   }
   
   .chip.first .rank {
-    color: #ffd23f;
-    text-shadow: 0 0 10px rgba(255, 210, 63, 0.4);
+    color: var(--color-maestro);
+    text-shadow: 0 0 10px rgba(255, 133, 0, 0.4);
   }
 
   /* CTAs & Button design */
@@ -499,26 +496,26 @@
   
   .btn.primary {
     background: #fff;
-    color: #12021f;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 255, 255, 0.1);
+    color: var(--ink);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 255, 255, 0.1);
   }
   
   .btn.primary:hover {
-    background: #00f5d4;
-    color: #000;
-    box-shadow: 0 10px 30px rgba(0, 245, 212, 0.3);
+    background: var(--color-maestro);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(255, 133, 0, 0.3);
   }
   
   .btn.ghost {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
     color: #fff;
-    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
   }
   
   .btn.ghost:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.5);
   }
   
   .btn:active {
@@ -529,8 +526,8 @@
   .arch {
     margin-top: 10px;
     text-align: center;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 24px;
     padding: 24px 20px;
     backdrop-filter: blur(16px);
@@ -558,7 +555,7 @@
     font-weight: 800;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #bfaaff;
+    color: #ffd9bf;
   }
 
   /* ---------- PM Lens container & Switch (Glassmorphism dashboard) ---------- */
@@ -570,8 +567,8 @@
     display: flex;
     align-items: center;
     gap: 9px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: #fff;
     border-radius: 99px;
     padding: 8px 14px;
@@ -584,8 +581,8 @@
   }
   
   #lensToggle:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
   }
   
   #lensToggle .sw {
@@ -611,21 +608,21 @@
   }
   
   body.lens #lensToggle .sw {
-    background: #00f5d4;
+    background: var(--color-maestro);
   }
   
   body.lens #lensToggle .sw::after {
     left: 16px;
   }
-
+ 
   .lens {
     position: absolute;
     left: 22px;
     right: 22px;
     bottom: 74px;
     z-index: 34;
-    background: rgba(7, 3, 16, 0.88);
-    border: 1px solid rgba(0, 245, 212, 0.45);
+    background: rgba(5, 2, 9, 0.94);
+    border: 1px solid rgba(255, 133, 0, 0.35);
     border-radius: 20px;
     padding: 16px 18px;
     backdrop-filter: blur(16px);
@@ -646,7 +643,7 @@
     font-weight: 800;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: #00f5d4;
+    color: var(--color-maestro);
     margin-bottom: 6px;
   }
   
@@ -654,7 +651,7 @@
     font-size: 13px;
     font-weight: 500;
     line-height: 1.45;
-    color: #e2daff;
+    color: #e5daff;
   }
 
   /* Confetti */
@@ -705,11 +702,11 @@
 </head>
 <body>
 
-<div id="stage" aria-label="Dropi Wrapped">
+<div id="stage" aria-label="Leyendas Dropi">
   <div id="bars"></div>
   <div id="brand">
-    <div class="logo"><span class="dot">D</span><span>Dropi&nbsp;<span class="logo-wrapped">Wrapped</span></span></div>
-    <span style="opacity:0.65; font-size: 12px; font-weight: 800;">2025</span>
+    <div class="logo">LEYENDAS</div>
+    <span class="logo-wrapped">WRAPPED 2025</span>
   </div>
 
   <div id="fx"></div>
@@ -718,8 +715,8 @@
   <svg style="width:0; height:0; position:absolute;">
     <defs>
       <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#00f5d4" />
-        <stop offset="100%" stop-color="#7b2ff7" />
+        <stop offset="0%" stop-color="#FF8500" />
+        <stop offset="100%" stop-color="#FF0000" />
       </linearGradient>
     </defs>
   </svg>
@@ -727,72 +724,72 @@
   <!-- 0 · INTRO -->
   <section class="slide g0 active">
     <div class="kicker reveal d1">Hola, Valentina 👋</div>
-    <div class="med reveal d2">Este fue tu año<br>moviendo producto<br>en <span class="accent">Dropi</span>.</div>
-    <div class="sub reveal d3">4 países. 52 semanas. Miles de pedidos contra entrega.<br>Toca para revivirlo →</div>
+    <div class="med reveal d2">Tu retrospectiva<br>de estatus en<br><span class="accent" style="color:var(--color-maestro); border-color:var(--color-maestro);">LEYENDAS</span></div>
+    <div class="sub reveal d3">Descubre tu rango, tus drops acumulados de por vida y cómo tu consistencia consolida tu imperio.<br>Toca para iniciar tu ascenso →</div>
     <div class="lens">
-      <div class="tt">Lente · Trigger + curiosidad</div>
-      <div class="tx">Abrir con el nombre del seller y una promesa de identidad activa el Sistema 1 ("esto es sobre mí"). Es el prompt del loop conductual.</div>
+      <div class="tt">Lente · Identidad y Pertenencia (SDT)</div>
+      <div class="tx">Mapear el Wrapped como el camino transcurrido en el programa "Leyendas" y no como estadísticas sueltas activa la autonomía y el sentido de competencia del vendedor.</div>
     </div>
   </section>
 
-  <!-- 1 · ÓRDENES -->
+  <!-- 1 · ÓRDENES / DROPS -->
   <section class="slide g1">
-    <div class="kicker reveal d1">Órdenes movilizadas</div>
+    <div class="kicker reveal d1">Drops Históricos Acumulados</div>
     <div class="metric"><div class="big up" data-count="4820" data-dur="1600">0</div></div>
-    <div class="lede reveal d3" style="margin-top:18px">Cada una salió de tu tienda a la calle.<br>Eso es <span class="accent">1 pedido cada 1.8 horas</span>, todo el año.</div>
-    <div class="delta reveal d4">📦 <span><b>+63%</b> vs. tu 2024</span></div>
+    <div class="lede reveal d3" style="margin-top:18px">Cada drop representa una orden completada con éxito. Has consolidado <span class="accent">1 drop cada 1.8 horas</span> de por vida.</div>
+    <div class="delta reveal d4">📦 <span><b>+63%</b> drops vs. tu 2024</span></div>
     <div class="lens">
-      <div class="tt">Lente · Measure what matters, show what motivates</div>
-      <div class="tx">El outcome del negocio es la movilización (evitar fuga de logística). Devolvérselo al dropshipper como logro personal y no como métrica fría refuerza el comportamiento núcleo del vendedor.</div>
+      <div class="tt">Lente · Inversión Conductual (Lock-In)</div>
+      <div class="tx">El saldo histórico de drops es un capital persistente acumulado que nunca se pierde. Actúa como el ancla de retención definitiva ("sunk cost"), elevando el costo de abandonar Dropi.</div>
     </div>
   </section>
 
   <!-- 2 · VENTAS COD -->
   <section class="slide g2">
-    <div class="kicker reveal d1">Ventas contra entrega</div>
+    <div class="kicker reveal d1">Volumen Transaccionado</div>
     <div class="metric"><span class="med up" style="opacity:0.9; margin-right: 4px;">$</span><div class="big up" data-count="312" data-dur="1500">0</div><span class="unit reveal d3" style="margin-left: 6px;">M COP</span></div>
-    <div class="lede reveal d3" style="margin-top:18px">Movidos con <span class="accent">pago contra entrega</span>.<br>Sin inventario propio. Sin capital congelado.</div>
-    <div class="delta reveal d4">💸 <span>Tu mejor mes: <b>Noviembre</b> · $48M</span></div>
+    <div class="lede reveal d3" style="margin-top:18px">Valor bruto movilizado mediante pago contra entrega (COD). Tu tienda es un motor de activación comercial clave.</div>
+    <div class="delta reveal d4">💸 <span>Tu racha dorada: <b>Noviembre</b> · $48M</span></div>
     <div class="lens">
-      <div class="tt">Lente · Valor percibido</div>
-      <div class="tx">El contra entrega (COD) es el motor financiero de Dropi. Recordar el volumen de dinero transaccionado sin apalancamiento de inventario reafirma el valor de permanecer en la plataforma (Ability/Márgenes).</div>
+      <div class="tt">Lente · Refuerzo de Capacidad (Ability)</div>
+      <div class="tx">Hacer tangible el volumen total transaccionado sin apalancarse en inventarios propios refuerza la baja fricción operativa de nuestro modelo de negocio.</div>
     </div>
   </section>
 
   <!-- 3 · TOP PRODUCTO -->
   <section class="slide g3">
-    <div class="kicker reveal d1">Tu producto estrella</div>
+    <div class="kicker reveal d1">Tus Combustibles de Ascenso</div>
     <div class="med reveal d2" style="margin-bottom: 4px;">Kit de bandas<br>de resistencia 🏋️</div>
     <div class="chips">
-      <div class="chip first reveal d3"><span class="rank">1</span><span class="name">Kit bandas fitness</span><span class="qty">1.240</span></div>
-      <div class="chip reveal d3" style="transition-delay:0.5s"><span class="rank">2</span><span class="name">Organizador de closet</span><span class="qty">870</span></div>
-      <div class="chip reveal d4"><span class="rank">3</span><span class="name">Lámpara de luna 3D</span><span class="qty">640</span></div>
+      <div class="chip first reveal d3"><span class="rank">1</span><span class="name">Kit bandas fitness</span><span class="qty">1.240 drops</span></div>
+      <div class="chip reveal d3" style="transition-delay:0.5s"><span class="rank">2</span><span class="name">Organizador de closet</span><span class="qty">870 drops</span></div>
+      <div class="chip reveal d4"><span class="rank">3</span><span class="name">Lámpara de luna 3D</span><span class="qty">640 drops</span></div>
     </div>
     <div class="lens">
-      <div class="tt">Lente · Investment (Próxima Acción)</div>
-      <div class="tx">Nombrar el ganador histórico activa el deseo de repetición ("reordena / escala este"). El dato del pasado actúa precargando de forma simple la decisión de pauta del próximo ciclo.</div>
+      <div class="tt">Lente · Saliencia del Catálogo</div>
+      <div class="tx">Recordar los ganadores históricos ayuda al vendedor a segmentar sus futuros tests de pauta en base a su propia habilidad demostrada.</div>
     </div>
   </section>
 
   <!-- 4 · RUTA -->
   <section class="slide g4">
-    <div class="kicker reveal d1">Tu ruta campeona</div>
+    <div class="kicker reveal d1">Tus Corredores de Estatus</div>
     <div class="med reveal d2">Bogotá&nbsp;→&nbsp;Medellín</div>
-    <div class="lede reveal d3" style="margin-top:16px">Tu corredor más rentable:<br><span class="accent">92% de entregas efectivas</span> y devoluciones al mínimo.</div>
+    <div class="lede reveal d3" style="margin-top:16px">Tu ruta de menor fricción y mayor efectividad, logrando una tasa de <span class="accent">92% de entregas exitosas</span>.</div>
     <div class="chips" style="margin-top:18px">
-      <div class="chip reveal d3">🇨🇴 <span class="name">Colombia</span><span class="qty">3.910 envíos</span></div>
-      <div class="chip reveal d3" style="transition-delay:0.45s">🇲🇽 <span class="name">México</span><span class="qty">560 envíos</span></div>
-      <div class="chip reveal d4">🇨🇱 <span class="name">Chile</span><span class="qty">350 envíos</span></div>
+      <div class="chip reveal d3">🇨🇴 <span class="name">Colombia</span><span class="qty">3.910 drops</span></div>
+      <div class="chip reveal d3" style="transition-delay:0.45s">🇲🇽 <span class="name">México</span><span class="qty">560 drops</span></div>
+      <div class="chip reveal d4">🇨🇱 <span class="name">Chile</span><span class="qty">350 drops</span></div>
     </div>
     <div class="lens">
       <div class="tt">Lente · Reducción de Fricción (Ability)</div>
-      <div class="tx">Hacer visible la ruta de menor fricción facilita la decisión del próximo test de pauta. Le dices exactamente dónde es fácil ganar hoy. "Easiest beats loudest".</div>
+      <div class="tx">Destacar visualmente las zonas con mayor tasa de entrega reduce la incertidumbre logística del seller, incentivando la pauta y la continuidad comercial en rutas probadas.</div>
     </div>
   </section>
 
   <!-- 5 · TASA DE ENTREGA -->
   <section class="slide g5">
-    <div class="kicker reveal d1">Tu tasa de entrega COD</div>
+    <div class="kicker reveal d1">Tasa de Efectividad COD</div>
     <div class="ring pop">
       <svg width="190" height="190" viewBox="0 0 190 190">
         <circle class="ringtrack" cx="95" cy="95" r="82" fill="none" stroke-width="16"/>
@@ -801,69 +798,69 @@
       </svg>
       <div class="val"><span class="up" data-count="74" data-dur="1400">0</span>%</div>
     </div>
-    <div class="lede reveal d3" style="text-align:center; margin-top: 14px;">Subiste de <b>61%</b> a <b>74%</b> este año.</div>
-    <div class="delta reveal d4" style="margin:18px auto 0; display: flex; justify-content: center;">🎯 <span>Estás a <b>1 punto</b> de la meta (≥75%)</span></div>
+    <div class="lede reveal d3" style="text-align:center; margin-top: 14px;">Subiste de <b>61%</b> a <b>74%</b> de efectividad.</div>
+    <div class="delta reveal d4" style="margin:18px auto 0; display: flex; justify-content: center;">🎯 <span>A solo <b>1 punto</b> de la meta de excelencia (75%)</span></div>
     <div class="lens">
-      <div class="tt">Lente · Goal-Gradient (Gradiente de Meta)</div>
-      <div class="tx">La proximidad al objetivo acelera el esfuerzo. Enmarcar el logro como "a 1 punto de la meta" genera mayor empuje conductual que reportar simplemente la cifra de 74%.</div>
+      <div class="tt">Lente · Goal-Gradient Effect (Gradiente de Meta)</div>
+      <div class="tx">La proximidad al hito acelera el esfuerzo. Enmarcar el logro como "a 1 punto de la meta" genera mayor urgencia e impulso conductual que reportar solo la cifra.</div>
     </div>
   </section>
 
   <!-- 6 · RACHA -->
   <section class="slide g6">
-    <div class="kicker reveal d1">Tu racha activa</div>
+    <div class="kicker reveal d1">Racha de Permanencia (RAP)</div>
     <div class="metric"><div class="big up" data-count="18" data-dur="1200">0</div><span class="unit reveal d3" style="margin-left: 6px;">semanas 🔥</span></div>
-    <div class="lede reveal d3" style="margin-top:18px">18 semanas seguidas con ventas.<br>Tu racha más larga <span class="accent">hasta hoy</span>.</div>
-    <div class="delta reveal d4">⚠️ <span>Vende esta semana para <b>no romper la racha</b></span></div>
+    <div class="lede reveal d3" style="margin-top:18px">18 semanas consecutivas con ventas activas. Tu racha de continuidad más larga hasta hoy.</div>
+    <div class="delta reveal d4">⚠️ <span>Factura esta semana para <b>no enfriar tu racha</b></span></div>
     <div class="lens">
-      <div class="tt">Lente · Loss Aversion (Retención)</div>
-      <div class="tx">La racha redefine la inactividad como una pérdida ("no la rompas"). Loss aversion funciona 2 veces más fuerte que una arenga motivadora tradicional. Es el motor principal de retención.</div>
+      <div class="tt">Lente · Racha Activa (Prevención de Churn)</div>
+      <div class="tx">La racha activa de permanencia (RAP) previene el enfriamiento inter-campaña. Apalanca la aversión a la pérdida (Loss Aversion) al redefinir la inactividad como la rotura de un logro consecutivo.</div>
     </div>
   </section>
 
-  <!-- 7 · PERCENTIL -->
+  <!-- 7 · RANGO LEYENDAS -->
   <section class="slide g7">
-    <div class="kicker reveal d1">Tu lugar en la manada</div>
-    <div class="med reveal d2">Top <span class="up" data-count="7" data-dur="1100">0</span>%</div>
-    <div class="lede reveal d3" style="margin-top:14px">de los dropshippers de Colombia por volumen movilizado.</div>
-    <div class="delta reveal d4">🏆 <span>Más de <b>9.300</b> tiendas quedaron detrás</span></div>
+    <div class="kicker reveal d1">Tu Status en el Imperio</div>
+    <div class="med reveal d2">Experto Plata</div>
+    <div class="lede reveal d3" style="margin-top:14px">Rango Oficial: **Plata III** · Has superado en volumen al **93%** de los dropshippers de tu país.</div>
+    <div class="delta reveal d4">🏆 <span>Insignia metálica y estatus VIP activos</span></div>
     <div class="lens">
-      <div class="tt">Lente · Relatedness / Comparación social</div>
-      <div class="tx">Validación social positiva para construir identidad de pertenencia y competencia ("soy del Top"). Evitamos el shaming (comparaciones negativas) por alineación con el anti-roadmap.</div>
+      <div class="tt">Lente · Comparación Social & Estatus (SDT)</div>
+      <div class="tx">Usa la paleta oficial (Gris/Plata) y la nomenclatura de rangos de Leyendas. La comparación social positiva construye identidad y pertenencia al círculo selecto.</div>
     </div>
   </section>
 
   <!-- 8 · ARQUETIPO -->
   <section class="slide g8">
-    <div class="kicker reveal d1">Tu arquetipo 2025</div>
+    <div class="kicker reveal d1">Tu Arquetipo de Leyenda</div>
     <div class="arch">
-      <div class="emoji pop">🦉💜</div>
+      <div class="emoji pop">🦉👑</div>
       <div class="med reveal d2" style="margin-top:8px">La Escaladora<br>Nocturna</div>
-      <div class="tag reveal d3">Vende cuando el resto duerme</div>
-      <div class="sub reveal d4">El 61% de tus órdenes entran entre 9pm y 2am.<br>Constante, estratégica, imparable.</div>
+      <div class="tag reveal d3">Rango 02 · Plata III</div>
+      <div class="sub reveal d4">El 61% de tus órdenes entran entre 9pm y 2am.<br>Constante, estratégica, referente.</div>
     </div>
     <div class="lens">
-      <div class="tt">Lente · Identidad compartible / Adquisición</div>
-      <div class="tx">El arquetipo de personalidad es un elemento altamente compartible en redes. Transforma al dropshipper en embajador orgánico de la marca e impulsa el loop de referidos.</div>
+      <div class="tt">Lente · Viralidad Compartible</div>
+      <div class="tx">Los arquetipos identitarios son altamente compartibles en redes. Sirven como gancho orgánico de adquisición de nuevos sellers para el programa de referidos.</div>
     </div>
   </section>
 
   <!-- 9 · META + CTA -->
   <section class="slide g9">
-    <div class="kicker reveal d1">Tu próximo nivel</div>
-    <div class="med reveal d2">Estás <span class="accent">muy cerca</span> de<br>desbloquear <b>Escalando</b>.</div>
+    <div class="kicker reveal d1">Tu Próximo Ascenso</div>
+    <div class="med reveal d2">Estás muy cerca de<br>desbloquear <b>Master Oro</b></div>
     <div class="goal reveal d3">
       <div class="track"><i id="goalbar"></i></div>
       <div class="lbl"><span>820 / 1.000 órdenes/mes</span><span>faltan 180</span></div>
     </div>
-    <div class="sub reveal d3" style="font-size: 13.5px;">Al llegar: comisiones logísticas preferentes, soporte prioritario y acceso a productos ganadores antes que nadie.</div>
+    <div class="sub reveal d3" style="font-size: 13.5px;">Al ascender desbloqueas: Dropicard virtual exclusiva, soporte prioritario en caliente y comisiones logísticas preferenciales.</div>
     <div class="cta reveal d4">
-      <button class="btn primary" onclick="share()">📲 Compartir mi Wrapped</button>
-      <button class="btn ghost" onclick="restart()">↻ Ver de nuevo</button>
+      <button class="btn primary" onclick="share()">📲 Compartir mi Rango</button>
+      <button class="btn ghost" onclick="restart()">Ver de nuevo</button>
     </div>
     <div class="lens">
-      <div class="tt">Lente · Cierre de Hook conductual</div>
-      <div class="tx">Cierra con meta alcanzable + recompensa tangible y clara (autonomía y competencia de SDT) y un Investment (compartir) para activar el siguiente loop de ventas de forma inmediata.</div>
+      <div class="tt">Lente · Cierre de Bucle (Hook)</div>
+      <div class="tx">El CTA conecta con una recompensa operativa real (Master Oro) y una acción compartible para consolidar la racha. Cierra el loop y empuja hacia las 1000 órdenes.</div>
     </div>
   </section>
 
@@ -958,7 +955,7 @@
   // Refined confetti particle emitter
   function confetti(){
     const fx=document.getElementById('fx'); 
-    const cols=['#00f5d4','#f72585','#ffd23f','#7b2ff7','#4cc9f0','#ffffff'];
+    const cols=['#FF8500','#FF4800','#FF0000','#ffffff'];
     for(let k=0;k<60;k++){ 
       const c=document.createElement('div'); 
       c.className='confetti';
@@ -974,8 +971,8 @@
 
   function toggleLens(e){ e.stopPropagation(); document.body.classList.toggle('lens'); }
   function share(){
-    const txt='Moví 4.820 órdenes y quedé Top 7% de dropshippers en Dropi 🦉💜 #DropiWrapped';
-    if(navigator.share){ navigator.share({title:'Mi Dropi Wrapped 2025',text:txt}).catch(()=>{}); }
+    const txt='Consolidé 4.820 drops históricos en LEYENDAS y ascendí al rango Experto Plata III 🦉👑 #LeyendasDropi';
+    if(navigator.share){ navigator.share({title:'Mi Estatus en Leyendas Dropi',text:txt}).catch(()=>{}); }
     else { navigator.clipboard?.writeText(txt); const b=event.target; const o=b.textContent; b.textContent='✓ Copiado al portapapeles'; setTimeout(()=>b.textContent=o,1800); }
   }
 
