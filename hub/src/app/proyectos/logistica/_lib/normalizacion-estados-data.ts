@@ -1,294 +1,239 @@
-export type EvidenceLevel = "real" | "catalogo" | "pendiente";
+/**
+ * NORMALIZACIÓN DE ESTADOS — una homologación, dos audiencias.
+ *
+ *   CRUDO (51)  ──►  ADMIN DROPI (24)  ──►  DROPSHIPPER Y PROVEEDOR (13)
+ *   lo que llega     con esto se opera       lo que ve quien vende
+ *                    y se mide cada tramo
+ *
+ * Las audiencias son dos y solo dos (Juan, 29-jul): **dropshippers y proveedores**, y **admin
+ * Dropi**. No se modela una vista de cliente final.
+ *
+ * Los 24 NO son una capa de más: son el entregable del proyecto — el vocabulario con el que la
+ * operación trabaja y mide. Los 13 son lo mismo, resumido para quien vende. Se muestran con UN
+ * interruptor, nunca los dos a la vez.
+ *
+ * El 29-jul se borraron los 24 por error: la página quedó entregándole a la operación una simple
+ * agrupación de estados crudos, que es justo el problema que este proyecto existe para resolver.
+ *
+ * Regla de escritura: nada de nombres de tablas, endpoints ni jerga interna.
+ */
 
-export const normalizacionSummary = [
-  { label: "Países con catálogo", value: "9", note: "API verificada · 11-jul" },
-  { label: "Mapeos carrier", value: "576", note: "7 carriers · Excel de campo" },
-  { label: "Guías de ejemplo", value: "14", note: "Trazas completas reales" },
-  { label: "Catálogo objetivo", value: "26+", note: "7 fases · niveles por cerrar" },
-];
+export type Tone = "info" | "exito" | "alerta" | "critico" | "neutral";
+export type Vista = "operacion" | "usuario";
 
-export const countries = [
-  { name: "Colombia", states: 500, display: "~500", evidence: "real" as EvidenceLevel, note: "Catálogo + 133.555 órdenes y 52.636 guías auditadas" },
-  { name: "México", states: 193, display: "193", evidence: "catalogo" as EvidenceLevel, note: "Catálogo API; falta traza transaccional equivalente" },
-  { name: "Paraguay", states: 99, display: "99", evidence: "catalogo" as EvidenceLevel, note: "Catálogo API; falta ejemplo de guía" },
-  { name: "Ecuador", states: 94, display: "94", evidence: "catalogo" as EvidenceLevel, note: "Catálogo API; falta ejemplo de guía" },
-  { name: "Chile", states: 73, display: "73", evidence: "catalogo" as EvidenceLevel, note: "Catálogo API; falta ejemplo de guía" },
-  { name: "Perú", states: 65, display: "65", evidence: "catalogo" as EvidenceLevel, note: "Catálogo API; falta ejemplo de guía" },
-  { name: "Panamá", states: 55, display: "55", evidence: "catalogo" as EvidenceLevel, note: "Catálogo API; falta ejemplo de guía" },
-  { name: "Guatemala", states: 21, display: "21", evidence: "catalogo" as EvidenceLevel, note: "Catálogo API; falta ejemplo de guía" },
-  { name: "Argentina", states: 19, display: "19", evidence: "catalogo" as EvidenceLevel, note: "Catálogo API; falta ejemplo de guía" },
-];
+export type Flecha = { id: string; path: string; tone: Tone };
 
-export const carriers = [
-  { name: "ENVIA", mappings: 165 },
-  { name: "TCC", mappings: 106 },
-  { name: "COORDINADORA", mappings: 98 },
-  { name: "INTERRAPIDISIMO", mappings: 84 },
-  { name: "VELOCES", mappings: 66 },
-  { name: "DOMINA", mappings: 56 },
-  { name: "JAMV-DRIVE", mappings: 1 },
-];
-
-export type RouteMode = "directo" | "ecom" | "dropi";
-
-export type FlowNode = {
+/** Un estado del nivel OPERACIÓN. `usuario` es en cuál de los 9 cae; null = el cliente no lo ve. */
+export type EstadoOperacion = {
   id: string;
-  label: string;
+  nombre: string;
   x: number;
   y: number;
-  tone: "order" | "ecom" | "dropi" | "carrier" | "warning" | "danger" | "return" | "success";
-  kind: "main" | "optional" | "exception" | "terminal";
-  modes: RouteMode[];
-  phase: string;
-  actor: string;
-  client: string;
-  detail: string;
-  flags: string[];
+  tone: Tone;
+  quienLoGenera: string;
+  queSignifica: string;
+  usuario: string | null;
+  crudos: string[];
 };
 
-export type FlowEdge = {
-  id: string;
-  path: string;
-  tone: "main" | "optional" | "warning" | "danger" | "return";
-  kind: "main" | "exception";
-  modes: RouteMode[];
-};
-
-const allRoutes: RouteMode[] = ["directo", "ecom", "dropi"];
-
-export const flowNodes: FlowNode[] = [
-  { id: "confirm", label: "Por confirmar", x: 30, y: 70, tone: "order", kind: "main", modes: allRoutes, phase: "Gestión", actor: "Dropshipper", client: "En preparación", detail: "La orden existe y espera confirmación.", flags: ["No movilizado", "Reversible"] },
-  { id: "pending", label: "Pendiente", x: 190, y: 70, tone: "order", kind: "main", modes: allRoutes, phase: "Gestión", actor: "Proveedor", client: "En preparación", detail: "La orden fue confirmada y puede generar guía.", flags: ["No movilizado", "Reserva stock"] },
-  { id: "guide", label: "Guía generada", x: 350, y: 70, tone: "order", kind: "main", modes: allRoutes, phase: "Gestión", actor: "Proveedor", client: "En preparación", detail: "Existe intención logística, pero el paquete todavía no está en red.", flags: ["No movilizado", "No salió de bodega"] },
-  { id: "pickup-pending", label: "Pendiente de recolección", x: 540, y: 70, tone: "warning", kind: "main", modes: ["directo", "dropi"], phase: "Recolección", actor: "Carrier o Dropi", client: "En preparación", detail: "Permite medir cuánto tarda la recogida antes del handoff.", flags: ["No movilizado", "Reintento posible"] },
-  { id: "received", label: "Recibido por transportadora", x: 780, y: 70, tone: "carrier", kind: "main", modes: allRoutes, phase: "Transporte", actor: "Transportadora", client: "En camino", detail: "Frontera de movilización: el carrier ya tiene el paquete.", flags: ["Movilizado", "Salió de bodega"] },
-  { id: "transit", label: "En tránsito", x: 960, y: 70, tone: "carrier", kind: "main", modes: allRoutes, phase: "Transporte", actor: "Transportadora", client: "En camino", detail: "El paquete avanza entre origen y destino.", flags: ["Movilizado", "No terminal"] },
-  { id: "delivery", label: "En reparto", x: 1130, y: 70, tone: "carrier", kind: "main", modes: allRoutes, phase: "Última milla", actor: "Transportadora", client: "En reparto", detail: "El paquete salió a intento de entrega.", flags: ["Movilizado", "Reintento posible"] },
-  { id: "delivered", label: "Entregado", x: 1310, y: 70, tone: "success", kind: "terminal", modes: allRoutes, phase: "Desenlace", actor: "Transportadora", client: "Entregado", detail: "Terminal solo después de una ventana sin rebote.", flags: ["Movilizado", "Terminal por confirmar"] },
-
-  { id: "prepared", label: "Preparado para transportadora", x: 450, y: 205, tone: "ecom", kind: "optional", modes: ["ecom", "dropi"], phase: "ECOM", actor: "Proveedor", client: "En preparación", detail: "ECOM registra que el pedido está listo para salir.", flags: ["No movilizado", "En bodega"] },
-  { id: "ecom-handoff", label: "Entregado a transportadora", x: 630, y: 205, tone: "ecom", kind: "optional", modes: ["ecom", "dropi"], phase: "ECOM", actor: "Proveedor / ECOM", client: "En camino", detail: "El nombre suena a preparación, pero implica salida física de bodega.", flags: ["Salida de bodega", "Flag contable crítico"] },
-  { id: "dropi-pickup", label: "Recolectado por Dropi", x: 570, y: 335, tone: "dropi", kind: "optional", modes: ["dropi"], phase: "Dropi", actor: "Operación Dropi", client: "En camino", detail: "Dropi recoge el paquete antes de entregarlo al carrier.", flags: ["Movilizado interno", "Salió de bodega"] },
-  { id: "dropi-warehouse", label: "En bodega Dropi", x: 750, y: 335, tone: "dropi", kind: "optional", modes: ["dropi"], phase: "Dropi", actor: "Bodega Dropi", client: "En camino", detail: "Paso físico intermedio antes del handoff al carrier.", flags: ["Movilizado interno", "Stock fuera proveedor"] },
-
-  { id: "pickup-failed", label: "Recolección fallida", x: 500, y: 485, tone: "warning", kind: "exception", modes: ["directo", "dropi"], phase: "Recolección", actor: "Carrier o Dropi", client: "En preparación", detail: "La recogida no ocurrió; el paquete sigue fuera de red.", flags: ["No movilizado", "Reversible"] },
-  { id: "pickup-retry", label: "Reintento de recolección", x: 680, y: 485, tone: "warning", kind: "exception", modes: ["directo", "dropi"], phase: "Recolección", actor: "Operación", client: "En preparación", detail: "Nuevo intento antes de declarar la orden sin movilización.", flags: ["No movilizado", "Contador por cerrar"] },
-  { id: "office", label: "Disponible para retiro", x: 1110, y: 205, tone: "warning", kind: "exception", modes: allRoutes, phase: "Retiro en punto", actor: "Transportadora", client: "Disponible para retiro", detail: "El paquete espera al cliente en oficina o punto físico.", flags: ["Movilizado", "Aviso + fecha límite"] },
-  { id: "novelty", label: "Novedad", x: 1010, y: 335, tone: "warning", kind: "exception", modes: allRoutes, phase: "Novedad", actor: "Transportadora / operación", client: "Novedad en tu pedido", detail: "Un intento falló o apareció una incidencia recuperable.", flags: ["Movilizado", "Reversible"] },
-  { id: "retry", label: "Reintento de entrega", x: 1190, y: 335, tone: "warning", kind: "exception", modes: allRoutes, phase: "Novedad", actor: "Transportadora", client: "En reparto", detail: "La guía vuelve a reparto después de resolver la novedad.", flags: ["Movilizado", "Máximo por cerrar"] },
-  { id: "solved", label: "Novedad solucionada", x: 1360, y: 335, tone: "success", kind: "exception", modes: allRoutes, phase: "Novedad", actor: "Operación", client: "En camino", detail: "La incidencia se resolvió y la guía puede reingresar al flujo.", flags: ["Movilizado", "Reversible"] },
-  { id: "sinister", label: "Siniestro", x: 850, y: 500, tone: "danger", kind: "exception", modes: allRoutes, phase: "Siniestro", actor: "Transportadora / legal", client: "Novedad en tu pedido", detail: "Rama transversal por pérdida, daño o incautación.", flags: ["Movilizado", "Excepción"] },
-  { id: "indemnified", label: "Indemnizado", x: 1020, y: 500, tone: "danger", kind: "terminal", modes: allRoutes, phase: "Siniestro", actor: "Legal / financiero", client: "Proceso finalizado", detail: "Cierre del siniestro después del proceso de indemnización.", flags: ["Terminal", "Cierre financiero"] },
-  { id: "returning", label: "En devolución", x: 1190, y: 500, tone: "return", kind: "exception", modes: allRoutes, phase: "Devolución", actor: "Transportadora", client: "En devolución", detail: "El paquete retorna hacia la bodega o proveedor.", flags: ["Movilizado", "No terminal"] },
-  { id: "returned", label: "Devolución confirmada", x: 1360, y: 500, tone: "return", kind: "terminal", modes: allRoutes, phase: "Devolución", actor: "Bodega / proveedor", client: "Proceso finalizado", detail: "El cierre ocurre cuando bodega confirma la recepción física.", flags: ["Terminal", "Libera stock"] },
-  { id: "rejected", label: "Rechazado", x: 190, y: 500, tone: "danger", kind: "terminal", modes: allRoutes, phase: "Gestión", actor: "Proveedor", client: "Cancelado", detail: "La orden no entra al flujo logístico.", flags: ["No movilizado", "Terminal"] },
-  { id: "cancelled", label: "Cancelado", x: 350, y: 500, tone: "danger", kind: "terminal", modes: allRoutes, phase: "Gestión", actor: "Dropshipper / sistema", client: "Cancelado", detail: "La orden se cierra antes del handoff.", flags: ["No movilizado", "Terminal"] },
+export const operacion: EstadoOperacion[] = [
+  { id: "confirm", nombre: "Por confirmar", x: 30, y: 70, tone: "info", quienLoGenera: "Dropshipper", queSignifica: "La orden existe y espera confirmación.", usuario: "confirmar", crudos: ["PENDIENTE CONFIRMACION"] },
+  { id: "pending", nombre: "Pendiente", x: 190, y: 70, tone: "info", quienLoGenera: "Proveedor", queSignifica: "La orden fue confirmada y puede generar guía.", usuario: "pendiente", crudos: ["PENDIENTE"] },
+  { id: "guide", nombre: "Guía generada", x: 350, y: 70, tone: "info", quienLoGenera: "Proveedor", queSignifica: "Existe intención logística, pero el paquete todavía no está en red.", usuario: "guia", crudos: ["GUIA_GENERADA", "SIN MOVIMIENTOS"] },
+  { id: "pickup-pending", nombre: "Pendiente de recolección", x: 540, y: 70, tone: "alerta", quienLoGenera: "Carrier o Dropi", queSignifica: "Permite medir cuánto tarda la recogida antes del handoff.", usuario: "preparacion", crudos: [] },
+  { id: "received", nombre: "Recibido por transportadora", x: 780, y: 70, tone: "info", quienLoGenera: "Transportadora", queSignifica: "Frontera de movilización: el carrier ya tiene el paquete.", usuario: "transito", crudos: ["EN BODEGA TRANSPORTADORA", "MERCANCIA RECOGIDA"] },
+  { id: "transit", nombre: "En tránsito", x: 960, y: 70, tone: "info", quienLoGenera: "Transportadora", queSignifica: "El paquete avanza entre origen y destino.", usuario: "transito", crudos: ["EN BODEGA ORIGEN", "DESPACHADA", "EN PROCESAMIENTO", "EN BODEGA DESTINO", "EN TERMINAL DESTINO", "EN TERMINAL ORIGEN", "EN DISTRIBUCION", "EN DESPACHO", "EN RUTA", "BODEGA DESTINO", "EN CAMINO", "EN TRANSITO", "EN TRANSPORTE", "ADMITIDA", "EN ESPERA DE RUTA DOMESTICA", "EN TRASLADO NACIONAL", "REENVÍO", "EN REEXPEDICION", "ASIGNADO", "ENTREGADA A CONEXIONES", "EN ESPERA DE RX", "RECEPCION BODEGA", "ASIGNADO A ZONA", "ASIGNADO A SUCURSAL DESTINO"] },
+  { id: "delivery", nombre: "En reparto", x: 1130, y: 70, tone: "info", quienLoGenera: "Transportadora", queSignifica: "El paquete salió a intento de entrega.", usuario: "reparto", crudos: ["EN REPARTO", "INTENTO DE ENTREGA"] },
+  { id: "delivered", nombre: "Entregado", x: 1310, y: 70, tone: "exito", quienLoGenera: "Transportadora", queSignifica: "Terminal solo después de una ventana sin rebote.", usuario: "entregado", crudos: ["ENTREGADO"] },
+  { id: "prepared", nombre: "Preparado para transportadora", x: 450, y: 205, tone: "info", quienLoGenera: "Proveedor", queSignifica: "ECOM registra que el pedido está listo para salir.", usuario: "preparacion", crudos: ["PREPARADO PARA TRANSPORTADORA"] },
+  { id: "ecom-handoff", nombre: "Entregado a transportadora", x: 630, y: 205, tone: "info", quienLoGenera: "Proveedor / ECOM", queSignifica: "El nombre suena a preparación, pero implica salida física de bodega.", usuario: "transito", crudos: ["ENTREGADO A TRANSPORTADORA"] },
+  { id: "dropi-pickup", nombre: "Recolectado por Dropi", x: 570, y: 335, tone: "info", quienLoGenera: "Operación Dropi", queSignifica: "Dropi recoge el paquete antes de entregarlo al carrier.", usuario: "transito", crudos: ["RECOGIDO POR DROPI"] },
+  { id: "dropi-warehouse", nombre: "En bodega Dropi", x: 750, y: 335, tone: "info", quienLoGenera: "Bodega Dropi", queSignifica: "Paso físico intermedio antes del handoff al carrier.", usuario: "transito", crudos: ["EN BODEGA DROPI"] },
+  { id: "pickup-failed", nombre: "Recolección fallida", x: 500, y: 485, tone: "alerta", quienLoGenera: "Carrier o Dropi", queSignifica: "La recogida no ocurrió; el paquete sigue fuera de red.", usuario: "preparacion", crudos: [] },
+  { id: "pickup-retry", nombre: "Reintento de recolección", x: 680, y: 485, tone: "alerta", quienLoGenera: "Operación", queSignifica: "Nuevo intento antes de declarar la orden sin movilización.", usuario: "preparacion", crudos: [] },
+  { id: "office", nombre: "Disponible para retiro", x: 1110, y: 205, tone: "alerta", quienLoGenera: "Transportadora", queSignifica: "El paquete espera al cliente en oficina o punto físico.", usuario: "retiro", crudos: ["RECLAME EN OFICINA", "EN PUNTO DROOP"] },
+  { id: "novelty", nombre: "Novedad", x: 1010, y: 335, tone: "alerta", quienLoGenera: "Transportadora / operación", queSignifica: "Un intento falló o apareció una incidencia recuperable.", usuario: "novedad", crudos: ["NOVEDAD", "TELEMERCADEO"] },
+  { id: "retry", nombre: "Reintento de entrega", x: 1190, y: 335, tone: "alerta", quienLoGenera: "Transportadora", queSignifica: "La guía vuelve a reparto después de resolver la novedad.", usuario: "reparto", crudos: [] },
+  { id: "solved", nombre: "Novedad solucionada", x: 1360, y: 335, tone: "exito", quienLoGenera: "Operación", queSignifica: "La incidencia se resolvió y la guía puede reingresar al flujo.", usuario: "transito", crudos: ["NOVEDAD SOLUCIONADA"] },
+  { id: "sinister", nombre: "Siniestro", x: 850, y: 500, tone: "critico", quienLoGenera: "Transportadora / legal", queSignifica: "Rama transversal por pérdida, daño o incautación.", usuario: "novedad", crudos: [] },
+  // usuario: null — decisión de Juan (29-jul): la indemnización es un asunto entre Dropi y la
+  // transportadora. El cliente no ve este estado; se queda en el que traía.
+  { id: "indemnified", nombre: "Indemnizado", x: 1020, y: 500, tone: "critico", quienLoGenera: "Legal / financiero", queSignifica: "Cierre del siniestro después del proceso de indemnización.", usuario: null, crudos: ["EN PROCESO DE INDEMNIZACION"] },
+  { id: "returning", nombre: "En devolución", x: 1190, y: 500, tone: "alerta", quienLoGenera: "Transportadora", queSignifica: "El paquete retorna hacia la bodega o proveedor.", usuario: "devolucion", crudos: ["DEVOLUCION", "EN PROCESO DE DEVOLUCION", "TRANSITO A DEVOLUCION PROVEEDOR", "DEVOLUCION EN RUTA"] },
+  { id: "returned", nombre: "Devolución confirmada", x: 1360, y: 500, tone: "neutral", quienLoGenera: "Bodega / proveedor", queSignifica: "El cierre ocurre cuando bodega confirma la recepción física.", usuario: "devuelto", crudos: ["DEVOLUCION EN BODEGA"] },
+  { id: "rejected", nombre: "Rechazado", x: 190, y: 500, tone: "critico", quienLoGenera: "Proveedor", queSignifica: "La orden no entra al flujo logístico.", usuario: "rechazado", crudos: ["RECHAZADO"] },
+  { id: "cancelled", nombre: "Cancelado", x: 350, y: 500, tone: "critico", quienLoGenera: "Dropshipper / sistema", queSignifica: "La orden se cierra antes del handoff.", usuario: "cancelado", crudos: ["GUIA_ANULADA", "CANCELADO"] },
 ];
 
-export const flowEdges: FlowEdge[] = [
-  { id: "confirm-pending", path: "M170 102 L190 102", tone: "main", kind: "main", modes: allRoutes },
-  { id: "pending-guide", path: "M330 102 L350 102", tone: "main", kind: "main", modes: allRoutes },
-  { id: "guide-direct", path: "M490 102 L540 102", tone: "main", kind: "main", modes: ["directo"] },
-  { id: "direct-received", path: "M680 102 C715 102 735 102 780 102", tone: "main", kind: "main", modes: ["directo"] },
-  { id: "guide-ecom", path: "M420 134 C420 165 450 165 450 205", tone: "optional", kind: "main", modes: ["ecom", "dropi"] },
-  { id: "prepared-handoff", path: "M590 237 L630 237", tone: "optional", kind: "main", modes: ["ecom", "dropi"] },
-  { id: "ecom-received", path: "M770 237 C800 237 745 135 780 102", tone: "optional", kind: "main", modes: ["ecom"] },
-  { id: "handoff-dropi", path: "M700 269 C700 305 640 300 640 335", tone: "optional", kind: "main", modes: ["dropi"] },
-  { id: "dropi-warehouse", path: "M710 367 L750 367", tone: "optional", kind: "main", modes: ["dropi"] },
-  { id: "warehouse-pending", path: "M820 335 C820 245 610 245 610 134", tone: "optional", kind: "main", modes: ["dropi"] },
-  { id: "pending-received-dropi", path: "M680 102 C715 102 735 102 780 102", tone: "main", kind: "main", modes: ["dropi"] },
-  { id: "received-transit", path: "M920 102 L960 102", tone: "main", kind: "main", modes: allRoutes },
-  { id: "transit-delivery", path: "M1100 102 L1130 102", tone: "main", kind: "main", modes: allRoutes },
-  { id: "delivery-delivered", path: "M1270 102 L1310 102", tone: "main", kind: "main", modes: allRoutes },
-  { id: "pickup-failed", path: "M610 134 C610 260 570 390 570 485", tone: "warning", kind: "exception", modes: ["directo", "dropi"] },
-  { id: "failed-retry", path: "M640 517 L680 517", tone: "warning", kind: "exception", modes: ["directo", "dropi"] },
-  { id: "retry-pickup", path: "M750 485 C750 390 640 250 610 134", tone: "warning", kind: "exception", modes: ["directo", "dropi"] },
-  { id: "transit-office", path: "M1030 134 C1030 180 1110 170 1110 205", tone: "warning", kind: "exception", modes: allRoutes },
-  { id: "office-delivered", path: "M1250 237 C1350 237 1380 170 1380 134", tone: "warning", kind: "exception", modes: allRoutes },
-  { id: "delivery-novelty", path: "M1200 134 C1200 240 1080 245 1080 335", tone: "warning", kind: "exception", modes: allRoutes },
-  { id: "novelty-retry", path: "M1150 367 L1190 367", tone: "warning", kind: "exception", modes: allRoutes },
-  { id: "retry-delivery", path: "M1260 335 C1260 270 1200 215 1200 134", tone: "warning", kind: "exception", modes: allRoutes },
-  { id: "novelty-solved", path: "M1150 385 C1220 430 1360 430 1430 399", tone: "warning", kind: "exception", modes: allRoutes },
-  { id: "solved-delivery", path: "M1430 335 C1430 230 1200 240 1200 134", tone: "warning", kind: "exception", modes: allRoutes },
-  { id: "transit-sinister", path: "M1030 134 C1030 310 920 360 920 500", tone: "danger", kind: "exception", modes: allRoutes },
-  { id: "sinister-indemnified", path: "M990 532 L1020 532", tone: "danger", kind: "exception", modes: allRoutes },
-  { id: "novelty-return", path: "M1080 399 C1080 465 1190 450 1190 500", tone: "return", kind: "exception", modes: allRoutes },
-  { id: "return-returned", path: "M1330 532 L1360 532", tone: "return", kind: "exception", modes: allRoutes },
-  { id: "pending-rejected", path: "M260 134 L260 500", tone: "danger", kind: "exception", modes: allRoutes },
-  { id: "guide-cancelled", path: "M420 134 L420 500", tone: "danger", kind: "exception", modes: allRoutes },
+export const flechasOperacion: Flecha[] = [
+{ id: "confirm-pending", path: "M170 102 L190 102", tone: "info" },
+  { id: "pending-guide", path: "M330 102 L350 102", tone: "info" },
+  { id: "guide-direct", path: "M490 102 L540 102", tone: "info" },
+  { id: "direct-received", path: "M680 102 C715 102 735 102 780 102", tone: "info" },
+  { id: "guide-ecom", path: "M420 134 C420 165 450 165 450 205", tone: "info" },
+  { id: "prepared-handoff", path: "M590 237 L630 237", tone: "info" },
+  { id: "ecom-received", path: "M770 237 C800 237 745 135 780 102", tone: "info" },
+  { id: "handoff-dropi", path: "M700 269 C700 305 640 300 640 335", tone: "info" },
+  { id: "dropi-warehouse", path: "M710 367 L750 367", tone: "info" },
+  { id: "warehouse-pending", path: "M820 335 C820 245 610 245 610 134", tone: "info" },
+  { id: "pending-received-dropi", path: "M680 102 C715 102 735 102 780 102", tone: "info" },
+  { id: "received-transit", path: "M920 102 L960 102", tone: "info" },
+  { id: "transit-delivery", path: "M1100 102 L1130 102", tone: "info" },
+  { id: "delivery-delivered", path: "M1270 102 L1310 102", tone: "info" },
+  { id: "pickup-failed", path: "M610 134 C610 260 570 390 570 485", tone: "alerta" },
+  { id: "failed-retry", path: "M640 517 L680 517", tone: "alerta" },
+  { id: "retry-pickup", path: "M750 485 C750 390 640 250 610 134", tone: "alerta" },
+  { id: "transit-office", path: "M1030 134 C1030 180 1110 170 1110 205", tone: "alerta" },
+  { id: "office-delivered", path: "M1250 237 C1350 237 1380 170 1380 134", tone: "alerta" },
+  { id: "delivery-novelty", path: "M1200 134 C1200 240 1080 245 1080 335", tone: "alerta" },
+  { id: "novelty-retry", path: "M1150 367 L1190 367", tone: "alerta" },
+  { id: "retry-delivery", path: "M1260 335 C1260 270 1200 215 1200 134", tone: "alerta" },
+  { id: "novelty-solved", path: "M1150 385 C1220 430 1360 430 1430 399", tone: "alerta" },
+  { id: "solved-delivery", path: "M1430 335 C1430 230 1200 240 1200 134", tone: "alerta" },
+  { id: "transit-sinister", path: "M1030 134 C1030 310 920 360 920 500", tone: "critico" },
+  { id: "sinister-indemnified", path: "M990 532 L1020 532", tone: "critico" },
+  { id: "novelty-return", path: "M1080 399 C1080 465 1190 450 1190 500", tone: "alerta" },
+  { id: "return-returned", path: "M1330 532 L1360 532", tone: "alerta" },
+  { id: "pending-rejected", path: "M260 134 L260 500", tone: "critico" },
+  { id: "guide-cancelled", path: "M420 134 L420 500", tone: "critico" },
 ];
 
-export const phases = [
-  {
-    id: "gestion",
-    number: "01",
-    name: "Gestión de orden",
-    owner: "Dropshipper / proveedor",
-    modes: ["directo", "ecom", "dropi"] as RouteMode[],
-    states: ["Por confirmar", "Pendiente", "Guía generada", "Cancelado", "Rechazado"],
-  },
-  {
-    id: "ecom",
-    number: "02",
-    name: "ECOM",
-    owner: "Proveedor",
-    modes: ["ecom", "dropi"] as RouteMode[],
-    states: ["Preparado para transportadora", "Entregado a transportadora"],
-  },
-  {
-    id: "dropi",
-    number: "03",
-    name: "Recolección Dropi",
-    owner: "Dropi",
-    modes: ["dropi"] as RouteMode[],
-    states: ["Pendiente de recolección", "Recolección fallida", "Reintento", "Recolectado por Dropi", "En bodega Dropi"],
-  },
-  {
-    id: "transporte",
-    number: "04",
-    name: "Transporte y entrega",
-    owner: "Transportadora",
-    modes: ["directo", "ecom", "dropi"] as RouteMode[],
-    states: ["Recibido transportadora", "En tránsito", "En reparto", "Disponible para retiro", "Entregado"],
-  },
-  {
-    id: "novedad",
-    number: "05",
-    name: "Novedad y reintentos",
-    owner: "Transportadora / operación",
-    modes: ["directo", "ecom", "dropi"] as RouteMode[],
-    states: ["Novedad 1/2/3", "Reintento 1/2", "Novedad solucionada"],
-  },
-  {
-    id: "siniestro",
-    number: "06",
-    name: "Siniestro",
-    owner: "Transportadora / legal",
-    modes: ["directo", "ecom", "dropi"] as RouteMode[],
-    states: ["Siniestro", "En indemnización", "Indemnizado", "Incautado", "Excepción"],
-  },
-  {
-    id: "devolucion",
-    number: "07",
-    name: "Devolución",
-    owner: "Transportadora / bodega",
-    modes: ["directo", "ecom", "dropi"] as RouteMode[],
-    states: ["En devolución", "Devuelto", "Confirmado por bodega"],
-  },
-];
-
-export const clientStates = [
-  { name: "En preparación", tone: "prep", detail: "Orden, guía, ECOM y pre-recolección" },
-  { name: "En camino", tone: "route", detail: "Carrier recibió o está en tránsito" },
-  { name: "En reparto", tone: "last", detail: "Sale hoy a entrega" },
-  { name: "Disponible para retiro", tone: "pickup", detail: "Nuevo estado propuesto" },
-  { name: "Novedad en tu pedido", tone: "issue", detail: "Incidencia activa" },
-  { name: "Entregado", tone: "done", detail: "Terminal tras confirmación" },
-  { name: "En devolución", tone: "return", detail: "Retorno en curso" },
-  { name: "Proceso finalizado", tone: "closed", detail: "Indemnización o devolución cerrada" },
-  { name: "Cancelado", tone: "cancel", detail: "Orden no continúa" },
-];
+/** Un estado del nivel USUARIO. Sus crudos y sus estados de operación se derivan, no se escriben. */
+export type EstadoUsuario = { id: string; nombre: string; x: number; y: number; tone: Tone; queSignifica: string };
 
 /**
- * Un paso de traza. `node` es el id de un `FlowNode` del mapa — nunca una etiqueta suelta:
- * si el paso no se puede homologar a un nodo, `node` es `null` y queda visible como tal.
- * `raw` guarda el texto original de la hoja de campo cuando difiere del nombre del nodo.
- * La vista cliente NO se escribe aquí: se deriva del nodo (capa 3 del modelo).
+ * Los 13 del dropshipper y el proveedor. Ajustes de Juan (29-jul):
+ *  · «Por confirmar», «Pendiente» y «Guía generada» suben: son SUS acciones, no detalle interno.
+ *  · «Rechazado» sale de «Cancelado». Cancelar es decisión propia; que el cliente rechace el
+ *    paquete es un resultado del envío. Meterlos juntos le esconde lo que necesita saber.
+ * Ya no se modela una vista de cliente final: las audiencias son dropshipper/proveedor y admin.
  */
-export type GuideStep = {
-  node: string | null;
-  raw?: string;
-  clientRaw?: string; // solo para pasos sin nodo: qué veía el cliente en ese momento
-};
-
-export type GuideExample = {
-  id: string;
-  carrier: string;
-  outcome: "Entregado" | "Devolución";
-  highlight: string;
-  steps: GuideStep[];
-};
-
-const s = (node: string, raw?: string): GuideStep => ({ node, raw });
-/** Paso crudo que hoy no tiene nodo homologado. Es un hallazgo, no un error de dibujo. */
-const unmapped = (raw: string, clientRaw: string): GuideStep => ({ node: null, raw, clientRaw });
-
-export const guideExamples: GuideExample[] = [
-  { id: "240028451950", carrier: "INTERRAPIDISIMO", outcome: "Devolución", highlight: "Proceso finalizado no fue terminal", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), unmapped("Proceso finalizado", "Proceso finalizado"), s("cancelled"), s("returning", "Devolución")] },
-  { id: "240028493814", carrier: "INTERRAPIDISIMO", outcome: "Devolución", highlight: "Novedad termina en devolución", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("novelty"), s("returning", "Devolución")] },
-  { id: "36393180723", carrier: "COORDINADORA", outcome: "Entregado", highlight: "Novedades y reintentos recuperan la entrega", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("novelty"), s("delivery"), s("solved"), s("delivery"), s("delivered")] },
-  { id: "36393170971", carrier: "COORDINADORA", outcome: "Devolución", highlight: "Usa recolección Dropi", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("dropi-pickup"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("novelty"), s("returning", "Devolución")] },
-  { id: "36393170001", carrier: "COORDINADORA", outcome: "Devolución", highlight: "Dos novedades solucionadas no evitaron devolución", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("novelty"), s("solved"), s("delivery"), s("novelty"), s("solved"), s("returning", "Devolución")] },
-  { id: "114014276600", carrier: "ENVIA", outcome: "Devolución", highlight: "Tres ciclos novedad-solución", steps: [s("pending"), s("guide", "Guía generada"), s("prepared", "En preparación"), s("transit"), s("delivery"), s("novelty"), s("solved"), s("delivery"), s("novelty"), s("solved"), s("novelty"), s("solved"), s("returning", "Devolución")] },
-  { id: "024029789992", carrier: "ENVIA", outcome: "Devolución", highlight: "Dropi + carrier + novedad", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("dropi-pickup"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("novelty"), s("solved"), s("returning", "Devolución")] },
-  { id: "3864790571", carrier: "99MINUTOS", outcome: "Devolución", highlight: "Ruta ECOM + Dropi completa", steps: [s("pending"), s("guide", "Guía generada"), s("prepared", "En preparación"), s("dropi-pickup"), s("dropi-warehouse"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("novelty"), s("returning", "Devolución en proceso"), s("returning", "Devolución")] },
-  { id: "1222059299", carrier: "99MINUTOS", outcome: "Devolución", highlight: "Dos intentos antes de devolución", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("prepared", "En preparación"), s("dropi-pickup"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("novelty"), s("delivery"), s("novelty"), s("returning", "Devolución")] },
-  { id: "V4001044476", carrier: "VELOCES", outcome: "Devolución", highlight: "Tres novedades antes del retorno", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("dropi-pickup"), s("dropi-warehouse"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("novelty"), s("delivery"), s("novelty"), s("novelty"), s("returning", "Devolución en proceso"), s("returning", "Devolución")] },
-  { id: "V4001043459", carrier: "VELOCES", outcome: "Entregado", highlight: "Entregado rebotó a reparto", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("dropi-pickup"), s("dropi-warehouse"), s("received", "Recibido transportadora"), s("transit"), s("delivered"), s("delivery"), s("delivered")] },
-  { id: "40546381", carrier: "DOMINA", outcome: "Devolución", highlight: "Orden irregular entre carrier y Dropi", steps: [s("pending"), s("guide", "Guía generada"), s("prepared", "En preparación"), s("received", "Recibido transportadora"), s("dropi-pickup"), s("dropi-warehouse"), s("delivery"), s("novelty"), s("solved"), s("returning", "Devolución")] },
-  { id: "85910403203823", carrier: "DOMINA", outcome: "Entregado", highlight: "Novedad recuperada", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("prepared", "En preparación"), s("dropi-warehouse"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("novelty"), s("delivery"), s("delivered")] },
-  { id: "9641616116781858", carrier: "FUTURA", outcome: "Devolución", highlight: "Reparto y tránsito alternan varias veces", steps: [s("confirm", "Pendiente confirmación"), s("pending"), s("guide", "Guía generada"), s("dropi-pickup"), s("received", "Recibido transportadora"), s("transit"), s("delivery"), s("transit"), s("delivery"), s("transit"), s("returning", "Devolución")] },
+export const usuario: EstadoUsuario[] = [
+  { id: "confirmar", nombre: "Por confirmar", x: 30, y: 30, tone: "info", queSignifica: "La orden llegó y espera que alguien la confirme." },
+  { id: "pendiente", nombre: "Pendiente", x: 220, y: 30, tone: "info", queSignifica: "Confirmada, lista para generar la guía." },
+  { id: "guia", nombre: "Guía generada", x: 410, y: 30, tone: "info", queSignifica: "Ya hay guía, pero el paquete todavía no está en la red." },
+  { id: "preparacion", nombre: "En preparación", x: 600, y: 30, tone: "info", queSignifica: "Alistado y esperando que lo recojan." },
+  { id: "transito", nombre: "En tránsito", x: 790, y: 30, tone: "info", queSignifica: "Ya salió y está viajando hacia el cliente." },
+  { id: "reparto", nombre: "En reparto", x: 980, y: 30, tone: "info", queSignifica: "Salió a entregarse hoy." },
+  { id: "entregado", nombre: "Entregado", x: 1170, y: 30, tone: "exito", queSignifica: "El cliente lo recibió." },
+  { id: "retiro", nombre: "Disponible para retiro", x: 980, y: 155, tone: "alerta", queSignifica: "Espera al cliente en un punto físico." },
+  { id: "cancelado", nombre: "Cancelado", x: 30, y: 285, tone: "critico", queSignifica: "La orden se cerró antes de salir." },
+  { id: "rechazado", nombre: "Rechazado", x: 220, y: 285, tone: "critico", queSignifica: "El cliente no recibió el paquete." },
+  { id: "novedad", nombre: "Novedad", x: 600, y: 285, tone: "alerta", queSignifica: "Algo pasó y alguien tiene que resolverlo para que siga." },
+  { id: "devolucion", nombre: "En devolución", x: 790, y: 285, tone: "alerta", queSignifica: "Va de regreso al proveedor." },
+  { id: "devuelto", nombre: "Devuelto", x: 980, y: 285, tone: "neutral", queSignifica: "Ya volvió y la bodega confirmó que lo recibió." },
 ];
 
-export const nodeById = new Map(flowNodes.map((node) => [node.id, node]));
+export const flechasUsuario: Flecha[] = [
+  { id: "u-conf-pend", path: "M200 62 L212 62", tone: "info" },
+  { id: "u-pend-guia", path: "M390 62 L402 62", tone: "info" },
+  { id: "u-guia-prep", path: "M580 62 L592 62", tone: "info" },
+  { id: "u-prep-tran", path: "M770 62 L782 62", tone: "info" },
+  { id: "u-tran-rep", path: "M960 62 L972 62", tone: "info" },
+  { id: "u-rep-ent", path: "M1150 62 L1162 62", tone: "exito" },
+  { id: "u-tran-ret", path: "M875 94 C875 135 1065 125 1065 147", tone: "alerta" },
+  { id: "u-ret-ent", path: "M1150 187 C1230 187 1255 130 1255 94", tone: "exito" },
+  { id: "u-rep-nov", path: "M1020 94 C1020 210 685 205 685 277", tone: "alerta" },
+  { id: "u-nov-rep", path: "M770 300 C900 285 1010 200 1040 94", tone: "info" },
+  { id: "u-nov-dev", path: "M770 317 L782 317", tone: "alerta" },
+  { id: "u-dev-devu", path: "M960 317 L972 317", tone: "neutral" },
+  { id: "u-pend-canc", path: "M305 94 C305 175 115 205 115 277", tone: "critico" },
+  { id: "u-rep-rech", path: "M1020 94 C1020 240 305 235 305 277", tone: "critico" },
+];
 
-/** Nodos que al menos una guía de la muestra recorre. El resto está propuesto, no validado. */
-export const exercisedNodeIds = new Set(
-  guideExamples.flatMap((guide) => guide.steps.map((step) => step.node).filter((id): id is string => Boolean(id))),
-);
+export const operacionPorId = new Map(operacion.map((e) => [e.id, e]));
+export const usuarioPorId = new Map(usuario.map((e) => [e.id, e]));
 
-export const unexercisedNodes = flowNodes.filter((node) => !exercisedNodeIds.has(node.id));
+/** Los estados de operación que caen en un estado de usuario. */
+export const operacionDe = (idUsuario: string) => operacion.filter((o) => o.usuario === idUsuario);
+/** Los crudos que caen en un estado de usuario, pasando por los de operación. */
+export const crudosDe = (idUsuario: string) => operacionDe(idUsuario).flatMap((o) => o.crudos);
 
 /**
- * Numera los rebotes: cada vez que la traza vuelve a un nodo ya visitado, ese par de pasos
- * queda marcado con el número de ciclo. Es lo que hace visible "Entregado → En reparto → Entregado".
+ * Un paso de un envío real. `raw` es lo que llegó; `estado` es el estado de OPERACIÓN al que
+ * corresponde. Si es null, ese texto llegó y no tiene homologado: es un hallazgo, no un error.
+ * Los identificadores de envío son anónimos — eran números de guía reales.
  */
-export function traceCycles(steps: GuideStep[]): (number | undefined)[] {
-  const seen = new Map<string, number>();
-  return steps.map((step, index) => {
-    if (!step.node) return undefined;
-    // Un paso consecutivo al mismo nodo NO es rebote: son dos etiquetas crudas
-    // distintas para el mismo estado homologado (problema P2 del catálogo).
-    if (steps[index - 1]?.node === step.node) return undefined;
-    const count = (seen.get(step.node) ?? 0) + 1;
-    seen.set(step.node, count);
-    return count > 1 ? count : undefined;
+export type Paso = { raw: string; estado: string | null };
+export type Envio = { id: string; carrier: string; outcome: "Entregado" | "Devolución"; highlight: string; steps: Paso[] };
+
+const p = (raw: string, estado: string): Paso => ({ raw, estado });
+const u = (raw: string): Paso => ({ raw, estado: null });
+
+export const envios: Envio[] = [
+  { id: "Envío 01", carrier: "INTERRAPIDISIMO", outcome: "Devolución", highlight: "Proceso finalizado no fue terminal", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), u("Proceso finalizado"), p("Cancelado", "cancelled"), p("Devolución", "returning")] },
+  { id: "Envío 02", carrier: "INTERRAPIDISIMO", outcome: "Devolución", highlight: "Novedad termina en devolución", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Devolución", "returning")] },
+  { id: "Envío 03", carrier: "COORDINADORA", outcome: "Entregado", highlight: "Novedades y reintentos recuperan la entrega", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("En reparto", "delivery"), p("Novedad solucionada", "solved"), p("En reparto", "delivery"), p("Entregado", "delivered")] },
+  { id: "Envío 04", carrier: "COORDINADORA", outcome: "Devolución", highlight: "Usa recolección Dropi", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("Recolectado por Dropi", "dropi-pickup"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Devolución", "returning")] },
+  { id: "Envío 05", carrier: "COORDINADORA", outcome: "Devolución", highlight: "Dos novedades solucionadas no evitaron devolución", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Novedad solucionada", "solved"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Novedad solucionada", "solved"), p("Devolución", "returning")] },
+  { id: "Envío 06", carrier: "ENVIA", outcome: "Devolución", highlight: "Tres ciclos novedad-solución", steps: [p("Pendiente", "pending"), p("Guía generada", "guide"), p("En preparación", "prepared"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Novedad solucionada", "solved"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Novedad solucionada", "solved"), p("Novedad", "novelty"), p("Novedad solucionada", "solved"), p("Devolución", "returning")] },
+  { id: "Envío 07", carrier: "ENVIA", outcome: "Devolución", highlight: "Dropi + carrier + novedad", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("Recolectado por Dropi", "dropi-pickup"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Novedad solucionada", "solved"), p("Devolución", "returning")] },
+  { id: "Envío 08", carrier: "99MINUTOS", outcome: "Devolución", highlight: "Ruta ECOM + Dropi completa", steps: [p("Pendiente", "pending"), p("Guía generada", "guide"), p("En preparación", "prepared"), p("Recolectado por Dropi", "dropi-pickup"), p("En bodega Dropi", "dropi-warehouse"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Devolución en proceso", "returning"), p("Devolución", "returning")] },
+  { id: "Envío 09", carrier: "99MINUTOS", outcome: "Devolución", highlight: "Dos intentos antes de devolución", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("En preparación", "prepared"), p("Recolectado por Dropi", "dropi-pickup"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Devolución", "returning")] },
+  { id: "Envío 10", carrier: "VELOCES", outcome: "Devolución", highlight: "Tres novedades antes del retorno", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("Recolectado por Dropi", "dropi-pickup"), p("En bodega Dropi", "dropi-warehouse"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Novedad", "novelty"), p("Devolución en proceso", "returning"), p("Devolución", "returning")] },
+  { id: "Envío 11", carrier: "VELOCES", outcome: "Entregado", highlight: "Entregado rebotó a reparto", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("Recolectado por Dropi", "dropi-pickup"), p("En bodega Dropi", "dropi-warehouse"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("Entregado", "delivered"), p("En reparto", "delivery"), p("Entregado", "delivered")] },
+  { id: "Envío 12", carrier: "DOMINA", outcome: "Devolución", highlight: "Orden irregular entre carrier y Dropi", steps: [p("Pendiente", "pending"), p("Guía generada", "guide"), p("En preparación", "prepared"), p("Recibido transportadora", "received"), p("Recolectado por Dropi", "dropi-pickup"), p("En bodega Dropi", "dropi-warehouse"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("Novedad solucionada", "solved"), p("Devolución", "returning")] },
+  { id: "Envío 13", carrier: "DOMINA", outcome: "Entregado", highlight: "Novedad recuperada", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("En preparación", "prepared"), p("En bodega Dropi", "dropi-warehouse"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("Novedad", "novelty"), p("En reparto", "delivery"), p("Entregado", "delivered")] },
+  { id: "Envío 14", carrier: "FUTURA", outcome: "Devolución", highlight: "Reparto y tránsito alternan varias veces", steps: [p("Pendiente confirmación", "confirm"), p("Pendiente", "pending"), p("Guía generada", "guide"), p("Recolectado por Dropi", "dropi-pickup"), p("Recibido transportadora", "received"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("En tránsito", "transit"), p("En reparto", "delivery"), p("En tránsito", "transit"), p("Devolución", "returning")] },
+];
+
+/** A qué estado corresponde un paso, según el nivel que se esté mirando. */
+export function estadoDelPaso(paso: Paso, nivel: Vista): string | null {
+  if (!paso.estado) return null;
+  return nivel === "operacion" ? paso.estado : operacionPorId.get(paso.estado)?.usuario ?? null;
+}
+
+/** Marca cuándo el recorrido vuelve a un estado por el que ya había pasado. */
+export function vueltas(steps: Paso[], nivel: Vista): (number | undefined)[] {
+  const visto = new Map<string, number>();
+  return steps.map((step, i) => {
+    const k = estadoDelPaso(step, nivel);
+    if (!k) return undefined;
+    if (i > 0 && estadoDelPaso(steps[i - 1], nivel) === k) return undefined;
+    const n = (visto.get(k) ?? 0) + 1;
+    visto.set(k, n);
+    return n > 1 ? n : undefined;
   });
 }
 
-/** Incoherencias de vocabulario que la normalización de trazas dejó a la vista. */
-export const traceFindings = [
-  { level: "critico", title: "2 pasos eran de la capa cliente", detail: "«En preparación» y «Proceso finalizado» venían escritos como estados de operador. El primero se reclasificó a «Preparado para transportadora»; el segundo no tiene nodo — es el mismo hallazgo del gate: no es terminal en crudo." },
-  { level: "alto", title: "4 etiquetas no existían como nodo", detail: "«Pendiente confirmación» → Por confirmar · «Recibido transportadora» → Recibido por transportadora · «Devolución» → Devolución confirmada · «Devolución en proceso» → En devolución." },
-  { level: "critico", title: "Ninguna guía llega al cierre real de la devolución", detail: "El crudo «Devolución» se mapea a «En devolución», no a «Devolución confirmada»: ese estado final lo marca el PROVEEDOR cuando bodega recibe el paquete, y una traza de carrier no puede contenerlo. Resultado: las 11 devoluciones de la muestra terminan con el paquete en retorno y ninguna prueba de recepción física. El cierre de la fase 7 no está validado por ningún dato." },
-  { level: "alto", title: "Dos crudos para el mismo estado", detail: "«Devolución» y «Devolución en proceso» caen ambos en «En devolución» (problema P2 del catálogo: etiquetas destino inconsistentes). En 2 guías aparecen seguidos, así que se ven repetidos — no es un rebote." },
-  { level: "medio", title: "El nodo «Reintento de entrega» no aparece nunca", detail: "Las trazas reales vuelven directo a «En reparto» después de la novedad. O el nodo sobra, o el reintento no se está registrando como evento propio." },
+export const hallazgos = [
+  {
+    tone: "critico" as Tone,
+    titulo: "Casi nadie confirma que la devolución llegó",
+    detalle:
+      "11 de los 14 envíos terminan devueltos y en ninguno hay registro de que la bodega recibiera el paquete. Y no es cosa de la muestra: en el tráfico real, de 412 devoluciones solo 27 registran la recepción — 6 de cada 100. Ese registro lo marca el proveedor, no la transportadora.",
+  },
+  {
+    tone: "alerta" as Tone,
+    titulo: "«Entregado» no siempre es el final",
+    detalle:
+      "Hay envíos que aparecen entregados y después vuelven a moverse. Por eso una de las decisiones de hoy es cuánto esperar antes de darlo por cerrado.",
+  },
+  {
+    tone: "alerta" as Tone,
+    titulo: "Cinco estados todavía no se pueden medir",
+    detalle:
+      "Pendiente de recolección, Recolección fallida, Reintento de recolección, Reintento de entrega y Siniestro no tienen ningún dato que los alimente. Media fase de recolección es un hueco de instrumentación, no de homologación — y es justo donde se quería medir cuánto tarda la recogida.",
+  },
 ];
 
-export const decisions = [
-  { level: "resuelto", title: "INTENTO DE ENTREGA", question: "¿Significa salida a reparto o intento fallido?", action: "RESUELTO con datos (22-jul): es término propio de Interrapidísimo (99,2% de 145.733 ocurrencias) y ahí significa intento fallido (92,08% → falla). No hay colisión entre carriers → el modelo NO necesita eje por transportadora. Queda validarlo con Interrapidísimo, ya con el número en la mano." },
-  { level: "critico", title: "Terminalidad de Entregado", question: "¿Qué capa define el cierre: estado de orden o eventos del carrier?", action: "Ya no falta dato, falta decisión. En estado de orden rebota 0,11% y el máximo es 31h; en eventos de carrier el p99 va de 153h a 495h. Para la vista del cliente manda el estado de orden → umbral del orden de 24–48h." },
-  { level: "critico", title: "Re-mapear INTENTO DE ENTREGA", question: "Hoy está clasificado como EN_TRANSITO; los datos dicen NOVEDAD.", action: "145.733 eventos (7,74% del tráfico) contados como tránsito normal en vez de novedad. Corregir el mapeo antes del hand-off: hoy la medición esconde el problema." },
-  { level: "alto", title: "Catálogo 26+", question: "¿Reintentos son estados o nivel/contador?", action: "Cerrar el modelo para recolección, entrega y devolución sin inflar la taxonomía." },
-  { level: "alto", title: "Vista cliente 8+1", question: "¿Disponible para retiro es un noveno estado?", action: "Recomendación: sí; habilita aviso y fecha límite de recogida." },
-  { level: "alto", title: "Implicaciones físicas", question: "¿Cada estado mueve stock, cierre y movilización correctamente?", action: "Completar salida de bodega, reversible, terminal y efecto stock antes de TI." },
-  { level: "medio", title: "Cobertura multinacional", question: "¿El catálogo global aguanta tráfico real fuera de Colombia?", action: "Tomar al menos una guía por país y registrar crudos sin mapeo." },
-  { level: "medio", title: "Diff de implementación", question: "¿Qué cambia contra la DB vigente?", action: "Recalcular contra la base actual; el plan de 145 ajustes está desactualizado." },
-];
+export type Decision = { cuando: "hoy" | "despues"; titulo: string; pregunta: string; propuesta: string };
 
-/**
- * `peso` = participación MEDIDA de cada ruta sobre las 7.001 órdenes que generaron guía
- * en la ventana mar–jul 2026. Señal usada: presencia del estado que marca cada tramo.
- *   ECOM  → PREPARADO PARA TRANSPORTADORA = 4.799 órdenes (68,5%)
- *   Dropi → RECOGIDO POR DROPI            = 3.096 órdenes (44,2%)
- * Las rutas NO son excluyentes: una orden con Dropi pasó antes por ECOM, por eso no suman 100.
- * Directo = las que no registran ninguna de las dos señales.
- *
- * ⚠️ Corrige una estimación previa (98/0,8/1,2) que era falsa: dividía conteos de un universo
- * por el total de otro. La cifra de acá sí sale del mismo denominador.
- */
-export const routeLabels: Record<RouteMode, { label: string; detail: string; peso: string }> = {
-  directo: { label: "Directo", detail: "Proveedor entrega al carrier; salta ECOM y Dropi", peso: "~31%" },
-  ecom: { label: "ECOM", detail: "Preparación ECOM y entrega directa al carrier", peso: "68,5%" },
-  dropi: { label: "ECOM + Dropi", detail: "ECOM obligatorio y recolección operada por Dropi", peso: "44,2%" },
-};
+export const decisiones: Decision[] = [
+  {
+    cuando: "hoy",
+    titulo: "¿Cuándo decimos que una orden está entregada?",
+    pregunta: "Hoy una orden puede aparecer entregada y volver a moverse.",
+    propuesta:
+      "Manda lo que registra Dropi, y se confirma cuando pasan 24 a 48 horas sin un movimiento nuevo. Si mandara lo que reporta la transportadora habría que esperar hasta tres semanas.",
+  },
+  {
+    cuando: "hoy",
+    titulo: "¿El reintento es un estado o un contador?",
+    pregunta: "Cuando falla una entrega y se vuelve a intentar, ¿es un estado nuevo o el mismo «En reparto» con un número al lado?",
+    propuesta: "Contador, para no inflar la lista. Aplica igual para la recolección y la devolución.",
+  },
+  { cuando: "despues", titulo: "¿Qué mueve cada estado por dentro?", pregunta: "Salida de bodega, efecto en inventario, si se puede devolver atrás.", propuesta: "Hay que completarlo estado por estado antes de entregarle esto a TI." },
+  { cuando: "despues", titulo: "¿El modelo aguanta fuera de Colombia?", pregunta: "Solo Colombia está validada con órdenes reales.", propuesta: "Tomar al menos un envío real por país y anotar lo que no encaje." },
+  { cuando: "despues", titulo: "Falta medir el estado de la guía", pregunta: "Es la capa con más estados y la única sin medición propia.", propuesta: "Lo que sabemos de ella sale de revisión manual, no de medir el tráfico." },
+];
