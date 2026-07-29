@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Candidata } from "@/lib/recolecciones/elegibilidad";
-import { generarCsv, nombreArchivo, mensajeSolicitud } from "@/lib/recolecciones/archivo";
+import { generarCsv, nombreArchivo, mensajeSolicitud, mensajeBodega } from "@/lib/recolecciones/archivo";
+import { linkWhatsapp } from "@/lib/recolecciones/contacto";
 
 // Armar la solicitud de UNA transportadora.
 //
@@ -21,11 +22,23 @@ type Props = {
   minInicial: number;
 };
 
-type Orden = "paquetes" | "nombre" | "municipio";
+type Orden = "paquetes" | "nombre" | "municipio" | "antiguedad";
 type Aviso = { texto: string; tono: "ok" | "error" } | null;
 
 const fmt = (n: number) => n.toLocaleString("es-CO");
 const VISIBLES = 60;
+
+// Días desde los que una bodega se marca como demorada.
+//
+// No es un número elegido: sale de las cubetas que trae el export (0-1, 2-3,
+// 4-7, 8-15, +15). 8 es donde empieza la cuarta, y ahí ya son 10.477 guías en
+// todo el país. Debajo de eso el stock todavía se mueve solo.
+const DIAS_ALERTA = 8;
+const DIAS_CRITICO = 15;
+
+/** Cómo se lee la antigüedad: es el piso de una cubeta, no una fecha exacta. */
+const antiguedadTexto = (d: number | null) =>
+  d == null ? "—" : d >= DIAS_CRITICO ? "+15 d" : d >= DIAS_ALERTA ? "8-15 d" : `${d}-${d + 1} d`;
 
 export default function ArmarSolicitud({ transportadora, elegibles, minInicial }: Props) {
   const [busqueda, setBusqueda] = useState("");
@@ -92,6 +105,11 @@ export default function ArmarSolicitud({ transportadora, elegibles, minInicial }
     if (orden === "nombre") return pasa.sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
     if (orden === "municipio")
       return pasa.sort((a, b) => a.municipio.localeCompare(b.municipio, "es") || b.paquetes - a.paquetes);
+    // Sin dato de antigüedad va al final, no al principio: un null no puede
+    // colarse arriba haciéndose pasar por lo más urgente.
+    if (orden === "antiguedad")
+      return pasa.sort((a, b) =>
+        (b.antiguedad_max ?? -1) - (a.antiguedad_max ?? -1) || b.paquetes - a.paquetes);
     return pasa.sort((a, b) => b.paquetes - a.paquetes);
   }, [elegibles, busqueda, municipio, minPaquetes, soloUbicadas, quitadas, orden]);
 
@@ -325,13 +343,22 @@ export default function ArmarSolicitud({ transportadora, elegibles, minInicial }
                   {encabezado("nombre", "Bodega")}
                   {encabezado("municipio", "Municipio")}
                   {encabezado("paquetes", "Paquetes", "num")}
+                  {encabezado("antiguedad", "Parado hace", "num")}
                   <th>Ubicación</th>
                   <th aria-label="Quitar" />
                 </tr>
               </thead>
               <tbody>
-                {seleccionadas.slice(0, VISIBLES).map(c => (
-                  <tr key={c.warehouse_id}>
+                {seleccionadas.slice(0, VISIBLES).map(c => {
+                  const d = c.antiguedad_max;
+                  // La marca va en la FILA, no solo en la celda: así lo demorado
+                  // se ve con cualquier orden, sin depender de que el operador
+                  // ordene por antigüedad. Nadie cambia el orden por defecto.
+                  const clase = d == null ? undefined
+                    : d >= DIAS_CRITICO ? "sol-fila--critica"
+                    : d >= DIAS_ALERTA ? "sol-fila--demorada" : undefined;
+                  return (
+                  <tr key={c.warehouse_id} className={clase}>
                     {/* La dirección va bajo el nombre y no en su propia columna:
                         es lo más largo de la fila y como columna empujaría las
                         cifras fuera de la pantalla. */}
@@ -340,9 +367,35 @@ export default function ArmarSolicitud({ transportadora, elegibles, minInicial }
                       <span className="sol-dir" title={c.direccion}>
                         {c.direccion || "sin dirección registrada"}
                       </span>
+                      {/* Escribirle a la bodega es lo que sigue después de
+                          armar la lista, así que el acceso va acá y no en una
+                          columna aparte: la fila ya tiene seis. El mensaje sale
+                          armado con el nombre, los paquetes y los días — si hay
+                          que escribirlo a mano, nadie escribe. */}
+                      {(() => {
+                        const link = linkWhatsapp(c.telefono, mensajeBodega({
+                          tipo: "presion_proveedor",
+                          bodega: c.nombre,
+                          paquetes: c.paquetes,
+                          dias: d,
+                        }));
+                        return link ? (
+                          <a className="sol-wa" href={link} target="_blank" rel="noopener noreferrer"
+                             title={`Escribirle a ${c.nombre} por WhatsApp`}>
+                            WhatsApp
+                          </a>
+                        ) : (
+                          <span className="sol-wa sol-wa--no">sin teléfono</span>
+                        );
+                      })()}
                     </td>
                     <td>{c.municipio}</td>
                     <td className="num tnum">{fmt(c.paquetes)}</td>
+                    <td className="num tnum sol-edad"
+                        title={d == null ? "El export no trae antigüedad para esta bodega"
+                                         : `La guía más vieja lleva al menos ${d} días preparada`}>
+                      {antiguedadTexto(d)}
+                    </td>
                     <td>
                       {c.ubicacion_confiable
                         ? <span className="rec-ok">verificada</span>
@@ -358,7 +411,8 @@ export default function ArmarSolicitud({ transportadora, elegibles, minInicial }
                       </button>
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
