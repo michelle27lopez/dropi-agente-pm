@@ -9,6 +9,14 @@ export function generateStaticParams() {
   return proyectos.map((p) => ({ slug: p.slug }));
 }
 
+// Mismas etiquetas que usa el registro en /iniciativas, para que un proyecto no
+// se describa de dos maneras distintas según por dónde se mire.
+const DOC_LABEL: Record<string, string> = {
+  completo: "spec completo",
+  parcial: "spec parcial",
+  ninguno: "sin documentar",
+};
+
 export default async function ProyectoPage({
   params,
 }: {
@@ -23,12 +31,16 @@ export default async function ProyectoPage({
   const exps = experimentos.filter(
     (e) => e.proyectoSlug === p.slug || p.experimentos?.includes(e.slug)
   );
-  const idxEtapa = etapas.findIndex((e) => p.etapa.startsWith(e.nombre) || e.nombre.startsWith(p.etapa));
 
   const relatedSet = new Set(
     (p.etapasRelacionadas ?? []).map((r) => r.etapa)
   );
+  // Dos cosas distintas que antes se decidían con la misma condición: el badge
+  // "Transversal" solo tiene sentido con más de una etapa, pero el detalle de
+  // rol por etapa hay que pintarlo aunque sea una sola — si no, ese dato se
+  // perdía en silencio al caer en la rama de etapa única.
   const isTransversal = relatedSet.size > 1;
+  const tieneRelacionadas = relatedSet.size > 0;
 
   return (
     <main className="page">
@@ -37,24 +49,55 @@ export default async function ProyectoPage({
       </Link>
 
       <div className="detail">
-        <div className="detail-row">
-          <span className={`badge b-tipo t-${p.tipo}`}>{p.tipo}</span>
-          <span className="badge b-phase">{p.fase}</span>
-          <span className={`badge b-handoff h-${p.handoff.replace(/\s/g, "-")}`}>{p.handoff}</span>
-          {isTransversal ? (
-            <span className="badge b-phase">Transversal</span>
-          ) : (
-            <span className="badge b-code">{p.etapa}</span>
-          )}
-          {p.codigo ? (
-            <span className="badge b-code">{p.codigo}</span>
-          ) : (
-            <span className="badge b-warn">sin registrar en Darwin</span>
-          )}
-          {p.destacado && <span className="badge b-code">⭐ En foco</span>}
-        </div>
+        {/* El título abre la ficha. Antes venían seis pastillas de colores
+            primero y había que leerlas todas para saber qué proyecto era. */}
+        {p.codigo && <span className="detail-codigo">{p.codigo}</span>}
         <h1>{p.nombre}</h1>
         <p className="lead">{p.descripcion}</p>
+
+        {/* Los metadatos son texto, no pastillas: son categorías (qué es, en qué
+            fase va, qué etapa ataca) y el color no debe usarse para eso. Solo se
+            destacan con .tag las dos cosas que piden acción. */}
+        <div className="detail-meta">
+          <strong>{p.tipo}</strong>
+          <span className="sep">·</span>
+          {/* `fase` y `handoff` son ejes distintos, pero colapsan al mismo valor
+              en fulfillment y tarifas — se decía dos veces seguidas. */}
+          {p.fase !== p.handoff && (
+            <>
+              <span>{p.fase}</span>
+              <span className="sep">·</span>
+            </>
+          )}
+          {/* Mismo trato que en el registro: handoff son los cuatro estados, así
+              que lleva color; el resto de la línea es texto. */}
+          <span className={`pill h-${p.handoff.replace(/\s/g, "-")}`}>{p.handoff}</span>
+          <span className="sep">·</span>
+          <span>{isTransversal ? "transversal a la cadena" : p.etapa}</span>
+
+          {p.destacado && (
+            <>
+              <span className="sep">·</span>
+              <span>⭐ en foco</span>
+            </>
+          )}
+
+          {!p.codigo && <span className="pill is-warn">sin registrar en Darwin</span>}
+          {(p.doc ?? "ninguno") === "ninguno" ? (
+            <span className="pill is-risk">sin documentar</span>
+          ) : (
+            <span>{DOC_LABEL[p.doc ?? "ninguno"]}</span>
+          )}
+        </div>
+
+        {/* Same Day tiene página propia y estaba en el sidebar, pero su ficha no
+            sabía que existía: no había ni link ni `entregable`. Ahora cualquier
+            iniciativa con `vista` la ofrece desde arriba. */}
+        {p.vista && (
+          <p className="detail-hint" style={{ marginBottom: 14 }}>
+            <Link href={p.vista}>Abrir la pantalla de {p.nombre} →</Link>
+          </p>
+        )}
 
         {p.bloqueo && (
           <div className="detail-bloqueo">
@@ -75,8 +118,11 @@ export default async function ProyectoPage({
           {p.foco}
         </div>
 
-        {/* Cadena de valor: etapa única o transversal con detalle por etapa */}
-        {isTransversal ? (
+        {/* La cadena de las 6 etapas SOLO se pinta cuando el proyecto es
+            transversal: ahí la cobertura es el dato. Para una iniciativa de una
+            sola etapa era caro y redundante — la etapa ya está en la línea de
+            metadatos de arriba y en el sidebar. */}
+        {isTransversal && (
           <div className="detail-field">
             <b>Cobertura en la cadena de valor</b>
             <div className="fx-chain">
@@ -107,19 +153,20 @@ export default async function ProyectoPage({
               })}
             </div>
           </div>
-        ) : idxEtapa >= 0 ? (
+        )}
+
+        {/* Una sola etapa relacionada: el rol se perdía en silencio al no ser
+            "transversal". Se dice en una línea, sin la cadena. */}
+        {!isTransversal && tieneRelacionadas && (
           <div className="detail-field">
             <b>Etapa de la orden</b>
-            <div className="fx-chain">
-              {etapas.map((e, i) => (
-                <span key={e.n} className={`fx-chain-step${i === idxEtapa ? " is-current" : ""}`}>
-                  {e.nombre}
-                </span>
-              ))}
-            </div>
-            <small>{etapas[idxEtapa].sub}</small>
+            {p.etapasRelacionadas!.map((r) => (
+              <span key={r.etapa}>
+                <strong>{r.etapa}</strong> — {r.rol}
+              </span>
+            ))}
           </div>
-        ) : null}
+        )}
 
         <LinkList links={linksDe(p)} titulo="Enlaces" />
         {linksDe(p).length === 0 && (

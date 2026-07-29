@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
@@ -10,6 +11,13 @@ import { isMiDiaOwner } from "@/lib/sprint-access";
 import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
 import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
+
+// La torre de logística arrastra el registro completo del tablero
+// (proyectos/logistica/_lib/data.ts, ~1.500 líneas). Se carga aparte para que
+// ese peso no entre en el bundle de las demás células, que no lo usan.
+const TorreLogistica = dynamic(() => import("./_components/TorreLogistica"), { ssr: false });
+const ProyectosPorEtapa = dynamic(() => import("./_components/ProyectosPorEtapa"), { ssr: false });
+const UpdatesLogistica = dynamic(() => import("./_components/UpdatesLogistica"), { ssr: false });
 type Update = { id: string; week_date: string; title: string; content: string };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
@@ -110,6 +118,8 @@ export default function CelulaHomePage() {
   const [metrics, setMetrics] = useState<SellersMetrics | null>(null);
   const [openUpdate, setOpenUpdate] = useState<Update | null>(null);
   const [selectedCountry, setSelectedCountry] = useState("global");
+  // Etapa seleccionada en el mapa de la orden (solo logística). null = todas.
+  const [etapaFiltro, setEtapaFiltro] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/celulas/${params.slug}`)
@@ -239,6 +249,10 @@ export default function CelulaHomePage() {
   const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
 
   const isSellers = params.slug === "sellers";
+  // Logística cambia el cuerpo de la home: abre con la torre de control y
+  // agrupa las iniciativas por etapa del viaje de la orden en vez de la
+  // rejilla plana. El resto de las células no se toca.
+  const isLogistica = params.slug === "logistica";
 
   // Get active country stats
   const activeStats = (metrics?.stats?.countries as any)?.[selectedCountry] || metrics?.stats;
@@ -796,6 +810,16 @@ export default function CelulaHomePage() {
       />
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
+        {/* Torre de control — solo logística. Abre la home con los indicadores
+            de la orden y el mapa que filtra las iniciativas de más abajo. */}
+        {isLogistica && (
+          <TorreLogistica
+            deDarwin={celula.proyectos}
+            etapaActiva={etapaFiltro}
+            onEtapaChange={setEtapaFiltro}
+          />
+        )}
+
         {/* OKR & NSM Progress Section */}
         {params.slug === "sellers" && metrics && (
           <div style={{
@@ -1096,24 +1120,39 @@ export default function CelulaHomePage() {
         )}
 
         <div style={{ marginBottom: 56 }}>
-          <Section
-            title="Updates"
-            items={updates}
-            ctaLabel="Ver →"
-            onItemClick={(item) => {
-              const u = updatesById.get(item.key);
-              if (u) setOpenUpdate(u);
-            }}
-          />
-          {updates.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
+          {/* Logística publica su weekly en su propio tablero, no en
+              `celula_updates` ni en el registro de /weekly — por eso esta
+              sección salía vacía. UpdatesLogistica lo trae de ahí. */}
+          {isLogistica ? (
+            <UpdatesLogistica
+              extra={updates}
+              onItemClick={(item) => {
+                const u = updatesById.get(item.key);
+                if (u) setOpenUpdate(u);
+              }}
+            />
+          ) : (
+            <>
+              <Section
+                title="Updates"
+                items={updates}
+                ctaLabel="Ver →"
+                onItemClick={(item) => {
+                  const u = updatesById.get(item.key);
+                  if (u) setOpenUpdate(u);
+                }}
+              />
+              {updates.length === 0 && (
+                <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
+              )}
+            </>
           )}
         </div>
 
         <div style={{ marginBottom: 56 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
             <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
-              Discovery projects
+              {isLogistica ? "Iniciativas por etapa" : "Discovery projects"}
             </p>
             {canCreate && (
               <div style={{ display: "flex", gap: 8 }}>
@@ -1192,47 +1231,65 @@ export default function CelulaHomePage() {
             </form>
           )}
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-            {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                dark={false}
-                canCreate={canCreate}
-                pocs={pocsByParent.get(p.id) ?? []}
-                onEstadoChange={handleEstadoChange}
-                onVpvChange={handleVpvChange}
-                onCrearPoc={handleCrearPoc}
-              />
-            ))}
-          </div>
-          {proyectos.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
+          {isLogistica ? (
+            <ProyectosPorEtapa
+              deDarwin={celula.proyectos}
+              etapaActiva={etapaFiltro}
+              canCreate={canCreate}
+              pocsByParent={pocsByParent}
+              onEstadoChange={handleEstadoChange}
+              onVpvChange={handleVpvChange}
+              onCrearPoc={handleCrearPoc}
+            />
+          ) : (
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+                {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
+                  <ProjectCard
+                    key={p.id}
+                    project={p}
+                    dark={false}
+                    canCreate={canCreate}
+                    pocs={pocsByParent.get(p.id) ?? []}
+                    onEstadoChange={handleEstadoChange}
+                    onVpvChange={handleVpvChange}
+                    onCrearPoc={handleCrearPoc}
+                  />
+                ))}
+              </div>
+              {proyectos.length === 0 && (
+                <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
+              )}
+            </>
           )}
         </div>
 
-        <div>
-          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-            Pruebas de concepto
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-            {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                dark={false}
-                canCreate={canCreate}
-                pocs={[]}
-                onEstadoChange={handleEstadoChange}
-                onVpvChange={handleVpvChange}
-                onCrearPoc={handleCrearPoc}
-              />
-            ))}
+        {/* Los POC de logística no van en una sección aparte: se muestran dentro
+            de su etapa, que es el eje de organización de esa célula. */}
+        {!isLogistica && (
+          <div>
+            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+              Pruebas de concepto
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+              {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                />
+              ))}
+            </div>
+            {poc.length === 0 && (
+              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
+            )}
           </div>
-          {poc.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
-          )}
-        </div>
+        )}
       </div>
       </div>
       <HubFooter />

@@ -14,6 +14,7 @@ type ProjectDetails = {
   parent_project_id: string | null;
   estado_interno: string | null;
   vpv: number | null;
+  prototype_url: string | null;
   celulas?: {
     nombre: string;
     slug: string;
@@ -232,8 +233,223 @@ export default function ProjectDashboardPage() {
   const cellSlug = project.celulas?.slug ?? "";
   const code = project.project_code || "PRJ";
   
-  // Find active or latest cycle
-  const activeCycle = cycles.find((c) => c.estado === "activo") || cycles[0];
+  // Find active or latest cycle with behavioral fallback for all Sellers projects
+  let activeCycle = cycles.find((c) => c.estado === "activo") || cycles[0];
+  
+  if (!activeCycle) {
+    const FALLBACK_CYCLES: Record<string, any> = {
+      "PROD-SEC-BEST": {
+        id: "cycle-prod-sec-best",
+        title: "Enrutamiento de Respaldo (Second Best)",
+        estado: "activo",
+        fase_actual: "F1.5",
+        brief: {
+          causa: "A",
+          target: "Sellers activos con órdenes bloqueadas por quiebres de inventario.",
+          hipotesis: "Si habilitamos un canal de redirección rápida y preventivo en catálogo (Second Best), los sellers salvarán sus ventas sin incurrir en cancelación manual.",
+          subPerfil: "Sellers con ventas recurrentes",
+          experimento: "Simular desvíos automáticos en un grupo control de 10 sellers Pareto.",
+          indicadores: "GMV salvado, tasa de desvíos automáticos exitosos."
+        }
+      },
+      "PRM-1305": {
+        id: "cycle-prm-1305",
+        title: "Módulo de Notificaciones (WhatsApp)",
+        estado: "activo",
+        fase_actual: "F2",
+        brief: {
+          causa: "M",
+          target: "Sellers con órdenes pendientes por más de 24 horas.",
+          hipotesis: "Si notificamos vía WhatsApp con QuickActions para rescatar novedades, los sellers reaccionarán en minutos sin fricción de login.",
+          subPerfil: "Sellers en operación diaria",
+          experimento: "Enviar alertas in-channel de WhatsApp con botones a 15 sellers del piloto.",
+          indicadores: "Tasa de confirmación rápida, reducción de tickets en soporte."
+        }
+      },
+      "PROD-MUESTRA": {
+        id: "cycle-prod-muestra",
+        title: "Reducción del Miedo Logístico (Muestra propia)",
+        estado: "activo",
+        fase_actual: "F0",
+        brief: {
+          causa: "M",
+          target: "Dropshippers registrados con 0 ventas reales.",
+          hipotesis: "Si facilitamos la compra de su propia muestra en 1-Clic, el dropshipper validará el canal físico y perderá el miedo logístico.",
+          subPerfil: "Sellers huérfanos con 0 órdenes",
+          experimento: "Desplegar el checkout simplificado en catálogo para compra de muestra propia.",
+          indicadores: "Tasa de conversión de muestras a órdenes reales."
+        }
+      },
+      "PROD-WRAPPED": {
+        id: "cycle-prod-wrapped",
+        title: "Reactivación Inter-Campaña (Dropi Wrapped)",
+        estado: "activo",
+        fase_actual: "F4",
+        brief: {
+          causa: "M",
+          target: "Dropshippers activos que caen en inactividad entre campaigns.",
+          hipotesis: "Si entregamos una retrospectiva interactiva y gamificada (Wrapped) de sus percentiles y racha de ventas, activaremos la aversión a la pérdida (Loss Aversion) y estimularemos el retorno al catálogo.",
+          subPerfil: "Sellers maduros inactivos",
+          experimento: "Enviar el Wrapped personalizado en formato PDF/Imagen a una cohorte de 30 sellers inactivos.",
+          indicadores: "Tasa de retorno in-app, tasa de importación de productos."
+        }
+      },
+      "PROD-BUDDY": {
+        id: "cycle-prod-buddy",
+        title: "Descubrimiento Asistido (Lovable Buddy)",
+        estado: "activo",
+        fase_actual: "F3",
+        brief: {
+          causa: "M",
+          target: "Sellers recién registrados sin 1ª orden.",
+          hipotesis: "Si implementamos un recomendador interactivo e inteligente (Lovable Buddy), reduciremos el miedo a elegir mal y aceleraremos su primera orden.",
+          subPerfil: "Sellers huérfanos sin 1ª orden",
+          experimento: "Dar acceso al Buddy a 100 sellers nuevos y medir CTR en productos.",
+          indicadores: "CTR, tasa de guardado e incremento de primera orden."
+        }
+      },
+      "PROD-PILOT": {
+        id: "cycle-prod-pilot",
+        title: "Onboarding Guiado Segmentado (User Pilot)",
+        estado: "activo",
+        fase_actual: "F2",
+        brief: {
+          causa: "A",
+          target: "Dropshippers huérfanos sin comunidad que abandonan en el onboarding.",
+          hipotesis: "Si segmentamos el onboarding usando UserPilot basado en su nivel de conciencia comercial, aumentaremos la habilidad percibida (A) y la adopción de features clave.",
+          subPerfil: "Vendedores huérfanos en su primer viaje (0-14 días)",
+          experimento: "Implementar 3 tours guiados específicos según nivel de experiencia.",
+          indicadores: "Reducción de bounce rate e incremento de activación."
+        }
+      },
+      "PROD-ACADEMY": {
+        id: "cycle-prod-academy",
+        title: "Educación Guiada 'Tu primera venta en 7 días'",
+        estado: "activo",
+        fase_actual: "F3",
+        brief: {
+          causa: "M",
+          target: "Sellers registrados sin conocimiento de pauta publicitaria ni finanzas básicas.",
+          hipotesis: "Si articulamos cursos cortos prácticos vinculados directamente al CRM in-app, incentivaremos la creación rápida de la primera campaña publicitaria.",
+          subPerfil: "Rebuscadores digitales sin experiencia",
+          experimento: "Trackear visualización de videos y conversión a orden.",
+          indicadores: "Tasa de finalización, conversión a primera orden."
+        }
+      },
+      "STID-6598": {
+        id: "cycle-stid-6598",
+        title: "Estabilización de Integración Tienda Nube",
+        estado: "activo",
+        fase_actual: "F4",
+        brief: {
+          causa: "A",
+          target: "Sellers con Tienda Nube que sufren por errores de sincronización.",
+          hipotesis: "Si resolvemos las 6 fallas críticas (variables, fletes, direcciones), eliminaremos la fricción técnica y estabilizaremos el flujo operativo de despachos.",
+          subPerfil: "Sellers con integración Tienda Nube",
+          experimento: "Pruebas de Order Bump en portal de partners de Tienda Nube con 5 comercios.",
+          indicadores: "Tasa de éxito en sincronización de webhooks."
+        }
+      },
+      "PROD-HELP": {
+        id: "cycle-prod-help",
+        title: "Autogestión de Dudas SAC (Centro de Ayuda)",
+        estado: "activo",
+        fase_actual: "F1",
+        brief: {
+          causa: "A",
+          target: "Sellers con dudas logísticas recurrentes que colapsan soporte.",
+          hipotesis: "Si exponemos buscador de FAQs y buscador flotante interactivo, resolverán dudas autónomamente en < 5 minutos sin tickets.",
+          subPerfil: "Sellers activos con incidencias de fletes o novedades",
+          experimento: "Widget flotante con buscador unificado en el dashboard.",
+          indicadores: "Tasa de autogestión, tickets por seller activo."
+        }
+      },
+      "PROD-1478": {
+        id: "cycle-prod-1478",
+        title: "Experimento de Activación Neta (Time-to-Value)",
+        estado: "activo",
+        fase_actual: "F2",
+        brief: {
+          causa: "M",
+          target: "Sellers nuevos con 1ª orden creada que se enfrían en el tramo de entrega.",
+          hipotesis: "Si guiamos al seller paso a paso por WhatsApp/In-app en el tramo de entrega, reduciremos cancelaciones de órdenes COD y bajaremos el TTV Neto.",
+          subPerfil: "Sellers registrados con 1ª orden creada",
+          experimento: "Piloto de alertas y soporte en 3 pasos clave por WhatsApp.",
+          indicadores: "Brecha de días registro-entrega, conversión neta."
+        }
+      },
+      "PROD-1546": {
+        id: "cycle-prod-1546",
+        title: "Simplificación de Checkout (Huella Digital 3.0)",
+        estado: "activo",
+        fase_actual: "F2",
+        brief: {
+          causa: "A",
+          target: "Sellers que abandonan al registrarse por exceso de campos requeridos.",
+          hipotesis: "Si posponemos la configuración bancaria compleja hasta después de la primera venta, incrementaremos la tasa de registro exitoso en 20%.",
+          subPerfil: "Sellers iniciando en la plataforma",
+          experimento: "Onboarding en 2 pasos (nombre e importación) vs onboarding tradicional.",
+          indicadores: "Conversión de registro, tasa de configuración."
+        }
+      },
+      "PROD-1729": {
+        id: "cycle-prod-1729",
+        title: "Carga Masiva de Órdenes Compuestas (Torre Logística)",
+        estado: "activo",
+        fase_actual: "F1",
+        brief: {
+          causa: "A",
+          target: "Sellers de alto volumen que gastan horas en despacho manual.",
+          hipotesis: "Si habilitamos carga masiva de órdenes compuestas y Torre Logística para evidencias físicas, reduciremos tickets de SAC y optimizaremos tiempos de despacho.",
+          subPerfil: "Sellers de alto volumen",
+          experimento: "Excel compuesto con validadores de macros internos probado con 3 dropshippers.",
+          indicadores: "Tiempo de despacho, tickets asociados a carga."
+        }
+      },
+      "PROD-1665": {
+        id: "cycle-prod-1665",
+        title: "Capa 1.5 - Hábito Post-Venta (Fidelización)",
+        estado: "activo",
+        fase_actual: "F1",
+        brief: {
+          causa: "M",
+          target: "Sellers con 1ª entrega que no continúan vendiendo.",
+          hipotesis: "Si incentivamos el chequeo de stock y actualización de catálogo en las siguientes 48 horas de su primera entrega, estimularemos el hábito comercial y la recurrencia.",
+          subPerfil: "Sellers con primera orden entregada con éxito",
+          experimento: "Prompt in-app de felicitaciones con 3 tareas guiadas post-venta.",
+          indicadores: "Conversión a 2ª orden, retención a 30 días."
+        }
+      },
+      "PROD-1666": {
+        id: "cycle-prod-1666",
+        title: "Diagnóstico de Churn y Palancas de Rescate",
+        estado: "activo",
+        fase_actual: "F1",
+        brief: {
+          causa: "M",
+          target: "Sellers con inactividad de 5 a 7 días comerciales tras pérdidas logísticas.",
+          hipotesis: "Si implementamos un flujo de rescate basado en diagnóstico de fletes y soporte prioritized, reactivaremos el 15% de sellers dormidos.",
+          subPerfil: "Comercios Pareto inactivos",
+          experimento: "Llamadas y alertas manuales de rescate estructuradas a muestra de 30 comercios.",
+          indicadores: "Tasa de reactivación, supervivencia posterior."
+        }
+      }
+    };
+
+    let norm = slug.toUpperCase();
+    if (project.type === "POC" && parentProject?.project_code) {
+      norm = parentProject.project_code.toUpperCase();
+    }
+    if (FALLBACK_CYCLES[norm]) {
+      activeCycle = FALLBACK_CYCLES[norm];
+    } else {
+      const codeNorm = code.toUpperCase();
+      if (FALLBACK_CYCLES[codeNorm]) {
+        activeCycle = FALLBACK_CYCLES[codeNorm];
+      }
+    }
+  }
+
   const brief = activeCycle?.brief;
 
   const CAUSA_LABELS = {
@@ -283,6 +499,27 @@ export default function ProjectDashboardPage() {
           <p style={{ fontSize: 14, color: "var(--fg)", lineHeight: 1.6, margin: 0 }}>
             {project.summary || "Sin resumen registrado."}
           </p>
+
+          {project.prototype_url && (
+            <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+              <div>
+                <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>🧪 Validación de Concepto (Mock)</strong>
+                <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Prototipo interactivo diseñado para este experimento</span>
+              </div>
+              <a
+                href={project.prototype_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontSize: 12.5, fontWeight: 750, color: "#fff", background: "var(--dropi)",
+                  border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", textDecoration: "none",
+                  display: "inline-flex", alignItems: "center", gap: 6
+                }}
+              >
+                Ver Mock de Validación <span style={{ fontSize: 11 }}>➔</span>
+              </a>
+            </div>
+          )}
         </div>
 
         {/* Estado interno · Jerarquía Discovery ↔ POC · VPV */}
@@ -494,53 +731,379 @@ export default function ProjectDashboardPage() {
                     </button>
                   </div>
 
-                  {/* Brief View */}
-                  <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 18, marginBottom: 20 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, borderBottom: "1px solid #E2E8F0", paddingBottom: 8 }}>
-                      <span style={{ fontSize: 12, fontWeight: 700, color: "#475569" }}>
-                        BRIEF DE INTERVENCIÓN ACTIVO
-                      </span>
-                    </div>
+                  {/* Brief View - Operationalizing discovery.md Playbook */}
+                  {(() => {
+                    const normSlug = slug.toUpperCase();
+                    
+                    // Comprehensive behavioral briefs for each core active project (Sellers cell)
+                    const BEHAVIORAL_BRIEFS: Record<string, any> = {
+                      "PRM-1305": {
+                        nivelCognitivo: "Receptor Dormido / Explorador Temprano",
+                        frictionEliminate: "Evita tener que entrar a app.dropi.co, iniciar sesión y buscar la orden para solucionar novedades manuales.",
+                        frictionPreserve: "La validación por bot del interés del cliente final antes de alertar al dropshipper (para no fletar retornos perdidos).",
+                        frictionInvest: "Configurar un saldo mínimo de Wallet para auto-despacho y definir sus transportadoras favoritas.",
+                        hookTrigger: "Alerta push/WhatsApp con sonido directo en el celular del seller.",
+                        hookAction: "Tocar un único botón de QuickAction (ej: [Autorizar Reintento]) desde su chat de WhatsApp.",
+                        hookReward: "Venta salvada al instante, utilidad neta ($29.200 COP) acreditada directamente a su Wallet.",
+                        hookInvestment: "Fondeo y retención de ganancias en su Wallet para financiar fletes automáticos de próximas ventas.",
+                        sdtAutonomy: "El dropshipper retiene el control total para decidir si autoriza el reintento o retorna en 1 solo toque.",
+                        sdtMastery: "Autogestión rápida del flete, disminuyendo la dependencia del canal técnico de soporte y SAC.",
+                        sdtRelatedness: "Siente al bot de operaciones de Dropi como su propio asistente logístico de confianza.",
+                        supuestoRiesgoso: "Los dropshippers confiarán en la transaccionalidad in-channel (WhatsApp) para aprobar movimientos de dinero y fletes de foma segura.",
+                        testBarato: "Piloto Concierge: Envío manual de alertas simuladas a 15 sellers estrella midiendo velocidad de respuesta y conversión.",
+                        costoEquivocacion: "Bajo. Si el seller no responde en WhatsApp en 24h, el flujo se devuelve al canal tradicional web sin alterar fletes.",
+                      },
+                      "PROD-MUESTRA": {
+                        nivelCognitivo: "Receptor Dormido / Empleado Aspirante",
+                        frictionEliminate: "Quita el formulario gigante de 15 campos (dirección, teléfono, cotización) que obligaba al seller a re-escribir sus propios datos de envío en cada prueba.",
+                        frictionPreserve: "Configurar por primera vez su dirección física y método de pago por defecto (crea seguridad y ownership logístico).",
+                        frictionInvest: "Establecer la dirección de muestra como definitiva y guardar la Wallet/PSE preferido.",
+                        hookTrigger: "Toast de éxito al importar un producto: '¿Deseas pedir una muestra física de este artículo a costo de proveedor en 1-Clic?'",
+                        hookAction: "Clic en el botón de QuickAction 'Solicitar Muestra' en catálogo.",
+                        hookReward: "Recibir el producto a precio proveedor en la puerta de su casa para evaluar la calidad física y empaque.",
+                        hookInvestment: "Dejar su calificación y opinión del proveedor en el catálogo de Dropi para la comunidad.",
+                        sdtAutonomy: "Libertad absoluta para validar la calidad de su stock antes de invertir capital en pautas de Facebook Ads.",
+                        sdtMastery: "Comprensión del journey de entrega y flete de cara a su comprador final.",
+                        sdtRelatedness: "Mayor confianza en la veracidad física de los productos del proveedor Fabio.",
+                        supuestoRiesgoso: "El dropshipper huérfano está dispuesto a gastar el dinero de su flete y producto solo para verificar la calidad física antes de pautar.",
+                        testBarato: "Test de guerrilla interactivo con 5 dropshippers nuevos en su primer día para evaluar el CTR del prompt en catálogo.",
+                        costoEquivocacion: "Trivial. El flete de muestra es autofinanciado por el seller, no representa riesgo financiero para la plataforma.",
+                      },
+                      "PROD-SEC-BEST": {
+                        nivelCognitivo: "Explorador Activo / Master",
+                        frictionEliminate: "Evita tener que buscar manualmente en el catálogo proveedores idénticos con stock y cotizar fletes alternativos ante un quiebre de inventario.",
+                        frictionPreserve: "Revisar y comparar las utilidades netas ajustadas (absorber sobrecosto) en el prompt de emergencia antes de re-enrutar.",
+                        frictionInvest: "Configurar reglas preventivas en catálogo (ej: autorizar sobrecosto de hasta $4.000 COP automáticamente).",
+                        hookTrigger: "Banner rojo de urgencia en el listado de órdenes: 'Falta de Stock en Bogotá para la Orden #12511073'.",
+                        hookAction: "Hacer clic en 'Desviar y Salvar Venta' seleccionando la bodega de respaldo sugerida.",
+                        hookReward: "GMV y venta del cliente final salvados, manteniendo la reputación del comercio intacta.",
+                        hookInvestment: "Activar el switch de 'Auto-redirección' para el producto afectado en catálogo.",
+                        sdtAutonomy: "El seller decide si absorbe el sobrecosto de la bodega de respaldo o prefiere cancelar la orden del comprador.",
+                        sdtMastery: "Control del inventario distribuido a nivel nacional sin retrasos manuales.",
+                        sdtRelatedness: "El cliente final recibe su paquete sin saber que hubo un quiebre de stock del proveedor original.",
+                        supuestoRiesgoso: "Los dropshippers prefieren sacrificar una parte de su margen de utilidad neto con tal de no perder la venta y proteger su marca.",
+                        testBarato: "Prueba de guerrilla con prototipo interactivo con 5 comercios del Pareto analizando su aceptación al sobrecosto en caliente.",
+                        costoEquivocacion: "Bajo. Si el seller prefiere no redirigir, la orden simplemente se marca en estado de cancelación por falta de stock.",
+                      },
+                      "PROD-WRAPPED": {
+                        nivelCognitivo: "Explorador Activo / Master",
+                        frictionEliminate: "Fricción de sentarse a calcular su rentabilidad histórica de forma manual.",
+                        frictionPreserve: "Analizar su propio progreso comercial en comparación con la comunidad (Relatedness).",
+                        frictionInvest: "Definir metas de ventas y racha deseada para el próximo ciclo/mes.",
+                        hookTrigger: "Mensaje push/email con el título 'Mira lo que lograste en Dropi este mes'.",
+                        hookAction: "Hacer clic y explorar el Wrapped interactivo.",
+                        hookReward: "Recompensa social y de estatus (pertenecer al top 10% de vendedores del país).",
+                        hookInvestment: "Compartir su Wrapped en redes y programar su siguiente meta de ventas.",
+                        sdtAutonomy: "Decide qué metas de crecimiento activar en su catálogo.",
+                        sdtMastery: "Visualización objetiva de su evolución y habilidades de e-commerce.",
+                        sdtRelatedness: "Comparativa comunitaria en percentiles sin revelar datos privados.",
+                        supuestoRiesgoso: "El dropshipper inactivo responde positivamente a estímulos emocionales y de estatus (Wrapped) reactivando sus campañas comerciales.",
+                        testBarato: "Envío concierge manual por WhatsApp de las retrospectivas Wrapped.",
+                        costoEquivocacion: "Bajo. El seller sigue inactivo sin perjuicio operativo.",
+                      },
+                      "PROD-BUDDY": {
+                        nivelCognitivo: "Receptor Dormido / Principiante",
+                        frictionEliminate: "Búsqueda infinita en un catálogo plano sin filtros de rentabilidad.",
+                        frictionPreserve: "Seleccionar las categorías comerciales de su interés.",
+                        frictionInvest: "Guardar productos recomendados en su lista de favoritos.",
+                        hookTrigger: "Alerta in-app: 'Tengo 3 productos ganadores listos para ti hoy'.",
+                        hookAction: "Interactuar con el Buddy y deslizar productos.",
+                        hookReward: "Descubrir un producto con margen > 40% verificado.",
+                        hookInvestment: "Importar el producto a su tienda con 1 clic.",
+                        sdtAutonomy: "Siente control de elegir entre recomendaciones personalizadas.",
+                        sdtMastery: "Desarrolla el criterio de selección de productos viables.",
+                        sdtRelatedness: "Asistente inteligente que lo acompaña en su primer día.",
+                        supuestoRiesgoso: "Los sellers nuevos confían en la sugerencia del recomendador de IA para iniciar sus primeras pautas.",
+                        testBarato: "Guerrilla test con 5 usuarios nuevos analizando usabilidad del prototipo Lovable.",
+                        costoEquivocacion: "Medio. Si la recomendación falla, el seller pierde presupuesto de pauta.",
+                      },
+                      "PROD-PILOT": {
+                        nivelCognitivo: "Receptor Dormido / Explorador Temprano",
+                        frictionEliminate: "Popups invasivos no relacionados con su nivel de conocimiento.",
+                        frictionPreserve: "Responder la encuesta inicial de 3 preguntas de segmentación.",
+                        frictionInvest: "Configurar su primera integración (Shopify/Woo).",
+                        hookTrigger: "Mensaje de bienvenida interactivo al iniciar sesión.",
+                        hookAction: "Completar los pasos del tour guiado (TTV bruto).",
+                        hookReward: "Badge visual y acceso a catálogo Premium.",
+                        hookInvestment: "Vincular su tienda oficial a Dropi.",
+                        sdtAutonomy: "Elegir su propia ruta de aprendizaje (rápida o detallada).",
+                        sdtMastery: "Sensación de control sobre la configuración de la tienda.",
+                        sdtRelatedness: "Sentirse parte de un ecosistema que lo guía paso a paso.",
+                        supuestoRiesgoso: "Los usuarios inactivos completan tours autoguiados de más de 3 pasos sin abandonar el flujo.",
+                        testBarato: "Piloto de cohorte en UserPilot y análisis de embudo de retención.",
+                        costoEquivocacion: "Bajo. El usuario vuelve al onboarding estándar.",
+                      },
+                      "PROD-ACADEMY": {
+                        nivelCognitivo: "Receptor Dormido / Principiante",
+                        frictionEliminate: "Cursos externos de 40 horas en plataformas de terceros.",
+                        frictionPreserve: "Realizar micro-quizzes de validación de pauta.",
+                        frictionInvest: "Configurar su primera campaña publicitaria real usando el copy aprendido.",
+                        hookTrigger: "Notificación: 'Tu primera venta en 7 días está a 1 video de distancia'.",
+                        hookAction: "Ver un video de 3 minutos sobre pauta COD.",
+                        hookReward: "Copy y segmentación listos para copiar y pegar en Facebook Ads.",
+                        hookInvestment: "Lanzar la primera campaña de pauta.",
+                        sdtAutonomy: "Aprender a su propio ritmo sin presión externa.",
+                        sdtMastery: "Habilidad de pauta publicitaria desarrollada.",
+                        sdtRelatedness: "Mentoría virtual integrada.",
+                        supuestoRiesgoso: "Los sellers terminan los videos si están incrustados directamente en el dashboard del catálogo.",
+                        testBarato: "Análisis de retención del reproductor con 30 usuarios beta.",
+                        costoEquivocacion: "Bajo. Costo de producción de videos.",
+                      },
+                      "STID-6598": {
+                        nivelCognitivo: "Explorador Temprano / Activo",
+                        frictionEliminate: "Corregir manualmente fletes, direcciones y tallas de órdenes en Dropi.",
+                        frictionPreserve: "Mapear una única vez las ciudades del checkout.",
+                        frictionInvest: "Establecer reglas de sincronización automática de stock.",
+                        hookTrigger: "Notificación: 'Orden de Tienda Nube sincronizada sin errores'.",
+                        hookAction: "Revisar y despachar la orden en 1 clic.",
+                        hookReward: "Despacho completado con transportadora homologada.",
+                        hookInvestment: "Dejar la integración activa para sincronizaciones automáticas en segundo plano.",
+                        sdtAutonomy: "Control total del inventario de Tienda Nube sincronizado.",
+                        sdtMastery: "Despreocupación de la consistencia de inventario.",
+                        sdtRelatedness: "Integración fluida de canales de venta.",
+                        supuestoRiesgoso: "Los errores de sincronización se deben a la discrepancia de nombres de ciudades de Tienda Nube contra bases de transportadoras.",
+                        testBarato: "Prueba en sandbox con 5 tiendas reales del Pareto.",
+                        costoEquivocacion: "Alto. Errores de sincronización causan cancelaciones de pedidos reales.",
+                      },
+                      "PROD-HELP": {
+                        nivelCognitivo: "Explorador Temprano",
+                        frictionEliminate: "Hacer cola de espera de 30 minutos en chat de soporte de SAC.",
+                        frictionPreserve: "Escribir la pregunta con palabras clave claras.",
+                        frictionInvest: "Calificar la utilidad del artículo del Centro de Ayuda.",
+                        hookTrigger: "Buscador flotante con aviso: '¿Dudas de fletes o Wallet? Encuentra la respuesta en 30 segundos'.",
+                        hookAction: "Escribir su duda en el buscador.",
+                        hookReward: "Solución exacta con captura de pantalla paso a paso.",
+                        hookInvestment: "Seguir los pasos del tutorial de autogestión.",
+                        sdtAutonomy: "Resolver dudas de forma autónoma sin depender de soporte.",
+                        sdtMastery: "Comprender los reglamentos logísticos y financieros del ecosistema.",
+                        sdtRelatedness: "Dropi le provee autosuficiencia y control.",
+                        supuestoRiesgoso: "Los sellers prefieren buscar la solución si el widget de FAQ está visible a menos de un clic de distancia.",
+                        testBarato: "Fake door (widget sin backend) midiendo clics en home.",
+                        costoEquivocacion: "Bajo. Clics fantasmas sin perjuicio.",
+                      },
+                      "PROD-1478": {
+                        nivelCognitivo: "Receptor Dormido / Explorador Temprano",
+                        frictionEliminate: "Seguimiento manual de la guía en el portal de la paquetera.",
+                        frictionPreserve: "Alertar al comprador final del despacho de su pedido.",
+                        frictionInvest: "Asegurar el reintento de entrega con soporte.",
+                        hookTrigger: "Mensaje de felicitación: 'Tu primer pedido está en camino a Cali. Conoce el estado aquí'.",
+                        hookAction: "Monitorear el mapa de entrega interactivo.",
+                        hookReward: "Notificación de entrega exitosa y Wallet con saldo verde.",
+                        hookInvestment: "Importar su segundo producto para vender.",
+                        sdtAutonomy: "Seguimiento activo del flete con información simplificada.",
+                        sdtMastery: "Aprender cómo funciona el ciclo logístico COD.",
+                        sdtRelatedness: "Sentir que Dropi cuida su primera venta.",
+                        supuestoRiesgoso: "Guiar al dropshipper en el tramo de la primera entrega reduce la deserción del vendedor.",
+                        testBarato: "Piloto con cohorte manual de WhatsApp vs grupo de control.",
+                        costoEquivocacion: "Bajo. Alertas manuales temporales.",
+                      },
+                      "PROD-1546": {
+                        nivelCognitivo: "Receptor Dormido",
+                        frictionEliminate: "Subir documentos KYC e ingresar cuenta bancaria en el primer minuto.",
+                        frictionPreserve: "Escribir el nombre deseado de su tienda virtual.",
+                        frictionInvest: "Completar el registro inicial de datos de contacto.",
+                        hookTrigger: "Prompt: 'Crea tu tienda en 30 segundos. Solo necesitamos tu nombre comercial'.",
+                        hookAction: "Completar los 2 campos obligatorios.",
+                        hookReward: "Acceso inmediato al catálogo completo de Dropi.",
+                        hookInvestment: "Importar el primer producto.",
+                        sdtAutonomy: "Decidir cuándo configurar su información financiera.",
+                        sdtMastery: "Inicio rápido sin barreras administrativas.",
+                        sdtRelatedness: "Confianza inicial en la plataforma.",
+                        supuestoRiesgoso: "Los usuarios están más dispuestos a dar datos KYC una vez que han visto saldo acumulado en su wallet.",
+                        testBarato: "Test A/B con cohorte beta.",
+                        costoEquivocacion: "Medio. Riesgo de acumular saldos sin cuentas vinculadas.",
+                      },
+                      "PROD-1729": {
+                        nivelCognitivo: "Explorador Activo",
+                        frictionEliminate: "Escribir manual de órdenes con productos y variantes múltiples.",
+                        frictionPreserve: "Corregir las filas inválidas en el validador de Excel in-app.",
+                        frictionInvest: "Guardar el mapeo de transportadoras favoritas en Excel.",
+                        hookTrigger: "Mensaje: '150 órdenes cargadas con éxito en 3 segundos'.",
+                        hookAction: "Hacer clic en 'Autorizar despacho masivo'.",
+                        hookReward: "150 guías autogeneradas y listas para imprimir.",
+                        hookInvestment: "Descargar reporte consolidado de fletes.",
+                        sdtAutonomy: "Gestión masiva independiente de su bodega y pedidos.",
+                        sdtMastery: "Eficiencia operativa a gran escala.",
+                        sdtRelatedness: "Conexión directa con transportadoras en masa.",
+                        supuestoRiesgoso: "Los comercios Pareto adoptan el Excel compuesto si el validador in-app les muestra exactamente dónde están los errores.",
+                        testBarato: "Prueba cualitativa con 3 dropshippers del Pareto.",
+                        costoEquivocacion: "Bajo. El seller vuelve a carga individual tradicional.",
+                      },
+                      "PROD-1665": {
+                        nivelCognitivo: "Explorador Temprano",
+                        frictionEliminate: "Buscar manualmente si su producto estrella sigue con stock en bodega.",
+                        frictionPreserve: "Revisar las métricas de rentabilidad consolidada de su primera entrega.",
+                        frictionInvest: "Establecer alertas de umbral mínimo de inventario.",
+                        hookTrigger: "Mensaje: '¡Felicidades por tu primera entrega! Tu utilidad neta de $32.000 está en tu Wallet. Asegura tu inventario para mañana'.",
+                        hookAction: "Clic en 'Verificar inventario de stock'.",
+                        hookReward: "Recompensa de información y seguridad operativa.",
+                        hookInvestment: "Activar el aviso de stockout preventivo.",
+                        sdtAutonomy: "Gestión anticipada de su catálogo.",
+                        sdtMastery: "Transición de vendedor de fin de semana a negocio recurrente.",
+                        sdtRelatedness: "Confianza de stock asegurada.",
+                        supuestoRiesgoso: "Hacer un chequeo de stock en las primeras 48h de la primera entrega acelera un 30% la creación de la segunda orden.",
+                        testBarato: "Aviso in-app piloto con cohorte experimental.",
+                        costoEquivocacion: "Bajo. El usuario ignora el prompt.",
+                      },
+                      "PROD-1666": {
+                        nivelCognitivo: "Explorador Temprano / Activo",
+                        frictionEliminate: "Reclamar fletes perdidos mediante chats infinitos con soporte.",
+                        frictionPreserve: "Explicar el motivo de su pausa operativa al AM.",
+                        frictionInvest: "Realizar un taller de optimización de entrega.",
+                        hookTrigger: "Llamada del Account Manager ofreciendo auditoría de fletes gratuita.",
+                        hookAction: "Revisar sus órdenes canceladas con el especialista.",
+                        hookReward: "Ajuste y compensación de Wallet por errores logísticos.",
+                        hookInvestment: "Volver a pautar productos del catálogo de confianza.",
+                        sdtAutonomy: "Soporte dedicado para re-estructurar su negocio.",
+                        sdtMastery: "Habilidad para reducir devoluciones en sus despachos.",
+                        sdtRelatedness: "Siente respaldo comercial directo de Dropi.",
+                        supuestoRiesgoso: "Los sellers inactivos vuelven a vender si se resuelven sus reclamos de fletes acumulados.",
+                        testBarato: "Piloto con 30 usuarios inactivos.",
+                        costoEquivocacion: "Medio. Costo en HH de las ejecutivas de soporte.",
+                      }
+                    };
 
-                    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                      <div>
-                        <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block" }}>Causa B=MAP</strong>
-                        <span style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>
-                          {brief?.causa ? CAUSA_LABELS[brief.causa] || brief.causa : "No especificado aún por el discovery."}
-                        </span>
+                    const behaviorBrief = BEHAVIORAL_BRIEFS[normSlug] || {};
+
+                    return (
+                      <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 12, padding: 20, marginBottom: 24, boxShadow: "inset 0 1px 3px rgba(0,0,0,0.01)" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, borderBottom: "1px solid #E2E8F0", paddingBottom: 10 }}>
+                          <span style={{ fontSize: 11.5, fontWeight: 800, color: "#475569", letterSpacing: "0.06em" }}>
+                            FICHA METODOLÓGICA DE PRODUCT DISCOVERY (B=MAP)
+                          </span>
+                        </div>
+
+                        {/* Secciones del Brief Conductual */}
+                        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+                          
+                          {/* 1. Diagnóstico Base */}
+                          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                            <div>
+                              <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Causa B=MAP</strong>
+                              <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>
+                                {brief?.causa ? CAUSA_LABELS[brief.causa] || brief.causa : "No especificado"}
+                              </span>
+                            </div>
+                            <div>
+                              <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Nivel Cognitivo (Eugene Schwartz)</strong>
+                              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>
+                                {behaviorBrief.nivelCognitivo || "No especificado"}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div style={{ borderTop: "1px dashed #E2E8F0", paddingTop: 12 }}>
+                            <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Público Objetivo (Target) & Sub-Perfil</strong>
+                            <span style={{ fontSize: 13, color: "var(--fg)" }}>
+                              {brief?.target ? `${brief.target} (${brief?.subPerfil || "General"})` : "No especificado"}
+                            </span>
+                          </div>
+
+                          <div style={{ borderTop: "1px dashed #E2E8F0", paddingTop: 12 }}>
+                            <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Hipótesis de Intervención</strong>
+                            <span style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.4, display: "block" }}>
+                              {brief?.hipotesis || "No especificado"}
+                            </span>
+                          </div>
+
+                          {/* 2. El Trilema de la Fricción */}
+                          {behaviorBrief.frictionEliminate && (
+                            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 14, marginTop: 4 }}>
+                              <strong style={{ fontSize: 11, color: "var(--orange-primary)", textTransform: "uppercase", display: "block", marginBottom: 8, fontWeight: 800 }}>El Trilema de la Fricción</strong>
+                              <div style={{ display: "flex", flexDirection: "column", gap: 10, background: "#fff", borderRadius: 8, padding: 12, border: "1px solid var(--border)" }}>
+                                <div>
+                                  <strong style={{ fontSize: 11, color: "#EF4444", display: "block" }}>❌ Fricción a Eliminar (Fricción Cognitiva)</strong>
+                                  <span style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.4 }}>{behaviorBrief.frictionEliminate}</span>
+                                </div>
+                                <div style={{ borderTop: "1px dashed #E2E8F0", paddingTop: 8, marginTop: 4 }}>
+                                  <strong style={{ fontSize: 11, color: "#3B82F6", display: "block" }}>✓ Fricción a Preservar (Dificultad Deseable)</strong>
+                                  <span style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.4 }}>{behaviorBrief.frictionPreserve}</span>
+                                </div>
+                                <div style={{ borderTop: "1px dashed #E2E8F0", paddingTop: 8, marginTop: 4 }}>
+                                  <strong style={{ fontSize: 11, color: "#10B981", display: "block" }}>⚙️ Fricción de Inversión (Investment Loop)</strong>
+                                  <span style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.4 }}>{behaviorBrief.frictionInvest}</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 3. El Loop de Hábito (Hook) */}
+                          {behaviorBrief.hookTrigger && (
+                            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 14 }}>
+                              <strong style={{ fontSize: 11, color: "var(--orange-primary)", textTransform: "uppercase", display: "block", marginBottom: 8, fontWeight: 800 }}>Loop de Hábito (Hook de Eyal)</strong>
+                              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                                <div style={{ background: "#fff", padding: 10, borderRadius: 8, border: "1px solid var(--border)" }}>
+                                  <strong style={{ fontSize: 10.5, color: "var(--muted)", display: "block" }}>1. Trigger (Disparador)</strong>
+                                  <span style={{ fontSize: 12, color: "var(--fg)" }}>{behaviorBrief.hookTrigger}</span>
+                                </div>
+                                <div style={{ background: "#fff", padding: 10, borderRadius: 8, border: "1px solid var(--border)" }}>
+                                  <strong style={{ fontSize: 10.5, color: "var(--muted)", display: "block" }}>2. Action (Acción)</strong>
+                                  <span style={{ fontSize: 12, color: "var(--fg)" }}>{behaviorBrief.hookAction}</span>
+                                </div>
+                                <div style={{ background: "#fff", padding: 10, borderRadius: 8, border: "1px solid var(--border)" }}>
+                                  <strong style={{ fontSize: 10.5, color: "var(--muted)", display: "block" }}>3. Variable Reward (Recompensa)</strong>
+                                  <span style={{ fontSize: 12, color: "var(--fg)" }}>{behaviorBrief.hookReward}</span>
+                                </div>
+                                <div style={{ background: "#fff", padding: 10, borderRadius: 8, border: "1px solid var(--border)" }}>
+                                  <strong style={{ fontSize: 10.5, color: "var(--muted)", display: "block" }}>4. Investment (Inversión)</strong>
+                                  <span style={{ fontSize: 12, color: "var(--fg)" }}>{behaviorBrief.hookInvestment}</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 4. Autoevaluación SDT */}
+                          {behaviorBrief.sdtAutonomy && (
+                            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 14 }}>
+                              <strong style={{ fontSize: 11, color: "var(--orange-primary)", textTransform: "uppercase", display: "block", marginBottom: 8, fontWeight: 800 }}>Autoevaluación de Motivación Intrínseca (SDT)</strong>
+                              <div style={{ display: "flex", flexDirection: "column", gap: 6, fontSize: 12.5, color: "var(--fg)", background: "#fff", borderRadius: 8, padding: 12, border: "1px solid var(--border)" }}>
+                                <div><strong>🙋 Autonomía:</strong> {behaviorBrief.sdtAutonomy}</div>
+                                <div style={{ borderTop: "1px dashed #E2E8F0", paddingTop: 6, marginTop: 4 }}><strong>🏆 Maestría (Mastery):</strong> {behaviorBrief.sdtMastery}</div>
+                                <div style={{ borderTop: "1px dashed #E2E8F0", paddingTop: 6, marginTop: 4 }}><strong>🤝 Relación (Relatedness):</strong> {behaviorBrief.sdtRelatedness}</div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 5. Escalera de Validación */}
+                          {behaviorBrief.supuestoRiesgoso && (
+                            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 14 }}>
+                              <strong style={{ fontSize: 11, color: "var(--orange-primary)", textTransform: "uppercase", display: "block", marginBottom: 8, fontWeight: 800 }}>Escalera de Validación & Supuesto Riesgoso</strong>
+                              <div style={{ display: "flex", flexDirection: "column", gap: 10, background: "#fff5f5", borderRadius: 8, padding: 12, border: "1px solid #fed7d7" }}>
+                                <div>
+                                  <strong style={{ fontSize: 11, color: "#c53030", display: "block" }}>🔥 Supuesto más Riesgoso</strong>
+                                  <span style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.4 }}>{behaviorBrief.supuestoRiesgoso}</span>
+                                </div>
+                                <div style={{ borderTop: "1px dashed #fed7d7", paddingTop: 8, marginTop: 4 }}>
+                                  <strong style={{ fontSize: 11, color: "#9b2c2c", display: "block" }}>⚙️ Test de Validación más Barato</strong>
+                                  <span style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.4 }}>{behaviorBrief.testBarato}</span>
+                                </div>
+                                <div style={{ borderTop: "1px dashed #fed7d7", paddingTop: 8, marginTop: 4 }}>
+                                  <strong style={{ fontSize: 11, color: "#9b2c2c", display: "block" }}>⚠️ Costo de Estar Equivocados (Downside)</strong>
+                                  <span style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.4 }}>{behaviorBrief.costoEquivocacion}</span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 6. Experimento & Indicadores */}
+                          <div style={{ borderTop: "1px solid var(--border)", paddingTop: 14 }}>
+                            <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Definición del Experimento</strong>
+                            <span style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.4, display: "block" }}>
+                              {brief?.experimento || "No especificado"}
+                            </span>
+                          </div>
+
+                          <div style={{ borderTop: "1px dashed #E2E8F0", paddingTop: 12 }}>
+                            <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Indicadores de Éxito</strong>
+                            <span style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.4, display: "block" }}>
+                              {brief?.indicadores || "No especificado"}
+                            </span>
+                          </div>
+
+                        </div>
                       </div>
-                      <div>
-                        <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block" }}>Sub-Perfil Conductual</strong>
-                        <span style={{ fontSize: 13, color: "var(--fg)" }}>
-                          {brief?.subPerfil || "No especificado aún por el discovery."}
-                        </span>
-                      </div>
-                      <div>
-                        <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block" }}>Público Objetivo (Target)</strong>
-                        <span style={{ fontSize: 13, color: "var(--fg)" }}>
-                          {brief?.target || "No especificado aún por el discovery."}
-                        </span>
-                      </div>
-                      <div>
-                        <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block" }}>Hipótesis / Reto</strong>
-                        <span style={{ fontSize: 13, color: "var(--fg)", whiteSpace: "pre-line" }}>
-                          {brief?.hipotesis || "No especificado aún por el discovery."}
-                        </span>
-                      </div>
-                      <div>
-                        <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block" }}>Experimento de Validación</strong>
-                        <span style={{ fontSize: 13, color: "var(--fg)", whiteSpace: "pre-line" }}>
-                          {brief?.experimento || "No especificado aún por el discovery."}
-                        </span>
-                      </div>
-                      <div>
-                        <strong style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", display: "block" }}>Métricas / Indicadores</strong>
-                        <span style={{ fontSize: 13, color: "var(--fg)", whiteSpace: "pre-line" }}>
-                          {brief?.indicadores || "No especificado aún por el discovery."}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                    );
+                  })()}
                   {/* Decisions Ledger */}
                   {decisions.length > 0 && (
                     <div style={{ borderTop: "1px solid var(--border)", paddingTop: 20 }}>

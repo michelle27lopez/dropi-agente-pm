@@ -221,6 +221,20 @@ export async function supabaseGetEligibleByToken(campaignId: string, token: stri
   return fromEligibleRow(data as EligibleRow);
 }
 
+// Para el link corto /c/[token]: el token ya es único globalmente (generado
+// random por proveedor), así que no hace falta el campaign_id para
+// encontrarlo — solo se usa para resolver a qué campaña redirigir.
+export async function supabaseGetEligibleByTokenOnly(token: string): Promise<EligibleEntry | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("campaign_planeacion_eligible")
+    .select("*")
+    .eq("token", token)
+    .maybeSingle();
+  if (error || !data) return null;
+  return fromEligibleRow(data as EligibleRow);
+}
+
 export async function supabaseSetEligibleSelection(
   campaignId: string,
   token: string,

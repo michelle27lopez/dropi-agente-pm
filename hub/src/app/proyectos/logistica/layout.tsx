@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import "./_styles/tablero.css";
+// Badges, enlaces y ficha de proyecto. Van aparte porque un merge (40842ed) ya
+// las borró una vez de tablero.css — ver la cabecera de registro.css.
+import "./_styles/registro.css";
 import Sidebar from "./_components/Sidebar";
 
 // Layout de la sección de Logistic Success dentro del hub.

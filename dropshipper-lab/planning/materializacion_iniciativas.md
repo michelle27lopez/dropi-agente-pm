@@ -31,24 +31,25 @@ Este documento traduce los objetivos subjetivos y las intenciones del portafolio
     *   *Meta:* $\ge 25\%$ de activación en la ventana de 14 días.
 *   **Diagnóstico B=MAP & Sesgo:** **Ability (A)** cognitiva baja. El usuario sufre de *Choice Overload* y parálisis por incertidumbre al tener que redactar copies, crear fletes y fondear pasarelas de pago de forma aislada.
 *   **Supuesto más Riesgoso:** El dropshipper huérfano no publica no por falta de herramienta, sino porque carece de capital (fondear anuncios) o conocimiento básico de pauta para arrancar de forma autónoma.
-*   **Test de Validación más Barato:** Lanzamiento de un workshop práctico de 1 día (metodología TARS) con los 100 usuarios seleccionados para asistirlos manualmente y medir la tasa de publicación real del embudo.
-*   **Bloqueante Actual & Siguiente Paso:** Falta DropiCard virtual definitiva (`PROD-1515`) y bloqueo de QA (`PROD-1376`). *Acción:* Monitorear respuesta de Tesorería al correo de solicitud y resolver tickets de QA en Figma.
+*   **Test de Validación más Barato:** Lanzamiento de un workshop práctico de 1 día (metodología TARS) con los 120 usuarios seleccionados para asistirlos manualmente y medir la tasa de publicación real del embudo.
+*   **Bloqueante Actual & Siguiente Paso:** Ninguno (resuelto por decisión de negocio). A pesar del bug de generación de landings (esperando a Dev), se decidió avanzar con el piloto a los 120 usuarios dado que el reembolso en caso de fallo es automático a la wallet. El campo "ángulo de venta" no se hizo opcional (quedó igual), pero no es limitante. La DropiCard virtual (`PROD-1515`) está resuelta. *Acción:* Habilitar flag en producción para los 120 usuarios.
 
 ---
 
 ## 3. Módulo de Notificaciones (PROD-1664)
 
-*   **Fase de Ciclo:** **Wonder** (Investigación y benchmark).
+*   **Fase de Ciclo:** **Explore** (Prototipo finalizado).
 *   **Comportamiento Específico:** Un dropshipper que tiene una novedad logística abierta en sus despachos responde al prompt in-app o notificación de WhatsApp, autorizando el reintento de entrega en $\le 24$ horas.
 *   **Business Outcome (Lagging):** Reducir el porcentaje total de devoluciones de la plataforma.
 *   **Product Outcome (Leading):** % de novedades logísticas gestionadas con éxito por el seller en menos de 24 horas del reporte.
+*   **Prototipo Interactivo (WhatsApp QuickActions):** [/prototipos/wa-dropi-poc.html](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/hub/public/prototipos/wa-dropi-poc.html).
 *   **Baseline & Meta:**
     *   *Baseline:* `[DATO FALTANTE]` (las novedades no se miden por tiempo de respuesta in-app).
     *   *Meta:* $\ge 60\%$ de novedades resueltas por autogestión en la primera ventana de 24h.
 *   **Diagnóstico B=MAP & Sesgo:** Falta de **Prompt (P)** efectivo. El usuario sufre de *Inattention bias* / saliencia baja: los prompts actuales se pierden en el dashboard o se envían de forma duplicada/molesta, rompiendo la atención.
 *   **Supuesto más Riesgoso:** El dropshipper ignorará los prompts automáticos si no van acompañados de una sugerencia de acción clara y un clic de resolución directa.
 *   **Test de Validación más Barato:** Envío manual y selectivo del prompt de novedad vía WhatsApp Business por parte del Account Manager a 15 sellers activos, midiendo la tasa de confirmación y el tiempo de respuesta.
-*   **Bloqueante Actual & Siguiente Paso:** Ninguno. *Acción:* Ejecutar el benchmark comparativo con CJ y Shopify (`PROD-1698`) y mapear catálogo de eventos en backend.
+*   **Bloqueante Actual & Siguiente Paso:** Ninguno. *Acción:* Presentar el prototipo de WhatsApp a María Ossa y al equipo técnico de notificaciones para planificar la API de mensajería interactiva.
 
 ---
 
@@ -166,23 +167,24 @@ Este documento traduce los objetivos subjetivos y las intenciones del portafolio
 
 ## 11. Enrutamiento Dinámico (Second Best - PROD-SEC-BEST)
 
-*   **Fase de Ciclo:** **Explore** (Diseño de especificaciones de matching).
+*   **Fase de Ciclo:** **Wonder** (En Discovery inicial, validación de hipótesis).
 *   **Comportamiento Específico:** Un dropshipper con órdenes creadas y proveedor principal sin stock o inactivo por 24 horas aprueba el desvío inmediato de esas órdenes a un proveedor de respaldo pre-seleccionado en su catálogo.
 *   **Business Outcome (Lagging):** Reducir cancelaciones de órdenes Pareto y retener el GMV de los sellers estrella.
 *   **Product Outcome (Leading):** % de órdenes de compra exitosamente re-enrutadas y despachadas por un proveedor de respaldo calificado.
+*   **Prototipo Interactivo (Emergency & Setup):** [/prototipos/second-best-poc.html](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/hub/public/prototipos/second-best-poc.html).
 *   **Baseline & Meta:**
     *   *Baseline:* 0% (proceso 100% manual).
     *   *Meta:* $\ge 75\%$ de órdenes re-enrutadas exitosamente ante stockouts.
 *   **Diagnóstico B=MAP & Sesgo:** **Loss Aversion** (miedo a perder reputación con el comprador final) vs **Present Bias** (miedo a pagar un sobrecosto menor hoy).
 *   **Supuesto más Riesgoso:** Los dropshippers del Pareto están dispuestos a sacrificar hasta un 10% de su margen neto por orden con tal de salvar la entrega a su cliente final.
-*   **Test de Validación más Barato:** Test de guerrilla interactivo con Figma con 5 dropshippers del Pareto para medir su aceptación del sobrecosto en el prompt de emergencia.
-*   **Bloqueante Actual & Siguiente Paso:** Estructuración de UI. *Acción:* Alejandra Melo inicia el diseño del prompt de emergencia "Un Clic" y la sección de precarga en catálogo.
+*   **Test de Validación más Barato:** Test de guerrilla interactivo utilizando el prototipo mock con 5 dropshippers del Pareto para medir su aceptación del sobrecosto en el prompt de emergencia.
+*   **Bloqueante Actual & Siguiente Paso:** Concepto en validación. *Acción:* Alejandra Melo (PD) utilizará el prototipo mock interactivo para hacer pruebas rápidas de guerrilla y validar los supuestos conductuales y de UI con los 5 dropshippers del Pareto antes de formalizar especificaciones.
 
 ---
 
 ## 12. Dropi Wrapped para Dropshippers (PROD-WRAPPED)
 
-*   **Fase de Ciclo:** **Explore** (POC interactiva en evaluación).
+*   **Fase de Ciclo:** **Wonder** (En Discovery inicial, conceptualización).
 *   **Comportamiento Específico:** Un dropshipper inactivo en la ventana entre campañas visualiza su resumen Wrapped in-app e inicia una búsqueda o importación de producto en $\le 7$ días.
 *   **Business Outcome (Lagging):** Reactivación y reactivación inter-campaña de sellers maduros dormidos.
 *   **Product Outcome (Leading):** Tasa de retorno de usuarios inactivos (inicio de sesión y acción en catálogo) en los 7 días posteriores a ver su retrospectiva.
@@ -191,5 +193,104 @@ Este documento traduce los objetivos subjetivos y las intenciones del portafolio
     *   *Meta:* $\ge 20\%$ de reactivación de los usuarios inactivos intervenidos.
 *   **Diagnóstico B=MAP & Sesgo:** **Loss Aversion** (se enfatiza la racha y lo que se pierde si no vende este ciclo) y **Present Bias** (reactivación inmediata por progreso visualizado).
 *   **Supuesto más Riesgoso:** Mostrar el Wrapped personalizado es suficiente incentivo motivacional para que un dropshipper dormido reactive su pauta publicitaria.
-*   **Test de Validación más Barato:** Envío manual de la retrospectiva Wrapped en formato PDF/Imagen personalizada por WhatsApp a 30 sellers (piloto) y comparar contra 30 de control.
-*   **Bloqueante Actual & Siguiente Paso:** Extracción de cohorte en Supabase. *Acción:* Correr las queries de selección (basadas en el plan de concierge) para seleccionar a los 60 comercios de prueba.
+*   **Test de Validación más Barato:** Pruebas de usabilidad y diseño del concepto con Alejandra Melo (PD) antes de planear el piloto concierge.
+*   **Bloqueante Actual & Siguiente Paso:** Ninguno (en fase conceptual). *Acción:* Alejandra Melo diseñará el concepto UX/UI en Discovery y definirá la propuesta de valor conductual.
+
+---
+
+## 13. Simplificación de Muestras & Rediseño de Botones (PROD-MUESTRA-SIMP)
+
+*   **Fase de Ciclo:** **Explore** (Diseño visual y de interacción).
+*   **Comportamiento Específico:** Un dropshipper solicita una muestra a su casa en 1-Clic aprovechando los datos auto-guardados y seleccionando manualmente su transportadora en la ficha de producto simplificada.
+*   **Restricciones de Diseño UX/UI (Alejandra Melo):**
+    *   **No Drawer, No Modal Nuevo:** La información ya completada se muestra directamente en el formulario nativo, reduciendo y quitando campos innecesarios.
+    *   **Sin Botón Guardar:** El guardado y autodiligenciado de la dirección es automático desde el registro o envío anterior, editable en caliente siempre.
+    *   **Insight de Transportadora:** Los dropshippers experimentan intencionalmente pidiendo muestras con diferentes transportadoras para medir tiempos de entrega reales. Por ende, **se rechaza la automatización/optimización total del flete**; se mantendrá la opción de elegir (o un set optimizado tipo drop de pre-selección sin ocultar alternativas).
+*   **Bloqueo Histórico de Botones de Detalle:**
+    *   > [!WARNING]
+    *   > **Freno Organizacional:** La modificación de botones en el detalle de producto ha sido revertida o bloqueada sistemáticamente en el pasado. Se requiere **consultar a Kevin** sobre limitaciones técnicas, de dueño o de negocio de esta pantalla antes de iniciar propuestas de diseño.
+*   **Business Outcome (Lagging):** Aumento de la tasa de activación neta (Time-to-Value) del dropshipper.
+*   **Product Outcome (Leading):** Conversión del paso "Importar Producto" a "Solicitar Muestra".
+*   **Baseline & Meta:**
+    *   *Baseline:* `[DATO FALTANTE]` (los clics en muestra no están separados por re-digitación).
+    *   *Meta:* Incremento del $15\%$ en pedidos de muestras en el primer mes de despliegue.
+*   **Diagnóstico B=MAP & Sesgo:** **Ability (A) cognitiva**. La fricción de re-rellenar datos y el *Choice Overload* de botones aglomerados frenan la toma de decisión del seller nuevo.
+*   **Supuesto más Riesgoso:** Los dropshippers prefieren seleccionar su transportadora (para medir tiempos de despacho) que confiar en un algoritmo de selección automática.
+*   **Test de Validación más Barato:** Test A/B in-app (UserPilot / split de tráfico) comparando el formulario auto-diligenciado contra el tradicional.
+*   **Tracking / Eventos a Instrumentar:**
+    *   `click_sample_request_start`
+    *   `sample_form_autofill_success`
+    *   `sample_carrier_override_select`
+    *   `click_product_details_primary_action`
+
+---
+
+## 14. RAP / Tarjeta de Activación en Home (PROD-RAP)
+
+*   **Fase de Ciclo:** **Explore** (Planificación de diseño y copies de racha).
+*   **Comportamiento Específico:** Un dropshipper ingresa a la Home, visualiza su tarjeta RAP (tasa de entrega y racha actual), y hace clic en el CTA correspondiente para resolver la causa raíz de sus novedades logísticas.
+*   **Canal y Formato:** Tarjeta (Card) destacada en el Home (gestionada con Diana/marketing) con componentes de marketing. Debe ser descargable/compartible por el seller.
+*   **Lógica de Rachas Conductual:**
+    *   *Racha Negativa:* CTA explícito direct-to-novedades (`ver mis novedades` / `revisa tus novedades ahora`) enfocado a resolver causas de fricción operativa.
+    *   *Racha Positiva:* Mensaje puramente motivacional e incentivos visuales de estatus.
+    *   *Regla de Intervención:* **No sacar al usuario de la plataforma**. Todo se resuelve in-app (incluyendo visualización de tutoriales locales de asistencia sin redireccionar a videos externos).
+*   **Business Outcome (Lagging):** Reducción de la tasa de devoluciones y abandono de la plataforma.
+*   **Product Outcome (Leading):** % de usuarios en riesgo logístico (racha negativa) que ingresan directamente al módulo de novedades sugerido por el RAP.
+*   **Baseline & Meta:**
+    *   *Baseline:* 0% (los sellers ingresan a novedades a través de menús profundos).
+    *   *Meta:* $\ge 35\%$ de redirecciones exitosas a novedades desde el RAP.
+*   **Diagnóstico B=MAP & Sesgo:** **Prompt (P) & Motivación (M)**. Saliencia visual de progreso logístico. Se activa la motivación intrínseca (Mastery) al ver una racha de fletes exitosa y se previene el sesgo de inatención.
+*   **Supuesto más Riesgoso:** El dropshipper adoptará el RAP como su panel diario y compartirá/descargará sus logros en redes para marketing de atracción.
+*   **Test de Validación más Barato:** Fake Door en Home (tarjeta estática del RAP con métricas simuladas de racha) midiendo el CTR del CTA antes de instrumentar APIs en tiempo real.
+*   **Tracking / Eventos a Instrumentar:**
+    *   `view_home_rap_card`
+    *   `click_rap_action_streak`
+    *   `download_rap_report_image`
+
+---
+
+## 15. Ayuda Contextual por Módulo (PROD-HELP-MOD)
+
+*   **Fase de Ciclo:** **Explore** (Definición de rutas UserPilot).
+*   **Comportamiento Específico:** Un dropshipper con dudas operativas dentro de un módulo (ej. mis integraciones) expande la ayuda contextual, visualiza un video de < 1 min o califica una FAQ in-app sin salir de la plataforma.
+*   **Ubicación Física de la Ayuda:**
+    *   **No íconos flotantes:** Para evitar colisiones físicas con el widget de Intercom (que actualmente solapa elementos y anula el botón de volver arriba en catálogo), la ayuda será una barrita o gotica tenue debajo del banner de cada módulo, oculta por defecto y expandible en hover.
+*   **Límites Técnicos de la Arquitectura:**
+    *   > [!CAUTION]
+    *   > **Restricción Crítica:** La nueva arquitectura de Dropi **no permitirá ayuda contextual ni scripts de UserPilot en los pasos del registro e onboarding inicial**. Esta iniciativa se restringe exclusivamente a los módulos internos post-login (Productos, Mis Pedidos, Mis Integraciones, Garantías, Home).
+*   **Business Outcome (Lagging):** Reducción en la tasa de tickets de soporte técnico (SAC) creados por modulo de alto tráfico.
+*   **Product Outcome (Leading):** Conversión de resolución in-app (usuario expande ayuda y no crea ticket en las siguientes 24 horas).
+*   **Baseline & Meta:**
+    *   *Baseline:* 0% de autogestión local por módulo (todo cae al Help Center global o chat).
+    *   *Meta:* $\ge 30\%$ de autogestión exitosa en el módulo de integraciones y catálogo.
+*   **Diagnóstico B=MAP & Sesgo:** **Ability (A) cognitiva**. Se mitiga el *Ambiguity Effect* al proveer micro-aprendizaje de bajo esfuerzo cognitivo exactamente donde ocurre la fricción.
+*   **Supuesto más Riesgoso:** El dropshipper prefiere ver un video local de 45 segundos a chatear directamente con un agente de soporte.
+*   **Test de Validación más Barato:** Lanzamiento del widget manual expandible (Intercom/UserPilot) en el módulo de integraciones a una cohorte de 50 sellers midiendo el CTR de consulta.
+*   **Tracking / Eventos a Instrumentar:**
+    *   `hover_expand_module_help`
+    *   `click_module_faq_item`
+    *   `play_contextual_video_success`
+    *   `rate_help_usefulness`
+
+---
+
+## 16. Solicitud de Funciones / Feedback Interno (PROD-FEEDBACK)
+
+*   **Fase de Ciclo:** **Wonder** (Investigación inicial de canal).
+*   **Comportamiento Específico:** Un dropshipper experimentado registra un dolor o propuesta técnica en el buzón interno de Darwin en lugar de quejarse en grupos externos o chats de soporte.
+*   **Mecanismo de Votación y Privacidad:**
+    *   **No Público por Competencia:** De acuerdo a directrices de Mario, el roadmap y las ideas no serán públicos externamente para proteger el know-how de competidores.
+    *   **Lógica de Votos Ocultos:** Los usuarios pueden votar sobre iniciativas, pero el número total de votos estará oculto para evitar frustración si la idea más votada no es prioritariamente desarrollada por el equipo.
+    *   **Disclaimer Requerido:** La interfaz debe aclarar explícitamente que registrar una idea no garantiza su implementación.
+*   **Business Outcome (Lagging):** Reducción de reclamos públicos, aumento del Net Promoter Score (NPS) de la plataforma.
+*   **Product Outcome (Leading):** Tasa de participación y volumen de ideas cualificadas recibidas directamente en la célula Darwin.
+*   **Baseline & Meta:**
+    *   *Baseline:* 0% de canal de feedback estructurado e interactivo.
+    *   *Meta:* $\ge 15\%$ de comercios activos enviando propuestas mensualmente.
+*   **Diagnóstico B=MAP & Sesgo:** **Motivación (M) intrínseca**. Se apoya en la *Autonomía* y la co-creación (SDT) dando ownership de la evolución del producto sin alertar a competidores.
+*   **Supuesto más Riesgoso:** Los usuarios escribirán propuestas detalladas en lugar de simplemente reportar bugs transaccionales.
+*   **Test de Validación más Barato:** Input simple interactivo (tipo buzón GoHighLevel) colocado en un menú secundario para medir volumen y calidad de las peticiones iniciales.
+*   **Tracking / Eventos a Instrumentar:**
+    *   `open_feedback_form`
+    *   `submit_feature_proposal`
+    *   `vote_internal_roadmap_item`

@@ -47,11 +47,18 @@
 
 ## 🏃 Sprint Activo (Checklist de Producto)
 
-### PROD-1697 (Módulo Novedades Discovery) — En curso
-*   [ ] **Subtarea PROD-1698:** Benchmark de gestión de novedades (CJ, Zendrop, Spocket, Shopify, Meli).
-*   [ ] **Subtarea PROD-1721:** Exploración B=MAP (data + 5-8 entrevistas).
+### 📈 Frente 1: Page Pilot & Activación Neta (TTV)
+*   [ ] **Page Pilot (Ajustes):** Configurar ángulo de ventas obligatorio y alineación de selector de fecha. (Lidera Alejandra)
+*   [ ] **Habilitación de Beta:** Activar flag de producción (`PROD-1516`) para los 120 comercios de cohorte. (Lidera Santiago)
 
-### PROD-1692 (Notificaciones Operativo) — En curso
-*   [x] **Subtarea PROD-1693:** Benchmark operativo de notificaciones.
-*   [ ] **Subtarea PROD-1694:** Catálogo de eventos existentes en plataforma.
-*   [ ] **Subtarea PROD-1695:** Prototipado con IA.
+### 🔌 Frente 2: Integraciones (Dropify 2.0 & Tienda Nube)
+*   [ ] **Bugs Tienda Nube (STID-6598):** Presionar a Jose Giraldo para asignación de recurso Dev. (Lidera Santiago)
+*   [ ] **Shopify 2.0 QA (PROD-580):** Resolver dependencias y ejecutar pruebas aisladas PT2 QA. (Lidera Alejandra)
+*   [ ] **Handoff Tienda Nube (DROP-25311):** Consulta pre-handoff de submenú y carga de imágenes con Diego Pérez. (Lidera Alejandra)
+*   [ ] **Demo Dropify (Mañana 10:00 AM):** Preparar y presentar flujo completo (Shopify/Woo/Tienda Nube) en 20 mins. (Lidera Santiago)
+
+### 🧪 Frente 3: Mocks & Discovery de Activación
+*   [ ] **Módulo de Notificaciones (PROD-1664):** Finalizar y montar prototipo de WhatsApp en RPP (Angular). (Lidera Alejandra)
+*   [ ] **Simplificación de Muestras (PROD-MUESTRA-SIMP):** UI de solicitud 1-Clic (autofill, transportadora opcional) y botones. (Lidera Alejandra)
+*   [ ] **Dropi Wrapped (PROD-WRAPPED):** Conceptualización visual y de Discovery para reactivación. (Lidera Alejandra)
+*   [ ] **Second Best (PROD-SEC-BEST):** Pruebas de guerrilla con 5 comercios Pareto sobre sobrecostos de flete. (Lidera Alejandra)

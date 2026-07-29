@@ -341,6 +341,13 @@ export async function localGetEligibleByToken(
   return (store.eligibleProducts ?? []).find((e) => e.campaign_id === campaignId && e.token === token) ?? null;
 }
 
+// Contraparte de supabaseGetEligibleByTokenOnly: busca por token sin
+// necesitar el campaign_id, para resolver el link corto /c/[token].
+export async function localGetEligibleByTokenOnly(token: string): Promise<EligibleEntry | null> {
+  const store = await readStore();
+  return (store.eligibleProducts ?? []).find((e) => e.token === token) ?? null;
+}
+
 export async function localListEligibleProducts(campaignId: string): Promise<EligibleEntry[]> {
   const store = await readStore();
   return (store.eligibleProducts ?? [])

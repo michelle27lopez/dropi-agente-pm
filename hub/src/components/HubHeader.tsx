@@ -154,6 +154,7 @@ export default function HubHeader({
             <HeaderLink href="/data-solicitada">📊 Data solicitada</HeaderLink>
             <HeaderLink href="/metricas">📈 Métricas</HeaderLink>
             <HeaderLink href="/celulas">🧬 Células</HeaderLink>
+            <HeaderLink href="/admin/usuarios">🔐 Accesos</HeaderLink>
             <HeaderLink href="/pruebas-usuarios">🧪 Pruebas con Usuarios</HeaderLink>
             <HeaderLink href="/notas">📝 Mis notas</HeaderLink>
           </>

@@ -108,7 +108,7 @@ Especificaciones enviadas a Miguel Ángel (Data Analyst) para auditar el baselin
 *   **Objetivo:** Reducir la fricción cognitiva del dropshipper al descubrir, evaluar y guardar productos.
 *   **Acciones de Lanzamiento:** 
     *   **PROD-1814 — Workshop lanzamiento Page Pilot:** Planificar el lanzamiento a producción de la funcionalidad Page Pilot bajo la metodología TARS. Incluye reuniones con el equipo de sellers, Figma con workshop de ideación y visualización de data, y documentación en Confluence y Darwin. Liderado por Catherin Salazar.
-*   **Estado:** Beta controlada / En curso (bloqueado por dependencias de QA en `PROD-1376` y DropiCard en `PROD-1515`).
+*   **Estado:** Beta controlada / En curso (bloqueado por dependencia de QA en `PROD-1376`. La DropiCard `PROD-1515` fue resuelta y será manejada por Tesorería).
 
 ### 3. Personalización vía User Pilot & Experimento de Activación Neta (TTV) (PROD-1478)
 *   **Descripción:** Encuesta de nivel de conciencia + tour guiado específico para huérfanos.
@@ -120,11 +120,12 @@ Especificaciones enviadas a Miguel Ángel (Data Analyst) para auditar el baselin
 *   **Descripción:** Flujo educativo asociado al CRM para acompañar a los nuevos dropshippers.
 *   **Estado:** Operativo / pendiente de auditoría de contenido.
 
-### 5. Experimento: "Pide tu Muestra"
+### 5. Experimento: "Pide tu Muestra" (PROD-MUESTRA)
 *   **Descripción:** Incentivar que el dropshipper cree una primera orden manual para sí mismo como prueba logística ("sé tu primer cliente").
 *   **Hipótesis:** Comprar su propio producto reduce el miedo, enseña el flujo logístico y valida la entrega física.
 *   **Métrica:** Conversión de Registro a Primera Orden Manual.
-*   **Estado:** Planificado.
+*   **Prototipo Interactivo (1-Clic & Setup Único):** [/prototipos/solicitud-muestra-poc.html](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/hub/public/prototipos/solicitud-muestra-poc.html).
+*   **Estado:** En curso (Prototipo finalizado).
 
 ### 6. Biblia de AI / Proyecto Help Center (SAC)
 *   **Descripción:** Widget flotante buscador de FAQs para incentivar la autogestión de dudas técnicas y reducir tickets de soporte de nivel 1. Ver [Materialización Help Center](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#7-biblia-de-ai--proyecto-help-center-sac).
@@ -146,9 +147,10 @@ Especificaciones enviadas a Miguel Ángel (Data Analyst) para auditar el baselin
 *   **Descripción:** Segmentación y rescate de la cohorte del Pareto activa. Ver [Materialización Diagnóstico de Churn](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#10-diagnóstico-de-churn-prod-1666).
 *   **Estado:** Planificado (Q4 / Preparación en Q3).
 
-### 11. [DISCOVERY Q4] Enrutamiento dinámico y multi-proveedor - Second Best
+### 11. [DISCOVERY Q4] Enrutamiento dinámico y multi-proveedor - Second Best (PROD-SEC-BEST)
 *   **Descripción:** Redirección automática de órdenes a respaldo pre-seleccionado y subasta in-app de despacho (Pulso). Ver [Materialización Second Best](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#11-enrutamiento-dinámico-second-best---prod-sec-best).
-*   **Estado:** Planificado (Q4 / Discovery en Backlog).
+*   **Prototipo Interactivo (Emergency & Setup):** [/prototipos/second-best-poc.html](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/hub/public/prototipos/second-best-poc.html).
+*   **Estado:** En curso (Prototipo finalizado).
 
 ### 12. [DISCOVERY Q4] Dropi Wrapped para Dropshippers
 *   **Descripción:** Retrospectiva interactiva personalizada de percentiles y racha para reactivación inter-campaña. Ver [Materialización Dropi Wrapped](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#12-dropi-wrapped-para-dropshippers-prod-wrapped).
