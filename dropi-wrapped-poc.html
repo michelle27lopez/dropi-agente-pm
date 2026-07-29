@@ -126,9 +126,9 @@
   .g4 { background: radial-gradient(circle at 50% 10%, #FF0000 0%, #300000 60%, #050209 100%); } /* Leyenda */
   .g5 { background: radial-gradient(circle at 20% 50%, #FF8500 0%, #1b092c 55%, #050209 100%); }
   .g6 { background: radial-gradient(circle at 80% 80%, #FF4800 0%, #260020 60%, #050209 100%); }
-  .g7 { background: radial-gradient(circle at 50% 20%, #FF0000 0%, #2d000a 65%, #050209 100%); }
+  .g7 { background: radial-gradient(circle at 50% 20%, #7f7f7f 0%, #190924 65%, #050209 100%); }
   .g8 { background: radial-gradient(circle at 50% 50%, #7f7f7f 0%, #150920 60%, #050209 100%); }
-  .g9 { background: radial-gradient(circle at 50% 0%, #FF0000 0%, #2b0b00 50%, #050209 100%); }
+  .g9 { background: radial-gradient(circle at 50% 0%, #FF8500 0%, #2a0b00 50%, #050209 100%); }
 
   /* ---------- Typography & Elements ---------- */
   .kicker {
@@ -558,6 +558,25 @@
     color: #ffd9bf;
   }
 
+  /* Insignia SVG containers */
+  .insignia-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 15px 0;
+    gap: 8px;
+  }
+  .insignia-svg {
+    width: 120px;
+    height: 120px;
+  }
+  .insignia-svg.silver {
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.25));
+  }
+  .insignia-svg.gold {
+    filter: drop-shadow(0 0 20px rgba(255, 133, 0, 0.35));
+  }
+
   /* ---------- PM Lens container & Switch (Glassmorphism dashboard) ---------- */
   #lensToggle {
     position: absolute;
@@ -718,6 +737,15 @@
         <stop offset="0%" stop-color="#FF8500" />
         <stop offset="100%" stop-color="#FF0000" />
       </linearGradient>
+      <linearGradient id="silverGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffffff" />
+        <stop offset="50%" stop-color="#a6a6a6" />
+        <stop offset="100%" stop-color="#4d4d4d" />
+      </linearGradient>
+      <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#ffe259" />
+        <stop offset="100%" stop-color="#ffa751" />
+      </linearGradient>
     </defs>
   </svg>
 
@@ -725,7 +753,7 @@
   <section class="slide g0 active">
     <div class="kicker reveal d1">Hola, Valentina 👋</div>
     <div class="med reveal d2">Tu retrospectiva<br>de estatus en<br><span class="accent" style="color:var(--color-maestro); border-color:var(--color-maestro);">LEYENDAS</span></div>
-    <div class="sub reveal d3">Descubre tu rango, tus drops acumulados de por vida y cómo tu consistencia consolida tu imperio.<br>Toca para iniciar tu ascenso →</div>
+    <div class="sub reveal d3">Descubre tu rango, tus drops acumulados de por vida y cómo tu constancia consolida tu imperio.<br>Toca para iniciar tu ascenso →</div>
     <div class="lens">
       <div class="tt">Lente · Identidad y Pertenencia (SDT)</div>
       <div class="tx">Mapear el Wrapped como el camino transcurrido en el programa "Leyendas" y no como estadísticas sueltas activa la autonomía y el sentido de competencia del vendedor.</div>
@@ -821,12 +849,21 @@
   <!-- 7 · RANGO LEYENDAS -->
   <section class="slide g7">
     <div class="kicker reveal d1">Tu Status en el Imperio</div>
-    <div class="med reveal d2">Experto Plata</div>
-    <div class="lede reveal d3" style="margin-top:14px">Rango Oficial: **Plata III** · Has superado en volumen al **93%** de los dropshippers de tu país.</div>
-    <div class="delta reveal d4">🏆 <span>Insignia metálica y estatus VIP activos</span></div>
+    <div class="insignia-container reveal d2">
+      <svg class="insignia-svg silver" viewBox="0 0 100 100">
+        <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" fill="rgba(255,255,255,0.05)" stroke="url(#silverGrad)" stroke-width="4"/>
+        <polygon points="50,15 80,30 80,70 50,85 20,70 20,30" fill="none" stroke="url(#silverGrad)" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <text x="50" y="58" font-family="'Rationale', sans-serif" font-size="26" fill="#fff" text-anchor="middle" font-weight="900" letter-spacing="1">III</text>
+      </svg>
+      <div class="med" style="margin-top: 5px;">Experto Plata III</div>
+    </div>
+    <div class="sub reveal d3" style="text-align:center; margin-top:8px; line-height:1.6;">
+      Has superado al <b>93%</b> del ecosistema. <br>
+      <span style="color:var(--color-maestro); font-weight:700;">Beneficios activos:</span> Intermediación directa con áreas internas, auditoría de campañas de pauta, conexión directa con proveedores e importadores, y desarrollo de producto propio.
+    </div>
     <div class="lens">
       <div class="tt">Lente · Comparación Social & Estatus (SDT)</div>
-      <div class="tx">Usa la paleta oficial (Gris/Plata) y la nomenclatura de rangos de Leyendas. La comparación social positiva construye identidad y pertenencia al círculo selecto.</div>
+      <div class="tx">Usa la paleta oficial (Plata) y la nomenclatura de rangos e insignias. Los beneficios operativos reales (soporte, proveedores, campañas) refuerzan la competencia del seller.</div>
     </div>
   </section>
 
@@ -848,12 +885,20 @@
   <!-- 9 · META + CTA -->
   <section class="slide g9">
     <div class="kicker reveal d1">Tu Próximo Ascenso</div>
-    <div class="med reveal d2">Estás muy cerca de<br>desbloquear <b>Master Oro</b></div>
+    <div class="insignia-container reveal d2">
+      <svg class="insignia-svg gold" viewBox="0 0 100 100">
+        <polygon points="50,5 90,25 90,75 50,95 10,75 10,25" fill="rgba(255,133,0,0.08)" stroke="url(#goldGrad)" stroke-width="4"/>
+        <path d="M50,25 L60,45 L82,45 L65,58 L72,80 L50,68 L28,80 L35,58 L18,45 L40,45 Z" fill="url(#goldGrad)"/>
+      </svg>
+      <div class="med" style="margin-top: 5px;">Master de Oro (Nivel 3)</div>
+    </div>
     <div class="goal reveal d3">
       <div class="track"><i id="goalbar"></i></div>
       <div class="lbl"><span>820 / 1.000 órdenes/mes</span><span>faltan 180</span></div>
     </div>
-    <div class="sub reveal d3" style="font-size: 13.5px;">Al ascender desbloqueas: Dropicard virtual exclusiva, soporte prioritario en caliente y comisiones logísticas preferenciales.</div>
+    <div class="sub reveal d3" style="font-size: 13.5px; text-align:center;">
+      <span style="color:var(--color-maestro); font-weight:700;">Al ascender desbloqueas:</span> Dropicard virtual exclusiva (Top 3), soporte prioritario en caliente de primer nivel (flujo exclusivo por botón flotante), y acceso a eventos VIP de networking.
+    </div>
     <div class="cta reveal d4">
       <button class="btn primary" onclick="share()">📲 Compartir mi Rango</button>
       <button class="btn ghost" onclick="restart()">Ver de nuevo</button>
