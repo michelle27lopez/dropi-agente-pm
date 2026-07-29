@@ -825,22 +825,7 @@
     </div>
   </section>
 
-  <!-- 7 · RANGO LEYENDAS -->
-  <section class="slide g7">
-    <div class="kicker reveal d1">Tu Status en el Imperio</div>
-    <div class="insignia-container reveal d2">
-      <img class="insignia-img silver" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/2_3.png" alt="Experto Plata III">
-      <div class="med" style="margin-top: 5px;">Experto Plata III</div>
-    </div>
-    <div class="sub reveal d3" style="text-align:center; margin-top:8px; line-height:1.6; font-size: 13.5px;">
-      Ubicada en el nivel de consolidación de volumen. Superas en órdenes al <b>93%</b> del ecosistema. <br>
-      <span style="color:var(--color-maestro); font-weight:700;">Beneficios activos:</span> Intermediación directa con áreas operativas, auditoría estratégica de campañas de pauta, conexión directa con proveedores e importadores de confianza, y desarrollo de producto propio.
-    </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Comparación Social y Estatus</div>
-      <div class="tx">Comparar al seller con el percentil 93% genera orgullo y refuerza el estatus. Mapear los beneficios con la intermediación operativa directa y la auditoría de pauta tangibiliza el valor real del rango.</div>
-    </div>
-  </section>
+
 
 
 
@@ -944,7 +929,7 @@
     // goal bar
     if(s.querySelector('#goalbar')){ const g=s.querySelector('#goalbar'); g.style.width='0'; requestAnimationFrame(()=>g.style.width='82%'); }
     // confetti on celebratory slides
-    if([0,1,7,8].includes(n)) confetti();
+    if([0,1,7].includes(n)) confetti();
   }
   function countUp(el){
     const target=+el.dataset.count, dur=+(el.dataset.dur||1300); const start=performance.now();
