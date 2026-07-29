@@ -17,7 +17,17 @@ type Task = {
   updated_at: string;
   is_meetings_task: boolean;
   hours_estimate: number | null;
+  sprint_label: string | null;
 };
+
+// El sprint activo es el que más recientemente recibió una tarea sincronizada
+// (preplanning trae las tareas del sprint abierto primero) — evita mostrar
+// tareas de sprints cerrados en el home sin tener que borrarlas de Supabase.
+function activeSprintLabel(tasks: Task[]): string | null {
+  const withLabel = tasks.filter((t) => t.sprint_label);
+  if (withLabel.length === 0) return null;
+  return [...withLabel].sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0].sprint_label;
+}
 
 type Nota = { id: string; titulo: string; contenido: string; updated_at: string };
 
@@ -92,9 +102,11 @@ export default function HomeDashboard() {
     return <p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando tu día…</p>;
   }
 
-  const workTasks = tasks.filter((t) => !t.is_meetings_task);
-  const meetingsTask = tasks.find((t) => t.is_meetings_task) ?? null;
-  const foco = pickFoco(tasks);
+  const sprintLabel = activeSprintLabel(tasks);
+  const currentSprintTasks = sprintLabel ? tasks.filter((t) => t.sprint_label === sprintLabel) : tasks;
+  const workTasks = currentSprintTasks.filter((t) => !t.is_meetings_task);
+  const meetingsTask = currentSprintTasks.find((t) => t.is_meetings_task) ?? null;
+  const foco = pickFoco(currentSprintTasks);
   const continuarTask = foco[0] ?? null;
   const continuarLink = continuarTask ? carpetaLink(continuarTask) : null;
 

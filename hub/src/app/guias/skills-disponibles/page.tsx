@@ -28,6 +28,7 @@ const categories: Category[] = [
       { slug: "sync-diario", title: "sync-diario", when: "Al empezar el día o antes de seguir trabajando, para traer al día tu rama local con lo último de main sin perder trabajo ni forzar push." },
       { slug: "bug-jira", title: "bug-jira", when: "Publicar un bug o hallazgo directo a Jira con el formato y campos correctos del proyecto PROD." },
       { slug: "ds-sync", title: "ds-sync", when: "Aplicar o actualizar el Design System real de Dropi (tokens de ds-registry) en un proyecto del hub o en un repo nuevo — trae los tokens en vivo, no una copia fija." },
+      { slug: "salsa", title: "salsa", when: "Armar una guía visual paso a paso de un flujo (screenshots de Figma + descripciones + highlights de clic) publicada como página del hub para hand-off." },
     ],
   },
   {

@@ -5,8 +5,9 @@ import { useParams } from "next/navigation";
 import { Anton } from "next/font/google";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { FileImage, Layers, Lock, MousePointerClick, Rocket, Star, Store, TrendingUp, Zap } from "lucide-react";
+import { BookOpen, FileImage, Layers, Lock, MousePointerClick, Rocket, Star, Store, TrendingUp } from "lucide-react";
 import JSZip from "jszip";
+import { createClient } from "@/lib/supabase-browser";
 
 // Display condensada para titulares, cronómetros y watermark — es lo que
 // acerca la página al lenguaje tipográfico del board de referencia (el título
@@ -33,11 +34,8 @@ const MAX_PRODUCTS = 10;
 // — es una plataforma externa — así que solo se comunica el orden con copy.
 const CHECKLIST_KEYS: ChecklistKey[] = ["pasoFotos", "pasoCatalogo", "fotoDropi", "nombre", "categoria"];
 
-// Pendiente de Enrique (Canva) — hasta que llegue el link real, la sección
-// se ve construida pero honesta sobre que el link todavía no existe (no un
-// botón roto). El marco (paso 1) ya no depende de un link externo: se
-// compone en el navegador con marcocyber.png (ver frameProductPhoto).
-const CANVA_LINK = "";
+// Link real del Catálogo de difusión (Canva), recibido de Michelle el 28/07.
+const CANVA_LINK = "https://www.canva.com/design/DAHQC3nBq6c/qvqDaPIhyfMXBdvY2LBAdA/edit";
 // Link de prueba (28/07): el catálogo de Dropi filtrado por la categoría
 // real "Cyber Days" resuelve la parte "funcional" de compartir — el
 // dropshipper lo abre y ya ve solo los productos de la campaña, listos
@@ -607,9 +605,10 @@ const CSS = `
   .cd-receipt-note { font-size: 11.5px; color: var(--cd-muted-2); line-height: 1.5; border-top: 1px solid var(--cd-card-border); padding-top: 12px; }
 
   /* ─── Checklist de preparación (barra "X de N completados") ─── */
-  .cd-prep-head { display: flex; align-items: center; justify-content: space-between; margin: 16px 0 8px; }
+  .cd-prep-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 16px 0 8px; }
   .cd-checklist-title { font-size: 13px; font-weight: 800; color: var(--cd-ink); }
   .cd-checklist-count { font-size: 12px; font-weight: 800; color: var(--cd-accent); }
+  .cd-prep-head-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
   .cd-progress { height: 5px; background: rgba(255,255,255,.07); border-radius: 4px; overflow: hidden; }
   .cd-progress > span { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--cd-accent), var(--cd-accent-2)); transform-origin: left; transform: scaleX(var(--p, 0)); transition: transform .4s var(--cd-ease-out); }
   .cd-check-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--cd-ink); line-height: 1.4; cursor: pointer; position: relative; }
@@ -655,6 +654,20 @@ const CSS = `
   }
   .cd-toolcard-cta:active { transform: scale(.97); }
   .cd-toolcard-cta.is-pending { color: var(--cd-muted-2); background: rgba(255,255,255,.03); border-color: var(--cd-card-border); cursor: default; }
+
+  /* Link al manual de instrucciones — vive junto al título de "Prepara"
+     (no dentro de un paso puntual) porque cubre los 3 pasos, no solo el
+     marco. Variante "is-primary" para que se lea como CTA, igual peso
+     visual que los botones principales del resto de la página. */
+  .cd-manual-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 700; padding: 7px 12px; border-radius: 8px; text-decoration: none;
+    background: rgba(255,138,43,.08); color: var(--cd-accent); border: 1px dashed rgba(255,138,43,.4);
+  }
+  .cd-manual-link.is-primary {
+    background: linear-gradient(135deg, var(--cd-accent), var(--cd-accent-2)); color: #fff; border: none;
+    font-weight: 800; box-shadow: 0 4px 14px -4px rgba(255,90,30,.5);
+  }
 
   /* Dos cards de "Comparte" en En vivo (28/07) — reemplazan el toolcard
      único de una fila: en columna, título+CTA no caben lado a lado en la
@@ -732,8 +745,6 @@ const CSS = `
 
 
   .cd-footnote { font-size: 12.5px; color: var(--cd-muted-2); margin-top: 16px; }
-  .cd-brandline { text-align: center; font-size: 12.5px; color: var(--cd-muted-2); margin-top: 48px; }
-  .cd-brandline b { color: var(--cd-accent); font-weight: 800; }
 
   /* Barra de QA (solo dev): cambiar de fase sin copiar y pegar links */
   .cd-devbar { position: fixed; bottom: 14px; left: 14px; z-index: 50; display: flex; align-items: center; gap: 2px; background: #1a0d05; border: 1px solid rgba(255,138,43,.4); border-radius: 999px; padding: 5px 10px; max-width: calc(100vw - 28px); overflow-x: auto; }
@@ -915,7 +926,7 @@ const IntroOverlay = memo(function IntroOverlay({ onDone }: { onDone: () => void
       <HeroGrainient />
       <div className="cd-intro-scrim" />
       <div className="cd-intro-copy">
-        <div className="cd-intro-eyebrow">Del 17 al 31 de agosto</div>
+        <div className="cd-intro-eyebrow">Del 18 al 31 de agosto</div>
         <div className="cd-intro-title">Cyber Days</div>
       </div>
     </div>
@@ -981,13 +992,24 @@ export default function ElegiblesPage() {
   // renderiza en cliente después del fetch, así que leer matchMedia acá no
   // genera mismatch de hidratación.
   const [anim] = useState(() => typeof window !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  // Solo existe en dev: en el build de producción NODE_ENV lo mata, así que
-  // un proveedor real no puede adelantarse de fase agregando ?vista= a su URL.
-  const [vista] = useState<string | null>(() => {
-    if (process.env.NODE_ENV !== "development" || typeof window === "undefined") return null;
+  // El QA solo debe funcionar para el equipo, nunca para un proveedor real.
+  // En dev siempre está disponible; en producción se habilita solo si hay
+  // una sesión activa del hub (equipo logueado) — un proveedor real no tiene
+  // esa sesión, así que agregar ?vista= a su URL no le hace nada.
+  const [isInternalUser, setIsInternalUser] = useState(false);
+  useEffect(() => {
+    if (IS_DEV) return;
+    createClient().auth.getUser().then(({ data }) => {
+      if (data.user) setIsInternalUser(true);
+    });
+  }, []);
+  const canPreview = IS_DEV || isInternalUser;
+  const [rawVista] = useState<string | null>(() => {
+    if (typeof window === "undefined") return null;
     const v = new URLSearchParams(window.location.search).get("vista");
     return v && PREVIEW_ORDER[v] !== undefined ? v : null;
   });
+  const vista = canPreview ? rawVista : null;
 
   useEffect(() => {
     fetch(`/api/campaigns-planeacion/${id}/elegibles/${token}`)
@@ -1416,7 +1438,7 @@ export default function ElegiblesPage() {
   return (
     <div className={`cd-page ${anton.variable}${anim ? " cd-anim" : ""}`}>
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      {IS_DEV && (
+      {canPreview && (
         <div className="cd-devbar">
           <span className="cd-devbar-label">QA</span>
           <a href="?" className={!vista ? "is-on" : ""}>Real</a>
@@ -1451,7 +1473,7 @@ export default function ElegiblesPage() {
           <div className="cd-hero-spacer" />
 
           <div className="cd-hero-copy">
-            <div className="cd-eyebrow" data-reveal>Del 17 al 31 de agosto</div>
+            <div className="cd-eyebrow" data-reveal>Del 18 al 31 de agosto</div>
             <h1 className="cd-title"><TwoToneTitle text="Los Cyber Days te eligieron" anim={anim} /></h1>
             <p className="cd-stat-sentence" data-reveal data-delay="0.08">
               Puedes seleccionar <b><CountUp value={eligibleCount} anim={anim} /></b> producto{eligibleCount === 1 ? "" : "s"} para Cyber Days, con hasta{" "}
@@ -1699,7 +1721,13 @@ export default function ElegiblesPage() {
                     <>
                       <div className="cd-prep-head">
                         <span className="cd-checklist-title">Antes de que empiece Cyber Days — sigue el orden de los 3 pasos</span>
-                        <span className="cd-checklist-count">{doneCount} de {CHECKLIST_KEYS.length}</span>
+                        <div className="cd-prep-head-right">
+                          <span className="cd-checklist-count">{doneCount} de {CHECKLIST_KEYS.length}</span>
+                          <a className="cd-manual-link is-primary" href="https://www.canva.com/design/DAHQC6nXyDs/zyKj0Q83RihZV7DPQDhiBg/edit" target="_blank" rel="noopener noreferrer">
+                            <BookOpen size={13} strokeWidth={2.5} />
+                            Ver manual de instrucciones
+                          </a>
+                        </div>
                       </div>
                       <div className="cd-progress"><span style={{ ["--p" as string]: doneCount / CHECKLIST_KEYS.length }} /></div>
 
@@ -1733,7 +1761,7 @@ export default function ElegiblesPage() {
                           <div className="cd-step-num">2</div>
                           <div className="cd-step-body">
                             <div className="cd-step-title">Súbelos a tu Catálogo de difusión</div>
-                            <div className="cd-step-sub">El catálogo que reciben los dropshippers por WhatsApp: foto con marco, precio con descuento y nombre. Fecha límite <b style={{ color: "var(--cd-accent)" }}>16 de agosto</b> — lo que no esté montado ese día no sale.</div>
+                            <div className="cd-step-sub">El catálogo que reciben los dropshippers por WhatsApp: foto con marco, precio con descuento y nombre. Fecha límite <b style={{ color: "var(--cd-accent)" }}>17 de agosto</b> — lo que no esté montado ese día no sale.</div>
                             <div className="cd-step-checks">
                               <label className="cd-check-item">
                                 <input type="checkbox" checked={!!checklist.pasoCatalogo} onChange={() => toggleChecklist("pasoCatalogo")} />
@@ -1759,7 +1787,7 @@ export default function ElegiblesPage() {
                           <div className="cd-step-num">3</div>
                           <div className="cd-step-body">
                             <div className="cd-step-title">Actualiza tus productos en Dropi</div>
-                            <div className="cd-step-sub">Hazlo <b style={{ color: "var(--cd-ink)" }}>después del paso 2</b>, el <b style={{ color: "var(--cd-accent)" }}>16 de agosto</b>. Antes no — tus productos se verían vestidos de una campaña que todavía no empieza.</div>
+                            <div className="cd-step-sub">Hazlo <b style={{ color: "var(--cd-ink)" }}>después del paso 2</b>, el <b style={{ color: "var(--cd-accent)" }}>17 de agosto</b>. Antes no — tus productos se verían vestidos de una campaña que todavía no empieza.</div>
                             <div className="cd-step-checks">
                               <label className="cd-check-item">
                                 <input type="checkbox" checked={!!checklist.fotoDropi} onChange={() => toggleChecklist("fotoDropi")} />
@@ -1890,7 +1918,7 @@ export default function ElegiblesPage() {
               )}
 
               {vivoStep?.state === "bloqueado" && (
-                <div className="cd-phase-note"><Lock size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 5 }} />Del 17 al 31 de agosto tus productos aparecen en el catálogo para dropshippers.</div>
+                <div className="cd-phase-note"><Lock size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 5 }} />Del 18 al 31 de agosto tus productos aparecen en el catálogo para dropshippers.</div>
               )}
               </div>
           </div>
@@ -1901,8 +1929,6 @@ export default function ElegiblesPage() {
               <button type="button" className="cd-back-current" onClick={() => setOpenPhase(null)}>← Volver a tu paso actual</button>
             </div>
           )}
-
-          <p className="cd-brandline">Más ventas para más dropshippers en <b>Latinoamérica</b> <Zap size={12} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -1 }} fill="currentColor" /></p>
         </div>
       </div>
       </>
