@@ -18,6 +18,27 @@
   --danger-tint: #FEF2F2;
   --info: #3B82F6;
   --info-tint: #EFF6FF;
+
+  /* Escala tipográfica — DESIGN.md §3. Cinco pasos y ninguno más.
+     Vive aquí, y no en cada hoja, porque el tablero de logística y la torre de
+     /celula/logistica son archivos CSS distintos: cuando cada uno declaraba su
+     propia escala, divergían. El tablero llegó a usar quince tamaños sueltos
+     (9,5 · 10,5 · 11 · 11,5 · 12 · 12,5 · 13 · 13,5 · 14 · 15 · 16 · 18 · 22 ·
+     28 · 34) y por eso dos pantallas del mismo producto no se parecían.
+
+     Si hace falta un tamaño nuevo, se discute el token — no se escribe un
+     font-size a mano. */
+  --fs-display: 32px;   /* la cifra protagonista de una vista, como mucho una */
+  --fs-headline: 22px;  /* cifras de métrica · título de ficha */
+  --fs-title: 16px;     /* título de sección o de tarjeta */
+  --fs-body: 13px;      /* texto de trabajo — la mayoría de la interfaz */
+  --fs-label: 11px;     /* meta-texto, tags, ejes, contadores */
+
+  --lh-display: 1.1;
+  --lh-headline: 1.2;
+  --lh-title: 1.3;
+  --lh-body: 1.5;
+  --lh-label: 1.3;
 }
 
 @layer base {
