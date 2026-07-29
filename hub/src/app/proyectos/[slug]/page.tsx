@@ -495,9 +495,17 @@ export default function ProjectDashboardPage() {
       }
     };
 
-    const norm = slug.toUpperCase();
+    let norm = slug.toUpperCase();
+    if (project.type === "POC" && parentProject?.project_code) {
+      norm = parentProject.project_code.toUpperCase();
+    }
     if (FALLBACK_CYCLES[norm]) {
       activeCycle = FALLBACK_CYCLES[norm];
+    } else {
+      const codeNorm = code.toUpperCase();
+      if (FALLBACK_CYCLES[codeNorm]) {
+        activeCycle = FALLBACK_CYCLES[codeNorm];
+      }
     }
   }
 

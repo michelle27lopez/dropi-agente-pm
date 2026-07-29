@@ -103,13 +103,33 @@ export async function GET(req: NextRequest, context: any) {
   }
 
   // Fetch cycles associated with this project. Use either project_code or id as fallback
-  const { data: cycles, error: cyclesError } = await supabase
+  let { data: cycles, error: cyclesError } = await supabase
     .from("discovery_cycles")
     .select("*")
     .eq("project_id", project.project_code || project.id);
 
   if (cyclesError) {
     console.warn("[Project Detail API] Error loading cycles:", cyclesError.message);
+  }
+
+  // If this is a POC and has no cycles, fetch the parent's cycles
+  if ((!cycles || cycles.length === 0) && project.parent_project_id) {
+    const { data: parentProj } = await supabase
+      .from("projects")
+      .select("id, project_code")
+      .eq("id", project.parent_project_id)
+      .maybeSingle();
+
+    if (parentProj) {
+      const { data: parentCycles, error: parentCyclesError } = await supabase
+        .from("discovery_cycles")
+        .select("*")
+        .eq("project_id", parentProj.project_code || parentProj.id);
+      
+      if (!parentCyclesError && parentCycles && parentCycles.length > 0) {
+        cycles = parentCycles;
+      }
+    }
   }
 
   // Fetch decisions linked to the loaded cycles
