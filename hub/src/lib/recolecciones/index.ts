@@ -59,7 +59,63 @@ export type FilaExport = {
   preparadas?: number | string;
   guia_generada?: number | string;
   ultimo_evento?: string;
+
+  // ── Desde el export del 28-jul ─────────────────────────────────────────
+  // Antigüedad medida sobre `created_at` de la orden, que NO se refresca.
+  // Esta es la diferencia que resolvió la duda del módulo: con `updated_at`
+  // el 95,7% de las guías parecía de las últimas 24 h; con `created_at` se ve
+  // que el 93,3% lleva más de un día parado. Las dos cosas eran ciertas —
+  // `updated_at` se refresca solo, y eso estaba escondiendo stock real.
+  edad_0_1d?: number | string;
+  edad_2_3d?: number | string;
+  edad_4_7d?: number | string;
+  edad_8_15d?: number | string;
+  edad_15d_mas?: number | string;
+
+  // Quién es y a quién se le llama. Un proveedor puede tener varias bodegas
+  // con teléfonos distintos: por eso llegan los dos y no uno solo.
+  supplier_id?: string | number;
+  supplier_nombre?: string;
+  telefono_bodega?: string;
+  telefono_proveedor?: string;
+
+  fulfillment_by_dropi?: boolean | string | number;
+  bodega_creada_at?: string;
 };
+
+/** Las cinco cubetas de antigüedad, sumadas. */
+export type Edades = {
+  edad_0_1d: number;
+  edad_2_3d: number;
+  edad_4_7d: number;
+  edad_8_15d: number;
+  edad_15d_mas: number;
+};
+
+export const EDADES_CERO: Edades = {
+  edad_0_1d: 0, edad_2_3d: 0, edad_4_7d: 0, edad_8_15d: 0, edad_15d_mas: 0,
+};
+
+/**
+ * Días representativos de la cubeta más vieja que tenga guías.
+ *
+ * Devuelve el piso de cada rango, no el techo: si hay guías en 8–15 días, son
+ * "al menos 8 días". Redondear para arriba sería afirmar algo que el dato no
+ * dice — el export trae cubetas, no la fecha de cada guía.
+ *
+ * `null` cuando no hay ninguna guía: distinto de 0, que significaría "todas
+ * son de hoy". Esa diferencia importa porque `elegibilidad.ts` la usa para
+ * decidir, y un 0 inventado haría pasar por fresca una bodega sin dato.
+ */
+export function antiguedadMax(e: Partial<Edades> | null | undefined): number | null {
+  if (!e) return null;
+  if (e.edad_15d_mas) return 15;
+  if (e.edad_8_15d) return 8;
+  if (e.edad_4_7d) return 4;
+  if (e.edad_2_3d) return 2;
+  if (e.edad_0_1d) return 0;
+  return null;
+}
 
 export const COLUMNAS_REQUERIDAS = [
   "warehouse_id",
@@ -79,11 +135,52 @@ export type BodegaAgregada = {
   preparadas: number;
   guia_generada: number;
   total: number;
+  /** [transportadora, preparadas, guia_generada] — la forma que ya consumen
+   *  el mapa, el tablero y el generador de archivo. Las edades NO van acá
+   *  para no romper esos seis puntos de uso: viajan en `cargas`. */
   transportadoras: Array<[string, number, number]>;
+  /** El mismo grano que `transportadoras`, con la antigüedad al lado. Es lo
+   *  que se escribe en `rec_carga_diaria`, que guarda una fila por
+   *  bodega × transportadora × fecha. */
+  cargas: Array<{ transportadora: string; preparadas: number; guia_generada: number } & Edades>;
+  /** Suma de las cubetas de todas sus transportadoras. */
+  edades: Edades;
   ultimo_evento: string;
+
+  // Identidad y contacto. Se toman de la primera fila de la bodega: el export
+  // los repite idénticos en cada fila de transportadora.
+  supplier_id: string | null;
+  supplier_nombre: string | null;
+  telefono: string | null;
+  telefono_proveedor: string | null;
+  fulfillment_by_dropi: boolean | null;
+  bodega_creada_at: string | null;
 };
 
 const num = (v: unknown) => Number(v) || 0;
+
+/** Texto del export → string limpio o null. "" y "NULL" son ausencia, no valor. */
+const txt = (v: unknown): string | null => {
+  const s = String(v ?? "").trim();
+  return !s || s.toUpperCase() === "NULL" ? null : s;
+};
+
+/** El export puede traer el booleano como true/false, "true"/"false" o 1/0. */
+const bool = (v: unknown): boolean | null => {
+  if (v === true || v === false) return v;
+  const s = String(v ?? "").trim().toLowerCase();
+  if (s === "true" || s === "1" || s === "t") return true;
+  if (s === "false" || s === "0" || s === "f") return false;
+  return null;
+};
+
+const edadesDe = (f: FilaExport): Edades => ({
+  edad_0_1d: num(f.edad_0_1d),
+  edad_2_3d: num(f.edad_2_3d),
+  edad_4_7d: num(f.edad_4_7d),
+  edad_8_15d: num(f.edad_8_15d),
+  edad_15d_mas: num(f.edad_15d_mas),
+});
 
 /**
  * Valida que el archivo subido sea de verdad el export esperado.
@@ -122,7 +219,18 @@ export function agruparPorBodega(filas: FilaExport[]): BodegaAgregada[] {
         dep: dane8.slice(0, 2),
         preparadas: 0, guia_generada: 0, total: 0,
         transportadoras: [],
+        cargas: [],
+        edades: { ...EDADES_CERO },
         ultimo_evento: "",
+        // Identidad: se toma de la primera fila y no se vuelve a tocar. El
+        // export la repite igual en cada fila de transportadora, así que la
+        // última no aporta nada que la primera no diga.
+        supplier_id: txt(f.supplier_id),
+        supplier_nombre: txt(f.supplier_nombre),
+        telefono: txt(f.telefono_bodega),
+        telefono_proveedor: txt(f.telefono_proveedor),
+        fulfillment_by_dropi: bool(f.fulfillment_by_dropi),
+        bodega_creada_at: txt(f.bodega_creada_at),
       };
       mapa.set(id, b);
     }
@@ -131,7 +239,13 @@ export function agruparPorBodega(filas: FilaExport[]): BodegaAgregada[] {
     b.preparadas += p;
     b.guia_generada += g;
     b.total += p + g;
-    b.transportadoras.push([f.transportadora || "(sin transportadora)", p, g]);
+
+    const transportadora = f.transportadora || "(sin transportadora)";
+    b.transportadoras.push([transportadora, p, g]);
+
+    const e = edadesDe(f);
+    b.cargas.push({ transportadora, preparadas: p, guia_generada: g, ...e });
+    for (const k of Object.keys(EDADES_CERO) as Array<keyof Edades>) b.edades[k] += e[k];
 
     const ev = String(f.ultimo_evento ?? "");
     if (ev > b.ultimo_evento) b.ultimo_evento = ev;
@@ -139,6 +253,8 @@ export function agruparPorBodega(filas: FilaExport[]): BodegaAgregada[] {
 
   for (const b of mapa.values()) {
     b.transportadoras.sort((x, y) => (y[1] + y[2]) - (x[1] + x[2]));
+    b.cargas.sort((x, y) =>
+      (y.preparadas + y.guia_generada) - (x.preparadas + x.guia_generada));
   }
   return [...mapa.values()].sort((a, b) => b.total - a.total);
 }
@@ -256,6 +372,11 @@ export type BodegaConCarga = {
   total: number;
   /** [transportadora, preparadas, guia_generada] */
   transportadoras: Array<[string, number, number]>;
+  /** Cubetas de antigüedad sumadas. En cero cuando la carga es anterior al
+   *  export del 28-jul, que fue el primero en traer el dato. */
+  edades: Edades;
+  /** Días de la cubeta más vieja con guías. `null` = sin dato, que NO es lo
+   *  mismo que 0 (“todas de hoy”). */
   antiguedad_max: number | null;
 };
 

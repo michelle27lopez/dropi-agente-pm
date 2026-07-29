@@ -1,0 +1,848 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   Sistema visual del registro de iniciativas — tags, ficha y enlaces.
+
+   POR QUÉ ESTE ARCHIVO EXISTE Y NO ESTÁ DENTRO DE tablero.css
+   Nació para reponer ~40 reglas que el commit 40842ed borró al sobrescribir
+   tablero.css con una versión anterior (regresión de merge: la ficha, el
+   registro, los experimentos y parte del cronograma quedaron como texto
+   corrido). Se mantiene aparte porque tablero.css tiene 1.846 líneas, ya perdió
+   estas reglas una vez en un merge, y se edita en paralelo.
+
+   Se carga desde layout.tsx DESPUÉS de tablero.css, así que también sirve para
+   corregir ahí donde tablero.css se sale del sistema sin tener que editarlo.
+
+   TIPOGRAFÍA: los cinco pasos de globals.css (--fs-*). Ni un font-size suelto,
+   salvo el dígito de .fuga-n, que va dentro de un círculo de 16px y no es texto
+   de lectura.
+
+   COLOR: neutro por defecto. El color se gana señalando un estado que pide
+   acción — bloqueado, sin documentar, hecho. Cuando todo tiene color, nada
+   tiene color: eso era la cabecera de la ficha, seis pastillas en cinco colores
+   antes siquiera del título.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.log-root {
+  /* El original usaba --accent-soft, que nunca llegó a definirse en ninguna
+     hoja: los enlaces quedaban sin fondo. Se declara aquí junto a su tint. */
+  --accent-soft: #fff3e0;
+  --accent-soft-hover: #ffe6d3;
+  --accent-soft-border: #ffd9bf;
+
+  /* Variantes oscuras de los cuatro estados, para texto sobre su tint. Los
+     valores planos de globals.css (#10B981 sobre #ECFDF5) no dan contraste
+     suficiente a 11px. */
+  --on-neutral: #6b7280;
+  --on-info: #1e50c0;
+  --on-amber: #a15c00;
+  --on-green: #1b7d3f;
+  --on-red: #a3143a;
+
+  --tint-neutral: #f4f4f6;
+  --tint-info: #eaf1ff;
+  --tint-amber: #fdf1e0;
+  --tint-green: #e7f7ee;
+  --tint-red: #fdeaef;
+
+  --edge-neutral: #e2e2e8;
+  --edge-info: #cfdcfb;
+  --edge-amber: #f7ddb6;
+  --edge-green: #c2e8d3;
+  --edge-red: #f5c2ce;
+}
+
+/* ── Tags ────────────────────────────────────────────────────────────────────
+   Un solo componente con cuatro modificadores, en lugar de las ~25 variantes
+   que había (.b-tipo.t-* ×5, .b-handoff.h-* ×4, .b-phase, .b-code, .b-warn,
+   .b-doc.d-* ×3, .chip-tipo, .estado.e-* ×5…). Aquellas coloreaban por
+   CATEGORÍA — qué tipo de iniciativa es, en qué fase va— y eso es justo lo que
+   prohíbe la "Regla de los Cuatro Estados" del DESIGN.md: el color es para
+   estado semántico, y para diferenciar categorías están la tipografía y el
+   layout.                                                                    */
+.log-root .pill,
+.log-root .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  line-height: var(--lh-label);
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--tint-neutral);
+  border: 1px solid var(--edge-neutral);
+  color: var(--on-neutral);
+  white-space: nowrap;
+}
+
+.log-root .pill.is-ok {
+  background: var(--tint-green);
+  border-color: var(--edge-green);
+  color: var(--on-green);
+}
+
+.log-root .pill.is-warn {
+  background: var(--tint-amber);
+  border-color: var(--edge-amber);
+  color: var(--on-amber);
+}
+
+.log-root .pill.is-risk {
+  background: var(--tint-red);
+  border-color: var(--edge-red);
+  color: var(--on-red);
+}
+
+.log-root .pill.is-info {
+  background: var(--tint-info);
+  border-color: var(--edge-info);
+  color: var(--on-info);
+}
+
+.log-root .pill.is-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* Handoff — ¿TI ya puede tomarlo? Es literalmente los cuatro estados, así que
+   aquí el color sí significa algo. Dejarlo neutro fue pasarse de frenada al
+   corregir el confeti: con TODO en gris, nada se puede escanear. `fase` y el
+   código siguen neutros porque esos sí son categorías. */
+.log-root .pill.h-No-aplica {
+  background: var(--tint-neutral);
+  border-color: var(--edge-neutral);
+  color: var(--on-neutral);
+}
+.log-root .pill.h-Pendiente {
+  background: var(--tint-amber);
+  border-color: var(--edge-amber);
+  color: var(--on-amber);
+}
+.log-root .pill.h-Listo-para-handoff {
+  background: var(--tint-info);
+  border-color: var(--edge-info);
+  color: var(--on-info);
+}
+.log-root .pill.h-Handoff-hecho {
+  background: var(--tint-green);
+  border-color: var(--edge-green);
+  color: var(--on-green);
+}
+
+/* El tipo de iniciativa dentro de una hoja del mapa: es una categoría, así que
+   se diferencia por tamaño y peso, no por color (antes eran cinco colores). */
+.log-root .chip-tipo {
+  font-size: var(--fs-label);
+  font-weight: 600;
+  line-height: var(--lh-label);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+  opacity: 0.75;
+  margin-left: 6px;
+}
+
+/* ── Ficha de proyecto ───────────────────────────────────────────────────────
+   tablero.css la deja con h1 a 24px, lead a 15px y campos a 14px — tres pasos
+   fuera de la escala. Y pone `border-left: 3px solid var(--brand)` en CADA
+   campo, o sea el naranja de marca repetido tres veces por pantalla, contra la
+   "Regla del Acento Único". Se corrige aquí sin tocar aquel archivo.         */
+.log-root .detail h1 {
+  font-size: var(--fs-headline);
+  font-weight: 700;
+  line-height: var(--lh-headline);
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+
+.log-root .detail .lead {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: #39415a;
+  margin: 0 0 14px;
+  max-width: 70ch;
+}
+
+/* El código va encima del título, quieto: identifica la ficha sin competir. */
+.log-root .detail-codigo {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  line-height: var(--lh-label);
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+/* La línea de metadatos: texto plano separado por puntos, no seis pastillas.
+   Lo que es categoría se lee; lo que pide acción se destaca con un .tag. */
+.log-root .detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  line-height: var(--lh-label);
+  color: var(--muted);
+  margin: 0 0 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.log-root .detail-meta .sep {
+  color: var(--edge-neutral);
+}
+
+.log-root .detail-meta strong {
+  font-weight: 600;
+  color: #39415a;
+}
+
+.log-root .detail-field {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: #39415a;
+  background: var(--soft);
+  /* Neutro: tres bloques seguidos con el acento de marca no jerarquizaban
+     nada. El color en esta ficha queda reservado al bloqueo. */
+  border-left: 3px solid var(--edge-neutral);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+.log-root .detail-field b {
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  line-height: var(--lh-label);
+  letter-spacing: 0.2px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+/* El único bloque con color de la ficha. */
+.log-root .detail-bloqueo {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: #7a1029;
+  background: var(--tint-red);
+  border-left: 3px solid var(--red, #d3244f);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+
+/* Sin esta regla el <b> es inline y el texto sale pegado al label —
+   "Qué lo detieneCapacidad de TI…". Era el síntoma más visible del borrado. */
+.log-root .detail-bloqueo b {
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  line-height: var(--lh-label);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+
+.log-root .detail-exps b,
+.log-root .detail-hint {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+}
+
+.log-root .detail-exps li {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+/* ── Cabeceras y listas del tablero ──────────────────────────────────────────
+   tablero.css deja el hero en 26px, el foco en 14, la fecha en 13,5 y el
+   eyebrow en 12 — cuatro pasos que no existen en la escala. Sumados hacían que
+   una misma pantalla tuviera cinco cuerpos de letra distintos. Se bajan al
+   sistema, más pequeños y más quietos.                                       */
+.log-root .eyebrow {
+  font-size: var(--fs-label);
+  font-weight: 700;
+  line-height: var(--lh-label);
+  letter-spacing: 0.4px;
+  margin: 26px 0 10px;
+}
+
+.log-root .wk-hero {
+  padding: 22px 26px 26px;
+}
+
+.log-root .wk-hero h1 {
+  font-size: var(--fs-headline);
+  font-weight: 700;
+  line-height: var(--lh-headline);
+  letter-spacing: -0.02em;
+}
+
+.log-root .wk-hero .wk-fecha {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+}
+
+.log-root .wk-hero .wk-foco {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  max-width: 70ch;
+}
+
+/* ── /iniciativas: cabecera y contadores ─────────────────────────────────────
+   Sustituyen al hero negro (~210px, cuyo cuerpo explicaba nombres de columna de
+   Supabase) y a la caja azul (~150px con las cuatro métricas dentro de una
+   frase). Entre las dos, la lista empezaba bajo el pliegue.                  */
+.log-root .reg-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.log-root .reg-titulo {
+  font-size: var(--fs-headline);
+  font-weight: 700;
+  line-height: var(--lh-headline);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.log-root .reg-titulo span {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* La taxonomía no se pierde: deja de cobrar peaje. */
+.log-root .reg-como summary {
+  font-size: var(--fs-label);
+  font-weight: 600;
+  line-height: var(--lh-label);
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+  padding: 4px 0;
+}
+
+.log-root .reg-como summary::-webkit-details-marker {
+  display: none;
+}
+
+.log-root .reg-como summary::after {
+  content: " ›";
+}
+
+.log-root .reg-como[open] summary::after {
+  content: " ⌄";
+}
+
+.log-root .reg-como summary:hover {
+  color: var(--brand);
+}
+
+.log-root .reg-como > div {
+  max-width: 70ch;
+  margin-top: 8px;
+  padding: 12px 14px;
+  background: var(--soft);
+  border-radius: 8px;
+}
+
+.log-root .reg-como p {
+  font-size: var(--fs-label);
+  line-height: var(--lh-body);
+  color: var(--muted);
+  margin: 0 0 6px;
+}
+
+.log-root .reg-como p:last-child {
+  margin-bottom: 0;
+}
+
+/* Los cuatro huecos: de prosa a control. El número era el dato más valioso de
+   la página y estaba enterrado en una frase. */
+.log-root .reg-huecos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.log-root .reg-hueco {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.log-root .reg-hueco b {
+  font-size: var(--fs-headline);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.log-root .reg-hueco span {
+  font-size: var(--fs-label);
+  font-weight: 500;
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+
+.log-root .reg-hueco:hover:not(:disabled) {
+  border-color: var(--brand);
+  box-shadow: var(--shadow-hover);
+}
+
+.log-root .reg-hueco[aria-pressed="true"] {
+  border-color: var(--brand);
+  background: var(--accent-soft);
+}
+
+.log-root .reg-hueco[aria-pressed="true"] b {
+  color: var(--brand);
+}
+
+/* Cero pendientes no es un botón: es una buena noticia, y desactivarlo evita
+   el filtro que devuelve una lista vacía. */
+.log-root .reg-hueco:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.log-root .reg-filtro-activo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  margin: -10px 0 18px;
+}
+
+/* ── Enlaces de una iniciativa (Jira · Figma · prototipo · doc · Drive) ──── */
+.log-root .lnks {
+  margin: 12px 0 4px;
+}
+
+.log-root .lnks-t {
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  line-height: var(--lh-label);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.log-root .lnks-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.log-root .lnk {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-label);
+  font-weight: 600;
+  line-height: var(--lh-label);
+  color: var(--brand);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft-border);
+  padding: 6px 11px;
+  border-radius: 999px;
+}
+
+.log-root .lnk:hover {
+  background: var(--accent-soft-hover);
+}
+
+.log-root .lnk-ic {
+  font-size: var(--fs-label);
+}
+
+/* Hueco visible a propósito: el pendiente se ve, no se esconde. */
+.log-root .lnk-falta {
+  color: var(--muted);
+  background: repeating-linear-gradient(
+    45deg,
+    #fafafc,
+    #fafafc 6px,
+    #f2f2f6 6px,
+    #f2f2f6 12px
+  );
+  border: 1px dashed var(--border);
+  cursor: default;
+}
+
+.log-root .lnk-falta em {
+  font-style: normal;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+/* ── Registro de iniciativas ─────────────────────────────────────────────── */
+.log-root .ini-nota {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+  margin: -6px 0 12px;
+}
+
+/* Filas, no tarjetas. Una tarjeta de 130px de alto para una línea de
+   descripción dejaba ver 3 de 16 sin scroll. Con la rejilla por `gap` sobre el
+   borde, las filas se separan con una hairline en vez de 10px de aire. */
+.log-root .ini-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 26px;
+}
+
+.log-root .ini {
+  background: var(--card);
+  border: none;
+  border-radius: 0;
+  padding: 11px 14px;
+  box-shadow: none;
+}
+
+.log-root .ini-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+
+/* El nombre en la lista del registro es una fila, no un titular: a 16px saltaba
+   contra las píldoras de 11 y por eso la lista se veía despareja. */
+.log-root .ini-nombre {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: var(--lh-body);
+  color: var(--text);
+  margin-right: 4px;
+}
+
+.log-root .ini-nombre:hover {
+  color: var(--brand);
+}
+
+.log-root .ini-desc {
+  font-size: var(--fs-label);
+  line-height: var(--lh-body);
+  color: var(--muted);
+  margin: 0;
+  max-width: 80ch;
+}
+
+/* Los enlaces dentro de una fila del registro no necesitan el aire que sí tiene
+   la ficha: ahí son el contenido, aquí son un apéndice. */
+.log-root .ini .lnks {
+  margin: 6px 0 0;
+}
+
+.log-root .ini .lnks-t {
+  display: none;
+}
+
+.log-root .ini .lnk {
+  padding: 3px 9px;
+}
+
+/* El ⚠️ marca desalineamiento entre lo que dice Jira y cómo se trabaja: esa
+   diferencia es el hallazgo, no un detalle. */
+.log-root .ini-jira {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+
+.log-root .ini-jira b {
+  font-weight: 600;
+  color: #39415a;
+}
+
+.log-root .ini-desalineado {
+  color: var(--on-amber);
+  font-weight: 600;
+}
+
+.log-root .ini-bloqueo {
+  font-size: var(--fs-label);
+  line-height: var(--lh-body);
+  color: var(--on-red);
+  background: var(--tint-red);
+  border-radius: 8px;
+  padding: 8px 11px;
+  margin: 0 0 6px;
+}
+
+.log-root .ini-faltan {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  margin: 8px 0 0;
+}
+
+.log-root .ini-alert {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--tint-info);
+  border: 1px solid var(--edge-info);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 26px;
+}
+
+.log-root .ini-alert strong {
+  display: block;
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: var(--lh-body);
+  margin-bottom: 3px;
+}
+
+.log-root .ini-alert p {
+  font-size: var(--fs-label);
+  line-height: var(--lh-body);
+  color: #39415a;
+  margin: 0;
+}
+
+.log-root .exp-proj-link:hover {
+  color: var(--brand);
+}
+
+/* ── Tarjeta de experimento ──────────────────────────────────────────────────
+   Se veía plana: cuatro bloques idénticos apilados, sin nada que dijera qué
+   mirar primero, y el título enterrado bajo la fila de estado. El relieve ahora
+   viene de la jerarquía —título, dato duro, argumento— no de sombras.        */
+.log-root .exp {
+  /* El estado tiñe el canto: es un estado semántico, así que el color se lo
+     gana. `--exp-tono` lo inyecta el componente. */
+  border-left: 3px solid var(--exp-tono, var(--edge-neutral));
+  padding: 18px 20px;
+}
+
+.log-root .exp h3 {
+  font-size: var(--fs-title);
+  font-weight: 600;
+  line-height: var(--lh-title);
+  letter-spacing: -0.01em;
+  margin: 0 0 8px;
+}
+
+.log-root .exp-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.log-root .exp-proj {
+  font-size: var(--fs-label);
+  font-weight: 500;
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+
+/* El impacto es la cifra que justifica el experimento. Antes era la tercera
+   línea de un muro de texto igual al resto. */
+.log-root .exp-impacto {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text);
+  background: var(--soft);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.log-root .exp-impacto b,
+.log-root .exp-field b {
+  display: block;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  line-height: var(--lh-label);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+.log-root .exp-field {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: #39415a;
+  margin: 10px 0;
+}
+
+/* El estado usa la misma píldora que el resto del tablero, pintada con su tono
+   por la rampa ordinal Idea → Diseñado → Corriendo → Validado → Descartado. */
+.log-root .pill.e-Idea {
+  background: var(--tint-neutral);
+  border-color: var(--edge-neutral);
+  color: var(--on-neutral);
+}
+.log-root .pill.e-Diseñado {
+  background: var(--tint-info);
+  border-color: var(--edge-info);
+  color: var(--on-info);
+}
+.log-root .pill.e-Corriendo {
+  background: var(--tint-amber);
+  border-color: var(--edge-amber);
+  color: var(--on-amber);
+}
+.log-root .pill.e-Validado {
+  background: var(--tint-green);
+  border-color: var(--edge-green);
+  color: var(--on-green);
+}
+.log-root .pill.e-Descartado {
+  background: var(--tint-red);
+  border-color: var(--edge-red);
+  color: var(--on-red);
+}
+
+.log-root .exp-demo {
+  font-size: var(--fs-label);
+  font-weight: 600;
+  line-height: var(--lh-label);
+  padding: 8px 13px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+/* ── Cronograma: ventana planeada pero NO activa hoy ─────────────────────── */
+/* Punteada para que no se lea como trabajo en curso — esa confusión era la
+   contradicción entre el Gantt y el weekly (Same Day "activo" vs "parqueado"). */
+.log-root .cr-tent {
+  opacity: 0.55;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0.5) 5px,
+    transparent 5px,
+    transparent 10px
+  );
+  border-style: dashed !important;
+}
+
+.log-root .cr-row-tent .cr-label-col strong {
+  opacity: 0.85;
+}
+
+.log-root .cr-estado-hoy {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: var(--fs-label);
+  font-weight: 700;
+  line-height: var(--lh-label);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--tint-green);
+  color: var(--on-green);
+}
+
+.log-root .cr-estado-hoy.tent {
+  background: var(--tint-neutral);
+  color: var(--on-neutral);
+}
+
+.log-root .cr-estado-hoy.bloq {
+  background: var(--tint-red);
+  color: var(--on-red);
+}
+
+.log-root .cr-leg.lg-tent::before {
+  background: repeating-linear-gradient(
+    45deg,
+    #c9cde0,
+    #c9cde0 3px,
+    transparent 3px,
+    transparent 6px
+  );
+}
+
+/* ── Navegación del panel ────────────────────────────────────────────────────
+   Las transiciones van en clases y no inline porque una media query no puede
+   anular un `style` inline: sin esto, `prefers-reduced-motion` no tendría
+   efecto sobre el sidebar. Es la convención de globals.css:147-168.          */
+.log-root .nav-item {
+  transition: background 160ms ease, color 160ms ease;
+}
+
+.log-root .nav-chevron {
+  transition: transform 160ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-root .nav-item,
+  .log-root .nav-chevron {
+    transition: none;
+  }
+}
+
+/* ── Número de fuga ──────────────────────────────────────────────────────── */
+/* Reemplaza los glifos circulados de Unicode, que dependían de la fuente y se
+   veían distintos (y mal) en cada sistema. Ahora el número es un dato
+   (`fuga.n` en data.ts) y esto es su representación.
+   La torre de /celula/logistica tiene su propia copia en torre-logistica.css —
+   este archivo solo se carga en el layout del tablero. */
+.log-root .fuga-n {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border-radius: 999px;
+  background: currentColor;
+  /* Única excepción a la escala en todo el archivo: un dígito dentro de un
+     círculo de 16px no es texto de lectura, es un glifo. A 11px no cabe. */
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  margin-right: 5px;
+}
+
+/* El dígito va sobre el fondo sólido, que hereda el tono de la fuga por
+   `currentColor` — así no hace falta una variable de color por cada tono. */
+.log-root .fuga-n > span {
+  color: #fff;
+}

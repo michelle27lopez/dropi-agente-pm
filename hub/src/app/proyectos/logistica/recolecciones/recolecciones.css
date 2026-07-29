@@ -614,3 +614,40 @@
   height: 100%;
   border: 0;
 }
+
+/* ── Antigüedad de la carga ────────────────────────────────────────────────
+   Desde el export del 28-jul se sabe hace cuánto está parada cada guía. Antes
+   la lista solo podía ordenarse por volumen, y una bodega chica con guías de
+   quince días quedaba invisible debajo de una grande con carga de ayer.
+
+   La marca va en la fila entera y no solo en la celda a propósito: el orden
+   por defecto sigue siendo por volumen, así que si la señal viviera únicamente
+   en su columna, habría que ir a buscarla. Acá salta con cualquier orden. */
+.sol-edad { white-space: nowrap; color: var(--rec-ink-2); }
+
+/* Franja al costado, no fondo de color: la fila sigue siendo legible y no
+   compite con el estado de selección. El color solo acompaña — el texto de la
+   celda ("8-15 d", "+15 d") es lo que informa, para que no dependa de ver
+   bien el color. */
+.sol-fila--demorada td:first-child { box-shadow: inset 3px 0 0 var(--rec-warn-ink); }
+.sol-fila--demorada .sol-edad { color: var(--rec-warn-ink); font-weight: 600; }
+
+.sol-fila--critica td:first-child { box-shadow: inset 3px 0 0 var(--rec-err-ink); }
+.sol-fila--critica .sol-edad { color: var(--rec-err-ink); font-weight: 700; }
+
+/* Contacto directo con la bodega, dentro de la celda del nombre. Discreto:
+   la acción principal sigue siendo armar la solicitud de la transportadora,
+   no llamar de a una. Aparece al lado de la dirección porque es la misma
+   pregunta —"quién es y dónde está"— continuada con "y a quién le escribo". */
+.sol-wa {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: var(--rec-fs-xs);
+  color: var(--rec-ok-ink);
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+}
+.sol-wa:hover { color: var(--brand); }
+.sol-wa:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+/* Sin teléfono no es un enlace roto: es una ausencia declarada. */
+.sol-wa--no { color: var(--muted); border-bottom: 0; font-style: italic; }

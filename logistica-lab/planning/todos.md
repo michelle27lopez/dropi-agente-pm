@@ -10,22 +10,10 @@
 > Vercel solo con el próximo `git push` que toque este bloque — no hay que tocar código.
 > Formato: `- emoji [Proyecto] texto`.
 <!-- tablero:pendientes:start -->
-- 🔴 [Local] Agregar `SUPABASE_URL` y `SUPABASE_SERVICE_KEY` a `hub/.env.local` (valores desde Vercel) — sin ellas el hub local no lee la base
-- 🔴 [Seguridad] Rotar 3 claves: `SUPABASE_SERVICE_KEY` (en 7 archivos de `origin/main`, es de Jaime) + OpenAI + Evolution API
-- 🔴 [Jira] Arreglar estados ANTES de documentar: asignar el paraguas PRM-1517 · sacar PRM-1513 y PRM-1512 de "En Ruta" · resolver ownership de PRM-91 (hoy es de Kate) con Maria
 - 🔴 [Fulfillment] Levantar `spec.md` de PRM-1446 — está en "Listo para hand off" sin nada documentado (hueco #1)
-- 🔴 [Pruebas de entrega] Consolidar los 8 tickets en un solo spec, recogiendo el dato del 80% de PRM-618
 - 🟡 [Darwin] Commitear `prototipo-recolecciones.html` del worktree `claude/dropi-logistics-queue-482601` — sigue sin guardar
 - 🟡 [Darwin] Pushear `juan/logistica-22jul` (4 commits: rescate 16-jul + mapa 3 ejes + cierre ESTADO + Sidebar WIP) y abrir PR. CODEOWNERS no exige aprobación; el check de ownership sí marcará el PR porque `hub/src/app/proyectos/` figura como zona de suppliers → registrar las rutas de logística en `.github/ownership.json`
-- 🔴 [Cronograma Q3/Q4] Crear cronograma de proyectos y presentarlo a Maria la próxima semana
-- 🔴 [KPIs + meta] Insight/presentación Weekly Product (vie) + Seguimiento de métricas (jue, con Diana)
-- 🔴 [KPIs + meta] Correr baseline creación→handoff (<24h) y proponer la meta a Maria
-- 🔴 [Data] Pedir export COMPLETO a Data (CSV sin cap, estados vivos + timestamps de fase) — el actual está capado y sesgado
-- 🔴 [Homologación estados] Confirmar `INTENTO DE ENTREGA` con INTERRAPIDISIMO/VELOCES (única colisión posible real) + decidir `Proceso finalizado` + validar flags contables → cerrar catálogo v1
-- 🔴 [Homologación estados] Hacer el mapeo crudo→homologado de los ~50 reales y validar contra el `history[]` (ver propuesta-homologacion.md §12)
 - 🟡 [Homologación estados] Modelar la devolución con su propio ciclo de reintento + `Entregado` confirmado vs observado + ubicar `Guía anulada`
-- 🔴 [Normalización] Hacer la CADENA de discovery (oportunidad → idea → solución)
-- 🔴 [Confirmación] Segmentar confirmación por volumen y categoría de dropshipper (con Michel) — el prom ~11h oculta segmentos
 - 🔴 [Cell Board] Preparar propuesta de experimento para "Preparación de guía" → llevar al Cell Board #3
 - 🔴 [Árbol OKR] Validar el reajuste del árbol v2 con Juan/Maria antes de tocar Jira
 - 🔴 [Delivery] EL FOCO = Normalización de estados: subirlo en el roadmap y terminar la propuesta (WIP=1)
