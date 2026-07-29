@@ -845,19 +845,7 @@
     </div>
   </section>
 
-  <!-- 8 · ARQUETIPO -->
-  <section class="slide g8">
-    <div class="kicker reveal d1">Tu Arquetipo de Leyenda</div>
-    <div class="arch">
-      <div class="med reveal d2" style="margin-top:8px">La Escaladora<br>Nocturna</div>
-      <div class="tag reveal d3">Rango 02 · Plata III</div>
-      <div class="sub reveal d4">El 61% de tus órdenes se completan entre 9pm y 2am.<br>Constante, estratégica, referente.</div>
-    </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Identidad Compartible</div>
-      <div class="tx">Los arquetipos con nombres descriptivos y atractivos actúan como insignias sociales ("social currency") ideales para pauta orgánica en redes y adquisición de nuevos usuarios por referidos.</div>
-    </div>
-  </section>
+
 
   <!-- 9 · META + CTA -->
   <section class="slide g9">
@@ -962,7 +950,7 @@
     // goal bar
     if(s.querySelector('#goalbar')){ const g=s.querySelector('#goalbar'); g.style.width='0'; requestAnimationFrame(()=>g.style.width='82%'); }
     // confetti on celebratory slides
-    if([0,1,7,8,9].includes(n)) confetti();
+    if([0,1,7,8].includes(n)) confetti();
   }
   function countUp(el){
     const target=+el.dataset.count, dur=+(el.dataset.dur||1300); const start=performance.now();
