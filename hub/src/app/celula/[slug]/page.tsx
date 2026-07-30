@@ -603,46 +603,7 @@ export default function CelulaHomePage() {
 
 
 
-          {/* Updates list */}
-          <div style={{ marginBottom: 40 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: 0 }}>
-                Updates
-              </p>
-            </div>
-            
-            {/* Custom dark list wrapper */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-              {updates.map((item) => (
-                <div
-                  key={item.key}
-                  onClick={() => {
-                    const u = updatesById.get(item.key);
-                    if (u) setOpenUpdate(u);
-                  }}
-                  className="glass-card"
-                  style={{ cursor: "pointer", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 20 }}
-                >
-                  <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(99, 102, 241, 0.15)", color: "#6366F1", padding: "2px 8px", borderRadius: 4, textTransform: "uppercase" }}>
-                        {item.tag}
-                      </span>
-                      <span style={{ fontSize: 14 }}>{item.icon}</span>
-                    </div>
-                    <h4 style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{item.name}</h4>
-                    <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>{item.description}</p>
-                  </div>
-                  <div style={{ marginTop: 14, fontSize: 11, fontWeight: 700, color: "#F77F00", display: "flex", alignItems: "center", gap: 4 }}>
-                    Ver →
-                  </div>
-                </div>
-              ))}
-              {updates.length === 0 && (
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay updates registrados.</p>
-              )}
-            </div>
-          </div>
+
 
           {/* Discovery projects list */}
           <div style={{ marginBottom: 40 }}>
@@ -974,11 +935,8 @@ export default function CelulaHomePage() {
 
 
 
-        <div style={{ marginBottom: 56 }}>
-          {/* Logística publica su weekly en su propio tablero, no en
-              `celula_updates` ni en el registro de /weekly — por eso esta
-              sección salía vacía. UpdatesLogistica lo trae de ahí. */}
-          {isLogistica ? (
+        {isLogistica && (
+          <div style={{ marginBottom: 56 }}>
             <UpdatesLogistica
               extra={updates}
               onItemClick={(item) => {
@@ -986,23 +944,8 @@ export default function CelulaHomePage() {
                 if (u) setOpenUpdate(u);
               }}
             />
-          ) : (
-            <>
-              <Section
-                title="Updates"
-                items={updates}
-                ctaLabel="Ver →"
-                onItemClick={(item) => {
-                  const u = updatesById.get(item.key);
-                  if (u) setOpenUpdate(u);
-                }}
-              />
-              {updates.length === 0 && (
-                <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
-              )}
-            </>
-          )}
-        </div>
+          </div>
+        )}
 
         <div style={{ marginBottom: 56 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
