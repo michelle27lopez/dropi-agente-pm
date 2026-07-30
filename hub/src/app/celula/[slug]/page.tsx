@@ -548,14 +548,12 @@ export default function CelulaHomePage() {
                       </div>
                     </div>
 
-                    {/* Thermometer Visual Bar */}
+                    {/* Visual Progress Bar */}
                     <div style={{ margin: "10px 0 14px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
-                        <span style={{ color: "rgba(255,255,255,0.5)", display: "flex", alignItems: "center", gap: 4 }}>
-                          <span>🌡️</span> Termómetro
-                        </span>
+                        <span style={{ color: "rgba(255,255,255,0.45)" }}>Avance a la Meta</span>
                         <span style={{ color: m.color, fontWeight: 900 }}>
-                          {m.progressPct.toFixed(1)}% avance
+                          {m.progressPct.toFixed(1)}%
                         </span>
                       </div>
 
@@ -921,14 +919,12 @@ export default function CelulaHomePage() {
                     </div>
                   </div>
 
-                  {/* Thermometer Visual Bar */}
+                  {/* Visual Progress Bar */}
                   <div style={{ margin: "10px 0 14px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
-                      <span style={{ color: "#64748B", display: "flex", alignItems: "center", gap: 4 }}>
-                        <span>🌡️</span> Termómetro
-                      </span>
+                      <span style={{ color: "#64748B" }}>Avance a la Meta</span>
                       <span style={{ color: m.color, fontWeight: 900 }}>
-                        {m.progressPct.toFixed(1)}% avance
+                        {m.progressPct.toFixed(1)}%
                       </span>
                     </div>
 
