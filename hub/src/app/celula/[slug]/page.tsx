@@ -454,82 +454,95 @@ export default function CelulaHomePage() {
 
           {/* Metrics Grid — Meta vs. Realidad Actual con Títulos y Descripciones Claras */}
           {metrics && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, marginBottom: 28 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: 16, marginBottom: 28 }}>
               {[
                 {
                   label: "Tasa de Activación Neta",
                   value: `${activeStats?.activationRateNet ?? 5.2}%`,
                   meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
-                  sub: "Sellers con ≥1 orden entregada exitosamente",
-                  color: "#10B981", icon: "⚡", sparkline: "M0,20 Q15,25 30,12 T60,28 T90,5 T100,8"
+                  sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
+                  color: "#10B981", icon: "⚡"
                 },
                 {
                   label: "Tiempo de Activación Neta (TTV)",
                   value: `${ttvNetoMedian} días`,
                   meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
-                  sub: "Mediana de días desde registro a 1ª orden entregada",
-                  color: "#F59E0B", icon: "⏱️", sparkline: "M0,10 Q15,28 30,14 T60,22 T90,5 T100,12"
+                  sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
+                  color: "#F59E0B", icon: "⏱️"
                 },
                 {
                   label: "Tasa de Activación Bruta",
                   value: `${activationRate}%`,
                   meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
-                  sub: "Sellers con ≥1 orden creada en la app (TTFO)",
-                  color: "#EC4899", icon: "📦", sparkline: "M0,25 Q15,10 30,20 T60,5 T90,15 T100,2"
+                  sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
+                  color: "#EC4899", icon: "📦"
                 },
                 {
                   label: "Retención a 30 Días",
                   value: `${survivalRate}%`,
                   meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
-                  sub: "Sellers vendiendo pasados 30 días (Supervivencia)",
-                  color: "#8B5CF6", icon: "🌱", sparkline: "M0,22 Q15,12 30,15 T60,5 T90,18 T100,4"
+                  sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
+                  color: "#8B5CF6", icon: "🌱"
                 },
                 {
                   label: "Base de Sellers Identificados",
                   value: totalSellers.toLocaleString(),
                   meta: "36,056 Dropshippers Target + 8,744 Proveedores",
-                  sub: "Registros reales auditados en Supabase DB",
-                  color: "#6366F1", icon: "👥", sparkline: "M0,15 Q15,5 30,18 T60,8 T90,25 T100,3"
+                  sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
+                  color: "#3B82F6", icon: "👥"
                 },
                 {
                   label: "Usuarios Activos Diarios (DAU)",
                   value: "14,262",
-                  meta: "MAU Global: 81,521 usuarios/mes",
-                  sub: "~31% de actividad diaria constante en vivo",
-                  color: "#22C55E", icon: "🎯", sparkline: "M0,5 Q15,22 30,10 T60,25 T90,12 T100,28"
+                  meta: "MAU Mensual: 81,521 usuarios/mes",
+                  sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
+                  color: "#22C55E", icon: "🎯"
                 }
               ].map((m) => (
-                <div key={m.label} className="glass-card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                <div key={m.label} style={{
+                  background: "rgba(15, 23, 42, 0.85)",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  borderRadius: 16,
+                  padding: "20px 22px",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between"
+                }}>
                   <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                         {m.label}
                       </span>
-                      <span style={{ fontSize: 16 }}>{m.icon}</span>
+                      <span style={{ fontSize: 18 }}>{m.icon}</span>
                     </div>
-                    <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: "-0.03em", color: "#fff", marginBottom: 2 }}>
+
+                    <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#ffffff", marginBottom: 10 }}>
                       {m.value}
                     </div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: m.color, marginBottom: 6 }}>
-                      {m.meta}
+
+                    <div style={{
+                      background: "rgba(255, 255, 255, 0.05)",
+                      borderLeft: `4px solid ${m.color}`,
+                      padding: "8px 12px",
+                      borderRadius: "0 8px 8px 0",
+                      marginBottom: 14
+                    }}>
+                      <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
+                        {m.meta}
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", marginBottom: 8, lineHeight: 1.4 }}>{m.sub}</div>
-                    
-                    {/* Simulated Sparkline */}
-                    <div style={{ height: 24, position: "relative", marginBottom: 4 }}>
-                      <svg viewBox="0 0 100 30" style={{ width: "100%", height: "100%", overflow: "visible" }}>
-                        <path d={m.sparkline} fill="none" stroke={m.color} strokeWidth="2" strokeLinecap="round" opacity="0.8" />
-                        <path d={`${m.sparkline} L100,30 L0,30 Z`} fill={`url(#gradient-${m.color.replace("#","")})`} opacity="0.06" />
-                        <defs>
-                          <linearGradient id={`gradient-${m.color.replace("#","")}`} x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor={m.color} />
-                            <stop offset="100%" stopColor="transparent" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                    </div>
+
+                  <div style={{
+                    fontSize: 12,
+                    color: "#CBD5E1",
+                    fontWeight: 500,
+                    lineHeight: 1.45,
+                    borderTop: "1px dashed rgba(255, 255, 255, 0.1)",
+                    paddingTop: 12
+                  }}>
+                    {m.sub}
                   </div>
                 </div>
               ))}
@@ -757,79 +770,98 @@ export default function CelulaHomePage() {
 
         {/* Live Metrics Grid — Meta vs. Realidad Actual con Títulos y Descripciones Claras */}
         {params.slug === "sellers" && metrics && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16, marginBottom: 36 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: 16, marginBottom: 36 }}>
             {[
               {
                 label: "Tasa de Activación Neta",
                 value: `${metrics.stats.activationRateNet ?? 5.2}%`,
                 meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
-                sub: "Sellers con ≥1 orden entregada exitosamente",
+                sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
                 color: "#10B981", icon: "⚡"
               },
               {
                 label: "Tiempo de Activación Neta (TTV)",
                 value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`,
                 meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
-                sub: "Mediana de días desde registro a 1ª orden entregada",
-                color: "#F59E0B", icon: "⏱️"
+                sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
+                color: "#D97706", icon: "⏱️"
               },
               {
                 label: "Tasa de Activación Bruta",
                 value: `${metrics.stats.activationRate}%`,
                 meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
-                sub: "Sellers con ≥1 orden creada en la app (TTFO)",
-                color: "#EC4899", icon: "📦"
+                sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
+                color: "#DB2777", icon: "📦"
               },
               {
                 label: "Retención a 30 Días",
                 value: `${metrics.stats.survivalRate ?? 69.38}%`,
                 meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
-                sub: "Sellers vendiendo pasados 30 días (Supervivencia)",
-                color: "#8B5CF6", icon: "🌱"
+                sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
+                color: "#7C3AED", icon: "🌱"
               },
               {
                 label: "Base de Sellers Identificados",
                 value: metrics.stats.totalSellers.toLocaleString(),
                 meta: "36,056 Dropshippers Target + 8,744 Proveedores",
-                sub: "Registros reales auditados en Supabase DB",
-                color: "#6366F1", icon: "👥"
+                sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
+                color: "#2563EB", icon: "👥"
               },
               {
                 label: "Usuarios Activos Diarios (DAU)",
                 value: "14,262",
-                meta: "MAU Global: 81,521 usuarios/mes",
-                sub: "~31% de actividad diaria constante en vivo",
-                color: "#22C55E", icon: "🎯"
+                meta: "MAU Mensual: 81,521 usuarios/mes",
+                sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
+                color: "#059669", icon: "🎯"
               }
             ].map((m) => (
               <div
                 key={m.label}
                 style={{
-                  background: "#fff", border: "1px solid var(--border)",
-                  borderRadius: 14, padding: "20px",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-                  display: "flex", flexDirection: "column", justifyContent: "space-between"
+                  background: "#ffffff",
+                  border: "1px solid #E2E8F0",
+                  borderRadius: 16,
+                  padding: "20px 22px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between"
                 }}
               >
                 <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <span style={{ fontSize: 11, fontWeight: 800, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                       {m.label}
                     </span>
-                    <span style={{ fontSize: 16 }}>{m.icon}</span>
+                    <span style={{ fontSize: 18 }}>{m.icon}</span>
                   </div>
-                  <div style={{ fontSize: 24, fontWeight: 900, letterSpacing: "-0.03em", color: "var(--fg)", marginBottom: 4 }}>
+
+                  <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#0F172A", marginBottom: 10 }}>
                     {m.value}
                   </div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: m.color, marginBottom: 6 }}>
-                    {m.meta}
+
+                  <div style={{
+                    background: "#F8FAFC",
+                    borderLeft: `4px solid ${m.color}`,
+                    padding: "8px 12px",
+                    borderRadius: "0 8px 8px 0",
+                    marginBottom: 14
+                  }}>
+                    <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
+                      {m.meta}
+                    </div>
                   </div>
                 </div>
-                <div>
-                  <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 10, lineHeight: 1.4 }}>{m.sub}</div>
-                  <div style={{ height: 4, background: "#F3F4F6", borderRadius: 999, overflow: "hidden" }}>
-                    <div style={{ height: "100%", width: "100%", background: m.color, borderRadius: 999 }} />
-                  </div>
+
+                <div style={{
+                  fontSize: 12,
+                  color: "#475569",
+                  fontWeight: 500,
+                  lineHeight: 1.45,
+                  borderTop: "1px dashed #E2E8F0",
+                  paddingTop: 12
+                }}>
+                  {m.sub}
                 </div>
               </div>
             ))}
