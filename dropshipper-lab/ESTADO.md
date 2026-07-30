@@ -6,16 +6,19 @@
 
 ---
 
-## Foco Estratégico (S2 2026)
-*   **Q3 (Julio–Septiembre):** Activación y Time-to-Value (TTV) del dropshipper huérfano (Subir activación neta de 2.9% a meta objetivo).
-*   **Q4 (Octubre–Diciembre):** Crecimiento y reducción de Churn (Retención).
+## Foco Estratégico & Alignment (S2 2026)
+*   **OKR de Compañía que Impacta:** **OKR 1 / KR 1.1 — Alcanzar 7.8M órdenes/mes** (93.6M anuales).
+*   **Q3 (Julio–Septiembre):** Activación Bruta/Neta y Time-to-Value (TTV) Bruto/Neto del dropshipper huérfano. *(Meta Activación Neta: 5.2% $\to$ 8.0% | TTV Neto: 16d $\to$ < 12d)*.
+*   **Q4 (Octubre–Diciembre):** Retención, Reducción de Churn y Crecimiento de Usuarios *(Visión construida desde las exploraciones de Q3 via Programa 360)*.
+*   **Especificación Core Oficial:** [confluence_seller_success_2026_s2.md](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/confluence_seller_success_2026_s2.md).
 
 ---
 
-## 📊 Hito Reciente: Validación Producción Data 360 (2026-07-30)
+## 📊 Hito Reciente: Alineación Oficial S2 Confluence & Validación Data 360 (2026-07-30)
+*   **Alineación Core S2:** Se incorporó el Pliego Oficial de Confluence (Space PD Page 1483833347) estableciendo el **OKR 1 / KR 1.1 (7.8M ord/mes)** como el marco de compañía y formalizando el **Product Backlog de 11 Oportunidades de Discovery** (Wonder $\to$ Explore $\to$ Make $\to$ Impact).
 *   **35 Campos Mapeados:** 31 poblados y operativos, 4 con alertas de calidad (`verified` en 0%, `tipo_proveedor` con taxonomía mixta, `real_products_created` estático en 3.13%, `survey_source` como etiqueta interna).
 *   **Verificación Real:** `role` (78% Dropshipper, 19% Supplier) y `billing_information` (9.75% true) son totalmente analíticos en producción.
-*   **Documento Refinada:** [materializacion_iniciativas.md](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#L344) y [auditoria_mapa_360.md](file:///Users/santiago.herrera/.gemini/antigravity-ide/brain/b9494400-a2ac-4d43-960a-a107b8748b86/auditoria_mapa_360.md).
+*   **Documentación de Referencia:** [materializacion_iniciativas.md](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/materializacion_iniciativas.md#L344), [confluence_seller_success_2026_s2.md](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/confluence_seller_success_2026_s2.md) y [auditoria_mapa_360.md](file:///Users/santiago.herrera/.gemini/antigravity-ide/brain/b9494400-a2ac-4d43-960a-a107b8748b86/auditoria_mapa_360.md).
 
 ---
 
@@ -47,7 +50,8 @@ En el comité con el CEO y la CPO se tomaron decisiones clave sobre el roadmap y
 
 | Outcome / OKR | Baseline Oficial | Realidad Actual (Julio 2026) | Meta S2 (Q3-Q4) | Brecha / Gap a la Meta | Variable Técnica / Fuente |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **NSM (Métrica Estrella)** | 3.435.363 ord/mes | **3.351.359 ord/mes** (1-29 Jul) | **3.571.042 ord/mes** | 🟡 **-219.683 ord** (97,5% cumplimiento) | Reporte CPO (Julio 2026) |
+| **OKR 1 / KR 1.1 (Compañía)** | — | **3.351.359 ord/mes** | **7.800.000 ord/mes** | 🔴 **-4.448.641 ord** (42.9% de meta global) | KR 1.1 Holding (Confluence PD) |
+| **NSM (Métrica Estrella Célula)**| 3.435.363 ord/mes | **3.351.359 ord/mes** (1-29 Jul) | **3.571.042 ord/mes** | 🟡 **-219.683 ord** (97,5% cumplimiento) | Reporte CPO (Julio 2026) |
 | **Tasa de Activación Neta** | **5.2%** | **5.2%** | **8.0%** | 🔴 **-2.8 pp** (Falta subir +53.8% relativo) | `real_orders_delivered >= 1` |
 | **Mediana de TTV Neto** | **16.0 días** | **16.0 días** | **< 12.0 días** | 🔴 **+4.0 días** (Reducir latencia 25%) | `dias_en_activarse` (Backend Dropi) |
 | **Supervivencia 30d (Retención)** | 69.38% | **69.38%** (Jun: 69.5%) | **75.0%** | 🟡 **-5.62 pp** (Brecha del 7.5%) | `es_activo_30d = true` / Cohortes |
@@ -68,6 +72,24 @@ En el comité con el CEO y la CPO se tomaron decisiones clave sobre el roadmap y
 | **Configuración Financiera (`billing`)**| **9.75%** (4.503 sellers) | Embudo de onboarding financiero (Registro $\to$ Billing $\to$ 1ª Orden). |
 | **Catálogo Poblado (`products_created`)**| **3.13%** (1.448 sellers) | Snapshot estático CSV de sellers con catálogo publicado. |
 | **Verificación In-App (`verified`)** | **0.0%** (0 de 46.2k) | Alerta de calidad: campo no instrumentado en frontend. |
+
+---
+
+### 3. Core Product Backlog — Oportunidades a Validar (Discovery Checklist S2)
+
+> **Regla de Proceso (Wonder $\to$ Explore $\to$ Make $\to$ Impact):** Checklist obligatorio derivado del Pliego Oficial S2. Todas las oportunidades avanzan progresivamente en Q3 como insumo de retención y escalamiento para Q4.
+
+* `[ ]` **1. Primera medición de KPIs y definición de meta (Wonder):** Estado real medido. Ajuste constante con Dirección de Producto.
+* `[ ]` **2. Cronograma de ejecución Q3 (Arranque):** Secuenciación de Delivery Backlog + Product Backlog con responsables.
+* `[ ]` **3. Visión de Producto Seller (Represado/Validar):** Consolidado de oferta por madurez (catálogo, ordenes, finanzas, Roax, Chatea Pro, Leyendas).
+* `[ ]` **4. Programa 360 (Retención/Churn):** Mapeo de palancas comerciales (GMV) para llevar in-app a la plataforma.
+* `[ ]` **5. Herramienta Gratuita de Mensajería (Represado/Validar):** Cierre ChatCenter $\to$ Chatea Pro Freemium (masivos + automatización).
+* `[ ]` **6. Módulo de Marketing & Suite:** Integración de herramientas de marketing en la experiencia del seller.
+* `[ ]` **7. Habilitar Testeos Más Rápidos:** Mecanismos de experimentación ágil para validación de hipótesis de venta.
+* `[ ]` **8. Primeras Ventas Más Rápido:** Aceleración del TTFO y TTV neto reduciendo fricción inicial.
+* `[ ]` **9. Alerta de Precio Recomendado y Stockout (Wonder):** Notificación proactiva de mayor margen y alerta preventiva de stockout.
+* `[ ]` **10. Automatización CMS ante Stockout (Wonder):** Enrutamiento dinámico a proveedor secundario sin apagar campañas.
+* `[ ]` **11. Comparador de Proveedores, Precios y Ranking (Wonder):** Comparación in-app de costos, reputación y nivel de cumplimiento.
 
 ---
 

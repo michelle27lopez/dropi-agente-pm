@@ -52,6 +52,24 @@
 
 ---
 
+## 📋 Product Backlog Confluence S2 — Discovery Checklist (Wonder → Explore → Make → Impact)
+
+> **Pliego Oficial S2 (Space PD Page 1483833347):** Oportunidades de Discovery a explorar durante Q3 para convertirse en insumo directo de retención y escalamiento en Q4.
+
+- `[ ]` **S2-DISC-01 (Wonder):** Primera medición de KPIs y definición de meta (Activación Bruta/Neta, TTV Bruto/Neto).
+- `[ ]` **S2-DISC-02 (Arranque):** Construir el cronograma de ejecución de Q3 (Jul–Sep) con secuenciación de Delivery + Product Backlog.
+- `[ ]` **S2-DISC-03 (Represado/Validar):** Visión de producto Seller (catálogo, módulo de órdenes, activos financieros, integraciones, subproductos Roax/Chatea Pro, Leyendas).
+- `[ ]` **S2-DISC-04 (Explore):** Programa 360 (Retención/Churn): mapear palancas comerciales de crecimiento (GMV) para bajarlas a la plataforma in-app.
+- `[ ]` **S2-DISC-05 (Represado/Validar):** Herramienta gratuita de mensajería (WhatsApp/SMS) conjunta con Brands Success (remplazo ChatCenter $\to$ Chatea Pro Freemium).
+- `[ ]` **S2-DISC-06 (Explore):** Recopilar el módulo de marketing y suite de herramientas integradas.
+- `[ ]` **S2-DISC-07 (Explore):** Habilitar mecanismos de experimentación y testeos más rápidos para sellers.
+- `[ ]` **S2-DISC-08 (Explore):** Aceleración de primeras ventas más rápido (reducción de latencia TTFO y TTV).
+- `[ ]` **S2-DISC-09 (Wonder):** Alerta proactiva de Precio Recomendado (mayor margen) y Alerta preventiva de Stockout.
+- `[ ]` **S2-DISC-10 (Wonder):** Automatización de integraciones CMS ante Stockout (enrutamiento dinámico sin apagar pauta).
+- `[ ]` **S2-DISC-11 (Wonder):** Comparador in-app de Proveedores, Precios de costo y Puntaje de reputación/cumplimiento.
+
+---
+
 ## 🟢 Parking Lot / Planificados (Para Q4)
 
 - `[ ]` **PROD-1665:** [RETENCIÓN] Instrumentar Capa 1.5: inversión y hábito post-venta (Epic de tracking e instrumentación de eventos).
@@ -62,3 +80,4 @@
 - `[ ]` **PROD-1361:** Definir con Data las señales in-app de inversión y hábito post-venta.
 - `[ ]` **PROD-1400:** Diseño del Loop de Hábito e Inversión Post-Venta.
 - `[ ]` **PROD-1401:** Diagnóstico de Churn vía SDT y Falla de Prompts.
+
