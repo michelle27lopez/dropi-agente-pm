@@ -348,14 +348,19 @@ export default function CelulaHomePage() {
               { key: "EC", label: "🇪🇨 Ecuador" },
               { key: "CL", label: "🇨🇱 Chile" },
               { key: "MX", label: "🇲🇽 México" },
-              { key: "AR", label: "🇦🇷 Argentina" }
+              { key: "GT", label: "🇬🇹 Guatemala" },
+              { key: "PY", label: "🇵🇾 Paraguay" },
+              { key: "PA", label: "🇵🇦 Panamá" },
+              { key: "AR", label: "🇦🇷 Argentina" },
+              { key: "CR", label: "🇨🇷 Costa Rica" },
+              { key: "PE", label: "🇵🇪 Perú" }
             ].map((country) => (
               <button
                 key={country.key}
                 onClick={() => setSelectedCountry(country.key)}
                 className={`country-tab ${selectedCountry === country.key ? "active" : ""}`}
                 style={{
-                  padding: "8px 16px",
+                  padding: "6px 14px",
                   borderRadius: 8,
                   fontSize: 12,
                   fontWeight: 700,
@@ -380,27 +385,27 @@ export default function CelulaHomePage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
                 <div>
                   <span style={{ fontSize: 10, fontWeight: 850, background: "rgba(247, 127, 0, 0.15)", color: "#F77F00", border: "1px solid rgba(247, 127, 0, 0.3)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                    OKR 1.1 · ESCALAR VOLUMEN DE VENTAS
+                    OKR 1 / KR 1.1 HOLDING: 7.8M ORD/MES · META JULIO CPO
                   </span>
                   <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
-                    Órdenes de Sellers Activos (NSM)
+                    Órdenes Movilizadas de Sellers Activos (NSM)
                   </h3>
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <span className="neon-text-orange" style={{ fontSize: 28, fontWeight: 900 }}>{percentageToOkr}%</span>
-                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}> de la meta</span>
+                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}> proy. cumplimiento Julio</span>
                 </div>
               </div>
               
               {/* Progress Bar */}
               <div style={{ height: 10, background: "rgba(255,255,255,0.08)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
-                <div style={{ height: "100%", width: `${percentageToOkr}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999, boxShadow: "0 0 10px rgba(247, 127, 0, 0.5)" }} />
+                <div style={{ height: "100%", width: `${Math.min(percentageToOkr, 100)}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999, boxShadow: "0 0 10px rgba(247, 127, 0, 0.5)" }} />
               </div>
               
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
-                <span>Actual: <strong style={{ color: "#fff" }}>{(nsmCurrent / 1000000).toFixed(2)}M/mes</strong></span>
-                <span>Meta: <strong style={{ color: "#fff" }}>{(okrTarget / 1000000).toFixed(2)}M/mes</strong></span>
-                <span>Brecha: <strong style={{ color: "#fff" }}>{(gapToOkr / 1000000).toFixed(2)}M/mes</strong></span>
+              <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12, fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
+                <span>Actual (1-29 Jul): <strong style={{ color: "#fff" }}>{(nsmCurrent / 1000000).toFixed(2)}M/mes</strong> ({nsmCurrent.toLocaleString()} ord)</span>
+                <span>Meta Julio CPO: <strong style={{ color: "#fff" }}>{(okrTarget / 1000000).toFixed(2)}M/mes</strong> (3.57M)</span>
+                <span>Holding OKR 1.1: <strong style={{ color: "#F77F00" }}>7.80M/mes</strong> (42.96% actual)</span>
               </div>
             </div>
           )}
@@ -409,12 +414,12 @@ export default function CelulaHomePage() {
           {metrics && (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, marginBottom: 28 }}>
               {[
-                { label: "Sellers Registrados", value: totalSellers.toLocaleString(), sub: "Total histórico en cohorte", color: "#6366F1", icon: "👥", sparkline: "M0,25 Q15,10 30,20 T60,5 T90,15 T100,2" },
-                { label: "Tasa de Activación", value: `${activationRate}%`, sub: "Sellers con ≥1 orden creada", color: "#EC4899", icon: "⚡", sparkline: "M0,20 Q15,25 30,12 T60,28 T90,5 T100,8" },
-                { label: "Sellers Activos (30d)", value: `${activeRate}%`, sub: "Con actividad constante", color: "#22C55E", icon: "🎯", sparkline: "M0,15 Q15,5 30,18 T60,8 T90,25 T100,3" },
-                { label: "Tasa de Rebote (Bounce)", value: `${bounceRate}%`, sub: "Sellers con ≤1 sesión web", color: "#EF4444", icon: "🚪", sparkline: "M0,5 Q15,22 30,10 T60,25 T90,12 T100,28" },
-                { label: "Supervivencia (30d)", value: `${survivalRate}%`, sub: "Sellers con ≥1 orden adicional", color: "#8B5CF6", icon: "🌱", sparkline: "M0,22 Q15,12 30,15 T60,5 T90,18 T100,4" },
-                { label: "TTV Neto (Mediana)", value: `${ttvNetoMedian} días`, sub: "Registro hasta entrega exitosa", color: "#F59E0B", icon: "⏱️", sparkline: "M0,10 Q15,28 30,14 T60,22 T90,5 T100,12" }
+                { label: "Activación Neta (TTV)", value: `${activeStats?.activationRateNet ?? 5.2}%`, sub: "Meta Q3: 8.0% · Brecha: -2.8 pp (1ª ord. entregada)", color: "#10B981", icon: "⚡", sparkline: "M0,20 Q15,25 30,12 T60,28 T90,5 T100,8" },
+                { label: "TTV Neto (Mediana)", value: `${ttvNetoMedian} días`, sub: "Meta Q3: <12.0d · Exceso: +4.0 días", color: "#F59E0B", icon: "⏱️", sparkline: "M0,10 Q15,28 30,14 T60,22 T90,5 T100,12" },
+                { label: "Activación Bruta (TTFO)", value: `${activationRate}%`, sub: "Meta Q3: 12.0% · Brecha: -4.4 pp (1ª ord. creada)", color: "#EC4899", icon: "📦", sparkline: "M0,25 Q15,10 30,20 T60,5 T90,15 T100,2" },
+                { label: "Supervivencia (30d)", value: `${survivalRate}%`, sub: "Meta S2: 75.0% · Brecha: -5.62 pp (retención)", color: "#8B5CF6", icon: "🌱", sparkline: "M0,22 Q15,12 30,15 T60,5 T90,18 T100,4" },
+                { label: "Sellers DB Identificados", value: totalSellers.toLocaleString(), sub: "Base real de Supabase (36.056 Dropshippers)", color: "#6366F1", icon: "👥", sparkline: "M0,15 Q15,5 30,18 T60,8 T90,25 T100,3" },
+                { label: "Activos Diarios (DAU)", value: "14,262", sub: "MAU Global: 81,521 (~31% actividad en vivo)", color: "#22C55E", icon: "🎯", sparkline: "M0,5 Q15,22 30,10 T60,25 T90,12 T100,28" }
               ].map((m) => (
                 <div key={m.label} className="glass-card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
@@ -429,7 +434,7 @@ export default function CelulaHomePage() {
                     </div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginBottom: 8 }}>{m.sub}</div>
+                    <div style={{ fontSize: 11, color: m.color, fontWeight: 700, marginBottom: 8 }}>{m.sub}</div>
                     
                     {/* Simulated Sparkline */}
                     <div style={{ height: 24, position: "relative", marginBottom: 4 }}>
