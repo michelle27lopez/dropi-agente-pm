@@ -75,23 +75,23 @@ En el comité con el CEO y la CPO se tomaron decisiones clave sobre el roadmap y
 
 ---
 
-### 3. Core Product Backlog — Oportunidades & Entregables CPO (Discovery S2)
+### 3. Core Product Backlog — Oportunidades & Retos de Discovery CPO (S2 2026)
 
-> **Directivas Oficiales CPO (Pliego Confluence 1483833347):** Todas las oportunidades avanzan progresivamente por **Wonder → Explore → Make → Impact** durante Q3 como insumo directo de retención y escalamiento para Q4.
+> **Directivas Oficiales CPO (Pliego Confluence 1483833347):** Son los retos estratégicos entregados por la CPO para resolver durante S2. El deliverable final de cada ítem no existe hoy, sino que se irá definiendo en la medida que cada oportunidad avance por **Wonder → Explore → Make → Impact**.
 
-| # | Oportunidad / Proyecto CPO | Fase | Entregable Concreto (Deliverable) | Fecha Objetivo |
+| # | Oportunidad / Reto CPO | Fase Discovery | Estado del Deliverable | Reto Estratégico a Resolver en S2 |
 |---|---|---|---|---|
-| 1 | **Primera medición KPIs y metas** | **Wonder** | **Audit Report & Baseline Brief:** Medición factual en producción (46.2k DB) + metas CPO oficializadas. | 1-Ago (Completado) |
-| 2 | **Cronograma ejecución Q3** | **Arranque** | **Master Roadmap Q3 (JPD):** Secuenciación Delivery + Discovery con asignación Dev/UX. | 5-Ago |
-| 3 | **Visión de Producto Seller 360** | **Represado** | **Master Spec "Mapa de Valor Seller 360":** Matriz de oferta por madurez (Catálogo, Wallet, CMS, Roax, Chatea Pro, Leyendas). | 15-Ago |
-| 4 | **Programa 360 In-App (Retención)**| **Explore** | **Blueprint Conductual 360:** Mapeo de palancas comerciales (GMV) traducidas a triggers in-app. | 25-Ago |
-| 5 | **Mensajería Gratuita (WhatsApp/SMS)**| **Represado** | **Spec "Chatea Pro Freemium":** Reemplazo ChatCenter para masivos + automatizaciones básicas (con Brands). | 20-Ago |
-| 6 | **Módulo Marketing & Tools** | **Explore** | **Ficha de Integración Suite Marketing:** Integración Minea, Meta Ads, TikTok y landing builders en Home. | 30-Ago |
-| 7 | **Rapid Testing Kit** | **Explore** | **Kit de Testeo Exprés:** Landings 1-clic + pauta exprés para pruebas A/B de productos en < 24h. | 5-Sep |
-| 8 | **Primeras Ventas Exprés** | **Explore** | **Onboarding Scaffolding Spec:** Wizard pre-configurado de tienda + 1er producto sugerido para TTFO < 4d. | 10-Sep |
-| 9 | **Alerta Precio/Stockout** | **Wonder** | **Brief & Mock UI Sugeridor:** Notificación in-app de margen óptimo y aviso preventivo de agotamiento. | 15-Sep |
-| 10 | **Automatización CMS Stockout** | **Wonder** | **Spec Enrutamiento CMS:** Desvío automático con CMS a proveedor secundario sin apagar campañas. | 20-Sep |
-| 11 | **Comparador de Proveedores** | **Wonder** | **Benchmark & Mock Comparador:** Matriz in-app de costos, tiempos de despacho y reputación. | 25-Sep |
+| 1 | **Primera medición KPIs y metas** | **Wonder** | ✅ `[COMPLETADO]` Audit Report | Medición factual en producción (46.2k DB) + metas CPO oficializadas. |
+| 2 | **Cronograma ejecución Q3** | **Arranque** | ⚙️ `[EN CURSO]` Master Roadmap | Secuenciar Delivery Backlog + Discovery con Dev/UX y fechas. |
+| 3 | **Visión de Producto Seller 360** | **Represado · Validar**| 🔍 `[POR DEFINIR — Reto CPO S2]` | Unir la oferta completa (Catálogo, Wallet, CMS, Roax, Chatea Pro, Leyendas) por nivel de madurez. Definir deliverable y fecha. |
+| 4 | **Programa 360 In-App (Retención)**| **Explore** | 🔍 `[POR DEFINIR — Reto CPO S2]` | Mapear palancas comerciales (GMV) y bajarlas in-app a la plataforma para activación/retención. |
+| 5 | **Mensajería Gratuita (WhatsApp/SMS)**| **Represado · Validar**| 🔍 `[POR DEFINIR — Reto CPO S2]` | Reemplazo de ChatCenter con Chatea Pro Freemium (masivos + automatización básica) junto a Brands. |
+| 6 | **Módulo Marketing & Tools** | **Explore** | 🔍 `[POR DEFINIR — Reto CPO S2]` | Recopilar la suite de herramientas de marketing que saldrán en Home. |
+| 7 | **Enfocarse en testeos más rápidos** | **Explore** | 🔍 `[POR DEFINIR — Reto CPO S2]` | Habilitar mecanismos de experimentación y testeo exprés de productos/pautas. |
+| 8 | **Primeras ventas más rápido** | **Explore** | 🔍 `[POR DEFINIR — Reto CPO S2]` | Reducir la fricción inicial para acelerar el Time-to-First-Order (TTFO) y TTV neto. |
+| 9 | **Alerta Precio Recomendado & Stockout** | **Wonder** | 🔍 `[POR DEFINIR — Reto CPO S2]` | Indicar proactivamente mayor margen de venta y alerta preventiva de agotamiento de stock. |
+| 10 | **Automatización CMS ante Stockout** | **Wonder** | 🔍 `[POR DEFINIR — Reto CPO S2]` | Automatizar desvío con CMS a proveedor secundario sin apagar campañas de pauta. |
+| 11 | **Comparador de Proveedores** | **Wonder** | 🔍 `[POR DEFINIR — Reto CPO S2]` | Habilitar comparación in-app de costos, tiempos de despacho y reputación del proveedor. |
 
 ---
 
