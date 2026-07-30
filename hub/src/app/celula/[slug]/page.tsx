@@ -375,37 +375,59 @@ export default function CelulaHomePage() {
             ))}
           </div>
 
-          {/* OKR Progress Card */}
+          {/* OKR Progress Card — OKR 1.1 (7.8M/mes) como Techo */}
           {metrics && (
             <div className="glow-border" style={{
-              background: "linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.9) 100%)",
+              background: "linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%)",
               borderRadius: 16, padding: "28px 32px", marginBottom: 24, color: "#fff",
               boxShadow: "0 10px 40px rgba(0,0,0,0.4)"
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
                 <div>
                   <span style={{ fontSize: 10, fontWeight: 850, background: "rgba(247, 127, 0, 0.15)", color: "#F77F00", border: "1px solid rgba(247, 127, 0, 0.3)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                    OKR 1 / KR 1.1 HOLDING: 7.8M ORD/MES · META JULIO CPO
+                    OKR 1 / KR 1.1 HOLDING · TECHO OBJETIVO: 7.80M ÓRDENES/MES
                   </span>
                   <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
-                    Órdenes Movilizadas de Sellers Activos (NSM)
+                    Órdenes Movilizadas de Sellers Activos (NSM Global)
                   </h3>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <span className="neon-text-orange" style={{ fontSize: 28, fontWeight: 900 }}>{percentageToOkr}%</span>
-                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}> proy. cumplimiento Julio</span>
+                  <span className="neon-text-orange" style={{ fontSize: 32, fontWeight: 900 }}>
+                    {((nsmCurrent / 7800000) * 100).toFixed(1)}%
+                  </span>
+                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", display: "block" }}>
+                    del Techo OKR 1.1 (7.80M/mes)
+                  </span>
                 </div>
               </div>
               
-              {/* Progress Bar */}
-              <div style={{ height: 10, background: "rgba(255,255,255,0.08)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
-                <div style={{ height: "100%", width: `${Math.min(percentageToOkr, 100)}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999, boxShadow: "0 0 10px rgba(247, 127, 0, 0.5)" }} />
+              {/* Progress Bar towards 7.8M Ceiling */}
+              <div style={{ height: 12, background: "rgba(255,255,255,0.08)", borderRadius: 999, overflow: "hidden", marginBottom: 16, position: "relative" }}>
+                <div style={{
+                  height: "100%",
+                  width: `${Math.min((nsmCurrent / 7800000) * 100, 100)}%`,
+                  background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)",
+                  borderRadius: 999,
+                  boxShadow: "0 0 12px rgba(247, 127, 0, 0.6)"
+                }} />
               </div>
               
-              <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12, fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
-                <span>Actual (1-29 Jul): <strong style={{ color: "#fff" }}>{(nsmCurrent / 1000000).toFixed(2)}M/mes</strong> ({nsmCurrent.toLocaleString()} ord)</span>
-                <span>Meta Julio CPO: <strong style={{ color: "#fff" }}>{(okrTarget / 1000000).toFixed(2)}M/mes</strong> (3.57M)</span>
-                <span>Holding OKR 1.1: <strong style={{ color: "#F77F00" }}>7.80M/mes</strong> (42.96% actual)</span>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed rgba(255,255,255,0.1)", paddingTop: 14 }}>
+                <div>
+                  <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
+                  <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>{(nsmCurrent / 1000000).toFixed(2)}M/mes</strong>
+                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", display: "block" }}>{nsmCurrent.toLocaleString()} ord movilizadas</span>
+                </div>
+                <div>
+                  <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Hito Julio CPO</span>
+                  <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>{(okrTarget / 1000000).toFixed(2)}M/mes</strong>
+                  <span style={{ fontSize: 11, color: "#22C55E", fontWeight: 700, display: "block" }}>93.85% alcanzado (100.32% proy)</span>
+                </div>
+                <div>
+                  <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Techo OKR 1.1 Holding</span>
+                  <strong style={{ color: "#F77F00", fontSize: 14, fontWeight: 900 }}>7.80M/mes</strong>
+                  <span style={{ fontSize: 11, color: "#EF4444", fontWeight: 700, display: "block" }}>Brecha: -4.45M ord (43.0% cumpl.)</span>
+                </div>
               </div>
             </div>
           )}
@@ -825,37 +847,49 @@ export default function CelulaHomePage() {
           />
         )}
 
-        {/* OKR & NSM Progress Section */}
+        {/* OKR & NSM Progress Section — OKR 1.1 (7.8M/mes) como Techo */}
         {params.slug === "sellers" && metrics && (
           <div style={{
             background: "linear-gradient(135deg, #111827 0%, #1f2937 55%, #c2410c 100%)",
-            borderRadius: 16, padding: "24px 32px", marginBottom: 36, color: "#fff",
+            borderRadius: 16, padding: "28px 32px", marginBottom: 36, color: "#fff",
             boxShadow: "0 4px 20px rgba(0,0,0,0.08)"
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
               <div>
                 <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(255,255,255,0.15)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                  OKR 1 / KR 1.1 Holding · 7.8M órdenes/mes
+                  OKR 1 / KR 1.1 Holding · TECHO OBJETIVO: 7.80M ÓRDENES/MES
                 </span>
                 <h3 style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
                   Volumen de Órdenes de Sellers Activos (NSM Global)
                 </h3>
               </div>
               <div style={{ textAlign: "right" }}>
-                <span style={{ fontSize: 24, fontWeight: 900, color: "#F77F00" }}>{metrics.stats.percentageToCompanyOKR ?? 42.9}%</span>
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}> del OKR 1.1 (7.8M/mes)</span>
+                <span style={{ fontSize: 28, fontWeight: 900, color: "#F77F00" }}>43.0%</span>
+                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", display: "block" }}>del Techo OKR 1.1 (7.80M/mes)</span>
               </div>
             </div>
             
             {/* Progress Bar for Holding OKR 1.1 */}
-            <div style={{ height: 8, background: "rgba(255,255,255,0.16)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
-              <div style={{ height: "100%", width: `${metrics.stats.percentageToCompanyOKR ?? 42.9}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999 }} />
+            <div style={{ height: 10, background: "rgba(255,255,255,0.16)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
+              <div style={{ height: "100%", width: "42.96%", background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999 }} />
             </div>
             
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
-              <span>Actual (Jul 29): <strong>3.35M ord/mes</strong></span>
-              <span>Meta CPO Julio: <strong>3.57M ord/mes</strong> (100.3% proy)</span>
-              <span>OKR 1.1 Holding: <strong>7.80M ord/mes</strong> (Brecha: 4.45M)</span>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed rgba(255,255,255,0.15)", paddingTop: 14 }}>
+              <div>
+                <span style={{ color: "rgba(255,255,255,0.6)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
+                <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>3.35M/mes</strong>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", display: "block" }}>3.351.359 ord movilizadas</span>
+              </div>
+              <div>
+                <span style={{ color: "rgba(255,255,255,0.6)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Hito Julio CPO</span>
+                <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>3.57M/mes</strong>
+                <span style={{ fontSize: 11, color: "#22C55E", fontWeight: 700, display: "block" }}>93.85% alcanzado (100.32% proy)</span>
+              </div>
+              <div>
+                <span style={{ color: "rgba(255,255,255,0.6)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Techo OKR 1.1 Holding</span>
+                <strong style={{ color: "#F77F00", fontSize: 14, fontWeight: 900 }}>7.80M/mes</strong>
+                <span style={{ fontSize: 11, color: "#EF4444", fontWeight: 700, display: "block" }}>Brecha: -4.45M ord (43.0% cumpl.)</span>
+              </div>
             </div>
           </div>
         )}
