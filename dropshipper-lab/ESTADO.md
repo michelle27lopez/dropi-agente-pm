@@ -75,21 +75,23 @@ En el comité con el CEO y la CPO se tomaron decisiones clave sobre el roadmap y
 
 ---
 
-### 3. Core Product Backlog — Oportunidades a Validar (Discovery Checklist S2)
+### 3. Core Product Backlog — Oportunidades & Entregables CPO (Discovery S2)
 
-> **Regla de Proceso (Wonder $\to$ Explore $\to$ Make $\to$ Impact):** Checklist obligatorio derivado del Pliego Oficial S2. Todas las oportunidades avanzan progresivamente en Q3 como insumo de retención y escalamiento para Q4.
+> **Directivas Oficiales CPO (Pliego Confluence 1483833347):** Todas las oportunidades avanzan progresivamente por **Wonder → Explore → Make → Impact** durante Q3 como insumo directo de retención y escalamiento para Q4.
 
-* `[ ]` **1. Primera medición de KPIs y definición de meta (Wonder):** Estado real medido. Ajuste constante con Dirección de Producto.
-* `[ ]` **2. Cronograma de ejecución Q3 (Arranque):** Secuenciación de Delivery Backlog + Product Backlog con responsables.
-* `[ ]` **3. Visión de Producto Seller (Represado/Validar):** Consolidado de oferta por madurez (catálogo, ordenes, finanzas, Roax, Chatea Pro, Leyendas).
-* `[ ]` **4. Programa 360 (Retención/Churn):** Mapeo de palancas comerciales (GMV) para llevar in-app a la plataforma.
-* `[ ]` **5. Herramienta Gratuita de Mensajería (Represado/Validar):** Cierre ChatCenter $\to$ Chatea Pro Freemium (masivos + automatización).
-* `[ ]` **6. Módulo de Marketing & Suite:** Integración de herramientas de marketing en la experiencia del seller.
-* `[ ]` **7. Habilitar Testeos Más Rápidos:** Mecanismos de experimentación ágil para validación de hipótesis de venta.
-* `[ ]` **8. Primeras Ventas Más Rápido:** Aceleración del TTFO y TTV neto reduciendo fricción inicial.
-* `[ ]` **9. Alerta de Precio Recomendado y Stockout (Wonder):** Notificación proactiva de mayor margen y alerta preventiva de stockout.
-* `[ ]` **10. Automatización CMS ante Stockout (Wonder):** Enrutamiento dinámico a proveedor secundario sin apagar campañas.
-* `[ ]` **11. Comparador de Proveedores, Precios y Ranking (Wonder):** Comparación in-app de costos, reputación y nivel de cumplimiento.
+| # | Oportunidad / Proyecto CPO | Fase | Entregable Concreto (Deliverable) | Fecha Objetivo |
+|---|---|---|---|---|
+| 1 | **Primera medición KPIs y metas** | **Wonder** | **Audit Report & Baseline Brief:** Medición factual en producción (46.2k DB) + metas CPO oficializadas. | 1-Ago (Completado) |
+| 2 | **Cronograma ejecución Q3** | **Arranque** | **Master Roadmap Q3 (JPD):** Secuenciación Delivery + Discovery con asignación Dev/UX. | 5-Ago |
+| 3 | **Visión de Producto Seller 360** | **Represado** | **Master Spec "Mapa de Valor Seller 360":** Matriz de oferta por madurez (Catálogo, Wallet, CMS, Roax, Chatea Pro, Leyendas). | 15-Ago |
+| 4 | **Programa 360 In-App (Retención)**| **Explore** | **Blueprint Conductual 360:** Mapeo de palancas comerciales (GMV) traducidas a triggers in-app. | 25-Ago |
+| 5 | **Mensajería Gratuita (WhatsApp/SMS)**| **Represado** | **Spec "Chatea Pro Freemium":** Reemplazo ChatCenter para masivos + automatizaciones básicas (con Brands). | 20-Ago |
+| 6 | **Módulo Marketing & Tools** | **Explore** | **Ficha de Integración Suite Marketing:** Integración Minea, Meta Ads, TikTok y landing builders en Home. | 30-Ago |
+| 7 | **Rapid Testing Kit** | **Explore** | **Kit de Testeo Exprés:** Landings 1-clic + pauta exprés para pruebas A/B de productos en < 24h. | 5-Sep |
+| 8 | **Primeras Ventas Exprés** | **Explore** | **Onboarding Scaffolding Spec:** Wizard pre-configurado de tienda + 1er producto sugerido para TTFO < 4d. | 10-Sep |
+| 9 | **Alerta Precio/Stockout** | **Wonder** | **Brief & Mock UI Sugeridor:** Notificación in-app de margen óptimo y aviso preventivo de agotamiento. | 15-Sep |
+| 10 | **Automatización CMS Stockout** | **Wonder** | **Spec Enrutamiento CMS:** Desvío automático con CMS a proveedor secundario sin apagar campañas. | 20-Sep |
+| 11 | **Comparador de Proveedores** | **Wonder** | **Benchmark & Mock Comparador:** Matriz in-app de costos, tiempos de despacho y reputación. | 25-Sep |
 
 ---
 
