@@ -452,13 +452,15 @@ export default function CelulaHomePage() {
             );
           })()}
 
-          {/* Metrics Grid — Meta vs. Realidad Actual con Títulos y Descripciones Claras */}
+          {/* Metrics Grid — Termómetros Visuales por Métrica a Escala */}
           {metrics && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: 16, marginBottom: 28 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))", gap: 18, marginBottom: 28 }}>
               {[
                 {
                   label: "Tasa de Activación Neta",
                   value: `${activeStats?.activationRateNet ?? 5.2}%`,
+                  targetVal: "8.0%",
+                  progressPct: ((activeStats?.activationRateNet ?? 5.2) / 8.0) * 100,
                   meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
                   sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
                   color: "#10B981", icon: "⚡"
@@ -466,6 +468,8 @@ export default function CelulaHomePage() {
                 {
                   label: "Tiempo de Activación Neta (TTV)",
                   value: `${ttvNetoMedian} días`,
+                  targetVal: "< 12.0d",
+                  progressPct: (12.0 / ttvNetoMedian) * 100,
                   meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
                   sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
                   color: "#F59E0B", icon: "⏱️"
@@ -473,6 +477,8 @@ export default function CelulaHomePage() {
                 {
                   label: "Tasa de Activación Bruta",
                   value: `${activationRate}%`,
+                  targetVal: "12.0%",
+                  progressPct: (activationRate / 12.0) * 100,
                   meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
                   sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
                   color: "#EC4899", icon: "📦"
@@ -480,6 +486,8 @@ export default function CelulaHomePage() {
                 {
                   label: "Retención a 30 Días",
                   value: `${survivalRate}%`,
+                  targetVal: "75.0%",
+                  progressPct: (survivalRate / 75.0) * 100,
                   meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
                   sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
                   color: "#8B5CF6", icon: "🌱"
@@ -487,6 +495,8 @@ export default function CelulaHomePage() {
                 {
                   label: "Base de Sellers Identificados",
                   value: totalSellers.toLocaleString(),
+                  targetVal: "46.2k DB",
+                  progressPct: (36056 / totalSellers) * 100,
                   meta: "36,056 Dropshippers Target + 8,744 Proveedores",
                   sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
                   color: "#3B82F6", icon: "👥"
@@ -494,53 +504,97 @@ export default function CelulaHomePage() {
                 {
                   label: "Usuarios Activos Diarios (DAU)",
                   value: "14,262",
+                  targetVal: "81.5k MAU",
+                  progressPct: (14262 / 81521) * 100,
                   meta: "MAU Mensual: 81,521 usuarios/mes",
                   sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
                   color: "#22C55E", icon: "🎯"
                 }
               ].map((m) => (
                 <div key={m.label} style={{
-                  background: "rgba(15, 23, 42, 0.85)",
-                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  background: "rgba(15, 23, 42, 0.88)",
+                  border: `1px solid ${m.color}30`,
                   borderRadius: 16,
                   padding: "20px 22px",
-                  boxShadow: "0 10px 30px rgba(0,0,0,0.35)",
+                  boxShadow: `0 10px 30px rgba(0,0,0,0.4), 0 0 15px ${m.color}15`,
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between"
                 }}>
                   <div>
+                    {/* Header */}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                         {m.label}
                       </span>
                       <span style={{ fontSize: 18 }}>{m.icon}</span>
                     </div>
 
-                    <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#ffffff", marginBottom: 10 }}>
+                    {/* Big Value */}
+                    <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#ffffff", marginBottom: 8 }}>
                       {m.value}
                     </div>
 
+                    {/* Meta Badge */}
                     <div style={{
-                      background: "rgba(255, 255, 255, 0.05)",
+                      background: "rgba(255, 255, 255, 0.04)",
                       borderLeft: `4px solid ${m.color}`,
-                      padding: "8px 12px",
+                      padding: "6px 12px",
                       borderRadius: "0 8px 8px 0",
-                      marginBottom: 14
+                      marginBottom: 12
                     }}>
                       <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
                         {m.meta}
                       </div>
                     </div>
+
+                    {/* Thermometer Visual Bar */}
+                    <div style={{ margin: "10px 0 14px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
+                        <span style={{ color: "rgba(255,255,255,0.5)", display: "flex", alignItems: "center", gap: 4 }}>
+                          <span>🌡️</span> Termómetro
+                        </span>
+                        <span style={{ color: m.color, fontWeight: 900 }}>
+                          {m.progressPct.toFixed(1)}% avance
+                        </span>
+                      </div>
+
+                      {/* Thermometer Tube */}
+                      <div style={{
+                        height: 10,
+                        background: "rgba(255, 255, 255, 0.08)",
+                        borderRadius: 999,
+                        padding: 1,
+                        border: "1px solid rgba(255, 255, 255, 0.12)",
+                        position: "relative",
+                        overflow: "hidden"
+                      }}>
+                        <div style={{
+                          height: "100%",
+                          width: `${Math.min(m.progressPct, 100)}%`,
+                          background: `linear-gradient(90deg, ${m.color}88 0%, ${m.color} 100%)`,
+                          borderRadius: 999,
+                          boxShadow: `0 0 10px ${m.color}80`
+                        }} />
+                      </div>
+
+                      {/* Scale Legends */}
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 4, fontWeight: 600 }}>
+                        <span>0</span>
+                        <span>Actual: <strong style={{ color: "#fff" }}>{m.value}</strong></span>
+                        <span>Meta: <strong style={{ color: m.color }}>{m.targetVal}</strong></span>
+                      </div>
+                    </div>
                   </div>
 
+                  {/* Explanation Footer */}
                   <div style={{
                     fontSize: 12,
                     color: "#CBD5E1",
                     fontWeight: 500,
                     lineHeight: 1.45,
                     borderTop: "1px dashed rgba(255, 255, 255, 0.1)",
-                    paddingTop: 12
+                    paddingTop: 10
                   }}>
                     {m.sub}
                   </div>
@@ -768,13 +822,15 @@ export default function CelulaHomePage() {
           </div>
         )}
 
-        {/* Live Metrics Grid — Meta vs. Realidad Actual con Títulos y Descripciones Claras */}
+        {/* Live Metrics Grid — Termómetros Visuales por Métrica a Escala */}
         {params.slug === "sellers" && metrics && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(290px, 1fr))", gap: 16, marginBottom: 36 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))", gap: 18, marginBottom: 36 }}>
             {[
               {
                 label: "Tasa de Activación Neta",
                 value: `${metrics.stats.activationRateNet ?? 5.2}%`,
+                targetVal: "8.0%",
+                progressPct: ((metrics.stats.activationRateNet ?? 5.2) / 8.0) * 100,
                 meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
                 sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
                 color: "#10B981", icon: "⚡"
@@ -782,6 +838,8 @@ export default function CelulaHomePage() {
               {
                 label: "Tiempo de Activación Neta (TTV)",
                 value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`,
+                targetVal: "< 12.0d",
+                progressPct: (12.0 / (metrics.stats.ttvNetoMedian ?? 16.0)) * 100,
                 meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
                 sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
                 color: "#D97706", icon: "⏱️"
@@ -789,6 +847,8 @@ export default function CelulaHomePage() {
               {
                 label: "Tasa de Activación Bruta",
                 value: `${metrics.stats.activationRate}%`,
+                targetVal: "12.0%",
+                progressPct: (metrics.stats.activationRate / 12.0) * 100,
                 meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
                 sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
                 color: "#DB2777", icon: "📦"
@@ -796,6 +856,8 @@ export default function CelulaHomePage() {
               {
                 label: "Retención a 30 Días",
                 value: `${metrics.stats.survivalRate ?? 69.38}%`,
+                targetVal: "75.0%",
+                progressPct: ((metrics.stats.survivalRate ?? 69.38) / 75.0) * 100,
                 meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
                 sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
                 color: "#7C3AED", icon: "🌱"
@@ -803,6 +865,8 @@ export default function CelulaHomePage() {
               {
                 label: "Base de Sellers Identificados",
                 value: metrics.stats.totalSellers.toLocaleString(),
+                targetVal: "46.2k DB",
+                progressPct: (36056 / metrics.stats.totalSellers) * 100,
                 meta: "36,056 Dropshippers Target + 8,744 Proveedores",
                 sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
                 color: "#2563EB", icon: "👥"
@@ -810,6 +874,8 @@ export default function CelulaHomePage() {
               {
                 label: "Usuarios Activos Diarios (DAU)",
                 value: "14,262",
+                targetVal: "81.5k MAU",
+                progressPct: (14262 / 81521) * 100,
                 meta: "MAU Mensual: 81,521 usuarios/mes",
                 sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
                 color: "#059669", icon: "🎯"
@@ -819,47 +885,89 @@ export default function CelulaHomePage() {
                 key={m.label}
                 style={{
                   background: "#ffffff",
-                  border: "1px solid #E2E8F0",
+                  border: `1px solid ${m.color}35`,
                   borderRadius: 16,
                   padding: "20px 22px",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                  boxShadow: `0 4px 14px rgba(0,0,0,0.06), 0 0 10px ${m.color}10`,
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between"
                 }}
               >
                 <div>
+                  {/* Header */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                    <span style={{ fontSize: 11, fontWeight: 800, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                    <span style={{ fontSize: 11, fontWeight: 800, color: "#475569", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                       {m.label}
                     </span>
                     <span style={{ fontSize: 18 }}>{m.icon}</span>
                   </div>
 
-                  <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#0F172A", marginBottom: 10 }}>
+                  {/* Big Value */}
+                  <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#0F172A", marginBottom: 8 }}>
                     {m.value}
                   </div>
 
+                  {/* Meta Badge */}
                   <div style={{
                     background: "#F8FAFC",
                     borderLeft: `4px solid ${m.color}`,
-                    padding: "8px 12px",
+                    padding: "6px 12px",
                     borderRadius: "0 8px 8px 0",
-                    marginBottom: 14
+                    marginBottom: 12
                   }}>
                     <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
                       {m.meta}
                     </div>
                   </div>
+
+                  {/* Thermometer Visual Bar */}
+                  <div style={{ margin: "10px 0 14px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
+                      <span style={{ color: "#64748B", display: "flex", alignItems: "center", gap: 4 }}>
+                        <span>🌡️</span> Termómetro
+                      </span>
+                      <span style={{ color: m.color, fontWeight: 900 }}>
+                        {m.progressPct.toFixed(1)}% avance
+                      </span>
+                    </div>
+
+                    {/* Thermometer Tube */}
+                    <div style={{
+                      height: 10,
+                      background: "#F1F5F9",
+                      borderRadius: 999,
+                      padding: 1,
+                      border: "1px solid #CBD5E1",
+                      position: "relative",
+                      overflow: "hidden"
+                    }}>
+                      <div style={{
+                        height: "100%",
+                        width: `${Math.min(m.progressPct, 100)}%`,
+                        background: `linear-gradient(90deg, ${m.color}AA 0%, ${m.color} 100%)`,
+                        borderRadius: 999,
+                        boxShadow: `0 0 8px ${m.color}60`
+                      }} />
+                    </div>
+
+                    {/* Scale Legends */}
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#64748B", marginTop: 4, fontWeight: 600 }}>
+                      <span>0</span>
+                      <span>Actual: <strong style={{ color: "#0F172A" }}>{m.value}</strong></span>
+                      <span>Meta: <strong style={{ color: m.color }}>{m.targetVal}</strong></span>
+                    </div>
+                  </div>
                 </div>
 
+                {/* Explanation Footer */}
                 <div style={{
                   fontSize: 12,
                   color: "#475569",
                   fontWeight: 500,
                   lineHeight: 1.45,
                   borderTop: "1px dashed #E2E8F0",
-                  paddingTop: 12
+                  paddingTop: 10
                 }}>
                   {m.sub}
                 </div>
