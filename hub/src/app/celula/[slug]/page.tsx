@@ -42,6 +42,9 @@ type MetricsStats = {
   gapToOkr: number;
   survivalRate?: number;
   ttvNetoMedian?: number;
+  activationRateNet?: number;
+  okrTargetCompany?: number;
+  percentageToCompanyOKR?: number;
   countries?: Record<string, any>;
 };
 type FunnelStep = { step: string; count: number; pct: number; color: string };
