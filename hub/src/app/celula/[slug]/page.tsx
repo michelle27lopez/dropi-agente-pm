@@ -452,31 +452,70 @@ export default function CelulaHomePage() {
             );
           })()}
 
-          {/* Metrics Grid */}
+          {/* Metrics Grid — Meta vs. Realidad Actual con Títulos y Descripciones Claras */}
           {metrics && (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, marginBottom: 28 }}>
               {[
-                { label: "Activación Neta (TTV)", value: `${activeStats?.activationRateNet ?? 5.2}%`, sub: "Meta Q3: 8.0% · Brecha: -2.8 pp (1ª ord. entregada)", color: "#10B981", icon: "⚡", sparkline: "M0,20 Q15,25 30,12 T60,28 T90,5 T100,8" },
-                { label: "TTV Neto (Mediana)", value: `${ttvNetoMedian} días`, sub: "Meta Q3: <12.0d · Exceso: +4.0 días", color: "#F59E0B", icon: "⏱️", sparkline: "M0,10 Q15,28 30,14 T60,22 T90,5 T100,12" },
-                { label: "Activación Bruta (TTFO)", value: `${activationRate}%`, sub: "Meta Q3: 12.0% · Brecha: -4.4 pp (1ª ord. creada)", color: "#EC4899", icon: "📦", sparkline: "M0,25 Q15,10 30,20 T60,5 T90,15 T100,2" },
-                { label: "Supervivencia (30d)", value: `${survivalRate}%`, sub: "Meta S2: 75.0% · Brecha: -5.62 pp (retención)", color: "#8B5CF6", icon: "🌱", sparkline: "M0,22 Q15,12 30,15 T60,5 T90,18 T100,4" },
-                { label: "Sellers DB Identificados", value: totalSellers.toLocaleString(), sub: "Base real de Supabase (36.056 Dropshippers)", color: "#6366F1", icon: "👥", sparkline: "M0,15 Q15,5 30,18 T60,8 T90,25 T100,3" },
-                { label: "Activos Diarios (DAU)", value: "14,262", sub: "MAU Global: 81,521 (~31% actividad en vivo)", color: "#22C55E", icon: "🎯", sparkline: "M0,5 Q15,22 30,10 T60,25 T90,12 T100,28" }
+                {
+                  label: "Tasa de Activación Neta",
+                  value: `${activeStats?.activationRateNet ?? 5.2}%`,
+                  meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
+                  sub: "Sellers con ≥1 orden entregada exitosamente",
+                  color: "#10B981", icon: "⚡", sparkline: "M0,20 Q15,25 30,12 T60,28 T90,5 T100,8"
+                },
+                {
+                  label: "Tiempo de Activación Neta (TTV)",
+                  value: `${ttvNetoMedian} días`,
+                  meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
+                  sub: "Mediana de días desde registro a 1ª orden entregada",
+                  color: "#F59E0B", icon: "⏱️", sparkline: "M0,10 Q15,28 30,14 T60,22 T90,5 T100,12"
+                },
+                {
+                  label: "Tasa de Activación Bruta",
+                  value: `${activationRate}%`,
+                  meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
+                  sub: "Sellers con ≥1 orden creada en la app (TTFO)",
+                  color: "#EC4899", icon: "📦", sparkline: "M0,25 Q15,10 30,20 T60,5 T90,15 T100,2"
+                },
+                {
+                  label: "Retención a 30 Días",
+                  value: `${survivalRate}%`,
+                  meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
+                  sub: "Sellers vendiendo pasados 30 días (Supervivencia)",
+                  color: "#8B5CF6", icon: "🌱", sparkline: "M0,22 Q15,12 30,15 T60,5 T90,18 T100,4"
+                },
+                {
+                  label: "Base de Sellers Identificados",
+                  value: totalSellers.toLocaleString(),
+                  meta: "36,056 Dropshippers Target + 8,744 Proveedores",
+                  sub: "Registros reales auditados en Supabase DB",
+                  color: "#6366F1", icon: "👥", sparkline: "M0,15 Q15,5 30,18 T60,8 T90,25 T100,3"
+                },
+                {
+                  label: "Usuarios Activos Diarios (DAU)",
+                  value: "14,262",
+                  meta: "MAU Global: 81,521 usuarios/mes",
+                  sub: "~31% de actividad diaria constante en vivo",
+                  color: "#22C55E", icon: "🎯", sparkline: "M0,5 Q15,22 30,10 T60,25 T90,12 T100,28"
+                }
               ].map((m) => (
                 <div key={m.label} className="glass-card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                   <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.5)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                         {m.label}
                       </span>
                       <span style={{ fontSize: 16 }}>{m.icon}</span>
                     </div>
-                    <div style={{ fontSize: 26, fontWeight: 900, letterSpacing: "-0.03em", color: "#fff", marginBottom: 2 }}>
+                    <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: "-0.03em", color: "#fff", marginBottom: 2 }}>
                       {m.value}
+                    </div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: m.color, marginBottom: 6 }}>
+                      {m.meta}
                     </div>
                   </div>
                   <div>
-                    <div style={{ fontSize: 11, color: m.color, fontWeight: 700, marginBottom: 8 }}>{m.sub}</div>
+                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)", marginBottom: 8, lineHeight: 1.4 }}>{m.sub}</div>
                     
                     {/* Simulated Sparkline */}
                     <div style={{ height: 24, position: "relative", marginBottom: 4 }}>
@@ -716,16 +755,52 @@ export default function CelulaHomePage() {
           </div>
         )}
 
-        {/* Live Metrics Grid — Meta vs. Realidad Actual */}
+        {/* Live Metrics Grid — Meta vs. Realidad Actual con Títulos y Descripciones Claras */}
         {params.slug === "sellers" && metrics && (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16, marginBottom: 36 }}>
             {[
-              { label: "Activación Neta (TTV)", value: `${metrics.stats.activationRateNet ?? 5.2}%`, meta: "Meta Q3: 8.0%", sub: "Brecha: -2.8 pp (1ª orden entregada)", color: "#10B981", icon: "⚡" },
-              { label: "TTV Neto (Mediana)", value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`, meta: "Meta Q3: < 12.0d", sub: "Exceso latencia: +4.0 días", color: "#F59E0B", icon: "⏱️" },
-              { label: "Activación Bruta (TTFO)", value: `${metrics.stats.activationRate}%`, meta: "Meta Q3: 12.0%", sub: "Brecha: -4.4 pp (1ª orden creada)", color: "#EC4899", icon: "📦" },
-              { label: "Retención 30d (Supervivencia)", value: `${metrics.stats.survivalRate ?? 69.38}%`, meta: "Meta S2: 75.0%", sub: "Brecha: -5.62 pp (es_activo_30d)", color: "#8B5CF6", icon: "🌱" },
-              { label: "Población DB Identificada", value: metrics.stats.totalSellers.toLocaleString(), meta: "36.056 Dropshippers puros", sub: "Validados en Supabase (46.2k total)", color: "#6366F1", icon: "👥" },
-              { label: "Activos Diarios (DAU)", value: "14,262", meta: "MAU Global: 81,521", sub: "~31% de actividad diaria en vivo", color: "#22C55E", icon: "🎯" }
+              {
+                label: "Tasa de Activación Neta",
+                value: `${metrics.stats.activationRateNet ?? 5.2}%`,
+                meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
+                sub: "Sellers con ≥1 orden entregada exitosamente",
+                color: "#10B981", icon: "⚡"
+              },
+              {
+                label: "Tiempo de Activación Neta (TTV)",
+                value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`,
+                meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
+                sub: "Mediana de días desde registro a 1ª orden entregada",
+                color: "#F59E0B", icon: "⏱️"
+              },
+              {
+                label: "Tasa de Activación Bruta",
+                value: `${metrics.stats.activationRate}%`,
+                meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
+                sub: "Sellers con ≥1 orden creada en la app (TTFO)",
+                color: "#EC4899", icon: "📦"
+              },
+              {
+                label: "Retención a 30 Días",
+                value: `${metrics.stats.survivalRate ?? 69.38}%`,
+                meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
+                sub: "Sellers vendiendo pasados 30 días (Supervivencia)",
+                color: "#8B5CF6", icon: "🌱"
+              },
+              {
+                label: "Base de Sellers Identificados",
+                value: metrics.stats.totalSellers.toLocaleString(),
+                meta: "36,056 Dropshippers Target + 8,744 Proveedores",
+                sub: "Registros reales auditados en Supabase DB",
+                color: "#6366F1", icon: "👥"
+              },
+              {
+                label: "Usuarios Activos Diarios (DAU)",
+                value: "14,262",
+                meta: "MAU Global: 81,521 usuarios/mes",
+                sub: "~31% de actividad diaria constante en vivo",
+                color: "#22C55E", icon: "🎯"
+              }
             ].map((m) => (
               <div
                 key={m.label}
@@ -737,8 +812,8 @@ export default function CelulaHomePage() {
                 }}
               >
                 <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                       {m.label}
                     </span>
                     <span style={{ fontSize: 16 }}>{m.icon}</span>
@@ -746,12 +821,12 @@ export default function CelulaHomePage() {
                   <div style={{ fontSize: 24, fontWeight: 900, letterSpacing: "-0.03em", color: "var(--fg)", marginBottom: 4 }}>
                     {m.value}
                   </div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: m.color, marginBottom: 8 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: m.color, marginBottom: 6 }}>
                     {m.meta}
                   </div>
                 </div>
                 <div>
-                  <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 10 }}>{m.sub}</div>
+                  <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 10, lineHeight: 1.4 }}>{m.sub}</div>
                   <div style={{ height: 4, background: "#F3F4F6", borderRadius: 999, overflow: "hidden" }}>
                     <div style={{ height: "100%", width: "100%", background: m.color, borderRadius: 999 }} />
                   </div>
