@@ -4,6 +4,9 @@
 
 **Última actualización:** 2026-07-30 · PM: Santiago Herrera · Designer: Alejandra Melo · **Auditoría de Data 360:** Se completó la validación en producción de los 35 campos de `userpilot_suppliers` (46,208 registros reales) y se actualizó el Mapa 360° en `materializacion_iniciativas.md`.
 
+> [!IMPORTANT]
+> 🔥 **Doctrina Core de la Célula:** Obsesión total con los OKRs y KPIs oficiales. Toda iniciativa, experimento, mock, spec o hipótesis de Discovery existe **únicamente** si demuestra una palanca directa para mover el **KR 1.1 de la compañía (7.8M ord/mes)**, la **Activación Neta (5.2% $\to$ 8.0%)**, la velocidad **TTV Neto (16d $\to$ <12d)** o la **Retención 30d (69.4% $\to$ 75.0%)**. No hay lugar para tareas sin impacto medible.
+
 ---
 
 ## Foco Estratégico & Alignment (S2 2026)
