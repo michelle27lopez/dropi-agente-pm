@@ -12,9 +12,10 @@
 
 | Métrica / Outcome | Realidad Actual | Meta S2 (Q3-Q4) | Brecha / Status | Definición & Fuente |
 | :--- | :---: | :---: | :---: | :--- |
-| **NSM (Métrica Estrella)** | **3.351.359 ord/mes** | **3.571.042 ord/mes** | 🟡 **-219.683 ord** (97.5%) | Órdenes mensuales movilizadas (Reporte CPO Jul 29) |
+| **OKR 1 / KR 1.1 (Compañía)** | **3.351.359 ord/mes** | **7.800.000 ord/mes** | 🔴 **-4.448.641 ord** (42.9% cumpl.) | OKR 1.1 Holding (Confluence Space PD) |
+| **NSM (Métrica Estrella Célula)**| **3.351.359 ord/mes** | **3.571.042 ord/mes** | 🟡 **-219.683 ord** (97.5%) | Órdenes mensuales movilizadas (Reporte CPO Jul 29) |
 | **Tasa de Activación Neta** | **5.2%** | **8.0%** | 🔴 **-2.8 pp** (Falta +53.8%) | Sellers registrados con $\ge 1$ orden entregada |
-| **Tasa de Activación Bruta** | **7.6%** | **12.0%** | 🔴 **-4.4 pp** | Sellers registrados con $\ge 1$ orden creada (TTFO) |
+| **Tasa de Activación Bruta** | **7.6%** | **12.0%** | 🔴 **-4.4 pp** | Sellers registrados with $\ge 1$ orden creada (TTFO) |
 | **Mediana de TTV Neto** | **16.0 días** | **< 12.0 días** | 🔴 **+4.0 días** (+25% latencia) | Días de registro a 1ª orden entregada |
 | **Mediana de TTV Bruto** | **7.4 días** | **< 4.0 días** | 🔴 **+3.4 días** | Días de registro a 1ª orden creada |
 | **Supervivencia 30d (Retención)** | **69.38%** (69.7%) | **75.0%** | 🟡 **-5.62 pp** (Brecha 7.5%) | % de sellers con actividad pasados 30 días (`es_activo_30d`) |
