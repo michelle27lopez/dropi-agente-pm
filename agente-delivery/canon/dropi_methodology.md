@@ -298,6 +298,31 @@ Ningún hallazgo, dolor u oportunidad se registra sin evidencia (cita o dato) qu
 
 ---
 
+## Documento de Discovery Conductual (Intervention Brief)
+
+Formato oficial para intervenciones basadas en diseño conductual, coordinado por el Agente de Discovery.
+
+### Estructura oficial (secciones EN ESTE ORDEN)
+
+**1. Problema conductual** — definición del comportamiento actual de los usuarios, comportamiento objetivo esperado y la brecha (gap) a resolver.
+
+**2. Diagnóstico conductual** — causa raíz analizada bajo B=MAP (Motivación/Ability/Prompt), nivel cognitivo (Sistema 1/Sistema 2), marcadores somáticos de relevancia, sesgos conductuales presentes y evidencia de soporte.
+
+**3. Intervención propuesta** — descripción detallada de la propuesta, cambios funcionales en el flujo y análisis del trilema de fricción (fricciones a eliminar, a preservar y a invertir).
+
+**4. El Loop Conductual** — diseño específico del disparador (Trigger), la acción (Action), la recompensa variable (Variable Reward) y la inversión del usuario (Investment).
+
+**5. Guardarraíles de Experiencia** — alineación con la teoría de la autodeterminación (SDT: Autonomía, Mastery/Competencia, y Relatedness/Relación).
+
+**6. Validación de Supuestos** — el supuesto de mayor riesgo identificado, el test conductual de validación elegido (Wizard of Oz, Fake Door, Concierge, etc.) y el costo estimado de estar equivocados (downside).
+
+**7. Métricas de Éxito** — métricas de actividad (adopción/uso), el outcome conductual principal, proxy de comportamiento y baselines cuantitativos frente a metas.
+
+### Regla dura
+Este documento es obligatorio para el 100% de los cambios conductuales o funcionales en la plataforma, independientemente del tamaño de la iniciativa, garantizando el rigor científico y de producto antes de pasar a desarrollo. Se debe anexar su enlace oficial bajo el apartado "Documentación / Research" de la Épica Jira correspondiente.
+
+---
+
 ## Flujo de Usuario (User Flow)
 
 ### Estructura oficial (secciones EN ESTE ORDEN)
