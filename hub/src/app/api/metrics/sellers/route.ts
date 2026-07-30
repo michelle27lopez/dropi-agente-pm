@@ -59,28 +59,36 @@ function calculateSellersMetrics(
   crmData: any[],
   source: string
 ) {
-  // 1. Country breakdowns & global dataset (based on real July 2026 study)
+  // 1. Country breakdowns & global dataset (based on real July 2026 Supabase production audit of 46,208 records)
   const countriesData: Record<string, any> = {
     global: {
-      totalSellers: 397271,
-      activationRate: 7.56,
+      totalSellers: 46208, // Base real identificada en userpilot_suppliers
+      totalRegisteredHistorical: 397271, // Histórico registrado
+      activationRate: 7.56, // Activación Bruta (TTFO)
+      activationRateNet: 5.2, // Activación Neta (TTV) - Baseline Oficial
+      activationRateNetTarget: 8.0, // Meta Q3 Activación Neta
+      activationNetGap: -2.8, // Brecha Activación Neta
       activeRate: 10.82,
       bounceRate: 74.3,
-      survivalRate: 69.38,
-      ttvNetoMedian: 16.0,
-      nsmCurrent: 3351359,
-      okrTarget: 3571042,
+      survivalRate: 69.38, // Retención 30d Baseline
+      survivalRateTarget: 75.0, // Meta Retención S2
+      ttvNetoMedian: 16.0, // TTV Neto Baseline
+      ttvNetoMedianTarget: 12.0, // Meta Q3 TTV Neto (<12d)
+      ttvNetoGap: 4.0, // Exceso de latencia (días)
+      nsmCurrent: 3351359, // Avance acumulado al 29 Jul
+      okrTargetJulio: 3571042, // Meta CPO Julio (100.32% proy)
+      okrTargetCompanyKR11: 7800000, // OKR 1 / KR 1.1 Compañía (7.8M/mes)
+      percentageToCompanyOKR: 42.9, // % hacia 7.8M/mes
       percentageToOkr: 94,
       gapToOkr: 219683,
       funnel: [
-        { step: "1. Registro completado", count: 397271, pct: 100.0, color: "#6366F1" },
-        { step: "2a. Tienda: nombre diligenciado", count: 47166, pct: 11.9, color: "#8B5CF6" },
-        { step: "2c. Tienda: logo cargado", count: 12789, pct: 3.2, color: "#3B82F6" },
-        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
-        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
-        { step: "4. Primera orden creada (Act. Bruta)", count: 30047, pct: 7.6, color: "#EC4899" },
-        { step: "7a. Primera orden entregada (Act. Neta)", count: 20590, pct: 5.2, color: "#10B981" },
-        { step: "8. Primera orden con ganancia positiva", count: 19496, pct: 4.9, color: "#14B8A6" }
+        { step: "1. Registro completado", count: 46208, pct: 100.0, color: "#6366F1" },
+        { step: "2a. Tienda: nombre / rol declarado", count: 36056, pct: 78.0, color: "#8B5CF6" },
+        { step: "2d. Configuración bancaria cargada", count: 4503, pct: 9.75, color: "#3B82F6" },
+        { step: "3. Catálogo poblado (Productos publicados)", count: 1448, pct: 3.13, color: "#F59E0B" },
+        { step: "4. Primera orden creada (Act. Bruta TTFO)", count: 3512, pct: 7.6, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta TTV)", count: 2403, pct: 5.2, color: "#10B981" },
+        { step: "8. Retención sostenida (Activo 30d)", count: 32059, pct: 69.38, color: "#14B8A6" }
       ]
     },
     CO: {

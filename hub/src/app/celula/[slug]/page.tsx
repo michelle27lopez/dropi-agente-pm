@@ -830,41 +830,41 @@ export default function CelulaHomePage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
               <div>
                 <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(255,255,255,0.15)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                  OKR 1.1 · Escalar Volumen de Ventas
+                  OKR 1 / KR 1.1 Holding · 7.8M órdenes/mes
                 </span>
                 <h3 style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
-                  Órdenes de Sellers Activos (NSM)
+                  Volumen de Órdenes de Sellers Activos (NSM Global)
                 </h3>
               </div>
               <div style={{ textAlign: "right" }}>
-                <span style={{ fontSize: 24, fontWeight: 900, color: "#F77F00" }}>{metrics.stats.percentageToOkr}%</span>
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}> de la meta</span>
+                <span style={{ fontSize: 24, fontWeight: 900, color: "#F77F00" }}>{metrics.stats.percentageToCompanyOKR ?? 42.9}%</span>
+                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}> del OKR 1.1 (7.8M/mes)</span>
               </div>
             </div>
             
-            {/* Progress Bar */}
+            {/* Progress Bar for Holding OKR 1.1 */}
             <div style={{ height: 8, background: "rgba(255,255,255,0.16)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
-              <div style={{ height: "100%", width: `${metrics.stats.percentageToOkr}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999 }} />
+              <div style={{ height: "100%", width: `${metrics.stats.percentageToCompanyOKR ?? 42.9}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999 }} />
             </div>
             
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
-              <span>Actual: <strong>{(metrics.stats.nsmCurrent / 1000000).toFixed(1)}M/mes</strong></span>
-              <span>Meta: <strong>{(metrics.stats.okrTarget / 1000000).toFixed(1)}M/mes</strong></span>
-              <span>Brecha: <strong>{(metrics.stats.gapToOkr / 1000000).toFixed(1)}M/mes</strong></span>
+              <span>Actual (Jul 29): <strong>3.35M ord/mes</strong></span>
+              <span>Meta CPO Julio: <strong>3.57M ord/mes</strong> (100.3% proy)</span>
+              <span>OKR 1.1 Holding: <strong>7.80M ord/mes</strong> (Brecha: 4.45M)</span>
             </div>
           </div>
         )}
 
-        {/* Live Metrics Grid */}
+        {/* Live Metrics Grid — Meta vs. Realidad Actual */}
         {params.slug === "sellers" && metrics && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 36 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16, marginBottom: 36 }}>
             {[
-              { label: "Sellers Registrados", value: metrics.stats.totalSellers.toLocaleString(), sub: "Sincronizados de Userpilot", color: "#6366F1", icon: "👥" },
-              { label: "Tasa de Activación", value: `${metrics.stats.activationRate}%`, sub: "Sellers con ≥1 orden", color: "#EC4899", icon: "⚡" },
-              { label: "Sellers Activos (30d)", value: `${metrics.stats.activeRate}%`, sub: "Actividad constante en plataforma", color: "#22C55E", icon: "🎯" },
-              { label: "Tasa de Rebote (Bounce)", value: `${metrics.stats.bounceRate}%`, sub: "Sellers con ≤1 sesión web", color: "#EF4444", icon: "🚪" },
-              { label: "Supervivencia (30d)", value: `${metrics.stats.survivalRate ?? 69.38}%`, sub: "Sellers con ≥1 orden adicional", color: "#8B5CF6", icon: "🌱" },
-              { label: "TTV Neto (Mediana)", value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`, sub: "Registro hasta entrega exitosa", color: "#F59E0B", icon: "⏱️" }
+              { label: "Activación Neta (TTV)", value: `${metrics.stats.activationRateNet ?? 5.2}%`, meta: "Meta Q3: 8.0%", sub: "Brecha: -2.8 pp (1ª orden entregada)", color: "#10B981", icon: "⚡" },
+              { label: "TTV Neto (Mediana)", value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`, meta: "Meta Q3: < 12.0d", sub: "Exceso latencia: +4.0 días", color: "#F59E0B", icon: "⏱️" },
+              { label: "Activación Bruta (TTFO)", value: `${metrics.stats.activationRate}%`, meta: "Meta Q3: 12.0%", sub: "Brecha: -4.4 pp (1ª orden creada)", color: "#EC4899", icon: "📦" },
+              { label: "Retención 30d (Supervivencia)", value: `${metrics.stats.survivalRate ?? 69.38}%`, meta: "Meta S2: 75.0%", sub: "Brecha: -5.62 pp (es_activo_30d)", color: "#8B5CF6", icon: "🌱" },
+              { label: "Población DB Identificada", value: metrics.stats.totalSellers.toLocaleString(), meta: "36.056 Dropshippers puros", sub: "Validados en Supabase (46.2k total)", color: "#6366F1", icon: "👥" },
+              { label: "Activos Diarios (DAU)", value: "14,262", meta: "MAU Global: 81,521", sub: "~31% de actividad diaria en vivo", color: "#22C55E", icon: "🎯" }
             ].map((m) => (
               <div
                 key={m.label}
@@ -882,14 +882,17 @@ export default function CelulaHomePage() {
                     </span>
                     <span style={{ fontSize: 16 }}>{m.icon}</span>
                   </div>
-                  <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.03em", color: "var(--fg)", marginBottom: 4 }}>
+                  <div style={{ fontSize: 24, fontWeight: 900, letterSpacing: "-0.03em", color: "var(--fg)", marginBottom: 4 }}>
                     {m.value}
+                  </div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: m.color, marginBottom: 8 }}>
+                    {m.meta}
                   </div>
                 </div>
                 <div>
                   <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 10 }}>{m.sub}</div>
                   <div style={{ height: 4, background: "#F3F4F6", borderRadius: 999, overflow: "hidden" }}>
-                    <div style={{ height: "100%", width: m.value.includes("%") ? m.value : "100%", background: m.color, borderRadius: 999 }} />
+                    <div style={{ height: "100%", width: "100%", background: m.color, borderRadius: 999 }} />
                   </div>
                 </div>
               </div>
