@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { resolve } from "path";
 
 // CSP en modo Report-Only: por ahora solo registra violaciones en la consola
 // del navegador, no bloquea nada. Revisar esos reportes con tráfico real
@@ -17,13 +16,7 @@ const CSP_REPORT_ONLY = [
   "frame-ancestors 'self'",
 ].join("; ");
 
-const workspaceRoot = resolve(import.meta.dirname, "..");
-
 const nextConfig: NextConfig = {
-  outputFileTracingRoot: workspaceRoot,
-  turbopack: {
-    root: workspaceRoot,
-  },
   async headers() {
     return [
       {
