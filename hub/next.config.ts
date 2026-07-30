@@ -17,9 +17,12 @@ const CSP_REPORT_ONLY = [
   "frame-ancestors 'self'",
 ].join("; ");
 
+const workspaceRoot = resolve(import.meta.dirname, "..");
+
 const nextConfig: NextConfig = {
+  outputFileTracingRoot: workspaceRoot,
   turbopack: {
-    root: resolve(import.meta.dirname),
+    root: workspaceRoot,
   },
   async headers() {
     return [
