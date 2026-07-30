@@ -41,16 +41,16 @@ Toda la intervención se diseña para reactivar el ciclo de ventas del dropshipp
 * **Ability (A) — Fricción de decisión:** Ante la pregunta "¿qué vendo ahora o dónde pauto?", el Wrapped expone de forma directa su producto estrella y su "ruta campeona" (menor índice de novedades), reduciendo la fricción cognitiva de la siguiente decisión logística.
 * **Prompt (P) — Gatillo ausente:** No existen estímulos in-app contextuales que disparen el retorno en periodos de inactividad. El Wrapped actúa como un trigger de urgencia e identidad.
 
-### Dinámicas conductuales aplicadas
+### Dinámicas conductuales aplicadas (Unificadas con el Programa Leyendas Dropi)
 
 ```
-   TRIGGER (Wrapped) → ACCIÓN (Slide show) → RECOMPENSA (Percentil/Arquetipo) → INVERSIÓN (Compartir/Meta)
+   TRIGGER (Wrapped) → ACCIÓN (Slide show) → RECOMPENSA (Nivel Leyenda/Arquetipo) → INVERSIÓN (Compartir/Ascenso)
 ```
 
 1. **Loss Aversion (Racha - Slide 6):** Enmarca la inactividad como una pérdida inminente de su consistencia lograda ("18 semanas seguidas, no rompas tu racha esta semana").
-2. **Goal-Gradient Effect (Slide 9):** La cercanía a la meta de ascenso de categoría (meta de 1.000 órdenes, faltan 180) acelera el empuje final del seller gracias a la visibilidad del beneficio asociado (comisiones preferentes).
-3. **Comparación Social Positiva (Slide 7):** Posicionamiento en el percentil superior (Top 7%) para construir identidad de competencia y Mastery ( relatedness en SDT), excluyendo dinámicas de humillación o leaderboards negativos (anti-roadmap).
-4. **Identidad Compartible (Slide 8):** El arquetipo lúdico ("La Escaladora Nocturna") actúa como un elemento socialmente compartible que promueve la adquisición orgánica de nuevos dropshippers.
+2. **Goal-Gradient Effect (Slide 9 - Unificado con Leyendas):** La cercanía a la meta de ascenso de nivel en Leyendas (ej. pasar de Explorador a Master en el mes en curso; faltan 180 de 1,000 órdenes) acelera el empuje final del seller al visibilizar los beneficios del siguiente nivel (soporte prioritario, Dropicard Virtual y eventos VIP).
+3. **Comparación Social Positiva (Slide 7):** Posicionamiento en el percentil superior (Top 7% de la categoría Leyenda actual) para construir identidad de competencia y Maestría, excluyendo dinámicas de tablas públicas negativas.
+4. **Identidad Compartible (Slide 8):** El arquetipo lúdico ("La Escaladora Nocturna" en el nivel Explorador) actúa como un elemento socialmente compartible que promueve la adquisición orgánica de nuevos dropshippers.
 
 ---
 

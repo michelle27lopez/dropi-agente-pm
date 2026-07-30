@@ -15,17 +15,26 @@
 - `[ ]` **PROD-1353:** Ejecutar sesión de alineación Journey de activación multipaís (Semana 4 de julio).
 - `[ ]` **DROP-17355:** Validar avance de WooCommerce en el weekly de desarrollo de los martes (entrega fijada para el 4-ago).
 - `[ ]` **PROD-MUESTRA-SIMP:** UI de "Solicitar Muestra" en 1-Clic sin drawer ni modal nuevo (autofill, transportadora opcional) y rediseño de jerarquía de botones de producto (Checkpoint: Kevin). Lidera Alejandra.
-- `[ ]` **PROD-WRAPPED (UX/UI):** Diseñar la conceptualización visual de la retrospectiva Wrapped en Discovery. Lidera Alejandra.
-- `[ ]` **PROD-SEC-BEST (Guerrilla):** Pruebas de guerrilla con 5 comercios para testear disposición a sobrecosto de flete vs cancelación con el mock. Lidera Alejandra.
+- `[ ]` **PROD-SAC-RESEARCH (Discovery):** Analizar y clasificar los 3.664 tickets de SAC (`ml_ia.patrones`) en un documento de Discovery para definir puntos de fricción prioritarios en Wallet y Catálogo. Lidera Santiago.
+- `[ ]` **PROD-WRAPPED (UX/UI):** Diseñar la retrospectiva Wrapped unificada por completo con los 6 niveles y umbrales de **Leyendas Dropi**. Lidera Alejandra.
+- `[ ]` **PROD-SEC-BEST (Guerrilla):** Pruebas de guerrilla con 5 comercios para testear disposición a sobrecosto de flete vs cancelación con el mock, alineado con lógica de órdenes automatizadas. Lidera Alejandra.
 - `[ ]` **Demo Dropify (Mañana 10:00 AM):** Preparar y presentar el flujo completo (Shopify/Woo/Tienda Nube) a la célula en 20 minutos para feedback. Lidera Santiago.
-- `[ ]` **Page Pilot (Ajustes):** Configurar ángulo de ventas obligatorio y alineación de selector de fecha. Lidera Alejandra.
-- `[ ]` **Dropify 2.0 (Shopify QA):** Realizar el QA respectivo sobre Shopify (Dropify 2.0).
+- `[ ]` **Page Pilot (Ajustes):** Configurar ángulo de ventas obligatorio y selector de fecha. Evaluar integración con Fluxxi e investigar complejidad de redirección (CEO gate) vs herramientas de Marketing. Lidera Alejandra.
+- `[ ]` **Dropify 2.0 (Shopify QA):** Realizar el QA respectivo sobre Shopify, incluyendo sincronización de productos ya creados y optimización de descripción con Growth.
 - `[ ]` **Dropify (Tienda Nube / Diego):** Consultar aclaración a Diego Pérez sobre pre-handoff (submenú y carga de imágenes).
+- `[ ]` **Rebranding Dropify (Rebranding):** Realizar benchmark de nombres comerciales para reemplazar la marca "Dropify".
 
 ---
 
 ## 🚨 Pendientes Prioritarios (Por iniciar)
 
+- `[ ]` **PROD-POOLMAX (Feasibility):** Esperar descripción del founder de PoolMax y realizar el estudio de viabilidad de la PoC con Shopi (Shopify) solicitado por el CEO.
+- `[ ]` **PROD-METRICS-DISCREP:** Investigar e identificar por qué las métricas de WooCommerce y Tienda Nube no coinciden con las del tablero de Miguel.
+- `[ ]` **PROD-ALERTA-PULSO:** Diseñar la integración de "Órdenes en Alerta" con el dashboard de Pulso y definir el condicionador sugerido por María.
+- `[ ]` **PROD-HELP-MOD:** Alinear las guías de ayuda contextual por módulo con el proyecto de Biblioteca AI (SAC) para evitar traslapes.
+- `[ ]` **PROD-SHERLOCK-SAC:** Conectar el buzón de co-creación y feedback de los sellers (PROD-FEEDBACK) con Sherlock y la asignación inteligente del triaje liderado por Laura Contreras en WhatsApp.
+- `[ ]` **PROD-CMS-ERP (Discovery):** Realizar el benchmark de Astroselling (stock multiplataforma) e investigar las oportunidades de Alegra, Siigo, Metricool y Apify (scraping).
+- `[ ]` **PROD-FEEDBACK-EXPERIENCE:** Integrar e implementar el botón de feedback platform-wide alineado con el diseño preexistente de Experience (votos ocultos).
 - `[ ]` **PROD-HELP:** Alinear con José Pineda los flujos del widget de soporte (widget flotante) y las APIs del buscador para el Proyecto Help Center (SAC).
 - `[ ]` **PROD-1698:** Finalizar Benchmark de Novedades (CJ, Spocket, Zendrop, Shopify, Meli) para el Módulo Novedades.
 - `[ ]` **PROD-1721:** Agendar y ejecutar 5–8 entrevistas cortas con dropshippers que tengan novedades logísticas abiertas.
@@ -34,7 +43,7 @@
 - `[x]` **PROD-1519:** Finalizar especificaciones del plugin de WooCommerce (Alejandra Melo) - Completado (desarrollo inició el 2-jul).
 - `[ ]` **PROD-1478:** [PRODUCTO][EXPERIMENTACIÓN] Experimento de activación: Activación neta (TTV) (Agosto). Ver [Intervention Brief](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/intervention_brief_ttv.md).
 - `[ ]` **PROD-1814:** Workshop lanzamiento Page Pilot bajo metodología TARS (Catherin Salazar).
-- `[ ]` **PROD-1546:** Definir el alcance, hipótesis y diseño del experimento de Huella Digital 3.0 con Alejandra Melo. Ver [Opportunity/Intervention Brief](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/opportunity_brief_huella_3.md).
+- `[ ]` **PROD-1546:** Define el alcance, hipótesis y diseño del experimento de Huella Digital 3.0 con Alejandra Melo. Ver [Opportunity/Intervention Brief](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/opportunity_brief_huella_3.md).
 - `[ ]` **PROD-1729:** Discovery de Mejoras en Gestión de Órdenes del Seller (Epic) / **PROD-1707:** Carga masiva de órdenes compuestas.
 - `[ ]` **PROD-1706:** Torre Logística: trazabilidad y evidencias de entrega (Asociado a Retención/Capa 1.5 - PROD-1665).
 - `[ ]` **PROD-1357:** Validar causa raíz (B=MAP) del gap de activación de sellers.
