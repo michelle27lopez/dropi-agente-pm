@@ -4,7 +4,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useSearchParams } from "next/navigation";
 import { REGISTRY, SEMANAS, CELULA_LABELS, CURRENT } from "./data/index";
-import type { MetricGroup, Oportunidad, Dolor, ProximoPaso, HeroChip, Insight, Documento } from "./data/types";
+import type { MetricGroup, Oportunidad, Dolor, ProximoPaso, HeroChip, Insight, Documento, KpiCard, KpiOkr } from "./data/types";
 
 // ─── Componente principal ──────────────────────────────────────────────────────
 export default function WeeklyPage() {
@@ -176,6 +176,20 @@ function WeeklyPageContent() {
           </div>
         </div>
 
+        {/* ── KPI OKRs — barras de progreso de metas ── */}
+        {data.kpiOkrs && data.kpiOkrs.length > 0 && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 4 }}>
+            {data.kpiOkrs.map((okr: KpiOkr) => <KpiOkrCard key={okr.etiqueta} okr={okr} />)}
+          </div>
+        )}
+
+        {/* ── KPI Grid — métricas clave de la semana ── */}
+        {data.kpis && data.kpis.length > 0 && (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 14, marginBottom: 28 }}>
+            {data.kpis.map((k: KpiCard) => <KpiCardComp key={k.label} kpi={k} />)}
+          </div>
+        )}
+
         {/* ── Sección 1: Insights de la semana ── */}
         {data.insights && data.insights.length > 0 && (
           <Section title="1. Insights de la semana" badge="Hallazgos"
@@ -247,6 +261,74 @@ function WeeklyPageContent() {
         </p>
       </div>
     </main>
+  );
+}
+
+// ─── KpiOkrCard ───────────────────────────────────────────────────────────────
+function KpiOkrCard({ okr }: { okr: KpiOkr }) {
+  const clamp = Math.min(100, Math.max(0, okr.pct));
+  return (
+    <div style={{
+      background: "linear-gradient(135deg, #111827 0%, #1f2937 55%, #c2410c 100%)",
+      borderRadius: 16, padding: "24px 28px", marginBottom: 14, color: "#fff",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 10, flexWrap: "wrap", gap: 8 }}>
+        <div>
+          <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(255,255,255,0.14)", padding: "3px 9px", borderRadius: 999, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+            {okr.etiqueta}
+          </span>
+          <h3 style={{ fontSize: 17, fontWeight: 800, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
+            {okr.titulo}
+          </h3>
+        </div>
+        <div style={{ textAlign: "right" }}>
+          <span style={{ fontSize: 26, fontWeight: 900, color: "#F77F00" }}>{clamp}%</span>
+          <span style={{ fontSize: 12, color: "rgba(255,255,255,0.55)" }}> de la meta</span>
+        </div>
+      </div>
+      <div style={{ height: 8, background: "rgba(255,255,255,0.14)", borderRadius: 999, overflow: "hidden", marginBottom: 12 }}>
+        <div style={{ height: "100%", width: `${clamp}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999 }} />
+      </div>
+      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(255,255,255,0.65)", flexWrap: "wrap", gap: 8 }}>
+        <span>Actual: <strong style={{ color: "#fff" }}>{okr.actual}</strong></span>
+        <span>Meta: <strong style={{ color: "#fff" }}>{okr.objetivo}</strong></span>
+        <span>Brecha: <strong style={{ color: "#fff" }}>{okr.brecha}</strong></span>
+      </div>
+      {okr.nota && (
+        <div style={{ marginTop: 10, fontSize: 11, color: "rgba(255,255,255,0.45)", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: 8, fontStyle: "italic" }}>
+          ⚠️ {okr.nota}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── KpiCardComp ──────────────────────────────────────────────────────────────
+function KpiCardComp({ kpi }: { kpi: KpiCard }) {
+  const alertBg = kpi.alert ? "#FEF2F2" : "#fff";
+  const alertBorder = kpi.alert ? "#FCA5A5" : "var(--border)";
+  return (
+    <div style={{
+      background: alertBg, border: `1px solid ${alertBorder}`,
+      borderTop: `4px solid ${kpi.color}`, borderRadius: 14, padding: "18px 16px",
+      display: "flex", flexDirection: "column", gap: 6,
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <span style={{ fontSize: 10, fontWeight: 800, color: kpi.alert ? "#DC2626" : "var(--muted)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
+          {kpi.label}
+        </span>
+        <span style={{ fontSize: 15 }}>{kpi.icon}</span>
+      </div>
+      <div style={{ fontSize: 26, fontWeight: 900, letterSpacing: "-0.03em", color: kpi.color }}>
+        {kpi.value}
+      </div>
+      <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.4 }}>{kpi.sub}</div>
+      {kpi.progress !== undefined && (
+        <div style={{ height: 4, background: "#F3F4F6", borderRadius: 999, overflow: "hidden", marginTop: 4 }}>
+          <div style={{ height: "100%", width: `${Math.min(100, kpi.progress)}%`, background: kpi.color, borderRadius: 999 }} />
+        </div>
+      )}
+    </div>
   );
 }
 
