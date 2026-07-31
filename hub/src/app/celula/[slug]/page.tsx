@@ -10,7 +10,7 @@ import { isMiDiaOwner } from "@/lib/sprint-access";
 import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
 import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
-type Update = { id: string; week_date: string; title: string; content: string };
+type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
 
@@ -78,6 +78,7 @@ function updateToItem(u: Update): Item {
     key: u.id,
     name: u.title,
     description: truncate(u.content, 160),
+    url: u.url ?? undefined,
     tag: u.week_date,
     color: "#6366F1",
     icon: "📋",

@@ -60,18 +60,14 @@ export type ReflexionCard = {
 export type ComparativoRow = {
   metrica: string;
   nota?: string;
-  abril: string;
-  mayo: string;
-  junio: string;
+  valores: string[]; // alineado con MonthlySnapshot.comparativoMeses, mismo orden
   delta: string;
   direction: "up" | "down" | "flat";
 };
 
 export type CelulaComparativoRow = {
   metrica: string;
-  abril: string;
-  mayo: string;
-  junio: string;
+  valores: string[]; // alineado con MonthlySnapshot.comparativoMeses, mismo orden
 };
 
 export type CelulaComparativo = {
@@ -85,9 +81,50 @@ export type Novedad = {
   color: string;
 };
 
+// Resumen ejecutivo que va primero en el dashboard — conecta la adopción de
+// herramientas/metodología con el momento en que los tiempos del equipo vuelven
+// a ser una conversación confiable. No es "el reporte", es la lectura de por qué
+// el reporte se ve como se ve este mes.
+export type PilarAdopcion = {
+  nombre: string;
+  icon: string;
+  estado: string;
+};
+
+export type MesLectura = {
+  mes: string;
+  rol: string;
+  activo: boolean; // true = mes actual
+};
+
+export type ConclusionEjecutiva = {
+  mensaje: string;
+  submensaje: string;
+  pilares: PilarAdopcion[];
+  meses: MesLectura[];
+};
+
+// Tiempo promedio entre el arranque de una etapa y la siguiente (Discovery → POC →
+// Delivery → Following), calculado con la fecha de creación del primer ticket
+// etiquetado de cada etapa dentro de un mismo proyecto. Requiere que el proyecto
+// tenga 2+ etapas distintas ya tagueadas — por eso el tamaño de muestra (n) suele
+// ser bajo al principio y crece mes a mes según se adopta la taxonomía.
+export type EtapaTransicion = {
+  transicion: string; // "Discovery → POC"
+  dias: number;
+  n: number;
+};
+
+export type TiempoPorEtapa = {
+  celula: string;
+  color: string;
+  transiciones: EtapaTransicion[];
+};
+
 export type MonthlySnapshot = {
   month: string;
   monthLabel: string;
+  conclusionEjecutiva: ConclusionEjecutiva;
   kpis: Kpi[];
   cicloCompletoNota: string;
   cicloCompletoItems: CicloCompletoItem[];
@@ -95,6 +132,7 @@ export type MonthlySnapshot = {
   experimentacion: Experimentacion;
   statusDistribution: StatusSlice[];
   handoffsPorCelula: HandoffBar[];
+  tiempoPorEtapa: TiempoPorEtapa[];
   celulasDetail: CelulaDetail[];
   mejorasMetodologia: string[];
   reflexiones: ReflexionCard[];
