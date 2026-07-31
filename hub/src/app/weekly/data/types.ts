@@ -72,12 +72,34 @@ export type Documento = {
   fecha: string;
 };
 
+export type KpiCard = {
+  label: string;
+  value: string;
+  sub: string;
+  color: string;       // accent color del valor y la barra
+  icon: string;        // emoji
+  progress?: number;   // 0-100 para barra de progreso opcional
+  alert?: boolean;     // tratamiento visual de alerta (rojo/amarillo)
+};
+
+export type KpiOkr = {
+  titulo: string;      // nombre del OKR
+  etiqueta: string;    // chip badge, e.g. "OKR 1.1"
+  actual: string;      // valor actual formateado, e.g. "18"
+  objetivo: string;    // valor objetivo formateado, e.g. "104"
+  brecha: string;      // diferencia formateada, e.g. "86"
+  pct: number;         // 0-100 para la barra
+  nota?: string;       // aviso opcional bajo la barra (e.g. "Medición manual por ahora")
+};
+
 export type WeeklySnapshot = {
   week: string;          // "Semana 19–25 jun 2026"
   subtitle: string;
   heroBadge: string;     // chip pill en el hero
   heroTitle: string;     // h1 principal
   heroStrip: HeroChip[]; // los chips de métricas del hero
+  kpiOkrs?: KpiOkr[];    // una o más tarjetas OKR con barra de progreso (opcional)
+  kpis?: KpiCard[];      // grilla de métricas clave (opcional)
   insights?: Insight[];  // siempre primera sección — se agregan durante la semana
   oportunidades: Oportunidad[];
   documentos?: Documento[];

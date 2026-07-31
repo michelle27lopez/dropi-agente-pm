@@ -64,7 +64,7 @@ const HANDOFF_COLOR: Record<string, string> = {
   "Experimentación": "#F59E0B", "Listo para handoff": "#0EA5E9", "Handoff hecho": "#22C55E",
 };
 const TYPE_ICON: Record<string, string> = {
-  Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀",
+  Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀", "Delivery Proyecto": "🚚",
 };
 
 function truncate(text: string | undefined | null, max: number) {
@@ -173,16 +173,22 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const proyectos = celula.proyectos.filter((p) => p.type !== "POC").map(proyectoToItem);
+  const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
 
   const pocsByParent = new Map<string, Proyecto[]>();
+  const deliveriesByParent = new Map<string, Proyecto[]>();
   for (const p of celula.proyectos) {
     if (p.type === "POC" && p.parent_project_id) {
       const list = pocsByParent.get(p.parent_project_id) ?? [];
       list.push(p);
       pocsByParent.set(p.parent_project_id, list);
+    }
+    if (p.type === "Delivery Proyecto" && p.parent_project_id) {
+      const list = deliveriesByParent.get(p.parent_project_id) ?? [];
+      list.push(p);
+      deliveriesByParent.set(p.parent_project_id, list);
     }
   }
 
@@ -217,6 +223,28 @@ export default function CelulaHomePage() {
     if (!res.ok) return;
     const created = await res.json();
     setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, created] } : prev);
+  }
+
+  async function handleCrearDelivery(parent: Proyecto, name: string, summary: string, relatedPocId: string | null) {
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary, type: "Delivery Proyecto", related_poc_id: relatedPocId }),
+    });
+    if (!res.ok) return;
+    const created = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, created] } : prev);
+  }
+
+  async function handleRelatedPocChange(id: string, relatedPocId: string | null) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ related_poc_id: relatedPocId }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: prev.proyectos.map((p) => (p.id === updated.id ? updated : p)) } : prev);
   }
 
   // Home privada: solo para MI_DIA_OWNER_EMAIL, reemplaza el body estándar de
@@ -630,16 +658,18 @@ export default function CelulaHomePage() {
 
             {/* Custom dark list wrapper */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-              {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
+              {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map((p) => (
                 <ProjectCard
                   key={p.id}
                   project={p}
                   dark
                   canCreate={canCreate}
                   pocs={pocsByParent.get(p.id) ?? []}
+                  deliveries={deliveriesByParent.get(p.id) ?? []}
                   onEstadoChange={handleEstadoChange}
                   onVpvChange={handleVpvChange}
                   onCrearPoc={handleCrearPoc}
+                  onCrearDelivery={handleCrearDelivery}
                 />
               ))}
             </div>
@@ -665,6 +695,32 @@ export default function CelulaHomePage() {
               ))}
               {poc.length === 0 && (
                 <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay POCs cargadas para esta célula.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Delivery Proyectos list */}
+          <div style={{ marginBottom: 40 }}>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
+              Delivery Proyectos
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+              {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark
+                  canCreate={canCreate}
+                  pocs={[]}
+                  siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                  onRelatedPocChange={handleRelatedPocChange}
+                />
+              ))}
+              {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
               )}
             </div>
           </div>
@@ -1045,16 +1101,18 @@ export default function CelulaHomePage() {
           ) : (
             <>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-                {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
+                {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map((p) => (
                   <ProjectCard
                     key={p.id}
                     project={p}
                     dark={false}
                     canCreate={canCreate}
                     pocs={pocsByParent.get(p.id) ?? []}
+                    deliveries={deliveriesByParent.get(p.id) ?? []}
                     onEstadoChange={handleEstadoChange}
                     onVpvChange={handleVpvChange}
                     onCrearPoc={handleCrearPoc}
+                    onCrearDelivery={handleCrearDelivery}
                   />
                 ))}
               </div>
@@ -1068,7 +1126,7 @@ export default function CelulaHomePage() {
         {/* Los POC de logística no van en una sección aparte: se muestran dentro
             de su etapa, que es el eje de organización de esa célula. */}
         {!isLogistica && (
-          <div>
+          <div style={{ marginBottom: 56 }}>
             <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
               Pruebas de concepto
             </p>
@@ -1088,6 +1146,33 @@ export default function CelulaHomePage() {
             </div>
             {poc.length === 0 && (
               <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
+            )}
+          </div>
+        )}
+
+        {!isLogistica && (
+          <div>
+            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+              Delivery Proyectos
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+              {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                  onRelatedPocChange={handleRelatedPocChange}
+                />
+              ))}
+            </div>
+            {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
+              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
             )}
           </div>
         )}
