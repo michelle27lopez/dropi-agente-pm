@@ -101,13 +101,14 @@ function categoryVisual(category?: string) {
 }
 
 // ─── Fotos pre-enmarcadas (paso 1 de "Prepara") ───
-// El marco (marcocyber.png, 1024x1024) tiene una ventana transparente para
-// la foto del producto. MARCO_WINDOW es el bounding box real de esa
-// transparencia, medido sobre el PNG con el canal alfa — no es un valor a
-// ojo. Si Michelle regenera el marco, hay que volver a medirlo (no asumir
-// que sigue en el mismo lugar).
-const MARCO_SRC = "/cyberdays/assets/marcocyber.png";
-const MARCO_WINDOW = { x: 78, y: 94, w: 941 - 78, h: 935 - 94 };
+// El marco (marcoo2.png, 1254x1254 — versión final entregada 30/07,
+// reemplaza a marcocyber.png) tiene una ventana transparente para la foto
+// del producto. MARCO_WINDOW es el bounding box real de esa transparencia,
+// medido sobre el PNG con el canal alfa — no es un valor a ojo. Si Michelle
+// regenera el marco, hay que volver a medirlo (no asumir que sigue en el
+// mismo lugar).
+const MARCO_SRC = "/cyberdays/assets/marcoo2.png";
+const MARCO_WINDOW = { x: 87, y: 173, w: 1179 - 87, h: 1179 - 173 };
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
