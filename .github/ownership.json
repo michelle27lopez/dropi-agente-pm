@@ -10,11 +10,15 @@
     "lauracontreras-beep": "product-designers"
   },
 
-  "_comment_celula_paths": "Carpetas propias de cada célula dentro del repo. Si alguien de otra célula las toca, se marca en el comentario. Growth (Catherin Salazar) todavía no tiene usuario de GitHub registrado en 'people' — agregarlo cuando lo tengamos. Brands, Growth, Sellers, Logística y Product Designers aún no tienen carpetas propias en el repo (sus proyectos viven en Supabase, no en archivos) — agregar aquí cuando las tengan.",
+  "_comment_celula_paths": "Carpetas propias de cada célula dentro del repo. Si alguien de otra célula las toca, se marca en el comentario. Las zonas se ANIDAN y gana el prefijo más específico: 'hub/src/app/proyectos/' es de suppliers, pero 'hub/src/app/proyectos/logistica/' es de logística. Growth (Catherin Salazar) todavía no tiene usuario de GitHub registrado en 'people' — agregarlo cuando lo tengamos. Brands, Growth, Sellers y Product Designers aún no tienen carpetas propias en el repo (sus proyectos viven en Supabase, no en archivos) — agregar aquí cuando las tengan.",
   "celula_paths": {
     "suppliers": [
       "hub/src/app/proyectos/",
       "hub/src/app/informes/"
+    ],
+    "logistica": [
+      "logistica-lab/",
+      "hub/src/app/proyectos/logistica/"
     ]
   },
 

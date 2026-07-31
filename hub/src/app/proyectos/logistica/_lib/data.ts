@@ -107,7 +107,17 @@ export const indicadores: Indicador[] = [
 ];
 
 // ── Las 2 fugas que cierran la brecha ────────────────────────────────────────
+//
+// El número va como DATO (`n`), no dentro del string. Antes se escribía con los
+// glifos circulados de Unicode, que dependen de la fuente instalada y se veían
+// distintos —y mal— en cada sistema. Además, tenerlo en el texto hacía que
+// renumerar fuera buscar y reemplazar prosa.
+//
+// Renumeradas 1-2-3 el 29-jul: la de Novedad era la 4 y la 3 no existía en
+// ninguna parte del tablero, así que la numeración tenía un hueco que hacía
+// buscar una fuga inexistente.
 export type Fuga = {
+  n: number;
   nombre: string;
   valor: string;
   barra: number; // 0–100
@@ -117,14 +127,16 @@ export type Fuga = {
 
 export const fugas: Fuga[] = [
   {
-    nombre: "① No-movilización",
+    n: 1,
+    nombre: "No-movilización",
     valor: "~17–21%",
     barra: 20,
     tono: "malo",
     desc: "La orden se crea pero no entra a la red. Colador: la confirmación manual (317K órdenes >24h). Palanca: autoconfirmación por madurez.",
   },
   {
-    nombre: "② Devolución",
+    n: 2,
+    nombre: "Devolución",
     valor: "~26%",
     barra: 26,
     tono: "alerta",
@@ -138,16 +150,24 @@ export type Etapa = {
   nombre: string;
   sub: string;
   color: string; // acento de la etapa
-  fuga?: { label: string; tono: "malo" | "alerta" | "bueno" };
+  /**
+   * `n` es el número de la fuga (1–3), no el de la etapa. Va aparte del `label`
+   * para que la UI lo pinte como badge y el texto quede corto — con el prefijo
+   * "Fuga N · " dentro del string, la etiqueta envolvía en tres líneas en las
+   * columnas del mapa. Las etapas sanas no llevan `n`.
+   */
+  fuga?: { n?: number; label: string; tono: "malo" | "alerta" | "bueno" };
 };
 
 export const etapas: Etapa[] = [
   { n: 1, nombre: "Generación", sub: "Se crea la orden y se elige transportadora", color: "#6366f1" },
-  { n: 2, nombre: "Confirmación", sub: "Pre-red · el cliente confirma", color: "#f97316", fuga: { label: "Fuga ① · ~17–21% no moviliza", tono: "malo" } },
-  { n: 3, nombre: "Despacho", sub: "Preparación y handoff al carrier", color: "#16a34a", fuga: { label: "El foso de Dropi · excelente aquí", tono: "bueno" } },
+  { n: 2, nombre: "Confirmación", sub: "Pre-red · el cliente confirma", color: "#f97316", fuga: { n: 1, label: "~17–21% no moviliza", tono: "malo" } },
+  // "El foso de Dropi · excelente aquí" no se entendía sin conocer la metáfora
+  // del moat. Se dice en el mismo lenguaje que las otras dos etiquetas.
+  { n: 3, nombre: "Despacho", sub: "Preparación y handoff al carrier", color: "#16a34a", fuga: { label: "Sin fuga · el tramo más sano", tono: "bueno" } },
   { n: 4, nombre: "Tránsito", sub: "En camino · estados y tiempo por fases", color: "#0ea5e9" },
-  { n: 5, nombre: "Entrega / Devolución", sub: "Desenlace de la orden", color: "#dc2626", fuga: { label: "Fuga ② · ~26% devuelve", tono: "malo" } },
-  { n: 6, nombre: "Novedad / Posventa", sub: "Recuperación y recompra", color: "#a855f7", fuga: { label: "Fuga ④ · novedades sin recuperar", tono: "alerta" } },
+  { n: 5, nombre: "Entrega / Devolución", sub: "Desenlace de la orden", color: "#dc2626", fuga: { n: 2, label: "~26% devuelve", tono: "malo" } },
+  { n: 6, nombre: "Novedad / Posventa", sub: "Recuperación y recompra", color: "#a855f7", fuga: { n: 3, label: "novedades sin recuperar", tono: "alerta" } },
 ];
 
 // ── Registro único de iniciativas, clavadas a su etapa ───────────────────────
@@ -224,6 +244,16 @@ export type Proyecto = {
    * entregable lleva el contexto de la ficha en su cabecera. Un proyecto, una URL.
    */
   entregable?: string;
+  /**
+   * Pantalla propia de la iniciativa dentro del tablero, si la tiene.
+   *
+   * Distinto de `entregable`: `entregable` REDIRIGE (la ficha no se ve), `vista`
+   * solo declara que existe una pantalla para que el sidebar enlace directo y la
+   * ficha la ofrezca. Antes esto se adivinaba leyendo los `links` de tipo
+   * prototipo/tablero, y por eso Same Day —que sí tiene página y está en el
+   * sidebar— no sabía que su propia vista existía.
+   */
+  vista?: string;
 };
 
 export function proyectoPorSlug(slug: string) {
@@ -245,6 +275,7 @@ export const proyectos: Proyecto[] = [
     nombre: "Autoconfirmación de órdenes (movilización)",
     slug: "movilizacion",
     codigo: "LOG-001",
+    vista: "/proyectos/logistica/experimentos/autoconfirmacion",
     etapa: "Confirmación", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
     ticket: "PRM-1497", destacado: true,
     descripcion:
@@ -263,6 +294,7 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Autogeneración de guías",
     slug: "autogeneracion-guias",
+    codigo: "LOG-012",
     etapa: "Despacho", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
     ticket: "PRM-1469",
     descripcion:
@@ -278,13 +310,15 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Vigía — control operativo en tiempo real",
     slug: "vigia",
+    codigo: "LOG-015",
+    vista: "/proyectos/logistica/experimentos/vigia",
     etapa: "Tránsito", tipo: "Experimento", fase: "Diseño", handoff: "No aplica",
     jira: "⚠️ No existe en Jira",
     doc: "parcial",
     destacado: true,
     descripcion:
       "Extensión de Chrome (Manifest V3) que intercepta el API de Dropi, calcula SLAs automáticamente por estado de orden e inyecta alertas accionables directamente en el dashboard — para ambos roles (Dropshipper y Proveedor). Actúa ANTES del desenlace: da visibilidad sobre qué órdenes están en riesgo para que el usuario corrija antes de que se caigan.",
-    foco: "Dueño: Michel Pino. Diseño en curso, sin desarrollo técnico (confirmado 22-jul). Es la única iniciativa transversal a toda la cadena de valor: monitorea desde Confirmación (POR CONFIRMAR 12h, PENDIENTE 24h) hasta Novedad (24h), pasando por Despacho (GUÍA GENERADA 48h, RECOGIDO 24h) y Tránsito (EN TRÁNSITO 72h). Cruza directamente las fugas ② devolución (~26%) y ④ novedad porque su valor es anticipar el problema, no reaccionar después. Para el Dropshipper: SLA por orden, WhatsApp directo al proveedor con número real del API, breakdown por estado, $ en riesgo. Para el Proveedor: SLA sobre lo que controla (confirmar, despachar, generar guía) + monitor de stock por bodega con alertas de quiebre. Stack: interceptor fetch/XHR en MAIN world → motor SLA puro → inyección visual Angular-resilient con polling 2s. GATE: mientras sea diseño está bien, pero el día que entre a desarrollo necesita ticket, métrica y spec o se construye a ciegas.",
+    foco: "Dueño: Michel Pino. Diseño en curso, sin desarrollo técnico (confirmado 22-jul). Es la única iniciativa transversal a toda la cadena de valor: monitorea desde Confirmación (POR CONFIRMAR 12h, PENDIENTE 24h) hasta Novedad (24h), pasando por Despacho (GUÍA GENERADA 48h, RECOGIDO 24h) y Tránsito (EN TRÁNSITO 72h). Cruza directamente las fugas 2 (devolución ~26%) y 3 (novedad) porque su valor es anticipar el problema, no reaccionar después. Para el Dropshipper: SLA por orden, WhatsApp directo al proveedor con número real del API, breakdown por estado, $ en riesgo. Para el Proveedor: SLA sobre lo que controla (confirmar, despachar, generar guía) + monitor de stock por bodega con alertas de quiebre. Stack: interceptor fetch/XHR en MAIN world → motor SLA puro → inyección visual Angular-resilient con polling 2s. GATE: mientras sea diseño está bien, pero el día que entre a desarrollo necesita ticket, métrica y spec o se construye a ciegas.",
     etapasRelacionadas: [
       { etapa: "Confirmación", rol: "POR CONFIRMAR (12h) · PENDIENTE (24h) — el proveedor no confirma o no despacha" },
       { etapa: "Despacho", rol: "GUÍA GENERADA (48h) · RECOGIDO (24h) — alerta si la guía no se recoge a tiempo" },
@@ -301,6 +335,8 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Recolección proactiva",
     slug: "recoleccion-proactiva",
+    codigo: "LOG-013",
+    vista: "/proyectos/logistica/recolecciones",
     etapa: "Despacho", tipo: "Experimento", fase: "Research", handoff: "No aplica",
     descripcion:
       "Que Dropi programe la recolección a la transportadora en vez de esperarla: saber qué está listo, quién recoge y quién no recogió.",
@@ -334,13 +370,14 @@ export const proyectos: Proyecto[] = [
     nombre: "Normalización de estados",
     slug: "normalizacion-estados",
     codigo: "LOG-007",
+    vista: "/proyectos/logistica/normalizacion-estados",
     etapa: "Tránsito", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
     ticket: "PRM-1297", destacado: true,
     jira: "Investigación y definición",
     doc: "completo",
     entregable: "/proyectos/logistica/normalizacion-estados",
-    descripcion: "Homologar los estados del carrier para poder medir bien (sin-cierre, tiempo por fases).",
-    foco: "Prioridad #1 del Delivery Roadmap (WIP = 1). El mejor documentado de la célula (spec + CONTEXTO + propuesta + vista interactiva). Catálogo v0.1: crudo → homologado(26) → fase → vista cliente(8). Pendiente: 7 gates de decisión, 2 críticos y externos.",
+    descripcion: "Un lenguaje único de estados para saber dónde está cada orden y poder contárselo al cliente.",
+    foco: "Prioridad #1 del Delivery Roadmap (WIP = 1). Hoy 35 de los 51 estados que usa la operación se guardan como lo mismo: no se puede medir dónde se traba una orden ni avisarle nada al cliente. El modelo son dos capas: el estado crudo lo ve el admin, y 9 estados homologados los ven los usuarios. Pendiente: 2 decisiones para cerrarlo.",
     links: [{ tipo: "tablero", label: "Mapa de estados interactivo", href: "/proyectos/logistica/normalizacion-estados" }],
   },
   {
@@ -368,6 +405,7 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Parametrización de fulfillment",
     slug: "fulfillment",
+    codigo: "LOG-014",
     etapa: "Despacho", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
     ticket: "PRM-1446", destacado: true,
     jira: "Listo para hand off (14-jul), asignado a Juan",
@@ -385,6 +423,7 @@ export const proyectos: Proyecto[] = [
     nombre: "Same Day",
     slug: "same-day",
     codigo: "LOG-005",
+    vista: "/proyectos/logistica/same-day",
     etapa: "Despacho", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-1366",
     bloqueo: "Parqueado por WIP = 1 (Normalización de estados es la iniciativa activa). La ventana del cronograma es tentativa.",
@@ -404,6 +443,7 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Pruebas de entrega (POD)",
     slug: "pruebas-entrega",
+    codigo: "LOG-016",
     etapa: "Entrega / Devolución", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-1517",
     jira: "⚠️ Paraguas En Ruta y SIN ASIGNAR · PRM-1361 y PRM-1455 en Impedimentos",
@@ -444,7 +484,7 @@ export const proyectos: Proyecto[] = [
     doc: "completo",
     bloqueo: "Nadie lo tiene asignado en Jira. Alinear con Seller Success.",
     descripcion: "Dar dueño, SLA y triaje por motivo a las novedades para recuperar la orden, y avisar al comprador antes de que la devolución ocurra.",
-    foco: "Absorbe lo que antes figuraba aparte como 'Notificaciones prevención de devoluciones': era el mismo PRM-1512 duplicado en dos fichas. Fuga ④, capa transversal + posventa.",
+    foco: "Absorbe lo que antes figuraba aparte como 'Notificaciones prevención de devoluciones': era el mismo PRM-1512 duplicado en dos fichas. Fuga 3, capa transversal + posventa.",
   },
   {
     nombre: "Reducir devoluciones (COD)",
@@ -453,7 +493,7 @@ export const proyectos: Proyecto[] = [
     etapa: "Entrega / Devolución", tipo: "Idea", fase: "Backlog", handoff: "No aplica",
     ticket: "PRM-1523",
     descripcion: "Reducir la devolución atacándola DENTRO del COD (pago/gestión), nunca empujando prepago.",
-    foco: "Backlog: no hay trabajo hecho todavía. Fuga ②. Direcciones a explorar: score de riesgo, triaje por motivo, anticipo/ConfioPagos.",
+    foco: "Backlog: no hay trabajo hecho todavía. Fuga 2. Direcciones a explorar: score de riesgo, triaje por motivo, anticipo/ConfioPagos.",
   },
   {
     nombre: "Torre de control / Tiempo por fases",
@@ -467,74 +507,17 @@ export const proyectos: Proyecto[] = [
     links: [{ tipo: "tablero", label: "Tiempo por fases (weekly)", href: "/proyectos/logistica/updates" }],
   },
 
-  // ── Fuera del radar ────────────────────────────────────────────────────────
-  // Salieron de barrer Jira por estado el 22-jul. Están a nombre de Juan, sin
-  // documentación ni mención en ningún tablero. Se registran aquí justamente
-  // para que dejen de ser invisibles: dos llevan 7 semanas en "Listo para hand
-  // off" sin moverse, y eso es lo que infla esa columna.
-  {
-    nombre: "QR de recolección Veloces a proveedores",
-    slug: "qr-recoleccion-veloces",
-    etapa: "Despacho", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
-    ticket: "PRM-407",
-    jira: "Listo para hand off desde el 01-jun",
-    doc: "ninguno",
-    bloqueo: "7 semanas parado sin moverse. Decisión pendiente: documentarlo y sacarlo, o bajarlo de estado.",
-    descripcion: "QR de recolección de Veloces para los proveedores (Ecom).",
-    foco: "Salió del barrido de Jira del 22-jul. Es uno de los dos que inflan la columna de hand-off.",
-  },
-  {
-    nombre: "Embebido de imágenes",
-    slug: "embebido-imagenes",
-    etapa: "Generación", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
-    ticket: "PRM-796",
-    jira: "Listo para hand off desde el 01-jun",
-    doc: "ninguno",
-    bloqueo: "7 semanas parado sin moverse. Misma decisión que PRM-407: sacarlo o bajarlo de estado.",
-    descripcion: "Embebido de imágenes.",
-    foco: "Salió del barrido de Jira del 22-jul. Sin contexto documentado — hay que abrir el ticket para saber de qué se trata.",
-  },
-  {
-    nombre: "Garantías: de recolección a entrega",
-    slug: "garantias-recoleccion-entrega",
-    etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
-    ticket: "PRM-118",
-    jira: "Pre Hand off desde el 01-jun",
-    doc: "ninguno",
-    bloqueo: "Sin confirmar si sigue vivo.",
-    descripcion: "Cubrir el tramo de garantías desde la recolección hasta la entrega.",
-    foco: "Salió del barrido de Jira del 22-jul.",
-  },
-  {
-    nombre: "Suppli CO · validación de transportadora",
-    slug: "suppli-co",
-    etapa: "Generación", tipo: "Proyecto", fase: "En desarrollo", handoff: "Handoff hecho",
-    ticket: "PRM-1431",
-    jira: "En Desarrollo desde el 22-jun",
-    doc: "ninguno",
-    descripcion: "Validación de transportadora para Suppli en Colombia.",
-    foco: "Ya está en desarrollo y no figuraba en ningún tablero de la célula.",
-  },
-  {
-    nombre: "Velocidad y calidad de integración de transportadoras",
-    slug: "integracion-transportadoras",
-    etapa: "Tránsito", tipo: "Proyecto", fase: "En desarrollo", handoff: "Handoff hecho",
-    ticket: "PRM-1265",
-    jira: "En Desarrollo desde el 05-jun",
-    doc: "ninguno",
-    descripcion: "Optimizar la velocidad y la calidad con que se integran nuevas transportadoras.",
-    foco: "Ya está en desarrollo y no figuraba en ningún tablero de la célula.",
-  },
-  {
-    nombre: "Reportes dashboard · fase 1",
-    slug: "reportes-dashboard",
-    etapa: "Tránsito", tipo: "Proyecto", fase: "En desarrollo", handoff: "Handoff hecho",
-    ticket: "PRM-1067",
-    jira: "En Desarrollo desde el 11-jun",
-    doc: "ninguno",
-    descripcion: "Primera fase de los reportes del dashboard.",
-    foco: "Ya está en desarrollo y no figuraba en ningún tablero de la célula.",
-  },
+  // ── Depuración 28-jul ──────────────────────────────────────────────────────
+  // Se retiró el bloque "Fuera del radar" (6 iniciativas que salieron de barrer
+  // Jira el 22-jul). El registro pasó de 22 a 16 y ahora solo contiene el
+  // discovery vivo de la célula. Lo retirado y por qué, para no re-agregarlo
+  // sin decisión:
+  //   · PRM-1431 Suppli CO · PRM-1265 Integración de transportadoras
+  //     · PRM-1067 Reportes dashboard → ya en desarrollo, no son discovery.
+  //   · PRM-796 Embebido de imágenes · PRM-407 QR de recolección Veloces
+  //     → 7 semanas en "Listo para hand off" sin moverse ni documentación.
+  //   · PRM-118 Garantías de recolección a entrega → entregado; queda
+  //     pendiente actualizar Jira y los documentos E2E (fuera de este tablero).
 ];
 
 // ── Experimentos / hipótesis ─────────────────────────────────────────────────
@@ -653,7 +636,7 @@ export const experimentos: Experimento[] = [
       "Si el usuario (dropshipper o proveedor) puede ver en tiempo real qué órdenes están fuera de SLA, con acciones de un click (WhatsApp al proveedor/carrier, escalar, exportar), corrige antes de que la orden se caiga — reduciendo devoluciones y novedades sin recuperar.",
     metrica: "Candidatas: % de órdenes intervenidas que se recuperan vs. control · reducción de tiempo de reacción ante novedades (h) · efecto en tasa de devolución de usuarios con la extensión vs. sin ella",
     estado: "Diseñado",
-    impacto: "Transversal a 5 de 6 etapas de la orden. Hoy el 59% se entrega (meta 70%). La fuga ② (devolución ~26%) y la fuga ④ (novedades sin recuperar) son las dos que Vigía ataca directamente porque actúa ANTES del desenlace. Con 3.4M órdenes/mes, cada punto porcentual de recuperación = ~34K órdenes. Los 6 umbrales SLA (12h–72h) cubren: POR CONFIRMAR, PENDIENTE, GUÍA GENERADA, RECOGIDO, EN TRÁNSITO, NOVEDAD. Para proveedores además incluye monitor de stock por bodega (rojo <10, naranja <50, amarillo <100 uds).",
+    impacto: "Transversal a 5 de 6 etapas de la orden. Hoy el 59% se entrega (meta 70%). La fuga 2 (devolución ~26%) y la fuga 3 (novedades sin recuperar) son las dos que Vigía ataca directamente porque actúa ANTES del desenlace. Con 3.4M órdenes/mes, cada punto porcentual de recuperación = ~34K órdenes. Los 6 umbrales SLA (12h–72h) cubren: POR CONFIRMAR, PENDIENTE, GUÍA GENERADA, RECOGIDO, EN TRÁNSITO, NOVEDAD. Para proveedores además incluye monitor de stock por bodega (rojo <10, naranja <50, amarillo <100 uds).",
     proyecto: "Vigía (sin ticket todavía)",
     aprendizaje:
       "La conceptualización v4 define dos módulos completos (Dropshipper + Proveedor) con auto-discovery de campos del API. El interceptor fetch/XHR en MAIN world ya funciona en la v3.2 actual. El riesgo principal es que Angular destruye el DOM — resuelto con polling 2s. El valor no es solo la alerta: es que el WhatsApp sale con el número REAL del proveedor, pre-armado con el contexto de la orden. Sin eso, el dropshipper tiene que buscar el contacto manualmente.",

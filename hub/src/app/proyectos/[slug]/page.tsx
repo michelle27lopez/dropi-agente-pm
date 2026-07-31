@@ -14,6 +14,7 @@ type ProjectDetails = {
   parent_project_id: string | null;
   estado_interno: string | null;
   vpv: number | null;
+  related_poc_id: string | null;
   prototype_url: string | null;
   celulas?: {
     nombre: string;
@@ -21,10 +22,17 @@ type ProjectDetails = {
   } | null;
 };
 
-type ProjectRef = { id: string; name: string; project_code: string | null; estado_interno?: string | null };
+type ProjectRef = { id: string; name: string; project_code: string | null; type?: string | null; estado_interno?: string | null };
 
-const ESTADOS_DISCOVERY = ["Research", "Ideación", "Concepción de experimento"];
+const ESTADOS_DISCOVERY = ["Research", "Ideación", "Concepción de experimento", "Activo", "Cerrado"];
 const ESTADOS_POC = ["Seguimiento", "En definición", "En priorización"];
+const ESTADOS_DELIVERY = ["En definición", "En priorización", "Pendiente Handoff", "en DEV"];
+
+function estadosValidosPara(type: string | null) {
+  if (type === "POC") return ESTADOS_POC;
+  if (type === "Delivery Proyecto") return ESTADOS_DELIVERY;
+  return ESTADOS_DISCOVERY;
+}
 
 type Cycle = {
   id: string;
@@ -62,6 +70,10 @@ export default function ProjectDashboardPage() {
   const [discoveryOptions, setDiscoveryOptions] = useState<ProjectRef[]>([]);
   const [selectedParentId, setSelectedParentId] = useState("");
   const [linkingParent, setLinkingParent] = useState(false);
+  const [relatedPoc, setRelatedPoc] = useState<ProjectRef | null>(null);
+  const [pocOptions, setPocOptions] = useState<ProjectRef[]>([]);
+  const [selectedPocId, setSelectedPocId] = useState("");
+  const [linkingPoc, setLinkingPoc] = useState(false);
   const [cycles, setCycles] = useState<Cycle[]>([]);
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,6 +83,12 @@ export default function ProjectDashboardPage() {
   const [pocName, setPocName] = useState("");
   const [pocSummary, setPocSummary] = useState("");
   const [pocSubmitting, setPocSubmitting] = useState(false);
+
+  const [showDeliveryForm, setShowDeliveryForm] = useState(false);
+  const [deliveryName, setDeliveryName] = useState("");
+  const [deliverySummary, setDeliverySummary] = useState("");
+  const [deliveryPocId, setDeliveryPocId] = useState("");
+  const [deliverySubmitting, setDeliverySubmitting] = useState(false);
 
   const [docsOpen, setDocsOpen] = useState(true);
   const [briefOpen, setBriefOpen] = useState(true);
@@ -120,6 +138,8 @@ export default function ProjectDashboardPage() {
         setParentProject(data.parent || null);
         setChildren(data.children || []);
         setDiscoveryOptions(data.discoveryOptions || []);
+        setRelatedPoc(data.relatedPoc || null);
+        setPocOptions(data.pocOptions || []);
         setCycles(data.cycles || []);
         setDecisions(data.decisions || []);
       })
@@ -208,6 +228,45 @@ export default function ProjectDashboardPage() {
     setShowPocForm(false);
     setPocName("");
     setPocSummary("");
+  }
+
+  async function handleCrearDelivery(e: React.FormEvent) {
+    e.preventDefault();
+    if (!deliveryName.trim() || !deliverySummary.trim()) return;
+    setDeliverySubmitting(true);
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: deliveryName.trim(),
+        summary: deliverySummary.trim(),
+        type: "Delivery Proyecto",
+        related_poc_id: deliveryPocId || null,
+      }),
+    });
+    setDeliverySubmitting(false);
+    if (!res.ok) return;
+    const created = await res.json();
+    setChildren((prev) => [...prev, created]);
+    setShowDeliveryForm(false);
+    setDeliveryName("");
+    setDeliverySummary("");
+    setDeliveryPocId("");
+  }
+
+  async function handleVincularPoc() {
+    if (!selectedPocId) return;
+    setLinkingPoc(true);
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ related_poc_id: selectedPocId }),
+    });
+    setLinkingPoc(false);
+    if (!res.ok) return;
+    const elegido = pocOptions.find((p) => p.id === selectedPocId);
+    if (elegido) setRelatedPoc(elegido);
+    setSelectedPocId("");
   }
 
   if (loading) {
@@ -436,9 +495,17 @@ export default function ProjectDashboardPage() {
       }
     };
 
-    const norm = slug.toUpperCase();
+    let norm = slug.toUpperCase();
+    if (project.type === "POC" && parentProject?.project_code) {
+      norm = parentProject.project_code.toUpperCase();
+    }
     if (FALLBACK_CYCLES[norm]) {
       activeCycle = FALLBACK_CYCLES[norm];
+    } else {
+      const codeNorm = code.toUpperCase();
+      if (FALLBACK_CYCLES[codeNorm]) {
+        activeCycle = FALLBACK_CYCLES[codeNorm];
+      }
     }
   }
 
@@ -528,7 +595,7 @@ export default function ProjectDashboardPage() {
             </div>
           )}
 
-          {!parentProject && project.type === "POC" && discoveryOptions.length > 0 && (
+          {!parentProject && (project.type === "POC" || project.type === "Delivery Proyecto") && discoveryOptions.length > 0 && (
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
               <label style={{ fontSize: 12.5, color: "var(--muted)" }}>Vincular a proyecto padre:</label>
               <select
@@ -562,7 +629,7 @@ export default function ProjectDashboardPage() {
                 style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
               >
                 <option value="" disabled>Sin definir</option>
-                {(project.type === "POC" ? ESTADOS_POC : ESTADOS_DISCOVERY).map((estado) => (
+                {estadosValidosPara(project.type).map((estado) => (
                   <option key={estado} value={estado}>{estado}</option>
                 ))}
               </select>
@@ -582,16 +649,54 @@ export default function ProjectDashboardPage() {
                 />
               </div>
             )}
+
+            {project.type === "Delivery Proyecto" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 220 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  POC relacionado (opcional)
+                </label>
+                {relatedPoc ? (
+                  <a
+                    href={`/proyectos/${relatedPoc.project_code ? relatedPoc.project_code.toLowerCase() : relatedPoc.id}`}
+                    style={{ fontSize: 13, fontWeight: 700, color: "#F77F00", textDecoration: "none" }}
+                  >
+                    🧪 {relatedPoc.name}
+                  </a>
+                ) : pocOptions.length > 0 ? (
+                  <div style={{ display: "flex", gap: 6 }}>
+                    <select
+                      value={selectedPocId}
+                      onChange={(e) => setSelectedPocId(e.target.value)}
+                      style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                    >
+                      <option value="">Ninguno</option>
+                      {pocOptions.map((p) => (
+                        <option key={p.id} value={p.id}>{p.name}</option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={handleVincularPoc}
+                      disabled={!selectedPocId || linkingPoc}
+                      style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "#0EA5E9", border: "none", borderRadius: 8, padding: "6px 12px", cursor: selectedPocId ? "pointer" : "default" }}
+                    >
+                      {linkingPoc ? "Vinculando…" : "Vincular"}
+                    </button>
+                  </div>
+                ) : (
+                  <span style={{ fontSize: 13, color: "var(--muted)" }}>Ninguno</span>
+                )}
+              </div>
+            )}
           </div>
 
-          {project.type !== "POC" && (
+          {project.type !== "POC" && project.type !== "Delivery Proyecto" && (
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
                 POCs de este proyecto
               </div>
-              {children.length > 0 && (
+              {children.filter((c) => c.type === "POC").length > 0 && (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
-                  {children.map((c) => (
+                  {children.filter((c) => c.type === "POC").map((c) => (
                     <a
                       key={c.id}
                       href={`/proyectos/${c.project_code ? c.project_code.toLowerCase() : c.id}`}
@@ -643,6 +748,78 @@ export default function ProjectDashboardPage() {
                   style={{ fontSize: 12, fontWeight: 700, color: "#F77F00", background: "none", border: "1px dashed #F77F00", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
                 >
                   + Crear POC
+                </button>
+              )}
+
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", margin: "20px 0 10px" }}>
+                Delivery Proyectos de este proyecto
+              </div>
+              {children.filter((c) => c.type === "Delivery Proyecto").length > 0 && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+                  {children.filter((c) => c.type === "Delivery Proyecto").map((c) => (
+                    <a
+                      key={c.id}
+                      href={`/proyectos/${c.project_code ? c.project_code.toLowerCase() : c.id}`}
+                      style={{ fontSize: 12, fontWeight: 700, color: "#0EA5E9", background: "#EFF8FF", padding: "4px 10px", borderRadius: 999, textDecoration: "none" }}
+                    >
+                      🚚 {c.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {showDeliveryForm ? (
+                <form onSubmit={handleCrearDelivery} style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 420 }}>
+                  <input
+                    value={deliveryName}
+                    onChange={(e) => setDeliveryName(e.target.value)}
+                    placeholder="Nombre del Delivery Proyecto"
+                    required
+                    style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                  />
+                  <textarea
+                    value={deliverySummary}
+                    onChange={(e) => setDeliverySummary(e.target.value)}
+                    placeholder="De qué se trata"
+                    required
+                    rows={2}
+                    style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", resize: "vertical" }}
+                  />
+                  {children.filter((c) => c.type === "POC").length > 0 && (
+                    <select
+                      value={deliveryPocId}
+                      onChange={(e) => setDeliveryPocId(e.target.value)}
+                      style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                    >
+                      <option value="">POC relacionado: ninguno</option>
+                      {children.filter((c) => c.type === "POC").map((c) => (
+                        <option key={c.id} value={c.id}>POC relacionado: {c.name}</option>
+                      ))}
+                    </select>
+                  )}
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button
+                      type="submit"
+                      disabled={deliverySubmitting}
+                      style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "#0EA5E9", border: "none", borderRadius: 8, padding: "8px 14px", cursor: deliverySubmitting ? "default" : "pointer" }}
+                    >
+                      {deliverySubmitting ? "Creando…" : "Crear"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowDeliveryForm(false)}
+                      style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <button
+                  onClick={() => setShowDeliveryForm(true)}
+                  style={{ fontSize: 12, fontWeight: 700, color: "#0EA5E9", background: "none", border: "1px dashed #0EA5E9", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
+                >
+                  + Crear Delivery Proyecto
                 </button>
               )}
             </div>

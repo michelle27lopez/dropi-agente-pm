@@ -31,6 +31,8 @@ const tdStyle: React.CSSProperties = {
 const ETAPAS: Record<string, { label: string; color: string; bg: string }> = {
   activado: { label: "Activado (automático)", color: "#3B82F6", bg: "#EFF6FF" },
   contactado: { label: "Contactado", color: "#8B5CF6", bg: "#F5F3FF" },
+  sin_agendar: { label: "Contactado, sin agendar", color: "#EC4899", bg: "#FDF2F8" },
+  agendado: { label: "Reunión agendada", color: "#6366F1", bg: "#EEF2FF" },
   bodega: { label: "Bodega creada", color: "#F59E0B", bg: "#FFFBEB" },
   producto: { label: "Producto publicado", color: "#F59E0B", bg: "#FFFBEB" },
   venta: { label: "Primera venta 🎉", color: "#10B981", bg: "#ECFDF5" },
@@ -188,9 +190,17 @@ export default function PilotoSeguimientoTtvPage() {
     });
   }, []);
 
+  // Orden del embudo — "sin_respuesta" queda fuera (es un estado terminal, no un avance)
+  const ORDEN_ETAPAS = ["activado", "contactado", "sin_agendar", "agendado", "bodega", "producto", "venta"];
+  const alcanzoOMas = (etapa: string) => {
+    const idx = ORDEN_ETAPAS.indexOf(etapa);
+    return (target: string) => idx >= 0 && idx >= ORDEN_ETAPAS.indexOf(target);
+  };
+  const conContacto = rows.filter(s => alcanzoOMas(s.etapa)("contactado")).length;
+  const conAgenda = rows.filter(s => alcanzoOMas(s.etapa)("agendado")).length;
+  const sinAgendar = rows.filter(s => s.etapa === "sin_agendar").length;
+  const conProducto = rows.filter(s => alcanzoOMas(s.etapa)("producto")).length;
   const conVenta = rows.filter(s => s.etapa === "venta").length;
-  const conProducto = rows.filter(s => s.etapa === "producto" || s.etapa === "venta").length;
-  const conContacto = rows.filter(s => s.etapa !== "activado").length;
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
@@ -244,10 +254,12 @@ export default function PilotoSeguimientoTtvPage() {
                   Ya activados automáticamente. Jaime/Michelle los contactan directo con el botón de WhatsApp de
                   cada fila, y las notas se guardan al instante mientras van hablando.
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, maxWidth: 500, marginTop: 16 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 12, marginTop: 16 }}>
                   {[
                     { v: `${conContacto}/${rows.length}`, l: "Contactados" },
-                    { v: `${conProducto}/${rows.length}`, l: "Con producto publicado" },
+                    { v: `${sinAgendar}`, l: "Sin agendar" },
+                    { v: `${conAgenda}/${rows.length}`, l: "Con agenda" },
+                    { v: `${conProducto}/${rows.length}`, l: "Con producto" },
                     { v: `${conVenta}/${rows.length}`, l: "Primera venta" },
                   ].map(({ v, l }) => (
                     <div key={l} style={{ background: "rgba(255,255,255,0.15)", borderRadius: 10, padding: "10px 12px" }}>

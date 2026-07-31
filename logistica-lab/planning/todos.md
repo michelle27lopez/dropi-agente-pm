@@ -10,22 +10,11 @@
 > Vercel solo con el próximo `git push` que toque este bloque — no hay que tocar código.
 > Formato: `- emoji [Proyecto] texto`.
 <!-- tablero:pendientes:start -->
-- 🔴 [Local] Agregar `SUPABASE_URL` y `SUPABASE_SERVICE_KEY` a `hub/.env.local` (valores desde Vercel) — sin ellas el hub local no lee la base
-- 🔴 [Seguridad] Rotar 3 claves: `SUPABASE_SERVICE_KEY` (en 7 archivos de `origin/main`, es de Jaime) + OpenAI + Evolution API
-- 🔴 [Jira] Arreglar estados ANTES de documentar: asignar el paraguas PRM-1517 · sacar PRM-1513 y PRM-1512 de "En Ruta" · resolver ownership de PRM-91 (hoy es de Kate) con Maria
+- 🔴 [Indiana] Poner el `.env.local` en `/Users/user/dropi-repos/inidiana-map/` y correr el primer ciclo real (armar UNA solicitud)
+- 🔴 [Indiana] Vercel bloquea todos los deploys desde el 28-jul (28 commits sin publicar) — pedirle a Jaime el motivo y mover el proyecto a un team de Dropi
 - 🔴 [Fulfillment] Levantar `spec.md` de PRM-1446 — está en "Listo para hand off" sin nada documentado (hueco #1)
-- 🔴 [Pruebas de entrega] Consolidar los 8 tickets en un solo spec, recogiendo el dato del 80% de PRM-618
 - 🟡 [Darwin] Commitear `prototipo-recolecciones.html` del worktree `claude/dropi-logistics-queue-482601` — sigue sin guardar
-- 🟡 [Darwin] Pushear `juan/logistica-22jul` (4 commits: rescate 16-jul + mapa 3 ejes + cierre ESTADO + Sidebar WIP) y abrir PR. CODEOWNERS no exige aprobación; el check de ownership sí marcará el PR porque `hub/src/app/proyectos/` figura como zona de suppliers → registrar las rutas de logística en `.github/ownership.json`
-- 🔴 [Cronograma Q3/Q4] Crear cronograma de proyectos y presentarlo a Maria la próxima semana
-- 🔴 [KPIs + meta] Insight/presentación Weekly Product (vie) + Seguimiento de métricas (jue, con Diana)
-- 🔴 [KPIs + meta] Correr baseline creación→handoff (<24h) y proponer la meta a Maria
-- 🔴 [Data] Pedir export COMPLETO a Data (CSV sin cap, estados vivos + timestamps de fase) — el actual está capado y sesgado
-- 🔴 [Homologación estados] Confirmar `INTENTO DE ENTREGA` con INTERRAPIDISIMO/VELOCES (única colisión posible real) + decidir `Proceso finalizado` + validar flags contables → cerrar catálogo v1
-- 🔴 [Homologación estados] Hacer el mapeo crudo→homologado de los ~50 reales y validar contra el `history[]` (ver propuesta-homologacion.md §12)
 - 🟡 [Homologación estados] Modelar la devolución con su propio ciclo de reintento + `Entregado` confirmado vs observado + ubicar `Guía anulada`
-- 🔴 [Normalización] Hacer la CADENA de discovery (oportunidad → idea → solución)
-- 🔴 [Confirmación] Segmentar confirmación por volumen y categoría de dropshipper (con Michel) — el prom ~11h oculta segmentos
 - 🔴 [Cell Board] Preparar propuesta de experimento para "Preparación de guía" → llevar al Cell Board #3
 - 🔴 [Árbol OKR] Validar el reajuste del árbol v2 con Juan/Maria antes de tocar Jira
 - 🔴 [Delivery] EL FOCO = Normalización de estados: subirlo en el roadmap y terminar la propuesta (WIP=1)
@@ -54,6 +43,19 @@
 - 🟢 [Cell Board] Coordinar fecha/logística del Cell Board #3 presencial (Laura + Michel)
 - 🟢 [Operación] Limpiar backlog DROP heredado (bulk desasignar/cerrar en UI)
 <!-- tablero:pendientes:end -->
+
+## 🆕 INDIANA — Control de Recolecciones (29-jul)
+> Repo `jaimeguevara-dropi/inidiana-map` → clon local **`/Users/user/dropi-repos/inidiana-map`**. Levanta con `npx next dev --port 3001`.
+> Doc del proyecto: `proyectos/recoleccion-proactiva/` *(bóveda: proyectos/recoleccion-proactiva/)*.
+- [ ] 🔴 **Crear `.env.local` en la raíz del repo de Indiana** (4 líneas = 3 valores: la URL va en `NEXT_PUBLIC_SUPABASE_URL` y en `SUPABASE_URL`; `anon` ≠ `service_role`). Fuente: Supabase → Settings → API, o Vercel del hub, o Jaime. **No existe ningún `.env.local` en la máquina** (se buscó en todo el home). Sin esto la app da **503 en todas las rutas** y no corre ningún script.
+- [ ] 🔴 **Correr el primer ciclo real: armar UNA solicitud de punta a punta** (filtrar → descargar → marcar cómo se mandó) y anotar qué falló. Hoy: **0 solicitudes y 0 contactos** en la base, 13 pantallas nunca vistas. Es el **único paso del flujo sin bloqueo externo**. Necesita a quien gestiona recolecciones hoy (William), no se puede simular.
+- [ ] 🔴 **Aplicar la migración RLS** `supabase/003_rls_cerrar_lectura_authenticated.sql` — está en `main` **sin correr** (Jaime dijo que la corría). Verificar con `node --env-file=.env.local scripts/verificar-rls.mjs`: hoy da **4 tablas expuestas**, deben ser **7 bloqueadas**. Mientras tanto, direcciones y teléfonos de proveedores son legibles por cualquier cuenta `authenticated`.
+- [ ] 🔴 **Vercel: pedirle a Jaime el motivo del bloqueo.** Todos los deploys fallan con *"Deployment was blocked"* desde el **28-jul 15:55 UTC** → **28 commits sin publicar**. **No es el código** (`next build` pasa limpio) ni falta de merge. El proyecto vive en su cuenta personal (`jaimeguevara-dropis-projects`).
+- [ ] 🟡 **Mover Indiana a un team de Vercel de Dropi con Juan adentro.** Hoy Juan no puede ver logs, reintentar deploys ni cargar env vars de un producto de la célula. Arreglarlo ahora que no hay usuarios.
+- [ ] 🟡 **Perseguir a Luis los 2 pedidos del 26-jul** (`peticion-data-luis-26jul.md`): (1) re-export **sin el tope de 4.000 filas** — el actual está truncado e infla "salieron" ~13%; (2) **las guías que salieron de PREPARADO/GUIA_GENERADA con su estado nuevo**. Sin (2), el paso 4 solo dice *"salieron N guías"* y **nunca "las recogió tal transportadora"** → no se le puede reclamar a nadie. Lleva desde el 26-jul; ponerle fecha con Maria de por medio.
+- [ ] 🟡 **Cobertura por municipio** (qué ciudades opera Dropi vs cada transportadora): la estructura existe en `elegibilidad.ts` pero **entra vacía** → hoy se le puede pedir a un carrier un municipio donde no opera. Falta el dato, no el código.
+- [ ] 🟢 **Unificar los dos clones del cerebro.** `proyectos/recoleccion-proactiva/` y la carta a Luis viven **solo** en `cerebro-logistica-dropi`; ESTADO/DASHBOARD/planning/Darwin viven **solo** en `AGENTE`. Mismo proyecto, dos repos que no se hablan.
+- [ ] 🟢 **Reanudar geocodificación** (`npx tsx --env-file=.env.local scripts/geocodificar-cruces.ts --si`): quedan ~300 bodegas con 18% de acierto y ~65 s por consulta. Idempotente. **Bajo retorno** — son las difíciles y de poco volumen.
 
 ## 🆕 WIP = 1 + 1 — foco de los dos roadmaps (16-jul)
 > Decisión de Juan (16-jul): **una** cosa activa en **Delivery** y **una** en **Product**. De a una.

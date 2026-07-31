@@ -29,7 +29,7 @@
 ### 2. Page Pilot — Activación Huérfanos (PROD-1663 / PRM-1238)
 *   *Objetivo:* Validar creador de páginas para lograr la 1ª orden rentable.
 *   *Estado:* En curso.
-*   *Acción:* Reunión con Miguel Ángel para auditar baseline de ganancias (PROD-1341), mapear funnel AS-IS (PROD-1351) y destrabar la DropiCard con Financiero (PROD-1515).
+*   *Acción:* Reunión con Miguel Ángel para auditar baseline de ganancias (PROD-1341), mapear funnel AS-IS (PROD-1351) y coordinar el flag de desarrollo (la DropiCard PROD-1515 fue resuelta por Tesorería).
 
 ### 3. Módulo de Notificaciones (PROD-1664 / PRM-1305)
 *   *Objetivo:* Reducir TTV e incentivar la primera orden manual mediante prompts.

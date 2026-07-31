@@ -108,7 +108,7 @@ Especificaciones enviadas a Miguel Ángel (Data Analyst) para auditar el baselin
 *   **Objetivo:** Reducir la fricción cognitiva del dropshipper al descubrir, evaluar y guardar productos.
 *   **Acciones de Lanzamiento:** 
     *   **PROD-1814 — Workshop lanzamiento Page Pilot:** Planificar el lanzamiento a producción de la funcionalidad Page Pilot bajo la metodología TARS. Incluye reuniones con el equipo de sellers, Figma con workshop de ideación y visualización de data, y documentación en Confluence y Darwin. Liderado por Catherin Salazar.
-*   **Estado:** Beta controlada / En curso (bloqueado por dependencias de QA en `PROD-1376` y DropiCard en `PROD-1515`).
+*   **Estado:** Beta controlada / En curso (bloqueado por dependencia de QA en `PROD-1376`. La DropiCard `PROD-1515` fue resuelta y será manejada por Tesorería).
 
 ### 3. Personalización vía User Pilot & Experimento de Activación Neta (TTV) (PROD-1478)
 *   **Descripción:** Encuesta de nivel de conciencia + tour guiado específico para huérfanos.

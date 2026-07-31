@@ -180,11 +180,17 @@ export default function HubPage() {
   // un POC nuevo se ve como acceso directo desde su padre aunque su propio
   // código no esté (todavía) en la curaduría.
   const pocsByParent = new Map<string, Proyecto[]>();
+  const deliveriesByParent = new Map<string, Proyecto[]>();
   for (const p of proyectosReales) {
     if (p.type === "POC" && p.parent_project_id) {
       const list = pocsByParent.get(p.parent_project_id) ?? [];
       list.push(p);
       pocsByParent.set(p.parent_project_id, list);
+    }
+    if (p.type === "Delivery Proyecto" && p.parent_project_id) {
+      const list = deliveriesByParent.get(p.parent_project_id) ?? [];
+      list.push(p);
+      deliveriesByParent.set(p.parent_project_id, list);
     }
   }
 
@@ -219,6 +225,28 @@ export default function HubPage() {
     if (!res.ok) return;
     const created = await res.json();
     setProyectosReales((prev) => [...prev, created]);
+  }
+
+  async function handleCrearDelivery(parent: Proyecto, name: string, summary: string, relatedPocId: string | null) {
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary, type: "Delivery Proyecto", related_poc_id: relatedPocId }),
+    });
+    if (!res.ok) return;
+    const created = await res.json();
+    setProyectosReales((prev) => [...prev, created]);
+  }
+
+  async function handleRelatedPocChange(id: string, relatedPocId: string | null) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ related_poc_id: relatedPocId }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setProyectosReales((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
   }
 
   const projects = proyectosReales
@@ -271,11 +299,13 @@ export default function HubPage() {
 
   // Lista curada (PROJECT_STYLE) pero ya con los datos reales de `projects`
   // — así el select de estado y el VPV quedan conectados a la base.
-  const curatedProjects = proyectosReales.filter((p) => p.type !== "POC" && p.project_code && PROJECT_STYLE[p.project_code]);
+  const curatedProjects = proyectosReales.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.project_code && PROJECT_STYLE[p.project_code]);
   const curatedPoc = proyectosReales.filter((p) => p.type === "POC" && p.project_code && PROJECT_STYLE[p.project_code]);
+  const curatedDelivery = proyectosReales.filter((p) => p.type === "Delivery Proyecto");
   const filteredCuratedProjects = curatedProjects.filter((p) => matchesProyectoQuery(p, query));
   const filteredCuratedPoc = curatedPoc.filter((p) => matchesProyectoQuery(p, query));
-  const hasResults = filteredUpdates.length + filteredCuratedProjects.length + filteredCuratedPoc.length > 0;
+  const filteredCuratedDelivery = curatedDelivery.filter((p) => matchesProyectoQuery(p, query));
+  const hasResults = filteredUpdates.length + filteredCuratedProjects.length + filteredCuratedPoc.length + filteredCuratedDelivery.length > 0;
 
   return (
     <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
@@ -335,9 +365,11 @@ export default function HubPage() {
                   dark={false}
                   canCreate={canCreate}
                   pocs={pocsByParent.get(p.id) ?? []}
+                  deliveries={deliveriesByParent.get(p.id) ?? []}
                   onEstadoChange={handleEstadoChange}
                   onVpvChange={handleVpvChange}
                   onCrearPoc={handleCrearPoc}
+                  onCrearDelivery={handleCrearDelivery}
                   urlOverride={style?.url}
                   colorOverride={style?.color}
                   iconOverride={style?.icon}
@@ -364,6 +396,34 @@ export default function HubPage() {
                   onEstadoChange={handleEstadoChange}
                   onVpvChange={handleVpvChange}
                   onCrearPoc={handleCrearPoc}
+                  urlOverride={style?.url}
+                  colorOverride={style?.color}
+                  iconOverride={style?.icon}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{ marginTop: filteredCuratedDelivery.length ? 56 : 0 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Delivery Proyectos
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {filteredCuratedDelivery.map((p) => {
+              const style = p.project_code ? PROJECT_STYLE[p.project_code] : undefined;
+              return (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                  onRelatedPocChange={handleRelatedPocChange}
                   urlOverride={style?.url}
                   colorOverride={style?.color}
                   iconOverride={style?.icon}
