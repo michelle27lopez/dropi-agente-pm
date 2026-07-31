@@ -1,0 +1,139 @@
+﻿🔍 Discovery del Proyecto (Por áreas, Usuarios, AS-IS, Hipótesis y Requerimientos)
+Profundiza el POR QUÉ. Documenta la investigación realizada, el estado actual (AS-IS), las hipótesis planteadas y las conclusiones que sustentan la definición del proyecto.
+2.1 Usuarios Implicados & Estado de Madurez
+* Perfil Principal: Equipo de cartera — Estado de madurez: [Ej: En consolidación]
+* Perfil Secundario: [Ej: Operadores logísticos de la marca] — Estado de madurez: [Ej: En aprendizaje]
+2.2 El "AS-IS" (Soluciones Actuales y Limitaciones)
+* Soluciones Actuales: ¿Cómo están abordando las marcas o el equipo este problema el día de hoy? (Procesos manuales, parches técnicos, herramientas externas).
+* Limitaciones: Por qué la solución actual no es escalable o daña la experiencia.
+2.3 Discovery por Áreas, Bench e Investigación (Apéndices)
+* Resultados de Research: * Hallazgo principal: Lo más relevante y revelador que aprendimos de las marcas.
+   * Fuentes y Datos de Investigación: [Link a entrevistas, encuestas, Mixpanel, datos de mercado o feedback de soporte].
+* Benchmark: Breve mención de cómo plataformas competidoras o industrias análogas resuelven este dolor.
+2.4 Gestión de Riesgos de Producto
+* Riesgo de Valor: ¿El cliente/Brand realmente encontrará valor en esta solución y pagará por ella / la usará?
+   * El principal usuario de esta solución es el área financiera de Dropi. El valor es claro si la solución reduce el tiempo dedicado a la conciliación manual, genera confianza en los resultados y permite detectar diferencias de forma oportuna. El riesgo existe si la solución automatiza el proceso pero no se adapta a la forma en que el área financiera interpreta y usa los resultados hoy.
+   * Experimento: validar con el área financiera el flujo actual paso a paso, identificar qué información es crítica en el output y qué decisiones toman a partir de los resultados de la conciliación, antes de definir el formato y contenido del reporte final.
+* Riesgo de Usabilidad: ¿Los usuarios podrán entender y usar la interfaz de manera efectiva?
+   * Aún no está definido si la solución tendrá interfaz visual o será un proceso backend automatizado. Si se decide construir una UI, existe el riesgo de que el área financiera no adopte la herramienta si no se adapta a su flujo de trabajo actual. Si es un proceso backend, el riesgo es que los outputs no sean legibles o accionables sin contexto adicional.
+   * Responsable: El product designer deberá validar con el área financiera la necesidad de interfaz, el nivel de intervención esperado por el usuario y el formato ideal de los resultados antes de definir la solución técnica.
+* Riesgo de Factibilidad: ¿Podemos construir esto con la tecnología, infraestructura y APIs disponibles?
+La lógica de conciliación ya existe en el notebook, lo que reduce el riesgo técnico de construcción. Sin embargo, existen dependencias que podrían bloquear o retrasar el desarrollo:
+   * Acceso a la API de Confío o definición del formato de reporte que entregará.
+   * Acceso al extracto bancario de forma programática o acuerdo sobre el mecanismo de entrega del archivo.
+   * Capacidad del equipo de ingeniería para priorizar e integrar esta solución dentro del roadmap actual.
+   * Definición del ambiente donde vivirá la solución dentro de Dropi.
+Responsable: el project lead deberá mapear estas dependencias técnicas en la fase de discovery con ingeniería y confirmar la viabilidad antes del inicio del desarrollo.
+* Riesgo de Viabilidad Empresarial: ¿Esta solución se alinea con las reglas de negocio, costos y márgenes de Dropi?
+   * La solución tiene una viabilidad clara en Colombia como piloto. El riesgo aparece al considerar la escalabilidad regional, ya que cada país puede tener una pasarela distinta, un banco distinto y una estructura de datos diferente, lo que podría hacer que el modelo no sea replicable sin esfuerzo adicional significativo.
+   * Adicionalmente, existe el riesgo de que el costo de implementación o de las herramientas adicionales requeridas no esté alineado con el apetito de inversión del negocio para esta solución en esta etapa.
+* Riesgo Legal: ¿Cumplimos con las normativas vigentes, términos de uso y tratamiento de datos?
+   * La conciliación involucra datos financieros y transaccionales de usuarios, lo que puede implicar obligaciones relacionadas con protección de datos, retención de información contable y requerimientos regulatorios específicos del sector financiero en Colombia.
+   * Adicionalmente, la integración con Confío como pasarela de pagos regulada puede tener implicaciones contractuales sobre el acceso, uso y almacenamiento de los datos de transacciones.
+2.5 Hipótesis, Validaciones y Preguntas Abiertas
+* Preguntas Clave / Dudas Iniciales: Lista de incógnitas críticas que deben ser respondidas durante o inmediatamente después del shaping (Ej: dependencias técnicas externas).
+* ¿Cuál es la estructura exacta del reporte de transacciones que genera Confío? 
+Se recibe por API el JSON que contiene la siguiente información
+Campo API Confío
+	Descripción
+	Uso en conciliación
+	correlationId
+	ID de la recarga (ej: 143047)
+	Llave de matching principal con external_id de Dropi
+	status
+	Estado de la transacción
+	Filtro: sólo procesar APPROVED
+
+
+Existen:
+APPROVED (Pago aprobado y completado): Se puede conciliar
+PAYMENT_IN_PROGRESS (Pago en proceso): Pendiente, no conciliar aún
+AWAITING_PAYMENT (Esperando que el usuario pague): No se concilia
+	amountCents
+	Valor en centavos (ej: 2000000 = $20.000 COP)
+	Monto a conciliar, requiere dividir por 100
+	currencyCode
+	Moneda (COP)
+	Validación de moneda
+	enabledPaymentMethods
+	Métodos habilitados (PSE, NEQUI)
+	Filtro por método de pago si se requiere
+	description
+	Texto con usuario e ID recarga
+	Extracción del ID usuario de Dropi como dato de trazabilidad
+	name
+	Identificador único del pago en Confío (ej: stores/.../payments/01KPXG...)
+	ID interno de Confío, útil como referencia de auditoría
+	redirectUri
+	URL de retorno post-pago al dashboard del home de Dropi
+	Puede indicar si el pago fue exitoso o fallido según los query params (status=failed)
+	* ¿Tiene un campo equivalente al ExternalOrder de Payments Way para hacer el matching con Dropi?        
+* Si, se llama correlationId y trae el ID de la recarga de Dropi
+* ¿Confío pagará al banco de Dropi por cohortes (como lo hacía Payments Way) o realizará pagos diarios?
+* Los estados coexisten en el mismo response: en una misma consulta aparecen transacciones APPROVED, PAYMENT_IN_PROGRESS y AWAITING_PAYMENT simultáneamente, lo que solo es posible si la API refleja el estado actual de cada transacción en el momento de la consulta.
+* No hay agrupación por fechas ni cortes: a diferencia del reporte de Payments Way que venía consolidado por cohortes con una fecha representativa de pago, cada registro de Confío es una transacción individual con su propio estado independiente.
+* ¿Confío tiene API disponible para consultar transacciones de forma programática, o solo entrega reportes en archivo?
+* Si, tiene una API. Para poder acceder y visualizar la información se generó un JSON donde vienen desglosadas cada una de esas transacciones.
+* ¿Confío sigue pagando al banco de Dropi por lotes o el dinero también fluye en tiempo real? ¿Cómo se refleja esto en el concepto del extracto bancario o de cobre?
+* En Confío se reciben muchas transacciones individuales de recargas de usuarios.
+* El equipo de tesorería de Dropi decide en qué momento hacer un retiro global de Confío hacia la cuenta de Cobre — sin un patrón fijo (puede ser el día 8, el 15, el 17...).
+* Lo que llega a Cobre es una sola transacción por el monto que el tesorero decidió bajar — no corresponde 1:1 con el número de recargas.
+* Ejemplo dado: Se reciben 8 días de recargas en Confío → acumula 700M COP → el tesorero baja 300M a Cobre. En Cobre solo se ve una transacción de 300M, no las recargas individuales.
+* ¿La API de Confío tiene un campo de fecha/hora explícito en otros endpoints, o la única forma de obtener el timestamp es decodificando el ULID del name?
+* Hay un campo que se llama create_time. Sin embargo, revisando la documentación,se confirmó que efectivamente la fecha no se está devolviendo en el API actualmente, pero sí la tienen internamente.
+* Nos pueden facilitar las fechas de inició la recarga y en la que se recibe el pago
+* ¿Cuál será el concepto bancario asociado a los pagos de Confío en el extracto del banco o en Cobre para la cuenta de Dropi?
+* ¿El banco de Dropi tiene API o mecanismo de integración para obtener el extracto de forma automática, o solo se puede obtener descargando el archivo manualmente?
+* ¿Qué métodos de pago maneja Confío además de PSE? ¿Todos deben incluirse en la conciliación o solo algunos?
+* Maneja PSE y NEQUI, el incluirse depende que se quiere conciliar y como llega el dinero al banco. Pero no veo necesario especificar el método si en COBRE llega bajo un concepto general de la pasarela.
+* ¿La comisión por transacción de Confío es fija como en Payments Way ($1.779,30 COP) o varía por monto, método de pago o tipo de usuario?
+* Para dropi Colombia está negociado como un valor único para los dos métodos de pago activos: 1.900 pesos fijos + IVA (19%)
+* ¿Qué debe pasar cuando una transacción aparece en Confío pero no en Dropi, o viceversa? 
+* Se debe marcar como no conciliada.
+* ¿Dónde vivirán los datos históricos de conciliación? ¿Existe infraestructura de datos disponible en Dropi para esto?
+* Por el momento no.
+* ¿Cómo deberíamos manejar la lógica de la conciliación?
+* Pasarela vs banco con Confío debería funcionar así:
+   * El sistema acumula diariamente las recargas APPROVED en Confío con sus fechas reales
+   * Cuando tesorería hace un retiro a Cobre, ese evento dispara la conciliación del período correspondiente
+   * El sistema debe permitir definir el rango de fechas de las recargas que respaldan ese retiro y verificar que el total neto (bruto menos comisiones) coincida con el monto retirado a Cobre:
+Ejemplo práctico:
+Tesorería decide el día 15 de mayo retirar $300M COP de Confío hacia Cobre.
+El sistema debería permitir decir:
+"Este retiro de $300M corresponde a las recargas aprobadas en Confío entre el 1 y el 14 de mayo"
+Entonces verifica:
+Suma de recargas APPROVED en Confío del 1 al 14 de mayo = $320M bruto
+Menos comisiones (transacciones × $2.261 COP(comisión + IVA)) = $18M
+Total neto esperado = $302M
+Monto retirado a Cobre = $300M
+Diferencia = $2M → genera alerta
+* La lógica del tramo Confío vs Dropi: 
+   * La llave de matching sigue siendo el mismo identificador: correlationId de Confío = external_id de Dropi
+   * La comparación sigue siendo transacción a transacción
+   * Los tres grupos de resultado se mantienen: conciliados, solo en Confío, solo en Dropi
+   * El riesgo que se controla es el mismo: que toda acreditación en Dropi tenga respaldo en Confío
+* ¿Se debe mantener el respaldo de días de tolerancia por si hay algún tema de que la transacción se tarde en ingresar?
+* Aunque confío confirma que generalmente las transacciones son inmediatas, si existen casos donde se pueden demorar minutos o días en llegar debido a fallas del método de pago. Es importante tener en cuenta esto para poder decidir si se maneja o no.
+* ¿Tesorería sabe exactamente qué rango de fechas está bajando cuando hace el retiro, o simplemente baja lo que hay disponible en Confío sin pensar en fechas?
+No hay una fecha en específico, se hacen los retiros de confio a Cobre según la necesidad y análisis de tesorería. En un mes pueden hacer 3 o 7 retiros dependiendo del flujo de dinero.
+* ¿Existe la forma de saber que transacciones de confio se están yendo cuando se recarga cobre?
+No, no se puede. Cuando se hace la recarga a cobre se visualiza es un monto y no el detalle del monto. Ocurre lo mismo que con una cuenta bancaria. Tienes un valor total pero cuando lo sacas no se tiene trazabilidad de que transacciones corresponden a ese monto
+
+   * Hipótesis: Planteamiento de supuestos sobre posibles enfoques que el equipo validará durante el desarrollo.
+   * El tramo Confío vs Dropi puede ser completamente automático. Dado que Confío tiene API en tiempo real y Dropi tiene acceso a su propia base de datos, el matching por correlationId = external_id puede ejecutarse de forma programada sin intervención humana. El sistema podría correr la conciliación de este tramo diariamente de forma automática y solo escalar al área financiera cuando detecte registros sin par o diferencias de montos.
+   * El tramo Confío vs Cobre requiere un disparador manual para la primera versión. Dado que los retiros de Confío a Cobre los decide tesorería de forma discrecional y sin un patrón fijo, la primera versión de la conciliación de este tramo podría funcionar así: cuando tesorería realiza un retiro, ingresa al sistema el monto retirado y el rango de fechas que cubre, y el sistema automáticamente calcula el total neto esperado desde Confío y lo compara contra lo declarado. El archivo de Cobre podría subirse manualmente como fuente de validación adicional.
+   * Cobre puede ser la única fuente que llegue como archivo en la primera versión.Confío se integra vía API y Dropi es fuente interna, por lo que el único archivo que probablemente deba cargarse manualmente en la primera versión es el extracto de Cobre. Si en el futuro Cobre habilita una API o integración bancaria, este paso también podría automatizarse.
+   * El resultado de la conciliación puede presentarse como un dashboard de estado. En lugar de exportar un Excel con tres pestañas como hace el notebook hoy, el sistema podría presentar los resultados en una vista dentro de Dropi con tres estados claros por período: conciliado, con diferencias y pendiente de revisión. Cada estado tendría el detalle de transacciones accionable, permitiendo al área financiera gestionar excepciones directamente desde la herramienta sin necesidad de abrir archivos.
+   * Las diferencias deben generar alertas activas, no reportes pasivos En lugar de que el área financiera deba revisar periódicamente si hay diferencias, el sistema podría enviar una notificación automática (correo, Slack u otro canal que use el equipo) cada vez que detecte una transacción solo en Confío, solo en Dropi o una diferencia entre el retiro a Cobre y el saldo neto esperado. Esto convierte la conciliación de un proceso reactivo a uno proactivo.
+   * El historial de conciliaciones debe ser consultable y auditable A diferencia del notebook actual que genera archivos aislados sin trazabilidad, el sistema debería almacenar cada ejecución de conciliación con su fecha, el período cubierto, quién la ejecutó o disparó, y el resultado obtenido. Esto permitiría responder ágilmente ante requerimientos de auditoría, contabilidad o tesorería sin depender de archivos guardados localmente.
+   * Si la solución se diseña con una arquitectura parametrizable (concepto bancario, campos de matching, costo por transacción configurables), el modelo podría replicarse a otros países donde Confío opere como pasarela sin necesidad de rediseñar el proceso desde cero.
+
+
+2.6  Conclusiones del discovery
+Síntesis ejecutiva: qué aprendimos, qué decisiones tomamos y qué queda fuera del alcance del proyecto.
+
+
+2.7 Requerimientos Generales, Compatibilidad y Performance
+   * Descripción de la solución: Definición clara de la funcionalidad. ¿Qué estamos construyendo exactamente?
+   * Dispositivos: [Ej: Mobile-first, Desktop-only, Responsivo]
+   * Restricciones y Performance: [Ej: Tiempo de carga menor a 2s, límites de consumo de APIs, compatibilidad con navegadores].
