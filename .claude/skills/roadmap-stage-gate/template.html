@@ -1,0 +1,296 @@
+<!--
+  TEMPLATE — Roadmap Stage Gate
+  Validado por Laura el 31-jul-2026. No rediseñar desde cero: copiar este archivo,
+  reemplazar CELULAS / ITEMS / BLOCKERS en el <script> de abajo con los datos reales
+  de esta corrida, ajustar los 3 callouts destacados (o quitar los que no apliquen),
+  y publicar con Artifact (favicon 🗺️, mismo emoji siempre).
+-->
+<title>Roadmap de Producto — Stage Gate</title>
+<style>
+  :root {
+    --bg: #F2F4F7; --surface: #FFFFFF; --surface-2: #FAFBFC; --border: #E1E5EA;
+    --ink: #1A2027; --ink-muted: #5B6472; --ink-faint: #8A93A0;
+    --brand: #C74F14; --brand-soft: #FBE7D8;
+    --shadow: 0 1px 2px rgba(20,24,30,0.04), 0 4px 14px rgba(20,24,30,0.05);
+    --st-discovery: #64748B; --st-discovery-bg: #EEF1F4;
+    --st-poc:       #2563EB; --st-poc-bg:       #E3ECFD;
+    --st-delivery:  #B45309; --st-delivery-bg:  #FDF0DA;
+    --st-following: #15803D; --st-following-bg: #DFF3E7;
+    --danger: #B42318; --danger-soft: #FCE4E1;
+    --warn: #92650A; --warn-soft: #FFF1D2;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151A; --surface: #191D24; --surface-2: #1E232B; --border: #2B313B;
+      --ink: #E7E9EC; --ink-muted: #9AA3AF; --ink-faint: #6B7382;
+      --brand: #F2894A; --brand-soft: #3A2416;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 18px rgba(0,0,0,0.32);
+      --st-discovery: #94A3B8; --st-discovery-bg: #232A33;
+      --st-poc: #7FA6F5; --st-poc-bg: #1B2A44;
+      --st-delivery: #F0B057; --st-delivery-bg: #362808;
+      --st-following: #4ADE94; --st-following-bg: #10301E;
+      --danger: #F2887D; --danger-soft: #3A1613; --warn: #F2C14E; --warn-soft: #3A2E10;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12151A; --surface: #191D24; --surface-2: #1E232B; --border: #2B313B;
+    --ink: #E7E9EC; --ink-muted: #9AA3AF; --ink-faint: #6B7382;
+    --brand: #F2894A; --brand-soft: #3A2416;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 18px rgba(0,0,0,0.32);
+    --st-discovery: #94A3B8; --st-discovery-bg: #232A33;
+    --st-poc: #7FA6F5; --st-poc-bg: #1B2A44;
+    --st-delivery: #F0B057; --st-delivery-bg: #362808;
+    --st-following: #4ADE94; --st-following-bg: #10301E;
+    --danger: #F2887D; --danger-soft: #3A1613; --warn: #F2C14E; --warn-soft: #3A2E10;
+  }
+  :root[data-theme="light"] {
+    --bg: #F2F4F7; --surface: #FFFFFF; --surface-2: #FAFBFC; --border: #E1E5EA;
+    --ink: #1A2027; --ink-muted: #5B6472; --ink-faint: #8A93A0;
+    --brand: #C74F14; --brand-soft: #FBE7D8;
+    --shadow: 0 1px 2px rgba(20,24,30,0.04), 0 4px 14px rgba(20,24,30,0.05);
+    --st-discovery: #64748B; --st-discovery-bg: #EEF1F4;
+    --st-poc: #2563EB; --st-poc-bg: #E3ECFD;
+    --st-delivery: #B45309; --st-delivery-bg: #FDF0DA;
+    --st-following: #15803D; --st-following-bg: #DFF3E7;
+    --danger: #B42318; --danger-soft: #FCE4E1; --warn: #92650A; --warn-soft: #FFF1D2;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .serif { font-family: Charter, "Iowan Old Style", Georgia, serif; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
+
+  .masthead { max-width: 1280px; margin: 0 auto; padding: 40px 24px 18px; }
+  .eyebrow { font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--brand); }
+  h1 { font-size: clamp(24px, 3.4vw, 32px); font-weight: 800; letter-spacing: -0.02em; margin: 8px 0 8px; text-wrap: balance; }
+  .sub { color: var(--ink-muted); max-width: 640px; font-size: 14px; margin: 0 0 22px; }
+
+  .summary { max-width: 1280px; margin: 0 auto 8px; padding: 0 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .sum-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .sum-num { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+  .sum-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); margin-top: 2px; }
+
+  .callouts { max-width: 1280px; margin: 18px auto; padding: 0 24px; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); }
+  .callout { border: 1px solid var(--border); border-left: 4px solid var(--danger); background: var(--danger-soft); border-radius: 4px 10px 10px 4px; padding: 10px 14px; font-size: 13px; }
+  .callout.warn { border-left-color: var(--warn); background: var(--warn-soft); }
+  .callout b { display: block; margin-bottom: 2px; }
+
+  .toolbar { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); margin-top: 10px; }
+  .toolbar-inner { max-width: 1280px; margin: 0 auto; padding: 10px 24px; display: flex; gap: 8px; overflow-x: auto; }
+  .pill { flex: 0 0 auto; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--surface); color: var(--ink-muted); cursor: pointer; white-space: nowrap; transition: all .15s; }
+  .pill[aria-pressed="true"] { color: #fff; border-color: transparent; }
+  .pill:hover { border-color: var(--brand); }
+
+  main { max-width: 1280px; margin: 0 auto; padding: 24px 24px 80px; }
+  .board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: start; }
+  @media (max-width: 980px) { .board { grid-template-columns: 1fr; } }
+
+  .col-head { display: flex; align-items: center; gap: 8px; padding: 10px 4px 12px; border-bottom: 2px solid var(--col-color); margin-bottom: 12px; position: sticky; top: 46px; background: var(--bg); z-index: 5; }
+  .col-title { font-weight: 800; font-size: 14.5px; color: var(--col-color); }
+  .col-count { font-size: 11.5px; font-weight: 700; background: var(--col-bg); color: var(--col-color); padding: 2px 9px; border-radius: 20px; margin-left: auto; }
+  .col-hint { font-size: 11px; color: var(--ink-faint); margin: -8px 0 12px 4px; }
+  .col-body { display: flex; flex-direction: column; gap: 10px; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 13px 15px; box-shadow: var(--shadow); }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+  .card-title { font-weight: 700; font-size: 13.5px; line-height: 1.35; }
+  .card-code { font-size: 10.5px; color: var(--ink-faint); margin-top: 1px; }
+  .card-note { font-size: 12.5px; color: var(--ink-muted); margin: 6px 0 8px; line-height: 1.5; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; white-space: nowrap; }
+  .sub-pill { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: var(--surface-2); color: var(--ink-muted); border: 1px solid var(--border); }
+  .flag { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 20px; background: var(--danger-soft); color: var(--danger); }
+  .src { margin-left: auto; font-size: 9.5px; font-weight: 700; color: var(--ink-faint); text-transform: uppercase; letter-spacing: .04em; }
+
+  .unclassified { background: var(--surface-2); border: 1px dashed var(--border); border-radius: 12px; padding: 16px 18px; margin-top: 26px; }
+  .unclassified h3 { margin: 0 0 8px; font-size: 13.5px; }
+  .unclassified ul { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-muted); }
+  .unclassified li { margin-bottom: 4px; }
+
+  .blockers { max-width: 1280px; margin: 30px auto 0; padding: 0 24px; }
+  .blockers h2 { font-size: 15px; margin-bottom: 4px; }
+  .blockers p.sub { margin-bottom: 12px; }
+  .blocker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 10px; }
+  .blocker-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 13px; font-size: 12.5px; box-shadow: var(--shadow); }
+  .blocker-card b { display: block; font-size: 12.5px; margin-bottom: 2px; }
+
+  footer { max-width: 1280px; margin: 30px auto 0; padding: 20px 24px 40px; border-top: 1px solid var(--border); font-size: 12px; color: var(--ink-faint); }
+</style>
+
+<div class="masthead">
+  <div class="eyebrow">Producto · Dropi</div>
+  <h1>Roadmap de Producto — Vista Stage Gate</h1>
+  <p class="sub serif">«una línea de contexto: qué se cruzó y para qué reunión/audiencia es esta versión»</p>
+</div>
+
+<div class="summary" id="summary"></div>
+
+<!-- 2-3 callouts como máximo, solo si hay un riesgo/fecha/bug real que valga la pena destacar. No rellenar por rellenar. -->
+<div class="callouts">
+  <div class="callout">
+    <b>«Título del riesgo más urgente»</b>
+    «una frase con el hecho concreto, no una opinión»
+  </div>
+</div>
+
+<nav class="toolbar">
+  <div class="toolbar-inner" id="filters"></div>
+</nav>
+
+<main>
+  <div class="board" id="board">
+    <div>
+      <div class="col-head" style="--col-color:var(--st-discovery);--col-bg:var(--st-discovery-bg)">
+        <span class="col-title">Discovery</span><span class="col-count" id="count-discovery">0</span>
+      </div>
+      <p class="col-hint">Research · Ideación · Experimento</p>
+      <div class="col-body" data-stage="discovery"></div>
+    </div>
+    <div>
+      <div class="col-head" style="--col-color:var(--st-poc);--col-bg:var(--st-poc-bg)">
+        <span class="col-title">POC</span><span class="col-count" id="count-poc">0</span>
+      </div>
+      <p class="col-hint">En seguimiento · En priorización</p>
+      <div class="col-body" data-stage="poc"></div>
+    </div>
+    <div>
+      <div class="col-head" style="--col-color:var(--st-delivery);--col-bg:var(--st-delivery-bg)">
+        <span class="col-title">Delivery</span><span class="col-count" id="count-delivery">0</span>
+      </div>
+      <p class="col-hint">Pendiente hand-off · En dev (+ QA)</p>
+      <div class="col-body" data-stage="delivery"></div>
+    </div>
+    <div>
+      <div class="col-head" style="--col-color:var(--st-following);--col-bg:var(--st-following-bg)">
+        <span class="col-title">Following</span><span class="col-count" id="count-following">0</span>
+      </div>
+      <p class="col-hint">Beta · Producción</p>
+      <div class="col-body" data-stage="following"></div>
+    </div>
+  </div>
+
+  <div class="unclassified">
+    <h3>Sin clasificar — sin evidencia suficiente para tagear con confianza</h3>
+    <ul>
+      <li><strong>«Proyecto»</strong> — «por qué no se pudo clasificar (sin señal de estado en el código/doc)».</li>
+    </ul>
+  </div>
+
+  <div class="blockers">
+    <h2>Bloqueadores transversales</h2>
+    <p class="sub serif" style="color:var(--ink-muted)">No son proyectos — son accesos/APIs que varias iniciativas necesitan de TI para avanzar.</p>
+    <div class="blocker-grid" id="blockers"></div>
+  </div>
+</main>
+
+<footer>
+  Fuentes: «doc de necesidades por célula» + inspección directa del código de Darwin en <span class="mono">main</span>.
+</footer>
+
+<script>
+// Un color distinto por célula — reutiliza esta paleta si las células son las mismas de siempre,
+// agrega/quita entradas si cambian.
+const CELULAS = {
+  logistica:   { label: "Logística",              color: "#0D9488" },
+  supplier:    { label: "Supplier Success",        color: "#7C3AED" },
+  growth:      { label: "Growth / Comercial",      color: "#C026D3" },
+  brands:      { label: "Brands Success",          color: "#EA580C" },
+  seller:      { label: "Seller Success",          color: "#0891B2" },
+  backoffice:  { label: "Operaciones / Backoffice",color: "#B91C1C" },
+  experience:  { label: "Feature Strategy",        color: "#4338CA" },
+  interno:     { label: "Operación Producto",      color: "#78716C" },
+};
+
+// «Reemplazar con los proyectos reales de esta corrida.»
+// stage: "discovery" | "poc" | "delivery" | "following"
+// sub: el subestado tal como lo define el SKILL.md (ej. "Pendiente hand-off", "QA", "Beta"...)
+// src: "Doc" | "Darwin" | "Doc+Darwin" — de dónde salió la evidencia
+// flag (opcional): una alerta corta tipo "999 · legal", "Bug abierto", "Auditar"
+const ITEMS = [
+  { stage:"discovery", sub:"Research", celula:"supplier", src:"Darwin", title:"«Nombre del proyecto»", note:"«una frase con la evidencia real, no una suposición»" },
+];
+
+const BLOCKERS = [
+  { title: "«Nombre del acceso/API pendiente»", note: "«para qué proyectos es necesario»" },
+];
+
+function renderSummary() {
+  const stages = ["discovery","poc","delivery","following"];
+  const labels = { discovery:"Discovery", poc:"POC", delivery:"Delivery", following:"Following" };
+  const el = document.getElementById("summary");
+  el.innerHTML = stages.map(s => {
+    const n = ITEMS.filter(i => i.stage === s).length;
+    const pct = ITEMS.length ? Math.round(n / ITEMS.length * 100) : 0;
+    return `<div class="sum-card"><div class="sum-num" style="color:var(--st-${s})">${n}</div><div class="sum-label">${labels[s]} · ${pct}%</div></div>`;
+  }).join("");
+}
+
+function renderFilters() {
+  const el = document.getElementById("filters");
+  const all = `<button class="pill" data-celula="all" aria-pressed="true">Todas las células</button>`;
+  const rest = Object.entries(CELULAS).map(([key, c]) =>
+    `<button class="pill" data-celula="${key}" style="--c:${c.color}" aria-pressed="false">${c.label}</button>`
+  ).join("");
+  el.innerHTML = all + rest;
+  el.querySelectorAll(".pill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      el.querySelectorAll(".pill").forEach(b => { b.setAttribute("aria-pressed","false"); b.style.background=""; b.style.color=""; });
+      btn.setAttribute("aria-pressed","true");
+      const c = btn.dataset.celula === "all" ? null : CELULAS[btn.dataset.celula].color;
+      btn.style.background = c || "var(--brand)";
+      btn.style.color = "#fff";
+      filterBoard(btn.dataset.celula);
+    });
+  });
+}
+
+function cardHTML(item) {
+  const c = CELULAS[item.celula];
+  return `
+    <div class="card" data-celula="${item.celula}">
+      <div class="card-top">
+        <div>
+          <div class="card-title">${item.title}</div>
+          ${item.code ? `<div class="card-code mono">${item.code}</div>` : ""}
+        </div>
+      </div>
+      <p class="card-note serif">${item.note}</p>
+      <div class="card-tags">
+        <span class="tag" style="background:${c.color}1A;color:${c.color}">${c.label}</span>
+        <span class="sub-pill">${item.sub}</span>
+        ${item.flag ? `<span class="flag">${item.flag}</span>` : ""}
+        <span class="src">${item.src}</span>
+      </div>
+    </div>`;
+}
+
+function renderBoard() {
+  ["discovery","poc","delivery","following"].forEach(stage => {
+    const col = document.querySelector(`.col-body[data-stage="${stage}"]`);
+    const items = ITEMS.filter(i => i.stage === stage);
+    col.innerHTML = items.map(cardHTML).join("");
+    document.getElementById(`count-${stage}`).textContent = items.length;
+  });
+}
+
+function filterBoard(celula) {
+  document.querySelectorAll(".card").forEach(card => {
+    card.style.display = (celula === "all" || card.dataset.celula === celula) ? "" : "none";
+  });
+  ["discovery","poc","delivery","following"].forEach(stage => {
+    document.getElementById(`count-${stage}`).textContent =
+      celula === "all" ? ITEMS.filter(i=>i.stage===stage).length : ITEMS.filter(i=>i.stage===stage && i.celula===celula).length;
+  });
+}
+
+function renderBlockers() {
+  document.getElementById("blockers").innerHTML = BLOCKERS.map(b =>
+    `<div class="blocker-card"><b>${b.title}</b><span class="serif" style="color:var(--ink-muted)">${b.note}</span></div>`
+  ).join("");
+}
+
+renderSummary();
+renderFilters();
+renderBoard();
+renderBlockers();
+</script>
