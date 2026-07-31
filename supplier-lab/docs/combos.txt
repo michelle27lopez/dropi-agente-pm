@@ -1,0 +1,3962 @@
+import React, { useState, useMemo, useEffect } from "react";
+import {
+  Home,
+  LayoutDashboard,
+  Package,
+  Search,
+  Users,
+  Link,
+  History,
+  UserPlus,
+  Settings,
+  Calendar,
+  Megaphone,
+  BarChart3,
+  FileText,
+  Truck,
+  CreditCard,
+  GraduationCap,
+  ChevronDown,
+  ChevronRight,
+  Plus,
+  Edit2,
+  Trash2,
+  Filter,
+  Wallet,
+  AlertTriangle,
+  X,
+  Heart,
+  Crown,
+  Star,
+  Check,
+  Image as ImageIcon,
+  Store,
+  Warehouse,
+  ShoppingCart,
+  Share2,
+  Bookmark,
+  ArrowLeft,
+  ArrowRight,
+  Tag,
+  Bell,
+  Fingerprint,
+  Headset,
+  CheckCircle2,
+} from "lucide-react";
+
+const SidebarItem = ({
+  icon: Icon,
+  label,
+  active = false,
+  hasNew = false,
+  subItems = [],
+  onClick,
+}) => {
+  const [isOpen, setIsOpen] = useState(active);
+
+  return (
+    <div className="w-full">
+      <div
+        onClick={() => {
+          if (subItems.length > 0) setIsOpen(!isOpen);
+          if (onClick && subItems.length === 0) onClick();
+        }}
+        className={`flex items-center justify-between px-4 py-2.5 cursor-pointer transition-colors ${
+          active && !subItems.length
+            ? "text-orange-500 bg-orange-50 border-r-4 border-orange-500"
+            : "text-slate-600 hover:bg-slate-50"
+        }`}
+      >
+        <div className="flex items-center gap-3">
+          <Icon
+            size={18}
+            className={active ? "text-orange-500" : "text-slate-400"}
+          />
+          <span
+            className={`text-sm font-medium ${active ? "text-orange-600" : ""}`}
+          >
+            {label}
+          </span>
+          {hasNew && (
+            <span className="bg-emerald-100 text-emerald-600 text-[10px] px-1.5 py-0.5 rounded font-bold">
+              Nuevo
+            </span>
+          )}
+        </div>
+        {subItems.length > 0 && (
+          <ChevronDown
+            size={14}
+            className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+          />
+        )}
+      </div>
+      {isOpen && subItems.length > 0 && (
+        <div className="bg-slate-50/50">
+          {subItems.map((item, idx) => (
+            <div
+              key={idx}
+              onClick={(e) => {
+                e.stopPropagation();
+                if (item.onClick) item.onClick();
+              }}
+              className={`pl-12 py-2 text-xs font-medium cursor-pointer flex items-center gap-2 ${
+                item.active
+                  ? "text-orange-500"
+                  : "text-slate-500 hover:text-orange-500"
+              }`}
+            >
+              {item.label}
+              {item.hasNew && (
+                <span className="bg-orange-100 text-orange-600 text-[9px] px-1 py-0.5 rounded font-bold uppercase">
+                  Nuevo
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ConfirmModal = ({
+  isOpen,
+  title,
+  message,
+  onConfirm,
+  onCancel,
+  confirmText,
+  confirmColorClass,
+}) => {
+  if (!isOpen) return null;
+  return (
+    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-[1px] z-[100] flex items-center justify-center p-4">
+      <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 animate-in zoom-in-95 duration-200">
+        <h3 className="text-lg font-bold text-[#1e3a5f] mb-2">{title}</h3>
+        <p className="text-sm text-slate-500 mb-6">{message}</p>
+        <div className="flex gap-3 justify-end">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={onConfirm}
+            className={`px-4 py-2 text-sm font-bold text-white rounded-xl transition-colors ${confirmColorClass}`}
+          >
+            {confirmText}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const WarrantyAccordion = ({ title, days, description }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="border-b border-slate-100 last:border-0">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center gap-3 py-4 px-5 text-[14px] text-slate-700 font-medium hover:bg-slate-50 transition-colors"
+      >
+        <ChevronDown
+          size={16}
+          className={`text-slate-500 transition-transform ${
+            isOpen ? "rotate-180" : ""
+          }`}
+        />
+        {title} · {days} días
+      </button>
+      {isOpen && (
+        <div className="px-5 pb-4 pt-1 text-[13px] text-slate-600 pl-[44px]">
+          {description}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const ComboCard = ({ combo, onClick, onEditClick, onDeleteClick }) => {
+  const {
+    title,
+    productsCount,
+    stock,
+    description,
+    provider,
+    warehouse,
+    cost,
+    suggestedPrice,
+    status,
+    image,
+    warning,
+    richData,
+  } = combo;
+
+  const isVariable = richData?.comboVariants?.length > 0;
+
+  // Convertir string de bodegas en un array para renderizar tags separados
+  const warehousesList = warehouse
+    ? warehouse.split(",").map((w) => w.trim())
+    : [];
+
+  return (
+    <div
+      onClick={onClick}
+      className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm flex flex-col h-full hover:shadow-md transition-shadow cursor-pointer group"
+    >
+      <div className="relative h-44 overflow-hidden bg-slate-100">
+        <img
+          src={image}
+          alt={title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          onError={(e) => {
+            e.target.src = "https://via.placeholder.com/400x300?text=Producto";
+          }}
+        />
+        <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
+          <div
+            className={`px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase shadow-sm ${
+              status === "Activo" ? "bg-emerald-500" : "bg-red-500"
+            }`}
+          >
+            {status}
+          </div>
+          {isVariable && (
+            <div className="bg-[#ff7b00] px-3 py-1 rounded-full text-[10px] font-bold text-white uppercase shadow-sm">
+              Variable
+            </div>
+          )}
+        </div>
+
+        {status === "Inactivo" && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/70 backdrop-blur-[2px] p-4 text-center z-20">
+            <div
+              className={`p-2 rounded-full mb-2 shadow-lg ${
+                warning?.type === "error" ? "bg-rose-500" : "bg-orange-500"
+              }`}
+            >
+              <AlertTriangle className="text-white" size={20} />
+            </div>
+            <span className="text-white font-bold text-[13px] leading-tight drop-shadow-md">
+              {warning?.type === "error"
+                ? "Producto Eliminado"
+                : "Agotado (Sin Stock)"}
+            </span>
+            {warning?.text && (
+              <span className="text-white/90 text-[10px] mt-1.5 line-clamp-3 leading-snug font-medium">
+                {warning.text}
+              </span>
+            )}
+          </div>
+        )}
+      </div>
+
+      <div className="p-4 flex-1 flex flex-col">
+        <div className="flex justify-between items-start mb-2">
+          <span className="text-[11px] text-slate-400 font-medium">
+            {productsCount} productos
+          </span>
+          <span className="text-[11px] font-bold">
+            Stock:{" "}
+            <span className={stock <= 5 ? "text-rose-500" : "text-emerald-500"}>
+              {stock}
+            </span>
+          </span>
+        </div>
+
+        <h3 className="font-bold text-slate-800 text-sm mb-1 leading-tight group-hover:text-orange-500 transition-colors">
+          {title}
+        </h3>
+        <p className="text-[11px] text-slate-400 mb-3 line-clamp-2">
+          {description}
+        </p>
+
+        <div className="space-y-2 mb-4 text-[11px] mt-auto">
+          <p className="text-slate-500">
+            Proveedor:{" "}
+            <span className="text-orange-500 font-medium">{provider}</span>
+          </p>
+          <div className="text-slate-500 flex flex-col gap-1.5">
+            <span>Bodegas:</span>
+            <div className="flex flex-wrap gap-1">
+              {warehousesList.map((w, i) => (
+                <span
+                  key={i}
+                  className="bg-slate-100 border border-slate-200 text-slate-600 px-1.5 py-0.5 rounded flex items-center gap-1 font-bold text-[9px]"
+                >
+                  <Warehouse size={8} /> {w}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {warning && (
+          <div
+            className={`mb-4 px-2.5 py-2 rounded-lg text-[10px] flex items-start gap-1.5 ${
+              warning.type === "error"
+                ? "bg-rose-50 text-rose-600 border border-rose-100"
+                : "bg-orange-50 text-orange-600 border border-orange-100"
+            }`}
+          >
+            <AlertTriangle size={14} className="shrink-0 mt-0.5" />
+            <span className="font-medium line-clamp-2">{warning.text}</span>
+          </div>
+        )}
+
+        <div className="flex justify-between items-end border-t border-slate-50 pt-3">
+          <div>
+            <p className="text-[10px] text-slate-400">Costo combo</p>
+            <p className="font-bold text-slate-800 text-sm">
+              ${cost.toLocaleString()}
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="text-[10px] text-slate-400">Precio sugerido</p>
+            <p className="font-bold text-orange-500 text-sm">
+              ${suggestedPrice.toLocaleString()}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 border-t border-slate-100 bg-white relative z-10">
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onEditClick) onEditClick(combo);
+          }}
+          className="flex items-center justify-center gap-2 py-3 text-[11px] font-bold text-orange-500 hover:bg-orange-50 transition-colors"
+        >
+          <Edit2 size={12} /> Editar
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            if (onDeleteClick) onDeleteClick(combo);
+          }}
+          className="flex items-center justify-center gap-2 py-3 text-[11px] font-bold text-rose-500 hover:bg-rose-50 border-l border-slate-100 transition-colors"
+        >
+          <Trash2 size={12} /> Eliminar
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const ComboPreviewUI = ({ data }) => {
+  const [isVariantsExpanded, setIsVariantsExpanded] = useState(true);
+
+  if (!data) return null;
+
+  const {
+    comboName,
+    comboDescription,
+    comboImages = [],
+    selectedProducts = [],
+    comboVariants = [],
+    selectedProvider,
+    selectedWarehouse,
+    minStock,
+    totalCost,
+    totalSuggested,
+    warning,
+  } = data;
+
+  const warehousesList =
+    selectedWarehouse?.name && selectedWarehouse.name !== "Sin asignar"
+      ? selectedWarehouse.name.split(",").map((w) => w.trim())
+      : [];
+
+  return (
+    <div className="w-full max-w-[1000px] mx-auto py-8 px-4 lg:px-8 bg-transparent min-h-full animate-in fade-in duration-300">
+      <div className="text-[11px] text-slate-500 mb-6 flex items-center gap-2">
+        <Home size={12} className="text-slate-400" />
+        <ChevronRight size={12} className="text-slate-300" />
+        <span>Productos</span>
+        <ChevronRight size={12} className="text-slate-300" />
+        <span>Proveedores</span>
+        <ChevronRight size={12} className="text-slate-300" />
+        <span>{selectedProvider?.name || "Proveedor"}</span>
+        <ChevronRight size={12} className="text-slate-300" />
+        <span className="text-slate-700 font-medium">
+          {comboName || "Combo sin título"}
+        </span>
+      </div>
+
+      {warning && (
+        <div
+          className={`mb-8 p-4 rounded-xl flex items-start gap-3 border shadow-sm ${
+            warning.type === "error"
+              ? "bg-rose-50 border-rose-200 text-rose-700"
+              : "bg-orange-50 border-orange-200 text-orange-700"
+          }`}
+        >
+          <AlertTriangle size={20} className="shrink-0 mt-0.5" />
+          <div>
+            <h4 className="font-bold text-[14px]">
+              {warning.type === "error"
+                ? "Acción requerida: Producto eliminado"
+                : "Acción requerida: Producto sin stock"}
+            </h4>
+            <p className="text-[13px] font-medium opacity-90">{warning.text}</p>
+          </div>
+        </div>
+      )}
+
+      <div className="flex flex-col lg:flex-row gap-10">
+        <div className="w-full lg:w-[400px] shrink-0">
+          <div className="aspect-square bg-slate-50 border border-slate-100 rounded-3xl overflow-hidden mb-4">
+            <img
+              src={
+                comboImages[0] ||
+                selectedProducts[0]?.image ||
+                "https://via.placeholder.com/600"
+              }
+              className="w-full h-full object-cover"
+              alt="Combo Preview"
+            />
+          </div>
+
+          <div className="flex gap-3 mb-10 overflow-x-auto pb-2 scrollbar-hide">
+            {comboImages.length > 0
+              ? comboImages.map((img, i) => (
+                  <div
+                    key={`c-${i}`}
+                    className={`w-16 h-16 rounded-xl border-2 overflow-hidden shrink-0 ${
+                      i === 0 ? "border-orange-500" : "border-transparent"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      className="w-full h-full object-cover"
+                      alt={`Thumb ${i}`}
+                    />
+                  </div>
+                ))
+              : selectedProducts.map((p, i) => (
+                  <div
+                    key={`p-${i}`}
+                    className={`w-16 h-16 rounded-xl border-2 overflow-hidden shrink-0 ${
+                      i === 0 ? "border-orange-500" : "border-transparent"
+                    }`}
+                  >
+                    <img
+                      src={p.image}
+                      className="w-full h-full object-cover"
+                      alt={`Thumb ${i}`}
+                    />
+                  </div>
+                ))}
+          </div>
+
+          <h4 className="font-bold text-[#1e3a5f] text-[15px] mb-4">
+            Productos incluidos
+          </h4>
+          <div className="space-y-4">
+            {selectedProducts.map((p, index) => {
+              const isDeleted = p.deleted;
+              const isOutOfStock = p.stock === 0 && !isDeleted;
+
+              return (
+                <div
+                  key={p.id || index}
+                  className={`flex gap-4 border rounded-2xl p-3 shadow-sm ${
+                    isDeleted
+                      ? "border-rose-300 bg-rose-50/80 grayscale-[30%]"
+                      : isOutOfStock
+                      ? "border-orange-300 bg-orange-50/80"
+                      : "border-slate-100 bg-white"
+                  }`}
+                >
+                  <div className="w-16 h-16 rounded-xl bg-slate-50 shrink-0 overflow-hidden relative">
+                    <img
+                      src={p.image}
+                      className="w-full h-full object-cover"
+                      alt={p.name}
+                    />
+                    {(isDeleted || isOutOfStock) && (
+                      <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px] flex items-center justify-center">
+                        <span
+                          className={`text-[10px] font-bold rotate-[-15deg] ${
+                            isDeleted ? "text-rose-600" : "text-orange-600"
+                          }`}
+                        >
+                          {isDeleted ? "Eliminado" : "Agotado"}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0 py-0.5">
+                    <div className="flex items-center gap-2 mb-1">
+                      {isDeleted ? (
+                        <span className="bg-rose-500 text-white text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">
+                          Eliminado
+                        </span>
+                      ) : (
+                        <span className="border border-slate-200 rounded text-[9px] px-1.5 py-0.5 text-slate-500 font-medium">
+                          ID: 1801{p.id || index}
+                        </span>
+                      )}
+                      {p.hasVariables && !isDeleted && (
+                        <span className="bg-[#ff7b00] text-white text-[9px] px-1.5 py-0.5 rounded font-bold">
+                          Variable
+                        </span>
+                      )}
+                    </div>
+                    <h5
+                      className={`font-bold text-[13px] truncate mb-1.5 ${
+                        isDeleted
+                          ? "text-rose-700 line-through"
+                          : "text-slate-800"
+                      }`}
+                    >
+                      {p.name}
+                    </h5>
+
+                    {isDeleted && (
+                      <p className="text-[10px] text-rose-600 font-medium leading-tight mb-2">
+                        Motivo: El proveedor ha eliminado este producto de su
+                        catálogo.
+                      </p>
+                    )}
+                    {isOutOfStock && (
+                      <p className="text-[10px] text-orange-600 font-medium leading-tight mb-2">
+                        Motivo: El producto se ha quedado sin stock en la
+                        bodega.
+                      </p>
+                    )}
+
+                    {isDeleted ? (
+                      <button className="text-[11px] font-bold text-rose-600 hover:text-rose-700 flex items-center gap-1 transition-colors">
+                        <Edit2 size={10} /> Cambiar producto
+                      </button>
+                    ) : (
+                      <div className="flex gap-4">
+                        <div>
+                          <p className="text-[10px] text-slate-400">
+                            Precio proveedor
+                          </p>
+                          <p className="text-[12px] font-bold text-slate-800">
+                            ${(p.cost || 0).toLocaleString()}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-slate-400">
+                            Precio sugerido de
+                          </p>
+                          <p className="text-[12px] font-bold text-slate-800">
+                            ${(p.suggestedPrice || 0).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="flex-1 min-w-0 pt-2">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="bg-slate-100 border border-slate-200 text-slate-500 text-[11px] px-2 py-0.5 rounded-md font-medium shadow-sm">
+              ID: 243878
+            </span>
+            <span className="bg-blue-500 text-white text-[11px] px-2.5 py-0.5 rounded-full font-bold shadow-sm">
+              Combo
+            </span>
+          </div>
+
+          <h1 className="text-[26px] font-black text-[#1e3a5f] leading-tight mb-3">
+            {comboName || "Combo: Título del combo aquí"}
+          </h1>
+
+          <div className="text-[12px] text-slate-500 mb-6 flex items-center gap-3">
+            <span>
+              SKU: <span className="text-slate-700">11020</span>
+            </span>
+            <span className="bg-slate-100 px-2.5 py-1 rounded font-medium text-slate-600">
+              Hogar
+            </span>
+          </div>
+
+          <div className="space-y-3 mb-8 text-[13px] text-slate-600">
+            <p>
+              Tipo de producto:{" "}
+              <span className="font-medium text-slate-800">
+                {comboVariants.length > 0 ? "Combo variable" : "Combo simple"}
+              </span>
+            </p>
+            <div className="flex items-start gap-2">
+              <span className="pt-0.5">Bodegas disponibles:</span>
+              <div className="flex flex-wrap gap-1.5">
+                {warehousesList.length > 0 ? (
+                  warehousesList.map((w, idx) => (
+                    <span
+                      key={idx}
+                      className="bg-slate-100 border border-slate-200 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1"
+                    >
+                      <Warehouse size={10} /> {w}
+                    </span>
+                  ))
+                ) : (
+                  <span className="font-medium text-slate-800">
+                    Sin asignar
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {comboVariants.length > 0 && (
+            <div className="border border-slate-200 rounded-2xl overflow-hidden mb-8 bg-white shadow-sm">
+              <div
+                className="bg-slate-50/80 px-6 py-4 border-b border-slate-200 flex items-center justify-between cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => setIsVariantsExpanded(!isVariantsExpanded)}
+              >
+                <span className="font-bold text-[14px] text-[#1e3a5f]">
+                  Stock por variantes ({comboVariants.length} en total)
+                </span>
+                <ChevronDown
+                  size={18}
+                  className={`text-slate-400 transition-transform duration-200 ${
+                    isVariantsExpanded ? "rotate-180" : ""
+                  }`}
+                />
+              </div>
+
+              {isVariantsExpanded && (
+                <>
+                  <div className="hidden md:grid grid-cols-[1fr_1fr_1.5fr_1.5fr] gap-4 px-6 py-3 border-b border-slate-100 text-[11px] font-bold text-slate-500 bg-white">
+                    <div>Id</div>
+                    <div>Existencia</div>
+                    <div>Precio de venta</div>
+                    <div>Precio sugerido</div>
+                  </div>
+
+                  <div className="max-h-[420px] overflow-y-auto bg-white">
+                    {comboVariants.map((variantArr, idx) => {
+                      const variantId = 18512 + idx;
+                      return (
+                        <div
+                          key={idx}
+                          className="border-b border-slate-100 p-6 hover:bg-slate-50/50 transition-colors"
+                        >
+                          <div className="grid grid-cols-2 md:grid-cols-[1fr_1fr_1.5fr_1.5fr] gap-y-4 md:gap-y-0 md:gap-x-4 mb-4 items-center">
+                            <div>
+                              <span className="border border-slate-200 px-2 py-1 rounded text-[11px] text-slate-600 bg-white shadow-sm font-medium">
+                                ID: {variantId}
+                              </span>
+                            </div>
+                            <div className="text-[#00a896] font-bold text-[13px]">
+                              {minStock}
+                            </div>
+                            <div>
+                              <span className="md:hidden block text-[10px] text-slate-400 mb-0.5">
+                                Precio de venta
+                              </span>
+                              <div className="text-[14px] text-slate-700">
+                                ${totalCost.toLocaleString()}
+                              </div>
+                            </div>
+                            <div>
+                              <span className="md:hidden block text-[10px] text-slate-400 mb-0.5">
+                                Precio sugerido
+                              </span>
+                              <div className="text-[14px] text-slate-700 font-medium">
+                                ${totalSuggested.toLocaleString()}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="space-y-2.5 bg-slate-50/50 rounded-xl p-3 border border-slate-100">
+                            {variantArr.map((v, j) => (
+                              <div
+                                key={j}
+                                className="flex flex-col sm:flex-row sm:items-center justify-between text-[12px] gap-1"
+                              >
+                                <span className="text-slate-500">
+                                  {v.productName}
+                                </span>
+                                <span className="font-medium text-slate-700 text-right">
+                                  {Object.entries(v.attributes)
+                                    .map(([k, val]) => `${k}: ${val}`)
+                                    .join(", ")}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          <div className="flex items-center gap-3 mb-8">
+            <span className="text-[14px] text-slate-600">
+              Stock:{" "}
+              <span className="font-bold text-[#00a896] text-[16px]">
+                {minStock}
+              </span>
+            </span>
+            <span className="bg-[#e6f7f5] text-[#00a896] border border-[#b2e5df] text-[11px] px-2.5 py-0.5 rounded-full font-bold">
+              Stock promedio 60
+            </span>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3 mb-8">
+            <button className="bg-[#ff9f65] hover:bg-orange-400 text-white font-bold py-3 px-6 rounded-xl transition-colors shadow-sm text-[13px]">
+              Enviar al cliente
+            </button>
+            <button className="border border-orange-300 text-orange-500 font-bold py-3 px-6 rounded-xl hover:bg-orange-50 transition-colors shadow-sm text-[13px]">
+              Solicitar muestra
+            </button>
+            <button className="border border-orange-300 text-orange-500 font-bold py-3 px-6 rounded-xl hover:bg-orange-50 transition-colors shadow-sm text-[13px]">
+              Calculadora de flete
+            </button>
+          </div>
+
+          <div className="border border-slate-200 rounded-2xl p-5 mb-10 bg-white shadow-sm">
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-white border-4 border-yellow-100">
+                  {selectedProvider?.icon === "crown" && <Crown size={20} />}
+                  {selectedProvider?.icon === "star" && (
+                    <Star size={20} fill="white" />
+                  )}
+                  {selectedProvider?.icon === "check" && (
+                    <Check size={20} strokeWidth={3} />
+                  )}
+                  {!selectedProvider?.icon && <Store size={20} />}
+                </div>
+                <div>
+                  <h4 className="font-bold text-[#1e3a5f] text-[15px]">
+                    {selectedProvider?.name || "Proveedor"}
+                  </h4>
+                  <p className="text-[11px] text-slate-400 flex items-center gap-1">
+                    <Check
+                      size={10}
+                      className="text-emerald-500"
+                      strokeWidth={3}
+                    />{" "}
+                    Verificado
+                  </p>
+                </div>
+              </div>
+              <button className="border border-slate-200 rounded-lg px-4 py-2 text-[12px] font-bold text-slate-600 hover:bg-slate-50 flex items-center gap-2">
+                <FileText size={14} /> Contactar
+              </button>
+            </div>
+
+            <div className="bg-slate-50 rounded-xl p-4 mb-4 border border-slate-100">
+              <p className="text-[13px] text-slate-600 mb-2">
+                <span className="font-bold text-slate-800">
+                  {selectedProvider?.rating || "Estable"}:
+                </span>{" "}
+                {selectedProvider?.description || "Buen rendimiento"}
+              </p>
+              <div className="flex h-1.5 rounded-full overflow-hidden gap-1">
+                <div className="bg-emerald-400 w-1/3"></div>
+                <div className="bg-yellow-400 w-1/3"></div>
+                <div className="bg-slate-200 w-1/3"></div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-[12px]">
+              <span className="text-slate-500 flex items-center gap-2">
+                <Calendar size={14} className="text-orange-400" />
+                Tiempo promedio de despacho:{" "}
+                <span className="font-bold text-slate-700">
+                  {selectedProvider?.dispatch || "2 Horas"}
+                </span>
+              </span>
+              <button className="text-orange-500 font-bold hover:underline">
+                Ver más v
+              </button>
+            </div>
+          </div>
+
+          <div className="mb-6">
+            <h4 className="pb-3 border-b-2 border-orange-500 font-bold text-slate-800 text-[14px] inline-block mb-4">
+              Descripción
+            </h4>
+            <div className="text-[13px] text-slate-600 leading-relaxed pb-10 whitespace-pre-wrap">
+              {comboDescription ||
+                "Descripción detallada del producto. Aquí se mostrarán las características y ventajas de este combo diseñado especialmente para tus clientes."}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CreateGarantiaModal = ({ isOpen, onClose, availableProducts = [] }) => {
+  const [contactNumber, setContactNumber] = useState("");
+  const [items, setItems] = useState([
+    {
+      id: Date.now(),
+      productId: "",
+      quantity: 1,
+      warrantyType: "",
+      returnType: "devolucion",
+      description: "",
+    },
+  ]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setContactNumber("");
+      setItems([
+        {
+          id: Date.now(),
+          productId: "",
+          quantity: 1,
+          warrantyType: "",
+          returnType: "devolucion",
+          description: "",
+        },
+      ]);
+    }
+  }, [isOpen]);
+
+  const handleAddItem = () => {
+    setItems([
+      ...items,
+      {
+        id: Date.now(),
+        productId: "",
+        quantity: 1,
+        warrantyType: "",
+        returnType: "devolucion",
+        description: "",
+      },
+    ]);
+  };
+
+  const handleRemoveItem = (idToRemove) => {
+    setItems(items.filter((item) => item.id !== idToRemove));
+  };
+
+  const updateItem = (id, field, value) => {
+    setItems(
+      items.map((item) => (item.id === id ? { ...item, [field]: value } : item))
+    );
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-slate-900/50 backdrop-blur-[1px] z-[100] flex items-center justify-center p-4 font-sans">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-5xl flex flex-col max-h-[95vh] animate-in zoom-in-95 duration-200">
+        <div className="flex items-center justify-between p-5 border-b border-slate-200 shrink-0">
+          <h2 className="text-xl font-bold text-slate-800">Crear garantia</h2>
+          <button
+            onClick={onClose}
+            className="text-slate-400 hover:text-slate-700 transition-colors"
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        <div className="p-6 overflow-y-auto flex-1 text-slate-700 bg-slate-50/50">
+          <Search size={32} className="text-[#3b82f6] mb-6 stroke-[2]" />
+
+          <div className="bg-white border border-slate-200 rounded-lg p-5 mb-6 shadow-sm">
+            <h3 className="text-sm font-bold text-slate-800 mb-4">
+              Información de contacto
+            </h3>
+            <div className="max-w-md">
+              <label className="block text-[13px] font-bold text-slate-600 mb-1.5">
+                Numero de contacto:
+              </label>
+              <input
+                type="text"
+                value={contactNumber}
+                onChange={(e) => setContactNumber(e.target.value)}
+                className="w-full border border-slate-300 rounded-[4px] px-3 py-2 text-sm text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+              <p className="text-[12px] text-slate-500 mt-1">
+                Ingresa un número de contacto donde podamos comunicarnos
+                referente a esta garantía.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-slate-800">
+                Detalle de los productos a reclamar
+              </h3>
+            </div>
+
+            {items.map((item, index) => {
+              const selectedProd = availableProducts.find(
+                (p) => String(p.id) === String(item.productId)
+              );
+              const maxQty = selectedProd ? selectedProd.qty : 1;
+
+              return (
+                <div
+                  key={item.id}
+                  className="relative p-6 border border-slate-200 bg-white rounded-lg mb-6 shadow-sm"
+                >
+                  <div className="flex justify-between items-center mb-5 pb-3 border-b border-slate-100">
+                    <h4 className="font-bold text-[#0ea5e9]">
+                      Producto a devolver #{index + 1}
+                    </h4>
+                    {items.length > 1 && (
+                      <button
+                        onClick={() => handleRemoveItem(item.id)}
+                        className="flex items-center gap-1.5 text-[12px] font-bold text-rose-500 hover:bg-rose-50 px-2 py-1 rounded-md transition-colors"
+                      >
+                        <Trash2 size={14} /> Quitar producto
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-5 mb-5">
+                    <div className="md:col-span-8">
+                      <label className="block text-[13px] font-bold text-slate-600 mb-1.5">
+                        Producto:
+                      </label>
+                      <div className="relative">
+                        <select
+                          value={item.productId}
+                          onChange={(e) => {
+                            const newProd = availableProducts.find(
+                              (p) => String(p.id) === String(e.target.value)
+                            );
+                            updateItem(item.id, "productId", e.target.value);
+                            if (newProd && item.quantity > newProd.qty) {
+                              updateItem(item.id, "quantity", newProd.qty);
+                            }
+                          }}
+                          className="w-full border border-slate-300 rounded-[4px] px-3 py-2 text-sm text-slate-700 appearance-none focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white cursor-pointer"
+                        >
+                          <option value="">
+                            Seleccione un producto del pedido
+                          </option>
+                          {availableProducts.map((prod) => (
+                            <option
+                              key={prod.id}
+                              value={prod.id}
+                              disabled={items.some(
+                                (i) =>
+                                  i.productId === String(prod.id) &&
+                                  i.id !== item.id
+                              )}
+                            >
+                              {prod.name} (Max: {prod.qty})
+                            </option>
+                          ))}
+                        </select>
+                        <ChevronDown
+                          size={16}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="md:col-span-4">
+                      <label className="block text-[13px] font-bold text-slate-600 mb-1.5">
+                        Cantidad:
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        max={maxQty}
+                        value={item.quantity}
+                        onChange={(e) => {
+                          let val = parseInt(e.target.value, 10);
+                          if (isNaN(val) || val < 1) val = 1;
+                          if (val > maxQty) val = maxQty;
+                          updateItem(item.id, "quantity", val);
+                        }}
+                        onBlur={(e) => {
+                          let val = parseInt(e.target.value, 10);
+                          if (isNaN(val) || val < 1)
+                            updateItem(item.id, "quantity", 1);
+                        }}
+                        disabled={!item.productId}
+                        className="w-full border border-slate-300 rounded-[4px] px-3 py-2 text-sm text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 disabled:bg-slate-100 disabled:text-slate-400"
+                      />
+                    </div>
+
+                    <div className="md:col-span-6">
+                      <label className="block text-[13px] font-bold text-slate-600 mb-1.5">
+                        Tipo de garantia:
+                      </label>
+                      <div className="relative">
+                        <select
+                          value={item.warrantyType}
+                          onChange={(e) =>
+                            updateItem(item.id, "warrantyType", e.target.value)
+                          }
+                          className="w-full border border-slate-300 rounded-[4px] px-3 py-2 text-sm text-slate-700 appearance-none focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white cursor-pointer"
+                        >
+                          <option value="" disabled>
+                            Seleccione el motivo
+                          </option>
+                          <option value="Orden incompleta">
+                            Orden incompleta
+                          </option>
+                          <option value="Mal funcionamiento">
+                            Mal funcionamiento
+                          </option>
+                          <option value="Producto roto">Producto roto</option>
+                          <option value="Orden diferente">
+                            Orden diferente
+                          </option>
+                        </select>
+                        <ChevronDown
+                          size={16}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="md:col-span-6">
+                      <label className="block text-[13px] font-bold text-slate-600 mb-1.5">
+                        Tipo de devolucion:
+                      </label>
+                      <div className="relative">
+                        <select
+                          value={item.returnType}
+                          onChange={(e) =>
+                            updateItem(item.id, "returnType", e.target.value)
+                          }
+                          className="w-full border border-slate-300 rounded-[4px] px-3 py-2 text-sm text-slate-700 appearance-none focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 bg-white cursor-pointer"
+                        >
+                          <option value="devolucion">
+                            Devolución de producto
+                          </option>
+                          <option value="cambio">
+                            Cambio por otro producto
+                          </option>
+                          <option value="reembolso">Reembolso de dinero</option>
+                        </select>
+                        <ChevronDown
+                          size={16}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mb-6">
+                    <label className="block text-[13px] font-bold text-slate-600 mb-1.5">
+                      Descripcion de garantia:
+                    </label>
+                    <input
+                      type="text"
+                      value={item.description}
+                      onChange={(e) =>
+                        updateItem(item.id, "description", e.target.value)
+                      }
+                      className="w-full border border-slate-300 rounded-[4px] px-3 py-2 text-sm text-slate-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                      placeholder="Ej. El producto llegó abollado en la esquina superior..."
+                    />
+                    <p className="text-[12px] text-slate-500 mt-1">
+                      Explique brevemente por qué solicita la garantía para este
+                      producto.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block text-[14px] font-bold text-slate-700 mb-3">
+                      Evidencia de garantia:
+                    </label>
+
+                    <div className="bg-[#fff9e6] border border-[#fef0c7] text-[#a16207] p-3 mb-4 flex items-start gap-2 rounded-[4px]">
+                      <AlertTriangle size={18} className="shrink-0 mt-0.5" />
+                      <p className="text-[13px] leading-snug">
+                        <span className="font-bold">
+                          Es fundamental que adjuntes las PRUEBAS PERTINENTES
+                        </span>{" "}
+                        relacionadas con el problema de este producto.
+                      </p>
+                    </div>
+
+                    <div className="w-full max-w-2xl border-[3px] border-dashed border-slate-300 hover:border-blue-400 rounded-md p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-blue-50/50 transition-colors bg-slate-50">
+                      <span className="text-xl font-bold text-slate-500">
+                        Agregar archivos
+                      </span>
+                      <span className="text-[12px] text-slate-400 mt-1">
+                        Sube fotos o videos mostrando el defecto
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {items.length < availableProducts.length && (
+              <div className="flex justify-center mt-2 mb-8">
+                <button
+                  onClick={handleAddItem}
+                  className="bg-white border-2 border-dashed border-[#0ea5e9] text-[#0ea5e9] px-6 py-3 rounded-lg text-sm font-bold flex items-center gap-2 hover:bg-blue-50 transition-colors shadow-sm"
+                >
+                  <Plus size={18} strokeWidth={2.5} /> Añadir otro producto a la
+                  garantía
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="p-4 border-t border-slate-200 shrink-0 flex justify-end items-center gap-4 bg-white rounded-b-lg">
+          <button
+            onClick={onClose}
+            className="text-[14px] font-medium text-[#0ea5e9] hover:underline"
+          >
+            Cerrar
+          </button>
+          <button
+            onClick={() => {
+              alert("Garantías solicitadas exitosamente");
+              onClose();
+            }}
+            className="bg-[#0ea5e9] hover:bg-[#0284c7] text-white px-6 py-2 rounded-[4px] font-medium text-[14px] transition-colors shadow-sm"
+          >
+            Aceptar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const CreateComboModal = ({
+  isOpen,
+  onClose,
+  onAddCombo,
+  onEditCombo,
+  editCombo,
+}) => {
+  const [currentStep, setCurrentStep] = useState(1);
+  const [selectedProvider, setSelectedProvider] = useState(null);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isLoadingProducts, setIsLoadingProducts] = useState(false);
+  const [alertMsg, setAlertMsg] = useState(null);
+  const [comboName, setComboName] = useState("");
+  const [comboDescription, setComboDescription] = useState("");
+  const [comboImages, setComboImages] = useState([]);
+
+  const [filterType, setFilterType] = useState("");
+  const [filterCity, setFilterCity] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterFavorite, setFilterFavorite] = useState(false);
+
+  const [appliedFilters, setAppliedFilters] = useState({
+    type: "",
+    city: "",
+    category: "",
+    query: "",
+    favorite: false,
+  });
+
+  const [isConfirmEditOpen, setIsConfirmEditOpen] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && editCombo && editCombo.richData) {
+      setCurrentStep(2);
+      setSelectedProvider(editCombo.richData.selectedProvider);
+      setSelectedProducts(editCombo.richData.selectedProducts || []);
+      setComboName(editCombo.richData.comboName || "");
+      setComboDescription(editCombo.richData.comboDescription || "");
+      setComboImages(editCombo.richData.comboImages || []);
+    } else if (isOpen && !editCombo) {
+      setCurrentStep(1);
+      setSelectedProvider(null);
+      setSelectedProducts([]);
+      setComboName("");
+      setComboDescription("");
+      setComboImages([]);
+    }
+  }, [isOpen, editCombo]);
+
+  const providers = useMemo(
+    () => [
+      {
+        id: 1,
+        name: "America Imports",
+        products: 48,
+        categories: "Tecnología, Hogar, Accesorios",
+        image:
+          "https://images.unsplash.com/photo-1556740749-887f6717d7e4?w=150",
+        icon: "crown",
+        rating: "Estable",
+        description: "Buen rendimiento",
+        dispatch: "2 Horas",
+        type: "premium",
+        city: "bogota",
+        isFavorite: true,
+      },
+      {
+        id: 2,
+        name: "Gold Stone",
+        products: 32,
+        categories: "Moda, Hogar",
+        image:
+          "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=150",
+        icon: "star",
+        rating: "Excelente",
+        description: "Vendedor destacado",
+        dispatch: "1 Hora",
+        type: "verificado",
+        city: "medellin",
+        isFavorite: false,
+      },
+      {
+        id: 3,
+        name: "CarBlock",
+        products: 21,
+        categories: "Auto",
+        image:
+          "https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=150",
+        icon: "check",
+        rating: "Estable",
+        description: "Envíos regulares",
+        dispatch: "4 Horas",
+        type: "exclusivo",
+        city: "cali",
+        isFavorite: true,
+      },
+      {
+        id: 4,
+        name: "Inspiranova",
+        products: 65,
+        categories: "Hogar",
+        image:
+          "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=150",
+        icon: null,
+        rating: "Bueno",
+        description: "Ventas recurrentes",
+        dispatch: "12 Horas",
+        type: "no_verificado",
+        city: "barranquilla",
+        isFavorite: false,
+      },
+      {
+        id: 5,
+        name: "TechNova",
+        products: 120,
+        categories: "Tecnología",
+        image:
+          "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=150",
+        icon: "crown",
+        rating: "Excelente",
+        description: "Líder en tecnología",
+        dispatch: "24 Horas",
+        type: "premium",
+        city: "bogota",
+        isFavorite: true,
+      },
+      {
+        id: 6,
+        name: "Fashion Store",
+        products: 85,
+        categories: "Moda, Accesorios",
+        image:
+          "https://images.unsplash.com/photo-1445205170230-053b83016050?w=150",
+        icon: "star",
+        rating: "Estable",
+        description: "Gran variedad de prendas",
+        dispatch: "2 Horas",
+        type: "verificado",
+        city: "medellin",
+        isFavorite: false,
+      },
+      {
+        id: 7,
+        name: "Beauty Plus",
+        products: 45,
+        categories: "Belleza y Salud",
+        image:
+          "https://images.unsplash.com/photo-1596462502278-27bf85033e5a?w=150",
+        icon: null,
+        rating: "Regular",
+        description: "Productos de belleza",
+        dispatch: "48 Horas",
+        type: "no_verificado",
+        city: "cali",
+        isFavorite: false,
+      },
+      {
+        id: 8,
+        name: "SportMaster",
+        products: 200,
+        categories: "Deportes, Moda",
+        image:
+          "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=150",
+        icon: "check",
+        rating: "Excelente",
+        description: "Especialistas en deporte",
+        dispatch: "1 Hora",
+        type: "exclusivo",
+        city: "pereira",
+        isFavorite: true,
+      },
+      {
+        id: 9,
+        name: "Electro World",
+        products: 70,
+        categories: "Tecnología, Hogar",
+        image:
+          "https://images.unsplash.com/photo-1550009158-9effb619a637?w=150",
+        icon: "star",
+        rating: "Estable",
+        description: "Electrodomésticos",
+        dispatch: "5 Horas",
+        type: "verificado",
+        city: "bucaramanga",
+        isFavorite: false,
+      },
+      {
+        id: 10,
+        name: "Home Style",
+        products: 150,
+        categories: "Hogar, Muebles",
+        image:
+          "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=150",
+        icon: "crown",
+        rating: "Excelente",
+        description: "Muebles y decoración",
+        dispatch: "24 Horas",
+        type: "premium",
+        city: "cartagena",
+        isFavorite: true,
+      },
+    ],
+    []
+  );
+
+  const filteredProviders = useMemo(() => {
+    return providers.filter((provider) => {
+      if (appliedFilters.favorite && !provider.isFavorite) return false;
+      if (appliedFilters.type && provider.type !== appliedFilters.type)
+        return false;
+      if (appliedFilters.city && provider.city !== appliedFilters.city)
+        return false;
+      if (appliedFilters.category) {
+        const normalizedCats = provider.categories
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+        if (!normalizedCats.includes(appliedFilters.category)) return false;
+      }
+      if (appliedFilters.query) {
+        const normalizedName = provider.name
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+        const normalizedQuery = appliedFilters.query
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+        if (!normalizedName.includes(normalizedQuery)) return false;
+      }
+      return true;
+    });
+  }, [providers, appliedFilters]);
+
+  const comboVariants = useMemo(() => {
+    const variableProds = selectedProducts.filter((p) => p.hasVariables);
+    if (variableProds.length === 0) return [];
+
+    const productVariantsList = variableProds.map((p) => {
+      if (!p.attributes)
+        return [{ productId: p.id, productName: p.name, attributes: {} }];
+
+      const parts = p.attributes.split("|").map((s) => s.trim());
+      const keys = [];
+      const valuesList = [];
+      parts.forEach((part) => {
+        const [key, valStr] = part.split(":").map((s) => s.trim());
+        if (key && valStr) {
+          keys.push(key);
+          valuesList.push(valStr.split(",").map((s) => s.trim()));
+        }
+      });
+
+      if (keys.length === 0)
+        return [{ productId: p.id, productName: p.name, attributes: {} }];
+
+      let combos = [{}];
+      for (let i = 0; i < keys.length; i++) {
+        const currentKey = keys[i];
+        const currentVals = valuesList[i];
+        const newCombos = [];
+        for (const combo of combos) {
+          for (const val of currentVals) {
+            newCombos.push({ ...combo, [currentKey]: val });
+          }
+        }
+        combos = newCombos;
+      }
+
+      return combos.map((attrObj) => ({
+        productId: p.id,
+        productName: p.name,
+        attributes: attrObj,
+      }));
+    });
+
+    let variants = [[]];
+    for (const variantsList of productVariantsList) {
+      const newCombos = [];
+      for (const combo of variants) {
+        for (const variant of variantsList) {
+          newCombos.push([...combo, variant]);
+        }
+      }
+      variants = newCombos;
+    }
+    return variants;
+  }, [selectedProducts]);
+
+  if (!isOpen) return null;
+
+  const handleApplyFilters = () => {
+    setAppliedFilters((prev) => ({
+      ...prev,
+      type: filterType,
+      city: filterCity,
+      category: filterCategory,
+      favorite: filterFavorite,
+    }));
+  };
+
+  const handleClearFilters = () => {
+    setFilterType("");
+    setFilterCity("");
+    setFilterCategory("");
+    setSearchQuery("");
+    setFilterFavorite(false);
+    setAppliedFilters({
+      type: "",
+      city: "",
+      category: "",
+      query: "",
+      favorite: false,
+    });
+  };
+
+  const hasAppliedFilters =
+    appliedFilters.type !== "" ||
+    appliedFilters.city !== "" ||
+    appliedFilters.category !== "" ||
+    appliedFilters.query !== "" ||
+    appliedFilters.favorite === true;
+
+  const handleClose = () => {
+    setCurrentStep(1);
+    setSelectedProvider(null);
+    setSelectedProducts([]);
+    setComboName("");
+    setComboDescription("");
+    setComboImages([]);
+    setIsDrawerOpen(false);
+    setAlertMsg(null);
+    handleClearFilters();
+    onClose();
+  };
+
+  const getIntersection = (products) => {
+    if (products.length === 0) return [];
+    let intersection = [...products[0].warehouses];
+    for (let i = 1; i < products.length; i++) {
+      intersection = intersection.filter((w) =>
+        products[i].warehouses.includes(w)
+      );
+    }
+    return intersection;
+  };
+
+  const catalogProducts = [
+    {
+      id: 101,
+      name: "Set utensilios cocina 6 pzas",
+      cost: 38000,
+      suggestedPrice: 79000,
+      hasVariables: false,
+      stock: 150,
+      category: "Hogar",
+      attributes: "",
+      warehouses: ["Bodega Principal", "Bodega Sur"],
+      image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400",
+      warranties: [
+        {
+          type: "Producto incompleto",
+          days: 10,
+          description: "Garantía por defecto para orden incompleta",
+        },
+        {
+          type: "Mal funcionamiento",
+          days: 10,
+          description: "Garantía por mal funcionamiento de fábrica",
+        },
+      ],
+    },
+    {
+      id: 102,
+      name: "Sartén antiadherente 28cm",
+      cost: 45000,
+      suggestedPrice: 95000,
+      hasVariables: true,
+      stock: 98,
+      category: "Hogar",
+      attributes: "Color: Rojo, Negro, Menta",
+      warehouses: ["Bodega Principal"],
+      image:
+        "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=400",
+      warranties: [
+        {
+          type: "Mal funcionamiento",
+          days: 15,
+          description: "Garantía en caso de pérdida prematura de adherencia",
+        },
+        {
+          type: "Producto roto",
+          days: 5,
+          description: "Garantía por daños en el envío",
+        },
+      ],
+    },
+    {
+      id: 103,
+      name: "Cafetera prensa francesa 600ml",
+      cost: 42000,
+      suggestedPrice: 89000,
+      hasVariables: true,
+      stock: 14,
+      category: "Hogar",
+      attributes: "Color: Cobre, Acero inox, Negro",
+      warehouses: ["Bodega Sur", "Bodega Centro"],
+      image:
+        "https://images.unsplash.com/photo-1517578239113-b03992dcdd25?w=400",
+      warranties: [
+        {
+          type: "Producto roto",
+          days: 10,
+          description: "Garantía si el cristal llega roto",
+        },
+        {
+          type: "Producto incompleto",
+          days: 10,
+          description: "Si falta la prensa o accesorios",
+        },
+      ],
+    },
+    {
+      id: 104,
+      name: "Gorra snapback ajustable",
+      cost: 18000,
+      suggestedPrice: 42000,
+      hasVariables: true,
+      stock: 145,
+      category: "Moda",
+      attributes: "Color: Negro, Gris, Azul",
+      warehouses: ["Bodega Sur"],
+      image:
+        "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400",
+      warranties: [
+        {
+          type: "Producto diferente",
+          days: 10,
+          description: "Garantía si el producto recibido no es el solicitado",
+        },
+      ],
+    },
+    {
+      id: 105,
+      name: "Jean slim fit clásico",
+      cost: 58000,
+      suggestedPrice: 119000,
+      hasVariables: true,
+      stock: 8,
+      category: "Moda",
+      attributes: "Color: Azul oscuro | Talla: 30, 32",
+      warehouses: ["Bodega Centro", "Bodega Principal"],
+      image:
+        "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=400",
+      warranties: [
+        {
+          type: "Mal funcionamiento",
+          days: 30,
+          description: "Defectos en cierres o costuras",
+        },
+      ],
+    },
+    {
+      id: 106,
+      name: "Cinturón de cuero genuino",
+      cost: 25000,
+      suggestedPrice: 55000,
+      hasVariables: false,
+      stock: 93,
+      category: "Moda",
+      attributes: "",
+      warehouses: ["Bodega Principal"],
+      image:
+        "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=400",
+      warranties: [
+        {
+          type: "Producto roto",
+          days: 15,
+          description: "Garantía si la hebilla llega defectuosa",
+        },
+        {
+          type: "Producto diferente",
+          days: 10,
+          description: "Si no es el color o talla correctos",
+        },
+      ],
+    },
+  ];
+
+  const totalItems = selectedProducts.reduce((acc, p) => acc + p.quantity, 0);
+  const variableItems = selectedProducts
+    .filter((p) => p.hasVariables)
+    .reduce((acc, p) => acc + p.quantity, 0);
+  const totalCost = selectedProducts.reduce(
+    (acc, p) => acc + p.cost * p.quantity,
+    0
+  );
+  const totalSuggested = selectedProducts.reduce(
+    (acc, p) => acc + p.suggestedPrice * p.quantity,
+    0
+  );
+  const minStock =
+    selectedProducts.length > 0
+      ? Math.min(...selectedProducts.map((p) => p.stock))
+      : 0;
+
+  const currentWarehouses = getIntersection(selectedProducts);
+
+  const displayedProducts = catalogProducts.filter((p) => {
+    if (currentWarehouses.length === 0) return true;
+    return p.warehouses.some((w) => currentWarehouses.includes(w));
+  });
+
+  const triggerSkeletonIfNeeded = (oldArr, newArr) => {
+    const oldW = getIntersection(oldArr);
+    const newW = getIntersection(newArr);
+    if (oldW.join(",") !== newW.join(",")) {
+      setIsLoadingProducts(true);
+      setTimeout(() => setIsLoadingProducts(false), 500);
+    }
+  };
+
+  const handleAddProduct = (product) => {
+    if (totalItems >= 5) {
+      setAlertMsg(
+        "Has alcanzado el límite máximo. Un combo no puede tener más de 5 productos en total."
+      );
+      return;
+    }
+    if (product.hasVariables && variableItems >= 2) {
+      setAlertMsg(
+        "Límite alcanzado. Solo puedes incluir un máximo de 2 productos con variables por combo."
+      );
+      return;
+    }
+    const newSelection = [...selectedProducts, { ...product, quantity: 1 }];
+    triggerSkeletonIfNeeded(selectedProducts, newSelection);
+    setSelectedProducts(newSelection);
+  };
+
+  const handleUpdateQuantity = (product, delta) => {
+    if (delta > 0) {
+      if (totalItems >= 5) {
+        setAlertMsg(
+          "Has alcanzado el límite máximo. Un combo no puede tener más de 5 productos en total."
+        );
+        return;
+      }
+      if (product.hasVariables && variableItems >= 2) {
+        setAlertMsg(
+          "Límite alcanzado. Solo puedes incluir un máximo de 2 productos con variables por combo."
+        );
+        return;
+      }
+    }
+    setSelectedProducts((prev) =>
+      prev.map((p) =>
+        p.id === product.id ? { ...p, quantity: p.quantity + delta } : p
+      )
+    );
+  };
+
+  const handleRemoveProduct = (productId) => {
+    const newSelection = selectedProducts.filter((p) => p.id !== productId);
+    triggerSkeletonIfNeeded(selectedProducts, newSelection);
+    setSelectedProducts(newSelection);
+  };
+
+  const handleImageUpload = (e) => {
+    const files = Array.from(e.target.files);
+    const newImages = files
+      .slice(0, 3 - comboImages.length)
+      .map((file) => URL.createObjectURL(file));
+    setComboImages((prev) => [...prev, ...newImages]);
+  };
+
+  const handleRemoveComboImage = (index) => {
+    setComboImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const previewData = {
+    comboName,
+    comboDescription,
+    comboImages,
+    selectedProducts,
+    comboVariants,
+    selectedProvider,
+    selectedWarehouse: {
+      name: currentWarehouses.join(", ") || "Sin asignar",
+      city: "",
+    },
+    minStock,
+    totalCost,
+    totalSuggested,
+  };
+
+  return (
+    <div className="fixed inset-0 bg-white z-50 flex flex-col font-sans">
+      <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200 shrink-0">
+        <h2 className="text-lg font-bold text-[#1e3a5f]">
+          {editCombo ? "Editar combo" : "Crear combo"}
+        </h2>
+        <button
+          onClick={handleClose}
+          className="text-slate-400 hover:text-slate-600 transition-colors"
+        >
+          <X size={20} />
+        </button>
+      </div>
+
+      <div className="flex flex-1 overflow-hidden">
+        <div className="w-64 bg-white border-r border-slate-100 p-8 flex flex-col gap-6 shrink-0 shadow-[2px_0_10px_-5px_rgba(0,0,0,0.1)] z-10 overflow-y-auto">
+          <div className="flex items-center gap-4">
+            <div
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                currentStep > 1
+                  ? "bg-emerald-500 text-white"
+                  : "bg-orange-500 text-white"
+              }`}
+            >
+              {currentStep > 1 ? <Check size={14} strokeWidth={3} /> : "1"}
+            </div>
+            <span
+              className={`text-sm ${
+                currentStep >= 1
+                  ? "font-bold text-slate-800"
+                  : "font-medium text-slate-500"
+              }`}
+            >
+              Elegir proveedor
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                currentStep > 2
+                  ? "bg-emerald-500 text-white"
+                  : currentStep === 2
+                  ? "bg-orange-500 text-white"
+                  : "bg-slate-100 text-slate-400"
+              }`}
+            >
+              {currentStep > 2 ? <Check size={14} strokeWidth={3} /> : "2"}
+            </div>
+            <span
+              className={`text-sm ${
+                currentStep >= 2
+                  ? "font-bold text-slate-800"
+                  : "font-medium text-slate-500"
+              }`}
+            >
+              Agregar productos
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                currentStep > 3
+                  ? "bg-emerald-500 text-white"
+                  : currentStep === 3
+                  ? "bg-orange-500 text-white"
+                  : "bg-slate-100 text-slate-400"
+              }`}
+            >
+              {currentStep > 3 ? <Check size={14} strokeWidth={3} /> : "3"}
+            </div>
+            <span
+              className={`text-sm ${
+                currentStep >= 3
+                  ? "font-bold text-slate-800"
+                  : "font-medium text-slate-500"
+              }`}
+            >
+              Personalizar combo
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                currentStep > 4
+                  ? "bg-emerald-500 text-white"
+                  : currentStep === 4
+                  ? "bg-orange-500 text-white"
+                  : "bg-slate-100 text-slate-400"
+              }`}
+            >
+              {currentStep > 4 ? <Check size={14} strokeWidth={3} /> : "4"}
+            </div>
+            <span
+              className={`text-sm ${
+                currentStep >= 4
+                  ? "font-bold text-slate-800"
+                  : "font-medium text-slate-500"
+              }`}
+            >
+              Garantías
+            </span>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div
+              className={`w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold ${
+                currentStep === 5
+                  ? "bg-orange-500 text-white"
+                  : "bg-slate-100 text-slate-400"
+              }`}
+            >
+              5
+            </div>
+            <span
+              className={`text-sm ${
+                currentStep === 5
+                  ? "font-bold text-slate-800"
+                  : "font-medium text-slate-500"
+              }`}
+            >
+              Previsualizar
+            </span>
+          </div>
+        </div>
+
+        <div
+          className={`flex-1 overflow-y-auto bg-slate-50/30 ${
+            currentStep === 5 ? "p-0 bg-white" : "p-8"
+          }`}
+        >
+          {currentStep === 1 && (
+            <div className="animate-in fade-in duration-300">
+              <h3 className="text-xl font-medium text-[#1e3a5f] mb-2">
+                Seleccionar proveedor
+              </h3>
+              <p className="text-[13px] text-slate-500 mb-6">
+                Elige el proveedor del cual quieres armar el combo. Todos los
+                productos del combo deben pertenecer al mismo proveedor.
+              </p>
+
+              <div className="border border-slate-200 rounded-xl p-4 mb-8 bg-white shadow-sm">
+                <div className="flex items-center gap-2 mb-4">
+                  <Heart
+                    size={16}
+                    className={`stroke-[2.5] ${
+                      filterFavorite
+                        ? "text-[#ff7b00] fill-[#ff7b00]"
+                        : "text-slate-400"
+                    }`}
+                  />
+                  <span
+                    className={`text-[13px] font-medium ${
+                      filterFavorite ? "text-[#ff7b00]" : "text-slate-700"
+                    }`}
+                  >
+                    Favoritos
+                  </span>
+                  <div
+                    onClick={() => setFilterFavorite(!filterFavorite)}
+                    className={`w-8 h-4 rounded-full relative ml-1 cursor-pointer transition-colors ${
+                      filterFavorite ? "bg-[#ff7b00]" : "bg-slate-200"
+                    }`}
+                  >
+                    <div
+                      className={`w-3 h-3 bg-white rounded-full absolute top-0.5 shadow-sm transition-transform ${
+                        filterFavorite ? "left-[18px]" : "left-0.5"
+                      }`}
+                    ></div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap lg:flex-nowrap items-center gap-3 w-full">
+                  <div className="relative">
+                    <select
+                      value={filterType}
+                      onChange={(e) => setFilterType(e.target.value)}
+                      className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-2 text-[13px] text-slate-600 focus:outline-none focus:border-[#ff7b00] bg-white cursor-pointer"
+                    >
+                      <option value="">Tipo de proveedor</option>
+                      <option value="verificado">Verificados</option>
+                      <option value="premium">Premium</option>
+                      <option value="exclusivo">Exclusivos</option>
+                      <option value="no_verificado">No verificados</option>
+                    </select>
+                    <ChevronDown
+                      size={14}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <select
+                      value={filterCity}
+                      onChange={(e) => setFilterCity(e.target.value)}
+                      className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-2 text-[13px] text-slate-600 focus:outline-none focus:border-[#ff7b00] bg-white cursor-pointer"
+                    >
+                      <option value="">Seleccione una ciudad</option>
+                      <option value="bogota">Bogotá</option>
+                      <option value="medellin">Medellín</option>
+                      <option value="cali">Cali</option>
+                      <option value="barranquilla">Barranquilla</option>
+                    </select>
+                    <ChevronDown
+                      size={14}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <select
+                      value={filterCategory}
+                      onChange={(e) => setFilterCategory(e.target.value)}
+                      className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-2 text-[13px] text-slate-600 focus:outline-none focus:border-[#ff7b00] bg-white min-w-[120px] cursor-pointer"
+                    >
+                      <option value="">Todas las categorías</option>
+                      <option value="tecnologia">Tecnología</option>
+                      <option value="hogar">Hogar</option>
+                      <option value="moda">Moda</option>
+                    </select>
+                    <ChevronDown
+                      size={14}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleApplyFilters}
+                    className="bg-[#ff7b00] hover:bg-[#e06c00] transition-colors text-white w-[38px] h-[38px] flex items-center justify-center rounded-lg shrink-0 shadow-sm"
+                  >
+                    <ArrowRight size={18} strokeWidth={2.5} />
+                  </button>
+
+                  {hasAppliedFilters && (
+                    <button
+                      onClick={handleClearFilters}
+                      className="text-[#ff7b00] text-[13px] font-bold hover:underline shrink-0 px-2 transition-all"
+                    >
+                      Limpiar
+                    </button>
+                  )}
+
+                  <div className="flex-1 relative min-w-[150px] lg:ml-auto max-w-[250px]">
+                    <Search
+                      className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                      size={16}
+                    />
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter")
+                          setAppliedFilters((prev) => ({
+                            ...prev,
+                            query: searchQuery,
+                          }));
+                      }}
+                      placeholder="Buscar (Enter)"
+                      className="w-full border border-slate-200 rounded-lg pl-9 pr-4 py-2 h-[38px] text-[13px] focus:outline-none focus:border-[#ff7b00] bg-white"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {filteredProviders.length === 0 ? (
+                <div className="border-2 border-dashed border-slate-200 rounded-2xl p-12 flex flex-col items-center justify-center text-center bg-slate-50/50 h-48">
+                  <Search size={32} className="text-slate-300 mb-3" />
+                  <p className="text-[14px] font-bold text-slate-600 mb-1">
+                    No se encontraron proveedores
+                  </p>
+                  <p className="text-[13px] text-slate-500">
+                    Intenta ajustar los filtros o la búsqueda.
+                  </p>
+                  <button
+                    onClick={handleClearFilters}
+                    className="mt-4 text-[#ff7b00] font-bold text-[13px] hover:underline"
+                  >
+                    Limpiar filtros
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-4 flex-wrap">
+                  {filteredProviders.map((provider) => (
+                    <div
+                      key={provider.id}
+                      onClick={() => setSelectedProvider(provider)}
+                      className={`w-[200px] border rounded-xl p-5 flex flex-col items-center relative cursor-pointer transition-colors shadow-sm bg-white ${
+                        selectedProvider?.name === provider.name
+                          ? "border-[#ff7b00] bg-orange-50/20 ring-1 ring-[#ff7b00]"
+                          : "border-slate-200 hover:border-orange-300"
+                      }`}
+                    >
+                      {provider.icon === "crown" && (
+                        <div className="absolute top-3 left-3 w-6 h-6 bg-black rounded-full flex items-center justify-center">
+                          <Crown size={12} className="text-white" />
+                        </div>
+                      )}
+                      {provider.icon === "star" && (
+                        <div className="absolute top-3 left-3 w-6 h-6 bg-[#ff7b00] rounded-full flex items-center justify-center">
+                          <Star size={12} className="text-white" fill="white" />
+                        </div>
+                      )}
+                      {provider.icon === "check" && (
+                        <div className="absolute top-3 left-3 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
+                          <Check
+                            size={14}
+                            className="text-white"
+                            strokeWidth={3}
+                          />
+                        </div>
+                      )}
+                      <div className="w-[72px] h-[72px] rounded-full overflow-hidden mb-3">
+                        <img
+                          src={provider.image}
+                          className="w-full h-full object-cover"
+                          alt={provider.name}
+                        />
+                      </div>
+                      <h4 className="font-bold text-slate-800 text-[13px] mb-0.5 text-center leading-tight">
+                        {provider.name}
+                      </h4>
+                      <p className="text-[11px] font-medium text-slate-500 mb-1">
+                        {provider.products} Productos
+                      </p>
+                      <p className="text-[11px] text-slate-400 text-center leading-tight line-clamp-1">
+                        {provider.categories}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {currentStep === 2 && (
+            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-xl font-medium text-[#1e3a5f]">
+                  Productos del combo
+                </h3>
+                <button
+                  onClick={() => setIsDrawerOpen(true)}
+                  className="text-[#ff7b00] hover:text-[#e06c00] font-bold flex items-center gap-2 text-[14px] transition-colors shrink-0"
+                >
+                  <Plus size={18} strokeWidth={2.5} /> Agregar producto
+                </button>
+              </div>
+              <p className="text-[13px] text-slate-500 mb-6">
+                Agrega entre 2 y 5 productos para crear tu combo. Puedes incluir
+                máximo 2 productos con variantes. Todos los productos deben
+                pertenecer a las mismas bodegas en común.
+              </p>
+
+              {editCombo &&
+                (editCombo.warning || editCombo.richData?.warning) && (
+                  <div
+                    className={`mb-6 p-4 rounded-xl flex items-start gap-3 border shadow-sm ${
+                      (editCombo.warning || editCombo.richData?.warning)
+                        .type === "error"
+                        ? "bg-rose-50 border-rose-200 text-rose-700"
+                        : "bg-orange-50 border-orange-200 text-orange-700"
+                    }`}
+                  >
+                    <AlertTriangle size={20} className="shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-bold text-[14px]">
+                        {(editCombo.warning || editCombo.richData?.warning)
+                          .type === "error"
+                          ? "Acción requerida: Producto eliminado"
+                          : "Acción requerida: Producto sin stock"}
+                      </h4>
+                      <p className="text-[13px] font-medium opacity-90">
+                        {
+                          (editCombo.warning || editCombo.richData?.warning)
+                            .text
+                        }
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+              {selectedProducts.length === 0 ? (
+                <div className="border-2 border-dashed border-slate-200 rounded-2xl p-12 flex flex-col items-center justify-center text-center bg-slate-50/50 h-32">
+                  <p className="text-[13px] text-slate-500">
+                    Aún no has agregado productos.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {selectedProducts.map((product) => {
+                    const selectedData = selectedProducts.find(
+                      (p) => p.id === product.id
+                    );
+                    const isDeleted = product.deleted;
+                    const isOutOfStock = product.stock === 0 && !isDeleted;
+
+                    return (
+                      <div
+                        key={product.id}
+                        className={`flex border-2 rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(0,0,0,0.03)] relative flex-row items-stretch ${
+                          isDeleted
+                            ? "border-rose-400 bg-rose-50/30"
+                            : isOutOfStock
+                            ? "border-orange-400 bg-orange-50/30"
+                            : "border-slate-100 bg-white"
+                        }`}
+                      >
+                        {(isDeleted || isOutOfStock) && (
+                          <div
+                            className={`absolute top-0 right-0 px-3 py-1 rounded-bl-xl font-bold text-[10px] uppercase tracking-wider text-white z-10 ${
+                              isDeleted ? "bg-rose-500" : "bg-orange-500"
+                            }`}
+                          >
+                            {isDeleted
+                              ? "Producto Eliminado"
+                              : "Agotado (Sin Stock)"}
+                          </div>
+                        )}
+
+                        <div
+                          className={`w-48 shrink-0 border-r border-slate-100 bg-slate-50 flex items-stretch ${
+                            isDeleted ? "opacity-60 grayscale" : ""
+                          }`}
+                        >
+                          <img
+                            src={product.image}
+                            alt={product.name}
+                            className="w-full object-cover"
+                            style={{ minHeight: "100%" }}
+                          />
+                        </div>
+
+                        <div className="p-5 flex flex-col flex-1 relative min-w-0">
+                          <div className="flex justify-between items-start mb-2">
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="border border-slate-200 rounded-full px-2.5 py-0.5 text-[11px] font-medium text-slate-500 shadow-sm bg-white">
+                                ID: P-10{product.id}
+                              </span>
+                              {product.hasVariables && (
+                                <span className="bg-[#ff7b00] text-white text-[11px] px-2.5 py-0.5 rounded-full font-bold shadow-sm">
+                                  Variable
+                                </span>
+                              )}
+                              <span className="bg-slate-100 text-slate-500 text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1">
+                                <Warehouse size={10} />{" "}
+                                {product.warehouses?.join(", ")}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-4 border border-slate-200 rounded-full px-1 py-1 bg-white shadow-sm">
+                              <button
+                                onClick={() =>
+                                  handleUpdateQuantity(product, -1)
+                                }
+                                disabled={selectedData.quantity <= 1}
+                                className={`w-7 h-7 rounded-full flex items-center justify-center transition-colors ${
+                                  selectedData.quantity <= 1
+                                    ? "text-slate-300 bg-slate-50 cursor-not-allowed"
+                                    : "text-slate-500 hover:bg-slate-100"
+                                }`}
+                              >
+                                -
+                              </button>
+                              <span className="font-bold text-[14px] w-4 text-center text-slate-800">
+                                {selectedData.quantity}
+                              </span>
+                              <button
+                                onClick={() => handleUpdateQuantity(product, 1)}
+                                className="w-7 h-7 rounded-full flex items-center justify-center text-[#ff7b00] hover:bg-orange-50 border border-orange-200 transition-colors"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+
+                          <h4 className="font-bold text-slate-800 text-[16px] mb-3 truncate pr-20">
+                            {product.name}
+                          </h4>
+
+                          <div className="flex gap-8 mb-3">
+                            <div className="flex flex-col">
+                              <span className="text-[11px] text-slate-400 mb-0.5">
+                                Precio proveedor
+                              </span>
+                              <span className="font-bold text-slate-800 text-[14px]">
+                                $ {product.cost.toLocaleString()}
+                              </span>
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-[11px] text-slate-400 mb-0.5">
+                                Precio sugerido
+                              </span>
+                              <span className="font-bold text-slate-800 text-[14px]">
+                                $ {product.suggestedPrice.toLocaleString()}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-[12px] text-slate-500">
+                              Stock:{" "}
+                              <span className="text-[#00a896] font-bold">
+                                {product.stock}
+                              </span>
+                            </span>
+                            {product.attributes && (
+                              <>
+                                <span className="text-slate-300">·</span>
+                                <span className="text-[12px] text-slate-400">
+                                  {product.attributes}
+                                </span>
+                              </>
+                            )}
+                          </div>
+
+                          {isDeleted && (
+                            <div className="mt-2 bg-rose-100/50 border border-rose-200 p-2.5 rounded-lg flex items-start gap-2 mr-16">
+                              <AlertTriangle
+                                size={14}
+                                className="text-rose-600 shrink-0 mt-0.5"
+                              />
+                              <p className="text-[11px] text-rose-700 font-medium leading-tight">
+                                <span className="font-bold">
+                                  Motivo inactivo:
+                                </span>{" "}
+                                El proveedor eliminó este producto del catálogo.
+                                Elimínalo del combo.
+                              </p>
+                            </div>
+                          )}
+                          {isOutOfStock && (
+                            <div className="mt-2 bg-orange-100/50 border border-orange-200 p-2.5 rounded-lg flex items-start gap-2 mr-16">
+                              <AlertTriangle
+                                size={14}
+                                className="text-orange-600 shrink-0 mt-0.5"
+                              />
+                              <p className="text-[11px] text-orange-700 font-medium leading-tight">
+                                <span className="font-bold">
+                                  Motivo inactivo:
+                                </span>{" "}
+                                Producto sin stock en bodega. Elimínalo o
+                                reemplázalo para activar el combo.
+                              </p>
+                            </div>
+                          )}
+
+                          <button
+                            onClick={() => handleRemoveProduct(product.id)}
+                            className="absolute bottom-5 right-5 flex items-center gap-1.5 text-slate-400 hover:text-rose-500 transition-colors text-[12px] font-medium"
+                          >
+                            <Trash2 size={14} /> Eliminar
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
+
+          {currentStep === 3 && (
+            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+              <div className="flex justify-between items-center mb-6">
+                <div>
+                  <h3 className="text-xl font-medium text-[#1e3a5f] mb-2">
+                    Personalizar combo
+                  </h3>
+                  <p className="text-[13px] text-slate-500">
+                    Ingresa los detalles finales de tu combo y prepáralo para
+                    vender.
+                  </p>
+                </div>
+              </div>
+
+              <div className="border border-slate-200 rounded-2xl p-6 bg-white shadow-sm">
+                <div className="mb-5">
+                  <label className="block text-[13px] font-bold text-slate-700 mb-2">
+                    Nombre del combo
+                  </label>
+                  <input
+                    type="text"
+                    value={comboName}
+                    onChange={(e) => setComboName(e.target.value)}
+                    className="w-full border border-slate-200 rounded-xl px-4 py-3 text-[14px] focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all bg-slate-50/50 focus:bg-white"
+                    placeholder="Ej: Kit Hogar Perfecto"
+                  />
+                </div>
+                <div className="mb-5">
+                  <label className="block text-[13px] font-bold text-slate-700 mb-2">
+                    Descripción comercial
+                  </label>
+                  <textarea
+                    value={comboDescription}
+                    onChange={(e) => setComboDescription(e.target.value)}
+                    className="w-full border border-slate-200 rounded-xl px-4 py-3 text-[14px] focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all min-h-[100px] bg-slate-50/50 focus:bg-white resize-y"
+                    placeholder="Escribe los detalles y beneficios de este combo para atraer clientes..."
+                  />
+                </div>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <label className="block text-[13px] font-bold text-slate-700">
+                      Imágenes del combo
+                    </label>
+                    <span className="text-[11px] text-slate-500 font-medium">
+                      {comboImages.length}/3 agregadas
+                    </span>
+                  </div>
+                  <div className="flex gap-4">
+                    {comboImages.map((img, idx) => (
+                      <div
+                        key={idx}
+                        className="relative w-24 h-24 rounded-xl border border-slate-200 overflow-hidden shadow-sm group bg-slate-50 shrink-0"
+                      >
+                        <img
+                          src={img}
+                          className="w-full h-full object-cover"
+                          alt={`Combo ${idx + 1}`}
+                        />
+                        <button
+                          onClick={() => handleRemoveComboImage(idx)}
+                          className="absolute top-1.5 right-1.5 w-6 h-6 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-slate-500 hover:text-rose-500 hover:bg-rose-50 opacity-0 group-hover:opacity-100 transition-all shadow-sm"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
+                    ))}
+                    {comboImages.length < 3 && (
+                      <label className="w-24 h-24 rounded-xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center text-slate-400 hover:border-orange-500 hover:text-orange-500 hover:bg-orange-50/50 cursor-pointer transition-all shrink-0">
+                        <ImageIcon size={24} className="mb-1" />
+                        <span className="text-[10px] font-medium">Agregar</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                      </label>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 4 && (
+            <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+              <div className="mb-6">
+                <h3 className="text-xl font-bold text-[#1e3a5f] mb-1">
+                  Garantías
+                </h3>
+                <p className="text-[13px] text-slate-500">
+                  Las garantías del combo se heredan de los productos que lo
+                  componen. No se pueden modificar desde aquí.
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {selectedProducts.map((product) => (
+                  <div
+                    key={product.id}
+                    className="border border-slate-200 rounded-lg bg-white overflow-hidden shadow-sm"
+                  >
+                    <div className="flex items-center gap-4 p-4 border-b border-slate-100">
+                      <div className="w-14 h-14 rounded bg-slate-50 border border-slate-200 overflow-hidden shrink-0">
+                        <img
+                          src={product.image}
+                          className="w-full h-full object-cover"
+                          alt={product.name}
+                        />
+                      </div>
+                      <div className="flex flex-col gap-1">
+                        <span className="inline-block px-2 py-0.5 border border-slate-200 bg-slate-50 rounded-md text-[11px] text-slate-500 font-medium w-fit">
+                          ID: {product.id}
+                        </span>
+                        <h4 className="text-[15px] font-bold text-slate-700">
+                          {product.name}
+                        </h4>
+                      </div>
+                    </div>
+                    <div className="flex flex-col">
+                      {product.warranties &&
+                        product.warranties.map((w, i) => (
+                          <WarrantyAccordion
+                            key={i}
+                            title={w.type}
+                            days={w.days}
+                            description={w.description}
+                          />
+                        ))}
+                      {(!product.warranties ||
+                        product.warranties.length === 0) && (
+                        <div className="p-4 text-sm text-slate-500">
+                          Este producto no tiene garantías configuradas.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {currentStep === 5 && <ComboPreviewUI data={previewData} />}
+        </div>
+
+        {/* Right Sidebar - Summary */}
+        {currentStep < 5 && (
+          <div className="w-[300px] bg-[#f8fafc] border-l border-slate-200 p-6 flex flex-col shrink-0">
+            <span className="text-[11px] font-bold text-slate-500 tracking-wide mb-4">
+              RESUMEN
+            </span>
+
+            <div className="bg-slate-100/80 rounded-2xl h-40 mb-4 flex items-center justify-center border border-slate-200 border-dashed overflow-hidden shadow-sm">
+              {comboImages.length > 0 ? (
+                <div
+                  className={`w-full h-full p-1 ${
+                    comboImages.length > 1 ? "grid grid-cols-2 gap-1" : ""
+                  }`}
+                >
+                  {comboImages.map((imgUrl, idx) => (
+                    <img
+                      key={idx}
+                      src={imgUrl}
+                      className="w-full h-full object-cover rounded-xl"
+                      alt="Combo"
+                    />
+                  ))}
+                </div>
+              ) : (
+                <ImageIcon size={40} className="text-slate-300 stroke-[1.5]" />
+              )}
+            </div>
+
+            <h4 className="font-bold text-[#1e3a5f] text-[15px] mb-1">
+              {comboName || "Nombre del combo"}
+            </h4>
+            <p className="text-[12px] text-slate-400 mb-3">
+              {selectedProducts.length} productos • {totalItems} unidades
+            </p>
+
+            {selectedProducts.length > 0 && (
+              <div className="font-bold text-[#ff7b00] text-[18px] mb-6">
+                ${totalSuggested.toLocaleString()}
+              </div>
+            )}
+
+            <div className="flex flex-col border border-slate-200 rounded-2xl bg-white shadow-sm mb-4">
+              <div className="flex items-center justify-between px-4 py-3.5 border-b border-slate-100">
+                <div className="flex items-center gap-2">
+                  <Store size={14} className="text-orange-400" />
+                  <span className="text-[12px] text-slate-500">Proveedor</span>
+                </div>
+                <span
+                  className={`text-[12px] ${
+                    selectedProvider
+                      ? "font-bold text-[#1e3a5f]"
+                      : "text-slate-300"
+                  }`}
+                >
+                  {selectedProvider ? selectedProvider.name : "--"}
+                </span>
+              </div>
+              <div className="flex items-center justify-between px-4 py-3.5">
+                <div className="flex items-center gap-2">
+                  <Warehouse size={14} className="text-orange-400" />
+                  <span className="text-[12px] text-slate-500">Bodegas</span>
+                </div>
+                <span
+                  className={`text-[12px] ${
+                    currentWarehouses.length > 0
+                      ? "font-bold text-[#1e3a5f] text-right"
+                      : "text-slate-300"
+                  }`}
+                >
+                  {currentWarehouses.length > 0
+                    ? currentWarehouses.join(", ")
+                    : "Sin asignar"}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col border border-slate-200 rounded-2xl bg-white shadow-sm">
+              <div className="flex items-center justify-between px-4 py-3.5 border-b border-slate-100">
+                <span className="text-[12px] text-slate-500">Costo total</span>
+                <span className="text-[13px] font-bold text-[#1e3a5f]">
+                  ${totalCost.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center justify-between px-4 py-3.5 border-b border-slate-100">
+                <span className="text-[12px] text-slate-500">
+                  Precio sugerido
+                </span>
+                <span className="text-[13px] font-bold text-[#ff7b00]">
+                  ${totalSuggested.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex items-center justify-between px-4 py-3.5">
+                <span className="text-[12px] text-slate-500">Stock combo</span>
+                <span className="text-[13px] font-bold text-[#00a896]">
+                  {minStock} uds.
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="h-20 border-t border-slate-200 bg-white flex items-center justify-between px-6 shrink-0 relative z-40">
+        <div className="flex gap-3 ml-auto">
+          {currentStep === 1 ? (
+            <button
+              onClick={handleClose}
+              className="px-6 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors bg-white"
+            >
+              Cancelar
+            </button>
+          ) : (
+            <button
+              onClick={() => setCurrentStep((prev) => prev - 1)}
+              className="px-6 py-2.5 border border-slate-200 rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-colors bg-white"
+            >
+              Atrás
+            </button>
+          )}
+
+          <button
+            onClick={() => {
+              if (currentStep === 1 && selectedProvider) {
+                setCurrentStep(2);
+                if (selectedProducts.length === 0) setIsDrawerOpen(true);
+              } else if (currentStep === 2 && selectedProducts.length >= 2)
+                setCurrentStep(3);
+              else if (
+                currentStep === 3 &&
+                comboName.trim() &&
+                comboDescription.trim() &&
+                comboImages.length > 0
+              )
+                setCurrentStep(4);
+              else if (currentStep === 4) setCurrentStep(5);
+              else if (currentStep === 5) {
+                if (editCombo) {
+                  setIsConfirmEditOpen(true);
+                } else {
+                  const newComboData = {
+                    id: Date.now(),
+                    title: comboName,
+                    description: comboDescription,
+                    productsCount: selectedProducts.length,
+                    stock: minStock,
+                    provider: selectedProvider.name,
+                    warehouse: currentWarehouses.join(", "), // Guardar la bodega derivada
+                    cost: totalCost,
+                    suggestedPrice: totalSuggested,
+                    status: "Activo",
+                    image: comboImages[0] || selectedProducts[0]?.image,
+                    richData: previewData,
+                  };
+                  onAddCombo(newComboData);
+                  handleClose();
+                }
+              }
+            }}
+            disabled={
+              (currentStep === 1 && !selectedProvider) ||
+              (currentStep === 2 && selectedProducts.length < 2) ||
+              (currentStep === 3 &&
+                (!comboName.trim() ||
+                  !comboDescription.trim() ||
+                  comboImages.length === 0))
+            }
+            className={`px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-colors text-white ${
+              (currentStep === 1 && !selectedProvider) ||
+              (currentStep === 2 && selectedProducts.length < 2) ||
+              (currentStep === 3 &&
+                (!comboName.trim() ||
+                  !comboDescription.trim() ||
+                  comboImages.length === 0))
+                ? "bg-[#ff7b00] opacity-50 cursor-not-allowed"
+                : "bg-[#ff7b00] hover:bg-[#e06c00]"
+            }`}
+          >
+            {currentStep === 5
+              ? editCombo
+                ? "Guardar"
+                : "Crear"
+              : "Siguiente"}
+          </button>
+        </div>
+      </div>
+
+      <ConfirmModal
+        isOpen={isConfirmEditOpen}
+        title="Guardar cambios"
+        message={`¿Estás seguro de que deseas guardar los cambios realizados en el combo "${comboName}"?`}
+        confirmText="Sí, guardar"
+        confirmColorClass="bg-orange-500 hover:bg-orange-600"
+        onCancel={() => setIsConfirmEditOpen(false)}
+        onConfirm={() => {
+          const newComboData = {
+            id: editCombo.id,
+            title: comboName,
+            description: comboDescription,
+            productsCount: selectedProducts.length,
+            stock: minStock,
+            provider: selectedProvider.name,
+            warehouse: currentWarehouses.join(", "),
+            cost: totalCost,
+            suggestedPrice: totalSuggested,
+            status: editCombo.status || "Activo",
+            image: comboImages[0] || selectedProducts[0]?.image,
+            richData: previewData,
+          };
+          onEditCombo(newComboData);
+          setIsConfirmEditOpen(false);
+          handleClose();
+        }}
+      />
+
+      {isDrawerOpen && (
+        <div
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-[1px] z-[55]"
+          onClick={() => setIsDrawerOpen(false)}
+        />
+      )}
+
+      <div
+        className={`fixed inset-y-0 right-0 w-full max-w-[720px] bg-white shadow-[-10px_0_30px_rgba(0,0,0,0.1)] z-[60] transform transition-transform duration-300 ease-in-out flex flex-col ${
+          isDrawerOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200 shrink-0 bg-white">
+          <h3 className="font-bold text-[#1e3a5f] text-lg">
+            Agregar productos
+          </h3>
+          <div className="flex-1 max-w-sm mx-6 relative">
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              size={16}
+            />
+            <input
+              type="text"
+              placeholder="Buscar productos por nombre o ID"
+              className="w-full border border-slate-200 rounded-lg pl-9 pr-4 py-2 text-[13px] text-slate-600 focus:outline-none focus:border-orange-500"
+            />
+          </div>
+          <button
+            onClick={() => setIsDrawerOpen(false)}
+            className="text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="bg-slate-50 border-b border-slate-200 px-6 py-3 flex gap-6 text-[12px] text-slate-500 shrink-0">
+          <div className="flex items-center gap-2">
+            <div
+              className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                totalItems >= 2
+                  ? "bg-emerald-500 text-white"
+                  : "bg-slate-200 text-slate-500"
+              }`}
+            >
+              {totalItems >= 2 ? <Check size={12} strokeWidth={3} /> : "2"}
+            </div>
+            <span
+              className={totalItems >= 2 ? "text-emerald-500 font-medium" : ""}
+            >
+              Mín. 2 productos
+            </span>
+          </div>
+          <span className="text-slate-300">·</span>
+          <div className="flex items-center gap-2">
+            <div
+              className={`w-auto px-2 h-5 rounded-full flex items-center justify-center text-[10px] font-bold bg-slate-200 text-slate-500`}
+            >
+              {totalItems}/5
+            </div>
+            <span>Máx. 5 productos</span>
+          </div>
+          <span className="text-slate-300">·</span>
+          <div className="flex items-center gap-2">
+            <div
+              className={`w-auto px-2 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
+                variableItems > 0
+                  ? "bg-[#ff7b00] text-white"
+                  : "bg-slate-200 text-slate-500"
+              }`}
+            >
+              {variableItems}/2
+            </div>
+            <span
+              className={
+                variableItems > 0
+                  ? "text-[#ff7b00] font-medium"
+                  : "text-slate-500"
+              }
+            >
+              Con variables
+            </span>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6 grid grid-cols-2 md:grid-cols-3 gap-5 bg-white content-start pb-[260px]">
+          {isLoadingProducts
+            ? Array.from({ length: 6 }).map((_, i) => (
+                <div
+                  key={`skel-${i}`}
+                  className="bg-white border border-slate-200 rounded-[16px] flex flex-col p-0 overflow-hidden shadow-sm animate-pulse h-[350px]"
+                >
+                  <div className="h-[170px] bg-slate-200 w-full shrink-0"></div>
+                  <div className="p-4 flex flex-col grow">
+                    <div className="h-3 bg-slate-200 w-1/3 rounded mb-3"></div>
+                    <div className="h-5 bg-slate-200 w-2/3 rounded mb-4"></div>
+                    <div className="h-3 bg-slate-200 w-1/2 rounded mb-1"></div>
+                    <div className="h-3 bg-slate-200 w-1/4 rounded mb-6"></div>
+                    <div className="mt-auto flex justify-between gap-4">
+                      <div className="h-10 bg-slate-200 w-full rounded-lg"></div>
+                    </div>
+                  </div>
+                </div>
+              ))
+            : displayedProducts.map((product) => {
+                const selectedData = selectedProducts.find(
+                  (p) => p.id === product.id
+                );
+                const isSelected = !!selectedData;
+
+                return (
+                  <div
+                    key={product.id}
+                    className={`bg-white border rounded-[16px] flex flex-col transition-shadow relative ${
+                      isSelected
+                        ? "border-[#ff7b00] shadow-sm ring-1 ring-[#ff7b00]"
+                        : "border-slate-200 hover:shadow-md"
+                    }`}
+                  >
+                    <div className="relative h-[170px] w-full bg-slate-100 rounded-t-[15px] overflow-hidden shrink-0">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
+                      {product.hasVariables && (
+                        <span className="absolute top-3 left-3 bg-[#ff7b00] text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-sm">
+                          Variable
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="p-4 flex flex-col grow min-h-[240px]">
+                      <div className="flex justify-between items-center mb-1.5 text-[12px]">
+                        <span className="text-slate-400 font-medium">
+                          {product.category}
+                        </span>
+                        <span className="text-slate-500 font-medium">
+                          Stock:{" "}
+                          <span className="text-emerald-500 font-bold">
+                            {product.stock}
+                          </span>
+                        </span>
+                      </div>
+
+                      <div className="mb-2">
+                        <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-500 px-2 py-0.5 rounded text-[10px] font-bold border border-slate-200">
+                          <Warehouse size={10} />{" "}
+                          {product.warehouses?.join(", ")}
+                        </span>
+                      </div>
+
+                      {product.attributes ? (
+                        <p className="text-[11px] text-slate-400 mb-1 leading-tight">
+                          {product.attributes}
+                        </p>
+                      ) : (
+                        <div className="h-4 mb-1"></div>
+                      )}
+
+                      <h4 className="font-bold text-slate-800 text-[15px] mb-4 leading-snug">
+                        {product.name}
+                      </h4>
+
+                      <div className="mt-auto">
+                        <div className="flex justify-between items-end mb-4">
+                          <div className="flex flex-col">
+                            <span className="text-[11px] text-slate-400 leading-tight mb-0.5">
+                              Precio
+                              <br />
+                              proveedor
+                            </span>
+                            <span className="font-bold text-slate-800 text-[14px]">
+                              $ {product.cost.toLocaleString()}
+                            </span>
+                          </div>
+                          <div className="flex flex-col">
+                            <span className="text-[11px] text-slate-400 leading-tight mb-0.5">
+                              Precio
+                              <br />
+                              sugerido
+                            </span>
+                            <span className="font-bold text-slate-800 text-[14px]">
+                              $ {product.suggestedPrice.toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+
+                        {!isSelected && (
+                          <div className="w-full h-px bg-slate-100 mb-3 mt-1"></div>
+                        )}
+
+                        {isSelected ? (
+                          <div className="flex items-center gap-2 mt-1 h-[40px] w-full">
+                            <button
+                              onClick={() => handleRemoveProduct(product.id)}
+                              className="w-[42px] h-[40px] flex items-center justify-center text-slate-400 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors shrink-0"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                            <div className="flex-1 h-[40px] flex items-center border border-slate-200 rounded-lg overflow-hidden">
+                              <button
+                                onClick={() =>
+                                  handleUpdateQuantity(product, -1)
+                                }
+                                disabled={selectedData.quantity <= 1}
+                                className={`w-10 h-full flex items-center justify-center border-r border-slate-200 transition-colors ${
+                                  selectedData.quantity <= 1
+                                    ? "text-slate-300 cursor-not-allowed bg-slate-50"
+                                    : "text-slate-500 hover:bg-slate-50"
+                                }`}
+                              >
+                                -
+                              </button>
+                              <div className="flex-1 h-full flex items-center justify-center font-bold text-[14px] text-slate-800 bg-white">
+                                {selectedData.quantity}
+                              </div>
+                              <button
+                                onClick={() => handleUpdateQuantity(product, 1)}
+                                className="w-10 h-full flex items-center justify-center text-[#ff7b00] border-l border-slate-200 hover:bg-orange-50 transition-colors bg-white"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => handleAddProduct(product)}
+                            className="w-full py-1 flex items-center justify-center gap-2 text-[14px] font-bold text-[#ff7b00] hover:text-[#e06c00] transition-colors"
+                          >
+                            <ShoppingCart size={18} /> Agregar al combo
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 border-t border-slate-200 bg-white p-5 pb-6 shadow-[0_-4px_15px_rgba(0,0,0,0.03)] z-10">
+          <div className="mb-5 flex justify-between items-end">
+            <div>
+              <p className="text-[13px] text-[#1e3a5f] mb-3 font-bold">
+                Productos agregados ({totalItems}/5)
+              </p>
+              <div className="flex items-center gap-2">
+                {[...Array(5)].map((_, i) => (
+                  <React.Fragment key={i}>
+                    <div
+                      className={`w-[52px] h-[52px] rounded-xl flex items-center justify-center border-2 transition-all relative ${
+                        i < selectedProducts.length
+                          ? "border-[#ff7b00] p-[2px] shadow-sm bg-white"
+                          : "border-slate-200 border-dashed bg-slate-50/50"
+                      }`}
+                    >
+                      {i < selectedProducts.length ? (
+                        <>
+                          <img
+                            src={selectedProducts[i].image}
+                            className="w-full h-full object-cover rounded-[8px]"
+                            alt=""
+                          />
+                          <div className="absolute -bottom-1.5 -right-1.5 w-[18px] h-[18px] bg-[#ff7b00] rounded-full flex items-center justify-center text-[10px] font-bold text-white border-2 border-white shadow-sm">
+                            {selectedProducts[i].quantity}
+                          </div>
+                        </>
+                      ) : (
+                        <Package
+                          size={20}
+                          className="text-slate-300 stroke-[1.5]"
+                        />
+                      )}
+                    </div>
+                    {i < 4 && (
+                      <span className="text-slate-200 font-bold text-lg px-1">
+                        +
+                      </span>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+            {totalItems < 2 && (
+              <p className="text-[12px] text-[#ff7b00] font-medium pb-2">
+                Mín. 2 productos
+              </p>
+            )}
+          </div>
+
+          <div className="flex gap-4">
+            <button
+              onClick={() => setIsDrawerOpen(false)}
+              className="flex-1 py-3 border border-[#ff7b00] text-[#ff7b00] rounded-xl font-bold hover:bg-orange-50 transition-colors shadow-sm"
+            >
+              Cancelar
+            </button>
+            <button
+              onClick={() => setIsDrawerOpen(false)}
+              disabled={totalItems < 2}
+              className={`flex-1 py-3 text-white rounded-xl font-bold transition-colors shadow-sm ${
+                totalItems < 2
+                  ? "bg-[#ff7b00] opacity-50 cursor-not-allowed"
+                  : "bg-[#ff7b00] hover:bg-[#e06c00]"
+              }`}
+            >
+              Agregar {totalItems > 0 && `(${totalItems})`}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default function App() {
+  const [currentView, setCurrentView] = useState("combos");
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [viewingCombo, setViewingCombo] = useState(null);
+  const [comboToEdit, setComboToEdit] = useState(null);
+
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    type: null,
+    combo: null,
+  });
+
+  const [filterStatus, setFilterStatus] = useState("");
+  const [filterProvider, setFilterProvider] = useState("");
+  const [searchComboQuery, setSearchComboQuery] = useState("");
+  const [appliedComboFilters, setAppliedComboFilters] = useState({
+    status: "",
+    provider: "",
+    query: "",
+  });
+
+  const [combosData, setCombosData] = useState([
+    {
+      id: 1,
+      title: "Pack Hogar Esencial",
+      productsCount: 2,
+      stock: 14,
+      description: "Productos de uso diario para tu cocina y hogar",
+      provider: "America Imports",
+      warehouse: "Bodega Principal, Bodega Sur",
+      cost: 87000,
+      suggestedPrice: 184000,
+      status: "Activo",
+      image:
+        "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=400",
+      richData: {
+        comboName: "Pack Hogar Esencial",
+        comboDescription:
+          "Lleva este increíble pack con todo lo necesario para iniciar tu hogar de manera elegante y funcional. Alta calidad y resistencia en cada preparación.",
+        comboImages: [
+          "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=400",
+          "https://images.unsplash.com/photo-1517578239113-b03992dcdd25?w=400",
+        ],
+        selectedProducts: [
+          {
+            id: 102,
+            name: "Sartén antiadherente 28cm",
+            cost: 45000,
+            suggestedPrice: 95000,
+            hasVariables: true,
+            stock: 98,
+            category: "Hogar",
+            attributes: "Color: Rojo, Negro, Menta",
+            warehouses: ["Bodega Principal", "Bodega Sur"],
+            image:
+              "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&q=80&w=400",
+            quantity: 1,
+            warranties: [
+              {
+                type: "Mal funcionamiento",
+                days: 15,
+                description:
+                  "Garantía en caso de pérdida prematura de adherencia",
+              },
+              {
+                type: "Producto roto",
+                days: 5,
+                description: "Garantía por daños en el envío",
+              },
+            ],
+          },
+          {
+            id: 103,
+            name: "Cafetera prensa francesa 600ml",
+            cost: 42000,
+            suggestedPrice: 89000,
+            hasVariables: true,
+            stock: 14,
+            category: "Hogar",
+            attributes: "Color: Cobre, Acero inox, Negro",
+            warehouses: ["Bodega Principal", "Bodega Sur"],
+            image:
+              "https://images.unsplash.com/photo-1517578239113-b03992dcdd25?w=400",
+            quantity: 1,
+            warranties: [
+              {
+                type: "Producto roto",
+                days: 10,
+                description: "Garantía si el cristal llega roto",
+              },
+              {
+                type: "Producto incompleto",
+                days: 10,
+                description: "Si falta la prensa o accesorios",
+              },
+            ],
+          },
+        ],
+        comboVariants: [
+          [
+            {
+              productName: "Sartén antiadherente 28cm",
+              attributes: { Color: "Rojo" },
+            },
+            { productName: "Cafetera prensa", attributes: { Color: "Cobre" } },
+          ],
+        ],
+        selectedProvider: {
+          name: "America Imports",
+          rating: "Estable",
+          description: "Buen rendimiento, con oportunidades para mejorar",
+          dispatch: "2 Horas",
+          icon: "crown",
+        },
+        selectedWarehouse: { name: "Bodega Principal, Bodega Sur", city: "" },
+        minStock: 14,
+        totalCost: 87000,
+        totalSuggested: 184000,
+      },
+    },
+    {
+      id: 2,
+      title: "Kit Básico Funcional",
+      productsCount: 2,
+      stock: 93,
+      description:
+        "Lo esencial para tu día a día sin configuraciones complejas.",
+      provider: "Inspiranova",
+      warehouse: "Principal",
+      cost: 63000,
+      suggestedPrice: 134000,
+      status: "Activo",
+      image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400",
+      richData: {
+        comboName: "Kit Básico Funcional",
+        comboDescription:
+          "La combinación perfecta de utilidad y estilo. Todo lo que necesitas sin configuraciones complejas, productos simples y directos.",
+        comboImages: [
+          "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400",
+          "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=400",
+        ],
+        selectedProducts: [
+          {
+            id: 101,
+            name: "Set utensilios cocina 6 pzas",
+            cost: 38000,
+            suggestedPrice: 79000,
+            hasVariables: false,
+            stock: 150,
+            category: "Hogar",
+            attributes: "",
+            image:
+              "https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400",
+            quantity: 1,
+            warehouses: ["Bodega Principal"],
+          },
+          {
+            id: 106,
+            name: "Cinturón de cuero genuino",
+            cost: 25000,
+            suggestedPrice: 55000,
+            hasVariables: false,
+            stock: 93,
+            category: "Moda",
+            attributes: "",
+            image:
+              "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=400",
+            quantity: 1,
+            warehouses: ["Bodega Principal"],
+          },
+        ],
+        comboVariants: [],
+        selectedProvider: {
+          name: "Inspiranova",
+          rating: "Bueno",
+          description: "Ventas recurrentes",
+          dispatch: "12 Horas",
+          icon: null,
+        },
+        selectedWarehouse: { name: "Bodega Principal", city: "" },
+        minStock: 93,
+        totalCost: 63000,
+        totalSuggested: 134000,
+      },
+    },
+    {
+      id: 3,
+      title: "Kit Moda Urbana",
+      productsCount: 2,
+      stock: 0,
+      description: "Look completo para el día a día. Cómodo y versátil.",
+      provider: "Gold Stone",
+      warehouse: "Principal",
+      cost: 76000,
+      suggestedPrice: 161000,
+      status: "Inactivo",
+      warning: {
+        type: "warning",
+        text: 'El producto "Jean slim fit clásico" se quedó sin stock.',
+      },
+      image:
+        "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=400",
+      richData: {
+        comboName: "Kit Moda Urbana",
+        comboDescription:
+          "El outfit que necesitas para salir a conquistar la ciudad con estilo y máxima comodidad.",
+        comboImages: [
+          "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=400",
+          "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400",
+        ],
+        selectedProducts: [
+          {
+            id: 104,
+            name: "Gorra snapback ajustable",
+            cost: 18000,
+            suggestedPrice: 42000,
+            hasVariables: true,
+            stock: 145,
+            category: "Moda",
+            attributes: "Color: Negro, Gris, Azul",
+            image:
+              "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400",
+            quantity: 1,
+            warehouses: ["Bodega Sur"],
+          },
+          {
+            id: 105,
+            name: "Jean slim fit clásico",
+            cost: 58000,
+            suggestedPrice: 119000,
+            hasVariables: true,
+            stock: 0,
+            category: "Moda",
+            attributes: "Color: Azul oscuro | Talla: 30, 32",
+            image:
+              "https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=400",
+            quantity: 1,
+            warehouses: ["Bodega Centro", "Bodega Principal"],
+          },
+        ],
+        comboVariants: [
+          [
+            { productName: "Gorra snapback", attributes: { Color: "Negro" } },
+            { productName: "Jean slim fit", attributes: { Talla: "30" } },
+          ],
+          [
+            { productName: "Gorra snapback", attributes: { Color: "Gris" } },
+            { productName: "Jean slim fit", attributes: { Talla: "32" } },
+          ],
+        ],
+        selectedProvider: {
+          name: "Gold Stone",
+          rating: "Excelente",
+          description: "Vendedor destacado",
+          dispatch: "1 Hora",
+          icon: "star",
+        },
+        selectedWarehouse: { name: "Bodega Principal", city: "" },
+        minStock: 0,
+        totalCost: 76000,
+        totalSuggested: 161000,
+        warning: {
+          type: "warning",
+          text: 'El producto "Jean slim fit clásico" se ha quedado sin stock en bodega. Por favor, reemplázalo o espera a que el proveedor lo reabastezca para volver a activar tu combo.',
+        },
+      },
+    },
+    {
+      id: 4,
+      title: "Pack Supervivencia Matutina",
+      productsCount: 2,
+      stock: 0,
+      description: "Lo que necesitas para arrancar tus mañanas.",
+      provider: "America Imports",
+      warehouse: "Centro",
+      cost: 42000,
+      suggestedPrice: 89000,
+      status: "Inactivo",
+      warning: { type: "error", text: "Producto eliminado del proveedor." },
+      image:
+        "https://images.unsplash.com/photo-1517578239113-b03992dcdd25?w=400",
+      richData: {
+        comboName: "Pack Supervivencia Matutina",
+        comboDescription:
+          "Despierta de la mejor manera con este combo ideal para tus desayunos rápidos y deliciosos.",
+        comboImages: [
+          "https://images.unsplash.com/photo-1517578239113-b03992dcdd25?w=400",
+        ],
+        selectedProducts: [
+          {
+            id: 103,
+            name: "Cafetera prensa francesa 600ml",
+            cost: 42000,
+            suggestedPrice: 89000,
+            hasVariables: true,
+            stock: 14,
+            category: "Hogar",
+            attributes: "Color: Cobre, Acero inox, Negro",
+            image:
+              "https://images.unsplash.com/photo-1517578239113-b03992dcdd25?w=400",
+            quantity: 1,
+            warehouses: ["Bodega Sur", "Bodega Centro"],
+          },
+          {
+            id: 999,
+            name: "Termo de acero inoxidable",
+            cost: 0,
+            suggestedPrice: 0,
+            hasVariables: false,
+            stock: 0,
+            category: "Hogar",
+            attributes: "",
+            image: "https://via.placeholder.com/400x300?text=Eliminado",
+            quantity: 1,
+            deleted: true,
+            warehouses: ["Bodega Centro"],
+          },
+        ],
+        comboVariants: [
+          [
+            {
+              productName: "Cafetera prensa francesa",
+              attributes: { Color: "Cobre" },
+            },
+          ],
+          [
+            {
+              productName: "Cafetera prensa francesa",
+              attributes: { Color: "Negro" },
+            },
+          ],
+        ],
+        selectedProvider: {
+          name: "America Imports",
+          rating: "Estable",
+          description: "Buen rendimiento, con oportunidades para mejorar",
+          dispatch: "2 Horas",
+          icon: "crown",
+        },
+        selectedWarehouse: { name: "Bodega Centro", city: "" },
+        minStock: 0,
+        totalCost: 42000,
+        totalSuggested: 89000,
+        warning: {
+          type: "error",
+          text: 'El proveedor ha eliminado "Termo de acero inoxidable" de su catálogo. Debes reemplazar este producto para poder vender el combo de nuevo.',
+        },
+      },
+    },
+  ]);
+
+  const handleAddNewCombo = (newCombo) => {
+    setCombosData([newCombo, ...combosData]);
+  };
+
+  const handleEditCombo = (updatedCombo) => {
+    setCombosData(
+      combosData.map((c) => (c.id === updatedCombo.id ? updatedCombo : c))
+    );
+  };
+
+  const handleApplyComboFilters = () => {
+    setAppliedComboFilters((prev) => ({
+      ...prev,
+      status: filterStatus,
+      provider: filterProvider,
+    }));
+  };
+
+  const uniqueProviders = [...new Set(combosData.map((c) => c.provider))];
+
+  const filteredCombosData = combosData.filter((combo) => {
+    if (
+      appliedComboFilters.status &&
+      combo.status !== appliedComboFilters.status
+    )
+      return false;
+    if (
+      appliedComboFilters.provider &&
+      combo.provider !== appliedComboFilters.provider
+    )
+      return false;
+    if (appliedComboFilters.query) {
+      const q = appliedComboFilters.query.toLowerCase();
+      if (
+        !combo.title.toLowerCase().includes(q) &&
+        !combo.id.toString().includes(q)
+      )
+        return false;
+    }
+    return true;
+  });
+
+  const handleEditComboClick = (combo) => {
+    setComboToEdit(combo);
+    setIsCreateModalOpen(true);
+  };
+
+  const handleDeleteComboClick = (combo) => {
+    setConfirmDialog({ isOpen: true, type: "delete", combo });
+  };
+
+  const executeConfirmAction = () => {
+    if (confirmDialog.type === "delete") {
+      setCombosData(combosData.filter((c) => c.id !== confirmDialog.combo.id));
+    }
+    setConfirmDialog({ isOpen: false, type: null, combo: null });
+  };
+
+  const [isGarantiaModalOpen, setIsGarantiaModalOpen] = useState(false);
+  const [availableGarantiaProducts, setAvailableGarantiaProducts] = useState(
+    []
+  );
+
+  const handleOpenGarantia = (productsArray) => {
+    setAvailableGarantiaProducts(productsArray);
+    setIsGarantiaModalOpen(true);
+  };
+
+  return (
+    <div className="flex min-h-screen bg-slate-50 font-sans text-slate-800">
+      <aside className="w-64 bg-white border-r border-slate-200 hidden lg:flex flex-col sticky top-0 h-screen overflow-y-auto no-scrollbar">
+        <div className="p-6">
+          <div
+            className="flex items-center mb-2 cursor-pointer"
+            onClick={() => {
+              setViewingCombo(null);
+              setCurrentView("combos");
+            }}
+          >
+            <svg
+              width="126"
+              height="41"
+              viewBox="0 0 126 41"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-10 w-auto object-contain"
+            >
+              <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M0 19.3791C0.209559 18.0307 0.504549 16.7071 0.884969 15.4083C0.939315 15.2227 0.995405 15.0377 1.05324 14.8532C1.32811 13.9761 1.46011 13.1921 1.44922 12.5012C1.42201 10.6039 1.41792 8.69722 1.43698 6.78107C1.43691 6.71622 1.42356 6.6524 1.39788 6.59362C1.39421 6.58522 1.39029 6.57692 1.38612 6.56874C1.35276 6.5033 1.30444 6.44703 1.24511 6.40458C-0.975673 4.78125 0.747064 1.56293 3.19237 2.64785C4.41043 3.18626 4.76897 4.71338 4.06288 5.72678C3.96201 5.87155 3.83942 6.00584 3.6945 6.12526C3.54481 6.2494 3.46997 6.40728 3.46997 6.5989L3.46589 9.44883C3.46589 9.69678 3.53406 9.73363 3.6704 9.55937C3.67949 9.54775 3.68888 9.53519 3.69858 9.5217C4.53953 8.33962 5.52065 7.18184 6.64193 6.04834C6.76712 5.9215 6.90728 5.90261 7.06241 5.99167L12.994 9.4124C13.0035 9.41779 13.0125 9.42329 13.021 9.42887C13.1485 9.51269 13.1599 9.61784 13.0552 9.74435C12.1054 10.8913 11.3965 12.1814 10.9284 13.6144C10.9093 13.6694 10.9086 13.7289 10.9262 13.7843C10.9438 13.8397 10.9789 13.888 11.0263 13.9221C14.3197 16.3839 15.2471 20.8262 13.8331 24.5181C13.6311 25.0455 13.3813 25.5576 13.0838 26.0465C10.7691 29.8477 5.8622 30.4185 2.98417 26.8804C2.48919 26.2732 2.39248 26.2767 2.69403 26.8911C2.71413 26.932 2.736 26.9757 2.75965 27.0221C5.36824 32.135 11.5693 32.1754 14.084 26.9654C14.1547 26.8197 14.25 26.8008 14.3698 26.9087C17.0287 29.2891 20.1653 30.7761 23.7795 31.3699C27.1705 31.9258 30.5276 31.7855 33.8506 30.9488C38.0989 29.8774 40.5265 27.2272 41.1334 22.9982C41.4702 20.6654 41.3011 18.1844 40.6261 15.5551C40.5811 15.3798 40.5338 15.2039 40.4843 15.0273C38.942 9.52423 34.9024 5.97098 29.4117 4.93457C29.0457 4.86548 28.6732 4.80757 28.2945 4.76101C25.2631 4.39026 22.3014 4.66626 19.4096 5.589C18.9964 5.72082 18.5847 5.86583 18.1745 6.02405C18.0554 6.07128 17.9405 6.06995 17.8298 6.02007C17.8139 6.01294 17.7982 6.00482 17.7826 5.99571L11.8918 2.59522C11.8729 2.58496 11.8574 2.56971 11.8469 2.55112C11.8364 2.53254 11.8313 2.5113 11.8321 2.48968C11.833 2.46807 11.8397 2.44688 11.8517 2.4284C11.8636 2.40991 11.8803 2.39481 11.8999 2.38472C14.3279 1.18012 16.8491 0.451306 19.3637 0.154605C20.6597 0.00168661 21.9539 -0.0364472 23.2326 0.0342264C32.7051 0.557762 41.3286 7.05215 43.5379 17.0878C44.1747 19.9836 44.2088 22.8362 43.6399 25.6457C42.2719 32.3794 37.6001 36.9001 31.4187 39.197C30.5357 39.5251 29.6218 39.8078 28.6823 40.0451C28.3177 40.1369 28.2646 40.0465 28.5231 39.7739C29.0756 39.1991 29.526 38.4771 29.8744 37.6081C29.986 37.3302 30.1833 37.1372 30.4663 37.0292L32.2625 36.337C32.294 36.3253 32.3221 36.3061 32.3443 36.2811C32.3665 36.2561 32.3821 36.226 32.3898 36.1936C32.3965 36.1653 32.3969 36.1358 32.3911 36.1073C32.3903 36.1032 32.3894 36.0992 32.3883 36.0952C32.3807 36.067 32.3671 36.0408 32.3484 36.0185C32.3457 36.0153 32.343 36.0121 32.3401 36.0091L29.0457 32.4872C29.0321 32.4728 29.0159 32.4612 28.9978 32.453L28.9942 32.4514C28.9759 32.4438 28.9563 32.4397 28.9365 32.4396L28.9325 32.4396C28.914 32.4399 28.8957 32.4436 28.8786 32.4505C28.8761 32.4515 28.8737 32.4525 28.8713 32.4537C28.8545 32.4614 28.8393 32.4722 28.8265 32.4854C28.8247 32.4873 28.8229 32.4892 28.8211 32.4912C27.2889 34.1753 25.6478 35.607 23.8979 36.7863C23.8834 36.7969 23.8721 36.8112 23.8652 36.8276L23.8639 36.8309C23.8572 36.8488 23.856 36.8682 23.8603 36.8867C23.8647 36.9053 23.8744 36.9222 23.8883 36.9353C23.9023 36.9483 23.9198 36.9571 23.9387 36.9604L26.0411 37.2843C26.0715 37.2888 26.1004 37.3005 26.1252 37.3183C26.1285 37.3206 26.1317 37.3231 26.1348 37.3256L26.1356 37.3263C26.1626 37.3486 26.1829 37.3779 26.1943 37.4109C26.2043 37.4398 26.2071 37.4706 26.2025 37.5006C26.2019 37.5049 26.2011 37.5092 26.2001 37.5135C26.1935 37.5433 26.1797 37.571 26.1601 37.5944C26.1573 37.5977 26.1544 37.6009 26.1513 37.6041C24.9011 38.9466 22.5038 40.506 20.4527 40.7312C20.1597 40.7633 19.8737 40.7683 19.5992 40.7414C13.4757 40.1423 8.59736 38.0561 4.9641 34.4829C2.17179 31.7382 0.517093 28.1637 0 23.7592V19.3791ZM7.13589 26.8116C8.30303 26.8116 9.42836 26.2927 10.3233 25.3548C10.4512 25.2208 10.5743 25.0783 10.6922 24.9275C11.6354 23.7212 12.1653 22.085 12.1653 20.379C12.1653 18.8862 11.7596 17.4469 11.0263 16.3023C10.9216 16.1387 10.8101 15.9812 10.6922 15.8304C9.80797 14.6995 8.62836 14.0332 7.38528 13.9543C7.30241 13.949 7.21925 13.9464 7.13589 13.9464C5.802 13.9464 4.52275 14.6241 3.57956 15.8304C2.63636 17.0368 2.10647 18.6729 2.10647 20.379C2.10647 22.085 2.63636 23.7212 3.57956 24.9275C4.52275 26.1339 5.802 26.8116 7.13589 26.8116ZM9.9976 3.53438L15.9496 6.9713C15.9689 6.98245 15.985 6.99816 15.9966 7.01702C16.0082 7.03588 16.0149 7.0573 16.0162 7.07936C16.0174 7.10142 16.013 7.12344 16.0036 7.14344C15.9941 7.16344 15.9798 7.18079 15.9619 7.19395L14.5657 8.19386C14.5447 8.2092 14.5195 8.21813 14.4934 8.21957C14.4674 8.22101 14.4414 8.21489 14.4188 8.20195L8.45041 4.76908C8.43055 4.75778 8.41393 4.74165 8.4021 4.72221C8.39028 4.70277 8.38364 4.68067 8.38283 4.65798C8.38201 4.63529 8.38704 4.61277 8.39743 4.59255C8.40783 4.57232 8.42325 4.55505 8.44224 4.54238L9.85472 3.53843C9.87576 3.52453 9.90031 3.51678 9.92558 3.51606C9.95084 3.51534 9.9758 3.52169 9.9976 3.53438ZM21.7465 6.41674C17.4573 6.84585 14.4704 9.28962 12.7858 13.748C12.77 13.7882 12.7709 13.8331 12.7885 13.8731C12.806 13.9132 12.8387 13.9453 12.8797 13.9626L12.9858 14.0071C13.0313 14.0255 13.0819 14.027 13.1284 14.0114C13.1749 13.9958 13.2141 13.9641 13.2389 13.9221C14.382 11.9844 15.8557 10.5513 17.6601 9.62292C18.7403 9.06715 19.967 8.82096 21.1891 8.57567C21.5604 8.50115 21.9313 8.4267 22.2976 8.34369C22.8011 8.22764 23.0678 7.91323 23.0977 7.40045C23.1168 7.06041 22.8337 6.75949 22.2486 6.4977C22.0911 6.42622 21.9176 6.39824 21.7465 6.41674ZM61.941 29.868C59.448 31.8759 56.6938 32.1633 53.6784 30.7302C48.4122 28.2325 47.7549 19.5208 51.8617 15.7802C53.9002 13.9235 56.2339 13.2582 58.8629 13.7845C60.0005 14.0139 61.0156 14.5604 61.9083 15.424C62.0716 15.5832 62.1532 15.5495 62.1532 15.3228V7.82957C62.1532 7.69463 62.2213 7.62716 62.3574 7.62716H66.6438C66.7799 7.62716 66.8479 7.69463 66.8479 7.82957V31.1067L66.8479 31.1097L66.8477 31.1168C66.8452 31.1668 66.824 31.2143 66.7881 31.2499C66.7498 31.2878 66.6979 31.3091 66.6438 31.3091H62.3574C62.3032 31.3091 62.2513 31.2878 62.213 31.2499C62.1748 31.2119 62.1532 31.1604 62.1532 31.1067L62.1573 29.9692C62.1573 29.7857 62.0852 29.7519 61.941 29.868ZM56.4013 26.8683C58.4628 27.8317 60.6428 26.5768 61.994 24.9008C62.1002 24.7659 62.1532 24.6134 62.1532 24.4434V20.7595C62.1533 20.5834 62.0975 20.4131 61.994 20.2737C60.3203 18.0067 56.7442 16.8975 54.9276 19.5977C53.5069 21.7028 53.7723 25.6376 56.4013 26.8683ZM122.404 7.66765C123.784 7.35189 124.758 7.88761 125.327 9.27479V10.6309C124.932 11.4784 124.391 11.983 123.702 12.145C120.359 12.9222 119.408 8.34775 122.404 7.66765ZM99.4656 22.6258C99.4656 25.0114 98.5099 27.2993 96.8088 28.9863C95.1077 30.6732 92.8005 31.6209 90.3947 31.6209C87.989 31.6209 85.6817 30.6732 83.9806 28.9863C82.2795 27.2993 81.3238 25.0114 81.3238 22.6258C81.3238 20.2401 82.2795 17.9522 83.9806 16.2653C85.6817 14.5783 87.989 13.6306 90.3947 13.6306C92.8005 13.6306 95.1077 14.5783 96.8088 16.2653C98.5099 17.9522 99.4656 20.2401 99.4656 22.6258ZM90.4032 27.4391C90.9522 27.4381 91.4955 27.3125 92.0023 27.0693C92.509 26.8261 92.9692 26.4702 93.3566 26.0218C93.744 25.5734 94.051 25.0414 94.26 24.456C94.4691 23.8707 94.5761 23.2436 94.575 22.6104C94.5739 21.9773 94.4647 21.3505 94.2535 20.7659C94.0424 20.1813 93.7336 19.6503 93.3446 19.2033C92.9557 18.7562 92.4942 18.4019 91.9866 18.1605C91.479 17.9191 90.9352 17.7953 90.3862 17.7962C89.8372 17.7972 89.2939 17.9228 88.7871 18.166C88.2804 18.4092 87.8202 18.7651 87.4328 19.2135C87.0454 19.6619 86.7384 20.194 86.5294 20.7793C86.3203 21.3646 86.2133 21.9917 86.2144 22.6249C86.2155 23.2581 86.3248 23.8848 86.5359 24.4694C86.747 25.054 87.0558 25.585 87.4448 26.032C87.8338 26.4791 88.2952 26.8334 88.8028 27.0748C89.3104 27.3163 89.8542 27.44 90.4032 27.4391ZM105.732 29.8194C105.596 29.6979 105.528 29.7276 105.528 29.9084V37.3814C105.528 37.4351 105.506 37.4866 105.468 37.5246C105.43 37.5625 105.378 37.5838 105.324 37.5838H101.037C100.901 37.5838 100.833 37.5164 100.833 37.3814V14.1043C100.833 13.9693 100.901 13.9019 101.037 13.9019H105.324C105.457 13.9019 105.524 13.9693 105.524 14.1043L105.532 15.3349C105.532 15.5022 105.596 15.5319 105.724 15.424C110.28 11.647 116.358 14.0314 118.028 19.5248C118.893 22.3666 118.617 25.0749 117.199 27.6495C114.913 31.799 109.267 32.977 105.732 29.8194ZM105.638 24.7875C106.753 26.5201 109.043 27.6941 111.108 26.9533C115.199 25.4838 114.15 16.8449 108.9 18.1282C107.604 18.4466 106.529 19.1834 105.675 20.3385C105.577 20.468 105.528 20.6151 105.528 20.7798V24.4069C105.528 24.5446 105.565 24.6714 105.638 24.7875ZM74.2124 15.7114C75.927 13.9869 78.0158 13.3756 80.4788 13.8776C80.5492 13.8916 80.6126 13.9292 80.658 13.9838C80.7034 14.0384 80.7281 14.1068 80.7278 14.1771V18.2537C80.7278 18.4642 80.6244 18.5438 80.4175 18.4925C78.0131 17.8772 75.5351 18.8245 74.1226 20.6826C74.0377 20.7956 73.9919 20.9333 73.992 21.0753V31.1067C73.992 31.2416 73.9239 31.3091 73.7879 31.3091H69.3994C69.3452 31.3091 69.2933 31.2878 69.255 31.2498C69.2168 31.2119 69.1953 31.1604 69.1953 31.1067V14.1043C69.1953 14.0506 69.2168 13.9991 69.255 13.9611C69.2933 13.9232 69.3452 13.9018 69.3994 13.9018H73.7919C73.9307 13.9018 73.9988 13.9707 73.9961 14.1083L73.9756 15.6142C73.9729 15.8382 74.0518 15.8706 74.2124 15.7114ZM120.828 13.9302L125.327 13.9221V31.301L120.881 31.2808C120.715 31.2808 120.632 31.1985 120.632 31.0339V14.1245C120.632 13.995 120.698 13.9302 120.828 13.9302ZM19.7507 19.8416C19.7153 21.849 20.8106 23.4958 22.1969 23.5198C23.5833 23.5438 24.7358 21.9359 24.7712 19.9285C24.8065 17.9211 23.7113 16.2744 22.3249 16.2504C20.9385 16.2264 19.786 17.8342 19.7507 19.8416ZM36.1087 23.3016C35.0852 23.291 34.2716 21.7528 34.2916 19.8659C34.3115 17.979 35.1574 16.458 36.1809 16.4686C37.2044 16.4793 38.018 18.0175 37.9981 19.9044C37.9782 21.7912 37.1323 23.3122 36.1087 23.3016Z"
+                fill="#FF6102"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <nav className="flex-1 pb-10">
+          <SidebarItem icon={Home} label="Inicio" />
+          <SidebarItem icon={LayoutDashboard} label="Dashboard" />
+          <SidebarItem
+            icon={Package}
+            label="Productos"
+            active={currentView === "combos"}
+            hasNew
+            subItems={[
+              { label: "Catálogo" },
+              { label: "Proveedores" },
+              { label: "Caza productos" },
+              {
+                label: "Combos",
+                active: currentView === "combos",
+                hasNew: true,
+                onClick: () => {
+                  setViewingCombo(null);
+                  setCurrentView("combos");
+                },
+              },
+            ]}
+          />
+          <SidebarItem
+            icon={Truck}
+            label="Mis Pedidos"
+            active={currentView === "pedidos"}
+            subItems={[
+              {
+                label: "Mis Pedidos",
+                active: currentView === "pedidos",
+                onClick: () => setCurrentView("pedidos"),
+              },
+              { label: "Novedades" },
+              { label: "Etiquetas" },
+              { label: "Configuración de pedidos" },
+            ]}
+          />
+          <SidebarItem icon={History} label="Mis Garantías" />
+          <SidebarItem icon={Users} label="Clientes" />
+          <SidebarItem icon={Link} label="Mis Integraciones" />
+          <SidebarItem icon={FileText} label="Historial de Cartera" />
+          <SidebarItem icon={UserPlus} label="Mis usuarios" />
+          <SidebarItem icon={Users} label="Mis Referidos" />
+          <SidebarItem icon={Settings} label="Configuraciones" hasNew />
+          <SidebarItem icon={Calendar} label="Calendario" />
+          <SidebarItem icon={Megaphone} label="Marketing" />
+          <SidebarItem icon={BarChart3} label="Reportes" hasNew />
+          <SidebarItem icon={FileText} label="Facturas" />
+          <SidebarItem icon={Truck} label="Transportadora" />
+          <SidebarItem icon={CreditCard} label="Dropi Card" hasNew />
+          <SidebarItem icon={LayoutDashboard} label="CAS" />
+          <SidebarItem icon={GraduationCap} label="Academy" />
+        </nav>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col min-w-0 relative">
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-end px-8 gap-6 sticky top-0 z-20">
+          <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+            <span>US</span>
+            <span>English</span>
+            <ChevronDown size={14} />
+          </div>
+          <div className="flex items-center gap-2 bg-slate-50 border border-slate-100 rounded-full px-3 py-1.5">
+            <Wallet size={16} className="text-orange-500" />
+            <span className="text-sm font-bold text-slate-700">$ 0.0</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-bold text-xs">
+              A
+            </div>
+            <span className="text-sm font-semibold text-slate-700">
+              Alejandra
+            </span>
+            <ChevronDown size={14} className="text-slate-400" />
+          </div>
+        </header>
+
+        {currentView === "pedidos" ? (
+          <div className="p-4 md:p-8 w-full animate-in fade-in duration-300 bg-slate-50/50 flex-1">
+            <h1 className="text-[22px] font-bold text-slate-800 mb-6">
+              Mis Pedidos
+            </h1>
+
+            <div className="bg-white border border-slate-200 rounded-lg shadow-sm">
+              <div className="p-4 flex justify-between items-center bg-white rounded-t-lg">
+                <button className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-md text-sm text-slate-700 hover:bg-slate-100 transition-colors">
+                  Acciones <ChevronDown size={14} />
+                </button>
+                <button className="bg-[#10b981] hover:bg-emerald-600 transition-colors p-2 rounded-md shadow-sm">
+                  <Filter size={16} className="text-white" fill="white" />
+                </button>
+              </div>
+
+              <div className="px-4 py-2 flex justify-between items-center bg-white">
+                <div className="flex items-center gap-2 text-sm text-slate-600">
+                  Mostrar
+                  <select className="border border-slate-200 rounded px-2 py-1 outline-none text-sm bg-white cursor-pointer">
+                    <option>10</option>
+                  </select>
+                </div>
+                <div className="relative">
+                  <input
+                    type="text"
+                    placeholder="Buscar..."
+                    className="border border-slate-200 rounded-md bg-slate-100 px-3 py-1.5 text-sm w-[280px] outline-none focus:border-slate-300 transition-all"
+                  />
+                </div>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-[13px] text-slate-600 border-collapse mt-2">
+                  <thead className="border-y border-slate-200 bg-white font-bold text-slate-700">
+                    <tr>
+                      <th className="p-4 w-10 text-center">
+                        <input
+                          type="checkbox"
+                          className="rounded border-slate-300 cursor-pointer"
+                        />
+                      </th>
+                      <th className="py-4 px-2 whitespace-nowrap text-center">
+                        #{" "}
+                        <ChevronDown
+                          size={12}
+                          className="inline ml-1 cursor-pointer"
+                        />
+                      </th>
+                      <th className="p-4 text-center">Nombre del producto</th>
+                      <th className="p-4 text-center">Fecha de la order</th>
+                      <th className="p-4 text-center">Cliente</th>
+                      <th className="p-4 text-center">Estatus de la Orden</th>
+                      <th className="p-4 text-center">Transportadora</th>
+                      <th className="p-4 text-center">Bodega</th>
+                      <th className="p-4 text-center">Tipo de Envío</th>
+                      <th className="p-4 text-center">Etique</th>
+                      <th className="p-4 text-center">Detalles</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-200">
+                    <tr className="hover:bg-slate-50 transition-colors">
+                      <td className="p-4 text-center">
+                        <input
+                          type="checkbox"
+                          className="rounded border-slate-300 cursor-pointer"
+                        />
+                      </td>
+                      <td className="py-4 px-2 text-center text-slate-500">
+                        74773435
+                      </td>
+                      <td className="p-4 text-center font-bold text-slate-800">
+                        <div className="flex flex-col items-center gap-1">
+                          Pack Hogar Esencial
+                          <span className="bg-blue-500 text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
+                            Combo
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-blue-600 font-bold mt-1 cursor-pointer hover:underline">
+                          Tiene Nota
+                        </div>
+                      </td>
+                      <td className="p-4 text-center text-slate-600">
+                        08/05/2026 4:21 p. m.
+                      </td>
+                      <td className="p-4 text-center text-[12px] leading-tight text-slate-600">
+                        michelle lopez
+                        <br />
+                        cale 1 , CALI-VALLE{" "}
+                        <CheckCircle2
+                          size={14}
+                          className="inline text-rose-400 -mt-0.5"
+                        />
+                        <br />
+                        Tel: 3052270634
+                      </td>
+                      <td className="p-4 text-center">
+                        <span className="bg-[#10b981] text-white text-[9px] font-bold px-3 py-0.5 rounded-full block w-fit mx-auto mb-1 uppercase tracking-wide shadow-sm">
+                          Entregado
+                        </span>
+                        <span className="text-[#0ea5e9] font-bold text-[13px] cursor-pointer hover:underline">
+                          85910404389630
+                        </span>
+                      </td>
+                      <td className="p-4 text-center text-slate-600">DOMINA</td>
+                      <td className="p-4 text-center font-bold text-slate-700 text-[12px] leading-snug">
+                        Bodega
+                        <br />
+                        Principal
+                        <br />
+                        pruebas
+                      </td>
+                      <td className="p-4 flex flex-col items-center gap-1.5 mt-2">
+                        <span className="text-slate-600 text-[11px] font-medium uppercase">
+                          Con Recaudo
+                        </span>
+                        <span className="bg-[#10b981] text-white font-bold text-[9px] px-2 py-0.5 rounded-full uppercase shadow-sm">
+                          Shopify-Productshop
+                        </span>
+                        <span className="bg-[#10b981] text-white font-bold text-[9px] px-2 py-0.5 rounded-full uppercase shadow-sm">
+                          Orden ID:
+                        </span>
+                      </td>
+                      <td className="p-4"></td>
+                      <td className="p-4">
+                        <div className="flex items-center justify-center gap-2.5">
+                          <ChevronDown
+                            size={14}
+                            className="text-rose-500 cursor-pointer hover:scale-110 transition-transform"
+                          />
+                          <Search
+                            size={14}
+                            className="text-[#0ea5e9] cursor-pointer hover:scale-110 transition-transform"
+                          />
+                          <Tag
+                            size={14}
+                            className="text-slate-500 cursor-pointer hover:scale-110 transition-transform"
+                          />
+
+                          <div className="relative group flex items-center justify-center">
+                            <FileText
+                              size={14}
+                              className="text-slate-500 cursor-pointer hover:scale-110 transition-transform"
+                              onClick={() =>
+                                handleOpenGarantia([
+                                  {
+                                    id: 102,
+                                    name: "Sartén antiadherente 28cm",
+                                    qty: 1,
+                                  },
+                                  {
+                                    id: 103,
+                                    name: "Cafetera prensa francesa 600ml",
+                                    qty: 1,
+                                  },
+                                ])
+                              }
+                            />
+                            <div className="absolute bottom-full mb-2 hidden group-hover:block bg-slate-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap z-50 shadow-md">
+                              Garantía
+                              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800"></div>
+                            </div>
+                          </div>
+
+                          <Fingerprint
+                            size={14}
+                            className="text-slate-500 cursor-pointer hover:scale-110 transition-transform"
+                          />
+                          <Headset
+                            size={14}
+                            className="text-[#0ea5e9] cursor-pointer hover:scale-110 transition-transform"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                    <tr className="hover:bg-slate-50 transition-colors">
+                      <td className="p-4 text-center">
+                        <input
+                          type="checkbox"
+                          className="rounded border-slate-300 cursor-pointer"
+                        />
+                      </td>
+                      <td className="py-4 px-2 text-center text-slate-500">
+                        74428746
+                      </td>
+                      <td className="p-4 text-center font-bold text-slate-800">
+                        prueba
+                      </td>
+                      <td className="p-4 text-center text-slate-600">
+                        05/05/2026 3:47 p. m.
+                      </td>
+                      <td className="p-4 text-center text-[12px] leading-tight text-slate-600">
+                        Michel David Pino Aguilar
+                        <br />
+                        Cra 48b # 55-56 , CALI-VALLE{" "}
+                        <CheckCircle2
+                          size={14}
+                          className="inline text-[#10b981] -mt-0.5"
+                        />
+                        <br />
+                        Tel: 3015197100
+                      </td>
+                      <td className="p-4 text-center">
+                        <span className="bg-slate-700 text-white text-[9px] font-bold px-3 py-0.5 rounded-full block w-fit mx-auto mb-1 uppercase tracking-wide shadow-sm">
+                          Guia_Generada
+                        </span>
+                        <span className="text-[#0ea5e9] font-bold text-[13px] cursor-pointer hover:underline">
+                          WCO2000730208
+                        </span>
+                      </td>
+                      <td className="p-4 text-center text-slate-600">
+                        JAMV-DRIVE
+                      </td>
+                      <td className="p-4 text-center font-bold text-slate-700 text-[12px] leading-snug">
+                        Bodega
+                        <br />
+                        Principal
+                        <br />
+                        pruebas
+                      </td>
+                      <td className="p-4 text-center text-[11px] uppercase pt-4 font-medium text-slate-600">
+                        Con Recaudo
+                      </td>
+                      <td className="p-4"></td>
+                      <td className="p-4">
+                        <div className="flex items-center justify-center gap-2.5">
+                          <ChevronDown
+                            size={14}
+                            className="text-rose-500 cursor-pointer hover:scale-110 transition-transform"
+                          />
+                          <Search
+                            size={14}
+                            className="text-[#0ea5e9] cursor-pointer hover:scale-110 transition-transform"
+                          />
+                          <Tag
+                            size={14}
+                            className="text-slate-500 cursor-pointer hover:scale-110 transition-transform"
+                          />
+                          <div className="relative cursor-pointer hover:scale-110 transition-transform">
+                            <Bell size={14} className="text-slate-500" />
+                            <span className="absolute -top-2 -right-2 bg-rose-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center border-2 border-white shadow-sm">
+                              1
+                            </span>
+                          </div>
+                          <Fingerprint
+                            size={14}
+                            className="text-slate-500 cursor-pointer hover:scale-110 transition-transform"
+                          />
+                          <Headset
+                            size={14}
+                            className="text-[#0ea5e9] cursor-pointer hover:scale-110 transition-transform"
+                          />
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div className="w-[98%] mx-auto h-[3px] bg-slate-200 mt-3 mb-3 rounded-full relative">
+                  <div className="w-1/4 h-full bg-slate-400 rounded-full absolute left-0"></div>
+                </div>
+              </div>
+
+              <div className="px-4 py-3 border-t border-slate-200 flex justify-between items-center text-sm text-slate-500 bg-white rounded-b-lg">
+                <div className="flex items-center gap-2">
+                  Mostrar
+                  <select className="border border-slate-200 rounded px-2 py-1 outline-none text-sm bg-white cursor-pointer">
+                    <option>10</option>
+                  </select>
+                </div>
+                <div className="flex gap-4 items-center">
+                  <span>Página 1</span>
+                  <button className="text-slate-500 hover:text-slate-800 font-medium transition-colors">
+                    Siguiente &gt;
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : viewingCombo ? (
+          <div className="flex-1 bg-white relative">
+            <div className="bg-white border-b border-slate-200 px-8 py-4 sticky top-0 z-10 flex items-center gap-4 shadow-sm">
+              <button
+                onClick={() => setViewingCombo(null)}
+                className="w-10 h-10 rounded-full bg-slate-50 hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors"
+              >
+                <ArrowLeft size={20} />
+              </button>
+              <h2 className="text-xl font-bold text-[#1e3a5f]">
+                Detalles del combo
+              </h2>
+            </div>
+            {viewingCombo.richData ? (
+              <ComboPreviewUI data={viewingCombo.richData} />
+            ) : (
+              <div className="p-12 text-center text-slate-500">
+                <AlertTriangle
+                  size={48}
+                  className="mx-auto mb-4 text-orange-300"
+                />
+                <p>
+                  Este combo de prueba no contiene detalles avanzados para
+                  visualizar.
+                </p>
+                <p className="text-sm">
+                  ¡Intenta crear un combo nuevo para ver esta funcionalidad en
+                  acción!
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="p-8 max-w-7xl mx-auto w-full animate-in fade-in duration-300">
+            <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+              <div>
+                <div className="flex items-center gap-2 text-[11px] text-slate-400 font-medium mb-1 uppercase tracking-wider">
+                  <span>Productos</span>
+                  <span>/</span>
+                  <span className="text-slate-600">Combos</span>
+                </div>
+                <h1 className="text-3xl font-black text-slate-800 tracking-tight">
+                  Mis combos
+                </h1>
+              </div>
+              <button
+                onClick={() => setIsCreateModalOpen(true)}
+                className="bg-[#ff7b00] hover:bg-[#e06c00] text-white px-6 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 transition-all shadow-lg shadow-orange-200/50 self-start"
+              >
+                <Plus size={20} /> Crear combo
+              </button>
+            </div>
+
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 gap-4 w-full">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="relative">
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                    className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-2 h-[38px] text-[13px] text-slate-600 focus:outline-none focus:border-[#ff7b00] bg-white cursor-pointer"
+                  >
+                    <option value="">Estado</option>
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                  </select>
+                  <ChevronDown
+                    size={14}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                  />
+                </div>
+                <div className="relative">
+                  <select
+                    value={filterProvider}
+                    onChange={(e) => setFilterProvider(e.target.value)}
+                    className="appearance-none border border-slate-200 rounded-lg pl-3 pr-8 py-2 h-[38px] text-[13px] text-slate-600 focus:outline-none focus:border-[#ff7b00] bg-white cursor-pointer"
+                  >
+                    <option value="">Proveedor</option>
+                    {uniqueProviders.map((p, i) => (
+                      <option key={i} value={p}>
+                        {p}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown
+                    size={14}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                  />
+                </div>
+
+                <button
+                  onClick={handleApplyComboFilters}
+                  className="bg-[#ff7b00] hover:bg-[#e06c00] transition-colors text-white w-[38px] h-[38px] flex items-center justify-center rounded-lg shrink-0 shadow-sm"
+                >
+                  <ArrowRight size={18} strokeWidth={2.5} />
+                </button>
+
+                {(appliedComboFilters.status ||
+                  appliedComboFilters.provider ||
+                  appliedComboFilters.query) && (
+                  <button
+                    onClick={() => {
+                      setFilterStatus("");
+                      setFilterProvider("");
+                      setSearchComboQuery("");
+                      setAppliedComboFilters({
+                        status: "",
+                        provider: "",
+                        query: "",
+                      });
+                    }}
+                    className="text-[#ff7b00] text-[13px] font-bold hover:underline shrink-0 px-2 transition-all"
+                  >
+                    Limpiar
+                  </button>
+                )}
+              </div>
+
+              <div className="relative w-full lg:w-72 lg:ml-auto max-w-[250px]">
+                <input
+                  type="text"
+                  value={searchComboQuery}
+                  onChange={(e) => setSearchComboQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      setAppliedComboFilters((prev) => ({
+                        ...prev,
+                        query: searchComboQuery,
+                      }));
+                    }
+                  }}
+                  placeholder="Buscar combo (Enter)..."
+                  className="w-full border border-slate-200 rounded-lg pl-10 pr-4 py-2 h-[38px] text-[13px] text-slate-600 focus:outline-none focus:border-[#ff7b00] bg-white transition-all shadow-sm"
+                />
+                <Search
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                  size={16}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {filteredCombosData.map((combo) => (
+                <ComboCard
+                  key={combo.id}
+                  combo={combo}
+                  onClick={() => setViewingCombo(combo)}
+                  onEditClick={handleEditComboClick}
+                  onDeleteClick={handleDeleteComboClick}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        <ConfirmModal
+          isOpen={confirmDialog.isOpen}
+          title="Eliminar combo"
+          message={`¿Estás seguro de que deseas eliminar el combo "${confirmDialog.combo?.title}"? Esta acción no se puede deshacer.`}
+          confirmText="Sí, eliminar"
+          confirmColorClass="bg-rose-500 hover:bg-rose-600"
+          onCancel={() =>
+            setConfirmDialog({ isOpen: false, type: null, combo: null })
+          }
+          onConfirm={executeConfirmAction}
+        />
+
+        <CreateComboModal
+          isOpen={isCreateModalOpen}
+          onClose={() => {
+            setIsCreateModalOpen(false);
+            setComboToEdit(null);
+          }}
+          onAddCombo={handleAddNewCombo}
+          onEditCombo={handleEditCombo}
+          editCombo={comboToEdit}
+        />
+
+        <CreateGarantiaModal
+          isOpen={isGarantiaModalOpen}
+          onClose={() => setIsGarantiaModalOpen(false)}
+          availableProducts={availableGarantiaProducts}
+        />
+      </main>
+    </div>
+  );
+}

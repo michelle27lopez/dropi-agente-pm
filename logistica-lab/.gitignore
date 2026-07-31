@@ -1,0 +1,58 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# logistica-lab — qué NUNCA entra a Darwin
+#
+# Este repo lo comparten 6 PMs de distintas células. Estas rutas se quedan en el
+# repo bóveda privado de Juan (JuanBautista0209/cerebro-logistica-dropi) por dos
+# razones distintas:
+#
+#   1. Material crudo → la regla del propio cerebro: "la data cruda vive en
+#      Drive; no copiar todo, apuntar a la fuente". Son 38 MB de xlsx que cada
+#      PM del repo descargaría al clonar sin necesitarlos nunca.
+#   2. Material de juicio → actas y reportes escritos para uso propio, con
+#      evaluaciones de personas y cifras de negocio sin contexto.
+#
+# Si necesitas uno de estos archivos, no lo copies aquí: cítalo apuntando al
+# repo bóveda o a su carpeta de Drive.
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Data: NADA de esta carpeta entra a Darwin (decisión de Juan, 22-jul-2026).
+# Ni la data cruda (37,7 MB de xlsx) ni su capa de síntesis —diccionario,
+# modelo Power BI, CSV reconciliados—: son cifras de negocio sin contexto.
+# Citar como (bóveda: conocimiento/Data/...).
+/conocimiento/Data/
+
+# Originales de research y su destilado en .md: nada entra.
+/conocimiento/fuentes/
+
+# Registro de fuentes externas: nada entra, tampoco el _index.md.
+# Los 4 dossiers HTML ya viven servidos en hub/public/logistica/info-logistica/
+# (ahí es donde van, no aquí).
+/fuentes/
+
+# Fuentes crudas dentro de un proyecto (xlsx, PDF de trabajo de campo): tampoco
+# entran. Los spec ya las citan como *(bóveda: fuentes/)*.
+/proyectos/*/fuentes/
+
+# ⚠️ OJO con los patrones sin anclar: "fuentes/" (sin la barra inicial) ignora
+# CUALQUIER carpeta llamada fuentes a cualquier nivel — así se perdieron sin
+# aviso las fuentes de proyectos/normalizacion-estados/ en la mudanza del 21-jul
+# (existían en disco pero nunca se commitearon). Por eso todas estas rutas van
+# ancladas con "/" inicial. Verificar siempre con: git check-ignore -v <ruta>
+
+# Actas de reunión y reportes de uso propio
+reuniones/
+reportes/
+
+# Dashboard previo al tablero, reemplazado por hub/src/app/proyectos/logistica/
+index.html
+
+# El tablero ya vive en el hub — no debe duplicarse aquí
+tablero/
+
+# AGENTS.md es byte a byte idéntico a CLAUDE.md: una sola copia
+AGENTS.md
+
+# Ruido local
+.DS_Store
+node_modules/
+.claude/worktrees/

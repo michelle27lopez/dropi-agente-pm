@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Solicitud de Data · Panel de Indicadores de Proveedores (IND-001)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      max-width: 820px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #1f4e79;
+      border-bottom: 2px solid #1f4e79;
+      padding-bottom: 10px;
+      font-size: 20pt;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      color: #2e75b6;
+      font-size: 11pt;
+      margin-bottom: 24px;
+      font-weight: bold;
+    }
+    h2 {
+      color: #2e75b6;
+      border-bottom: 1px solid #d9d9d9;
+      padding-bottom: 5px;
+      margin-top: 30px;
+      font-size: 14pt;
+    }
+    h3 {
+      color: #1f4e79;
+      font-size: 11pt;
+      margin-top: 20px;
+      margin-bottom: 6px;
+    }
+    p, li {
+      font-size: 10.5pt;
+      margin: 8px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+    th, td {
+      border: 1px solid #bfbfbf;
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      color: #000;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .intro-box {
+      background-color: #f2f7fa;
+      border: 1px solid #c9dcec;
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin: 18px 0 28px 0;
+      font-size: 10.5pt;
+      color: #1a1a1a;
+    }
+    .highlight-box {
+      background-color: #fff8e1;
+      border: 1px solid #ffe082;
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+    .urgente-box {
+      background-color: #fce4ec;
+      border: 1px solid #f48fb1;
+      border-radius: 4px;
+      padding: 12px 16px;
+      margin: 14px 0;
+      font-size: 10pt;
+    }
+    .tag {
+      display: inline-block;
+      font-size: 8.5pt;
+      font-weight: bold;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-right: 4px;
+    }
+    .tag-blue   { background: #e3f2fd; color: #1565c0; }
+    .tag-orange { background: #fff3e0; color: #e65100; }
+    .tag-purple { background: #f3e5f5; color: #6a1b9a; }
+    .tag-gray   { background: #f5f5f5; color: #424242; }
+    .firma {
+      margin-top: 40px;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 16px;
+      font-size: 10pt;
+      color: #555;
+    }
+    .col-v  { color: #1565c0; font-weight: bold; }
+    .col-p  { color: #e65100; font-weight: bold; }
+    .col-e  { color: #6a1b9a; font-weight: bold; }
+    .diff   { background-color: #fff3e0; }
+  </style>
+</head>
+<body>
+
+<h1>Solicitud de Extracción de Data Semanal</h1>
+<div class="subtitle">Panel de Indicadores de Proveedores · IND-001 · Supplier Success</div>
+
+<div class="intro-box">
+  <strong>Para:</strong> Miguel (Data / Analytics)<br>
+  <strong>De:</strong> Jaime Guevara · Delivery Manager, Supplier Success<br>
+  <strong>Fecha:</strong> 22 de junio de 2026<br>
+  <strong>Proyecto:</strong> IND-001 — Panel de desempeño y postulación de niveles<br>
+  <strong>Frecuencia solicitada:</strong> <strong>Semanal</strong> (cada lunes antes de las 10am, para análisis del lunes)
+</div>
+
+<h2>1. Contexto y Objetivo</h2>
+
+<p>
+  Dropi tiene hoy <strong>3.833 proveedores activos en Colombia</strong>, distribuidos en 4 niveles:
+  <span class="tag tag-gray">No Verificado (Activo) — 88.6%</span>
+  <span class="tag tag-blue">Verificado — 9.3%</span>
+  <span class="tag tag-orange">Premium — 1.7%</span>
+  <span class="tag tag-purple">Exclusivo — 0.4%</span>
+</p>
+
+<p>
+  El objetivo estratégico de Supplier Success es <strong>cambiar esta distribución</strong> hacia:
+  20% Activo / 40% Verificado / 40% Premium+Exclusivo.
+  Para lograrlo necesitamos identificar <em>quiénes ya cumplen los requisitos</em> para subir de nivel
+  y ejecutar el experimento de postulación segmentada (Paso 2 del experimento IND-001).
+</p>
+
+<p>
+  Esta data también alimentará el <strong>tablero de seguimiento semanal</strong> de IND-001 que hoy solo mide
+  comportamiento en UserPilot (vistas de panel, clics en "Postularme"). Necesitamos cruzarlo con
+  los indicadores operativos reales para saber si los proveedores que se postulan efectivamente cumplen requisitos.
+</p>
+
+<h2>2. Criterios Oficiales de Avance por Nivel</h2>
+
+<p>Estos son los requisitos que evalúa Comercial para aprobar un cambio de nivel:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th class="col-v">→ Verificado</th>
+      <th class="col-p">→ Premium</th>
+      <th class="col-e">→ Exclusivo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="diff">
+      <td><strong>Órdenes movilizadas / trimestre</strong></td>
+      <td class="col-v">3.000</td>
+      <td class="col-p">20.000</td>
+      <td class="col-e">20.000</td>
+    </tr>
+    <tr>
+      <td>Utilización de EcomScanner</td>
+      <td>100%</td>
+      <td>100%</td>
+      <td>100%</td>
+    </tr>
+    <tr>
+      <td>Envío de manifiestos</td>
+      <td>Diario</td>
+      <td>Diario</td>
+      <td>Diario</td>
+    </tr>
+    <tr>
+      <td>Gestión de garantías</td>
+      <td>100%</td>
+      <td>100%</td>
+      <td>100%</td>
+    </tr>
+    <tr class="diff">
+      <td><strong>Tiempo de respuesta en garantías</strong></td>
+      <td class="col-v">≤ 48 h</td>
+      <td class="col-p">≤ 24 h</td>
+      <td class="col-e">≤ 24 h</td>
+    </tr>
+    <tr>
+      <td>% de despachos completados</td>
+      <td>100%</td>
+      <td>100%</td>
+      <td>100%</td>
+    </tr>
+    <tr class="diff">
+      <td><strong>Tiempo de despacho</strong></td>
+      <td class="col-v">≤ 48 h</td>
+      <td class="col-p">≤ 24 h</td>
+      <td class="col-e">≤ 24 h</td>
+    </tr>
+    <tr>
+      <td>Comunicación con área Comercial</td>
+      <td>Efectiva</td>
+      <td>Efectiva</td>
+      <td>Efectiva</td>
+    </tr>
+    <tr class="diff">
+      <td><strong>Exclusividad con Dropi</strong></td>
+      <td>—</td>
+      <td>—</td>
+      <td class="col-e">Sí (obligatorio)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>3. Campos Solicitados — Extracción Semanal</h2>
+
+<p>
+  Necesitamos un archivo (CSV o Excel) con <strong>una fila por proveedor</strong> que incluya:
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Campo / Variable</th>
+      <th>Descripción</th>
+      <th>Tabla / Fuente estimada</th>
+      <th>Prioridad</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td><strong>supplier_id</strong></td>
+      <td>Identificador único del proveedor</td>
+      <td>suppliers / users</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td><strong>supplier_name</strong></td>
+      <td>Nombre o razón social</td>
+      <td>suppliers</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td><strong>nivel_actual</strong></td>
+      <td>Nivel vigente: Activo / Verificado / Premium / Exclusivo</td>
+      <td>suppliers.tier / category</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td><strong>ordenes_ultimo_trimestre</strong></td>
+      <td>Total de órdenes efectivas movilizadas en los últimos 90 días</td>
+      <td>orders (filtro: status = entregada)</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td><strong>uso_ecom_scanner</strong></td>
+      <td>Si usa EcomScanner: Sí / No (o % de productos cargados vía scanner)</td>
+      <td>product_imports / ecom_events</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td><strong>manifiestos_frecuencia</strong></td>
+      <td>Frecuencia de envío de manifiestos en últimas 4 semanas: Diario / Semanal / Esporádico / Nunca</td>
+      <td>manifests / shipping_events</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td><strong>garantias_gestion_pct</strong></td>
+      <td>% de garantías gestionadas sobre el total recibidas (últimos 90 días)</td>
+      <td>warranties / claims</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td><strong>garantias_tiempo_promedio_h</strong></td>
+      <td>Tiempo promedio de respuesta a garantías en horas (últimos 90 días)</td>
+      <td>warranties.response_time</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td><strong>despachos_pct</strong></td>
+      <td>% de órdenes despachadas sobre el total asignadas</td>
+      <td>orders / shipments</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td><strong>despachos_tiempo_promedio_h</strong></td>
+      <td>Tiempo promedio desde recepción de orden hasta despacho en horas</td>
+      <td>orders.dispatch_time</td>
+      <td>Alta</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td><strong>cumple_verificado</strong></td>
+      <td>Flag calculado: ¿cumple todos los requisitos para Verificado? (Sí/No)</td>
+      <td>Calculado</td>
+      <td>Media</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td><strong>cumple_premium</strong></td>
+      <td>Flag calculado: ¿cumple todos los requisitos para Premium? (Sí/No)</td>
+      <td>Calculado</td>
+      <td>Media</td>
+    </tr>
+    <tr>
+      <td>13</td>
+      <td><strong>fecha_extraccion</strong></td>
+      <td>Fecha del corte de datos (lunes de cada semana)</td>
+      <td>—</td>
+      <td>Alta</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>4. Segmentos Prioritarios</h2>
+
+<p>Para el experimento de postulación segmentada (Paso 2 · IND-001), los segmentos más urgentes son:</p>
+
+<div class="highlight-box">
+  <strong>Segmento A — Activos que ya cumplen requisito mínimo para Verificado:</strong><br>
+  → Proveedores con <code>nivel_actual = "Activo"</code> y <code>ordenes_ultimo_trimestre ≥ 3.000</code><br>
+  → Estimar: posiblemente 200–500 proveedores. Son los primeros en recibir el mensaje de postulación.
+</div>
+
+<div class="highlight-box">
+  <strong>Segmento B — Verificados que ya cumplen requisito para Premium:</strong><br>
+  → Proveedores con <code>nivel_actual = "Verificado"</code> y <code>ordenes_ultimo_trimestre ≥ 20.000</code><br>
+  → Estimar: posiblemente 30–60 proveedores. Candidatos directos al ascenso.
+</div>
+
+<div class="urgente-box">
+  <strong>⚠ Prioridad inmediata:</strong> Para lanzar el Paso 2 del experimento en la primera semana de julio,
+  necesitamos los segmentos A y B <strong>antes del 30 de junio de 2026</strong>.
+  Con el listado de proveedor_id podemos configurar el envío segmentado desde el CRM.
+</div>
+
+<h2>5. Formato de Entrega y Periodicidad</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Formato</strong></td>
+      <td>CSV UTF-8 o Google Sheets compartido (preferiblemente Sheets para acceso directo)</td>
+    </tr>
+    <tr>
+      <td><strong>Frecuencia</strong></td>
+      <td>Semanal — cada <strong>lunes antes de las 10am</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Entrega primer corte</strong></td>
+      <td><strong>Antes del 30 de junio de 2026</strong> (urgente para Paso 2 del experimento)</td>
+    </tr>
+    <tr>
+      <td><strong>Canal de entrega</strong></td>
+      <td>Slack directo a @jaime.guevara o carpeta compartida en Drive</td>
+    </tr>
+    <tr>
+      <td><strong>Propietario del proceso</strong></td>
+      <td>Jaime Guevara · jaime.guevara@dropi.co</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>6. Uso de los Datos</h2>
+
+<ul>
+  <li><strong>Identificar candidatos a postulación:</strong> Solo enviamos el mensaje de "postúlate al siguiente nivel" a quienes ya cumplen los requisitos. Evitamos frustración y sobrecargar a Comercial con solicitudes que no van a avanzar.</li>
+  <li><strong>Medir el gap estratégico:</strong> Calcular cuántos proveedores están "a punto de cumplir" (ej. tienen 2.500 órdenes de 3.000 requeridas) para personalizar la comunicación de motivación.</li>
+  <li><strong>Tablero semanal de movimiento:</strong> Rastrear semana a semana cuántos proveedores suben de nivel, cuántos quedan represados en postulaciones pendientes, y si hay correlación entre la intervención del experimento y el avance.</li>
+  <li><strong>Alimentar el panel de IND-001:</strong> Cruzar con datos de UserPilot para entender si los proveedores que ven el panel y se postulan efectivamente cumplen requisitos o hay una brecha de percepción.</li>
+</ul>
+
+<h2>7. Preguntas de Verificación</h2>
+
+<p>Para confirmar viabilidad antes de proceder, si necesitas:</p>
+
+<ul>
+  <li>¿Existe una tabla de <em>tier</em> o nivel de proveedor actualizada en la BD? ¿O está en el CRM de Comercial?</li>
+  <li>¿Las órdenes "movilizadas" equivalen a órdenes con status "entregada" o hay algún filtro adicional?</li>
+  <li>¿El uso de EcomScanner tiene un evento registrado en BD o solo en UserPilot?</li>
+  <li>¿Los tiempos de despacho se calculan desde <em>orden creada</em> o desde <em>orden confirmada por proveedor</em>?</li>
+</ul>
+
+<div class="firma">
+  <strong>Jaime Guevara</strong> · Delivery Manager, Supplier Success · Dropi<br>
+  jaime.guevara@dropi.co<br>
+  <span style="color: #888; font-size: 9pt;">IND-001 · Solicitud generada el 22 de junio de 2026</span>
+</div>
+
+</body>
+</html>

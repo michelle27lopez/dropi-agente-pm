@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Dropi × WhatsApp — Mobile Demo</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --wa-dark:   #0b141a;
+  --wa-panel:  #1f2c34;
+  --wa-mid:    #2a3942;
+  --wa-green:  #00a884;
+  --wa-bubble-in:  #202c33;
+  --wa-bubble-out: #005c4b;
+  --wa-text:   #e9edef;
+  --wa-muted:  #8696a0;
+  --wa-border: rgba(134,150,160,0.15);
+  --wa-bg: #0b141a;
+  --wa-tick: #53bdeb;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+}
+html, body { height: 100%; background: #030206; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 100vh; overflow: hidden;
+  background: radial-gradient(circle at center, #130a24 0%, #030206 100%);
+}
+
+/* Premium Device Frame (iPhone 15 Pro) */
+#device {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  max-width: 402px;
+  max-height: 874px;
+  background: var(--wa-bg);
+  overflow: hidden;
+  user-select: none;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 40px rgba(123, 47, 247, 0.15);
+  transition: all 0.5s var(--ease);
+  display: flex;
+  flex-direction: column;
+}
+
+@media(min-width: 480px) {
+  #device {
+    border: 8px solid rgba(255, 255, 255, 0.12);
+    border-radius: 44px;
+    height: 90vh;
+  }
+  
+  /* Dynamic Island */
+  #device::before {
+    content: "";
+    position: absolute;
+    top: 11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 110px;
+    height: 28px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 50;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+  }
+}
+
+/* iOS Status Bar */
+.status-bar {
+  height: 44px;
+  background: var(--wa-panel);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 24px 6px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  z-index: 45;
+  flex-shrink: 0;
+}
+.status-bar .icons {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+}
+
+/* WhatsApp Mobile Head */
+.wa-chat-head {
+  height: 56px;
+  background: var(--wa-panel);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  flex-shrink: 0;
+  z-index: 40;
+}
+.wa-av {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #00a884;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.wa-chat-info {
+  flex: 1;
+  min-width: 0;
+}
+.wa-chat-name { font-size: 13.5px; font-weight: 700; color: var(--wa-text); }
+.wa-chat-status { font-size: 11px; color: var(--wa-green); margin-top: 1px; }
+.wa-chat-icons {
+  display: flex; gap: 16px; color: var(--wa-muted);
+}
+.wa-chat-icons i { font-size: 19px; cursor: pointer; }
+
+/* Scenarios floating trigger */
+.scenarios-trigger {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+/* Chat Messages Area */
+.wa-msgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  z-index: 10;
+}
+.wa-msgs::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23182229' fill-opacity='0.45'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.8;
+}
+.wa-msgs::-webkit-scrollbar { width: 4px; }
+.wa-msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+/* Date separator */
+.date-sep {
+  text-align: center; margin: 12px 0 6px;
+}
+.date-sep span {
+  background: var(--wa-panel); color: var(--wa-muted);
+  font-size: 11px; padding: 4px 10px; border-radius: 8px;
+  font-weight: 500;
+  border: 1px solid rgba(255,255,255,0.02);
+}
+
+/* Message bubbles */
+.wa-msg { display: flex; flex-direction: column; max-width: 82%; position: relative; z-index: 12; }
+.wa-msg.in { align-self: flex-start; }
+.wa-msg.out { align-self: flex-end; }
+.wa-bubble {
+  padding: 8px 12px 6px;
+  border-radius: 12px;
+  font-size: 13.5px; line-height: 1.5;
+  position: relative; word-wrap: break-word;
+}
+.wa-msg.in  .wa-bubble { background: var(--wa-bubble-in); color: var(--wa-text); border-top-left-radius: 0; }
+.wa-msg.out .wa-bubble { background: var(--wa-bubble-out); color: var(--wa-text); border-top-right-radius: 0; }
+.wa-meta {
+  display: flex; align-items: center; gap: 4px;
+  justify-content: flex-end; margin-top: 3px;
+}
+.wa-meta-time { font-size: 10px; color: var(--wa-muted); }
+.wa-tick i { font-size: 13px; color: var(--wa-tick); display: inline-block; transform: translateY(1px); }
+
+/* Typing indicator */
+.wa-typing .wa-bubble { padding: 10px 14px; }
+.wa-typing-dots { display: flex; gap: 4px; align-items: center; height: 12px; }
+.tdot { width: 6px; height: 6px; border-radius: 50%; background: var(--wa-muted); animation: tb 1.2s infinite; }
+.tdot:nth-child(2){ animation-delay:.2s }
+.tdot:nth-child(3){ animation-delay:.4s }
+@keyframes tb { 0%,60%,100%{transform:translateY(0);opacity:.4} 30%{transform:translateY(-4px);opacity:1} }
+
+/* WhatsApp cloud API Interactive Button Messages (Faithful layout) */
+.wa-interactive-card {
+  background: var(--wa-panel);
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 320px;
+  border-top-left-radius: 0;
+  margin-top: 2px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+.wa-card-header {
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+.wa-card-body {
+  padding: 12px 14px;
+}
+.wa-card-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--wa-text);
+  margin-bottom: 4px;
+}
+.wa-card-desc {
+  font-size: 12px;
+  color: var(--wa-muted);
+  line-height: 1.5;
+}
+.wa-card-actions {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.wa-card-btn {
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 12px;
+  color: #29b6f6;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+.wa-card-btn:last-child { border-bottom: none; }
+.wa-card-btn:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+/* WhatsApp Mobile Input Row */
+.wa-input-row {
+  height: 60px;
+  background: var(--wa-bg);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px 10px;
+  flex-shrink: 0;
+  z-index: 30;
+}
+.wa-input-container {
+  flex: 1;
+  background: var(--wa-panel);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  height: 40px;
+}
+.wa-input-container i {
+  color: var(--wa-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+.wa-input-box {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--wa-text);
+  font-size: 14.5px;
+  padding: 0 10px;
+  font-family: inherit;
+}
+.wa-send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--wa-green);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.wa-send-btn i { color: #fff; font-size: 18px; }
+
+/* Scenarios Bottom Sheet slide-up */
+.bottom-sheet {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  background: #111b21;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  z-index: 60;
+  transform: translateY(100%);
+  transition: transform 0.4s var(--ease);
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.bottom-sheet.open {
+  transform: translateY(0);
+}
+.sheet-header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 2px;
+  margin: 8px auto 0;
+  cursor: pointer;
+}
+.sheet-body {
+  padding: 16px 20px 24px;
+}
+.sheet-btn {
+  width: 100%;
+  background: var(--wa-panel);
+  border: 1px solid rgba(255,255,255,0.06);
+  color: #fff;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  transition: all 0.2s;
+}
+.sheet-btn:hover {
+  background: var(--wa-mid);
+  border-color: var(--wa-green);
+}
+.sheet-btn.active {
+  background: var(--wa-green);
+  color: #0b141a;
+  border-color: transparent;
+}
+
+/* Quick Replies */
+.wa-qr-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-self: flex-end;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 15;
+}
+.wa-qr {
+  background: var(--wa-panel);
+  border: 1px solid var(--wa-green);
+  color: var(--wa-green);
+  border-radius: 18px;
+  padding: 8px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.wa-qr:hover { background: var(--wa-green); color: #fff; }
+
+.fade-in { animation: fi 0.3s ease; }
+@keyframes fi { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+
+<div id="device">
+  <!-- Status Bar iOS simulation -->
+  <div class="status-bar">
+    <div id="clock">14:48</div>
+    <div class="icons">
+      <i class="ti ti-cellular-5g"></i>
+      <i class="ti ti-wifi" style="margin-left: 2px;"></i>
+      <i class="ti ti-battery-4" style="margin-left: 2px; font-size: 15px;"></i>
+    </div>
+  </div>
+
+  <!-- WhatsApp Chat Header -->
+  <div class="wa-chat-head">
+    <div class="wa-av">🛒</div>
+    <div class="wa-chat-info">
+      <div class="wa-chat-name">Dropi — Operaciones</div>
+      <div class="wa-chat-status">● en línea</div>
+    </div>
+    <button class="scenarios-trigger" onclick="toggleSheet(true)">Reiniciar 🔄</button>
+  </div>
+
+  <!-- Messages List -->
+  <div class="wa-msgs" id="msgs"></div>
+
+  <!-- Input Row -->
+  <div class="wa-input-row">
+    <div class="wa-input-container">
+      <i class="ti ti-mood-smile"></i>
+      <input class="wa-input-box" id="userInput" placeholder="Escribe un mensaje..." onkeydown="handleKey(event)" />
+      <i class="ti ti-paperclip"></i>
+    </div>
+    <button class="wa-send-btn" onclick="sendMsg()"><i class="ti ti-send"></i></button>
+  </div>
+
+  <!-- Bottom Sheet for Scenarios -->
+  <div class="bottom-sheet" id="sheet">
+    <div class="sheet-handle" onclick="toggleSheet(false)"></div>
+    <div class="sheet-header">
+      <span style="font-size: 12px; font-weight: 850; color: #fff; text-transform: uppercase;">Reiniciar Simulación</span>
+      <button onclick="toggleSheet(false)" style="background:none; border:none; color:var(--wa-muted); font-size:18px; cursor:pointer;">×</button>
+    </div>
+    <div class="sheet-body">
+      <button class="sheet-btn active" onclick="restartJourney()">
+        🔄 Reiniciar Ciclo del Pedido #98211
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const msgs = document.getElementById('msgs');
+const sheet = document.getElementById('sheet');
+const delay = ms => new Promise(r => setTimeout(r, ms));
+
+function getTime() {
+  const now = new Date();
+  return `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+}
+
+function toggleSheet(open) {
+  if (open) sheet.classList.add('open');
+  else sheet.classList.remove('open');
+}
+
+function addDateSep(label) {
+  msgs.insertAdjacentHTML('beforeend', `<div class="date-sep"><span>${label}</span></div>`);
+  scroll();
+}
+
+function addMsg(dir, content, opts = {}) {
+  const wrap = document.createElement('div');
+  wrap.className = `wa-msg ${dir} fade-in`;
+  const ticks = dir === 'out' ? `<span class="wa-tick"><i class="ti ti-checks"></i></span>` : '';
+  wrap.innerHTML = `
+    <div class="wa-bubble">${content.replace(/\n/g, '<br/>')}
+      <div class="wa-meta">
+        <span class="wa-meta-time">${opts.time || getTime()}</span>
+        ${ticks}
+      </div>
+    </div>`;
+  msgs.appendChild(wrap);
+  scroll();
+  return wrap;
+}
+
+function addInteractiveCard(dir, headerEmoji, headerBg, title, desc, buttons) {
+  const wrap = document.createElement('div');
+  wrap.className = `wa-msg ${dir} fade-in`;
+  wrap.innerHTML = `
+    <div class="wa-interactive-card">
+      <div class="wa-card-header" style="background:${headerBg}">${headerEmoji}</div>
+      <div class="wa-card-body">
+        <div class="wa-card-title">${title}</div>
+        <div class="wa-card-desc">${desc.replace(/\n/g, '<br/>')}</div>
+      </div>
+      <div class="wa-card-actions">
+        ${buttons.map(b => `<button class="wa-card-btn" onclick="${b.handler}">${b.text}</button>`).join('')}
+      </div>
+    </div>
+    <div class="wa-meta" style="padding-left:4px; justify-content:flex-start; margin-top:2px">
+      <span class="wa-meta-time">${getTime()}</span>
+    </div>`;
+  msgs.appendChild(wrap);
+  scroll();
+}
+
+function addTyping() {
+  const d = document.createElement('div');
+  d.className = 'wa-msg in wa-typing fade-in';
+  d.id = 'typing';
+  d.innerHTML = `<div class="wa-bubble"><div class="wa-typing-dots"><div class="tdot"></div><div class="tdot"></div><div class="tdot"></div></div></div>`;
+  msgs.appendChild(d);
+  scroll();
+}
+function removeTyping() { const t = document.getElementById('typing'); if(t) t.remove(); }
+function scroll() { msgs.scrollTop = msgs.scrollHeight; }
+
+function addQR(options) {
+  const wrap = document.createElement('div');
+  wrap.className = 'wa-qr-row fade-in';
+  wrap.id = 'qrRow';
+  wrap.innerHTML = options.map(o =>
+    `<div class="wa-qr" onclick="chooseQR(this,'${o.text}','${o.val}')">${o.text}</div>`
+  ).join('');
+  msgs.appendChild(wrap);
+  scroll();
+}
+
+function chooseQR(el, text, val) {
+  document.getElementById('qrRow') && document.getElementById('qrRow').remove();
+  addMsg('out', text);
+  window._qrCallback && window._qrCallback(val);
+}
+
+function restartJourney() {
+  toggleSheet(false);
+  startOrderJourney();
+}
+
+/* ── LINEAR OPERATIONAL JOURNEY: PEDIDO #98211 ── */
+async function startOrderJourney() {
+  msgs.innerHTML = '';
+  addDateSep('Hoy · Gestión del Pedido');
+  
+  // ── PASO 1: Sincronización & Confirmación (Capa 1) ──
+  addTyping(); await delay(1200); removeTyping();
+  addMsg('in', `📢 *¡Nuevo pedido sincronizado de tu tienda Shopify!*`);
+  
+  await delay(600); addTyping(); await delay(1400); removeTyping();
+  addInteractiveCard('in', '📦', '#0284c7', 'Pedido #98211 (Shopify)', 'Cliente: Andrés Gómez · Bogotá\nProducto: Audífonos Pro X (1 ud)\nMétodo: Contra Entrega (COD)\nValor Recaudo: $89.900\nFlete Estimado: $10.800\nMargen Neto: $31.200 (descontando flete)\nEstado: Pendiente por Confirmar', [
+    { text: '✓ [QuickAction] Confirmar Despacho', handler: 'confirmOrder(this)' },
+    { text: '✗ Retener / Cancelar', handler: 'rejectOrder(this)' }
+  ]);
+}
+
+// Handler Paso 1
+function confirmOrder(btn) {
+  const actions = btn.closest('.wa-card-actions');
+  actions.innerHTML = `<div style="padding:12px; font-size:12.5px; font-weight:800; color:#00a884; text-align:center;">✓ Confirmado y Enviado a Bodega</div>`;
+  addMsg('out', 'Confirmar y despachar el pedido #98211 hoy.');
+  
+  setTimeout(async () => {
+    addTyping(); await delay(1400); removeTyping();
+    addMsg('in', `¡Listo! Guía Coordinadora generada: *CO-99281-COD*.\n\nEl proveedor en bodega fue notificado y está preparando el empaque.`);
+    
+    // Disparar Paso 2: Stockout (Second Best) despues de un breve delay
+    await delay(2500);
+    triggerStockout();
+  }, 400);
+}
+
+function rejectOrder(btn) {
+  const actions = btn.closest('.wa-card-actions');
+  actions.innerHTML = `<div style="padding:12px; font-size:12.5px; font-weight:800; color:#f43f5e; text-align:center;">✗ Pedido Retenido</div>`;
+  addMsg('out', 'Retener despacho para revisión.');
+}
+
+// ── PASO 2: Quiebre de Stock & Derivación (Second Best / Capa 1.5) ──
+async function triggerStockout() {
+  addTyping(); await delay(1200); removeTyping();
+  addMsg('in', `⚠️ *Alerta de Bodega: Quiebre de Stock*`);
+  
+  await delay(600); addTyping(); await delay(1600); removeTyping();
+  addInteractiveCard('in', '🔄', '#e11d48', 'Pedido #98211 en Pausa', 'El proveedor principal de Audífonos Pro X se quedó sin stock físico.\n\nEncontramos una bodega secundaria de respaldo:\nBodega: JP Distribuciones (180 uds)\nSobrecosto: +$2.000 COP\nMargen Ajustado: $29.200 (antes $31.200)', [
+    { text: '🔄 [QuickAction] Redirigir a Bodega Respaldo', handler: 'redirectSecondBest(this)' },
+    { text: '✗ Cancelar Orden', handler: 'cancelSecondBest(this)' }
+  ]);
+}
+
+// Handler Paso 2
+function redirectSecondBest(btn) {
+  const actions = btn.closest('.wa-card-actions');
+  actions.innerHTML = `<div style="padding:12px; font-size:12.5px; font-weight:800; color:#00a884; text-align:center;">✓ Redirección Autorizada</div>`;
+  addMsg('out', 'Sí, redirigir el pedido #98211 al proveedor JP Distribuciones.');
+  
+  setTimeout(async () => {
+    addTyping(); await delay(1500); removeTyping();
+    addMsg('in', `¡Sincronizado! 🔄 Cambiamos el origen a la bodega de JP Distribuciones. El stock quedó reservado. La orden continúa en preparación para salida física.`);
+    
+    // Disparar Paso 3: Novedad logística despues de un delay
+    await delay(2500);
+    triggerNovedad();
+  }, 400);
+}
+
+function cancelSecondBest(btn) {
+  const actions = btn.closest('.wa-card-actions');
+  actions.innerHTML = `<div style="padding:12px; font-size:12.5px; font-weight:800; color:#f43f5e; text-align:center;">✗ Pedido Cancelado</div>`;
+  addMsg('out', 'Cancelar pedido #98211 por falta de stock.');
+}
+
+// ── PASO 3: Novedad Logística & Rescate (Capa 2) ──
+async function triggerNovedad() {
+  addTyping(); await delay(1200); removeTyping();
+  addMsg('in', `🚨 *Alerta Logística: Dirección Incompleta*`);
+  
+  await delay(600); addTyping(); await delay(1600); removeTyping();
+  addInteractiveCard('in', '🚨', '#ea580c', 'Guía Coordinadora CO-99281-COD', 'Novedad: Dirección no encontrada (Cali)\nDirección original: Calle 5 #23-45\n\nEl bot de Dropi contactó al cliente por WhatsApp y normalizó los datos:\nDirección Nueva: Calle 5 #23-45, Apto 402, Torre B (Cali)', [
+    { text: '📍 [QuickAction] Autorizar Reintento con Dirección Nueva', handler: 'resolveNovelty(this)' },
+    { text: '✗ Devolver a Bodega', handler: 'rejectNovelty(this)' }
+  ]);
+}
+
+// Handler Paso 3
+function resolveNovelty(btn) {
+  const actions = btn.closest('.wa-card-actions');
+  actions.innerHTML = `<div style="padding:12px; font-size:12.5px; font-weight:800; color:#00a884; text-align:center;">✓ Reintento Autorizado</div>`;
+  addMsg('out', 'Autorizar reintento de la guía CO-99281-COD con la dirección corregida en Cali.');
+  
+  setTimeout(async () => {
+    addTyping(); await delay(1500); removeTyping();
+    addMsg('in', `¡Listo! 🚚 Actualizamos la dirección en la orden de Coordinadora. El reintento de entrega quedó agendado para mañana a primera hora. ¡Salvamos la entrega neta!`);
+    
+    // Disparar Paso 4: Liquidación despues de un delay
+    await delay(2500);
+    triggerLiquidacion();
+  }, 400);
+}
+
+function rejectNovelty(btn) {
+  const actions = btn.closest('.wa-card-actions');
+  actions.innerHTML = `<div style="padding:12px; font-size:12.5px; font-weight:800; color:#f43f5e; text-align:center;">✗ Retorno Solicitado</div>`;
+  addMsg('out', 'Solicitar retorno a bodega del pedido.');
+}
+
+// ── PASO 4: Entrega & Liquidación (Cierre de Wallet) ──
+async function triggerLiquidacion() {
+  addTyping(); await delay(1200); removeTyping();
+  addMsg('in', `🎉 *¡Pedido #98211 Entregado con Éxito!*`);
+  
+  await delay(600); addTyping(); await delay(1600); removeTyping();
+  addInteractiveCard('in', '💳', '#00a884', 'Liquidación de Pedido #98211', 'Coordinadora recaudó el pago COD de $89.900 COP.\n\nDesglose de Caja:\n+ Recaudo COD: $89.900\n- Proveedor (JP): $49.900\n- Flete Coordinadora: $10.800\n= Utilidad Acreditada: $29.200 COP', [
+    { text: '💳 [QuickAction] Ver Wallet / Retirar Saldo', handler: 'viewWallet(this)' }
+  ]);
+}
+
+// Handler Paso 4
+function viewWallet(btn) {
+  const actions = btn.closest('.wa-card-actions');
+  actions.innerHTML = `<div style="padding:12px; font-size:12.5px; font-weight:800; color:#00a884; text-align:center;">✓ Wallet Acreditada</div>`;
+  addMsg('out', 'Ver saldo de mi Wallet en Dropi.');
+  
+  setTimeout(async () => {
+    addTyping(); await delay(1200); removeTyping();
+    addMsg('in', `Tu saldo actual disponible en Wallet es de *$29.200 COP*.\n\n¿Deseas transferir tus utilidades a tu cuenta bancaria o dejarlas para pagar fletes futuros de tus ventas?`);
+    
+    await delay(300);
+    addQR([
+      { text: '🏦 Transferir a mi Banco', val: 'bank' },
+      { text: '📦 Dejar para Próximos Fletes', val: 'fletes' }
+    ]);
+    
+    window._qrCallback = async (val) => {
+      window._qrCallback = null;
+      await delay(600); addTyping(); await delay(1000); removeTyping();
+      if (val === 'bank') {
+        addMsg('in', `Transferencia programada por $29.200 COP a tu cuenta bancaria registrada. Se reflejará en un plazo máximo de 24 horas hábiles. 🚀`);
+      } else {
+        addMsg('in', `¡Entendido! Conservamos los $29.200 COP en tu Wallet para auto-financiar fletes. Esto evitará que tus próximos despachos queden en pausa. ¡A vender! 🔥`);
+      }
+    };
+  }, 400);
+}
+
+/* ── Chat inputs ── */
+function sendMsg() {
+  const v = document.getElementById('userInput').value.trim();
+  if (!v) return;
+  document.getElementById('userInput').value = '';
+  addMsg('out', v);
+  setTimeout(async () => {
+    addTyping(); await delay(1200); removeTyping();
+    addMsg('in', `Recibido. Operación del Pedido #98211 activa. Presiona los botones del chat para avanzar.`);
+  }, 400);
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter') { e.preventDefault(); sendMsg(); }
+}
+
+// Iniciar viaje lineal
+startOrderJourney();
+</script>
+</body>
+</html>

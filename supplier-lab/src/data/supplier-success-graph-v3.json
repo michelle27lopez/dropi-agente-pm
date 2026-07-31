@@ -1,0 +1,1793 @@
+{
+  "nodes": [
+    {
+      "id": "seg_no_verificado",
+      "label": "Supplier no verificado",
+      "type": "supplier_segment",
+      "description": "Proveedor que ha completado el registro básico pero aún no ha pasado por el proceso de verificación de identidad y documentos."
+    },
+    {
+      "id": "seg_verificado",
+      "label": "Supplier verificado",
+      "type": "supplier_segment",
+      "description": "Proveedor que ha completado la verificación de identidad y documentos, con acceso completo a funcionalidades de publicación."
+    },
+    {
+      "id": "seg_premium",
+      "label": "Supplier premium",
+      "type": "supplier_segment",
+      "description": "Proveedor con historial de ventas y calidad de catálogo superior, con acceso a beneficios adicionales y visibilidad preferencial."
+    },
+    {
+      "id": "seg_dropshipper",
+      "label": "Dropshipper",
+      "type": "supplier_segment",
+      "description": "Vendedor que comercializa productos de proveedores verificados sin tener stock propio."
+    },
+    {
+      "id": "seg_lider_comunidad",
+      "label": "Líder de comunidad",
+      "type": "supplier_segment",
+      "description": "Usuario con capacidad de crear y gestionar grupos de dropshippers, con incentivos especiales por volumen de red."
+    },
+    {
+      "id": "seg_equipo_interno",
+      "label": "Equipo interno",
+      "type": "supplier_segment",
+      "description": "Miembros del equipo de Dropi que operan como proveedores o administradores del catálogo."
+    },
+    {
+      "id": "flow_registro",
+      "label": "Registro",
+      "type": "flow",
+      "description": "Proceso de creación de cuenta en la plataforma Dropi: ingreso de datos básicos, email, contraseña y aceptación de términos."
+    },
+    {
+      "id": "flow_diagnostico",
+      "label": "Diagnóstico inicial",
+      "type": "flow",
+      "description": "Etapa de evaluación del perfil del proveedor: tipo de negocio, categorías de productos, volumen esperado y necesidades específicas."
+    },
+    {
+      "id": "flow_completar_datos",
+      "label": "Completar datos",
+      "type": "flow",
+      "description": "Llenado de información de perfil: datos legales, bancarios, dirección fiscal y documentación de respaldo."
+    },
+    {
+      "id": "flow_crear_bodega",
+      "label": "Crear bodega",
+      "type": "flow",
+      "description": "Configuración del espacio de almacenamiento virtual: nombre, dirección física, transportadoras disponibles y horarios de despacho."
+    },
+    {
+      "id": "flow_crear_producto",
+      "label": "Crear producto",
+      "type": "flow",
+      "description": "Flujo completo de creación de producto: nombre, descripción, categoría, precio, stock, imágenes, garantías y variantes."
+    },
+    {
+      "id": "flow_validacion_externa",
+      "label": "Validación externa",
+      "type": "flow",
+      "description": "Proceso de verificación por parte del equipo de Dropi o herramientas automatizadas para validar la identidad y legitimidad del proveedor."
+    },
+    {
+      "id": "flow_publicacion_producto",
+      "label": "Publicación de producto",
+      "type": "flow",
+      "description": "Paso final que hace un producto visible en el catálogo de Dropi y disponible para que los dropshippers lo comercialicen."
+    },
+    {
+      "id": "flow_editar_producto",
+      "label": "Editar producto",
+      "type": "flow",
+      "description": "Modificación de datos de un producto ya creado: precios, stock, imágenes, descripción, garantías o variantes."
+    },
+    {
+      "id": "flow_actualizar_stock",
+      "label": "Actualizar stock",
+      "type": "flow",
+      "description": "Proceso de sincronización o actualización manual del inventario disponible para cada producto o variante."
+    },
+    {
+      "id": "flow_cargar_imagenes",
+      "label": "Cargar imágenes",
+      "type": "flow",
+      "description": "Subida y gestión de imágenes de producto: principal, galería, y requisitos de formato/resolución de Dropi."
+    },
+    {
+      "id": "flow_configurar_garantias",
+      "label": "Configurar garantías",
+      "type": "flow",
+      "description": "Definición de las políticas de garantía del producto: tipo, duración, condiciones de aplicación y proceso de reclamación."
+    },
+    {
+      "id": "flow_crear_combo",
+      "label": "Crear combo",
+      "type": "flow",
+      "description": "Agrupación de múltiples productos en una oferta conjunta con precio especial o beneficio adicional."
+    },
+    {
+      "id": "flow_negociaciones",
+      "label": "Negociaciones y descuentos",
+      "type": "flow",
+      "description": "Proceso de definición de precios especiales para dropshippers seleccionados, descuentos por volumen o acuerdos comerciales."
+    },
+    {
+      "id": "flow_gestion_ordenes",
+      "label": "Gestión de órdenes",
+      "type": "flow",
+      "description": "Visualización y procesamiento de pedidos recibidos: confirmación, preparación y seguimiento del estado."
+    },
+    {
+      "id": "flow_generacion_guias",
+      "label": "Generación de guías",
+      "type": "flow",
+      "description": "Creación de etiquetas de envío con la transportadora seleccionada: generación de guía, código de rastreo y documentos de despacho."
+    },
+    {
+      "id": "flow_despacho",
+      "label": "Despacho",
+      "type": "flow",
+      "description": "Proceso físico de entrega del paquete a la transportadora y actualización del estado del pedido en la plataforma."
+    },
+    {
+      "id": "flow_gestion_novedades",
+      "label": "Gestión de novedades",
+      "type": "flow",
+      "description": "Manejo de incidencias post-despacho: devoluciones, pedidos no entregados, reclamaciones y resolución de conflictos."
+    },
+    {
+      "id": "flow_medicion_desempeno",
+      "label": "Medición de desempeño",
+      "type": "flow",
+      "description": "Revisión periódica de métricas del proveedor: tasa de entrega, calificaciones, tiempo de respuesta y calidad del catálogo."
+    },
+    {
+      "id": "ms_supplier_registered",
+      "label": "supplier_registered",
+      "type": "milestone",
+      "description": "Hito que marca la creación exitosa de la cuenta del proveedor en la plataforma."
+    },
+    {
+      "id": "ms_supplier_setup_completed",
+      "label": "supplier_setup_completed",
+      "type": "milestone",
+      "description": "Hito que marca la finalización completa del perfil del proveedor con todos los datos obligatorios."
+    },
+    {
+      "id": "ms_first_warehouse_created",
+      "label": "first_warehouse_created",
+      "type": "milestone",
+      "description": "Hito que confirma la creación de la primera bodega, prerequisito para publicar productos."
+    },
+    {
+      "id": "ms_product_creation_started",
+      "label": "product_creation_started",
+      "type": "milestone",
+      "description": "Hito que marca el inicio del flujo de creación de producto por primera vez."
+    },
+    {
+      "id": "ms_product_general_completed",
+      "label": "product_general_completed",
+      "type": "milestone",
+      "description": "Hito que marca la completitud de los datos generales del producto (nombre, descripción, categoría, precio)."
+    },
+    {
+      "id": "ms_product_stock_completed",
+      "label": "product_stock_completed",
+      "type": "milestone",
+      "description": "Hito que confirma que el producto tiene stock suficiente configurado para proceder."
+    },
+    {
+      "id": "ms_product_images_completed",
+      "label": "product_images_completed",
+      "type": "milestone",
+      "description": "Hito que confirma que el producto tiene las imágenes requeridas en el formato correcto."
+    },
+    {
+      "id": "ms_product_warranties_completed",
+      "label": "product_warranties_completed",
+      "type": "milestone",
+      "description": "Hito que confirma que las garantías del producto están correctamente configuradas."
+    },
+    {
+      "id": "ms_product_created",
+      "label": "product_created",
+      "type": "milestone",
+      "description": "Hito que marca la creación exitosa del producto con todos los campos mínimos completos."
+    },
+    {
+      "id": "ms_product_complete",
+      "label": "product_complete",
+      "type": "milestone",
+      "description": "Hito que marca que el producto cumple todos los criterios de completitud: stock, imágenes, garantías y datos generales."
+    },
+    {
+      "id": "ms_product_public_requested",
+      "label": "product_public_requested",
+      "type": "milestone",
+      "description": "Hito que marca la solicitud de publicación del producto por parte del proveedor."
+    },
+    {
+      "id": "ms_supplier_validation_started",
+      "label": "supplier_validation_started",
+      "type": "milestone",
+      "description": "Hito que marca el inicio del proceso de validación externa del proveedor."
+    },
+    {
+      "id": "ms_supplier_validated",
+      "label": "supplier_validated",
+      "type": "milestone",
+      "description": "Hito que confirma que el proveedor ha pasado exitosamente el proceso de validación."
+    },
+    {
+      "id": "ms_product_visible",
+      "label": "product_visible",
+      "type": "milestone",
+      "description": "Hito que marca que el producto es visible en el catálogo de Dropi y está disponible para dropshippers."
+    },
+    {
+      "id": "ms_first_order",
+      "label": "first_order",
+      "type": "milestone",
+      "description": "Hito que marca la recepción del primer pedido para el proveedor — punto de activación comercial."
+    },
+    {
+      "id": "fric_no_entiende_bodega",
+      "label": "No entiende bodega",
+      "type": "friction",
+      "description": "El proveedor no comprende el concepto de bodega en Dropi ni cómo configurarla correctamente, causando abandono o errores."
+    },
+    {
+      "id": "fric_no_entiende_guia",
+      "label": "No entiende formato de guía",
+      "type": "friction",
+      "description": "El proveedor no comprende cómo generar la guía de envío correctamente ni qué información se necesita."
+    },
+    {
+      "id": "fric_no_sabe_transportadoras",
+      "label": "No sabe qué transportadoras usar",
+      "type": "friction",
+      "description": "El proveedor desconoce cuáles transportadoras están disponibles en su zona o cuál elegir según su tipo de producto."
+    },
+    {
+      "id": "fric_no_entiende_carga_masiva",
+      "label": "No entiende carga masiva",
+      "type": "friction",
+      "description": "El proveedor no sabe cómo usar la carga masiva de productos vía CSV o API, limitando su eficiencia en catálogos grandes."
+    },
+    {
+      "id": "fric_no_tiene_imagenes",
+      "label": "No tiene imágenes",
+      "type": "friction",
+      "description": "El proveedor no cuenta con imágenes de calidad para sus productos o no sabe cómo subirlas correctamente."
+    },
+    {
+      "id": "fric_no_entiende_garantias",
+      "label": "No entiende garantías",
+      "type": "friction",
+      "description": "El proveedor no comprende el sistema de garantías de Dropi ni cómo configurarlas correctamente para sus productos."
+    },
+    {
+      "id": "fric_no_sabe_si_activo",
+      "label": "No sabe si el producto quedó activo",
+      "type": "friction",
+      "description": "Después de guardar, el proveedor no tiene claridad sobre si su producto fue publicado correctamente o si quedó en borrador."
+    },
+    {
+      "id": "fric_descubre_errores_final",
+      "label": "Descubre errores al final",
+      "type": "friction",
+      "description": "El proveedor solo se entera de errores de validación al intentar guardar el producto al final, no durante el proceso."
+    },
+    {
+      "id": "fric_no_hay_borrador",
+      "label": "No hay borrador visible",
+      "type": "friction",
+      "description": "El sistema no permite guardar borradores de productos incompletos, forzando al proveedor a completar todo en una sola sesión."
+    },
+    {
+      "id": "fric_abandona_validacion",
+      "label": "Abandona validación externa",
+      "type": "friction",
+      "description": "El proveedor abandona el proceso de validación por ser demasiado largo, confuso o requerir documentos que no tiene a mano."
+    },
+    {
+      "id": "fric_stock_insuficiente",
+      "label": "Stock insuficiente",
+      "type": "friction",
+      "description": "El producto no puede completarse porque el stock mínimo requerido no está configurado o es menor al mínimo exigido."
+    },
+    {
+      "id": "fric_producto_sin_estado",
+      "label": "Producto sin estado claro",
+      "type": "friction",
+      "description": "El producto existe en el sistema pero su estado (borrador, pendiente, activo, rechazado) no es visible o comprensible para el proveedor."
+    },
+    {
+      "id": "hyp_wizard_guiado",
+      "label": "Wizard guiado",
+      "type": "hypothesis",
+      "description": "Hipótesis: un flujo de creación de producto paso a paso (wizard) con validaciones en tiempo real reducirá el abandono y los errores al final."
+    },
+    {
+      "id": "hyp_tutorial_contextual",
+      "label": "Tutorial contextual",
+      "type": "hypothesis",
+      "description": "Hipótesis: mostrar tooltips y tutoriales contextuales en cada campo del formulario de producto aumentará la tasa de completitud."
+    },
+    {
+      "id": "hyp_guardar_progreso",
+      "label": "Guardar progreso",
+      "type": "hypothesis",
+      "description": "Hipótesis: permitir guardar borradores de productos incompletos reducirá el abandono por sesiones interrumpidas."
+    },
+    {
+      "id": "hyp_checklist_interno",
+      "label": "Checklist interno del producto",
+      "type": "hypothesis",
+      "description": "Hipótesis: un checklist visible dentro del formulario de producto que muestre el progreso hacia la completitud motivará al proveedor a terminar."
+    },
+    {
+      "id": "hyp_separar_carga",
+      "label": "Separar carga simple de carga masiva",
+      "type": "hypothesis",
+      "description": "Hipótesis: ofrecer dos flujos diferenciados (simple para 1-5 productos, masivo para más) reducirá la fricción y el error humano."
+    },
+    {
+      "id": "hyp_onboarding_bloqueante",
+      "label": "Onboarding bloqueante",
+      "type": "hypothesis",
+      "description": "Hipótesis: hacer obligatorio completar el onboarding antes de acceder a funcionalidades core aumentará la calidad del perfil y del catálogo."
+    },
+    {
+      "id": "hyp_onboarding_independiente",
+      "label": "Onboarding independiente de la plataforma",
+      "type": "hypothesis",
+      "description": "Hipótesis: un onboarding fuera de la plataforma principal (email, WhatsApp, microsite) tendrá mayor tasa de completitud por menor fricción técnica."
+    },
+    {
+      "id": "hyp_validacion_progresiva",
+      "label": "Validación progresiva por pasos",
+      "type": "hypothesis",
+      "description": "Hipótesis: validar cada sección del producto al completarse (no solo al guardar) reducirá los errores descubiertos al final."
+    },
+    {
+      "id": "hyp_vista_final_estado",
+      "label": "Vista final con estado del producto",
+      "type": "hypothesis",
+      "description": "Hipótesis: mostrar una vista de confirmación después de guardar con el estado claro del producto reducirá la confusión sobre si fue publicado."
+    },
+    {
+      "id": "exp_variante_a",
+      "label": "Variante A baseline",
+      "type": "experiment",
+      "description": "Control experiment: flujo actual de creación de producto sin modificaciones. Sirve como baseline para medir el impacto de otras variantes."
+    },
+    {
+      "id": "exp_variante_b",
+      "label": "Variante B wizard",
+      "type": "experiment",
+      "description": "Experimento: reemplazar el formulario lineal por un wizard paso a paso con validaciones progresivas y barra de progreso visible."
+    },
+    {
+      "id": "exp_variante_b2",
+      "label": "Variante B2 tutorial + motivación",
+      "type": "experiment",
+      "description": "Experimento: añadir tooltips contextuales, mensajes motivacionales y ejemplos de productos exitosos al flujo existente."
+    },
+    {
+      "id": "exp_variante_c",
+      "label": "Variante C autoguardado",
+      "type": "experiment",
+      "description": "Experimento: implementar autoguardado de borradores cada 30 segundos y permitir retomar la creación desde donde se dejó."
+    },
+    {
+      "id": "exp_variante_d",
+      "label": "Variante D onboarding separado",
+      "type": "experiment",
+      "description": "Experimento: flujo de onboarding fuera de la plataforma principal, entregado vía email con pasos guiados y checkpoints de verificación."
+    },
+    {
+      "id": "metric_supplier_registered",
+      "label": "metric: supplier_registered",
+      "type": "metric",
+      "description": "Número de proveedores que completan el registro básico. Tasa de conversión del primer paso del funnel."
+    },
+    {
+      "id": "metric_supplier_first_login",
+      "label": "supplier_first_login",
+      "type": "metric",
+      "description": "Número de proveedores que inician sesión por primera vez después del registro. Indica activación inicial."
+    },
+    {
+      "id": "metric_warehouse_created",
+      "label": "warehouse_created",
+      "type": "metric",
+      "description": "Número de bodegas creadas. Indica que el proveedor ha superado una de las fricciones más comunes del onboarding."
+    },
+    {
+      "id": "metric_product_creation_started",
+      "label": "metric: product_creation_started",
+      "type": "metric",
+      "description": "Número de veces que se inicia el flujo de creación de producto. Base para medir tasas de abandono."
+    },
+    {
+      "id": "metric_product_save_clicked",
+      "label": "product_save_clicked",
+      "type": "metric",
+      "description": "Número de intentos de guardar producto. Permite identificar la tasa de éxito vs. bloqueo al guardar."
+    },
+    {
+      "id": "metric_save_blocked_stock",
+      "label": "product_save_blocked_missing_stock",
+      "type": "metric",
+      "description": "Número de guardados bloqueados por falta de stock. Cuantifica la fricción de stock insuficiente."
+    },
+    {
+      "id": "metric_save_blocked_images",
+      "label": "product_save_blocked_missing_images",
+      "type": "metric",
+      "description": "Número de guardados bloqueados por falta de imágenes. Cuantifica la fricción de imágenes faltantes."
+    },
+    {
+      "id": "metric_save_blocked_warranties",
+      "label": "product_save_blocked_missing_warranties",
+      "type": "metric",
+      "description": "Número de guardados bloqueados por garantías incompletas. Cuantifica la fricción de garantías no configuradas."
+    },
+    {
+      "id": "metric_product_created",
+      "label": "metric: product_created",
+      "type": "metric",
+      "description": "Número de productos creados exitosamente. KPI principal del funnel de activación del proveedor."
+    },
+    {
+      "id": "metric_product_complete",
+      "label": "metric: product_complete",
+      "type": "metric",
+      "description": "Número de productos con todos los campos de calidad completos (stock, imágenes, garantías). Indicador de Product Readiness."
+    },
+    {
+      "id": "metric_supplier_validation_started",
+      "label": "metric: supplier_validation_started",
+      "type": "metric",
+      "description": "Número de proveedores que inician el proceso de validación externa. Base para medir la tasa de completitud de validación."
+    },
+    {
+      "id": "metric_product_visible",
+      "label": "metric: product_visible",
+      "type": "metric",
+      "description": "Número de productos visibles en el catálogo de Dropi. KPI de Product Readiness y Sales Potential."
+    },
+    {
+      "id": "metric_first_order",
+      "label": "metric: first_order",
+      "type": "metric",
+      "description": "Número de proveedores que reciben su primer pedido. Métrica de activación comercial — el momento de valor real."
+    },
+    {
+      "id": "ds_userpilot",
+      "label": "UserPilot",
+      "type": "data_source",
+      "description": "Herramienta de product analytics y onboarding. Provee datos de comportamiento in-app, flujos de onboarding y NPS."
+    },
+    {
+      "id": "ds_backend_dropi",
+      "label": "Backend Dropi",
+      "type": "data_source",
+      "description": "API y base de datos principal de Dropi. Fuente de verdad para productos, órdenes, proveedores y estados."
+    },
+    {
+      "id": "ds_supabase_lab",
+      "label": "Supabase Lab",
+      "type": "data_source",
+      "description": "Base de datos del Supplier Journey Lab. Almacena eventos de experimentos, variantes asignadas y resultados."
+    },
+    {
+      "id": "ds_eventos_frontend",
+      "label": "Eventos frontend",
+      "type": "data_source",
+      "description": "Eventos de analytics enviados desde el frontend: clics, abandonos, tiempo en página, errores de formulario."
+    },
+    {
+      "id": "ds_tickets_soporte",
+      "label": "Tickets soporte",
+      "type": "data_source",
+      "description": "Tickets de soporte al cliente. Fuente cualitativa de fricciones, dudas frecuentes y errores no capturados por métricas."
+    },
+    {
+      "id": "ds_ordenes",
+      "label": "Órdenes",
+      "type": "data_source",
+      "description": "Dataset de órdenes procesadas. Permite correlacionar calidad del catálogo con conversión y volumen de ventas."
+    },
+    {
+      "id": "ds_catalogo",
+      "label": "Catálogo",
+      "type": "data_source",
+      "description": "Dataset del catálogo de productos activos en Dropi. Permite analizar completitud, calidad y distribución del catálogo."
+    },
+    {
+      "id": "ds_metricas_supplier",
+      "label": "Métricas de supplier",
+      "type": "data_source",
+      "description": "Dashboard de métricas por proveedor: tasa de entrega, devoluciones, calificaciones y tiempo de respuesta."
+    },
+    {
+      "id": "proj_journey_lab",
+      "label": "Supplier Journey Lab",
+      "type": "project",
+      "description": "Proyecto de experimentación del proceso de onboarding y activación del proveedor. Contiene variantes A/B del flujo de creación de producto."
+    },
+    {
+      "id": "proj_mejora_catalogo",
+      "label": "Mejoramiento de catálogo",
+      "type": "project",
+      "description": "Proyecto enfocado en mejorar la calidad y completitud del catálogo de productos: herramientas de enriquecimiento, validación y SEO."
+    },
+    {
+      "id": "proj_combos",
+      "label": "Combos",
+      "type": "project",
+      "description": "Proyecto para habilitar la creación y gestión de combos de productos, permitiendo a los proveedores agrupar artículos en ofertas."
+    },
+    {
+      "id": "proj_negociaciones",
+      "label": "Negociaciones y descuentos",
+      "type": "project",
+      "description": "Proyecto para implementar un sistema de negociaciones de precio entre proveedores y dropshippers seleccionados."
+    },
+    {
+      "id": "proj_metricas_desempeno",
+      "label": "Métricas de desempeño proveedores",
+      "type": "project",
+      "description": "Proyecto para construir el dashboard de métricas de desempeño de proveedores con SLA, calidad y volumen."
+    },
+    {
+      "id": "proj_product_activation",
+      "label": "Product Activation Processor",
+      "type": "project",
+      "description": "Servicio/proceso que toma un producto creado y lo evalúa contra criterios de activación para determinar si puede ser publicado."
+    },
+    {
+      "id": "proj_supplier_success_graph",
+      "label": "Supplier Success Graph",
+      "type": "project",
+      "description": "Este mismo grafo: mapa vivo de flujos, hipótesis, fricciones, datos y proyectos que impactan el catálogo de Dropi."
+    },
+    {
+      "id": "obj_catalogo",
+      "label": "Catálogo",
+      "type": "objective",
+      "description": "Objetivo estratégico de construir y mantener un catálogo de productos amplio, de calidad y correctamente categorizado."
+    },
+    {
+      "id": "obj_product_readiness",
+      "label": "Product Readiness",
+      "type": "objective",
+      "description": "Objetivo de asegurar que los productos en el catálogo tengan toda la información necesaria para ser vendidos exitosamente."
+    },
+    {
+      "id": "obj_sales_potential",
+      "label": "Sales Potential",
+      "type": "objective",
+      "description": "Objetivo de maximizar el potencial de ventas del catálogo mediante visibilidad, competitividad de precio y calidad."
+    },
+    {
+      "id": "obj_precio_competitivo",
+      "label": "Precio competitivo",
+      "type": "objective",
+      "description": "Objetivo de mantener precios competitivos en el catálogo de Dropi frente a otras plataformas de dropshipping."
+    },
+    {
+      "id": "obj_calidad_catalogo",
+      "label": "Calidad del catálogo",
+      "type": "objective",
+      "description": "Objetivo de asegurar estándares mínimos de calidad: imágenes, descripciones, precios y stock en todos los productos activos."
+    },
+    {
+      "id": "obj_sla",
+      "label": "SLA",
+      "type": "objective",
+      "description": "Objetivo de cumplir los acuerdos de nivel de servicio: tiempo de despacho, tasa de entrega exitosa y tiempo de respuesta ante novedades."
+    },
+    {
+      "id": "nivel_no_verificado",
+      "label": "Nivel No verificado",
+      "type": "supplier_segment",
+      "description": "Supplier registrado sin verificación comercial. Acceso básico a la plataforma."
+    },
+    {
+      "id": "nivel_verificado",
+      "label": "Nivel Verificado",
+      "type": "supplier_segment",
+      "description": "Supplier con verificación comercial. Tiene insignia, aprobación automática y beneficios de visibilidad."
+    },
+    {
+      "id": "nivel_premium",
+      "label": "Nivel Premium",
+      "type": "supplier_segment",
+      "description": "Supplier premium con beneficios de crecimiento: visita comercial, live Dropi, comunidades."
+    },
+    {
+      "id": "nivel_exclusivo",
+      "label": "Nivel Exclusivo",
+      "type": "supplier_segment",
+      "description": "Supplier exclusivo con beneficios estratégicos: WMS, préstamos, video corporativo, stands."
+    },
+    {
+      "id": "flow_habilitacion_catalogo",
+      "label": "Habilitación para catálogo público",
+      "type": "flow",
+      "description": "Flujo donde el supplier completa validación light para habilitar sus productos en el catálogo público de Dropi."
+    },
+    {
+      "id": "flow_escalamiento_nivel",
+      "label": "Escalamiento de nivel supplier",
+      "type": "flow",
+      "description": "Flujo donde el supplier con catálogo activo y desempeño demostrado asciende a niveles comerciales superiores."
+    },
+    {
+      "id": "obj_catalogo_publico",
+      "label": "Catálogo público",
+      "type": "objective",
+      "description": "Objetivo de tener productos del supplier visibles para dropshippers en el catálogo público de Dropi."
+    },
+    {
+      "id": "obj_desempeno_supplier",
+      "label": "Desempeño supplier",
+      "type": "objective",
+      "description": "Métricas de desempeño operativo del supplier: cumplimiento de SLA, calidad de productos, tasa de órdenes exitosas."
+    },
+    {
+      "id": "benefit_insignia",
+      "label": "Insignia diferencial",
+      "type": "benefit",
+      "description": "Insignia que aumenta visibilidad del supplier en el catálogo frente a dropshippers."
+    },
+    {
+      "id": "benefit_aprobacion_auto",
+      "label": "Aprobación automática",
+      "type": "benefit",
+      "description": "Los productos del supplier se aprueban automáticamente sin revisión manual."
+    },
+    {
+      "id": "benefit_atencion_preferencial",
+      "label": "Línea de atención preferencial",
+      "type": "benefit",
+      "description": "Soporte rápido y prioritario para resolución de dudas del supplier."
+    },
+    {
+      "id": "benefit_caza_productos",
+      "label": "Módulo caza productos",
+      "type": "benefit",
+      "description": "Acceso a publicaciones de dropshippers que buscan productos específicos."
+    },
+    {
+      "id": "benefit_banner",
+      "label": "Banner de proveedores",
+      "type": "benefit",
+      "description": "Aparece destacado en el catálogo de proveedores de Dropi."
+    },
+    {
+      "id": "benefit_comunidades",
+      "label": "Relacionamiento con comunidades",
+      "type": "benefit",
+      "description": "Conexión con otras comunidades de dropshippers y proveedores."
+    },
+    {
+      "id": "benefit_visita_comercial",
+      "label": "Visita comercial e informe",
+      "type": "benefit",
+      "description": "Visita personalizada para evaluar desempeño y recibir informe detallado con recomendaciones."
+    },
+    {
+      "id": "benefit_live_dropi",
+      "label": "Presencia en live Dropi",
+      "type": "benefit",
+      "description": "Participación en eventos en vivo de Dropi para mayor visibilidad."
+    },
+    {
+      "id": "benefit_video_corporativo",
+      "label": "Video corporativo",
+      "type": "benefit",
+      "description": "Video profesional que mejora la imagen corporativa frente a posibles clientes."
+    },
+    {
+      "id": "benefit_stands",
+      "label": "Stands gratuitos en eventos",
+      "type": "benefit",
+      "description": "Participación gratuita en eventos organizados por Dropi."
+    },
+    {
+      "id": "benefit_prestamos",
+      "label": "Préstamos para importación",
+      "type": "benefit",
+      "description": "Financiamiento para importación de productos, facilitando el crecimiento de la oferta."
+    },
+    {
+      "id": "benefit_wms",
+      "label": "Servicio WMS",
+      "type": "benefit",
+      "description": "Sistema WMS para gestión de inventario y eficiencia logística."
+    },
+    {
+      "id": "ms_habilitado_catalogo",
+      "label": "habilitado_para_catalogo_publico",
+      "type": "milestone",
+      "description": "El supplier completó la validación light y sus productos pueden aparecer en el catálogo público."
+    },
+    {
+      "id": "ms_validacion_light",
+      "label": "validacion_light_completada",
+      "type": "milestone",
+      "description": "El supplier superó la verificación mínima de existencia requerida para publicar en catálogo público."
+    },
+    {
+      "id": "flow_proponer_combo",
+      "label": "Proponer combo",
+      "type": "flow",
+      "description": "Flujo donde el dropshipper selecciona productos de un mismo supplier, arma una propuesta de combo y la envía para aprobación."
+    },
+    {
+      "id": "flow_aprobar_combo",
+      "label": "Aprobar combo",
+      "type": "flow",
+      "description": "Flujo donde el supplier revisa los productos incluidos, el precio total y el solicitante, y aprueba o rechaza la propuesta de combo."
+    },
+    {
+      "id": "ms_combo_products_selected",
+      "label": "combo_products_selected",
+      "type": "milestone",
+      "description": "El dropshipper seleccionó los productos que componen el combo."
+    },
+    {
+      "id": "ms_combo_submitted",
+      "label": "combo_submitted_to_supplier",
+      "type": "milestone",
+      "description": "La propuesta de combo fue enviada al supplier para revisión y aprobación."
+    },
+    {
+      "id": "ms_combo_approved",
+      "label": "combo_approved",
+      "type": "milestone",
+      "description": "El supplier aprobó el combo. Queda disponible para el dropshipper que lo propuso."
+    },
+    {
+      "id": "ms_combo_rejected",
+      "label": "combo_rejected",
+      "type": "milestone",
+      "description": "El supplier rechazó la propuesta de combo."
+    },
+    {
+      "id": "ms_combo_available",
+      "label": "combo_available_to_dropshipper",
+      "type": "milestone",
+      "description": "El combo aprobado está disponible para ser vendido por el dropshipper que lo propuso."
+    },
+    {
+      "id": "fric_combo_sin_descuento",
+      "label": "Combo sin descuento poco atractivo",
+      "type": "friction",
+      "description": "El combo V1 suma precios individuales sin descuento. El dropshipper puede no tener incentivo real para armarlo si no hay diferencial de precio."
+    },
+    {
+      "id": "fric_supplier_no_entiende_aprobacion",
+      "label": "Supplier no entiende qué aprobar",
+      "type": "friction",
+      "description": "El supplier no tiene claridad sobre qué implica aprobar un combo: qué compromiso asume, qué stock se afecta, qué visibilidad tiene el combo."
+    },
+    {
+      "id": "fric_combo_stock_roto",
+      "label": "Combo cae por stock de un producto",
+      "type": "friction",
+      "description": "Si cualquiera de los productos del combo se queda sin stock, el combo completo queda inactivo. Stock disponible del combo = mínimo entre productos."
+    },
+    {
+      "id": "hyp_combo_valor_sin_descuento",
+      "label": "Combo tiene valor sin descuento",
+      "type": "hypothesis",
+      "description": "Hipótesis: el dropshipper valora poder armar una oferta agrupada (comodidad, presentación, venta cruzada) incluso sin descuento de precio."
+    },
+    {
+      "id": "int_shopify",
+      "label": "Shopify",
+      "type": "integration",
+      "description": "Plataforma ecommerce que el dropshipper conecta a Dropi para recibir órdenes y gestionar su catálogo."
+    },
+    {
+      "id": "int_tiendanube",
+      "label": "Tienda Nube",
+      "type": "integration",
+      "description": "Plataforma ecommerce latinoamericana que el dropshipper conecta a Dropi."
+    },
+    {
+      "id": "int_woocommerce",
+      "label": "WooCommerce",
+      "type": "integration",
+      "description": "Plugin de ecommerce sobre WordPress que el dropshipper puede conectar a Dropi."
+    },
+    {
+      "id": "int_meta",
+      "label": "Meta (Facebook/Instagram)",
+      "type": "integration",
+      "description": "Canal de venta social donde el dropshipper promociona y vende productos, con órdenes que llegan a Dropi."
+    },
+    {
+      "id": "int_tiktok",
+      "label": "TikTok Shop",
+      "type": "integration",
+      "description": "Canal de venta social emergente conectado a Dropi para dropshippers con audiencia en TikTok."
+    },
+    {
+      "id": "dec_garantia_combo",
+      "label": "¿Garantía de combo: por producto o por conjunto?",
+      "type": "decision",
+      "description": "Decisión conceptual no resuelta: cuando se vende un combo, ¿la garantía aplica sobre cada producto individual o sobre el combo como unidad? Bloquea el diseño completo del flujo de aprobación y post-venta de combos."
+    },
+    {
+      "id": "dec_visibilidad_combo",
+      "label": "¿Combo visible para todos o solo para quien lo propuso?",
+      "type": "decision",
+      "description": "Decisión de alcance: V1 define que el combo es solo para el dropshipper que lo creó, pero está abierto si en versiones futuras se comparte al catálogo general."
+    },
+    {
+      "id": "fric_bodega_sin_interseccion",
+      "label": "Sin bodega común entre productos",
+      "type": "friction",
+      "description": "Los productos seleccionados para el combo no comparten ninguna bodega. Constraint técnico: el combo requiere al menos una bodega en común para poder gestionarse logísticamente."
+    },
+    {
+      "id": "ms_combo_simple",
+      "label": "Combo simple configurado",
+      "type": "milestone",
+      "description": "Combo creado con productos de precio fijo únicamente (sin variantes). Stock = mínimo entre stocks individuales. Máximo 5 productos."
+    },
+    {
+      "id": "ms_combo_variable",
+      "label": "Combo variable configurado",
+      "type": "milestone",
+      "description": "Combo que incluye al menos un producto con variantes (talla, color, etc). Máximo 2 productos variables por combo. Requiere selección de variante por el dropshipper al ordenar."
+    },
+    {
+      "id": "ms_combo_garantias_configuradas",
+      "label": "Garantías del combo configuradas",
+      "type": "milestone",
+      "description": "Cada producto dentro del combo tiene su política de garantía definida (por producto, no por combo como unidad). Habilita la disponibilidad del combo con post-venta claro."
+    },
+    {
+      "id": "obj_continuidad_ordenes",
+      "type": "objective",
+      "label": "Continuidad de órdenes",
+      "description": "Nada debe frenar las órdenes. Toda iniciativa debe cuidar la continuidad, trazabilidad y calidad del ciclo de orden. Es el principio evaluador de toda nueva iniciativa en Dropi."
+    },
+    {
+      "id": "cap_combo",
+      "type": "capability",
+      "label": "Capacidad: Combo",
+      "description": "Capacidad del sistema para crear, gestionar y operar combos como tipo de producto. Puede ser activada por diferentes actores (supplier, dropshipper, marcas blancas). Su existencia impacta integraciones, operaciones y toda la cadena del ecosistema Dropi. Es una entidad del sistema, no un flujo de un actor específico."
+    },
+    {
+      "id": "fric_combo_variante_shopify",
+      "type": "friction",
+      "label": "Combo con variante falla en Shopify",
+      "description": "Importar a Shopify un combo que incluye un producto con variantes falla. Punto bloqueante confirmado en pruebas. Solo funciona con productos simples. Relacionado con cambios en la API de Shopify post-enero 2025."
+    },
+    {
+      "id": "fric_combo_flujo_inverso_shopify",
+      "type": "friction",
+      "label": "Flujo Shopify→Dropi indefinido para combos",
+      "description": "No se ha probado ni definido cómo llega una orden desde Shopify a Dropi cuando el producto vendido es un combo. Siguiente punto bloqueante después de resolver la exportación. Si Shopify manda la orden como producto individual, Dropi no puede identificarlo como combo."
+    },
+    {
+      "id": "fric_combo_dispersion_negociaciones",
+      "type": "friction",
+      "label": "Sin lógica de dispersión en negociaciones",
+      "description": "No existe lógica para distribuir márgenes cuando un producto con negociación activa se vende dentro de un combo. Bloquea la correcta liquidación al proveedor y la estimación del nodo Negociaciones."
+    },
+    {
+      "id": "fric_emprendedor_sin_perfil",
+      "type": "friction",
+      "label": "Perfil emprendedor no existe técnicamente",
+      "description": "El perfil de emprendedor/marca no existe como entidad técnica en la plataforma. Bloquea diferenciación de UX para ese segmento en combos. Workaround actual: un proveedor que crea su propia orden es funcionalmente un emprendedor."
+    },
+    {
+      "id": "dec_combos_proveedor_primero",
+      "type": "decision",
+      "label": "Combos: supplier crea primero [RESUELTA]",
+      "description": "Decisión tomada 2026-05-13: el supplier activa la capacidad de combo directamente (como crea un producto). El flujo donde el dropshipper propone y el supplier aprueba queda pausado hasta validación con Lucho."
+    },
+    {
+      "id": "dec_combo_woocommerce_version",
+      "type": "decision",
+      "label": "¿Combos en WooCommerce actual o v2.0?",
+      "description": "Decisión pendiente: el plugin de WooCommerce está en rediseño (v2.0 en desarrollo). Implementar combos sobre la versión actual sería reproceso. Bloquea estimación del nodo WooCommerce. Responsable: Jose Giraldo / TI."
+    },
+    {
+      "id": "dec_combo_dispersion_costos",
+      "type": "decision",
+      "label": "¿Cómo se dispersan costos en negociaciones con combo?",
+      "description": "Decisión de negocio pendiente: cuando un producto con negociación activa se vende en combo, ¿cómo se distribuye el margen entre los componentes? Bloquea estimación del nodo Negociaciones. Responsable: Lucho / Juan Diego."
+    },
+    {
+      "id": "dec_combo_marcas_blancas_multiproveedor",
+      "type": "decision",
+      "label": "¿Marcas blancas pueden combinar productos de distintos proveedores?",
+      "description": "Decisión de negocio pendiente: ¿una marca blanca puede armar un combo mezclando productos de diferentes proveedores? Tiene implicaciones logísticas (bodega común requerida) y de stock. Responsable: María / Lucho."
+    },
+    {
+      "id": "dec_combo_codigo_scanner",
+      "type": "decision",
+      "label": "¿Qué código se escanea para un combo?",
+      "description": "Decisión técnica pendiente: el combo necesita un código para ser escaneado en bodega e Icon Scanner. ¿Es un código propio del combo o el código de uno de sus componentes? Bloquea el diseño del flujo de bodega y devoluciones. Responsable: TI + Operaciones."
+    }
+  ],
+  "edges": [
+    {
+      "id": "e1",
+      "source": "seg_no_verificado",
+      "target": "flow_registro",
+      "type": "requires",
+      "label": "requires"
+    },
+    {
+      "id": "e2",
+      "source": "flow_registro",
+      "target": "flow_diagnostico",
+      "type": "enables",
+      "label": "enables"
+    },
+    {
+      "id": "e3",
+      "source": "flow_diagnostico",
+      "target": "flow_completar_datos",
+      "type": "enables",
+      "label": "enables"
+    },
+    {
+      "id": "e4",
+      "source": "flow_completar_datos",
+      "target": "flow_crear_bodega",
+      "type": "enables",
+      "label": "enables"
+    },
+    {
+      "id": "e5",
+      "source": "flow_crear_bodega",
+      "target": "flow_crear_producto",
+      "type": "enables",
+      "label": "enables"
+    },
+    {
+      "id": "e6",
+      "source": "flow_crear_producto",
+      "target": "proj_product_activation",
+      "type": "feeds",
+      "label": "feeds"
+    },
+    {
+      "id": "e7",
+      "source": "flow_crear_producto",
+      "target": "obj_catalogo",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e8",
+      "source": "flow_crear_producto",
+      "target": "obj_product_readiness",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e9",
+      "source": "flow_crear_producto",
+      "target": "flow_validacion_externa",
+      "type": "requires",
+      "label": "requires"
+    },
+    {
+      "id": "e10",
+      "source": "flow_validacion_externa",
+      "target": "ms_supplier_validated",
+      "type": "enables",
+      "label": "enables"
+    },
+    {
+      "id": "e11",
+      "source": "ms_supplier_validated",
+      "target": "ms_product_visible",
+      "type": "enables",
+      "label": "enables"
+    },
+    {
+      "id": "e12",
+      "source": "ms_product_visible",
+      "target": "ms_first_order",
+      "type": "enables",
+      "label": "enables"
+    },
+    {
+      "id": "e13",
+      "source": "fric_stock_insuficiente",
+      "target": "ms_product_complete",
+      "type": "blocks",
+      "label": "blocks"
+    },
+    {
+      "id": "e14",
+      "source": "fric_no_tiene_imagenes",
+      "target": "ms_product_complete",
+      "type": "blocks",
+      "label": "blocks"
+    },
+    {
+      "id": "e15",
+      "source": "fric_no_entiende_garantias",
+      "target": "ms_product_complete",
+      "type": "blocks",
+      "label": "blocks"
+    },
+    {
+      "id": "e16",
+      "source": "fric_descubre_errores_final",
+      "target": "flow_crear_producto",
+      "type": "blocks",
+      "label": "blocks"
+    },
+    {
+      "id": "e17",
+      "source": "fric_no_hay_borrador",
+      "target": "flow_crear_producto",
+      "type": "blocks",
+      "label": "blocks"
+    },
+    {
+      "id": "e18",
+      "source": "hyp_wizard_guiado",
+      "target": "flow_crear_producto",
+      "type": "tests",
+      "label": "tests"
+    },
+    {
+      "id": "e19",
+      "source": "hyp_tutorial_contextual",
+      "target": "flow_crear_producto",
+      "type": "tests",
+      "label": "tests"
+    },
+    {
+      "id": "e20",
+      "source": "hyp_guardar_progreso",
+      "target": "flow_crear_producto",
+      "type": "tests",
+      "label": "tests"
+    },
+    {
+      "id": "e21",
+      "source": "hyp_checklist_interno",
+      "target": "flow_crear_producto",
+      "type": "tests",
+      "label": "tests"
+    },
+    {
+      "id": "e22",
+      "source": "exp_variante_a",
+      "target": "hyp_wizard_guiado",
+      "type": "tests",
+      "label": "tests"
+    },
+    {
+      "id": "e23",
+      "source": "exp_variante_b",
+      "target": "flow_crear_producto",
+      "type": "tests",
+      "label": "tests"
+    },
+    {
+      "id": "e24",
+      "source": "exp_variante_b2",
+      "target": "hyp_tutorial_contextual",
+      "type": "tests",
+      "label": "tests"
+    },
+    {
+      "id": "e25",
+      "source": "proj_journey_lab",
+      "target": "exp_variante_b",
+      "type": "belongs_to",
+      "label": "belongs_to"
+    },
+    {
+      "id": "e26",
+      "source": "proj_journey_lab",
+      "target": "proj_supplier_success_graph",
+      "type": "belongs_to",
+      "label": "belongs_to"
+    },
+    {
+      "id": "e27",
+      "source": "proj_mejora_catalogo",
+      "target": "obj_catalogo",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e28",
+      "source": "proj_combos",
+      "target": "obj_catalogo",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e29",
+      "source": "proj_negociaciones",
+      "target": "obj_precio_competitivo",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e30",
+      "source": "proj_metricas_desempeno",
+      "target": "obj_sla",
+      "type": "measures",
+      "label": "measures"
+    },
+    {
+      "id": "e31",
+      "source": "obj_sla",
+      "target": "obj_calidad_catalogo",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e32",
+      "source": "nivel_no_verificado",
+      "target": "flow_habilitacion_catalogo",
+      "type": "requires",
+      "label": "debe completar"
+    },
+    {
+      "id": "e33",
+      "source": "flow_habilitacion_catalogo",
+      "target": "ms_validacion_light",
+      "type": "enables",
+      "label": "genera"
+    },
+    {
+      "id": "e34",
+      "source": "ms_validacion_light",
+      "target": "ms_habilitado_catalogo",
+      "type": "enables",
+      "label": "habilita"
+    },
+    {
+      "id": "e35",
+      "source": "ms_habilitado_catalogo",
+      "target": "obj_catalogo_publico",
+      "type": "impacts",
+      "label": "impacta"
+    },
+    {
+      "id": "e36",
+      "source": "obj_desempeno_supplier",
+      "target": "flow_escalamiento_nivel",
+      "type": "enables",
+      "label": "habilita"
+    },
+    {
+      "id": "e37",
+      "source": "flow_escalamiento_nivel",
+      "target": "nivel_verificado",
+      "type": "enables",
+      "label": "puede alcanzar"
+    },
+    {
+      "id": "e38",
+      "source": "flow_escalamiento_nivel",
+      "target": "nivel_premium",
+      "type": "enables",
+      "label": "puede alcanzar"
+    },
+    {
+      "id": "e39",
+      "source": "flow_escalamiento_nivel",
+      "target": "nivel_exclusivo",
+      "type": "enables",
+      "label": "puede alcanzar"
+    },
+    {
+      "id": "e40",
+      "source": "nivel_verificado",
+      "target": "benefit_insignia",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e41",
+      "source": "nivel_verificado",
+      "target": "benefit_aprobacion_auto",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e42",
+      "source": "nivel_verificado",
+      "target": "benefit_atencion_preferencial",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e43",
+      "source": "nivel_verificado",
+      "target": "benefit_caza_productos",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e44",
+      "source": "nivel_verificado",
+      "target": "benefit_banner",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e45",
+      "source": "nivel_premium",
+      "target": "benefit_comunidades",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e46",
+      "source": "nivel_premium",
+      "target": "benefit_visita_comercial",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e47",
+      "source": "nivel_premium",
+      "target": "benefit_live_dropi",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e48",
+      "source": "nivel_exclusivo",
+      "target": "benefit_video_corporativo",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e49",
+      "source": "nivel_exclusivo",
+      "target": "benefit_stands",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e50",
+      "source": "nivel_exclusivo",
+      "target": "benefit_prestamos",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e51",
+      "source": "nivel_exclusivo",
+      "target": "benefit_wms",
+      "type": "includes",
+      "label": "incluye"
+    },
+    {
+      "id": "e52",
+      "source": "benefit_aprobacion_auto",
+      "target": "obj_catalogo_publico",
+      "type": "impacts",
+      "label": "acelera"
+    },
+    {
+      "id": "e53",
+      "source": "benefit_insignia",
+      "target": "obj_catalogo_publico",
+      "type": "impacts",
+      "label": "aumenta visibilidad"
+    },
+    {
+      "source": "seg_dropshipper",
+      "target": "flow_proponer_combo",
+      "type": "requires",
+      "label": "inicia"
+    },
+    {
+      "source": "flow_proponer_combo",
+      "target": "ms_product_complete",
+      "type": "depends_on",
+      "label": "requiere productos completos"
+    },
+    {
+      "source": "flow_proponer_combo",
+      "target": "ms_combo_products_selected",
+      "type": "enables",
+      "label": "genera"
+    },
+    {
+      "source": "ms_combo_products_selected",
+      "target": "ms_combo_submitted",
+      "type": "enables",
+      "label": "habilita envío"
+    },
+    {
+      "source": "ms_combo_submitted",
+      "target": "flow_aprobar_combo",
+      "type": "enables",
+      "label": "activa revisión"
+    },
+    {
+      "source": "flow_aprobar_combo",
+      "target": "ms_combo_approved",
+      "type": "enables",
+      "label": "puede resultar en"
+    },
+    {
+      "source": "flow_aprobar_combo",
+      "target": "ms_combo_rejected",
+      "type": "enables",
+      "label": "puede resultar en"
+    },
+    {
+      "source": "ms_combo_approved",
+      "target": "ms_combo_available",
+      "type": "enables",
+      "label": "habilita"
+    },
+    {
+      "source": "flow_crear_combo",
+      "target": "flow_proponer_combo",
+      "type": "enables",
+      "label": "contiene"
+    },
+    {
+      "source": "ms_combo_available",
+      "target": "obj_sales_potential",
+      "type": "impacts",
+      "label": "aumenta ticket promedio"
+    },
+    {
+      "source": "fric_stock_insuficiente",
+      "target": "ms_combo_available",
+      "type": "blocks",
+      "label": "puede romper combo"
+    },
+    {
+      "source": "fric_combo_stock_roto",
+      "target": "ms_combo_available",
+      "type": "blocks",
+      "label": "desactiva combo"
+    },
+    {
+      "source": "fric_combo_sin_descuento",
+      "target": "flow_proponer_combo",
+      "type": "blocks",
+      "label": "reduce adopción"
+    },
+    {
+      "source": "fric_supplier_no_entiende_aprobacion",
+      "target": "flow_aprobar_combo",
+      "type": "blocks",
+      "label": "bloquea aprobación"
+    },
+    {
+      "source": "proj_combos",
+      "target": "flow_proponer_combo",
+      "type": "tests",
+      "label": "prueba"
+    },
+    {
+      "source": "proj_combos",
+      "target": "flow_aprobar_combo",
+      "type": "tests",
+      "label": "prueba"
+    },
+    {
+      "source": "hyp_combo_valor_sin_descuento",
+      "target": "fric_combo_sin_descuento",
+      "type": "reduces",
+      "label": "apuesta a resolver"
+    },
+    {
+      "source": "ms_combo_available",
+      "target": "obj_catalogo",
+      "type": "impacts",
+      "label": "amplía oferta personal"
+    },
+    {
+      "source": "seg_verificado",
+      "target": "flow_aprobar_combo",
+      "type": "requires",
+      "label": "es el actor que ejecuta"
+    },
+    {
+      "source": "seg_dropshipper",
+      "target": "int_shopify",
+      "type": "integrates",
+      "label": "conecta su tienda"
+    },
+    {
+      "source": "seg_dropshipper",
+      "target": "int_tiendanube",
+      "type": "integrates",
+      "label": "conecta su tienda"
+    },
+    {
+      "source": "seg_dropshipper",
+      "target": "int_woocommerce",
+      "type": "integrates",
+      "label": "conecta su tienda"
+    },
+    {
+      "source": "seg_dropshipper",
+      "target": "int_meta",
+      "type": "integrates",
+      "label": "vende desde"
+    },
+    {
+      "source": "seg_dropshipper",
+      "target": "int_tiktok",
+      "type": "integrates",
+      "label": "vende desde"
+    },
+    {
+      "source": "int_shopify",
+      "target": "flow_gestion_ordenes",
+      "type": "feeds",
+      "label": "genera órdenes en Dropi"
+    },
+    {
+      "source": "int_tiendanube",
+      "target": "flow_gestion_ordenes",
+      "type": "feeds",
+      "label": "genera órdenes en Dropi"
+    },
+    {
+      "source": "int_woocommerce",
+      "target": "flow_gestion_ordenes",
+      "type": "feeds",
+      "label": "genera órdenes en Dropi"
+    },
+    {
+      "source": "int_meta",
+      "target": "flow_gestion_ordenes",
+      "type": "feeds",
+      "label": "genera órdenes en Dropi"
+    },
+    {
+      "source": "ms_combo_available",
+      "target": "flow_gestion_ordenes",
+      "type": "enables",
+      "label": "puede generar"
+    },
+    {
+      "source": "flow_gestion_ordenes",
+      "target": "flow_generacion_guias",
+      "type": "enables",
+      "label": "activa"
+    },
+    {
+      "source": "flow_generacion_guias",
+      "target": "flow_despacho",
+      "type": "enables",
+      "label": "habilita"
+    },
+    {
+      "source": "flow_despacho",
+      "target": "flow_gestion_novedades",
+      "type": "feeds",
+      "label": "genera novedades"
+    },
+    {
+      "source": "flow_despacho",
+      "target": "obj_sla",
+      "type": "measures",
+      "label": "determina cumplimiento"
+    },
+    {
+      "source": "flow_gestion_novedades",
+      "target": "obj_sla",
+      "type": "impacts",
+      "label": "afecta"
+    },
+    {
+      "source": "flow_configurar_garantias",
+      "target": "ms_product_warranties_completed",
+      "type": "enables",
+      "label": "completa"
+    },
+    {
+      "source": "ms_product_warranties_completed",
+      "target": "ms_product_complete",
+      "type": "enables",
+      "label": "contribuye a"
+    },
+    {
+      "source": "dec_garantia_combo",
+      "target": "flow_aprobar_combo",
+      "type": "blocks",
+      "label": "bloquea diseño"
+    },
+    {
+      "source": "dec_garantia_combo",
+      "target": "ms_combo_available",
+      "type": "blocks",
+      "label": "impide definir post-venta"
+    },
+    {
+      "source": "dec_garantia_combo",
+      "target": "flow_configurar_garantias",
+      "type": "depends_on",
+      "label": "depende de cómo se resuelva"
+    },
+    {
+      "source": "dec_visibilidad_combo",
+      "target": "ms_combo_available",
+      "type": "blocks",
+      "label": "define alcance"
+    },
+    {
+      "source": "dec_visibilidad_combo",
+      "target": "obj_catalogo",
+      "type": "impacts",
+      "label": "determina impacto en catálogo"
+    },
+    {
+      "source": "fric_bodega_sin_interseccion",
+      "target": "ms_combo_products_selected",
+      "type": "blocks",
+      "label": "impide selección válida"
+    },
+    {
+      "source": "ms_combo_products_selected",
+      "target": "ms_combo_simple",
+      "type": "enables",
+      "label": "genera (solo productos fijos)"
+    },
+    {
+      "source": "ms_combo_products_selected",
+      "target": "ms_combo_variable",
+      "type": "enables",
+      "label": "genera (con producto variable)"
+    },
+    {
+      "source": "ms_combo_approved",
+      "target": "ms_combo_garantias_configuradas",
+      "type": "enables",
+      "label": "habilita configuración de garantías"
+    },
+    {
+      "source": "dec_garantia_combo",
+      "target": "ms_combo_garantias_configuradas",
+      "type": "blocks",
+      "label": "decisión sin resolver bloquea"
+    },
+    {
+      "source": "ms_combo_garantias_configuradas",
+      "target": "ms_combo_available",
+      "type": "enables",
+      "label": "habilita disponibilidad con post-venta"
+    },
+    {
+      "id": "e_first_order_gestion",
+      "source": "ms_first_order",
+      "target": "flow_gestion_ordenes",
+      "type": "enables",
+      "label": "enables"
+    },
+    {
+      "id": "e_gestion_cont",
+      "source": "flow_gestion_ordenes",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e_despacho_cont",
+      "source": "flow_despacho",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e_novedades_cont",
+      "source": "flow_gestion_novedades",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e_ds_ordenes_cont",
+      "source": "ds_ordenes",
+      "target": "obj_continuidad_ordenes",
+      "type": "feeds",
+      "label": "feeds"
+    },
+    {
+      "id": "e_proj_catalogo_cont",
+      "source": "proj_mejora_catalogo",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e_proj_combos_cont",
+      "source": "proj_combos",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e_proj_neg_cont",
+      "source": "proj_negociaciones",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e_proj_journey_cont",
+      "source": "proj_journey_lab",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e_proj_activation_cont",
+      "source": "proj_product_activation",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "impacts"
+    },
+    {
+      "id": "e_supplier_cap_combo",
+      "source": "seg_verificado",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "puede activar (activo)"
+    },
+    {
+      "id": "e_dropshipper_cap_combo",
+      "source": "seg_dropshipper",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "puede activar (pausado)"
+    },
+    {
+      "id": "e_flow_crear_combo_cap",
+      "source": "flow_crear_combo",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "punto de entrada activo"
+    },
+    {
+      "id": "e_flow_proponer_combo_cap",
+      "source": "flow_proponer_combo",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "punto de entrada (pausado)"
+    },
+    {
+      "id": "e_dec_proveedor_pausa_proponer",
+      "source": "dec_combos_proveedor_primero",
+      "target": "flow_proponer_combo",
+      "type": "blocks",
+      "label": "pausa flujo dropshipper"
+    },
+    {
+      "id": "e_dec_proveedor_cap",
+      "source": "dec_combos_proveedor_primero",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "define enfoque actual"
+    },
+    {
+      "id": "e_cap_combo_shopify",
+      "source": "cap_combo",
+      "target": "int_shopify",
+      "type": "impacts",
+      "label": "requiere adaptación"
+    },
+    {
+      "id": "e_cap_combo_tiendanube",
+      "source": "cap_combo",
+      "target": "int_tiendanube",
+      "type": "impacts",
+      "label": "requiere adaptación"
+    },
+    {
+      "id": "e_cap_combo_woocommerce",
+      "source": "cap_combo",
+      "target": "int_woocommerce",
+      "type": "impacts",
+      "label": "requiere adaptación"
+    },
+    {
+      "id": "e_cap_combo_ordenes",
+      "source": "cap_combo",
+      "target": "flow_gestion_ordenes",
+      "type": "impacts",
+      "label": "cambia comportamiento"
+    },
+    {
+      "id": "e_cap_combo_novedades",
+      "source": "cap_combo",
+      "target": "flow_gestion_novedades",
+      "type": "impacts",
+      "label": "cambia comportamiento"
+    },
+    {
+      "id": "e_cap_combo_continuidad",
+      "source": "cap_combo",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "debe preservar"
+    },
+    {
+      "id": "e_cap_combo_negociaciones",
+      "source": "cap_combo",
+      "target": "proj_negociaciones",
+      "type": "impacts",
+      "label": "requiere nueva lógica"
+    },
+    {
+      "id": "e_fric_variante_shopify",
+      "source": "fric_combo_variante_shopify",
+      "target": "int_shopify",
+      "type": "blocks",
+      "label": "bloquea exportación con variantes"
+    },
+    {
+      "id": "e_fric_flujo_inverso_ordenes",
+      "source": "fric_combo_flujo_inverso_shopify",
+      "target": "flow_gestion_ordenes",
+      "type": "blocks",
+      "label": "flujo inverso indefinido"
+    },
+    {
+      "id": "e_fric_dispersion_neg",
+      "source": "fric_combo_dispersion_negociaciones",
+      "target": "proj_negociaciones",
+      "type": "blocks",
+      "label": "sin lógica de dispersión"
+    },
+    {
+      "id": "e_fric_emprendedor_cap",
+      "source": "fric_emprendedor_sin_perfil",
+      "target": "cap_combo",
+      "type": "blocks",
+      "label": "bloquea segmento marca/emprendedor"
+    },
+    {
+      "id": "e_dec_woo_version_int",
+      "source": "dec_combo_woocommerce_version",
+      "target": "int_woocommerce",
+      "type": "blocks",
+      "label": "define sobre qué versión"
+    },
+    {
+      "id": "e_dec_dispersion_neg",
+      "source": "dec_combo_dispersion_costos",
+      "target": "proj_negociaciones",
+      "type": "blocks",
+      "label": "bloquea estimación"
+    },
+    {
+      "id": "e_dec_scanner_cap",
+      "source": "dec_combo_codigo_scanner",
+      "target": "cap_combo",
+      "type": "blocks",
+      "label": "bloquea operación en bodega"
+    }
+  ]
+}

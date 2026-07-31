@@ -1,0 +1,202 @@
+// Shell decorativo que simula el navegador/sidebar real de Dropi alrededor del
+// prototipo Gali. Solo "Proyectos" es interactivo — el resto es decorativo (a propósito).
+
+.dropi-shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: #eef0f9;
+  background-image: radial-gradient(circle, #d8dcef 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.dropi-shell__rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 56px;
+  flex-shrink: 0;
+  padding: 20px 0;
+  background: #fff;
+  border-right: 1px solid #e2e5f0;
+}
+
+.dropi-shell__rail-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  color: #4b5169;
+  cursor: default;
+}
+
+.dropi-shell__rail-divider {
+  width: 24px;
+  height: 1px;
+  background: #e2e5f0;
+  margin: 2px 0;
+}
+
+.dropi-shell__nav {
+  width: 240px;
+  flex-shrink: 0;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.dropi-shell__topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.dropi-shell__galeria-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid #e2e5f0;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #4b5169;
+}
+
+.dropi-shell__logo {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 14px;
+  color: #ff6102;
+}
+
+.dropi-shell__version-badge {
+  background: #ffe0cc;
+  color: #cc4f01;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 100px;
+  padding: 2px 8px;
+}
+
+.dropi-shell__header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 6px;
+  margin-bottom: 8px;
+}
+
+.dropi-shell__header-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #232938;
+}
+
+.dropi-shell__collapse-icon {
+  color: #858ea6;
+}
+
+.dropi-shell__section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #232938;
+}
+
+.dropi-shell__section-icon {
+  color: #4b5169;
+  flex-shrink: 0;
+}
+
+.dropi-shell__subitems {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #d5d9ea;
+  margin-left: 15px;
+  padding-left: 12px;
+  gap: 2px;
+  margin-bottom: 6px;
+}
+
+.dropi-shell__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #4b5169;
+  cursor: default;
+
+  &--active {
+    background: #fff;
+    color: #232938;
+    font-weight: 600;
+  }
+
+  &--clickable {
+    cursor: pointer;
+    transition: background 0.15s;
+    &:hover { background: rgba(255, 255, 255, 0.6); }
+  }
+}
+
+.dropi-shell__top-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 6px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #232938;
+  border: none;
+  background: none;
+  text-align: left;
+  width: 100%;
+  cursor: default;
+
+  &--clickable {
+    cursor: pointer;
+    transition: background 0.15s;
+    &:hover { background: rgba(255, 255, 255, 0.6); }
+  }
+
+  &--active {
+    background: #fff;
+  }
+}
+
+.dropi-shell__divider {
+  height: 1px;
+  background: #d5d9ea;
+  margin: 10px 6px;
+}
+
+.dropi-shell__plain-item {
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #4b5169;
+  cursor: default;
+}
+
+.dropi-shell__main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+}

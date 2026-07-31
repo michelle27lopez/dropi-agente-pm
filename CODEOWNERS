@@ -1,0 +1,49 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# CODEOWNERS — Darwin
+#
+# Solo protege el "núcleo" del hub (según la gobernanza definida para Darwin):
+# esquema de Supabase, autenticación, rutas/API compartidas por todas las
+# células. Cualquier PR que toque estas rutas requiere aprobación de
+# @jaimeguevara-dropi antes de poder mergear a main (una vez actives branch
+# protection en GitHub — ver nota abajo).
+#
+# Lo que NO está aquí (carpetas propias de cada célula dentro de
+# hub/src/app/proyectos/ o hub/src/app/celula/<slug>/ si llegan a tener
+# archivos propios) queda libre — cada célula se auto-aprueba sus cambios.
+#
+# Para sumar dueños por célula cuando tengamos su usuario de GitHub:
+#   /hub/src/app/proyectos/brands-*   @usuario-de-kate
+#   /hub/src/app/proyectos/sellers-*  @usuario-de-juan-diego
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Directorios personales / de PM, fuera del hub
+/agente-delivery/                     @jaimeguevara-dropi
+/research-brain/                      @jaimeguevara-dropi
+/dropshipper-lab/                     @jaimeguevara-dropi
+/metrics-lab/                         @jaimeguevara-dropi
+/supplier-lab/                        @jaimeguevara-dropi
+
+# Esquema de datos — núcleo inamovible
+/hub/supabase/                        @jaimeguevara-dropi
+
+# Autenticación y control de acceso
+/hub/src/proxy.ts                     @jaimeguevara-dropi
+/hub/src/lib/                         @jaimeguevara-dropi
+/hub/src/app/login/                   @jaimeguevara-dropi
+/hub/src/app/auth/                    @jaimeguevara-dropi
+
+# Home compartido, plantilla de célula y directorio admin
+/hub/src/app/layout.tsx               @jaimeguevara-dropi
+/hub/src/app/page.tsx                 @jaimeguevara-dropi
+/hub/src/app/celula/                  @jaimeguevara-dropi
+/hub/src/app/celulas/                 @jaimeguevara-dropi
+
+# API routes núcleo (ownership, cuentas, perfiles)
+/hub/src/app/api/admin/               @jaimeguevara-dropi
+/hub/src/app/api/celulas/             @jaimeguevara-dropi
+/hub/src/app/api/me/                  @jaimeguevara-dropi
+
+# Config de build/despliegue y secretos
+/hub/.env.example                     @jaimeguevara-dropi
+/hub/next.config.ts                   @jaimeguevara-dropi
+/hub/package.json                     @jaimeguevara-dropi

@@ -1,0 +1,40 @@
+{
+ "generado": "2026-07-25",
+ "muestra_por_ciudad": 150,
+ "patron": "Nominatim/OSM",
+ "resumen": {
+  "BOGOTA": {
+   "comparadas": 35,
+   "sin_referencia": 85,
+   "referencia_descartada": 2,
+   "sin_indice": 19,
+   "error_mediano_m": 2384,
+   "p75_m": 4699,
+   "p90_m": 13161,
+   "error_mediano_cruce_m": 2384,
+   "n_cruce": 35
+  },
+  "MEDELLIN": {
+   "comparadas": 60,
+   "sin_referencia": 57,
+   "referencia_descartada": 1,
+   "sin_indice": 22,
+   "error_mediano_m": 1864,
+   "p75_m": 3370,
+   "p90_m": 6201,
+   "error_mediano_cruce_m": 1864,
+   "n_cruce": 55
+  },
+  "CALI": {
+   "comparadas": 44,
+   "sin_referencia": 58,
+   "referencia_descartada": 0,
+   "sin_indice": 32,
+   "error_mediano_m": 1730,
+   "p75_m": 5151,
+   "p90_m": 7492,
+   "error_mediano_cruce_m": 1730,
+   "n_cruce": 44
+  }
+ }
+}

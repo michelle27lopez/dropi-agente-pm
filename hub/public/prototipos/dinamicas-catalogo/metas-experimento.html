@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Metas del Experimento · Dinámicas de Catálogo · DCA-001</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --dropi:   #F77F00;
+      --dropi-l: #FFF3E0;
+      --bg:      #F8F9FA;
+      --card:    #ffffff;
+      --border:  #E5E7EB;
+      --fg:      #111827;
+      --muted:   #6B7280;
+      --s1: #0EA5E9;
+      --s2: #8B5CF6;
+      --s3: #10B981;
+      --s4: #F59E0B;
+      --s5: #EF4444;
+      --s6: #06B6D4;
+    }
+
+    body { background: var(--bg); color: var(--fg); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+    .section    { padding: 52px 0; border-bottom: 1px solid var(--border); }
+    .section:last-child { border-bottom: none; }
+
+    /* Header */
+    .header { background: var(--card); border-bottom: 1px solid var(--border); padding: 16px 24px; position: sticky; top: 0; z-index: 50; }
+    .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .header img   { height: 26px; }
+    .header-sep   { width: 1px; height: 22px; background: var(--border); }
+    .header-title { font-size: 13px; font-weight: 600; color: var(--muted); flex: 1; }
+    .pill         { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--dropi-l); color: var(--dropi); border: 1px solid rgba(247,127,0,.2); }
+    .pill.gray    { background: var(--bg); color: var(--muted); border-color: var(--border); }
+
+    /* Hero */
+    .hero { padding: 60px 0 48px; }
+    .hero-tag  { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--dropi); background: var(--dropi-l); border: 1px solid rgba(247,127,0,.2); border-radius: 20px; padding: 3px 12px; margin-bottom: 18px; }
+    .hero h1   { font-size: clamp(24px, 3.5vw, 36px); font-weight: 800; line-height: 1.25; color: var(--fg); margin-bottom: 16px; max-width: 660px; }
+    .hero h1 em { color: var(--dropi); font-style: normal; }
+    .hero-sub  { font-size: 15px; color: var(--muted); max-width: 580px; margin-bottom: 28px; line-height: 1.7; }
+    .formula-box { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 22px; font-size: 14px; }
+    .formula-part        { font-weight: 700; }
+    .formula-part.a      { color: var(--s1); }
+    .formula-part.b      { color: var(--s3); }
+    .formula-part.result { color: var(--dropi); }
+    .formula-op { color: var(--muted); font-size: 16px; }
+
+    /* Sections */
+    .section-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--dropi); margin-bottom: 8px; }
+    .section-title { font-size: clamp(18px, 2.5vw, 24px); font-weight: 800; color: var(--fg); margin-bottom: 8px; }
+    .section-desc  { font-size: 14px; color: var(--muted); margin-bottom: 28px; max-width: 620px; line-height: 1.7; }
+
+    /* Metric cards */
+    .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+    .metric-card  { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; position: relative; overflow: hidden; }
+    .metric-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background: var(--accent, var(--dropi)); }
+    .metric-value { font-size: 26px; font-weight: 800; color: var(--fg); line-height: 1.1; margin-bottom: 6px; }
+    .metric-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
+    .metric-desc  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .metric-badge { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border); }
+    table       { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead tr    { background: var(--bg); }
+    thead th    { padding: 11px 16px; text-align: left; font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; border-bottom: 1px solid var(--border); }
+    tbody tr    { border-bottom: 1px solid #F3F4F6; background: var(--card); transition: background .12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--bg); }
+    tbody td    { padding: 11px 16px; color: var(--muted); vertical-align: middle; }
+    td.num  { font-weight: 700; color: var(--fg); font-variant-numeric: tabular-nums; }
+    td.hi   { color: var(--s5); font-weight: 700; }
+    td.ok   { color: var(--s3); font-weight: 700; }
+    td.warn { color: var(--s4); font-weight: 700; }
+    td.blue { color: var(--s1); font-weight: 700; }
+    .row-current    { background: var(--dropi-l) !important; }
+    .row-current td { color: var(--fg); }
+    .row-target     { background: #ECFDF5 !important; }
+    .row-target td  { color: var(--fg); }
+
+    /* Scenario cards */
+    .scenario-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+    .scenario-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 22px; position: relative; overflow: hidden; }
+    .scenario-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background: var(--sc, var(--dropi)); }
+    .scenario-num    { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--sc, var(--dropi)); color: #fff; font-size: 11px; font-weight: 800; margin-bottom: 10px; }
+    .scenario-title  { font-size: 14px; font-weight: 700; color: var(--fg); margin-bottom: 3px; }
+    .scenario-sub    { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.5; }
+    .scenario-orders { font-size: 28px; font-weight: 800; color: var(--sc, var(--dropi)); line-height: 1; margin-bottom: 3px; }
+    .scenario-orders-label { font-size: 10px; color: var(--muted); margin-bottom: 14px; text-transform: uppercase; letter-spacing: .06em; }
+    .scenario-stats { display: flex; flex-direction: column; gap: 4px; }
+    .scenario-stat  { display: flex; justify-content: space-between; align-items: center; font-size: 12px; padding: 5px 0; border-bottom: 1px solid #F3F4F6; }
+    .scenario-stat:last-child { border-bottom: none; }
+    .stat-label { color: var(--muted); }
+    .stat-value { font-weight: 700; color: var(--fg); }
+    .scenario-tag  { display: inline-block; margin-top: 12px; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+    .tag-reach   { background: #ECFDF5; color: var(--s3); border-color: rgba(16,185,129,.2); }
+    .tag-partial { background: #EFF6FF; color: var(--s1); border-color: rgba(14,165,233,.2); }
+
+    /* Progress */
+    .progress-list   { display: flex; flex-direction: column; gap: 18px; }
+    .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .progress-name   { font-size: 13px; font-weight: 700; }
+    .progress-pct    { font-size: 13px; font-weight: 800; }
+    .progress-detail { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    .progress-track  { height: 8px; background: var(--bg); border-radius: 99px; overflow: hidden; border: 1px solid var(--border); }
+    .progress-fill   { height: 100%; border-radius: 99px; }
+
+    /* Levers */
+    .lever-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .lever-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 26px; }
+    .lever-icon   { font-size: 28px; margin-bottom: 10px; }
+    .lever-title  { font-size: 15px; font-weight: 800; color: var(--fg); margin-bottom: 4px; }
+    .lever-metric { font-size: 11px; font-weight: 700; color: var(--dropi); margin-bottom: 10px; letter-spacing: .04em; text-transform: uppercase; }
+    .lever-desc   { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 14px; }
+    .lever-list   { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .lever-list li { font-size: 13px; color: var(--muted); padding-left: 16px; position: relative; line-height: 1.5; }
+    .lever-list li::before { content:'·'; position: absolute; left: 4px; color: var(--dropi); font-weight: 700; }
+
+    /* Callout */
+    .callout { border-radius: 12px; padding: 14px 18px; display: flex; gap: 12px; align-items: flex-start; margin-bottom: 24px; }
+    .callout:last-child { margin-bottom: 0; }
+    .callout.info    { background: #EFF6FF; border: 1px solid rgba(14,165,233,.25); }
+    .callout.warning { background: #FFFBEB; border: 1px solid rgba(245,158,11,.25); }
+    .callout.success { background: #ECFDF5; border: 1px solid rgba(16,185,129,.25); }
+    .callout.orange  { background: var(--dropi-l); border: 1px solid rgba(247,127,0,.25); }
+    .callout.red     { background: #FEF2F2; border: 1px solid rgba(239,68,68,.25); }
+    .callout-icon { font-size: 16px; flex-shrink: 0; line-height: 1.5; }
+    .callout-text { font-size: 13px; color: var(--muted); line-height: 1.7; }
+    .callout-text strong { color: var(--fg); }
+
+    /* Conclusion */
+    .conclusion     { background: var(--dropi-l); border: 1px solid rgba(247,127,0,.2); border-radius: 16px; padding: 32px; }
+    .conclusion p   { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 12px; }
+    .conclusion p:last-child { margin-bottom: 0; }
+    .conclusion strong { color: var(--fg); }
+    .conclusion .dca-tag { display: inline-block; background: var(--dropi); color: #fff; border-radius: 20px; padding: 3px 14px; font-size: 11px; font-weight: 700; margin-bottom: 14px; }
+
+    /* Def grid */
+    .def-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+    .def-card  { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
+    .def-term  { font-size: 11px; font-weight: 700; color: var(--dropi); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+    .def-body  { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    footer { padding: 28px 24px; text-align: center; border-top: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+    .spacer { height: 28px; }
+
+    @media (max-width: 640px) {
+      .lever-grid { grid-template-columns: 1fr; }
+      .def-grid   { grid-template-columns: 1fr; }
+      .formula-box { flex-direction: column; align-items: flex-start; }
+    }
+    @media print {
+      .header { position: static; }
+      .section { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-inner">
+    <img src="https://d1l4mzebo786pw.cloudfront.net/image/input/white-labels/1/logos/secondary_logo/logo-naranja.png" alt="Dropi" />
+    <div class="header-sep"></div>
+    <span class="header-title">Supplier Success · Productividad del catálogo · DCA-001</span>
+    <span class="pill gray">1.079.982 productos vigentes</span>
+    <span class="pill">3,2M órdenes/mes</span>
+  </div>
+</header>
+
+<!-- Hero — La meta -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-tag">Meta elegida · DCA-001 · Dinámicas de Catálogo</div>
+    <h1>La meta: <em>10 millones</em> de órdenes mensuales.</h1>
+    <p class="hero-sub">
+      Esta es la apuesta de Dinámicas de Catálogo. No es el único camino posible, pero es el más eficiente: combina las dos palancas del crecimiento sin depender exclusivamente de ninguna.
+    </p>
+
+    <!-- Meta card -->
+    <div style="background:var(--card); border:2px solid var(--s6); border-radius:18px; padding:32px 36px; max-width:700px; margin-bottom:28px; position:relative; overflow:hidden;">
+      <div style="position:absolute; top:0; left:0; right:0; height:4px; background:var(--s6);"></div>
+      <div style="display:flex; align-items:flex-start; gap:24px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:180px;">
+          <div style="font-size:11px; font-weight:700; color:var(--s6); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;">Objetivo</div>
+          <div style="font-size:52px; font-weight:800; color:var(--fg); line-height:1; margin-bottom:4px;">10M</div>
+          <div style="font-size:14px; color:var(--muted);">órdenes mensuales</div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px; flex:2; min-width:240px; justify-content:center;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border-radius:10px; background:rgba(6,182,212,.1); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">📦</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:var(--fg);">1.250.000 productos con orden</div>
+              <div style="font-size:12px; color:var(--muted);">60% del catálogo total vendiendo · hoy estamos en 49,7%</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border-radius:10px; background:rgba(6,182,212,.1); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">🔁</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:var(--fg);">8 órdenes promedio por producto activo</div>
+              <div style="font-size:12px; color:var(--muted);">Productividad objetivo · hoy estamos en 5,96</div>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:36px; height:36px; border-radius:10px; background:rgba(6,182,212,.1); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0;">🗂️</div>
+            <div>
+              <div style="font-size:13px; font-weight:700; color:var(--fg);">~2.083.333 productos en catálogo total</div>
+              <div style="font-size:12px; color:var(--muted);">~430K menos que si la operatividad se mantiene en 49,7%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px; padding-top:20px; border-top:1px solid var(--border); display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <div style="font-size:16px; font-weight:800; color:var(--fg); background:rgba(6,182,212,.08); border:1px solid rgba(6,182,212,.25); border-radius:10px; padding:8px 18px; font-variant-numeric:tabular-nums;">
+          1.250.000 × 8 = <span style="color:var(--s6);">10.000.000</span>
+        </div>
+        <div style="font-size:13px; color:var(--muted); flex:1; min-width:200px;">
+          Productos con orden × productividad promedio = órdenes mensuales
+        </div>
+      </div>
+    </div>
+
+    <p style="font-size:13px; color:var(--muted); max-width:640px; line-height:1.7;">
+      Todo lo que sigue es el contexto que soporta esta decisión: la situación actual del catálogo, los escenarios alternativos analizados y las dos palancas que Dinámicas de Catálogo debe validar para llegar ahí.
+    </p>
+  </div>
+</div>
+
+<!-- Contexto divider -->
+<div style="background:var(--bg); border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:16px 0;">
+  <div class="container">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.1em;">Contexto que soporta la decisión</span>
+      <div style="flex:1; height:1px; background:var(--border);"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Línea base -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">Situación actual</div>
+    <h2 class="section-title">Línea base del catálogo</h2>
+    <p class="section-desc">Los cuatro números que describen la productividad del catálogo hoy.</p>
+
+    <div class="metric-grid">
+      <div class="metric-card" style="--accent:#F77F00">
+        <div class="metric-label">Catálogo total</div>
+        <div class="metric-value">1.079.982</div>
+        <div class="metric-desc">Productos vigentes en plataforma.</div>
+      </div>
+      <div class="metric-card" style="--accent:#10B981">
+        <div class="metric-label">Con al menos una orden</div>
+        <div class="metric-value">536.590</div>
+        <div class="metric-desc">Productos que generan al menos una orden mensual.</div>
+        <div class="metric-badge">49,7% del catálogo vigente</div>
+      </div>
+      <div class="metric-card" style="--accent:#EF4444">
+        <div class="metric-label">Sin orden</div>
+        <div class="metric-value">543.392</div>
+        <div class="metric-desc">Productos publicados que no generan órdenes.</div>
+        <div class="metric-badge">50,3% del catálogo vigente</div>
+      </div>
+      <div class="metric-card" style="--accent:#8B5CF6">
+        <div class="metric-label">Productividad actual</div>
+        <div class="metric-value">5,96</div>
+        <div class="metric-desc">Órdenes promedio mensuales por producto con al menos una orden.</div>
+        <div class="metric-badge">= 3.200.000 / 536.590</div>
+      </div>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="callout info">
+      <span class="callout-icon">💡</span>
+      <div class="callout-text">
+        <strong>5,96 es un promedio, no un porcentaje.</strong> Cada producto que hoy vende produce en promedio 5,96 órdenes al mes. Hoy ya estamos cerca de 6 órdenes por producto activo. El reto estratégico es llevar ese número hacia 8+ mientras aumentamos la proporción de productos que venden.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Primer hallazgo -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">Primer hallazgo</div>
+    <h2 class="section-title">El techo del catálogo actual</h2>
+    <p class="section-desc">Incluso en el mejor escenario posible con el catálogo vigente, la productividad actual no es suficiente para llegar a 10M.</p>
+
+    <div class="callout red">
+      <span class="callout-icon">🧱</span>
+      <div class="callout-text">
+        <strong>Si todo el catálogo vigente vendiera al promedio actual:</strong><br />
+        1.079.982 productos × 5,96 órdenes = <strong>~6.436.493 órdenes/mes</strong><br />
+        Ni activando el 100% del catálogo actual alcanzamos 10M con la productividad de hoy. Necesitamos mejorar productividad y seguir ampliando catálogo sano.
+      </div>
+    </div>
+
+    <div class="spacer" style="height:16px"></div>
+
+    <p style="font-size:14px; color:var(--muted); margin-bottom:16px; line-height:1.7">Si mantenemos la productividad actual de 5,96 y solo crecemos productos con orden:</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Meta de órdenes</th>
+            <th>Productividad</th>
+            <th>Productos con orden requeridos</th>
+            <th>vs. catálogo vigente actual</th>
+            <th>Lectura</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-current">
+            <td><strong>3,2M · Situación actual</strong></td>
+            <td class="num">5,96</td>
+            <td class="num">536.590</td>
+            <td class="ok">49,7%</td>
+            <td>Estado actual del catálogo.</td>
+          </tr>
+          <tr>
+            <td><strong>5M órdenes</strong></td>
+            <td class="num">5,96</td>
+            <td class="num">838.926</td>
+            <td class="warn">77,7%</td>
+            <td>Alcanzable con el catálogo vigente.</td>
+          </tr>
+          <tr>
+            <td><strong>6,4M órdenes (techo)</strong></td>
+            <td class="num">5,96</td>
+            <td class="num">1.079.982</td>
+            <td class="warn">100%</td>
+            <td>Solo si todo el catálogo vigente vendiera al promedio actual.</td>
+          </tr>
+          <tr>
+            <td><strong>10M órdenes</strong></td>
+            <td class="num">5,96</td>
+            <td class="num">1.677.852</td>
+            <td class="hi">155,4%</td>
+            <td>Supera el catálogo vigente. Imposible sin mejorar productividad.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="callout warning">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-text">
+        <strong>Conclusión:</strong> con la productividad actual de 5,96, el techo del catálogo vigente está en ~6,4M órdenes. Para llegar a 10M se necesita mejorar productividad promedio hacia 8 o más órdenes por producto activo, combinado con más productos vendiendo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabla de combinaciones -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">Tabla de combinaciones</div>
+    <h2 class="section-title">Cómo se llega a 10M combinando las dos palancas</h2>
+    <p class="section-desc">Diferentes combinaciones de productos con orden y productividad promedio y su impacto en el volumen mensual de órdenes.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Productos con orden</th>
+            <th>Productividad promedio</th>
+            <th>Órdenes mensuales</th>
+            <th>Progreso a 10M</th>
+            <th>Nota</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-current">
+            <td class="num">536.590</td>
+            <td class="num">5,96</td>
+            <td class="num">3.200.000</td>
+            <td><span style="color:var(--dropi); font-weight:700">32%</span></td>
+            <td>Situación actual.</td>
+          </tr>
+          <tr>
+            <td class="num">700.000</td>
+            <td class="num">6,00</td>
+            <td class="num">4.200.000</td>
+            <td><span style="color:var(--s1); font-weight:700">42%</span></td>
+            <td>Activar más productos, misma rotación.</td>
+          </tr>
+          <tr>
+            <td class="num">1.250.000</td>
+            <td class="num">8,00</td>
+            <td class="num">10.000.000</td>
+            <td><span style="color:var(--s6); font-weight:700">100% ✓</span></td>
+            <td>60% operatividad × prod. 8 — catálogo total ~2,08M (más eficiente que S3).</td>
+          </tr>
+          <tr>
+            <td class="num">800.000</td>
+            <td class="num">7,00</td>
+            <td class="num">5.600.000</td>
+            <td><span style="color:var(--s2); font-weight:700">56%</span></td>
+            <td>Más productos + ligera mejora de rotación.</td>
+          </tr>
+          <tr>
+            <td class="num">1.000.000</td>
+            <td class="num">8,00</td>
+            <td class="num">8.000.000</td>
+            <td><span style="color:var(--s2); font-weight:700">80%</span></td>
+            <td>Palancas combinadas. Zona de tracción.</td>
+          </tr>
+          <tr>
+            <td class="num">1.200.000</td>
+            <td class="num">8,00</td>
+            <td class="num">9.600.000</td>
+            <td><span style="color:var(--s3); font-weight:700">96%</span></td>
+            <td>Muy cerca de la meta.</td>
+          </tr>
+          <tr class="row-target">
+            <td class="num" style="color:var(--s3)">1.250.000</td>
+            <td class="num" style="color:var(--s3)">8,00</td>
+            <td class="num" style="color:var(--s3)">10.000.000</td>
+            <td><span style="color:var(--s3); font-weight:800">100% ✓</span></td>
+            <td><strong style="color:var(--s3)">Meta principal: ruta balanceada.</strong></td>
+          </tr>
+          <tr>
+            <td class="num">1.079.982</td>
+            <td class="num">9,26</td>
+            <td class="num">~10.000.000</td>
+            <td><span style="color:var(--s4); font-weight:700">100% ✓</span></td>
+            <td>Si todo el catálogo vigente vendiera a 9,26 órdenes. Sin catálogo nuevo.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="callout success">
+      <span class="callout-icon">🎯</span>
+      <div class="callout-text">
+        <strong>Ruta principal:</strong> 1.250.000 productos con orden vendiendo en promedio <strong>8 órdenes al mes</strong>. Eso implica pasar del 49,7% al 57,8% de catálogo activo, y subir la productividad de 5,96 a 8. <strong>Dinámicas de Catálogo debe ser el sistema que valide cómo lograrlo.</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Escenarios -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">Escenarios clave</div>
+    <h2 class="section-title">5 formas de llegar a 10M</h2>
+    <p class="section-desc">Los cinco escenarios que representan caminos distintos hacia la meta, cada uno con sus implicaciones de catálogo y productividad.</p>
+
+    <div class="def-grid">
+      <div class="def-card">
+        <div class="def-term">Productos con orden</div>
+        <div class="def-body">Productos que generan al menos una orden mensual.</div>
+      </div>
+      <div class="def-card">
+        <div class="def-term">Productividad</div>
+        <div class="def-body">Órdenes promedio por producto con orden al mes.</div>
+      </div>
+      <div class="def-card">
+        <div class="def-term">Catálogo total requerido</div>
+        <div class="def-body">Estimado asumiendo que el 49,7% del catálogo total genera órdenes (proporción actual).</div>
+      </div>
+    </div>
+
+    <div class="scenario-grid">
+
+      <!-- S1 -->
+      <div class="scenario-card" style="--sc:var(--s1)">
+        <div class="scenario-num">1</div>
+        <div class="scenario-title">Primer paso: activar más</div>
+        <div class="scenario-sub">700K productos con orden · productividad 6. Mantener rotación actual y activar más catálogo.</div>
+        <div class="scenario-orders">4,2M</div>
+        <div class="scenario-orders-label">órdenes mensuales</div>
+        <div class="scenario-stats">
+          <div class="scenario-stat"><span class="stat-label">Productos con orden</span><span class="stat-value">700.000</span></div>
+          <div class="scenario-stat"><span class="stat-label">Productividad promedio</span><span class="stat-value">6,00</span></div>
+          <div class="scenario-stat"><span class="stat-label">% catálogo con orden</span><span class="stat-value">64,8%</span></div>
+          <div class="scenario-stat"><span class="stat-label">Catálogo total requerido</span><span class="stat-value">~1.408.450</span></div>
+        </div>
+        <span class="scenario-tag tag-partial">42% del camino a 10M</span>
+      </div>
+
+      <!-- S2 -->
+      <div class="scenario-card" style="--sc:var(--s2)">
+        <div class="scenario-num">2</div>
+        <div class="scenario-title">Tracción media</div>
+        <div class="scenario-sub">800K productos con orden · productividad 7. Primeras mejoras de rotación.</div>
+        <div class="scenario-orders">5,6M</div>
+        <div class="scenario-orders-label">órdenes mensuales</div>
+        <div class="scenario-stats">
+          <div class="scenario-stat"><span class="stat-label">Productos con orden</span><span class="stat-value">800.000</span></div>
+          <div class="scenario-stat"><span class="stat-label">Productividad promedio</span><span class="stat-value">7,00</span></div>
+          <div class="scenario-stat"><span class="stat-label">% catálogo con orden</span><span class="stat-value">49,7% (actual)</span></div>
+          <div class="scenario-stat"><span class="stat-label">Catálogo total requerido</span><span class="stat-value">~1.609.658</span></div>
+        </div>
+        <span class="scenario-tag tag-partial">56% del camino a 10M</span>
+      </div>
+
+      <!-- S3 -->
+      <div class="scenario-card" style="--sc:var(--s3)">
+        <div class="scenario-num">3</div>
+        <div class="scenario-title">Ruta 10M balanceada ★</div>
+        <div class="scenario-sub">1,25M productos con orden · productividad 8. La combinación más sostenible.</div>
+        <div class="scenario-orders">10M</div>
+        <div class="scenario-orders-label">órdenes mensuales</div>
+        <div class="scenario-stats">
+          <div class="scenario-stat"><span class="stat-label">Productos con orden</span><span class="stat-value">1.250.000</span></div>
+          <div class="scenario-stat"><span class="stat-label">Productividad promedio</span><span class="stat-value">8,00</span></div>
+          <div class="scenario-stat"><span class="stat-label">% catálogo con orden</span><span class="stat-value">49,7% (actual)</span></div>
+          <div class="scenario-stat"><span class="stat-label">Catálogo total requerido</span><span class="stat-value">~2.514.085</span></div>
+        </div>
+        <span class="scenario-tag tag-reach">✓ Meta principal</span>
+      </div>
+
+      <!-- S4 -->
+      <div class="scenario-card" style="--sc:var(--s4)">
+        <div class="scenario-num">4</div>
+        <div class="scenario-title">Todo el catálogo vende</div>
+        <div class="scenario-sub">1.079.982 productos con orden · productividad 9,26. Sin agregar catálogo nuevo.</div>
+        <div class="scenario-orders">~10M</div>
+        <div class="scenario-orders-label">órdenes mensuales</div>
+        <div class="scenario-stats">
+          <div class="scenario-stat"><span class="stat-label">Productos con orden</span><span class="stat-value">1.079.982</span></div>
+          <div class="scenario-stat"><span class="stat-label">Productividad promedio</span><span class="stat-value">9,26</span></div>
+          <div class="scenario-stat"><span class="stat-label">% catálogo con orden</span><span class="stat-value">100%</span></div>
+          <div class="scenario-stat"><span class="stat-label">Catálogo total requerido</span><span class="stat-value">1.079.982 (el actual)</span></div>
+        </div>
+        <span class="scenario-tag tag-reach">✓ Sin catálogo nuevo</span>
+      </div>
+
+      <!-- S6 -->
+      <div class="scenario-card" style="--sc:var(--s6)">
+        <div class="scenario-num">6</div>
+        <div class="scenario-title">60% operatividad × productividad 8</div>
+        <div class="scenario-sub">Llegar a 10M con 60% del catálogo vendiendo a 8 órdenes. Requiere menos catálogo total que la ruta balanceada.</div>
+        <div class="scenario-orders">10M</div>
+        <div class="scenario-orders-label">órdenes mensuales</div>
+        <div class="scenario-stats">
+          <div class="scenario-stat"><span class="stat-label">Productos con orden</span><span class="stat-value">1.250.000</span></div>
+          <div class="scenario-stat"><span class="stat-label">Productividad promedio</span><span class="stat-value">8,00</span></div>
+          <div class="scenario-stat"><span class="stat-label">% catálogo con orden</span><span class="stat-value">60,0%</span></div>
+          <div class="scenario-stat"><span class="stat-label">Catálogo total requerido</span><span class="stat-value">~2.083.333</span></div>
+        </div>
+        <span class="scenario-tag tag-reach" style="background:#ECFEFF; color:var(--s6); border-color:rgba(6,182,212,.2)">✓ Alcanza 10M — más eficiente</span>
+      </div>
+
+      <!-- S5 -->
+      <div class="scenario-card" style="--sc:var(--s5)">
+        <div class="scenario-num">5</div>
+        <div class="scenario-title">Sin mejorar productividad</div>
+        <div class="scenario-sub">Solo crecer productos con orden manteniendo la productividad actual de 5,96.</div>
+        <div class="scenario-orders">10M</div>
+        <div class="scenario-orders-label">órdenes mensuales</div>
+        <div class="scenario-stats">
+          <div class="scenario-stat"><span class="stat-label">Productos con orden</span><span class="stat-value">1.677.852</span></div>
+          <div class="scenario-stat"><span class="stat-label">Productividad promedio</span><span class="stat-value">5,96 (sin mejorar)</span></div>
+          <div class="scenario-stat"><span class="stat-label">% catálogo con orden</span><span class="stat-value">49,7% (actual)</span></div>
+          <div class="scenario-stat"><span class="stat-label">Catálogo total requerido</span><span class="stat-value">~3.375.961</span></div>
+        </div>
+        <span class="scenario-tag" style="background:#FEF2F2; color:var(--s5); border-color:rgba(239,68,68,.2)">Mayor catálogo requerido</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Tabla resumen -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">Resumen comparativo</div>
+    <h2 class="section-title">Los 5 escenarios lado a lado</h2>
+    <p class="section-desc">Comparación directa de catálogo requerido, productividad y órdenes resultantes.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Escenario</th>
+            <th>Prods. con orden</th>
+            <th>Productividad</th>
+            <th>Órdenes</th>
+            <th>Catálogo total req.</th>
+            <th>Palanca dominante</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-current">
+            <td><strong>Situación actual</strong></td>
+            <td class="num">536.590</td><td class="num">5,96</td>
+            <td class="num">3.200.000</td><td class="num">1.079.982</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--s1)">① Primer paso</strong></td>
+            <td class="num">700.000</td><td class="num">6,00</td>
+            <td class="num">4.200.000</td><td class="num warn">~1.408.450</td>
+            <td>+ productos con orden</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--s2)">② Tracción media</strong></td>
+            <td class="num">800.000</td><td class="num">7,00</td>
+            <td class="num">5.600.000</td><td class="num warn">~1.609.658</td>
+            <td>Ambas palancas</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--s6)">⑥ 60% operatividad × prod. 8</strong></td>
+            <td class="num">1.250.000</td><td class="num">8,00</td>
+            <td class="num">10.000.000</td><td class="num" style="color:var(--s6); font-weight:700">~2.083.333</td>
+            <td>Ambas palancas · ~430K menos catálogo que S3</td>
+          </tr>
+          <tr class="row-target">
+            <td><strong style="color:var(--s3)">③ Ruta 10M balanceada ★</strong></td>
+            <td class="num">1.250.000</td><td class="num">8,00</td>
+            <td class="num">10.000.000</td><td class="num warn">~2.514.085</td>
+            <td><strong style="color:var(--s3)">Ambas palancas — meta</strong></td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--s4)">④ Todo el catálogo vende</strong></td>
+            <td class="num">1.079.982</td><td class="num">9,26</td>
+            <td class="num">~10.000.000</td><td class="num ok">1.079.982</td>
+            <td>+ productividad</td>
+          </tr>
+          <tr>
+            <td><strong style="color:var(--s5)">⑤ Sin mejorar prod.</strong></td>
+            <td class="num">1.677.852</td><td class="num">5,96</td>
+            <td class="num">10.000.000</td><td class="num hi">~3.375.961</td>
+            <td>Solo catálogo</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="spacer"></div>
+    <div class="callout success">
+      <span class="callout-icon">📌</span>
+      <div class="callout-text">
+        <strong>Lectura clave:</strong> el Escenario 3 (1.250.000 × 8) es la ruta más sostenible porque combina ambas palancas sin depender exclusivamente de ninguna. El Escenario 4 es fascinante: si todo el catálogo vigente vendiera a 9,26 órdenes/mes, llegaríamos a 10M sin agregar un solo producto. El Escenario 5 muestra el costo de no mejorar productividad: necesitaríamos más del doble del catálogo total actual.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Comparación visual -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">Comparación visual</div>
+    <h2 class="section-title">Progreso hacia 10M de órdenes</h2>
+    <p class="section-desc">Cuánto aporta cada escenario a la meta y qué combinación de palancas utiliza.</p>
+
+    <div class="progress-list">
+      <div>
+        <div class="progress-header">
+          <span class="progress-name" style="color:var(--dropi)">Situación actual</span>
+          <span class="progress-pct" style="color:var(--dropi)">32%</span>
+        </div>
+        <div class="progress-detail">3.200.000 órdenes · 536.590 productos con orden · productividad 5,96</div>
+        <div class="progress-track"><div class="progress-fill" style="width:32%; background:var(--dropi)"></div></div>
+      </div>
+      <div>
+        <div class="progress-header">
+          <span class="progress-name" style="color:var(--s1)">① Primer paso — 700K × 6</span>
+          <span class="progress-pct" style="color:var(--s1)">42%</span>
+        </div>
+        <div class="progress-detail">4.200.000 órdenes · activar más catálogo · productividad 6</div>
+        <div class="progress-track"><div class="progress-fill" style="width:42%; background:var(--s1)"></div></div>
+      </div>
+      <div>
+        <div class="progress-header">
+          <span class="progress-name" style="color:var(--s6)">⑥ 60% operatividad × productividad 8</span>
+          <span class="progress-pct" style="color:var(--s6)">100%</span>
+        </div>
+        <div class="progress-detail">10.000.000 órdenes · 1.250.000 productos con orden · catálogo total ~2.083.333 · ~430K menos que S3</div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--s6)"></div></div>
+      </div>
+      <div>
+        <div class="progress-header">
+          <span class="progress-name" style="color:var(--s2)">② Tracción media — 800K × 7</span>
+          <span class="progress-pct" style="color:var(--s2)">56%</span>
+        </div>
+        <div class="progress-detail">5.600.000 órdenes · más productos + primera mejora de rotación</div>
+        <div class="progress-track"><div class="progress-fill" style="width:56%; background:var(--s2)"></div></div>
+      </div>
+      <div>
+        <div class="progress-header">
+          <span class="progress-name" style="color:var(--s3)">③ Ruta 10M balanceada ★ — 1.250K × 8</span>
+          <span class="progress-pct" style="color:var(--s3)">100%</span>
+        </div>
+        <div class="progress-detail">10.000.000 órdenes · ruta más equilibrada · meta principal</div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--s3)"></div></div>
+      </div>
+      <div>
+        <div class="progress-header">
+          <span class="progress-name" style="color:var(--s4)">④ Todo el catálogo vende — 1.080K × 9,26</span>
+          <span class="progress-pct" style="color:var(--s4)">100%</span>
+        </div>
+        <div class="progress-detail">~10.000.000 órdenes · sin catálogo nuevo · máxima rotación del vigente</div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--s4)"></div></div>
+      </div>
+      <div>
+        <div class="progress-header">
+          <span class="progress-name" style="color:var(--s5)">⑤ Sin mejorar productividad — 1.678K × 5,96</span>
+          <span class="progress-pct" style="color:var(--s5)">100%</span>
+        </div>
+        <div class="progress-detail">10.000.000 órdenes · catálogo total requerido ~3,4M · ruta menos eficiente</div>
+        <div class="progress-track"><div class="progress-fill" style="width:100%; background:var(--s5)"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Palancas -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">Palancas de productividad</div>
+    <h2 class="section-title">¿Cómo se mueven esos números?</h2>
+    <p class="section-desc">DCA-001 debe validar qué tipo de campaña mueve cada palanca. El experimento mide ambas.</p>
+
+    <div class="lever-grid">
+      <div class="lever-card">
+        <div class="lever-icon">📦</div>
+        <div class="lever-title">Palanca 1 — Más productos con orden</div>
+        <div class="lever-metric">Métrica: % del catálogo vigente con al menos una orden</div>
+        <p class="lever-desc">Del 49,7% actual hacia el 60% o más. Convertir productos publicados sin venta en productos que generan al menos una orden mensual.</p>
+        <ul class="lever-list">
+          <li>Productos sin primera orden</li>
+          <li>Productos con stock alto y baja rotación</li>
+          <li>Suppliers nuevos o recién verificados</li>
+          <li>Campañas de remate e inventario quieto</li>
+          <li>Campañas de visibilidad para catálogos dormidos</li>
+          <li>Campañas de primera venta para suppliers nuevos</li>
+        </ul>
+      </div>
+      <div class="lever-card">
+        <div class="lever-icon">🔁</div>
+        <div class="lever-title">Palanca 2 — Más órdenes por producto activo</div>
+        <div class="lever-metric">Métrica: Órdenes promedio por producto con venta al mes</div>
+        <p class="lever-desc">De 5,96 hacia 8 o más órdenes promedio por producto activo. Que los productos que ya venden roten más veces al mes.</p>
+        <ul class="lever-list">
+          <li>Campañas de temporada (Mundial, Black Week, Navidad)</li>
+          <li>Productos de alto margen para pauta</li>
+          <li>Productos seleccionados por Dropi en vitrinas curadas</li>
+          <li>Categorías temporales beta</li>
+          <li>Combos con descuento o precio especial</li>
+          <li>Campañas de alta visibilidad a dropshippers</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Conclusión -->
+<div class="section">
+  <div class="container">
+    <div class="section-label">Conclusión estratégica</div>
+    <h2 class="section-title">Por qué importa el experimento</h2>
+    <div class="spacer" style="height:16px"></div>
+    <div class="conclusion">
+      <div class="dca-tag">DCA-001 · Dinámicas de Catálogo</div>
+      <p>Con <strong>3,2M de órdenes mensuales</strong> y una productividad actual de <strong>5,96 órdenes por producto activo</strong>, Dropi ya tiene una base sólida. Pero incluso si todo el catálogo vigente vendiera al promedio actual, el techo estaría en ~6,4M órdenes. Para llegar a 10M necesitamos mejorar ambas palancas al tiempo.</p>
+      <p>La ruta más sostenible es la <strong>balanceada (Escenario 3)</strong>: llevar a <strong>1.250.000 productos con orden</strong> vendiendo en promedio <strong>8 órdenes al mes</strong>. Eso implica pasar del 49,7% al ~57,8% de catálogo activo, y subir la productividad de 5,96 a 8.</p>
+      <p><strong>Dinámicas de Catálogo debe ser el sistema que valide qué campañas mueven esas dos palancas:</strong> qué activa productos que no venden, y qué hace que los productos activos roten más. El experimento actual (Dropicup Mundial y Remates de Stock) busca generar la primera evidencia para informar ese camino.</p>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Dropi · Supplier Success · DCA-001 Dinámicas de Catálogo · Experimento lean de productividad del catálogo
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+{
+  "nodes": [
+    {
+      "id": "cap_combo",
+      "type": "capability",
+      "label": "Capacidad: Combo",
+      "description": "Capacidad del sistema para crear, gestionar y operar combos como tipo de producto. Puede ser activada por diferentes actores (supplier, dropshipper, marcas blancas). Su existencia impacta integraciones, operaciones y toda la cadena del ecosistema Dropi. Es una entidad del sistema, no un flujo de un actor específico."
+    },
+    {
+      "id": "fric_combo_variante_shopify",
+      "type": "friction",
+      "label": "Combo con variante falla en Shopify",
+      "description": "Importar a Shopify un combo que incluye un producto con variantes falla. Punto bloqueante confirmado en pruebas. Solo funciona con productos simples. Relacionado con cambios en la API de Shopify post-enero 2025."
+    },
+    {
+      "id": "fric_combo_flujo_inverso_shopify",
+      "type": "friction",
+      "label": "Flujo Shopify→Dropi indefinido para combos",
+      "description": "No se ha probado ni definido cómo llega una orden desde Shopify a Dropi cuando el producto vendido es un combo. Siguiente punto bloqueante después de resolver la exportación. Si Shopify manda la orden como producto individual, Dropi no puede identificarlo como combo."
+    },
+    {
+      "id": "fric_combo_dispersion_negociaciones",
+      "type": "friction",
+      "label": "Sin lógica de dispersión en negociaciones",
+      "description": "No existe lógica para distribuir márgenes cuando un producto con negociación activa se vende dentro de un combo. Bloquea la correcta liquidación al proveedor y la estimación del nodo Negociaciones."
+    },
+    {
+      "id": "fric_emprendedor_sin_perfil",
+      "type": "friction",
+      "label": "Perfil emprendedor no existe técnicamente",
+      "description": "El perfil de emprendedor/marca no existe como entidad técnica en la plataforma. Bloquea diferenciación de UX para ese segmento en combos. Workaround actual: un proveedor que crea su propia orden es funcionalmente un emprendedor."
+    },
+    {
+      "id": "dec_combos_proveedor_primero",
+      "type": "decision",
+      "label": "Combos: supplier crea primero [RESUELTA]",
+      "description": "Decisión tomada 2026-05-13: el supplier activa la capacidad de combo directamente (como crea un producto). El flujo donde el dropshipper propone y el supplier aprueba queda pausado hasta validación con Lucho."
+    },
+    {
+      "id": "dec_combo_woocommerce_version",
+      "type": "decision",
+      "label": "¿Combos en WooCommerce actual o v2.0?",
+      "description": "Decisión pendiente: el plugin de WooCommerce está en rediseño (v2.0 en desarrollo). Implementar combos sobre la versión actual sería reproceso. Bloquea estimación del nodo WooCommerce. Responsable: Jose Giraldo / TI."
+    },
+    {
+      "id": "dec_combo_dispersion_costos",
+      "type": "decision",
+      "label": "¿Cómo se dispersan costos en negociaciones con combo?",
+      "description": "Decisión de negocio pendiente: cuando un producto con negociación activa se vende en combo, ¿cómo se distribuye el margen entre los componentes? Bloquea estimación del nodo Negociaciones. Responsable: Lucho / Juan Diego."
+    },
+    {
+      "id": "dec_combo_marcas_blancas_multiproveedor",
+      "type": "decision",
+      "label": "¿Marcas blancas pueden combinar productos de distintos proveedores?",
+      "description": "Decisión de negocio pendiente: ¿una marca blanca puede armar un combo mezclando productos de diferentes proveedores? Tiene implicaciones logísticas (bodega común requerida) y de stock. Responsable: María / Lucho."
+    },
+    {
+      "id": "dec_combo_codigo_scanner",
+      "type": "decision",
+      "label": "¿Qué código se escanea para un combo?",
+      "description": "Decisión técnica pendiente: el combo necesita un código para ser escaneado en bodega e Icon Scanner. ¿Es un código propio del combo o el código de uno de sus componentes? Bloquea el diseño del flujo de bodega y devoluciones. Responsable: TI + Operaciones."
+    }
+  ],
+  "edges": [
+    {
+      "id": "e_supplier_cap_combo",
+      "source": "seg_verificado",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "puede activar (activo)"
+    },
+    {
+      "id": "e_dropshipper_cap_combo",
+      "source": "seg_dropshipper",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "puede activar (pausado)"
+    },
+    {
+      "id": "e_flow_crear_combo_cap",
+      "source": "flow_crear_combo",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "punto de entrada activo"
+    },
+    {
+      "id": "e_flow_proponer_combo_cap",
+      "source": "flow_proponer_combo",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "punto de entrada (pausado)"
+    },
+    {
+      "id": "e_dec_proveedor_pausa_proponer",
+      "source": "dec_combos_proveedor_primero",
+      "target": "flow_proponer_combo",
+      "type": "blocks",
+      "label": "pausa flujo dropshipper"
+    },
+    {
+      "id": "e_dec_proveedor_cap",
+      "source": "dec_combos_proveedor_primero",
+      "target": "cap_combo",
+      "type": "enables",
+      "label": "define enfoque actual"
+    },
+    {
+      "id": "e_cap_combo_shopify",
+      "source": "cap_combo",
+      "target": "int_shopify",
+      "type": "impacts",
+      "label": "requiere adaptación"
+    },
+    {
+      "id": "e_cap_combo_tiendanube",
+      "source": "cap_combo",
+      "target": "int_tiendanube",
+      "type": "impacts",
+      "label": "requiere adaptación"
+    },
+    {
+      "id": "e_cap_combo_woocommerce",
+      "source": "cap_combo",
+      "target": "int_woocommerce",
+      "type": "impacts",
+      "label": "requiere adaptación"
+    },
+    {
+      "id": "e_cap_combo_ordenes",
+      "source": "cap_combo",
+      "target": "flow_gestion_ordenes",
+      "type": "impacts",
+      "label": "cambia comportamiento"
+    },
+    {
+      "id": "e_cap_combo_novedades",
+      "source": "cap_combo",
+      "target": "flow_gestion_novedades",
+      "type": "impacts",
+      "label": "cambia comportamiento"
+    },
+    {
+      "id": "e_cap_combo_continuidad",
+      "source": "cap_combo",
+      "target": "obj_continuidad_ordenes",
+      "type": "impacts",
+      "label": "debe preservar"
+    },
+    {
+      "id": "e_cap_combo_negociaciones",
+      "source": "cap_combo",
+      "target": "proj_negociaciones",
+      "type": "impacts",
+      "label": "requiere nueva lógica"
+    },
+    {
+      "id": "e_fric_variante_shopify",
+      "source": "fric_combo_variante_shopify",
+      "target": "int_shopify",
+      "type": "blocks",
+      "label": "bloquea exportación con variantes"
+    },
+    {
+      "id": "e_fric_flujo_inverso_ordenes",
+      "source": "fric_combo_flujo_inverso_shopify",
+      "target": "flow_gestion_ordenes",
+      "type": "blocks",
+      "label": "flujo inverso indefinido"
+    },
+    {
+      "id": "e_fric_dispersion_neg",
+      "source": "fric_combo_dispersion_negociaciones",
+      "target": "proj_negociaciones",
+      "type": "blocks",
+      "label": "sin lógica de dispersión"
+    },
+    {
+      "id": "e_fric_emprendedor_cap",
+      "source": "fric_emprendedor_sin_perfil",
+      "target": "cap_combo",
+      "type": "blocks",
+      "label": "bloquea segmento marca/emprendedor"
+    },
+    {
+      "id": "e_dec_woo_version_int",
+      "source": "dec_combo_woocommerce_version",
+      "target": "int_woocommerce",
+      "type": "blocks",
+      "label": "define sobre qué versión"
+    },
+    {
+      "id": "e_dec_dispersion_neg",
+      "source": "dec_combo_dispersion_costos",
+      "target": "proj_negociaciones",
+      "type": "blocks",
+      "label": "bloquea estimación"
+    },
+    {
+      "id": "e_dec_scanner_cap",
+      "source": "dec_combo_codigo_scanner",
+      "target": "cap_combo",
+      "type": "blocks",
+      "label": "bloquea operación en bodega"
+    }
+  ]
+}

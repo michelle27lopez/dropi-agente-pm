@@ -1,0 +1,3649 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from "recharts";
+import {
+  ArrowLeft,
+  Users,
+  Calendar,
+  Activity,
+  AlertTriangle,
+  Smartphone,
+  Globe,
+  MessageSquare,
+  Search,
+  RefreshCw,
+  Compass,
+  Laptop,
+  CheckCircle,
+  Clock,
+  Filter,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
+
+type Cohort = {
+  name: string;
+  value: number;
+  color: string;
+};
+
+type ItemData = {
+  name: string;
+  value: number;
+  color?: string;
+};
+
+type ChurnTier = {
+  key: string;
+  name: string;
+  range: string;
+  count: number;
+  percentage: number;
+  avgSessions: number;
+  avgLifespan: number;
+  action: string;
+  color: string;
+};
+
+type ActivationCohort = {
+  key: string;
+  name: string;
+  description: string;
+  count: number;
+  percentage: number;
+  color: string;
+};
+
+type WeeklyCohort = {
+  weekStart: string;
+  size: number;
+  retention: (number | null)[];
+};
+
+type AgeCohort = {
+  name: string;
+  count: number;
+  avgSessions: number;
+  activeRate: number;
+};
+
+type RiskSupplier = {
+  name: string;
+  email: string;
+  phone: string;
+  country: string;
+  web_sessions: number;
+  days_inactive: number;
+  signed_up: string;
+  status: "dormant" | "critical" | "churned";
+  priority: "high" | "medium" | "low";
+  survey_role: string | null;
+  survey_stage: string | null;
+  survey_volume: string | null;
+  survey_purpose: string | null;
+  survey_brand_sales: string | null;
+  survey_shipping_pref: string | null;
+  survey_sell_pref: string | null;
+  survey_source: "comunidades" | "huerfanos" | null;
+  referred_by: string | null;
+  belong_to_community: string | null;
+  owner_of_community: string | null;
+  resolved_community: string | null;
+  tipo_proveedor: string | null;
+  has_appointment: boolean;
+  ultima_cita_confirmada: string | null;
+  real_orders_delivered: number;
+  real_products_created: number;
+  real_dropshipper_clients: number;
+};
+
+type FunnelStep = {
+  step: string;
+  count: number;
+  pct: number;
+  color: string;
+};
+
+type CommunityMetric = {
+  name: string;
+  count: number;
+  activeCount: number;
+  activeRate: number;
+  verifiedRate: number;
+  avgSessions: number;
+  billingRate: number;
+  supplierRate: number;
+  highVolumeRate: number;
+  bounceRate: number;
+  avgInactiveDays: number;
+  avgLifespanDays: number;
+  avgTtvDays: number;
+  realActiveRate: number;
+  totalRealOrders: number;
+  totalRealProducts: number;
+  hasProductRate: number;
+  hasOrderRate: number;
+};
+
+type CommunitySupplier = {
+  user_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  country: string;
+  web_sessions: number;
+  days_inactive: number;
+  signed_up: string;
+  verified: boolean;
+  billing_information: boolean;
+  survey_role: string | null;
+  survey_volume: string | null;
+  potentialRating: "high" | "medium" | "low";
+  referrerName: string;
+  fecha_activacion: string | null;
+  dias_en_activarse: number | null;
+  es_activo_30d: boolean;
+  real_orders_delivered: number;
+  real_products_created: number;
+  real_dropshipper_clients: number;
+};
+
+type CommunityDetailResponse = {
+  communityName: string;
+  funnel: FunnelStep[];
+  stats: {
+    totalSuppliers: number;
+    activeRate: number;
+    verifiedRate: number;
+    billingRate: number;
+    bounceRate: number;
+    avgSessions: number;
+    avgInactiveDays: number;
+    avgLifespanDays: number;
+    avgTtvDays: number;
+    realActiveRate: number;
+    totalRealOrders: number;
+    totalRealProducts: number;
+  };
+  volumes: ItemData[];
+  roles: ItemData[];
+  suppliers: CommunitySupplier[];
+};
+
+type SurveyStats = {
+  totalWithSurvey: number;
+  roles: ItemData[];
+  volumes: ItemData[];
+  sources: ItemData[];
+  crossSegments: {
+    supplierComunidad: number;
+    supplierHuerfano: number;
+    brandComunidad: number;
+    brandHuerfano: number;
+  };
+};
+
+type BehaviorResponse = {
+  source: "supabase" | "mock";
+  country: string;
+  stats: {
+    totalSuppliers: number;
+    avgSessions: number;
+    activeRate: number;
+    verifiedRate: number;
+    dormantCount: number;
+    churnedCount: number;
+    churnRate: number;
+  };
+  cohorts: Cohort[];
+  devices: ItemData[];
+  operatingSystems: ItemData[];
+  countries: ItemData[];
+  churnTiers: ChurnTier[];
+  activationCohorts: ActivationCohort[];
+  weeklyCohorts: WeeklyCohort[];
+  ageCohorts: AgeCohort[];
+  riskSuppliers: RiskSupplier[];
+  funnel: FunnelStep[];
+  communities: CommunityMetric[];
+  surveyStats: SurveyStats;
+  validationStats: {
+    noTypeCount: number;
+    validatedCount: number;
+    validatedPct: number;
+    surveyBreakdown: { name: string; value: number; color?: string }[];
+    validatedList: {
+      user_id: string;
+      name: string;
+      email: string;
+      phone: string;
+      country: string;
+      real_orders_delivered: number;
+      real_products_created: number;
+      survey_role: string;
+      survey_volume: string;
+      survey_source: string;
+      resolved_community: string;
+      has_appointment: boolean;
+      ultima_cita_confirmada: string | null;
+      tipo_proveedor: string;
+      days_inactive: number;
+      status: string;
+      signed_up: string | null;
+      web_sessions: number;
+    }[];
+    correlation: {
+      withMeetingWithProducts: number;
+      withMeetingNoProducts: number;
+      noMeetingWithProducts: number;
+      noMeetingNoProducts: number;
+    };
+  };
+  tierPerformance: {
+    tier: string;
+    count: number;
+    avgOrders: number;
+    avgProducts: number;
+    activeRate: number;
+  }[];
+};
+
+type QueryResult = {
+  explanation: string;
+  count: number;
+  percentage?: number;
+  records: any[];
+  operationType: "count" | "list" | "percentage" | "top";
+};
+
+function CollapsibleText({ text, maxLength = 50 }: { text: string; maxLength?: number }) {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+
+  if (!text || text === "-") return <span>-</span>;
+  if (text.length <= maxLength) return <span>{text}</span>;
+
+  const displayedText = isCollapsed ? text.substring(0, maxLength) + "..." : text;
+
+  return (
+    <span>
+      <span>{displayedText}</span>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsCollapsed(!isCollapsed);
+        }}
+        className="text-indigo-600 hover:text-indigo-800 font-bold ml-1 hover:underline cursor-pointer focus:outline-none focus:ring-0 inline-block align-baseline"
+        style={{ fontSize: "10px" }}
+      >
+        {isCollapsed ? "Ver más" : "Ver menos"}
+      </button>
+    </span>
+  );
+}
+
+function executeDeterministicQuery(rawQuery: string, list: any[]): QueryResult {
+  const cleanString = (str: string): string => {
+    return str
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  };
+
+  const normQuery = cleanString(rawQuery);
+  const totalCount = list.length;
+  let filtered = [...list];
+  const appliedFilters: string[] = [];
+
+  // 1. Filtro de País
+  if (normQuery.includes("colombia")) {
+    filtered = filtered.filter((s) => cleanString(s.country) === "colombia");
+    appliedFilters.push("País: Colombia");
+  } else if (normQuery.includes("mexico")) {
+    filtered = filtered.filter((s) => cleanString(s.country) === "mexico" || cleanString(s.country) === "mexico");
+    appliedFilters.push("País: México");
+  } else if (normQuery.includes("ecuador")) {
+    filtered = filtered.filter((s) => cleanString(s.country) === "ecuador");
+    appliedFilters.push("País: Ecuador");
+  }
+
+  // 2. Filtro de Rol
+  if (normQuery.includes("marca")) {
+    filtered = filtered.filter((s) => s.survey_role?.toLowerCase().includes("marca"));
+    appliedFilters.push("Rol: Marca / Emprendedor");
+  } else if (normQuery.includes("proveedor")) {
+    filtered = filtered.filter((s) => s.survey_role?.toLowerCase().includes("proveedor"));
+    appliedFilters.push("Rol: Proveedor");
+  } else if (normQuery.includes("sin encuesta") || normQuery.includes("sin responder") || normQuery.includes("no especificado")) {
+    filtered = filtered.filter((s) => !s.survey_role || s.survey_role === "No especificado");
+    appliedFilters.push("Rol: No especificado / Sin responder");
+  }
+
+  // 3. Filtro de Citas
+  if (normQuery.includes("con cita") || normQuery.includes("cita agendada") || normQuery.includes("cita confirmada")) {
+    filtered = filtered.filter((s) => s.has_appointment === true);
+    appliedFilters.push("Citas CRM: Con Cita Agendada");
+  } else if (normQuery.includes("sin cita")) {
+    filtered = filtered.filter((s) => s.has_appointment === false);
+    appliedFilters.push("Citas CRM: Sin Cita");
+  }
+
+  // 4. Filtro de Catálogo (Productos)
+  if (normQuery.includes("con producto") || normQuery.includes("catalogo creado") || normQuery.includes("con catalogo")) {
+    filtered = filtered.filter((s) => s.real_products_created >= 1);
+    appliedFilters.push("Catálogo: Con productos creados (≥1)");
+  } else if (normQuery.includes("sin producto") || normQuery.includes("catalogo vacio") || normQuery.includes("sin catalogo")) {
+    filtered = filtered.filter((s) => s.real_products_created === 0);
+    appliedFilters.push("Catálogo: Vacío (0 productos)");
+  }
+
+  // 5. Filtro de Ventas (Órdenes)
+  if (normQuery.includes("con orden") || normQuery.includes("con venta") || normQuery.includes("con pedido") || normQuery.includes("vendieron")) {
+    filtered = filtered.filter((s) => s.real_orders_delivered >= 1);
+    appliedFilters.push("Ventas: Con órdenes reales (≥1)");
+  } else if (normQuery.includes("sin orden") || normQuery.includes("sin venta") || normQuery.includes("sin pedido") || normQuery.includes("no han vendido")) {
+    filtered = filtered.filter((s) => s.real_orders_delivered === 0);
+    appliedFilters.push("Ventas: Sin órdenes (0)");
+  }
+
+  // 6. Filtro de Nivel
+  if (normQuery.includes("verificado")) {
+    filtered = filtered.filter((s) => s.tipo_proveedor === "VERIFICADO");
+    appliedFilters.push("Nivel: VERIFICADO");
+  } else if (normQuery.includes("premium exclusivo")) {
+    filtered = filtered.filter((s) => s.tipo_proveedor === "PREMIUM EXCLUSIVO");
+    appliedFilters.push("Nivel: PREMIUM EXCLUSIVO");
+  } else if (normQuery.includes("premium")) {
+    filtered = filtered.filter((s) => s.tipo_proveedor === "PREMIUM");
+    appliedFilters.push("Nivel: PREMIUM");
+  } else if (normQuery.includes("sin tipo") || normQuery.includes("sin validar")) {
+    filtered = filtered.filter((s) => s.tipo_proveedor === "Sin Tipo");
+    appliedFilters.push("Nivel: Sin Tipo");
+  }
+
+  // 7. Filtro de Estado
+  if (normQuery.includes("activo")) {
+    filtered = filtered.filter((s) => s.status === "active");
+    appliedFilters.push("Actividad: Activo reciente (0-7d inactivo)");
+  } else if (normQuery.includes("dormante") || normQuery.includes("inactivo")) {
+    filtered = filtered.filter((s) => s.status === "dormant");
+    appliedFilters.push("Actividad: Dormante (8-14d inactivo)");
+  } else if (normQuery.includes("critico")) {
+    filtered = filtered.filter((s) => s.status === "critical");
+    appliedFilters.push("Actividad: Crítico (15-30d inactivo)");
+  } else if (normQuery.includes("abandono") || normQuery.includes("churn")) {
+    filtered = filtered.filter((s) => s.status === "churned");
+    appliedFilters.push("Actividad: Abandono confirmado (30d+)");
+  }
+
+  // 8. Filtro de Comunidad
+  const uniqueComms = Array.from(new Set(list.map((s) => s.resolved_community).filter(Boolean)));
+  let matchedCommunity = null;
+  for (const com of uniqueComms) {
+    const normCom = cleanString(com);
+    if (normCom && normQuery.includes(normCom)) {
+      matchedCommunity = com;
+      break;
+    }
+  }
+  if (matchedCommunity) {
+    filtered = filtered.filter((s) => s.resolved_community === matchedCommunity);
+    appliedFilters.push(`Comunidad: ${matchedCommunity}`);
+  }
+
+  // Determinar Tipo de Operación y Ordenamiento
+  let opType: "count" | "list" | "percentage" | "top" = "count";
+  if (normQuery.includes("quienes") || normQuery.includes("cuales") || normQuery.includes("lista") || normQuery.includes("como se llaman") || normQuery.includes("nombre")) {
+    opType = "list";
+  } else if (normQuery.includes("porcentaje") || normQuery.includes("tasa") || normQuery.includes("%")) {
+    opType = "percentage";
+  }
+
+  if (normQuery.includes("top") || normQuery.includes("mas") || normQuery.includes("mayor")) {
+    opType = "top";
+    // Ordenar descendente según criterio
+    if (normQuery.includes("orden") || normQuery.includes("venta") || normQuery.includes("pedido")) {
+      filtered.sort((a, b) => b.real_orders_delivered - a.real_orders_delivered);
+    } else if (normQuery.includes("producto") || normQuery.includes("catalogo")) {
+      filtered.sort((a, b) => b.real_products_created - a.real_products_created);
+    } else {
+      filtered.sort((a, b) => b.web_sessions - a.web_sessions);
+    }
+  }
+
+  // Obtener límite numérico si se especifica (ej: top 5, top 10)
+  let limit = 10; // Límite por defecto para listas/top
+  const numMatch = normQuery.match(/\b(\d+)\b/);
+  if (numMatch) {
+    limit = parseInt(numMatch[1], 10);
+  }
+
+  const finalCount = filtered.length;
+  const percentage = totalCount > 0 ? Math.round((finalCount / totalCount) * 1000) / 10 : 0;
+
+  // Si la consulta es de tipo top o lista, limitamos los registros retornados para evitar saturar la interfaz
+  const recordsToReturn = (opType === "top" || opType === "list") ? filtered.slice(0, limit) : filtered;
+
+  // Generar explicación legible
+  let explanation = "Filtrando por: ";
+  if (appliedFilters.length > 0) {
+    explanation += appliedFilters.join(" y ");
+  } else {
+    explanation += "Todos los registros de la cohorte de 90 días";
+  }
+
+  if (opType === "top") {
+    explanation += ` | Ordenado de mayor a menor (Top ${limit})`;
+  } else if (opType === "list") {
+    explanation += ` | Mostrando listado de nombres (Límite ${limit})`;
+  }
+
+  return {
+    explanation,
+    count: finalCount,
+    percentage,
+    records: recordsToReturn,
+    operationType: opType,
+  };
+}
+
+export default function BehaviorDashboard() {
+  const [country, setCountry] = useState<string>("ALL");
+  const [activeTab, setActiveTab] = useState<string>("churn");
+  const [data, setData] = useState<BehaviorResponse | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [isClient, setIsClient] = useState<boolean>(false);
+
+  // Filtros del Directorio de Recuperación
+  const [search, setSearch] = useState<string>("");
+  const [filterWeek, setFilterWeek] = useState<string>("ALL");
+  const [filterRisk, setFilterRisk] = useState<string>("ALL");
+  const [filterSource, setFilterSource] = useState<string>("ALL");
+  const [filterVolume, setFilterVolume] = useState<string>("ALL");
+  const [filterPriority, setFilterPriority] = useState<string>("ALL");
+  const [filterCommunity, setFilterCommunity] = useState<string>("ALL");
+  const [chartMetric, setChartMetric] = useState<"count" | "activeRate" | "billingRate" | "avgSessions" | "bounceRate" | "avgInactiveDays" | "avgLifespanDays" | "avgTtvDays" | "realActiveRate">("count");
+  const [detailMinOrders, setDetailMinOrders] = useState<number>(0);
+  const [detailMinProducts, setDetailMinProducts] = useState<number>(0);
+
+  // Detalle de Comunidad (Modal)
+  const [detailCommunityName, setDetailCommunityName] = useState<string | null>(null);
+  const [communityDetail, setCommunityDetail] = useState<CommunityDetailResponse | null>(null);
+  const [loadingDetail, setLoadingDetail] = useState<boolean>(false);
+
+  // Filtros del listado dentro del Modal
+  const [detailSearch, setDetailSearch] = useState<string>("");
+  const [detailFilterPotential, setDetailFilterPotential] = useState<string>("ALL");
+  const [detailFilterStatus, setDetailFilterStatus] = useState<string>("ALL");
+
+  // Toggle del Heatmap: % de retención vs cantidad absoluta
+  const [heatmapMode, setHeatmapMode] = useState<"percentage" | "count">("percentage");
+
+  // Filtros de la pestaña Control de Validación
+  const [valSearch, setValSearch] = useState<string>("");
+  const [valFilterTier, setValFilterTier] = useState<string>("ALL");
+  const [valFilterProducts, setValFilterProducts] = useState<string>("ALL");
+  const [valFilterOrders, setValFilterOrders] = useState<string>("ALL");
+  const [valFilterAppointment, setValFilterAppointment] = useState<string>("ALL");
+  const [valFilterStatus, setValFilterStatus] = useState<string>("ALL");
+  const [valFilterRole, setValFilterRole] = useState<string>("ALL");
+  const [valFilterVolume, setValFilterVolume] = useState<string>("ALL");
+  // Estados para el Asistente de Datos (Chat)
+  type ChatMessage = {
+    sender: "user" | "assistant";
+    text: string;
+    result?: QueryResult;
+    timestamp: Date;
+  };
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([
+    {
+      sender: "assistant",
+      text: "¡Hola! Soy tu Asistente de Datos del Hub. Puedo responder preguntas exactas y determinísticas en lenguaje natural sobre la cohorte de proveedores de los últimos 90 días.\n\nNo tengo costos de tokens de AI porque analizo la data directamente en tu navegador.",
+      timestamp: new Date()
+    }
+  ]);
+  const [expandedMessages, setExpandedMessages] = useState<Record<number, boolean>>({});
+  const [chatMode, setChatMode] = useState<"local" | "gpt">("local");
+  const [chatInput, setChatInput] = useState<string>("");
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+
+  const handleSendMessage = (textToSend?: string) => {
+    const query = textToSend || chatInput;
+    if (!query.trim()) return;
+
+    const userMsg: ChatMessage = {
+      sender: "user",
+      text: query,
+      timestamp: new Date()
+    };
+    
+    setChatMessages(prev => [...prev, userMsg]);
+    if (!textToSend) setChatInput("");
+    setIsTyping(true);
+
+    if (chatMode === "gpt") {
+      const res = executeDeterministicQuery(query, data?.validationStats?.validatedList || []);
+      const summaryStats = {
+        totalSuppliers: data?.stats?.totalSuppliers || 0,
+        activeRate: data?.stats?.activeRate || 0,
+        verifiedRate: data?.stats?.verifiedRate || 0,
+        dormantCount: data?.stats?.dormantCount || 0,
+        churnedCount: data?.stats?.churnedCount || 0,
+        churnRate: data?.stats?.churnRate || 0,
+      };
+
+      fetch("/api/metrics/behavior/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query,
+          deterministicResult: res,
+          summaryStats
+        })
+      })
+        .then(async apiRes => {
+          const isJson = apiRes.headers.get("content-type")?.includes("application/json");
+          const resData = isJson ? await apiRes.json() : null;
+          if (!apiRes.ok) {
+            const errorMsg = resData?.error || `Error ${apiRes.status}: Respuesta no válida`;
+            throw new Error(errorMsg);
+          }
+          return resData;
+        })
+        .then(json => {
+          const assistantMsg: ChatMessage = {
+            sender: "assistant",
+            text: json.reply,
+            result: res,
+            timestamp: new Date()
+          };
+          setChatMessages(prev => [...prev, assistantMsg]);
+          setIsTyping(false);
+        })
+        .catch(err => {
+          console.error("OpenAI call error:", err);
+          const assistantMsg: ChatMessage = {
+            sender: "assistant",
+            text: `⚠️ Error al consultar ChatGPT: ${err.message}. Asegúrate de que la API key esté configurada en el archivo .env.local de la carpeta 'hub'.`,
+            result: res,
+            timestamp: new Date()
+          };
+          setChatMessages(prev => [...prev, assistantMsg]);
+          setIsTyping(false);
+        });
+    } else {
+      setTimeout(() => {
+        const res = executeDeterministicQuery(query, data?.validationStats?.validatedList || []);
+        
+        let responseText = "";
+
+        if (res.count === 0) {
+          const zeroReplies = [
+            `No encontré ningún proveedor en la cohorte de 90 días que coincida con esos criterios de búsqueda.`,
+            `Vaya, parece que no hay registros que coincidan con la búsqueda actual.`,
+            `El resultado de la búsqueda determinística es de 0 coincidencias para este segmento.`,
+            `No se detectaron proveedores activos en la cohorte que cumplan con esas condiciones.`
+          ];
+          responseText = zeroReplies[Math.floor(Math.random() * zeroReplies.length)];
+        } else if (res.operationType === "top") {
+          const topReplies = [
+            `Aquí tienes el ranking (Top) de proveedores más representativo según tu consulta.`,
+            `He ordenado los registros para mostrarte los principales proveedores de este segmento.`,
+            `Te presento el listado ordenado descendente de los mejores registros bajo este criterio.`,
+            `Aquí tienes el Top solicitado de cuentas correspondientes a tu búsqueda.`,
+            `Aquí puedes ver los proveedores ordenados de mayor a menor según tu consulta.`
+          ];
+          responseText = topReplies[Math.floor(Math.random() * topReplies.length)];
+        } else if (res.operationType === "list") {
+          const listReplies = [
+            `Aquí tienes el listado de proveedores correspondientes a tu búsqueda.`,
+            `Te comparto la lista detallada de los proveedores que coinciden con tu criterio.`,
+            `Aquí puedes ver los nombres y datos de contacto de las cuentas filtradas.`,
+            `He extraído los siguientes registros que cumplen con las condiciones especificadas.`
+          ];
+          responseText = listReplies[Math.floor(Math.random() * listReplies.length)];
+        } else {
+          const countReplies = [
+            `Encontré **${res.count} proveedores** que coinciden con tu criterio (${res.percentage}% de la cohorte de 90 días).`,
+            `¡Listo! He analizado los datos y detecté **${res.count} cuentas** (${res.percentage}% del total de nuevos registros).`,
+            `El cruce de datos arroja un total de **${res.count} proveedores** que representan el ${res.percentage}% del segmento.`,
+            `Según la cohorte de los últimos 90 días, hay **${res.count} registros** (${res.percentage}% de la base) con este comportamiento.`,
+            `Hecho. Coinciden **${res.count} proveedores** (${res.percentage}%) con las características consultadas.`
+          ];
+          responseText = countReplies[Math.floor(Math.random() * countReplies.length)];
+        }
+
+        const assistantMsg: ChatMessage = {
+          sender: "assistant",
+          text: responseText,
+          result: res,
+          timestamp: new Date()
+        };
+        setChatMessages(prev => [...prev, assistantMsg]);
+        setIsTyping(false);
+      }, 400);
+    }
+  };
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  const fetchBehaviorData = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/metrics/behavior?country=${country}`);
+      if (res.ok) {
+        const json = await res.json();
+        setData(json);
+      }
+    } catch (e) {
+      console.error("Error loading behavior metrics:", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchCommunityDetail = async (comName: string) => {
+    setDetailCommunityName(comName);
+    setLoadingDetail(true);
+    setDetailSearch("");
+    setDetailFilterPotential("ALL");
+    setDetailFilterStatus("ALL");
+    setDetailMinOrders(0);
+    setDetailMinProducts(0);
+    try {
+      const res = await fetch(`/api/metrics/behavior?country=${country}&community=${encodeURIComponent(comName)}`);
+      if (res.ok) {
+        const json = await res.json();
+        setCommunityDetail(json);
+      }
+    } catch (e) {
+      console.error("Error loading community details:", e);
+    } finally {
+      setLoadingDetail(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBehaviorData();
+  }, [country]);
+
+  if (!isClient) return null;
+
+  const stats = data?.stats || {
+    totalSuppliers: 0,
+    avgSessions: 0,
+    activeRate: 0,
+    verifiedRate: 0,
+    dormantCount: 0,
+    churnedCount: 0,
+    churnRate: 0,
+  };
+  const cohorts = data?.cohorts || [];
+  const devices = data?.devices || [];
+  const countries = data?.countries || [];
+  const churnTiers = data?.churnTiers || [];
+  const activationCohorts = data?.activationCohorts || [];
+  const weeklyCohorts = data?.weeklyCohorts || [];
+  const ageCohorts = data?.ageCohorts || [];
+  const riskSuppliers = data?.riskSuppliers || [];
+  const surveyStats = data?.surveyStats || {
+    totalWithSurvey: 0,
+    roles: [],
+    volumes: [],
+    sources: [],
+    crossSegments: {
+      supplierComunidad: 0,
+      supplierHuerfano: 0,
+      brandComunidad: 0,
+      brandHuerfano: 0,
+    },
+  };
+  const source = data?.source || "mock";
+
+  // Helper para obtener el string del lunes de una semana dada
+  const getMondayStr = (dateStr: string): string => {
+    const d = new Date(dateStr);
+    const day = d.getDay();
+    const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+    const monday = new Date(d.setDate(diff));
+    return `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, "0")}-${String(monday.getDate()).padStart(2, "0")}`;
+  };
+
+  // Formato legible para fechas de semanas (ej. 2026-05-19 -> May 19)
+  const formatWeekStr = (dateStr: string) => {
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return dateStr;
+    const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+    const month = months[parseInt(parts[1], 10) - 1];
+    return `${parts[2]} de ${month}`;
+  };
+
+  // Extraer semanas únicas de la lista de riesgos para el filtro
+  const uniqueSignupWeeks: string[] = [];
+  riskSuppliers.forEach((s) => {
+    if (s.signed_up) {
+      const mondayStr = getMondayStr(s.signed_up);
+      if (!uniqueSignupWeeks.includes(mondayStr)) {
+        uniqueSignupWeeks.push(mondayStr);
+      }
+    }
+  });
+  uniqueSignupWeeks.sort().reverse();
+
+  // Extraer comunidades únicas de los datos de comportamiento para el filtro
+  const uniqueCommunities = data?.communities.map((c) => c.name) || [];
+
+  // Filtrado de proveedores en riesgo (Directorio)
+  const filteredRisk = riskSuppliers.filter((s) => {
+    const matchesSearch =
+      s.name.toLowerCase().includes(search.trim().toLowerCase()) ||
+      s.email.toLowerCase().includes(search.trim().toLowerCase());
+
+    const matchesWeek = (() => {
+      if (filterWeek === "ALL") return true;
+      return getMondayStr(s.signed_up) === filterWeek;
+    })();
+
+    const matchesRisk = (() => {
+      if (filterRisk === "ALL") return true;
+      return s.status === filterRisk;
+    })();
+
+    const matchesSource = (() => {
+      if (filterSource === "ALL") return true;
+      return s.survey_source === filterSource;
+    })();
+
+    const matchesVolume = (() => {
+      if (filterVolume === "ALL") return true;
+      const vol = s.survey_volume || s.survey_brand_sales || "";
+      if (filterVolume === "over1000") return vol.includes("Más de 1.000");
+      if (filterVolume === "301to1000") return vol.includes("301 a 1.000");
+      if (filterVolume === "51to300") return vol.includes("51 a 300");
+      if (filterVolume === "under50") return vol.includes("Menos de 50");
+      if (filterVolume === "not_selling") return vol.includes("Aún no vendo");
+      if (filterVolume === "not_managing") return vol.includes("Aún no gestiono") || vol.includes("Aún no gestiona");
+      if (filterVolume === "no_data") return vol === "";
+      return true;
+    })();
+
+    const matchesPriority = (() => {
+      if (filterPriority === "ALL") return true;
+      return s.priority === filterPriority;
+    })();
+
+    const matchesCommunity = (() => {
+      if (filterCommunity === "ALL") return true;
+      return s.resolved_community === filterCommunity;
+    })();
+
+    return matchesSearch && matchesWeek && matchesRisk && matchesSource && matchesVolume && matchesPriority && matchesCommunity;
+  });
+
+  // Filtrado de proveedores en Control de Validación (Directorio completo de registros 90d)
+  const filteredValidatedList = (data?.validationStats?.validatedList || []).filter((s) => {
+    const matchesSearch =
+      s.name.toLowerCase().includes(valSearch.trim().toLowerCase()) ||
+      s.email.toLowerCase().includes(valSearch.trim().toLowerCase()) ||
+      s.phone.toLowerCase().includes(valSearch.trim().toLowerCase());
+
+    const matchesTier = (() => {
+      if (valFilterTier === "ALL") return true;
+      return s.tipo_proveedor === valFilterTier;
+    })();
+
+    const matchesProducts = (() => {
+      if (valFilterProducts === "ALL") return true;
+      if (valFilterProducts === "with") return s.real_products_created >= 1;
+      return s.real_products_created === 0;
+    })();
+
+    const matchesOrders = (() => {
+      if (valFilterOrders === "ALL") return true;
+      if (valFilterOrders === "with") return s.real_orders_delivered >= 1;
+      return s.real_orders_delivered === 0;
+    })();
+
+    const matchesAppointment = (() => {
+      if (valFilterAppointment === "ALL") return true;
+      if (valFilterAppointment === "with") return s.has_appointment;
+      return !s.has_appointment;
+    })();
+
+    const matchesStatus = (() => {
+      if (valFilterStatus === "ALL") return true;
+      return s.status === valFilterStatus;
+    })();
+
+    const matchesRole = (() => {
+      if (valFilterRole === "ALL") return true;
+      if (valFilterRole === "brand") return s.survey_role?.toLowerCase().includes("marca");
+      if (valFilterRole === "supplier") return s.survey_role?.toLowerCase().includes("proveedor");
+      return !s.survey_role || s.survey_role === "No especificado";
+    })();
+
+    const matchesVolume = (() => {
+      if (valFilterVolume === "ALL") return true;
+      const vol = s.survey_volume || "";
+      if (valFilterVolume === "high") return vol.includes("Más de 1.000") || vol.includes("301 a 1.000");
+      if (valFilterVolume === "mid") return vol.includes("51 a 300");
+      if (valFilterVolume === "low") return vol.includes("Menos de 50");
+      if (valFilterVolume === "none") return vol.includes("vendo") || vol.includes("Aún") || vol.includes("gestiono");
+      return true;
+    })();
+
+    return matchesSearch && matchesTier && matchesProducts && matchesOrders && matchesAppointment && matchesStatus && matchesRole && matchesVolume;
+  });
+
+  const COLORS = ["#6366F1", "#10B981", "#F59E0B", "#EF4444", "#EC4899", "#8B5CF6", "#14B8A6", "#3B82F6"];
+
+  // Generador de mensajes personalizados para WhatsApp según perfil de uso y volumen de productos
+  const getWhatsAppLink = (phone: string, name: string, sessions: number, volStr: string | null) => {
+    const cleanPhone = phone.replace(/\s+/g, "").replace(/\+/g, "");
+    let finalPhone = cleanPhone;
+    if (cleanPhone.startsWith("3") && cleanPhone.length === 10) {
+      finalPhone = `57${cleanPhone}`;
+    }
+
+    const valueContext = volStr ? ` Vimos en la encuesta que gestionas un gran volumen de productos (${volStr}).` : "";
+    let message = "";
+    
+    if (sessions <= 1) {
+      message = `Hola ${name}, te saludamos del equipo de Dropi.${valueContext} Vimos que creaste tu cuenta de proveedor pero solo pudiste ingresar una vez. ¿Tuviste algún inconveniente técnico subiendo tus productos o integrando tus envíos? Nos gustaría agendar una llamada rápida para dejar tu cuenta totalmente activa.`;
+    } else if (sessions <= 3) {
+      message = `Hola ${name}, te saludamos de Dropi.${valueContext} Notamos que ingresaste un par de veces para explorar el panel pero no has vuelto recientemente. Queremos ayudarte a publicar tus productos en el catálogo de dropshipping para que empieces a vender. ¿Te sirve una sesión de 5 minutos de soporte?`;
+    } else {
+      message = `Hola ${name}, te saludamos de Dropi.${valueContext} Vimos que ya estabas utilizando el panel activamente, pero no registras visitas últimamente. ¿Hay algo en lo que podamos ayudarte para impulsar tu stock o mejorar tus despachos con nosotros?`;
+    }
+
+    return `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
+  };
+
+  // Helper para asignar color a los cuadritos del heatmap
+  const getCohortBgColor = (pct: number | null) => {
+    if (pct === null) return "bg-slate-100/40 text-slate-300 border-dashed border-slate-200";
+    if (pct === 100) return "bg-indigo-600 text-white font-bold";
+    if (pct >= 80) return "bg-indigo-500 text-white font-bold";
+    if (pct >= 60) return "bg-indigo-400 text-white";
+    if (pct >= 40) return "bg-indigo-300 text-indigo-950";
+    if (pct >= 20) return "bg-indigo-200 text-indigo-900";
+    if (pct >= 5) return "bg-indigo-100 text-indigo-800";
+    return "bg-indigo-50/50 text-indigo-700/60";
+  };
+
+  // Encontrar insights de comunidades destacadas (excluyendo Orgánico y requiriendo un volumen mínimo de 5 registros para ser representativo)
+  const nonOrganicComs = data?.communities.filter(c => c.name !== "Orgánico / Sin comunidad" && c.count >= 5) || [];
+  
+  const bestAcquisition = nonOrganicComs.length > 0 
+    ? [...nonOrganicComs].sort((a, b) => b.count - a.count)[0] 
+    : null;
+    
+  const bestActivation = nonOrganicComs.length > 0 
+    ? [...nonOrganicComs].sort((a, b) => b.activeRate - a.activeRate)[0] 
+    : null;
+    
+  const lowestBounce = nonOrganicComs.length > 0 
+    ? [...nonOrganicComs].sort((a, b) => a.bounceRate - b.bounceRate)[0] 
+    : null;
+    
+  const bestBilling = nonOrganicComs.length > 0 
+    ? [...nonOrganicComs].sort((a, b) => b.billingRate - a.billingRate)[0] 
+    : null;
+
+  const chartMetricOptions = [
+    { key: "count", name: "Registrados", color: "#8B5CF6", unit: "proveedores" },
+    { key: "activeRate", name: "Tasa de Activación", color: "#10B981", unit: "%" },
+    { key: "billingRate", name: "Facturación Configurada", color: "#F59E0B", unit: "%" },
+    { key: "avgSessions", name: "Sesiones Promedio", color: "#3B82F6", unit: "ses" },
+    { key: "bounceRate", name: "Tasa de Rebote", color: "#EF4444", unit: "%" },
+    { key: "avgInactiveDays", name: "Inactividad Promedio", color: "#64748B", unit: "días" },
+    { key: "avgLifespanDays", name: "Permanencia Promedio", color: "#EC4899", unit: "días" },
+    { key: "avgTtvDays", name: "Time-to-Value (TTV) Prom.", color: "#8B5CF6", unit: "días" },
+    { key: "realActiveRate", name: "Tasa de Activos Dropi", color: "#10B981", unit: "%" },
+  ] as const;
+
+  const activeMetricOption = chartMetricOptions.find((opt) => opt.key === chartMetric) || chartMetricOptions[0];
+
+  const chartData = [...nonOrganicComs]
+    .sort((a, b) => {
+      if (chartMetric === "bounceRate" || chartMetric === "avgInactiveDays") {
+        // Para inactividad y rebote, a veces se prefiere ver de menor a mayor,
+        // pero para mantener coherencia en barras visuales ordenamos de mayor a menor (los peores o de mayor volumen).
+        // Dejamos descendente para destacar los picos de inactividad o rebote.
+        return b[chartMetric] - a[chartMetric];
+      }
+      return b[chartMetric] - a[chartMetric];
+    })
+    .slice(0, 10);
+
+  return (
+    <div className="min-h-screen bg-slate-50 text-slate-900 pb-16 font-sans">
+      {/* Header */}
+      <header className="bg-white border-b border-slate-200/80 sticky top-0 z-50 backdrop-blur-md bg-white/95 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/metrics"
+              className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-slate-100 transition-colors text-slate-500"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <div className="w-[1px] h-6 bg-slate-200" />
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="p-1 rounded bg-indigo-500/10 text-indigo-600">
+                  <Compass className="w-4 h-4" />
+                </span>
+                <h1 className="font-bold text-sm sm:text-base tracking-tight text-slate-800">
+                  Supplier Behavior Lab
+                </h1>
+              </div>
+              <p className="text-[10px] text-slate-500 font-medium">
+                Análisis de Retención, Inactividad y Abandono (Userpilot 90D)
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {source === "supabase" ? (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-800 text-xs font-semibold shadow-sm">
+                <CheckCircle className="w-3.5 h-3.5 text-emerald-600 animate-pulse" />
+                <span>Supabase Live ({stats.totalSuppliers} rows)</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-full text-amber-800 text-xs font-semibold shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                <span>Modo Simulación (Mock)</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+        
+        {/* Filtro General de País */}
+        <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mr-2">Filtrar por País:</span>
+            {[
+              { code: "ALL", name: "Todos" },
+              { code: "CO", name: "Colombia" },
+              { code: "MX", name: "México" },
+              { code: "EC", name: "Ecuador" },
+            ].map((c) => (
+              <button
+                key={c.code}
+                onClick={() => setCountry(c.code)}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  country === c.code
+                    ? "bg-indigo-600 text-white shadow-sm shadow-indigo-600/20"
+                    : "bg-slate-50 text-slate-600 hover:bg-slate-100"
+                }`}
+              >
+                {c.name}
+              </button>
+            ))}
+          </div>
+          <div className="text-xs text-slate-400 font-medium">
+            Referencia de análisis fija al **25 de Mayo, 2026**
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-32 gap-3">
+            <RefreshCw className="w-8 h-8 text-indigo-600 animate-spin" />
+            <p className="text-slate-500 text-sm font-medium">Calculando métricas y cohortes...</p>
+          </div>
+        ) : (
+          <div className="mt-6 flex flex-col gap-6">
+            
+            {/* KPI Cards Row */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50 rounded-bl-full -z-1 group-hover:scale-105 transition-transform" />
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Users className="w-4 h-4" />
+                  <p className="text-[10px] font-bold uppercase tracking-wider">Total Registrados</p>
+                </div>
+                <h3 className="text-3xl font-extrabold text-slate-900 mt-1 tracking-tight">
+                  {stats.totalSuppliers.toLocaleString("es-CO")}
+                </h3>
+                <p className="text-[10px] text-slate-400 mt-1.5">En los últimos 90 días</p>
+              </div>
+
+              <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50 rounded-bl-full -z-1 group-hover:scale-105 transition-transform" />
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Activity className="w-4 h-4" />
+                  <p className="text-[10px] font-bold uppercase tracking-wider">Sesiones Promedio</p>
+                </div>
+                <h3 className="text-3xl font-extrabold text-slate-900 mt-1 tracking-tight">
+                  {stats.avgSessions}
+                </h3>
+                <p className="text-[10px] text-slate-400 mt-1.5">Sesiones acumuladas por usuario</p>
+              </div>
+
+              <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50 rounded-bl-full -z-1 group-hover:scale-105 transition-transform" />
+                <div className="flex items-center gap-2 text-slate-400">
+                  <CheckCircle className="w-4 h-4 text-emerald-500" />
+                  <p className="text-[10px] font-bold uppercase tracking-wider">Tasa de Activación</p>
+                </div>
+                <h3 className="text-3xl font-extrabold text-slate-900 mt-1 tracking-tight">
+                  {stats.activeRate}%
+                </h3>
+                <p className="text-[10px] text-slate-400 mt-1.5">% con más de 7 sesiones web</p>
+              </div>
+
+              <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm relative overflow-hidden group">
+                <div className="absolute top-0 right-0 w-16 h-16 bg-rose-50 rounded-bl-full -z-1 group-hover:scale-105 transition-transform" />
+                <div className="flex items-center gap-2 text-rose-500/80">
+                  <AlertTriangle className="w-4 h-4" />
+                  <p className="text-[10px] font-bold uppercase tracking-wider">Tasa de Churn</p>
+                </div>
+                <h3 className="text-3xl font-extrabold text-rose-600 mt-1 tracking-tight">
+                  {stats.churnRate}%
+                </h3>
+                <p className="text-[10px] text-rose-500/70 mt-1.5">
+                  {stats.churnedCount} proveedores inactivos &gt;14d
+                </p>
+              </div>
+            </div>
+
+            {/* Selector de Pestañas de Análisis */}
+            <div className="flex border-b border-slate-200 bg-white p-1 rounded-xl border border-slate-200/60 shadow-sm">
+              {[
+                { id: "churn", name: "Inactividad y Churn", icon: <AlertTriangle className="w-4 h-4" /> },
+                { id: "cohorts", name: "Matriz de Cohortes", icon: <Calendar className="w-4 h-4" /> },
+                { id: "validation_insights", name: "Control de Validación", icon: <CheckCircle className="w-4 h-4" /> },
+                { id: "data_chat", name: "Asistente de Datos 🤖", icon: <MessageSquare className="w-4 h-4" /> },
+                { id: "survey_insights", name: "Perfil de Encuestas 📊", icon: <Sparkles className="w-4 h-4" /> },
+                { id: "demographics", name: "Comportamiento y Demografía", icon: <Activity className="w-4 h-4" /> },
+                { id: "recovery", name: "Directorio de Recuperación", icon: <Users className="w-4 h-4" /> },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg font-bold text-xs sm:text-sm transition-all cursor-pointer ${
+                    activeTab === tab.id
+                      ? "bg-slate-900 text-white shadow-sm"
+                      : "text-slate-500 hover:text-slate-800 hover:bg-slate-50"
+                  }`}
+                >
+                  {tab.icon}
+                  <span>{tab.name}</span>
+                </button>
+              ))}
+            </div>
+
+            {/* PESTAÑA 1: INACTIVIDAD Y CHURN */}
+            {activeTab === "churn" && (
+              <div className="flex flex-col gap-6">
+                
+                {/* Cohortes de Activación Temprana */}
+                <div>
+                  <h3 className="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider">
+                    Análisis de Activación Temprana (Se registraron y...)
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {activationCohorts.map((c) => (
+                      <div
+                        key={c.key}
+                        className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between"
+                        style={{ borderLeft: `4px solid ${c.color}` }}
+                      >
+                        <div>
+                          <span
+                            className="px-2 py-0.5 text-[9px] font-bold rounded-full"
+                            style={{ backgroundColor: `${c.color}15`, color: c.color }}
+                          >
+                            {c.name}
+                          </span>
+                          <h4 className="text-2xl font-extrabold text-slate-800 mt-2">
+                            {c.percentage}%
+                          </h4>
+                          <p className="text-[11px] text-slate-500 mt-1">
+                            {c.description}
+                          </p>
+                        </div>
+                        <div className="mt-4 flex items-center justify-between text-[11px] font-semibold text-slate-400">
+                          <span>Volumen:</span>
+                          <span className="text-slate-700">{c.count} proveedores</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Embudo de Conversión Operativa Global */}
+                <div className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Embudo de Conversión Operativa (Time-to-Value)</h4>
+                      <p className="text-xs text-slate-400">Progreso real de los proveedores desde el registro hasta la actividad recurrente en Dropi</p>
+                    </div>
+                    <span className="text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-2.5 py-1 rounded-full uppercase">
+                      Hitos Críticos
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-center">
+                    {data?.funnel && data.funnel.map((step, sIdx) => {
+                      const nextStep = data.funnel[sIdx + 1];
+                      const dropPct = nextStep ? Math.round((nextStep.count / step.count) * 100) : null;
+                      
+                      return (
+                        <div key={step.step} className="relative flex flex-col items-center w-full">
+                          <div className="w-full bg-slate-50 p-5 rounded-2xl border border-slate-200/50 flex flex-col justify-between h-36 relative overflow-hidden group hover:shadow-md transition-shadow">
+                            <div className="absolute top-0 left-0 w-1.5 h-full" style={{ backgroundColor: step.color }} />
+                            <div>
+                              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{step.step}</p>
+                              <h5 className="text-2xl font-extrabold text-slate-900 mt-2 tracking-tight">
+                                {step.count.toLocaleString("es-CO")}
+                              </h5>
+                            </div>
+                            <div className="mt-4 flex items-center justify-between text-xs font-bold">
+                              <span className="text-slate-400">Conversión Total:</span>
+                              <span className="px-2 py-0.5 rounded text-[10px]" style={{ backgroundColor: `${step.color}15`, color: step.color }}>
+                                {step.pct}%
+                              </span>
+                            </div>
+                          </div>
+                          
+                          {nextStep && (
+                            <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white border border-slate-200 shadow-sm items-center justify-center text-[10px] font-extrabold text-slate-500" title={`Conversión de paso a paso: ${dropPct}%`}>
+                              {dropPct}%
+                            </div>
+                          )}
+                          {nextStep && (
+                            <div className="flex lg:hidden my-2 text-center text-[10px] font-extrabold text-slate-400">
+                              ↓ Conversión: {dropPct}% ↓
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Tabla de Niveles de Churn por Inactividad (Multitier) */}
+                <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+                  <div className="p-5 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Segmentación de Churn por Inactividad (Multitier)</h4>
+                      <p className="text-xs text-slate-400">Clasificación detallada según el tiempo transcurrido desde su última sesión</p>
+                    </div>
+                    <span className="text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 px-2.5 py-1 rounded-full uppercase">
+                      5 Niveles de Acción
+                    </span>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <th className="px-6 py-4">Nivel / Estado</th>
+                          <th className="px-6 py-4">Inactividad</th>
+                          <th className="px-6 py-4 text-center">Proveedores</th>
+                          <th className="px-6 py-4 text-center">% de la Base</th>
+                          <th className="px-6 py-4 text-center">Sesiones Prom.</th>
+                          <th className="px-6 py-4 text-center">Vida Media (días)</th>
+                          <th className="px-6 py-4">Acción Recomendada</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-xs text-slate-600">
+                        {churnTiers.map((tier) => (
+                          <tr key={tier.key} className="hover:bg-slate-50/30 transition-colors">
+                            <td className="px-6 py-4 font-bold text-slate-800 flex items-center gap-2">
+                              <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: tier.color }} />
+                              <span>{tier.name}</span>
+                            </td>
+                            <td className="px-6 py-4 text-slate-500 font-medium">{tier.range}</td>
+                            <td className="px-6 py-4 text-center font-bold text-slate-800">
+                              {tier.count.toLocaleString("es-CO")}
+                            </td>
+                            <td className="px-6 py-4 text-center">
+                              <span className="px-2 py-0.5 rounded bg-slate-100 font-bold text-slate-700">
+                                {tier.percentage}%
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-center font-semibold text-slate-700">{tier.avgSessions}</td>
+                            <td className="px-6 py-4 text-center font-semibold text-slate-700">{tier.avgLifespan} d</td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center justify-between gap-4">
+                                <span className="text-[11px] text-slate-500">{tier.action}</span>
+                                {tier.key !== "active" && (
+                                  <button
+                                    onClick={() => {
+                                      setActiveTab("recovery");
+                                      setFilterRisk(
+                                        tier.key === "slightRisk"
+                                          ? "dormant"
+                                          : tier.key === "churnRisk"
+                                          ? "dormant"
+                                          : tier.key === "highRisk"
+                                          ? "critical"
+                                          : "churned"
+                                      );
+                                    }}
+                                    className="text-[10px] font-bold text-indigo-600 hover:text-indigo-800 flex items-center gap-0.5 cursor-pointer"
+                                  >
+                                    <span>Ver lista</span>
+                                    <ArrowRight className="w-3 h-3" />
+                                  </button>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* PESTAÑA 2: MATRIZ DE COHORTES */}
+            {activeTab === "cohorts" && (
+              <div className="flex flex-col gap-6">
+                
+                {/* Cohort Heatmap Table */}
+                <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden p-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Matriz de Cohortes por Semana de Registro</h4>
+                      <p className="text-xs text-slate-400">
+                        Retención porcentual o absoluta de los proveedores según las semanas transcurridas desde su registro.
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-lg border border-slate-200/50 self-start">
+                      <button
+                        onClick={() => setHeatmapMode("percentage")}
+                        className={`px-3 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                          heatmapMode === "percentage" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500"
+                        }`}
+                      >
+                        % Retención
+                      </button>
+                      <button
+                        onClick={() => setHeatmapMode("count")}
+                        className={`px-3 py-1 rounded-md text-xs font-bold transition-all cursor-pointer ${
+                          heatmapMode === "count" ? "bg-white text-slate-800 shadow-sm" : "text-slate-500"
+                        }`}
+                      >
+                        Usuarios
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Tabla Heatmap */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-center border-collapse min-w-[800px]">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-500 uppercase">
+                          <th className="px-3 py-3 text-left">Semana de Registro</th>
+                          <th className="px-3 py-3 text-right pr-6">Tamaño</th>
+                          {Array.from({ length: 13 }).map((_, wIdx) => (
+                            <th key={wIdx} className="px-2 py-3">W{wIdx}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {weeklyCohorts.length > 0 ? (
+                          weeklyCohorts.map((cohort, idx) => (
+                            <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/20 text-xs">
+                              <td className="px-3 py-3 text-left font-bold text-slate-800">
+                                {formatWeekStr(cohort.weekStart)}
+                              </td>
+                              <td className="px-3 py-3 text-right pr-6 font-bold text-slate-500">
+                                {cohort.size}
+                              </td>
+                              {cohort.retention.map((val, wIdx) => {
+                                const displayVal =
+                                  val === null
+                                    ? "-"
+                                    : heatmapMode === "percentage"
+                                    ? `${val}%`
+                                    : Math.round((val / 100) * cohort.size);
+                                return (
+                                  <td
+                                    key={wIdx}
+                                    className={`px-2 py-3 border-r border-slate-100/50 ${getCohortBgColor(val)}`}
+                                  >
+                                    {displayVal}
+                                  </td>
+                                );
+                              })}
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={15} className="py-8 text-center text-slate-400">
+                              No hay cohortes de registro disponibles.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-100 flex items-start gap-2.5 text-xs text-slate-500">
+                    <Clock className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-slate-700">¿Cómo leer esta matriz?</p>
+                      <p className="mt-0.5">
+                        Cada fila representa el grupo de proveedores registrados en esa semana. Las columnas (W0 a W12) muestran su evolución. 
+                        W0 es el momento de registro (100% activos). Las semanas vacías con guión (-) corresponden a períodos futuros que la cohorte aún no ha alcanzado.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Comportamiento por Antigüedad */}
+                <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm p-5">
+                  <h4 className="font-bold text-slate-800 text-sm mb-4">Comportamiento Agregado por Edad de Cuenta</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    {ageCohorts.map((cohort, index) => (
+                      <div key={index} className="bg-slate-50 p-4 rounded-xl border border-slate-100 text-center">
+                        <p className="text-xs font-bold text-slate-500 uppercase">{cohort.name}</p>
+                        <h5 className="text-xl font-extrabold text-slate-800 mt-2">{cohort.count} users</h5>
+                        
+                        <div className="mt-4 pt-3 border-t border-slate-200/50 grid grid-cols-2 gap-2 text-xs">
+                          <div>
+                            <p className="text-[10px] text-slate-400 uppercase">Sesiones Prom.</p>
+                            <p className="font-bold text-slate-700 mt-0.5">{cohort.avgSessions}</p>
+                          </div>
+                          <div>
+                            <p className="text-[10px] text-slate-400 uppercase">% Conexión 7d</p>
+                            <p className="font-bold text-emerald-600 mt-0.5">{cohort.activeRate}%</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* PESTAÑA NUEVA: CONTROL DE VALIDACIÓN */}
+            {activeTab === "validation_insights" && data?.validationStats && (
+              <div className="flex flex-col gap-6">
+                
+                {/* Header de Control de Validación */}
+                <div className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 rounded-2xl border border-slate-800 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-indigo-400 animate-pulse" />
+                      <h3 className="font-bold text-base sm:text-lg">Control de Validación y Conversión de Proveedores</h3>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Medición de proveedores registrados sin tipo oficial asignado que ya operan y validan su visibilidad.
+                    </p>
+                  </div>
+                  <div className="bg-white/10 px-4 py-2 rounded-xl text-center border border-white/5">
+                    <p className="text-[9px] font-bold text-slate-400 uppercase">Sin Tipo Registrados</p>
+                    <p className="text-xl font-extrabold text-indigo-300 mt-0.5">
+                      {data.validationStats.noTypeCount.toLocaleString("es-CO")}
+                    </p>
+                  </div>
+                </div>
+
+                {/* KPI Metrics Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* KPI 1: Tasa de Conversión */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="px-2.5 py-1 text-[9px] font-bold rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 uppercase">
+                        Conversión de Visibilidad
+                      </span>
+                      <h4 className="text-4xl font-extrabold text-slate-800 mt-3">
+                        {data.validationStats.validatedPct}%
+                      </h4>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Porcentaje de proveedores sin tipo que tienen al menos 1 orden real entregada en Dropi.
+                      </p>
+                    </div>
+                    <div className="w-full bg-slate-100 rounded-full h-2 mt-4">
+                      <div className="bg-emerald-500 h-full rounded-full" style={{ width: `${data.validationStats.validatedPct}%` }} />
+                    </div>
+                  </div>
+
+                  {/* KPI 2: Total Validados */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="px-2.5 py-1 text-[9px] font-bold rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100 uppercase">
+                        Validados Visibles
+                      </span>
+                      <h4 className="text-4xl font-extrabold text-indigo-650 mt-3">
+                        {data.validationStats.validatedCount.toLocaleString("es-CO")}
+                      </h4>
+                      <p className="text-xs text-slate-400 mt-1">
+                        Proveedores que operan activamente y han demostrado volumen real sin poseer tipo de proveedor.
+                      </p>
+                    </div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase mt-4">
+                      Listos para asignación comercial
+                    </p>
+                  </div>
+
+                  {/* KPI 3: Citas agendadas */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <span className="px-2.5 py-1 text-[9px] font-bold rounded-full bg-amber-50 text-amber-700 border border-amber-100 uppercase">
+                        Citas en CRM
+                      </span>
+                      {(() => {
+                        const { withMeetingWithProducts, withMeetingNoProducts } = data.validationStats.correlation;
+                        const totalAppts = withMeetingWithProducts + withMeetingNoProducts;
+                        return (
+                          <>
+                            <h4 className="text-4xl font-extrabold text-slate-800 mt-3">
+                              {totalAppts.toLocaleString("es-CO")}
+                            </h4>
+                            <p className="text-xs text-slate-400 mt-1">
+                              Total de proveedores sin tipo que ya agendaron cita de validación en CRM de seguimiento.
+                            </p>
+                          </>
+                        );
+                      })()}
+                    </div>
+                    <div className="flex items-center gap-2 mt-4 text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1.5 rounded-xl">
+                      <Calendar className="w-4 h-4 shrink-0 text-emerald-600" />
+                      <span>Soporte comercial agendado</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seccion 2: Correlación Citas y Productos + Rendimiento Tiers */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Correlación de Citas CRM */}
+                  <div className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Correlación: Citas Agendadas vs Carga de Productos</h4>
+                      <p className="text-xs text-slate-400 mb-4">¿El agendamiento comercial de citas empuja la creación de catálogo en proveedores sin tipo?</p>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        {/* Con Cita */}
+                        <div className="bg-emerald-50/30 p-4 rounded-xl border border-emerald-100">
+                          <p className="text-[10px] font-bold text-emerald-705 uppercase tracking-wider flex items-center gap-1">
+                            <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                            Con Cita Agendada
+                          </p>
+                          
+                          <div className="mt-3 flex flex-col gap-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-slate-500">Catálogo Creado (≥1 Prod):</span>
+                              <span className="font-bold text-slate-800">{data.validationStats.correlation.withMeetingWithProducts}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-slate-500">Catálogo Vacío (0 Prod):</span>
+                              <span className="font-bold text-slate-800">{data.validationStats.correlation.withMeetingNoProducts}</span>
+                            </div>
+                            {(() => {
+                              const total = data.validationStats.correlation.withMeetingWithProducts + data.validationStats.correlation.withMeetingNoProducts;
+                              const pct = total > 0 ? Math.round((data.validationStats.correlation.withMeetingWithProducts / total) * 100) : 0;
+                              return (
+                                <div className="mt-2 pt-2 border-t border-emerald-100 flex justify-between items-center text-[11px] font-bold text-emerald-755">
+                                  <span>Conversión Catálogo:</span>
+                                  <span>{pct}%</span>
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        </div>
+
+                        {/* Sin Cita */}
+                        <div className="bg-slate-50/50 p-4 rounded-xl border border-slate-200">
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
+                            <Clock className="w-3.5 h-3.5" />
+                            Sin Cita Agendada
+                          </p>
+                          
+                          <div className="mt-3 flex flex-col gap-2">
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-slate-500">Catálogo Creado (≥1 Prod):</span>
+                              <span className="font-bold text-slate-800">{data.validationStats.correlation.noMeetingWithProducts}</span>
+                            </div>
+                            <div className="flex justify-between items-center text-xs">
+                              <span className="text-slate-500">Catálogo Vacío (0 Prod):</span>
+                              <span className="font-bold text-slate-800">{data.validationStats.correlation.noMeetingNoProducts}</span>
+                            </div>
+                            {(() => {
+                              const total = data.validationStats.correlation.noMeetingWithProducts + data.validationStats.correlation.noMeetingNoProducts;
+                              const pct = total > 0 ? Math.round((data.validationStats.correlation.noMeetingWithProducts / total) * 100) : 0;
+                              return (
+                                <div className="mt-2 pt-2 border-t border-slate-200 flex justify-between items-center text-[11px] font-bold text-slate-600">
+                                  <span>Conversión Catálogo:</span>
+                                  <span>{pct}%</span>
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mt-4 p-3 bg-indigo-50 border border-indigo-100 rounded-xl text-[11px] text-indigo-950 flex items-start gap-2">
+                      <Sparkles className="w-4 h-4 shrink-0 text-indigo-650 mt-0.5" />
+                      <p>
+                        <strong>Hipótesis Comercial:</strong> Los proveedores que pasan por la cita de validación tienen una tasa de creación de catálogo sustancialmente mayor que los que no. Use esto para priorizar llamadas telefónicas preventivas.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Rendimiento por Nivel de Proveedor */}
+                  <div className="bg-white p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                    <h4 className="font-bold text-slate-800 text-sm">Rendimiento Operativo por Nivel de Proveedor</h4>
+                    <p className="text-xs text-slate-400 mb-4">Comparación de volumen real de ventas y catálogo según su tipo de proveedor asignado.</p>
+                    
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left border-collapse text-xs">
+                        <thead>
+                          <tr className="border-b border-slate-100 bg-slate-50 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                            <th className="px-4 py-3">Nivel del Proveedor</th>
+                            <th className="px-4 py-3 text-center">Proveedores</th>
+                            <th className="px-4 py-3 text-center">Órdenes Prom.</th>
+                            <th className="px-4 py-3 text-center">Productos Prom.</th>
+                            <th className="px-4 py-3 text-center">Activos (30d)</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-slate-600">
+                          {data.tierPerformance.map((tierData) => (
+                            <tr key={tierData.tier} className="hover:bg-slate-50/40">
+                              <td className="px-4 py-3 font-bold text-slate-800">
+                                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-lg border ${
+                                  tierData.tier === "PREMIUM EXCLUSIVO" ? "bg-indigo-50 text-indigo-700 border-indigo-200" :
+                                  tierData.tier === "PREMIUM" ? "bg-amber-50 text-amber-700 border-amber-200" :
+                                  tierData.tier === "VERIFICADO" ? "bg-blue-50 text-blue-700 border-blue-200" :
+                                  "bg-slate-50 text-slate-500 border-slate-200"
+                                }`}>
+                                  {tierData.tier}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-center font-semibold text-slate-700">
+                                {tierData.count.toLocaleString("es-CO")}
+                              </td>
+                              <td className="px-4 py-3 text-center font-bold text-indigo-650">
+                                {tierData.avgOrders.toLocaleString("es-CO")}
+                              </td>
+                              <td className="px-4 py-3 text-center font-bold text-slate-800">
+                                {tierData.avgProducts.toLocaleString("es-CO")}
+                              </td>
+                              <td className="px-4 py-3 text-center">
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                  tierData.activeRate >= 50 ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"
+                                }`}>
+                                  {tierData.activeRate}%
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tabla de Proveedores Visibles Validados */}
+                <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+                  <div className="p-5 bg-slate-900 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <span className="p-2 bg-white/10 rounded-xl text-emerald-400">
+                        <CheckCircle className="w-5 h-5" />
+                      </span>
+                      <div>
+                        <h3 className="font-bold text-sm sm:text-base">Directorio de Nuevos Registros (Cohorte 90 días)</h3>
+                        <p className="text-xs text-slate-400">
+                          Listado de todos los proveedores registrados en los últimos 90 días. Filtre por nivel, catálogo, citas y órdenes para evaluar su efectividad.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Input Search */}
+                    <div className="relative w-full md:w-64">
+                      <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                      <input
+                        type="text"
+                        value={valSearch}
+                        onChange={(e) => setValSearch(e.target.value)}
+                        placeholder="Buscar por bodega, email o tel..."
+                        className="w-full pl-9 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-slate-500 transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Barra de Filtros Avanzados */}
+                  <div className="bg-slate-50 p-4 border-b border-slate-100 flex flex-wrap items-center gap-3 text-xs">
+                    <div className="flex items-center gap-1.5">
+                      <Filter className="w-3.5 h-3.5 text-slate-400" />
+                      <span className="font-semibold text-slate-500">Filtrar tabla:</span>
+                    </div>
+
+                    {/* Filtro de Tipo de Proveedor */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Nivel/Tipo:</span>
+                      <select
+                        value={valFilterTier}
+                        onChange={(e) => setValFilterTier(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos los niveles</option>
+                        <option value="Sin Tipo">Sin Tipo (Registros nuevos)</option>
+                        <option value="VERIFICADO">VERIFICADO</option>
+                        <option value="PREMIUM">PREMIUM</option>
+                        <option value="PREMIUM EXCLUSIVO">PREMIUM EXCLUSIVO</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Catálogo (Productos) */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Catálogo:</span>
+                      <select
+                        value={valFilterProducts}
+                        onChange={(e) => setValFilterProducts(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos</option>
+                        <option value="with">Con Catálogo (≥1 Prod)</option>
+                        <option value="without">Catálogo Vacío (0 Prod)</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Ventas (Órdenes) */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Ventas (Órdenes):</span>
+                      <select
+                        value={valFilterOrders}
+                        onChange={(e) => setValFilterOrders(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos</option>
+                        <option value="with">Con Ventas (≥1 Orden)</option>
+                        <option value="without">Sin Ventas (0 Órdenes)</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Citas CRM */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Cita CRM:</span>
+                      <select
+                        value={valFilterAppointment}
+                        onChange={(e) => setValFilterAppointment(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos</option>
+                        <option value="with">Con Cita Agendada</option>
+                        <option value="without">Sin Cita Agendada</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Estado de Actividad */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Estado/Actividad:</span>
+                      <select
+                        value={valFilterStatus}
+                        onChange={(e) => setValFilterStatus(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos los estados</option>
+                        <option value="active">Activos recientes (0-7d inactivo)</option>
+                        <option value="dormant">Dormantes (8-14d inactivo)</option>
+                        <option value="critical">Riesgo Crítico (15-30d inactivo)</option>
+                        <option value="churned">Abandono Confirmado (30d+)</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Rol de Encuesta */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Rol Encuesta:</span>
+                      <select
+                        value={valFilterRole}
+                        onChange={(e) => setValFilterRole(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos los roles</option>
+                        <option value="supplier">Proveedor</option>
+                        <option value="brand">Marca / Emprendedor</option>
+                        <option value="none">No especificado</option>
+                      </select>
+                    </div>
+
+                    {/* Filtro de Volumen de Encuesta */}
+                    <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                      <span className="text-slate-400">Volumen Encuesta:</span>
+                      <select
+                        value={valFilterVolume}
+                        onChange={(e) => setValFilterVolume(e.target.value)}
+                        className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                      >
+                        <option value="ALL">Todos los volúmenes</option>
+                        <option value="high">Alto Volumen (&gt;300/mes)</option>
+                        <option value="mid">Volumen Medio (50-300/mes)</option>
+                        <option value="low">Bajo Volumen (&lt;50/mes)</option>
+                        <option value="none">Sin Ventas / Inicial</option>
+                      </select>
+                    </div>
+
+                    <div className="ml-auto text-slate-400 font-medium">
+                      Mostrando <span className="font-bold text-slate-700">{filteredValidatedList.length}</span> resultados
+                    </div>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                          <th className="px-6 py-4">Bodega / Proveedor</th>
+                          <th className="px-6 py-4">Nivel / Cita</th>
+                          <th className="px-6 py-4">Contacto</th>
+                          <th className="px-6 py-4">Registro</th>
+                          <th className="px-6 py-4">Perfil Encuesta</th>
+                          <th className="px-6 py-4">Comunidad / Origen</th>
+                          <th className="px-6 py-4 text-center">País</th>
+                          <th className="px-6 py-4 text-center">Productos</th>
+                          <th className="px-6 py-4 text-center">Órdenes Reales</th>
+                          <th className="px-6 py-4 text-center">Estado</th>
+                          <th className="px-6 py-4 text-right">Acción</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-slate-600">
+                        {filteredValidatedList.length > 0 ? (
+                          filteredValidatedList.map((valSup, idx) => {
+                            const rawTipo = valSup.tipo_proveedor ? valSup.tipo_proveedor.trim().toUpperCase() : "";
+                            const badgeColor = rawTipo === "PREMIUM EXCLUSIVO" ? "bg-indigo-100 text-indigo-805 border-indigo-200" :
+                                               rawTipo === "PREMIUM" ? "bg-amber-100 text-amber-800 border-amber-200" :
+                                               rawTipo === "VERIFICADO" ? "bg-blue-100 text-blue-800 border-blue-200" :
+                                               "bg-slate-100 text-slate-500 border-slate-200";
+                            const tierName = valSup.tipo_proveedor || "Sin Tipo";
+
+                            // Procesar datos de encuesta
+                            const isBrand = valSup.survey_role?.toLowerCase().includes("marca");
+                            const isSupplier = valSup.survey_role?.toLowerCase().includes("proveedor");
+                            const roleText = isBrand ? "MARCA" : isSupplier ? "PROVEEDOR" : "No especificado";
+                            const roleColor = isBrand ? "bg-amber-50 text-amber-700 border-amber-200/80" :
+                                              isSupplier ? "bg-indigo-50 text-indigo-700 border-indigo-200/80" :
+                                              "bg-slate-50 text-slate-500 border-slate-200";
+
+                            const vol = valSup.survey_volume || "";
+                            let volBadgeColor = "bg-slate-50 text-slate-500 border-slate-200";
+                            let volText = vol || "No especificado";
+                            if (vol.includes("1.000") && vol.includes("Más")) {
+                              volBadgeColor = "bg-rose-50 text-rose-700 border-rose-200 font-bold";
+                              volText = "🔥 > 1.000 / mes";
+                            } else if (vol.includes("301")) {
+                              volBadgeColor = "bg-purple-50 text-purple-700 border-purple-200";
+                              volText = "📦 300 - 1.000 / mes";
+                            } else if (vol.includes("51")) {
+                              volBadgeColor = "bg-blue-50 text-blue-700 border-blue-200";
+                              volText = "📦 50 - 300 / mes";
+                            } else if (vol.includes("Menos")) {
+                              volBadgeColor = "bg-slate-100 text-slate-600 border-slate-200";
+                              volText = "📦 < 50 / mes";
+                            } else if (vol.includes("vendo") || vol.includes("Aún") || vol.includes("gestiono")) {
+                              volBadgeColor = "bg-slate-50/70 text-slate-400 border-slate-200";
+                              volText = "Sin ventas";
+                            }
+
+                            const comName = valSup.resolved_community || "Orgánico / Sin comunidad";
+                            const src = valSup.survey_source;
+                            const srcText = src === "comunidades" ? "Comunidad" : src === "huerfanos" ? "Huérfano" : "Orgánico";
+                            const srcColor = src === "comunidades" ? "bg-purple-50 text-purple-700 border-purple-200" :
+                                             src === "huerfanos" ? "bg-amber-50 text-amber-700 border-amber-200" :
+                                             "bg-slate-100 text-slate-500 border-slate-200";
+
+                            return (
+                              <tr key={idx} className="hover:bg-slate-50/30 transition-colors">
+                                <td className="px-6 py-4 font-bold text-slate-800">{valSup.name}</td>
+                                <td className="px-6 py-4">
+                                  <span className={`px-2 py-0.5 text-[9px] font-bold rounded border ${badgeColor}`}>
+                                    {tierName}
+                                  </span>
+                                  <div className="flex items-center gap-1 mt-1">
+                                    <Calendar className={`w-3.5 h-3.5 ${valSup.has_appointment ? "text-emerald-500" : "text-slate-300"}`} />
+                                    <span className={`text-[9px] font-semibold ${valSup.has_appointment ? "text-emerald-700" : "text-slate-400"}`}>
+                                      {valSup.has_appointment ? "Con Cita" : "Sin Cita"}
+                                    </span>
+                                    {valSup.ultima_cita_confirmada && (
+                                      <span className="text-[8px] text-slate-400">
+                                        ({new Date(valSup.ultima_cita_confirmada).toLocaleDateString("es-CO", { day: "numeric", month: "short" })})
+                                      </span>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="text-slate-700">{valSup.email}</div>
+                                  <div className="text-[10px] text-slate-400">{valSup.phone}</div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  {valSup.signed_up ? (
+                                    <>
+                                      <div className="font-semibold text-slate-700">
+                                        {new Date(valSup.signed_up).toLocaleDateString("es-CO", {
+                                          day: "numeric",
+                                          month: "short",
+                                          year: "numeric"
+                                        })}
+                                      </div>
+                                      <div className="text-[10px] text-slate-400">
+                                        Hace {Math.max(0, Math.floor((new Date("2026-05-25T10:30:00-05:00").getTime() - new Date(valSup.signed_up).getTime()) / 86400000))} días
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <span className="text-slate-400">-</span>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="flex flex-col gap-1.5 items-start">
+                                    <span className={`px-1.5 py-0.5 text-[8px] font-extrabold rounded border uppercase tracking-wider ${roleColor}`}>
+                                      {roleText}
+                                    </span>
+                                    <span className={`px-1.5 py-0.5 text-[8px] font-bold rounded border ${volBadgeColor}`} title={vol}>
+                                      {volText}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4">
+                                  <div className="font-bold text-slate-800 text-[11px] truncate max-w-[130px]" title={comName}>
+                                    {comName}
+                                  </div>
+                                  <div className="mt-1">
+                                    <span className={`px-1.5 py-0.5 text-[8px] font-bold rounded border uppercase tracking-wide ${srcColor}`}>
+                                      {srcText}
+                                    </span>
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-center font-semibold text-slate-700">{valSup.country}</td>
+                                <td className="px-6 py-4 text-center font-bold text-slate-700">📦 {valSup.real_products_created}</td>
+                                <td className="px-6 py-4 text-center font-extrabold text-indigo-600">🛒 {valSup.real_orders_delivered}</td>
+                                <td className="px-6 py-4 text-center">
+                                  {valSup.status === "churned" ? (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-red-50 text-red-700 border border-red-100 rounded-full">
+                                      Abandono
+                                    </span>
+                                  ) : valSup.status === "critical" ? (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-rose-50 text-rose-700 border border-rose-100 rounded-full">
+                                      Crítico
+                                    </span>
+                                  ) : valSup.status === "dormant" ? (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-blue-50 text-blue-700 border border-blue-100 rounded-full">
+                                      Dormante
+                                    </span>
+                                  ) : (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full">
+                                      Activo
+                                    </span>
+                                  )}
+                                </td>
+                                <td className="px-6 py-4 text-right">
+                                  {valSup.phone && valSup.phone !== "-" ? (
+                                    <a
+                                      href={getWhatsAppLink(valSup.phone, valSup.name, 5, "Volumen validado por Control de Validación")}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-[10px] font-bold transition-all shadow-sm shadow-emerald-500/10 cursor-pointer"
+                                    >
+                                      <MessageSquare className="w-3.5 h-3.5" />
+                                      <span>Contactar</span>
+                                    </a>
+                                  ) : (
+                                    <span className="text-[10px] text-slate-400">Sin teléfono</span>
+                                  )}
+                                </td>
+                              </tr>
+                            );
+                          })
+                        ) : (
+                          <tr>
+                            <td colSpan={11} className="px-6 py-12 text-center text-slate-400 font-medium">
+                              No hay registros que coincidan con la búsqueda o filtros aplicados.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* PESTAÑA NUEVA: ASISTENTE DE DATOS (CHAT DETERMINÍSTICO) */}
+            {activeTab === "data_chat" && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Panel Izquierdo: Preguntas Sugeridas */}
+                <div className="flex flex-col gap-4">
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="p-1 rounded bg-indigo-50 text-indigo-650">
+                        <Compass className="w-4 h-4" />
+                      </span>
+                      <h4 className="font-bold text-slate-800 text-sm">Preguntas Sugeridas</h4>
+                    </div>
+                    <p className="text-xs text-slate-400 mb-4">
+                      Haz clic en cualquiera de estas preguntas predefinidas para consultar el dataset de la cohorte de 90 días de forma instantánea:
+                    </p>
+
+                    <div className="flex flex-col gap-2.5">
+                      {[
+                        { q: "¿Cuántos proveedores de Colombia se registraron en los últimos 90 días?", icon: "🇨🇴" },
+                        { q: "¿Cuáles son los 5 proveedores con más órdenes?", icon: "🔥" },
+                        { q: "¿Quiénes son los proveedores sin tipo con catálogo vacío?", icon: "📦" },
+                        { q: "¿Qué porcentaje de proveedores con cita agendada crearon productos?", icon: "📅" },
+                        { q: "¿Quiénes son los proveedores de la comunidad ALEX ROJAS?", icon: "👥" },
+                        { q: "¿Cuántos proveedores están en estado de abandono?", icon: "⚠️" },
+                      ].map((item, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleSendMessage(item.q)}
+                          className="w-full text-left p-3 bg-slate-50 hover:bg-indigo-50 border border-slate-100 hover:border-indigo-200 rounded-xl text-xs font-semibold text-slate-700 hover:text-indigo-900 transition-all flex items-start gap-2.5 cursor-pointer shadow-sm"
+                        >
+                          <span className="text-sm shrink-0">{item.icon}</span>
+                          <span>{item.q}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-slate-900 text-white p-5 rounded-2xl border border-slate-800 shadow-md">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="px-2 py-0.5 text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-full uppercase tracking-wider">
+                        Optimizado
+                      </span>
+                      <span className="text-[10px] font-bold text-slate-400">Consumo: 0 Tokens</span>
+                    </div>
+                    <h5 className="font-bold text-xs uppercase tracking-wider text-indigo-300">¿Cómo funciona?</h5>
+                    <p className="text-[11px] text-slate-400 mt-2 leading-relaxed">
+                      Este chat utiliza un motor de **procesamiento determinístico en el navegador**. En lugar de enviar los datos de tus proveedores a un servidor de inteligencia artificial externo (lo cual consumiría tokens y violaría la privacidad), traduce tus preguntas a filtros lógicos directos sobre el dataset en memoria.
+                    </p>
+                    <div className="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center text-[10px] text-slate-500">
+                      <span>Exactitud del dato:</span>
+                      <span className="font-bold text-emerald-400">100% Determinístico</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Panel Derecho: Consola de Chat */}
+                <div className="lg:col-span-2 flex flex-col bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden h-[620px]">
+                  
+                  {/* Chat Header */}
+                  <div className="p-4 bg-slate-950 text-white border-b border-slate-850 flex items-center justify-between shrink-0">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-indigo-650 flex items-center justify-center text-white relative">
+                        <MessageSquare className="w-5 h-5" />
+                        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-950 animate-pulse" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-xs sm:text-sm">Asistente Analítico del Hub</h4>
+                        <p className="text-[10px] text-slate-400 font-medium">Búsqueda determinística sobre {data?.validationStats?.validatedList?.length || 0} proveedores</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {chatMode === "local" ? (
+                        <span className="px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-bold rounded-full uppercase">
+                          0 Tokens / 0ms Latencia
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 bg-indigo-500/20 border border-indigo-500/30 text-indigo-400 text-[9px] font-bold rounded-full uppercase animate-pulse">
+                          ChatGPT Activo
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Mode Selector */}
+                  <div className="px-4 py-2 bg-slate-50 border-b border-slate-200/80 flex items-center justify-between shrink-0 text-xs">
+                    <span className="font-bold text-slate-500 uppercase tracking-wider text-[9px] flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-500" /> Motor de respuestas:
+                    </span>
+                    <div className="flex bg-slate-200/50 p-0.5 rounded-lg border border-slate-200/60">
+                      <button
+                        type="button"
+                        onClick={() => setChatMode("local")}
+                        className={`px-3 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                          chatMode === "local"
+                            ? "bg-white text-indigo-750 shadow-sm"
+                            : "text-slate-500 hover:text-slate-800"
+                        }`}
+                      >
+                        ⚡ Local (0 Tokens)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setChatMode("gpt")}
+                        className={`px-3 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                          chatMode === "gpt"
+                            ? "bg-indigo-650 text-white shadow-sm"
+                            : "text-slate-500 hover:text-slate-800"
+                        }`}
+                      >
+                        🤖 ChatGPT AI
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Chat Messages Container */}
+                  <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50">
+                    {chatMessages.map((msg, mIdx) => (
+                      <div
+                        key={mIdx}
+                        className={`flex gap-3 max-w-[85%] ${
+                          msg.sender === "user" ? "ml-auto flex-row-reverse" : ""
+                        }`}
+                      >
+                        {/* Avatar */}
+                        <div
+                          className={`w-8 h-8 rounded-lg shrink-0 flex items-center justify-center text-xs font-bold ${
+                            msg.sender === "user"
+                              ? "bg-slate-200 text-slate-700"
+                              : "bg-indigo-600 text-white"
+                          }`}
+                        >
+                          {msg.sender === "user" ? "Tú" : "🤖"}
+                        </div>
+
+                        {/* Bubble */}
+                        <div className="flex flex-col gap-1">
+                          <div
+                            className={`p-3 rounded-2xl text-xs leading-relaxed ${
+                              msg.sender === "user"
+                                ? "bg-slate-900 text-white rounded-tr-none"
+                                : "bg-white text-slate-800 rounded-tl-none border border-slate-200 shadow-sm"
+                            }`}
+                          >
+                            <p className="whitespace-pre-line">{msg.text}</p>
+
+                            {/* Mostrar Explicación de Filtro */}
+                            {msg.result && (
+                              <div className="mt-2 pt-2 border-t border-slate-100 text-[10px] text-slate-450 italic flex items-center gap-1 font-medium">
+                                <Filter className="w-3 h-3 text-slate-400 shrink-0" />
+                                <span>{msg.result.explanation}</span>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Renderizar resultados estructurados determinísticos */}
+                          {msg.result && (
+                            <div className="mt-2 space-y-3">
+                              {/* 1. KPIs de Conteo o Porcentaje */}
+                              {(msg.result.operationType === "count" || msg.result.operationType === "percentage") && (
+                                <div className="grid grid-cols-2 gap-3">
+                                  <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-center">
+                                    <p className="text-[9px] text-slate-400 font-bold uppercase">Resultado</p>
+                                    <p className="text-xl font-black text-slate-800 mt-1">
+                                      {msg.result.count}
+                                    </p>
+                                    <p className="text-[9px] text-slate-400 mt-0.5">proveedores</p>
+                                  </div>
+                                  <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm text-center">
+                                    <p className="text-[9px] text-slate-400 font-bold uppercase">Proporción</p>
+                                    <p className="text-xl font-black text-indigo-650 mt-1">
+                                      {msg.result.percentage}%
+                                    </p>
+                                    <p className="text-[9px] text-slate-400 mt-0.5">de la cohorte</p>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* 2. Tabla de registros si es Lista o Top */}
+                              {msg.result.records && msg.result.records.length > 0 && (
+                                <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden max-w-lg">
+                                  <div className="px-3 py-2 bg-slate-50 border-b border-slate-100 flex justify-between items-center text-[10px] font-bold text-slate-500">
+                                    <span>Registros Coincidentes</span>
+                                    <span>Mostrando {expandedMessages[mIdx] ? msg.result.records.length : Math.min(3, msg.result.records.length)} de {msg.result.count}</span>
+                                  </div>
+                                  <div className="overflow-x-auto">
+                                    <table className="w-full text-left text-[10px] border-collapse">
+                                      <thead>
+                                        <tr className="bg-slate-50/50 border-b border-slate-100 text-slate-400 uppercase text-[8px] font-bold">
+                                          <th className="px-3 py-2">Proveedor</th>
+                                          <th className="px-3 py-2">País</th>
+                                          <th className="px-3 py-2">Comunidad</th>
+                                          <th className="px-3 py-2 text-center">Prod/Ord</th>
+                                          <th className="px-3 py-2 text-right">Contacto</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody className="divide-y divide-slate-100 text-slate-655">
+                                        {(expandedMessages[mIdx] 
+                                          ? msg.result.records 
+                                          : msg.result.records.slice(0, 3)
+                                        ).map((rec, rIdx) => (
+                                          <tr key={rIdx} className="hover:bg-slate-50/30">
+                                            <td className="px-3 py-2 font-bold text-slate-800">{rec.name}</td>
+                                            <td className="px-3 py-2">{rec.country}</td>
+                                            <td className="px-3 py-2 truncate max-w-[80px]" title={rec.resolved_community}>
+                                              {rec.resolved_community || "Orgánico"}
+                                            </td>
+                                            <td className="px-3 py-2 text-center">
+                                              📦{rec.real_products_created} / 🛒{rec.real_orders_delivered}
+                                            </td>
+                                            <td className="px-3 py-2 text-right">
+                                              {rec.phone && rec.phone !== "-" ? (
+                                                <a
+                                                  href={getWhatsAppLink(rec.phone, rec.name, 5, "Contacto desde Asistente Analítico")}
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                  className="inline-flex items-center gap-0.5 px-2 py-1 bg-emerald-500 hover:bg-emerald-600 text-white rounded text-[8px] font-bold transition-all shadow-sm shadow-emerald-500/10 cursor-pointer"
+                                                >
+                                                  <MessageSquare className="w-2.5 h-2.5" />
+                                                  <span>WhatsApp</span>
+                                                </a>
+                                              ) : (
+                                                <span className="text-[8px] text-slate-400">Sin tel</span>
+                                              )}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  {msg.result.records.length > 3 && (
+                                    <div className="p-2 bg-slate-50 border-t border-slate-100 text-center">
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          setExpandedMessages(prev => ({
+                                            ...prev,
+                                            [mIdx]: !prev[mIdx]
+                                          }));
+                                        }}
+                                        className="text-[10px] text-indigo-650 hover:text-indigo-850 font-bold transition-colors cursor-pointer focus:outline-none"
+                                      >
+                                        {expandedMessages[mIdx] ? "Ver menos registros" : `Ver ${msg.result.records.length - 3} registros más`}
+                                      </button>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          <span className="text-[9px] text-slate-400 font-medium px-1">
+                            {msg.timestamp.toLocaleTimeString("es-CO", { hour: "numeric", minute: "2-digit" })}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* Typing Indicator */}
+                    {isTyping && (
+                      <div className="flex gap-3 max-w-[80%]">
+                        <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center text-xs font-bold shrink-0">
+                          🤖
+                        </div>
+                        <div className="bg-white p-3.5 rounded-2xl rounded-tl-none border border-slate-200 shadow-sm flex items-center gap-1.5 shrink-0">
+                          <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Chat Input Bar */}
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSendMessage();
+                    }}
+                    className="p-3 bg-white border-t border-slate-200 flex gap-2 items-center shrink-0"
+                  >
+                    <input
+                      type="text"
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      placeholder="Pregunta algo (ej. 'cuales son los top 5 proveedores con mas ordenes de ecuador con cita agendada')"
+                      className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs placeholder-slate-400 text-slate-800 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all shadow-inner"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!chatInput.trim()}
+                      className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-100 text-white disabled:text-slate-400 font-bold rounded-xl text-xs transition-colors flex items-center gap-1.5 cursor-pointer disabled:cursor-not-allowed shrink-0 shadow-sm"
+                    >
+                      <span>Preguntar</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {/* PESTAÑA 3: PERFIL DE ENCUESTAS (INSIGHTS) */}
+            {activeTab === "survey_insights" && (
+              <div className="flex flex-col gap-6">
+                
+                {/* Header de Encuestas */}
+                <div className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 rounded-2xl border border-slate-800 shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="w-5 h-5 text-indigo-400 animate-pulse" />
+                      <h3 className="font-bold text-base sm:text-lg">Insights de Perfilado Comercial de Proveedores</h3>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Métricas acumuladas a partir de las respuestas registradas en las encuestas de Dropi.
+                    </p>
+                  </div>
+                  <div className="bg-white/10 px-4 py-2 rounded-xl text-center border border-white/5">
+                    <p className="text-[9px] font-bold text-slate-400 uppercase">Encuestas Cruzadas</p>
+                    <p className="text-xl font-extrabold text-indigo-300 mt-0.5">
+                      {surveyStats.totalWithSurvey.toLocaleString("es-CO")}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Graficos de Encuestas */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  
+                  {/* Rol o Intención */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Intención de Uso (Roles)</h4>
+                      <p className="text-xs text-slate-400">¿Cómo se perfilan en la plataforma?</p>
+                    </div>
+
+                    <div className="h-[180px] w-full relative flex items-center justify-center mt-4">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={surveyStats.roles}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={45}
+                            outerRadius={65}
+                            paddingAngle={3}
+                            dataKey="value"
+                          >
+                            {surveyStats.roles.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                      <div className="absolute flex flex-col items-center justify-center">
+                        <Users className="w-5 h-5 text-slate-400" />
+                        <span className="text-[9px] font-bold text-slate-400 uppercase mt-0.5">Roles</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1.5 mt-4">
+                      {surveyStats.roles.map((r, index) => (
+                        <div key={r.name} className="flex items-center justify-between text-xs text-slate-600 border-b border-slate-50 pb-1">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full" style={{ background: r.color || COLORS[index % COLORS.length] }} />
+                            <span className="font-medium">{r.name}</span>
+                          </div>
+                          <span className="font-bold text-slate-800">
+                            {r.value.toLocaleString("es-CO")} ({surveyStats.totalWithSurvey > 0 ? Math.round((r.value / surveyStats.totalWithSurvey) * 100) : 0}%)
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Volumen Declarado (Rangos de Pedidos/Productos) */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between lg:col-span-2">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Volumen de Pedidos/Ventas Mensuales</h4>
+                      <p className="text-xs text-slate-400">Distribución de rangos de cantidad de transacciones declaradas</p>
+                    </div>
+
+                    <div className="h-[280px] w-full mt-4">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={surveyStats.volumes} layout="vertical" margin={{ top: 10, right: 20, left: 60, bottom: 5 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                          <XAxis type="number" tick={{ fontSize: 10, fill: "#64748b" }} stroke="#e2e8f0" />
+                          <YAxis dataKey="name" type="category" tick={{ fontSize: 9, fill: "#475569" }} width={150} stroke="#e2e8f0" />
+                          <Tooltip
+                            contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "11px" }}
+                          />
+                          <Bar dataKey="value" fill="#6366F1" radius={[0, 4, 4, 0]} barSize={16}>
+                            {surveyStats.volumes.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+
+                  {/* Origen de Registro */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Origen de Registro</h4>
+                      <p className="text-xs text-slate-400">¿De qué canal o embudo provienen?</p>
+                    </div>
+
+                    <div className="h-[180px] w-full relative flex items-center justify-center mt-4">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={surveyStats.sources}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={45}
+                            outerRadius={65}
+                            paddingAngle={3}
+                            dataKey="value"
+                          >
+                            {surveyStats.sources.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                      <div className="absolute flex flex-col items-center justify-center">
+                        <Globe className="w-5 h-5 text-slate-400" />
+                        <span className="text-[9px] font-bold text-slate-400 uppercase mt-0.5">Canales</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-1.5 mt-4">
+                      {surveyStats.sources.map((src, index) => (
+                        <div key={src.name} className="flex items-center justify-between text-xs text-slate-600 border-b border-slate-50 pb-1">
+                          <div className="flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full" style={{ background: src.color || COLORS[index % COLORS.length] }} />
+                            <span className="font-medium">{src.name}</span>
+                          </div>
+                          <span className="font-bold text-slate-800">
+                            {src.value.toLocaleString("es-CO")} ({surveyStats.totalWithSurvey > 0 ? Math.round((src.value / surveyStats.totalWithSurvey) * 100) : 0}%)
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Cruzado de Segmentos (Canal y Rol) */}
+                  <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm lg:col-span-2 flex flex-col justify-between">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Cruzado de Segmentos (Rol y Canal)</h4>
+                      <p className="text-xs text-slate-400">Distribución cruzada de Proveedores vs. Marcas según comunidades / huérfanos</p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mt-6">
+                      <div className="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100/50 text-center">
+                        <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">Proveedores en Comunidades</p>
+                        <h5 className="text-2xl font-extrabold text-indigo-950 mt-1.5">
+                          {surveyStats.crossSegments.supplierComunidad.toLocaleString("es-CO")}
+                        </h5>
+                        <p className="text-[10px] text-indigo-700/70 mt-1">
+                          {surveyStats.totalWithSurvey > 0 ? Math.round((surveyStats.crossSegments.supplierComunidad / surveyStats.totalWithSurvey) * 100) : 0}% de los encuestados
+                        </p>
+                      </div>
+
+                      <div className="bg-emerald-50/50 p-4 rounded-xl border border-emerald-100/50 text-center">
+                        <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Proveedores Huérfanos</p>
+                        <h5 className="text-2xl font-extrabold text-emerald-950 mt-1.5">
+                          {surveyStats.crossSegments.supplierHuerfano.toLocaleString("es-CO")}
+                        </h5>
+                        <p className="text-[10px] text-emerald-700/70 mt-1">
+                          {surveyStats.totalWithSurvey > 0 ? Math.round((surveyStats.crossSegments.supplierHuerfano / surveyStats.totalWithSurvey) * 100) : 0}% de los encuestados
+                        </p>
+                      </div>
+
+                      <div className="bg-purple-50/50 p-4 rounded-xl border border-purple-100/50 text-center">
+                        <p className="text-[10px] font-bold text-purple-600 uppercase tracking-wider">Marcas en Comunidades</p>
+                        <h5 className="text-2xl font-extrabold text-purple-950 mt-1.5">
+                          {surveyStats.crossSegments.brandComunidad.toLocaleString("es-CO")}
+                        </h5>
+                        <p className="text-[10px] text-purple-700/70 mt-1">
+                          {surveyStats.totalWithSurvey > 0 ? Math.round((surveyStats.crossSegments.brandComunidad / surveyStats.totalWithSurvey) * 100) : 0}% de los encuestados
+                        </p>
+                      </div>
+
+                      <div className="bg-amber-50/50 p-4 rounded-xl border border-amber-100/50 text-center">
+                        <p className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">Marcas Huérfanas</p>
+                        <h5 className="text-2xl font-extrabold text-amber-950 mt-1.5">
+                          {surveyStats.crossSegments.brandHuerfano.toLocaleString("es-CO")}
+                        </h5>
+                        <p className="text-[10px] text-amber-700/70 mt-1">
+                          {surveyStats.totalWithSurvey > 0 ? Math.round((surveyStats.crossSegments.brandHuerfano / surveyStats.totalWithSurvey) * 100) : 0}% de los encuestados
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                {/* Rendimiento por Comunidades */}
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm mt-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-slate-100 pb-4">
+                    <div>
+                      <h4 className="font-bold text-slate-800 text-sm">Rendimiento y Penetración de Comunidades</h4>
+                      <p className="text-xs text-slate-400">Atribución de registros por comunidades directas, propietarios o referidos</p>
+                    </div>
+                    <span className="text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-100 px-2.5 py-1 rounded-full uppercase">
+                      Adquisición y Activación
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    {/* Top 10 Comunidades Chart */}
+                    <div className="lg:col-span-5 border-r border-slate-100 pr-0 lg:pr-6">
+                      <p className="text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider">
+                        Top 10 Comunidades por {activeMetricOption.name}
+                      </p>
+                      
+                      {/* Control Selector de Métrica */}
+                      <div className="flex flex-wrap items-center gap-1.5 mb-4">
+                        {chartMetricOptions.map((opt) => (
+                          <button
+                            key={opt.key}
+                            onClick={() => setChartMetric(opt.key)}
+                            className={`px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                              chartMetric === opt.key
+                                ? "bg-slate-900 text-white shadow-sm"
+                                : "bg-slate-50 text-slate-500 hover:bg-slate-100"
+                            }`}
+                          >
+                            {opt.name}
+                          </button>
+                        ))}
+                      </div>
+
+                      <div className="h-[320px] w-full">
+                        {chartData && chartData.length > 0 ? (
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart
+                              data={chartData}
+                              layout="vertical"
+                              margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
+                            >
+                              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                              <XAxis type="number" tick={{ fontSize: 10, fill: "#64748b" }} stroke="#e2e8f0" />
+                              <YAxis
+                                dataKey="name"
+                                type="category"
+                                tick={{ fontSize: 9, fill: "#475569" }}
+                                width={120}
+                                stroke="#e2e8f0"
+                              />
+                              <Tooltip
+                                contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "11px" }}
+                                formatter={(value: any) => [`${value} ${activeMetricOption.unit}`, activeMetricOption.name]}
+                              />
+                              <Bar dataKey={chartMetric} name={activeMetricOption.name} fill={activeMetricOption.color} radius={[0, 4, 4, 0]} barSize={12}>
+                                {chartData.map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                              </Bar>
+                            </BarChart>
+                          </ResponsiveContainer>
+                        ) : (
+                          <div className="h-full flex items-center justify-center text-slate-400 text-xs italic">
+                            No hay datos de comunidades disponibles
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Tarjeta de Resumen / Comunidades Destacadas */}
+                    <div className="lg:col-span-7 flex flex-col justify-between bg-slate-50/50 p-5 rounded-2xl border border-slate-200/50">
+                      <div>
+                        <p className="text-xs font-bold text-slate-600 mb-4 uppercase tracking-wider">Líderes y Comunidades Destacadas</p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Mejor Adquisición */}
+                          {bestAcquisition && (
+                            <div className="bg-white p-4 rounded-xl border border-slate-200/50 shadow-sm flex items-start gap-3">
+                              <span className="p-2 bg-indigo-50 text-indigo-600 rounded-lg text-xs font-bold shrink-0">📈</span>
+                              <div>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase">Mayor Captación</p>
+                                <p className="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[170px]" title={bestAcquisition.name}>{bestAcquisition.name}</p>
+                                <p className="text-[11px] text-slate-500 mt-1 font-semibold">
+                                  {bestAcquisition.count} registrados
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Mejor Activación */}
+                          {bestActivation && (
+                            <div className="bg-white p-4 rounded-xl border border-slate-200/50 shadow-sm flex items-start gap-3">
+                              <span className="p-2 bg-emerald-50 text-emerald-600 rounded-lg text-xs font-bold shrink-0">⚡</span>
+                              <div>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase">Mejor Activación (Retención)</p>
+                                <p className="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[170px]" title={bestActivation.name}>{bestActivation.name}</p>
+                                <p className="text-[11px] text-emerald-600 mt-1 font-bold">
+                                  {bestActivation.activeRate}% entran y continúan
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Menor Rebote */}
+                          {lowestBounce && (
+                            <div className="bg-white p-4 rounded-xl border border-slate-200/50 shadow-sm flex items-start gap-3">
+                              <span className="p-2 bg-rose-50 text-rose-600 rounded-lg text-xs font-bold shrink-0">🎯</span>
+                              <div>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase">Menor Rebote (Bounce)</p>
+                                <p className="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[170px]" title={lowestBounce.name}>{lowestBounce.name}</p>
+                                <p className="text-[11px] text-slate-500 mt-1 font-semibold">
+                                  Solo <span className="text-rose-600 font-bold">{lowestBounce.bounceRate}%</span> abandonan al registrarse
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Mejor Facturación */}
+                          {bestBilling && (
+                            <div className="bg-white p-4 rounded-xl border border-slate-200/50 shadow-sm flex items-start gap-3">
+                              <span className="p-2 bg-amber-50 text-amber-600 rounded-lg text-xs font-bold shrink-0">💳</span>
+                              <div>
+                                <p className="text-[10px] text-slate-400 font-bold uppercase">Facturación Lista</p>
+                                <p className="text-xs font-bold text-slate-800 mt-0.5 truncate max-w-[170px]" title={bestBilling.name}>{bestBilling.name}</p>
+                                <p className="text-[11px] text-amber-600 mt-1 font-bold">
+                                  {bestBilling.billingRate}% con facturación configurada
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="mt-4 pt-3 border-t border-slate-200/40 text-[10px] text-slate-400 font-semibold italic">
+                        * Muestra comunidades con mínimo 5 registros. Se excluye el flujo puramente orgánico.
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tabla de Métricas de Comunidades Detallada (Full Width) */}
+                  <div className="mt-6 border-t border-slate-100 pt-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <p className="text-xs font-bold text-slate-600 uppercase tracking-wider">Métricas Analíticas Completas de Conversión y Uso</p>
+                      <span className="text-[10px] text-slate-400 font-medium">Mostrando {data?.communities.length} comunidades / canales detectados</span>
+                    </div>
+
+                    <div className="overflow-x-auto border border-slate-200/80 rounded-2xl shadow-sm">
+                      <table className="w-full text-left border-collapse min-w-[900px]">
+                        <thead>
+                          <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                            <th className="px-6 py-4">Comunidad / Canal</th>
+                            <th className="px-6 py-4 text-center">Registrados</th>
+                            <th className="px-6 py-4 text-center">Tasa Activación</th>
+                            <th className="px-6 py-4 text-center">Catálogo Listo (%)</th>
+                            <th className="px-6 py-4 text-center">Con Venta (%)</th>
+                            <th className="px-6 py-4 text-center">TTV Prom.</th>
+                            <th className="px-6 py-4 text-center">Activos Dropi</th>
+                            <th className="px-6 py-4 text-center">Órdenes Reales</th>
+                            <th className="px-6 py-4 text-center">Productos Reales</th>
+                            <th className="px-6 py-4 text-center">Verificados</th>
+                            <th className="px-6 py-4 text-center">Rebote (1 ses)</th>
+                            <th className="px-6 py-4 text-center">Sesiones Prom.</th>
+                            <th className="px-6 py-4 text-center">Facturación Lista</th>
+                            <th className="px-6 py-4 text-center">Perfil Proveedor</th>
+                            <th className="px-6 py-4 text-center">Alto Volumen</th>
+                            <th className="px-6 py-4 text-center">Inactividad Prom.</th>
+                            <th className="px-6 py-4 text-center">Permanencia Prom.</th>
+                            <th className="px-6 py-4 text-right">Recuperación</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100 text-xs text-slate-600">
+                          {data?.communities && data.communities.length > 0 ? (
+                            data.communities.map((c, idx) => {
+                              const isOrganic = c.name === "Orgánico / Sin comunidad";
+                              return (
+                                <tr key={idx} className={`hover:bg-slate-50/50 transition-colors ${isOrganic ? "bg-slate-50/20 font-medium" : ""}`}>
+                                  <td className="px-6 py-4 font-bold text-slate-800 flex items-center gap-2">
+                                    <span className={`w-2 h-2 rounded-full shrink-0 ${isOrganic ? "bg-slate-400" : "bg-purple-500"}`} />
+                                    <span>{c.name}</span>
+                                  </td>
+                                  <td className="px-6 py-4 text-center font-bold text-slate-800">
+                                    {c.count.toLocaleString("es-CO")}
+                                  </td>
+                                  
+                                  {/* Tasa Activación */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold ${
+                                      c.activeRate >= 50
+                                        ? "bg-emerald-100 text-emerald-800"
+                                        : c.activeRate >= 25
+                                        ? "bg-emerald-50 text-emerald-700"
+                                        : c.activeRate >= 10
+                                        ? "bg-amber-50 text-amber-700"
+                                        : "bg-rose-50 text-rose-700"
+                                    }`}>
+                                      {c.activeRate}%
+                                    </span>
+                                  </td>
+
+                                  {/* Catálogo Listo (>=1 Prod) */}
+                                  <td className="px-6 py-4 text-center font-bold text-indigo-600">
+                                    {c.hasProductRate}%
+                                  </td>
+
+                                  {/* Con Venta (>=1 Orden) */}
+                                  <td className="px-6 py-4 text-center font-bold text-rose-600">
+                                    {c.hasOrderRate}%
+                                  </td>
+
+                                  {/* TTV Prom. (días) */}
+                                  <td className="px-6 py-4 text-center font-bold text-slate-700">
+                                    {c.avgTtvDays > 0 ? `${c.avgTtvDays}d` : "-"}
+                                  </td>
+
+                                  {/* Activos Dropi (%) */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold ${
+                                      c.realActiveRate >= 40
+                                        ? "bg-indigo-100 text-indigo-800"
+                                        : c.realActiveRate >= 15
+                                        ? "bg-indigo-50 text-indigo-700"
+                                        : "bg-slate-100 text-slate-500"
+                                    }`}>
+                                      {c.realActiveRate}%
+                                    </span>
+                                  </td>
+
+                                  {/* Órdenes Reales */}
+                                  <td className="px-6 py-4 text-center font-semibold text-slate-700">
+                                    {c.totalRealOrders?.toLocaleString("es-CO") || 0}
+                                  </td>
+
+                                  {/* Productos Reales */}
+                                  <td className="px-6 py-4 text-center font-semibold text-slate-700">
+                                    {c.totalRealProducts?.toLocaleString("es-CO") || 0}
+                                  </td>
+
+                                  {/* Tasa Verificados */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold ${
+                                      c.verifiedRate >= 30
+                                        ? "bg-indigo-100 text-indigo-800"
+                                        : c.verifiedRate >= 10
+                                        ? "bg-indigo-50/70 text-indigo-700"
+                                        : "bg-slate-100 text-slate-500"
+                                    }`}>
+                                      {c.verifiedRate}%
+                                    </span>
+                                  </td>
+ 
+                                  {/* Rebote (Bounce) */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                                      c.bounceRate > 60
+                                        ? "bg-red-50 text-red-600"
+                                        : c.bounceRate > 30
+                                        ? "bg-amber-50 text-amber-600"
+                                        : "bg-green-50 text-green-600"
+                                    }`}>
+                                      {c.bounceRate}%
+                                    </span>
+                                  </td>
+ 
+                                  {/* Sesiones Promedio */}
+                                  <td className="px-6 py-4 text-center font-semibold text-slate-700">
+                                    {c.avgSessions}
+                                  </td>
+ 
+                                  {/* Facturación Lista */}
+                                  <td className="px-6 py-4 text-center">
+                                    <div className="flex items-center justify-center gap-1">
+                                      <div className="w-12 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                        <div className="bg-amber-500 h-full" style={{ width: `${c.billingRate}%` }} />
+                                      </div>
+                                      <span className="text-[10px] text-slate-500 font-bold w-7 text-right">{c.billingRate}%</span>
+                                    </div>
+                                  </td>
+ 
+                                  {/* Perfil Proveedor */}
+                                  <td className="px-6 py-4 text-center font-medium text-slate-600">
+                                    {c.supplierRate}%
+                                  </td>
+ 
+                                  {/* Alto Volumen */}
+                                  <td className="px-6 py-4 text-center">
+                                    <div className="flex items-center justify-center gap-1">
+                                      <div className="w-12 bg-slate-100 rounded-full h-1.5 overflow-hidden">
+                                        <div className="bg-indigo-500 h-full" style={{ width: `${c.highVolumeRate}%` }} />
+                                      </div>
+                                      <span className="text-[10px] text-slate-500 font-bold w-7 text-right">{c.highVolumeRate}%</span>
+                                    </div>
+                                  </td>
+ 
+                                  {/* Inactividad Promedio */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`font-bold ${c.avgInactiveDays > 14 ? "text-rose-600" : "text-slate-700"}`}>
+                                      {c.avgInactiveDays}
+                                    </span>{" "}
+                                    días
+                                  </td>
+
+                                  {/* Permanencia Promedio */}
+                                  <td className="px-6 py-4 text-center">
+                                    <span className={`font-bold ${c.avgLifespanDays >= 30 ? "text-emerald-600" : "text-slate-700"}`}>
+                                      {c.avgLifespanDays}
+                                    </span>{" "}
+                                    días
+                                  </td>
+ 
+                                  {/* Acción */}
+                                  <td className="px-6 py-4 text-right">
+                                    <div className="flex items-center justify-end gap-3">
+                                      <button
+                                        onClick={() => fetchCommunityDetail(c.name)}
+                                        className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 hover:text-emerald-800 hover:underline cursor-pointer"
+                                      >
+                                        <span>Analizar 🔍</span>
+                                      </button>
+                                      <button
+                                        onClick={() => {
+                                          setFilterCommunity(c.name);
+                                          setActiveTab("recovery");
+                                        }}
+                                        className="inline-flex items-center gap-0.5 text-[10px] font-bold text-indigo-600 hover:text-indigo-800 hover:underline cursor-pointer"
+                                      >
+                                        <span>Ver lista</span>
+                                        <ArrowRight className="w-3 h-3" />
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })
+                          ) : (
+                            <tr>
+                              <td colSpan={18} className="px-6 py-12 text-center text-slate-400 italic">
+                                No hay datos de métricas analíticas de comunidades
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* PESTAÑA 4: COMPORTAMIENTO Y DEMOGRAFÍA */}
+            {activeTab === "demographics" && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                {/* Distribución de Frecuencia */}
+                <div className="lg:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                  <div>
+                    <h4 className="font-bold text-slate-800 text-sm">Distribución de Frecuencia de Sesiones</h4>
+                    <p className="text-xs text-slate-400">Segmentación de proveedores basada en la cantidad acumulada de visitas</p>
+                  </div>
+                  
+                  <div className="h-[250px] w-full mt-4">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={cohorts} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                        <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#64748b" }} stroke="#e2e8f0" />
+                        <YAxis tick={{ fontSize: 10, fill: "#64748b" }} stroke="#e2e8f0" />
+                        <Tooltip
+                          contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "12px", fontSize: "12px" }}
+                        />
+                        <Bar dataKey="value" fill="#6366F1" radius={[4, 4, 0, 0]}>
+                          {cohorts.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+
+                {/* Dispositivos Donut */}
+                <div className="lg:col-span-1 bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between">
+                  <div>
+                    <h4 className="font-bold text-slate-800 text-sm">Tipo de Dispositivo</h4>
+                    <p className="text-xs text-slate-400">¿Desde qué dispositivos acceden?</p>
+                  </div>
+
+                  <div className="h-[180px] w-full relative flex items-center justify-center mt-2">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={devices}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={50}
+                          outerRadius={70}
+                          paddingAngle={4}
+                          dataKey="value"
+                        >
+                          {devices.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="absolute flex flex-col items-center justify-center">
+                      <Laptop className="w-5 h-5 text-slate-400" />
+                      <span className="text-[9px] font-bold text-slate-400 uppercase mt-0.5">Acceso</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1.5 mt-2">
+                    {devices.map((d, index) => (
+                      <div key={d.name} className="flex items-center justify-between text-xs text-slate-600 border-b border-slate-50 pb-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-full" style={{ background: COLORS[index % COLORS.length] }} />
+                          <span className="font-medium">{d.name}</span>
+                        </div>
+                        <span className="font-bold text-slate-800">
+                          {d.value.toLocaleString("es-CO")} ({Math.round((d.value / stats.totalSuppliers) * 100)}%)
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Distribución por Países */}
+                <div className="lg:col-span-3 bg-white p-5 rounded-2xl border border-slate-200/60 shadow-sm">
+                  <h4 className="font-bold text-slate-800 text-sm mb-4">Ubicación Geográfica de Proveedores</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {countries.map((c, idx) => (
+                      <div key={idx} className="flex items-center gap-3 p-3.5 bg-slate-50 rounded-xl border border-slate-100">
+                        <span className="p-2 bg-indigo-500/10 text-indigo-600 rounded-lg">
+                          <Globe className="w-4 h-4" />
+                        </span>
+                        <div>
+                          <p className="text-xs font-bold text-slate-800">{c.name}</p>
+                          <p className="text-xs text-slate-500 mt-0.5">
+                            {c.value.toLocaleString("es-CO")} proveedores ({Math.round((c.value / stats.totalSuppliers) * 100)}%)
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+              </div>
+            )}
+
+            {/* PESTAÑA 5: DIRECTORIO DE RECUPERACIÓN */}
+            {activeTab === "recovery" && (
+              <div className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden">
+                <div className="p-5 bg-slate-950 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <span className="p-2 bg-white/10 rounded-xl text-amber-400">
+                      <AlertTriangle className="w-5 h-5 animate-pulse" />
+                    </span>
+                    <div>
+                      <h3 className="font-bold text-sm sm:text-base">Centro de Recuperación de Proveedores</h3>
+                      <p className="text-xs text-slate-400">
+                        Lista de proveedores inactivos en riesgo. Muestra datos de encuestas y resalta a los de alto potencial.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Input Search */}
+                  <div className="relative w-full md:w-64">
+                    <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="Buscar por bodega o email..."
+                      className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-slate-500 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                {/* Barra de Filtros Avanzados */}
+                <div className="bg-slate-50 p-4 border-b border-slate-100 flex flex-wrap items-center gap-3 text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <Filter className="w-3.5 h-3.5 text-slate-400" />
+                    <span className="font-semibold text-slate-500">Filtrar lista:</span>
+                  </div>
+
+                  {/* Filtro de Semana de Registro */}
+                  <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                    <span className="text-slate-400">Semana:</span>
+                    <select
+                      value={filterWeek}
+                      onChange={(e) => setFilterWeek(e.target.value)}
+                      className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer"
+                    >
+                      <option value="ALL">Todas las semanas</option>
+                      {uniqueSignupWeeks.map((week) => (
+                        <option key={week} value={week}>
+                          Semana del {formatWeekStr(week)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Filtro de Nivel de Riesgo */}
+                  <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                    <span className="text-slate-400">Nivel de Riesgo:</span>
+                    <select
+                      value={filterRisk}
+                      onChange={(e) => setFilterRisk(e.target.value)}
+                      className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer"
+                    >
+                      <option value="ALL">Todos los riesgos</option>
+                      <option value="dormant">Riesgo Leve/Medio (Inactivo 8-14d)</option>
+                      <option value="critical">Riesgo Crítico (Inactivo 15-30d)</option>
+                      <option value="churned">Abandono Confirmado (Inactivo 30d+)</option>
+                    </select>
+                  </div>
+
+                  {/* Filtro de Origen de Encuesta */}
+                  <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                    <span className="text-slate-400">Origen Encuesta:</span>
+                    <select
+                      value={filterSource}
+                      onChange={(e) => setFilterSource(e.target.value)}
+                      className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer"
+                    >
+                      <option value="ALL">Todos</option>
+                      <option value="comunidades">Comunidades</option>
+                      <option value="huerfanos">Huérfanos / Orgánicos</option>
+                    </select>
+                  </div>
+
+                  {/* Filtro de Comunidad Específica */}
+                  <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                    <span className="text-slate-400">Comunidad:</span>
+                    <select
+                      value={filterCommunity}
+                      onChange={(e) => setFilterCommunity(e.target.value)}
+                      className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs max-w-[150px]"
+                    >
+                      <option value="ALL">Todas las Comunidades</option>
+                      {uniqueCommunities.map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Filtro de Volumen de la Encuesta */}
+                  <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                    <span className="text-slate-400">Volumen Comercial:</span>
+                    <select
+                      value={filterVolume}
+                      onChange={(e) => setFilterVolume(e.target.value)}
+                      className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer text-xs"
+                    >
+                      <option value="ALL">Todos los Volúmenes</option>
+                      <option value="over1000">Más de 1.000 al mes</option>
+                      <option value="301to1000">301 a 1.000 al mes</option>
+                      <option value="51to300">51 a 300 al mes</option>
+                      <option value="under50">Menos de 50 al mes</option>
+                      <option value="not_selling">Aún no vendo (Marcas)</option>
+                      <option value="not_managing">Aún no gestiono pedidos</option>
+                      <option value="no_data">Sin datos (No completó)</option>
+                    </select>
+                  </div>
+
+                  {/* Filtro de Prioridad Comercial */}
+                  <div className="flex items-center gap-1 bg-white px-2.5 py-1.5 rounded-lg border border-slate-200 shadow-sm">
+                    <span className="text-slate-400">Prioridad:</span>
+                    <select
+                      value={filterPriority}
+                      onChange={(e) => setFilterPriority(e.target.value)}
+                      className="focus:outline-none font-bold text-slate-700 bg-transparent cursor-pointer"
+                    >
+                      <option value="ALL">Todas</option>
+                      <option value="high">🔥 Alta Prioridad (Proveedor + Gran Vol)</option>
+                      <option value="medium">⚡ Media Prioridad</option>
+                      <option value="low">Baja Prioridad</option>
+                    </select>
+                  </div>
+
+                  <div className="ml-auto text-slate-400 font-medium">
+                    Mostrando <span className="font-bold text-slate-700">{filteredRisk.length}</span> resultados
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse">
+                    <thead>
+                      <tr className="border-b border-slate-100 bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        <th className="px-6 py-4">Prioridad / Proveedor</th>
+                        <th className="px-6 py-4">Nivel / Cita</th>
+                        <th className="px-6 py-4">Perfil Encuesta (Dropi)</th>
+                        <th className="px-6 py-4">Volumen / Canal</th>
+                        <th className="px-6 py-4 text-center">País / Sesiones</th>
+                        <th className="px-6 py-4 text-center">Operaciones (Prod/Ord)</th>
+                        <th className="px-6 py-4 text-center">Días Inactivo</th>
+                        <th className="px-6 py-4 text-center">Estado</th>
+                        <th className="px-6 py-4 text-right">Recuperación</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 text-xs text-slate-600">
+                      {filteredRisk.length > 0 ? (
+                        filteredRisk.slice(0, 100).map((s, idx) => {
+                          const hasSurvey = s.survey_role !== null;
+                          const isHigh = s.priority === "high";
+                          const isMed = s.priority === "medium";
+                          
+                          // Formato de nivel
+                          const rawTipo = s.tipo_proveedor ? s.tipo_proveedor.trim().toUpperCase() : "";
+                          const badgeColor = rawTipo === "PREMIUM EXCLUSIVO" ? "bg-indigo-100 text-indigo-800 border-indigo-200" :
+                                             rawTipo === "PREMIUM" ? "bg-amber-100 text-amber-800 border-amber-200" :
+                                             rawTipo === "VERIFICADO" ? "bg-blue-100 text-blue-800 border-blue-200" :
+                                             "bg-slate-100 text-slate-500 border-slate-200";
+                          const tierName = s.tipo_proveedor || "Sin Tipo";
+
+                          return (
+                            <tr key={idx} className={`hover:bg-slate-50/50 transition-colors ${isHigh ? "bg-red-50/20" : ""}`}>
+                              {/* Prioridad y Proveedor */}
+                              <td className="px-6 py-4">
+                                <div className="flex items-start gap-2">
+                                  {isHigh ? (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-red-100 text-red-700 rounded-full flex items-center gap-0.5 shrink-0 animate-pulse">
+                                      🔥 Alta
+                                    </span>
+                                  ) : isMed ? (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-amber-100 text-amber-700 rounded-full shrink-0">
+                                      ⚡ Media
+                                    </span>
+                                  ) : (
+                                    <span className="px-2 py-0.5 text-[9px] font-bold bg-slate-100 text-slate-500 rounded-full shrink-0">
+                                      Baja
+                                    </span>
+                                  )}
+                                  <div>
+                                    <p className="font-bold text-slate-800">{s.name}</p>
+                                    <p className="text-[10px] text-slate-400">{s.email}</p>
+                                  </div>
+                                </div>
+                              </td>
+
+                              {/* Nivel / Cita CRM */}
+                              <td className="px-6 py-4">
+                                <span className={`px-2 py-0.5 text-[9px] font-bold rounded border ${badgeColor}`}>
+                                  {tierName}
+                                </span>
+                                <div className="flex items-center gap-1 mt-1">
+                                  <Calendar className={`w-3.5 h-3.5 ${s.has_appointment ? "text-emerald-500" : "text-slate-300"}`} />
+                                  <span className={`text-[9px] font-semibold ${s.has_appointment ? "text-emerald-700" : "text-slate-400"}`}>
+                                    {s.has_appointment ? "Con Cita" : "Sin Cita"}
+                                  </span>
+                                  {s.ultima_cita_confirmada && (
+                                    <span className="text-[8px] text-slate-400">
+                                      ({new Date(s.ultima_cita_confirmada).toLocaleDateString("es-CO", { day: "numeric", month: "short" })})
+                                    </span>
+                                  )}
+                                </div>
+                              </td>
+
+                              {/* Perfil Encuesta */}
+                              <td className="px-6 py-4 max-w-[180px]">
+                                {hasSurvey ? (
+                                  <div>
+                                    <p className="font-semibold text-slate-700 truncate" title={s.survey_role || ""}>
+                                      {s.survey_role && s.survey_role.includes("Proveedor") ? "Proveedor" : "Marca/Emprendedor"}
+                                    </p>
+                                    <div className="text-[10px] text-slate-400" title={s.survey_purpose || s.survey_sell_pref || ""}>
+                                      <CollapsibleText text={s.survey_purpose || s.survey_sell_pref || "-"} maxLength={50} />
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <span className="text-slate-400 italic">Sin encuesta completada</span>
+                                )}
+                              </td>
+
+                              {/* Volumen / Canal */}
+                              <td className="px-6 py-4">
+                                <div className="flex flex-col gap-1">
+                                  {hasSurvey ? (
+                                    <span className={`px-2 py-0.5 rounded-lg text-[10px] font-bold self-start ${
+                                      (s.survey_volume || s.survey_brand_sales || "").includes("1.000") || (s.survey_volume || s.survey_brand_sales || "").includes("301 a 1.000")
+                                        ? "bg-indigo-50 text-indigo-700 border border-indigo-100"
+                                        : "bg-slate-100 text-slate-600"
+                                    }`}>
+                                      {s.survey_volume || s.survey_brand_sales || "No indica"}
+                                    </span>
+                                  ) : null}
+                                  
+                                  {s.survey_source ? (
+                                    <span className={`px-1.5 py-0.5 rounded text-[9px] font-semibold uppercase tracking-wider self-start ${
+                                      s.survey_source === "comunidades" 
+                                        ? "bg-purple-50 text-purple-700 border border-purple-100" 
+                                        : "bg-slate-100 text-slate-600"
+                                    }`}>
+                                      {s.survey_source === "comunidades" ? "Comunidad" : "Huérfano"}
+                                    </span>
+                                  ) : (
+                                    <span className="text-[10px] text-slate-400 italic">Orgánico</span>
+                                  )}
+                                  
+                                  {s.resolved_community && s.resolved_community !== "Orgánico / Sin comunidad" && (
+                                    <span className="text-[9px] font-bold text-purple-650 truncate max-w-[120px]" title={s.resolved_community}>
+                                      {s.resolved_community}
+                                    </span>
+                                  )}
+                                </div>
+                              </td>
+
+                              {/* País / Sesiones */}
+                              <td className="px-6 py-4 text-center">
+                                <div className="flex flex-col items-center">
+                                  <span className="flex items-center gap-1 text-[11px] font-medium text-slate-700">
+                                    <Globe className="w-3.5 h-3.5 text-slate-400" />
+                                    <span>{s.country}</span>
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 mt-0.5">
+                                    {s.web_sessions} {s.web_sessions === 1 ? "sesión" : "sesiones"}
+                                  </span>
+                                </div>
+                              </td>
+
+                              {/* Operaciones (Prod/Ord) */}
+                              <td className="px-6 py-4 text-center">
+                                <div className="flex flex-col items-center">
+                                  <span className="text-[11px] font-bold text-slate-700">
+                                    📦 {s.real_products_created || 0} Prod
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 mt-0.5">
+                                    🛒 {s.real_orders_delivered || 0} Ord
+                                  </span>
+                                </div>
+                              </td>
+
+                              {/* Inactividad */}
+                              <td className="px-6 py-4 text-center">
+                                <span className="font-bold text-slate-900">{s.days_inactive}</span> días
+                              </td>
+
+                              {/* Estado */}
+                              <td className="px-6 py-4 text-center">
+                                {s.status === "churned" ? (
+                                  <span className="px-2 py-0.5 text-[9px] font-bold bg-red-50 text-red-700 border border-red-100 rounded-full">
+                                    Abandono
+                                  </span>
+                                ) : s.status === "critical" ? (
+                                  <span className="px-2 py-0.5 text-[9px] font-bold bg-rose-50 text-rose-700 border border-rose-100 rounded-full">
+                                    Crítico
+                                  </span>
+                                ) : (
+                                  <span className="px-2 py-0.5 text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-100 rounded-full">
+                                    Churn &gt;10d
+                                  </span>
+                                )}
+                              </td>
+
+                              {/* Contacto */}
+                              <td className="px-6 py-4 text-right">
+                                {s.phone && s.phone !== "-" ? (
+                                  <a
+                                    href={getWhatsAppLink(s.phone, s.name, s.web_sessions, s.survey_volume || s.survey_brand_sales)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1 px-3 py-1.5 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white rounded-lg text-[10px] font-bold transition-all shadow-sm shadow-emerald-500/10 cursor-pointer"
+                                  >
+                                    <MessageSquare className="w-3.5 h-3.5" />
+                                    <span>Contactar</span>
+                                  </a>
+                                ) : (
+                                  <span className="text-[10px] text-slate-400">Sin teléfono</span>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      ) : (
+                        <tr>
+                          <td colSpan={9} className="px-6 py-12 text-center text-slate-400 font-medium">
+                            No se encontraron proveedores inactivos que coincidan con la búsqueda o filtros.
+                          </td>
+                        </tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                {filteredRisk.length > 100 && (
+                  <div className="p-4 bg-slate-50 border-t border-slate-100 text-center text-[10px] text-slate-400 font-semibold uppercase tracking-wider">
+                    Mostrando los primeros 100 registros. Refine su búsqueda o use filtros para ver el resto.
+                  </div>
+                )}
+              </div>
+            )}
+
+          </div>
+        )}
+      </div>
+
+      {/* Modal de Detalle de Comunidad */}
+      {detailCommunityName && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            {/* Header */}
+            <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                  <span className="p-1 rounded bg-purple-500/10 text-purple-600">
+                    <Users className="w-4 h-4" />
+                  </span>
+                  Analizar Comunidad: <span className="text-purple-600 font-extrabold">{detailCommunityName}</span>
+                </h3>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  Desglose analítico, volumen de pedidos y directorio de leads para este canal
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setDetailCommunityName(null);
+                  setCommunityDetail(null);
+                }}
+                className="w-8 h-8 rounded-lg hover:bg-slate-200 transition-colors flex items-center justify-center text-slate-500 font-bold text-xl cursor-pointer"
+              >
+                &times;
+              </button>
+            </div>
+            
+            {/* Content (Scrollable) */}
+            {loadingDetail ? (
+              <div className="flex-1 flex flex-col items-center justify-center py-24 gap-3">
+                <RefreshCw className="w-8 h-8 text-purple-600 animate-spin" />
+                <p className="text-slate-500 text-sm font-medium animate-pulse">Cargando datos detallados de la comunidad...</p>
+              </div>
+            ) : communityDetail ? (
+              <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
+                {/* Mini KPI Cards specific to community */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Registros Totales</p>
+                    <p className="text-2xl font-extrabold text-slate-800 mt-1">{communityDetail.stats.totalSuppliers}</p>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Activación Userpilot</p>
+                    <p className="text-2xl font-extrabold text-emerald-600 mt-1">{communityDetail.stats.activeRate}%</p>
+                    <div className="w-full bg-slate-200 rounded-full h-1 mt-2">
+                      <div className="bg-emerald-500 h-full" style={{ width: `${communityDetail.stats.activeRate}%` }} />
+                    </div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Activos Dropi (30d)</p>
+                    <p className="text-2xl font-extrabold text-indigo-600 mt-1">{communityDetail.stats.realActiveRate}%</p>
+                    <div className="w-full bg-slate-200 rounded-full h-1 mt-2">
+                      <div className="bg-indigo-500 h-full" style={{ width: `${communityDetail.stats.realActiveRate}%` }} />
+                    </div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">TTV Promedio</p>
+                    <p className="text-2xl font-extrabold text-purple-600 mt-1">
+                      {communityDetail.stats.avgTtvDays > 0 ? `${communityDetail.stats.avgTtvDays} días` : "N/A"}
+                    </p>
+                    <div className="text-[10px] text-slate-400 mt-2">Time-to-Value Real</div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Órdenes Reales</p>
+                    <p className="text-2xl font-extrabold text-slate-800 mt-1">
+                      {communityDetail.stats.totalRealOrders?.toLocaleString("es-CO") || 0}
+                    </p>
+                    <div className="text-[10px] text-slate-400 mt-2">Despachadas en total</div>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-400 font-bold uppercase">Productos Creados</p>
+                    <p className="text-2xl font-extrabold text-slate-800 mt-1">
+                      {communityDetail.stats.totalRealProducts?.toLocaleString("es-CO") || 0}
+                    </p>
+                    <div className="text-[10px] text-slate-400 mt-2">En catálogo global</div>
+                  </div>
+                </div>
+
+                {/* Community Operational Funnel */}
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-100">
+                  <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-4">Embudo de Activación de la Comunidad (Time-to-Value)</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center animate-fade-in">
+                    {communityDetail.funnel && communityDetail.funnel.map((step, sIdx) => {
+                      const nextStep = communityDetail.funnel[sIdx + 1];
+                      const dropPct = nextStep ? Math.round((nextStep.count / step.count) * 100) : null;
+                      
+                      return (
+                        <div key={step.step} className="relative flex flex-col items-center w-full">
+                          <div className="w-full bg-white p-4 rounded-xl border border-slate-200/50 flex flex-col justify-between h-28 relative overflow-hidden group hover:shadow-sm transition-shadow">
+                            <div className="absolute top-0 left-0 w-1.5 h-full" style={{ backgroundColor: step.color }} />
+                            <div>
+                              <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{step.step}</p>
+                              <h5 className="text-xl font-extrabold text-slate-800 mt-1 tracking-tight">
+                                {step.count.toLocaleString("es-CO")}
+                              </h5>
+                            </div>
+                            <div className="flex items-center justify-between text-[10px] font-bold mt-2">
+                              <span className="text-slate-400">Conversión:</span>
+                              <span className="px-1.5 py-0.5 rounded text-[10px]" style={{ backgroundColor: `${step.color}15`, color: step.color }}>
+                                {step.pct}%
+                              </span>
+                            </div>
+                          </div>
+                          
+                          {nextStep && (
+                            <div className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-6 h-6 rounded-full bg-slate-50 border border-slate-200 shadow-sm items-center justify-center text-[9px] font-extrabold text-slate-500" title={`Retención de paso a paso: ${dropPct}%`}>
+                              {dropPct}%
+                            </div>
+                          )}
+                          {nextStep && (
+                            <div className="flex md:hidden my-1 text-center text-[9px] font-extrabold text-slate-400">
+                              ↓ Conversión: {dropPct}% ↓
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Charts specific to community */}
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                  {/* Volumen */}
+                  <div className="md:col-span-8 bg-slate-50/50 p-4 rounded-xl border border-slate-100">
+                    <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Distribución de Ventas/Pedidos Declarados</h4>
+                    <div className="h-[220px] w-full">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <BarChart data={communityDetail.volumes.filter(v => v.value > 0)} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                          <XAxis dataKey="name" tick={{ fontSize: 9, fill: "#64748b" }} stroke="#e2e8f0" />
+                          <YAxis tick={{ fontSize: 9, fill: "#64748b" }} stroke="#e2e8f0" />
+                          <Tooltip contentStyle={{ background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: "8px", fontSize: "11px" }} />
+                          <Bar dataKey="value" fill="#6366F1" radius={[4, 4, 0, 0]} barSize={24}>
+                            {communityDetail.volumes.filter(v => v.value > 0).map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                          </Bar>
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                  {/* Roles */}
+                  <div className="md:col-span-4 bg-slate-50/50 p-4 rounded-xl border border-slate-100 flex flex-col justify-between">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Distribución de Roles</h4>
+                      <p className="text-[10px] text-slate-400">Composición de miembros</p>
+                    </div>
+                    <div className="h-[130px] w-full relative flex items-center justify-center my-2">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <PieChart>
+                          <Pie
+                            data={communityDetail.roles}
+                            cx="50%"
+                            cy="50%"
+                            innerRadius={35}
+                            outerRadius={50}
+                            paddingAngle={3}
+                            dataKey="value"
+                          >
+                            {communityDetail.roles.map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color || COLORS[index % COLORS.length]} />
+                            ))}
+                          </Pie>
+                          <Tooltip />
+                        </PieChart>
+                      </ResponsiveContainer>
+                    </div>
+                    <div className="flex flex-col gap-1 text-[10px] mt-2">
+                      {communityDetail.roles.map((r, index) => (
+                        <div key={r.name} className="flex items-center justify-between text-slate-600 border-b border-slate-100 pb-0.5">
+                          <div className="flex items-center gap-1">
+                            <span className="w-2 h-2 rounded-full" style={{ background: r.color || COLORS[index % COLORS.length] }} />
+                            <span>{r.name}</span>
+                          </div>
+                          <span className="font-bold text-slate-800">{r.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Members Directory */}
+                <div className="border-t border-slate-100 pt-6">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-4">
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider">Directorio de Bodegas de la Comunidad</h4>
+                      <p className="text-[10px] text-slate-400 mt-0.5">Filtre por potencial comercial o estado de conexión</p>
+                    </div>
+                    
+                    {/* Filters for modal members */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      {/* Search */}
+                      <div className="relative w-44">
+                        <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="text"
+                          value={detailSearch}
+                          onChange={(e) => setDetailSearch(e.target.value)}
+                          placeholder="Buscar bodega..."
+                          className="w-full pl-7 pr-2 py-1 bg-slate-50 border border-slate-200 rounded-lg text-[10px] placeholder-slate-400 focus:outline-none focus:border-slate-400 transition-colors"
+                        />
+                      </div>
+                      {/* Filter potential */}
+                      <select
+                        value={detailFilterPotential}
+                        onChange={(e) => setDetailFilterPotential(e.target.value)}
+                        className="bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg text-[10px] font-bold text-slate-700 focus:outline-none cursor-pointer"
+                      >
+                        <option value="ALL">Todos los Potenciales</option>
+                        <option value="high">Alto Potencial (Proveedor + &gt;50 pedidos)</option>
+                        <option value="medium">Medio Potencial</option>
+                        <option value="low">Bajo Potencial</option>
+                      </select>
+                      {/* Filter connection status */}
+                      <select
+                        value={detailFilterStatus}
+                        onChange={(e) => setDetailFilterStatus(e.target.value)}
+                        className="bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg text-[10px] font-bold text-slate-700 focus:outline-none cursor-pointer"
+                      >
+                        <option value="ALL">Todos los Estados</option>
+                        <option value="active">Activos recientes (Inactivo &lt;= 7d)</option>
+                        <option value="dormant">Dormantes/Inactivos (&gt;7d)</option>
+                      </select>
+                      {/* Min Orders */}
+                      <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg text-[10px]">
+                        <span className="text-slate-400 font-medium">Min Órdenes:</span>
+                        <input
+                          type="number"
+                          value={detailMinOrders || ""}
+                          onChange={(e) => setDetailMinOrders(Number(e.target.value))}
+                          placeholder="0"
+                          className="w-12 bg-transparent text-slate-700 font-bold focus:outline-none animate-pulse"
+                        />
+                      </div>
+                      {/* Min Products */}
+                      <div className="flex items-center gap-1 bg-slate-50 border border-slate-200 px-2 py-1 rounded-lg text-[10px]">
+                        <span className="text-slate-400 font-medium">Min Prod:</span>
+                        <input
+                          type="number"
+                          value={detailMinProducts || ""}
+                          onChange={(e) => setDetailMinProducts(Number(e.target.value))}
+                          placeholder="0"
+                          className="w-12 bg-transparent text-slate-700 font-bold focus:outline-none animate-pulse"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Filtered Members table */}
+                  {(() => {
+                    const filteredSuppliers = communityDetail.suppliers.filter((s) => {
+                      const matchesSearch =
+                        s.name.toLowerCase().includes(detailSearch.toLowerCase()) ||
+                        s.email.toLowerCase().includes(detailSearch.toLowerCase());
+                      const matchesPotential =
+                        detailFilterPotential === "ALL" || s.potentialRating === detailFilterPotential;
+                      const matchesStatus = (() => {
+                        if (detailFilterStatus === "ALL") return true;
+                        if (detailFilterStatus === "active") return s.days_inactive <= 7;
+                        return s.days_inactive > 7;
+                      })();
+                      const matchesOrders = s.real_orders_delivered >= detailMinOrders;
+                      const matchesProducts = s.real_products_created >= detailMinProducts;
+                      
+                      return matchesSearch && matchesPotential && matchesStatus && matchesOrders && matchesProducts;
+                    });
+
+                    // Generar mensaje contextualizado de WhatsApp
+                    const getDetailWhatsAppLink = (supplier: CommunitySupplier) => {
+                      const cleanPhone = supplier.phone.replace(/\s+/g, "").replace(/\+/g, "");
+                      let finalPhone = cleanPhone;
+                      if (cleanPhone.startsWith("3") && cleanPhone.length === 10) {
+                        finalPhone = `57${cleanPhone}`;
+                      }
+                      const comContext = ` Vimos que te registraste a través de la comunidad de ${detailCommunityName}.`;
+                      
+                      let message = "";
+                      if (supplier.real_orders_delivered > 0) {
+                        message = `Hola ${supplier.name}, te saludamos de Dropi.${comContext} ¡Felicitaciones por las ${supplier.real_orders_delivered} órdenes entregadas que registras en tu cuenta! Queremos ver de qué manera podemos apoyarte a escalar el negocio, destacar tu catálogo y optimizar tus tiempos de entrega (TTV). ¿Te sirve una breve llamada de 5 minutos esta semana?`;
+                      } else if (supplier.real_products_created > 0) {
+                        message = `Hola ${supplier.name}, te saludamos de Dropi.${comContext} Notamos que ya cuentas con ${supplier.real_products_created} productos creados en tu catálogo, pero aún no registras órdenes entregadas. Queremos ayudarte a conseguir tus primeros dropshippers y activar tus ventas. ¿Podemos agendar una sesión rápida de 5 minutos para impulsarte?`;
+                      } else {
+                        const volContext = supplier.survey_volume ? ` e indicaste en la encuesta que despachas un volumen de ${supplier.survey_volume}.` : "";
+                        message = `Hola ${supplier.name}, te saludamos de Dropi.${comContext}${volContext} Queremos ayudarte a publicar tus primeros productos y certificar tu bodega en nuestro catálogo. ¿Podemos agendar una llamada breve de 5 minutos para resolver cualquier duda y configurar tu cuenta?`;
+                      }
+                      
+                      return `https://wa.me/${finalPhone}?text=${encodeURIComponent(message)}`;
+                    };
+
+                    return (
+                      <div className="border border-slate-200/80 rounded-xl overflow-hidden shadow-sm bg-white">
+                        <div className="max-h-[300px] overflow-y-auto">
+                          <table className="w-full text-left border-collapse text-xs">
+                            <thead>
+                              <tr className="border-b border-slate-100 bg-slate-50 text-[9px] font-bold text-slate-400 uppercase tracking-wider sticky top-0">
+                                <th className="px-4 py-3">Nombre Bodega</th>
+                                <th className="px-4 py-3 text-center">Potencial</th>
+                                <th className="px-4 py-3 text-center">TTV</th>
+                                <th className="px-4 py-3 text-center">Órdenes Reales</th>
+                                <th className="px-4 py-3 text-center">Productos Dropi</th>
+                                <th className="px-4 py-3">Referido por</th>
+                                <th className="px-4 py-3">Rol Survey</th>
+                                <th className="px-4 py-3">Volumen Survey</th>
+                                <th className="px-4 py-3 text-center">Sesiones</th>
+                                <th className="px-4 py-3 text-center">Última Conexión</th>
+                                <th className="px-4 py-3 text-center">Facturación</th>
+                                <th className="px-4 py-3 text-center">Verificado</th>
+                                <th className="px-4 py-3 text-right">Contacto</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 text-slate-600">
+                              {filteredSuppliers.length > 0 ? (
+                                filteredSuppliers.map((s) => (
+                                  <tr key={s.user_id} className="hover:bg-slate-50/40 transition-colors">
+                                    <td className="px-4 py-3">
+                                      <p className="font-bold text-slate-800">{s.name}</p>
+                                      <p className="text-[10px] text-slate-400 mt-0.5">{s.email}</p>
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                      {s.potentialRating === "high" ? (
+                                        <span className="px-2 py-0.5 text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-100 rounded-full">
+                                          Alto
+                                        </span>
+                                      ) : s.potentialRating === "medium" ? (
+                                        <span className="px-2 py-0.5 text-[9px] font-bold bg-amber-50 text-amber-700 border border-amber-100 rounded-full">
+                                          Medio
+                                        </span>
+                                      ) : (
+                                        <span className="px-2 py-0.5 text-[9px] font-bold bg-slate-50 text-slate-500 border border-slate-200 rounded-full">
+                                          Bajo
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td className="px-4 py-3 text-center font-semibold text-slate-700">
+                                      {s.dias_en_activarse !== null && s.dias_en_activarse !== undefined ? `${s.dias_en_activarse}d` : "-"}
+                                    </td>
+                                    <td className="px-4 py-3 text-center font-bold text-indigo-600">
+                                      {s.real_orders_delivered?.toLocaleString("es-CO") || 0}
+                                    </td>
+                                    <td className="px-4 py-3 text-center font-bold text-slate-700">
+                                      {s.real_products_created?.toLocaleString("es-CO") || 0}
+                                    </td>
+                                    <td className="px-4 py-3 text-[11px] text-slate-500">
+                                      {s.referrerName}
+                                    </td>
+                                    <td className="px-4 py-3 max-w-[150px] truncate text-[11px]" title={s.survey_role || ""}>
+                                      {s.survey_role ? (s.survey_role.includes("Proveedor") ? "Proveedor" : "Marca") : "-"}
+                                    </td>
+                                    <td className="px-4 py-3 text-[11px] font-semibold text-slate-700">
+                                      {s.survey_volume || "-"}
+                                    </td>
+                                    <td className="px-4 py-3 text-center font-bold text-slate-700">
+                                      {s.web_sessions}
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                      <span className={`font-semibold ${s.days_inactive > 14 ? "text-rose-600" : s.days_inactive > 7 ? "text-amber-600" : "text-emerald-600"}`}>
+                                        {s.days_inactive === 0 ? "Hoy" : `Hace ${s.days_inactive}d`}
+                                      </span>
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                      {s.billing_information ? (
+                                        <span className="text-emerald-600 font-bold">Sí</span>
+                                      ) : (
+                                        <span className="text-slate-300 font-bold">No</span>
+                                      )}
+                                    </td>
+                                    <td className="px-4 py-3 text-center">
+                                      {s.verified ? (
+                                        <span className="px-1.5 py-0.5 text-[9px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-100 rounded">Sí</span>
+                                      ) : (
+                                        <span className="px-1.5 py-0.5 text-[9px] font-bold bg-slate-50 text-slate-300 border border-slate-200 rounded">No</span>
+                                      )}
+                                    </td>
+                                    <td className="px-4 py-3 text-right">
+                                      {s.phone && s.phone !== "-" ? (
+                                        <a
+                                          href={getDetailWhatsAppLink(s)}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white rounded-lg text-[9px] font-bold transition-all shadow-sm cursor-pointer"
+                                        >
+                                          <MessageSquare className="w-3 h-3" />
+                                          <span>Contactar</span>
+                                        </a>
+                                      ) : (
+                                        <span className="text-[9px] text-slate-400">Sin teléfono</span>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))
+                              ) : (
+                                <tr>
+                                  <td colSpan={13} className="px-4 py-8 text-center text-slate-400 font-medium italic">
+                                    No hay usuarios en esta comunidad que coincidan con la búsqueda.
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            ) : (
+              <div className="py-12 text-center text-slate-500">
+                Ocurrió un problema al cargar la información detallada.
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

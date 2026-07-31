@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+  body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #1a1a1a; max-width: 900px; margin: 40px auto; padding: 0 32px; line-height: 1.6; }
+  h1 { font-size: 20pt; font-weight: bold; color: #1a1a1a; border-bottom: 3px solid #1a1a1a; padding-bottom: 8px; margin-top: 0; }
+  h2 { font-size: 14pt; font-weight: bold; color: #1a1a1a; border-bottom: 1.5px solid #cccccc; padding-bottom: 4px; margin-top: 32px; }
+  h3 { font-size: 12pt; font-weight: bold; color: #1a1a1a; margin-top: 24px; }
+  h4 { font-size: 11pt; font-weight: bold; color: #444444; margin-top: 20px; }
+  p { margin: 8px 0; }
+  blockquote { border-left: 4px solid #cccccc; margin: 12px 0; padding: 8px 16px; background: #f8f8f8; font-style: italic; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+  th { background: #1a1a1a; color: #ffffff; font-weight: bold; padding: 8px 10px; text-align: left; font-size: 10pt; }
+  td { border: 1px solid #cccccc; padding: 7px 10px; font-size: 10pt; vertical-align: top; }
+  tr:nth-child(even) td { background: #f5f5f5; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin-bottom: 4px; }
+  code { font-family: Consolas, monospace; font-size: 9.5pt; background: #f0f0f0; padding: 1px 4px; border-radius: 3px; }
+  .gherkin { background: #f4f8f0; border-left: 4px solid #4a7c3f; padding: 12px 16px; margin: 12px 0; font-family: Consolas, monospace; font-size: 10pt; line-height: 1.8; }
+  .gherkin .keyword { font-weight: bold; color: #2e6b2e; }
+  .nota { background: #fff8e6; border-left: 4px solid #e6a800; padding: 10px 14px; margin: 12px 0; font-size: 10pt; }
+  .separador { border: none; border-top: 1px solid #e0e0e0; margin: 24px 0; }
+  .pie { font-size: 9pt; color: #888888; margin-top: 40px; border-top: 1px solid #cccccc; padding-top: 12px; }
+</style>
+</head>
+<body>
+
+<h1>Documentación E2E: DESC-001 · Descuentos en Catálogo — Precio Antes / Precio Ahora</h1>
+
+<p>Este documento consolida los 5 entregables de Producto bajo el formato oficial <strong>E2E</strong> para el proyecto <strong>DESC-001 · Descuentos en Catálogo</strong>.</p>
+
+<div class="nota">
+  <strong>Contexto de origen:</strong> Feature recomendada por María Ossa en el weekly del 27-jun-2026 como habilitador estratégico de la primera campaña Cyber Days (agosto 2026). La prioridad inicial es Cyber Days, pero la funcionalidad debe operar de forma <strong>transversal a todas las campañas</strong> del ecosistema de Dinámicas de Catálogo (DCA-001/DCA-002).
+</div>
+
+<hr class="separador">
+
+<h2>1. Kick-off de Producto</h2>
+
+<h3>1.1 Información General &amp; Equipo del Proyecto</h3>
+
+<table>
+  <tr><th>Campo</th><th>Contenido</th></tr>
+  <tr><td><strong>Nombre del proyecto</strong></td><td>DESC-001 · Descuentos en Catálogo — Precio Antes / Precio Ahora</td></tr>
+  <tr><td><strong>Célula</strong></td><td>Supplier Success</td></tr>
+  <tr><td><strong>Owner / PM</strong></td><td>Jaime Guevara</td></tr>
+  <tr><td><strong>Product Designer</strong></td><td>Michelle López</td></tr>
+  <tr><td><strong>Stakeholder principal</strong></td><td>María Ossa</td></tr>
+  <tr><td><strong>Fecha de kick-off</strong></td><td>30/06/2026</td></tr>
+  <tr><td><strong>Estado</strong></td><td>Discovery / Definición</td></tr>
+  <tr><td><strong>Proyecto padre</strong></td><td>DCA-001/DCA-002 · Dinámicas de Catálogo</td></tr>
+  <tr><td><strong>Trigger inmediato</strong></td><td>Campaña Cyber Days (agosto 2026)</td></tr>
+</table>
+
+<h3>1.2 Introducción y Contexto. POR QUÉ ahora</h3>
+
+<p><strong>Contexto:</strong> La célula Supplier Success lanzó el experimento de campañas de catálogo (DCA-001). La primera campaña, Cyber Days, tiene como palanca principal el descuento que asumen los proveedores. Sin embargo, actualmente en Dropi no existe ningún mecanismo para que ese descuento sea visible para el dropshipper: el proveedor baja el precio manualmente, pero el dropshipper ve únicamente el precio actual sin contexto de ahorro. El único diferenciador visual hoy es el marco en la imagen del producto, que comunica "soy de campaña" pero no "aquí hay ahorro real".</p>
+
+<p><strong>Cambio externo:</strong> Todas las plataformas de e-commerce maduras (MercadoLibre, Amazon, Shopify, Tienda Nube, WooCommerce) tienen precio tachado como estándar de UX. La ausencia de esta señal en Dropi hace que la campaña parezca solo de visibilidad, no de oportunidad económica concreta.</p>
+
+<p><strong>Cambio interno:</strong> El Weekly del 27-jun-2026 identificó que sin descuento visible, la campaña Cyber Days valida la dinámica pero no activa la palanca principal de conversión (el precio). Además, el proyecto de campañas (DCA-001/DCA-002) necesita una feature estructural de descuentos que funcione transversalmente, no solo en Dropi nativo, sino en todo el ecosistema de integraciones que el dropshipper ya usa.</p>
+
+<p><strong>Costo de no hacerlo:</strong> Si Cyber Days lanza sin descuento visible, el experimento queda incompleto porque no valida la hipótesis más importante: que el descuento mueve la decisión de importación. Además, cada campaña futura tendría que resolver esto de forma ad hoc.</p>
+
+<h3>1.3 Definición del Problema, Impacto y Painpoints. QUÉ se va a construir</h3>
+
+<p><strong>Descripción Detallada:</strong> El proveedor que participa en Cyber Days (u otra campaña) baja su precio como señal de disposición comercial. Pero el dropshipper que explora la vitrina no sabe si el precio es el normal o si hay un descuento activo. No tiene referencia del precio anterior. Esto reduce la urgencia de importar el producto y limita el impacto de la campaña.</p>
+
+<p><strong>Frecuencia del problema:</strong> En cada campaña activa (recurrente desde agosto 2026 según calendario de campañas DCA-001).</p>
+
+<p><strong>Importancia del problema:</strong> Alta. Es la palanca de conversión central del modelo de campañas.</p>
+
+<p><strong>Segmento / Target:</strong></p>
+<ul>
+  <li><em>Target description:</em> Proveedores verificados o premium con productos aprobados en campañas activas. Dropshippers que navegan el catálogo o la vitrina de campaña.</li>
+  <li><em>País/mercado objetivo:</em> Colombia (Fase 1). México y Ecuador en Fase 2 al escalar campañas.</li>
+  <li><em>Target size:</em> Fase 1 — estimado 20 a 100 productos en Cyber Days.</li>
+</ul>
+
+<p><strong>Painpoints (Dolores específicos):</strong></p>
+<ul>
+  <li><strong>Dolor 1 — Descuento invisible:</strong> El proveedor hace un sacrificio de margen para participar en la campaña, pero el dropshipper no percibe el descuento porque no tiene referencia del precio original. El esfuerzo del proveedor no se traduce en señal de valor para el dropshipper.</li>
+  <li><strong>Dolor 2 — Sin estándar de descuento multi-canal:</strong> Hoy no existe un campo de descuento estándar que se sincronice con Shopify, WooCommerce, Tienda Nube, CAS y ECOM Scanner. Cada integración manejaría precios de forma diferente, sin coherencia en el ecosistema.</li>
+  <li><strong>Dolor 3 — Validación de campaña incompleta:</strong> Sin precio tachado visible, el experimento de campañas no puede medir el impacto real del descuento en la decisión de importación. Los resultados de Cyber Days quedarían ambiguos.</li>
+</ul>
+
+<h3>1.4 Objetivos. PARA QUÉ</h3>
+
+<p><strong>Objetivo Principal de Negocio:</strong> Aumentar la tasa de importación y las órdenes atribuidas a productos en campaña, comunicando el descuento de manera clara y estandarizada en todo el ecosistema.</p>
+
+<p><strong>Objetivo de Experiencia de Usuario (UX):</strong> Que el dropshipper entienda en menos de 3 segundos cuánto descuento tiene el producto y qué gana si lo importa durante la campaña. Que el proveedor pueda registrar el descuento de forma simple desde su panel.</p>
+
+<p><strong>Alineación Estratégica:</strong></p>
+<ul>
+  <li><em>OKR:</em> OKR1 / KR1.1 — aumentar órdenes vía más y mejores productos/proveedores.</li>
+  <li><em>KR:</em> Tasa de importación de productos de campaña, órdenes atribuidas a Cyber Days, GMV incremental.</li>
+  <li><em>Data:</em> <code>campaign_product_import_rate</code>, <code>campaign_attributed_orders</code>, <code>discount_ctr</code>, <code>discount_gmv</code>.</li>
+</ul>
+
+<h3>1.5 Enlaces</h3>
+<ul>
+  <li><strong>Épica:</strong> Por crear en Jira tras validación TI (lunes 30-jun-2026).</li>
+  <li><strong>Figma:</strong> Pendiente — Michelle López define el display de precio tachado en vitrina y ficha.</li>
+  <li><strong>Research como punto de partida:</strong>
+    <ul>
+      <li><em>Hallazgo principal:</em> En el discovery de DCA-001, los proveedores identificaron el precio y la visibilidad como los dos motivadores para participar en campañas. El precio tachado convierte el motivador en señal visible.</li>
+      <li><em>Fuentes:</em> dinamicas-catalogo-nodos.md (Nodo 2, Nodo 7), Weekly 27-jun-2026.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3>1.6 Dudas e incógnitas iniciales</h3>
+<ul>
+  <li>¿La wallet de Dropi calcula comisiones o márgenes basándose directamente en el campo de precio del producto? (Confirmar con TI — riesgo principal de Fase 1).</li>
+  <li>¿El descuento lo registra el proveedor en su panel, o lo define el admin de campaña, o ambos?</li>
+  <li>¿Shopify tiene <code>compare_at_price</code> disponible en la versión de la API que usa Dropify actualmente?</li>
+  <li>¿CAS y ECOM Scanner tienen un campo para precio de descuento en su schema actual, o requiere cambio de contrato?</li>
+  <li>¿La regla de descuento mínimo para Cyber Days la define Comercial o es automática?</li>
+</ul>
+
+<hr class="separador">
+
+<h2>2. Discovery &amp; Levantamiento</h2>
+
+<h3>2.1 Usuarios Implicados &amp; Estado de Madurez</h3>
+<ul>
+  <li><strong>Perfil 1 — Supplier (Proveedor):</strong> Activa y desactiva el descuento en cualquiera de sus productos desde el panel de administración. — <em>Madurez:</em> En consolidación / Verificado o Premium.</li>
+  <li><strong>Perfil 2 — Dropshipper:</strong> Ve el precio tachado en Dropi y en su tienda externa para decidir si importa el producto. — <em>Madurez:</em> Novato a avanzado (todos los segmentos).</li>
+  <li><strong>Perfil 3 — Sistema de Integración (ICOM / Dropify / CAS):</strong> Sincroniza el campo de descuento con los canales externos al activarse o desactivarse.</li>
+</ul>
+
+<h3>2.2 El "AS-IS" — Soluciones Actuales y Limitaciones</h3>
+
+<p><strong>Soluciones actuales:</strong></p>
+<ul>
+  <li>El proveedor que entra a una campaña baja manualmente el precio del producto desde su panel de administración.</li>
+  <li>No queda registro del precio original antes del cambio.</li>
+  <li>El dropshipper ve únicamente el precio actual sin ningún indicador de que bajó.</li>
+  <li>El único diferenciador visual de campaña es el marco en la imagen del producto.</li>
+  <li>En Shopify, el contrato actual de sincronización (Dropify) solo envía el campo <code>price</code>. No hay <code>compare_at_price</code>.</li>
+  <li>En WooCommerce/Tienda Nube el campo de precio de promoción (<code>sale_price</code> / <code>promotional_price</code>) no está mapeado.</li>
+  <li>En CAS y ECOM Scanner no existe campo de descuento en el schema de producto.</li>
+</ul>
+
+<p><strong>Limitaciones:</strong></p>
+<ul>
+  <li>El esfuerzo del proveedor (bajar el precio) es invisible para el dropshipper → baja conversión.</li>
+  <li>No hay forma de revertir automáticamente el precio al original cuando termina la campaña → riesgo operativo.</li>
+  <li>No hay coherencia entre canales: un producto con descuento en Dropi puede no mostrarlo en la tienda del dropshipper en Shopify.</li>
+</ul>
+
+<h3>2.3 Discovery por Áreas, Benchmark e Investigación</h3>
+
+<p><strong>Resultados de Research (DCA-001):</strong></p>
+<ul>
+  <li>Del levantamiento de campañas anteriores (Black Week, DropiCup), no se midió el impacto del descuento visible vs. no visible. No hay baseline.</li>
+  <li>Los nodos 2 y 7 de dinamicas-catalogo-nodos.md ya contemplan "precio campaña" y "badge de descuento" como información mínima requerida en la vitrina — la feature fue diseñada pero no implementada.</li>
+  <li>Proveedor motivador: en el Nodo 2, los motivadores principales identificados son "mayor visibilidad" y "salir de stock" + "precio especial". El precio especial sin visualización no activa el motivador.</li>
+</ul>
+
+<p><strong>Benchmark:</strong></p>
+<table>
+  <tr><th>Plataforma</th><th>Campo</th><th>Display para el comprador</th></tr>
+  <tr><td><strong>MercadoLibre</strong></td><td><code>original_price</code></td><td>Precio tachado en rojo + badge verde con % de descuento</td></tr>
+  <tr><td><strong>Shopify</strong></td><td><code>compare_at_price</code></td><td>Si &gt; <code>price</code>, muestra tachado automáticamente en el tema</td></tr>
+  <tr><td><strong>Amazon</strong></td><td><code>was_price</code></td><td>"Antes: $X — Ahora: $Y" + "Ahorrás: Z%"</td></tr>
+  <tr><td><strong>Tienda Nube</strong></td><td><code>promotional_price</code></td><td>Campo separado del precio base, display con porcentaje</td></tr>
+  <tr><td><strong>WooCommerce</strong></td><td><code>sale_price</code> + <code>regular_price</code></td><td>Display nativo de "precio regular" tachado + "precio de oferta"</td></tr>
+</table>
+
+<p>Todos los competidores tienen este campo como estándar. Dropi es la excepción.</p>
+
+<h3>2.4 Gestión de Riesgos de Producto</h3>
+<ul>
+  <li><strong>Riesgo de Valor (2 - Bajo):</strong> El dropshipper podría no cambiar su comportamiento solo por ver el precio tachado si el descuento es pequeño (&lt;5%). <em>Mitigación:</em> definir descuento mínimo de campaña como regla de participación.</li>
+  <li><strong>Riesgo de Usabilidad (3 - Medio):</strong> Si el diseño del precio tachado no tiene suficiente contraste o está debajo del fold, el dropshipper no lo ve. <em>Mitigación:</em> diseño validado por Michelle antes de publicar vitrina.</li>
+  <li><strong>Riesgo de Factibilidad (4 - Alto):</strong> La wallet de Dropi puede calcular márgenes o comisiones basándose en el precio del producto. Cambiar el precio durante la campaña puede afectar cálculos. <strong>Confirmación crítica con TI antes de iniciar Fase 1.</strong></li>
+  <li><strong>Riesgo de Viabilidad Empresarial (2 - Bajo):</strong> El descuento lo asume completamente el proveedor. Dropi no pierde margen directamente. Verificar que la comisión de Dropi se calcule sobre el precio de campaña y no sobre el original.</li>
+  <li><strong>Riesgo Legal (2 - Bajo):</strong> En algunos mercados (Colombia y México), la publicidad comparativa de precios requiere que el precio original haya sido el precio real vigente durante un período mínimo. Si el proveedor sube el precio artificialmente antes de la campaña, Dropi podría tener exposición. <em>Mitigación:</em> regla de negocio + validación comercial.</li>
+  <li><strong>Riesgo de Sincronización Multi-canal (4 - Alto):</strong> Si la sincronización falla y el precio no revierte al terminar la campaña, el proveedor queda con el precio de campaña activo en Shopify o WooCommerce indefinidamente. <em>Mitigación:</em> proceso de cierre de campaña con revert automático + alerta.</li>
+</ul>
+
+<h3>2.5 Hipótesis, Validaciones y Preguntas Abiertas</h3>
+
+<p><strong>Hipótesis:</strong></p>
+<ol>
+  <li>Si el dropshipper ve el precio tachado + porcentaje de descuento, la tasa de importación de productos de campaña aumenta vs. sin precio tachado.</li>
+  <li>Cuanto mayor el porcentaje de descuento visible, mayor la tasa de importación. (¿Hay un umbral mínimo de descuento que genere impacto significativo?)</li>
+  <li>Los proveedores están dispuestos a registrar el precio anterior manualmente para participar en la campaña, si el proceso es simple.</li>
+  <li>El precio tachado visible en Shopify (vía <code>compare_at_price</code>) aumenta las conversiones de ventas desde la tienda del dropshipper.</li>
+</ol>
+
+<p><strong>Preguntas abiertas:</strong></p>
+<ul>
+  <li>¿La wallet de Dropi calcula comisiones sobre el precio del producto? (TI - crítico).</li>
+  <li>¿Qué versión de la API de Shopify usa Dropify actualmente y soporta <code>compare_at_price</code>? (Diego Pérez / Fabian Castro).</li>
+  <li>¿CAS necesita cambio de contrato de datos para incluir <code>precio_original</code> y <code>precio_descuento</code>? (equipo CAS / Pau).</li>
+  <li>¿Se requiere aprobación de un admin para activar descuentos, o el proveedor tiene autonomía total? (decisión de negocio — Fase 1 propone autonomía total del proveedor).</li>
+</ul>
+
+<h3>2.6 Conclusiones del Discovery</h3>
+
+<p>El problema está bien identificado y el mercado tiene soluciones probadas. La complejidad no está en el display visual (es simple), sino en la <strong>sincronización transversal con el ecosistema de integraciones</strong> (Shopify, WooCommerce, Tienda Nube, CAS, ECOM Scanner) y en el <strong>riesgo de la wallet</strong>. La Fase 1 debe ir con una validación técnica puntual con TI antes de comprometer fecha para Cyber Days.</p>
+
+<h3>2.7 Requerimientos Generales, Compatibilidad y Performance</h3>
+<ul>
+  <li><strong>Descripción de la solución:</strong> Campo de descuento en el producto (porcentaje o valor fijo) que genera el display "precio tachado → precio actual (-X%)" visible en la ficha del producto y en la vitrina de campaña, sincronizado con todos los canales de integración.</li>
+  <li><strong>Dispositivos:</strong> Mobile-first (el dropshipper navega mayoritariamente desde móvil). Desktop para el proveedor / admin de campaña.</li>
+  <li><strong>Performance:</strong> El display del precio tachado no debe afectar el tiempo de carga de la ficha del producto. El cálculo del porcentaje se hace en el backend al registrar el descuento. La sincronización con canales externos puede ser asíncrona si no supera los 5 minutos.</li>
+</ul>
+
+<hr class="separador">
+
+<h2>3. Definición &amp; Alcance</h2>
+
+<h3>3.1 Primeras Ideas y Propuestas</h3>
+
+<p><strong>Idea A (elegida para Fase 1) — Descuento como propiedad del producto, control del proveedor:</strong><br>
+El proveedor entra al panel de cualquier producto y activa un descuento. El sistema pregunta si es por porcentaje o valor fijo. Calcula y almacena el <code>precio_original</code> y el <code>precio_descuento</code>. El display se activa inmediatamente al confirmar, sin dependencia del sistema de campañas.</p>
+
+<p><strong>Idea B (descartada para Fase 1) — Historial automático de precios:</strong><br>
+El sistema captura el precio histórico del producto y usa el precio de 30 días atrás como referencia. Descartada para Fase 1 por complejidad técnica. Se incluye en Fase 3.</p>
+
+<p><strong>Escenarios clave:</strong></p>
+<ul>
+  <li>Proveedor con producto a $50.000 define 30% de descuento → sistema calcula precio_descuento $35.000, muestra "<del>$50.000</del> $35.000 (-30%)".</li>
+  <li>Proveedor define valor fijo: "baja $10.000" → sistema calcula precio_descuento y porcentaje implícito.</li>
+  <li>Proveedor desactiva descuento → precio revierte a $50.000 en todos los canales.</li>
+</ul>
+
+<h3>3.2 Fases del Proyecto y Alcance</h3>
+
+<h4>Fase 1 — Descuento básico como propiedad del producto (MVP)</h4>
+<p><em>Contexto de negocio: Cyber Days (agosto 2026) es el trigger que prioriza esta feature ahora. Pero técnicamente el descuento es una <strong>propiedad del producto</strong>, completamente independiente del sistema de campañas — que aún no existe como funcionalidad técnica delimitadora.</em></p>
+
+<p><strong>Qué incluye:</strong></p>
+<ul>
+  <li>El proveedor entra al panel de <strong>cualquiera de sus productos</strong> y activa un descuento.</li>
+  <li>El sistema le pregunta: <strong>¿descuento por porcentaje (%) o por valor fijo?</strong></li>
+  <li>El sistema captura <code>precio_original</code> (precio vigente en ese momento) y calcula <code>precio_descuento</code>.</li>
+  <li>El sistema muestra un <strong>preview</strong> del display antes de confirmar: "<del>$50.000</del> $35.000 (-30%)".</li>
+  <li>Al confirmar, el flag <code>descuento_activo = true</code> se activa. El display se muestra inmediatamente.</li>
+  <li><strong>Funciona en TODO el ecosistema:</strong>
+    <ul>
+      <li>Dropi nativo (ficha de producto en catálogo y resultados de búsqueda)</li>
+      <li>Shopify (vía Dropify): <code>compare_at_price = precio_original</code>, <code>price = precio_descuento</code></li>
+      <li>WooCommerce: <code>regular_price = precio_original</code>, <code>sale_price = precio_descuento</code></li>
+      <li>Tienda Nube: <code>original_price = precio_original</code>, <code>promotional_price = precio_descuento</code></li>
+      <li>CAS: campo <code>precio_original</code> y <code>precio_descuento</code> en el schema del producto</li>
+      <li>ECOM Scanner: muestra <code>precio_descuento</code> como precio vigente del pedido</li>
+    </ul>
+  </li>
+  <li>El proveedor puede <strong>desactivar el descuento</strong> en cualquier momento desde su panel.</li>
+  <li><strong>Finalización automática por fecha (<code>fecha_fin_descuento</code>):</strong> el proveedor define una fecha límite opcional. Al llegar a esa fecha, el sistema ejecuta el revert automáticamente sin intervención manual.</li>
+  <li><strong>Finalización automática por volumen (<code>cantidad_limite_descuento</code>):</strong> el proveedor define cuántas unidades quiere vender con el descuento activo. Al alcanzar esa cantidad, el sistema ejecuta el revert automáticamente.</li>
+  <li>Si ambas condiciones están configuradas, <strong>la primera que se cumpla ejecuta el revert</strong>. La otra queda inactiva.</li>
+  <li>Si ninguna condición está configurada, el descuento permanece activo hasta que el proveedor lo desactive manualmente.</li>
+  <li><strong>Actualización masiva vía Excel:</strong> columnas nuevas: <code>descuento_activo</code> (SI/NO), <code>tipo_descuento</code> (PORCENTAJE/FIJO), <code>valor_descuento</code>, <code>fecha_fin_descuento</code> (opcional), <code>cantidad_limite_descuento</code> (opcional).</li>
+  <li>Validación: <code>precio_descuento</code> debe ser estrictamente menor a <code>precio_original</code>.</li>
+</ul>
+
+<p><strong>Qué NO incluye:</strong></p>
+<ul>
+  <li>Ninguna dependencia del sistema de campañas (no existe aún como funcionalidad técnica).</li>
+  <li>Revert automático por cierre de campaña — el descuento no está vinculado al ciclo de vida de una campaña.</li>
+  <li>Historial automático de precios (requiere infraestructura de auditoría).</li>
+  <li>Filtros por descuento en el catálogo general.</li>
+  <li>Reglas automáticas disparadas por condiciones externas (precio competencia, días sin órdenes) — Fase 3.</li>
+</ul>
+
+<h4>Fase 2 — Exploración y filtros por descuento</h4>
+
+<p><strong>Qué incluye:</strong></p>
+<ul>
+  <li>Badge de descuento visible en el <strong>listing del catálogo</strong> de Dropi (no solo en la ficha).</li>
+  <li>Filtro en el catálogo para dropshippers: "Productos con descuento", "Mayor descuento primero", "Descuento ≥ X%".</li>
+  <li>Notificación push / email a dropshippers que ya tienen importado un producto que entra en descuento de campaña.</li>
+  <li>Segmentación de descuentos por campaña: el dropshipper puede explorar "todos los productos de Cyber Days" o "todos los productos con más de 20% de descuento".</li>
+  <li>Dashboard básico para el admin de campaña: qué productos tienen descuento registrado, cuáles no, estado de sincronización por canal.</li>
+</ul>
+
+<h4>Fase 3 — Inteligencia de descuentos</h4>
+
+<p><strong>Qué incluye:</strong></p>
+<ul>
+  <li><strong>Reglas automáticas de descuento:</strong> el proveedor define condiciones ("si mi producto lleva 30 días sin órdenes, aplicar 15% de descuento automáticamente en la próxima campaña").</li>
+  <li><strong>Historial automático de precios:</strong> el sistema captura el precio del producto en un snapshot periódico (ej. cada 7 días), elimina la necesidad de registrar manualmente el precio_original.</li>
+  <li><strong>Dashboard de performance de descuentos:</strong> qué porcentaje de descuento tiene mayor tasa de importación, qué productos con descuento generaron más GMV, curva de conversión por nivel de descuento.</li>
+  <li><strong>Integración con Campaign Manager:</strong> el gestor de campaña puede definir rangos de descuento mínimos y máximos por campaña.</li>
+  <li><strong>A/B testing de precios:</strong> el sistema puede mostrar diferentes niveles de descuento a segmentos diferentes de dropshippers para validar cuál convierte más.</li>
+</ul>
+
+<h3>3.3 Estimación de Recursos y Esfuerzo (Perspectiva de Producto)</h3>
+<ul>
+  <li><strong>Fase 1:</strong> ~2 sprints de desarrollo (estimación tentativa — pendiente validación TI el 30-jun). Alta dependencia de la complejidad de la wallet y del contrato de integración con cada canal.</li>
+  <li><strong>Fase 2:</strong> ~1-2 sprints adicionales.</li>
+  <li><strong>Fase 3:</strong> Backlog largo plazo — depende de impacto medido en Fases 1 y 2.</li>
+</ul>
+
+<h3>3.4 Segmento y País de Implementación</h3>
+<table>
+  <tr><th>Campo</th><th>Fase 1</th><th>Fase 2</th><th>Fase 3</th></tr>
+  <tr><td>Segmento supplier</td><td>Verificados y Premium en campaña</td><td>Todos los proveedores con campaña activa</td><td>Todos</td></tr>
+  <tr><td>Segmento dropshipper</td><td>Todos (solo ven el display)</td><td>Todos (filtros en catálogo)</td><td>Todos</td></tr>
+  <tr><td>País</td><td>Colombia</td><td>Colombia + México</td><td>Multi-país</td></tr>
+</table>
+
+<h3>3.5 Supuestos</h3>
+<ol>
+  <li>La wallet de Dropi no calcula comisiones en tiempo real sobre el precio del producto (confirmación pendiente TI).</li>
+  <li>Shopify soporta <code>compare_at_price</code> en la versión de API que usa Dropify actualmente.</li>
+  <li>WooCommerce y Tienda Nube tienen campos análogos (<code>sale_price</code> / <code>promotional_price</code>) ya mapeados o fácilmente mapeables por el equipo ICOM.</li>
+  <li>El descuento siempre lo define el proveedor o el admin de campaña — no hay descuento automático calculado por Dropi en Fase 1.</li>
+  <li>El precio_original es el precio vigente del producto en el momento en que se aprueba el descuento.</li>
+</ol>
+
+<h3>3.6 Próximos Pasos</h3>
+<ol>
+  <li><strong>Lunes 30-jun-2026:</strong> Jaime valida con José Giraldo (TI) si la wallet tiene dependencia del campo de precio.</li>
+  <li><strong>Esta semana:</strong> Michelle define el display de precio tachado en la vitrina de campaña (Figma).</li>
+  <li><strong>Al tener respuesta de TI:</strong> Si es viable → crear épica en Jira + estimación de esfuerzo.</li>
+  <li><strong>Próxima semana:</strong> Alinear con ICOM (Juan Diego) el contrato de integración con Shopify/WooCommerce/TN.</li>
+  <li><strong>Alinear con equipo CAS (Pau)</strong> el contrato de precio_descuento en el schema de CAS.</li>
+</ol>
+
+<hr class="separador">
+
+<h2>4. Following y Lanzamiento</h2>
+
+<h3>4.1 Contexto y Objetivo de Medición</h3>
+<ul>
+  <li><strong>Contexto del Problema:</strong> Los descuentos de campaña hoy son invisibles para el dropshipper. El objetivo es validar que hacer el descuento visible aumenta la importación de productos y las órdenes atribuidas a campañas.</li>
+  <li><strong>Objetivo del Feature:</strong> Que el dropshipper entienda el valor económico del descuento y lo use como señal de compra.</li>
+  <li><strong>Propuesta de valor:</strong> "En Dropi ahora puedes ver el precio original y el precio de campaña en cada producto. Lo que ahorras, lo ganas de margen."</li>
+  <li><strong>Impacto en experiencia:</strong> Reduce la carga cognitiva del dropshipper al evaluar un producto de campaña. No necesita calcular ni comparar — el descuento está visible.</li>
+  <li><strong>Alcance:</strong> Proveedores verificados/premium con descuento activo en campaña. Dropshippers de todos los niveles. Colombia en Fase 1.</li>
+</ul>
+
+<h3>4.2 Métricas de Impacto (Negocio — Data Warehouse)</h3>
+
+<p><strong>Métrica 1 — Tasa de importación de productos en campaña (Adoption)</strong></p>
+<ul>
+  <li><em>¿Por qué medirlo?</em> Es el primer paso hacia la orden. Si el precio tachado no mueve la importación, no mueve la venta.</li>
+  <li><em>Fórmula:</em> <code>(Dropshippers que importaron ≥1 producto de campaña) / (Dropshippers que vieron la vitrina de campaña) × 100</code></li>
+  <li><em>Criterio de éxito:</em> ≥ 30% vs. campañas previas sin precio tachado.</li>
+  <li><em>Segmentación técnica:</em> <code>campaign_id = CYBER_DAYS_2026 AND action = 'product_imported'</code></li>
+</ul>
+
+<p><strong>Métrica 2 — Órdenes atribuidas a campaña (Task Success)</strong></p>
+<ul>
+  <li><em>¿Por qué medirlo?</em> La importación no garantiza la venta. Validamos si el descuento visible genera órdenes reales.</li>
+  <li><em>Fórmula:</em> <code>Órdenes de productos con descuento_activo = true durante el período de campaña</code></li>
+  <li><em>Criterio de éxito:</em> Definir baseline con primera campaña. Meta de campaña 2: +20% sobre campaña 1.</li>
+  <li><em>Segmentación técnica:</em> <code>product.descuento_activo = true AND order.created_at BETWEEN campaign.start AND campaign.end</code></li>
+</ul>
+
+<p><strong>Métrica 3 — GMV incremental de campaña (Engagement)</strong></p>
+<ul>
+  <li><em>¿Por qué medirlo?</em> Los productos en campaña deben generar más GMV que los mismos productos en períodos sin campaña.</li>
+  <li><em>Fórmula:</em> <code>GMV productos campaña semana X / GMV mismos productos semana X-4 (sin campaña)</code></li>
+  <li><em>Criterio de éxito:</em> GMV incremental positivo en ≥70% de los productos participantes.</li>
+</ul>
+
+<h3>4.3 Métricas de Comportamiento (UX — Userpilot / Analytics)</h3>
+
+<p><strong>Target:</strong> Dropshippers activos que navegan el catálogo o la vitrina de campaña durante Cyber Days. Estimado: todos los dropshippers activos en Colombia durante agosto 2026.</p>
+
+<p><strong>Adopción — CTR en ficha de producto con descuento:</strong></p>
+<ul>
+  <li><em>Acción clave:</em> El dropshipper hace clic en "ver producto" o "importar" desde la vitrina de campaña.</li>
+  <li><em>Fórmula:</em> <code>(Clics en producto de campaña) / (Impresiones del producto en vitrina) × 100</code></li>
+  <li><em>Criterio de éxito:</em> CTR ≥ 8%.</li>
+</ul>
+
+<p><strong>Retención — Dropshippers que vuelven a la vitrina:</strong></p>
+<ul>
+  <li><em>Frecuencia natural:</em> Semanal (campaña activa durante ~4 semanas).</li>
+  <li><em>Meta:</em> ≥ 40% de dropshippers que visitaron la vitrina en semana 1 regresan en semana 2.</li>
+</ul>
+
+<p><strong>Satisfacción (Happiness):</strong></p>
+<ul>
+  <li><em>Pregunta clave SEQ:</em> "¿El precio con descuento te ayudó a decidir si importar este producto?"</li>
+  <li><em>Escala:</em> 1 al 5. <em>Meta:</em> ≥ 70% de respuestas en 4 o 5.</li>
+</ul>
+
+<h3>4.4 Metodología de Validación (Micro-surveys SEQ)</h3>
+
+<p><strong>Encuesta 1 — Impacto del descuento en la decisión de importación:</strong></p>
+<ul>
+  <li><em>Trigger:</em> Inmediatamente después de que el dropshipper importa un producto de campaña.</li>
+  <li><em>Frecuencia:</em> Una vez por usuario durante la campaña.</li>
+  <li><em>Pregunta:</em> "¿El precio con descuento visible fue el principal motivo por el que importaste este producto?"</li>
+  <li><em>Escala:</em> 1 (No influyó) a 5 (Fue la razón principal).</li>
+  <li><em>Lógica condicional:</em> Si respuesta ≤ 2 → abrir caja de texto: "¿Qué fue lo que te motivó a importarlo?"</li>
+</ul>
+
+<p><strong>Encuesta 2 — Experiencia del proveedor registrando el descuento:</strong></p>
+<ul>
+  <li><em>Trigger:</em> Inmediatamente después de que el proveedor guarda el descuento en el panel de administración.</li>
+  <li><em>Frecuencia:</em> Una vez por proveedor en la primera campaña.</li>
+  <li><em>Pregunta:</em> "¿Qué tan fácil fue registrar el descuento de tu producto para la campaña?"</li>
+  <li><em>Escala:</em> 1 al 5.</li>
+</ul>
+
+<h3>4.5 Esquema de Seguimiento (12 Semanas)</h3>
+<table>
+  <tr><th>Período</th><th>Foco</th></tr>
+  <tr><td><strong>Mes 1 (semanas 1-4) — Semanal</strong></td><td>Monitoreo de adopción inicial en Cyber Days. Verificación de sincronización en Shopify/WooCommerce/TN/CAS. Detección de bugs en el revert de precios al cierre. Primeras señales de CTR e importación.</td></tr>
+  <tr><td><strong>Mes 2 (semanas 5-8) — Quincenal</strong></td><td>Análisis de correlación descuento% → tasa de importación. Ajustes de UX si el display no es suficientemente visible. Encuestas SEQ con muestra representativa. Decisión de escalar a Fase 2.</td></tr>
+  <tr><td><strong>Mes 3 (semanas 9-12) — Mensual</strong></td><td>Evaluación de GMV incremental. Comparación con campañas sin precio tachado. Documentación de aprendizajes para Campaign Manager. Decisión de incluir en Dropi Score para roadmap permanente.</td></tr>
+</table>
+
+<h3>4.6 Lanzamiento y Kick-off a Marketing (Comunicación)</h3>
+<ul>
+  <li><strong>Descripción breve:</strong> Desde ahora, los productos de Cyber Days muestran el precio original tachado junto al precio de campaña, para que los dropshippers vean exactamente cuánto ahorran.</li>
+  <li><strong>Para quién:</strong> Dropshippers activos en Colombia que exploran el catálogo o la vitrina de campaña.</li>
+  <li><strong>Tipo de lanzamiento:</strong> Lanzamiento de feature dentro de Cyber Days. No requiere comunicación independiente.</li>
+  <li><strong>Dolor vs. Solución:</strong> "Antes no sabías si el precio era normal o de campaña. Ahora ves exactamente cuánto bajó y cuánto ganás de margen."</li>
+  <li><strong>Beneficios clave:</strong> Descuento visible de un vistazo · Porcentaje de ahorro calculado automáticamente · El precio se revierte solo cuando termina la campaña.</li>
+  <li><strong>Mensajes sugeridos para Marketing:</strong> "Precios reales. Descuentos visibles. Importa más, vende más."</li>
+  <li><strong>Recursos:</strong> Figma (pendiente Michelle) · Tango del flujo de importación con precio tachado (por crear) · Video Loom (por crear).</li>
+  <li><strong>Contacto de Producto:</strong> Jaime Guevara.</li>
+</ul>
+
+<hr class="separador">
+
+<h2>5. Hand-off a TI</h2>
+
+<table>
+  <tr><th>Campo</th><th>Contenido</th></tr>
+  <tr><td><strong>Segmento</strong></td><td>Suppliers / Dropshippers</td></tr>
+  <tr><td><strong>Equipo de TI receptor</strong></td><td>ICOM (integraciones) + Célula Supplier Success (Dropi nativo) + CAS</td></tr>
+  <tr><td><strong>Tech Lead asignado</strong></td><td>José Giraldo (coordinador) · Fernando Pérez (owner tech)</td></tr>
+  <tr><td><strong>Fecha de hand-off</strong></td><td>Pendiente validación técnica del 30-jun-2026</td></tr>
+</table>
+
+<h3>5.1 Job to be Done (JTBD)</h3>
+
+<blockquote>
+  "Cuando un <strong>dropshipper</strong> explora la vitrina de Cyber Days (o cualquier campaña de catálogo activa), quiero <strong>ver el precio original tachado junto al precio de campaña y el porcentaje de descuento</strong>, para <strong>entender el nivel de ahorro real y decidir si importo el producto ahora</strong>."
+</blockquote>
+
+<blockquote>
+  "Cuando un <strong>supplier</strong> quiere hacer visible un descuento en alguno de sus productos, quiero <strong>activar el descuento directamente desde el panel del producto (por porcentaje o valor fijo)</strong>, para <strong>que mi oferta sea visible de inmediato para los dropshippers y en todos sus canales externos</strong>."
+</blockquote>
+
+<h3>5.2 Contexto del Sistema (C4 Nivel 1)</h3>
+
+<p><strong>Actores:</strong></p>
+<table>
+  <tr><th>Actor</th><th>Rol en el flujo</th></tr>
+  <tr><td><strong>Supplier (Proveedor)</strong></td><td>Entra al panel de cualquiera de sus productos y activa/desactiva el descuento. Define si es por porcentaje (%) o valor fijo.</td></tr>
+  <tr><td><strong>Dropshipper</strong></td><td>Ve el precio tachado + precio actual + porcentaje de ahorro en Dropi y en su tienda externa.</td></tr>
+  <tr><td><strong>Sistema de Integración (Dropify / ICOM)</strong></td><td>Sincroniza los campos <code>precio_original</code> y <code>precio_descuento</code> con Shopify, WooCommerce y Tienda Nube.</td></tr>
+  <tr><td><strong>Sistema CAS</strong></td><td>Recibe el campo de descuento para mostrarlo en el scanner al operar el pedido.</td></tr>
+</table>
+
+<p><strong>Sistemas externos involucrados:</strong></p>
+<table>
+  <tr><th>Sistema</th><th>Intercambio de datos</th></tr>
+  <tr><td>Shopify (vía Dropify)</td><td><code>compare_at_price = precio_original</code>, <code>price = precio_descuento</code> al sincronizar producto.</td></tr>
+  <tr><td>WooCommerce (vía ICOM)</td><td><code>regular_price = precio_original</code>, <code>sale_price = precio_descuento</code>.</td></tr>
+  <tr><td>Tienda Nube (vía ICOM)</td><td><code>original_price = precio_original</code>, <code>promotional_price = precio_descuento</code>.</td></tr>
+  <tr><td>CAS</td><td>Campo <code>precio_original</code> y <code>precio_descuento</code> en schema del producto.</td></tr>
+  <tr><td>ECOM Scanner</td><td>Muestra <code>precio_descuento</code> como precio vigente del pedido cuando el descuento está activo.</td></tr>
+</table>
+
+<p><strong>Flujo de datos (A → J):</strong></p>
+<ol>
+  <li>El proveedor entra al panel de administración de cualquiera de sus productos.</li>
+  <li>Activa la opción "Descuento" en el producto. El sistema le pregunta: <strong>¿descuento por porcentaje (%) o por valor fijo?</strong></li>
+  <li>El proveedor ingresa el valor (ej. "30%" o "$15.000"). El sistema captura <code>precio_original</code> = precio vigente en ese momento.</li>
+  <li>Calcula <code>precio_descuento</code> = precio_original × (1 - descuento%) o precio_original - valor_fijo.</li>
+  <li>Valida que <code>precio_descuento</code> &lt; <code>precio_original</code>. Si no cumple, muestra error y no guarda.</li>
+  <li>El sistema muestra un <strong>preview</strong> del display: "<del>$50.000</del> $35.000 (-30%)". El proveedor confirma.</li>
+  <li>Al confirmar, el producto se marca como <code>descuento_activo = true</code>. El display de precio tachado se activa en Dropi inmediatamente.</li>
+  <li>El sistema de integración sincroniza el producto con los canales externos: envía <code>compare_at_price</code>, <code>sale_price</code> o <code>promotional_price</code> según el canal.</li>
+  <li>El dropshipper ve el precio tachado en la vitrina y en la ficha del producto, tanto en Dropi como en su tienda externa.</li>
+  <li>Cuando el proveedor decide desactivar el descuento, el sistema ejecuta el <strong>revert</strong>: <code>price = precio_original</code>, <code>compare_at_price = null</code> en todos los canales. <code>descuento_activo = false</code>.</li>
+</ol>
+
+<h3>5.3 Glosario de Dominio</h3>
+<table>
+  <tr><th>Término</th><th>Definición de negocio</th></tr>
+  <tr><td><code>precio_original</code></td><td>Precio del producto vigente en Dropi antes de que el proveedor active el descuento. Lo captura el sistema al momento de confirmar el descuento.</td></tr>
+  <tr><td><code>precio_descuento</code></td><td>Precio activo mientras el descuento está habilitado. Resultado de aplicar el descuento al precio_original. Es el precio que ve el dropshipper y que se sincroniza con los canales.</td></tr>
+  <tr><td><code>descuento</code></td><td>Diferencia entre precio_original y precio_descuento. Puede definirse como porcentaje (%) o valor fijo (COP/MXN). Lo define el proveedor.</td></tr>
+  <tr><td><code>descuento_activo</code></td><td>Flag booleano en el producto que indica si el proveedor ha activado un descuento. Independiente del sistema de campañas.</td></tr>
+  <tr><td><code>compare_at_price</code></td><td>Campo nativo de Shopify para mostrar el precio de comparación tachado. Equivalente a <code>precio_original</code>.</td></tr>
+  <tr><td><code>sale_price</code></td><td>Campo de WooCommerce para el precio de oferta. Equivalente a <code>precio_descuento</code>.</td></tr>
+  <tr><td><code>promotional_price</code></td><td>Campo de Tienda Nube para el precio de descuento. Equivalente a <code>precio_descuento</code>.</td></tr>
+  <tr><td><code>vitrina de campaña</code></td><td>Categoría temporal + banner prefiltrado en Dropi donde el dropshipper ve los productos de la campaña (contexto de negocio; no es requisito técnico de Fase 1).</td></tr>
+  <tr><td><code>revert de descuento</code></td><td>Proceso que restaura el <code>precio_original</code> en todos los canales cuando el proveedor desactiva el descuento. Controlado manualmente por el proveedor.</td></tr>
+  <tr><td><code>tipo_descuento</code></td><td>Campo del formulario y del Excel. Valores válidos: <code>PORCENTAJE</code> o <code>FIJO</code>. Define cómo se interpreta <code>valor_descuento</code>.</td></tr>
+  <tr><td><code>valor_descuento</code></td><td>Campo del formulario y del Excel. Número entero positivo. Si <code>PORCENTAJE</code>: ej. <code>30</code> = 30%. Si <code>FIJO</code>: ej. <code>15000</code> = $15.000 COP.</td></tr>
+  <tr><td><code>fecha_fin_descuento</code></td><td>Fecha límite opcional definida por el proveedor (formato <code>YYYY-MM-DD HH:MM</code>). Al llegar a esa fecha, el sistema ejecuta el revert automáticamente. Si <code>NULL</code>, no hay límite por tiempo.</td></tr>
+  <tr><td><code>cantidad_limite_descuento</code></td><td>Número máximo de unidades que se pueden vender con <code>descuento_activo = true</code>. Al igualar o superar ese número de órdenes confirmadas, el sistema ejecuta el revert. Si <code>NULL</code>, no hay límite por volumen.</td></tr>
+</table>
+
+<h3>5.4 Reglas de Negocio Consolidadas</h3>
+<ol>
+  <li><strong>El <code>precio_descuento</code> debe ser estrictamente menor al <code>precio_original</code>.</strong> Si el proveedor intenta registrar un precio de descuento igual o mayor, el sistema debe rechazar la operación con mensaje de error descriptivo. Previene fraude visual.</li>
+  <li><strong>El display de precio tachado solo se activa cuando <code>descuento_activo = true</code>.</strong> Es una propiedad del producto controlada por el proveedor — no requiere pertenencia a ninguna campaña.</li>
+  <li><strong>El <code>precio_original</code> lo captura el sistema en el momento en que el proveedor confirma el descuento.</strong> Esto previene que el proveedor infle el precio_original artificialmente antes de activar la oferta.</li>
+  <li><strong>El proveedor puede modificar o desactivar el descuento en cualquier momento.</strong> No requiere aprobación de un admin. El sistema aplica el revert inmediatamente en todos los canales.</li>
+  <li><strong>Al desactivar el descuento, el sistema ejecuta el revert:</strong> <code>price = precio_original</code> y deshabilita los campos de precio de comparación en todos los canales. La operación debe completarse en ≤ 10 minutos desde la desactivación.</li>
+  <li><strong>El porcentaje de descuento visible para el dropshipper se calcula así:</strong> <code>((precio_original - precio_descuento) / precio_original) × 100</code>. Redondear a entero positivo (sin decimales).</li>
+  <li><strong>La comisión de Dropi se calcula sobre <code>precio_descuento</code></strong>, no sobre <code>precio_original</code>. TI debe confirmar que la wallet respeta esta regla (punto crítico de validación).</li>
+  <li><strong>El campo <code>compare_at_price</code> en Shopify solo se sincroniza si la integración Dropify está activa para ese producto.</strong> Si el producto no tiene Shopify habilitado, el descuento aplica solo en Dropi nativo.</li>
+  <li><strong>Si <code>fecha_fin_descuento</code> está configurada y la fecha actual la supera, el sistema ejecuta automáticamente el revert:</strong> <code>descuento_activo = false</code>, restaura <code>precio_original</code> en todos los canales. El job de verificación corre al menos cada hora.</li>
+  <li><strong>Si <code>cantidad_limite_descuento</code> está configurada, el sistema contabiliza en tiempo real cada orden confirmada con <code>descuento_activo = true</code>.</strong> Al igualar o superar ese número, el sistema ejecuta el revert inmediatamente.</li>
+  <li><strong>Si ambas condiciones están configuradas, la primera que se cumpla ejecuta el revert.</strong> La otra queda inactiva. El reporte al proveedor indica cuál fue la condición disparadora.</li>
+  <li><strong>El proveedor puede modificar <code>fecha_fin_descuento</code> y <code>cantidad_limite_descuento</code> mientras el descuento está activo</strong>, siempre que el nuevo valor no sea menor a lo ya contabilizado.</li>
+</ol>
+
+<h3>5.5 Criterios de Aceptación (Gherkin por Módulo)</h3>
+
+<h4>Módulo A · Display de precio tachado en vitrina y ficha de producto (Dropi nativo)</h4>
+
+<div class="gherkin">
+<strong>Escenario A-1 (Flujo exitoso — display activado)</strong><br>
+<span class="keyword">Dado que</span> el producto "Organizador plegable" tiene <code>descuento_activo = true</code>, precio_original = $50.000 y precio_descuento = $35.000<br>
+<span class="keyword">Cuando</span> el dropshipper accede a la ficha del producto o al catálogo general<br>
+<span class="keyword">Entonces</span> el sistema muestra: "<del>$50.000</del> $35.000 (-30%)"
+</div>
+
+<div class="gherkin">
+<strong>Escenario A-2 (Producto sin descuento activo)</strong><br>
+<span class="keyword">Dado que</span> el producto tiene <code>descuento_activo = false</code> (el proveedor nunca activó descuento, o lo desactivó)<br>
+<span class="keyword">Cuando</span> el dropshipper accede a la ficha del producto<br>
+<span class="keyword">Entonces</span> el sistema muestra únicamente el precio actual, sin tachado ni porcentaje (no rompe la experiencia)
+</div>
+
+<div class="gherkin">
+<strong>Escenario A-3 (Desactivación por el proveedor — revert en Dropi)</strong><br>
+<span class="keyword">Dado que</span> el proveedor desactiva el descuento de un producto que tenía <code>descuento_activo = true</code><br>
+<span class="keyword">Cuando</span> el proveedor confirma la desactivación<br>
+<span class="keyword">Entonces</span> el producto vuelve a mostrar únicamente el <code>precio_original</code>, sin tachado. <code>descuento_activo = false</code>. El cambio es visible en ≤ 10 min en todos los canales.
+</div>
+
+<div class="gherkin">
+<strong>Escenario A-4 (Dos productos del mismo proveedor — independencia de descuentos)</strong><br>
+<span class="keyword">Dado que</span> el proveedor tiene dos productos: Producto A con <code>descuento_activo = true</code> y Producto B con <code>descuento_activo = false</code><br>
+<span class="keyword">Cuando</span> el dropshipper navega el catálogo<br>
+<span class="keyword">Entonces</span> Producto A muestra precio tachado y Producto B muestra solo el precio vigente, sin interferencia entre ellos
+</div>
+
+<h4>Módulo B · Registro de descuento por proveedor</h4>
+
+<div class="gherkin">
+<strong>Escenario B-1 (Registro exitoso por porcentaje)</strong><br>
+<span class="keyword">Dado que</span> el proveedor entra al panel de cualquiera de sus productos con precio vigente = $50.000<br>
+<span class="keyword">Cuando</span> activa el descuento, selecciona "descuento por porcentaje" e ingresa "30%"<br>
+<span class="keyword">Entonces</span> el sistema calcula precio_descuento = $35.000, muestra un preview "<del>$50.000</del> $35.000 (-30%)" y solicita confirmación antes de guardar
+</div>
+
+<div class="gherkin">
+<strong>Escenario B-2 (Registro exitoso por valor fijo)</strong><br>
+<span class="keyword">Dado que</span> el proveedor activa el descuento en un producto a $50.000 y selecciona "valor fijo"<br>
+<span class="keyword">Cuando</span> ingresa "$15.000 de descuento" y confirma<br>
+<span class="keyword">Entonces</span> el sistema calcula precio_descuento = $35.000 y el porcentaje implícito (-30%) para el display. <code>descuento_activo = true</code>.
+</div>
+
+<div class="gherkin">
+<strong>Escenario B-3 (Precio de descuento inválido)</strong><br>
+<span class="keyword">Dado que</span> el proveedor intenta registrar un precio_descuento = $55.000 sobre un producto a $50.000<br>
+<span class="keyword">Cuando</span> intenta guardar<br>
+<span class="keyword">Entonces</span> el sistema bloquea la operación y muestra: "El precio con descuento debe ser menor al precio original ($50.000). Revisa el descuento ingresado."
+</div>
+
+<div class="gherkin">
+<strong>Escenario B-4 (Modificación del descuento activo)</strong><br>
+<span class="keyword">Dado que</span> el proveedor tiene un producto con <code>descuento_activo = true</code><br>
+<span class="keyword">Cuando</span> el proveedor edita el campo de descuento e ingresa un nuevo valor<br>
+<span class="keyword">Entonces</span> el sistema aplica el nuevo descuento, actualiza precio_descuento y sincroniza todos los canales en ≤ 10 minutos
+</div>
+
+<h4>Módulo C · Sincronización con canales externos</h4>
+
+<div class="gherkin">
+<strong>Escenario C-1 (Sincronización con Shopify)</strong><br>
+<span class="keyword">Dado que</span> el producto tiene <code>descuento_activo = true</code> y la integración Shopify (Dropify) está habilitada<br>
+<span class="keyword">Cuando</span> el sistema sincroniza el producto<br>
+<span class="keyword">Entonces</span> en Shopify: compare_at_price = precio_original y price = precio_descuento. El tema del dropshipper muestra el precio tachado nativamente.
+</div>
+
+<div class="gherkin">
+<strong>Escenario C-2 (Revert en Shopify al cierre de campaña)</strong><br>
+<span class="keyword">Dado que</span> la campaña Cyber Days cierra<br>
+<span class="keyword">Cuando</span> el sistema ejecuta el revert<br>
+<span class="keyword">Entonces</span> en Shopify: compare_at_price = null y price = precio_original. Verificable en el panel de Shopify del dropshipper.
+</div>
+
+<div class="gherkin">
+<strong>Escenario C-3 (Producto en CAS con descuento activo)</strong><br>
+<span class="keyword">Dado que</span> el producto tiene <code>descuento_activo = true</code><br>
+<span class="keyword">Cuando</span> el operario escanea el producto en CAS para crear un pedido<br>
+<span class="keyword">Entonces</span> CAS muestra precio_descuento como precio vigente del pedido, no el precio_original
+</div>
+
+<div class="gherkin">
+<strong>Escenario C-4 (Sincronización fallida — manejo de error)</strong><br>
+<span class="keyword">Dado que</span> la sincronización con Shopify falla por timeout o error de API<br>
+<span class="keyword">Cuando</span> el sistema detecta el fallo<br>
+<span class="keyword">Entonces</span> registra el error en logs, reintenta en la siguiente ventana de sincronización (máx. 15 min), y alerta al admin de campaña si después de 3 reintentos el canal sigue sin sincronizar
+</div>
+
+<h4>Módulo E · Actualización masiva de descuentos vía Excel</h4>
+
+<div class="gherkin">
+<strong>Escenario E-1 (Carga masiva exitosa — activación en múltiples productos)</strong><br>
+<span class="keyword">Dado que</span> el proveedor completa el Excel de carga masiva con <code>descuento_activo = SI</code>, <code>tipo_descuento = PORCENTAJE</code>, <code>valor_descuento = 30</code> para 5 productos<br>
+<span class="keyword">Cuando</span> sube el archivo al sistema<br>
+<span class="keyword">Entonces</span> el sistema activa <code>descuento_activo = true</code> en los 5 productos, calcula <code>precio_descuento</code> para cada uno, sincroniza todos los canales y retorna: "5 productos actualizados exitosamente."
+</div>
+
+<div class="gherkin">
+<strong>Escenario E-2 (Carga masiva con error de validación en una fila)</strong><br>
+<span class="keyword">Dado que</span> el proveedor carga un Excel de 10 filas donde en 1 fila el descuento resulta en un <code>precio_descuento</code> mayor al <code>precio_original</code> (error de tipeo)<br>
+<span class="keyword">Cuando</span> el sistema procesa el archivo<br>
+<span class="keyword">Entonces</span> procesa las 9 filas válidas y rechaza solo la fila inválida. El reporte indica: "9 actualizados correctamente. 1 fila rechazada (fila 6): el precio de descuento resultante ($52.500) es mayor al precio original ($50.000)."
+</div>
+
+<div class="gherkin">
+<strong>Escenario E-3 (Carga masiva — desactivación masiva de descuentos)</strong><br>
+<span class="keyword">Dado que</span> el proveedor carga un Excel con <code>descuento_activo = NO</code> para todos sus productos con descuento activo<br>
+<span class="keyword">Cuando</span> el sistema procesa el archivo<br>
+<span class="keyword">Entonces</span> ejecuta el revert en todos los productos afectados: restaura <code>precio_original</code>, pone <code>descuento_activo = false</code> y sincroniza todos los canales. Los campos <code>tipo_descuento</code> y <code>valor_descuento</code> se ignoran.
+</div>
+
+<div class="gherkin">
+<strong>Escenario E-4 (Carga masiva — columnas obligatorias faltantes)</strong><br>
+<span class="keyword">Dado que</span> el proveedor sube un Excel con <code>descuento_activo = SI</code> pero sin la columna <code>tipo_descuento</code><br>
+<span class="keyword">Cuando</span> el sistema procesa el archivo<br>
+<span class="keyword">Entonces</span> rechaza las filas afectadas con error: "Las columnas tipo_descuento y valor_descuento son obligatorias cuando descuento_activo = SI."
+</div>
+
+<h4>Módulo F · Finalización automática — por fecha y por volumen</h4>
+
+<div class="gherkin">
+<strong>Escenario F-1 (Revert automático por fecha límite)</strong><br>
+<span class="keyword">Dado que</span> el proveedor activó un descuento del 20% con <code>fecha_fin_descuento = 2026-08-15 23:59</code><br>
+<span class="keyword">Cuando</span> el sistema ejecuta el job de verificación y detecta que la fecha actual superó <code>fecha_fin_descuento</code><br>
+<span class="keyword">Entonces</span> el sistema ejecuta el revert: <code>descuento_activo = false</code>, restaura <code>precio_original</code> en todos los canales. El proveedor recibe notificación: "El descuento del producto X finalizó automáticamente el 15 de agosto."
+</div>
+
+<div class="gherkin">
+<strong>Escenario F-2 (Revert automático por volumen alcanzado)</strong><br>
+<span class="keyword">Dado que</span> el proveedor configuró <code>cantidad_limite_descuento = 100</code> y el descuento lleva 99 unidades vendidas<br>
+<span class="keyword">Cuando</span> se confirma una orden que incluye ese producto con <code>descuento_activo = true</code><br>
+<span class="keyword">Entonces</span> el conteo llega a 100, el sistema ejecuta el revert inmediatamente. El proveedor recibe notificación: "Alcanzaste las 100 unidades con descuento. El descuento fue desactivado automáticamente."
+</div>
+
+<div class="gherkin">
+<strong>Escenario F-3 (Ambas condiciones configuradas — fecha llega primero)</strong><br>
+<span class="keyword">Dado que</span> el proveedor configuró <code>fecha_fin_descuento = 2026-08-15</code> y <code>cantidad_limite_descuento = 500</code>, y al llegar la fecha solo se habían vendido 230 unidades<br>
+<span class="keyword">Cuando</span> el sistema detecta la fecha superada<br>
+<span class="keyword">Entonces</span> el sistema ejecuta el revert por fecha. El reporte indica: "Descuento finalizado por fecha límite. Unidades vendidas con descuento: 230 de 500 configuradas."
+</div>
+
+<div class="gherkin">
+<strong>Escenario F-4 (Sin condiciones automáticas — ciclo de vida manual)</strong><br>
+<span class="keyword">Dado que</span> el proveedor activó el descuento sin configurar <code>fecha_fin_descuento</code> ni <code>cantidad_limite_descuento</code><br>
+<span class="keyword">Cuando</span> el dropshipper navega el catálogo en cualquier momento posterior<br>
+<span class="keyword">Entonces</span> el descuento permanece activo indefinidamente hasta que el proveedor lo desactive manualmente desde su panel
+</div>
+
+<h4>Módulo D · Protección anti-fraude y casos borde</h4>
+
+<div class="gherkin">
+<strong>Escenario D-1 (Precio original inflado artificialmente)</strong><br>
+<span class="keyword">Dado que</span> el proveedor subió el precio del producto de $30.000 a $60.000 el día antes de registrar el descuento<br>
+<span class="keyword">Cuando</span> el admin aprueba el descuento (captura precio_original = $60.000 en ese momento)<br>
+<span class="keyword">Entonces</span> el sistema guarda precio_original = $60.000. La validación del admin debe revisar el historial reciente del precio. (Automatización en Fase 3.)
+</div>
+
+<div class="gherkin">
+<strong>Escenario D-2 (Descuento de 0%)</strong><br>
+<span class="keyword">Dado que</span> el proveedor intenta registrar un descuento del 0%<br>
+<span class="keyword">Cuando</span> intenta guardar<br>
+<span class="keyword">Entonces</span> el sistema muestra error: "El descuento debe ser mayor a 0%. Para participar en campaña sin descuento, no es necesario registrar precio de campaña."
+</div>
+
+<h3>5.6 Consideraciones de UX y Negocio</h3>
+<ul>
+  <li>El display de precio tachado en la vitrina debe ser visualmente prominente (badge verde con porcentaje, no solo texto gris tachado).</li>
+  <li>El flujo del proveedor para registrar el descuento debe ser ≤ 3 pasos desde el panel del producto.</li>
+  <li>El preview del display final (cómo se ve el precio tachado antes de confirmar) es clave para la satisfacción del proveedor y evita errores.</li>
+  <li>En Shopify, el display de <code>compare_at_price</code> depende del tema que use el dropshipper. Validar con los temas más usados.</li>
+</ul>
+
+<h3>5.7 Riesgos Detectados desde Producto</h3>
+<table>
+  <tr><th>#</th><th>Riesgo</th><th>Zona</th><th>Plan de mitigación</th></tr>
+  <tr><td>R-01</td><td>Wallet calcula comisiones sobre precio actual → cambio de precio afecta márgenes internos</td><td style="background:#fee2e2;color:#991b1b;font-weight:bold;text-align:center">ROJA (20)</td><td>Validar con TI el 30-jun antes de comprometer fecha. Puede bloquear Fase 1.</td></tr>
+  <tr><td>R-02</td><td>Sincronización falla al cerrar campaña → proveedor queda con precio de campaña en Shopify indefinidamente</td><td style="background:#fef3c7;color:#92400e;font-weight:bold;text-align:center">AMARILLA (12)</td><td>Proceso de revert con reintentos + alerta al admin de campaña.</td></tr>
+  <tr><td>R-03</td><td>Proveedor infla precio_original artificialmente para aparentar mayor descuento</td><td style="background:#fef3c7;color:#92400e;font-weight:bold;text-align:center">AMARILLA (9)</td><td>Validación comercial por el admin antes de aprobar. Historial automático en Fase 3.</td></tr>
+  <tr><td>R-04</td><td>Temas Shopify del dropshipper no soportan compare_at_price → display no aparece en su tienda</td><td style="background:#fef3c7;color:#92400e;font-weight:bold;text-align:center">AMARILLA (8)</td><td>Validar con Diego Pérez los temas más usados. Documentar limitación.</td></tr>
+  <tr><td>R-05</td><td>CAS necesita cambio de contrato de datos → retrasa la Fase 1</td><td style="background:#fef3c7;color:#92400e;font-weight:bold;text-align:center">AMARILLA (8)</td><td>Alinear con equipo Pau en paralelo a la validación de TI.</td></tr>
+  <tr><td>R-06</td><td>Scope creep — descuentos fuera de campaña</td><td style="background:#d1fae5;color:#065f46;font-weight:bold;text-align:center">VERDE (6)</td><td>Documento define explícitamente que Fase 1 solo aplica a productos en campaña aprobada.</td></tr>
+</table>
+
+<h3>5.8 Lo que TI debe devolver tras el Hand-off</h3>
+<ul>
+  <li>Diagrama C4 Nivel 2 (Contenedores) y Nivel 3 (Componentes) para el flujo de descuento.</li>
+  <li>Confirmación sobre impacto en wallet: ¿el campo de precio del producto alimenta el cálculo de comisiones?</li>
+  <li>Estimación de esfuerzo por fase (Fase 1, 2 y 3) en puntos o sprints.</li>
+  <li>Mapeo técnico de los campos por canal: confirmar que <code>compare_at_price</code>, <code>sale_price</code> y <code>promotional_price</code> son accesibles en las versiones de API actuales.</li>
+  <li>Propuesta de cómo implementar el revert automático al cerrar la campaña (job schedulado, webhook, evento de campaña).</li>
+  <li>Riesgos técnicos adicionales identificados.</li>
+  <li>Restricciones de performance: ¿la sincronización multi-canal puede ejecutarse en ≤ 10 minutos?</li>
+</ul>
+
+<div class="pie">
+  Documento creado: 30-jun-2026 &nbsp;·&nbsp; Jaime Guevara &nbsp;·&nbsp; Supplier Success<br>
+  Proyecto padre: DCA-001/DCA-002 · Dinámicas de Catálogo<br>
+  Próxima acción: Validación técnica con José Giraldo — lunes 30-jun-2026
+</div>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+# Direcciones de clientes finales (427.294). Es DATO PERSONAL y además data cruda de
+# Dropi: no se versiona, ni aquí ni en ningún repo compartido. Se regenera con xlsx2json.js
+# desde el xlsx original, que vive en Drive / la bóveda privada.
+ordenes.ndjson
+
+# Cachés de OpenStreetMap (~52 MB). Se regeneran con `node osm.js --fetch` y
+# `node zonas.js --fetch`. No tiene sentido versionar geometría pública y pesada.
+osmgeom-*.json
+redvial-*.json
+zonas-*.json
+barrios-*.json
+validacion-cache.json
+datos-antes.json
+
+# Lo que SÍ se versiona: los scripts, `validacion.json` (el resultado de la medición)
+# y `../datos-sameday.json` (el agregado que lee el mapa — sin direcciones).

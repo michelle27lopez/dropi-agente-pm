@@ -1,0 +1,105 @@
+﻿🚀 Conciliación automatizada de recargas: Confío, banco y Dropi
+Kick-off de Producto & Documento de Alineación
+Punto de partida. Documenta el QUÉ y el POR QUÉ inicial del proyecto. Sirve para alinear a la célula completa antes de iniciar discovery profundo. No incluye estimaciones técnicas ni decisiones de arquitectura.
+________________
+
+
+Qué es el proyecto, Problema y Painpoints
+1.1 Información General & Equipo del Proyecto
+Campo
+	Contenido esperado
+	Nombre del proyecto
+	Conciliación automatizada de recargas: Confío, banco y Dropi
+	Célula
+	Backoffice
+	Owner / PM
+	Paula Macias
+	Product Designer
+	Catalina Giraldo
+	Stakeholder principal
+	Legal, Financiero y Tesorería
+	Fecha de kick-off
+	01/07/2026
+	Estado
+	Discovery / Definición
+	
+
+1.2 Introducción y Contexto. POR QUÉ ahora
+* Contexto: Breve resumen del problema que se está abordando y por qué es importante. ¿Qué cambió en el mercado o en el usuario (Brands) que nos trajo aquí hoy?
+Dropi opera en múltiples países y gestiona diariamente recargas de wallet a través de distintos canales de pago. En Colombia, la pasarela Confío es el medio principal para procesar estas recargas, generando movimientos que deben reflejarse de forma consistente en tres fuentes: la pasarela de pagos, el banco de Dropi y el sistema interno de Dropi.
+Un proceso de conciliación robusto es fundamental para garantizar que cada peso recibido por la pasarela llegue efectivamente al banco y se acredite correctamente en el sistema. Sin este control, el negocio queda expuesto a riesgos como acreditación de saldo sin respaldo real, duplicación de transacciones, pérdidas no detectadas, inconsistencias contables y dificultades para responder ante auditorías o requerimientos regulatorios.
+Hoy, este proceso se realiza de forma manual: un miembro del área financiera descarga los reportes de cada fuente, los carga en un notebook de Python y ejecuta la lógica de comparación. Este proceso, además de depender de intervención humana constante, fue construido originalmente sobre la pasarela Payments Way, por lo que requiere ser adaptado para operar correctamente con Confío.
+La ausencia de un proceso automatizado aumenta el riesgo de errores operativos, dificulta la trazabilidad de las transacciones y limita la capacidad de escalar la conciliación a medida que el volumen de recargas crece o se incorporan nuevos países.
+1.3 Definición del Problema, Impacto y Painpoints. QUÉ se va a construir
+* Descripción Detallada: Ampliación del problema presentado en el pitch. Incluye datos relevantes, ejemplos y variables del negocio que ayuden al equipo a comprender el entorno.
+El flujo de recargas de Dropi en Colombia involucra tres actores que deben estar alineados para garantizar la integridad financiera de cada transacción: Confío como pasarela de pagos, el banco de Dropi como receptor de los fondos y el sistema interno de Dropi donde se acredita el saldo al usuario.
+Hoy no existe un proceso automatizado que verifique la consistencia entre estos tres actores. La conciliación se realiza manualmente a través de un notebook de Python que fue construido originalmente para trabajar con Payments Way, la pasarela anterior. Esto implica que la lógica actual no está adaptada a la estructura de datos de Confío, lo que genera un proceso parcialmente funcional que requiere intervención manual constante para operar.
+El proceso actual presenta las siguientes limitaciones concretas:
+* Carga manual de archivos: el área financiera debe descargar por separado los reportes de Confío, el extracto bancario y el reporte de Dropi, y cargarlos manualmente en el notebook cada vez que se requiere una conciliación.
+* Lógica desactualizada: la lógica de cohortes, los filtros por concepto bancario y los campos de matching fueron diseñados para Payments Way. Campos clave como el concepto de banco, el identificador de la transacción y el formato de fechas pueden diferir en Confío, generando errores o resultados incorrectos.
+* Ausencia de trazabilidad: los resultados de cada conciliación se exportan a un archivo Excel de forma aislada, sin historial, sin versionamiento y sin visibilidad para otros equipos.
+* Riesgo de errores no detectados: al depender de ejecución manual, existe la posibilidad de que conciliaciones no se ejecuten a tiempo, que diferencias no sean detectadas oportunamente o que registros sin par en alguna fuente pasen desapercibidos.
+* Sin escalabilidad: el modelo actual no está diseñado para incorporar nuevos países, nuevas pasarelas o mayores volúmenes de transacciones sin un esfuerzo manual proporcional.
+Como referencia del volumen que este proceso debe soportar, en el período conciliado con el notebook (26 feb — 16 mar 2025) se procesaron 1.469 transacciones exitosas por un total de $384.516.387 COP, distribuidas en dos cohortes de pago. En ese ejercicio se identificaron diferencias en dos montos entre pasarela y banco de $386.097 COP y $335.519 COP respectivamente, diferencias que hoy solo pueden detectarse si alguien corre el notebook manualmente.
+* Painpoints (Dolores específicos):
+   * Ausencia de integración entre sistemas Las tres fuentes de información (Confío, banco y Dropi) no están conectadas entre sí. Cada una genera su propio reporte de forma independiente y en formatos distintos, lo que obliga a un proceso de extracción, transformación y carga manual cada vez que se requiere conciliar.
+   * Dependencia de una herramienta no productiva El notebook de Python es una solución funcional para exploración y análisis de datos, pero no está diseñado para ser un proceso productivo, repetible y auditable. No tiene control de versiones, no genera alertas, no tiene logs de ejecución y depende de que una persona específica lo opere correctamente.
+   * Falta de ownership claro del proceso El notebook fue construido de forma puntual por el área de producto para el área financiera, sin que exista un equipo de ingeniería que lo mantenga, lo mejore o lo opere de forma sostenida. Esto genera un proceso frágil que depende del conocimiento de pocas personas.
+   * Ausencia de un estándar de conciliación multi país No existe una definición formal de cómo debe funcionar el proceso de conciliación para los distintos países y pasarelas donde opera Dropi. Cada implementación ha sido reactiva y adaptada al contexto inmediato, sin una arquitectura que permita reutilizar la lógica entre mercados.
+* Impacto: Explicación de cómo afecta este problema directamente a los usuarios (Brands), al negocio de Dropi, o a ambos.
+   * OKR (Objetivo Trimestral): El objetivo macro al que impacta este proyecto.
+      * OKR 2 - Consolidar operación multipaís
+   * KR (Key Result): El resultado clave numérico que este proyecto moverá.
+      * KR 1 - 14 Países operando al cierre 1016
+   * Data: Listado de eventos o KPIs específicos a trackear (ej. conversion_rate, first_order_date).
+El negocio
+1. Riesgo financiero: la falta de conciliación automatizada y oportuna expone a Dropi a no detectar a tiempo diferencias entre lo cobrado por la pasarela, lo recibido en el banco y lo acreditado en el sistema. Como se evidenció en el período analizado, estas diferencias pueden superar los $300.000 COP por cohorte y acumularse sin ser detectadas si nadie ejecuta el proceso manualmente.
+2. Riesgo de control interno: sin un proceso robusto, existe la posibilidad de que se acredite saldo en la wallet de un usuario sin que exista un respaldo real verificable en la pasarela o en el banco, lo que compromete la integridad del sistema financiero de Dropi.
+3. Riesgo operativo: el proceso actual depende del conocimiento y disponibilidad de personas específicas. Ante una ausencia, un error humano o un cambio en el equipo, el proceso puede detenerse o ejecutarse incorrectamente sin que el negocio lo detecte oportunamente.
+4. Carga operativa innecesaria: el área financiera invierte tiempo recurrente en tareas manuales de descarga, carga y ejecución del notebook, tiempo que podría destinarse a análisis y toma de decisiones de mayor valor.
+5. Limitación para escalar: mientras el proceso dependa de intervención manual y de una herramienta no productiva, incorporar nuevos países o pasarelas al modelo de conciliación requerirá un esfuerzo desproporcionado, frenando la expansión regional de Dropi.
+En el usuario interno (área financiera)
+1. Dependencia de un proceso frágil y no estandarizado que genera incertidumbre sobre la confiabilidad de los resultados.
+2. Ausencia de visibilidad en tiempo real sobre el estado de la conciliación, obligando a ejecutar el proceso de forma reactiva.
+3. Dificultad para responder ágilmente ante requerimientos de auditoría, contabilidad o tesorería que requieran trazabilidad del proceso.
+* Proceso/solución actuales: Describe cómo se está abordando el problema actualmente y las limitaciones de esas soluciones.
+La conciliación de recargas se realiza hoy de forma manual mediante un notebook de Python desarrollado en Deepnote. El proceso se ejecuta de forma periódica y bajo demanda, siguiendo estos pasos:
+1. El área financiera descarga manualmente el reporte de transacciones de Confío (anteriormente Payments Way) en formato Excel.
+2. Descarga el extracto bancario de Dropi en formato Excel, filtrando los movimientos asociados a la pasarela por el concepto del banco.
+3. Descarga el reporte de pagos del sistema interno de Dropi en formato CSV.
+4. Carga los tres archivos en el notebook de Python y ejecuta la lógica de conciliación.
+Limitaciones del proceso actual
+* No automatizado: no existe ningún mecanismo que ejecute el proceso de forma programada. Depende completamente de que una persona recuerde ejecutarlo, tenga acceso a los archivos y opere el notebook sin errores.
+* Sin alertas ni notificaciones: si existen diferencias entre las fuentes, el proceso no notifica a nadie de forma activa. Los resultados solo son visibles si alguien abre el archivo Excel de salida.
+* Sin historial ni trazabilidad: cada ejecución sobreescribe o genera un archivo aislado, sin registro histórico de conciliaciones anteriores, sin logs de ejecución y sin posibilidad de auditar quién ejecutó el proceso, cuándo y con qué resultado.
+* Frágil ante cambios: cualquier modificación en el formato de los reportes de la pasarela, el banco o Dropi puede romper el proceso sin previo aviso, ya que no existe validación de esquema ni manejo de errores robusto.
+* No escalable: el modelo no está diseñado para incorporar nuevos países, nuevas pasarelas o mayores volúmenes de transacciones sin reescribir manualmente partes del notebook.
+   * * Objetivos. PARA QUÉ
+   * Objetivo Principal de Negocio:
+      * Automatizar el proceso de conciliación de recargas entre Confío, el banco de Dropi y el sistema interno de Dropi, reduciendo la dependencia manual y fortaleciendo el control financiero sobre el flujo de recargas en Colombia.
+      * Adaptar la lógica de conciliación existente (actualmente construida sobre Payments Way) para que opere correctamente con los reportes y estructura de datos de Confío.
+      * Automatizar la comparación de transacciones entre las tres fuentes (pasarela, banco y Dropi), identificando conciliados, descuadres y registros sin par en cada fuente.
+      * Generar un reporte de resultados de conciliación que permita al área financiera identificar diferencias, tomar decisiones y mantener trazabilidad del proceso.
+      * Reducir el riesgo de acreditación de saldo sin respaldo real, garantizando que toda recarga acreditada en Dropi tenga correspondencia verificable en la pasarela y en el banco.
+      * Sentar las bases de un modelo de conciliación escalable que pueda extenderse a otros países donde Dropi integre Confío como pasarela.
+   * Objetivo de Experiencia de Usuario (UX): 
+   * Alineación Estratégica:
+      * OKR (Objetivo Trimestral): El objetivo macro de la compañía o área al que impacta.
+         * OKR 2 - Consolidar operación multipaís
+      * KR (Key Result): El resultado clave numérico que este proyecto moverá.
+         * KR 1 - 14 Países operando al cierre 1016
+      * Data: Listado de eventos, logs o KPIs específicos a trackear en base de datos/analítica (ej. conversion_rate, first_order_date).
+1.4 Enlaces
+* Épica: * [Enlace a Jira/Linear/Herramienta de gestión]
+* Figma Kick-off / Wireframes Iniciales: * [Enlace al canvas de diseño, bocetos preliminares o prototipo inicial]
+* Research como punto de partida: 
+   * Hallazgo principal: (Lo más relevante que aprendimos de las marcas).
+   * Fuentes: [Link a entrevistas, encuestas o Mixpanel].
+1.5 Dudas e incógnitas iniciales
+Solo preguntas funcionales o de negocio. Las dudas técnicas se levantan en el hand-off, no aquí.
+* [Pregunta de negocio o usuario por resolver]
+* [Dependencia con otra área a confirmar]
+
+
+Lo que NO va en el Kick-off
+Esfuerzo técnico, tiempo estimado de desarrollo, dispositivos soportados, restricciones de performance, stack, dependencias técnicas. Todo eso lo responde TI en el documento 4 o después de recibir el hand-off.

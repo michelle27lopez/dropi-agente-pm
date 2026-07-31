@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Solicitud de Extracción de Datos · Módulo de Negociaciones (NEG-001)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333333;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #1f4e79;
+      border-bottom: 2px solid #1f4e79;
+      padding-bottom: 10px;
+      font-size: 20pt;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      color: #2e75b6;
+      font-size: 11pt;
+      margin-bottom: 24px;
+      font-weight: bold;
+    }
+    h2 {
+      color: #2e75b6;
+      border-bottom: 1px solid #d9d9d9;
+      padding-bottom: 5px;
+      margin-top: 30px;
+      font-size: 14pt;
+    }
+    p, li {
+      font-size: 10.5pt;
+      margin: 8px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+    th, td {
+      border: 1px solid #bfbfbf;
+      padding: 8px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      color: #000;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .intro-box {
+      background-color: #f2f7fa;
+      border: 1px solid #c9dcec;
+      border-radius: 4px;
+      padding: 14px 18px;
+      margin: 18px 0 28px 0;
+      font-size: 10.5pt;
+      color: #1a1a1a;
+    }
+    .code-box {
+      background-color: #f5f5f5;
+      border: 1px solid #e1e1e1;
+      border-radius: 4px;
+      padding: 14px;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9.5pt;
+      white-space: pre-wrap;
+      color: #000;
+      margin: 14px 0;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      font-weight: bold;
+      background-color: #e1f5fe;
+      color: #0288d1;
+    }
+    ul {
+      margin: 8px 0 14px 20px;
+    }
+    .highlight-blue {
+      color: #1f4e79;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📋 Solicitud de Extracción de Datos / Datamart</h1>
+<div class="subtitle">NEG-001 · Módulo de Negociaciones · Célula Supplier Success · 19 de junio de 2026</div>
+
+<div class="intro-box">
+  <strong>Objetivo de la Solicitud:</strong> Extraer el listado histórico y vigente de negociaciones comerciales entre proveedores (bodegas) y comunidades. Esta información servirá como fuente de datos para estructurar un dashboard operativo interno que permita monitorear la adopción, tasas de conversión y estados comerciales antes del lanzamiento formal del <strong>6 de julio de 2026</strong>.
+</div>
+
+<table>
+  <tr>
+    <th style="width: 30%;">Proyecto Asociado</th>
+    <td>Negociaciones · NEG-001</td>
+  </tr>
+  <tr>
+    <th>Solicitante</th>
+    <td>Jaime Guevara · Delivery Manager · Supplier Success</td>
+  </tr>
+  <tr>
+    <th>Destinatario</th>
+    <td>Equipo de Data & BI</td>
+  </tr>
+  <tr>
+    <th>Fecha de Solicitud</th>
+    <td>19 de junio de 2026</td>
+  </tr>
+  <tr>
+    <th>Frecuencia Requerida</th>
+    <td>Actualización diaria (D-1)</td>
+  </tr>
+</table>
+
+<hr class="section-divider" style="border: none; border-top: 2px solid #1f4e79; margin: 30px 0 20px 0;">
+
+<h2>1. Especificación del Dataset (Estructura de Columnas)</h2>
+<p>Necesitamos que la extracción retorne un registro por cada negociación solicitada, con los siguientes campos y formatos:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 25%;">Campo Técnico</th>
+      <th style="width: 25%;">Columna Sugerida</th>
+      <th style="width: 30%;">Descripción de Negocio</th>
+      <th style="width: 20%;">Ejemplo / Valores</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="highlight-blue">ID de Negociación</td>
+      <td><code>negotiation_id</code></td>
+      <td>ID único del acuerdo en el sistema.</td>
+      <td><code>550e8400-e29b-41d4-a716-446655440000</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">ID Bodega / Supplier</td>
+      <td><code>supplier_id</code></td>
+      <td>Identificador de la bodega que solicita la negociación.</td>
+      <td><code>5381</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Nombre Bodega</td>
+      <td><code>supplier_name</code></td>
+      <td>Nombre comercial de la bodega.</td>
+      <td><code>BODEGA DE BELLEZA</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">País</td>
+      <td><code>country</code></td>
+      <td>País de operación donde aplica la negociación.</td>
+      <td><code>CO, MX, EC</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Alcance (Filtro)</td>
+      <td><code>scope_type</code></td>
+      <td>Define si la negociación es por producto o para todo el catálogo.</td>
+      <td><span class="tag">PRODUCT</span> o <span class="tag">FULL_CATALOG</span></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Productos Afectados</td>
+      <td><code>negotiated_products</code></td>
+      <td>IDs de productos o SKUs si aplica por producto. NULL si es catálogo completo.</td>
+      <td><code>[10142, 10143]</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Tipo de Comisión</td>
+      <td><code>commission_type</code></td>
+      <td>Establece si el descuento es porcentual o un valor fijo personalizado (solo se clasifica el tipo de comisión sin extraer el monto exacto).</td>
+      <td><span class="tag">PERCENTAGE</span> o <span class="tag">FIXED_VALUE</span></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">ID Comunidad</td>
+      <td><code>community_id</code></td>
+      <td>ID único de la comunidad que recibe la solicitud.</td>
+      <td><code>9107</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Nombre Comunidad</td>
+      <td><code>community_name</code></td>
+      <td>Nombre público/comercial de la comunidad.</td>
+      <td><code>IMPRODUCTOS BY CRISTIAN CASTELLANOS</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Email del Líder</td>
+      <td><code>community_leader_email</code></td>
+      <td>Correo electrónico del mentor/líder de la comunidad.</td>
+      <td><code>improductosonlineproveedor@gmail.com</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Estado de Aprobación</td>
+      <td><code>status</code></td>
+      <td>Estado en el que se encuentra la negociación en la base de datos.</td>
+      <td><span class="tag">PENDING</span>, <span class="tag">ACTIVE</span>, <span class="tag">REJECTED</span>, <span class="tag">CANCELLED</span></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Fecha Solicitud</td>
+      <td><code>created_at</code></td>
+      <td>Fecha y hora en la que el proveedor creó la propuesta.</td>
+      <td><code>2026-06-19 10:54:00</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Fecha Respuesta</td>
+      <td><code>approved_at</code></td>
+      <td>Fecha y hora en la que el líder de comunidad aceptó o rechazó.</td>
+      <td><code>2026-06-19 14:30:00</code></td>
+    </tr>
+    <tr>
+      <td class="highlight-blue">Versión T&Cs</td>
+      <td><code>terms_version</code></td>
+      <td>Versión del documento legal aceptada.</td>
+      <td><code>v1.0.0</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr class="section-divider" style="border: none; border-top: 2px solid #1f4e79; margin: 30px 0 20px 0;">
+
+<h2>2. Entrega y Accesibilidad</h2>
+<ul>
+  <li><strong>Formato:</strong> Agradecemos que esta información sea consolidada en una <strong>Vista (VIEW)</strong> dentro de la base de datos de réplica o Data Warehouse para poder consumirla directamente desde Metabase o integrarla a nuestro dashboard.</li>
+  <li><strong>Frecuencia:</strong> Actualización programada una vez al día en horas de la madrugada.</li>
+</ul>
+
+<hr class="section-divider" style="border: none; border-top: 2px solid #1f4e79; margin: 30px 0 20px 0;">
+
+<h2>3. Query SQL Lógico de Referencia (Ejemplo para Join)</h2>
+<p>Para simplificar el levantamiento de datos por parte del equipo de ingeniería, se sugiere un query lógico inicial basado en las tablas principales del módulo:</p>
+
+<div class="code-box">
+SELECT 
+    n.id AS negotiation_id,
+    n.supplier_id AS supplier_id,
+    s.name AS supplier_name,
+    s.country AS country,
+    CASE 
+        WHEN n.type = 'catalog' THEN 'FULL_CATALOG'
+        ELSE 'PRODUCT'
+    END AS scope_type,
+    n.product_ids AS negotiated_products,
+    CASE 
+        WHEN n.commission_mode = 'percentage' THEN 'PERCENTAGE'
+        ELSE 'FIXED_VALUE'
+    END AS commission_type,
+    n.community_id AS community_id,
+    c.name AS community_name,
+    c.email AS community_leader_email,
+    n.status AS status,
+    n.created_at AS created_at,
+    n.approved_at AS approved_at,
+    n.terms_version AS terms_version
+FROM 
+    dropi_prod.negotiations n
+LEFT JOIN 
+    dropi_prod.suppliers s ON n.supplier_id = s.id
+LEFT JOIN 
+    dropi_prod.communities c ON n.community_id = c.id
+ORDER BY 
+    n.created_at DESC;
+</div>
+
+</body>
+</html>

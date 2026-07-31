@@ -1,0 +1,2582 @@
+﻿📝 Guía del documento
+📖 Guía Rápida de Uso
+
+
+
+
+Producto define el QUÉ, el PORQUÉ y el PARA QUÉ.
+TI define el CÓMO y el CUÁNDO.
+
+
+	
+
+Este documento es nuestra fuente de verdad. Cada rol es responsable de llenar los apartados marcados con su emoji:
+* 🧠 Product Managers (PM/PO)
+* 🫀 Product Designers (PD)
+* ⭐️ Marketing
+* 💻 Technology (TI)
+  
+
+🚫 Reglas Clave:
+* ¿Un campo no aplica para este proyecto? No lo dejes vacío; escribe N/A para saber que ya fue revisado.
+* ¿Falta información única del proyecto? Tienes total libertad de añadir los subapartados que necesites.
+
+
+
+
+
+
+
+
+
+
+
+
+Principios rectores del formato
+Este documento estandariza cómo Producto (o cualquier área solicitante) entrega un proyecto al área de TI. Antes de usar las plantillas, todo el equipo debe alinearse en los siguientes principios.
+1. Separación clara de responsabilidades
+QUÉ · POR QUÉ · PARA QUÉ → responsabilidad de Producto
+Producto entrega la intención del proyecto: qué problema se resuelve, por qué importa ahora, para qué usuarios, y qué resultado de negocio se espera. No define stack, ni componentes, ni cronograma de desarrollo.
+	
+
+CÓMO · CUÁNDO → responsabilidad de TI
+TI recibe el hand-off y responde con: diseño de arquitectura (C4 niveles 2-4), estimaciones, fases técnicas, dependencias internas y plan de release. Esto se devuelve a Producto antes de iniciar desarrollo.
+	
+
+GOBIERNO Y EJECUCIÓN → TDL / Program Manager y TPL / Project Lead
+El TDL (Technical Delivery Lead) o Program Manager gobierna la entrega: define RACI, consolida riesgos, fija las DORA Metrics objetivo. El TPL (Technical Project Lead) o Project Lead ejecuta: arma el PERT, lleva el Traffic Light semanal y reporta avance. Ambos se activan en el momento del hand-off con el documento 4-bis.
+	
+
+2. Flujo de fases consolidado
+Las 6 etapas mencionadas en el formato original se consolidan en 6 documentos entregables, ordenados así:
+1. Kick-off de Producto — Qué es el proyecto, problema y painpoints.
+2. Discovery & Levantamiento — Investigación, AS-IS, hipótesis y validaciones.
+3. Definición & Alcance — Propuesta, fases funcionales (no técnicas) y no-objetivos.
+4. Following y lanzamiento — Plan de medición, comunicación a MKT y seguimiento post-entrega.
+5. Hand-off a TI — Job to be done, criterios de aceptación, contexto C4 nivel 1 y reglas de negocio.
+6. Hand-off a stakeholders — Contexto, impacto y alcance del proyecto, ademas de definición y entrega de recursos
+7. Activación de TDL / TPL — RACI, Risk Heat Map, DORA, PERT y Traffic Light para gobierno de la entrega.
+8. Lanzamiento — Estrategia de salida según el proyecto definida por equipos de coms
+9. Hallazgos Following — Seguimiento basado en data, para generar insights y definir próximos pasos. 
+
+
+3. Sobre la arquitectura (C4)
+El modelo C4 tiene cuatro niveles: Contexto del sistema, Contenedores, Componentes y Código. Producto solo aporta insumos para el Nivel 1 (Contexto): qué actores humanos y qué sistemas externos están involucrados, y qué dominios de negocio se tocan. TI construye los niveles 2, 3 y 4 a partir de ese contexto.
+Lo que Producto entrega para C4 Nivel 1
+Actores (perfiles de usuario), sistemas externos con los que se integra el feature, dominios de negocio impactados, flujos de datos a alto nivel desde la perspectiva de usuario. Sin diagramas técnicos: en palabras o esquema funcional.
+	
+
+🧠 Kick-off
+🚀 [Nombre del Proyecto / Título del Pitch Aprobado]
+Kick-off de Producto & Documento de Alineación
+Punto de partida. Documenta el QUÉ y el POR QUÉ inicial del proyecto. Sirve para alinear a la célula completa antes de iniciar discovery profundo. No incluye estimaciones técnicas ni decisiones de arquitectura.
+________________
+
+
+Qué es el proyecto, Problema y Painpoints
+1.1 Información General & Equipo del Proyecto
+Campo
+	Contenido esperado
+	Nombre del proyecto
+	Validación de identidad países
+	Célula
+	Backoffice
+	Owner / PM
+	Paula Macias
+	Product Designer
+	Catalina Giraldo
+	Stakeholder principal
+	Legal, Financiero y Tesorería
+	Fecha de kick-off
+	DD/MM/AAAA
+	Estado
+	Discovery / Definición
+	1.2 Introducción y Contexto. POR QUÉ ahora
+* Contexto: Breve resumen del problema que se está abordando y por qué es importante. ¿Qué cambió en el mercado o en el usuario que nos trajo aquí hoy?
+Dropi opera en 12 países de LATAM sin un sistema de validación de identidad unificado. Hoy cada país valida por separado, los datos de facturación no están conectados a la validación, y el 40% de las validaciones en Colombia requieren intervención manual.
+
+
+El resultado: fricción operativa para el usuario, riesgo legal activo por cumplimiento de normativas KYC/KYB/KYT, y un costo oculto de soporte que escala con el volumen.
+
+
+Tendencia de mercado: los competidores ya lo tienen
+* Las plataformas de ecommerce B2B en LATAM (Merama, Kavak, Nuvemshop, VTEX) han implementado onboarding con validación biométrica en 2024–2025. Un flujo de registro sin validación integrada empieza a percibirse como señal de plataforma no confiable.
+* Las billeteras digitales y plataformas de pagos con las que Dropi compite por el float del usuario (Nequi, Daviplata, Clip, Kushki) exigen KYC completo desde el primer retiro. Dropi tiene una ventana de fricción comparativa que cierra en 2026.
+* Los proveedores de validación (SumSub, Truora, Jumio) han bajado sus precios unitarios en LATAM un 30–40% en los últimos 18 meses por competencia. El momento de negociar es ahora.
+Criptoactivos: regulación emergente que ya opera
+* Dropi habilita recargas y retiros en Tether (USDT). En Colombia, México y Argentina existen marcos regulatorios de activos virtuales activos o en proceso de implementación que exigen KYT (screening de wallets) para cualquier plataforma que procese cripto.
+* Sin KYT activo, cada retiro en Tether es una transacción que podría tener contrapartes en listas OFAC/ONU sin que Dropi lo sepa. Eso constituye un pasivo legal en tiempo real.
+
+
+Cambio interno — Señales de datos, feedback y decisión estratégica
+
+
+Señal
+	Dato
+	Tasa de validación manual en Colombia
+	~40% de las validaciones (3.000–4.000 casos/mes)
+	Truora no compatible con iOS/MacBook
+	Segmento de usuarios excluidos del flujo de validación
+	Falsos positivos en validación de extranjeros
+	Truora busca por nombre → homónimos. Decisiones de KYC sobre datos erróneos.
+	Sin KYB implementado
+	0% de personas jurídicas validadas formalmente. Brecha legal activa.
+	Sin KYT para criptoactivos
+	Todos los retiros Tether se procesan sin screening de wallet
+	Datos de facturación desconectados de validación
+	El usuario valida su identidad y luego debe volver a ingresar los mismos datos en facturación. Doble fricción.
+	Popup validación Guatemala/Panamá en UserPilot
+	Solución temporal no integrada al flujo nativo. No escalable.
+	Usuarios brasileños sin trazabilidad
+	Usuarios con doc. BR operan en otros países sin validación local. Brecha transversal.
+	Decisión estratégica que lo activa
+* Renovación del contrato con Truora: el contrato fue renovado en mayo de 2026. Este es el momento de definir la arquitectura objetivo (Truora + SumSub mixto) antes de comprometer otro ciclo de renovación.
+* Demostración técnica de SumSub (14/05/2026): SumSub presentó capacidades de KYC+KYB+KYT en una sola plataforma con cobertura en 240+ países, 92% de conversión automática en Colombia y tiempo de respuesta promedio de 20 segundos. El caso de negocio se sostiene solo.
+* Reclasificación a P0 (13/05/2026): la Célula Back Office elevó el proyecto a prioridad máxima por su carácter transversal: afecta onboarding, facturación, retiros, dispersión y cumplimiento legal en todos los países simultáneamente.
+
+
+1.3 Definición del Problema, Impacto y Painpoints. QUÉ se va a construir
+* Descripción Detallada: Ampliación del problema presentado en el pitch. Incluye datos relevantes, ejemplos y variables del negocio que ayuden al equipo a comprender el entorno.
+Dropi opera en 12 países conectando dropshippers, proveedores y marcas. Para que esa operación sea legal, trazable y sostenible, necesita saber con certeza quién está detrás de cada cuenta. Hoy no lo sabe con suficiente precisión, y el flujo que usa para intentarlo genera más problemas de los que resuelve.
+Capa 1 — El sistema de validación actual no suple todas las necesidades
+* Truora es la herramienta actual y tiene limitaciones estructurales que no son configurables ni corregibles con el contrato vigente.
+* El 40% de las validaciones en Colombia no pasan de forma automática. Eso son entre 3.000 y 4.000 casos mensuales que un agente de Back Office debe revisar manualmente. A medida que Dropi crece, este número crece proporcionalmente. No hay techo definido.
+* Truora busca extranjeros por nombre, no por documento. Cuando un venezolano, ecuatoriano o peruano intenta validarse en Dropi Colombia, el sistema cruza su nombre contra bases de datos locales y devuelve resultados de homónimos. Las decisiones de KYC se toman sobre datos incorrectos. Eso no es un bug, es el diseño de la herramienta.
+* Truora no funciona correctamente en iOS ni en MacBook. Hay un segmento de usuarios, especialmente proveedores y marcas con perfil más profesional, que usa dispositivos Apple. Para ellos el flujo de validación simplemente no existe. O buscan un dispositivo Android prestado o quedan atascados.
+* No hay reintentos automáticos. Si el usuario toma una foto borrosa del documento, el sistema lo bloquea en ese punto. No le dice qué falló, no le da otra oportunidad automática. Pasa directo a revisión manual o queda abandonado en el flujo.
+Capa 2 — El flujo de usuario está fragmentado y genera fricción activa
+El proceso actual tiene más de 6 pasos con salidas y re-entradas a la plataforma. El usuario que intenta validarse en Dropi:
+* Primero se registra con nombre y correo. Luego, cuando quiere hacer un retiro o usar su wallet, el sistema le pide validar su identidad. Eso lo lleva a otra pantalla donde tiene que ingresar nuevamente datos que ya dio. Si no tiene teléfono verificado, lo saca de la pantalla de validación a otra sección. Vuelve, retoma, completa la validación con Truora. Y después, cuando quiere emitir una factura, el sistema le vuelve a pedir sus datos personales porque facturación y validación de identidad son dos módulos completamente separados que no se hablan entre sí.
+* El usuario ingresa los mismos datos hasta tres veces en el mismo flujo: al registrarse, al validar su identidad y al configurar sus datos de facturación.
+* Para Guatemala y Panamá, donde la validación tiene requisitos específicos por la dispersión a entidades financieras locales, la solución actual es un popup de UserPilot, una herramienta de onboarding que no está integrada al flujo nativo. Es un parche visible que no escala.
+Capa 3 — Hay brechas de validación que hoy no existen en absoluto
+Estas no son limitaciones del flujo actual; son funcionalidades que directamente no están construidas:
+* KYB — personas jurídicas: cero cobertura. Hoy no existe ningún mecanismo para validar que una empresa que opera en Dropi es una empresa real, que está activa en el registro mercantil, que su representante legal existe y que no tiene alertas en listas internacionales. Cualquier persona puede declarar que es una empresa, poner un NIT o RFC y operar como tal. Esto tiene implicaciones directas en la validez de las facturas electrónicas emitidas en México y Argentina, donde el SAT y la AFIP exigen que el receptor de la factura exista y esté activo fiscalmente.
+* KYT — criptoactivos: cero cobertura. Dropi habilita recargas y retiros en Tether (USDT). Cada una de esas transacciones ocurre sin ningún screening de la wallet destino o de las contrapartes involucradas. En este momento, si un usuario en lista OFAC hace un retiro en Tether, Dropi lo procesa sin saberlo. Eso no es un riesgo futuro; es un pasivo activo.
+* Brasil: brecha transversal. Usuarios con documentos brasileños se registran y operan en Colombia, México, Argentina y otros países de Dropi. No hay ninguna base de datos local contra la que validarlos. Truora no los cubre adecuadamente, y la integración de SumSub con la Receita Federal brasileña (CNPJ/CPF) estará disponible en el próximo trimestre. Hasta entonces, estos usuarios tienen un nivel de validación materialmente inferior al del resto.
+
+* Painpoints (Dolores específicos):
+Dropshipper:
+   * Se registra, intenta hacer su primer retiro y descubre que debe validarse. El momento de fricción llega justo cuando tiene motivación alta de usar la plataforma.
+   * Si está en iOS, no puede completar el proceso.
+   * Si es extranjero operando en otro país de Dropi, el sistema puede traerle información de otra persona con su nombre.
+   * Por validación erronea de Truora o por imagen borrosa de la persona, esta puede perder su primer intento de la validación.
+   * Ingresa sus datos personales en el registro, los vuelve a ingresar en validación y los vuelve a ingresar en facturación.
+   * No en todos los países hay una revisión automatizada o manual para la revisión de esos datos tributarios con los que opera el usuario.
+   * La revisión tributaria existe en 2 países y es un proceso muy manual con sus propios SLA de revisión.
+Proveedor:
+   * Necesita emitir facturas a nombre de su empresa, pero Dropi no tiene KYB. No puede validar su razón social, su NIT o su estatus fiscal. Cualquier factura emitida sin esa validación tiene riesgo de rechazo ante el ente regulador tributario del país.
+   * Si su catálogo crece y su volumen de ventas sube, el riesgo regulatorio para Dropi también sube, sin que haya ningún mecanismo de control.
+   * No en todos los países hay una revisión automatizada o manual para la revisión de esos datos tributarios con los que opera el usuario.
+   * La revisión tributaria existe en 2 países y es un proceso muy manual con sus propios SLA de revisión.
+Marca / emprendedor:
+   * Tiene una empresa constituida pero Dropi solo en Colombia la valida pero la trata igual que a una persona natural. 
+   * No en todos los países hay una revisión automatizada o manual para la revisión de esos datos tributarios con los que opera el usuario.
+   * La revisión tributaria existe en 2 países y es un proceso muy manual con sus propios SLA de revisión.
+
+   * Impacto: Explicación de cómo afecta este problema directamente a los usuarios, al negocio de Dropi, o a ambos.
+      * OKR (Objetivo Trimestral): OKR 2 - Consolidar operación multipaís
+      * KR (Key Result): KR 1 - 14 Países operando al cierre 1016
+      * Data: Listado de eventos o KPIs específicos a trackear (ej. conversion_rate, first_order_date).
+      * Objetivos. PARA QUÉ
+      * Objetivo Principal de Negocio:
+      * Implementar un sistema de validación de identidad unificado, global y escalable que permita a Dropi operar con cumplimiento regulatorio activo en sus 12 países, eliminar el riesgo legal por ausencia de KYB y KYT, y reducir el costo operativo de validación manual al mínimo técnicamente posible, sin frenar el crecimiento de la plataforma.
+En términos concretos, este objetivo se descompone en tres resultados de negocio no negociables:
+         * Cumplimiento regulatorio: que ningún país donde Dropi opera tenga una brecha de validación que genere una exposición legal activa. Esto significa KYC funcionando para personas naturales, KYB funcionando para personas jurídicas en países P0, y KYT activo para cualquier retiro en criptoactivos.
+         * Eficiencia operativa: pasar del 40% de validaciones manuales actuales en Colombia a menos del 8%, liberando al equipo de complience de un cuello de botella que hoy escala con el volumen y que no tiene solución dentro de la herramienta actual.
+         * Habilitación del crecimiento: que la validación de identidad deje de ser una barrera de entrada para usuarios nuevos y se convierta en un paso transparente dentro del onboarding, de modo que no frene la activación ni la retención en ningún mercado.
+         * Objetivo de Experiencia de Usuario (UX): 
+         * Que el usuario complete su validación de identidad y sus datos de facturación en un único momento, dentro de la plataforma, sin salir, sin repetir información y sin necesitar ayuda de soporte para lograrlo.
+Esto significa cosas concretas en el diseño, y varían según el país donde opera el usuario:
+Para usuarios en países distintos a Colombia — validación primero, formulario después.
+            * El usuario declara si es persona natural o jurídica antes de iniciar cualquier validación. Con esa declaración, el sistema lo dirige al flujo de validación correspondiente (KYC o KYB) vía SumSub. Una vez aprobada la validación, SumSub retorna la información del usuario y el sistema la precarga automáticamente en el formulario unificado de datos personales y facturación. El usuario llega al formulario con sus datos ya diligenciados, los revisa, confirma y guarda. No ingresa información que ya proporcionó durante la validación.
+            * Si declaró ser persona natural, el formulario queda precar­gado con los datos del KYC aprobado y la facturación queda configurada como PN sin pasos adicionales.
+            * Si declaró ser persona jurídica, el formulario precarga los datos del KYB aprobado (empresa y representante legal) y la facturación queda configurada para esa empresa.
+            * En ambos casos el formulario es el cierre del proceso, no el inicio. La validación ocurre primero y sus resultados alimentan directamente la información de facturación.
+Para usuarios en Colombia — formulario primero, validación después.
+            * El usuario entra a Configuraciones > Datos personales y encuentra el formulario unificado con correo y teléfono precargados desde el registro. Completa la información restante, declara si es persona natural o jurídica, y guarda. Con esa información el sistema decide la herramienta de validación: KYC con Truora si es persona natural, KYB con SumSub si es persona jurídica. La información del formulario viaja a la herramienta correspondiente como insumo del proceso de validación. El usuario no vuelve a ingresar datos en ningún punto posterior.
+            * Si la validación es aprobada, los datos que ya ingresó quedan confirmados y activos como datos de facturación. Si es persona natural, facturación PN queda lista. Si es persona jurídica y el KYB es aprobado, facturación PJ queda configurada para su empresa.
+            * En ambos casos, la validación y la facturación son el mismo evento, no dos momentos separados. El formulario no es un paso previo a la validación: es el mismo proceso visto desde la experiencia del usuario.
+
+En los dos flujos, el sistema guía y no bloquea.
+Si algo falla en la validación, el usuario entiende exactamente qué pasó porque el mensaje de error es específico por causa, no genérico. Tiene una acción clara disponible: reintentar con la corrección indicada, sin perder los datos que ya ingresó. Si agota los intentos disponibles (máximo 3), el sistema le entrega un código de caso y le habilita el canal de soporte. Si la herramienta falla técnicamente, el usuario queda en un estado visible con mensaje de "validación en proceso" y recibe una notificación cuando se resuelve. En ningún caso el usuario queda en un estado muerto sin saber qué sigue. El soporte es el último recurso, no el primero.
+El resultado de la validación resuelve la facturación automáticamente, independientemente del flujo.
+
+En países distintos a Colombia, la validación genera los datos que alimentan el formulario. En Colombia, el formulario genera los datos que alimentan la validación. El punto de llegada es el mismo en los dos casos: el usuario tiene su identidad validada y su información de facturación configurada como consecuencia directa de un único proceso, sin tener que volver a ninguna sección de la plataforma para completar su información fiscal.
+El flujo de retiro y las alertas de riesgo no pueden ser una caja negra para el usuario. 
+Cuando una cuenta bancaria destino no pasa la validación, el usuario no puede recibir simplemente un mensaje de "operación rechazada" sin contexto. Eso genera desconfianza, tickets de soporte innecesarios y abandono de la plataforma.
+El objetivo de UX en esta capa es que el usuario entienda qué pasó y qué puede hacer, dentro de los límites que la regulación y Legal permitan comunicar. Hay tres escenarios concretos que el diseño debe resolver:
+               * Si el KYT bloquea una wallet cripto por riesgo alto, el usuario debe saber que esa wallet específica está bloqueada, que puede intentar con otra wallet, y que si cree que es un error tiene un canal para escalar. No se le puede decir la razón técnica del bloqueo (no se revela que está en una lista), pero sí se le puede dar una acción.
+               * Si un retiro fiat es bloqueado porque el titular de la cuenta bancaria no pasó validación, el usuario debe entender que el problema es con ese titular y qué documentación necesita para resolverlo.
+               * Si una cuenta es suspendida por una alerta de LA/FT, el mensaje al usuario debe estar definido con Legal de antemano. No puede ser un mensaje genérico de error técnico, pero tampoco puede revelar información que comprometa una investigación. Este copy no es una decisión de producto; es una decisión legal que producto debe ejecutar.
+               * Alineación Estratégica:
+               * OKR (Objetivo Trimestral): OKR 2 - Consolidar operación multipaís
+               * KR (Key Result): KR 1 - 14 Países operando al cierre 1016
+               * Data: Listado de eventos, logs o KPIs específicos a trackear en base de datos/analítica (ej. conversion_rate, first_order_date).
+               * La validación de identidad es un habilitador directo de este KR. Ningún país puede "operar" en términos legales y financieros si no tiene KYC activo para sus usuarios, KYB para las empresas que facturan, y KYT para los retiros. Sin este proyecto, el conteo de países operando es cuestionable desde el punto de vista regulatorio.
+               * KPI 1 — Eficiencia / Costo Time-to-Value: tiempo que tarda un usuario en completar su validación y quedar habilitado para operar (hacer un retiro, emitir una factura, usar su wallet).
+               * KPI 2 — Crecimiento / Volumen Adopción del feature: porcentaje de usuarios activos que completan el flujo de validación unificado. Roadmap execution: features de validación entregadas vs. planificadas por fase.
+               * KPI 3 — Calidad Churn de producto: tasa de abandono del flujo de validación por fallas en la experiencia (foto borrosa, timeout, error técnico, salida sin completar).
+Bloque A — Funnel de validación (KYC y KYB)
+Evento
+	Descripción
+	KPI que alimenta
+	validation_flow_started
+	Usuario abre el formulario unificado por primera vez
+	Adopción del feature
+	persona_type_selected
+	Usuario selecciona Natural o Jurídica en el selector
+	Segmentación, funnel
+	phone_otp_abandoned
+	Usuario cierra el modal sin completar OTP
+	Drop-off
+	kyc_initiated
+	Sistema envía solicitud KYC a Truora / SumSub
+	Volumen de validaciones
+	kyc_liveness_completed
+	Usuario completa el paso de liveness
+	Funnel KYC
+	kyc_document_uploaded
+	Usuario sube foto del documento
+	Funnel KYC
+	kyc_approved
+	Motor de validación devuelve resultado aprobado
+	Conversión automática
+	kyc_rejected
+	Motor de validación devuelve resultado rechazado
+	Tasa de rechazo
+	kyc_manual_review
+	Caso derivado a revisión manual
+	Costo operativo
+	kyc_timeout
+	Motor de validación no responde en tiempo definido
+	Calidad técnica
+	kyc_retry_attempted
+	Usuario reintenta validación después de fallo
+	Reintentos
+	kyb_initiated
+	Sistema envía solicitud KYB a SumSub
+	Volumen KYB
+	kyb_approved
+	KYB aprobado, facturación PJ activa
+	Conversión KYB
+	kyb_rejected
+	KYB rechazado, estado pj_pendiente
+	Tasa de rechazo KYB
+	kyb_retry_attempted
+	Usuario reintenta KYB directamente sin formulario
+	Reintentos KYB
+	kyb_escalated_compliance
+	Segundo fallo KYB, escala a compliance
+	Casos compliance
+	Bloque B — Facturación y datos personales
+Evento
+	Descripción
+	KPI que alimenta
+	billing_auto_populated_pn
+	Datos de facturación PN pre-llenados desde KYC
+	Reducción fricción
+	billing_auto_populated_pj
+	Datos de facturación PJ activados desde KYB
+	Conversión KYB
+	billing_data_manually_edited
+	Usuario edita datos de facturación post-validación
+	Calidad del dato
+	billing_type_changed_pn_to_pj
+	Usuario cambia de PN a PJ en configuración
+	Adopción KYB
+	billing_type_changed_pj_to_pn
+	Usuario revierte de PJ a PN
+	Comportamiento
+	document_mismatch_detected
+	Documento de facturación no coincide con el validado
+	Calidad, fraude
+	Bloque C — Wallet, retiros y KYT
+Evento
+	Descripción
+	KPI que alimenta
+	wallet_unblocked_post_kyc
+	Wallet desbloqueada tras KYC aprobado
+	Time-to-Value
+	withdrawal_blocked_no_kyc
+	Retiro bloqueado por falta de validación
+	Fricción operativa
+	bank_account_registered
+	Usuario registra cuenta bancaria destino
+	Funnel retiros
+	bank_account_owner_match
+	Titular cuenta = usuario validado (sin costo extra)
+	Eficiencia
+	bank_account_owner_mismatch
+	Titular diferente, dispara KYC adicional
+	Fricción, costo
+	kyt_initiated
+	Sistema inicia screening de wallet cripto
+	Volumen KYT
+	kyt_approved_low_risk
+	Wallet aprobada, riesgo bajo
+	Conversión KYT
+	kyt_blocked_high_risk
+	Wallet bloqueada, riesgo alto
+	Alertas LA/FT
+	kyt_escalated_compliance
+	Caso KYT derivado a compliance
+	Casos compliance
+	Bloque D — Drop-off y abandono (Churn de producto)
+Evento
+	Descripción
+	KPI que alimenta
+	validation_flow_abandoned
+	Usuario inicia flujo y no lo completa
+	Churn de producto
+	abandon_step
+	Paso específico donde ocurrió el abandono
+	Punto de fricción
+	abandon_reason
+	Clasificación del abandono: técnico / usuario / timeout
+	Diagnóstico
+	session_expired_mid_validation
+	Sesión venció mientras el usuario estaba en el flujo
+	Calidad técnica
+	support_ticket_opened_validation
+	Usuario abre ticket de soporte durante validación
+	Costo soporte
+	1.4 Enlaces
+               * Épica: * [Enlace a Jira/Linear/Herramienta de gestión]
+               * Figma Kick-off / Wireframes Iniciales: * [Enlace al canvas de diseño, bocetos preliminares o prototipo inicial]
+               * Research como punto de partida: 
+               * Hallazgo principal: (Lo más relevante que aprendimos de las marcas).
+               * Fuentes: [Link a entrevistas, encuestas o Mixpanel].
+1.5 Dudas e incógnitas iniciales
+Solo preguntas funcionales o de negocio. Las dudas técnicas se levantan en el hand-off, no aquí.
+Preguntas de negocio:
+
+               1. ¿La validación se hace contra la base de datos del país de nacionalidad del usuario o del país donde opera en Dropi?
+Jonatan (Compliance): Se debe parametrizar para que se valide contra el país de operación y de facturación fiscal dentro de Dropi. Se tiene que utilizar para las reglas fiscales y gubernamentales locales. Por ejemplo, el cruce obligatorio con el MIR, el SAT o el RUT local dependiendo del país donde se estén adelantando las operaciones. Esto tiene incidencia fiscal, sobre todo ante la DIAN. Por eso se hace contra el país donde se encuentra operando.
+Andrés (Legal): Agrega que el proceso de onboarding habilita las bases de datos de los países de donde son oriundas las personas que se van a registrar. No se pueden buscar antecedentes judiciales de un colombiano con una base de datos de Brasil. Para efectos de facturación, en algunos países se requieren registros o licencias adicionales para poder ejercer actividades comerciales dentro de esa jurisdicción. En Chile, por ejemplo, se requiere sacar un documento habilitante para poder facturar y que se le facture a nombre del usuario.
+
+⚠️ Implicación para producto: Esta respuesta define una regla dual. La validación de identidad (antecedentes, biometría) va contra el país de nacionalidad. La validación fiscal (facturación, cruce con DIAN/SAT/AFIP) va contra el país de operación. Son dos lógicas distintas que el motor de ruteo debe manejar por separado
+
+               2. ¿Qué funcionalidades están bloqueadas para un usuario que no ha iniciado la validación KYC?
+No sé si esos bloqueos les han generado algún tipo de fricción que ustedes hayan detectado. ¿Hay usuarios que dicen "no quiero validarme" o "quiero hacer un retiro y no quiero validarme"?
+Jonatan (Compliance): Actualmente lo único que se encuentra inhabilitado para quien no ha iniciado el proceso de validación es el cruce de saldos entre wallet y el retiro de saldos de la wallet. De resto puede vivir toda la experiencia en la plataforma. Las quejas que se han presentado son por problemas de la plataforma al capturar la imagen de la cédula o del rostro, o porque el usuario no sigue las recomendaciones (iluminación, encuadre). No ha habido manifestaciones de usuarios que digan "no quiero validarme, entréguenme mi dinero." Más bien falla la validación según los protocolos establecidos y, si ya tiene saldo en la wallet, se le hace devolución y no se le permite continuar.
+
+⚠️ Implicación para producto: El bloqueo está bien definido: solo wallet y retiros. El resto de la plataforma queda libre. Se debe mantener así en el nuevo flujo para no aumentar la fricción.
+
+               3. ¿Qué pasa cuando es un proveedor grande con bastante saldo en wallet?
+¿Los proveedores también tienen validación de identidad? Si es un proveedor grande y tiene bastante saldo en wallet, ¿cómo son los términos con proveedores o marcas? ¿Tienen contrato?
+Andrés (Legal): Hay veces que toca ser muy flexibles. Si un proveedor moviliza 10.000 órdenes mensuales y tiene un bloqueo, se entra a evaluar el caso y se hace una debida diligencia, un seguimiento y un monitoreo permanente al usuario y monitoreo transaccional. Se valida manualmente si lo amerita y se deja la trazabilidad del proceso.
+¿El seguimiento lo hace Legal directamente?
+Andrés (Legal): Lo hace Legal a través del manual y del oficial de cumplimiento.
+Jonatan (Compliance): Agrega que no ha visto casos donde alguien opere prolongadamente y luego quiera retirar grandes sumas. Normalmente entran, hacen sus primeras operaciones para probar la plataforma, quieren hacer un traslado entre wallets o un retiro, y es en ese momento que se les exige la validación. El flujo está diseñado para que esto ocurra en un tiempo corto y no haya grandes sumas acumuladas al momento de la validación.
+
+⚠️ Implicación para producto: Existe un proceso de excepción manual para proveedores estratégicos bloqueados. Esto debe estar documentado como flujo de escalamiento y no puede depender de criterios informales. Es una regla de negocio pendiente de formalizar con Legal.
+
+               4. ¿Cuánto tiempo es válida una validación aprobada antes de que venza?
+Jonatan (Compliance): Depende del nivel de riesgo arrojado en la validación. Cada validación genera un score de riesgo. Riesgo alto: rechazo inmediato. Riesgo bajo: la validación es válida entre 1 y 2 años. Riesgo medio: se recomienda monitoreo constante, cada 3, 4 o 6 meses dependiendo del concepto emitido.
+
+⚠️ Implicación para producto: El campo nivel_riesgo del resultado de validación debe guardarse en base de datos y condicionar el tiempo de vigencia. No es un valor fijo; es dinámico por usuario.
+
+               5. Si el usuario edita sus datos personales después de los 6 meses de bloqueo del formulario, ¿se le vuelve a pedir validación?
+El formulario se bloquea durante 6 meses. Después de esos 6 meses el usuario puede solicitar edición. ¿Se le vuelve a pedir validación si edita su nombre o número de cédula?
+Jonatan (Compliance): Sí, porque si cambia algo que pertenece a lo que está dentro de la cédula, ya no se estaría hablando de la misma cédula ni de la misma persona. Lo que se ha visto en la práctica son cambios menores: número de teléfono, domicilio, dirección, que no tienen mayor impacto a efectos de la validación. Lo que sí dispara re-validación es el número de cédula, la fecha de expedición y el nombre completo.
+
+⚠️ Implicación para producto: Hay dos categorías de campos editables. Campos sensibles (documento, nombre completo, fecha expedición) → disparan re-validación KYC completa. Campos no sensibles (teléfono, dirección, ciudad) → no requieren re-validación. El sistema debe distinguirlos explícitamente.
+
+               6. ¿El flujo de validación actual de Truora es el mismo para todos los tipos de usuario?
+¿Todos los usuarios (dropshippers, proveedores, marcas) se validan bajo el mismo flujo de Truora? ¿El bloqueo también es igual para todos?
+Jonatan (Compliance): La respuesta corta es sí. Truora no da la herramienta para diferenciar flujos por tipo de usuario, de ahí la necesidad de SumSub con KYB. Todos los que han ingresado al ecosistema pasan por el mismo flujo de validación KYC.
+Andrés (Legal): Solo hay dos formas de registrarse: como dropshipper y como proveedor. No había mapeado el perfil de marcas propias (emprendedores). Comenta que ese perfil debe ser contemplado desde ya porque todos los usuarios deben pasar el proceso de validación.
+
+⚠️ Implicación para producto: El perfil "marca propia / emprendedor" no estaba mapeado por Legal ni Compliance como tipo de usuario con flujo propio. Debe definirse si tienen un flujo KYC igual al dropshipper o si por ser potencialmente persona jurídica requieren un flujo diferenciado desde el onboarding.
+
+               7. ¿Cuánto tiempo máximo puede estar un usuario en estado "en proceso"?
+¿Qué cantidad de tiempo debe transcurrir entre que un usuario no continúa el flujo o hay un error técnico, como el de Truora que no permite reintentos cuando la foto sale borrosa?
+Jonatan (Compliance): El proceso de validación es obligatorio solo cuando el usuario intenta hacer un cruce entre wallets o un retiro. Hasta ese momento el usuario puede navegar en el ecosistema. Una vez inicia el proceso de validación, la instrucción es que ningún usuario que ya esté en proceso puede pasar más de 24 horas sin que se haya definido su situación. Truora no tiene un temporizador automático; el seguimiento lo hace Gina manualmente. Ella tiene la instrucción de tomar contacto por cualquier medio con el usuario que dejó incompleta la validación. Si el usuario validó el documento pero no completó el liveness, y retoma en tiempo corto, Truora le permite continuar desde donde quedó. Si ya pasó más tiempo o resultó fallido, debe empezar desde el principio.
+
+⚠️ Implicación para producto: El SLA de 24 horas para resolver el estado "en proceso" debe ser automatizado en el nuevo flujo con SumSub, no manual. El sistema debe disparar notificaciones proactivas al usuario y al equipo de Back Office si un caso supera ese umbral sin resolución.
+
+               8. ¿Cuántas veces puede un usuario reintentar la validación?
+En Truora son 3 intentos. ¿En SumSub también se puede parametrizar? ¿Aplica igual para KYC, KYB y KYT?
+Jonatan (Compliance): Sí, en SumSub se puede parametrizar igual. El número de intentos depende del apetito de riesgo de la compañía. Tres intentos es un número correcto y válido. Para KYB el volumen es mucho menor que KYC, así que no debería generar mayor problema. Si presenta dificultades se puede subir orgánicamente a cinco o hacer acompañamiento manual. El cuarto intento en el flujo actual ya tiene asistencia de carácter manual por parte de Gina.
+
+⚠️ Implicación para producto: Parametrizar en SumSub: 3 intentos para KYC, 3 intentos para KYB (revisable). Después del tercer intento fallido → estado pendiente_revision_manual → Back Office recibe alerta y hace contacto activo.
+
+               9. Si un usuario baneado en Colombia se registra en Dropi México con otro correo, ¿hay forma de detectarlo?
+¿Hay algún proceso que detecte que el usuario baneado en Colombia no esté dentro de Dropi México, Costa Rica, Panamá, etc.? ¿Y si se registra con el nombre de otra persona?
+Jonatan (Compliance): Exactamente ese problema fue identificado desde que asumió el cargo. En países donde Truora no tiene presencia, la persona que quiere registrarse lo hace sin ningún obstáculo. Por eso la implementación de SumSub es prioritaria: la arquitectura holding con cuenta madre permite identificar a una persona baneada en Colombia aunque se registre en Chile con otro correo. Respecto a registrarse con el nombre de otra persona (la mamá, la abuela): si esa persona pasa la validación, Dropi no puede llegar a la minucia de identificar quién está detrás de la cuenta. Cada persona con cédula es responsable de sus propias actuaciones como mayor de edad.
+
+⚠️ Implicación para producto: La arquitectura holding de SumSub es la solución técnica a este riesgo para el caso de mismo usuario, distinto país. El caso de usuario suplantando a otra persona es un riesgo residual que Legal reconoce como no mitigable 100% desde la plataforma.
+               10. ¿Un usuario rechazado puede apelar? ¿Por qué canal y quién lo gestiona?
+Si el usuario fue baneado ya no puede entrar a Dropi. ¿Tienen algún proceso para que diga "me equivoqué al poner mi cédula y encontraron a un homónimo"?
+Jonatan (Compliance): Dentro del flujo actual ese proceso no está definido formalmente. Dropi como sociedad privada se reserva el derecho de admisión. Si un usuario quiere apelar, puede enviar un correo a atención al ciudadano (no usuario, porque ya no lo es) exponiendo su caso. Ese caso se evalúa y Compliance coordina con el proceso de validación (Gina) para permitirle un intento adicional o hacer acompañamiento manual. El caso del homónimo, por ejemplo, puede resolverse manualmente dejando el antecedente documentado de que el proceso fue manual y que el usuario demostró que se trataba de un error de la base de datos.
+
+⚠️ Implicación para producto: No existe un canal formal de apelación. Debe crearse: correo externo de atención para usuarios baneados + flujo interno de revisión con SLA definido + capacidad de Compliance para levantar un bloqueo puntualmente con trazabilidad.
+
+               11. Cómo debería funcionar el flujo KYB en SumSub y qué documentos se requieren por país?
+¿Ya han planteado desde Compliance qué flujo de KYB van a parametrizar en SumSub? ¿Qué se va a validar y qué documentos se van a pedir por país?
+Jonatan (Compliance): Hasta el día anterior a la reunión le dieron acceso a SumSub para empezar a explorar. El antes es todas las personas jurídicas que ya están en el ecosistema sin KYB, que lo necesitan para facturación. El después son todos los que ingresen como persona jurídica desde que se implemente. El KYB incluye: NIT de la empresa, verificación en superintendencias si fue sancionada, datos del representante legal (que incluye un KYC embebido dentro del mismo flujo KYB), y toda la información que después puede migrarse al proceso de facturación para no pedírsela dos veces al usuario. Para los documentos específicos por país de facturación necesita el apoyo del área financiera y de los contadores, porque él conoce 3 o 4 países pero no todos.
+Desde producto lo que se busca es que el sistema valide si los datos corresponden a persona natural o persona jurídica y active el flujo correspondiente, sin llenar al usuario de links ni generar validaciones redundantes con costo adicional.
+Preguntas Tech:
+                  12. ¿Qué información le debemos enviar a la API de SumSub para iniciar el proceso de validación?
+La idea es saber si podemos mandarle a la API cierta información desde los formularios, o si le pedimos al usuario que se valide y luego cogemos esa información para precargarla en nuestros formularios. Quiero entender qué información mínima necesita SumSub para iniciar la validación y cuánto nos devuelve después.
+José (TI): Para iniciar el proceso en SumSub solo se necesita información básica: un external user ID (el nuestro), correo, teléfono, si es una compañía o persona individual, y datos del formulario inicial como nombre, fecha de nacimiento, sexo, país, nacionalidad, lugar de nacimiento y dirección. Con eso SumSub genera una URL donde la persona ve su proceso de validación. No se necesita nada más para iniciar. Los datos adicionales de facturación como tipo de régimen o condición frente al IVA no van en ese primer envío; esos los tomamos de los datos personales, no del formulario de facturación.
+
+⚠️ Implicación para producto: El formulario unificado que llene el usuario debe capturar los campos mínimos que SumSub necesita para iniciar. No tiene sentido hacer un formulario largo si al final solo se le envían 6 o 7 campos. El diseño del formulario debe partir de lo que SumSub requiere, no al revés.
+
+                  13. ¿Qué nos devuelve la API de SumSub después de la validación? ¿Podemos usar esa data para precargar los formularios de facturación?
+¿Nos devuelve únicamente una confirmación de aprobado/rechazado o nos puede regresar data del usuario para precargar nuestros formularios y reducir la fricción del onboarding?
+José (TI): Sí devuelve data. Lo que retorna la API incluye: correo, teléfono, país, cuándo se registró, si el perfil fue desactivado alguna vez, y la información extraída por OCR del documento. Del OCR específicamente devuelve: nombre, apellido, middle name, alias, fecha de nacimiento, lugar de nacimiento, país, estado, nacionalidad, número de identificación, dirección del documento, tipo de documento (pasaporte, cédula, licencia de conducción), qué país emitió el documento, número del documento, fecha de expedición, nombre del padre si aplica, número de edificio/apartamento, resultado de verificación, nivel de riesgo (score), y estado de aprobación. También devuelve información de consentimientos y términos. Aclaró que hay que corroborar con SumSub si devuelve todo lo que aparece en el backoffice (como el cruce de lo que se extrajo vs. lo que se proporcionó para KYB), porque lo que él leyó en la documentación no lo confirmaba en su totalidad.
+⚠️ Implicación para producto: La API sí devuelve suficiente data para precargar la mayoría de campos del formulario de datos personales. Sin embargo, José recomienda presentarlos como datos "sugeridos" que el usuario pueda confirmar o modificar, no como campos bloqueados. Queda pendiente confirmar con SumSub exactamente qué retorna el endpoint de data para el caso KYB.
+                     14. ¿Los campos específicos de facturación por país (régimen IVA, condición AFIP, tipo de responsabilidad) se pueden enviar o traer desde la API?
+En Argentina tenemos el campo "condición frente al IVA", en Colombia "tipo de régimen" y "tipo de responsabilidad de impuesto". ¿Estos campos los podemos pasar a la API o traer desde ella?
+José (TI): Lo básico que SumSub pide para iniciar son correo, teléfono, tipo de usuario y datos personales del formulario inicial. Los campos fiscales específicos por país no son los que se le envían a SumSub; esos los toma Dropi de sus propios formularios. SumSub permite parametrizar campos adicionales desde su interfaz de backoffice, pero en el momento de pasar la información a la API se mandan los campos preestablecidos (datos personales básicos), no los campos de facturación fiscal.
+
+⚠️ Implicación para producto: Los campos fiscales específicos por país (IVA, régimen, CUIT, RFC) no vienen de SumSub. Dropi los debe capturar en su propio formulario. Lo que SumSub aporta es la validación de identidad y el cruce con bases oficiales; la información tributaria sigue siendo responsabilidad del formulario propio de Dropi
+
+                     15. Si el usuario modifica datos sensibles después de la validación (tipo de documento, número), ¿eso dispara una nueva validación con costo?
+Si precar­gamos los datos que nos devuelve SumSub y el usuario los puede editar, ¿qué pasa si cambia algo sensible como el tipo de documento? Por ejemplo, si se validó con cédula y luego pone NIT, ¿eso genera una nueva validación?
+José (TI): Sí, si el usuario cambia datos sensibles como tipo de documento o número de documento, eso dispara una nueva validación porque ya no es el mismo documento con el que se validó. Confirmó que hay que definir claramente qué campos no deben ser editables para no generar validaciones adicionales con costo. El correo es el campo único identificador para poder trazar la información del usuario.
+
+⚠️ Implicación para producto: Se deben definir dos categorías de campos post-validación. Campos bloqueados (no editables sin nueva validación): tipo de documento, número de documento, nombre completo. Campos editables sin nueva validación: teléfono, dirección, ciudad, correo de facturación. Esta definición debe quedar en las reglas de negocio antes de que TI diseñe la arquitectura.
+
+                     16. ¿Cuál es la opción técnica más viable: formulario primero y luego validación, o validación primero y luego precargar el formulario?
+Se plantean dos opciones. Primera: el usuario llena el formulario unificado, lo guarda y eso dispara la validación KYC o KYB según corresponda. Segunda: el usuario primero hace la validación en SumSub, y luego Dropi precarga los datos que devuelve la API en el formulario de datos personales y facturación. ¿Cuál es técnicamente más viable?
+José (TI): Entiende ambas opciones. Señala que el problema de hacer el formulario primero y luego mandarlo a SumSub es que la información que SumSub necesita para iniciar no es tanta, entonces el usuario estaría llenando un formulario largo para que al final se le pasen solo unos pocos campos. La segunda opción de validar primero y precargar después es viable, pero la data que devuelve SumSub debería mostrarse como "sugerida" para que el usuario la confirme, no como datos bloqueados. Lo más importante desde TI es que primero se defina bien el qué (reglas de negocio, campos, flujos) para que el equipo de arquitectura pueda definir el cómo. No es solo integrar SumSub; es entender qué impacta en toda la plataforma.
+
+⚠️ Implicación para producto: José necesita de Producto: lista de campos del formulario que se van a recargar desde SumSub, definición de cuáles se bloquean y cuáles son editables, y si los dos formularios (datos personales + facturación) se unifican o quedan separados. Sin eso, arquitectura no puede arrancar.
+
+                     17. ¿Actualmente hay forma de detectar si un usuario baneado en Colombia intenta registrarse en Dropi Ecuador o México con el mismo correo?
+Si me banean en Colombia y me registro en Ecuador con el mismo correo, ¿el sistema lo detecta? ¿Y si cambio el correo?
+José (TI): Hoy no hay forma automática de detectarlo. Cada base de datos de cada país es independiente. Un usuario baneado en Colombia puede operar normalmente en México porque son instancias separadas. El bloqueo cruzado entre países hoy se hace manualmente. Sin embargo, sí es técnicamente posible construir esa validación: el correo es el campo único identificador. Si el correo ya está baneado en un país, se puede validar contra esa lista antes de permitir el registro en otro país. Aclaró que si el usuario cambia el correo y toda la información, no hay nada técnico que Dropi pueda hacer para detectarlo.
+
+⚠️ Implicación para producto: Hay dos acciones derivadas. A corto plazo: cuando SumSub implemente la arquitectura holding, el perfil baneado en una subcuenta queda trazable en la cuenta madre, lo que resuelve el problema estructuralmente. A mediano plazo antes de SumSub: construir una validación en el momento del registro que cruce el correo contra la lista de usuarios baneados en todos los países. Si hay match, no permitir el registro y ahorrar el costo de una validación que ya sabemos que va a fallar.
+
+                     18. ¿Se necesita una sesión adicional con SumSub para validar aspectos técnicos de la integración?
+José (TI): Falta corroborar con Diana (encargada de seguridad en TI) la viabilidad de seguridad del sistema, porque ese aval aún no está formalizado. Una vez tenga eso y el equipo tenga claro el qué, el siguiente paso es que el equipo de arquitectura (con Marcos) defina cómo va a quedar la integración. No es solo conectar SumSub; hay que entender todo lo que impacta en la plataforma: si la validación va al momento del registro, si se unifican los formularios, qué se bloquea, cómo se manejan los usuarios que omiten la validación.
+
+
+                        * [Dependencia con otra área a confirmar]
+
+
+Lo que NO va en el Kick-off
+Esfuerzo técnico, tiempo estimado de desarrollo, dispositivos soportados, restricciones de performance, stack, dependencias técnicas. Todo eso lo responde TI en el documento 4 o después de recibir el hand-off.
+	
+
+
+
+🫀 Discovery
+🔍 Discovery del Proyecto (Por áreas, Usuarios, AS-IS, Hipótesis y Requerimientos)
+Profundiza el POR QUÉ. Documenta la investigación realizada, el estado actual (AS-IS), las hipótesis planteadas y las conclusiones que sustentan la definición del proyecto.
+2.1 Usuarios Implicados & Estado de Madurez
+                        * Perfil Principal o Perfil Secundario]: 
+
+Perfil 1 — Dropshipper
+Estado de madurez: En consolidación
+Es el usuario más numeroso de la plataforma y el que genera el mayor volumen de validaciones (7.000–10.000/mes solo en Colombia). Ya existe un flujo de validación KYC para él con Truora, aunque con un 40% de casos manuales. Conoce el proceso de validación porque ya lo ha vivido, pero lo experimenta como una fricción en el momento en que quiere hacer su primer retiro. Opera principalmente como persona natural. Su relación con la facturación es simple: necesita que le facturen a su nombre con sus datos personales. El perfil está maduro en su comportamiento dentro de la plataforma, pero inmaduro en su comprensión de por qué se le pide la validación.
+
+Perfil 2 — Proveedor
+Estado de madurez: En transición
+Tiene presencia activa en la plataforma y mueve volúmenes significativos de órdenes. A diferencia del dropshipper, puede operar como persona jurídica, lo que lo convierte en el primer usuario que necesita KYB. Hoy no tiene KYB porque Truora no lo ofrece, por lo que ningún proveedor ha sido validado formalmente como empresa. Esto representa la brecha legal más crítica del proyecto. Su catálogo y su reputación en la plataforma dependen de que su identidad como empresa quede validada. Está en transición porque el sistema actual lo trata igual que a un dropshipper (solo KYC) cuando su realidad operativa es más compleja.
+
+Perfil 3 — Marca propia / Emprendedor
+Estado de madurez: Emergente
+Perfil identificado con Legal como no mapeado formalmente hasta ahora. Son marcas o emprendedores que usan Dropi para su logística y distribución. Pueden operar como persona natural o jurídica. No tienen un flujo diferenciado en la plataforma hoy; se registran y validan igual que un dropshipper. Su madurez en el sistema es emergente porque el perfil mismo está en construcción dentro del roadmap de producto: está pendiente confirmar con el equipo responsable si tendrán un tipo de cuenta diferenciado que requiera un flujo de validación distinto. Hasta que eso se defina, comparten flujo con el dropshipper.
+
+Perfil 4 — Usuario existente sin validación vigente (usuario en migración)
+Estado de madurez: En riesgo
+Es el universo de usuarios que se registraron antes del nuevo sistema y que pueden o no tener una validación previa con Truora. Dentro de este grupo hay tres sub-segmentos con tratamiento diferente:
+Validados automáticamente por Truora: son candidatos a migración masiva vía ZIP a SumSub sin re-fricción.
+Validados manualmente por Gina (el ~40%): su estatus legal es más débil. Legal y Compliance deben definir si se les acepta como validados o se les exige re-validación.
+Sin validación alguna: nunca intentaron retirar ni transferir, por lo que nunca se les exigió. Cuando intenten hacerlo con el nuevo sistema, entrarán al flujo nuevo como si fueran usuarios nuevos. O son aquellos usuarios de países donde no tenemos el flujo con Truora implementado
+
+Perfil 5 — Equipo interno de Back Office / Compliance (usuario operativo)
+Estado de madurez: Sobrecargado
+No es un usuario final de la plataforma, pero es el actor que hoy sostiene el 40% de validaciones manuales. Gina hace seguimiento diario via WhatsApp e Intercom a los casos que Truora no resuelve automáticamente. Jonatan (Compliance) emite conceptos de cumplimiento y define quién entra o no al ecosistema. Con el nuevo sistema su rol debe cambiar: de ejecutores de tareas manuales a revisores de excepciones y casos de escalamiento. Si el nuevo flujo logra el objetivo del ≤8% de validaciones manuales, este equipo pasa de 3.000–4.000 casos/mes a menos de 800, lo que libera capacidad operativa real.
+2.2 El "AS-IS" (Soluciones Actuales y Limitaciones)
+                           * Soluciones Actuales: ¿Cómo están abordando las marcas o el equipo este problema el día de hoy? (Procesos manuales, parches técnicos, herramientas externas).
+                           * Hoy Dropi tiene un único mecanismo de validación: Truora, usado exclusivamente para KYC de personas naturales en Colombia. El flujo se activa no en el momento del registro, sino cuando el usuario intenta hacer su primer retiro o transferencia entre wallets. Hasta ese momento el usuario puede navegar, crear órdenes y usar la plataforma sin ninguna validación de identidad. Cuando el sistema detecta que quiere mover dinero, lo detiene y le exige validarse.
+El flujo actual tiene cuatro pasos secuenciales con Truora: captura de rostro (liveness), validación del documento de identidad con OCR, cruce de biometría rostro-foto del documento, y background check judicial y de listas restrictivas. Si el usuario pasa los tres primeros intentos automáticos y falla, entra a revisión manual gestionada por Gina desde WhatsApp e Intercom. El resultado de esa validación no se conecta con ningún otro módulo de la plataforma: los datos de facturación son un formulario completamente separado que el usuario debe llenar independientemente.
+                              * Limitaciones: Por qué la solución actual no es escalable o daña la experiencia.
+                              * Limitación 1 — El flujo está roto para 4 de cada 10 usuarios
+El 40% de las validaciones en Colombia no pasan de forma automática. Eso son entre 3.000 y 4.000 casos mensuales que requieren intervención humana. El problema no es que Truora falle ocasionalmente: es que el 40% de fallo es el comportamiento esperado y normal del sistema. Gina gestiona estos casos uno a uno vía WhatsApp, sin un sistema de tickets formal, sin SLA automatizado, y con seguimiento manual desde Intercom, herramienta que el propio equipo de Compliance reconoce no dominar completamente.
+Esto no escala. Si Dropi pasa de 10.000 a 20.000 validaciones mensuales en Colombia, el equipo de Back Office necesitaría duplicar su capacidad humana para mantener el mismo nivel de atención. El crecimiento de la plataforma está directamente limitado por la capacidad manual del equipo.
+                              * Limitación 2 — Truora valida extranjeros por nombre, no por documento
+Cuando un usuario con nacionalidad diferente a la colombiana intenta validarse, Truora hace el cruce contra bases de datos locales usando el nombre como identificador. Eso trae resultados de homónimos: otra persona con el mismo nombre que puede tener antecedentes, que puede estar en listas negras, que puede tener un score de riesgo diferente. Las decisiones de KYC se toman sobre datos incorrectos. Esto no es un bug que se pueda corregir con configuración; es la arquitectura de la herramienta. El resultado es una tasa de falsos positivos no medida que genera bloqueos injustificados a usuarios legítimos y una debilidad probatoria real ante cualquier autoridad regulatoria.
+                              * Limitación 3 — KYB no existe. Ninguna empresa ha sido validada formalmente
+Truora no ofrece KYB. Esto significa que el 100% de los proveedores y marcas que operan como personas jurídicas en Dropi nunca han sido validados como empresas. Cualquier persona puede declarar que representa una empresa, ingresar un NIT o RFC, y operar con esa identidad sin que el sistema lo verifique. Las consecuencias son tres: las facturas emitidas en México y Argentina pueden ser inválidas ante el SAT y la AFIP porque el receptor declarado puede no existir o estar inactivo fiscalmente; no hay verificación de que el representante legal sea quien dice ser; y no hay cruce contra listas de empresas sancionadas o con alertas AML. Esta brecha no es un feature pendiente; es un pasivo legal activo.
+                              * Limitación 4 — KYT no existe. Todos los retiros en Tether se procesan sin screening
+Dropi permite recargas y retiros. Ninguna de esas transacciones pasa por un proceso de screening de la wallet destino o de las contrapartes involucradas. En este momento, si un usuario en lista OFAC o ONU hace un retiro cripto, Dropi lo procesa sin saberlo y sin dejar trazabilidad de que intentó prevenirlo. Esto no es un riesgo futuro: es una exposición legal en tiempo real que crece con cada transacción cripto procesada.
+                              * Limitación 5 — La validación y la facturación son módulos que no se hablan
+El usuario que completa su KYC con Truora termina el proceso y vuelve a la plataforma. Luego, cuando quiere configurar su facturación, encuentra un formulario completamente separado donde debe ingresar nuevamente su nombre, tipo de documento, número de documento, correo y demás datos que ya proporcionó en la validación y en el registro. No hay ningún mecanismo que conecte los datos validados con los datos de facturación. El usuario ingresa la misma información hasta tres veces en distintos puntos del flujo. Además, los campos no coinciden entre países: Colombia tiene tipo de régimen y responsabilidad de impuesto; Argentina tiene condición frente al IVA; México requiere RFC. Esa diversidad fiscal nunca fue considerada en el diseño del flujo de validación actual.
+                              * Limitación 6 — Los usuarios baneados en un país pueden operar libremente en otros
+Cada instancia de Dropi por país tiene su propia base de datos independiente. Un usuario bloqueado en Colombia por aparecer en listas negras puede registrarse en Dropi Ecuador, Chile o México con el mismo correo y operar sin ningún obstáculo. El bloqueo cruzado hoy se hace manualmente cuando alguien del equipo lo detecta, lo que en la práctica significa que no se hace de forma sistemática. Con el crecimiento multipaís este riesgo escala: a más países operando, más vectores de evasión disponibles.
+                              * Limitación 7 — Guatemala y Panamá operan con un parche que no es producto
+Para estos dos países, donde la validación tiene requisitos específicos relacionados con la dispersión a entidades financieras locales, la solución actual es un popup en UserPilot, una herramienta de onboarding y comunicación in-app. No es un flujo nativo de la plataforma, no está integrado al proceso de validación, no deja trazabilidad en base de datos de la misma forma que el resto de países, y no escala a medida que Centroamérica crece. Es la evidencia más visible de que el equipo ha estado parcheando un problema estructural con soluciones temporales.
+2.3 Discovery por Áreas, Bench e Investigación (Apéndices)[a]
+                                 * Resultados de Research: * Hallazgo principal: Lo más relevante y revelador que aprendimos de las marcas.
+                                 * Fuentes y Datos de Investigación: [Link a entrevistas, encuestas, Mixpanel, datos de mercado o feedback de soporte].
+                                 * Benchmark: Breve mención de cómo plataformas competidoras o industrias análogas resuelven este dolor.
+2.4 Gestión de Riesgos de Producto
+                                 * Riesgo de Valor: ¿El cliente realmente encontrará valor en esta solución y pagará por ella / la usará?
+                                 * El usuario no entiende por qué le piden más datos de los que ya dio. Si el formulario unificado le pide información que siente que ya proporcionó al registrarse, la percepción es que la plataforma no está bien hecha. El valor percibido cae antes de que la validación empiece.
+                                 * Para las personas jurídicas, el KYB puede percibirse como una carga burocrática. Subir documentos de la empresa, esperar validación de registros mercantiles y tener que involucrar al representante legal son pasos que unas persona jurídica pequeña puede ver como excesivos para "simplemente vender en Dropi". El valor del KYB es para Dropi y para la legalidad; el usuario lo vive como una exigencia.
+                                 * Riesgo de Usabilidad: ¿Los usuarios podrán entender y usar la interfaz de manera efectiva?[b][c]
+                                 * El formulario unificado puede percibirse como más largo que los formularios separados actuales. Aunque en realidad elimina pasos, si visualmente concentra muchos campos en una sola pantalla puede generar la sensación contraria. La arquitectura de información del formulario es crítica.
+                                 * Los estados de validación no son claros para el usuario hoy y pueden seguir sin serlo. "Tu validación está en proceso" no le dice al usuario cuánto tiempo esperar ni qué hacer si pasa tiempo sin respuesta. El usuario queda en un limbo que genera ansiedad y tickets de soporte.
+                                 * El flujo de KYB es inherentemente más complejo que el KYC. Involucra subir múltiples documentos, validar al representante legal, y posiblemente esperar verificación contra registros gubernamentales que pueden tener latencia. Si ese proceso no está muy bien guiado paso a paso, con indicadores de progreso claros, la tasa de abandono en KYB va a ser alta.
+                                 * El reintento después de un KYB fallido puede ser confuso. El usuario ya pasó por todo el proceso, lo rechazaron, y ahora tiene que reintentar. Si no entiende exactamente qué falló y qué debe corregir para el reintento, va a cometer el mismo error y agotar sus intentos sin saberlo.
+                                 * Riesgo de Factibilidad: ¿Podemos construir esto con la tecnología, infraestructura y APIs disponibles?
+                                 * No está claro exactamente qué devuelve la API de SumSub en cada endpoint. José confirmó que hay campos que aparecen en el backoffice de SumSub pero que no está seguro de que la API los retorne todos. Hasta que no se haga el PoC técnico con el sandbox de SumSub, el diseño del formulario y la lógica de precarga están basados en supuestos, no en certezas.
+                                 * El aval de seguridad de Diana no está formalizado. Es un paso que TI necesita completar antes de que arquitectura pueda arrancar. Si ese aval tiene observaciones técnicas sobre la forma en que SumSub maneja datos biométricos o documentos de identidad, puede requerir ajustes en la arquitectura que afecten el alcance.
+                                 * La integración de Truora y SumSub en paralelo para Colombia añade complejidad técnica. Durante el período de transición, Colombia seguirá usando Truora para KYC de PN mientras SumSub cubre KYB y otros países. Eso significa que el backend debe manejar dos motores de validación simultáneamente, con lógicas de ruteo, estados y webhooks diferentes para cada uno.
+                                 * Riesgo de Viabilidad Empresarial: ¿Esta solución se alinea con las reglas de negocio, costos y márgenes de Dropi?
+                                 * El modelo de cobro de SumSub es por bolsa de validaciones y cada llamado tiene costo. Si el flujo no está bien diseñado y genera validaciones redundantes (por ejemplo, el usuario cambia un campo sensible y dispara una nueva validación), el costo escala rápidamente. Jonatan fue explícito en la reunión: si se hace una validación en onboarding y otra para facturación cuando la información es la misma, Dropi estaría pagando dos veces por la misma persona. El diseño del flujo unificado no es solo una decisión de UX; es una decisión financiera.
+                                 * El costo de Truora sigue corriendo en paralelo. Mientras dure la transición, Dropi paga dos plataformas de validación simultáneamente. La bolsa de Truora fue renovada hace poco más de un mes. Jonatan estima que la transición completa tardará entre 7 y 8 meses, con posibilidad de terminación anticipada si SumSub funciona bien. Ese es un período de costo duplicado que Financiero debe tener visibilidad.
+                                 * El costo de Truora sigue corriendo en paralelo. Mientras dure la transición, Dropi paga dos plataformas de validación simultáneamente. La bolsa de Truora fue renovada hace poco más de un mes. Jonatan estima que la transición completa tardará entre 7 y 8 meses, con posibilidad de terminación anticipada si SumSub funciona bien. Ese es un período de costo duplicado que Financiero debe tener visibilidad.
+                                 * Riesgo Legal: ¿Cumplimos con las normativas vigentes, términos de uso y tratamiento de datos?
+                                 * KYB inexistente en países P0 es una brecha legal activa, no futura. México con CFDI 4.0 y Argentina con AFIP/ARCA tienen obligaciones fiscales vigentes que requieren que el receptor de una factura electrónica exista y esté activo fiscalmente. Cada factura emitida hoy a una empresa no validada es una factura con riesgo de rechazo ante el SAT o la AFIP. El volumen acumulado de estas facturas representa un pasivo que crece cada día que el proyecto se demora.
+                                 * KYT inexistente expone a Dropi ante reguladores de activos virtuales. Colombia, México y Argentina tienen marcos regulatorios de activos virtuales activos o en implementación. Procesar retiros en Tether sin screening de wallet es una práctica que en cualquier auditoría regulatoria aparece como ausencia de control AML. No existe actualmente ningún registro de que Dropi intentó prevenir transacciones con contrapartes en listas negras.
+                                 * Los usuarios baneados en un país que operan en otros generan un riesgo de complicidad. Si Dropi tiene conocimiento de que un usuario está en lista negra (porque lo bloqueó en Colombia) y ese mismo usuario opera libremente en Ecuador, hay un argumento legal de que Dropi tenía conocimiento y no actuó. La ausencia de bloqueo cruzado hoy no es solo un riesgo operativo; puede convertirse en un riesgo legal si se prueba que el sistema lo permitía sabiendo.
+                                 * El perfil de marca propia / emprendedor no estaba mapeado por Legal. Andrés (Legal) lo reconoció en la reunión. Si ese perfil sale al mercado sin un flujo de validación definido, Dropi estaría incorporando un nuevo tipo de usuario sin el proceso de debida diligencia correspondiente.
+2.5 Hipótesis, Validaciones y Preguntas Abiertas
+                                 * Preguntas Clave / Dudas Iniciales: Lista de incógnitas críticas que deben ser respondidas durante o inmediatamente después del shaping (Ej: dependencias técnicas externas).
+                                 * Hipótesis: Planteamiento de supuestos sobre posibles enfoques que el equipo validará durante el desarrollo.
+                                 * Creemos que unificar el formulario de datos personales y datos de facturación en un solo paso dentro de Configuraciones > Datos personales logrará reducir la tasa de abandono del flujo de onboarding y eliminar la fricción de ingresar la misma información más de una vez para el dropshipper y el proveedor. Sabremos que es verdad cuando el porcentaje de usuarios que completan el formulario en el primer intento supere el 80% y el tiempo promedio de completado sea menor a 8 minutos.
+                                 * Creemos que precargar automáticamente los datos que devuelve la API de SumSub después de la validación (nombre, documento, fecha de nacimiento, dirección) en el formulario de facturación logrará que el 90% de los usuarios aprueben sus datos de facturación sin modificaciones, reduciendo el tiempo de configuración post-validación a menos de 2 minutos.
+                                 * Creemos que implementar el motor de ruteo por nacionalidad del usuario (validar contra las bases de datos del país de origen, no del país de operación en Dropi) logrará eliminar los falsos positivos actuales en extranjeros que Truora genera al buscar por nombre en lugar de por documento. Sabremos que es verdad cuando la tasa de rechazo de usuarios con nacionalidad diferente a la del país de operación caiga al mismo nivel que la tasa de rechazo de usuarios locales.
+                                 * Creemos que implementar la validación KYB obligatoria para usuarios que declaren ser personas jurídicas logrará que el 100% de las facturas emitidas en esos países tengan al receptor validado fiscalmente, eliminando el riesgo de facturas inválidas. 
+                                 * Creemos que reutilizar el KYC del representante legal ya validado como parte del flujo KYB (cuando el representante legal es el mismo usuario Dropi) logrará reducir el costo por validación KYB en los casos donde ambos coinciden, sin afectar la rigurosidad del proceso. 
+                                 * Creemos que implementar una validación cruzada de correo entre países antes de permitir el registro de un nuevo usuario logrará bloquear al menos el 70% de los intentos de evasión de usuarios baneados que se registran en otro país con el mismo correo, reduciendo el costo de validaciones que ya sabemos van a fallar. Sabremos que es verdad cuando el número de registros bloqueados por correo coincidente con usuario baneado sea mayor que cero y el costo evitado por validación no realizada sea cuantificable.
+                                 * Creemos que migrar los usuarios ya validados con Truora a SumSub mediante carga masiva ZIP, sin pedirles que repitan el proceso de validación, logrará mantener la experiencia de los usuarios activos sin interrupciones y preservar su estado aprobado en el nuevo sistema. Sabremos que es verdad cuando el evento ocurra para el 100% de los usuarios con validación Truora aprobada y el porcentaje de tickets de soporte de usuarios migrados sea menor al 1% en los 30 días post-migración.
+2.6  Conclusiones del discovery
+Síntesis ejecutiva: qué aprendimos, qué decisiones tomamos y qué queda fuera del alcance del proyecto.
+2.7 Requerimientos Generales, Compatibilidad y Performance
+                                 * Descripción de la solución: Definición clara de la funcionalidad. ¿Qué estamos construyendo exactamente?[d]
+                                 * Dispositivos: [Ej: Mobile-first, Desktop-only, Responsivo]
+                                 * Restricciones y Performance: [Ej: Tiempo de carga menor a 2s, límites de consumo de APIs, compatibilidad con navegadores].
+
+
+🫀 Definición
+🛠️ Definición (Propuestas, Alcance, Estimaciones y Próximos Pasos)
+Cierra el PARA QUÉ. Concreta la propuesta de solución y delimita el alcance del proyecto. Aquí Producto decide qué entra y qué no entra, antes de pasar el hand-off a TI.
+3.1 Primeras Ideas y Propuestas
+                                 * Primeras Ideas: Enumeración de las soluciones preliminares, lluvias de ideas o enfoques de diseño/arquitectura discutidos por el equipo.
+Idea 1 — Precargar el formulario de facturación desde los datos personales (descartada como solución única)
+La idea original era que los datos que el usuario ingresa al registrarse se precargarán automáticamente en el formulario de facturación. Al analizar campo por campo por país, Paula identificó que los datos personales y los de facturación no coinciden en su totalidad: los campos fiscales específicos por país (tipo de régimen, condición frente al IVA, CUIT, RFC) no existen en el formulario de registro. La precarga solo cubriría información de contacto (correo, teléfono), lo que no resuelve el problema de fondo. Esta idea se mantuvo como componente parcial del formulario unificado, no como solución completa.
+Idea 2 — Mantener los formularios separados y conectarlos por evento (descartada)
+Se exploró la posibilidad de mantener el formulario de datos personales y el de facturación como módulos independientes, pero conectarlos mediante un evento que copiara los campos comunes al guardar. Esta idea fue descartada porque no elimina la fricción de fondo: el usuario sigue teniendo que ir a dos secciones distintas de la plataforma, y los campos que no se copian los tiene que llenar de todas formas. Tampoco resuelve el problema de la validación, que seguiría siendo un tercer momento separado.
+Idea 3 — Validar primero y usar la respuesta de SumSub para precargar el formulario (adoptada para países fuera de Colombia)
+Esta idea surgió de la reunión con TI cuando José confirmó que la API de SumSub retorna información extraída por OCR del documento del usuario: nombre, apellido, fecha de nacimiento, número de documento, dirección y tipo de documento. Si el usuario se valida primero, esa información puede precargar el formulario unificado directamente desde la respuesta de SumSub, sin que el usuario tenga que escribir nada. El usuario llega al formulario para confirmar, no para diligenciar. Esta idea fue adoptada como el flujo principal para todos los países distintos a Colombia, donde SumSub es la herramienta de validación.
+Idea 4 — Formulario primero, validación después, usando los datos del formulario como insumo (adoptada para Colombia)
+En Colombia, Truora sigue siendo la herramienta de KYC para personas naturales durante el período de transición. A diferencia de SumSub, Truora no retorna data estructurada del usuario de la misma forma. El enfoque invertido, formulario primero y validación después, permite que el usuario diligencie el formulario unificado con sus datos personales y de facturación, y que esa información sea enviada a Truora (KYC PN) o a SumSub (KYB PJ) como insumo del proceso de validación. El formulario no es un paso previo separado; es el mismo proceso de onboarding.
+Idea 5 — Un tercer flujo para la edición de información post-validación (adoptada)
+Identificado durante el discovery como un caso de uso frecuente que no tenía flujo definido. Hoy cuando un usuario quiere actualizar sus datos después de los 6 meses de bloqueo, el proceso es completamente manual: el usuario solicita la actualización por Intercom, el equipo le habilita el formulario manualmente, y el usuario edita. La propuesta es que al momento que el usuario tenga habilitado para editarla, el sistema detecte qué campos fueron modificados y determine automáticamente si esa modificación requiere una nueva validación. Los campos sensibles (nombre, tipo de persona, tipo de documento, número de documento, documento adjunto) disparan re-validación. Los campos no sensibles (dirección, ciudad, correo de facturación) se guardan sin proceso adicional.
+Idea 6 — Motor de ruteo global por nacionalidad (adoptada como componente técnico transversal)
+La validación no debe ir siempre contra las bases del país donde opera el usuario en Dropi, sino contra las bases del país de nacionalidad para el KYC, y contra las bases del país donde está constituida la empresa para el KYB. Esto requiere un microservicio de ruteo que, con base en la información del formulario (nacionalidad del usuario, país de la empresa), decida qué herramienta usar y contra qué base de datos validar. Este componente es transversal a los tres flujos y es un requerimiento técnico independiente.
+                                 * Escenarios: Mapeo de los diferentes casos que pueden suceder en el flujo del usuario o en el comportamiento del sistema durante el proyecto.
+Bloque A — Flujo KYC y KYB usuario nuevo en países distintos a Colombia
+ESC-A01 — Usuario nuevo, persona natural, primera vez en Dropi, primer acceso
+El usuario se registra, valida su correo, ingresa a Dropi y visualiza el mensaje de que debe realizar su validación de identidad. Es redirigido a Configuraciones > Datos personales donde ve el formulario unificado deshabilitado con correo y teléfono precargados. Declara ser persona natural, pasa el checklist, hace clic en Comenzar y es dirigido al WebSDK de SumSub. Completa el KYC (liveness + documento + contraste con bases internacionales). SumSub retorna el resultado en verde. Dropi recibe el webhook, almacena el estado como aprobado, obtiene la información del solicitante desde SumSub y la precarga en el formulario unificado. El usuario elige operar con esa misma información. El formulario queda guardado y deshabilitado. Se habilitan transferencias entre wallets y retiros. Fin.
+Reglas de negocio asociadas: RN-07 (timeout 10 min), RN-09 (3 intentos), RN-11 (vigencia validación).
+ESC-A03 — Usuario nuevo, persona jurídica, primera vez en Dropi
+El usuario declara ser persona jurídica en el paso 1. Pasa el checklist de PJ (que incluye el aviso de que el representante legal debe realizar la validación). Hace clic en Comenzar y es dirigido al WebSDK de SumSub para el flujo KYB. Dentro del KYB: adjunta documentos e información de la empresa, SumSub realiza la verificación de personas involucradas en la empresa (KYC embebido del representante legal), valida contra bases del país de constitución de la empresa. SumSub retorna resultado. Si es aprobado, Dropi almacena el estado, precarga el formulario con datos de empresa y representante legal, y configura la facturación como PJ. Si es rechazado, el estado queda como pendiente y se habilita el reintento directo al KYB sin pasar por el formulario.
+Reglas de negocio asociadas: RN-20 (KYC previo del rep. legal), RN-23 revisada (sin degradar a PN si falla KYB).
+ESC-A04 — Usuario ya validado en otro país Dropi que accede a un nuevo país
+El usuario ingresa a Dropi en un nuevo país. El sistema detecta que ya tiene una validación correcta en otro país Dropi. Se le pregunta si desea operar con la misma información ya validada o registrar información nueva. Si elige la misma información, el formulario se precarga con los datos ya validados y queda deshabilitado. Se habilitan las funcionalidades financieras. Si elige información nueva, inicia el flujo desde el paso de selección de tipo de persona.
+ESC-A05 — Usuario baneado intenta acceder a otro país Dropi con el mismo correo
+El usuario baneado intenta ingresar a Dropi en otro país con el mismo correo. El sistema cruza el correo contra la lista de usuarios baneados en todos los países. Detecta coincidencia. No permite el registro ni el acceso. Muestra un mensaje explicativo indicando que no puede ingresar. El usuario no puede avanzar. Fin.
+Regla de negocio asociada: RN-17 (detección de duplicados).
+ESC-A06 — Usuario que inicia la validación y no la completa en 10 minutos
+El usuario inicia el flujo de validación en el WebSDK pero no lo completa dentro de los 10 minutos. El sistema detecta el timeout. Si el usuario continúa con la sesión abierta, muestra la alerta "No terminaste tu validación. Puedes retomarla ahora, ¡es rápido y fácil!" con botón Reanudar validación. Si la sesión se cerró, al volver muestra "Tu validación de identidad está pendiente. Comienza ahora y accede a todos los beneficios." Este intento no cuenta como uno de los 3 intentos disponibles porque no se completó el flujo.
+Regla de negocio asociada: RN-07 (timeout 24h para definición de estado), RN-10 (tiempo para retomar sin empezar de cero).
+ESC-A08 — Usuario que agota los 3 intentos de validación
+El usuario llega al tercer intento fallido. SumSub retorna resultado negativo. El sistema marca al usuario como baneado o como pendiente de revisión manual según la causa del fallo. Si es baneado permanente (lista LA/FT): el usuario es redirigido fuera de Dropi, no puede volver a ingresar, ve un mensaje explicativo. Si es pendiente de revisión manual (causa técnica o documento inválido): el sistema muestra el mensaje "La validación no fue exitosa. Si necesitas ayuda, contacta a soporte con el código [# del caso]" con el botón Contactar a soporte habilitado y abre el flujo de Intercom.
+Bloque B — Flujo KYC y KYB usuario nuevo en Colombia
+
+
+ESC-B01 — Usuario nuevo, persona natural, Colombia
+El usuario se registra, valida correo, ingresa a Dropi. Es redirigido a Configuraciones > Datos personales. Visualiza el formulario unificado con correo y teléfono precargados. Diligencia el formulario completo (datos personales + información de contacto + información tributaria Colombia). Selecciona persona natural. Hace clic en Siguiente. El sistema envía la información del formulario y el documento adjunto al flujo de validación: KYC con Truora. Truora ejecuta la validación. Retorna el score. Si es aprobado, Dropi almacena el estado, obtiene el documento validado, lo almacena en las tablas correspondientes de datos personales y facturación. Se habilitan transferencias y retiros. Fin.
+ESC-B02 — Usuario nuevo, persona jurídica, Colombia
+El usuario diligencia el formulario unificado con datos de empresa y representante legal. Selecciona persona jurídica. El sistema detecta el tipo y envía la información al flujo KYB con SumSub (Truora no tiene KYB). SumSub ejecuta la validación de empresa: verifica NIT contra la base del país de operación (RUES en Colombia), valida al representante legal, verifica AML de la empresa. Si es aprobado, facturación queda configurada como PJ. Si es rechazado, estado pj_pendiente, datos PJ conservados, reintento directo a KYB disponible.
+Nota técnica: Colombia usa Truora para KYC-PN y SumSub para KYB-PJ en paralelo durante el período de transición.
+ESC-B02 — Usuario nuevo, persona jurídica, Colombia
+El usuario diligencia el formulario unificado con datos de empresa y representante legal. Selecciona persona jurídica. El sistema detecta el tipo y envía la información al flujo KYB con SumSub (Truora no tiene KYB). SumSub ejecuta la validación de empresa: verifica NIT contra la base del país de operación, valida al representante legal, verifica AML de la empresa. Si es aprobado, queda configurada como PJ. Si es rechazado, estado pj_pendiente, datos PJ conservados, reintento directo a KYB disponible.
+Nota técnica: Colombia usa Truora para KYC-PN y SumSub para KYB-PJ en paralelo durante el período de transición.
+ESC-B03 — Usuario MFA no configurado intenta iniciar validación
+El usuario llega al paso de validación pero no tiene MFA activo. El sistema lo lleva al flujo de configuración de MFA antes de continuar. Una vez configurado, vuelve al flujo de validación desde donde lo dejó. Si el MFA falla en la verificación, el usuario puede reintentar el proceso de verificación MFA. No cuenta como intento de validación.
+Bloque C — Flujo edición de información post-validación
+ESC-C01 — Usuario edita campos no sensibles (dirección, ciudad, correo de facturación)
+El usuario ya está validado. Han transcurrido más de 6 meses desde su última validación. Solicita actualización de datos. El sistema le habilita el formulario. El usuario modifica campos no sensibles. Hace clic en Guardar. El sistema consulta cuáles campos fueron modificados, determina que ninguno requiere nueva validación, guarda la información directamente. El formulario vuelve a quedar deshabilitado con la información actualizada. Fin. No se dispara ningún proceso de validación.
+ESC-C02 — Usuario edita campos sensibles (nombre, tipo de persona, tipo o número de documento)
+El usuario modifica uno o más campos sensibles. Hace clic en Guardar. El sistema detecta los campos modificados y determina que requieren nueva validación. Muestra la información editada con el formulario habilitado y le indica que debe comenzar la validación para confirmar los cambios. El usuario hace clic en Comenzar validación. Es dirigido al WebSDK con los campos modificados y el documento adjunto precargados. Ejecuta el flujo de validación correspondiente según el tipo de persona. Si es aprobado, los nuevos datos quedan confirmados. Si falla, los datos modificados no se consolidan y se aplica la lógica de reintentos.
+ESC-C03 — Usuario edita información y cambia de persona natural a persona jurídica
+El usuario estaba validado como PN y cambia el tipo de persona a PJ. Este es un campo sensible que dispara re-validación. El sistema detecta el cambio de tipo de persona, mantiene los datos PJ que el usuario ingresó y lanza el flujo KYB completo. El KYC individual del usuario ya aprobado actúa como pre-condición. Si el KYB es aprobado, la facturación cambia de PN a PJ. Si falla, el estado queda como pj_pendiente y los datos PJ se conservan para el reintento.
+ESC-C04 — Usuario intenta acceder habiendo sido baneado y ya no puede ingresar
+El usuario baneado intenta ingresar a Dropi. El sistema detecta el estado baneado. El usuario ve un mensaje indicando que no puede acceder y un mensaje explicativo. No puede continuar. No hay botón de reintento. El único canal disponible es el de soporte externo (correo de atención al ciudadano, no Intercom, porque ya no es usuario activo).
+ESC-C05 — Usuario con validación pendiente retoma el flujo en una sesión nueva
+El usuario tenía una validación iniciada pero no completada. Cierra sesión y vuelve. Al ingresar ve el mensaje "Tu validación de identidad está pendiente. Comienza ahora y accede a todos los beneficios." con el botón Comenzar validación. Si han pasado menos de 10 minutos desde el intento fallido anterior, el sistema evalúa si puede retomar desde donde quedó o debe empezar de cero dependiendo del tiempo transcurrido y del estado que retornó la herramienta de validación.
+3.2 Fases del Proyecto y Alcance
+3.2.1. FASE 0 -  Validación asistida sin desarrollo en core 
+
+Empezar a validar identidad de usuarios de forma inmediata, apalancándose en herramientas ya existentes (UserPilot, backoffice de SumSub, CRM y Google Sheets), sin depender del ciclo de desarrollo del core de Dropi. La fase persigue tres resultados:
+                                 1. Reducir exposición legal ya, interceptando al usuario antes de que mueva fondos sin estar verificado.
+                                 2. Robustecer la base de validación en SumSub (migrando históricos y capturando nuevos) para que la integración nativa arranque sobre una base poblada.
+                                 3. Aprender de la operación real —volúmenes, tasas de rechazo, capacidad de auditoría— antes de automatizar, para no automatizar un proceso mal entendido.
+Resultado esperado al cierre de la fase
+                                 * Base histórica migrada a SumSub (ColocaPayments, repositorio de Cartera y ~115.000 usuarios de Colombia validados con Truora), evitando re-validaciones pagadas.
+                                 * Usuarios nuevos y activos interceptados por país, según lotes de despliegue controlados.
+                                 * Un ciclo operativo funcionando de punta a punta: captura en SumSub → auditoría → actualización de estado → comunicación al usuario.
+                                 * Aprendizajes documentados que alimentan el diseño de la fase nativa.
+Alcance
+Dentro del alcance
+                                 * Migración de bases históricas de validación a SumSub (formato ZIP/Excel).
+                                 * Interceptación de usuarios nuevos (panel lateral suave en Home) y usuarios activos (modal interceptor en triggers transaccionales).
+                                 * Configuración de formularios de SumSub por país (4 propuestas: Largo, Corto, Colombia y Marcas Blancas).
+                                 * Operación manual de auditoría y actualización de estados vía Google Sheets.
+                                 * Comunicación al usuario por UserPilot (in-app) y CRM (WhatsApp / correo).
+                                 * Bloqueo y gestión de usuarios con saldo negativo, fraude o rechazo criminal.
+                                 * Modal exclusivo de datos bancarios para Guatemala y Panamá.
+Fuera del alcance (se resuelve en la fase nativa)
+                                 * Integración vía API entre SumSub y Dropi (actualización automática de estados).
+                                 * Bloqueo a nivel de backend: la interceptación es visual, no impide operaciones por código.
+                                 * Pantalla propia de bloqueo en registro/login con correo baneado (hoy inexistente).
+                                 * Formulario unificado de onboarding + facturación.
+                                 * Automatización del ciclo de auditoría (sin Zapier, HubSpot ni integraciones de API).
+SEGMENTOS Y MECÁNICA
+PRE-ETAPA — Piloto técnico y setup
+Población: equipo interno (piloto) y usuarios a migrar.
+Migración de las bases históricas a SumSub: base temporal de ColocaPayments (validados de Guatemala y Panamá), repositorio interno de Cartera (validados históricos multipaís) y ~115.000 usuarios de Colombia ya validados con Truora. 
+Objetivo explícito en Colombia: evitar re-validaciones pagadas y reducir costo operativo importando casos ya certificados.
+En paralelo: configuración del Google Sheet compartido y de las campañas en User Pilot; configuración de SumSub dando prioridad a la existencia legal sobre la detección por IA; y validación de la operación manual mediante ensayos en User Pilot contrastados con los datos en SumSub.
+Lotes de despliegue: el lanzamiento es país por país, priorizando los países que hoy no tienen módulo de facturación (Guatemala, Panamá, Paraguay, Perú), regulando el volumen para que Financiero y Legal puedan auditar a mano sin colapsar.
+ETAPA 0.5 — Trigger transaccional (usuarios activos)
+Población: usuarios activos con historial.
+Se interceptan cinco acciones: Transferir Wallet, Registro de Datos Bancarios, Solicitud de DropiCard e Información de Cuenta. La lógica de Growth Ops es interceptar en el registro de datos bancarios, que es el paso previo al retiro real, evitando que el usuario configure una cuenta sin validarse; editar datos de facturación o de cuenta también exige verificarse primero.
+Se despliega el Modal Interceptor Recurrente: pantalla completa, "Verifica tu identidad para continuar", sin botón "X" ni "Continuar". Es ineludible —no puede ser evadido por AdBlockers— y reaparece infinitamente hasta completar la validación. No es un bloqueo de backend, es una interceptación visual obligatoria. El usuario elige tipo de cuenta y es redirigido a SumSub, que verifica liveness y datos tributarios.
+ETAPA 1 — Bloqueo y rechazos
+Población: usuarios con saldos negativos, fraude o rechazo por criminalidad.
+Detección: Cartera ejecuta un script interno en Python que cruza bases de datos para detectar saldo negativo o fraude cruzado por país, y cruza cuentas por correo + DNI para identificar reincidencia multipaís, alimentando campañas focalizadas de UserPilot.
+Experiencia: modal de pantalla completa "Bloqueamos esta operación por seguridad", sin retiros ni envíos durante la revisión. La única vía de contacto es el ícono de soporte flotante.
+Tratamiento:
+                                 * Si SumSub identifica criminalidad: baneo total de IP y cuenta.
+                                 * Si el rechazo es por delito grave (lavado de activos, listas restrictivas): Legal y Financiero se reúnen y devuelven el dinero del usuario a una cuenta externa.
+                                 * El baneo se ejecuta manualmente y de forma simultánea en Colombia, Chile, Ecuador, Perú y Venezuela, cruzando cuentas por correo y por DNI. El DNI es el conector primario para detectar reincidencia multipaís, dado que una misma persona puede tener varios correos.
+ETAPA 2 — Operación periódica
+Población: usuarios que iniciaron validación o que no dieron clic en validar identidad.
+Ciclo operativo, 100% manual (identificado en el blueprint como el cuello de botella):
+                                 1. Descarga — Admin descarga los estados desde el backoffice de SumSub.
+                                 2. Actualización — Admin marca a mano en el Google Sheet compartido quién está Aprobado, Pendiente o Rechazado.
+                                 3. Ejecución — Producto apaga el pop-up a los Aprobados vía UserPilot; el CRM notifica una sola vez por WhatsApp a los Pendientes; Financiero revisa el Sheet para validar los datos tributarios cruzados contra Dropi.
+                                 4. Regulación de capacidad — Financiero/Legal avisan si se acumulan pendientes, para pausar campañas de UserPilot.
+Fase 0 — Variante B: con intervención de TI
+
+La Fase 0 se diseñó como un experimento no-code: UserPilot para lo visual, SumSub para la captura, Google Sheets como cerebro manual y CRM para los mensajes. Al presentarla a TI, aparecieron tres problemas que la variante pura no resuelve:
+                                 1. Carga operativa insostenible. El ciclo exige que alguien entre a diario al backoffice de SumSub, marque a mano en el Sheet quién está aprobado, pendiente o rechazado, y luego actualice UserPilot para apagar el pop-up. Es el cuello de botella declarado del blueprint.
+                                 2. Riesgo de seguridad y fuga de información. Que Producto y Diseño crucen a mano bases de datos de usuarios para segmentar audiencias implica manipular datos personales fuera del core. Riesgo señalado por Producto en la propia sesión, y por TI como objeción de arquitectura: la información de las personas debe vivir dentro de la plataforma, no en herramientas externas.
+                                 3. Retrabajo garantizado. En la variante pura, los datos capturados quedan en SumSub pero no se reflejan en Dropi. Al llegar la fase nativa habría que migrarlos como un proceso aparte.
+La variante propone que TI acompañe en paralelo, sin que la Fase 0 pierda su carácter de experimento rápido.
+Qué se le pide a TI (alcance de la variante) 
+
+Cuatro componentes, en orden de prioridad según lo planteado en la sesión:
+
+2.1 Recepción y almacenamiento de estados vía API (componente central)
+
+
+TI consume la API de SumSub y almacena en la base de datos de Dropi los estados de validación (aprobado, pendiente, rechazado) y la información del usuario validado, a medida que se produce. Valor: elimina la descarga manual del backoffice y deja la data dentro del core desde el día 1.
+
+
+2.2 Disparo de eventos hacia UserPilot
+
+
+TI expone el estado como evento, de modo que UserPilot dispare automáticamente el modal correspondiente: apagar el pop-up al aprobado, mantener el de pendiente, activar el bloqueo al rechazado. Valor: elimina el filtrado manual de audiencias y el retraso entre la aprobación real y el apagado del pop-up (hoy, 48–72h).
+
+
+2.3 Persistencia anticipada para la fase nativa
+
+
+Los datos que se van validando quedan guardados en la arquitectura de Dropi mientras corre la Fase 0, de forma que al lanzar la fase visual los formularios de datos personales y de facturación se precarguen en lugar de exigir una migración posterior. Valor: convierte la Fase 0 en insumo de la Fase 1 en vez de en un desvío.
+
+
+2.4 Habilitadores de acceso y conocimiento
+                                 * Onboarding de TI en SumSub: ningún integrante del equipo conoce la plataforma. Se propone que SumSub haga esa inducción.
+                                 * Integración con el buscador multipaís de Cartera (script en Python de Andrés Herrera, ya avanzado y con front): cruza cuentas por correo y DNI entre países. Sirve para detectar saldo negativo, fraude y reincidencia multipaís, y para evitar gastar créditos revalidando a la misma persona en varios países.
+
+
+No cambia el corazón de la fase: sigue sin haber bloqueo por backend, sigue sin desarrollarse el formulario unificado, y la experiencia sigue siendo interceptación visual que redirige a SumSub.[e]
+3.2.2 Fase 1 — Bloqueo cruzado de usuarios baneados
+
+Objetivo. Impedir que un usuario baneado en un país (p. ej. Colombia) se registre y opere en otro (México, Ecuador) con las mismas credenciales, cerrando el riesgo de complicidad. Hoy no existe forma de detectarlo porque las bases son independientes.
+Mecanismo. Construir un servicio de validación usando el correo de registro como identificador, complementado con cédula y celular. José confirmó que es viable. Consideración de Catalina: cédula y nombre pueden diferir entre cuentas, por lo que el correo de registro es el cruce más confiable, aunque no es 100% concluyente por sí solo.
+Dependencias: habilitador H3 (modelo consolidado de baneados) y migración de la base de Coloca Payments (que hoy retiene los datos de validación de Guatemala y Panamá) hacia SumSub. Se puede exporta la base en un ZIP que habría que importar.
+
+Criterios y consideraciones para consolidar:
+                                 * No romper la operación de usuarios de alto volumen baneados en un país pero que son top en otro: si se activa el bloqueo cruzado de un día para otro, ese usuario deja de poder operar donde más órdenes hace. Decidir si el bloqueo cruzado sale como fase temprana o solo dentro del proyecto de validación completo.
+                                 * Levantar la data de multipaís (pendiente con Miguel, franja sugerida 6 meses–1 año): cuántos usuarios operan en varios países y en cuántos. Laura señala que los multipaís reales son pocos pero muy importantes.
+                                 * La funcionalidad de una sola validación que sirva para varios países (con cambio interno de país, sin revalidar) se difiere: es más compleja y robusta, más propia de una fase posterior/MVP+ una vez SumSub esté integrado y pueda hacer el cruce de forma inteligente.
+                                 * Posible prueba piloto con dos países (p. ej. Colombia + Guatemala, el segundo priorizado), verificando primero que existan usuarios operando en ambos.
+3.2.3 Fase 2 — Integración nativa del flujo de validación (Colombia primero)
+
+Objetivo. El flujo definitivo, unificado, que conecta validación de identidad con datos de facturación. Primer país: Colombia (onboarding = KYC + KYB + formulario unificado), luego lanzamiento.
+Diseño del flujo por país (según recomendación de SumSub):
+                                 * Fuera de Colombia: validación primero, formulario después. El usuario se valida dentro del WebSDK de SumSub y Dropi recibe esa información para precargar el formulario, evitando que el usuario registre los datos y luego los vuelva a escanear. Es la opción con menos riesgo de datos corruptos.
+                                 * Colombia: formulario primero, validación después, porque el KYC de Truora debe coexistir con el KYB de SumSub (arquitectura híbrida) mientras esté vigente el contrato de Truora (activo hasta mayo 2027).
+Criterios y consideraciones para consolidar:
+                                 * Decisión sobre Truora: definir el criterio para descartar el contrato antes de tiempo y salir en Colombia con el flujo completo de SumSub aun con contrato activo. Juan Camilo valida con Admin la viabilidad y la migración.
+                                 * Migración de usuarios ya validados con Truora: extraer el backup y migrar su información sin bloquearlos, o revalidar a todos de forma automática con el proceso integrado de SumSub. Alinear a TI para el empalme.
+                                 * Cerrar el diseño de precarga en función de lo que retorne la API (depende de H1).
+                                 * Contemplar los campos específicos de facturación por país (Argentina: CUIT/CUIL, condición frente al IVA, régimen; etc.), que pueden parametrizarse en SumSub y obtenerse vía API.
+3.2.4 Fase 3 — KYT (screening de retiros y recargas)
+
+Objetivo. Detectar y bloquear cuentas reportadas por lavado de activos, comparando transacciones contra listas (OFAC / ONU). Hoy los retiros y recargas en USDT se procesan sin revisar el origen/destino del dinero.
+Alcance. Aplica al flujo de retiro (registro de cuenta bancaria, hoy resuelto con el parche de UserPilot en Guatemala y Panamá) y a las recargas/retiros cripto. Se plantea con un popup donde el usuario indica si es natural o jurídica y se enruta al flujo correspondiente de SumSub, que valida contra listas negras y banea la cuenta si está reportada.
+Criterios y consideraciones para consolidar: definir las listas y la lógica de bloqueo; articular con Compliance el tratamiento de las cuentas marcadas.
+3.2.5 Fase 4 — Réplica multipaís
+
+Objetivo. Extender el flujo a los demás países. Segundo país prioritario: Guatemala. Luego el resto, según la matriz de priorización de Legal.
+                                 * Matriz de priorización (Legal). Tres ejes: A) urgencia regulatoria, B) exposición operacional y reputacional, C) habilitación tecnológica. Con prioridad alta hoy: Colombia en facturación (no existe) y Colombia en retiros. La priorización también distingue por tipo de persona (natural / jurídica). Los países críticos tienen un plazo de 90 días.
+
+Criterios y consideraciones para consolidar:
+
+                                    * Definir quién replica los flujos a los ~11 países (SumSub o Dropi) y con qué acompañamiento. Es un punto estratégico pendiente (a llevar a seguimiento de proyectos con Jonathan).
+                                    * Retomar aquí la validación multipaís con una sola verificación (diferida desde la Fase 1).
+Lo que NO entra (no-objetivos)
+Apartado clave para evitar malentendidos. Lista explícita de cosas que el proyecto NO va a resolver, aunque parezcan relacionadas.
+                                    * No-objetivo 1: y razón por la que queda fuera.
+                                    * No-objetivo 2: y razón por la que queda fuera.
+3.3 Estimación de Recursos y Esfuerzo
+                                    * Tiempo Estimado de Desarrollo en producto: [Ej: 2 Sprints / 1 Mes]
+3.4 Segmento y país de lanzamiento
+                                    * Segmento de usuario impactado: (ej. Marcas activas con más de N órdenes).
+                                    * País / mercado objetivo: (ej. Colombia primero, México en fase 2).
+                                    * Volumen estimado de usuarios alcanzados en fase 1.[f]
+3.5 Supuestos
+Cosas que damos por ciertas para que el proyecto tenga sentido. Si alguno se rompe, el proyecto debe revisarse.
+                                    * Supuesto 1: (ej. el usuario tiene cuenta bancaria activa).
+                                    * Supuesto 2: (ej. el integrador externo X seguirá disponible).
+                                    * Supuesto 3: (ej. la política comercial Y no cambiará en el trimestre).
+________________
+
+
+3.6 Próximos Pasos
+                                    * Plan de Trabajo Inicial: Tareas inmediatas para arrancar tras el cierre del kick-off.
+                                    * Reuniones de Seguimiento: Calendario de sincronizaciones regulares instituidas para revisar bloqueos y avances.
+3.7 Entregables
+                                    * Figma final
+                                    * TANGO
+                                    * Loom
+
+
+🫀 Following y lanzamiento
+Estrategia de Following y Lanzamiento
+Formato: 
+Anexos: 
+1. Contexto y Objetivo de Medición
+                                    * Contexto del Problema: [Resume brevemente la fricción actual que se busca resolver].
+                                    * Objetivo del Feature: [Qué valor funcional aporta esta nueva herramienta o cambio].
+                                    * Propuesta de valor: [Cuál es el beneficio principal (Job to be done) para el usuario].
+                                    * Impacto de la solución (Experiencia): [Describe cómo mejora la experiencia en la interfaz. Ej: Reduce la carga cognitiva, agiliza clics].
+                                    * Alcance: [Segmento impactado y países. Ej: Segmento de Marcas activas en Colombia].
+                                    * Objetivo de este documento: Definir el esquema de medición y los eventos necesarios en Userpilot para evaluar el éxito de la funcionalidad.
+2. Métricas de Impacto (Negocio - Data Warehouse)
+Métricas basadas en el framework HEART. Calculadas cruzando tablas de la base de datos.
+[Nombre de Métrica 1 (Retention)]
+                                    * ¿Por qué medirlo? [Razón estratégica del negocio].
+                                    * Fórmula: [Lógica de cálculo matemática. Ej: Usuarios activos mes 2 / Usuarios activos mes 1].
+                                    * Criterio de éxito: [Meta esperada o porcentaje de mejora vs control].
+                                    * Segmentación técnica: [Filtros a aplicar en base de datos. Ej: Filtrar por tipo de usuario = Marca].
+[Instrucción: Nombre de Métrica 2 (Engagement / Task Success de Negocio)]
+                                    * ¿Por qué medirlo? [...]
+                                    * Fórmula: [...]
+                                    * Criterio de éxito: [...]
+                                    * Segmentación técnica: [...]
+[Instrucción: Nombre de Métrica 3 (Adoption / Activación de Registro)]
+                                    * ¿Por qué medirlo? [...]
+                                    * Fórmula: [...]
+                                    * Criterio de éxito: [...]
+                                    * Segmentación técnica: [...]
+3. Métricas de Comportamiento (UX - Userpilot / Analytics)
+
+
+A. Target (Población Objetivo)[Describe el segmento específico basado en su comportamiento, nivel digital, país, tipo de plan o canal de venta (por ejemplo: "Usuarios novatos con menos de 50 órdenes al mes"]
+
+
+Descripción del segmento: [ Drop ] * Número total de usuarios activos en este segmento ($T$): [ Número ] (Representa el 100% para el resto del análisis).
+
+
+B. Adopción de nuevas funcionalidades (Engagement)
+
+
+Define la acción exacta en la que el usuario experimenta el valor por primera vez. No es hacer clic en un menú o registrarse; es completar la acción clave (ejemplo: "Cuando el usuario procesa su primera orden masiva" o "Cuando envía el primer mensaje" ). 
+
+
+[Nombre de la Métrica. Ej: Uso de carga masiva]
+                                    * Acción clave[Razón enfocada en la usabilidad].
+                                    * Fórmula: [Usuarios que disparan evento X / Total de usuarios en la pantalla Y].
+                                    * Criterio de éxito: [Ej: > 30% adopción].
+                                    * Segmentación técnica: [Filtros de Userpilot a aplicar].
+
+
+C. Retención
+¿La funcionalidad es tan buena que los usuarios la siguen usando de forma recurrente?
+
+
+Frecuencia natural del proyecto: [ Diaria / Semanal / Mensual / Configuración única ] * 
+Porcentaje de usuarios que regresan en el segundo período: [ % ] (Meta sugerida para proyectos clave: >50%).
+
+
+
+
+
+
+
+
+
+
+D.Satisfacción
+De los usuarios que se quedaron usando la funcionalidad ¿Cómo se sienten y qué tan fácil les resulta?
+
+
+Pregunta clave: "¿Qué tan fácil fue para ti completar [la tarea del proyecto] hoy?"
+Opciones de respuesta: Mucho más difícil de lo esperado / Como esperaba / Mucho más fácil de lo esperado.
+
+
+Pregunta adaptada al proyecto: [ Ejemplo: ¿Qué tan fácil fue automatizar la confirmación de tus órdenes hoy? ] * Porcentaje de usuarios satisfechos de la muestra: [ % ] (Meta saludable: >80% de la muestra evaluada)
+
+
+4. Metodología de Validación (Micro-surveys SEQ)
+Evaluación de la 'Happiness' (Satisfacción) enfocada en flujos críticos usando SEQ (Single Ease Question).
+Encuesta 1: [Nombre del flujo crítico a evaluar]
+                                    * Trigger (Cuándo): [Momento exacto de disparo. Ej: Tras el evento de éxito].
+                                    * Frecuencia: [Ej: Mostrar la primera vez, luego a los 30 días].
+                                    * Pregunta (SEQ): [Redacta la pregunta. Ej: "¿En general, qué tan fácil fue completar esta tarea?"].
+                                    * Escala: ESTRICTAMENTE 1 al 5 (1 = Muy difícil, 5 = Muy fácil).
+                                    * Lógica Condicional: [Qué hacer si hay baja nota. Ej: Si 1 o 2, mostrar caja de texto].
+5. Esquema de Seguimiento (Piloto de 12 Semanas)
+Periodo
+	Foco de seguimiento
+	Mes 1 (semanas 1-4) — Semanal
+	Monitoreo de adopción inicial, detección de bugs, primeras señales de uso.
+	Mes 2 (semanas 5-8) — Quincenal
+	Análisis de uso repetitivo, primeras encuestas SEQ, ajustes menores.
+	Mes 3 (semanas 9-12) — Mensual
+	Evaluación de impacto final en métricas de negocio, decisión de evolutivos.
+	
+
+6. Lanzamiento y Kick-off a Marketing
+                                    * Alcance del lanzamiento: [Ej: Liberación 100% o escalonada].
+                                    * Canales propuestos desde producto: [Ej: Tour de Userpilot, Email, Notificación push].
+                                    * TANGO (Cómo funciona): [Link al paso a paso]
+                                    * Video funcionalidad (Cómo se ve): [Link al video]
+                                    * Por qué: [Razón principal que Marketing debe comunicar].
+                                    * Propuesta de valor / Jobs to be done: [Instrucción: El "trabajo" resuelto al usuario].
+                                    * Impacto (Experiencia): [Resumen del impacto en la UX].
+                                    * Alcance: [Reiterar segmento y país].
+                                    * Tipo de campaña: [Lanzamiento / Relanzamiento / Ajuste / Ecosistema].
+⭐ Estrategia de comunicación
+1. Título del Proyecto
+                                    * Nombre oficial del producto o la funcionalidad.
+________________
+
+
+2. Descripción General (Breve)
+                                    * ¿Qué es?
+ Explica en 2-3 líneas de qué se trata el producto, mejora o funcionalidad.
+                                    * ¿Para quién está dirigido?
+ Indica el perfil principal de usuarios (segmento de mercado o tipo de cliente).
+                                    * Dolor del usuario
+                                    * Solución
+                                    * Países lanzamiento
+                                    * Usuarios
+                                    * Tipo de lanzamiento (Actualización/Lanzamiento/Relanzamiento/Push) 
+________________
+3. Beneficios Clave
+                                       * Beneficio principal:
+ ¿Cuál es el valor agregado que entrega a los usuarios?
+                                       * Beneficios secundarios:
+ Menciona otros puntos fuertes o características destacadas (idealmente en formato de viñetas).
+________________
+
+
+4. Objetivo del Lanzamiento
+                                          * Meta principal de la campaña
+ (Ej: Dar a conocer la nueva funcionalidad a los usuarios actuales, atraer nuevos leads, etc.)
+                                          * Fechas de lanzamiento o ventana aproximada
+ Para coordinar publicaciones y anuncios.
+                                          * Estrategia de prdoucto. Aquí explicamos al equipo de comunicaciones cuales son los requerimientos puntuales que establece el equipo de producto para el lanzamiento.
+________________
+
+
+5. Mensajes y Angles de Comunicación
+                                             * Mensaje clave:
+ Frase o tagline que resumen la propuesta de valor (ej. “La nueva forma de gestionar tus tareas en equipo”).
+                                             * Puntos de apoyo / bullet points:
+ Ideas o frases que ayuden a reforzar la comunicación (ej. “Facilidad de uso”, “Ahorro de tiempo”, etc.).
+________________
+
+
+6. Recursos Disponibles
+                                                * Materiales de apoyo que ya existen
+                                                * Video demostrativo (enlace, si aplica).
+                                                * Documentación de paso a paso en herramienta Tango.
+                                                * Enlace a Figma / prototipo (solo si el equipo de comunicaciones lo requiere para entender el diseño).
+                                                * Documentos o presentaciones sencillas (ej: PDF con funcionalidades destacadas).
+(Si hay recursos muy técnicos, solo mencionar si aportan valor a la campaña.)
+________________
+
+
+7. Contacto Principal
+                                                * Persona de producto que resolverá dudas de posicionamiento, tono o alcance.
+                                                * Fecha límite para enviar cualquier solicitud de información adicional.
+________________
+
+
+Formato Resumido
+                                                1. Título del Proyecto
+                                                2. Descripción General (Breve)
+                                                3. Beneficios Clave
+                                                4. Objetivo del Lanzamiento
+                                                5. Mensajes y Angles de Comunicación
+                                                6. Recursos Disponibles
+                                                7. Requerimientos para la Campaña
+                                                8. Contacto Principal
+________________
+
+
+
+
+🧠 Hand off - DEV & Stakeholders
+Hand-off to DEV y Stakeholders
+Entrega formal a TI. Reúne en un solo documento toda la información que TI necesita para definir el CÓMO y el CUÁNDO. Es el insumo para que arquitectura levante los niveles 2-4 de C4 y para que el equipo estime.
+
+
+Campo
+	Contenido
+	Segmento
+	Transversal — Dropshippers (Sellers), Proveedores (Suppliers) y Marcas propias/Emprendedores (Brands). Usuario operativo interno: Back Office / Compliance.
+	Equipo de TI receptor
+	Backoffice
+	Tech Lead asignado
+	Nombre
+	Fecha de hand-off
+	DD/MM/AAAA
+	Documentos previos
+	Links a docs 1, 2 y 3
+	
+
+4.1 Job to be Done
+JTBD principal — Usuario final (persona natural)
+Cuando quiero usar mi dinero en Dropi (retirar, transferir entre wallets o emitir una factura), quiero validar mi identidad una sola vez y que esa información alimente automáticamente mis datos de facturación, para quedar habilitado para operar sin repetir información ni salir de la plataforma.
+	
+
+JTBD — Persona jurídica (proveedor / marca)
+Cuando opero en Dropi como empresa y necesito facturar, quiero validar mi identidad como persona jurídica (KYB), incluyendo el KYC de mi representante legal, para que mis facturas sean fiscalmente válidas ante el ente regulador de cada país y poder operar sin riesgo de rechazo.
+	
+
+JTBD — Negocio / Compliance
+Cuando Dropi procesa un retiro en criptoactivos o factura a una empresa, quiero tener KYT y KYB activos, para no incurrir en exposición legal por contrapartes en listas restrictivas o por receptores fiscalmente inexistentes.
+
+
+	
+
+4.2 Contexto del sistema · C4 Nivel 1
+Este apartado es la base sobre la cual TI construirá el diagrama técnico de C4. Producto aporta la vista funcional; TI traduce a componentes.
+Actores
+Personas o roles humanos que interactúan con el sistema en el flujo de este proyecto.
+                                                * Actor 1: rol y qué hace en el flujo.
+                                                * Actor 2: rol y qué hace en el flujo.
+                                                * Actor 3 (interno): equipo o administrador que opera o supervisa.
+Sistemas externos involucrados
+Sistemas, plataformas o terceros con los que este feature debe conversar para funcionar. Aquí Producto lista los que conoce desde la perspectiva de negocio; TI complementará con los técnicos.
+                                                *  Dropshipper (PN): usuario más numeroso. Se valida con KYC para habilitar retiros y transferencias. Opera como persona natural; factura a su nombre.
+                                                * Proveedor (PN o PJ): mueve volúmenes significativos. Cuando opera como empresa requiere KYB para facturar. Hoy sin KYB: brecha legal más crítica.
+                                                * Marca propia / Emprendedor (PN o PJ): perfil emergente, no mapeado formalmente por Legal hasta ahora. Hoy comparte flujo con el dropshipper y proveedor; pendiente definir flujo diferenciado.
+                                                * Representante legal (en KYB): persona física que realiza un KYC embebido dentro del flujo KYB de la empresa.
+                                                * Usuario en migración: registrado antes del nuevo sistema; validado por Truora (automático o manual) o sin validación previa.
+                                                * Back Office / Compliance (interno): revisa excepciones, escalamientos y apelaciones; emite conceptos de cumplimiento. Hoy sostiene el 40% de validaciones manuales (Gina = seguimiento operativo; Jonatan = Compliance; Andrés = Legal).
+Dominios de negocio impactados
+Áreas del producto / negocio que se tocan. Sirve a TI para identificar dueños de módulos existentes.
+                                                * Onboarding / Registro: Validación de identidad (dominio central nuevo: KYC, KYB, KYT y motor de ruteo)
+                                                * Datos personales (Configuraciones > Datos personales) y Facturación electrónica (por país)
+                                                * Wallet / Historial de cartera
+                                                * Retiros y transferencias entre wallets
+                                                * Dropicard (países habilitados)
+                                                * Compliance / Back Office (gestión de casos, excepciones, apelaciones, migración)
+                                                * Criptoactivos (recargas y retiros en Tether) — KYT
+Flujo de datos a alto nivel
+Descripción funcional, en prosa o lista numerada, de cómo viaja la información entre actores y sistemas. Sin tecnicismos: el dato entra por aquí, lo ve este actor, se guarda asociado a esta entidad de negocio, dispara este efecto.
+                                                1. Países ≠ Colombia (validar → precargar): el usuario declara tipo de persona → el sistema lo dirige al WebSDK de SumSub (KYC o KYB) → SumSub valida contra bases del país de nacionalidad/constitución → retorna estado (reviewAnswer GREEN) y data por OCR → Dropi almacena el estado y precarga el formulario unificado de datos personales + facturación → el usuario confirma → se habilitan wallet y retiros.
+                                                2. Colombia (formulario → validar): el usuario diligencia el formulario unificado (incluida la información tributaria CO) y declara tipo de persona → el sistema enruta KYC-PN a Truora o KYB-PJ a SumSub usando los datos del formulario como insumo → recibe el estado → si aprueba, los datos quedan confirmados como facturación → se habilitan wallet y retiros.
+                                                3. Edición / re-validación (transversal): tras 6 meses, el usuario solicita edición → al guardar, el sistema consulta qué campos cambiaron → si son sensibles dispara re-validación (KYC/KYB) y contrasta el dato editado contra el resultado del motor; si son no sensibles, guarda sin proceso adicional.
+                                                4. KYT / retiros (transversal): todo retiro/recarga en Tether dispara screening de la wallet; riesgo alto → bloqueo de esa wallet con acción al usuario. En retiros fiat, si el titular de la cuenta destino difiere del usuario validado, se dispara un KYC adicional del titular. 
+4.3 Glosario de dominio
+Términos del negocio que TI debe entender igual que Producto. Evita ambigüedad al modelar.
+Término
+	Definición de negocio
+	KYC
+	Know Your Customer. Validación de identidad de una persona natural (liveness + documento + contraste contra bases).
+	KYB
+	Know Your Business. Validación de una persona jurídica: existencia legal de la empresa, representante legal (con KYC embebido) y cruce AML.
+	KYT
+	Know Your Transaction. Screening de wallets y contrapartes en transacciones de criptoactivos (Tether/USDT).
+	Score / nivel de riesgo
+	Puntaje de riesgo del resultado. Condiciona aprobación y vigencia de la validación (RN-11).
+	WebSDK
+	Componente embebido del motor donde el usuario realiza su validación (liveness, documento).
+	Arquitectura holding / cuenta madre
+	Estructura de SumSub que permite identificar a un mismo usuario aunque se registre en distintos países (subcuentas).
+	Formulario unificado
+	Formulario único de datos personales + facturación; el usuario no reingresa información ya provista.
+	Vigencia de validación
+	Tiempo durante el cual una validación aprobada es válida; dinámico según nivel de riesgo (RN-11).
+	Campos sensibles / no sensibles
+	Campos cuya edición dispara (o no) una nueva validación (RN-15 / RN-16).
+	Motor de ruteo
+	Componente que decide qué herramienta usar y contra qué base validar según nacionalidad, operación y constitución (RN-03/RN-04).
+	País de nacionalidad / operación / constitución
+	Nacionalidad → KYC (identidad/antecedentes). Operación → validación fiscal. Constitución → KYB de la empresa.
+	LA/FT
+	Lavado de Activos / Financiación del Terrorismo. Un match en lista restrictiva implica baneo permanente.
+	Migración ZIP
+	Carga masiva de usuarios ya validados con Truora hacia SumSub sin re-fricción.
+	
+
+4.4 Reglas de negocio consolidadas[g]
+Restricciones, validaciones y comportamientos esperados que no dependen de la implementación. Cualquier solución técnica debe cumplirlas.
+ 
+	 
+	 
+	RN-01
+	Disparo de la validación
+	La validación es obligatoria y sin ésta hecha el usuario no puede transferir entre wallets o retirar saldo. Hasta ese momento puede navegar y operar libremente en la plataforma.
+	RN-02
+	Funcionalidades bloqueadas sin validación
+	Sin validación solo se bloquean: transferencia entre wallets y procesar retiros. El resto de la plataforma permanece disponible. No aumentar la fricción más allá de esto.
+	RN-03
+	Ruteo dual de validación
+	KYC (identidad/antecedentes/biometría) se valida contra el país de NACIONALIDAD del usuario. 
+La validación fiscal (facturación) va contra el país de OPERACIÓN en Dropi. 
+El KYB de la empresa va contra el país de CONSTITUCIÓN. [DECISIÓN: confirmar KYB constitución vs. operación — los diagramas dicen país de operación; la Idea 6 del kick-off dice país de constitución.]
+	RN-04
+	Motor por país (transición)
+	Colombia: Truora para KYC-PN y SumSub para KYB-PJ en paralelo (~7–8 meses). 
+Resto de países: SumSub para KYC y KYB. El diseño debe soportar dos motores simultáneos durante la transición.
+	RN-05
+	Orden del flujo según país
+	Países ≠ Colombia: validar primero y precargar el formulario con la data del motor. 
+
+Colombia: diligenciar el formulario primero y usarlo como insumo de la validación.
+	RN-06
+	Formulario unificado
+	Datos personales + facturación en un único formulario; el usuario no reingresa datos ya provistos. 
+Campos mínimos para iniciar SumSub: externalUserId, email, phone, lang, type, país y datos personales básicos (nombre, fecha de nacimiento, sexo, nacionalidad, lugar de nacimiento, dirección). 
+El formulario debe diseñarse partiendo de lo que el motor requiere, no al revés.
+	RN-07
+	Timeout de sesión de validación = 10 min
+	El usuario dispone de 10 minutos para completar la validación en el WebSDK. UNIFICAR el copy del checklist, que hoy promete 5 minutos. 
+Un timeout NO cuenta como intento. 
+Sesión abierta → alerta 'No terminaste tu validación…'; 
+Sesión cerrada → 'Tu validación está pendiente…'.
+	RN-08
+	Intentos de validación = 3
+	3 intentos para KYC y 3 para KYB (parametrizable en SumSub; revisable a 5). 
+Tras el 3.º fallo se aplica RN-12.
+	RN-9
+	Retomar sin reiniciar
+	Si el usuario retoma en tiempo corto (según RN-07 y el estado retornado por el motor), continúa desde donde quedó. Si pasó más tiempo o el intento fue fallido, reinicia el flujo.
+	RN-10
+	Vigencia dinámica por riesgo
+	El resultado guarda nivel_riesgo. Alto → rechazo inmediato. Bajo → vigencia 1–2 años. Medio → válido con monitoreo cada 3/4/6 meses según concepto. FALTA en los flujos actuales: deben incorporar la rama de riesgo medio (monitoreo), hoy el resultado se trata como binario.
+	RN-11
+	Resultado no binario
+	El motor puede devolver: aprobado / pendiente / rechazado-reintentable / rechazado-baneo. El flujo debe contemplar los cuatro estados, no solo aprobado/rechazado.
+	RN-12
+	Baneo por CAUSA, no por conteo
+	Agotar los 3 intentos no implica baneo automático. Causa técnica/calidad (foto borrosa, documento ilegible) → Intentos + canal de soporte/apelación al agotar los 3. 
+Match en lista LA/FT o antecedentes graves→ baneo permanente, redirección fuera de Dropi, sin reintento.
+	RN-13
+	Canal de apelación
+	Debe existir un canal formal para usuarios baneados (correo de atención al ciudadano, no Intercom), con SLA de revisión y capacidad de Compliance de levantar un bloqueo puntual con trazabilidad. Aplica a falsos positivos/homónimos, NO a match real de lista.
+	RN-14
+	Campos sensibles (disparan re-validación)
+	Nombre completo (1.er y 2.º nombre, 1.er y 2.º apellido), tipo de persona, tipo de documento, número de documento y documento adjunto. 
+Editar cualquiera dispara re-validación KYC/KYB completa.
+	RN-15
+	Campos no sensibles (no disparan re-validación)
+	Teléfono, dirección, ciudad y correo de facturación. Se guardan directamente sin proceso de validación adicional.
+	RN-16
+	Detección de baneado cross-país
+	Al registrarse o acceder en otro país, se cruza el correo contra la lista de baneados de TODOS los países. Si hay match → no se permite registro/acceso (ahorra el costo de una validación que sabemos fallará). Mediano plazo: la arquitectura holding de SumSub hace trazable al baneado aunque cambie de país. Riesgo residual no mitigable: cambio total de correo + datos.
+	RN-17
+	Reconocimiento cross-país
+	Un usuario validado correctamente en un país Dropi, al entrar a otro, puede elegir reutilizar esa validación o registrar información nueva. [DECISIÓN: ¿una validación SumSub hecha en, p.ej., México se acepta para Colombia/DIAN o requiere corrida local? — define Compliance.]
+	RN-18
+	Bloqueo de 6 meses
+	Tras validar, el formulario queda bloqueado 6 meses con la alerta correspondiente. Pasados los 6 meses, el usuario puede solicitar edición.
+	RN-19
+	KYC embebido del representante legal
+	En KYB, el representante legal realiza un KYC dentro del flujo. 
+
+[HIPÓTESIS a decidir para Fase 1: si el representante legal ya es usuario Dropi validado, reutilizar su KYC para no pagar doble.]
+	RN-20
+	Documento adjunto = del motor, no del usuario
+	El documento que se almacena es el extraído por el validador durante el liveness/OCR, NO un archivo subido manualmente por el usuario, para preservar integridad probatoria. 
+
+(Resuelve la pregunta abierta de Paula en el flujo de edición.) [Requiere visto bueno de Compliance.]
+	RN-21
+	No re-cobrar validación por dato idéntico
+	Si la información es la misma, no debe dispararse una segunda validación con costo (p. ej. onboarding vs. facturación). Editar un campo no sensible no debe generar llamado al motor. El diseño del flujo unificado es también una decisión financiera.
+	RN-22
+	Manejo de fallo KYB
+	Si el KYB falla, el usuario NO se degrada a PN: queda en estado pendiente con los datos PJ conservados y reintento directo a KYB disponible (sin re-diligenciar el formulario).
+	RN-23
+	Estado operativo durante re-validación
+	[DECISIÓN — Compliance] Mientras se re-valida por cambio de campo sensible, las acciones financieras quedan bloqueadas. 
+Si la re-validación FALLA: por causa técnica → se descartan los cambios y se restauran los datos validados previos (el usuario sigue operando con ellos); por match de lista → baneo (RN-12).
+
+Confirmar con Compliance antes de desarrollar (define a qué estado escribe TI).
+	RN-24
+	MFA como pre-condición
+	El usuario debe tener MFA activo antes de iniciar la validación; si no, se configura primero. La verificación MFA no cuenta como intento de validación.
+	RN-25
+	Migración de usuarios existentes
+	Validados automáticamente por Truora → migración masiva vía ZIP a SumSub sin re-fricción. 
+Validados manualmente (~40%) → [DECISIÓN Legal/Compliance: aceptar como validados o exigir re-validación]. 
+Sin validación → entran al flujo nuevo cuando intenten operar.
+	RN-26
+	Mapeo multi-motor del estado
+	El estado lógico (aprobado/pendiente/reintento/baneo) debe abstraerse del proveedor. 
+La respuesta de Truora (score/estado propio) se mapea al mismo modelo que SumSub (reviewStatus/reviewAnswer).
+Ningún consumidor del estado debe depender del esquema de un proveedor específico. Crítico para el path KYC-PN Colombia.
+	RN-27
+	Titular de cuenta bancaria (fiat)
+	Si el titular de la cuenta de retiro coincide con el usuario validado → sin costo adicional. 
+Si difiere → dispara KYC adicional del titular. El usuario debe entender que el problema es con ese titular y qué documentación resuelve.
+	RN-28
+	Copy de bloqueos sensibles lo define Legal
+	Los mensajes ante bloqueo KYT y suspensión por alerta LA/FT los define Legal de antemano. Producto los ejecuta; no se revela información que comprometa una investigación ni la existencia de listas.
+	
+
+4.5 Criterios de aceptación
+Formato Gherkin (Dado / Cuando / Entonces) agrupado por módulo funcional.
+
+
+Módulo A · KYC/KYB usuario nuevo — países ≠ Colombia (validar → precargar)
+
+
+Escenario
+	A1 — Registro de usuario nuevo
+	Dado que
+	una persona sin cuenta en Dropi en un país distinto a Colombia
+	Cuando
+	completa el registro y valida su correo electrónico
+	Entonces
+	queda registrada, ingresa a Dropi con sus credenciales e inicia el flujo de validación de identidad descrito en este módulo.
+	
+
+
+
+Escenario
+	A2 — Registro bloqueado por correo baneado en otro país
+	Dado que
+	una persona intenta registrarse con un correo que ya está baneado en otro país Dropi
+	Cuando
+	el sistema cruza el correo contra la lista global de usuarios baneados (RN-16)
+	Entonces
+	No se permite el acceso a Dropi, se muestra un mensaje explicativo indicando que no puede ingresar y no se incurre en costo de validación.
+	
+
+
+
+Escenario
+	A3 — Estado inicial: aviso de validación y bloqueo financiero
+	Dado que
+	un usuario recién registrado y aún no validado
+	Cuando
+	ingresa a Dropi
+	Entonces
+	visualiza el aviso de que debe validar su identidad en los módulos Configuraciones > Datos personales, Configuraciones > Retiros de saldo e Historial de cartera, y ve bloqueadas las acciones financieras: transferencia entre wallets y procesar en retiros (RN-02).
+	
+
+Escenario
+	A4 — Checklist diferenciado por tipo de persona y entrada al WebSDK
+	Dado que
+	un usuario no validado que inicia el flujo y declara su tipo de persona (natural o jurídica)
+	Cuando
+	completa el checklist correspondiente a su tipo de persona (PN y PJ tienen checklist distinto) y acepta continuar
+	Entonces
+	el sistema le indica que iniciará la validación y lo redirige al WebSDK de SumSub correspondiente: KYC si es persona natural, KYB si es persona jurídica.
+	
+
+Escenario
+	A5 — Usuario ya validado en otro país: validación simplificada
+	Dado que
+	un usuario que ya se validó correctamente en otro país Dropi (persona natural o jurídica)
+	Cuando
+	el sistema lo detecta y le ofrece operar con los mismos datos ya validados
+	Entonces
+	                                                * si acepta, es dirigido a un nivel de validación más sencillo (en lugar del flujo completo) y, al aprobarlo, se precarga su información ya validada. 
+                                                * Si elige datos nuevos, inicia el flujo completo desde la selección de tipo de persona. (Refina RN-18.)
+	
+
+Escenario
+	A6 — Fallo en la validación simplificada
+	Dado que
+	un usuario en el flujo de validación simplificada por reutilización de datos de otro país
+	Cuando
+	no la supera por algún error
+	Entonces
+	se habilita la lógica de 3 intentos (RN-09) y, en cada reintento, el sistema le vuelve a preguntar si desea operar con los mismos datos ya validados o registrar datos nuevos.
+	
+
+Escenario
+	A7 — Timeout de 10 min en el WebSDK: reinicio del flujo
+	Dado que
+	un usuario realizando su validación en el WebSDK de SumSub
+	Cuando
+	supera los 10 minutos sin completarla (RN-07)
+	Entonces
+	Dropi muestra un mensaje para reanudar la validación y reinicia el flujo completo desde la selección del tipo de persona y el paso a paso hasta SumSub. El timeout no descuenta un intento.
+	
+
+Escenario
+	A8 — Interrupción y cierre de sesión durante la validación
+	Dado que
+	un usuario que interrumpe su validación y cierra sesión
+	Cuando
+	vuelve a ingresar a Dropi
+	Entonces
+	visualiza el mensaje de validación pendiente ('Tu validación de identidad está pendiente. Comienza ahora y accede a todos los beneficios.') y se mantiene el bloqueo de las acciones financieras.
+	
+
+Escenario
+	A9 — Fallo técnico o datos no coinciden: conteo e intervalo entre intentos
+	Dado que
+	un usuario cuya validación no se completa por falla técnica o porque los datos no coinciden con el documento
+	Cuando
+	el motor retorna el fallo
+	Entonces
+	el sistema contabiliza el intento (de 3 disponibles, RN-09), indica cuántos intentos le quedan, y exige un intervalo de ~10 minutos entre intentos antes de habilitar un nuevo reintento.
+	
+
+Escenario
+	A10 — Agotar los 3 intentos por causa técnica/calidad
+	Dado que
+	un usuario que agotó los 3 reintentos sin lograr validarse por causa técnica o de calidad
+	Cuando
+	falla el tercer intento
+	Entonces
+	queda en estado pendiente de revisión manual y se muestra el mensaje 'La validación no fue exitosa. Si necesitas ayuda, contacta a soporte con el código [# del caso]', con el botón de Contactar a soporte habilitado (incluye el video de cómo contactar a soporte) (RN-13/RN-14).
+	
+
+Escenario
+	A11 — Rechazo por riesgo: baneo automático
+	Dado que
+	un usuario cuya validación arroja un score que representa riesgo por antecedentes
+	Cuando
+	el motor retorna un resultado de rechazo por riesgo
+	Entonces
+	el usuario es baneado y expulsado de Dropi automáticamente, no puede registrarse de nuevo con el mismo correo (RN-16) y se le notifica la decisión.
+	
+
+
+
+Escenario
+	A12 — Validación exitosa: precarga, TyC y MFA
+	Dado que
+	un usuario que aceptó los TyC y la política de privacidad y se autenticó con MFA (RN-25)
+	Cuando
+	pasa correctamente la validación en cualquiera de los 3 intentos
+	Entonces
+	SumSub retorna aprobado y Dropi precarga los datos validados en los campos del formulario unificado dentro de Dropi (RN-06).
+	
+
+Escenario
+	A13 — Notificación y habilitación de acciones financieras
+	Dado que
+	un usuario correctamente validado
+	Cuando
+	se confirma el resultado aprobado
+	Entonces
+	es notificado por correo o SMS de que ya está validado y puede operar normalmente, y se le habilitan las acciones financieras antes bloqueadas (transferencia entre wallets y procesar en retiros).
+	
+
+Escenario
+	A14 — Bloqueo del formulario por N meses
+	Dado que
+	un usuario correctamente validado
+	Cuando
+	se guarda su información
+	Entonces
+	el formulario queda deshabilitado por N meses (hoy 6, RN-19); pasados los N meses se activa el botón 'Solicitar activación' para que el usuario pueda solicitar la edición de sus datos.
+	
+
+Escenario
+	A15 — (Borde) Campos fiscales requeridos por país
+	Dado que
+	un usuario en un país que exige datos fiscales propios (p. ej. RFC en México, CUIT en Argentina)
+	Cuando
+	el motor precarga el formulario pero el dato fiscal no viene en la respuesta de SumSub
+	Entonces
+	el formulario presenta una sección editable para que el usuario complete el dato faltante antes de cerrar; el formulario unificado no se da por configurado hasta capturarlo. (Ver Riesgo en 4.7.)
+	
+
+Escenario
+	A1 — PN aprobada, precarga de formulario
+	Dado que
+	un usuario nuevo persona natural en un país distinto a Colombia con MFA activo
+	Cuando
+	completa el KYC en el WebSDK de SumSub y SumSub retorna reviewAnswer GREEN
+	Entonces
+	Dropi almacena el estado aprobado, precarga el formulario unificado con la data del solicitante, habilita transferencias y retiros, y el usuario solo confirma la información.
+	
+
+Escenario
+	A2 — PJ aprobada con KYC del representante
+	Dado que
+	un usuario que declara ser persona jurídica
+	Cuando
+	completa el KYB (documentos de empresa + KYC embebido del representante legal) y SumSub aprueba
+	Entonces
+	Dropi precarga datos de empresa y representante, configura la facturación como PJ y habilita las funciones financieras.
+	Módulo B · KYC/KYB usuario nuevo — Colombia (formulario → validar)
+
+
+Escenario
+	B1 — Registro de usuario nuevo
+	Dado que
+	una persona sin cuenta en Dropi Colombia
+	Cuando
+	completa el registro y valida su correo electrónico
+	Entonces
+	queda registrada, ingresa a Dropi con sus credenciales e inicia el flujo de validación de identidad descrito en este módulo.
+	
+
+Escenario
+	B2 — Registro bloqueado por correo baneado en otro país
+	Dado que
+	una persona intenta registrarse con un correo que ya está baneado en otro país Dropi
+	Cuando
+	el sistema cruza el correo contra la lista global de usuarios baneados (RN-17)
+	Entonces
+	no se permite el acceso a Dropi, se muestra un mensaje explicativo indicando que no puede ingresar y no se incurre en costo de validación.
+	
+
+Escenario
+	B3 — Formulario unificado habilitado y diligenciado
+	Dado que
+	un usuario sin datos datos personales y de facturación en Configuraciones > Datos personales
+	Cuando
+	visualiza el formulario de datos personales y de facturación unificados y habilitados (con correo y teléfono precargados desde el registro)
+	Entonces
+	diligencia el formulario completo, incluida la información tributaria de Colombia, y declara su tipo de persona (natural o jurídica).
+	
+
+Escenario
+	B4 — Estado inicial: aviso de validación y bloqueo financiero
+	Dado que
+	un usuario recién registrado y aún no validado
+	Cuando
+	termina de diligenciar sus datos personales y de facturación
+	Entonces
+	visualiza el aviso de que debe validar su identidad en los módulos Configuraciones > Datos personales, Configuraciones > Retiros de saldo e Historial de cartera, y ve bloqueadas las acciones financieras: transferencia entre wallets y procesar en retiros (RN-02).
+	
+
+Escenario
+	B5 — CTA Validarse redirige a Datos personales
+	Dado que
+	un usuario no validado situado en un módulo distinto a Configuraciones > Datos personales (p. ej. Retiros de saldo o Historial de cartera)
+	Cuando
+	hace clic en el CTA de validarse
+	Entonces
+	es redirigido a la pantalla de Configuraciones > Datos personales, donde se encuentra el formulario unificado.
+	
+
+Escenario
+	B6 — Guardar requiere TyC y MFA
+	Dado que
+	un usuario que terminó de diligenciar el formulario unificado
+	Cuando
+	intenta hacer clic en Guardar
+	Entonces
+	solo puede guardar si aceptó los documentos legales correspondientes (TyC y política de privacidad) y se autenticó correctamente con el MFA (RN-25). La verificación MFA no cuenta como intento.
+	
+
+Escenario
+	MFA no configurado
+	Dado que
+	un usuario que llega al paso de validación sin MFA activo
+	Cuando
+	intenta iniciar la validación
+	Entonces
+	el sistema lo lleva a configurar MFA y lo regresa al punto del flujo; la verificación MFA no cuenta como intento (RN-25).
+	
+
+Escenario
+	B7 — Tras guardar: validación pendiente
+	Dado que
+	un usuario que guardó los datos diligenciados en el formulario
+	Cuando
+	el sistema almacena la información
+	Entonces
+	muestra un mensaje indicando que tiene la validación de identidad pendiente, con la opción Comenzar validación.
+	
+
+Escenario
+	B8 — Ruteo por tipo de persona (doble motor)
+	Dado que
+	un usuario que guardó el formulario con su tipo de persona declarado
+	Cuando
+	inicia la validación
+	Entonces
+	el sistema lo enruta al flujo correspondiente según el tipo de persona:
+                                                * KYC con Truora si es persona natural
+                                                * KYB con SumSub si es persona jurídica (Truora no ofrece KYB).
+El estado de cada motor se mapea al modelo lógico común (RN-04 / RN-27).
+	
+
+Escenario
+	B9 — Checklist diferenciado y entrada al WebSDK del motor correspondiente
+	Dado que
+	un usuario que va a iniciar la validación tras declarar su tipo de persona
+	Cuando
+	completa el checklist correspondiente a su tipo de persona (PN y PJ tienen checklist distinto) y acepta continuar
+	Entonces
+	el sistema le indica que iniciará la validación y lo redirige al WebSDK del motor correspondiente: Truora para KYC-PN y SumSub para KYB-PJ. 
+	
+
+Escenario
+	B10 — Validación del documento en el WebSDK
+	Dado que
+	un usuario redirigido a cualquiera de los dos flujos (KYC o KYB)
+	Cuando
+	realiza la captura de su documento y la prueba de vida en el WebSDK
+	Entonces
+	el motor valida que el documento es real y corresponde a la persona que se está validando. El documento que se almacena es el obtenido por el motor durante la validación, no un archivo subido manualmente (RN-21).
+	
+
+Escenario
+	B11 — Timeout de 10 min en el WebSDK: reinicio del flujo
+	Dado que
+	un usuario realizando su validación en el WebSDK
+	Cuando
+	supera los 10 minutos sin completarla (RN-07)
+	Entonces
+	Dropi muestra un mensaje para reanudar la validación y reinicia el flujo desde el paso a paso o checklist hasta el motor. El timeout no descuenta un intento. 
+Los datos previamente diligenciados se conservan y el formulario permanece habilitado hasta que la persona logre validarse correctamente.
+	
+
+Escenario
+	B12 — Interrupción y cierre de sesión durante la validación
+	Dado que
+	un usuario que interrumpe su validación y cierra sesión
+	Cuando
+	vuelve a ingresar a Dropi
+	Entonces
+	visualiza el mensaje de validación pendiente ('Tu validación de identidad está pendiente. Comienza ahora y accede a todos los beneficios.') y se mantiene el bloqueo de las acciones financieras.
+	
+
+Escenario
+	B13 — Fallo técnico o datos no coinciden: conteo e intervalo entre intentos
+	Dado que
+	un usuario cuya validación no se completa por falla técnica o porque los datos no coinciden con el documento
+	Cuando
+	el motor retorna el fallo
+	Entonces
+	el sistema contabiliza el intento (de 3 disponibles, RN-09), indica cuántos intentos le quedan, y exige un intervalo de ~10 minutos entre intentos antes de habilitar un nuevo reintento.
+	 
+Escenario
+	B14 — Agotar los 3 intentos por causa técnica/calidad
+	Dado que
+	un usuario que agotó los 3 reintentos sin lograr validarse por causa técnica o de calidad
+	Cuando
+	falla el tercer intento
+	Entonces
+	queda en estado pendiente de revisión manual y se muestra el mensaje 'La validación no fue exitosa. Si necesitas ayuda, contacta a soporte con el código [# del caso]', con el botón de Contactar a soporte habilitado (incluye el video de cómo contactar a soporte) (RN-13/RN-14).
+	
+
+Escenario
+	B15 — Rechazo por riesgo: baneo automático
+	Dado que
+	un usuario cuya validación arroja un score que representa riesgo por antecedentes
+	Cuando
+	el motor retorna un resultado de rechazo por riesgo
+	Entonces
+	el usuario es baneado y expulsado de Dropi automáticamente, no puede registrarse de nuevo con el mismo correo (RN-17) y se le notifica la decisión.
+	
+
+Escenario
+	B16 — Validación exitosa: confirmación al usuario
+	Dado que
+	un usuario que acepta los TyC y se autenticó con MFA
+	Cuando
+	pasa correctamente la validación en cualquiera de los 3 intentos
+	Entonces
+	visualiza un mensaje indicando que fue correctamente validado (su documento es real, corresponde a su información y no representa antecedentes ni riesgo), y los datos del formulario quedan confirmados como datos personales y de facturación.
+	 
+Escenario
+	B17 — Notificación y habilitación de acciones financieras
+	Dado que
+	un usuario correctamente validado
+	Cuando
+	se confirma el resultado aprobado
+	Entonces
+	es notificado por correo o SMS de que ya está validado y puede operar normalmente, y se le habilitan las acciones financieras antes bloqueadas (transferencia entre wallets y procesar en retiros).
+	
+
+Escenario
+	B18 — Bloqueo del formulario por N meses
+	Dado que
+	un usuario correctamente validado
+	Cuando
+	se guarda su información
+	Entonces
+	el formulario queda deshabilitado por N meses (hoy 6, RN-19); pasados los N meses se activa el botón 'Solicitar activación' para que el usuario pueda solicitar la edición de sus datos.
+	Módulo C · Edición de información y re-validación (transversal)
+
+
+
+
+Escenario
+	C1 — Solicitud de actualización tras N meses
+	Dado que
+	un usuario antiguo de Dropi ya validado, una vez transcurridos los N meses de bloqueo (RN-19)
+	Cuando
+	hace clic en el botón Solicitar actualización de datos del formulario unificado
+	Entonces
+	el sistema habilita el formulario para edición.
+	
+
+Escenario
+	C2 — Edición de la información
+	Dado que
+	un usuario con el formulario habilitado para edición
+	Cuando
+	modifica su información en los campos correspondientes
+	Entonces
+	el formulario permanece habilitado mientras edita, sin disparar aún ningún proceso de validación.
+	 
+Escenario
+	C3 — Guardar requiere campos completos y checks legales
+	Dado que
+	un usuario que terminó de editar su información
+	Cuando
+	intenta hacer clic en Guardar
+	Entonces
+	el sistema confirma que todos los campos estén diligenciados nuevamente y que los checks de los documentos legales (TyC y política de privacidad) estén seleccionados; de lo contrario, no permite guardar.
+	
+
+Escenario
+	C4 — Guardar requiere MFA
+	Dado que
+	un usuario que va a guardar los cambios con los campos completos y los checks legales aceptados
+	Cuando
+	hace clic en Guardar
+	Entonces
+	solo se guarda si el usuario se autentica correctamente con el MFA (RN-25). La verificación MFA no cuenta como intento.
+	
+
+Escenario
+	C5 — Comparación de campos sensibles tras guardar
+	Dado que
+	un usuario que guardó sus cambios
+	Cuando
+	la información queda almacenada
+	Entonces
+	el sistema confirma inmediatamente si cambió alguno de los campos sensibles respecto a lo almacenado: nombre completo (1.er/2.º nombre, 1.er/2.º apellido), tipo de persona, tipo de documento, número de documento o documento adjunto (RN-15).
+	
+
+Escenario
+	C6 — Edición de campos no sensibles
+	Dado que
+	un usuario validado, pasados N meses, con el formulario habilitado para edición
+	Cuando
+	modifica solo campos no sensibles (dirección, ciudad, correo de facturación) y guarda
+	Entonces
+	el sistema detecta que ningún campo requiere validación (RN-16), guarda directamente y vuelve a bloquear el formulario. No se dispara ningún proceso de validación ni costo.
+	 
+Escenario
+	C7 — Se modificó un campo sensible: se activa la re-validación
+	Dado que
+	un usuario cuyo guardado modificó al menos un campo sensible (RN-15)
+	Cuando
+	el sistema detecta el cambio
+	Entonces
+	activa el flujo de validación: muestra la información almacenada, el aviso de validación en Configuraciones > Datos personales, Configuraciones > Retiros de saldo e Historial de cartera, bloquea las acciones financieras (RN-02) y presenta el botón Comenzar validación.
+	 
+Escenario
+	C8 — Ruteo por tipo de persona y país
+	Dado que
+	un usuario que inicia la re-validación tras un cambio sensible
+	Cuando
+	es dirigido automáticamente al checklist y al WebSDK del motor correspondiente
+	Entonces
+	se enruta según país y tipo de persona: en Colombia, persona natural → Truora (KYC) y persona jurídica → SumSub (KYB); en el resto de países, ambas validaciones → SumSub (RN-04 / RN-27). (Este criterio resuelve la ambigüedad marcada en B9.)
+	
+
+Escenario
+	C9 — Validación del documento en el WebSDK
+	Dado que
+	un usuario redirigido a cualquiera de los dos flujos (KYC o KYB)
+	Cuando
+	realiza la captura de su documento y la prueba de vida en el WebSDK
+	Entonces
+	el motor valida que el documento es real y corresponde a la persona; el documento almacenado es el obtenido por el motor durante la validación, no un archivo subido manualmente (RN-21).
+	
+
+
+
+Escenario
+	C10 — Timeout de 10 min en el WebSDK: reinicio del flujo
+	Dado que
+	un usuario realizando su re-validación en el WebSDK
+	Cuando
+	supera los 10 minutos sin completarla (RN-07)
+	Entonces
+	Dropi muestra un mensaje para reanudar la validación y reinicia el flujo desde rehacer checklist + WebSDK . El timeout no descuenta un intento. 
+	 
+Escenario
+	C11 — Interrupción y cierre de sesión durante la re-validación
+	Dado que
+	un usuario que interrumpe su re-validación y cierra sesión
+	Cuando
+	vuelve a ingresar a Dropi
+	Entonces
+	visualiza el mensaje de validación pendiente y se mantiene el bloqueo de las acciones financieras.
+	 
+Escenario
+	C12 — Fallo técnico o datos no coinciden: conteo e intervalo entre intentos
+	Dado que
+	un usuario cuya re-validación no se completa por falla técnica o porque los datos no coinciden con el documento
+	Cuando
+	el motor retorna el fallo
+	Entonces
+	el sistema contabiliza el intento (de 3 disponibles, RN-09), indica cuántos intentos le quedan, y exige un intervalo de ~10 minutos entre intentos antes de habilitar un nuevo reintento.
+	 
+Escenario
+	C13 — Agotar los 3 intentos por causa técnica/calidad
+	Dado que
+	un usuario que ya operaba y agotó los 3 reintentos de re-validación por causa técnica/calidad
+	Cuando
+	falla el tercer intento
+	Entonces
+	queda en estado pendiente de revisión manual y se muestra el mensaje 'La validación no fue exitosa. Si necesitas ayuda, contacta a soporte con el código [# del caso]', con el botón de Contactar a soporte (incluye video) (RN-13/RN-14).  
+	 
+Escenario
+	C14 — Rechazo por riesgo: baneo automático
+	Dado que
+	un usuario cuya re-validación arroja un score que representa riesgo por antecedentes
+	Cuando
+	el motor retorna un resultado de rechazo por riesgo
+	Entonces
+	el usuario es baneado y expulsado de Dropi automáticamente, no puede registrarse de nuevo con el mismo correo (RN-17) y se le notifica la decisión.
+	 
+Escenario
+	C15 — Re-validación exitosa: confirmación al usuario
+	Dado que
+	un usuario que aceptó los TyC y se autenticó con MFA
+	Cuando
+	pasa correctamente la re-validación en cualquiera de los 3 intentos
+	Entonces
+	visualiza un mensaje indicando que fue correctamente validado (su documento es real, corresponde a su información y no representa antecedentes ni riesgo), y los datos editados quedan confirmados como datos personales y de facturación.
+	 
+Escenario
+	C16 — Notificación y habilitación de acciones financieras
+	Dado que
+	un usuario correctamente re-validado
+	Cuando
+	se confirma el resultado aprobado
+	Entonces
+	es notificado por correo o SMS de que ya está validado y puede operar normalmente, y se le habilitan las acciones financieras antes bloqueadas (transferencia entre wallets y procesar en retiros).
+	 
+Escenario
+	C17 — Bloqueo del formulario por N meses (nuevamente)
+	Dado que
+	un usuario correctamente re-validado
+	Cuando
+	se guarda su información
+	Entonces
+	el formulario queda deshabilitado nuevamente por N meses (hoy 6, RN-19); pasados los N meses se reactiva el botón 'Solicitar actualización' para una próxima edición.
+	Módulo D · Validación al agregar cuentas bancarias
+Disparada cuando el usuario intenta agregar una cuenta bancaria. Para usuarios ya validados aplica una validación ligera (liveness express); para usuarios sin validación previa, el flujo KYC/KYB completo dentro del popup de SumSub (SDK iFrame). Reemplaza el parche actual de UserPilot en Guatemala/Panamá. 
+
+
+Escenario
+	E1 — Disparo: agregar cuenta bancaria / intento de retiro
+	Dado que
+	un usuario que intenta agregar una cuenta bancaria o iniciar un retiro que la requiere
+	Cuando
+	diligencia la información de la cuenta y marca si es persona natural o jurídica
+	Entonces
+	el sistema consulta el estado de validación del usuario para decidir el nivel de validación requerido (¿usuario ya validado?).
+	 
+Escenario
+	E2 — Usuario ya validado: liveness express
+	Dado que
+	un usuario con perfil ya validado que agrega una cuenta bancaria
+	Cuando
+	el sistema detecta que ya está validado (perfil existente)
+	Entonces
+	se le solicita únicamente un liveness express (solo selfie); al completarlo, se crea la cuenta bancaria en caso de ser exitosa la validación.
+	 
+Escenario
+	E3 — Usuario sin validación previa: KYC/KYB completo en popup
+	Dado que
+	un usuario sin validación KYC/KYB previa que agrega una cuenta bancaria
+	Cuando
+	el sistema detecta la ausencia de validación
+	Entonces
+	despliega el popup de SumSub (SDK iFrame) para la validación completa.
+	 
+Escenario
+	E4 — Verificación de país precargado
+	Dado que
+	un usuario en proceso de validación para agregar cuenta bancaria
+	Cuando
+	el backend obtiene el país, el tipo de identificación y el número del usuario
+	Entonces
+	valida que el país coincida con el precargado (p. ej., en Guatemala el país debe ser Guatemala) antes de generar el token de sesión del SDK de SumSub.
+	 
+Escenario
+	E5 — Bloqueo por VPN
+	Dado que
+	un usuario que inicia la validación en SumSub
+	Cuando
+	SumSub, al inicializar el SDK, detecta IP/país con uso de VPN
+	Entonces
+	se bloquea la validación, se muestra un error técnico al usuario y el error queda registrado. No se crea la cuenta bancaria.
+	 
+Escenario
+	E6 — Generación de token y ejecución de la validación
+	Dado que
+	un usuario que pasó la verificación de país y no usa VPN
+	Cuando
+	el backend genera el token de sesión y lo envía a SumSub
+	Entonces
+	SumSub ejecuta OCR del documento, selfie/liveness, background check nacional y búsqueda en listas internacionales (AML/PEP/OFAC), evalúa el score y envía el webhook de resultado a Dropi.
+	 
+Escenario
+	E7 — Usuario cierra el popup sin completar
+[h]	
+Dado que
+	un usuario con el popup de validación desplegado
+[i]	
+Cuando
+	cierra el popup sin completar el flujo
+[j]	
+Entonces
+	abandona la validación para agregar la cuenta bancaria; el sistema muestra una alerta para continuar con la validación, registra estado 'Pendiente de validación', notifica al usuario (pendiente) y el flujo queda interrumpido (cuenta no creada).
+El estado de pendiente debe durar una cantidad de tiempo establecida para que en caso de ya no continuar con esa cuenta, pueda registrar otra.
+[k]	
+ 
+Escenario
+	E8 — Estado pendiente y recepción del webhook
+	Dado que
+	un usuario que completó el flujo dentro del popup
+	Cuando
+	el sistema registra estado 'Pendiente de validación' y espera el webhook de SumSub
+	Entonces
+	al recibir el webhook (SumSub → Dropi) evalúa el resultado de la validación y lo enruta según el score.
+	 
+Escenario
+	E9 — Aprobado automático: cuenta habilitada
+	Dado que
+	un resultado de validación aprobado automático
+	Cuando
+	Dropi procesa el webhook
+	Entonces
+	registra la aprobación en BD y la cuenta bancaria queda creada y habilitada para hacer retiros (usuario habilitado).
+	 
+Escenario
+	E10 — Rechazado por antecedentes graves: baneo
+	Dado que
+	un resultado rechazado por antecedentes graves
+	Cuando
+	Dropi procesa el webhook
+	Entonces
+	registra el rechazo y banea al usuario, no permite crear la cuenta nuevamente con el mismo tipo y número de documento (RN-17), muestra el mensaje de rechazo de creación de la cuenta y el usuario queda bloqueado.
+	 
+Escenario
+	E11 — Score intermedio: revisión manual de Compliance
+	Dado que
+	un resultado con score intermedio
+	Cuando
+	Dropi procesa el webhook
+	Entonces
+	el caso se enruta a revisión manual por Compliance/Legal (flujo de validación manual por país). Si Compliance decide Apto → registra la aprobación en BD y habilita la cuenta (como E9). Si decide No apto → registra la decisión y justificación en BD, muestra el resultado de la revisión manual al usuario y el caso queda notificado (cuenta no creada). 
+	 
+Escenario
+	E12 — Error técnico y reintento
+	Dado que
+	una falla técnica durante la validación (distinta de VPN)
+	Cuando
+	ocurre el error en el flujo de validación
+	Entonces
+	el sistema envía una alerta a TI y reintenta una vez (x1); si el error persiste, muestra el error técnico al usuario y lo registra.
+	 
+Escenario
+	E13 — (Borde) Titular de la cuenta ≠ usuario validado
+	Dado que
+	un usuario que agrega una cuenta bancaria cuyo titular no coincide con el usuario validado
+	Cuando
+	el sistema compara el titular de la cuenta contra la identidad validada
+	Entonces
+	se dispara un KYC adicional del titular y se informa al usuario qué documentación lo resuelve (RN-29). 
+	
+
+Módulo E · Robustez y casos de borde
+Escenario
+	D1 — Timeout de validación
+	Dado que
+	un usuario que inició la validación en el WebSDK
+	Cuando
+	no la completa dentro de los 10 minutos (RN-07)
+	Entonces
+	el sistema muestra la alerta de reanudación correspondiente al estado de su sesión y NO descuenta un intento.
+	 
+Escenario
+	D2 — Baneado intenta acceder en otro país (mismo correo)
+	Dado que
+	un usuario baneado en un país
+	Cuando
+	intenta registrarse/acceder en otro país Dropi con el mismo correo
+	Entonces
+	el sistema cruza el correo contra la lista global de baneados (RN-17), detecta coincidencia, impide el acceso y muestra un mensaje explicativo, sin incurrir en costo de validación.
+	 
+Escenario
+	D3 — Agotar 3 intentos: ramificación por causa
+	Dado que
+	un usuario que llega al 3.er intento fallido
+	Cuando
+	el motor retorna resultado negativo
+	Entonces
+	si la causa es técnica/calidad → estado pendiente de revisión manual + código de caso + Contactar a soporte (RN-13/RN-14); 
+
+si es match LA/FT o tiene antecedentes graves → baneo permanente y redirección fuera de Dropi, sin reintento.
+	 
+Escenario
+	D4 — Riesgo medio
+	Dado que
+	una validación cuyo score arroja nivel de riesgo medio
+	Cuando
+	el motor retorna el resultado
+	Entonces
+	el sistema aprueba con vigencia condicionada y programa monitoreo cada 3/4/6 meses según el concepto (RN-11). El resultado no se trata como rechazo sino como aprobación que se le hará un seguimiento operativo.
+	 
+Escenario
+	D5 — Falla técnica del motor
+	Dado que
+	un usuario en medio del flujo de validación
+	Cuando
+	el motor de validación no responde o presenta una falla técnica (timeout/servicio caído)
+	Entonces
+	el usuario queda en estado visible 'validación en proceso', recibe notificación al resolverse y nunca queda en estado muerto; aplica el SLA de 24 h (RN-08).
+	 
+Escenario
+	D6 — KYT bloquea wallet cripto
+	Dado que
+	un usuario que intenta registrar una cuenta bancaria
+	Cuando
+	el KYT detecta riesgo alto en la wallet destino
+	Entonces
+	El sistema bloquea esa cuenta, informa que está bloqueada y ofrece intentar con otra o escalar, sin revelar la razón técnica (RN-28/RN-30).
+	
+
+4.6 Consideraciones de negocio y experiencia
+                                                * Datos sugeridos, no bloqueados: la data que retorna el motor debe presentarse como sugerida y confirmable, no como campos bloqueados de entrada, para permitir corregir errores de OCR y capturar campos fiscales faltantes.
+                                                * Arquitectura de información del formulario: aunque el formulario unificado elimina pasos, concentrar muchos campos en una pantalla puede percibirse como más largo. El diseño visual y la progresión son críticos para la conversión.
+                                                * Estados claros y mensajes por causa: los errores deben ser específicos por causa (no genéricos) con una acción clara disponible. El soporte es el último recurso, no el primero.
+                                                * KYB bien guiado: el KYB es inherentemente más complejo que el KYC (múltiples documentos, representante legal, latencia de registros). Requiere guía paso a paso e indicadores de progreso para no disparar el abandono.
+                                                * Costo por validación: SumSub cobra por bolsa de validaciones y cada llamado tiene costo. Evitar validaciones redundantes (RN-22) no es solo UX: es una decisión financiera.
+                                                * Doble costo en transición: durante ~7–8 meses Dropi paga Truora y SumSub en paralelo. Financiero debe tener visibilidad de ese período de costo duplicado.
+                                                * Impacto esperado: reducir la validación manual en Colombia del ~40% a ≤8%, habilitar KYB/KYT para cerrar la brecha legal, y convertir la validación en un paso transparente del onboarding que no frene activación ni retención.
+
+
+4.7 Riesgos detectados desde Producto
+Riesgos visibles desde la perspectiva de negocio. TI sumará los técnicos al devolver el documento de CÓMO/CUÁNDO.
+                                                * Riesgo 1: dependencia con tercero o área.
+                                                * Riesgo 2: posible cuello de botella operativo.
+                                                * Riesgo 3: cualquier factor que pueda retrasar el desarrollo.
+
+
+4.8 Lo que TI debe devolver tras el hand-off
+Respuesta esperada de TI (CÓMO / CUÁNDO)
+Antes de iniciar desarrollo, TI entrega: diagrama C4 niveles 2 a 4 (contenedores, componentes y código clave), estimación de esfuerzo por fase, restricciones técnicas detectadas, dependencias internas, plan de release, plan de logs/observabilidad y riesgos técnicos. Esta respuesta cierra el ciclo del hand-off.
+	                                                * Diagrama C4 — Nivel 2 (Contenedores).
+                                                * Diagrama C4 — Nivel 3 (Componentes) de los contenedores nuevos o más impactados.
+                                                * Estimación de esfuerzo por fase funcional (Fase 1 / 2 / 3).
+                                                * Cronograma propuesto (sprints, hitos, fecha tentativa de release de MVP).
+                                                * Restricciones técnicas y de performance que aplican.
+                                                * Dependencias internas (otros equipos, servicios compartidos).
+                                                * Plan de observabilidad: logs, métricas técnicas, alertas.
+                                                * Protocolos de seguridad aplicables (cifrado, autenticación, autorización).
+                                                * Riesgos técnicos adicionales detectados.
+
+
+💻 Activación de TDL/TPL
+Activación de TDL / TPL
+Este documento se completa en el momento del hand-off, cuando el proyecto pasa de Producto a ejecución. Lo lideran el Technical Delivery Lead (TDL) o Program Manager y el Technical Project Lead (TPL) o Project Lead. Define gobierno, riesgos, métricas de entrega y mecanismos de reporte.
+
+
+Rol del TDL / Program Manager
+Mira el proyecto desde arriba: gobierno, dependencias entre células, riesgos sistémicos, métricas DORA agregadas y comunicación a stakeholders ejecutivos. Es dueño de la matriz RACI y del Risk Heat Map consolidado.
+	
+
+Rol del TPL / Project Lead
+Mira el proyecto desde adentro: planeación detallada con PERT, ejecución sprint a sprint, reporte de estado con Traffic Light, captura de eventos para DORA y escalamiento de riesgos al TDL cuando aplique.
+	
+
+1 Información de gobierno
+Campo
+	Contenido
+	TDL / Program Manager
+	Nombre y contacto
+	TPL / Project Lead
+	Nombre y contacto
+	Sponsor ejecutivo
+	Nombre y área
+	Fecha de activación
+	DD/MM/AAAA
+	Cadencia de reporte ejecutivo
+	Semanal / Quincenal
+	Cadencia de reporte de squad
+	Diaria (daily) + Semanal (status)
+	Herramienta de tracking
+	Jira / Linear / Otro
+	
+
+
+
+2 Matriz RACI
+Define quién es Responsable, Aprobador, Consultado e Informado para cada actividad clave del proyecto. La completa el TDL al recibir el hand-off, con validación de Producto y Tech Lead. Una sola persona puede ser A (Aprobador) por actividad; varias pueden ser R, C o I.
+
+
+Convención RACI
+R = Responsable (hace el trabajo) · A = Aprobador (rinde cuentas, hay solo uno) · C = Consultado (aporta input antes de decidir) · I = Informado (sabe del resultado).
+	
+
+Tabla a completar — añadir o quitar filas según el proyecto:
+Actividad
+	Producto / PM
+	TDL / PM
+	TPL / PL
+	Tech Lead
+	Squad Dev
+	QA
+	Diseño
+	Stakeholder
+	Definición de alcance funcional
+	R
+	C
+	I
+	C
+	I
+	I
+	C
+	A
+	Definición de criterios de aceptación
+	R
+	C
+	C
+	C
+	I
+	C
+	C
+	I
+	Diseño de arquitectura (C4 N2-N4)
+	I
+	C
+	C
+	R/A
+	C
+	I
+	I
+	I
+	Estimación de esfuerzo
+	C
+	C
+	R
+	A
+	C
+	C
+	I
+	I
+	Definición del PERT
+	I
+	C
+	R/A
+	C
+	C
+	I
+	I
+	I
+	Definición de DORA objetivo
+	I
+	R/A
+	C
+	C
+	I
+	I
+	I
+	I
+	Risk Heat Map
+	C
+	R/A
+	C
+	C
+	I
+	C
+	I
+	I
+	Sprint planning
+	C
+	I
+	R/A
+	C
+	C
+	C
+	C
+	I
+	Code review
+	I
+	I
+	I
+	A
+	R
+	I
+	I
+	I
+	QA y aceptación
+	C
+	I
+	C
+	C
+	C
+	R/A
+	I
+	I
+	Decisión de release a producción
+	C
+	A
+	R
+	C
+	I
+	C
+	I
+	I
+	Reporte ejecutivo (Traffic Light)
+	I
+	A
+	R
+	I
+	I
+	I
+	I
+	I
+	Comunicación a Marketing
+	R/A
+	I
+	C
+	I
+	I
+	I
+	C
+	I
+	Medición post-lanzamiento
+	R/A
+	C
+	C
+	I
+	I
+	I
+	I
+	I
+	
+
+
+
+
+
+
+
+
+
+3 DORA Metrics
+Las cuatro métricas DORA miden la capacidad de entrega de software del equipo. Se definen como objetivo al hand-off, se capturan durante la ejecución y se reportan al cierre. El TDL define las metas; el TPL captura los eventos.
+
+
+Definición y meta por métrica
+Métrica
+	Qué mide
+	Cómo se calcula
+	Meta del proyecto
+	Responsable de captura
+	Deployment Frequency
+	Frecuencia con la que el equipo despliega código a producción.
+	Número de deployments a producción / período (semana o mes).
+	[Ej. diaria / semanal]
+	TPL + Squad Dev
+	Lead Time for Changes
+	Tiempo desde que el código se commitea hasta que corre en producción.
+	Promedio de horas/días entre commit y deploy exitoso a producción.
+	[Ej. < 24 horas]
+	TPL
+	Change Failure Rate
+	Porcentaje de deployments que requieren remediación (rollback, hotfix, parche).
+	(Deployments fallidos / total de deployments) × 100.
+	[Ej. < 15%]
+	TPL + QA
+	Mean Time to Restore (MTTR)
+	Tiempo promedio para restaurar el servicio tras un incidente en producción.
+	Promedio de tiempo entre detección del incidente y resolución.
+	[Ej. < 1 hora]
+	TPL + Squad Dev
+	
+
+Eventos a registrar para DORA
+El TPL debe asegurar que la herramienta de tracking (Jira, Linear, GitHub Actions, etc.) capture estos eventos automáticamente o de forma manual estandarizada.
+                                                * Fecha y hora de commit principal de cada cambio.
+                                                * Fecha y hora de deploy a producción.
+                                                * Estado del deploy: éxito / rollback / hotfix posterior.
+                                                * Fecha y hora de detección de cada incidente productivo asociado.
+                                                * Fecha y hora de resolución de cada incidente.
+
+
+Clasificación DORA
+Como referencia: equipos Elite despliegan bajo demanda, con Lead Time menor a un día, Change Failure Rate menor al 15% y MTTR menor a una hora. High: Lead Time entre 1 día y 1 semana. Medium: 1 semana a 1 mes. Low: más de 1 mes. Definir el nivel objetivo del proyecto al iniciar.
+	
+
+4 Risk Heat Map
+Mapa de calor de riesgos: combina probabilidad de ocurrencia e impacto si ocurre. Consolida los riesgos de negocio (doc 4.7) con los técnicos (devueltos por TI en 4.8). El TDL es dueño de este mapa.
+
+
+Escala de evaluación
+Nivel
+	Probabilidad
+	1 — Muy baja
+	Poco probable que ocurra en el proyecto.
+	2 — Baja
+	Podría ocurrir, pero no es esperado.
+	3 — Media
+	Hay condiciones que lo hacen posible.
+	4 — Alta
+	Es probable que ocurra en algún momento.
+	5 — Muy alta
+	Es casi seguro que ocurra.
+	
+
+Nivel
+	Impacto
+	1 — Muy bajo
+	Sin efecto en alcance, tiempo o calidad.
+	2 — Bajo
+	Ajustes menores, sin retraso.
+	3 — Medio
+	Retraso de algunos días o reducción de alcance no crítico.
+	4 — Alto
+	Retraso significativo o impacto en métrica de negocio.
+	5 — Muy alto
+	Pone en riesgo el lanzamiento o genera daño reputacional.
+	
+
+Cálculo y zonas
+Riesgo = Probabilidad × Impacto. Cada riesgo cae en una de tres zonas según el resultado:
+                                                * Zona Verde (1-6): monitorear. Revisar en status semanal.
+                                                * Zona Amarilla (7-14): mitigar. Plan de acción definido y owner asignado.
+                                                * Zona Roja (15-25): escalar. Decisión ejecutiva requerida antes de continuar.
+
+
+Matriz visual de referencia
+P ↓ / I →
+	I=1
+	I=2
+	I=3
+	I=4
+	I=5
+	P=5
+	5
+	10
+	15
+	20
+	25
+	P=4
+	4
+	8
+	12
+	16
+	20
+	P=3
+	3
+	6
+	9
+	12
+	15
+	P=2
+	2
+	4
+	6
+	8
+	10
+	P=1
+	1
+	2
+	3
+	4
+	5
+	
+
+Registro de riesgos del proyecto
+ID
+	Riesgo
+	Origen
+	Prob.
+	Impacto
+	Zona
+	Plan de mitigación
+	Owner
+	R-01
+	[Descripción del riesgo]
+	Negocio / Técnico / Externo
+	3
+	4
+	Amarilla
+	[Acción de mitigación]
+	[Nombre]
+	R-02
+	[Descripción del riesgo]
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	R-03
+	[Descripción del riesgo]
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	R-04
+	[Descripción del riesgo]
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	R-05
+	[Descripción del riesgo]
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+5 PERT (Program Evaluation and Review Technique)
+Técnica de estimación que pondera tres escenarios por tarea: optimista, más probable y pesimista. El TPL la usa para construir el cronograma real, identificar el camino crítico y dar fechas con grado de certeza, en lugar de estimaciones de punto único.
+
+
+Fórmula PERT
+Tiempo esperado por tarea
+TE = (O + 4M + P) / 6   donde: O = optimista (todo sale bien), M = más probable (escenario realista), P = pesimista (todo lo que puede salir mal, sale mal). La desviación estándar es (P - O) / 6, útil para calcular rangos de confianza.
+	
+
+Tabla de estimación PERT por tarea
+Cada tarea se descompone hasta un nivel donde la estimación tenga sentido (típicamente 1-5 días). Las dependencias se anotan para construir luego la red y detectar el camino crítico.
+ID
+	Tarea
+	Depende de
+	O (días)
+	M (días)
+	P (días)
+	TE
+	Owner
+	T-01
+	[Tarea o entregable técnico]
+	—
+	1
+	2
+	4
+	2.2
+	[Nombre]
+	T-02
+	[Tarea]
+	T-01
+	
+
+	
+
+	
+
+	
+
+	
+
+	T-03
+	[Tarea]
+	T-01
+	
+
+	
+
+	
+
+	
+
+	
+
+	T-04
+	[Tarea]
+	T-02, T-03
+	
+
+	
+
+	
+
+	
+
+	
+
+	T-05
+	[Tarea]
+	T-04
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+Camino crítico y fecha objetivo
+                                                * Camino crítico identificado: secuencia de tareas T-XX → T-XX → T-XX.
+                                                * Duración total del camino crítico (suma de TE): [N] días.
+                                                * Holgura de tareas fuera del camino crítico: [días disponibles antes de afectar la fecha final].
+                                                * Fecha objetivo de entrega (MVP): DD/MM/AAAA.
+                                                * Fecha pesimista (suma de Ps en camino crítico): DD/MM/AAAA.
+
+
+6 Traffic Light (estado semanal)
+Sistema de semáforo para reportar el estado del proyecto a stakeholders ejecutivos. Lo actualiza el TPL al cierre de cada semana y lo valida el TDL antes de comunicarlo. Se evalúan cuatro dimensiones de forma independiente.
+
+
+Convención de colores
+🟢 Verde
+	Todo en plan. Sin desviaciones significativas en alcance, tiempo o calidad.
+	🟡 Amarillo
+	Atención. Hay una desviación o riesgo identificado, con plan de acción en marcha.
+	🔴 Rojo
+	Crítico. La dimensión está comprometida y requiere decisión ejecutiva.
+	⚪ Gris
+	No aplica en esta semana o aún no medible.
+	
+
+Dimensiones a evaluar cada semana
+                                                * Alcance: ¿se está entregando lo definido en el hand-off? ¿hubo cambios de scope no aprobados?
+                                                * Tiempo: ¿el avance real se mantiene dentro del PERT? ¿el camino crítico está comprometido?
+                                                * Calidad: ¿los criterios de aceptación se están cumpliendo? ¿la Change Failure Rate está en meta?
+                                                * Equipo y riesgos: ¿hay riesgos nuevos en zona amarilla o roja? ¿el squad está disponible y sin bloqueos?
+
+
+Formato de reporte semanal
+Semana
+	Alcance
+	Tiempo
+	Calidad
+	Equipo / Riesgos
+	Comentario clave
+	Acción siguiente
+	S1
+	🟢
+	🟢
+	🟢
+	🟢
+	[Comentario]
+	[Acción]
+	S2
+	🟢
+	🟡
+	🟢
+	🟢
+	[Comentario]
+	[Acción]
+	S3
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	S4
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+	
+
+Regla de escalamiento
+Una sola dimensión en rojo, o dos en amarillo durante dos semanas consecutivas, dispara reunión de escalamiento con el sponsor ejecutivo dentro de las 48 horas siguientes al reporte.
+	
+
+7 Articulación de los cinco instrumentos
+Los cinco instrumentos no son listas independientes; se alimentan entre sí. El TDL y el TPL deben mantenerlos vivos y conectados durante toda la ejecución.
+                                                * La RACI define quién opera cada instrumento.
+                                                * El Risk Heat Map nutre la columna 'Equipo / Riesgos' del Traffic Light.
+                                                * El PERT define la línea base contra la que el Traffic Light evalúa 'Tiempo'.
+                                                * Los eventos capturados para DORA validan o invalidan la dimensión 'Calidad' del Traffic Light.
+                                                * Cuando un riesgo del Heat Map se materializa, se reestima el PERT y se actualiza el Traffic Light.
+🫀 Hallazgos following
+📈 Hallazgos Following (Monitoreo Post-Lanzamiento)
+Propósito: Monitorear el comportamiento real de los usuarios (Brands), validar las hipótesis del discovery y registrar iteraciones o errores detectados en producción.
+🔗 Fuentes de Información y Control
+                                                * 📊 Link de Dashboard: [Enlace a Mixpanel / Looker Studio / Amplitude para ver las métricas en tiempo real]
+                                                * 📓 Link de Bitácora: [Enlace al documento de registro de bugs, feedback de soporte o despliegues]
+________________
+
+
+🗓️ Ciclo de Seguimiento Actual
+                                                * 🟢 Fecha de inicio following: [DD/MM/AAAA] (Cuándo se empezó a trackear este comportamiento o cuándo se lanzó la fase).
+                                                * 🔍 Fecha de review: [DD/MM/AAAA] (Fecha de la sesión de alineación del equipo para evaluar los datos).
+                                                * Países en implementación Vs. Países en following
+________________
+
+
+📝 Resumen Semanal
+(Espacio para sintetizar el comportamiento de los KPI norte, adopción y salud del producto en los últimos 7 días).
+                                                * Métricas Clave de la Semana:
+                                                1. [Métrica 1, ej: Conversión]: [Valor actual] vs [Valor esperado] (📈/📉).
+                                                * Principales Hallazgos:
+                                                1. 💡 [Hallazgo de negocio/UX, ej: Las marcas abandonan el flujo si el procesamiento tarda más de 20s].
+________________
+
+
+💬 Comentarios, Conclusiones y Próximos Pasos
+                                                * Notas del equipo (PM/PD/Dev): * [Comentario sobre fricciones detectadas o comportamientos inesperados de los usuarios].
+                                                * Acciones Inmediatas (Next Steps):
+                                                * [ ] Apagar/Ajustar el feature flag de...
+                                                * [ ] Priorizar en el backlog el fix para...
+
+
+Apéndice checklist
+Apéndice · Checklist de uso del formato
+Antes de pasar al siguiente documento, validar que el anterior cumple los criterios mínimos.
+
+
+Checklist Kick-off de Producto
+                                                * Hay un POR QUÉ ahora claramente articulado.
+                                                * Hay al menos 2 painpoints documentados con descripción.
+                                                * Hay un perfil principal de usuario definido.
+                                                * Hay un objetivo de negocio y uno de experiencia.
+                                                * No hay estimaciones técnicas ni decisiones de arquitectura en el documento.
+
+
+Checklist Discovery & Levantamiento
+                                                * Hay evidencia de investigación con usuarios (no solo opinión).
+                                                * El AS-IS está documentado en pasos concretos.
+                                                * Las hipótesis siguen el formato sugerido y tienen evidencia.
+                                                * Hay una conclusión ejecutiva clara.
+
+
+Checklist Definición & Alcance
+                                                * Hay una propuesta única elegida (no varias en paralelo sin decisión).
+                                                * Existe lista explícita de NO-objetivos.
+                                                * Las fases describen valor al usuario, no implementación.
+                                                * Los supuestos están listados.
+
+
+Checklist Hand-off a TI
+                                                * JTBD redactado en el formato indicado.
+                                                * Sección C4 Nivel 1 completa: actores, sistemas externos, dominios, flujo de datos.
+                                                * Glosario de dominio incluido.
+                                                * Reglas de negocio numeradas.
+                                                * Criterios de aceptación en formato Gherkin para todos los módulos.
+                                                * Riesgos de negocio listados.
+
+
+Checklist Lanzamiento & Following
+                                                * Métricas de negocio con fórmula y criterio de éxito.
+                                                * Métricas de comportamiento definidas con eventos a trackear.
+                                                * Al menos una encuesta SEQ con trigger y frecuencia.
+                                                * Plan de 12 semanas con foco por mes.
+                                                * Insumos completos para MKT (TANGO, video, propuesta de valor, alcance, tipo de campaña).
+
+
+Checklist Activación TDL / TPL (Documento 4-bis)
+                                                * RACI completa con un solo Aprobador por actividad.
+                                                * DORA Metrics objetivo definidas para las cuatro dimensiones (Deployment Frequency, Lead Time, Change Failure Rate, MTTR).
+                                                * Eventos a capturar para DORA acordados con la herramienta de tracking.
+                                                * Risk Heat Map con al menos los riesgos del hand-off y los técnicos devueltos por TI, cada uno con plan de mitigación y owner.
+                                                * PERT con tareas estimadas en tres escenarios y camino crítico identificado.
+                                                * Fechas objetivo y pesimista comunicadas al sponsor.
+                                                * Traffic Light con cadencia, dimensiones y regla de escalamiento acordadas.
+Aporte Growth Ops
+
+
+[a]@catalina.giraldo@dropi.co dejemos aquí documentado lo que hablamos con Chile y Ecuador. También el tema del dashboard que hicimos
+_Asignada a catalina.giraldo@dropi.co_
+[b]@catalina.giraldo@dropi.co yo habia escrito ese riesgo pero si tienes una mejor perspectiva lo puedes dejar
+_Asignada a catalina.giraldo@dropi.co_
+[c]okaa ya veo
+[d]@catalina.giraldo@dropi.co aqui detallar lo que vamos a hacer para las fases
+_Asignada a catalina.giraldo@dropi.co_
+[e]@catalina.giraldo@dropi.co ya documente la fase 0, si tienes alguna observación la puedes dejar
+_Asignada a catalina.giraldo@dropi.co_
+[f]@catalina.giraldo@dropi.co @juan.rojas@dropi.co este es el pedazo que aun no tenemos full claro, solo sabemos que arrancamos con Guatemala con el de cuentas bancarias y con el de onboarding
+_Asignada a juan.rojas@dropi.co_
+[g]@juan.rojas@dropi.co tengo esas reglas de negocio por el momento, si tienes mas me dejas saber.
+_Asignada a juan.rojas@dropi.co_
+[h]@juan.rojas@dropi.co toca revisar esta de pendiente, hasta cuando puede quedar un proceso de validación en pendiente cuando va a registrar la cuenta bancaria
+_Asignada a juan.rojas@dropi.co_
+[i]@juan.rojas@dropi.co toca revisar esta de pendiente, hasta cuando puede quedar un proceso de validación en pendiente cuando va a registrar la cuenta bancaria
+_Asignada a juan.rojas@dropi.co_
+[j]@juan.rojas@dropi.co toca revisar esta de pendiente, hasta cuando puede quedar un proceso de validación en pendiente cuando va a registrar la cuenta bancaria
+_Asignada a juan.rojas@dropi.co_
+[k]@juan.rojas@dropi.co toca revisar esta de pendiente, hasta cuando puede quedar un proceso de validación en pendiente cuando va a registrar la cuenta bancaria
+_Asignada a juan.rojas@dropi.co_

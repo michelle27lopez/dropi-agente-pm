@@ -1,0 +1,34 @@
+.DS_Store
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/sync-diario/
+!.claude/skills/bug-jira/
+.mcp.json
+.impeccable/
+
+# Cerebro privado (repo anidado propio: cerebro-logistica-dropi).
+# Vive dentro de esta carpeta pero NUNCA se sube al repo del equipo.
+/cerebro/
+
+# Data generada del pipeline de recolecciones. NO se versiona.
+#
+# La rama juan/logistica-recolecciones-weekly hacía lo contrario (versionarlo
+# "para que el prototipo cargue en Vercel"), y tenía razón en el problema: sin
+# el archivo, el desplegado no tiene de dónde leer. Pero versionarlo cuesta más
+# de lo que resuelve:
+#   · son 563 KB con las direcciones de 2.055 bodegas — data operativa interna;
+#   · cambia todos los días, así que cada actualización sería un commit gordo
+#     y el repo se infla con fotos viejas que nadie va a consultar.
+#
+# La solución no es el archivo, es la base: con la migración 037 corrida, la
+# API sirve los datos y el JSON deja de hacer falta. Mientras tanto el módulo
+# desplegado muestra "todavía no se ha importado ningún día" en vez de romper,
+# y el botón "Actualizar datos" permite cargarlos desde el navegador.
+hub/public/logistica/recolecciones/datos-recolecciones*.json
+hub/public/logistica/recolecciones/pipeline/centroides.json
+hub/public/logistica/recolecciones/pipeline/geocache-*.json
+hub/public/logistica/recolecciones/pipeline/por-geocodificar.json
+hub/public/logistica/recolecciones/pipeline/geocode-final.json
+hub/public/logistica/recolecciones/pipeline/cruces-resultado.json
+hub/public/logistica/recolecciones/pipeline/*.csv

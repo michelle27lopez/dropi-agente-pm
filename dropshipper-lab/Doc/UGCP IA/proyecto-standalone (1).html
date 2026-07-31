@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UGC Creation Flow with AI — Handoff standalone</title>
+  <style>
+    :root { --bg: #0f1419; --card: #1a2332; --text: #e7ecf3; --muted: #8b9cb3; --accent: #f97316; --accent2: #a78bfa; --border: #2d3a4d; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; margin: 0; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 1.5rem 2rem 3rem; }
+    h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    h2 { font-size: 1.15rem; margin-top: 0; border-bottom: 1px solid var(--border); padding-bottom: 0.35rem; color: var(--accent); }
+    h3 { font-size: 1rem; color: var(--accent2); margin-top: 1.25rem; }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+    section { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1rem 0; }
+    code { font-family: ui-monospace, monospace; font-size: 0.82rem; background: #0d1117; padding: 0.1em 0.35em; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; }
+    ul, ol { margin: 0.5rem 0; padding-left: 1.25rem; }
+    .badge { display: inline-block; background: #431407; color: #fdba74; padding: 0.15rem 0.5rem; border-radius: 6px; font-size: 0.75rem; margin-right: 0.35rem; }
+    .badge.purple { background: #2e1065; color: #c4b5fd; }
+    .tabs { display: flex; gap: 0.5rem; margin: 1.25rem 0 0; flex-wrap: wrap; }
+    .tab { background: var(--card); border: 1px solid var(--border); color: var(--muted); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.9rem; }
+    .tab.active { border-color: var(--accent); color: var(--accent); background: #1f2937; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .files { columns: 2; column-gap: 1rem; font-size: 0.78rem; }
+    .files code { display: block; break-inside: avoid; margin-bottom: 0.15rem; word-break: break-all; }
+    #json-raw { background: #0d1117; border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow: auto; max-height: 70vh; font-size: 0.75rem; line-height: 1.45; white-space: pre; margin: 0; }
+    .toolbar { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; flex-wrap: wrap; }
+    .btn { background: #1f2937; border: 1px solid var(--border); color: var(--text); padding: 0.4rem 0.85rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+    .btn:hover { border-color: var(--accent); }
+    .btn.primary { background: #431407; border-color: #ea580c; color: #fdba74; }
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #14532d; color: #bbf7d0; padding: 0.6rem 1rem; border-radius: 8px; opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 99; }
+    .toast.show { opacity: 1; }
+    details { margin-top: 0.75rem; }
+    summary { cursor: pointer; color: var(--accent2); }
+  </style>
+</head>
+<body>
+  
+  <div class="wrap">
+    <header id="header"></header>
+    <div class="tabs" role="tablist">
+      <button type="button" class="tab active" data-tab="doc">Documentación</button>
+      <button type="button" class="tab" data-tab="json">JSON embebido</button>
+    </div>
+    
+    <div id="panel-doc" class="panel active"></div>
+    <div id="panel-json" class="panel">
+      <section>
+        <h2>Datos del proyecto (JSON)</h2>
+        <p class="meta">Copia este bloque y pégalo en otro agente. Todo el contexto está en un solo archivo.</p>
+        <div class="toolbar">
+          <button type="button" class="btn primary" id="copy-json">Copiar JSON</button>
+          <button type="button" class="btn" id="download-json">Descargar .json</button>
+        </div>
+        <pre id="json-raw"></pre>
+      </section>
+    </div>
+  </div>
+  <div class="toast" id="toast">Copiado al portapapeles</div>
+  <script type="application/json" id="proyecto-data">{"meta":{"purpose":"Handoff para otro agente de IA — contexto completo del prototipo","generatedAt":"2026-05-19T18:49:58.710Z","workspacePath":"/Users/user/Documents/contenido-IA","version":"0.1.0","language":"es-CO","format":"standalone-html-v1"},"project":{"name":"creador-contenido-ia","displayName":"UGC Creation Flow with AI","description":"Prototipo unificado: Fase 1 canvas de guiones (ScriptCreator) + Fase 2 wizard de contenido IA (ContentCreator) + biblioteca creativa. React + TypeScript + Vite.","type":"frontend-prototype","confidential":true},"stack":{"runtime":"browser","framework":"React 18.3","language":"TypeScript 5.8","bundler":"Vite 6.3","styling":["Tailwind CSS 4.1","tw-animate-css"],"ui":["Radix UI (shadcn-style components)","lucide-react icons","motion (Framer Motion successor)"],"state":"Zustand 5","routing":"React Router DOM 6.30","dnd":["@dnd-kit/core","react-dnd"],"charts":"recharts","alias":{"@":"./src"}},"commands":{"install":"npm i","dev":"npm run dev","build":"npm run build","preview":"npm run preview"},"entryPoints":{"html":"index.html","main":"src/main.tsx","app":"src/app/App.tsx"},"routes":[{"path":"/","page":"ProductCatalogPage","feature":"Catálogo de productos Dropi"},{"path":"/canvas/:productId","page":"ScriptCreatorPage","feature":"Canvas Fase 1 — nodos perfil/ángulo/hook/guion"},{"path":"/library","page":"BibliotecaCreativaPage","feature":"Índice biblioteca (tabs Copywriting / Creativos)"},{"path":"/library/:productId","page":"ContenidoGeneradoPage","feature":"Videos e imágenes por producto"}],"globalOverlays":[{"component":"CreativeFactoryWizard","trigger":"canvasStore.showWizard","description":"Wizard Fase 2 modal sobre cualquier ruta"},{"component":"MonomoWizard","trigger":"Step0MethodSelection → Creators","description":"Flujo alternativo con creadores reales"},{"component":"ConfidentialWatermark","description":"Marca de agua confidencial en toda la app"}],"architecture":{"phases":[{"id":"fase1","name":"ScriptCreator","path":"src/features/ScriptCreator/","description":"Canvas con nodos magnéticos: Producto → Perfiles → Ángulos → Hooks → Guiones"},{"id":"fase2","name":"ContentCreator","path":"src/features/ContentCreator/","description":"Wizard IA: formato → guion → avatar/B-roll → generación → checkout"}],"directories":{"src/app":"Shell, rutas en App.tsx, componentes UI shadcn, creativos compartidos","src/pages":"Wrappers de página por ruta","src/store":"Zustand canvasStore + mappers copywriting","src/layouts":"LibraryShell (sidebar Dropi)","src/data":"mockCatalogProducts","src/styles":"index.css, tailwind, theme, fonts"}},"stateManagement":{"store":"src/store/canvasStore.ts","highlights":["currentScript — guion desde ScriptNode, pre-llena Step2ScriptReview","selectedProfileIds / selectedAngleIds — multi-selección máx 5","creatives — generados por wizard, usados en biblioteca y canvas","wizardDrafts — borradores pausados (Ocultar y avisarme)","showWizard / wizardEntry / variationContext — apertura del asistente","copywritingByProductId — snapshot canvas por producto (solo sesión)","brandKits / activeBrandKitId — kits de marca en memoria"],"note":"main.tsx elimina localStorage key contenido-ia-copywriting al arrancar"},"wizardSteps":{"step0":{"file":"Step0MethodSelection.tsx","options":["IA → CreativeFactoryWizard","Creators → MonomoWizard"]},"iaFlow":["Step1FormatSelection — video o imagen","Step2ScriptReview — lee canvasStore.currentScript","Step3AvatarSelection — avatar o B-roll producto","Step4VideoGeneration / Step4PostProduction","Step5VideoPreview / Step6ImageFlow","Step7Checkout / Step8PaymentValidation"],"monomoFlow":"MonomoStep1..13 en steps/monomo/"},"keyComponents":{"canvas":["Canvas.tsx","nodes/ProductNode|AvatarNode|AngleNode|HookNode|ScriptNode","SelectionToolbar","ModalVistaPrevia (tema naranja)"],"library":["BibliotecaCreativaPage","ContenidoGeneradoPage","ModalDetalleCreativo (tema morado)","LibraryShell"],"shared":["CreativeContentDetailModal","ProductSelectionDrawer","ConfidentialWatermark"]},"canvasHooks":["useCanvasData","useCanvasLayout","useCanvasActions","useCanvasFocus","useCanvasViewport","useCanvasNodeDrag","useMagneticLayout","useCanvasMagneticLayoutSync"],"figma":{"canvasFase1":"node-id=7723-137767","detallesAltaFidelidad":"node-id=7726-137768","wireframesFase2":"node-id=7727-155085"},"documents":[{"path":"PLAN.md","summary":"Plan maestro: arquitectura, rutas, store, componentes Figma, tareas"},{"path":"README.md","summary":"npm i && npm run dev"},{"path":"guidelines/Guidelines.md","summary":"Plantilla de guidelines (vacía)"}],"designTokens":{"canvasAccent":"naranja (#EA580C / orange)","libraryAccent":"morado (#7C3AED / violet)","selectionToolbar":"fondo #1A1A2E, fixed bottom-6"},"fileCounts":{"total":211,"sourceTsTsx":176,"assets":25},"fileTree":[".gitignore","ATTRIBUTIONS.md","PLAN.md","README.md","guidelines/Guidelines.md","index.html","package-lock.json","package.json","postcss.config.mjs","src/app/App.tsx","src/app/components/ColorPickerInput.tsx","src/app/components/ConfidentialWatermark.tsx","src/app/components/CreativeDetailModal.tsx","src/app/components/MyUGCDashboard.tsx","src/app/components/ProductResultsDashboard.tsx","src/app/components/ProductSelectionDrawer.tsx","src/app/components/UGCLibrary.tsx","src/app/components/creatives/CreativeContentDetailModal.tsx","src/app/components/creatives/CreativeExpandOverlay.tsx","src/app/components/creatives/creativeDetailViewModel.ts","src/app/components/figma/ImageWithFallback.tsx","src/app/components/ui/accordion.tsx","src/app/components/ui/alert-dialog.tsx","src/app/components/ui/alert.tsx","src/app/components/ui/aspect-ratio.tsx","src/app/components/ui/avatar.tsx","src/app/components/ui/badge.tsx","src/app/components/ui/breadcrumb.tsx","src/app/components/ui/button.tsx","src/app/components/ui/calendar.tsx","src/app/components/ui/card.tsx","src/app/components/ui/carousel.tsx","src/app/components/ui/chart.tsx","src/app/components/ui/checkbox.tsx","src/app/components/ui/collapsible.tsx","src/app/components/ui/command.tsx","src/app/components/ui/context-menu.tsx","src/app/components/ui/dialog.tsx","src/app/components/ui/drawer.tsx","src/app/components/ui/dropdown-menu.tsx","src/app/components/ui/form.tsx","src/app/components/ui/hover-card.tsx","src/app/components/ui/input-otp.tsx","src/app/components/ui/input.tsx","src/app/components/ui/label.tsx","src/app/components/ui/menubar.tsx","src/app/components/ui/navigation-menu.tsx","src/app/components/ui/pagination.tsx","src/app/components/ui/popover.tsx","src/app/components/ui/progress.tsx","src/app/components/ui/radio-group.tsx","src/app/components/ui/resizable.tsx","src/app/components/ui/scroll-area.tsx","src/app/components/ui/select.tsx","src/app/components/ui/separator.tsx","src/app/components/ui/sheet.tsx","src/app/components/ui/sidebar.tsx","src/app/components/ui/skeleton.tsx","src/app/components/ui/slider.tsx","src/app/components/ui/sonner.tsx","src/app/components/ui/switch.tsx","src/app/components/ui/table.tsx","src/app/components/ui/tabs.tsx","src/app/components/ui/textarea.tsx","src/app/components/ui/toggle-group.tsx","src/app/components/ui/toggle.tsx","src/app/components/ui/tooltip.tsx","src/app/components/ui/use-mobile.ts","src/app/components/ui/utils.ts","src/data/mockCatalogProducts.ts","src/features/ContentCreator/BrandKitEditorModal.tsx","src/features/ContentCreator/CreativeFactoryWizard.tsx","src/features/ContentCreator/ImportSourceModal.tsx","src/features/ContentCreator/ModalDetalleCreativo.tsx","src/features/ContentCreator/MonomoWizard.tsx","src/features/ContentCreator/ProductDrawer.tsx","src/features/ContentCreator/Stepper.tsx","src/features/ContentCreator/index.ts","src/features/ContentCreator/scriptTiming.ts","src/features/ContentCreator/steps/Step0MethodSelection.tsx","src/features/ContentCreator/steps/Step1FormatSelection.tsx","src/features/ContentCreator/steps/Step2ScriptReview.tsx","src/features/ContentCreator/steps/Step3AvatarSelection.tsx","src/features/ContentCreator/steps/Step4PostProduction.tsx","src/features/ContentCreator/steps/Step4VideoGeneration.tsx","src/features/ContentCreator/steps/Step5VideoPreview.tsx","src/features/ContentCreator/steps/Step6ImageFlow.tsx","src/features/ContentCreator/steps/Step7Checkout.tsx","src/features/ContentCreator/steps/Step8PaymentValidation.tsx","src/features/ContentCreator/steps/StepVideoKeyframePreview.tsx","src/features/ContentCreator/steps/monomo/MonomoStep10OfferParticipants.tsx","src/features/ContentCreator/steps/monomo/MonomoStep11MonomoIntegration.tsx","src/features/ContentCreator/steps/monomo/MonomoStep12Checkout.tsx","src/features/ContentCreator/steps/monomo/MonomoStep13PaymentValidation.tsx","src/features/ContentCreator/steps/monomo/MonomoStep1NeedType.tsx","src/features/ContentCreator/steps/monomo/MonomoStep2ProjectName.tsx","src/features/ContentCreator/steps/monomo/MonomoStep3ContentType.tsx","src/features/ContentCreator/steps/monomo/MonomoStep4ParticipantAction.tsx","src/features/ContentCreator/steps/monomo/MonomoStep5ProjectStyle.tsx","src/features/ContentCreator/steps/monomo/MonomoStep6ScriptReview.tsx","src/features/ContentCreator/steps/monomo/MonomoStep7PhotoSession.tsx","src/features/ContentCreator/steps/monomo/MonomoStep8CreatorProfile.tsx","src/features/ContentCreator/steps/monomo/MonomoStep9BudgetDistribution.tsx","src/features/ContentCreator/videoPricing.ts","src/features/ScriptCreator/AIContentLibrary.tsx","src/features/ScriptCreator/AIContentLibraryHeader.tsx","src/features/ScriptCreator/AIContentView.tsx","src/features/ScriptCreator/Canvas.tsx","src/features/ScriptCreator/CanvasOnboardingOverlay.tsx","src/features/ScriptCreator/CanvasSecurityAlert.tsx","src/features/ScriptCreator/ConnectionLine.tsx","src/features/ScriptCreator/CustomZoomPan.tsx","src/features/ScriptCreator/GenerateContentButton.tsx","src/features/ScriptCreator/HelpPanel.tsx","src/features/ScriptCreator/MagneticIndicator.tsx","src/features/ScriptCreator/Minimap.tsx","src/features/ScriptCreator/ModalVistaPrevia.tsx","src/features/ScriptCreator/ProductCard.tsx","src/features/ScriptCreator/ProductCatalog.tsx","src/features/ScriptCreator/ProductDetail.tsx","src/features/ScriptCreator/ProductDetailView.tsx","src/features/ScriptCreator/ProductHeader.tsx","src/features/ScriptCreator/ProductImageGallery.tsx","src/features/ScriptCreator/SelectionToolbar.tsx","src/features/ScriptCreator/SidebarWrapper.tsx","src/features/ScriptCreator/SmartTag.tsx","src/features/ScriptCreator/SparklesAnimated.tsx","src/features/ScriptCreator/Tooltip.tsx","src/features/ScriptCreator/assets/01610cf1902b907cd84bc9e2b2a21b1b284f4844.png","src/features/ScriptCreator/assets/068ff3521c68e9b6f07bebb1a819dc9607cd5ac1.png","src/features/ScriptCreator/assets/1fb25c351499676d14aedd7a82d12f551a0f7b4c.png","src/features/ScriptCreator/assets/3808736d26480f8cb6366563dd3ee42193276b49.png","src/features/ScriptCreator/assets/3a249ed24d8658ddbc0f52d1c295defa613bde5d.png","src/features/ScriptCreator/assets/3a7fa1f7e2af1d61be107c6cb8ee29e829626358.png","src/features/ScriptCreator/assets/3be6e99dec320e1b63bc001091d8d2dc8d668f18.png","src/features/ScriptCreator/assets/44f8e529a8faf41ff7c9d366dac72e6ec81b3bbe.png","src/features/ScriptCreator/assets/5e4306f57b25ba5d4ff541263e0440df3cc4ee53.png","src/features/ScriptCreator/assets/62804b7a7acac03f29e6c47410e75090e58a03b3.png","src/features/ScriptCreator/assets/65982bded48dbc1c17207d7af13e441c71d4a0c0.png","src/features/ScriptCreator/assets/6957233382a29c47c1de69ac809d4e316574d7cb.png","src/features/ScriptCreator/assets/7f55731c8371c211e0f162763a8c656e25a07b01.png","src/features/ScriptCreator/assets/8dbf2a5e1d40448993fccbfcfae3990092b0bf59.png","src/features/ScriptCreator/assets/968e696555760b4224677a5f331c89796bd09924.png","src/features/ScriptCreator/assets/99a7b7e0c193143391f226b706e9b0461ef600dd.png","src/features/ScriptCreator/assets/aab4099538dc19c3687dae77f1f3cc21d8988fd1.png","src/features/ScriptCreator/assets/abf1b3c87fc7997e8f57dfd8d1786a3dcc544c1e.png","src/features/ScriptCreator/assets/abf63918fbf5cfddb7f827e997ec11214312bba4.png","src/features/ScriptCreator/assets/b0814f738cb62eaf287692b17c3d1fe6a9ad27af.png","src/features/ScriptCreator/assets/c9a3629efbad710c519bbb34820ace9db3642096.png","src/features/ScriptCreator/assets/e66fcbbd47f5e71c7dc6c985467057b7ae7012d9.png","src/features/ScriptCreator/assets/e791c2e53a74ed252fcf1845f77c94039f1184bf.png","src/features/ScriptCreator/assets/ee3dbfea838473324d81af8e26c7dd3992adbea1.png","src/features/ScriptCreator/assets/ffc44208530a6f35f25059d3af2f48dcd031832f.png","src/features/ScriptCreator/canvasLinkage.ts","src/features/ScriptCreator/canvasScriptGeneration.ts","src/features/ScriptCreator/canvasThemedScripts.ts","src/features/ScriptCreator/canvasTypes.ts","src/features/ScriptCreator/hooks/useCanvasActions.ts","src/features/ScriptCreator/hooks/useCanvasAutoExpand.ts","src/features/ScriptCreator/hooks/useCanvasData.ts","src/features/ScriptCreator/hooks/useCanvasFocus.ts","src/features/ScriptCreator/hooks/useCanvasLayout.ts","src/features/ScriptCreator/hooks/useCanvasLayoutConstants.ts","src/features/ScriptCreator/hooks/useCanvasMagneticLayoutSync.ts","src/features/ScriptCreator/hooks/useCanvasNodeDrag.ts","src/features/ScriptCreator/hooks/useCanvasViewport.ts","src/features/ScriptCreator/hooks/useMagneticLayout.ts","src/features/ScriptCreator/imports/Confidencial.tsx","src/features/ScriptCreator/imports/Default.tsx","src/features/ScriptCreator/imports/Escenario4InsigniaVisibleEnDetalleDelProducto.tsx","src/features/ScriptCreator/imports/Frame1321316947.tsx","src/features/ScriptCreator/imports/Frame1321317902.tsx","src/features/ScriptCreator/imports/Frame1321317968.tsx","src/features/ScriptCreator/imports/GenerarContenido.tsx","src/features/ScriptCreator/imports/IconFillSparksIaAnimated.tsx","src/features/ScriptCreator/imports/Id.tsx","src/features/ScriptCreator/imports/Insignia.tsx","src/features/ScriptCreator/imports/Sidebar.tsx","src/features/ScriptCreator/imports/TooltipOficial.tsx","src/features/ScriptCreator/imports/svg-1k33a4bxec.ts","src/features/ScriptCreator/imports/svg-2y9jhl2nm1.ts","src/features/ScriptCreator/imports/svg-4bzq0ou13z.ts","src/features/ScriptCreator/imports/svg-9b64qg02el.ts","src/features/ScriptCreator/imports/svg-bjg6fvqd13.ts","src/features/ScriptCreator/imports/svg-gowx3u2wup.ts","src/features/ScriptCreator/imports/svg-k1dgbr3oax.ts","src/features/ScriptCreator/imports/svg-op1enl3np6.ts","src/features/ScriptCreator/imports/svg-qf0od442kf.ts","src/features/ScriptCreator/imports/svg-vow24yruii.ts","src/features/ScriptCreator/nodes/AngleNode.tsx","src/features/ScriptCreator/nodes/AvatarNode.tsx","src/features/ScriptCreator/nodes/HookNode.tsx","src/features/ScriptCreator/nodes/ProductNode.tsx","src/features/ScriptCreator/nodes/ScriptNode.tsx","src/features/ScriptCreator/productCanvasTheme.ts","src/features/ScriptCreator/productImages.ts","src/features/ScriptCreator/sensitiveNicheDetector.ts","src/layouts/LibraryShell.tsx","src/main.tsx","src/pages/BibliotecaCreativaPage.tsx","src/pages/ContenidoGeneradoPage.tsx","src/pages/ProductCatalogPage.tsx","src/pages/ScriptCreatorPage.tsx","src/store/canvasScriptMapper.ts","src/store/canvasStore.ts","src/store/copywritingSnapshot.ts","src/styles/fonts.css","src/styles/index.css","src/styles/tailwind.css","src/styles/theme.css","vite.config.ts"],"sourceFiles":["src/app/App.tsx","src/app/components/ColorPickerInput.tsx","src/app/components/ConfidentialWatermark.tsx","src/app/components/CreativeDetailModal.tsx","src/app/components/MyUGCDashboard.tsx","src/app/components/ProductResultsDashboard.tsx","src/app/components/ProductSelectionDrawer.tsx","src/app/components/UGCLibrary.tsx","src/app/components/creatives/CreativeContentDetailModal.tsx","src/app/components/creatives/CreativeExpandOverlay.tsx","src/app/components/creatives/creativeDetailViewModel.ts","src/app/components/figma/ImageWithFallback.tsx","src/app/components/ui/accordion.tsx","src/app/components/ui/alert-dialog.tsx","src/app/components/ui/alert.tsx","src/app/components/ui/aspect-ratio.tsx","src/app/components/ui/avatar.tsx","src/app/components/ui/badge.tsx","src/app/components/ui/breadcrumb.tsx","src/app/components/ui/button.tsx","src/app/components/ui/calendar.tsx","src/app/components/ui/card.tsx","src/app/components/ui/carousel.tsx","src/app/components/ui/chart.tsx","src/app/components/ui/checkbox.tsx","src/app/components/ui/collapsible.tsx","src/app/components/ui/command.tsx","src/app/components/ui/context-menu.tsx","src/app/components/ui/dialog.tsx","src/app/components/ui/drawer.tsx","src/app/components/ui/dropdown-menu.tsx","src/app/components/ui/form.tsx","src/app/components/ui/hover-card.tsx","src/app/components/ui/input-otp.tsx","src/app/components/ui/input.tsx","src/app/components/ui/label.tsx","src/app/components/ui/menubar.tsx","src/app/components/ui/navigation-menu.tsx","src/app/components/ui/pagination.tsx","src/app/components/ui/popover.tsx","src/app/components/ui/progress.tsx","src/app/components/ui/radio-group.tsx","src/app/components/ui/resizable.tsx","src/app/components/ui/scroll-area.tsx","src/app/components/ui/select.tsx","src/app/components/ui/separator.tsx","src/app/components/ui/sheet.tsx","src/app/components/ui/sidebar.tsx","src/app/components/ui/skeleton.tsx","src/app/components/ui/slider.tsx","src/app/components/ui/sonner.tsx","src/app/components/ui/switch.tsx","src/app/components/ui/table.tsx","src/app/components/ui/tabs.tsx","src/app/components/ui/textarea.tsx","src/app/components/ui/toggle-group.tsx","src/app/components/ui/toggle.tsx","src/app/components/ui/tooltip.tsx","src/app/components/ui/use-mobile.ts","src/app/components/ui/utils.ts","src/data/mockCatalogProducts.ts","src/features/ContentCreator/BrandKitEditorModal.tsx","src/features/ContentCreator/CreativeFactoryWizard.tsx","src/features/ContentCreator/ImportSourceModal.tsx","src/features/ContentCreator/ModalDetalleCreativo.tsx","src/features/ContentCreator/MonomoWizard.tsx","src/features/ContentCreator/ProductDrawer.tsx","src/features/ContentCreator/Stepper.tsx","src/features/ContentCreator/index.ts","src/features/ContentCreator/scriptTiming.ts","src/features/ContentCreator/steps/Step0MethodSelection.tsx","src/features/ContentCreator/steps/Step1FormatSelection.tsx","src/features/ContentCreator/steps/Step2ScriptReview.tsx","src/features/ContentCreator/steps/Step3AvatarSelection.tsx","src/features/ContentCreator/steps/Step4PostProduction.tsx","src/features/ContentCreator/steps/Step4VideoGeneration.tsx","src/features/ContentCreator/steps/Step5VideoPreview.tsx","src/features/ContentCreator/steps/Step6ImageFlow.tsx","src/features/ContentCreator/steps/Step7Checkout.tsx","src/features/ContentCreator/steps/Step8PaymentValidation.tsx","src/features/ContentCreator/steps/StepVideoKeyframePreview.tsx","src/features/ContentCreator/steps/monomo/MonomoStep10OfferParticipants.tsx","src/features/ContentCreator/steps/monomo/MonomoStep11MonomoIntegration.tsx","src/features/ContentCreator/steps/monomo/MonomoStep12Checkout.tsx","src/features/ContentCreator/steps/monomo/MonomoStep13PaymentValidation.tsx","src/features/ContentCreator/steps/monomo/MonomoStep1NeedType.tsx","src/features/ContentCreator/steps/monomo/MonomoStep2ProjectName.tsx","src/features/ContentCreator/steps/monomo/MonomoStep3ContentType.tsx","src/features/ContentCreator/steps/monomo/MonomoStep4ParticipantAction.tsx","src/features/ContentCreator/steps/monomo/MonomoStep5ProjectStyle.tsx","src/features/ContentCreator/steps/monomo/MonomoStep6ScriptReview.tsx","src/features/ContentCreator/steps/monomo/MonomoStep7PhotoSession.tsx","src/features/ContentCreator/steps/monomo/MonomoStep8CreatorProfile.tsx","src/features/ContentCreator/steps/monomo/MonomoStep9BudgetDistribution.tsx","src/features/ContentCreator/videoPricing.ts","src/features/ScriptCreator/AIContentLibrary.tsx","src/features/ScriptCreator/AIContentLibraryHeader.tsx","src/features/ScriptCreator/AIContentView.tsx","src/features/ScriptCreator/Canvas.tsx","src/features/ScriptCreator/CanvasOnboardingOverlay.tsx","src/features/ScriptCreator/CanvasSecurityAlert.tsx","src/features/ScriptCreator/ConnectionLine.tsx","src/features/ScriptCreator/CustomZoomPan.tsx","src/features/ScriptCreator/GenerateContentButton.tsx","src/features/ScriptCreator/HelpPanel.tsx","src/features/ScriptCreator/MagneticIndicator.tsx","src/features/ScriptCreator/Minimap.tsx","src/features/ScriptCreator/ModalVistaPrevia.tsx","src/features/ScriptCreator/ProductCard.tsx","src/features/ScriptCreator/ProductCatalog.tsx","src/features/ScriptCreator/ProductDetail.tsx","src/features/ScriptCreator/ProductDetailView.tsx","src/features/ScriptCreator/ProductHeader.tsx","src/features/ScriptCreator/ProductImageGallery.tsx","src/features/ScriptCreator/SelectionToolbar.tsx","src/features/ScriptCreator/SidebarWrapper.tsx","src/features/ScriptCreator/SmartTag.tsx","src/features/ScriptCreator/SparklesAnimated.tsx","src/features/ScriptCreator/Tooltip.tsx","src/features/ScriptCreator/canvasLinkage.ts","src/features/ScriptCreator/canvasScriptGeneration.ts","src/features/ScriptCreator/canvasThemedScripts.ts","src/features/ScriptCreator/canvasTypes.ts","src/features/ScriptCreator/hooks/useCanvasActions.ts","src/features/ScriptCreator/hooks/useCanvasAutoExpand.ts","src/features/ScriptCreator/hooks/useCanvasData.ts","src/features/ScriptCreator/hooks/useCanvasFocus.ts","src/features/ScriptCreator/hooks/useCanvasLayout.ts","src/features/ScriptCreator/hooks/useCanvasLayoutConstants.ts","src/features/ScriptCreator/hooks/useCanvasMagneticLayoutSync.ts","src/features/ScriptCreator/hooks/useCanvasNodeDrag.ts","src/features/ScriptCreator/hooks/useCanvasViewport.ts","src/features/ScriptCreator/hooks/useMagneticLayout.ts","src/features/ScriptCreator/imports/Confidencial.tsx","src/features/ScriptCreator/imports/Default.tsx","src/features/ScriptCreator/imports/Escenario4InsigniaVisibleEnDetalleDelProducto.tsx","src/features/ScriptCreator/imports/Frame1321316947.tsx","src/features/ScriptCreator/imports/Frame1321317902.tsx","src/features/ScriptCreator/imports/Frame1321317968.tsx","src/features/ScriptCreator/imports/GenerarContenido.tsx","src/features/ScriptCreator/imports/IconFillSparksIaAnimated.tsx","src/features/ScriptCreator/imports/Id.tsx","src/features/ScriptCreator/imports/Insignia.tsx","src/features/ScriptCreator/imports/Sidebar.tsx","src/features/ScriptCreator/imports/TooltipOficial.tsx","src/features/ScriptCreator/imports/svg-1k33a4bxec.ts","src/features/ScriptCreator/imports/svg-2y9jhl2nm1.ts","src/features/ScriptCreator/imports/svg-4bzq0ou13z.ts","src/features/ScriptCreator/imports/svg-9b64qg02el.ts","src/features/ScriptCreator/imports/svg-bjg6fvqd13.ts","src/features/ScriptCreator/imports/svg-gowx3u2wup.ts","src/features/ScriptCreator/imports/svg-k1dgbr3oax.ts","src/features/ScriptCreator/imports/svg-op1enl3np6.ts","src/features/ScriptCreator/imports/svg-qf0od442kf.ts","src/features/ScriptCreator/imports/svg-vow24yruii.ts","src/features/ScriptCreator/nodes/AngleNode.tsx","src/features/ScriptCreator/nodes/AvatarNode.tsx","src/features/ScriptCreator/nodes/HookNode.tsx","src/features/ScriptCreator/nodes/ProductNode.tsx","src/features/ScriptCreator/nodes/ScriptNode.tsx","src/features/ScriptCreator/productCanvasTheme.ts","src/features/ScriptCreator/productImages.ts","src/features/ScriptCreator/sensitiveNicheDetector.ts","src/layouts/LibraryShell.tsx","src/main.tsx","src/pages/BibliotecaCreativaPage.tsx","src/pages/ContenidoGeneradoPage.tsx","src/pages/ProductCatalogPage.tsx","src/pages/ScriptCreatorPage.tsx","src/store/canvasScriptMapper.ts","src/store/canvasStore.ts","src/store/copywritingSnapshot.ts","src/styles/fonts.css","src/styles/index.css","src/styles/tailwind.css","src/styles/theme.css"]}</script>
+  <script>
+(function () {
+  const p = JSON.parse(document.getElementById('proyecto-data').textContent);
+  const esc = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  document.getElementById('header').innerHTML = `
+    <h1>${esc(p.project.displayName)}</h1>
+    <p class="meta">${esc(p.project.description)}</p>
+    <p class="meta">Generado: ${esc(p.meta.generatedAt)} · v${esc(p.meta.version)} · <span class="badge">CONFIDENCIAL</span> · <span class="badge">STANDALONE</span></p>
+    <p class="meta">${esc(p.meta.purpose)}</p>
+  `;
+
+  const routes = p.routes.map(r => `<tr><td><code>${esc(r.path)}</code></td><td>${esc(r.page)}</td><td>${esc(r.feature)}</td></tr>`).join('');
+  const overlays = p.globalOverlays.map(o => `<li><code>${esc(o.component)}</code> — ${esc(o.description)}</li>`).join('');
+  const phases = p.architecture.phases.map(ph => `<h3>${esc(ph.name)} <code>${esc(ph.path)}</code></h3><p>${esc(ph.description)}</p>`).join('');
+  const dirs = Object.entries(p.architecture.directories).map(([k,v]) => `<li><code>${esc(k)}</code> — ${esc(v)}</li>`).join('');
+  const state = p.stateManagement.highlights.map(h => `<li>${esc(h)}</li>`).join('');
+  const iaFlow = p.wizardSteps.iaFlow.map(s => `<li>${esc(s)}</li>`).join('');
+  const comps = Object.entries(p.keyComponents).map(([area, items]) =>
+    `<h3>${esc(area)}</h3><ul>${items.map(i => `<li><code>${esc(i)}</code></li>`).join('')}</ul>`).join('');
+  const docs = p.documents.map(d => `<li><code>${esc(d.path)}</code> — ${esc(d.summary)}</li>`).join('');
+  const sourceFiles = p.sourceFiles.map(f => `<code>${esc(f)}</code>`).join('');
+  const fileTree = p.fileTree.map(f => `<code>${esc(f)}</code>`).join('');
+
+  document.getElementById('panel-doc').innerHTML = `
+    <section><h2>Comandos</h2><ul>
+      <li><code>${esc(p.commands.install)}</code> — instalar</li>
+      <li><code>${esc(p.commands.dev)}</code> — desarrollo</li>
+      <li><code>${esc(p.commands.build)}</code> — build</li>
+    </ul></section>
+    <section><h2>Stack</h2><ul>
+      <li>${esc(p.stack.framework)} + ${esc(p.stack.language)}</li>
+      <li>${esc(p.stack.bundler)}</li>
+      <li>Estilos: ${esc(p.stack.styling.join(', '))}</li>
+      <li>UI: ${esc(p.stack.ui.join('; '))}</li>
+      <li>Estado: ${esc(p.stack.state)} · Rutas: ${esc(p.stack.routing)}</li>
+      <li>Alias <code>@</code> → <code>${esc(p.stack.alias['@'])}</code></li>
+    </ul>
+    <p class="meta">Entry: <code>${esc(p.entryPoints.main)}</code> · <code>${esc(p.entryPoints.app)}</code></p></section>
+    <section><h2>Rutas</h2>
+      <table><thead><tr><th>Ruta</th><th>Página</th><th>Descripción</th></tr></thead><tbody>${routes}</tbody></table>
+      <h3>Overlays</h3><ul>${overlays}</ul></section>
+    <section><h2>Arquitectura</h2>${phases}
+      <h3>Directorios</h3><ul>${dirs}</ul></section>
+    <section><h2>Estado (Zustand)</h2>
+      <p><code>${esc(p.stateManagement.store)}</code></p>
+      <ul>${state}</ul>
+      <p class="meta">${esc(p.stateManagement.note)}</p></section>
+    <section><h2>Wizard Fase 2</h2>
+      <p><code>${esc(p.wizardSteps.step0.file)}</code>: ${esc(p.wizardSteps.step0.options.join(' · '))}</p>
+      <h3>Flujo IA</h3><ol>${iaFlow}</ol>
+      <p class="meta">${esc(p.wizardSteps.monomoFlow)}</p></section>
+    <section><h2>Componentes</h2>${comps}
+      <h3>Hooks canvas</h3><p>${p.canvasHooks.map(h => '<code>'+esc(h)+'</code>').join(' · ')}</p></section>
+    <section><h2>Figma</h2><ul>
+      <li>Canvas: <code>${esc(p.figma.canvasFase1)}</code></li>
+      <li>Detalles: <code>${esc(p.figma.detallesAltaFidelidad)}</code></li>
+      <li>Wireframes: <code>${esc(p.figma.wireframesFase2)}</code></li>
+    </ul>
+    <p><span class="badge">Canvas</span> ${esc(p.designTokens.canvasAccent)} · <span class="badge purple">Biblioteca</span> ${esc(p.designTokens.libraryAccent)}</p></section>
+    <section><h2>Docs en repo</h2><ul>${docs}</ul></section>
+    <section><h2>Archivos fuente (${p.fileCounts.sourceTsTsx})</h2>
+      <div class="files">${sourceFiles}</div></section>
+    <section><h2>Árbol completo (${p.fileCounts.total})</h2>
+      <details><summary>Ver todos los archivos</summary>
+      <div class="files" style="margin-top:0.75rem">${fileTree}</div></details></section>
+    <section><h2>Instrucciones agente</h2><ol>
+      <li>Extraer JSON de la pestaña "JSON embebido" o del <code>&lt;script id="proyecto-data"&gt;</code>.</li>
+      <li>Leer <code>PLAN.md</code> en el repo para diagrama Mermaid.</li>
+      <li>Wizard = overlay; rutas en <code>App.tsx</code>.</li>
+      <li>Sin backend; Zustand en sesión.</li>
+      <li>Tema naranja (canvas) vs morado (biblioteca).</li>
+      <li>Multi-selección máx. 5.</li>
+    </ol></section>
+  `;
+
+  const pretty = JSON.stringify(p, null, 2);
+  document.getElementById('json-raw').textContent = pretty;
+
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  const toast = document.getElementById('toast');
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  document.getElementById('copy-json').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(pretty);
+      showToast('JSON copiado');
+    } catch {
+      showToast('Error al copiar');
+    }
+  });
+
+  document.getElementById('download-json').addEventListener('click', () => {
+    const blob = new Blob([pretty], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (p.project.name || 'proyecto') + '-handoff.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    showToast('Descarga iniciada');
+  });
+})();
+  </script>
+</body>
+</html>

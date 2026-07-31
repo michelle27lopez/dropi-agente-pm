@@ -1,0 +1,361 @@
+<title>Webhook pulso_suppliers · Contrato "ascenso"</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+  :root {
+    --bg: #F4F5F1;
+    --bg-alt: #EAEDE6;
+    --ink: #1B2420;
+    --muted: #5B6660;
+    --faint: #8A948C;
+    --accent: #2F6B52;
+    --accent-ink: #1F4A38;
+    --accent-soft: #DCEAE0;
+    --border: #D3D9CE;
+    --code-bg: #EDF1E9;
+    --code-ink: #1F2B24;
+    --danger: #8C3B2E;
+    --danger-soft: #F3E1DB;
+    --shadow: 0 1px 2px rgba(27, 36, 32, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #10160F; --bg-alt: #171F16; --ink: #E7EDE3; --muted: #96A292; --faint: #63705F;
+      --accent: #74CB9B; --accent-ink: #A9E4C4; --accent-soft: #1D2E23; --border: #283227;
+      --code-bg: #142019; --code-ink: #DCE7DA; --danger: #E6917D; --danger-soft: #34211D;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #10160F; --bg-alt: #171F16; --ink: #E7EDE3; --muted: #96A292; --faint: #63705F;
+    --accent: #74CB9B; --accent-ink: #A9E4C4; --accent-soft: #1D2E23; --border: #283227;
+    --code-bg: #142019; --code-ink: #DCE7DA; --danger: #E6917D; --danger-soft: #34211D;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  }
+  :root[data-theme="light"] {
+    --bg: #F4F5F1; --bg-alt: #EAEDE6; --ink: #1B2420; --muted: #5B6660; --faint: #8A948C;
+    --accent: #2F6B52; --accent-ink: #1F4A38; --accent-soft: #DCEAE0; --border: #D3D9CE;
+    --code-bg: #EDF1E9; --code-ink: #1F2B24; --danger: #8C3B2E; --danger-soft: #F3E1DB;
+    --shadow: 0 1px 2px rgba(27, 36, 32, 0.06);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+  }
+  .serif { font-family: Iowan Old Style, Palatino Linotype, Palatino, Georgia, "Times New Roman", serif; }
+  .mono, code, pre, .kv dt, table.schema td:first-child, .path {
+    font-family: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 72px 28px 120px; }
+
+  header.masthead { margin-bottom: 40px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+  .eyebrow {
+    display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 18px;
+  }
+  .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  h1.title { font-size: 32px; line-height: 1.15; font-weight: 500; margin: 0 0 14px; letter-spacing: -0.01em; text-wrap: balance; }
+  .dek { color: var(--muted); font-size: 16.5px; max-width: 58ch; margin: 0 0 22px; }
+  .meta-row { display: flex; flex-wrap: wrap; gap: 20px; font-size: 13px; color: var(--faint); }
+  .meta-row .mono { color: var(--muted); }
+
+  section.entry { margin-bottom: 52px; }
+  .entry-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  .entry-num { font-family: Iowan Old Style, Palatino, Georgia, serif; font-style: italic; font-size: 15px; color: var(--faint); flex-shrink: 0; min-width: 20px; }
+  h2.entry-title { font-size: 21px; font-weight: 500; margin: 0; letter-spacing: -0.005em; }
+  .entry-body { padding-left: 34px; }
+  .entry-body > p { margin: 0 0 14px; max-width: 64ch; }
+  .entry-body > p:last-child { margin-bottom: 0; }
+
+  a { color: var(--accent-ink); text-decoration-color: var(--border); text-underline-offset: 2px; }
+  a:hover { text-decoration-color: var(--accent-ink); }
+  strong { font-weight: 600; }
+
+  .block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; margin: 0 0 14px; overflow-x: auto; }
+  .block pre { margin: 0; font-size: 13.5px; line-height: 1.65; color: var(--code-ink); white-space: pre; }
+  .block-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin: 0 0 8px; }
+  .tok-key { color: var(--accent-ink); }
+  .tok-str { color: var(--muted); }
+  .tok-comment { color: var(--faint); font-style: italic; }
+  .tok-method { color: var(--accent-ink); font-weight: 700; }
+
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 8px 20px; margin: 0 0 16px; font-size: 14px; }
+  .kv dt { color: var(--ink); font-size: 13px; }
+  .kv dd { margin: 0; color: var(--muted); }
+
+  .table-scroll { overflow-x: auto; }
+  table.schema { width: 100%; border-collapse: collapse; font-size: 14px; margin-bottom: 4px; }
+  table.schema th {
+    text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--faint); padding: 0 12px 10px 0; border-bottom: 1px solid var(--border);
+  }
+  table.schema td { padding: 11px 12px 11px 0; border-bottom: 1px solid var(--border); vertical-align: top; }
+  table.schema tr:last-child td { border-bottom: none; }
+  table.schema td:first-child { font-size: 13px; color: var(--accent-ink); white-space: nowrap; }
+  table.schema td.type { color: var(--muted); white-space: nowrap; font-size: 12.5px; }
+  table.schema td.desc { color: var(--ink); }
+  table.schema td.desc span.sub { display: block; color: var(--faint); font-size: 12.5px; margin-top: 2px; }
+
+  .note { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; font-size: 14px; color: var(--ink); background: var(--bg-alt); margin: 0 0 14px; }
+  .note.caution { border-color: color-mix(in srgb, var(--danger) 35%, var(--border)); background: var(--danger-soft); }
+  .note .note-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-ink); margin-bottom: 6px; }
+  .note.caution .note-label { color: var(--danger); }
+  .note p { margin: 0; }
+  .note p + p { margin-top: 8px; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px; font-family: ui-monospace, monospace;
+    font-size: 12.5px; font-weight: 600; padding: 3px 9px; border-radius: 5px; border: 1px solid var(--border);
+  }
+  .pill.ok { color: var(--accent-ink); background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 30%, var(--border)); }
+  .pill.err { color: var(--danger); background: var(--danger-soft); border-color: color-mix(in srgb, var(--danger) 30%, var(--border)); }
+
+  /* Plantilla WhatsApp — mockup de burbuja */
+  .wa-mock {
+    background: #DCF3E4; border-radius: 10px; padding: 14px 16px; max-width: 340px;
+    font-size: 14px; color: #111; line-height: 1.5; margin: 0 0 10px; position: relative;
+  }
+  .wa-mock .var { background: color-mix(in srgb, var(--accent) 18%, transparent); border-radius: 3px; padding: 0 3px; font-weight: 600; }
+  .wa-mock .btn {
+    margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.08);
+    color: #0A6847; font-weight: 600; font-size: 13px; text-align: center;
+  }
+  .tpl-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+
+  footer.colophon {
+    margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border);
+    font-size: 13px; color: var(--faint); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+
+  @media (max-width: 560px) {
+    .wrap { padding: 44px 20px 90px; }
+    h1.title { font-size: 26px; }
+    .entry-body { padding-left: 0; }
+    .entry-head { flex-direction: column; gap: 4px; }
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="eyebrow"><span class="dot"></span> Documentación técnica · Dropi PM Tools</div>
+    <h1 class="title serif">Webhook pulso_suppliers — contrato "ascenso"</h1>
+    <p class="dek">Cómo el hub va a mandar la cola de ofertas de ascenso (IND-001) a tu webhook de n8n, y qué necesitamos que el flujo haga del otro lado.</p>
+    <div class="meta-row">
+      <span>Para <strong>Enrique</strong> · Growth/CRM</span>
+      <span>Entregado por <strong>Jaime Guevara</strong></span>
+      <span class="mono">Borrador v1 · 2026-07-17</span>
+    </div>
+  </header>
+
+  <div class="note caution" style="margin-bottom: 52px;">
+    <div class="note-label">Esto es un borrador, no un contrato cerrado</div>
+    <p>Armamos el JSON de nuestro lado sin que estuviera confirmado el formato que esperás. Probamos conectividad contra <span class="mono">pulso_suppliers</span> con datos sintéticos y quedó respondiendo 200. Si algo de la forma del payload no te sirve para tu flujo de n8n, lo ajustamos — todavía no hay nada en producción con esto.</p>
+  </div>
+
+  <section class="entry">
+    <div class="entry-head">
+      <span class="entry-num serif">i.</span>
+      <h2 class="entry-title serif">Qué es esto</h2>
+    </div>
+    <div class="entry-body">
+      <p>IND-001 es el panel de indicadores de proveedores: detecta quién ya cumple el umbral de órdenes para ascender de nivel (Activo → Verificado → Premium) y arma una oferta de ascenso con un magic link donde el proveedor acepta o rechaza (con motivo).</p>
+      <p>Hoy ese envío sale por Evolution API a un número de prueba — no puede salir a proveedores reales todavía por riesgo de baneo de WhatsApp. La idea es mover el envío real a tu pipeline (WhatsApp Business oficial vía GHL/n8n), igual que ya hacen con Dropi Pulso.</p>
+      <p>Como el webhook <span class="mono">pulso_suppliers</span> ya existe y lo usa Pulso, cada llamado nuestro lleva <span class="mono">"tipo": "ascenso"</span> para que tu flujo de n8n distinga cuál caso es cuál dentro del mismo webhook.</p>
+    </div>
+  </section>
+
+  <section class="entry">
+    <div class="entry-head">
+      <span class="entry-num serif">ii.</span>
+      <h2 class="entry-title serif">Cómo llega el envío</h2>
+    </div>
+    <div class="entry-body">
+      <p><strong>Un solo POST por lote</strong> — no uno por proveedor. Desde nuestro lado juntamos toda la cola pendiente (puede ser 1 o puede ser 200) y la mandamos entera de una vez; el throttling del envío real a WhatsApp queda de tu lado, no lo hacemos nosotros.</p>
+      <div class="kv">
+        <dt>Método</dt><dd><span class="tok-method mono">POST</span></dd>
+        <dt>URL</dt><dd class="mono path">https://n8n-n8n.ojjmzk.easypanel.host/webhook/pulso_suppliers</dd>
+        <dt>Content-Type</dt><dd class="mono">application/json</dd>
+      </div>
+      <div class="note">
+        <div class="note-label">Candado de seguridad de nuestro lado</div>
+        <p>El botón que dispara esto en el hub exige una confirmación explícita antes de mandar de verdad (dry-run primero, mostrando quién va en la lista). No debería llegarte nada por accidente desde una prueba nuestra.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry">
+    <div class="entry-head">
+      <span class="entry-num serif">iii.</span>
+      <h2 class="entry-title serif">Forma del payload</h2>
+    </div>
+    <div class="entry-body">
+      <p>El nivel superior distingue el caso con <span class="mono">tipo</span>; para ascenso, <span class="mono">ofertas</span> trae un array con una fila por proveedor.</p>
+      <div class="table-scroll">
+        <table class="schema">
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td>tipo</td><td class="type">string</td><td class="desc">Siempre <span class="mono">"ascenso"</span> en este caso — así separás este payload del de Pulso en el mismo webhook.</td></tr>
+            <tr><td>ofertas[].supplier_id</td><td class="type">number</td><td class="desc">ID del proveedor en Dropi. <strong>Con esto tenés que resolver el WhatsApp real</strong> — no te lo mandamos nosotros, no lo tenemos en esta data.</td></tr>
+            <tr><td>ofertas[].nombre</td><td class="type">string</td><td class="desc">Nombre del proveedor, para personalizar el mensaje.</td></tr>
+            <tr><td>ofertas[].email</td><td class="type">string | null</td><td class="desc">Email del proveedor, si existe en nuestra data (no siempre).</td></tr>
+            <tr><td>ofertas[].nivel_actual</td><td class="type">string</td><td class="desc">"Activo" o "Verificado" — de dónde asciende.</td></tr>
+            <tr><td>ofertas[].nivel_objetivo</td><td class="type">string</td><td class="desc">"Verificado" o "Premium" — a dónde asciende.</td></tr>
+            <tr><td>ofertas[].beneficios</td><td class="type">string[]</td><td class="desc">2-3 frases cortas con los beneficios del nivel objetivo, listas para insertar en el mensaje.</td></tr>
+            <tr><td>ofertas[].link</td><td class="type">string</td><td class="desc">Magic link único por proveedor — ahí ve los beneficios completos y confirma o rechaza (con motivo). <strong>Este es el link que va en el botón de la plantilla de WhatsApp.</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry">
+    <div class="entry-head">
+      <span class="entry-num serif">iv.</span>
+      <h2 class="entry-title serif">Ejemplo real</h2>
+    </div>
+    <div class="entry-body">
+      <p>Esto es exactamente lo que mandamos en la prueba de conectividad (con un proveedor sintético, no uno real):</p>
+      <div class="block">
+        <div class="block-label">POST body</div>
+        <pre>{
+  <span class="tok-key">"tipo"</span>: <span class="tok-str">"ascenso"</span>,
+  <span class="tok-key">"ofertas"</span>: [
+    {
+      <span class="tok-key">"supplier_id"</span>: <span class="tok-comment">206810</span>,
+      <span class="tok-key">"nombre"</span>: <span class="tok-str">"VICTOR AGUDELO"</span>,
+      <span class="tok-key">"email"</span>: <span class="tok-str">"dropi-provider@goevery.co"</span>,
+      <span class="tok-key">"nivel_actual"</span>: <span class="tok-str">"Activo"</span>,
+      <span class="tok-key">"nivel_objetivo"</span>: <span class="tok-str">"Verificado"</span>,
+      <span class="tok-key">"beneficios"</span>: [
+        <span class="tok-str">"Aprobación automática de productos"</span>,
+        <span class="tok-str">"Acceso a Caza Productos"</span>,
+        <span class="tok-str">"Banner destacado en catálogo"</span>
+      ],
+      <span class="tok-key">"link"</span>: <span class="tok-str">"https://dropi-agente-pm-qd7c.vercel.app/proyectos/indicadores/ascenso/3dae9c00-…"</span>
+    }
+    <span class="tok-comment">// … el resto de la cola, mismo formato</span>
+  ]
+}</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry">
+    <div class="entry-head">
+      <span class="entry-num serif">v.</span>
+      <h2 class="entry-title serif">Plantillas de WhatsApp — borrador para Meta</h2>
+    </div>
+    <div class="entry-body">
+      <p>Como esto sale por WhatsApp Business oficial, necesita plantilla pre-aprobada por Meta (no texto libre como hacíamos con Evolution API). Te dejo el copy que ya veníamos usando en la prueba, armado como plantilla — falta que lo subas a Meta Business Manager y lo ajustes si la categoría/política lo pide.</p>
+
+      <div class="tpl-meta">
+        <span class="pill ok mono">categoría sugerida: UTILITY</span>
+        <span class="pill mono" style="background:var(--bg-alt)">idioma: es_CO</span>
+      </div>
+      <div class="block-label" style="margin-top:4px;">Plantilla · oferta_ascenso_disponible</div>
+      <div class="wa-mock">
+        🎯 <strong>Ascenso detectado</strong><br /><br />
+        Hola <span class="var">{{1}}</span>,<br /><br />
+        Nuestro sistema detectó que cumples con lo básico para ascender a <span class="var">{{2}}</span> y obtener nuevos beneficios.
+        <div class="btn">👉 Ver beneficios y responder</div>
+      </div>
+      <div class="note" style="margin-top: 4px;">
+        <div class="note-label">Variables y botón</div>
+        <p><span class="mono">{{1}}</span> = nombre del proveedor · <span class="mono">{{2}}</span> = nivel_objetivo ("Verificado" o "Premium")</p>
+        <p>Botón tipo <strong>Visit website (dynamic)</strong>, con <span class="mono">{{1}}</span> = el token del link (la parte final de <span class="mono">ofertas[].link</span>).</p>
+      </div>
+
+      <div class="tpl-meta" style="margin-top: 28px;">
+        <span class="pill mono" style="background:var(--bg-alt)">opcional · segundo intento</span>
+      </div>
+      <div class="block-label">Plantilla · oferta_ascenso_recordatorio (idea, no construida aún)</div>
+      <div class="wa-mock">
+        Hola <span class="var">{{1}}</span> 👋<br /><br />
+        Tu oferta para ascender a <span class="var">{{2}}</span> sigue disponible. ¿La revisamos?
+        <div class="btn">👉 Ver oferta</div>
+      </div>
+      <p style="font-size: 13px; color: var(--muted);">No está en el alcance actual — lo dejo anotado por si quieren armar un segundo toque para quienes no respondieron. El hub no dispara esto todavía.</p>
+    </div>
+  </section>
+
+  <section class="entry">
+    <div class="entry-head">
+      <span class="entry-num serif">vi.</span>
+      <h2 class="entry-title serif">Plantillas del flujo de revisión — para precrear ya</h2>
+    </div>
+    <div class="entry-body">
+      <p>Después de que el proveedor acepta, hoy el flujo termina en un correo a Soporte pidiendo que actualice el tipo de proveedor a mano — no hay todavía una etapa de revisión ni un aviso de vuelta al proveedor. Vamos a construir esa parte, pero pedimos que estas tres plantillas ya queden precreadas en Meta para no bloquear el desarrollo cuando lleguemos ahí. <strong>El hub todavía no dispara ninguna de las tres.</strong></p>
+
+      <div class="tpl-meta">
+        <span class="pill ok mono">categoría sugerida: UTILITY</span>
+        <span class="pill mono" style="background:var(--bg-alt)">se dispara al aceptar</span>
+      </div>
+      <div class="block-label">Plantilla · ascenso_confirmacion_recibida</div>
+      <div class="wa-mock">
+        ✅ <strong>Recibimos tu confirmación</strong><br /><br />
+        Hola <span class="var">{{1}}</span>,<br /><br />
+        Hemos recibido tu aceptación para ascender a <span class="var">{{2}}</span>. El equipo revisará tu cuenta y, si todo está en orden, tendrás tu ascenso pronto.
+      </div>
+      <div class="note" style="margin-top: 4px;">
+        <p><span class="mono">{{1}}</span> = nombre del proveedor · <span class="mono">{{2}}</span> = nivel_objetivo</p>
+      </div>
+
+      <div class="tpl-meta" style="margin-top: 28px;">
+        <span class="pill mono" style="background:var(--bg-alt)">categoría sugerida: UTILITY</span>
+        <span class="pill mono" style="background:var(--bg-alt)">se dispara si la revisión rechaza</span>
+      </div>
+      <div class="block-label">Plantilla · ascenso_no_aprobado</div>
+      <div class="wa-mock">
+        Hola <span class="var">{{1}}</span>,<br /><br />
+        Revisamos tu solicitud de ascenso a <span class="var">{{2}}</span> y encontramos puntos que aún no cumples.
+        <div class="btn">👉 Contactar SAC</div>
+      </div>
+      <div class="note" style="margin-top: 4px;">
+        <p><span class="mono">{{1}}</span> = nombre · <span class="mono">{{2}}</span> = nivel_objetivo. Botón hacia el canal de SAC que definan — falta confirmar si es link o número.</p>
+      </div>
+
+      <div class="tpl-meta" style="margin-top: 28px;">
+        <span class="pill mono" style="background:var(--bg-alt)">categoría sugerida: UTILITY</span>
+        <span class="pill mono" style="background:var(--bg-alt)">se dispara si la revisión aprueba</span>
+      </div>
+      <div class="block-label">Plantilla · ascenso_aprobado</div>
+      <div class="wa-mock">
+        🎉 <strong>¡Felicidades, <span class="var">{{1}}</span>!</strong><br /><br />
+        Ya ascendiste a <span class="var">{{2}}</span>. Recuerda cumplir con las condiciones del nivel para mantenerlo.
+      </div>
+      <div class="note" style="margin-top: 4px;">
+        <p><span class="mono">{{1}}</span> = nombre · <span class="mono">{{2}}</span> = nivel_objetivo. Si querés, se puede agregar <span class="mono">{{3}}</span> con la condición específica a recordar (ej. "3.000 órdenes/trimestre") — decime si lo sumamos.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="entry">
+    <div class="entry-head">
+      <span class="entry-num serif">vii.</span>
+      <h2 class="entry-title serif">Lo que falta acordar</h2>
+    </div>
+    <div class="entry-body">
+      <div class="table-scroll">
+        <table class="schema">
+          <thead><tr><th>Pendiente</th><th>De quién</th></tr></thead>
+          <tbody>
+            <tr><td>Confirmar si esta forma del JSON sirve tal cual, o hay que ajustar campos</td><td class="desc">Enrique</td></tr>
+            <tr><td>Subir y aprobar en Meta la plantilla oferta_ascenso_disponible (la única que el hub dispara hoy)</td><td class="desc">Enrique</td></tr>
+            <tr><td>Precrear las 3 plantillas del flujo de revisión (confirmación, no aprobado, aprobado) aunque el hub no las use todavía</td><td class="desc">Enrique</td></tr>
+            <tr><td>Definir el canal de SAC (link o número) para el botón de ascenso_no_aprobado</td><td class="desc">Enrique</td></tr>
+            <tr><td>Confirmar cómo resuelve n8n el WhatsApp real a partir de supplier_id</td><td class="desc">Enrique</td></tr>
+            <tr><td>Definir si hay algún aviso de vuelta hacia nosotros (¿n8n nos dice qué se envió?) o si por ahora asumimos éxito con el 200 del POST</td><td class="desc">Enrique + Jaime</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    <span>Dudas o cambios al contrato → Jaime Guevara</span>
+    <span class="mono">pulso_suppliers · tipo: ascenso</span>
+  </footer>
+
+</div>
