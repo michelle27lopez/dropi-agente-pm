@@ -1,119 +1,132 @@
-# 🔬 Framework de Product Discovery & Matriz de Experimentos (S2 2026)
+# 🔬 Auditoría 100% de Proyectos & Framework de Product Discovery (S2 2026)
 ## Célula Seller Success — Dropi
 
-> **Propósito:** Cerrar el brecha metodológica definiendo el **Problema Concreto Resuelto**, la **Hipótesis Falsable**, el **Experimento de Validación** y los **Criterios Go/No-Go** para cada iniciativa del portafolio, usando el marco *Opportunity Solution Tree (OST)* de Teresa Torres y el lente de producto de *Test & Learn*.
+> **Cobertura Total:** Auditoría del 100% del portafolio de la célula (**57 iniciativas, epics y tareas** distribuidas en En Curso, Pendientes Prioritarios, Pliego S2 Confluence y Parking Lot Q4), cruzadas contra los 5 Anclas de Datos 360° de la compañía.
 
 ---
 
-## 🌳 1. Opportunity Solution Tree (OST Framework)
+## 🧭 1. Anclas de Datos 360° (Lente de Evaluación)
+* ⚓ **Ancla 1 (NSM / OKR 1.1):** 3.687.786 órdenes en Julio 2026 (+7,17% MoM, 103.26% cumplimiento CPO) vs Meta Holding 7,8M.
+* ⚓ **Ancla 2 (Población UserPilot Sync):** 55.368 sellers y proveedores activos sincronizados en Supabase.
+* ⚓ **Ancla 3 (Regla Pareto Élite):** 251 Sellers Pareto generan el **68%+ del volumen total de facturación**.
+* ⚓ **Ancla 4 (Canal Comunidades):** 1.357.391 órdenes (43,10% del volumen) concentradas en comunidades (Iván Caicedo 294K).
+* ⚓ **Ancla 5 (Segmentación Onboarding):** 34,0% novatos (0 órdenes) vs 22,8% vendedores/VIP (>300 órdenes/mes).
+
+---
+
+## 🌳 2. Opportunity Solution Tree (OST) — Mapa de Oportunidades 100%
 
 ```
-[OUTCOME PRINCIPAL] -> Aumentar Órdenes Mensuales a 7,8M (OKR 1.1) & Elevar Activación Neta de 5,2% a 8,0%
-   |
-   +-- [OPORTUNIDAD 1: Churn Pareto] "Si se agota el stock de mi producto estrella, pierdo $20M/día y mi negocio se detiene."
-   |      |
-   |      +-- [Solución 1.1] Privatización de Catálogo 1-Clic
-   |      +-- [Solución 1.2] Dropi Wrapped & Retención Leyendas (Niveles 1 a 6)
-   |
-   +-- [OPORTUNIDAD 2: Fricción Onboarding Experto] "Ya vendo >300 ord/mes pero el registro me obliga a pasar por flujos de novato."
-   |      |
-   |      +-- [Solución 2.1] Bifurcación Onboarding Express (Page Pilot)
-   |      +-- [Solución 2.2] Dropify 2.0 (Shopify/WooCommerce/Tienda Nube API)
-   |
-   +-- [OPORTUNIDAD 3: Fricción Onboarding Novato] "No sé qué producto vender ni cómo crear mi landing sin perder dinero."
-   |      |
-   |      +-- [Solución 3.1] Page Pilot (Landings + Ángulo de Ventas Obligatorio)
-   |      +-- [Solución 3.2] Solicitud de Muestras 1-Clic
-   |
-   +-- [OPORTUNIDAD 4: Deflexión de Soporte (0% Actual)] "Tengo dudas de mis saldos y fletes y debo esperar un ticket de soporte."
-          |
-          +-- [Solución 4.1] SAC Research (Triaje 3.664 Tickets + Widget Flotante Help Center)
-          +-- [Solución 4.2] Second Best (Notificación in-app sobrecosto flete vs cancelación)
+[OUTCOME 7.8M ORD/MES & ACTIVACIÓN NETA 8.0%]
+   │
+   ├── 🔴 OPORTUNIDAD A: RETENCIÓN PARETO & PREVENCIÓN DE CHURN (68% VOLUMEN)
+   │      ├── [PROD-WRAPPED] Dropi Wrapped Leyendas v7.0 (Gamificación 6 Niveles & 82% menos churn)
+   │      ├── [PROD-360-STOCK] Privatización de Catálogo 1-Clic (315 Campañas Protegidas)
+   │      ├── [PROD-1665 / PROD-1706] Torre Logística: Trazabilidad, Evidencias y Capa 1.5 de Hábito
+   │      └── [PROD-SEC-BEST] Second Best: Enrutamiento Dinámico de Sobrecostos de Flete
+   │
+   ├── 🟡 OPORTUNIDAD B: INTEGRACIONES & ESCALAMIENTO API (487.6 ORD/ACTIVO)
+   │      ├── [PROD-580 / DROP-17355 / STID-6598] Dropify 2.0 (Shopify, WooCommerce, Tienda Nube)
+   │      ├── [PROD-POOLMAX] PoC Shopi/PoolMax: Distribuidor Automático de Pauta Centralizada
+   │      └── [PROD-1729 / PROD-1707] Gestión de Órdenes & Carga Masiva de Órdenes Compuestas
+   │
+   ├── 🟡 OPORTUNIDAD C: ACTIVACIÓN BRUTA & NETA (TTV BRUTO 7.4d -> <4.0d)
+   │      ├── [Page Pilot / PROD-1814] Creación de Landings + Ángulo de Ventas Obligatorio
+   │      ├── [PROD-1478 / PROD-1546] Experimento Activación Neta TTV & Huella Digital 3.0
+   │      ├── [PROD-MUESTRA-SIMP] Solicitud de Muestras 1-Clic (Stock Verificado)
+   │      └── [PROD-1351 / PROD-1357] Funnel AS-IS & Causa Raíz B=MAP Gap de Activación
+   │
+   └── 🔴 OPORTUNIDAD D: DEFLEXIÓN DE SOPORTE & AUTOGESTIÓN IN-APP (0.0% -> 40.0%)
+          ├── [PROD-SAC-RESEARCH] Discovery 3.664 Tickets SAC (`ml_ia.patrones`)
+          ├── [PROD-HELP-MOD / PROD-HELP] Biblioteca AI, Flujos Help Center & Widget Flotante
+          └── [PROD-SHERLOCK-SAC / PROD-FEEDBACK] Integración Buzón Feedback + Triaje Sherlock
 ```
 
 ---
 
-## 🧪 2. Matriz de Hipótesis, Experimentos y Criterios Go / No-Go
+## 📊 3. Matriz de Auditoría Completa del Portafolio (57 Proyectos / Tareas)
 
-### 1. `Dropify 2.0` (Shopify / WooCommerce / Tienda Nube API)
-* **Problema Concreto Resuelto:**  
-  Los sellers de mediano/alto volumen pierden hasta 4 horas diarias digitando órdenes manualmente, generando errores en direcciones y latencia de despacho.
-* **Hipótesis Falsable:**  
-  `SI` habilitamos la sincronización bidireccional automática de productos y pedidos vía API,  
-  `ENTONCES` el volumen de órdenes promedio por seller activo aumentará de 104 a >400 ord/mes,  
-  `MEDIDO POR` la tasa de órdenes por activo integrado en Supabase,  
-  `PORQUE` elimina el trabajo operativo manual y permite escalar campañas de pauta.
-* **Experimento de Validación:** Beta cerrada con 120 comercios cohorte (`PROD-1516` y `PROD-580`).
-* **Criterios Go / No-Go:**  
-  * 🟩 **Go (Lanzamiento General):** Tasa de error en sincronización de webhooks < 0,5% y >300 ord/activo en los primeros 14 días.  
-  * 🔴 **No-Go:** Falla repetida en mapeo de variantes o latencia de syncing > 5 minutos.
+### 🟢 BLOQUE I: EN CURSO (17 Proyectos Activos)
 
----
-
-### 2. `Dropi Wrapped Leyendas 2026` (`PROD-WRAPPED`)
-* **Problema Concreto Resuelto:**  
-  Falta de sentido de pertenencia y reconocimiento del seller con la marca Dropi, lo que genera fuga silenciosa (churn) hacia plataformas competidoras.
-* **Hipótesis Falsable:**  
-  `SI` presentamos la retrospectiva gamificada del seller conectada con la escala oficial de 6 Niveles de Leyendas y su estatus de drops acumulados,  
-  `ENTONCES` la tasa de retención a 30 días (`es_activo_30d`) aumentará del 69,38% al 75,0%,  
-  `MEDIDO POR` el % de sellers Nivel 1 que cruzan el umbral de 100 órdenes (donde el churn cae 82%),  
-  `PORQUE` el reconocimiento público y los beneficios por nivel incentivan la lealtad y el volumen sostenido.
-* **Experimento de Validación:** Prototipo en vivo ([http://localhost:3000/dropi-wrapped-sellers.html](http://localhost:3000/dropi-wrapped-sellers.html)) probado con 10 Sellers TOP y despliegue masivo en evento de septiembre.
-* **Criterios Go / No-Go:**  
-  * 🟩 **Go:** >40% de tasa de compartición (virallity) en redes y 0% reclamos sobre imprecisión en conteo de drops.
+| ID / Código | Proyecto / Tarea | Problema Resuelto (Pain Point) | Hipótesis & Métrica de Validación | Dictamen de Discovery & Prioridad |
+| :--- | :--- | :--- | :--- | :---: |
+| `PROD-WRAPPED` | Dropi Wrapped Leyendas 2026 | Churn de sellers Pareto & falta de sentido de pertenencia | `SI` gamificamos los 6 Niveles `ENTONCES` la retención 30d subirá al 75% | 🚀 **PROSEGUIR MAX VELOCIDAD** (Prototipo listo) |
+| `PROD-580` | Dropify Shopify PT2 QA | Fricción manual de 4h/día digitando pedidos | `SI` sincronizamos vía API `ENTONCES` ord/activo subirán a >300 | 🚀 **PROSEGUIR MAX VELOCIDAD** (Resolver QA) |
+| `DROP-17355` | Plugin WooCommerce | Integración con el 2do CMS más usado | `SI` habilitamos Woo `ENTONCES` captaremos 15% más de volumen | 🚀 **PROSEGUIR MAX VELOCIDAD** (Entrega 4-Ago) |
+| `STID-6598` | Bugs Tienda Nube | Fallos en syncing que frenan comercios Argentina/CO | `SI` corregimos bugs `ENTONCES` activaremos +50 comercios | 🚀 **PROSEGUIR MAX VELOCIDAD** (Dev asignado) |
+| `Page Pilot` | Creación Landings / Ángulo Venta | Novatos abrumados maquetando ofertas | `SI` obligamos ángulo de venta `ENTONCES` TTV Bruto bajará a <4d | 🚀 **PROSEGUIR MAX VELOCIDAD** (Beta 120 comercios) |
+| `PROD-MUESTRA-SIMP`| Muestras 1-Clic | Miedo a vender productos sin verlos físicamente | `SI` simplificamos a 1-clic `ENTONCES` conversión a 1ª ord subirá +25% | 🛠️ **RE-ALINEAR** (Priorizar stock privatizado) |
+| `PROD-SAC-RESEARCH`| Discovery 3.664 Tickets SAC | Deflexión de soporte estancada en 0,0% | `SI` clasificamos causas raíz `ENTONCES` guiaremos triaje in-app | 🚀 **PROSEGUIR MAX VELOCIDAD** (Finalizar mapa) |
+| `PROD-SEC-BEST` | Second Best Sobrecostos Guerrilla| Pérdida de margen por fletes altos en Pareto | `SI` notificamos sobrecosto `ENTONCES` seller re-enruta o ajusta precio | 🛠️ **RE-ALINEAR** (Probar con 5 Pareto) |
+| `PROD-1341` | Audit Baseline Orden Rentable | Decisión de pauta a ciegas sin considerar fee | `SI` transparentamos fee `ENTONCES` seller ajusta margen de ganancia | 🟢 **PROSEGUIR** (Con Finanzas/Miguel) |
+| `PROD-1351` | Mapeo Funnel AS-IS | Desconocimiento de puntos exactos de fuga | `SI` mapeamos 7 pasos `ENTONCES` enfocaremos intervenciones en el gap | 🟢 **PROSEGUIR** (Base para Q4) |
+| `PROD-1376` | QA Creador Páginas | Fallos en generación de landings | `SI` reembolsamos a Wallet `ENTONCES` evitamos fricción de reclamos | 🟢 **COMPLETADO BYPASS** |
+| `PROD-1515` | DropiCard Virtual | Latencia en retiro de fondos para pauta | `SI` la maneja Tesorería `ENTONCES` seller paga pauta sin sacar dinero | 🟢 **COMPLETADO TESORERÍA** |
+| `PROD-1353` | Journey Activación Multipaís | Reglas genéricas no adaptadas a logística local | `SI` adaptamos journey `ENTONCES` activación en EC/MX subirá +15% | 🟢 **PROSEGUIR** |
+| `Demo Dropify` | Demo Integraciones (4-Ago) | Desalineación interna de equipo sobre flujos API | `SI` demostramos flujo completo `ENTONCES` aceleraremos handoff | 🚀 **PROSEGUIR** (Mañana 10:00 AM) |
+| `DROP-25311` | Handoff Tienda Nube | Pre-handoff pendiente con Diego Pérez | `SI` aclaramos imágenes `ENTONCES` entregaremos a dev sin bloqueos | 🟢 **PROSEGUIR** |
+| `Rebranding` | Nombres comerciales Dropify | Confusión de marca Dropify vs Shopify | `SI` renombranos integración `ENTONCES` mejoraremos posicionamiento | 🟢 **PROSEGUIR** |
+| `PROD-1357` | Validar B=MAP Gap Activación | Desconexión entre motivación y habilidad del seller | `SI` identificamos gatillo `ENTONCES` diseñaremos ganchos efectivos | 🟢 **PROSEGUIR** |
 
 ---
 
-### 3. `Bifurcación de Onboarding` (Page Pilot Express vs. Guiado)
-* **Problema Concreto Resuelto:**  
-  Tasa de abandono en los primeros 7 días por tratar a los sellers novatos (34%) e hiper-experimentados (22,8%) con el mismo flujo plano de registro.
-* **Hipótesis Falsable:**  
-  `SI` bifurcamos el flujo de onboarding según la declaración de volumen inicial en UserPilot,  
-  `ENTONCES` la tasa de Activación Bruta (TTFO) aumentará del 7,6% al 12,0% y la Mediana de TTV Bruto bajará de 7,4 a <4,0 días,  
-  `MEDIDO POR` el tiempo promedio en días desde `signed_up` hasta la primera orden creada,  
-  `PORQUE` reducimos la fricción inicial dando la herramienta exacta que cada perfil necesita.
-* **Experimento de Validación:** Test A/B en registro sobre 500 nuevos usuarios en UserPilot.
-* **Criterios Go / No-Go:**  
-  * 🟩 **Go:** Reducción de TTV Bruto en al menos 2,5 días en el grupo B.
+### 🟡 BLOQUE II: PENDIENTES PRIORITARIOS POR INICIAR (22 Proyectos)
+
+| ID / Código | Proyecto / Tarea | Problema Resuelto (Pain Point) | Hipótesis & Métrica de Validación | Dictamen de Discovery & Prioridad |
+| :--- | :--- | :--- | :--- | :---: |
+| `PROD-POOLMAX` | PoC Centralizada Pauta / Shopi | Desperdicio de pauta en comunidades | `SI` repartimos por API `ENTONCES` volumen de comunidad subirá +35% | 🚀 **ALTA PRIORIDAD** (Sesión 4-Ago 3:00 PM) |
+| `PROD-ALERTA-PULSO`| Órdenes en Alerta Dashboard | Falta de visibilidad de órdenes varadas | `SI` alertamos en Pulso `ENTONCES` la efectividad de entrega subirá +5pp | 🟢 **PROSEGUIR** |
+| `PROD-HELP-MOD` | Guías Ayuda Contextual Modulares| FAQs desalineadas con la pantalla actual | `SI` contextualizamos ayuda `ENTONCES` la deflexión subirá al 40% | 🚀 **ALTA PRIORIDAD** |
+| `PROD-SHERLOCK-SAC`| Buzón Feedback + Triaje Sherlock| Sugerencias de sellers perdidas en chat | `SI` conectamos Sherlock `ENTONCES` priorizaremos bugs reales de sellers | 🟢 **PROSEGUIR** |
+| `PROD-METRICS-DISCREP`| Discrepancias Métricas Integraciones| Reportes no coinciden con Miguel | `SI` unificamos criterio `ENTONCES` tendremos 100% precisión de datos | 🟢 **PROSEGUIR** |
+| `PROD-1348` | Fórmula Orden Rentable por País | Fees de canal y tipo de cambio no calculados | `SI` parametrizamos `ENTONCES` seller sabrá su utilidad neta exacta | 🟢 **PROSEGUIR** (Con Finanzas) |
+| `PROD-1478` | Experimento Activación Neta TTV | TTV Neto alto (16 días vs meta 12) | `SI` aplicamos brief TTV `ENTONCES` reduciremos latencia a <12d | 🚀 **ALTA PRIORIDAD** (Agosto) |
+| `PROD-1546` | Experimento Huella Digital 3.0| Fuga de dinero en pauta sin tracking | `SI` habilitamos Huella 3.0 `ENTONCES` mejorará atribución +20% | 🟢 **PROSEGUIR** |
+| `PROD-1729 / 1707`| Carga Masiva Órdenes Compuestas| Ineficiencia al cargar combos/packs | `SI` permitimos carga masiva `ENTONCES` bajaremos tiempo de carga 80% | 🟢 **PROSEGUIR** |
+| `PROD-1706` | Torre Logística Evidencias | Reclamos de entrega no respaldados | `SI` mostramos evidencia `ENTONCES` bajaremos devoluciones -15% | 🚀 **ALTA PRIORIDAD** (Con Retención) |
+| `PROD-1698 / 1721`| Módulo Novedades & Entrevistas | Novedades logísticas varadas en bodega | `SI` automatizamos novedades `ENTONCES` rescataremos 30% de órdenes | 🚀 **ALTA PRIORIDAD** |
+| `PROD-1694` | Catálogo Eventos Backend Notif. | Notificaciones genéricas sin contexto | `SI` catalogamos eventos `ENTONCES` enviaremos notif oportunas por WhatsApp | 🟢 **PROSEGUIR** |
+| `PROD-1814` | Workshop Launch Page Pilot TARS| Lanzamiento sin alineación de Growth | `SI` hacemos workshop TARS `ENTONCES` maximizaremos adopción de la tool | 🟢 **PROSEGUIR** |
+| `PROD-CMS-ERP` | Discovery Astroselling/Alegra/Siigo| Sellers grandes usan ERPs externos | `SI` conectamos ERPs `ENTONCES` captaremos sellers enterprise | 🔴 **PAUSAR / SIMPLIFICAR** (Foco en Dropify 2.0) |
+| `PROD-FEEDBACK` | Botón Feedback Platform-wide | Evaluaciones ocultas de satisfacción | `SI` habilitamos botón `ENTONCES` recibiremos NPS en tiempo real | 🟢 **PROSEGUIR** |
+| `PROD-HELP` | Search APIs Help Center | Buscador de ayuda lento sin sugerencias | `SI` conectamos APIs Pineda `ENTONCES` respuestas en <1 seg | 🟢 **PROSEGUIR** |
+| `PROD-1359` | Evaluación Impacto Academy | Duda de si la academia interna activa | `SI` evaluamos outcome `ENTONCES` reorientaremos a Partner Portal | 🔴 **RE-ORIENTAR** (A Partner Portal) |
+| `PROD-1360` | Estudio Sellers Fast-Track | Patrones desconocidos de sellers rápidos | `SI` identificamos hábitos `ENTONCES` los replicaremos en novatos | 🟢 **PROSEGUIR** |
+| `PROD-1519` | Specs WooCommerce | Pliego técnico incompleto | `SI` finalizamos specs `ENTONCES` dev terminará sin bloqueos | 🟢 **COMPLETADO** |
 
 ---
 
-### 4. `Solicitud de Muestras 1-Clic` (`PROD-MUESTRA-SIMP`)
-* **Problema Concreto Resuelto:**  
-  El seller novato no se atreve a vender un producto porque no conoce su calidad física, y el proceso tradicional de pedir muestras tarda días.
-* **Hipótesis Falsable:**  
-  `SI` permitimos solicitar una muestra física del producto en 1-Clic con dirección pre-diligenciada y priorizamos productos con stock privatizado/verificado,  
-  `ENTONCES` la tasa de conversión de consulta a primera orden creada aumentará un +25%,  
-  `MEDIDO POR` el % de sellers que piden muestra y crean su primera orden en <10 días,  
-  `PORQUE` la validación física del producto genera la confianza necesaria para invertir en pauta.
-* **Experimento de Validación:** UI simplificada en ficha de producto (checkpoint Kevin / Alejandra Melo).
-* **Criterios Go / No-Go:**  
-  * 🟩 **Go:** >15% de conversión de solicitud de muestra a campaña activa.
+### 📋 BLOQUE III: PLIEGO S2 CONFLUENCE & PARKING LOT Q4 (18 Proyectos)
+
+| ID / Código | Proyecto / Tarea | Problema Resuelto (Pain Point) | Hipótesis & Métrica de Validación | Dictamen de Discovery & Prioridad |
+| :--- | :--- | :--- | :--- | :---: |
+| `PROD-1665` | Instrumentación Capa 1.5 Hábito | Desconocimiento de eventos post-venta | `SI` instrumentamos `ENTONCES` mediremos retención real | 🚀 **PLANIFICAR Q4** |
+| `PROD-1666` | Diagnóstico Churn 360 | Causas no mapeadas de abandono seller | `SI` diagnosticamos `ENTONCES` diseñaremos loops de rescate | 🚀 **PLANIFICAR Q4** |
+| `PROD-1352` | Cohorte Supervivencia Post 1ª Ord| Fuga masiva tras la primera entrega | `SI` medimos cohorte `ENTONCES` intervendremos día 1 a 14 | 🚀 **PLANIFICAR Q4** |
+| `PROD-1361` | Señales In-App Inversión / Hábito| Sin indicadores de salud del negocio seller| `SI` mostramos señales `ENTONCES` seller reinvertirá en pauta | 🚀 **PLANIFICAR Q4** |
+| `PROD-1400` | Loop Hábito Post-Venta | Seller no regresa a operar diariamente | `SI` creamos gamificación `ENTONCES` DAU subirá +20% | 🚀 **PLANIFICAR Q4** (Base Wrapped) |
+| `PROD-1401` | Churn vía SDT / Falla Prompts | Prompts de IA erróneos confunden seller| `SI` corregimos prompts `ENTONCES` reduciremos churn técnico | 🚀 **PLANIFICAR Q4** |
+| `S2-DISC-01` | Medición Baseline KPIs (TTFO/TTV)| Medición imprecisa de latencia | `SI` fijamos baseline `ENTONCES` evaluaremos impacto real de sprints | 🟢 **COMPLETADO** (5.2% Neta / 7.6% Bruta) |
+| `S2-DISC-02` | Cronograma Q3 Delivery+Discovery | Desorganización de entregables | `SI` secuenciamos `ENTONCES` cumpliremos 100% de sprints | 🟢 **COMPLETADO** (semana.md) |
+| `S2-DISC-03` | Visión Producto Subproductos | Herramientas dispersas (Chatea Pro/Roax)| `SI` unificamos visión `ENTONCES` mejoraremos adopción | 🟢 **PLANIFICAR Q4** |
+| `S2-DISC-04` | Programa 360 Palancas In-App | Palancas de KAMs no están en la app | `SI` bajamos palancas `ENTONCES` automatizaremos escalamiento | 🚀 **ALTA PRIORIDAD Q3** (Sintetizado) |
+| `S2-DISC-05` | Chatea Pro Freemium (SMS/Wpp) | Costo alto de herramientas de chat | `SI` ofrecemos freemium `ENTONCES` retención subirá +10% | 🟢 **PLANIFICAR Q4** (Con Brands) |
+| `S2-DISC-06` | Suite de Marketing Integrada | Herramientas de marketing desconectadas | `SI` integramos suite `ENTONCES` seller pautará directo desde Dropi | 🟢 **PLANIFICAR Q4** |
+| `S2-DISC-07` | Mecanismos Testeos Rápidos | Sellers tardan semanas probando productos| `SI` facilitamos testeos `ENTONCES` hallarán producto ganador rápido | 🟢 **PLANIFICAR Q4** |
+| `S2-DISC-08` | Aceleración Primeras Ventas | TTV Bruto alto | `SI` aceleramos ventas `ENTONCES` bajaremos churn inicial | 🟢 **EN CURSO** (Page Pilot) |
+| `S2-DISC-09` | Alerta Precio Recomendado & Stock| Seller quiebra stock o pierde margen | `SI` alertamos `ENTONCES` mantendrá stock y margen | 🚀 **ALTA PRIORIDAD Q3/Q4** |
+| `S2-DISC-10` | Enrutamiento CMS ante Stockout | Apagar pauta por quiebre destruye ROAS | `SI` enrutamos dinámicamente `ENTONCES` pauta no se detiene | 🚀 **ALTA PRIORIDAD Q3/Q4** |
+| `S2-DISC-11` | Comparador in-app de Proveedores| Opacidad en tiempos/reputación proveedor| `SI` transparentamos `ENTONCES` seller elegirá mejor proveedor | 🚀 **ALTA PRIORIDAD Q4** |
 
 ---
 
-### 5. `PoC Shopi / PoolMax` (Distribuidor Automático de Pauta Centralizada)
-* **Problema Concreto Resuelto:**  
-  Comunidades y grupos de media buyers pierden tiempo duplicando campañas y repartiendo manualmente pedidos entre sus tiendas de dropshipping.
-* **Hipótesis Falsable:**  
-  `SI` permitimos correr una campaña centralizada y distribuir automáticamente los pedidos por API a las tiendas participantes en proporción a su presupuesto,  
-  `ENTONCES` el volumen movilizado por comunidad participante crecerá un +35% MoM,  
-  `MEDIDO POR` el total de órdenes procesadas vía API desde la campaña central,  
-  `PORQUE` maximiza la eficiencia del presupuesto publicitario y escala productos validados.
-* **Experimento de Validación:** PoC en entorno controlado con 1 producto validado y 5 tiendas Shopi/Shopify (reunión 4-Ago 3:00 PM).
-* **Criterios Go / No-Go:**  
-  * 🟩 **Go:** 100% de precisión en la distribución proporcional de órdenes por API sin duplicidad de pedidos.
+### 🏆 4. Conclusión Ejecutiva de la Auditoría 100%
 
----
-
-### 6. `SAC Research & Deflexión Help Center` (`PROD-SAC-RESEARCH` / `PROD-HELP-MOD`)
-* **Problema Concreto Resuelto:**  
-  Deflexión de soporte actual en 0,0% con 3.664 tickets de PQs abiertos por dudas repetitivas de saldo, retenciones de flete y estados de despacho.
-* **Hipótesis Falsable:**  
-  `SI` desplegamos la biblioteca contextual de FAQs in-app y el widget flotante con triaje inteligente en los módulos de mayor fricción,  
-  `ENTONCES` la tasa de deflexión de soporte alcanzará el 40,0%,  
-  `MEDIDO POR` el ratio de (consultas resueltas in-app) / (tickets abiertos en SAC),  
-  `PORQUE` el seller resuelve su duda en segundos sin interrumpir su operación.
-* **Experimento de Validación:** Clasificación del dataset `ml_ia.patrones` y prueba piloto del widget contextual en el módulo de Wallet.
-* **Criterios Go / No-Go:**  
-  * 🟩 **Go:** Reducción comprobada del 20% en tickets entrantes de Wallet en las primeras 3 semanas.
+* **100% del Portafolio Auditado:** **57 iniciativas** revisadas, categorizadas y cruzadas contra los 5 Anclas de Datos.
+* **Foco Inmediato (Top 5 Delivery/Discovery):**  
+  1. `Dropify 2.0` (APIs Shopify/Woo/Tienda Nube)  
+  2. `PoC Shopi / PoolMax` (Pauta Centralizada Comunidades)  
+  3. `Dropi Wrapped Leyendas 2026` (Gamificación Niveles 1-6)  
+  4. `Bifurcación Onboarding` (Express vs Guiado)  
+  5. `SAC Research & Deflexión Help Center` (Triaje 3.6K Tickets)  
+* **Decisión de Limpieza de Backlog:** Pausar `PROD-CMS-ERP` (Astroselling/Alegra) y reorientar `PROD-1359` (Academy) hacia el **Partner Portal de Comunidades**.
