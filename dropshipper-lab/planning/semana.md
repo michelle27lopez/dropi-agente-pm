@@ -70,7 +70,8 @@ Dado que solo disponemos de **5 minutos en el Weekly de Producto**, el espacio s
 
 ### 📌 Miércoles 5-Ago: Cell Board & Alineación UX/UI
 - [ ] ⭐ **2:00 PM — Cell Board Seller Success:**
-  - Revisar avances de UX/UI con Alejandra Melo: Muestras 1-clic (`PROD-MUESTRA-SIMP`) y Mock Wrapped unificado con Leyendas.
+  - **DISPARO DE PROTOTIPO ⭐:** Revisión final y lanzamiento del **Prototipo de Notificaciones Conductuales 360 & WhatsApp QuickActions (`PROD-1664`)** diseñado por Alejandra Melo.
+  - Revisar avances UX/UI con Alejandra Melo: Muestras 1-clic (`PROD-MUESTRA-SIMP`) y Mock Wrapped unificado con Leyendas.
   - Revisar resultados de guerrilla testing de Enrutamiento Dinámico / Second Best (5 sellers).
   - Consolidar insumos de la semana para la plantilla del Weekly del Viernes.
 

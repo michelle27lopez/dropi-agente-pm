@@ -68,6 +68,7 @@ graph TD
 | **Muestras 1-Clic** | `PROD-MUESTRA` | `Idea` | `Ideación` | `PROD-MUESTRA-POC-1` | `Seguimiento` | **$25.000.000 COP** | `PROD-MUESTRA-DEL-1` | `En definición` | `PROD-MUESTRA-POC-1` |
 | **Second Best Fletes** | `PROD-SEC-BEST` | `Oportunidad` | `Concepción de exp.`| `PROD-SEC-BEST-POC-1` | `Seguimiento` | **$30.000.000 COP** | `PROD-SEC-BEST-DEL-1` | `En definición` | `PROD-SEC-BEST-POC-1` |
 | **Help Center SAC** | `PROD-HELP` | `Idea` | `Research` | `PROD-HELP-POC-1` | `Seguimiento` | **$50.000.000 COP** | `PROD-HELP-DEL-1` | `En definición` | `PROD-HELP-POC-1` |
+| **Notificaciones 360** | `PROD-1664` | `Proyecto` | `Activo` | `PROD-1664-POC-1` | `Seguimiento` | **$45.000.000 COP** | `PROD-1664-DEL-1` | `en DEV` | `PROD-1664-POC-1` |
 | **Leyendas Dropi** | `GRO-002` | `Idea` | `Ideación` | `GRO-002-POC-1` | `Seguimiento` | **$60.000.000 COP** | `GRO-002-DEL-1` | `Pendiente Handoff` | `GRO-002-POC-1` |
 | **Time to Value (TTV)**| `TTV-001` | `Proyecto` | `Activo` | `PROD-1478-POC-1` | `En priorización` | **$40.000.000 COP** | `PROD-1478-DEL-1` | `En definición` | `PROD-1478-POC-1` |
 
