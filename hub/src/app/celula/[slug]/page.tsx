@@ -7,8 +7,7 @@ import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
 import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
 import { isMiDiaOwner } from "@/lib/sprint-access";
-import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
-import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
+import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 type Update = { id: string; week_date: string; title: string; content: string };
 
@@ -211,16 +210,9 @@ export default function CelulaHomePage() {
   if (isMiDiaOwner(profile?.email)) {
     return (
       <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
-        <div style={{ flex: 1, display: "flex", alignItems: "flex-start" }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <HubHeader title={celula.nombre} subtitle="Tu día · Darwin" currentSlug={celula.slug} />
-            <div style={{ display: "flex", alignItems: "flex-start" }}>
-              <ProjectSidebar allProjects={proyectos} allPoc={poc} />
-              <div style={{ flex: 1, minWidth: 0, maxWidth: 900, padding: "48px 32px" }}>
-                <HomeDashboard />
-              </div>
-            </div>
-          </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <HubHeader title={celula.nombre} subtitle="Tu día · Darwin" currentSlug={celula.slug} />
+          <MiDiaShell />
         </div>
         <HubFooter />
       </main>

@@ -6,8 +6,8 @@ import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section, matchesQuery } from "@/components/HomeSections";
 import { isSprintAllowed, isMiDiaOwner } from "@/lib/sprint-access";
-import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
-import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
+import { PROJECT_STYLE } from "@/lib/curated-projects";
+import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 
 const updates: Item[] = [
@@ -58,32 +58,6 @@ const updates: Item[] = [
   },
 ];
 
-// Home curado de Suppliers: solo estos 13 proyectos reales de la tabla
-// `projects` se muestran aquí (10 Discovery projects + 3 POC), aunque la
-// célula tenga más filas en la base — el resto vive en /celula/suppliers.
-// color/icon no existen en la tabla, así que se mantienen aquí por código.
-const PROJECT_STYLE: Record<string, { url: string; color: string; icon: string }> = {
-  "CELL-001": { url: "/proyectos/celula", color: "#0891B2", icon: "🧬" },
-  "DCA-001": { url: "/proyectos/dinamicas-catalogo", color: "#0EA5E9", icon: "🗂️" },
-  "TTV-001": { url: "/proyectos/time-to-value", color: "#F77F00", icon: "⚡" },
-  "CAT-001": { url: "/proyectos/categorizacion", color: "#7C3AED", icon: "🏷️" },
-  "IND-001": { url: "/proyectos/indicadores", color: "#6366F1", icon: "📈" },
-  "NEG-001": { url: "/proyectos/negociaciones", color: "#0D9488", icon: "🤝" },
-  "NEG-002": { url: "/proyectos/negociaciones-dropshipper", color: "#F77F00", icon: "🤝" },
-  "CAZ-001": { url: "/proyectos/caza-productos", color: "#EC4899", icon: "🔍" },
-  "COM-002": { url: "/proyectos/combos", color: "#F77F00", icon: "📦" },
-  "DESC-001": { url: "/proyectos/descuentos", color: "#F59E0B", icon: "🏷️" },
-  "PULSO-001": { url: "/proyectos/pulso-demo", color: "#F77F00", icon: "⚡" },
-  "PUL-001":   { url: "/proyectos/pulso-demo", color: "#EC4899", icon: "🔭" },
-  "GALI-001": { url: "/proyectos/gali-demo", color: "#FF6102", icon: "🦊" },
-  "ACT-001": { url: "/proyectos/dropi-activa", color: "#7C3AED", icon: "🚀" },
-  "ESP-001": { url: "/proyectos/espionaje", color: "#10B981", icon: "🕵️" },
-};
-
-function truncate(text: string, max: number) {
-  return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
-}
-
 function matchesProyectoQuery(p: Proyecto, q: string) {
   const query = q.trim().toLowerCase();
   if (!query) return true;
@@ -92,20 +66,6 @@ function matchesProyectoQuery(p: Proyecto, q: string) {
     (p.summary ?? "").toLowerCase().includes(query) ||
     (p.project_code ?? "").toLowerCase().includes(query)
   );
-}
-
-function proyectoToItem(p: Proyecto): Item | null {
-  const style = p.project_code ? PROJECT_STYLE[p.project_code] : undefined;
-  if (!style) return null;
-  return {
-    key: p.id,
-    name: p.name,
-    description: truncate(p.summary ?? "Sin descripción aún.", 160),
-    url: style.url,
-    tag: p.project_code ?? p.handoff_status ?? "Sin código",
-    color: style.color,
-    icon: style.icon,
-  };
 }
 
 export default function HubPage() {
@@ -221,31 +181,15 @@ export default function HubPage() {
     setProyectosReales((prev) => [...prev, created]);
   }
 
-  const projects = proyectosReales
-    .filter((p) => p.type !== "POC")
-    .map(proyectoToItem)
-    .filter((item): item is Item => item !== null);
-  const poc = proyectosReales
-    .filter((p) => p.type === "POC")
-    .map(proyectoToItem)
-    .filter((item): item is Item => item !== null);
-
   // Home privada: este es el home real de Michelle (célula "suppliers" cae
   // aquí, no en celula/[slug]) — reemplaza el grid estándar por el
   // dashboard de "mi día". Ver [[project_darwin_pd_dashboard]].
   if (isMiDiaOwner(userEmail)) {
     return (
       <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
-        <div style={{ flex: 1, display: "flex", alignItems: "flex-start" }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <HubHeader title="Darwin" subtitle="Tu día · Darwin" currentSlug="suppliers" />
-            <div style={{ display: "flex", alignItems: "flex-start" }}>
-              <ProjectSidebar allProjects={projects} allPoc={poc} />
-              <div style={{ flex: 1, minWidth: 0, maxWidth: 900, padding: "48px 32px" }}>
-                <HomeDashboard />
-              </div>
-            </div>
-          </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <HubHeader title="Darwin" subtitle="Tu día · Darwin" currentSlug="suppliers" />
+          <MiDiaShell />
         </div>
         <HubFooter />
       </main>

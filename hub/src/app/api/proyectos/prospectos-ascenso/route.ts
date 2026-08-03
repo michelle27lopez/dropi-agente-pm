@@ -30,13 +30,16 @@ export async function GET() {
     from += PAGE;
   }
 
-  const fuente = (rows[0]?.fecha_extraccion as string) ?? null;
+  const activos = rows.filter(r => (r.estado_snapshot ?? "activo") === "activo");
+  const perdidos = rows.filter(r => r.estado_snapshot === "perdido");
+
+  const fuente = (activos[0]?.fecha_extraccion as string) ?? null;
 
   return NextResponse.json({
     generadoEn: fuente,
     fuente: "supplier_ascenso_panel (Supabase)",
-    total: rows.length,
-    prospectos: rows.map(r => ({
+    total: activos.length,
+    prospectos: activos.map(r => ({
       id: String(r.supplier_id),
       nombre: r.supplier_name,
       email: r.email,
@@ -50,6 +53,18 @@ export async function GET() {
       garantiasRecibidas90d: r.garantias_recibidas_90d,
       garantiasGestionPct: r.garantias_gestion_pct,
       garantiasTiempoH: r.garantias_tiempo_h,
+    })),
+    // "Se le pasó el momento": estaban Listos, nadie les avisó, y dejaron de
+    // calificar en algún import semanal. Se conservan para Historial en vez
+    // de borrarse — ver hub/supabase/023_ascenso_panel_perdidos.sql.
+    perdidos: perdidos.map(r => ({
+      id: String(r.supplier_id),
+      nombre: r.supplier_name,
+      nivelObjetivo: r.nivel_objetivo,
+      ordenesMovilizadas90d: r.ordenes_movilizadas_90d,
+      umbralObjetivo: r.umbral_objetivo,
+      pctUmbral: r.pct_umbral,
+      perdidoEn: r.perdido_en,
     })),
   });
 }

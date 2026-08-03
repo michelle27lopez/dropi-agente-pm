@@ -4,7 +4,7 @@
 :root {
   --dropi: #F77F00;
   --dropi-light: #FFF3E0;
-  --bg: #F8F9FA;
+  --bg: #ffffff;
   --card: #ffffff;
   --border: #E5E7EB;
   --fg: #111827;
@@ -164,5 +164,910 @@
   .hub-card:hover .hub-card-icon,
   .hub-card:hover .hub-card-arrow {
     transform: none;
+  }
+}
+
+/* Home "Mi día" — shell responsive: sidebar colapsable a rail de iconos
+   (desktop/tablet) o drawer con overlay (mobile). Ver [[project_darwin_pd_dashboard]]. */
+.midia-shell {
+  display: flex;
+  align-items: flex-start;
+  isolation: isolate;
+  position: relative;
+}
+
+.midia-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.35);
+  z-index: 190;
+  display: none;
+}
+
+.midia-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  padding: 24px 12px;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  max-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--card);
+  transition: width 0.2s ease;
+}
+
+.midia-sidebar--collapsed {
+  width: 56px;
+  padding: 24px 8px;
+}
+
+.midia-sidebar--collapsed .midia-sidebar__hide-on-collapse {
+  display: none;
+}
+
+.midia-sidebar__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.midia-sidebar__toggle:hover {
+  background: var(--bg);
+  color: var(--fg);
+}
+
+.midia-sidebar__toggle:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+.midia-sidebar__mobile-close {
+  display: none;
+}
+
+.midia-nav-item {
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.midia-nav-item:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+.midia-mobile-trigger {
+  display: none;
+}
+
+/* Tokens de ds-registry/new (arquitectura nueva de dropi-prototypes),
+   aplicados solo dentro de "Mi día" — ver skill ds-sync. No se tocan las
+   variables globales del hub, así el resto de secciones no cambia. */
+.midia-content {
+  --dropi: #FF6102;
+  --dropi-light: #FFECDA;
+  --border: #E6EAF2;
+  --fg: #0E111A;
+  --muted: #69738C;
+  --success: #0ABB87;
+  --warning: #F1B44C;
+  --danger: #F46A6B;
+  --info: #50A5F1;
+  --midia-hover-border: #FAC289;
+  --midia-shadow-small: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  --midia-chip-bg: #F7F8FA;
+
+  flex: 1;
+  min-width: 0;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+@media (max-width: 1023px) {
+  .midia-content {
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 767px) {
+  .midia-content {
+    max-width: none;
+    padding: 20px 16px;
+  }
+}
+
+/* Dos columnas: feed principal + franja lateral persistente (Hoy, Sprint
+   actual). Se apila en una columna por debajo de 1100px. */
+.midia-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: start;
+}
+
+.midia-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 24px;
+}
+
+@media (max-width: 1099px) {
+  .midia-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .midia-rail {
+    position: static;
+  }
+}
+
+.midia-card {
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.midia-card:hover,
+.midia-card:focus-within {
+  border-color: var(--midia-hover-border);
+  box-shadow: var(--midia-shadow-small);
+}
+
+.midia-card a:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Entrada escalonada del feed — ver useMiDiaData / HomeDashboard, cada
+   panel recibe animation-delay inline para el stagger. */
+@keyframes midia-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.midia-panel,
+.midia-retomando {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  animation: midia-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.midia-panel {
+  overflow: hidden;
+}
+
+.midia-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px 20px;
+}
+
+.midia-panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.midia-panel-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.midia-panel-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--dropi-light);
+  color: var(--dropi);
+}
+
+.midia-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  transition: background-color 0.15s ease;
+}
+
+.midia-row:hover,
+.midia-row:focus-within {
+  background: var(--midia-row-hover);
+}
+
+.midia-row a {
+  text-decoration: none;
+}
+
+.midia-row a:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: -2px;
+  border-radius: 8px;
+}
+
+.midia-row-status {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--muted);
+}
+
+.midia-row-status--activo {
+  color: var(--info);
+}
+
+.midia-row-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.midia-row-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0 0 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.midia-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.midia-row-meta-sep {
+  color: var(--border);
+}
+
+.midia-badge {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.midia-badge--activo {
+  background: var(--info-tint);
+  color: var(--info);
+}
+
+.midia-badge--pendiente {
+  background: var(--midia-chip-bg);
+  color: var(--muted);
+}
+
+.midia-panel-footer {
+  padding: 12px 20px 16px;
+  border-top: 1px solid var(--border);
+}
+
+.midia-panel-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--dropi);
+  text-decoration: none;
+}
+
+.midia-panel-link:hover {
+  text-decoration: underline;
+}
+
+.midia-panel-link:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* Retomando: card independiente (no lista), diferenciada por el ícono +
+   label naranja y el CTA relleno — sin tinte de fondo (feedback Michelle
+   30/07: el fondo naranja completo se sentía pesado). */
+.midia-retomando {
+  padding: 20px;
+}
+
+.midia-retomando-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.midia-retomando-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg);
+  margin: 0;
+}
+
+.midia-retomando-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.midia-retomando-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.midia-retomando-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.midia-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: var(--dropi);
+  border: 1px solid var(--dropi);
+  border-radius: 8px;
+  padding: 9px 16px;
+  text-decoration: none;
+  transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.midia-btn-primary:hover {
+  filter: brightness(0.93);
+  transform: translateY(-1px);
+  box-shadow: var(--midia-shadow-small);
+}
+
+.midia-btn-primary:active {
+  transform: translateY(0);
+  filter: brightness(0.88);
+}
+
+.midia-btn-primary:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+/* Botón "Actualizar" del sprint: texto + spinner, sin fondo en reposo. */
+.midia-sync-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--dropi);
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin: -4px -8px 0 0;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.midia-sync-btn:hover:not(:disabled) {
+  background: var(--dropi-light);
+}
+
+.midia-sync-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.midia-sync-btn:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+@keyframes midia-spin {
+  to { transform: rotate(360deg); }
+}
+
+.midia-spin {
+  animation: midia-spin 0.7s linear infinite;
+}
+
+/* Stats del sprint: ícono en badge de color semántico + valor tabular. */
+.midia-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.midia-stat-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.midia-stat-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.midia-stat-icon--success { background: var(--success-tint); color: var(--success); }
+.midia-stat-icon--info { background: var(--info-tint); color: var(--info); }
+.midia-stat-icon--pending { background: var(--midia-chip-bg); color: var(--muted); }
+.midia-stat-icon--meetings { background: var(--dropi-light); color: var(--dropi); }
+
+.midia-stat-label {
+  font-size: 13px;
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.midia-stat-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--fg);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* Skeleton de carga inicial, en vez de texto plano. */
+.midia-skeleton {
+  background: var(--midia-chip-bg);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.midia-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), transparent);
+  animation: midia-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes midia-shimmer {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@media (max-width: 767px) {
+  .midia-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    max-width: 80vw;
+    z-index: 200;
+    box-shadow: none;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  .midia-sidebar--mobile-open {
+    transform: translateX(0);
+    box-shadow: 0 20px 40px rgba(17, 24, 39, 0.16);
+  }
+
+  .midia-sidebar--collapsed {
+    width: 260px;
+    padding: 24px 12px;
+  }
+
+  .midia-sidebar--collapsed .midia-sidebar__hide-on-collapse {
+    display: block;
+  }
+
+  .midia-sidebar__toggle {
+    display: none;
+  }
+
+  .midia-sidebar__mobile-close {
+    display: block;
+    margin-left: auto;
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+
+  .midia-backdrop--open {
+    display: block;
+  }
+
+  .midia-mobile-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    color: var(--fg);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .midia-sidebar,
+  .midia-nav-item,
+  .midia-sidebar__toggle,
+  .midia-card {
+    transition: none;
+  }
+}
+
+/* Nav global de Darwin — visible en toda la app (layout raíz), solo para
+   Michelle (gate por email en layout.tsx, ver [[project_darwin_pd_dashboard]]).
+   Mismo patrón responsive que .midia-*: rail de iconos colapsable en
+   desktop/tablet, drawer con overlay en mobile (<768px). */
+.gnav-shell {
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+  isolation: isolate;
+  position: relative;
+}
+
+.gnav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.35);
+  z-index: 190;
+  display: none;
+}
+
+.gnav-sidebar {
+  --gnav-primary: #ff6102;
+  --gnav-primary-tint: #ffe0cc;
+  --gnav-border: #e9eef5;
+  --gnav-hover-bg: #f0f4f9;
+  --gnav-text: #32394d;
+  --gnav-muted: #69738c;
+  width: 232px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--gnav-border);
+  padding: 16px 12px;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--card);
+  transition: width 0.2s ease;
+}
+
+.gnav-sidebar--collapsed {
+  width: 60px;
+  padding: 16px 8px;
+}
+
+.gnav-sidebar--collapsed .gnav-hide-on-collapse {
+  display: none;
+}
+
+.gnav-brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 6px 16px;
+}
+
+.gnav-brand__mark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.gnav-brand__logo {
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+
+.gnav-brand__name {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--gnav-primary, #ff6102);
+}
+
+.gnav-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: var(--gnav-muted, var(--muted));
+  background: none;
+  border: 1px solid var(--gnav-border, var(--border));
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.gnav-toggle:hover {
+  background: var(--gnav-hover-bg, var(--bg));
+  color: var(--gnav-primary, var(--fg));
+}
+
+.gnav-toggle:focus-visible,
+.gnav-nav-item:focus-visible,
+.gnav-profile__logout:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+.gnav-mobile-close {
+  display: none;
+}
+
+.gnav-section {
+  margin-bottom: 4px;
+}
+
+.gnav-section + .gnav-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gnav-border, var(--border));
+}
+
+.gnav-section__title {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gnav-muted, var(--muted));
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin: 0 0 6px;
+  padding: 0 10px;
+}
+
+.gnav-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gnav-text, var(--fg));
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.gnav-nav-item:hover {
+  background: var(--gnav-hover-bg, var(--bg));
+}
+
+.gnav-nav-item--active {
+  color: #fff;
+  background: var(--gnav-primary, var(--dropi));
+  font-weight: 700;
+}
+
+.gnav-nav-item--active:hover {
+  background: var(--gnav-primary, var(--dropi));
+}
+
+.gnav-nav-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.gnav-nav-item__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gnav-spacer {
+  flex: 1;
+}
+
+.gnav-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  border-top: 1px solid var(--gnav-border, var(--border));
+  margin-top: 12px;
+}
+
+.gnav-profile__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--gnav-primary-tint, var(--dropi-light));
+  color: var(--gnav-primary, var(--dropi));
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gnav-profile__info {
+  min-width: 0;
+}
+
+.gnav-profile__name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gnav-text, var(--fg));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gnav-profile__role {
+  font-size: 11px;
+  color: var(--gnav-muted, var(--muted));
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gnav-profile__logout {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 0;
+  text-align: left;
+}
+
+.gnav-profile__logout:hover {
+  color: var(--danger);
+}
+
+.gnav-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.gnav-mobile-trigger {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .gnav-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    height: 100vh;
+    width: 260px;
+    max-width: 80vw;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  .gnav-sidebar--mobile-open {
+    transform: translateX(0);
+    box-shadow: 0 20px 40px rgba(17, 24, 39, 0.16);
+  }
+
+  .gnav-sidebar--collapsed {
+    width: 260px;
+    padding: 16px 12px;
+  }
+
+  .gnav-sidebar--collapsed .gnav-hide-on-collapse {
+    display: block;
+  }
+
+  .gnav-toggle {
+    display: none;
+  }
+
+  .gnav-mobile-close {
+    display: block;
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+  }
+
+  .gnav-backdrop--open {
+    display: block;
+  }
+
+  .gnav-mobile-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    color: var(--fg);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    position: sticky;
+    top: 12px;
+    left: 12px;
+    margin: 12px 0 0 12px;
+    z-index: 100;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gnav-sidebar,
+  .gnav-nav-item,
+  .gnav-toggle {
+    transition: none;
   }
 }
