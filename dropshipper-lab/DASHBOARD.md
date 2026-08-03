@@ -151,3 +151,18 @@
 *   [ ] **Simplificación de Muestras (PROD-MUESTRA-SIMP):** UI de solicitud 1-Clic (autofill, transportadora opcional) y botones. (Lidera Alejandra)
 *   [ ] **Dropi Wrapped (PROD-WRAPPED):** Conceptualización visual y de Discovery para reactivación. (Lidera Alejandra)
 *   [ ] **Second Best (PROD-SEC-BEST):** Pruebas de guerrilla con 5 comercios Pareto sobre sobrecostos de flete. (Lidera Alejandra)
+
+---
+
+## 🔬 Matriz de Product Discovery, Hipótesis & Experimentos (OST Framework)
+
+> Ver pliego metodológico completo en [DISCOVERY_FRAMEWORK.md](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/DISCOVERY_FRAMEWORK.md).
+
+| Iniciativa / Proyecto | Problema Concreto Resuelto (Pain Point) | Hipótesis Falsable | Métrica de Validación & Criterio Go |
+| :--- | :--- | :--- | :--- |
+| **Dropify 2.0 (APIs)** | Fricción manual de 4h/día en digitación de órdenes | `SI` sincronizamos pedidos vía API `ENTONCES` las ord/activo subirán a >300 | Tasa de Sync Error <0,5% y >300 ord/activo |
+| **Dropi Wrapped 2026** | Churn silencioso y falta de lealtad a la marca | `SI` gamificamos los 6 Niveles de Leyendas `ENTONCES` la retención 30d subirá al 75% | >40% de virallity y +5,6pp en retención 30d |
+| **Bifurcación Onboarding** | Registro plano abruma novatos y aburre VIPs | `SI` bifurcamos Express vs Guiado `ENTONCES` TTV Bruto bajará de 7,4 a <4 días | TTV Bruto reducido en ≥2,5 días |
+| **Muestras 1-Clic** | Novato no confía en producto sin verlo | `SI` habilitamos muestra 1-clic con stock privatizado `ENTONCES` conversión a 1ª ord subirá +25% | >15% de conversión de muestra a pauta activa |
+| **PoC Shopi / PoolMax** | Desperdicio de pauta centralizada en comunidades | `SI` repartimos órdenes por API proporcionalmente `ENTONCES` el volumen de comunidad subirá +35% | 100% de precisión en distribución API sin duplicados |
+| **Deflexión Help Center** | 0,0% deflexión con 3.664 tickets de PQs abiertos | `SI` desplegamos triaje e in-app FAQs `ENTONCES` la deflexión alcanzará el 40,0% | Reducción del 20% en tickets entrantes de Wallet |
