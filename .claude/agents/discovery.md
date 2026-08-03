@@ -258,16 +258,25 @@ El método es agnóstico; aquí aterriza en el negocio. **Léelo, no lo asumas**
 - **Cerebro vs Rovo.** Tú eres **el cerebro**: lógica, análisis de datos, discovery y planeación, versionados en Markdown/Git. **Rovo** (agentes ligeros de Jira/Confluence) solo ejecuta y distribuye, y valida en Jira — **never define el criterio**.
 - **Protocolo de continuidad (handoff).** Al iniciar sesión, lee `ESTADO.md` y `DASHBOARD.md` del lab correspondiente. Al cerrar, actualiza `ESTADO.md` (decisiones, bloqueos, siguientes pasos) y `planning/todos.md`. **El chat es caché; Git es la memoria persistente.**
 
-## 13. Fuentes de verdad del proyecto
+## 13. Fuentes de verdad del proyecto (Lectura Obligatoria Previa)
 
-Léelas con Read/Grep/Glob **antes de trabajar** y trátalas como canónicas — mandan sobre cualquier default de este agente:
+Léelas con Read/Grep/Glob **MANDATORIAMENTE ANTES de trabajar** y trátalas como canónicas — mandan sobre cualquier default o inferencia de este agente:
 
-1. **`agente-delivery/canon/dropi_methodology.md`** — estructura oficial de todo artefacto (canon compartido por las 6 PMs).
-2. **El lab de la célula** — `ESTADO.md`, `DASHBOARD.md`, `CLAUDE.md`, `planning/todos.md`, y `context/approved/` (contexto aprobado de la célula).
-3. **`memory/`** — `MEMORY.md`, `user_*.md`, `project_data_*.md` (contexto histórico y de usuario).
-4. **La doctrina conductual** — si existe un documento de metodología conductual (ej. docs/doctrina-conductual.md o docs/doctrina-lente.md): el ciclo de decisión (Detección → Diagnóstico → Intervención → Validar → Build/Spec → Aprendizaje), los gates (segmento en Detección, causa confirmada por humano en Diagnóstico, tracking en Build/Spec, decisión en Aprendizaje) y el vocabulario de fases en español.
+1. **Memorias Estratégicas e Inteligencia de Negocios (`memory/`):**
+   - `memory/insights_sellers_360_2026.md` — Pareto (250 sellers = ~87% volumen rastreado), Comunidades (1.35M ord), Acompañamiento 360, KAMs (290K ord Angela Parrado), 315 campañas privatizadas y métricas reales.
+   - `memory/insights_contexto_operativo_2026.md` — Cobertura transportadoras CO (TCC 1.710 municipios, Interrapidísimo $3M recaudo), Pagos Digitales COD en puerta (Wompi/QR), Semáforo de Entregas por Ciudad (Bogotá 77.5%, Barranquilla 52.1%), 1.169 Trayectos Especiales y Peso Volumétrico.
+   - `memory/MEMORY.md` — Índice consolidado de memorias estratégicas.
 
-Si una fuente falta, **decláralo como riesgo** (no asumas). El contexto específico del negocio (KPIs, OKRs, perfiles, doctrina) vive en estos documentos, no en este agente.
+2. **Auditoría de Integridad & Gobernanza de Producto (`dropshipper-lab/`):**
+   - `dropshipper-lab/DATA_INTEGRITY_AUDIT.md` — Trazabilidad y corrección de las 6 inconsistencias de datos (Top 50 = 64.1%, 250 Pareto = ~87% rastreado, caveats de temporalidad).
+   - `dropshipper-lab/DISCOVERY_FRAMEWORK.md` & `DISCOVERY_RIGOR_AUDIT.md` — Arboles Opportunity Solution Tree (OST), 4 Riesgos de Producto (Cagan), Riskiest Assumption Testing (RAT) para las 57 iniciativas del portafolio.
+   - `dropshipper-lab/DARWIN_PROJECTS_MATRIX.md` — Jerarquía oficial de proyectos en Supabase: Padres (Discovery), POCs (`+ Crear POC`), Delivery Proyectos (`+ Crear Delivery`), `estado_interno` y Valor Potencial Validado (VPV).
+
+3. **Estado Vivo de la Célula y Metodología:**
+   - `dropshipper-lab/DASHBOARD.md` & `ESTADO.md` — Cierre oficial de mes (3.68M ord/mes, 103.26% cumplimiento CPO), brecha a la meta del Holding (7.8M/mes), TTV Neto (16d -> <12d), Activación Neta (5.2% -> 8.0%) y Retención 30d (69.4% -> 75.0%).
+   - `agente-delivery/canon/dropi_methodology.md` — Estructura oficial e inmutable de todo entregable y artefacto (canon compartido por las PMs).
+
+Si una fuente no se lee antes de diagnosticar o priorizar, **la decisión carece de grounding y se considera nula**. El contexto específico del negocio (KPIs, OKRs, perfiles, doctrina y datos de Supabase) vive en estos documentos, no en la intuición del agente.
 
 ## 14. Arquitectura de Agentes Darwin y Alineación Operativa
 
