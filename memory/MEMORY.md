@@ -8,3 +8,4 @@
 - [Usuario: Paula Macias](user_paula.md) — PO Célula Backoffice, Dropi. Lidera el proyecto BAC-001 (Validación de Identidad Países).
 - [Proyecto BAC-001 Backoffice](project_bac001_backoffice.md) — Unificación del sistema de validación de identidad KYC/KYB/KYT para los 12 países LATAM (Sumsub + Truora).
 - [Feedback: setup agente](feedback_setup.md) — Setup ejecutado en modo local (sin Supabase). Carpetas context/ creadas. Dashboard Python en puerto 8080.
+- [Insights 360° Seller Success 2026](insights_sellers_360_2026.md) — Memoria estratégica de inteligencia de negocios: Pareto, Comunidades, Acompañamiento 360, Onboarding y Operación Móvil.
