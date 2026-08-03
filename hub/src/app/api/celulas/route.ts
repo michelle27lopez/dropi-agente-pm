@@ -27,10 +27,24 @@ export async function GET() {
 
   if (projectsError) return NextResponse.json({ error: projectsError.message }, { status: 500 });
 
+  const { data: updates, error: updatesError } = await supabase
+    .from("celula_updates")
+    .select("id, celula_id");
+
+  if (updatesError) return NextResponse.json({ error: updatesError.message }, { status: 500 });
+
+  const { data: roadmap, error: roadmapError } = await supabase
+    .from("roadmap_items")
+    .select("id, celula_id");
+
+  if (roadmapError) return NextResponse.json({ error: roadmapError.message }, { status: 500 });
+
   const result = (celulas ?? []).map((celula) => ({
     ...celula,
     miembros: (profiles ?? []).filter((p) => p.celula_id === celula.id),
     proyectos: (projects ?? []).filter((p) => p.celula_owner_id === celula.id),
+    updates: (updates ?? []).filter((u) => u.celula_id === celula.id),
+    roadmap: (roadmap ?? []).filter((r) => r.celula_id === celula.id),
   }));
 
   return NextResponse.json(result);

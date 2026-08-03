@@ -4,7 +4,7 @@
 > Toma los **2 KPIs de la célula**, los mide con la data que ya tenemos, y **propone la meta** para cerrarla con Dirección de Producto.
 >
 > **Disciplina (ley spec-driven):** **[DATO]** = medido/reconciliado con fuente · **[SÍNTESIS]** = lectura propia sobre datos · **[PROPUESTA·validar]** = meta/decisión que **falta validar con Maria/Dir. Producto**.
-> **Base:** abril = mes cerrado (reconciliado, tema 18); movilización/entrega por país = **captura "última data" 01-jul**; tiempos = **Q8 medianas (mayo)**. Mayo es incompleto en desenlace → no se lee su %entrega/%dev (§5). Fuentes: [tema 18](../conocimiento/temas/18-metricas-operacion-2026-04-05.md) · `Data/` *(bóveda: ../conocimiento/Data/)* · Q8 Funnel_Tiempos · dossier.
+> **Base:** abril = mes cerrado (reconciliado, tema 18); movilización/entrega por país = **captura "última data" 01-jul**; tiempos = **Q8 medianas (mayo)**. Mayo es incompleto en desenlace → no se lee su %entrega/%dev (§5). Fuentes: [tema 18](../conocimiento/temas/18-metricas-operacion-2026-04-05.md) · `Data/` *(bóveda: ../conocimiento/Data/)* · Q8 Funnel_Tiempos · dossier. **Actualización CPO (29-jul):** Se incorporaron los datos oficiales de órdenes movilizadas del 1 al 29 de julio de 2026 (ver [DASHBOARD.md](../../dropshipper-lab/DASHBOARD.md#3-volumen-de-órdenes-movilizadas-1-al-29-de-julio-2026---datos-oficiales-cpo) para el desglose por país).
 
 ---
 

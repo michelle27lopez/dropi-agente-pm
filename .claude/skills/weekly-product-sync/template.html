@@ -1,0 +1,195 @@
+<!--
+  TEMPLATE — Weekly Product Sync
+  Validado por Laura el 23-jul-2026. No rediseñar desde cero: copiar este archivo,
+  reemplazar el contenido de <main> y del <script> de datos si aplica, ajustar
+  la lista de <nav> a las células reales de esa semana, y publicar con Artifact
+  (favicon 🧭, mismo emoji siempre).
+
+  Reemplaza cada bloque marcado con «...» — no dejes las llaves en el HTML final.
+-->
+<title>Weekly Product — «fecha»</title>
+<style>
+  :root {
+    --bg: #F2F4F7; --surface: #FFFFFF; --surface-2: #FAFBFC; --border: #E1E5EA;
+    --ink: #1A2027; --ink-muted: #5B6472; --ink-faint: #8A93A0;
+    --accent: #C74F14; --accent-ink: #7A3410; --accent-soft: #FBE7D8;
+    --good: #1F7A4D; --good-soft: #DEF3E6;
+    --warn: #92650A; --warn-soft: #FFF1D2;
+    --danger: #B42318; --danger-soft: #FCE4E1;
+    --chat: #2B5F8A; --chat-soft: #E3EEF6;
+    --shadow: 0 1px 2px rgba(20,24,30,0.04), 0 6px 20px rgba(20,24,30,0.05);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151A; --surface: #191D24; --surface-2: #1E232B; --border: #2B313B;
+      --ink: #E7E9EC; --ink-muted: #9AA3AF; --ink-faint: #6B7382;
+      --accent: #F2894A; --accent-ink: #FBD3B4; --accent-soft: #3A2416;
+      --good: #4ADE94; --good-soft: #123322; --warn: #F2C14E; --warn-soft: #3A2E10;
+      --danger: #F2887D; --danger-soft: #3A1613; --chat: #7FBEE8; --chat-soft: #16283A;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #12151A; --surface: #191D24; --surface-2: #1E232B; --border: #2B313B;
+    --ink: #E7E9EC; --ink-muted: #9AA3AF; --ink-faint: #6B7382;
+    --accent: #F2894A; --accent-ink: #FBD3B4; --accent-soft: #3A2416;
+    --good: #4ADE94; --good-soft: #123322; --warn: #F2C14E; --warn-soft: #3A2E10;
+    --danger: #F2887D; --danger-soft: #3A1613; --chat: #7FBEE8; --chat-soft: #16283A;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px rgba(0,0,0,0.35);
+  }
+  :root[data-theme="light"] {
+    --bg: #F2F4F7; --surface: #FFFFFF; --surface-2: #FAFBFC; --border: #E1E5EA;
+    --ink: #1A2027; --ink-muted: #5B6472; --ink-faint: #8A93A0;
+    --accent: #C74F14; --accent-ink: #7A3410; --accent-soft: #FBE7D8;
+    --good: #1F7A4D; --good-soft: #DEF3E6; --warn: #92650A; --warn-soft: #FFF1D2;
+    --danger: #B42318; --danger-soft: #FCE4E1; --chat: #2B5F8A; --chat-soft: #E3EEF6;
+    --shadow: 0 1px 2px rgba(20,24,30,0.04), 0 6px 20px rgba(20,24,30,0.05);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font-family: Charter, "Iowan Old Style", Georgia, "Times New Roman", serif;
+    font-size: 16px; line-height: 1.65; -webkit-font-smoothing: antialiased;
+  }
+  .display { font-family: -apple-system, "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
+  a { color: var(--accent); }
+
+  .masthead { max-width: 880px; margin: 0 auto; padding: 44px 24px 20px; }
+  .eyebrow { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 11.5px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); }
+  h1.title { font-size: clamp(28px, 4vw, 38px); margin: 8px 0 14px; color: var(--ink); }
+  .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px 28px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px 20px; box-shadow: var(--shadow); font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; }
+  .meta-grid dt { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-faint); margin-bottom: 3px; }
+  .meta-grid dd { margin: 0; font-size: 13.5px; color: var(--ink-muted); line-height: 1.5; }
+
+  .navbar { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); }
+  .navbar-inner { max-width: 880px; margin: 0 auto; padding: 10px 24px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; }
+  .navlink { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; flex: 0 0 auto; font-size: 12.5px; font-weight: 600; color: var(--ink-muted); text-decoration: none; padding: 7px 13px; border-radius: 20px; border: 1px solid var(--border); white-space: nowrap; transition: color .15s, border-color .15s; }
+  .navlink:hover { color: var(--accent); border-color: var(--accent); }
+
+  main { max-width: 880px; margin: 0 auto; padding: 8px 24px 100px; }
+  section { scroll-margin-top: 62px; padding-top: 40px; }
+  section:first-of-type { padding-top: 28px; }
+  .section-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+  h2.section-title { font-size: 20px; margin: 0; color: var(--ink); }
+  .section-sub { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12.5px; color: var(--ink-faint); margin: 0 0 18px; }
+
+  .status { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; padding: 3px 10px 3px 8px; border-radius: 20px; white-space: nowrap; }
+  .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
+  .status-track   { background: var(--good-soft);  color: var(--good); }   /* En marcha / OK */
+  .status-watch   { background: var(--warn-soft);  color: var(--warn); }   /* Sin fecha / atención */
+  .status-blocked { background: var(--danger-soft);color: var(--danger); } /* Bloqueado */
+  .status-next    { background: var(--chat-soft);  color: var(--chat); }   /* Próxima sesión / futuro */
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; box-shadow: var(--shadow); padding: 6px 22px; margin-bottom: 10px; }
+  .entry { padding: 15px 0; border-top: 1px solid var(--border); }
+  .entry:first-child { border-top: none; }
+  .entry p { margin: 4px 0 0; color: var(--ink); }
+  .entry .lead { font-weight: 700; }
+  .ts { font-size: 12px; color: var(--ink-faint); }
+  .chip { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; padding: 2px 8px; border-radius: 20px; margin-right: 6px; vertical-align: middle; }
+  .chip-chat { background: var(--chat-soft); color: var(--chat); }
+  .code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 0.92em; background: var(--surface-2); border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px; }
+
+  .summary-card { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 4px 14px 14px 4px; box-shadow: var(--shadow); padding: 20px 24px; margin: 28px 0 8px; }
+  .summary-card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.07em; color: var(--accent-ink); font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; margin: 0 0 12px; }
+  .summary-card ul { margin: 0; padding-left: 20px; }
+  .summary-card li { margin-bottom: 9px; }
+  .summary-card li:last-child { margin-bottom: 0; }
+
+  .callout { border: 1px solid var(--border); border-left: 4px solid var(--warn); background: var(--warn-soft); border-radius: 4px 12px 12px 4px; padding: 14px 18px; margin-bottom: 12px; }
+  .callout .lead { color: var(--warn); font-weight: 700; }
+  .callout p { color: var(--ink); }
+
+  .agenda { counter-reset: item; list-style: none; margin: 0; padding: 0; }
+  .agenda li { counter-increment: item; position: relative; padding: 12px 0 12px 34px; border-top: 1px solid var(--border); }
+  .agenda li:first-child { border-top: none; }
+  .agenda li::before { content: counter(item); font-family: ui-monospace, monospace; position: absolute; left: 0; top: 12px; font-size: 12px; font-weight: 700; color: var(--accent); background: var(--accent-soft); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+  footer { max-width: 880px; margin: 40px auto 0; padding: 20px 24px 40px; border-top: 1px solid var(--border); font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 12px; color: var(--ink-faint); }
+
+  @media (max-width: 560px) { .masthead, main, footer { padding-left: 16px; padding-right: 16px; } .card { padding: 4px 16px; } }
+</style>
+
+<div class="masthead">
+  <div class="eyebrow">Producto · Dropi</div>
+  <h1 class="title display">Weekly Product — «fecha»</h1>
+  <dl class="meta-grid">
+    <div><dt>Reunión</dt><dd>Weekly Product · «hora»</dd></div>
+    <div><dt>Asistentes</dt><dd>«lista de asistentes»</dd></div>
+    <div><dt>Fuente</dt><dd>«ej. Notas de Gemini + transcripción + chat»</dd></div>
+    <div><dt>Cómo leer esto</dt><dd>Organizado por célula — usa la barra de arriba para ir directo a la tuya</dd></div>
+  </dl>
+</div>
+
+<!-- Un <a class="navlink" href="#slug"> por cada célula/sección que aparezca ESTA semana. No copiar siempre la misma lista. -->
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a class="navlink" href="#resumen">Resumen</a>
+    <!-- «...un pill por sección real de esta semana...» -->
+    <a class="navlink" href="#abiertos">Pendientes</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="resumen">
+    <div class="summary-card">
+      <h2>Resumen ejecutivo</h2>
+      <ul>
+        <!-- 4-6 bullets con lo más importante de TODA la reunión (Paso 4 del SKILL.md) -->
+        <li>«...»</li>
+      </ul>
+    </div>
+  </section>
+
+  <!--
+    Un <section> por célula/tema, siguiendo este patrón. Repetir tantas veces como
+    células reales haya esa semana. El status del header usa una de las 4 clases
+    definidas arriba (track/watch/blocked/next) — elígela según el contenido real,
+    no por defecto.
+  -->
+  <section id="«slug-celula»">
+    <div class="section-head">
+      <h2 class="section-title">«Nombre de la célula»</h2>
+      <span class="status status-track">«En marcha / Sin fecha definida / Bloqueado / Próxima semana»</span>
+    </div>
+    <p class="section-sub">«una línea de contexto, opcional»</p>
+    <div class="card">
+      <!-- Un .entry por punto de la transcripción. El <span class="ts mono"> lleva el timestamp tal cual viene en la fuente. -->
+      <div class="entry"><p><span class="lead">«Título del punto.»</span> «Descripción tal como está en la fuente.» <span class="ts mono">(«mm:ss»)</span></p></div>
+
+      <!-- Cuando el chat agregó algo a ESTE MISMO punto (Paso 2), va como párrafo aparte dentro del mismo .entry, con el chip: -->
+      <div class="entry">
+        <p><span class="lead">«Título.»</span> «Contenido de la transcripción.» <span class="ts mono">(«mm:ss»)</span></p>
+        <p><span class="chip chip-chat">Del chat</span>«Lo que agregó el chat sobre este mismo punto.»</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de agenda/contexto, si la reunión abrió con una agenda compartida de antemano -->
+  <section id="agenda">
+    <h2 class="section-title" style="margin-bottom:4px;">Agenda con la que se abrió la sesión</h2>
+    <div class="card">
+      <ol class="agenda">
+        <li>«...»</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="abiertos">
+    <h2 class="section-title" style="margin-bottom:4px;">Pendientes por aclarar</h2>
+    <p class="section-sub">No forzados a ninguna categoría — mejor marcarlos abiertos que adivinar (Paso 3 del SKILL.md).</p>
+    <div class="callout">
+      <p><span class="lead">«Qué no está claro.»</span> «Por qué no se pudo ubicar con confianza y qué hace falta para confirmarlo.»</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Weekly Product · «fecha» · Síntesis armada a partir de «fuentes usadas esta semana».
+</footer>

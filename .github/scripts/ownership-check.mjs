@@ -42,14 +42,31 @@ function matchesPrefix(filePath, prefixes) {
   return prefixes.some((p) => filePath === p || filePath.startsWith(p));
 }
 
+// Gana el prefijo MÁS ESPECÍFICO, no el primero que aparezca en el objeto.
+// Hace falta porque las zonas se anidan: `hub/src/app/proyectos/` es de
+// suppliers y `hub/src/app/proyectos/logistica/` es de logística. Con el
+// match a secas, todo lo de logística caía dentro del prefijo de suppliers y
+// se marcaba como zona ajena — y al revés, suppliers tocando la carpeta de
+// logística no se marcaba nunca.
+function duenoDe(filePath) {
+  let mejor = null;
+  for (const [celula, prefixes] of Object.entries(config.celula_paths)) {
+    for (const p of prefixes) {
+      if ((filePath === p || filePath.startsWith(p)) && (!mejor || p.length > mejor.prefix.length)) {
+        mejor = { celula, prefix: p };
+      }
+    }
+  }
+  return mejor;
+}
+
 function classify(filePath, authorCelula) {
   if (matchesPrefix(filePath, config.core_paths)) {
     return { reason: "core", detail: null };
   }
-  for (const [celula, prefixes] of Object.entries(config.celula_paths)) {
-    if (celula !== authorCelula && matchesPrefix(filePath, prefixes)) {
-      return { reason: "otra-celula", detail: celula };
-    }
+  const dueno = duenoDe(filePath);
+  if (dueno && dueno.celula !== authorCelula) {
+    return { reason: "otra-celula", detail: dueno.celula };
   }
   return null;
 }
