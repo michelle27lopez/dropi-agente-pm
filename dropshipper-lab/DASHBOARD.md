@@ -52,6 +52,43 @@
 *   *Perú:* 52,0%
 *   *Argentina:* 44,4%
 
+---
+
+## 🏛️ Desempeño Operativo de Comerciales (KAMs) y Comunidades Top (Julio 2026)
+
+> **Insumo:** Seguimiento diario de ingreso de órdenes (3.149.280 órdenes rastreadas del 1 al 31 de Julio 2026).
+
+### 👥 1. Ranking de Comerciales / KAMs por Volumen Manejado
+| Comercial / KAM | Órdenes Movilizadas (Julio) | % Participación | Foco Principal |
+| :--- | :---: | :---: | :--- |
+| 👑 **Angela Parrado** | **290.857 ord** | **9,24%** | Comunidades & VIP |
+| 🥈 **Angie Hurtado** | **271.521 ord** | **8,62%** | Cuentas VIP & Escalamiento |
+| 🥉 **Victoria Hurtado** | **201.798 ord** | **6,41%** | Comunidades Top |
+| **Isabella Villa** | **192.905 ord** | **6,13%** | Cuentas VIP |
+| **Britany Mesa** | **145.427 ord** | **4,62%** | Cuentas VIP |
+| **Stephanie Castro** | **109.899 ord** | **3,49%** | Acompañamiento Seller |
+| **Paula Madroñero** | **96.225 ord** | **3,06%** | Cuentas en Crecimiento |
+| **Nadia Boada** | **95.756 ord** | **3,04%** | Cuentas en Crecimiento |
+
+### 🏆 2. Top 10 Comunidades de Dropshipping por Volumen
+| Comunidad | Órdenes Movilizadas (Julio) | Tipo / Enfoque | KAM Responsable |
+| :--- | :---: | :--- | :--- |
+| 🥇 **Comunidad Iván Caicedo** | **294.707 ord** | Formación & Escalamiento Masivo | Victoria Hurtado |
+| 🥈 **Unlocked Academy** | **70.390 ord** | Academia & Pauta Digital | Angela Parrado |
+| 🥉 **TikTok Mastery** | **47.818 ord** | Tráfico Orgánico & TikTok Ads | Angela Parrado |
+| **Prana Society** | **38.822 ord** | Comunidad E-commerce | Angela Parrado |
+| **Guerrero Ads** | **37.513 ord** | Pauta & Media Buying | Angie Hurtado |
+| **WiFi Money** | **37.455 ord** | Dropshippers Jóvenes | Angela Parrado |
+| **Goldbox** | **36.971 ord** | Producto Ganador & Pauta | Angela Parrado |
+| **Leyendas Ecom** | **36.865 ord** | Programa de Crecimiento | Angie Hurtado |
+| **Comunidad Mercy Pardo** | **28.193 ord** | Formación E-commerce | Angela Parrado |
+| **EcomCircle** | **27.431 ord** | Círculo de Escalamiento | Valentina García |
+
+### 📊 3. Distribución por Segmento de Atención
+*   **Comunidades Afiliadas:** `1.357.391 órdenes` (**43,10%** del volumen total movilizado).
+*   **Cuentas VIP / Top Sellers:** `146.642 órdenes` (**4,66%** del volumen).
+*   **Dropshippers Puros / Orgánicos:** `46.065 órdenes` (**1,46%** del volumen).
+
 ### 📦 3. Volumen de Órdenes Movilizadas (Comparativa: Corte 29-Jul vs. Cierre Definitivo Julio 2026)
 | País | Cierre JUN | Corte 29-JUL *(Foto Congelada)* | Cierre Definitivo JUL | Remate Final (Delta) | % Crec. MoM | Meta Julio | % Cumplimiento | Status vs Meta |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
