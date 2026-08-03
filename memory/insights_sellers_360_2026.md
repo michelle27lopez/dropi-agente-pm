@@ -5,22 +5,24 @@
 ---
 
 ## 🏛️ Pilar 1: El Fenómeno Pareto y Concentración del Volumen
-* **Hallazgo:** 251 Sellers Pareto representan el **68%+ del volumen total de órdenes** de Dropi.
-* **Diagnóstico:** Perder a 1 solo Pareto como Joan Sebastián Otero (21,6K ord/mes) o Victor Agudelo (379K acumuladas) equivale a perder el volumen completo de países enteros como Panamá (23.7K ord/mes) o Argentina (11.2K ord/mes).
+* **Hallazgo:** La concentración del volumen es extrema: los **top 50 sellers mueven el 64,1%** y los **top 100 mueven el 72,2%** de las órdenes rastreadas. Los 250 sellers clasificados como PARETO por el equipo comercial mueven colectivamente el **~87% del volumen rastreado** (2.740.907 de 3.149.280 órdenes en el seguimiento diario de julio).
+* **Diagnóstico:** Perder a 1 solo Pareto como Joan Sebastián Otero (21,6K ord/junio, dato del programa 360) equivale a perder el volumen completo de países enteros como Panamá (23.7K ord/mes) o Argentina (11.2K ord/mes).
 * **Decisión:** Implementar SLA de Línea Blanca y Alerta Temprana en el Dashboard para variaciones >15% semanal en sellers Nivel 5 (Sabio) y Nivel 6 (Leyenda).
+* **⚠️ Caveat:** La clasificación de "PARETO" proviene del criterio comercial del equipo de KAMs (Acompañamiento 360), no de un cálculo estadístico de percentiles sobre el volumen.
 
 ---
 
 ## ⚡ Pilar 2: El Motor de Acompañamiento Comercial 360 (+126,8% Crecimiento MoM)
 * **Hallazgo:** Las órdenes acompañadas crecieron de **167.837 en mayo a 380.648 en junio (+126,8%)**.
+* **⚠️ Caveat Temporal:** Los datos del programa 360 son de **mayo-junio 2026**. La columna "Unidades vendidas en Julio" está vacía en el Excel y pendiente de actualización por el equipo comercial.
 * **Protección de Stock:** 315 campañas cuentan con acuerdo de **Producto Privatizado / Stock Reservado con Proveedor**.
 * **Decisión:** Convertir la privatización de inventario en un beneficio in-app automático desbloqueable desde Nivel 3 Master (≥1.000 ord/mes).
 
 ---
 
-## 🎓 Pilar 3: Academias y Comunidades como Canal Dominante (43,1% del Volumen)
-* **Hallazgo:** Las comunidades afiliadas mueven **1.357.391 órdenes (43,10% del volumen global)**. Comunidad Iván Caicedo lidera con **294.707 órdenes en julio**.
-* **Concentración KAM:** Angela Parrado (290K ord) y Angie Hurtado (271K ord) gestionan el 17,8% del volumen global por su cercanía con academias.
+## 🎓 Pilar 3: Academias y Comunidades como Canal Dominante (43,1% Rastreado / 36,8% Total)
+* **Hallazgo:** Las comunidades afiliadas mueven **1.357.391 órdenes**, representando el **43,1% de las órdenes con seguimiento comercial directo** (3.149.280) o **36,8% del cierre oficial total de julio** (3.687.786). La diferencia se explica porque el seguimiento diario cubre ~85% del volumen total. Comunidad Iván Caicedo lidera con **294.707 órdenes en julio**.
+* **Concentración KAM:** Angela Parrado (290K ord) y Angie Hurtado (271K ord) gestionan el 17,8% del volumen rastreado por su cercanía con academias.
 * **Decisión:** Desarrollar el *Partner Portal para Creadores/Líderes de Comunidad* para darles visibilidad del onboarding y nivel de Leyendas de sus estudiantes.
 
 ---
