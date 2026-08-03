@@ -28,7 +28,7 @@ Para cada una de las 57 iniciativas se aplicó la matriz de **4 Riesgos de Cagan
 ---
 
 ### 2. `PoC Shopi / PoolMax` (Pauta Centralizada Comunidades `PROD-POOLMAX`)
-* **Valor:** 🟢 **EXTREMO** (Ataca el 43,10% del volumen que viene de comunidades).
+* **Valor:** 🟢 **EXTREMO** (Ataca el 43,1% del volumen rastreado / 36,8% del cierre oficial que viene de comunidades).
 * **Usabilidad:** 🟡 **MEDIO** (Requiere asignación transparente de presupuestos).
 * **Factibilidad:** 🟡 **MEDIO** (Distribución dinámica de pedidos por API entre múltiples tiendas).
 * **Viabilidad:** 🟢 **ALTO** (Aprobado por CEO/CPO; escala volumen sin incrementar CAC).

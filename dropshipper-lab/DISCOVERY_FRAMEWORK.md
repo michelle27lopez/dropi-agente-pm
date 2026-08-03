@@ -7,9 +7,9 @@
 
 ## 🧭 1. Anclas de Datos 360° (Lente de Evaluación)
 * ⚓ **Ancla 1 (NSM / OKR 1.1):** 3.687.786 órdenes en Julio 2026 (+7,17% MoM, 103.26% cumplimiento CPO) vs Meta Holding 7,8M.
-* ⚓ **Ancla 2 (Población UserPilot Sync):** 55.368 sellers y proveedores activos sincronizados en Supabase.
-* ⚓ **Ancla 3 (Regla Pareto Élite):** 251 Sellers Pareto generan el **68%+ del volumen total de facturación**.
-* ⚓ **Ancla 4 (Canal Comunidades):** 1.357.391 órdenes (43,10% del volumen) concentradas en comunidades (Iván Caicedo 294K).
+* ⚓ **Ancla 2 (Población UserPilot Sync):** 54.241 sellers del Auth0/UserPilot en tabla compartida de 103.892 registros totales en Supabase.
+* ⚓ **Ancla 3 (Concentración Pareto):** Top 50 sellers = 64,1% del volumen rastreado; Top 100 = 72,2%; 250 Sellers PARETO (clasificación comercial) = **~87% del volumen rastreado** (2.740.907 de 3.149.280 órdenes).
+* ⚓ **Ancla 4 (Canal Comunidades):** 1.357.391 órdenes (**43,1% del volumen rastreado** · 36,8% del cierre oficial total) concentradas en comunidades (Iván Caicedo 294K).
 * ⚓ **Ancla 5 (Segmentación Onboarding):** 34,0% novatos (0 órdenes) vs 22,8% vendedores/VIP (>300 órdenes/mes).
 
 ---
@@ -19,7 +19,7 @@
 ```
 [OUTCOME 7.8M ORD/MES & ACTIVACIÓN NETA 8.0%]
    │
-   ├── 🔴 OPORTUNIDAD A: RETENCIÓN PARETO & PREVENCIÓN DE CHURN (68% VOLUMEN)
+   ├── 🔴 OPORTUNIDAD A: RETENCIÓN PARETO & PREVENCIÓN DE CHURN (~87% VOLUMEN RASTREADO)
    │      ├── [PROD-WRAPPED] Dropi Wrapped Leyendas v7.0 (Gamificación 6 Niveles & 82% menos churn)
    │      ├── [PROD-360-STOCK] Privatización de Catálogo 1-Clic (315 Campañas Protegidas)
    │      ├── [PROD-1665 / PROD-1706] Torre Logística: Trazabilidad, Evidencias y Capa 1.5 de Hábito

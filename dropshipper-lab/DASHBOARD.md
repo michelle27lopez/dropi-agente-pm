@@ -26,7 +26,7 @@
 ## 📈 Métricas de Volumen y Comportamiento Operativo
 
 *   **Sellers Registrados (Histórico):** 397.000 (397k)
-*   **Usuarios Identificados en DB Célula (UserPilot Sync):** 31.952 registrados únicos sincronizados
+*   **Usuarios Identificados en DB Célula (UserPilot Sync):** 54.241 sellers del Auth0/UserPilot en tabla compartida de 103.892 registros totales en Supabase
 *   **Usuarios Activos Diarios (DAU):** 14.262 usuarios/día (Userpilot UI)
 *   **Usuarios Activos Mensuales (MAU):** 81.521 usuarios/mes (Userpilot UI - Tráfico global)
 *   **Mediana días a 2ª orden:** 0,8 días (Promedio: 5,0 días)
@@ -85,20 +85,23 @@
 | **EcomCircle** | **27.431 ord** | Círculo de Escalamiento | Valentina García |
 
 ### 📊 3. Distribución por Segmento de Atención
-*   **Comunidades Afiliadas:** `1.357.391 órdenes` (**43,10%** del volumen total movilizado).
-*   **Cuentas VIP / Top Sellers:** `146.642 órdenes` (**4,66%** del volumen).
-*   **Dropshippers Puros / Orgánicos:** `46.065 órdenes` (**1,46%** del volumen).
+> ⚠️ **Nota:** Los porcentajes se calculan sobre las **3.149.280 órdenes rastreadas** en el seguimiento diario (85,4% del cierre oficial de 3.687.786). Sobre el cierre total, los porcentajes son ~15% menores.
+
+*   **Comunidades Afiliadas:** `1.357.391 órdenes` (**43,1% del rastreado** · 36,8% del cierre oficial).
+*   **Cuentas VIP / Top Sellers:** `146.642 órdenes` (**4,66% del rastreado**).
+*   **Dropshippers Puros / Orgánicos:** `46.065 órdenes` (**1,46% del rastreado**).
 
 ---
 
 ## ⚡ Programa de Acompañamiento Comercial 360 & Cuidado de Campañas
 
-> **Insumo:** Data maestra de 4.939 campañas acompañadas y 251 Sellers Pareto (Junio - Julio 2026).
+> **Insumo:** Data maestra de 4.939 campañas acompañadas y 250 Sellers Pareto (datos de **mayo-junio 2026**; columna de julio vacía/pendiente de actualización por equipo comercial).
 
-### 📈 1. Crecimiento de Volumen de Órdenes Acompañadas
+### 📈 1. Crecimiento de Volumen de Órdenes Acompañadas (Mayo → Junio 2026)
 * **Mayo 2026:** `167.837 órdenes` (419.080 unidades).
 * **Junio 2026:** **`380.648 órdenes`** (534.152 unidades).  
-* **Impacto Comercial:** Crecimiento explosivo del **+126,8% MoM** en el volumen respaldado con acompañamiento comercial directo.
+* **Impacto Comercial:** Crecimiento del **+126,8% MoM** en el volumen respaldado con acompañamiento comercial directo.
+* ⚠️ **Datos de Julio 2026 no disponibles aún** en este dataset — pendiente de actualización por el equipo comercial.
 
 ### 🛡️ 2. Protección de Inventario & Privatización de Catálogo
 * **315 Campañas** cuentan con acuerdo de **Producto Privatizado / Stock Reservado con Proveedor** para blindar el inventario durante el escalamiento de pauta y prevenir quiebres de stock.
