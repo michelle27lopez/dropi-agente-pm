@@ -1,0 +1,95 @@
+﻿📋 Weekly — Célula Backoffice
+📅 30 julio 2026 
+🧬 Foco: 🎉 Argentina en beta · Giro estratégico Sumsub → Fase 1 por directriz ejecutiva · Confío en espera
+
+
+🇦🇷Facturación Argentina — Beta en producción desde el 29 julio ✅ Beta activo
+
+
+La funcionalidad entró a beta en producción el 29 de julio con 8 usuarios. Todos los bugs identificados en la sesión del 22 de julio fueron corregidos y verificados el 27 de julio. Nataly y Valeria tienen acceso al módulo admin para revisar y aprobar/rechazar datos. Producto hace pruebas con su propio usuario.
+Ya quedo montado el video tutorial y los documentos legales de los check quedaron apuntando a los de Argentina correctamente
+
+
+📌 Flujo de fases confirmado definitivamente:
+•Beta (ahora):
+8 usuarios ven el formulario. Switch activo — herramientas financieras habilitadas aunque no lo llenen.
+•Fase 1 (requiere nuevo despliegue de frontend):
+formulario visible para TODOS los usuarios argentinos. Switch activo, sin bloqueos. Va la campaña de comunicación.
+•Fase 2:
+switch desactivado → bloqueo de retiros, transferencias y cuentas bancarias para quien no completó datos.
+
+
+* Gustavo: corregir los errores reportados por el area de producto antes de habilitar la funcionalidad a todos los usuarios.
+* Catalina: citar a Nataly y Valeria para pruebas del panel administrativo (30 julio).
+* Paula: coordinar con TI el segundo despliegue de frontend para pasar de beta a Fase 1 (todos los usuarios).
+
+
+🪪 Sumsub — Directriz ejecutiva: ir directo a Fase 1
+
+
+🔴 Directriz corporativa — 30 julio (Laura Sánchez)
+Lucho instruyó implementación urgente y transversal de Sumsub en TODOS los países. Se va directamente a la Fase 1 (implementación técnica en backend). La Fase Cero manual queda descartada. El lunes hay reunión formal con todos los equipos.
+
+
+¿Por qué la urgencia? En los últimos 3 meses se detectaron: demandas en algunos países, falsificación de datos de facturación, errores en reportes exógenos a la DIAN, y problemas con entidades tributarias. El costo de no actuar (multas, demandas, bloqueo de wallets a todos los usuarios de un país) es mayor que el riesgo de actuar rápido.
+
+
+Estructura de flujos por país — Fase 1:
+
+
+• Flujo largo (identidad + facturación en un solo paso en Sumsub): Guatemala, Panamá, Paraguay, Perú, México, Venezuela y Costa Rica. Guatemala es el primer piloto.
+• Flujo corto (solo validación de documento — biometría/liveness): Chile, Ecuador y Argentina — ya tienen módulo de facturación activo. No se toca el formulario existente en esta fase.
+• Colombia: sigue con Truora para KYC. Se agrega captura de datos de facturación en el flujo de Sumsub sin reemplazar Truora todavía.
+• Marcas blancas: flujo diferenciado — sin logo de Dropi, canales por fuera de los estándar.
+
+
+Acuerdo con TI: TI asigna desarrollador. José, Juan Camilo, Paula y Catalina trabajan en conjunto desde el 30 julio. TI investiga API de Sumsub en paralelo mientras Producto termina de definir los flujos. José alertó: no unificar el formulario en el front en esta fase — primero el backend y la integración, luego los cambios de front.
+
+
+* Lunes: reunión formal con todos los equipos (GrowOps, Administrativo, TI y Producto) — Sumsub presenta flujos validados, José presenta estimación de esfuerzo, se define alcance del MVP y orden de países.
+* Juan Camilo: entregar a José ANTES del lunes toda la documentación técnica del proyecto (flujos KYC/KYB por país, blueprint, campos requeridos por tipo de persona).
+* José: trabajar con equipo de arquitectura para mapear estados de Truora como referencia y estimar la integración con Sumsub. Entregar estimación el lunes.
+* José: confirmar el nombre del desarrollador asignado al proyecto y asegurar que esté en la reunión del lunes.
+* Paula: compartir con José el acceso al sandbox de Sumsub esta semana.
+* Jonatan: coordinar con Sumsub la reunión técnica para definir cómo se hace la migración de usuarios de Guatemala (API, ZIP o traslado directo).
+
+
+💳Confío Pagos — México ⚠️ Fecha indefinida-Bloqueado
+
+
+La integración sigue bloqueada por la debida diligencia con el proveedor bancario de México — sin avance esta semana. Catalina y Juan Camilo quedan pendientes al seguimiento con Víctor en las semanas del 10 al 24 de agosto. Si hay avance, gestionar lanzamiento y métricas.
+
+
+🔑 CAS — JAMV DRIVE Colombia y ACTIVACIÓN CAS ARGENTINA
+
+
+
+
+JAMV DRIVE Colombia gestionada la comunicación gestionada en redes sociales, pendiente en plataforma. 
+Nueva solicitud que debe entrar al dropiscore: la activación CAS ARGENTINA
+
+
+💬 Alineación SAC — Canal Intercom Facturación Argentina 
+
+
+Sesión de alineación con el equipo de soporte (Harry, Osman, Yuliana) para preparar el canal de Intercom de Argentina antes del lanzamiento al público. El flujo es similar al de Chile y Ecuador, pero con diferencias importantes: documentos distintos (DNI, CUIT, constancia AFIP según condición IVA) y tutoriales propios del país.
+
+
+Estructura del árbol de soporte acordada: el usuario entra al canal y puede elegir entre — completar datos de facturación, reportar error en los datos, problemas técnicos (MFA, wallet bloqueada) o solicitar agente. Si reporta un error, recibe una alerta roja con el campo específico fallido, lo corrige y queda en revisión nuevamente. Si tiene problema técnico, envía captura de pantalla al agente para revisión manual. Si no encuentra solución, puede volver al menú o escalar directamente a un agente.
+
+
+📌 Ajuste urgente antes del lanzamiento:
+El tiempo de revisión manual de datos (24-48 horas) NO está incluido en los mensajes automáticos de Intercom. Sin ese mensaje, los usuarios esperarán sin saber cuánto tiempo — generando tickets innecesarios. Catalina debe actualizar el copy antes del lanzamiento.
+
+
+Bug activo en Ecuador — a tener en cuenta para Argentina: cuando los datos son aprobados, la wallet puede quedar bloqueada por un retraso en la sincronización automática. Requiere desbloqueo manual por un administrador. El flujo de Intercom debe informar al usuario que un agente se encargará, en lugar de redirigirlo a una opción que no aplica.
+
+
+Bloqueos financieros: en Argentina hay una semana de gracia (Fase 1) donde los usuarios pueden mover fondos aunque no hayan completado los datos. El bloqueo solo aplica desde la Fase 2. El equipo SAC debe conocer esta distinción para gestionar correctamente las expectativas.
+
+
+* Catalina: actualizar los mensajes automáticos de Intercom para Argentina incluyendo el tiempo estimado de revisión de 24-48 horas — antes del lanzamiento.
+* Catalina: obtener el número de usuarios activos en Argentina para calcular el volumen estimado de solicitudes de soporte al lanzamiento.
+* Catalina: compartir con Yuliana los materiales de soporte de Chile y Ecuador (flujo Intercom, tutorial YouTube, manual de uso y Figma) para que adapte lo necesario para Argentina.
+* Yuliana: presentar el flujo de soporte y materiales de facturación a Marlon y Osman para obtener aprobación antes de configurar formalmente el canal en Intercom.
+* Una vez obtenida la aprobación de Marlon y Osman: implementar flujos de respuesta automática y botones de ayuda en Intercom para Argentina.

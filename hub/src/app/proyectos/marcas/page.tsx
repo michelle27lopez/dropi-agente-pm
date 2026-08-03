@@ -308,6 +308,12 @@ export default function MarcasPage() {
           >
             🧪 Ver experimentos en marcha →
           </a>
+          <a
+            href="/proyectos/marcas/entrevistas"
+            style={{ display: "inline-block", marginTop: 10, marginLeft: 16, fontSize: 12, fontWeight: 700, color: "white", textDecoration: "none", opacity: 0.85 }}
+          >
+            🎙️ Ver entrevistas →
+          </a>
         </div>
       </div>
 

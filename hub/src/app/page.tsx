@@ -6,8 +6,8 @@ import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section, matchesQuery } from "@/components/HomeSections";
 import { isSprintAllowed, isMiDiaOwner } from "@/lib/sprint-access";
-import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
-import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
+import { PROJECT_STYLE } from "@/lib/curated-projects";
+import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 
 const updates: Item[] = [
@@ -58,32 +58,6 @@ const updates: Item[] = [
   },
 ];
 
-// Home curado de Suppliers: solo estos 13 proyectos reales de la tabla
-// `projects` se muestran aquí (10 Discovery projects + 3 POC), aunque la
-// célula tenga más filas en la base — el resto vive en /celula/suppliers.
-// color/icon no existen en la tabla, así que se mantienen aquí por código.
-const PROJECT_STYLE: Record<string, { url: string; color: string; icon: string }> = {
-  "CELL-001": { url: "/proyectos/celula", color: "#0891B2", icon: "🧬" },
-  "DCA-001": { url: "/proyectos/dinamicas-catalogo", color: "#0EA5E9", icon: "🗂️" },
-  "TTV-001": { url: "/proyectos/time-to-value", color: "#F77F00", icon: "⚡" },
-  "CAT-001": { url: "/proyectos/categorizacion", color: "#7C3AED", icon: "🏷️" },
-  "IND-001": { url: "/proyectos/indicadores", color: "#6366F1", icon: "📈" },
-  "NEG-001": { url: "/proyectos/negociaciones", color: "#0D9488", icon: "🤝" },
-  "NEG-002": { url: "/proyectos/negociaciones-dropshipper", color: "#F77F00", icon: "🤝" },
-  "CAZ-001": { url: "/proyectos/caza-productos", color: "#EC4899", icon: "🔍" },
-  "COM-002": { url: "/proyectos/combos", color: "#F77F00", icon: "📦" },
-  "DESC-001": { url: "/proyectos/descuentos", color: "#F59E0B", icon: "🏷️" },
-  "PULSO-001": { url: "/proyectos/pulso-demo", color: "#F77F00", icon: "⚡" },
-  "PUL-001":   { url: "/proyectos/pulso-demo", color: "#EC4899", icon: "🔭" },
-  "GALI-001": { url: "/proyectos/gali-demo", color: "#FF6102", icon: "🦊" },
-  "ACT-001": { url: "/proyectos/dropi-activa", color: "#7C3AED", icon: "🚀" },
-  "ESP-001": { url: "/proyectos/espionaje", color: "#10B981", icon: "🕵️" },
-};
-
-function truncate(text: string, max: number) {
-  return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
-}
-
 function matchesProyectoQuery(p: Proyecto, q: string) {
   const query = q.trim().toLowerCase();
   if (!query) return true;
@@ -92,20 +66,6 @@ function matchesProyectoQuery(p: Proyecto, q: string) {
     (p.summary ?? "").toLowerCase().includes(query) ||
     (p.project_code ?? "").toLowerCase().includes(query)
   );
-}
-
-function proyectoToItem(p: Proyecto): Item | null {
-  const style = p.project_code ? PROJECT_STYLE[p.project_code] : undefined;
-  if (!style) return null;
-  return {
-    key: p.id,
-    name: p.name,
-    description: truncate(p.summary ?? "Sin descripción aún.", 160),
-    url: style.url,
-    tag: p.project_code ?? p.handoff_status ?? "Sin código",
-    color: style.color,
-    icon: style.icon,
-  };
 }
 
 export default function HubPage() {
@@ -180,11 +140,17 @@ export default function HubPage() {
   // un POC nuevo se ve como acceso directo desde su padre aunque su propio
   // código no esté (todavía) en la curaduría.
   const pocsByParent = new Map<string, Proyecto[]>();
+  const deliveriesByParent = new Map<string, Proyecto[]>();
   for (const p of proyectosReales) {
     if (p.type === "POC" && p.parent_project_id) {
       const list = pocsByParent.get(p.parent_project_id) ?? [];
       list.push(p);
       pocsByParent.set(p.parent_project_id, list);
+    }
+    if (p.type === "Delivery Proyecto" && p.parent_project_id) {
+      const list = deliveriesByParent.get(p.parent_project_id) ?? [];
+      list.push(p);
+      deliveriesByParent.set(p.parent_project_id, list);
     }
   }
 
@@ -221,14 +187,27 @@ export default function HubPage() {
     setProyectosReales((prev) => [...prev, created]);
   }
 
-  const projects = proyectosReales
-    .filter((p) => p.type !== "POC")
-    .map(proyectoToItem)
-    .filter((item): item is Item => item !== null);
-  const poc = proyectosReales
-    .filter((p) => p.type === "POC")
-    .map(proyectoToItem)
-    .filter((item): item is Item => item !== null);
+  async function handleCrearDelivery(parent: Proyecto, name: string, summary: string, relatedPocId: string | null) {
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary, type: "Delivery Proyecto", related_poc_id: relatedPocId }),
+    });
+    if (!res.ok) return;
+    const created = await res.json();
+    setProyectosReales((prev) => [...prev, created]);
+  }
+
+  async function handleRelatedPocChange(id: string, relatedPocId: string | null) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ related_poc_id: relatedPocId }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setProyectosReales((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  }
 
   // Home privada: este es el home real de Michelle (célula "suppliers" cae
   // aquí, no en celula/[slug]) — reemplaza el grid estándar por el
@@ -236,16 +215,9 @@ export default function HubPage() {
   if (isMiDiaOwner(userEmail)) {
     return (
       <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
-        <div style={{ flex: 1, display: "flex", alignItems: "flex-start" }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <HubHeader title="Darwin" subtitle="Tu día · Darwin" currentSlug="suppliers" />
-            <div style={{ display: "flex", alignItems: "flex-start" }}>
-              <ProjectSidebar allProjects={projects} allPoc={poc} />
-              <div style={{ flex: 1, minWidth: 0, maxWidth: 900, padding: "48px 32px" }}>
-                <HomeDashboard />
-              </div>
-            </div>
-          </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <HubHeader title="Darwin" subtitle="Tu día · Darwin" currentSlug="suppliers" />
+          <MiDiaShell />
         </div>
         <HubFooter />
       </main>
@@ -271,11 +243,13 @@ export default function HubPage() {
 
   // Lista curada (PROJECT_STYLE) pero ya con los datos reales de `projects`
   // — así el select de estado y el VPV quedan conectados a la base.
-  const curatedProjects = proyectosReales.filter((p) => p.type !== "POC" && p.project_code && PROJECT_STYLE[p.project_code]);
+  const curatedProjects = proyectosReales.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.project_code && PROJECT_STYLE[p.project_code]);
   const curatedPoc = proyectosReales.filter((p) => p.type === "POC" && p.project_code && PROJECT_STYLE[p.project_code]);
+  const curatedDelivery = proyectosReales.filter((p) => p.type === "Delivery Proyecto");
   const filteredCuratedProjects = curatedProjects.filter((p) => matchesProyectoQuery(p, query));
   const filteredCuratedPoc = curatedPoc.filter((p) => matchesProyectoQuery(p, query));
-  const hasResults = filteredUpdates.length + filteredCuratedProjects.length + filteredCuratedPoc.length > 0;
+  const filteredCuratedDelivery = curatedDelivery.filter((p) => matchesProyectoQuery(p, query));
+  const hasResults = filteredUpdates.length + filteredCuratedProjects.length + filteredCuratedPoc.length + filteredCuratedDelivery.length > 0;
 
   return (
     <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
@@ -335,9 +309,11 @@ export default function HubPage() {
                   dark={false}
                   canCreate={canCreate}
                   pocs={pocsByParent.get(p.id) ?? []}
+                  deliveries={deliveriesByParent.get(p.id) ?? []}
                   onEstadoChange={handleEstadoChange}
                   onVpvChange={handleVpvChange}
                   onCrearPoc={handleCrearPoc}
+                  onCrearDelivery={handleCrearDelivery}
                   urlOverride={style?.url}
                   colorOverride={style?.color}
                   iconOverride={style?.icon}
@@ -364,6 +340,34 @@ export default function HubPage() {
                   onEstadoChange={handleEstadoChange}
                   onVpvChange={handleVpvChange}
                   onCrearPoc={handleCrearPoc}
+                  urlOverride={style?.url}
+                  colorOverride={style?.color}
+                  iconOverride={style?.icon}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        <div style={{ marginTop: filteredCuratedDelivery.length ? 56 : 0 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Delivery Proyectos
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {filteredCuratedDelivery.map((p) => {
+              const style = p.project_code ? PROJECT_STYLE[p.project_code] : undefined;
+              return (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                  onRelatedPocChange={handleRelatedPocChange}
                   urlOverride={style?.url}
                   colorOverride={style?.color}
                   iconOverride={style?.icon}

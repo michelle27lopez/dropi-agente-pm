@@ -25,7 +25,10 @@ HUB_DIR = os.path.dirname(SCRIPT_DIR)
 ENV_PATH = os.path.join(HUB_DIR, ".env.local")
 DOC_HUB_DIR = os.path.join(HUB_DIR, "doc hub")
 
-UMBRAL = {"Activo": 3000, "Verificado": 20000}
+# Verificado: 3.000 órdenes/trimestre · Premium: 45.000 órdenes/trimestre.
+# Corregido 29/07/2026 — estaba en 20.000, desalineado con la tabla oficial
+# "Categorías de Proveedores" (confirmado por Michelle).
+UMBRAL = {"Activo": 3000, "Verificado": 45000}
 OBJETIVO = {"Activo": "Verificado", "Verificado": "Premium"}
 BATCH_SIZE = 500
 

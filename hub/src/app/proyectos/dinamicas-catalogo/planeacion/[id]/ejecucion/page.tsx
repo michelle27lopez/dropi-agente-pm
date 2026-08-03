@@ -678,6 +678,18 @@ export default function EjecucionPage() {
                                   {path ? (
                                     <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                                       <div style={{ display: "flex", gap: 6 }}>
+                                        <a
+                                          href={path}
+                                          target="_blank"
+                                          rel="noreferrer"
+                                          title="Abrir la vista tal como la ve el proveedor"
+                                          style={{
+                                            fontSize: 11.5, fontWeight: 600, color: "#374151", background: "#fff",
+                                            border: "1px solid #d1d5db", borderRadius: 6, padding: "4px 8px", textDecoration: "none", whiteSpace: "nowrap",
+                                          }}
+                                        >
+                                          Ver
+                                        </a>
                                         <button
                                           type="button"
                                           onClick={() => {

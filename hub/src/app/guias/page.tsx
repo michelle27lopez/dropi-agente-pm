@@ -15,6 +15,13 @@ const guias = [
     description: "Qué skills hay disponibles, agrupadas por categoría, y cuándo usar cada una en el trabajo de un PD.",
     tag: "Referencia · Skills",
   },
+  {
+    slug: "nomenclatura-fases",
+    icon: "🧭",
+    title: "Nomenclatura de fases de proyecto",
+    description: "Cómo se nombran proyectos, fases (Epic) y subfases (tarea) en Jira. Borrador para revisar con Laura Contreras.",
+    tag: "Referencia · Nomenclatura",
+  },
 ];
 
 export default function GuiasIndexPage() {

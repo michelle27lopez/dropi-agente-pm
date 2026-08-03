@@ -14,8 +14,8 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
-import { snapshot } from "./data/2026-06";
-import type { CelulaDetail, ComparativoRow } from "./data/types";
+import { snapshot } from "./data/2026-07";
+import type { CelulaDetail, ComparativoRow, TiempoPorEtapa, ConclusionEjecutiva } from "./data/types";
 
 const JIRA_BOARD_URL = "https://dropi-it.atlassian.net/jira/software/c/projects/PROD/boards/1267";
 
@@ -102,7 +102,7 @@ export default function MonthlyUpdatePage() {
 
 function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
   const items: { id: Tab; label: string }[] = [
-    { id: "resumen", label: "Resumen Junio" },
+    { id: "resumen", label: `Resumen ${snapshot.monthLabel.split(" ")[0]}` },
     { id: "comp", label: "Histórico" },
     { id: "updates", label: "Actualizaciones del Equipo" },
   ];
@@ -134,12 +134,15 @@ function Tabs({ tab, setTab }: { tab: Tab; setTab: (t: Tab) => void }) {
 // ─── Tab: Resumen ─────────────────────────────────────────────────────────────
 
 function ResumenTab() {
-  const { kpis, cicloCompletoNota, cicloCompletoItems, cicloCompletoPromedio, experimentacion, statusDistribution, handoffsPorCelula, celulasDetail, mejorasMetodologia } = snapshot;
+  const { conclusionEjecutiva, kpis, cicloCompletoNota, cicloCompletoItems, cicloCompletoPromedio, experimentacion, statusDistribution, handoffsPorCelula, tiempoPorEtapa, celulasDetail, mejorasMetodologia } = snapshot;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      {/* KPI cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 14 }}>
+      {/* Conclusión ejecutiva — lo primero que se lee */}
+      {conclusionEjecutiva.mensaje && <ConclusionEjecutivaCard data={conclusionEjecutiva} />}
+
+      {/* KPI cards — solo lo esencial, sin relleno */}
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${kpis.length}, 1fr)`, gap: 14 }}>
         {kpis.map((k) => (
           <div key={k.label} style={{ ...card, padding: 18, borderColor: k.accent ? ACCENT : "var(--border)" }}>
             <div style={{ fontSize: 20, marginBottom: 10, color: k.accent ? ACCENT : "var(--fg)" }}>{k.icon}</div>
@@ -151,101 +154,164 @@ function ResumenTab() {
         ))}
       </div>
 
-      {/* Cycle time callout */}
-      <div style={{ ...card, borderLeft: `3px solid ${ACCENT}`, padding: "14px 18px", fontSize: 12, color: "var(--muted)", lineHeight: 1.7 }}>
-        ℹ️ <strong style={{ color: "var(--fg)" }}>Ciclo completo:</strong> {cicloCompletoNota}
-        <br />
-        {cicloCompletoItems.map((item) => (
-          <span key={item.proyecto}>
-            • {item.proyecto}: {item.dias} días ({item.fechas}) · <strong style={{ color: "var(--fg)" }}>{item.sprints.toFixed(1)} sprints</strong>
+      {/* Tiempo por etapa — la sección de tiempos vive junta: transición por etapa + único dato de ciclo completo */}
+      <div>
+        <div style={sectionTitle}><span style={dotStyle} />Tiempo por etapa — Discovery → POC → Delivery → Following</div>
+        <p style={{ fontSize: 12, color: "var(--muted)", marginTop: -8, marginBottom: 14, lineHeight: 1.6 }}>
+          Días entre el arranque de una etapa y la siguiente. Necesita 2+ etapas tagueadas por proyecto — <strong style={{ color: "var(--fg)" }}>n suele ser bajo</strong> los primeros meses; crece con más historia.
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 14 }}>
+          {tiempoPorEtapa.map((t) => <TiempoEtapaCard key={t.celula} data={t} />)}
+        </div>
+        <details>
+          <summary style={{ cursor: "pointer", fontSize: 12, color: ACCENT, fontWeight: 600 }}>Ver el único caso de ciclo completo a handoff (n=1) →</summary>
+          <div style={{ ...card, borderLeft: `3px solid ${ACCENT}`, padding: "14px 18px", fontSize: 12, color: "var(--muted)", lineHeight: 1.7, marginTop: 10 }}>
+            {cicloCompletoNota}
             <br />
-          </span>
-        ))}
-        {cicloCompletoPromedio}
+            {cicloCompletoItems.map((item) => (
+              <span key={item.proyecto}>
+                • {item.proyecto}: {item.dias} días ({item.fechas}) · <strong style={{ color: "var(--fg)" }}>{item.sprints.toFixed(1)} sprints</strong>
+                <br />
+              </span>
+            ))}
+            {cicloCompletoPromedio}
+          </div>
+        </details>
       </div>
 
-      {/* Experiment callout */}
-      <div style={{ ...card, display: "flex", alignItems: "center", gap: 18, background: "#FAF5FF", borderColor: "#E9D5FF" }}>
-        <div style={{ fontSize: 26 }}>🧪</div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#A855F7" }}>
-            Experimentación Activa
-          </div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", margin: "3px 0" }}>{experimentacion.titulo}</div>
-          <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.5 }}>{experimentacion.desc}</div>
+      {/* Célula cards — detalle, segundo plano */}
+      <details>
+        <summary style={{ cursor: "pointer", ...sectionTitle, display: "inline-flex" }}><span style={dotStyle} />Ver detalle por célula →</summary>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14, marginTop: 14 }}>
+          {celulasDetail.map((c) => <CelulaCard key={c.celula} celula={c} />)}
         </div>
-        <div style={{ display: "flex", gap: 20, flexShrink: 0 }}>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 24, fontWeight: 800, color: "#A855F7" }}>{experimentacion.numExperimentos}</div>
-            <div style={{ fontSize: 10, color: "var(--muted)" }}>Experimentos</div>
-          </div>
-          <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: 24, fontWeight: 800, color: "#A855F7" }}>{experimentacion.numCelulas}</div>
-            <div style={{ fontSize: 10, color: "var(--muted)" }}>Células</div>
-          </div>
-        </div>
-      </div>
+      </details>
 
-      {/* Charts */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
-        <div style={card}>
-          <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 14 }}>Distribución Global por Estado</h3>
-          <div style={{ height: 220 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie data={statusDistribution} nameKey="label" cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={3} dataKey="value">
-                  {statusDistribution.map((s, i) => <Cell key={i} fill={s.color} />)}
-                </Pie>
-                <Tooltip formatter={(value, name) => [`${value} proyectos`, name]} />
-              </PieChart>
-            </ResponsiveContainer>
+      {/* Charts + experimentación + metodología — secundario, colapsado por defecto */}
+      <details>
+        <summary style={{ cursor: "pointer", fontSize: 13, color: ACCENT, fontWeight: 600, marginBottom: 10 }}>Ver gráficos, experimentación activa y notas de metodología →</summary>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20, marginTop: 14 }}>
+          <div style={{ ...card, display: "flex", alignItems: "center", gap: 18, background: "#FAF5FF", borderColor: "#E9D5FF" }}>
+            <div style={{ fontSize: 26 }}>🧪</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#A855F7" }}>
+                Experimentación Activa
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", margin: "3px 0" }}>{experimentacion.titulo}</div>
+              <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.5 }}>{experimentacion.desc}</div>
+            </div>
+            <div style={{ display: "flex", gap: 20, flexShrink: 0 }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 24, fontWeight: 800, color: "#A855F7" }}>{experimentacion.numExperimentos}</div>
+                <div style={{ fontSize: 10, color: "var(--muted)" }}>Experimentos</div>
+              </div>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: 24, fontWeight: 800, color: "#A855F7" }}>{experimentacion.numCelulas}</div>
+                <div style={{ fontSize: 10, color: "var(--muted)" }}>Células</div>
+              </div>
+            </div>
           </div>
-          <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 8 }}>
-            {statusDistribution.map((s) => (
-              <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--muted)" }}>
-                <span style={{ width: 9, height: 9, borderRadius: "50%", background: s.color, display: "inline-block" }} />
-                {s.label}
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+            <div style={card}>
+              <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 14 }}>Distribución Global por Estado</h3>
+              <div style={{ height: 220 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie data={statusDistribution} nameKey="label" cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={3} dataKey="value">
+                      {statusDistribution.map((s, i) => <Cell key={i} fill={s.color} />)}
+                    </Pie>
+                    <Tooltip formatter={(value, name) => [`${value} proyectos`, name]} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div style={{ display: "flex", gap: 14, flexWrap: "wrap", justifyContent: "center", marginTop: 8 }}>
+                {statusDistribution.map((s) => (
+                  <div key={s.label} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--muted)" }}>
+                    <span style={{ width: 9, height: 9, borderRadius: "50%", background: s.color, display: "inline-block" }} />
+                    {s.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={card}>
+              <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 14 }}>Hand-offs por Célula</h3>
+              <div style={{ height: 260 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={handoffsPorCelula}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                    <XAxis dataKey="celula" tick={{ fontSize: 10, fill: "var(--muted)" }} interval={0} angle={-20} textAnchor="end" height={50} />
+                    <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "var(--muted)" }} />
+                    <Tooltip formatter={(value) => [`${value} handoffs`, ""]} />
+                    <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                      {handoffsPorCelula.map((h, i) => <Cell key={i} fill={h.color} />)}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+
+          <div style={card}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+              <span style={{ color: ACCENT, fontSize: 16 }}>⚠️</span>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)" }}>Por mejorar de la metodología</h3>
+            </div>
+            {mejorasMetodologia.map((m, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "10px 0", borderBottom: i < mejorasMetodologia.length - 1 ? "1px solid var(--border)" : "none" }}>
+                <div style={{ width: 8, height: 8, borderRadius: 2, background: ACCENT, flexShrink: 0, marginTop: 4 }} />
+                <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6 }}>{m}</div>
               </div>
             ))}
           </div>
         </div>
+      </details>
+    </div>
+  );
+}
 
-        <div style={card}>
-          <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 14 }}>Hand-offs por Célula</h3>
-          <div style={{ height: 260 }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={handoffsPorCelula}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                <XAxis dataKey="celula" tick={{ fontSize: 10, fill: "var(--muted)" }} interval={0} angle={-20} textAnchor="end" height={50} />
-                <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: "var(--muted)" }} />
-                <Tooltip formatter={(value) => [`${value} handoffs`, ""]} />
-                <Bar dataKey="value" radius={[6, 6, 0, 0]}>
-                  {handoffsPorCelula.map((h, i) => <Cell key={i} fill={h.color} />)}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
+function ConclusionEjecutivaCard({ data: c }: { data: ConclusionEjecutiva }) {
+  return (
+    <div style={{
+      ...card, background: `linear-gradient(135deg, ${ACCENT_BG} 0%, #fff 60%)`,
+      borderColor: ACCENT, padding: 24,
+    }}>
+      <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: ACCENT, marginBottom: 8 }}>
+        Conclusión del mes
+      </div>
+      <div style={{ fontSize: 19, fontWeight: 800, color: "var(--fg)", lineHeight: 1.35, marginBottom: 10, letterSpacing: "-0.01em" }}>
+        {c.mensaje}
+      </div>
+      <div style={{ fontSize: 13, color: "var(--muted)", lineHeight: 1.6, marginBottom: 20, maxWidth: 780 }}>
+        {c.submensaje}
+      </div>
+
+      {/* Pilares adoptados */}
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${c.pilares.length}, 1fr)`, gap: 12, marginBottom: 20 }}>
+        {c.pilares.map((p) => (
+          <div key={p.nombre} style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px" }}>
+            <div style={{ fontSize: 18, marginBottom: 6 }}>{p.icon}</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", marginBottom: 3 }}>{p.nombre}</div>
+            <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.4 }}>{p.estado}</div>
           </div>
-        </div>
+        ))}
       </div>
 
-      {/* Célula cards */}
-      <div>
-        <div style={sectionTitle}><span style={dotStyle} />Detalle por Célula</div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 14 }}>
-          {celulasDetail.map((c) => <CelulaCard key={c.celula} celula={c} />)}
-        </div>
-      </div>
-
-      {/* Mejoras metodología */}
-      <div style={card}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-          <span style={{ color: ACCENT, fontSize: 16 }}>⚠️</span>
-          <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)" }}>Por mejorar de la metodología</h3>
-        </div>
-        {mejorasMetodologia.map((m, i) => (
-          <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "10px 0", borderBottom: i < mejorasMetodologia.length - 1 ? "1px solid var(--border)" : "none" }}>
-            <div style={{ width: 8, height: 8, borderRadius: 2, background: ACCENT, flexShrink: 0, marginTop: 4 }} />
-            <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6 }}>{m}</div>
+      {/* Timeline de meses */}
+      <div style={{ display: "flex", alignItems: "stretch", gap: 0 }}>
+        {c.meses.map((m, i) => (
+          <div key={m.mes} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", position: "relative" }}>
+            {i > 0 && (
+              <div style={{ position: "absolute", top: 7, left: "-50%", width: "100%", height: 2, background: "var(--border)", zIndex: 0 }} />
+            )}
+            <div style={{
+              width: 16, height: 16, borderRadius: "50%", zIndex: 1,
+              background: m.activo ? ACCENT : "#fff", border: `2px solid ${m.activo ? ACCENT : "var(--border)"}`,
+              marginBottom: 8,
+            }} />
+            <div style={{ fontSize: 12, fontWeight: m.activo ? 800 : 600, color: m.activo ? ACCENT : "var(--fg)", marginBottom: 3 }}>{m.mes}</div>
+            <div style={{ fontSize: 10, color: "var(--muted)", textAlign: "center", lineHeight: 1.4, maxWidth: 140 }}>{m.rol}</div>
           </div>
         ))}
       </div>
@@ -279,7 +345,35 @@ function CelulaCard({ celula: c }: { celula: CelulaDetail }) {
         </div>
       )}
       {c.dedupNote && (
-        <div style={{ padding: "0 18px 12px", fontSize: 10, color: "var(--muted)" }}>{c.dedupNote}</div>
+        <details style={{ padding: "0 18px 12px" }}>
+          <summary style={{ cursor: "pointer", fontSize: 10, color: "var(--muted)", fontWeight: 600 }}>ⓘ Nota de metodología</summary>
+          <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 4, lineHeight: 1.5 }}>{c.dedupNote}</div>
+        </details>
+      )}
+    </div>
+  );
+}
+
+function TiempoEtapaCard({ data: t }: { data: TiempoPorEtapa }) {
+  return (
+    <div style={{ ...card, padding: "14px 16px", borderTop: `3px solid ${t.color}` }}>
+      <div style={{ fontSize: 12, fontWeight: 700, color: t.color, marginBottom: 10 }}>{t.celula}</div>
+      {t.transiciones.length === 0 ? (
+        <div style={{ fontSize: 11, color: "var(--faint, var(--muted))", fontStyle: "italic" }}>Sin datos suficientes aún</div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {t.transiciones.map((tr) => (
+            <div key={tr.transicion}>
+              <div style={{ fontSize: 10, color: "var(--muted)" }}>{tr.transicion}</div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
+                <span style={{ fontSize: 16, fontWeight: 800, color: "var(--fg)" }}>{tr.dias}d</span>
+                <span style={{ fontSize: 10, color: tr.n === 1 ? "#D97706" : "var(--muted)" }}>
+                  {tr.n === 1 ? "⚠️ n=1" : `n=${tr.n}`}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
@@ -289,11 +383,13 @@ function CelulaCard({ celula: c }: { celula: CelulaDetail }) {
 
 function ComparativoTab() {
   const { comparativoMeses, comparativoGlobal, comparativoCelulas, novedades } = snapshot;
+  const globalCols = `2fr repeat(${comparativoMeses.length}, 1fr) 90px`;
+  const celulaCols = `1.2fr repeat(${comparativoMeses.length}, 1fr)`;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-      <div style={{ ...card, display: "flex", alignItems: "center", gap: 16 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 17, fontWeight: 700 }}>
+      <div style={{ ...card, display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 17, fontWeight: 700, flexWrap: "wrap" }}>
           {comparativoMeses.map((m, i) => (
             <span key={m} style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={{ color: i === comparativoMeses.length - 1 ? "var(--fg)" : "var(--muted)" }}>{m}</span>
@@ -302,20 +398,24 @@ function ComparativoTab() {
           ))}
         </div>
         <div style={{ fontSize: 12, color: "var(--muted)", borderLeft: "1px solid var(--border)", paddingLeft: 14 }}>
-          Evolución de métricas clave del equipo de Product Design · Q2 2026
+          Evolución de métricas clave del equipo de Product Design
         </div>
       </div>
 
       {/* Global comparativo table */}
       <div style={{ ...card, padding: 0, overflow: "hidden" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 90px", padding: "10px 18px", background: "#FAFBFC", borderBottom: "1px solid var(--border)" }}>
-          {["Métrica", "Abril", "Mayo", "Junio", "Δ May→Jun"].map((h, i) => (
-            <span key={h} style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--muted)", textAlign: i === 0 ? "left" : "center" }}>{h}</span>
-          ))}
+        <div style={{ overflowX: "auto" }}>
+          <div style={{ minWidth: 560 }}>
+            <div style={{ display: "grid", gridTemplateColumns: globalCols, padding: "10px 18px", background: "#FAFBFC", borderBottom: "1px solid var(--border)" }}>
+              {["Métrica", ...comparativoMeses, `Δ ${comparativoMeses[comparativoMeses.length - 2]?.slice(0, 3)}→${comparativoMeses[comparativoMeses.length - 1]?.slice(0, 3)}`].map((h, i) => (
+                <span key={h + i} style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--muted)", textAlign: i === 0 ? "left" : "center" }}>{h}</span>
+              ))}
+            </div>
+            {comparativoGlobal.map((row, i) => (
+              <ComparativoRowView key={row.metrica} row={row} last={i === comparativoGlobal.length - 1} gridCols={globalCols} />
+            ))}
+          </div>
         </div>
-        {comparativoGlobal.map((row, i) => (
-          <ComparativoRowView key={row.metrica} row={row} last={i === comparativoGlobal.length - 1} />
-        ))}
       </div>
 
       {/* Per-cell comparison */}
@@ -327,20 +427,24 @@ function ComparativoTab() {
               <div style={{ padding: "10px 16px", borderBottom: `2px solid ${cc.color}` }}>
                 <span style={{ color: cc.color, fontSize: 13, fontWeight: 700 }}>{cc.celula}</span>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", padding: "8px 16px", background: "#FAFBFC", borderBottom: "1px solid var(--border)" }}>
-                <span style={{ fontSize: 10, color: "var(--muted)", fontWeight: 600 }}>Métrica</span>
-                <span style={{ fontSize: 10, color: "var(--muted)", fontWeight: 600, textAlign: "center" }}>Abr</span>
-                <span style={{ fontSize: 10, color: "var(--muted)", fontWeight: 600, textAlign: "center" }}>May</span>
-                <span style={{ fontSize: 10, color: "var(--muted)", fontWeight: 600, textAlign: "center" }}>Jun</span>
-              </div>
-              {cc.rows.map((r, i) => (
-                <div key={r.metrica} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", padding: "8px 16px", borderBottom: i < cc.rows.length - 1 ? "1px solid var(--border)" : "none" }}>
-                  <span style={{ fontSize: 11, color: "var(--muted)" }}>{r.metrica}</span>
-                  <span style={{ fontSize: 12, color: "var(--fg)", textAlign: "center" }}>{r.abril}</span>
-                  <span style={{ fontSize: 12, color: "var(--fg)", textAlign: "center" }}>{r.mayo}</span>
-                  <span style={{ fontSize: 12, color: "var(--fg)", fontWeight: 700, textAlign: "center" }}>{r.junio}</span>
+              <div style={{ overflowX: "auto" }}>
+                <div style={{ minWidth: 320 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: celulaCols, padding: "8px 16px", background: "#FAFBFC", borderBottom: "1px solid var(--border)" }}>
+                    <span style={{ fontSize: 10, color: "var(--muted)", fontWeight: 600 }}>Métrica</span>
+                    {comparativoMeses.map((m) => (
+                      <span key={m} style={{ fontSize: 10, color: "var(--muted)", fontWeight: 600, textAlign: "center" }}>{m.slice(0, 3)}</span>
+                    ))}
+                  </div>
+                  {cc.rows.map((r, i) => (
+                    <div key={r.metrica} style={{ display: "grid", gridTemplateColumns: celulaCols, padding: "8px 16px", borderBottom: i < cc.rows.length - 1 ? "1px solid var(--border)" : "none" }}>
+                      <span style={{ fontSize: 11, color: "var(--muted)" }}>{r.metrica}</span>
+                      {r.valores.map((v, vi) => (
+                        <span key={vi} style={{ fontSize: 12, color: "var(--fg)", textAlign: "center", fontWeight: vi === r.valores.length - 1 ? 700 : 400 }}>{v}</span>
+                      ))}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
             </div>
           ))}
         </div>
@@ -350,7 +454,9 @@ function ComparativoTab() {
       <div style={card}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
           <span style={{ color: ACCENT }}>⚡</span>
-          <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)" }}>Novedades de Junio vs Mayo</h3>
+          <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)" }}>
+            Novedades de {comparativoMeses[comparativoMeses.length - 1]} vs {comparativoMeses[comparativoMeses.length - 2]}
+          </h3>
         </div>
         {novedades.map((n, i) => (
           <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "8px 0", borderBottom: i < novedades.length - 1 ? "1px solid var(--border)" : "none" }}>
@@ -363,17 +469,21 @@ function ComparativoTab() {
   );
 }
 
-function ComparativoRowView({ row, last }: { row: ComparativoRow; last: boolean }) {
+function ComparativoRowView({ row, last, gridCols }: { row: ComparativoRow; last: boolean; gridCols: string }) {
   const deltaColor = row.direction === "up" ? "#16A34A" : row.direction === "down" ? "#DC2626" : "var(--muted)";
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 90px", padding: "12px 18px", borderBottom: last ? "none" : "1px solid var(--border)" }}>
+    <div style={{ display: "grid", gridTemplateColumns: gridCols, padding: "12px 18px", borderBottom: last ? "none" : "1px solid var(--border)" }}>
       <div>
         <div style={{ fontSize: 13, color: "var(--fg)" }}>{row.metrica}</div>
         {row.nota && <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 2 }}>{row.nota}</div>}
       </div>
-      <div style={{ fontSize: 13, textAlign: "center", color: "var(--muted)", alignSelf: "center" }}>{row.abril}</div>
-      <div style={{ fontSize: 13, textAlign: "center", color: "var(--muted)", alignSelf: "center" }}>{row.mayo}</div>
-      <div style={{ fontSize: 13, textAlign: "center", color: "var(--fg)", fontWeight: 700, alignSelf: "center" }}>{row.junio}</div>
+      {row.valores.map((v, i) => (
+        <div key={i} style={{
+          fontSize: 13, textAlign: "center", alignSelf: "center",
+          color: i === row.valores.length - 1 ? "var(--fg)" : "var(--muted)",
+          fontWeight: i === row.valores.length - 1 ? 700 : 400,
+        }}>{v}</div>
+      ))}
       <div style={{ fontSize: 11, fontWeight: 700, textAlign: "center", color: deltaColor, alignSelf: "center" }}>{row.delta}</div>
     </div>
   );
@@ -387,7 +497,7 @@ function UpdatesTab() {
       <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--muted)", marginBottom: 14 }}>
         Reflexiones del Equipo — {snapshot.monthLabel}
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
         {snapshot.reflexiones.map((r) => (
           <div key={r.titulo} style={{ ...card, padding: 0, overflow: "hidden", borderTop: `3px solid ${r.color}` }}>
             <div style={{ padding: 20 }}>

@@ -1,0 +1,1461 @@
+﻿📝 Guía de documentación E2E
+📖 Guía Rápida de Uso
+Este documento es nuestra fuente de verdad. Cada rol es responsable de llenar los apartados marcados con su emoji:
+* 🧠 Product Managers (PM)
+* 🫀 Product Designers (PD)
+* ⭐️ Marketing
+🚫 Reglas Clave:
+* ¿Un campo no aplica para este proyecto? No lo dejes vacío; escribe N/A para saber que ya fue revisado.
+* ¿Falta información única del proyecto? Tienes total libertad de añadir los subapartados que necesites.
+
+
+🧠 Kick-off
+🚀 [Nombre del Proyecto / Título del Pitch Aprobado]
+Kick-off de Producto & Documento de Alineación
+________________
+
+
+Qué es el proyecto, Problema y Painpoints
+1.1 Información General & Equipo del Proyecto
+* Célula: 
+   * * PM / Owner (Responsabilidades y Contacto): Paula Macias
+   * * Tech Lead (Responsabilidades y Contacto): Jose Giraldo
+   * * Product Designer (Responsabilidades y Contacto): Michel David Pino Aguilar
+1.2 Introducción y Contexto
+* Contexto: Breve resumen del problema que se está abordando y por qué es importante. ¿Qué cambió en el mercado o en el usuario que nos trajo aquí hoy?
+Dropi opera en Argentina desde noviembre de 2025, recibiendo pagos de transportadoras a través de una cuenta bancaria local. Sin embargo, la plataforma actualmente solo genera un informe de facturación con el email del usuario y el valor a facturar, careciendo de los datos tributarios necesarios (nombre, tipo y número de documento, dirección, teléfono) para emitir facturas electrónicas válidas ante el fisco argentino.
+Esta ausencia de datos derivó en que durante meses no se emitiera ninguna factura, lo que generó una alerta bancaria por incapacidad de justificar los ingresos recibidos, poniendo en riesgo el cierre de la cuenta. Ante el ultimátum del banco, el equipo administrativo de Argentina tuvo que reaccionar emitiendo la facturación acumulada de 6 meses de forma consolidada, agrupando múltiples períodos en una sola factura por usuario. Esta alternativa sólo fue posible con usuarios argentinos identificados, a quienes se les solicitó autorización previa para gestionar la facturación bajo su documento. Los usuarios extranjeros, principalmente brasileros, quedaron excluidos al no contar con una validación contable y legal definida para ese caso.
+La facturación electrónica no es opcional: es una obligación tributaria que, de no cumplirse de forma continua, impide justificar ingresos, genera pérdidas fiscales y puede derivar en la disolución de la empresa. Adicionalmente, hay una transportadora clave (Fixia) que aún retiene fondos pendientes de transferencia precisamente porque no existe la trazabilidad fiscal que el banco exige.
+Esta solución busca implementar en Argentina el registro de datos de facturación por parte de los dropshippers y un panel de aprobación para el equipo financiero, replicando y adaptando el modelo ya operativo en Ecuador y Chile, con las particularidades tributarias del país.
+* Apetencia: Reafirmación del tiempo, presupuesto y recursos máximos asignados a este proyecto para delimitar el alcance.
+2 meses desde que inició el discovery, diseño y para hand-off a desarrollo.
+* Épica: https://dropi-it.atlassian.net/browse/DROP-23210 
+* Figma Kick-off / Wireframes Iniciales:
+Módulo datos de facturación: https://www.figma.com/design/HvoEmrK4bRGgOg1NrUFrjV/Cuenta-V2.0?node-id=8265-347233
+Módulo de revisión datos: https://www.figma.com/design/7RGAZpRUXnKJAyjXGvaOZD/Facturaci%C3%B3n-Admin?node-id=3126-209939 
+* Research como punto de partida: 
+   * Fuentes: Se hizo una investigación de lo que se tiene como proyecto de facturación vs lo que se solicita para Argentina: https://www.figma.com/board/Rowl6dml2LpQk3pgx6NC3H/Research-Datos-de-Facturaci%C3%B3n-Latam-%E2%80%94-Registro-y-Panel-de-Aprobaci%C3%B3n-Argentina?node-id=1-687 
+1.3 Definición del Problema, Impacto y Painpoints
+   * Descripción Detallada: Ampliación del problema presentado en el pitch. Incluye datos relevantes, ejemplos y variables del negocio que ayuden al equipo a comprender el entorno.
+Dropi actúa como intermediario entre usuarios y transportadoras en Argentina. En este modelo, las transportadoras liquidan a Dropi los valores correspondientes a los servicios logísticos prestados, y Dropi a su vez debe emitir facturas electrónicas a cada usuario por concepto de esos servicios. Esta facturación no es opcional: es una obligación tributaria que genera el ingreso contable de la empresa. Sin ingreso registrado, Dropi opera en pérdida fiscal, lo cual en Argentina puede derivar en la disolución de la empresa si se mantiene por períodos consecutivos.
+El problema central es que la plataforma no cuenta con los datos tributarios de los usuarios. El informe que genera el módulo de órdenes únicamente contiene el email del usuario y el valor a facturar, sin ningún dato de identificación formal como nombre completo, tipo de documento, número de documento, dirección o teléfono. Esto hace imposible emitir una factura electrónica válida ante el fisco argentino.
+Esta situación se mantuvo desde la apertura de la operación en Argentina en noviembre de 2025 sin que se emitiera ninguna factura, acumulando meses de ingresos sin respaldo tributario. El banco que custodia la cuenta de Dropi Argentina detectó la entrada de recursos sin justificación y emitió una alerta formal exigiendo la identificación de todos los usuarios operantes, bajo amenaza de cierre de cuenta. Esta alerta representó un riesgo operativo crítico, ya que sin cuenta bancaria Dropi no puede recaudar pagos de transportadoras ni pagar wallets a sus usuarios.
+Como medida de emergencia, el equipo administrativo de Argentina identificó manualmente a un grupo de usuarios argentinos, solicitándoles autorización individual para facturar bajo su documento. Con esos usuarios se emitió la facturación acumulada de octubre 2025 a marzo 2026, consolidando múltiples períodos en una sola factura por usuario con varios conceptos. Este proceso tomó aproximadamente dos a tres días de trabajo exclusivo, sin posibilidad de atender otras responsabilidades. Los usuarios extranjeros, principalmente brasileros que representan una proporción significativa de los operantes en Argentina, quedaron excluidos de esta facturación provisional al no existir aún una definición contable y legal clara sobre cómo facturarles.
+Adicionalmente, una de las dos transportadoras que opera en Argentina, Fixia, que es la de mayor volumen, aún retiene los fondos en sus propias cuentas desde noviembre de 2025 porque Dropi no ha podido recibirlos sin una justificación fiscal que respalde el ingreso. Esto representa un riesgo financiero acumulado de varios meses de operación que no ha podido ser recaudado.
+A partir de abril de 2026 Dropi debe retomar la facturación de forma mensual y correcta. El equipo tiene hasta mayo para facturar el mes de abril, lo que establece una ventana de tiempo muy corta para implementar una solución que permita recolectar y validar los datos de facturación de los usuarios activos en Argentina, que se estiman en aproximadamente 1.000 usuarios.
+   * Painpoints (Dolores específicos):
+   * Ausencia de un módulo de registro de datos de facturación en Argentina La plataforma no cuenta con un flujo que obligue o invite al dropshipper a registrar sus datos tributarios al momento de operar en Argentina. Argentina inició operaciones sin que se implementara esta funcionalidad, dejando un vacío estructural desde el primer día.
+   * El informe de facturación de la plataforma es incompleto El módulo de órdenes genera un informe que sólo contiene el email del usuario y el valor a facturar. No incluye ningún dato tributario de identificación.
+   * Falta de definición legal para el tratamiento de usuarios extranjeros Una proporción significativa de los Usuarios activos en Argentina son usuarios extranjeros, principalmente brasileños. No existe una definición contable ni legal validada sobre qué documentos aceptar y cómo facturarles, lo que dejó a este segmento completamente fuera de la facturación provisional de emergencia y representa un riesgo tributario no resuelto.
+   * Ausencia de términos y condiciones actualizados por país La recolección y el uso de datos de facturación requiere que los usuarios hayan aceptado explícitamente que sus datos pueden ser compartidos, por ejemplo con proveedores para la emisión de sus facturas. Este respaldo legal no está confirmado para Argentina, lo que expone a Dropi a riesgos en el manejo de datos personales con fines tributarios.
+   * Impacto: Explicación de cómo afecta este problema directamente a los usuarios, al negocio de Dropi, o a ambos.
+   * Riesgo de cierre de cuenta bancaria El impacto más crítico e inmediato es la amenaza directa sobre la cuenta bancaria de Dropi en Argentina. El banco ya emitió una alerta formal exigiendo la identificación de los usuarios operantes. Sin una solución estructural, cualquier nuevo ingreso de fondos sin respaldo de facturación electrónica puede reactivar esta alerta y derivar en el cierre de la cuenta. Sin cuenta bancaria, Dropi no puede recaudar pagos de transportadoras ni pagar wallets a sus usuarios, lo que paralizaría la operación completa en el país.
+   * Fondos retenidos por la transportadora principal Fixia, la transportadora de mayor volumen en Argentina, lleva desde noviembre de 2025 reteniendo los fondos correspondientes a los servicios prestados porque Dropi no ha podido recibirlos sin una justificación fiscal válida. Esto representa varios meses de ingresos acumulados que no han podido ser recaudados, afectando directamente el flujo de caja de la operación en el país.
+   * Insostenibilidad del proceso manual de emergencia La solución provisional implementada, que consistió en consolidar 6 meses de facturación en facturas agrupadas por usuario con autorización individual, demandó entre dos y tres días de trabajo exclusivo de una sola persona. Este proceso no es replicable mes a mes, no cubre a usuarios extranjeros y no cumple con los estándares de trazabilidad y correcta identificación que exige el fisco argentino a largo plazo.
+   * Carga operativa desproporcionada sobre el equipo financiero Sin un módulo automatizado, todo el proceso de recolección, validación y uso de datos de facturación recae sobre el equipo financiero de forma manual.
+   * Bloqueo de retiro de wallet como detonante del registro El mecanismo de bloqueo de retiro de wallet impacta directamente al usuario en el momento en que intenta retirar sus ganancias, obligándolo a dirigirse al módulo de registro y completar sus datos de facturación. Aunque genera una fricción inicial, este bloqueo es el principal motor que garantiza que los usuarios activos registren su información, ya que sin él no existe un incentivo real para hacerlo. En países como Chile y Ecuador este mecanismo demostró ser efectivo, logrando pasar de coberturas mínimas a porcentajes significativos de usuarios con datos registrados en poco tiempo.
+   * Objetivos:
+   * Objetivo Principal de Negocio: Implementar en Argentina el módulo de registro y aprobación de datos de facturación, permitiendo al equipo financiero emitir facturas electrónicas válidas de forma continua, cumpliendo con la obligación tributaria local y eliminando el riesgo de cierre de cuenta bancaria.
+   * Objetivo de Experiencia de Usuario (UX):
+   * Habilitar el registro de datos de facturación para usuarios argentinos, permitiendo que cada usuario cargue su documento de identidad y diligencie los datos tributarios requeridos por el fisco argentino directamente en la plataforma.
+   * Implementar un mecanismo de bloqueo de retiro de wallet, que obligue a los usuarios activos a actualizar sus datos de facturación antes de poder realizar retiros, garantizando una cobertura progresiva y sostenida de datos.
+   * Habilitar el panel de aprobación para el equipo financiero, que permita revisar, aprobar o reportar los registros de cada usuario con trazabilidad del historial de revisiones y motivos de rechazo.
+   * Alineación Estratégica:
+   * OKR (Objetivo Trimestral): Consolidar operación multi-pais
+   * KR (Key Result): OKR 2 - KR1 - 14 países operando al cierre 1016
+   * Data: Listado de eventos, logs o KPIs específicos a trackear en base de datos/analítica (ej. conversion_rate, first_order_date).
+
+
+🫀 Discovery
+🔍 Discovery del Proyecto (Por áreas, Usuarios, AS-IS, Hipótesis y Requerimientos)
+2.1 Usuarios Implicados & Estado de Madurez
+   * Perfil Principal: [Ej: Dueños de marcas con inventario propio] — Estado de madurez: [Ej: En consolidación]
+   * Perfil Secundario: [Ej: Operadores logísticos de la marca] — Estado de madurez: [Ej: En aprendizaje]
+2.2 El "AS-IS" (Soluciones Actuales y Limitaciones)
+   * Soluciones Actuales: ¿Cómo están abordando las marcas o el equipo este problema el día de hoy? (Procesos manuales, parches técnicos, herramientas externas).
+   * Limitaciones: Por qué la solución actual no es escalable o daña la experiencia.
+2.3 Discovery por Áreas, Bench e Investigación (Apéndices)
+   * Resultados de Research: * Hallazgo principal: Lo más relevante y revelador que aprendimos de las marcas.
+   * Fuentes y Datos de Investigación: [Link a entrevistas, encuestas, Mixpanel, datos de mercado o feedback de soporte].
+   * Benchmark: Breve mención de cómo plataformas competidoras o industrias análogas resuelven este dolor.
+2.4 Gestión de Riesgos de Producto
+   * Riesgo de Valor: ¿El cliente/Brand realmente encontrará valor en esta solución y pagará por ella / la usará?
+   * Riesgo de Usabilidad: ¿Los usuarios podrán entender y usar la interfaz de manera efectiva?
+   * Riesgo de Factibilidad: ¿Podemos construir esto con la tecnología, infraestructura y APIs disponibles?
+   * Riesgo de Viabilidad Empresarial: ¿Esta solución se alinea con las reglas de negocio, costos y márgenes de Dropi?
+   * Riesgo Legal: ¿Cumplimos con las normativas vigentes, términos de uso y tratamiento de datos?
+2.5 Hipótesis, Validaciones y Preguntas Abiertas
+   * Preguntas Clave / Dudas Iniciales: Lista de incógnitas críticas que deben ser respondidas durante o inmediatamente después del shaping (Ej: dependencias técnicas externas).
+   * Hipótesis: Planteamiento de supuestos sobre posibles enfoques que el equipo validará durante el desarrollo.
+2.6 Requerimientos Generales, Compatibilidad y Performance
+   * Descripción de la solución: Definición clara de la funcionalidad. ¿Qué estamos construyendo exactamente?
+   * Dispositivos: [Ej: Mobile-first, Desktop-only, Responsivo]
+   * Restricciones y Performance: [Ej: Tiempo de carga menor a 2s, límites de consumo de APIs, compatibilidad con navegadores].
+
+
+🫀 Definición
+🛠️ Definición (Propuestas, Alcance, Estimaciones y Próximos Pasos)
+3.1 Primeras Ideas y Propuestas
+   * Primeras Ideas: Enumeración de las soluciones preliminares, lluvias de ideas o enfoques de diseño/arquitectura discutidos por el equipo.
+   * Escenarios: Mapeo de los diferentes casos que pueden suceder en el flujo del usuario o en el comportamiento del sistema durante el proyecto.
+El usuario intenta retirar sus fondos de la wallet y encuentra el bloqueo activo. Es redirigido al módulo de registro, carga correctamente la imagen de su documento de identidad argentino (DNI, CUIT o CUIL según corresponda) y diligencia todos los campos tributarios requeridos. El equipo financiero revisa la solicitud, valida que los datos ingresados coinciden con el documento cargado y aprueba el registro. El bloqueo de wallet se levanta automáticamente y el usuario queda habilitado para operar con normalidad. Sus datos quedan disponibles en el informe de facturación descargable para la emisión de la factura electrónica correspondiente.
+   * El usuario completa el flujo de registro pero ingresa datos que no coinciden con el documento cargado, por ejemplo el nombre está incompleto, el número de documento no corresponde o el tipo de contribuyente seleccionado no es el correcto. El equipo financiero detecta la inconsistencia durante la revisión, reporta el registro indicando el campo con error y el motivo del rechazo. El usuario recibe una notificación, debe corregir la información y volver a cargar el documento, reingresando a la cola de revisión. El bloqueo de wallet permanece activo hasta que el registro sea aprobado.
+   * Un usuario extranjero, principalmente brasilero, intenta completar el flujo de registro y no cuenta con un documento de identidad argentino válido. El módulo debe contemplar un flujo diferenciado para este tipo de usuario, en el que se le solicite el documento correspondiente a su país de origen y se aplique el tratamiento tributario definido previamente por legal y el equipo contable de Argentina. Si este flujo no está definido al momento del lanzamiento, el usuario extranjero quedará bloqueado sin una ruta clara para completar su registro, replicando la exclusión que ocurrió en la solución de emergencia.
+   * Al activarse el bloqueo de wallet para todos los usuarios activos en Argentina, se espera una avalancha de registros en los primeros días, similar al pico de más de 1.000 solicitudes registrado en el lanzamiento de Chile. El equipo financiero de Argentina no tendrá la capacidad de procesar ese volumen de forma individual en poco tiempo. Si no se dispone de un plan de contingencia con personal de apoyo desde Colombia u otros países, se generará un represamiento masivo de solicitudes pendientes, dejando a cientos de usuarios bloqueados por períodos prolongados y generando una alta carga de soporte y reclamos.
+   * Al llegar la fecha de emisión de facturas del mes de abril, un porcentaje de usuarios activos aún no ha completado o no ha tenido aprobado su registro de datos. El informe descargable tendrá registros sin datos tributarios completos, impidiendo que el equipo financiero emita la factura electrónica correspondiente a esos usuarios. Si no existe un protocolo definido para este caso, el equipo deberá recurrir nuevamente a gestiones manuales para completar la información faltante o dejar esos usuarios sin facturar, replicando el problema original.
+   * El fisco argentino actualiza los campos o documentos requeridos para la emisión de facturas electrónicas, o el equipo contable local identifica que los campos configurados en el módulo no son suficientes para cumplir con la normativa vigente. Si el módulo no está diseñado para permitir ajustes ágiles en los campos requeridos por país, cualquier cambio implicará un nuevo ciclo de desarrollo, generando un período de desajuste entre lo que la plataforma recolecta y lo que el fisco exige.
+3.2 Fases del Proyecto y Alcance
+      * Fase 1 (MVP): Lo mínimo indispensable para salir a producción, validar valor y mitigar riesgos.
+Formulario de datos de facturación para el registro de la información de los usuarios.
+Módulo de revisión de datos de facturación por parte de admin a los usuarios.
+      * Fase 2 (Evolutivo): Funcionalidades que añaden valor incremental pero no detienen el lanzamiento.
+Validación de datos de facturación con sumsub.
+      * Fase 3 (Optimización): Pulido de UX fina, automatizaciones avanzadas y escalabilidad técnica.
+3.3 Estimación de Recursos y Esfuerzo
+         * Esfuerzo Técnico Estimado: Medio
+         * Tiempo Estimado de Desarrollo: 1 sprint
+3.4 Próximos Pasos
+         * Plan de Trabajo Inicial: Tareas inmediatas para arrancar tras el cierre del kick-off.
+         * Reuniones de Seguimiento: Calendario de sincronizaciones regulares instituidas para revisar bloqueos y avances.
+3.5 Entregables
+         * Figma final
+         * TANGO
+         * Loom
+
+
+🫀 Following y lanzamiento
+Estrategia de Following y Lanzamiento — Facturación Electrónica Argentina
+Formato:
+Anexos: Michel David Pino Aguilar documento inicial: https://docs.google.com/document/d/1Jvx4UOo_DELJLqEGhBDnFN2pxGPqu10v2I3WxWsKcLk/edit?usp=sharing
+Flujos de diseño (Figma):
+         * Persona Jurídica: Cuenta V2.0 — Persona Jurídica
+         * Persona Humana: Cuenta V2.0 — Persona Humana
+         * Persona Extranjera: Cuenta V2.0 — Persona Extranjera
+         * Alertas por fases: Cuenta V2.0 — Alertas
+________________
+
+
+1. Contexto y Objetivo de Medición
+         * Contexto del Problema: Los dropshippers que operan en Argentina no cuentan con un mecanismo dentro de la plataforma para registrar sus datos fiscales y de facturación electrónica. Actualmente, las facturas se generan con datos personales genéricos, lo que genera incumplimiento con las normativas de AFIP, riesgo tributario para el usuario y tickets de soporte recurrentes por corrección manual de comprobantes.
+         * Objetivo del Feature: Permitir que los usuarios de Argentina configuren de forma autónoma sus datos de facturación electrónica (CUIT/CUIL/Pasaporte, condición frente al IVA, razón social, domicilio fiscal) desde Configuraciones > Datos Personales > Facturación electrónica, diferenciando tres tipos de persona: Jurídica, Humana y Extranjera.
+         * Propuesta de valor: "Quiero que mis facturas se emitan correctamente con mis datos fiscales para operar legalmente en Argentina sin depender de soporte." (Job to be done: Cumplir con la normativa fiscal argentina de forma autónoma y sin fricción).
+         * Impacto de la solución (Experiencia):
+         * Reduce la carga cognitiva al segmentar el formulario por tipo de persona (Jurídica, Humana, Extranjera), mostrando solo los campos relevantes para cada caso.
+         * Centraliza en un solo lugar (tab "Facturación electrónica") toda la gestión tributaria, eliminando la dispersión entre soporte y configuraciones manuales.
+         * Incorpora un sistema progresivo de alertas (Fase 1: informativas → Fase 2: bloqueantes) que guía sin interrumpir bruscamente la operación.
+         * Incluye flujo de onboarding guiado vía Userpilot (Tour Guide) para acompañar la primera configuración.
+         * Alcance: Todos los usuarios activos operando en Argentina — segmentados por tipo de persona: Persona Jurídica (empresas/sociedades), Persona Humana (monotributistas/autónomos) y Persona Extranjera (usuarios de otros países que operan en la plataforma argentina).
+         * Objetivo de este documento: Definir el esquema de medición y los eventos necesarios en Userpilot para evaluar el éxito de la funcionalidad, así como la estrategia de lanzamiento escalonado y comunicación a Marketing.
+________________
+
+
+2. Métricas de Impacto (Negocio - Data Warehouse)
+Tasa de Cumplimiento Fiscal (Adoption)
+         * ¿Por qué medirlo? El objetivo principal del feature es que los usuarios regularicen sus datos fiscales. Si no lo hacen, la plataforma mantiene riesgo regulatorio con AFIP y los usuarios siguen emitiendo comprobantes incorrectos.
+         * Fórmula: Usuarios con datos de facturación completos y aprobados / Total de usuarios activos en Argentina × 100.
+         * Criterio de éxito: ≥ 70% de usuarios activos en Argentina con datos de facturación aprobados al cierre del mes 3.
+         * Segmentación técnica: Filtrar por país = Argentina, estado de facturación ∈ {aprobado}. Segmentar por tipo_persona ∈ {Jurídica, Humana, Extranjera}.
+Tasa de Retención Post-Configuración (Retention)
+         * ¿Por qué medirlo? Validar que la funcionalidad no genera abandono. Usuarios que perciban el formulario como una barrera podrían reducir actividad o irse. Necesitamos confirmar que la facturación no impacta negativamente la retención.
+         * Fórmula: Usuarios activos en mes N+1 que completaron facturación en mes N / Usuarios que completaron facturación en mes N × 100.
+         * Criterio de éxito: Retención ≥ 85% (al menos igual al baseline pre-feature para el segmento Argentina).
+         * Segmentación técnica: Filtrar por país = Argentina, fecha de completación de facturación, actividad en período N+1 (al menos 1 orden o 1 login).
+Reducción de Tickets de Facturación (Task Success de Negocio)
+         * ¿Por qué medirlo? Un indicador de éxito operativo es que soporte deje de recibir tickets relacionados con corrección manual de datos de facturación. Si la funcionalidad es efectiva, los tickets deben caer.
+         * Fórmula: Tickets con tag "facturación Argentina" en mes N / Tickets con mismo tag en mes N-1 (baseline pre-lanzamiento) × 100.
+         * Criterio de éxito: Reducción ≥ 40% de tickets de facturación vs. baseline al cierre del mes 3.
+         * Segmentación técnica: Tag de ticket = "facturación", "datos fiscales", "CUIT", "factura Argentina". País del usuario = Argentina.
+________________
+
+
+3. Métricas de Comportamiento (UX - Userpilot / Analytics)
+A. Target (Población Objetivo)
+Dropshippers activos en Argentina que aún no han completado su configuración de facturación electrónica. Incluye tres perfiles diferenciados por tipo de persona fiscal (Jurídica, Humana, Extranjera), con distintos niveles de complejidad documental y de validación.
+*Descripción del segmento:* Usuarios registrados con país = Argentina, con al menos 1 orden procesada en los últimos 60 días, cuyo estado de facturación electrónica es "Pendiente" o inexistente. *Número total de usuarios activos en este segmento (TT T):* [Dato a extraer de DW antes del lanzamiento] *(Representa el 100% para el resto del análisis)*.
+B. Adopción de nuevas funcionalidades (Engagement)
+La acción clave no es abrir la pestaña de facturación ni hacer clic en "Ver tutorial". Es completar y guardar exitosamente los datos de facturación — el momento en que el usuario pasa de estado "Pendiente" a "En revisión" o "Aprobado".
+Tasa de Completación del Formulario de Facturación
+         * Acción clave: El usuario completa todos los campos requeridos según su tipo de persona (incluyendo upload de documento fiscal cuando aplica) y presiona "Guardar facturación" exitosamente.
+         * Fórmula: Usuarios que disparan evento billing_form_submitted_success / Total de usuarios que visitaron la pantalla de Facturación electrónica (billing_tab_viewed) × 100.
+         * Criterio de éxito: > 50% de completación entre usuarios que acceden a la tab.
+         * Segmentación técnica: Evento de Userpilot: billing_form_submitted_success. Filtrar por tipo_persona para comparar tasas entre Jurídica vs. Humana vs. Extranjera (hipótesis: Extranjera tendrá mayor fricción por upload de pasaporte).
+C. Retención
+¿La funcionalidad es tan buena que los usuarios la siguen usando de forma recurrente?
+Frecuencia natural del proyecto: Configuración única con actualizaciones esporádicas (cambio de condición IVA, actualización de domicilio fiscal, renovación de documentos).
+Porcentaje de usuarios que regresan en el segundo período: ≥ 10% (Meta ajustada a configuración única — el regreso indica actualización legítima de datos, no que el flujo falló la primera vez).
+Nota: Para este feature, la "retención" se mide de forma inversa: un % alto de retorno temprano (semanas 1-4) puede indicar errores en el primer intento o formulario confuso. Monitorear en conjunto con la tasa de rechazo de datos por el equipo de revisión.
+D. Satisfacción
+De los usuarios que se quedaron usando la funcionalidad ¿Cómo se sienten y qué tan fácil les resulta?
+Pregunta clave: "¿Qué tan fácil fue para ti completar tus datos de facturación electrónica hoy?"
+Opciones de respuesta: Mucho más difícil de lo esperado / Como esperaba / Mucho más fácil de lo esperado.
+Pregunta adaptada al proyecto: "¿Qué tan fácil fue configurar tu información tributaria para facturación en Dropi?" Porcentaje de usuarios satisfechos de la muestra: ≥ 80% (Meta saludable: ≥80% responde "Como esperaba" o "Mucho más fácil de lo esperado").
+________________
+
+
+4. Metodología de Validación (Micro-surveys SEQ)
+Evaluación de la 'Happiness' (Satisfacción) enfocada en flujos críticos usando SEQ (Single Ease Question).
+Encuesta 1: Completación del formulario de facturación electrónica
+         * Trigger (Cuándo): Inmediatamente después del evento billing_form_submitted_success (el usuario guardó exitosamente sus datos de facturación).
+         * Frecuencia: Mostrar la primera vez que el usuario completa el formulario. Repetir a los 90 días si el usuario actualiza sus datos.
+         * Pregunta (SEQ): "¿En general, qué tan fácil fue completar tus datos de facturación electrónica?"
+         * Escala: 1 al 5 (1 = Muy difícil, 5 = Muy fácil).
+         * Lógica Condicional: Si puntaje ≤ 3, mostrar caja de texto abierta: "¿Qué fue lo más difícil?    (Opciones dentro del flujo que tengan relación directa con el formulario dinámico)
+
+
+         * Encuesta 2: Reacción a alertas bloqueantes (Fase 2)
+         * Trigger (Cuándo): Cuando el usuario cierra un modal bloqueante de alerta de facturación (por ejemplo, al intentar realizar una transferencia entre wallets o un retiro de saldo sin datos de facturación completos).
+         * Frecuencia: Máximo 1 vez por módulo visualizado con bloqueante para evitar fatiga de encuesta.
+         * Pregunta (SEQ): "¿Qué tan clara fue la información que te dimos sobre por qué necesitas completar tu facturación?"
+         * Escala: 1 al 5 (1 = Nada clara, 5 = Totalmente clara).
+         * Lógica Condicional: Si puntaje ≤ 3, mostrar caja de texto: "¿Qué información te faltó o no entendiste?" (Opciones dentro del flujo que tengan relación directa con el formulario dinámico)
+________________
+
+
+5. Esquema de Seguimiento (Piloto de 12 Semanas) 
+(Recordatorio por fases de alertas a usuarios para hacer push)
+         * Mes 1 (Semanas 1-4) - Seguimiento Semanal:
+         * Monitoreo de adopción inicial: % de usuarios que abren la tab de facturación electrónica vs. % que completan el formulario (funnel de conversión por paso).
+         * Tracking de errores de validación más frecuentes (campo de CUIT/CUIL inválido, uploads rechazados por formato, condición IVA inconsistente con tipo de persona).
+         * Comparación de tasas de completación entre los 3 tipos de persona (Jurídica vs. Humana vs. Extranjera).
+         * Revisión semanal de tickets de soporte relacionados con facturación Argentina (¿están bajando, subiendo o cambiando de naturaleza?).
+         * Monitoreo del rendimiento de alertas Fase 1: ¿los banners informativos están generando clics hacia la tab de facturación o son ignorados?
+         * Evaluación del Flujo User Pilot: tasa de completación del tour guiado, paso donde más usuarios abandonan.
+         * Mes 2 (Semanas 5-8) - Seguimiento Quincenal:
+         * Activación de alertas Fase 2 (bloqueantes) para usuarios que no completaron en Fase 1. Monitoreo del impacto: ¿los bloqueos en retiro de saldo, transferencia entre wallets e historial de cartera están acelerando la completación o generando abandono?
+         * Análisis de primera ronda de micro-surveys SEQ: score promedio, distribución de respuestas, análisis cualitativo de comentarios abiertos.
+         * Tasa de rechazo de datos por el equipo de revisión: ¿los usuarios están entendiendo correctamente qué documentos subir?
+         * Segmentación de adopción por antigüedad del usuario (usuarios nuevos vs. usuarios legacy) y por volumen de órdenes.
+         * Primer corte de retención: ¿los usuarios que completaron facturación en semanas 1-4 siguen activos?
+         * Mes 3 (Semanas 9-12) - Seguimiento Mensual:
+         * Evaluación de impacto final en negocio: % de cumplimiento fiscal logrado vs. meta (70%), reducción de tickets vs. baseline (meta: -40%).
+         * Análisis de retención post-configuración: comparar retención del grupo que completó facturación vs. grupo que no (¿el bloqueo generó churn?).
+         * Consolidación de SEQ scores y generación de reporte de satisfacción por tipo de persona.
+         * Decisión sobre roadmap: ¿se necesitan iteraciones al formulario? ¿Hay campos que generan confusión recurrente? ¿El upload de documentos necesita mejoras UX?
+
+
+         * Reporte ejecutivo de cierre de piloto con recomendaciones para escalamiento o ajustes.
+________________
+
+
+6. Lanzamiento y Kick-off a Marketing
+         * Alcance del lanzamiento: Liberación escalonada en 2 fases:
+         * Fase 1 (Semanas 1-4): Liberación al 100% de usuarios en Argentina. Alertas informativas (banners no bloqueantes) en Home, Historial de Cartera, Cuentas Bancarias y Retiro de Saldo. Tour guiado de Userpilot disponible desde el Home.
+         * Fase 2 (Semanas 5+): Activación de alertas bloqueantes para usuarios que no completaron. Bloqueos en: Transferencia entre wallets (modal obligatorio), Retiro de saldo (acción restringida), funcionalidades financieras críticas.
+         * Canales propuestos desde producto:
+         * Tour de Userpilot (Flujo User Pilot): tour guiado de ~12 pasos desde Home hasta completar el formulario, activado en el primer login post-lanzamiento.
+         * Banners contextuales en las pantallas donde el usuario tiene intención financiera (Retiro de saldo, Historial de cartera, Transferencias).
+         * Email transaccional: notificación a usuarios argentinos que aún no han completado su facturación (disparar a semana 2 y semana 4).
+         * Notificación push en plataforma (campana de notificaciones).
+         * TANGO (Cómo funciona): https://app.tango.us/app/workflow/Ingreso-de-la-informaci-n-de-facturaci-n-electr-nica---Argentina-01d9cae6e48947878d60a73d0a8219fc  
+         * https://app.tango.us/app/workflow/Visualizaci-n-de-los-datos-de-facturaci-n---Usuario-Argentina-Admin-c459ff1aaa8e412fb4882a25177ef516 (Admin)
+
+
+
+
+         * Por qué: Argentina requiere que toda operación comercial tenga respaldo de facturación electrónica conforme a AFIP. Los usuarios de Dropi que no regularicen sus datos fiscales no podrán emitir comprobantes válidos, lo que les impide operar legalmente. Esta funcionalidad les permite cumplir la normativa de forma autónoma, sin depender de soporte.
+         * Propuesta de valor / Jobs to be done: "Necesito que mis facturas reflejen mis datos fiscales reales (CUIT, condición IVA, razón social) para cumplir con AFIP y operar tranquilo en Argentina." → Dropi ahora permite configurar tu facturación electrónica en menos de 3 minutos desde Configuraciones > Datos Personales.
+         * Impacto (Experiencia):
+         * Formulario inteligente que se adapta al tipo de persona (Jurídica, Humana, Extranjera) — el usuario solo ve los campos que le aplican.
+         * Upload de documentos fiscales integrado (JPG, PDF, JPEG, PNG, máx. 10 MB) para Persona Humana, Jurídica y Extranjera.
+         * Sistema de alertas progresivas que guía sin bloquear prematuramente.
+         * Tutorial integrado ("Ver tutorial") y Tour Guide de Userpilot para primera configuración.
+         * Estado visible ("Pendiente" / "En revisión" / "Aprobado"/ "Errores reportados") para que el usuario sepa en qué punto está.
+         * Alcance: Todos los usuarios activos (dropshippers, proveedores) operando en Argentina, segmentados en Persona Jurídica, Persona Humana y Persona Extranjera. No aplica para Dropi de otros países (Colombia, México, etc.).
+         * Tipo de campaña: Lanzamiento.
+
+
+________________
+
+
+7. Esquema de Eventos Userpilot
+Evento
+	Descripción
+	Trigger
+	billing_tab_viewed
+	El usuario abre la tab "Facturación electrónica"
+	Carga de la vista de facturación
+	billing_tutorial_clicked
+	El usuario hace clic en "Ver tutorial"
+	Clic en enlace de tutorial
+	billing_person_type_selected
+	El usuario selecciona tipo de persona
+	Selección en dropdown "Tipo de persona"
+	billing_document_uploaded
+	El usuario sube un documento fiscal
+	Upload exitoso en la zona de drag & drop
+	billing_form_submitted_success
+	El usuario guarda exitosamente sus datos
+	Respuesta exitosa del endpoint "Guardar facturación"
+	billing_form_submitted_error
+	Error al guardar datos de facturación
+	Respuesta de error del endpoint
+	billing_alert_banner_clicked
+	El usuario hace clic en el banner de alerta informativa
+	Clic en el CTA del banner (Fase 1)
+	billing_alert_modal_shown
+	Se muestra el modal bloqueante al usuario
+	Render del modal de bloqueo (Fase 2)
+	billing_alert_modal_cta_clicked
+	El usuario hace clic en el CTA del modal bloqueante para ir a completar facturación
+	Clic en "Completar datos" del modal
+	billing_userpilot_tour_started
+	El usuario inicia el Tour Guide de facturación
+	Inicio del flujo User Pilot
+	billing_userpilot_tour_completed
+	El usuario completa todos los pasos del Tour Guide
+	Finalización del último step del tour
+	billing_userpilot_tour_dismissed
+	El usuario cierra/descarta el Tour Guide
+	Clic en cerrar o skip del tour
+	billing_terms_accepted
+	El usuario acepta T&C de Dropi Argentina
+	Check en el checkbox de términos
+	billing_status_changed
+	El estado de facturación cambia (Pendiente → En revisión → Aprobado → Rechazado)
+	Cambio de estado en backend
+	________________
+
+
+8. Resumen de Flujos Entregados a T.I.
+Formulario de Facturación Electrónica (Configuraciones > Datos Personales > tab "Facturación electrónica"):
+Sección
+	Persona Jurídica
+	Persona Humana
+	Persona Extranjera
+	País
+	Argentina (fijo)
+	Argentina (fijo)
+	País de origen (ej: Honduras)
+	Provincia
+	Sí (dropdown)
+	Sí (dropdown)
+	No aplica
+	Ciudad/Localidad
+	Sí (dropdown)
+	Sí (dropdown)
+	No aplica
+	Dirección
+	Sí
+	Sí
+	No aplica
+	Email facturación
+	Sí
+	Sí
+	Sí
+	Teléfono (+54)
+	Sí
+	Sí
+	Sí
+	Nombre/Razón social
+	Razón social
+	Nombre completo
+	Nombre completo
+	Condición IVA
+	Dropdown completo
+	Dropdown completo
+	Consumidor Final (fijo)
+	Tipo documento
+	CUIT/CUIL
+	CUIT/CUIL/DNI
+	Pasaporte
+	Upload documento fiscal
+	No
+	Sí (JPG, PDF, JPEG, PNG ≤ 10 MB)
+	Sí (Pasaporte/ID extranjera)
+	Consentimientos
+	T&C Dropi Argentina
+	T&C + Política de datos personales
+	T&C + Política de privacidad
+	Sistema de Alertas Progresivas:
+Fase
+	Tipo
+	Pantallas afectadas
+	Comportamiento
+	Fase 1
+	Banners informativos (no bloqueantes)
+	Home, Historial de Cartera, Cuentas Bancarias, Retiro de Saldo
+	Banner amarillo/naranja superior con CTA a completar facturación
+	Fase 2
+	Alertas bloqueantes
+	Transferencia entre wallets, Retiro de saldo, Historial de Cartera, Cuentas Bancarias
+	Modal obligatorio que impide la acción hasta completar facturación
+	         * ⭐ Estrategia de comunicación
+1. Título del Proyecto
+         * Nombre oficial del producto o la funcionalidad.
+________________
+
+
+2. Descripción General (Breve)
+         * ¿Qué es?
+ Explica en 2-3 líneas de qué se trata el producto, mejora o funcionalidad.
+         * ¿Para quién está dirigido?
+ Indica el perfil principal de usuarios (segmento de mercado o tipo de cliente).
+         * Dolor del usuario
+         * Solución
+         * Países lanzamiento
+         * Usuarios
+         * Tipo de lanzamiento (Actualización/Lanzamiento/Relanzamiento/Push) 
+________________
+3. Beneficios Clave
+            * Beneficio principal:
+ ¿Cuál es el valor agregado que entrega a los usuarios?
+            * Beneficios secundarios:
+ Menciona otros puntos fuertes o características destacadas (idealmente en formato de viñetas).
+________________
+
+
+4. Objetivo del Lanzamiento
+               * Meta principal de la campaña
+ (Ej: Dar a conocer la nueva funcionalidad a los usuarios actuales, atraer nuevos leads, etc.)
+               * Fechas de lanzamiento o ventana aproximada
+ Para coordinar publicaciones y anuncios.
+               * Estrategia de prdoucto. Aquí explicamos al equipo de comunicaciones cuales son los requerimientos puntuales que establece el equipo de producto para el lanzamiento.
+________________
+
+
+5. Mensajes y Angles de Comunicación
+                  * Mensaje clave:
+ Frase o tagline que resumen la propuesta de valor (ej. “La nueva forma de gestionar tus tareas en equipo”).
+                  * Puntos de apoyo / bullet points:
+ Ideas o frases que ayuden a reforzar la comunicación (ej. “Facilidad de uso”, “Ahorro de tiempo”, etc.).
+________________
+
+
+6. Recursos Disponibles
+                     * Materiales de apoyo que ya existen
+                     * Video demostrativo (enlace, si aplica).
+                     * Documentación de paso a paso en herramienta Tango.
+                     * Enlace a Figma / prototipo (solo si el equipo de comunicaciones lo requiere para entender el diseño).
+                     * Documentos o presentaciones sencillas (ej: PDF con funcionalidades destacadas).
+(Si hay recursos muy técnicos, solo mencionar si aportan valor a la campaña.)
+________________
+
+
+7. Contacto Principal
+                     * Persona de producto que resolverá dudas de posicionamiento, tono o alcance.
+                     * Fecha límite para enviar cualquier solicitud de información adicional.
+________________
+
+
+Formato Resumido
+                     1. Título del Proyecto
+                     2. Descripción General (Breve)
+                     3. Beneficios Clave
+                     4. Objetivo del Lanzamiento
+                     5. Mensajes y Angles de Comunicación
+                     6. Recursos Disponibles
+                     7. Requerimientos para la Campaña
+                     8. Contacto Principal
+________________
+
+
+
+
+🧠 Hand off - DEV & Stakeholders
+Hand-off to DEV y Stakeholders
+Segmento: Backoffice
+1. JOB TO BE DONE
+Cuando yo como dropshipper o proveedor activo en Argentina intento retirar mis fondos de la wallet, 
+quiero poder registrar mis datos tributarios (tipo de persona, condición frente al IVA, documento, dirección y documentos de respaldo) directamente en la plataforma, 
+para que Dropi pueda emitirme una factura electrónica válida ante el fisco argentino, desbloquear mis movimientos financieros y operar con normalidad dentro de la plataforma.
+________________
+
+
+2. CRITERIOS DE ACEPTACIÓN
+Módulo A: Formulario de Datos de Facturación Electrónica 
+
+
+Link del figma:  https://www.figma.com/design/HvoEmrK4bRGgOg1NrUFrjV/Cuenta-V2.0?node-id=8265-347233 
+
+
+Link de la matriz datos de facturación Argentina: https://docs.google.com/spreadsheets/d/1uwv9oRyjg9nC6V1_QBU21AYFPMlsoHpSmOA90qCVcDo/edit?usp=sharing 
+
+
+Link de Prototipo en dropitesters: https://www.dropitesters.co/old/configuraciones/datos-personales (Deben hacer el login con el botón de Google y se conectará con la cuenta de google workspace de Dropi) (Dentro de Antigua Arquitectura. -> Usuario: Dropshipper[a]
+Flujo: Estructura y Visualización del Formulario
+                     * Escenario 1: Visualización inicial del formulario
+                     * Dado que el usuario autenticado accede a la sección "Datos de facturación" en Configuraciones > Datos personales
+                     * Cuando se carga la vista del formulario
+                     * Entonces el formulario se despliega completo con campos organizados en 3 bloques: Información de Contacto, Información de Empresa, Documento Legal.
+El diseño cumple con Design System v2.0.
+El componente es responsive (desktop y mobile) y accesible (soporte lector de pantalla).
+                        * Escenario 2: Usuario sin datos de facturación
+                        * Dado que el usuario nunca ha registrado datos de facturación (sin registros en user_fiscal_data)
+                        * Cuando se carga la vista por primera vez
+                        * Entonces el estado del formulario se muestra como "Pendiente".
+                        * Aparece el mensaje: "Asegúrate de completar la información de facturación electrónica; de lo contrario, la factura se generará utilizando tus datos personales."
+Los módulos de movimientos de dinero están inhabilitados.
+                           * Escenario 3: Usuario que ya registró sus datos de facturación visualiza el formulario diligenciado
+                           * Dado que al usuario ya completó y envió el formulario previamente
+                           * Cuando accede nuevamente a la sección de facturación
+                           * Entonces el formulario se precarga con todos los campos ya guardados.
+Los checkboxes de consentimiento aparecen marcados.
+Se muestra el estado actual (En revisión / Aprobado / Con errores reportados) con indicador visual claro.
+Flujo: Lógica Dinámica y Condicional del Formulario
+                              * Escenario 1: Campos Provincia y Ciudad según país seleccionado = Argentina
+                              * Dado que el usuario accede al formulario y selecciona un país que tiene registros de provincias y ciudades en la base de datos (ej. Argentina)
+                              * Cuando selecciona el país en el campo "País"
+                              * Entonces los campos "Provincia" y "Ciudad / Localidad" se transforman en selectores desplegables (dropdown).
+El usuario puede buscar y seleccionar entre las opciones disponibles.
+                                 * Escenario 2: Campos Provincia y Ciudad según país seleccionado ≠ Argentina
+                                 * Dado que el usuario selecciona un país que NO tiene registros de provincias ni de localidades/ciudades en la base de datos (ej. Honduras)
+                                 * Cuando selecciona el país ≠ a Argentina en el campo "País"
+                                 * Entonces los campos "Provincia" y "Ciudad / Localidad" se transforman en inputs de texto libre. El usuario puede escribir manualmente el valor.
+                                 * Escenario 3: Tipo de persona según país seleccionado = Argentina
+                                 * Dado el usuario tiene visible el campo "Tipo de persona" y el país seleccionado es Argentina
+                                 * Cuando hace clic sobre el campo desplegable "Tipo de persona"
+                                 * Entonces se despliegan exactamente 2 opciones: "Persona humana" y "Persona jurídica".
+Al seleccionar, el valor se mantiene visible en el campo.
+Se activa la lógica condicional que ajusta los campos siguientes.
+                                    * Escenario 4: Tipo de persona según país seleccionado ≠ Argentina
+                                    * Dado que el país seleccionado es diferente a Argentina
+                                    * Cuando hace clic sobre el campo "Tipo de persona"
+                                    * Entonces se despliega únicamente la opción "Extranjero" o se precarga automáticamente la opción en el campo sin posibilidad de modificarse al ser la única.
+                                    * Escenario 5: Condición frente al IVA según Tipo de persona = Persona Humana
+                                    * Dado que el usuario hace clic en el campo "Tipo de persona" y el campo "Condición frente al IVA" está deshabilitado.
+                                    * Cuando el usuario selecciona "Persona Humana" (país = Argentina)
+                                    * Entonces se habilita el campo "Condición frente al IVA" con las opciones: Consumidor Final, IVA Responsable Inscripto, Responsable Monotributo.
+                                    * Escenario 6: Condición frente al IVA según Tipo de persona = Persona Jurídica
+                                    * Dado que el campo "Tipo de persona" está seleccionado
+                                    * Cuando el usuario selecciona "Persona Jurídica" (país = Argentina)
+                                    * Entonces se habilita "Condición frente al IVA" con las opciones: IVA Responsable Inscripto, IVA Exento.
+                                    * Escenario 7: Condición frente al IVA según Tipo de persona y país ≠ Argentina
+                                    * Dado que el país seleccionado es diferente a Argentina
+                                    * Cuando el usuario selecciona "Extranjero" en "Tipo de persona"
+                                    * Entonces "Condición frente al IVA" se habilita con la única opción: Consumidor Final.
+                                    * Escenario 8: Limpieza del campo Condición frente al IVA
+                                    * Dado que el usuario tiene seleccionada una opción en "Tipo de persona"
+                                    * Cuando cambia la selección a otra opción en "Tipo de persona"
+                                    * Entonces "Condición frente al IVA" se limpia y deshabilita automáticamente.
+                                    * Solo se habilita nuevamente cuando se seleccione un nuevo tipo de persona válido.
+Flujo: Tipo de documento según combinación Tipo de persona + Condición IVA
+                                    * Escenario 1: Selección de tipo de documento según país + tipo de persona + Condición frente al iva
+                                    * Dado que el usuario accede al formulario
+                                    * Cuando selecciona un país + el tipo de persona + la condición frente al iva
+                                    * Entonces el campo de tipo de documento cargan las opciones correspondientes a esas selecciones. A continuación se detalla el comportamiento:
+Condición (campos seleccionados)
+	Acción
+	Resultado esperado (opciones del campo)
+	Argentina | Persona Humana + Consumidor Final
+	El usuario completa la selección de tipo de persona y condición IVA
+	El campo "Tipo de documento" despliega: DNI | CUIT | CUIL.
+	Argentina | Persona Humana + IVA Responsable Inscripto
+	El usuario completa la selección
+	El campo "Tipo de documento" carga únicamente: CUIT.
+	Argentina | Persona Humana + Responsable Monotributo
+	El usuario completa la selección
+	El campo "Tipo de documento" carga únicamente: CUIT.
+	Argentina | Persona Jurídica + IVA Responsable Inscripto
+	El usuario completa la selección
+	El campo "Tipo de documento" carga únicamente: CUIT.
+	Argentina | Persona Jurídica + IVA Exento
+	El usuario completa la selección
+	El campo "Tipo de documento" carga únicamente: CUIT.
+	País ≠ Argentina | Extranjero + Consumidor Final
+	El usuario completa la selección de tipo de persona y condición IVA
+	El campo "Tipo de documento" despliega: Pasaporte | Identificación extranjera.
+	Flujo: Reglas de validación por tipo de documento 
+                                    * Escenario 1: Validaciones del Número de Documento según el tipo de documento seleccionado
+                                    * Dado que el usuario accede al formulario
+                                    * Cuando selecciona un tipo de documento
+                                    * Entonces en el campo de número de documento se valida que los dígitos corresponden a las siguientes reglas:
+
+
+Condición (Selección del usuario)
+	Acción (Cuando)
+	Resultado esperado (validación de los caracteres o dígitos del campo)
+	Usuario seleccionó tipo de documento CUIT o CUIL
+	Escribe un valor en el campo "Número de documento"
+	Solo se aceptan 11 dígitos numéricos.
+El sistema elimina automáticamente guiones y puntos antes de procesar.
+Si el valor no cumple con 11 dígitos, el sistema muestra error inline y no permite guardar.
+	Usuario seleccionó tipo de documento DNI
+	Escribe un valor en el campo "Número de documento"
+	Solo se aceptan 7 u 8 dígitos numéricos.
+El sistema elimina automáticamente puntos y espacios.
+Si el valor no cumple el rango 7-8 dígitos, se muestra error inline.
+	Usuario seleccionó tipo de documento Pasaporte
+	Escribe un valor en el campo "Número de documento"
+	Se aceptan entre 6 y 15 caracteres alfanuméricos.
+No se realiza limpieza automática — se acepta el valor tal como se ingresa.
+	Usuario seleccionó Identificación Extranjera
+	Escribe un valor en el campo "Número de documento"
+	Se acepta formato alfanumérico variable según país de origen.
+El sistema elimina espacios automáticamente.
+	                                    * Escenario 2: Error en el Número de Documento
+                                    * Dado que el usuario intenta guardar con un número de documento que no cumple el patrón del tipo seleccionado
+                                    * Cuando intenta hacer clic en "Guardar"
+                                    * Entonces el botón permanece deshabilitado
+Se resalta el campo faltante.
+No se almacena información parcial.
+Flujo: Carga de Documentos (según combinación fiscal)
+                                       * Escenario 1: Selección de tipo de documento según tipo de persona + Condición frente al iva
+                                       * Dado que el usuario accede al formulario
+                                       * Cuando selecciona el tipo de persona + la condición frente al iva
+                                       * Entonces el campo para cargar documentos se habilita con los copys de los documentos que el usuario debe adjuntar según la selección de los campos mencionados y se permite cargar la cantidad de documentos requeridos. A continuación se detalla el comportamiento:
+Condición (opciones seleccionadas en los campos)
+	Acción (Cuando)
+	Resultado esperado (Copy y cantidad de documentos a cargar)
+	Persona Humana + Consumidor Final
+	El usuario accede a la sección de carga de documentos
+	Se habilita campo para cargar 1 archivo máximo: DNI frente y dorso (en un mismo archivo PDF/imagen).
+Una vez cargado, el campo queda deshabilitado.
+Si el usuario elimina el archivo, el campo se vuelve a habilitar.
+No se permite avanzar sin este archivo.
+	Persona Humana + IVA Responsable Inscripto
+	El usuario accede a la sección de carga de documentos
+	Se habilita el campo para adjuntar 2 archivos obligatorios:
+(1) DNI frente y dorso
+(2) Constancia de inscripción ARCA como Responsable Inscripto.
+Al completar los 2, el campo se deshabilita.
+Si se elimina uno, el campo vuelve a habilitarse.
+No se permite avanzar sin los 2 documentos.
+	Persona Humana + Responsable Monotributo
+	El usuario accede a la sección de carga de documentos
+	Se habilita el campo para adjuntar 2 archivos obligatorios: 
+(1) DNI frente y dorso (en un mismo archivo PDF/imagen)
+(2) Constancia de inscripción ARCA – categoría Monotributo vigente (A–K).
+Al completar los 2, el campo se deshabilita.
+Si se elimina uno, el campo vuelve a habilitarse.
+No se permite avanzar sin los 2 documentos.
+	Persona Jurídica + IVA Responsable Inscripto
+	El usuario accede a la sección de carga de documentos
+	Se habilita el campo para adjuntar 2 archivos obligatorios: 
+(1) Constancia de inscripción ARCA (AFIP + Ingresos Brutos)
+(2) Estatuto o Contrato Social inscripto en IGJ o Registro Público.
+Al completar los 2, el campo se deshabilita.
+Si se elimina uno, el campo vuelve a habilitarse.
+No se permite avanzar sin los 2 documentos.
+	Persona Jurídica + IVA Exento
+	El usuario accede a la sección de carga de documentos
+	Se habilita el campo para adjuntar 2 archivos obligatorios: 
+(1) Constancia de inscripción ARCA
+(2) Certificado de exención ARCA/AFIP vigente.
+Al completar los 2, el campo se deshabilita.
+Si se elimina uno, el campo vuelve a habilitarse.
+No se permite avanzar sin los 2 documentos.
+	Extranjero + Consumidor Final (opera en plataforma local AR)
+	El usuario accede a la sección de carga de documentos
+	Se habilita campo para cargar 1 archivo máximo el usuario puede cargar:
+Pasaporte vigente o Constancia tributaria del país de origen (no ambos).
+Al cargar el archivo, el campo se deshabilita.
+Si se elimina, el campo vuelve a habilitarse.
+No se permite avanzar sin al menos 1 documento.
+	                                       * Escenario 2: Validaciones de archivo al cargar documento - Tipo y Tamaño
+                                       * Dado que el usuario hace clic en "Subir documento"
+                                       * Cuando se muestra el campo con requisitos del archivo
+                                       * Entonces el sistema acepta únicamente archivos con formato: .JPEG, .JPG, .PNG, .PDF.
+Tamaño máximo por archivo: 10 MB.
+                                          * Escenario 3: Validaciones de archivo al cargar documento - Formato no permitido
+                                          * Dado que el usuario intenta subir un archivo con formato no permitido
+                                          * Cuando selecciona el archivo y lo carga
+                                          * Entonces Se muestra alerta de error: "Formato no permitido. Solo .JPG, .JPEG, .PNG, .PDF".
+El archivo no se guarda.
+                                             * Escenario 4: Validaciones de archivo al cargar documento - Tamaño no permitido
+                                             * Dado que el usuario intenta subir un archivo que supera 10 MB
+                                             * Cuando selecciona el archivo y lo carga
+                                             * Entonces se muestra alerta de error: "El archivo supera los 10MB".
+El archivo no se guarda.
+                                                * Escenario 5: Validaciones de archivo al cargar documento - Fallo al subir el archivo
+                                                * Dado que ocurre un fallo interno al intentar subir el archivo
+                                                * Cuando el sistema retorna un error inesperado
+                                                * Entonces se muestra alerta: "Se produjo un error. Vuelve a intentarlo.".
+El usuario puede reintentar sin perder los demás campos completados.
+                                                   * Escenario 6: Visualización de documentos ya cargados - archivo tipo PDF
+                                                   * Dado que el usuario ha cargado un archivo .PDF válido en el formulario
+                                                   * Cuando hace clic en el ícono "ver" del documento
+                                                   * Entonces el archivo se abre en una nueva pestaña del navegador.
+Se permite descarga o impresión desde el visor del navegador.
+                                                      * Escenario 7: Visualización de documentos ya cargados - archivo tipo Imagen
+                                                      * Dado que el usuario ha cargado un archivo .JPG, .JPEG o .PNG válido
+                                                      * Cuando hace clic en el ícono "ver" del documento
+                                                      * Entonces se abre un modal centrado con la imagen en alta resolución.
+                                                      * El modal incluye botón "X" para cerrar.
+Mientras el modal está abierto, se bloquea la interacción con el fondo.
+                                                         * Escenario 8: Prevención de errores al cambiar selección para cargar documento
+                                                         * Dado que el usuario cambia de combinación fiscal (ej. de Persona Humana a Persona Jurídica) después de haber cargado documentos
+                                                         * Cuando Cambia el tipo de persona o condición IVA
+                                                         * Entonces los documentos previamente cargados se eliminan del formulario.
+El campo de carga se rehabilita para los nuevos documentos requeridos por la nueva combinación.
+Se notifica visualmente al usuario del cambio requerido.
+Flujo: Habilitación del botón Guardar según checkboxes, campo y OTP
+                                                            * Escenario 1: Habilitación del botón Guardar al marcar ambos checkboxes y  tener los campos completos
+                                                            * Dado que el usuario ha completado todos los campos obligatorios del formulario
+                                                            * Cuando marca ambos checkboxes: Aviso de privacidad y Términos y Condiciones (Link: https://dropi.ar/terminos-y-condiciones/ )
+                                                            * Entonces el botón "Guardar" se habilita.
+Al hacer clic, se ejecuta la validación con modal 2FA.
+                                                               * Escenario 2: Deshabilitación del botón Guardar por checkbox desmarcados
+                                                               * Dado que el usuario ya tenía los checkboxes marcados y todos los campos completos
+                                                               * Cuando desmarca cualquiera de los 2 checkboxes
+                                                               * Entonces El botón "Guardar facturación" se deshabilita inmediatamente.
+No es posible guardar hasta que ambos checkboxes estén marcados nuevamente.
+                                                                  * Escenario 3: Deshabilitación del botón Guardar por campos faltantes
+                                                                  * Dado que el usuario deja un campo obligatorio vacío
+                                                                  * Cuando Intenta guardar la información
+                                                                  * Entonces el botón "Guardar facturación" permanece deshabilitado.
+Backend rechaza con error 400 listando los campos inválidos o vacíos.
+No se almacena información parcial.
+                                                                     * Escenario 4: Deshabilitación del botón Guardar por campos faltantes
+                                                                     * Dado que el usuario intenta guardar sin marcar los checkboxes de veracidad (aunque complete todos los campos)
+                                                                     * Cuando envía el formulario
+                                                                     * Entonces el sistema reforma el flujo de autenticación (2FA) del usuario solicitando el código de 6 dígitos de su app de autenticación. No se almacena ningún cambio.
+                                                                     * Escenario 5: Flujo de validación OTP al guardar
+                                                                     * Dado El usuario ha diligenciado todos los campos y hace clic en "Guardar"
+                                                                     * Cuando el sistema abre el modal de validación
+                                                                     * Entonces Aparece un modal centrado con el mensaje: "Ingresa los seis dígitos que genera tu app de autenticación de dos factores para continuar.".
+Se renderizan 6 campos para el código de 6 dígitos.
+El backend valida que el código de 6 dígitos sea el correcto.
+                                                                        * Escenario 6: Flujo de validación OTP al guardar - Código correcto
+                                                                        * Dado que el usuario ingresa el código OTP de la app
+                                                                        * Cuando el código es correcto y válido
+                                                                        * Entonces se muestra los campos de los 6 dígitos como success, se cierra el modal.
+El sistema marca datos_fiscales_completos = true.
+Se desactiva la alerta persistente de "Completa tu facturación".
+El estado del formulario cambia a "En revisión".
+                                                                           * Escenario 7: Flujo de validación OTP al guardar - Código incorrecto
+                                                                           * Dado que el usuario ingresa un código incorrecto
+                                                                           * Cuando se valida el código
+                                                                           * Entonces se muestra error, el campo se resalta en rojo con animación.
+No se guarda el formulario.
+Flujo: Estados del formulario y transiciones
+                                                                              * Escenario 1: Formulario diligenciado
+                                                                              * Dado que el usuario completa el formulario y valida correctamente con OTP
+                                                                              * Cuando el sistema procesa el guardado exitoso
+                                                                              * Entonces el estado cambia a "En revisión".
+Los campos del formulario se inhabilitan para edición.
+Las acciones en los módulos financieros se bloquean hasta nueva validación: Transferencia entre wallets, solicitud de retiros.
+El sistema registra evento de auditoría.
+                                                                                 * Escenario 2: Formulario revisado y posteriormente aprobado
+                                                                                 * Dado que el administrador revisa y aprueba los datos fiscales del usuario
+                                                                                 * Cuando guarda la validación en el sistema
+                                                                                 * Entonces el estado cambia a "Aprobado".
+Se habilita has_access_to_money_modules = true.
+El usuario visualiza notificación en el Home y en Configuraciones/ Datos personales: "¡Tus datos de facturación fueron aprobados! Has desbloqueado todas las funciones de Dropi.".
+La notificación de aprobación se muestra una única vez (al cerrar sesión o navegar no vuelve a aparecer).
+Se registra log con usuario aprobador y fecha.
+                                                                                    * Escenario 3: Formulario revisado y posteriormente reportado con errores
+                                                                                    * Dado que el administrador detecta errores en los datos del usuario
+                                                                                    * Cuando marca campos con errores y guarda comentarios
+                                                                                    * Entonces el estado cambia a "Con errores reportados".
+Los campos con error muestran borde de advertencia.
+El usuario recibe notificación vía correo electrónico.
+Las acciones en los módulos financieros se bloquean hasta nueva validación: Transferencia entre wallets, solicitud de retiros.
+Los comentarios se almacenan en tabla asociada al usuario (campo_reportado, etiqueta_campo, valor_campo, comentario).
+El formulario queda editable para que el usuario pueda corregir.
+                                                                                       * Escenario 4: Formulario aprobado y posteriormente es modificado
+                                                                                       * Dado que el usuario tiene estado "Aprobado" y modifica cualquier campo del formulario
+                                                                                       * Cuando guarda los cambios
+                                                                                       * Entonces el estado cambia automáticamente a "En revisión".
+Se muestra el mensaje: "Tus datos han sido actualizados y están nuevamente en proceso de revisión.".
+Se registra en auditoría el campo afectado y la edición realizada.
+                                                                                          * Escenario 5: Formulario aprobado y posteriormente es modificado
+                                                                                          * Dado que el usuario tiene estado "Aprobado" y modifica cualquier campo del formulario
+                                                                                          * Cuando guarda los cambios
+                                                                                          * Entonces el estado cambia automáticamente a "En revisión".
+Se muestra el mensaje: "Tus datos han sido actualizados y están nuevamente en proceso de revisión.".
+Se registra en auditoría el campo afectado y la edición realizada.
+                                                                                             * Escenario 6: Formulario con errores y posteriormente es modificado
+                                                                                             * Dado que el usuario corrige un campo reportado y guarda
+                                                                                             * Cuando el sistema procesa la corrección
+                                                                                             * Entonces el estado cambia a "En revisión".
+Se muestra mensaje: "Tus datos fueron enviados para revisión. Recibirás una notificación cuando hayan sido validados.".
+Las acciones en los módulos financieros se bloquean hasta nueva validación: Transferencia entre wallets, solicitud de retiros.
+                                                                                                * Escenario 7: Error del sistema durante el guardado
+                                                                                                * Dado que el backend retorna un error durante el guardado del formulario
+                                                                                                * Cuando falla la petición de guardado
+                                                                                                * Entonces se muestra alerta de error al usuario.
+Los datos ingresados en el formulario NO se eliminan.
+El usuario puede reintentar sin perder información.
+Flujo: Fases del sistema de Alertas y Bloqueo de Módulos Financieros[b]
+
+
+Fase 1: Al momento de salir a producción se va a implementar únicamente las alertas relacionadas a los estados de diligenciamiento del formulario de datos de facturación.
+                                                                                                   * Escenario 1: Alerta cuando el formulario está en revisión 
+                                                                                                   * Dado que el usuario tiene estado fiscal "En revisión"
+                                                                                                   * Cuando inicia sesión e intenta acceder a módulos de movimientos de dinero
+                                                                                                   * Entonces se muestra alerta informativa: "Estamos revisando tu información fiscal. Mientras tanto, no podrás hacer uso de los movimientos de dinero.".
+Se inhabilitan las opciones de los módulos de dinero: Transferencias entre wallets y Procesar retiros.
+La misma alerta se muestra en cada módulo financiero: Historial de Cartera, Transferencias entre wallets, Cuentas bancarias, Retiro de saldo.
+                                                                                                      * Escenario 2: Alertas por errores reportados y su desaparición 
+                                                                                                      * Dado que el usuario tiene errores reportados por el administrador
+                                                                                                      * Cuando accede a la pantalla de inicio o a cualquier módulo de transacciones
+                                                                                                      * Entonces se muestra alerta fija con botón "Editar información" en: Inicio, Historial de cartera, Transferencia entre wallets, Cuentas bancarias, Retiros de saldo.
+  
+[c][d][e][f]
+
+
+No se permiten clics sobre botones de acción financiera: Transferencias entre wallets y Procesar retiros.[g][h][i]
+                                                                                                      * Escenario 3: Alertas por errores reportados y comportamiento
+                                                                                                      * Dado que el usuario accede al formulario con estado "Con errores reportados"
+                                                                                                      * Cuando visualiza el formulario
+                                                                                                      * Entonces se muestra alerta en la parte superior del formulario indicando el campo con error (ej. "Tipo de documento necesita una corrección...").
+Se muestra botón "Ver comentario" que abre modal con título "Detalle de reporte".
+El modal muestra por cada campo reportado: campo, valor actual y comentario del administrador.
+Si hay múltiples campos reportados, cada bloque se muestra separado y ordenado verticalmente.
+El modal incluye botón "X" para cerrar.
+                                                                                                         * Escenario 4: Formulario corregido y en revisión
+                                                                                                         * Dado que el usuario corrige los datos reportados y el equipo se encuentra validando la corrección
+                                                                                                         * Cuando el usuario accede a las pantallas donde aparecía la alerta
+                                                                                                         * Entonces la alerta de error ya no se muestra, sino que se muestra la correspondiente al estado.
+El estado pasa a "En revisión".
+Fase 2: Días después de salir a producción se va a implementar las alertas avisando al usuario que debe diligenciar el formulario de datos de facturación. Esto incluye el comportamiento de las alertas datos personales y facturación, así como la continuidad de las alertas de lo estados del formulario (fase 1).
+                                                                                                            * Escenario 1: Alerta por datos personales incompletos - visualización
+                                                                                                            * Dado que el usuario no ha completado sus datos personales (datos_personales_completos = false)
+                                                                                                            * Cuando accede a cualquiera de los módulos: Inicio, Historial de cartera, Transferencia entre wallets, Cuentas bancarias, Retiros de saldo.
+                                                                                                            * Entonces se muestra alerta persistente tipo banner: "Aún no has completado tus datos personales y de facturación. Dirígete a Configuraciones para completarlos.” en: Inicio, Historial de cartera, Transferencia entre wallets, Cuentas bancarias, Retiros de saldo.
+Se muestra botón "Completar" que redirige a Configuraciones > Datos personales y facturación.
+No se permiten clics sobre botones de acción financiera: Transferencias entre wallets y Procesar retiros.
+                                                                                                               * Escenario 2: Desaparición alerta de datos personales completos
+                                                                                                               * Dado que el usuario completa correctamente todos los campos obligatorios de datos personales
+                                                                                                               * Cuando vuelve a cualquiera de los módulos restringidos
+                                                                                                               * Entonces la alerta ya no se muestra.
+El sistema actualiza datos_personales_completos = true.
+                                                                                                                  * Escenario 3: Alerta por datos de facturación incompletos 
+                                                                                                                  * Dado que datos_personales_completos = true pero datos_fiscales_completos = false
+                                                                                                                  * Cuando El usuario accede a Inicio, Historial de cartera, Transferencia entre wallets, Cuentas bancarias o Retiros de saldo
+                                                                                                                  * Entonces se muestra alerta persistente tipo banner: "Completa la información de facturación electrónica; de lo contrario, la factura se generará utilizando tus datos personales.".
+Se muestra botón "Completar" que redirige a Configuraciones > Datos personales > Pestaña: Facturación electrónica.
+No se permiten clics sobre botones de acción financiera: Transferencias entre wallets y Procesar retiros.
+                                                                                                                     * Escenario 4: Desaparición de alerta por datos de facturación incompletos 
+                                                                                                                     * Dado que el usuario completa todos los campos requeridos de facturación
+                                                                                                                     * Cuando el sistema actualiza el estado
+                                                                                                                     * Entonces la alerta deja de mostrarse en todos los módulos. Se inicia el proceso de mostrar las alertas según el estado de revisión de los datos de facturación.
+NOTA: Estas fases deben quedar configurables para este feature (Ej: un switch en BDA) que permita la activación del bloqueo cuando no hay datos de facturación (fase 2), de forma ágil sin tener que esperar a implementar un ajuste en código.
+Flujo: Bloqueo de módulos financieros por estado fiscal
+                                                                                                                     * Escenario 1: Datos de facturación diferente a aprobado
+                                                                                                                     * Dado que el fiscal_status del usuario es distinto de "aprobado"
+                                                                                                                     * Cuando el usuario intenta acceder a rutas de movimientos de dinero (retiros, transferencias, cuentas bancarias) 
+                                                                                                                     * Entonces el backend responde inhabilitando el uso del módulo.
+Frontend muestra la alerta correspondiente al estado actual.
+No se permite ejecutar ninguna acción financiera: Transferencias entre wallets y Procesar retiros.
+                                                                                                                        * Escenario 2: Datos de facturación diferente a aprobado
+                                                                                                                        * Dado que El usuario tiene fiscal_status = "aprobado" y datos_fiscales_completos = true
+                                                                                                                        * Cuando accede a módulos de movimientos de dinero
+                                                                                                                        * Entonces todos los endpoints responden normalmente.
+Las alertas ya no se muestran.
+El usuario puede operar con normalidad.
+Flujo: Auditoría y logs
+                                                                                                                           * Escenario 1: Registro de datos para auditoria
+                                                                                                                           * Dado que se realiza cualquier modificación en los datos fiscales del usuario
+                                                                                                                           * Cuando el sistema procesa el guardado exitoso
+                                                                                                                           * Entonces se genera registro de auditoría con: campo modificado, valor anterior, valor nuevo, usuario que editó, fecha y hora, IP/dispositivo.
+Módulo B: Panel de Revisión de Datos de Facturación (ADMIN)
+
+
+Link del figma:  https://www.figma.com/design/7RGAZpRUXnKJAyjXGvaOZD/Facturaci%C3%B3n-Admin?node-id=3126-209939 
+
+
+Cuando el equipo financiero/administrativo de Dropi necesita validar la información tributaria enviada por usuarios argentinos, 
+quiere acceder a un panel de revisión que me permita visualizar el estado fiscal de todos los usuarios, aprobar o reportar sus datos con comentarios por campo, consultar el historial de acciones y exportar la información para el proceso de facturación, 
+para garantizar que solo operen con funciones financieras aquellos usuarios cuya información fiscal ha sido validada y es conforme a la normativa argentina (AFIP/ARCA). 
+
+
+Ruta de acceso y alcance del módulo
+Menú Usuarios > Revisión de facturación
+Acceso exclusivo para administradores Dropi. Los administradores de marcas blancas NO deben visualizar este módulo. 
+
+
+Tabla de estados y acciones disponibles para el admin
+Estado del usuario
+	Acciones disponibles para el admin
+	Pendiente
+	Ver mensaje de que no ha registrado datos fiscales. Botones Aprobar/Reportar deshabilitados u ocultos. Sin acceso al historial (vacío).
+	En revisión
+	Ver datos completos. Botones "Aprobar usuario" y "Reportar usuario" habilitados. Acceso al historial.
+	Reportado
+	Solo puede continuar reportando otros campos. No puede ser aprobado hasta que el usuario edite sus datos. Acceso al historial.
+	Aprobado (Completado)
+	Solo puede Reportar si detecta un nuevo error. Al reportar, el estado cambia automáticamente a "Reportado". Acceso al historial.
+	
+
+2. CRITERIOS DE ACEPTACIÓN
+Flujo: Vista Principal — Listado de Usuarios
+                                                                                                                           * Escenario 1:Acceso y visibilidad del módulo
+                                                                                                                           * Dado que el usuario ha iniciado sesión como administrador Dropi
+                                                                                                                           * Cuando accede al menú principal y navega a "Usuarios"
+                                                                                                                           * Entonces debe visualizarse el submódulo "Revisión de facturación" en el menú.
+Los administradores de marcas blancas NO deben ver este submódulo.
+                                                                                                                              * Escenario 2: Visualización de los usuarios en la vista del módulo
+                                                                                                                              * Dado que el administrador accede a "Usuarios > Revisión de facturación"
+                                                                                                                              * Cuando se carga la vista principal
+                                                                                                                              * Entonces se lista a los usuarios (Dropshippers y Proveedores) registrados en Dropi Argentina con sus estados fiscales representados con etiquetas (badges).
+Por defecto se carga el tab "Todos" con el listado completo de usuarios activos en Argentina.
+                                                                                                                                 * Escenario 3: Tabs de estado y contadores dinámicos
+                                                                                                                                 * Dado que el administrador se encuentra en el módulo "Revisión de facturación"
+                                                                                                                                 * Cuando se carga la vista o cambia entre tabs
+                                                                                                                                 * Entonces se muestran en la parte superior los siguientes tabs con sus contadores:
+Todos (total general) | En revisión | Aprobados | Reportados | Pendientes
+Al cambiar a cada tab se muestra el total de usuarios asociados a ese estado.
+Al hacer clic en cualquier tab, el listado se actualiza con los usuarios del estado seleccionado.
+Los contadores se actualizan dinámicamente si cambia el estado de algún usuario.
+                                                                                                                                    * Escenario 4: Cantidad de usuarios del tab cuando no hay usuarios en ese estado
+                                                                                                                                    * Dado que El administrador selecciona un tab específico (ej. "Aprobados") y no hay usuarios en ese estado
+                                                                                                                                    * Cuando el sistema ejecuta la consulta
+                                                                                                                                    * Entonces se muestra pantalla de empty state con mensaje: "No se encontraron usuarios con ese estado de facturación.".
+El contador del estado muestra 0.
+No se muestra la tabla de usuarios ni acciones asociadas.
+                                                                                                                                       * Escenario 5: Columnas del listado y badges de estado 
+                                                                                                                                       * Dado que el sistema carga el listado de usuarios según el tab activo
+                                                                                                                                       * Cuando se renderiza la tabla de usuarios
+                                                                                                                                       * Entonces el listado incluye las columnas: ID User | Estado | Tipo de Usuario | Nombre | Correo | Nacionalidad | Marca Blanca | Acciones.
+La columna "Estado" muestra un badge con colores: 
+En revisión: Amarillo | Aprobado: Verde | Reportado: Rojo | Pendiente: Gris.
+                                                                                                                                       * El backend retorna el campo estado_fiscal como valor normalizado (en_revision, aprobado, reportado, pendiente) y el frontend aplica el color y badge correspondiente.
+Flujo: Orden por defecto y ordenamiento manual
+                                                                                                                                          * Escenario 1: Orden de los usuarios por defecto
+                                                                                                                                          * Dado que el administrador accede al módulo sin aplicar ningún filtro de orden
+                                                                                                                                          * Cuando el sistema carga la tabla de usuarios
+                                                                                                                                          * Entonces el filtro "Ordenar por" se inicializa con la opción "Usuarios más recientes".
+                                                                                                                                          * El listado muestra primero los usuarios con fecha de registro más reciente (ORDER BY created_at DESC).
+                                                                                                                                          * Escenario 2: Orden de los usuarios al cambiar el filtro de ordenar por
+                                                                                                                                          * Dado que el administrador hace clic en el filtro "Ordenar por" y selecciona "Usuarios más antiguos"
+                                                                                                                                          * Cuando Se ejecuta el cambio de orden
+                                                                                                                                          * Entonces el listado se reorganiza mostrando primero los usuarios con fecha de registro más antigua (ORDER BY created_at ASC).
+El texto del filtro se actualiza con la opción seleccionada.
+Flujo: Filtros combinados: Nacionalidad, Marca Blanca y Tipo de usuario
+                                                                                                                                             * Escenario 1: Comportamiento de los filtros
+                                                                                                                                             * Dado que el administrador accede al módulo
+                                                                                                                                             * Cuando interactúa con la sección de los filtros para aplicar uno o varios combinados
+                                                                                                                                             * Entonces el sistema debe tener los siguientes comportamientos:
+Condición (Dado que)
+	Acción (Cuando)
+	Resultado esperado (Entonces)
+	El administrador aplica uno o más filtros (Nacionalidad, Marca Blanca, Usuario/tipo) sobre un tab activo
+	Se ejecuta la búsqueda
+	El sistema muestra solo los usuarios que cumplan con los filtros y el estado del tab seleccionado.
+Se muestra el contador de resultados (ej. "5 resultados encontrados").
+Si cambia de tab, se recalcula el total de resultados aplicando los mismos filtros al nuevo estado.
+	El administrador hace clic en el filtro "Usuario" (tipo)
+	Se despliega el selector
+	Se muestran las opciones: "Dropshipper" y "Proveedor".
+	El administrador interactúa con el filtro "Nacionalidad"
+	Se despliega el selector
+	Se muestra la lista completa de todas las nacionalidades de los países disponibles en la plataforma Dropi.
+	El administrador interactúa con el filtro "Marca Blanca"
+	Se despliega el selector
+	Se listan únicamente las marcas blancas existentes para el país Dropi donde se ingresó = Argentina.
+	El administrador hace clic en el ícono de eliminar filtros (caneca)
+	Se ejecuta la limpieza del filtro
+	El filtro se limpia, el listado se actualiza mostrando todos los usuarios del tab activo y el contador de resultados se reinicia.
+	Se realiza una búsqueda por ID de usuario o correo electrónico
+	El administrador ingresa el valor en el buscador
+	El sistema ubica y hace foco en el usuario coincidente dentro del tab activo.
+	                                                                                                                                             * Escenario 2: Listado de usuarios con datos fiscales 
+                                                                                                                                             * Dado que el frontend solicita datos aplicando múltiples filtros combinados
+                                                                                                                                             * Cuando realiza GET /usuarios/facturacion con parámetros: estado_fiscal, nacionalidad, marca_blanca, tipo_usuario, ID User o correo
+                                                                                                                                             * Entonces El backend aplica todos los filtros en conjunto.
+Retorna solo usuarios que cumplan con TODOS los criterios.
+Incluye el total de resultados filtrados en la respuesta.
+Si cambia el estado (tab), recalcula con los mismos filtros sobre el nuevo estado.
+Si tipo_usuario no está presente o es vacío, se omite ese filtro y se retornan todos los tipos.
+Flujo: Modal de Datos de Facturación — Comportamiento por Estado
+                                                                                                                                                * Escenario 1: Comportamiento de los filtros
+                                                                                                                                                * Dado que el administrador accede al módulo
+                                                                                                                                                * Cuando interactúa con la opción de ver información fiscal
+                                                                                                                                                * Entonces el sistema debe tener los siguientes comportamientos:
+Condición (Dado que)
+	Acción (Cuando)
+	Resultado esperado (Entonces)
+	El usuario tiene estado "Pendiente"
+	El administrador hace clic en "Ver información fiscal"
+	Se abre un modal con empty state (ilustración o ícono representativo).
+No se permite ejecutar ninguna acción sobre la información fiscal.
+	El usuario tiene estado "En revisión"
+	El administrador hace clic en "Ver información fiscal"
+	Se abre el modal con el detalle completo de la información de facturación.
+Se muestran ambos botones: "Aprobar usuario" y "Reportar usuario", ambos habilitados.
+El administrador puede ejecutar cualquiera de las dos acciones.
+	El usuario tiene estado "Reportado"
+	El administrador hace clic en "Ver información fiscal"
+	El botón "Aprobar usuario" está deshabilitado u oculto.
+Solo se muestra el botón "Reportar usuario" (para reportar campos adicionales diferentes al ya reportado anteriormente).
+Cuando el usuario actualice sus datos, el estado vuelve automáticamente a "En revisión" y ambos botones vuelven a habilitarse.
+	El usuario tiene estado "Aprobado" (Completado)
+	El administrador hace clic en "Ver información fiscal"
+	El botón "Aprobar usuario" está oculto o deshabilitado.
+Se muestra únicamente el botón "Reportar usuario".
+Al ejecutar el reporte, el estado cambia automáticamente a "Reportado".
+	Flujo: Contenido y visor de documentos en el modal
+                                                                                                                                                * Escenario 1: Visualización de la información tributaria del usuario
+                                                                                                                                                * Dado que el usuario tiene estado "En revisión", "Aprobado" o "Reportado". El administrador abre la modal de datos de facturación.
+                                                                                                                                                * Cuando Se carga el modal
+                                                                                                                                                * Entonces El modal muestra el título "Datos de facturación".
+Se visualizan: documento(s) cargado(s), información del usuario y campos tributarios diligenciados.
+La sección izquierda incluye un visor de documentos que permite navegar entre documentos con flechas o paginador (ej. 1/3), visualiza correctamente PDFs e imágenes (JPG, PNG), incluye controles de zoom (+ / -), cambio de página y descarga, y permite ampliar o descargar el documento.
+Flujo: Tab de Historial dentro del modal
+                                                                                                                                                   * Escenario 1: Visualización del historial de reportes de la información tributaria del usuario
+                                                                                                                                                   * Dado que el administrador está dentro del modal de datos de facturación
+                                                                                                                                                   * Cuando hace clic en el tab "Historial"
+                                                                                                                                                   * Entonces se muestra el listado cronológico descendente de todas las acciones previas (Aprobado / Reportado).
+Cada registro incluye: Fecha de acción | Acción | Revisado por | Campo reportado | Comentario (máx. 200 caracteres).
+La columna "Comentario" se adapta al contenido hasta 200 caracteres.
+Si no hay registros previos, se muestra empty state con mensaje: "No hay registros de revisiones disponibles en este momento."
+                                                                                                                                                      * Escenario 2: Historial de acciones por usuario 
+                                                                                                                                                      * Dado que el frontend solicita el historial de un usuario
+                                                                                                                                                      * Cuando realiza GET /usuarios/{id}/facturacion/historial
+                                                                                                                                                      * Entonces retorna array ordenado cronológicamente descendente.
+Cada registro incluye: fecha_accion, accion (aprobado/reportado), admin_responsable, campo_reportado, comentario.
+Si no hay historial, retorna array vacío para que el frontend muestre el empty state.
+                                                                                                                                                         * Escenario 3: Filtro por rango de fechas en el historial
+                                                                                                                                                         * Dado que el administrador está en el tab "Historial de revisiones" del modal de datos de facturación de un usuario
+                                                                                                                                                         * Cuando hace clic en el campo "Fecha de reporte", selecciona una fecha de inicio y una fecha de fin en el datepicker, y hace clic en el botón de aplicar (flecha naranja)
+                                                                                                                                                         * Entonces:
+                                                                                                                                                         * El listado se actualiza mostrando únicamente los registros cuya fecha de acción esté dentro del rango seleccionado (inclusivo en ambos extremos).
+                                                                                                                                                         * El contador de resultados se actualiza (ej. "5 resultados encontrados").
+                                                                                                                                                         * Si no hay registros en ese rango, se muestra el empty state con mensaje: "No hay registros de revisiones disponibles en este momento."
+                                                                                                                                                         * Si solo se selecciona fecha de inicio sin fecha de fin, el sistema no aplica el filtro y mantiene el rango vacío hasta que ambas fechas estén definidas.
+                                                                                                                                                         * Al limpiar el campo de fecha, el listado vuelve a mostrar todos los registros sin filtro.
+                                                                                                                                                         * Escenario 4: Filtro por campo reportado en el historial
+                                                                                                                                                         * Dado que el administrador está en el tab "Historial de revisiones"
+                                                                                                                                                         * Cuando despliega el selector "Campo reportado" y selecciona una opción
+                                                                                                                                                         * Entonces:
+                                                                                                                                                         * El selector muestra como primera opción "Todos" (estado por defecto) y luego lista todos los campos del formulario de facturación: País, Tipo de persona, Condición frente al IVA, Nombre o razón social, Tipo de documento, Número de documento, Provincia, Ciudad/Localidad, Dirección, Email para facturación, Número de teléfono, Documento(s) cargado(s).
+                                                                                                                                                         * Al seleccionar un campo y hacer clic en la flecha que indica buscar, el listado muestra únicamente los registros donde ese campo fue reportado.
+                                                                                                                                                         * Los registros con acción "Aprobado" (que no tienen campo reportado) quedan excluidos del resultado cuando se aplica este filtro, salvo que se seleccione "Todos".
+                                                                                                                                                         * El contador de resultados se actualiza.
+                                                                                                                                                         * Si no hay registros con ese campo reportado, se muestra el empty state: "No hay registros de revisiones disponibles en este momento."
+                                                                                                                                                         * Escenario 5: Búsqueda por "Revisado por" o por comentario
+                                                                                                                                                         * Dado que el administrador está en el tab "Historial de revisiones"
+                                                                                                                                                         * Cuando escribe en el campo de búsqueda "Buscar por usuario, comentario"
+                                                                                                                                                         * Entonces:
+                                                                                                                                                         * El sistema ejecuta búsqueda en tiempo real (o al presionar Enter) sobre dos campos simultáneamente: el nombre del administrador en la columna "Revisado por" y el texto de la columna "Comentario".
+                                                                                                                                                         * La búsqueda es insensible a mayúsculas/minúsculas y a tildes.
+                                                                                                                                                         * Se resaltan visualmente los términos coincidentes dentro del resultado (opcional, si el diseño lo permite).
+                                                                                                                                                         * El contador de resultados se actualiza con el total de coincidencias encontradas.
+                                                                                                                                                         * Si no hay coincidencias, se muestra el empty state: "No hay registros de revisiones disponibles en este momento."
+                                                                                                                                                         * Al borrar el texto del buscador, el listado vuelve al estado anterior respetando los demás filtros activos.
+                                                                                                                                                         * Escenario 6: Filtros combinados en el historial
+                                                                                                                                                         * Dado que el administrador aplica dos o más filtros simultáneamente (rango de fechas + campo reportado + buscador, en cualquier combinación)
+                                                                                                                                                         * Cuando el sistema procesa la consulta
+                                                                                                                                                         * Entonces:
+                                                                                                                                                         * Se aplica lógica AND entre todos los filtros activos: solo se muestran registros que cumplan con todos los criterios al mismo tiempo.
+                                                                                                                                                         * El contador de resultados refleja el total de registros que cumplen la combinación.
+                                                                                                                                                         * Los filtros son independientes entre sí: modificar uno no resetea los demás.
+                                                                                                                                                         * Si la combinación no arroja resultados, se muestra el empty state: "No se encontraron revisiones con los filtros aplicados."
+                                                                                                                                                         * Al limpiar todos los filtros, el listado vuelve al estado completo ordenado cronológicamente descendente.
+                                                                                                                                                         * Escenario 7: Ordenamiento del historial
+                                                                                                                                                         * Dado que el administrador está en el tab "Historial de revisiones" con o sin filtros activos
+                                                                                                                                                         * Cuando hace clic en el selector "Ordenar por"
+                                                                                                                                                         * Entonces:
+                                                                                                                                                         * Se muestran las opciones: "Recientes" (orden descendente por fecha, opción por defecto) y "Antiguos" (orden ascendente por fecha).
+                                                                                                                                                         * Al cambiar el ordenamiento, el listado se reorganiza respetando los filtros activos en ese momento.
+                                                                                                                                                         * El cambio de orden no resetea ningún filtro aplicado.
+                                                                                                                                                         * Escenario 8: Empty state cuando el usuario no tiene revisiones
+                                                                                                                                                         * Dado que el administrador abre el tab "Historial de revisiones" de un usuario que nunca ha sido revisado (sin registros en historial) o cuya combinación de filtros no arroja resultados
+                                                                                                                                                         * Cuando el sistema consulta el historial
+                                                                                                                                                         * Entonces:
+                                                                                                                                                         * Se muestra una ilustración o ícono representativo del empty state.
+                                                                                                                                                         * El mensaje varía según el contexto:
+                                                                                                                                                         * Sin filtros activos y sin historial: "No hay registros de revisiones disponibles en este momento."
+                                                                                                                                                         * Con filtros activos y sin coincidencias: "No se encontraron revisiones con los filtros aplicados."
+                                                                                                                                                         * No se muestra la tabla ni encabezados de columnas cuando el estado es vacío.
+                                                                                                                                                         * El contador muestra "0 resultados encontrados".
+                                                                                                                                                         * El backend retorna [] (array vacío) sin error, para que el frontend renderice el empty state correctamente.
+Flujo: Acción de Aprobación
+                                                                                                                                                         * Escenario 1: Comportamiento de la acción de aprobar
+                                                                                                                                                         * Dado que el administrador accede al módulo
+                                                                                                                                                         * Cuando interactúa con la opción de ver información fiscal y la acción de Aprobar usuario
+                                                                                                                                                         * Entonces el sistema debe tener los siguientes comportamientos:
+Condición (Dado que)
+	Acción (Cuando)
+	Resultado esperado (Entonces)
+	El administrador está en el modal de datos de facturación de un usuario en estado "En revisión"
+	Hace clic en "Aprobar usuario"
+	Se abre un modal de confirmación con dos botones: "Volver" y "Aprobar".
+	El modal de confirmación está abierto
+	El administrador hace clic en "Volver"
+	El modal de confirmación se cierra.
+El sistema retorna al modal "Datos de facturación".
+Los botones "Aprobar usuario" y "Reportar usuario" permanecen visibles (si el estado era "En revisión").
+	El modal de confirmación está abierto
+	El administrador hace clic en "Aprobar"
+	                                                                                                                                                         * El sistema cambia el estado del usuario a "Aprobado".
+                                                                                                                                                         * Se muestra notificación de éxito.
+                                                                                                                                                         * La tabla actualiza el usuario al tab "Aprobados" con badge verde.
+                                                                                                                                                         * El backend envía notificación de aprobación por correo al correo de registro del usuario.
+                                                                                                                                                         * Si se vuelve a abrir el modal del mismo usuario, solo se muestra el botón "Reportar usuario"; el botón "Aprobar usuario" queda oculto.
+                                                                                                                                                         * Se registra en historial: acción "aprobado", fecha, administrador que aprobó.
+                                                                                                                                                         * Se habilita has_access_to_money_modules = true para el usuario.
+	                                                                                                                                                         * Escenario 2: Comportamiento de error al momento de aprobar usuario
+                                                                                                                                                         * Dado que el backend retorna un error durante la aprobación
+                                                                                                                                                         * Cuando el sistema no puede completar la operación
+                                                                                                                                                         * Entonces se muestra alerta de error al administrador.
+El usuario mantiene su estado anterior ("En revisión").
+Los botones "Aprobar usuario" y "Reportar usuario" siguen visibles.
+El administrador puede reintentar la acción.
+El backend retorna 400 o 500 con mensaje: "No se ha podido aprobar el usuario".
+Flujo: Acción de Reporte de Errores
+                                                                                                                                                            * Escenario 1: Apertura y contenido del modal de reporte 
+                                                                                                                                                            * Dado que el administrador está en el modal de datos de facturación de un usuario con botón "Reportar usuario" habilitado
+                                                                                                                                                            * Cuando hace clic en "Reportar usuario"
+                                                                                                                                                            * Entonces Se abre el modal "Reportar usuario" con:
+Texto introductorio: "Indica el campo con errores en la información de facturación y agrega un comentario para informar al usuario la inconsistencia. Esta acción no se puede deshacer."
+Etiqueta de advertencia en rojo: "🔔 Envío de notificación: Corrección de datos de facturación".
+Select con placeholder "Selecciona un campo" para elegir el campo a reportar.
+Textarea con placeholder "Agrega más detalles sobre el reporte" y contador de caracteres (0/200).
+Botón secundario "Volver" y botón primario "Reportar" (deshabilitado por defecto).
+Botón "X" para cerrar el modal en la parte superior derecha.
+                                                                                                                                                               * Escenario 2: Comportamiento de la acción de reportar errores
+                                                                                                                                                               * Dado que el administrador accede al módulo
+                                                                                                                                                               * Cuando interactúa con la opción de ver información fiscal y la acción de Reportar usuario
+                                                                                                                                                               * Entonces el sistema debe tener las siguientes validaciones a la hora de reportar un usuario:
+Condición (Dado que)
+	Acción (Cuando)
+	Resultado esperado (Entonces)
+	El administrador selecciona un campo del listado Y escribe un comentario en el textarea
+	Ambos campos están completados y son válidos
+	El botón "Reportar" se habilita con estilo activo (color de fondo sólido según diseño).
+	El administrador no ha seleccionado un campo O el comentario está vacío
+	Intenta usar el botón "Reportar"
+	El botón "Reportar" permanece deshabilitado con estilo inactivo (color gris).
+	El administrador comienza a escribir en el campo de comentario
+	Escribe caracteres en el textarea
+	Se muestra el contador de caracteres actualizándose (ej. "23/200").
+No se permite escribir más de 200 caracteres.
+El backend valida el límite de 200 caracteres al guardar; rechaza si supera el límite.
+	                                                                                                                                                               * Escenario 3: Catálogo de campos tributarios para el select de reporte 
+                                                                                                                                                               * Dado que el frontend necesita cargar el listado de campos disponibles para reportar en el modal
+                                                                                                                                                               * Cuando realiza GET /catalogs/campos-tributarios
+                                                                                                                                                               * Entonces el backend retorna la lista de campos tributarios disponibles para reportar (ej. "Tipo de Persona", "Condición frente al IVA", "Tipo de documento", "Número de documento", "Teléfono", "Municipio", etc.).
+                                                                                                                                                               * Escenario 4: Selección múltiple de campos a reportar
+                                                                                                                                                               * Dado que el administrador abre el modal "Reportar usuario" y despliega el selector "Selecciona el campo a reportar"
+                                                                                                                                                               * Cuando marca uno o más checkboxes del listado
+                                                                                                                                                               * Entonces:
+                                                                                                                                                               * El selector permite selección múltiple mediante checkboxes; no se cierra el dropdown al marcar una opción.
+                                                                                                                                                               * Los campos seleccionados se muestran en el input del selector separados por comas en el orden en que fueron seleccionados (ej. "Nombre o Razón Social, Dirección, Tipo de Persona").
+                                                                                                                                                               * El listado completo de campos disponibles incluye: País, Provincia, Ciudad/Localidad, Email para facturación, Dirección, Número de teléfono, Nombre o Razón Social, Tipo de Persona, Condición frente al IVA, Tipo de documento, Número de documento, Documento adjunto.
+                                                                                                                                                               * No hay límite máximo de campos seleccionables en una misma acción de reporte.
+                                                                                                                                                               * El botón "Reportar" permanece deshabilitado hasta que haya al menos un campo seleccionado Y el textarea de comentario tenga contenido.
+                                                                                                                                                               * Escenario 5: Deselección de un campo mal seleccionado
+                                                                                                                                                               * Dado que el administrador tiene uno o más campos seleccionados en el dropdown y el selector sigue desplegado
+                                                                                                                                                               * Cuando desmarca el checkbox de un campo previamente seleccionado
+                                                                                                                                                               * Entonces:
+                                                                                                                                                               * El campo se elimina del input del selector inmediatamente; los demás campos seleccionados permanecen y se reorganizan en el input separados por comas.
+                                                                                                                                                               * Si se deseleccionan todos los campos, el input del selector vuelve a mostrar el placeholder "Selecciona un campo".
+                                                                                                                                                               * El botón "Reportar" se deshabilita automáticamente si no queda ningún campo seleccionado.
+                                                                                                                                                               * La deselección no borra el contenido del textarea de comentario.
+                                                                                                                                                               * Escenario 6: Comportamiento del select de campos a reportar según estado del usuario 
+                                                                                                                                                               * Dado que el administrador accede al módulo
+                                                                                                                                                               * Cuando interactúa con la acción de Reportar usuario
+                                                                                                                                                               * Entonces el sistema debe tener las siguientes validaciones a la hora de reportarle un campo a un usuario:
+Condición (Dado que)
+	Acción (Cuando)
+	Resultado esperado (Entonces)
+	El usuario tiene estado "Reportado" (ya tiene campos reportados previamente sin corregir).
+El administrador abre el modal "Reportar usuario".
+	El administrador hace clic en el select "Selecciona un campo"
+	Los campos que ya fueron reportados previamente se muestran deshabilitados en la lista desplegable.
+No se permite seleccionar nuevamente un campo ya reportado. Pero si le permite reportar los otros campos que se encuentran habilitados debido a que estos no se le han reportado mientras el usuario se encuentra en estado "Reportado" 
+	El usuario reportado actualizó su información y volvió al estado "En revisión".
+El administrador abre nuevamente el modal "Reportar usuario".
+	El administrador hace clic en el select "Selecciona un campo"
+	Todos los campos del listado están habilitados nuevamente.
+El administrador puede reportar cualquier campo, incluso si fue reportado anteriormente.
+	                                                                                                                                                               * Escenario 7: Un comentario se registra de forma independiente por cada campo seleccionado
+                                                                                                                                                               * Dado que el administrador ha seleccionado múltiples campos (ej. Nombre o Razón Social, Dirección, Tipo de Persona) y ha escrito un comentario en el textarea
+                                                                                                                                                               * Cuando hace clic en "Reportar" y el sistema procesa la acción
+                                                                                                                                                               * Entonces:
+                                                                                                                                                               * El backend genera un registro de reporte independiente por cada campo seleccionado, todos asociados al mismo comentario, usuario reportado, administrador responsable y fecha/hora de la acción.
+                                                                                                                                                               * Cada registro se almacena individualmente en la tabla de reportes: { user_id, campo_reportado, comentario, reportado_por, fecha }.
+                                                                                                                                                               * En el historial del admin (tab "Historial de revisiones"), cada campo reportado aparece como una fila separada con la misma fecha, acción "Reportado", revisado por, su campo específico y el comentario compartido.
+                                                                                                                                                               * En la vista del usuario (formulario de facturación), cada campo reportado se muestra como una observación independiente con su propio indicador de error y su comentario, permitiendo al usuario identificar exactamente qué corregir en cada campo.
+                                                                                                                                                               * El estado del usuario cambia a "Reportado" una sola vez, no una vez por campo.
+                                                                                                                                                               * Se registra en logs un único evento de reporte con la lista de campos afectados.
+                                                                                                                                                               * Escenario 8: Reporte del documento adjunto como campo reportable
+                                                                                                                                                               * Dado que el administrador despliega el selector "Selecciona el campo a reportar"
+                                                                                                                                                               * Cuando marca el checkbox "Documento adjunto"
+                                                                                                                                                               * Entonces:
+                                                                                                                                                               * "Documento adjunto" se agrega al input del selector junto con los demás campos seleccionados (si los hay), separado por comas.
+                                                                                                                                                               * El campo se trata como cualquier otro campo reportable: genera su propio registro independiente en el backend con campo_reportado = "documento_adjunto".
+                                                                                                                                                               * En la vista del usuario, el campo de carga de documento muestra el indicador de error y el comentario del admin, igual que cualquier otro campo reportado.
+                                                                                                                                                               * El usuario puede corregir subiendo un nuevo documento; al hacerlo, el flag disabled del campo "Documento adjunto" se elimina y el estado vuelve a "En revisión".
+                                                                                                                                                               * Escenario 9: Validación del botón "Reportar" con selección múltiple
+                                                                                                                                                               * Dado que el administrador está en el modal "Reportar usuario"
+                                                                                                                                                               * Cuando interactúa con el selector y el textarea en cualquier combinación
+                                                                                                                                                               * Entonces el botón "Reportar" solo se habilita (estilo activo, fondo sólido) cuando se cumplan ambas condiciones simultáneamente:
+                                                                                                                                                               * Al menos un campo está seleccionado en el dropdown.
+                                                                                                                                                               * El textarea contiene al menos un carácter (no está vacío ni tiene solo espacios en blanco).
+                                                                                                                                                               * En cualquier otro caso el botón permanece deshabilitado (estilo inactivo, fondo gris). El backend también valida ambas condiciones antes de procesar; rechaza con error 400 si alguna no se cumple.
+                                                                                                                                                               * Escenario 10: Ejecución del reporte y consecuencias 
+                                                                                                                                                               * Dado que el administrador ha completado el modal de reporte (campo + comentario) y hace clic en "Reportar"
+                                                                                                                                                               * Cuando el sistema procesa la acción
+                                                                                                                                                               * Entonces El estado del usuario cambia a "Reportado".
+Se almacena el reporte: user_id, campo_reportado, observación, reportado_por, fecha.
+Se activa el flag has_active_reports = true para mostrar alerta al usuario.
+El backend envía notificación de reporte por correo al correo de registro del usuario.
+Se guarda log del intento de envío (éxito o error) con fecha y hora.
+Si el envío falla, el sistema reintenta en segundo plano (máx. 2 intentos).
+El campo reportado queda marcado como disabled = true en respuestas futuras del backend mientras el usuario esté en estado "Reportado".
+Flujo: Exportación de Datos de Facturación
+                                                                                                                                                                  * Escenario 1: Comportamiento de la acción de "Exportar datos de facturación"
+                                                                                                                                                                  * Dado que el administrador accede al módulo
+                                                                                                                                                                  * Cuando interactúa con la acción de "Exportar datos de facturación"
+                                                                                                                                                                  * Entonces el sistema debe tener los siguientes comportamientos:
+Condición (Dado que)
+	Acción (Cuando)
+	Resultado esperado (Entonces)
+	El administrador está en el módulo de Revisión de facturación sin seleccionar ninguna fila
+	Hace clic en "Exportar datos de facturación"
+	Se descarga un Excel con TODOS los datos de los usuarios del tab/pestaña activo (ej. "En revisión", "Aprobados", etc.).
+La descarga incluye todos los resultados del estado activo, independientemente de cuántas páginas haya en la tabla.
+	El administrador selecciona una o más filas manualmente y hace clic en "Exportar datos de facturación"
+	El sistema procesa la selección
+	Solo se descargan los datos de las filas seleccionadas de la página actual.
+	El administrador marca el checkbox superior para seleccionar todas las filas visibles de la página actual
+	Hace clic en "Exportar datos de facturación"
+	Se descargan solo las filas de la página actual seleccionadas, no todas las páginas.
+	El administrador aplica un filtro de estado y/o filtros adicionales (usuario, correo, etc.) y descarga
+	El sistema aplica los filtros a la exportación
+	La descarga respeta el estado del tab activo y los filtros adicionales como base.
+Para exportar todos los estados, el administrador debe ubicarse en el tab "Todos".
+Solo desde el tab "Todos" la exportación incluye registros de todos los estados.
+	                                                                                                                                                                  * Escenario 2: Estructura y formato del archivo Excel descargado 
+                                                                                                                                                                  * Dado que el administrador confirma la descarga del Excel desde el módulo de Revisión de facturación
+                                                                                                                                                                  * Cuando El backend genera el archivo y el front notifica al usuario que debe redirigirse al módulo de reportes con la opción de que el usuario pueda ser redirigido automáticamente al hacer clic sobre Ver reportes
+                                                                                                                                                                  * Entonces
+                                                                                                                                                                  * El nombre del archivo sigue el patrón: USUARIOS-DATOS-FACTURACION-MM-YYYY.xlsx (mes y año de la fecha de descarga).
+                                                                                                                                                                  * Los datos corresponden a la información más reciente registrada por cada usuario.
+                                                                                                                                                                  * La columna "Estado facturación" muestra el último estado del usuario: En revisión | Pendiente | Aprobado | Reportado.
+                                                                                                                                                                  * Si un campo no ha sido diligenciado, la celda aparece vacía (sin errores).
+                                                                                                                                                                  * La columna "Documento cargado" muestra el nombre del archivo más reciente (ej. DNI_FranciscoGomez.pdf); vacío si no hay archivos, si hay más de un archivo deben ir separados por comas.
+                                                                                                                                                                  * El archivo está en formato UTF-8 compatible con MS Excel y Google Sheets.
+                                                                                                                                                                  * Se registra en logs administrativos quién generó el archivo y cuándo.
+Orden de las columnas del Excel (USUARIO-DATOS-FACTURACION-MM-YYYY.xlsx) — Módulo Revisión de facturación
+#
+	Columna
+	Descripción / Regla
+	1
+	ID USUARIO
+	ID único del usuario en Dropi.
+	2
+	NOMBRE
+	Nombre del usuario
+	3
+	CORREO
+	Email de login del usuario.
+	4
+	MARCA BLANCA
+	Nombre de la marca blanca asociada (si aplica); vacío si no.
+	5
+	ESTADO FACTURACIÓN
+	Último estado fiscal: En revisión | Pendiente | Aprobado | Reportado.
+	6
+	NOMBRE O RAZÓN SOCIAL
+	Nombre completo o razón social según tipo de persona.
+	7
+	PAÍS
+	País seleccionado en el formulario de facturación.
+	8
+	PROVINCIA
+	Provincia seleccionada o escrita por el usuario; vacío si no aplica.
+	9
+	CIUDAD / LOCALIDAD
+	Ciudad seleccionada o escrita; vacío si no aplica.
+	10
+	DIRECCIÓN
+	Dirección fiscal ingresada por el usuario.
+	11
+	EMAIL FACTURACIÓN
+	Correo ingresado para fines tributarios.
+	12
+	NÚMERO DE TELÉFONO
+	Número celular validado.
+	13
+	TIPO PERSONA
+	Persona Humana | Persona Jurídica | Extranjero.
+	14
+	CONDICIÓN FRENTE AL IVA
+	Consumidor Final | IVA Responsable Inscripto | Responsable Monotributo | IVA Exento.
+	15
+	TIPO DOCUMENTO
+	DNI | CUIT | CUIL | Pasaporte | Identificación extranjera.
+	16
+	NÚMERO DE DOCUMENTO
+	Número de documento ingresado por el usuario.
+	17
+	DOCUMENTO CARGADO
+	Nombre(s) del archivo(s) adjunto más reciente (PDF/JPG/PNG). Vacío si no hay archivo cargado.
+	Link del documento: https://docs.google.com/spreadsheets/d/1TpQwXf4oemmLk_LtMoc-CcUleexnlEa2/edit?usp=drive_link&ouid=113808622039589897577&rtpof=true&sd=true [j]
+                                                                                                                                                                  * Escenario 3: Exportación individual desde el modal de revisión (botón "Exportar datos")
+                                                                                                                                                                  * Dado que el administrador está dentro del modal "Datos de facturación" de un usuario específico, independientemente del estado fiscal del usuario (En revisión, Aprobado, Reportado)
+                                                                                                                                                                  * Cuando hace clic en el botón "Exportar datos" ubicado en la sección "Datos de Usuario" del modal
+                                                                                                                                                                  * Entonces:
+                                                                                                                                                                  * El backend genera un archivo Excel con los datos fiscales más recientes únicamente de ese usuario.
+                                                                                                                                                                  * El nombre del archivo sigue el patrón: USUARIO-DATOS-FACTURACION-MM-YYYY.xlsx (mes y año de la fecha de descarga).
+                                                                                                                                                                  * El archivo contiene las mismas columnas estándar del reporte general: ID Usuario, Correo, Marca blanca, Estado facturación, Nombre o Razón Social, País, Provincia, Ciudad/Localidad, Dirección, Email Facturación, Número de teléfono, Tipo Persona, Condición frente al IVA, Tipo Documento, Número de Documento, Documento(s) cargado(s).
+                                                                                                                                                                  * La columna "Documento(s) cargado(s)" muestra el nombre del archivo más reciente; si hay más de un archivo, van separados por comas; vacío si no hay archivos cargados.
+                                                                                                                                                                  * Si un campo no ha sido diligenciado, la celda aparece vacía sin generar errores.
+                                                                                                                                                                  * El archivo está en formato UTF-8 compatible con MS Excel y Google Sheets.
+                                                                                                                                                                  * La descarga se inicia directamente desde el modal, sin redirigir al módulo de reportes.
+                                                                                                                                                                  * Se registra en logs administrativos: quién generó el archivo, el ID del usuario exportado y la fecha y hora de la acción.
+
+Flujo: Reporte Excel desde Órdenes
+                                                                                                                                                                     * Escenario 1: Estructura del Excel descargado desde Órdenes(Dropshippers y Suppliers)
+                                                                                                                                                                     * Dado que El administrador está en el módulo "Órdenes" (Dropshippers o Suppliers) y ha seleccionado "Facturación Dropshippers" o "Facturación Suppliers autofill"
+                                                                                                                                                                     * Cuando hace clic en el botón de descarga
+                                                                                                                                                                     * Entonces Se genera el archivo Excel correspondiente a cada acción ("Facturación Dropshippers" o "Facturación Suppliers autofill")
+Los datos corresponden a la información más reciente registrada por cada usuario.
+La columna "Estado facturación" muestra el último estado del usuario: En revisión | Pendiente | Aprobado | Reportado.
+Si el usuario no tiene datos de facturación, las nuevas columnas se dejan en blanco sin alterar el resto de la fila.
+Orden de las columnas del Excel — Módulo Órdenes
+#
+	Columna
+	Descripción / Regla
+	1
+	ID (columna ya existente en el reporte)
+	ID único del usuario en Dropi.
+	2
+	NOMBRE (columna ya existente en el reporte)
+	Nombre del usuario
+	3
+	EMAIL (columna ya existente en el reporte)
+	Email de login del usuario.
+	4
+	COMISIÓN COMO DROPSHIPPER (columna ya existente en el reporte)
+	Columna ya existente en el reporte excel, no se debe modificar su comportamiento.
+	5
+	FLETE (columna ya existente en el reporte)
+	Columna ya existente en el reporte excel, no se debe modificar su comportamiento.
+	6
+	FLETE DEVOLUCIÓN (columna ya existente en el reporte)
+	Columna ya existente en el reporte excel, no se debe modificar su comportamiento.
+	7
+	FULFILLMENT (columna ya existente en el reporte)
+	Columna ya existente en el reporte excel, no se debe modificar su comportamiento.
+	8
+	NOMBRE O RAZÓN SOCIAL.
+	Nombre completo o razón social según tipo de persona.
+	9
+	ESTADO FACTURACIÓN
+	Último estado fiscal: En revisión | Pendiente | Aprobado | Reportado.
+	10
+	PAÍS
+	País seleccionado en el formulario de facturación.
+	11
+	PROVINCIA
+	Provincia seleccionada o escrita por el usuario; vacío si no aplica.
+	12
+	CIUDAD / LOCALIDAD
+	Ciudad seleccionada o escrita; vacío si no aplica.
+	13
+	DIRECCIÓN
+	Dirección fiscal ingresada por el usuario.
+	14
+	EMAIL FACTURACIÓN
+	Correo ingresado para fines tributarios.
+	15
+	NÚMERO DE TELÉFONO
+	Número celular validado.
+	16
+	TIPO PERSONA
+	Persona Humana | Persona Jurídica | Extranjero.
+	17
+	CONDICIÓN FRENTE AL IVA
+	Consumidor Final | IVA Responsable Inscripto | Responsable Monotributo | IVA Exento.
+	18
+	TIPO DOCUMENTO
+	DNI | CUIT | CUIL | Pasaporte | Identificación extranjera.
+	19
+	NÚMERO DE DOCUMENTO
+	Número de documento ingresado por el usuario.
+	Link del documento: https://docs.google.com/spreadsheets/d/19AQNgQmuzGAN2_PMGOq4B30d6vAsN-D6/edit?usp=drive_link&ouid=113808622039589897577&rtpof=true&sd=true 
+
+
+________________
+
+
+3. RECOMENDACIONES / COMENTARIOS / CONSIDERACIONES
+🛠️ Recomendaciones Técnicas
+                                                                                                                                                                        * Reutilizar el módulo de Ecuador/Chile como base, no construir desde cero
+La ventana de tiempo es crítica (hay que facturar abril en mayo). Los cambios principales para Argentina son los catálogos (tipo de persona, condición IVA, tipos de documento, documentos requeridos), las reglas de validación del número de documento y el faseo de los bloqueos. Construir desde cero es un riesgo de tiempo innecesario. Mapear primero qué se reutiliza vs. qué se adapta como primera acción del equipo tech.
+                                                                                                                                                                        * Catálogos configurables por país en base de datos, no hardcodeados
+Los tipos de persona, condiciones de IVA, tipos de documento y documentos requeridos deben almacenarse en base de datos (no en el código), para permitir ajustes ágiles ante cambios normativos sin necesidad de deploys. La normativa de AFIP/ARCA puede actualizarse; un cambio hardcodeado implica un ciclo completo de desarrollo y despliegue para algo que debería ser configuración.
+                                                                                                                                                                        * Almacenamiento seguro de documentos con URLs temporales firmadas
+Los documentos cargados (DNI, constancias ARCA/AFIP) son datos sensibles. Deben almacenarse en un bucket privado (ej. S3) con acceso restringido. El acceso debe entregarse mediante URLs temporales firmadas con expiración corta, tanto para el usuario (visor en el formulario) como para el admin (visor en el modal de revisión). No deben existir rutas públicas estáticas para estos archivos en ningún contexto.
+                                                                                                                                                                        * Control de acceso granular por rol en todos los endpoints del módulo admin
+El módulo de revisión es exclusivo para administradores Dropi. Ningún endpoint debe responder a solicitudes de administradores de marcas blancas ni a usuarios regulares. La validación de rol debe hacerse en el backend en cada request, no confiar solo en que el frontend oculte el menú. Incluir pruebas de autorización en el ciclo de QA.
+                                                                                                                                                                        * Auditoría completa de cambios en datos fiscales
+Todo cambio en datos fiscales debe quedar registrado: campo modificado, valor anterior, valor nuevo, usuario que editó, fecha, hora e IP/dispositivo. Esto es crítico para responder ante auditorías del fisco argentino. Aplica también para las acciones del admin (quién aprobó, quién reportó, cuándo). El log de generación de Excel también debe registrarse por las mismas razones.
+                                                                                                                                                                        * Estado fiscal centralizado como fuente única de verdad para módulos financieros
+El campo fiscal_status del usuario impacta en el acceso a módulos financieros (retiros, transferencias, etc.). Debe existir una única fuente de verdad consultada por todos los módulos. Evitar lógicas duplicadas donde cada módulo implementa su propia validación del estado fiscal. Un estado desincronizado puede llevar a situaciones donde el admin aprueba pero el usuario sigue bloqueado, o viceversa.
+                                                                                                                                                                        * Sistema de envío de correos con reintentos y logging obligatorio
+El correo de notificación al usuario cuando el admin reporta un error o aprueba los datos es un elemento crítico del flujo de aprobación/reportar. El sistema debe tener manejo explícito de fallos con máximo 2 reintentos automáticos y registro de cada intento (exitoso o fallido) con fecha y hora. Esto permite trazabilidad ante reclamos de usuarios que afirmen no haber recibido la notificación.
+💡 Consideraciones de Negocio
+                                                                                                                                                                           * El bloqueo de wallet es el gatillo de activación más poderoso del proyecto
+El usuario solo completará sus datos cuando sienta el impacto directo. El copy del bloqueo es la primera y más importante palanca de conversión: debe explicar QUÉ está bloqueado, POR QUÉ y QUÉ gana al completar. Validar el mensaje con UX antes del go-live. Un copy ambiguo generará tickets de soporte masivos.
+                                                                                                                                                                           * Comunicar el proceso antes del bloqueo, no después
+Enviar una comunicación proactiva (email + push notification) antes del lanzamiento explicando el proceso reduce el shock. Los usuarios que llegan al bloqueo sin contexto previo generan mayor fricción, más tickets y menor tasa de completitud. Basado en la experiencia de Ecuador (54% de cobertura), Argentina necesita una estrategia de activación más agresiva dado el contexto de alerta bancaria.
+                                                                                                                                                                           * Definir y publicar el SLA de revisión desde el día 1
+Sin un tiempo máximo de respuesta acordado, el usuario queda en estado "En revisión" indefinidamente, sin saber cuándo podrá operar. Recomendamos 48 horas hábiles como SLA inicial y mostrarlo en la interfaz después del envío del formulario. Esto reduce ansiedad, tickets de soporte y abandono.
+                                                                                                                                                                           * El pico de registros inicial superará la capacidad del equipo financiero
+Chile recibió más de 1.000 solicitudes en los primeros días. Argentina, con el bloqueo de wallet, generará un pico aún más concentrado. Definir con anticipación si el equipo financiero argentino tendrá apoyo desde Colombia u otros países durante las primeras semanas. Sin plan de capacidad, el panel admin se convierte en un cuello de botella que bloquea a usuarios legítimos.
+                                                                                                                                                                           * Actualizar T&C antes del go-live, no después
+La recolección de datos tributarios y su uso para facturación electrónica requiere que los usuarios hayan aceptado explícitamente. Los T&C y la política de privacidad en Argentina deben estar actualizados y los checkboxes del formulario deben tener respaldo legal antes del lanzamiento. Confirmar con legal el estado de esta actualización como bloqueante del go-live.
+⚖️ Riesgos Detectados
+                                                                                                                                                                              * Represamiento en el panel admin por falta de capacidad de revisión
+Sin personal suficiente para revisar el pico inicial de registros, cientos de usuarios quedarán en estado "En revisión" por días, bloqueados de sus módulos financieros. Esto genera escalaciones, tickets y presión operativa. El panel admin debe diseñarse para eficiencia de revisión en volumen (acciones rápidas, filtros útiles, historial claro). Adicionalmente, planificar la capacidad del equipo antes del lanzamiento.
+                                                                                                                                                                              * Documentos mal cargados generarán alto volumen de reportes y re-trabajo
+La experiencia en Ecuador mostró que una proporción significativa de usuarios carga documentos incorrectos, ilegibles o del tipo equivocado. Cada error requiere un ciclo de reporte → corrección → re-revisión que consume tiempo del equipo financiero. Mitigación: instrucciones claras y ejemplos visuales junto a cada campo de carga, y validación de formato/peso en el momento del upload (no solo al guardar).
+                                                                                                                                                                              * Cambios normativos en AFIP/ARCA sin aviso previo
+La normativa de facturación electrónica en Argentina puede cambiar (campos requeridos, tipos de documento, categorías de IVA). Si los catálogos están hardcodeados en el código, cualquier cambio normativo implica un ciclo completo de desarrollo y despliegue. El módulo debe ser configurable por país para incorporar cambios ágiles sin deploys. Mitigación directa: implementar[k] catálogos en base de datos desde el inicio.[l]
+                                                                                                                                                                              * Desincronización de estado fiscal entre módulos del sistema
+El fiscal_status del usuario impacta en múltiples módulos (retiros, transferencias, alertas en Home, etc). Si hay inconsistencias entre el estado que ve el admin y el que aplica el sistema al usuario, pueden ocurrir situaciones críticas: usuario aprobado que sigue bloqueado, o usuario rechazado que puede operar. Requiere pruebas de integración exhaustivas entre el módulo admin y los módulos financieros del usuario.
+                                                                                                                                                                              * Cobertura insuficiente al primer cierre mensual de facturación
+Aunque el módulo esté listo, si la tasa de registro y aprobación es baja al cierre del mes, el informe descargable tendrá un número significativo de usuarios sin datos. Sin un protocolo definido (¿se omiten? ¿se gestionan manualmente? ¿se aplaza la factura?), el equipo financiero operará con incertidumbre. Definir este protocolo antes del lanzamiento y documentarlo en el flujo del panel admin.
+
+
+🫀 Hallazgos following
+📈 Hallazgos Following (Monitoreo Post-Lanzamiento)
+Propósito: Monitorear el comportamiento real de los usuarios (Brands), validar las hipótesis del discovery y registrar iteraciones o errores detectados en producción.
+🔗 Fuentes de Información y Control
+                                                                                                                                                                                 * 📊 Link de Dashboard: [Enlace a Mixpanel / Looker Studio / Amplitude para ver las métricas en tiempo real]
+                                                                                                                                                                                 * 📓 Link de Bitácora: [Enlace al documento de registro de bugs, feedback de soporte o despliegues]
+________________
+
+
+🗓️ Ciclo de Seguimiento Actual
+                                                                                                                                                                                 * 🟢 Fecha de inicio following: [DD/MM/AAAA] (Cuándo se empezó a trackear este comportamiento o cuándo se lanzó la fase).
+                                                                                                                                                                                 * 🔍 Fecha de review: [DD/MM/AAAA] (Fecha de la sesión de alineación del equipo para evaluar los datos).
+                                                                                                                                                                                 * Países en implementación Vs. Países en following
+________________
+
+
+📝 Resumen Semanal
+(Espacio para sintetizar el comportamiento de los KPI norte, adopción y salud del producto en los últimos 7 días).
+                                                                                                                                                                                 * Métricas Clave de la Semana:
+                                                                                                                                                                                 1. [Métrica 1, ej: Conversión]: [Valor actual] vs [Valor esperado] (📈/📉).
+                                                                                                                                                                                 * Principales Hallazgos:
+                                                                                                                                                                                 1. 💡 [Hallazgo de negocio/UX, ej: Las marcas abandonan el flujo si el procesamiento tarda más de 20s].
+________________
+
+
+💬 Comentarios, Conclusiones y Próximos Pasos
+                                                                                                                                                                                 * Notas del equipo (PM/PD/Dev): * [Comentario sobre fricciones detectadas o comportamientos inesperados de los usuarios].
+                                                                                                                                                                                 * Acciones Inmediatas (Next Steps):
+                                                                                                                                                                                 * [ ] Apagar/Ajustar el feature flag de...
+                                                                                                                                                                                 * [ ] Priorizar en el backlog el fix para...
+
+
+[a]Este enlace no funciona
+[b]@gustavo.espinoza@dropi.co tener en cuenta las fases
+_Asignada a gustavo.espinoza@dropi.co_
+[c]@gustavo.espinoza@dropi.co asi debe quedar Cuentas bancarias, solo la alerta pero sin el bloqueo del botón. Ya quedo corregido el figma
+_Asignada a gustavo.espinoza@dropi.co_
+[d]a eso me refiero en el comentario de abajo
+[e]Entonces necesito hacer el ajuste porque ya se había implementado el bloqueo sobre esta funcionalidad
+[f]dale, que pena contigo. Me confíe con el figma pero aquí se había definido otra cosa y esta es la que esta alineada con los equipos. 
+
+
+Muchas gracias, revisa el figma que ya quedo sin ese botón bloqueado en ninguna de las alertas @gustavo.espinoza@dropi.co
+1 reacción en total
+Gustavo Espinoza reaccionó con 👍 a la/s 2026-07-16 4:17 p.m. UTC
+[g]@gustavo.espinoza@dropi.co tener en cuenta que mostrar alertas no es = a bloquear los clics en los botones. Solo se bloquean: Transferencias entre wallets y Procesar retiros.
+_Asignada a gustavo.espinoza@dropi.co_
+[h]Tener en cuenta para todos los bloqueos, me puse a revisar y en el diseño quedo un botón bloqueado que no va que es el de AGREGAR en Datos Bancarios. Una disculpa
+[i]Sí, @paula.macias@dropi.co, las alertas se manejan por separado; estas se gestionan con base en los estados de los datos de facturación.
+
+
+Los bloqueos solo son en los botones (se incluyó un tooltip indicando al usuario el porqué del bloqueo) y están relacionados al switch y al comportamiento normal del flujo de revisión; por ejemplo: cuando los datos están en revisión, las herramientas financieras aparecen bloqueadas aunque el switch esté habilitado.
+[j]Solicite acceso a este documento
+[k]El tema son los campos que dependen de los valores de otros, ahí sí por más que los configuremos en la db, igualmente tocaría implementar la lógica para los filtros de los dropdowns
+[l]Los cambios en la base de datos requieren control de versiones (migraciones) que igualmente requieren desarrollo y despliegue
