@@ -89,6 +89,34 @@
 *   **Cuentas VIP / Top Sellers:** `146.642 órdenes` (**4,66%** del volumen).
 *   **Dropshippers Puros / Orgánicos:** `46.065 órdenes` (**1,46%** del volumen).
 
+---
+
+## ⚡ Programa de Acompañamiento Comercial 360 & Cuidado de Campañas
+
+> **Insumo:** Data maestra de 4.939 campañas acompañadas y 251 Sellers Pareto (Junio - Julio 2026).
+
+### 📈 1. Crecimiento de Volumen de Órdenes Acompañadas
+* **Mayo 2026:** `167.837 órdenes` (419.080 unidades).
+* **Junio 2026:** **`380.648 órdenes`** (534.152 unidades).  
+* **Impacto Comercial:** Crecimiento explosivo del **+126,8% MoM** en el volumen respaldado con acompañamiento comercial directo.
+
+### 🛡️ 2. Protección de Inventario & Privatización de Catálogo
+* **315 Campañas** cuentan con acuerdo de **Producto Privatizado / Stock Reservado con Proveedor** para blindar el inventario durante el escalamiento de pauta y prevenir quiebres de stock.
+
+### 👑 3. Top Sellers Pareto 360 (Vendedores Élite Acompañados)
+| ID Seller | Nombre del Seller / Comercio | KAM Asignado | Órdenes Mensuales | Producto Ganador Acompañado |
+| :---: | :--- | :--- | :---: | :--- |
+| **`87669`** | **Joan Sebastián Otero Muriel** | Angela Ivone Parrado | **21.687 ord** | Gel Recubrimiento V |
+| **`651604`** | **Carlos Vergara** | Isabella Villa Sepúlveda | **11.685 ord** | Varicose Veins Crema |
+| **`561133`** | **Faja Compresión Perfecta** | Sara Victoria Hurtado | **11.397 ord** | Faja Compresión |
+| **`15752`** | **Adriel Mandrá Faccini** | Isabella Villa Sepúlveda | **11.194 ord** | Oxímetro Medilisk |
+| **`63986`** | **Mariana Gómez** | Angela Ivone Parrado | **9.701 ord** | Slim Patch x 30 |
+| **`142560`** | **Augusto Genghammer** | Angela Ivone Parrado | **8.786 ord** | Parches Detox Kin |
+| **`760323`** | **Víctor Vargas** | Angela Ivone Parrado | **8.108 ord** | Shampoo en Barra x2 |
+| **`256887`** | **Natalia Mina** | Angela Ivone Parrado | **6.725 ord** | Taladro Inalámbrico |
+| **`214986`** | **María Alarcón** | Isabella Villa Sepúlveda | **6.299 ord** | Serum + Hilo tensor |
+| **`571994`** | **Carlos Muñoz** | Paula Madroñero | **6.229 ord** | Crema Avanzada Arrugas |
+
 ### 📦 3. Volumen de Órdenes Movilizadas (Comparativa: Corte 29-Jul vs. Cierre Definitivo Julio 2026)
 | País | Cierre JUN | Corte 29-JUL *(Foto Congelada)* | Cierre Definitivo JUL | Remate Final (Delta) | % Crec. MoM | Meta Julio | % Cumplimiento | Status vs Meta |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
