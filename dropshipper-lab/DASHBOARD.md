@@ -10,12 +10,12 @@
 
 ### 📊 Contrastación Meta vs. Realidad
 
-| Métrica / Outcome | Realidad Actual | Meta S2 (Q3-Q4) | Brecha / Status | Definición & Fuente |
+| Métrica / Outcome | Realidad Actual (Cierre JUL) | Meta S2 (Q3-Q4) | Brecha / Status | Definición & Fuente |
 | :--- | :---: | :---: | :---: | :--- |
-| **OKR 1 / KR 1.1 (Compañía)** | **3.351.359 ord/mes** | **7.800.000 ord/mes** | 🔴 **-4.448.641 ord** (42.9% cumpl.) | OKR 1.1 Holding (Confluence Space PD) |
-| **NSM (Métrica Estrella Célula)**| **3.351.359 ord/mes** | **3.571.042 ord/mes** | 🟡 **-219.683 ord** (97.5%) | Órdenes mensuales movilizadas (Reporte CPO Jul 29) |
+| **OKR 1 / KR 1.1 (Compañía)** | **3.687.786 ord/mes** | **7.800.000 ord/mes** | 🔴 **-4.112.214 ord** (47.3% cumpl.) | OKR 1.1 Holding (Confluence Space PD) |
+| **NSM (Métrica Estrella Célula)**| **3.687.786 ord/mes** | **3.571.042 ord/mes** | 🟢 **+116.744 ord** (103.3%) | Órdenes mensuales movilizadas (Cierre Oficial CPO Julio 2026) |
 | **Tasa de Activación Neta** | **5.2%** | **8.0%** | 🔴 **-2.8 pp** (Falta +53.8%) | Sellers registrados con $\ge 1$ orden entregada |
-| **Tasa de Activación Bruta** | **7.6%** | **12.0%** | 🔴 **-4.4 pp** | Sellers registrados with $\ge 1$ orden creada (TTFO) |
+| **Tasa de Activación Bruta** | **7.6%** | **12.0%** | 🔴 **-4.4 pp** | Sellers registrados con $\ge 1$ orden creada (TTFO) |
 | **Mediana de TTV Neto** | **16.0 días** | **< 12.0 días** | 🔴 **+4.0 días** (+25% latencia) | Días de registro a 1ª orden entregada |
 | **Mediana de TTV Bruto** | **7.4 días** | **< 4.0 días** | 🔴 **+3.4 días** | Días de registro a 1ª orden creada |
 | **Supervivencia 30d (Retención)** | **69.38%** (69.7%) | **75.0%** | 🟡 **-5.62 pp** (Brecha 7.5%) | % de sellers con actividad pasados 30 días (`es_activo_30d`) |
@@ -26,7 +26,7 @@
 ## 📈 Métricas de Volumen y Comportamiento Operativo
 
 *   **Sellers Registrados (Histórico):** 397.000 (397k)
-*   **Usuarios Identificados en DB Célula:** 46.208 (36.056 Dropshippers puros)
+*   **Usuarios Identificados en DB Célula (UserPilot Sync):** 31.952 registrados únicos sincronizados
 *   **Usuarios Activos Diarios (DAU):** 14.262 usuarios/día (Userpilot UI)
 *   **Usuarios Activos Mensuales (MAU):** 81.521 usuarios/mes (Userpilot UI - Tráfico global)
 *   **Mediana días a 2ª orden:** 0,8 días (Promedio: 5,0 días)
@@ -52,20 +52,20 @@
 *   *Perú:* 52,0%
 *   *Argentina:* 44,4%
 
-### 📦 3. Volumen de Órdenes Movilizadas (1 al 29 de Julio 2026 - Datos Oficiales CPO)
-| País | Cierre Junio | del 1 al 29 de JUN | del 1 al 29 de JUL | % Crecimiento | Meta Julio | % Proy. cumplimiento |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| 🇨🇴 COLOMBIA | 2.537.091 | 2.424.403 | 2.430.474 | +0,25% | 2.664.050 | 97,52% |
-| 🇪🇨 ECUADOR | 248.618 | 240.601 | 261.436 | +8,65% | 234.096 | 119,38% |
-| 🇨🇱 CHILE | 232.625 | 224.607 | 232.894 | +3,68% | 235.685 | 105,63% |
-| 🇲🇽 MÉXICO | 231.459 | 224.206 | 219.393 | -2,14% | 229.163 | 102,33% |
-| 🇬🇹 GUATEMALA | 126.010 | 120.992 | 147.391 | +21,81% | 133.829 | 117,72% |
-| 🇵🇾 PARAGUAY | 25.862 | 24.902 | 27.718 | +11,30% | 30.412 | 97,42% |
-| 🇵🇦 PANAMÁ | 23.400 | 22.352 | 21.875 | -2,13% | 26.826 | 87,16% |
-| 🇦🇷 ARGENTINA | 12.091 | 11.775 | 9.934 | -15,63% | 12.682 | 83,73% |
-| 🇨🇷 COSTA RICA | 2.803 | 2.699 | 4.011 | +48,61% | 3.290 | 130,32% |
-| 🇵🇪 PERÚ | 841 | 811 | 622 | -23,30% | 1.009 | 65,89% |
-| **GLOBAL** | **3.435.363** | **3.292.025** | **3.351.359** | **+1,80%** | **3.571.042** | **100,32%** |
+### 📦 3. Volumen de Órdenes Movilizadas (Comparativa: Corte 29-Jul vs. Cierre Definitivo Julio 2026)
+| País | Cierre JUN | Corte 29-JUL *(Foto Congelada)* | Cierre Definitivo JUL | Remate Final (Delta) | % Crec. MoM | Meta Julio | % Cumplimiento | Status vs Meta |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 🇨🇴 COLOMBIA | 2.537.148 | 2.430.474 *(97,52%)* | **2.671.864** | **+241.390** | +5,30% | 2.664.050 | **100,29%** | 🟢 Superó Meta (+7.814) |
+| 🇪🇨 ECUADOR | 248.618 | 261.436 *(119,38%)* | **286.380** | **+24.944** | +15,18% | 234.096 | **122,33%** | 🟢 Superó Meta (+52.284) |
+| 🇨🇱 CHILE | 232.626 | 232.894 *(105,63%)* | **254.878** | **+21.984** | +9,56% | 235.685 | **108,14%** | 🟢 Superó Meta (+19.193) |
+| 🇲🇽 MÉXICO | 231.484 | 219.393 *(102,33%)* | **243.053** | **+23.660** | +4,99% | 229.163 | **106,06%** | 🟢 Superó Meta (+13.890) |
+| 🇬🇹 GUATEMALA | 126.014 | 147.391 *(117,72%)* | **161.217** | **+13.826** | +27,93% | 133.829 | **120,46%** | 🟢 Superó Meta (+27.388) |
+| 🇵🇾 PARAGUAY | 25.861 | 27.718 *(97,42%)* | **30.293** | **+2.575** | +17,13% | 30.412 | **99,60%** | 🟨 Cerca (Faltan 119) |
+| 🇵🇦 PANAMÁ | 23.400 | 21.875 *(87,16%)* | **23.730** | **+1.855** | +1,41% | 26.826 | **88,45%** | 🔴 Bajo Meta (-3.096) |
+| 🇦🇷 ARGENTINA | 12.091 | 9.934 *(83,73%)* | **11.201** | **+1.267** | -7,36% | 12.682 | **88,32%** | 🔴 Bajo Meta (-1.481) |
+| 🇨🇷 COSTA RICA | 2.803 | 4.011 *(130,32%)* | **4.442** | **+431** | +58,47% | 3.290 | **135,01%** | 🟢 Superó Meta (+1.152) |
+| 🇵🇪 PERÚ | 841 | 622 *(65,89%)* | **728** | **+106** | -13,43% | 1.009 | **72,15%** | 🔴 Bajo Meta (-281) |
+| **GLOBAL** | **3.440.886** | **3.351.359 *(100,32%)*** | **3.687.786** | **+336.427** | **+7,17%** | **3.571.042** | **103,26%** | 🟢 **Meta Superada (+116.744)** |
 
 ---
 
