@@ -80,6 +80,19 @@ context/                 → se crea en el setup (tu datos van aquí)
   drafts/                → borradores en progreso
 ```
 
+## Copilotos de IA (Agentes Claude)
+
+En la carpeta `.claude/agents/` del monorepo viven las definiciones de los agentes Claude especializados que actúan como "cerebros" del equipo. Puedes invocarlos directamente en el entorno de desarrollo:
+
+1. **Agente de Discovery (`discovery.md`):**
+   - **Propósito:** El estratega conductual y de producto. Diseña hipótesis conductuales, evalúa flujos visuales y redacta el *Intervention Brief* (el sustento conductual obligatorio para las épicas).
+   - **Manual de uso:** Toda la teoría de Fogg ($B=MAP$), Procesamiento Dual y el ciclo de decisión está documentada en [manual_uso_agente_discovery.md](file:///Users/santiago.herrera/.gemini/antigravity-ide/brain/e04d1a50-a314-4625-b7d1-6369cc84f23f/manual_uso_agente_discovery.md).
+   - **Triggers de activación:** Escribe `B=MAP`, `Intervention Brief`, `sesgo`, o `comportamiento` para activarlo.
+
+2. **Agente Dropi Brain (`dropi-brain.md`):**
+   - **Propósito:** Validador del canon estructural. Mantiene unificado el formato de los documentos y el indexado del Research Brain (`research-brain/`).
+   - **Triggers de activación:** Escribe `dropi-brain` o pregunta `¿esto sigue el formato oficial?` para activarlo.
+
 ## Comandos principales
 
 | Skill | Qué hace |

@@ -1,0 +1,975 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Leyendas Dropi — Tu Wrapped 2025</title>
+<!-- Google Fonts: Chakra Petch & Rationale -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700;800&family=Rationale&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #050209;
+    --paper: #f4f2f7;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+    
+    /* Leyendas Palette */
+    --color-iniciado: #EAEAEA;
+    --color-experto: #7f7f7f;
+    --color-maestro: #FF8500;
+    --color-sabia: #FF4800;
+    --color-leyenda: #FF0000;
+    
+    --primary-gradient: linear-gradient(135deg, var(--color-maestro), var(--color-leyenda));
+    --pink-gradient: linear-gradient(135deg, var(--color-sabia), var(--color-leyenda));
+    --gold-gradient: linear-gradient(135deg, #ffd23f, var(--color-maestro));
+    
+    --orange-glow: 0 0 30px rgba(255, 133, 0, 0.45);
+    --red-glow: 0 0 30px rgba(255, 0, 0, 0.45);
+    
+    font-family: 'Chakra Petch', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  html, body {
+    height: 100%;
+    background: #020104;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #1b0c03 0%, #030107 100%);
+  }
+
+  /* ---------- Stage (Premium Smartphone frame on desktop) ---------- */
+  #stage {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    max-width: 412px;
+    max-height: 892px; /* iPhone 15 Pro resolution ratio */
+    background: var(--ink);
+    overflow: hidden;
+    user-select: none;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 72, 0, 0.2);
+    transition: all 0.5s var(--ease);
+  }
+  
+  @media(min-width: 480px) {
+    #stage {
+      border: 8px solid rgba(255, 255, 255, 0.08);
+      border-radius: 44px;
+      height: 90vh;
+    }
+    
+    /* Device Dynamic Island simulator */
+    #stage::before {
+      content: "";
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 28px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 50;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+    }
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 70px 28px 100px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+    color: #fff;
+    overflow: hidden;
+    background-size: 200% 200% !important;
+    animation: gradientShift 10s ease infinite;
+  }
+  
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+  }
+
+  /* ---------- Gradients per slide (Leyendas brand palette) ---------- */
+  .g0 { background: radial-gradient(circle at 10% 10%, rgba(234, 234, 234, 0.25) 0%, #0d0d0d 60%, #050209 100%); } /* Iniciado */
+  .g1 { background: radial-gradient(circle at 90% 10%, rgba(127, 127, 127, 0.3) 0%, #141414 60%, #050209 100%); } /* Experto */
+  .g2 { background: radial-gradient(circle at 10% 90%, #FF8500 0%, #241100 60%, #050209 100%); } /* Maestro */
+  .g3 { background: radial-gradient(circle at 90% 90%, #FF4800 0%, #2e0800 60%, #050209 100%); } /* Sabia */
+  .g4 { background: radial-gradient(circle at 50% 10%, #FF0000 0%, #300000 60%, #050209 100%); } /* Leyenda */
+  .g5 { background: radial-gradient(circle at 20% 50%, #FF8500 0%, #1b092c 55%, #050209 100%); }
+  .g6 { background: radial-gradient(circle at 80% 80%, #FF4800 0%, #260020 60%, #050209 100%); }
+  .g7 { background: radial-gradient(circle at 50% 20%, #7f7f7f 0%, #190924 65%, #050209 100%); }
+  .g8 { background: radial-gradient(circle at 50% 50%, #7f7f7f 0%, #150920 60%, #050209 100%); }
+  .g9 { background: radial-gradient(circle at 50% 0%, #FF8500 0%, #2a0b00 50%, #050209 100%); }
+
+  /* ---------- Typography & Elements ---------- */
+  .kicker {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-maestro);
+    text-shadow: 0 0 10px rgba(255,133,0,0.3);
+    margin-bottom: 16px;
+  }
+  
+  .big {
+    font-size: clamp(52px, 16vw, 92px);
+    font-weight: 800;
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    background: linear-gradient(to right, #fff, #ffe2cc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .med {
+    font-size: clamp(30px, 9vw, 40px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  
+  .lede {
+    font-size: clamp(17px, 5vw, 21px);
+    font-weight: 500;
+    line-height: 1.4;
+    opacity: 0.92;
+  }
+  
+  .sub {
+    font-size: 14px;
+    font-weight: 400;
+    color: #e5def5;
+    margin-top: 14px;
+    line-height: 1.5;
+  }
+  
+  .accent {
+    color: var(--color-maestro);
+    background: rgba(255, 133, 0, 0.12);
+    padding: 0.15em 0.4em;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 133, 0, 0.2);
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(255, 133, 0, 0.25);
+  }
+  
+  .up {
+    display: inline-block;
+  }
+
+  /* Entry animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  }
+  
+  .slide.active .reveal {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .slide.active .d1 { transition-delay: 0.15s; }
+  .slide.active .d2 { transition-delay: 0.3s; }
+  .slide.active .d3 { transition-delay: 0.48s; }
+  .slide.active .d4 { transition-delay: 0.68s; }
+
+  .pop {
+    transform: scale(0.85) translateY(10px);
+    opacity: 0;
+    transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  }
+  
+  .slide.active .pop {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  /* ---------- Progress bars (Top) ---------- */
+  #bars {
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    gap: 5px;
+    z-index: 40;
+  }
+  
+  @media(max-width: 479px) {
+    #bars {
+      top: 16px;
+    }
+  }
+  
+  .bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+  }
+  
+  .bar > i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: #fff;
+    border-radius: 3px;
+    box-shadow: 0 0 8px #fff;
+  }
+  
+  .bar.done > i {
+    width: 100%;
+  }
+  
+  .bar.run > i {
+    animation: fill var(--dur, 6s) linear forwards;
+  }
+  
+  @keyframes fill {
+    to { width: 100%; }
+  }
+
+  /* ---------- Top brand row ---------- */
+  #brand {
+    position: absolute;
+    top: 64px;
+    left: 22px;
+    right: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 30;
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  @media(max-width: 479px) {
+    #brand {
+      top: 30px;
+    }
+  }
+  
+  #brand .brand-logo-img {
+    height: 16px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 6px rgba(255, 0, 0, 0.6));
+  }
+  
+  #brand .logo-wrapped {
+    font-family: 'Chakra Petch', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0.8;
+  }
+
+  /* ---------- Nav touch zones ---------- */
+  .nav {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 30%;
+    z-index: 20;
+    cursor: pointer;
+  }
+  
+  .nav.left {
+    left: 0;
+  }
+  
+  .nav.right {
+    right: 0;
+    width: 70%;
+  }
+
+  /* ---------- Metric display cards ---------- */
+  .metric {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  
+  .metric .unit {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffd9bf;
+  }
+  
+  .delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    font-size: 14.5px;
+    font-weight: 800;
+    background: rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 16px;
+    border-radius: 99px;
+    backdrop-filter: blur(10px);
+  }
+  
+  .delta b {
+    color: var(--color-maestro);
+  }
+
+  /* Progress Ring gradient-styled */
+  .ring {
+    width: 190px;
+    height: 190px;
+    margin: 20px auto 10px;
+    position: relative;
+  }
+  
+  .ring svg {
+    transform: rotate(-90deg);
+  }
+  
+  .ring .val {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #fff, var(--color-maestro));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .ringtrack {
+    stroke: rgba(255, 255, 255, 0.08);
+  }
+  
+  .ringbar {
+    stroke: url(#ringGrad);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.4s var(--ease) 0.3s;
+    filter: drop-shadow(0 0 8px rgba(255, 133, 0, 0.5));
+  }
+
+  /* Goal bar */
+  .goal {
+    margin-top: 24px;
+  }
+  
+  .goal .track {
+    height: 18px;
+    border-radius: 99px;
+    background: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+  }
+  
+  .goal .track > i {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--color-maestro), var(--color-leyenda));
+    box-shadow: 0 0 12px rgba(255, 133, 0, 0.4);
+    transition: width 1.6s var(--ease) 0.4s;
+  }
+  
+  .goal .lbl {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #e5def5;
+  }
+
+  /* Chips leaderboards (Glassmorphic cards) */
+  .chips {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 18px;
+    padding: 14px 18px;
+    backdrop-filter: blur(12px);
+    transition: all 0.3s var(--ease);
+  }
+  
+  .chip:hover {
+    transform: translateX(4px);
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.06);
+  }
+  
+  .chip .rank {
+    font-size: 19px;
+    font-weight: 800;
+    width: 24px;
+    color: var(--color-maestro);
+  }
+  
+  .chip .name {
+    font-weight: 600;
+    font-size: 16px;
+  }
+  
+  .chip .qty {
+    margin-left: auto;
+    font-weight: 800;
+    font-size: 16px;
+    color: #fff;
+  }
+  
+  .chip.first {
+    background: linear-gradient(100deg, rgba(255, 133, 0, 0.15) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-color: rgba(255, 133, 0, 0.3);
+  }
+  
+  .chip.first .rank {
+    color: var(--color-maestro);
+    text-shadow: 0 0 10px rgba(255, 133, 0, 0.4);
+  }
+
+  /* CTAs & Button design */
+  .cta {
+    margin-top: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .btn {
+    border: none;
+    border-radius: 18px;
+    padding: 17px;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.2s var(--ease), box-shadow 0.2s, background 0.3s;
+    font-family: inherit;
+  }
+  
+  .btn.primary {
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 255, 255, 0.1);
+  }
+  
+  .btn.primary:hover {
+    background: var(--color-maestro);
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(255, 133, 0, 0.3);
+  }
+  
+  .btn.ghost {
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+  }
+  
+  .btn.ghost:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+  
+  .btn:active {
+    transform: scale(0.97);
+  }
+
+  /* Archetype card */
+  .arch {
+    margin-top: 10px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    padding: 24px 20px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  }
+  
+  .arch .tag {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #ffd9bf;
+  }
+
+  /* Insignia images official */
+  .insignia-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+    gap: 8px;
+  }
+  .insignia-img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
+    animation: float 4s ease-in-out infinite;
+  }
+  .insignia-img.silver {
+    filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.45));
+  }
+  .insignia-img.gold {
+    filter: drop-shadow(0 0 25px rgba(255, 133, 0, 0.55));
+  }
+  .insignia-img.red {
+    filter: drop-shadow(0 0 35px rgba(255, 0, 0, 0.65));
+  }
+
+  /* ---------- PM Lens container & Switch (Glassmorphism dashboard) ---------- */
+  #lensToggle {
+    position: absolute;
+    bottom: 26px;
+    left: 22px;
+    z-index: 35;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border-radius: 99px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    transition: all 0.3s var(--ease);
+  }
+  
+  #lensToggle:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+  
+  #lensToggle .sw {
+    width: 32px;
+    height: 18px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.2);
+    position: relative;
+    transition: background 0.3s;
+  }
+  
+  #lensToggle .sw::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    transition: left 0.3s var(--ease);
+  }
+  
+  body.lens #lensToggle .sw {
+    background: var(--color-maestro);
+  }
+  
+  body.lens #lensToggle .sw::after {
+    left: 16px;
+  }
+ 
+  .lens {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 74px;
+    z-index: 34;
+    background: rgba(5, 2, 9, 0.94);
+    border: 1px solid rgba(255, 133, 0, 0.35);
+    border-radius: 20px;
+    padding: 16px 18px;
+    backdrop-filter: blur(16px);
+    opacity: 0;
+    transform: translateY(14px);
+    pointer-events: none;
+    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255,255,255,0.1);
+  }
+  
+  body.lens .slide.active .lens {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .lens .tt {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-maestro);
+    margin-bottom: 6px;
+  }
+  
+  .lens .tx {
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.45;
+    color: #e5daff;
+  }
+
+  /* Confetti */
+  #fx {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 25;
+    overflow: hidden;
+  }
+  
+  .confetti {
+    position: absolute;
+    top: -16px;
+    width: 8px;
+    height: 14px;
+    border-radius: 2px;
+    opacity: 0.9;
+    animation: fall linear forwards;
+  }
+  
+  @keyframes fall {
+    to {
+      transform: translateY(105vh) rotate(540deg);
+      opacity: 0.8;
+    }
+  }
+
+  .pausehint {
+    position: absolute;
+    bottom: 30px;
+    right: 22px;
+    z-index: 30;
+    font-size: 11px;
+    font-weight: 700;
+    opacity: 0.4;
+    color: #fff;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  
+  @media(max-width: 479px) {
+    .pausehint {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="stage" aria-label="Leyendas Dropi">
+  <div id="bars"></div>
+  <div id="brand">
+    <img class="brand-logo-img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Leyendas">
+    <span class="logo-wrapped">Julio 2026</span>
+  </div>
+
+  <div id="fx"></div>
+
+  <!-- SVG gradient definition for Progress Ring -->
+  <svg style="width:0; height:0; position:absolute;">
+    <defs>
+      <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FF8500" />
+        <stop offset="100%" stop-color="#FF0000" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- 0 · INTRO -->
+  <section class="slide g0 active">
+    <div class="kicker reveal d1" style="text-align:center;">Hola, Valentina</div>
+    <div class="insignia-container reveal d2">
+      <img class="insignia-img silver" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/2_3.png" alt="Experto Plata III" style="width: 150px; height: 150px;">
+      <div class="med" style="font-size: 24px; margin-top: 5px;">Experto Plata III</div>
+    </div>
+    <div class="sub reveal d3" style="text-align:center; max-width: 320px; margin: 15px auto 0; line-height: 1.5; font-size: 13.5px;">Aquí se mide el poder de tu constancia. Repasemos el volumen de tu operación y tu estatus acumulado en el Imperio.<br><br>Toca para iniciar tu ascenso →</div>
+    <div class="lens">
+      <div class="tt">Lente PM · Identidad y Pertenencia (SDT)</div>
+      <div class="tx">Enmarcar el Wrapped como el camino transcurrido en el programa "Leyendas" (no estadísticas sueltas) activa la motivación intrínseca (Autonomía y Competencia) al dar significado al esfuerzo del seller.</div>
+    </div>
+  </section>
+
+  <!-- 1 · ÓRDENES / DROPS -->
+  <section class="slide g1">
+    <div class="kicker reveal d1">Drops Históricos Acumulados</div>
+    <div class="metric"><div class="big up" data-count="4820" data-dur="1600">0</div><span class="unit reveal d3" style="margin-left: 6px;">drops</span></div>
+    <div class="lede reveal d3" style="margin-top:18px">Cada drop representa una orden completada con éxito. Has acumulado <span class="accent">1 drop cada 1.8 horas</span> de por vida de forma permanente.</div>
+    <div class="delta reveal d4"><span><b>+63%</b> drops vs. tu 2024</span></div>
+    <div class="lens">
+      <div class="tt">Lente PM · Capital Acumulado (Sunk Cost Fallacy)</div>
+      <div class="tx">Los drops históricos son permanentes (1 orden = 1 drop). Al ser acumulativos y no expirar, actúan como un "lock-in" psicológico que eleva el costo percibido de abandonar la plataforma.</div>
+    </div>
+  </section>
+
+  <!-- 2 · VENTAS COD -->
+  <section class="slide g2">
+    <div class="kicker reveal d1">Volumen Transaccionado</div>
+    <div class="metric"><span class="med up" style="opacity:0.9; margin-right: 4px;">$</span><div class="big up" data-count="312" data-dur="1500">0</div><span class="unit reveal d3" style="margin-left: 6px;">M COP</span></div>
+    <div class="lede reveal d3" style="margin-top:18px">Valor bruto movilizado mediante pago contra entrega (COD). Consolidaste tu operación comercial sin incurrir en costos de inventario propio.</div>
+    <div class="delta reveal d4"><span>Tu mes récord: <b>Noviembre</b> · $48M transaccionados</span></div>
+    <div class="lens">
+      <div class="tt">Lente PM · Refuerzo de Capacidad (Self-Efficacy)</div>
+      <div class="tx">Hacer tangible el volumen total transaccionado sin apalancarse en inventarios propios refuerza la baja fricción operativa del modelo y empodera al dropshipper al visibilizar su capacidad de escala.</div>
+    </div>
+  </section>
+
+  <!-- 3 · TOP PRODUCTO -->
+  <section class="slide g3">
+    <div class="kicker reveal d1">Tus Combustibles de Escala</div>
+    <div class="med reveal d2" style="margin-bottom: 4px;">Kit de bandas<br>de resistencia</div>
+    <div class="chips">
+      <div class="chip first reveal d3"><span class="rank">1</span><span class="name">Kit bandas fitness</span><span class="qty">1.240 drops</span></div>
+      <div class="chip reveal d3" style="transition-delay:0.5s"><span class="rank">2</span><span class="name">Organizador de closet</span><span class="qty">870 drops</span></div>
+      <div class="chip reveal d4"><span class="rank">3</span><span class="name">Lámpara de luna 3D</span><span class="qty">640 drops</span></div>
+    </div>
+    <div class="lens">
+      <div class="tt">Lente PM · Saliencia de Habilidad</div>
+      <div class="tx">Recordar los productos ganadores históricos ayuda a mitigar la fatiga de pauta y promueve la búsqueda de nuevos productos similares bajo la misma categoría ganadora.</div>
+    </div>
+  </section>
+
+  <!-- 4 · RUTA -->
+  <section class="slide g4">
+    <div class="kicker reveal d1">Tus Corredores de Estatus</div>
+    <div class="med reveal d2">Bogotá&nbsp;→&nbsp;Medellín</div>
+    <div class="lede reveal d3" style="margin-top:16px">Tu ruta de menor fricción logística y mayor efectividad, logrando una tasa de <span class="accent">92% de entregas exitosas</span>.</div>
+    <div class="chips" style="margin-top:18px">
+      <div class="chip reveal d3">🇨🇴 <span class="name">Colombia</span><span class="qty">3.910 drops</span></div>
+      <div class="chip reveal d3" style="transition-delay:0.45s">🇲🇽 <span class="name">México</span><span class="qty">560 drops</span></div>
+      <div class="chip reveal d4">🇨🇱 <span class="name">Chile</span><span class="qty">350 drops</span></div>
+    </div>
+    <div class="lens">
+      <div class="tt">Lente PM · Mitigación de Fricción</div>
+      <div class="tx">Al resaltar las rutas de entrega más exitosas (Bogotá -> Medellín), guiamos al seller hacia zonas de bajo riesgo logístico, protegiendo su margen y fomentando la pauta continua.</div>
+    </div>
+  </section>
+
+  <!-- 5 · TASA DE ENTREGA -->
+  <section class="slide g5">
+    <div class="kicker reveal d1">Tasa de Efectividad COD</div>
+    <div class="ring pop">
+      <svg width="190" height="190" viewBox="0 0 190 190">
+        <circle class="ringtrack" cx="95" cy="95" r="82" fill="none" stroke-width="16"/>
+        <circle id="ring6" class="ringbar" cx="95" cy="95" r="82" fill="none" stroke-width="16"
+                stroke-dasharray="515" stroke-dashoffset="515"/>
+      </svg>
+      <div class="val"><span class="up" data-count="74" data-dur="1400">0</span>%</div>
+    </div>
+    <div class="lede reveal d3" style="text-align:center; margin-top: 14px;">Subiste de <b>61%</b> a <b>74%</b> de efectividad.</div>
+    <div class="delta reveal d4" style="margin:18px auto 0; display: flex; justify-content: center;"><span>A solo <b>1%</b> de la meta de excelencia (75%)</span></div>
+    <div class="lens">
+      <div class="tt">Lente PM · Gradiente de Meta (Goal-Gradient Effect)</div>
+      <div class="tx">La proximidad al hito acelera el esfuerzo. Enmarcar el logro como "a 1% de la meta" genera mayor urgencia e impulso conductual que reportar solo la cifra.</div>
+    </div>
+  </section>
+
+  <!-- 6 · RACHA -->
+  <section class="slide g6">
+    <div class="kicker reveal d1">Racha Activa de Permanencia (RAP)</div>
+    <div class="metric"><div class="big up" data-count="18" data-dur="1200">0</div><span class="unit reveal d3" style="margin-left: 6px;">semanas</span></div>
+    <div class="lede reveal d3" style="margin-top:18px">18 semanas consecutivas facturando órdenes completadas. Leyendas recompensa la consistencia operativa continua.</div>
+    <div class="delta reveal d4"><span>Factura esta semana para <b>no enfriar tu racha</b> y mantener tu rango</span></div>
+    <div class="lens">
+      <div class="tt">Lente PM · Aversión a la Pérdida (Loss Aversion)</div>
+      <div class="tx">La racha activa de permanencia (RAP) de 18 semanas activa el temor a perder el logro acumulado. La alerta de facturar para no enfriar la racha combate la inactividad temporal del seller.</div>
+    </div>
+  </section>
+
+
+
+
+
+  <!-- 9 · META + CTA -->
+  <section class="slide g9">
+    <div class="kicker reveal d1">Tu Próximo Ascenso</div>
+    <div class="insignia-container reveal d2">
+      <img class="insignia-img gold" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/3.png" alt="Master de Oro" style="width: 140px; height: 140px;">
+      <div class="med" style="font-size: 24px; margin-top: 5px;">Master de Oro (Nivel 3)</div>
+    </div>
+    <div class="goal reveal d3" style="margin-top: 15px;">
+      <div class="track"><i id="goalbar"></i></div>
+      <div class="lbl"><span>820 / 1.000 órdenes/mes</span><span>faltan 180</span></div>
+    </div>
+    <div class="sub reveal d3" style="font-size: 13.5px; text-align:center; margin-top: 15px; line-height: 1.5;">
+      Al alcanzar las 1.000 órdenes en el mes en curso y ascender al Nivel 3, desbloquearás: soporte prioritario vía botón flotante con flujo exclusivo, Dropicard Virtual y participación en eventos VIP cerrados de networking.
+    </div>
+    <div class="cta reveal d4">
+      <button class="btn primary" onclick="share()">Compartir mi Rango</button>
+      <button class="btn ghost" onclick="restart()">Ver de nuevo</button>
+    </div>
+    <div class="lens">
+      <div class="tt">Lente PM · Cierre de Bucle de Retención</div>
+      <div class="tx">Muestra la brecha (180 órdenes) para alcanzar la meta mensual (1.000 órdenes - Master de Oro). El beneficio operativo (soporte prioritario y Dropicard) genera tracción operativa inmediata.</div>
+    </div>
+  </section>
+
+  <!-- nav zones -->
+  <div class="nav left"  onclick="prev()"></div>
+  <div class="nav right" onclick="next()"></div>
+
+  <!-- PM lens -->
+  <div id="lensToggle" onclick="toggleLens(event)"><span class="sw"></span><span>Lente PM</span></div>
+  <div class="pausehint">← → mueve · espacio pausa</div>
+</div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const barsWrap = document.getElementById('bars');
+  const DUR = 6200;
+  let i = 0, timer = null, barEl = null, paused = false;
+
+  // build progress bars
+  slides.forEach(()=>{ const b=document.createElement('div'); b.className='bar'; b.innerHTML='<i></i>'; barsWrap.appendChild(b); });
+  const bars=[...barsWrap.children];
+
+  function show(n){
+    if(n<0)n=0; if(n>slides.length-1){ n=slides.length-1; }
+    slides[i].classList.remove('active');
+    i=n;
+    slides[i].classList.add('active');
+    bars.forEach((b,k)=>{ b.classList.remove('run','done'); if(k<i)b.classList.add('done'); });
+    runBar();
+    triggerSlide(i);
+  }
+  function runBar(){
+    clearTimeout(timer);
+    if(barEl){barEl.classList.remove('run');}
+    barEl=bars[i];
+    // restart CSS animation
+    const inner=barEl.querySelector('i'); inner.style.animation='none'; void inner.offsetWidth;
+    barEl.style.setProperty('--dur',DUR+'ms');
+    barEl.classList.add('run');
+    if(!paused) timer=setTimeout(()=>{ if(i<slides.length-1) next(); }, DUR);
+  }
+  function next(){ if(i<slides.length-1) show(i+1); }
+  function prev(){ if(i>0) show(i-1); else runBar(); }
+  function restart(){ show(0); }
+
+  // pause / resume
+  function pauseAnim(p){
+    paused=p;
+    const inner=barEl?.querySelector('i');
+    if(inner) inner.style.animationPlayState = p?'paused':'running';
+    if(p){ clearTimeout(timer); }
+    else { // resume remaining
+      const inner2=barEl.querySelector('i');
+      const cs=getComputedStyle(inner2);
+      const w=parseFloat(cs.width)/parseFloat(getComputedStyle(barEl).width);
+      const remain=DUR*(1-(isNaN(w)?0:w));
+      if(i<slides.length-1) timer=setTimeout(()=>next(), Math.max(400,remain));
+    }
+  }
+
+  // keyboard
+  addEventListener('keydown',e=>{
+    if(e.key==='ArrowRight') next();
+    else if(e.key==='ArrowLeft') prev();
+    else if(e.key===' '){ e.preventDefault(); pauseAnim(!paused); }
+  });
+  // hold to pause (touch)
+  let holdT;
+  const stage=document.getElementById('stage');
+  stage.addEventListener('pointerdown',()=>{ holdT=setTimeout(()=>pauseAnim(true),260); });
+  stage.addEventListener('pointerup',()=>{ clearTimeout(holdT); if(paused) pauseAnim(false); });
+
+  // ---- per-slide effects ----
+  function triggerSlide(n){
+    const s=slides[n];
+    // count-ups
+    s.querySelectorAll('[data-count]').forEach(el=>countUp(el));
+    // ring
+    if(s.querySelector('#ring6')){ const r=s.querySelector('#ring6'); r.style.strokeDashoffset=515; requestAnimationFrame(()=>{ r.style.strokeDashoffset=515*(1-0.74); }); }
+    // goal bar
+    if(s.querySelector('#goalbar')){ const g=s.querySelector('#goalbar'); g.style.width='0'; requestAnimationFrame(()=>g.style.width='82%'); }
+    // confetti on celebratory slides
+    if([0,1,7].includes(n)) confetti();
+  }
+  function countUp(el){
+    const target=+el.dataset.count, dur=+(el.dataset.dur||1300); const start=performance.now();
+    const fmt=target>=1000?(v=>Math.round(v).toLocaleString('es-CO')):(v=>Math.round(v));
+    function step(t){ let p=Math.min(1,(t-start)/dur); p=1-Math.pow(1-p,3); el.textContent=fmt(target*p); if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  
+  // Refined confetti particle emitter
+  function confetti(){
+    const fx=document.getElementById('fx'); 
+    const cols=['#FF8500','#FF4800','#FF0000','#ffffff'];
+    for(let k=0;k<60;k++){ 
+      const c=document.createElement('div'); 
+      c.className='confetti';
+      c.style.left=Math.random()*100+'%'; 
+      c.style.background=cols[k%cols.length];
+      c.style.animationDuration=(1.5+Math.random()*1.8)+'s'; 
+      c.style.animationDelay=(Math.random()*.4)+'s';
+      c.style.transform=`translateY(0) rotate(${Math.random()*360}deg)`; 
+      fx.appendChild(c);
+      setTimeout(()=>c.remove(),3400);
+    }
+  }
+
+  function toggleLens(e){ e.stopPropagation(); document.body.classList.toggle('lens'); }
+  function share(){
+    const txt='Consolidé 4.820 drops históricos en LEYENDAS y ascendí al rango Experto Plata III #LeyendasDropi';
+    if(navigator.share){ navigator.share({title:'Mi Estatus en Leyendas Dropi',text:txt}).catch(()=>{}); }
+    else { navigator.clipboard?.writeText(txt); const b=event.target; const o=b.textContent; b.textContent='✓ Copiado al portapapeles'; setTimeout(()=>b.textContent=o,1800); }
+  }
+
+  // init
+  triggerSlide(0); runBar();
+</script>
+</body>
+</html>

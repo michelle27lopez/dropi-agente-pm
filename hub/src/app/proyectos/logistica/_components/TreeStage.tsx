@@ -25,7 +25,18 @@ export default function TreeStage({
           <span className="stage-name">{etapa.nombre}</span>
           <span className="stage-sub">{etapa.sub}</span>
         </div>
-        {etapa.fuga && <div className={`fuga ${etapa.fuga.tono}`}>{etapa.fuga.label}</div>}
+        {etapa.fuga && (
+          <div className={`fuga ${etapa.fuga.tono}`}>
+            {/* El número dejó de vivir dentro del texto: era un glifo circulado
+                de Unicode que se veía distinto en cada sistema. */}
+            {etapa.fuga.n && (
+              <span className="fuga-n" aria-label={`Fuga ${etapa.fuga.n}`}>
+                <span>{etapa.fuga.n}</span>
+              </span>
+            )}
+            {etapa.fuga.label}
+          </div>
+        )}
         <div className="leaves">
           {proyectos.length === 0 && <span className="chip empty">sin proyecto</span>}
           {proyectos.map((p) => (
@@ -35,7 +46,7 @@ export default function TreeStage({
             <Link key={p.slug} className="chip leaf" href={`/proyectos/logistica/proyecto/${p.slug}`}>
               {p.destacado ? "⭐ " : ""}
               {p.nombre}
-              <small className={`chip-tipo t-${p.tipo}`}>{p.tipo}</small>
+              <small className="chip-tipo">{p.tipo}</small>
             </Link>
           ))}
         </div>

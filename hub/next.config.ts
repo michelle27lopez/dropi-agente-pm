@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import { resolve } from "path";
 
 // CSP en modo Report-Only: por ahora solo registra violaciones en la consola
 // del navegador, no bloquea nada. Revisar esos reportes con tráfico real
@@ -18,9 +17,6 @@ const CSP_REPORT_ONLY = [
 ].join("; ");
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: resolve(import.meta.dirname),
-  },
   async headers() {
     return [
       {

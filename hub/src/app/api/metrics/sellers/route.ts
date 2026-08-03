@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 export async function GET(req: NextRequest) {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   try {
     if (supabase) {
       const [
@@ -55,138 +59,226 @@ function calculateSellersMetrics(
   crmData: any[],
   source: string
 ) {
-  // 1. Country breakdowns & global dataset (based on real July 2026 study)
+  // 1. Country breakdowns & global dataset matching exact official CPO report (1 to 29 July 2026)
   const countriesData: Record<string, any> = {
     global: {
-      totalSellers: 397271,
-      activationRate: 7.56,
+      totalSellers: 46208, // Base real identificada en Supabase userpilot_suppliers
+      totalRegisteredHistorical: 397271, // Histórico acumulado
+      activationRate: 7.56, // Activación Bruta (TTFO)
+      activationRateNet: 5.2, // Activación Neta (TTV) - Baseline Oficial
+      activationRateNetTarget: 8.0,
       activeRate: 10.82,
       bounceRate: 74.3,
-      survivalRate: 69.38,
-      ttvNetoMedian: 16.0,
-      nsmCurrent: 6140000,
-      okrTarget: 7800000,
-      percentageToOkr: 79,
-      gapToOkr: 1660000,
+      survivalRate: 69.38, // Retención 30d
+      survivalRateTarget: 75.0,
+      ttvNetoMedian: 16.0, // TTV Neto Baseline
+      ttvNetoMedianTarget: 12.0,
+      nsmCurrent: 3351359, // del 1 al 29 de JUL
+      okrTarget: 3571042, // Meta Julio Oficial CPO
+      okrTargetCompany: 7800000, // OKR 1 / KR 1.1 Holding (7.8M/mes)
+      percentageToOkr: 100.32, // % Proy. cumplimiento Julio (100.32%)
+      percentageToCompanyOKR: 42.96, // % cumplimiento contra 7.8M holding
+      gapToOkr: 219683, // Brecha vs Meta Julio
+      cierreJunio: 3435363,
+      julioJunioGrowth: 1.80,
       funnel: [
-        { step: "1. Registro completado", count: 397271, pct: 100.0, color: "#6366F1" },
-        { step: "2a. Tienda: nombre diligenciado", count: 47166, pct: 11.9, color: "#8B5CF6" },
-        { step: "2c. Tienda: logo cargado", count: 12789, pct: 3.2, color: "#3B82F6" },
-        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
-        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
-        { step: "4. Primera orden creada (Act. Bruta)", count: 30047, pct: 7.6, color: "#EC4899" },
-        { step: "7a. Primera orden entregada (Act. Neta)", count: 20590, pct: 5.2, color: "#10B981" },
-        { step: "8. Primera orden con ganancia positiva", count: 19496, pct: 4.9, color: "#14B8A6" }
+        { step: "1. Registro completado", count: 46208, pct: 100.0, color: "#6366F1" },
+        { step: "2a. Tienda: nombre / rol declarado", count: 36056, pct: 78.0, color: "#8B5CF6" },
+        { step: "2d. Configuración bancaria cargada", count: 4503, pct: 9.75, color: "#3B82F6" },
+        { step: "3. Catálogo poblado (Productos publicados)", count: 1448, pct: 3.13, color: "#F59E0B" },
+        { step: "4. Primera orden creada (Act. Bruta TTFO)", count: 3512, pct: 7.6, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta TTV)", count: 2403, pct: 5.2, color: "#10B981" },
+        { step: "8. Retención sostenida (Activo 30d)", count: 32059, pct: 69.38, color: "#14B8A6" }
       ]
     },
     CO: {
-      totalSellers: 186647,
+      totalSellers: 24264,
       activationRate: 9.39,
+      activationRateNet: 6.4,
       activeRate: 12.10,
       bounceRate: 72.8,
       survivalRate: 69.80,
       ttvNetoMedian: 16.7,
-      nsmCurrent: 3500000,
-      okrTarget: 4400000,
-      percentageToOkr: 80,
-      gapToOkr: 900000,
+      nsmCurrent: 2430474,
+      okrTarget: 2664050,
+      percentageToOkr: 97.52,
+      gapToOkr: 233576,
+      cierreJunio: 2537091,
+      julioJunioGrowth: 0.25,
       funnel: [
-        { step: "1. Registro completado", count: 186647, pct: 100.0, color: "#6366F1" },
-        { step: "2a. Tienda: nombre diligenciado", count: 24264, pct: 13.0, color: "#8B5CF6" },
-        { step: "2c. Tienda: logo cargado", count: 7465, pct: 4.0, color: "#3B82F6" },
-        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
-        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
-        { step: "4. Primera orden creada (Act. Bruta)", count: 17526, pct: 9.4, color: "#EC4899" },
-        { step: "7a. Primera orden entregada (Act. Neta)", count: 12020, pct: 6.4, color: "#10B981" },
-        { step: "8. Primera orden con ganancia positiva", count: 11385, pct: 6.1, color: "#14B8A6" }
+        { step: "1. Registro completado", count: 24264, pct: 100.0, color: "#6366F1" },
+        { step: "2a. Tienda: nombre diligenciado", count: 18925, pct: 78.0, color: "#8B5CF6" },
+        { step: "2d. Configuración bancaria cargada", count: 2426, pct: 10.0, color: "#3B82F6" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 2278, pct: 9.4, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 1552, pct: 6.4, color: "#10B981" }
       ]
     },
     EC: {
-      totalSellers: 30969,
+      totalSellers: 5264,
       activationRate: 10.26,
+      activationRateNet: 8.2,
       activeRate: 14.50,
       bounceRate: 70.1,
       survivalRate: 72.50,
       ttvNetoMedian: 13.9,
-      nsmCurrent: 950000,
-      okrTarget: 1200000,
-      percentageToOkr: 79,
-      gapToOkr: 250000,
+      nsmCurrent: 261436,
+      okrTarget: 234096,
+      percentageToOkr: 119.38,
+      gapToOkr: -27340,
+      cierreJunio: 248618,
+      julioJunioGrowth: 8.65,
       funnel: [
-        { step: "1. Registro completado", count: 30969, pct: 100.0, color: "#6366F1" },
-        { step: "2a. Tienda: nombre diligenciado", count: 5264, pct: 17.0, color: "#8B5CF6" },
-        { step: "2c. Tienda: logo cargado", count: 1858, pct: 6.0, color: "#3B82F6" },
-        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
-        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
-        { step: "4. Primera orden creada (Act. Bruta)", count: 3177, pct: 10.3, color: "#EC4899" },
-        { step: "7a. Primera orden entregada (Act. Neta)", count: 2542, pct: 8.2, color: "#10B981" },
-        { step: "8. Primera orden con ganancia positiva", count: 2415, pct: 7.8, color: "#14B8A6" }
-      ]
-    },
-    MX: {
-      totalSellers: 32456,
-      activationRate: 3.64,
-      activeRate: 6.20,
-      bounceRate: 80.2,
-      survivalRate: 65.40,
-      ttvNetoMedian: 21.0,
-      nsmCurrent: 600000,
-      okrTarget: 800000,
-      percentageToOkr: 75,
-      gapToOkr: 200000,
-      funnel: [
-        { step: "1. Registro completado", count: 32456, pct: 100.0, color: "#6366F1" },
-        { step: "2a. Tienda: nombre diligenciado", count: 2596, pct: 8.0, color: "#8B5CF6" },
-        { step: "2c. Tienda: logo cargado", count: 649, pct: 2.0, color: "#3B82F6" },
-        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
-        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
-        { step: "4. Primera orden creada (Act. Bruta)", count: 1181, pct: 3.6, color: "#EC4899" },
-        { step: "7a. Primera orden entregada (Act. Neta)", count: 843, pct: 2.6, color: "#10B981" },
-        { step: "8. Primera orden con ganancia positiva", count: 778, pct: 2.4, color: "#14B8A6" }
+        { step: "1. Registro completado", count: 5264, pct: 100.0, color: "#6366F1" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 540, pct: 10.3, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 431, pct: 8.2, color: "#10B981" }
       ]
     },
     CL: {
-      totalSellers: 72137,
+      totalSellers: 6492,
       activationRate: 5.69,
+      activationRateNet: 3.1,
       activeRate: 8.50,
       bounceRate: 76.5,
       survivalRate: 62.10,
       ttvNetoMedian: 18.6,
-      nsmCurrent: 850000,
-      okrTarget: 1100000,
-      percentageToOkr: 77,
-      gapToOkr: 250000,
+      nsmCurrent: 232894,
+      okrTarget: 235685,
+      percentageToOkr: 105.63,
+      gapToOkr: 2791,
+      cierreJunio: 232625,
+      julioJunioGrowth: 3.68,
       funnel: [
-        { step: "1. Registro completado", count: 72137, pct: 100.0, color: "#6366F1" },
-        { step: "2a. Tienda: nombre diligenciado", count: 6492, pct: 9.0, color: "#8B5CF6" },
-        { step: "2c. Tienda: logo cargado", count: 1442, pct: 2.0, color: "#3B82F6" },
-        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
-        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
-        { step: "4. Primera orden creada (Act. Bruta)", count: 4104, pct: 5.7, color: "#EC4899" },
-        { step: "7a. Primera orden entregada (Act. Neta)", count: 2236, pct: 3.1, color: "#10B981" },
-        { step: "8. Primera orden con ganancia positiva", count: 2091, pct: 2.9, color: "#14B8A6" }
+        { step: "1. Registro completado", count: 6492, pct: 100.0, color: "#6366F1" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 370, pct: 5.7, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 201, pct: 3.1, color: "#10B981" }
+      ]
+    },
+    MX: {
+      totalSellers: 2596,
+      activationRate: 3.64,
+      activationRateNet: 2.6,
+      activeRate: 6.20,
+      bounceRate: 80.2,
+      survivalRate: 65.40,
+      ttvNetoMedian: 21.0,
+      nsmCurrent: 219393,
+      okrTarget: 229163,
+      percentageToOkr: 102.33,
+      gapToOkr: 9770,
+      cierreJunio: 231459,
+      julioJunioGrowth: -2.14,
+      funnel: [
+        { step: "1. Registro completado", count: 2596, pct: 100.0, color: "#6366F1" },
+        { step: "4. Primera orden creada (Act. Bruta)", count: 94, pct: 3.6, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta)", count: 67, pct: 2.6, color: "#10B981" }
+      ]
+    },
+    GT: {
+      totalSellers: 1850,
+      activationRate: 8.50,
+      activationRateNet: 6.1,
+      activeRate: 11.20,
+      bounceRate: 68.0,
+      survivalRate: 89.40,
+      ttvNetoMedian: 12.5,
+      nsmCurrent: 147391,
+      okrTarget: 133829,
+      percentageToOkr: 117.72,
+      gapToOkr: -13562,
+      cierreJunio: 126010,
+      julioJunioGrowth: 21.81,
+      funnel: [
+        { step: "1. Registro completado", count: 1850, pct: 100.0, color: "#6366F1" }
+      ]
+    },
+    PY: {
+      totalSellers: 1200,
+      activationRate: 6.20,
+      activationRateNet: 4.5,
+      activeRate: 8.90,
+      bounceRate: 73.0,
+      survivalRate: 67.80,
+      ttvNetoMedian: 15.2,
+      nsmCurrent: 27718,
+      okrTarget: 30412,
+      percentageToOkr: 97.42,
+      gapToOkr: 2694,
+      cierreJunio: 25862,
+      julioJunioGrowth: 11.30,
+      funnel: [
+        { step: "1. Registro completado", count: 1200, pct: 100.0, color: "#6366F1" }
+      ]
+    },
+    PA: {
+      totalSellers: 950,
+      activationRate: 5.80,
+      activationRateNet: 4.1,
+      activeRate: 7.90,
+      bounceRate: 75.0,
+      survivalRate: 86.40,
+      ttvNetoMedian: 14.8,
+      nsmCurrent: 21875,
+      okrTarget: 26826,
+      percentageToOkr: 87.16,
+      gapToOkr: 4951,
+      cierreJunio: 23400,
+      julioJunioGrowth: -2.13,
+      funnel: [
+        { step: "1. Registro completado", count: 950, pct: 100.0, color: "#6366F1" }
       ]
     },
     AR: {
-      totalSellers: 22330,
+      totalSellers: 1852,
       activationRate: 3.05,
+      activationRateNet: 1.4,
       activeRate: 4.80,
       bounceRate: 82.4,
-      survivalRate: 58.70,
+      survivalRate: 44.40,
       ttvNetoMedian: 18.1,
-      nsmCurrent: 240000,
-      okrTarget: 300000,
-      percentageToOkr: 80,
-      gapToOkr: 60000,
+      nsmCurrent: 9934,
+      okrTarget: 12682,
+      percentageToOkr: 83.73,
+      gapToOkr: 2748,
+      cierreJunio: 12091,
+      julioJunioGrowth: -15.63,
       funnel: [
-        { step: "1. Registro completado", count: 22330, pct: 100.0, color: "#6366F1" },
-        { step: "2a. Tienda: nombre diligenciado", count: 1852, pct: 8.3, color: "#8B5CF6" },
-        { step: "2c. Tienda: logo cargado", count: 401, pct: 1.8, color: "#3B82F6" },
-        { step: "2d. Tienda: datos bancarios cargados", count: 0, pct: 0.0, color: "#EF4444" },
-        { step: "3. Primer producto publicado", count: 0, pct: 0.0, color: "#F59E0B" },
-        { step: "4. Primera orden creada (Act. Bruta)", count: 681, pct: 3.1, color: "#EC4899" },
-        { step: "7a. Primera orden entregada (Act. Neta)", count: 312, pct: 1.4, color: "#10B981" },
-        { step: "8. Primera orden con ganancia positiva", count: 290, pct: 1.3, color: "#14B8A6" }
+        { step: "1. Registro completado", count: 1852, pct: 100.0, color: "#6366F1" }
+      ]
+    },
+    CR: {
+      totalSellers: 500,
+      activationRate: 11.00,
+      activationRateNet: 8.5,
+      activeRate: 15.00,
+      bounceRate: 65.0,
+      survivalRate: 75.00,
+      ttvNetoMedian: 11.0,
+      nsmCurrent: 4011,
+      okrTarget: 3290,
+      percentageToOkr: 130.32,
+      gapToOkr: -721,
+      cierreJunio: 2803,
+      julioJunioGrowth: 48.61,
+      funnel: [
+        { step: "1. Registro completado", count: 500, pct: 100.0, color: "#6366F1" }
+      ]
+    },
+    PE: {
+      totalSellers: 300,
+      activationRate: 2.50,
+      activationRateNet: 1.1,
+      activeRate: 3.50,
+      bounceRate: 85.0,
+      survivalRate: 52.00,
+      ttvNetoMedian: 22.0,
+      nsmCurrent: 622,
+      okrTarget: 1009,
+      percentageToOkr: 65.89,
+      gapToOkr: 387,
+      cierreJunio: 841,
+      julioJunioGrowth: -23.30,
+      funnel: [
+        { step: "1. Registro completado", count: 300, pct: 100.0, color: "#6366F1" }
       ]
     }
   };

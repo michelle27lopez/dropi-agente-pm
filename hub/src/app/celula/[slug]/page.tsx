@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
@@ -9,7 +10,14 @@ import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
 import { isMiDiaOwner } from "@/lib/sprint-access";
 import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
-type Update = { id: string; week_date: string; title: string; content: string };
+
+// La torre de logística arrastra el registro completo del tablero
+// (proyectos/logistica/_lib/data.ts, ~1.500 líneas). Se carga aparte para que
+// ese peso no entre en el bundle de las demás células, que no lo usan.
+const TorreLogistica = dynamic(() => import("./_components/TorreLogistica"), { ssr: false });
+const ProyectosPorEtapa = dynamic(() => import("./_components/ProyectosPorEtapa"), { ssr: false });
+const UpdatesLogistica = dynamic(() => import("./_components/UpdatesLogistica"), { ssr: false });
+type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
 
@@ -33,6 +41,9 @@ type MetricsStats = {
   gapToOkr: number;
   survivalRate?: number;
   ttvNetoMedian?: number;
+  activationRateNet?: number;
+  okrTargetCompany?: number;
+  percentageToCompanyOKR?: number;
   countries?: Record<string, any>;
 };
 type FunnelStep = { step: string; count: number; pct: number; color: string };
@@ -52,7 +63,7 @@ const HANDOFF_COLOR: Record<string, string> = {
   "Experimentación": "#F59E0B", "Listo para handoff": "#0EA5E9", "Handoff hecho": "#22C55E",
 };
 const TYPE_ICON: Record<string, string> = {
-  Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀",
+  Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀", "Delivery Proyecto": "🚚",
 };
 
 function truncate(text: string | undefined | null, max: number) {
@@ -77,6 +88,7 @@ function updateToItem(u: Update): Item {
     key: u.id,
     name: u.title,
     description: truncate(u.content, 160),
+    url: u.url ?? undefined,
     tag: u.week_date,
     color: "#6366F1",
     icon: "📋",
@@ -109,6 +121,8 @@ export default function CelulaHomePage() {
   const [metrics, setMetrics] = useState<SellersMetrics | null>(null);
   const [openUpdate, setOpenUpdate] = useState<Update | null>(null);
   const [selectedCountry, setSelectedCountry] = useState("global");
+  // Etapa seleccionada en el mapa de la orden (solo logística). null = todas.
+  const [etapaFiltro, setEtapaFiltro] = useState<string | null>(null);
 
   useEffect(() => {
     fetch(`/api/celulas/${params.slug}`)
@@ -159,16 +173,22 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const proyectos = celula.proyectos.filter((p) => p.type !== "POC").map(proyectoToItem);
+  const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
 
   const pocsByParent = new Map<string, Proyecto[]>();
+  const deliveriesByParent = new Map<string, Proyecto[]>();
   for (const p of celula.proyectos) {
     if (p.type === "POC" && p.parent_project_id) {
       const list = pocsByParent.get(p.parent_project_id) ?? [];
       list.push(p);
       pocsByParent.set(p.parent_project_id, list);
+    }
+    if (p.type === "Delivery Proyecto" && p.parent_project_id) {
+      const list = deliveriesByParent.get(p.parent_project_id) ?? [];
+      list.push(p);
+      deliveriesByParent.set(p.parent_project_id, list);
     }
   }
 
@@ -205,6 +225,28 @@ export default function CelulaHomePage() {
     setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, created] } : prev);
   }
 
+  async function handleCrearDelivery(parent: Proyecto, name: string, summary: string, relatedPocId: string | null) {
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary, type: "Delivery Proyecto", related_poc_id: relatedPocId }),
+    });
+    if (!res.ok) return;
+    const created = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, created] } : prev);
+  }
+
+  async function handleRelatedPocChange(id: string, relatedPocId: string | null) {
+    const res = await fetch(`/api/proyectos/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ related_poc_id: relatedPocId }),
+    });
+    if (!res.ok) return;
+    const updated = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: prev.proyectos.map((p) => (p.id === updated.id ? updated : p)) } : prev);
+  }
+
   // Home privada: solo para MI_DIA_OWNER_EMAIL, reemplaza el body estándar de
   // célula por el dashboard de "mi día" — ver [[project_darwin_pd_dashboard]].
   if (isMiDiaOwner(profile?.email)) {
@@ -231,6 +273,10 @@ export default function CelulaHomePage() {
   const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
 
   const isSellers = params.slug === "sellers";
+  // Logística cambia el cuerpo de la home: abre con la torre de control y
+  // agrupa las iniciativas por etapa del viaje de la orden en vez de la
+  // rejilla plana. El resto de las células no se toca.
+  const isLogistica = params.slug === "logistica";
 
   // Get active country stats
   const activeStats = (metrics?.stats?.countries as any)?.[selectedCountry] || metrics?.stats;
@@ -326,14 +372,19 @@ export default function CelulaHomePage() {
               { key: "EC", label: "🇪🇨 Ecuador" },
               { key: "CL", label: "🇨🇱 Chile" },
               { key: "MX", label: "🇲🇽 México" },
-              { key: "AR", label: "🇦🇷 Argentina" }
+              { key: "GT", label: "🇬🇹 Guatemala" },
+              { key: "PY", label: "🇵🇾 Paraguay" },
+              { key: "PA", label: "🇵🇦 Panamá" },
+              { key: "AR", label: "🇦🇷 Argentina" },
+              { key: "CR", label: "🇨🇷 Costa Rica" },
+              { key: "PE", label: "🇵🇪 Perú" }
             ].map((country) => (
               <button
                 key={country.key}
                 onClick={() => setSelectedCountry(country.key)}
                 className={`country-tab ${selectedCountry === country.key ? "active" : ""}`}
                 style={{
-                  padding: "8px 16px",
+                  padding: "6px 14px",
                   borderRadius: 8,
                   fontSize: 12,
                   fontWeight: 700,
@@ -348,326 +399,235 @@ export default function CelulaHomePage() {
             ))}
           </div>
 
-          {/* OKR Progress Card */}
-          {metrics && (
-            <div className="glow-border" style={{
-              background: "linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(3, 7, 18, 0.9) 100%)",
-              borderRadius: 16, padding: "28px 32px", marginBottom: 24, color: "#fff",
-              boxShadow: "0 10px 40px rgba(0,0,0,0.4)"
-            }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
-                <div>
-                  <span style={{ fontSize: 10, fontWeight: 850, background: "rgba(247, 127, 0, 0.15)", color: "#F77F00", border: "1px solid rgba(247, 127, 0, 0.3)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                    OKR 1.1 · ESCALAR VOLUMEN DE VENTAS
-                  </span>
-                  <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
-                    Órdenes de Sellers Activos (NSM)
-                  </h3>
-                </div>
-                <div style={{ textAlign: "right" }}>
-                  <span className="neon-text-orange" style={{ fontSize: 28, fontWeight: 900 }}>{percentageToOkr}%</span>
-                  <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}> de la meta</span>
-                </div>
-              </div>
-              
-              {/* Progress Bar */}
-              <div style={{ height: 10, background: "rgba(255,255,255,0.08)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
-                <div style={{ height: "100%", width: `${percentageToOkr}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999, boxShadow: "0 0 10px rgba(247, 127, 0, 0.5)" }} />
-              </div>
-              
-              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
-                <span>Actual: <strong style={{ color: "#fff" }}>{(nsmCurrent / 1000000).toFixed(2)}M/mes</strong></span>
-                <span>Meta: <strong style={{ color: "#fff" }}>{(okrTarget / 1000000).toFixed(2)}M/mes</strong></span>
-                <span>Brecha: <strong style={{ color: "#fff" }}>{(gapToOkr / 1000000).toFixed(2)}M/mes</strong></span>
-              </div>
-            </div>
-          )}
-
-          {/* Metrics Grid */}
-          {metrics && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, marginBottom: 28 }}>
-              {[
-                { label: "Sellers Registrados", value: totalSellers.toLocaleString(), sub: "Total histórico en cohorte", color: "#6366F1", icon: "👥", sparkline: "M0,25 Q15,10 30,20 T60,5 T90,15 T100,2" },
-                { label: "Tasa de Activación", value: `${activationRate}%`, sub: "Sellers con ≥1 orden creada", color: "#EC4899", icon: "⚡", sparkline: "M0,20 Q15,25 30,12 T60,28 T90,5 T100,8" },
-                { label: "Sellers Activos (30d)", value: `${activeRate}%`, sub: "Con actividad constante", color: "#22C55E", icon: "🎯", sparkline: "M0,15 Q15,5 30,18 T60,8 T90,25 T100,3" },
-                { label: "Tasa de Rebote (Bounce)", value: `${bounceRate}%`, sub: "Sellers con ≤1 sesión web", color: "#EF4444", icon: "🚪", sparkline: "M0,5 Q15,22 30,10 T60,25 T90,12 T100,28" },
-                { label: "Supervivencia (30d)", value: `${survivalRate}%`, sub: "Sellers con ≥1 orden adicional", color: "#8B5CF6", icon: "🌱", sparkline: "M0,22 Q15,12 30,15 T60,5 T90,18 T100,4" },
-                { label: "TTV Neto (Mediana)", value: `${ttvNetoMedian} días`, sub: "Registro hasta entrega exitosa", color: "#F59E0B", icon: "⏱️", sparkline: "M0,10 Q15,28 30,14 T60,22 T90,5 T100,12" }
-              ].map((m) => (
-                <div key={m.label} className="glass-card" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+          {/* OKR Progress Card — Dynamic Ceiling (Global = 7.8M Holding, Country = CPO Meta Julio) */}
+          {metrics && (() => {
+            const isGlobal = selectedCountry === "global";
+            const ceilingTarget = isGlobal ? 7800000 : okrTarget;
+            const actualPctOfCeiling = ceilingTarget > 0 ? (nsmCurrent / ceilingTarget) * 100 : 0;
+            const formattedCurrent = nsmCurrent >= 1000000 ? `${(nsmCurrent / 1000000).toFixed(2)}M` : nsmCurrent.toLocaleString();
+            const formattedTarget = ceilingTarget >= 1000000 ? `${(ceilingTarget / 1000000).toFixed(2)}M` : ceilingTarget.toLocaleString();
+            
+            return (
+              <div className="glow-border" style={{
+                background: "linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%)",
+                borderRadius: 16, padding: "28px 32px", marginBottom: 24, color: "#fff",
+                boxShadow: "0 10px 40px rgba(0,0,0,0.4)"
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
                   <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.45)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                    <span style={{ fontSize: 10, fontWeight: 850, background: "rgba(247, 127, 0, 0.15)", color: "#F77F00", border: "1px solid rgba(247, 127, 0, 0.3)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      {isGlobal ? "OKR 1 / KR 1.1 HOLDING · TECHO GLOBAL: 7.80M ÓRDENES/MES" : `TECHO META JULIO CPO (${selectedCountry.toUpperCase()})`}
+                    </span>
+                    <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
+                      {isGlobal ? "Órdenes Movilizadas de Sellers Activos (NSM Global)" : `Órdenes Movilizadas en ${selectedCountry === "CO" ? "Colombia" : selectedCountry === "EC" ? "Ecuador" : selectedCountry === "CL" ? "Chile" : selectedCountry === "MX" ? "México" : selectedCountry === "GT" ? "Guatemala" : selectedCountry === "PY" ? "Paraguay" : selectedCountry === "PA" ? "Panamá" : selectedCountry === "AR" ? "Argentina" : selectedCountry === "CR" ? "Costa Rica" : selectedCountry === "PE" ? "Perú" : selectedCountry}`}
+                    </h3>
+                  </div>
+                  <div style={{ textAlign: "right" }}>
+                    <span className="neon-text-orange" style={{ fontSize: 32, fontWeight: 900 }}>
+                      {actualPctOfCeiling.toFixed(1)}%
+                    </span>
+                    <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", display: "block" }}>
+                      {isGlobal ? "del Techo OKR 1.1 (7.80M/mes)" : `alcanzado de la Meta Julio (${percentageToOkr}% proy.)`}
+                    </span>
+                  </div>
+                </div>
+                
+                {/* Progress Bar towards Ceiling */}
+                <div style={{ height: 12, background: "rgba(255,255,255,0.08)", borderRadius: 999, overflow: "hidden", marginBottom: 16, position: "relative" }}>
+                  <div style={{
+                    height: "100%",
+                    width: `${Math.min(actualPctOfCeiling, 100)}%`,
+                    background: actualPctOfCeiling >= 100 ? "linear-gradient(90deg, #10B981 0%, #34D399 100%)" : "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)",
+                    borderRadius: 999,
+                    boxShadow: actualPctOfCeiling >= 100 ? "0 0 12px rgba(16, 185, 129, 0.6)" : "0 0 12px rgba(247, 127, 0, 0.6)"
+                  }} />
+                </div>
+                
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed rgba(255,255,255,0.1)", paddingTop: 14 }}>
+                  <div>
+                    <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
+                    <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>{formattedCurrent}/mes</strong>
+                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", display: "block" }}>{nsmCurrent.toLocaleString()} ord movilizadas</span>
+                  </div>
+                  <div>
+                    <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
+                      {isGlobal ? "Hito Julio CPO" : "Meta Julio CPO (Techo País)"}
+                    </span>
+                    <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>
+                      {isGlobal ? "3.57M/mes" : `${formattedTarget}/mes`}
+                    </strong>
+                    <span style={{ fontSize: 11, color: "#22C55E", fontWeight: 700, display: "block" }}>
+                      {isGlobal ? "93.85% alcanzado (100.32% proy)" : `${percentageToOkr}% proy. cumplimiento`}
+                    </span>
+                  </div>
+                  <div>
+                    <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
+                      {isGlobal ? "Techo OKR 1.1 Holding" : "Brecha a la Meta Julio"}
+                    </span>
+                    <strong style={{ color: "#F77F00", fontSize: 14, fontWeight: 900 }}>
+                      {isGlobal ? "7.80M/mes" : gapToOkr > 0 ? `-${gapToOkr.toLocaleString()} ord` : `+${Math.abs(gapToOkr).toLocaleString()} ord 🎉`}
+                    </strong>
+                    <span style={{ fontSize: 11, color: isGlobal ? "#EF4444" : gapToOkr > 0 ? "#EF4444" : "#22C55E", fontWeight: 700, display: "block" }}>
+                      {isGlobal ? "Brecha: -4.45M ord (43.0% cumpl.)" : gapToOkr > 0 ? "Falta para completar meta" : "Meta del mes superada!"}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Metrics Grid — Termómetros Visuales por Métrica a Escala */}
+          {metrics && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))", gap: 18, marginBottom: 28 }}>
+              {[
+                {
+                  label: "Tasa de Activación Neta",
+                  value: `${activeStats?.activationRateNet ?? 5.2}%`,
+                  targetVal: "8.0%",
+                  progressPct: ((activeStats?.activationRateNet ?? 5.2) / 8.0) * 100,
+                  meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
+                  sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
+                  color: "#10B981", icon: "⚡"
+                },
+                {
+                  label: "Tiempo de Activación Neta (TTV)",
+                  value: `${ttvNetoMedian} días`,
+                  targetVal: "< 12.0d",
+                  progressPct: (12.0 / ttvNetoMedian) * 100,
+                  meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
+                  sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
+                  color: "#F59E0B", icon: "⏱️"
+                },
+                {
+                  label: "Tasa de Activación Bruta",
+                  value: `${activationRate}%`,
+                  targetVal: "12.0%",
+                  progressPct: (activationRate / 12.0) * 100,
+                  meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
+                  sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
+                  color: "#EC4899", icon: "📦"
+                },
+                {
+                  label: "Retención a 30 Días",
+                  value: `${survivalRate}%`,
+                  targetVal: "75.0%",
+                  progressPct: (survivalRate / 75.0) * 100,
+                  meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
+                  sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
+                  color: "#8B5CF6", icon: "🌱"
+                },
+                {
+                  label: "Base de Sellers Identificados",
+                  value: totalSellers.toLocaleString(),
+                  targetVal: "46.2k DB",
+                  progressPct: (36056 / totalSellers) * 100,
+                  meta: "36,056 Dropshippers Target + 8,744 Proveedores",
+                  sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
+                  color: "#3B82F6", icon: "👥"
+                },
+                {
+                  label: "Usuarios Activos Diarios (DAU)",
+                  value: "14,262",
+                  targetVal: "81.5k MAU",
+                  progressPct: (14262 / 81521) * 100,
+                  meta: "MAU Mensual: 81,521 usuarios/mes",
+                  sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
+                  color: "#22C55E", icon: "🎯"
+                }
+              ].map((m) => (
+                <div key={m.label} style={{
+                  background: "rgba(15, 23, 42, 0.88)",
+                  border: `1px solid ${m.color}30`,
+                  borderRadius: 16,
+                  padding: "20px 22px",
+                  boxShadow: `0 10px 30px rgba(0,0,0,0.4), 0 0 15px ${m.color}15`,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between"
+                }}>
+                  <div>
+                    {/* Header */}
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                         {m.label}
                       </span>
-                      <span style={{ fontSize: 16 }}>{m.icon}</span>
+                      <span style={{ fontSize: 18 }}>{m.icon}</span>
                     </div>
-                    <div style={{ fontSize: 26, fontWeight: 900, letterSpacing: "-0.03em", color: "#fff", marginBottom: 2 }}>
+
+                    {/* Big Value */}
+                    <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#ffffff", marginBottom: 8 }}>
                       {m.value}
                     </div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginBottom: 8 }}>{m.sub}</div>
-                    
-                    {/* Simulated Sparkline */}
-                    <div style={{ height: 24, position: "relative", marginBottom: 4 }}>
-                      <svg viewBox="0 0 100 30" style={{ width: "100%", height: "100%", overflow: "visible" }}>
-                        <path d={m.sparkline} fill="none" stroke={m.color} strokeWidth="2" strokeLinecap="round" opacity="0.8" />
-                        <path d={`${m.sparkline} L100,30 L0,30 Z`} fill={`url(#gradient-${m.color.replace("#","")})`} opacity="0.06" />
-                        <defs>
-                          <linearGradient id={`gradient-${m.color.replace("#","")}`} x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor={m.color} />
-                            <stop offset="100%" stopColor="transparent" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
+
+                    {/* Meta Badge */}
+                    <div style={{
+                      background: "rgba(255, 255, 255, 0.04)",
+                      borderLeft: `4px solid ${m.color}`,
+                      padding: "6px 12px",
+                      borderRadius: "0 8px 8px 0",
+                      marginBottom: 12
+                    }}>
+                      <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
+                        {m.meta}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
 
-          {/* Strategic OS Frame Card */}
-          <div className="glass-card" style={{ marginBottom: 28 }}>
-            <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16, display: "flex", alignItems: "center", gap: 6 }}>
-              <span>🔭</span> Direccionamiento Estratégico & Lentes PM OS
-            </h3>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
-              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 10, padding: 14 }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 6 }}>
-                  Norte & Propósito
-                </div>
-                <p style={{ fontSize: 13, color: "#fff", fontWeight: 700, margin: "0 0 4px" }}>
-                  Que cada dropshipper gane dinero vendiendo en la plataforma.
-                </p>
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
-                  Activación = 1ª orden rentable · Retención = ganancia sostenida.
-                </span>
-              </div>
-              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 10, padding: 14 }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 6 }}>
-                  Territorio & Perfil
-                </div>
-                <p style={{ fontSize: 13, color: "#fff", fontWeight: 700, margin: "0 0 4px" }}>
-                  Territorio E-commerce (Seller Success)
-                </p>
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
-                  Foco: Dropshippers (Rebuscador, Empleado Aspirante, Joven Visionario).
-                </span>
-              </div>
-              <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 10, padding: 14 }}>
-                <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 6 }}>
-                  Lentes & Madurez (Q3 Focus)
-                </div>
-                <p style={{ fontSize: 13, color: "#fff", fontWeight: 700, margin: "0 0 4px" }}>
-                  Nivel A (Iniciando) → TTV / Reptiliano
-                </p>
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
-                  Q3: Aumentar la activación neta y bajar TTV.
-                </span>
-              </div>
-            </div>
-          </div>
+                    {/* Visual Progress Bar */}
+                    <div style={{ margin: "10px 0 14px" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
+                        <span style={{ color: "rgba(255,255,255,0.45)" }}>Avance a la Meta</span>
+                        <span style={{ color: m.color, fontWeight: 900 }}>
+                          {m.progressPct.toFixed(1)}%
+                        </span>
+                      </div>
 
-          {/* Onboarding Funnel Redesign */}
-          {metrics && (
-            <div className="glass-card" style={{ marginBottom: 28 }}>
-              <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>
-                🎛️ EMBUDO DE CONVERSIÓN DE SELLERS & COVERAGE FUNNEL
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                {activeFunnel.map((step: any, idx: number) => {
-                  const isGap = step.pct === 0 || isNaN(step.pct);
-                  const alignmentPct = isGap ? 8 : step.pct;
-                  
-                  return (
-                    <div key={step.step} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.3)", width: 20 }}>
-                        {idx + 1}
-                      </span>
+                      {/* Thermometer Tube */}
                       <div style={{
-                        flex: 1, background: "rgba(255,255,255,0.01)", border: isGap ? "1px dashed rgba(239, 68, 68, 0.4)" : "1px solid rgba(255, 255, 255, 0.05)",
-                        borderRadius: 10, padding: "12px 16px", display: "flex",
-                        justifyContent: "space-between", alignItems: "center",
-                        position: "relative", overflow: "hidden"
+                        height: 10,
+                        background: "rgba(255, 255, 255, 0.08)",
+                        borderRadius: 999,
+                        padding: 1,
+                        border: "1px solid rgba(255, 255, 255, 0.12)",
+                        position: "relative",
+                        overflow: "hidden"
                       }}>
                         <div style={{
-                          position: "absolute", top: 0, left: 0, bottom: 0,
-                          width: `${alignmentPct}%`, background: isGap ? "rgba(239, 68, 68, 0.08)" : `${step.color}15`,
-                          zIndex: 0
+                          height: "100%",
+                          width: `${Math.min(m.progressPct, 100)}%`,
+                          background: `linear-gradient(90deg, ${m.color}88 0%, ${m.color} 100%)`,
+                          borderRadius: 999,
+                          boxShadow: `0 0 10px ${m.color}80`
                         }} />
-                        <span style={{ fontSize: 13, fontWeight: 700, color: isGap ? "rgba(239, 68, 68, 0.85)" : "#fff", zIndex: 1, display: "flex", alignItems: "center", gap: 6 }}>
-                          {isGap && <span>⚠️</span>}
-                          {step.step}
-                          {isGap && <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(239, 68, 68, 0.15)", color: "#EF4444", padding: "1px 6px", borderRadius: 4, marginLeft: 8 }}>DEUDA DE TRACKING</span>}
-                        </span>
-                        <div style={{ display: "flex", alignItems: "center", gap: 12, zIndex: 1 }}>
-                          <span style={{ fontSize: 12, fontWeight: 800, color: isGap ? "#EF4444" : "#fff" }}>
-                            {isGap ? "[DATO FALTANTE]" : step.count.toLocaleString()}
-                          </span>
-                          <span style={{
-                            fontSize: 10, fontWeight: 700, background: isGap ? "rgba(239,68,68,0.15)" : `${step.color}25`,
-                            color: isGap ? "#EF4444" : step.color, padding: "2px 8px", borderRadius: 20
-                          }}>
-                            {isGap ? "NaN%" : `${step.pct}%`}
-                          </span>
-                        </div>
+                      </div>
+
+                      {/* Scale Legends */}
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 4, fontWeight: 600 }}>
+                        <span>0</span>
+                        <span>Actual: <strong style={{ color: "#fff" }}>{m.value}</strong></span>
+                        <span>Meta: <strong style={{ color: m.color }}>{m.targetVal}</strong></span>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Jira and Sprints Card Container */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px, 1fr))", gap: 24, marginBottom: 28 }}>
-            
-            {/* GoHighLevel CRM Onboarding Pipeline Card */}
-            <div className="glass-card">
-              <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                <span>🤝</span> CRM GoHighLevel Onboarding
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {metrics?.crm?.stages ? (
-                  Object.entries(metrics.crm.stages).map(([stage, count]) => (
-                    <div key={stage} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px dashed rgba(255,255,255,0.06)", paddingBottom: 8 }}>
-                      <span style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", fontWeight: 600 }}>{stage}</span>
-                      <span style={{ fontSize: 12, fontWeight: 800, background: "rgba(255,255,255,0.05)", color: "#fff", padding: "3px 10px", borderRadius: 20 }}>
-                        {count} leads
-                      </span>
-                    </div>
-                  ))
-                ) : (
-                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", margin: 0 }}>Cargando datos del CRM...</p>
-                )}
-                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", marginTop: 6, fontStyle: "italic" }}>
-                  Fuente: Oportunidades GHL en tiempo real.
-                </div>
-              </div>
-            </div>
-
-            {/* Sprint Active Checklist Card */}
-            <div className="glass-card">
-              <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                <span>📅</span> Sprint Activo (Checklist de Producto)
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                {metrics?.sprint?.tasksList ? (
-                  metrics.sprint.tasksList.map((task) => (
-                    <div key={task.key} style={{ border: "1px solid rgba(255,255,255,0.05)", borderRadius: 10, padding: 12, background: "rgba(255,255,255,0.01)" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
-                        <a href={task.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 700, color: "#F77F00", textDecoration: "none" }}>
-                          {task.key}
-                        </a>
-                        <span style={{
-                          fontSize: 9, fontWeight: 800, textTransform: "uppercase",
-                          padding: "2px 6px", borderRadius: 4,
-                          background: task.status === "Listo" || task.status === "Done" || task.status === "Finished" ? "rgba(34, 197, 94, 0.15)" : "rgba(245, 158, 11, 0.15)",
-                          color: task.status === "Listo" || task.status === "Done" || task.status === "Finished" ? "#22C55E" : "#F59E0B"
-                        }}>
-                          {task.status}
-                        </span>
-                      </div>
-                      <div style={{ fontSize: 12, color: "#fff", fontWeight: 700, marginBottom: 8 }}>{task.summary}</div>
-                      {task.sections && task.sections.length > 0 && (
-                        <div style={{ display: "flex", flexDirection: "column", gap: 4, borderTop: "1px solid rgba(255,255,255,0.05)", paddingTop: 8 }}>
-                          {task.sections.map((sec: any) => (
-                            <div key={sec.name} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11 }}>
-                              <span>{sec.status === "hecho" ? "✅" : "⏳"}</span>
-                              <span style={{ color: "rgba(255,255,255,0.8)", fontWeight: 600 }}>{sec.name}:</span>
-                              <span style={{ color: "rgba(255,255,255,0.4)" }}>{sec.notes}</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", margin: 0 }}>Cargando checklist del sprint...</p>
-                )}
-              </div>
-            </div>
-
-          </div>
-
-          {/* Jira Bugs Tracking Card */}
-          {metrics && (
-            <div className="glass-card" style={{ marginBottom: 28 }}>
-              <h3 style={{ fontSize: 11, fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                <span>🐛</span> Bugs Activos en Jira (Caza-productos / Notificaciones)
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {metrics.jira?.bugsList ? (
-                  metrics.jira.bugsList.map((bug) => (
-                    <div key={bug.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px dashed rgba(255,255,255,0.06)", paddingBottom: 10 }}>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <a href={bug.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 700, color: "#F77F00", textDecoration: "none" }}>
-                            {bug.key}
-                          </a>
-                          <span style={{ fontSize: 12, color: "#fff", fontWeight: 700 }}>{bug.summary}</span>
-                        </div>
-                        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)" }}>Asignado a: <strong>{bug.assignee}</strong></div>
-                      </div>
-                      <span style={{
-                        fontSize: 10, fontWeight: 700, textTransform: "uppercase",
-                        padding: "4px 8px", borderRadius: 6,
-                        background: bug.status === "Done" || bug.status === "Resuelto" || bug.status === "Finished" ? "rgba(34, 197, 94, 0.15)" : "rgba(239, 68, 68, 0.15)",
-                        color: bug.status === "Done" || bug.status === "Resuelto" || bug.status === "Finished" ? "#22C55E" : "#EF4444"
-                      }}>
-                        {bug.status}
-                      </span>
-                    </div>
-                  ))
-                ) : (
-                  <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", margin: 0 }}>Cargando bugs activos...</p>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Updates list */}
-          <div style={{ marginBottom: 40 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: 0 }}>
-                Updates
-              </p>
-            </div>
-            
-            {/* Custom dark list wrapper */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-              {updates.map((item) => (
-                <div
-                  key={item.key}
-                  onClick={() => {
-                    const u = updatesById.get(item.key);
-                    if (u) setOpenUpdate(u);
-                  }}
-                  className="glass-card"
-                  style={{ cursor: "pointer", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 20 }}
-                >
-                  <div>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                      <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(99, 102, 241, 0.15)", color: "#6366F1", padding: "2px 8px", borderRadius: 4, textTransform: "uppercase" }}>
-                        {item.tag}
-                      </span>
-                      <span style={{ fontSize: 14 }}>{item.icon}</span>
-                    </div>
-                    <h4 style={{ fontSize: 14, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{item.name}</h4>
-                    <p style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.5 }}>{item.description}</p>
                   </div>
-                  <div style={{ marginTop: 14, fontSize: 11, fontWeight: 700, color: "#F77F00", display: "flex", alignItems: "center", gap: 4 }}>
-                    Ver →
+
+                  {/* Explanation Footer */}
+                  <div style={{
+                    fontSize: 12,
+                    color: "#CBD5E1",
+                    fontWeight: 500,
+                    lineHeight: 1.45,
+                    borderTop: "1px dashed rgba(255, 255, 255, 0.1)",
+                    paddingTop: 10
+                  }}>
+                    {m.sub}
                   </div>
                 </div>
               ))}
-              {updates.length === 0 && (
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay updates registrados.</p>
-              )}
             </div>
-          </div>
+          )}
+
+
+
+
 
           {/* Discovery projects list */}
           <div style={{ marginBottom: 40 }}>
@@ -691,16 +651,18 @@ export default function CelulaHomePage() {
 
             {/* Custom dark list wrapper */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-              {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
+              {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map((p) => (
                 <ProjectCard
                   key={p.id}
                   project={p}
                   dark
                   canCreate={canCreate}
                   pocs={pocsByParent.get(p.id) ?? []}
+                  deliveries={deliveriesByParent.get(p.id) ?? []}
                   onEstadoChange={handleEstadoChange}
                   onVpvChange={handleVpvChange}
                   onCrearPoc={handleCrearPoc}
+                  onCrearDelivery={handleCrearDelivery}
                 />
               ))}
             </div>
@@ -726,6 +688,32 @@ export default function CelulaHomePage() {
               ))}
               {poc.length === 0 && (
                 <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay POCs cargadas para esta célula.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Delivery Proyectos list */}
+          <div style={{ marginBottom: 40 }}>
+            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
+              Delivery Proyectos
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+              {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark
+                  canCreate={canCreate}
+                  pocs={[]}
+                  siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                  onRelatedPocChange={handleRelatedPocChange}
+                />
+              ))}
+              {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
+                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
               )}
             </div>
           </div>
@@ -788,324 +776,233 @@ export default function CelulaHomePage() {
       />
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
-        {/* OKR & NSM Progress Section */}
+        {/* Torre de control — solo logística. Abre la home con los indicadores
+            de la orden y el mapa que filtra las iniciativas de más abajo. */}
+        {isLogistica && (
+          <TorreLogistica
+            deDarwin={celula.proyectos}
+            etapaActiva={etapaFiltro}
+            onEtapaChange={setEtapaFiltro}
+          />
+        )}
+
+        {/* OKR & NSM Progress Section — OKR 1.1 (7.8M/mes) como Techo */}
         {params.slug === "sellers" && metrics && (
           <div style={{
             background: "linear-gradient(135deg, #111827 0%, #1f2937 55%, #c2410c 100%)",
-            borderRadius: 16, padding: "24px 32px", marginBottom: 36, color: "#fff",
+            borderRadius: 16, padding: "28px 32px", marginBottom: 36, color: "#fff",
             boxShadow: "0 4px 20px rgba(0,0,0,0.08)"
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
               <div>
                 <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(255,255,255,0.15)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                  OKR 1.1 · Escalar Volumen de Ventas
+                  OKR 1 / KR 1.1 Holding · TECHO OBJETIVO: 7.80M ÓRDENES/MES
                 </span>
                 <h3 style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
-                  Órdenes de Sellers Activos (NSM)
+                  Volumen de Órdenes de Sellers Activos (NSM Global)
                 </h3>
               </div>
               <div style={{ textAlign: "right" }}>
-                <span style={{ fontSize: 24, fontWeight: 900, color: "#F77F00" }}>{metrics.stats.percentageToOkr}%</span>
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}> de la meta</span>
+                <span style={{ fontSize: 28, fontWeight: 900, color: "#F77F00" }}>43.0%</span>
+                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", display: "block" }}>del Techo OKR 1.1 (7.80M/mes)</span>
               </div>
             </div>
             
-            {/* Progress Bar */}
-            <div style={{ height: 8, background: "rgba(255,255,255,0.16)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
-              <div style={{ height: "100%", width: `${metrics.stats.percentageToOkr}%`, background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999 }} />
+            {/* Progress Bar for Holding OKR 1.1 */}
+            <div style={{ height: 10, background: "rgba(255,255,255,0.16)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
+              <div style={{ height: "100%", width: "42.96%", background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999 }} />
             </div>
             
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
-              <span>Actual: <strong>{(metrics.stats.nsmCurrent / 1000000).toFixed(1)}M/mes</strong></span>
-              <span>Meta: <strong>{(metrics.stats.okrTarget / 1000000).toFixed(1)}M/mes</strong></span>
-              <span>Brecha: <strong>{(metrics.stats.gapToOkr / 1000000).toFixed(1)}M/mes</strong></span>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed rgba(255,255,255,0.15)", paddingTop: 14 }}>
+              <div>
+                <span style={{ color: "rgba(255,255,255,0.6)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
+                <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>3.35M/mes</strong>
+                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", display: "block" }}>3.351.359 ord movilizadas</span>
+              </div>
+              <div>
+                <span style={{ color: "rgba(255,255,255,0.6)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Hito Julio CPO</span>
+                <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>3.57M/mes</strong>
+                <span style={{ fontSize: 11, color: "#22C55E", fontWeight: 700, display: "block" }}>93.85% alcanzado (100.32% proy)</span>
+              </div>
+              <div>
+                <span style={{ color: "rgba(255,255,255,0.6)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Techo OKR 1.1 Holding</span>
+                <strong style={{ color: "#F77F00", fontSize: 14, fontWeight: 900 }}>7.80M/mes</strong>
+                <span style={{ fontSize: 11, color: "#EF4444", fontWeight: 700, display: "block" }}>Brecha: -4.45M ord (43.0% cumpl.)</span>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Live Metrics Grid */}
+        {/* Live Metrics Grid — Termómetros Visuales por Métrica a Escala */}
         {params.slug === "sellers" && metrics && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 36 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))", gap: 18, marginBottom: 36 }}>
             {[
-              { label: "Sellers Registrados", value: metrics.stats.totalSellers.toLocaleString(), sub: "Sincronizados de Userpilot", color: "#6366F1", icon: "👥" },
-              { label: "Tasa de Activación", value: `${metrics.stats.activationRate}%`, sub: "Sellers con ≥1 orden", color: "#EC4899", icon: "⚡" },
-              { label: "Sellers Activos (30d)", value: `${metrics.stats.activeRate}%`, sub: "Actividad constante en plataforma", color: "#22C55E", icon: "🎯" },
-              { label: "Tasa de Rebote (Bounce)", value: `${metrics.stats.bounceRate}%`, sub: "Sellers con ≤1 sesión web", color: "#EF4444", icon: "🚪" },
-              { label: "Supervivencia (30d)", value: `${metrics.stats.survivalRate ?? 69.38}%`, sub: "Sellers con ≥1 orden adicional", color: "#8B5CF6", icon: "🌱" },
-              { label: "TTV Neto (Mediana)", value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`, sub: "Registro hasta entrega exitosa", color: "#F59E0B", icon: "⏱️" }
+              {
+                label: "Tasa de Activación Neta",
+                value: `${metrics.stats.activationRateNet ?? 5.2}%`,
+                targetVal: "8.0%",
+                progressPct: ((metrics.stats.activationRateNet ?? 5.2) / 8.0) * 100,
+                meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
+                sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
+                color: "#10B981", icon: "⚡"
+              },
+              {
+                label: "Tiempo de Activación Neta (TTV)",
+                value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`,
+                targetVal: "< 12.0d",
+                progressPct: (12.0 / (metrics.stats.ttvNetoMedian ?? 16.0)) * 100,
+                meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
+                sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
+                color: "#D97706", icon: "⏱️"
+              },
+              {
+                label: "Tasa de Activación Bruta",
+                value: `${metrics.stats.activationRate}%`,
+                targetVal: "12.0%",
+                progressPct: (metrics.stats.activationRate / 12.0) * 100,
+                meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
+                sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
+                color: "#DB2777", icon: "📦"
+              },
+              {
+                label: "Retención a 30 Días",
+                value: `${metrics.stats.survivalRate ?? 69.38}%`,
+                targetVal: "75.0%",
+                progressPct: ((metrics.stats.survivalRate ?? 69.38) / 75.0) * 100,
+                meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
+                sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
+                color: "#7C3AED", icon: "🌱"
+              },
+              {
+                label: "Base de Sellers Identificados",
+                value: metrics.stats.totalSellers.toLocaleString(),
+                targetVal: "46.2k DB",
+                progressPct: (36056 / metrics.stats.totalSellers) * 100,
+                meta: "36,056 Dropshippers Target + 8,744 Proveedores",
+                sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
+                color: "#2563EB", icon: "👥"
+              },
+              {
+                label: "Usuarios Activos Diarios (DAU)",
+                value: "14,262",
+                targetVal: "81.5k MAU",
+                progressPct: (14262 / 81521) * 100,
+                meta: "MAU Mensual: 81,521 usuarios/mes",
+                sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
+                color: "#059669", icon: "🎯"
+              }
             ].map((m) => (
               <div
                 key={m.label}
                 style={{
-                  background: "#fff", border: "1px solid var(--border)",
-                  borderRadius: 14, padding: "20px",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
-                  display: "flex", flexDirection: "column", justifyContent: "space-between"
+                  background: "#ffffff",
+                  border: `1px solid ${m.color}35`,
+                  borderRadius: 16,
+                  padding: "20px 22px",
+                  boxShadow: `0 4px 14px rgba(0,0,0,0.06), 0 0 10px ${m.color}10`,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between"
                 }}
               >
                 <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.07em" }}>
+                  {/* Header */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+                    <span style={{ fontSize: 11, fontWeight: 800, color: "#475569", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                       {m.label}
                     </span>
-                    <span style={{ fontSize: 16 }}>{m.icon}</span>
+                    <span style={{ fontSize: 18 }}>{m.icon}</span>
                   </div>
-                  <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.03em", color: "var(--fg)", marginBottom: 4 }}>
+
+                  {/* Big Value */}
+                  <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#0F172A", marginBottom: 8 }}>
                     {m.value}
                   </div>
-                </div>
-                <div>
-                  <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 10 }}>{m.sub}</div>
-                  <div style={{ height: 4, background: "#F3F4F6", borderRadius: 999, overflow: "hidden" }}>
-                    <div style={{ height: "100%", width: m.value.includes("%") ? m.value : "100%", background: m.color, borderRadius: 999 }} />
+
+                  {/* Meta Badge */}
+                  <div style={{
+                    background: "#F8FAFC",
+                    borderLeft: `4px solid ${m.color}`,
+                    padding: "6px 12px",
+                    borderRadius: "0 8px 8px 0",
+                    marginBottom: 12
+                  }}>
+                    <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
+                      {m.meta}
+                    </div>
                   </div>
+
+                  {/* Visual Progress Bar */}
+                  <div style={{ margin: "10px 0 14px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
+                      <span style={{ color: "#64748B" }}>Avance a la Meta</span>
+                      <span style={{ color: m.color, fontWeight: 900 }}>
+                        {m.progressPct.toFixed(1)}%
+                      </span>
+                    </div>
+
+                    {/* Thermometer Tube */}
+                    <div style={{
+                      height: 10,
+                      background: "#F1F5F9",
+                      borderRadius: 999,
+                      padding: 1,
+                      border: "1px solid #CBD5E1",
+                      position: "relative",
+                      overflow: "hidden"
+                    }}>
+                      <div style={{
+                        height: "100%",
+                        width: `${Math.min(m.progressPct, 100)}%`,
+                        background: `linear-gradient(90deg, ${m.color}AA 0%, ${m.color} 100%)`,
+                        borderRadius: 999,
+                        boxShadow: `0 0 8px ${m.color}60`
+                      }} />
+                    </div>
+
+                    {/* Scale Legends */}
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#64748B", marginTop: 4, fontWeight: 600 }}>
+                      <span>0</span>
+                      <span>Actual: <strong style={{ color: "#0F172A" }}>{m.value}</strong></span>
+                      <span>Meta: <strong style={{ color: m.color }}>{m.targetVal}</strong></span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Explanation Footer */}
+                <div style={{
+                  fontSize: 12,
+                  color: "#475569",
+                  fontWeight: 500,
+                  lineHeight: 1.45,
+                  borderTop: "1px dashed #E2E8F0",
+                  paddingTop: 10
+                }}>
+                  {m.sub}
                 </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* Direccionamiento Estratégico Section */}
-        {params.slug === "sellers" && metrics && (
-          <div style={{
-            background: "#fff", border: "1px solid var(--border)",
-            borderRadius: 16, padding: 24, marginBottom: 36,
-            boxShadow: "0 1px 3px rgba(0,0,0,0.06)"
-          }}>
-            <h3 style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
-              <span>🎯</span> Direccionamiento Estratégico & Lentes PM OS
-            </h3>
-            
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 20 }}>
-              <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
-                  Norte & Propósito
-                </div>
-                <p style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, margin: "0 0 4px" }}>
-                  Que cada dropshipper gane dinero vendiendo en la plataforma.
-                </p>
-                <span style={{ fontSize: 11, color: "var(--muted)" }}>
-                  Activación = 1ª orden rentable · Retención = ganancia sostenida.
-                </span>
-              </div>
 
-              <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
-                  Territorio & Perfil
-                </div>
-                <p style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, margin: "0 0 4px" }}>
-                  Territorio E-commerce (Seller Success)
-                </p>
-                <span style={{ fontSize: 11, color: "var(--muted)" }}>
-                  Foco: Dropshippers (Rebuscador, Empleado Aspirante, Joven Visionario).
-                </span>
-              </div>
 
-              <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: 16 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
-                  Lentes & Madurez (Q3 Focus)
-                </div>
-                <p style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600, margin: "0 0 4px" }}>
-                  Nivel A (Iniciando) → TTV/Reptiliano
-                </p>
-                <span style={{ fontSize: 11, color: "var(--muted)" }}>
-                  Q3: Reducir fricción de activación neta (5.2%) y bruta (7.6%).
-                </span>
-              </div>
-            </div>
-            
-            <div style={{ marginTop: 16, fontSize: 11, color: "var(--muted)", display: "flex", flexWrap: "wrap", gap: 16, borderTop: "1px dashed var(--border)", paddingTop: 12 }}>
-              <span>🔑 <strong>Ownership:</strong> Módulo de marketing y herramientas de ventas/marketing.</span>
-              <span>📈 <strong>Alineación OKR:</strong> Todas las iniciativas empujan el KR1.1 de la holding (7.8M órdenes/mes).</span>
-            </div>
+        {isLogistica && (
+          <div style={{ marginBottom: 56 }}>
+            <UpdatesLogistica
+              extra={updates}
+              onItemClick={(item) => {
+                const u = updatesById.get(item.key);
+                if (u) setOpenUpdate(u);
+              }}
+            />
           </div>
         )}
-
-        {/* Conversion Funnel Section */}
-        {params.slug === "sellers" && metrics && (
-          <>
-            <div style={{
-              background: "#fff", border: "1px solid var(--border)",
-              borderRadius: 16, padding: 24, marginBottom: 36,
-              boxShadow: "0 1px 3px rgba(0,0,0,0.06)"
-            }}>
-              <h3 style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20 }}>
-                Embudo de Conversión de Sellers (UserPilot → DB)
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                {metrics.funnel.map((step, idx) => (
-                  <div key={step.step} style={{ display: "flex", alignItems: "center", gap: 16 }}>
-                    <span style={{ fontSize: 11, fontWeight: 800, color: "var(--muted)", width: 20 }}>
-                      {idx + 1}
-                    </span>
-                    <div style={{
-                      flex: 1, background: "#F8FAFC", border: "1px solid var(--border)",
-                      borderRadius: 10, padding: "12px 16px", display: "flex",
-                      justifyContent: "space-between", alignItems: "center",
-                      position: "relative", overflow: "hidden"
-                    }}>
-                      <div style={{
-                        position: "absolute", top: 0, left: 0, bottom: 0,
-                        width: `${step.pct}%`, background: `${step.color}0c`,
-                        zIndex: 0
-                      }} />
-                      <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", zIndex: 1 }}>
-                        {step.step}
-                      </span>
-                      <div style={{ display: "flex", alignItems: "center", gap: 12, zIndex: 1 }}>
-                        <span style={{ fontSize: 13, fontWeight: 800, color: "var(--fg)" }}>
-                          {step.count.toLocaleString()}
-                        </span>
-                        <span style={{
-                          fontSize: 10, fontWeight: 700, background: `${step.color}18`,
-                          color: step.color, padding: "2px 8px", borderRadius: 20
-                        }}>
-                          {step.pct}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Two-column layout for Jira and Sprints */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px, 1fr))", gap: 24, marginBottom: 36 }}>
-              {/* GoHighLevel CRM Onboarding Pipeline Card */}
-              <div style={{
-                background: "#fff", border: "1px solid var(--border)",
-                borderRadius: 16, padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.06)"
-              }}>
-                <h3 style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span>🤝</span> CRM GoHighLevel Onboarding
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {metrics.crm?.stages ? (
-                    Object.entries(metrics.crm.stages).map(([stage, count]) => (
-                      <div key={stage} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px dashed var(--border)", paddingBottom: 8 }}>
-                        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>{stage}</span>
-                        <span style={{ fontSize: 12, fontWeight: 800, background: "var(--bg)", color: "var(--fg)", padding: "3px 10px", borderRadius: 20 }}>
-                          {count} leads
-                        </span>
-                      </div>
-                    ))
-                  ) : (
-                    <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>Cargando datos del CRM...</p>
-                  )}
-                  <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 6, fontStyle: "italic" }}>
-                    Fuente: Oportunidades GHL sincronizadas en tiempo real.
-                  </div>
-                </div>
-              </div>
-
-              {/* Sprints Tasks & Checklist Card */}
-              <div style={{
-                background: "#fff", border: "1px solid var(--border)",
-                borderRadius: 16, padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.06)"
-              }}>
-                <h3 style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                  <span>📅</span> Sprint Activo (Checklist de Producto)
-                </h3>
-                <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                  {metrics.sprint?.tasksList ? (
-                    metrics.sprint.tasksList.map((task) => (
-                      <div key={task.key} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 12, background: "var(--bg)" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8, marginBottom: 8 }}>
-                          <a href={task.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}>
-                            {task.key}
-                          </a>
-                          <span style={{
-                            fontSize: 9, fontWeight: 800, textTransform: "uppercase",
-                            padding: "2px 6px", borderRadius: 4,
-                            background: task.status === "Listo" || task.status === "Done" || task.status === "Finished" ? "#DCFCE7" : "#FEF3C7",
-                            color: task.status === "Listo" || task.status === "Done" || task.status === "Finished" ? "#166534" : "#92400E"
-                          }}>
-                            {task.status}
-                          </span>
-                        </div>
-                        <div style={{ fontSize: 12, color: "var(--fg)", fontWeight: 600, marginBottom: 8 }}>{task.summary}</div>
-                        {task.sections && task.sections.length > 0 && (
-                          <div style={{ display: "flex", flexDirection: "column", gap: 4, borderTop: "1px solid var(--border)", paddingTop: 8 }}>
-                            {task.sections.map((sec: any) => (
-                              <div key={sec.name} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11 }}>
-                                <span>{sec.status === "hecho" ? "✅" : "⏳"}</span>
-                                <span style={{ color: "var(--fg)", fontWeight: 550 }}>{sec.name}:</span>
-                                <span style={{ color: "var(--muted)" }}>{sec.notes}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    ))
-                  ) : (
-                    <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>Cargando checklist del sprint...</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Jira Bugs Tracking Card */}
-            <div style={{
-              background: "#fff", border: "1px solid var(--border)",
-              borderRadius: 16, padding: 24, marginBottom: 40,
-              boxShadow: "0 1px 3px rgba(0,0,0,0.06)"
-            }}>
-              <h3 style={{ fontSize: 12, fontWeight: 700, color: "var(--fg)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                <span>🐛</span> Bugs Activos en Jira (Caza-productos / Notificaciones)
-              </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {metrics.jira?.bugsList ? (
-                  metrics.jira.bugsList.map((bug) => (
-                    <div key={bug.key} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px dashed var(--border)", paddingBottom: 10 }}>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                          <a href={bug.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}>
-                            {bug.key}
-                          </a>
-                          <span style={{ fontSize: 12, color: "var(--fg)", fontWeight: 600 }}>{bug.summary}</span>
-                        </div>
-                        <div style={{ fontSize: 11, color: "var(--muted)" }}>Asignado a: <strong>{bug.assignee}</strong></div>
-                      </div>
-                      <span style={{
-                        fontSize: 10, fontWeight: 700, textTransform: "uppercase",
-                        padding: "4px 8px", borderRadius: 6,
-                        background: bug.status === "Done" || bug.status === "Resuelto" || bug.status === "Finished" ? "#DCFCE7" : "#FEE2E2",
-                        color: bug.status === "Done" || bug.status === "Resuelto" || bug.status === "Finished" ? "#166534" : "#991B1B"
-                      }}>
-                        {bug.status}
-                      </span>
-                    </div>
-                  ))
-                ) : (
-                  <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>Cargando bugs activos...</p>
-                )}
-                {metrics.jira?.bugsList && metrics.jira.bugsList.length === 0 && (
-                  <p style={{ fontSize: 13, color: "var(--muted)", margin: 0 }}>No hay bugs activos reportados.</p>
-                )}
-              </div>
-            </div>
-          </>
-        )}
-
-        <div style={{ marginBottom: 56 }}>
-          <Section
-            title="Updates"
-            items={updates}
-            ctaLabel="Ver →"
-            onItemClick={(item) => {
-              const u = updatesById.get(item.key);
-              if (u) setOpenUpdate(u);
-            }}
-          />
-          {updates.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
-          )}
-        </div>
 
         <div style={{ marginBottom: 56 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
             <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
-              Discovery projects
+              {isLogistica ? "Iniciativas por etapa" : "Discovery projects"}
             </p>
             {canCreate && (
               <div style={{ display: "flex", gap: 8 }}>
@@ -1184,47 +1081,94 @@ export default function CelulaHomePage() {
             </form>
           )}
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-            {celula.proyectos.filter((p) => p.type !== "POC").map((p) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                dark={false}
-                canCreate={canCreate}
-                pocs={pocsByParent.get(p.id) ?? []}
-                onEstadoChange={handleEstadoChange}
-                onVpvChange={handleVpvChange}
-                onCrearPoc={handleCrearPoc}
-              />
-            ))}
-          </div>
-          {proyectos.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
+          {isLogistica ? (
+            <ProyectosPorEtapa
+              deDarwin={celula.proyectos}
+              etapaActiva={etapaFiltro}
+              canCreate={canCreate}
+              pocsByParent={pocsByParent}
+              onEstadoChange={handleEstadoChange}
+              onVpvChange={handleVpvChange}
+              onCrearPoc={handleCrearPoc}
+            />
+          ) : (
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+                {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map((p) => (
+                  <ProjectCard
+                    key={p.id}
+                    project={p}
+                    dark={false}
+                    canCreate={canCreate}
+                    pocs={pocsByParent.get(p.id) ?? []}
+                    deliveries={deliveriesByParent.get(p.id) ?? []}
+                    onEstadoChange={handleEstadoChange}
+                    onVpvChange={handleVpvChange}
+                    onCrearPoc={handleCrearPoc}
+                    onCrearDelivery={handleCrearDelivery}
+                  />
+                ))}
+              </div>
+              {proyectos.length === 0 && (
+                <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
+              )}
+            </>
           )}
         </div>
 
-        <div>
-          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-            Pruebas de concepto
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-            {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                dark={false}
-                canCreate={canCreate}
-                pocs={[]}
-                onEstadoChange={handleEstadoChange}
-                onVpvChange={handleVpvChange}
-                onCrearPoc={handleCrearPoc}
-              />
-            ))}
+        {/* Los POC de logística no van en una sección aparte: se muestran dentro
+            de su etapa, que es el eje de organización de esa célula. */}
+        {!isLogistica && (
+          <div style={{ marginBottom: 56 }}>
+            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+              Pruebas de concepto
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+              {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                />
+              ))}
+            </div>
+            {poc.length === 0 && (
+              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
+            )}
           </div>
-          {poc.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
-          )}
-        </div>
+        )}
+
+        {!isLogistica && (
+          <div>
+            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+              Delivery Proyectos
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+              {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                  onRelatedPocChange={handleRelatedPocChange}
+                />
+              ))}
+            </div>
+            {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
+              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
+            )}
+          </div>
+        )}
       </div>
       </div>
       <HubFooter />

@@ -99,6 +99,17 @@
 .rec-btn:hover { border-color: var(--brand); color: var(--text); }
 .rec-btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 
+/* Variante sólida: solo para la acción principal de un bloque. Si hubiera dos
+   en la misma vista dejarían de señalar nada. Texto blanco sobre el morado de
+   marca da 7,4:1 — bien por encima del 4,5:1 que pide AA. */
+.rec-btn--fuerte {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+  padding: var(--rec-sp-2) var(--rec-sp-4);
+}
+.rec-btn--fuerte:hover { color: #fff; filter: brightness(1.08); }
+
 /* ── De dónde salen los datos ────────────────────────────────────────────── */
 /* Leer de un archivo local no es lo mismo que leer de la base, y la pantalla
    tiene que decirlo sin que haya que preguntar. */
@@ -556,3 +567,87 @@
 }
 .mapa-leyenda li { display: flex; align-items: center; gap: 6px; }
 .mapa-leyenda i { width: 13px; height: 13px; flex: 0 0 13px; }
+
+/* ── Acceso al mapa desde el tablero ───────────────────────────────────────
+   No embebe el mapa: lo anuncia y lleva a él. Ver page.tsx para el porqué. */
+.rec-mapa-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rec-sp-4);
+  flex-wrap: wrap;
+  margin: var(--rec-sp-6) 0 0;
+  padding: var(--rec-sp-4) var(--rec-sp-5);
+  border: 1px solid var(--border);
+  border-radius: var(--rec-r-md);
+  background: #fff;
+}
+.rec-mapa-cta h2 {
+  margin: 0;
+  font-size: var(--rec-fs-lg);
+  font-weight: 600;
+  color: var(--rec-ink-1, var(--fg));
+}
+.rec-mapa-cta p {
+  margin: var(--rec-sp-1) 0 0;
+  max-width: 62ch;
+  font-size: var(--rec-fs-sm);
+  line-height: 1.5;
+  color: var(--rec-ink-2);
+}
+
+/* ── El mapa en su propia página ───────────────────────────────────────────
+   La ventana entera, sin barra propia ni panel lateral: el mapa ya trae su
+   encabezado y sus migas adentro, y cualquier chrome del hub encima le roba
+   alto para repetir lo que ya dice. Un mapa con poco alto no se puede usar. */
+.rec-mapa-pagina {
+  display: block;
+  height: 100vh;
+  min-width: 0;
+  overflow: hidden;        /* el scroll es del mapa, no de la página */
+  background: #fff;
+}
+
+.rec-mapa-pagina iframe {
+  display: block;          /* sin esto el iframe es inline y deja 4px abajo */
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* ── Antigüedad de la carga ────────────────────────────────────────────────
+   Desde el export del 28-jul se sabe hace cuánto está parada cada guía. Antes
+   la lista solo podía ordenarse por volumen, y una bodega chica con guías de
+   quince días quedaba invisible debajo de una grande con carga de ayer.
+
+   La marca va en la fila entera y no solo en la celda a propósito: el orden
+   por defecto sigue siendo por volumen, así que si la señal viviera únicamente
+   en su columna, habría que ir a buscarla. Acá salta con cualquier orden. */
+.sol-edad { white-space: nowrap; color: var(--rec-ink-2); }
+
+/* Franja al costado, no fondo de color: la fila sigue siendo legible y no
+   compite con el estado de selección. El color solo acompaña — el texto de la
+   celda ("8-15 d", "+15 d") es lo que informa, para que no dependa de ver
+   bien el color. */
+.sol-fila--demorada td:first-child { box-shadow: inset 3px 0 0 var(--rec-warn-ink); }
+.sol-fila--demorada .sol-edad { color: var(--rec-warn-ink); font-weight: 600; }
+
+.sol-fila--critica td:first-child { box-shadow: inset 3px 0 0 var(--rec-err-ink); }
+.sol-fila--critica .sol-edad { color: var(--rec-err-ink); font-weight: 700; }
+
+/* Contacto directo con la bodega, dentro de la celda del nombre. Discreto:
+   la acción principal sigue siendo armar la solicitud de la transportadora,
+   no llamar de a una. Aparece al lado de la dirección porque es la misma
+   pregunta —"quién es y dónde está"— continuada con "y a quién le escribo". */
+.sol-wa {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: var(--rec-fs-xs);
+  color: var(--rec-ok-ink);
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+}
+.sol-wa:hover { color: var(--brand); }
+.sol-wa:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+/* Sin teléfono no es un enlace roto: es una ausencia declarada. */
+.sol-wa--no { color: var(--muted); border-bottom: 0; font-style: italic; }

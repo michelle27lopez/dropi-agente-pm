@@ -1,7 +1,9 @@
 # Borrador · propuesta final visual de normalización de estados
 
 > **Estado: 🟡 borrador de trabajo · 2026-07-17. No promovido al spec.**
-> Vista interactiva: `tablero/app/normalizacion-estados/` → ruta `/normalizacion-estados`.
+> Vista interactiva: `hub/src/app/proyectos/logistica/normalizacion-estados/`
+> → ruta `/proyectos/logistica/normalizacion-estados` *(ruta actualizada tras la migración a Darwin
+> del 21-jul; antes vivía en `tablero/app/normalizacion-estados/`)*.
 
 ## 1 · Objetivo del entregable
 
@@ -69,8 +71,19 @@ ECOM sin Dropi) · `Recolección fallida` · `Reintento de recolección` · `Dis
 estado de cierre validado.** Sabemos que el paquete vuelve; no tenemos un solo dato de que alguien
 confirme que llegó.
 
-El mapa ahora los marca con el interruptor **«Marcar sin validar»**. Entran a TI como propuesta, no como
-comportamiento observado — y eso debe decirse en la presentación.
+La vista los lista aparte, en la pestaña **Ejemplos**, bajo «Cobertura de la muestra». Entran a TI como
+propuesta, no como comportamiento observado — y eso debe decirse en la presentación.
+
+> ⚠️ **«Validado» se usa con tres criterios distintos y no significan lo mismo** (corregido 28-jul).
+> Conviene nombrarlos separados o la mesa los confunde:
+> 1. **Respaldo en el tráfico** — lo que colorea el mapa: cuántos eventos reales caen en ese estado
+>    (`observado` ≥ 0,5% · `raro` < 0,5% · `propuesto` = ningún crudo lo alimenta).
+> 2. **Cobertura de la muestra** — los 10 nodos de esta sección: si alguna de las 14 guías los recorre.
+> 3. **Sin crudo que lo alimente** — pestaña Homologación: la propuesta define el estado pero
+>    ninguna fuente lo produce. El más estricto de los tres.
+>
+> Un estado puede pasar uno y fallar otro: `Disponible para retiro` tiene 184 eventos reales
+> (criterio 1 ✅) y ninguna guía de la muestra lo toca (criterio 2 ❌).
 
 ## 4 · Gates para declarar la propuesta final
 

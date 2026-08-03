@@ -72,6 +72,24 @@ export async function POST(req: NextRequest) {
     .select("fecha", { count: "exact", head: true })
     .eq("fecha", fecha);
 
+  // ── ¿El export viene cortado? ────────────────────────────────────────────
+  // Pasó con el del 28-jul: 4.000 filas exactas, ordenado por volumen
+  // descendente y con menos bodegas que el anterior pese a una ventana 15x
+  // más amplia. Era un tope del exportador, no el fin de los datos.
+  //
+  // Un archivo truncado entra sin error y se ve normal — por eso hay que
+  // decirlo acá. La señal es la combinación: total redondo Y orden
+  // descendente Y última fila en el mínimo. Cualquiera de las tres sola es
+  // coincidencia; las tres juntas, no.
+  const vol = filas.map(f => Number(f.preparadas ?? 0) + Number(f.guia_generada ?? 0));
+  const desc = vol.every((v, i) => i === 0 || vol[i - 1] >= v);
+  const redondo = filas.length >= 1000 && filas.length % 1000 === 0;
+  const truncado = redondo && desc && vol[vol.length - 1] <= Math.min(...vol);
+
+  const conTelefono = bodegas.filter(b => b.telefono || b.telefono_proveedor).length;
+  const conEdades = bodegas.filter(b =>
+    Object.values(b.edades).some(v => v > 0)).length;
+
   const preview = {
     archivo: archivo.name,
     fecha_datos: fecha,
@@ -79,6 +97,19 @@ export async function POST(req: NextRequest) {
     delta,
     // Reimportar el mismo día no rompe (es upsert), pero conviene saberlo.
     pisa_carga_del_dia: (yaExiste.count ?? 0) > 0,
+    // Qué trae de nuevo: si el export es de los viejos, estos van en 0 y se
+    // ve de una que no aporta contacto ni antigüedad.
+    columnas_nuevas: {
+      con_telefono: conTelefono,
+      con_antiguedad: conEdades,
+    },
+    aviso: truncado
+      ? `El archivo tiene exactamente ${filas.length.toLocaleString("es-CO")} filas, ` +
+        `viene ordenado de mayor a menor y la última es la más chica. ` +
+        `Probablemente esté cortado por un tope del exportador y falte la cola ` +
+        `de bodegas con pocas guías. Se puede cargar igual —los totales serán un ` +
+        `piso, no la foto completa— y volver a subir el archivo completo encima.`
+      : null,
   };
 
   if (!confirmar) {
@@ -114,7 +145,7 @@ export async function POST(req: NextRequest) {
     const previo = cache.get(b.warehouse_id);
     const u = ubicar(b, previo);
     const conserva = previo && u.nivel_precision === previo.nivel_precision && u.lat === previo.lat;
-    return {
+    const fila: Record<string, unknown> = {
       warehouse_id: b.warehouse_id,
       nombre: b.nombre, direccion: b.direccion,
       municipio: b.municipio, dpto: b.dpto, cod_dane: b.cod_dane,
@@ -124,15 +155,40 @@ export async function POST(req: NextRequest) {
       direccion_geocodificada: conserva ? previo?.direccion_geocodificada : null,
       updated_at: ahora,
     };
+
+    // Contacto e identidad: solo se escriben si el export los trae.
+    //
+    // Un export que no incluya la columna —el del 25-jul, por ejemplo— no
+    // puede borrar un teléfono que ya está bien, ni menos uno corregido a
+    // mano. Por eso se omite la clave en vez de mandar null: PostgREST solo
+    // actualiza las columnas presentes en el objeto, así que lo ausente
+    // queda intacto.
+    if (b.supplier_id !== null) fila.supplier_id = b.supplier_id;
+    if (b.supplier_nombre !== null) fila.supplier_nombre = b.supplier_nombre;
+    if (b.telefono !== null) fila.telefono = b.telefono;
+    if (b.telefono_proveedor !== null) fila.telefono_proveedor = b.telefono_proveedor;
+    if (b.fulfillment_by_dropi !== null) fila.fulfillment_by_dropi = b.fulfillment_by_dropi;
+    if (b.bodega_creada_at !== null) {
+      fila.bodega_creada_at = b.bodega_creada_at.replace(" ", "T") + "Z";
+    }
+    return fila;
   });
 
   const filasCarga = bodegas.flatMap(b =>
-    b.transportadoras.map(([transportadora, preparadas, guia_generada]) => ({
+    b.cargas.map(c => ({
       fecha,
       warehouse_id: b.warehouse_id,
-      transportadora,
-      preparadas,
-      guia_generada,
+      transportadora: c.transportadora,
+      preparadas: c.preparadas,
+      guia_generada: c.guia_generada,
+      // Las cubetas de antigüedad, al grano de la transportadora. Hasta el
+      // export del 28-jul esto quedaba en NULL a propósito: no teníamos el
+      // dato y un 0 habría dicho "todo es de hoy", que era falso.
+      edad_0_1d: c.edad_0_1d,
+      edad_2_3d: c.edad_2_3d,
+      edad_4_7d: c.edad_4_7d,
+      edad_8_15d: c.edad_8_15d,
+      edad_15d_mas: c.edad_15d_mas,
       ultimo_evento: b.ultimo_evento ? b.ultimo_evento.replace(" ", "T") + "Z" : null,
     })),
   );

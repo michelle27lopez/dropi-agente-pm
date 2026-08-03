@@ -8,6 +8,7 @@
 > Etiquetas: 🔵 nuevo/estratégico · 🔴 heredado/por finalizar · 🟡 OKR · 🟣 KPI
 
 > **Categorización del roadmap** (por la cadena de valor de la orden + OKR/KR + fugas + gaps) → [`_categorizacion.md`](_categorizacion.md). Playbook del proceso: `metodologia/discovery-y-categorizacion.md`.
+> **Fichas en Darwin** (el Product Lab interno, `/celula/logistica`): qué campos acepta una ficha, qué falta cargar y el SQL que las creó → [`_darwin/fichas-darwin.md`](_darwin/fichas-darwin.md).
 > **Semana a semana** (sprints, dailies, cell board) → ver `planning/semana.md`.
 > **Documentación para entrega a TI** → plantilla en `metodologia/handoff-ti.md`.
 > **Delivery Backlog oficial de la célula** (con tickets y estado EJECUTAR/FINALIZAR) → lo define
