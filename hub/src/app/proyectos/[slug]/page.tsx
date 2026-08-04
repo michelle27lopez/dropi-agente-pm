@@ -101,6 +101,7 @@ export default function ProjectDashboardPage() {
   const [followingName, setFollowingName] = useState("");
   const [followingSummary, setFollowingSummary] = useState("");
   const [followingSubmitting, setFollowingSubmitting] = useState(false);
+  const [followingError, setFollowingError] = useState<string | null>(null);
 
   const [docsOpen, setDocsOpen] = useState(true);
   const [briefOpen, setBriefOpen] = useState(true);
@@ -287,6 +288,7 @@ export default function ProjectDashboardPage() {
     e.preventDefault();
     if (!followingName.trim() || !followingSummary.trim()) return;
     setFollowingSubmitting(true);
+    setFollowingError(null);
     const res = await fetch(`/api/proyectos/${slug}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -297,7 +299,11 @@ export default function ProjectDashboardPage() {
       }),
     });
     setFollowingSubmitting(false);
-    if (!res.ok) return;
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      setFollowingError(data?.error ?? "No se pudo crear el Following.");
+      return;
+    }
     const created = await res.json();
     setChildren((prev) => [...prev, created]);
     setShowFollowingForm(false);
@@ -799,6 +805,9 @@ export default function ProjectDashboardPage() {
 
               {showFollowingForm ? (
                 <form onSubmit={handleCrearFollowing} style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 420 }}>
+                  {followingError && (
+                    <p style={{ fontSize: 12, color: "#DC2626", margin: 0 }}>{followingError}</p>
+                  )}
                   <input
                     value={followingName}
                     onChange={(e) => setFollowingName(e.target.value)}

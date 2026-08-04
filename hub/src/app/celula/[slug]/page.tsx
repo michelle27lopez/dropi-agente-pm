@@ -253,15 +253,19 @@ export default function CelulaHomePage() {
     setCelula((prev) => prev ? { ...prev, proyectos: prev.proyectos.map((p) => (p.id === updated.id ? updated : p)) } : prev);
   }
 
-  async function handleCrearFollowing(parent: Proyecto, name: string, summary: string) {
+  async function handleCrearFollowing(parent: Proyecto, name: string, summary: string): Promise<string | null> {
     const res = await fetch(`/api/proyectos/${parent.id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, summary, type: "Following" }),
     });
-    if (!res.ok) return;
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      return data?.error ?? "No se pudo crear el Following.";
+    }
     const created = await res.json();
     setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, created] } : prev);
+    return null;
   }
 
   // Home privada: solo para MI_DIA_OWNER_EMAIL, reemplaza el body estándar de

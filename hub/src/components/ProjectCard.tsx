@@ -54,7 +54,10 @@ export function ProjectCard({
   onCrearPoc: (parent: Proyecto, name: string, summary: string) => Promise<void>;
   onCrearDelivery?: (parent: Proyecto, name: string, summary: string, relatedPocId: string | null) => Promise<void>;
   onRelatedPocChange?: (id: string, relatedPocId: string | null) => void;
-  onCrearFollowing?: (parent: Proyecto, name: string, summary: string) => Promise<void>;
+  // Devuelve un mensaje de error si la creación falla (ej. migración de BD
+  // pendiente en ese Supabase), o null si salió bien — para no cerrar el
+  // formulario en silencio como si hubiera funcionado.
+  onCrearFollowing?: (parent: Proyecto, name: string, summary: string) => Promise<string | null>;
   // Los homes "curados" (ej. la raíz de Suppliers) ya tenían su propia
   // url/color/icon por código de proyecto antes de este componente — se
   // respetan aquí para no perder esa curaduría visual.
@@ -77,6 +80,7 @@ export function ProjectCard({
   const [followingName, setFollowingName] = useState("");
   const [followingSummary, setFollowingSummary] = useState("");
   const [submittingFollowing, setSubmittingFollowing] = useState(false);
+  const [followingError, setFollowingError] = useState<string | null>(null);
 
   const tag = project.project_code ?? project.handoff_status ?? "Sin código";
   const color = colorOverride ?? (project.handoff_status && HANDOFF_COLOR[project.handoff_status]) ?? "#94A3B8";
@@ -121,8 +125,13 @@ export function ProjectCard({
     e.preventDefault();
     if (!followingName.trim() || !followingSummary.trim() || !onCrearFollowing) return;
     setSubmittingFollowing(true);
-    await onCrearFollowing(project, followingName.trim(), followingSummary.trim());
+    setFollowingError(null);
+    const error = await onCrearFollowing(project, followingName.trim(), followingSummary.trim());
     setSubmittingFollowing(false);
+    if (error) {
+      setFollowingError(error);
+      return;
+    }
     setShowFollowingForm(false);
     setFollowingName("");
     setFollowingSummary("");
@@ -231,6 +240,9 @@ export function ProjectCard({
         <div style={{ display: "flex", flexDirection: "column", gap: 8, borderTop: cardBorder, paddingTop: 10 }}>
           {showFollowingForm ? (
             <form onSubmit={submitFollowing} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {followingError && (
+                <p style={{ fontSize: 11, color: "#EF4444", margin: 0 }}>{followingError}</p>
+              )}
               <input
                 value={followingName}
                 onChange={(e) => setFollowingName(e.target.value)}
