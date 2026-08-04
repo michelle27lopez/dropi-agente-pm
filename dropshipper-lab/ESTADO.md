@@ -31,14 +31,14 @@ Son las **únicas 5 iniciativas** que han superado Discovery y están en el fluj
 ### 3. 🟡 Page Pilot — Creador de Landings (`PRM-1238-DEL` / `PROD-1814`)
 * **¿Qué es y qué problema resuelve?:** Creador asistido de páginas de venta (landings) para novatos. Elimina la barrera técnica de diseñar tiendas complejas desde cero.
 * **¿Qué cambia en la plataforma?:** El seller selecciona un producto del catálogo y genera su página de aterrizaje en minutos con un ángulo de venta prescriptivo.
-* **Estado Actual:** 🟡 **En QA (P1)** — Piloto controlado con 120 comercios seleccionados.
-* **Alineación con Otras Células (TI / Growth):** Handoff a QA realizado por PD. **Pendiente de TI/QA:** Solucionar errores persistentes al generar landings y forzar que el campo "Ángulo de Venta" sea obligatorio. **Con Growth (Catherin Salazar):** Workshop TARS de lanzamiento comercial.
+* **Estado Actual:** 🟡 **En QA (P1 - Bloqueado por QA)**.
+* **Alineación con Otras Células (TI / QA):** Handoff a QA realizado por PD. **Aún no se tiene respuesta de QA ni cambios sobre los errores reportados. Aún NO se ha desplegado la beta al cohorte de 120 usuarios novatos.**
 
 ### 4. 🟡 Dropify Shopify 2.0 — App Nativa (`PROD-580`)
 * **¿Qué es y qué problema resuelve?:** Re-arquitectura nativa "Built for Shopify" para eliminar las 4 horas diarias que sellers de alto volumen pierden digitando pedidos a mano.
 * **¿Qué cambia en la plataforma?:** Conexión OAuth transparente de 1-clic, sincronización bidireccional automática de inventario y pedidos, y mapeo de productos preexistentes.
-* **Estado Actual:** 🟡 **En QA (P2)** — Pruebas aisladas en ambiente PT2 Sandbox.
-* **Alineación con Otras Células (Producto ➔ TI):** Pendiente completar la matriz de pruebas de fulfillment de combos y variantes complejas junto a Alejandra Melo. Optimización de la descripción en Shopify App Store coordinada con **Growth**.
+* **Estado Actual:** 🟡 **En QA (P2 - Bloqueado por QA)**.
+* **Alineación con Otras Células (Producto ➔ QA):** **No hay fecha fijada por el equipo de QA** para llevar a cabo la matriz de pruebas de fulfillment de combos y variantes complejas junto a Alejandra Melo.
 
 ### 5. 🔴 Dropify WooCommerce — Plugin React (`DROP-17355`)
 * **¿Qué es y qué problema resuelve?:** Migración completa del plugin de WooCommerce a React para eliminar la deuda técnica del código legado y ofrecer paridad funcional con Shopify 2.0.
@@ -52,20 +52,6 @@ Son las **únicas 5 iniciativas** que han superado Discovery y están en el fluj
 
 Son las iniciativas que **aún NO están en desarrollo técnico** y se encuentran en diseño de solución o validación con usuarios:
 
-### 6. 🟢 PoC Shopi / PoolMax — Pauta Centralizada (`PROD-POOLMAX`)
-* **¿Qué es?:** Reparto automático vía API de órdenes e inversión publicitaria desde campañas centrales (Meta/TikTok) hacia tiendas asociadas a comunidades.
-* **Estado:** 🟢 **Avanzado / Listo para inicio esta semana**. Conversaciones adelantadas con Financiero, Legal y reunión técnica realizada con Esteban y Arlex. Grupo de WhatsApp activo para comunicación directa.
-* **Alineación Cross-Célula:** Control financiero y legal cerrado. Canal de comunicación WhatsApp en marcha.
-
-### 7. 🎨 Módulo de Notificaciones 360 (`PROD-1664` / `PRM-1305`)
-* **¿Qué es?:** Motor conductual de prompts y notificaciones multicanal (In-App y WhatsApp) para guiar al seller ante eventos clave del journey.
-* **Estado:** 🎨 **Discovery (Mockup & Recolección de Info)**. Apenas en maquetación de pantallas y recolección de eventos de Novedades (`PROD-1697`).
-* **Alineación Cross-Célula:** Se unificará con la **Biblia de AI / Help Center (SAC)** para centralizar los contenidos y no duplicar widgets flotantes.
-
-### 7. 🎨 Dropi Wrapped Leyendas 2026 (`PROD-WRAPPED` / `GRO-002`)
-* **¿Qué es?:** Retrospectiva interactiva gamificada que celebra las ventas del seller y lo ubica en uno of los 6 niveles de *Leyendas Dropi* para acelerar la retención post-campaña.
-* **Estado:** 🎨 **Discovery (Fase de Diseño UX/UI)**. Prototipo interactivo v7.0 maquetado ([dropi-wrapped-sellers.html](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropi-wrapped-sellers.html)).
-* **Alineación Cross-Célula:** Alinear con el equipo de **Brands / Marketing** para el evento comercial de septiembre.
 
 ### 8. 🤝 PoC Shopi / PoolMax — Pauta Centralizada (`PROD-POOLMAX`)
 * **¿Qué es?:** Reparto automático vía API de órdenes e inversión publicitaria desde campañas centrales (Meta/TikTok) hacia tiendas asociadas a comunidades.
