@@ -63,11 +63,11 @@ graph TD
 
 | Iniciativa / Proyecto Delivery | Código Jira / Darwin | Tipo | Estado Interno (`estado_interno`) | Handoff Status | Prioridad | Copy Ejecutivo & Causa Raíz / Bloqueante |
 | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-| **Bugs Tienda Nube (V1)** | `STID-6598` | `Delivery Proyecto` | `en DEV` | `Handoff hecho` | **P0 (Urgente)** | **Objetivo:** Resolver 6 errores de integración críticos (sincronización de variables talla/color, importación masiva, webhooks inestables y direcciones sin Barrio/Piso).<br>**Bloqueante:** Falta de asignación de recurso dev en Jira por parte de ingeniería (Jose Giraldo). |
+| **Bugs Tienda Nube (V1)** | `STID-6598` | `Delivery Proyecto` | `en DEV` | `Handoff hecho` | **P0 (Urgente)** | **Objetivo:** Resolver 6 errores de integración críticos (sincronización de variables talla/color, importación masiva, webhooks inestables y direcciones sin Barrio/Piso).<br>**Bloqueante P0:** Aún sin asignación de recurso dev en Jira por parte de ingeniería (Jose Giraldo). |
 | **Tienda Nube V2 (Handoff)** | `DROP-25311` | `Delivery Proyecto` | `Pendiente Handoff` | `Listo para handoff` | **P1** | **Objetivo:** Pre-handoff de la nueva versión V2.<br>**Estado:** En aclaración técnica liderada por Alejandra Melo con Diego Pérez sobre la estructura del submenú y la carga de imágenes. |
-| **Page Pilot (Creación Landings)** | `PRM-1238-DEL` | `Delivery Proyecto` | `En QA` | `Handoff hecho` | **P1** | **Objetivo:** Facilitar maquetación de landings para novatos.<br>**Estado:** Handoff a QA realizado por PD. Persisten errores en generación de landings y no se aplicó el campo obligatorio de Ángulo de Venta. |
-| **Dropify Shopify 2.0** | `PROD-580` | `Delivery Proyecto` | `En QA` | `Handoff hecho` | **P2** | **Objetivo:** Re-arquitectura Built for Shopify y sync nativo.<br>**Estado:** Pruebas PT2. Pendiente completar matriz de pruebas de fulfillment de combos con Alejandra Melo. |
-| **Dropify WooCommerce** | `DROP-17355` | `Delivery Proyecto` | `en DEV` | `Handoff hecho` | **Sin Prioridad** | **Objetivo:** Migración completa del plugin de WooCommerce a React para paridad con Shopify 2.0.<br>**Estado:** En desarrollo activo por TI (Fecha de entrega pautada: 4 de agosto). |
+| **Page Pilot (Creación Landings)** | `PRM-1238-DEL` | `Delivery Proyecto` | `Pendiente Handoff` | `Handoff hecho` | **P1** | **Objetivo:** Facilitar maquetación de landings para novatos.<br>**Estado:** Handoff a QA realizado por PD. Persisten errores en generación de landings y no se aplicó el campo obligatorio de Ángulo de Venta. |
+| **Dropify Shopify 2.0** | `PROD-580` | `Delivery Proyecto` | `Pendiente Handoff` | `Handoff hecho` | **P2** | **Objetivo:** Re-arquitectura Built for Shopify y sync nativo.<br>**Estado:** Pruebas PT2. Pendiente completar matriz de pruebas de fulfillment de combos con Alejandra Melo. |
+| **Dropify WooCommerce** | `DROP-17355` | `Delivery Proyecto` | `en DEV` | `Handoff hecho` | **P0 (Incumplido)** | **Objetivo:** Migración completa del plugin de WooCommerce a React para paridad con Shopify 2.0.<br>**Alerta TI:** Entrega pactada para el 4 de agosto **INCUMPLIDA por TI** (comunicaron el 3-Ago que no se tenía). Pendiente fecha oficial reprogramada por Jose Giraldo. |
 
 ---
 
@@ -75,9 +75,9 @@ graph TD
 
 | Iniciativa / Proyecto Discovery | Código Padre | Tipo Padre | Estado Interno Padre | Estado Real de Avance |
 | :--- | :---: | :---: | :---: | :--- |
+| **PoC Shopi / PoolMax** | `PROD-POOLMAX` | `Oportunidad` | `Activo` | 🟢 **Avanzado / Inicio esta semana:** Conversaciones adelantadas con Financiero, Legal y reunión realizada con Esteban y Arlex. Grupo de WhatsApp activo para comunicación directa. |
 | **Módulo Notificaciones 360** | `PROD-1664` | `Proyecto` | `Activo` | 🎨 **Discovery:** Apenas en mockups y recolección de info de Novedades. |
 | **Dropi Wrapped Leyendas 2026** | `PROD-WRAPPED` | `Idea` | `Ideación` | 🎨 **Discovery:** En fase de diseño UX/UI y prototipado. |
-| **PoolMax (Distribución Pauta API)** | `PROD-POOLMAX` | `Oportunidad` | `Concepción de exp.` | 🤝 **Discovery:** Llamada inicial de alineación de arquitectura entre equipo PoolMax y Shopi. |
 | **Muestras 1-Clic** | `PROD-MUESTRA` | `Idea` | `Ideación` | 🔬 **Discovery:** Prototipo finalizado, pendiente testeo de stock privatizado. |
 | **Second Best Fletes** | `PROD-SEC-BEST` | `Oportunidad` | `Concepción de exp.` | 🔬 **Discovery:** Validación de sobrecostos de fletes con cohortes de sellers Pareto. |
 | **Help Center SAC (Biblia AI)** | `PROD-HELP` | `Idea` | `Research` | 🔬 **Discovery:** Benchmark y triaje de 3.6K tickets con Pineda. |

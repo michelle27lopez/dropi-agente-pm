@@ -19,8 +19,8 @@ Son las **únicas 5 iniciativas** que han superado Discovery y están en el fluj
 ### 1. 🔴 Bugs Tienda Nube V1 (`STID-6598`)
 * **¿Qué es y qué problema resuelve?:** Mantenimiento correctivo urgente sobre la integración actual en producción. Corrige 6 fallas críticas que hoy provocan fallos de despacho, errores de flete y devoluciones en comercios de Colombia y Argentina.
 * **¿Qué cambia en la plataforma?:** Sincronización limpia de variables talla/color, corrección de ubicaciones (ej. Pasto), cobro fiel de fletes en promociones Order Bump, importación masiva estable y captura de Barrio/Piso para transportadoras.
-* **Estado Actual:** 🔴 **En DEV (P0 - Urgente)**.
-* **Alineación con Otras Células (Bloqueante TI):** Se requiere que **Jose Giraldo (Tech Lead)** asigne en Jira el desarrollador para ejecutar las correcciones de código. Luego Santiago y Alejandra realizarán pruebas de fletes en el portal de partners.
+* **Estado Actual:** 🔴 **En DEV (P0 - Urgente / Sin asignación dev)**.
+* **Alineación con Otras Células (Bloqueante TI):** **Bloqueante P0:** Aún no hay asignación de recurso de desarrollo por parte de Jose Giraldo (Tech Lead). Se requiere priorización inmediata. Luego Santiago y Alejandra realizarán pruebas de fletes en el portal de partners.
 
 ### 2. 🔵 Pre-handoff Tienda Nube V2 (`DROP-25311`)
 * **¿Qué es y qué problema resuelve?:** Re-arquitectura completa del plugin V2 de Tienda Nube para alinearlo a la nueva arquitectura API multitienda de Dropify 2.0.
@@ -40,11 +40,11 @@ Son las **únicas 5 iniciativas** que han superado Discovery y están en el fluj
 * **Estado Actual:** 🟡 **En QA (P2)** — Pruebas aisladas en ambiente PT2 Sandbox.
 * **Alineación con Otras Células (Producto ➔ TI):** Pendiente completar la matriz de pruebas de fulfillment de combos y variantes complejas junto a Alejandra Melo. Optimización de la descripción en Shopify App Store coordinada con **Growth**.
 
-### 5. 🟢 Dropify WooCommerce — Plugin React (`DROP-17355`)
+### 5. 🔴 Dropify WooCommerce — Plugin React (`DROP-17355`)
 * **¿Qué es y qué problema resuelve?:** Migración completa del plugin de WooCommerce a React para eliminar la deuda técnica del código legado y ofrecer paridad funcional con Shopify 2.0.
 * **¿Qué cambia en la plataforma?:** Interfaz moderna de administración del plugin dentro de WooCommerce con sincronización estable de tokens y órdenes.
-* **Estado Actual:** 🟢 **En DEV (Sin Prioridad)**.
-* **Alineación con Otras Células (TI):** En desarrollo activo por ingeniería desde el 2 de julio. **Hito de entrega de TI:** Pactado para el 4 de agosto. Santiago monitoreará el avance en el weekly de desarrollo.
+* **Estado Actual:** 🔴 **En DEV (P0 - Incumplido por TI)**.
+* **Alineación con Otras Células (TI):** **Entrega pactada para el 4 de agosto INCUMPLIDA por TI** (el 3-Ago comunicaron que no la tenían lista). Aún no hay fecha oficial de entrega reprogramada por Jose Giraldo.
 
 ---
 
@@ -52,7 +52,12 @@ Son las **únicas 5 iniciativas** que han superado Discovery y están en el fluj
 
 Son las iniciativas que **aún NO están en desarrollo técnico** y se encuentran en diseño de solución o validación con usuarios:
 
-### 6. 🎨 Módulo de Notificaciones 360 (`PROD-1664` / `PRM-1305`)
+### 6. 🟢 PoC Shopi / PoolMax — Pauta Centralizada (`PROD-POOLMAX`)
+* **¿Qué es?:** Reparto automático vía API de órdenes e inversión publicitaria desde campañas centrales (Meta/TikTok) hacia tiendas asociadas a comunidades.
+* **Estado:** 🟢 **Avanzado / Listo para inicio esta semana**. Conversaciones adelantadas con Financiero, Legal y reunión técnica realizada con Esteban y Arlex. Grupo de WhatsApp activo para comunicación directa.
+* **Alineación Cross-Célula:** Control financiero y legal cerrado. Canal de comunicación WhatsApp en marcha.
+
+### 7. 🎨 Módulo de Notificaciones 360 (`PROD-1664` / `PRM-1305`)
 * **¿Qué es?:** Motor conductual de prompts y notificaciones multicanal (In-App y WhatsApp) para guiar al seller ante eventos clave del journey.
 * **Estado:** 🎨 **Discovery (Mockup & Recolección de Info)**. Apenas en maquetación de pantallas y recolección de eventos de Novedades (`PROD-1697`).
 * **Alineación Cross-Célula:** Se unificará con la **Biblia de AI / Help Center (SAC)** para centralizar los contenidos y no duplicar widgets flotantes.
