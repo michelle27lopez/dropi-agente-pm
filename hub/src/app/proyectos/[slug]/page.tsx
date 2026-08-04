@@ -15,6 +15,7 @@ type ProjectDetails = {
   estado_interno: string | null;
   vpv: number | null;
   related_poc_id: string | null;
+  related_delivery_id: string | null;
   prototype_url: string | null;
   celulas?: {
     nombre: string;
@@ -26,11 +27,13 @@ type ProjectRef = { id: string; name: string; project_code: string | null; type?
 
 const ESTADOS_DISCOVERY = ["Research", "Ideación", "Concepción de experimento", "Activo", "Cerrado"];
 const ESTADOS_POC = ["Seguimiento", "En definición", "En priorización"];
-const ESTADOS_DELIVERY = ["En definición", "En priorización", "Pendiente Handoff", "en DEV"];
+const ESTADOS_DELIVERY = ["En definición", "En priorización", "Pendiente Handoff", "en DEV", "Activo", "Cerrado"];
+const ESTADOS_FOLLOWING = ["Beta controlada", "Producción", "Cerrado"];
 
 function estadosValidosPara(type: string | null) {
   if (type === "POC") return ESTADOS_POC;
   if (type === "Delivery Proyecto") return ESTADOS_DELIVERY;
+  if (type === "Following") return ESTADOS_FOLLOWING;
   return ESTADOS_DISCOVERY;
 }
 
@@ -74,6 +77,10 @@ export default function ProjectDashboardPage() {
   const [pocOptions, setPocOptions] = useState<ProjectRef[]>([]);
   const [selectedPocId, setSelectedPocId] = useState("");
   const [linkingPoc, setLinkingPoc] = useState(false);
+  const [relatedDelivery, setRelatedDelivery] = useState<ProjectRef | null>(null);
+  const [deliveryOptions, setDeliveryOptions] = useState<ProjectRef[]>([]);
+  const [selectedDeliveryId, setSelectedDeliveryId] = useState("");
+  const [linkingDelivery, setLinkingDelivery] = useState(false);
   const [cycles, setCycles] = useState<Cycle[]>([]);
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [loading, setLoading] = useState(true);
@@ -89,6 +96,11 @@ export default function ProjectDashboardPage() {
   const [deliverySummary, setDeliverySummary] = useState("");
   const [deliveryPocId, setDeliveryPocId] = useState("");
   const [deliverySubmitting, setDeliverySubmitting] = useState(false);
+
+  const [showFollowingForm, setShowFollowingForm] = useState(false);
+  const [followingName, setFollowingName] = useState("");
+  const [followingSummary, setFollowingSummary] = useState("");
+  const [followingSubmitting, setFollowingSubmitting] = useState(false);
 
   const [docsOpen, setDocsOpen] = useState(true);
   const [briefOpen, setBriefOpen] = useState(true);
@@ -140,6 +152,8 @@ export default function ProjectDashboardPage() {
         setDiscoveryOptions(data.discoveryOptions || []);
         setRelatedPoc(data.relatedPoc || null);
         setPocOptions(data.pocOptions || []);
+        setRelatedDelivery(data.relatedDelivery || null);
+        setDeliveryOptions(data.deliveryOptions || []);
         setCycles(data.cycles || []);
         setDecisions(data.decisions || []);
       })
@@ -267,6 +281,43 @@ export default function ProjectDashboardPage() {
     const elegido = pocOptions.find((p) => p.id === selectedPocId);
     if (elegido) setRelatedPoc(elegido);
     setSelectedPocId("");
+  }
+
+  async function handleCrearFollowing(e: React.FormEvent) {
+    e.preventDefault();
+    if (!followingName.trim() || !followingSummary.trim()) return;
+    setFollowingSubmitting(true);
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: followingName.trim(),
+        summary: followingSummary.trim(),
+        type: "Following",
+      }),
+    });
+    setFollowingSubmitting(false);
+    if (!res.ok) return;
+    const created = await res.json();
+    setChildren((prev) => [...prev, created]);
+    setShowFollowingForm(false);
+    setFollowingName("");
+    setFollowingSummary("");
+  }
+
+  async function handleVincularDelivery() {
+    if (!selectedDeliveryId) return;
+    setLinkingDelivery(true);
+    const res = await fetch(`/api/proyectos/${slug}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ related_delivery_id: selectedDeliveryId }),
+    });
+    setLinkingDelivery(false);
+    if (!res.ok) return;
+    const elegido = deliveryOptions.find((d) => d.id === selectedDeliveryId);
+    if (elegido) setRelatedDelivery(elegido);
+    setSelectedDeliveryId("");
   }
 
   if (loading) {
@@ -687,7 +738,109 @@ export default function ProjectDashboardPage() {
                 )}
               </div>
             )}
+
+            {project.type === "Following" && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 6, minWidth: 220 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                  Delivery Proyecto del que nace
+                </label>
+                {relatedDelivery ? (
+                  <a
+                    href={`/proyectos/${relatedDelivery.project_code ? relatedDelivery.project_code.toLowerCase() : relatedDelivery.id}`}
+                    style={{ fontSize: 13, fontWeight: 700, color: "#0EA5E9", textDecoration: "none" }}
+                  >
+                    🚚 {relatedDelivery.name}
+                  </a>
+                ) : deliveryOptions.length > 0 ? (
+                  <div style={{ display: "flex", gap: 6 }}>
+                    <select
+                      value={selectedDeliveryId}
+                      onChange={(e) => setSelectedDeliveryId(e.target.value)}
+                      style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                    >
+                      <option value="">Ninguno</option>
+                      {deliveryOptions.map((d) => (
+                        <option key={d.id} value={d.id}>{d.name}</option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={handleVincularDelivery}
+                      disabled={!selectedDeliveryId || linkingDelivery}
+                      style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "#8B5CF6", border: "none", borderRadius: 8, padding: "6px 12px", cursor: selectedDeliveryId ? "pointer" : "default" }}
+                    >
+                      {linkingDelivery ? "Vinculando…" : "Vincular"}
+                    </button>
+                  </div>
+                ) : (
+                  <span style={{ fontSize: 13, color: "var(--muted)" }}>Ninguno</span>
+                )}
+              </div>
+            )}
           </div>
+
+          {project.type === "Delivery Proyecto" && (
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 10 }}>
+                Followings de este Delivery Proyecto
+              </div>
+              {children.filter((c) => c.type === "Following").length > 0 && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
+                  {children.filter((c) => c.type === "Following").map((c) => (
+                    <a
+                      key={c.id}
+                      href={`/proyectos/${c.project_code ? c.project_code.toLowerCase() : c.id}`}
+                      style={{ fontSize: 12, fontWeight: 700, color: "#8B5CF6", background: "#F5F3FF", padding: "4px 10px", borderRadius: 999, textDecoration: "none" }}
+                    >
+                      📡 {c.name}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {showFollowingForm ? (
+                <form onSubmit={handleCrearFollowing} style={{ display: "flex", flexDirection: "column", gap: 8, maxWidth: 420 }}>
+                  <input
+                    value={followingName}
+                    onChange={(e) => setFollowingName(e.target.value)}
+                    placeholder="Nombre del Following"
+                    required
+                    style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                  />
+                  <textarea
+                    value={followingSummary}
+                    onChange={(e) => setFollowingSummary(e.target.value)}
+                    placeholder="De qué se trata"
+                    required
+                    rows={2}
+                    style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", resize: "vertical" }}
+                  />
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button
+                      type="submit"
+                      disabled={followingSubmitting}
+                      style={{ fontSize: 12, fontWeight: 700, color: "#fff", background: "#8B5CF6", border: "none", borderRadius: 8, padding: "8px 14px", cursor: followingSubmitting ? "default" : "pointer" }}
+                    >
+                      {followingSubmitting ? "Creando…" : "Crear"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowFollowingForm(false)}
+                      style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <button
+                  onClick={() => setShowFollowingForm(true)}
+                  style={{ fontSize: 12, fontWeight: 700, color: "#8B5CF6", background: "none", border: "1px dashed #8B5CF6", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
+                >
+                  + Crear Following
+                </button>
+              )}
+            </div>
+          )}
 
           {project.type !== "POC" && project.type !== "Delivery Proyecto" && (
             <div>
