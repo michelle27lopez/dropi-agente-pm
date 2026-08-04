@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS supplier_ascenso_panel (
   nivel_actual              text            NOT NULL,   -- 'Activo' | 'Verificado'
   nivel_objetivo            text            NOT NULL,   -- 'Verificado' | 'Premium'
   ordenes_movilizadas_90d   integer,
-  umbral_objetivo           integer         NOT NULL,   -- 3000 | 20000
+  umbral_objetivo           integer         NOT NULL,   -- 3000 | 45000
   pct_umbral                numeric(8,4)    NOT NULL,   -- ordenes_movilizadas_90d / umbral_objetivo
   despachos_pct             numeric(6,4),
   despacho_tiempo_h         numeric(8,2),

@@ -28,7 +28,7 @@
 
 ## 🚨 Pendientes Prioritarios (Por iniciar)
 
-- `[ ]` **PROD-POOLMAX (Feasibility):** Esperar descripción del founder de PoolMax y realizar el estudio de viabilidad de la PoC con Shopi (Shopify) solicitado por el CEO.
+- `[/]` **PROD-POOLMAX (Feasibility):** Sesión agendada para Martes 4-Ago 3:00 PM con Arlex (Shopi) y el founder de PoolMax para auditar la distribución automática de pedidos vía API en tiendas Shopify y evaluar factibilidad de la PoC solicitada por el CEO/CPO.
 - `[ ]` **PROD-METRICS-DISCREP:** Investigar e identificar por qué las métricas de WooCommerce y Tienda Nube no coinciden con las del tablero de Miguel.
 - `[ ]` **PROD-ALERTA-PULSO:** Diseñar la integración de "Órdenes en Alerta" con el dashboard de Pulso y definir el condicionador sugerido por María.
 - `[ ]` **PROD-HELP-MOD:** Alinear las guías de ayuda contextual por módulo con el proyecto de Biblioteca AI (SAC) para evitar traslapes.

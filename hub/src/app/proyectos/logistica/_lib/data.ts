@@ -294,6 +294,7 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Autogeneración de guías",
     slug: "autogeneracion-guias",
+    codigo: "LOG-012",
     etapa: "Despacho", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
     ticket: "PRM-1469",
     descripcion:
@@ -309,6 +310,7 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Vigía — control operativo en tiempo real",
     slug: "vigia",
+    codigo: "LOG-015",
     vista: "/proyectos/logistica/experimentos/vigia",
     etapa: "Tránsito", tipo: "Experimento", fase: "Diseño", handoff: "No aplica",
     jira: "⚠️ No existe en Jira",
@@ -333,6 +335,7 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Recolección proactiva",
     slug: "recoleccion-proactiva",
+    codigo: "LOG-013",
     vista: "/proyectos/logistica/recolecciones",
     etapa: "Despacho", tipo: "Experimento", fase: "Research", handoff: "No aplica",
     descripcion:
@@ -402,6 +405,7 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Parametrización de fulfillment",
     slug: "fulfillment",
+    codigo: "LOG-014",
     etapa: "Despacho", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
     ticket: "PRM-1446", destacado: true,
     jira: "Listo para hand off (14-jul), asignado a Juan",
@@ -439,6 +443,7 @@ export const proyectos: Proyecto[] = [
   {
     nombre: "Pruebas de entrega (POD)",
     slug: "pruebas-entrega",
+    codigo: "LOG-016",
     etapa: "Entrega / Devolución", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-1517",
     jira: "⚠️ Paraguas En Ruta y SIN ASIGNAR · PRM-1361 y PRM-1455 en Impedimentos",

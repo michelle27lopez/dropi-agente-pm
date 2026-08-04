@@ -4,6 +4,14 @@ export const snapshot: MonthlySnapshot = {
   month: "2026-06",
   monthLabel: "Junio 2026",
 
+  // Junio no tenía todavía la lectura ejecutiva de adopción — ese framing arrancó en julio.
+  conclusionEjecutiva: {
+    mensaje: "",
+    submensaje: "",
+    pilares: [],
+    meses: [],
+  },
+
   kpis: [
     { icon: "📁", label: "Total Proyectos Trabajados", value: "48", sub: "5 células activas · Junio 2026" },
     { icon: "✅", label: "Total Cierres del Mes", value: "11", sub: "Proyectos en etapa de cierre/QA" },
@@ -46,6 +54,9 @@ export const snapshot: MonthlySnapshot = {
     { celula: "Fintech", value: 0, color: "#06B6D4" },
     { celula: "Estrellas", value: 1, color: "#EAB308" },
   ],
+
+  // Taxonomía [DISCOVERY][POC][DELIVERY][FOLLOWING] se adoptó en julio — junio no tiene datos.
+  tiempoPorEtapa: [],
 
   celulasDetail: [
     {
@@ -217,14 +228,14 @@ export const snapshot: MonthlySnapshot = {
   comparativoMeses: ["Abril", "Mayo", "Junio"],
 
   comparativoGlobal: [
-    { metrica: "Total proyectos trabajados", nota: "Proyectos activos en células durante el mes", abril: "29", mayo: "21", junio: "48", delta: "↑ +27", direction: "up" },
-    { metrica: "Cierres / En cierre", nota: "Proyectos en etapa de cierre o QA", abril: "6", mayo: "7", junio: "11", delta: "↑ +4", direction: "up" },
-    { metrica: "Hand-offs a TI", nota: "Proyectos formalmente transferidos a desarrollo", abril: "—", mayo: "6", junio: "5", delta: "↓ −1", direction: "down" },
-    { metrica: "Células activas", abril: "4", mayo: "5", junio: "5", delta: "= igual", direction: "flat" },
-    { metrica: "Experimentos activos", nota: "Story + Sub-task level — 6 células", abril: "—", mayo: "2", junio: "11", delta: "↑ +9", direction: "up" },
-    { metrica: "Cycle time handoff", nota: "Tiempo desde apertura de sprint hasta handoff", abril: "—", mayo: "5.3 sprints", junio: "3.7 sprints", delta: "↓ −1.6 🎯", direction: "up" },
-    { metrica: "Ciclo completo prom.", nota: "Primera versión → handoff a TI", abril: "—", mayo: "—", junio: "~26 días", delta: "nuevo", direction: "flat" },
-    { metrica: "En Discovery", abril: "—", mayo: "—", junio: "13", delta: "nuevo", direction: "flat" },
+    { metrica: "Total proyectos trabajados", nota: "Proyectos activos en células durante el mes", valores: ["29", "21", "48"], delta: "↑ +27", direction: "up" },
+    { metrica: "Cierres / En cierre", nota: "Proyectos en etapa de cierre o QA", valores: ["6", "7", "11"], delta: "↑ +4", direction: "up" },
+    { metrica: "Hand-offs a TI", nota: "Proyectos formalmente transferidos a desarrollo", valores: ["—", "6", "5"], delta: "↓ −1", direction: "down" },
+    { metrica: "Células activas", valores: ["4", "5", "5"], delta: "= igual", direction: "flat" },
+    { metrica: "Experimentos activos", nota: "Story + Sub-task level — 6 células", valores: ["—", "2", "11"], delta: "↑ +9", direction: "up" },
+    { metrica: "Cycle time handoff", nota: "Tiempo desde apertura de sprint hasta handoff", valores: ["—", "5.3 sprints", "3.7 sprints"], delta: "↓ −1.6 🎯", direction: "up" },
+    { metrica: "Ciclo completo prom.", nota: "Primera versión → handoff a TI", valores: ["—", "—", "~26 días"], delta: "nuevo", direction: "flat" },
+    { metrica: "En Discovery", valores: ["—", "—", "13"], delta: "nuevo", direction: "flat" },
   ],
 
   comparativoCelulas: [
@@ -232,54 +243,54 @@ export const snapshot: MonthlySnapshot = {
       celula: "Sellers Success",
       color: "#D946EF",
       rows: [
-        { metrica: "Total proyectos", abril: "6", mayo: "3", junio: "3" },
-        { metrica: "Cierres", abril: "0", mayo: "1", junio: "1" },
-        { metrica: "Handoffs TI", abril: "—", mayo: "1", junio: "0" },
+        { metrica: "Total proyectos", valores: ["6", "3", "3"] },
+        { metrica: "Cierres", valores: ["0", "1", "1"] },
+        { metrica: "Handoffs TI", valores: ["—", "1", "0"] },
       ],
     },
     {
       celula: "Brands Success",
       color: "#A3E635",
       rows: [
-        { metrica: "Total proyectos", abril: "10", mayo: "3", junio: "7 únicos" },
-        { metrica: "Cierres", abril: "2", mayo: "1", junio: "1" },
-        { metrica: "Handoffs TI", abril: "—", mayo: "1", junio: "1 ✓" },
+        { metrica: "Total proyectos", valores: ["10", "3", "7 únicos"] },
+        { metrica: "Cierres", valores: ["2", "1", "1"] },
+        { metrica: "Handoffs TI", valores: ["—", "1", "1 ✓"] },
       ],
     },
     {
       celula: "Suppliers Success",
       color: "#EA5024",
       rows: [
-        { metrica: "Total proyectos", abril: "4", mayo: "3", junio: "4" },
-        { metrica: "Cierres", abril: "2", mayo: "2", junio: "0" },
-        { metrica: "Handoffs TI", abril: "—", mayo: "2", junio: "0" },
+        { metrica: "Total proyectos", valores: ["4", "3", "4"] },
+        { metrica: "Cierres", valores: ["2", "2", "0"] },
+        { metrica: "Handoffs TI", valores: ["—", "2", "0"] },
       ],
     },
     {
       celula: "Logistics",
       color: "#3B82F6",
       rows: [
-        { metrica: "Total proyectos", abril: "9", mayo: "5", junio: "15" },
-        { metrica: "Cierres", abril: "2", mayo: "2", junio: "2" },
-        { metrica: "Handoffs TI", abril: "—", mayo: "2", junio: "0" },
+        { metrica: "Total proyectos", valores: ["9", "5", "15"] },
+        { metrica: "Cierres", valores: ["2", "2", "2"] },
+        { metrica: "Handoffs TI", valores: ["—", "2", "0"] },
       ],
     },
     {
       celula: "Backoffice",
       color: "#8B5CF6",
       rows: [
-        { metrica: "Total proyectos", abril: "—", mayo: "—", junio: "14" },
-        { metrica: "Cierres", abril: "—", mayo: "—", junio: "6" },
-        { metrica: "Handoffs TI", abril: "—", mayo: "—", junio: "2 ✓" },
+        { metrica: "Total proyectos", valores: ["—", "—", "14"] },
+        { metrica: "Cierres", valores: ["—", "—", "6"] },
+        { metrica: "Handoffs TI", valores: ["—", "—", "2 ✓"] },
       ],
     },
     {
       celula: "Experience",
       color: "#F97316",
       rows: [
-        { metrica: "Total proyectos", abril: "—", mayo: "—", junio: "13" },
-        { metrica: "Cierres", abril: "—", mayo: "—", junio: "3" },
-        { metrica: "Handoffs TI", abril: "—", mayo: "—", junio: "0" },
+        { metrica: "Total proyectos", valores: ["—", "—", "13"] },
+        { metrica: "Cierres", valores: ["—", "—", "3"] },
+        { metrica: "Handoffs TI", valores: ["—", "—", "0"] },
       ],
     },
   ],

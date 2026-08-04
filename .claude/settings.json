@@ -74,7 +74,10 @@
       "Bash(mkdir -p \"/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/hub/src/app/proyectos/marcas/entrevistas\")",
       "Bash(curl -s -o /tmp/entrevistas.html -w \"HTTP %{http_code}\\\\n\" http://localhost:3004/proyectos/marcas/entrevistas)",
       "Bash(curl -s http://localhost:3004/proyectos/marcas -o /tmp/marcas.html -w \"HTTP %{http_code}\\\\n\")",
-      "Bash(curl -s -D - -o /dev/null http://localhost:3004/proyectos/marcas/entrevistas)"
+      "Bash(curl -s -D - -o /dev/null http://localhost:3004/proyectos/marcas/entrevistas)",
+      "WebFetch(domain:n8n-metabase.ojjmzk.easypanel.host)",
+      "Bash(python3 -c \"import json; json.load\\(open\\('.claude/settings.json'\\)\\); print\\('JSON válido'\\)\")",
+      "Bash(python3 -c \"import json; d=json.load\\(open\\('.claude/settings.json'\\)\\); print\\('WebFetch entry present:', any\\('n8n-metabase' in x for x in d['permissions']['allow']\\)\\); print\\('additionalDirectories:', d['permissions'].get\\('additionalDirectories'\\)\\)\")"
     ],
     "additionalDirectories": [
       "/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/hub/src/app/proyectos/marcas"

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import HubFooter from "@/components/HubFooter";
+import { StatRow } from "@/components/StatBadge";
+import { SEMANAS } from "@/app/weekly/data/index";
 
 type Miembro = {
   id: string;
@@ -28,6 +30,8 @@ type Celula = {
   ve_hub_completo: boolean;
   miembros: Miembro[];
   proyectos: Proyecto[];
+  updates: { id: string }[];
+  roadmap: { id: string }[];
 };
 
 const TYPE_COLOR: Record<string, string> = {
@@ -208,7 +212,13 @@ export default function CelulasPage() {
         )}
 
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-          {celulas.map((celula) => (
+          {celulas.map((celula) => {
+            const noPoc = celula.proyectos.filter((p) => p.type !== "POC");
+            const discoveryCount = noPoc.filter((p) => p.handoff_status === "Experimentación" || !p.handoff_status).length;
+            const deliveryCount = noPoc.filter((p) => p.handoff_status === "Listo para handoff" || p.handoff_status === "Handoff hecho").length;
+            const updatesCount = celula.updates.length + celula.roadmap.length + SEMANAS.filter((s) => s.celula === celula.slug).length;
+
+            return (
             <div key={celula.id} style={{
               background: "var(--card)",
               border: "1px solid var(--border)",
@@ -229,6 +239,14 @@ export default function CelulasPage() {
               {celula.area && (
                 <p style={{ fontSize: 12, color: "var(--muted)", marginBottom: 8 }}>{celula.area}</p>
               )}
+
+              <div style={{ marginBottom: 16 }}>
+                <StatRow stats={[
+                  { label: "Updates", value: updatesCount, color: "#6366F1" },
+                  { label: "Discovery", value: discoveryCount, color: "#F59E0B" },
+                  { label: "Delivery", value: deliveryCount, color: "#22C55E" },
+                ]} />
+              </div>
 
               {isSuperAdmin && (
                 <label style={{
@@ -294,7 +312,8 @@ export default function CelulasPage() {
                 </div>
               )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       </div>

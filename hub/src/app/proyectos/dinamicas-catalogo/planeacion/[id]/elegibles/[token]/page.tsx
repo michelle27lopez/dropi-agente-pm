@@ -45,9 +45,12 @@ const CANVA_LINK = "https://www.canva.com/design/DAHQC3nBq6c/qvqDaPIhyfMXBdvY2LB
 // placeholder solo para probar el patrón de URL; cuando exista la
 // categoría real, cambiar únicamente el valor de category=.
 const DROPI_CATALOG_LINK = "https://app.dropi.co/dashboard/search?search_type=simple&category=Navidad";
-// Evento de Luma para el Meet del 7 de agosto — cuando Michelle pase el
-// link, la card del Meet se vuelve clickeable con "Agéndate →".
-const LUMA_LINK = "";
+// Link de Google Meet para la reunión informativa del 6 de agosto
+// (2:00-3:00pm, America/Bogota) — jueves, no viernes: el 7 de agosto es
+// festivo en Colombia. Corregido 31/07 (el link anterior era del evento
+// mal agendado para el 7). Con esto la card del Meet se vuelve clickeable
+// con "Agéndate →".
+const LUMA_LINK = "https://meet.google.com/dwj-zeav-yvb";
 
 const STEPPER_LABELS: Record<JourneyStep["key"], string> = {
   seleccion: "Elige", fotos: "Prepara", vivo: "En vivo",
@@ -101,13 +104,14 @@ function categoryVisual(category?: string) {
 }
 
 // ─── Fotos pre-enmarcadas (paso 1 de "Prepara") ───
-// El marco (marcocyber.png, 1024x1024) tiene una ventana transparente para
-// la foto del producto. MARCO_WINDOW es el bounding box real de esa
-// transparencia, medido sobre el PNG con el canal alfa — no es un valor a
-// ojo. Si Michelle regenera el marco, hay que volver a medirlo (no asumir
-// que sigue en el mismo lugar).
-const MARCO_SRC = "/cyberdays/assets/marcocyber.png";
-const MARCO_WINDOW = { x: 78, y: 94, w: 941 - 78, h: 935 - 94 };
+// El marco (marcoo2.png, 1254x1254 — versión final entregada 30/07,
+// reemplaza a marcocyber.png) tiene una ventana transparente para la foto
+// del producto. MARCO_WINDOW es el bounding box real de esa transparencia,
+// medido sobre el PNG con el canal alfa — no es un valor a ojo. Si Michelle
+// regenera el marco, hay que volver a medirlo (no asumir que sigue en el
+// mismo lugar).
+const MARCO_SRC = "/cyberdays/assets/marcoo2.png";
+const MARCO_WINDOW = { x: 87, y: 173, w: 1179 - 87, h: 1179 - 173 };
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -1106,10 +1110,10 @@ export default function ElegiblesPage() {
     if (!anim || !el) { done(); return; }
     gsap.to(el, { autoAlpha: 0, scale: 1.03, duration: 0.55, ease: "power2.in", onComplete: done });
   }
-  // El Meet del 7 de agosto deja de mostrarse cuando ya pasó, y solo aplica
+  // El Meet del 6 de agosto deja de mostrarse cuando ya pasó, y solo aplica
   // en el paso 1 (Elige) — no tiene sentido seguir empujándolo una vez el
   // proveedor ya avanzó de fase (23/07, antes se veía en cualquier paso).
-  const meetVisible = expandedIdx === 0 && Date.now() <= new Date("2026-08-07T23:59:59").getTime();
+  const meetVisible = expandedIdx === 0 && Date.now() <= new Date("2026-08-06T23:59:59").getTime();
 
   // Animación cinemática con GSAP + ScrollTrigger (reemplaza el sistema
   // anterior de IntersectionObserver + classList: aquel escribía clases a
@@ -1544,7 +1548,7 @@ export default function ElegiblesPage() {
               <span className="cd-meet-icon">🎥</span>
               <div className="cd-meet-body">
                 <div className="cd-meet-label">Reunión informativa de Cyber Days</div>
-                <div className="cd-meet-time">Viernes 7 de agosto · 2:00pm</div>
+                <div className="cd-meet-time">Jueves 6 de agosto · 2:00pm</div>
               </div>
               <span className="cd-meet-cta">Agéndate →</span>
             </a>
@@ -1553,7 +1557,7 @@ export default function ElegiblesPage() {
               <span className="cd-meet-icon">🎥</span>
               <div className="cd-meet-body">
                 <div className="cd-meet-label">Reunión informativa de Cyber Days</div>
-                <div className="cd-meet-time">Viernes 7 de agosto · 2:00pm</div>
+                <div className="cd-meet-time">Jueves 6 de agosto · 2:00pm</div>
               </div>
             </div>
           ))}

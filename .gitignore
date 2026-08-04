@@ -5,6 +5,8 @@
 !.claude/skills/sync-diario/
 !.claude/skills/bug-jira/
 !.claude/skills/salsa/
+!.claude/skills/weekly-product-sync/
+!.claude/skills/roadmap-stage-gate/
 .mcp.json
 .impeccable/
 
