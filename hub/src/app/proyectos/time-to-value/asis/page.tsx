@@ -325,9 +325,9 @@ export default function AsisTtvPage() {
                         { l: "Registrados (en el CRM)", v: TTV_FASE_2.registradosLabel },
                         { l: "Activación bruta (orden generada)", v: TTV_FASE_2.activacionBruta, sub: TTV_FASE_2.activacionBrutaSub },
                         { l: "Activación neta (orden entregada)", v: TTV_FASE_2.activacionNeta, sub: TTV_FASE_2.activacionNetaSub },
-                        { l: "Tiempo prom. Registro → Onboarding", v: TTV_FASE_2.tiempoOnboarding },
-                        { l: "Tiempo prom. Onboarding + Auditoría", v: TTV_FASE_2.tiempoAuditoria },
-                        { l: "Brecha 104→18 (generada → entregada)", v: TTV_FASE_2.fuga },
+                        { l: "Generadas ÷ Entregadas (ratio)", v: TTV_FASE_2.ratioGeneradasEntregadas },
+                        { l: "Días registro → orden entregada (prom., desde 30-jun-2026)", v: TTV_FASE_2.tiempoRegistroEntrega },
+                        { l: "Brecha 41→18 (generada → entregada)", v: TTV_FASE_2.fuga },
                       ].map(m => (
                         <div key={m.l} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "6px 0", borderBottom: "1px solid #D1FAE5", gap: 12 }}>
                           <span style={{ fontSize: 12, color: "#065F46" }}>

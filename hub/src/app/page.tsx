@@ -325,8 +325,14 @@ export default function HubPage() {
                   </div>
                 </div>
               </div>
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>⏱️ Registro → orden entregada (prom., desde 30-jun-2026)</div>
+                <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", color: "var(--fg)" }}>
+                  {TTV_FASE_2.tiempoRegistroEntrega}
+                </div>
+              </div>
               <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 14, lineHeight: 1.5 }}>
-                Activación real prácticamente plana. La fuga está entre generar la orden ({TTV_FASE_2.activacionBruta})
+                Activación neta ya supera el baseline. La brecha sigue entre generar la orden ({TTV_FASE_2.activacionBruta})
                 y entregarla — punto exacto detrás del pivote a agente de WA.
               </div>
             </div>
