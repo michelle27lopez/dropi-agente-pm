@@ -173,12 +173,13 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map(proyectoToItem);
+  const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
 
   const pocsByParent = new Map<string, Proyecto[]>();
   const deliveriesByParent = new Map<string, Proyecto[]>();
+  const followingsByDelivery = new Map<string, Proyecto[]>();
   for (const p of celula.proyectos) {
     if (p.type === "POC" && p.parent_project_id) {
       const list = pocsByParent.get(p.parent_project_id) ?? [];
@@ -189,6 +190,11 @@ export default function CelulaHomePage() {
       const list = deliveriesByParent.get(p.parent_project_id) ?? [];
       list.push(p);
       deliveriesByParent.set(p.parent_project_id, list);
+    }
+    if (p.type === "Following" && p.related_delivery_id) {
+      const list = followingsByDelivery.get(p.related_delivery_id) ?? [];
+      list.push(p);
+      followingsByDelivery.set(p.related_delivery_id, list);
     }
   }
 
@@ -245,6 +251,21 @@ export default function CelulaHomePage() {
     if (!res.ok) return;
     const updated = await res.json();
     setCelula((prev) => prev ? { ...prev, proyectos: prev.proyectos.map((p) => (p.id === updated.id ? updated : p)) } : prev);
+  }
+
+  async function handleCrearFollowing(parent: Proyecto, name: string, summary: string): Promise<string | null> {
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary, type: "Following" }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      return data?.error ?? "No se pudo crear el Following.";
+    }
+    const created = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, created] } : prev);
+    return null;
   }
 
   // Home privada: solo para MI_DIA_OWNER_EMAIL, reemplaza el body estándar de
@@ -611,7 +632,7 @@ export default function CelulaHomePage() {
 
             {/* Custom light list wrapper */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-              {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map((p) => (
+              {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map((p) => (
                 <ProjectCard
                   key={p.id}
                   project={p}
@@ -666,14 +687,40 @@ export default function CelulaHomePage() {
                   canCreate={canCreate}
                   pocs={[]}
                   siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                  followings={followingsByDelivery.get(p.id) ?? []}
                   onEstadoChange={handleEstadoChange}
                   onVpvChange={handleVpvChange}
                   onCrearPoc={handleCrearPoc}
                   onRelatedPocChange={handleRelatedPocChange}
+                  onCrearFollowing={handleCrearFollowing}
                 />
               ))}
               {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
                 <p style={{ fontSize: 13, color: "#64748b" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Followings list */}
+          <div style={{ marginBottom: 40 }}>
+            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
+              Followings
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+              {celula.proyectos.filter((p) => p.type === "Following").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                />
+              ))}
+              {celula.proyectos.filter((p) => p.type === "Following").length === 0 && (
+                <p style={{ fontSize: 13, color: "#64748b" }}>Aún no hay Followings cargados para esta célula.</p>
               )}
             </div>
           </div>
@@ -1054,7 +1101,7 @@ export default function CelulaHomePage() {
           ) : (
             <>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-                {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map((p) => (
+                {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map((p) => (
                   <ProjectCard
                     key={p.id}
                     project={p}
@@ -1117,15 +1164,42 @@ export default function CelulaHomePage() {
                   canCreate={canCreate}
                   pocs={[]}
                   siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                  followings={followingsByDelivery.get(p.id) ?? []}
                   onEstadoChange={handleEstadoChange}
                   onVpvChange={handleVpvChange}
                   onCrearPoc={handleCrearPoc}
                   onRelatedPocChange={handleRelatedPocChange}
+                  onCrearFollowing={handleCrearFollowing}
                 />
               ))}
             </div>
             {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
               <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
+            )}
+          </div>
+        )}
+
+        {!isLogistica && (
+          <div style={{ marginTop: 56 }}>
+            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+              Followings
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+              {celula.proyectos.filter((p) => p.type === "Following").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                />
+              ))}
+            </div>
+            {celula.proyectos.filter((p) => p.type === "Following").length === 0 && (
+              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Followings cargados para esta célula.</p>
             )}
           </div>
         )}
