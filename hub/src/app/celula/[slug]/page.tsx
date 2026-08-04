@@ -8,8 +8,7 @@ import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
 import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
 import { isMiDiaOwner } from "@/lib/sprint-access";
-import HomeDashboard from "@/app/proyectos/mi-dia/HomeDashboard";
-import ProjectSidebar from "@/app/proyectos/mi-dia/ProjectSidebar";
+import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 
 // La torre de logística arrastra el registro completo del tablero
@@ -253,16 +252,9 @@ export default function CelulaHomePage() {
   if (isMiDiaOwner(profile?.email)) {
     return (
       <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
-        <div style={{ flex: 1, display: "flex", alignItems: "flex-start" }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <HubHeader title={celula.nombre} subtitle="Tu día · Darwin" currentSlug={celula.slug} />
-            <div style={{ display: "flex", alignItems: "flex-start" }}>
-              <ProjectSidebar allProjects={proyectos} allPoc={poc} />
-              <div style={{ flex: 1, minWidth: 0, maxWidth: 900, padding: "48px 32px" }}>
-                <HomeDashboard />
-              </div>
-            </div>
-          </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <HubHeader title={celula.nombre} subtitle="Tu día · Darwin" currentSlug={celula.slug} />
+          <MiDiaShell />
         </div>
         <HubFooter />
       </main>
@@ -291,56 +283,23 @@ export default function CelulaHomePage() {
   const activeFunnel = activeStats?.funnel || metrics?.funnel || [];
 
   const sellersCss = `
-    .glass-card {
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .glass-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(247, 127, 0, 0.4);
-      box-shadow: 0 12px 40px rgba(247, 127, 0, 0.08);
-    }
-    .neon-text-orange {
-      color: #F77F00;
-      text-shadow: 0 0 10px rgba(247, 127, 0, 0.3);
-    }
     .country-tab {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.6);
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
       transition: all 0.2s ease;
       cursor: pointer;
     }
     .country-tab:hover {
-      color: #fff;
-      background: rgba(255,255,255,0.08);
+      color: #0f172a;
+      background: #f8fafc;
+      border-color: #cbd5e1;
     }
     .country-tab.active {
       background: linear-gradient(90deg, #F77F00 0%, #ffaa44 100%);
       border-color: transparent;
-      color: #fff;
-      box-shadow: 0 0 15px rgba(247, 127, 0, 0.35);
-    }
-    .glow-border {
-      position: relative;
-    }
-    .glow-border::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 16px;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(247,127,0,0.5), transparent, rgba(99,102,241,0.5));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(247, 127, 0, 0.25);
     }
   `;
 
@@ -357,12 +316,11 @@ export default function CelulaHomePage() {
     const gapToOkr = activeStats?.gapToOkr ?? 0;
 
     return (
-      <main style={{ minHeight: "100vh", padding: "0", background: "radial-gradient(120% 90% at 50% -10%, #0c1020 0%, #030712 100%)", color: "#f1f5f9", display: "flex", flexDirection: "column", fontFamily: "'Inter', sans-serif" }}>
+      <main style={{ minHeight: "100vh", padding: "0", background: "linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)", color: "#0f172a", display: "flex", flexDirection: "column", fontFamily: "'Inter', sans-serif" }}>
         <style dangerouslySetInnerHTML={{ __html: sellersCss }} />
         
         {/* Header Section */}
-        <div style={{ position: "relative", overflow: "hidden", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(3,7,18,0.4)" }}>
-          <div className="login-aurora" style={{ opacity: 0.4 }} />
+        <div style={{ borderBottom: "1px solid #e2e8f0", background: "#ffffff" }}>
           <HubHeader
             title={celula.nombre}
             subtitle={celula.lead ? `Lead: ${celula.lead} · Control Tower PM OS` : "Control Tower de Célula · Darwin"}
@@ -373,7 +331,7 @@ export default function CelulaHomePage() {
         <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px", width: "100%", flex: 1 }}>
           
           {/* Country Filter Tab Bar */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, background: "rgba(255,255,255,0.02)", padding: 6, borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, background: "#f1f5f9", padding: 6, borderRadius: 12, border: "1px solid #e2e8f0" }}>
             {[
               { key: "global", label: "🌍 Global" },
               { key: "CO", label: "🇨🇴 Colombia" },
@@ -396,7 +354,6 @@ export default function CelulaHomePage() {
                   borderRadius: 8,
                   fontSize: 12,
                   fontWeight: 700,
-                  border: "1px solid rgba(255,255,255,0.05)",
                   display: "flex",
                   alignItems: "center",
                   gap: 6
@@ -416,66 +373,66 @@ export default function CelulaHomePage() {
             const formattedTarget = ceilingTarget >= 1000000 ? `${(ceilingTarget / 1000000).toFixed(2)}M` : ceilingTarget.toLocaleString();
             
             return (
-              <div className="glow-border" style={{
-                background: "linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%)",
-                borderRadius: 16, padding: "28px 32px", marginBottom: 24, color: "#fff",
-                boxShadow: "0 10px 40px rgba(0,0,0,0.4)"
+              <div style={{
+                background: "#ffffff",
+                border: "1px solid #e2e8f0",
+                borderRadius: 16, padding: "28px 32px", marginBottom: 24, color: "#0f172a",
+                boxShadow: "0 8px 30px rgba(0,0,0,0.05)"
               }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
                   <div>
-                    <span style={{ fontSize: 10, fontWeight: 850, background: "rgba(247, 127, 0, 0.15)", color: "#F77F00", border: "1px solid rgba(247, 127, 0, 0.3)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    <span style={{ fontSize: 10, fontWeight: 850, background: "#FFF7ED", color: "#F77F00", border: "1px solid #FFEDD5", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       {isGlobal ? "OKR 1 / KR 1.1 HOLDING · TECHO GLOBAL: 7.80M ÓRDENES/MES" : `TECHO META JULIO CPO (${selectedCountry.toUpperCase()})`}
                     </span>
-                    <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
+                    <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", color: "#0f172a", margin: "8px 0 0" }}>
                       {isGlobal ? "Órdenes Movilizadas de Sellers Activos (NSM Global)" : `Órdenes Movilizadas en ${selectedCountry === "CO" ? "Colombia" : selectedCountry === "EC" ? "Ecuador" : selectedCountry === "CL" ? "Chile" : selectedCountry === "MX" ? "México" : selectedCountry === "GT" ? "Guatemala" : selectedCountry === "PY" ? "Paraguay" : selectedCountry === "PA" ? "Panamá" : selectedCountry === "AR" ? "Argentina" : selectedCountry === "CR" ? "Costa Rica" : selectedCountry === "PE" ? "Perú" : selectedCountry}`}
                     </h3>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <span className="neon-text-orange" style={{ fontSize: 32, fontWeight: 900 }}>
+                    <span style={{ fontSize: 32, fontWeight: 900, color: "#F77F00" }}>
                       {actualPctOfCeiling.toFixed(1)}%
                     </span>
-                    <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", display: "block" }}>
+                    <span style={{ fontSize: 12, color: "#64748b", display: "block" }}>
                       {isGlobal ? "del Techo OKR 1.1 (7.80M/mes)" : `alcanzado de la Meta Julio (${percentageToOkr}% proy.)`}
                     </span>
                   </div>
                 </div>
                 
                 {/* Progress Bar towards Ceiling */}
-                <div style={{ height: 12, background: "rgba(255,255,255,0.08)", borderRadius: 999, overflow: "hidden", marginBottom: 16, position: "relative" }}>
+                <div style={{ height: 12, background: "#f1f5f9", borderRadius: 999, overflow: "hidden", marginBottom: 16, border: "1px solid #e2e8f0" }}>
                   <div style={{
                     height: "100%",
                     width: `${Math.min(actualPctOfCeiling, 100)}%`,
                     background: actualPctOfCeiling >= 100 ? "linear-gradient(90deg, #10B981 0%, #34D399 100%)" : "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)",
                     borderRadius: 999,
-                    boxShadow: actualPctOfCeiling >= 100 ? "0 0 12px rgba(16, 185, 129, 0.6)" : "0 0 12px rgba(247, 127, 0, 0.6)"
                   }} />
                 </div>
                 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed rgba(255,255,255,0.1)", paddingTop: 14 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed #e2e8f0", paddingTop: 14 }}>
                   <div>
-                    <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
-                    <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>{formattedCurrent}/mes</strong>
-                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", display: "block" }}>{nsmCurrent.toLocaleString()} ord movilizadas</span>
+                    <span style={{ color: "#64748b", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
+                    <strong style={{ color: "#0f172a", fontSize: 14, fontWeight: 800 }}>{formattedCurrent}/mes</strong>
+                    <span style={{ fontSize: 11, color: "#64748b", display: "block" }}>{nsmCurrent.toLocaleString()} ord movilizadas</span>
                   </div>
                   <div>
-                    <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
+                    <span style={{ color: "#64748b", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
                       {isGlobal ? "Hito Julio CPO" : "Meta Julio CPO (Techo País)"}
                     </span>
-                    <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>
+                    <strong style={{ color: "#0f172a", fontSize: 14, fontWeight: 800 }}>
                       {isGlobal ? "3.57M/mes" : `${formattedTarget}/mes`}
                     </strong>
-                    <span style={{ fontSize: 11, color: "#22C55E", fontWeight: 700, display: "block" }}>
+                    <span style={{ fontSize: 11, color: "#16a34a", fontWeight: 700, display: "block" }}>
                       {isGlobal ? "93.85% alcanzado (100.32% proy)" : `${percentageToOkr}% proy. cumplimiento`}
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
+                    <span style={{ color: "#64748b", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
                       {isGlobal ? "Techo OKR 1.1 Holding" : "Brecha a la Meta Julio"}
                     </span>
                     <strong style={{ color: "#F77F00", fontSize: 14, fontWeight: 900 }}>
                       {isGlobal ? "7.80M/mes" : gapToOkr > 0 ? `-${gapToOkr.toLocaleString()} ord` : `+${Math.abs(gapToOkr).toLocaleString()} ord 🎉`}
                     </strong>
-                    <span style={{ fontSize: 11, color: isGlobal ? "#EF4444" : gapToOkr > 0 ? "#EF4444" : "#22C55E", fontWeight: 700, display: "block" }}>
+                    <span style={{ fontSize: 11, color: isGlobal ? "#dc2626" : gapToOkr > 0 ? "#dc2626" : "#16a34a", fontWeight: 700, display: "block" }}>
                       {isGlobal ? "Brecha: -4.45M ord (43.0% cumpl.)" : gapToOkr > 0 ? "Falta para completar meta" : "Meta del mes superada!"}
                     </span>
                   </div>
@@ -495,7 +452,7 @@ export default function CelulaHomePage() {
                   progressPct: ((activeStats?.activationRateNet ?? 5.2) / 8.0) * 100,
                   meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
                   sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
-                  color: "#10B981", icon: "⚡"
+                  color: "#10B981", bg: "#ECFDF5", icon: "⚡"
                 },
                 {
                   label: "Tiempo de Activación Neta (TTV)",
@@ -504,7 +461,7 @@ export default function CelulaHomePage() {
                   progressPct: (12.0 / ttvNetoMedian) * 100,
                   meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
                   sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
-                  color: "#F59E0B", icon: "⏱️"
+                  color: "#D97706", bg: "#FEF3C7", icon: "⏱️"
                 },
                 {
                   label: "Tasa de Activación Bruta",
@@ -513,7 +470,7 @@ export default function CelulaHomePage() {
                   progressPct: (activationRate / 12.0) * 100,
                   meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
                   sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
-                  color: "#EC4899", icon: "📦"
+                  color: "#DB2777", bg: "#FCE7F3", icon: "📦"
                 },
                 {
                   label: "Retención a 30 Días",
@@ -522,7 +479,7 @@ export default function CelulaHomePage() {
                   progressPct: (survivalRate / 75.0) * 100,
                   meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
                   sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
-                  color: "#8B5CF6", icon: "🌱"
+                  color: "#7C3AED", bg: "#F3E8FF", icon: "🌱"
                 },
                 {
                   label: "Base de Sellers Identificados",
@@ -531,7 +488,7 @@ export default function CelulaHomePage() {
                   progressPct: (36056 / totalSellers) * 100,
                   meta: "36,056 Dropshippers Target + 8,744 Proveedores",
                   sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
-                  color: "#3B82F6", icon: "👥"
+                  color: "#2563EB", bg: "#EFF6FF", icon: "👥"
                 },
                 {
                   label: "Usuarios Activos Diarios (DAU)",
@@ -540,15 +497,16 @@ export default function CelulaHomePage() {
                   progressPct: (14262 / 81521) * 100,
                   meta: "MAU Mensual: 81,521 usuarios/mes",
                   sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
-                  color: "#22C55E", icon: "🎯"
+                  color: "#16A34A", bg: "#DCFCE7", icon: "🎯"
                 }
               ].map((m) => (
                 <div key={m.label} style={{
-                  background: "rgba(15, 23, 42, 0.88)",
-                  border: `1px solid ${m.color}30`,
+                  background: "#ffffff",
+                  border: "1px solid #e2e8f0",
+                  borderLeft: `4px solid ${m.color}`,
                   borderRadius: 16,
                   padding: "20px 22px",
-                  boxShadow: `0 10px 30px rgba(0,0,0,0.4), 0 0 15px ${m.color}15`,
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between"
@@ -556,23 +514,22 @@ export default function CelulaHomePage() {
                   <div>
                     {/* Header */}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                         {m.label}
                       </span>
                       <span style={{ fontSize: 18 }}>{m.icon}</span>
                     </div>
 
                     {/* Big Value */}
-                    <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#ffffff", marginBottom: 8 }}>
+                    <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#0f172a", marginBottom: 8 }}>
                       {m.value}
                     </div>
 
                     {/* Meta Badge */}
                     <div style={{
-                      background: "rgba(255, 255, 255, 0.04)",
-                      borderLeft: `4px solid ${m.color}`,
+                      background: m.bg,
                       padding: "6px 12px",
-                      borderRadius: "0 8px 8px 0",
+                      borderRadius: 8,
                       marginBottom: 12
                     }}>
                       <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
@@ -583,7 +540,7 @@ export default function CelulaHomePage() {
                     {/* Visual Progress Bar */}
                     <div style={{ margin: "10px 0 14px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
-                        <span style={{ color: "rgba(255,255,255,0.45)" }}>Avance a la Meta</span>
+                        <span style={{ color: "#64748b" }}>Avance a la Meta</span>
                         <span style={{ color: m.color, fontWeight: 900 }}>
                           {m.progressPct.toFixed(1)}%
                         </span>
@@ -592,26 +549,25 @@ export default function CelulaHomePage() {
                       {/* Thermometer Tube */}
                       <div style={{
                         height: 10,
-                        background: "rgba(255, 255, 255, 0.08)",
+                        background: "#f1f5f9",
                         borderRadius: 999,
                         padding: 1,
-                        border: "1px solid rgba(255, 255, 255, 0.12)",
+                        border: "1px solid #e2e8f0",
                         position: "relative",
                         overflow: "hidden"
                       }}>
                         <div style={{
                           height: "100%",
                           width: `${Math.min(m.progressPct, 100)}%`,
-                          background: `linear-gradient(90deg, ${m.color}88 0%, ${m.color} 100%)`,
+                          background: `linear-gradient(90deg, ${m.color}cc 0%, ${m.color} 100%)`,
                           borderRadius: 999,
-                          boxShadow: `0 0 10px ${m.color}80`
                         }} />
                       </div>
 
                       {/* Scale Legends */}
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 4, fontWeight: 600 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#64748b", marginTop: 4, fontWeight: 600 }}>
                         <span>0</span>
-                        <span>Actual: <strong style={{ color: "#fff" }}>{m.value}</strong></span>
+                        <span>Actual: <strong style={{ color: "#0f172a" }}>{m.value}</strong></span>
                         <span>Meta: <strong style={{ color: m.color }}>{m.targetVal}</strong></span>
                       </div>
                     </div>
@@ -620,10 +576,10 @@ export default function CelulaHomePage() {
                   {/* Explanation Footer */}
                   <div style={{
                     fontSize: 12,
-                    color: "#CBD5E1",
+                    color: "#475569",
                     fontWeight: 500,
                     lineHeight: 1.45,
-                    borderTop: "1px dashed rgba(255, 255, 255, 0.1)",
+                    borderTop: "1px dashed #e2e8f0",
                     paddingTop: 10
                   }}>
                     {m.sub}
@@ -633,14 +589,10 @@ export default function CelulaHomePage() {
             </div>
           )}
 
-
-
-
-
           {/* Discovery projects list */}
           <div style={{ marginBottom: 40 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: 0 }}>
+              <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: 0 }}>
                 Discovery Projects
               </p>
               {canCreate && (
@@ -648,7 +600,7 @@ export default function CelulaHomePage() {
                   onClick={() => { setShowForm(true); setFormError(null); }}
                   style={{
                     fontSize: 12, fontWeight: 700, color: "#F77F00",
-                    background: "rgba(247, 127, 0, 0.08)", border: "1px solid rgba(247, 127, 0, 0.2)", borderRadius: 8,
+                    background: "#FFF7ED", border: "1px solid #FFEDD5", borderRadius: 8,
                     padding: "6px 12px", cursor: "pointer",
                   }}
                 >
@@ -657,13 +609,13 @@ export default function CelulaHomePage() {
               )}
             </div>
 
-            {/* Custom dark list wrapper */}
+            {/* Custom light list wrapper */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
               {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map((p) => (
                 <ProjectCard
                   key={p.id}
                   project={p}
-                  dark
+                  dark={false}
                   canCreate={canCreate}
                   pocs={pocsByParent.get(p.id) ?? []}
                   deliveries={deliveriesByParent.get(p.id) ?? []}
@@ -678,15 +630,15 @@ export default function CelulaHomePage() {
 
           {/* Pruebas de concepto list */}
           <div style={{ marginBottom: 40 }}>
-            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
-              Pruebas de concepto
+            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
+              Pruebas de concepto (POCs)
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
               {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
                 <ProjectCard
                   key={p.id}
                   project={p}
-                  dark
+                  dark={false}
                   canCreate={canCreate}
                   pocs={[]}
                   onEstadoChange={handleEstadoChange}
@@ -695,14 +647,14 @@ export default function CelulaHomePage() {
                 />
               ))}
               {poc.length === 0 && (
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay POCs cargadas para esta célula.</p>
+                <p style={{ fontSize: 13, color: "#64748b" }}>Aún no hay POCs cargadas para esta célula.</p>
               )}
             </div>
           </div>
 
           {/* Delivery Proyectos list */}
           <div style={{ marginBottom: 40 }}>
-            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
+            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
               Delivery Proyectos
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
@@ -710,7 +662,7 @@ export default function CelulaHomePage() {
                 <ProjectCard
                   key={p.id}
                   project={p}
-                  dark
+                  dark={false}
                   canCreate={canCreate}
                   pocs={[]}
                   siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
@@ -721,7 +673,7 @@ export default function CelulaHomePage() {
                 />
               ))}
               {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
+                <p style={{ fontSize: 13, color: "#64748b" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
               )}
             </div>
           </div>
@@ -734,7 +686,7 @@ export default function CelulaHomePage() {
           <div
             onClick={() => setOpenUpdate(null)}
             style={{
-              position: "fixed", inset: 0, background: "rgba(3,7,18,0.75)",
+              position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
               display: "flex", alignItems: "center", justifyContent: "center",
               padding: 24, zIndex: 50, backdropFilter: "blur(4px)"
             }}
@@ -742,26 +694,26 @@ export default function CelulaHomePage() {
             <div
               onClick={(e) => e.stopPropagation()}
               style={{
-                background: "#0c1020", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 16, maxWidth: 640, width: "100%",
+                background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: 16, maxWidth: 640, width: "100%",
                 maxHeight: "80vh", overflowY: "auto", padding: "28px",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.5)", color: "#fff"
+                boxShadow: "0 20px 60px rgba(0,0,0,0.15)", color: "#0f172a"
               }}
             >
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
-                <h2 style={{ fontSize: 17, fontWeight: 800, color: "#fff", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
+                <h2 style={{ fontSize: 17, fontWeight: 800, color: "#0f172a", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
                 <button
                   onClick={() => setOpenUpdate(null)}
-                  style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "rgba(255,255,255,0.4)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                  style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "#64748b", cursor: "pointer", lineHeight: 1, padding: 4 }}
                   aria-label="Cerrar"
                 >
                   ×
                 </button>
               </div>
-              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
-              <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.8)", lineHeight: 1.7 }}>
+              <p style={{ fontSize: 12, color: "#64748b", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
+              <div style={{ fontSize: 13.5, color: "#334155", lineHeight: 1.7 }}>
                 {openUpdate.content.split("\n").map((line, i) => {
                   const trimmed = line.trim();
-                  if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid rgba(255,255,255,0.1)", margin: "16px 0" }} />;
+                  if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid #e2e8f0", margin: "16px 0" }} />;
                   if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
                   if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
                   return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
