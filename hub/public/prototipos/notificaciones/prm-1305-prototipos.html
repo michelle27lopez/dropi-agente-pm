@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PRM-1305-POC-1 — Prototipos de Notificaciones</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #F77F00;
+    --orange-light: #FFF3E0;
+    --bg: #f4f6f9;
+    --border: #e2e8f0;
+    --text: #2d3748;
+    --muted: #718096;
+  }
+  body {
+    background: var(--bg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    padding: 60px 24px;
+    display: flex;
+    justify-content: center;
+  }
+  .wrap { max-width: 880px; width: 100%; }
+  .eyebrow { font-size: 12px; font-weight: 800; color: var(--orange); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  h1 { font-size: 26px; font-weight: 900; margin-bottom: 10px; }
+  .lead { font-size: 14px; color: var(--muted); max-width: 620px; line-height: 1.6; margin-bottom: 36px; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 720px) { .cards { grid-template-columns: 1fr; } }
+  .card {
+    background: #fff; border: 1px solid var(--border); border-radius: 14px;
+    padding: 24px; text-decoration: none; color: inherit;
+    display: flex; flex-direction: column; gap: 12px;
+    transition: all 0.15s ease;
+  }
+  .card:hover { border-color: var(--orange); box-shadow: 0 10px 30px rgba(247,127,0,0.12); transform: translateY(-2px); }
+  .card .icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: var(--orange-light); color: var(--orange);
+    display: flex; align-items: center; justify-content: center; font-size: 22px;
+  }
+  .card h3 { font-size: 16px; font-weight: 800; }
+  .card p { font-size: 12.8px; color: var(--muted); line-height: 1.55; flex: 1; }
+  .card .tag { font-size: 10.5px; font-weight: 800; text-transform: uppercase; color: var(--orange); }
+  .card .cta { font-size: 12.5px; font-weight: 700; color: var(--orange); display: flex; align-items: center; gap: 4px; }
+  .foot { margin-top: 32px; font-size: 11.5px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="eyebrow">PRM-1305-POC-1 · Módulo de Notificaciones</div>
+    <h1>Prototipos de validación (Mock)</h1>
+    <p class="lead">Dos exploraciones de canal para el mismo comportamiento — mover al dropshipper a resolver eventos clave (novedades, órdenes, garantías, wallet) sin fricción de login. Ambas son mocks interactivos, no conectados a datos reales.</p>
+
+    <div class="cards">
+      <a class="card" href="/prototipos/notificaciones/wa-dropi-poc.html">
+        <div class="icon"><i class="ti ti-brand-whatsapp"></i></div>
+        <div class="tag">Canal · WhatsApp</div>
+        <h3>Rescate de novedades (QuickActions)</h3>
+        <p>Journey completo de un pedido vía WhatsApp: confirmación de despacho, quiebre de stock (Second Best), novedad de entrega y liquidación en Wallet — todo resuelto con botones de acción rápida dentro del chat.</p>
+        <div class="cta">Abrir prototipo <i class="ti ti-arrow-right"></i></div>
+      </a>
+
+      <a class="card" href="/prototipos/notificaciones/notificaciones-panel-poc.html">
+        <div class="icon"><i class="ti ti-bell"></i></div>
+        <div class="tag">Canal · In-App</div>
+        <h3>Panel de notificaciones (campana)</h3>
+        <p>Maqueta del dashboard de Dropi con un ícono de campana nuevo en el header que despliega un panel con los 25 tipos de notificación del catálogo (Registro, Órdenes, Garantías, Wallet, Negociaciones, CAS y más).</p>
+        <div class="cta">Abrir prototipo <i class="ti ti-arrow-right"></i></div>
+      </a>
+    </div>
+
+    <div class="foot">Última actualización: célula Seller Success (Darwin) · Alejandra Melo</div>
+  </div>
+</body>
+</html>
