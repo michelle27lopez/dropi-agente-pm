@@ -128,6 +128,8 @@ function TarjetaGrupoOnboarding({ titulo, sub, color, r }: { titulo: string; sub
 }
 
 type Filtro = "todos" | EstadoMeta7d;
+type FiltroSegmento = "todos" | "marca" | "proveedor";
+const OPCIONES_MADUREZ = ["Aún no vendo", "Iniciando", "Creciendo", "Consolidando / Pre-Escalando", "Escalando", "No documentado"];
 
 export default function OnboardingTTFOPage() {
   const [filas, setFilas] = useState<FilaAPI[]>([]);
@@ -136,6 +138,8 @@ export default function OnboardingTTFOPage() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filtro, setFiltro] = useState<Filtro>("exito");
+  const [filtroSegmento, setFiltroSegmento] = useState<FiltroSegmento>("todos");
+  const [filtroMadurez, setFiltroMadurez] = useState<string>("todos");
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -171,9 +175,16 @@ export default function OnboardingTTFOPage() {
   }, [filas]);
 
   const filasVisibles = useMemo(() => {
-    const base = filtro === "todos" ? filas : filas.filter(r => r.estadoMeta7d === filtro);
+    let base = filtro === "todos" ? filas : filas.filter(r => r.estadoMeta7d === filtro);
+    if (filtroSegmento !== "todos") base = base.filter(r => r.segmento === filtroSegmento);
+    if (filtroMadurez !== "todos") {
+      base = base.filter(r => {
+        const label = nivelMadurezDeclarado(r.ventasMesDeclaradas).label;
+        return filtroMadurez === "No documentado" ? label.startsWith("No documentado") : label === filtroMadurez;
+      });
+    }
     return [...base].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt));
-  }, [filas, filtro]);
+  }, [filas, filtro, filtroSegmento, filtroMadurez]);
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
@@ -416,7 +427,7 @@ export default function OnboardingTTFOPage() {
             <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>
               Resultado acumulado · {filasVisibles.length} marca{filasVisibles.length === 1 ? "" : "s"}
             </span>
-            <div style={{ display: "flex", gap: 6, marginLeft: "auto", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 6, marginLeft: "auto", flexWrap: "wrap", alignItems: "center" }}>
               {(["todos", "exito", "en_observacion"] as Filtro[]).map((f) => (
                 <button
                   key={f}
@@ -431,6 +442,31 @@ export default function OnboardingTTFOPage() {
                   {f === "todos" ? "Todos" : ESTADO_LABEL[f]}
                 </button>
               ))}
+              <select
+                value={filtroSegmento}
+                onChange={e => setFiltroSegmento(e.target.value as FiltroSegmento)}
+                style={{
+                  fontSize: 12, fontWeight: 600, padding: "5px 8px", borderRadius: 8,
+                  border: "1px solid var(--border)", cursor: "pointer",
+                  background: "#fff", color: "var(--muted)",
+                }}
+              >
+                <option value="todos">Marca / Proveedor</option>
+                <option value="marca">Solo Marca</option>
+                <option value="proveedor">Solo Proveedor</option>
+              </select>
+              <select
+                value={filtroMadurez}
+                onChange={e => setFiltroMadurez(e.target.value)}
+                style={{
+                  fontSize: 12, fontWeight: 600, padding: "5px 8px", borderRadius: 8,
+                  border: "1px solid var(--border)", cursor: "pointer",
+                  background: "#fff", color: "var(--muted)",
+                }}
+              >
+                <option value="todos">Todos los niveles</option>
+                {OPCIONES_MADUREZ.map(m => <option key={m} value={m}>{m}</option>)}
+              </select>
             </div>
           </div>
 
