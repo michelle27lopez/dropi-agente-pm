@@ -59,18 +59,28 @@ graph TD
 
 ## 📊 Matriz Detallada de Campos Cargados en Darwin (`projects` table)
 
-| Iniciativa / Proyecto | Código Padre | Tipo Padre | Estado Interno Padre | Código POC (`+ Crear POC`) | Estado Interno POC | Valor Potencial Validado (VPV) | Código Delivery (`+ Crear Delivery`) | Estado Interno Delivery | Related POC ID |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Dropi Wrapped 2026** | `PROD-WRAPPED` | `Idea` | `Ideación` | `PROD-WRAPPED-POC-1` | `Seguimiento` | **$35.000.000 COP** | `PROD-WRAPPED-DEL-1` | `en DEV` | `PROD-WRAPPED-POC-1` |
-| **Dropify 2.0 (APIs)** | `PRM-1239` | `Proyecto` | `Activo` | `PROD-580-POC-1` | `Seguimiento` | **$120.000.000 COP** | `PROD-580-DEL-1` | `en DEV` | `PROD-580-POC-1` |
-| **PoC Shopi / PoolMax** | `PROD-POOLMAX` | `Oportunidad` | `Concepción de exp.`| `PROD-POOLMAX-POC-1` | `En priorización` | **$85.000.000 COP** | `PROD-POOLMAX-DEL-1` | `En definición` | `PROD-POOLMAX-POC-1` |
-| **Page Pilot Landings** | `PRM-1238` | `Proyecto` | `Activo` | `PROD-PILOT-POC-1` | `Seguimiento` | **$45.000.000 COP** | `PROD-PILOT-DEL-1` | `Pendiente Handoff` | `PROD-PILOT-POC-1` |
-| **Muestras 1-Clic** | `PROD-MUESTRA` | `Idea` | `Ideación` | `PROD-MUESTRA-POC-1` | `Seguimiento` | **$25.000.000 COP** | `PROD-MUESTRA-DEL-1` | `En definición` | `PROD-MUESTRA-POC-1` |
-| **Second Best Fletes** | `PROD-SEC-BEST` | `Oportunidad` | `Concepción de exp.`| `PROD-SEC-BEST-POC-1` | `Seguimiento` | **$30.000.000 COP** | `PROD-SEC-BEST-DEL-1` | `En definición` | `PROD-SEC-BEST-POC-1` |
-| **Help Center SAC** | `PROD-HELP` | `Idea` | `Research` | `PROD-HELP-POC-1` | `Seguimiento` | **$50.000.000 COP** | `PROD-HELP-DEL-1` | `En definición` | `PROD-HELP-POC-1` |
-| **Notificaciones 360** | `PROD-1664` | `Proyecto` | `Activo` | `PROD-1664-POC-1` | `Seguimiento` | **$45.000.000 COP** | `PROD-1664-DEL-1` | `en DEV` | `PROD-1664-POC-1` |
-| **Leyendas Dropi** | `GRO-002` | `Idea` | `Ideación` | `GRO-002-POC-1` | `Seguimiento` | **$60.000.000 COP** | `GRO-002-DEL-1` | `Pendiente Handoff` | `GRO-002-POC-1` |
-| **Time to Value (TTV)**| `TTV-001` | `Proyecto` | `Activo` | `PROD-1478-POC-1` | `En priorización` | **$40.000.000 COP** | `PROD-1478-DEL-1` | `En definición` | `PROD-1478-POC-1` |
+### 🚚 1. DELIVERY PROYECTOS (Zona de Tecnología, QA y Handoff)
+
+| Iniciativa / Proyecto Delivery | Código Jira / Darwin | Tipo | Estado Interno (`estado_interno`) | Handoff Status | Prioridad | Copy Ejecutivo & Causa Raíz / Bloqueante |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **Bugs Tienda Nube (V1)** | `STID-6598` | `Delivery Proyecto` | `en DEV` | `Handoff hecho` | **P0 (Urgente)** | **Objetivo:** Resolver 6 errores de integración críticos (sincronización de variables talla/color, importación masiva, webhooks inestables y direcciones sin Barrio/Piso).<br>**Bloqueante:** Falta de asignación de recurso dev en Jira por parte de ingeniería (Jose Giraldo). |
+| **Tienda Nube V2 (Handoff)** | `DROP-25311` | `Delivery Proyecto` | `Pendiente Handoff` | `Listo para handoff` | **P1** | **Objetivo:** Pre-handoff de la nueva versión V2.<br>**Estado:** En aclaración técnica liderada por Alejandra Melo con Diego Pérez sobre la estructura del submenú y la carga de imágenes. |
+| **Page Pilot (Creación Landings)** | `PRM-1238-DEL` | `Delivery Proyecto` | `En QA` | `Handoff hecho` | **P1** | **Objetivo:** Facilitar maquetación de landings para novatos.<br>**Estado:** Handoff a QA realizado por PD. Persisten errores en generación de landings y no se aplicó el campo obligatorio de Ángulo de Venta. |
+| **Dropify Shopify 2.0** | `PROD-580` | `Delivery Proyecto` | `En QA` | `Handoff hecho` | **P2** | **Objetivo:** Re-arquitectura Built for Shopify y sync nativo.<br>**Estado:** Pruebas PT2. Pendiente completar matriz de pruebas de fulfillment de combos con Alejandra Melo. |
+| **Dropify WooCommerce** | `DROP-17355` | `Delivery Proyecto` | `en DEV` | `Handoff hecho` | **Sin Prioridad** | **Objetivo:** Migración completa del plugin de WooCommerce a React para paridad con Shopify 2.0.<br>**Estado:** En desarrollo activo por TI (Fecha de entrega pautada: 4 de agosto). |
+
+---
+
+### 🔬 2. DISCOVERY PROJECTS (Zona de Investigación, Mocks, Prototipado y Alineación)
+
+| Iniciativa / Proyecto Discovery | Código Padre | Tipo Padre | Estado Interno Padre | Estado Real de Avance |
+| :--- | :---: | :---: | :---: | :--- |
+| **Módulo Notificaciones 360** | `PROD-1664` | `Proyecto` | `Activo` | 🎨 **Discovery:** Apenas en mockups y recolección de info de Novedades. |
+| **Dropi Wrapped Leyendas 2026** | `PROD-WRAPPED` | `Idea` | `Ideación` | 🎨 **Discovery:** En fase de diseño UX/UI y prototipado. |
+| **PoolMax (Distribución Pauta API)** | `PROD-POOLMAX` | `Oportunidad` | `Concepción de exp.` | 🤝 **Discovery:** Llamada inicial de alineación de arquitectura entre equipo PoolMax y Shopi. |
+| **Muestras 1-Clic** | `PROD-MUESTRA` | `Idea` | `Ideación` | 🔬 **Discovery:** Prototipo finalizado, pendiente testeo de stock privatizado. |
+| **Second Best Fletes** | `PROD-SEC-BEST` | `Oportunidad` | `Concepción de exp.` | 🔬 **Discovery:** Validación de sobrecostos de fletes con cohortes de sellers Pareto. |
+| **Help Center SAC (Biblia AI)** | `PROD-HELP` | `Idea` | `Research` | 🔬 **Discovery:** Benchmark y triaje de 3.6K tickets con Pineda. |
 
 ---
 
@@ -78,8 +88,7 @@ graph TD
 
 1. **Estado Interno (`estado_interno`):**
    * **Discovery Projects:** `Research` (fase inicial de datos), `Ideación` (diseño de oportunidad), `Concepción de experimento` (definición de test), `Activo` (corriendo en ciclo).
-   * **POCs (`type = 'POC'`):** `Seguimiento` (experimento activo registrando datos), `En definición` (diseño de muestra), `En priorización` (en cola de testeo).
-   * **Delivery Proyectos (`type = 'Delivery Proyecto'`):** `en DEV` (en desarrollo activo por equipo tech), `Pendiente Handoff` (pre-entrega a dev/QA), `En definición` (diseño de arquitectura).
+   * **Delivery Proyectos (`type = 'Delivery Proyecto'`):** `Pendiente Handoff` (Pre-handoff activo), `En QA` (pruebas de paridad/fulfillment), `en DEV` (desarrollo activo en TI).
 
 2. **Valor Potencial Validado (VPV):**
    * Calculado como el valor económico estimado en COP del impacto en GMV, retención de sellers Pareto o ahorro en costos de soporte:
@@ -89,5 +98,5 @@ graph TD
      * **Help Center SAC:** $50M COP en ahorros de atención de soporte (deflexión 40%).
 
 3. **Jerarquía Padres / Hijos:**
-   * Todos los POCs están vinculados a su proyecto Discovery padre mediante `parent_project_id`.
    * Todos los Delivery Proyectos están vinculados a su proyecto Discovery padre mediante `parent_project_id` y al POC correspondiente mediante `related_poc_id`.
+

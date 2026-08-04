@@ -2,10 +2,13 @@
 
 > Este archivo representa el estado "vivo" de la célula de producto. Se lee al iniciar cada sesión de chat y se actualiza al cerrarla para registrar decisiones, bloqueos y próximos pasos.
 
-**Última actualización:** 2026-08-03 · PM: Santiago Herrera · Designer: Alejandra Melo · **Arranque de Semana:** Se formalizó la estructura semanal de Seller Success (Planning Lunes, PoC PoolMax Martes 3 PM con Arlex, Weekly TI Martes 4 PM con Jose Giraldo, Cell Board Miércoles 2 PM y Showcase 5 min CPO Viernes 11 AM) registrada en [planning/semana.md](planning/semana.md).
+**Última actualización:** 2026-08-04 · PM: Santiago Herrera · **Hito Experimento Causal:** Se creó e integró formalmente el nuevo proyecto de Discovery Causal **Experimento Concierge Wpp Novatos** ([`PROD-EXP-WPP-NOVATOS`](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/proyectos/experimento-falsificacion-wpp-novatos/spec.md)) dentro de `dropshipper-lab/proyectos/`. El proyecto cuenta con su especificación conductual completa de 8 secciones (aislamiento de confounders, regla de falsificación ex-ante con 5 novatos) y su prototipo de simulación UI/UX interactiva navegable en vivo.
 
 > [!IMPORTANT]
-> 🔥 **Doctrina & Criterio Core de la Célula:** Ninguna oportunidad o idea se auto-descarta prematuramente. Todas las ideas se exploran y evalúan rigurosamente en su **alcance, efectividad, deseabilidad y viabilidad técnica** a través del ciclo **Wonder → Explore → Make → Impact**. La vara de medir y el criterio maestro para priorizar cada hallazgo son nuestros OKRs y KPIs oficiales: **KR 1.1 de la compañía (7.8M ord/mes)**, **Activación Neta (5.2% $\to$ 8.0%)**, **TTV Neto (16d $\to$ <12d)** y **Retención 30d (69.4% $\to$ 75.0%)**.
+> 🔥 **MANTRA OFICIAL DE LA CÉLULA SELLER SUCCESS:**  
+> *"Habilitar, acelerar y retener al Dropshipper (Seller) para que construya un negocio de e-commerce recurrente y rentable en Dropi, eliminando la parálisis operativa inicial y maximizando el volumen de órdenes netas generadas y entregadas."*  
+>  
+> **Doctrina & Criterio Core de la Célula:** Ninguna oportunidad o idea se auto-descarta prematuramente. Todas las ideas se exploran y evalúan rigurosamente en su **alcance, efectividad, deseabilidad y viabilidad técnica** a través del ciclo **Wonder → Explore → Make → Impact**. La vara de medir y el criterio maestro para priorizar cada hallazgo son nuestros OKRs y KPIs oficiales: **KR 1.1 de la compañía (7.8M ord/mes)**, **Activación Neta (5.2% $\to$ 8.0%)**, **TTV Neto (16d $\to$ <12d)** y **Retención 30d (69.4% $\to$ 75.0%)**.
 
 ---
 
