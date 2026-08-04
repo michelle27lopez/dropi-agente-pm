@@ -19,7 +19,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 
   const [{ data: miembros }, { data: proyectos }, { data: updates }, { data: roadmap }] = await Promise.all([
     supabase.from("profiles").select("id, email, nombre, is_super_admin").eq("celula_id", celula.id),
-    supabase.from("projects").select("id, name, project_code, status, type, handoff_status, summary, business_area, prototype_url, parent_project_id, estado_interno, vpv, related_poc_id").eq("celula_owner_id", celula.id),
+    supabase.from("projects").select("id, name, project_code, status, type, handoff_status, summary, business_area, prototype_url, parent_project_id, estado_interno, vpv, related_poc_id, related_delivery_id").eq("celula_owner_id", celula.id),
     supabase.from("celula_updates").select("*").eq("celula_id", celula.id).order("week_date", { ascending: false }),
     supabase.from("roadmap_items").select("*").eq("celula_id", celula.id).order("target_date", { ascending: true }),
   ]);
