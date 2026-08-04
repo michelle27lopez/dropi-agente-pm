@@ -329,9 +329,15 @@ export async function PATCH(req: NextRequest, context: any) {
 //
 // Para Following, este proyecto (`slug`) debe ser un Delivery Proyecto — el
 // Following nace un nivel más abajo, pero se preserva la invariante de árbol
-// plano (parent_project_id SIEMPRE apunta a un Discovery): se sube al abuelo
-// (`parentProject.parent_project_id`) y se guarda el Delivery clickeado en
-// `related_delivery_id`, mismo patrón que `related_poc_id`.
+// plano (parent_project_id SIEMPRE apunta a un Discovery, nunca a un POC/
+// Delivery/Following): se sube al abuelo (`parentProject.parent_project_id`)
+// y se guarda el Delivery clickeado en `related_delivery_id`, mismo patrón
+// que `related_poc_id`. Si el Delivery en sí nació huérfano (sin Discovery
+// vinculado — pasa cuando se crea directo, no vía "+ Crear Delivery
+// Proyecto" de un Discovery), el Following también nace con
+// parent_project_id null: no bloqueamos la creación por eso, porque lo que
+// realmente lo hace visible (célula, pills, sección "Followings") es
+// related_delivery_id, no el árbol de Discovery.
 export async function POST(req: NextRequest, context: any) {
   if (!supabase) return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
 
@@ -346,9 +352,6 @@ export async function POST(req: NextRequest, context: any) {
   if (type === "Following") {
     if (parentProject.type !== "Delivery Proyecto") {
       return NextResponse.json({ error: "El padre de un Following debe ser un Delivery Proyecto" }, { status: 400 });
-    }
-    if (!parentProject.parent_project_id) {
-      return NextResponse.json({ error: "Este Delivery Proyecto no tiene un Discovery project vinculado — vincúlalo antes de crear un Following" }, { status: 400 });
     }
   } else if (parentProject.type === "POC" || parentProject.type === "Delivery Proyecto" || parentProject.type === "Following") {
     return NextResponse.json({ error: "El padre debe ser un Discovery project" }, { status: 400 });
