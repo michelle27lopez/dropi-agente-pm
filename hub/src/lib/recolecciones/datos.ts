@@ -1,20 +1,11 @@
 // De dónde salen los datos del módulo, en un solo lugar.
 //
-// Dos fuentes, en orden: la base (rec_carga_diaria + rec_bodega) y, si todavía
-// no existe la migración 037, el JSON que el pipeline deja en public/. Esa
-// segunda vía es la que permite trabajar y probar el módulo completo antes de
-// que las tablas existan — no es un parche permanente: el día que la base
-// tenga datos, gana ella y el archivo deja de mirarse.
-//
-// En Vercel el archivo NO está (es data operativa, gitignored), así que allá
-// solo funciona la base. Por eso la foto declara su `fuente`: la pantalla tiene
-// que poder decir de dónde salió lo que muestra.
-
-import fs from "node:fs";
-import path from "node:path";
+// Única fuente: Supabase (`rec_carga_diaria` + `rec_bodega`). Los snapshots
+// operativos no pueden vivir en `public/` ni funcionar como respaldo: además
+// de quedar viejos, eludirían el control de acceso específico de Indiana.
 import { supabase } from "@/lib/supabase";
-import { A_ETIQUETA_MAPA, esUbicacionReal, antiguedadMax, EDADES_CERO,
-         type Precision, type BodegaConCarga, type Foto, type Edades } from "./index";
+import { esUbicacionReal, antiguedadMax, EDADES_CERO,
+         type BodegaConCarga, type Foto, type Edades } from "./index";
 import type { ReglasPorTransportadora } from "./tablero";
 
 
@@ -22,11 +13,6 @@ const VACIA: Foto = {
   fecha: null, fuente: "vacio", bodegas: [],
   totales: { bodegas: 0, guias: 0, preparadas: 0, sin_ubicar_guias: 0 },
 };
-
-// El JSON del mapa usa etiquetas cortas; acá se vuelve al vocabulario completo.
-const DESDE_ETIQUETA: Record<string, Precision> = Object.fromEntries(
-  Object.entries(A_ETIQUETA_MAPA).map(([k, v]) => [v, k as Precision]),
-) as Record<string, Precision>;
 
 function totalizar(bodegas: BodegaConCarga[]): Foto["totales"] {
   return {
@@ -45,7 +31,7 @@ async function desdeLaBase(): Promise<Foto | null> {
   const { data: ultima, error } = await supabase
     .from("rec_carga_diaria").select("fecha")
     .order("fecha", { ascending: false }).limit(1).maybeSingle();
-  // Sin tablas todavía (PGRST205) o sin filas: que decida el archivo.
+  // Sin tablas todavía (PGRST205) o sin filas: estado vacío explícito.
   if (error || !ultima) return null;
 
   const fecha = ultima.fecha as string;
@@ -123,48 +109,9 @@ async function desdeLaBase(): Promise<Foto | null> {
   return { fecha, fuente: "base", bodegas: lista, totales: totalizar(lista) };
 }
 
-function desdeElArchivo(): Foto | null {
-  const f = path.join(process.cwd(), "public", "logistica", "recolecciones",
-                      "datos-recolecciones.json");
-  if (!fs.existsSync(f)) return null;
-
-  try {
-    const { meta, puntos } = JSON.parse(fs.readFileSync(f, "utf8"));
-    const bodegas: BodegaConCarga[] = puntos.map((p: Record<string, never>) => ({
-      warehouse_id: String(p.id),
-      nombre: (p.b as string) ?? "(sin nombre)",
-      direccion: (p.a as string) ?? "",
-      municipio: (p.m as string) ?? "",
-      dpto: (p.dp as string) ?? "",
-      cod_dane: (p.dane as string) ?? "",
-      lat: p.lat as number, lng: p.lng as number,
-      nivel_precision: DESDE_ETIQUETA[p.geo as string] ?? "sin_ubicar",
-      // El archivo es anterior a la petición a Data: estos campos aún no existen.
-      supplier_id: null, supplier_nombre: null,
-      telefono: null, telefono_proveedor: null,
-      fulfillment_by_dropi: null,
-      preparadas: (p.p as number) ?? 0,
-      guia_generada: (p.g as number) ?? 0,
-      total: (p.t as number) ?? 0,
-      transportadoras: (p.tr as unknown as Array<[string, number, number]>) ?? [],
-      // El JSON del pipeline es anterior al export con antigüedad.
-      edades: { ...EDADES_CERO },
-      antiguedad_max: null,
-    }));
-    return {
-      fecha: (meta?.generado as string) ?? null,
-      fuente: "archivo",
-      bodegas,
-      totales: totalizar(bodegas),
-    };
-  } catch {
-    return null;
-  }
-}
-
-/** La foto vigente. Base primero; el archivo solo si la base no tiene nada. */
+/** La foto vigente. Sin base o sin filas, falla a un estado vacío explícito. */
 export async function cargarFoto(): Promise<Foto> {
-  return (await desdeLaBase()) ?? desdeElArchivo() ?? VACIA;
+  return (await desdeLaBase()) ?? VACIA;
 }
 
 /** Reglas por transportadora desde la base; vacío si todavía no hay tablas. */
