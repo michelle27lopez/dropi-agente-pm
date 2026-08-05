@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dropi — Experiencia Nativa "Vender por WhatsApp" (RPP Design System)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --dropi-primary-500: #f49a3d;
+      --dropi-primary-600: #e58017;
+      --dropi-gray-50: #f7f8fa;
+      --dropi-gray-100: #eef0f4;
+      --dropi-gray-800: #232938;
+      --dropi-gray-900: #151921;
+      --dropi-success: #4caf50;
+      --wpp-green: #25D366;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7f8fa;
+      color: #151921;
+    }
+    .bg-dropi {
+      background-color: #f49a3d;
+    }
+    .bg-dropi-hover:hover {
+      background-color: #e58017;
+    }
+    .text-dropi {
+      color: #e58017;
+    }
+    .border-dropi {
+      border-color: #f49a3d;
+    }
+    .bg-wpp {
+      background-color: #25D366;
+    }
+    .bg-wpp-hover:hover {
+      background-color: #1eb956;
+    }
+    .modal-overlay {
+      background-color: rgba(21, 25, 33, 0.65);
+      backdrop-filter: blur(4px);
+    }
+    /* Smartphone Mockup */
+    .phone-container {
+      width: 340px;
+      height: 660px;
+      border-radius: 36px;
+      border: 8px solid #232938;
+      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.25);
+    }
+    .wpp-chat-bg {
+      background-color: #0b141a;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased bg-slate-50">
+
+  <!-- TOPBAR DROPI (REPLICADO DE APPDROPI.CO / RPP) -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-6 py-2.5 flex items-center justify-between shadow-xs">
+    <div class="flex items-center gap-6">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-dropi flex items-center justify-center text-white font-extrabold text-base shadow-sm">
+          d
+        </div>
+        <span class="font-extrabold text-xl tracking-tight text-slate-900">dropi</span>
+        <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-orange-100 text-orange-700">RPP DESIGN SYSTEM</span>
+      </div>
+
+      <!-- BUSCADOR DROPI -->
+      <div class="hidden md:flex items-center gap-2 bg-slate-100 rounded-lg px-3 py-1.5 w-72 border border-slate-200 text-xs text-slate-500">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <span>Buscar productos...</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4 text-xs">
+      <div class="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-lg border border-emerald-200 font-semibold">
+        <i class="fa-solid fa-wallet"></i>
+        <span>Wallet: <strong id="top-wallet-val">$350.000 COP</strong></span>
+      </div>
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-slate-800 text-white font-bold flex items-center justify-center text-[11px]">
+          CM
+        </div>
+        <span class="font-medium text-slate-700">Carlos Mendoza</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- SUBHEADER / NAVEGACIÓN DROPI -->
+  <div class="bg-white border-b border-slate-200 px-6 py-2 text-xs text-slate-500 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <a href="#" class="hover:text-orange-600">Inicio</a>
+      <i class="fa-solid fa-chevron-right text-[9px] text-slate-400"></i>
+      <a href="#" class="hover:text-orange-600">Catálogo de Productos</a>
+      <i class="fa-solid fa-chevron-right text-[9px] text-slate-400"></i>
+      <span class="font-semibold text-slate-800">Cepillo Secador 3-en-1 Pro</span>
+    </div>
+
+    <div class="flex items-center gap-2 text-xs font-medium">
+      <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+      <span class="text-slate-600">WhatsApp Business: <strong id="wpp-status-badge" class="text-slate-800">No Vinculado</strong></span>
+    </div>
+  </div>
+
+  <!-- MAIN VIEW: FICHA DE PRODUCTO EN DROPI -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+    <!-- IZQUIERDA: DETALLE DE PRODUCTO DROPI (7 COLS) -->
+    <div class="lg:col-span-7 space-y-6">
+
+      <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-xs space-y-6 text-slate-900">
+        
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <span class="px-2.5 py-0.5 rounded text-[11px] font-bold bg-orange-100 text-orange-700 uppercase">PROVEEDOR VERIFICADO</span>
+          <span class="text-xs text-slate-500 font-medium">Bodega Bogotá · Stock: <strong class="text-emerald-600 font-bold">1.200 unids</strong></span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-6">
+          <div class="sm:col-span-5 h-60 rounded-lg bg-slate-100 overflow-hidden relative border border-slate-200">
+            <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=600&auto=format&fit=crop&q=80" class="w-full h-full object-cover">
+          </div>
+
+          <div class="sm:col-span-7 space-y-4 flex flex-col justify-between">
+            <div class="space-y-2">
+              <h1 class="text-xl font-bold text-slate-900 leading-tight">Cepillo Secador 3-en-1 Ionico Profesional</h1>
+              <p class="text-xs text-slate-500 leading-relaxed">Seca, alisa y da volumen en 1 paso. Alta rotación con efectividad del 84.5% en Pago Contra Entrega (COD).</p>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 grid grid-cols-3 gap-2 text-center text-xs">
+              <div>
+                <span class="text-slate-400 block text-[10px]">Costo</span>
+                <strong class="text-slate-800 font-bold">$38.000</strong>
+              </div>
+              <div>
+                <span class="text-slate-400 block text-[10px]">P. Sugerido</span>
+                <strong class="text-slate-900 font-bold">$89.900</strong>
+              </div>
+              <div class="bg-emerald-50 border border-emerald-200 p-1 rounded-md">
+                <span class="text-emerald-700 font-bold block text-[10px]">Tu Ganancia</span>
+                <strong class="text-emerald-600 font-extrabold">+$24.500</strong>
+              </div>
+            </div>
+
+            <!-- BOTONES NATIVOS DROPI -->
+            <div class="space-y-2">
+              <button onclick="iniciarFlujoNativoWhatsApp()" class="w-full py-3 px-4 rounded-lg bg-wpp bg-wpp-hover text-white font-bold text-xs shadow-sm transition flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-base"></i>
+                <span>VENDER POR WHATSAPP (EXPORTAR AL CELULAR)</span>
+              </button>
+
+              <button class="w-full py-2.5 px-4 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plus"></i>
+                <span>Agregar a Mi Tienda Shopify/Woo</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- HISTORIAL NATIVO DE VENTAS EN WALLET -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-xs space-y-3">
+        <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-clock-rotate-left text-orange-500"></i> Órdenes de WhatsApp Recientes
+        </h3>
+
+        <div class="space-y-2" id="wallet-log-list">
+          <div class="p-3 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs">
+                ✓
+              </div>
+              <div>
+                <strong class="text-slate-900 block font-semibold">Orden #1042 — Marcela Gómez (Bogotá)</strong>
+                <span class="text-[11px] text-slate-500">Entregada por Interrapidisimo · Pago Contra Entrega</span>
+              </div>
+            </div>
+            <span class="font-bold text-emerald-600">+$24.500 COP</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DERECHA: CELULAR WHATSAPP EN VIVO (5 COLS) -->
+    <div class="lg:col-span-5 flex flex-col items-center">
+      
+      <div class="phone-container overflow-hidden bg-slate-950 flex flex-col relative">
+        
+        <!-- PHONE HEADER -->
+        <div class="bg-slate-900 text-white px-6 py-2 flex items-center justify-between text-[11px] font-medium border-b border-slate-800 flex-shrink-0">
+          <span>9:41</span>
+          <div class="w-14 h-3 rounded-full bg-slate-800 mx-auto"></div>
+          <div class="flex items-center gap-1">
+            <i class="fa-solid fa-wifi text-[10px]"></i>
+            <i class="fa-solid fa-battery-full text-[10px]"></i>
+          </div>
+        </div>
+
+        <!-- WHATSAPP APP HEADER -->
+        <div class="bg-slate-900 border-b border-slate-800 p-3 flex items-center justify-between flex-shrink-0">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-wpp flex items-center justify-center text-white font-bold text-xs">
+              <i class="fa-brands fa-whatsapp"></i>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-white">WhatsApp Business</h4>
+              <p class="text-[10px] text-slate-400" id="phone-sync-label">Esperando vinculación...</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHONE SCREEN BODY -->
+        <div class="flex-1 wpp-chat-bg p-3 overflow-y-auto space-y-3" id="phone-screen-body">
+          
+          <div id="phone-empty-view" class="text-center py-16 space-y-2 px-4">
+            <div class="w-10 h-10 rounded-full bg-slate-800 text-slate-400 flex items-center justify-center mx-auto text-lg">
+              <i class="fa-solid fa-mobile-screen"></i>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Haz clic en <strong>"VENDER POR WHATSAPP"</strong> en Dropi para enviar el producto y las respuestas aquí.
+            </p>
+          </div>
+
+          <!-- ACTIVE CHAT VIEW (HIDDEN AT START) -->
+          <div id="phone-chat-view" class="hidden space-y-3">
+            <div class="p-2 bg-slate-900 rounded-lg border border-slate-800 text-[11px] space-y-1.5">
+              <span class="text-[10px] font-bold text-emerald-400 block">📦 Catálogo de WhatsApp Actualizado:</span>
+              <div class="flex items-center gap-2">
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=100&auto=format&fit=crop&q=80" class="w-10 h-10 rounded object-cover">
+                <div>
+                  <h5 class="font-bold text-white text-xs">Cepillo Secador 3-en-1 Pro</h5>
+                  <p class="text-[10px] text-emerald-400">$89.900 (Envío Gratis COD)</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- MESSAGES CONTAINER -->
+            <div class="space-y-2" id="wpp-messages-container">
+              <div class="flex flex-col items-start">
+                <div class="max-w-[85%] bg-slate-800 text-slate-100 rounded-lg p-2 text-xs">
+                  <span class="text-[9px] font-bold text-emerald-400 block mb-0.5">Marcela Gómez (Cliente)</span>
+                  <p>Hola! Me interesa el Cepillo Secador, ¿es verdad que el envío es gratis a Bogotá?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- QUICK REPLIES BAR -->
+        <div id="phone-replies-bar" class="bg-slate-900 border-t border-slate-800 p-2 flex items-center gap-1 overflow-x-auto flex-shrink-0 hidden">
+          <span class="text-[9px] font-bold text-slate-500 uppercase flex-shrink-0">Respuestas:</span>
+          <button onclick="enviarQuickReply('/oferta')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded text-[10px] font-mono border border-slate-700 flex-shrink-0">/oferta</button>
+          <button onclick="enviarQuickReply('/envio')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded text-[10px] font-mono border border-slate-700 flex-shrink-0">/envio</button>
+          <button onclick="enviarQuickReply('/pedir')" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-emerald-400 rounded text-[10px] font-mono border border-slate-700 flex-shrink-0">/pedir</button>
+        </div>
+
+        <!-- SMARTPHONE INPUT -->
+        <div class="bg-slate-900 border-t border-slate-800 p-2 flex items-center gap-2 flex-shrink-0">
+          <input type="text" id="phone-chat-input" placeholder="Escribe o usa /oferta..." class="flex-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none">
+          <button onclick="enviarMensajeManual()" class="w-7 h-7 rounded-lg bg-wpp flex items-center justify-center text-white text-xs">
+            <i class="fa-solid fa-paper-plane text-[10px]"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- MODAL NATIVO DROPI (SIMULACIÓN FIEL POP-UP VINCULAR Y EXPORTAR) -->
+  <div id="native-dropi-modal" class="fixed inset-0 z-50 modal-overlay hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-md w-full border border-slate-200 shadow-2xl overflow-hidden text-slate-900 animate-in fade-in duration-150">
+      
+      <!-- MODAL HEADER -->
+      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded bg-wpp flex items-center justify-center text-white text-xs">
+            <i class="fa-brands fa-whatsapp"></i>
+          </div>
+          <h3 class="font-bold text-sm text-slate-900">Exportar a WhatsApp Business</h3>
+        </div>
+        <button onclick="cerrarModalNativo()" class="text-slate-400 hover:text-slate-600 text-sm">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- MODAL BODY -->
+      <div class="p-5 space-y-4 text-xs">
+        
+        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-1">
+          <span class="font-semibold text-slate-700 block">Producto Seleccionado:</span>
+          <strong class="text-slate-900 font-bold block text-sm">Cepillo Secador 3-en-1 Ionico Pro</strong>
+          <span class="text-slate-500">Precio Sugerido: $89.900 COP · Ganancia: +$24.500 COP</span>
+        </div>
+
+        <div class="space-y-2">
+          <label class="font-semibold text-slate-700 block">Número de WhatsApp Business donde venderás:</label>
+          <input type="text" id="wpp-number-input" value="+57 310 456 7890" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold text-slate-900 focus:outline-none focus:border-orange-500">
+        </div>
+
+        <div class="p-3 bg-emerald-50 rounded-lg border border-emerald-200 text-emerald-800 text-[11px] space-y-1">
+          <strong class="font-bold block flex items-center gap-1">
+            <i class="fa-solid fa-circle-info"></i> ¿Qué sucederá en 1-Clic?
+          </strong>
+          <p>Dropi cargará el producto en tu catálogo de WhatsApp Business y te enviará las respuestas rápidas (<code>/oferta</code>, <code>/envio</code>, <code>/datos</code>) a tu chat.</p>
+        </div>
+
+      </div>
+
+      <!-- MODAL FOOTER -->
+      <div class="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+        <button onclick="cerrarModalNativo()" class="px-3.5 py-1.5 rounded-lg border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-100">
+          Cancelar
+        </button>
+        
+        <button onclick="confirmarExportacionNativa()" class="px-4 py-2 rounded-lg bg-wpp bg-wpp-hover text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5">
+          <i class="fa-brands fa-whatsapp"></i>
+          <span>EXPORTAR Y EMPEZAR A VENDER</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT NATIVO DROPI -->
+  <script>
+    function iniciarFlujoNativoWhatsApp() {
+      document.getElementById('native-dropi-modal').classList.remove('hidden');
+    }
+
+    function cerrarModalNativo() {
+      document.getElementById('native-dropi-modal').classList.add('hidden');
+    }
+
+    function confirmarExportacionNativa() {
+      cerrarModalNativo();
+
+      // UPDATE DROPI HEADER BADGE
+      const number = document.getElementById('wpp-number-input').value;
+      document.getElementById('wpp-status-badge').innerText = `Vinculado (${number})`;
+      document.getElementById('wpp-status-badge').className = "text-emerald-600 font-bold";
+
+      // UPDATE SMARTPHONE VIEW
+      document.getElementById('phone-sync-label').innerText = "Catálogo Dropi Sincronizado ✓";
+      document.getElementById('phone-empty-view').classList.add('hidden');
+      document.getElementById('phone-chat-view').classList.remove('hidden');
+      document.getElementById('phone-replies-bar').classList.remove('hidden');
+
+      alert("🎉 ¡Exportación Exitosa! Revisa el celular a la derecha: el producto y las respuestas automáticas ya están disponibles en tu WhatsApp Business.");
+    }
+
+    function enviarQuickReply(codigo) {
+      const container = document.getElementById('wpp-messages-container');
+      let msg = '';
+      if (codigo === '/oferta') msg = '🔥 PROMO BOGOTÁ: Cepillo Secador 3-en-1 Ionico Pro a sólo $89.900 COP con ENVÍO GRATIS y PAGO CONTRA ENTREGA en tu casa.';
+      if (codigo === '/envio') msg = '🚚 El envío es 100% GRATIS por Interrapidisimo/Servientrega. Pagas únicamente al recibir en tu puerta en 24h.';
+      if (codigo === '/pedir') msg = '📝 Por favor envíame tu Nombre completo, Dirección exacta con barrio y Ciudad para despachar tu pedido hoy mismo.';
+
+      container.innerHTML += `
+        <div class="flex flex-col items-end">
+          <div class="max-w-[85%] bg-emerald-800 text-white rounded-lg p-2 text-xs">
+            <span class="text-[9px] font-bold text-emerald-200 block mb-0.5">Carlos Mendoza (Novato)</span>
+            <p>${msg}</p>
+          </div>
+        </div>
+      `;
+
+      if (codigo === '/pedir') {
+        setTimeout(() => {
+          container.innerHTML += `
+            <div class="flex flex-col items-start">
+              <div class="max-w-[85%] bg-slate-800 text-slate-100 rounded-lg p-2 text-xs">
+                <span class="text-[9px] font-bold text-emerald-400 block mb-0.5">Marcela Gómez (Cliente)</span>
+                <p>¡Listo! Mi dirección es Cra 15 #102-30 Apto 402 en Bogotá. Confírmame el despacho por favor.</p>
+              </div>
+            </div>
+          `;
+          simularAbonoWallet();
+        }, 1200);
+      }
+    }
+
+    function enviarMensajeManual() {
+      const input = document.getElementById('phone-chat-input');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const container = document.getElementById('wpp-messages-container');
+      container.innerHTML += `
+        <div class="flex flex-col items-end">
+          <div class="max-w-[85%] bg-emerald-800 text-white rounded-lg p-2 text-xs">
+            <span class="text-[9px] font-bold text-emerald-200 block mb-0.5">Carlos Mendoza (Novato)</span>
+            <p>${val}</p>
+          </div>
+        </div>
+      `;
+      input.value = '';
+    }
+
+    function simularAbonoWallet() {
+      setTimeout(() => {
+        document.getElementById('top-wallet-val').innerText = "$374.500 COP";
+        const list = document.getElementById('wallet-log-list');
+        list.innerHTML = `
+          <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs animate-pulse">
+            <div class="flex items-center gap-3">
+              <div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
+                ✓
+              </div>
+              <div>
+                <strong class="text-slate-900 block font-bold">🎉 ¡NUEVA ORDEN DESPACHADA #1043!</strong>
+                <span class="text-[11px] text-slate-600">Marcela Gómez (Bogotá) · Ganancia abonada a Wallet</span>
+              </div>
+            </div>
+            <span class="font-extrabold text-emerald-600 text-sm">+$24.500 COP</span>
+          </div>
+        ` + list.innerHTML;
+
+        alert("🎉 ¡ORDEN RECIBIDA Y DESPACHADA! Se ingresó el pedido de Marcela Gómez en Bogotá y tu Wallet sumó +$24.500 COP.");
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

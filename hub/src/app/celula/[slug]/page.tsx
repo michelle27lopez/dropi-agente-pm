@@ -16,6 +16,8 @@ import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 // ese peso no entre en el bundle de las demás células, que no lo usan. Por lo
 // mismo, el mapa de etapas se pide con un `import()` dentro del efecto.
 const UpdatesLogistica = dynamic(() => import("./_components/UpdatesLogistica"), { ssr: false });
+const UpdatesBackoffice = dynamic(() => import("./_components/UpdatesBackoffice"), { ssr: false });
+const WeeklyBanner = dynamic(() => import("./_components/WeeklyBanner"), { ssr: false });
 type MapaEtapas = import("./_lib/logistica-etapas").MapaEtapas;
 type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
@@ -308,6 +310,9 @@ export default function CelulaHomePage() {
   // del viaje de la orden, que pasó de ser el esqueleto de la página a ser un
   // tag de la tarjeta más una fila de chips para filtrar.
   const isLogistica = params.slug === "logistica";
+  // Backoffice suma su propio Weekly (acordeones por fecha) a la sección
+  // Updates, igual que logística — ver UpdatesBackoffice.
+  const isBackoffice = params.slug === "backoffice";
 
   // ── Las cuatro secciones, iguales para todas las células ───────────────────
   // Los filtros son los mismos de antes; lo único nuevo es `pasaEtapa`, que
@@ -406,8 +411,11 @@ export default function CelulaHomePage() {
           />
         </div>
 
-        <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px", width: "100%", flex: 1 }}>
+        <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px 24px", width: "100%", flex: 1 }}>
           
+          {/* Weekly Célula Banner / Action Bar */}
+          <WeeklyBanner />
+
           {/* Country Filter Tab Bar */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, background: "#f1f5f9", padding: 6, borderRadius: 12, border: "1px solid #e2e8f0" }}>
             {[
@@ -1046,6 +1054,18 @@ export default function CelulaHomePage() {
         {isLogistica && (
           <div style={{ marginBottom: 56 }}>
             <UpdatesLogistica
+              extra={updates}
+              onItemClick={(item) => {
+                const u = updatesById.get(item.key);
+                if (u) setOpenUpdate(u);
+              }}
+            />
+          </div>
+        )}
+
+        {isBackoffice && (
+          <div style={{ marginBottom: 56 }}>
+            <UpdatesBackoffice
               extra={updates}
               onItemClick={(item) => {
                 const u = updatesById.get(item.key);

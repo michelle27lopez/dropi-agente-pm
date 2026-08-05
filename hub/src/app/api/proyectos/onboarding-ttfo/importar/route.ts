@@ -4,22 +4,28 @@ import { requireUser } from "@/lib/require-auth";
 import {
   clasificarLote, type ArchivoEntrada,
   parsearEncuesta, parsearModalOTour, parsearEvento,
-  construirLineaDeTiempo, type SlotsParaCronologia,
-  calcularCohorte, calcularAlertas,
-  calcularComparacionOnboarding, CORTE_COHORTE,
+  type SlotsParaCronologia,
+  calcularResultadoCompleto,
+  esColumnasRawData, parsearRawDataUserPilot, empalmarConRawData, CORTE_EMPALME_RAW_DATA,
   type ExclusionManual, type FilaCruda, type SlotId,
 } from "@/lib/onboarding-ttfo";
-import { leerExclusiones, guardarResultado, type FilaGuardada } from "@/lib/onboarding-ttfo/almacenLocal";
+import { leerExclusiones, guardarCargaHistorica, type FilaGuardada } from "@/lib/onboarding-ttfo/almacenLocal";
 
-// Carga de un corte de cohorte para la pizarra de Onboarding TTFO — sube
-// todos los CSVs de una vez (Encuesta + pasos del tour), el servidor los
-// clasifica, cruza y calcula el resultado completo (población, Marca/
-// Proveedor, TTFO, gatillo, alertas) en un dry-run; solo con `confirmar` en
-// el form-data se escribe a hub/data/onboarding-ttfo.json (sin Supabase
-// mientras las migraciones 039/040 sigan sin aplicar — decisión 2026-07-29).
-// Cada carga trae el histórico COMPLETO de UserPilot (no hay export delta),
-// así que el resultado calculado en esta corrida ya reemplaza al anterior
-// por completo — no hace falta upsert/merge contra lo guardado antes.
+// Carga de CSV histórico para la pizarra de Onboarding TTFO — sube todos los
+// CSVs de una vez (Encuesta + pasos del tour), el servidor los clasifica,
+// cruza y calcula el resultado completo (población, Marca/Proveedor, TTFO,
+// gatillo, alertas) en un dry-run; solo con `confirmar` en el form-data se
+// escribe a hub/data/ (sin Supabase mientras las migraciones 039/040 sigan
+// sin aplicar — decisión 2026-07-29).
+//
+// Cada carga de ESTA ruta trae el histórico COMPLETO de UserPilot (no hay
+// export delta de CSV), así que reemplaza por completo lo guardado antes —
+// no hace falta upsert/merge. Esta ruta es la línea base "histórica"
+// (decisión de Kate, 04-ago-2026): de ahí en adelante, las cargas rutinarias
+// de la automatización van por /importar-raw-data, que SUMA sobre lo que
+// esta ruta dejó guardado, sin volver a pedir los CSV. Si en el mismo lote
+// además se incluye un export "Raw Data", se empalma también acá (ver
+// rawData.ts) — pero no es el camino esperado semana a semana.
 //
 // Un archivo con nombre/columnas irreconocibles no rompe el resto del lote —
 // se lista aparte en `noReconocidos` para que se corrija y se vuelva a
@@ -63,7 +69,15 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  const clasificacion = clasificarLote(entradas);
+  // Los archivos "Raw Data" de la automatización (Google Sheets → webhook
+  // UserPilot) no calzan con ninguna de las 3 firmas de columnas normales
+  // (Encuesta/Modal-Tour/Evento) — se separan antes de clasificar el resto,
+  // se agregan aparte con parsearRawDataUserPilot, y se empalman al final.
+  // Ver rawData.ts y la decisión de Kate (04-ago-2026).
+  const entradasRawData = entradas.filter(e => esColumnasRawData(Object.keys(e.filas[0] ?? {})));
+  const entradasNormales = entradas.filter(e => !entradasRawData.includes(e));
+
+  const clasificacion = clasificarLote(entradasNormales);
 
   // Aplicar reasignaciones manuales del mapeo (paso de revisión editable).
   for (const archivo of clasificacion.mapeados) {
@@ -73,23 +87,44 @@ export async function POST(req: NextRequest) {
     if (mapeoOverride[archivo.nombreArchivo]) archivo.slot = mapeoOverride[archivo.nombreArchivo];
   }
 
-  const filasPorNombre = new Map(entradas.map(e => [e.nombreArchivo, e.filas]));
+  const filasPorNombre = new Map(entradasNormales.map(e => [e.nombreArchivo, e.filas]));
   const encuestaFilas = clasificacion.mapeados.find(a => a.slot === "encuesta");
-  const encuesta = encuestaFilas ? parsearEncuesta(filasPorNombre.get(encuestaFilas.nombreArchivo) ?? []) : [];
+  const encuestaHistorico = encuestaFilas ? parsearEncuesta(filasPorNombre.get(encuestaFilas.nombreArchivo) ?? []) : [];
 
-  const modalOTour: SlotsParaCronologia["modalOTour"] = {};
-  const evento: SlotsParaCronologia["evento"] = {};
+  const modalOTourHistorico: SlotsParaCronologia["modalOTour"] = {};
+  const eventoHistorico: SlotsParaCronologia["evento"] = {};
   for (const archivo of clasificacion.mapeados) {
     if (!archivo.slot || archivo.slot === "encuesta") continue;
     const filas = filasPorNombre.get(archivo.nombreArchivo) ?? [];
     if (archivo.familiaDetectada === "modal_o_tour") {
-      modalOTour[archivo.slot] = parsearModalOTour(filas);
+      modalOTourHistorico[archivo.slot] = parsearModalOTour(filas);
     } else if (archivo.familiaDetectada === "evento") {
-      evento[archivo.slot] = parsearEvento(filas);
+      eventoHistorico[archivo.slot] = parsearEvento(filas);
     }
   }
 
-  const lineas = construirLineaDeTiempo({ encuesta, modalOTour, evento });
+  let encuesta = encuestaHistorico;
+  let modalOTour: SlotsParaCronologia["modalOTour"] = modalOTourHistorico;
+  let evento: SlotsParaCronologia["evento"] = eventoHistorico;
+  let resumenRawData: { archivos: number; filasLeidas: number; usuariosEncuestaNuevos: number; corteEmpalme: string } | null = null;
+
+  if (entradasRawData.length > 0) {
+    const filasRawData = entradasRawData.flatMap(e => e.filas);
+    const rawData = parsearRawDataUserPilot(filasRawData, CORTE_EMPALME_RAW_DATA);
+    const empalmado = empalmarConRawData(
+      { encuesta: encuestaHistorico, modalOTour: modalOTourHistorico, evento: eventoHistorico },
+      rawData,
+    );
+    encuesta = empalmado.encuesta;
+    modalOTour = empalmado.modalOTour;
+    evento = empalmado.evento;
+    resumenRawData = {
+      archivos: entradasRawData.length,
+      filasLeidas: filasRawData.length,
+      usuariosEncuestaNuevos: rawData.encuesta.length,
+      corteEmpalme: CORTE_EMPALME_RAW_DATA,
+    };
+  }
 
   // ── Exclusiones manuales persistidas ─────────────────────────────────────
   const exclusionesData = await leerExclusiones();
@@ -98,46 +133,10 @@ export async function POST(req: NextRequest) {
   );
 
   const fechaCorte = new Date().toISOString().slice(0, 10);
-  const resultados = calcularCohorte(lineas, fechaCorte, exclusionesManuales);
-  const alertas = calcularAlertas(resultados, lineas);
+  const { resultados, alertas, comparacionOnboarding, resumen, inferidosPorParalelismo } =
+    calcularResultadoCompleto({ encuesta, modalOTour, evento }, exclusionesManuales, fechaCorte);
 
-  // Comparación "con onboarding vs. sin él" — usa la Encuesta COMPLETA (sin
-  // filtrar al cohorte desde CORTE_COHORTE), porque necesita también a los
-  // encuestados de antes del 28-jul, que calcularCohorte descarta a propósito.
-  const comparacionOnboarding = calcularComparacionOnboarding(
-    encuesta,
-    evento.evento_enviar_cliente ?? [],
-    modalOTour.modal_felicidades_orden_manual ?? [],
-    exclusionesManuales,
-    CORTE_COHORTE,
-  );
-
-  const resumen = {
-    poblacion: resultados.length,
-    activadas: resultados.filter(r => r.primeraOrden !== null).length,
-    exito: resultados.filter(r => r.estadoMeta7d === "exito").length,
-    fracaso: resultados.filter(r => r.estadoMeta7d === "fracaso").length,
-    enObservacion: resultados.filter(r => r.estadoMeta7d === "en_observacion").length,
-    cuentasDePrueba: resultados.filter(r => r.esPrueba).length,
-  };
-
-  const preview = {
-    clasificacion,
-    resumen,
-    alertas,
-    comparacionOnboarding,
-    // Casos a revisar a mano: el modal final se disparó sin fila directa en
-    // el evento correspondiente (resuelto por la regla de paralelismo, pero
-    // no lo escondemos — se marca como inferido).
-    inferidosPorParalelismo: resultados
-      .filter(r => r.primeraOrden !== null && r.caminos.some(c => c.camino === "orden_manual"))
-      .map(r => r.userId)
-      .filter(userId => {
-        const linea = lineas.get(userId);
-        const evento = linea?.pasos.evento_enviar_cliente;
-        return !(evento && typeof evento === "object" && "totalOcurrencias" in evento);
-      }),
-  };
+  const preview = { clasificacion, resumen, resumenRawData, alertas, comparacionOnboarding, inferidosPorParalelismo };
 
   if (!confirmar) {
     return NextResponse.json({ dryRun: true, ...preview, mensaje: "Nada escrito todavía. Confirmá para guardar." });
@@ -175,7 +174,7 @@ export async function POST(req: NextRequest) {
   };
 
   try {
-    await guardarResultado({ filas, alertas, comparacionOnboarding, ultimaImportacion });
+    await guardarCargaHistorica({ filas, alertas, comparacionOnboarding, ultimaImportacion }, { encuesta, modalOTour, evento });
   } catch (err) {
     return NextResponse.json(
       { error: err instanceof Error ? err.message : "Error escribiendo el resultado local" }, { status: 500 });

@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { localGetEligibleByToken, localRegisterEligibleView } from "@/lib/local-store-planeacion";
 import { supabaseGetEligibleByToken, supabaseRegisterEligibleView } from "@/lib/supabase-store-planeacion";
 
+// Sin esto, Next.js puede tratar este handler como estático (no usa cookies
+// ni headers del request) y cachear la respuesta — rompiendo tanto el reset
+// del token de QA como la lectura en vivo del estado real de un proveedor.
+export const dynamic = "force-dynamic";
+
 // Público a propósito (sin login) — el token es opaco y no se puede adivinar
 // ni derivar del ID real del proveedor, así que solo quien recibió su propio
 // link ve su propia lista. Un proveedor no puede ver la de otro cambiando
@@ -45,10 +50,34 @@ function computeJourney(): JourneyStep[] {
   }));
 }
 
+// Token fijo de QA (ver scratchpad de seed) — cada vez que alguien del equipo
+// entra a este link, la respuesta se fuerza a estado "recién postulado" (sin
+// selección, sin checklist, sin feedback) aunque la fila real en la base
+// tenga cosas guardadas de la última prueba. Así el link siempre se siente
+// como la primera visita de un proveedor, sin tener que borrar nada a mano
+// entre pruebas — y sin arriesgar resetear la fila de un proveedor real.
+const QA_RESET_TOKEN = "qa-preview-campanas";
+
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string; token: string }> }) {
   const { id, token } = await params;
   const entry = (await supabaseGetEligibleByToken(id, token)) ?? (await localGetEligibleByToken(id, token));
   if (!entry) return NextResponse.json({ error: "No encontrado" }, { status: 404 });
+
+  if (token === QA_RESET_TOKEN) {
+    return NextResponse.json({
+      ...entry,
+      selectedProductIds: [],
+      submitted_at: null,
+      selection_updated_at: null,
+      approved_at: null,
+      readyChecklist: {},
+      feedback: undefined,
+      view_count: 0,
+      first_viewed_at: null,
+      last_viewed_at: null,
+      journey: computeJourney(),
+    });
+  }
 
   // Cuenta la visita real a la página pública — no bloquea la respuesta al
   // proveedor si falla, es solo analítica interna.
