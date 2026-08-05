@@ -17,6 +17,7 @@ import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 const TorreLogistica = dynamic(() => import("./_components/TorreLogistica"), { ssr: false });
 const ProyectosPorEtapa = dynamic(() => import("./_components/ProyectosPorEtapa"), { ssr: false });
 const UpdatesLogistica = dynamic(() => import("./_components/UpdatesLogistica"), { ssr: false });
+const UpdatesBackoffice = dynamic(() => import("./_components/UpdatesBackoffice"), { ssr: false });
 type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
@@ -298,6 +299,9 @@ export default function CelulaHomePage() {
   // agrupa las iniciativas por etapa del viaje de la orden en vez de la
   // rejilla plana. El resto de las células no se toca.
   const isLogistica = params.slug === "logistica";
+  // Backoffice suma su propio Weekly (acordeones por fecha) a la sección
+  // Updates, igual que logística — ver UpdatesBackoffice.
+  const isBackoffice = params.slug === "backoffice";
 
   // Get active country stats
   const activeStats = (metrics?.stats?.countries as any)?.[selectedCountry] || metrics?.stats;
@@ -997,6 +1001,18 @@ export default function CelulaHomePage() {
         {isLogistica && (
           <div style={{ marginBottom: 56 }}>
             <UpdatesLogistica
+              extra={updates}
+              onItemClick={(item) => {
+                const u = updatesById.get(item.key);
+                if (u) setOpenUpdate(u);
+              }}
+            />
+          </div>
+        )}
+
+        {isBackoffice && (
+          <div style={{ marginBottom: 56 }}>
+            <UpdatesBackoffice
               extra={updates}
               onItemClick={(item) => {
                 const u = updatesById.get(item.key);
