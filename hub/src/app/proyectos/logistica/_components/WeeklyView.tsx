@@ -94,6 +94,17 @@ function ExecutiveWeekly({ w }: { w: Weekly }) {
                       <span className={`wk-estado est-${proyecto.estadoTono}`}>{proyecto.estado}</span>
                     </div>
                     <p className="wk-proj2-nota">{proyecto.nota}</p>
+                    {proyecto.impacto && (
+                      <p className="wk-proj2-impacto">
+                        <span className="wk-impacto-badge">💰 Impacto</span>
+                        {proyecto.impacto}
+                      </p>
+                    )}
+                    {proyecto.enlace && (
+                      <a href={proyecto.enlace.href} className="wk-proj-ticket">
+                        {proyecto.enlace.label} →
+                      </a>
+                    )}
                     {url && (
                       <a href={url} target="_blank" rel="noreferrer" className="wk-proj-ticket">
                         {proyecto.ticket} ↗
@@ -404,6 +415,11 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
                         <span className="wk-impacto-badge">💰 Impacto</span>
                         {p.impacto}
                       </p>
+                    )}
+                    {p.enlace && (
+                      <a href={p.enlace.href} className="wk-proj-ticket">
+                        {p.enlace.label} →
+                      </a>
                     )}
                     {url && (
                       <a href={url} target="_blank" rel="noreferrer" className="wk-proj-ticket">
