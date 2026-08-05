@@ -11,12 +11,12 @@ import { isMiDiaOwner } from "@/lib/sprint-access";
 import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 
-// La torre de logística arrastra el registro completo del tablero
-// (proyectos/logistica/_lib/data.ts, ~1.500 líneas). Se carga aparte para que
-// ese peso no entre en el bundle de las demás células, que no lo usan.
-const TorreLogistica = dynamic(() => import("./_components/TorreLogistica"), { ssr: false });
-const ProyectosPorEtapa = dynamic(() => import("./_components/ProyectosPorEtapa"), { ssr: false });
+// El weekly de logística arrastra el registro completo del tablero
+// (proyectos/logistica/_lib/data.ts, ~1.800 líneas). Se carga aparte para que
+// ese peso no entre en el bundle de las demás células, que no lo usan. Por lo
+// mismo, el mapa de etapas se pide con un `import()` dentro del efecto.
 const UpdatesLogistica = dynamic(() => import("./_components/UpdatesLogistica"), { ssr: false });
+type MapaEtapas = import("./_lib/logistica-etapas").MapaEtapas;
 type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
@@ -121,8 +121,9 @@ export default function CelulaHomePage() {
   const [metrics, setMetrics] = useState<SellersMetrics | null>(null);
   const [openUpdate, setOpenUpdate] = useState<Update | null>(null);
   const [selectedCountry, setSelectedCountry] = useState("global");
-  // Etapa seleccionada en el mapa de la orden (solo logística). null = todas.
+  // Etapa seleccionada del viaje de la orden (solo logística). null = todas.
   const [etapaFiltro, setEtapaFiltro] = useState<string | null>(null);
+  const [mapaEtapas, setMapaEtapas] = useState<MapaEtapas | null>(null);
 
   useEffect(() => {
     fetch(`/api/celulas/${params.slug}`)
@@ -137,6 +138,14 @@ export default function CelulaHomePage() {
       .then((res) => res.json())
       .then((data) => setProfile(data?.profile ?? null))
       .catch(() => setProfile(null));
+
+    // La etapa del viaje de la orden es un dato del tablero de logística, no de
+    // Darwin. Se pide aparte para que su registro no pese en las demás células.
+    if (params.slug === "logistica") {
+      import("./_lib/logistica-etapas")
+        .then((m) => setMapaEtapas(m.mapaEtapas()))
+        .catch((err) => console.error("Error cargando las etapas de logística:", err));
+    }
 
     // Si la célula es de Sellers, cargamos sus métricas cruzadas en vivo
     if (params.slug === "sellers") {
@@ -294,10 +303,58 @@ export default function CelulaHomePage() {
   const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
 
   const isSellers = params.slug === "sellers";
-  // Logística cambia el cuerpo de la home: abre con la torre de control y
-  // agrupa las iniciativas por etapa del viaje de la orden en vez de la
-  // rejilla plana. El resto de las células no se toca.
+  // Logística ya NO cambia la estructura de la home: usa las mismas cuatro
+  // secciones que las demás células. Lo único propio que le queda es la etapa
+  // del viaje de la orden, que pasó de ser el esqueleto de la página a ser un
+  // tag de la tarjeta más una fila de chips para filtrar.
   const isLogistica = params.slug === "logistica";
+
+  // ── Las cuatro secciones, iguales para todas las células ───────────────────
+  // Los filtros son los mismos de antes; lo único nuevo es `pasaEtapa`, que
+  // fuera de logística siempre devuelve true porque no hay mapa que consultar.
+  const pasaEtapa = (p: Proyecto) => {
+    if (!etapaFiltro || !mapaEtapas) return true;
+    const codigo = p.project_code?.toUpperCase();
+    return !!codigo && mapaEtapas.etapaPorCodigo[codigo] === etapaFiltro;
+  };
+
+  const discoveryProjects = celula.proyectos.filter(
+    (p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following" && pasaEtapa(p),
+  );
+  const pruebasConcepto = celula.proyectos.filter((p) => p.type === "POC" && pasaEtapa(p));
+  const deliveryProjects = celula.proyectos.filter((p) => p.type === "Delivery Proyecto" && pasaEtapa(p));
+  const followings = celula.proyectos.filter((p) => p.type === "Following" && pasaEtapa(p));
+
+  // Las iniciativas del tablero que aún no tienen ficha en Darwin. No se pintan
+  // como tarjeta a propósito: que se vea de un vistazo cuáles faltan es el punto.
+  //
+  // Se comprueban las DOS llaves de cada iniciativa, porque cinco quedaron
+  // registradas con su ticket de Jira como `project_code` — ver `codigoDarwin`
+  // en el tablero. Tener `codigo` en data.ts no prueba que exista la ficha.
+  const codigosEnDarwin = new Set(
+    celula.proyectos.map((p) => p.project_code?.toUpperCase()).filter(Boolean) as string[],
+  );
+  const sinFichaDarwin = (mapaEtapas?.iniciativas ?? []).filter((i) => {
+    const registrada = i.codigos.some((c) => codigosEnDarwin.has(c));
+    return !registrada && (!etapaFiltro || i.etapa === etapaFiltro);
+  });
+
+  /**
+   * Tag de etapa + enlace a la ficha del tablero. Devuelve `{}` fuera de
+   * logística, así que el spread en las tarjetas es inocuo para las demás.
+   */
+  function extrasEtapa(p: Proyecto) {
+    if (!mapaEtapas) return {};
+    const codigo = p.project_code?.toUpperCase();
+    const etapa = codigo ? mapaEtapas.etapaPorCodigo[codigo] : undefined;
+    const slug = codigo ? mapaEtapas.slugPorCodigo[codigo] : undefined;
+    return {
+      tags: etapa ? [etapa] : [],
+      // Sin esto la tarjeta enlaza a `/proyectos/log-00X`, que no existe: estos
+      // proyectos tienen `prototype_url` en NULL y su ficha vive en el tablero.
+      urlOverride: slug ? `/proyectos/logistica/proyecto/${slug}` : undefined,
+    };
+  }
 
   // Get active country stats
   const activeStats = (metrics?.stats?.countries as any)?.[selectedCountry] || metrics?.stats;
@@ -783,16 +840,6 @@ export default function CelulaHomePage() {
       />
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
-        {/* Torre de control — solo logística. Abre la home con los indicadores
-            de la orden y el mapa que filtra las iniciativas de más abajo. */}
-        {isLogistica && (
-          <TorreLogistica
-            deDarwin={celula.proyectos}
-            etapaActiva={etapaFiltro}
-            onEtapaChange={setEtapaFiltro}
-          />
-        )}
-
         {/* OKR & NSM Progress Section — OKR 1.1 (7.8M/mes) como Techo */}
         {params.slug === "sellers" && metrics && (
           <div style={{
@@ -994,6 +1041,8 @@ export default function CelulaHomePage() {
 
 
 
+        {/* El weekly de logística vive en el tablero, no en `celula_updates`,
+            así que esta sección sigue siendo suya. */}
         {isLogistica && (
           <div style={{ marginBottom: 56 }}>
             <UpdatesLogistica
@@ -1006,10 +1055,44 @@ export default function CelulaHomePage() {
           </div>
         )}
 
+        {/* Filtro por etapa del viaje de la orden. Antes la etapa ERA la
+            estructura de la página (un encabezado por cada una); ahora es un
+            filtro que atraviesa las cuatro secciones de abajo. */}
+        {mapaEtapas && (
+          <div style={{ marginBottom: 28 }}>
+            <p style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: "0 0 10px" }}>
+              Etapa del viaje de la orden
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {[{ n: 0, nombre: "Todas", total: mapaEtapas.chips.reduce((acc, c) => acc + c.total, 0) }, ...mapaEtapas.chips].map((c) => {
+                const activa = c.n === 0 ? etapaFiltro === null : etapaFiltro === c.nombre;
+                return (
+                  <button
+                    key={c.nombre}
+                    onClick={() => setEtapaFiltro(c.n === 0 ? null : c.nombre)}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      fontSize: 12, fontWeight: 700, cursor: "pointer",
+                      padding: "6px 12px", borderRadius: 999,
+                      color: activa ? "var(--dropi)" : "var(--fg)",
+                      background: activa ? "rgba(247,127,0,0.08)" : "var(--card)",
+                      border: `1px solid ${activa ? "var(--dropi)" : "var(--border)"}`,
+                    }}
+                  >
+                    {c.n > 0 && <span style={{ color: "var(--muted)", fontVariantNumeric: "tabular-nums" }}>{c.n}</span>}
+                    {c.nombre}
+                    <span style={{ color: "var(--muted)", fontWeight: 500, fontVariantNumeric: "tabular-nums" }}>{c.total}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div style={{ marginBottom: 56 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
             <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
-              {isLogistica ? "Iniciativas por etapa" : "Discovery projects"}
+              Discovery projects
             </p>
             {canCreate && (
               <div style={{ display: "flex", gap: 8 }}>
@@ -1088,121 +1171,137 @@ export default function CelulaHomePage() {
             </form>
           )}
 
-          {isLogistica ? (
-            <ProyectosPorEtapa
-              deDarwin={celula.proyectos}
-              etapaActiva={etapaFiltro}
-              canCreate={canCreate}
-              pocsByParent={pocsByParent}
-              onEstadoChange={handleEstadoChange}
-              onVpvChange={handleVpvChange}
-              onCrearPoc={handleCrearPoc}
-            />
-          ) : (
-            <>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-                {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map((p) => (
-                  <ProjectCard
-                    key={p.id}
-                    project={p}
-                    dark={false}
-                    canCreate={canCreate}
-                    pocs={pocsByParent.get(p.id) ?? []}
-                    deliveries={deliveriesByParent.get(p.id) ?? []}
-                    onEstadoChange={handleEstadoChange}
-                    onVpvChange={handleVpvChange}
-                    onCrearPoc={handleCrearPoc}
-                    onCrearDelivery={handleCrearDelivery}
-                  />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {discoveryProjects.map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={pocsByParent.get(p.id) ?? []}
+                deliveries={deliveriesByParent.get(p.id) ?? []}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+                onCrearDelivery={handleCrearDelivery}
+                {...extrasEtapa(p)}
+              />
+            ))}
+          </div>
+          {discoveryProjects.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>
+              {etapaFiltro
+                ? `Ninguna iniciativa de la etapa "${etapaFiltro}" tiene ficha en Darwin.`
+                : "Aún no hay proyectos cargados para esta célula."}
+            </p>
+          )}
+
+          {/* Iniciativas que están en el tablero de logística pero todavía no en
+              Darwin. Van como chips y no como tarjeta: que falte la ficha es el
+              dato, y una tarjeta más lo escondería. */}
+          {sinFichaDarwin.length > 0 && (
+            <div style={{ marginTop: 20, border: "1px dashed var(--border)", borderRadius: 12, padding: "12px 14px", background: "var(--bg)" }}>
+              <p style={{ fontSize: 11, color: "var(--muted)", margin: "0 0 8px", fontWeight: 500 }}>
+                En el tablero · sin ficha en Darwin
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {sinFichaDarwin.map((i) => (
+                  <a
+                    key={i.slug}
+                    href={`/proyectos/logistica/proyecto/${i.slug}`}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      fontSize: 13, fontWeight: 500, color: "var(--fg)", textDecoration: "none",
+                      background: "var(--card)", border: "1px solid var(--border)",
+                      borderRadius: 999, padding: "6px 12px",
+                    }}
+                  >
+                    <span style={{ color: "var(--warning)" }} aria-hidden="true">○</span>
+                    {i.destacado && <span aria-hidden="true">⭐</span>}
+                    {i.nombre}
+                    {!etapaFiltro && <span style={{ color: "var(--muted)", fontSize: 11 }}>{i.etapa}</span>}
+                  </a>
                 ))}
               </div>
-              {proyectos.length === 0 && (
-                <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
-              )}
-            </>
+            </div>
           )}
         </div>
 
-        {/* Los POC de logística no van en una sección aparte: se muestran dentro
-            de su etapa, que es el eje de organización de esa célula. */}
-        {!isLogistica && (
-          <div style={{ marginBottom: 56 }}>
-            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-              Pruebas de concepto
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-              {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
-                <ProjectCard
-                  key={p.id}
-                  project={p}
-                  dark={false}
-                  canCreate={canCreate}
-                  pocs={[]}
-                  onEstadoChange={handleEstadoChange}
-                  onVpvChange={handleVpvChange}
-                  onCrearPoc={handleCrearPoc}
-                />
-              ))}
-            </div>
-            {poc.length === 0 && (
-              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
-            )}
+        <div style={{ marginBottom: 56 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Pruebas de concepto
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {pruebasConcepto.map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={[]}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+                {...extrasEtapa(p)}
+              />
+            ))}
           </div>
-        )}
+          {pruebasConcepto.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
+          )}
+        </div>
 
-        {!isLogistica && (
-          <div>
-            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-              Delivery Proyectos
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-              {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").map((p) => (
-                <ProjectCard
-                  key={p.id}
-                  project={p}
-                  dark={false}
-                  canCreate={canCreate}
-                  pocs={[]}
-                  siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
-                  followings={followingsByDelivery.get(p.id) ?? []}
-                  onEstadoChange={handleEstadoChange}
-                  onVpvChange={handleVpvChange}
-                  onCrearPoc={handleCrearPoc}
-                  onRelatedPocChange={handleRelatedPocChange}
-                  onCrearFollowing={handleCrearFollowing}
-                />
-              ))}
-            </div>
-            {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
-              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
-            )}
+        <div>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Delivery Proyectos
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {deliveryProjects.map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={[]}
+                siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                followings={followingsByDelivery.get(p.id) ?? []}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+                onRelatedPocChange={handleRelatedPocChange}
+                onCrearFollowing={handleCrearFollowing}
+                {...extrasEtapa(p)}
+              />
+            ))}
           </div>
-        )}
+          {deliveryProjects.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
+          )}
+        </div>
 
-        {!isLogistica && (
-          <div style={{ marginTop: 56 }}>
-            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-              Followings
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-              {celula.proyectos.filter((p) => p.type === "Following").map((p) => (
-                <ProjectCard
-                  key={p.id}
-                  project={p}
-                  dark={false}
-                  canCreate={canCreate}
-                  pocs={[]}
-                  onEstadoChange={handleEstadoChange}
-                  onVpvChange={handleVpvChange}
-                  onCrearPoc={handleCrearPoc}
-                />
-              ))}
-            </div>
-            {celula.proyectos.filter((p) => p.type === "Following").length === 0 && (
-              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Followings cargados para esta célula.</p>
-            )}
+        <div style={{ marginTop: 56 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Followings
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {followings.map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={[]}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+                {...extrasEtapa(p)}
+              />
+            ))}
           </div>
-        )}
+          {followings.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Followings cargados para esta célula.</p>
+          )}
+        </div>
       </div>
       </div>
       <HubFooter />
