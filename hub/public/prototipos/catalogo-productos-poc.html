@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dropi — Catálogo de Productos (POC)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-light: #f4f6f9;
+    --border-color: #e2e8f0;
+    --orange-primary: #F77F00;
+    --orange-hover: #e0531f;
+    --orange-light: #FFF3E0;
+    --orange-muted: #FFF8F0;
+    --text-main: #2d3748;
+    --text-muted: #718096;
+    --sidebar-width: 250px;
+    --header-height: 60px;
+    --green: #10b981;
+    --red: #e11d48;
+    --blue: #2563eb;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+  }
+
+  body {
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* ───────── Sidebar (fiel a app.dropi.co) ───────── */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: #fff;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+  .sidebar-logo {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+  .dropi-mark {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--orange-primary);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .dropi-mark::before, .dropi-mark::after {
+    content: "";
+    position: absolute;
+    width: 6px; height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    top: 12px;
+  }
+  .dropi-mark::before { left: 7px; }
+  .dropi-mark::after { right: 7px; }
+  .sidebar-logo .wordmark { font-size: 21px; font-weight: 800; color: var(--orange-primary); }
+  .sidebar-logo i.ti-menu-2 { margin-left: auto; color: var(--text-muted); font-size: 18px; cursor: pointer; }
+
+  .sidebar-menu { flex: 1; padding: 10px 0; display: flex; flex-direction: column; gap: 1px; overflow-y: auto; }
+  .menu-item {
+    display: flex; align-items: center; padding: 9px 22px; gap: 11px;
+    color: var(--text-main); font-size: 13.2px; text-decoration: none; font-weight: 500;
+    cursor: pointer; border-left: 3px solid transparent; white-space: nowrap;
+  }
+  .menu-item:hover, .menu-item.active { background: #fafbfc; color: var(--orange-primary); border-left-color: var(--orange-primary); }
+  .menu-item i { font-size: 17px; color: var(--text-muted); width: 18px; text-align: center; }
+  .menu-item:hover i, .menu-item.active i { color: var(--orange-primary); }
+  .menu-item .chev { margin-left: auto; font-size: 13px !important; }
+  .badge-new, .badge-beta { background: var(--green); color: #fff; font-size: 8.5px; padding: 2px 6px; border-radius: 10px; font-weight: 700; margin-left: auto; }
+
+  .submenu { display: flex; flex-direction: column; padding-left: 18px; margin-bottom: 3px; }
+  .submenu-item {
+    display: flex; align-items: center; gap: 9px; padding: 7px 22px 7px 32px;
+    font-size: 12.5px; color: var(--text-muted); cursor: pointer; border-left: 3px solid transparent; white-space: nowrap;
+  }
+  .submenu-item::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--border-color); flex-shrink: 0; }
+  .submenu-item:hover { color: var(--orange-primary); }
+  .submenu-item.active { color: var(--orange-primary); font-weight: 700; border-left-color: var(--orange-primary); background: #fafbfc; }
+  .submenu-item.active::before { background: var(--orange-primary); }
+
+  /* ───────── Main area ───────── */
+  .main-content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .top-header {
+    height: var(--header-height); background: #fff; border-bottom: 1px solid var(--border-color);
+    display: flex; align-items: center; justify-content: space-between; padding: 0 28px; flex-shrink: 0;
+  }
+  .header-left { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-main); font-weight: 500; }
+  .header-left .mini-mark { width: 26px; height: 26px; border-radius: 50%; background: var(--orange-light); display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .header-right { display: flex; align-items: center; gap: 22px; }
+  .lang-pick { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-main); cursor: pointer; }
+  .wallet-pill { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--text-main); }
+  .wallet-pill i { font-size: 16px; color: var(--text-muted); }
+  .profile-chip { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .avatar-circ { width: 30px; height: 30px; border-radius: 50%; background: var(--orange-light); color: var(--orange-primary); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; }
+  .profile-chip span { font-size: 13px; font-weight: 600; color: var(--text-main); }
+  .profile-chip i { font-size: 12px; color: var(--text-muted); }
+  .beta-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--green); }
+  .beta-toggle { width: 34px; height: 18px; background: var(--green); border-radius: 10px; position: relative; }
+  .beta-toggle::after { content: ""; position: absolute; width: 14px; height: 14px; background: #fff; border-radius: 50%; top: 2px; right: 2px; }
+
+  .page-body { padding: 20px 30px 60px; }
+
+  /* ── Proveedores ── */
+  .providers-section-title { display: flex; align-items: baseline; gap: 12px; font-size: 15px; font-weight: 800; margin-bottom: 12px; }
+  .providers-section-title a { font-size: 12.5px; font-weight: 700; color: var(--blue); text-decoration: none; }
+  .providers-row { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .providers-scroll { display: flex; gap: 14px; overflow-x: auto; flex: 1; padding-bottom: 4px; }
+  .provider-card {
+    background: #fff; border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;
+    display: flex; gap: 12px; align-items: flex-start; min-width: 300px; flex-shrink: 0;
+  }
+  .provider-logo { width: 40px; height: 40px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 12px; color: #fff; }
+  .provider-info strong { font-size: 13.5px; display: flex; align-items: center; gap: 6px; }
+  .provider-info strong i { color: var(--orange-primary); font-size: 12px; }
+  .provider-info .provider-count { font-size: 11.5px; color: var(--text-muted); display: block; margin: 2px 0 4px; }
+  .provider-info .provider-cats { font-size: 10.5px; color: var(--text-muted); }
+  .providers-next {
+    width: 34px; height: 34px; border-radius: 50%; background: #fff; border: 1px solid var(--border-color);
+    display: flex; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; flex-shrink: 0;
+  }
+
+  /* ── Catálogo header + filtros ── */
+  .catalog-title { font-size: 22px; font-weight: 800; margin-bottom: 18px; }
+
+  .filter-toggles-row { display: flex; align-items: center; gap: 22px; margin-bottom: 16px; flex-wrap: wrap; }
+  .filter-toggle { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--text-main); }
+  .filter-toggle i { color: var(--text-muted); font-size: 14px; }
+  .mini-switch { width: 34px; height: 18px; background: #cbd5e0; border-radius: 10px; position: relative; }
+  .mini-switch::after { content: ""; position: absolute; width: 14px; height: 14px; background: #fff; border-radius: 50%; top: 2px; left: 2px; }
+  .filter-search-row { display: flex; gap: 10px; margin-left: auto; }
+  .search-box-input {
+    width: 260px; border: 1px solid var(--border-color); border-radius: 8px; padding: 9px 12px 9px 34px;
+    font-size: 13px; background: #fff url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="%23718096"><path d="M6 1a5 5 0 1 0 3.08 8.94l3.49 3.49 1.06-1.06-3.49-3.49A5 5 0 0 0 6 1zm0 1.5a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7z"/></svg>') no-repeat 12px center;
+  }
+  .btn-search-image {
+    display: flex; align-items: center; gap: 6px; border: 1px solid var(--border-color); border-radius: 8px;
+    padding: 9px 14px; font-size: 12.5px; font-weight: 600; color: var(--text-main); background: #fff; cursor: pointer; white-space: nowrap;
+  }
+
+  .filter-selects-row { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 22px; flex-wrap: wrap; }
+  .filter-group { display: flex; flex-direction: column; gap: 5px; }
+  .filter-group label { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+  .filter-group select, .filter-group input {
+    border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; font-size: 12.5px;
+    background: #fff; color: var(--text-main); font-family: inherit;
+  }
+  .price-range-row { display: flex; align-items: center; gap: 6px; }
+  .price-range-row input { width: 90px; }
+  .btn-apply-filters {
+    background: var(--orange-primary); color: #fff; border: none; padding: 10px 18px; border-radius: 8px;
+    font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; margin-left: auto;
+  }
+  .btn-apply-filters:hover { background: var(--orange-hover); }
+
+  .sort-row { display: flex; align-items: center; justify-content: flex-end; gap: 14px; margin-bottom: 16px; font-size: 12.5px; color: var(--text-muted); }
+  .sort-row select { border: 1px solid var(--border-color); border-radius: 8px; padding: 6px 10px; font-size: 12.5px; background: #fff; color: var(--text-main); }
+  .view-icons { display: flex; gap: 8px; }
+  .view-icons i { font-size: 16px; cursor: pointer; }
+  .view-icons i.active { color: var(--orange-primary); }
+
+  /* ── Grid de productos ── */
+  .product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+  .product-card {
+    background: #fff; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden;
+    display: flex; flex-direction: column; text-decoration: none; color: inherit;
+  }
+  .product-card.clickable { cursor: pointer; transition: box-shadow 0.15s, transform 0.15s; }
+  .product-card.clickable:hover { box-shadow: 0 8px 22px rgba(0,0,0,0.08); transform: translateY(-2px); }
+  .product-card.static { cursor: default; }
+  .product-card-media { position: relative; height: 150px; background: #eef2f7; overflow: hidden; }
+  .product-card-media img { width: 100%; height: 100%; object-fit: cover; }
+  .product-card-media.no-image { display: flex; align-items: center; justify-content: center; color: #cbd5e0; font-size: 34px; }
+  .product-card-badge {
+    position: absolute; top: 8px; right: 8px; background: var(--green); color: #fff;
+    font-size: 9.5px; font-weight: 800; padding: 3px 8px; border-radius: 10px;
+  }
+  .product-card-badge.paquete { right: auto; left: 8px; background: #e11d48; }
+  .product-card-fav {
+    position: absolute; bottom: 8px; right: 8px; width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(255,255,255,0.9); display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); font-size: 13px;
+  }
+  .product-card-body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 4px; flex: 1; }
+  .product-card-meta { display: flex; justify-content: space-between; font-size: 10.5px; color: var(--text-muted); font-weight: 600; }
+  .product-card-name { font-size: 12.8px; font-weight: 700; color: var(--text-main); line-height: 1.35; margin: 2px 0 4px; min-height: 34px; }
+  .product-card-provider { font-size: 10.5px; color: var(--text-muted); margin-bottom: 6px; }
+  .product-card-prices { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 10px; }
+  .product-card-prices div { display: flex; flex-direction: column; }
+  .product-card-prices span:first-child { color: var(--text-muted); font-size: 10px; }
+  .product-card-prices span:last-child { font-weight: 700; color: var(--text-main); }
+  .product-card-prices .col-right { text-align: right; }
+  .btn-enviar-cliente {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: var(--orange-muted); color: var(--orange-primary); border: none; border-radius: 8px;
+    padding: 8px; font-size: 12px; font-weight: 700; cursor: pointer;
+  }
+
+  .poc-tag {
+    position: fixed; bottom: 18px; left: calc(var(--sidebar-width) + 18px);
+    background: rgba(17,24,39,0.92); color:#fff; font-size:11px; font-weight:700;
+    padding: 8px 12px; border-radius: 8px; z-index: 400;
+    display:flex; align-items:center; gap:10px;
+  }
+  .poc-tag i.ti-flask { color: var(--orange-primary); }
+</style>
+</head>
+<body>
+
+<!-- ───────── Sidebar ───────── -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="dropi-mark"></div>
+    <span class="wordmark">dropi</span>
+    <i class="ti ti-menu-2"></i>
+  </div>
+  <div class="sidebar-menu">
+    <div class="menu-item"><i class="ti ti-home"></i>Inicio</div>
+    <div class="menu-item"><i class="ti ti-chart-bar"></i>Dashboard<span class="badge-beta">Beta</span></div>
+    <div class="menu-item active"><i class="ti ti-search"></i>Productos<span class="badge-new">Nuevo</span></div>
+    <div class="submenu">
+      <div class="submenu-item active">Catálogo</div>
+      <div class="submenu-item">Proveedores</div>
+      <div class="submenu-item">Caza productos</div>
+      <div class="submenu-item">Negociaciones</div>
+    </div>
+    <div class="menu-item"><i class="ti ti-shopping-cart"></i>Mis Pedidos<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item"><i class="ti ti-shield-check"></i>Mis Garantias<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item"><i class="ti ti-users"></i>Clientes</div>
+    <div class="menu-item"><i class="ti ti-plug"></i>Mis Integraciones</div>
+    <div class="menu-item"><i class="ti ti-history"></i>Historial de Cartera</div>
+    <div class="menu-item"><i class="ti ti-users-group"></i>Mis usuarios</div>
+    <div class="menu-item"><i class="ti ti-user-plus"></i>Mis Referidos</div>
+    <div class="menu-item"><i class="ti ti-settings"></i>Configuraciones<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-calendar"></i>Calendario</div>
+    <div class="menu-item"><i class="ti ti-speakerphone"></i>Marketing<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item"><i class="ti ti-rocket"></i>ROAX<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-report"></i>Reportes<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-file-invoice"></i>Facturas</div>
+    <div class="menu-item"><i class="ti ti-truck"></i>Transportadora<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item"><i class="ti ti-credit-card"></i>Dropi Card<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-headset"></i>CAS<i class="ti ti-chevron-down chev"></i></div>
+  </div>
+</div>
+
+<!-- ───────── Main ───────── -->
+<div class="main-content">
+  <div class="top-header">
+    <div class="header-left">
+      <div class="mini-mark">🐼</div>
+      Miembro De: PRUEBAS PRODUCTO DROPI
+    </div>
+    <div class="header-right">
+      <div class="lang-pick">🇺🇸 English</div>
+      <div class="wallet-pill"><i class="ti ti-briefcase"></i> $ 192.506</div>
+      <div class="profile-chip">
+        <div class="avatar-circ">UX</div>
+        <span>ux</span>
+        <i class="ti ti-chevron-down"></i>
+      </div>
+      <div class="beta-pill">BETA <div class="beta-toggle"></div></div>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <!-- Proveedores -->
+    <div class="providers-section-title">Proveedores <a href="#" onclick="return false;">Ver todos</a></div>
+    <div class="providers-row">
+      <div class="providers-scroll">
+        <div class="provider-card">
+          <div class="provider-logo" style="background:#F97316;">JS</div>
+          <div class="provider-info">
+            <strong><i class="ti ti-award"></i> Joesma Prov.</strong>
+            <span class="provider-count">187 Productos</span>
+            <span class="provider-cats">Aseo, Bebé, Belleza, Camping, Cocina, Herramientas, ...</span>
+          </div>
+        </div>
+        <div class="provider-card">
+          <div class="provider-logo" style="background:#DC2626;">K</div>
+          <div class="provider-info">
+            <strong><i class="ti ti-award"></i> Krombi</strong>
+            <span class="provider-count">735 Productos</span>
+            <span class="provider-cats">Aseo, Bebé, Belleza, Bienestar, Bisuteria, Cocina, Depo...</span>
+          </div>
+        </div>
+        <div class="provider-card">
+          <div class="provider-logo" style="background:#16A34A;">IW</div>
+          <div class="provider-info">
+            <strong><i class="ti ti-award"></i> Impowinner</strong>
+            <span class="provider-count">328 Productos</span>
+            <span class="provider-cats">Aseo, Bebé, Belleza, Bienestar, Bisuteria, Camping, Co...</span>
+          </div>
+        </div>
+        <div class="provider-card">
+          <div class="provider-logo" style="background:#EA580C;">CH</div>
+          <div class="provider-info">
+            <strong><i class="ti ti-award"></i> Colorhome Sas</strong>
+            <span class="provider-count">79 Productos</span>
+            <span class="provider-cats">Aseo, Cocina, Deportes, Herramientas, Hogar, Moda, N...</span>
+          </div>
+        </div>
+      </div>
+      <div class="providers-next"><i class="ti ti-chevron-right"></i></div>
+    </div>
+
+    <!-- Catálogo -->
+    <div class="catalog-title">Catálogo de productos</div>
+
+    <div class="filter-toggles-row">
+      <div class="filter-toggle"><i class="ti ti-heart"></i> Favoritos <div class="mini-switch"></div></div>
+      <div class="filter-toggle"><i class="ti ti-lock"></i> Privado <div class="mini-switch"></div></div>
+      <div class="filter-toggle"><i class="ti ti-shopping-cart"></i> Con ordenes <div class="mini-switch"></div></div>
+      <div class="filter-search-row">
+        <input type="text" class="search-box-input" placeholder="Buscar...">
+        <button class="btn-search-image"><i class="ti ti-camera"></i> Buscar por imagen</button>
+      </div>
+    </div>
+
+    <div class="filter-selects-row">
+      <div class="filter-group">
+        <label>Tipo de proveedor:</label>
+        <select><option>Proveedor</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Rango precio proveedor:</label>
+        <div class="price-range-row">
+          <input type="text" value="0">
+          <span>—</span>
+          <input type="text" value="1,000,000">
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>Stock:</label>
+        <select><option>Cantidad</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Categorías:</label>
+        <select><option>Categorías</option></select>
+      </div>
+      <div class="filter-group">
+        <label>Ciudad:</label>
+        <select><option>Seleccione una ciudad</option></select>
+      </div>
+      <button class="btn-apply-filters"><i class="ti ti-filter"></i> Aplicar filtros</button>
+    </div>
+
+    <div class="sort-row">
+      Ordenar por: <select><option>Aleatorio</option></select>
+      <div class="view-icons">
+        <i class="ti ti-layout-grid active"></i>
+        <i class="ti ti-list"></i>
+      </div>
+    </div>
+
+    <!-- Grid de productos -->
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+</div>
+
+<div class="poc-tag">
+  <i class="ti ti-flask"></i> PROD-MUESTRA-POC-1 · Catálogo de productos (Mock) — click en un producto para ver su detalle
+</div>
+
+<script>
+  // Solo 3 productos son "reales" (abren la página de detalle con el flujo de Solicitud de muestra):
+  // reloj-curren, yerba-magic, mascara-s. El resto son decorativos, tal como se ven en el catálogo real.
+  const CATALOG_ITEMS = [
+    {
+      name: 'Kit Arrastre 15×42 Rtx 150unishock Oe', category: 'Vehiculos', stock: 100,
+      proveedor: 53515, sugerido: 73515,
+      img: 'https://images.pexels.com/photos/162553/keys-workshop-mechanic-tools-162553.jpeg?auto=compress&cs=tinysrgb&w=400',
+      clickable: false,
+    },
+    {
+      name: 'Estufa de Gas Butano Portatil Floppi', category: 'Tecnologia', stock: 30,
+      proveedor: 75000, sugerido: 99000,
+      img: 'https://images.pexels.com/photos/6195085/pexels-photo-6195085.jpeg?auto=compress&cs=tinysrgb&w=400',
+      badge: 'DEL PAQUETE',
+      clickable: false,
+    },
+    {
+      name: 'Mascara S', category: 'Herramientas', stock: 2,
+      proveedor: 38000, sugerido: 60000,
+      img: 'https://images.pexels.com/photos/36548332/pexels-photo-36548332.jpeg?auto=compress&cs=tinysrgb&w=400',
+      clickable: true, slug: 'mascara-s',
+    },
+    {
+      name: 'Yerba Magic X 60 Cap', category: 'Belleza', stock: 1000,
+      proveedor: 21000, sugerido: 80000,
+      img: 'https://images.pexels.com/photos/17820733/pexels-photo-17820733.jpeg?auto=compress&cs=tinysrgb&w=400',
+      clickable: true, slug: 'yerba-magic',
+    },
+    {
+      name: 'Reloj Curren 8489 Silicona', category: 'Bisuteria', stock: 74,
+      proveedor: 88000, sugerido: 88000,
+      img: 'https://images.pexels.com/photos/3766111/pexels-photo-3766111.jpeg?auto=compress&cs=tinysrgb&w=400',
+      badge: 'Variable',
+      clickable: true, slug: 'reloj-curren',
+    },
+    {
+      name: 'Tabla Deportiva', category: 'Deportes', stock: 100,
+      proveedor: 39900, sugerido: 59900,
+      img: 'https://images.pexels.com/photos/4162449/pexels-photo-4162449.jpeg?auto=compress&cs=tinysrgb&w=400',
+      clickable: false,
+    },
+    {
+      name: 'Comando Izq.ak 110 Power.negrogenui', category: 'Vehiculos', stock: 100,
+      proveedor: 39600, sugerido: 47050,
+      img: null,
+      clickable: false,
+    },
+    {
+      name: '3 Tapones para Botella de Vino', category: 'Tecnologia', stock: 98,
+      proveedor: 41300, sugerido: 59900,
+      img: 'https://images.pexels.com/photos/2912108/pexels-photo-2912108.jpeg?auto=compress&cs=tinysrgb&w=400',
+      badge: '3PCS',
+      clickable: false,
+    },
+  ];
+
+  function formatCurrency(value) {
+    return `$ ${value.toLocaleString('es-CO')}`;
+  }
+
+  function renderCatalog() {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = CATALOG_ITEMS.map((item) => {
+      const badgeHtml = item.badge
+        ? `<span class="product-card-badge${item.badge === 'DEL PAQUETE' ? ' paquete' : ''}">${item.badge}</span>`
+        : '';
+
+      const navigateAttr = item.clickable
+        ? `onclick="window.location.href='solicitud-muestra-poc-v2.html?product=${item.slug}'"`
+        : '';
+
+      return `
+        <div class="product-card ${item.clickable ? 'clickable' : 'static'}" ${navigateAttr}>
+          <div class="product-card-media">
+            ${item.img ? `<img src="${item.img}" alt="${item.name}">` : `<div class="no-image" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;"><i class="ti ti-photo-off"></i></div>`}
+            ${badgeHtml}
+            <div class="product-card-fav" onclick="event.stopPropagation();"><i class="ti ti-heart"></i></div>
+          </div>
+          <div class="product-card-body">
+            <div class="product-card-meta"><span>${item.category}</span><span>Stock: ${item.stock}</span></div>
+            <div class="product-card-name">${item.name}</div>
+            <div class="product-card-provider">Proveedor: Sin definir</div>
+            <div class="product-card-prices">
+              <div><span>Precio proveedor</span><span>${formatCurrency(item.proveedor)}</span></div>
+              <div class="col-right"><span>Precio sugerido</span><span>${formatCurrency(item.sugerido)}</span></div>
+            </div>
+            <button class="btn-enviar-cliente" type="button" onclick="event.stopPropagation();"><i class="ti ti-shopping-cart"></i> Enviar a cliente</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  renderCatalog();
+</script>
+</body>
+</html>

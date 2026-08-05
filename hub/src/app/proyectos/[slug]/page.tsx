@@ -409,20 +409,6 @@ export default function ProjectDashboardPage() {
           indicadores: "Tasa de éxito en sincronización de webhooks."
         }
       },
-      "PROD-HELP": {
-        id: "cycle-prod-help",
-        title: "Autogestión de Dudas SAC (Centro de Ayuda)",
-        estado: "activo",
-        fase_actual: "F1",
-        brief: {
-          causa: "A",
-          target: "Sellers con dudas logísticas recurrentes que colapsan soporte.",
-          hipotesis: "Si exponemos buscador de FAQs y buscador flotante interactivo, resolverán dudas autónomamente en < 5 minutos sin tickets.",
-          subPerfil: "Sellers activos con incidencias de fletes o novedades",
-          experimento: "Widget flotante con buscador unificado en el dashboard.",
-          indicadores: "Tasa de autogestión, tickets por seller activo."
-        }
-      },
       "PROD-1478": {
         id: "cycle-prod-1478",
         title: "Experimento de Activación Neta (Time-to-Value)",
@@ -565,18 +551,34 @@ export default function ProjectDashboardPage() {
                 <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>🧪 Validación de Concepto (Mock)</strong>
                 <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Prototipo interactivo diseñado para este experimento</span>
               </div>
-              <a
-                href={project.prototype_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  fontSize: 12.5, fontWeight: 750, color: "#fff", background: "var(--dropi)",
-                  border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", textDecoration: "none",
-                  display: "inline-flex", alignItems: "center", gap: 6
-                }}
-              >
-                Ver Mock de Validación <span style={{ fontSize: 11 }}>➔</span>
-              </a>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {project.project_code === "PROD-MUESTRA-POC-1" && (
+                  <a
+                    href="/prototipos/solicitud-muestra-poc.html"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      fontSize: 12.5, fontWeight: 750, color: "var(--dropi)", background: "#fff",
+                      border: "1px solid var(--dropi)", borderRadius: 8, padding: "8px 16px", cursor: "pointer", textDecoration: "none",
+                      display: "inline-flex", alignItems: "center", gap: 6
+                    }}
+                  >
+                    Ver Mock — Rediseño anterior <span style={{ fontSize: 11 }}>➔</span>
+                  </a>
+                )}
+                <a
+                  href={project.prototype_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontSize: 12.5, fontWeight: 750, color: "#fff", background: "var(--dropi)",
+                    border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", textDecoration: "none",
+                    display: "inline-flex", alignItems: "center", gap: 6
+                  }}
+                >
+                  {project.project_code === "PROD-MUESTRA-POC-1" ? "Ver Mock — Detalle de producto" : "Ver Mock de Validación"} <span style={{ fontSize: 11 }}>➔</span>
+                </a>
+              </div>
             </div>
           )}
         </div>

@@ -242,6 +242,79 @@
       gap: 10px;
       margin-bottom: 16px;
     }
+
+    /* --- Ícono de ayuda junto al título + aviso por inactividad --- */
+    .page-title-group {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      position: relative;
+    }
+
+    .help-hint-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      height: 30px;
+      border: none;
+      border-radius: 6px;
+      background: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0 6px;
+      line-height: 1;
+      outline: none;
+    }
+
+    .help-hint-btn i {
+      font-size: 10px;
+    }
+
+    .help-hint-btn:hover {
+      color: var(--primary-orange);
+      background: #fff8f3;
+    }
+
+    .help-hint-bubble {
+      position: absolute;
+      top: 36px;
+      left: -10px;
+      background: #2c3e50;
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 8px;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-4px);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    .help-hint-bubble::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: 15px;
+      width: 10px;
+      height: 10px;
+      background: #2c3e50;
+      transform: rotate(45deg);
+    }
+
+    .help-hint-bubble.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
     .demo-view-toggle {
       display: flex;
       align-items: center;
@@ -524,8 +597,17 @@
       padding: 20px 10px;
     }
     .tour-image {
-      width: 120px;
-      margin-bottom: 15px;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 15px;
+      border-radius: 50%;
+      background: #fff8f3;
+      border: 1px solid #fbdcbd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      color: var(--primary-orange);
     }
     .tour-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
     .tour-text { color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; }
@@ -662,63 +744,40 @@
     }
     .modal-close-float:hover { color: var(--badge-red); }
 
-    /* CTA de carpeta de Drive (reemplaza la lista de documentos) */
-    .drive-cta {
-      background-color: #f0faf4;
-      border: 1px solid #cdebd9;
-      border-radius: 10px;
-      padding: 28px 24px 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 12px;
-    }
-    .drive-cta-icon {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: #ffffff;
-      border: 1px solid #cdebd9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      color: #0F9D58;
-    }
-    .drive-cta-text strong { display: block; font-size: 14px; color: var(--text-dark); margin-bottom: 4px; }
-    .drive-cta-text span { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
-    .drive-cta-btn {
-      background: #0F9D58;
-      color: #fff;
-      text-decoration: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: background 0.2s;
-      margin-top: 4px;
-    }
-    .drive-cta-btn:hover { background: #0c8046; }
-
     .feedback-form {
       display: flex;
       flex-direction: column;
       gap: 15px;
     }
-    .rating-stars {
+    .rating-scale {
       display: flex;
-      gap: 8px;
-      font-size: 28px;
-      color: #ffd700;
+      gap: 4px;
       justify-content: center;
-      margin-bottom: 10px;
-      cursor: pointer;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      margin-bottom: 6px;
     }
-    .rating-stars i:hover { transform: scale(1.1); transition: transform 0.2s; }
+    .rating-scale-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      color: var(--text-dark);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .rating-scale-btn:hover { border-color: var(--primary-orange); color: var(--primary-orange); }
+    .rating-scale-btn.selected { background: var(--primary-orange); border-color: var(--primary-orange); color: #fff; }
+    .rating-scale-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
     .form-group {
       display: flex;
       flex-direction: column;
@@ -961,98 +1020,11 @@
       z-index: 10;
     }
 
-    /* ==========================================================
-       LÍNEA NARANJA CON GOTA INTEGRADA (EFECTO FLUIDO Y SUTIL)
-       ========================================================== */
-    .droplet-bar-container {
-      position: fixed;
-      top: var(--header-height);
-      left: var(--sidebar-width);
-      right: 0;
-      height: 40px;
-      z-index: 95;
-      pointer-events: none;
-      display: flex;
-      justify-content: flex-end;
-      padding-right: 65px; /* Separación del borde derecho */
-    }
-
-    /* Línea de 1px que se desvanece suavemente a los lados */
-    .droplet-bar-line {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(255,140,50,0.1) 40%, var(--primary-orange) 85%, transparent 100%);
-    }
-
-    /* Cuerpo central de la gota (Más pequeña y sutil) */
-    .droplet-tab {
-      pointer-events: auto;
-      position: relative;
-      top: 0;
-      width: 40px;
-      height: 20px; /* Muy corta en reposo */
-      background-color: var(--primary-orange);
-      color: white;
-      border-radius: 0 0 20px 20px; /* Curva inferior perfecta */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0.85; /* Sutil transparencia en reposo */
-      box-shadow: 0 2px 5px rgba(255, 140, 50, 0.2);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Magia CSS: Curvas cóncavas perfectas simulando tensión superficial */
-    .droplet-tab::before,
-    .droplet-tab::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 14px;
-      height: 14px;
-      background-color: transparent;
-    }
-
-    /* Curva izquierda */
-    .droplet-tab::before {
-      left: -14px;
-      border-top-right-radius: 14px;
-      box-shadow: 5px -5px 0 0 var(--primary-orange);
-    }
-
-    /* Curva derecha */
-    .droplet-tab::after {
-      right: -14px;
-      border-top-left-radius: 14px;
-      box-shadow: -5px -5px 0 0 var(--primary-orange);
-    }
-
-    .droplet-tab i {
-      font-size: 13px;
-      margin-top: -4px;
-      transition: transform 0.3s ease;
-    }
-
-    /* Efecto al pasar el ratón (recupera color, crece fluidamente) */
-    .droplet-tab:hover {
-      height: 32px; /* Se estira hacia abajo */
-      opacity: 1; /* Color sólido */
-      box-shadow: 0 5px 12px rgba(255, 140, 50, 0.35);
-    }
-
-    .droplet-tab:hover i {
-      transform: scale(1.15) translateY(1px);
-    }
-
     /* MENÚ DESPLEGABLE DROPI COMPANION */
     .droplet-menu {
       position: absolute;
-      top: 45px;
-      right: -20px;
+      top: 36px;
+      left: -10px;
       width: 260px;
       background-color: white;
       border-radius: 8px;
@@ -1431,7 +1403,62 @@
     <!-- --- MAIN CONTENT AREA --- -->
     <main class="main-content">
       <div class="page-header-row">
-        <h1 class="page-title">Mis Pedidos</h1>
+        <div class="page-title-group">
+          <h1 class="page-title">Mis Pedidos</h1>
+          <div class="help-hint-btn" id="helpHintBtn" title="Recursos y Ayuda" role="button" tabindex="0">
+            <span>Ayuda</span>
+            <i class="fa-solid fa-chevron-down"></i>
+            <div class="help-hint-bubble" id="helpHintBubble">¿Necesitas ayuda?</div>
+
+            <!-- Menú Desplegable Dropi Companion -->
+            <div class="droplet-menu" id="dropletMenu">
+              <ul class="droplet-list">
+                <li>
+                  <a href="#" onclick="openModal('videoModal'); return false;">
+                    <i class="fa-regular fa-circle-play"></i>
+                    <span>Video Tutoriales</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" onclick="openModal('faqModal'); return false;">
+                    <i class="fa-regular fa-circle-question"></i>
+                    <span>Preguntas Frecuentes</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" onclick="openModal('tourModal'); return false;">
+                    <i class="fa-solid fa-route"></i>
+                    <span>Tour Guiado</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://drive.google.com/drive/folders/18bsVatVAvXJrgW6wpvpca_5_0w9g_dg6" target="_blank" rel="noopener noreferrer" onclick="dropletMenu.classList.remove('show')">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                    <span>Documentación</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="https://academy.dropi.co/communities/groups/dropi-academy-colombia/home" target="_blank" rel="noopener noreferrer" onclick="dropletMenu.classList.remove('show')">
+                    <i class="fa-solid fa-people-group"></i>
+                    <span>Ingresa a nuestra comunidad</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#" onclick="openModal('feedbackModal'); return false;">
+                    <i class="fa-regular fa-comment-dots"></i>
+                    <span>Feedback y Sugerencias</span>
+                  </a>
+                </li>
+                <li style="border-top: 1px solid var(--border-color); margin-top: 4px; padding-top: 4px;">
+                  <a href="#" onclick="openHelpChat(); return false;">
+                    <i class="fa-solid fa-headset"></i>
+                    <span>Ayuda con Gali</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <div class="demo-view-toggle" title="Controla los dos escenarios reales: seller con y sin órdenes creadas">
           <span class="demo-view-label">Vista (demo)</span>
           <button class="demo-view-btn active" id="btnViewWithOrders" onclick="setOrdersView(true)">Con pedidos</button>
@@ -1490,14 +1517,14 @@
               <!-- Fila 1 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>80531119</td>
+                <td class="order-id-cell">80531119</td>
                 <td><div class="product-name">CAFETERA KALLEY 10 TAZAS</div></td>
                 <td>30/06/2026 9:13 a. m.</td>
                 <td>
                   <div class="client-info">
                     <div class="client-name">Jaime Guevara</div>
                     <div class="client-address">kra 56 # 7 oeste 96 casa C1 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
-                    <div class="client-address">Tel: 3224400784</div>
+                    <div class="client-address">Tel: 3224400784 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td>
@@ -1522,14 +1549,14 @@
               <!-- Fila 2 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>80047411</td>
+                <td class="order-id-cell">80047411</td>
                 <td><div class="product-name">ALMOHADA ERGOCONFORT MARIPOSA</div></td>
                 <td>25/06/2026 5:24 p. m.</td>
                 <td>
                   <div class="client-info">
                     <div class="client-name">prueba</div>
                     <div class="client-address">Carrera 26 # 13 - 11 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
-                    <div class="client-address">Tel: 3126123626</div>
+                    <div class="client-address">Tel: 3126123626 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td><span class="status-badge status-cancelado">CANCELADO</span></td>
@@ -1553,14 +1580,14 @@
               <!-- Fila 3 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>79171894</td>
+                <td class="order-id-cell">79171894</td>
                 <td><div class="product-name">prueba</div></td>
                 <td>18/06/2026 8:41 a. m.</td>
                 <td>
                   <div class="client-info">
                     <div class="client-name">Prueba Prueba</div>
                     <div class="client-address">Prueba 12 12 12 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
-                    <div class="client-address">Tel: 3126365262</div>
+                    <div class="client-address">Tel: 3126365262 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td><span class="status-badge status-cancelado">CANCELADO</span></td>
@@ -1584,14 +1611,14 @@
               <!-- Fila 4 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>79153412</td>
+                <td class="order-id-cell">79153412</td>
                 <td><div class="product-name">ALMOHADA ERGOCONFORT MARIPOSA</div></td>
                 <td>18/06/2026 12:14 a. m.</td>
                 <td>
                   <div class="client-info">
                     <div class="client-name">Prueba Prueba</div>
                     <div class="client-address">Prueba 12 12 12 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
-                    <div class="client-address">Tel: 3126365262</div>
+                    <div class="client-address">Tel: 3126365262 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td><span class="status-badge status-cancelado">CANCELADO</span></td>
@@ -1615,14 +1642,14 @@
               <!-- Fila 5 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>79152901</td>
+                <td class="order-id-cell">79152901</td>
                 <td><div class="product-name">TENIS ZAPATILLAS NIKE FREE UNISEX</div></td>
                 <td>18/06/2026 12:01 a. m.</td>
                 <td>
                   <div class="client-info">
                     <div class="client-name">Prueba Prueba</div>
                     <div class="client-address">Prueba 12 12 12 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
-                    <div class="client-address">Tel: 3126365262</div>
+                    <div class="client-address">Tel: 3126365262 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td><span class="status-badge status-cancelado">CANCELADO</span></td>
@@ -1646,14 +1673,14 @@
               <!-- Fila 6 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>78457512</td>
+                <td class="order-id-cell">78457512</td>
                 <td><div class="product-name">prueba</div></td>
                 <td>11/06/2026 5:31 p. m.</td>
                 <td>
                   <div class="client-info">
                     <div class="client-name">Alejandra Melo</div>
                     <div class="client-address">Prueba 12 12 12 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
-                    <div class="client-address">Tel: 3126365262</div>
+                    <div class="client-address">Tel: 3126365262 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td><span class="status-badge status-cancelado">CANCELADO</span></td>
@@ -1677,14 +1704,14 @@
               <!-- Fila 7 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>77740103</td>
+                <td class="order-id-cell">77740103</td>
                 <td><div class="product-name">Mini Masajeador Manual 5 Cabezales</div></td>
                 <td>05/06/2026 12:35 p. m.</td>
                 <td>
                   <div class="client-info">
                     <div class="client-name">Catalina Giraldo Aguirre</div>
                     <div class="client-address">Cll56#922 - , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
-                    <div class="client-address">Tel: 3017346303</div>
+                    <div class="client-address">Tel: 3017346303 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td><span class="status-badge status-cancelado">CANCELADO</span></td>
@@ -1708,7 +1735,7 @@
               <!-- Fila 8 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>76053358</td>
+                <td class="order-id-cell">76053358</td>
                 <td>
                   <div class="product-name">BOLSA MULTI COLLAGEN PEPTIDES</div>
                   <div class="text-red">(Orden Compuesta)</div>
@@ -1718,7 +1745,7 @@
                   <div class="client-info">
                     <div class="client-name">Diana Perez</div>
                     <div class="client-address">45 26 , PALMIRA-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
-                    <div class="client-address">Tel: 3256326325</div>
+                    <div class="client-address">Tel: 3256326325 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td><span class="status-badge status-cancelado">CANCELADO</span></td>
@@ -1742,7 +1769,7 @@
               <!-- Fila 9 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>76052210</td>
+                <td class="order-id-cell">76052210</td>
                 <td>
                   <div class="product-name">123 Prueba</div>
                   <div class="text-blue">Tiene Nota</div>
@@ -1752,7 +1779,7 @@
                   <div class="client-info">
                     <div class="client-name">Alejandra Melo</div>
                     <div class="client-address">45 26 , PALMIRA-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
-                    <div class="client-address">Tel: 3175754193</div>
+                    <div class="client-address">Tel: 3175754193 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td><span class="status-badge status-rechazado">RECHAZADO</span></td>
@@ -1776,7 +1803,7 @@
               <!-- Fila 10 -->
               <tr>
                 <td><input type="checkbox"></td>
-                <td>75771027</td>
+                <td class="order-id-cell">75771027</td>
                 <td>
                   <div class="product-name">Combo simple</div>
                   <div class="text-blue">Tiene Nota</div>
@@ -1786,7 +1813,7 @@
                   <div class="client-info">
                     <div class="client-name">Alejandra Melo</div>
                     <div class="client-address">45 26 , PALMIRA-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
-                    <div class="client-address">Tel: 3256363658</div>
+                    <div class="client-address">Tel: 3256363658 <i class="fa-solid fa-fingerprint" style="color: var(--text-muted); margin-left: 4px;" title="Ver histórico del cliente en Dropi"></i></div>
                   </div>
                 </td>
                 <td><span class="status-badge status-cancelado">CANCELADO</span></td>
@@ -1840,65 +1867,6 @@
     <span>Creado con ❤️</span>
   </footer>
 
-  <!-- ================= LÍNEA CON GOTA INTEGRADA ================= -->
-  <div class="droplet-bar-container">
-
-    <!-- Línea sutil superior -->
-    <div class="droplet-bar-line"></div>
-
-    <!-- Pestaña fluida -->
-    <div class="droplet-tab" id="dropletBtn" title="Recursos y Ayuda">
-      <i class="fa-solid fa-graduation-cap"></i>
-
-      <!-- Menú Desplegable Dropi Companion -->
-      <div class="droplet-menu" id="dropletMenu">
-        <ul class="droplet-list">
-          <li>
-            <a href="#" onclick="openModal('videoModal'); return false;">
-              <i class="fa-solid fa-circle-play"></i>
-              <span>Video Tutoriales</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" onclick="openModal('faqModal'); return false;">
-              <i class="fa-solid fa-circle-question"></i>
-              <span>Preguntas Frecuentes</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" onclick="openModal('tourModal'); return false;">
-              <i class="fa-solid fa-route"></i>
-              <span>Tour Guiado</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" onclick="openModal('docsModal'); return false;">
-              <i class="fa-solid fa-file-arrow-down"></i>
-              <span>Documentación</span>
-            </a>
-          </li>
-          <li>
-            <a href="https://academy.dropi.co/communities/groups/dropi-academy-colombia/home" target="_blank" rel="noopener noreferrer" onclick="dropletMenu.classList.remove('show')">
-              <i class="fa-solid fa-people-group"></i>
-              <span>Ingresa a nuestra comunidad</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" onclick="openModal('feedbackModal'); return false;">
-              <i class="fa-solid fa-comment-dots"></i>
-              <span>Feedback y Sugerencias</span>
-            </a>
-          </li>
-          <li style="border-top: 1px solid var(--border-color); margin-top: 4px; padding-top: 4px;">
-            <a href="#" onclick="openHelpChat(); return false;">
-              <i class="fa-solid fa-headset"></i>
-              <span>Ayuda con Gali</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
 
   <!-- ================= MODALS DE EDUCACIÓN ================= -->
 
@@ -1912,28 +1880,36 @@
       <div class="custom-modal-body">
 
         <div class="video-grid">
-          <div class="video-item" onclick="playVideo('ZUWzxMbBLYg', '02. Panel Mis Pedidos - Dropshippers')">
+          <div class="video-item" onclick="playVideo('ZUWzxMbBLYg', 'Cómo usar el panel de Mis pedidos')">
             <div class="video-thumb">
-              <img src="https://img.youtube.com/vi/ZUWzxMbBLYg/hqdefault.jpg" alt="02. Panel Mis Pedidos - Dropshippers" loading="lazy">
+              <img src="https://img.youtube.com/vi/ZUWzxMbBLYg/hqdefault.jpg" alt="Cómo usar el panel de Mis pedidos" loading="lazy">
               <div class="video-play-overlay"><i class="fa-solid fa-circle-play"></i></div>
             </div>
-            <p class="video-title-sm">02. Panel Mis Pedidos - Dropshippers</p>
+            <p class="video-title-sm">Cómo usar el panel de Mis pedidos</p>
             <p class="video-duration">Dropi • YouTube</p>
           </div>
-          <div class="video-item" onclick="playVideo('ohfrhIakMl4', 'Cómo editar pedidos en Dropi')">
+          <div class="video-item" onclick="playVideo('ohfrhIakMl4', 'Cómo editar pedidos')">
             <div class="video-thumb">
-              <img src="https://img.youtube.com/vi/ohfrhIakMl4/hqdefault.jpg" alt="Cómo editar pedidos en Dropi" loading="lazy">
+              <img src="https://img.youtube.com/vi/ohfrhIakMl4/hqdefault.jpg" alt="Cómo editar pedidos" loading="lazy">
               <div class="video-play-overlay"><i class="fa-solid fa-circle-play"></i></div>
             </div>
-            <p class="video-title-sm">Cómo editar pedidos en Dropi</p>
+            <p class="video-title-sm">Cómo editar pedidos</p>
             <p class="video-duration">Dropi • YouTube</p>
           </div>
-          <div class="video-item" onclick="playVideo('HU0YEhJCKOk', '12. Validación de Direcciones')">
+          <div class="video-item" onclick="playVideo('HU0YEhJCKOk', 'Validación de direcciones')">
             <div class="video-thumb">
-              <img src="https://img.youtube.com/vi/HU0YEhJCKOk/hqdefault.jpg" alt="12. Validación de Direcciones" loading="lazy">
+              <img src="https://img.youtube.com/vi/HU0YEhJCKOk/hqdefault.jpg" alt="Validación de direcciones" loading="lazy">
               <div class="video-play-overlay"><i class="fa-solid fa-circle-play"></i></div>
             </div>
-            <p class="video-title-sm">12. Validación de Direcciones</p>
+            <p class="video-title-sm">Validación de direcciones</p>
+            <p class="video-duration">Dropi • YouTube</p>
+          </div>
+          <div class="video-item" onclick="playVideo('r2h1sGPdyRI', 'Cómo cancelar un pedido')">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/r2h1sGPdyRI/hqdefault.jpg" alt="Cómo cancelar un pedido" loading="lazy">
+              <div class="video-play-overlay"><i class="fa-solid fa-circle-play"></i></div>
+            </div>
+            <p class="video-title-sm">Cómo cancelar un pedido</p>
             <p class="video-duration">Dropi • YouTube</p>
           </div>
         </div>
@@ -1965,25 +1941,6 @@
     </div>
   </div>
 
-  <!-- 1.5 Modal Documentación y Archivos -->
-  <div class="custom-modal-overlay" id="docsModal">
-    <div class="custom-modal">
-      <button class="modal-close-float" onclick="closeModal('docsModal')" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
-      <div class="custom-modal-body">
-        <div class="drive-cta">
-          <div class="drive-cta-icon"><i class="fa-brands fa-google-drive"></i></div>
-          <div class="drive-cta-text">
-            <strong>Documentación y Recursos</strong>
-            <span>Manuales, plantillas y guías del módulo de Pedidos, centralizados en la carpeta de Drive del equipo.</span>
-          </div>
-          <a class="drive-cta-btn" href="https://drive.google.com/drive/folders/18bsVatVAvXJrgW6wpvpca_5_0w9g_dg6" target="_blank" rel="noopener noreferrer">
-            Abrir carpeta de Drive <i class="fa-solid fa-arrow-up-right-from-square"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <!-- 1.6 Modal Feedback y Sugerencias (fusión de "Dejar Feedback" + "Solicitar Mejora") -->
   <div class="custom-modal-overlay" id="feedbackModal">
     <div class="custom-modal" style="max-width: 420px;">
@@ -1994,13 +1951,23 @@
       <div class="custom-modal-body">
         <form class="feedback-form" onsubmit="submitFeedbackForm(event)">
           <div style="text-align: center;">
-            <label style="font-weight: 600; font-size: 13px;">¿Qué tan útil te parece esta pantalla?</label>
-            <div class="rating-stars">
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-solid fa-star"></i>
-              <i class="fa-regular fa-star"></i>
+            <label style="font-weight: 600; font-size: 13px;">¿Qué tan útil te parece el módulo de órdenes?</label>
+            <div class="rating-scale" id="ratingScale">
+              <button type="button" class="rating-scale-btn" data-value="0">0</button>
+              <button type="button" class="rating-scale-btn" data-value="1">1</button>
+              <button type="button" class="rating-scale-btn" data-value="2">2</button>
+              <button type="button" class="rating-scale-btn" data-value="3">3</button>
+              <button type="button" class="rating-scale-btn" data-value="4">4</button>
+              <button type="button" class="rating-scale-btn" data-value="5">5</button>
+              <button type="button" class="rating-scale-btn" data-value="6">6</button>
+              <button type="button" class="rating-scale-btn" data-value="7">7</button>
+              <button type="button" class="rating-scale-btn" data-value="8">8</button>
+              <button type="button" class="rating-scale-btn" data-value="9">9</button>
+              <button type="button" class="rating-scale-btn" data-value="10">10</button>
+            </div>
+            <div class="rating-scale-labels">
+              <span>Para nada útil</span>
+              <span>Extremadamente útil</span>
             </div>
           </div>
 
@@ -2047,7 +2014,7 @@
   <div class="custom-modal-overlay" id="tourModal">
     <div class="custom-modal" style="max-width: 450px;">
       <div class="custom-modal-body tour-card">
-        <img src="https://cdn3d.iconscout.com/3d/premium/thumb/map-route-5374026-4496229.png" alt="Tour" class="tour-image">
+        <div class="tour-image"><i class="fa-solid fa-route"></i></div>
         <h3 class="tour-title">¡Bienvenido a Mis Pedidos!</h3>
         <p class="tour-text">
           Te daremos un recorrido rápido por las herramientas de esta pantalla para que aprendas a crear órdenes manuales, filtrar por transportadora y gestionar el estado de tus envíos como un experto.
@@ -2107,19 +2074,61 @@
 
   <script>
     // Referencias al DOM
-    const dropletBtn = document.getElementById('dropletBtn');
     const dropletMenu = document.getElementById('dropletMenu');
     const chatModal = document.getElementById('chatModal');
+    const helpHintBtn = document.getElementById('helpHintBtn');
+    const helpHintBubble = document.getElementById('helpHintBubble');
 
-    // Toggle Menú Educativo (Dropdown de la gota)
-    dropletBtn.addEventListener('click', (e) => {
+    // --- Aviso "¿Necesitas ayuda?" junto al título ---
+    // Se muestra apenas se entra a la plataforma. Si el usuario lo cierra (click en el ícono),
+    // vuelve a aparecer solo después de 5 minutos sin actividad.
+    const HELP_HINT_IDLE_MS = 5 * 60 * 1000;
+    let helpHintIdleTimer = null;
+
+    function isHelpHintVisible() {
+      return helpHintBubble.classList.contains('show');
+    }
+
+    function showHelpHint() {
+      helpHintBubble.classList.add('show');
+      clearTimeout(helpHintIdleTimer);
+    }
+
+    function hideHelpHint() {
+      helpHintBubble.classList.remove('show');
+      scheduleHelpHint();
+    }
+
+    function scheduleHelpHint() {
+      clearTimeout(helpHintIdleTimer);
+      helpHintIdleTimer = setTimeout(showHelpHint, HELP_HINT_IDLE_MS);
+    }
+
+    ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach((evt) => {
+      document.addEventListener(evt, () => {
+        if (!isHelpHintVisible()) scheduleHelpHint();
+      }, { passive: true });
+    });
+
+    showHelpHint(); // Visible desde que se entra a la plataforma
+
+    // Toggle Menú Educativo (Dropdown junto al título "Mis Pedidos")
+    helpHintBtn.addEventListener('click', (e) => {
       e.stopPropagation();
+      hideHelpHint();
       dropletMenu.classList.toggle('show');
+    });
+
+    helpHintBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        helpHintBtn.click();
+      }
     });
 
     // Cerrar menú al hacer clic fuera
     document.addEventListener('click', function(event) {
-      if (!dropletMenu.contains(event.target) && !dropletBtn.contains(event.target)) {
+      if (!dropletMenu.contains(event.target) && !helpHintBtn.contains(event.target)) {
         dropletMenu.classList.remove('show');
       }
     });
@@ -2140,9 +2149,9 @@
       }
     }
 
-    // Reproductor de video embebido: abre el video de la lista dentro de un modal, en la misma ventana
+    // Reproductor de video embebido: abre el video de la lista dentro de un modal, en la misma ventana.
+    // No cierra "videoModal" (la lista de videos) para que, al cerrar el reproductor, el usuario vuelva a verla.
     function playVideo(videoId, title) {
-      closeModal('videoModal');
       document.getElementById('videoPlayerFrame').title = title;
       document.getElementById('videoPlayerFrame').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
       document.getElementById('videoPlayerModal').classList.add('active');
@@ -2189,10 +2198,20 @@
       }, 3500);
     }
 
+    // Selección de calificación 0-10 (NPS del módulo de órdenes)
+    const ratingScale = document.getElementById('ratingScale');
+    ratingScale.addEventListener('click', (e) => {
+      const btn = e.target.closest('.rating-scale-btn');
+      if (!btn) return;
+      ratingScale.querySelectorAll('.rating-scale-btn').forEach((b) => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+
     function submitFeedbackForm(event) {
       event.preventDefault(); // Evita recargar la página
       closeModal('feedbackModal');
       event.target.reset();
+      ratingScale.querySelectorAll('.rating-scale-btn').forEach((b) => b.classList.remove('selected'));
       showToast('¡Gracias! Recibimos tu calificación y tu sugerencia.');
     }
 
@@ -2237,6 +2256,15 @@
       { target: '.search-box', placement: 'bottom',
         title: 'Buscador',
         text: 'Busca cualquier pedido por número, cliente o producto.' },
+      { target: '#ordersWithData .order-id-cell', placement: 'right',
+        title: 'ID de la orden',
+        text: 'Es el identificador único de la orden. Te sirve para ubicarla rápido o referenciarla con soporte.' },
+      { target: '#ordersWithData .client-address .fa-circle-check', placement: 'top',
+        title: 'Validador de direcciones',
+        text: 'Este check confirma si la dirección del cliente fue validada correctamente: verde si es válida, rojo si tiene algo por corregir.' },
+      { target: '#ordersWithData .fa-fingerprint', placement: 'top',
+        title: 'Huella digital',
+        text: 'Te permite ver el histórico del cliente en Dropi: sus órdenes anteriores y su comportamiento como comprador.' },
       { target: '#ordersWithData .status-badge', placement: 'top',
         title: 'Estado de la orden',
         text: 'El estado te dice en qué punto va cada pedido: Entregado, Cancelado, Rechazado y más.' },
