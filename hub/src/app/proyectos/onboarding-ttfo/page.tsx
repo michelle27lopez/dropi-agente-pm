@@ -140,6 +140,10 @@ export default function OnboardingTTFOPage() {
   const [filtro, setFiltro] = useState<Filtro>("exito");
   const [filtroSegmento, setFiltroSegmento] = useState<FiltroSegmento>("todos");
   const [filtroMadurez, setFiltroMadurez] = useState<string>("todos");
+  const [signedUpDesde, setSignedUpDesde] = useState("");
+  const [submittedAtDesde, setSubmittedAtDesde] = useState("");
+  const [hayRespaldoHistorico, setHayRespaldoHistorico] = useState(false);
+  const [hayRespaldoRawData, setHayRespaldoRawData] = useState(false);
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -151,6 +155,8 @@ export default function OnboardingTTFOPage() {
       setFilas(data.filas ?? []);
       setAlertas(data.alertas ?? null);
       setComparacionOnboarding(data.comparacionOnboarding ?? null);
+      setHayRespaldoHistorico(Boolean(data.hayRespaldoHistorico));
+      setHayRespaldoRawData(Boolean(data.hayRespaldoRawData));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error desconocido");
     } finally {
@@ -183,8 +189,15 @@ export default function OnboardingTTFOPage() {
         return filtroMadurez === "No documentado" ? label.startsWith("No documentado") : label === filtroMadurez;
       });
     }
+    // Mismas reglas de fecha para todos los orígenes (CSV histórico y Raw
+    // Data quedan mezclados en la misma `encuesta` desde el empalme — no hay
+    // un campo de "fuente" separado, así que estos filtros son la forma de
+    // aislar visualmente lo que entró vía automatización: sus Signed
+    // Up/Submitted At van a caer después del corte de empalme).
+    if (signedUpDesde) base = base.filter(r => r.signedUp >= signedUpDesde);
+    if (submittedAtDesde) base = base.filter(r => r.submittedAt >= submittedAtDesde);
     return [...base].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt));
-  }, [filas, filtro, filtroSegmento, filtroMadurez]);
+  }, [filas, filtro, filtroSegmento, filtroMadurez, signedUpDesde, submittedAtDesde]);
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
@@ -420,6 +433,21 @@ export default function OnboardingTTFOPage() {
 
         <InstruccionesDeCarga />
         <SeccionCarga onImportado={cargar} />
+        <BotonDeshacer
+          hayRespaldo={hayRespaldoHistorico}
+          onImportado={cargar}
+          ruta="/api/proyectos/onboarding-ttfo/deshacer-historico"
+          etiqueta="Deshacer última carga histórica (CSV)"
+          confirmacion="¿Volver a la base histórica de antes de la última carga de CSV? Esto también descarta cualquier Raw Data sumado desde entonces."
+        />
+        <SeccionCargaRawData onImportado={cargar} />
+        <BotonDeshacer
+          hayRespaldo={hayRespaldoRawData}
+          onImportado={cargar}
+          ruta="/api/proyectos/onboarding-ttfo/deshacer-raw-data"
+          etiqueta="Deshacer última carga de Raw Data"
+          confirmacion="¿Volver al estado de justo antes de la última carga de Raw Data? La base histórica no se toca."
+        />
         <SeccionExclusiones />
 
         <div style={{ ...card, padding: 0, overflow: "hidden" }}>
@@ -467,6 +495,32 @@ export default function OnboardingTTFOPage() {
                 <option value="todos">Todos los niveles</option>
                 {OPCIONES_MADUREZ.map(m => <option key={m} value={m}>{m}</option>)}
               </select>
+              <label style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11.5, color: "var(--muted)" }}>
+                Signed Up desde
+                <input
+                  type="date"
+                  value={signedUpDesde}
+                  onChange={e => setSignedUpDesde(e.target.value)}
+                  style={{ fontSize: 12, padding: "4px 6px", borderRadius: 8, border: "1px solid var(--border)" }}
+                />
+              </label>
+              <label style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11.5, color: "var(--muted)" }}>
+                Submitted At desde
+                <input
+                  type="date"
+                  value={submittedAtDesde}
+                  onChange={e => setSubmittedAtDesde(e.target.value)}
+                  style={{ fontSize: 12, padding: "4px 6px", borderRadius: 8, border: "1px solid var(--border)" }}
+                />
+              </label>
+              {(signedUpDesde || submittedAtDesde) && (
+                <button
+                  onClick={() => { setSignedUpDesde(""); setSubmittedAtDesde(""); }}
+                  style={{ fontSize: 11.5, color: "var(--muted)", background: "none", border: "none", cursor: "pointer", textDecoration: "underline" }}
+                >
+                  Limpiar fechas
+                </button>
+              )}
             </div>
           </div>
 
@@ -713,6 +767,49 @@ function SeccionExclusiones() {
 
 // ── Sección de carga (dry-run / confirm) ─────────────────────────────────────
 
+function BotonDeshacer({
+  hayRespaldo, onImportado, ruta, etiqueta, confirmacion,
+}: {
+  hayRespaldo: boolean; onImportado: () => void; ruta: string; etiqueta: string; confirmacion: string;
+}) {
+  const [deshaciendo, setDeshaciendo] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  if (!hayRespaldo) return null;
+
+  const deshacer = async () => {
+    if (!confirm(confirmacion)) return;
+    setDeshaciendo(true);
+    setError(null);
+    try {
+      const res = await fetch(ruta, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Error deshaciendo la importación");
+      onImportado();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error desconocido");
+    } finally {
+      setDeshaciendo(false);
+    }
+  };
+
+  return (
+    <div style={{ marginBottom: 12 }}>
+      <button
+        onClick={deshacer}
+        disabled={deshaciendo}
+        title={confirmacion}
+        style={{
+          fontSize: 11.5, fontWeight: 600, padding: "4px 10px", borderRadius: 8,
+          border: "1px solid #FDE68A", background: "#FFFBEB", color: "#92400E", cursor: "pointer",
+        }}
+      >
+        {deshaciendo ? "Restaurando…" : `↩ ${etiqueta}`}
+      </button>
+      {error && <div style={{ color: "#EF4444", fontSize: 12, marginTop: 6 }}>{error}</div>}
+    </div>
+  );
+}
+
 function SeccionCarga({ onImportado }: { onImportado: () => void }) {
   const [archivos, setArchivos] = useState<FileList | null>(null);
   const [preview, setPreview] = useState<Record<string, unknown> | null>(null);
@@ -753,15 +850,18 @@ function SeccionCarga({ onImportado }: { onImportado: () => void }) {
         onClick={() => setAbierto(v => !v)}
         style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 13, fontWeight: 700, color: "var(--fg)" }}
       >
-        {abierto ? "▾" : "▸"} Cargar cohorte nueva
+        {abierto ? "▾" : "▸"} Cargar cohorte nueva (CSV histórico)
       </button>
 
       {abierto && (
         <div style={{ marginTop: 14 }}>
           <p style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 10, lineHeight: 1.5 }}>
-            Arrastra todos los CSVs de este corte a la vez (Encuesta + los pasos del tour que tengas). El sistema
-            los clasifica por nombre y columnas — un archivo irreconocible no rompe el resto, se lista aparte.
-            Nada se escribe hasta que confirmes.
+            Esta es la <b>línea base histórica</b> — arrastra todos los CSVs de este corte a la vez (Encuesta + los
+            pasos del tour que tengas). El sistema los clasifica por nombre y columnas — un archivo irreconocible no
+            rompe el resto, se lista aparte. Nada se escribe hasta que confirmes, y si el resultado no te convence,
+            "Deshacer última importación" vuelve exactamente a lo que había antes. Una vez confirmada, las cargas
+            rutinarias de la automatización van por la sección de abajo (Raw Data) — no hace falta volver a subir
+            estos CSV cada vez.
           </p>
           <input
             type="file" multiple accept=".csv,.xlsx"
@@ -783,6 +883,97 @@ function SeccionCarga({ onImportado }: { onImportado: () => void }) {
                 style={{ fontSize: 12, fontWeight: 700, padding: "6px 12px", borderRadius: 8, border: "none", background: "var(--dropi, #F77F00)", color: "#fff", cursor: "pointer" }}
               >
                 Confirmar e importar
+              </button>
+            )}
+          </div>
+
+          {error && <div style={{ color: "#EF4444", fontSize: 12.5, marginTop: 10 }}>{error}</div>}
+
+          {preview && (
+            <pre style={{
+              marginTop: 14, fontSize: 11.5, background: "#FAFBFC", border: "1px solid var(--border)",
+              borderRadius: 8, padding: 12, overflow: "auto", maxHeight: 400,
+            }}>
+              {JSON.stringify(preview, null, 2)}
+            </pre>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function SeccionCargaRawData({ onImportado }: { onImportado: () => void }) {
+  const [archivo, setArchivo] = useState<File | null>(null);
+  const [preview, setPreview] = useState<Record<string, unknown> | null>(null);
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [abierto, setAbierto] = useState(false);
+
+  const enviar = async (confirmar: boolean) => {
+    if (!archivo) return;
+    setEnviando(true);
+    setError(null);
+    try {
+      const form = new FormData();
+      form.append("archivos", archivo);
+      if (confirmar) form.append("confirmar", "true");
+
+      const res = await fetch("/api/proyectos/onboarding-ttfo/importar-raw-data", { method: "POST", body: form });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Error en la importación");
+
+      if (confirmar) {
+        setPreview(null);
+        setArchivo(null);
+        onImportado();
+      } else {
+        setPreview(data);
+      }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Error desconocido");
+    } finally {
+      setEnviando(false);
+    }
+  };
+
+  return (
+    <div style={{ ...card, marginBottom: 24 }}>
+      <button
+        onClick={() => setAbierto(v => !v)}
+        style={{ background: "none", border: "none", cursor: "pointer", padding: 0, fontSize: 13, fontWeight: 700, color: "var(--fg)" }}
+      >
+        {abierto ? "▾" : "▸"} Cargar Raw Data (automatización, rutinario)
+      </button>
+
+      {abierto && (
+        <div style={{ marginTop: 14 }}>
+          <p style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 10, lineHeight: 1.5 }}>
+            Solo el export "Raw Data" de la automatización (Plantilla → Google Sheets), un archivo — nada de CSV
+            acá. Se suma sobre la línea base ya guardada (arriba), no la reemplaza. Si el archivo trae filas que
+            ya estaban contadas, no se duplican (el empalme toma lo más reciente/mayor por usuario). Nada se
+            escribe hasta que confirmes.
+          </p>
+          <input
+            type="file" accept=".csv,.xlsx"
+            onChange={e => { setArchivo(e.target.files?.[0] ?? null); setPreview(null); }}
+            style={{ fontSize: 13, marginBottom: 10 }}
+          />
+          <div style={{ display: "flex", gap: 8 }}>
+            <button
+              onClick={() => enviar(false)}
+              disabled={!archivo || enviando}
+              style={{ fontSize: 12, fontWeight: 600, padding: "6px 12px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", cursor: "pointer" }}
+            >
+              {enviando ? "Procesando…" : "Previsualizar"}
+            </button>
+            {preview && (
+              <button
+                onClick={() => enviar(true)}
+                disabled={enviando}
+                style={{ fontSize: 12, fontWeight: 700, padding: "6px 12px", borderRadius: 8, border: "none", background: "var(--dropi, #F77F00)", color: "#fff", cursor: "pointer" }}
+              >
+                Confirmar y sumar a la base
               </button>
             )}
           </div>
