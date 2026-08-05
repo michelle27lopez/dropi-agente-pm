@@ -33,7 +33,12 @@ export const REGISTRO_SLOTS: DefinicionSlot[] = [
     tipoPaso: "modal",
     camino: null,
     familiaEsperada: "modal_o_tour",
-    patronesNombre: [/video.*bienvenida/i, /bienvenida.*video/i],
+    // El título real que manda UserPilot (visto en el webhook Raw Data,
+    // 04-ago-2026) es "[Evergreen] [Onboarding] [Prov] Bienvenida Dropi
+    // Colombia" — no contiene la palabra "video". Se deja /bienvenida/i como
+    // patrón amplio (ningún otro slot usa esa palabra) y los dos anteriores
+    // como respaldo por si el nombre de archivo exportado sí la trae.
+    patronesNombre: [/bienvenida/i, /video.*bienvenida/i, /bienvenida.*video/i],
     etiqueta: "① Video Bienvenida",
   },
   {
