@@ -1655,9 +1655,6 @@ export default function ElegiblesPage() {
                     <div className="cd-phase-note" style={{ marginBottom: 14 }}>Tu selección sigue enviada. Al guardar, la reemplazamos con esta.</div>
                   )}
 
-                  {!canSelect && !selectionWindowClosed && (
-                    <div className="cd-phase-note" style={{ marginBottom: 14 }}><Lock size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 5 }} />Podrás seleccionar a partir del {seleccionStep?.window.split("–")[0].trim()}. Por ahora puedes revisar tu lista.</div>
-                  )}
                   {selectionWindowClosed && (
                     <div className="cd-phase-note" style={{ marginBottom: 14 }}>La selección ya cerró y no alcanzaste a enviar la tuya. Escríbenos si crees que es un error.</div>
                   )}

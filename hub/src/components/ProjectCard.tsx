@@ -34,7 +34,7 @@ export function projectUrl(p: Proyecto) {
 export function ProjectCard({
   project, dark, canCreate, pocs, deliveries = [], siblingPocs = [], followings = [],
   onEstadoChange, onVpvChange, onCrearPoc, onCrearDelivery, onRelatedPocChange, onCrearFollowing,
-  urlOverride, colorOverride, iconOverride,
+  urlOverride, colorOverride, iconOverride, tags = [],
 }: {
   project: Proyecto;
   dark: boolean;
@@ -64,6 +64,12 @@ export function ProjectCard({
   urlOverride?: string;
   colorOverride?: string;
   iconOverride?: string;
+  // Etiquetas extra junto al código del proyecto. Hoy las usa logística para
+  // la etapa del viaje de la orden, que dejó de ser el encabezado de sección y
+  // pasó a ser un dato de la tarjeta. Van en gris a propósito: el color de la
+  // card ya significa handoff, y un segundo código de color competiría con él
+  // (la "Regla de los Cuatro Estados" del DESIGN.md).
+  tags?: string[];
 }) {
   const [showPocForm, setShowPocForm] = useState(false);
   const [pocName, setPocName] = useState("");
@@ -153,6 +159,18 @@ export function ProjectCard({
             <span style={{ fontSize: 10, fontWeight: 800, background: `${color}${dark ? "25" : "18"}`, color, padding: "2px 8px", borderRadius: 4, textTransform: "uppercase" }}>
               {tag}
             </span>
+            {tags.map((t) => (
+              <span
+                key={t}
+                style={{
+                  fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 4,
+                  background: dark ? "rgba(255,255,255,0.06)" : "var(--bg)",
+                  color: muted, border: dark ? "1px solid rgba(255,255,255,0.08)" : "1px solid var(--border)",
+                }}
+              >
+                {t}
+              </span>
+            ))}
             {isDiscovery && pocs.length > 0 && (
               <span style={{ fontSize: 10, fontWeight: 800, background: dark ? "rgba(247,127,0,0.15)" : "#FFF7ED", color: "#F77F00", padding: "2px 8px", borderRadius: 4 }}>
                 🧪 {pocs.length} POC en curso

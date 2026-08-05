@@ -1,0 +1,1047 @@
+﻿15 mayo 2026
+Weekly — Célula Backoffice
+📅 15 mayo 2026  ·  👥 Paula · Michel · Juan Camilo · Marlon · José Giraldo
+🧬 Foco: Validación de identidad, facturación Latam, conciliaciones y seguridad
+
+
+🗺️ Presentación de Roadmap Backoffice Priorización
+Se presentó el roadmap de la célula (heredado de Harry) con 7 proyectos activos priorizados por Dropi Score. Los proyectos con score 99 son de mayor urgencia.
+Proyectos activos: Automatización de recargas multipaís, Automatización de conciliaciones, Validación de identidad, Sistemas de T&C, Datos de facturación Latam, Prevención de saldos negativos y CAS.
+Se acordó que varios proyectos pueden correr en paralelo, pero Validación de Identidad recibe la mayor concentración de recursos de producto y TI.
+* Cambio clave: Eduardo Pachón instruyó que toda coordinación con TI sea directamente con José Giraldo, quien reemplaza a Fernando como referente técnico de la célula.
+* Se definió cuál es la prioridad máxima del equipo para enfocar la fuerza del sprint.
+* Marlon + Legal: construir matriz de urgencia por país (tipo de validación necesaria y riesgo legal si no se actúa). Datos de cuantos usuarios se están validando KYC y KYB en los países donde se hace.
+
+
+🪪 Evaluación Sumsub vs. Truora  Definición
+Legal argumentó que tanto la automatización de recargas (USDT) como la facturación electrónica exigen KYC/KYB mínimos — la validación de identidad es el puente que los conecta. Posición acordada: usar Truora para personas naturales (infraestructura ya montada) y evaluar Sumsub para personas jurídicas y países no cubiertos.
+Situación por país:
+Guatemala: riesgo de cierre de cuentas bancarias. Ecuador: validación manual no efectiva (usuarios suben fotos irrelevantes). Argentina: operación sin legalización de ventas históricas.
+* Sumsub: habilitar cuentas Sandbox para Paula y José Giraldo esta semana.
+* Sumsub (Fernando): compartir documentación de API y SDK con José Giraldo para revisión técnica.
+* José Giraldo: revisar documentación técnica e iniciar exploración del sandbox esta semana.
+* Paula: explorar sandbox de Sumsub desde producto — validar flujos KYC y KYB para Argentina, Ecuador, Chile y México.
+* Legal (Andrés/Jonatan): solicitar a Sumsub matriz de capacidades por país. Atención especial: Argentina y Brasil.
+* Legal + Sumsub: agendar sesión dedicada de KYB y reunión de seguimiento contractual (POC y bolsa de verificaciones).
+* José Giraldo + Fernando (Sumsub): definir arquitectura de cuenta (clave única con workflows por país vs. subcuentas separadas).
+⚠️ Truora: 40% de validaciones manuales (~3.000/mes) — problema crítico que Sumsub resolvería
+
+
+🧾Datos de Facturación — Argentina Desarrollo
+Proyecto comparte necesidad de KYC/KYB — los avances de Sumsub lo benefician directamente. Continúa el diseño del módulo con las reglas de bloqueo ya definidas (bloquear transferencias entre wallets y retiros; NO bloquear recargas ni creación de cuentas bancarias).
+Paula / Michel: continuar diseño del módulo de Argentina. Una vez listo, pasar a desarrollo para despliegue sin bloqueo activo (Fase 1).
+
+
+🔄 Automatización de Conciliaciones Definición
+Puede avanzar en paralelo con menor fuerza mientras se resuelve la prioridad de validación de identidad.
+* José Giraldo: retomar con el equipo de DropiPay para avanzar en paralelo.
+
+
+🔑 CAS — Permisos usuario hijo y nuevas transportadoras ✅ Error resuelto - Producción
+El error de permisos del usuario hijo quedó solucionado y fue comprobado entre Soporte TI y el usuario que lo reportó. 
+Nuevos frentes: Hellen gestionará la habilitación del CAS con Soporte TI para transportadoras TIUI México y STARKEN Chile.
+* Hellen: montar solicitud a Soporte TI para habilitar CAS a TIUI México y STARKEN Chile.
+* Laura Torres: preparar comunicación de habilitación de transportadoras para el siguiente sprint.
+✅ Error de permisos usuario hijo — resuelto en producción
+
+
+
+
+MFA Obligatorio
+Laura Torres ya montó el flujo de la campaña de expectativa de userpilot para todos los países. Se continua con la fecha del 20 de mayo para que todos los usuarios lo tengan obligatorio, ya comunicaciones está trabajando en la actualización del material anterior que se tenía para poder tener los manuales, tutoriales, etc.
+21 mayo 2026
+📋 Weekly — Célula Backoffice
+📅 21 mayo 2026
+🧬 Foco: Validación de identidad KYC/KYB, facturación Latam, CAS y módulos operativos
+
+
+
+
+Integración Sumsub — Avance y definición de flujos Definición
+
+
+Semana de avances importantes en exploración. Producto accedió al demo de Sumsub y revisó flujos con María. Se documentó el mapeo en Figma. TI (José) recibió APIs y documentación — en revisión técnica, con cuello de botella por disponibilidad de Mauricio (desarrollador asignado).
+
+
+Posible repriorización por país — Legal confirmó que la iba a revisar y compartir nuevamente:
+#1 Colombia — KYB (personas jurídicas) para retiros y facturación
+#2 Guatemala — KYC y KYB para retiros (subió a máxima urgencia — riesgo de cierre de cuentas bancarias)
+#3 Argentina — en ajustes finales con Michel (regresó de vacaciones); pendiente evaluar vs. Guatemala
+
+
+Se identificaron 4 flujos del proyecto: (1) Validación inicial KYC al registrarse, (2) Datos de facturación, (3) Edición de datos personales, (4) Validación en retiros (cuenta bancaria debe coincidir con representante legal).
+
+
+Propuesta clave acordada: anclar los datos de facturación desde la validación de identidad inicial para evitar doble formulario. Legal apoyó la viabilidad legal. Pendiente validación con equipo de Financiero.
+
+
+Problema detectado en retiros: hoy Dropi NO valida si la cuenta bancaria registrada corresponde a la persona que hace el retiro, ni si es natural o jurídica. Esto es lo que Legal exige corregir.
+
+
+Escenarios críticos pendientes de definir: ¿qué ve el usuario si interrumpe la validación? ¿Qué se bloquea si falla? ¿Cuántos reintentos se permiten? ¿Cómo maneja Sumsub un usuario colombiano operando en Argentina con correo diferente?
+
+
+Aprendizaje Truora aplicable: no comprometer fechas hasta tener el flujo completo validado por Legal, TI, Producto y Diseño.
+
+
+* Paula: comunicar a María que el proyecto requiere más tiempo de análisis — gestionar expectativas y no comprometer fechas.
+* Paula: compartir link de Coloca Payments con Juan Camilo para validar que Sumsub funciona en iOS.
+* Paula + TI (José): gestionar activamente viabilidad técnica de integración. Sin ese input no se distribuye trabajo de diseño ni se definen fechas.
+* Legal: actualizar matriz de priorización con Guatemala como prioridad alta y enviarla. Paula / María revisan.
+* Marlon: socializar con Financiero la propuesta de anclar datos de facturación desde la validación inicial.
+* Paola Angulo: compartir flujos de Truora usados en implementación anterior para no partir de cero.
+* Kevin D. Paternina: continuar rediseño de login y registro (look & feel) sin involucrarse aún en flujos de validación multipaís.
+* Luisa, José, María, Marlon: reunión 21 mayo para evaluar carga Dropi Score y liberar a José del 10-20% de carga.
+
+
+Datos de Facturación — Argentina
+
+
+Michel regresó de vacaciones. Proyecto en ajustes finales de diseño. Con la repriorización de Guatemala, queda pendiente decidir si Argentina continúa o si los recursos se redirigen. Decisión debe tomarse esta semana antes de que Michel entregue los ajustes finales.
+
+
+* Paula / Michel: continuar ajustes finales del módulo. Confirmar con Legal y María si Argentina sigue o cede recursos a Guatemala.
+
+
+Inhabilitar módulo de facturación — México + ajuste de bloqueos
+
+
+Épica creada y lista para handoff con TI. Ya se había acordado la mejor forma de proceder: crear la épica para que TI cree sus propias tareas. Pendiente socializar con Financiero.
+
+
+* Paula: hacer handoff de la épica con TI y socializar con Financiero.
+
+
+Activar transportadoras CAS — TIUI México y STARKEN Chile Desarrollo
+Épica e historias de lanzamiento creadas y amarradas al proyecto en Dropi Score. Pendiente hacer handoff con TI para iniciar desarrollo.
+* Paula: hacer handoff con TI para activar transportadoras CAS en Chile y México.
+
+
+Próximos pasos
+* Legal: entregar matriz de priorización actualizada (Guatemala incluida).
+* Paula + María: revisar matriz para redirigir esfuerzos.
+* José Giraldo: reportar viabilidad técnica Sumsub en el chat — sin esperar reunión semanal.
+* Paula: mapear flujos completos de validación (happy path + alternos) antes de comprometer fechas.
+* Marlon: socializar con Financiero la propuesta de anclar datos de facturación desde la validación inicial.
+* Handoff a TI: épica de módulo facturación México y épica CAS transportadoras.
+* Paula: dar contexto a Michel sobre estado del proyecto — compartir grabaciones.
+* Luisa, José, María, Marlon: reunión 21 mayo para redistribuir carga y liberar capacidad de José.
+
+
+
+
+28 mayo 2026
+📋 Weekly — Célula Backoffice
+📅 28 mayo 2026 
+🧬 Foco: Sumsub en producción, informes de facturación, CAS, MFA y Confío
+
+
+🔑 CAS — TIUI México y STARKEN Chile ✅ En producción
+
+
+Habilitación completada el martes 26 de mayo. Hellen inició el proceso de creación de usuarios para informar a las transportadoras. Comunicación oficial programada para el 2 de junio.
+* Hellen: continuar proceso de creación de usuarios para las transportadoras.
+* Laura Torres: preparar comunicación de lanzamiento para salir el 2 de junio.
+
+
+🔐 MFA Obligatorio ✅ En producción
+
+
+Flujo de MFA obligatorio desplegado en producción para todos los usuarios. El switch que lo activaba de forma opcional fue removido. Video tutorial listo, pendiente de ajustes por parte del equipo de Marketing.
+
+
+* Marketing: realizar ajustes al video tutorial del MFA para publicación.
+
+
+🪪 Sumsub KYC/KYB/AML — Negociación cerrada, inicio de ejecución ✅ Contrato firmado
+
+
+Jonatan confirmó que el ciclo de negociación con Sumsub cerró esta semana. Se contrató una bolsa tipo sombrilla que incluye KYC, KYB, Background Check y AML, acordada según las necesidades y proyección de crecimiento de Dropi. José confirmó que no tiene objeciones técnicas y está listo para arrancar la integración en cuanto estén definidos la épica y el flujo.
+
+
+🚨 Plan B activo — Popup inmediato mientras avanza integración técnica:
+Chile, Ecuador y Argentina no pueden esperar la integración completa (puede tomar meses). Esta semana Marlon define el plan de despliegue de popup replicando el modelo de Guatemala, donde ya funciona en menos de 2 días vía User Pilot. Además, los datos de facturación ya recogidos (Ecuador, Chile) se llevarán a Sumsub como backoffice manual para validar usuarios antes del lanzamiento técnico.
+
+
+Transición Truora → Sumsub: Truora seguirá activa en Colombia durante todo este año (contrato renovado). Sumsub cubre los nuevos países y la expansión. Migración de usuarios ya validados en Truora a Sumsub confirmada como posible — sin reprocesos para el usuario.
+
+
+Formulario unificado: no es factible precargar datos personales en facturación por particularidades tributarias por país. Se propone un formulario unificado que detecte automáticamente si el usuario es persona natural o jurídica y ejecute KYC o KYB en el mismo paso. Riesgo: usuarios que ponen datos de terceros en facturación — el flujo debe contemplarlo.
+
+
+* Marlon: definir esta semana el plan de despliegue del popup de Sumsub para Chile (y países críticos), replicando modelo Guatemala.
+* Marlon: convocar mesas operativas para llevar datos de facturación de Ecuador y Chile a Sumsub como backoffice manual. Incluir a Andrés Herrera en esas mesas (antifraude).
+* Paula: enviar a Jonatan hoy el documento con preguntas de reglas de negocio para la reunión del 28 de mayo.
+* Paula: agendar reunión con José Giraldo para revisar API de Sumsub (qué se envía/recibe) y planear la experiencia de usuario.
+* Jonatan: acceder hoy al demo de Sumsub, explorar flujos y llegar con respuestas preparadas a la reunión del 28 de mayo con Paula.
+* José: reunirse con Paula esta semana para revisión técnica de la API de Sumsub. Una vez listos los flujos, organizar el equipo de TI para iniciar integración formal.
+* Paula: agregar a Andrés Herrera al grupo de Back Office en Google Chat e invitarlo a las mesas operativas de Sumsub.
+
+
+⚠️ Chile urgente: carteras rojas y fraudes activos.
+📅 Reunión con Truora (Elisa): viernes 29 de mayo, 2 p.m.
+📅 Reunión con Jonatan (compliance): 28 de mayo
+
+
+📊 Informes de facturación — Ecuador y Chile Desbloqueado
+
+
+El reporte de facturación que descarga Financiero para emitir facturas en Ecuador y Chile estaba incompleto — le faltan columnas de datos de facturación (teléfono, dirección), Fulfillment y comisión. El desarrollo ya estaba hecho por Stiven López, pero fue devuelto para adaptarse a la nueva arquitectura de reportes (Fluent). No estaba perdido, estaba en cola. John Dairo escaló directamente a Stiven en la reunión del 26 de mayo.
+
+
+Canal correcto confirmado: Financiero debe usar Soporte TI (no Dropi Score) para reportar errores o ajustes en reportes existentes. Las solicitudes de Dropi Score para este tema quedan cerradas.
+* John Dairo + Stiven: definir prioridad y dar fecha estimada de entrega a Financiero el 27 de mayo.
+* Nataly / Lina: montar caso puntual en Soporte TI para las columnas faltantes (valor que no aparece). TI lo unificará con la tarea de Stiven.
+* John Dairo: agendar sesión con Marlon y GrowOps para dar visibilidad del tracking de solicitudes internas (estado, cumplimiento, métricas).
+
+
+🇲🇽 Deshabilitación módulo de facturación — México
+Épica pasada a TI, ya quedó deshabilitado el día de hoy jueves 28 de mayo. México queda fuera del alcance del ajuste de informes de Ecuador y Chile.
+
+
+💳 Confío Pagos — México (SPEI)
+Bloqueado por negociación comercial con Cobre — no es un problema legal. Los T&C de Confío ya existen y tropicalizarlos a México es un ajuste puntual. Se propone que Confío tenga un flujo de interacción formal con Dropi (mesas independientes) y pase por Dropi Score como cualquier proveedor de la red.
+
+
+* Legal (Andrés) y Growth: coordinar mesa directa con Víctor (Confío) para verificar estado de negociación con Cobre y requisitos concretos para México.
+
+
+🔄 Conciliación Confío / Proyecto Flujo del Dinero
+Andrés Herrera alertó que hoy no existe forma de conciliar lo que llega de Confío con lo registrado en plataforma y banco. Este problema se conecta directamente con el proyecto Flujo del Dinero, que busca automatizar conciliaciones y eliminar la manualidad en recargas. José tiene conocimiento parcial del estado del proyecto.
+
+
+* José: confirmar con Fernando el estado del proyecto Flujo del Dinero y reportar al grupo de Back Office.
+
+
+⚡ Mini proyectos en paralelo
+
+
+Tres frentes avanzando de forma ágil directamente con TI, sin bloqueos:
+
+
+* CAS transportadoras México y Chile: gestionados directamente con TI, ya saliendo (ver sección lanzamientos).
+* Errores en informes de facturación Ecuador y Chile: revisados en mesa con TI el 26 de mayo, ya en manos de Soporte TI para corrección.
+* Deshabilitación módulo facturación México: épica pasada a TI, ya en producción.
+
+
+📌 Próximos pasos
+
+
+Marlon: definir y arrancar esta semana el plan de popup Sumsub para Chile — urgente por carteras rojas y fraudes.
+* Paula + Jonatan: reunión 28 mayo — reglas de negocio Sumsub. Paula envía preguntas.
+* Paula + José: agendar revisión técnica de API Sumsub esta semana para planear experiencia de usuario.
+* Reunión con Truora (Elisa): viernes 29 mayo 2 p.m. — planificar transición Truora → Sumsub.
+* John Dairo + Stiven: dar fecha de entrega del informe de facturación Ecuador y Chile el 27 mayo.
+* Nataly / Lina: montar caso puntual en Soporte TI para columna Fulfillment.
+* Legal (Andrés): agendar mesa directa con Víctor (Confío) para destrabar México.
+* José: confirmar estado del proyecto Flujo del Dinero con Fernando y reportar al grupo.
+* Marketing: ajustar video tutorial MFA para publicación.
+* Laura Torres: preparar comunicación lanzamiento CAS para el 2 de junio.
+
+
+4 junio 2026
+📋 Weekly — Célula Backoffice
+📅 4 junio 2026  
+🧬 Foco: Validación de identidad Sumsub, facturación Argentina, conciliaciones y mini proyectos
+
+
+🪪 Sumsub — Diseño de flujo unificado y Plan B activo
+
+
+Propuesta de producto alineada con Legal y Financiero: unificar los dos formularios actuales (datos personales + facturación) en uno solo. El usuario indica desde el inicio si es persona natural o jurídica → el sistema lanza KYC o KYB en Sumsub → los datos validados se precargan automáticamente en Dropi. Colombia tiene flujo diferencial: persona natural sigue con Truora, persona jurídica (KYB) va a Sumsub. Este punto se revisó con José el 4 de junio.
+
+
+📌 Decisiones clave de la semana:
+• Cada modificación de datos de facturación implica una nueva validación en Sumsub (costo adicional). La frecuencia de cambios permitidos debe ser una regla de negocio acordada entre Legal, Financiero y Producto.
+• Usuarios existentes sin validar (Chile, Ecuador, Argentina, Perú, Guatemala) no pueden revalidarse masivamente sin base legal — requieren aceptación de T&C y política de privacidad vigente por país.
+• Priorización de validaciones: NO validar masivamente desde el inicio. Priorizar por riesgo: usuarios con quejas de estafas, proveedores con fraudes, montos altos en wallet.
+• Migración Truora → Sumsub confirmada: usuarios ya validados en Truora no necesitan revalidarse. Sumsub puede recibir archivo plano con datos históricos.
+
+
+Plan B — Popup User Pilot (activar esta semana): alerta no bloqueante que invita al usuario a validarse en Sumsub. Si acepta, lo lleva al Web SDK de Sumsub. Si lo cierra, continúa normal. Solución de front en ~2 días sin desarrollo de TI. Ya probado y funcionando en Guatemala.
+
+
+Plan B-2 — Sumsub como backoffice manual: Financiero y compliance cargan manualmente datos de usuarios en Sumsub para obtener validación y consultar listas internacionales de actividad ilícita. Permite tomar acción manual (bloqueo, baja) antes de que salga la integración técnica.
+
+
+* Paula: reunirse hoy (4 junio) con José para revisar los 4 flujos del proyecto y el formulario unificado desde la perspectiva técnica.
+* Paula: reunirse esta semana con el equipo de diseño para mostrar la propuesta y avanzar a nivel visual.
+* Paula: exportar en PDF el flujo propuesto KYC/KYB y compartirlo con Jonatan, Lina y Andrés Herrera para aportes antes del siguiente weekly.
+* Paula: mantenerse en contacto con Camilo (Sumsub) para confirmar parametrización de campos por API.
+* Juan Camilo: liderar levantamiento del proceso operativo para usuarios existentes sin validar — reunirse con Legal y Financiero, definir criterios de priorización y construir el flujo paso a paso. Definir criterios de a qué usuarios mostrárselo y pasar instrucciones a la persona de User Pilot.
+* Jonatan + Andrés Alcedo + Lina: revisar flujo compartido por Paula, definir módulos que se activan por tipo de usuario, qué campos se parametrizan y cuáles activarán nueva validación al modificarse. Compartir resultado a Paula lo antes posible.
+* Jonatan: avanzar en paralelo con políticas de privacidad de Guatemala, Chile, Argentina y Ecuador — sin política vigente no hay base legal para validar.
+* Marlon + GrowOps: definir proceso operativo Plan B-2 — criterios de riesgo para validación manual en Sumsub. Coordinar con Andrés Herrera el flujo de acción cuando un usuario aparece en listas ilícitas.
+
+
+🧾Facturación Argentina Handoff a TI - completado Desarrollo
+
+
+Handoff al equipo de TI completado el lunes 2 de junio. A la espera de confirmación de José o algún desarrollador sobre la fecha de inicio. Michel Pino se encuentra preparando el plan de lanzamiento y pasos a seguir del proyecto.
+
+
+* José: confirmar fecha de inicio de desarrollo del módulo de Argentina y comunicar al grupo.
+* Michel: continuar preparación del lanzamiento y pasos a seguir del proyecto.
+
+
+🔄 Conciliaciones — Simetric + TI (Fernando)
+
+
+Definición
+Simetric se incorpora para conciliar retiros y recargas a nivel de aplicativos. Los bancos nacionales siguen siendo gestionados directamente por TI (Fernando). José retoma el 4 de junio la contextualización del proyecto con Fernando para reportar el estado al grupo.
+
+
+* José: retomar con Fernando el estado del proyecto de conciliaciones y reportar avance al grupo de Back Office hoy 4 junio.
+
+
+💳 Confío Pagos — México (SPEI)
+
+
+Definición
+Reunión movida al viernes 6 de junio. Deben estar presentes Financiero (Lina) y Antifraude (Andrés Herrera) para alinear los bloqueos de integración. Los T&C de Confío ya existen — tropicalizarlos a México es un ajuste puntual, no un bloqueante.
+
+
+* Juan Camilo (Growth ops): coordinar asistencia de Lina y Andrés Herrera para la reunión del viernes 6 de junio con Víctor (Confío).
+
+
+🔑 CAS — TIUI México y STARKEN Chile ✅ Lanzamiento formal esta semana
+
+
+Producción
+Llevan una semana en producción. Esta semana se hizo el lanzamiento formal con comunicación en redes sociales para empezar a recibir más casos y completar la capacitación de operarios.
+
+
+📌 Próximos pasos
+
+
+* Paula + José: revisión técnica hoy 4 junio — flujos KYC/KYB y formulario unificado.
+* Paula + Diseño: avanzar esta semana en el diseño visual del flujo de validación.
+* Marlon: activar popup User Pilot (Plan B) esta semana para Chile, Ecuador y Argentina.
+* Juan Camilo: levantar proceso operativo para usuarios existentes sin validar — criterios de priorización con Legal y Financiero.
+* Jonatan: avanzar con políticas de privacidad por país (Guatemala, Chile, Argentina, Ecuador) — requisito legal bloqueante.
+* José: reportar estado del proyecto de conciliaciones con Fernando hoy 4 junio.
+* José: confirmar fecha de inicio de desarrollo de facturación Argentina.
+* Viernes 6 junio: reunión con Víctor (Confío) con Financiero y Antifraude — destrabar México.
+* Equipo: lanzamiento formal CAS TIUI México y STARKEN Chile — comunicación en redes esta semana.
+
+
+12 junio 2026
+📋 Weekly — Célula Backoffice
+📅 12 junio 2026  
+🧬 Foco: Urgencia regulatoria T&C, Sumsub popup, facturación Argentina y mini proyectos
+
+
+🚨 Alerta regulatoria de la semana
+Ecuador tiene requerimiento del SRI con fecha límite
+18 de junio
+. Chile lleva
+6 meses de incumplimiento normativo
+. T&C pasa a prioridad máxima junto con Sumsub — ambos avanzan con plan provisional (User Pilot) y plan definitivo (desarrollo TI) en paralelo.
+
+
+📜T&C y Política de Privacidad — Ecuador y Chile ⚠️ Fecha límite 18 jun
+
+
+Chile ya tiene popup activo vía User Pilot: 49.000 veces mostrado, 47.000 usuarios que aceptaron. Ecuador no tiene User Pilot instalado — hay que implementarlo desde cero. Se acordó solución en dos velocidades:
+
+
+Plan provisional (urgente)
+User Pilot para Chile y Ecuador esta semana. Legal aceptó el riesgo de que los datos queden en base externa ante la urgencia del SRI. La aceptación se registra con clic en 'Aceptar' — válido bajo ley de mensajes de datos. MFA obligatorio ya activo refuerza la identificación del usuario.
+Estructura del nuevo popup acordada: un solo flujo nuevo en User Pilot (no modificar el existente) con dos links separados — T&C y Política de Privacidad. Un solo clic de aceptación es válido para ambos documentos. Todos los usuarios, incluidos los que ya aceptaron la primera versión, verán el nuevo popup. El correo de notificación también lo gestiona Laura desde User Pilot.
+Alcance: prioridad esta semana Ecuador y Chile. Resto de países: semana del 16 de junio.
+Bloqueante activo: los links de las landing de T&C y Política de Privacidad no existen para Ecuador y otros países — todos redirigen a Colombia. Legal debe solicitar su creación a Juan Peña (webmaster) hoy.
+
+
+* Andrés (Legal): enviar hoy correo a Juan Peña / Grow Marketing solicitando creación de landings de T&C y Política de Privacidad para Ecuador y Chile con URLs independientes por país.
+* Andrés (Legal): una vez tenga los links, enviarlos a Laura Torres con especificaciones del popup (copy y links por país y documento).
+* Andrés (Legal): semana del 16 junio, enviar segundo correo a Laura con links del resto de países para despliegue global.
+* Juan Camilo: escribir hoy a Luisa para definir el flujo correcto de publicación de landings — ¿directamente con Juan Peña o escala a TI?
+* Paula: escribir hoy a José para que TI confirme si la actualización de links internos de la plataforma (módulo facturación + pantalla de registro) va por soporte o requiere desarrollo.
+* Laura Torres: una vez reciba los links de Legal, montar el popup nuevo en User Pilot para Ecuador y Chile esta semana. Preparar correo de notificación a usuarios.
+
+
+🪪 Sumsub — Sesión de activación de flujos 
+
+
+El popup de Guatemala y Panamá usa flujos de ColocaPayments (que usa Sumsub), no flujos propios de Dropi. Para replicarlo en Chile, Ecuador y Argentina, se necesita crear flujos propios de Dropi en Sumsub — lo cual requiere una sesión técnica con el equipo de Sumsub. Esta sesión es el punto de activación: de ahí salen los links de KYC y KYB para montar los popups por país.
+
+
+📌 Lo que debe pasar antes de la sesión de Sumsub (12 junio):
+Legal, Financiero y Antifraude deben llegar con los datos requeridos por país (KYC persona natural y KYB persona jurídica) ya definidos y alineados entre las tres áreas.
+Próximo weekly: Producto presenta propuesta de diseño del flujo KYC/KYB a Legal, Financiero y Antifraude para validación y ajustes.
+
+
+* Jonatan: coordinar sesión con Sumsub para el 11 junio por Google Chat. Objetivo: configurar flujos propios de Dropi y obtener links para popups por país.
+* Legal + Financiero + Antifraude: llegar a la sesión de Sumsub con los datos requeridos por país (KYC y KYB) ya definidos.
+* Paula + Diseño: presentar propuesta visual del flujo KYC/KYB en el próximo weekly para validación de las tres áreas.
+* Una vez salgan los links de Sumsub: coordinar con Producto el montaje de popups para Chile, Ecuador y Argentina.
+
+
+✅ Update — Reunión con Sumsub realizada (11 junio)
+Sumsub enviará los formatos para diligenciar la matriz de riesgos, los flujos de validación y las reglas por cada uno. El proceso se llevará a cabo desde el área admin de Sumsub. Se definió
+Telegram
+como canal de comunicación directa con el equipo de Sumsub.
+
+
+📌 Lo que sigue tras la reunión:
+Diligenciar la matriz de riesgos y los flujos de validación con los formatos que enviará Sumsub. Legal, Financiero y Admin deben alinear los datos requeridos por país (KYC persona natural y KYB persona jurídica) para completar los formatos.
+
+
+🧾 Facturación Argentina Desarrollo inicia esta semana Desarrollo
+
+
+José confirmó que la arquitectura está lista y el desarrollo inicia esta semana (martes o miércoles). Una vez arranque, dará una fecha estimada de entrega. Desde Producto ya se coordina el plan de lanzamiento: campaña de expectativa, cuenta regresiva y coordinación con Marketing.
+
+
+* José: iniciar desarrollo esta semana y comunicar fecha estimada de entrega al grupo.
+* Paula + Marlon + Juan Camilo: agendar reunión para definir canal de soporte de Argentina en Intercom (tutorial o manual).
+* Michel: continuar preparación del plan de lanzamiento — campaña de expectativa y coordinación con Marketing.
+
+
+Intercom Venezuela: siguiente proyecto rápido. Se ejecuta con el mismo proceso que Intercom Costa Rica, coordinado con Marlon el cual indica que hay un bloqueo con la fluctuación de la moneda y no han dado fecha de solución. Por tanto no hay fecha de lanzamiento establecido, una vez Marlon sepa algo, nos comunica.
+19 junio 2026
+📋 Weekly — Célula Backoffice
+📅 19 junio 2026  ·  🧬 Foco: Resultados T&C, avance Sumsub, kickoff Argentina y Flujo del Dinero
+
+
+📜 T&C — Resultados del popup en Chile y Ecuador ✅ Éxito en <24h - Producción
+
+
+Bug detectado: el popup quedó con botón de cerrar (X) en ambos países, generando una tasa de descarte alta en Ecuador (37,3% — 1.951 usuarios). User Pilot ya está corrigiendo: se eliminará la opción de cerrar y se volverá a mostrar únicamente a quienes lo cerraron, sin perder el repositorio de quienes ya aceptaron.
+
+
+* Paula: dar seguimiento a User Pilot para corregir el bug del botón de cerrar y volver a mostrar el popup a quienes lo descartaron.
+* Paula: continuar a la espera de respuesta de TI (José) sobre el proceso para actualizar los links internos que aún apuntan a Colombia.
+
+
+✅ Ticket montado el 18 junio a Soporte solicitando actualización de links legales en Dropi Chile y Dropi Ecuador
+
+
+
+
+🪪 Sumsub — Matriz de riesgo y datos de facturación por país
+
+
+Jonatan y Juan Camilo ya verificaron la matriz de riesgo para los filtros de validación por país. Colombia ya está estructurada; se está proyectando para Guatemala, Ecuador, Chile y Argentina según la priorización. Pendiente que Sumsub envíe el formato exacto en el que necesitan recibir la información, para migrar lo ya construido.
+
+
+Financiero (Lina, con apoyo de Juan Camilo) levantó la documentación de datos de facturación requeridos por país: la validación se hace según el país de origen / nacionalidad 
+del usuario, no según el país donde factura. Construido con los equipos tributarios locales.
+
+
+📌 Decisiones clave de gobernanza de datos:
+• Compliance: Migrar a Dropi toda la data que hoy tiene Coloca Payments con Sumsub, para no perder validaciones ya hechas.
+• Toda la información del usuario quedará tanto en Dropi como en el backoffice de Sumsub (OCR). Contractualmente, los datos no pueden quedar de forma indefinida en Sumsub — al finalizar el contrato la base debe devolverse a Dropi.
+• Reto pendiente: definir con José qué tan amplia debe ser la base de datos de Dropi para soportar todos los tipos de documento que Sumsub puede traer de cualquier país.
+
+
+* Reunión con Jonatan para alinearnos con respecto a los documentos requeridos por Sumsub
+* Jonatan: consultar por Telegram a Sumsub el formato exacto requerido y el tiempo estimado para montar flujos y Web SDK.
+* Equipo: una vez enviado los formatos requeridos por sumsub y obtener los links — montar un popup de cuentas bancarias (ya validado en otros 2 países), antes del flujo completo de KYC/KYB.
+* Jonatan: coordinar por correo fechas y entregables de las nuevas mesas operativas técnicas (Legal + Financiero + Compliance + Producto).
+* Financiero (liderado por Legal): iniciar construcción de la política de facturación formal de Dropi.
+
+
+🇦🇷 Facturación Argentina Primer weekly técnico — 18 junio
+
+
+Primera sesión técnica con el equipo de desarrollo (Gustavo, Jordán, Mauricio) liderada por José. Se resolvieron dudas del formulario: el componente "subir documento" debe depender de DOS campos (tipo de persona + condición frente al IVA), no solo uno — corrección hecha en vivo sobre el Figma. Paula compartió la matriz exacta de documentos requeridos por combinación de campos.
+
+
+Lanzamiento en dos fases: Fase 1 (sin bloqueos financieros, solo alertas informativas sobre el estado del formulario) → Fase 2, tras una gavela de 8-15 días sin definir aún (bloqueo activo de transferencias entre wallets para quienes no completen datos).
+
+
+* Equipo técnico (José, Gustavo, Mauricio, Jordán): entrar en desarrollo activo.
+* Definir en el camino el mecanismo técnico final del switch de bloqueo (fecha programable vs. true/false).
+
+
+💰Automatización de Conciliaciones — Flujo del Dinero
+
+
+Proyecto que arrancó con poca visibilidad — solo Fernando tenía el contexto completo y no había sido transferido a Back Office ni a TI. Está pausado: Fernando se ocupó del tema IAS. Se acordó que Fernando transfiera el conocimiento a Paula (Producto) y a TI.
+
+
+Tres frentes identificados:
+
+
+* Dropi ↔ Billions: ya desarrollado del lado de Dropi — antes de pagar, Billions consulta a Dropi el estado del pago. Pendiente coordinar la conexión técnica final con Billions (documentación, no desarrollo adicional).
+* Dropi ↔ Cobre: valida que montos y personas correspondan a lo mapeado, una vez Billions paga vía Cobre (bancos nacionales en Colombia).
+* Plataformas externas (Simetrik): cubre Payoneer, Global66 y PayPal. En etapa de viabilidad — demo ya cumplió requerimientos, decisión de contratación en manos de Mónica y Cristian.
+
+
+Pendiente de alcance: no está claro si los pagos a bancos nacionales de otros países (ej. Banco Pichincha Ecuador) están dentro del proyecto. Laura Mejía (Tesorería) tiene esa información.
+
+
+* Paula: consultar con Mónica el estado de la contratación de Simetrik para definir el alcance tecnológico.
+* Paula: investigar con Fernando qué información falta para completar el entendimiento de las conciliaciones Dropi-Billions-Cobre.
+* Fernando: transferir toda la documentación y contexto técnico del proyecto.
+* Fernando: coordinar con Billions la conexión técnica final del frente Dropi-Billions.
+* Paula + Juan Camilo: actualizar el estado real del proyecto en Jira ('Automatización de Conciliaciones'), dejando constancia de cada frente.
+* Paula: definir con Laura Mejía si los pagos internacionales están dentro del alcance del proyecto.
+
+
+🇻🇪 Botón flotante — Dropi Venezuela
+
+
+Fecha tentativa de salida confirmada con Marlon: 29 y 30 de agosto. Ya se puede ir gestionando con Maria el botón. 
+
+
+26 junio 2026
+📋 Weekly — Célula Backoffice
+📅 26 junio 2026  
+🧬 Foco: Rol estratégico de la célula, Sumsub, lanzamiento Argentina y bloqueo de wallet
+
+
+
+
+🧭 Visibilidad centralizada — Exógena y proyecto Apolo
+
+
+Mónica alertó un cruce de información: el proyecto Exógena estaría "muy avanzado" desde TI, pero ese avance no se ha socializado en la célula — segunda sesión consecutiva sin conexión de TI. Se aclaró el rol de la célula: no necesariamente desarrolla aquí, pero todo proyecto de alto riesgo (tributario, legal, financiero, flujo de dinero) debe tener visibilidad centralizada en esta mesa.
+
+
+Se diferenció el proyecto Apolo (automatizaciones internas de procesos, sponsor gerencia) de la célula Back Office: lo que conecta con producto (facturación, exógena, T&C) se trae a esta célula; lo puramente operativo interno se resuelve por Apolo.
+
+
+* Marlon: agendar sesión con TI para sincronizar los avances de Exógena con la célula.
+* José Giraldo: asistir a la siguiente reunión de seguimiento — su presencia es vital para la alineación con TI. Si no puede, delegar a alguien de TI con contexto.
+
+
+
+
+🪪 Sumsub — Flujo Web SDK alineado ✅ Avance técnico
+
+
+Buen avance: reunión con Sumsub realizada. El flujo de validación vía Web SDK quedó alineado — el usuario entra directo al websdk de Sumsub, evitando errores de digitación. Paula y Juan Camilo presentaron el flujo de los posibles escenarios tras alinearse con María. Sumsub queda a la espera de que Compliance y Financiero terminen de pasar la información (matriz de riesgo y formularios, ya compartidos por Jonatan vía Telegram).
+
+
+📌 Decisiones y temas abiertos:
+• Revalidación periódica (mensual/trimestral/semestral) es opcional, configurable según perfil de riesgo — no obligatoria.
+• Jonatan solicitó a Sumsub el detalle de costos por actividad para proyectar impacto financiero antes de decidir frecuencia.
+• Dos flujos distintos: usuarios nuevos (validación al registrar) y usuarios antiguos (envío por lotes/segmentos priorizados por volumen de órdenes o wallet).
+
+
+Debate sobre edición de datos de facturación: cada modificación implica costo de revalidación. Mónica fue enfática: los cambios casi siempre buscan beneficios tributarios o evadir reportes — no puede quedar a libre voluntad del usuario. Jonatan propuso usar la fricción a favor: una capa de validación al cambiar datos, sin eliminar el acceso a la plataforma. Juan Camilo sugirió que el cambio de campos críticos (cédula, correo) genere alerta interna.
+
+
+4 frentes de análisis financiero pendientes: (1) costo de dejar habilitada la edición libre de datos de facturación, (2) costo de validar el segmento de usuarios antiguos, (3) evaluar si los 6 meses de bloqueo de datos personales en Colombia deben ajustarse, (4)  Revalidación periódica (mensual/trimestral/semestral)
+
+
+* Jonatan: recibir de Sumsub el detalle de costos por actividad de validación para proyectar impacto financiero.
+* Mónica + equipo financiero: analizar y compartir costos de edición libre, validación de usuarios antiguos por lotes, y ajuste de los 6 meses de bloqueo de datos personales.
+
+
+
+
+🧾 Informes Ecuador y Chile ✅ En QA
+
+
+Paula sigue haciendo push con John Dairo. Ya está en pruebas (QA) la corrección de los campos faltantes (dirección y teléfono). Se espera salida confirmada.
+
+
+🇦🇷 Facturación Argentina Decisión de alcance - Desarrollo
+
+
+Decisión clave: lanzar Argentina IGUAL que Chile y Ecuador (sin el botón de exportar desde el panel admin), para no alargar el desarrollo con un servicio nuevo que ni siquiera existe en los demás países. Lina confirmó que el reporte actual desde Órdenes, más la corrección de campos en curso, es suficiente para avanzar.
+
+
+El desarrollador está revisando criterios de aceptación. La fecha de entrega dependía de si se incluía o no el botón de exportación — ya descartado.
+
+
+* Paula: obtener de TI una fecha estimada (con rango) para el lanzamiento de Argentina.
+* Marlon: solicitar que todo proyecto tecnológico entregue estimaciones con rango (ej. "1 a 2 meses"), replicando la práctica de la célula de logística.
+
+
+
+
+🔒Bloqueo de wallet — Argentina ⚠️ Riesgo tributario y legal
+
+
+🚨 Por qué es grave:
+Sin datos de facturación, Dropi deja de facturar y de pagar impuestos (IVA, renta) — riesgo tributario, legal y penal. En Chile el tributarista advirtió pérdida fiscal por este motivo; en Argentina hubo dinero bloqueado en el banco por falta de facturas (riesgo de lavado).
+
+
+DECISIÓN: fase pedagógica corta (1 semana — banners, comunicación) y luego bloqueo para quienes no actualicen. Argentina sale con un switch configurable (mejora respecto a los demás países) que activa o desactiva el bloqueo de wallet, retiros y transferencias. Aplica solo a usuarios existentes — los nuevos se validan desde su primera orden.
+
+
+Mónica aclaró: el bloqueo no le niega el dinero al usuario, solo exige actualizar datos antes de retirar — comparable a actualizar una clave dinámica bancaria.
+
+
+Lección de Ecuador (Lina): cuando se lanzó sin bloqueo activo, muchos usuarios completaron el formulario pero quedaron en zona gris — ni aprobados ni rechazados — sin bloquearse.
+
+
+* Paula: verificar con el desarrollador que el proceso de aprobación/rechazo de datos de facturación en Argentina funcione correctamente antes de iniciar la campaña de expectativa.
+* Marlon: invitar a Legal (Jonatan) a preparar T&C / políticas ante el riesgo de que un usuario se niegue completamente a dar sus datos.
+
+
+📜 T&C — Ecuador y Chile resueltos ✅ Confirmado por Soporte TI
+
+
+Soporte TI confirmó que los links de T&C y Política de Privacidad ya redirigen correctamente a las landing de Ecuador y Chile (ya no a Colombia).
+
+
+Pendiente Argentina: falta el link de Política de Privacidad (el de T&C ya se pasó a tecnología). Jonatan se comprometió a gestionarlo hoy mismo con el equipo de Argentina para evitar el bucle de redirección al home.
+
+
+* Jonatan: gestionar hoy el link de Política de Privacidad de Argentina con el equipo de tecnología.
+
+
+🇻🇪 Botón flotante Venezuela - En curso
+
+
+Código de activación ya entregado. Paula hace seguimiento diario, pendiente de confirmación final por parte de Jhainey.
+
+
+🔑 CAS México - Definición
+
+
+Ya gestionado, listo para entrar al Dropi Score como épica. Material de marketing ya entregado para ejecutarse.
+
+
+💳 Confío México -  Definición
+
+
+Víctor (CEO Confío) aún no confirma la salida. Juan Camilo le compartió la épica; Víctor quedó en validar el avance con su equipo técnico.
+
+
+3 julio 2026
+📋 Weekly — Célula Backoffice
+📅 3 julio 2026  
+🧬 Foco: Sumsub fase cero, Argentina fecha confirmada, Cartera y transición Truora
+
+
+🚨 TI — Tercera sesión consecutiva sin conexión
+Marlon advirtió que si esto continúa, el espacio pierde su propósito. Paula debe escalar directamente con José y/o Eduardo. Sin TI, los proyectos no pueden avanzar formalmente.
+
+
+🪪 Sumsub — Propuesta de flujos y Fase Cero - Desarrollo
+
+
+Jonatan confirmó que el formulario de flujos y las condicionales de validación (incluidos delitos y crímenes tipificados por país) ya fueron enviados a Sumsub. El 2 de julio Sumsub presenta la propuesta de flujos con las condicionales ya incorporadas. Jonatan invitó a Catalina, Juan Camilo y Paula.
+
+
+
+
+📌 Fase Cero:
+Validación asistida: manual, no-code y no bloqueante. El objetivo es incentivar a usuarios a validarse sin restricciones financieras, recogiendo data mientras se completa la integración técnica. Paula convoca mesa con Legal, Financiero, Compliance, GrowOps y Diseño para definir criterios.
+
+
+Usuario activo — criterio acordado: más de 50 órdenes como umbral de priorización, con posibilidad de cruzar también monto en wallet. Las órdenes son el criterio más robusto dado que el monto por ticket varía mucho.
+
+
+Costos de validación: aún pendientes. Jonatan los reiteró en sesión — Lina confirmó que tampoco los tiene. Una vez lleguen, Lina + Financiero hacen la proyección para 4 escenarios: edición libre de datos de facturación, validación de usuarios antiguos por lotes, validaciones automáticas recurrentes (mensual/trimestral/semestral), y ajuste del bloqueo de 6 meses de datos personales.
+
+
+* Jonatan: obtener detalle de costos por actividad para compartir con Lina.
+* Jonatan + Lina: revisar minuciosamente el Web SDK de Sumsub para corroborar que cumple con las necesidades y lo plasmado en los documentos enviados.
+* Paula: convocar mesa de Fase Cero con Legal, Financiero, Compliance, GrowOps y Diseño para definir criterios de usuarios a priorizar y estrategia no bloqueante.
+* Lina: una vez reciba los costos de Sumsub, hacer el análisis de impacto financiero para los 4 escenarios.
+
+
+🔄 Transición Truora → Sumsub
+
+
+📌 Decisión acordada:
+Agotar la bolsa de Truora (renovada hasta el año siguiente) mientras se implementa Sumsub en los otros países. Colombia se migra cuando queden pocos créditos de Truora.
+Truora en Colombia: no funciona en iOS/Mac, falla con frecuencia y es la segunda causa más alta de tickets de soporte (~3.500 casos/mes en los últimos 3 meses).
+
+
+* Andrés Herrera: reunirse con Paula, Catalina y Juan Camilo para compartir cómo nació el flujo con Truora y trasladar el aprendizaje a Sumsub sin repetir errores.
+* Andrés Herrera: participar más activamente en la integración con Sumsub apoyando a Jonatan y Lina con el conocimiento del proceso de Truora.
+
+
+📋 Cambio de datos de facturación - Definición
+
+
+Andrés Herrera fue claro: cuando lideró el proceso de validaciones, no se permitía cambiar datos de cuenta ni de facturación libremente — el usuario validado es el dueño de esa cuenta. Jonatan apoya la fricción como mecanismo de control: cambios posibles pero no sencillos.
+
+
+Riesgo crítico identificado (Andrés): si un usuario factura hoy a nombre de su mamá y mañana a nombre de su tío, es una facturación fragmentada a múltiples terceros — un problema grave para la información exógena.
+
+
+🇦🇷 Facturación Argentina 📅 28 julio — fin de desarrollo
+
+
+José confirmó a Lina la fecha estimada de fin de desarrollo: 28 de julio de 2026. Posterior a eso, Producto realiza pruebas de calidad y luego se libera al público en el siguiente release. La comunicación de lanzamiento está lista desde el 25 de junio — esperando a que salga el desarrollo para activarla.
+
+
+* Paula: retomar la semana siguiente la alineación con Comunicaciones para coordinar el lanzamiento (desarrollo termina 28 julio, publicación posterior a pruebas).
+* Juan Camilo + GrowOps: definir cómo se maneja el canal de Intercom para Argentina antes del lanzamiento público.
+
+
+🇻🇪 Botón flotante Venezuela ✅ Instalación comprobada - Producción
+Instalación del botón flotante comprobada en Venezuela. Se informó a Marlon y a Laura Andrea Núñez para el proceso de configuración. Pendiente: definir el atributo de comunidades (verificar si son las mismas de Colombia) para completar la configuración.
+
+
+🔑 CAS — COORDI México y JAMV DRIVE Colombia
+
+
+A la espera de que entren por Dropi Score las solicitudes de activación CAS para Transportadora COORDI México y JAMV DRIVE Colombia.
+
+
+📋 Flujo Configuración de pedidos - MFA
+
+
+Desde TI ya se había detectado esa omisión y se encuentran terminando de aplicar una observaciones para que lo aprueben y lo desplieguen, ya que hay unos requisitos que debe cumplir para que el líder técnico le dé paso a producción.
+
+
+10 julio 2026
+📋 Weekly — Célula Backoffice
+📅 10 julio 2026 
+🧬 Foco: Sumsub Fase Cero, lanzamiento Argentina, Simetrik kickoff y Confío desbloqueado
+
+
+🔑 CAS — COORDI México y JAMV DRIVE Colombia
+
+
+Épicas ya gestionadas. Pendiente amarrarlas a la solicitud en Dropi Score para pasarlas a TI.
+
+
+🪪 Sumsub — Flujo ajustado y Fase Cero en marcha
+
+
+Financiero y Compliance revisaron el flujo enviado por Sumsub. Hay una observación puntual sobre datos de facturación que Camilo (Sumsub) ya está implementando — el flujo ajustado se revisó el 9 de julio. Los datos de usuarios de Guatemala registrados en Coloca Payments ya se está gestionando para que sean migrados hacia Sumsub bajo el dominio de Dropi.
+
+
+El flujo de cuentas bancarias (popup tipo Guatemala/Panamá) puede replicarse en los demás países con el mismo look & feel de Dropi. La ruta ya está diseñada — es el mismo paso a paso, solo cambia la marca.
+
+
+📌 Fase Cero — estrategia no-code (Catalina):
+Validación asistida manual para usuarios nuevos y activos, sin integración tecnológica, usando User Pilot, CRM y comunicación activa mientras se completa la integración técnica.
+
+
+• Países piloto:
+Guatemala, Panamá, Paraguay y Perú (sin módulo de facturación complejo — se implementa el link de Sumsub directamente).
+• Países con módulo activo
+(Chile, Ecuador, próximamente Argentina): solo se solicitará a sumsub un flujo sencillo de validación — sus datos de facturación ya están en el formulario manual.
+• Incluye: banners informativos en User Pilot para usuarios nuevos (últimos 7 días), popups al intentar retiros/transferencias en usuarios activos, y mensajes por CRM al equipo de proveedores.
+• Usuarios rechazados por crimen o actividad ilícita: bloqueo simultáneo en todos los países, sin comunicar razón exacta. Coordinación con Andrés Herrera y Legal/Financiero.
+
+
+Juan Camilo: citar a cada área por separado para levantar criterios y procesos operativos de la Fase Cero. Levantar los flujos TOBE que se le van a pasar a sumsub para que lo programen en el websdk.
+
+
+⚠️ Truora — Problema activo de soporte
+
+
+El servicio no está dando el valor esperado: se paga por automatización pero más de la mitad de los casos requieren procesamiento manual humano adicional (~4.000 casos/mes de soporte).
+
+
+Conciliaciones — Simetrik ✅ Kickoff realizado
+
+
+Kickoff de Simetrik ya ocurrió. Hay equipo asignado. Primera reunión de inicio: viernes 11 de julio a las 11 a.m. Implementación estimada: 3 meses.
+
+
+Equipo asignado: Fernando (TI técnico, provisional), Laura Mejía (procesos), Juan Camilo (GrowOps) y Cristian Ruiz (PM). Marlon propone agregar a Paula para evitar el teléfono roto.
+
+
+Alcance de Simetrik: conciliaciones de recargas y retiros para USDT, Payoneer, PayPal y Global66. Además construirá un módulo backoffice con métricas de conciliación nacional. La integración con bancos nacionales sigue siendo de TI (Fernando).
+
+
+💳 Confío Pagos — México ✅ Desbloqueado
+
+
+Confío está desbloqueando sus temas administrativos y tecnológicos. Fecha estimada de entrega de la integración para México: 30 de julio. Se establecieron weeklies de seguimiento con Víctor.
+
+
+Marlon: compartir a Paula el listado de volumen de recargas por país antes del próximo weekly con Confío, para que Confío planee la hoja de ruta de expansión en orden de prioridad.
+
+
+📜 T&C — Chile y Ecuador
+
+
+64% de aceptación en Chile y 62% en Ecuador. El ritmo de nuevas aceptaciones disminuyó — ya cubrió a los usuarios más frecuentes; los restantes son menos activos. El Discovery del proyecto tecnológico formal de T&C ya está en curso — la product designer está retomando el flujo para planear la implementación tecnológica.
+
+
+🇦🇷 Facturación Argentina — Segundo weekly técnico + plan de lanzamiento definido
+Beta a Producto: 29 julio
+
+
+Estado técnico: el formulario está prácticamente listo en ambiente local. Gustavo presentó el flujo en vivo — provincia, ciudad, dirección, razón social y condición frente al IVA (campo nuevo en base de datos, aplica para todos los países pero solo activo para Argentina). El comportamiento de auto-selección funciona correctamente. Error detectado: cuando el usuario cambia el tipo de persona, el campo de tipo de documento no se limpia — Gustavo ya lo tiene identificado.
+
+
+📌 Aclaración definitiva del switch de bloqueo:
+El switch NO habilita el formulario — habilita temporalmente las herramientas financieras para usuarios SIN datos de facturación durante la semana de gracia (Fase 1). Los cuatro módulos bloqueados en Fase 2: retiros, transferencias entre wallets, Dropicar y cuentas bancarias.
+
+
+Estrategia de lanzamiento — dos fases + beta controlado: beta previo solo con usuarios de Valeria (los que ya tienen datos de facturación existentes) para detección de errores antes del lanzamiento masivo. Evita repetir la experiencia de México/Chile donde el módulo salió a todos simultáneamente y generó saturación de soporte. Catalina + Laura Torres arman el flujo de User Pilot para el beta basándose en flujos de otros países.
+
+
+⚠️ Bloqueante: Comunicaciones aún no ha entregado ningún recurso (manual, tutorial, redes) — solicitud desde el 25 junio. Video tutorial requerido antes del 16-17 julio para que Gustavo lo adjunte al código
+
+
+🛡️ Panel antifraude y prevención de saldos negativos
+
+
+El panel antifraude ya tiene avances con Fernando y Andrés Herrera. El proyecto de prevención y recuperación de saldos negativos requiere revisión — algunas soluciones planteadas pueden estar obsoletas.
+
+
+* Paula: sentarse con Andrés Herrera y Fernando para recoger el estatus actual del panel antifraude antes de retomarlo formalmente.
+
+
+🇻🇪 Botón flotante Venezuela ✅ Configurado
+
+
+Configurado y activo. Ya hay más de 60 solicitudes activas.
+
+
+17 julio 2026
+📋 Weekly — Célula Backoffice
+📅 17 julio 2026
+🧬 Foco: Sumsub Fase Cero aprobación + TI, Confío bloqueado indefinidamente, datos multipaís
+
+
+🔑 CAS — COORDI México y JAMV DRIVE Colombia
+
+
+Épicas ya gestionadas. Ya ambas se le pasaron a Jose Giraldo para gestión con TI para pronta habilitación.
+
+
+🪪 Sumsub — Blueprint Fase Cero definido.
+
+
+El blueprint de Fase Cero está definido y listo para arrancar. La estrategia es 100% no-code y no bloqueante. Guatemala es el primer país piloto para usuarios nuevos. Arranca en cuanto se obtenga la aprobación de María y Diana.
+
+
+* Catalina: finalizar el blueprint esta semana y compartirlo con el grupo para revisión antes del arranque.
+* Catalina: coordinar con Diana (diseño) la aprobación de usabilidad del flujo antes del despliegue.
+* Paula: asistir a la reunión del 16 julio con Catalina, Juan Camilo, Andrés Herrera y TI para explorar el apoyo de TI en almacenar datos en base de datos desde la Fase Cero.
+
+
+📊Data de usuarios — Cruce multipaís 
+
+
+Se cruzó la base de usuarios de Colombia (activos últimos 90 días, con documento) para detectar los mismos usuarios en otros países y baneados que operan en el exterior. Cruce por correo O número de documento (no por nombre, para evitar falsos positivos).
+
+
+Andrés Herrera aportó que 115.000 usuarios ya están validados en Colombia — muchos de esos mismos están en otros países y no habría que revalidarlos, reduciendo significativamente el costo de Sumsub.
+
+
+* Juan Camilo: levantar el proceso operativo para la Fase Cero y los requisitos de los usuarios a priorizar, partiendo de Guatemala como primera ola.
+* Lina: revisar los costos de Sumsub y hacer la proyección de impacto financiero por país y volumen estimado de validaciones.
+* Lina + Juan Camilo: sentarse juntos a validar que los campos requeridos por tipo de persona y país coincidan con lo que necesita facturación y exógena.
+
+
+🔀 Flujos KYC y KYB — Avances de Juan Camilo
+
+
+Flujos de usuario de Sumsub ya avanzados. Duda clave resuelta: para validar a una persona diferente al dueño de la cuenta (ej. representante legal de empresa), Sumsub genera un link que se envía a esa persona para que complete el proceso. No se requiere un nuevo formulario en Dropi.
+
+
+Lina aclaró: Dropi factura siempre a la persona jurídica (empresa), no al representante legal. La validación del representante es solo para verificar que los datos de la empresa sean legítimos — sus datos personales no se almacenan en Dropi.
+
+
+* Juan Camilo: terminar los flujos visuales de Sumsub (KYC y KYB por país, incluidas marcas blancas) y pasarlos a Sumsub para validación. Una vez confirmados, citar a José y/o Diego para la reunión técnica de integración.
+* Juan Camilo: levantar el flujo diferenciado para marcas blancas con apoyo de Andrés Herrera (131.975 usuarios activos solo en Colombia).
+* Jonatan: analizar país por país cómo gestionar aceptación de T&C y privacidad para representantes legales externos. Compartir resultado al grupo.
+* Jonatan: avanzar con la reunión con Coloca Payments (abogado y representante legal) y Sumsub para coordinar la migración formal de usuarios de Guatemala.
+* Andrés Herrera: facilitar acceso o screenshots de flujos de Truora (incluidas marcas blancas) para que Juan Camilo evalúe cuáles reutilizar en Sumsub.
+
+
+💻 Postura de TI frente a Fase Cero (José Giraldo)
+
+
+José propone saltarse la Fase Cero e ir directo a la integración formal (Fase 1). Argumenta que hacer una fase no-code y después el desarrollo "de verdad" duplica el esfuerzo. Nadie en TI conoce la plataforma de Sumsub en detalle — no puede dar estimaciones sin antes estudiar la API y arquitectura.
+
+
+Respuesta de Producto: la Fase Cero existe por urgencia legal y para no frenar la operación mientras TI estima tiempos. La Fase 1 completa implica cambios en el onboarding que aún no están diseñados — puede tomar meses. La Fase Cero no es descartable: los usuarios se validan en Sumsub y esa data queda en el backoffice de Sumsub. Lo que se pide a TI es que en paralelo guarden esa data en Dropi para que cuando llegue la Fase 1 la info ya esté lista.
+
+
+* José: revisar el blueprint de Fase Cero (compartido por Catalina). Si necesita sesión adicional, solicitarla al equipo.
+* José: confirmar si Diego (dev que hizo la integración con Truora) puede participar en la próxima reunión técnica con Sumsub.
+* TI: evaluar en paralelo si puede construir los endpoints para recibir estados de Sumsub y almacenarlos en base de datos de Dropi — facilita la transición a Fase 1.
+
+
+💳 Confío Pagos — México
+
+
+La integración de Confío en México sigue bloqueada por un proceso de debida diligencia con el proveedor bancario que continúa sin terminar. El formulario del proveedor es por pasos — cada vez que se avanza aparecen nuevos documentos requeridos. El equipo administrativo de Dropi gestiona diariamente con Angélica y Víctor, pero aún no se han aperturado las cuentas ni se ha dado acceso a las APIs de Confío en México.
+
+
+* Víctor (Confío): notificar a Paula o Juan Camilo de inmediato si el proceso de diligencia se desbloquea — sin esperar al siguiente weekly.
+* Paula: actualizar el plan de lanzamiento de Confío México en el Dropi Score y en el roadmap (fecha TBD — bloqueado administrativamente).
+
+
+24 julio 2026
+📋 Weekly — Célula Backoffice
+
+
+📅 24 julio 2026
+
+
+🧬 Foco: Argentina beta próxima semana, Sumsub flujos + Guatemala desbloqueado, Confío en espera
+
+
+🪪 Sumsub — Flujos avanzados + Guatemala desbloqueándose
+
+
+Guatemala — Coloca Payments: entrega esta semana
+
+
+Jonatan confirmó que Coloca Payments entregará esta semana: (1) la base de datos de usuarios de Guatemala ya validados, y (2) el flujo y parametrización actual de Coloca con Sumsub. Legal destacó que es fundamental entender esa parametrización (qué conductas excluyen, qué documentos exigen, cómo funciona el liveness para dispersión) para que Dropi la replique cuando entre Dropipay con su propio Sumsub.
+
+
+Capacitaciones Sumsub — semana del 28 julio: Sumsub capacita a Jonatan y a la persona contratada para validaciones en el manejo del backoffice y creación de flujos. Después Jonatan capacita internamente. Una vez hecha la primera implementación en vivo con acompañamiento de Sumsub, el equipo podrá gestionar flujos futuros de forma independiente.
+
+
+* Jonatan: cerrar esta semana la entrega de Coloca Payments (base usuarios Guatemala + flujo y parametrización). Confirmar si hay liveness en ese flujo.
+* Jonatan: compartir con Juan Camilo el documento de criterios de exclusión y tipos de validación por país ya entregado a Sumsub.
+* Jonatan: asistir a las capacitaciones de Sumsub la semana del 28 julio junto con la persona de validaciones.
+* Juan Camilo: reunión 23 julio con Camilo (Sumsub) para validar escenarios y definir modelo final — un flujo con bifurcaciones por país y tipo de persona.
+* Paula: estar presente (o delegar) en la reunión de entrega con Coloca Payments para capturar el detalle técnico del flujo y la parametrización.
+
+
+💬 Árbol de soporte Intercom — Facturación En construcción
+
+
+Catalina presentó el árbol de soporte en construcción para Chile, Ecuador y Argentina. Incluye opciones: quiero completar mis datos, tengo un error reportado, problemas técnicos (MFA, edición de datos, wallet bloqueada), error al diligenciar datos (ej. pasaporte mal ingresado en Chile), tipos de documentos aceptados y botón guardar deshabilitado.
+
+
+Juan Camilo destacó que este árbol también alimenta la base de conocimiento de Gali (IA de soporte en Intercom), potenciando la automatización del canal en todos los países.
+
+
+* Paula + Catalina: finalizar ajustes del árbol de soporte de Intercom y compartirlo con Juan Camilo para pasarlo a Laura Núñez (SAC).
+* Juan Camilo: una vez reciba el árbol, pasárselo a Laura Núñez (SAC) para que el equipo de soporte sepa cómo funciona el canal.
+
+
+
+
+🇦🇷 Facturación Argentina — Formulario listo, beta desde el 29 julio ✅
+
+
+El formulario fue revisado en sesión del 22 de julio. Los bugs son menores y se corrigen rápido. Las decisiones de comportamiento más importantes quedaron totalmente claras.
+
+
+📌 Aclaración definitiva del switch y las fases:
+Switch activo = usuario SÍ puede usar funciones financieras sin datos de facturación (sin bloqueo).
+•
+Despliegue BETA:
+usuarios normales no ven nada. Usuarios beta ven el formulario con herramientas financieras habilitadas aunque no lo llenen.
+•
+Fase 1
+(1 semana después): formulario habilitado para TODOS los usuarios argentinos. Switch activo, sin bloqueos. Va la campaña de comunicación.
+•
+Fase 2
+(posterior a Fase 1): switch desactivado. Bloqueo de retiros y transferencias para quien no completó los datos.
+
+
+Decisión sobre edición post-aprobación: formulario bloqueado para edición tras aprobación. Se evalúa con datos reales de soporte de Chile/Ecuador antes de cambiar el comportamiento.
+
+
+Bugs identificados en sesión (aplican para todos los países):
+* Campo provincia/ciudad no se limpia al cambiar país — comportamiento heredado de Chile, Ecuador y México. Decisión: corregir para todos los países a la vez.
+* Provincia y ciudad aparecen duplicados en estado 'Reportado' — comportamiento heredado. Se corrige para todos.
+* Campo tipo de documento no se limpia al cambiar tipo de persona — ya identificado en weekly anterior, pendiente de corrección.
+
+
+Compromisos:
+* Gustavo: corregir los 3 bugs identificados (provincia/ciudad al cambiar país, duplicidad en estado Reportado, limpieza de tipo de documento). Aplican para todos los países.
+* Gustavo: investigar si los links de T&C y Política de Privacidad deben gestionarse a través de la tabla de Daniel de la Pava (arquitectura existente) para no quemarlos en código como en Chile y Ecuador.
+* Paula: pasar a Gustavo los correos de los usuarios administrativos con acceso al panel de revisión Argentina (consulta con equipo de facturación Colombia hoy mismo).
+* Paula: una vez tenga el link de Política de Privacidad de Argentina (viernes), pasarlo a desarrollo. Provisional: link de Colombia mientras llega el de Argentina.
+* Marketing: entregar el video tutorial de Argentina la semana del 28 julio. Paula lo pasa a Gustavo para configurarlo.
+* Catalina: revisar la grabación de la sesión del 22 julio y reportar si encuentra algún otro detalle a corregir antes del beta.
+* Paula: épica en Jira ya lista con los 8 usuarios de Valeria para el beta controlado.
+
+
+💳 Confío Pagos — México ⚠️ Fecha indefinida
+
+
+La integración sigue bloqueada por el proceso de debida diligencia con el proveedor bancario de México. El formulario avanza por pasos — cada uno revela nuevos documentos requeridos. El equipo administrativo de Dropi gestiona con Angélica y Víctor de forma diaria, pero aún no se han aperturado las cuentas ni dado acceso a las APIs de Confío en México.
+30 julio 2026
+📋 Weekly — Célula Backoffice
+📅 30 julio 2026 
+🧬 Foco: 🎉 Argentina en beta · Giro estratégico Sumsub → Fase 1 por directriz ejecutiva · Confío en espera
+
+
+🇦🇷Facturación Argentina — Beta en producción desde el 29 julio ✅ Beta activo
+
+
+La funcionalidad entró a beta en producción el 29 de julio con 8 usuarios. Todos los bugs identificados en la sesión del 22 de julio fueron corregidos y verificados el 27 de julio. Nataly y Valeria tienen acceso al módulo admin para revisar y aprobar/rechazar datos. Producto hace pruebas con su propio usuario.
+Ya quedo montado el video tutorial y los documentos legales de los check quedaron apuntando a los de Argentina correctamente
+
+
+📌 Flujo de fases confirmado definitivamente:
+•Beta (ahora):
+8 usuarios ven el formulario. Switch activo — herramientas financieras habilitadas aunque no lo llenen.
+•Fase 1 (requiere nuevo despliegue de frontend):
+formulario visible para TODOS los usuarios argentinos. Switch activo, sin bloqueos. Va la campaña de comunicación.
+•Fase 2:
+switch desactivado → bloqueo de retiros, transferencias y cuentas bancarias para quien no completó datos.
+
+
+* Gustavo: corregir los errores reportados por el area de producto antes de habilitar la funcionalidad a todos los usuarios.
+* Catalina: citar a Nataly y Valeria para pruebas del panel administrativo (30 julio).
+* Paula: coordinar con TI el segundo despliegue de frontend para pasar de beta a Fase 1 (todos los usuarios).
+
+
+🪪 Sumsub — Directriz ejecutiva: ir directo a Fase 1
+
+
+🔴 Directriz corporativa — 30 julio (Laura Sánchez)
+Lucho instruyó implementación urgente y transversal de Sumsub en TODOS los países. Se va directamente a la Fase 1 (implementación técnica en backend). La Fase Cero manual queda descartada. El lunes hay reunión formal con todos los equipos.
+
+
+¿Por qué la urgencia? En los últimos 3 meses se detectaron: demandas en algunos países, falsificación de datos de facturación, errores en reportes exógenos a la DIAN, y problemas con entidades tributarias. El costo de no actuar (multas, demandas, bloqueo de wallets a todos los usuarios de un país) es mayor que el riesgo de actuar rápido.
+
+
+Estructura de flujos por país — Fase 1:
+
+
+• Flujo largo (identidad + facturación en un solo paso en Sumsub): Guatemala, Panamá, Paraguay, Perú, México, Venezuela y Costa Rica. Guatemala es el primer piloto.
+• Flujo corto (solo validación de documento — biometría/liveness): Chile, Ecuador y Argentina — ya tienen módulo de facturación activo. No se toca el formulario existente en esta fase.
+• Colombia: sigue con Truora para KYC. Se agrega captura de datos de facturación en el flujo de Sumsub sin reemplazar Truora todavía.
+• Marcas blancas: flujo diferenciado — sin logo de Dropi, canales por fuera de los estándar.
+
+
+Acuerdo con TI: TI asigna desarrollador. José, Juan Camilo, Paula y Catalina trabajan en conjunto desde el 30 julio. TI investiga API de Sumsub en paralelo mientras Producto termina de definir los flujos. José alertó: no unificar el formulario en el front en esta fase — primero el backend y la integración, luego los cambios de front.
+
+
+* Lunes: reunión formal con todos los equipos (GrowOps, Administrativo, TI y Producto) — Sumsub presenta flujos validados, José presenta estimación de esfuerzo, se define alcance del MVP y orden de países.
+* Juan Camilo: entregar a José ANTES del lunes toda la documentación técnica del proyecto (flujos KYC/KYB por país, blueprint, campos requeridos por tipo de persona).
+* José: trabajar con equipo de arquitectura para mapear estados de Truora como referencia y estimar la integración con Sumsub. Entregar estimación el lunes.
+* José: confirmar el nombre del desarrollador asignado al proyecto y asegurar que esté en la reunión del lunes.
+* Paula: compartir con José el acceso al sandbox de Sumsub esta semana.
+* Jonatan: coordinar con Sumsub la reunión técnica para definir cómo se hace la migración de usuarios de Guatemala (API, ZIP o traslado directo).
+
+
+💳Confío Pagos — México ⚠️ Fecha indefinida-Bloqueado
+
+
+La integración sigue bloqueada por la debida diligencia con el proveedor bancario de México — sin avance esta semana. Catalina y Juan Camilo quedan pendientes al seguimiento con Víctor en las semanas del 10 al 24 de agosto. Si hay avance, gestionar lanzamiento y métricas.
+
+
+🔑 CAS — JAMV DRIVE Colombia y ACTIVACIÓN CAS ARGENTINA
+
+
+
+
+JAMV DRIVE Colombia gestionada la comunicación gestionada en redes sociales, pendiente en plataforma. 
+Nueva solicitud que debe entrar al dropiscore: la activación CAS ARGENTINA
+
+
+💬 Alineación SAC — Canal Intercom Facturación Argentina 
+
+
+Sesión de alineación con el equipo de soporte (Harry, Osman, Yuliana) para preparar el canal de Intercom de Argentina antes del lanzamiento al público. El flujo es similar al de Chile y Ecuador, pero con diferencias importantes: documentos distintos (DNI, CUIT, constancia AFIP según condición IVA) y tutoriales propios del país.
+
+
+Estructura del árbol de soporte acordada: el usuario entra al canal y puede elegir entre — completar datos de facturación, reportar error en los datos, problemas técnicos (MFA, wallet bloqueada) o solicitar agente. Si reporta un error, recibe una alerta roja con el campo específico fallido, lo corrige y queda en revisión nuevamente. Si tiene problema técnico, envía captura de pantalla al agente para revisión manual. Si no encuentra solución, puede volver al menú o escalar directamente a un agente.
+
+
+📌 Ajuste urgente antes del lanzamiento:
+El tiempo de revisión manual de datos (24-48 horas) NO está incluido en los mensajes automáticos de Intercom. Sin ese mensaje, los usuarios esperarán sin saber cuánto tiempo — generando tickets innecesarios. Catalina debe actualizar el copy antes del lanzamiento.
+
+
+Bug activo en Ecuador — a tener en cuenta para Argentina: cuando los datos son aprobados, la wallet puede quedar bloqueada por un retraso en la sincronización automática. Requiere desbloqueo manual por un administrador. El flujo de Intercom debe informar al usuario que un agente se encargará, en lugar de redirigirlo a una opción que no aplica.
+
+
+Bloqueos financieros: en Argentina hay una semana de gracia (Fase 1) donde los usuarios pueden mover fondos aunque no hayan completado los datos. El bloqueo solo aplica desde la Fase 2. El equipo SAC debe conocer esta distinción para gestionar correctamente las expectativas.
+
+
+* Catalina: actualizar los mensajes automáticos de Intercom para Argentina incluyendo el tiempo estimado de revisión de 24-48 horas — antes del lanzamiento.
+* Catalina: obtener el número de usuarios activos en Argentina para calcular el volumen estimado de solicitudes de soporte al lanzamiento.
+* Catalina: compartir con Yuliana los materiales de soporte de Chile y Ecuador (flujo Intercom, tutorial YouTube, manual de uso y Figma) para que adapte lo necesario para Argentina.
+* Yuliana: presentar el flujo de soporte y materiales de facturación a Marlon y Osman para obtener aprobación antes de configurar formalmente el canal en Intercom.
+* Una vez obtenida la aprobación de Marlon y Osman: implementar flujos de respuesta automática y botones de ayuda en Intercom para Argentina.

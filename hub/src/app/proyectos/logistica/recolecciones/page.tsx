@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { requireAppAccess } from "@/lib/app-access";
 import { cargarFoto, cargarReglas } from "@/lib/recolecciones/datos";
 import { armarTablero } from "@/lib/recolecciones/tablero";
 import { ETIQUETA_VEREDICTO } from "@/lib/recolecciones/elegibilidad";
@@ -33,6 +35,9 @@ const fmt = (n: number) => n.toLocaleString("es-CO");
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 export default async function RecoleccionesPage() {
+  const user = await requireAppAccess("inidiana");
+  if (!user) redirect("/proyectos/logistica");
+
   const foto = await cargarFoto();
   const reglas = await cargarReglas();
   const { filas, dropi } = armarTablero(foto, reglas);
@@ -205,10 +210,9 @@ export default async function RecoleccionesPage() {
               perder lo que el mapa sí hace bien: navegar por territorio, buscar,
               filtrar, ver el detalle de una bodega y subir el export.
 
-              No es un placeholder a la espera de un port: este HTML ya consume
-              /api/logistica/recolecciones (la base), con el JSON de public/ solo
-              como respaldo, y ya trae la ingesta conectada a /importar. O sea que
-              funciona igual en producción. Lo que queda de deuda es visual —dos
+              No es un placeholder a la espera de un port: este HTML consume
+              /api/logistica/recolecciones como única fuente autorizada y trae la
+              ingesta conectada a /importar. Lo que queda de deuda es visual —dos
               sistemas de estilo conviviendo—, no funcional, y eso no justifica
               reescribir 750 líneas. Mapa.tsx queda como base por si algún día se
               decide unificar el estilo. */}

@@ -1,0 +1,5 @@
+# Salida de `npm run sameday:laminas`. No se versiona: se regenera en un segundo desde
+# `../datos-sameday.json` y `../datos-simulacion.json`, que sí están en el repo. Versionar el
+# PDF solo garantizaría que en algún momento el archivo y el dato dejen de coincidir.
+*.pdf
+*.svg

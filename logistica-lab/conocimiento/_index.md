@@ -44,10 +44,10 @@ Donde-esta-el-valor.txt · ecosistema-perfiles-niveles-conciencia.txt · portada
 
 ## 🔗 Entregables externos relacionados (registrados en `fuentes/_index.md`)
 - **Board de Figma** (id `LJbbDMU7…`) — narrativa visual viva (matriz de productos, modelo operativo, ciclo PLG, palancas H1-H8, flujo Ecom, plan 3 frentes).
-- **Data_logistica.xlsx** — 13 pestañas con la data cruda + estado de hipótesis (fuente actualizable).
-- **queries_*.sql/.txt** — queries de reproducibilidad.
+- **Fuente analítica restringida** — datos crudos e hipótesis; no se indexa como proyecto, no se publica y no se replica en Confluence.
+- **Queries restringidas** — reproducibilidad interna; requieren control de acceso y revisión antes de compartir.
 
 ## Notas de uso
 - Data base = **abril 2026** (mes cerrado). Re-validar contra data fresca antes de decidir. Corte fresco abr/may 2026 en [`temas/18`](temas/18-metricas-operacion-2026-04-05.md) — ⚠️ **mayo es mes incompleto** (no leer su entrega como caída).
 - Esta capa es **referencia de fondo**, no fuente operativa (esa es Jira/Drive/data viva).
-- Todo destilado a fondo ✅. Pendiente menor: conseguir URL/IDs exactos del Figma y el xlsx para enlazarlos.
+- Todo destilado a fondo ✅. No agregar enlaces directos a datos crudos; enlazar solo síntesis aprobadas y sin información confidencial.

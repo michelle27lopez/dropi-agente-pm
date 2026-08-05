@@ -85,7 +85,7 @@ No hay duplicado: hay un **Proyecto OKR paraguas** con dos solicitudes y **una s
 | Reducir devoluciones (COD) | [PRM-1523](https://dropi-it.atlassian.net/browse/PRM-1523) | ✅ spec | fuga ② |
 | Dirección confiable + geo | cruza PRM-91/1497/1512/1523 | ✅ spec | rama muestra |
 | Torre de control / tiempo por fases | ⚠️ **sin ticket** | ✅ spec | habilitador del KPI de tiempo · **falta crear el Proyecto OKR** |
-| Guías reemplazatorias | [PRM-745](https://dropi-it.atlassian.net/browse/PRM-745) · [1380](https://dropi-it.atlassian.net/browse/PRM-1380) · [1381](https://dropi-it.atlassian.net/browse/PRM-1381) | ✅ spec | 🟢 **en beta real** con Interrapidísimo, Coordinadora y TCC |
+| Guías reemplazatorias | [PRM-745](https://dropi-it.atlassian.net/browse/PRM-745) · [1380](https://dropi-it.atlassian.net/browse/PRM-1380) · [1381](https://dropi-it.atlassian.net/browse/PRM-1381) | ✅ spec + auditoría | 🟡 **beta reportada** en tres carriers; bloqueo/hotfix 27-jul y rollout global por reconciliar |
 | Combos | [PRM-555](https://dropi-it.atlassian.net/browse/PRM-555) · [1372](https://dropi-it.atlassian.net/browse/PRM-1372) | ✅ spec | ⛔ **es de Supplier Success**, no de logística |
 
 ## 4 · Lo que estaba fuera del radar (a nombre de Juan, sin doc ni mención)

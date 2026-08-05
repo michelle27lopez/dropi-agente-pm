@@ -83,13 +83,13 @@ const segmentos: Segmento[] = [
       { n: 2, nivel: "critico", dolor: "Panel de recolecciones con limitaciones funcionales críticas", oportunidad: "Levantar requerimientos operativos y rediseñar el panel.", tipo: "Rediseño" },
       { n: 3, nivel: "critico", dolor: "Validación insuficiente de códigos postales", oportunidad: "Validación automática de CP + integración con Sepomex.", tipo: "Cobertura" },
       { n: 4, nivel: "critico", dolor: "Sin notificaciones de estatus de guía al cliente final", oportunidad: "Notificaciones automáticas de seguimiento en cada etapa del envío.", tipo: "Notificaciones" },
-      { n: 5, nivel: "medio", dolor: "Archivos de transportadoras manuales — generan errores y retrasos", oportunidad: "Automatización de archivos con actualización dinámica.", tipo: "Automatización" },
-      { n: 6, nivel: "critico", dolor: "Bodegas externas de ecom generan pedidos duplicados", oportunidad: "Diagnóstico y corrección del flujo ecom con bodegas externas.", tipo: "Bug" },
+      { n: 5, nivel: "medio", dolor: "Archivos de transportadoras manuales — generan errores y retrasos", oportunidad: "Cerrar el contrato de información dentro del Sistema Inteligente antes de reemplazar la fuente operativa.", tipo: "Capacidad · LOG-004", nota: "PRM-1150 fue fusionada en PRM-203 y conecta con PRM-1219: no es un proyecto nuevo. La V1 usa documentos curados, no parseo del Excel. Mantener la fuente restringida hasta confirmar data owner, diccionario, sensibilidad, frecuencia, paridad y migración." },
+      { n: 6, nivel: "critico", dolor: "Bodegas externas de ecom generan pedidos duplicados", oportunidad: "Reproducir objeto, canal, retry/concurrencia e idempotencia antes de declarar una recurrencia.", tipo: "Bug candidato", nota: "PRM-403 está finalizada, pero DROP-6924 sigue en backlog; DROP-6818 fue hotfix y DROP-6876 una reversión sin causa documentada. Comentario 51012 verificado. El caso México todavía no es un duplicado confirmado." },
       { n: 7, nivel: "critico", dolor: "LOGIAPP con fricciones críticas, manuales desactualizados", oportunidad: "Actualizar manuales y guías + matriz en línea con estadísticas e IA.", tipo: "LOGIAPP" },
-      { n: 8, nivel: "critico", dolor: "Torre de Control inexistente — sin seguimiento de ciudades ni CP", oportunidad: "Torre de Control: seguimiento de ciudades, efectividad y activación de CP.", tipo: "Torre de Control" },
-      { n: 9, nivel: "critico", resaltado: true, dolor: "Sin código de seguridad para validar que el paquete llegó a la persona correcta", oportunidad: "Código de verificación que el destinatario confirma al momento de la entrega.", tipo: "Trust · Entrega" },
+      { n: 8, nivel: "critico", dolor: "Torre de Control MX con alcance y filtros por verificar", oportunidad: "Auditar la activación existente y resolver la limitación actual de filtros antes de proponer otra torre.", tipo: "Capacidad + bug", nota: "DROP-18559 registra la activación en México; STID-6894 reporta un bug abierto al filtrar ciudad/rangos. No está demostrada la equivalencia con PROD-1706." },
+      { n: 9, nivel: "critico", resaltado: true, dolor: "Hipótesis de código de seguridad para validar al destinatario", oportunidad: "Validar necesidad, fricción y compatibilidad por carrier dentro del discovery POD antes de decidir implementación.", tipo: "Hipótesis · POD", nota: "El comentario original dice que puede no aplicar por fricción y pide validarlo con Logistic Success. Es distinto del token de devolución Veloces." },
       { n: 10, nivel: "critico", dolor: "Guías impresas sin control claro de qué se despacha", oportunidad: "Estandarizar generación e impresión de guías con validaciones previas.", tipo: "Operaciones" },
-      { n: 11, nivel: "medio", dolor: "Torre Logística ausente o incompleta para seguimiento end-to-end", oportunidad: "Consolidar Torre Logística como centro de visibilidad de toda la operación.", tipo: "Torre Logística" },
+      { n: 11, nivel: "medio", dolor: "Trazabilidad end-to-end y evidencias aún no definidas de forma transversal", oportunidad: "Completar el discovery PROD-1706 y separar tracking, POD, código, datos de guía y cobertura.", tipo: "Discovery", nota: "PROD-1706 y sus tareas 1708–1711 están en backlog. No fusionar con Torre de Control de ciudades/CP ni con STID-6894." },
     ],
   },
   {
@@ -160,13 +160,13 @@ const ACUERDOS = [
   "Espacio específico con Logística: sesión dedicada entre producto CO y logística MEX para profundizar en los dolores operativos críticos.",
 ];
 
-const PROXIMOS_PASOS: { accion: string; segmento: string; descripcion: string; prioridad: "inmediata" | "q3"; }[] = [
+const PROXIMOS_PASOS: { accion: string; segmento: string; descripcion: string; prioridad: "inmediata" | "q3" | "validar"; }[] = [
   { accion: "Torre Logística + evidencias", segmento: "Drop · Prov · Log", descripcion: "Trazabilidad en tiempo real y evidencias de entrega para todas las paqueteras. El más crítico y transversal del workshop.", prioridad: "inmediata" },
   { accion: "Herramienta anti-estafas", segmento: "Dropshipper", descripcion: "Validación de landing page del drop para detectar fraudes al comprador final.", prioridad: "inmediata" },
   { accion: "Notificaciones APP", segmento: "Drop · Marca · Log", descripcion: "Notificaciones push de estatus de órdenes. Impacta todos los segmentos.", prioridad: "inmediata" },
   { accion: "Módulo de devoluciones", segmento: "Prov · Marca", descripcion: "Trazabilidad completa con evidencias. Resuelve desconfianza del proveedor y falta de control de marca.", prioridad: "inmediata" },
-  { accion: "Torre de Control Logística", segmento: "Logística", descripcion: "Panel de seguimiento de ciudades, efectividad y activación de CP.", prioridad: "inmediata" },
-  { accion: "Código de seguridad de entrega", segmento: "Logística", descripcion: "Verificación de identidad del destinatario al momento de la entrega.", prioridad: "inmediata" },
+  { accion: "Auditoría Torre de Control MX", segmento: "Logística", descripcion: "Contrastar la activación DROP-18559 con el bug STID-6894 y con la necesidad de ciudades/CP; no crear otra torre por defecto.", prioridad: "inmediata" },
+  { accion: "Código de seguridad de entrega", segmento: "Logística", descripcion: "Hipótesis dentro de POD: validar fricción, fraude, fallback y cobertura por carrier. No confundir con el token de devolución.", prioridad: "validar" },
   { accion: "Canal oficial MEX → CO en JIRA", segmento: "Procesos", descripcion: "Documentar solicitudes de MEX en JIRA con contexto. Elimina dependencia de contactos directos.", prioridad: "inmediata" },
   { accion: "Mesa mensual + trimestral CO ↔ MEX", segmento: "Procesos", descripcion: "Ritmo de actualización mensual + sesión trimestral de discovery y alineación de roadmap.", prioridad: "inmediata" },
   { accion: "Revisión de permisos y roles", segmento: "Administrativo", descripcion: "Modelo de permisos granular por perfil y mercado. Habilita autonomía del equipo MEX.", prioridad: "q3" },
@@ -247,6 +247,9 @@ export default function OportunidadesPaisesPage() {
           >
             📄 Ver documento original del workshop ↗
           </a>
+          <div style={{ marginTop: 14, maxWidth: 760, padding: "10px 12px", borderRadius: 10, border: "1px solid #FDE68A", background: "#FFFBEB", color: "#92400E", fontSize: 12, lineHeight: 1.5 }}>
+            Este tablero es un <strong>intake de hallazgos</strong>, no un portafolio aprobado. “Crítico” y “acción inmediata” reproducen el workshop; no convierten el hallazgo en proyecto. La clasificación logística se valida contra Jira y evidencia posterior, y puede encontrar capacidades existentes, bugs, operaciones o hipótesis descartadas.
+          </div>
         </div>
 
         {/* Contexto del workshop */}
@@ -445,6 +448,11 @@ export default function OportunidadesPaisesPage() {
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ fontSize: 12.5, fontWeight: 600, color: "var(--fg)", lineHeight: 1.4 }}>{item.dolor}</div>
                           <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.4, marginTop: 2 }}>→ {item.oportunidad}</div>
+                          {item.nota && (
+                            <div style={{ fontSize: 11.5, color: "#B45309", background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 8, padding: "6px 10px", marginTop: 7, lineHeight: 1.4 }}>
+                              💬 {item.nota}
+                            </div>
+                          )}
                         </div>
                         <span style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", background: "#F8FAFC", border: "1px solid var(--border)", padding: "2px 8px", borderRadius: 20, whiteSpace: "nowrap" }}>
                           {item.tipo}
@@ -492,10 +500,10 @@ export default function OportunidadesPaisesPage() {
               }}>
                 <span style={{
                   fontSize: 11, fontWeight: 700, whiteSpace: "nowrap", padding: "3px 9px", borderRadius: 20,
-                  background: p.prioridad === "inmediata" ? "#FEE2E2" : "#FEF3C7",
-                  color: p.prioridad === "inmediata" ? "#B91C1C" : "#B45309",
+                  background: p.prioridad === "inmediata" ? "#FEE2E2" : p.prioridad === "validar" ? "#DBEAFE" : "#FEF3C7",
+                  color: p.prioridad === "inmediata" ? "#B91C1C" : p.prioridad === "validar" ? "#1D4ED8" : "#B45309",
                 }}>
-                  {p.prioridad === "inmediata" ? "🔴 Inmediata" : "🟡 Q3 2025"}
+                  {p.prioridad === "inmediata" ? "🔴 Inmediata" : p.prioridad === "validar" ? "🔵 Por validar" : "🟡 Q3 2026"}
                 </span>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>{p.accion}</div>

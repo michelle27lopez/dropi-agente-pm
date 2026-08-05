@@ -7,6 +7,7 @@
 ## 🟢 En Curso (Activos esta semana)
 
 - `[ ]` **STID-6598:** Coordinar con Jose Giraldo la asignación de dev para corregir los 6 bugs de Tienda Nube.
+- `[x]` **De Oportunidad a Intervención (10 Proyectos Core):** Documento maestro de especificación conductual generado y guardado en [de_oportunidad_a_intervencion_10_proyectos.md](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/planning/de_oportunidad_a_intervencion_10_proyectos.md).
 - `[ ]` **PROD-1341:** Reunión con Miguel Ángel (Data Analyst) para auditar baseline de ganancias de sellers bajo la nueva fórmula de Orden Rentable.
 - `[x]` **PROD-1515:** Monitorear respuesta de Tesorería por la DropiCard (solucionado: Tesorería manejará la tarjeta virtual).
 - `[ ]` **PROD-1351:** Mapear funnel AS-IS completo del seller (registro → publicación → primera orden entregada).
