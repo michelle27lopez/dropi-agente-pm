@@ -214,6 +214,21 @@ export type Proyecto = {
   nombre: string;
   slug: string;
   codigo?: string; // LOG-XXX en Supabase (undefined = no registrado en Darwin)
+  /**
+   * El `project_code` REAL con el que la ficha quedó guardada en Supabase,
+   * cuando no es el `codigo` de arriba.
+   *
+   * Cinco iniciativas se registraron con su ticket de Jira como código
+   * (PRM-91, PRM-1513, PRM-1366, PRM-1297, PRM-1512). Como el cruce
+   * tablero↔Darwin es por `project_code`, salían como "sin ficha en Darwin"
+   * aunque la ficha existe desde el 21-jul.
+   *
+   * Se declara acá en vez de renombrar la fila a propósito: `project_code` no
+   * tiene UNIQUE y funciona como llave de texto en otras tablas
+   * (`discovery_cycles.project_id`), así que renombrarlo sale más caro que
+   * declararlo. El día que se normalicen los códigos, este campo se borra.
+   */
+  codigoDarwin?: string;
   etapa: string;
   tipo: TipoIniciativa;
   fase: FaseIniciativa;
@@ -351,6 +366,7 @@ export const proyectos: Proyecto[] = [
     nombre: "Selección inteligente de transportadoras",
     slug: "seleccion-transportadoras",
     codigo: "LOG-004",
+    codigoDarwin: "PRM-1513",
     etapa: "Generación", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
     ticket: "PRM-1513",
     jira: "⚠️ En Ruta (backlog), SIN ASIGNAR — aunque el Delivery Backlog lo da en ejecución",
@@ -370,6 +386,7 @@ export const proyectos: Proyecto[] = [
     nombre: "Normalización de estados",
     slug: "normalizacion-estados",
     codigo: "LOG-007",
+    codigoDarwin: "PRM-1297",
     vista: "/proyectos/logistica/normalizacion-estados",
     etapa: "Tránsito", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
     ticket: "PRM-1297", destacado: true,
@@ -423,6 +440,7 @@ export const proyectos: Proyecto[] = [
     nombre: "Same Day",
     slug: "same-day",
     codigo: "LOG-005",
+    codigoDarwin: "PRM-1366",
     vista: "/proyectos/logistica/same-day",
     etapa: "Despacho", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-1366",
@@ -457,6 +475,7 @@ export const proyectos: Proyecto[] = [
     nombre: "Validación y normalización de direcciones",
     slug: "validacion-direcciones",
     codigo: "LOG-002",
+    codigoDarwin: "PRM-91",
     etapa: "Confirmación", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-91",
     jira: "En Ruta (backlog) · ⚠️ el dueño en Jira es Katerine Pencue, no Juan",
@@ -478,6 +497,7 @@ export const proyectos: Proyecto[] = [
     nombre: "Herramienta preventiva de novedades (dueño y triaje)",
     slug: "novedad-triaje",
     codigo: "LOG-008",
+    codigoDarwin: "PRM-1512",
     etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-1512",
     jira: "⚠️ En Ruta (backlog), SIN ASIGNAR — aunque el Delivery Backlog pide FINALIZARLO",
