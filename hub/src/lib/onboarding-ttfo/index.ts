@@ -10,3 +10,4 @@ export * from "./alertas";
 export * from "./activacionHistorica";
 export * from "./rawData";
 export * from "./calculoCompleto";
+export * from "./texto";

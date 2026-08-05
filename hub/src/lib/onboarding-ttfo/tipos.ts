@@ -152,8 +152,33 @@ export interface Alertas {
   flujoCompletoYOrden: { userId: number; segmento: Segmento | null }[];
   /** B: disparó el evento de crear orden sin consumir el flujo, dentro del cohorte. */
   ordenSinFlujo: { userId: number; segmento: Segmento | null }[];
-  /** C: caída por paso — absoluta y relativa contra el paso anterior. */
-  mayorCaidaPorPaso: { slot: SlotId; poblacion: number; caidaAbsoluta: number; caidaRelativa: number }[];
+  /**
+   * C: caída por paso — absoluta y relativa contra el paso anterior, con
+   * desglose Marca/Proveedor (nunca un solo agregado que los mezcle — misma
+   * regla que la Alerta D). Población total = cohorte estable desde
+   * CORTE_COHORTE (28-jul-2026); marca/proveedor son subconjuntos de esa
+   * misma población, no un cálculo aparte.
+   */
+  mayorCaidaPorPaso: {
+    slot: SlotId; poblacion: number; caidaAbsoluta: number; caidaRelativa: number;
+    marca: { poblacion: number; caidaAbsoluta: number; caidaRelativa: number };
+    proveedor: { poblacion: number; caidaAbsoluta: number; caidaRelativa: number };
+  }[];
+  /**
+   * C (extra) — el primer tramo real del flujo (Bienvenida → Encuesta), que
+   * mayorCaidaPorPaso no puede ver directamente: esa función solo cuenta
+   * población que YA está en `idsCohorte` (que por construcción exige
+   * Encuesta respondida) — quien vio el video pero nunca respondió la
+   * encuesta es invisible ahí. Acá se cuenta aparte, pero SIN salirse de la
+   * misma ventana estable (cohorte desde CORTE_COHORTE, 28-jul-2026) — nunca
+   * todo el histórico de Marcas/Proveedores, esa regla aplica a toda la
+   * Alerta C, no solo a mayorCaidaPorPaso.
+   */
+  videoAEncuesta: {
+    poblacionVideo: number; poblacionEncuesta: number; caidaAbsoluta: number; caidaRelativa: number;
+    marca: { poblacionVideo: number; poblacionEncuesta: number };
+    proveedor: { poblacionVideo: number; poblacionEncuesta: number };
+  };
   /** D: comparación Marca vs Proveedor — siempre los dos números, nunca uno solo. */
   segmentoConMasCaida: { marca: { poblacion: number; avanzan: number; pct: number }; proveedor: { poblacion: number; avanzan: number; pct: number } };
 }
