@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dropi — Panel de Notificaciones (POC)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-light: #f4f6f9;
+    --border-color: #e2e8f0;
+    --orange-primary: #F77F00;
+    --orange-hover: #e0531f;
+    --orange-light: #FFF3E0;
+    --orange-muted: #FFF8F0;
+    --text-main: #2d3748;
+    --text-muted: #718096;
+    --sidebar-width: 250px;
+    --header-height: 60px;
+    --green: #10b981;
+    --red: #e11d48;
+    --blue: #2563eb;
+    --purple: #7c3aed;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+  }
+
+  body {
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* ───────── Sidebar (fiel a app.dropi.co) ───────── */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: #fff;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+  .sidebar-logo {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+  .dropi-mark {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--orange-primary);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .dropi-mark::before, .dropi-mark::after {
+    content: "";
+    position: absolute;
+    width: 6px; height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    top: 12px;
+  }
+  .dropi-mark::before { left: 7px; }
+  .dropi-mark::after { right: 7px; }
+  .sidebar-logo .wordmark {
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--orange-primary);
+  }
+  .sidebar-logo i.ti-menu-2 { margin-left: auto; color: var(--text-muted); font-size: 18px; cursor: pointer; }
+
+  .sidebar-menu {
+    flex: 1;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    overflow-y: auto;
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 9px 22px;
+    gap: 11px;
+    color: var(--text-main);
+    font-size: 13.2px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .menu-item:hover, .menu-item.active {
+    background: #fafbfc;
+    color: var(--orange-primary);
+    border-left-color: var(--orange-primary);
+  }
+  .menu-item i { font-size: 17px; color: var(--text-muted); width: 18px; text-align: center; }
+  .menu-item:hover i, .menu-item.active i { color: var(--orange-primary); }
+  .menu-item .chev { margin-left: auto; font-size: 13px !important; }
+  .badge-new, .badge-beta {
+    background: var(--green);
+    color: #fff;
+    font-size: 8.5px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 700;
+    margin-left: auto;
+  }
+
+  /* ───────── Main area ───────── */
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .top-header {
+    height: var(--header-height);
+    background: #fff;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 100;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-main);
+    font-weight: 500;
+  }
+  .header-left .mini-mark {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--orange-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+  .lang-pick { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-main); cursor: pointer; }
+  .wallet-pill { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--text-main); }
+  .wallet-pill i { font-size: 16px; color: var(--text-muted); }
+
+  /* Bell — the new element */
+  .bell-wrap { position: relative; }
+  .bell-btn {
+    background: none; border: none; cursor: pointer;
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    position: relative;
+    transition: background 0.15s;
+  }
+  .bell-btn:hover { background: var(--orange-muted); color: var(--orange-primary); }
+  .bell-btn i { font-size: 21px; }
+  .bell-btn.ringing i { animation: ring 0.4s ease; }
+  @keyframes ring {
+    0%, 100% { transform: rotate(0); }
+    20% { transform: rotate(14deg); }
+    40% { transform: rotate(-12deg); }
+    60% { transform: rotate(8deg); }
+    80% { transform: rotate(-4deg); }
+  }
+  .bell-badge {
+    position: absolute; top: 3px; right: 3px;
+    background: var(--red);
+    color: #fff;
+    font-size: 9.5px;
+    font-weight: 800;
+    min-width: 16px; height: 16px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 3px;
+    border: 2px solid #fff;
+  }
+  .bell-badge.hidden { display: none; }
+
+  .profile-chip { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .avatar-circ {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--orange-light); color: var(--orange-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+  }
+  .profile-chip span { font-size: 13px; font-weight: 600; color: var(--text-main); }
+  .profile-chip i { font-size: 12px; color: var(--text-muted); }
+
+  .beta-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--green); }
+  .beta-toggle { width: 34px; height: 18px; background: var(--green); border-radius: 10px; position: relative; }
+  .beta-toggle::after { content: ""; position: absolute; width: 14px; height: 14px; background: #fff; border-radius: 50%; top: 2px; right: 2px; }
+
+  /* ───────── Notification Panel ───────── */
+  .notif-panel {
+    position: absolute;
+    top: 52px;
+    right: 24px;
+    width: 410px;
+    max-height: 82vh;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(20, 30, 45, 0.18);
+    z-index: 200;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+    pointer-events: none;
+    transition: all 0.18s var(--ease);
+  }
+  .notif-panel.open {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+  }
+  .notif-head {
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+  .notif-head-row {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 10px; flex-wrap: wrap;
+  }
+  .notif-head-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding-top: 2px; }
+  .mark-all-btn {
+    background: none; border: none; color: var(--orange-primary);
+    font-size: 12px; font-weight: 700; cursor: pointer; white-space: nowrap;
+  }
+  .mark-all-btn:hover { text-decoration: underline; }
+  .mark-all-btn.hidden { display: none; }
+  .delete-all-btn {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 15px; cursor: pointer; padding: 2px; line-height: 1;
+  }
+  .delete-all-btn:hover { color: var(--red); }
+  .delete-all-btn.hidden { display: none; }
+  .notif-tabs { display: flex; gap: 6px; flex-wrap: wrap; row-gap: 6px; }
+  .notif-tab {
+    background: var(--bg-light); border: 1px solid transparent;
+    color: var(--text-muted); font-size: 11.5px; font-weight: 700;
+    padding: 5px 11px; border-radius: 20px; cursor: pointer;
+    white-space: nowrap;
+  }
+  .notif-tab.active { background: var(--orange-light); color: var(--orange-primary); border-color: var(--orange-primary); }
+
+  .notif-list { overflow-y: auto; flex: 1; }
+  .notif-list::-webkit-scrollbar { width: 5px; }
+  .notif-list::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
+
+  .notif-item {
+    display: flex;
+    gap: 12px;
+    padding: 13px 18px;
+    border-bottom: 1px solid #f1f4f8;
+    cursor: pointer;
+    position: relative;
+    transition: background 0.12s;
+  }
+  .notif-item:hover { background: #fafbfc; }
+  .notif-item.unread { background: var(--orange-muted); }
+  .notif-item.unread:hover { background: #fef3e6; }
+  .notif-item.hidden-by-filter { display: none; }
+
+  .notif-icon {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 17px; color: #fff;
+  }
+  .notif-body { flex: 1; min-width: 0; }
+  .notif-title { font-size: 13px; font-weight: 700; color: var(--text-main); }
+  .notif-copy { font-size: 12.8px; color: var(--text-main); line-height: 1.5; }
+  .notif-copy b { font-weight: 700; }
+  .notif-meta-row { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
+  .notif-time { font-size: 10.5px; color: var(--text-muted); white-space: nowrap; }
+  .notif-delete {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 13px; cursor: pointer; padding: 2px; line-height: 1;
+    opacity: 0.6;
+  }
+  .notif-delete:hover { opacity: 1; color: var(--red); }
+  .unread-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--orange-primary);
+    position: absolute; left: 6px; top: 18px;
+  }
+
+  .notif-empty { padding: 40px 20px; text-align: center; color: var(--text-muted); font-size: 13px; display:none; }
+  .notif-empty.show { display: block; }
+
+  /* ───────── Incoming notification (llega en tiempo real) ───────── */
+  .incoming-notif {
+    position: fixed;
+    top: calc(var(--header-height) + 14px);
+    right: 24px;
+    width: 360px;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(20,30,45,0.22);
+    z-index: 600;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    cursor: pointer;
+    transform: translate(30px, -14px);
+    opacity: 0;
+    transition: all 0.32s var(--ease);
+    pointer-events: none;
+  }
+  .incoming-notif.show {
+    transform: translate(0, 0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .incoming-notif .notif-icon { width: 36px; height: 36px; font-size: 16px; }
+  .incoming-notif .in-title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .incoming-notif .in-eyebrow { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; color: var(--orange-primary); margin-bottom: 3px; }
+  .incoming-notif .notif-title { font-size: 12.8px; }
+  .incoming-notif .notif-copy { font-size: 11.8px; margin-top: 2px; }
+  .incoming-close {
+    background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 15px;
+    flex-shrink: 0; line-height: 1; padding: 2px;
+  }
+  .incoming-close:hover { color: var(--text-main); }
+
+  /* ───────── Navegación simulada a la pantalla destino (capturas reales) ───────── */
+  .nav-bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: #fef6e6; border: 1px solid #fde3b0; border-radius: 10px;
+    padding: 10px 16px; margin-bottom: 16px; font-size: 12.5px; color: #92600a;
+  }
+  .nav-bar b { color: #7a4c06; }
+  .nav-bar button {
+    background: none; border: none; color: var(--orange-primary); font-weight: 800;
+    font-size: 12.5px; cursor: pointer; display: flex; align-items: center; gap: 4px;
+    flex-shrink: 0;
+  }
+  .nav-bar button:hover { text-decoration: underline; }
+  .screen-frame { border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; background: #fff; }
+  .screen-frame .clip { overflow: hidden; width: 100%; }
+  .screen-frame img { display: block; max-width: none; margin-left: -250px; margin-top: -60px; }
+
+  .flash-highlight { animation: flashGlow 1.5s ease; }
+  @keyframes flashGlow {
+    0% { box-shadow: 0 0 0 4px rgba(247,127,0,0.55); border-radius: 12px; }
+    100% { box-shadow: 0 0 0 0 rgba(247,127,0,0); border-radius: 12px; }
+  }
+
+  /* ───────── Submenús (Productos / Mis Pedidos) ───────── */
+  .submenu { display: flex; flex-direction: column; padding-left: 18px; margin-bottom: 3px; }
+  .submenu-item {
+    display: flex; align-items: center; gap: 9px;
+    padding: 7px 22px 7px 32px; font-size: 12.5px; color: var(--text-muted);
+    cursor: pointer; border-left: 3px solid transparent; white-space: nowrap;
+  }
+  .submenu-item::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--border-color); flex-shrink: 0; }
+  .submenu-item:hover { color: var(--orange-primary); }
+  .submenu-item.active { color: var(--orange-primary); font-weight: 700; border-left-color: var(--orange-primary); background: #fafbfc; }
+  .submenu-item.active::before { background: var(--orange-primary); }
+  .menu-item.parent-active { color: var(--orange-primary); }
+  .menu-item.parent-active i { color: var(--orange-primary); }
+
+  /* ───────── Botones flotantes (fiel a app.dropi.co) ───────── */
+  .float-actions { position: fixed; bottom: 100px; right: 26px; display: flex; flex-direction: column; gap: 12px; z-index: 250; }
+  .float-btn {
+    width: 46px; height: 46px; border-radius: 50%; background: var(--orange-primary); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2); cursor: pointer;
+  }
+  .float-btn.pulse { animation: pulseRing 0.9s ease 2; }
+  @keyframes pulseRing {
+    0% { box-shadow: 0 0 0 0 rgba(247,127,0,0.55); }
+    100% { box-shadow: 0 0 0 16px rgba(247,127,0,0); }
+  }
+
+  /* ───────── Page content (Inicio, simplificado) ───────── */
+  .page-body { padding: 26px 30px 60px; }
+  .alert-banner {
+    background: #fef6e6; border: 1px solid #fde3b0;
+    border-radius: 10px; padding: 14px 18px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 22px;
+  }
+  .alert-banner span { font-size: 13.5px; color: #92600a; display:flex; align-items:center; gap:8px; }
+  .alert-banner button {
+    background: var(--orange-primary); color: #fff; border: none;
+    padding: 8px 16px; border-radius: 6px; font-weight: 700; font-size: 12.5px; cursor: pointer;
+  }
+  .hola { font-size: 21px; font-weight: 800; margin-bottom: 16px; color: var(--text-main); }
+
+  .home-grid { display: grid; grid-template-columns: 1.1fr 1.6fr; gap: 20px; margin-bottom: 26px; }
+  .promo-card {
+    border-radius: 12px; overflow: hidden; min-height: 280px;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 22px; color: #fff;
+    background: linear-gradient(160deg, #1a1030 0%, #3d1450 60%, #7b1f2f 100%);
+  }
+  .promo-card h2 { font-size: 26px; font-weight: 900; line-height: 1.1; margin-bottom: 8px; }
+  .promo-card p { font-size: 12px; opacity: 0.85; margin-bottom: 14px; }
+  .promo-card button { align-self: flex-start; background: #ff4d4d; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:800; font-size:11.5px; }
+
+  .update-banner { background:#fff; border:1px solid var(--border-color); border-radius:12px; overflow:hidden; }
+  .update-banner .art { height: 160px; background: repeating-linear-gradient(45deg, #101820, #101820 10px, #16202b 10px, #16202b 20px); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900; font-size:20px; text-align:center; }
+  .update-banner .body { padding: 18px 20px; }
+  .update-banner h4 { font-size: 15px; margin-bottom: 8px; }
+  .update-banner p { font-size:12.5px; color:var(--text-muted); line-height:1.5; margin-bottom: 12px; }
+  .update-banner button { background: var(--orange-primary); color:#fff; border:none; padding:8px 16px; border-radius:6px; font-weight:800; font-size:12px; }
+
+  .section-title { font-size: 16px; font-weight: 800; margin-bottom: 14px; }
+  .providers-list { display:flex; flex-direction:column; gap:10px; }
+  .provider-row { background:#fff; border:1px solid var(--border-color); border-radius:10px; padding:14px 18px; display:flex; align-items:center; gap:14px; }
+  .provider-row .pic { width:36px;height:36px;border-radius:8px; background:var(--orange-light); display:flex;align-items:center;justify-content:center; font-size:16px; }
+  .provider-row span { flex:1; font-size:13.5px; font-weight:600; }
+  .provider-row button { background: var(--orange-primary); color:#fff; border:none; padding:7px 16px; border-radius:6px; font-weight:800; font-size:12px; }
+
+  .poc-tag {
+    position: fixed; bottom: 18px; left: calc(var(--sidebar-width) + 18px);
+    background: rgba(17,24,39,0.92); color:#fff; font-size:11px; font-weight:700;
+    padding: 8px 12px; border-radius: 8px; z-index: 400;
+    display:flex; align-items:center; gap:10px;
+  }
+  .poc-tag i.ti-flask { color: var(--orange-primary); }
+  .simulate-btn {
+    background: var(--orange-primary); border: none; color: #fff;
+    font-size: 11px; font-weight: 800; padding: 6px 12px; border-radius: 20px;
+    cursor: pointer; display: flex; align-items: center; gap: 5px;
+  }
+  .simulate-btn:hover { background: var(--orange-hover); }
+</style>
+</head>
+<body>
+
+<!-- ───────── Sidebar ───────── -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="dropi-mark"></div>
+    <span class="wordmark">dropi</span>
+    <i class="ti ti-menu-2"></i>
+  </div>
+  <div class="sidebar-menu">
+    <div class="menu-item active" data-nav="Inicio" onclick="goHome()"><i class="ti ti-home"></i>Inicio</div>
+    <div class="menu-item"><i class="ti ti-chart-bar"></i>Dashboard<span class="badge-beta">Beta</span></div>
+
+    <div class="menu-group">
+      <div class="menu-item"><i class="ti ti-search"></i>Productos<span class="badge-new">Nuevo</span></div>
+      <div class="submenu">
+        <div class="submenu-item" data-nav="Catálogo">Catálogo</div>
+        <div class="submenu-item" data-nav="Proveedores">Proveedores</div>
+        <div class="submenu-item" data-nav="Caza productos">Caza productos</div>
+        <div class="submenu-item" data-nav="Negociaciones">Negociaciones</div>
+      </div>
+    </div>
+
+    <div class="menu-group">
+      <div class="menu-item"><i class="ti ti-shopping-cart"></i>Mis Pedidos<i class="ti ti-chevron-down chev"></i></div>
+      <div class="submenu">
+        <div class="submenu-item" data-nav="Mis Pedidos">Mis Pedidos</div>
+        <div class="submenu-item" data-nav="Novedades">Novedades</div>
+        <div class="submenu-item" data-nav="Etiquetas">Etiquetas</div>
+        <div class="submenu-item" data-nav="Configuración de pedidos">Configuración de pedidos</div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-nav="Mis Garantias"><i class="ti ti-shield-check"></i>Mis Garantias<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item" data-nav="Clientes"><i class="ti ti-users"></i>Clientes</div>
+    <div class="menu-item" data-nav="Mis Integraciones"><i class="ti ti-plug"></i>Mis Integraciones</div>
+    <div class="menu-item" data-nav="Historial de Cartera"><i class="ti ti-history"></i>Historial de Cartera</div>
+    <div class="menu-item" data-nav="Mis usuarios"><i class="ti ti-users-group"></i>Mis usuarios</div>
+    <div class="menu-item" data-nav="Mis Referidos"><i class="ti ti-user-plus"></i>Mis Referidos</div>
+    <div class="menu-item" data-nav="Configuraciones"><i class="ti ti-settings"></i>Configuraciones<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item" data-nav="Calendario"><i class="ti ti-calendar"></i>Calendario</div>
+    <div class="menu-item"><i class="ti ti-speakerphone"></i>Marketing<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item"><i class="ti ti-rocket"></i>ROAX<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item" data-nav="Reportes"><i class="ti ti-report"></i>Reportes<span class="badge-new">Nuevo</span></div>
+  </div>
+</div>
+
+<!-- ───────── Main ───────── -->
+<div class="main-content">
+  <div class="top-header">
+    <div class="header-left">
+      <div class="mini-mark">🐼</div>
+      Miembro De: PRUEBAS PRODUCTO DROPI
+    </div>
+    <div class="header-right">
+      <div class="lang-pick">🇺🇸 English</div>
+      <div class="wallet-pill"><i class="ti ti-briefcase"></i> $ 189.506</div>
+
+      <!-- ★ NUEVO: campana de notificaciones ★ -->
+      <div class="bell-wrap">
+        <button class="bell-btn" id="bellBtn" onclick="toggleNotifPanel()">
+          <i class="ti ti-bell"></i>
+          <span class="bell-badge" id="bellBadge">9</span>
+        </button>
+
+        <div class="notif-panel" id="notifPanel">
+          <div class="notif-head">
+            <div class="notif-head-row" id="notifHeadRow">
+              <div class="notif-tabs" id="notifTabs"></div>
+              <div class="notif-head-actions">
+                <button class="mark-all-btn" id="markAllBtn" onclick="event.stopPropagation(); markAllRead()">Marcar todas como leídas</button>
+                <button class="delete-all-btn" id="deleteAllBtn" onclick="event.stopPropagation(); clearAllNotifs()" title="Eliminar todas las notificaciones"><i class="ti ti-trash"></i></button>
+              </div>
+            </div>
+          </div>
+          <div class="notif-list" id="notifList"></div>
+          <div class="notif-empty" id="notifEmpty">No hay notificaciones en esta vista.</div>
+        </div>
+      </div>
+
+      <div class="profile-chip">
+        <div class="avatar-circ">UX</div>
+        <span>ux</span>
+        <i class="ti ti-chevron-down"></i>
+      </div>
+      <div class="beta-pill">BETA <div class="beta-toggle"></div></div>
+    </div>
+  </div>
+
+  <div class="page-body" id="pageBody">
+    <div class="alert-banner">
+      <span><i class="ti ti-alert-circle"></i> Completa los datos personales y luego realiza la validación.</span>
+      <button>Completar datos</button>
+    </div>
+
+    <div class="hola">¡Hola, ux!</div>
+
+    <div class="home-grid">
+      <div class="promo-card">
+        <h2>Panamá Mastermind</h2>
+        <p>Escala tu operación a dólares y domina un nuevo mercado. 30 julio · 8a.m.–5p.m. · Oficinas de Dropi</p>
+        <button>¡Reserva tu cupo aquí!</button>
+      </div>
+      <div class="update-banner" id="homeUpdateCard">
+        <div class="art">NUEVO INFORME<br/>DE TESTEO ROAX</div>
+        <div class="body">
+          <h4>¿Sigues testeando campañas a ciegas?</h4>
+          <p>Con el <b>Módulo de Testeo de ROAX</b>, puedes conectar tu inversión con las ventas reales para identificar qué campañas vale la pena escalar.</p>
+          <button>Ver cómo usar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Proveedores destacados de la semana</div>
+    <div class="providers-list">
+      <div class="provider-row"><div class="pic">📦</div><span>Primos</span><button>Contactar</button></div>
+      <div class="provider-row"><div class="pic">📦</div><span>Fluxon</span><button>Contactar</button></div>
+      <div class="provider-row"><div class="pic">📦</div><span>Oh Homie</span><button>Contactar</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Notificación entrante (simulación en tiempo real) -->
+<div class="incoming-notif" id="incomingNotif" onclick="handleIncomingClick()">
+  <div class="notif-icon" id="incomingIcon"></div>
+  <div style="flex:1; min-width:0;">
+    <div class="in-title-row">
+      <div>
+        <div class="in-eyebrow">Nueva notificación</div>
+        <div class="notif-title" id="incomingTitle"></div>
+      </div>
+      <button class="incoming-close" onclick="event.stopPropagation(); dismissIncoming();"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="notif-copy" id="incomingCopy"></div>
+  </div>
+</div>
+
+<!-- Botones flotantes (fiel a app.dropi.co) — el de chat se usa para las notificaciones de CAS -->
+<div class="float-actions">
+  <div class="float-btn"><i class="ti ti-fingerprint"></i></div>
+  <div class="float-btn"><i class="ti ti-antenna"></i></div>
+  <div class="float-btn" id="chatFloatBtn"><i class="ti ti-message-circle-2"></i></div>
+</div>
+
+<div class="poc-tag">
+  <i class="ti ti-flask"></i> PRM-1305-POC-1 · Panel de notificaciones (Mock)
+  <button class="simulate-btn" onclick="simulateIncoming()"><i class="ti ti-bell-ringing"></i> Simular notificación entrante</button>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   Data: 25 tipos de notificación (fuente: PDF "Módulo de
+   Notificaciones - Dropshippers"), reagrupados en 4 categorías
+   de negocio en vez de por módulo técnico:
+     General   → onboarding, catálogo, negociaciones, caza
+                 productos, transportadora, reportes, novedades
+                 de plataforma.
+     Pedidos   → órdenes, novedades logísticas, garantías.
+     Financiero→ movimientos y retiros de Wallet.
+     CAS       → respuestas del chat de soporte.
+   `screenshot`/`pantalla` = captura real de app.dropi.co usada
+   para previsualizar a dónde lleva cada notificación.
+────────────────────────────────────────────────────────────── */
+const NOTIFS = [
+  { categoria: "General", tipo: "Bienvenida a Dropi", icon: "ti-confetti", color: "#F77F00",
+    copy: "¡Bienvenido a Dropi, <b>Andrés</b>! Estás a un paso de tu primera venta. Empecemos con el recorrido guiado.",
+    pantalla: "Inicio", navKey: "Inicio", homeHighlight: ".hola", time: "hace 2 min", unread: true },
+
+  { categoria: "Pedidos", tipo: "Orden pendiente de confirmación", icon: "ti-package", color: "#2563eb",
+    copy: "Tienes <b>3 órdenes</b> pendientes de confirmación. Confírmalas para no perder la venta.",
+    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "hace 9 min", unread: true },
+
+  { categoria: "Pedidos", tipo: "Orden con novedad", icon: "ti-alert-triangle", color: "#e11d48",
+    copy: "La orden <b>#98211</b> tiene una novedad pendiente de resolver. Actúa pronto para no perder el envío.",
+    pantalla: "Novedades", navKey: "Novedades", screenshot: "capturas/dashboard_novelties.png", time: "hace 25 min", unread: true },
+
+  { categoria: "Financiero", tipo: "Nuevo ingreso", icon: "ti-wallet", color: "#10b981",
+    copy: "Recibiste un ingreso de <b>$ 29.200</b> en tu Wallet por entrega. Revisa el detalle.",
+    pantalla: "Historial de Cartera", navKey: "Historial de Cartera", screenshot: "capturas/dashboard_historywallet.png", time: "hace 40 min", unread: true },
+
+  { categoria: "Pedidos", tipo: "Respuesta a garantía", icon: "ti-shield-check", color: "#10b981",
+    copy: "<b>JP Distribuciones</b> aprobó la garantía de la orden #98177. Revísala.",
+    pantalla: "Mis Garantías", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties.png", time: "hace 1 h", unread: true },
+
+  { categoria: "General", tipo: "Negociación requiere decisión", icon: "ti-handshake", color: "#7c3aed",
+    copy: "Tienes una negociación con <b>Katz Supply</b> esperando tu respuesta. Revísala antes de que expire.",
+    pantalla: "Productos → Negociaciones", navKey: "Negociaciones", screenshot: "capturas/dashboard_negotiations.png", time: "hace 1 h", unread: true },
+
+  { categoria: "CAS", tipo: "Respuesta", icon: "ti-message-circle", color: "#2563eb",
+    copy: "<b>Coordinadora</b> respondió tu mensaje en CAS. Continúa la conversación aquí.",
+    pantalla: "CAS · Bandeja de tickets", navKey: "CAS", screenshot: "capturas/dashboard_cas_tickets.png", time: "hace 2 h", unread: true },
+
+  { categoria: "General", tipo: "Respuesta a búsqueda (Caza Productos)", icon: "ti-target-arrow", color: "#7c3aed",
+    copy: "<b>Black Swan</b> respondió a tu búsqueda de \"audífonos inalámbricos\". Revisa su propuesta.",
+    pantalla: "Productos → Caza productos", navKey: "Caza productos", screenshot: "capturas/dashboard_hunter-product.png", time: "hace 3 h", unread: true },
+
+  { categoria: "General", tipo: "Comunicado importante de transportadora", icon: "ti-truck", color: "#2563eb",
+    copy: "<b>Envía</b> publicó un comunicado importante que puede afectar tus envíos. Léelo aquí.",
+    pantalla: "Configuración → Transportadoras (aprox.)", navKey: "Configuraciones", screenshot: "capturas/dashboard_settings_distribution-companies.png", time: "hace 5 h", unread: true },
+
+  { categoria: "General", tipo: "Validación de identidad", icon: "ti-shield-lock", color: "#e11d48",
+    copy: "Tu cuenta necesita validación de identidad para seguir operando sin restricciones. Complétala aquí.",
+    pantalla: "Configuración → Datos Personales y Facturación", navKey: "Configuraciones", screenshot: "capturas/dashboard_settings_personal-data.png", time: "ayer", unread: false },
+
+  { categoria: "Pedidos", tipo: "Orden anulada", icon: "ti-package", color: "#e11d48",
+    copy: "La orden <b>#97965</b> fue anulada. Revisa el motivo en el detalle de la orden.",
+    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "ayer", unread: false },
+
+  { categoria: "Pedidos", tipo: "Orden lleva más tiempo del esperado", icon: "ti-package", color: "#e11d48",
+    copy: "La orden <b>#97910</b> lleva más tiempo del esperado en gestión. Te recomendamos hacer seguimiento.",
+    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "ayer", unread: false },
+
+  { categoria: "Pedidos", tipo: "Órdenes duplicadas", icon: "ti-package", color: "#e11d48",
+    copy: "Detectamos una posible orden duplicada de <b>#97890</b>. Confirma con tu cliente antes de despachar ambas.",
+    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "ayer", unread: false },
+
+  { categoria: "Pedidos", tipo: "Guía de devolución disponible", icon: "ti-shield-check", color: "#2563eb",
+    copy: "Ya está disponible la guía de devolución de la orden <b>#97812</b>. Compártela con tu cliente.",
+    pantalla: "Mis Garantías", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties.png", time: "hace 2 días", unread: false },
+
+  { categoria: "Pedidos", tipo: "Proveedor recibió el producto", icon: "ti-shield-check", color: "#2563eb",
+    copy: "<b>Oh Homie</b> recibió el producto devuelto de la orden #97701. Está en proceso de diagnóstico.",
+    pantalla: "Mis Garantías", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties.png", time: "hace 2 días", unread: false },
+
+  { categoria: "Pedidos", tipo: "Estado de recolección", icon: "ti-shield-check", color: "#e11d48",
+    copy: "La recolección del producto de la orden <b>#97701</b> falló. Revisa el detalle.",
+    pantalla: "Mis Garantías → Recolección", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties-recollection.png", time: "hace 2 días", unread: false },
+
+  { categoria: "General", tipo: "Negociación fue cancelada", icon: "ti-handshake", color: "#e11d48",
+    copy: "La negociación con <b>Curren</b> fue cancelada. Consulta el motivo en el módulo de negociaciones.",
+    pantalla: "Productos → Negociaciones", navKey: "Negociaciones", screenshot: "capturas/dashboard_negotiations.png", time: "hace 3 días", unread: false },
+
+  { categoria: "General", tipo: "Publicación de Caza Productos por finalizar", icon: "ti-target-arrow", color: "#f59e0b",
+    copy: "Tu búsqueda de \"funda impermeable\" en Caza Productos vence pronto. Renuévala si aún la necesitas.",
+    pantalla: "Productos → Caza productos", navKey: "Caza productos", screenshot: "capturas/dashboard_hunter-product.png", time: "hace 3 días", unread: false },
+
+  { categoria: "General", tipo: "Publicación de Caza Productos sin respuestas", icon: "ti-target-arrow", color: "#718096",
+    copy: "Tu búsqueda de \"soporte para celular\" venció sin respuestas. Prueba ajustando la descripción o el precio esperado.",
+    pantalla: "Productos → Caza productos", navKey: "Caza productos", screenshot: "capturas/dashboard_hunter-product.png", time: "hace 4 días", unread: false },
+
+  { categoria: "General", tipo: "Nuevos proveedores", icon: "ti-building-store", color: "#2563eb",
+    copy: "Esta semana se sumaron <b>6 proveedores</b> nuevos a Dropi. Dale un vistazo a su catálogo.",
+    pantalla: "Productos → Proveedores", navKey: "Proveedores", screenshot: "capturas/dashboard_providers.png", time: "hace 4 días", unread: false },
+
+  { categoria: "General", tipo: "Exportación de data lista", icon: "ti-file-download", color: "#718096",
+    copy: "Tu reporte \"Ventas de junio\" ya está listo. Descárgalo desde el módulo de descargas.",
+    pantalla: "Reportes → Descargas", navKey: "Reportes", screenshot: "capturas/dashboard_reports_downloads.png", time: "hace 5 días", unread: false },
+
+  { categoria: "Financiero", tipo: "Débito de dinero", icon: "ti-wallet", color: "#e11d48",
+    copy: "Se descontaron <b>$ 4.500</b> de tu Wallet por ajuste. Revisa el detalle del movimiento.",
+    pantalla: "Historial de Cartera", navKey: "Historial de Cartera", screenshot: "capturas/dashboard_historywallet.png", time: "hace 5 días", unread: false },
+
+  { categoria: "Financiero", tipo: "Retiro procesado", icon: "ti-wallet", color: "#10b981",
+    copy: "Tu retiro de <b>$ 150.000</b> fue procesado y está en camino a tu cuenta bancaria.",
+    pantalla: "Configuración → Retiros", navKey: "Configuraciones", screenshot: "capturas/dashboard_settings_withdrawals.png", time: "hace 6 días", unread: false },
+
+  { categoria: "Financiero", tipo: "Retiro rechazado", icon: "ti-wallet", color: "#e11d48",
+    copy: "Tu retiro de <b>$ 80.000</b> no se pudo procesar: datos bancarios inválidos. Corrígelo para volver a intentarlo.",
+    pantalla: "Configuración → Retiros", navKey: "Configuraciones", screenshot: "capturas/dashboard_settings_withdrawals.png", time: "hace 6 días", unread: false },
+
+  { categoria: "General", tipo: "Nueva funcionalidad en Dropi", icon: "ti-speakerphone", color: "#F77F00",
+    copy: "¡Novedad en Dropi! Ya puedes usar <b>ROAX Testeo de Campañas</b>. Descúbrela.",
+    pantalla: "Inicio · Nueva actualización", navKey: "Inicio", homeHighlight: "#homeUpdateCard", time: "hace 1 semana", unread: false },
+];
+
+let currentFilter = "all";
+const CATEGORY_TABS = ["Pedidos", "Financiero", "CAS"];
+
+function renderTabs() {
+  const presentCategories = CATEGORY_TABS.filter(cat => NOTIFS.some(n => n.categoria === cat));
+
+  // si el filtro activo era una categoría que ya no tiene notificaciones, vuelve a "Todas"
+  if (currentFilter !== "all" && currentFilter !== "unread" && !presentCategories.includes(currentFilter)) {
+    currentFilter = "all";
+  }
+
+  const tabs = [
+    { key: "all", label: "Todas" },
+    { key: "unread", label: "No leídas" },
+    ...presentCategories.map(cat => ({ key: cat, label: cat })),
+  ];
+
+  const tabsEl = document.getElementById("notifTabs");
+  tabsEl.innerHTML = tabs.map(t => `
+    <button class="notif-tab${t.key === currentFilter ? " active" : ""}" onclick="event.stopPropagation(); setFilter('${t.key}')">${t.label}</button>
+  `).join("");
+}
+
+function renderNotifs() {
+  renderTabs();
+
+  const list = document.getElementById("notifList");
+  list.innerHTML = "";
+  let visibleCount = 0;
+
+  NOTIFS.forEach((n, idx) => {
+    let visible = true;
+    if (currentFilter === "unread") visible = n.unread;
+    else if (currentFilter !== "all") visible = n.categoria === currentFilter;
+    if (visible) visibleCount++;
+
+    const el = document.createElement("div");
+    el.className = "notif-item" + (n.unread ? " unread" : "") + (visible ? "" : " hidden-by-filter");
+    el.onclick = () => openNotif(idx);
+    el.innerHTML = `
+      ${n.unread ? '<div class="unread-dot"></div>' : ''}
+      <div class="notif-icon" style="background:${n.color}"><i class="ti ${n.icon}"></i></div>
+      <div class="notif-body">
+        <div class="notif-copy">${n.copy}</div>
+        <div class="notif-meta-row">
+          <span class="notif-time">${n.time}</span>
+          <button class="notif-delete" title="Eliminar notificación" onclick="event.stopPropagation(); deleteNotif(${idx})"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>
+    `;
+    list.appendChild(el);
+  });
+
+  document.getElementById("notifEmpty").classList.toggle("show", visibleCount === 0);
+  updateHeadActions();
+  updateBadge();
+}
+
+function deleteNotif(idx) {
+  NOTIFS.splice(idx, 1);
+  renderNotifs();
+}
+
+function clearAllNotifs() {
+  NOTIFS.length = 0;
+  renderNotifs();
+}
+
+function updateHeadActions() {
+  const unreadCount = NOTIFS.filter(n => n.unread).length;
+  document.getElementById("markAllBtn").classList.toggle("hidden", unreadCount === 0);
+  document.getElementById("deleteAllBtn").classList.toggle("hidden", NOTIFS.length === 0);
+}
+
+function updateBadge() {
+  const unreadCount = NOTIFS.filter(n => n.unread).length;
+  const badge = document.getElementById("bellBadge");
+  badge.textContent = unreadCount;
+  badge.classList.toggle("hidden", unreadCount === 0);
+}
+
+function openNotif(idx) {
+  const n = NOTIFS[idx];
+  if (n.unread) {
+    n.unread = false;
+    renderNotifs();
+  }
+  navigateTo(n);
+}
+
+function markAllRead() {
+  NOTIFS.forEach(n => n.unread = false);
+  renderNotifs();
+}
+
+function setFilter(filter) {
+  currentFilter = filter;
+  renderNotifs();
+}
+
+function toggleNotifPanel() {
+  const panel = document.getElementById("notifPanel");
+  const bell = document.getElementById("bellBtn");
+  const willOpen = !panel.classList.contains("open");
+  panel.classList.toggle("open", willOpen);
+  if (willOpen) {
+    bell.classList.add("ringing");
+    setTimeout(() => bell.classList.remove("ringing"), 400);
+  }
+}
+
+document.addEventListener("click", (e) => {
+  const panel = document.getElementById("notifPanel");
+  const wrap = document.querySelector(".bell-wrap");
+  if (panel.classList.contains("open") && !wrap.contains(e.target)) {
+    panel.classList.remove("open");
+  }
+});
+
+/* ───────── Navegación real dentro del mock: la notificación lleva
+   a la pestaña/módulo correspondiente (sidebar + contenido), usando
+   la captura real recortada (sin su propio sidebar/header) como
+   contenido de esa pantalla. ───────── */
+const HOME_HTML = document.getElementById("pageBody").innerHTML;
+
+function clearActiveNav() {
+  document.querySelectorAll(".menu-item, .submenu-item").forEach(el => {
+    el.classList.remove("active", "parent-active");
+  });
+}
+
+function setActiveNav(navKey) {
+  clearActiveNav();
+  const el = document.querySelector(`[data-nav="${CSS.escape(navKey)}"]`);
+  if (!el) return;
+  el.classList.add("active");
+  const group = el.closest(".menu-group");
+  if (group) {
+    const parent = group.querySelector(".menu-item");
+    if (parent && parent !== el) parent.classList.add("parent-active");
+  }
+}
+
+function goHome() {
+  document.getElementById("pageBody").innerHTML = HOME_HTML;
+  setActiveNav("Inicio");
+}
+
+function flashHome(selector) {
+  goHome();
+  const target = selector ? document.querySelector(selector) : document.getElementById("pageBody");
+  if (!target) return;
+  target.classList.add("flash-highlight");
+  target.scrollIntoView({ behavior: "smooth", block: "center" });
+  setTimeout(() => target.classList.remove("flash-highlight"), 1500);
+}
+
+function pulseChat() {
+  const btn = document.getElementById("chatFloatBtn");
+  btn.classList.add("pulse");
+  setTimeout(() => btn.classList.remove("pulse"), 1900);
+}
+
+function navigateTo(n) {
+  document.getElementById("notifPanel").classList.remove("open");
+  dismissIncoming();
+
+  if (n.navKey === "Inicio") {
+    flashHome(n.homeHighlight);
+    return;
+  }
+  if (n.navKey === "CAS") pulseChat();
+
+  setActiveNav(n.navKey);
+  const pageBody = document.getElementById("pageBody");
+  pageBody.innerHTML = `
+    <div class="nav-bar">
+      <span>📍 Navegaste a <b>${n.pantalla}</b> — vista simulada a partir de una captura real de la app.</span>
+      <button onclick="goHome()"><i class="ti ti-arrow-left"></i> Volver a Inicio</button>
+    </div>
+    <div class="screen-frame"><div class="clip"><img src="${n.screenshot}" alt="${n.pantalla}" /></div></div>
+  `;
+  pageBody.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/* ───────── Notificación entrante (simulación en tiempo real) ─────────
+   Aparece debajo del header, esquina superior derecha. Al hacer clic
+   marca como leída en el panel y abre la captura de destino. */
+let incomingIndex = 0;
+let incomingTimer;
+
+function simulateIncoming() {
+  if (NOTIFS.length === 0) return;
+  const n = NOTIFS[incomingIndex % NOTIFS.length];
+  incomingIndex++;
+
+  document.getElementById("incomingIcon").style.background = n.color;
+  document.getElementById("incomingIcon").innerHTML = `<i class="ti ${n.icon}"></i>`;
+  document.getElementById("incomingTitle").textContent = n.tipo;
+  document.getElementById("incomingCopy").innerHTML = n.copy;
+
+  const el = document.getElementById("incomingNotif");
+  el._current = n;
+  el.classList.add("show");
+
+  clearTimeout(incomingTimer);
+  incomingTimer = setTimeout(dismissIncoming, 6000);
+}
+
+function dismissIncoming() {
+  document.getElementById("incomingNotif").classList.remove("show");
+}
+
+function handleIncomingClick() {
+  const el = document.getElementById("incomingNotif");
+  const n = el._current;
+  dismissIncoming();
+  if (!n) return;
+  const idx = NOTIFS.indexOf(n);
+  if (idx > -1 && NOTIFS[idx].unread) {
+    NOTIFS[idx].unread = false;
+    renderNotifs();
+  }
+  navigateTo(n);
+}
+
+renderNotifs();
+setTimeout(simulateIncoming, 1500);
+</script>
+</body>
+</html>
