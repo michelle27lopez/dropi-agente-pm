@@ -17,6 +17,7 @@ import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 const TorreLogistica = dynamic(() => import("./_components/TorreLogistica"), { ssr: false });
 const ProyectosPorEtapa = dynamic(() => import("./_components/ProyectosPorEtapa"), { ssr: false });
 const UpdatesLogistica = dynamic(() => import("./_components/UpdatesLogistica"), { ssr: false });
+const WeeklyBanner = dynamic(() => import("./_components/WeeklyBanner"), { ssr: false });
 type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
@@ -349,8 +350,11 @@ export default function CelulaHomePage() {
           />
         </div>
 
-        <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px", width: "100%", flex: 1 }}>
+        <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px 24px", width: "100%", flex: 1 }}>
           
+          {/* Weekly Célula Banner / Action Bar */}
+          <WeeklyBanner />
+
           {/* Country Filter Tab Bar */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, background: "#f1f5f9", padding: 6, borderRadius: 12, border: "1px solid #e2e8f0" }}>
             {[
