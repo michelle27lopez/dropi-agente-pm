@@ -57,6 +57,13 @@ export function calcularEstadoMeta7d(
  * validez temporal de §6 aplicada como parte de la condición 3 (no como
  * chequeo aparte): el evento del camino completado debe ser anterior a
  * primeraOrden, y primeraOrden debe ser posterior a Submitted At.
+ *
+ * "orden_manual" se excluye del loop de evidencia (fix 04-ago-2026, caso
+ * 965744): `primeraOrden` SE DERIVA de `fechaEventoCamino(linea,
+ * "orden_manual")` — comparar ese mismo camino contra `primeraOrden` es
+ * comparar una fecha contra sí misma, nunca puede ser "anterior". La
+ * evidencia de causalidad tiene que venir de un paso PREVIO (bodega,
+ * producto, integraciones), no del paso que define la orden.
  */
 export function calcularGatillo(linea: LineaDeTiempoUsuario, primeraOrden: string | null): Gatillo {
   const submittedAt = linea.encuesta?.submittedAt ?? null;
@@ -67,6 +74,7 @@ export function calcularGatillo(linea: LineaDeTiempoUsuario, primeraOrden: strin
 
   if (ordenPosteriorAEncuesta) {
     for (const c of caminosCompletados) {
+      if (c.camino === "orden_manual") continue;
       const fechaEvento = fechaEventoCamino(linea, c.camino);
       if (fechaEvento && fechaEvento < primeraOrden) return "gatillo_cerrado";
     }

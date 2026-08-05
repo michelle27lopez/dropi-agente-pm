@@ -4671,7 +4671,7 @@
       "signedUp": "2026-07-28T18:48:25.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4701,7 +4701,7 @@
       "signedUp": "2026-07-28T17:50:17.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4716,7 +4716,7 @@
       "signedUp": "2026-07-28T17:44:31.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4731,7 +4731,7 @@
       "signedUp": "2026-07-28T17:30:59.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4746,7 +4746,7 @@
       "signedUp": "2026-07-28T17:36:09.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4761,7 +4761,7 @@
       "signedUp": "2026-07-28T17:00:42.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4776,7 +4776,7 @@
       "signedUp": "2026-07-28T16:48:24.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -4791,7 +4791,7 @@
       "signedUp": "2026-07-28T16:36:36.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4806,7 +4806,7 @@
       "signedUp": "2026-07-28T16:35:32.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -4821,7 +4821,7 @@
       "signedUp": "2026-07-28T16:35:25.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -4836,7 +4836,7 @@
       "signedUp": "2026-07-28T15:57:42.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4851,7 +4851,7 @@
       "signedUp": "2026-07-28T15:56:51.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4881,7 +4881,7 @@
       "signedUp": "2026-07-28T15:25:35.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4896,7 +4896,7 @@
       "signedUp": "2026-07-28T15:24:10.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -4911,7 +4911,7 @@
       "signedUp": "2026-07-28T14:54:55.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -4941,7 +4941,7 @@
       "signedUp": "2026-07-28T14:34:36.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -4956,7 +4956,7 @@
       "signedUp": "2026-07-28T14:11:08.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -4971,7 +4971,7 @@
       "signedUp": "2026-07-28T14:11:03.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -4986,7 +4986,7 @@
       "signedUp": "2026-07-28T14:00:44.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": true,
@@ -5001,7 +5001,7 @@
       "signedUp": "2026-07-28T13:32:35.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5016,7 +5016,7 @@
       "signedUp": "2026-07-28T13:00:21.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5031,7 +5031,7 @@
       "signedUp": "2026-07-28T12:48:31.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5046,7 +5046,7 @@
       "signedUp": "2026-07-28T12:52:49.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5061,7 +5061,7 @@
       "signedUp": "2026-07-28T12:47:06.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5076,7 +5076,7 @@
       "signedUp": "2026-07-28T12:22:16.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5106,7 +5106,7 @@
       "signedUp": "2026-07-27T20:28:16.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5121,7 +5121,7 @@
       "signedUp": "2026-07-28T11:19:21.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5136,7 +5136,7 @@
       "signedUp": "2026-07-28T11:07:47.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5151,7 +5151,7 @@
       "signedUp": "2026-07-28T10:37:44.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5166,7 +5166,7 @@
       "signedUp": "2026-07-28T10:33:48.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5181,7 +5181,7 @@
       "signedUp": "2026-07-28T10:31:09.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5196,7 +5196,7 @@
       "signedUp": "2026-07-28T10:28:47.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": true,
@@ -5211,7 +5211,7 @@
       "signedUp": "2026-07-28T10:26:19.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5241,7 +5241,7 @@
       "signedUp": "2026-07-28T10:09:08.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5271,7 +5271,7 @@
       "signedUp": "2026-07-28T08:57:49.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5286,7 +5286,7 @@
       "signedUp": "2026-07-28T08:58:42.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5301,7 +5301,7 @@
       "signedUp": "2026-07-28T08:58:30.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5316,7 +5316,7 @@
       "signedUp": "2026-07-28T08:29:02.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5331,7 +5331,7 @@
       "signedUp": "2026-07-28T07:20:51.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5376,7 +5376,7 @@
       "signedUp": "2026-07-28T05:02:48.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5391,7 +5391,7 @@
       "signedUp": "2026-07-28T01:03:42.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5406,7 +5406,7 @@
       "signedUp": "2026-07-28T00:47:48.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5421,7 +5421,7 @@
       "signedUp": "2026-07-28T00:31:09.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
@@ -5436,7 +5436,7 @@
       "signedUp": "2026-07-28T00:19:31.000000",
       "primeraOrden": null,
       "ttfoDias": null,
-      "estadoMeta7d": "fracaso",
+      "estadoMeta7d": "en_observacion",
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
@@ -5458,7 +5458,7 @@
       "caminos": "",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no gestiono pedidos"
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
     },
     {
       "userId": 964974,
@@ -5488,7 +5488,7 @@
       "caminos": "bodega",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no vendo"
+      "ventasMesDeclaradas": "Aún no vendo"
     },
     {
       "userId": 964991,
@@ -5518,7 +5518,7 @@
       "caminos": "",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no gestiono pedidos"
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
     },
     {
       "userId": 965047,
@@ -5533,7 +5533,7 @@
       "caminos": "",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no gestiono pedidos"
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
     },
     {
       "userId": 965048,
@@ -5548,7 +5548,7 @@
       "caminos": "",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no gestiono pedidos"
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
     },
     {
       "userId": 965071,
@@ -5563,7 +5563,7 @@
       "caminos": "bodega,producto,orden_manual",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no vendo"
+      "ventasMesDeclaradas": "Aún no vendo"
     },
     {
       "userId": 965102,
@@ -5578,7 +5578,7 @@
       "caminos": "",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no gestiono pedidos"
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
     },
     {
       "userId": 965216,
@@ -5668,7 +5668,7 @@
       "caminos": "",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no vendo"
+      "ventasMesDeclaradas": "Aún no vendo"
     },
     {
       "userId": 965278,
@@ -5758,7 +5758,7 @@
       "caminos": "bodega",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no vendo"
+      "ventasMesDeclaradas": "Aún no vendo"
     },
     {
       "userId": 965377,
@@ -5818,7 +5818,7 @@
       "caminos": "bodega",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no vendo"
+      "ventasMesDeclaradas": "Aún no vendo"
     },
     {
       "userId": 965532,
@@ -5863,7 +5863,7 @@
       "caminos": "bodega,producto",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no vendo"
+      "ventasMesDeclaradas": "Aún no vendo"
     },
     {
       "userId": 965564,
@@ -6013,7 +6013,7 @@
       "caminos": "bodega",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no vendo"
+      "ventasMesDeclaradas": "Aún no vendo"
     },
     {
       "userId": 965706,
@@ -6028,7 +6028,7 @@
       "caminos": "",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no gestiono pedidos"
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
     },
     {
       "userId": 965688,
@@ -6043,7 +6043,7 @@
       "caminos": "",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no gestiono pedidos"
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
     },
     {
       "userId": 965730,
@@ -6103,7 +6103,7 @@
       "caminos": "",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no gestiono pedidos"
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
     },
     {
       "userId": 965765,
@@ -6118,7 +6118,7 @@
       "caminos": "bodega",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "AÃºn no vendo"
+      "ventasMesDeclaradas": "Aún no vendo"
     },
     {
       "userId": 965804,
@@ -6194,36 +6194,6 @@
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
       "ventasMesDeclaradas": null
-    },
-    {
-      "userId": 965395,
-      "submittedAt": "2026-08-04T18:20:45",
-      "signedUp": "2026-08-04T11:35:33",
-      "primeraOrden": null,
-      "ttfoDias": null,
-      "estadoMeta7d": "en_observacion",
-      "gatillo": "sin_atribucion",
-      "segmento": null,
-      "esPrueba": false,
-      "caminos": "",
-      "ordenesCreadas": null,
-      "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "301 a 1.000 al mes"
-    },
-    {
-      "userId": 965884,
-      "submittedAt": "2026-08-04T18:28:19",
-      "signedUp": "2026-08-04T18:25:22",
-      "primeraOrden": null,
-      "ttfoDias": null,
-      "estadoMeta7d": "en_observacion",
-      "gatillo": "sin_atribucion",
-      "segmento": null,
-      "esPrueba": false,
-      "caminos": "",
-      "ordenesCreadas": null,
-      "ordenesEntregadas": null,
-      "ventasMesDeclaradas": "Menos de 50 al mes"
     }
   ],
   "alertas": {
@@ -6298,15 +6268,15 @@
     "mayorCaidaPorPaso": [
       {
         "slot": "video_bienvenida",
-        "poblacion": 401,
+        "poblacion": 399,
         "caidaAbsoluta": 0,
         "caidaRelativa": 0
       },
       {
         "slot": "modal_crea_bodega",
         "poblacion": 121,
-        "caidaAbsoluta": 280,
-        "caidaRelativa": 0.6982543640897756
+        "caidaAbsoluta": 278,
+        "caidaRelativa": 0.6967418546365914
       },
       {
         "slot": "tour_bodegas",
@@ -6398,9 +6368,9 @@
     "corteOnboarding": "2026-07-28",
     "desdeFecha": "2026-03-17",
     "conOnboarding": {
-      "poblacion": 410,
+      "poblacion": 408,
       "activados": 16,
-      "pctActivados": 0.03902439024390244,
+      "pctActivados": 0.0392156862745098,
       "ttfoMedianaDias": 1,
       "ttfoPromedioDias": 1.875,
       "ttfoDias": [
@@ -7568,20 +7538,20 @@
   "ultimaImportacion": {
     "archivos": [
       {
-        "nombreArchivo": "Automatizacion_Flujo_onbording - Raw Data.csv",
-        "filas": 424
+        "nombreArchivo": "Autormatizacion_flujo_onboarding (1).xlsx",
+        "filas": 416
       }
     ],
     "tipo": "raw_data_incremental",
-    "poblacion": 415,
+    "poblacion": 413,
     "activadas": 18,
     "exito": 18,
     "fracaso": 18,
-    "enObservacion": 379,
+    "enObservacion": 377,
     "alertaAFlujoYOrden": 10,
     "alertaBOrdenSinFlujo": 6,
     "usuario": "katerine.pencue@dropi.co",
     "fechaCorte": "2026-08-04",
-    "createdAt": "2026-08-04T23:45:14.595Z"
+    "createdAt": "2026-08-04T23:25:12.082Z"
   }
 }

@@ -37,8 +37,13 @@ const CAMINOS_CON_PARALELISMO_VALIDADO: Camino[] = ["orden_manual"];
  * (mismo patrón Tour → Evento → Modal, sin modal de creación propia), pero
  * sin datos reales todavía para confirmarlo — mapeado el 29-jul-2026, antes
  * de que llegara ningún archivo de integraciones.
+ *
+ * "bodega" y "producto" se agregaron el 04-ago-2026 a pedido de Kate: para
+ * Raw Data (automatización) el evento (`Ev_`) quedó apagado a propósito —
+ * "no obligatorio... la data raw omite el tema del evento" — y el modal ya
+ * es prueba suficiente de que el paso ocurrió, sin depender del evento.
  */
-const CAMINOS_CON_PARALELISMO_ASUMIDO: Camino[] = ["integraciones"];
+const CAMINOS_CON_PARALELISMO_ASUMIDO: Camino[] = ["integraciones", "bodega", "producto"];
 
 function esFilaModalOTour(valor: unknown): valor is FilaModalOTour {
   return typeof valor === "object" && valor !== null && "totalCompleted" in valor;
@@ -80,10 +85,17 @@ export function derivarTodosLosCaminos(linea: LineaDeTiempoUsuario): CaminoDeriv
     .filter((c): c is CaminoDerivado => c !== null);
 }
 
-/** Modal final de cada camino que tiene el patrón Tour → Evento → Modal (sin modal de creación propia). */
+/**
+ * Modal final de cada camino — el último paso de SENALES_POR_CAMINO, usado
+ * como respaldo cuando no hay evento. "bodega" no tiene modal de
+ * felicitación propia (ver SENALES_POR_CAMINO) — su último paso real es el
+ * Tour, así que ese es el que hace de "final" acá.
+ */
 const MODAL_FINAL_POR_CAMINO: Partial<Record<Camino, Exclude<SlotId, "encuesta">>> = {
   orden_manual: "modal_felicidades_orden_manual",
   integraciones: "modal_felicidades_integracion",
+  producto: "modal_felicidades_producto",
+  bodega: "tour_bodegas",
 };
 
 /**
