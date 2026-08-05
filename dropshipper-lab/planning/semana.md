@@ -52,9 +52,10 @@ Dado que solo disponemos de **5 minutos en el Weekly de Producto**, el espacio s
 ## 📅 Agenda & Entregables Día a Día (3 – 7 Ago 2026)
 
 ### 📌 Lunes 3-Ago: Planning Semanal & Discovery SAC
-- [ ] ⭐ **Planning Semanal Seller Success (con Célula):** Alineación de prioridades, asignación de tareas de la semana y coordinación de entregables.
+- [x] ⭐ **Planning Semanal Seller Success (con Célula):** Alineación de prioridades, asignación de tareas de la semana y coordinación de entregables.
 - [x] ⭐ **Correo PoC Shopi (Finanzas & CPO):** Enviado a Mónica González (Financial Manager), Nicolás Martínez (Financial Analyst) y Maria (CPO) con asunto *"Prueba de Concepto Shopi (Distribución Automática de Ventas) – Explicación y Solicitud de Presupuesto"*.
-- [ ] **Data & SAC:** Avanzar en el reporte de Discovery analizando los 3.664 tickets de SAC (`ml_ia.patrones`) para estructurar los cuellos de botella en Wallet y Catálogo (`PROD-SAC-RESEARCH`).
+- [x] ⭐ **Discovery Rigor Audit (10/10 Proyectos):** Auditoría y diligenciamiento conductual al 100% de los 10 proyectos Seller Success según `@.claude/agents/discovery.md` (Aprobados todos sin vacíos).
+- [x] **Data & SAC:** Avanzar en el reporte de Discovery analizando los 3.664 tickets de SAC (`ml_ia.patrones`) para estructurar los cuellos de botella en Wallet y Catálogo (`PROD-SAC-RESEARCH`).
 - [ ] **Métricas:** Revisar datos actualizados de Activación Neta (5.2%) y TTV Neto (16d) en producción para preparar el corte semanal del Dashboard.
 - [ ] **Demo Interna Dropify:** Ajustar preparación del flujo multitienda para demo interna.
 
