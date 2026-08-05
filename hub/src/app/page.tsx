@@ -32,6 +32,15 @@ const updates: Item[] = [
     icon: "📋",
   },
   {
+    key: "weekly-sellers",
+    name: "Weekly · Célula Sellers",
+    description: "Espacio semanal interactivo de la Célula Seller Success — presentación de Delivery (P0/P1/P2/QA) y Discovery Iniciado.",
+    url: "/proyectos/weekly-sellers",
+    tag: "Célula · Seller Success",
+    color: "#FF6B35",
+    icon: "🚀",
+  },
+  {
     key: "weekly-celula",
     name: "Weekly · Célula",
     description: "Updates semanales de la célula Supplier Success para el jefe. Registro histórico por semana.",
