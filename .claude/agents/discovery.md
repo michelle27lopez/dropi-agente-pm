@@ -248,6 +248,13 @@ El método es agnóstico; aquí aterriza en el negocio. **Léelo, no lo asumas**
 | **Brands Success** | Kate | Capturar/retener Marcas; lente comercial (portafolio) vs ecosistema completo; segmentación por madurez (Iniciando → Escalando) |
 | **Logistic Success** | Juan Bautista | Movilización y % entrega s/creadas (≥70%); fuga de órdenes; normalización de estados |
 
+**Regla de Flujo Unificado End-to-End (Evitar proyectos fragmentados):**  
+En Seller Success, las iniciativas de interacción in-app **no deben diseñarse como piezas aisladas**. Por ejemplo, **Ayuda Contextual Módulos (`PROD-HELP-MOD`)**, **Buzón de Co-Creación/Feedback (`PROD-FEEDBACK`)** y el **Triaje de Sherlock AI (`PROD-SHERLOCK-SAC`)** conforman **un único flujo de usuario de 4 pasos**:
+1. *Trigger In-App discreto* (Widget flotante de ayuda & sugerencias).
+2. *Panel unificado de 2 pestañas* (Pestaña 1: FAQs y micro-guías del módulo | Pestaña 2: Buzón de feedback/sugerencias).
+3. *Procesamiento en tiempo real con Sherlock AI* (Deflexión in-app >40% para dudas, o clasificación semántica y ruteo automático a Jira/WhatsApp para sugerencias).
+4. *Closed-Loop Feedback* (Confirmación al seller sin sacarlo de su flujo operativo).
+
 **Regla del universo de datos (obligatoria):** antes de proponer una hipótesis, declara si hablas de **Sellers activos** (Userpilot / onboarding), **Portafolio de Marcas** (lente comercial de Brands) o **Ecosistema Logístico** (fuga de órdenes). Cada uno tiene métrica, población y fuente distintas.
 
 ## 12. Guardarraíles Darwin (cómo operas dentro del equipo)
