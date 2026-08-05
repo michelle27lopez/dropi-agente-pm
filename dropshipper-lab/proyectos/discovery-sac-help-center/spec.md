@@ -36,11 +36,39 @@
 
 ---
 
-## 🛠️ 5. Intervención de Producto & Trilema de Fricción
-* **Qué cambia en el producto:** Módulo de ayuda contextual in-app por módulo alimentado por la Biblia de AI. Autogestión de estados de retiros y guías en tiempo real.
+## 🛠️ 5. Intervención de Producto & Flujo Completo del Usuario (End-to-End)
+
+Para evitar la fragmentación de características o la proliferación de widgets molestos, la solución se consolida en **un solo flujo unificado de 4 pasos in-app**:
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ FLUJO UNIFICADO DE USUARIO (Ayuda Contextual + Buzón Co-Creación + Sherlock AI)                         │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ PASO 1: TRIGGER IN-APP DISCRETO                                                                        │
+│ • El seller está en un módulo crítico (ej: Wallet consultando retiros o Novedades).                    │
+│ • Visualiza el botón sutil de "Ayuda & Sugerencias" en la esquina inferior.                            │
+│                                                                                                        │
+│ PASO 2: DESPLIEGUE DEL PANEL UNIFICADO (2 Pestañas en 1 Widget)                                        │
+│ • Pestaña 💡 "Ayuda del Módulo": Muestra las 3 FAQs más consultadas de esa vista específica.           │
+│ • Pestaña 💬 "Buzón de Co-Creación": Permite enviar sugerencias, mejoras o reportar un dolor de UX.   │
+│                                                                                                        │
+│ PASO 3: ENGINE INTELIGENTE CON SHERLOCK AI                                                             │
+│ • Si consulta una duda: Sherlock responde con micro-guías in-app (<45s) logrando deflexión >40%.       │
+│ • Si envía una sugerencia/bug: Sherlock analiza la semántica, elimina duplicados y clasifica:          │
+│   - Dudas operativas ➔ Responde de inmediato in-app.                                                  │
+│   - Ideas de producto ➔ Envía al backlog de Jira del PM de la célula correspondiente.                 │
+│   - Bloqueos graves ➔ Rutea al WhatsApp de soporte de Laura Contreras (SAC).                          │
+│                                                                                                        │
+│ PASO 4: RECOMPENSA CONDUCTUAL & CLOSED-LOOP                                                            │
+│ • El seller recibe confirmación in-app de la gestión ("Tu idea fue asignada a Finanzas").             │
+│ • Cero cambio de contexto: el seller no sale a WhatsApp ni abandona su flujo de ventas.                │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
 * **Trilema de Fricción:**
   * **ELIMINAR:** La necesidad de chatear con un ser humano para saber el estado de un retiro o guía.
   * **PRESERVAR:** Acceso a soporte humano prioritario cuando el caso supera Nivel 1.
+  * **INVERSIÓN:** El feedback dejado por el seller retroalimenta el backlog sin trabajo de triaje manual.
 
 ---
 
