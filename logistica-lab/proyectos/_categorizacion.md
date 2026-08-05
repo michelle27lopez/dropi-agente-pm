@@ -3,7 +3,7 @@
 > Tablero de trabajo del playbook `metodologia/discovery-y-categorizacion.md`. Categoriza el roadmap
 > por **la ORDEN** (criterio de Juan 24-jun: *logística = dueño de la orden; entra por CONTENIDO, no por el
 > campo Célula/Dominio de Jira*). Fuentes: `reportes/auditoria-roadmap-lsc.md` (17 ideas + fill-rate) ·
-> `estrategia/` (OKR) · specs de cada proyecto. **Última actualización: 2026-06-24.**
+> `estrategia/` (OKR) · specs de cada proyecto. **Última actualización: 2026-08-02.**
 
 ## OKR / NSM de la célula (contexto)
 - **Ownership:** *la orden — todo lo que le pasa una vez se crea en Dropi.* Célula = **Enabler**, dueño directo de la tasa de entrega.
@@ -52,7 +52,7 @@ Etiqueta: 🔵 nuevo/estratégico · 🔴 heredado/finalizar · 🟡 OKR · 🟣
 |---|---|---|---|---|---|
 | **Notif. Prevención de Devoluciones / predicción de entrega AI** | PRM-1512 | Junta OKR · **FINALIZAR** · 🟡 | ②④ | entrega ≥70% | _por crear_ (alinear c/ Seller Success) |
 | Pruebas de entrega | PRM-1364 (→1517) | — | ② | entrega | — |
-| **Guías reemplazatorias** (Ecom Scanner) | PRM-745·1380·1381 | dev beta · ✅ ordenado | ②④ | entrega | [spec](guias-reemplazatorias/spec.md) |
+| **Guías reemplazatorias** (Ecom Scanner) | PRM-745·1380·1381 | dev finalizado · beta/rollout por reconciliar | ②④ | entrega | [spec](guias-reemplazatorias/spec.md) · [auditoría](guias-reemplazatorias/auditoria-lanzamiento-agosto-2026.md) |
 | Devoluciones (logística inversa) | PRM-1363 · 1263 · 1288 (Ecom) | — | ②④ | entrega | (dedupe 1263↔1288) |
 | Rediseño módulo de garantías ⤴ | PRM-1294 (Backoffice) | — | ④ | — | logística inversa (debatible) |
 
@@ -61,6 +61,30 @@ Etiqueta: 🔵 nuevo/estratégico · 🔴 heredado/finalizar · 🟡 OKR · 🟣
 |---|---|---|---|---|---|
 | Cierre diario · seguimiento transportadoras ⤴ | PRM-1082 (Backoffice) | Backoffice | ⬚ | **North Star (SLA por ruta, tiempos)** | logística por contenido; **mover/anclar** |
 | Tableros KPIs (gerencia / CAS) | PRM-1185 · 1268 | Data/Backoffice | ⬚ | medición | soporte/data |
+
+## Intake México · clasificación previa a Jira
+
+> Fuente primaria: workshop [Hablemos del producto en MX](https://docs.google.com/document/d/1nI-Sxs4m0sKiDh9j6qXvSTPcV3BXLB7ok1TL6VyAuxs/edit), 3-jun-2026. Esta tabla es **triaje**, no backlog nuevo. Ninguna fila cambia de tipo ni se enlaza en Jira hasta comprobar equivalencia funcional y ownership.
+
+| Hallazgo literal o derivado | Clasificación actual | Relación candidata | Decisión / siguiente verificación |
+|---|---|---|---|
+| Torre Logística + evidencias | Oportunidad compuesta | LOG-011 · LOG-016 · PROD-1706 · DROP-18559 | Comparar capacidades. No fusionar la torre de tiempos, POD y la activación MX solo por compartir “torre”. |
+| Panel de recolecciones | Intake logístico ambiguo | **LOG-013** · PRM-1465 ← PRM-1468 | Confirmar si México describe pickups externos, carrier interno/PAU, Warranties u otro sistema. STID-550/598/2185 son Garantías y quedan fuera. |
+| Compatibilidad bodega–transportadora | Problema logístico por clasificar | selección/elegibilidad de carrier; ticket no confirmado | Levantar la regla actual de compatibilidad, país/bodega, excepciones y dueño antes de decidir proyecto vs bug. |
+| Pedidos duplicados desde Ecom | Bug o condición operativa logística | guardarraíl de LOG-001; ticket exacto no confirmado | Reproducir el flujo y deduplicar contra tickets existentes. No crear proyecto; una orden duplicada no debe autoconfirmarse. |
+| Códigos postales insuficientes / Sepomex | Problema de calidad/validación de dirección | PRM-1341 · PRM-1144 | Revisar alcance y datos; mantener ambos tickets sin cambios hasta confirmar equivalencia. |
+| Código de seguridad al destinatario | Capacidad candidata de última milla | LOG-016 / POD | Comparar con foto, firma, geolocalización y doble verificación. **No es** el token de devolución. |
+| Token de devoluciones Veloces | Capacidad/evidencia existente | LOG-010 · `reduccion-devoluciones-cod/spec.md` | No crear iniciativa. Es prueba de entrega de la devolución al proveedor; Juan acompaña, no desarrolla. |
+| Archivos de transportadoras | Capacidad/fuente del Sistema Inteligente + operación transitoria | PRM-1150 → PRM-203; conectado con PRM-1219 / LOG-004 | No crear iniciativa. Separar catálogo curado de la hoja cruda y del proceso GP/SOP-101; cerrar owner, diccionario, sensibilidad, frecuencia/SLA, paridad y migración. |
+
+### Regla de corte
+
+- **Proyecto:** solo con problema, alcance, owner, métrica y relación Jira comprobados.
+- **Oportunidad:** evidencia de valor sin solución/alcance cerrado.
+- **Bug:** comportamiento esperado conocido y reproducible que hoy falla.
+- **Operación:** trabajo recurrente cuyo valor está en proceso/SLA, no en construir producto.
+- **Experimento:** prueba acotada para resolver una incertidumbre antes del desarrollo.
+- **Evidencia:** fuente que sustenta otra iniciativa; no recibe código propio.
 
 ### Catálogo / pre-orden (no-core de la célula)
 | Proyecto | Jira | Notas |

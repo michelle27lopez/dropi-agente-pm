@@ -1,100 +1,174 @@
-# Spec · Reducir devoluciones dentro del COD  ·  RAMA DE MUESTRA (flujo end-to-end)
+# Spec · Reducir devoluciones COD y trazabilidad de logística inversa
 
-> Fuente de verdad INTERNA. Obedece a `metodologia/spec-driven.md`. **Cada afirmación lleva estado + fuente.**
-> Estados: ⚪ discovery · 🟡 definido · 🔵 en diseño · 🟢 construido · ⛔ no-objetivo. Fuente: `data:` `jira:` `doc:` `reunion:`.
-> ⭐ **Esta es la rama de MUESTRA del flujo completo** (decisión Juan 25-jun): baja una sola fuga de punta a punta
-> —árbol → oportunidad → insights → ideas → soluciones → impacto → métricas— para validar el formato y replicarlo.
-> Modelo del árbol/cadena: `metodologia/arbol-discovery-okr-jira.md`. Mapa de impacto: `estrategia/roadmap-okr-impacto.md`.
+> Fuente interna de Logistic Success. Corte: 2026-08-02. Jira gobierna estado, ownership y relaciones; este documento conserva la definición, la evidencia y los vacíos. No reproduce identidades, contactos, órdenes ni métricas operativas restringidas.
 
 | Campo | Valor |
-|-------|-------|
-| Owner / PM | Juan Diego Bautista |
-| Proyecto OKR (Jira) | **PRM-1523** "Reducir devoluciones 10%" (Proyecto OKR) |
+|---|---|
+| Código | **LOG-010** |
+| Owner / PM documental | Juan Diego Bautista |
+| Proyecto Jira | [PRM-1523](https://dropi-it.atlassian.net/browse/PRM-1523) · “Reducir devoluciones 10%” |
+| Oportunidad relacionada en Jira | [PRM-1580](https://dropi-it.atlassian.net/browse/PRM-1580) · “Alto porcentaje de devoluciones en la contraentrega” |
 | Célula | Logistic Success |
-| Etapa de la cadena | Desenlace (entrega/devolución) |
-| Fuga | ② COD fallido / devolución |
-| OKR / KR | OKR2 · **KR2.1 Tasa de entrega ≥70%** (directo) |
-| Estado global | ⚪ discovery (borrador 25-jun) |
-| Última actualización | 2026-07-09 |
+| Etapa | Desenlace COD y retorno al proveedor |
+| Estado verificable | **Discovery/backlog**. PRM-1523 y PRM-1580 están en `En Ruta (backlog)`, sin assignee; PRM-1523 no tiene descripción. |
+| Última actualización | 2026-08-02 |
 
-> **🆕 09-jul · logística inversa — token de devoluciones (Veloces)** `[fuente: update de Juan a Maria, 09-jul]`
-> Veloces desarrolló un **token para proveedores al momento de entregarles las devoluciones**, para zanjar la
-> disputa clásica de la logística inversa: **el proveedor dice que la devolución no le llegó y la transportadora
-> dice que sí**. Prueba de entrega verificable de la devolución al proveedor. **Rol de Juan = acompañar / direccionar**
-> (no es dueño ni desarrollo propio). Es la pata de **logística inversa** de esta rama: no reduce la devolución,
-> pero **cierra la fricción/confianza del tramo de retorno** (evita pérdidas y disputas). Seguir el proceso.
+## 1. Decisión de arquitectura
 
-## 0 · El flujo end-to-end (el mapa de esta rama)
+LOG-010 reúne dos capas relacionadas, pero causalmente distintas:
+
+1. **Reducir la incidencia de devolución COD:** actuar antes o durante el intento de entrega sobre riesgo de pago, voluntad, contactabilidad y gestión de la novedad.
+2. **Trazar la logística inversa:** cuando la devolución ya ocurrió, demostrar el traspaso físico al proveedor y cerrar discrepancias.
+
+El **token de devoluciones de Veloces pertenece a la segunda capa**. Se conserva dentro de LOG-010 como capacidad/evidencia adyacente para evitar otro registro paralelo, pero no se contabiliza como experimento primario para reducir la tasa de devoluciones. Un token exitoso puede reducir disputas, pérdidas y tiempo de conciliación; no evita que el destinatario rehúse o que el pedido regrese.
+
+## 2. Qué es —y qué no es— el token Veloces
+
+### Flujo observado en el piloto
+
+1. Veloces prepara el manifiesto digital y notifica que la devolución va en ruta.
+2. El contacto autorizado de la bodega recibe un código de cuatro dígitos.
+3. La persona que recibe físicamente la devolución entrega el código al conductor.
+4. Se registran recepción, novedades, nombre/firma y cierre del manifiesto.
+5. El manifiesto firmado se comparte por los canales acordados, de modo que bodega y transportadora consulten la misma evidencia.
+
+La capacitación de julio documenta un piloto controlado con un grupo acotado de bodegas. No se localizaron todavía un reporte final, métricas de discrepancias antes/después ni una decisión formal de expansión a otros carriers. Por eso el estado correcto es **piloto con flujo documentado**, no “desplegado globalmente”.
+
+### Fronteras obligatorias
+
+| Concepto | Actor que confirma | Momento | Clasificación |
+|---|---|---|---|
+| Código de seguridad de entrega | Destinatario final | Entrega de última milla | Capacidad candidata de POD / LOG-016 |
+| Token de devolución Veloces | Persona autorizada en bodega/proveedor | Recepción del retorno | Capacidad de logística inversa dentro de LOG-010 |
+| Archivos de transportadoras | Sistema/equipo que intercambia lotes | Conciliación periódica | Integración u operación independiente; requiere auditoría propia |
+| Guía reemplazatoria | Bodega/operación identifica un paquete retornado | Lectura y clasificación | LOG-009; no confirma por sí sola la recepción final |
+
+## 3. Evidencia y antecedentes
+
+| Fuente | Fecha / estado | Qué demuestra | Qué no demuestra |
+|---|---|---|---|
+| [Capacitación token de devolución](https://docs.google.com/document/d/1BZINWZLxXkVy4hTbE6uVZFBaQpUfJ01BJWjZ4Cl-Di0/edit) | 2026-07-10 | Flujo real del piloto: manifiesto previo, token, firma, novedades y canales de cierre | Resultado del piloto, reducción de disputas o rollout global |
+| [Revisión de pendientes Dropi–Veloces](https://docs.google.com/document/d/1z0BQyRznjthNcKayorFvxAYJJKdaNu0xlhuoWP19YRc/edit) | 2026-06-05 | Veloces ya había mapeado su proceso; Dropi debía resolver contactos de bodega, integración y sensibilización | Que los datos de contacto ya estén corregidos o que la integración esté terminada |
+| Hoja “Prueba token Veloces devoluciones” | Fuente restringida | Existe un registro operativo de la prueba | No se replica ni se usa como publicación; falta síntesis anonimizada y aprobada |
+| [DROP-3455](https://dropi-it.atlassian.net/browse/DROP-3455) | Epic `HANDOFF`, creada 2024 | Antecedente amplio de rediseño/trazabilidad Ecom Scanner para devoluciones | Que cada historia hija esté construida |
+| [DROP-4595](https://dropi-it.atlassian.net/browse/DROP-4595) / [DROP-4596](https://dropi-it.atlassian.net/browse/DROP-4596) | Historias Front/Back en `Backlog`, enero 2025 | Definición previa de lectura, evidencias, manifiesto, firma y flujo Veloces | Implementación en Dropi; siguen en backlog y sin relaciones propias |
+| [PRM-1523](https://dropi-it.atlassian.net/browse/PRM-1523) | Proyecto OKR en backlog | Paraguas vigente para reducción de devoluciones; relacionado con PRM-1580 | Alcance definido: no tiene descripción ni assignee |
+
+Los artefactos de Laura que aparezcan en este frente se consultan únicamente como referencia. No se editan, duplican ni se reclasifican desde este trabajo.
+
+## 4. Problema y árbol causal
+
+```text
+Devolución COD
+├── antes/durante la entrega
+│   ├── riesgo de pago o cambio de voluntad
+│   ├── contactabilidad y coordinación
+│   ├── dirección/elegibilidad (frente relacionado, no absorbido)
+│   └── gestión de novedad sin triaje ni owner
+└── después de la devolución
+    ├── falta de evidencia del traspaso al proveedor
+    ├── contactos de bodega incorrectos o desactualizados
+    ├── novedades sin cierre compartido
+    └── disputa proveedor–transportadora
 ```
-FUGA ② COD/devolución  (rama del árbol, = PRM-1523)
-  └─ OPORTUNIDAD · "El grueso de la devolución es pago/voluntad, no logística"
-       ├─ Insight 1 · COD 25% vs prepago 1.3% (pago = palanca dominante)
-       ├─ Insight 2 · triaje por motivo: rehúsa 95% devuelve (soltar) · no-encuentra 41-55% (pelear)
-       └─ Insight 3 · no hay dueño de la novedad (solved_by_logistic=0, recupero <5%)
-     ├─ IDEA A · Red de seguridad de pago DENTRO del COD
-     │    └─ Solución A1 · Score de riesgo de pago/devolución por orden (pre-despacho)
-     │    └─ Solución A2 · Anticipo / ConfioPagos en órdenes de alto riesgo (con Fintech)
-     └─ IDEA B · Dueño + triaje de la novedad
-          └─ Solución B1 · Triaje automático por motivo (soltar / pelear) + dueño asignado
-  → IMPACTO: Alto (devolución 25% → meta ≤10%; mueve KR2.1 directo)
-  → MÉTRICA: tasa de devolución s/red + recuperación de novedades "pelear" + precisión del score
-```
-> **Principio que NO se viola:** el COD es el valor agregado de Dropi (el cliente paga al recibir). La devolución
-> se ataca **dentro del COD** (anticipo, score, contactabilidad), **nunca empujando prepago**. `[doc:CLAUDE.md · Juan]`
 
-## 1 · Árbol de problema (la rama, descompuesta por motivo de devolución)
-**Raíz:** la orden entra a la red pero no se entrega y se devuelve, perdiendo el flete de ida y vuelta y el COD. Devolución ~19-25% sobre red. `[data:tema 04]`
-Descompuesta por **motivo de novedad** (no es un bloque; cada motivo se ataca distinto): `[data:tema 04 · history_new_orders, captura 24-jun]`
-- **A · Pago / voluntad** — "rehúsa recibir" 294K (95% devuelve) + el "no tengo plata" al momento de entrega. Es arrepentimiento o falta de efectivo, no logística. `[data]`
-- **B · Contactabilidad / coordinación** — "coordinar la entrega" 281K (79% devuelve) + "no contesta" 37K. `[data]`
-- **C · Gestión de la visita (recuperable)** — "no se logra entrega" 84K (41% recupera) + "no encuentra destinatario" 24K (55% recupera). `[data]`
-- **D · Dirección** — "no existe/incompleta/no localiza" ~161K (58-82% devuelve). ⛔ **No-objetivo de esta rama:** es la **hermana de prevención/recuperación** → vive en [`direccion-confiable-geo/spec.md`](../direccion-confiable-geo/spec.md). `[⛔ · data]`
+La analítica restringida indica que los motivos no tienen el mismo potencial de recuperación. Este spec conserva la conclusión y la fuente, pero no replica conteos, identidades ni consultas productivas. El baseline debe publicarse únicamente como agregado aprobado, con fecha, país, definición de denominador y owner.
 
-## 2 · Oportunidad (problema + data)  — el nodo Polaris
-**"El grueso de la devolución es un problema de pago y de gestión, no de la última milla."**
-Hoy tratamos la devolución como un bloque y la "gestionamos" cuando ya ocurrió; pero la data dice que la palanca grande es el pago dentro del COD y un triaje honesto por motivo, no más operación física. `[data:tema 04]`
+## 5. Hipótesis y líneas de solución
 
-### Los 3 Insights (= la evidencia que se pega como tarjetas en Polaris)
-1. **El pago manda:** COD devuelve **25%** vs prepago **1.3%** (H2, hallazgo #1). Como el COD es el valor, se ataca dentro de él. `[data:tema 05]`
-2. **Triaje por motivo:** "rehúsa recibir" (294K, **95% devuelve**) → soltar, no pelear; "no se logra/no encuentra" (**41-55% recupera**) → pelear. "Resuelta" es humo: el % resuelta es alto pero la entrega final no sube → la gestión administra el fracaso. `[data:tema 04]`
-3. **Sin dueño:** `solved_by_logistic = 0` siempre; recuperación real **<5%**. Nadie es responsable de la novedad. `[data:tema 04]`
+### Capa A — prevenir la devolución
 
-## 3 · Ideas (las palancas)
-- **Idea A · Red de seguridad de pago dentro del COD** — reducir la devolución por pago/voluntad sin tocar la promesa de contraentrega (anticipo parcial, score de riesgo, recordatorio de "ten el efectivo"). Ataca el motivo A. `[⚪]`
-- **Idea B · Dueño + triaje de la novedad** — poner un responsable Dropi y triar por motivo: soltar lo perdido (rehúsa), pelear lo recuperable (no se logra/no encuentra), con gate pre-despacho. Ataca B y C. `[⚪ · data:tema 05 plan frente 2/3]`
+- **Score de riesgo predespacho:** identificar órdenes con mayor probabilidad de retorno y activar una intervención proporcional.
+- **Red de seguridad dentro del COD:** recordatorio o anticipo selectivo sin eliminar la promesa de pago contraentrega.
+- **Triaje de novedades:** separar casos recuperables de casos sin señal de recuperación y asignar owner/SLA.
+- **Guardarraíles:** duplicidad, elegibilidad de zona/carrier, atribución de la intervención e idempotencia.
 
-## 4 · Soluciones (experimentos, barato → caro)
-- **A1 · Score de riesgo de pago/devolución por orden** — marcar antes del despacho las órdenes con alta probabilidad de devolver (huella histórica del comprador). Engancha con PRM-1512 (IA predicción) y PRM-1211 (huella digital). Barato-medio; usa data existente. `[⚪ · jira:PRM-1512/1211]`
-- **B1 · Triaje automático de novedad por motivo + dueño** — soltar "rehúsa", escalar "no se logra/no encuentra", con responsable asignado. Barato; cambia proceso, no construye motor de reintentos (el 1er intento decide). `[⚪]`
-- **A2 · Anticipo / ConfioPagos en órdenes de alto riesgo** — red de seguridad de pago dentro del COD, sólo donde el score lo amerite. Más caro; requiere **coordinación con Fintech**. `[⚪ · pregunta abierta §9]`
-> No-objetivo (⛔): motor de re-despacho/reintentos (el 1er intento decide); empujar prepago (rompe el valor COD). `[⛔ · data:tema 04]`
+Estas líneas siguen en discovery. No existe evidencia localizada de experimento outcome para LOG-010.
 
-## 5 · Impacto (aporte al KR)
-**Alto.** Devolución hoy ~25% s/red → objetivo del Proyecto OKR **≤10%** (PRM-1523). Cada devolución cuesta flete ida+vuelta + producto inmovilizado + COD no recaudado. Atacar el motivo A (294K "rehúsa") y rescatar el C (recuperables 41-55%) sube la tasa de entrega (KR2.1) directamente. `[data:tema 04/05]`
-> `Aporte a NSM` (cuando se cargue): **Alto · % entrega/devolución · baseline pendiente** (la cifra exacta sale de la 1ª medición).
+### Capa B — conciliar la devolución ya materializada
 
-## 6 · Métricas (de éxito + cómo se mide)
-- **Métrica de éxito:** tasa de devolución sobre red. Base ~**19-25%** (±2-3%), meta **≤10%** o −10% relativo sostenido. `[data:tema 04]`
-- **Sub-métricas:** % devolución **por motivo** · % recuperación de las novedades "pelear" · precisión del score (de las marcadas alto-riesgo, cuántas devuelven). `[🟡]`
-- **Segmentación / PQL:** por canal (SHOP/MANUAL), por motivo, por carrier, por país. `[🟡]`
-- **Cómo se mide (datos):** `history_new_orders` (`novedad`, `solution`, `solved_by_user_logistic`) · `Order` (`rate_type`=COD, `status`, `distribution_company_id`) · `Historyorder`. Devolución es ±2-3% confiable; las novedades ya las tenemos por captura. `[data:tema 10]`
+- **Token Veloces + manifiesto:** prueba del traspaso físico a la bodega.
+- **Novedades y firma:** evidencia común antes de cerrar el manifiesto.
+- **Contacto autorizado:** WhatsApp/correo de la bodega debe ser actual, consentido, limitado al propósito y no expuesto en Jira, Confluence, Darwin o repositorio.
+- **Expansión por carrier:** solo después de revisar resultado, capacidad equivalente, contrato de datos, soporte y tratamiento de novedades.
 
-## 7 · Multi-país
-Rama común; **CO primero** (data madura) → **MX después**, con baseline y umbrales de score por país. El score y el triaje se parametrizan por país/carrier; el KR se mide por país. `[🟡 · metodologia/arbol-discovery-okr-jira §6]`
+## 6. Ownership y RACI provisional
 
-## 8 · Trazabilidad
-| Tipo | Referencia |
-|------|-----------|
-| OKR / KR | OKR2 [PRM-1391] → KR2.1 [PRM-1396] |
-| Proyecto OKR | PRM-1523 (ya con OKR Ppal + KR entrega, 25-jun) |
-| Oportunidad / Idea / Solución | **por crear** (cuando se valide el flujo y se decida espejar) |
-| Engancha con | PRM-1512 (IA predicción devoluciones) · PRM-1211 (huella digital) · PRM-91 (direcciones = motivo D, otra rama) |
+| Actividad | Responsable verificable / candidato | Límite |
+|---|---|---|
+| Desarrollo y operación del token | Veloces | La evidencia disponible atribuye el proceso a la transportadora; falta owner nominal confirmado |
+| Dirección del piloto y articulación | Juan / Logistic Success | Acompaña y direcciona; no es owner del desarrollo |
+| Datos de contacto de bodega | Operación/Producto Dropi, owner por confirmar | No publicar datos personales; definir fuente canónica y consentimiento |
+| Cambios Ecom Scanner / integración | Equipo técnico por identificar | DROP-4595/4596 son antecedentes en backlog, no una asignación vigente |
+| Decisión de expansión | Logistic Success + Operaciones + Veloces | Requiere resultados y criterios de salida |
 
-## 9 · Preguntas abiertas
-- [ ] **Frente de pago dentro del COD (A2):** ¿lo asume logística o se coordina con Fintech (ConfioPagos/anticipo)? — Juan + Fintech `[doc:estrategia/ decisión abierta COD]`
-- [ ] **Baseline de devolución por motivo y por país** — correr con `history_new_orders`. — Juan + Data
-- [ ] **Umbral del score** (precisión vs cobertura) — se fija con la 1ª corrida.
-- [ ] **¿Cuánto del "rehúsa" (294K) es realmente "no tengo plata"?** — abrir el motivo, hoy agregado. — Data
+## 7. Contrato mínimo de datos, sin información confidencial
 
-## 10 · Changelog
-- 2026-06-25 — Rama de muestra creada end-to-end (árbol→oportunidad→3 insights→2 ideas→3 soluciones→impacto→métricas). Pendiente: validar el formato con Juan y, si sirve, replicarlo en las demás fugas; luego (último) cronograma + espejar a Jira.
+| Entidad/evento | Campos mínimos permitidos en el diseño | Regla |
+|---|---|---|
+| Manifiesto de devolución | id técnico, carrier, bodega referenciada, estado, timestamps | Sin nombres/teléfonos en documentación compartida |
+| Token emitido | id del manifiesto, estado de emisión, expiración, canal abstracto | Nunca guardar el token en logs analíticos ni documentos |
+| Recepción validada | timestamp, resultado, actor por rol, novedad agregada | Separar identificador técnico de PII |
+| Cierre | firma/evidencia referenciada, conteos agregados, resultado | Acceso por rol, retención definida y auditoría |
+| Contacto fallido | razón normalizada y canal | Medir calidad sin publicar el dato de contacto |
+
+Antes de integración se deben resolver expiración, reintentos, reenvío, múltiples contactos, cambio de contacto, acceso al manifiesto, retención, derecho de corrección e idempotencia del cierre.
+
+## 8. Métricas y criterio de decisión
+
+### Prevención COD
+
+- tasa de devolución con denominador y ventana explícitos;
+- recuperación por motivo de novedad;
+- entrega y costo incremental por intervención;
+- falsos positivos del score y efecto por país/carrier.
+
+### Token/logística inversa
+
+- manifiestos notificados, recibidos y cerrados;
+- validaciones exitosas/fallidas y causa agregada;
+- contactos no alcanzables;
+- novedades abiertas y tiempo de cierre;
+- discrepancias proveedor–carrier antes/después;
+- soporte requerido, reenvíos y cierres duplicados;
+- integridad de la evidencia y cumplimiento de acceso/retención.
+
+**Gate de expansión:** no ampliar a otros carriers solo porque el flujo funcione en una demostración. Exigir periodo, cohorte, baseline, guardarraíles, resultado, soporte y decisión documentada.
+
+## 9. Auditoría de las nueve fases E2E
+
+| Fase | Estado | Evidencia / pendiente |
+|---|---|---|
+| Kick-off | 🟡 | Problema de trazabilidad y disputa documentado; falta owner formal y alcance Jira |
+| Discovery | 🟡 | Reunión de pendientes y antecedente Ecom Scanner; falta mapa del proceso actual por actor |
+| Definición | 🟡 | Flujo token/manifiesto documentado; faltan excepciones y contrato de datos |
+| Following | 🟡 | Capacitación/piloto registrados; falta bitácora anonimizada y resultado |
+| Hand-off DEV | ⛔/⚪ | Token parece desarrollado por Veloces; integración Dropi no comprobada. No atribuir a Juan |
+| Comunicación | 🟡 | WhatsApp/correo forman parte del flujo; faltan plantillas aprobadas y manejo de contactos |
+| Activación | 🟡 piloto | Cohorte controlada reportada; no rollout global |
+| Hallazgos | ⚪ | No se localizó informe de resultado ni decisión antes/después |
+| Checklist | ⚪ | Faltan seguridad, soporte, rollback, owner, métricas y expansión |
+
+## 10. Relaciones Jira: estado actual y propuesta
+
+- `PRM-1523 ↔ PRM-1580` ya están relacionados en Jira.
+- `DROP-3455 → DROP-4595/4596` conserva el antecedente técnico/funcional.
+- No existe relación Jira confirmada entre PRM-1523 y DROP-3455/4595/4596.
+- No crear un issue “token de devoluciones” mientras no se demuestre un trabajo nuevo separado.
+- Si se valida la equivalencia, proponer una relación documental entre PRM-1523 y DROP-3455, no marcar duplicidad ni reabrir historias sin decisión de Producto/TI.
+
+## 11. Preguntas abiertas y siguientes acciones
+
+- [ ] Obtener una síntesis anonimizada y aprobada del piloto: periodo, cohorte, intentos, cierres, fallas, discrepancias y decisión.
+- [ ] Confirmar owner nominal en Veloces y owner de integración/contactos en Dropi.
+- [ ] Verificar si DROP-4595/4596 siguen siendo la definición vigente o si fueron sustituidas por otra implementación.
+- [ ] Definir fuente canónica y proceso de actualización de contactos de bodega sin exponer PII.
+- [ ] Cerrar expiración, reenvío, fallback, novedades, idempotencia, acceso y retención.
+- [ ] Separar el KPI de reducción COD del KPI de conciliación de logística inversa.
+- [ ] Revisar expansión por carrier solo después del informe de piloto.
+
+## 12. Changelog
+
+- 2026-08-02 — Auditoría multifuente: se incorporaron PRM-1580, DROP-3455/4595/4596 y documentos de piloto; token reclasificado como piloto/capacidad de conciliación, no como prevención de devolución ni proyecto nuevo. Se retiraron cifras operativas restringidas del spec.
+- 2026-08-02 — Separación explícita frente a código de entrega al destinatario, archivos de carriers y guías reemplazatorias.
+- 2026-06-25 — Rama inicial de discovery COD creada.
