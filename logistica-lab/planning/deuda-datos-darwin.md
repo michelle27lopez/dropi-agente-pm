@@ -1,0 +1,181 @@
+# 🧾 Deuda de datos — Darwin (`projects`)
+
+> Lista viva de lo que está **inconsistente en la base**, no en el código. Todo lo de acá se
+> verificó con consultas de solo lectura a Supabase el **4-ago-2026** — no hay nada inferido
+> ni recordado. Prioridad: 🔴 alta · 🟡 media · 🟢 baja.
+>
+> Nació al alinear `/celula/logistica` con la estructura de las demás células. Varias de estas
+> cosas se descubrieron porque la home dejó de esconderlas: agrupar por etapa tapaba los
+> huecos que la rejilla común deja a la vista.
+>
+> **Ninguno de estos puntos se arregla desde este documento.** Cada uno necesita una decisión
+> de su dueño antes de tocar nada.
+
+---
+
+## 🔴 1. Cinco fichas de logística usan el ticket de Jira como `project_code`
+
+| En la base | Debería ser | Iniciativa |
+|---|---|---|
+| `PRM-91` | LOG-002 | Validación y normalización de direcciones |
+| `PRM-1513` | LOG-004 | Selección inteligente de transportadoras |
+| `PRM-1366` | LOG-005 | Same Day |
+| `PRM-1297` | LOG-007 | Normalización de estados |
+| `PRM-1512` | LOG-008 | Herramienta preventiva de novedades |
+
+El cruce entre el tablero (`hub/src/app/proyectos/logistica/_lib/data.ts`) y Darwin es por
+`project_code`. Con el código de Jira ahí, la ficha existe pero es invisible para el cruce, y
+las cinco salían marcadas como "sin ficha en Darwin" aunque están desde el 21-jul.
+
+Las guardas `where not exists (... where p.project_code = v.project_code)` de las migraciones
+031 y 040 comparan por código: como `PRM-91 ≠ LOG-002`, ninguna de las dos las reconoció.
+
+**Estado:** resuelto *en la UI* declarando `codigoDarwin` en el tablero — cero UPDATE a
+`projects`. La base sigue con dos convenciones.
+
+**Decisión pendiente (Juan):** ¿se normalizan los códigos o se deja declarado? Ojo antes de
+normalizar: `project_code` **no tiene UNIQUE** y se usa como llave de texto sin FK en
+`discovery_cycles.project_id`. Renombrar puede huerfanar filas — para estas cinco se verificó
+que hoy no afecta a ninguna, pero la regla general es que renombrar códigos es peligroso.
+Además sellers usa claves de Jira (`PROD-*`, `PRM-*`) como `project_code` **a propósito**:
+`FALLBACK_CYCLES` en `hub/src/app/proyectos/[slug]/page.tsx` está indexado por ellas.
+
+---
+
+## 🔴 2. Esas mismas cinco están tipadas `Delivery Proyecto` y el tablero dice otra cosa
+
+En Supabase las cinco tienen `type = 'Delivery Proyecto'`. En el tablero, ninguna está en
+delivery: `LOG-002` y `LOG-005` están en Discovery, `LOG-004` y `LOG-007` en Definición,
+`LOG-008` en Discovery. `PRM-1297` figura como "prioridad #1 del Delivery Roadmap" pero su
+fase es Definición.
+
+Las dos fuentes dicen cosas distintas sobre los mismos cinco proyectos. Desde que logística
+usa la estructura común, salen bajo "Delivery Proyectos" — no se tapa, es el hallazgo.
+
+**Decisión pendiente (Juan):** o se corrige el `type` en la base, o se corrige la fase en el
+tablero. Lo que no puede quedar es una versión distinta en cada lado.
+
+---
+
+## 🔴 3. No hay forma de corregir `type` desde la interfaz
+
+El `PATCH` de `hub/src/app/api/proyectos/[slug]/route.ts` acepta `estado_interno`, `vpv`,
+`parent_project_id`, `related_poc_id` y `related_delivery_id`. **No acepta `type`.**
+
+O sea: el punto 2 no se puede arreglar desde Darwin. Hace falta SQL a mano en el editor de
+Supabase, o extender el PATCH.
+
+**Dueño:** quien tome el próximo PR de Darwin.
+
+---
+
+## 🟡 4. Catorce proyectos sin `type`
+
+13 de suppliers y 1 de brands tienen `type = NULL`:
+
+```
+DAT-001  COM-001  FAC-001  SUP-001  OUS-001  DCA-000  SUP-002
+CHIP-001 CAT-002  DCA-003  DCA-002  CHP-001  NOM-001   (suppliers)
+BRA-005  (brands)
+```
+
+Caen en "Discovery projects" **por descarte**, no por decisión: el filtro es
+`type !== 'POC' && type !== 'Delivery Proyecto' && type !== 'Following'`, y NULL pasa. Lo
+mismo hace `estadosValidosPara()` en la API, que trata NULL como Discovery.
+
+No está roto, pero significa que nadie eligió dónde va ese 16% del portafolio.
+
+**Dueño:** Jaime (suppliers) y Kate (brands).
+
+---
+
+## 🟡 5. `status` tiene 9 valores y ningún enum efectivo
+
+| Valor | Filas |
+|---|---|
+| `in_progress` | 44 |
+| `Discovery` | 22 |
+| `In Progress` | 10 |
+| `Cerrado` | 3 |
+| `Backlog` | 3 |
+| `Activo` | 3 |
+| `Blocked` | 2 |
+| `Lanzamiento` | 1 |
+| `Done` | 1 |
+
+`in_progress` e `In Progress` son el mismo estado escrito de dos formas: la API escribe el
+primero al crear un proyecto, y las migraciones de logística escriben el segundo. El único
+CHECK versionado (`agente-delivery/schema/supabase_schema.sql`) ni siquiera permite
+`in_progress`, así que en la base real ese constraint no existe.
+
+Nadie lee `status` hoy para decidir nada en la UI — por eso la inconsistencia no se nota. El
+día que alguien filtre por él, se va a notar de golpe.
+
+---
+
+## 🟡 6. La taxonomía está duplicada a mano en varios archivos
+
+Los cuatro arrays de estados (`ESTADOS_DISCOVERY`, `ESTADOS_POC`, `ESTADOS_DELIVERY`,
+`ESTADOS_FOLLOWING`) están escritos **literalmente dos veces**: en
+`hub/src/components/ProjectCard.tsx` (el `<select>` que ofrece los valores) y en
+`hub/src/app/api/proyectos/[slug]/route.ts` (la validación que los comprueba). Hay más copias
+en `hub/src/app/proyectos/[slug]/page.tsx`.
+
+Además `TYPE_ICON` está en 2 archivos, `HANDOFF_COLOR` en 3, y `TYPE_COLOR` en
+`hub/src/app/celulas/page.tsx` **no tiene** `Delivery Proyecto` ni `Following` — así que esos
+proyectos salen sin color en el directorio de células.
+
+Si la UI y la API se desincronizan, el usuario elige un estado válido en pantalla y la API se
+lo rechaza. Hoy coinciden por suerte, no por diseño.
+
+**Arreglo:** un `hub/src/lib/proyecto-taxonomia.ts` del que importen todos. Se dejó **fuera**
+del PR de la estructura de logística a propósito: esos mismos archivos se acaban de reescribir
+para meter Following, y mezclarlo multiplicaba el riesgo del merge.
+
+---
+
+## 🟢 7. `celula_updates` con filas que nadie pinta
+
+| Célula | Filas | La home las muestra |
+|---|---|---|
+| suppliers | 5 | sí (home raíz `/`) |
+| sellers | 4 | no |
+| backoffice | 4 | **no** |
+| product-designers | 2 | **no** |
+| brands | 1 | **no** |
+| logistica | 0 | n/a — su weekly vive en el tablero |
+
+La rama clara de `hub/src/app/celula/[slug]/page.tsx` solo renderiza "Updates" cuando
+`isLogistica`. Las demás células tienen updates guardados que su propia home nunca ha
+mostrado.
+
+**Por qué no se arregló acá:** hacerlo les cambia la página a PM que no lo pidieron.
+
+---
+
+## 🟢 8. `LOG-017` existe en Darwin pero no en el tablero
+
+`LOG-017` ("Parametrizar Tarifas", POC hijo de LOG-006) se creó desde la UI el 30-jul y no
+está en `data.ts`. Como el tablero es quien asigna la etapa, este proyecto no tiene ninguna, y
+**desaparece al filtrar por etapa** en `/celula/logistica`.
+
+Es el hueco inverso al punto 1: se arregla agregando la iniciativa al tablero, no tocando la
+base.
+
+**Dueño:** Juan.
+
+---
+
+## 🟢 9. `roadmap_items` está vacía y la API la devuelve igual
+
+`GET /api/celulas/[slug]` devuelve `roadmap: []` en toda llamada. La tabla tiene 0 filas y
+ninguna vista la consume. O se usa, o se quita del select.
+
+---
+
+## Cómo reproducir estos números
+
+Las consultas fueron `GET` a la API REST de Supabase con la service key del `.env` del repo,
+sobre `projects`, `celulas`, `celula_updates` y `discovery_cycles`. Nada de esto requiere
+escritura. Si algún número no cuadra al releerlo, la base cambió — vuelve a consultarla antes
+de discutir el punto.

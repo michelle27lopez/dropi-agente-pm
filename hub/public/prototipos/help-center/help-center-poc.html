@@ -1,0 +1,2367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dropi - Mis Pedidos</title>
+  <!-- FontAwesome para los íconos exactos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #f5f6f8;
+      --bg-white: #ffffff;
+      --primary-orange: #ff8c32;
+      --primary-hover: #e07422;
+      --text-dark: #333333;
+      --text-muted: #777777;
+      --text-light: #999999;
+      --border-color: #eaeaea;
+      --badge-green: #2ecc71;
+      --badge-green-bg: #eafaf1;
+      --badge-dark: #34495e;
+      --badge-red: #e74c3c;
+      --badge-red-bg: #fdedec;
+      --tag-shopify: #1abc9c;
+      --sidebar-width: 240px;
+      --header-height: 56px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* --- TOP HEADER --- */
+    .top-header {
+      height: var(--header-height);
+      background-color: var(--bg-white);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+
+    .top-header-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--primary-orange);
+      width: calc(var(--sidebar-width) - 40px);
+    }
+
+    .logo i {
+      font-size: 22px;
+    }
+
+    .menu-toggle {
+      font-size: 16px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .user-membership {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-left: 10px;
+    }
+
+    .user-membership img {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+    }
+
+    .top-header-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-dark);
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .badge-beta {
+      background-color: #eafaf1;
+      color: var(--badge-green);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* --- LAYOUT WRAPPER --- */
+    .layout {
+      display: flex;
+      margin-top: var(--header-height);
+      min-height: calc(100vh - var(--header-height));
+    }
+
+    /* --- SIDEBAR --- */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--bg-white);
+      border-right: 1px solid var(--border-color);
+      padding: 15px 0;
+      position: fixed;
+      top: var(--header-height);
+      bottom: 0;
+      overflow-y: auto;
+    }
+
+    .sidebar ul {
+      list-style: none;
+    }
+
+    .sidebar li a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .sidebar li a:hover,
+    .sidebar li.active > a {
+      color: var(--primary-orange);
+      background-color: #fff8f3;
+    }
+
+    .sidebar-left-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar li i {
+      width: 16px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .sidebar-sub {
+      list-style: none;
+      padding-left: 48px;
+      background-color: #fffcfa;
+    }
+
+    .sidebar-sub li a {
+      padding: 8px 10px;
+      font-size: 11px;
+    }
+
+    .sidebar-sub li.active a {
+      color: var(--primary-orange);
+      font-weight: 600;
+    }
+
+    .tag-new {
+      background-color: var(--badge-green);
+      color: white;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    /* --- MAIN CONTENT --- */
+    .main-content {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      padding: 20px;
+      padding-bottom: 60px;
+    }
+
+    .card {
+      background-color: var(--bg-white);
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+
+    /* --- PAGE HEADER & EDU BUTTON --- */
+    .page-header-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .page-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    /* --- Toggle de vista para el prototipo (con pedidos / sin pedidos) --- */
+    .page-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .demo-view-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1px dashed #d9dde3;
+      border-radius: 20px;
+      padding: 4px 6px 4px 12px;
+    }
+    .demo-view-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+    .demo-view-btn {
+      background: var(--bg-main);
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 16px;
+      cursor: pointer;
+    }
+    .demo-view-btn.active {
+      background: var(--primary-orange);
+      color: #fff;
+    }
+
+    /* --- Estado vacío de Mis Pedidos (dentro del cuerpo de la tabla) --- */
+    .empty-tbody-message {
+      padding: 60px 20px !important;
+      text-align: center !important;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* --- Tour guiado tipo UserPilot (spotlight + tooltip) --- */
+    .tour-blocker {
+      position: fixed;
+      inset: 0;
+      z-index: 4999;
+      background: transparent;
+    }
+    .tour-spotlight {
+      position: fixed;
+      z-index: 5000;
+      border-radius: 8px;
+      border: 2px solid var(--primary-orange);
+      box-shadow: 0 0 0 9999px rgba(15, 20, 30, 0.65);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+    .tour-tooltip {
+      position: fixed;
+      z-index: 5001;
+      width: 280px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+      padding: 16px 18px;
+      transition: top 0.3s ease, left 0.3s ease;
+    }
+    .tour-step-count {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--primary-orange);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+    }
+    .tour-tooltip h4 {
+      font-size: 14px;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    .tour-tooltip p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .tour-tooltip-controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .tour-skip-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tour-skip-btn:hover { color: var(--text-dark); }
+    .tour-nav-btns { display: flex; gap: 8px; }
+    .tour-tooltip .tour-btn {
+      padding: 7px 14px;
+      font-size: 12px;
+      border-radius: 6px;
+    }
+
+    .edu-inline-btn {
+      background-color: var(--bg-white);
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    .edu-inline-btn:hover {
+      background-color: #f8f9fa;
+      color: var(--text-dark);
+      border-color: #dcdcdc;
+    }
+
+    .edu-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      width: 230px;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 1000;
+    }
+
+    .edu-menu.active {
+      display: flex;
+    }
+
+    .edu-menu button {
+      background: none;
+      border: none;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 13px;
+      color: var(--text-dark);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.2s;
+    }
+
+    .edu-menu button:hover {
+      background-color: #f8f9fa;
+      color: var(--primary-orange);
+    }
+
+    .edu-menu button i {
+      width: 16px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .edu-menu button:hover i {
+      color: var(--primary-orange);
+    }
+
+    /* --- MODALS (VIDEO, FAQ, TOUR) --- */
+    .custom-modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0,0,0,0.6);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .custom-modal-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+
+    .custom-modal {
+      position: relative;
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 600px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .custom-modal-overlay.active .custom-modal {
+      transform: translateY(0);
+    }
+
+    .custom-modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .custom-modal-header i {
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+    .custom-modal-header i:hover { color: var(--badge-red); }
+
+    .custom-modal-body {
+      padding: 20px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .video-desc {
+      margin-top: 15px;
+      color: var(--text-muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* FAQ Styles */
+    .faq-item {
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .faq-item summary {
+      padding: 15px;
+      background: #fdfdfd;
+      font-weight: 600;
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-item summary::after {
+      content: '\f078';
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: var(--text-muted);
+      transition: transform 0.3s;
+    }
+    .faq-item[open] summary::after { transform: rotate(180deg); }
+    .faq-item p {
+      padding: 15px;
+      border-top: 1px solid var(--border-color);
+      color: #555;
+      line-height: 1.5;
+    }
+
+    /* Tour Styles */
+    .tour-card {
+      text-align: center;
+      padding: 20px 10px;
+    }
+    .tour-image {
+      width: 120px;
+      margin-bottom: 15px;
+    }
+    .tour-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .tour-text { color: var(--text-muted); margin-bottom: 25px; line-height: 1.5; }
+    .tour-controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    .tour-btn {
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    .tour-btn-outline { background: white; border: 1px solid var(--border-color); color: var(--text-dark); }
+    .tour-btn-primary { background: var(--primary-orange); color: white; }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .video-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .video-thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 6px;
+      overflow: hidden;
+      background: #000;
+    }
+    .video-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .video-play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.25);
+      color: #fff;
+      font-size: 32px;
+      transition: background 0.2s;
+    }
+    .video-play-overlay i { transition: transform 0.2s; }
+    .video-item:hover .video-play-overlay { background: rgba(0,0,0,0.4); }
+    .video-item:hover .video-play-overlay i { transform: scale(1.15); color: var(--primary-orange); }
+
+    /* Modal reproductor de video embebido (YouTube) */
+    .video-embed-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+    }
+    .video-embed-wrap iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .video-title-sm {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--text-dark);
+      line-height: 1.3;
+    }
+    .video-duration {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .academy-cta {
+      background-color: #fff8f3;
+      border: 1px solid #fbdcbd;
+      border-radius: 8px;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-top: 10px;
+    }
+    .academy-cta-icon {
+      font-size: 28px;
+      color: var(--primary-orange);
+    }
+    .academy-cta-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .academy-cta-text strong { font-size: 13px; color: var(--text-dark); }
+    .academy-cta-text span { font-size: 12px; color: var(--text-muted); }
+    .academy-btn {
+      background: var(--primary-orange);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .academy-btn:hover { background: var(--primary-hover); }
+
+    /* Botón de cierre flotante para modales sin header (ej. Documentación) */
+    .modal-close-float {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 10;
+      padding: 4px;
+    }
+    .modal-close-float:hover { color: var(--badge-red); }
+
+    /* CTA de carpeta de Drive (reemplaza la lista de documentos) */
+    .drive-cta {
+      background-color: #f0faf4;
+      border: 1px solid #cdebd9;
+      border-radius: 10px;
+      padding: 28px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+    .drive-cta-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 1px solid #cdebd9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      color: #0F9D58;
+    }
+    .drive-cta-text strong { display: block; font-size: 14px; color: var(--text-dark); margin-bottom: 4px; }
+    .drive-cta-text span { font-size: 12.5px; color: var(--text-muted); line-height: 1.5; }
+    .drive-cta-btn {
+      background: #0F9D58;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+      margin-top: 4px;
+    }
+    .drive-cta-btn:hover { background: #0c8046; }
+
+    .feedback-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .rating-stars {
+      display: flex;
+      gap: 8px;
+      font-size: 28px;
+      color: #ffd700;
+      justify-content: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .rating-stars i:hover { transform: scale(1.1); transition: transform 0.2s; }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group label { font-weight: 600; font-size: 12px; color: var(--text-dark); }
+    .form-group input, .form-group textarea {
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      outline: none;
+      font-family: inherit;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--primary-orange); }
+    .btn-submit {
+      background: var(--primary-orange);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 5px;
+    }
+
+    /* --- TOP TOOLBAR --- */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .btn-dropdown, .select-show {
+      background-color: #f8f9fa;
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 4px;
+      color: var(--text-dark);
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-create {
+      background-color: var(--primary-orange);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-create:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-filter {
+      background-color: var(--badge-green);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .search-box {
+      background-color: #eaecef;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      width: 180px;
+      color: var(--text-dark);
+    }
+
+    /* --- DATA TABLE --- */
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th {
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 8px;
+      font-weight: 600;
+      color: #555;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 14px 8px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-dark);
+      vertical-align: middle;
+    }
+
+    tr:hover {
+      background-color: #fafbfc;
+    }
+
+    .product-name {
+      font-weight: 700;
+      color: #444;
+      max-width: 150px;
+      margin: 0 auto;
+      line-height: 1.3;
+    }
+
+    .client-info {
+      line-height: 1.4;
+    }
+
+    .client-name {
+      font-weight: 600;
+    }
+
+    .client-address {
+      color: var(--text-muted);
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: white;
+    }
+
+    .status-entregado { background-color: var(--badge-green); }
+    .status-cancelado { background-color: var(--badge-dark); }
+    .status-rechazado { background-color: var(--badge-red); }
+
+    .sub-order-number {
+      color: #2980b9;
+      font-weight: 700;
+      display: block;
+      margin-top: 4px;
+    }
+
+    .tag-shopify-badge {
+      background-color: var(--tag-shopify);
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 3px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .action-icons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #2980b9;
+    }
+
+    .action-icons i {
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .text-red { color: var(--badge-red); font-size: 10px; font-weight: 600; }
+    .text-blue { color: #2980b9; font-size: 10px; font-weight: 600; }
+
+    /* --- FOOTER / PAGINATION --- */
+    .table-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+    }
+
+    .pagination {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* --- FLOATING ACTION BUTTONS --- */
+    .floating-buttons {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 50;
+    }
+
+    .fab-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background-color: var(--primary-orange);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .footer-credits {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: var(--bg-main);
+      padding: 8px 20px;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 11px;
+      border-top: 1px solid var(--border-color);
+      z-index: 10;
+    }
+
+    /* ==========================================================
+       LÍNEA NARANJA CON GOTA INTEGRADA (EFECTO FLUIDO Y SUTIL)
+       ========================================================== */
+    .droplet-bar-container {
+      position: fixed;
+      top: var(--header-height);
+      left: var(--sidebar-width);
+      right: 0;
+      height: 40px;
+      z-index: 95;
+      pointer-events: none;
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 65px; /* Separación del borde derecho */
+    }
+
+    /* Línea de 1px que se desvanece suavemente a los lados */
+    .droplet-bar-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,140,50,0.1) 40%, var(--primary-orange) 85%, transparent 100%);
+    }
+
+    /* Cuerpo central de la gota (Más pequeña y sutil) */
+    .droplet-tab {
+      pointer-events: auto;
+      position: relative;
+      top: 0;
+      width: 40px;
+      height: 20px; /* Muy corta en reposo */
+      background-color: var(--primary-orange);
+      color: white;
+      border-radius: 0 0 20px 20px; /* Curva inferior perfecta */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0.85; /* Sutil transparencia en reposo */
+      box-shadow: 0 2px 5px rgba(255, 140, 50, 0.2);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Magia CSS: Curvas cóncavas perfectas simulando tensión superficial */
+    .droplet-tab::before,
+    .droplet-tab::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 14px;
+      height: 14px;
+      background-color: transparent;
+    }
+
+    /* Curva izquierda */
+    .droplet-tab::before {
+      left: -14px;
+      border-top-right-radius: 14px;
+      box-shadow: 5px -5px 0 0 var(--primary-orange);
+    }
+
+    /* Curva derecha */
+    .droplet-tab::after {
+      right: -14px;
+      border-top-left-radius: 14px;
+      box-shadow: -5px -5px 0 0 var(--primary-orange);
+    }
+
+    .droplet-tab i {
+      font-size: 13px;
+      margin-top: -4px;
+      transition: transform 0.3s ease;
+    }
+
+    /* Efecto al pasar el ratón (recupera color, crece fluidamente) */
+    .droplet-tab:hover {
+      height: 32px; /* Se estira hacia abajo */
+      opacity: 1; /* Color sólido */
+      box-shadow: 0 5px 12px rgba(255, 140, 50, 0.35);
+    }
+
+    .droplet-tab:hover i {
+      transform: scale(1.15) translateY(1px);
+    }
+
+    /* MENÚ DESPLEGABLE DROPI COMPANION */
+    .droplet-menu {
+      position: absolute;
+      top: 45px;
+      right: -20px;
+      width: 260px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border: 1px solid var(--border-color);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 110;
+      text-align: left;
+    }
+
+    .droplet-menu.show {
+      display: flex;
+      animation: fadeInGota 0.2s ease-out;
+    }
+
+    @keyframes fadeInGota {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .droplet-list { list-style: none; padding: 8px 0; }
+    .droplet-list li a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+    .droplet-list li a:hover {
+      background-color: #fff8f3;
+      color: var(--primary-orange);
+    }
+    .droplet-list li a i {
+      width: 16px;
+      text-align: center;
+      color: var(--text-muted);
+    }
+    .droplet-list li a:hover i { color: var(--primary-orange); }
+
+    /* --- CHAT MODAL (GALI) --- */
+    .chat-modal {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 360px;
+      height: 600px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+      z-index: 1001;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .chat-modal.active {
+      display: flex;
+    }
+
+    .chat-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid #f0f0f0;
+      background: white;
+    }
+
+    .chat-header-left, .chat-header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-muted);
+    }
+
+    .chat-header i {
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .chat-header i:hover {
+      color: var(--text-dark);
+    }
+
+    .gali-avatar {
+      width: 32px;
+      height: 32px;
+      background-color: #7f8c8d;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+    }
+
+    .gali-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gali-name {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-dark);
+    }
+
+    .gali-subtitle {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-greeting {
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .chat-bubble {
+      background-color: #f4f6f8;
+      color: var(--text-dark);
+      padding: 12px 16px;
+      border-radius: 16px 16px 16px 4px;
+      font-size: 13px;
+      max-width: 85%;
+      align-self: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .chat-timestamp {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .chat-chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+
+    .chat-chip {
+      background: white;
+      border: 1px solid #e0e0e0;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: #9e6b4c; /* Brownish color from image */
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chat-chip:hover {
+      background: #fdfaf8;
+      border-color: #9e6b4c;
+    }
+
+    .chat-footer {
+      padding: 12px 16px;
+      border-top: 1px solid #f0f0f0;
+      background: #f9f9f9;
+      display: flex;
+      align-items: center;
+    }
+
+    .chat-input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 10px 15px;
+      font-size: 12px;
+      outline: none;
+      background: white;
+    }
+
+    .chat-input:focus {
+      border-color: var(--primary-orange);
+    }
+
+    .chat-send-btn {
+      background: var(--primary-orange);
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      margin-left: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* --- TOAST NOTIFICATION --- */
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--badge-dark);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s, top 0.3s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .toast-container.show {
+      opacity: 1;
+      visibility: visible;
+      top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= TOP HEADER ================= -->
+  <header class="top-header">
+    <div class="top-header-left">
+      <div class="logo">
+        <i class="fa-solid fa-boxes-packing"></i>
+        <span>dropi</span>
+      </div>
+      <i class="fa-solid fa-bars menu-toggle"></i>
+      <div class="user-membership">
+        <img src="https://ui-avatars.com/api/?name=Pruebas+Producto&background=ff8c32&color=fff" alt="User">
+        <span>Miembro De: PRUEBAS PRODUCTO DROPI</span>
+      </div>
+    </div>
+
+    <div class="top-header-right">
+      <div class="header-item">
+        <img src="https://flagcdn.com/w20/us.png" alt="US" style="width: 16px;">
+        <span>English</span>
+      </div>
+      <div class="header-item">
+        <i class="fa-solid fa-dollar-sign"></i>
+        <span>189.506</span>
+      </div>
+      <div class="header-item">
+        <i class="fa-regular fa-circle-user" style="color: var(--primary-orange); font-size: 18px;"></i>
+        <span>ux</span>
+        <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+      </div>
+      <span class="badge-beta">BETA</span>
+    </div>
+  </header>
+
+  <!-- ================= MAIN LAYOUT ================= -->
+  <div class="layout">
+
+    <!-- --- SIDEBAR --- -->
+    <aside class="sidebar">
+      <ul>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-house"></i><span>Inicio</span></div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-gauge"></i><span>Dashboard</span></div>
+            <span class="tag-new">Beta</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-box"></i><span>Productos</span></div>
+            <span class="tag-new">Nuevo</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="#" id="tourSidebarPedidos">
+            <div class="sidebar-left-content"><i class="fa-solid fa-cart-shopping"></i><span>Mis Pedidos</span></div>
+            <i class="fa-solid fa-chevron-up"></i>
+          </a>
+          <ul class="sidebar-sub">
+            <li class="active"><a href="#">Mis Pedidos</a></li>
+            <li><a href="#">Novedades</a></li>
+            <li><a href="#">Etiquetas</a></li>
+            <li><a href="#">Configuración de pedidos</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-shield-halved"></i><span>Mis Garantías</span></div>
+            <i class="fa-solid fa-chevron-down"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-user-group"></i><span>Clientes</span></div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-plug"></i><span>Mis Integraciones</span></div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-clock-rotate-left"></i><span>Historial de Cartera</span></div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-users"></i><span>Mis usuarios</span></div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-user-plus"></i><span>Mis Referidos</span></div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-gear"></i><span>Configuraciones</span></div>
+            <span class="tag-new">Nuevo</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-calendar"></i><span>Calendario</span></div>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-bullhorn"></i><span>Marketing</span></div>
+            <i class="fa-solid fa-chevron-down"></i>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-chart-line"></i><span>ROAX</span></div>
+            <span class="tag-new">Nuevo</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-chart-column"></i><span>Reportes</span></div>
+            <span class="tag-new">Nuevo</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <div class="sidebar-left-content"><i class="fa-solid fa-file-invoice"></i><span>Facturas</span></div>
+            <i class="fa-solid fa-chevron-down"></i>
+          </a>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- --- MAIN CONTENT AREA --- -->
+    <main class="main-content">
+      <div class="page-header-row">
+        <h1 class="page-title">Mis Pedidos</h1>
+        <div class="demo-view-toggle" title="Controla los dos escenarios reales: seller con y sin órdenes creadas">
+          <span class="demo-view-label">Vista (demo)</span>
+          <button class="demo-view-btn active" id="btnViewWithOrders" onclick="setOrdersView(true)">Con pedidos</button>
+          <button class="demo-view-btn" id="btnViewEmpty" onclick="setOrdersView(false)">Sin pedidos</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <!-- TOOLBAR SUPERIOR DE TABLA -->
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <div class="btn-dropdown">
+              <span>Acciones</span>
+              <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+            </div>
+          </div>
+
+          <div class="toolbar-right">
+            <button class="btn-create">Crear nueva orden</button>
+            <button class="btn-filter"><i class="fa-solid fa-filter"></i></button>
+          </div>
+        </div>
+
+        <div class="toolbar" style="margin-bottom: 20px;">
+          <div class="toolbar-left">
+            <span>Mostrar</span>
+            <div class="select-show">
+              <span>10</span>
+              <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+            </div>
+          </div>
+          <div class="toolbar-right">
+            <input type="text" class="search-box" placeholder="Buscar...">
+          </div>
+        </div>
+
+        <div id="ordersWithData">
+        <!-- TABLA DE DATOS -->
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox"></th>
+                <th># <i class="fa-solid fa-caret-down"></i></th>
+                <th>Nombre del producto</th>
+                <th>Fecha de la orden</th>
+                <th>Cliente</th>
+                <th>Estatus de la Orden</th>
+                <th>Transportadora</th>
+                <th>Bodega</th>
+                <th>Tipo</th>
+                <th>Detalles</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Fila 1 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>80531119</td>
+                <td><div class="product-name">CAFETERA KALLEY 10 TAZAS</div></td>
+                <td>30/06/2026 9:13 a. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">Jaime Guevara</div>
+                    <div class="client-address">kra 56 # 7 oeste 96 casa C1 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
+                    <div class="client-address">Tel: 3224400784</div>
+                  </div>
+                </td>
+                <td>
+                  <span class="status-badge status-entregado">ENTREGADO</span>
+                  <span class="sub-order-number">V4002790266</span>
+                  <div>2</div>
+                </td>
+                <td>VELOCES</td>
+                <td>ONIX TECH</td>
+                <td>SIN</td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 2 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>80047411</td>
+                <td><div class="product-name">ALMOHADA ERGOCONFORT MARIPOSA</div></td>
+                <td>25/06/2026 5:24 p. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">prueba</div>
+                    <div class="client-address">Carrera 26 # 13 - 11 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
+                    <div class="client-address">Tel: 3126123626</div>
+                  </div>
+                </td>
+                <td><span class="status-badge status-cancelado">CANCELADO</span></td>
+                <td>VELOCES</td>
+                <td>BODEGA 01</td>
+                <td>
+                  <div>CON</div>
+                  <span class="tag-shopify-badge">TIENDANUBE-T</span>
+                </td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 3 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>79171894</td>
+                <td><div class="product-name">prueba</div></td>
+                <td>18/06/2026 8:41 a. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">Prueba Prueba</div>
+                    <div class="client-address">Prueba 12 12 12 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
+                    <div class="client-address">Tel: 3126365262</div>
+                  </div>
+                </td>
+                <td><span class="status-badge status-cancelado">CANCELADO</span></td>
+                <td>COORDINADORA</td>
+                <td>prueba</td>
+                <td>
+                  <div>CON</div>
+                  <span class="tag-shopify-badge">TIENDANUBE-T</span>
+                </td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 4 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>79153412</td>
+                <td><div class="product-name">ALMOHADA ERGOCONFORT MARIPOSA</div></td>
+                <td>18/06/2026 12:14 a. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">Prueba Prueba</div>
+                    <div class="client-address">Prueba 12 12 12 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
+                    <div class="client-address">Tel: 3126365262</div>
+                  </div>
+                </td>
+                <td><span class="status-badge status-cancelado">CANCELADO</span></td>
+                <td>VELOCES</td>
+                <td>BODEGA 01</td>
+                <td>
+                  <div>CON</div>
+                  <span class="tag-shopify-badge">TIENDANUBE-T</span>
+                </td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 5 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>79152901</td>
+                <td><div class="product-name">TENIS ZAPATILLAS NIKE FREE UNISEX</div></td>
+                <td>18/06/2026 12:01 a. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">Prueba Prueba</div>
+                    <div class="client-address">Prueba 12 12 12 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
+                    <div class="client-address">Tel: 3126365262</div>
+                  </div>
+                </td>
+                <td><span class="status-badge status-cancelado">CANCELADO</span></td>
+                <td>VELOCES</td>
+                <td>MADELENA</td>
+                <td>
+                  <div>CON</div>
+                  <span class="tag-shopify-badge">TIENDANUBE-T</span>
+                </td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 6 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>78457512</td>
+                <td><div class="product-name">prueba</div></td>
+                <td>11/06/2026 5:31 p. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">Alejandra Melo</div>
+                    <div class="client-address">Prueba 12 12 12 , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
+                    <div class="client-address">Tel: 3126365262</div>
+                  </div>
+                </td>
+                <td><span class="status-badge status-cancelado">CANCELADO</span></td>
+                <td>COORDINADORA</td>
+                <td>prueba</td>
+                <td>
+                  <div>CON</div>
+                  <span class="tag-shopify-badge">TIENDANUBE-T</span>
+                </td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 7 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>77740103</td>
+                <td><div class="product-name">Mini Masajeador Manual 5 Cabezales</div></td>
+                <td>05/06/2026 12:35 p. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">Catalina Giraldo Aguirre</div>
+                    <div class="client-address">Cll56#922 - , CALI-VALLE <i class="fa-regular fa-circle-check" style="color: #e74c3c;"></i></div>
+                    <div class="client-address">Tel: 3017346303</div>
+                  </div>
+                </td>
+                <td><span class="status-badge status-cancelado">CANCELADO</span></td>
+                <td>VELOCES</td>
+                <td>Bodega alpha</td>
+                <td>
+                  <div>CON</div>
+                  <span class="tag-shopify-badge">SHOPIFY</span>
+                </td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 8 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>76053358</td>
+                <td>
+                  <div class="product-name">BOLSA MULTI COLLAGEN PEPTIDES</div>
+                  <div class="text-red">(Orden Compuesta)</div>
+                </td>
+                <td>21/05/2026 12:45 p. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">Diana Perez</div>
+                    <div class="client-address">45 26 , PALMIRA-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
+                    <div class="client-address">Tel: 3256326325</div>
+                  </div>
+                </td>
+                <td><span class="status-badge status-cancelado">CANCELADO</span></td>
+                <td>ENVIA</td>
+                <td>Distribuidora Alma Verde Naturals</td>
+                <td>
+                  <div>CON</div>
+                  <span class="tag-shopify-badge">SHOPIFY</span>
+                </td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 9 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>76052210</td>
+                <td>
+                  <div class="product-name">123 Prueba</div>
+                  <div class="text-blue">Tiene Nota</div>
+                </td>
+                <td>21/05/2026 12:34 p. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">Alejandra Melo</div>
+                    <div class="client-address">45 26 , PALMIRA-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
+                    <div class="client-address">Tel: 3175754193</div>
+                  </div>
+                </td>
+                <td><span class="status-badge status-rechazado">RECHAZADO</span></td>
+                <td>DOMINA</td>
+                <td>Bodega Principal pruebas</td>
+                <td>
+                  <div>CON</div>
+                  <span class="tag-shopify-badge">SHOPIFY</span>
+                </td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Fila 10 -->
+              <tr>
+                <td><input type="checkbox"></td>
+                <td>75771027</td>
+                <td>
+                  <div class="product-name">Combo simple</div>
+                  <div class="text-blue">Tiene Nota</div>
+                </td>
+                <td>18/05/2026 11:43 p. m.</td>
+                <td>
+                  <div class="client-info">
+                    <div class="client-name">Alejandra Melo</div>
+                    <div class="client-address">45 26 , PALMIRA-VALLE <i class="fa-regular fa-circle-check" style="color: #2ecc71;"></i></div>
+                    <div class="client-address">Tel: 3256363658</div>
+                  </div>
+                </td>
+                <td><span class="status-badge status-cancelado">CANCELADO</span></td>
+                <td>99MINUTOS</td>
+                <td>Bodega Principal pruebas</td>
+                <td>CON</td>
+                <td>
+                  <div class="action-icons">
+                    <i class="fa-solid fa-chevron-down" style="color: #e74c3c;"></i>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-tag"></i>
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <i class="fa-solid fa-headset"></i>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- PIE DE TABLA (PAGINACIÓN) -->
+        <div class="table-footer">
+          <div class="toolbar-left">
+            <span>Mostrar</span>
+            <div class="select-show">
+              <span>10</span>
+              <i class="fa-solid fa-chevron-down" style="font-size: 10px;"></i>
+            </div>
+          </div>
+          <div class="pagination">
+            <span>Página 1</span>
+            <a href="#" style="color: var(--primary-orange); text-decoration: none; font-weight: 600;">Siguiente</a>
+          </div>
+        </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- FLOATING BUTTONS -->
+  <div class="floating-buttons">
+    <div class="fab-btn"><i class="fa-solid fa-fingerprint"></i></div>
+    <div class="fab-btn"><i class="fa-solid fa-tower-broadcast"></i></div>
+    <div class="fab-btn"><i class="fa-solid fa-comment-dots"></i></div>
+  </div>
+
+  <!-- FOOTER CREDITS -->
+  <footer class="footer-credits">
+    <span>2026 © Dropi</span>
+    <span>Creado con ❤️</span>
+  </footer>
+
+  <!-- ================= LÍNEA CON GOTA INTEGRADA ================= -->
+  <div class="droplet-bar-container">
+
+    <!-- Línea sutil superior -->
+    <div class="droplet-bar-line"></div>
+
+    <!-- Pestaña fluida -->
+    <div class="droplet-tab" id="dropletBtn" title="Recursos y Ayuda">
+      <i class="fa-solid fa-graduation-cap"></i>
+
+      <!-- Menú Desplegable Dropi Companion -->
+      <div class="droplet-menu" id="dropletMenu">
+        <ul class="droplet-list">
+          <li>
+            <a href="#" onclick="openModal('videoModal'); return false;">
+              <i class="fa-solid fa-circle-play"></i>
+              <span>Video Tutoriales</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="openModal('faqModal'); return false;">
+              <i class="fa-solid fa-circle-question"></i>
+              <span>Preguntas Frecuentes</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="openModal('tourModal'); return false;">
+              <i class="fa-solid fa-route"></i>
+              <span>Tour Guiado</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="openModal('docsModal'); return false;">
+              <i class="fa-solid fa-file-arrow-down"></i>
+              <span>Documentación</span>
+            </a>
+          </li>
+          <li>
+            <a href="https://academy.dropi.co/communities/groups/dropi-academy-colombia/home" target="_blank" rel="noopener noreferrer" onclick="dropletMenu.classList.remove('show')">
+              <i class="fa-solid fa-people-group"></i>
+              <span>Ingresa a nuestra comunidad</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" onclick="openModal('feedbackModal'); return false;">
+              <i class="fa-solid fa-comment-dots"></i>
+              <span>Feedback y Sugerencias</span>
+            </a>
+          </li>
+          <li style="border-top: 1px solid var(--border-color); margin-top: 4px; padding-top: 4px;">
+            <a href="#" onclick="openHelpChat(); return false;">
+              <i class="fa-solid fa-headset"></i>
+              <span>Ayuda con Gali</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODALS DE EDUCACIÓN ================= -->
+
+  <!-- 1. Modal Video Tutoriales (MULTIPLE VIDEOS & ACADEMY) -->
+  <div class="custom-modal-overlay" id="videoModal">
+    <div class="custom-modal" style="max-width: 750px;">
+      <div class="custom-modal-header">
+        <span><i class="fa-solid fa-play" style="color: var(--primary-orange); margin-right: 8px;"></i> Video Tutoriales: Gestión de Pedidos</span>
+        <i class="fa-solid fa-xmark" onclick="closeModal('videoModal')"></i>
+      </div>
+      <div class="custom-modal-body">
+
+        <div class="video-grid">
+          <div class="video-item" onclick="playVideo('ZUWzxMbBLYg', '02. Panel Mis Pedidos - Dropshippers')">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/ZUWzxMbBLYg/hqdefault.jpg" alt="02. Panel Mis Pedidos - Dropshippers" loading="lazy">
+              <div class="video-play-overlay"><i class="fa-solid fa-circle-play"></i></div>
+            </div>
+            <p class="video-title-sm">02. Panel Mis Pedidos - Dropshippers</p>
+            <p class="video-duration">Dropi • YouTube</p>
+          </div>
+          <div class="video-item" onclick="playVideo('ohfrhIakMl4', 'Cómo editar pedidos en Dropi')">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/ohfrhIakMl4/hqdefault.jpg" alt="Cómo editar pedidos en Dropi" loading="lazy">
+              <div class="video-play-overlay"><i class="fa-solid fa-circle-play"></i></div>
+            </div>
+            <p class="video-title-sm">Cómo editar pedidos en Dropi</p>
+            <p class="video-duration">Dropi • YouTube</p>
+          </div>
+          <div class="video-item" onclick="playVideo('HU0YEhJCKOk', '12. Validación de Direcciones')">
+            <div class="video-thumb">
+              <img src="https://img.youtube.com/vi/HU0YEhJCKOk/hqdefault.jpg" alt="12. Validación de Direcciones" loading="lazy">
+              <div class="video-play-overlay"><i class="fa-solid fa-circle-play"></i></div>
+            </div>
+            <p class="video-title-sm">12. Validación de Direcciones</p>
+            <p class="video-duration">Dropi • YouTube</p>
+          </div>
+        </div>
+
+        <div class="academy-cta">
+          <div class="academy-cta-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div class="academy-cta-text">
+            <strong>¿Quieres dominar este módulo y escalar tus ventas?</strong>
+            <span>Accede a cursos completos, certificaciones y material exclusivo.</span>
+          </div>
+          <a class="academy-btn" href="https://app.dropi.co/dashboard/dropi-academy" target="_blank" rel="noopener noreferrer">Ve a Dropi Academy</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.4 Modal Reproductor de Video (embebido, sin salir de la ventana) -->
+  <div class="custom-modal-overlay" id="videoPlayerModal">
+    <div class="custom-modal" style="max-width: 720px;">
+      <button class="modal-close-float" onclick="closeVideoPlayer()" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+      <div class="custom-modal-body" style="padding: 0;">
+        <div class="video-embed-wrap">
+          <iframe id="videoPlayerFrame" src="" title="Video tutorial" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.5 Modal Documentación y Archivos -->
+  <div class="custom-modal-overlay" id="docsModal">
+    <div class="custom-modal">
+      <button class="modal-close-float" onclick="closeModal('docsModal')" aria-label="Cerrar"><i class="fa-solid fa-xmark"></i></button>
+      <div class="custom-modal-body">
+        <div class="drive-cta">
+          <div class="drive-cta-icon"><i class="fa-brands fa-google-drive"></i></div>
+          <div class="drive-cta-text">
+            <strong>Documentación y Recursos</strong>
+            <span>Manuales, plantillas y guías del módulo de Pedidos, centralizados en la carpeta de Drive del equipo.</span>
+          </div>
+          <a class="drive-cta-btn" href="https://drive.google.com/drive/folders/18bsVatVAvXJrgW6wpvpca_5_0w9g_dg6" target="_blank" rel="noopener noreferrer">
+            Abrir carpeta de Drive <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.6 Modal Feedback y Sugerencias (fusión de "Dejar Feedback" + "Solicitar Mejora") -->
+  <div class="custom-modal-overlay" id="feedbackModal">
+    <div class="custom-modal" style="max-width: 420px;">
+      <div class="custom-modal-header">
+        <span><i class="fa-solid fa-comment-dots" style="color: var(--primary-orange); margin-right: 8px;"></i> Feedback y Sugerencias</span>
+        <i class="fa-solid fa-xmark" onclick="closeModal('feedbackModal')"></i>
+      </div>
+      <div class="custom-modal-body">
+        <form class="feedback-form" onsubmit="submitFeedbackForm(event)">
+          <div style="text-align: center;">
+            <label style="font-weight: 600; font-size: 13px;">¿Qué tan útil te parece esta pantalla?</label>
+            <div class="rating-stars">
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-solid fa-star"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>¿Qué mejorarías o qué te gustaría ver? (Opcional)</label>
+            <textarea rows="4" placeholder="Cuéntanos tu comentario o idea de mejora..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit">Enviar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Modal Preguntas Frecuentes (FAQ) -->
+  <div class="custom-modal-overlay" id="faqModal">
+    <div class="custom-modal">
+      <div class="custom-modal-header">
+        <span><i class="fa-solid fa-circle-question" style="color: var(--primary-orange); margin-right: 8px;"></i> Preguntas Frecuentes</span>
+        <i class="fa-solid fa-xmark" onclick="closeModal('faqModal')"></i>
+      </div>
+      <div class="custom-modal-body">
+        <details class="faq-item">
+          <summary>¿Qué significa el estado "Orden Compuesta"?</summary>
+          <p>Una orden compuesta indica que el pedido contiene múltiples productos que pueden provenir de diferentes bodegas. El sistema agrupará la logística automáticamente para optimizar el envío.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo cancelo un pedido que ya fue procesado?</summary>
+          <p>Si el pedido ya está en estado "Procesando" o tiene guía generada, debes contactar a soporte a través del botón de ayuda o solicitar una intercepción directamente con la transportadora desde los detalles del pedido.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Por qué mi pedido dice "Rechazado"?</summary>
+          <p>Un pedido es rechazado generalmente por falta de inventario en la bodega seleccionada, dirección inválida o problemas con el método de pago del cliente. Revisa las "Notas" haciendo clic en el icono de lupa para ver el motivo exacto.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo integro mi tienda Shopify o Tiendanube?</summary>
+          <p>Ve al menú lateral izquierdo, sección "Mis Integraciones". Allí podrás conectar tus tiendas para que las órdenes se sincronicen automáticamente en este panel con la etiqueta correspondiente.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Modal Tour Guiado -->
+  <div class="custom-modal-overlay" id="tourModal">
+    <div class="custom-modal" style="max-width: 450px;">
+      <div class="custom-modal-body tour-card">
+        <img src="https://cdn3d.iconscout.com/3d/premium/thumb/map-route-5374026-4496229.png" alt="Tour" class="tour-image">
+        <h3 class="tour-title">¡Bienvenido a Mis Pedidos!</h3>
+        <p class="tour-text">
+          Te daremos un recorrido rápido por las herramientas de esta pantalla para que aprendas a crear órdenes manuales, filtrar por transportadora y gestionar el estado de tus envíos como un experto.
+        </p>
+        <div class="tour-controls">
+          <button class="tour-btn tour-btn-outline" onclick="closeModal('tourModal')">Omitir Tour</button>
+          <button class="tour-btn tour-btn-primary" onclick="closeModal('tourModal'); setTimeout(startTour, 350);">Comenzar Tour</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT MODAL (GALI) -->
+  <div class="chat-modal" id="chatModal">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <i class="fa-solid fa-chevron-left" onclick="closeHelpChat()"></i>
+        <div class="gali-avatar">
+          <i class="fa-solid fa-book"></i>
+        </div>
+        <div class="gali-info">
+          <span class="gali-name">Gali</span>
+          <span class="gali-subtitle">El equipo también puede ayudar</span>
+        </div>
+      </div>
+      <div class="chat-header-right">
+        <i class="fa-solid fa-ellipsis"></i>
+        <i class="fa-solid fa-xmark" onclick="closeHelpChat()"></i>
+      </div>
+    </div>
+    <div class="chat-body">
+      <div class="chat-greeting">👋 Estamos aquí para ayudarte 👋</div>
+      <div class="chat-bubble">¿Cómo te podemos ayudar hoy?</div>
+      <div class="chat-timestamp">Gali • AI Agent • Ahora</div>
+
+      <div class="chat-chips-container">
+        <button class="chat-chip">Soy nuevo</button>
+        <button class="chat-chip">Ayuda para usar la plataforma</button>
+        <button class="chat-chip">Validación de identidad</button>
+        <button class="chat-chip">Transportadoras y envíos</button>
+        <button class="chat-chip">Productos y proveedores</button>
+        <button class="chat-chip">Billetera y Facturación</button>
+        <button class="chat-chip">Dropicard</button>
+        <button class="chat-chip">Integraciones</button>
+        <button class="chat-chip">Problemas con mis envíos</button>
+        <button class="chat-chip">Garantías</button>
+      </div>
+    </div>
+    <div class="chat-footer">
+      <input type="text" class="chat-input" value="Hola, neceito ayuda con el modulo de ordenes para...." />
+      <button class="chat-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastNotification" class="toast-container"></div>
+
+  <script>
+    // Referencias al DOM
+    const dropletBtn = document.getElementById('dropletBtn');
+    const dropletMenu = document.getElementById('dropletMenu');
+    const chatModal = document.getElementById('chatModal');
+
+    // Toggle Menú Educativo (Dropdown de la gota)
+    dropletBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropletMenu.classList.toggle('show');
+    });
+
+    // Cerrar menú al hacer clic fuera
+    document.addEventListener('click', function(event) {
+      if (!dropletMenu.contains(event.target) && !dropletBtn.contains(event.target)) {
+        dropletMenu.classList.remove('show');
+      }
+    });
+
+    // Controladores de Modales (Video, FAQ, Tour)
+    function openModal(modalId) {
+      dropletMenu.classList.remove('show'); // Cerrar el dropdown
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.add('active');
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('active');
+      }
+    }
+
+    // Reproductor de video embebido: abre el video de la lista dentro de un modal, en la misma ventana
+    function playVideo(videoId, title) {
+      closeModal('videoModal');
+      document.getElementById('videoPlayerFrame').title = title;
+      document.getElementById('videoPlayerFrame').src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+      document.getElementById('videoPlayerModal').classList.add('active');
+    }
+
+    function closeVideoPlayer() {
+      closeModal('videoPlayerModal');
+      document.getElementById('videoPlayerFrame').src = ''; // detiene la reproducción al cerrar
+    }
+
+    // Si cierran el reproductor haciendo clic fuera (fondo oscuro), también detiene el video
+    document.getElementById('videoPlayerModal').addEventListener('click', function(e) {
+      if (e.target === this) closeVideoPlayer();
+    });
+
+    // Cerrar modal al hacer clic en el overlay (fondo oscuro)
+    document.querySelectorAll('.custom-modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    });
+
+    // Abrir Chat Gali (Ayuda)
+    function openHelpChat() {
+      dropletMenu.classList.remove('show');
+      chatModal.classList.add('active');
+    }
+
+    // Cerrar Chat Gali
+    function closeHelpChat() {
+      chatModal.classList.remove('active');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      toast.textContent = message;
+      toast.classList.add('show');
+
+      // Ocultar toast después de 3.5 segundos
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    function submitFeedbackForm(event) {
+      event.preventDefault(); // Evita recargar la página
+      closeModal('feedbackModal');
+      event.target.reset();
+      showToast('¡Gracias! Recibimos tu calificación y tu sugerencia.');
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       TOGGLE DE VISTA (DEMO): con pedidos / sin pedidos.
+       Muchos sellers nuevos entran a Mis Pedidos sin ninguna orden
+       creada todavía — este switch deja comparar ambos escenarios
+       para decidir cómo debe adaptarse el tour guiado a cada uno.
+    ────────────────────────────────────────────────────────────── */
+    let ordersHaveData = true;
+
+    let originalTbodyHTML = null;
+
+    function setOrdersView(hasOrders) {
+      ordersHaveData = hasOrders;
+
+      const tbody = document.querySelector('#ordersWithData tbody');
+      if (originalTbodyHTML === null) originalTbodyHTML = tbody.innerHTML;
+      tbody.innerHTML = hasOrders
+        ? originalTbodyHTML
+        : '<tr><td colspan="10" class="empty-tbody-message">No tienes pedidos</td></tr>';
+
+      document.querySelector('#ordersWithData .table-footer').style.display = hasOrders ? '' : 'none';
+
+      document.getElementById('btnViewWithOrders').classList.toggle('active', hasOrders);
+      document.getElementById('btnViewEmpty').classList.toggle('active', !hasOrders);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       TOUR GUIADO (estilo UserPilot): spotlight + tooltip anclado
+       a cada elemento real de la pantalla. Dos guiones distintos
+       según haya o no órdenes creadas, para que el paso a paso
+       nunca señale una fila o un ícono que no existe.
+    ────────────────────────────────────────────────────────────── */
+    const TOUR_STEPS_WITH_ORDERS = [
+      { target: '.btn-dropdown', placement: 'bottom',
+        title: 'Acciones',
+        text: 'Desde aquí puedes cargar pedidos de forma masiva y también exportar tus órdenes.' },
+      { target: '.btn-filter', placement: 'bottom',
+        title: 'Filtros',
+        text: 'Filtra tus pedidos por estado, transportadora, bodega o canal de venta.' },
+      { target: '.search-box', placement: 'bottom',
+        title: 'Buscador',
+        text: 'Busca cualquier pedido por número, cliente o producto.' },
+      { target: '#ordersWithData .status-badge', placement: 'top',
+        title: 'Estado de la orden',
+        text: 'El estado te dice en qué punto va cada pedido: Entregado, Cancelado, Rechazado y más.' },
+      { target: '#ordersWithData .action-icons', placement: 'left',
+        title: 'Acciones rápidas',
+        text: 'Desde aquí ves el detalle, etiquetas, facturas o pides ayuda puntual para esa orden.' },
+    ];
+
+    const TOUR_STEPS_EMPTY = [
+      { target: '.btn-dropdown', placement: 'bottom',
+        title: 'Acciones',
+        text: 'Desde aquí vas a poder cargar pedidos de forma masiva y también exportar tus órdenes, en cuanto tengas.' },
+      { target: '.btn-filter', placement: 'bottom',
+        title: 'Filtros',
+        text: 'Cuando tengas pedidos, filtra por estado, transportadora, bodega o canal de venta desde aquí.' },
+      { target: '.empty-tbody-message', placement: 'top',
+        title: 'Aquí aparecerán tus pedidos',
+        text: 'En cuanto tengas una orden —propia o sincronizada desde tus canales conectados— va a aparecer automáticamente en esta tabla.' },
+    ];
+
+    let tourSteps = [];
+    let tourIndex = 0;
+
+    function getTourSteps() {
+      return ordersHaveData ? TOUR_STEPS_WITH_ORDERS : TOUR_STEPS_EMPTY;
+    }
+
+    function startTour() {
+      tourSteps = getTourSteps();
+      tourIndex = 0;
+      buildTourChrome();
+      renderTourStep();
+      window.addEventListener('resize', repositionCurrentStep);
+    }
+
+    function buildTourChrome() {
+      if (document.getElementById('tourBlocker')) return;
+      const blocker = document.createElement('div');
+      blocker.className = 'tour-blocker';
+      blocker.id = 'tourBlocker';
+      document.body.appendChild(blocker);
+
+      const spotlight = document.createElement('div');
+      spotlight.className = 'tour-spotlight';
+      spotlight.id = 'tourSpotlight';
+      document.body.appendChild(spotlight);
+
+      const tooltip = document.createElement('div');
+      tooltip.className = 'tour-tooltip';
+      tooltip.id = 'tourTooltip';
+      document.body.appendChild(tooltip);
+    }
+
+    function renderTourStep() {
+      const step = tourSteps[tourIndex];
+      const target = document.querySelector(step.target);
+      if (!target) { nextStep(); return; } // el elemento no existe en este escenario: salta el paso
+
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => positionTourElements(target, step), 280);
+    }
+
+    function repositionCurrentStep() {
+      if (!document.getElementById('tourSpotlight')) return;
+      const step = tourSteps[tourIndex];
+      const target = document.querySelector(step.target);
+      if (target) positionTourElements(target, step);
+    }
+
+    function positionTourElements(target, step) {
+      const rect = target.getBoundingClientRect();
+      const pad = 6;
+
+      const spotlight = document.getElementById('tourSpotlight');
+      spotlight.style.top = (rect.top - pad) + 'px';
+      spotlight.style.left = (rect.left - pad) + 'px';
+      spotlight.style.width = (rect.width + pad * 2) + 'px';
+      spotlight.style.height = (rect.height + pad * 2) + 'px';
+
+      const isLast = tourIndex === tourSteps.length - 1;
+      const tooltip = document.getElementById('tourTooltip');
+      tooltip.innerHTML = `
+        <div class="tour-step-count">Paso ${tourIndex + 1} de ${tourSteps.length}</div>
+        <h4>${step.title}</h4>
+        <p>${step.text}</p>
+        <div class="tour-tooltip-controls">
+          <button class="tour-skip-btn" onclick="endTour()">Omitir</button>
+          <div class="tour-nav-btns">
+            ${tourIndex > 0 ? '<button class="tour-btn tour-btn-outline" onclick="prevStep()">Atrás</button>' : ''}
+            <button class="tour-btn tour-btn-primary" onclick="${isLast ? 'endTour()' : 'nextStep()'}">${isLast ? 'Listo' : 'Siguiente'}</button>
+          </div>
+        </div>
+      `;
+
+      const tw = 280, gap = 14;
+      const th = tooltip.offsetHeight;
+      let top, left;
+      switch (step.placement) {
+        case 'bottom': top = rect.bottom + gap; left = rect.left; break;
+        case 'top': top = rect.top - th - gap; left = rect.left; break;
+        case 'left': top = rect.top; left = rect.left - tw - gap; break;
+        default: top = rect.top; left = rect.right + gap; break; // 'right'
+      }
+      left = Math.max(12, Math.min(left, window.innerWidth - tw - 12));
+      top = Math.max(12, Math.min(top, window.innerHeight - th - 12));
+      tooltip.style.top = top + 'px';
+      tooltip.style.left = left + 'px';
+    }
+
+    function nextStep() {
+      if (tourIndex < tourSteps.length - 1) { tourIndex++; renderTourStep(); }
+      else endTour();
+    }
+
+    function prevStep() {
+      if (tourIndex > 0) { tourIndex--; renderTourStep(); }
+    }
+
+    function endTour() {
+      ['tourBlocker', 'tourSpotlight', 'tourTooltip'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+      });
+      window.removeEventListener('resize', repositionCurrentStep);
+    }
+  </script>
+</body>
+</html>

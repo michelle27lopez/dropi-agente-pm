@@ -114,6 +114,15 @@ export default function EspionajePage() {
                   badgeColor: "#3B82F6",
                   external: true,
                 },
+                {
+                  href: "https://radar-comunidad.vercel.app/",
+                  icon: "📡",
+                  title: "Radar de Comunidad",
+                  sub: "Insights curados de los grupos de WhatsApp escuchados (Panorama, Banco de Trabajo, Depurar)",
+                  badge: "Producto",
+                  badgeColor: "#F77F00",
+                  external: true,
+                },
               ].map((card) => (
                 <a
                   key={card.href}

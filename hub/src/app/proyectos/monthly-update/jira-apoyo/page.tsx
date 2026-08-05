@@ -11,6 +11,15 @@ const card: React.CSSProperties = {
   padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
 };
 
+const sectionTitle: React.CSSProperties = {
+  fontSize: 16, fontWeight: 700, color: "var(--fg)",
+  display: "flex", alignItems: "center", gap: 8, marginBottom: 14,
+};
+
+const dotStyle: React.CSSProperties = {
+  width: 8, height: 8, borderRadius: "50%", background: ACCENT, display: "inline-block",
+};
+
 type CelulaAgg = { celula: string; total: number; cerrados: number; enCurso: number; backlog: number };
 type PmAmbiguo = { assignee: string; posibles: string[]; total: number; cerrados: number; enCurso: number; backlog: number };
 type SinClasificar = { assignee: string; total: number; cerrados: number };
@@ -24,6 +33,36 @@ type Summary = {
   nota: string;
 };
 
+type ProjectCandidate = {
+  normalizedTitle: string;
+  representativeTitle: string;
+  keys: string[];
+  count: number;
+  stageTag: string | null;
+  statusCounts: { done: number; enCurso: number; toDo: number };
+};
+
+type Candidates = {
+  month: string;
+  totalIssuesCrudos: number;
+  totalTopLevel: number;
+  totalRutina: number;
+  porCelula: Record<string, ProjectCandidate[]>;
+  ambiguos: { assignee: string; posibles: string[]; count: number }[];
+  sinClasificar: { assignee: string; count: number }[];
+  nota: string;
+};
+
+const STAGE_COLORS: Record<string, string> = {
+  DISCOVERY: "#10B981",
+  "DEFINICIÓN": "#3B82F6",
+  DELIVERY: "#8B5CF6",
+  CIERRE: "#EA5024",
+  "EXPERIMENTACIÓN": "#A855F7",
+  QA: "#F59E0B",
+  HANDOFF: "#0EA5E9",
+};
+
 function currentMonth() {
   return new Date().toISOString().slice(0, 7);
 }
@@ -32,17 +71,28 @@ export default function JiraApoyoPage() {
   const isEmbedded = useIsEmbedded();
   const [month, setMonth] = useState(currentMonth());
   const [data, setData] = useState<Summary | null>(null);
+  const [candidates, setCandidates] = useState<Candidates | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setLoading(true);
     setError(null);
-    fetch(`/api/jira/monthly-summary?month=${month}`)
-      .then(async (res) => {
+    Promise.all([
+      fetch(`/api/jira/monthly-summary?month=${month}`).then(async (res) => {
         const json = await res.json();
         if (!res.ok) throw new Error(json.error ?? "Error al consultar Jira");
-        setData(json);
+        return json;
+      }),
+      fetch(`/api/jira/project-candidates?month=${month}`).then(async (res) => {
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error ?? "Error al consultar Jira");
+        return json;
+      }),
+    ])
+      .then(([summary, cand]) => {
+        setData(summary);
+        setCandidates(cand);
       })
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
@@ -91,6 +141,23 @@ export default function JiraApoyoPage() {
           <div style={{ ...card, borderColor: "#FCA5A5", background: "#FEF2F2", color: "#B91C1C", fontSize: 13 }}>
             {error}
           </div>
+        )}
+
+        {candidates && !loading && (
+          <>
+            <div style={{ fontSize: 12, color: "var(--muted)" }}>
+              {candidates.totalIssuesCrudos} issues crudos → {candidates.totalTopLevel} sin sub-tasks → {candidates.totalRutina} filtrados por operativos (reuniones, dailies, planning) → candidatos a proyecto abajo.
+            </div>
+
+            <div>
+              <div style={sectionTitle}><span style={dotStyle} />Candidatos a proyecto por célula</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                {Object.entries(candidates.porCelula).map(([celula, items]) => (
+                  <CelulaCandidatos key={celula} celula={celula} items={items} />
+                ))}
+              </div>
+            </div>
+          </>
         )}
 
         {data && !loading && (
@@ -144,6 +211,50 @@ export default function JiraApoyoPage() {
         )}
       </div>
     </main>
+  );
+}
+
+function CelulaCandidatos({ celula, items }: { celula: string; items: ProjectCandidate[] }) {
+  const [open, setOpen] = useState(true);
+  return (
+    <div style={{ ...card, padding: 0, overflow: "hidden" }}>
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
+          padding: "14px 18px", background: "none", border: "none", cursor: "pointer", textAlign: "left",
+        }}
+      >
+        <span style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)" }}>{celula}</span>
+        <span style={{ fontSize: 12, color: "var(--muted)" }}>{items.length} candidatos {open ? "▲" : "▼"}</span>
+      </button>
+      {open && (
+        <div>
+          {items.map((it) => (
+            <div key={it.normalizedTitle} style={{ padding: "10px 18px", borderTop: "1px solid var(--border)", display: "flex", alignItems: "flex-start", gap: 10, flexWrap: "wrap" }}>
+              <div style={{ flex: 1, minWidth: 220 }}>
+                <div style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>{it.representativeTitle}</div>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 3, display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {it.keys.map((k) => (
+                    <a key={k} href={`${JIRA_BASE_URL}/browse/${k}`} target="_blank" rel="noopener noreferrer" style={{ color: ACCENT, textDecoration: "none" }}>{k}</a>
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 6, alignItems: "center", flexShrink: 0 }}>
+                {it.stageTag && (
+                  <span style={{ fontSize: 10, fontWeight: 700, padding: "3px 8px", borderRadius: 999, color: "#fff", background: STAGE_COLORS[it.stageTag] ?? "#6B7280" }}>
+                    {it.stageTag}
+                  </span>
+                )}
+                <span style={{ fontSize: 11, color: "var(--muted)" }}>
+                  {it.count} ticket{it.count !== 1 ? "s" : ""} · {it.statusCounts.done} hecho · {it.statusCounts.enCurso} en curso · {it.statusCounts.toDo} backlog
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 

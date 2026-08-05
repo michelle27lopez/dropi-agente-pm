@@ -59,7 +59,7 @@ function calculateSellersMetrics(
   crmData: any[],
   source: string
 ) {
-  // 1. Country breakdowns & global dataset matching exact official CPO report (1 to 29 July 2026)
+  // 1. Country breakdowns & global dataset matching exact official CPO report (Cierre de Mes Junio vs Julio 2026)
   const countriesData: Record<string, any> = {
     global: {
       totalSellers: 46208, // Base real identificada en Supabase userpilot_suppliers
@@ -73,14 +73,15 @@ function calculateSellersMetrics(
       survivalRateTarget: 75.0,
       ttvNetoMedian: 16.0, // TTV Neto Baseline
       ttvNetoMedianTarget: 12.0,
-      nsmCurrent: 3351359, // del 1 al 29 de JUL
+      nsmCurrent: 3687786, // Cierre Oficial JUL 2026
       okrTarget: 3571042, // Meta Julio Oficial CPO
       okrTargetCompany: 7800000, // OKR 1 / KR 1.1 Holding (7.8M/mes)
-      percentageToOkr: 100.32, // % Proy. cumplimiento Julio (100.32%)
-      percentageToCompanyOKR: 42.96, // % cumplimiento contra 7.8M holding
-      gapToOkr: 219683, // Brecha vs Meta Julio
-      cierreJunio: 3435363,
-      julioJunioGrowth: 1.80,
+      percentageToOkr: 103.26, // % Cumplimiento oficial Cierre Julio
+      percentageToCompanyOKR: 47.28, // % cumplimiento contra 7.8M holding (3.687M/7.8M)
+      gapToOkr: -116744, // Superó la meta por 116.744 órdenes
+      cierreJunio: 3440886,
+      cierreJulio: 3687786,
+      julioJunioGrowth: 7.17,
       funnel: [
         { step: "1. Registro completado", count: 46208, pct: 100.0, color: "#6366F1" },
         { step: "2a. Tienda: nombre / rol declarado", count: 36056, pct: 78.0, color: "#8B5CF6" },
@@ -99,12 +100,13 @@ function calculateSellersMetrics(
       bounceRate: 72.8,
       survivalRate: 69.80,
       ttvNetoMedian: 16.7,
-      nsmCurrent: 2430474,
+      nsmCurrent: 2671864,
       okrTarget: 2664050,
-      percentageToOkr: 97.52,
-      gapToOkr: 233576,
-      cierreJunio: 2537091,
-      julioJunioGrowth: 0.25,
+      percentageToOkr: 100.29,
+      gapToOkr: -7814,
+      cierreJunio: 2537148,
+      cierreJulio: 2671864,
+      julioJunioGrowth: 5.30,
       funnel: [
         { step: "1. Registro completado", count: 24264, pct: 100.0, color: "#6366F1" },
         { step: "2a. Tienda: nombre diligenciado", count: 18925, pct: 78.0, color: "#8B5CF6" },
@@ -121,12 +123,13 @@ function calculateSellersMetrics(
       bounceRate: 70.1,
       survivalRate: 72.50,
       ttvNetoMedian: 13.9,
-      nsmCurrent: 261436,
+      nsmCurrent: 286380,
       okrTarget: 234096,
-      percentageToOkr: 119.38,
-      gapToOkr: -27340,
+      percentageToOkr: 122.33,
+      gapToOkr: -52284,
       cierreJunio: 248618,
-      julioJunioGrowth: 8.65,
+      cierreJulio: 286380,
+      julioJunioGrowth: 15.18,
       funnel: [
         { step: "1. Registro completado", count: 5264, pct: 100.0, color: "#6366F1" },
         { step: "4. Primera orden creada (Act. Bruta)", count: 540, pct: 10.3, color: "#EC4899" },
@@ -141,12 +144,13 @@ function calculateSellersMetrics(
       bounceRate: 76.5,
       survivalRate: 62.10,
       ttvNetoMedian: 18.6,
-      nsmCurrent: 232894,
+      nsmCurrent: 254878,
       okrTarget: 235685,
-      percentageToOkr: 105.63,
-      gapToOkr: 2791,
-      cierreJunio: 232625,
-      julioJunioGrowth: 3.68,
+      percentageToOkr: 108.14,
+      gapToOkr: -19193,
+      cierreJunio: 232626,
+      cierreJulio: 254878,
+      julioJunioGrowth: 9.56,
       funnel: [
         { step: "1. Registro completado", count: 6492, pct: 100.0, color: "#6366F1" },
         { step: "4. Primera orden creada (Act. Bruta)", count: 370, pct: 5.7, color: "#EC4899" },
@@ -161,12 +165,13 @@ function calculateSellersMetrics(
       bounceRate: 80.2,
       survivalRate: 65.40,
       ttvNetoMedian: 21.0,
-      nsmCurrent: 219393,
+      nsmCurrent: 243053,
       okrTarget: 229163,
-      percentageToOkr: 102.33,
-      gapToOkr: 9770,
-      cierreJunio: 231459,
-      julioJunioGrowth: -2.14,
+      percentageToOkr: 106.06,
+      gapToOkr: -13890,
+      cierreJunio: 231484,
+      cierreJulio: 243053,
+      julioJunioGrowth: 4.99,
       funnel: [
         { step: "1. Registro completado", count: 2596, pct: 100.0, color: "#6366F1" },
         { step: "4. Primera orden creada (Act. Bruta)", count: 94, pct: 3.6, color: "#EC4899" },
@@ -181,12 +186,13 @@ function calculateSellersMetrics(
       bounceRate: 68.0,
       survivalRate: 89.40,
       ttvNetoMedian: 12.5,
-      nsmCurrent: 147391,
+      nsmCurrent: 161217,
       okrTarget: 133829,
-      percentageToOkr: 117.72,
-      gapToOkr: -13562,
-      cierreJunio: 126010,
-      julioJunioGrowth: 21.81,
+      percentageToOkr: 120.46,
+      gapToOkr: -27388,
+      cierreJunio: 126014,
+      cierreJulio: 161217,
+      julioJunioGrowth: 27.93,
       funnel: [
         { step: "1. Registro completado", count: 1850, pct: 100.0, color: "#6366F1" }
       ]
@@ -199,12 +205,13 @@ function calculateSellersMetrics(
       bounceRate: 73.0,
       survivalRate: 67.80,
       ttvNetoMedian: 15.2,
-      nsmCurrent: 27718,
+      nsmCurrent: 30293,
       okrTarget: 30412,
-      percentageToOkr: 97.42,
-      gapToOkr: 2694,
-      cierreJunio: 25862,
-      julioJunioGrowth: 11.30,
+      percentageToOkr: 99.60,
+      gapToOkr: 119,
+      cierreJunio: 25861,
+      cierreJulio: 30293,
+      julioJunioGrowth: 17.13,
       funnel: [
         { step: "1. Registro completado", count: 1200, pct: 100.0, color: "#6366F1" }
       ]
@@ -217,12 +224,13 @@ function calculateSellersMetrics(
       bounceRate: 75.0,
       survivalRate: 86.40,
       ttvNetoMedian: 14.8,
-      nsmCurrent: 21875,
+      nsmCurrent: 23730,
       okrTarget: 26826,
-      percentageToOkr: 87.16,
-      gapToOkr: 4951,
+      percentageToOkr: 88.45,
+      gapToOkr: 3096,
       cierreJunio: 23400,
-      julioJunioGrowth: -2.13,
+      cierreJulio: 23730,
+      julioJunioGrowth: 1.41,
       funnel: [
         { step: "1. Registro completado", count: 950, pct: 100.0, color: "#6366F1" }
       ]
@@ -235,12 +243,13 @@ function calculateSellersMetrics(
       bounceRate: 82.4,
       survivalRate: 44.40,
       ttvNetoMedian: 18.1,
-      nsmCurrent: 9934,
+      nsmCurrent: 11201,
       okrTarget: 12682,
-      percentageToOkr: 83.73,
-      gapToOkr: 2748,
+      percentageToOkr: 88.32,
+      gapToOkr: 1481,
       cierreJunio: 12091,
-      julioJunioGrowth: -15.63,
+      cierreJulio: 11201,
+      julioJunioGrowth: -7.36,
       funnel: [
         { step: "1. Registro completado", count: 1852, pct: 100.0, color: "#6366F1" }
       ]
@@ -253,12 +262,13 @@ function calculateSellersMetrics(
       bounceRate: 65.0,
       survivalRate: 75.00,
       ttvNetoMedian: 11.0,
-      nsmCurrent: 4011,
+      nsmCurrent: 4442,
       okrTarget: 3290,
-      percentageToOkr: 130.32,
-      gapToOkr: -721,
+      percentageToOkr: 135.01,
+      gapToOkr: -1152,
       cierreJunio: 2803,
-      julioJunioGrowth: 48.61,
+      cierreJulio: 4442,
+      julioJunioGrowth: 58.47,
       funnel: [
         { step: "1. Registro completado", count: 500, pct: 100.0, color: "#6366F1" }
       ]
@@ -271,12 +281,13 @@ function calculateSellersMetrics(
       bounceRate: 85.0,
       survivalRate: 52.00,
       ttvNetoMedian: 22.0,
-      nsmCurrent: 622,
+      nsmCurrent: 728,
       okrTarget: 1009,
-      percentageToOkr: 65.89,
-      gapToOkr: 387,
+      percentageToOkr: 72.15,
+      gapToOkr: 281,
       cierreJunio: 841,
-      julioJunioGrowth: -23.30,
+      cierreJulio: 728,
+      julioJunioGrowth: -13.43,
       funnel: [
         { step: "1. Registro completado", count: 300, pct: 100.0, color: "#6366F1" }
       ]
