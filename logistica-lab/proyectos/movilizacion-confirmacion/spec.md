@@ -13,8 +13,15 @@
 | Etapa de la cadena | Confirmación (pre-red) |
 | Fuga | ① churn pre-red |
 | OKR / KR | OKR2 · **KR2.1 Tasa de entrega ≥70%** (movilización = ½ de la NSM) |
-| Estado global | ⚪ discovery (borrador 25-jun) · 🧪 experimento autoconfirmación en montaje (09-jul) |
-| Última actualización | 2026-07-09 |
+| Estado global | 🟡 discovery · prueba de usabilidad completada con 6 usuarios; gate técnico e impacto en NSM pendientes |
+| Última actualización | 2026-08-02 |
+
+> **Corte auditado 02-ago** `[doc:Hub logístico + Drive; jira:PRM-1497/1574/1588/1589]`
+> - La prueba moderada del configurador de autoconfirmación **sí ocurrió** entre el 18 y el 25-jul con 6 participantes. Resultado: aceptación conceptual 81/100, pero la interpretación del impacto económico solo fue correcta en 17% de la muestra. Evidencia estructurada: [`prueba-usabilidad-julio-2026.md`](prueba-usabilidad-julio-2026.md).
+> - Esto valida **comprensión y usabilidad parcial**, no que la autoconfirmación aumente movilización, entrega o reduzca devoluciones. Aún no existe un A/B ni una medición outcome posterior.
+> - El gate de ChateaPro continúa abierto: hay que verificar convivencia del trigger, atribución manual/automática e instrumentación antes de prometer handoff o fecha.
+> - Jira ya contiene la oportunidad PRM-1574 y la cadena PRM-1588 → PRM-1589. Sin embargo, esa cadena describe WhatsApp y órdenes “confirmadas sin guía”; **no se comprobó** que represente el configurador general probado. Esa frase también puede invadir el problema de autogeneración de guías (LOG-012/PRM-1469).
+> - No se encontró un E2E dedicado ni el artefacto canónico crudo de las seis sesiones en Drive. El Hub contiene el consolidado de resultados; las reuniones semanales de Drive confirman que las pruebas ocurrieron, no reemplazan grabaciones, guion ni matriz de observación.
 
 > **🆕 16-jul · reclasificación + el gate de ChateaPro** `[fuente: Juan, 16-jul]` · detalle en [`planning/cronograma-pruebas-poc.md`](../../planning/cronograma-pruebas-poc.md) §3-4
 > - **Autoconfirmación pasa a "prueba con usuarios"** y **autogeneración a "proyecto de discovery"** (deja de ser "2º experimento listo"). Objetivo: **entender la funcionalidad**, no medir impacto todavía.
@@ -26,8 +33,8 @@
 > - **Entrevistas a dropshippers:** ¿cómo confirman hoy y **qué variables usan**? Alimenta las **reglas de madurez** (pendientes con Michel), que hoy salieron de *data agregada* (constancia + ≥50 órd/mes) y no de preguntarle a nadie — la data no dice el *por qué*.
 > - **🆕 Variable "órdenes duplicadas"** (Juan, 16-jul): ya está abajo como rescatable (**80K**, §1.C / Sol B1). **Doble uso:** (a) señal de rescate y (b) **guardarraíl → si es duplicada, NO autoconfirmar.** Se suma a ⛔ zona rural (veredas/fincas) y ⛔ variantes (talla/color).
 
-> **🆕 09-jul · experimentos en montaje** `[fuente: update de Juan a Maria, 09-jul]`
-> - **Autoconfirmación por madurez** (del Cell Board 1-jul): ya **socializado con Santiago** (contexto dado); **a la espera de las personas** para correr la prueba. Reglas de madurez (constancia mensual + ≥50 órd/mes) se cerraban con Michel. Recordar: hoy el sistema no distingue confirmación manual vs. automática → el experimento debe dejar esa trazabilidad.
+> **Histórico 09-jul · experimentos en montaje** `[doc:update de Juan a Maria, 09-jul; superado parcialmente por pruebas 18–25-jul]`
+> - **Autoconfirmación por madurez** (del Cell Board 1-jul): quedó socializado con Santiago y entonces estaba a la espera de personas. Esa espera **se cerró para la prueba de usabilidad de 6 participantes**, no para la futura prueba de impacto. Reglas de madurez (constancia mensual + ≥50 órd/mes) seguían por validar con Michel. El sistema aún debe dejar trazabilidad manual vs. automática.
 > - **Autogeneración de guías:** 2º experimento **listo para probar** (falta con quién correrlo). Ataca la fuga posterior a la confirmación (confirmó pero no genera guía → no entra a red).
 
 ## 0 · El flujo end-to-end
@@ -88,15 +95,27 @@ CO primero; el catálogo de motivos y el nudge de validación aplican a todos lo
 | Tipo | Referencia |
 |------|-----------|
 | OKR / KR | OKR2 [PRM-1391] → KR2.1 [PRM-1396] |
-| Proyecto OKR | **PRM-1497** (ya con OKR Ppal + KR entrega, 25-jun) |
-| Hermanas / relates | `direccion-confiable-geo` (validación de destino) · PRM-91 · PRM-1515 (ChateaPro) |
-| Oportunidad/Idea/Solución Polaris | **por crear** (cuando se valide y se decida espejar) |
+| Proyecto OKR | **PRM-1497** · Jira: `En Ruta (backlog)`, sin assignee ni descripción al corte 02-ago |
+| Oportunidad confirmada | **PRM-1574** · baja movilización en órdenes de integraciones; relacionada con PRM-1497 |
+| Idea / solución candidatas | **PRM-1588 → PRM-1589** · WhatsApp. Existen, pero su equivalencia con el configurador general no está validada |
+| Rama separada | **LOG-012 / PRM-1469** · autogeneración de guía; comparte superficie, no actor ni decisión |
+| Evidencia de prueba | [`prueba-usabilidad-julio-2026.md`](prueba-usabilidad-julio-2026.md) · Hub `AutoconfirmacionResultados.tsx` · Weekly Product 24/31-jul en Drive |
+| Estado compartido | Hoja Drive “Estado de los proyectos 23/07”, tab LS: dos filas duplicadas de Autoconfirmación en Discovery / Concepción de experimento |
+| Jira / Confluence sincronizados | PRM-1497 comentario **50933** · [síntesis LOG-001](https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1572864001) creada e indexada; ambos releídos 02-ago |
+| E2E Drive | No se encontró documento dedicado; sin escritura por salvaguarda del conector |
+| Hermanas / antecedentes | `direccion-confiable-geo` (validación de destino) · PRM-91 · ChateaPro como dependencia técnica por identificar con ticket exacto |
 
 ## 9 · Preguntas abiertas
 - [ ] **Catálogo de motivos:** ¿qué motivos entran y cómo se separan rescatable/no? — Juan + Michel/Laura `[data:tema 05]`
 - [ ] **Forzar validación en SHOP:** ¿nudge o bloqueo? ¿dónde se salta hoy? — Juan + Data
 - [ ] **Baseline de cancelación por motivo y canal** — hoy 428K "sin nota"; la instrumentación es el primer entregable. — Data
-- [ ] **Auto-confirmación WhatsApp:** ¿alcance con ChateaPro (PRM-1515)? — Juan
+- [ ] **Gate ChateaPro:** ¿tolera esperar la decisión del motor? ¿cómo se atribuye quién confirmó y dónde queda el marcador? — Juan + ChateaPro
+- [ ] **Equivalencia Jira:** ¿PRM-1588/1589 representan el configurador general de reglas o solo la recuperación por WhatsApp? — Juan
+- [ ] **Frontera con LOG-012:** ¿“confirmada sin guía” pertenece realmente a autoconfirmación o a autogeneración? — Juan + Jira owner
+- [ ] **Fuente canónica de la prueba:** enlazar guion, grabaciones/consentimiento y matriz de observación; hoy solo existe el consolidado del Hub y evidencia semanal en Drive.
+- [ ] **Documento E2E:** crear una copia de la plantilla de nueve fases cuando se autorice la escritura en Drive; no usar este spec como sustituto del E2E vivo.
+- [ ] **Estado compartido:** deduplicar las dos filas de Autoconfirmación en la hoja LS después de confirmar cuál es la fila canónica; no borrar sin owner.
 
 ## 10 · Changelog
+- 2026-08-02 — Reconciliadas prueba de usabilidad (6 usuarios), Jira PRM-1574/1588/1589, reuniones Drive y hoja LS. Se separó usabilidad de impacto; se registraron los huecos de E2E, fuente cruda, gate ChateaPro y equivalencia con LOG-012.
 - 2026-06-25 — Rama bajada end-to-end con el molde aprobado. Fuga #1 en palanca (frente #1 del plan). Pendiente: validar y, cuando se decida, replicar resto (novedad/posventa) + (último) cronograma + Jira.

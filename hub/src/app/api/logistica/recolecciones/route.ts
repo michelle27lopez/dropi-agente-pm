@@ -1,14 +1,13 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-import { requireUser } from "@/lib/require-auth";
+import { requireAppAccess } from "@/lib/app-access";
 import { A_ETIQUETA_MAPA, esUbicacionReal, type Precision } from "@/lib/recolecciones";
 import { resolverContactoBodega } from "@/lib/recolecciones/contacto";
 
 // Sirve la foto vigente al prototipo del mapa.
 //
-// Devuelve EXACTAMENTE el mismo contrato que el `datos-recolecciones.json` que
-// el HTML lee hoy ({ meta, puntos }), así el frontend no se entera de que la
-// fuente pasó de archivo a base. Lo único que cambia es de dónde sale.
+// Devuelve el contrato estable del mapa ({ meta, puntos }) únicamente desde la
+// base autorizada. No existe fallback a snapshots bajo `public/`.
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -22,8 +21,8 @@ type FilaCarga = {
 };
 
 export async function GET() {
-  const user = await requireUser();
-  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  const user = await requireAppAccess("inidiana");
+  if (!user) return NextResponse.json({ error: "Sin acceso a Control de Recolecciones" }, { status: 403 });
   if (!supabase) return NextResponse.json({ error: "Sin cliente de Supabase" }, { status: 500 });
 
   // La foto más reciente. Si mañana entra otra, esta consulta la toma sola.

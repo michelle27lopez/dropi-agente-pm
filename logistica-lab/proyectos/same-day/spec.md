@@ -185,6 +185,16 @@ no *dónde se puede cumplir*. Faltan, cruzables por `orden_id`:  `[⚪ · pedido
 ⚠️ **Punto ciego:** `ciudad_destino` sólo tiene 3 valores, así que **Soacha, Bello, Itagüí,
 Sabaneta y Jamundí no están en esta data** — aunque el §0.1 los lista como elegibles o
 parciales. El área metropolitana **no se puede dimensionar** con este archivo.
+→ Declarado explícitamente en cada lámina del entregable (04-ago): omitirlo en silencio hace
+que el mapa se lea como "ahí no hay demanda", que no es lo que dice el dato.
+
+⚠️ **Segundo punto ciego, cuantificado (04-ago): el 18,7% de las órdenes no se puede ubicar**
+(79.832 de 427.294). Por ciudad: Bogotá 13,9% · Medellín 23,9% · **Cali 25,4%** — en Cali una de
+cada cuatro órdenes no está en el mapa. Se ubica interpolando el cruce de vías porque el export
+sólo trae texto libre. **Un solo campo lo resolvería:** barrio / localidad / comuna normalizada
+o la coordenada del destino, si la orden la guarda. Agregado a la petición de data como campo de
+prioridad alta. Si resulta que la orden **no** guarda nada de eso, es hallazgo por sí mismo:
+Dropi no podría segmentar por zona sin geocodificar.
 
 ## 8 · Trazabilidad
 | Tipo | Referencia |
@@ -212,6 +222,21 @@ parciales. El área metropolitana **no se puede dimensionar** con este archivo.
 - [ ] **¿El área metropolitana entra en fase 1?** El §0.1 lista Bello/Itagüí/Sabaneta/Jamundí como elegibles, pero no hay una sola orden de ellos en la data entregada. O el export vino filtrado a las 3 ciudades, o esas plazas no tienen volumen. Hay que saber cuál de las dos.
 
 ## 10 · Changelog
+- 2026-08-04 — **Entregable imprimible para Carlos Peralta.** Acordado con Katerine en la
+  reunión del 04-ago: sacar el mapa de calor a un formato que se pueda pasar fuera del equipo.
+  Construido `pipeline/laminas.js` → `npm run sameday:laminas` genera
+  `hub/public/logistica/same-day/entregables/same-day-mapas.pdf` (6 láminas A4 vertical) más un
+  SVG por lámina. **Se dibuja desde `datos-sameday.json`, no se captura el mapa:** una captura
+  sale rasterizada, atada al CDN del basemap, y —lo que importa— **sin la nota de precisión**.
+  Acá el rótulo *"mapa de DEMANDA, no de factibilidad"* va impreso en las seis láminas.
+  Contenido: portada con universo y límites · una lámina por ciudad (calor + ranking de zonas +
+  composición del 100% incluyendo el % sin ubicar) · concentración comparada · curva
+  corte↔cobertura. Sin dependencias nuevas (PDF escrito a mano, fuentes base-14).
+  **Hallazgo de la construcción:** encuadrar por límite administrativo metía a Sumapaz y dejaba
+  media lámina vacía; el encuadre pasó a salir de la demanda (99,8% dentro del marco).
+  ⚠️ **Vigente:** el PDF no cambia el estado del proyecto — sigue siendo demanda, no
+  factibilidad. Antes de que Carlos lo use para fijar cobertura o tarifa hay que enviarle la
+  petición de data del §7.2.
 - 2026-07-25 — **Primera data real del proyecto + mapa de densidad.** Llegó `Data samday.xlsx`
   (427.294 órdenes de Bogotá/Medellín/Cali). Poblado §7 con el diccionario verificado y §5 con la
   primera regla de negocio dimensionada. Construido el mapa navegable en

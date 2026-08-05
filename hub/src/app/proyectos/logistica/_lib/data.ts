@@ -1,7 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// Contenido del tablero — sembrado desde el cerebro de Juan (Logistic Success).
-// Home = INDICADORES. Frame propio: cadena de valor de la orden + experimentos.
-// Datos fijos por ahora; en Fase 2 se mueve a Supabase.
+// Read model de PRESENTACIÓN del tablero Logistic Success.
+// Jira gobierna clasificación/estado/ownership y Darwin (Supabase) el portafolio
+// compartido. Este archivo conserva solo narrativa, navegación y metadatos
+// específicos de la experiencia logística, unidos a Darwin por `codigo` ↔
+// `projects.project_code`. No es una segunda fuente maestra.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { RPP_BASE_URL } from "@/lib/rpp";
@@ -14,8 +16,19 @@ const JIRA = "https://dropi-it.atlassian.net/browse/";
 //
 // ⚠️ Solo enlazar rutas que estén en `main` de dropi-prototypes: es lo que se
 // despliega. Una ruta que vive solo en una rama da 404 en dropitesters.co.
-function rpp(ruta: string) {
-  return `${RPP_BASE_URL}/${ruta}`;
+//
+// El `perfil` NO es opcional por capricho. El RPP protege sus rutas con
+// `profileGuard` (src/app/guards/profile.guard.ts): si la URL no trae
+// `?profile=`, y el navegador no tiene un perfil guardado de una visita
+// anterior, redirige a la pantalla de selección de perfil. Es decir, quien abre
+// el link por primera vez NO llega al prototipo — llega a un selector.
+//
+// El perfil válido de cada prototipo está declarado en su `meta.json` dentro
+// del repo de prototipos; no se adivina. Valores posibles: dropshipper,
+// proveedor, admin. Verificado el 5-ago contra origin/main.
+type PerfilRpp = "dropshipper" | "proveedor" | "admin";
+function rpp(ruta: string, perfil: PerfilRpp) {
+  return `${RPP_BASE_URL}/${ruta}?profile=${perfil}`;
 }
 export function jiraUrl(ticket?: string) {
   return ticket ? JIRA + ticket : undefined;
@@ -43,16 +56,16 @@ export type Spotlight = {
 };
 
 export const spotlight: Spotlight = {
-  fecha: "Cell Board · 1 jul 2026",
-  fuente: "Primera vez con dato duro",
-  titulo: "La confirmación es el cuello #1 del ciclo de la orden",
-  cifra: "317K",
-  cifraLabel: "órdenes tardan más de 24h en confirmarse (promedio 11,18h)",
+  fecha: "Pruebas moderadas · 18–25 jul 2026",
+  fuente: "Resultados con 6 usuarios",
+  titulo: "Autoconfirmación se entiende, pero no deja claro el impacto económico",
+  cifra: "17%",
+  cifraLabel: "interpretó correctamente ganancia/pérdida en la tarea crítica T4",
   lectura:
-    "Hoy la confirmación depende de una acción manual del dropshipper. El 14,37% de las confirmaciones exceden 24h — ahí se va el tiempo y parte de la movilización.",
+    "La aceptación conceptual llegó a 81/100, pero 5 de 6 usuarios pidieron visibilidad de ganancia o pérdida. Es evidencia de usabilidad, no de mejora en movilización.",
   accion:
-    "Arranca experimento de autoconfirmación por madurez (dropshippers constantes, ≥50 órd/mes) la próxima semana. Ojo: no aplica en zonas rurales, donde la devolución ya es alta.",
-  linkTexto: "Ver el experimento →",
+    "Corregir T4, cerrar el gate técnico con ChateaPro e instrumentar quién confirma antes de diseñar la prueba de impacto.",
+  linkTexto: "Ver resultados →",
   linkHref: "/proyectos/logistica/experimentos",
 };
 
@@ -210,7 +223,7 @@ export const LINK_ICONO: Record<LinkTipo, string> = {
   jira: "🎫", figma: "🎨", prototipo: "🖥️", poc: "🧪", doc: "📄", drive: "📁", tablero: "🧭",
 };
 
-export type Proyecto = {
+export type ProyectoMetadataLogistica = {
   nombre: string;
   slug: string;
   codigo?: string; // LOG-XXX en Supabase (undefined = no registrado en Darwin)
@@ -271,6 +284,9 @@ export type Proyecto = {
   vista?: string;
 };
 
+// Nombre histórico conservado para no romper los consumidores del tablero.
+export type Proyecto = ProyectoMetadataLogistica;
+
 export function proyectoPorSlug(slug: string) {
   return proyectos.find((p) => p.slug === slug);
 }
@@ -285,7 +301,7 @@ export function linksDe(p: Proyecto): LinkRef[] {
 // Orden = prioridad de trabajo, derivada del roadmap Q3 (estrategia/roadmap-q3-logistica.md):
 // Fase 0 enabler → Fase 1 apuestas activas → Fase 2 construcción → Fase 3 terceros → casi cerrados.
 // NO es orden por cadena de valor (ese es el eje del mapa /mapa). Ajustar aquí si cambia la prioridad.
-export const proyectos: Proyecto[] = [
+export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
   {
     nombre: "Autoconfirmación de órdenes (movilización)",
     slug: "movilizacion",
@@ -293,16 +309,26 @@ export const proyectos: Proyecto[] = [
     vista: "/proyectos/logistica/experimentos/autoconfirmacion",
     etapa: "Confirmación", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
     ticket: "PRM-1497", destacado: true,
+    jira: "En Ruta (backlog), sin assignee. PRM-1574 es antecedente; PRM-1588/1589 son una rama WhatsApp candidata, no equivalencia confirmada.",
+    doc: "parcial",
     descripcion:
-      "Confirmar automáticamente las órdenes de los dropshippers maduros, para que dejen de quedarse fuera de la red esperando una acción manual.",
-    foco: "Fuga #1. 317K órdenes >24h en confirmar (prom. 11,18h). Se valida con experimento antes de comprometer desarrollo; el handoff a TI es condicional al resultado.",
+      "Configurar reglas para confirmar automáticamente órdenes elegibles y evitar que se queden fuera de la red esperando una acción manual.",
+    foco: "Prueba moderada 18–25 jul: 6 usuarios, aceptación 81/100 y comprensión económica T4 de 17%. Valida usabilidad parcial, no impacto. El handoff sigue condicionado al gate ChateaPro, guardarraíles, trazabilidad manual/automática y prueba outcome.",
     links: [
       { tipo: "prototipo", label: "Simulador de reglas (aquí en el tablero)", href: "/proyectos/logistica/experimentos/autoconfirmacion" },
-      // El prototipo RPP existe (old/configuraciones/configuracion-de-tienda,
-      // commit 8d2bd14) pero vive SOLO en la rama
-      // wireframe/DROP-configuracion-pedidos-autoconfirmacion. Hasta que se
-      // mergee a main no está en dropitesters.co, así que enlazarlo daría 404.
-      { tipo: "prototipo", label: "RPP · Configuración de tienda (falta merge a main)", href: "", falta: true },
+      { tipo: "doc", label: "Confluence · síntesis y gates LOG-001", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1572864001" },
+      // Este link estuvo marcado como "falta merge a main" desde el 8-jul,
+      // cuando el prototipo vivía solo en la rama
+      // wireframe/DROP-configuracion-pedidos-autoconfirmacion (commit 8d2bd14).
+      // Ya no: main tiene la pantalla Y un `autoconfirmacion-wizard` posterior
+      // — commit aedf743 del 3-ago, "wizard autoconfirmación × ChateaPro, 3
+      // pasos con simulador" — que la rama nunca tuvo. Main va adelante, no
+      // atrás. Verificado el 5-ago contra origin/main de dropi-prototypes.
+      //
+      // Perfil dropshipper porque confirmar la orden es su acción: así lo
+      // declara sidebar-nav.config.ts, que ofrece esta ruta bajo dropshipper
+      // (L62) y bajo proveedor (L165) — ver LOG-012 para la otra vista.
+      { tipo: "prototipo", label: "RPP · Configuración de tienda · autoconfirmación", href: rpp("old/configuraciones/configuracion-de-tienda", "dropshipper") },
     ],
     experimentos: ["autoconfirmacion"],
   },
@@ -310,15 +336,20 @@ export const proyectos: Proyecto[] = [
     nombre: "Autogeneración de guías",
     slug: "autogeneracion-guias",
     codigo: "LOG-012",
-    etapa: "Despacho", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
+    etapa: "Despacho", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-1469",
+    jira: "Solicitud · Inv. y definición · sin assignee/description. Causa INVS-67, que está en Backlog y también sin assignee.",
+    doc: "completo",
     descripcion:
-      "Al confirmar la orden, generar la guía automáticamente para que el alistamiento no espere una acción manual más.",
-    foco: "Hermano de autoconfirmación: ataca la fase 'Generación de guía' (10,37h prom.). No es una pantalla aparte — es una pestaña de la MISMA configuración, pero vista desde el PERFIL PROVEEDOR (el de autoconfirmación es el del dropshipper). Listo para probar; beneficia a proveedores de alto volumen. NO registrado todavía en Darwin (sin código LOG).",
+      "Generar en lote las guías de despacho de órdenes confirmadas para que el proveedor de alto volumen pase directamente a imprimir y alistar.",
+    foco: "Maria lo clasificó como solicitud/proyecto en definición, no iniciativa propia. Baseline agregado: 10,37h, pero falta consulta segmentada y recuperar la exploración Kevin/Lucho que habría relativizado el problema. Sin prueba propia. Gates: lotes/cola de impresión, fallback bodega–carrier, idempotencia y datos.",
     links: [
-      // Misma pantalla que autoconfirmación (old/configuraciones/configuracion-de-tienda),
-      // otra pestaña y otro perfil. Igual que aquella, espera el merge a main.
-      { tipo: "prototipo", label: "RPP · Config. de tienda · perfil proveedor (falta merge a main)", href: "", falta: true },
+      // Misma pantalla que autoconfirmación, vista desde el perfil PROVEEDOR
+      // (sidebar-nav.config.ts la ofrece bajo los dos roles). Ya está en main:
+      // ver la nota larga en LOG-001.
+      { tipo: "prototipo", label: "RPP · Config. de tienda · perfil proveedor", href: rpp("old/configuraciones/configuracion-de-tienda", "proveedor") },
+      { tipo: "jira", label: "INVS-67 · solicitud origen", href: JIRA + "INVS-67" },
+      { tipo: "doc", label: "Confluence · síntesis y gates LOG-012", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1572929537" },
     ],
     experimentos: ["autogeneracion-guias"],
   },
@@ -343,6 +374,11 @@ export const proyectos: Proyecto[] = [
     ],
     links: [
       { tipo: "prototipo", label: "Conceptualización interactiva", href: "/proyectos/logistica/experimentos/vigia" },
+      // El RPP existe y está en main del repo de prototipos: tres rutas
+      // (new/vigia, new/vigia/ordenes, new/vigia/orden/:id) con sus componentes
+      // bajo pages/new/pedidos/vigia. Verificado el 5-ago contra origin/main.
+      { tipo: "prototipo", label: "RPP · Centro Vigía", href: rpp("new/vigia", "dropshipper") },
+      { tipo: "prototipo", label: "RPP · Vigía · órdenes", href: rpp("new/vigia/ordenes", "dropshipper") },
       { tipo: "doc", label: "Arquitectura v4 (Claude Code prompt)", href: "", falta: true },
     ],
     experimentos: ["vigia"],
@@ -352,13 +388,20 @@ export const proyectos: Proyecto[] = [
     slug: "recoleccion-proactiva",
     codigo: "LOG-013",
     vista: "/proyectos/logistica/recolecciones",
-    etapa: "Despacho", tipo: "Experimento", fase: "Research", handoff: "No aplica",
+    etapa: "Despacho", tipo: "Oportunidad", fase: "Discovery", handoff: "No aplica",
+    ticket: "PRM-1465",
+    jira: "Oportunidad principal candidata en backlog. PRM-1468 fue fusionada dentro de PRM-1465; comentario documental 51003 verificado. Ownership pendiente.",
+    doc: "parcial",
     descripcion:
       "Que Dropi programe la recolección a la transportadora en vez de esperarla: saber qué está listo, quién recoge y quién no recogió.",
-    foco: "Conecta con la fase 'Recogido por Dropi' (8,28h, cumplimiento 80,64% — el peor de la ruta Dropi). Ya hay prototipo: mapa de guías preparadas sin recoger por territorio DANE, con datos mock (falta la respuesta de Data sobre cobertura por municipio). Sin ticket ni código LOG.",
+    foco: "PRM-1468 fue fusionada dentro de PRM-1465. La operación combina pickups de carriers externos y carrier interno/cross-docking; Hub/Indiana agrega detección preventiva. PAU es arquitectura adyacente y Warranties otro dominio. Faltan owners, frontera México, RLS y ciclo persistencia → envío → acuse → resultado.",
     links: [
-      { tipo: "prototipo", label: "Control de recolecciones", href: "/proyectos/logistica/recolecciones" },
-      { tipo: "doc", label: "Hallazgos de recolecciones (Growth Ops)", href: "", falta: true },
+      // Indiana es el producto de verdad: nació como módulo del hub y se separó
+      // como app propia (ver su README). Va primero porque la pantalla del hub
+      // de abajo es el port anterior, que ya divergió — mismo control, otra
+      // versión, y la de Indiana es la que se mantiene.
+      { tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://inidiana-map.vercel.app/mapa" },
+      { tipo: "prototipo", label: "Control de recolecciones (versión del hub)", href: "/proyectos/logistica/recolecciones" },
     ],
     experimentos: ["recoleccion-proactiva"],
   },
@@ -367,18 +410,25 @@ export const proyectos: Proyecto[] = [
     slug: "seleccion-transportadoras",
     codigo: "LOG-004",
     codigoDarwin: "PRM-1513",
-    etapa: "Generación", tipo: "Experimento", fase: "Research", handoff: "Pendiente",
-    ticket: "PRM-1513",
-    jira: "⚠️ En Ruta (backlog), SIN ASIGNAR — aunque el Delivery Backlog lo da en ejecución",
-    doc: "completo",
+    etapa: "Generación", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
+    ticket: "PRM-1219",
+    jira: "Asignado para hand off — PRM-1219; PRM-203 en Diseño; PRM-1513 conserva el gate OKR",
+    doc: "parcial",
     bloqueo:
       "Sin acceso a Chronos para crear las tablas que faltan → el PoC no se puede volver a levantar en la cuenta de AWS de IA. Juan Felipe Cubillos coordina los accesos con Jaime.",
     descripcion: "Elegir automáticamente la mejor transportadora por zona para bajar la devolución y mejorar la entrega.",
-    foco: "Ranking carrier × zona (POC 72%). PM: Kate Pencue; Juan actúa como Carrier Ops. Épica dev DROP-17946. Δ 20–27 pp de devolución entre carriers en la misma zona. Es el único con documentación completa.",
+    foco: "Ranking carrier × zona (POC 72%). PM: Kate Pencue; Juan actúa como Carrier Ops. PRM-1150 fue fusionada en PRM-203: el catálogo de carriers es una capacidad del mismo frente, no otro proyecto. V1 con documentos curados; faltan contrato de información, paridad y cierre E2E.",
     links: [
-      { tipo: "poc", label: "PoC en AWS (cuenta de IA)", href: "", falta: true },
-      { tipo: "figma", label: "Diseño en Figma", href: "", falta: true },
-      { tipo: "doc", label: "Documentación completa", href: "", falta: true },
+      { tipo: "jira", label: "Jira · PRM-1513", href: JIRA + "PRM-1513" },
+      { tipo: "jira", label: "Jira · Épica DROP-17946", href: JIRA + "DROP-17946" },
+      { tipo: "jira", label: "Jira · Pendiente handoff PROD-1992", href: JIRA + "PROD-1992" },
+      { tipo: "figma", label: "Figma · Selección de transportadoras", href: "https://www.figma.com/design/RxEb9heslhkDA7tMpAvYXJ/Selecci%C3%B3n-de-transportadoras?node-id=4875-296079" },
+      // Mismo documento de siempre (id 1oiKOFd…), pero en su forma canónica de
+      // Google Docs. La forma `drive.google.com/file/d/…/view` abre el visor y
+      // no el documento.
+      { tipo: "drive", label: "Drive · Kickoff sistema inteligente", href: "https://docs.google.com/document/d/1oiKOFdQ27P2COPSRQVVu9WlRAh7c5_bq/edit" },
+      { tipo: "doc", label: "Confluence · Sistema inteligente", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1531936779" },
+      { tipo: "doc", label: "Confluence · Análisis de apertura previo", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1530593304" },
     ],
     experimentos: ["ruteo-carrier-zona"],
   },
@@ -395,7 +445,11 @@ export const proyectos: Proyecto[] = [
     entregable: "/proyectos/logistica/normalizacion-estados",
     descripcion: "Un lenguaje único de estados para saber dónde está cada orden y poder contárselo al cliente.",
     foco: "Prioridad #1 del Delivery Roadmap (WIP = 1). Hoy 35 de los 51 estados que usa la operación se guardan como lo mismo: no se puede medir dónde se traba una orden ni avisarle nada al cliente. El modelo son dos capas: el estado crudo lo ve el admin, y 9 estados homologados los ven los usuarios. Pendiente: 2 decisiones para cerrarlo.",
-    links: [{ tipo: "tablero", label: "Mapa de estados interactivo", href: "/proyectos/logistica/normalizacion-estados" }],
+    links: [
+      { tipo: "tablero", label: "Mapa de estados interactivo", href: "/proyectos/logistica/normalizacion-estados" },
+      { tipo: "drive", label: "E2E · Normalización de estados", href: "https://docs.google.com/document/d/1MdJpIfBWM3dODcMW8big-4-RfOxatUIt1I2CcoGtV-Y/edit" },
+      { tipo: "doc", label: "Confluence · Síntesis existente", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1530560582" },
+    ],
   },
   {
     nombre: "Parametrización de tarifas",
@@ -412,11 +466,14 @@ export const proyectos: Proyecto[] = [
     descripcion: "Parametrizar el costo por orden (fletes) de forma clara y automática.",
     foco: "OKR 3 de compañía. Prototipo RPP construido (3 vistas). ⚠️ El doc E2E todavía necesita ajuste — no está listo para entregar tal cual. Espera slot de desarrollo.",
     links: [
-      { tipo: "prototipo", label: "RPP · Parametrizar tarifas", href: rpp("old/parametrizar-tarifas") },
-      { tipo: "prototipo", label: "RPP · Tarifas industrial", href: rpp("old/parametrizar-tarifas-industrial") },
-      { tipo: "doc", label: "RPP · Docs de tarifas", href: rpp("old/parametrizar-tarifas-docs") },
-      { tipo: "figma", label: "Diseño en Figma", href: "", falta: true },
-      { tipo: "doc", label: "Doc E2E (falta ajustar)", href: "", falta: true },
+      { tipo: "prototipo", label: "RPP · Parametrizar tarifas", href: rpp("old/parametrizar-tarifas", "admin") },
+      { tipo: "prototipo", label: "RPP · Tarifas industrial", href: rpp("old/parametrizar-tarifas-industrial", "admin") },
+      { tipo: "doc", label: "RPP · Docs de tarifas", href: rpp("old/parametrizar-tarifas-docs", "admin") },
+      // El E2E no lleva link propio: es el mismo frente que ya cubren el RPP y
+      // el Figma de arriba, y su estado ("necesita ajuste, no está listo para
+      // entregar") ya se cuenta en el `foco`. Un enlace vacío más solo sumaba
+      // ruido a la lista de huecos.
+      { tipo: "figma", label: "Figma · Parametrización de tarifas", href: "https://www.figma.com/design/PDeeZVQMyF3i6SUFCWyuQa/Parametrizaci%C3%B3n-de-tarifas?node-id=2233-35839" },
     ],
   },
   {
@@ -425,15 +482,16 @@ export const proyectos: Proyecto[] = [
     codigo: "LOG-014",
     etapa: "Despacho", tipo: "Proyecto", fase: "Listo para handoff", handoff: "Listo para handoff",
     ticket: "PRM-1446", destacado: true,
-    jira: "Listo para hand off (14-jul), asignado a Juan",
-    doc: "ninguno",
+    jira: "Workflow: Listo para hand off; comentario 50931 documenta el gate transversal bloqueado",
+    doc: "parcial",
     bloqueo: "Capacidad de TI (cola de dev) + negociación de la mesa logística.",
     descripcion: "Parametrizar el cobro de fulfillment con sus dos esquemas (mensual y diario).",
-    foco: "🔴 HUECO DE DOCUMENTACIÓN #1: es el único en 'Listo para hand off' sin nada en el repo. Bodegas 2PL en Bogotá, Cali y Medellín = 92.000 órdenes/mes; el cobro se activa solo al llegar a Entregado, así que 20–25% de las órdenes preparadas y despachadas nunca se cobran. Servicios prestados y no cobrados: almacenamiento, etiquetado manual, armado de kits y combos, multi-unidad. Prototipo RPP construido (PROD-648). NO registrado en Darwin pese a estar listo.",
+    foco: "Corte transversal auditado: la cadena PROD-238/648/785/995/1171/1330/1526 prueba iteración de Producto, no desarrollo. PROD-1526 está en Dependencia, PROD-240 sigue en backlog sin assignee e INVS-66 está en curso. Bodegas 2PL Bogotá/Cali/Medellín = 92.000 órdenes/mes; 20–25% de órdenes preparadas/despachadas no llegan a Entregado. Alcance: base, multi-unidad, etiquetado, kits/combos, almacenamiento y recepción. Gates: E2E, +68%/+78%, economía, triggers, elegibilidad, wallet/reversos, actores, países y respuesta TI. Darwin LOG-014, Jira comentario 50931 y Confluence 1572732930 ya coinciden.",
     links: [
-      { tipo: "prototipo", label: "RPP · Parametrizar fulfillment", href: rpp("old/fulfillment/parametrizar") },
-      { tipo: "figma", label: "Diseño en Figma", href: "", falta: true },
-      { tipo: "doc", label: "Doc E2E (falta ajustar)", href: "", falta: true },
+      { tipo: "prototipo", label: "RPP · Parametrizar fulfillment", href: rpp("old/fulfillment/parametrizar", "admin") },
+      { tipo: "figma", label: "Diseño en Figma", href: "https://www.figma.com/design/iR3wuYGNrfTfaDKpViDf0Y?node-id=2233-35839" },
+      { tipo: "drive", label: "Doc E2E · Parametrización de Fulfillment", href: "https://docs.google.com/document/d/1-t3LtPde36OIYE6mDuNWneRn2IL1UPA8paLLiZdbhYI/edit" },
+      { tipo: "doc", label: "Confluence · Síntesis auditada", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1572732930" },
     ],
   },
   {
@@ -447,7 +505,11 @@ export const proyectos: Proyecto[] = [
     bloqueo: "Parqueado por WIP = 1 (Normalización de estados es la iniciativa activa). La ventana del cronograma es tentativa.",
     descripcion: "Entrega el mismo día para bodegas propias y Veloces.",
     foco: "MVP: flag SD + hora de corte + validación geo + selección guiada. Épica PROD-1127. Riesgo vivo: hoy con Veloces salen guías same day sin validación geográfica (Cali→Santa Marta).",
-    links: [{ tipo: "figma", label: "Board de discovery (Michelle López)", href: "", falta: true }],
+    links: [
+      { tipo: "figma", label: "Board de discovery (Michelle López)", href: "https://www.figma.com/board/uZeHBc0bilrBIXgYWyxeow/Research-same-day" },
+      { tipo: "drive", label: "E2E · Same Day", href: "https://docs.google.com/document/d/1NO9fbjklz2XvMVrMc_os6AuUjsF5ZkmDw3kX5XmwNtA/edit" },
+      { tipo: "doc", label: "Confluence · Síntesis existente", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1531576355" },
+    ],
   },
   {
     nombre: "Guías reemplazatorias (Ecom Scanner)",
@@ -455,8 +517,10 @@ export const proyectos: Proyecto[] = [
     codigo: "LOG-009",
     etapa: "Novedad / Posventa", tipo: "Lanzamiento", fase: "Beta", handoff: "Handoff hecho",
     ticket: "PRM-745",
-    descripcion: "Generar guías cuando el carrier no lee el código de barras (Ecom Scanner).",
-    foco: "Ya no es discovery: está en lanzamiento con Laura (comunicación), operativo en Interrapidísimo, Coordinadora y TCC. Monitoreo de 3 semanas antes del despliegue global.",
+    doc: "completo",
+    descripcion: "Leer una guía reemplazatoria en Ecom Scanner, resolverla a la guía original y conservar la trazabilidad de la devolución.",
+    foco: "Capacidad construida y PRM en Versión Beta. Junio reportó pruebas satisfactorias; la mesa operativa del 27-jul volvió a reportar bloqueos y el 31-jul se declaró lista para ampliar. PROD-1045 sigue en backlog: faltan ticket/hotfix, medición, comunicación y evidencia de rollout global.",
+    links: [{ tipo: "jira", label: "PROD-1045 · Lanzamiento Laura", href: JIRA + "PROD-1045" }],
   },
   {
     nombre: "Pruebas de entrega (POD)",
@@ -465,11 +529,15 @@ export const proyectos: Proyecto[] = [
     etapa: "Entrega / Devolución", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
     ticket: "PRM-1517",
     jira: "⚠️ Paraguas En Ruta y SIN ASIGNAR · PRM-1361 y PRM-1455 en Impedimentos",
-    doc: "ninguno",
-    bloqueo: "El proyecto paraguas (PRM-1517) no tiene dueño, y dos de las soluciones por transportadora están en Impedimentos. No se puede escribir el spec sobre eso.",
+    doc: "parcial",
+    bloqueo: "PRM-1517 no tiene owner; PRM-1361 y PRM-1455 están en Impedimentos; el handoff PROD-1525 está en Dependencia. DROP-23095 figura Finalizada, pero sus criterios son de discovery y no prueban producción.",
     descripcion: "Evidencia de los intentos de entrega (SLAs, foto con geolocalización), con una solución por transportadora.",
-    foco: "🔴 HUECO DE DOCUMENTACIÓN #2. No es un ticket: son 8 — paraguas PRM-1517 (conectado a KR2.1) + solicitudes PRM-1364/1361 + soluciones por carrier PRM-1462 ENVIA, PRM-1455 Interrapidísimo, PRM-1610 Domina, PRM-1611 TIUI, PRM-618 Coordinadora. 💎 Dato enterrado en PRM-618: el 80% de las solicitudes del equipo de logística a las transportadoras son pruebas de entrega — es la solicitud más común.",
-    links: [{ tipo: "doc", label: "Kickoff POD (PDF sin versionar)", href: "", falta: true }],
+    foco: "No es un ticket: es un árbol por carrier. Cadena de Producto ENVÍA: PROD-836 → 1172 → 1347 hechos; PROD-1525 en Dependencia. DROP-23095 está Finalizada, pero exige verificación de build/API/UI antes de afirmar despliegue. PROD-1072 se excluye: es Print On Demand, no Proof of Delivery. PRM-618 reporta que 80% de solicitudes a carriers son POD, sin baseline trazable. El código al destinatario sigue como capacidad candidata; es distinto del token Veloces de logística inversa y de archivos periódicos de carriers.",
+    links: [
+      { tipo: "drive", label: "E2E · Prueba de entrega", href: "https://docs.google.com/document/d/16XQ6P1pWrzm3PHaltL5UaMeV4698-rMpgFSpGWd3tas/edit" },
+      { tipo: "doc", label: "Confluence · Síntesis POD", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1531772949" },
+      { tipo: "figma", label: "Figma · Pruebas de entrega", href: "https://www.figma.com/design/72YLEVFhrvdrZgrbPB67IM/Pruebas-de-entrega--POD-?node-id=12-9290" },
+    ],
   },
   {
     nombre: "Validación y normalización de direcciones",
@@ -483,6 +551,9 @@ export const proyectos: Proyecto[] = [
     bloqueo: "Conflicto de ownership: el Delivery Backlog lo pone a EJECUTAR en la célula, pero en Jira el dueño es Katerine Pencue. Resolver con Maria antes de trabajarlo.",
     descripcion: "Normalizar y validar la dirección en el momento de crearla, a nivel de plataforma.",
     foco: "Discovery del taller 24-jun. Está registrado en Darwin (LOG-002) pero no aparecía en este tablero.",
+    links: [
+      { tipo: "doc", label: "Confluence · Síntesis existente", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1530855466" },
+    ],
   },
   {
     nombre: "Dirección confiable + geo",
@@ -505,15 +576,22 @@ export const proyectos: Proyecto[] = [
     bloqueo: "Nadie lo tiene asignado en Jira. Alinear con Seller Success.",
     descripcion: "Dar dueño, SLA y triaje por motivo a las novedades para recuperar la orden, y avisar al comprador antes de que la devolución ocurra.",
     foco: "Absorbe lo que antes figuraba aparte como 'Notificaciones prevención de devoluciones': era el mismo PRM-1512 duplicado en dos fichas. Fuga 3, capa transversal + posventa.",
+    links: [
+      { tipo: "drive", label: "Drive · Kickoff prevención de devoluciones", href: "https://drive.google.com/file/d/1joY2mYtgDpgtXpxuvRQToFdIP5x2xNUL/view" },
+      { tipo: "doc", label: "Confluence · Síntesis existente", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1530560555" },
+    ],
   },
   {
     nombre: "Reducir devoluciones (COD)",
     slug: "devoluciones-cod",
     codigo: "LOG-010",
-    etapa: "Entrega / Devolución", tipo: "Idea", fase: "Backlog", handoff: "No aplica",
+    etapa: "Entrega / Devolución", tipo: "Proyecto", fase: "Discovery", handoff: "No aplica",
     ticket: "PRM-1523",
-    descripcion: "Reducir la devolución atacándola DENTRO del COD (pago/gestión), nunca empujando prepago.",
-    foco: "Backlog: no hay trabajo hecho todavía. Fuga 2. Direcciones a explorar: score de riesgo, triaje por motivo, anticipo/ConfioPagos.",
+    jira: "PRM-1523 y PRM-1580 en En Ruta (backlog), sin assignee; PRM-1523 no tiene descripción",
+    doc: "parcial",
+    bloqueo: "Falta informe anonimizado del piloto Veloces, owners, vigencia de DROP-4595/4596, contrato de datos y separación formal entre KPI de devolución y KPI de conciliación.",
+    descripcion: "Discovery para prevenir devoluciones dentro del COD y cerrar la trazabilidad del retorno al proveedor sin crear un proyecto paralelo.",
+    foco: "El token Veloces es una capacidad de conciliación de logística inversa en piloto: confirma el traspaso a bodega mediante manifiesto, código y firma. No evita la devolución, no es el código al destinatario y no equivale a los archivos de carriers. DROP-3455/4595/4596 son antecedentes, pero las historias siguen en backlog y no prueban integración Dropi ni rollout global.",
   },
   {
     nombre: "Torre de control / Tiempo por fases",
@@ -540,6 +618,10 @@ export const proyectos: Proyecto[] = [
   //     pendiente actualizar Jira y los documentos E2E (fuera de este tablero).
 ];
 
+// Alias público compatible. Los adaptadores de Darwin y las vistas existentes
+// siguen importando `proyectos`, pero el nombre canónico deja claro su alcance.
+export const proyectos = metadataProyectosLogistica;
+
 // ── Experimentos / hipótesis ─────────────────────────────────────────────────
 export type EstadoExp = "Idea" | "Diseñado" | "Corriendo" | "Validado" | "Descartado";
 export type Experimento = {
@@ -564,17 +646,20 @@ export const experimentos: Experimento[] = [
   {
     slug: "autoconfirmacion",
     proyectoSlug: "movilizacion",
-    links: [{ tipo: "figma", label: "Prototipo funcional", href: "", falta: true }],
+    // El prototipo no faltaba: es el wizard de autoconfirmación del RPP
+    // (commit aedf743, 3-ago). Estaba sin enlazar porque el tablero lo daba
+    // por no mergeado — ver la nota en LOG-001.
+    links: [{ tipo: "prototipo", label: "RPP · Wizard de autoconfirmación", href: rpp("old/configuraciones/configuracion-de-tienda", "dropshipper") }],
     nombre: "Autoconfirmación por madurez del dropshipper",
     hipotesis:
       "Autoconfirmar a dropshippers maduros (constantes, ≥50 órd/mes) baja el tiempo de confirmación y sube movilización, sin subir devolución.",
-    metrica: "Tiempo de confirmación (h) + % movilización + % devolución (A/B sobre la muestra)",
-    estado: "Diseñado",
-    impacto: "317K órdenes >24h · confirmación promedio 11,18h · 14,37% exceden 24h",
+    metrica: "Fase actual: éxito por tarea y comprensión económica. Fase outcome pendiente: tiempo de confirmación + % movilización, con % devolución como guardarraíl.",
+    estado: "Corriendo",
+    impacto: "Baseline: 317K órdenes >24h, promedio 11,18h. Usabilidad: 6 sesiones, aceptación 81/100; T4 económico solo 17%.",
     proyecto: "Movilización · Confirmación (Cell Board 1-jul)",
     demoHref: "/proyectos/logistica/experimentos/autoconfirmacion",
     aprendizaje:
-      "Ojo: en zonas rurales (veredas/fincas) la devolución ya es alta, así que ahí no se autoconfirma sin revisar. Hoy tampoco distinguimos confirmación manual de automática (salvo Chatea) — el experimento deja esa trazabilidad.",
+      "La pantalla se entiende de forma parcial, pero 5/6 usuarios no vieron claramente ganancia/pérdida y solo 17% resolvió T4. Antes de handoff: visibilidad económica, gate ChateaPro, decision_source y guardarraíles de duplicidad, ruralidad y variantes. Aún no hay evidencia de mejora en movilización o devolución.",
   },
   {
     slug: "autogeneracion-guias",
@@ -582,13 +667,15 @@ export const experimentos: Experimento[] = [
     nombre: "Autogeneración de guías al confirmar",
     hipotesis:
       "Generar la guía automáticamente al confirmar la orden recorta la fase de generación (10,37h prom.) sin degradar el alistamiento en bodega.",
-    metrica: "Horas de la fase 'Generación de guía' + % de cumplimiento <24h (A/B sobre proveedores de alto volumen)",
+    metrica: "Discovery: tiempo activo/espera, tamaño de lote y fallos por segmento. Piloto futuro: confirmación→guía, % válidas, error/anulación/duplicidad y tiempo hasta impresión.",
     estado: "Diseñado",
     impacto: "3,20M órdenes pasan por esta fase · 325K críticas · cumplimiento 89,84%",
     proyecto: "Autogeneración de guías (PRM-1469)",
     aprendizaje:
-      "Prototipo listo para probar; falta conseguir con quién correrlo. También impacta a brands, no solo a dropshippers (nota de Maria).",
-    links: [{ tipo: "figma", label: "Prototipo funcional", href: "", falta: true }],
+      "El concepto existe, pero aún no está listo para una prueba outcome. Primero hay que recuperar el análisis Kevin/Lucho, validar con proveedores si el cuello es generar o imprimir/alistar y cerrar fallback de carrier e idempotencia. La capacidad 2025 de guías de recolección/garantías es distinta.",
+    // Misma pantalla del RPP que autoconfirmación, vista desde el proveedor:
+    // es donde se configura que la guía se genere sola al confirmar.
+    links: [{ tipo: "prototipo", label: "RPP · Config. de tienda · perfil proveedor", href: rpp("old/configuraciones/configuracion-de-tienda", "proveedor") }],
   },
   {
     slug: "recoleccion-proactiva",
@@ -598,13 +685,13 @@ export const experimentos: Experimento[] = [
       "Si Dropi programa la recolección en vez de esperarla —sabiendo qué está listo, quién recoge y quién no— baja el tiempo de la fase 'Recogido por Dropi' y se mueven más paquetes por ruta.",
     metrica:
       "[por cerrar con Growth Ops] — candidatas: horas de la fase Recogido por Dropi · % de recolecciones cumplidas · paquetes por ruta",
-    estado: "Idea",
+    estado: "Diseñado",
     impacto:
       "Fase 'Recogido por Dropi': 8,28h prom. y 80,64% de cumplimiento — el peor tramo de la ruta Dropi. 96K órdenes críticas.",
-    proyecto: "Recolección proactiva",
+    proyecto: "Recolección proactiva (PRM-1465 candidato principal)",
     aprendizaje:
-      "Tres palancas identificadas por Juan (10-jul): que Dropi programe la recolección; ir por el proveedor con muchos paquetes aunque no llegue al mínimo; agrupar proveedores cercanos en una ruta. Investigación E2E hecha con Growth Ops, falta cerrar hallazgos.",
-    links: [{ tipo: "doc", label: "Hallazgos de recolecciones (Growth Ops)", href: "", falta: true }],
+      "La operación saliente y la capa preventiva ya están diferenciadas. El Hub detecta/prioriza y prepara archivos o mensajes, pero no persiste ni confirma el ciclo real. Falta recuperar los artefactos PROD, validar owners, ejecutar un piloto con baseline y reconciliar el resultado.",
+    links: [{ tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://inidiana-map.vercel.app/mapa" }],
   },
   {
     slug: "validacion-shop",
@@ -634,7 +721,7 @@ export const experimentos: Experimento[] = [
     metrica: "% de devolución por zona (post-ranking)",
     estado: "Corriendo",
     impacto: "Δ 20–27 pp entre carriers en la misma zona · POC 72%",
-    proyecto: "Selección de transportadoras (PRM-1513)",
+    proyecto: "Selección de transportadoras (PRM-1219)",
   },
   {
     slug: "encuesta-direccion",
@@ -720,6 +807,9 @@ export type ProyectoLite = {
   estadoTono: "verde" | "ambar" | "rojo" | "azul" | "gris";
   nota: string;
   impacto?: string; // dato de impacto/negocio destacado (ej. ingreso adicional)
+  // Enlace a una página del tablero (ruta relativa, para que sirva en cualquier
+  // dominio del despliegue) o a un recurso externo.
+  enlace?: { label: string; href: string };
 };
 export type SeccionProyectos = { titulo: string; nota: string; proyectos: ProyectoLite[] };
 
@@ -760,13 +850,177 @@ export type Weekly = {
 // Cada semana es una entrada. La primera del array es la más reciente (la que se
 // muestra por defecto). NO borrar semanas viejas: el switch de /updates las conserva.
 export const weeklies: Weekly[] = [
-  // ── Semana 21 – 25 jul 2026 (actual) ────────────────────────────────────────
+  // ── Semana 27 – 31 jul 2026 (actual) ────────────────────────────────────────
+  {
+    id: "2026-w31",
+    fecha: "Viernes 31 de julio de 2026",
+    semana: "Semana 27 – 31 jul",
+    foco:
+      "Semana de definición operativa, no de cifra: Recolecciones reconstruyó el flujo actual y diseñó un piloto preventivo, todavía sin baseline ni outcome reconciliados. El POC de selección de transportadoras se revivió con prototipo en RPP, Normalización de estados quedó organizada para enviarle a Maria y Autoconfirmación consolidó sus pruebas de usabilidad. El indicador mensual sigue sin cierre nuevo desde junio.",
+
+    comparacionMensual: {
+      titulo: "Cierre junio — sin cierre nuevo esta semana",
+      alcance: "Consolidado de 9 países, ponderado por volumen. Junio sigue siendo el último mes cerrado.",
+      lectura:
+        "Segunda semana sin dato mensual nuevo: el cierre de julio aún no madura. El avance fue de preparación — Recolecciones separó la operación saliente de la capa preventiva y dejó el piloto por validar; el POC de transportadoras quedó listo para probarse con usuarios reales. Ninguna de las dos palancas tiene outcome demostrado todavía.",
+      entregaNota:
+        "% entrega sigue sin ser comparable hasta tener el export por cohorte de Data. Sin novedad frente al 24-jul.",
+      filas: [
+        { metrica: "Movilización", abril: "81,9%", mayo: "82,3%", junio: "82,3%", delta: "≈ 0 · plano", tono: "alerta" },
+        { metrica: "No movilizado", abril: "700.281", mayo: "716.957", junio: "737.865", delta: "+20.908", tono: "malo" },
+        { metrica: "Órdenes", abril: "3,86M", mayo: "4,04M", junio: "4,17M", delta: "+3,3%", tono: "bueno" },
+      ],
+    },
+
+    avanceInvestigacion: {
+      titulo: "Investigación de oportunidades por fase",
+      descripcion:
+        "La fase 'Recogido por Dropi' tiene operación y flujo candidato documentados. Faltan aprobar reglas, owners, acceso y protocolo antes de una prueba de proceso.",
+      pasos: [
+        { nombre: "Confirmación", detalle: "Oportunidades levantadas + resultados de las pruebas con 6 usuarios", estado: "listo" },
+        { nombre: "Generación de guía", detalle: "Oportunidades levantadas", estado: "listo" },
+        { nombre: "Recogido por Dropi", detalle: "Operación y paridad documentadas; piloto, owners y outcome pendientes", estado: "activo" },
+        { nombre: "Conectar el flujo", detalle: "Siguiente paso", estado: "siguiente" },
+      ],
+    },
+
+    focoSiguienteSemana: [
+      "Recolecciones: completar PRM-1465, owners y protocolo; luego correr un piloto acotado y leer solicitud→acuse→resultado — Driver: Juan Diego.",
+      "POC Selección de transportadoras: probar con Shopi y con usuarios de marcas — Responsable: Juan (Carrier Ops) / Kate (PM).",
+      "Autoconfirmación: llevar al prototipo los tres hallazgos de mayor frecuencia (impacto en ganancia, precios de flete, alerta de pérdida) — Responsable: Juan Diego / Michel Pino.",
+      "Normalización de estados: enviarle la propuesta ya organizada a Maria — Responsable: Juan Diego.",
+    ],
+
+    indicadores: [
+      {
+        nombre: "Movilización consolidada",
+        valor: "82,3%",
+        tono: "alerta",
+        estado: "Plano",
+        nota: "Sin cierre nuevo desde junio. Se mantiene el último dato consolidado.",
+      },
+      {
+        nombre: "Órdenes no movilizadas",
+        valor: "737.865",
+        tono: "malo",
+        estado: "+20.908",
+        nota: "Dato de junio. Recolecciones y Autoconfirmación —las dos palancas que lo atacan— entran a prueba la próxima semana.",
+      },
+      {
+        nombre: "Recolecciones · target de movilización",
+        valor: "Por definir",
+        tono: "alerta",
+        estado: "Sin baseline reconciliado",
+        nota: "El baseline, denominador y target se calculan en la fuente restringida y solo se publican como agregado aprobado. No inferirlos de la foto operativa.",
+      },
+    ] as IndicadorHoy[],
+
+    // Formato ejecutivo: usa comparación mensual + secciones. Estos campos se
+    // conservan por compatibilidad con el render de semanas históricas.
+    brecha: {
+      actual: 73.5, actualLabel: "73,5% crudo CO",
+      meta: 70, metaLabel: "70%",
+      gap: "No comparable", metaQ3: "Pendiente cohorte",
+      paisFoco: "Colombia representa 73% del negocio.",
+      lectura: "Junio sigue madurando; no se usa esta cifra para evaluar el KR.",
+      fugas: [],
+    },
+    tiempo: {
+      lectura:
+        "La fase 'Recogido por Dropi' queda definida como proceso (auditar → accionar → convertir → prevenir). La medición del impacto llega con las pruebas de la próxima semana.",
+      dropi: [
+        { fase: "Ruta Dropi hasta transportadora", horas: 44.9, metaHoras: 24, responsable: "Célula", palanca: "pruebas de proceso de recolección" },
+      ],
+      carrier: [
+        { fase: "Maduración de entrega", horas: 24, metaHoras: 24, palanca: "comparar cohortes cerradas" },
+      ],
+      proximosPasos: ["Correr las pruebas de proceso de Recolecciones y leer el resultado sobre las bodegas en alcance."],
+    },
+    hallazgos: [],
+
+    secciones: [
+      {
+        titulo: "Product Road map · investigación",
+        nota: "Discovery con datos antes de comprometer desarrollo.",
+        proyectos: [
+          {
+            nombre: "Recolecciones",
+            estado: "Flujo y paridad documentados",
+            estadoTono: "ambar",
+            nota:
+              "Se reconstruyó la operación saliente y se separó de la capa preventiva Hub/Indiana. Antes de probar faltan aprobar reglas, owners, acceso y el ciclo solicitud→acuse→resultado. Los volúmenes por bodega permanecen restringidos.",
+            impacto:
+              "Baseline y target pendientes de reconciliar en la fuente restringida; no hay impacto atribuible demostrado.",
+            enlace: { label: "Ver control de recolecciones", href: "/proyectos/logistica/recolecciones" },
+          },
+          {
+            nombre: "POC selección de transportadoras",
+            ticket: "PRM-1513",
+            estado: "Revivido · prototipo listo",
+            estadoTono: "verde",
+            nota:
+              "El POC se revivió: se ajustó el UI y ya hay prototipo funcionando en RPP, que sirvió para alinear el flujo con TI. La próxima semana se prueba con Shopi y con usuarios de marcas.",
+          },
+        ],
+      },
+      {
+        titulo: "Experimentos",
+        nota: "Validar la palanca y su impacto antes de escalar desarrollo.",
+        proyectos: [
+          {
+            nombre: "Autoconfirmación de órdenes",
+            ticket: "PRM-1497",
+            estado: "Investigación con resultados",
+            estadoTono: "ambar",
+            nota:
+              "Pruebas de usabilidad moderadas sobre el prototipo RPP con 6 usuarios (dropshippers y proveedores). Puntajes: Accesibilidad 72, Satisfacción 81 y Claridad 58 — la claridad es la que arrastra. El hallazgo crítico se repitió en 5 de 6: el simulador no muestra cuánto gana o pierde el usuario con cada configuración. Le siguen, en 4 de 6, la falta de precios de flete por transportadora y la ausencia de alerta visual de pérdida potencial. Señal a favor: 5 de 6 lo usarían si ven su ganancia.",
+            enlace: { label: "Ver resultados del experimento", href: "/proyectos/logistica/experimentos/autoconfirmacion" },
+          },
+          {
+            nombre: "Vigía",
+            estado: "En iteración",
+            estadoTono: "gris",
+            nota: "En iteración con el módulo y las reglas del rediseño del módulo de órdenes. Falta revisar los estados dentro del módulo de órdenes para incorporarlos.",
+          },
+        ],
+      },
+      {
+        titulo: "Delivery Road map · WIP = 1",
+        nota: "Una iniciativa activa; el resto conserva su posición explícita.",
+        proyectos: [
+          {
+            nombre: "Normalización de estados",
+            ticket: "PRM-1297",
+            estado: "Organizado · pendiente enviar",
+            estadoTono: "verde",
+            nota: "Prioridad #1 del Delivery. Esta semana se organizó la propuesta; queda pendiente enviársela a Maria.",
+          },
+          {
+            nombre: "Same Day",
+            ticket: "PRM-1366",
+            estado: "Inv. y definición",
+            estadoTono: "gris",
+            nota: "Sin cambios esta semana.",
+          },
+          {
+            nombre: "Fulfillment",
+            ticket: "PRM-1446",
+            estado: "Listo para hand off",
+            estadoTono: "ambar",
+            nota: "Diseño validado, en 'Listo para hand off'.",
+          },
+        ],
+      },
+    ] as SeccionProyectos[],
+  },
+
+  // ── Semana 21 – 25 jul 2026 ─────────────────────────────────────────────────
   {
     id: "2026-w30",
     fecha: "Jueves 24 de julio de 2026",
     semana: "Semana 21 – 25 jul",
     foco:
-      "Semana de discovery y validación en campo: se revisó Recolecciones, arrancaron las entrevistas de Autoconfirmación (6 hechas) y se lanzó la prueba de Recolección proactiva (2.000 guías nuevas). El indicador mensual no tiene cierre nuevo desde junio; el avance de la semana fue definir el dashboard de indicadores con Diana.",
+      "Semana de discovery y validación en campo: se revisó Recolecciones, arrancaron las entrevistas de Autoconfirmación y se reportó una gestión de Recolección proactiva. Ese volumen no quedó reconciliado con fuente, denominador ni outcome. El indicador mensual no tiene cierre nuevo desde junio; el avance de la semana fue definir el dashboard de indicadores con Diana.",
 
     comparacionMensual: {
       titulo: "Cierre junio — sin cierre nuevo esta semana",
@@ -788,14 +1042,14 @@ export const weeklies: Weekly[] = [
       pasos: [
         { nombre: "Confirmación", detalle: "Oportunidades levantadas + entrevistas Autoconfirmación (6)", estado: "listo" },
         { nombre: "Generación de guía", detalle: "Oportunidades levantadas", estado: "listo" },
-        { nombre: "Recogido por Dropi", detalle: "Recolecciones revisado + prueba proactiva (2.000 guías)", estado: "activo" },
+        { nombre: "Recogido por Dropi", detalle: "Recolecciones revisado + gestión proactiva autodeclarada, pendiente de reconciliación", estado: "activo" },
         { nombre: "Conectar el flujo", detalle: "Siguiente paso", estado: "siguiente" },
       ],
     },
 
     focoSiguienteSemana: [
       "Autoconfirmación: sintetizar las 6 entrevistas (ChateaPro, Mauricio Corzo, líderes de comunidad, dropshipper grande) en aprendizajes y guardarraíles — Responsable: Juan Diego.",
-      "Recolección proactiva: leer el resultado de las 2.000 guías enviadas y decidir si escala — Responsable: Juan Diego / William.",
+      "Recolección proactiva: recuperar la fuente del volumen reportado, medir solicitud→acuse→resultado y decidir si escala — Driver: Juan Diego; owner operativo nominal pendiente.",
       "POC Selección de transportadoras: cerrar el siguiente paso tras el análisis técnico con TI (Francisco Ramírez) — Responsable: Juan (Carrier Ops) / Kate (PM).",
       "Normalización de estados: cerrar la propuesta tras la reunión de homologación — Responsable: Juan Diego.",
     ],
@@ -842,7 +1096,7 @@ export const weeklies: Weekly[] = [
       carrier: [
         { fase: "Maduración de entrega", horas: 24, metaHoras: 24, palanca: "comparar cohortes cerradas" },
       ],
-      proximosPasos: ["Leer el resultado de la prueba de Recolección proactiva (2.000 guías) y del control de Recolecciones."],
+      proximosPasos: ["Reconciliar la gestión reportada de Recolección proactiva y validar el ciclo solicitud→acuse→resultado del control de Recolecciones."],
     },
     hallazgos: [],
 
@@ -855,7 +1109,7 @@ export const weeklies: Weekly[] = [
             nombre: "Recolecciones",
             estado: "Revisado esta semana",
             estadoTono: "verde",
-            nota: "Se revisó el control de recolecciones (guías preparadas sin recoger por territorio DANE: 1.604 bodegas, 61.106 guías). Conecta con la fase 'Recogido por Dropi', el cumplimiento más bajo de la ruta Dropi. El prototipo ya carga con datos reales en el tablero.",
+            nota: "Se revisó el control de guías preparadas sin recoger por territorio. Conecta con la fase 'Recogido por Dropi'. El tablero consume una base restringida y no publica snapshots ni volúmenes operativos en la ficha de portafolio.",
           },
           {
             nombre: "POC selección de transportadoras",
@@ -886,9 +1140,9 @@ export const weeklies: Weekly[] = [
           },
           {
             nombre: "Recolección proactiva",
-            estado: "Prueba lanzada",
-            estadoTono: "verde",
-            nota: "Se enviaron 2.000 guías nuevas como prueba de recolección proactiva. Ataca la fase 'Recogido por Dropi'. Pendiente: leer el resultado y decidir si escala.",
+            estado: "Gestión reportada · resultado pendiente",
+            estadoTono: "ambar",
+            nota: "Se reportó una gestión de recolección proactiva, pero no hay fuente, denominador, acuse ni resultado reconciliados. Es una señal de campo, no evidencia de impacto ni de escala.",
           },
         ],
       },
@@ -1279,9 +1533,9 @@ export const weeklies: Weekly[] = [
           {
             nombre: "Guías reemplazatorias (Ecom Scanner)",
             ticket: "PRM-745",
-            estado: "Lanzamiento",
-            estadoTono: "verde",
-            nota: "En lanzamiento con Laura (comunicación). Funcionando con Interrapidísimo, Coordinadora y TCC.",
+            estado: "Beta por reconciliar",
+            estadoTono: "amarillo",
+            nota: "Dev finalizado y beta reportada en tres carriers. Falta reconciliar el bloqueo operativo del 27-jul, cerrar medición/activación y demostrar rollout global. PROD-1045 permanece como historia canónica de Laura.",
           },
           {
             nombre: "Oficinas de Interrapidísimo en orden manual",
@@ -1601,10 +1855,10 @@ export const cronograma = {
 
   experimentos: [
     { proyecto: "Autoconfirmación", ticket: "PRM-1497", slug: "movilizacion", researchInicio: 0, researchFin: 0.4, expInicio: 0.4, expFin: 2, handoff: "Handoff TI ? · ~sep", nota: "Prototipo en pruebas; guardarraíl zona rural." },
-    { proyecto: "Autogeneración de guías", ticket: "PRM-1469", slug: "autogeneracion-guias", researchInicio: 0.3, researchFin: 0.7, expInicio: 0.7, expFin: 2.3, handoff: "Handoff TI ? · ~sep", nota: "Listo para probar; proveedores de alto volumen." },
-    { proyecto: "Selección de transportadoras", ticket: "PRM-1513", slug: "seleccion-transportadoras", researchInicio: 0, researchFin: 0.6, expInicio: 0.6, expFin: 2.2, handoff: "Handoff TI ? · ~sep", tentativa: true, bloqueo: "Sin acceso a Chronos", nota: "El PoC existe pero no se puede levantar: faltan accesos a Chronos para crear las tablas en la cuenta de AWS de IA (Juan Felipe ↔ Jaime). La ventana es tentativa hasta que se resuelvan los accesos." },
+    { proyecto: "Autogeneración de guías", ticket: "PRM-1469", slug: "autogeneracion-guias", researchInicio: 0.3, researchFin: 0.7, expInicio: 0.7, expFin: 2.3, handoff: "Sin fecha de handoff", tentativa: true, nota: "Proyecto/solicitud en discovery. Antes de probar: análisis Kevin/Lucho, baseline segmentado, lotes/impresión, fallback carrier e idempotencia." },
+    { proyecto: "Selección de transportadoras", ticket: "PRM-1219", slug: "seleccion-transportadoras", researchInicio: 0, researchFin: 0.6, expInicio: 0.6, expFin: 2.2, handoff: "Handoff TI ? · ~sep", tentativa: true, bloqueo: "Sin acceso a Chronos", nota: "El PoC existe pero no se puede levantar: faltan accesos a Chronos para crear las tablas en la cuenta de AWS de IA (Juan Felipe ↔ Jaime). PRM-1150 fue absorbida por PRM-203; el catálogo requiere fuente curada y contrato de información. La ventana es tentativa hasta resolver accesos y datos." },
     { proyecto: "Vigía (extensión de órdenes)", slug: "vigia", researchInicio: 0.5, researchFin: 1.5, expInicio: 1.5, expFin: 3, handoff: "Handoff TI ? · ~oct", tentativa: true, nota: "Nuevo. Research primero: falta definir la métrica y conseguir el prototipo. Sin ticket todavía." },
-    { proyecto: "Recolección proactiva", slug: "recoleccion-proactiva", researchInicio: 0.4, researchFin: 1.6, expInicio: 1.6, expFin: 3.2, handoff: "Handoff TI ? · ~oct", tentativa: true, nota: "Nuevo. Research E2E hecho con Growth Ops; falta cerrar hallazgos y definir la métrica. Sin ticket todavía." },
+    { proyecto: "Recolección proactiva", ticket: "PRM-1465", slug: "recoleccion-proactiva", researchInicio: 0.4, researchFin: 1.6, expInicio: 1.6, expFin: 3.2, handoff: "Sin fecha de handoff", tentativa: true, nota: "PRM-1468 fue fusionada dentro de PRM-1465; comentario 51003 verificado. Faltan owners, evidencia PROD, RLS, persistencia/acuse/resultado y piloto con outcome." },
   ] as ExperimentoCrono[],
 
   kpiTrimestre: [
