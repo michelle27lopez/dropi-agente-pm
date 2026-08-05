@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { localGetEligibleByToken, localRegisterEligibleView } from "@/lib/local-store-planeacion";
 import { supabaseGetEligibleByToken, supabaseRegisterEligibleView } from "@/lib/supabase-store-planeacion";
 
+// Sin esto, Next.js puede tratar este handler como estático (no usa cookies
+// ni headers del request) y cachear la respuesta — rompiendo tanto el reset
+// del token de QA como la lectura en vivo del estado real de un proveedor.
+export const dynamic = "force-dynamic";
+
 // Público a propósito (sin login) — el token es opaco y no se puede adivinar
 // ni derivar del ID real del proveedor, así que solo quien recibió su propio
 // link ve su propia lista. Un proveedor no puede ver la de otro cambiando
