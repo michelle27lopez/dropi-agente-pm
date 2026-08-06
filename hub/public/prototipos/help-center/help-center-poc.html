@@ -256,33 +256,33 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
-      height: 30px;
-      border: none;
-      border-radius: 6px;
-      background: none;
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--primary-orange);
+      border-radius: 50%;
+      background: var(--bg-white);
+      color: var(--primary-orange);
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
-      padding: 0 6px;
+      padding: 0;
       line-height: 1;
       outline: none;
-    }
-
-    .help-hint-btn i {
-      font-size: 10px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
     }
 
     .help-hint-btn:hover {
-      color: var(--primary-orange);
-      background: #fff8f3;
+      color: #fff;
+      border-color: var(--primary-hover);
+      background: var(--primary-orange);
     }
 
     .help-hint-bubble {
       position: absolute;
-      top: 36px;
-      left: -10px;
+      top: 40px;
+      right: -6px;
+      left: auto;
       background: #2c3e50;
       color: #fff;
       font-size: 12.5px;
@@ -303,7 +303,8 @@
       content: '';
       position: absolute;
       top: -5px;
-      left: 15px;
+      right: 15px;
+      left: auto;
       width: 10px;
       height: 10px;
       background: #2c3e50;
@@ -316,6 +317,10 @@
       transform: translateY(0);
     }
     .demo-view-toggle {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 50;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -323,6 +328,7 @@
       border: 1px dashed #d9dde3;
       border-radius: 20px;
       padding: 4px 6px 4px 12px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.12);
     }
     .demo-view-label {
       font-size: 10px;
@@ -590,6 +596,20 @@
       color: #555;
       line-height: 1.5;
     }
+    .faq-item > ol {
+      margin: 0;
+      padding: 15px 15px 15px 35px;
+      border-top: 1px solid var(--border-color);
+      color: #555;
+      line-height: 1.6;
+    }
+    .faq-item p + ol {
+      border-top: none;
+      padding-top: 0;
+    }
+    .faq-item ol li { margin-bottom: 6px; }
+    .faq-item ol li:last-child { margin-bottom: 0; }
+    .faq-item a { color: var(--primary-orange); font-weight: 600; }
 
     /* Tour Styles */
     .tour-card {
@@ -1023,18 +1043,23 @@
     /* MENÚ DESPLEGABLE DROPI COMPANION */
     .droplet-menu {
       position: absolute;
-      top: 36px;
-      left: -10px;
-      width: 260px;
+      top: 40px;
+      bottom: auto;
+      right: 0;
+      left: auto;
+      width: 320px;
+      max-width: calc(100vw - 40px);
+      max-height: calc(100vh - 120px);
       background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.2);
       border: 1px solid var(--border-color);
       display: none;
       flex-direction: column;
       overflow: hidden;
-      z-index: 110;
+      z-index: 1002;
       text-align: left;
+      padding: 14px;
     }
 
     .droplet-menu.show {
@@ -1047,25 +1072,51 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .droplet-list { list-style: none; padding: 8px 0; }
+    .droplet-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text-dark);
+    }
+    .droplet-menu-header span { display: flex; align-items: center; }
+    .droplet-menu-header span i { color: var(--primary-orange); margin-right: 8px; font-size: 15px; }
+    .droplet-menu-header .droplet-close {
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    .droplet-menu-header .droplet-close:hover { color: var(--badge-red); }
+
+    .droplet-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
     .droplet-list li a {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 10px 16px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-color);
+      background: #fff;
       color: var(--text-dark);
       text-decoration: none;
-      font-weight: 500;
-      transition: background 0.15s;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.15s ease;
     }
     .droplet-list li a:hover {
-      background-color: #fff8f3;
+      border-color: var(--primary-orange);
       color: var(--primary-orange);
+      background: #fff8f3;
     }
     .droplet-list li a i {
       width: 16px;
       text-align: center;
       color: var(--text-muted);
+      font-size: 13px;
     }
     .droplet-list li a:hover i { color: var(--primary-orange); }
 
@@ -1405,13 +1456,17 @@
       <div class="page-header-row">
         <div class="page-title-group">
           <h1 class="page-title">Mis Pedidos</h1>
-          <div class="help-hint-btn" id="helpHintBtn" title="Recursos y Ayuda" role="button" tabindex="0">
-            <span>Ayuda</span>
-            <i class="fa-solid fa-chevron-down"></i>
-            <div class="help-hint-bubble" id="helpHintBubble">¿Necesitas ayuda?</div>
+        </div>
+        <div class="help-hint-btn" id="helpHintBtn" title="Recursos y Ayuda" role="button" tabindex="0">
+          <i class="fa-solid fa-question"></i>
+          <div class="help-hint-bubble" id="helpHintBubble">¿Necesitas ayuda?</div>
 
             <!-- Menú Desplegable Dropi Companion -->
             <div class="droplet-menu" id="dropletMenu">
+              <div class="droplet-menu-header">
+                <span><i class="fa-solid fa-circle-question"></i>Recursos y Ayuda</span>
+                <i class="fa-solid fa-xmark droplet-close" onclick="dropletMenu.classList.remove('show')"></i>
+              </div>
               <ul class="droplet-list">
                 <li>
                   <a href="#" onclick="openModal('videoModal'); return false;">
@@ -1449,21 +1504,15 @@
                     <span>Feedback y Sugerencias</span>
                   </a>
                 </li>
-                <li style="border-top: 1px solid var(--border-color); margin-top: 4px; padding-top: 4px;">
+                <li>
                   <a href="#" onclick="openHelpChat(); return false;">
                     <i class="fa-solid fa-headset"></i>
-                    <span>Ayuda con Gali</span>
+                    <span>Ayuda</span>
                   </a>
                 </li>
               </ul>
             </div>
           </div>
-        </div>
-        <div class="demo-view-toggle" title="Controla los dos escenarios reales: seller con y sin órdenes creadas">
-          <span class="demo-view-label">Vista (demo)</span>
-          <button class="demo-view-btn active" id="btnViewWithOrders" onclick="setOrdersView(true)">Con pedidos</button>
-          <button class="demo-view-btn" id="btnViewEmpty" onclick="setOrdersView(false)">Sin pedidos</button>
-        </div>
       </div>
 
       <div class="card">
@@ -1861,6 +1910,13 @@
     <div class="fab-btn"><i class="fa-solid fa-comment-dots"></i></div>
   </div>
 
+  <!-- TOGGLE DE VISTA (DEMO), flotante inferior izquierda -->
+  <div class="demo-view-toggle" title="Controla los dos escenarios reales: seller con y sin órdenes creadas">
+    <span class="demo-view-label">Vista (demo)</span>
+    <button class="demo-view-btn active" id="btnViewWithOrders" onclick="setOrdersView(true)">Con pedidos</button>
+    <button class="demo-view-btn" id="btnViewEmpty" onclick="setOrdersView(false)">Sin pedidos</button>
+  </div>
+
   <!-- FOOTER CREDITS -->
   <footer class="footer-credits">
     <span>2026 © Dropi</span>
@@ -1991,20 +2047,101 @@
       </div>
       <div class="custom-modal-body">
         <details class="faq-item">
-          <summary>¿Qué significa el estado "Orden Compuesta"?</summary>
-          <p>Una orden compuesta indica que el pedido contiene múltiples productos que pueden provenir de diferentes bodegas. El sistema agrupará la logística automáticamente para optimizar el envío.</p>
+          <summary>¿Cuándo se despacha un pedido tras recibirlo?</summary>
+          <p>Una vez confirmes la orden en Dropi, el estado pasará de "Pendiente de confirmación" a "Pendiente". A partir de ahí, el proveedor tiene hasta 48 horas hábiles para procesarlo y generar la guía con la transportadora ("Guía Generada"). Posteriormente, el pedido será despachado.</p>
         </details>
         <details class="faq-item">
-          <summary>¿Cómo cancelo un pedido que ya fue procesado?</summary>
-          <p>Si el pedido ya está en estado "Procesando" o tiene guía generada, debes contactar a soporte a través del botón de ayuda o solicitar una intercepción directamente con la transportadora desde los detalles del pedido.</p>
+          <summary>¿Qué significa "con recaudo" o "sin recaudo"?</summary>
+          <p>Con recaudo: Es el pago contra entrega; el cliente paga el producto al recibirlo en su casa. Sin recaudo: Es cuando ya le cobramos al cliente en nuestra página a través de una pasarela de pago. (Nota: Siempre debes elegir una de estas dos opciones al enviar un producto).</p>
         </details>
         <details class="faq-item">
-          <summary>¿Por qué mi pedido dice "Rechazado"?</summary>
-          <p>Un pedido es rechazado generalmente por falta de inventario en la bodega seleccionada, dirección inválida o problemas con el método de pago del cliente. Revisa las "Notas" haciendo clic en el icono de lupa para ver el motivo exacto.</p>
+          <summary>¿Dónde puedo ver el precio del despacho (flete) a diferentes direcciones?</summary>
+          <p>Para conocer el costo exacto del envío, haz una simulación en Dropi: selecciona el producto, usa la Calculadora de flete e ingresa la dirección de destino.</p>
         </details>
         <details class="faq-item">
-          <summary>¿Cómo integro mi tienda Shopify o Tiendanube?</summary>
-          <p>Ve al menú lateral izquierdo, sección "Mis Integraciones". Allí podrás conectar tus tiendas para que las órdenes se sincronicen automáticamente en este panel con la etiqueta correspondiente.</p>
+          <summary>¿Cómo llenar de forma correcta los datos del cliente?</summary>
+          <p>Revisa siempre que el nombre, apellido, correo y dirección estén en el campo correspondiente. Importante: En las órdenes de Dropi, los campos de NOMBRE y APELLIDO no deben superar los 50 caracteres.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cuántos intentos de entrega se hacen?</summary>
+          <p>Se realizan dos intentos. Si no se logra entregar, el pedido se cancela y el dropshipper debe asumir el costo del envío.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo puede el cliente rastrear su pedido?</summary>
+          <p>El cliente puede rastrear su paquete ingresando el número de guía generado en Dropi directamente en la página web oficial de la transportadora asignada.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo anular una guía de envío?</summary>
+          <p>Condición: Solo puedes anularla si el paquete no ha sido entregado a la transportadora o el proveedor aún lo tiene en bodega.</p>
+          <ol>
+            <li>Busca la orden que deseas anular y selecciona "Cancelar".</li>
+            <li>Elige el motivo de la cancelación (ej. error al crearla o datos incorrectos).</li>
+            <li>Verifica en tu historial de envíos que la guía haya sido anulada correctamente.</li>
+          </ol>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo solicitar actualización de estatus de guías?</summary>
+          <ol>
+            <li>Entra a Dropi con tus datos de acceso.</li>
+            <li>En el menú lateral, ve al módulo "Mis Pedidos".</li>
+            <li>Busca la guía o número de orden afectada y abre sus detalles (o ve a soporte / Bandeja CAS).</li>
+            <li>Crea un ticket o solicitud seleccionando el motivo relacionado con transportadoras y envíos para exigir la actualización.</li>
+          </ol>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo reportar órdenes sin movimiento?</summary>
+          <ol>
+            <li>Identifica el número de guía o pedido sin avance.</li>
+            <li>Haz clic en el ícono del chat flotante (soporte) y sigue los pasos.</li>
+            <li>Adjunta el número de orden y describe detalladamente el problema para que el equipo revise el estado con la transportadora.</li>
+          </ol>
+        </details>
+        <details class="faq-item">
+          <summary>¿La devolución de un pedido tiene costo?</summary>
+          <p>No, la devolución no tiene ningún costo adicional.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo reportar devoluciones injustificadas?</summary>
+          <p>Condiciones: La guía debe tener cierre logístico, estar formalmente "en devolución" y debes poder demostrar que la transportadora falló (ej. omitió una novedad reportada a tiempo).</p>
+          <ol>
+            <li>Pulsa el botón flotante de asistencia.</li>
+            <li>Ve a mensajes y haz clic en "Envíanos un mensaje".</li>
+            <li>Selecciona la categoría "Problemas con mis envíos".</li>
+            <li>Escoge "Reportar devoluciones injustificadas" y completa los datos con sus respectivas pruebas.</li>
+          </ol>
+        </details>
+        <details class="faq-item">
+          <summary>¿Qué hago si hay un problema con el producto (llegó roto, equivocado, incompleto)?</summary>
+          <p>Abre una garantía en el módulo de Garantías dentro de Dropi. Es fundamental subir imágenes de apoyo claras para que el proveedor proceda a aceptarla o rechazarla.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Si activo una garantía, ¿debo pagar algo más yo o el cliente?</summary>
+          <p>No. El producto de repuesto será enviado nuevamente al cliente sin costo.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Por qué no tengo respuesta sobre mi garantía?</summary>
+          <p>Suele deberse a alta saturación en soporte, falta de evidencias claras o demoras del proveedor. Para solucionarlo:</p>
+          <ol>
+            <li>Revisa en "Mis garantías" que hayan pasado menos de 10 días desde la entrega.</li>
+            <li>Asegúrate de que tu reporte tenga una descripción de más de 50 caracteres y fotos/videos reales del defecto.</li>
+            <li>Escribe a soporte desde el botón flotante teniendo a la mano el número de orden y la guía con estado "entregado". (<a href="https://www.youtube.com/watch?v=rafROker5z4" target="_blank" rel="noopener noreferrer">Video de ayuda</a>)</li>
+          </ol>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cuándo aparecerá el saldo en mi wallet/billetera por una entrega?</summary>
+          <p>El saldo aparecerá a las 2:00 am del día hábil siguiente a la entrega del pedido.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Qué precio debo colocar a mis productos?</summary>
+          <p>El precio "sugerido" del proveedor es solo una referencia, pero debes calcular tu precio final basándote en: el costo del producto, el despacho, gastos en publicidad, etc. Regla importante: No puedes colocar un precio que sea un 80% menor al sugerido por el proveedor.</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Qué hago si quiero poner un precio menor al 80% del sugerido?</summary>
+          <p>Puedes escribirle directamente al proveedor para pedirle que baje su precio sugerido en la plataforma, permitiéndote así usar un precio menor. (Recuerda calcular bien tus márgenes).</p>
+        </details>
+        <details class="faq-item">
+          <summary>¿Cómo me puedo contactar con un proveedor?</summary>
+          <p>En Dropi, ve a la sección "Buscar Productos", entra a "Bodegas" y allí aparecerán todos los proveedores con su número de teléfono.</p>
         </details>
       </div>
     </div>
