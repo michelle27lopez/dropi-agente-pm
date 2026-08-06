@@ -122,10 +122,12 @@ export default function RegistroIniciativas() {
           <div>
             <p>
               Tres ejes explícitos —<b>qué es</b> (tipo), <b>dónde va</b> (fase) y{" "}
-              <b>si TI puede tomarlo</b> (handoff)— más lo que la bloquea. Es la misma
-              taxonomía que usa Darwin en Supabase (<code>projects.type / status /
-              handoff_status</code>), para que el tablero y{" "}
-              <Link href="/celula/logistica">/celula/logistica</Link> no se contradigan.
+              <b>si TI puede tomarlo</b> (handoff)— más lo que la bloquea. Darwin sigue
+              siendo el portafolio compartido; este registro aporta narrativa y navegación
+              específicas de Logística y se une por <code>codigo / project_code</code>. Las
+              diferencias con <code>projects.type / status / handoff_status</code> son huecos
+              por validar, no una fuente paralela. Ver{" "}
+              <Link href="/celula/logistica">/celula/logistica</Link>.
             </p>
             <p>
               Los huecos se muestran a propósito: un <em>falta link</em> visible es un

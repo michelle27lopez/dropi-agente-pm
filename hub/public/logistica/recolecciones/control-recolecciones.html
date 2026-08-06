@@ -833,24 +833,18 @@ function renderLegendSizes(){
 function renderAll(){renderCrumbs();renderKpis();renderChips();renderTerr();renderQueue();renderMarkers();renderLegendSizes()}
 
 // ─── Carga de datos ────────────────────────────────────────────────────────
-// Primero la base (Supabase, vía la API del hub). Si no responde —porque el
-// archivo se está viendo suelto, sin el Next detrás— cae al JSON local. El
-// banner siempre dice de dónde salió lo que estás viendo: nunca hay que
-// adivinar si la data es la de la base o una copia vieja del disco.
+// Única fuente: la API autenticada y autorizada del Hub. Los snapshots con
+// bodegas, direcciones o coordenadas no deben vivir en `public/` ni usarse
+// como fallback: una copia vieja elude el control de acceso y puede llevar a
+// una decisión operativa incorrecta.
 let FUENTE='';
 
 async function cargarDatos(){
-  try{
-    const r=await fetch('/api/logistica/recolecciones',{credentials:'same-origin'});
-    if(r.ok){const d=await r.json();
-      if(d.meta&&d.meta.sin_datos)throw new Error('base vacía');
-      FUENTE='base';return d}
-    throw new Error('HTTP '+r.status);
-  }catch(e){
-    const r=await fetch('./datos-recolecciones.json');
-    if(!r.ok)throw new Error('HTTP '+r.status);
-    FUENTE='archivo';return r.json();
-  }
+  const r=await fetch('/api/logistica/recolecciones',{credentials:'same-origin'});
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const d=await r.json();
+  if(d.meta&&d.meta.sin_datos)throw new Error('base vacía');
+  FUENTE='base';return d;
 }
 
 function pintarBanner(){
@@ -860,7 +854,7 @@ function pintarBanner(){
     ? ` · ${String(m.evento_min).slice(0,10)} → ${String(m.evento_max).slice(0,10)}`:'';
   const cob=m.cobertura_geocodificada!=null
     ? ` · ${m.cobertura_geocodificada}% de las guías con ubicación real`:'';
-  const origen=FUENTE==='base'?'base':'archivo local';
+  const origen='API autorizada del Hub';
 
   // Dos cosas distintas que antes iban en la misma frase, separadas por puntos
   // medios: una ADVERTENCIA que hay que leer antes de salir a la calle, y la
@@ -871,7 +865,7 @@ function pintarBanner(){
     `<b>nivel “vía” = una vía con ese nombre, no la puerta</b> — verificar antes de navegar` +
     `<details class="banner-mas"><summary>procedencia del dato</summary>` +
       `<div class="bm-body">` +
-        `<span><b>Origen:</b> Chronos (${origen})</span>` +
+        `<span><b>Origen:</b> Chronos vía ${origen}</span>` +
         `<span><b>Ventana:</b> ${ventana}${rango?` (${rango.replace(' · ','')})`:''}</span>` +
         (cob?`<span><b>Ubicación real:</b> ${m.cobertura_geocodificada}% de las guías</span>`:'') +
       `</div></details>`;
@@ -901,7 +895,7 @@ cargarDatos()
  .then(d=>{aplicarDatos(d);document.getElementById('loading').classList.add('hide');initMap()})
  .catch(err=>{document.getElementById('loading').innerHTML=
    `<div style="text-align:center;max-width:420px"><b style="display:block;margin-bottom:6px">No se pudieron cargar los datos</b>
-    <span style="color:var(--ink-3)">${err.message} — ni la base ni <code>datos-recolecciones.json</code> respondieron.</span></div>`});
+    <span style="color:var(--ink-3)">${err.message} — verifica tu acceso a Control de Recolecciones o la disponibilidad de la API.</span></div>`});
 
 // ─── Ingesta: subir el export sin correr scripts ───────────────────────────
 // Dos pasos siempre. El primer POST es dry-run: devuelve el preview y el delta

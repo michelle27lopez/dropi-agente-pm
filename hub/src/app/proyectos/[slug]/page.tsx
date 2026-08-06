@@ -68,6 +68,9 @@ export default function ProjectDashboardPage() {
   const slug = typeof params?.slug === "string" ? params.slug : "";
 
   const [project, setProject] = useState<ProjectDetails | null>(null);
+  // Slug de esta iniciativa en el tablero de logística, si figura ahí. Se
+  // resuelve por `project_code` contra el registro del tablero.
+  const [slugTablero, setSlugTablero] = useState<string | null>(null);
   const [parentProject, setParentProject] = useState<ProjectRef | null>(null);
   const [children, setChildren] = useState<ProjectRef[]>([]);
   const [discoveryOptions, setDiscoveryOptions] = useState<ProjectRef[]>([]);
@@ -157,6 +160,19 @@ export default function ProjectDashboardPage() {
         setDeliveryOptions(data.deliveryOptions || []);
         setCycles(data.cycles || []);
         setDecisions(data.decisions || []);
+
+        // El tablero de logística se pide aparte y solo si el proyecto es de
+        // esa célula: su registro son ~1.800 líneas que no deben entrar al
+        // bundle de la ficha de las demás células. Mismo patrón que usa la
+        // home de célula para el mapa de etapas.
+        if (data.project?.celulas?.slug === "logistica" && data.project?.project_code) {
+          import("@/app/celula/[slug]/_lib/logistica-etapas")
+            .then((m) => {
+              const codigo = String(data.project.project_code).toUpperCase();
+              setSlugTablero(m.mapaEtapas().slugPorCodigo[codigo] ?? null);
+            })
+            .catch((err) => console.error("Error cargando el tablero de logística:", err));
+        }
       })
       .catch((err) => {
         setError(err.message);
@@ -636,6 +652,31 @@ export default function ProjectDashboardPage() {
                   {project.project_code === "PROD-MUESTRA-POC-1" ? "Ver Mock — Detalle de producto" : "Ver Mock de Validación"} <span style={{ fontSize: 11 }}>➔</span>
                 </a>
               </div>
+            </div>
+          )}
+
+          {/* Puente al tablero de logística.
+              Sin esto la ficha es un callejón sin salida: todo el contenido real
+              de una iniciativa de logística (ticket, prototipos RPP, Figma,
+              Confluence, experimentos, bloqueos) vive en el tablero, y desde
+              acá no había forma de llegar. Se llega aquí desde /celulas o desde
+              el padre de un POC, no solo desde la home de la célula. */}
+          {slugTablero && (
+            <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+              <div>
+                <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>🧭 Ficha en el tablero de logística</strong>
+                <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Ticket, prototipos, documentos y experimentos de esta iniciativa</span>
+              </div>
+              <a
+                href={`/proyectos/logistica/proyecto/${slugTablero}`}
+                style={{
+                  fontSize: 12.5, fontWeight: 750, color: "var(--dropi)", background: "none",
+                  border: "1px solid var(--dropi)", borderRadius: 8, padding: "8px 16px",
+                  textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6,
+                }}
+              >
+                Abrir en el tablero <span style={{ fontSize: 11 }}>➔</span>
+              </a>
             </div>
           )}
         </div>

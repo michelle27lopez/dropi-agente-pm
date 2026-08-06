@@ -1,8 +1,9 @@
 "use client";
 
-// TODO: reemplazar con el componente real de Michelle (commit 1196414,
-// fix(dca-001)) — el archivo nunca se subió al repo, solo el import en
-// GlobalNavShell.tsx. Placeholder temporal para no romper el build local.
+// Stub temporal: el commit 1196414 (fix/dca-001, Michelle) importa este
+// componente desde GlobalNavShell pero el archivo nunca se subió a git —
+// no existe en ningún commit del historial. Placeholder sin UI para que
+// el build no rompa mientras se recupera el original con Michelle.
 export default function GlobalTopBar() {
   return null;
 }

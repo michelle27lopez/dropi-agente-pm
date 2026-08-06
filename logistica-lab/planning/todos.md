@@ -12,7 +12,7 @@
 <!-- tablero:pendientes:start -->
 - 🔴 [Indiana] Poner el `.env.local` en `/Users/user/dropi-repos/inidiana-map/` y correr el primer ciclo real (armar UNA solicitud)
 - 🔴 [Indiana] Vercel bloquea todos los deploys desde el 28-jul (28 commits sin publicar) — pedirle a Jaime el motivo y mover el proyecto a un team de Dropi
-- 🔴 [Fulfillment] Levantar `spec.md` de PRM-1446 — está en "Listo para hand off" sin nada documentado (hueco #1)
+- 🟡 [Fulfillment] Cerrar el E2E de Drive: spec, Jira 50931, Confluence 1572732930 y Darwin LOG-014 ya están sincronizados; Drive requiere reautorización explícita del riesgo del conector
 - 🟡 [Darwin] Commitear `prototipo-recolecciones.html` del worktree `claude/dropi-logistics-queue-482601` — sigue sin guardar
 - 🟡 [Homologación estados] Modelar la devolución con su propio ciclo de reintento + `Entregado` confirmado vs observado + ubicar `Guía anulada`
 - 🔴 [Cell Board] Preparar propuesta de experimento para "Preparación de guía" → llevar al Cell Board #3
@@ -20,18 +20,26 @@
 - 🔴 [Delivery] EL FOCO = Normalización de estados: subirlo en el roadmap y terminar la propuesta (WIP=1)
 - 🔴 [Delivery] Traslapar diseño solo sobre lo cerrado (vista cliente 8 estados), NO sobre el catálogo en disputa
 - 🔴 [Delivery] Escalar Same Day como riesgo aceptado con dueño — un riesgo no se pone en cola en silencio
-- 🔴 [Product] Decidir EL uno del Product Roadmap (hay 4 ítems y WIP=1) — recomendado: Autoconfirmación
+- 🔴 [Same Day] Revisar las 6 láminas del PDF (`npm run sameday:laminas`) antes de mandárselas a Carlos Peralta — generadas 04-ago, sin enviar
+- 🔴 [Same Day] Enviar la petición de data (lista, con correo redactado) — falta ponerle DESTINATARIO; quieta desde el 26-jul
+- 🔴 [Product] WIP activo = Autoconfirmación: cerrar gate ChateaPro, trazabilidad y siguiente prueba antes de abrir otro frente
 - 🔴 [Pruebas POC] Poner las fechas del cronograma de pruebas de POC → llevarlo al Product Roadmap
 - 🔴 [Pruebas POC] Aclarar qué es "Notificación de optimización" (iniciativa de producto nuestra, sin definir)
 - 🔴 [Autoconfirmación] Sesión con ChateaPro: hoy el flujo se dispara al entrar la orden — entender cómo confirman y cómo les impacta esperar la decisión de autoconfirmar
-- 🔴 [Autoconfirmación] Entrevistas con dropshippers: ¿cómo confirman hoy y qué variables usan? (alimenta las reglas de madurez)
-- 🔴 [Autogeneración] Levantar el discovery — pasa de "experimento listo" a proyecto de discovery (hoy no tiene spec)
+- 🔴 [Autoconfirmación] Reconciliar las 6 pruebas ya realizadas con guion/grabaciones y confirmar si cubrieron cómo confirman hoy; no repetir entrevistas a ciegas
+- 🔴 [Autogeneración] Completar el discovery desde el spec existente: evidencia, usuarios, reglas de datos y frontera con “confirmada sin guía”
+- 🟡 [Oportunidades MX] Triaje logístico inicial completado contra el workshop; quedan verificaciones operativas/técnicas en `proyectos/_intake-mexico-logistica.md`, sin crear proyectos por defecto
+- 🔴 [Recolección proactiva] Completar PRM-1465 como principal tras el merge de PRM-1468 y cerrar pickups externos + carrier interno + capa preventiva bajo LOG-013; PAU adyacente y Warranties separado
+- 🟡 [POD] Completar el E2E (129+ placeholders), verificar build/API/UI de ENVÍA y resolver PROD-1525; código al destinatario sigue como capacidad candidata separada del token
+- 🟡 [Devoluciones COD] Token Veloces ya conectado documentalmente a LOG-010, sin iniciativa nueva. Pendiente informe anonimizado del piloto, owners, contrato de datos y vigencia/integración de DROP-4595/4596.
+- 🟡 [México] PRM-1144 confirmado como antecedente cercano de cobertura/CP y PRM-1341 como captura Sitidata; no editar ni relacionar hasta confirmar Sepomex, catálogo y experiencia objetivo
+- 🟡 [Archivos transportadoras] Cruce cerrado: PRM-1150 fue fusionada en PRM-203 y conecta con PRM-1219; comentario `51009` aplicado/releído. No es proyecto nuevo. Pendiente data owner, diccionario/sensibilidad, productores/consumidores, frecuencia/SLA, paridad y migración; no abrir/copiar/eliminar la hoja actual
 - 🔴 [Selección transportadoras] Cerrar con Paula Macías la caracterización de los 4 docs de Drive (catálogo) — prerrequisito del discovery con usuarios
 - 🟡 [Selección transportadoras] Llevar a Kate Pencue el protocolo de discovery con ≥20 usuarios (Cronos NO bloquea a N=20)
 - 🟡 [Selección transportadoras] Alinear el copy del CTA ("precisión de datos") con el modelo V1 (50% efectividad / 50% costo) antes de las sesiones
 - 🟡 [Autoconfirmación] Variable "órdenes duplicadas" → guardarraíl: si es duplicada, NO autoconfirmar
-- 🟡 [Autoconfirmación] PRM-1497 socializado — conseguir las personas para correr la prueba y traer avance
-- 🟡 [Autogeneración] 2º experimento listo para probar — conseguir con quién correrlo
+- 🟡 [Autoconfirmación] Muestra de usabilidad conseguida (6); falta artefacto canónico, gate técnico y diseño de prueba outcome
+- 🟡 [Autogeneración] Proyecto/solicitud en discovery: recuperar análisis Kevin/Lucho y cerrar baseline, lotes/impresión, carrier e idempotencia antes de reclutar
 - 🟡 [Supplier] Autoconfirmación también impacta brands (Maria): interiorizar que los sellers también son brands
 - 🟡 [Supplier] Autogeneración de guías también impacta brands (Maria)
 - 🟡 [Recolección proactiva] Investigar: que Dropi programe recolecciones a transportadoras (qué está listo / quién recoge / quién no)
@@ -43,6 +51,54 @@
 - 🟢 [Cell Board] Coordinar fecha/logística del Cell Board #3 presencial (Laura + Michel)
 - 🟢 [Operación] Limpiar backlog DROP heredado (bulk desasignar/cerrar en UI)
 <!-- tablero:pendientes:end -->
+
+## 🆕 REUNIÓN CON KATERINE (04-ago) — Same Day para Carlos
+
+> ⚠️ **Registrado desde lo que dictó Juan, NO desde el acta.** El doc de la reunión
+> ([link](https://docs.google.com/document/d/1bjsxfpQtLuguwWr580YTKpYGUy23zsuU4SJYdYZwxII/edit))
+> **no es accesible** con la cuenta `producto@dropi.co` (Drive: *"Requested entity was not found"*)
+> → pedir que lo compartan con esa cuenta y **contrastar este bloque** contra el acta real.
+> Lo demás (compromisos, dueños, fechas de la reunión) **está sin registrar**.
+
+- [x] 🔴 **Exportar el mapa de calor Same Day a un formato pasable a Carlos (Peralta)** — ✅ **hecho 04-ago.**
+  `npm run sameday:laminas` genera `hub/public/logistica/same-day/entregables/same-day-mapas.pdf`
+  (6 láminas A4 vertical) + un SVG por lámina. Se dibuja **desde el dato**, no se captura el mapa:
+  vectorial, reproducible y con el rótulo de límites impreso en las seis. Detalle en
+  [same-day/spec.md §10](../proyectos/same-day/spec.md) y en el README del pipeline.
+- [ ] 🔴 **Revisar las 6 láminas con Juan antes de que salgan a Carlos.** Lo generado NO se ha
+  enviado a nadie. Ya resuelto: el área metropolitana (Soacha/Bello/Itagüí/Sabaneta/Jamundí)
+  queda **declarada como vacío del export** en cada lámina, no omitida en silencio. Queda por
+  decidir: (a) si entra una lámina con **basemap de calles** — hoy se ven los contornos de zona
+  pero no la malla vial; cuesta re-descargar ~52 MB de OSM (`node osm.js --fetch`), no está en
+  disco; (b) si las páginas de ciudad deben ir en el **color de su ciudad** (hoy el calor es azul
+  en las tres y solo las barras toman el color) para que enganchen con la lámina 5.
+- [ ] 🔴 **Enviar la petición de data — lleva quieta desde el 26-jul.** Ya está lista para salir,
+  con correo redactado, en `proyectos/same-day-peticion-data.md` *(bóveda)*. **Lo único que falta
+  es el destinatario: el spec dice "Data/Chronos" pero no hay un nombre**, y sin nombre esto
+  lleva 9 días parado y puede llevar 9 más. Actualizada 04-ago con el campo nuevo de destino
+  normalizado (resolvería el 18,7% de órdenes sin ubicar) y la corrección de 10.104 → 11.766
+  órd/día en Bogotá. **Debe salir antes o junto con el PDF a Carlos**, no después: un documento
+  circulando pesa más que un rótulo en cuerpo 8.
+
+## 🆕 Unificación documental exclusiva de Logística (2-ago)
+
+> Alcance: Logistic Success. Jira gobierna estado, clasificación, ownership y relaciones; Darwin presenta el portafolio; Drive conserva el E2E vivo; Confluence indexa; el repo conserva specs, auditorías y metadatos logísticos. La cuenta genérica `producto@dropi.co` fue autorizada para sincronización documental; estados, owners y relaciones siguen requiriendo validación explícita.
+
+- [x] 🔴 **Inventariar Confluence antes de crear páginas.** Revisados el índice logístico y sus 12 hijas, más referencias externas de selección de transportadoras, Ecom Scanner, guías reemplazatorias y APIs de recolecciones. Registro: `proyectos/_registro-confluence.md`. POD reutiliza la página `1531772949`; no se crea duplicado. Páginas de Laura en solo lectura.
+- [x] 🔴 **Triar las oportunidades logísticas de México sin promoverlas automáticamente a proyecto.** Matriz y contraevidencia en `proyectos/_intake-mexico-logistica.md`; la página ahora explicita que es intake. Supplier quedó intacto. Pendientes pasan a validaciones específicas.
+- [ ] 🔴 **LOG-013 · cerrar gobierno y piloto.** Jira confirmó PRM-1468 → PRM-1465; comentario 51003 y Darwin `044` aplicados/releídos. PROD-821/1568/1800/1855 están Hecho sin descripción, adjuntos ni enlaces. La arquitectura distingue pickups externos, carrier interno/cross-docking, PAU futuro y Hub/Indiana; Warranties queda fuera. Pendiente: completar PRM-1465, nombrar owners, clasificar México/PAU, sembrar accesos `inidiana` (hoy 0) y luego aplicar/probar RLS `043`; aprobar persistencia→envío→acuse→resultado y ejecutar piloto con baseline/outcome.
+- [x] 🔴 **Separar Torre Logística + evidencias de las otras torres.** PROD-1706/1708–1711 es el discovery literal; DROP-18559 prueba activación de Torre Control MX y STID-6894 un bug de filtros; LOG-011 mide tiempo por fases. No deduplicar por nombre. Pendiente outcome/capacidades de cada una.
+- [ ] 🟡 **Compatibilidad bodega–transportadora y órdenes duplicadas desde Ecom.** Elegibilidad manual sigue en DROP-6070/6071/6072. La cadena de duplicidad fue auditada y PRM-403 comentario `51012` aplicado/releído: PRM cerrada, épica DROP-6924 en backlog, hotfix DROP-6818 y reversión DROP-6876 sin causa documentada. Falta reproducir bodega externa México antes de declarar recurrencia; guardarraíl de LOG-001/012.
+- [x] 🟡 **Códigos postales México — antecedentes leídos.** PRM-1144 cubre gestión de cobertura/CP y dependencia manual; PRM-1341 captura datos Sitidata. Permanecen intactos y no relacionados hasta confirmar equivalencia con Sepomex.
+- [x] 🟡 **Separar tres conceptos que hoy se pueden confundir:** (1) código de seguridad al destinatario = última milla/POD; (2) token de Veloces = prueba de devolución entregada al proveedor dentro de LOG-010; (3) archivos de transportadoras = automatización/integración operativa independiente. Registrado en specs, Jira PRM-1517 comentario 50932, Confluence POD y Darwin LOG-016.
+- [ ] 🟡 **Completar resultados de encuestas/Userpilot.** Inventario y clasificación cerrados en `proyectos/_fuentes-userpilot-logistica.md`: PROD-729/797 despriorizadas; PROD-577 es diseño de dashboard; PROD-1086 no demuestra respuestas; DROP-24402 enlaza export con PII. Falta síntesis anonimizada, verificación de eventos/campañas y outcome backend. No editar artefactos de Laura.
+- [ ] 🟡 **Preparar lanzamiento con Laura dentro de cada proyecto.** Guías reemplazatorias se mantiene ligado a PROD-1045 y los artefactos de Laura se usan solo como referencia, sin editarlos. Auditoría LOG-009 cerrada: falta localizar hotfix 27-jul, reconciliar piloto, instrumentar adopción/errores y enlazar comunicación/Tango cuando Laura los publique. Los demás lanzamientos deben nacer del proyecto logístico correspondiente, no como lista paralela.
+- [x] 🔴 **LOG-001 · consolidar la prueba de usabilidad existente.** Registrados 6 participantes, fechas 18–25-jul, tareas, puntajes, hallazgos, decisiones y límites en `proyectos/movilizacion-confirmacion/prueba-usabilidad-julio-2026.md`. Se dejó explícito que no es prueba de impacto.
+- [ ] 🔴 **LOG-001 · cerrar procedencia y arquitectura externa.** Localizar guion, grabaciones/consentimiento y matriz; crear/enlazar E2E de nueve fases cuando Drive autorice escritura; resolver las dos filas duplicadas de la hoja LS con su owner.
+- [ ] 🔴 **LOG-001 · validar la frontera Jira.** Confirmar si PRM-1588/1589 (WhatsApp) implementan el configurador general o una rama distinta, y si “confirmada sin guía” pertenece a LOG-012/PRM-1469. No crear relaciones por parecido.
+- [x] 🔴 **LOG-012 · reclasificar con evidencia.** PRM-1469/INVS-67 y la decisión de Maria confirman proyecto/solicitud en investigación y definición, no “segundo experimento”. Spec, auditoría, Hub y borradores actualizados; Darwin vivo aún pendiente.
+- [ ] 🔴 **LOG-012 · recuperar contraevidencia antes de probar.** Localizar el análisis que Kevin hizo para Lucho y que habría concluido que el problema no era grave; confrontarlo con la referencia agregada de 10,37 h y segmentar por proveedor/país/carrier.
+- [ ] 🔴 **LOG-012 · cerrar DoR técnico/operativo.** Lotes, cola/estado de impresión, compatibilidad bodega–carrier, fallback, idempotencia, recuperación manual y contrato de datos. Después sí reclutar proveedores.
 
 ## 🆕 INDIANA — Control de Recolecciones (29-jul)
 > Repo `jaimeguevara-dropi/inidiana-map` → clon local **`/Users/user/dropi-repos/inidiana-map`**. Levanta con `npx next dev --port 3001`.
@@ -70,8 +126,8 @@
   - ⛔ **NO traslapar sobre:** el mapeo crudo→homologado ni los 3 puntos en disputa.
 - [ ] 🔴 **Escalar Same Day como riesgo ACEPTADO, no ponerlo en la fila en silencio.** Los falsos SD siguen en producción (Cali→Santa Marta sale SD sin validación geo) = promesas incumplidas a clientes reales. **Un riesgo no se pone en cola: se acepta o se mitiga, con dueño.** → decirlo explícito a Maria/Carlos. *(Es la diferencia entre "priorizamos" y "se nos olvidó".)*
 
-**🎯 PRODUCT — falta decidir cuál es la una**
-- [ ] 🔴 **Decidir EL uno del Product Roadmap.** El 16-jul entraron **4 ítems** y el WIP declarado es 1 → hoy hay 4 cosas y una regla que dice una. **Recomendación: Autoconfirmación** — es la fuga #1, la más avanzada (prototipo funcional) y **tiene una pregunta que puede matarla** (¿ChateaPro tolera el gate?): *lo que puede morir barato se prueba primero*. **Selección de transportadoras no debería gastar el slot: no es proyecto de Juan** (PM = Kate); el catálogo con Paula es **una dependencia que debe, no su foco**.
+**🎯 PRODUCT — el uno activo = Autoconfirmación**
+- [ ] 🔴 **Cerrar LOG-001 antes de abrir el siguiente frente.** La documentación ya demuestra que hubo prueba de usabilidad con 6 usuarios, pero la iniciativa todavía puede morir o cambiar de tamaño por el gate ChateaPro. Salida del WIP: fuente primaria enlazada, equivalencia Jira resuelta, T4 económico iterado y siguiente prueba outcome diseñada. **Selección de transportadoras no consume este slot:** PM = Kate; el catálogo con Paula sigue siendo una dependencia de Juan.
 
 ## 🆕 CRONOGRAMA DE PRUEBAS DE POC → Product Roadmap (16-jul)
 > Pedido de Juan (16-jul): montar el **cronograma de pruebas de POC** para llevarlo al **Product Roadmap**;
@@ -96,15 +152,17 @@
 - [ ] 🟢 **Sumar los 20 usuarios a la petición EXISTENTE de personas** en la carta a Maria *(bóveda: reportes/para-maria-carta-al-nino-dios.md)* — mismo cuello que autoconfirmación y autogeneración. **3 cosas bloqueadas por la misma causa pesa; 3 pedidos sueltos es ruido.**
 - 💡 **Argumento para no esperar:** el bloqueo de **índices en Cronos NO aplica a N=20** (solo al batch nocturno Golden y a la carga de 20K concurrentes) → **esquiva lo que tiene el proyecto parado en 72%**.
 
-### 💬 Autoconfirmación — prueba con usuarios vía ChateaPro
+### 💬 Autoconfirmación — usabilidad completada; gate técnico y outcome pendientes
 - [ ] 🔴 **Sesión con ChateaPro** — hoy, cuando la orden entra en *"pendiente confirmación"*, **su flujo se dispara de inmediato**. Juan propone que **no se dispare hasta que el sistema decida si autoconfirma o no**. Entender: (1) ¿cómo confirman hoy?, (2) ¿qué hacen con la orden después?, (3) **¿cómo impacta a sus sistemas meter ese gate?**, (4) ¿su flujo tolera esperar o asume disparo inmediato? *(Juan, 16-jul)*
   - ⚠️ **Por qué es condición de existencia y no un detalle:** sin el gate hay una **carrera** — Chatea sale a confirmar **y** el sistema autoconfirma en paralelo → el cliente recibe contacto por una orden ya confirmada y **no se sabe quién confirmó**. Y recordar: **Chatea es hoy la ÚNICA fuente con la marca** manual vs. automática → es a la vez el riesgo de integración **y** el instrumento de medición.
   - ⚠️ **La pregunta (3) puede matar la idea:** si el flujo de Chatea no tolera espera, autoconfirmación no es "activar una regla" sino **rediseñar el trigger de un sistema de un tercero** → otro tamaño de proyecto. **Averiguarlo antes de prometer fecha.**
-- [ ] 🔴 **Entrevistas con dropshippers: ¿cómo confirman hoy y qué variables usan?** Alimenta las **reglas de madurez** (que seguían pendientes con Michel) y los guardarraíles. **Vale porque** las reglas actuales (constancia + ≥50 órd/mes) salieron de *data agregada*, no de preguntarle a nadie — la data no dice *por qué*. Conecta con la crítica de Juan Camilo (el prom. ~11h oculta segmentos). *(Juan, 16-jul)*
+- [ ] 🔴 **Revisar el guion/matriz de las seis sesiones antes de pedir más entrevistas.** Si no cubrieron “¿cómo confirman hoy y qué variables usan?”, completar ese hueco con dropshippers segmentados. Las reglas actuales (constancia + ≥50 órd/mes) salieron de data agregada y siguen requiriendo explicación cualitativa. Repetir sesiones sin revisar la evidencia existente desperdicia muestra y no cierra el problema.
 - [ ] 🟡 **Variable "órdenes duplicadas"** — ya está en el spec como rescatable (**80K órdenes**, §1.C + Sol B1 "fricción al cancelar duplicado"). **Doble uso:** (a) señal de rescate y (b) **guardarraíl → si es duplicada, NO autoconfirmar.** Se suma a ⛔ zona rural y ⛔ variantes (talla/color). *(Juan, 16-jul)*
+- [ ] 🔴 **Corregir y volver a probar T4 (impacto económico).** La prueba 18–25-jul obtuvo 17% de éxito en interpretación y 5/6 pidieron ganancia/pérdida visible. No pasar a handoff con esa comprensión.
+- [ ] 🔴 **Diseñar la prueba outcome después del gate técnico.** Baseline por segmento, `decision_source`, movilización/tiempo como primaria, devolución como guardarraíl, muestra, duración y criterio de stop.
 
-### 📄 Autogeneración de guías — pasa a proyecto de discovery
-- [ ] 🔴 **Levantar el discovery de autogeneración** — hoy figura como "2º experimento listo para probar" pero **no tiene spec**. Como proyecto de discovery necesita problema raíz, hipótesis, métrica y definición de datos (DoR). *(Juan, 16-jul)*
+### 📄 Autogeneración de guías — proyecto de discovery separado
+- [ ] 🔴 **Completar el discovery de autogeneración desde su spec y auditoría.** Ya existen `spec.md` y `auditoria-fuentes-agosto-2026.md`; faltan recuperar análisis Kevin/Lucho, evidencia propia, usuarios, contrato de datos y resolver si la frase Jira “confirmada sin guía” describe este frente. No volver a reportar “no tiene spec” ni “listo para probar”. *(actualizado 02-ago)*
 
 ## 🆕 DEL CELL BOARD #2 (08-jul) — acta *(bóveda: ../reuniones/2026-07-08-cell-board.md)*
 - [ ] 🔴 **Segmentar confirmación por volumen y categoría de dropshipper (con Michel)** — el promedio de ~11h oculta segmentos (crítica de Juan Camilo). Refina el experimento de autoconfirmación y desglosa el "iceberg" de valor. Insumo: data store [tema 18](../conocimiento/temas/18-metricas-operacion-2026-04-05.md) + pedir export por segmento. *(Cell Board 08-jul · dueños: Michel + Juan Diego)*
@@ -123,10 +181,10 @@
 **🔴/🟡 Vivo para el weekly de mañana (10-jul) y la próxima semana**
 - [ ] 🔴 **Cronograma de proyectos (Q3/Q4)** — sigue en construcción; **citar a Maria a principio de la próxima semana** para revisarlo. *(Venía 🔴 URGENTE desde 03-jul; ~1 semana de corrimiento — cerrarlo ya.)*
 - [ ] 🔴 **Normalización de estados (PRM-1297):** terminar la **v interactiva** del mapa de estados (compartir ~mañana) + esperar respuesta al **correo de cuentas en otros países** (MX/AR) para revisar casos de guías multi-país → luego **presentar propuesta + abrir mesas de trabajo**.
-- [ ] 🟡 **Autoconfirmación (PRM-1497):** ya socializado con Santiago; **a la espera de las personas** para correr la prueba. Traer avance la 1ª semana (Cell Board).
-- [ ] 🟡 **Autogeneración de guías:** 2º experimento **listo para probar** — conseguir con quién correrlo.
+- [x] 🟡 **Autoconfirmación (PRM-1497):** se consiguió muestra y se ejecutaron 6 sesiones entre 18–25-jul. Pendientes vigentes: artefacto primario, gate ChateaPro y prueba outcome. Evidencia: `proyectos/movilizacion-confirmacion/prueba-usabilidad-julio-2026.md`.
+- [ ] 🟡 **Autogeneración de guías:** el estado “2º experimento listo” quedó superado. Es proyecto/solicitud en discovery; primero recuperar evidencia Kevin/Lucho y cerrar DoR.
 - [ ] 🟡 **Same Day / Veloces:** cerrar con Veloces que hoy el flag "same day" **sale sin lógica** (ni tipo de envío ni geo → Cali–Santa Marta sale SD). Enmarcar como **riesgo vivo** (promesas incumplidas) + evidencia del MVP (flag + validación geo). Ver [same-day/spec.md §0.1](../proyectos/same-day/spec.md).
-- [ ] 🟢 **Token de devoluciones (Veloces):** solo **acompañar/direccionar** — token para proveedores al entregarles devoluciones (evita disputa "no me llegó / sí se entregó"). Seguir el proceso; conecta con devoluciones/logística inversa.
+- [x] 🟢 **Token de devoluciones (Veloces) — clasificación cerrada:** piloto/capacidad de conciliación dentro de LOG-010; Juan acompaña/direcciona y no es owner del desarrollo. [ ] Falta obtener outcome anonimizado, owner Veloces/Dropi, contrato de contactos y decisión de expansión.
 
 **Cell Board — reparto de la medición de tiempo por fases (traer avance 1ª semana):**
 - [ ] 🔴 **Confirmación de órdenes = Juan/nosotros** (nuestra fase del tiempo por fases).

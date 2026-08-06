@@ -5,8 +5,27 @@ import type { NextRequest } from "next/server";
 export async function proxy(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const pathname = request.nextUrl.pathname;
+  const isSensitiveLogisticsPath =
+    pathname.startsWith("/logistica/") ||
+    pathname.startsWith("/proyectos/logistica") ||
+    pathname.startsWith("/api/logistica") ||
+    pathname.startsWith("/proyectos/oportunidades-paises");
 
   if (!supabaseUrl || !supabaseAnonKey) {
+    // Los artefactos bajo public/logistica se sirven como rutas directas. Si la
+    // autenticación está mal configurada, continuar dejaría documentación y
+    // datos operativos expuestos. Este cierre es deliberadamente acotado a
+    // Logistic Success para no cambiar el comportamiento del resto del Hub.
+    if (isSensitiveLogisticsPath) {
+      return new NextResponse("Autenticación no disponible.", {
+        status: 503,
+        headers: {
+          "Cache-Control": "no-store",
+          "Content-Type": "text/plain; charset=utf-8",
+        },
+      });
+    }
     return NextResponse.next({ request });
   }
 
@@ -35,7 +54,6 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  const pathname = request.nextUrl.pathname;
   const isPublicPath =
     pathname.startsWith("/login") ||
     pathname.startsWith("/auth/callback") ||
