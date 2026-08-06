@@ -81,7 +81,9 @@
       "Bash(curl -s -o /dev/null -w \"GET /api/proyectos/test-slug -> %{http_code}\\\\n\" http://localhost:3004/api/proyectos/test-slug)",
       "Bash(curl -s -o /dev/null -w \"GET /celula/suppliers -> %{http_code}\\\\n\" http://localhost:3004/celula/suppliers)",
       "Bash(curl -s -D - http://localhost:3004/api/proyectos/test-slug)",
-      "Bash(ps -p 33250 -o pid,lstart,command)"
+      "Bash(ps -p 33250 -o pid,lstart,command)",
+      "Bash(open \"/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/agente-delivery/Documentos/pulso-marcas-corte-03ago2026-v21.html\")",
+      "Bash(open \"/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/agente-delivery/Documentos/pulso-marcas-corte-03ago2026-v22.html\")"
     ],
     "additionalDirectories": [
       "/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/hub/src/app/proyectos/marcas"

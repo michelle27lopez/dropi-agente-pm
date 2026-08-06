@@ -55,7 +55,7 @@
       "gatillo": "sin_atribucion",
       "segmento": "proveedor",
       "esPrueba": false,
-      "caminos": "",
+      "caminos": "producto",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
       "ventasMesDeclaradas": null
@@ -5860,7 +5860,7 @@
       "gatillo": "sin_atribucion",
       "segmento": "marca",
       "esPrueba": false,
-      "caminos": "bodega,producto",
+      "caminos": "bodega,producto,integraciones",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
       "ventasMesDeclaradas": "Aún no vendo"
@@ -6499,13 +6499,13 @@
       "userId": 966385,
       "submittedAt": "2026-08-05T09:10:05",
       "signedUp": "2026-08-05T08:59:54",
-      "primeraOrden": null,
-      "ttfoDias": null,
-      "estadoMeta7d": "en_observacion",
-      "gatillo": "sin_atribucion",
+      "primeraOrden": "2026-08-05T13:25:58",
+      "ttfoDias": 0,
+      "estadoMeta7d": "exito",
+      "gatillo": "gatillo_cerrado",
       "segmento": null,
       "esPrueba": false,
-      "caminos": "bodega,producto",
+      "caminos": "bodega,producto,orden_manual",
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
       "ventasMesDeclaradas": "51 a 300 al mes"
@@ -6584,6 +6584,426 @@
       "ordenesCreadas": null,
       "ordenesEntregadas": null,
       "ventasMesDeclaradas": null
+    },
+    {
+      "userId": 966486,
+      "submittedAt": "2026-08-05T11:02:58",
+      "signedUp": "2026-08-05T11:00:38",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no vendo"
+    },
+    {
+      "userId": 966503,
+      "submittedAt": "2026-08-05T11:22:03",
+      "signedUp": "2026-08-05T11:15:02",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Menos de 50 al mes"
+    },
+    {
+      "userId": 966518,
+      "submittedAt": "2026-08-05T11:33:07",
+      "signedUp": "2026-08-05T11:28:49",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega,producto",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no vendo"
+    },
+    {
+      "userId": 966545,
+      "submittedAt": "2026-08-05T12:03:37",
+      "signedUp": "2026-08-05T12:01:36",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "301 a 1.000 al mes"
+    },
+    {
+      "userId": 966601,
+      "submittedAt": "2026-08-05T12:53:23",
+      "signedUp": "2026-08-05T12:50:18",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega,producto",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "51 a 300 al mes"
+    },
+    {
+      "userId": 966637,
+      "submittedAt": "2026-08-05T13:35:48",
+      "signedUp": "2026-08-05T13:32:53",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Menos de 50 al mes"
+    },
+    {
+      "userId": 966664,
+      "submittedAt": "2026-08-05T14:05:56",
+      "signedUp": "2026-08-05T14:04:43",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "301 a 1.000 al mes"
+    },
+    {
+      "userId": 966670,
+      "submittedAt": "2026-08-05T14:10:40",
+      "signedUp": "2026-08-05T14:09:15",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Menos de 50 al mes"
+    },
+    {
+      "userId": 966672,
+      "submittedAt": "2026-08-05T14:13:12",
+      "signedUp": "2026-08-05T14:11:15",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "51 a 300 al mes"
+    },
+    {
+      "userId": 966678,
+      "submittedAt": "2026-08-05T14:17:50",
+      "signedUp": "2026-08-05T14:16:00",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega,producto,orden_manual",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Menos de 50 al mes"
+    },
+    {
+      "userId": 966693,
+      "submittedAt": "2026-08-05T14:26:27",
+      "signedUp": "2026-08-05T14:25:29",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "producto",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
+    },
+    {
+      "userId": 966695,
+      "submittedAt": "2026-08-05T14:28:48",
+      "signedUp": "2026-08-05T14:27:48",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "301 a 1.000 al mes"
+    },
+    {
+      "userId": 966697,
+      "submittedAt": "2026-08-05T14:29:40",
+      "signedUp": "2026-08-05T14:28:02",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": null
+    },
+    {
+      "userId": 966702,
+      "submittedAt": "2026-08-05T14:40:15",
+      "signedUp": "2026-08-05T14:33:19",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
+    },
+    {
+      "userId": 966716,
+      "submittedAt": "2026-08-05T14:43:03",
+      "signedUp": "2026-08-05T14:39:32",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "301 a 1.000 al mes"
+    },
+    {
+      "userId": 965525,
+      "submittedAt": "2026-08-05T15:03:30",
+      "signedUp": "2026-08-04T12:54:32",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no gestiono pedidos"
+    },
+    {
+      "userId": 966755,
+      "submittedAt": "2026-08-05T15:15:46",
+      "signedUp": "2026-08-05T15:14:40",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no vendo"
+    },
+    {
+      "userId": 966735,
+      "submittedAt": "2026-08-05T15:21:49",
+      "signedUp": "2026-08-05T14:56:39",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega,producto",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "51 a 300 al mes"
+    },
+    {
+      "userId": 966767,
+      "submittedAt": "2026-08-05T15:33:45",
+      "signedUp": "2026-08-05T15:32:14",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no vendo"
+    },
+    {
+      "userId": 966792,
+      "submittedAt": "2026-08-05T15:54:15",
+      "signedUp": "2026-08-05T15:52:06",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no vendo"
+    },
+    {
+      "userId": 966824,
+      "submittedAt": "2026-08-05T16:24:10",
+      "signedUp": "2026-08-05T16:20:56",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": null
+    },
+    {
+      "userId": 966829,
+      "submittedAt": "2026-08-05T16:30:56",
+      "signedUp": "2026-08-05T16:26:12",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Menos de 50 al mes"
+    },
+    {
+      "userId": 966896,
+      "submittedAt": "2026-08-05T17:13:33",
+      "signedUp": "2026-08-05T17:11:39",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no vendo"
+    },
+    {
+      "userId": 966907,
+      "submittedAt": "2026-08-05T17:22:35",
+      "signedUp": "2026-08-05T17:21:31",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": null
+    },
+    {
+      "userId": 966916,
+      "submittedAt": "2026-08-05T17:33:44",
+      "signedUp": "2026-08-05T17:29:35",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": null
+    },
+    {
+      "userId": 966939,
+      "submittedAt": "2026-08-05T17:51:45",
+      "signedUp": "2026-08-05T17:50:59",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": null
+    },
+    {
+      "userId": 966954,
+      "submittedAt": "2026-08-05T18:02:37",
+      "signedUp": "2026-08-05T18:01:29",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no vendo"
+    },
+    {
+      "userId": 966957,
+      "submittedAt": "2026-08-05T18:04:44",
+      "signedUp": "2026-08-05T18:04:09",
+      "primeraOrden": null,
+      "ttfoDias": null,
+      "estadoMeta7d": "en_observacion",
+      "gatillo": "sin_atribucion",
+      "segmento": null,
+      "esPrueba": false,
+      "caminos": "bodega",
+      "ordenesCreadas": null,
+      "ordenesEntregadas": null,
+      "ventasMesDeclaradas": "Aún no vendo"
     }
   ],
   "alertas": {
@@ -6631,6 +7051,10 @@
       {
         "userId": 966222,
         "segmento": null
+      },
+      {
+        "userId": 966385,
+        "segmento": null
       }
     ],
     "ordenSinFlujo": [
@@ -6662,7 +7086,7 @@
     "mayorCaidaPorPaso": [
       {
         "slot": "video_bienvenida",
-        "poblacion": 425,
+        "poblacion": 453,
         "caidaAbsoluta": 0,
         "caidaRelativa": 0,
         "marca": {
@@ -6678,9 +7102,9 @@
       },
       {
         "slot": "modal_crea_bodega",
-        "poblacion": 129,
-        "caidaAbsoluta": 296,
-        "caidaRelativa": 0.6964705882352941,
+        "poblacion": 142,
+        "caidaAbsoluta": 311,
+        "caidaRelativa": 0.6865342163355408,
         "marca": {
           "poblacion": 121,
           "caidaAbsoluta": 4,
@@ -6694,9 +7118,9 @@
       },
       {
         "slot": "tour_bodegas",
-        "poblacion": 118,
-        "caidaAbsoluta": 11,
-        "caidaRelativa": 0.08527131782945736,
+        "poblacion": 127,
+        "caidaAbsoluta": 15,
+        "caidaRelativa": 0.1056338028169014,
         "marca": {
           "poblacion": 108,
           "caidaAbsoluta": 13,
@@ -6711,8 +7135,8 @@
       {
         "slot": "evento_guardar_bodega",
         "poblacion": 141,
-        "caidaAbsoluta": -23,
-        "caidaRelativa": -0.19491525423728814,
+        "caidaAbsoluta": -14,
+        "caidaRelativa": -0.11023622047244094,
         "marca": {
           "poblacion": 60,
           "caidaAbsoluta": 48,
@@ -6726,9 +7150,9 @@
       },
       {
         "slot": "modal_sube_producto",
-        "poblacion": 58,
-        "caidaAbsoluta": 83,
-        "caidaRelativa": 0.5886524822695035,
+        "poblacion": 62,
+        "caidaAbsoluta": 79,
+        "caidaRelativa": 0.5602836879432624,
         "marca": {
           "poblacion": 53,
           "caidaAbsoluta": 7,
@@ -6742,25 +7166,25 @@
       },
       {
         "slot": "tour_productos",
-        "poblacion": 68,
-        "caidaAbsoluta": -10,
-        "caidaRelativa": -0.1724137931034483,
+        "poblacion": 74,
+        "caidaAbsoluta": -12,
+        "caidaRelativa": -0.1935483870967742,
         "marca": {
           "poblacion": 51,
           "caidaAbsoluta": 2,
           "caidaRelativa": 0.03773584905660377
         },
         "proveedor": {
-          "poblacion": 13,
-          "caidaAbsoluta": -13,
+          "poblacion": 14,
+          "caidaAbsoluta": -14,
           "caidaRelativa": 0
         }
       },
       {
         "slot": "evento_guardar_producto",
         "poblacion": 94,
-        "caidaAbsoluta": -26,
-        "caidaRelativa": -0.38235294117647056,
+        "caidaAbsoluta": -20,
+        "caidaRelativa": -0.2702702702702703,
         "marca": {
           "poblacion": 33,
           "caidaAbsoluta": 18,
@@ -6768,19 +7192,19 @@
         },
         "proveedor": {
           "poblacion": 61,
-          "caidaAbsoluta": -48,
-          "caidaRelativa": -3.6923076923076925
+          "caidaAbsoluta": -47,
+          "caidaRelativa": -3.357142857142857
         }
       },
       {
         "slot": "modal_felicidades_producto",
-        "poblacion": 39,
-        "caidaAbsoluta": 55,
-        "caidaRelativa": 0.5851063829787234,
+        "poblacion": 42,
+        "caidaAbsoluta": 52,
+        "caidaRelativa": 0.5531914893617021,
         "marca": {
-          "poblacion": 36,
-          "caidaAbsoluta": -3,
-          "caidaRelativa": -0.09090909090909091
+          "poblacion": 37,
+          "caidaAbsoluta": -4,
+          "caidaRelativa": -0.12121212121212122
         },
         "proveedor": {
           "poblacion": 0,
@@ -6790,13 +7214,13 @@
       },
       {
         "slot": "tour_orden_manual",
-        "poblacion": 22,
-        "caidaAbsoluta": 17,
-        "caidaRelativa": 0.4358974358974359,
+        "poblacion": 24,
+        "caidaAbsoluta": 18,
+        "caidaRelativa": 0.42857142857142855,
         "marca": {
           "poblacion": 21,
-          "caidaAbsoluta": 15,
-          "caidaRelativa": 0.4166666666666667
+          "caidaAbsoluta": 16,
+          "caidaRelativa": 0.43243243243243246
         },
         "proveedor": {
           "poblacion": 0,
@@ -6807,8 +7231,8 @@
       {
         "slot": "evento_enviar_cliente",
         "poblacion": 13,
-        "caidaAbsoluta": 9,
-        "caidaRelativa": 0.4090909090909091,
+        "caidaAbsoluta": 11,
+        "caidaRelativa": 0.4583333333333333,
         "marca": {
           "poblacion": 8,
           "caidaAbsoluta": 13,
@@ -6822,9 +7246,9 @@
       },
       {
         "slot": "modal_felicidades_orden_manual",
-        "poblacion": 12,
-        "caidaAbsoluta": 1,
-        "caidaRelativa": 0.07692307692307693,
+        "poblacion": 13,
+        "caidaAbsoluta": 0,
+        "caidaRelativa": 0,
         "marca": {
           "poblacion": 11,
           "caidaAbsoluta": -3,
@@ -6838,13 +7262,13 @@
       },
       {
         "slot": "tour_integraciones",
-        "poblacion": 9,
+        "poblacion": 10,
         "caidaAbsoluta": 3,
-        "caidaRelativa": 0.25,
+        "caidaRelativa": 0.23076923076923078,
         "marca": {
-          "poblacion": 8,
-          "caidaAbsoluta": 3,
-          "caidaRelativa": 0.2727272727272727
+          "poblacion": 9,
+          "caidaAbsoluta": 2,
+          "caidaRelativa": 0.18181818181818182
         },
         "proveedor": {
           "poblacion": 1,
@@ -6855,12 +7279,12 @@
       {
         "slot": "evento_crear_integraciones",
         "poblacion": 17,
-        "caidaAbsoluta": -8,
-        "caidaRelativa": -0.8888888888888888,
+        "caidaAbsoluta": -7,
+        "caidaRelativa": -0.7,
         "marca": {
           "poblacion": 11,
-          "caidaAbsoluta": -3,
-          "caidaRelativa": -0.375
+          "caidaAbsoluta": -2,
+          "caidaRelativa": -0.2222222222222222
         },
         "proveedor": {
           "poblacion": 6,
@@ -6870,13 +7294,13 @@
       },
       {
         "slot": "modal_felicidades_integracion",
-        "poblacion": 11,
-        "caidaAbsoluta": 6,
-        "caidaRelativa": 0.35294117647058826,
+        "poblacion": 12,
+        "caidaAbsoluta": 5,
+        "caidaRelativa": 0.29411764705882354,
         "marca": {
-          "poblacion": 11,
-          "caidaAbsoluta": 0,
-          "caidaRelativa": 0
+          "poblacion": 12,
+          "caidaAbsoluta": -1,
+          "caidaRelativa": -0.09090909090909091
         },
         "proveedor": {
           "poblacion": 0,
@@ -6886,10 +7310,10 @@
       }
     ],
     "videoAEncuesta": {
-      "poblacionVideo": 440,
-      "poblacionEncuesta": 434,
-      "caidaAbsoluta": 6,
-      "caidaRelativa": 0.013636363636363636,
+      "poblacionVideo": 471,
+      "poblacionEncuesta": 462,
+      "caidaAbsoluta": 9,
+      "caidaRelativa": 0.01910828025477707,
       "marca": {
         "poblacionVideo": 125,
         "poblacionEncuesta": 128
@@ -6907,8 +7331,8 @@
       },
       "proveedor": {
         "poblacion": 280,
-        "avanzan": 15,
-        "pct": 0.05357142857142857
+        "avanzan": 16,
+        "pct": 0.05714285714285714
       }
     }
   },
@@ -6916,11 +7340,11 @@
     "corteOnboarding": "2026-07-28",
     "desdeFecha": "2026-03-17",
     "conOnboarding": {
-      "poblacion": 434,
-      "activados": 17,
-      "pctActivados": 0.03917050691244239,
-      "ttfoMedianaDias": 1,
-      "ttfoPromedioDias": 1.7647058823529411,
+      "poblacion": 462,
+      "activados": 18,
+      "pctActivados": 0.03896103896103896,
+      "ttfoMedianaDias": 0.5,
+      "ttfoPromedioDias": 1.6666666666666667,
       "ttfoDias": [
         0,
         4,
@@ -6936,6 +7360,7 @@
         1,
         2,
         1,
+        0,
         0,
         0,
         0
@@ -8088,19 +8513,19 @@
     "archivos": [
       {
         "nombreArchivo": "Automatizacion_Flujo_onbording - Raw Data (1).csv",
-        "filas": 634
+        "filas": 891
       }
     ],
     "tipo": "raw_data_incremental",
-    "poblacion": 439,
-    "activadas": 19,
-    "exito": 19,
+    "poblacion": 467,
+    "activadas": 20,
+    "exito": 20,
     "fracaso": 63,
-    "enObservacion": 357,
-    "alertaAFlujoYOrden": 11,
+    "enObservacion": 384,
+    "alertaAFlujoYOrden": 12,
     "alertaBOrdenSinFlujo": 6,
     "usuario": "katerine.pencue@dropi.co",
     "fechaCorte": "2026-08-05",
-    "createdAt": "2026-08-05T16:00:44.203Z"
+    "createdAt": "2026-08-05T23:39:32.586Z"
   }
 }
