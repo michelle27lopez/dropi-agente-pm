@@ -17,6 +17,11 @@
 - 🟡 [Homologación estados] Modelar la devolución con su propio ciclo de reintento + `Entregado` confirmado vs observado + ubicar `Guía anulada`
 - 🔴 [Cell Board] Preparar propuesta de experimento para "Preparación de guía" → llevar al Cell Board #3
 - 🔴 [Árbol OKR] Validar el reajuste del árbol v2 con Juan/Maria antes de tocar Jira
+- 🔴 [Medición] LOG-011 Torre de control sin ticket ni dueño — sin él las submétricas del KPI de 24h se calculan a mano cada vez (ver `estrategia/medicion-movilizacion-y-entrega.md`)
+- 🟡 [Medición] Abrir la novedad como embudo: % que entra, % que se soluciona, % que termina entregada — depende de normalizar estados primero
+- 🟡 [Medición] Elegir UNA definición de zona (ciudad · territorio DANE · zona de la transportadora) antes de cortar los KPIs por geografía
+- 🟡 [Comercial] Levantar a partir de cuántas órdenes cada transportadora habilita pago contra entrega, y sus contratos mínimos — condiciona LOG-004
+- 🟢 [Research] Entrevistas de logística para ecommerce: definir a quién (operadores · otros ecommerce · dropshippers con otras plataformas)
 - 🔴 [Delivery] EL FOCO = Normalización de estados: subirlo en el roadmap y terminar la propuesta (WIP=1)
 - 🔴 [Delivery] Traslapar diseño solo sobre lo cerrado (vista cliente 8 estados), NO sobre el catálogo en disputa
 - 🔴 [Delivery] Escalar Same Day como riesgo aceptado con dueño — un riesgo no se pone en cola en silencio
