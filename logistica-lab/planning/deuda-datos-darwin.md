@@ -55,6 +55,23 @@ usa la estructura común, salen bajo "Delivery Proyectos" — no se tapa, es el 
 **Decisión pendiente (Juan):** o se corrige el `type` en la base, o se corrige la fase en el
 tablero. Lo que no puede quedar es una versión distinta en cada lado.
 
+### Lo que sí se corrigió el 5-ago (migración `047`)
+
+Tres proyectos iban al revés que estos cinco: estaban tipados `Proyecto` cuando ya habían
+salido de discovery. En esos, las dos fuentes **sí coincidían** — solo faltaba el `type`:
+
+| | Tablero | `handoff_status` | Ahora |
+|---|---|---|---|
+| `LOG-006` Tarifas | fase "Listo para handoff" | Listo para handoff | Delivery Proyecto |
+| `LOG-014` Fulfillment | fase "Listo para handoff" | Listo para handoff | Delivery Proyecto |
+| `LOG-009` Guías reemplazatorias | "ya no es discovery, está en lanzamiento" | **Handoff hecho** | Delivery Proyecto |
+
+`LOG-009` era el único proyecto de toda la célula con el handoff hecho, y salía en Discovery.
+
+**No se tocó `LOG-016` (POD)**, aunque se pidió con los otros: el tablero lo pone en fase
+Discovery, su paraguas `PRM-1517` está en backlog **sin assignee** y dos de sus tickets en
+Impedimentos. Tiparlo como Delivery declararía entregado un frente sin dueño. Sigue abierto.
+
 ---
 
 ## 🔴 3. No hay forma de corregir `type` desde la interfaz
@@ -153,16 +170,17 @@ mostrado.
 
 ---
 
-## 🟢 8. `LOG-017` existe en Darwin pero no en el tablero
+## ✅ 8. `LOG-017` existe en Darwin pero no en el tablero — RESUELTO 5-ago
 
-`LOG-017` ("Parametrizar Tarifas", POC hijo de LOG-006) se creó desde la UI el 30-jul y no
-está en `data.ts`. Como el tablero es quien asigna la etapa, este proyecto no tiene ninguna, y
-**desaparece al filtrar por etapa** en `/celula/logistica`.
+`LOG-017` ("Parametrizar Tarifas", POC hijo de LOG-006) se creó desde la UI el 30-jul, no
+estaba en `data.ts`, y por eso desaparecía al filtrar por etapa.
 
-Es el hueco inverso al punto 1: se arregla agregando la iniciativa al tablero, no tocando la
-base.
+Se resolvió borrándolo: duplicaba a su propio padre (mismo panel de tarifas con simulador) y
+sus tres prototipos RPP ya cuelgan de LOG-006. Migración `047`.
 
-**Dueño:** Juan.
+⚠️ El código `LOG-017` quedó reutilizado: ahora lo lleva el Following de LOG-009, que tomó el
+siguiente número libre. Son dos proyectos distintos con el mismo código a lo largo del tiempo
+— tenerlo presente al leer historial viejo.
 
 ---
 
