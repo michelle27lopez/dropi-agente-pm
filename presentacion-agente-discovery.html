@@ -3,31 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agente de Discovery — Presentación Interactiva | Dropi Product Team</title>
+  <title>Agente de Discovery — Presentación Leyendas Dropi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #0b0f19;
-      --bg-card: rgba(22, 31, 49, 0.75);
-      --bg-card-hover: rgba(30, 42, 66, 0.9);
-      --border-color: rgba(255, 255, 255, 0.08);
-      --border-accent: rgba(99, 102, 241, 0.3);
+      /* Paleta Oficial Leyendas Dropi */
+      --bg-dark: #030107;
+      --bg-card: rgba(18, 10, 26, 0.85);
+      --bg-card-hover: rgba(32, 16, 45, 0.95);
+      --border-color: rgba(255, 133, 0, 0.2);
+      --border-accent: rgba(255, 133, 0, 0.5);
       
-      --primary: #6366f1;
-      --primary-light: #818cf8;
-      --primary-glow: rgba(99, 102, 241, 0.4);
-      --secondary: #10b981;
-      --secondary-glow: rgba(16, 185, 129, 0.3);
-      --accent: #f59e0b;
-      --pink: #ec4899;
+      --color-master: #FF8500;  /* Naranja / Oro Master */
+      --color-experto: #FF6A00;
+      --color-sabiovip: #FF4800;
+      --color-leyenda: #FF0000;  /* Rojo Leyenda */
+      --color-gold-light: #FFD23F;
       
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --text-dim: #6b7280;
+      --text-main: #f4f2f7;
+      --text-muted: #c4b9d8;
+      --text-dim: #8c7fa6;
 
-      --font-heading: 'Outfit', sans-serif;
+      --font-heading: 'Chakra Petch', 'Outfit', sans-serif;
       --font-body: 'Inter', sans-serif;
       --font-code: 'Fira Code', monospace;
     }
@@ -48,9 +47,9 @@
       display: flex;
       flex-direction: column;
       background-image: 
-        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 85% 80%, rgba(16, 185, 129, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.08) 0%, transparent 60%);
+        radial-gradient(circle at 10% 10%, rgba(255, 133, 0, 0.25) 0%, transparent 45%),
+        radial-gradient(circle at 90% 90%, rgba(255, 72, 0, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.1) 0%, transparent 60%);
     }
 
     /* Top Navigation Header */
@@ -58,23 +57,23 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
+      padding: 0.9rem 2rem;
       border-bottom: 1px solid var(--border-color);
-      background: rgba(11, 15, 25, 0.8);
-      backdrop-filter: blur(12px);
+      background: rgba(5, 2, 9, 0.92);
+      backdrop-filter: blur(16px);
       z-index: 100;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.85rem;
     }
 
     .brand-logo {
-      width: 38px;
-      height: 38px;
-      background: linear-gradient(135deg, var(--primary), var(--pink));
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--color-master), var(--color-leyenda));
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -82,26 +81,30 @@
       font-weight: 800;
       font-family: var(--font-heading);
       color: #fff;
-      box-shadow: 0 0 15px var(--primary-glow);
+      box-shadow: 0 0 20px rgba(255, 133, 0, 0.5);
     }
 
     .brand-title {
       font-family: var(--font-heading);
-      font-weight: 700;
-      font-size: 1.15rem;
-      background: linear-gradient(to right, #fff, var(--text-muted));
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: 0.04em;
+      background: linear-gradient(to right, #ffffff, var(--color-gold-light));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
     }
 
     .badge-live {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #34d399;
+      background: rgba(255, 133, 0, 0.15);
+      border: 1px solid rgba(255, 133, 0, 0.5);
+      color: var(--color-gold-light);
       font-size: 0.75rem;
-      padding: 0.25rem 0.6rem;
+      padding: 0.3rem 0.75rem;
       border-radius: 20px;
-      font-weight: 600;
+      font-weight: 700;
+      font-family: var(--font-heading);
+      letter-spacing: 0.05em;
       display: flex;
       align-items: center;
       gap: 0.4rem;
@@ -109,11 +112,11 @@
 
     .badge-live::before {
       content: '';
-      width: 6px;
-      height: 6px;
-      background: #34d399;
+      width: 7px;
+      height: 7px;
+      background: var(--color-master);
       border-radius: 50%;
-      box-shadow: 0 0 8px #34d399;
+      box-shadow: 0 0 10px var(--color-master);
       animation: pulse 1.8s infinite;
     }
 
@@ -124,11 +127,11 @@
 
     .slide-indicator {
       font-family: var(--font-heading);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.9rem;
-      color: var(--text-muted);
-      background: rgba(255, 255, 255, 0.05);
-      padding: 0.35rem 0.85rem;
+      color: var(--color-gold-light);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.4rem 0.9rem;
       border-radius: 8px;
       border: 1px solid var(--border-color);
     }
@@ -158,6 +161,7 @@
       transform: scale(0.96);
       transition: opacity 0.5s ease, transform 0.5s ease;
       overflow-y: auto;
+      text-align: left; /* Alineación limpia sin estiramiento de justificado */
     }
 
     .slide.active {
@@ -170,38 +174,42 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      color: var(--primary-light);
-      font-weight: 600;
+      color: var(--color-master);
+      font-family: var(--font-heading);
+      font-weight: 800;
       font-size: 0.85rem;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       margin-bottom: 0.75rem;
     }
 
     .slide-title {
       font-family: var(--font-heading);
-      font-size: 2.75rem;
+      font-size: 2.6rem;
       font-weight: 800;
-      line-height: 1.15;
+      line-height: 1.2;
       margin-bottom: 1rem;
-      background: linear-gradient(135deg, #ffffff 30%, var(--primary-light) 100%);
+      background: linear-gradient(135deg, #ffffff 40%, var(--color-master) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      letter-spacing: -0.02em;
+      text-align: left;
     }
 
     .slide-subtitle {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       color: var(--text-muted);
       max-width: 850px;
       line-height: 1.6;
       margin-bottom: 2rem;
+      text-align: left; /* No justified text */
     }
 
     /* Grid Layouts */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 2rem;
+      gap: 1.75rem;
       align-items: stretch;
     }
 
@@ -223,73 +231,93 @@
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       border-radius: 16px;
-      padding: 1.75rem;
+      padding: 1.6rem;
       backdrop-filter: blur(16px);
       transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
+      text-align: left;
     }
 
     .card:hover {
       background: var(--bg-card-hover);
       border-color: var(--border-accent);
       transform: translateY(-4px);
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 12px 30px rgba(255, 133, 0, 0.2);
     }
 
     .card-icon {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       border-radius: 12px;
-      background: rgba(99, 102, 241, 0.12);
-      border: 1px solid rgba(99, 102, 241, 0.3);
+      background: rgba(255, 133, 0, 0.15);
+      border: 1px solid rgba(255, 133, 0, 0.4);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
-      margin-bottom: 1.25rem;
+      font-size: 1.4rem;
+      margin-bottom: 1.1rem;
     }
 
     .card-title {
       font-family: var(--font-heading);
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 700;
       margin-bottom: 0.6rem;
       color: #fff;
+      text-align: left;
     }
 
     .card-desc {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       color: var(--text-muted);
       line-height: 1.55;
+      text-align: left;
     }
 
     .card-highlight {
-      border-color: rgba(16, 185, 129, 0.4);
-      background: rgba(16, 185, 129, 0.05);
+      border-color: rgba(255, 133, 0, 0.5);
+      background: rgba(255, 133, 0, 0.07);
     }
 
     .card-highlight .card-icon {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(255, 133, 0, 0.25);
+      border-color: var(--color-master);
+    }
+
+    /* Explanation Boxes for Acronyms & Authors */
+    .glossary-box {
+      background: rgba(255, 255, 255, 0.03);
+      border-left: 3px solid var(--color-master);
+      padding: 0.75rem 1rem;
+      margin-top: 0.75rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      text-align: left;
+    }
+
+    .glossary-box strong {
+      color: var(--color-gold-light);
     }
 
     /* Interactive Playground / Simulator */
     .simulator-container {
-      background: rgba(15, 23, 42, 0.85);
+      background: rgba(10, 5, 18, 0.9);
       border: 1px solid var(--border-accent);
       border-radius: 16px;
       display: grid;
-      grid-template-columns: 320px 1fr;
-      height: 480px;
+      grid-template-columns: 340px 1fr;
+      height: 460px;
       overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     }
 
     .sim-sidebar {
-      background: rgba(11, 15, 25, 0.6);
+      background: rgba(5, 2, 9, 0.8);
       border-right: 1px solid var(--border-color);
       padding: 1.25rem;
       display: flex;
@@ -308,11 +336,12 @@
       cursor: pointer;
       transition: all 0.2s ease;
       line-height: 1.4;
+      font-family: var(--font-body);
     }
 
     .sim-prompt-btn:hover, .sim-prompt-btn.active {
-      background: rgba(99, 102, 241, 0.15);
-      border-color: var(--primary);
+      background: rgba(255, 133, 0, 0.15);
+      border-color: var(--color-master);
       color: #fff;
     }
 
@@ -320,74 +349,83 @@
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      background: #090d16;
+      background: #040207;
       font-family: var(--font-body);
       overflow-y: auto;
+      text-align: left;
     }
 
     .sim-chat-bubble {
-      background: rgba(30, 41, 59, 0.7);
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-color);
       padding: 1.25rem;
       border-radius: 12px;
       margin-bottom: 1rem;
       font-size: 0.92rem;
       line-height: 1.6;
+      text-align: left;
     }
 
     .sim-chat-bubble.agent-response {
-      background: rgba(16, 185, 129, 0.08);
-      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(255, 133, 0, 0.08);
+      border-color: rgba(255, 133, 0, 0.35);
     }
 
     .sim-tag {
       display: inline-block;
-      padding: 0.15rem 0.45rem;
-      background: rgba(99, 102, 241, 0.2);
-      color: var(--primary-light);
+      padding: 0.2rem 0.5rem;
+      background: rgba(255, 133, 0, 0.2);
+      color: var(--color-gold-light);
       border-radius: 4px;
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 700;
+      font-family: var(--font-heading);
       margin-right: 0.4rem;
     }
 
-    /* B=MAP Interactive Slider */
+    /* B=MAP Interactive Slider Widget */
     .bmap-widget {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid var(--border-color);
+      background: rgba(18, 10, 26, 0.8);
+      border: 1px solid var(--border-accent);
       padding: 1.5rem;
-      border-radius: 14px;
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.1rem;
+      text-align: left;
     }
 
     .slider-row {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: 1.25rem;
     }
 
     .slider-label {
-      width: 140px;
+      width: 220px;
       font-weight: 600;
       font-size: 0.9rem;
+      color: var(--text-main);
     }
 
     .slider-input {
       flex: 1;
-      accent-color: var(--primary);
+      accent-color: var(--color-master);
+      height: 6px;
+      border-radius: 3px;
+      cursor: pointer;
     }
 
     .result-box {
-      background: rgba(99, 102, 241, 0.1);
-      border: 1px solid var(--primary-light);
-      padding: 1rem;
-      border-radius: 10px;
+      background: rgba(255, 133, 0, 0.12);
+      border: 1px solid var(--color-master);
+      padding: 1.1rem;
+      border-radius: 12px;
       text-align: center;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       color: #fff;
+      line-height: 1.5;
     }
 
     /* Bottom Control Bar */
@@ -395,10 +433,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 2rem;
+      padding: 0.9rem 2rem;
       border-top: 1px solid var(--border-color);
-      background: rgba(11, 15, 25, 0.9);
-      backdrop-filter: blur(12px);
+      background: rgba(5, 2, 9, 0.95);
+      backdrop-filter: blur(16px);
       z-index: 100;
     }
 
@@ -414,7 +452,7 @@
 
     .progress-bar {
       height: 100%;
-      background: linear-gradient(to right, var(--primary), var(--secondary));
+      background: linear-gradient(to right, var(--color-master), var(--color-leyenda));
       width: 14.28%;
       transition: width 0.3s ease;
     }
@@ -440,9 +478,9 @@
     }
 
     .btn-nav:hover {
-      background: var(--primary);
-      border-color: var(--primary-light);
-      box-shadow: 0 0 12px var(--primary-glow);
+      background: var(--color-master);
+      border-color: var(--color-gold-light);
+      box-shadow: 0 0 15px rgba(255, 133, 0, 0.5);
     }
 
     .btn-nav:disabled {
@@ -457,6 +495,7 @@
       flex-direction: column;
       gap: 0.75rem;
       margin-top: 0.75rem;
+      text-align: left;
     }
 
     ul.check-list li {
@@ -466,22 +505,25 @@
       font-size: 0.92rem;
       color: var(--text-muted);
       line-height: 1.5;
+      text-align: left;
     }
 
     ul.check-list li::before {
       content: '✓';
-      color: var(--secondary);
+      color: var(--color-master);
       font-weight: 800;
     }
 
     /* Code Snippets */
     code {
       font-family: var(--font-code);
-      background: rgba(0, 0, 0, 0.4);
-      padding: 0.2rem 0.5rem;
-      border-radius: 5px;
-      color: #38bdf8;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      color: var(--color-gold-light);
+      border: 1px solid rgba(255, 133, 0, 0.2);
       font-size: 0.85rem;
+      display: inline-block;
     }
   </style>
 </head>
@@ -490,15 +532,15 @@
   <!-- Header Navigation -->
   <header>
     <div class="brand">
-      <div class="brand-logo">D</div>
+      <div class="brand-logo">👑</div>
       <div>
-        <div class="brand-title">Agente de Discovery — Dropi Product Team</div>
-        <div style="font-size: 0.75rem; color: var(--text-dim);">Presentación Interactiva Localhost</div>
+        <div class="brand-title">Agente de Discovery</div>
+        <div style="font-size: 0.75rem; color: var(--text-dim);">Dropi Leyendas — Equipo de Producto & Diseño</div>
       </div>
     </div>
 
     <div class="badge-live">
-      MODO INTERACTIVO LIVE
+      EDICIÓN LEYENDAS DROPI
     </div>
 
     <div class="slide-indicator" id="slide-indicator">
@@ -512,59 +554,66 @@
 
       <!-- SLIDE 1: HERO -->
       <section class="slide active">
-        <div class="slide-tag">🧠 UN SOLO CEREBRO DE PRODUCTO</div>
+        <div class="slide-tag">🧠 TU SPARRING PARTNER DE PRODUCTO</div>
         <h1 class="slide-title">Agente de Discovery</h1>
         <p class="slide-subtitle">
-          El copiloto conductual que une el <strong>Proceso de Discovery Continuo</strong> (Teresa Torres + JPD) con el <strong>Mindset Conductual</strong> (BJ Fogg, Kahneman, Eyal, SDT) para tomar decisiones de producto basadas en evidencia y no en intuición.
+          Un asistente pensado para acompañar a Product Managers y Designers. Une el <strong>Proceso de Discovery Continuo</strong> con la <strong>Psicología Conductual</strong> para evaluar por qué los usuarios actúan (o no actúan) antes de gastar recursos construyendo.
         </p>
 
         <div class="grid-3" style="margin-top: 1rem;">
           <div class="card card-highlight">
             <div class="card-icon">⚡</div>
-            <div class="card-title">Continuous Discovery</div>
-            <div class="card-desc">Opportunity Solution Trees (OST) y Jira Product Discovery (JPD) operados en ciclos semanales sostenidos.</div>
+            <div class="card-title">Discovery Continuo</div>
+            <div class="card-desc">Explora necesidades reales de los usuarios cada semana usando metodologías estructuradas (como el Árbol de Oportunidades de Teresa Torres).</div>
+            <div class="glossary-box">
+              <strong>¿Qué es Discovery?</strong> El hábito de investigar constantemente antes de comprometer código de desarrollo.
+            </div>
           </div>
 
           <div class="card card-highlight">
             <div class="card-icon">🧪</div>
             <div class="card-title">Enfoque Conductual</div>
-            <div class="card-desc">B=MAP, Procesamiento Dual (Sistema 1 vs 2), Carga Cognitiva e Inversión (Hook Model).</div>
+            <div class="card-desc">Analiza la Motivación, la Facilidad (Fricción) y el Momento del usuario usando modelos científicos probados (BJ Fogg, Kahneman).</div>
+            <div class="glossary-box">
+              <strong>¿Por qué ayuda?</strong> Nos evita asumir que "la gente no usa la app porque no quiere", revelando la fricción real.
+            </div>
           </div>
 
           <div class="card">
             <div class="card-icon">🎯</div>
-            <div class="card-title">Grounding con Dropi</div>
-            <div class="card-desc">Conectado a los datos reales de Seller Success, Brands Success y Logistic Success en Supabase.</div>
+            <div class="card-title">Datos Reales de Dropi</div>
+            <div class="card-desc">Conectado a los datos y métricas oficiales de Sellers, Marcas y Logística en Supabase y Power BI.</div>
+            <div class="glossary-box">
+              <strong>Grounded:</strong> No inventa teorías genéricas; habla de tus Sellers reales en Colombia, México y la región.
+            </div>
           </div>
         </div>
       </section>
 
       <!-- SLIDE 2: PARA QUÉ SIRVE -->
       <section class="slide">
-        <div class="slide-tag">🎯 PROPÓSITO Y DIAGNÓSTICO</div>
+        <div class="slide-tag">🎯 PROPÓSITO & TRABAJO EN EQUIPO</div>
         <h2 class="slide-title">¿Para Qué Sirve el Agente?</h2>
         <p class="slide-subtitle">
-          Elimina la trampa del <em>"Solution-First"</em> (saltar a construir UI antes de diagnosticar el problema) y actúa como un sparring partner riguroso que fuerza la evidencia.
+          Ayuda al equipo a evitar el sesgo común de <em>"Saltar a la Solución"</em> (diseñar pantallas o pedir cambios técnicos antes de diagnosticar la causa raíz del problema).
         </p>
 
         <div class="grid-2">
           <div class="card" style="border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05);">
-            <div class="card-title" style="color: #f87171;">❌ La Fábrica de Features (Sin Agente)</div>
+            <div class="card-title" style="color: #f87171;">❌ El Riesgo de Trabajar "A la Ciega"</div>
             <ul class="check-list">
-              <li style="color: #fca5a5;">El equipo salta a "hacer un A/B test de rediseño de UI" sin saber por qué la gente abandona.</li>
-              <li style="color: #fca5a5;">Las encuestas de opinión ("¿Usarías X?") se toman como certezas absolutas.</li>
-              <li style="color: #fca5a5;">Aparecen features huérfanas que nadie usa y sobrecargan la interfaz.</li>
-              <li style="color: #fca5a5;">Se pierde tiempo en desarrollo antes de validar los supuestos más riesgosos.</li>
+              <li style="color: #fca5a5;">Rediseñar una interfaz completa creyendo que "es fea", cuando el usuario abandonaba por desconfianza financiera.</li>
+              <li style="color: #fca5a5;">Tomar encuestas de opinión como verdades absolutas (lo que el usuario dice no siempre es lo que hace).</li>
+              <li style="color: #fca5a5;">Lanzar pruebas A/B costosas en tiempo de desarrollo para ideas que ni siquiera se habían validado en borrador.</li>
             </ul>
           </div>
 
           <div class="card card-highlight">
-            <div class="card-title" style="color: #34d399;">✅ Rigor Conductual (Con el Agente)</div>
+            <div class="card-title" style="color: var(--color-gold-light);">✅ El Apoyo del Agente de Discovery</div>
             <ul class="check-list">
-              <li>Formula el <strong>Product Outcome</strong> (leading indicator) antes de escribir una sola línea de código.</li>
-              <li>Diagnostica si la falla es de Motivación (M), Ability/Fricción (A) o Prompt (P).</li>
-              <li>Diseña el <strong>test más barato de la escalera</strong> (Fake Door / Wizard of Oz) para matar supuestos falsos.</li>
-              <li>Garantiza el <strong>Pre-Flight Package</strong> completo antes de enviar a desarrollo (Delivery).</li>
+              <li>Ayuda a formular metas claras centradas en el <strong>comportamiento del usuario</strong> (Product Outcome).</li>
+              <li>Diagnostica si el freno está en la <strong>Motivación (M)</strong>, la <strong>Facilidad (A)</strong> o el <strong>Recordatorio (P)</strong>.</li>
+              <li>Propone la <strong>prueba más barata y rápida</strong> (de $0 esfuerzo técnico) para validar supuestos riesgosos antes de programar.</li>
             </ul>
           </div>
         </div>
@@ -572,40 +621,44 @@
 
       <!-- SLIDE 3: VALOR Y POR QUÉ USARLO -->
       <section class="slide">
-        <div class="slide-tag">🚀 ROI & BENEFICIOS PARA EL EQUIPO</div>
+        <div class="slide-tag">🚀 VALOR PRÁCTICO PARA CADA ROL</div>
         <h2 class="slide-title">¿Qué Valor Genera & Por Qué Usarlo?</h2>
         <p class="slide-subtitle">
-          Beneficios cuantificables para Product Managers, Product Designers y los resultados del Holding de Dropi.
+          Es una herramienta concebida para potenciar el criterio del equipo, no para reemplazarlo ni burocratizar el trabajo.
         </p>
 
         <div class="grid-3">
           <div class="card">
             <div class="card-icon">📊</div>
-            <div class="card-title">Para PMs</div>
+            <div class="card-title">Para Product Managers</div>
             <ul class="check-list">
-              <li>Acelera el framing de problemas de <strong>5 días a 10 minutos</strong>.</li>
-              <li>RICE scoring con <strong>Confidence anclado a evidencia real</strong>.</li>
-              <li>Balancea el portafolio con la pirámide <strong>RUF</strong> (Reliability, Usability, Features).</li>
+              <li>Estructura problemas complejos en minutos con evidencia sólida.</li>
+              <li>Prioriza iniciativas equilibrando estabilidad y novedades mediante el modelo <strong>RUF</strong>.</li>
             </ul>
+            <div class="glossary-box">
+              <strong>RUF (Reliability, Usability, Features):</strong> Prioridad: (1) Que funcione bien, (2) Que sea fácil, (3) Crear lo nuevo.
+            </div>
           </div>
 
           <div class="card">
             <div class="card-icon">🎨</div>
-            <div class="card-title">Para Designers</div>
+            <div class="card-title">Para Product Designers</div>
             <ul class="check-list">
-              <li>Protege el <strong>Límite de Memoria de Trabajo</strong> (máx 4 ítems por pantalla).</li>
-              <li>Audita el <strong>Procesamiento Dual (Sistema 1 vs 2)</strong> y la fluidez.</li>
-              <li>Aplica el <strong>Trilema de la Fricción</strong> (Eliminar, Preservar o Invertir).</li>
+              <li>Audita la <strong>Carga Cognitiva</strong> para no saturar al usuario (respetando el límite de 4 elementos por vista).</li>
+              <li>Evalúa el <strong>Procesamiento Dual</strong> (acciones intuitivas vs decisiones complejas).</li>
             </ul>
+            <div class="glossary-box">
+              <strong>Sistema 1 vs 2 (Kahneman):</strong> Sistema 1 es veloz e intuitivo; Sistema 2 exige pensar mucho. ¡Buscamos fluidez!
+            </div>
           </div>
 
           <div class="card card-highlight">
-            <div class="card-icon">💰</div>
-            <div class="card-title">Para Dropi</div>
+            <div class="card-icon">👑</div>
+            <div class="card-title">Para los Resultados Dropi</div>
             <ul class="check-list">
-              <li>Evita gastar meses de devs en features con cero tracción.</li>
-              <li>Acelera la <strong>Tasa de Activación Neta (5.2% ➔ 8.0%)</strong>.</li>
-              <li>Reduce la mediana de <strong>TTV Bruto (7.4d ➔ &lt;4.0d)</strong>.</li>
+              <li>Evita semanas de desarrollo en funcionalidades con baja adopción.</li>
+              <li>Aumenta la <strong>Tasa de Activación Neta</strong> (Sellers que logran su 1ª entrega).</li>
+              <li>Reduce el tiempo que tarda un nuevo seller en generar valor (TTV Bruto).</li>
             </ul>
           </div>
         </div>
@@ -613,97 +666,97 @@
 
       <!-- SLIDE 4: EN QUÉ ESCENARIOS USARLO -->
       <section class="slide">
-        <div class="slide-tag">🎬 CASOS DE USO REALES</div>
+        <div class="slide-tag">🎬 CASOS DE USO DÍA A DÍA</div>
         <h2 class="slide-title">¿En Qué Escenarios Invocarlo?</h2>
         <p class="slide-subtitle">
-          Puedes llamarlo escribiendo palabras clave en el chat cuando te enfrentes a cualquier decisión de producto.
+          Puedes activarlo en cualquier momento del chat mencionando palabras clave sencillas en tu conversación.
         </p>
 
         <div class="grid-4">
           <div class="card">
-            <div style="font-size: 0.75rem; color: var(--primary-light); font-weight: 700; margin-bottom: 0.4rem;">ESCENARIO 1</div>
-            <div class="card-title" style="font-size: 1.1rem;">Diagnóstico de Caída</div>
-            <div class="card-desc"><em>"El 65% de los novatos en Colombia abandonan en el onboarding de billetera. ¿Qué pasa?"</em></div>
+            <div style="font-size: 0.75rem; color: var(--color-master); font-weight: 800; font-family: var(--font-heading); margin-bottom: 0.4rem;">ESCENARIO 1</div>
+            <div class="card-title" style="font-size: 1.1rem;">Diagnóstico de Caídas</div>
+            <div class="card-desc"><em>"La conversión cayó en el registro de billetera bancaria. ¿Por qué ocurre y cómo lo analizamos?"</em></div>
           </div>
 
           <div class="card">
-            <div style="font-size: 0.75rem; color: var(--secondary); font-weight: 700; margin-bottom: 0.4rem;">ESCENARIO 2</div>
+            <div style="font-size: 0.75rem; color: var(--color-experto); font-weight: 800; font-family: var(--font-heading); margin-bottom: 0.4rem;">ESCENARIO 2</div>
             <div class="card-title" style="font-size: 1.1rem;">Priorización de Backlog</div>
-            <div class="card-desc"><em>"Tenemos 8 solicitudes de features de soporte. ¿Cómo las clasificamos en RUF y Boulders/Pebbles?"</em></div>
+            <div class="card-desc"><em>"Tengo 6 peticiones de soporte. Ayúdame a ordenar cuáles son fallas de usabilidad vs nuevas funciones."</em></div>
           </div>
 
           <div class="card">
-            <div style="font-size: 0.75rem; color: var(--accent); font-weight: 700; margin-bottom: 0.4rem;">ESCENARIO 3</div>
-            <div class="card-title" style="font-size: 1.1rem;">Diseño de Experimento</div>
-            <div class="card-desc"><em>"¿Cuál es el experimento más barato (RAT) para validar la deseabilidad de Muestras 1-Clic?"</em></div>
+            <div style="font-size: 0.75rem; color: var(--color-gold-light); font-weight: 800; font-family: var(--font-heading); margin-bottom: 0.4rem;">ESCENARIO 3</div>
+            <div class="card-title" style="font-size: 1.1rem;">Experimento Barato</div>
+            <div class="card-desc"><em>"Queremos probar Muestras 1-Clic. ¿Cómo lo validamos rápido antes de programarlo?"</em></div>
           </div>
 
           <div class="card">
-            <div style="font-size: 0.75rem; color: var(--pink); font-weight: 700; margin-bottom: 0.4rem;">ESCENARIO 4</div>
-            <div class="card-title" style="font-size: 1.1rem;">Auditoría de UX / Carga</div>
-            <div class="card-desc"><em>"Revisa este prototipo en Figma. ¿Estamos saturando al usuario con Sistema 2?"</em></div>
+            <div style="font-size: 0.75rem; color: var(--color-sabiovip); font-weight: 800; font-family: var(--font-heading); margin-bottom: 0.4rem;">ESCENARIO 4</div>
+            <div class="card-title" style="font-size: 1.1rem;">Revisión de Diseños</div>
+            <div class="card-desc"><em>"Mira este flujo de 4 pasos. ¿Está generando sobrecarga mental al usuario en dispositivos móviles?"</em></div>
           </div>
         </div>
       </section>
 
       <!-- SLIDE 5: CÓMO SE USA (MINDSET INTERACTIVO B=MAP) -->
       <section class="slide">
-        <div class="slide-tag">🧮 INTERACTION SIMULATOR</div>
-        <h2 class="slide-title">¿Cómo Piensa el Agente? (Simulador B=MAP)</h2>
+        <div class="slide-tag">🧮 SIMULADOR CONDUCTUAL B=MAP</div>
+        <h2 class="slide-title">¿Cómo Diagnostica el Agente?</h2>
         <p class="slide-subtitle">
-          Prueba el widget conductual de BJ Fogg: si la <strong>Motivación</strong> o la <strong>Ability</strong> caen a cero, el comportamiento NO ocurre.
+          Utiliza la fórmula conductual de BJ Fogg: <strong>Comportamiento (B) = Motivación (M) × Facilidad (A) × Prompt (P)</strong>. Si cualquiera es cero, la acción no ocurre.
         </p>
 
         <div class="bmap-widget">
           <div class="slider-row">
-            <div class="slider-label">Motivación (M):</div>
+            <div class="slider-label">Motivación del Usuario (M):</div>
             <input type="range" min="0" max="10" value="3" class="slider-input" id="m-slider" oninput="updateBMAP()">
-            <span id="m-val" style="font-weight: 700; width: 30px;">3</span>
+            <span id="m-val" style="font-weight: 700; width: 35px; color: var(--color-gold-light);">3</span>
           </div>
 
           <div class="slider-row">
-            <div class="slider-label">Ability / Facilidad (A):</div>
+            <div class="slider-label">Facilidad / Menos Fricción (A):</div>
             <input type="range" min="0" max="10" value="2" class="slider-input" id="a-slider" oninput="updateBMAP()">
-            <span id="a-val" style="font-weight: 700; width: 30px;">2</span>
+            <span id="a-val" style="font-weight: 700; width: 35px; color: var(--color-gold-light);">2</span>
           </div>
 
           <div class="slider-row">
-            <div class="slider-label">Prompt Oportuno (P):</div>
+            <div class="slider-label">Prompt / Recordatorio Oportuno (P):</div>
             <input type="range" min="0" max="1" value="1" class="slider-input" id="p-slider" oninput="updateBMAP()">
-            <span id="p-val" style="font-weight: 700; width: 30px;">SI</span>
+            <span id="p-val" style="font-weight: 700; width: 35px; color: var(--color-gold-light);">SI</span>
           </div>
 
           <div class="result-box" id="bmap-result">
-            ⚠️ COMPORTAMIENTO BLOQUEADO (Ability demasiado baja / Alta Fricción)
+            ⚠️ COMPORTAMIENTO BLOQUEADO (Facilidad muy baja / Mucha Fricción)
           </div>
         </div>
       </section>
 
       <!-- SLIDE 6: DEMO PLAYGROUND EN VIVO -->
       <section class="slide">
-        <div class="slide-tag">💬 CHAT PLAYGROUND</div>
-        <h2 class="slide-title">Probador de Prompts en Vivo</h2>
+        <div class="slide-tag">💬 PROBADOR INTERACTIVO DE PROMPTS</div>
+        <h2 class="slide-title">Ejemplo de Respuestas del Agente</h2>
         <p class="slide-subtitle">
-          Haz clic en uno de los prompts de prueba a la izquierda para ver cómo responde el Agente de Discovery.
+          Selecciona cualquiera de las situaciones a la izquierda para observar la postura clara y colaborativa del agente.
         </p>
 
         <div class="simulator-container">
           <div class="sim-sidebar">
-            <div style="font-size: 0.8rem; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Prompts de Prueba:</div>
+            <div style="font-size: 0.8rem; font-weight: 800; color: var(--color-master); text-transform: uppercase; font-family: var(--font-heading);">Consultas de Ejemplo:</div>
             
             <button class="sim-prompt-btn active" onclick="loadSimResponse(0)">
-              <strong>1. Desafío a la Premisa</strong><br>
-              <span style="font-size: 0.75rem; color: var(--text-muted);">"Rediseñemos la UI de la billetera y hagamos A/B test"</span>
+              <strong>1. Retar Premisa de UI</strong><br>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">"Rediseñemos la UI de billetera y hagamos A/B test"</span>
             </button>
 
             <button class="sim-prompt-btn" onclick="loadSimResponse(1)">
-              <strong>2. Matriz RICE con Evidencia</strong><br>
-              <span style="font-size: 0.75rem; color: var(--text-muted);">"Evalúa la idea de Notificaciones por WhatsApp"</span>
+              <strong>2. Priorización de Ideas</strong><br>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">"Evalúa la función de Notificaciones por WhatsApp"</span>
             </button>
 
             <button class="sim-prompt-btn" onclick="loadSimResponse(2)">
-              <strong>3. Límite de Handoff (P9)</strong><br>
-              <span style="font-size: 0.75rem; color: var(--text-muted);">"Redacta las User Stories en Gherkin para Jira"</span>
+              <strong>3. Límite de Handoff a Delivery</strong><br>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">"Escribe las historias de usuario para Jira"</span>
             </button>
           </div>
 
@@ -713,33 +766,33 @@
         </div>
       </section>
 
-      <!-- SLIDE 7: CHEAT SHEET & PRÓXIMOS PASOS -->
+      <!-- SLIDE 7: CHEAT SHEET & PASOS SIGUIENTES -->
       <section class="slide">
-        <div class="slide-tag">🏁 EMPIEZA HOY MISMO</div>
-        <h2 class="slide-title">Cheat Sheet de Prompts para el Equipo</h2>
+        <div class="slide-tag">👑 LISTO PARA USAR EN TU DÍA A DÍA</div>
+        <h2 class="slide-title">Frases para Iniciar en Tu Chat</h2>
         <p class="slide-subtitle">
-          Copia cualquiera de estos disparadores en tu chat con el agente en Claude Web para iniciar tu primera sesión.
+          Puedes copiar estas preguntas en tu chat de Claude Web para comenzar a trabajar junto al Agente de Discovery.
         </p>
 
         <div class="grid-2">
           <div class="card">
-            <div class="card-title">💡 Para Desmantelar Soluciones Apresuradas</div>
-            <code>"El equipo quiere construir [Feature X]. Ayúdame a subir en el OST hasta la oportunidad y el outcome conductual."</code>
+            <div class="card-title">💡 Para Analizar Una Idea Apresurada</div>
+            <code>"El equipo quiere construir [Feature X]. Ayúdame a revisar la necesidad de fondo antes de diseñar."</code>
           </div>
 
           <div class="card">
-            <div class="card-title">🔍 Para Diagnóstico B=MAP de Conversión</div>
-            <code>"Nuestra métrica [Métrica] cayó un [X]%. Diagnostica si es Motivación, Ability (Fricción) o Prompt."</code>
+            <div class="card-title">🔍 Para Diagnosticar Una Caída en Métricas</div>
+            <code>"La conversión en [Módulo] cayó un [X]%. Ayúdame a diagnosticar si es Motivación, Fricción o el Momento."</code>
           </div>
 
           <div class="card">
-            <div class="card-title">🧪 Para Experimentos Baratos (RAT)</div>
-            <code>"Para la iniciativa [Nombre], identifica el supuesto más riesgoso y diseña el test más barato sin escribir código."</code>
+            <div class="card-title">🧪 Para Diseñar Un Experimento Rápido</div>
+            <code>"Para la propuesta [Nombre], ¿cuál es el supuesto más riesgoso y la prueba más barata de hacer de $0 costo?"</code>
           </div>
 
           <div class="card card-highlight">
-            <div class="card-title">📌 Recordatorio de Guardarraíl</div>
-            <div class="card-desc">El agente **propone y el humano confirma**. El Pre-Flight Package final pasa luego al **Agente de Delivery** para las historias de Jira.</div>
+            <div class="card-title">📌 El Humano Siempre Decide</div>
+            <div class="card-desc">El agente **propone y el equipo humano confirma**. Nunca auto-commitea cambios en tu producto sin tu aprobación.</div>
           </div>
         </div>
       </section>
@@ -750,7 +803,7 @@
   <!-- Footer Navigation Controls -->
   <footer>
     <div style="font-size: 0.85rem; color: var(--text-muted);">
-      Usar flechas <kbd>←</kbd> <kbd>→</kbd> o botones para navegar
+      Usar flechas <kbd>←</kbd> <kbd>→</kbd> del teclado o los botones para avanzar
     </div>
 
     <div class="progress-bar-container">
@@ -824,19 +877,19 @@
       if (p === 0) {
         resultBox.style.background = 'rgba(239, 68, 68, 0.15)';
         resultBox.style.borderColor = '#ef4444';
-        resultBox.textContent = '❌ FALTÓ EL PROMPT (El usuario no sabe que debe actuar ahora)';
+        resultBox.textContent = '❌ FALTÓ EL PROMPT (El usuario no sabe que debe realizar la acción en este momento)';
       } else if (a < 4) {
-        resultBox.style.background = 'rgba(245, 158, 11, 0.15)';
-        resultBox.style.borderColor = '#f59e0b';
-        resultBox.textContent = '⚠️ ALTA FRICCIÓN (Diseña para el usuario agotado: simplifica o elimina el paso)';
+        resultBox.style.background = 'rgba(255, 133, 0, 0.15)';
+        resultBox.style.borderColor = 'var(--color-master)';
+        resultBox.textContent = '⚠️ ALTA FRICCIÓN (Diseña para el usuario agotado: simplifica o elimina el paso en lugar de intentar motivar)';
       } else if (score >= 25) {
         resultBox.style.background = 'rgba(16, 185, 129, 0.15)';
         resultBox.style.borderColor = '#10b981';
-        resultBox.textContent = '🎉 COMPORTAMIENTO EXITOSO (Suficiente Motivación + Fluidez + Prompt Oportuno)';
+        resultBox.textContent = '🎉 COMPORTAMIENTO FLUJO EXITOSO (Buena Facilidad + Motivación alineada + Prompt Oportuno)';
       } else {
-        resultBox.style.background = 'rgba(99, 102, 241, 0.15)';
-        resultBox.style.borderColor = '#6366f1';
-        resultBox.textContent = 'ℹ️ EN ZONA MEDIA: Aumenta la facilidad (Ability) antes de gastar en motivadores.';
+        resultBox.style.background = 'rgba(255, 210, 63, 0.15)';
+        resultBox.style.borderColor = 'var(--color-gold-light)';
+        resultBox.textContent = 'ℹ️ FRICCIÓN MODERADA: Aumenta la facilidad reduciendo pasos antes de invertir en motivadores.';
       }
     }
 
@@ -844,26 +897,26 @@
     const simResponses = [
       {
         user: "Rediseñemos la UI de la billetera y hagamos un A/B test.",
-        agent: `<strong>[P3 Anti-Premisa & P5 Segmento]</strong><br><br>
-        Detengamos el salto a la solución. Antes de diseñar o gastar semanas en un A/B test, analicemos el comportamiento:<br>
-        • <strong>Segmento:</strong> Sellers novatos orgánicos en Colombia (5.2% activación neta).<br>
-        • <strong>Pregunta clave:</strong> ¿El usuario abandona porque la UI es fea (fricción visual), o porque pedirle datos bancarios ANTES de su primera venta activa el Sistema 2 con aversión a la pérdida?<br><br>
-        <span class="sim-tag">DIAGNÓSTICO B=MAP</span> <em>Easiest beats loudest:</em> El antídoto no es cambiar colores, es <strong>diferir la fricción</strong> (Just-in-Time Setup).`
+        agent: `<strong>[Poder del Diagnóstico Conductual]</strong><br><br>
+        Revisemos la causa antes de comprometer desarrollo:<br>
+        • <strong>Población objetivo:</strong> Sellers novatos en Colombia (5.2% tasa de activación neta).<br>
+        • <strong>Análisis:</strong> ¿El usuario abandona porque la pantalla es difícil visualmente, o porque exigirle datos bancarios ANTES de su primera venta activa desconfianza financiera?<br><br>
+        <span class="sim-tag">RECOMENDACIÓN</span> <em>Easiest beats loudest:</em> El antídoto no es cambiar colores de botones, es <strong>diferir el paso de billetera</strong> para solicitarlo únicamente cuando el seller tenga su primer pago por retirar.`
       },
       {
         user: "Evalúa la idea de Notificaciones por WhatsApp.",
-        agent: `<strong>[RICE Scoring & Evidencia Convergente]</strong><br><br>
-        • <strong>Reach:</strong> 14.262 DAUs (Sellers Activos).<br>
-        • <strong>Impact:</strong> Alto (Reducción de TTV Bruto de 7.4d a &lt;4.0d).<br>
-        • <strong>Confidence:</strong> 85% (Respaldado por 3 fuentes convergentes: tickets de PQs, datos de Userpilot y feedback de KAM Angela Parrado).<br>
-        • <strong>Clasificación RUF:</strong> Usability (Prioridad #2 en la pirámide).`
+        agent: `<strong>[Matriz RUF & Priorización de Evidencia]</strong><br><br>
+        • <strong>Alcance (Reach):</strong> ~14.200 usuarios activos diarios (DAUs).<br>
+        • <strong>Impacto:</strong> Alto en reducir los días a la primera orden (TTV Bruto).<br>
+        • <strong>Evidencia:</strong> Respaldada por tickets en soporte de PQs y entrevistas comerciales.<br>
+        • <strong>Clasificación RUF:</strong> Usabilidad (Facilitar la vida al seller sin sacarlo de su flujo).`
       },
       {
-        user: "Redacta las User Stories en Gherkin para Jira.",
-        agent: `<strong>[P9 Pre-Flight Handoff Junction]</strong><br><br>
-        El Agente de Discovery llega hasta la validación del problema, la formulación del OST, la estructura del RAT y la emisión del Intervention Brief.<br><br>
-        La creación de Épicas, User Stories en sintaxis Gherkin y Definition of Done para Jira es responsabilidad exclusiva del <strong>Agente de Delivery</strong> (<code>dropi_methodology.md</code>).<br>
-        ¡El Pre-Flight Package está listo para ser entregado!`
+        user: "Redacta las historias de usuario en Gherkin para Jira.",
+        agent: `<strong>[Punto de Traspaso a Delivery]</strong><br><br>
+        El Agente de Discovery se encarga de explorar el problema, estructurar el árbol de oportunidades y validar las hipótesis conductuales.<br><br>
+        Una vez cerrado el paquete conceptual, la redacción de Épicas e Historias de Usuario con sintaxis Gherkin (Given/When/Then) para los desarrolladores le corresponde al <strong>Agente de Delivery</strong>.<br>
+        ¡El documento de descubrimiento está completo y listo para transferir!`
       }
     ];
 
@@ -878,11 +931,11 @@
 
       chatBox.innerHTML = `
         <div class="sim-chat-bubble">
-          <strong style="color: var(--primary-light);">PM / Designer:</strong><br>
+          <strong style="color: var(--color-gold-light);">PM / Designer:</strong><br>
           "${data.user}"
         </div>
         <div class="sim-chat-bubble agent-response">
-          <strong style="color: #34d399;">🧠 Agente de Discovery:</strong><br><br>
+          <strong style="color: var(--color-master);">🧠 Agente de Discovery:</strong><br><br>
           ${data.agent}
         </div>
       `;
