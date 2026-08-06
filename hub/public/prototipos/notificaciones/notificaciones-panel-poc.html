@@ -248,12 +248,6 @@
   }
   .mark-all-btn:hover { text-decoration: underline; }
   .mark-all-btn.hidden { display: none; }
-  .delete-all-btn {
-    background: none; border: none; color: var(--text-muted);
-    font-size: 15px; cursor: pointer; padding: 2px; line-height: 1;
-  }
-  .delete-all-btn:hover { color: var(--red); }
-  .delete-all-btn.hidden { display: none; }
   .notif-tabs { display: flex; gap: 6px; flex-wrap: wrap; row-gap: 6px; }
   .notif-tab {
     background: var(--bg-light); border: 1px solid transparent;
@@ -267,6 +261,26 @@
   .notif-list::-webkit-scrollbar { width: 5px; }
   .notif-list::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 3px; }
 
+  .notif-section-label {
+    padding: 10px 18px 6px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    background: #fff;
+    position: sticky;
+    top: 0;
+  }
+
+  .notif-footer-msg {
+    padding: 14px 18px;
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    border-top: 1px solid #f1f4f8;
+  }
+
   .notif-item {
     display: flex;
     gap: 12px;
@@ -279,7 +293,6 @@
   .notif-item:hover { background: #fafbfc; }
   .notif-item.unread { background: var(--orange-muted); }
   .notif-item.unread:hover { background: #fef3e6; }
-  .notif-item.hidden-by-filter { display: none; }
 
   .notif-icon {
     width: 38px; height: 38px; border-radius: 50%;
@@ -292,12 +305,6 @@
   .notif-copy b { font-weight: 700; }
   .notif-meta-row { display: flex; align-items: center; justify-content: space-between; margin-top: 6px; }
   .notif-time { font-size: 10.5px; color: var(--text-muted); white-space: nowrap; }
-  .notif-delete {
-    background: none; border: none; color: var(--text-muted);
-    font-size: 13px; cursor: pointer; padding: 2px; line-height: 1;
-    opacity: 0.6;
-  }
-  .notif-delete:hover { opacity: 1; color: var(--red); }
   .unread-dot {
     width: 8px; height: 8px; border-radius: 50%;
     background: var(--orange-primary);
@@ -520,12 +527,12 @@
               <div class="notif-tabs" id="notifTabs"></div>
               <div class="notif-head-actions">
                 <button class="mark-all-btn" id="markAllBtn" onclick="event.stopPropagation(); markAllRead()">Marcar todas como leídas</button>
-                <button class="delete-all-btn" id="deleteAllBtn" onclick="event.stopPropagation(); clearAllNotifs()" title="Eliminar todas las notificaciones"><i class="ti ti-trash"></i></button>
               </div>
             </div>
           </div>
           <div class="notif-list" id="notifList"></div>
-          <div class="notif-empty" id="notifEmpty">No hay notificaciones en esta vista.</div>
+          <div class="notif-empty" id="notifEmpty">No tienes notificaciones para leer.</div>
+          <div class="notif-footer-msg" id="notifFooterMsg" style="display:none;">Estas son todas tus notificaciones de los últimos 7 días.</div>
         </div>
       </div>
 
@@ -600,118 +607,91 @@
 
 <script>
 /* ─────────────────────────────────────────────────────────────
-   Data: 25 tipos de notificación (fuente: PDF "Módulo de
-   Notificaciones - Dropshippers"), reagrupados en 4 categorías
-   de negocio en vez de por módulo técnico:
+   Data: notificaciones AGRUPADAS por tipo + día (no una por cada
+   evento individual, para no saturar al usuario). Cada entrada ya
+   trae el conteo aplicado en el copy, ej. "Tienes 3 órdenes con
+   novedades...". El día (Hoy/Ayer/Más antiguas) ya lo indica el
+   encabezado de sección, no hace falta repetirlo en el texto.
+   Reagrupadas en 4 categorías de negocio:
      General   → onboarding, catálogo, negociaciones, caza
                  productos, transportadora, reportes, novedades
                  de plataforma.
      Pedidos   → órdenes, novedades logísticas, garantías.
      Financiero→ movimientos y retiros de Wallet.
      CAS       → respuestas del chat de soporte.
+   `daysAgo` ubica la notificación en su sección (Hoy / Ayer / Más
+   antiguas) y aplica la caducidad: solo se muestran los últimos
+   7 días (daysAgo 0-6).
    `screenshot`/`pantalla` = captura real de app.dropi.co usada
    para previsualizar a dónde lleva cada notificación.
 ────────────────────────────────────────────────────────────── */
 const NOTIFS = [
-  { categoria: "General", tipo: "Bienvenida a Dropi", icon: "ti-confetti", color: "#F77F00",
-    copy: "¡Bienvenido a Dropi, <b>Andrés</b>! Estás a un paso de tu primera venta. Empecemos con el recorrido guiado.",
-    pantalla: "Inicio", navKey: "Inicio", homeHighlight: ".hola", time: "hace 2 min", unread: true },
-
-  { categoria: "Pedidos", tipo: "Orden pendiente de confirmación", icon: "ti-package", color: "#2563eb",
+  // ── Hoy ──
+  { categoria: "Pedidos", tipo: "Órdenes por confirmar", icon: "ti-package", color: "#2563eb",
     copy: "Tienes <b>3 órdenes</b> pendientes de confirmación. Confírmalas para no perder la venta.",
-    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "hace 9 min", unread: true },
+    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "hace 9 min", daysAgo: 0, unread: true },
 
-  { categoria: "Pedidos", tipo: "Orden con novedad", icon: "ti-alert-triangle", color: "#e11d48",
-    copy: "La orden <b>#98211</b> tiene una novedad pendiente de resolver. Actúa pronto para no perder el envío.",
-    pantalla: "Novedades", navKey: "Novedades", screenshot: "capturas/dashboard_novelties.png", time: "hace 25 min", unread: true },
+  { categoria: "Pedidos", tipo: "Novedades", icon: "ti-alert-triangle", color: "#e11d48",
+    copy: "Tienes <b>2 órdenes con novedades</b> pendientes de resolver. Actúa pronto para no perder el envío.",
+    pantalla: "Novedades", navKey: "Novedades", screenshot: "capturas/dashboard_novelties.png", time: "hace 25 min", daysAgo: 0, unread: true },
 
-  { categoria: "Financiero", tipo: "Nuevo ingreso", icon: "ti-wallet", color: "#10b981",
-    copy: "Recibiste un ingreso de <b>$ 29.200</b> en tu Wallet por entrega. Revisa el detalle.",
-    pantalla: "Historial de Cartera", navKey: "Historial de Cartera", screenshot: "capturas/dashboard_historywallet.png", time: "hace 40 min", unread: true },
+  { categoria: "Financiero", tipo: "Ingresos nuevos", icon: "ti-wallet", color: "#10b981",
+    copy: "Tienes <b>4 ingresos nuevos</b> en tu Wallet. Revísalos.",
+    pantalla: "Historial de Cartera", navKey: "Historial de Cartera", screenshot: "capturas/dashboard_historywallet.png", time: "hace 40 min", daysAgo: 0, unread: true },
 
-  { categoria: "Pedidos", tipo: "Respuesta a garantía", icon: "ti-shield-check", color: "#10b981",
-    copy: "<b>JP Distribuciones</b> aprobó la garantía de la orden #98177. Revísala.",
-    pantalla: "Mis Garantías", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties.png", time: "hace 1 h", unread: true },
+  { categoria: "Pedidos", tipo: "Garantía aprobada", icon: "ti-shield-check", color: "#10b981",
+    copy: "<b>JP Distribuciones</b> aprobó la garantía de tu orden #98177. Revísala.",
+    pantalla: "Mis Garantías", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties.png", time: "hace 1 h", daysAgo: 0, unread: true },
 
-  { categoria: "General", tipo: "Negociación requiere decisión", icon: "ti-handshake", color: "#7c3aed",
+  { categoria: "General", tipo: "Negociación pendiente", icon: "ti-handshake", color: "#7c3aed",
     copy: "Tienes una negociación con <b>Katz Supply</b> esperando tu respuesta. Revísala antes de que expire.",
-    pantalla: "Productos → Negociaciones", navKey: "Negociaciones", screenshot: "capturas/dashboard_negotiations.png", time: "hace 1 h", unread: true },
+    pantalla: "Productos → Negociaciones", navKey: "Negociaciones", screenshot: "capturas/dashboard_negotiations.png", time: "hace 1 h", daysAgo: 0, unread: true },
 
   { categoria: "CAS", tipo: "Respuesta", icon: "ti-message-circle", color: "#2563eb",
     copy: "<b>Coordinadora</b> respondió tu mensaje en CAS. Continúa la conversación aquí.",
-    pantalla: "CAS · Bandeja de tickets", navKey: "CAS", screenshot: "capturas/dashboard_cas_tickets.png", time: "hace 2 h", unread: true },
+    pantalla: "CAS · Bandeja de tickets", navKey: "CAS", screenshot: "capturas/dashboard_cas_tickets.png", time: "hace 2 h", daysAgo: 0, unread: true },
 
-  { categoria: "General", tipo: "Respuesta a búsqueda (Caza Productos)", icon: "ti-target-arrow", color: "#7c3aed",
-    copy: "<b>Black Swan</b> respondió a tu búsqueda de \"audífonos inalámbricos\". Revisa su propuesta.",
-    pantalla: "Productos → Caza productos", navKey: "Caza productos", screenshot: "capturas/dashboard_hunter-product.png", time: "hace 3 h", unread: true },
+  { categoria: "General", tipo: "Bienvenida a Dropi", icon: "ti-confetti", color: "#F77F00",
+    copy: "¡Bienvenido a Dropi, <b>Andrés</b>! Estás a un paso de tu primera venta. Empecemos con el recorrido guiado.",
+    pantalla: "Inicio", navKey: "Inicio", homeHighlight: ".hola", time: "hace 5 h", daysAgo: 0, unread: true },
 
-  { categoria: "General", tipo: "Comunicado importante de transportadora", icon: "ti-truck", color: "#2563eb",
-    copy: "<b>Envía</b> publicó un comunicado importante que puede afectar tus envíos. Léelo aquí.",
-    pantalla: "Configuración → Transportadoras (aprox.)", navKey: "Configuraciones", screenshot: "capturas/dashboard_settings_distribution-companies.png", time: "hace 5 h", unread: true },
-
+  // ── Ayer ──
   { categoria: "General", tipo: "Validación de identidad", icon: "ti-shield-lock", color: "#e11d48",
     copy: "Tu cuenta necesita validación de identidad para seguir operando sin restricciones. Complétala aquí.",
-    pantalla: "Configuración → Datos Personales y Facturación", navKey: "Configuraciones", screenshot: "capturas/dashboard_settings_personal-data.png", time: "ayer", unread: false },
+    pantalla: "Configuración → Datos Personales y Facturación", navKey: "Configuraciones", screenshot: "capturas/dashboard_settings_personal-data.png", time: "Ayer", daysAgo: 1, unread: false },
 
-  { categoria: "Pedidos", tipo: "Orden anulada", icon: "ti-package", color: "#e11d48",
-    copy: "La orden <b>#97965</b> fue anulada. Revisa el motivo en el detalle de la orden.",
-    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "ayer", unread: false },
+  { categoria: "Pedidos", tipo: "Alertas en tus órdenes", icon: "ti-package", color: "#e11d48",
+    copy: "Tienes <b>3 órdenes con alertas</b>: 1 anulada, 1 con demora en gestión y 1 posible duplicado. Revísalas.",
+    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "Ayer", daysAgo: 1, unread: false },
 
-  { categoria: "Pedidos", tipo: "Orden lleva más tiempo del esperado", icon: "ti-package", color: "#e11d48",
-    copy: "La orden <b>#97910</b> lleva más tiempo del esperado en gestión. Te recomendamos hacer seguimiento.",
-    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "ayer", unread: false },
+  // ── Más antiguas (hasta 6 días, caducidad a los 7) ──
+  { categoria: "Pedidos", tipo: "Actualizaciones de garantías", icon: "ti-shield-check", color: "#2563eb",
+    copy: "Tienes <b>3 actualizaciones</b> en garantías: guía de devolución disponible, producto recibido por el proveedor y una recolección fallida.",
+    pantalla: "Mis Garantías", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties.png", time: "hace 2 días", daysAgo: 2, unread: false },
 
-  { categoria: "Pedidos", tipo: "Órdenes duplicadas", icon: "ti-package", color: "#e11d48",
-    copy: "Detectamos una posible orden duplicada de <b>#97890</b>. Confirma con tu cliente antes de despachar ambas.",
-    pantalla: "Mis Pedidos", navKey: "Mis Pedidos", screenshot: "capturas/dashboard_orders.png", time: "ayer", unread: false },
-
-  { categoria: "Pedidos", tipo: "Guía de devolución disponible", icon: "ti-shield-check", color: "#2563eb",
-    copy: "Ya está disponible la guía de devolución de la orden <b>#97812</b>. Compártela con tu cliente.",
-    pantalla: "Mis Garantías", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties.png", time: "hace 2 días", unread: false },
-
-  { categoria: "Pedidos", tipo: "Proveedor recibió el producto", icon: "ti-shield-check", color: "#2563eb",
-    copy: "<b>Oh Homie</b> recibió el producto devuelto de la orden #97701. Está en proceso de diagnóstico.",
-    pantalla: "Mis Garantías", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties.png", time: "hace 2 días", unread: false },
-
-  { categoria: "Pedidos", tipo: "Estado de recolección", icon: "ti-shield-check", color: "#e11d48",
-    copy: "La recolección del producto de la orden <b>#97701</b> falló. Revisa el detalle.",
-    pantalla: "Mis Garantías → Recolección", navKey: "Mis Garantias", screenshot: "capturas/dashboard_warranties-recollection.png", time: "hace 2 días", unread: false },
-
-  { categoria: "General", tipo: "Negociación fue cancelada", icon: "ti-handshake", color: "#e11d48",
+  { categoria: "General", tipo: "Negociación cancelada", icon: "ti-handshake", color: "#e11d48",
     copy: "La negociación con <b>Curren</b> fue cancelada. Consulta el motivo en el módulo de negociaciones.",
-    pantalla: "Productos → Negociaciones", navKey: "Negociaciones", screenshot: "capturas/dashboard_negotiations.png", time: "hace 3 días", unread: false },
+    pantalla: "Productos → Negociaciones", navKey: "Negociaciones", screenshot: "capturas/dashboard_negotiations.png", time: "hace 3 días", daysAgo: 3, unread: false },
 
-  { categoria: "General", tipo: "Publicación de Caza Productos por finalizar", icon: "ti-target-arrow", color: "#f59e0b",
-    copy: "Tu búsqueda de \"funda impermeable\" en Caza Productos vence pronto. Renuévala si aún la necesitas.",
-    pantalla: "Productos → Caza productos", navKey: "Caza productos", screenshot: "capturas/dashboard_hunter-product.png", time: "hace 3 días", unread: false },
-
-  { categoria: "General", tipo: "Publicación de Caza Productos sin respuestas", icon: "ti-target-arrow", color: "#718096",
-    copy: "Tu búsqueda de \"soporte para celular\" venció sin respuestas. Prueba ajustando la descripción o el precio esperado.",
-    pantalla: "Productos → Caza productos", navKey: "Caza productos", screenshot: "capturas/dashboard_hunter-product.png", time: "hace 4 días", unread: false },
+  { categoria: "General", tipo: "Caza Productos", icon: "ti-target-arrow", color: "#f59e0b",
+    copy: "Tienes <b>2 búsquedas</b> en Caza Productos que necesitan tu atención: una vence pronto y otra venció sin respuestas.",
+    pantalla: "Productos → Caza productos", navKey: "Caza productos", screenshot: "capturas/dashboard_hunter-product.png", time: "hace 3 días", daysAgo: 3, unread: false },
 
   { categoria: "General", tipo: "Nuevos proveedores", icon: "ti-building-store", color: "#2563eb",
     copy: "Esta semana se sumaron <b>6 proveedores</b> nuevos a Dropi. Dale un vistazo a su catálogo.",
-    pantalla: "Productos → Proveedores", navKey: "Proveedores", screenshot: "capturas/dashboard_providers.png", time: "hace 4 días", unread: false },
+    pantalla: "Productos → Proveedores", navKey: "Proveedores", screenshot: "capturas/dashboard_providers.png", time: "hace 4 días", daysAgo: 4, unread: false },
 
-  { categoria: "General", tipo: "Exportación de data lista", icon: "ti-file-download", color: "#718096",
+  { categoria: "General", tipo: "Exportación lista", icon: "ti-file-download", color: "#718096",
     copy: "Tu reporte \"Ventas de junio\" ya está listo. Descárgalo desde el módulo de descargas.",
-    pantalla: "Reportes → Descargas", navKey: "Reportes", screenshot: "capturas/dashboard_reports_downloads.png", time: "hace 5 días", unread: false },
+    pantalla: "Reportes → Descargas", navKey: "Reportes", screenshot: "capturas/dashboard_reports_downloads.png", time: "hace 5 días", daysAgo: 5, unread: false },
 
-  { categoria: "Financiero", tipo: "Débito de dinero", icon: "ti-wallet", color: "#e11d48",
-    copy: "Se descontaron <b>$ 4.500</b> de tu Wallet por ajuste. Revisa el detalle del movimiento.",
-    pantalla: "Historial de Cartera", navKey: "Historial de Cartera", screenshot: "capturas/dashboard_historywallet.png", time: "hace 5 días", unread: false },
+  { categoria: "Financiero", tipo: "Movimientos de Wallet", icon: "ti-wallet", color: "#e11d48",
+    copy: "Tienes <b>3 movimientos</b> en tu Wallet esta semana: 1 débito de $4.500, 1 retiro procesado de $150.000 y 1 retiro rechazado de $80.000.",
+    pantalla: "Historial de Cartera", navKey: "Historial de Cartera", screenshot: "capturas/dashboard_historywallet.png", time: "hace 6 días", daysAgo: 6, unread: false },
 
-  { categoria: "Financiero", tipo: "Retiro procesado", icon: "ti-wallet", color: "#10b981",
-    copy: "Tu retiro de <b>$ 150.000</b> fue procesado y está en camino a tu cuenta bancaria.",
-    pantalla: "Configuración → Retiros", navKey: "Configuraciones", screenshot: "capturas/dashboard_settings_withdrawals.png", time: "hace 6 días", unread: false },
-
-  { categoria: "Financiero", tipo: "Retiro rechazado", icon: "ti-wallet", color: "#e11d48",
-    copy: "Tu retiro de <b>$ 80.000</b> no se pudo procesar: datos bancarios inválidos. Corrígelo para volver a intentarlo.",
-    pantalla: "Configuración → Retiros", navKey: "Configuraciones", screenshot: "capturas/dashboard_settings_withdrawals.png", time: "hace 6 días", unread: false },
-
-  { categoria: "General", tipo: "Nueva funcionalidad en Dropi", icon: "ti-speakerphone", color: "#F77F00",
+  { categoria: "General", tipo: "Nueva funcionalidad", icon: "ti-speakerphone", color: "#F77F00",
     copy: "¡Novedad en Dropi! Ya puedes usar <b>ROAX Testeo de Campañas</b>. Descúbrela.",
-    pantalla: "Inicio · Nueva actualización", navKey: "Inicio", homeHighlight: "#homeUpdateCard", time: "hace 1 semana", unread: false },
+    pantalla: "Inicio · Nueva actualización", navKey: "Inicio", homeHighlight: "#homeUpdateCard", time: "hace 6 días", daysAgo: 6, unread: false },
 ];
 
 let currentFilter = "all";
@@ -737,21 +717,43 @@ function renderTabs() {
   `).join("");
 }
 
+// Caducidad: solo se muestran notificaciones de los últimos 7 días (daysAgo 0-6)
+const NOTIF_EXPIRY_DAYS = 6;
+
+function dayBucketLabel(n) {
+  if (n.daysAgo === 0) return "Hoy";
+  if (n.daysAgo === 1) return "Ayer";
+  return "Más antiguas";
+}
+
 function renderNotifs() {
   renderTabs();
 
   const list = document.getElementById("notifList");
   list.innerHTML = "";
   let visibleCount = 0;
+  let lastBucket = null;
 
   NOTIFS.forEach((n, idx) => {
+    if (n.daysAgo > NOTIF_EXPIRY_DAYS) return; // caducó: ya no se muestra
+
     let visible = true;
     if (currentFilter === "unread") visible = n.unread;
     else if (currentFilter !== "all") visible = n.categoria === currentFilter;
-    if (visible) visibleCount++;
+    if (!visible) return;
+    visibleCount++;
+
+    const bucket = dayBucketLabel(n);
+    if (bucket !== lastBucket) {
+      const label = document.createElement("div");
+      label.className = "notif-section-label";
+      label.textContent = bucket;
+      list.appendChild(label);
+      lastBucket = bucket;
+    }
 
     const el = document.createElement("div");
-    el.className = "notif-item" + (n.unread ? " unread" : "") + (visible ? "" : " hidden-by-filter");
+    el.className = "notif-item" + (n.unread ? " unread" : "");
     el.onclick = () => openNotif(idx);
     el.innerHTML = `
       ${n.unread ? '<div class="unread-dot"></div>' : ''}
@@ -760,7 +762,6 @@ function renderNotifs() {
         <div class="notif-copy">${n.copy}</div>
         <div class="notif-meta-row">
           <span class="notif-time">${n.time}</span>
-          <button class="notif-delete" title="Eliminar notificación" onclick="event.stopPropagation(); deleteNotif(${idx})"><i class="ti ti-trash"></i></button>
         </div>
       </div>
     `;
@@ -768,24 +769,14 @@ function renderNotifs() {
   });
 
   document.getElementById("notifEmpty").classList.toggle("show", visibleCount === 0);
+  document.getElementById("notifFooterMsg").style.display = visibleCount > 0 ? "block" : "none";
   updateHeadActions();
   updateBadge();
-}
-
-function deleteNotif(idx) {
-  NOTIFS.splice(idx, 1);
-  renderNotifs();
-}
-
-function clearAllNotifs() {
-  NOTIFS.length = 0;
-  renderNotifs();
 }
 
 function updateHeadActions() {
   const unreadCount = NOTIFS.filter(n => n.unread).length;
   document.getElementById("markAllBtn").classList.toggle("hidden", unreadCount === 0);
-  document.getElementById("deleteAllBtn").classList.toggle("hidden", NOTIFS.length === 0);
 }
 
 function updateBadge() {
