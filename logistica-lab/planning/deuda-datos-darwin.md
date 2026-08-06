@@ -191,6 +191,36 @@ ninguna vista la consume. O se usa, o se quita del select.
 
 ---
 
+## ✅ 10. Recolecciones en el hub y en Indiana — DECIDIDO 6-ago: son separados
+
+Durante la auditoría se levantó como posible duplicación: el control de recolecciones vive en
+`hub/src/app/proyectos/logistica/recolecciones` y también en el repo `inidiana-map`, y las dos
+versiones ya habían divergido (987 líneas contra 1.271, y el naranja viejo `#F49A3D` que
+Indiana ya corrigió).
+
+**Decisión de Juan: son productos separados, no una duplicación a resolver.** Indiana es el
+producto propio —así lo declara su README, "nace como módulo dentro de Darwin y se separa
+aquí"— y la vista del hub se queda como lo que es: la del tablero de la célula.
+
+El tablero ya lo refleja: LOG-013 enlaza Indiana primero y la del hub aparece como
+*"Control de recolecciones (versión del hub)"*.
+
+---
+
+## 🟡 11. Los POC viven en Darwin y los experimentos en el tablero
+
+`data.ts` modela 8 `experimentos` con estado (Idea · Diseñado · Corriendo · Validado ·
+Descartado) y su vínculo al proyecto. Darwin modela `type = 'POC'` con `estado_interno` y
+`vpv`. **Son las dos caras de lo mismo y nada las cruza.**
+
+La migración `048` registró en Darwin los tres que tienen artefacto real, pero eso no une los
+dos sistemas: si mañana un experimento pasa de Diseñado a Corriendo en el tablero, su POC en
+Darwin no se entera.
+
+Decidir cuál manda antes de que diverjan. Mismo patrón que ya pasó con recolecciones.
+
+---
+
 ## Cómo reproducir estos números
 
 Las consultas fueron `GET` a la API REST de Supabase con la service key del `.env` del repo,
