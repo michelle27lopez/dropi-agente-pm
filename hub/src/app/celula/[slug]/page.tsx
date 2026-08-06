@@ -1075,6 +1075,28 @@ export default function CelulaHomePage() {
           </div>
         )}
 
+        {/* El resto de células (Suppliers, Brands, Growth, Growth Marketing,
+            Product Designers, Experience...) no tiene componente propio de
+            updates — usan el genérico de celula_updates + historial del
+            Weekly PM, igual que antes de que 9d911bd se lo llevara junto con
+            el de sellers al tocar este mismo archivo compartido. */}
+        {!isLogistica && !isBackoffice && (
+          <div style={{ marginBottom: 56 }}>
+            <Section
+              title="Updates"
+              items={updates}
+              ctaLabel="Ver →"
+              onItemClick={(item) => {
+                const u = updatesById.get(item.key);
+                if (u) setOpenUpdate(u);
+              }}
+            />
+            {updates.length === 0 && (
+              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
+            )}
+          </div>
+        )}
+
         {/* Filtro por etapa del viaje de la orden. Antes la etapa ERA la
             estructura de la página (un encabezado por cada una); ahora es un
             filtro que atraviesa las cuatro secciones de abajo. */}
