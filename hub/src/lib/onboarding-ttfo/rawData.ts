@@ -1,5 +1,6 @@
 import type { FilaCruda, FilaEncuesta, FilaEvento, FilaModalOTour, Segmento, SlotId } from "./tipos";
 import { detectarSlotPorNombre } from "./clasificarArchivo";
+import { repararMojibake } from "./texto";
 
 // Parser del export "Raw Data" de la automatización UserPilot → Google
 // Sheets ("Plantilla"). A diferencia de los CSV agregados (parseo.ts), acá
@@ -145,11 +146,11 @@ export function parsearRawDataUserPilot(filas: FilaCruda[], corteDesde: string =
       const respuestaVolumen = respuestas.find(r => /mes/i.test(r.question) && /(pedidos|ventas)/i.test(r.question));
       const candidato: FilaEncuesta = {
         userId,
-        nombre: data.user?.full_name ?? "",
+        nombre: repararMojibake(data.user?.full_name ?? ""),
         submittedAt: timestamp,
         signedUp,
         segmento: segmentoDeRespuesta(respuestaUso?.answer?.[0] ?? null),
-        ventasMesDeclaradas: respuestaVolumen?.answer?.[0] ?? null,
+        ventasMesDeclaradas: repararMojibake(respuestaVolumen?.answer?.[0] ?? null),
         email: data.user?.email ?? null,
       };
       encuestaPorUsuario.set(userId, combinarFilaEncuesta(encuestaPorUsuario.get(userId), candidato));

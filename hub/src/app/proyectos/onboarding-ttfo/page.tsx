@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { buscarDefinicion } from "@/lib/onboarding-ttfo/registroSlots";
+import { repararMojibake } from "@/lib/onboarding-ttfo/texto";
 import type { SlotId } from "@/lib/onboarding-ttfo/tipos";
 
 const card: React.CSSProperties = {
@@ -45,7 +46,16 @@ interface FilaAPI {
 interface AlertasAPI {
   flujoCompletoYOrden: { userId: number; segmento: string | null }[];
   ordenSinFlujo: { userId: number; segmento: string | null }[];
-  mayorCaidaPorPaso: { slot: string; poblacion: number; caidaAbsoluta: number; caidaRelativa: number }[];
+  mayorCaidaPorPaso: {
+    slot: string; poblacion: number; caidaAbsoluta: number; caidaRelativa: number;
+    marca: { poblacion: number; caidaAbsoluta: number; caidaRelativa: number };
+    proveedor: { poblacion: number; caidaAbsoluta: number; caidaRelativa: number };
+  }[];
+  videoAEncuesta: {
+    poblacionVideo: number; poblacionEncuesta: number; caidaAbsoluta: number; caidaRelativa: number;
+    marca: { poblacionVideo: number; poblacionEncuesta: number };
+    proveedor: { poblacionVideo: number; poblacionEncuesta: number };
+  };
   segmentoConMasCaida: {
     marca: { poblacion: number; avanzan: number; pct: number };
     proveedor: { poblacion: number; avanzan: number; pct: number };
@@ -103,7 +113,30 @@ const MADUREZ_DECLARADA: Record<string, { label: string; color: string; bg: stri
   "301 a 1.000 al mes": { label: "Consolidando / Pre-Escalando", color: "#F59E0B", bg: "#FFFBEB" },
   "Más de 1.000 al mes": { label: "Escalando", color: "#DC2626", bg: "#FEF2F2" },
 };
-function nivelMadurezDeclarado(valor: string | null): { label: string; color: string; bg: string } {
+const SEGMENTO_VACIO = { poblacion: 0, caidaAbsoluta: 0, caidaRelativa: 0 };
+
+/**
+ * Rellena campos que un `alertas` guardado con una versión anterior del
+ * código puede no tener (ej. `videoAEncuesta` y el desglose marca/proveedor
+ * de `mayorCaidaPorPaso`, agregados 05-ago-2026) — para que ver el tablero
+ * antes de la próxima carga no tumbe la página con un undefined.
+ */
+function normalizarAlertas(alertas: AlertasAPI | null): AlertasAPI | null {
+  if (!alertas) return alertas;
+  return {
+    ...alertas,
+    mayorCaidaPorPaso: (alertas.mayorCaidaPorPaso ?? []).map(p => ({
+      ...p, marca: p.marca ?? SEGMENTO_VACIO, proveedor: p.proveedor ?? SEGMENTO_VACIO,
+    })),
+    videoAEncuesta: alertas.videoAEncuesta ?? {
+      poblacionVideo: 0, poblacionEncuesta: 0, caidaAbsoluta: 0, caidaRelativa: 0,
+      marca: { poblacionVideo: 0, poblacionEncuesta: 0 }, proveedor: { poblacionVideo: 0, poblacionEncuesta: 0 },
+    },
+  };
+}
+
+function nivelMadurezDeclarado(valorCrudo: string | null): { label: string; color: string; bg: string } {
+  const valor = repararMojibake(valorCrudo);
   if (!valor || valor === "-") return { label: "No documentado", color: "#9CA3AF", bg: "#F3F4F6" };
   return MADUREZ_DECLARADA[valor] ?? { label: `No documentado (${valor})`, color: "#9CA3AF", bg: "#F3F4F6" };
 }
@@ -144,6 +177,7 @@ export default function OnboardingTTFOPage() {
   const [submittedAtDesde, setSubmittedAtDesde] = useState("");
   const [hayRespaldoHistorico, setHayRespaldoHistorico] = useState(false);
   const [hayRespaldoRawData, setHayRespaldoRawData] = useState(false);
+  const [funnelAbierto, setFunnelAbierto] = useState(false);
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -153,7 +187,7 @@ export default function OnboardingTTFOPage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Error cargando datos");
       setFilas(data.filas ?? []);
-      setAlertas(data.alertas ?? null);
+      setAlertas(normalizarAlertas(data.alertas ?? null));
       setComparacionOnboarding(data.comparacionOnboarding ?? null);
       setHayRespaldoHistorico(Boolean(data.hayRespaldoHistorico));
       setHayRespaldoRawData(Boolean(data.hayRespaldoRawData));
@@ -180,24 +214,85 @@ export default function OnboardingTTFOPage() {
     return { poblacion, activadas, exito, fracaso, observacion, gatillo, conVeredicto, consumioSinOrden, sinConsumoSinOrden, cuentasDePrueba };
   }, [filas]);
 
-  const filasVisibles = useMemo(() => {
-    let base = filtro === "todos" ? filas : filas.filter(r => r.estadoMeta7d === filtro);
-    if (filtroSegmento !== "todos") base = base.filter(r => r.segmento === filtroSegmento);
-    if (filtroMadurez !== "todos") {
-      base = base.filter(r => {
-        const label = nivelMadurezDeclarado(r.ventasMesDeclaradas).label;
-        return filtroMadurez === "No documentado" ? label.startsWith("No documentado") : label === filtroMadurez;
-      });
+  // Aplica los 4 filtros activos, pudiendo omitir uno — así el mismo cálculo
+  // sirve para la lista visible (no omite nada) y para los conteos "por
+  // faceta" de cada dropdown (omite la dimensión propia del dropdown, para
+  // que el número mostrado sea "cuántos quedan si elijo esta opción", no
+  // "cuántos hay ya filtrando por mí mismo").
+  type DimensionFiltro = "estado" | "segmento" | "madurez" | "fechas";
+  const pasaFiltros = useCallback((r: FilaAPI, omitir?: DimensionFiltro) => {
+    if (omitir !== "estado" && filtro !== "todos" && r.estadoMeta7d !== filtro) return false;
+    if (omitir !== "segmento" && filtroSegmento !== "todos" && r.segmento !== filtroSegmento) return false;
+    if (omitir !== "madurez" && filtroMadurez !== "todos") {
+      const label = nivelMadurezDeclarado(r.ventasMesDeclaradas).label;
+      const calza = filtroMadurez === "No documentado" ? label.startsWith("No documentado") : label === filtroMadurez;
+      if (!calza) return false;
     }
     // Mismas reglas de fecha para todos los orígenes (CSV histórico y Raw
     // Data quedan mezclados en la misma `encuesta` desde el empalme — no hay
     // un campo de "fuente" separado, así que estos filtros son la forma de
     // aislar visualmente lo que entró vía automatización: sus Signed
     // Up/Submitted At van a caer después del corte de empalme).
-    if (signedUpDesde) base = base.filter(r => r.signedUp >= signedUpDesde);
-    if (submittedAtDesde) base = base.filter(r => r.submittedAt >= submittedAtDesde);
-    return [...base].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt));
-  }, [filas, filtro, filtroSegmento, filtroMadurez, signedUpDesde, submittedAtDesde]);
+    if (omitir !== "fechas") {
+      if (signedUpDesde && r.signedUp < signedUpDesde) return false;
+      if (submittedAtDesde && r.submittedAt < submittedAtDesde) return false;
+    }
+    return true;
+  }, [filtro, filtroSegmento, filtroMadurez, signedUpDesde, submittedAtDesde]);
+
+  const filasNoPrueba = useMemo(() => filas.filter(r => !r.esPrueba), [filas]);
+
+  const filasVisibles = useMemo(() => {
+    return [...filasNoPrueba.filter(r => pasaFiltros(r))].sort((a, b) => a.submittedAt.localeCompare(b.submittedAt));
+  }, [filasNoPrueba, pasaFiltros]);
+
+  // Conteos por opción de cada filtro, calculados sobre las OTRAS 3
+  // dimensiones activas (sin contar la propia) — a pedido de Kate
+  // (05-ago-2026): "totalice la cantidad de usuarios por cada filtro que se
+  // aplique".
+  //
+  // El 100% de referencia para el % del header NO puede ser siempre el
+  // cohorte combinado — corrección de Kate (05-ago-2026): "castiga mucho a
+  // marcas si indicas que el 100% es de proveedores, cada uno debe manejar
+  // su 100%". Si el filtro de Segmento está en "Solo Marca"/"Solo
+  // Proveedor", el 100% es el total de ESE segmento (fijo, no se mueve con
+  // los demás filtros); si está en "todos", el 100% es el cohorte completo.
+  const poblacionTotalCohorte = filasNoPrueba.length;
+  const poblacionMarcaTotal = useMemo(() => filasNoPrueba.filter(r => r.segmento === "marca").length, [filasNoPrueba]);
+  const poblacionProveedorTotal = useMemo(() => filasNoPrueba.filter(r => r.segmento === "proveedor").length, [filasNoPrueba]);
+  const referencia100 = filtroSegmento === "marca"
+    ? { total: poblacionMarcaTotal, etiqueta: "de Marca" }
+    : filtroSegmento === "proveedor"
+    ? { total: poblacionProveedorTotal, etiqueta: "de Proveedor" }
+    : { total: poblacionTotalCohorte, etiqueta: "del cohorte" };
+
+  // Con filtro de Segmento en "todos" un solo % combinado vuelve a mezclar
+  // Marca y Proveedor (el problema que ya corregimos) — acá se parte en dos,
+  // cada uno contra su propio 100%, para que "todos" no pierda la lectura
+  // segmentada.
+  const desgloseVisibleSegmento = useMemo(() => ({
+    marca: filasVisibles.filter(r => r.segmento === "marca").length,
+    proveedor: filasVisibles.filter(r => r.segmento === "proveedor").length,
+  }), [filasVisibles]);
+  const conteosSegmento = useMemo(() => {
+    const base = filasNoPrueba.filter(r => pasaFiltros(r, "segmento"));
+    return {
+      todos: base.length,
+      marca: base.filter(r => r.segmento === "marca").length,
+      proveedor: base.filter(r => r.segmento === "proveedor").length,
+    };
+  }, [filasNoPrueba, pasaFiltros]);
+  const conteosMadurez = useMemo(() => {
+    const base = filasNoPrueba.filter(r => pasaFiltros(r, "madurez"));
+    const porNivel: Record<string, number> = { todos: base.length };
+    for (const m of OPCIONES_MADUREZ) {
+      porNivel[m] = base.filter(r => {
+        const label = nivelMadurezDeclarado(r.ventasMesDeclaradas).label;
+        return m === "No documentado" ? label.startsWith("No documentado") : label === m;
+      }).length;
+    }
+    return porNivel;
+  }, [filasNoPrueba, pasaFiltros]);
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
@@ -365,6 +460,41 @@ export default function OnboardingTTFOPage() {
                 })() : (
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>Sin datos de la última carga todavía.</div>
                 )}
+                {alertas.videoAEncuesta && (
+                <div style={{ borderTop: "1px solid var(--border)", marginTop: 10, paddingTop: 10 }}>
+                  <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>
+                    Otro paso a revisar
+                  </div>
+                  <div style={{ fontSize: 15, fontWeight: 800, color: alertas.videoAEncuesta.caidaAbsoluta > 0 ? "#EF4444" : "#B45309", marginTop: 2 }}>
+                    ① Video Bienvenida → Encuesta
+                  </div>
+                  {alertas.videoAEncuesta.caidaAbsoluta > 0 ? (
+                    <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>
+                      {alertas.videoAEncuesta.poblacionVideo} vieron el video (cohorte desde 28-jul-2026) → solo{" "}
+                      {alertas.videoAEncuesta.poblacionEncuesta} respondieron la Encuesta
+                      {" "}(-{alertas.videoAEncuesta.caidaAbsoluta}, {Math.round(alertas.videoAEncuesta.caidaRelativa * 100)}%).
+                      Es el primer tramo del flujo (Bienvenida → Encuesta → Bodega → Producto → Orden) y hoy es
+                      invisible en el funnel de abajo, porque ese cálculo solo mira población ya dentro del cohorte
+                      (que por definición ya respondió la Encuesta).
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>
+                      No se puede leer como caída real: solo <b>{alertas.videoAEncuesta.poblacionVideo}</b> filas con
+                      evidencia de Video Bienvenida dentro del cohorte desde 28-jul-2026, contra{" "}
+                      <b>{alertas.videoAEncuesta.poblacionEncuesta}</b> de Encuesta — el archivo de Bienvenida no
+                      cubre bien ni siquiera esta ventana (revisar con Miguel/UserPilot su cobertura real). No sirve
+                      para medir este tramo hasta que se corrija esa cobertura.
+                    </div>
+                  )}
+                  <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 6 }}>
+                    <span style={tag("#3B82F6", "#DBEAFE")}>Marca</span>{" "}
+                    {alertas.videoAEncuesta.marca.poblacionVideo} video / {alertas.videoAEncuesta.marca.poblacionEncuesta} encuesta
+                    {"  "}
+                    <span style={{ ...tag("#F97316", "#FFEDD5"), marginLeft: 8 }}>Proveedor</span>{" "}
+                    {alertas.videoAEncuesta.proveedor.poblacionVideo} video / {alertas.videoAEncuesta.proveedor.poblacionEncuesta} encuesta
+                  </div>
+                </div>
+                )}
               </div>
               <div style={card}>
                 <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>
@@ -395,6 +525,127 @@ export default function OnboardingTTFOPage() {
                   tocar ningún paso del tour).
                 </div>
               </div>
+            </div>
+
+            {(() => {
+              // Conclusión: solo se compara caída entre pasos Modal/Tour
+              // consecutivos (misma familia de fuente) — los pasos "Evento"
+              // quedan afuera de esta comparación porque su población ya no
+              // es comparable 1-a-1 desde que Raw Data dejó de mandarlos (ver
+              // nota de abajo). Es la transición con mayor caída LIMPIA, no
+              // la mayor caída del funnel completo (esa puede incluir ruido
+              // de fuentes mezcladas).
+              const lista = alertas.mayorCaidaPorPaso;
+              let peorIdx = -1;
+              for (let i = 1; i < lista.length; i++) {
+                const actual = buscarDefinicion(lista[i].slot as SlotId);
+                const anterior = buscarDefinicion(lista[i - 1].slot as SlotId);
+                if (actual.tipoPaso === "evento" || anterior.tipoPaso === "evento") continue;
+                if (peorIdx === -1 || lista[i].caidaAbsoluta > lista[peorIdx].caidaAbsoluta) peorIdx = i;
+              }
+              if (peorIdx === -1) return null;
+              const peor = lista[peorIdx];
+              const anterior = lista[peorIdx - 1];
+              const etiquetaPeor = buscarDefinicion(peor.slot as SlotId).etiqueta;
+              const etiquetaAnterior = buscarDefinicion(anterior.slot as SlotId).etiqueta;
+              return (
+                <div style={{
+                  ...card, marginTop: 16, background: "#EFF6FF", borderColor: "#BFDBFE",
+                  fontSize: 13, color: "#1E3A8A", lineHeight: 1.6,
+                }}>
+                  <b>Dónde poner el ojo:</b> la caída más grande y más confiable del funnel está entre{" "}
+                  <b>"{etiquetaAnterior}"</b> y <b>"{etiquetaPeor}"</b> — de {anterior.poblacion} usuarios,{" "}
+                  <b>{peor.caidaAbsoluta} ({Math.round(peor.caidaRelativa * 100)}%)</b> no llegan al siguiente paso.
+                  Es la transición Modal/Tour más grande de todo el funnel (comparando solo pasos con la misma
+                  fuente de población, sin el ruido de los pasos "Evento" — ver nota abajo).
+                  <div style={{ display: "flex", gap: 20, marginTop: 8, fontSize: 12.5 }}>
+                    <span>
+                      <span style={tag("#3B82F6", "#DBEAFE")}>Marca</span>{" "}
+                      {anterior.marca.poblacion} → {peor.marca.poblacion} (-{peor.marca.caidaAbsoluta}, {Math.round(peor.marca.caidaRelativa * 100)}%)
+                    </span>
+                    <span>
+                      <span style={tag("#F97316", "#FFEDD5")}>Proveedor</span>{" "}
+                      {anterior.proveedor.poblacion} → {peor.proveedor.poblacion} (-{peor.proveedor.caidaAbsoluta}, {Math.round(peor.proveedor.caidaRelativa * 100)}%)
+                    </span>
+                  </div>
+                  <div style={{ marginTop: 8 }}>
+                    Ahí es donde un esfuerzo de producto tiene más chance de mover el número, no en los pasos con
+                    menos gente porque ya vienen filtrados por las caídas de antes.
+                  </div>
+                </div>
+              );
+            })()}
+
+            <div style={{ ...card, padding: 0, overflow: "hidden", marginTop: 16 }}>
+              <button
+                onClick={() => setFunnelAbierto(v => !v)}
+                style={{
+                  width: "100%", textAlign: "left", background: "none", border: "none", cursor: "pointer",
+                  padding: "10px 16px", fontSize: 12, fontWeight: 700, color: "var(--fg)",
+                  display: "flex", alignItems: "center", gap: 8,
+                }}
+              >
+                {funnelAbierto ? "▾" : "▸"} Funnel completo — los 14 pasos, no solo el de mayor caída
+              </button>
+              {funnelAbierto && (
+                <>
+                  <div style={{ overflowX: "auto" }}>
+                  <table style={{ width: "100%", borderCollapse: "collapse", borderTop: "1px solid var(--border)" }}>
+                    <thead>
+                      <tr>
+                        <th style={thStyle}>Paso</th>
+                        <th style={thStyle}>Camino</th>
+                        <th style={thStyle}>Marca</th>
+                        <th style={thStyle}>Proveedor</th>
+                        <th style={thStyle}>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {alertas.mayorCaidaPorPaso.map((paso, i) => {
+                        const def = buscarDefinicion(paso.slot as SlotId);
+                        const caminoAnterior = i > 0 ? buscarDefinicion(alertas.mayorCaidaPorPaso[i - 1].slot as SlotId).camino : null;
+                        const nuevoCamino = def.camino !== caminoAnterior;
+                        const CAMINO_LABEL: Record<string, string> = {
+                          bodega: "Bodega", producto: "Producto", orden_manual: "Orden manual", integraciones: "Integraciones",
+                        };
+                        const celda = (pob: number, caidaAbs: number, caidaRel: number, color: string) => (
+                          <td style={tdStyle}>
+                            <span style={{ fontWeight: 700, color }}>{pob}</span>
+                            {i > 0 && (
+                              <span style={{ color: caidaAbs > 0 ? "#EF4444" : "var(--muted)", marginLeft: 6, fontSize: 11.5 }}>
+                                (-{caidaAbs}, {Math.round(caidaRel * 100)}%)
+                              </span>
+                            )}
+                          </td>
+                        );
+                        return (
+                          <tr key={paso.slot} style={nuevoCamino ? { borderTop: "2px solid var(--border)" } : undefined}>
+                            <td style={tdStyle}>{def.etiqueta}</td>
+                            <td style={tdStyle}>
+                              {def.camino
+                                ? <span style={tag("#6366F1", "#EEF2FF")}>{CAMINO_LABEL[def.camino] ?? def.camino}</span>
+                                : <span style={{ ...tag("#9CA3AF", "#F3F4F6") }}>Obligatorio (todos)</span>}
+                            </td>
+                            {celda(paso.marca.poblacion, paso.marca.caidaAbsoluta, paso.marca.caidaRelativa, "#3B82F6")}
+                            {celda(paso.proveedor.poblacion, paso.proveedor.caidaAbsoluta, paso.proveedor.caidaRelativa, "#F97316")}
+                            {celda(paso.poblacion, paso.caidaAbsoluta, paso.caidaRelativa, "var(--fg)")}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  </div>
+                  <div style={{ padding: "8px 16px", fontSize: 11, color: "var(--muted)", borderTop: "1px solid var(--border)", lineHeight: 1.5 }}>
+                    "① Video Bienvenida" es el único paso obligatorio para todos, sin importar el camino que sigan
+                    después. Los otros 13 pertenecen a uno de los 4 caminos (Bodega, Producto, Orden manual,
+                    Integraciones) — la caída se mide contra el paso inmediatamente anterior en esta lista, no
+                    contra el total de la Encuesta. Los pasos "Evento" pueden mostrar caída negativa (población
+                    sube): desde que Raw Data dejó de mandar eventos, su población depende casi solo del CSV
+                    histórico mientras que Modal/Tour ya mezcla histórico + Raw Data — son fuentes distintas, no
+                    directamente comparables paso a paso.
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}
@@ -453,7 +704,27 @@ export default function OnboardingTTFOPage() {
         <div style={{ ...card, padding: 0, overflow: "hidden" }}>
           <div style={{ padding: "14px 20px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>
-              Resultado acumulado · {filasVisibles.length} marca{filasVisibles.length === 1 ? "" : "s"}
+              {(() => {
+                const singular = filtroSegmento === "marca" ? "marca" : filtroSegmento === "proveedor" ? "proveedor" : "usuario";
+                const plural = filtroSegmento === "proveedor" ? "proveedores" : `${singular}s`;
+                const etiquetaPoblacion = filasVisibles.length === 1 ? singular : plural;
+                return <>Resultado acumulado · {filasVisibles.length} {etiquetaPoblacion}</>;
+              })()}{" "}
+              {filtroSegmento === "todos" ? (
+                <span style={{ fontWeight: 600, color: "var(--muted)" }}>
+                  (<span style={{ color: "#3B82F6" }}>Marca: {desgloseVisibleSegmento.marca} —{" "}
+                    {poblacionMarcaTotal > 0 ? Math.round((desgloseVisibleSegmento.marca / poblacionMarcaTotal) * 100) : 0}% de {poblacionMarcaTotal}</span>
+                  {" · "}
+                  <span style={{ color: "#F97316" }}>Proveedor: {desgloseVisibleSegmento.proveedor} —{" "}
+                    {poblacionProveedorTotal > 0 ? Math.round((desgloseVisibleSegmento.proveedor / poblacionProveedorTotal) * 100) : 0}% de {poblacionProveedorTotal}</span>
+                  {" "}— cohorte desde 28-jul-2026)
+                </span>
+              ) : (
+                <span style={{ fontWeight: 600, color: "var(--muted)" }}>
+                  ({referencia100.total > 0 ? Math.round((filasVisibles.length / referencia100.total) * 100) : 0}%
+                  {" "}{referencia100.etiqueta} — {referencia100.total} desde 28-jul-2026)
+                </span>
+              )}
             </span>
             <div style={{ display: "flex", gap: 6, marginLeft: "auto", flexWrap: "wrap", alignItems: "center" }}>
               {(["todos", "exito", "en_observacion"] as Filtro[]).map((f) => (
@@ -479,9 +750,9 @@ export default function OnboardingTTFOPage() {
                   background: "#fff", color: "var(--muted)",
                 }}
               >
-                <option value="todos">Marca / Proveedor</option>
-                <option value="marca">Solo Marca</option>
-                <option value="proveedor">Solo Proveedor</option>
+                <option value="todos">Marca / Proveedor ({conteosSegmento.todos})</option>
+                <option value="marca">Solo Marca ({conteosSegmento.marca})</option>
+                <option value="proveedor">Solo Proveedor ({conteosSegmento.proveedor})</option>
               </select>
               <select
                 value={filtroMadurez}
@@ -492,8 +763,8 @@ export default function OnboardingTTFOPage() {
                   background: "#fff", color: "var(--muted)",
                 }}
               >
-                <option value="todos">Todos los niveles</option>
-                {OPCIONES_MADUREZ.map(m => <option key={m} value={m}>{m}</option>)}
+                <option value="todos">Todos los niveles ({conteosMadurez.todos})</option>
+                {OPCIONES_MADUREZ.map(m => <option key={m} value={m}>{m} ({conteosMadurez[m] ?? 0})</option>)}
               </select>
               <label style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11.5, color: "var(--muted)" }}>
                 Signed Up desde
@@ -542,7 +813,7 @@ export default function OnboardingTTFOPage() {
                 </tr>
               </thead>
               <tbody>
-                {filasVisibles.filter(r => !r.esPrueba).map((r) => {
+                {filasVisibles.map((r) => {
                   const estadoStyle = ESTADO_COLOR[r.estadoMeta7d];
                   const gatilloStyle = GATILLO_COLOR[r.gatillo] ?? GATILLO_COLOR.sin_atribucion;
                   const madurez = nivelMadurezDeclarado(r.ventasMesDeclaradas);
