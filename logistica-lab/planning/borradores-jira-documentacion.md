@@ -84,33 +84,58 @@ PRM-1609 →  connects to               (Solución · fase 2)
 
 Es la cadena del canon completa: **OKR → Proyecto → Solución → Épica**.
 
-### Valores a llenar en los 11 de PRM
+### Auditoría real de campos — 10-ago, leída de la base, no supuesta
 
-Todos comparten Célula `Logistic Success`, Dominio `Logistic`, Área `Producto`, Manager
-`Juan Diego Bautista`. Lo que cambia:
+**Yo había asumido que los 11 estaban vacíos. Falso.** Cuatro están completos y uno está
+completamente vacío. Esta es la foto verificada:
 
-| Ticket | País | OKR / KR | Etapa Delivery |
-|---|---|---|---|
-| `PRM-1297` normalización | Colombia | OKR 2 · KR 2.1 (entrega) | Definición |
-| `PRM-1608` tarifas F1 | Colombia | OKR 3 · KR 1 (gross margin) | Definición |
-| `PRM-1609` tarifas F2 | Colombia | OKR 3 · KR 1 (gross margin) | Discovery |
-| `PRM-1366` same day | Colombia | OKR 2 · KR 2.1 (entrega) | Discovery |
-| `PRM-1469` autogeneración | Colombia | OKR 2 · KR 2.1 (entrega) | Discovery |
-| `PRM-1364` POD | Colombia | OKR 2 · KR 2.1 (entrega) | Definición |
-| `PRM-1462` ENVÍA | Colombia | — hereda de PRM-1364 | Definición |
-| `PRM-1455` Interrapidísimo | Colombia | — hereda de PRM-1364 | Discovery |
-| `PRM-1610` Domina | Colombia | — hereda de PRM-1364 | Discovery |
-| `PRM-749` notif. devolución | Colombia | OKR 2 · KR 2.1 (entrega) | Discovery |
-| `INVS-17` POD (solicitud) | Colombia | — es la entrada, no lleva OKR | — |
+| Ticket | Célula | Dominio | País | Área | OKR | KR | Etapa | Manager | Asignado |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| `PRM-1297` normalización | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `PRM-749` predicción AI | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `PRM-1364` POD | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ | ✅ | ✅ | ✅ |
+| `PRM-1366` same day | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | ✅ |
+| `PRM-1455` Interrapidísimo | ✅ | ✅ | — | ✅ | — | — | ✅ | — | — |
+| `PRM-1469` autogeneración | ✅ | — | — | ✅ | — | — | ✅ | — | — |
+| `PRM-1608` tarifas F1 | ✅ | ✅ | — | — | — | — | ✅ | — | — |
+| `PRM-1609` tarifas F2 | ✅ | ✅ | — | — | — | — | ✅ | — | — |
+| `PRM-1610` Domina | ✅ | ✅ | — | — | — | — | — | — | — |
+| `PRM-1611` TIUI | ✅ | ✅ | — | — | — | — | — | — | — |
+| `PRM-1462` **ENVÍA** | — | — | — | — | — | — | — | — | — |
 
-⚠️ **El OKR/KR de cada uno es propuesta, no dato.** Sale de cruzar la fuga que ataca con el
-árbol de `estrategia/arbol-discovery-okr-jira.md`. Confirmar con Juan antes de llenar.
+**Tres cosas que salen de aquí y que no se veían antes:**
 
-### Enlaces que faltan — esto NO es documentación, es decisión de roadmap
+🔴 **`PRM-1462` (ENVÍA) está en cero de nueve campos.** Es el carrier **más avanzado** del
+programa POD —tres tickets de PROD hechos— y en las vistas de Polaris no aparece en ninguna
+parte: ni siquiera tiene Célula. Es el peor caso de los 11 y es justo el que más importa.
 
-`PRM-1297` **no tiene ningún enlace**, y no tiene épica en DROP/PROD: se buscó y solo aparecen
-30 tareas sueltas viejas sobre estados, ninguna es su épica. Crear los enlaces define la
-estructura del árbol de producto, así que lo decide Juan, no se deduce.
+🔵 **El llenado correlaciona exactamente con tener assignee.** Los 4 completos son los 4 que
+tienen dueño. Los 7 incompletos son los 7 huérfanos. No es casualidad: **el campo se llena
+cuando alguien se hace cargo**, así que asignar responsable no es un trámite — es lo que
+destraba el resto.
+
+⚠️ **El KR de `PRM-1364` no es el que yo había propuesto,** y probablemente el bueno es el que
+ya está. Dice **OKR 3 · KR 2 — % tickets resueltos por AI/autoservicio >40%**, no la tasa de
+entrega. Tiene sentido: POD reduce el ida y vuelta de reclamos con soporte. **Mi propuesta era
+la desalineada.** Confirmarlo, pero el sesgo está a favor de lo que ya existe.
+
+### Corrección a lo que este documento decía antes
+
+- El OKR/KR **no es propuesta en los 4 que ya lo tienen** — ahí es dato. La propuesta aplica
+  solo a los 7 restantes.
+- **País no siempre es Colombia:** `PRM-1366` y `PRM-749` están marcados **"Todos"**.
+- Área tiene **dos valores en uso** en la célula: `Producto` y `Logistica - Val. Inicial`.
+  Elegir uno o saber cuándo aplica cada cual.
+
+### Enlaces — verificado, no supuesto
+
+Los enlaces que importan **ya existen**: `PRM-1364` tiene 7, `PROD-240 ↔ PRM-1446` está, y
+`PROD-235`/`PROD-1127` cuelgan de su discovery.
+
+El único suelto es **`PRM-1297`: cero enlaces y sin épica en DROP/PROD.** Se buscó — solo hay
+30 tareas viejas sobre estados, ninguna es su épica. Es la iniciativa **#1 del Delivery
+Roadmap** y está desconectada del árbol. Crear esos enlaces define la estructura, así que lo
+decide Juan.
 
 ---
 
@@ -146,9 +171,16 @@ POD tiene **cuatro** soluciones por carrier, no tres. Se documentó igual.
 
 | Vía | PROD | PRM (Polaris) | INVS (service desk) |
 |---|---|---|---|
-| `description` vía API | ✅ funciona | ⛔ *"not on the appropriate screen"* | ⛔ mismo error |
-| Comentario vía API | ✅ | ✅ **funciona** | ⛔ *"no tienes permisos para comentar"* |
-| `editmeta` (qué campos acepta) | 4 campos | `{}` vacío | — |
+| `description` | ✅ funciona | ⛔ *"not on the appropriate screen"* | ⛔ mismo error |
+| `assignee` | ✅ **funciona** | ⛔ mismo error | no probado |
+| Customfields (`cf_10228` País) | no probado | ⛔ mismo error | no probado |
+| Comentario | ✅ | ✅ **funciona** | ⛔ *"no tienes permisos para comentar"* |
+| `editmeta` (qué acepta) | 4 campos | `{}` vacío | — |
+
+⚠️ **Corrección a lo que se creía:** el bloqueo de PRM **no es solo de `description`**. Se probó
+`assignee` (campo de sistema) y `customfield_10228` (País) — **los tres dan el mismo error**.
+En PRM no se puede escribir absolutamente ningún campo por API. Lo único que pasa son
+comentarios.
 
 **Los tres errores no son el mismo problema:**
 
@@ -395,12 +427,20 @@ La documentación está hecha. Lo que sigue son **decisiones y trabajo manual**,
 
 - [ ] **Pegar las 11 descripciones de PRM** desde los comentarios ya publicados. El texto está
       escrito y revisado; es copiar de la caja de comentario al campo de descripción.
-- [ ] **Pinned fields de Polaris** en los 11 — Célula `cf_10783` · Dominio `cf_10322` ·
-      País `cf_10228` · Área `cf_12373` · OKR `cf_11775` · KR `cf_11776` ·
-      Etapa Delivery `cf_11410` · Manager `cf_10684`. Los valores están en la tabla de arriba.
-      **Sin ellos el ticket no sale en las vistas**, por perfecta que esté la descripción.
-- [ ] **Asignar responsable** en los que están sin assignee: PRM-1608, 1609, 1462, 1455, 1610,
-      1611 y las 3 épicas de PROD.
+- [ ] **Campos de Polaris — solo donde faltan** (ver la matriz de arriba, no son los 11):
+      - 🔴 `PRM-1462` **ENVÍA — los 9 campos**. Está en cero y es el carrier más avanzado.
+      - `PRM-1610` · `PRM-1611` — País, Área, OKR, KR, Etapa, Manager, Asignado
+      - `PRM-1608` · `PRM-1609` — País, Área, OKR, KR, Manager, Asignado
+      - `PRM-1455` — País, OKR, KR, Manager, Asignado
+      - `PRM-1469` — Dominio, País, OKR, KR, Manager, Asignado
+      - `PRM-1366` — solo Manager
+      - `PRM-1297` · `PRM-749` · `PRM-1364` — **completos, no tocar**
+
+      IDs: Célula `cf_10783` · Dominio `cf_10322` · País `cf_10228` · Área `cf_12373` ·
+      OKR `cf_11775` · KR `cf_11776` · Etapa Delivery `cf_11410` · Manager `cf_10684`.
+
+- [x] ~~Asignar responsable en las 3 épicas de PROD~~ — **hecho 10-ago por API.** PROD-235,
+      PROD-240 y PROD-1127 quedaron asignadas a Juan Diego. En PROD sí se puede.
 
 ## 2 · Pedirle a un admin de Jira
 
