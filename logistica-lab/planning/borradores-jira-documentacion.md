@@ -116,13 +116,58 @@ estructura del árbol de producto, así que lo decide Juan, no se deduce.
 
 ### Estado de publicación
 
-| Ticket | Proyecto | Estado |
-|---|---|---|
-| `PROD-235` tarifas | PROD | ✅ **publicado 10-ago** |
-| `PROD-240` fulfillment | PROD | ✅ **publicado 10-ago** |
-| `PROD-1127` same day | PROD | ✅ **publicado 10-ago** |
-| `PRM-1297` normalización | PRM | 📋 borrador listo — **pegar a mano** |
-| Los otros 10 de PRM | PRM | ⏳ por redactar — **se pegarán a mano** |
+| Ticket | Proyecto | Cómo quedó | Ref |
+|---|---|---|---|
+| `PROD-235` tarifas | PROD | ✅ **descripción** (API) | — |
+| `PROD-240` fulfillment | PROD | ✅ **descripción** (API) | — |
+| `PROD-1127` same day | PROD | ✅ **descripción** (API) | — |
+| `PRM-1297` normalización | PRM | ✅ comentario | `51606` |
+| `PRM-1608` tarifas F1 | PRM | ✅ comentario | `51615` |
+| `PRM-1609` tarifas F2 | PRM | ✅ comentario | `51616` |
+| `PRM-1366` same day | PRM | ✅ comentario | `51617` |
+| `PRM-1469` autogeneración | PRM | ✅ comentario | `51618` |
+| `PRM-1364` POD proyecto | PRM | ✅ comentario | `51619` |
+| `PRM-1462` ENVÍA | PRM | ✅ comentario | `51620` |
+| `PRM-1455` Interrapidísimo | PRM | ✅ comentario | `51621` |
+| `PRM-1610` Domina | PRM | ✅ comentario | `51622` |
+| `PRM-1611` TIUI | PRM | ✅ comentario | `51623` |
+| `PRM-749` predicción AI | PRM | ✅ comentario | `51624` |
+| `INVS-17` POD solicitud | INVS | ⛔ **bloqueado — sin permiso de comentario** | — |
+
+**14 de 15 documentados.** Los 3 de PROD llevan la estructura del canon (Épica); los 11 de
+PRM/INVS llevan `Contexto · Problema · Ideas de solución · Consideraciones importantes · Bloqueos`.
+
+⚠️ **PRM-1611 (TIUI) no estaba en el plan original.** Apareció al leer los enlaces de PRM-1364:
+POD tiene **cuatro** soluciones por carrier, no tres. Se documentó igual.
+
+---
+
+## Las tres vías de escritura, probadas
+
+| Vía | PROD | PRM (Polaris) | INVS (service desk) |
+|---|---|---|---|
+| `description` vía API | ✅ funciona | ⛔ *"not on the appropriate screen"* | ⛔ mismo error |
+| Comentario vía API | ✅ | ✅ **funciona** | ⛔ *"no tienes permisos para comentar"* |
+| `editmeta` (qué campos acepta) | 4 campos | `{}` vacío | — |
+
+**Los tres errores no son el mismo problema:**
+
+* **PRM es estructural.** Polaris no expone sus campos por la API REST clásica. Probado tres
+  veces, incluida la prueba decisiva: escribir `summary` **con su propio valor idéntico**
+  también falla. Si fuera permisos daría 403, no "screen".
+* **INVS-17 sí es permisos**, y de dos tipos distintos: la cuenta `producto@dropi.co` no puede
+  editar ni comentar en ese proyecto. **Un admin de Jira lo puede arreglar** — a diferencia de PRM.
+
+---
+
+## Enlaces — no hizo falta crearlos donde importaba
+
+Se verificó antes de tocar nada: **PRM-1364 ya tiene los 7 enlaces** que lo hacen navegable
+(INVS-17 · DROP-23095 · PRM-1517 · PRM-1462 · PRM-1455 · PRM-1610 · PRM-1611). POD **está
+conectado**, no había que armarlo.
+
+El que **sigue suelto es `PRM-1297`**: cero enlaces y sin épica en DROP/PROD. Eso no es
+documentación, es decisión de roadmap — lo decide Juan.
 
 ---
 
@@ -342,14 +387,42 @@ Entrega el mismo día para bodegas propias y para Veloces.
 
 ---
 
-# Pendientes de las tandas 2 a 4
+# Lo que queda — y ya no es redacción
 
-- [ ] **Tanda 2** — PRM-1608 (fase 1) · PRM-1609 (fase 2)
-- [ ] **Tanda 3** — PRM-1366 · PRM-1469 · INVS-17
-- [ ] **Tanda 4** — PRM-1462 · PRM-1455 · PRM-1610, y ampliar PRM-1364 y PRM-749
-- [ ] **Segunda pasada** — pinned fields de Polaris (Célula, Etapa Delivery, Dominio, Feature, OKR/KR, Manager `cf_10684`, Diseñador). Sin ellos el ticket queda invisible en las vistas, aunque la descripción esté perfecta.
+La documentación está hecha. Lo que sigue son **decisiones y trabajo manual**, no escritura.
 
-## Decisiones que no son redacción
+## 1 · Manual, porque la API no puede (Juan o quien tenga la sesión)
 
-- [ ] **PROD-240 no tiene Solución de PRM asociada.** Crearla o vincularla.
-- [ ] **Estado real de POD:** se reportó "listo para hand off" pero PRM-1364 está en "Próximo" y sus tres soluciones en Impedimentos / Inv. y definición / backlog.
+- [ ] **Pegar las 11 descripciones de PRM** desde los comentarios ya publicados. El texto está
+      escrito y revisado; es copiar de la caja de comentario al campo de descripción.
+- [ ] **Pinned fields de Polaris** en los 11 — Célula `cf_10783` · Dominio `cf_10322` ·
+      País `cf_10228` · Área `cf_12373` · OKR `cf_11775` · KR `cf_11776` ·
+      Etapa Delivery `cf_11410` · Manager `cf_10684`. Los valores están en la tabla de arriba.
+      **Sin ellos el ticket no sale en las vistas**, por perfecta que esté la descripción.
+- [ ] **Asignar responsable** en los que están sin assignee: PRM-1608, 1609, 1462, 1455, 1610,
+      1611 y las 3 épicas de PROD.
+
+## 2 · Pedirle a un admin de Jira
+
+- [ ] **Permisos de `producto@dropi.co` sobre INVS.** Hoy no puede editar ni comentar, así que
+      INVS-17 quedó sin documentar. Es lo único que faltó de los 15.
+
+## 3 · Decisiones de roadmap (solo Juan)
+
+- [ ] **PRM-1297 no tiene ningún enlace ni épica en DROP/PROD.** Es la iniciativa #1 del
+      Delivery Roadmap y está desconectada del árbol. Crear esos enlaces define la estructura.
+- [ ] **PROD-240 (fulfillment) no tiene Solución de PRM asociada**, a diferencia de tarifas que
+      sí tiene sus dos fases. Crearla o vincularla.
+- [ ] **Confirmar el OKR/KR de cada ticket.** La tabla de arriba es **propuesta**, deducida de
+      cruzar la fuga que ataca contra el árbol de OKR. Si está mal, se propaga a 11 tickets.
+- [ ] **Estado real de POD.** Se reportó "listo para handoff", pero PRM-1364 está en "Próximo" y
+      sus cuatro soluciones en Impedimentos / Inv. y definición / backlog ×2. Una de las dos
+      lecturas está mal.
+- [ ] **Frontera PRM-749 ↔ LOG-004.** "Recomendación de transportadora automatizada" aparece
+      dentro de los dos. Decidir cuál lo gobierna.
+
+## 4 · Deuda de discovery que la documentación dejó a la vista
+
+- [ ] **PRM-749 es el único ticket de la célula sin spec propio.** Se documentó lo que se sabe y
+      el vacío quedó señalado en el comentario, no rellenado con relleno.
+- [ ] **PRM-1611 (TIUI) no estaba mapeado** en ninguna parte del cerebro antes de hoy.
