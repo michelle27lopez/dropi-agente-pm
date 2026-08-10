@@ -162,6 +162,23 @@ decide Juan.
 **14 de 15 documentados.** Los 3 de PROD llevan la estructura del canon (Épica); los 11 de
 PRM/INVS llevan `Contexto · Problema · Ideas de solución · Consideraciones importantes · Bloqueos`.
 
+### ⭐ Dónde vive esto ahora
+
+> **Pantalla:** [`/proyectos/logistica/documentacion-jira`](../../hub/src/app/proyectos/logistica/documentacion-jira/page.tsx)
+> — "Llenar Jira" en el panel del tablero. Se abre al lado de Jira: cada ticket con su enlace,
+> cada campo con su valor exacto y un botón que lo copia, y la descripción completa en un clic.
+>
+> **Los 11 textos:** [`hub/public/logistica/documentacion-jira/*.md`](../../hub/public/logistica/documentacion-jira/)
+> — antes vivían **solo en el comentario de Jira**. Si alguien borraba el comentario, el trabajo
+> se iba con él. Ahora están versionados y son lo que la pantalla ofrece copiar.
+>
+> **Los valores de cada campo:** [`_lib/jira-documentacion.ts`](../../hub/src/app/proyectos/logistica/_lib/jira-documentacion.ts)
+> — con el `customfield`, el id de la opción y de qué padre se heredó cada uno.
+
+⚠️ Los `.md` quedan **detrás del login** igual que el resto de `public/logistica/` — el proxy lo
+cierra a propósito (`hub/src/proxy.ts`). El `fetch` de la pantalla va con la cookie de sesión,
+así que funciona desde el navegador y no desde fuera. Es lo correcto: son documentos internos.
+
 ⚠️ **PRM-1611 (TIUI) no estaba en el plan original.** Apareció al leer los enlaces de PRM-1364:
 POD tiene **cuatro** soluciones por carrier, no tres. Se documentó igual.
 
@@ -425,8 +442,11 @@ La documentación está hecha. Lo que sigue son **decisiones y trabajo manual**,
 
 ## 1 · Manual, porque la API no puede (Juan o quien tenga la sesión)
 
-- [ ] **Pegar las 11 descripciones de PRM** desde los comentarios ya publicados. El texto está
-      escrito y revisado; es copiar de la caja de comentario al campo de descripción.
+> **Todo esto se hace desde `/proyectos/logistica/documentacion-jira`.** La pantalla ya trae el
+> valor exacto de cada campo con botón de copiar, así que es pegar, no buscar.
+
+- [ ] **Pegar las 11 descripciones de PRM.** El texto está escrito y revisado; un botón lo pone
+      en el portapapeles.
 - [ ] **Campos de Polaris — solo donde faltan** (ver la matriz de arriba, no son los 11):
       - 🔴 `PRM-1462` **ENVÍA — los 9 campos**. Está en cero y es el carrier más avanzado.
       - `PRM-1610` · `PRM-1611` — País, Área, OKR, KR, Etapa, Manager, Asignado

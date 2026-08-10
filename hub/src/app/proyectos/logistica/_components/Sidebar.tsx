@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Activity, Map, BookOpen, FlaskConical, ChevronRight,
-  CalendarDays, GanttChartSquare, ListTodo, FolderKanban,
+  CalendarDays, GanttChartSquare, ListTodo, FolderKanban, ClipboardCheck,
 } from "lucide-react";
 import { etapas, proyectos } from "@/app/proyectos/logistica/_lib/data";
 
@@ -38,6 +38,9 @@ const SECCIONES = [
   { href: `${BASE}/experimentos`, label: "Experimentos", icon: FlaskConical, exact: true },
   { href: `${BASE}/cronograma`, label: "Cronograma", icon: GanttChartSquare },
   { href: `${BASE}/pendientes`, label: "Pendientes", icon: ListTodo },
+  // Va con Pendientes y no con Iniciativas porque es trabajo por hacer, no una
+  // vista del portafolio: son los campos de Jira que la API no puede escribir.
+  { href: `${BASE}/documentacion-jira`, label: "Llenar Jira", icon: ClipboardCheck },
   { href: `${BASE}/updates`, label: "Updates", icon: CalendarDays },
   { href: `${BASE}/info-logistica`, label: "Info logística", icon: BookOpen },
 ];
