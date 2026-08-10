@@ -1,185 +1,355 @@
 # 📝 Borradores de documentación para Jira
 
 > **Qué es:** el texto para llenar las descripciones vacías que encontró la auditoría del
-> **10-ago-2026**. Cada borrador sale de los specs del cerebro, no se inventa nada.
+> **10-ago-2026**. Cada borrador sale de los specs del cerebro. Nada inventado.
 >
-> **⚠️ NO se ha escrito nada en Jira.** La sesión de Atlassian está conectada como **Michel
-> Pino**, no como Juan, y el `CLAUDE.md` de este lab prohíbe escribir a nombre de Juan con la
-> cuenta de otra persona. Reconectar la cuenta, o pegar estos textos a mano.
+> **Cuenta:** verificada con `atlassianUserInfo` → **Producto** (`producto@dropi.co`), que sí
+> opera sobre PRM. El historial de los tickets dirá que los editó "Producto".
 >
-> **Molde:** se copia la estructura de **PRM-1362** (parametrización de tarifas), el único
-> ticket del portafolio con documentación completa — contexto · cambio externo · cambio
-> interno · costo de no hacerlo. Si Jira tuviera 14 tickets así, no habría auditoría.
+> **Solo se toca el campo `description`.** No se cambia estado, asignado, tipo ni enlaces
+> (`metodologia/jira-tipos-y-estructura.md` §reglas de seguridad).
 
 ---
 
-## Lo que encontró la auditoría
+## 🔴 HALLAZGO 10-ago · Los tickets de PRM NO se pueden editar por API
 
-| Ticket | Descripción | Dueño |
+Al intentar publicar `PRM-1297` la API respondió:
+
+```
+Field 'description' cannot be set. It is not on the appropriate screen, or unknown.
+```
+
+Se verificó con `expand=editmeta`, y la causa es estructural, no de permisos:
+
+| Proyecto | Tipo de proyecto | `editmeta.fields` | ¿Se puede escribir? |
+|---|---|---|---|
+| **PROD** | `software` (clásico) | `summary`, `description`, `assignee`, `issuetype` | ✅ **Sí** |
+| **PRM** | `product_discovery` (Polaris) | **`{}` — vacío** | ❌ **No, ningún campo** |
+
+Jira Product Discovery no expone sus campos por la API REST clásica; se editan por su propia
+interfaz o por la GraphQL de Polaris, que el conector MCP no ofrece.
+
+**Consecuencia para este trabajo:**
+
+* **Las 3 épicas de PROD → publicadas por API.** ✅ 10-ago
+* **Los 11 tickets de PRM → hay que pegarlos a mano** desde este archivo. No hay alternativa
+  automatizable con las herramientas actuales.
+
+Esto también explica por qué `getJiraProjectIssueTypesMetadata` sobre PRM devolvía
+*"No puedes crear incidencias en este proyecto"* incluso con una cuenta con permisos: Polaris
+no responde a esos endpoints.
+
+### Lo que SÍ funciona en Polaris: los comentarios
+
+`addCommentToJiraIssue` usa un endpoint distinto y **sí escribe en PRM** (probado el 10-ago en
+PRM-1297, comentario `51606`). No es lo mismo que la descripción —queda como comentario, no
+como cuerpo— pero la documentación vive dentro de Jira y no solo en el repo.
+
+| Acción | PRM (Polaris) | PROD (software) |
 |---|---|---|
-| PRM-1362 Tarifas | ✅ Excelente — **el molde** | Juan |
-| PRM-1446 Fulfillment | ✅ Buena | Juan |
-| PRM-1364 POD | ⚠️ Una línea | Juan |
-| PRM-749 Notif. devolución | ⚠️ Tres líneas | Juan |
-| **PRM-1297** Normalización | ❌ vacía | Juan |
-| **PRM-1366** Same Day | ❌ vacía | Juan |
-| **PRM-1469** Autogeneración | ❌ vacía | sin asignar |
-| INVS-17 POD | ❌ vacía | sin asignar |
-| PRM-1608 Tarifas F1 | ❌ vacía | sin asignar |
-| PRM-1609 Tarifas F2 | ❌ vacía | sin asignar |
-| PRM-1462 · PRM-1455 · PRM-1610 | ❌ vacías | sin asignar |
-| **PROD-235 · PROD-240 · PROD-1127** | ⚠️ solo un link al PRM | sin asignar |
-
-**Las tres épicas de PROD son cáscaras:** su descripción es una URL. Un dev que abra PROD-240
-no encuentra qué construir.
+| `description` y demás campos | ❌ imposible | ✅ |
+| **Comentarios** | ✅ **funciona** | ✅ |
+| Asignar responsable | ❌ | ✅ |
+| Enlaces entre tickets | ⏳ sin probar | ✅ |
 
 ---
+
+## Los campos de clasificación · qué significa "completo"
+
+**El modelo es PRM-1362**, el único ticket del portafolio con todo lleno. Esto es lo que tiene,
+con el `customfield` exacto para que llenarlo sea mecánico:
+
+| Campo | ID | Valor en PRM-1362 |
+|---|---|---|
+| Célula | `customfield_10783` | Logistic Success |
+| Dominio | `customfield_10322` | Logistic |
+| País | `customfield_10228` | Colombia |
+| Área | `customfield_12373` | Producto |
+| OKR | `customfield_11775` | [OKR 3 2026] Eficiencia y rentabilidad |
+| KR | `customfield_11776` | OKR 3 · KR 1 · Gross margin promedio >22% |
+| Etapa Delivery | `customfield_11410` | Definición |
+| Manager | `customfield_10684` | Juan Diego Bautista |
+| Scoring | `cf_11774`, `11778`, `11593`, `11594`, `11860`–`11863` | valores 1–5 |
+| Fechas | `customfield_10156` / `10157` | start / end |
+
+**Y 5 enlaces**, que son los que lo hacen navegable:
+
+```
+INVS-13  ←  causes                    (la solicitud que lo origina)
+PROD-235 ←  is implemented by         (la épica de desarrollo)   ⭐
+PRM-1510 ←  is connected to           (el Proyecto OKR)
+PRM-1608 →  connects to               (Solución · fase 1)
+PRM-1609 →  connects to               (Solución · fase 2)
+```
+
+Es la cadena del canon completa: **OKR → Proyecto → Solución → Épica**.
+
+### Valores a llenar en los 11 de PRM
+
+Todos comparten Célula `Logistic Success`, Dominio `Logistic`, Área `Producto`, Manager
+`Juan Diego Bautista`. Lo que cambia:
+
+| Ticket | País | OKR / KR | Etapa Delivery |
+|---|---|---|---|
+| `PRM-1297` normalización | Colombia | OKR 2 · KR 2.1 (entrega) | Definición |
+| `PRM-1608` tarifas F1 | Colombia | OKR 3 · KR 1 (gross margin) | Definición |
+| `PRM-1609` tarifas F2 | Colombia | OKR 3 · KR 1 (gross margin) | Discovery |
+| `PRM-1366` same day | Colombia | OKR 2 · KR 2.1 (entrega) | Discovery |
+| `PRM-1469` autogeneración | Colombia | OKR 2 · KR 2.1 (entrega) | Discovery |
+| `PRM-1364` POD | Colombia | OKR 2 · KR 2.1 (entrega) | Definición |
+| `PRM-1462` ENVÍA | Colombia | — hereda de PRM-1364 | Definición |
+| `PRM-1455` Interrapidísimo | Colombia | — hereda de PRM-1364 | Discovery |
+| `PRM-1610` Domina | Colombia | — hereda de PRM-1364 | Discovery |
+| `PRM-749` notif. devolución | Colombia | OKR 2 · KR 2.1 (entrega) | Discovery |
+| `INVS-17` POD (solicitud) | Colombia | — es la entrada, no lleva OKR | — |
+
+⚠️ **El OKR/KR de cada uno es propuesta, no dato.** Sale de cruzar la fuga que ataca con el
+árbol de `estrategia/arbol-discovery-okr-jira.md`. Confirmar con Juan antes de llenar.
+
+### Enlaces que faltan — esto NO es documentación, es decisión de roadmap
+
+`PRM-1297` **no tiene ningún enlace**, y no tiene épica en DROP/PROD: se buscó y solo aparecen
+30 tareas sueltas viejas sobre estados, ninguna es su épica. Crear los enlaces define la
+estructura del árbol de producto, así que lo decide Juan, no se deduce.
+
+---
+
+### Estado de publicación
+
+| Ticket | Proyecto | Estado |
+|---|---|---|
+| `PROD-235` tarifas | PROD | ✅ **publicado 10-ago** |
+| `PROD-240` fulfillment | PROD | ✅ **publicado 10-ago** |
+| `PROD-1127` same day | PROD | ✅ **publicado 10-ago** |
+| `PRM-1297` normalización | PRM | 📋 borrador listo — **pegar a mano** |
+| Los otros 10 de PRM | PRM | ⏳ por redactar — **se pegarán a mano** |
+
+---
+
+## Las dos estructuras
+
+**El canon no cubre PRM.** `agente-delivery/canon/dropi_methodology.md` define Épica →
+Historia → Subtarea para DROP/PROD, pero **no define `Solicitud`, `Solución`, `Proyecto` ni
+`Proyecto OKR`**, que es lo que son 11 de los 14 tickets. Así que van dos formatos:
+
+**A · Épicas de PROD** → la del canon, literal (§Épica, L27–56):
+`Contexto` (4 viñetas) · `¿Qué buscamos?` · `Criterios de éxito` · `Documentación`
+
+**B · Tickets de PRM** → la acordada con Juan, mapeada al Definition of Ready de
+`metodologia/product-logistics.md`:
+`Contexto` · `Problema` · `Ideas de solución` · `Consideraciones importantes` · `Bloqueos`
+
+**Ley de `spec-driven.md` en ambas:** cada afirmación lleva `[estado · fuente]`, y cero
+placeholders — valor real o `N/A — razón`.
+Estados: ⚪ discovery · 🟡 definido · 🔵 en diseño · 🟢 construido · ⛔ no-objetivo.
+
+---
+
+# TANDA 1
 
 ## 1 · PRM-1297 · Normalización de estados
 
-*Prioridad #1 del Delivery Roadmap (WIP=1), en Inv. y definición, descripción vacía.*
+*Tipo Proyecto · Inv. y definición · asignado a Juan · reportado por Maria Ossa · descripción vacía*
 
-> **Contexto**
->
-> No existe "el estado de una orden Dropi". Existen tres fuentes distintas y solo dos son
-> homologables:
->
-> * **A · Estado de la ORDEN** — lo emite Dropi, es el ciclo de vida comercial. Homologable. ~15 en uso.
-> * **B · Estado de la GUÍA** — lo emite la transportadora, es el ciclo físico del paquete. Homologable. ~34 en uso sobre un catálogo de ~500.
-> * **C · Movimientos del carrier** — texto libre. **No homologable**: solo sirve para narrativa cruda y para fechar eventos.
->
-> Confundir A, B y C es el error de diseño más caro del proyecto. El PDF de macro-proceso
-> (24 estados, 6 fases) describe A; el Excel de 576 mapeos describe B. No se contradicen:
-> cubren mitades distintas del mismo flujo.
->
-> Hoy, de los 51 estados que usa la operación, **35 se guardan como lo mismo**. No se puede
-> medir dónde se traba una orden ni avisarle nada al cliente.
->
-> **Cambio externo**
->
-> Cada transportadora nueva trae su propio vocabulario de estados. Sin un catálogo homologado,
-> integrar un carrier implica volver a mapear a mano y multiplicar las colisiones.
->
-> **Cambio interno**
->
-> Discovery cerrado con datos reales: auditoría de solo lectura sobre **133.555 órdenes y
-> 52.636 guías de Colombia**, más una corrida de **125.232 órdenes y 1,88M de eventos** en la
-> ventana 19-mar → 22-jul.
->
-> Esa corrida cerró la decisión de arquitectura más cara: `INTENTO DE ENTREGA` resultó ser
-> **término propio de Interrapidísimo** (144.575 de 145.733 ocurrencias = 99,2%) y ahí
-> significa intento fallido — 92,08% termina en falla, contra 44,93% de entrega en el control
-> `EN REPARTO` de ENVIA. **No es un término compartido entre carriers, así que no hay colisión
-> semántica y el modelo NO necesita eje `transportadora`.** La clave es `estado_crudo` global,
-> sin override.
->
-> **Modelo propuesto:** dos capas. El estado crudo lo ve el admin; 9 estados homologados los
-> ve el usuario.
->
-> **Costo de no hacerlo**
->
-> 1. El KPI de tiempo de entrega por fases no se puede calcular — es el habilitador de LOG-011.
-> 2. El embudo de novedades no es trazable: no se sabe cuántas entran, cuántas se resuelven ni cuántas terminan entregadas.
-> 3. No se le puede comunicar al cliente final en qué punto va su pedido.
-> 4. Cada carrier nuevo multiplica el mapeo manual.
->
-> **Pendiente:** 2 decisiones de negocio para cerrar el catálogo.
->
-> **Entregable revisable:** `/proyectos/logistica/normalizacion-estados` — mapa, comparador de
-> 4 catálogos sobre el mismo tráfico, evidencia y cola de decisiones.
+```markdown
+## Contexto
+
+Etapa de la cadena: **Tránsito**, pero es transversal a las seis etapas.
+Fuga que ataca: habilitador de las fugas ② (devolución) y ④ (posventa) — no las ataca directo, las hace medibles.
+NSM que mueve: ⏱️ **tiempo por fases** y ⬆️ **movilización**. `[🟡 · fuente: doc:direccionamiento-2026-s2]`
+
+Prioridad #1 del Delivery Roadmap, con WIP = 1. `[🟡 · fuente: doc:direccionamiento-2026-s2]`
+
+## Problema
+
+**No existe "el estado de una orden Dropi".** Existen tres fuentes distintas y solo dos son homologables: `[🟢 · fuente: doc:CONTEXTO_ESTADOS_DROPI §1]`
+
+* **A · Estado de la ORDEN** — lo emite Dropi, ciclo de vida comercial. Homologable. ~15 en uso.
+* **B · Estado de la GUÍA** — lo emite la transportadora, ciclo físico del paquete. Homologable. ~34 en uso sobre un catálogo de ~500.
+* **C · Movimientos del carrier** — texto libre. **NO homologable**: solo sirve para narrativa cruda y para fechar eventos.
+
+Confundir A, B y C es el error de diseño más caro del proyecto. El PDF de macro-proceso (24 estados, 6 fases) describe **A**; el Excel de 576 mapeos describe **B**. No se contradicen: cubren mitades distintas del mismo flujo.
+
+**Consecuencia medida:** de los 51 estados que usa la operación, **35 se guardan como lo mismo**. No se puede medir dónde se traba una orden ni avisarle nada al cliente. `[🟢 · fuente: data:auditoría 133.555 órdenes / 52.636 guías CO · 2026-07-12]`
+
+## Ideas de solución
+
+**Modelo por capas** — el estado crudo lo ve el admin; **9 estados homologados** los ve el usuario. La clave es `estado_crudo` global, sin override por transportadora. `[🔵 · fuente: doc:propuesta-homologacion.md]`
+
+**No-objetivos (⛔):**
+* No se homologan los movimientos del carrier (fuente C): son texto libre y solo sirven para fechar eventos.
+* El modelo NO lleva eje `transportadora` — ver Consideraciones.
+
+## Consideraciones importantes
+
+**El gate de arquitectura quedó cerrado con datos.** Corrida de solo lectura del 22-jul sobre 125.232 órdenes y 1,88M de eventos (CO, ventana 19-mar → 22-jul): `[🟢 · fuente: data:corrida read-only 2026-07-22]`
+
+`INTENTO DE ENTREGA` resultó ser **término propio de Interrapidísimo** — 144.575 de 145.733 ocurrencias, el 99,2% — y ahí significa **intento fallido**: 92,08% termina en falla, contra 44,93% de entrega en el control `EN REPARTO` de ENVIA. **No es un término compartido entre carriers, así que no hay colisión semántica y el modelo no necesita eje `transportadora`.** Era la decisión de arquitectura más cara del proyecto.
+
+⚠️ **Reserva:** el veredicto del reporte está editado a mano. Los CSV lo sostienen, pero hay que **re-correr el script antes de citarlo en la presentación**. `[⚪ · fuente: doc:spec §5]`
+
+**Entregable revisable:** comparador de 4 catálogos sobre el mismo tráfico, mapa, evidencia y cola de decisiones → `/proyectos/logistica/normalizacion-estados`
+
+## Bloqueos
+
+* **2 decisiones de negocio pendientes** para cerrar el catálogo. Responsable: Juan Diego + Dirección de Producto. `[⚪ · fuente: doc:spec §5]`
+* La propuesta está lista y **sin enviar a Maria Ossa**. Responsable: Juan Diego. `[🟡 · fuente: reunion:weekly 2026-07-31]`
+```
 
 ---
 
 ## 2 · PROD-235 · Épica de tarifas
 
-*Hoy su descripción es solo un link a PRM-1362.*
+*Epic · En Ruta (backlog) · sin asignar · descripción = solo una URL*
 
-> **Qué construye esta épica**
->
-> El panel de parametrización de tarifas de transportadoras. Hoy los ajustes se hacen
-> directamente por código: cuando hay que cambiar una tarifa, un sobreflete o un porcentaje de
-> COD, se genera un requerimiento a TI.
->
-> **Dos fases, ya separadas en discovery:**
->
-> * **Fase 1 · PRM-1608** — el panel actual de paquetería express (envíos hasta 5 kg), sobre lo ya construido y prototipado.
-> * **Fase 2 · PRM-1609** — mercancía industrial: peso volumétrico, tablas origen-destino, remesas y rangos de peso sin límite. Lógica completamente distinta a paquetería.
->
-> **Evidencia del problema (de PRM-1362):** el cotizador de Urbano en Argentina cobra $5.737
-> cuando el costo real del trayecto es $10.412 — 82% de diferencia que Dropi absorbe. Y la
-> tasa de COD en Argentina estuvo en 0,7% cuando el objetivo de utilidad requiere 1,5%; se
-> descubrió meses después porque no hay visibilidad de pricing.
->
-> **Alcance de la fase 1:** parametrizar sin tocar código, con validación y simulación antes
-> de activar. **Fuera de alcance en fase 1:** mercancía industrial.
->
-> Discovery completo en PRM-1362. Prototipo RPP construido, 3 vistas.
+```markdown
+## Contexto
+
+**Descripción del problema:**
+
+* **¿Qué problema estamos resolviendo?** No existe un panel de parametrización de tarifas. Los ajustes se hacen directamente por código: cuando hay que cambiar una tarifa, un sobreflete o un porcentaje de COD, se genera un requerimiento a TI.
+* **¿Por qué es importante?** Sin validaciones ni visibilidad, las discrepancias de facturación se acumulan sin que nadie las vea. El cotizador de Urbano en Argentina cobra $5.737 cuando el costo real del trayecto es $10.412 — 82% de diferencia que Dropi absorbe. Y la tasa de COD en Argentina estuvo en 0,7% cuando el objetivo de utilidad requiere 1,5%; se descubrió meses después.
+* **¿A qué usuarios afecta?** Operaciones y Finanzas, que hoy no pueden configurar, validar ni simular pricing. Y a los sellers que necesitan envíos de más de 5 kg, que Dropi hoy no puede atender.
+* **Datos relevantes:** Dropi opera paquetería express hasta 5 kg en 12 países (AR, CO, GT, CR, PA, PE, MX, PY, CL, EC, VZ, ES).
+
+`[🟡 · fuente: jira:PRM-1362]`
+
+## ¿Qué buscamos?
+
+Parametrizar tarifas sin tocar código, con validación y simulación de rentabilidad antes de activar.
+
+**Dos fases, ya separadas en discovery:**
+
+* **Fase 1 — PRM-1608 · Panel actual.** Paquetería express hasta 5 kg, sobre lo ya construido y prototipado. Entregable: el panel operativo.
+* **Fase 2 — PRM-1609 · Mercancía industrial.** Peso volumétrico, tablas origen-destino, remesas y rangos de peso sin límite. Lógica completamente distinta a paquetería. Entregable: el modelo de pricing industrial.
+
+**Bloqueante de la fase 2:** antes de construir hay que responder para qué se usa la parametrización de mercancía industrial, en qué vertical se abre y para quién. La decisión inicial es aplicarlo a **Marcas** como segmento piloto. `[⚪ · fuente: jira:PRM-1362]`
+
+⛔ **Fuera de alcance de la fase 1:** mercancía industrial.
+
+## Criterios de éxito
+
+* **Métricas a impactar:** OKR 3 de compañía — gross margin ≥ 22%. Reducción de las discrepancias de facturación por tarifas hardcodeadas.
+* **Público objetivo:** Operaciones y Finanzas como usuarios del panel; Marcas como segmento piloto de mercancía industrial. 12 países.
+
+`[🟡 · fuente: jira:PRM-1362]`
+
+## Documentación
+
+* Discovery completo: PRM-1362
+* Prototipo RPP, 3 vistas: https://www.dropitesters.co/old/parametrizar-tarifas?profile=admin
+* Prototipo mercancía industrial: https://www.dropitesters.co/old/parametrizar-tarifas-industrial?profile=admin
+* Figma: https://www.figma.com/design/PDeeZVQMyF3i6SUFCWyuQa/Parametrizaci%C3%B3n-de-tarifas?node-id=2233-35839
+* Doc E2E: `N/A — necesita ajuste antes de entregarse` `[⚪ · fuente: jira:PRM-1362]`
+```
 
 ---
 
 ## 3 · PROD-240 · Épica de fulfillment
 
-*Hoy su descripción es solo un link a PRM-1446.*
+*Epic · En Ruta (backlog) · sin asignar · descripción = solo una URL*
 
-> **Qué construye esta épica**
->
-> Parametrizar el registro y cobro de los servicios de fulfillment por bodega y proveedor, con
-> un corte consolidado por país.
->
-> **El problema (de PRM-1446):** Dropi opera bodegas 2PL en Bogotá, Cali y Medellín con
-> **92.000 órdenes mensuales**. El cobro se activa solo cuando la orden llega a "Entregado",
-> así que **entre el 20 y el 25% de las órdenes preparadas y despachadas nunca se cobran** —
-> devoluciones, pérdidas y cancelaciones post-despacho.
->
-> Además no se cobran servicios que las bodegas ya prestan: almacenamiento, etiquetado manual
-> de productos sin código de barras, armado de kits y combos, y manejo de multi-unidad.
->
-> **Modelo de cobro, ya definido:**
-> * El responsable del cobro es el **equipo de facturación**
-> * El corte es **por país y lo resuelve TI**, no un operador por bodega
-> * Si la wallet del proveedor no tiene saldo, **se dispara una alerta; el cobro no se bloquea**
->
-> **Pendiente de definir:** a quién notifica esa alerta y con qué política de reintento.
->
-> ⚠️ **Esta épica no tiene Solución asociada en Jira** — a diferencia de tarifas, que sí tiene
-> sus dos fases. Hay que crearla o vincularla.
+```markdown
+## Contexto
+
+**Descripción del problema:**
+
+* **¿Qué problema estamos resolviendo?** El cobro del servicio de fulfillment se activa solo cuando la orden llega al estado "Entregado". Entre el **20 y el 25% de las órdenes preparadas y despachadas nunca se cobran** — devoluciones, pérdidas y cancelaciones post-despacho.
+* **¿Por qué es importante?** Además no se cobran servicios que las bodegas ya prestan: almacenamiento de inventario, etiquetado manual de productos sin código de barras, armado de kits y combos, y manejo de órdenes multi-unidad. Son costos operativos reales que hoy absorbe Dropi sin compensación.
+* **¿A qué usuarios afecta?** Operación de bodegas 2PL, equipo de facturación y los proveedores, que reciben el cobro contra su wallet y necesitan trazabilidad del desglose.
+* **Datos relevantes:** bodegas propias (2PL) en Bogotá, Cali y Medellín, con **92.000 órdenes mensuales** combinadas.
+
+`[🟡 · fuente: jira:PRM-1446]`
+
+## ¿Qué buscamos?
+
+Parametrizar el registro y el cobro de los servicios de fulfillment por bodega y proveedor, con un corte consolidado por país.
+
+**Modelo de cobro, ya definido:** `[🟡 · fuente: reunion:2026-08-06]`
+
+* El responsable del cobro es el **equipo de facturación**
+* El corte es **por país y lo resuelve TI**, no un operador por bodega
+* Si la wallet del proveedor no tiene saldo, **se dispara una alerta; el cobro no se bloquea**
+
+**Fases:** captura de servicios por bodega y periodo → registro provisional inmutable → corte definitivo consolidado por país, idempotente y con alerta si ya existe un registro.
+
+⛔ **Fuera de alcance:** cobrar servicios que no estén registrados por la bodega en el periodo.
+
+## Criterios de éxito
+
+* **Métricas a impactar:** ingreso mensual recuperado y % de servicios prestados que sí se cobran.
+* **Público objetivo:** proveedores con operación en bodegas 2PL de Colombia (Bogotá, Cali, Medellín).
+
+⚠️ **Línea base sin reconciliar:** el E2E reporta $355M actuales y $631M proyectados por mes — una diferencia de +77,7% — mientras otras secciones declaran +68%. No existe reconciliación trazable de base, universo, periodo ni fórmula. `[⚪ · fuente: jira:INVS-66]`
+
+## Documentación
+
+* Discovery completo: PRM-1446
+* Prototipo RPP: https://www.dropitesters.co/old/fulfillment/parametrizar?profile=admin
+* Doc E2E: en Drive, con el tab de handoff en placeholders `[⚪ · fuente: doc:spec fulfillment]`
+* Figma: `N/A — el prototipo vive en el RPP, no en Figma`
+
+⚠️ **Esta épica no tiene Solución de PRM asociada**, a diferencia de tarifas, que sí tiene sus dos fases. Falta crearla o vincularla.
+```
 
 ---
 
 ## 4 · PROD-1127 · Épica de Same Day
 
-*Hoy su descripción es solo un link a PRM-1366.*
+*Epic · En Ruta (backlog) · sin asignar · descripción = solo una URL*
 
-> **Qué construye esta épica**
->
-> Entrega el mismo día para bodegas propias y para Veloces.
->
-> **MVP:** flag Same Day + validación de hora de corte + validación geográfica + selección
-> guiada de transportadora.
->
-> **Riesgo vivo, confirmado en producción:** hoy con Veloces salen guías marcadas same day
-> **sin validación geográfica** — una orden Cali → Santa Marta sale como same day. Es la razón
-> por la que la validación geo no es un nice-to-have.
->
-> **Discovery:** board de research de Michelle López + mapa de densidad de demanda construido
-> sobre **427.294 órdenes reales** de Bogotá, Medellín y Cali, ubicadas por cruce de
-> nomenclatura contra OpenStreetMap, para medir cuánta demanda captura un centro de operación
-> según su radio.
->
-> **Estado:** parqueado por WIP = 1 mientras Normalización de estados es la iniciativa activa.
-> La ventana del cronograma es tentativa.
->
-> ⚠️ **Definición de datos sin cerrar:** faltan origen, timestamps, transportadora y estado
-> final. Hasta cerrarla, el mapa sirve para decidir dónde, no para comprometer SLA.
+```markdown
+## Contexto
+
+**Descripción del problema:**
+
+* **¿Qué problema estamos resolviendo?** Dropi no ofrece entrega el mismo día, y no tiene cómo decidir qué órdenes son elegibles.
+* **¿Por qué es importante?** Hoy con Veloces **ya salen guías marcadas same day sin validación geográfica**: una orden Cali → Santa Marta sale como same day. Es un riesgo vivo confirmado en producción, no hipotético.
+* **¿A qué usuarios afecta?** Proveedores, marcas y la operación de fulfillment.
+* **Datos relevantes:** el mapa de densidad de demanda se construyó sobre **427.294 órdenes reales** de Bogotá, Medellín y Cali, ubicadas por cruce de nomenclatura contra OpenStreetMap.
+
+`[🟡 · fuente: jira:PRM-1366 · data:pipeline same-day]`
+
+## ¿Qué buscamos?
+
+Entrega el mismo día para bodegas propias y para Veloces.
+
+**MVP:** flag Same Day + validación de hora de corte + **validación geográfica** + selección guiada de transportadora.
+
+**Fase de discovery — entregable ya disponible:** mapa de densidad que mide cuánta demanda captura un centro de operación según su radio → `/proyectos/logistica/same-day`
+
+**Bloqueante:** la definición de datos no está cerrada — faltan origen, timestamps, transportadora y estado final. Hasta cerrarla, el mapa sirve para decidir dónde poner un centro, **no para comprometer un SLA**. `[⚪ · fuente: doc:spec same-day §7]`
+
+⛔ **Fuera de alcance:** comprometer SLA de same day antes de cerrar la definición de datos.
+
+## Criterios de éxito
+
+* **Métricas a impactar:** ⬆️ % de entrega y ⏱️ tiempo de entrega. Cobertura de demanda por centro de operación.
+* **Público objetivo:** proveedores, marcas y fulfillment en Bogotá, Medellín y Cali.
+
+⚠️ **Sin línea base todavía**: depende de la definición de datos. `[⚪ · fuente: doc:spec same-day §7]`
+
+## Documentación
+
+* Discovery: PRM-1366
+* Board de research (Michelle López): https://www.figma.com/board/uZeHBc0bilrBIXgYWyxeow/Research-same-day
+* Mapa de densidad: `/proyectos/logistica/same-day`
+* Doc E2E: https://docs.google.com/document/d/1NO9fbjklz2XvMVrMc_os6AuUjsF5ZkmDw3kX5XmwNtA/edit
+* Confluence: https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1531576355
+
+**Estado:** parqueado por WIP = 1 mientras Normalización de estados es la iniciativa activa. La ventana del cronograma es tentativa. `[🟡 · fuente: doc:direccionamiento-2026-s2]`
+```
 
 ---
 
-## Pendientes de este archivo
+# Pendientes de las tandas 2 a 4
 
-- [ ] Borrador de **PRM-1366** (Same Day, solicitud) — mismo contenido que su épica, en clave de solicitud
-- [ ] Borrador de **PRM-1469** (autogeneración de guías) — y asignarle dueño
-- [ ] Borradores de las 5 Soluciones vacías: PRM-1608, PRM-1609, PRM-1462, PRM-1455, PRM-1610
-- [ ] Borrador de **INVS-17**
-- [ ] Ampliar **PRM-1364** (POD) y **PRM-749** (notificación de devolución), hoy de una y tres líneas
-- [ ] Crear o vincular la Solución que le falta a PROD-240
-- [ ] Aclarar el estado real de POD: se reportó "listo para hand off" pero PRM-1364 está en "Próximo"
+- [ ] **Tanda 2** — PRM-1608 (fase 1) · PRM-1609 (fase 2)
+- [ ] **Tanda 3** — PRM-1366 · PRM-1469 · INVS-17
+- [ ] **Tanda 4** — PRM-1462 · PRM-1455 · PRM-1610, y ampliar PRM-1364 y PRM-749
+- [ ] **Segunda pasada** — pinned fields de Polaris (Célula, Etapa Delivery, Dominio, Feature, OKR/KR, Manager `cf_10684`, Diseñador). Sin ellos el ticket queda invisible en las vistas, aunque la descripción esté perfecta.
+
+## Decisiones que no son redacción
+
+- [ ] **PROD-240 no tiene Solución de PRM asociada.** Crearla o vincularla.
+- [ ] **Estado real de POD:** se reportó "listo para hand off" pero PRM-1364 está en "Próximo" y sus tres soluciones en Impedimentos / Inv. y definición / backlog.
