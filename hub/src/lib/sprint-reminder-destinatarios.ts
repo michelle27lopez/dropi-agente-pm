@@ -36,20 +36,26 @@ export const DESTINATARIOS: Destinatario[] = [
 
   // ── Diseño (lead) ──────────────────────────────────────────
   { email: "laura.contreras@dropi.co",    nombre: "Laura Contreras",    celula: "Product Designers", rol: "PD" },
+
+  // ── Growth ─────────────────────────────────────────────────
+  { email: "jose.pineda@dropi.co",        nombre: "José Pineda",        celula: "Growth",            rol: "PM" },
+
+  // ── Growth Marketing ───────────────────────────────────────
+  { email: "catherin.salazar@dropi.co",   nombre: "Catherin Salazar",   celula: "Growth Marketing",  rol: "PM" },
+  { email: "laura.torres@dropi.co",       nombre: "Laura Torres",       celula: "Growth Marketing",  rol: "PO" },
+
+  // ── Fintech ────────────────────────────────────────────────
+  { email: "harry.hernandez@dropi.co",    nombre: "Harry Hernández",    celula: "Fintech",           rol: "PM" },
+  { email: "nicolas.vargas@dropi.co",     nombre: "Nicolás Vargas",     celula: "Fintech",           rol: "PD" },
 ];
 
-// PENDIENTES DE CONFIRMAR
+// Sobre el campo `rol`: es metadato interno, el mensaje no lo muestra —
+// solo agrupa nombres por célula. Donde no estaba documentado se dedujo del
+// campo `lead` de la tabla `celulas` (el lead se marca PM). Laura Torres es
+// Product Ops: entra porque pertenece a Growth Marketing, y además es quien
+// mide el cumplimiento de horas.
 //
-// 1. jesus.garavito@dropi.co — aparece en `profiles` bajo la célula Suppliers
-//    como super_admin, pero no está en `equipo_roles` de ninguna célula. No se
-//    incluyó porque no sé su rol.
-// 2. Kevin Paternina — figura como Product Designer de Experience en el MD de
-//    la célula, pero NO existe en `profiles`. Si debe recibirlo hay que crearle
-//    el perfil primero (o al menos tener su correo).
-// 3. laura.torres@dropi.co — Product Ops, es quien mide el cumplimiento de
-//    horas. No se incluyó como destinataria del recordatorio; si quieres que
-//    le llegue copia, se agrega aparte como observadora.
-//
-// EXCLUIDOS a propósito: Lucho y María (stakeholders), José Pineda (Growth),
-// Catherin Salazar (Growth Marketing), Nicolás Vargas y Harry Hernández
-// (Fintech).
+// EXCLUIDOS a propósito (confirmado con Jaime, 2026-08-11):
+//   · Lucho y María — stakeholders, no ejecutan sprint
+//   · Jesús Garavito — seguridad, no es del equipo
+//   · Kevin Paternina — comercial, no es del equipo (tampoco está en `profiles`)
