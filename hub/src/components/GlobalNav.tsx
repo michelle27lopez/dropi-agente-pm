@@ -20,6 +20,7 @@ import {
   BarChart3,
   Inbox,
   FlaskConical,
+  Webhook,
 } from "lucide-react";
 
 type NavItem = {
@@ -43,6 +44,7 @@ const PRIMARY_ITEMS: NavItem[] = [
   { key: "iniciativas", label: "Iniciativas", href: "/iniciativas", icon: Inbox },
   { key: "guias", label: "Guías", href: "/guias", icon: GraduationCap },
   { key: "pruebas-usuarios", label: "Pruebas con Usuarios", href: "/pruebas-usuarios", icon: FlaskConical },
+  { key: "integraciones", label: "Integraciones", href: "/integraciones", icon: Webhook },
   { key: "configuracion", label: "Configuración", href: "/ajustes", icon: Settings },
 ];
 
