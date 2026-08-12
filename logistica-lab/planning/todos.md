@@ -10,6 +10,10 @@
 > Vercel solo con el próximo `git push` que toque este bloque — no hay que tocar código.
 > Formato: `- emoji [Proyecto] texto`.
 <!-- tablero:pendientes:start -->
+- 🔴 [Jira] Decidir DROP-15914 (Panel de Homologación): figura "En curso" hace 9 meses, el diseño está hecho y las historias de front y back no tienen dueño
+- 🔴 [Jira] Llenar los 9 campos de PRM-1462 (POD · ENVÍA): está en cero y es el carrier más avanzado del programa — usar `/proyectos/logistica/documentacion-jira`
+- 🟡 [Jira] Pedirle a un admin permisos de INVS para `producto@dropi.co` — INVS-17 es el único de 15 tickets sin documentar
+- 🟡 [Jira] Pegar a mano las 11 descripciones y los campos que faltan (la API de Polaris no escribe nada) — todo listo para copiar en `/proyectos/logistica/documentacion-jira`
 - 🔴 [Indiana] Poner el `.env.local` en `/Users/user/dropi-repos/inidiana-map/` y correr el primer ciclo real (armar UNA solicitud)
 - 🔴 [Indiana] Vercel bloquea todos los deploys desde el 28-jul (28 commits sin publicar) — pedirle a Jaime el motivo y mover el proyecto a un team de Dropi
 - 🟡 [Fulfillment] Cerrar el E2E de Drive: spec, Jira 50931, Confluence 1572732930 y Darwin LOG-014 ya están sincronizados; Drive requiere reautorización explícita del riesgo del conector

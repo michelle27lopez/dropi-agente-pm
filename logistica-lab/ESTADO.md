@@ -5,7 +5,56 @@
 > Aquí va lo VIVO (dónde vamos, decisiones recientes, próximo paso). Lo estable vive
 > en `DASHBOARD.md`, `metodologia/`, `conocimiento/`.
 
-**Última actualización:** 2026-08-02 (unificación documental Logistic Success · LOG-001/012/009)
+**Última actualización:** 2026-08-10 (documentación del portafolio en Jira · hallazgo del segundo árbol de Normalización)
+
+---
+
+**[10-ago · documentar el portafolio en Jira — 14 de 15 tickets, y lo que apareció al hacerlo]**
+
+Se documentaron los 14 tickets del portafolio con estructura completa. Lo importante no fue
+la redacción: fueron tres hallazgos que la auditoría destapó.
+
+- **🔴 Normalización de estados tiene DOS árboles en Jira y no se conocen.** Buscando por qué
+  PRM-1297 no tenía enlaces apareció el otro, indexado como *"homologación"* y no como
+  *"normalización"* — por eso nunca había salido: `PROB-101 → PRM-477 → DROP-15914`.
+  **DROP-15914 figura "En curso" y lleva 9 meses y medio sin movimiento** (último cambio
+  29-oct-2025), asignada a Juan. Su diseño está TERMINADO (UI y ajustes por Michelle López,
+  definición por Paola Angulo, matriz por Juan) y lo que falta —`DROP-16278` [Back] y
+  `DROP-16293` [Front]— está **escrito completo con Gherkin, reglas y DoD, y sin dueño**.
+  No son dos proyectos: PRM-1297 decide *cuáles* son los estados padre y DROP-15914 es *la
+  herramienta* para mapearlos. **Decisión pendiente de Juan** — cerrarla tiraría cuatro
+  tickets de diseño hecho; el flujo de DROP además no tiene transición a "Cerrada", solo
+  `Finalizada` (afirmaría que se construyó, y no) o `Congelado por producto` (dice la verdad
+  pero sigue en categoría "En curso"). Detalle en `proyectos/normalizacion-estados/spec.md §8.1`.
+  ✅ **Sí se creó** el enlace `PRM-1297 ↔ PRM-477` (Discovery - Connected): con él la cadena
+  cierra de punta a punta, porque PRM-477 → DROP-15914 ya existía.
+
+- **🔴 En PRM (Polaris) no se puede escribir NINGÚN campo por API.** Probado con tres de
+  naturaleza distinta —`description`, `assignee` y `customfield_10228`— y los tres dan
+  *"cannot be set, it is not on the appropriate screen"*. No es permisos: si lo fuera daría
+  403. El metadata también está bloqueado, así que ni los nombres de los campos se leen.
+  **Lo único que pasa son comentarios** (y `createIssueLink`, probado hoy y sí funciona).
+  En PROD sí se escribe todo. `INVS-17` quedó sin documentar por permisos reales de la cuenta
+  `producto@dropi.co` — eso **sí** lo arregla un admin.
+
+- **🟡 La auditoría de campos desmintió lo que se asumía.** No estaban los 11 vacíos:
+  PRM-1297, PRM-749 y PRM-1364 están **completos**, PRM-1366 solo le falta Manager, y
+  **PRM-1462 (ENVÍA) está en CERO de nueve** — siendo el carrier más avanzado del programa POD.
+  El llenado correlaciona exactamente con tener assignee: los 4 completos son los 4 con dueño.
+  Además el OKR/KR **no se adivina, se hereda del padre** (PRM-1362 → las dos fases de tarifas;
+  PRM-1364 → los cuatro carriers), y el KR de PRM-1364 ya existía y es mejor que el propuesto.
+
+- **Qué quedó construido:** pantalla **`/proyectos/logistica/documentacion-jira`** ("Llenar Jira"
+  en el panel) para llenar a mano lo que la API no puede, con el valor exacto de cada campo y
+  botón de copiar. Y los **11 textos rescatados a `hub/public/logistica/documentacion-jira/*.md`**
+  — antes vivían solo en el comentario de Jira. Commits `35e65e4` · `e07ef55` · `b530675` ·
+  `44def9d` · `66279f3`.
+
+- **Siguiente paso:** decidir DROP-15914; llenar PRM-1462 con la pantalla al lado (prueba de
+  campo: si un valor no calza con el desplegable, el dato está mal); y pedirle a un admin
+  permisos sobre INVS.
+
+---
 
 **[02-ago · unificación Logistic Success — WIP Product LOG-001 → LOG-012]** Se auditó y sincronizó Autoconfirmación antes de abrir Autogeneración, respetando WIP=1 documental.
 - **LOG-001 Autoconfirmación:** 6 sesiones moderadas 18–25-jul, aceptación 81/100, pero T4 económico 17% y 5/6 sin ver ganancia/pérdida. Es usabilidad parcial, **no** impacto. Evidencia local en `proyectos/movilizacion-confirmacion/prueba-usabilidad-julio-2026.md`; Jira PRM-1497 comentario **50933** y Confluence **1572864001** creados/releídos. Estado/owner/relaciones Jira intactos. Falta gate ChateaPro, fuente cruda, E2E Drive y prueba outcome.
