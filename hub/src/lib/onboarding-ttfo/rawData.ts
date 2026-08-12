@@ -141,16 +141,31 @@ export function parsearRawDataUserPilot(filas: FilaCruda[], corteDesde: string =
     const signedUp = data.user?.signed_up ? normalizarSignedUpPayload(data.user.signed_up) : timestamp;
 
     if (tipo === "survey" && accion === "completed") {
-      const respuestas = data.answers ?? [];
+      // La PREGUNTA también puede llegar con mojibake (no solo las
+      // respuestas) — sin reparar, el regex de "¿Cómo quieres usar Dropi?"
+      // no calzaba contra "CÃ³mo quieres..." y el segmento quedaba en blanco
+      // aunque la respuesta sí estuviera ahí. Se repara ANTES de buscar.
+      const respuestas = (data.answers ?? []).map(r => ({
+        question: repararMojibake(r.question),
+        answer: r.answer.map(a => repararMojibake(a)),
+      }));
       const respuestaUso = respuestas.find(r => /c[oó]mo quieres usar dropi/i.test(r.question));
       const respuestaVolumen = respuestas.find(r => /mes/i.test(r.question) && /(pedidos|ventas)/i.test(r.question));
+      // Respaldo — a pedido de Kate (06-ago-2026): "no quiero volverlo a
+      // repetir, no debe salir en blanco". Si por cambio de wording de la
+      // pregunta no se encuentra `respuestaUso`, se escanea el set completo
+      // de respuestas por la primera que arranque con "Marca:"/"Proveedor:"
+      // — el prefijo es el dato real, no depende de acertarle a la pregunta.
+      const segmentoDirecto = segmentoDeRespuesta(respuestaUso?.answer?.[0] ?? null);
+      const segmentoRespaldo = segmentoDirecto
+        ?? segmentoDeRespuesta(respuestas.map(r => r.answer[0]).find(a => segmentoDeRespuesta(a ?? null) !== null) ?? null);
       const candidato: FilaEncuesta = {
         userId,
         nombre: repararMojibake(data.user?.full_name ?? ""),
         submittedAt: timestamp,
         signedUp,
-        segmento: segmentoDeRespuesta(respuestaUso?.answer?.[0] ?? null),
-        ventasMesDeclaradas: repararMojibake(respuestaVolumen?.answer?.[0] ?? null),
+        segmento: segmentoRespaldo,
+        ventasMesDeclaradas: respuestaVolumen?.answer?.[0] ?? null,
         email: data.user?.email ?? null,
       };
       encuestaPorUsuario.set(userId, combinarFilaEncuesta(encuestaPorUsuario.get(userId), candidato));
