@@ -568,6 +568,115 @@
     transform: translateX(-50%) translateY(0);
   }
 
+  /* Offscreen Poster container for HD 9:16 story export */
+  .export-poster-hidden {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 420px;
+    height: 740px;
+    background: radial-gradient(circle at center, #1c0a02 0%, #050209 100%);
+    border: 1px solid rgba(255, 133, 0, 0.4);
+    box-sizing: border-box;
+    padding: 40px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    font-family: 'Chakra Petch', -apple-system, sans-serif;
+  }
+  .ep-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .ep-logo {
+    height: 38px;
+    object-fit: contain;
+  }
+  .ep-edition {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--color-master);
+    text-transform: uppercase;
+  }
+  .ep-seller-box {
+    text-align: center;
+  }
+  .ep-seller-kicker {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: #a8b2c1;
+  }
+  .ep-seller-name {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 4px;
+    text-shadow: 0 0 20px rgba(255, 133, 0, 0.4);
+  }
+  .ep-insignia-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+  }
+  .ep-insignia-img {
+    width: 165px;
+    height: 165px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 35px rgba(255, 133, 0, 0.6));
+  }
+  .ep-rank-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--color-master);
+    margin-top: 12px;
+  }
+  .ep-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    width: 100%;
+  }
+  .ep-stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 133, 0, 0.3);
+    border-radius: 16px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .ep-stat-val {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .ep-stat-lbl {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #d0c4eb;
+    margin-top: 2px;
+  }
+  .ep-footer {
+    text-align: center;
+  }
+  .ep-footer-tag {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--color-master);
+    letter-spacing: 0.06em;
+  }
+  .ep-footer-sub {
+    font-size: 10px;
+    color: #a8b2c1;
+    margin-top: 2px;
+  }
+
   /* Particles */
   #fx { position: absolute; inset: 0; pointer-events: none; z-index: 25; overflow: hidden; }
   .confetti {
@@ -707,6 +816,40 @@
   <!-- Touch Nav -->
   <div class="nav left" onclick="prev()"></div>
   <div class="nav right" onclick="next()"></div>
+</div>
+
+<!-- Dedicated High-Res Export Poster Canvas (Captured by html2canvas) -->
+<div id="exportPoster" class="export-poster-hidden">
+  <div class="ep-header">
+    <img class="ep-logo" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Leyendas Dropi Logo">
+    <div class="ep-edition">Retrospectiva 2026</div>
+  </div>
+
+  <div class="ep-seller-box">
+    <div class="ep-seller-kicker">MI ESTATUS EN LEYENDAS</div>
+    <div class="ep-seller-name" id="ep_name">Seller</div>
+  </div>
+
+  <div class="ep-insignia-box">
+    <img class="ep-insignia-img" id="ep_insignia" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/1.png" alt="Insignia Leyendas">
+    <div class="ep-rank-title" id="ep_rank">Nivel Leyendas</div>
+  </div>
+
+  <div class="ep-stats-grid">
+    <div class="ep-stat-card">
+      <div class="ep-stat-val" id="ep_drops">0</div>
+      <div class="ep-stat-lbl">DROPS ACUMULADOS</div>
+    </div>
+    <div class="ep-stat-card">
+      <div class="ep-stat-val" id="ep_eff">0%</div>
+      <div class="ep-stat-lbl">EFECTIVIDAD LOGÍSTICA</div>
+    </div>
+  </div>
+
+  <div class="ep-footer">
+    <div class="ep-footer-tag">👑 MIEMBRO OFICIAL LEYENDAS DROPI</div>
+    <div class="ep-footer-sub">Plataforma #1 de Dropshipping en Latinoamérica</div>
+  </div>
 </div>
 
 <!-- Share Bottom Sheet Modal -->
@@ -1103,11 +1246,23 @@
   }
 
   async function generateImageBlob() {
-    const slide5 = document.getElementById('slide5');
+    const s = currentSeller;
+    const lvl = getOfficialLeyendasLevel(s.total_orders);
+    const effPct = Math.round(s.efectivity_delivery * 100);
+
+    // Populate offscreen poster data with summary (no buttons, no URLs, no secret product details)
+    document.getElementById('ep_name').textContent = s.name;
+    document.getElementById('ep_insignia').src = lvl.insigniaImg;
+    document.getElementById('ep_rank').textContent = `Nivel ${lvl.levelNum} · ${lvl.name} ${lvl.emoji}`;
+    document.getElementById('ep_drops').textContent = s.total_orders.toLocaleString('es-CO');
+    document.getElementById('ep_eff').textContent = `${effPct}%`;
+
+    const poster = document.getElementById('exportPoster');
+
     if (typeof html2canvas !== 'undefined') {
       try {
-        const canvas = await html2canvas(slide5, {
-          scale: 2,
+        const canvas = await html2canvas(poster, {
+          scale: 2.5,
           useCORS: true,
           backgroundColor: '#050209',
           logging: false
@@ -1123,44 +1278,62 @@
   async function shareTo(channel) {
     const s = currentSeller;
     const lvl = getOfficialLeyendasLevel(s.total_orders);
-    const textMsg = `👑 ¡Consolidé ${s.total_orders.toLocaleString()} drops en Dropi y alcancé el Nivel ${lvl.levelNum} (${lvl.name})! #LeyendasDropi`;
-    const shareUrl = window.location.href;
+    const textMsg = `👑 ¡Consolidé ${s.total_orders.toLocaleString('es-CO')} drops acumulados en el Programa Leyendas Dropi y alcancé el Nivel ${lvl.levelNum} (${lvl.name})! #LeyendasDropi`;
 
     closeShareModal();
-    showToast('Generando tarjeta de insignia...');
+    showToast('Generando tarjeta HD de resumen...');
 
     let blob = await generateImageBlob();
-    let file = blob ? new File([blob], `wrapped-dropi-${s.user_id}.png`, { type: 'image/png' }) : null;
+    let file = blob ? new File([blob], `leyendas-dropi-${s.user_id}.png`, { type: 'image/png' }) : null;
 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: 'Mi Estatus Leyendas Dropi',
+          text: textMsg,
+          files: [file]
+        });
+        showToast('✓ Tarjeta e imagen compartidas');
+        return;
+      } catch (e) {
+        console.log('Native share fallback triggered', e);
+      }
+    }
+
     if (channel === 'whatsapp') {
-      showToast('💬 Abriendo WhatsApp...');
-      if (blob && navigator.clipboard && window.ClipboardItem) {
-        try {
-          await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-        } catch(e) {}
-      }
-      if (isMobile) {
-        window.location.href = `whatsapp://send?text=${encodeURIComponent(textMsg + '\n\n' + shareUrl)}`;
-      } else {
-        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textMsg + '\n\n' + shareUrl)}`, '_blank');
-      }
-    } 
-    else if (channel === 'instagram') {
-      showToast('📸 Guardando tarjeta en fotos...');
       if (blob) {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `wrapped-dropi-leyendas.png`;
+        a.download = `leyendas-dropi-${s.user_id}.png`;
         a.click();
       }
       try {
-        if (navigator.clipboard) {
-          await navigator.clipboard.writeText(textMsg);
-        }
+        if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
       } catch(e) {}
 
+      showToast('💬 Abriendo WhatsApp...');
+      setTimeout(() => {
+        if (isMobile) {
+          window.location.href = `whatsapp://send?text=${encodeURIComponent(textMsg)}`;
+        } else {
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textMsg)}`, '_blank');
+        }
+      }, 300);
+    } 
+    else if (channel === 'instagram') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+      }
+      try {
+        if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+      } catch(e) {}
+
+      showToast('📸 Tarjeta guardada. Abriendo Instagram...');
       setTimeout(() => {
         if (isMobile) {
           window.location.href = "instagram://story-camera";
@@ -1168,30 +1341,36 @@
         } else {
           window.open("https://www.instagram.com/", '_blank');
         }
-        showToast('📸 ¡Imagen guardada! Súbela directo a tu Story');
       }, 400);
     } 
     else if (channel === 'facebook') {
-      showToast('🔵 Abriendo Facebook...');
-      const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(textMsg)}`;
-      window.open(fbUrl, '_blank');
-    } 
-    else if (channel === 'native') {
-      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({ title: 'Mi Wrapped Leyendas Dropi', text: textMsg, files: [file] });
-          return;
-        } catch (e) {}
-      }
       if (blob) {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `wrapped-dropi-${s.user_id}.png`;
+        a.download = `leyendas-dropi-${s.user_id}.png`;
         a.click();
-        showToast('✓ Imagen descargada en HD');
+      }
+      try {
+        if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+      } catch(e) {}
+
+      showToast('🔵 Abriendo Facebook...');
+      setTimeout(() => {
+        window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textMsg)}`, '_blank');
+      }, 300);
+    } 
+    else if (channel === 'native') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+        showToast('✓ Tarjeta HD guardada en fotos');
       } else {
-        navigator.clipboard?.writeText(textMsg + ' ' + shareUrl);
-        showToast('✓ Enlace copiado al portapapeles');
+        try {
+          if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+        } catch(e) {}
+        showToast('✓ Texto de estado copiado');
       }
     }
   }
