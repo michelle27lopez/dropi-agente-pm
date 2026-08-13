@@ -565,101 +565,7 @@
     filter: drop-shadow(0 0 35px rgba(255, 0, 0, 0.65));
   }
 
-  /* ---------- PM Lens container & Switch (Glassmorphism dashboard) ---------- */
-  #lensToggle {
-    position: absolute;
-    bottom: 26px;
-    left: 22px;
-    z-index: 35;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
-    border-radius: 99px;
-    padding: 8px 14px;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
-    backdrop-filter: blur(12px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    transition: all 0.3s var(--ease);
-  }
-  
-  #lensToggle:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-  }
-  
-  #lensToggle .sw {
-    width: 32px;
-    height: 18px;
-    border-radius: 99px;
-    background: rgba(255, 255, 255, 0.2);
-    position: relative;
-    transition: background 0.3s;
-  }
-  
-  #lensToggle .sw::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-    transition: left 0.3s var(--ease);
-  }
-  
-  body.lens #lensToggle .sw {
-    background: var(--color-maestro);
-  }
-  
-  body.lens #lensToggle .sw::after {
-    left: 16px;
-  }
- 
-  .lens {
-    position: absolute;
-    left: 22px;
-    right: 22px;
-    bottom: 74px;
-    z-index: 34;
-    background: rgba(5, 2, 9, 0.94);
-    border: 1px solid rgba(255, 133, 0, 0.35);
-    border-radius: 20px;
-    padding: 16px 18px;
-    backdrop-filter: blur(16px);
-    opacity: 0;
-    transform: translateY(14px);
-    pointer-events: none;
-    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255,255,255,0.1);
-  }
-  
-  body.lens .slide.active .lens {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  
-  .lens .tt {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-maestro);
-    margin-bottom: 6px;
-  }
-  
-  .lens .tx {
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 1.45;
-    color: #e5daff;
-  }
+
 
   /* Confetti */
   #fx {
@@ -736,10 +642,6 @@
       <div class="med" style="font-size: 24px; margin-top: 5px;">Experto Plata III</div>
     </div>
     <div class="sub reveal d3" style="text-align:center; max-width: 320px; margin: 15px auto 0; line-height: 1.5; font-size: 13.5px;">Aquí se mide el poder de tu constancia. Repasemos el volumen de tu operación y tu estatus acumulado en el Imperio.<br><br>Toca para iniciar tu ascenso →</div>
-    <div class="lens">
-      <div class="tt">Lente PM · Identidad y Pertenencia (SDT)</div>
-      <div class="tx">Enmarcar el Wrapped como el camino transcurrido en el programa "Leyendas" (no estadísticas sueltas) activa la motivación intrínseca (Autonomía y Competencia) al dar significado al esfuerzo del seller.</div>
-    </div>
   </section>
 
   <!-- 1 · ÓRDENES / DROPS -->
@@ -748,10 +650,6 @@
     <div class="metric"><div class="big up" data-count="4820" data-dur="1600">0</div><span class="unit reveal d3" style="margin-left: 6px;">drops</span></div>
     <div class="lede reveal d3" style="margin-top:18px">Cada drop representa una orden completada con éxito. Has acumulado <span class="accent">1 drop cada 1.8 horas</span> de por vida de forma permanente.</div>
     <div class="delta reveal d4"><span><b>+63%</b> drops vs. tu 2024</span></div>
-    <div class="lens">
-      <div class="tt">Lente PM · Capital Acumulado (Sunk Cost Fallacy)</div>
-      <div class="tx">Los drops históricos son permanentes (1 orden = 1 drop). Al ser acumulativos y no expirar, actúan como un "lock-in" psicológico que eleva el costo percibido de abandonar la plataforma.</div>
-    </div>
   </section>
 
   <!-- 2 · VENTAS COD -->
@@ -760,10 +658,6 @@
     <div class="metric"><span class="med up" style="opacity:0.9; margin-right: 4px;">$</span><div class="big up" data-count="312" data-dur="1500">0</div><span class="unit reveal d3" style="margin-left: 6px;">M COP</span></div>
     <div class="lede reveal d3" style="margin-top:18px">Valor bruto movilizado mediante pago contra entrega (COD). Consolidaste tu operación comercial sin incurrir en costos de inventario propio.</div>
     <div class="delta reveal d4"><span>Tu mes récord: <b>Noviembre</b> · $48M transaccionados</span></div>
-    <div class="lens">
-      <div class="tt">Lente PM · Refuerzo de Capacidad (Self-Efficacy)</div>
-      <div class="tx">Hacer tangible el volumen total transaccionado sin apalancarse en inventarios propios refuerza la baja fricción operativa del modelo y empodera al dropshipper al visibilizar su capacidad de escala.</div>
-    </div>
   </section>
 
   <!-- 3 · TOP PRODUCTO -->
@@ -774,10 +668,6 @@
       <div class="chip first reveal d3"><span class="rank">1</span><span class="name">Kit bandas fitness</span><span class="qty">1.240 drops</span></div>
       <div class="chip reveal d3" style="transition-delay:0.5s"><span class="rank">2</span><span class="name">Organizador de closet</span><span class="qty">870 drops</span></div>
       <div class="chip reveal d4"><span class="rank">3</span><span class="name">Lámpara de luna 3D</span><span class="qty">640 drops</span></div>
-    </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Saliencia de Habilidad</div>
-      <div class="tx">Recordar los productos ganadores históricos ayuda a mitigar la fatiga de pauta y promueve la búsqueda de nuevos productos similares bajo la misma categoría ganadora.</div>
     </div>
   </section>
 
@@ -790,10 +680,6 @@
       <div class="chip reveal d3">🇨🇴 <span class="name">Colombia</span><span class="qty">3.910 drops</span></div>
       <div class="chip reveal d3" style="transition-delay:0.45s">🇲🇽 <span class="name">México</span><span class="qty">560 drops</span></div>
       <div class="chip reveal d4">🇨🇱 <span class="name">Chile</span><span class="qty">350 drops</span></div>
-    </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Mitigación de Fricción</div>
-      <div class="tx">Al resaltar las rutas de entrega más exitosas (Bogotá -> Medellín), guiamos al seller hacia zonas de bajo riesgo logístico, protegiendo su margen y fomentando la pauta continua.</div>
     </div>
   </section>
 
@@ -810,22 +696,13 @@
     </div>
     <div class="lede reveal d3" style="text-align:center; margin-top: 14px;">Subiste de <b>61%</b> a <b>74%</b> de efectividad.</div>
     <div class="delta reveal d4" style="margin:18px auto 0; display: flex; justify-content: center;"><span>A solo <b>1%</b> de la meta de excelencia (75%)</span></div>
-    <div class="lens">
-      <div class="tt">Lente PM · Gradiente de Meta (Goal-Gradient Effect)</div>
-      <div class="tx">La proximidad al hito acelera el esfuerzo. Enmarcar el logro como "a 1% de la meta" genera mayor urgencia e impulso conductual que reportar solo la cifra.</div>
-    </div>
   </section>
-
   <!-- 6 · RACHA -->
   <section class="slide g6">
     <div class="kicker reveal d1">Racha Activa de Permanencia (RAP)</div>
     <div class="metric"><div class="big up" data-count="18" data-dur="1200">0</div><span class="unit reveal d3" style="margin-left: 6px;">semanas</span></div>
     <div class="lede reveal d3" style="margin-top:18px">18 semanas consecutivas facturando órdenes completadas. Leyendas recompensa la consistencia operativa continua.</div>
     <div class="delta reveal d4"><span>Factura esta semana para <b>no enfriar tu racha</b> y mantener tu rango</span></div>
-    <div class="lens">
-      <div class="tt">Lente PM · Aversión a la Pérdida (Loss Aversion)</div>
-      <div class="tx">La racha activa de permanencia (RAP) de 18 semanas activa el temor a perder el logro acumulado. La alerta de facturar para no enfriar la racha combate la inactividad temporal del seller.</div>
-    </div>
   </section>
 
 
@@ -850,18 +727,12 @@
       <button class="btn primary" onclick="share()">Compartir mi Rango</button>
       <button class="btn ghost" onclick="restart()">Ver de nuevo</button>
     </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Cierre de Bucle de Retención</div>
-      <div class="tx">Muestra la brecha (180 órdenes) para alcanzar la meta mensual (1.000 órdenes - Master de Oro). El beneficio operativo (soporte prioritario y Dropicard) genera tracción operativa inmediata.</div>
-    </div>
   </section>
 
   <!-- nav zones -->
   <div class="nav left"  onclick="prev()"></div>
   <div class="nav right" onclick="next()"></div>
 
-  <!-- PM lens -->
-  <div id="lensToggle" onclick="toggleLens(event)"><span class="sw"></span><span>Lente PM</span></div>
   <div class="pausehint">← → mueve · espacio pausa</div>
 </div>
 
@@ -961,7 +832,7 @@
     }
   }
 
-  function toggleLens(e){ e.stopPropagation(); document.body.classList.toggle('lens'); }
+
   function share(){
     const txt='Consolidé 4.820 drops históricos en LEYENDAS y ascendí al rango Experto Plata III #LeyendasDropi';
     if(navigator.share){ navigator.share({title:'Mi Estatus en Leyendas Dropi',text:txt}).catch(()=>{}); }
