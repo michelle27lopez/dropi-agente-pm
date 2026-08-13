@@ -49,47 +49,7 @@
     background: radial-gradient(circle at center, #1b0c03 0%, #030107 100%);
   }
 
-  /* Selector Bar */
-  #sellerSelectorBar {
-    position: fixed;
-    top: 12px;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(10, 5, 18, 0.92);
-    border: 1px solid rgba(255, 133, 0, 0.4);
-    padding: 8px 16px;
-    border-radius: 99px;
-    backdrop-filter: blur(16px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
-  }
-  
-  #sellerSelectorBar label {
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-master);
-  }
-  
-  #sellerSelect {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 700;
-    font-family: inherit;
-    cursor: pointer;
-    outline: none;
-  }
 
-  #sellerSelect option {
-    background: #11081f;
-    color: #fff;
-  }
 
   /* Stage (iPhone frame) */
   #stage {
@@ -442,17 +402,7 @@
       border: none !important;
       box-shadow: none !important;
     }
-    #sellerSelectorBar {
-      top: 6px;
-      padding: 5px 12px;
-    }
-    #sellerSelectorBar label {
-      font-size: 10px;
-    }
-    #sellerSelect {
-      font-size: 11px;
-      padding: 4px 8px;
-    }
+
     .slide {
       padding: 60px 20px 80px;
     }
@@ -615,19 +565,11 @@
 </head>
 <body>
 
-<!-- Top Selector -->
-<div id="sellerSelectorBar">
-  <label for="sellerSelect">👑 Programa Leyendas Dropi:</label>
-  <select id="sellerSelect" onchange="loadSeller(this.value)">
-    <!-- Dynamic options -->
-  </select>
-</div>
-
 <div id="stage" aria-label="Programa Leyendas Dropi Wrapped 2026">
   <div id="bars"></div>
   <div id="brand">
     <img class="brand-logo-img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Leyendas Dropi Logo">
-    <span class="logo-wrapped" id="sellerBadgeTop">Seller #...</span>
+    <span class="logo-wrapped" id="sellerBadgeTop">Leyendas 2026</span>
   </div>
 
   <div id="fx"></div>
@@ -644,7 +586,7 @@
 
   <!-- SLIDE 0: INTRO / INSIGNIA RECURSO GRÁFICO OFICIAL -->
   <section class="slide g0 active" id="slide0">
-    <div class="kicker reveal d1" id="s0_kicker">Hola, Seller #...</div>
+    <div class="kicker reveal d1" id="s0_kicker">¡Hola! Tu Wrapped 2026</div>
     <div class="insignia-container reveal d2">
       <!-- Recurso gráfico oficial del Playbook de Leyendas Dropi -->
       <img class="insignia-img-official" id="s0_insignia_img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/1.png" alt="Insignia Oficial Leyendas">
@@ -917,16 +859,6 @@
     return { val: Math.round(amount).toLocaleString('es-CO'), unit: "COP" };
   }
 
-  // Populate Dropdown
-  const selEl = document.getElementById('sellerSelect');
-  SELLERS_DATA.forEach((s) => {
-    const opt = document.createElement('option');
-    opt.value = s.user_id;
-    const lvl = getOfficialLeyendasLevel(s.total_orders);
-    opt.textContent = `${s.name} (#${s.user_id}) — Nivel ${lvl.levelNum} ${lvl.name} (${s.total_orders.toLocaleString()} drops)`;
-    selEl.appendChild(opt);
-  });
-
   let currentSeller = SELLERS_DATA[0];
   const slides = [...document.querySelectorAll('.slide')];
   const barsWrap = document.getElementById('bars');
@@ -955,10 +887,10 @@
     const effPct = Math.round(s.efectivity_delivery * 100);
     const prodPct = ((s.orders_with_product / s.total_orders) * 100).toFixed(1);
 
-    document.getElementById('sellerBadgeTop').textContent = `${s.name} (#${s.user_id})`;
+    document.getElementById('sellerBadgeTop').textContent = 'Leyendas 2026';
 
     // Slide 0: Insignia Oficial
-    document.getElementById('s0_kicker').textContent = `Hola, ${s.name}`;
+    document.getElementById('s0_kicker').textContent = '¡Hola! Tu Wrapped 2026';
     const img0 = document.getElementById('s0_insignia_img');
     img0.src = lvl.insigniaImg;
     img0.alt = `Insignia Oficial ${lvl.name}`;
@@ -1097,7 +1029,7 @@
     const s = currentSeller;
     const lvl = getOfficialLeyendasLevel(s.total_orders);
     document.getElementById('modalInsigniaImg').src = lvl.insigniaImg;
-    document.getElementById('modalSellerName').textContent = s.name;
+    document.getElementById('modalSellerName').textContent = 'Mi Estatus Leyendas';
     document.getElementById('modalSellerRank').textContent = `Nivel ${lvl.levelNum}: ${lvl.name} ${lvl.emoji}`;
     document.getElementById('modalSellerStats').textContent = `${s.total_orders.toLocaleString()} drops completados`;
     document.getElementById('shareModal').classList.add('active');
