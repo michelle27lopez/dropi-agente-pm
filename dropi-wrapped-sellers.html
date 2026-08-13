@@ -109,8 +109,8 @@
   .slide.active {
     opacity: 1;
     visibility: visible;
-    pointer-events: none;
-    z-index: 10;
+    pointer-events: auto;
+    z-index: 30;
   }
   
   @keyframes gradientShift {
@@ -276,11 +276,11 @@
     opacity: 0.85;
   }
 
-  /* Touch Nav */
+  /* Touch Nav (covers top 85% of screen, leaving bottom 130px free for CTA buttons) */
   .nav {
     position: absolute;
     top: 0;
-    bottom: 0;
+    bottom: 130px;
     width: 35%;
     z-index: 40;
     cursor: pointer;
@@ -386,7 +386,7 @@
     flex-direction: column;
     gap: 10px;
     position: relative;
-    z-index: 90;
+    z-index: 99;
     pointer-events: auto;
   }
   .btn {
@@ -399,7 +399,7 @@
     font-family: inherit;
     transition: transform 0.2s var(--ease);
     position: relative;
-    z-index: 95;
+    z-index: 100;
     pointer-events: auto;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
