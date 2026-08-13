@@ -276,11 +276,11 @@
     opacity: 0.85;
   }
 
-  /* Touch Nav (covers top 85% of screen, leaving bottom 130px free for CTA buttons) */
+  /* Touch Nav (occupies top 60% of stage, 0% overlap with bottom buttons) */
   .nav {
     position: absolute;
-    top: 0;
-    bottom: 130px;
+    top: 60px;
+    height: 55%;
     width: 35%;
     z-index: 40;
     cursor: pointer;
@@ -386,7 +386,7 @@
     flex-direction: column;
     gap: 10px;
     position: relative;
-    z-index: 99;
+    z-index: 100;
     pointer-events: auto;
   }
   .btn {
@@ -399,9 +399,10 @@
     font-family: inherit;
     transition: transform 0.2s var(--ease);
     position: relative;
-    z-index: 100;
+    z-index: 101;
     pointer-events: auto;
     user-select: none;
+    touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
   .btn.primary {
@@ -852,8 +853,8 @@
       ¡Sigue escalando! En el Programa Leyendas, cruzar el umbral de <strong>100 órdenes mensuales</strong> reduce la cancelación en <strong>82%</strong> y desbloquea beneficios exclusivos.
     </div>
     <div class="cta reveal d4">
-      <button class="btn primary" onclick="share(event)" type="button">Compartir Estatus Leyendas</button>
-      <button class="btn ghost" onclick="restart(event)" type="button">Ver de nuevo</button>
+      <button class="btn primary" onclick="share(event)" ontouchend="share(event)" type="button">Compartir Estatus Leyendas</button>
+      <button class="btn ghost" onclick="restart(event)" ontouchend="restart(event)" type="button">Ver de nuevo</button>
     </div>
   </section>
 
@@ -1454,19 +1455,26 @@
     }
   }
 
+  let lastActionTime = 0;
   function share(e) {
     if (e) {
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
       e.stopPropagation();
     }
+    const now = Date.now();
+    if (now - lastActionTime < 400) return;
+    lastActionTime = now;
     openShareModal();
   }
 
   function restart(e) {
     if (e) {
-      e.preventDefault();
+      if (e.cancelable) e.preventDefault();
       e.stopPropagation();
     }
+    const now = Date.now();
+    if (now - lastActionTime < 400) return;
+    lastActionTime = now;
     show(0);
   }
 
