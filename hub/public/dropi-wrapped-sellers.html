@@ -612,7 +612,7 @@
       <div class="med" style="font-size: 22px; margin-top: 8px;" id="s0_rank">...</div>
     </div>
     <div class="sub reveal d3" style="text-align:center; max-width: 310px; margin: 10px auto 0;" id="s0_sub">
-      Bienvenido a tu retrospectiva oficial en el programa **Leyendas Dropi (v7.0)**. Repasemos tu desempeño acumulado.
+      Bienvenido a tu retrospectiva oficial en el programa <strong>Leyendas Dropi (v7.0)</strong>. Repasemos tu desempeño acumulado.
     </div>
   </section>
 
@@ -693,10 +693,10 @@
     </div>
     <div class="goal reveal d3">
       <div class="track"><i id="goalbar"></i></div>
-      <div class="lbl"><span id="s5_goal_curr">0 / 0</span><span id="s5_goal_rem">...</span></div>
+      <div class="lbl"><span id="s5_goal_curr">0 de 0</span><span id="s5_goal_rem">...</span></div>
     </div>
     <div class="sub reveal d3" style="font-size: 12.5px; text-align:center; margin-top: 8px; line-height: 1.45;" id="s5_sub">
-      ¡Sigue escalando! En el Programa Leyendas, cruzar las **100 órdenes/mes** reduce el churn en **82%** y desbloquea beneficios exclusivos.
+      ¡Sigue escalando! En el Programa Leyendas, cruzar el umbral de <strong>100 órdenes mensuales</strong> reduce la cancelación en <strong>82%</strong> y desbloquea beneficios exclusivos.
     </div>
     <div class="cta reveal d4">
       <button class="btn primary" onclick="share(event)" type="button">Compartir Estatus Leyendas</button>
@@ -946,13 +946,13 @@
     img0.style.filter = `drop-shadow(0 0 30px ${lvl.glowColor})`;
     
     document.getElementById('s0_rank').textContent = `Nivel ${lvl.levelNum} · ${lvl.name}`;
-    document.getElementById('s0_sub').innerHTML = `Has acumulado <span class="accent">${s.total_orders.toLocaleString('es-CO')} drops</span> en el programa **Leyendas Dropi (v7.0)**. Tu estatus oficial es **${lvl.name}** (${lvl.desc}).`;
+    document.getElementById('s0_sub').innerHTML = `Has acumulado <span class="accent">${s.total_orders.toLocaleString('es-CO')} drops</span> en el programa <strong>Leyendas Dropi (v7.0)</strong>. Tu estatus oficial es <strong>${lvl.name}</strong> (${lvl.desc}).`;
 
     // Slide 1
     const el1 = document.getElementById('s1_orders');
     el1.dataset.count = s.total_orders;
     document.getElementById('s1_accent').textContent = `${s.total_orders.toLocaleString('es-CO')}`;
-    document.getElementById('s1_status').textContent = `Nivel ${lvl.levelNum} ${lvl.name} · ${s.total_orders >= 100 ? "Cruza el umbral de no-churn (≥100 órdenes)" : "En ruta a cruzar las 100 órdenes de activación"}`;
+    document.getElementById('s1_status').textContent = `Nivel ${lvl.levelNum} ${lvl.name} · ${s.total_orders >= 100 ? "Has superado la meta de 100 órdenes mensuales" : "En ruta a alcanzar las 100 órdenes de activación"}`;
 
     // Slide 2
     const el2 = document.getElementById('s2_income');
@@ -984,7 +984,7 @@
     document.getElementById('s5_rank').textContent = `Nivel ${lvl.levelNum} — ${lvl.name}`;
     
     const rem = Math.max(0, lvl.nextGoal - s.total_orders);
-    document.getElementById('s5_goal_curr').textContent = `${s.total_orders.toLocaleString()} / ${lvl.nextGoal.toLocaleString()} drops`;
+    document.getElementById('s5_goal_curr').textContent = `${s.total_orders.toLocaleString()} de ${lvl.nextGoal.toLocaleString()} drops`;
     document.getElementById('s5_goal_rem').textContent = rem > 0 ? `Faltan ${rem.toLocaleString()} para Nivel ${lvl.levelNum < 6 ? lvl.levelNum + 1 : 6} (${lvl.nextName})` : "¡Nivel Máximo Leyenda alcanzado!";
   }
 
