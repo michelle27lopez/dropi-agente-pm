@@ -621,8 +621,8 @@ export default function ProjectDashboardPage() {
           {project.prototype_url && (
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
               <div>
-                <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>🧪 Validación de Concepto (Mock)</strong>
-                <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Prototipo interactivo diseñado para este experimento</span>
+                <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📄 Detalle del Proyecto</strong>
+                <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Información completa de este proyecto</span>
               </div>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {project.project_code === "PROD-MUESTRA-POC-1" && (
@@ -649,7 +649,7 @@ export default function ProjectDashboardPage() {
                     display: "inline-flex", alignItems: "center", gap: 6
                   }}
                 >
-                  {project.project_code === "PROD-MUESTRA-POC-1" ? "Ver Mock — Detalle de producto" : "Ver Mock de Validación"} <span style={{ fontSize: 11 }}>➔</span>
+                  {project.project_code === "PROD-MUESTRA-POC-1" ? "Ver Mock — Detalle de producto" : "Ver Detalle del Proyecto"} <span style={{ fontSize: 11 }}>➔</span>
                 </a>
               </div>
             </div>
