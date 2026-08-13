@@ -106,12 +106,14 @@
     overflow: hidden;
     background-size: 200% 200% !important;
     animation: gradientShift 10s ease infinite;
+    z-index: 10;
   }
   
   .slide.active {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    z-index: 30;
   }
   
   @keyframes gradientShift {
@@ -480,6 +482,9 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    position: relative;
+    z-index: 90;
+    pointer-events: auto;
   }
   
   .btn {
@@ -491,6 +496,11 @@
     cursor: pointer;
     transition: transform 0.2s var(--ease), box-shadow 0.2s, background 0.3s;
     font-family: inherit;
+    position: relative;
+    z-index: 95;
+    pointer-events: auto;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   
   .btn.primary {
@@ -1159,8 +1169,20 @@
     }
   }
 
-  function share() {
+  function share(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     openShareModal();
+  }
+
+  function restart(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    show(0);
   }
 
   // init
