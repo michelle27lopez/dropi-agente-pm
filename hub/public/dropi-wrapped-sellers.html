@@ -589,17 +589,18 @@
     transform: translateX(-50%) translateY(0);
   }
 
-  /* Offscreen Poster container for HD 9:16 story export */
+  /* Offscreen Poster container for HD 9:16 story export with Instagram/WhatsApp Safe Zones */
   .export-poster-hidden {
     position: absolute;
     left: -9999px;
     top: -9999px;
-    width: 420px;
-    height: 740px;
-    background: radial-gradient(circle at center, #1c0a02 0%, #050209 100%);
-    border: 1px solid rgba(255, 133, 0, 0.4);
+    width: 440px;
+    height: 780px;
+    background: radial-gradient(circle at 50% 30%, #280e02 0%, #0c0517 70%, #030107 100%);
+    border: 2px solid rgba(255, 133, 0, 0.45);
     box-sizing: border-box;
-    padding: 40px 28px;
+    /* SAFE ZONES: 80px Top (avoids story headers), 125px Bottom (avoids reply/caption input), 36px Sides */
+    padding: 80px 36px 125px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -644,35 +645,50 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px 0;
+    margin: 6px 0;
   }
   .ep-insignia-img {
-    width: 165px;
-    height: 165px;
+    width: 155px;
+    height: 155px;
     object-fit: contain;
     filter: drop-shadow(0 0 35px rgba(255, 133, 0, 0.6));
   }
   .ep-rank-title {
-    font-size: 22px;
+    font-size: 21px;
     font-weight: 800;
     color: var(--color-master);
-    margin-top: 12px;
+    margin-top: 8px;
+  }
+  .ep-quote-box {
+    background: linear-gradient(135deg, rgba(255, 133, 0, 0.18) 0%, rgba(255, 0, 0, 0.12) 100%);
+    border: 1px solid rgba(255, 133, 0, 0.35);
+    border-radius: 14px;
+    padding: 10px 16px;
+    text-align: center;
+    width: 100%;
+    margin: 4px 0;
+  }
+  .ep-quote-text {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
   }
   .ep-stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 12px;
     width: 100%;
   }
   .ep-stat-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 133, 0, 0.3);
     border-radius: 16px;
-    padding: 14px 10px;
+    padding: 12px 10px;
     text-align: center;
   }
   .ep-stat-val {
-    font-size: 24px;
+    font-size: 23px;
     font-weight: 800;
     color: #fff;
   }
@@ -863,7 +879,7 @@
   <div class="nav right" onclick="next()"></div>
 </div>
 
-<!-- Dedicated High-Res Export Poster Canvas (Captured by html2canvas) -->
+<!-- Dedicated High-Res Export Poster Canvas (SAFE ZONE DESIGN FOR INSTAGRAM & WHATSAPP STORIES) -->
 <div id="exportPoster" class="export-poster-hidden">
   <div class="ep-header">
     <div class="leyendas-brand-vector">
@@ -887,7 +903,7 @@
         <text x="34" y="28" font-family="'Chakra Petch', system-ui, -apple-system, sans-serif" font-weight="800" font-size="7.5" letter-spacing="2.8" fill="#FF8500">PROGRAMA DROPI</text>
       </svg>
     </div>
-    <div class="ep-edition">Retrospectiva 2026</div>
+    <div class="ep-edition">RETROSPECTIVA OFICIAL 2026</div>
   </div>
 
   <div class="ep-seller-box">
@@ -900,10 +916,14 @@
     <div class="ep-rank-title" id="ep_rank">Nivel Leyendas</div>
   </div>
 
+  <div class="ep-quote-box">
+    <div class="ep-quote-text" id="ep_quote">"¡Consolidé mis drops en el Programa Leyendas Dropi!"</div>
+  </div>
+
   <div class="ep-stats-grid">
     <div class="ep-stat-card">
       <div class="ep-stat-val" id="ep_drops">0</div>
-      <div class="ep-stat-lbl">DROPS ACUMULADOS</div>
+      <div class="ep-stat-lbl">DROPS COMPLETADOS</div>
     </div>
     <div class="ep-stat-card">
       <div class="ep-stat-val" id="ep_eff">0%</div>
@@ -1330,10 +1350,11 @@
     const lvl = getOfficialLeyendasLevel(s.total_orders);
     const effPct = Math.round(s.efectivity_delivery * 100);
 
-    // Populate offscreen poster data with summary (no buttons, no URLs, no secret product details)
+    // Populate offscreen poster data inside Stories Safe Zone Grid
     document.getElementById('ep_name').textContent = s.name;
     document.getElementById('ep_insignia').src = lvl.insigniaImg;
     document.getElementById('ep_rank').textContent = `Nivel ${lvl.levelNum} · ${lvl.name} ${lvl.emoji}`;
+    document.getElementById('ep_quote').textContent = `“¡Consolidé ${s.total_orders.toLocaleString('es-CO')} drops acumulados en el Programa Leyendas Dropi!”`;
     document.getElementById('ep_drops').textContent = s.total_orders.toLocaleString('es-CO');
     document.getElementById('ep_eff').textContent = `${effPct}%`;
 
