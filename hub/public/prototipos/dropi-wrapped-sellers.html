@@ -256,15 +256,14 @@
   @media(max-width: 479px) { #brand { top: 28px; } }
   
   #brand .brand-logo-img {
-    height: 28px;
+    height: 32px;
+    width: auto;
     object-fit: contain;
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
-  }
-  .leyendas-brand-vector {
-    display: inline-flex;
-    align-items: center;
-    filter: drop-shadow(0 0 10px rgba(255, 133, 0, 0.45));
+    filter: drop-shadow(0 2px 14px rgba(255, 133, 0, 0.5));
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
   
   #brand .logo-wrapped {
@@ -615,8 +614,13 @@
     gap: 6px;
   }
   .ep-logo {
-    height: 38px;
+    height: 48px;
+    width: auto;
     object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 4px 18px rgba(255, 133, 0, 0.5));
+    transform: translateZ(0);
   }
   .ep-edition {
     font-size: 11px;
@@ -733,31 +737,7 @@
 <div id="stage" aria-label="Programa Leyendas Dropi Wrapped 2026">
   <div id="bars"></div>
   <div id="brand">
-    <div class="leyendas-brand-vector">
-      <svg viewBox="0 0 170 34" width="145" height="29" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="leyendasGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#FFD700"/>
-            <stop offset="50%" stop-color="#FF8500"/>
-            <stop offset="100%" stop-color="#FF0000"/>
-          </linearGradient>
-          <linearGradient id="leyendasTextGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#FFFFFF"/>
-            <stop offset="100%" stop-color="#FFDAB9"/>
-          </linearGradient>
-          <filter id="crownGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="1.5" result="blur"/>
-            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-          </filter>
-        </defs>
-        <path d="M5 23L3 11L9.5 15L15 6L20.5 15L27 11L25 23H5Z" fill="url(#leyendasGoldGrad)" filter="url(#crownGlow)"/>
-        <circle cx="3" cy="10" r="1.5" fill="#FFD700"/>
-        <circle cx="15" cy="5" r="1.8" fill="#FFD700"/>
-        <circle cx="27" cy="10" r="1.5" fill="#FFD700"/>
-        <text x="34" y="19" font-family="'Chakra Petch', system-ui, -apple-system, sans-serif" font-weight="900" font-size="16" letter-spacing="1.8" fill="url(#leyendasTextGrad)">LEYENDAS</text>
-        <text x="34" y="28" font-family="'Chakra Petch', system-ui, -apple-system, sans-serif" font-weight="800" font-size="7.5" letter-spacing="2.8" fill="#FF8500">PROGRAMA DROPI</text>
-      </svg>
-    </div>
+    <img class="brand-logo-img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Programa Leyendas Dropi Logo" crossorigin="anonymous">
     <span class="logo-wrapped" id="sellerBadgeTop">Leyendas 2026</span>
   </div>
 
@@ -882,27 +862,7 @@
 <!-- Dedicated High-Res Export Poster Canvas (SAFE ZONE DESIGN FOR INSTAGRAM & WHATSAPP STORIES) -->
 <div id="exportPoster" class="export-poster-hidden">
   <div class="ep-header">
-    <div class="leyendas-brand-vector">
-      <svg viewBox="0 0 170 34" width="160" height="32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="epGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#FFD700"/>
-            <stop offset="50%" stop-color="#FF8500"/>
-            <stop offset="100%" stop-color="#FF0000"/>
-          </linearGradient>
-          <linearGradient id="epTextGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#FFFFFF"/>
-            <stop offset="100%" stop-color="#FFDAB9"/>
-          </linearGradient>
-        </defs>
-        <path d="M5 23L3 11L9.5 15L15 6L20.5 15L27 11L25 23H5Z" fill="url(#epGoldGrad)"/>
-        <circle cx="3" cy="10" r="1.5" fill="#FFD700"/>
-        <circle cx="15" cy="5" r="1.8" fill="#FFD700"/>
-        <circle cx="27" cy="10" r="1.5" fill="#FFD700"/>
-        <text x="34" y="19" font-family="'Chakra Petch', system-ui, -apple-system, sans-serif" font-weight="900" font-size="16" letter-spacing="1.8" fill="url(#epTextGrad)">LEYENDAS</text>
-        <text x="34" y="28" font-family="'Chakra Petch', system-ui, -apple-system, sans-serif" font-weight="800" font-size="7.5" letter-spacing="2.8" fill="#FF8500">PROGRAMA DROPI</text>
-      </svg>
-    </div>
+    <img class="ep-logo" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Programa Leyendas Dropi Logo" crossorigin="anonymous">
     <div class="ep-edition">RETROSPECTIVA OFICIAL 2026</div>
   </div>
 
