@@ -417,13 +417,14 @@
 
 
 
-  /* Mobile Fullscreen & Responsiveness */
+  /* Mobile Fullscreen & Responsiveness for iOS & Android */
   @media(max-width: 479px) {
     body {
       background: #050209;
       justify-content: flex-start;
     }
     #stage {
+      width: 100vw;
       height: 100vh;
       height: 100dvh;
       max-height: 100dvh;
@@ -433,8 +434,56 @@
       box-shadow: none !important;
     }
 
+    #bars {
+      top: calc(env(safe-area-inset-top, 0px) + 14px) !important;
+    }
+
+    #brand {
+      top: calc(env(safe-area-inset-top, 0px) + 26px) !important;
+    }
+
     .slide {
-      padding: 60px 20px 80px;
+      padding: calc(env(safe-area-inset-top, 0px) + 60px) 20px calc(env(safe-area-inset-bottom, 0px) + 30px) !important;
+    }
+
+    .insignia-img-official {
+      max-width: 38vw;
+      max-height: 140px;
+    }
+
+    .metric .big {
+      font-size: clamp(38px, 12vw, 56px) !important;
+    }
+
+    .share-modal-content {
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px) !important;
+    }
+  }
+
+  /* Compact Viewports (iPhone SE / Short Android devices <= 680px height) */
+  @media(max-height: 680px) and (max-width: 479px) {
+    .insignia-img-official {
+      max-width: 30vw;
+      max-height: 110px;
+    }
+    .kicker {
+      font-size: 10.5px;
+      margin-bottom: 4px;
+    }
+    .med {
+      font-size: 18px !important;
+    }
+    .sub, .lede {
+      font-size: 12px !important;
+      margin-top: 8px !important;
+    }
+    .cta {
+      margin-top: 12px;
+      gap: 8px;
+    }
+    .btn {
+      padding: 12px;
+      font-size: 13.5px;
     }
   }
 
