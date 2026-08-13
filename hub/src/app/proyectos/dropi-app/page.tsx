@@ -1,7 +1,7 @@
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
 
-// Estructura: Promp/Prompmaestro.md (plantilla estándar de detalle de proyecto)
+// Estructura: Promp/Documento de Seguimiento.md (plantilla de seguimiento de proyecto)
 // Insumo: Dropi App/Plan Estrategico_ Dropi App (2).md — 20 mayo 2026
 
 const badgeStyle = (color: string, bg: string): React.CSSProperties => ({
@@ -57,23 +57,14 @@ const table: React.CSSProperties = {
   fontSize: 13,
 };
 
-const th: React.CSSProperties = {
-  textAlign: "left",
-  padding: "8px 10px",
-  borderBottom: "2px solid var(--border)",
-  color: "var(--muted)",
-  fontSize: 11,
-  fontWeight: 700,
-  textTransform: "uppercase",
-  letterSpacing: "0.05em",
-};
-
 const td: React.CSSProperties = {
   textAlign: "left",
   padding: "10px",
   borderBottom: "1px solid var(--border)",
   verticalAlign: "top",
 };
+
+const pending = <span style={badgeStyle("#B45309", "#FFFBEB")}>Pendiente de definir</span>;
 
 function Section({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) {
   return (
@@ -132,191 +123,130 @@ export default function DropiAppPage() {
           <p style={{ fontSize: 14, color: "var(--muted)", marginTop: 6 }}>Plan Estratégico · Dropi App — 20 mayo 2026</p>
         </div>
 
-        {/* 1. Definición del Proyecto */}
-        <Section icon="🎯" title="1. Definición del Proyecto">
-          <Field term="Nombre del proyecto">Plan Estratégico · Dropi App — De Vitrina a Herramienta de Gestión de Negocio</Field>
-          <Field term="Objetivo principal">
-            La Dropi App no es una copia de la plataforma web — debe convertirse en la herramienta para gestionar el negocio desde el bolsillo (modelo Shopify Mobile), enfocada en métricas de ventas, notificaciones push inteligentes, búsqueda de productos y gestión de órdenes, para resolver el problema severo de retención actual.
-          </Field>
-
-          <div style={{ marginBottom: 14 }}>
-            <div style={label}>Estado actual (baseline · corte 19 may 2026)</div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 10 }}>
-              <div style={metric}><div style={{ fontSize: 11, color: "var(--muted)" }}>Descargas iOS</div><div style={{ fontSize: 18, fontWeight: 800 }}>22,486</div></div>
-              <div style={metric}><div style={{ fontSize: 11, color: "var(--muted)" }}>Descargas Android</div><div style={{ fontSize: 18, fontWeight: 800 }}>73,686</div></div>
-              <div style={metric}><div style={{ fontSize: 11, color: "var(--muted)" }}>DAU total</div><div style={{ fontSize: 18, fontWeight: 800 }}>~3,443</div></div>
-              <div style={metric}><div style={{ fontSize: 11, color: "var(--muted)" }}>Ratio DAU/Descargas</div><div style={{ fontSize: 18, fontWeight: 800, color: "#DC2626" }}>~3.6%</div></div>
-            </div>
-          </div>
-
-          <Field term="Métricas de éxito / KPIs">
-            <p style={{ margin: "0 0 8px" }}>
-              El documento fuente no define una meta numérica explícita — el KPI implícito es <strong>subir el ratio DAU/Descargas por encima del 3.6% actual</strong> (hoy solo ~4 de cada 100 usuarios que descargan la app regresan diariamente).
-            </p>
-            <span style={badgeStyle("#B45309", "#FFFBEB")}>Meta numérica objetivo: pendiente de definir</span>
-          </Field>
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-            <Field term="Dentro del alcance (in-scope)">
-              <ul style={{ margin: 0, paddingLeft: 20 }}>
-                <li>📊 Métricas de ventas</li>
-                <li>🔔 Notificaciones push inteligentes con sonido</li>
-                <li>🔍 Búsqueda de productos para todos los usuarios</li>
-                <li>✏️ Gestión de órdenes</li>
-              </ul>
-            </Field>
-            <Field term="Fuera del alcance (out-of-scope)">
-              <span style={badgeStyle("#B45309", "#FFFBEB")}>No definido en el documento fuente</span>
-            </Field>
+        {/* 🎯 Objetivos Macro */}
+        <Section icon="🎯" title="Objetivos Macro">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
+            <Field term="Target">Usuarios de la Dropi App (Dropshippers, Marcas/Emprendedores en móvil).</Field>
+            <Field term="Adopción">Descargas iOS 22,486 · Android 73,686 (baseline corte 19 may 2026).</Field>
+            <Field term="Retención">Ratio DAU/Descargas actual ~3.6% (problema severo) — meta numérica {pending}.</Field>
+            <Field term="Satisfacción (NPS/CSAT)">{pending}</Field>
           </div>
         </Section>
 
-        {/* 2. Equipo y Responsabilidades */}
-        <Section icon="👥" title="2. Equipo y Responsabilidades">
+        {/* 📌 Definición del Proyecto */}
+        <Section icon="📌" title="Definición del Proyecto">
+          <Field term="Descripción">
+            La Dropi App no es una copia de la plataforma web — debe convertirse en la herramienta para gestionar el negocio desde el bolsillo (modelo Shopify Mobile), enfocada en métricas de ventas, notificaciones push inteligentes, búsqueda de productos y gestión de órdenes, para resolver el problema severo de retención actual.
+          </Field>
+          <div style={{ marginBottom: 6 }}>
+            <div style={label}>Enlaces clave</div>
+            <table style={table}>
+              <tbody>
+                <tr>
+                  <td style={{ ...td, fontWeight: 700, width: 260 }}>📄 Documento de Lanzamiento (Kickoff)</td>
+                  <td style={td}>Plan Estrategico_ Dropi App (2).md (carpeta Dropi App)</td>
+                </tr>
+                <tr>
+                  <td style={{ ...td, fontWeight: 700 }}>📊 Archivos / Hojas de Cálculo (Excel)</td>
+                  <td style={td}>{pending}</td>
+                </tr>
+                <tr>
+                  <td style={{ ...td, fontWeight: 700, borderBottom: "none" }}>🎫 Tarea principal o Épica en Jira</td>
+                  <td style={{ ...td, borderBottom: "none" }}>{pending}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </Section>
+
+        {/* 👥 Equipo del Proyecto */}
+        <Section icon="👥" title="Equipo del Proyecto">
           <table style={table}>
             <tbody>
               <tr>
-                <td style={{ ...td, fontWeight: 700, width: 220 }}>Product Manager / Líder</td>
+                <td style={{ ...td, fontWeight: 700, width: 220 }}>Product Manager (PM)</td>
                 <td style={td}>Diana Aldana</td>
               </tr>
               <tr>
-                <td style={{ ...td, fontWeight: 700 }}>Tech / Dev Lead</td>
-                <td style={td}><span style={badgeStyle("#B45309", "#FFFBEB")}>Sin asignar</span></td>
+                <td style={{ ...td, fontWeight: 700 }}>UX/UI Designer</td>
+                <td style={td}>{pending}</td>
               </tr>
               <tr>
-                <td style={{ ...td, fontWeight: 700 }}>Diseñador Lead</td>
-                <td style={td}><span style={badgeStyle("#B45309", "#FFFBEB")}>Sin asignar</span></td>
+                <td style={{ ...td, fontWeight: 700 }}>Frontend Developer</td>
+                <td style={td}>{pending}</td>
               </tr>
               <tr>
-                <td style={{ ...td, fontWeight: 700, borderBottom: "none" }}>Stakeholders / clientes clave</td>
-                <td style={{ ...td, borderBottom: "none" }}>Usuarios de la Dropi App (Dropshippers, Marcas/Emprendedores en móvil).</td>
+                <td style={{ ...td, fontWeight: 700, borderBottom: "none" }}>Tecnología Growth</td>
+                <td style={{ ...td, borderBottom: "none" }}>{pending}</td>
               </tr>
             </tbody>
           </table>
         </Section>
 
-        {/* 3. Recursos, Archivos y Enlaces */}
-        <Section icon="🔗" title="3. Recursos, Archivos y Enlaces">
+        {/* 📚 Documentación & Assets UX/UI */}
+        <Section icon="📚" title="Documentación & Assets UX/UI">
           <table style={table}>
             <tbody>
               <tr>
-                <td style={{ ...td, fontWeight: 700, width: 220 }}>Diseños & UX</td>
-                <td style={td}><span style={badgeStyle("#B45309", "#FFFBEB")}>Pendiente</span></td>
+                <td style={{ ...td, fontWeight: 700, width: 260 }}>🔬 Archivos de Research</td>
+                <td style={td}>{pending}</td>
               </tr>
               <tr>
-                <td style={{ ...td, fontWeight: 700 }}>Gestión de tareas</td>
-                <td style={td}><span style={badgeStyle("#B45309", "#FFFBEB")}>Pendiente</span></td>
+                <td style={{ ...td, fontWeight: 700 }}>📐 Service Blueprint</td>
+                <td style={td}>{pending}</td>
               </tr>
               <tr>
-                <td style={{ ...td, fontWeight: 700 }}>Código / repositorio</td>
-                <td style={td}><span style={badgeStyle("#B45309", "#FFFBEB")}>Pendiente</span> — app móvil Dropi (iOS/Android)</td>
+                <td style={{ ...td, fontWeight: 700 }}>👤 User Personas</td>
+                <td style={td}>{pending}</td>
               </tr>
               <tr>
-                <td style={{ ...td, fontWeight: 700 }}>Documentación técnica</td>
-                <td style={td}>Plan Estratégico · Dropi App (carpeta "Dropi App")</td>
+                <td style={{ ...td, fontWeight: 700 }}>🔀 Flujos de usuario (User Flows)</td>
+                <td style={td}>{pending}</td>
               </tr>
               <tr>
-                <td style={{ ...td, fontWeight: 700, borderBottom: "none" }}>Archivos adjuntos</td>
-                <td style={{ ...td, borderBottom: "none" }}>Plan Estrategico_ Dropi App (2).md</td>
+                <td style={{ ...td, fontWeight: 700 }}>🎨 Figma v1.0 (Exploración)</td>
+                <td style={td}>{pending}</td>
+              </tr>
+              <tr>
+                <td style={{ ...td, fontWeight: 700, borderBottom: "none" }}>🎨 Figma v2.0 (Handoff / Producción)</td>
+                <td style={{ ...td, borderBottom: "none" }}>{pending}</td>
               </tr>
             </tbody>
           </table>
         </Section>
 
-        {/* 4. Experimentos e Hipótesis */}
-        <Section icon="🧪" title="4. Experimentos e Hipótesis">
-          <table style={table}>
-            <thead>
-              <tr>
-                <th style={th}>ID</th>
-                <th style={th}>Experimento / prueba</th>
-                <th style={th}>Hipótesis</th>
-                <th style={th}>Criterio de éxito</th>
-                <th style={th}>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={{ ...td, borderBottom: "none", fontWeight: 700 }}>EXP-1</td>
-                <td style={{ ...td, borderBottom: "none" }}>Fase 2 · Rediseño hacia gestión de negocio (novedades)</td>
-                <td style={{ ...td, borderBottom: "none" }}>Si la app muestra métricas de ventas, permite gestionar órdenes y envía alertas de novedades, el usuario la necesitará todo el día, todos los días.</td>
-                <td style={{ ...td, borderBottom: "none" }}>Subir el ratio DAU/Descargas por encima del 3.6% actual</td>
-                <td style={{ ...td, borderBottom: "none" }}><span style={badgeStyle("#1458A8", "#EFF6FF")}>En curso</span></td>
-              </tr>
-            </tbody>
-          </table>
+        {/* 🗺️ Roadmap */}
+        <Section icon="🗺️" title="Roadmap">
+          <Field term="Fase 1 (MVP / Q1)">Descubrimiento de productos vía feed de video — completado.</Field>
+          <Field term="Fase 2 (Escala / Q2)">Novedades / gestión de negocio: métricas de ventas, notificaciones push, búsqueda de productos, gestión de órdenes — en desarrollo.</Field>
+          <Field term="Próximos pasos inmediatos">Definir fecha de cierre de Fase 2 y meta numérica objetivo del ratio DAU/Descargas.</Field>
         </Section>
 
-        {/* 5. Roadmap y Línea de Tiempo */}
-        <Section icon="🗺️" title="5. Roadmap y Línea de Tiempo">
-          <table style={table}>
-            <thead>
-              <tr>
-                <th style={th}>Fase / hito</th>
-                <th style={th}>Fecha estimada</th>
-                <th style={th}>Responsable</th>
-                <th style={th}>Estado</th>
-                <th style={th}>Entregable principal</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={td}>Fase 1 · Descubrimiento de productos (video)</td>
-                <td style={td}><span style={badgeStyle("#B45309", "#FFFBEB")}>Sin fecha exacta</span></td>
-                <td style={td}><span style={badgeStyle("#B45309", "#FFFBEB")}>Sin asignar</span></td>
-                <td style={td}><span style={badgeStyle("#16A34A", "#F0FDF4")}>Completado</span></td>
-                <td style={td}>App como vitrina de descubrimiento vía feed de video</td>
-              </tr>
-              <tr>
-                <td style={{ ...td, borderBottom: "none" }}>Fase 2 · Gestión de negocio (novedades)</td>
-                <td style={{ ...td, borderBottom: "none" }}><span style={badgeStyle("#B45309", "#FFFBEB")}>Sin fecha exacta</span></td>
-                <td style={{ ...td, borderBottom: "none" }}><span style={badgeStyle("#B45309", "#FFFBEB")}>Sin asignar</span></td>
-                <td style={{ ...td, borderBottom: "none" }}><span style={badgeStyle("#1458A8", "#EFF6FF")}>En desarrollo</span></td>
-                <td style={{ ...td, borderBottom: "none" }}>Métricas de ventas, push, búsqueda, gestión de órdenes</td>
-              </tr>
-            </tbody>
-          </table>
+        {/* 🗓️ Weekly Status */}
+        <Section icon="🗓️" title="Weekly Status (Sincronización Semanal)">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
+            <Field term="Semana del">{pending}</Field>
+            <Field term="Estado general">{pending}</Field>
+          </div>
+          <Field term="Resumen de la semana">{pending} — sin registros todavía.</Field>
+          <Field term="Retos y Bloqueos">{pending}</Field>
         </Section>
 
-        {/* 6. Seguimiento Semanal */}
-        <Section icon="📅" title="6. Seguimiento Semanal (Weekly Status)">
-          <p style={{ ...body, color: "var(--muted)", fontStyle: "italic" }}>
-            Sin registros todavía — esta sección se actualiza semana a semana por el equipo del proyecto.
-          </p>
-        </Section>
-
-        {/* 7. Bitácora de Decisiones Clave */}
-        <Section icon="📓" title="7. Bitácora de Decisiones Clave (Decision Log)">
-          <table style={table}>
-            <thead>
-              <tr>
-                <th style={th}>Fecha</th>
-                <th style={th}>Decisión tomada</th>
-                <th style={th}>Contexto / por qué</th>
-                <th style={th}>Aprobado por</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={{ ...td, borderBottom: "none", whiteSpace: "nowrap" }}>20 mayo 2026</td>
-                <td style={{ ...td, borderBottom: "none" }}>Adoptar nueva visión estratégica: pivotar de "vitrina de contenido" (feed de video) a herramienta de gestión de negocio (modelo Shopify Mobile).</td>
-                <td style={{ ...td, borderBottom: "none" }}>Ratio DAU/Descargas de solo ~3.6% evidencia un problema severo de retención — la app no genera necesidad de uso operativo diario.</td>
-                <td style={{ ...td, borderBottom: "none" }}><span style={badgeStyle("#B45309", "#FFFBEB")}>Sin especificar</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </Section>
-
-        {/* Pendientes por Clarificar */}
-        <Section icon="⚠️" title="Pendientes por Clarificar">
-          <ul style={{ ...body, margin: 0, paddingLeft: 20 }}>
-            <li style={{ marginBottom: 4 }}>Tech/Dev Lead y Diseñador Lead sin nombre asignado.</li>
-            <li style={{ marginBottom: 4 }}>Meta numérica objetivo del ratio DAU/Descargas no definida.</li>
-            <li style={{ marginBottom: 4 }}>Fechas específicas de la Fase 2 no definidas en el documento fuente.</li>
-            <li style={{ marginBottom: 4 }}>Alcance "fuera de scope" no definido en el documento fuente.</li>
-            <li style={{ marginBottom: 4 }}>Links de diseño, repositorio y gestión de tareas pendientes.</li>
-            <li>Aprobador de la decisión de pivote estratégico (20 mayo 2026) sin especificar.</li>
-          </ul>
+        {/* 📊 Métricas de Seguimiento */}
+        <Section icon="📊" title="Métricas de Seguimiento">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 }}>
+            <div style={metric}>
+              <div style={{ fontSize: 11, color: "var(--muted)" }}>Métrica 1 · Ratio DAU/Descargas</div>
+              <div style={{ fontSize: 14, fontWeight: 700 }}>Línea base: ~3.6% → Meta: pendiente</div>
+            </div>
+            <div style={metric}>
+              <div style={{ fontSize: 11, color: "var(--muted)" }}>Métrica 2 · DAU total</div>
+              <div style={{ fontSize: 14, fontWeight: 700 }}>Línea base: ~3,443 → Meta: pendiente</div>
+            </div>
+          </div>
+          <Field term="Comentarios de rendimiento">
+            De cada 100 usuarios que descargan la app, solo ~4 regresan diariamente — evidencia un problema severo de retención que la Fase 2 busca resolver.
+          </Field>
         </Section>
       </main>
 
