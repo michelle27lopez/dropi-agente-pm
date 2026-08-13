@@ -887,10 +887,11 @@
     const effPct = Math.round(s.efectivity_delivery * 100);
     const prodPct = ((s.orders_with_product / s.total_orders) * 100).toFixed(1);
 
-    document.getElementById('sellerBadgeTop').textContent = 'Leyendas 2026';
+    document.getElementById('sellerBadgeTop').textContent = s.name;
 
     // Slide 0: Insignia Oficial
-    document.getElementById('s0_kicker').textContent = '¡Hola! Tu Wrapped 2026';
+    const firstName = s.name ? s.name.split(' ')[0] : 'Seller';
+    document.getElementById('s0_kicker').textContent = `¡Hola, ${firstName}!`;
     const img0 = document.getElementById('s0_insignia_img');
     img0.src = lvl.insigniaImg;
     img0.alt = `Insignia Oficial ${lvl.name}`;
@@ -1029,7 +1030,7 @@
     const s = currentSeller;
     const lvl = getOfficialLeyendasLevel(s.total_orders);
     document.getElementById('modalInsigniaImg').src = lvl.insigniaImg;
-    document.getElementById('modalSellerName').textContent = 'Mi Estatus Leyendas';
+    document.getElementById('modalSellerName').textContent = s.name;
     document.getElementById('modalSellerRank').textContent = `Nivel ${lvl.levelNum}: ${lvl.name} ${lvl.emoji}`;
     document.getElementById('modalSellerStats').textContent = `${s.total_orders.toLocaleString()} drops completados`;
     document.getElementById('shareModal').classList.add('active');
@@ -1143,8 +1144,11 @@
     openShareModal();
   }
 
-  // Init
-  loadSeller(SELLERS_DATA[0].user_id);
+  // Init: Check URL parameter ?user_id=... or default to first seller
+  const urlParams = new URLSearchParams(window.location.search);
+  const userIdParam = urlParams.get('user_id') || urlParams.get('user') || urlParams.get('seller');
+  const initialSeller = SELLERS_DATA.find(s => s.user_id === userIdParam) || SELLERS_DATA[0];
+  loadSeller(initialSeller.user_id);
 </script>
 </body>
 </html>
