@@ -156,7 +156,7 @@ export default function CalendarioPage() {
         </button>
       </header>
 
-      <div style={{ flex: 1, display: "flex", gap: 24, padding: "24px 32px", flexWrap: "wrap" }}>
+      <div className="gnav-page" style={{ flex: 1, display: "flex", gap: 24, flexWrap: "wrap" }}>
         {/* Calendario mensual */}
         <section style={{ flex: "2 1 560px", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 20 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>

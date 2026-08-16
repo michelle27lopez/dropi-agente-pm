@@ -1,5 +1,7 @@
 "use client";
 
+import Breadcrumb from "@/components/Breadcrumb";
+
 const DOCS = [
   {
     href: "/solicitud-data-campana-cyber-2026.html",
@@ -51,13 +53,11 @@ export default function DataSolicitadaPage() {
         padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Data Solicitada</span>
+          <Breadcrumb items={[{ label: "Data Solicitada" }]} />
         </div>
       </header>
 
-      <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px 60px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
 
         <div style={{ marginBottom: 36 }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--fg)", marginBottom: 8 }}>

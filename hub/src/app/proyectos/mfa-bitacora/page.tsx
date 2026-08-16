@@ -226,7 +226,7 @@ export default function MFABitacoraPage() {
         <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>MFA Obligatorio &mdash; Bitácora UX</span>
       </header>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px" }}>
         <div style={{ marginBottom: 8 }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--fg)", margin: 0 }}>
             MFA Obligatorio &mdash; Bitácora UX

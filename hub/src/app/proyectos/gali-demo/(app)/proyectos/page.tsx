@@ -30,7 +30,7 @@ export default function ProyectosPage() {
   }, []);
 
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
+    <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px", display: "flex", flexDirection: "column", gap: 20 }}>
       <div>
         <h1 style={{ fontSize: 22, fontWeight: 800, color: "#232938", marginBottom: 4 }}>Proyectos</h1>
         <p style={{ fontSize: 14, color: "#69738c" }}>Todos los proyectos que has armado con Gali, o crea uno nuevo.</p>

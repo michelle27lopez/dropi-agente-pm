@@ -189,7 +189,7 @@ export default function HandoffPage() {
       {/* Nav bar */}
       <header className="no-print handoff-header" style={{
         background: "#fff", borderBottom: "1px solid #e5e7eb",
-        padding: "0 24px", height: 52,
+        padding: "0 32px", height: 52,
         display: "flex", alignItems: "center", gap: 12, flexShrink: 0,
         position: "sticky", top: 0, zIndex: 10,
       }}>
@@ -228,7 +228,7 @@ export default function HandoffPage() {
       </header>
 
       {/* Document */}
-      <div className="handoff-doc" style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px 80px" }}>
+      <div className="handoff-doc" style={{ maxWidth: 860, margin: "0 auto", padding: "32px" }}>
 
         {/* Cover */}
         <div style={{

@@ -231,7 +231,7 @@ export default function ResumenPage() {
       <div style={{ flex: 1 }}>
         <HubHeader title="Resumen ejecutivo" subtitle="Vista cross-célula · Darwin" currentSlug="resumen" />
 
-        <div style={{ maxWidth: 1000, margin: "0 auto", padding: "48px 24px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
           <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 32 }}>
             Vista de solo lectura del estado de cada célula: proyectos por etapa y sus riesgos de delivery más relevantes.
           </p>

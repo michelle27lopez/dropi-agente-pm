@@ -525,7 +525,7 @@ export default function ProjectDashboardPage() {
         currentSlug={cellSlug}
       />
 
-      <div style={{ maxWidth: 900, width: "100%", margin: "0 auto", padding: "40px 24px", boxSizing: "border-box" }}>
+      <div style={{ maxWidth: 900, width: "100%", margin: "0 auto", padding: "32px", boxSizing: "border-box" }}>
         
         {/* Navigation Breadcrumb */}
         <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 24, fontSize: 13 }}>

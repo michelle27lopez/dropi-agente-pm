@@ -247,7 +247,7 @@ export default function AsisTtvPage() {
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 24px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px" }}>
         {loading && (
           <p style={{ color: "var(--muted)", fontSize: 14 }}>Cargando diagnóstico...</p>
         )}

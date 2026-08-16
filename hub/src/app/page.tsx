@@ -219,7 +219,6 @@ export default function HubPage() {
           <HubHeader title="Darwin" subtitle="Tu día · Darwin" currentSlug="suppliers" />
           <MiDiaShell />
         </div>
-        <HubFooter />
       </main>
     );
   }
@@ -261,7 +260,7 @@ export default function HubPage() {
       />
 
       {/* Grid */}
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
         <div style={{ position: "relative", marginBottom: 40 }}>
           <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--muted)", fontSize: 14 }}>
             🔍

@@ -362,7 +362,7 @@ export default function CelulaHomePage() {
           />
         </div>
 
-        <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px", width: "100%", flex: 1 }}>
+        <div style={{ maxWidth: 960, margin: "0 auto", padding: 32, width: "100%", flex: 1 }}>
           
           {/* Country Filter Tab Bar */}
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, background: "rgba(255,255,255,0.02)", padding: 6, borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
@@ -775,7 +775,7 @@ export default function CelulaHomePage() {
         currentSlug={celula.slug}
       />
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
         {/* Torre de control — solo logística. Abre la home con los indicadores
             de la orden y el mapa que filtra las iniciativas de más abajo. */}
         {isLogistica && (

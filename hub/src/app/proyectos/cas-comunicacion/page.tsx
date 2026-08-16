@@ -180,7 +180,7 @@ export default function CASComunicacionPage() {
         </header>
       )}
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px" }}>
 
         <div style={{ marginBottom: 24 }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--fg)", marginBottom: 8, letterSpacing: "-0.02em" }}>

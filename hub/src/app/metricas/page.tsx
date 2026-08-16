@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Breadcrumb from "@/components/Breadcrumb";
 
 type MetricsProject = {
   key: string;
@@ -60,9 +61,7 @@ function MetricasContent() {
         background: "#fff", borderBottom: "1px solid var(--border)",
         padding: "16px 32px", display: "flex", alignItems: "center", gap: 16, flexShrink: 0,
       }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Métricas</span>
+        <Breadcrumb items={[{ label: "Following" }]} />
       </header>
 
       <div style={{ display: "flex", flex: 1, minHeight: 0 }}>

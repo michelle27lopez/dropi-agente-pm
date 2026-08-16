@@ -77,7 +77,7 @@ export default function DinamicasCatalogoDashboardPage() {
     <div style={{ display: "flex", minHeight: "100vh", background: "#fff" }}>
       <Sidebar />
       <main style={{ flex: 1, minWidth: 0 }}>
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 32px 80px" }}>
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px" }}>
         <div style={{
           background: "#fff", border: "1px solid var(--border)",
           borderRadius: 14, marginBottom: 28, overflow: "hidden",
@@ -178,7 +178,7 @@ export default function DinamicasCatalogoDashboardPage() {
                 </thead>
                 <tbody>
                   {withResults.map((c) => (
-                    <tr key={c.id} onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${c.id}/dashboard`)}
+                    <tr key={c.id} onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${c.id}/seguimiento`)}
                       style={{ borderTop: "1px solid var(--border)", cursor: "pointer" }}>
                       <td style={{ padding: "12px 16px", fontWeight: 600, color: "var(--fg)" }}>{c.name}</td>
                       <td style={{ padding: "12px 16px", color: "var(--fg)" }}>{fmt(num(c.resultados.suppliers_invited))}</td>
@@ -198,7 +198,7 @@ export default function DinamicasCatalogoDashboardPage() {
             <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)", marginBottom: 10 }}>Sin resultados todavía</h3>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
               {withoutResults.map((c) => (
-                <span key={c.id} onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${c.id}/dashboard`)}
+                <span key={c.id} onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${c.id}/seguimiento`)}
                   style={{ fontSize: 12.5, background: "#fff", border: "1px solid var(--border)", borderRadius: 20, padding: "6px 14px", cursor: "pointer", color: "var(--muted)" }}>
                   {c.name}
                 </span>

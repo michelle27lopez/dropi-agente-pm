@@ -137,7 +137,7 @@ function WeeklyPageContent() {
         </div>
       </header>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px 80px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
 
         {/* Hero */}
         <div style={{

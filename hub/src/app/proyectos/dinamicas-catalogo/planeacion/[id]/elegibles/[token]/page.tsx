@@ -40,11 +40,8 @@ const CANVA_LINK = "https://www.canva.com/design/DAHQC3nBq6c/qvqDaPIhyfMXBdvY2LB
 // real "Cyber Days" resuelve la parte "funcional" de compartir — el
 // dropshipper lo abre y ya ve solo los productos de la campaña, listos
 // para agregar a su tienda — a diferencia de CANVA_LINK arriba, que es el
-// activo visual (imagen) para difundir en redes/WhatsApp. La categoría
-// "Cyber Days" todavía no existe en Dropi, así que se usa "Navidad" como
-// placeholder solo para probar el patrón de URL; cuando exista la
-// categoría real, cambiar únicamente el valor de category=.
-const DROPI_CATALOG_LINK = "https://app.dropi.co/dashboard/search?search_type=simple&category=Navidad";
+// activo visual (imagen) para difundir en redes/WhatsApp.
+const DROPI_CATALOG_LINK = "https://app.dropi.co/dashboard/search?search_type=simple&category=Cyber%20days";
 // Link de Google Meet para la reunión informativa del 6 de agosto
 // (2:00-3:00pm, America/Bogota) — jueves, no viernes: el 7 de agosto es
 // festivo en Colombia. Corregido 31/07 (el link anterior era del evento
@@ -1544,7 +1541,19 @@ export default function ElegiblesPage() {
           {/* Banner fijo, visible en cualquier paso — antes vivía solo en la
               fase Elige y nadie sabía dónde volver a encontrarlo. */}
           {meetVisible && (LUMA_LINK ? (
-            <a className="cd-meet" href={LUMA_LINK} target="_blank" rel="noopener noreferrer" data-reveal>
+            <a
+              className="cd-meet"
+              href={LUMA_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-reveal
+              onClick={() => {
+                // Señal de clic para el comercial (tab Seguimiento) — no
+                // confirma asistencia real, solo que abrió el link. Fire-and-
+                // forget: nunca debe bloquear ni romper la navegación al Meet.
+                fetch(`/api/campaigns-planeacion/${id}/elegibles/${token}/meet`, { method: "POST" }).catch(() => {});
+              }}
+            >
               <span className="cd-meet-icon">🎥</span>
               <div className="cd-meet-body">
                 <div className="cd-meet-label">Reunión informativa de Cyber Days</div>

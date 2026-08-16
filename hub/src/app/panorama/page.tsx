@@ -211,7 +211,7 @@ export default function PanoramaPage() {
 
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      <div style={{ flex: 1, padding: "48px 32px" }}>
+      <div style={{ flex: 1, padding: 32 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>Panorama</h1>
           <span style={{ fontSize: 10, fontWeight: 700, color: "#B45309", background: "#FFF6E5", padding: "2px 8px", borderRadius: 999 }}>

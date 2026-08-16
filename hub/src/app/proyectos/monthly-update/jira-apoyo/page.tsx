@@ -113,7 +113,7 @@ export default function JiraApoyoPage() {
         </header>
       )}
 
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "32px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "32px", display: "flex", flexDirection: "column", gap: 20 }}>
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--fg)", marginBottom: 6, letterSpacing: "-0.02em" }}>
             Apoyo para armar el reporte — actividad cruda de Jira

@@ -27,7 +27,7 @@ export default function PruebasUsuariosPage() {
         </div>
       </header>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",

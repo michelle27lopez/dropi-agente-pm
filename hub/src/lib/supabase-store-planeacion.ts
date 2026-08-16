@@ -7,6 +7,7 @@ import {
   type ReadyChecklistKey,
   type ReadyChecklist,
   type CampaignFeedback,
+  type ProductOrderEntry,
 } from "@/lib/local-store-planeacion";
 
 // Contraparte en Supabase (tablas campaign_planeacion_suppliers /
@@ -48,6 +49,11 @@ type EligibleRow = {
   view_count: number | null;
   first_viewed_at: string | null;
   last_viewed_at: string | null;
+  meet_click_count: number | null;
+  meet_first_clicked_at: string | null;
+  meet_last_clicked_at: string | null;
+  meet_attended: boolean | null;
+  meet_attended_marked_at: string | null;
   updated_at: string;
 };
 
@@ -67,6 +73,32 @@ function fromEligibleRow(row: EligibleRow): EligibleEntry {
     view_count: row.view_count ?? 0,
     first_viewed_at: row.first_viewed_at,
     last_viewed_at: row.last_viewed_at,
+    meet_click_count: row.meet_click_count ?? 0,
+    meet_first_clicked_at: row.meet_first_clicked_at,
+    meet_last_clicked_at: row.meet_last_clicked_at,
+    meet_attended: row.meet_attended ?? false,
+    meet_attended_marked_at: row.meet_attended_marked_at,
+    updated_at: row.updated_at,
+  };
+}
+
+type ProductOrderRow = {
+  id: string;
+  campaign_id: string;
+  product_id: string;
+  product_name: string | null;
+  orders_count: number;
+  source: "manual" | "import";
+  updated_at: string;
+};
+
+function fromProductOrderRow(row: ProductOrderRow): ProductOrderEntry {
+  return {
+    campaign_id: row.campaign_id,
+    product_id: row.product_id,
+    product_name: row.product_name ?? undefined,
+    orders_count: row.orders_count,
+    source: row.source,
     updated_at: row.updated_at,
   };
 }
@@ -349,4 +381,96 @@ export async function supabaseSetFeedback(
     .single();
   if (error) return null;
   return fromEligibleRow(data as EligibleRow);
+}
+
+// Registra un clic en el link del Meet — señal automática (público, sin
+// login), no confirma asistencia real. Ver supabaseSetMeetAttendance para
+// la confirmación manual del comercial.
+export async function supabaseRegisterMeetClick(campaignId: string, token: string): Promise<EligibleEntry | null> {
+  if (!supabase) return null;
+  const prev = await supabaseGetEligibleByToken(campaignId, token);
+  if (!prev) return null;
+  const now = new Date().toISOString();
+  const { data, error } = await supabase
+    .from("campaign_planeacion_eligible")
+    .update({
+      meet_click_count: (prev.meet_click_count ?? 0) + 1,
+      meet_first_clicked_at: prev.meet_first_clicked_at ?? now,
+      meet_last_clicked_at: now,
+    })
+    .eq("campaign_id", campaignId)
+    .eq("token", token)
+    .select()
+    .single();
+  if (error) return null;
+  return fromEligibleRow(data as EligibleRow);
+}
+
+export async function supabaseSetMeetAttendance(
+  campaignId: string,
+  token: string,
+  attended: boolean
+): Promise<EligibleEntry | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("campaign_planeacion_eligible")
+    .update({ meet_attended: attended, meet_attended_marked_at: new Date().toISOString() })
+    .eq("campaign_id", campaignId)
+    .eq("token", token)
+    .select()
+    .single();
+  if (error) return null;
+  return fromEligibleRow(data as EligibleRow);
+}
+
+// ─── Órdenes por producto ────────────────────────────────────────────────
+
+export async function supabaseListProductOrders(campaignId: string): Promise<ProductOrderEntry[] | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("campaign_planeacion_product_orders")
+    .select("*")
+    .eq("campaign_id", campaignId);
+  if (error) return null;
+  return (data as ProductOrderRow[]).map(fromProductOrderRow);
+}
+
+export async function supabaseUpsertProductOrder(
+  campaignId: string,
+  productId: string,
+  productName: string | undefined,
+  ordersCount: number,
+  source: "manual" | "import"
+): Promise<ProductOrderEntry | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("campaign_planeacion_product_orders")
+    .upsert(
+      { campaign_id: campaignId, product_id: productId, product_name: productName ?? null, orders_count: ordersCount, source, updated_at: new Date().toISOString() },
+      { onConflict: "campaign_id,product_id" }
+    )
+    .select()
+    .single();
+  if (error) return null;
+  return fromProductOrderRow(data as ProductOrderRow);
+}
+
+// Import de CSV: reemplaza en bloque las órdenes de los productos que vienen
+// en el archivo (upsert fila por fila) — un CSV parcial no borra los que no
+// aparecen en él.
+export async function supabaseImportProductOrders(
+  campaignId: string,
+  rows: { productId: string; productName?: string; ordersCount: number }[]
+): Promise<ProductOrderEntry[] | null> {
+  if (!supabase) return null;
+  const now = new Date().toISOString();
+  const payload = rows
+    .filter((r) => r.productId?.trim())
+    .map((r) => ({ campaign_id: campaignId, product_id: r.productId, product_name: r.productName ?? null, orders_count: r.ordersCount, source: "import" as const, updated_at: now }));
+  if (payload.length === 0) return supabaseListProductOrders(campaignId);
+  const { error } = await supabase
+    .from("campaign_planeacion_product_orders")
+    .upsert(payload, { onConflict: "campaign_id,product_id" });
+  if (error) return null;
+  return supabaseListProductOrders(campaignId);
 }

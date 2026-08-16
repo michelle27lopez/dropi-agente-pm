@@ -2,6 +2,7 @@
 
 import { useIsEmbedded } from "@/lib/use-is-embedded";
 import { SEMANAS } from "./semanas";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const ACCENT = "#0891B2";
 const ACCENT_BG = "#ECFEFF";
@@ -13,17 +14,14 @@ export default function CelulaPage() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--card)" }}>
       {!isEmbedded && (
-        <header style={{
-          background: "#fff", borderBottom: "1px solid var(--border)",
-          padding: "16px 32px", display: "flex", alignItems: "center", gap: "16px",
-        }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Célula</span>
+        <header style={{ background: "#fff", padding: "16px 0" }}>
+          <div style={{ maxWidth: 760, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", gap: "16px" }}>
+            <Breadcrumb items={[{ label: "Proyectos", href: "/proyectos" }, { label: "Célula" }]} />
+          </div>
         </header>
       )}
 
-      <div style={{ maxWidth: 760, margin: "0 auto", padding: "40px 24px" }}>
+      <div style={{ maxWidth: 760, margin: "0 auto", padding: "32px" }}>
         <div style={{ marginBottom: 28 }}>
           <span style={{
             fontSize: 11, fontWeight: 700, color: ACCENT, background: ACCENT_BG,

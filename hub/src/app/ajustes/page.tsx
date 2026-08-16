@@ -1,6 +1,6 @@
 export default function AjustesPage() {
   return (
-    <main style={{ minHeight: "100vh", padding: "48px 32px" }}>
+    <main style={{ minHeight: "100vh", padding: 32 }}>
       <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>Configuración</h1>
 
       <a

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Sun } from "lucide-react";
+import { Sun, Loader2 } from "lucide-react";
 
 type Meeting = {
   id: string;
@@ -37,11 +37,13 @@ function MeetingRow({ meeting, primary }: { meeting: Meeting; primary: boolean }
   );
 }
 
-// Reuniones de hoy, sincronizadas por conversación en la tabla
-// `today_meetings` (no hay integración en vivo con Google Calendar en el
-// hub) — ver [[project_darwin_pd_dashboard]] y api/meetings/route.ts.
+// Reuniones de hoy, sincronizadas en vivo vía OAuth con Google Calendar
+// (botón "Actualizar" → /api/meetings/sync) — ver
+// [[project_darwin_pd_dashboard]] y src/lib/google-calendar.ts.
 export default function HoyPanel() {
   const [meetings, setMeetings] = useState<Meeting[] | null>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncError, setSyncError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/meetings")
@@ -49,6 +51,20 @@ export default function HoyPanel() {
       .then((data) => setMeetings(data.meetings ?? []))
       .catch(() => setMeetings([]));
   }, []);
+
+  async function handleActualizar() {
+    setSyncing(true);
+    setSyncError(null);
+    try {
+      const res = await fetch("/api/meetings/sync", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Error desconocido");
+      window.location.reload();
+    } catch (err) {
+      setSyncing(false);
+      setSyncError(err instanceof Error ? err.message : "Error desconocido");
+    }
+  }
 
   if (meetings === null) return null;
 
@@ -68,7 +84,14 @@ export default function HoyPanel() {
           </span>
           <span className="midia-panel-label">Hoy</span>
         </div>
+        <button type="button" onClick={handleActualizar} disabled={syncing} className="midia-sync-btn">
+          {syncing ? <Loader2 size={12} className="midia-spin" /> : null}
+          {syncing ? "Actualizando…" : "Actualizar"}
+        </button>
       </div>
+      {syncError && (
+        <p style={{ fontSize: 11, color: "var(--danger)", margin: "0 20px 8px" }}>{syncError}</p>
+      )}
       {meetings.length === 0 ? (
         <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 20px 16px" }}>Sin reuniones agendadas para hoy.</p>
       ) : !proxima ? (
