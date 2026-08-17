@@ -11,6 +11,7 @@ import {
   Database,
   BarChart3,
   Network,
+  Webhook,
 } from "lucide-react";
 
 type NavItem = {
@@ -33,6 +34,7 @@ const PRIMARY_ITEMS: NavItem[] = [
   { key: "metricas", label: "Following", href: "/metricas", icon: BarChart3 },
   { key: "calendario", label: "Calendario", href: "/calendario", icon: Calendar },
   { key: "celulas", label: "Células", href: "/celulas", icon: Network },
+  { key: "integraciones", label: "Integraciones", href: "/integraciones", icon: Webhook },
   { key: "configuracion", label: "Configuración", href: "/ajustes", icon: Settings },
 ];
 

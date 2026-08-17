@@ -4,7 +4,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useSearchParams } from "next/navigation";
 import { REGISTRY, SEMANAS, CELULA_LABELS, CURRENT } from "./data/index";
-import type { MetricGroup, Oportunidad, Dolor, ProximoPaso, HeroChip, Insight, Documento, KpiCard, KpiOkr } from "./data/types";
+import type { MetricGroup, Oportunidad, Dolor, ProximoPaso, HeroChip, Insight, Documento, KpiCard, KpiOkr, CelulaUpdateItem } from "./data/types";
 
 // ─── Componente principal ──────────────────────────────────────────────────────
 export default function WeeklyPage() {
@@ -190,6 +190,18 @@ function WeeklyPageContent() {
           </div>
         )}
 
+        {/* ── Update de Célula ── */}
+        {data.updateCelula && data.updateCelula.length > 0 && (
+          <Section title="Update de Célula" badge="Equipo"
+            sub="Estado conciso por frente para compartir en el ritual semanal.">
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {data.updateCelula.map((item: CelulaUpdateItem) => (
+                <CelulaUpdateCard key={item.nombre} item={item} />
+              ))}
+            </div>
+          </Section>
+        )}
+
         {/* ── Sección 1: Insights de la semana ── */}
         {data.insights && data.insights.length > 0 && (
           <Section title="1. Insights de la semana" badge="Hallazgos"
@@ -261,6 +273,50 @@ function WeeklyPageContent() {
         </p>
       </div>
     </main>
+  );
+}
+
+// ─── CelulaUpdateCard ─────────────────────────────────────────────────────────
+const CELULA_STATUS_COLOR: Record<string, string> = {
+  "🟢": "#10B981", "🟡": "#F59E0B", "🔴": "#EF4444", "🔵": "#6366F1",
+};
+
+function CelulaUpdateCard({ item }: { item: CelulaUpdateItem }) {
+  const borderColor = CELULA_STATUS_COLOR[item.emoji] ?? "#9CA3AF";
+  return (
+    <div style={{
+      background: "#fff", border: "1px solid var(--border)",
+      borderLeft: `4px solid ${borderColor}`, borderRadius: 14, padding: "18px 22px",
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12, flexWrap: "wrap" }}>
+        <span style={{ fontSize: 18 }}>{item.emoji}</span>
+        <span style={{ fontSize: 14, fontWeight: 800, color: "var(--fg)", letterSpacing: "-0.01em" }}>{item.nombre}</span>
+        <span style={{
+          fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 999,
+          background: `${borderColor}18`, color: borderColor,
+        }}>{item.estado}</span>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 14 }}>
+        <div>
+          <p style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--muted)", margin: "0 0 6px" }}>⚙️ Hitos de la semana</p>
+          <ul style={{ margin: 0, paddingLeft: 14 }}>
+            {item.hitos.map((h) => <li key={h} style={{ fontSize: 12, color: "#374151", marginBottom: 4, lineHeight: 1.45 }}>{h}</li>)}
+          </ul>
+        </div>
+        <div>
+          <p style={{ fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--muted)", margin: "0 0 6px" }}>⚡ Accionables críticos</p>
+          <ul style={{ margin: 0, paddingLeft: 14 }}>
+            {item.accionables.map((a) => <li key={a} style={{ fontSize: 12, color: "#374151", marginBottom: 4, lineHeight: 1.45 }}>{a}</li>)}
+          </ul>
+        </div>
+      </div>
+      <div style={{
+        marginTop: 12, paddingTop: 10, borderTop: "1px solid var(--border)",
+        fontSize: 12, color: "#374151", fontStyle: "italic",
+      }}>
+        💡 {item.novedad}
+      </div>
+    </div>
   );
 }
 

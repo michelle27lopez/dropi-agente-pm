@@ -9,6 +9,8 @@ import { isSprintAllowed, isMiDiaOwner } from "@/lib/sprint-access";
 import { PROJECT_STYLE } from "@/lib/curated-projects";
 import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
+import { TTV_FASE_1, TTV_FASE_2 } from "@/lib/ttv-fases-data";
+import { CATALOGO_METAS } from "@/lib/catalogo-metas-data";
 
 const updates: Item[] = [
   {
@@ -28,6 +30,15 @@ const updates: Item[] = [
     tag: "Weekly · Jun 2026",
     color: "#F77F00",
     icon: "📋",
+  },
+  {
+    key: "weekly-sellers",
+    name: "Weekly · Célula Sellers",
+    description: "Espacio semanal interactivo de la Célula Seller Success — presentación de Delivery (P0/P1/P2/QA) y Discovery Iniciado.",
+    url: "/proyectos/weekly-sellers",
+    tag: "Célula · Seller Success",
+    color: "#FF6B35",
+    icon: "🚀",
   },
   {
     key: "weekly-celula",
@@ -289,6 +300,91 @@ export default function HubPage() {
             Sin resultados para “{query}”.
           </p>
         )}
+
+        {/* Activación TTV + Metas de Catálogo */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 56 }}>
+          {/* TTV — Activación */}
+          <a href="/proyectos/time-to-value/asis" style={{ textDecoration: "none", color: "inherit" }}>
+            <div style={{
+              background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+              padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", height: "100%",
+              transition: "box-shadow 0.15s",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+                <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
+                  ⚡ TTV-001 · Activación
+                </p>
+                <span style={{ fontSize: 11, fontWeight: 700, color: "var(--dropi)", background: "var(--dropi-light)", padding: "3px 9px", borderRadius: 20 }}>
+                  Ver diagnóstico →
+                </span>
+              </div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 24, marginTop: 16 }}>
+                <div>
+                  <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Fase 1 · Baseline</div>
+                  <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", color: "var(--fg)" }}>
+                    {TTV_FASE_1.tasaActivacion}
+                  </div>
+                </div>
+                <div style={{ fontSize: 20, color: "var(--muted)" }}>→</div>
+                <div>
+                  <div style={{ fontSize: 11, color: "#059669", marginBottom: 4 }}>Fase 2 · Pipeline (neta)</div>
+                  <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", color: "#10B981" }}>
+                    {TTV_FASE_2.activacionNeta}
+                  </div>
+                </div>
+              </div>
+              <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>⏱️ Registro → orden entregada (prom., desde 30-jun-2026)</div>
+                <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", color: "var(--fg)" }}>
+                  {TTV_FASE_2.tiempoRegistroEntrega}
+                </div>
+              </div>
+              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 14, lineHeight: 1.5 }}>
+                Activación neta ya supera el baseline. La brecha sigue entre generar la orden ({TTV_FASE_2.activacionBruta})
+                y entregarla — punto exacto detrás del pivote a agente de WA.
+              </div>
+            </div>
+          </a>
+
+          {/* Catálogo — Metas */}
+          <a href={CATALOGO_METAS.detalleUrl} style={{ textDecoration: "none", color: "inherit" }}>
+            <div style={{
+              background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+              padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", height: "100%",
+              transition: "box-shadow 0.15s",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+                <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
+                  🗂️ DCA-001 · Metas de Catálogo
+                </p>
+                <span style={{ fontSize: 11, fontWeight: 700, color: "var(--dropi)", background: "var(--dropi-light)", padding: "3px 9px", borderRadius: 20 }}>
+                  Ver detalle →
+                </span>
+              </div>
+              <div style={{ marginTop: 16 }}>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Meta de órdenes/mes</div>
+                <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", color: "var(--fg)" }}>
+                  {CATALOGO_METAS.metaOrdenesMes}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: 24, marginTop: 14 }}>
+                <div>
+                  <div style={{ fontSize: 11, color: "var(--muted)" }}>% catálogo con orden</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)" }}>{CATALOGO_METAS.pctConOrden}</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: 11, color: "var(--muted)" }}>Productividad (actual → meta)</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)" }}>
+                    {CATALOGO_METAS.productividadActual} → {CATALOGO_METAS.productividadMeta}
+                  </div>
+                </div>
+              </div>
+              <div style={{ fontSize: 11, color: "var(--faint, #9CA3AF)", marginTop: 12, fontStyle: "italic" }}>
+                Prototipo de escenarios — no es data en vivo.
+              </div>
+            </div>
+          </a>
+        </div>
 
         <div style={{ marginBottom: filteredUpdates.length ? 56 : 0 }}>
           <Section title="Updates" items={filteredUpdates} ctaLabel="Ver →" />

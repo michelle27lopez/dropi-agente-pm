@@ -45,7 +45,7 @@ const axisTick = { fontSize: 11, fill: "#6B7280" };
 const tooltipStyle = { fontSize: 12, borderRadius: 8, border: "1px solid #E5E7EB", boxShadow: "0 4px 12px rgba(0,0,0,0.08)" };
 const labelStyle = { fontSize: 10, fill: "#6B7280", fontWeight: 700 };
 
-const TABS = ["Resumen", "S1-2 · Jul 6-20", "Hallazgos", "Próximos Pasos"];
+const TABS = ["Resumen", "S1-2 · Jul 6-20", "S3-4 · Jul 21 - Ago 5", "Comparativo", "Hallazgos", "Próximos Pasos"];
 
 const TRACKED_EVENTS = [
   "OTP_2fa",
@@ -69,6 +69,7 @@ const MISSING_EVENTS = [
   "mfa_recovery_completed",
 ];
 
+/* ── S1-2 data (Jul 6-20) ── */
 const RAW_DATA = [
   { evento: "OTP_2fa", usuarios: 766, pctBase: "1.40%", eventos: 1273, tendencia: "+5.33%", avgUser: "1.66" },
   { evento: "Codigo autenticador_2fa", usuarios: 295, pctBase: "0.54%", eventos: 665, tendencia: "+3.87%", avgUser: "2.25" },
@@ -107,6 +108,60 @@ const RECOVERY_DETAIL = [
   { step: "5. Recovery completado", value: null as number | null, pct: "?", status: "missing" },
 ];
 
+/* ── S3-4 data (Jul 21 - Ago 5) ── */
+const RAW_DATA_S34 = [
+  { evento: "2FA activada_2fa", usuarios: 3814, pctBase: "6.69%", eventos: 11542, tendencia: "+6.7%", avgUser: "3.03" },
+  { evento: "Configurar nuevamente 2fa", usuarios: 1931, pctBase: "3.39%", eventos: 5099, tendencia: "+44.0%", avgUser: "2.64" },
+  { evento: "OTP_2fa", usuarios: 828, pctBase: "1.45%", eventos: 1392, tendencia: "+9.3%", avgUser: "1.68" },
+  { evento: "Codigo autenticador_2fa", usuarios: 343, pctBase: "0.60%", eventos: 1077, tendencia: "+62.0%", avgUser: "3.14" },
+  { evento: "Correo electronico_2fa", usuarios: 36, pctBase: "0.06%", eventos: 49, tendencia: "+113%", avgUser: "1.36" },
+  { evento: "Mensaje de texto_2fa", usuarios: 23, pctBase: "0.04%", eventos: 27, tendencia: "+22.7%", avgUser: "1.17" },
+];
+
+const EVENT_CHART_DATA_S34 = [
+  { name: "2FA activada", eventos: 11542, fill: "var(--dropi)" },
+  { name: "Configurar nuevam.", eventos: 5099, fill: "var(--warning)" },
+  { name: "OTP", eventos: 1392, fill: "var(--info)" },
+  { name: "Cod. autenticador", eventos: 1077, fill: "var(--success)" },
+  { name: "Correo electrónico", eventos: 49, fill: "var(--danger)" },
+  { name: "Mensaje de texto", eventos: 27, fill: "var(--muted)" },
+];
+
+const METHODS_CHART_S34 = [
+  { name: "OTP", usuarios: 828, eventos: 1392 },
+  { name: "Autenticador", usuarios: 343, eventos: 1077 },
+  { name: "2FA Total", usuarios: 3814, eventos: 11542 },
+];
+
+const RECOVERY_FUNNEL_S34 = [
+  { step: "Recovery iniciado", value: 1931, pct: "100%", drop: "" },
+  { step: "Correo electrónico", value: 36, pct: "1.9%", drop: "-98.1%" },
+  { step: "Mensaje de texto", value: 23, pct: "1.2%", drop: "-36.1%" },
+];
+
+const RECOVERY_DETAIL_S34 = [
+  { step: "1. Recovery iniciado", value: 1931, pct: "100%", status: "tracked" },
+  { step: "2. Código enviado (email)", value: 36, pct: "1.9%", status: "tracked" },
+  { step: "3. Código enviado (SMS)", value: 23, pct: "1.2%", status: "tracked" },
+  { step: "4. Código verificado", value: null as number | null, pct: "?", status: "missing" },
+  { step: "5. Recovery completado", value: null as number | null, pct: "?", status: "missing" },
+];
+
+/* ── Comparativo data ── */
+const COMPARATIVO_DATA = [
+  { metric: "Base usuarios activos", s12: "54,790", s34: "56,984", delta: "+4.0%", severity: "neutral" as const },
+  { metric: "Cobertura MFA", s12: "6.49%", s34: "6.7%", delta: "+0.21pp", severity: "warning" as const },
+  { metric: "2FA Activada (usuarios)", s12: "3,555", s34: "3,814", delta: "+7.3%", severity: "success" as const },
+  { metric: "Recovery iniciado", s12: "1,446", s34: "1,931", delta: "+33.5%", severity: "danger" as const },
+  { metric: "Recovery / 2FA ratio", s12: "40.7%", s34: "50.6%", delta: "+9.9pp", severity: "danger" as const },
+  { metric: "OTP (usuarios)", s12: "766", s34: "828", delta: "+8.1%", severity: "success" as const },
+  { metric: "Autenticador (usuarios)", s12: "295", s34: "343", delta: "+16.3%", severity: "success" as const },
+  { metric: "Contactos recovery", s12: "31", s34: "59", delta: "+90.3%", severity: "warning" as const },
+  { metric: "OTP / Auth ratio", s12: "2.6:1", s34: "2.41:1", delta: "Mejora", severity: "success" as const },
+  { metric: "Recurrencia", s12: "204%", s34: "202.7%", delta: "-0.6%", severity: "neutral" as const },
+  { metric: "Recovery completion", s12: "2.1%", s34: "3.1%", delta: "+1.0pp", severity: "warning" as const },
+];
+
 const MAPPING_TABLE = [
   { userPilot: "OTP_2fa", tars: "mfa_method_selected (OTP)", status: "parcial" },
   { userPilot: "Codigo autenticador_2fa", tars: "mfa_method_selected (Auth)", status: "parcial" },
@@ -128,44 +183,44 @@ const INSIGHTS = [
   {
     severity: "danger" as const,
     icon: "🔴",
+    title: "Crisis de recovery: ratio sube a 50.6% (3.4x sobre umbral)",
+    body: "El ratio recovery/2FA pasó de 40.7% (S1-2) a 50.6% (S3-4), 3.4 veces por encima de la meta de <15%. 1,931 usuarios necesitaron recuperar acceso sobre 3,814 con 2FA activa. El crecimiento de recovery (+33.5%) duplica al de adopción (+7.3%), lo que indica que el problema empeora en proporción. Si no se interviene, podría convertirse en el principal blocker de adopción.",
+  },
+  {
+    severity: "danger" as const,
+    icon: "🔴",
+    title: "Cobertura estancada: 6.49% → 6.7% en 2 semanas",
+    body: "La cobertura MFA avanzó solo 0.21 puntos porcentuales en 2 semanas (6.49% → 6.7%). A este ritmo, alcanzar 95% tomaría más de 3 años. El gap con la meta es de 88.3pp. Sin enforcement, la adopción orgánica es insuficiente — se necesitan ~8,000 activaciones/semana vs. las ~130 actuales.",
+  },
+  {
+    severity: "danger" as const,
+    icon: "🔴",
     title: "Agujero negro de tracking: Grupo B sin visibilidad",
     body: "De los 16 eventos del modelo TARS, solo 6 están instrumentados (37.5%). Todo el Grupo B (login MFA, setup screen, QR scanned, setup abandoned, sensitive actions) tiene 0 eventos. No podemos medir fricción en el flujo de setup ni en las acciones sensibles post-login. Cualquier decisión sobre UX de MFA se basa en menos del 40% de la foto completa.",
   },
   {
     severity: "danger" as const,
     icon: "🔴",
-    title: "Embudo de setup incompleto",
-    body: "No tenemos visibilidad de cuántos usuarios ven la pantalla de setup, cuántos eligen un método, cuántos escanean el QR y cuántos abandonan antes de completar. Solo vemos el resultado final (2FA activada: 3,555). El embudo completo está ciego desde el inicio hasta el penúltimo paso.",
-  },
-  {
-    severity: "danger" as const,
-    icon: "🔴",
-    title: "Recovery desproporcionado: ratio 40.7%",
-    body: "1,446 usuarios iniciaron recovery vs. 3,555 con 2FA activada. Eso es un ratio del 40.7%, muy por encima de la meta de <15%. Indica que casi la mitad de quienes activan 2FA necesitan recuperar acceso, lo cual sugiere fricción grave en el flujo post-activación o pérdida masiva de dispositivos/códigos.",
-  },
-  {
-    severity: "danger" as const,
-    icon: "🔴",
-    title: "Caída del 97.9% en canales de recovery",
-    body: "De 1,446 que inician recovery, solo 16 llegan a email y 15 a SMS. Eso es una caída del 97.9% entre el primer y segundo paso del embudo de recovery. O los usuarios abandonan, o hay un paso intermedio no trackeado, o el flujo tiene un blocker técnico. Los últimos 2 pasos (código verificado y recovery completado) no tienen tracking — no sabemos cuántos realmente recuperan su cuenta.",
+    title: "Caída del 98% en canales de recovery (acumulado)",
+    body: "En S3-4: de 1,931 que inician recovery, solo 36 llegan a email y 23 a SMS. La caída del 98.1% entre paso 1 y paso 2 se mantiene desde S1-2. Los últimos 2 pasos del embudo (código verificado y recovery completado) siguen sin tracking. Sin embargo, los contactos absolutos crecieron 90.3% (31 → 59), lo que sugiere que el volumen de recovery está escalando con la adopción.",
   },
   {
     severity: "warning" as const,
     icon: "🟡",
-    title: "OTP domina con ratio 2.6:1 sobre Autenticador",
-    body: "766 usuarios eligieron OTP vs. 295 Autenticador (ratio 2.6:1). OTP es más fácil de configurar pero menos seguro. Si el objetivo es migrar hacia autenticadores, se necesita una estrategia activa de promoción. La recurrencia de Autenticador (2.25 eventos/usuario) es mayor que OTP (1.66), lo que sugiere que quienes lo adoptan lo usan más consistentemente.",
+    title: "Autenticador crece 2x más rápido que OTP",
+    body: "Autenticador creció +62.0% vs OTP +9.3% en S3-4. El ratio OTP/Auth mejoró de 2.6:1 a 2.41:1. La recurrencia de Autenticador (3.14 eventos/usuario) supera ampliamente a OTP (1.68). Si la tendencia se mantiene, Autenticador podría alcanzar paridad con OTP en ~4 meses. Esto abre la puerta a evaluar deprecación progresiva de OTP a favor de métodos más seguros.",
   },
   {
     severity: "success" as const,
     icon: "🟢",
-    title: "2FA con tendencia positiva sostenida",
-    body: "2FA activada crece +5.33% en el periodo evaluado, con 3,555 usuarios activos y un promedio de 3.04 eventos por usuario. La adopción avanza, aunque desde una base baja (6.49% de la base total de 54,790). A este ritmo orgánico, alcanzar 95% tomaría más de 2 años sin intervención.",
+    title: "2FA con tendencia positiva acelerada",
+    body: "2FA activada crece +6.7% en S3-4 (vs +5.33% en S1-2), acelerando la tendencia. 3,814 usuarios activos con promedio de 3.03 eventos/usuario. La adopción avanza desde una base baja (6.7% de 56,984), pero la aceleración es una señal positiva que sugiere adopción orgánica creciente.",
   },
   {
     severity: "info" as const,
     icon: "🔵",
     title: "Proyección lineal inalcanzable sin enforcement",
-    body: "Con 6.49% actual y meta de 95% en 8 semanas, se necesitan ~8,082 activaciones nuevas por semana. El crecimiento orgánico actual no supera las 200 activaciones semanales. Sin un mecanismo de enforcement (MFA obligatorio en login o en acciones sensibles), la meta es matemáticamente inalcanzable. El gap es de 88.5 puntos porcentuales.",
+    body: "Con 6.7% actual y meta de 95%, se necesitan ~8,000 activaciones nuevas por semana. El crecimiento orgánico actual no supera las 260 activaciones semanales (mejora vs S1-2 pero aún insuficiente). Sin enforcement (MFA obligatorio en login o en acciones sensibles), la meta es matemáticamente inalcanzable. El gap es de 88.3 puntos porcentuales.",
   },
 ];
 
@@ -176,36 +231,36 @@ const NEXT_STEPS = {
       body: "Instrumentar mfa_login_attempt, mfa_setup_screen_shown, mfa_method_selected, mfa_qr_scanned, mfa_setup_abandoned, sensitive_action_attempted, mfa_modal_shown_sensitive, sensitive_action_completed, mfa_recovery_code_sent y mfa_recovery_completed. Sin estos eventos, toda decisión sobre flujo MFA se basa en menos del 40% de la información.",
     },
     {
-      title: "Investigar la caída del 97.9% en el embudo de recovery",
-      body: "Determinar si la caída entre recovery iniciado (1,446) y email/SMS (16/15) se debe a abandono del usuario, un paso intermedio no trackeado, o un blocker técnico. Revisar logs de backend y validar con el equipo de desarrollo si hay pasos entre “Configurar nuevamente” y el envío de código.",
+      title: "Diagnosticar crisis de recovery: ratio 50.6%",
+      body: "El ratio recovery/2FA subió de 40.7% a 50.6% en 2 semanas — 3.4x sobre el umbral de <15%. Determinar si la caída del 98% entre recovery iniciado (1,931) y contactos (59) se debe a abandono, pasos no trackeados, o blockers técnicos. Priorizar: (1) revisar logs de backend entre “Configurar nuevamente” y envío de código, (2) validar que el flujo funciona end-to-end, (3) implementar tracking de los pasos faltantes.",
     },
     {
-      title: "Verificar estado real del enforcement de MFA",
-      body: "Confirmar con el equipo técnico si MFA es realmente obligatorio, en qué flujos se exige (login, acciones sensibles, ambos), y si existe algún bypass. Los datos sugieren que no hay enforcement real: solo 6.49% de adopción es inconsistente con un MFA obligatorio.",
+      title: "Confirmar estado real del enforcement de MFA",
+      body: "Los datos muestran que solo 6.7% de la base tiene 2FA activa. Eso es inconsistente con un MFA obligatorio. Confirmar con el equipo técnico: ¿en qué flujos se exige (login, acciones sensibles, ambos)? ¿Existe algún bypass? ¿Cuál es el plan y timeline de enforcement?",
     },
   ],
   corto: [
     {
-      title: "Analizar la dominancia de OTP sobre Autenticador",
-      body: "Investigar si la preferencia 2.6:1 por OTP es por diseño (se muestra primero, es el default), por facilidad (menos pasos), o por desconocimiento del autenticador. Evaluar si la mayor recurrencia del autenticador (2.25 vs 1.66 eventos/usuario) justifica promoverlo activamente.",
+      title: "Diseñar pantalla de códigos de respaldo",
+      body: "Al activar 2FA, generar códigos de recovery descargables/imprimibles. Si el ratio recovery/2FA baja de 50.6% a <15%, se confirma que la fricción es por pérdida de acceso al método. Esto ataca directamente la crisis de recovery identificada en S3-4.",
     },
     {
       title: "Implementar micro-surveys post-activación de 2FA",
       body: "Encuesta in-app (1-2 preguntas) tras activar 2FA para entender: facilidad percibida del proceso, método preferido y por qué, y si encontraron algún problema. Esto complementa los datos cuantitativos con contexto cualitativo.",
     },
     {
-      title: "Dashboard BI de retención post-MFA",
-      body: "Crear un dashboard que cruce activación de 2FA con retención de usuarios a 30/60/90 días. Responder: ¿los usuarios que activan 2FA retienen más que los que no? ¿El método elegido (OTP vs Autenticador) afecta la retención?",
+      title: "Evaluar deprecación progresiva de OTP",
+      body: "Con Autenticador creciendo 2x más rápido que OTP (+62% vs +9.3%) y mostrando mayor recurrencia (3.14 vs 1.68 eventos/usuario), evaluar si OTP debe dejar de ser el método por defecto. Analizar si presentar Autenticador primero en el flujo de setup cambia las proporciones.",
     },
   ],
   mediano: [
     {
-      title: "Evaluar onboarding de recovery codes",
-      body: "Diseñar un flujo donde al activar 2FA se generen códigos de recovery descargables/imprimibles. Si el ratio recovery/2FA baja de 40.7% a <15%, se confirma que la fricción es por pérdida de acceso al método, no por problemas del flujo en sí.",
+      title: "Dashboard BI de retención post-MFA",
+      body: "Crear un dashboard que cruce activación de 2FA con retención de usuarios a 30/60/90 días. Responder: ¿los usuarios que activan 2FA retienen más que los que no? ¿El método elegido (OTP vs Autenticador) afecta la retención? Incluir tracking del ratio recovery/2FA por cohorte.",
     },
     {
-      title: "Planificar rollout de MFA forzado por cohortes",
-      body: "Diseñar un plan de enforcement gradual: primero usuarios de alto valor, luego usuarios nuevos al registrarse, finalmente base existente. Cada cohorte debe tener métricas de conversión, abandono y soporte para calibrar antes de escalar.",
+      title: "Planificar rollout de MFA forzado escalonado",
+      body: "Diseñar un plan de enforcement gradual: primero usuarios de alto valor, luego usuarios nuevos al registrarse, finalmente base existente. Cada cohorte debe tener métricas de conversión, abandono, recovery y soporte para calibrar antes de escalar. Prerequisito: resolver crisis de recovery antes de forzar.",
     },
   ],
 };
@@ -223,22 +278,22 @@ export default function MFABitacoraPage() {
           &larr; Backoffice
         </a>
         <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>MFA Obligatorio &mdash; Bitácora UX</span>
+        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>MFA Obligatorio &mdash; Bit&aacute;cora UX</span>
       </header>
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px" }}>
         <div style={{ marginBottom: 8 }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--fg)", margin: 0 }}>
-            MFA Obligatorio &mdash; Bitácora UX
+            MFA Obligatorio &mdash; Bit&aacute;cora UX
           </h1>
           <p style={{ fontSize: 13, color: "var(--muted)", marginTop: 4, lineHeight: 1.5 }}>
-            Jul 6 al Jul 20, 2026 &middot; Actualizado: 23/07/2026
+            Jul 6 al Ago 5, 2026 &middot; Actualizado: 06/08/2026
           </p>
         </div>
 
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 8 }}>
-          <span style={tag("var(--fg)", "#F3F4F6")}>Usuarios activos base: 54,790</span>
-          <span style={tag("var(--dropi)", "var(--dropi-light)")}>2FA Activada: 3,555 (6.49%)</span>
+          <span style={tag("var(--fg)", "#F3F4F6")}>Usuarios activos base: 56,984</span>
+          <span style={tag("var(--dropi)", "var(--dropi-light)")}>2FA Activada: 3,814 (6.7%)</span>
           <span style={tag("var(--danger)", "var(--danger-tint)")}>Eventos trackeados: 6/16</span>
           <span style={tag("var(--info)", "var(--info-tint)")}>North Star (8 sem): 95%</span>
         </div>
@@ -266,20 +321,23 @@ export default function MFABitacoraPage() {
 
         {activeTab === 0 && <PanelResumen />}
         {activeTab === 1 && <PanelSprint />}
-        {activeTab === 2 && <PanelHallazgos />}
-        {activeTab === 3 && <PanelProximosPasos />}
+        {activeTab === 2 && <PanelS34 />}
+        {activeTab === 3 && <PanelComparativo />}
+        {activeTab === 4 && <PanelHallazgos />}
+        {activeTab === 5 && <PanelProximosPasos />}
       </div>
 
       <footer style={{
         textAlign: "center", padding: "32px 24px 40px", fontSize: 12,
         color: "var(--muted)", borderTop: "1px solid var(--border)",
       }}>
-        Backoffice &middot; MFA Obligatorio &middot; Bitácora UX &middot; Jul 23, 2026 &middot; Autor: Michel Pino
+        Backoffice &middot; MFA Obligatorio &middot; Bit&aacute;cora UX &middot; Ago 6, 2026 &middot; Autor: Michel Pino
       </footer>
     </div>
   );
 }
 
+/* ── Resumen ── */
 function PanelResumen() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
@@ -287,31 +345,31 @@ function PanelResumen() {
         background: "linear-gradient(135deg, var(--danger) 0%, #DC2626 100%)",
         borderRadius: 14, padding: "18px 22px", color: "#fff",
       }}>
-        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>Alerta crítica de cobertura de tracking</div>
+        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>Alerta cr&iacute;tica: crisis de recovery + cobertura estancada</div>
         <div style={{ fontSize: 13, lineHeight: 1.6, opacity: 0.95 }}>
-          Solo 6 de 16 eventos trackeados (37.5%). Todo el Grupo B (login MFA, setup screen, QR scanned, setup abandoned, acciones sensibles) tiene <strong>0 eventos</strong>. Las decisiones sobre UX de MFA se basan en menos del 40% de la información disponible.
+          Recovery/2FA ratio subi&oacute; a <strong>50.6%</strong> (3.4x sobre umbral de &lt;15%). La cobertura MFA avanz&oacute; solo 0.21pp en 2 semanas (6.49% &rarr; 6.7%). Solo 6 de 16 eventos trackeados (37.5%). Las decisiones sobre UX de MFA se basan en menos del 40% de la informaci&oacute;n disponible.
         </div>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14 }}>
-        <KPICard label="Cobertura MFA" value="6.49%" sub="3,555 / 54,790 usuarios" color="var(--dropi)" bg="var(--dropi-light)" />
-        <KPICard label="2FA Activada" value="3,555" sub="↑ 5.33% vs periodo anterior" color="var(--success)" bg="var(--success-tint)" />
-        <KPICard label="Recovery iniciado" value="1,446" sub="↓ 4.66% vs periodo anterior" color="var(--warning)" bg="var(--warning-tint)" />
-        <KPICard label="Contactos recovery" value="31" sub="↓ 91% vs periodo anterior" color="var(--danger)" bg="var(--danger-tint)" />
+        <KPICard label="Cobertura MFA" value="6.7%" sub="3,814 / 56,984 usuarios" color="var(--dropi)" bg="var(--dropi-light)" />
+        <KPICard label="2FA Activada" value="3,814" sub={"↑ 7.3% vs S1-2"} color="var(--success)" bg="var(--success-tint)" />
+        <KPICard label="Recovery iniciado" value="1,931" sub={"↑ 33.5% vs S1-2"} color="var(--warning)" bg="var(--warning-tint)" />
+        <KPICard label="Contactos recovery" value="59" sub={"↑ 90.3% vs S1-2"} color="var(--danger)" bg="var(--danger-tint)" />
       </div>
 
       <div style={card}>
-        <div style={sectionTitle}>North Star: ≥95% cobertura MFA en 8 semanas</div>
+        <div style={sectionTitle}>North Star: &ge;95% cobertura MFA en 8 semanas</div>
         <div style={{ ...sectionSub, marginBottom: 14 }}>
-          Actual: 6.49% &middot; Meta: 95% &middot; Gap: 88.5pp &middot; Ritmo necesario: ~8,082 activaciones/semana
+          Actual: 6.7% &middot; Meta: 95% &middot; Gap: 88.3pp &middot; Ritmo necesario: ~8,000 activaciones/semana
         </div>
         <div style={{ background: "#F3F4F6", borderRadius: 8, height: 28, position: "relative", overflow: "hidden" }}>
           <div style={{
-            background: "var(--dropi)", height: "100%", width: "6.49%",
+            background: "var(--dropi)", height: "100%", width: "6.7%",
             borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 10, fontWeight: 700, color: "#fff", minWidth: 40,
           }}>
-            6.49%
+            6.7%
           </div>
           <div style={{
             position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)",
@@ -323,13 +381,13 @@ function PanelResumen() {
       </div>
 
       <div style={card}>
-        <div style={sectionTitle}>Métodos de verificación: comparativa</div>
+        <div style={sectionTitle}>M&eacute;todos de verificaci&oacute;n: comparativa (S3-4)</div>
         <div style={{ ...sectionSub, marginBottom: 14 }}>
-          OTP: 766 usuarios / 1,273 eventos &middot; Autenticador: 295 usuarios / 665 eventos &middot; 2FA total: 3,555 / 10,818
+          OTP: 828 usuarios / 1,392 eventos &middot; Autenticador: 343 usuarios / 1,077 eventos &middot; 2FA total: 3,814 / 11,542
         </div>
         <div style={{ height: 220 }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={METHODS_CHART} layout="horizontal" margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
+            <BarChart data={METHODS_CHART_S34} layout="horizontal" margin={{ top: 10, right: 20, left: 10, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} />
               <XAxis dataKey="name" tick={axisTick} />
               <YAxis tick={axisTick} />
@@ -346,19 +404,19 @@ function PanelResumen() {
       </div>
 
       <div style={card}>
-        <div style={sectionTitle}>Embudo de recovery</div>
+        <div style={sectionTitle}>Embudo de recovery (S3-4)</div>
         <div style={{ ...sectionSub, marginBottom: 14 }}>
-          Recovery iniciado 1,446 &rarr; Email 16 &rarr; SMS 15. Caída del 97.9% entre paso 1 y paso 2.
+          Recovery iniciado 1,931 &rarr; Email 36 &rarr; SMS 23. Ca&iacute;da del 98.1% entre paso 1 y paso 2.
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {RECOVERY_FUNNEL.map((r) => (
+          {RECOVERY_FUNNEL_S34.map((r) => (
             <div key={r.step} style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ width: 160, fontSize: 13, color: "var(--fg)", fontWeight: 500, flexShrink: 0 }}>{r.step}</div>
               <div style={{ flex: 1, background: "#F3F4F6", borderRadius: 6, height: 24, position: "relative", overflow: "hidden" }}>
                 <div style={{
-                  background: r.value === 1446 ? "var(--dropi)" : "var(--danger)",
+                  background: r.value === 1931 ? "var(--dropi)" : "var(--danger)",
                   height: "100%",
-                  width: `${Math.max((r.value / 1446) * 100, 3)}%`,
+                  width: `${Math.max((r.value / 1931) * 100, 3)}%`,
                   borderRadius: 6,
                   display: "flex", alignItems: "center", paddingLeft: 8,
                   fontSize: 10, fontWeight: 700, color: "#fff",
@@ -375,15 +433,29 @@ function PanelResumen() {
 
       <div style={card}>
         <div style={sectionTitle}>Timeline</div>
-        <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginTop: 8 }}>
-          <div style={{
-            width: 10, height: 10, borderRadius: "50%", background: "var(--dropi)",
-            marginTop: 4, flexShrink: 0,
-          }} />
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>Jul 6 - Jul 20, 2026</div>
-            <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
-              Primera evaluación de la bitácora MFA. Se identificaron 6 eventos activos de 16 del modelo TARS. Cobertura MFA en 6.49% con tendencia positiva pero ritmo insuficiente para alcanzar meta de 95% en 8 semanas.
+        <div style={{ display: "flex", flexDirection: "column", gap: 16, marginTop: 8 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+            <div style={{
+              width: 10, height: 10, borderRadius: "50%", background: "var(--danger)",
+              marginTop: 4, flexShrink: 0,
+            }} />
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>Jul 21 - Ago 5, 2026 (S3-4)</div>
+              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
+                Crisis de recovery: ratio sube a 50.6% (3.4x sobre umbral). Cobertura estancada en 6.7% (+0.21pp). Autenticador crece 2x m&aacute;s r&aacute;pido que OTP. Contactos de recovery crecen 90.3% pero embudo sigue colapsando al 98%.
+              </div>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+            <div style={{
+              width: 10, height: 10, borderRadius: "50%", background: "var(--dropi)",
+              marginTop: 4, flexShrink: 0,
+            }} />
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>Jul 6 - Jul 20, 2026 (S1-2)</div>
+              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
+                Primera evaluaci&oacute;n de la bit&aacute;cora MFA. Se identificaron 6 eventos activos de 16 del modelo TARS. Cobertura MFA en 6.49% con tendencia positiva pero ritmo insuficiente para alcanzar meta de 95% en 8 semanas.
+              </div>
             </div>
           </div>
         </div>
@@ -402,13 +474,14 @@ function KPICard({ label, value, sub, color, bg }: { label: string; value: strin
   );
 }
 
+/* ── S1-2 Sprint Panel (unchanged) ── */
 function PanelSprint() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div style={card}>
         <div style={sectionTitle}>Cobertura de tracking: 6 de 16 eventos activos</div>
         <div style={{ ...sectionSub, marginBottom: 14 }}>
-          Solo los eventos del Grupo A (UserPilot) están instrumentados. Todo el Grupo B (TARS) está sin tracking.
+          Solo los eventos del Grupo A (UserPilot) est&aacute;n instrumentados. Todo el Grupo B (TARS) est&aacute; sin tracking.
         </div>
 
         <div style={{ marginBottom: 16 }}>
@@ -437,7 +510,7 @@ function PanelSprint() {
       </div>
 
       <div style={card}>
-        <div style={sectionTitle}>Data cruda: 6 eventos activos</div>
+        <div style={sectionTitle}>Data cruda: 6 eventos activos (S1-2)</div>
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 10 }}>
             <thead>
@@ -471,7 +544,7 @@ function PanelSprint() {
       </div>
 
       <div style={card}>
-        <div style={sectionTitle}>Volumen de eventos por tipo</div>
+        <div style={sectionTitle}>Volumen de eventos por tipo (S1-2)</div>
         <div style={{ height: 260, marginTop: 10 }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={EVENT_CHART_DATA} layout="vertical" margin={{ top: 5, right: 40, left: 120, bottom: 5 }}>
@@ -491,7 +564,7 @@ function PanelSprint() {
       </div>
 
       <div style={card}>
-        <div style={sectionTitle}>Embudo de recovery: detalle por paso</div>
+        <div style={sectionTitle}>Embudo de recovery: detalle por paso (S1-2)</div>
         <div style={{ overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 10 }}>
             <thead>
@@ -523,7 +596,7 @@ function PanelSprint() {
       </div>
 
       <div style={card}>
-        <div style={sectionTitle}>Métricas derivadas</div>
+        <div style={sectionTitle}>M&eacute;tricas derivadas (S1-2)</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14, marginTop: 10 }}>
           <DerivedMetric label="Recovery / 2FA ratio" value="40.7%" meta="Meta: <15%" color="var(--danger)" />
           <DerivedMetric label="OTP / Auth ratio" value="2.6:1" meta="766 vs 295 usuarios" color="var(--warning)" />
@@ -565,6 +638,229 @@ function PanelSprint() {
   );
 }
 
+/* ── S3-4 Sprint Panel ── */
+function PanelS34() {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{
+        background: "linear-gradient(135deg, var(--danger) 0%, #DC2626 100%)",
+        borderRadius: 14, padding: "18px 22px", color: "#fff",
+      }}>
+        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>S3-4: Recovery en crisis &mdash; ratio sube a 50.6%</div>
+        <div style={{ fontSize: 13, lineHeight: 1.6, opacity: 0.95 }}>
+          El crecimiento de recovery (+33.5%) duplica al de adopci&oacute;n (+7.3%). Autenticador crece 2x m&aacute;s r&aacute;pido que OTP. La cobertura subi&oacute; solo 0.21pp en 2 semanas. El tracking sigue al 37.5%.
+        </div>
+      </div>
+
+      <div style={card}>
+        <div style={sectionTitle}>Data cruda: 6 eventos activos (S3-4)</div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 10 }}>
+            <thead>
+              <tr>
+                <th style={thStyle}>Evento</th>
+                <th style={thR}>Usuarios</th>
+                <th style={thR}>% Base</th>
+                <th style={thR}>Eventos</th>
+                <th style={thR}>Tendencia</th>
+                <th style={thR}>Avg/User</th>
+              </tr>
+            </thead>
+            <tbody>
+              {RAW_DATA_S34.map((r) => (
+                <tr key={r.evento}>
+                  <td style={{ ...tdStyle, fontWeight: 500, fontSize: 12 }}>{r.evento}</td>
+                  <td style={tdR}>{r.usuarios.toLocaleString()}</td>
+                  <td style={tdR}>{r.pctBase}</td>
+                  <td style={tdR}>{r.eventos.toLocaleString()}</td>
+                  <td style={{
+                    ...tdR,
+                    color: r.tendencia.startsWith("+") ? "var(--success)" : "var(--danger)",
+                    fontWeight: 600,
+                  }}>{r.tendencia}</td>
+                  <td style={tdR}>{r.avgUser}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style={card}>
+        <div style={sectionTitle}>Volumen de eventos por tipo (S3-4)</div>
+        <div style={{ height: 260, marginTop: 10 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={EVENT_CHART_DATA_S34} layout="vertical" margin={{ top: 5, right: 40, left: 120, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} horizontal={false} />
+              <XAxis type="number" tick={axisTick} />
+              <YAxis dataKey="name" type="category" tick={axisTick} width={110} />
+              <Tooltip contentStyle={tooltipStyle} />
+              <Bar dataKey="eventos" radius={[0, 4, 4, 0]}>
+                {EVENT_CHART_DATA_S34.map((entry, i) => (
+                  <Cell key={i} fill={entry.fill} />
+                ))}
+                <LabelList dataKey="eventos" position="right" style={labelStyle} formatter={(v) => typeof v === "number" ? v.toLocaleString() : String(v)} />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div style={card}>
+        <div style={sectionTitle}>Embudo de recovery: detalle por paso (S3-4)</div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 10 }}>
+            <thead>
+              <tr>
+                <th style={thStyle}>Paso</th>
+                <th style={thR}>Valor</th>
+                <th style={thR}>% del total</th>
+                <th style={thStyle}>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {RECOVERY_DETAIL_S34.map((r) => (
+                <tr key={r.step}>
+                  <td style={{ ...tdStyle, fontWeight: 500, fontSize: 12 }}>{r.step}</td>
+                  <td style={tdR}>{r.value !== null ? r.value.toLocaleString() : "—"}</td>
+                  <td style={tdR}>{r.pct}</td>
+                  <td style={tdStyle}>
+                    {r.status === "tracked" ? (
+                      <span style={tag("var(--success)", "var(--success-tint)")}>Trackeado</span>
+                    ) : (
+                      <span style={tag("var(--danger)", "var(--danger-tint)")}>Sin tracking</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style={card}>
+        <div style={sectionTitle}>M&eacute;tricas derivadas (S3-4)</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 14, marginTop: 10 }}>
+          <DerivedMetric label="Recovery / 2FA ratio" value="50.6%" meta="Meta: <15% — CRITICAL" color="var(--danger)" />
+          <DerivedMetric label="OTP / Auth ratio" value="2.41:1" meta="828 vs 343 usuarios" color="var(--warning)" />
+          <DerivedMetric label="Recurrencia" value="202.7%" meta="Eventos/usuario promedio" color="var(--info)" />
+          <DerivedMetric label="Recovery completion" value="3.1%" meta="59 contactos / 1,931 inicio" color="var(--danger)" />
+        </div>
+      </div>
+
+      <div style={card}>
+        <div style={sectionTitle}>Mapeo de eventos: UserPilot vs TARS</div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", marginTop: 10 }}>
+            <thead>
+              <tr>
+                <th style={thStyle}>Evento UserPilot</th>
+                <th style={thStyle}>Evento TARS</th>
+                <th style={thStyle}>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {MAPPING_TABLE.map((r, i) => (
+                <tr key={i}>
+                  <td style={{ ...tdStyle, fontSize: 12, fontFamily: "monospace", color: r.userPilot === "—" ? "var(--muted)" : "var(--fg)" }}>{r.userPilot}</td>
+                  <td style={{ ...tdStyle, fontSize: 12, fontFamily: "monospace" }}>{r.tars}</td>
+                  <td style={tdStyle}>
+                    {r.status === "parcial" ? (
+                      <span style={tag("var(--warning)", "var(--warning-tint)")}>Parcial</span>
+                    ) : (
+                      <span style={tag("var(--danger)", "var(--danger-tint)")}>Sin tracking</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Comparativo Panel ── */
+function PanelComparativo() {
+  const severityColor: Record<string, string> = {
+    danger: "var(--danger)",
+    warning: "var(--warning)",
+    success: "var(--success)",
+    neutral: "var(--muted)",
+  };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={card}>
+        <div style={sectionTitle}>Comparativo S1-2 vs S3-4</div>
+        <div style={{ ...sectionSub, marginBottom: 14 }}>
+          Evoluci&oacute;n de m&eacute;tricas clave entre periodos. Rojo = empeora, verde = mejora, amarillo = atenci&oacute;n.
+        </div>
+        <div style={{ overflowX: "auto" }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr>
+                <th style={thStyle}>M&eacute;trica</th>
+                <th style={thR}>S1-2 (Jul 6-20)</th>
+                <th style={thR}>S3-4 (Jul 21 - Ago 5)</th>
+                <th style={thR}>Delta</th>
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARATIVO_DATA.map((r) => (
+                <tr key={r.metric}>
+                  <td style={{ ...tdStyle, fontWeight: 500, fontSize: 12 }}>{r.metric}</td>
+                  <td style={tdR}>{r.s12}</td>
+                  <td style={tdR}>{r.s34}</td>
+                  <td style={{
+                    ...tdR,
+                    color: severityColor[r.severity],
+                    fontWeight: 600,
+                  }}>{r.delta}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style={card}>
+        <div style={sectionTitle}>Tendencias clave</div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 10 }}>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+            <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>{"🔴"}</span>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>Recovery crece 4.6x m&aacute;s r&aacute;pido que adopci&oacute;n</div>
+              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
+                Recovery: +33.5% vs 2FA activada: +7.3%. El problema empeora m&aacute;s r&aacute;pido de lo que crece la base. Si esta tendencia se mantiene, el ratio podr&iacute;a superar 60% en el pr&oacute;ximo sprint.
+              </div>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+            <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>{"🟢"}</span>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>Autenticador gana terreno sobre OTP</div>
+              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
+                Autenticador creci&oacute; +16.3% (295 &rarr; 343) vs OTP +8.1% (766 &rarr; 828). El ratio OTP/Auth mejor&oacute; de 2.6:1 a 2.41:1. La recurrencia de Autenticador (3.14) supera a OTP (1.68) por un factor de 1.87x.
+              </div>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+            <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>{"🟡"}</span>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>Recovery completion mejora pero sigue cr&iacute;tico</div>
+              <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2, lineHeight: 1.5 }}>
+                Subi&oacute; de 2.1% a 3.1% (+1pp). Contactos de recovery crecieron 90.3% (31 &rarr; 59). Pero el 96.9% de quienes inician recovery siguen sin completarlo a trav&eacute;s de los canales trackeados.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DerivedMetric({ label, value, meta, color }: { label: string; value: string; meta: string; color: string }) {
   return (
     <div style={{
@@ -585,18 +881,12 @@ function PanelHallazgos() {
     success: "var(--success)",
     info: "var(--info)",
   };
-  const bgMap = {
-    danger: "var(--danger-tint)",
-    warning: "var(--warning-tint)",
-    success: "var(--success-tint)",
-    info: "var(--info-tint)",
-  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div style={{ marginBottom: 4 }}>
-        <div style={sectionTitle}>7 hallazgos clave del periodo</div>
-        <div style={sectionSub}>Ordenados por severidad: críticos, advertencias, positivos y proyecciones.</div>
+        <div style={sectionTitle}>{INSIGHTS.length} hallazgos clave del periodo acumulado</div>
+        <div style={sectionSub}>Ordenados por severidad: cr&iacute;ticos, advertencias, positivos y proyecciones. Incluye S1-2 y S3-4.</div>
       </div>
 
       {INSIGHTS.map((insight, i) => (
@@ -625,21 +915,21 @@ function PanelProximosPasos() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <StepSection
-        icon="🔴"
+        icon={"🔴"}
         title="Urgente"
         color="var(--danger)"
         bg="var(--danger-tint)"
         items={NEXT_STEPS.urgente}
       />
       <StepSection
-        icon="🟡"
+        icon={"🟡"}
         title="Corto plazo"
         color="var(--warning)"
         bg="var(--warning-tint)"
         items={NEXT_STEPS.corto}
       />
       <StepSection
-        icon="🔵"
+        icon={"🔵"}
         title="Mediano plazo"
         color="var(--info)"
         bg="var(--info-tint)"

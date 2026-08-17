@@ -11,12 +11,14 @@ import { isMiDiaOwner } from "@/lib/sprint-access";
 import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 
-// La torre de logística arrastra el registro completo del tablero
-// (proyectos/logistica/_lib/data.ts, ~1.500 líneas). Se carga aparte para que
-// ese peso no entre en el bundle de las demás células, que no lo usan.
-const TorreLogistica = dynamic(() => import("./_components/TorreLogistica"), { ssr: false });
-const ProyectosPorEtapa = dynamic(() => import("./_components/ProyectosPorEtapa"), { ssr: false });
+// El weekly de logística arrastra el registro completo del tablero
+// (proyectos/logistica/_lib/data.ts, ~1.800 líneas). Se carga aparte para que
+// ese peso no entre en el bundle de las demás células, que no lo usan. Por lo
+// mismo, el mapa de etapas se pide con un `import()` dentro del efecto.
 const UpdatesLogistica = dynamic(() => import("./_components/UpdatesLogistica"), { ssr: false });
+const UpdatesBackoffice = dynamic(() => import("./_components/UpdatesBackoffice"), { ssr: false });
+const WeeklyBanner = dynamic(() => import("./_components/WeeklyBanner"), { ssr: false });
+type MapaEtapas = import("./_lib/logistica-etapas").MapaEtapas;
 type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
@@ -121,8 +123,9 @@ export default function CelulaHomePage() {
   const [metrics, setMetrics] = useState<SellersMetrics | null>(null);
   const [openUpdate, setOpenUpdate] = useState<Update | null>(null);
   const [selectedCountry, setSelectedCountry] = useState("global");
-  // Etapa seleccionada en el mapa de la orden (solo logística). null = todas.
+  // Etapa seleccionada del viaje de la orden (solo logística). null = todas.
   const [etapaFiltro, setEtapaFiltro] = useState<string | null>(null);
+  const [mapaEtapas, setMapaEtapas] = useState<MapaEtapas | null>(null);
 
   useEffect(() => {
     fetch(`/api/celulas/${params.slug}`)
@@ -137,6 +140,14 @@ export default function CelulaHomePage() {
       .then((res) => res.json())
       .then((data) => setProfile(data?.profile ?? null))
       .catch(() => setProfile(null));
+
+    // La etapa del viaje de la orden es un dato del tablero de logística, no de
+    // Darwin. Se pide aparte para que su registro no pese en las demás células.
+    if (params.slug === "logistica") {
+      import("./_lib/logistica-etapas")
+        .then((m) => setMapaEtapas(m.mapaEtapas()))
+        .catch((err) => console.error("Error cargando las etapas de logística:", err));
+    }
 
     // Si la célula es de Sellers, cargamos sus métricas cruzadas en vivo
     if (params.slug === "sellers") {
@@ -173,12 +184,13 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map(proyectoToItem);
+  const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
   const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
 
   const pocsByParent = new Map<string, Proyecto[]>();
   const deliveriesByParent = new Map<string, Proyecto[]>();
+  const followingsByDelivery = new Map<string, Proyecto[]>();
   for (const p of celula.proyectos) {
     if (p.type === "POC" && p.parent_project_id) {
       const list = pocsByParent.get(p.parent_project_id) ?? [];
@@ -189,6 +201,11 @@ export default function CelulaHomePage() {
       const list = deliveriesByParent.get(p.parent_project_id) ?? [];
       list.push(p);
       deliveriesByParent.set(p.parent_project_id, list);
+    }
+    if (p.type === "Following" && p.related_delivery_id) {
+      const list = followingsByDelivery.get(p.related_delivery_id) ?? [];
+      list.push(p);
+      followingsByDelivery.set(p.related_delivery_id, list);
     }
   }
 
@@ -247,6 +264,21 @@ export default function CelulaHomePage() {
     setCelula((prev) => prev ? { ...prev, proyectos: prev.proyectos.map((p) => (p.id === updated.id ? updated : p)) } : prev);
   }
 
+  async function handleCrearFollowing(parent: Proyecto, name: string, summary: string): Promise<string | null> {
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary, type: "Following" }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      return data?.error ?? "No se pudo crear el Following.";
+    }
+    const created = await res.json();
+    setCelula((prev) => prev ? { ...prev, proyectos: [...prev.proyectos, created] } : prev);
+    return null;
+  }
+
   // Home privada: solo para MI_DIA_OWNER_EMAIL, reemplaza el body estándar de
   // célula por el dashboard de "mi día" — ver [[project_darwin_pd_dashboard]].
   if (isMiDiaOwner(profile?.email)) {
@@ -273,66 +305,84 @@ export default function CelulaHomePage() {
   const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
 
   const isSellers = params.slug === "sellers";
-  // Logística cambia el cuerpo de la home: abre con la torre de control y
-  // agrupa las iniciativas por etapa del viaje de la orden en vez de la
-  // rejilla plana. El resto de las células no se toca.
+  // Logística ya NO cambia la estructura de la home: usa las mismas cuatro
+  // secciones que las demás células. Lo único propio que le queda es la etapa
+  // del viaje de la orden, que pasó de ser el esqueleto de la página a ser un
+  // tag de la tarjeta más una fila de chips para filtrar.
   const isLogistica = params.slug === "logistica";
+  // Backoffice suma su propio Weekly (acordeones por fecha) a la sección
+  // Updates, igual que logística — ver UpdatesBackoffice.
+  const isBackoffice = params.slug === "backoffice";
+
+  // ── Las cuatro secciones, iguales para todas las células ───────────────────
+  // Los filtros son los mismos de antes; lo único nuevo es `pasaEtapa`, que
+  // fuera de logística siempre devuelve true porque no hay mapa que consultar.
+  const pasaEtapa = (p: Proyecto) => {
+    if (!etapaFiltro || !mapaEtapas) return true;
+    const codigo = p.project_code?.toUpperCase();
+    return !!codigo && mapaEtapas.etapaPorCodigo[codigo] === etapaFiltro;
+  };
+
+  const discoveryProjects = celula.proyectos.filter(
+    (p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following" && pasaEtapa(p),
+  );
+  const pruebasConcepto = celula.proyectos.filter((p) => p.type === "POC" && pasaEtapa(p));
+  const deliveryProjects = celula.proyectos.filter((p) => p.type === "Delivery Proyecto" && pasaEtapa(p));
+  const followings = celula.proyectos.filter((p) => p.type === "Following" && pasaEtapa(p));
+
+  // Las iniciativas del tablero que aún no tienen ficha en Darwin. No se pintan
+  // como tarjeta a propósito: que se vea de un vistazo cuáles faltan es el punto.
+  //
+  // Se comprueban las DOS llaves de cada iniciativa, porque cinco quedaron
+  // registradas con su ticket de Jira como `project_code` — ver `codigoDarwin`
+  // en el tablero. Tener `codigo` en data.ts no prueba que exista la ficha.
+  const codigosEnDarwin = new Set(
+    celula.proyectos.map((p) => p.project_code?.toUpperCase()).filter(Boolean) as string[],
+  );
+  const sinFichaDarwin = (mapaEtapas?.iniciativas ?? []).filter((i) => {
+    const registrada = i.codigos.some((c) => codigosEnDarwin.has(c));
+    return !registrada && (!etapaFiltro || i.etapa === etapaFiltro);
+  });
+
+  /**
+   * Tag de etapa + enlace a la ficha del tablero. Devuelve `{}` fuera de
+   * logística, así que el spread en las tarjetas es inocuo para las demás.
+   */
+  function extrasEtapa(p: Proyecto) {
+    if (!mapaEtapas) return {};
+    const codigo = p.project_code?.toUpperCase();
+    const etapa = codigo ? mapaEtapas.etapaPorCodigo[codigo] : undefined;
+    const slug = codigo ? mapaEtapas.slugPorCodigo[codigo] : undefined;
+    return {
+      tags: etapa ? [etapa] : [],
+      // Sin esto la tarjeta enlaza a `/proyectos/log-00X`, que no existe: estos
+      // proyectos tienen `prototype_url` en NULL y su ficha vive en el tablero.
+      urlOverride: slug ? `/proyectos/logistica/proyecto/${slug}` : undefined,
+    };
+  }
 
   // Get active country stats
   const activeStats = (metrics?.stats?.countries as any)?.[selectedCountry] || metrics?.stats;
   const activeFunnel = activeStats?.funnel || metrics?.funnel || [];
 
   const sellersCss = `
-    .glass-card {
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.24);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .glass-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(247, 127, 0, 0.4);
-      box-shadow: 0 12px 40px rgba(247, 127, 0, 0.08);
-    }
-    .neon-text-orange {
-      color: #F77F00;
-      text-shadow: 0 0 10px rgba(247, 127, 0, 0.3);
-    }
     .country-tab {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.6);
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
       transition: all 0.2s ease;
       cursor: pointer;
     }
     .country-tab:hover {
-      color: #fff;
-      background: rgba(255,255,255,0.08);
+      color: #0f172a;
+      background: #f8fafc;
+      border-color: #cbd5e1;
     }
     .country-tab.active {
       background: linear-gradient(90deg, #F77F00 0%, #ffaa44 100%);
       border-color: transparent;
-      color: #fff;
-      box-shadow: 0 0 15px rgba(247, 127, 0, 0.35);
-    }
-    .glow-border {
-      position: relative;
-    }
-    .glow-border::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 16px;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(247,127,0,0.5), transparent, rgba(99,102,241,0.5));
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(247, 127, 0, 0.25);
     }
   `;
 
@@ -349,12 +399,11 @@ export default function CelulaHomePage() {
     const gapToOkr = activeStats?.gapToOkr ?? 0;
 
     return (
-      <main style={{ minHeight: "100vh", padding: "0", background: "radial-gradient(120% 90% at 50% -10%, #0c1020 0%, #030712 100%)", color: "#f1f5f9", display: "flex", flexDirection: "column", fontFamily: "'Inter', sans-serif" }}>
+      <main style={{ minHeight: "100vh", padding: "0", background: "linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)", color: "#0f172a", display: "flex", flexDirection: "column", fontFamily: "'Inter', sans-serif" }}>
         <style dangerouslySetInnerHTML={{ __html: sellersCss }} />
         
         {/* Header Section */}
-        <div style={{ position: "relative", overflow: "hidden", borderBottom: "1px solid rgba(255,255,255,0.06)", background: "rgba(3,7,18,0.4)" }}>
-          <div className="login-aurora" style={{ opacity: 0.4 }} />
+        <div style={{ borderBottom: "1px solid #e2e8f0", background: "#ffffff" }}>
           <HubHeader
             title={celula.nombre}
             subtitle={celula.lead ? `Lead: ${celula.lead} · Control Tower PM OS` : "Control Tower de Célula · Darwin"}
@@ -362,10 +411,13 @@ export default function CelulaHomePage() {
           />
         </div>
 
-        <div style={{ maxWidth: 960, margin: "0 auto", padding: 32, width: "100%", flex: 1 }}>
+        <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px 24px", width: "100%", flex: 1 }}>
           
+          {/* Weekly Célula Banner / Action Bar */}
+          <WeeklyBanner />
+
           {/* Country Filter Tab Bar */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, background: "rgba(255,255,255,0.02)", padding: 6, borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, background: "#f1f5f9", padding: 6, borderRadius: 12, border: "1px solid #e2e8f0" }}>
             {[
               { key: "global", label: "🌍 Global" },
               { key: "CO", label: "🇨🇴 Colombia" },
@@ -388,7 +440,6 @@ export default function CelulaHomePage() {
                   borderRadius: 8,
                   fontSize: 12,
                   fontWeight: 700,
-                  border: "1px solid rgba(255,255,255,0.05)",
                   display: "flex",
                   alignItems: "center",
                   gap: 6
@@ -408,66 +459,66 @@ export default function CelulaHomePage() {
             const formattedTarget = ceilingTarget >= 1000000 ? `${(ceilingTarget / 1000000).toFixed(2)}M` : ceilingTarget.toLocaleString();
             
             return (
-              <div className="glow-border" style={{
-                background: "linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(3, 7, 18, 0.95) 100%)",
-                borderRadius: 16, padding: "28px 32px", marginBottom: 24, color: "#fff",
-                boxShadow: "0 10px 40px rgba(0,0,0,0.4)"
+              <div style={{
+                background: "#ffffff",
+                border: "1px solid #e2e8f0",
+                borderRadius: 16, padding: "28px 32px", marginBottom: 24, color: "#0f172a",
+                boxShadow: "0 8px 30px rgba(0,0,0,0.05)"
               }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
                   <div>
-                    <span style={{ fontSize: 10, fontWeight: 850, background: "rgba(247, 127, 0, 0.15)", color: "#F77F00", border: "1px solid rgba(247, 127, 0, 0.3)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    <span style={{ fontSize: 10, fontWeight: 850, background: "#FFF7ED", color: "#F77F00", border: "1px solid #FFEDD5", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                       {isGlobal ? "OKR 1 / KR 1.1 HOLDING · TECHO GLOBAL: 7.80M ÓRDENES/MES" : `TECHO META JULIO CPO (${selectedCountry.toUpperCase()})`}
                     </span>
-                    <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
+                    <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", color: "#0f172a", margin: "8px 0 0" }}>
                       {isGlobal ? "Órdenes Movilizadas de Sellers Activos (NSM Global)" : `Órdenes Movilizadas en ${selectedCountry === "CO" ? "Colombia" : selectedCountry === "EC" ? "Ecuador" : selectedCountry === "CL" ? "Chile" : selectedCountry === "MX" ? "México" : selectedCountry === "GT" ? "Guatemala" : selectedCountry === "PY" ? "Paraguay" : selectedCountry === "PA" ? "Panamá" : selectedCountry === "AR" ? "Argentina" : selectedCountry === "CR" ? "Costa Rica" : selectedCountry === "PE" ? "Perú" : selectedCountry}`}
                     </h3>
                   </div>
                   <div style={{ textAlign: "right" }}>
-                    <span className="neon-text-orange" style={{ fontSize: 32, fontWeight: 900 }}>
+                    <span style={{ fontSize: 32, fontWeight: 900, color: "#F77F00" }}>
                       {actualPctOfCeiling.toFixed(1)}%
                     </span>
-                    <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", display: "block" }}>
+                    <span style={{ fontSize: 12, color: "#64748b", display: "block" }}>
                       {isGlobal ? "del Techo OKR 1.1 (7.80M/mes)" : `alcanzado de la Meta Julio (${percentageToOkr}% proy.)`}
                     </span>
                   </div>
                 </div>
                 
                 {/* Progress Bar towards Ceiling */}
-                <div style={{ height: 12, background: "rgba(255,255,255,0.08)", borderRadius: 999, overflow: "hidden", marginBottom: 16, position: "relative" }}>
+                <div style={{ height: 12, background: "#f1f5f9", borderRadius: 999, overflow: "hidden", marginBottom: 16, border: "1px solid #e2e8f0" }}>
                   <div style={{
                     height: "100%",
                     width: `${Math.min(actualPctOfCeiling, 100)}%`,
                     background: actualPctOfCeiling >= 100 ? "linear-gradient(90deg, #10B981 0%, #34D399 100%)" : "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)",
                     borderRadius: 999,
-                    boxShadow: actualPctOfCeiling >= 100 ? "0 0 12px rgba(16, 185, 129, 0.6)" : "0 0 12px rgba(247, 127, 0, 0.6)"
                   }} />
                 </div>
                 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed rgba(255,255,255,0.1)", paddingTop: 14 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed #e2e8f0", paddingTop: 14 }}>
                   <div>
-                    <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
-                    <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>{formattedCurrent}/mes</strong>
-                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", display: "block" }}>{nsmCurrent.toLocaleString()} ord movilizadas</span>
+                    <span style={{ color: "#64748b", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
+                    <strong style={{ color: "#0f172a", fontSize: 14, fontWeight: 800 }}>{formattedCurrent}/mes</strong>
+                    <span style={{ fontSize: 11, color: "#64748b", display: "block" }}>{nsmCurrent.toLocaleString()} ord movilizadas</span>
                   </div>
                   <div>
-                    <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
+                    <span style={{ color: "#64748b", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
                       {isGlobal ? "Hito Julio CPO" : "Meta Julio CPO (Techo País)"}
                     </span>
-                    <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>
+                    <strong style={{ color: "#0f172a", fontSize: 14, fontWeight: 800 }}>
                       {isGlobal ? "3.57M/mes" : `${formattedTarget}/mes`}
                     </strong>
-                    <span style={{ fontSize: 11, color: "#22C55E", fontWeight: 700, display: "block" }}>
+                    <span style={{ fontSize: 11, color: "#16a34a", fontWeight: 700, display: "block" }}>
                       {isGlobal ? "93.85% alcanzado (100.32% proy)" : `${percentageToOkr}% proy. cumplimiento`}
                     </span>
                   </div>
                   <div>
-                    <span style={{ color: "rgba(255,255,255,0.5)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
+                    <span style={{ color: "#64748b", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
                       {isGlobal ? "Techo OKR 1.1 Holding" : "Brecha a la Meta Julio"}
                     </span>
                     <strong style={{ color: "#F77F00", fontSize: 14, fontWeight: 900 }}>
                       {isGlobal ? "7.80M/mes" : gapToOkr > 0 ? `-${gapToOkr.toLocaleString()} ord` : `+${Math.abs(gapToOkr).toLocaleString()} ord 🎉`}
                     </strong>
-                    <span style={{ fontSize: 11, color: isGlobal ? "#EF4444" : gapToOkr > 0 ? "#EF4444" : "#22C55E", fontWeight: 700, display: "block" }}>
+                    <span style={{ fontSize: 11, color: isGlobal ? "#dc2626" : gapToOkr > 0 ? "#dc2626" : "#16a34a", fontWeight: 700, display: "block" }}>
                       {isGlobal ? "Brecha: -4.45M ord (43.0% cumpl.)" : gapToOkr > 0 ? "Falta para completar meta" : "Meta del mes superada!"}
                     </span>
                   </div>
@@ -487,7 +538,7 @@ export default function CelulaHomePage() {
                   progressPct: ((activeStats?.activationRateNet ?? 5.2) / 8.0) * 100,
                   meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
                   sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
-                  color: "#10B981", icon: "⚡"
+                  color: "#10B981", bg: "#ECFDF5", icon: "⚡"
                 },
                 {
                   label: "Tiempo de Activación Neta (TTV)",
@@ -496,7 +547,7 @@ export default function CelulaHomePage() {
                   progressPct: (12.0 / ttvNetoMedian) * 100,
                   meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
                   sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
-                  color: "#F59E0B", icon: "⏱️"
+                  color: "#D97706", bg: "#FEF3C7", icon: "⏱️"
                 },
                 {
                   label: "Tasa de Activación Bruta",
@@ -505,7 +556,7 @@ export default function CelulaHomePage() {
                   progressPct: (activationRate / 12.0) * 100,
                   meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
                   sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
-                  color: "#EC4899", icon: "📦"
+                  color: "#DB2777", bg: "#FCE7F3", icon: "📦"
                 },
                 {
                   label: "Retención a 30 Días",
@@ -514,7 +565,7 @@ export default function CelulaHomePage() {
                   progressPct: (survivalRate / 75.0) * 100,
                   meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
                   sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
-                  color: "#8B5CF6", icon: "🌱"
+                  color: "#7C3AED", bg: "#F3E8FF", icon: "🌱"
                 },
                 {
                   label: "Base de Sellers Identificados",
@@ -523,7 +574,7 @@ export default function CelulaHomePage() {
                   progressPct: (36056 / totalSellers) * 100,
                   meta: "36,056 Dropshippers Target + 8,744 Proveedores",
                   sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
-                  color: "#3B82F6", icon: "👥"
+                  color: "#2563EB", bg: "#EFF6FF", icon: "👥"
                 },
                 {
                   label: "Usuarios Activos Diarios (DAU)",
@@ -532,15 +583,16 @@ export default function CelulaHomePage() {
                   progressPct: (14262 / 81521) * 100,
                   meta: "MAU Mensual: 81,521 usuarios/mes",
                   sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
-                  color: "#22C55E", icon: "🎯"
+                  color: "#16A34A", bg: "#DCFCE7", icon: "🎯"
                 }
               ].map((m) => (
                 <div key={m.label} style={{
-                  background: "rgba(15, 23, 42, 0.88)",
-                  border: `1px solid ${m.color}30`,
+                  background: "#ffffff",
+                  border: "1px solid #e2e8f0",
+                  borderLeft: `4px solid ${m.color}`,
                   borderRadius: 16,
                   padding: "20px 22px",
-                  boxShadow: `0 10px 30px rgba(0,0,0,0.4), 0 0 15px ${m.color}15`,
+                  boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between"
@@ -548,23 +600,22 @@ export default function CelulaHomePage() {
                   <div>
                     {/* Header */}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                      <span style={{ fontSize: 11, fontWeight: 800, color: "rgba(255,255,255,0.75)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                         {m.label}
                       </span>
                       <span style={{ fontSize: 18 }}>{m.icon}</span>
                     </div>
 
                     {/* Big Value */}
-                    <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#ffffff", marginBottom: 8 }}>
+                    <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#0f172a", marginBottom: 8 }}>
                       {m.value}
                     </div>
 
                     {/* Meta Badge */}
                     <div style={{
-                      background: "rgba(255, 255, 255, 0.04)",
-                      borderLeft: `4px solid ${m.color}`,
+                      background: m.bg,
                       padding: "6px 12px",
-                      borderRadius: "0 8px 8px 0",
+                      borderRadius: 8,
                       marginBottom: 12
                     }}>
                       <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
@@ -575,7 +626,7 @@ export default function CelulaHomePage() {
                     {/* Visual Progress Bar */}
                     <div style={{ margin: "10px 0 14px" }}>
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
-                        <span style={{ color: "rgba(255,255,255,0.45)" }}>Avance a la Meta</span>
+                        <span style={{ color: "#64748b" }}>Avance a la Meta</span>
                         <span style={{ color: m.color, fontWeight: 900 }}>
                           {m.progressPct.toFixed(1)}%
                         </span>
@@ -584,26 +635,25 @@ export default function CelulaHomePage() {
                       {/* Thermometer Tube */}
                       <div style={{
                         height: 10,
-                        background: "rgba(255, 255, 255, 0.08)",
+                        background: "#f1f5f9",
                         borderRadius: 999,
                         padding: 1,
-                        border: "1px solid rgba(255, 255, 255, 0.12)",
+                        border: "1px solid #e2e8f0",
                         position: "relative",
                         overflow: "hidden"
                       }}>
                         <div style={{
                           height: "100%",
                           width: `${Math.min(m.progressPct, 100)}%`,
-                          background: `linear-gradient(90deg, ${m.color}88 0%, ${m.color} 100%)`,
+                          background: `linear-gradient(90deg, ${m.color}cc 0%, ${m.color} 100%)`,
                           borderRadius: 999,
-                          boxShadow: `0 0 10px ${m.color}80`
                         }} />
                       </div>
 
                       {/* Scale Legends */}
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.4)", marginTop: 4, fontWeight: 600 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#64748b", marginTop: 4, fontWeight: 600 }}>
                         <span>0</span>
-                        <span>Actual: <strong style={{ color: "#fff" }}>{m.value}</strong></span>
+                        <span>Actual: <strong style={{ color: "#0f172a" }}>{m.value}</strong></span>
                         <span>Meta: <strong style={{ color: m.color }}>{m.targetVal}</strong></span>
                       </div>
                     </div>
@@ -612,10 +662,10 @@ export default function CelulaHomePage() {
                   {/* Explanation Footer */}
                   <div style={{
                     fontSize: 12,
-                    color: "#CBD5E1",
+                    color: "#475569",
                     fontWeight: 500,
                     lineHeight: 1.45,
-                    borderTop: "1px dashed rgba(255, 255, 255, 0.1)",
+                    borderTop: "1px dashed #e2e8f0",
                     paddingTop: 10
                   }}>
                     {m.sub}
@@ -625,14 +675,10 @@ export default function CelulaHomePage() {
             </div>
           )}
 
-
-
-
-
           {/* Discovery projects list */}
           <div style={{ marginBottom: 40 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-              <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: 0 }}>
+              <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: 0 }}>
                 Discovery Projects
               </p>
               {canCreate && (
@@ -640,7 +686,7 @@ export default function CelulaHomePage() {
                   onClick={() => { setShowForm(true); setFormError(null); }}
                   style={{
                     fontSize: 12, fontWeight: 700, color: "#F77F00",
-                    background: "rgba(247, 127, 0, 0.08)", border: "1px solid rgba(247, 127, 0, 0.2)", borderRadius: 8,
+                    background: "#FFF7ED", border: "1px solid #FFEDD5", borderRadius: 8,
                     padding: "6px 12px", cursor: "pointer",
                   }}
                 >
@@ -649,13 +695,13 @@ export default function CelulaHomePage() {
               )}
             </div>
 
-            {/* Custom dark list wrapper */}
+            {/* Custom light list wrapper */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-              {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map((p) => (
+              {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map((p) => (
                 <ProjectCard
                   key={p.id}
                   project={p}
-                  dark
+                  dark={false}
                   canCreate={canCreate}
                   pocs={pocsByParent.get(p.id) ?? []}
                   deliveries={deliveriesByParent.get(p.id) ?? []}
@@ -670,15 +716,15 @@ export default function CelulaHomePage() {
 
           {/* Pruebas de concepto list */}
           <div style={{ marginBottom: 40 }}>
-            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
-              Pruebas de concepto
+            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
+              Pruebas de concepto (POCs)
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
               {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
                 <ProjectCard
                   key={p.id}
                   project={p}
-                  dark
+                  dark={false}
                   canCreate={canCreate}
                   pocs={[]}
                   onEstadoChange={handleEstadoChange}
@@ -687,14 +733,14 @@ export default function CelulaHomePage() {
                 />
               ))}
               {poc.length === 0 && (
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay POCs cargadas para esta célula.</p>
+                <p style={{ fontSize: 13, color: "#64748b" }}>Aún no hay POCs cargadas para esta célula.</p>
               )}
             </div>
           </div>
 
           {/* Delivery Proyectos list */}
           <div style={{ marginBottom: 40 }}>
-            <p style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
+            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
               Delivery Proyectos
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
@@ -702,18 +748,44 @@ export default function CelulaHomePage() {
                 <ProjectCard
                   key={p.id}
                   project={p}
-                  dark
+                  dark={false}
                   canCreate={canCreate}
                   pocs={[]}
                   siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                  followings={followingsByDelivery.get(p.id) ?? []}
                   onEstadoChange={handleEstadoChange}
                   onVpvChange={handleVpvChange}
                   onCrearPoc={handleCrearPoc}
                   onRelatedPocChange={handleRelatedPocChange}
+                  onCrearFollowing={handleCrearFollowing}
                 />
               ))}
               {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
-                <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
+                <p style={{ fontSize: 13, color: "#64748b" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Followings list */}
+          <div style={{ marginBottom: 40 }}>
+            <p style={{ fontSize: 11, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, marginBottom: 20 }}>
+              Followings
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+              {celula.proyectos.filter((p) => p.type === "Following").map((p) => (
+                <ProjectCard
+                  key={p.id}
+                  project={p}
+                  dark={false}
+                  canCreate={canCreate}
+                  pocs={[]}
+                  onEstadoChange={handleEstadoChange}
+                  onVpvChange={handleVpvChange}
+                  onCrearPoc={handleCrearPoc}
+                />
+              ))}
+              {celula.proyectos.filter((p) => p.type === "Following").length === 0 && (
+                <p style={{ fontSize: 13, color: "#64748b" }}>Aún no hay Followings cargados para esta célula.</p>
               )}
             </div>
           </div>
@@ -726,7 +798,7 @@ export default function CelulaHomePage() {
           <div
             onClick={() => setOpenUpdate(null)}
             style={{
-              position: "fixed", inset: 0, background: "rgba(3,7,18,0.75)",
+              position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
               display: "flex", alignItems: "center", justifyContent: "center",
               padding: 24, zIndex: 50, backdropFilter: "blur(4px)"
             }}
@@ -734,26 +806,26 @@ export default function CelulaHomePage() {
             <div
               onClick={(e) => e.stopPropagation()}
               style={{
-                background: "#0c1020", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 16, maxWidth: 640, width: "100%",
+                background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: 16, maxWidth: 640, width: "100%",
                 maxHeight: "80vh", overflowY: "auto", padding: "28px",
-                boxShadow: "0 20px 60px rgba(0,0,0,0.5)", color: "#fff"
+                boxShadow: "0 20px 60px rgba(0,0,0,0.15)", color: "#0f172a"
               }}
             >
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
-                <h2 style={{ fontSize: 17, fontWeight: 800, color: "#fff", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
+                <h2 style={{ fontSize: 17, fontWeight: 800, color: "#0f172a", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
                 <button
                   onClick={() => setOpenUpdate(null)}
-                  style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "rgba(255,255,255,0.4)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                  style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "#64748b", cursor: "pointer", lineHeight: 1, padding: 4 }}
                   aria-label="Cerrar"
                 >
                   ×
                 </button>
               </div>
-              <p style={{ fontSize: 12, color: "rgba(255,255,255,0.4)", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
-              <div style={{ fontSize: 13.5, color: "rgba(255,255,255,0.8)", lineHeight: 1.7 }}>
+              <p style={{ fontSize: 12, color: "#64748b", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
+              <div style={{ fontSize: 13.5, color: "#334155", lineHeight: 1.7 }}>
                 {openUpdate.content.split("\n").map((line, i) => {
                   const trimmed = line.trim();
-                  if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid rgba(255,255,255,0.1)", margin: "16px 0" }} />;
+                  if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid #e2e8f0", margin: "16px 0" }} />;
                   if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
                   if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
                   return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
@@ -775,17 +847,7 @@ export default function CelulaHomePage() {
         currentSlug={celula.slug}
       />
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
-        {/* Torre de control — solo logística. Abre la home con los indicadores
-            de la orden y el mapa que filtra las iniciativas de más abajo. */}
-        {isLogistica && (
-          <TorreLogistica
-            deDarwin={celula.proyectos}
-            etapaActiva={etapaFiltro}
-            onEtapaChange={setEtapaFiltro}
-          />
-        )}
-
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
         {/* OKR & NSM Progress Section — OKR 1.1 (7.8M/mes) como Techo */}
         {params.slug === "sellers" && metrics && (
           <div style={{
@@ -987,6 +1049,8 @@ export default function CelulaHomePage() {
 
 
 
+        {/* El weekly de logística vive en el tablero, no en `celula_updates`,
+            así que esta sección sigue siendo suya. */}
         {isLogistica && (
           <div style={{ marginBottom: 56 }}>
             <UpdatesLogistica
@@ -999,10 +1063,78 @@ export default function CelulaHomePage() {
           </div>
         )}
 
+        {isBackoffice && (
+          <div style={{ marginBottom: 56 }}>
+            <UpdatesBackoffice
+              extra={updates}
+              onItemClick={(item) => {
+                const u = updatesById.get(item.key);
+                if (u) setOpenUpdate(u);
+              }}
+            />
+          </div>
+        )}
+
+        {/* El resto de células (Suppliers, Brands, Growth, Growth Marketing,
+            Product Designers, Experience...) no tiene componente propio de
+            updates — usan el genérico de celula_updates + historial del
+            Weekly PM, igual que antes de que 9d911bd se lo llevara junto con
+            el de sellers al tocar este mismo archivo compartido. */}
+        {!isLogistica && !isBackoffice && (
+          <div style={{ marginBottom: 56 }}>
+            <Section
+              title="Updates"
+              items={updates}
+              ctaLabel="Ver →"
+              onItemClick={(item) => {
+                const u = updatesById.get(item.key);
+                if (u) setOpenUpdate(u);
+              }}
+            />
+            {updates.length === 0 && (
+              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
+            )}
+          </div>
+        )}
+
+        {/* Filtro por etapa del viaje de la orden. Antes la etapa ERA la
+            estructura de la página (un encabezado por cada una); ahora es un
+            filtro que atraviesa las cuatro secciones de abajo. */}
+        {mapaEtapas && (
+          <div style={{ marginBottom: 28 }}>
+            <p style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: "0 0 10px" }}>
+              Etapa del viaje de la orden
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {[{ n: 0, nombre: "Todas", total: mapaEtapas.chips.reduce((acc, c) => acc + c.total, 0) }, ...mapaEtapas.chips].map((c) => {
+                const activa = c.n === 0 ? etapaFiltro === null : etapaFiltro === c.nombre;
+                return (
+                  <button
+                    key={c.nombre}
+                    onClick={() => setEtapaFiltro(c.n === 0 ? null : c.nombre)}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      fontSize: 12, fontWeight: 700, cursor: "pointer",
+                      padding: "6px 12px", borderRadius: 999,
+                      color: activa ? "var(--dropi)" : "var(--fg)",
+                      background: activa ? "rgba(247,127,0,0.08)" : "var(--card)",
+                      border: `1px solid ${activa ? "var(--dropi)" : "var(--border)"}`,
+                    }}
+                  >
+                    {c.n > 0 && <span style={{ color: "var(--muted)", fontVariantNumeric: "tabular-nums" }}>{c.n}</span>}
+                    {c.nombre}
+                    <span style={{ color: "var(--muted)", fontWeight: 500, fontVariantNumeric: "tabular-nums" }}>{c.total}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div style={{ marginBottom: 56 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
             <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
-              {isLogistica ? "Iniciativas por etapa" : "Discovery projects"}
+              Discovery projects
             </p>
             {canCreate && (
               <div style={{ display: "flex", gap: 8 }}>
@@ -1081,94 +1213,137 @@ export default function CelulaHomePage() {
             </form>
           )}
 
-          {isLogistica ? (
-            <ProyectosPorEtapa
-              deDarwin={celula.proyectos}
-              etapaActiva={etapaFiltro}
-              canCreate={canCreate}
-              pocsByParent={pocsByParent}
-              onEstadoChange={handleEstadoChange}
-              onVpvChange={handleVpvChange}
-              onCrearPoc={handleCrearPoc}
-            />
-          ) : (
-            <>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-                {celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto").map((p) => (
-                  <ProjectCard
-                    key={p.id}
-                    project={p}
-                    dark={false}
-                    canCreate={canCreate}
-                    pocs={pocsByParent.get(p.id) ?? []}
-                    deliveries={deliveriesByParent.get(p.id) ?? []}
-                    onEstadoChange={handleEstadoChange}
-                    onVpvChange={handleVpvChange}
-                    onCrearPoc={handleCrearPoc}
-                    onCrearDelivery={handleCrearDelivery}
-                  />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {discoveryProjects.map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={pocsByParent.get(p.id) ?? []}
+                deliveries={deliveriesByParent.get(p.id) ?? []}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+                onCrearDelivery={handleCrearDelivery}
+                {...extrasEtapa(p)}
+              />
+            ))}
+          </div>
+          {discoveryProjects.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>
+              {etapaFiltro
+                ? `Ninguna iniciativa de la etapa "${etapaFiltro}" tiene ficha en Darwin.`
+                : "Aún no hay proyectos cargados para esta célula."}
+            </p>
+          )}
+
+          {/* Iniciativas que están en el tablero de logística pero todavía no en
+              Darwin. Van como chips y no como tarjeta: que falte la ficha es el
+              dato, y una tarjeta más lo escondería. */}
+          {sinFichaDarwin.length > 0 && (
+            <div style={{ marginTop: 20, border: "1px dashed var(--border)", borderRadius: 12, padding: "12px 14px", background: "var(--bg)" }}>
+              <p style={{ fontSize: 11, color: "var(--muted)", margin: "0 0 8px", fontWeight: 500 }}>
+                En el tablero · sin ficha en Darwin
+              </p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {sinFichaDarwin.map((i) => (
+                  <a
+                    key={i.slug}
+                    href={`/proyectos/logistica/proyecto/${i.slug}`}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      fontSize: 13, fontWeight: 500, color: "var(--fg)", textDecoration: "none",
+                      background: "var(--card)", border: "1px solid var(--border)",
+                      borderRadius: 999, padding: "6px 12px",
+                    }}
+                  >
+                    <span style={{ color: "var(--warning)" }} aria-hidden="true">○</span>
+                    {i.destacado && <span aria-hidden="true">⭐</span>}
+                    {i.nombre}
+                    {!etapaFiltro && <span style={{ color: "var(--muted)", fontSize: 11 }}>{i.etapa}</span>}
+                  </a>
                 ))}
               </div>
-              {proyectos.length === 0 && (
-                <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay proyectos cargados para esta célula.</p>
-              )}
-            </>
+            </div>
           )}
         </div>
 
-        {/* Los POC de logística no van en una sección aparte: se muestran dentro
-            de su etapa, que es el eje de organización de esa célula. */}
-        {!isLogistica && (
-          <div style={{ marginBottom: 56 }}>
-            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-              Pruebas de concepto
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-              {celula.proyectos.filter((p) => p.type === "POC").map((p) => (
-                <ProjectCard
-                  key={p.id}
-                  project={p}
-                  dark={false}
-                  canCreate={canCreate}
-                  pocs={[]}
-                  onEstadoChange={handleEstadoChange}
-                  onVpvChange={handleVpvChange}
-                  onCrearPoc={handleCrearPoc}
-                />
-              ))}
-            </div>
-            {poc.length === 0 && (
-              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
-            )}
+        <div style={{ marginBottom: 56 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Pruebas de concepto
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {pruebasConcepto.map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={[]}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+                {...extrasEtapa(p)}
+              />
+            ))}
           </div>
-        )}
+          {pruebasConcepto.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
+          )}
+        </div>
 
-        {!isLogistica && (
-          <div>
-            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-              Delivery Proyectos
-            </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-              {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").map((p) => (
-                <ProjectCard
-                  key={p.id}
-                  project={p}
-                  dark={false}
-                  canCreate={canCreate}
-                  pocs={[]}
-                  siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
-                  onEstadoChange={handleEstadoChange}
-                  onVpvChange={handleVpvChange}
-                  onCrearPoc={handleCrearPoc}
-                  onRelatedPocChange={handleRelatedPocChange}
-                />
-              ))}
-            </div>
-            {celula.proyectos.filter((p) => p.type === "Delivery Proyecto").length === 0 && (
-              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
-            )}
+        <div>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Delivery Proyectos
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {deliveryProjects.map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={[]}
+                siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
+                followings={followingsByDelivery.get(p.id) ?? []}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+                onRelatedPocChange={handleRelatedPocChange}
+                onCrearFollowing={handleCrearFollowing}
+                {...extrasEtapa(p)}
+              />
+            ))}
           </div>
-        )}
+          {deliveryProjects.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
+          )}
+        </div>
+
+        <div style={{ marginTop: 56 }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
+            Followings
+          </p>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+            {followings.map((p) => (
+              <ProjectCard
+                key={p.id}
+                project={p}
+                dark={false}
+                canCreate={canCreate}
+                pocs={[]}
+                onEstadoChange={handleEstadoChange}
+                onVpvChange={handleVpvChange}
+                onCrearPoc={handleCrearPoc}
+                {...extrasEtapa(p)}
+              />
+            ))}
+          </div>
+          {followings.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Followings cargados para esta célula.</p>
+          )}
+        </div>
       </div>
       </div>
       <HubFooter />

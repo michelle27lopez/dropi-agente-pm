@@ -17,8 +17,8 @@
 | Ítem | Tipo NUEVO | Antes era | Dónde vive |
 |------|-----------|-----------|-----------|
 | **Selección de transportadoras** | **Discovery — pruebas de usuarios** | "prueba/beta de 20 usuarios" | Product Backlog · [protocolo](../proyectos/sistema-inteligente-transportadoras/prueba-fase0-20-usuarios.md) |
-| **Autoconfirmación** | **Prueba con usuarios** (+ vía **ChateaPro**, §3) | experimento A/B a la espera de personas | Product Backlog · [spec](../proyectos/movilizacion-confirmacion/spec.md) · PRM-1497 |
-| **Autogeneración de guías** | **Proyecto de discovery** | "2º experimento listo para probar" | Product Backlog · _spec por crear_ |
+| **Autoconfirmación** | **Prueba con usuarios** (+ gate **ChateaPro**, §3) | usabilidad con 6 usuarios completada; outcome pendiente | Product Backlog · [spec](../proyectos/movilizacion-confirmacion/spec.md) · PRM-1497 comentario 50933 |
+| **Autogeneración de guías** | **Proyecto/solicitud de discovery** | concepto/prototipo; no prueba propia | Product Backlog · [spec](../proyectos/autogeneracion-guias/spec.md) · PRM-1469 → INVS-67 |
 | **Notificación de optimización** | **Iniciativa de producto (nuestra)** | — *(ítem nuevo)* | ⚠️ **por precisar — §5** |
 
 **Lo que cambia de fondo:** los tres primeros dejan de ser *experimentos que miden impacto* y pasan a
@@ -38,8 +38,8 @@ un discovery no se juzga por "¿movió la aguja?" sino por "¿aprendimos lo que 
 
 | Orden | POC | Tipo | Usuarios | Fecha | Dueño | Prerrequisito |
 |-------|-----|------|----------|-------|-------|---------------|
-| **🎯 1º** | **Autoconfirmación** | Prueba con usuarios | dropshippers reales + **ChateaPro** | _por definir_ | Juan · Michel | Entender el trigger de Chatea (§3) |
-| ⏸️ 2º | **Autogeneración de guías** | Proyecto de discovery | _por definir_ | _por definir_ | Juan | Levantar el discovery (no tiene spec) |
+| **🎯 1º** | **Autoconfirmación** | Gate técnico + iteración T4 | ChateaPro + muestra segmentada | _por definir_ | Juan · Michel | Resolver trigger/atribución y fuente primaria (§3) |
+| ⏸️ 2º | **Autogeneración de guías** | Proyecto/solicitud de discovery | proveedores de alto volumen, después del DoR | _por definir_ | Juan driver · owner Jira pendiente | Recuperar análisis Kevin/Lucho; baseline; lotes/impresión; fallback carrier; datos |
 | ⏸️ 3º | **Selección de transportadoras** | Discovery · pruebas de usuarios | ≥20 dropshippers | _por definir_ | **Kate Pencue** (Juan = Carrier Ops) | Catálogo caracterizado (Juan + Paula) |
 | ⏸️ — | **Notificación de optimización** | Iniciativa de producto | — | _por definir_ | Juan | **Definir qué es** (§5) |
 

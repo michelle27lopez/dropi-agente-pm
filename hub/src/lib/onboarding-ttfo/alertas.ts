@@ -3,6 +3,7 @@ import type {
   LineaDeTiempoUsuario, ResultadoUsuario, Segmento, SlotId,
 } from "./tipos";
 import { REGISTRO_SLOTS } from "./registroSlots";
+import { CORTE_COHORTE } from "./cohorte";
 
 // Las 4 alertas pedidas por Kate (28/29-jul-2026). Ninguna asume una
 // explicación ("diseño distinto por segmento", etc.) — solo reporta el
@@ -52,7 +53,9 @@ export function alertaB_OrdenSinFlujo(resultados: ResultadoUsuario[]): Alertas["
 
 /**
  * C: población DEL COHORTE que llega a cada paso, y la caída absoluta/
- * relativa contra el paso anterior.
+ * relativa contra el paso anterior — con desglose Marca/Proveedor (a pedido
+ * de Kate, 05-ago-2026: nunca un solo agregado que los mezcle, misma regla
+ * que la Alerta D). Cohorte = estable desde CORTE_COHORTE (28-jul-2026).
  *
  * Bug real encontrado al correr contra data real (29-jul-2026): los archivos
  * de evento traen miles de filas de TODA la plataforma (cualquiera que
@@ -74,20 +77,89 @@ export function alertaC_MayorCaidaPorPaso(
 
   const poblacionPorSlot = slotsEnOrden.map(slot => {
     let poblacion = 0;
+    let poblacionMarca = 0;
+    let poblacionProveedor = 0;
     for (const linea of lineas.values()) {
       if (!idsCohorte.has(linea.userId)) continue;
       if (idsPrueba.has(linea.userId)) continue;
-      if (esFilaConEvidencia(linea.pasos[slot])) poblacion += 1;
+      if (!esFilaConEvidencia(linea.pasos[slot])) continue;
+      poblacion += 1;
+      if (linea.encuesta?.segmento === "marca") poblacionMarca += 1;
+      else if (linea.encuesta?.segmento === "proveedor") poblacionProveedor += 1;
     }
-    return { slot, poblacion };
+    return { slot, poblacion, poblacionMarca, poblacionProveedor };
   });
+
+  const caida = (actual: number, anterior: number | null) => {
+    const caidaAbsoluta = anterior !== null ? anterior - actual : 0;
+    const caidaRelativa = anterior !== null && anterior > 0 ? caidaAbsoluta / anterior : 0;
+    return { caidaAbsoluta, caidaRelativa };
+  };
 
   return poblacionPorSlot.map((actual, i) => {
     const anterior = i === 0 ? null : poblacionPorSlot[i - 1];
-    const caidaAbsoluta = anterior ? anterior.poblacion - actual.poblacion : 0;
-    const caidaRelativa = anterior && anterior.poblacion > 0 ? caidaAbsoluta / anterior.poblacion : 0;
-    return { slot: actual.slot, poblacion: actual.poblacion, caidaAbsoluta, caidaRelativa };
+    return {
+      slot: actual.slot,
+      poblacion: actual.poblacion,
+      ...caida(actual.poblacion, anterior?.poblacion ?? null),
+      marca: { poblacion: actual.poblacionMarca, ...caida(actual.poblacionMarca, anterior?.poblacionMarca ?? null) },
+      proveedor: { poblacion: actual.poblacionProveedor, ...caida(actual.poblacionProveedor, anterior?.poblacionProveedor ?? null) },
+    };
   });
+}
+
+function fechaDeModalOTour(valor: unknown): string | null {
+  if (typeof valor === "object" && valor !== null && "totalCompleted" in valor) {
+    const f = valor as unknown as { lastCompleted: string | null; lastDismissed: string | null };
+    return f.lastCompleted ?? f.lastDismissed;
+  }
+  return null;
+}
+
+/**
+ * El primer tramo real del flujo (Bienvenida → Encuesta) — a pedido de Kate
+ * (05-ago-2026): "del video de Bienvenida contestan la encuesta y de la
+ * encuesta pasan a crear la primera bodega".
+ *
+ * Corrección de Kate (05-ago-2026): la Alerta C completa es sobre el cohorte
+ * ESTABLE desde CORTE_COHORTE (28-jul-2026) — no todo el universo histórico
+ * de Marcas/Proveedores (el flujo de onboarding antes de esa fecha era una
+ * versión distinta, no comparable). Este tramo respeta la misma regla: solo
+ * cuenta como "vio el video" a quien lo vio DENTRO de esa ventana (su propio
+ * lastCompleted/lastDismissed >= CORTE_COHORTE); si no hay fecha en la fila
+ * del video (solo "Seen", sin Completed/Dismissed), se usa pertenecer al
+ * cohorte como respaldo — su Submitted At ya garantiza que está en la
+ * ventana estable. "Encuesta" = tamaño del cohorte mismo (`idsCohorte`), no
+ * el histórico completo de la Encuesta.
+ */
+export function alertaVideoAEncuesta(
+  lineas: Map<number, LineaDeTiempoUsuario>,
+  idsCohorte: Set<number>,
+  idsPrueba: Set<number>,
+): Alertas["videoAEncuesta"] {
+  let poblacionVideo = 0;
+  let poblacionEncuesta = 0;
+  const porSegmento = { marca: { poblacionVideo: 0, poblacionEncuesta: 0 }, proveedor: { poblacionVideo: 0, poblacionEncuesta: 0 } };
+  for (const linea of lineas.values()) {
+    if (idsPrueba.has(linea.userId)) continue;
+    const segmento = linea.encuesta?.segmento;
+    const video = linea.pasos.video_bienvenida;
+    if (esFilaConEvidencia(video)) {
+      const fechaVideo = fechaDeModalOTour(video);
+      const enVentanaEstable = fechaVideo ? fechaVideo >= CORTE_COHORTE : idsCohorte.has(linea.userId);
+      if (enVentanaEstable) {
+        poblacionVideo += 1;
+        if (segmento) porSegmento[segmento].poblacionVideo += 1;
+      }
+    }
+    if (idsCohorte.has(linea.userId)) {
+      poblacionEncuesta += 1;
+      if (segmento) porSegmento[segmento].poblacionEncuesta += 1;
+    }
+  }
+  const caidaAbsoluta = poblacionVideo - poblacionEncuesta;
+  const caidaRelativa = poblacionVideo > 0 ? caidaAbsoluta / poblacionVideo : 0;
+  return { poblacionVideo, poblacionEncuesta, caidaAbsoluta, caidaRelativa, ...porSegmento };
 }
 
 /** D: Marca vs Proveedor, siempre los dos números lado a lado — nunca un solo agregado. */
@@ -114,6 +186,7 @@ export function calcularAlertas(
     flujoCompletoYOrden: alertaA_FlujoCompletoYOrden(resultados),
     ordenSinFlujo: alertaB_OrdenSinFlujo(resultados),
     mayorCaidaPorPaso: alertaC_MayorCaidaPorPaso(lineas, idsCohorte, idsPrueba),
+    videoAEncuesta: alertaVideoAEncuesta(lineas, idsCohorte, idsPrueba),
     segmentoConMasCaida: alertaD_SegmentoConMasCaida(resultados),
   };
 }

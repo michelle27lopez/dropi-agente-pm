@@ -43,6 +43,32 @@ node osm.js --fetch                          # ~52 MB de geometría, se cachea
 node zonas.js --fetch && node barrios.js --fetch
 ```
 
+## Entregable imprimible (`laminas.js`)
+
+`npm run sameday:laminas` → `../entregables/same-day-mapas.pdf` (6 láminas A4 vertical) y un
+`.svg` por lámina. Es lo que se comparte fuera del equipo; el mapa interactivo se queda adentro.
+
+Se dibuja **desde `../datos-sameday.json`**, no capturando el mapa. La diferencia importa:
+
+- Una captura sale rasterizada, depende del CDN del basemap y del zoom que tuviera la pantalla
+  ese día, y —lo grave— se va **sin la nota de precisión**. Acá el rótulo de límites va impreso
+  en las seis láminas y no se puede separar del gráfico.
+- Sin dependencias: el PDF se escribe a mano (fuentes base-14 WinAnsi, flujos Flate) y el SVG es
+  texto. No hace falta navegador headless ni librería de PDF.
+
+Decisiones que no son obvias al leer el código:
+
+- **El encuadre sale de la demanda, no del límite administrativo.** Encuadrar por contornos mete
+  a Sumapaz —rural, cero órdenes— y deja media lámina en blanco. Se recorta al rango que cubre
+  el 99,5% de las órdenes ubicadas (queda 99,8% dentro del marco en las tres ciudades).
+- **Cortes por cuantiles, no iguales.** La densidad va de 1 a 319 por celda; con cortes iguales
+  el mapa entero cae en el tono más claro. Como consecuencia **cada ciudad lleva su propia
+  escala** y los tonos NO son comparables entre láminas — eso está dicho en la lámina.
+- **Insignias numeradas** en vez de rótulos de zona sobre el calor: los nombres largos chocan
+  entre sí y con las celdas. Las 8 primeras del ranking llevan número en el mapa.
+- Si se cambia la maqueta, correr el auditor de geometría antes de dar por bueno el PDF: hay
+  choques (leyenda contra pie, texto fuera de columna) que no se ven en el código.
+
 ## Simulador de cobertura (modo "Simulación" del mapa)
 
 Responde *"si la bodega está aquí, con esta hora de corte y esta flota, ¿qué es servible el
