@@ -15,11 +15,15 @@ export const SPRINT_ROLES: Record<string, SprintRole> = {
 };
 
 // Home privado tipo "mi día" (proyectos/mi-dia) — solo se renderiza en vez
-// de la home de célula estándar para este email (decisión 2026-07-21).
+// de la home de célula estándar para estos emails (decisión 2026-07-21,
+// ampliada 2026-08-17 para que Jaime pueda explorar el rediseño con su
+// propia identidad, no viendo lo de Michelle). Mismo alcance que
+// SPRINT_ALLOWED_EMAILS a propósito — es el mismo grupo de preview.
 export const MI_DIA_OWNER_EMAIL = "michelle.lopez@dropi.co";
 
 export function isMiDiaOwner(email: string | null | undefined): boolean {
-  return !!email && email.toLowerCase() === MI_DIA_OWNER_EMAIL;
+  if (!email) return false;
+  return SPRINT_ALLOWED_EMAILS.includes(email.toLowerCase());
 }
 
 export function isSprintAllowed(email: string | null | undefined): boolean {

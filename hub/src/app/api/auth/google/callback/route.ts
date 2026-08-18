@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUser } from "@/lib/require-auth";
-import { isMiDiaOwner, MI_DIA_OWNER_EMAIL } from "@/lib/sprint-access";
+import { isMiDiaOwner } from "@/lib/sprint-access";
 import { exchangeCodeForRefreshToken } from "@/lib/google-calendar";
 import { supabase } from "@/lib/supabase";
 
@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
 
     const { error } = await supabase
       .from("google_oauth_tokens")
-      .upsert({ person_email: MI_DIA_OWNER_EMAIL, refresh_token: refreshToken, updated_at: new Date().toISOString() });
+      .upsert({ person_email: user!.email, refresh_token: refreshToken, updated_at: new Date().toISOString() });
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 

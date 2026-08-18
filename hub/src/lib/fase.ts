@@ -1,14 +1,15 @@
 // Fase de un proyecto derivada de `type` — mecanismo real que Jaime
 // construyó en Darwin (migraciones 036 + 039). Compartido entre /proyectos
-// (tabs + tabla) y el breadcrumb de cada página de proyecto. Ver
-// [[project_nomenclatura_fases]]: "Following" es una fase de Jira que
-// Darwin aún no sincroniza, así que nunca sale de esta función — no hay
-// dato real que la produzca todavía.
+// (tabs + tabla) y el breadcrumb de cada página de proyecto. "Following" es
+// un `type` real de la tabla `projects` (con `related_delivery_id` propio),
+// no depende de Jira — los estados de Jira son solo referencia, la fuente
+// de verdad es esta arquitectura en Supabase.
 export type Fase = "discovery" | "poc" | "delivery" | "following";
 
 export function faseDe(type: string | null | undefined): Fase {
   if (type === "POC") return "poc";
   if (type === "Delivery Proyecto") return "delivery";
+  if (type === "Following") return "following";
   return "discovery";
 }
 

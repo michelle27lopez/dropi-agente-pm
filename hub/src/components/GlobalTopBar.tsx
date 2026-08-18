@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, Users } from "lucide-react";
 import { createClient } from "@/lib/supabase-browser";
+import { MI_DIA_OWNER_EMAIL } from "@/lib/sprint-access";
 
 type CelulaLink = { nombre: string; slug: string };
 
@@ -28,6 +30,11 @@ export default function GlobalTopBar() {
   const celulaMenuRef = useRef<HTMLDivElement>(null);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
+  // Título de contexto (2026-08-17, Jaime): sin esto no había ninguna señal
+  // de en qué célula estás parado — HubHeader (que sí mostraba el nombre)
+  // dejó de renderizarse en cuanto el sidebar se volvió global.
+  const [celulaTitulo, setCelulaTitulo] = useState<string | null>(null);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -61,6 +68,27 @@ export default function GlobalTopBar() {
       });
   }, []);
 
+  useEffect(() => {
+    if (pathname === "/") {
+      setCelulaTitulo("Mi día");
+      return;
+    }
+    const slug = pathname.match(/^\/celula\/([^/]+)/)?.[1];
+    if (!slug) {
+      setCelulaTitulo(null);
+      return;
+    }
+    const cacheado = otrasCelulas.find((c) => c.slug === slug);
+    if (cacheado) {
+      setCelulaTitulo(cacheado.nombre);
+      return;
+    }
+    fetch(`/api/celulas/${slug}`)
+      .then((res) => res.json())
+      .then((data) => setCelulaTitulo(data?.nombre ?? null))
+      .catch(() => setCelulaTitulo(null));
+  }, [pathname, otrasCelulas]);
+
   async function handleLogout() {
     const supabase = createClient();
     await supabase.auth.signOut();
@@ -70,9 +98,14 @@ export default function GlobalTopBar() {
   }
 
   const fullAccess = !!(profile?.is_super_admin || profile?.is_stakeholder || profile?.celulas?.ve_hub_completo);
+  const esMichelle = profile?.email?.toLowerCase() === MI_DIA_OWNER_EMAIL;
+  const inicial = (profile?.nombre?.trim()?.[0] || profile?.email?.[0] || "?").toUpperCase();
 
   return (
     <div className="gnav-topbar">
+      {celulaTitulo && (
+        <span style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)" }}>{celulaTitulo}</span>
+      )}
       <div className="gnav-topbar__spacer" />
       <div className="gnav-topbar__actions">
         {fullAccess && otrasCelulas.length > 0 && (
@@ -89,19 +122,19 @@ export default function GlobalTopBar() {
             {celulaMenuOpen && (
               <div className="gnav-topbar__dropdown">
                 {(profile?.is_super_admin || profile?.is_stakeholder) && (
-                  <a href="/resumen" className="gnav-topbar__dropdown-item" onClick={() => setCelulaMenuOpen(false)}>
+                  <Link href="/resumen" className="gnav-topbar__dropdown-item" onClick={() => setCelulaMenuOpen(false)}>
                     Resumen ejecutivo
-                  </a>
+                  </Link>
                 )}
                 {otrasCelulas.map((c) => (
-                  <a
+                  <Link
                     key={c.slug}
                     href={`/celula/${c.slug}`}
                     className="gnav-topbar__dropdown-item"
                     onClick={() => setCelulaMenuOpen(false)}
                   >
                     {c.nombre}
-                  </a>
+                  </Link>
                 ))}
               </div>
             )}
@@ -115,13 +148,28 @@ export default function GlobalTopBar() {
               className="gnav-topbar__user"
               onClick={() => setUserMenuOpen((v) => !v)}
             >
-              <img
-                src="/michelle-avatar.png"
-                alt={profile.nombre || "Perfil"}
-                width={28}
-                height={28}
-                className="gnav-topbar__avatar"
-              />
+              {esMichelle ? (
+                <img
+                  src="/michelle-avatar.png"
+                  alt={profile.nombre || "Perfil"}
+                  width={28}
+                  height={28}
+                  className="gnav-topbar__avatar"
+                />
+              ) : (
+                <span
+                  className="gnav-topbar__avatar"
+                  style={{
+                    width: 28, height: 28, borderRadius: "50%",
+                    background: "var(--dropi-light)", color: "var(--dropi)",
+                    fontSize: 12, fontWeight: 700,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    flexShrink: 0,
+                  }}
+                >
+                  {inicial}
+                </span>
+              )}
               <span className="gnav-topbar__user-name">{profile.nombre ? profile.nombre.split(" ")[0] : "Perfil"}</span>
               <ChevronDown size={14} strokeWidth={2} />
             </button>
@@ -129,7 +177,7 @@ export default function GlobalTopBar() {
               <div className="gnav-topbar__dropdown gnav-topbar__dropdown--right">
                 <div className="gnav-topbar__dropdown-header">
                   <p className="gnav-topbar__dropdown-name">{profile.nombre || "Perfil"}</p>
-                  <p className="gnav-topbar__dropdown-role">Product Designer</p>
+                  {esMichelle && <p className="gnav-topbar__dropdown-role">Product Designer</p>}
                 </div>
                 <button type="button" className="gnav-topbar__dropdown-item gnav-topbar__dropdown-item--danger" onClick={handleLogout}>
                   Cerrar sesión

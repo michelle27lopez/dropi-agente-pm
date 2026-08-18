@@ -42,13 +42,21 @@ function MeetingRow({ meeting, primary }: { meeting: Meeting; primary: boolean }
 // [[project_darwin_pd_dashboard]] y src/lib/google-calendar.ts.
 export default function HoyPanel() {
   const [meetings, setMeetings] = useState<Meeting[] | null>(null);
+  // Si nunca se conectó Google Calendar para este email (nadie pasó por
+  // /api/auth/google/login), no tiene sentido ofrecer "Actualizar" — hoy esa
+  // conexión sigue restringida a Michelle/Jaime, así que para el resto se
+  // muestra "Pendiente" sin un botón que va a fallar.
+  const [connected, setConnected] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [syncError, setSyncError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/meetings")
       .then((res) => res.json())
-      .then((data) => setMeetings(data.meetings ?? []))
+      .then((data) => {
+        setMeetings(data.meetings ?? []);
+        setConnected(!!data.connected);
+      })
       .catch(() => setMeetings([]));
   }, []);
 
@@ -84,15 +92,19 @@ export default function HoyPanel() {
           </span>
           <span className="midia-panel-label">Hoy</span>
         </div>
-        <button type="button" onClick={handleActualizar} disabled={syncing} className="midia-sync-btn">
-          {syncing ? <Loader2 size={12} className="midia-spin" /> : null}
-          {syncing ? "Actualizando…" : "Actualizar"}
-        </button>
+        {connected && (
+          <button type="button" onClick={handleActualizar} disabled={syncing} className="midia-sync-btn">
+            {syncing ? <Loader2 size={12} className="midia-spin" /> : null}
+            {syncing ? "Actualizando…" : "Actualizar"}
+          </button>
+        )}
       </div>
       {syncError && (
         <p style={{ fontSize: 11, color: "var(--danger)", margin: "0 20px 8px" }}>{syncError}</p>
       )}
-      {meetings.length === 0 ? (
+      {!connected ? (
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 20px 16px" }}>Pendiente — tu calendario todavía no está conectado.</p>
+      ) : meetings.length === 0 ? (
         <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 20px 16px" }}>Sin reuniones agendadas para hoy.</p>
       ) : !proxima ? (
         <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 20px 16px" }}>No tienes más reuniones hoy.</p>

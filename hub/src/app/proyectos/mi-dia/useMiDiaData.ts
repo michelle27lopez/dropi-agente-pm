@@ -8,11 +8,21 @@ export type ActiveSprint = { id: number; name: string; startDate: string | null;
 export function useMiDiaData() {
   const [tasks, setTasks] = useState<Task[] | null>(null);
   const [activeSprint, setActiveSprint] = useState<ActiveSprint | null>(null);
+  // false = la API respondió 401 (persona fuera de SPRINT_ALLOWED_EMAILS,
+  // sin Jira conectado a este panel todavía) — distingue "sin tareas" de
+  // "esto no aplica a mí", para mostrar "Pendiente" en vez de un panel
+  // vacío que parece roto.
+  const [sprintAllowed, setSprintAllowed] = useState(true);
 
   useEffect(() => {
     fetch("/api/sprint")
-      .then((res) => res.json())
-      .then((data) => {
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) {
+          setSprintAllowed(false);
+          setTasks([]);
+          return;
+        }
         setTasks(data.tasks ?? []);
         setActiveSprint(data.activeSprint ?? null);
       })
@@ -28,5 +38,5 @@ export function useMiDiaData() {
     );
   }, []);
 
-  return { tasks, activeSprint, updateTaskStatus };
+  return { tasks, activeSprint, sprintAllowed, updateTaskStatus };
 }

@@ -114,8 +114,20 @@ function KpiCard({
 export default function KpiPreviewPanel() {
   const [globalMetric, setGlobalMetric] = useState<TimeMetric | null | undefined>(undefined);
   const [monthly, setMonthly] = useState<MonthlyRow[]>([]);
+  // Este panel reusa /api/ttv, que hoy solo tiene datos reales de Suppliers
+  // (TTV-001) — no está parametrizado por célula. Para cualquier otra
+  // célula se muestra "Pendiente" en vez de los KPIs de Suppliers.
+  const [celulaSlug, setCelulaSlug] = useState<string | null | undefined>(undefined);
 
   useEffect(() => {
+    fetch("/api/me")
+      .then((res) => res.json())
+      .then((data) => setCelulaSlug(data?.profile?.celulas?.slug ?? null))
+      .catch(() => setCelulaSlug(null));
+  }, []);
+
+  useEffect(() => {
+    if (celulaSlug !== "suppliers") return;
     fetch("/api/ttv")
       .then((res) => res.json())
       .then((data) => {
@@ -124,7 +136,27 @@ export default function KpiPreviewPanel() {
         setMonthly((data.monthly ?? []).slice().sort((a: MonthlyRow, b: MonthlyRow) => a.month_number - b.month_number));
       })
       .catch(() => setGlobalMetric(null));
-  }, []);
+  }, [celulaSlug]);
+
+  if (celulaSlug === undefined) return null;
+
+  if (celulaSlug !== "suppliers") {
+    return (
+      <div className="midia-panel" style={{ animationDelay: "0ms" }}>
+        <div className="midia-panel-header">
+          <div className="midia-panel-header-left">
+            <span className="midia-panel-icon">
+              <Gauge size={14} />
+            </span>
+            <span className="midia-panel-label">Activación de proveedores</span>
+          </div>
+        </div>
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 20px 16px" }}>
+          Pendiente — todavía no hay panel de KPIs configurado para tu célula.
+        </p>
+      </div>
+    );
+  }
 
   if (globalMetric === undefined) return null;
 
@@ -230,7 +262,7 @@ export default function KpiPreviewPanel() {
         </div>
       )}
       <a
-        href="/metricas?p=time-to-value"
+        href="/celula/suppliers/following?p=time-to-value"
         className="midia-panel-link"
         style={{ display: "inline-flex", margin: "14px 20px 16px" }}
       >
