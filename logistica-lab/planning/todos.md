@@ -10,12 +10,9 @@
 > Vercel solo con el próximo `git push` que toque este bloque — no hay que tocar código.
 > Formato: `- emoji [Proyecto] texto`.
 <!-- tablero:pendientes:start -->
-- 🔴 [Jira] Decidir DROP-15914 (Panel de Homologación): figura "En curso" hace 9 meses, el diseño está hecho y las historias de front y back no tienen dueño
-- 🔴 [Jira] Llenar los 9 campos de PRM-1462 (POD · ENVÍA): está en cero y es el carrier más avanzado del programa — usar `/proyectos/logistica/documentacion-jira`
-- 🟡 [Jira] Pedirle a un admin permisos de INVS para `producto@dropi.co` — INVS-17 es el único de 15 tickets sin documentar
+- 🔴 [Jira] DROP-15914 (Panel de Homologación) → **congelar, no cerrar ni reasignar**: el diseño está hecho y DROP-16278/16293 están escritas con Gherkin y DoD. Está bloqueada aguas arriba por PRM-1297 (decide *cuáles* son los estados padre); asignar dueño hoy es asignar trabajo que no puede arrancar. Mover a `Congelado por producto` y descongelar cuando PRM-1297 cierre el catálogo
+- 🔴 [Jira] Llenar a mano los 9 campos de PRM-1462 (POD · ENVÍA): sigue en cero siendo el carrier más avanzado. **Reconfirmado 18-ago: la API rechaza `description` con "cannot be set, it is not on the appropriate screen"** — no es permisos, es configuración de pantalla en Polaris. Texto listo para copiar en `/proyectos/logistica/documentacion-jira` (`PRM-1462.md`). Hoy su documentación vive SOLO en el comentario 51620
 - 🟡 [Jira] Pegar a mano las 11 descripciones y los campos que faltan (la API de Polaris no escribe nada) — todo listo para copiar en `/proyectos/logistica/documentacion-jira`
-- 🔴 [Indiana] Poner el `.env.local` en `/Users/user/dropi-repos/inidiana-map/` y correr el primer ciclo real (armar UNA solicitud)
-- 🔴 [Indiana] Vercel bloquea todos los deploys desde el 28-jul (28 commits sin publicar) — pedirle a Jaime el motivo y mover el proyecto a un team de Dropi
 - 🟡 [Fulfillment] Cerrar el E2E de Drive: spec, Jira 50931, Confluence 1572732930 y Darwin LOG-014 ya están sincronizados; Drive requiere reautorización explícita del riesgo del conector
 - 🟡 [Darwin] Commitear `prototipo-recolecciones.html` del worktree `claude/dropi-logistics-queue-482601` — sigue sin guardar
 - 🟡 [Homologación estados] Modelar la devolución con su propio ciclo de reintento + `Entregado` confirmado vs observado + ubicar `Guía anulada`
@@ -28,9 +25,8 @@
 - 🟢 [Research] Entrevistas de logística para ecommerce: definir a quién (operadores · otros ecommerce · dropshippers con otras plataformas)
 - 🔴 [Delivery] EL FOCO = Normalización de estados: subirlo en el roadmap y terminar la propuesta (WIP=1)
 - 🔴 [Delivery] Traslapar diseño solo sobre lo cerrado (vista cliente 8 estados), NO sobre el catálogo en disputa
-- 🔴 [Delivery] Escalar Same Day como riesgo aceptado con dueño — un riesgo no se pone en cola en silencio
+- 🟢 [Delivery] (backlog) Same Day — falsos SD en producción: decisión de Juan 18-ago de NO escalarlo ahora como riesgo aceptado. Queda en backlog consciente, no olvidado
 - 🔴 [Same Day] Revisar las 6 láminas del PDF (`npm run sameday:laminas`) antes de mandárselas a Carlos Peralta — generadas 04-ago, sin enviar
-- 🔴 [Same Day] Enviar la petición de data (lista, con correo redactado) — falta ponerle DESTINATARIO; quieta desde el 26-jul
 - 🔴 [Product] WIP activo = Autoconfirmación: cerrar gate ChateaPro, trazabilidad y siguiente prueba antes de abrir otro frente
 - 🔴 [Pruebas POC] Poner las fechas del cronograma de pruebas de POC → llevarlo al Product Roadmap
 - 🔴 [Pruebas POC] Aclarar qué es "Notificación de optimización" (iniciativa de producto nuestra, sin definir)
@@ -43,7 +39,6 @@
 - 🟡 [Devoluciones COD] Token Veloces ya conectado documentalmente a LOG-010, sin iniciativa nueva. Pendiente informe anonimizado del piloto, owners, contrato de datos y vigencia/integración de DROP-4595/4596.
 - 🟡 [México] PRM-1144 confirmado como antecedente cercano de cobertura/CP y PRM-1341 como captura Sitidata; no editar ni relacionar hasta confirmar Sepomex, catálogo y experiencia objetivo
 - 🟡 [Archivos transportadoras] Cruce cerrado: PRM-1150 fue fusionada en PRM-203 y conecta con PRM-1219; comentario `51009` aplicado/releído. No es proyecto nuevo. Pendiente data owner, diccionario/sensibilidad, productores/consumidores, frecuencia/SLA, paridad y migración; no abrir/copiar/eliminar la hoja actual
-- 🔴 [Selección transportadoras] Cerrar con Paula Macías la caracterización de los 4 docs de Drive (catálogo) — prerrequisito del discovery con usuarios
 - 🟡 [Selección transportadoras] Llevar a Kate Pencue el protocolo de discovery con ≥20 usuarios (Cronos NO bloquea a N=20)
 - 🟡 [Selección transportadoras] Alinear el copy del CTA ("precisión de datos") con el modelo V1 (50% efectividad / 50% costo) antes de las sesiones
 - 🟡 [Autoconfirmación] Variable "órdenes duplicadas" → guardarraíl: si es duplicada, NO autoconfirmar
@@ -81,13 +76,18 @@
   pero no la malla vial; cuesta re-descargar ~52 MB de OSM (`node osm.js --fetch`), no está en
   disco; (b) si las páginas de ciudad deben ir en el **color de su ciudad** (hoy el calor es azul
   en las tres y solo las barras toman el color) para que enganchen con la lámina 5.
-- [ ] 🔴 **Enviar la petición de data — lleva quieta desde el 26-jul.** Ya está lista para salir,
+- [x] 🔴 **Enviar la petición de data.** ✅ **Cerrada 18-ago (Juan): "ya tenemos todo de data".** Se da por resuelta; el bloqueo del destinatario deja de aplicar. Texto original abajo por trazabilidad.
+  <details><summary>histórico</summary>
+
+  Lleva quieta desde el 26-jul. Ya está lista para salir,
   con correo redactado, en `proyectos/same-day-peticion-data.md` *(bóveda)*. **Lo único que falta
   es el destinatario: el spec dice "Data/Chronos" pero no hay un nombre**, y sin nombre esto
   lleva 9 días parado y puede llevar 9 más. Actualizada 04-ago con el campo nuevo de destino
   normalizado (resolvería el 18,7% de órdenes sin ubicar) y la corrección de 10.104 → 11.766
   órd/día en Bogotá. **Debe salir antes o junto con el PDF a Carlos**, no después: un documento
   circulando pesa más que un rótulo en cuerpo 8.
+
+  </details>
 
 ## 🆕 Unificación documental exclusiva de Logística (2-ago)
 
@@ -110,6 +110,13 @@
 - [ ] 🔴 **LOG-012 · cerrar DoR técnico/operativo.** Lotes, cola/estado de impresión, compatibilidad bodega–carrier, fallback, idempotencia, recuperación manual y contrato de datos. Después sí reclutar proveedores.
 
 ## 🆕 INDIANA — Control de Recolecciones (29-jul)
+
+> ⛔ **FUERA DE ESTE TABLERO desde el 18-ago (decisión de Juan).** Indiana se trabaja en
+> otro chat y otro repo (`jaimeguevara-dropi/inidiana-map`). Los pendientes de abajo
+> —incluida la migración RLS `003` sin correr, que hoy deja direcciones y teléfonos de
+> proveedores legibles por cualquier cuenta `authenticated`— **se gestionan allá, con Jaime
+> como dueño del repo y de Vercel.** No se borran de aquí para no perder la trazabilidad,
+> pero no cuentan como pendientes de Logistic Success ni salen en `/pendientes`.
 > Repo `jaimeguevara-dropi/inidiana-map` → clon local **`/Users/user/dropi-repos/inidiana-map`**. Levanta con `npx next dev --port 3001`.
 > Doc del proyecto: `proyectos/recoleccion-proactiva/` *(bóveda: proyectos/recoleccion-proactiva/)*.
 - [ ] 🔴 **Crear `.env.local` en la raíz del repo de Indiana** (4 líneas = 3 valores: la URL va en `NEXT_PUBLIC_SUPABASE_URL` y en `SUPABASE_URL`; `anon` ≠ `service_role`). Fuente: Supabase → Settings → API, o Vercel del hub, o Jaime. **No existe ningún `.env.local` en la máquina** (se buscó en todo el home). Sin esto la app da **503 en todas las rutas** y no corre ningún script.
