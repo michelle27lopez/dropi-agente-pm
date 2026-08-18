@@ -1,0 +1,481 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   PRIMITIVOS del tablero de logística.
+
+   Ley: logistica-lab/metodologia/tablero-diseno.md §4.
+
+   Estas ~9 clases reemplazan las 14 definiciones de card, 8 barras de progreso,
+   5 stat tiles y 4 vocabularios de píldora que había repartidos entre
+   tablero.css (1.525 líneas), registro.css y recolecciones.css. La regla que
+   viene con ellas: NINGUNA pantalla nueva define su propia card, píldora o
+   barra. Si un primitivo no alcanza, se extiende el primitivo.
+
+   TIPOGRAFÍA — cinco pasos y ninguno más (de globals.css):
+     --fs-display 32 · --fs-headline 22 · --fs-title 16 · --fs-body 13 · --fs-label 11
+
+   RADIOS — cuatro y ninguno más:  8px · 12px · 20px · 999px
+
+   COLOR — un acento (naranja) y cuatro estados (verde/ámbar/rojo/azul).
+   Se reutiliza la rampa --tint / --edge / --on de registro.css, que ya resuelve
+   el contraste de texto sobre fondo teñido a 11px.
+   (Ojo al escribir comentarios aquí: una secuencia asterisco-barra cierra el
+   comentario. Nombrar los tokens con comodín rompió el build una vez.)
+
+   PREFIJO `u-` a propósito: tablero.css ocupa nombres genéricos (.card, .kpi,
+   .track, .stat-box…) y estos tienen que poder convivir con él mientras dure
+   la migración, sin cascada cruzada ni sorpresas de especificidad.
+
+   ✅ Cerrado: `.log-root` declaraba `font: 15px` —un sexto tamaño fuera de la
+   escala— y no se podía tocar mientras hubiera reglas heredadas en em. Al
+   quedar solo una, se alineó al paso de cuerpo. Hoy la auditoría del módulo
+   devuelve CERO tamaños en píxeles sueltos: todo pasa por los cinco tokens.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Card ────────────────────────────────────────────────────────────────────
+   Plana en reposo (Regla del Hover-Only). La sombra solo aparece si la card es
+   navegable — se gana con la interacción, no se regala.                      */
+.log-root .u-card {
+  position: relative;
+  display: block;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  color: inherit;
+}
+
+/* Solo las clicables reaccionan. Una card que se eleva sin ser accionable
+   promete una interacción que no existe. */
+.log-root a.u-card,
+.log-root button.u-card {
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font: inherit;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease;
+}
+.log-root a.u-card:hover,
+.log-root button.u-card:hover,
+.log-root a.u-card:focus-visible,
+.log-root button.u-card:focus-visible {
+  border-color: var(--dropi-gray-200);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Acento de estado: una barra a la izquierda. Es el ÚNICO idioma de acento del
+   sistema — antes convivían borde-izquierdo y borde-superior sin criterio. */
+.log-root .u-card[data-tone]:not([data-tone="neutral"])::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 12px 0 0 12px;
+  background: var(--u-tone, transparent);
+}
+.log-root .u-card[data-tone="ok"] { --u-tone: var(--green); }
+.log-root .u-card[data-tone="warn"] { --u-tone: var(--amber); }
+.log-root .u-card[data-tone="risk"] { --u-tone: var(--red); }
+.log-root .u-card[data-tone="info"] { --u-tone: var(--info); }
+.log-root .u-card[data-tone="brand"] { --u-tone: var(--brand); }
+
+.log-root .u-card--flush { padding: 0; overflow: hidden; }
+
+/* ── PageHeader ──────────────────────────────────────────────────────────────
+   Existe porque /mapa, /experimentos y /pendientes abrían con un <div
+   className="eyebrow"> y no tenían <h1>: sin landmark de título, y el mismo
+   peso visual para el título de la página y para el de una sección interna. */
+.log-root .u-pagehead {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 0 0 24px;
+}
+.log-root .u-pagehead__main { flex: 1; min-width: 260px; }
+.log-root .u-pagehead__back {
+  display: inline-block;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.log-root .u-pagehead__back:hover { color: var(--text); }
+.log-root .u-pagehead h1 {
+  margin: 0;
+  font-size: var(--fs-headline);
+  line-height: var(--lh-headline);
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+.log-root .u-pagehead__sub {
+  margin: 4px 0 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+  max-width: 70ch;
+}
+.log-root .u-pagehead__aside {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── Título de sección ───────────────────────────────────────────────────────
+   Reemplaza a `.eyebrow`, que era un <div> con peso 800, tracking y una barrita
+   naranja — el patrón de "kicker genérico" que DESIGN.md prohíbe por nombre, y
+   que además hacía de título de página y de sección con el mismo peso.        */
+.log-root .u-section {
+  margin: 32px 0 12px;
+}
+.log-root .u-section h2 {
+  margin: 0;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  font-weight: 600;
+}
+.log-root .u-section p {
+  margin: 3px 0 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+/* ── Stat ────────────────────────────────────────────────────────────────────
+   Un número, su etiqueta, y un delta opcional. Nada más: dos números en el
+   mismo tile compiten y ninguno gana.                                        */
+.log-root .u-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.log-root .u-stat__label {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 500;
+  color: var(--muted);
+}
+.log-root .u-stat__value {
+  font-size: var(--fs-headline);
+  line-height: var(--lh-headline);
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  font-variant-numeric: tabular-nums;
+}
+.log-root .u-stat--lg .u-stat__value {
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+}
+.log-root .u-stat__value[data-tone="ok"] { color: var(--green); }
+.log-root .u-stat__value[data-tone="warn"] { color: var(--amber); }
+.log-root .u-stat__value[data-tone="risk"] { color: var(--red); }
+.log-root .u-stat__value[data-tone="info"] { color: var(--info); }
+.log-root .u-stat__hint {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+/* ── Bar ─────────────────────────────────────────────────────────────────────
+   Una sola altura y un solo relleno. Las 8 barras anteriores variaban entre
+   6px y 16px, unas con gradiente y otras planas, sin que la diferencia
+   significara nada.                                                          */
+.log-root .u-bar {
+  position: relative;
+  height: 8px;
+  background: var(--dropi-gray-100);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.log-root .u-bar__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  background: var(--muted);
+}
+.log-root .u-bar[data-tone="ok"] .u-bar__fill { background: var(--green); }
+.log-root .u-bar[data-tone="warn"] .u-bar__fill { background: var(--amber); }
+.log-root .u-bar[data-tone="risk"] .u-bar__fill { background: var(--red); }
+.log-root .u-bar[data-tone="info"] .u-bar__fill { background: var(--info); }
+/* Tick de meta: encima del relleno, no dentro, para que se lea también cuando
+   el relleno ya la pasó. */
+.log-root .u-bar__meta {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 2px;
+  border-radius: 999px;
+  background: var(--text);
+}
+
+/* ── Table ───────────────────────────────────────────────────────────────────
+   No existía ningún componente de tabla en el repo: había una `InfoTable` local
+   sin exportar, tablas con estilos inline en Vigía y una `.rec-tabla` propia.  */
+.log-root .u-table-wrap {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow-x: auto;
+  background: var(--card);
+}
+.log-root .u-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.log-root .u-table th {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--soft);
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+/* Cabecera ordenable. La flecha ↕ en reposo es lo que hace descubrible que se
+   puede clicar: sin ella, nadie prueba. */
+.log-root .u-table__sort {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.log-root .u-table__sort:hover { color: var(--text); }
+.log-root .u-table__sort span { opacity: 0.35; }
+.log-root .u-table__sort span[data-activa] { opacity: 1; color: var(--dropi-primary-600); }
+
+.log-root .u-table td {
+  padding: 11px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.log-root .u-table tbody tr:last-child td { border-bottom: 0; }
+.log-root .u-table tbody tr:hover { background: var(--soft); }
+.log-root .u-table [data-align="right"] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+/* La celda vacía se dibuja, no se deja en blanco: un hueco silencioso se lee
+   como "no aplica" y un hueco marcado se lee como "falta el dato" — que es
+   justo el hallazgo que el tablero debe delatar. */
+.log-root .u-empty {
+  color: var(--dropi-gray-300);
+  user-select: none;
+}
+.log-root .u-table__empty {
+  padding: 24px 12px;
+  text-align: center;
+  color: var(--muted);
+  font-size: var(--fs-body);
+}
+
+/* ── Disclosure ──────────────────────────────────────────────────────────────
+   El sitio donde vive el detalle que no cabe en dos líneas. Tres <details>
+   estilizados distinto se unifican aquí.                                     */
+.log-root .u-disc {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  margin-top: 10px;
+}
+.log-root .u-disc > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 600;
+  color: var(--muted);
+}
+.log-root .u-disc > summary::-webkit-details-marker { display: none; }
+.log-root .u-disc > summary:hover { color: var(--text); }
+.log-root .u-disc > summary::after {
+  content: "▾";
+  font-size: var(--fs-label);
+  transition: transform 0.14s ease;
+}
+.log-root .u-disc[open] > summary::after { transform: rotate(180deg); }
+.log-root .u-disc__body {
+  margin-top: 10px;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+/* ── DataList ────────────────────────────────────────────────────────────────
+   Etiqueta arriba en 11px, valor debajo en 13px. La etiqueta es lo que faltaba:
+   sin ella, cinco ejes distintos se leían como una sola frase separada por
+   puntos.                                                                    */
+.log-root .u-datalist {
+  display: grid;
+  gap: 14px 24px;
+  margin: 0;
+}
+.log-root .u-datalist[data-cols="1"] { grid-template-columns: 1fr; }
+.log-root .u-datalist[data-cols="2"] { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.log-root .u-datalist[data-cols="3"] { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.log-root .u-datalist__item { min-width: 0; }
+.log-root .u-datalist dt {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.log-root .u-datalist dd {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+
+/* ── Link de texto ───────────────────────────────────────────────────────────
+   El único estilo de enlace en prosa. Naranja porque es el acento, pero sin
+   fondo ni borde: un enlace no es un botón.                                  */
+.log-root .u-link {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: 600;
+  color: var(--dropi-primary-600);
+}
+.log-root .u-link:hover { text-decoration: underline; }
+
+/* ── Punto de salud ──────────────────────────────────────────────────────────
+   El semáforo del sistema, compartido por la home y el mapa de la orden.
+
+   Codifica SALUD, no fase. La distinción es la corrección más importante del
+   rediseño: un proyecto puede llevar cuatro meses en Discovery y estar sano, y
+   otro estar en Diseño y llevar tres semanas bloqueado. Cuando el color pintaba
+   la fase, doce nodos salían idénticos en azul y el color no informaba nada.  */
+.log-root .u-salud {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex: none;
+  background: var(--dropi-gray-200);
+}
+.log-root .u-salud[data-salud="ok"] { background: var(--green); }
+.log-root .u-salud[data-salud="warn"] { background: var(--amber); }
+.log-root .u-salud[data-salud="risk"] { background: var(--red); }
+
+/* ── Nota de fuente ──────────────────────────────────────────────────────────
+   De dónde sale lo que se está viendo. No es adorno: sin la fuente citada, una
+   cifra es una cifra sin dueño y el Cell Board no puede discutirla.           */
+.log-root .pen-fuente,
+.log-root .u-fuente {
+  margin: 14px 0 0;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+.log-root .pen-fuente code,
+.log-root .u-fuente code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--fs-label);
+}
+.log-root .pen-proyecto { color: var(--muted); }
+
+/* ── Utilidades mínimas ──────────────────────────────────────────────────── */
+.log-root .u-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(var(--u-min, 260px), 1fr));
+}
+.log-root .u-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+/* Corta a dos líneas. Era el único mecanismo que faltaba para que la prosa
+   larga dejara de romper las listas mientras se reescriben los textos. */
+.log-root .u-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.log-root .u-prose {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  max-width: 70ch;
+}
+
+/* Título dentro de una Card de alerta (cronograma). En 16px y no en 22: la Card
+   ya lleva el acento de estado, así que el texto no necesita gritar además. */
+.log-root .cr-alert-titulo {
+  display: block;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* ── Cola de Logística con TI (cronograma) ───────────────────────────────────
+   El número de prioridad manda la fila: va tabular y en negrita porque el
+   orden ES el dato. Y cada ítem dice si está o no en el portafolio: los que no
+   están son trabajo comprometido con TI que nadie prioriza contra el KR.     */
+.log-root .cola-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--muted);
+}
+.log-root .cola-link { font-weight: 500; display: block; }
+.log-root .cola-link:hover { color: var(--dropi-primary-600); text-decoration: underline; }
+.log-root .cola-enTablero,
+.log-root .cola-fuera {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 400;
+}
+.log-root .cola-enTablero { color: var(--on-green); }
+.log-root .cola-fuera { color: var(--on-amber); }
+.log-root .cola-fecha { font-variant-numeric: tabular-nums; }
+
+.log-root .cola-nombre { font-weight: 500; }
+.log-root .cola-transportadora,
+.log-root .cola-desc {
+  display: block;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  margin-top: 3px;
+}
+.log-root .cola-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* La antigüedad se tiñe al pasar del año: una petición de más de doce meses ya
+   no es una espera, es una decisión de no hacerlo que nadie tomó en voz alta. */
+.log-root .cola-espera { font-variant-numeric: tabular-nums; }
+.log-root .cola-espera--vieja { color: var(--on-red); font-weight: 600; }
+
+/* Delta de la comparación mensual del weekly. Se tiñe porque es lo único de esa
+   tabla que pide reacción; el resto son cifras de contexto. */
+.log-root .wk-delta { font-variant-numeric: tabular-nums; font-weight: 600; }
+.log-root .wk-delta.is-verde { color: var(--on-green); }
+.log-root .wk-delta.is-ambar { color: var(--on-amber); }
+.log-root .wk-delta.is-rojo { color: var(--on-red); }

@@ -1,0 +1,128 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   Composiciones de la FICHA DE PROYECTO (nivel 3 · el detalle completo).
+
+   Mismo patrón que home.css: los primitivos viven en ui.css y son de todos;
+   aquí solo lo que es exclusivo de esta pantalla. Se importa desde su page.tsx.
+
+   Cinco tamaños (--fs) y cuatro radios (8/12/20/999).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.log-root .page { max-width: 1120px; }
+
+/* ── Layout de dos columnas ──────────────────────────────────────────────── */
+.log-root .ficha__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 24px;
+  align-items: start;
+}
+.log-root .ficha__main { min-width: 0; }
+.log-root .ficha__rail { position: sticky; top: 24px; }
+.log-root .ficha__rail-titulo {
+  display: block;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+/* Por debajo de tablet el rail deja de ser rail: pasa a ser el último bloque.
+   Una columna de 260px pegajosa en un móvil no es contexto, es un estorbo. */
+@media (max-width: 900px) {
+  .log-root .ficha__layout { grid-template-columns: 1fr; }
+  .log-root .ficha__rail { position: static; }
+}
+
+/* Por qué importa: una línea, debajo de los cuatro datos esenciales. Va en
+   cuerpo normal y no en gris, porque es argumento y no metadato. */
+.log-root .ficha__porque {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  max-width: 70ch;
+}
+
+/* Un dato que falta o está sin decidir. No es un error ni una advertencia:
+   es una pregunta abierta, y se lee como tal. */
+.log-root .ficha__pendiente {
+  color: var(--on-amber);
+  border-bottom: 1px dashed var(--edge-amber);
+  cursor: help;
+}
+
+.log-root .ficha__salud { display: inline-flex; align-items: center; gap: 7px; }
+
+.log-root .ficha__vista { margin: 14px 0 0; }
+
+/* ── Cadena de valor ─────────────────────────────────────────────────────────
+   Las 6 etapas en fila, con las que toca el proyecto resaltadas. Sin los seis
+   colores de etapa que vivían dentro de data.ts: el color aquí significa
+   "este proyecto está aquí", no "esta etapa es la número 4".                 */
+.log-root .ficha__cadena {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+.log-root .ficha__cadena-paso {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.log-root .ficha__cadena-paso[data-estado="toca"] {
+  background: var(--tint-info);
+  border-color: var(--edge-info);
+  color: var(--on-info);
+}
+.log-root .ficha__cadena-paso[data-estado="principal"] {
+  background: var(--accent-soft);
+  border-color: var(--accent-soft-border);
+  color: var(--dropi-primary-600);
+  font-weight: 600;
+}
+
+/* ── Experimentos ────────────────────────────────────────────────────────── */
+.log-root .ficha__exps { list-style: none; margin: 0; padding: 0; }
+.log-root .ficha__exps li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  border-bottom: 1px solid var(--border);
+}
+.log-root .ficha__exps li:last-child { border-bottom: 0; }
+.log-root .ficha__exps li > span:nth-child(2) { flex: 1; min-width: 0; }
+
+/* ── Enlaces agrupados ───────────────────────────────────────────────────────
+   Antes eran siete pastillas naranjas idénticas en una fila: el naranja es el
+   acento de marca y va en UN elemento por vista, no en siete; y sin agrupar,
+   encontrar "el Figma" obligaba a leerlas todas. Ahora son listas de texto
+   bajo el nombre de su herramienta.                                          */
+.log-root .ficha__links {
+  display: grid;
+  gap: 20px 32px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.log-root .ficha__links-titulo {
+  display: block;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.log-root .ficha__links ul { list-style: none; margin: 0; padding: 0; }
+.log-root .ficha__links li {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  padding: 4px 0;
+}
+.log-root .ficha__links a { color: var(--text); }
+.log-root .ficha__links a:hover { color: var(--dropi-primary-600); text-decoration: underline; }

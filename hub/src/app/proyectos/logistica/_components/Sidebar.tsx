@@ -106,26 +106,58 @@ export default function Sidebar() {
           activo={pathname === SECCIONES[0].href}
         />
 
-        {/* ── El mapa, desplegable ─────────────────────────────────────────── */}
-        <button
-          type="button"
-          aria-expanded={mapaAbierto}
-          onClick={() => setMapa(!mapaAbierto)}
+        {/* ── El mapa: destino Y desplegable ───────────────────────────────────
+            Antes esta fila era un <button> que SOLO desplegaba el árbol, así que
+            el Mapa de la orden —una de las seis pantallas del tablero— no tenía
+            ningún enlace en toda la navegación: se podía ver la lista de etapas
+            pero nunca abrir el mapa. Una fila que se comporta como carpeta
+            cuando además es una página es un callejón sin salida silencioso.
+
+            Ahora son dos zonas de clic en la misma fila: el nombre navega, el
+            chevron despliega. Es el patrón estándar para un ítem de navegación
+            que es a la vez destino y contenedor. */}
+        <div
           style={{
             ...FILA,
-            ...(pathname.startsWith(`${BASE}/mapa`) ? ACTIVO : INACTIVO),
-            width: "100%",
-            border: "none",
-            cursor: "pointer",
-            textAlign: "left",
-            fontFamily: "inherit",
+            ...(pathname === `${BASE}/mapa` ? ACTIVO : INACTIVO),
+            padding: 0,
           }}
           className="nav-item"
         >
-          <Map size={15} strokeWidth={2} style={{ flex: "none" }} />
-          <span style={{ flex: 1, minWidth: 0 }}>Mapa de la orden</span>
-          <ChevronRight size={13} strokeWidth={2.2} className="nav-chevron" style={CHEVRON(mapaAbierto)} />
-        </button>
+          <Link
+            href={`${BASE}/mapa`}
+            style={{
+              ...FILA,
+              flex: 1,
+              minWidth: 0,
+              background: "transparent",
+              color: "inherit",
+              fontWeight: "inherit",
+            }}
+          >
+            <Map size={15} strokeWidth={2} style={{ flex: "none" }} />
+            <span style={{ flex: 1, minWidth: 0 }}>Mapa de la orden</span>
+          </Link>
+          <button
+            type="button"
+            aria-expanded={mapaAbierto}
+            aria-label={mapaAbierto ? "Contraer las etapas" : "Desplegar las etapas"}
+            onClick={() => setMapa(!mapaAbierto)}
+            style={{
+              display: "grid",
+              placeItems: "center",
+              width: 30,
+              alignSelf: "stretch",
+              flex: "none",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              color: "inherit",
+            }}
+          >
+            <ChevronRight size={13} strokeWidth={2.2} className="nav-chevron" style={CHEVRON(mapaAbierto)} />
+          </button>
+        </div>
 
         {mapaAbierto &&
           etapas.map((etapa) => {
@@ -160,18 +192,18 @@ export default function Sidebar() {
                     <span style={{ color: "var(--muted)", marginRight: 4 }}>{etapa.n}</span>
                     {etapa.nombre}
                   </span>
-                  {/* La fuga era "fuga 1" en rojo y se leía como error. Un punto
+                  {/* La perdida era "perdida 1" en rojo y se leía como error. Un punto
                       del tono dice lo mismo sin gritar; el detalle va en title. */}
-                  {etapa.fuga?.n && (
+                  {etapa.perdida?.n && (
                     <span
-                      title={`Fuga ${etapa.fuga.n} · ${etapa.fuga.label}`}
-                      aria-label={`Fuga ${etapa.fuga.n}`}
+                      title={etapa.perdida.label}
+                      aria-label={etapa.perdida.label}
                       style={{
                         width: 5,
                         height: 5,
                         flex: "none",
                         borderRadius: 999,
-                        background: TONO[etapa.fuga.tono],
+                        background: TONO[etapa.perdida.tono],
                       }}
                     />
                   )}
