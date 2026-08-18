@@ -177,7 +177,49 @@ diseño más caro.
 | Idea/Proyecto Polaris | [PRM-1297](https://dropi-it.atlassian.net/browse/PRM-1297) |
 | Doc E2E (Drive) | [Proyectos E2E - Normalización de estados](https://docs.google.com/document/d/1MdJpIfBWM3dODcMW8big-4-RfOxatUIt1I2CcoGtV-Y/edit) |
 | Carpeta Drive | [Normalización de estados](https://drive.google.com/drive/folders/1aI3PxUKGTuM5WVZ753Qv-5JyRaVC_9gw) |
-| Figma | N/A — aún no |
+| Figma | [Homologación de estados](https://www.figma.com/design/hNPnq9RZ9AiuBmmvsWwUmZ/Homologaci%C3%B3n-de-estados?node-id=3-23) `[🟢 · hallado 10-ago]` |
+| Documentación publicada | comentario `51606` en PRM-1297 · texto en `hub/public/logistica/documentacion-jira/PRM-1297.md` |
+
+### 8.1 · 🔴 El OTRO árbol — hallazgo del 10-ago-2026
+
+**Este proyecto tiene una segunda estructura en Jira que no estaba documentada acá, y que
+lleva 9 meses y medio parada figurando "En curso".** No se había encontrado porque está
+indexada como **"homologación"**, no como "normalización".
+
+```
+PROB-101     Falta de homologación de estados de transportadoras   Parking lot
+  └─ PRM-477    [Fase 1] Normalización y homologación de estados   Inv. y definición
+       └─ DROP-15914  [Fase 1] Panel de Homologación de estados    "EN CURSO" ← Juan
+```
+
+**Qué hay dentro de DROP-15914** `[🟢 · fuente: jira, leído 2026-08-10]`:
+
+| Ticket | Qué | Estado | Dueño |
+|---|---|---|---|
+| DROP-8692 | Definición de la matriz de estados | ✅ Finalizada | Juan |
+| DROP-15851 | UI del panel logístico | ✅ Finalizada | Michelle López |
+| DROP-16115 | Ajustes de UI | ✅ Finalizada | Michelle López |
+| DROP-16133 | Definición de la épica | ✅ Finalizada | Paola Angulo |
+| **DROP-16278** | **[Back] Lógica del panel** | 🔴 Backlog | **sin asignar** |
+| **DROP-16293** | **[Front] Panel** | 🔴 Backlog | **sin asignar** |
+
+**El diseño está terminado.** Front y back están escritos completos —criterios en Gherkin,
+reglas de negocio, DoD, Figma enlazado— y **sin dueño desde el 29-oct-2025**.
+
+**[SÍNTESIS] No son dos proyectos: son las dos mitades del mismo.** PRM-1297 decide *cuáles*
+son los estados padre; DROP-15914 es *la herramienta* con la que un admin le mapea los estados
+de cada transportadora. El panel no puede construirse sin el catálogo, y el catálogo no se
+opera sin el panel.
+
+**Lo que está mal no es que exista: es el estado.** Una épica "En curso" cuyas dos historias
+vivas no tienen dueño le miente al roadmap. Dos salidas honestas — **revivirla** (asignar las
+dos historias y conectar PRM-1297 ↔ PRM-477) o **bajarla a Backlog** declarando que espera a
+que cierre el catálogo. Cerrarla tiraría cuatro tickets de diseño terminado.
+
+⚠️ **El enlace que falta es exactamente uno.** PRM-1297 es `Proyecto` y PRM-477 es `Solución`:
+según el canon van unidos por **"Discovery - Connected"** (`id 10012`). Con ese enlace la
+cadena queda cerrada de punta a punta, porque PRM-477 → DROP-15914 ya existe.
+**Decisión de Juan — no se deduce.**
 
 ## 9 · Preguntas abiertas
 **Cerradas por el CONTEXTO (12-jul):**

@@ -4,6 +4,7 @@ import Sankey from "@/app/proyectos/logistica/_components/charts/Sankey";
 import TimeFlowChart from "@/app/proyectos/logistica/_components/charts/TimeFlowChart";
 import GroupedBars from "@/app/proyectos/logistica/_components/charts/GroupedBars";
 import SectionNav from "@/app/proyectos/logistica/_components/charts/SectionNav";
+import { PageHeader, SectionTitle } from "@/app/proyectos/logistica/_components/ui";
 import {
   F,
   bottlenecks,
@@ -70,10 +71,10 @@ function KpiStrip({ items }: { items: Kpi[] }) {
 
 const etapas = [
   { n: "1", title: "Creación", detail: "La orden nace desde canal manual, Shopify u otro origen.", tag: "origen", tone: "blue" },
-  { n: "2", title: "Confirmación", detail: "Primer cuello pre-red: órdenes SHOP, validación y acción del dropshipper.", tag: "fuga 1", tone: "amber" },
+  { n: "2", title: "Confirmación", detail: "Primer cuello pre-red: órdenes SHOP, validación y acción del dropshipper.", tag: "no moviliza", tone: "amber" },
   { n: "3", title: "Guía", detail: "Se genera guía, se elige transportadora y se activa el flujo logístico.", tag: "preparación", tone: "sky" },
   { n: "4", title: "Handoff", detail: "Preparación, recogida, bodega y entrega a transportadora.", tag: "Dropi", tone: "green" },
-  { n: "5", title: "Entrega", detail: "Carrier mueve, ofrece, gestiona novedades y entrega o devuelve.", tag: "fuga 2", tone: "red" },
+  { n: "5", title: "Entrega", detail: "Carrier mueve, ofrece, gestiona novedades y entrega o devuelve.", tag: "devuelve", tone: "red" },
   { n: "6", title: "Postventa", detail: "Reclamos, garantías, devolución y recuperación operativa.", tag: "cierre", tone: "purple" },
 ];
 
@@ -133,19 +134,18 @@ function InfoTable({ rows, columns }: { rows: string[][]; columns: string[] }) {
 export default function InfoLogisticaPage() {
   return (
     <main className="page info-page">
-      <section className="info-hero-app">
-        <span className="tag">Info logística · fuente única</span>
-        <h1>Logística como producto</h1>
-        <p>
-          Todas las gráficas del prototipo, nativas en el tablero y con tooltips: el funnel, las novedades,
-          las transportadoras, los manifiestos, los tiempos y los motivos. Los HTML completos quedan anexados abajo.
-        </p>
-      </section>
+      {/* Capa de REFERENCIA: aquí se viene a buscar un número, no a decidir. Su
+          densidad es correcta y sus gráficos no se tocan — lo que se homologa es
+          la cabecera, los títulos de sección y el lenguaje. */}
+      <PageHeader
+        title="Logística como producto"
+        subtitle="El detalle completo: el recorrido de la orden, las novedades, las transportadoras, los manifiestos y los tiempos. Es la fuente a la que apuntan las demás pantallas."
+      />
 
       <SectionNav items={navItems} />
 
       {/* ============ VIEW 1 · FUNNEL ============ */}
-      <div className="eyebrow" id="s-funnel">Funnel general de órdenes</div>
+      <div id="s-funnel"><SectionTitle>Funnel general de órdenes</SectionTitle></div>
       <KpiStrip items={kpisFunnel} />
       <section className="info-panel">
         <div className="info-section-head">
@@ -158,7 +158,7 @@ export default function InfoLogisticaPage() {
       </section>
 
       {/* ============ VIEW 2 · NOVEDADES ============ */}
-      <div className="eyebrow" id="s-novedades">Novedades y resolución</div>
+      <div id="s-novedades"><SectionTitle>Novedades y resolución</SectionTitle></div>
       <KpiStrip items={kpisNovedades} />
       <section className="info-panel">
         <div className="info-section-head">
@@ -245,7 +245,7 @@ export default function InfoLogisticaPage() {
       </section>
 
       {/* ============ VIEW 3 · TRANSPORTADORAS ============ */}
-      <div className="eyebrow" id="s-transportadoras">Por transportadora</div>
+      <div id="s-transportadoras"><SectionTitle>Por transportadora</SectionTitle></div>
       <KpiStrip items={kpisTransp} />
       <section className="info-panel accent-red">
         <h2>⚠ Hallazgo crítico: INTERRAPIDISIMO</h2>
@@ -328,7 +328,7 @@ export default function InfoLogisticaPage() {
       </section>
 
       {/* ============ VIEW 4 · MANIFIESTOS ============ */}
-      <div className="eyebrow" id="s-manifiestos">Manifiestos y devoluciones</div>
+      <div id="s-manifiestos"><SectionTitle>Manifiestos y devoluciones</SectionTitle></div>
       <KpiStrip items={kpisManifiestos} />
       <section className="info-panel">
         <h2>Cobertura de manifiestos — base: movilizadas</h2>
@@ -426,7 +426,7 @@ export default function InfoLogisticaPage() {
       </div>
 
       {/* ============ VIEW 5 · TIEMPOS ============ */}
-      <div className="eyebrow" id="s-tiempos">Tiempos entre estados</div>
+      <div id="s-tiempos"><SectionTitle>Tiempos entre estados</SectionTitle></div>
       <KpiStrip items={kpisTiempos} />
       <section className="info-panel">
         <h2>Ciclo de vida completo — creación a entrega/devolución (Q9)</h2>
@@ -520,7 +520,7 @@ export default function InfoLogisticaPage() {
       </section>
 
       {/* ============ VIEW 6 · MOTIVOS ============ */}
-      <div className="eyebrow" id="s-motivos">Motivos de cancelación y rechazo</div>
+      <div id="s-motivos"><SectionTitle>Motivos de cancelación y rechazo</SectionTitle></div>
       <KpiStrip items={kpisMotivos} />
       <div className="info-two">
         <section className="info-panel">
@@ -541,7 +541,7 @@ export default function InfoLogisticaPage() {
       </section>
 
       {/* ============ MARCO CONCEPTUAL ============ */}
-      <div className="eyebrow" id="s-marco">Mapa mental</div>
+      <div id="s-marco"><SectionTitle>Mapa mental</SectionTitle></div>
       <section className="info-panel">
         <div className="info-section-head">
           <div>
@@ -561,7 +561,7 @@ export default function InfoLogisticaPage() {
         </div>
       </section>
 
-      <div className="eyebrow">Data</div>
+      <SectionTitle>Data</SectionTitle>
       <section className="info-panel">
         <div className="info-section-head">
           <div>
@@ -572,13 +572,13 @@ export default function InfoLogisticaPage() {
         <InfoTable rows={dataModel} columns={["Pregunta", "Fuente", "Regla de uso"]} />
       </section>
 
-      <div className="eyebrow">Roadmap</div>
+      <SectionTitle>Roadmap</SectionTitle>
       <section className="info-panel">
         <h2>Qué mueve el 70%</h2>
         <InfoTable rows={roadmap} columns={["Frente", "Por qué importa", "Proyecto"]} />
       </section>
 
-      <div className="eyebrow" id="s-fuentes">Fuentes completas</div>
+      <div id="s-fuentes"><SectionTitle>Fuentes completas</SectionTitle></div>
       <section className="info-panel">
         <div className="info-section-head">
           <div>

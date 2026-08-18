@@ -10,6 +10,10 @@
 > Vercel solo con el próximo `git push` que toque este bloque — no hay que tocar código.
 > Formato: `- emoji [Proyecto] texto`.
 <!-- tablero:pendientes:start -->
+- 🔴 [Jira] Decidir DROP-15914 (Panel de Homologación): figura "En curso" hace 9 meses, el diseño está hecho y las historias de front y back no tienen dueño
+- 🔴 [Jira] Llenar los 9 campos de PRM-1462 (POD · ENVÍA): está en cero y es el carrier más avanzado del programa — usar `/proyectos/logistica/documentacion-jira`
+- 🟡 [Jira] Pedirle a un admin permisos de INVS para `producto@dropi.co` — INVS-17 es el único de 15 tickets sin documentar
+- 🟡 [Jira] Pegar a mano las 11 descripciones y los campos que faltan (la API de Polaris no escribe nada) — todo listo para copiar en `/proyectos/logistica/documentacion-jira`
 - 🔴 [Indiana] Poner el `.env.local` en `/Users/user/dropi-repos/inidiana-map/` y correr el primer ciclo real (armar UNA solicitud)
 - 🔴 [Indiana] Vercel bloquea todos los deploys desde el 28-jul (28 commits sin publicar) — pedirle a Jaime el motivo y mover el proyecto a un team de Dropi
 - 🟡 [Fulfillment] Cerrar el E2E de Drive: spec, Jira 50931, Confluence 1572732930 y Darwin LOG-014 ya están sincronizados; Drive requiere reautorización explícita del riesgo del conector
@@ -17,6 +21,11 @@
 - 🟡 [Homologación estados] Modelar la devolución con su propio ciclo de reintento + `Entregado` confirmado vs observado + ubicar `Guía anulada`
 - 🔴 [Cell Board] Preparar propuesta de experimento para "Preparación de guía" → llevar al Cell Board #3
 - 🔴 [Árbol OKR] Validar el reajuste del árbol v2 con Juan/Maria antes de tocar Jira
+- 🔴 [Medición] LOG-011 Torre de control sin ticket ni dueño — sin él las submétricas del KPI de 24h se calculan a mano cada vez (ver `estrategia/medicion-movilizacion-y-entrega.md`)
+- 🟡 [Medición] Abrir la novedad como embudo: % que entra, % que se soluciona, % que termina entregada — depende de normalizar estados primero
+- 🟡 [Medición] Elegir UNA definición de zona (ciudad · territorio DANE · zona de la transportadora) antes de cortar los KPIs por geografía
+- 🟡 [Comercial] Levantar a partir de cuántas órdenes cada transportadora habilita pago contra entrega, y sus contratos mínimos — condiciona LOG-004
+- 🟢 [Research] Entrevistas de logística para ecommerce: definir a quién (operadores · otros ecommerce · dropshippers con otras plataformas)
 - 🔴 [Delivery] EL FOCO = Normalización de estados: subirlo en el roadmap y terminar la propuesta (WIP=1)
 - 🔴 [Delivery] Traslapar diseño solo sobre lo cerrado (vista cliente 8 estados), NO sobre el catálogo en disputa
 - 🔴 [Delivery] Escalar Same Day como riesgo aceptado con dueño — un riesgo no se pone en cola en silencio

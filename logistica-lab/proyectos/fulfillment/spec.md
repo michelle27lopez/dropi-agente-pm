@@ -6,7 +6,7 @@
 |---|---|
 | Owner / PM | Juan Diego Bautista `[🟡 · jira:PRM-1446]` |
 | Product Designer | Michel Pino, según metadata del prototipo `[🟡 · doc:RPP meta.json · 2026-06-11]` |
-| Stakeholder | Operación de bodegas 2PL; responsables de facturación por confirmar `[⚪ · jira:PRM-1446]` |
+| Stakeholder | Operación de bodegas 2PL; **el equipo de facturación es el responsable del cobro** `[🟡 · Juan · 2026-08-06]` |
 | Célula | Logistic Success `[🟡 · jira:PRM-1446]` |
 | Etapa de la cadena | Despacho / fulfillment `[🟡 · jira:PRM-1446]` |
 | Estado global | 🟡 **no listo para handoff técnico completo**: PRM-1446 figura “Listo para hand off”, pero PROD-1526 está en Dependencia, PROD-240 sigue en backlog sin assignee y el tab Hand off del E2E conserva placeholders |
@@ -35,7 +35,7 @@ Parametriza el registro y cobro de servicios de fulfillment por bodega/proveedor
 ## 3 · Usuarios / actores
 
 - Operador de bodega no técnico: captura servicios por proveedor y periodo. `[🔵 · doc:RPP PROD-648]`
-- Responsable de corte por país: consolida y emite cobro definitivo; identidad/rol exacto pendiente. `[⚪ · doc:RPP PROD-648]`
+- Responsable de corte por país: **el equipo de facturación**. El corte es **por país y lo resuelve TI**, no un operador por bodega. `[🟡 · Juan · 2026-08-06]`
 - Proveedor: recibe el cobro contra wallet y requiere trazabilidad del desglose. `[🔵 · doc:RPP PROD-648]`
 
 ## 4 · Alcance
@@ -60,7 +60,7 @@ Parametriza el registro y cobro de servicios de fulfillment por bodega/proveedor
 - **R3 ·** Registrado/Cobrado es inmutable y solo lectura; la política de reverso sigue abierta. `[🔵/⚪ · doc:RPP PROD-648]`
 - **R4 ·** Multi-unidad aplica a órdenes multiproducto desde la cuarta unidad; valor unitario vigente requiere confirmación del negocio. `[🔵/⚪ · doc:RPP PROD-648]`
 - **R5 ·** El corte debe ser idempotente y alertar si ya existe un registro. `[🔵 · doc:RPP PROD-648]`
-- **R6 ·** La política ante wallet sin saldo no se considera definida hasta decisión explícita. `[⚪ · doc:RPP PROD-648]`
+- **R6 ·** Wallet sin saldo **no bloquea el cobro: dispara una alerta**. El cargo queda registrado y lo que se notifica es la falta de saldo — sigue pendiente definir a quién se le avisa y con qué reintento. `[🟡 · Juan · 2026-08-06]`
 - **R7 ·** Antes de cobrar, la combinación bodega–proveedor–orden debe ser elegible y trazable; STID-1960 demuestra el riesgo operativo de una asociación incorrecta. `[🟡 · jira:STID-1960 · criterio derivado]`
 - **R8 ·** Tarifas registradas en Discovery ($2.800 base, $400 multi-unidad desde cuarta unidad, $200 etiquetado, $300 kits, $60.000 almacenamiento y bandas de recepción/descuento) se consideran **valores reportados**, no tarifas aprobadas, hasta reconciliar INVS-66, Finanzas y la bitácora más reciente. `[⚪ · drive:Discovery · jira:INVS-66]`
 
