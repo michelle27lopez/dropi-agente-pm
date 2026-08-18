@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700;800&family=Rationale&display=swap" rel="stylesheet">
+<!-- html2canvas for instant HD PNG screenshot generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root {
     --ink: #050209;
@@ -47,47 +49,7 @@
     background: radial-gradient(circle at center, #1b0c03 0%, #030107 100%);
   }
 
-  /* Selector Bar */
-  #sellerSelectorBar {
-    position: fixed;
-    top: 12px;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: rgba(10, 5, 18, 0.92);
-    border: 1px solid rgba(255, 133, 0, 0.4);
-    padding: 8px 16px;
-    border-radius: 99px;
-    backdrop-filter: blur(16px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7);
-  }
-  
-  #sellerSelectorBar label {
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-master);
-  }
-  
-  #sellerSelect {
-    background: rgba(255, 255, 255, 0.12);
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 13px;
-    font-weight: 700;
-    font-family: inherit;
-    cursor: pointer;
-    outline: none;
-  }
 
-  #sellerSelect option {
-    background: #11081f;
-    color: #fff;
-  }
 
   /* Stage (iPhone frame) */
   #stage {
@@ -141,12 +103,14 @@
     overflow: hidden;
     background-size: 200% 200% !important;
     animation: gradientShift 10s ease infinite;
+    z-index: 10;
   }
   
   .slide.active {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    z-index: 30;
   }
   
   @keyframes gradientShift {
@@ -239,7 +203,7 @@
     right: 20px;
     display: flex;
     gap: 4px;
-    z-index: 40;
+    z-index: 50;
   }
   
   @media(max-width: 479px) { #bars { top: 16px; } }
@@ -248,22 +212,33 @@
     flex: 1;
     height: 3px;
     border-radius: 3px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.2);
     overflow: hidden;
+    position: relative;
   }
   
   .bar > i {
     display: block;
     height: 100%;
-    width: 0;
-    background: #fff;
+    width: 0%;
+    background: #ffffff;
     border-radius: 3px;
-    box-shadow: 0 0 8px #fff;
+    box-shadow: 0 0 10px #ffffff, 0 0 4px #ff8500;
   }
   
-  .bar.done > i { width: 100%; }
-  .bar.run > i { animation: fill var(--dur, 6s) linear forwards; }
-  @keyframes fill { to { width: 100%; } }
+  .bar.done > i {
+    width: 100% !important;
+    animation: none !important;
+  }
+
+  .bar.run > i {
+    animation: barProgress var(--dur, 6200ms) linear forwards !important;
+  }
+
+  @keyframes barProgress {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
 
   /* Top brand row */
   #brand {
@@ -281,9 +256,14 @@
   @media(max-width: 479px) { #brand { top: 28px; } }
   
   #brand .brand-logo-img {
-    height: 20px;
+    height: 32px;
+    width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.7));
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 2px 14px rgba(255, 133, 0, 0.5));
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
   
   #brand .logo-wrapped {
@@ -295,17 +275,20 @@
     opacity: 0.85;
   }
 
-  /* Nav touch zones */
+  /* Touch Nav (occupies top 60% of stage, 0% overlap with bottom buttons) */
   .nav {
     position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 30%;
-    z-index: 20;
+    top: 60px;
+    height: 55%;
+    width: 35%;
+    z-index: 40;
     cursor: pointer;
+    pointer-events: auto;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   .nav.left { left: 0; }
-  .nav.right { right: 0; width: 70%; }
+  .nav.right { right: 0; width: 65%; }
 
   /* Insignia Official Images Container */
   .insignia-container {
@@ -401,6 +384,9 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    position: relative;
+    z-index: 100;
+    pointer-events: auto;
   }
   .btn {
     border: none;
@@ -411,6 +397,12 @@
     cursor: pointer;
     font-family: inherit;
     transition: transform 0.2s var(--ease);
+    position: relative;
+    z-index: 101;
+    pointer-events: auto;
+    user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
   .btn.primary {
     background: #fff;
@@ -423,79 +415,356 @@
     border: 1.5px solid rgba(255, 255, 255, 0.2);
   }
 
-  /* PM Lens */
-  #lensToggle {
-    position: absolute;
-    bottom: 22px;
-    left: 20px;
-    z-index: 35;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
-    border-radius: 99px;
-    padding: 6px 12px;
-    font-size: 11px;
-    font-weight: 800;
-    cursor: pointer;
+
+
+  /* Mobile Fullscreen & Responsiveness for iOS & Android */
+  @media(max-width: 479px) {
+    body {
+      background: #050209;
+      justify-content: flex-start;
+    }
+    #stage {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100dvh;
+      margin-top: 0 !important;
+      border-radius: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    #bars {
+      top: calc(env(safe-area-inset-top, 0px) + 14px) !important;
+    }
+
+    #brand {
+      top: calc(env(safe-area-inset-top, 0px) + 26px) !important;
+    }
+
+    .slide {
+      padding: calc(env(safe-area-inset-top, 0px) + 60px) 20px calc(env(safe-area-inset-bottom, 0px) + 30px) !important;
+    }
+
+    .insignia-img-official {
+      max-width: 38vw;
+      max-height: 140px;
+    }
+
+    .metric .big {
+      font-size: clamp(38px, 12vw, 56px) !important;
+    }
+
+    .share-modal-content {
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px) !important;
+    }
+  }
+
+  /* Compact Viewports (iPhone SE / Short Android devices <= 680px height) */
+  @media(max-height: 680px) and (max-width: 479px) {
+    .insignia-img-official {
+      max-width: 30vw;
+      max-height: 110px;
+    }
+    .kicker {
+      font-size: 10.5px;
+      margin-bottom: 4px;
+    }
+    .med {
+      font-size: 18px !important;
+    }
+    .sub, .lede {
+      font-size: 12px !important;
+      margin-top: 8px !important;
+    }
+    .cta {
+      margin-top: 12px;
+      gap: 8px;
+    }
+    .btn {
+      padding: 12px;
+      font-size: 13.5px;
+    }
+  }
+
+  /* Share Bottom Sheet Modal */
+  .share-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.78);
     backdrop-filter: blur(12px);
-  }
-  #lensToggle .sw {
-    width: 28px;
-    height: 16px;
-    border-radius: 99px;
-    background: rgba(255, 255, 255, 0.2);
-    position: relative;
-  }
-  #lensToggle .sw::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: #fff;
-    transition: left 0.3s var(--ease);
-  }
-  body.lens #lensToggle .sw { background: var(--color-master); }
-  body.lens #lensToggle .sw::after { left: 14px; }
- 
-  .lens {
-    position: absolute;
-    left: 20px;
-    right: 20px;
-    bottom: 64px;
-    z-index: 34;
-    background: rgba(5, 2, 9, 0.94);
-    border: 1px solid rgba(255, 133, 0, 0.35);
-    border-radius: 18px;
-    padding: 14px 16px;
-    backdrop-filter: blur(16px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
     opacity: 0;
-    transform: translateY(12px);
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+    transition: opacity 0.3s var(--ease), visibility 0.3s;
   }
-  body.lens .slide.active .lens {
+  .share-modal-overlay.active {
     opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .share-modal-content {
+    width: 100%;
+    max-width: 440px;
+    background: #0e071c;
+    border: 1px solid rgba(255, 133, 0, 0.35);
+    border-radius: 28px 28px 0 0;
+    padding: 20px 22px 34px;
+    color: #fff;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.85);
+    transform: translateY(100%);
+    transition: transform 0.35s var(--ease);
+  }
+  .share-modal-overlay.active .share-modal-content {
     transform: translateY(0);
   }
-  .lens .tt {
-    font-size: 10.5px;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-master);
-    margin-bottom: 4px;
+  .share-modal-handle {
+    width: 42px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 99px;
+    margin: 0 auto 16px;
   }
-  .lens .tx {
-    font-size: 12px;
-    font-weight: 500;
+  .share-modal-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--color-master);
+    text-align: center;
+  }
+  .share-modal-sub {
+    font-size: 12.5px;
+    color: #b5a9cf;
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 16px;
+  }
+  .share-preview-card {
+    background: linear-gradient(135deg, rgba(255, 133, 0, 0.16) 0%, rgba(255, 0, 0, 0.1) 100%);
+    border: 1px solid rgba(255, 133, 0, 0.3);
+    border-radius: 16px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .sp-badge-img img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(255, 133, 0, 0.5));
+  }
+  .sp-name { font-size: 14.5px; font-weight: 800; color: #fff; }
+  .sp-rank { font-size: 12px; font-weight: 700; color: var(--color-master); margin-top: 1px; }
+  .sp-stats { font-size: 11px; color: #d0c4eb; margin-top: 2px; }
+
+  .share-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .share-opt-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: #fff;
+    font-family: inherit;
+    text-align: left;
+    transition: all 0.2s var(--ease);
+  }
+  .share-opt-btn:active {
+    transform: scale(0.96);
+  }
+  .share-opt-btn.whatsapp { border-color: rgba(37, 211, 102, 0.4); background: rgba(37, 211, 102, 0.08); }
+  .share-opt-btn.instagram { border-color: rgba(225, 48, 108, 0.4); background: rgba(225, 48, 108, 0.08); }
+  .share-opt-btn.facebook { border-color: rgba(24, 119, 242, 0.4); background: rgba(24, 119, 242, 0.08); }
+  .share-opt-btn.native { border-color: rgba(255, 133, 0, 0.4); background: rgba(255, 133, 0, 0.08); }
+
+  .opt-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .opt-svg { display: block; }
+  .opt-name { display: block; font-size: 13px; font-weight: 800; }
+  .opt-desc { display: block; font-size: 10px; opacity: 0.75; color: #d0c4eb; margin-top: 1px; }
+
+  .share-close-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 13px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .share-toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(16, 185, 129, 0.95);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 800;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s var(--ease);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .share-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Offscreen Poster container for HD 9:16 story export with Instagram/WhatsApp Safe Zones */
+  .export-poster-hidden {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 440px;
+    height: 780px;
+    background: radial-gradient(circle at 50% 30%, #280e02 0%, #0c0517 70%, #030107 100%);
+    border: 2px solid rgba(255, 133, 0, 0.45);
+    box-sizing: border-box;
+    /* SAFE ZONES: 80px Top (avoids story headers), 125px Bottom (avoids reply/caption input), 36px Sides */
+    padding: 80px 36px 125px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    font-family: 'Chakra Petch', -apple-system, sans-serif;
+  }
+  .ep-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .ep-logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 4px 18px rgba(255, 133, 0, 0.5));
+    transform: translateZ(0);
+  }
+  .ep-edition {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--color-master);
+    text-transform: uppercase;
+  }
+  .ep-seller-box {
+    text-align: center;
+  }
+  .ep-seller-kicker {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: #a8b2c1;
+  }
+  .ep-seller-name {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 4px;
+    text-shadow: 0 0 20px rgba(255, 133, 0, 0.4);
+  }
+  .ep-insignia-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 6px 0;
+  }
+  .ep-insignia-img {
+    width: 155px;
+    height: 155px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 35px rgba(255, 133, 0, 0.6));
+  }
+  .ep-rank-title {
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--color-master);
+    margin-top: 8px;
+  }
+  .ep-quote-box {
+    background: linear-gradient(135deg, rgba(255, 133, 0, 0.18) 0%, rgba(255, 0, 0, 0.12) 100%);
+    border: 1px solid rgba(255, 133, 0, 0.35);
+    border-radius: 14px;
+    padding: 10px 16px;
+    text-align: center;
+    width: 100%;
+    margin: 4px 0;
+  }
+  .ep-quote-text {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #fff;
     line-height: 1.4;
-    color: #e5daff;
+  }
+  .ep-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+  }
+  .ep-stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 133, 0, 0.3);
+    border-radius: 16px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .ep-stat-val {
+    font-size: 23px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .ep-stat-lbl {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #d0c4eb;
+    margin-top: 2px;
+  }
+  .ep-footer {
+    text-align: center;
+  }
+  .ep-footer-tag {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--color-master);
+    letter-spacing: 0.06em;
+  }
+  .ep-footer-sub {
+    font-size: 10px;
+    color: #a8b2c1;
+    margin-top: 2px;
   }
 
   /* Particles */
@@ -514,19 +783,11 @@
 </head>
 <body>
 
-<!-- Top Selector -->
-<div id="sellerSelectorBar">
-  <label for="sellerSelect">👑 Programa Leyendas Dropi:</label>
-  <select id="sellerSelect" onchange="loadSeller(this.value)">
-    <!-- Dynamic options -->
-  </select>
-</div>
-
 <div id="stage" aria-label="Programa Leyendas Dropi Wrapped 2026">
   <div id="bars"></div>
   <div id="brand">
-    <img class="brand-logo-img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Leyendas Dropi Logo">
-    <span class="logo-wrapped" id="sellerBadgeTop">Seller #...</span>
+    <img class="brand-logo-img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Programa Leyendas Dropi Logo" crossorigin="anonymous">
+    <span class="logo-wrapped" id="sellerBadgeTop">Leyendas 2026</span>
   </div>
 
   <div id="fx"></div>
@@ -543,18 +804,14 @@
 
   <!-- SLIDE 0: INTRO / INSIGNIA RECURSO GRÁFICO OFICIAL -->
   <section class="slide g0 active" id="slide0">
-    <div class="kicker reveal d1" id="s0_kicker">Hola, Seller #...</div>
+    <div class="kicker reveal d1" id="s0_kicker">¡Hola! Tu Wrapped 2026</div>
     <div class="insignia-container reveal d2">
       <!-- Recurso gráfico oficial del Playbook de Leyendas Dropi -->
       <img class="insignia-img-official" id="s0_insignia_img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/1.png" alt="Insignia Oficial Leyendas">
       <div class="med" style="font-size: 22px; margin-top: 8px;" id="s0_rank">...</div>
     </div>
     <div class="sub reveal d3" style="text-align:center; max-width: 310px; margin: 10px auto 0;" id="s0_sub">
-      Bienvenido a tu retrospectiva oficial en el programa **Leyendas Dropi (v7.0)**. Repasemos tu desempeño acumulado.
-    </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Identidad y Pertenencia (Programa Leyendas)</div>
-      <div class="tx">El uso del recurso gráfico oficial de cada insignia conecta directamente con la iconografía del Playbook de marca de Leyendas Dropi.</div>
+      Bienvenido a tu retrospectiva oficial en el programa <strong>Leyendas Dropi (v7.0)</strong>. Repasemos tu desempeño acumulado.
     </div>
   </section>
 
@@ -569,10 +826,6 @@
       <div style="font-size: 11px; font-weight:800; color: var(--color-master); text-transform: uppercase;">Mecánica del Nivel</div>
       <div style="font-size: 13.5px; font-weight: 600; color: #fff; margin-top: 4px;" id="s1_status">...</div>
     </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Capital Acumulado (Sunk Cost)</div>
-      <div class="tx">El saldo histórico de drops es permanente y nunca expira (1 orden = 1 drop). Esto actúa como lock-in psicológico que reduce el churn del seller.</div>
-    </div>
   </section>
 
   <!-- SLIDE 2: INGRESOS TOTALES (GMV) -->
@@ -585,10 +838,6 @@
     <div class="metric-card reveal d4" id="s2_card">
       <div style="font-size: 11px; font-weight:800; color: #ffd23f; text-transform: uppercase;">Escala Operativa</div>
       <div style="font-size: 13.5px; font-weight:600; color: #fff; margin-top: 4px;" id="s2_detail">...</div>
-    </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Refuerzo de Capacidad (Self-Efficacy)</div>
-      <div class="tx">Visualizar el volumen de facturación bruta transaccionado valida la alta rentabilidad del modelo dropshipping dentro de la plataforma.</div>
     </div>
   </section>
 
@@ -613,10 +862,6 @@
     <div class="sub reveal d4" style="text-align:center;" id="s3_sub">
       Este producto representó tu mayor acelerador de volumen en la plataforma.
     </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Saliencia de Producto Ganador</div>
-      <div class="tx">Recordar el producto ganador impulsa al seller a buscar nuevos productos similares en el catálogo para sostener la curva de pauta.</div>
-    </div>
   </section>
 
   <!-- SLIDE 4: EFECTIVIDAD LOGÍSTICA -->
@@ -636,10 +881,6 @@
     <div class="metric-card reveal d4" style="text-align:center;" id="s4_card">
       ...
     </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Gradiente de Meta</div>
-      <div class="tx">La efectividad de entrega determina el margen final del seller. Mostrar la tasa incentiva el uso de alertas y notificaciones de prevención de devoluciones.</div>
-    </div>
   </section>
 
   <!-- SLIDE 5: RESUMEN Y ASCENSO CON INSIGNIA OFICIAL -->
@@ -651,27 +892,143 @@
     </div>
     <div class="goal reveal d3">
       <div class="track"><i id="goalbar"></i></div>
-      <div class="lbl"><span id="s5_goal_curr">0 / 0</span><span id="s5_goal_rem">...</span></div>
+      <div class="lbl"><span id="s5_goal_curr">0 de 0</span><span id="s5_goal_rem">...</span></div>
     </div>
     <div class="sub reveal d3" style="font-size: 12.5px; text-align:center; margin-top: 8px; line-height: 1.45;" id="s5_sub">
-      ¡Sigue escalando! En el Programa Leyendas, cruzar las **100 órdenes/mes** reduce el churn en **82%** y desbloquea beneficios exclusivos.
+      ¡Sigue escalando! En el Programa Leyendas, cruzar el umbral de <strong>100 órdenes mensuales</strong> reduce la cancelación en <strong>82%</strong> y desbloquea beneficios exclusivos.
     </div>
     <div class="cta reveal d4">
-      <button class="btn primary" onclick="share()">Compartir Estatus Leyendas</button>
-      <button class="btn ghost" onclick="restart()">Ver de nuevo</button>
-    </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Cierre de Bucle de Retención (Leyendas)</div>
-      <div class="tx">Mostrar la brecha de órdenes hacia el siguiente Nivel del Programa Leyendas genera tracción inmediata y reduce el abandono operativo.</div>
+      <button class="btn primary" onclick="share(event)" ontouchend="share(event)" type="button">Compartir Estatus Leyendas</button>
+      <button class="btn ghost" onclick="restart(event)" ontouchend="restart(event)" type="button">Ver de nuevo</button>
     </div>
   </section>
 
   <!-- Touch Nav -->
   <div class="nav left" onclick="prev()"></div>
   <div class="nav right" onclick="next()"></div>
+</div>
 
-  <!-- PM Lens Toggle -->
-  <div id="lensToggle" onclick="toggleLens(event)"><span class="sw"></span><span>Lente PM</span></div>
+<!-- Dedicated High-Res Export Poster Canvas (SAFE ZONE DESIGN FOR INSTAGRAM & WHATSAPP STORIES) -->
+<div id="exportPoster" class="export-poster-hidden">
+  <div class="ep-header">
+    <img class="ep-logo" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Programa Leyendas Dropi Logo" crossorigin="anonymous">
+    <div class="ep-edition">RETROSPECTIVA OFICIAL 2026</div>
+  </div>
+
+  <div class="ep-seller-box">
+    <div class="ep-seller-kicker">MI ESTATUS EN LEYENDAS</div>
+    <div class="ep-seller-name" id="ep_name">Seller</div>
+  </div>
+
+  <div class="ep-insignia-box">
+    <img class="ep-insignia-img" id="ep_insignia" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/1.png" alt="Insignia Leyendas">
+    <div class="ep-rank-title" id="ep_rank">Nivel Leyendas</div>
+  </div>
+
+  <div class="ep-quote-box">
+    <div class="ep-quote-text" id="ep_quote">"¡Consolidé mis drops en el Programa Leyendas Dropi!"</div>
+  </div>
+
+  <div class="ep-stats-grid">
+    <div class="ep-stat-card">
+      <div class="ep-stat-val" id="ep_drops">0</div>
+      <div class="ep-stat-lbl">DROPS COMPLETADOS</div>
+    </div>
+    <div class="ep-stat-card">
+      <div class="ep-stat-val" id="ep_eff">0%</div>
+      <div class="ep-stat-lbl">EFECTIVIDAD LOGÍSTICA</div>
+    </div>
+  </div>
+
+  <div class="ep-footer">
+    <div class="ep-footer-tag">👑 MIEMBRO OFICIAL LEYENDAS DROPI</div>
+    <div class="ep-footer-sub">Plataforma #1 de Dropshipping en Latinoamérica</div>
+  </div>
+</div>
+
+<!-- Share Bottom Sheet Modal -->
+<div id="shareModal" class="share-modal-overlay" onclick="closeShareModal(event)">
+  <div class="share-modal-content" onclick="event.stopPropagation()">
+    <div class="share-modal-handle"></div>
+    <div class="share-modal-title">👑 Compartir tu Estatus Leyendas</div>
+    <div class="share-modal-sub">¿Por dónde deseas publicar tu logro de hoy?</div>
+
+    <div class="share-preview-card">
+      <div class="sp-badge-img">
+        <img id="modalInsigniaImg" src="" alt="Insignia Leyendas">
+      </div>
+      <div>
+        <div class="sp-name" id="modalSellerName">Seller</div>
+        <div class="sp-rank" id="modalSellerRank">Nivel Leyendas</div>
+        <div class="sp-stats" id="modalSellerStats">0 drops acumulados</div>
+      </div>
+    </div>
+
+    <div class="share-options-grid">
+      <button class="share-opt-btn whatsapp" onclick="shareTo('whatsapp')" type="button">
+        <div class="opt-icon-wrapper">
+          <svg class="opt-svg" viewBox="0 0 24 24" width="28" height="28" fill="none">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 13.81 2.49 15.5 3.35 16.97L2.05 21.72L6.91 20.45C8.36 21.27 10.12 21.75 12 21.75C17.52 21.75 22 17.27 22 11.75C22 6.23 17.52 2 12 2Z" fill="#25D366"/>
+            <path d="M17.47 14.38C17.24 14.27 16.11 13.71 15.9 13.63C15.69 13.55 15.54 13.51 15.39 13.74C15.24 13.97 14.81 14.47 14.68 14.63C14.55 14.78 14.42 14.8 14.19 14.69C13.96 14.58 12.99 14.26 11.84 13.23C10.94 12.43 10.33 11.44 10.16 11.14C9.99 10.84 10.14 10.68 10.26 10.56C10.36 10.46 10.49 10.29 10.6 10.16C10.71 10.03 10.75 9.93 10.83 9.77C10.91 9.61 10.87 9.47 10.81 9.35C10.75 9.23 10.3 8.12 10.11 7.66C9.93 7.21 9.75 7.27 9.61 7.26H9.18C9.03 7.26 8.78 7.32 8.57 7.55C8.36 7.78 7.77 8.33 7.77 9.46C7.77 10.59 8.59 11.68 8.71 11.84C8.83 12 10.33 14.3 12.63 15.29C13.18 15.53 13.6 15.67 13.94 15.78C14.49 15.95 14.99 15.93 15.39 15.87C15.83 15.8 16.74 15.31 16.93 14.78C17.12 14.25 17.12 13.8 17.06 13.7C17 13.6 17.7 13.49 17.47 14.38Z" fill="white"/>
+          </svg>
+        </div>
+        <div>
+          <span class="opt-name">WhatsApp</span>
+          <span class="opt-desc">Abrir App Directo</span>
+        </div>
+      </button>
+
+      <button class="share-opt-btn instagram" onclick="shareTo('instagram')" type="button">
+        <div class="opt-icon-wrapper">
+          <svg class="opt-svg" viewBox="0 0 24 24" width="28" height="28">
+            <defs>
+              <linearGradient id="igGradModal" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#fdf497" />
+                <stop offset="5%" stop-color="#fdf497" />
+                <stop offset="45%" stop-color="#fd5949" />
+                <stop offset="60%" stop-color="#d6249f" />
+                <stop offset="100%" stop-color="#285AEB" />
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igGradModal)"/>
+            <path d="M12 7C9.24 7 7 9.24 7 12C7 14.76 9.24 17 12 17C14.76 17 17 14.76 17 12C17 9.24 14.76 7 12 7ZM12 15C10.34 15 9 13.66 9 12C9 10.34 10.34 9 12 9C13.66 9 15 10.34 15 12C15 13.66 13.66 15 12 15ZM17.25 5.5C16.56 5.5 16 6.06 16 6.75C16 7.44 16.56 8 17.25 8C17.94 8 18.5 7.44 18.5 6.75C18.5 6.06 17.94 5.5 17.25 5.5Z" fill="white"/>
+          </svg>
+        </div>
+        <div>
+          <span class="opt-name">Instagram</span>
+          <span class="opt-desc">Abrir Cámara / Story</span>
+        </div>
+      </button>
+
+      <button class="share-opt-btn facebook" onclick="shareTo('facebook')" type="button">
+        <div class="opt-icon-wrapper">
+          <svg class="opt-svg" viewBox="0 0 24 24" width="28" height="28">
+            <circle cx="12" cy="12" r="10" fill="#1877F2"/>
+            <path d="M15 12H13V19H10V12H8.5V9.5H10V8C10 6.62 10.88 5.5 12.75 5.5H15V8H13.5C13.04 8 13 8.19 13 8.5V9.5H15L15 12Z" fill="white"/>
+          </svg>
+        </div>
+        <div>
+          <span class="opt-name">Facebook</span>
+          <span class="opt-desc">Publicar en Perfil</span>
+        </div>
+      </button>
+
+      <button class="share-opt-btn native" onclick="shareTo('native')" type="button">
+        <div class="opt-icon-wrapper">
+          <svg class="opt-svg" viewBox="0 0 24 24" width="28" height="28" fill="none">
+            <circle cx="12" cy="12" r="10" fill="rgba(255, 133, 0, 0.15)"/>
+            <path d="M12 7V14M12 14L9 11M12 14L15 11M8 17H16" stroke="#FF8500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <span class="opt-name">Descargar HD</span>
+          <span class="opt-desc">Guardar Imagen PNG</span>
+        </div>
+      </button>
+    </div>
+
+    <button class="share-close-btn" onclick="closeShareModal()">Cancelar</button>
+  </div>
 </div>
 
 <script>
@@ -787,16 +1144,6 @@
     return { val: Math.round(amount).toLocaleString('es-CO'), unit: "COP" };
   }
 
-  // Populate Dropdown
-  const selEl = document.getElementById('sellerSelect');
-  SELLERS_DATA.forEach((s) => {
-    const opt = document.createElement('option');
-    opt.value = s.user_id;
-    const lvl = getOfficialLeyendasLevel(s.total_orders);
-    opt.textContent = `${s.name} (#${s.user_id}) — Nivel ${lvl.levelNum} ${lvl.name} (${s.total_orders.toLocaleString()} drops)`;
-    selEl.appendChild(opt);
-  });
-
   let currentSeller = SELLERS_DATA[0];
   const slides = [...document.querySelectorAll('.slide')];
   const barsWrap = document.getElementById('bars');
@@ -825,23 +1172,24 @@
     const effPct = Math.round(s.efectivity_delivery * 100);
     const prodPct = ((s.orders_with_product / s.total_orders) * 100).toFixed(1);
 
-    document.getElementById('sellerBadgeTop').textContent = `${s.name} (#${s.user_id})`;
+    document.getElementById('sellerBadgeTop').textContent = s.name;
 
     // Slide 0: Insignia Oficial
-    document.getElementById('s0_kicker').textContent = `Hola, ${s.name}`;
+    const firstName = s.name ? s.name.split(' ')[0] : 'Seller';
+    document.getElementById('s0_kicker').textContent = `¡Hola, ${firstName}!`;
     const img0 = document.getElementById('s0_insignia_img');
     img0.src = lvl.insigniaImg;
     img0.alt = `Insignia Oficial ${lvl.name}`;
     img0.style.filter = `drop-shadow(0 0 30px ${lvl.glowColor})`;
     
     document.getElementById('s0_rank').textContent = `Nivel ${lvl.levelNum} · ${lvl.name}`;
-    document.getElementById('s0_sub').innerHTML = `Has acumulado <span class="accent">${s.total_orders.toLocaleString('es-CO')} drops</span> en el programa **Leyendas Dropi (v7.0)**. Tu estatus oficial es **${lvl.name}** (${lvl.desc}).`;
+    document.getElementById('s0_sub').innerHTML = `Has acumulado <span class="accent">${s.total_orders.toLocaleString('es-CO')} drops</span> en el programa <strong>Leyendas Dropi (v7.0)</strong>. Tu estatus oficial es <strong>${lvl.name}</strong> (${lvl.desc}).`;
 
     // Slide 1
     const el1 = document.getElementById('s1_orders');
     el1.dataset.count = s.total_orders;
     document.getElementById('s1_accent').textContent = `${s.total_orders.toLocaleString('es-CO')}`;
-    document.getElementById('s1_status').textContent = `Nivel ${lvl.levelNum} ${lvl.name} · ${s.total_orders >= 100 ? "Cruza el umbral de no-churn (≥100 órdenes)" : "En ruta a cruzar las 100 órdenes de activación"}`;
+    document.getElementById('s1_status').textContent = `Nivel ${lvl.levelNum} ${lvl.name} · ${s.total_orders >= 100 ? "Has superado la meta de 100 órdenes mensuales" : "En ruta a alcanzar las 100 órdenes de activación"}`;
 
     // Slide 2
     const el2 = document.getElementById('s2_income');
@@ -873,7 +1221,7 @@
     document.getElementById('s5_rank').textContent = `Nivel ${lvl.levelNum} — ${lvl.name}`;
     
     const rem = Math.max(0, lvl.nextGoal - s.total_orders);
-    document.getElementById('s5_goal_curr').textContent = `${s.total_orders.toLocaleString()} / ${lvl.nextGoal.toLocaleString()} drops`;
+    document.getElementById('s5_goal_curr').textContent = `${s.total_orders.toLocaleString()} de ${lvl.nextGoal.toLocaleString()} drops`;
     document.getElementById('s5_goal_rem').textContent = rem > 0 ? `Faltan ${rem.toLocaleString()} para Nivel ${lvl.levelNum < 6 ? lvl.levelNum + 1 : 6} (${lvl.nextName})` : "¡Nivel Máximo Leyenda alcanzado!";
   }
 
@@ -885,6 +1233,8 @@
     slides[i].classList.add('active');
     bars.forEach((b, k) => {
       b.classList.remove('run', 'done');
+      const inner = b.querySelector('i');
+      inner.style.animation = 'none';
       if (k < i) b.classList.add('done');
     });
     runBar();
@@ -893,8 +1243,13 @@
 
   function runBar() {
     clearTimeout(timer);
-    if (barEl) barEl.classList.remove('run');
+    if (barEl) {
+      barEl.classList.remove('run');
+      const oldInner = barEl.querySelector('i');
+      oldInner.style.animation = 'none';
+    }
     barEl = bars[i];
+    if (!barEl) return;
     const inner = barEl.querySelector('i');
     inner.style.animation = 'none';
     void inner.offsetWidth;
@@ -903,8 +1258,16 @@
     if (!paused) timer = setTimeout(() => { if (i < slides.length - 1) next(); }, DUR);
   }
 
-  function next() { if (i < slides.length - 1) show(i + 1); }
-  function prev() { if (i > 0) show(i - 1); else runBar(); }
+  function next(e) {
+    if (e) e.stopPropagation();
+    if (i < slides.length - 1) show(i + 1);
+  }
+
+  function prev(e) {
+    if (e) e.stopPropagation();
+    if (i > 0) show(i - 1);
+    else runBar();
+  }
   function restart() { show(0); }
 
   function triggerSlide(n) {
@@ -960,25 +1323,196 @@
     }
   }
 
-  function toggleLens(e) {
-    e.stopPropagation();
-    document.body.classList.toggle('lens');
-  }
 
-  function share() {
+
+  // ─── Share Modal Logic ───
+  function openShareModal() {
     const s = currentSeller;
     const lvl = getOfficialLeyendasLevel(s.total_orders);
-    const txt = `¡Consolidé ${s.total_orders.toLocaleString()} drops en Dropi y alcancé el Nivel ${lvl.levelNum} (${lvl.name})! 👑 #LeyendasDropi`;
-    if (navigator.share) {
-      navigator.share({ title: 'Mi Wrapped Leyendas Dropi', text: txt }).catch(() => {});
-    } else {
-      navigator.clipboard?.writeText(txt);
-      alert('✓ Resumen copiado al portapapeles');
+    document.getElementById('modalInsigniaImg').src = lvl.insigniaImg;
+    document.getElementById('modalSellerName').textContent = s.name;
+    document.getElementById('modalSellerRank').textContent = `Nivel ${lvl.levelNum}: ${lvl.name} ${lvl.emoji}`;
+    document.getElementById('modalSellerStats').textContent = `${s.total_orders.toLocaleString()} drops completados`;
+    document.getElementById('shareModal').classList.add('active');
+  }
+
+  function closeShareModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.classList.contains('share-close-btn')) return;
+    document.getElementById('shareModal').classList.remove('active');
+  }
+
+  function showToast(msg) {
+    let t = document.getElementById('shareToast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'shareToast';
+      t.className = 'share-toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  async function generateImageBlob() {
+    const s = currentSeller;
+    const lvl = getOfficialLeyendasLevel(s.total_orders);
+    const effPct = Math.round(s.efectivity_delivery * 100);
+
+    // Populate offscreen poster data inside Stories Safe Zone Grid
+    document.getElementById('ep_name').textContent = s.name;
+    document.getElementById('ep_insignia').src = lvl.insigniaImg;
+    document.getElementById('ep_rank').textContent = `Nivel ${lvl.levelNum} · ${lvl.name} ${lvl.emoji}`;
+    document.getElementById('ep_quote').textContent = `“¡Consolidé ${s.total_orders.toLocaleString('es-CO')} drops acumulados en el Programa Leyendas Dropi!”`;
+    document.getElementById('ep_drops').textContent = s.total_orders.toLocaleString('es-CO');
+    document.getElementById('ep_eff').textContent = `${effPct}%`;
+
+    const poster = document.getElementById('exportPoster');
+
+    if (typeof html2canvas !== 'undefined') {
+      try {
+        const canvas = await html2canvas(poster, {
+          scale: 2.5,
+          useCORS: true,
+          backgroundColor: '#050209',
+          logging: false
+        });
+        return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+      } catch (err) {
+        console.warn('Canvas capture error:', err);
+      }
+    }
+    return null;
+  }
+
+  async function shareTo(channel) {
+    const s = currentSeller;
+    const lvl = getOfficialLeyendasLevel(s.total_orders);
+    const textMsg = `👑 ¡Consolidé ${s.total_orders.toLocaleString('es-CO')} drops acumulados en el Programa Leyendas Dropi y alcancé el Nivel ${lvl.levelNum} (${lvl.name})! #LeyendasDropi`;
+
+    closeShareModal();
+    showToast('Generando tarjeta HD de resumen...');
+
+    let blob = await generateImageBlob();
+    let file = blob ? new File([blob], `leyendas-dropi-${s.user_id}.png`, { type: 'image/png' }) : null;
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: 'Mi Estatus Leyendas Dropi',
+          text: textMsg,
+          files: [file]
+        });
+        showToast('✓ Tarjeta e imagen compartidas');
+        return;
+      } catch (e) {
+        console.log('Native share fallback triggered', e);
+      }
+    }
+
+    if (channel === 'whatsapp') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+      }
+      try {
+        if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+      } catch(e) {}
+
+      showToast('💬 Abriendo WhatsApp...');
+      setTimeout(() => {
+        if (isMobile) {
+          window.location.href = `whatsapp://send?text=${encodeURIComponent(textMsg)}`;
+        } else {
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textMsg)}`, '_blank');
+        }
+      }, 300);
+    } 
+    else if (channel === 'instagram') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+      }
+      try {
+        if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+      } catch(e) {}
+
+      showToast('📸 Tarjeta guardada. Abriendo Instagram...');
+      setTimeout(() => {
+        if (isMobile) {
+          window.location.href = "instagram://story-camera";
+          setTimeout(() => { window.location.href = "instagram://app"; }, 700);
+        } else {
+          window.open("https://www.instagram.com/", '_blank');
+        }
+      }, 400);
+    } 
+    else if (channel === 'facebook') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+      }
+      try {
+        if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+      } catch(e) {}
+
+      showToast('🔵 Abriendo Facebook...');
+      setTimeout(() => {
+        window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textMsg)}`, '_blank');
+      }, 300);
+    } 
+    else if (channel === 'native') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+        showToast('✓ Tarjeta HD guardada en fotos');
+      } else {
+        try {
+          if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+        } catch(e) {}
+        showToast('✓ Texto de estado copiado');
+      }
     }
   }
 
-  // Init
-  loadSeller(SELLERS_DATA[0].user_id);
+  let lastActionTime = 0;
+  function share(e) {
+    if (e) {
+      if (e.cancelable) e.preventDefault();
+      e.stopPropagation();
+    }
+    const now = Date.now();
+    if (now - lastActionTime < 400) return;
+    lastActionTime = now;
+    openShareModal();
+  }
+
+  function restart(e) {
+    if (e) {
+      if (e.cancelable) e.preventDefault();
+      e.stopPropagation();
+    }
+    const now = Date.now();
+    if (now - lastActionTime < 400) return;
+    lastActionTime = now;
+    show(0);
+  }
+
+  // Init: Check URL parameter ?user_id=... or default to first seller
+  const urlParams = new URLSearchParams(window.location.search);
+  const userIdParam = urlParams.get('user_id') || urlParams.get('user') || urlParams.get('seller');
+  const initialSeller = SELLERS_DATA.find(s => s.user_id === userIdParam) || SELLERS_DATA[0];
+  loadSeller(initialSeller.user_id);
 </script>
 </body>
 </html>

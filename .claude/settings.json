@@ -81,7 +81,23 @@
       "Bash(curl -s -o /dev/null -w \"GET /api/proyectos/test-slug -> %{http_code}\\\\n\" http://localhost:3004/api/proyectos/test-slug)",
       "Bash(curl -s -o /dev/null -w \"GET /celula/suppliers -> %{http_code}\\\\n\" http://localhost:3004/celula/suppliers)",
       "Bash(curl -s -D - http://localhost:3004/api/proyectos/test-slug)",
-      "Bash(ps -p 33250 -o pid,lstart,command)"
+      "Bash(ps -p 33250 -o pid,lstart,command)",
+      "Bash(open \"/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/agente-delivery/Documentos/pulso-marcas-corte-03ago2026-v21.html\")",
+      "Bash(open \"/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/agente-delivery/Documentos/pulso-marcas-corte-03ago2026-v22.html\")",
+      "Bash(find / -iname \"*Data_*Distribucion*\" -maxdepth 8)",
+      "Bash(find /Users/user -iname *Distribucion* -maxdepth 10)",
+      "Bash(awk -F',' '{key=$3\"->\"$4; sum[key]+=$5} END {for \\(k in sum\\) print sum[k], k}')",
+      "Bash(python3 analisis_nsm.py)",
+      "Bash(python3 analisis_nsm2.py)",
+      "Bash(open \"/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/agente-delivery/Documentos/tablero-apalancamiento-nsm600k-ago2026.html\")",
+      "Bash(python3 analisis_nsm3.py)",
+      "Bash(python3 analisis_nsm4.py)",
+      "Bash(open /Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/agente-delivery/Documentos/tablero-apalancamiento-nsm600k-ago2026.html)",
+      "Bash(python3 comparar_64_vs_62.py)",
+      "Bash(python3 fieles_julio.py)",
+      "Bash(python3 cuidar_rescatar.py)",
+      "Bash(python3 cuidar_rescatar_64_62.py)",
+      "Bash(python3 fieles_todo_el_anio.py)"
     ],
     "additionalDirectories": [
       "/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/hub/src/app/proyectos/marcas"
