@@ -14,7 +14,6 @@
 - 🔴 [Jira] Llenar a mano los 9 campos de PRM-1462 (POD · ENVÍA): **los valores exactos ya están en el comentario 52186 de la propia ficha** (18-ago) — Célula, Dominio, País, Área, OKR, KR, Etapa `Definición`, Manager y Asignado. Solo falta seleccionarlos en Polaris. Confirmado que la API no escribe: `editmeta` devuelve `{"fields": {}}`, y `description` y `assignee` responden "not on the appropriate screen"
 - 🟡 [Jira] Pegar a mano las 11 descripciones y los campos que faltan (la API de Polaris no escribe nada) — todo listo para copiar en `/proyectos/logistica/documentacion-jira`
 - 🟡 [Fulfillment] Cerrar el E2E de Drive: spec, Jira 50931, Confluence 1572732930 y Darwin LOG-014 ya están sincronizados; Drive requiere reautorización explícita del riesgo del conector
-- 🟡 [Darwin] Commitear `prototipo-recolecciones.html` del worktree `claude/dropi-logistics-queue-482601` — sigue sin guardar
 - 🟡 [Homologación estados] Modelar la devolución con su propio ciclo de reintento + `Entregado` confirmado vs observado + ubicar `Guía anulada`
 - 🔴 [Cell Board] Preparar propuesta de experimento para "Preparación de guía" → llevar al Cell Board #3
 - 🔴 [Árbol OKR] Validar el reajuste del árbol v2 con Juan/Maria antes de tocar Jira
@@ -44,16 +43,8 @@
 - 🟡 [Autoconfirmación] Variable "órdenes duplicadas" → guardarraíl: si es duplicada, NO autoconfirmar
 - 🟡 [Autoconfirmación] Muestra de usabilidad conseguida (6); falta artefacto canónico, gate técnico y diseño de prueba outcome
 - 🟡 [Autogeneración] Proyecto/solicitud en discovery: recuperar análisis Kevin/Lucho y cerrar baseline, lotes/impresión, carrier e idempotencia antes de reclutar
-- 🟡 [Supplier] Autoconfirmación también impacta brands (Maria): interiorizar que los sellers también son brands
-- 🟡 [Supplier] Autogeneración de guías también impacta brands (Maria)
-- 🟡 [Recolección proactiva] Investigar: que Dropi programe recolecciones a transportadoras (qué está listo / quién recoge / quién no)
-- 🟡 [Dropi Academy] Cursos de gestión de órdenes + explicar los estados a los usuarios
-- 🟡 [Same Day] Cerrar con Veloces la lógica del flag SD (hoy sale sin validación geo → falsos SD)
 - 🟡 [Devoluciones COD] Pedir export "motivo de cierre" (confirma la causa de la devolución)
 - 🟡 [Sellers] Involucrar al equipo de Sellers en las pruebas del prototipo de autoconfirmación
-- 🟡 [Devoluciones] Token de devoluciones (Veloces) — acompañar/direccionar el proceso para proveedores
-- 🟢 [Cell Board] Coordinar fecha/logística del Cell Board #3 presencial (Laura + Michel)
-- 🟢 [Operación] Limpiar backlog DROP heredado (bulk desasignar/cerrar en UI)
 <!-- tablero:pendientes:end -->
 
 ## 🆕 REUNIÓN CON KATERINE (04-ago) — Same Day para Carlos
