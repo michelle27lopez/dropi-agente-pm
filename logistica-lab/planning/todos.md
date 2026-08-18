@@ -44,7 +44,7 @@
 - 🟡 [Autoconfirmación] Muestra de usabilidad conseguida (6); falta artefacto canónico, gate técnico y diseño de prueba outcome
 - 🟡 [Autogeneración] Proyecto/solicitud en discovery: recuperar análisis Kevin/Lucho y cerrar baseline, lotes/impresión, carrier e idempotencia antes de reclutar
 - 🟡 [Devoluciones COD] Pedir export "motivo de cierre" (confirma la causa de la devolución)
-- 🟡 [Sellers] Involucrar al equipo de Sellers en las pruebas del prototipo de autoconfirmación
+- 🟡 [Autoconfirmación] Reclutar al equipo de Sellers como participantes de la prueba del prototipo — es tarea nuestra, no un entregable de la célula de Sellers; ellos son la muestra, no el dueño
 <!-- tablero:pendientes:end -->
 
 ## 🆕 REUNIÓN CON KATERINE (04-ago) — Same Day para Carlos
