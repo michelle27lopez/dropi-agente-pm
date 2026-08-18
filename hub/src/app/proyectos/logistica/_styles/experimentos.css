@@ -1,0 +1,264 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   EXPERIMENTOS. Primitivos en ui.css; aquí solo lo propio de esta pantalla.
+   Cinco tamaños (--fs) y cuatro radios (8/12/20/999).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.log-root .exp-link { font-weight: 500; display: block; }
+.log-root .exp-link:hover { color: var(--dropi-primary-600); text-decoration: underline; }
+/* Marca que este experimento tiene una pantalla propia (simulador,
+   conceptualización) y no solo su ficha. */
+.log-root .exp-link__extra {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 400;
+  color: var(--on-info);
+}
+.log-root .exp-proyecto {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+.log-root .exp-proyecto:hover { color: var(--dropi-primary-600); text-decoration: underline; }
+
+/* ── Indicador · Hoy · Objetivo · Real ───────────────────────────────────────
+   Cuatro columnas cortas en vez de una frase. El real va en verde porque es lo
+   único medido de toda la fila: el resto es promesa, y conviene que se note.  */
+.log-root .exp-indicador { display: block; font-weight: 500; }
+.log-root .exp-objetivo { display: block; }
+.log-root .exp-real { display: block; color: var(--on-green); }
+
+/* Marca de experimento de discovery: no mueve el KR, hace visible algo. Va en
+   minúscula y pequeño porque es una aclaración, no un estado. */
+.log-root .exp-discovery {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--tint-info);
+  color: var(--on-info);
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 500;
+  text-transform: none;
+}
+
+/* ── Evidencia en la ficha ───────────────────────────────────────────────────
+   Abre la página. Un número en tamaño display y su frase debajo: es lo que
+   permite decidir en dos segundos si esta apuesta merece la atención del Cell
+   Board, antes de leer una sola línea de hipótesis.                          */
+.log-root .exp-det__evidencia { margin: 6px 0 14px; }
+.log-root .exp-det__cifra {
+  display: block;
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  font-variant-numeric: tabular-nums;
+}
+.log-root .exp-det__cifra-label {
+  margin: 6px 0 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  max-width: 55ch;
+}
+.log-root .exp-det__sin-cifra {
+  margin: 6px 0 14px;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--on-amber);
+  max-width: 70ch;
+}
+/* El párrafo original queda como contexto: no se pierde, deja de encabezar. */
+.log-root .exp-det__contexto {
+  margin: 0;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+  max-width: 70ch;
+}
+
+/* ── El recorrido del indicador: Hoy → Objetivo → Resultado ──────────────────
+   En una sola línea y en ese orden, porque así se lee el ciclo completo de un
+   experimento. Separados en bloques distintos nadie contrasta la promesa con
+   el resultado, y una apuesta que nunca rinde cuentas es una apuesta que se
+   repite.                                                                     */
+.log-root .exp-det__recorrido {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin: 10px 0 16px;
+}
+.log-root .exp-det__recorrido > div { min-width: 0; }
+.log-root .exp-det__paso-label {
+  display: block;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.log-root .exp-det__flecha {
+  align-self: center;
+  color: var(--dropi-gray-300);
+  font-size: var(--fs-title);
+}
+/* Un objetivo sin definir es deuda —alguien tenía que decidirlo— y va en ámbar. */
+.log-root .exp-det__paso-falta {
+  display: block;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--on-amber);
+}
+/* "Pendiente de medición" NO es deuda: en un experimento que aún corre es el
+   estado correcto. Por eso gris y no ámbar — si todo lo que falta grita, el
+   lector deja de distinguir lo que de verdad requiere acción. */
+.log-root .exp-det__paso-pendiente {
+  display: block;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+}
+.log-root .exp-det__real {
+  display: block;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--on-green);
+  max-width: 40ch;
+}
+
+/* Los dos huecos del aviso de cabecera, en columnas. */
+.log-root .exp-huecos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px 28px;
+}
+
+/* Hipótesis en la ficha del experimento: es la frase que todo lo demás pone a
+   prueba, así que abre la página y va en el paso de título. */
+.log-root .exp-det__hipotesis {
+  margin: 6px 0 0;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  max-width: 70ch;
+}
+
+/* ── Aviso de los que no deciden nada ────────────────────────────────────── */
+.log-root .exp-sin-disenar {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.log-root .exp-sin-disenar li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.log-root .exp-sin-disenar a { font-weight: 500; }
+.log-root .exp-sin-disenar a:hover { text-decoration: underline; }
+.log-root .exp-sin-disenar span {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--on-amber);
+}
+
+/* ── Ficha de experimento ────────────────────────────────────────────────── */
+.log-root .exp-lista { display: flex; flex-direction: column; gap: 12px; }
+.log-root .exp-ficha { scroll-margin-top: 24px; }
+.log-root .exp-ficha__head { margin-bottom: 12px; }
+.log-root .exp-ficha__head h3 {
+  margin: 0 0 8px;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  font-weight: 600;
+}
+.log-root .exp-ficha__proyecto {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+
+/* La hipótesis abre y va en 16px: es LA frase del experimento. Antes era el
+   segundo de cuatro bloques idénticos y competía con métrica y aprendizaje por
+   la misma atención, así que ninguno la ganaba. */
+.log-root .exp-ficha__hipotesis {
+  margin: 0 0 16px;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  max-width: 70ch;
+}
+
+.log-root .exp-ficha__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px 24px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+.log-root .exp-ficha__label {
+  display: block;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 500;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.log-root .exp-ficha__grid p {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  max-width: 70ch;
+}
+/* "Qué decide" sin llenar: el hueco se dice, no se disimula. */
+.log-root .exp-ficha__falta { color: var(--on-amber); }
+
+.log-root .exp-ficha__impacto {
+  margin-top: 16px;
+  padding: 12px 14px;
+  background: var(--soft);
+  border-radius: 8px;
+}
+/* El impacto puede ser un párrafo largo (Vigía), así que aquí el "valor" del
+   Stat no es un número: se baja a cuerpo para que no ocupe 22px de altura por
+   línea. */
+.log-root .exp-ficha__impacto .u-stat__value {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.log-root .exp-ficha__impacto-txt { display: block; max-width: 70ch; }
+
+.log-root .exp-ficha__pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+/* Único botón sólido de la pantalla: probar el simulador es la acción real que
+   ofrece esta página, y por eso se gana el acento (Regla del Acento Único). */
+.log-root .exp-ficha__demo {
+  background: var(--dropi-primary-600);
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+.log-root .exp-ficha__demo:hover { background: #db7300; }
+.log-root .exp-ficha__falta-link {
+  color: var(--on-amber);
+  text-decoration: line-through;
+  cursor: help;
+}
