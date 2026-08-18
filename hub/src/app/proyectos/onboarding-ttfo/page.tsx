@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { buscarDefinicion } from "@/lib/onboarding-ttfo/registroSlots";
 import { repararMojibake } from "@/lib/onboarding-ttfo/texto";
 import type { SlotId } from "@/lib/onboarding-ttfo/tipos";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const card: React.CSSProperties = {
   background: "var(--card)", border: "1px solid var(--border)",
@@ -296,20 +297,18 @@ export default function OnboardingTTFOPage() {
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
-      }}>
-        <a href="/celula/brands" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-          ← Dropi PM Tools
-        </a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>
-          Activación Bruta · Onboarding TTFO
-        </span>
+      <header style={{ background: "#fff", padding: "16px 0" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", gap: 16 }}>
+          <Breadcrumb
+            items={[
+              { label: "Proyectos", href: "/proyectos" },
+              { label: "Activación Bruta · Onboarding TTFO" },
+            ]}
+          />
+        </div>
       </header>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px" }}>
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>
             <span style={{

@@ -1541,7 +1541,19 @@ export default function ElegiblesPage() {
           {/* Banner fijo, visible en cualquier paso — antes vivía solo en la
               fase Elige y nadie sabía dónde volver a encontrarlo. */}
           {meetVisible && (LUMA_LINK ? (
-            <a className="cd-meet" href={LUMA_LINK} target="_blank" rel="noopener noreferrer" data-reveal>
+            <a
+              className="cd-meet"
+              href={LUMA_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-reveal
+              onClick={() => {
+                // Señal de clic para el comercial (tab Seguimiento) — no
+                // confirma asistencia real, solo que abrió el link. Fire-and-
+                // forget: nunca debe bloquear ni romper la navegación al Meet.
+                fetch(`/api/campaigns-planeacion/${id}/elegibles/${token}/meet`, { method: "POST" }).catch(() => {});
+              }}
+            >
               <span className="cd-meet-icon">🎥</span>
               <div className="cd-meet-body">
                 <div className="cd-meet-label">Reunión informativa de Cyber Days</div>

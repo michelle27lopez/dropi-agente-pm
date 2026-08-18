@@ -1,3 +1,5 @@
+import Breadcrumb from "@/components/Breadcrumb";
+
 // Fuente: agente-delivery/Documentos/plan-de-ataque-jul2026-v2.html (corte 20-jul-2026)
 // Datos: fact_marcas.csv · dim_marcas.csv · KAMs válidos: 21553 y 71445
 // v2: unificado a 2 lentes (L1 portafolio comercial / L2 ecosistema completo),
@@ -284,8 +286,8 @@ function UrgencyTable({ title, color, rows }: { title: string; color: string; ro
 export default function MarcasPage() {
   return (
     <main style={{ minHeight: "100vh", padding: "0 0 60px" }}>
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 24px 0" }}>
-        <a href="/celula/brands" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 32px 0" }}>
+        <Breadcrumb items={[{ label: "Proyectos", href: "/proyectos" }, { label: "Marcas · Plan de ataque" }]} />
       </div>
 
       {/* Header */}
@@ -317,7 +319,7 @@ export default function MarcasPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "0 24px" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "0 32px" }}>
 
         {/* VERSION NOTE */}
         <div style={{ background: AMB_BG, border: "1px solid #FDE68A", borderTop: "none", padding: "14px 18px", fontSize: 12, color: "#78350F", lineHeight: 1.6 }}>

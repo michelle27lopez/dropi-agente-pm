@@ -23,20 +23,38 @@ export const PROJECT_STYLE: Record<string, { url: string; color: string; icon: s
   "ESP-001": { url: "/proyectos/espionaje", color: "#10B981", icon: "🕵️" },
 };
 
+const TYPE_ICON: Record<string, string> = {
+  Idea: "💡", Oportunidad: "🔭", POC: "🧪", Proyecto: "🚀",
+  "Delivery Proyecto": "🚚", Following: "📡",
+};
+const HANDOFF_COLOR: Record<string, string> = {
+  "Experimentación": "#F59E0B", "Listo para handoff": "#0EA5E9", "Handoff hecho": "#22C55E",
+};
+
 function truncate(text: string, max: number) {
   return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
 }
 
-export function proyectoToItem(p: Proyecto): Item | null {
+// Todo proyecto real de `projects` entra a la tabla — los 15 curados en
+// PROJECT_STYLE se ven con su ícono/color/URL propios; el resto usa un
+// estilo genérico derivado de `type`/`handoff_status`, mismo criterio que ya
+// usa la home de célula sin curar.
+//
+// El click de la fila SIEMPRE va a la ficha interna (/proyectos/[slug]), no
+// directo a `prototype_url` — varios proyectos no curados tienen ese campo
+// mal guardado (sin "/" inicial, apuntando a una carpeta que no existe en
+// public/), lo que producía un 404 real al clickear. La ficha interna ya
+// muestra el link al prototipo si es válido, además del estado "sin
+// contenido" cuando no hay nada creado — ver [[project_darwin_pd_dashboard]].
+export function proyectoToItem(p: Proyecto): Item {
   const style = p.project_code ? PROJECT_STYLE[p.project_code] : undefined;
-  if (!style) return null;
   return {
     key: p.id,
     name: p.name,
     description: truncate(p.summary ?? "Sin descripción aún.", 160),
-    url: style.url,
+    url: style?.url ?? `/proyectos/${p.project_code ? p.project_code.toLowerCase() : p.id}`,
     tag: p.project_code ?? p.handoff_status ?? "Sin código",
-    color: style.color,
-    icon: style.icon,
+    color: style?.color ?? (p.handoff_status && HANDOFF_COLOR[p.handoff_status]) ?? "#94A3B8",
+    icon: style?.icon ?? (p.type && TYPE_ICON[p.type]) ?? "📁",
   };
 }

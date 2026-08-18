@@ -1,5 +1,7 @@
 "use client";
 
+import Breadcrumb from "@/components/Breadcrumb";
+
 // ─── Palette ──────────────────────────────────────────────────────────────────
 const GREEN      = "#1A6B52";
 const GREEN_BG   = "#E2EFE9";
@@ -404,12 +406,10 @@ export default function RoadmapS2Page() {
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
 
       <header style={{ background: "#fff", borderBottom: "1px solid var(--border)", padding: "16px 32px", display: "flex", alignItems: "center", gap: 16 }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Roadmap S2 2026</span>
+        <Breadcrumb items={[{ label: "Roadmap S2 2026" }]} />
       </header>
 
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "40px 24px 80px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
 
         {/* Title */}
         <div style={{ marginBottom: 32 }}>

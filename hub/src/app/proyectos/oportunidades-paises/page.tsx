@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Breadcrumb from "@/components/Breadcrumb";
 
 type Nivel = "critico" | "medio" | "operativo";
 
@@ -207,18 +208,13 @@ export default function OportunidadesPaisesPage() {
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
-      }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-          ← Dropi PM Tools
-        </a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Oportunidades Países</span>
+      <header style={{ background: "#fff", padding: "16px 0" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", gap: 16 }}>
+          <Breadcrumb items={[{ label: "Proyectos", href: "/proyectos" }, { label: "Oportunidades Países" }]} />
+        </div>
       </header>
 
-      <div style={{ maxWidth: 1040, margin: "0 auto", padding: "40px 24px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px" }}>
         {/* Title */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8, flexWrap: "wrap" }}>

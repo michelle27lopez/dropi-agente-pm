@@ -8,6 +8,7 @@
 // Datos ecosistema: fact_marcas.csv · dim_marcas.csv · act. 14-jul-2026 · Diagnostico_Marcas_CSAT_16jul2026.xlsx
 
 import { Fragment } from "react";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const NAVY = "#0A1628";
 const BLUE = "#1458A8";
@@ -266,8 +267,8 @@ function Stat({ n, sub, ordenes, label }: { n: string; sub?: string; ordenes?: s
 export default function BauCompetitivoMarcasPage() {
   return (
     <main style={{ minHeight: "100vh", padding: "0 0 60px" }}>
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 24px 0" }}>
-        <a href="/celula/brands" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 32px 0" }}>
+        <Breadcrumb items={[{ label: "Proyectos", href: "/proyectos" }, { label: "BAU Competitivo para Marcas" }]} />
       </div>
 
       {/* Header */}
@@ -285,7 +286,7 @@ export default function BauCompetitivoMarcasPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "0 24px" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "0 32px" }}>
 
         {/* PANORAMA */}
         <div style={{ ...card, borderRadius: 0, borderTop: "none", marginTop: 0 }}>

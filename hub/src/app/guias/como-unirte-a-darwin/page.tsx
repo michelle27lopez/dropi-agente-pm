@@ -128,7 +128,7 @@ export default function GuiaOnboardingPage() {
           </div>
         </header>
 
-        <div style={{ maxWidth: 720, margin: "0 auto", padding: "40px 24px 80px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.6, marginBottom: 8 }}>
             El hub interno donde cada célula construye su propio dashboard sobre una misma base de datos
             y un mismo despliegue. Esta guía cubre exactamente lo que necesitas hacer, en orden, para pasar

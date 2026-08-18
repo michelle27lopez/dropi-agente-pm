@@ -2,7 +2,7 @@
 name: Dropi PM Tools Hub
 description: Hub interno de prototipos para Supplier Success — precisión sobre decoración.
 colors:
-  dropi-orange: "#F77F00"
+  dropi-orange: "#FF6102"
   dropi-orange-tint: "#FFF3E0"
   success-green: "#10B981"
   warning-amber: "#F59E0B"
@@ -13,6 +13,14 @@ colors:
   neutral-border: "#E5E7EB"
   neutral-ink: "#111827"
   neutral-muted: "#6B7280"
+  gray-50: "#F0F4F9"
+  gray-100: "#E9EEF5"
+  gray-200: "#C3C9D9"
+  gray-300: "#A3ABBF"
+  gray-400: "#858EA6"
+  gray-500: "#69738C"
+  gray-600: "#475066"
+  gray-700: "#32394D"
 typography:
   display:
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
@@ -44,6 +52,7 @@ rounded:
   sm: "8px"
   md: "12px"
   lg: "20px"
+  xl: "24px"
   pill: "999px"
 spacing:
   xs: "4px"
@@ -51,6 +60,8 @@ spacing:
   md: "12px"
   lg: "16px"
   xl: "24px"
+  content-x: "32px"
+  content-y: "16px"
 components:
   button-primary:
     backgroundColor: "{colors.dropi-orange}"
@@ -58,7 +69,7 @@ components:
     rounded: "{rounded.sm}"
     padding: "10px 16px"
   button-primary-hover:
-    backgroundColor: "#DB7300"
+    backgroundColor: "#DB4E00"
     textColor: "#FFFFFF"
     rounded: "{rounded.sm}"
     padding: "10px 16px"
@@ -88,6 +99,8 @@ Este hub es donde el equipo de Supplier Success construye, en código real, los 
 
 El sistema documentado aquí es una **consolidación**, no un inventario del estado actual: el código de hoy usa más de diez colores sueltos y una docena de radios de borde distintos sin patrón. Este archivo fija el subconjunto que sobrevive de ahora en adelante; el resto se retira por convergencia natural cada vez que se toque una pantalla, no por una migración masiva.
 
+**Decisión 2026-08-04 — alineación con el DS real de Dropi.** El chrome global del hub (sidebar, topbar, dropdowns de usuario/célula) pasa a usar el naranja real de producto (`#FF6102`, antes `#F77F00`) y la escala de grises del Design System de Dropi (`gray-50`…`gray-700`), en vez de una paleta propia del hub. Reemplaza la guía anterior de "no usar los hex exactos del Figma real de Dropi" — decisión explícita de Michelle, no convergencia espontánea. El radio `xl` (24px) se suma como cuarto+uno paso, reservado a contenedores de página grandes (no a botones ni cards, que siguen en 8/12/20/pill). El resto de los prototipos (`proyectos/*`) no migra automáticamente: converge screen por screen cuando se toquen, igual que el resto de esta consolidación.
+
 Rechaza explícitamente: gradientes decorativos, tarjetas idénticas repetidas, kickers en mayúsculas sobre cada sección, glassmorphism decorativo, numeración 01/02/03 como scaffolding por defecto — el "look genérico de IA" que este proyecto quiere evitar por decisión explícita.
 
 **Key Characteristics:**
@@ -101,8 +114,12 @@ Rechaza explícitamente: gradientes decorativos, tarjetas idénticas repetidas, 
 Paleta restringida: un acento de marca, cuatro colores de estado con rol fijo, y una escala neutra corta.
 
 ### Primary
-- **Naranja Dropi** (#F77F00): el único acento de identidad. Botones primarios, elementos activos/seleccionados, y toques puntuales que digan "esto es Dropi". No se usa como color de fondo de secciones completas.
+- **Naranja Dropi** (#FF6102): el único acento de identidad — hex real del Design System de Dropi (ver nota de decisión arriba). Botones primarios, elementos activos/seleccionados, y toques puntuales que digan "esto es Dropi". No se usa como color de fondo de secciones completas.
 - **Naranja Dropi (tint)** (#FFF3E0): fondo suave para resaltar un bloque relacionado con el acento (ej. una fila destacada), nunca como reemplazo del naranja sólido.
+
+### Escala neutra del DS de Dropi (chrome global)
+Usada en sidebar, topbar y dropdowns — no reemplaza los neutrales de abajo dentro de cards de prototipo, que se mantienen en su convergencia normal.
+- `gray-50` #F0F4F9 · `gray-100` #E9EEF5 · `gray-200` #C3C9D9 · `gray-300` #A3ABBF · `gray-400` #858EA6 · `gray-500` #69738C · `gray-600` #475066 · `gray-700` #32394D
 
 ### Estado (semántico)
 - **Verde Confirmado** (#10B981): éxito, estados "activo"/"aprobado", confirmaciones.
@@ -168,7 +185,7 @@ Cuidados pero discretos: la función manda, la superficie no debe competir con l
 
 ### Inputs / Fields
 - **Style:** borde 1px `neutral-border`, fondo `neutral-card`, radio 8px (`rounded.sm`).
-- **Focus:** borde pasa a `dropi-orange` + halo suave (`box-shadow: 0 0 0 3px rgba(247,127,0,.12)`, patrón ya usado en el código).
+- **Focus:** borde pasa a `dropi-orange` + halo suave (`box-shadow: 0 0 0 3px rgba(255,97,2,.12)`, patrón ya usado en el código).
 - **Error:** borde `danger-red`, mensaje de apoyo en el mismo color debajo del campo.
 
 ### Tags / Estado (pills)
@@ -181,7 +198,7 @@ Cuidados pero discretos: la función manda, la superficie no debe competir con l
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** usar `#F77F00` (naranja Dropi) como único acento de marca, en un elemento por vista.
+- **Do** usar `#FF6102` (naranja Dropi) como único acento de marca, en un elemento por vista.
 - **Do** dejar las cards y filas planas en reposo; añadir `hover-lift` solo en `:hover`/`:focus-visible`.
 - **Do** consolidar cualquier radio de borde nuevo a uno de los cuatro pasos: 8px / 12px / 20px / 999px (pill).
 - **Do** usar los cuatro colores de estado (verde/ámbar/rojo/azul) para cualquier necesidad semántica futura, en vez de introducir un color nuevo.

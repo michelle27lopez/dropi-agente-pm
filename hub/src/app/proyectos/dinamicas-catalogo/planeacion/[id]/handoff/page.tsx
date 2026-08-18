@@ -106,7 +106,7 @@ export default function PlaneacionHandoffPage() {
     <>
       <style dangerouslySetInnerHTML={{ __html: PRINT_CSS }} />
       <header className="no-print" style={{
-        background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "0 24px", height: 52,
+        background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "0 32px", height: 52,
         display: "flex", alignItems: "center", gap: 12, flexShrink: 0, position: "sticky", top: 0, zIndex: 10,
       }}>
         <button onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${id}`)} style={{ background: "none", border: "none", cursor: "pointer", color: "#9ca3af", fontSize: 13, padding: 0 }}>
@@ -127,7 +127,7 @@ export default function PlaneacionHandoffPage() {
         </div>
       </header>
 
-      <div style={{ maxWidth: 860, margin: "0 auto", padding: "40px 24px 80px" }}>
+      <div style={{ maxWidth: 860, margin: "0 auto", padding: "32px" }}>
         <div style={{ background: "linear-gradient(135deg, #F77F00 0%, #F7A800 100%)", borderRadius: 18, padding: "40px 40px 36px", marginBottom: 32, color: "#fff" }}>
           <div style={{ fontSize: 11, fontWeight: 700, opacity: 0.8, marginBottom: 8, letterSpacing: "0.1em", textTransform: "uppercase" }}>
             Dropi · Experimento lean · Handoff de campaña

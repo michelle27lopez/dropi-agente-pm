@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
+import Breadcrumb from "@/components/Breadcrumb";
+import { FASE_LABEL, faseDe } from "@/lib/fase";
 import {
   BarChart,
   Bar,
@@ -54,17 +56,17 @@ const MUTED_BAR = "#D1D5DB";
 // ─── KPIs reales · UserPilot may–jun 2026 ────────────────────────────────────
 const KPIS = [
   { label: "Suppliers Colombia",    value: "3.833",   sub: "Total Dropi DB · jun 2026",                          color: "var(--fg)", bg: "#F8FAFC", note: "Fuente: Dropi DB"   },
-  { label: "Usuarios únicos panel", value: "137/sem", sub: "Promedio 9 sem · rango 112–159, sin caída sostenida", color: ACCENT,      bg: ACCENT_BG, note: "Fuente: UserPilot" },
-  { label: "Click 'Postularme'",    value: "~24/sem", sub: "Promedio 8 sem con datos completos",                 color: "#10B981",   bg: "#ECFDF5", note: "Fuente: UserPilot" },
-  { label: "Postulación completa",  value: "~11/sem", sub: "Superaron modal de requisitos",                      color: "#F59E0B",   bg: "#FFFBEB", note: "Fuente: UserPilot" },
-  { label: "Retención",             value: "~28%",    sub: "Salto de ~11% a ~45% desde 12 jun · causa sin confirmar", color: "#8B5CF6", bg: "#F5F3FF", note: "Fuente: UserPilot" },
+  { label: "Usuarios únicos panel", value: "136/sem", sub: "Promedio 13 sem · rango semanas completas 112–159 · semana en curso (31 jul–3 ago, 4 días): 88", color: ACCENT,      bg: ACCENT_BG, note: "Fuente: UserPilot" },
+  { label: "Click 'Postularme'",    value: "~25/sem", sub: "Promedio 12 de 13 semanas con datos completos",                 color: "#10B981",   bg: "#ECFDF5", note: "Fuente: UserPilot" },
+  { label: "Postulación completa",  value: "~12/sem", sub: "Superaron modal de requisitos",                      color: "#F59E0B",   bg: "#FFFBEB", note: "Fuente: UserPilot" },
+  { label: "Retención",             value: "~28%",    sub: "Salto de ~11% a ~45% desde 12 jun · causa sin confirmar · sin dato en semanas 10–16 jul a 31 jul–3 ago (no reproducible vía MCP con la definición histórica, pendiente confirmar con Laura/Miguel Ángel)", color: "#8B5CF6", bg: "#F5F3FF", note: "Fuente: UserPilot" },
 ];
 
 // ─── Funnel real ──────────────────────────────────────────────────────────────
 const FUNNEL = [
-  { label: "Vieron tablero",       value: "137/sem", pct: 100, color: ACCENT },
-  { label: "Click postularme",     value: "~24",     pct: 17,  color: "#10B981" },
-  { label: "Postulación completa", value: "~11",     pct: 8,   color: "#F59E0B" },
+  { label: "Vieron tablero",       value: "136/sem", pct: 100, color: ACCENT },
+  { label: "Click postularme",     value: "~25",     pct: 18,  color: "#10B981" },
+  { label: "Postulación completa", value: "~12",     pct: 9,   color: "#F59E0B" },
 ];
 
 // ─── Distribución real · Dropi DB · Colombia · jun 2026 ──────────────────────
@@ -101,6 +103,10 @@ const WEEKLY: WeekRow[] = [
   { semana: "19–25 jun",    tablero: 116, postulacion: 14,   postuladas: 7,    scanner: 1,    retencion: 45.7 },
   { semana: "26 jun–2 jul", tablero: 135, postulacion: 28,   postuladas: 14,   scanner: 3,    retencion: 44.6 },
   { semana: "02–09 jul",    tablero: 154, postulacion: 26,   postuladas: 13,   scanner: 2,    retencion: 48.7 },
+  { semana: "10–16 jul",    tablero: 149, postulacion: 33,   postuladas: 21,   scanner: 3,    retencion: null },
+  { semana: "17–23 jul",    tablero: 143, postulacion: 29,   postuladas: 16,   scanner: 4,    retencion: null },
+  { semana: "24–30 jul",    tablero: 157, postulacion: 32,   postuladas: 16,   scanner: 6,    retencion: null },
+  { semana: "31 jul–3 ago", tablero: 88,  postulacion: 19,   postuladas: 7,    scanner: 2,    retencion: null },
 ];
 
 // ─── CSAT dropshippers→proveedor · "CSAT Indicadores Proveedores", activa desde 17 jun ──────
@@ -111,6 +117,10 @@ const CSAT_POR_SEMANA: Record<string, { n: number; promedio: number }> = {
   "19–25 jun":    { n: 365, promedio: 4.30 },
   "26 jun–2 jul": { n: 228, promedio: 4.32 },
   "02–09 jul":    { n: 228, promedio: 4.31 },
+  "10–16 jul":    { n: 194, promedio: 4.50 },
+  "17–23 jul":    { n: 187, promedio: 4.42 },
+  "24–30 jul":    { n: 175, promedio: 4.30 },
+  "31 jul–3 ago": { n: 37,  promedio: 4.19 },
 };
 
 // ─── Hallazgo puntual de cada semana · grounded en la data de WEEKLY y CSAT_POR_SEMANA ───────
@@ -124,6 +134,10 @@ const WEEK_HALLAZGOS: Record<string, string> = {
   "19–25 jun": "Tablero vuelve a bajar a 116 pese a que la retención se mantiene alta (45.7%) — ambos movimientos no parecen correlacionados de forma obvia. CSAT: 365 respuestas, promedio 4.30/5.",
   "26 jun–2 jul": "Tablero se recupera a 135, retención estable en 44.6%. Mejor semana de postulación completa del periodo (14). CSAT: 228 respuestas, promedio 4.32/5.",
   "02–09 jul": "Tablero alcanza 154 — el nivel más alto desde la semana inicial (159). Retención en su punto más alto del periodo (48.7%). CSAT: 228 respuestas, promedio 4.31/5, estable.",
+  "10–16 jul": "Tablero baja levemente a 149 (-5 vs semana anterior, -3.2%), pero se mantiene por encima del promedio de las 9 semanas previas (137). Click postularme sube a 33 (+7, +26.9%) — el valor más alto registrado hasta ahora. Postulación completa sube a 21 (+8, +61.5%) — también el máximo del periodo. Scanner en 3, dentro del rango histórico (1–4). Retención: sin dato — no se pudo reproducir vía MCP UserPilot con la misma definición usada en semanas anteriores (pendiente confirmar metodología con Laura/Miguel Ángel). CSAT: sin dato (el reporte de CSAT no forma parte del dashboard 52 consultado vía MCP).",
+  "17–23 jul": "Tablero baja a 143 (-6 vs semana anterior, -4.0%), se mantiene por encima del promedio de las 9 semanas previas (137). Click postularme baja a 29 (-4, -12.1%), aún por encima del promedio previo (~24). Postulación completa baja a 16 (-5, -23.8%), aún por encima del promedio previo (~11). Scanner sube a 4, el máximo previamente visto en el periodo may–jul. Retención y CSAT: sin dato (misma razón que la semana anterior).",
+  "24–30 jul": "Tablero sube a 157 (+14 vs semana anterior, +9.8%) — el nivel más alto desde la semana inicial (159, 07–14 may). Click postularme sube a 32 (+3, +10.3%), cerca del máximo del periodo (33). Postulación completa se mantiene en 16 (= vs semana anterior). Scanner sube a 6 — supera por primera vez el rango histórico de 1–4 usos/semana visto en las 9 semanas previas. Retención y CSAT: sin dato (misma razón).",
+  "31 jul–3 ago": "Semana parcial: 4 de 7 días (corte al 3 de agosto, fecha actual). Tablero: 88, Click postularme: 19, Postulación completa: 7, Scanner: 2 — cifras crudas de una semana en curso, no comparables directamente contra semanas completas de 7 días. Retención y CSAT: sin dato (misma razón que semanas anteriores).",
 };
 
 // ─── Meta estratégica ────────────────────────────────────────────────────────
@@ -215,7 +229,7 @@ function WeekPanel({ week, prev }: { week: WeekRow; prev: WeekRow | null }) {
 
       <div style={card}>
         <div style={{ marginBottom: 14 }}>
-          <div style={sectionTitle}>Esta semana en el contexto de las 9 semanas</div>
+          <div style={sectionTitle}>Esta semana en el contexto de las 13 semanas</div>
           <div style={sectionSub}>{week.semana} resaltada en naranja/morado · el resto en gris para comparar.</div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
@@ -262,24 +276,25 @@ export default function IndicadoresPage() {
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
       {!isEmbedded && (
-        <header style={{
-          background: "#fff", borderBottom: "1px solid var(--border)",
-          padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-        }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-            ← Dropi PM Tools
-          </a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Indicadores · Postulaciones</span>
-          <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-            <span style={tag(ACCENT, ACCENT_BG)}>IND-001</span>
-            <span style={tag("#10B981", "#ECFDF5")}>In Progress</span>
-            <span style={tag("#6366F1", "#EEF2FF")}>UserPilot · may–jul 2026</span>
+        <header style={{ background: "#fff", padding: "14px 0" }}>
+          <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <Breadcrumb
+              items={[
+                { label: "Proyectos", href: "/proyectos" },
+                { label: FASE_LABEL[faseDe("Proyecto")] },
+                { label: "Indicadores · Postulaciones" },
+              ]}
+            />
+            <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              <span style={tag(ACCENT, ACCENT_BG)}>IND-001</span>
+              <span style={tag("#10B981", "#ECFDF5")}>In Progress</span>
+              <span style={tag("#6366F1", "#EEF2FF")}>UserPilot · may–ago 2026</span>
+            </div>
           </div>
         </header>
       )}
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px", display: "flex", flexDirection: "column", gap: 20 }}>
 
         {/* Title block */}
         <div>
@@ -288,7 +303,7 @@ export default function IndicadoresPage() {
           </h1>
           <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.5 }}>
             Cuántos suppliers ven su tablero de desempeño y cuántos se postulan para avanzar de nivel.
-            Datos reales de <strong>UserPilot</strong> — 9 semanas de seguimiento (07 mayo – 09 julio 2026).
+            Datos reales de <strong>UserPilot</strong> — 13 semanas de seguimiento (07 mayo – 03 agosto 2026).
           </p>
         </div>
 
@@ -320,7 +335,7 @@ export default function IndicadoresPage() {
                       <span>Métricas del proyecto</span>
                       {activeDoc === "metricas" && <span style={{ width: 8, height: 8, borderRadius: "50%", background: ACCENT, display: "inline-block" }} />}
                     </div>
-                    <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>9 semanas de seguimiento en UserPilot (may–jul 2026). Embudo, retención y tendencia semanal.</div>
+                    <div style={{ fontSize: 11, color: "var(--muted)", lineHeight: 1.5 }}>13 semanas de seguimiento en UserPilot (may–ago 2026). Embudo, retención y tendencia semanal.</div>
                   </div>
                 </div>
 
@@ -406,10 +421,10 @@ export default function IndicadoresPage() {
                     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
                         {[
-                          { label: "Usuarios únicos panel", value: "137/sem", sub: "Promedio 9 semanas", color: ACCENT },
-                          { label: "Click postularme",       value: "~24/sem", sub: "Promedio 8 sem",    color: "#10B981" },
-                          { label: "Postulación completa",   value: "~11/sem", sub: "Modal superado",     color: "#F59E0B" },
-                          { label: "Conversión global",      value: "6.9%",    sub: "Panel → postulación", color: "#6366F1" },
+                          { label: "Usuarios únicos panel", value: "136/sem", sub: "Promedio 13 semanas", color: ACCENT },
+                          { label: "Click postularme",       value: "~25/sem", sub: "Promedio 12 sem",    color: "#10B981" },
+                          { label: "Postulación completa",   value: "~12/sem", sub: "Modal superado",     color: "#F59E0B" },
+                          { label: "Conversión global",      value: "8.2%",    sub: "Panel → postulación", color: "#6366F1" },
                         ].map(k => (
                           <div key={k.label} style={{ background: "#F8FAFC", borderRadius: 10, padding: 12, border: "1px solid var(--border)", textAlign: "center" }}>
                             <div style={{ fontSize: 22, fontWeight: 800, color: k.color, letterSpacing: "-0.03em" }}>{k.value}</div>
@@ -447,7 +462,7 @@ export default function IndicadoresPage() {
                         </table>
                       </div>
                       <div style={{ fontSize: 12, color: "var(--muted)", background: "#F8FAFC", borderRadius: 8, padding: "8px 14px", border: "1px solid var(--border)" }}>
-                        Dashboard UserPilot: <strong style={{ color: "var(--fg)" }}>run.userpilot.io/dashboards/52</strong> · Solicitar a Laura los eventos de la semana actual cada lunes.
+                        Dashboard UserPilot: <strong style={{ color: "var(--fg)" }}>run.userpilot.io/dashboards/52</strong> · Datos extraídos vía MCP UserPilot directamente sobre el dashboard 52 (antes: solicitar a Laura cada lunes).
                       </div>
                     </div>
                   )}
@@ -718,16 +733,16 @@ export default function IndicadoresPage() {
         <div style={card}>
           <div style={{ marginBottom: 14 }}>
             <div style={sectionTitle}>Hallazgos · Bitácora may–jul 2026</div>
-            <div style={sectionSub}>9 semanas de seguimiento en UserPilot (07 may – 09 jul 2026).</div>
+            <div style={sectionSub}>13 semanas de seguimiento en UserPilot (07 may – 03 ago 2026).</div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
             {[
               { icon: "📉", titulo: "Caída y recuperación sin explicar", desc: "Usuarios únicos en panel cayeron -30% (159 → 112) entre 07 may y 11 jun, luego se recuperaron a 154 para el 9 jul — nivel similar al inicial. No hay causa confirmada para ninguno de los dos movimientos (pregunta abierta)." },
-              { icon: "🚧", titulo: "Fricción dura en el modal", desc: "55% de drop entre click en banner (~24) y postulación completada (~11). Los requisitos del modal frenan la conversión antes de que el supplier pueda avanzar." },
-              { icon: "📈", titulo: "Salto de retención sin causa confirmada", desc: "Retención pasó de ~11% (07 may–4 jun) a ~42–49% sostenido desde el 12 jun, un salto de ~4x. No se identificó campaña, cambio de widget o de definición de métrica que lo explique (pregunta abierta)." },
-              { icon: "📋", titulo: "CSAT de proveedores sin activar", desc: "9 semanas de experimento sin encuesta de satisfacción del proveedor sobre su propio tablero/postulación. No tenemos señal de por qué no completan la postulación ni cómo mejorar el módulo." },
-              { icon: "⭐", titulo: "CSAT dropshippers→proveedor: alto y estable", desc: "Encuesta \"CSAT Indicadores Proveedores\" (dropshippers calificando la página de detalle del proveedor), activa desde 17 jun: 1.132 respuestas, promedio 4.31/5, estable semana a semana (4.18 → 4.56). Mide la percepción del dropshipper sobre el proveedor — no resuelve el CSAT de proveedores pendiente. Fricción más mencionada: falta de detalle sobre tiempos de despacho (33) y opiniones de otros dropshippers (20); lo que más pesa en la decisión es la cantidad de despachos (151) y la calificación general (99)." },
-              { icon: "🔍", titulo: "Ecom Scanner invisible",    desc: "Solo 1–4 usos por semana en toda la plataforma en 9 semanas. El módulo no está siendo descubierto o no genera valor percibido por los suppliers." },
+              { icon: "🚧", titulo: "Fricción dura en el modal", desc: "52% de drop entre click en banner (~25/sem) y postulación completada (~12/sem), promedio de 12 de las 13 semanas con datos completos. Los requisitos del modal frenan la conversión antes de que el supplier pueda avanzar." },
+              { icon: "📈", titulo: "Salto de retención sin causa confirmada", desc: "Retención pasó de ~11% (07 may–4 jun) a ~42–49% sostenido desde el 12 jun hasta el 9 jul, un salto de ~4x. No se identificó campaña, cambio de widget o de definición de métrica que lo explique (pregunta abierta). Sin dato para las semanas 10 jul–3 ago — no se pudo reproducir con la misma definición vía MCP." },
+              { icon: "📋", titulo: "CSAT de proveedores sin activar", desc: "13 semanas de experimento sin encuesta de satisfacción del proveedor sobre su propio tablero/postulación. No tenemos señal de por qué no completan la postulación ni cómo mejorar el módulo." },
+              { icon: "⭐", titulo: "CSAT dropshippers→proveedor: alto y estable", desc: "Encuesta \"CSAT Indicadores Proveedores\" (dropshippers calificando la página de detalle del proveedor), activa desde 17 jun: 1.132 respuestas, promedio 4.31/5, estable semana a semana (4.18 → 4.56) hasta el 9 jul. Mide la percepción del dropshipper sobre el proveedor — no resuelve el CSAT de proveedores pendiente. Fricción más mencionada: falta de detalle sobre tiempos de despacho (33) y opiniones de otros dropshippers (20); lo que más pesa en la decisión es la cantidad de despachos (151) y la calificación general (99). Sin dato nuevo para semanas 10 jul–3 ago — el reporte de CSAT no forma parte del dashboard 52 consultado vía MCP." },
+              { icon: "🔍", titulo: "Ecom Scanner invisible",    desc: "1–6 usos por semana en toda la plataforma en las 13 semanas (máximo previo 4, superado en la semana 24–30 jul con 6). El módulo sigue sin ser descubierto o sin generar valor percibido por los suppliers, pese al leve repunte." },
             ].map(h => (
               <div key={h.titulo} style={{ display: "flex", gap: 10, padding: "12px", background: "#F8FAFC", borderRadius: 10, border: "1px solid var(--border)" }}>
                 <span style={{ fontSize: 20, flexShrink: 0 }}>{h.icon}</span>
@@ -748,7 +763,7 @@ export default function IndicadoresPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
               <div>
                 <div style={sectionTitle}>Embudo · tablero → postulación</div>
-                <div style={sectionSub}>Conversión desde primera vista del tablero hasta postulación enviada. Promedio 8 semanas con datos completos.</div>
+                <div style={sectionSub}>Conversión desde primera vista del tablero hasta postulación enviada. Promedio 12 de 13 semanas con datos completos.</div>
               </div>
               <span style={tag(ACCENT, ACCENT_BG)}>Funnel</span>
             </div>
@@ -771,7 +786,7 @@ export default function IndicadoresPage() {
               ))}
             </div>
             <div style={{ marginTop: 16, padding: "10px 12px", background: "#FEF3C7", borderRadius: 8, fontSize: 12, color: "#78350F", border: "1px solid #FDE68A", lineHeight: 1.4 }}>
-              <strong>55% de drop</strong> entre click en banner y postulación completa — el modal de requisitos filtra agresivamente.
+              <strong>52% de drop</strong> entre click en banner y postulación completa — el modal de requisitos filtra agresivamente.
             </div>
           </div>
 
@@ -896,7 +911,7 @@ export default function IndicadoresPage() {
         {/* Evolución semanal (gráficas) */}
         <div style={card}>
           <div style={{ marginBottom: 14 }}>
-            <div style={sectionTitle}>Evolución semanal · 9 semanas</div>
+            <div style={sectionTitle}>Evolución semanal · 13 semanas</div>
             <div style={sectionSub}>Vista completa del periodo — abre la tab de una semana específica para verla resaltada en el contexto de las demás.</div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
@@ -909,8 +924,8 @@ export default function IndicadoresPage() {
         <div style={card}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
             <div>
-              <div style={sectionTitle}>Tendencia semanal · 9 semanas · may–jul 2026</div>
-              <div style={sectionSub}>Fuente: UserPilot · Bitácora Indicadores. Semana 05–11 jun sin datos de postulación (banner/modal) — pendiente exportar.</div>
+              <div style={sectionTitle}>Tendencia semanal · 13 semanas · may–ago 2026</div>
+              <div style={sectionSub}>Fuente: UserPilot · Bitácora Indicadores. Semana 05–11 jun sin datos de postulación (banner/modal) — pendiente exportar. Semanas 10 jul–3 ago sin dato de retención (no reproducible vía MCP con la definición histórica) — pendiente confirmar metodología con Laura/Miguel Ángel. Semana 31 jul–3 ago es parcial (4 de 7 días). *Promedio de retención del pie de tabla calculado solo sobre las 8 semanas con dato disponible.</div>
             </div>
             <span style={tag("var(--muted)", "#F3F4F6")}>Semana a semana</span>
           </div>
@@ -946,13 +961,13 @@ export default function IndicadoresPage() {
               </tbody>
               <tfoot>
                 <tr>
-                  <td style={{ ...tdStyle, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>9 semanas</td>
-                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: ACCENT }}>1.232</td>
-                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>189</td>
-                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: "#10B981" }}>85</td>
-                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>19</td>
-                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: "#8B5CF6" }}>~28.2%</td>
-                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>6.9%</td>
+                  <td style={{ ...tdStyle, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>13 semanas</td>
+                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: ACCENT }}>1.769</td>
+                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>302</td>
+                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: "#10B981" }}>145</td>
+                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>34</td>
+                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none", color: "#8B5CF6" }}>~28.2%*</td>
+                  <td style={{ ...tdR, fontWeight: 700, background: "#F8FAFC", borderTop: "2px solid var(--border)", borderBottom: "none" }}>8.2%</td>
                 </tr>
               </tfoot>
             </table>
@@ -963,7 +978,7 @@ export default function IndicadoresPage() {
         <div style={card}>
           <div style={{ marginBottom: 14 }}>
             <div style={sectionTitle}>Próximos pasos</div>
-            <div style={sectionSub}>Acciones definidas a partir del análisis de 9 semanas.</div>
+            <div style={sectionSub}>Acciones definidas a partir del análisis de 13 semanas.</div>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {[

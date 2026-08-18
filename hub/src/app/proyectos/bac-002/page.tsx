@@ -82,7 +82,7 @@ export default function Bac002ProjectPage() {
         currentSlug="bac-002"
       />
 
-      <main style={{ maxWidth: 1200, width: "100%", margin: "0 auto", padding: "24px 20px", flex: 1 }}>
+      <main style={{ maxWidth: 1200, width: "100%", margin: "0 auto", padding: "32px", flex: 1 }}>
 
         {/* ── Breadcrumb & title ── */}
         <div style={{ marginBottom: 20 }}>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import GlobalNav from "./GlobalNav";
+import GlobalTopBar from "./GlobalTopBar";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
 
 // Rutas públicas de solo pantalla completa (las ve un proveedor real, sin
@@ -46,6 +47,7 @@ export default function GlobalNavShell({ children }: { children: React.ReactNode
         >
           ☰
         </button>
+        <GlobalTopBar />
         {children}
       </div>
     </div>

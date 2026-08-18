@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
+import Breadcrumb from "@/components/Breadcrumb";
+import { FASE_LABEL, faseDe } from "@/lib/fase";
 
 const COLOR = "#7C3AED";
 
@@ -72,24 +74,25 @@ export default function DropiActivaPage() {
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
       {!isEmbedded && (
-        <header style={{
-          background: "#fff", borderBottom: "1px solid var(--border)",
-          padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-        }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-            ← Dropi PM Tools
-          </a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Dropi Activa</span>
-          <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-            <span style={tag(COLOR, "#FFF8F0")}>ACT-001</span>
-            <span style={tag("#3B82F6", "#EFF6FF")}>Prueba de Concepto</span>
-            <span style={tag("#F59E0B", "#FFFBEB")}>En diseño</span>
+        <header style={{ background: "#fff", padding: "14px 0" }}>
+          <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <Breadcrumb
+              items={[
+                { label: "Proyectos", href: "/proyectos" },
+                { label: FASE_LABEL[faseDe("POC")] },
+                { label: "Dropi Activa" },
+              ]}
+            />
+            <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              <span style={tag(COLOR, "#FFF8F0")}>ACT-001</span>
+              <span style={tag("#3B82F6", "#EFF6FF")}>Prueba de Concepto</span>
+              <span style={tag("#F59E0B", "#FFFBEB")}>En diseño</span>
+            </div>
           </div>
         </header>
       )}
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px", display: "flex", flexDirection: "column", gap: 20 }}>
 
         {/* Title */}
         <div>

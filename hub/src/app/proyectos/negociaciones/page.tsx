@@ -14,6 +14,8 @@ import {
   LabelList,
   ReferenceLine,
 } from "recharts";
+import Breadcrumb from "@/components/Breadcrumb";
+import { FASE_LABEL, faseDe } from "@/lib/fase";
 
 // ─── Shared styles ────────────────────────────────────────────────────────────
 const card: React.CSSProperties = {
@@ -416,6 +418,186 @@ const WEEKS: Week[] = [
       bugs: "Sin bugs nuevos reportados esta semana para el rol Líder.",
       proximosPasos: "Seguir la proporción de aprobación vs rechazo con más semanas de datos. Activar micro-survey de CSAT/SEQ para Líder. Completar el resto de la semana (15 jul en adelante) cuando cierre el ciclo de 7 días.",
       notasSalvedades: "Datos tomados del dashboard UserPilot \"Negociaciones\" (capturas del 14 jul 2026), rango 9–14 jul 2026 — semana parcial (6 de 7 días). Los tiempos promedio de conversión del funnel de aprobación/rechazo vía modal se leyeron con menor confianza que los porcentajes (texto más pequeño en la captura original).",
+    },
+  },
+  {
+    id: "Semana 6",
+    fechas: "15–21 jul 2026",
+    lanzamiento: "Sin nota de rollout registrada esta semana.",
+    proveedor: {
+      ingresoEventos: 313,
+      ingresoUnicos: 108,
+      creadasEventos: 91,
+      creadasUnicos: 3,
+      canceladasEventos: 2,
+      canceladasUnicos: 2,
+      opcionesCard: { cancelar: 2, verDetalle: 2, editar: 1 },
+      notas: 89,
+      editarNeg: 0,
+      historial: 1,
+      clicEnviar: 91,
+      funnelPct: "0.93%",
+      funnelRepresentativo: true,
+      conclusionAdopcion: "Ingreso al módulo baja levemente en eventos (319 → 313) pero sube en usuarios únicos (81 → 108) frente a Semana 5. Negociaciones creadas bajan en eventos (116 → 91) con un usuario único más creando (2 → 3).",
+      conclusionTaskSuccess: "Los 4 funnels de creación convergen en la misma conversión total esta semana (0.93%), con solo 1 usuario completando el flujo hasta 'Enviar' en cada variante — muestra insuficiente (menos de 5 usuarios) para concluir si el patrón de comisión porcentual vs. fija visto en Semana 4 se mantiene.",
+      retencionTendencia: "Entró al módulo (únicos): 108 en la semana completa. Realizó una acción (únicos): 13. Desglose diario no disponible vía MCP para este rango — los reportes de tendencia con granularidad diaria (811) devuelven una ventana móvil que no respeta el rango de fechas solicitado; se reporta solo el total semanal, obtenido forzando visualización de tipo métrica total.",
+      conclusionRetencion: "De los 108 usuarios únicos que entraron al módulo, 13 (12%) realizaron alguna acción (crear, cancelar, editar, opciones de card) esta semana. No hay desglose por día disponible vía MCP para confirmar el patrón de fin de semana visto en semanas anteriores.",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Proveedor.",
+      hallazgos: "Las negociaciones creadas están concentradas en 3 usuarios únicos (91 eventos, ~30 c/u). El funnel de creación converge en 0.93% en las 4 variantes, con solo 1 usuario llegando a 'Enviar' en cada una — muestra insuficiente para comparar comisión porcentual vs. fija esta semana.",
+      dolores: "Base de creadores baja (3 usuarios únicos) frente a 108 que ingresaron al módulo. Conversión del funnel de creación en 0.93% en las 4 variantes, con solo 1 usuario completando cada ruta — no permite aislar si el problema de comisión porcentual visto en Semana 4 persiste.",
+      bugs: "Sin confirmar si persisten los bugs reportados en semanas anteriores (funnel de orden estricto, correo de pruebas uxdropi@gmail.com) — no verificado esta semana.",
+      proximosPasos: "Dar seguimiento con más semanas de datos para tener muestra suficiente en los funnels de creación (actualmente 1 usuario por variante). Activar micro-survey de CSAT/SEQ.",
+      notasSalvedades: "Datos obtenidos vía MCP de UserPilot (consulta directa, no capturas de pantalla), rango 15–21 jul 2026. Los reportes de tendencia con desglose diario (811, 840) no respetan el rango custom solicitado cuando el cálculo queda cacheado por definición de reporte — se recalcularon en forma inline forzando período custom sin caché para obtener los totales semanales correctos; el desglose por día no se pudo obtener con las herramientas disponibles esta semana.",
+    },
+    lider: {
+      ingresoEventos: 30,
+      ingresoUnicos: 12,
+      aprobadasEventos: 3,
+      aprobadasUnicos: 2,
+      rechazadasEventos: 21,
+      rechazadasUnicos: 7,
+      canceladasEventos: 20,
+      canceladasUnicos: 7,
+      opcionesCard: { rechazar: 20, verDetalle: 20, aprobar: 2 },
+      historial: 4,
+      funnelAprobacionSinModalPct: "8.33%",
+      funnelAprobacionSinModalTiempo: "6s",
+      funnelAprobacionViaModalPct: "8.33%",
+      funnelAprobacionViaModalTiempo: "21s",
+      funnelRechazoSinModalPct: "66.67%",
+      funnelRechazoSinModalTiempo: "18h 3m 26s",
+      funnelRechazoViaModalPct: "8.33%",
+      conclusionAdopcion: "Ingreso al módulo sube en eventos (24 → 30) pero baja en usuarios únicos (16 → 12) frente a Semana 5. Aprobadas suben de 1 a 3 eventos (1 → 2 usuarios únicos). Rechazadas suben de 18 a 21 eventos pero bajan de 11 a 7 usuarios únicos; canceladas suben de 17 a 20 eventos con la misma baja de usuarios únicos (11 → 7).",
+      conclusionTaskSuccess: "El rechazo sin modal se mantiene como la ruta dominante (66.67%, tiempo promedio 18h 3m), en línea con semanas anteriores. La aprobación converge a 8.33% en ambas rutas (con y sin modal) — con solo 1 usuario detrás de cada conversión, muestra insuficiente para comparar rutas. El rechazo vía modal sube de 6.25% (Semana 5) a 8.33%, también con 1 usuario.",
+      retencionTendencia: "Entró al módulo (únicos): 12 en la semana completa. Realizó múltiples acciones (únicos): 7. Desglose diario no disponible vía MCP para este rango.",
+      conclusionRetencion: "De los 12 usuarios únicos que entraron al módulo, 7 (58%) realizaron más de una acción esta semana — proporción más alta que la de Proveedor (12%), consistente con el patrón de actividad más sostenida del Líder visto en semanas anteriores. No hay desglose por día disponible vía MCP para confirmar el patrón dentro de la semana.",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Líder.",
+      hallazgos: "Rechazadas y canceladas (20-21 eventos) siguen muy por encima de aprobadas (3) — misma proporción de rechazo alta de semanas anteriores. La aprobación (vía y sin modal) y el rechazo vía modal convergen en 8.33% esta semana, cada uno con solo 1 usuario detrás — muestra insuficiente para sacar conclusiones.",
+      dolores: "Aprobadas (3 eventos, 2 usuarios únicos) siguen muy por debajo de rechazadas/canceladas (20-21 eventos, 7 usuarios únicos). Todas las conversiones de funnel esta semana están sostenidas por 1 usuario único (excepto rechazo sin modal, con 8) — no se puede aislar si son patrones reales o ruido de muestra pequeña.",
+      bugs: "Sin bugs nuevos reportados esta semana para el rol Líder — no verificado directamente vía MCP.",
+      proximosPasos: "Seguir la proporción de aprobación vs rechazo con más semanas de datos. Activar micro-survey de CSAT/SEQ para Líder.",
+      notasSalvedades: "Datos obtenidos vía MCP de UserPilot, rango 15–21 jul 2026. En UserPilot, la etiqueta 'Dropshipper' corresponde en realidad a Líder de Comunidad. El desglose diario no se pudo obtener con las herramientas disponibles esta semana (ver nota de Proveedor).",
+    },
+  },
+  {
+    id: "Semana 7",
+    fechas: "22–28 jul 2026",
+    lanzamiento: "Sin nota de rollout registrada esta semana.",
+    proveedor: {
+      ingresoEventos: 396,
+      ingresoUnicos: 114,
+      creadasEventos: 141,
+      creadasUnicos: 2,
+      canceladasEventos: 4,
+      canceladasUnicos: 3,
+      opcionesCard: { cancelar: 4, verDetalle: 4, editar: 1 },
+      notas: 135,
+      editarNeg: 0,
+      historial: 2,
+      clicEnviar: 141,
+      funnelPct: "0%",
+      funnelRepresentativo: true,
+      conclusionAdopcion: "Ingreso al módulo sube de 313 a 396 eventos (108 → 114 usuarios únicos) frente a Semana 6. Negociaciones creadas suben de 91 a 141 eventos, pero con 1 usuario único menos creando (3 → 2).",
+      conclusionTaskSuccess: "Los 4 funnels de creación caen a 0% de conversión total esta semana (frente a 0.93% en Semana 6) — de los 10 usuarios que llegaron al paso 'Crear negociación' (8.77% de 114), ninguno completó el flujo hasta 'Enviar' en ninguna de las 4 variantes.",
+      retencionTendencia: "Entró al módulo (únicos): 114 en la semana completa. Realizó una acción (únicos): 12. Desglose diario no disponible vía MCP para este rango.",
+      conclusionRetencion: "De los 114 usuarios únicos que entraron al módulo, 12 (11%) realizaron alguna acción esta semana — proporción similar a la de Semana 6 (12%).",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Proveedor.",
+      hallazgos: "El funnel de creación cae a 0% de conversión total en las 4 variantes esta semana — ningún usuario que llegó a 'Crear negociación' (10 de 114) completó el flujo hasta 'Enviar'. Las negociaciones creadas siguen concentradas en muy pocos usuarios (141 eventos / 2 únicos, ~70 c/u).",
+      dolores: "0% de conversión en los 4 funnels de creación esta semana — ningún usuario completó el flujo completo pese a que 10 usuarios llegaron al paso 'Crear negociación'. Concentración alta de la creación en solo 2 usuarios únicos.",
+      bugs: "Sin confirmar si persisten los bugs reportados en semanas anteriores — no verificado esta semana.",
+      proximosPasos: "Investigar por qué ningún usuario completó el funnel de creación esta semana pese a 10 usuarios llegando al paso 'Crear negociación'. Activar micro-survey de CSAT/SEQ.",
+      notasSalvedades: "Datos obtenidos vía MCP de UserPilot, rango 22–28 jul 2026.",
+    },
+    lider: {
+      ingresoEventos: 38,
+      ingresoUnicos: 18,
+      aprobadasEventos: 1,
+      aprobadasUnicos: 1,
+      rechazadasEventos: 34,
+      rechazadasUnicos: 12,
+      canceladasEventos: 34,
+      canceladasUnicos: 12,
+      opcionesCard: { rechazar: 34, verDetalle: 34, aprobar: 0 },
+      historial: 8,
+      funnelAprobacionSinModalPct: "0%",
+      funnelAprobacionViaModalPct: "5.56%",
+      funnelAprobacionViaModalTiempo: "59s",
+      funnelRechazoSinModalPct: "66.67%",
+      funnelRechazoSinModalTiempo: "27s",
+      funnelRechazoViaModalPct: "0%",
+      conclusionAdopcion: "Ingreso al módulo sube de 30 a 38 eventos (12 → 18 usuarios únicos) frente a Semana 6. Aprobadas bajan de 3 a 1 evento (2 → 1 usuario único). Rechazadas y canceladas suben de 20-21 a 34 eventos cada una (7 → 12 usuarios únicos).",
+      conclusionTaskSuccess: "El rechazo sin modal se mantiene como la ruta dominante (66.67%) — conversión idéntica a Semana 6 pero con tiempo de respuesta mucho más rápido (18h 3m → 27s). El rechazo vía modal cae a 0% (de 8.33% en Semana 6). La aprobación sin modal también cae a 0% (de 8.33%); la aprobación vía modal se mantiene en 5.56%-8.33%, con 1 usuario completando la ruta.",
+      retencionTendencia: "Entró al módulo (únicos): 18 en la semana completa. Realizó múltiples acciones (únicos): 12. Desglose diario no disponible vía MCP para este rango.",
+      conclusionRetencion: "De los 18 usuarios únicos que entraron al módulo, 12 (67%) realizaron más de una acción esta semana — proporción más alta que la de Semana 6 (58%) y que la de Proveedor esta semana (11%).",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Líder.",
+      hallazgos: "Rechazadas y canceladas suben fuerte esta semana (20-21 → 34 eventos cada una, 7 → 12 usuarios únicos) mientras aprobadas cae a su mínimo de las 3 semanas nuevas (1 evento, 1 usuario único). El rechazo sin modal mantiene la misma tasa de conversión que Semana 6 (66.67%) pero con tiempo de respuesta mucho menor (18h 3m → 27s).",
+      dolores: "Aprobadas cae a 1 evento / 1 usuario único, frente a 34 eventos de rechazadas y 34 de canceladas — la proporción de rechazo más alta de las 3 semanas nuevas. El rechazo y la aprobación sin modal caen a 0% de conversión esta semana.",
+      bugs: "Sin bugs nuevos reportados esta semana para el rol Líder — no verificado directamente vía MCP.",
+      proximosPasos: "Seguir la proporción de aprobación vs rechazo — esta semana marca el mínimo de aprobadas de las 3 semanas nuevas. Activar micro-survey de CSAT/SEQ para Líder.",
+      notasSalvedades: "Datos obtenidos vía MCP de UserPilot, rango 22–28 jul 2026. En UserPilot, la etiqueta 'Dropshipper' corresponde en realidad a Líder de Comunidad.",
+    },
+  },
+  {
+    id: "Semana 8",
+    fechas: "29 jul–3 ago 2026 (parcial)",
+    lanzamiento: "Semana parcial — corte al 3 de agosto 2026 (hoy), 6 días en vez de 7.",
+    proveedor: {
+      ingresoEventos: 191,
+      ingresoUnicos: 86,
+      creadasEventos: 7,
+      creadasUnicos: 2,
+      canceladasEventos: 11,
+      canceladasUnicos: 4,
+      opcionesCard: { cancelar: 11, verDetalle: 11, editar: 6 },
+      notas: 10,
+      editarNeg: 0,
+      historial: 2,
+      clicEnviar: 7,
+      funnelPct: "0%–1.16%",
+      funnelRepresentativo: true,
+      conclusionAdopcion: "Ingreso al módulo baja de 396 a 191 eventos (114 → 86 usuarios únicos) frente a Semana 7 — semana parcial de 6 días (corte al 3 de agosto, hoy). Negociaciones creadas caen fuerte de 141 a 7 eventos, con los mismos 2 usuarios únicos creando.",
+      conclusionTaskSuccess: "A diferencia de Semana 7 (0% en las 4 variantes), esta semana 2 de las 4 variantes del funnel de creación sí registran conversión: comisión fija en ambas rutas (productos específicos y catálogo completo) llega a 1.16% (1 usuario completando 'Enviar' de 86), mientras comisión porcentual se mantiene en 0% en ambas rutas — mismo patrón de diferenciación porcentual vs. fija visto en Semana 4, aunque con muestra de 1-2 usuarios (menos de 5).",
+      retencionTendencia: "Entró al módulo (únicos): 86 en la semana parcial (6 de 7 días). Realizó una acción (únicos): 7. Desglose diario no disponible vía MCP para este rango.",
+      conclusionRetencion: "De los 86 usuarios únicos que entraron al módulo, 7 (8%) realizaron alguna acción esta semana — proporción más baja que Semana 6 (12%) y Semana 7 (11%), aunque la semana está incompleta (6 de 7 días).",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Proveedor.",
+      hallazgos: "Caída fuerte en negociaciones creadas frente a Semana 7 (141 → 7 eventos), aunque los mismos 2 usuarios únicos siguen creando. Por segunda vez en las 3 semanas nuevas, las variantes de comisión fija del funnel de creación sí convierten (1.16%) mientras comisión porcentual se mantiene en 0%.",
+      dolores: "Negociaciones creadas caen a 7 eventos esta semana (de 141 en Semana 7) — la caída más fuerte de las 3 semanas nuevas, aunque la semana es parcial (6 de 7 días). El funnel de comisión porcentual se mantiene en 0% de conversión en las 3 semanas nuevas.",
+      bugs: "Sin confirmar si persisten los bugs reportados en semanas anteriores — no verificado esta semana.",
+      proximosPasos: "Completar esta semana con los datos del resto del 3 de agosto en adelante cuando cierre el ciclo de 7 días. Seguir monitoreando si la diferencia porcentual vs. fija en el funnel de creación se confirma como patrón estable. Activar micro-survey de CSAT/SEQ.",
+      notasSalvedades: "Datos obtenidos vía MCP de UserPilot, rango 29 jul–3 ago 2026 — semana parcial, corte al día de hoy (6 de 7 días).",
+    },
+    lider: {
+      ingresoEventos: 23,
+      ingresoUnicos: 9,
+      aprobadasEventos: 0,
+      aprobadasUnicos: 0,
+      rechazadasEventos: 11,
+      rechazadasUnicos: 5,
+      canceladasEventos: 11,
+      canceladasUnicos: 5,
+      opcionesCard: { rechazar: 11, verDetalle: 11, aprobar: 0 },
+      historial: 3,
+      funnelAprobacionSinModalPct: "0%",
+      funnelAprobacionViaModalPct: "0%",
+      funnelRechazoSinModalPct: "55.56%",
+      funnelRechazoSinModalTiempo: "7s",
+      funnelRechazoViaModalPct: "0%",
+      conclusionAdopcion: "Ingreso al módulo baja de 38 a 23 eventos (18 → 9 usuarios únicos) frente a Semana 7 — semana parcial de 6 días. Aprobadas caen a 0 (de 1 en Semana 7). Rechazadas y canceladas bajan de 34 a 11 eventos cada una (12 → 5 usuarios únicos).",
+      conclusionTaskSuccess: "El rechazo sin modal sigue siendo la única ruta con conversión esta semana (55.56%, tiempo promedio 7s) — similar a semanas anteriores. La aprobación (con y sin modal) y el rechazo vía modal caen a 0% de conversión, con 0 usuarios completando cada ruta.",
+      retencionTendencia: "Entró al módulo (únicos): 9 en la semana parcial (6 de 7 días). Realizó múltiples acciones (únicos): 5. Desglose diario no disponible vía MCP para este rango.",
+      conclusionRetencion: "De los 9 usuarios únicos que entraron al módulo, 5 (56%) realizaron más de una acción esta semana — proporción similar a Semana 6 (58%), por debajo de Semana 7 (67%).",
+      csat: "Sin dato",
+      conclusionHappiness: "Sin información suficiente para concluir. Sigue pendiente activar y validar la micro-survey de CSAT/SEQ en UserPilot para el rol Líder.",
+      hallazgos: "Aprobadas cae a 0 eventos esta semana — primera vez en las 3 semanas nuevas sin ninguna aprobación registrada. Rechazadas y canceladas también bajan frente a Semana 7 (34 → 11 eventos cada una), aunque la semana es parcial (6 de 7 días).",
+      dolores: "0 aprobaciones registradas esta semana (de 1 en Semana 7, 3 en Semana 6). El rechazo y la aprobación vía modal se mantienen en 0% de conversión, igual que Semana 7.",
+      bugs: "Sin bugs nuevos reportados esta semana para el rol Líder — no verificado directamente vía MCP.",
+      proximosPasos: "Confirmar si la caída a 0 aprobaciones es por la semana parcial (6 de 7 días) o un patrón real — dar seguimiento la próxima semana con el ciclo completo. Activar micro-survey de CSAT/SEQ para Líder.",
+      notasSalvedades: "Datos obtenidos vía MCP de UserPilot, rango 29 jul–3 ago 2026 — semana parcial, corte al día de hoy (6 de 7 días). En UserPilot, la etiqueta 'Dropshipper' corresponde en realidad a Líder de Comunidad.",
     },
   },
 ];
@@ -1263,24 +1445,24 @@ export default function NegociacionesPage() {
     <main style={{ minHeight: "100vh", background: "#fff" }}>
       {/* Header */}
       {!isEmbedded && (
-        <header style={{
-          background: "#fff",
-          borderBottom: "1px solid #EDEDED",
-          padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-        }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-            ← Dropi PM Tools
-          </a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>🤝 Negociaciones</span>
-          <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-            <span style={tag(ACCENT, ACCENT_BG)}>NEG-001</span>
-            <span style={tag("#10B981", "#ECFDF5")}>Live · Beta proveedores</span>
+        <header style={{ background: "#fff", padding: "14px 0" }}>
+          <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <Breadcrumb
+              items={[
+                { label: "Proyectos", href: "/proyectos" },
+                { label: FASE_LABEL[faseDe("Proyecto")] },
+                { label: "🤝 Negociaciones" },
+              ]}
+            />
+            <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              <span style={tag(ACCENT, ACCENT_BG)}>NEG-001</span>
+              <span style={tag("#10B981", "#ECFDF5")}>Live · Beta proveedores</span>
+            </div>
           </div>
         </header>
       )}
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px", display: "flex", flexDirection: "column", gap: 20 }}>
 
         {/* Title */}
         <div>

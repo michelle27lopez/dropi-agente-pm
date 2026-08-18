@@ -218,7 +218,7 @@ function EntrevistaCard({ e }: { e: Entrevista }) {
 export default function EntrevistasPage() {
   return (
     <main style={{ minHeight: "100vh", padding: "0 0 60px" }}>
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 24px 0" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 32px 0" }}>
         <a href="/proyectos/marcas" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
           ← Marcas
         </a>
@@ -238,7 +238,7 @@ export default function EntrevistasPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 24px 0" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 32px 0" }}>
         {/* NOTA: tipo_activo_churn tiene 8 estados (tabla ampliada 2026-07-17), no los 6 del CLAUDE.md raíz */}
         <div style={{ background: AMB_BG, border: "1px solid #FDE68A", borderRadius: 10, padding: "14px 16px", fontSize: 12.5, color: "#78350F", lineHeight: 1.6, marginBottom: 20 }}>
           <strong>Nota sobre tipo_activo_churn:</strong> las tablas de abajo usan la tabla ampliada de 8 estados confirmada por Kate el 2026-07-17 (Nuevo activado, Inactivo/Pre-Activación, Antiguo activado, Recurrente, <b>Fiel</b>, Reactivado, En Riesgo, Perdido) — no la tabla de 6 estados que sigue en el CLAUDE.md raíz del proyecto. <b>&quot;Fiel&quot;</b> e <b>&quot;Inactivo / Pre-Activación&quot;</b> SÍ son estados válidos y documentados bajo esa tabla ampliada. En producción, la columna trae abreviado <b>&quot;Nuevo&quot;</b> (= Nuevo activado) y <b>&quot;Activo Viejo&quot;</b> (= Antiguo activado) — la equivalencia es razonable pero sigue{" "}

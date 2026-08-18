@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Breadcrumb from "@/components/Breadcrumb";
 
 type BugRow = {
   id: string;
@@ -125,13 +126,11 @@ export default function BugsPage() {
         padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Seguimiento de Bugs</span>
+          <Breadcrumb items={[{ label: "Seguimiento de Bugs" }]} />
         </div>
       </header>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px 60px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
         <div style={{ marginBottom: 24 }}>
           <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--fg)", marginBottom: 8 }}>
             🐞 Seguimiento de Bugs

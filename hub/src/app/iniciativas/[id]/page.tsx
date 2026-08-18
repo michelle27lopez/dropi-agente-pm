@@ -256,7 +256,7 @@ export default function IniciativaDetalle() {
         </div>
       </header>
 
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "32px 24px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
         {/* Info de la iniciativa */}
         <div style={{ marginBottom: 32 }}>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "var(--fg)", marginBottom: 8 }}>

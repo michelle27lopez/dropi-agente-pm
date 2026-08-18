@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import HubHeader from "@/components/HubHeader";
+import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 
 type ProjectDetails = {
   id: string;
@@ -29,6 +30,15 @@ const ESTADOS_DISCOVERY = ["Research", "Ideación", "Concepción de experimento"
 const ESTADOS_POC = ["Seguimiento", "En definición", "En priorización"];
 const ESTADOS_DELIVERY = ["En definición", "En priorización", "Pendiente Handoff", "en DEV", "Activo", "Cerrado"];
 const ESTADOS_FOLLOWING = ["Beta controlada", "Producción", "Cerrado"];
+
+// Varios proyectos viejos tienen `prototype_url` mal guardado (sin "/"
+// inicial, apuntando a una carpeta que no existe en public/) — un valor no
+// vacío ahí no significa que haya contenido real. Sin esta validación, esos
+// proyectos ni mostraban el aviso de "sin contenido" (porque el campo no
+// estaba vacío) ni el link funcionaba (porque el archivo no existe).
+function esPrototipoValido(url: string | null): url is string {
+  return !!url && (url.startsWith("/") || url.startsWith("http"));
+}
 
 function estadosValidosPara(type: string | null) {
   if (type === "POC") return ESTADOS_POC;
@@ -88,6 +98,7 @@ export default function ProjectDashboardPage() {
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [showPocForm, setShowPocForm] = useState(false);
   const [pocName, setPocName] = useState("");
@@ -325,6 +336,16 @@ export default function ProjectDashboardPage() {
     setShowFollowingForm(false);
     setFollowingName("");
     setFollowingSummary("");
+  }
+
+  async function handleDelete() {
+    const res = await fetch(`/api/proyectos/${slug}`, { method: "DELETE" });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      throw new Error(data?.error ?? "No se pudo eliminar el proyecto.");
+    }
+    const destino = project?.celulas?.slug;
+    router.push(destino ? `/celula/${destino}` : "/proyectos");
   }
 
   async function handleVincularDelivery() {
@@ -584,7 +605,7 @@ export default function ProjectDashboardPage() {
         currentSlug={cellSlug}
       />
 
-      <div style={{ maxWidth: 900, width: "100%", margin: "0 auto", padding: "40px 24px", boxSizing: "border-box" }}>
+      <div style={{ maxWidth: 900, width: "100%", margin: "0 auto", padding: "32px", boxSizing: "border-box" }}>
         
         {/* Navigation Breadcrumb */}
         <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 24, fontSize: 13 }}>
@@ -618,7 +639,31 @@ export default function ProjectDashboardPage() {
             {project.summary || "Sin resumen registrado."}
           </p>
 
-          {project.prototype_url && (
+          {/* Fila creada pero nunca desarrollada: sin prototipo, sin POC/
+              Delivery/Following hijos, sin ciclos de discovery. En vez de
+              dejarla como un callejón sin salida (o un link roto si el
+              prototype_url quedó mal guardado), se ofrece eliminarla acá
+              mismo. */}
+          {!esPrototipoValido(project.prototype_url) && children.length === 0 && cycles.length === 0 && (
+            <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+              <div>
+                <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📭 Este proyecto no tiene contenido</strong>
+                <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Sin prototipo, sin POC/Delivery ni ciclos de discovery registrados.</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowDeleteModal(true)}
+                style={{
+                  fontSize: 12.5, fontWeight: 750, color: "#DC2626", background: "#FEF2F2",
+                  border: "1px solid #FECACA", borderRadius: 8, padding: "8px 16px", cursor: "pointer",
+                }}
+              >
+                Eliminar proyecto
+              </button>
+            </div>
+          )}
+
+          {esPrototipoValido(project.prototype_url) && (
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
               <div>
                 <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📄 Detalle del Proyecto</strong>
@@ -1973,6 +2018,16 @@ export default function ProjectDashboardPage() {
           return null;
         })()}
       </div>
+
+      {showDeleteModal && (
+        <DeleteConfirmModal
+          nombre={project.name}
+          codigo={project.project_code}
+          childCount={children.length}
+          onCancel={() => setShowDeleteModal(false)}
+          onConfirm={handleDelete}
+        />
+      )}
     </main>
   );
 }

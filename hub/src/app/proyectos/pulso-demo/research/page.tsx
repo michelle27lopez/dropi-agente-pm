@@ -1,6 +1,8 @@
 "use client";
 
 import { useIsEmbedded } from "@/lib/use-is-embedded";
+import Breadcrumb from "@/components/Breadcrumb";
+import { FASE_LABEL, faseDe } from "@/lib/fase";
 
 const METRICS = [
   { label: "Usuarios Pareto", value: "535", sub: "505 base + 30 comunidad Iván" },
@@ -134,19 +136,21 @@ export default function PulsoResearchPage() {
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {!isEmbedded && (
-        <header style={{
-          background: "#fff", borderBottom: "1px solid var(--border)",
-          padding: "16px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-        }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <a href="/proyectos/pulso-demo" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>Dropi Pulso · Demo</a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Research · RB-005</span>
+        <header style={{ background: "#fff", padding: "16px 0" }}>
+          <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <Breadcrumb
+              items={[
+                { label: "Proyectos", href: "/proyectos" },
+                { label: FASE_LABEL[faseDe("POC")] },
+                { label: "Dropi Pulso · Demo", href: "/proyectos/pulso-demo" },
+                { label: "Research · RB-005" },
+              ]}
+            />
+          </div>
         </header>
       )}
 
-      <div style={{ maxWidth: 940, margin: "0 auto", padding: "40px 24px 80px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px" }}>
 
         {/* Header */}
         <div style={{ marginBottom: 36 }}>

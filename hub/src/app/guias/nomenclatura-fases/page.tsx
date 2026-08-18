@@ -94,7 +94,7 @@ export default function NomenclaturaFasesPage() {
           </div>
         </header>
 
-        <div style={{ maxWidth: 780, margin: "0 auto", padding: "40px 24px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
 
           <Callout tone="pending">
             ⚠️ <strong>Borrador, no adoptado todavía.</strong> Esta página documenta la convención tal como quedó definida en conversación

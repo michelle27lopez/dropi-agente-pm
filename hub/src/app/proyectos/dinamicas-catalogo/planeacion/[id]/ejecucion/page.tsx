@@ -234,7 +234,6 @@ export default function EjecucionPage() {
   const isActive = executionNode?.data?.status === "active";
   const startedAt = executionNode?.data?.started_at;
   const planningComplete = isPlanningComplete(nodes);
-  const closingDone = !!nd("decision").decision;
 
   const handleStart = async () => {
     setStarting(true);
@@ -381,7 +380,7 @@ export default function EjecucionPage() {
       <Sidebar />
       <main style={{ flex: 1, minWidth: 0 }}>
       <header style={{
-        background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "0 24px", height: 52,
+        background: "#fff", borderBottom: "1px solid #e5e7eb", padding: "0 32px", height: 52,
         display: "flex", alignItems: "center", gap: 12, position: "sticky", top: 0, zIndex: 10,
       }}>
         <button onClick={() => router.push("/proyectos/dinamicas-catalogo/campanas")} style={{ background: "none", border: "none", cursor: "pointer", color: "#9ca3af", fontSize: 13, padding: 0 }}>
@@ -391,7 +390,7 @@ export default function EjecucionPage() {
         <span style={{ fontSize: 13, fontWeight: 700, color: "#111827" }}>{campaign.name}</span>
       </header>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 24px 80px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px" }}>
         <div style={{ marginBottom: 20 }}>
           <h1 style={{ fontSize: 22, fontWeight: 700, color: "#111827", margin: "0 0 6px", letterSpacing: "-0.01em" }}>{identidad.name || campaign.name}</h1>
           <p style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.6, margin: 0 }}>
@@ -400,7 +399,7 @@ export default function EjecucionPage() {
         </div>
 
         <div style={{ marginBottom: 22 }}>
-          <PhaseTabs campaignId={id} active="ejecucion" planningComplete={planningComplete} isActive={isActive} closingDone={closingDone} />
+          <PhaseTabs campaignId={id} active="ejecucion" planningComplete={planningComplete} isActive={isActive} />
         </div>
 
         {/* Estado de ejecución siempre visible — antes vivía en el tab

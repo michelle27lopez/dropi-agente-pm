@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
+import Breadcrumb from "@/components/Breadcrumb";
+import { FASE_LABEL, faseDe } from "@/lib/fase";
 
 const COLOR = "#10B981"; // success-green/WhatsApp Green for this project
 
@@ -13,19 +15,20 @@ export default function EspionajePage() {
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
       {!isEmbedded && (
-        <header style={{
-          background: "#fff", borderBottom: "1px solid var(--border)",
-          padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
-        }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-            ← Dropi PM Tools
-          </a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Escucha de canales (espionaje)</span>
+        <header style={{ background: "#fff", padding: "16px 0" }}>
+          <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", gap: 16 }}>
+            <Breadcrumb
+              items={[
+                { label: "Proyectos", href: "/proyectos" },
+                { label: FASE_LABEL[faseDe("Proyecto")] },
+                { label: "Escucha de canales (espionaje)" },
+              ]}
+            />
+          </div>
         </header>
       )}
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px" }}>
 
         {/* Title & Tags */}
         <div style={{ marginBottom: 32 }}>
