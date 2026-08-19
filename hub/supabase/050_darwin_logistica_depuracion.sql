@@ -30,26 +30,29 @@ update projects
    set estado_interno = 'Cerrado'
  where project_code in ('LOG-011', 'LOG-003', 'LOG-010');
 
--- ── 2. LOG-018 deja de estar huérfano ─────────────────────────────────────
+-- ── 2. LOG-018 y LOG-020 dejan de estar huérfanos ─────────────────────────
 --
--- "POC · Ruteo por mejor carrier × zona" nació sin padre porque su padre
--- natural (PRM-1513 · Selección inteligente de transportadoras) está tipado
--- 'Delivery Proyecto', y la 048 solo vinculaba contra padres Discovery.
+-- Los dos nacieron sin padre por la misma razón: sus padres naturales
+-- (PRM-1513 · Selección de transportadoras y PRM-1366 · Same Day) están
+-- tipados 'Delivery Proyecto', y la 048 solo vinculaba contra padres Discovery.
+-- Verificado contra la base el 19-ago: los dos siguen sin padre, y son los dos
+-- únicos POCs huérfanos que quedan (LOG-019 sí tiene, porque LOG-001 es
+-- Oportunidad).
 --
--- related_delivery_id es justamente la columna para eso (043_darwin_following)
--- y es la que ya usa LOG-017 → LOG-009. Su prototype_url ya apuntaba a la
--- ficha de selección de transportadoras: el vínculo estaba implícito, ahora
--- queda explícito.
+-- related_delivery_id es justamente la columna para esto (043_darwin_following)
+-- y es la que ya usa LOG-017 → LOG-009. En ambos casos el prototype_url ya
+-- apuntaba a la ficha del padre: el vínculo estaba implícito, ahora es
+-- explícito y navegable desde la ficha.
 
-update projects
-   set related_delivery_id = (
-         select id from projects
-          where project_code = 'PRM-1513'
-          limit 1
-       )
- where project_code = 'LOG-018'
-   and related_delivery_id is null
-   and exists (select 1 from projects where project_code = 'PRM-1513');
+update projects p
+   set related_delivery_id = padre.id
+  from (values
+         ('LOG-018', 'PRM-1513'),
+         ('LOG-020', 'PRM-1366')
+       ) as v(hijo, padre_code)
+  join projects padre on padre.project_code = v.padre_code
+ where p.project_code = v.hijo
+   and p.related_delivery_id is null;
 
 -- ── 3. POC de Indiana bajo Recolección proactiva ──────────────────────────
 --
