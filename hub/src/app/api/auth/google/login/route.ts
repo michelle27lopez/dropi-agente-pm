@@ -28,11 +28,7 @@ export async function GET(request: NextRequest) {
 
     response.cookies.set(OAUTH_STATE_COOKIE, state, {
       httpOnly: true,
-      // En producción va secure SIEMPRE, sin depender de que el protocolo se
-      // resuelva bien detrás del proxy de Vercel: si un header mal propagado
-      // hiciera ver la request como http, la cookie con el state viajaría en
-      // claro. En dev local sobre http sigue funcionando.
-      secure: process.env.NODE_ENV === "production" || request.nextUrl.protocol === "https:",
+      secure: request.nextUrl.protocol === "https:",
       sameSite: "lax", // "lax" y no "strict": la cookie debe sobrevivir el redirect de vuelta desde Google.
       path: "/api/auth/google",
       maxAge: OAUTH_STATE_MAX_AGE,

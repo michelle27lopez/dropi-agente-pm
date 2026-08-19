@@ -1,15 +1,9 @@
-// Acceso restringido: /sprint y su API solo existen para este grupo
-// (decisión 2026-07-15) — no se lista en los homes de otras células ni se
-// expone a nadie más, aunque conozcan la URL.
-//
-// Ampliado 2026-08-19: entra Juan Diego como PM de Logistic Success. Su home
-// de célula mostraba "Pendiente" en Retomando, Sprint actual y Hoy — los tres
-// consultan esta lista, así que sin estar aquí no podía ni conectar su propio
-// calendario (/api/auth/google/login responde 401 vía isMiDiaOwner).
+// Acceso restringido: /sprint y su API solo existen para Michelle y Jaime
+// por ahora (decisión 2026-07-15) — no se lista en los homes de otras
+// células ni se expone a nadie más, aunque conozcan la URL.
 export const SPRINT_ALLOWED_EMAILS = [
   "michelle.lopez@dropi.co",
   "jaime.guevara@dropi.co",
-  "juan.bautista@dropi.co",
 ];
 
 // Regla confirmada 2026-07-16: un PM puede ver el dashboard de los PD de su
@@ -18,7 +12,6 @@ export type SprintRole = "pm" | "pd";
 export const SPRINT_ROLES: Record<string, SprintRole> = {
   "michelle.lopez@dropi.co": "pd",
   "jaime.guevara@dropi.co": "pm",
-  "juan.bautista@dropi.co": "pm",
 };
 
 // Home privado tipo "mi día" (proyectos/mi-dia) — solo se renderiza en vez
