@@ -8,7 +8,6 @@ export type PhaseTabKey = "seguimiento" | "metricas" | "ejecucion" | "resumen";
 const TABS: { key: PhaseTabKey; label: string }[] = [
   { key: "seguimiento", label: "Seguimiento" },
   { key: "metricas", label: "Métricas" },
-  { key: "ejecucion", label: "Mensajes" },
   { key: "resumen", label: "Resumen" },
 ];
 

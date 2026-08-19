@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import * as XLSX from "xlsx";
-import { ChevronDown, ChevronRight, Upload } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { NodeKey, NodeData, SavedNode, isPlanningComplete, EXECUTION_NODE_INDEX } from "../../nodes";
 import { PhaseTabs } from "../../PhaseTabs";
 import { Sidebar } from "../../../Sidebar";
@@ -24,14 +23,6 @@ function fmt(n: number): string {
 function fmtDate(iso: string | null): string {
   if (!iso) return "—";
   return new Date(iso).toLocaleDateString("es-CO", { day: "numeric", month: "short" });
-}
-
-function guessColumn(columns: string[], patterns: RegExp[]): string {
-  for (const p of patterns) {
-    const match = columns.find((c) => p.test(c.trim()));
-    if (match) return match;
-  }
-  return "";
 }
 
 function Pill({ text, color, bg }: { text: string; color: string; bg: string }) {
@@ -56,9 +47,8 @@ export default function SeguimientoPage() {
   const [attendanceSaving, setAttendanceSaving] = useState<string | null>(null);
   const [orderDrafts, setOrderDrafts] = useState<Record<string, string>>({});
   const [orderSaving, setOrderSaving] = useState<string | null>(null);
-  const [importing, setImporting] = useState(false);
-  const [importResult, setImportResult] = useState<string>("");
-  const [approving, setApproving] = useState(false);
+  const [copiedToken, setCopiedToken] = useState<string | null>(null);
+  const [resettingToken, setResettingToken] = useState<string | null>(null);
 
   const load = () => {
     Promise.all([
@@ -95,32 +85,21 @@ export default function SeguimientoPage() {
     });
   };
 
-  const approveOne = async (token: string) => {
-    setApproving(true);
-    try {
-      await fetch(`/api/campaigns-planeacion/${id}/elegibles/aprobar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-      });
-      load();
-    } finally {
-      setApproving(false);
-    }
+  const copyLink = async (token: string) => {
+    const url = `${window.location.origin}/c/${token}`;
+    await navigator.clipboard.writeText(url);
+    setCopiedToken(token);
+    setTimeout(() => setCopiedToken((prev) => (prev === token ? null : prev)), 1500);
   };
 
-  const approveAll = async (pending: number) => {
-    if (!window.confirm(`¿Aprobar a los ${pending} proveedores que postularon y siguen pendientes? Sus páginas pasarán a "Aprobado" de inmediato.`)) return;
-    setApproving(true);
+  const resetLink = async (token: string, supplierName: string) => {
+    if (!window.confirm(`Esto invalida el enlace actual de ${supplierName} y genera uno nuevo. ¿Confirmar?`)) return;
+    setResettingToken(token);
     try {
-      await fetch(`/api/campaigns-planeacion/${id}/elegibles/aprobar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ all: true }),
-      });
+      await fetch(`/api/campaigns-planeacion/${id}/elegibles/${token}/reset`, { method: "POST" });
       load();
     } finally {
-      setApproving(false);
+      setResettingToken(null);
     }
   };
 
@@ -156,50 +135,6 @@ export default function SeguimientoPage() {
     }
   };
 
-  const handleImportFile = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      try {
-        const data = e.target?.result;
-        const wb = XLSX.read(data, { type: "binary" });
-        const sheet = wb.Sheets[wb.SheetNames[0]];
-        const json = XLSX.utils.sheet_to_json<Record<string, string | number>>(sheet, { defval: "" });
-        if (!json.length) { setImportResult("El archivo no tiene filas de datos."); return; }
-        const columns = Object.keys(json[0]);
-        const idCol = guessColumn(columns, [/^(id|product_id|producto_id)$/i, /id.*producto|producto.*id|product.*id/i]);
-        const nameCol = guessColumn(columns, [/nombre.*producto|producto.*nombre|product.*name/i]);
-        const ordersCol = guessColumn(columns, [/^(ordenes|órdenes|orders|orders_count)$/i, /orden|order/i]);
-        if (!idCol || !ordersCol) {
-          setImportResult("No se encontró columna de ID de producto y/o de órdenes. Revisa los encabezados del archivo.");
-          return;
-        }
-        const rows = json.map((r) => ({
-          productId: String(r[idCol] ?? "").trim(),
-          productName: nameCol ? String(r[nameCol] ?? "").trim() : undefined,
-          ordersCount: Number(r[ordersCol]),
-        }));
-        setImporting(true);
-        const res = await fetch(`/api/campaigns-planeacion/${id}/product-orders/import`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ rows }),
-        });
-        const json2 = await res.json();
-        if (!res.ok) {
-          setImportResult(json2.error || "No se pudo importar el archivo.");
-        } else {
-          setImportResult(`Se importaron ${json2.imported} productos.`);
-          load();
-        }
-      } catch {
-        setImportResult("No se pudo leer el archivo. ¿Es un Excel (.xlsx/.xls) o CSV válido?");
-      } finally {
-        setImporting(false);
-      }
-    };
-    reader.readAsBinaryString(file);
-  };
-
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     return q ? eligibles.filter((e) => e.supplier_name.toLowerCase().includes(q)) : eligibles;
@@ -210,7 +145,6 @@ export default function SeguimientoPage() {
     clicked: eligibles.filter((e) => e.view_count > 0).length,
     meetAttended: eligibles.filter((e) => e.meet_attended).length,
     submitted: eligibles.filter((e) => e.submitted_at).length,
-    pendingApproval: eligibles.filter((e) => e.submitted_at && !e.approved_at).length,
   }), [eligibles]);
 
   if (loading) {
@@ -272,7 +206,7 @@ export default function SeguimientoPage() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14, flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 18, flexWrap: "wrap" }}>
                 <input
                   type="text"
                   value={search}
@@ -280,44 +214,15 @@ export default function SeguimientoPage() {
                   placeholder="Buscar proveedor..."
                   style={{ fontSize: 13, padding: "7px 10px", border: "1px solid #e5e7eb", borderRadius: 8, width: 240, fontFamily: "inherit" }}
                 />
-                <label style={{
-                  display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 700, color: "#374151",
-                  background: "#fff", border: "1px solid #d1d5db", borderRadius: 8, padding: "7px 12px", cursor: "pointer",
-                }}>
-                  <Upload size={13} />
-                  {importing ? "Importando..." : "Importar órdenes por producto (CSV/Excel)"}
-                  <input
-                    type="file"
-                    accept=".xlsx,.xls,.csv"
-                    disabled={importing}
-                    onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImportFile(f); }}
-                    style={{ display: "none" }}
-                  />
-                </label>
-                {importResult && <span style={{ fontSize: 12, color: "#6b7280" }}>{importResult}</span>}
-                <span style={{ marginLeft: "auto", display: "flex", gap: 10 }}>
-                  {totals.submitted > 0 && (
-                    <a
-                      href={`/api/campaigns-planeacion/${id}/elegibles/export`}
-                      style={{ fontSize: 12, fontWeight: 700, color: "#6b7280", textDecoration: "none" }}
-                    >
-                      ⬇ Selecciones (CSV)
-                    </a>
-                  )}
-                  {totals.pendingApproval > 0 && (
-                    <button
-                      onClick={() => approveAll(totals.pendingApproval)}
-                      disabled={approving}
-                      style={{ background: "#10B981", color: "#fff", border: "none", borderRadius: 8, padding: "6px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: approving ? 0.6 : 1 }}
-                    >
-                      Aprobar todos ({totals.pendingApproval})
-                    </button>
-                  )}
-                </span>
+                {totals.submitted > 0 && (
+                  <a
+                    href={`/api/campaigns-planeacion/${id}/elegibles/export`}
+                    style={{ marginLeft: "auto", fontSize: 12, fontWeight: 700, color: "#6b7280", textDecoration: "none" }}
+                  >
+                    ⬇ Selecciones (CSV)
+                  </a>
+                )}
               </div>
-              <p style={{ fontSize: 11.5, color: "#9ca3af", margin: "-8px 0 14px" }}>
-                El archivo debe traer una columna de ID de producto y una de órdenes (ej. "ID producto", "Órdenes"). Un producto que no aparezca en el archivo conserva su número anterior.
-              </p>
 
               {filtered.length === 0 ? (
                 <p style={{ fontSize: 13, color: "#9ca3af", margin: 0 }}>Ningún proveedor coincide con "{search}".</p>
@@ -327,7 +232,7 @@ export default function SeguimientoPage() {
                     <thead>
                       <tr style={{ background: "#F8F9FA" }}>
                         <th style={{ width: 28 }} />
-                        {["Proveedor", "Clics", "Meet", "Participó", "Productos", "Aprobado"].map((h) => (
+                        {["Proveedor", "Clics", "Meet", "Participó", "Productos", "Enlace"].map((h) => (
                           <th key={h} style={{ textAlign: "left", padding: "9px 12px", borderBottom: "1px solid #e5e7eb", fontWeight: 700, color: "#6b7280", fontSize: 11.5, textTransform: "uppercase", letterSpacing: "0.03em" }}>
                             {h}
                           </th>
@@ -377,19 +282,6 @@ export default function SeguimientoPage() {
                               <td style={{ padding: "10px 12px", verticalAlign: "top" }}>{e.selected.length}</td>
                               <td style={{ padding: "10px 12px", verticalAlign: "top" }} onClick={(ev) => ev.stopPropagation()}>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                                  {e.approved_at ? (
-                                    <Pill text="Aprobado" color="#059669" bg="#ecfdf5" />
-                                  ) : e.submitted_at ? (
-                                    <button
-                                      onClick={() => approveOne(e.token)}
-                                      disabled={approving}
-                                      style={{ background: "none", border: "1px solid #10B981", color: "#10B981", borderRadius: 8, padding: "3px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: approving ? 0.6 : 1 }}
-                                    >
-                                      Aprobar
-                                    </button>
-                                  ) : (
-                                    <span style={{ color: "#9ca3af" }}>—</span>
-                                  )}
                                   <a
                                     href={`/proyectos/dinamicas-catalogo/planeacion/${id}/elegibles/${e.token}`}
                                     target="_blank"
@@ -398,6 +290,19 @@ export default function SeguimientoPage() {
                                   >
                                     Abrir →
                                   </a>
+                                  <button
+                                    onClick={() => copyLink(e.token)}
+                                    style={{ background: "none", border: "1px solid #d1d5db", color: "#374151", borderRadius: 8, padding: "3px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
+                                  >
+                                    {copiedToken === e.token ? "Copiado ✓" : "Copiar"}
+                                  </button>
+                                  <button
+                                    onClick={() => resetLink(e.token, e.supplier_name)}
+                                    disabled={resettingToken === e.token}
+                                    style={{ background: "none", border: "1px solid #d1d5db", color: "#6b7280", borderRadius: 8, padding: "3px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: resettingToken === e.token ? 0.6 : 1 }}
+                                  >
+                                    {resettingToken === e.token ? "..." : "Resetear"}
+                                  </button>
                                 </div>
                               </td>
                             </tr>

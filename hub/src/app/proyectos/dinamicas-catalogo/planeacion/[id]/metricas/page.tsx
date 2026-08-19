@@ -2,8 +2,9 @@
 
 import { useEffect, useMemo, useState, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import * as XLSX from "xlsx";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
-import { Wand2 } from "lucide-react";
+import { Upload, Wand2 } from "lucide-react";
 import {
   NODE_DEFINITIONS, NodeKey, NodeData, Field, SavedNode, isPlanningComplete, EXECUTION_NODE_INDEX,
 } from "../../nodes";
@@ -21,6 +22,14 @@ function num(v: string | undefined): number {
 }
 function fmt(n: number): string {
   return n.toLocaleString("es-CO");
+}
+
+function guessColumn(columns: string[], patterns: RegExp[]): string {
+  for (const p of patterns) {
+    const match = columns.find((c) => p.test(c.trim()));
+    if (match) return match;
+  }
+  return "";
 }
 
 function StatCard({ label, value, accent }: { label: string; value: string; accent?: string }) {
@@ -129,6 +138,8 @@ export default function MetricasPage() {
   const [saving, setSaving] = useState(false);
   const [aiLoading, setAiLoading] = useState<Set<string>>(new Set());
   const [aiErrors, setAiErrors] = useState<Record<string, string>>({});
+  const [importing, setImporting] = useState(false);
+  const [importResult, setImportResult] = useState<string>("");
 
   const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -212,6 +223,49 @@ export default function MetricasPage() {
     }
   };
 
+  const handleImportFile = (file: File) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const data = e.target?.result;
+        const wb = XLSX.read(data, { type: "binary" });
+        const sheet = wb.Sheets[wb.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json<Record<string, string | number>>(sheet, { defval: "" });
+        if (!json.length) { setImportResult("El archivo no tiene filas de datos."); return; }
+        const columns = Object.keys(json[0]);
+        const idCol = guessColumn(columns, [/^(id|product_id|producto_id)$/i, /id.*producto|producto.*id|product.*id/i]);
+        const nameCol = guessColumn(columns, [/nombre.*producto|producto.*nombre|product.*name/i]);
+        const ordersCol = guessColumn(columns, [/^(ordenes|órdenes|orders|orders_count)$/i, /orden|order/i]);
+        if (!idCol || !ordersCol) {
+          setImportResult("No se encontró columna de ID de producto y/o de órdenes. Revisa los encabezados del archivo.");
+          return;
+        }
+        const rows = json.map((r) => ({
+          productId: String(r[idCol] ?? "").trim(),
+          productName: nameCol ? String(r[nameCol] ?? "").trim() : undefined,
+          ordersCount: Number(r[ordersCol]),
+        }));
+        setImporting(true);
+        const res = await fetch(`/api/campaigns-planeacion/${id}/product-orders/import`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ rows }),
+        });
+        const json2 = await res.json();
+        if (!res.ok) {
+          setImportResult(json2.error || "No se pudo importar el archivo.");
+        } else {
+          setImportResult(`Se importaron ${json2.imported} productos.`);
+        }
+      } catch {
+        setImportResult("No se pudo leer el archivo. ¿Es un Excel (.xlsx/.xls) o CSV válido?");
+      } finally {
+        setImporting(false);
+      }
+    };
+    reader.readAsBinaryString(file);
+  };
+
   const hasResultados = Object.keys(resultados).length > 0;
   const resultadosDone = hasResultados && getRequiredMissing(resultados) === 0;
 
@@ -269,6 +323,27 @@ export default function MetricasPage() {
           <div style={{ marginBottom: 22 }}>
             <PhaseTabs campaignId={id} active="metricas" planningComplete={planningComplete} isActive={isActive} resultadosDone={resultadosDone} />
           </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4, flexWrap: "wrap" }}>
+            <label style={{
+              display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 700, color: "#374151",
+              background: "#fff", border: "1px solid #d1d5db", borderRadius: 8, padding: "7px 12px", cursor: "pointer",
+            }}>
+              <Upload size={13} />
+              {importing ? "Importando..." : "Importar órdenes por producto (CSV/Excel)"}
+              <input
+                type="file"
+                accept=".xlsx,.xls,.csv"
+                disabled={importing}
+                onChange={(e) => { const f = e.target.files?.[0]; if (f) handleImportFile(f); }}
+                style={{ display: "none" }}
+              />
+            </label>
+            {importResult && <span style={{ fontSize: 12, color: "#6b7280" }}>{importResult}</span>}
+          </div>
+          <p style={{ fontSize: 11.5, color: "#9ca3af", margin: "0 0 20px" }}>
+            El archivo debe traer una columna de ID de producto y una de órdenes (ej. "ID producto", "Órdenes"). Un producto que no aparezca en el archivo conserva su número anterior.
+          </p>
 
           {hasResultados && (
             <>
