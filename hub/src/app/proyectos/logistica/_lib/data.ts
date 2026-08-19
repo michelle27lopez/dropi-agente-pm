@@ -501,7 +501,7 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
       // como app propia (ver su README). Va primero porque la pantalla del hub
       // de abajo es el port anterior, que ya divergió — mismo control, otra
       // versión, y la de Indiana es la que se mantiene.
-      { tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://inidiana-map.vercel.app/mapa" },
+      { tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://indiana-map.vercel.app/mapa" },
       { tipo: "prototipo", label: "Control de recolecciones (versión del hub)", href: "/proyectos/logistica/recolecciones" },
     ],
     experimentos: ["recoleccion-proactiva"],
@@ -1024,7 +1024,7 @@ export const experimentos: Experimento[] = [
     proyecto: "Recolección proactiva (PRM-1465 candidato principal)",
     aprendizaje:
       "Ya está separado lo que se envía a la transportadora de lo que se detecta antes. El sistema prioriza y prepara el aviso, pero todavía no confirma que la recolección ocurrió. Falta definir responsables y correr un piloto con línea base para poder comparar.",
-    links: [{ tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://inidiana-map.vercel.app/mapa" }],
+    links: [{ tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://indiana-map.vercel.app/mapa" }],
   },
   {
     slug: "validacion-shop",
