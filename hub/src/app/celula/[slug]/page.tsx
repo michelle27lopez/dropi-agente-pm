@@ -481,9 +481,35 @@ export default function CelulaHomePage() {
             </div>
           </div>
           <div style={{ padding: "0 20px 16px" }}>
-            <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>
-              Misión / Visión — <em>Pendiente de definir</em>.
-            </p>
+            {celula.slug === "logistica" ? (
+              /* Direccionamiento 2026 S2 de María Ossa (Confluence PD/1485471746).
+                 Se transcribe lo que YA está formalmente definido —ownership, NSM
+                 y enfoque del semestre—; la "visión de producto" de tres lentes
+                 sigue siendo una oportunidad sin validar del Product Backlog, así
+                 que no se publica como si estuviera cerrada. */
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <p style={{ fontSize: 13, color: "var(--fg)", margin: 0, lineHeight: 1.5 }}>
+                  Dueña de <strong>la orden</strong>: todo lo que le pasa una vez se crea en Dropi.
+                </p>
+                <p style={{ fontSize: 12, color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>
+                  <strong>NSM</strong> · Tasa de entrega exitosa ≥ 70% (OKR 2 · KR 2.1).<br />
+                  <strong>Q3–Q4</strong> · Sostener y mejorar la tasa de entrega, y reducir el
+                  tiempo de la orden hasta la transportadora.
+                </p>
+                <a
+                  href="https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1485471746"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 11, color: "var(--muted)" }}
+                >
+                  Direccionamiento Logistic Success 2026 · S2 ↗
+                </a>
+              </div>
+            ) : (
+              <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>
+                Misión / Visión — <em>Pendiente de definir</em>.
+              </p>
+            )}
           </div>
         </div>
 
