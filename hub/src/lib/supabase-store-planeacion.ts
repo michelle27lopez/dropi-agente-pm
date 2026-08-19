@@ -54,6 +54,9 @@ type EligibleRow = {
   meet_last_clicked_at: string | null;
   meet_attended: boolean | null;
   meet_attended_marked_at: string | null;
+  meet_rsvp_click_count: number | null;
+  meet_rsvp_first_clicked_at: string | null;
+  meet_rsvp_last_clicked_at: string | null;
   updated_at: string;
 };
 
@@ -78,6 +81,9 @@ function fromEligibleRow(row: EligibleRow): EligibleEntry {
     meet_last_clicked_at: row.meet_last_clicked_at,
     meet_attended: row.meet_attended ?? false,
     meet_attended_marked_at: row.meet_attended_marked_at,
+    meet_rsvp_click_count: row.meet_rsvp_click_count ?? 0,
+    meet_rsvp_first_clicked_at: row.meet_rsvp_first_clicked_at,
+    meet_rsvp_last_clicked_at: row.meet_rsvp_last_clicked_at,
     updated_at: row.updated_at,
   };
 }
@@ -308,6 +314,25 @@ export async function supabaseApproveEligible(campaignId: string, token: string)
   return fromEligibleRow(data as EligibleRow);
 }
 
+// Invalida el link actual de un proveedor y le asigna uno nuevo — `newToken`
+// lo genera el endpoint (mismo formato en Supabase y local).
+export async function supabaseResetEligibleToken(
+  campaignId: string,
+  oldToken: string,
+  newToken: string
+): Promise<EligibleEntry | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("campaign_planeacion_eligible")
+    .update({ token: newToken, updated_at: new Date().toISOString() })
+    .eq("campaign_id", campaignId)
+    .eq("token", oldToken)
+    .select()
+    .single();
+  if (error) return null;
+  return fromEligibleRow(data as EligibleRow);
+}
+
 export async function supabaseApproveAllEligible(campaignId: string): Promise<number | null> {
   if (!supabase) return null;
   const { data, error } = await supabase
@@ -397,6 +422,31 @@ export async function supabaseRegisterMeetClick(campaignId: string, token: strin
       meet_click_count: (prev.meet_click_count ?? 0) + 1,
       meet_first_clicked_at: prev.meet_first_clicked_at ?? now,
       meet_last_clicked_at: now,
+    })
+    .eq("campaign_id", campaignId)
+    .eq("token", token)
+    .select()
+    .single();
+  if (error) return null;
+  return fromEligibleRow(data as EligibleRow);
+}
+
+// Registra un clic en el botón "Agendarme" del mensaje de WhatsApp — llega
+// vía /c/[token]?meet=1 (ver hub/src/app/c/[token]/page.tsx), que redirige
+// directo a Google Calendar sin pasar por el panel. Contador separado de
+// supabaseRegisterMeetClick (ese es del botón de adentro del panel) para
+// poder comparar clics por canal.
+export async function supabaseRegisterMeetRsvpClick(campaignId: string, token: string): Promise<EligibleEntry | null> {
+  if (!supabase) return null;
+  const prev = await supabaseGetEligibleByToken(campaignId, token);
+  if (!prev) return null;
+  const now = new Date().toISOString();
+  const { data, error } = await supabase
+    .from("campaign_planeacion_eligible")
+    .update({
+      meet_rsvp_click_count: (prev.meet_rsvp_click_count ?? 0) + 1,
+      meet_rsvp_first_clicked_at: prev.meet_rsvp_first_clicked_at ?? now,
+      meet_rsvp_last_clicked_at: now,
     })
     .eq("campaign_id", campaignId)
     .eq("token", token)

@@ -325,12 +325,17 @@ export default function CampaignDashboardPage() {
           </button>
         </div>
 
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginBottom: 16 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 16 }}>
           <a
             href={ENRIQUE_DOC_URL}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none",
+              background: "rgba(247,127,0,.08)", border: "1px solid rgba(247,127,0,.3)",
+              borderRadius: 8, padding: "7px 12px",
+            }}
           >
             📄 Plantillas WhatsApp (Claude) →
           </a>
@@ -338,7 +343,12 @@ export default function CampaignDashboardPage() {
             href={`${base}/elegibles/${SUPPLIER_PREVIEW_TOKEN}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none",
+              background: "rgba(247,127,0,.08)", border: "1px solid rgba(247,127,0,.3)",
+              borderRadius: 8, padding: "7px 12px",
+            }}
           >
             🔗 Vista proveedor · prueba →
           </a>
