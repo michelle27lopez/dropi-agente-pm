@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FIN-004 — A/B Copy Modal USDT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --orange: #f49a3d;
+    --orange-dark: #d9822a;
+    --gray-700: #32394d;
+    --gray-600: #475066;
+    --gray-500: #69738c;
+    --gray-300: #a3abbf;
+    --gray-100: #e6eaf2;
+    --gray-50: #f0f4f9;
+    --bg: #f4f6f9;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --purple: #6366f1;
+    --purple-bg: #eef2ff;
+  }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--gray-700);
+    min-height: 100vh;
+  }
+
+  /* ── Top bar ── */
+  .topbar {
+    background: #fff;
+    border-bottom: 1px solid var(--gray-100);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .topbar h1 { font-size: 18px; font-weight: 800; }
+  .topbar .sub { font-size: 12.5px; color: var(--gray-500); margin-top: 2px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 700;
+  }
+  .badge-fin003 { color: #4338ca; background: var(--purple-bg); }
+  .badge-poc { color: #b45309; background: #fef3c7; }
+
+  main { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+
+  /* ── Left: viewer ── */
+  .viewer-col { flex: 1 1 560px; min-width: 320px; }
+  .toggle-row { display: flex; gap: 8px; margin-bottom: 16px; }
+  .toggle-btn {
+    flex: 1; padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--gray-100);
+    background: #fff; cursor: pointer; text-align: left; transition: all .15s ease;
+  }
+  .toggle-btn.active { border-color: var(--orange); background: #fff8f0; }
+  .toggle-btn .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--gray-500); }
+  .toggle-btn.active .label { color: var(--orange-dark); }
+  .toggle-btn .title { font-size: 13.5px; font-weight: 700; color: var(--gray-700); margin-top: 2px; }
+
+  .stage {
+    background: #d8dde6; border-radius: 14px; padding: 40px 24px;
+    display: flex; align-items: center; justify-content: center; min-height: 620px;
+    position: relative; overflow: hidden;
+  }
+  .stage::before {
+    content: ""; position: absolute; inset: 0; background: rgba(0,0,0,.28);
+  }
+
+  /* ── Modal ── */
+  .modal {
+    position: relative; z-index: 2;
+    width: 420px; background: #fff; border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.18);
+    display: flex; flex-direction: column; align-items: center;
+    overflow: hidden;
+  }
+  .modal-banner {
+    width: 100%; height: 150px; object-fit: cover; display: block;
+  }
+  .modal-close {
+    position: absolute; top: 8px; right: 10px; z-index: 3;
+    width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,.85);
+    display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--gray-600); cursor: pointer;
+  }
+  .modal-body { padding: 20px 24px 28px; width: 100%; text-align: center; }
+  .modal-title { font-size: 21px; font-weight: 800; color: var(--gray-700); line-height: 1.15; margin-bottom: 10px; }
+  .modal-text { font-size: 13.5px; color: var(--gray-600); line-height: 1.5; margin-bottom: 16px; }
+  .modal-benefits {
+    background: var(--gray-50); border-radius: 8px; padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; text-align: left;
+  }
+  .benefit { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: var(--gray-600); font-weight: 500; }
+  .benefit .check { color: var(--green); flex-shrink: 0; font-weight: 800; }
+  .modal-cta {
+    width: 100%; background: var(--orange); color: #fff; border: none; border-radius: 8px;
+    padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; margin-bottom: 10px;
+    font-family: inherit;
+  }
+  .modal-legal { font-size: 10px; color: var(--gray-300); line-height: 1.5; }
+
+  .variant-tag {
+    position: absolute; top: 14px; left: 14px; z-index: 3;
+    background: #fff; border-radius: 999px; padding: 4px 12px; font-size: 11px; font-weight: 800;
+    color: var(--orange-dark); box-shadow: 0 2px 6px rgba(0,0,0,.15);
+  }
+
+  /* ── Right: panel ── */
+  .panel-col { flex: 1 1 380px; min-width: 320px; display: flex; flex-direction: column; gap: 16px; }
+  .card { background: #fff; border: 1px solid var(--gray-100); border-radius: 12px; padding: 18px 20px; }
+  .card h3 { font-size: 13px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .card p, .card li { font-size: 12.5px; color: var(--gray-600); line-height: 1.6; }
+  .card ul { padding-left: 18px; margin-top: 4px; }
+  .hipotesis-tag {
+    display: inline-block; font-size: 10px; font-weight: 800; color: #92400e; background: #fffbeb;
+    border: 1px solid #fde68a; border-radius: 6px; padding: 2px 6px; margin-bottom: 8px;
+  }
+  .diff-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px; }
+  .diff-table th { text-align: left; font-size: 10.5px; text-transform: uppercase; color: var(--gray-500); padding: 6px 8px; border-bottom: 1px solid var(--gray-100); }
+  .diff-table td { padding: 8px 8px; border-bottom: 1px solid var(--gray-100); color: var(--gray-600); vertical-align: top; }
+  .diff-table tr:last-child td { border-bottom: none; }
+  .metric-pill { display: flex; justify-content: space-between; font-size: 12px; padding: 6px 0; border-bottom: 1px dashed var(--gray-100); }
+  .metric-pill:last-child { border-bottom: none; }
+  .metric-pill b { color: var(--gray-700); }
+  .note {
+    background: var(--purple-bg); border: 1px solid #c7d2fe; border-radius: 10px; padding: 12px 14px;
+    font-size: 12px; color: #3730a3; line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div>
+      <h1>FIN-004 — A/B Testing: Copy del modal de retiros USDT</h1>
+      <div class="sub">Célula Fintech · Continuación de FIN-003 · Variable en prueba: <b>copy</b> (filtro de antigüedad se ajusta en UserPilot, banner descartado)</div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <span class="badge badge-fin003">↳ Basado en FIN-003</span>
+      <span class="badge badge-poc">🧪 Prototipo — En definición</span>
+    </div>
+  </div>
+
+  <main>
+    <div class="viewer-col">
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-variant="control" onclick="showVariant('control', this)">
+          <div class="label">Control</div>
+          <div class="title">Copy actual (piloto 27 jul–13 ago)</div>
+        </button>
+        <button class="toggle-btn" data-variant="b" onclick="showVariant('b', this)">
+          <div class="label">Variante B</div>
+          <div class="title">Copy simplificado — dolor del módulo</div>
+        </button>
+      </div>
+
+      <div class="stage">
+        <div class="variant-tag" id="variantTag">CONTROL</div>
+        <div class="modal">
+          <div class="modal-close">✕</div>
+          <img class="modal-banner" src="https://www.figma.com/api/mcp/asset/8ecbc0c0-f1e7-48a7-90fe-bd801952c385.png" alt="Banner USDT" />
+          <div class="modal-body">
+            <div class="modal-title" id="mTitle">¿Aún sin cuenta en USDT?</div>
+            <div class="modal-text" id="mText">Agrega tu wallet de cripto como método de retiro y empieza a retirar en USDT cuando quieras.</div>
+            <div class="modal-benefits" id="mBenefits">
+              <div class="benefit"><span class="check">✓</span><span>Retira tus ganancias directamente en USDT</span></div>
+              <div class="benefit"><span class="check">✓</span><span>Paga proveedores cripto-friendly sin intermediarios</span></div>
+              <div class="benefit"><span class="check">✓</span><span>Reinvierte más rápido en tu negocio</span></div>
+              <div class="benefit"><span class="check">✓</span><span>Disponible sin importar dónde operes</span></div>
+            </div>
+            <button class="modal-cta" id="mCta">Agregar cuenta USDT</button>
+            <div class="modal-legal">
+              Operado por Miwa S.A.S.<br/>
+              USDT es un activo virtual, no moneda de curso legal
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel-col">
+      <div class="card">
+        <h3>🎯 Hipótesis de la variante</h3>
+        <span class="hipotesis-tag">HIPÓTESIS a validar</span>
+        <p id="hipotesisText">Creemos que el copy actual no baja la conversión por sí solo — el modal genera awareness (6,55% clic) pero rompe entre clic y retiro real (0,09% neto). Esta variante no cambia esa hipótesis raíz; sirve para descartar que el mensaje sea la barrera antes de investigar fricción de configuración de cuenta.</p>
+      </div>
+
+      <div class="card">
+        <h3>📋 Qué cambia respecto al control</h3>
+        <table class="diff-table" id="diffTable">
+          <thead><tr><th>Elemento</th><th>Control</th><th>Variante B</th></tr></thead>
+          <tbody>
+            <tr><td><b>Título</b></td><td>Pregunta genérica ("¿Aún sin cuenta?")</td><td>Apunta al dolor documentado del módulo Retiros de Saldo (lentitud/visibilidad)</td></tr>
+            <tr><td><b>Beneficios</b></td><td>4 bullets genéricos</td><td>2 bullets, enfocados en velocidad de retiro</td></tr>
+            <tr><td><b>CTA</b></td><td>"Agregar cuenta USDT"</td><td>Sin cambio — ya es claro y no fue la barrera identificada</td></tr>
+            <tr><td><b>Disclaimers legales</b></td><td>Igual</td><td>Sin cambio — pendiente confirmar con legal si esta pantalla (previa a "agregar cuenta") requiere las advertencias de fluctuación/garantía estatal/tributarias, o si esas van en el siguiente paso</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>📊 Baseline a superar (FIN-003, Colombia, 18 días)</h3>
+        <div class="metric-pill"><span>Clic en CTA</span><b>6,55% (528/8.060)</b></div>
+        <div class="metric-pill"><span>Retiro nuevo atribuible (30d)</span><b>0,09% (7/8.060)</b></div>
+        <div class="metric-pill"><span>Tasa de dismissed</span><b>91,8%</b></div>
+        <div class="metric-pill"><span>Meta interna (no alcanzada)</span><b>25%</b></div>
+      </div>
+
+      <div class="note">
+        <b>Nota de alcance:</b> este prototipo cubre solo la variable de copy. El filtro de antigüedad (ahora &gt;30 días) se configura directo en UserPilot y queda documentado en FIN-004 sin representación visual aquí. El banner de refuerzo no se prototipa — sigue descartado por límite técnico de UserPilot.
+      </div>
+    </div>
+  </main>
+
+<script>
+  const COPIES = {
+    control: {
+      tag: "CONTROL",
+      title: "¿Aún sin cuenta en USDT?",
+      text: "Agrega tu wallet de cripto como método de retiro y empieza a retirar en USDT cuando quieras.",
+      benefits: [
+        "Retira tus ganancias directamente en USDT",
+        "Paga proveedores cripto-friendly sin intermediarios",
+        "Reinvierte más rápido en tu negocio",
+        "Disponible sin importar dónde operes"
+      ],
+      cta: "Agregar cuenta USDT",
+      hipotesis: "Creemos que el copy actual no baja la conversión por sí solo — el modal genera awareness (6,55% clic) pero rompe entre clic y retiro real (0,09% neto). Esta variante no cambia esa hipótesis raíz; sirve para descartar que el mensaje sea la barrera antes de investigar fricción de configuración de cuenta."
+    },
+    b: {
+      tag: "VARIANTE B",
+      title: "Tus retiros, sin la espera de siempre",
+      text: "Configura tu cuenta USDT en minutos y recibe tus pagos sin depender del proceso bancario tradicional.",
+      benefits: [
+        "Retiros más rápidos, sin intermediarios bancarios",
+        "Ideal para pagarle a tus proveedores al instante"
+      ],
+      cta: "Agregar cuenta USDT",
+      hipotesis: "Creemos que si el copy nombra el dolor real del módulo Retiros de Saldo (lentitud, rechazos, falta de visibilidad — reportado en discovery de FIN-003) en vez de una pregunta genérica, aumentará la tasa de clic sobre el 6,55% actual y reducirá el 91,8% de dismissed, porque el usuario reconocerá una solución a un problema que ya vive, no una oferta abstracta. Si la conversión no se mueve, la barrera no es el mensaje — hay que investigar la fricción de configurar la cuenta."
+    }
+  };
+
+  function showVariant(key, btn) {
+    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const c = COPIES[key];
+    document.getElementById('variantTag').textContent = c.tag;
+    document.getElementById('mTitle').textContent = c.title;
+    document.getElementById('mText').textContent = c.text;
+    document.getElementById('mCta').textContent = c.cta;
+    document.getElementById('hipotesisText').textContent = c.hipotesis;
+    const benefitsEl = document.getElementById('mBenefits');
+    benefitsEl.innerHTML = c.benefits.map(b => `<div class="benefit"><span class="check">✓</span><span>${b}</span></div>`).join('');
+  }
+</script>
+
+</body>
+</html>
