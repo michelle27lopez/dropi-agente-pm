@@ -628,7 +628,7 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     aportaA: "Fuera del centro",
     codigoDarwin: "PRM-1366",
     vista: "/proyectos/logistica/same-day",
-    etapa: "Despacho", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    etapa: "Despacho", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
     ticket: "PRM-1366",
     bloqueo: "En pausa por la regla de un frente a la vez: el activo es Normalización de estados.",
     descripcion: "Entrega el mismo día para bodegas propias y Veloces.",
@@ -690,7 +690,7 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     // vigente es esta: una dirección mal capturada se paga en devolución.
     aportaA: "Devolución",
     codigoDarwin: "PRM-91",
-    etapa: "Confirmación", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    etapa: "Confirmación", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
     ticket: "PRM-91",
     // Ownership resuelto el 10-ago: el proyecto es de Juan. Con eso desaparece
     // el `bloqueo` que tenía —era el conflicto de ownership, no un impedimento
@@ -719,7 +719,7 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     // novedades es inusable y el desenlace real es la devolución".
     aportaA: "Devolución",
     codigoDarwin: "PRM-1512",
-    etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
     ticket: "PRM-1512",
     jira: "⚠️ En Ruta (backlog), SIN ASIGNAR — aunque el Delivery Backlog pide FINALIZARLO",
     doc: "completo",

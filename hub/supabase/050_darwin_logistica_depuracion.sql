@@ -81,8 +81,40 @@ where not exists (
   select 1 from projects p where p.project_code = v.project_code
 );
 
+-- ── 4. Las cinco con código de Jira: cerrar la contradicción ──────────────
+--
+-- Decisión de Juan (19-ago) sobre lo que deuda-datos-darwin.md §2 dejó abierto:
+-- "o se corrige el type en la base, o se corrige la fase en el tablero".
+-- Resolución: SON Delivery — el Delivery Backlog del direccionamiento de María
+-- (Confluence PD/1485471746) las lista a las cinco como aprobadas y en
+-- ejecución. El `type` se queda como está.
+--
+-- Lo que sí estaba mal es `estado_interno`. Las cinco decían 'en DEV' mientras
+-- su propio `handoff_status` decía 'Experimentación' en cuatro de ellas: no se
+-- puede estar en desarrollo sin que el handoff haya ocurrido. El 'en DEV' era
+-- un valor puesto en bloque que la columna de al lado desmiente.
+--
+-- Se alinea al handoff real, que es el dato que sí tiene respaldo:
+--   · handoff 'Experimentación'     → 'En definición'
+--   · handoff 'Listo para handoff'  → 'Pendiente Handoff'  (solo PRM-1513)
+--
+-- Ambos son estados válidos de Delivery Proyecto según el check de la 043.
+
+update projects
+   set estado_interno = 'En definición'
+ where project_code in ('PRM-1297', 'PRM-1366', 'PRM-1512', 'PRM-91')
+   and type = 'Delivery Proyecto'
+   and handoff_status = 'Experimentación';
+
+update projects
+   set estado_interno = 'Pendiente Handoff'
+ where project_code = 'PRM-1513'
+   and type = 'Delivery Proyecto'
+   and handoff_status = 'Listo para handoff';
+
 -- ── Verificación ──────────────────────────────────────────────────────────
 -- select project_code, name, type, estado_interno, related_delivery_id
 --   from projects
---  where project_code in ('LOG-003','LOG-010','LOG-011','LOG-018','LOG-021')
+--  where project_code in ('LOG-003','LOG-010','LOG-011','LOG-018','LOG-020',
+--                          'LOG-021','PRM-91','PRM-1297','PRM-1366','PRM-1512','PRM-1513')
 --  order by project_code;
