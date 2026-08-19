@@ -88,7 +88,8 @@ export default function Sidebar() {
   const etapaAbierta = (n: string) => etapasAbiertas[n] ?? n === etapaDeLaRuta;
 
   return (
-    <aside style={ASIDE}>
+    <>
+    <aside className="log-nav" style={ASIDE}>
       <Link href="/celula/logistica" style={VOLVER}>
         ← Célula Logística
       </Link>
@@ -257,6 +258,15 @@ export default function Sidebar() {
 
       <div style={PIE}>Logistic Success · Dropi</div>
     </aside>
+    {/* Mismo patrón que proveedores/layout.tsx: bajo 900px el contenido pesa
+        más que la navegación. Sin esto el panel seguía ocupando 226px fijos
+        incluso cuando el nav global ya se había vuelto drawer. */}
+    <style>{`
+      @media (max-width: 900px) {
+        .log-nav { display: none; }
+      }
+    `}</style>
+    </>
   );
 }
 
@@ -281,16 +291,21 @@ function ItemNav({
 // dos cabeceras de grupo y un título que envolvía a dos líneas, y el panel no
 // cabía en pantalla.
 
+// Alto de .gnav-topbar (globals.css): es sticky con top:0 y z-index:30, así que
+// sin descontarla el primer ítem de este panel se mete debajo de la franja al
+// hacer scroll.
+const TOPBAR = 53;
+
 const ASIDE: React.CSSProperties = {
   width: 226,
   flexShrink: 0,
   background: "#fff",
   borderRight: "1px solid var(--border)",
-  minHeight: "100vh",
-  maxHeight: "100vh",
+  minHeight: `calc(100vh - ${TOPBAR}px)`,
+  maxHeight: `calc(100vh - ${TOPBAR}px)`,
   overflowY: "auto",
   position: "sticky",
-  top: 0,
+  top: TOPBAR,
   alignSelf: "flex-start",
   display: "flex",
   flexDirection: "column",
