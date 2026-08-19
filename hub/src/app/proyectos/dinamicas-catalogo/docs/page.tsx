@@ -115,7 +115,7 @@ export default function DocsPage() {
       {/* Header */}
       <header style={{
         background: "#fff", borderBottom: "1px solid #e5e7eb",
-        padding: "0 24px", height: 52,
+        padding: "0 32px", height: 52,
         display: "flex", alignItems: "center", gap: 12, flexShrink: 0,
         position: "sticky", top: 0, zIndex: 20,
       }}>
@@ -127,7 +127,7 @@ export default function DocsPage() {
         <Tag color="#0EA5E9">DCA-001</Tag>
       </header>
 
-      <div style={{ flex: 1, display: "flex", maxWidth: 1100, margin: "0 auto", width: "100%", padding: "32px 24px", gap: 32 }}>
+      <div style={{ flex: 1, display: "flex", maxWidth: 1100, margin: "0 auto", width: "100%", padding: "32px", gap: 32 }}>
 
         {/* Left nav */}
         <aside style={{ width: 220, flexShrink: 0, alignSelf: "flex-start", position: "sticky", top: 68 }}>

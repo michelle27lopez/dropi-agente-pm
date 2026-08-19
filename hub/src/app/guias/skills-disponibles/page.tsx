@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import HubFooter from "@/components/HubFooter";
+import Breadcrumb from "@/components/Breadcrumb";
 
 type Skill = {
   slug: string;
@@ -154,7 +155,7 @@ export default function SkillsDisponiblesPage() {
           background: "var(--card)", borderBottom: "1px solid var(--border)",
           padding: "20px 32px", display: "flex", flexDirection: "column", gap: 10,
         }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
+          <Breadcrumb items={[{ label: "Guías", href: "/guias" }, { label: "Directorio de Skills" }]} />
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <img src="/darwin-logo.png" alt="Darwin" width={36} height={36} style={{ display: "block", borderRadius: 8 }} />
             <div>
@@ -168,7 +169,7 @@ export default function SkillsDisponiblesPage() {
           </div>
         </header>
 
-        <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px 80px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.6, marginBottom: 8 }}>
             Una skill se activa escribiendo <code>/nombre-de-la-skill</code> en el chat, o simplemente
             describiendo lo que necesitas — Claude la reconoce por contexto y la carga sola. Esta lista está

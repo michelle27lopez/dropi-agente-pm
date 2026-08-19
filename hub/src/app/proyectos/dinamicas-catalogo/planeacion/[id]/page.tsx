@@ -359,7 +359,7 @@ export default function PlaneacionWizardPage() {
           --radius-pill: 999px;
         }
 
-        #hdr { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 16px; }
+        #hdr { background: var(--card); border-bottom: 1px solid var(--border); padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; gap: 16px; }
         .hdr-left { display: flex; align-items: center; gap: 10px; min-width: 0; flex-wrap: wrap; }
         .crumb { background: none; border: none; cursor: pointer; color: var(--muted); font-size: 13px; padding: 0; font-family: inherit; text-decoration: none; }
         .crumb:hover { color: var(--fg); }

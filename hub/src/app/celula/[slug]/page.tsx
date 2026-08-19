@@ -2,23 +2,24 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useParams } from "next/navigation";
+import { ChevronRight } from "lucide-react";
 import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
 import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
-import { isMiDiaOwner } from "@/lib/sprint-access";
-import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
+import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
+import { previewUpdateContent } from "@/lib/update-preview";
+import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 
 // El weekly de logística arrastra el registro completo del tablero
 // (proyectos/logistica/_lib/data.ts, ~1.800 líneas). Se carga aparte para que
 // ese peso no entre en el bundle de las demás células, que no lo usan. Por lo
 // mismo, el mapa de etapas se pide con un `import()` dentro del efecto.
-const UpdatesLogistica = dynamic(() => import("./_components/UpdatesLogistica"), { ssr: false });
-const UpdatesBackoffice = dynamic(() => import("./_components/UpdatesBackoffice"), { ssr: false });
 const WeeklyBanner = dynamic(() => import("./_components/WeeklyBanner"), { ssr: false });
-type MapaEtapas = import("./_lib/logistica-etapas").MapaEtapas;
+const SellersMetricsPanel = dynamic(() => import("./_components/SellersMetricsPanel"), { ssr: false });
 type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
@@ -27,38 +28,6 @@ type CelulaHome = {
   id: string; nombre: string; slug: string; lead: string | null; area: string | null;
   ve_hub_completo: boolean;
   proyectos: Proyecto[]; updates: Update[];
-};
-
-type MetricsStats = {
-  totalSellers: number;
-  activationCount: number;
-  activationRate: number;
-  activeCount: number;
-  activeRate: number;
-  bounceCount: number;
-  bounceRate: number;
-  nsmCurrent: number;
-  okrTarget: number;
-  percentageToOkr: number;
-  gapToOkr: number;
-  survivalRate?: number;
-  ttvNetoMedian?: number;
-  activationRateNet?: number;
-  okrTargetCompany?: number;
-  percentageToCompanyOKR?: number;
-  countries?: Record<string, any>;
-};
-type FunnelStep = { step: string; count: number; pct: number; color: string };
-type JiraBug = { key: string; summary: string; status: string; assignee: string; url: string };
-type SprintTask = { key: string; summary: string; status: string; priority: string; url: string; sections: any[] };
-type CrmStats = { totalOpps: number; stages: Record<string, number> };
-type SellersMetrics = {
-  source: string;
-  stats: MetricsStats;
-  funnel: FunnelStep[];
-  jira: { totalBugs: number; pendingBugs: number; completedBugs: number; bugsList: JiraBug[] };
-  sprint: { totalTasks: number; completedTasks: number; tasksList: SprintTask[] };
-  crm: CrmStats;
 };
 
 const HANDOFF_COLOR: Record<string, string> = {
@@ -89,7 +58,7 @@ function updateToItem(u: Update): Item {
   return {
     key: u.id,
     name: u.title,
-    description: truncate(u.content, 160),
+    description: previewUpdateContent(u.content),
     url: u.url ?? undefined,
     tag: u.week_date,
     color: "#6366F1",
@@ -120,12 +89,14 @@ export default function CelulaHomePage() {
   const [form, setForm] = useState({ name: "", summary: "" });
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
-  const [metrics, setMetrics] = useState<SellersMetrics | null>(null);
   const [openUpdate, setOpenUpdate] = useState<Update | null>(null);
-  const [selectedCountry, setSelectedCountry] = useState("global");
-  // Etapa seleccionada del viaje de la orden (solo logística). null = todas.
-  const [etapaFiltro, setEtapaFiltro] = useState<string | null>(null);
-  const [mapaEtapas, setMapaEtapas] = useState<MapaEtapas | null>(null);
+  // Modo lectura (2026-08-17, Jaime): ver la home de una célula que no es la
+  // tuya (vía el switcher de GlobalTopBar) ya no da los mismos poderes de
+  // edición que tu propia célula — antes cualquier super admin podía crear/
+  // editar/eliminar en cualquier célula sin distinción visual. El toggle
+  // "Editar de todos modos" es la única forma de recuperar esos poderes,
+  // pensado para cuando de verdad hay que corregir algo de otra célula.
+  const [modoEdicionForzado, setModoEdicionForzado] = useState(false);
 
   useEffect(() => {
     fetch(`/api/celulas/${params.slug}`)
@@ -140,22 +111,6 @@ export default function CelulaHomePage() {
       .then((res) => res.json())
       .then((data) => setProfile(data?.profile ?? null))
       .catch(() => setProfile(null));
-
-    // La etapa del viaje de la orden es un dato del tablero de logística, no de
-    // Darwin. Se pide aparte para que su registro no pese en las demás células.
-    if (params.slug === "logistica") {
-      import("./_lib/logistica-etapas")
-        .then((m) => setMapaEtapas(m.mapaEtapas()))
-        .catch((err) => console.error("Error cargando las etapas de logística:", err));
-    }
-
-    // Si la célula es de Sellers, cargamos sus métricas cruzadas en vivo
-    if (params.slug === "sellers") {
-      fetch("/api/metrics/sellers")
-        .then((res) => res.json())
-        .then((data) => setMetrics(data))
-        .catch((err) => console.error("Error cargando métricas de Sellers:", err));
-    }
   }, [params.slug]);
 
   async function handleCreate(e: React.FormEvent) {
@@ -186,7 +141,8 @@ export default function CelulaHomePage() {
 
   const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
   const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
-  const canCreate = !!profile && (profile.is_super_admin || profile.celula_id === celula.id);
+  const esCelulaPropia = !!profile && profile.celula_id === celula.id;
+  const canCreate = esCelulaPropia || modoEdicionForzado;
 
   const pocsByParent = new Map<string, Proyecto[]>();
   const deliveriesByParent = new Map<string, Proyecto[]>();
@@ -279,19 +235,11 @@ export default function CelulaHomePage() {
     return null;
   }
 
-  // Home privada: solo para MI_DIA_OWNER_EMAIL, reemplaza el body estándar de
-  // célula por el dashboard de "mi día" — ver [[project_darwin_pd_dashboard]].
-  if (isMiDiaOwner(profile?.email)) {
-    return (
-      <main style={{ minHeight: "100vh", padding: "0", background: "var(--card)", display: "flex", flexDirection: "column" }}>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <HubHeader title={celula.nombre} subtitle="Tu día · Darwin" currentSlug={celula.slug} />
-          <MiDiaShell />
-        </div>
-        <HubFooter />
-      </main>
-    );
-  }
+  // La home de célula ya NO se reemplaza por "Mi día" (2026-08-17,
+  // globalización aprobada por Jaime) — todas las células muestran la misma
+  // interfaz estándar (grid Discovery/POC/Delivery/Following). "Mi día"
+  // sigue existiendo como su propia página en el sidebar (/), no acá — ver
+  // [[project_darwin_pd_dashboard]].
 
   // "Updates" mezcla los registros de celula_updates con el historial del
   // Weekly PM de esta célula (si tiene alguno) — mismo look de tarjeta,
@@ -305,103 +253,19 @@ export default function CelulaHomePage() {
   const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
 
   const isSellers = params.slug === "sellers";
-  // Logística ya NO cambia la estructura de la home: usa las mismas cuatro
-  // secciones que las demás células. Lo único propio que le queda es la etapa
-  // del viaje de la orden, que pasó de ser el esqueleto de la página a ser un
-  // tag de la tarjeta más una fila de chips para filtrar.
-  const isLogistica = params.slug === "logistica";
-  // Backoffice suma su propio Weekly (acordeones por fecha) a la sección
-  // Updates, igual que logística — ver UpdatesBackoffice.
-  const isBackoffice = params.slug === "backoffice";
-
-  // ── Las cuatro secciones, iguales para todas las células ───────────────────
-  // Los filtros son los mismos de antes; lo único nuevo es `pasaEtapa`, que
-  // fuera de logística siempre devuelve true porque no hay mapa que consultar.
-  const pasaEtapa = (p: Proyecto) => {
-    if (!etapaFiltro || !mapaEtapas) return true;
-    const codigo = p.project_code?.toUpperCase();
-    return !!codigo && mapaEtapas.etapaPorCodigo[codigo] === etapaFiltro;
-  };
-
+  // El grid de tarjetas, el filtro de etapa y "sin ficha Darwin" de logística
+  // ya viven en /celula/logistica/proyectos (2026-08-17, Jaime) — acá los
+  // proyectos de la célula ya no se filtran ni se anotan con datos del
+  // tablero, solo se cuentan para el panel compacto de más abajo.
   const discoveryProjects = celula.proyectos.filter(
-    (p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following" && pasaEtapa(p),
+    (p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following",
   );
-  const pruebasConcepto = celula.proyectos.filter((p) => p.type === "POC" && pasaEtapa(p));
-  const deliveryProjects = celula.proyectos.filter((p) => p.type === "Delivery Proyecto" && pasaEtapa(p));
-  const followings = celula.proyectos.filter((p) => p.type === "Following" && pasaEtapa(p));
-
-  // Las iniciativas del tablero que aún no tienen ficha en Darwin. No se pintan
-  // como tarjeta a propósito: que se vea de un vistazo cuáles faltan es el punto.
-  //
-  // Se comprueban las DOS llaves de cada iniciativa, porque cinco quedaron
-  // registradas con su ticket de Jira como `project_code` — ver `codigoDarwin`
-  // en el tablero. Tener `codigo` en data.ts no prueba que exista la ficha.
-  const codigosEnDarwin = new Set(
-    celula.proyectos.map((p) => p.project_code?.toUpperCase()).filter(Boolean) as string[],
-  );
-  const sinFichaDarwin = (mapaEtapas?.iniciativas ?? []).filter((i) => {
-    const registrada = i.codigos.some((c) => codigosEnDarwin.has(c));
-    return !registrada && (!etapaFiltro || i.etapa === etapaFiltro);
-  });
-
-  /**
-   * Tag de etapa + enlace a la ficha del tablero. Devuelve `{}` fuera de
-   * logística, así que el spread en las tarjetas es inocuo para las demás.
-   */
-  function extrasEtapa(p: Proyecto) {
-    if (!mapaEtapas) return {};
-    const codigo = p.project_code?.toUpperCase();
-    const etapa = codigo ? mapaEtapas.etapaPorCodigo[codigo] : undefined;
-    const slug = codigo ? mapaEtapas.slugPorCodigo[codigo] : undefined;
-    return {
-      tags: etapa ? [etapa] : [],
-      // Sin esto la tarjeta enlaza a `/proyectos/log-00X`, que no existe: estos
-      // proyectos tienen `prototype_url` en NULL y su ficha vive en el tablero.
-      urlOverride: slug ? `/proyectos/logistica/proyecto/${slug}` : undefined,
-    };
-  }
-
-  // Get active country stats
-  const activeStats = (metrics?.stats?.countries as any)?.[selectedCountry] || metrics?.stats;
-  const activeFunnel = activeStats?.funnel || metrics?.funnel || [];
-
-  const sellersCss = `
-    .country-tab {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      color: #64748b;
-      transition: all 0.2s ease;
-      cursor: pointer;
-    }
-    .country-tab:hover {
-      color: #0f172a;
-      background: #f8fafc;
-      border-color: #cbd5e1;
-    }
-    .country-tab.active {
-      background: linear-gradient(90deg, #F77F00 0%, #ffaa44 100%);
-      border-color: transparent;
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(247, 127, 0, 0.25);
-    }
-  `;
-
+  const pruebasConcepto = celula.proyectos.filter((p) => p.type === "POC");
+  const deliveryProjects = celula.proyectos.filter((p) => p.type === "Delivery Proyecto");
+  const followings = celula.proyectos.filter((p) => p.type === "Following");
   if (isSellers) {
-    const totalSellers = activeStats?.totalSellers ?? 0;
-    const activationRate = activeStats?.activationRate ?? 0;
-    const activeRate = activeStats?.activeRate ?? 0;
-    const bounceRate = activeStats?.bounceRate ?? 0;
-    const survivalRate = activeStats?.survivalRate ?? 0;
-    const ttvNetoMedian = activeStats?.ttvNetoMedian ?? 0;
-    const nsmCurrent = activeStats?.nsmCurrent ?? 0;
-    const okrTarget = activeStats?.okrTarget ?? 0;
-    const percentageToOkr = activeStats?.percentageToOkr ?? 0;
-    const gapToOkr = activeStats?.gapToOkr ?? 0;
-
     return (
       <main style={{ minHeight: "100vh", padding: "0", background: "linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)", color: "#0f172a", display: "flex", flexDirection: "column", fontFamily: "'Inter', sans-serif" }}>
-        <style dangerouslySetInnerHTML={{ __html: sellersCss }} />
-        
         {/* Header Section */}
         <div style={{ borderBottom: "1px solid #e2e8f0", background: "#ffffff" }}>
           <HubHeader
@@ -412,268 +276,20 @@ export default function CelulaHomePage() {
         </div>
 
         <div style={{ maxWidth: 960, margin: "0 auto", padding: "32px 24px", width: "100%", flex: 1 }}>
-          
+
+          {!esCelulaPropia && profile?.is_super_admin && (
+            <ModoLecturaBanner activo={modoEdicionForzado} onToggle={() => setModoEdicionForzado((v) => !v)} />
+          )}
+
+          {/* "Mi día" de Sellers (2026-08-17, Jaime): arriba lo de la célula
+              — sus métricas globales reales (antes vivían acá mismo, luego
+              se movieron a Updates, ahora vuelven a casa) — abajo lo
+              personal, mismos paneles que el resto de células. */}
+          <SellersMetricsPanel />
+          <MiDiaShell />
+
           {/* Weekly Célula Banner / Action Bar */}
           <WeeklyBanner />
-
-          {/* Country Filter Tab Bar */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28, background: "#f1f5f9", padding: 6, borderRadius: 12, border: "1px solid #e2e8f0" }}>
-            {[
-              { key: "global", label: "🌍 Global" },
-              { key: "CO", label: "🇨🇴 Colombia" },
-              { key: "EC", label: "🇪🇨 Ecuador" },
-              { key: "CL", label: "🇨🇱 Chile" },
-              { key: "MX", label: "🇲🇽 México" },
-              { key: "GT", label: "🇬🇹 Guatemala" },
-              { key: "PY", label: "🇵🇾 Paraguay" },
-              { key: "PA", label: "🇵🇦 Panamá" },
-              { key: "AR", label: "🇦🇷 Argentina" },
-              { key: "CR", label: "🇨🇷 Costa Rica" },
-              { key: "PE", label: "🇵🇪 Perú" }
-            ].map((country) => (
-              <button
-                key={country.key}
-                onClick={() => setSelectedCountry(country.key)}
-                className={`country-tab ${selectedCountry === country.key ? "active" : ""}`}
-                style={{
-                  padding: "6px 14px",
-                  borderRadius: 8,
-                  fontSize: 12,
-                  fontWeight: 700,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6
-                }}
-              >
-                {country.label}
-              </button>
-            ))}
-          </div>
-
-          {/* OKR Progress Card — Dynamic Ceiling (Global = 7.8M Holding, Country = CPO Meta Julio) */}
-          {metrics && (() => {
-            const isGlobal = selectedCountry === "global";
-            const ceilingTarget = isGlobal ? 7800000 : okrTarget;
-            const actualPctOfCeiling = ceilingTarget > 0 ? (nsmCurrent / ceilingTarget) * 100 : 0;
-            const formattedCurrent = nsmCurrent >= 1000000 ? `${(nsmCurrent / 1000000).toFixed(2)}M` : nsmCurrent.toLocaleString();
-            const formattedTarget = ceilingTarget >= 1000000 ? `${(ceilingTarget / 1000000).toFixed(2)}M` : ceilingTarget.toLocaleString();
-            
-            return (
-              <div style={{
-                background: "#ffffff",
-                border: "1px solid #e2e8f0",
-                borderRadius: 16, padding: "28px 32px", marginBottom: 24, color: "#0f172a",
-                boxShadow: "0 8px 30px rgba(0,0,0,0.05)"
-              }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
-                  <div>
-                    <span style={{ fontSize: 10, fontWeight: 850, background: "#FFF7ED", color: "#F77F00", border: "1px solid #FFEDD5", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                      {isGlobal ? "OKR 1 / KR 1.1 HOLDING · TECHO GLOBAL: 7.80M ÓRDENES/MES" : `TECHO META JULIO CPO (${selectedCountry.toUpperCase()})`}
-                    </span>
-                    <h3 style={{ fontSize: 19, fontWeight: 900, letterSpacing: "-0.02em", color: "#0f172a", margin: "8px 0 0" }}>
-                      {isGlobal ? "Órdenes Movilizadas de Sellers Activos (NSM Global)" : `Órdenes Movilizadas en ${selectedCountry === "CO" ? "Colombia" : selectedCountry === "EC" ? "Ecuador" : selectedCountry === "CL" ? "Chile" : selectedCountry === "MX" ? "México" : selectedCountry === "GT" ? "Guatemala" : selectedCountry === "PY" ? "Paraguay" : selectedCountry === "PA" ? "Panamá" : selectedCountry === "AR" ? "Argentina" : selectedCountry === "CR" ? "Costa Rica" : selectedCountry === "PE" ? "Perú" : selectedCountry}`}
-                    </h3>
-                  </div>
-                  <div style={{ textAlign: "right" }}>
-                    <span style={{ fontSize: 32, fontWeight: 900, color: "#F77F00" }}>
-                      {actualPctOfCeiling.toFixed(1)}%
-                    </span>
-                    <span style={{ fontSize: 12, color: "#64748b", display: "block" }}>
-                      {isGlobal ? "del Techo OKR 1.1 (7.80M/mes)" : `alcanzado de la Meta Julio (${percentageToOkr}% proy.)`}
-                    </span>
-                  </div>
-                </div>
-                
-                {/* Progress Bar towards Ceiling */}
-                <div style={{ height: 12, background: "#f1f5f9", borderRadius: 999, overflow: "hidden", marginBottom: 16, border: "1px solid #e2e8f0" }}>
-                  <div style={{
-                    height: "100%",
-                    width: `${Math.min(actualPctOfCeiling, 100)}%`,
-                    background: actualPctOfCeiling >= 100 ? "linear-gradient(90deg, #10B981 0%, #34D399 100%)" : "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)",
-                    borderRadius: 999,
-                  }} />
-                </div>
-                
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed #e2e8f0", paddingTop: 14 }}>
-                  <div>
-                    <span style={{ color: "#64748b", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
-                    <strong style={{ color: "#0f172a", fontSize: 14, fontWeight: 800 }}>{formattedCurrent}/mes</strong>
-                    <span style={{ fontSize: 11, color: "#64748b", display: "block" }}>{nsmCurrent.toLocaleString()} ord movilizadas</span>
-                  </div>
-                  <div>
-                    <span style={{ color: "#64748b", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
-                      {isGlobal ? "Hito Julio CPO" : "Meta Julio CPO (Techo País)"}
-                    </span>
-                    <strong style={{ color: "#0f172a", fontSize: 14, fontWeight: 800 }}>
-                      {isGlobal ? "3.57M/mes" : `${formattedTarget}/mes`}
-                    </strong>
-                    <span style={{ fontSize: 11, color: "#16a34a", fontWeight: 700, display: "block" }}>
-                      {isGlobal ? "93.85% alcanzado (100.32% proy)" : `${percentageToOkr}% proy. cumplimiento`}
-                    </span>
-                  </div>
-                  <div>
-                    <span style={{ color: "#64748b", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>
-                      {isGlobal ? "Techo OKR 1.1 Holding" : "Brecha a la Meta Julio"}
-                    </span>
-                    <strong style={{ color: "#F77F00", fontSize: 14, fontWeight: 900 }}>
-                      {isGlobal ? "7.80M/mes" : gapToOkr > 0 ? `-${gapToOkr.toLocaleString()} ord` : `+${Math.abs(gapToOkr).toLocaleString()} ord 🎉`}
-                    </strong>
-                    <span style={{ fontSize: 11, color: isGlobal ? "#dc2626" : gapToOkr > 0 ? "#dc2626" : "#16a34a", fontWeight: 700, display: "block" }}>
-                      {isGlobal ? "Brecha: -4.45M ord (43.0% cumpl.)" : gapToOkr > 0 ? "Falta para completar meta" : "Meta del mes superada!"}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          })()}
-
-          {/* Metrics Grid — Termómetros Visuales por Métrica a Escala */}
-          {metrics && (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))", gap: 18, marginBottom: 28 }}>
-              {[
-                {
-                  label: "Tasa de Activación Neta",
-                  value: `${activeStats?.activationRateNet ?? 5.2}%`,
-                  targetVal: "8.0%",
-                  progressPct: ((activeStats?.activationRateNet ?? 5.2) / 8.0) * 100,
-                  meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
-                  sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
-                  color: "#10B981", bg: "#ECFDF5", icon: "⚡"
-                },
-                {
-                  label: "Tiempo de Activación Neta (TTV)",
-                  value: `${ttvNetoMedian} días`,
-                  targetVal: "< 12.0d",
-                  progressPct: (12.0 / ttvNetoMedian) * 100,
-                  meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
-                  sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
-                  color: "#D97706", bg: "#FEF3C7", icon: "⏱️"
-                },
-                {
-                  label: "Tasa de Activación Bruta",
-                  value: `${activationRate}%`,
-                  targetVal: "12.0%",
-                  progressPct: (activationRate / 12.0) * 100,
-                  meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
-                  sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
-                  color: "#DB2777", bg: "#FCE7F3", icon: "📦"
-                },
-                {
-                  label: "Retención a 30 Días",
-                  value: `${survivalRate}%`,
-                  targetVal: "75.0%",
-                  progressPct: (survivalRate / 75.0) * 100,
-                  meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
-                  sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
-                  color: "#7C3AED", bg: "#F3E8FF", icon: "🌱"
-                },
-                {
-                  label: "Base de Sellers Identificados",
-                  value: totalSellers.toLocaleString(),
-                  targetVal: "46.2k DB",
-                  progressPct: (36056 / totalSellers) * 100,
-                  meta: "36,056 Dropshippers Target + 8,744 Proveedores",
-                  sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
-                  color: "#2563EB", bg: "#EFF6FF", icon: "👥"
-                },
-                {
-                  label: "Usuarios Activos Diarios (DAU)",
-                  value: "14,262",
-                  targetVal: "81.5k MAU",
-                  progressPct: (14262 / 81521) * 100,
-                  meta: "MAU Mensual: 81,521 usuarios/mes",
-                  sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
-                  color: "#16A34A", bg: "#DCFCE7", icon: "🎯"
-                }
-              ].map((m) => (
-                <div key={m.label} style={{
-                  background: "#ffffff",
-                  border: "1px solid #e2e8f0",
-                  borderLeft: `4px solid ${m.color}`,
-                  borderRadius: 16,
-                  padding: "20px 22px",
-                  boxShadow: "0 4px 16px rgba(0,0,0,0.04)",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between"
-                }}>
-                  <div>
-                    {/* Header */}
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                      <span style={{ fontSize: 11, fontWeight: 800, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                        {m.label}
-                      </span>
-                      <span style={{ fontSize: 18 }}>{m.icon}</span>
-                    </div>
-
-                    {/* Big Value */}
-                    <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#0f172a", marginBottom: 8 }}>
-                      {m.value}
-                    </div>
-
-                    {/* Meta Badge */}
-                    <div style={{
-                      background: m.bg,
-                      padding: "6px 12px",
-                      borderRadius: 8,
-                      marginBottom: 12
-                    }}>
-                      <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
-                        {m.meta}
-                      </div>
-                    </div>
-
-                    {/* Visual Progress Bar */}
-                    <div style={{ margin: "10px 0 14px" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
-                        <span style={{ color: "#64748b" }}>Avance a la Meta</span>
-                        <span style={{ color: m.color, fontWeight: 900 }}>
-                          {m.progressPct.toFixed(1)}%
-                        </span>
-                      </div>
-
-                      {/* Thermometer Tube */}
-                      <div style={{
-                        height: 10,
-                        background: "#f1f5f9",
-                        borderRadius: 999,
-                        padding: 1,
-                        border: "1px solid #e2e8f0",
-                        position: "relative",
-                        overflow: "hidden"
-                      }}>
-                        <div style={{
-                          height: "100%",
-                          width: `${Math.min(m.progressPct, 100)}%`,
-                          background: `linear-gradient(90deg, ${m.color}cc 0%, ${m.color} 100%)`,
-                          borderRadius: 999,
-                        }} />
-                      </div>
-
-                      {/* Scale Legends */}
-                      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#64748b", marginTop: 4, fontWeight: 600 }}>
-                        <span>0</span>
-                        <span>Actual: <strong style={{ color: "#0f172a" }}>{m.value}</strong></span>
-                        <span>Meta: <strong style={{ color: m.color }}>{m.targetVal}</strong></span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Explanation Footer */}
-                  <div style={{
-                    fontSize: 12,
-                    color: "#475569",
-                    fontWeight: 500,
-                    lineHeight: 1.45,
-                    borderTop: "1px dashed #e2e8f0",
-                    paddingTop: 10
-                  }}>
-                    {m.sub}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
 
           {/* Discovery projects list */}
           <div style={{ marginBottom: 40 }}>
@@ -848,502 +464,176 @@ export default function CelulaHomePage() {
       />
 
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
-        {/* OKR & NSM Progress Section — OKR 1.1 (7.8M/mes) como Techo */}
-        {params.slug === "sellers" && metrics && (
-          <div style={{
-            background: "linear-gradient(135deg, #111827 0%, #1f2937 55%, #c2410c 100%)",
-            borderRadius: 16, padding: "28px 32px", marginBottom: 36, color: "#fff",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.08)"
-          }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 12 }}>
-              <div>
-                <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(255,255,255,0.15)", padding: "3px 8px", borderRadius: 20, textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                  OKR 1 / KR 1.1 Holding · TECHO OBJETIVO: 7.80M ÓRDENES/MES
-                </span>
-                <h3 style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.02em", margin: "8px 0 0" }}>
-                  Volumen de Órdenes de Sellers Activos (NSM Global)
-                </h3>
-              </div>
-              <div style={{ textAlign: "right" }}>
-                <span style={{ fontSize: 28, fontWeight: 900, color: "#F77F00" }}>43.0%</span>
-                <span style={{ fontSize: 12, color: "rgba(255,255,255,0.6)", display: "block" }}>del Techo OKR 1.1 (7.80M/mes)</span>
-              </div>
-            </div>
-            
-            {/* Progress Bar for Holding OKR 1.1 */}
-            <div style={{ height: 10, background: "rgba(255,255,255,0.16)", borderRadius: 999, overflow: "hidden", marginBottom: 16 }}>
-              <div style={{ height: "100%", width: "42.96%", background: "linear-gradient(90deg, #F77F00 0%, #ffaa44 100%)", borderRadius: 999 }} />
-            </div>
-            
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12, fontSize: 12, borderTop: "1px dashed rgba(255,255,255,0.15)", paddingTop: 14 }}>
-              <div>
-                <span style={{ color: "rgba(255,255,255,0.6)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Estado Actual (Tabla CPO 1-29 Jul)</span>
-                <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>3.35M/mes</strong>
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", display: "block" }}>3.351.359 ord movilizadas</span>
-              </div>
-              <div>
-                <span style={{ color: "rgba(255,255,255,0.6)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Hito Julio CPO</span>
-                <strong style={{ color: "#fff", fontSize: 14, fontWeight: 800 }}>3.57M/mes</strong>
-                <span style={{ fontSize: 11, color: "#22C55E", fontWeight: 700, display: "block" }}>93.85% alcanzado (100.32% proy)</span>
-              </div>
-              <div>
-                <span style={{ color: "rgba(255,255,255,0.6)", textTransform: "uppercase", fontSize: 10, fontWeight: 700, display: "block" }}>Techo OKR 1.1 Holding</span>
-                <strong style={{ color: "#F77F00", fontSize: 14, fontWeight: 900 }}>7.80M/mes</strong>
-                <span style={{ fontSize: 11, color: "#EF4444", fontWeight: 700, display: "block" }}>Brecha: -4.45M ord (43.0% cumpl.)</span>
-              </div>
+        {!esCelulaPropia && profile?.is_super_admin && (
+          <ModoLecturaBanner activo={modoEdicionForzado} onToggle={() => setModoEdicionForzado((v) => !v)} />
+        )}
+
+        {/* "Mi día" de la célula (2026-08-17, Jaime): dos capas — arriba lo
+            de la célula (métricas globales, misión/visión), abajo lo
+            personal (mismos paneles de /app/proyectos/mi-dia, que ya
+            degradan solos a "Pendiente" para quien no tiene Jira/Calendar
+            conectado). Sellers tiene sus propias métricas (SellersMetricsPanel,
+            más abajo en su rama); acá, sin dato real, solo Misión/Visión. */}
+        <div className="midia-panel" style={{ marginBottom: 32 }}>
+          <div className="midia-panel-header">
+            <div className="midia-panel-header-left">
+              <span className="midia-panel-label">Célula</span>
             </div>
           </div>
-        )}
-
-        {/* Live Metrics Grid — Termómetros Visuales por Métrica a Escala */}
-        {params.slug === "sellers" && metrics && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(310px, 1fr))", gap: 18, marginBottom: 36 }}>
-            {[
-              {
-                label: "Tasa de Activación Neta",
-                value: `${metrics.stats.activationRateNet ?? 5.2}%`,
-                targetVal: "8.0%",
-                progressPct: ((metrics.stats.activationRateNet ?? 5.2) / 8.0) * 100,
-                meta: "Meta Q3: 8.0% · Brecha: -2.8 pp",
-                sub: "% de sellers registrados que logran entregar exitosamente su 1ª orden (TTV neto).",
-                color: "#10B981", icon: "⚡"
-              },
-              {
-                label: "Tiempo de Activación Neta (TTV)",
-                value: `${metrics.stats.ttvNetoMedian ?? 16.0} días`,
-                targetVal: "< 12.0d",
-                progressPct: (12.0 / (metrics.stats.ttvNetoMedian ?? 16.0)) * 100,
-                meta: "Meta Q3: < 12.0 días · Exceso: +4.0 días",
-                sub: "Mediana de días transcurridos desde el registro hasta la 1ª orden entregada.",
-                color: "#D97706", icon: "⏱️"
-              },
-              {
-                label: "Tasa de Activación Bruta",
-                value: `${metrics.stats.activationRate}%`,
-                targetVal: "12.0%",
-                progressPct: (metrics.stats.activationRate / 12.0) * 100,
-                meta: "Meta Q3: 12.0% · Brecha: -4.4 pp",
-                sub: "% de sellers registrados que crean su 1ª orden en la plataforma (TTFO).",
-                color: "#DB2777", icon: "📦"
-              },
-              {
-                label: "Retención a 30 Días",
-                value: `${metrics.stats.survivalRate ?? 69.38}%`,
-                targetVal: "75.0%",
-                progressPct: ((metrics.stats.survivalRate ?? 69.38) / 75.0) * 100,
-                meta: "Meta S2: 75.0% · Brecha: -5.62 pp",
-                sub: "% de sellers que continúan vendiendo pasados 30 días de su registro.",
-                color: "#7C3AED", icon: "🌱"
-              },
-              {
-                label: "Base de Sellers Identificados",
-                value: metrics.stats.totalSellers.toLocaleString(),
-                targetVal: "46.2k DB",
-                progressPct: (36056 / metrics.stats.totalSellers) * 100,
-                meta: "36,056 Dropshippers Target + 8,744 Proveedores",
-                sub: "Total de cuentas registradas y auditadas en la base de datos Supabase.",
-                color: "#2563EB", icon: "👥"
-              },
-              {
-                label: "Usuarios Activos Diarios (DAU)",
-                value: "14,262",
-                targetVal: "81.5k MAU",
-                progressPct: (14262 / 81521) * 100,
-                meta: "MAU Mensual: 81,521 usuarios/mes",
-                sub: "Usuarios operando en vivo diariamente (~31% del volumen activo mensual).",
-                color: "#059669", icon: "🎯"
-              }
-            ].map((m) => (
-              <div
-                key={m.label}
-                style={{
-                  background: "#ffffff",
-                  border: `1px solid ${m.color}35`,
-                  borderRadius: 16,
-                  padding: "20px 22px",
-                  boxShadow: `0 4px 14px rgba(0,0,0,0.06), 0 0 10px ${m.color}10`,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between"
-                }}
-              >
-                <div>
-                  {/* Header */}
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                    <span style={{ fontSize: 11, fontWeight: 800, color: "#475569", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-                      {m.label}
-                    </span>
-                    <span style={{ fontSize: 18 }}>{m.icon}</span>
-                  </div>
-
-                  {/* Big Value */}
-                  <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: "-0.03em", color: "#0F172A", marginBottom: 8 }}>
-                    {m.value}
-                  </div>
-
-                  {/* Meta Badge */}
-                  <div style={{
-                    background: "#F8FAFC",
-                    borderLeft: `4px solid ${m.color}`,
-                    padding: "6px 12px",
-                    borderRadius: "0 8px 8px 0",
-                    marginBottom: 12
-                  }}>
-                    <div style={{ fontSize: 11, fontWeight: 850, color: m.color, letterSpacing: "0.01em" }}>
-                      {m.meta}
-                    </div>
-                  </div>
-
-                  {/* Visual Progress Bar */}
-                  <div style={{ margin: "10px 0 14px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 10, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 5 }}>
-                      <span style={{ color: "#64748B" }}>Avance a la Meta</span>
-                      <span style={{ color: m.color, fontWeight: 900 }}>
-                        {m.progressPct.toFixed(1)}%
-                      </span>
-                    </div>
-
-                    {/* Thermometer Tube */}
-                    <div style={{
-                      height: 10,
-                      background: "#F1F5F9",
-                      borderRadius: 999,
-                      padding: 1,
-                      border: "1px solid #CBD5E1",
-                      position: "relative",
-                      overflow: "hidden"
-                    }}>
-                      <div style={{
-                        height: "100%",
-                        width: `${Math.min(m.progressPct, 100)}%`,
-                        background: `linear-gradient(90deg, ${m.color}AA 0%, ${m.color} 100%)`,
-                        borderRadius: 999,
-                        boxShadow: `0 0 8px ${m.color}60`
-                      }} />
-                    </div>
-
-                    {/* Scale Legends */}
-                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "#64748B", marginTop: 4, fontWeight: 600 }}>
-                      <span>0</span>
-                      <span>Actual: <strong style={{ color: "#0F172A" }}>{m.value}</strong></span>
-                      <span>Meta: <strong style={{ color: m.color }}>{m.targetVal}</strong></span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Explanation Footer */}
-                <div style={{
-                  fontSize: 12,
-                  color: "#475569",
-                  fontWeight: 500,
-                  lineHeight: 1.45,
-                  borderTop: "1px dashed #E2E8F0",
-                  paddingTop: 10
-                }}>
-                  {m.sub}
-                </div>
+          <div style={{ padding: "0 20px 16px" }}>
+            {celula.slug === "logistica" ? (
+              /* Direccionamiento 2026 S2 de María Ossa (Confluence PD/1485471746).
+                 Se transcribe lo que YA está formalmente definido —ownership, NSM
+                 y enfoque del semestre—; la "visión de producto" de tres lentes
+                 sigue siendo una oportunidad sin validar del Product Backlog, así
+                 que no se publica como si estuviera cerrada. */
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <p style={{ fontSize: 13, color: "var(--fg)", margin: 0, lineHeight: 1.5 }}>
+                  Dueña de <strong>la orden</strong>: todo lo que le pasa una vez se crea en Dropi.
+                </p>
+                <p style={{ fontSize: 12, color: "var(--muted)", margin: 0, lineHeight: 1.5 }}>
+                  <strong>NSM</strong> · Tasa de entrega exitosa ≥ 70% (OKR 2 · KR 2.1).<br />
+                  <strong>Q3–Q4</strong> · Sostener y mejorar la tasa de entrega, y reducir el
+                  tiempo de la orden hasta la transportadora.
+                </p>
+                <a
+                  href="https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1485471746"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ fontSize: 11, color: "var(--muted)" }}
+                >
+                  Direccionamiento Logistic Success 2026 · S2 ↗
+                </a>
               </div>
-            ))}
-          </div>
-        )}
-
-
-
-        {/* El weekly de logística vive en el tablero, no en `celula_updates`,
-            así que esta sección sigue siendo suya. */}
-        {isLogistica && (
-          <div style={{ marginBottom: 56 }}>
-            <UpdatesLogistica
-              extra={updates}
-              onItemClick={(item) => {
-                const u = updatesById.get(item.key);
-                if (u) setOpenUpdate(u);
-              }}
-            />
-          </div>
-        )}
-
-        {isBackoffice && (
-          <div style={{ marginBottom: 56 }}>
-            <UpdatesBackoffice
-              extra={updates}
-              onItemClick={(item) => {
-                const u = updatesById.get(item.key);
-                if (u) setOpenUpdate(u);
-              }}
-            />
-          </div>
-        )}
-
-        {/* El resto de células (Suppliers, Brands, Growth, Growth Marketing,
-            Product Designers, Experience...) no tiene componente propio de
-            updates — usan el genérico de celula_updates + historial del
-            Weekly PM, igual que antes de que 9d911bd se lo llevara junto con
-            el de sellers al tocar este mismo archivo compartido. */}
-        {!isLogistica && !isBackoffice && (
-          <div style={{ marginBottom: 56 }}>
-            <Section
-              title="Updates"
-              items={updates}
-              ctaLabel="Ver →"
-              onItemClick={(item) => {
-                const u = updatesById.get(item.key);
-                if (u) setOpenUpdate(u);
-              }}
-            />
-            {updates.length === 0 && (
-              <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
-            )}
-          </div>
-        )}
-
-        {/* Filtro por etapa del viaje de la orden. Antes la etapa ERA la
-            estructura de la página (un encabezado por cada una); ahora es un
-            filtro que atraviesa las cuatro secciones de abajo. */}
-        {mapaEtapas && (
-          <div style={{ marginBottom: 28 }}>
-            <p style={{ fontSize: 11, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: "0 0 10px" }}>
-              Etapa del viaje de la orden
-            </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-              {[{ n: 0, nombre: "Todas", total: mapaEtapas.chips.reduce((acc, c) => acc + c.total, 0) }, ...mapaEtapas.chips].map((c) => {
-                const activa = c.n === 0 ? etapaFiltro === null : etapaFiltro === c.nombre;
-                return (
-                  <button
-                    key={c.nombre}
-                    onClick={() => setEtapaFiltro(c.n === 0 ? null : c.nombre)}
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: 6,
-                      fontSize: 12, fontWeight: 700, cursor: "pointer",
-                      padding: "6px 12px", borderRadius: 999,
-                      color: activa ? "var(--dropi)" : "var(--fg)",
-                      background: activa ? "rgba(247,127,0,0.08)" : "var(--card)",
-                      border: `1px solid ${activa ? "var(--dropi)" : "var(--border)"}`,
-                    }}
-                  >
-                    {c.n > 0 && <span style={{ color: "var(--muted)", fontVariantNumeric: "tabular-nums" }}>{c.n}</span>}
-                    {c.nombre}
-                    <span style={{ color: "var(--muted)", fontWeight: 500, fontVariantNumeric: "tabular-nums" }}>{c.total}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        <div style={{ marginBottom: 56 }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
-            <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
-              Discovery projects
-            </p>
-            {canCreate && (
-              <div style={{ display: "flex", gap: 8 }}>
-                {showForm ? (
-                  <button
-                    onClick={() => { setShowForm(false); setFormError(null); }}
-                    style={{
-                      fontSize: 12, fontWeight: 700, color: "var(--muted)",
-                      background: "none", border: "1px solid var(--border)", borderRadius: 8,
-                      padding: "6px 12px", cursor: "pointer",
-                    }}
-                  >
-                    Cancelar
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => { setShowForm(true); setFormError(null); }}
-                      style={{
-                        fontSize: 12, fontWeight: 700, color: "var(--dropi)",
-                        background: "none", border: "1px solid var(--border)", borderRadius: 8,
-                        padding: "6px 12px", cursor: "pointer",
-                      }}
-                    >
-                      + Proyecto vacío
-                    </button>
-                  </>
-                )}
-              </div>
-            )}
-          </div>
-
-          {showForm && (
-            <form
-              onSubmit={handleCreate}
-              style={{
-                border: "1px solid var(--border)", borderRadius: 12, padding: 20,
-                marginBottom: 20, display: "flex", flexDirection: "column", gap: 12,
-                background: "var(--card)",
-              }}
-            >
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)" }}>Nombre</label>
-                <input
-                  type="text"
-                  value={form.name}
-                  onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                  required
-                  placeholder="Nombre del proyecto"
-                  style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--fg)" }}
-                />
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <label style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)" }}>Resumen</label>
-                <textarea
-                  value={form.summary}
-                  onChange={(e) => setForm((f) => ({ ...f, summary: e.target.value }))}
-                  required
-                  rows={3}
-                  placeholder="De qué se trata este proyecto"
-                  style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--bg)", color: "var(--fg)", fontFamily: "inherit", resize: "vertical" }}
-                />
-              </div>
-              {formError && <p style={{ fontSize: 12, color: "#DC2626", margin: 0 }}>{formError}</p>}
-              <button
-                type="submit"
-                disabled={submitting}
-                style={{
-                  fontSize: 13, fontWeight: 700, color: "#fff", background: "var(--dropi)",
-                  border: "none", borderRadius: 8, padding: "10px 16px", cursor: submitting ? "default" : "pointer",
-                  opacity: submitting ? 0.7 : 1, alignSelf: "flex-start",
-                }}
-              >
-                {submitting ? "Creando…" : "Crear proyecto"}
-              </button>
-            </form>
-          )}
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-            {discoveryProjects.map((p) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                dark={false}
-                canCreate={canCreate}
-                pocs={pocsByParent.get(p.id) ?? []}
-                deliveries={deliveriesByParent.get(p.id) ?? []}
-                onEstadoChange={handleEstadoChange}
-                onVpvChange={handleVpvChange}
-                onCrearPoc={handleCrearPoc}
-                onCrearDelivery={handleCrearDelivery}
-                {...extrasEtapa(p)}
-              />
-            ))}
-          </div>
-          {discoveryProjects.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>
-              {etapaFiltro
-                ? `Ninguna iniciativa de la etapa "${etapaFiltro}" tiene ficha en Darwin.`
-                : "Aún no hay proyectos cargados para esta célula."}
-            </p>
-          )}
-
-          {/* Iniciativas que están en el tablero de logística pero todavía no en
-              Darwin. Van como chips y no como tarjeta: que falte la ficha es el
-              dato, y una tarjeta más lo escondería. */}
-          {sinFichaDarwin.length > 0 && (
-            <div style={{ marginTop: 20, border: "1px dashed var(--border)", borderRadius: 12, padding: "12px 14px", background: "var(--bg)" }}>
-              <p style={{ fontSize: 11, color: "var(--muted)", margin: "0 0 8px", fontWeight: 500 }}>
-                En el tablero · sin ficha en Darwin
+            ) : (
+              <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>
+                Misión / Visión — <em>Pendiente de definir</em>.
               </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-                {sinFichaDarwin.map((i) => (
-                  <a
-                    key={i.slug}
-                    href={`/proyectos/logistica/proyecto/${i.slug}`}
-                    style={{
-                      display: "inline-flex", alignItems: "center", gap: 6,
-                      fontSize: 13, fontWeight: 500, color: "var(--fg)", textDecoration: "none",
-                      background: "var(--card)", border: "1px solid var(--border)",
-                      borderRadius: 999, padding: "6px 12px",
-                    }}
-                  >
-                    <span style={{ color: "var(--warning)" }} aria-hidden="true">○</span>
-                    {i.destacado && <span aria-hidden="true">⭐</span>}
-                    {i.nombre}
-                    {!etapaFiltro && <span style={{ color: "var(--muted)", fontSize: 11 }}>{i.etapa}</span>}
-                  </a>
-                ))}
+            )}
+          </div>
+        </div>
+
+        <MiDiaShell />
+
+        {/* Teaser compacto (2026-08-17, Jaime): el feed completo — incluidos
+            los componentes propios de Logística/Backoffice y las métricas de
+            Sellers — se movió a /celula/[slug]/updates, su propia parada en
+            el sidebar. Acá solo se ve un adelanto con link a la página
+            completa, mismo patrón que el panel de Proyectos de más abajo. */}
+        <div style={{ marginBottom: 32 }}>
+          <Section
+            title="Updates"
+            items={updates.slice(0, 2)}
+            ctaLabel="Ver →"
+            onItemClick={(item) => {
+              const u = updatesById.get(item.key);
+              if (u) setOpenUpdate(u);
+            }}
+          />
+          {updates.length === 0 && (
+            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
+          )}
+          <div style={{ padding: updates.length > 0 ? "10px 20px 0" : 0 }}>
+            <Link href={`/celula/${celula.slug}/updates`} className="midia-panel-link">
+              Ver todos los updates
+              <ChevronRight size={14} />
+            </Link>
+          </div>
+        </div>
+
+
+
+        {/* Panel compacto de Proyectos (2026-08-17, Jaime) — reemplaza el grid
+            de tarjetas para cualquier célula, incluida logística (su filtro
+            de etapa y "sin ficha Darwin" ya viven en /celula/[slug]/proyectos,
+            no hace falta duplicar el grid acá): conteo por fase + link a la
+            tabla completa. La creación de POC/Delivery/Following por proyecto
+            se hace desde la ficha de cada proyecto (/proyectos/[slug]). */}
+        {(
+          <div className="midia-panel" style={{ marginBottom: 32 }}>
+            <div className="midia-panel-header">
+              <div className="midia-panel-header-left">
+                <span className="midia-panel-label">Proyectos</span>
               </div>
+              {canCreate && (
+                <button
+                  type="button"
+                  onClick={() => { setShowForm((v) => !v); setFormError(null); }}
+                  className="midia-sync-btn"
+                >
+                  {showForm ? "Cancelar" : "+ Proyecto vacío"}
+                </button>
+              )}
             </div>
-          )}
-        </div>
 
-        <div style={{ marginBottom: 56 }}>
-          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-            Pruebas de concepto
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-            {pruebasConcepto.map((p) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                dark={false}
-                canCreate={canCreate}
-                pocs={[]}
-                onEstadoChange={handleEstadoChange}
-                onVpvChange={handleVpvChange}
-                onCrearPoc={handleCrearPoc}
-                {...extrasEtapa(p)}
-              />
-            ))}
-          </div>
-          {pruebasConcepto.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay POCs cargadas para esta célula.</p>
-          )}
-        </div>
+            {showForm && (
+              <form
+                onSubmit={handleCreate}
+                style={{
+                  margin: "0 20px 16px", padding: 16, borderRadius: 10,
+                  border: "1px solid var(--border)", background: "var(--bg)",
+                  display: "flex", flexDirection: "column", gap: 10,
+                }}
+              >
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  <label style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)" }}>Nombre</label>
+                  <input
+                    type="text"
+                    value={form.name}
+                    onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                    required
+                    placeholder="Nombre del proyecto"
+                    style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)" }}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  <label style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)" }}>Resumen</label>
+                  <textarea
+                    value={form.summary}
+                    onChange={(e) => setForm((f) => ({ ...f, summary: e.target.value }))}
+                    required
+                    rows={3}
+                    placeholder="De qué se trata este proyecto"
+                    style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)", fontFamily: "inherit", resize: "vertical" }}
+                  />
+                </div>
+                {formError && <p style={{ fontSize: 12, color: "#DC2626", margin: 0 }}>{formError}</p>}
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  style={{
+                    fontSize: 13, fontWeight: 700, color: "#fff", background: "var(--dropi)",
+                    border: "none", borderRadius: 8, padding: "10px 16px", cursor: submitting ? "default" : "pointer",
+                    opacity: submitting ? 0.7 : 1, alignSelf: "flex-start",
+                  }}
+                >
+                  {submitting ? "Creando…" : "Crear proyecto"}
+                </button>
+              </form>
+            )}
 
-        <div>
-          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-            Delivery Proyectos
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-            {deliveryProjects.map((p) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                dark={false}
-                canCreate={canCreate}
-                pocs={[]}
-                siblingPocs={p.parent_project_id ? pocsByParent.get(p.parent_project_id) ?? [] : []}
-                followings={followingsByDelivery.get(p.id) ?? []}
-                onEstadoChange={handleEstadoChange}
-                onVpvChange={handleVpvChange}
-                onCrearPoc={handleCrearPoc}
-                onRelatedPocChange={handleRelatedPocChange}
-                onCrearFollowing={handleCrearFollowing}
-                {...extrasEtapa(p)}
-              />
-            ))}
-          </div>
-          {deliveryProjects.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Delivery Proyectos cargados para esta célula.</p>
-          )}
-        </div>
+            <div className="midia-row" style={{ gap: 24, flexWrap: "wrap" }}>
+              {[
+                { label: "Discovery", n: discoveryProjects.length },
+                { label: "POC", n: pruebasConcepto.length },
+                { label: "Delivery", n: deliveryProjects.length },
+                { label: "Following", n: followings.length },
+              ].map((s) => (
+                <div key={s.label}>
+                  <p style={{ fontSize: 20, fontWeight: 800, color: "var(--fg)", margin: 0, fontVariantNumeric: "tabular-nums" }}>{s.n}</p>
+                  <p style={{ fontSize: 11, color: "var(--muted)", margin: 0, textTransform: "uppercase", letterSpacing: "0.06em" }}>{s.label}</p>
+                </div>
+              ))}
+            </div>
 
-        <div style={{ marginTop: 56 }}>
-          <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, marginBottom: 20 }}>
-            Followings
-          </p>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
-            {followings.map((p) => (
-              <ProjectCard
-                key={p.id}
-                project={p}
-                dark={false}
-                canCreate={canCreate}
-                pocs={[]}
-                onEstadoChange={handleEstadoChange}
-                onVpvChange={handleVpvChange}
-                onCrearPoc={handleCrearPoc}
-                {...extrasEtapa(p)}
-              />
-            ))}
+            <div style={{ padding: "14px 20px" }}>
+              <Link href={`/celula/${celula.slug}/proyectos`} className="midia-panel-link">
+                Ver todos los proyectos
+                <ChevronRight size={14} />
+              </Link>
+            </div>
           </div>
-          {followings.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay Followings cargados para esta célula.</p>
-          )}
-        </div>
+        )}
       </div>
       </div>
       <HubFooter />

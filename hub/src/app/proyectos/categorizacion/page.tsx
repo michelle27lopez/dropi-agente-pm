@@ -3,6 +3,8 @@
 import React, { useEffect, useState, useRef, useCallback, MouseEvent, WheelEvent } from "react";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
 import { RPP_BASE_URL } from "@/lib/rpp";
+import Breadcrumb from "@/components/Breadcrumb";
+import { FASE_LABEL, faseDe } from "@/lib/fase";
 
 // Types
 interface CategoryInfo {
@@ -3617,20 +3619,20 @@ export default function CategorizacionPage() {
     <main id="categorizacion-project-page" className="min-h-screen pb-16" style={{ background: "var(--card)" }}>
       {/* Header */}
       {!isEmbedded && (
-        <header id="project-header" className="bg-white border-b flex items-center justify-between px-8 py-4" style={{ borderColor: "var(--border)" }}>
-          <div className="flex items-center gap-4">
-            <a href="/" id="back-to-home-link" className="text-sm font-medium hover:underline" style={{ color: "var(--muted)" }}>
-              ← Dropi PM Tools
-            </a>
-            <span style={{ color: "var(--border)" }}>/</span>
-            <span id="breadcrumb-current" className="text-sm font-semibold" style={{ color: "var(--fg)" }}>
-              Categorización y Enriquecimiento
-            </span>
+        <header id="project-header" className="bg-white py-4">
+          <div className="max-w-7xl mx-auto px-8 flex items-center gap-4">
+            <Breadcrumb
+              items={[
+                { label: "Proyectos", href: "/proyectos" },
+                { label: FASE_LABEL[faseDe("Proyecto")] },
+                { label: "Categorización y Enriquecimiento" },
+              ]}
+            />
           </div>
         </header>
       )}
 
-      <div className="max-w-7xl mx-auto px-6 pt-10">
+      <div className="max-w-7xl mx-auto px-8 pt-10">
         {/* Title */}
         <div id="project-title-container" className="mb-8">
           <div className="flex items-center gap-3 mb-3">

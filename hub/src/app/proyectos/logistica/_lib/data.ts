@@ -501,7 +501,7 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
       // como app propia (ver su README). Va primero porque la pantalla del hub
       // de abajo es el port anterior, que ya divergió — mismo control, otra
       // versión, y la de Indiana es la que se mantiene.
-      { tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://inidiana-map.vercel.app/mapa" },
+      { tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://indiana-map.vercel.app/mapa" },
       { tipo: "prototipo", label: "Control de recolecciones (versión del hub)", href: "/proyectos/logistica/recolecciones" },
     ],
     experimentos: ["recoleccion-proactiva"],
@@ -628,7 +628,7 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     aportaA: "Fuera del centro",
     codigoDarwin: "PRM-1366",
     vista: "/proyectos/logistica/same-day",
-    etapa: "Despacho", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    etapa: "Despacho", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
     ticket: "PRM-1366",
     bloqueo: "En pausa por la regla de un frente a la vez: el activo es Normalización de estados.",
     descripcion: "Entrega el mismo día para bodegas propias y Veloces.",
@@ -690,7 +690,7 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     // vigente es esta: una dirección mal capturada se paga en devolución.
     aportaA: "Devolución",
     codigoDarwin: "PRM-91",
-    etapa: "Confirmación", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    etapa: "Confirmación", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
     ticket: "PRM-91",
     // Ownership resuelto el 10-ago: el proyecto es de Juan. Con eso desaparece
     // el `bloqueo` que tenía —era el conflicto de ownership, no un impedimento
@@ -711,19 +711,6 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     ],
   },
   {
-    nombre: "Dirección confiable + geo",
-    slug: "direccion-geo",
-    codigo: "LOG-003",
-    // Misma decisión que LOG-002 (Juan, 10-ago): cuelga de la perdida 2.
-    aportaA: "Devolución",
-    etapa: "Confirmación", tipo: "Oportunidad", fase: "Discovery", handoff: "No aplica",
-    descripcion: "Capturar y validar la ubicación del comprador para prevenir y recuperar novedades.",
-    porQue: "Capturar bien la ubicación previene la novedad antes de que ocurra.",
-    proximoPaso: "Decidir si mueve movilización o devolución, o si se archiva — el árbol OKR propone archivarla.",
-    foco: "Todavía es oportunidad, no proyecto: no tiene alcance ni ticket propio. Cruza PRM-1497 / PRM-1512 / PRM-1523 y coordina con PRM-91. Experimento asociado: activar la validación en SHOP.",
-    experimentos: ["validacion-shop", "encuesta-direccion"],
-  },
-  {
     nombre: "Triaje de novedades",
     slug: "novedad-triaje",
     nombreCorto: "Triaje de novedades",
@@ -732,7 +719,7 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     // novedades es inusable y el desenlace real es la devolución".
     aportaA: "Devolución",
     codigoDarwin: "PRM-1512",
-    etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    etapa: "Novedad / Posventa", tipo: "Proyecto", fase: "Definición", handoff: "Pendiente",
     ticket: "PRM-1512",
     jira: "⚠️ En Ruta (backlog), SIN ASIGNAR — aunque el Delivery Backlog pide FINALIZARLO",
     doc: "completo",
@@ -746,39 +733,6 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
       { tipo: "doc", label: "Confluence · Síntesis existente", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1530560555" },
     ],
   },
-  {
-    nombre: "Reducir devoluciones en pago contra entrega",
-    slug: "devoluciones-cod",
-    nombreCorto: "Reducir devoluciones",
-    codigo: "LOG-010",
-    // PRM-1523 es el ticket de la perdida ② en el árbol OKR.
-    aportaA: "Devolución",
-    etapa: "Entrega / Devolución", tipo: "Proyecto", fase: "Discovery", handoff: "No aplica",
-    ticket: "PRM-1523",
-    jira: "PRM-1523 y PRM-1580 en En Ruta (backlog), sin assignee; PRM-1523 no tiene descripción",
-    doc: "parcial",
-    bloqueo: "Falta informe anonimizado del piloto Veloces, owners, vigencia de DROP-4595/4596, contrato de datos y separación formal entre KPI de devolución y KPI de conciliación.",
-    descripcion: "Prevenir devoluciones en pago contra entrega y trazar el retorno al proveedor.",
-    porQue: "Es la devolución en sí misma: 823K órdenes al mes vuelven, y Colombia es el 71% del volumen.",
-    proximoPaso: "Pedir el informe anonimizado del piloto Veloces y cerrar el contrato de datos.",
-    foco: "El token Veloces es una capacidad de conciliación de logística inversa en piloto: confirma el traspaso a bodega mediante manifiesto, código y firma. No evita la devolución, no es el código al destinatario y no equivale a los archivos de carriers. DROP-3455/4595/4596 son antecedentes, pero las historias siguen en backlog y no prueban integración Dropi ni rollout global.",
-  },
-  {
-    nombre: "Torre de control / Tiempo por fases",
-    slug: "torre-control",
-    nombreCorto: "Tiempo por fases",
-    codigo: "LOG-011",
-    // El árbol es explícito: "Tiempo por fases: habilitador. Mide, no mueve".
-    aportaA: "Habilitador",
-    etapa: "Tránsito", tipo: "Oportunidad", fase: "Discovery", handoff: "No aplica",
-    descripcion: "Medir el tiempo de la orden por fases (F1→F5) para ver dónde se estanca.",
-    jira: "⚠️ Sin ticket — falta crear el Proyecto OKR",
-    doc: "completo",
-    porQue: "Habilita el KPI de tiempo por fases. Las medidas ya existen en Power BI: está desbloqueado.",
-    proximoPaso: "Crear el ticket del Proyecto OKR — hoy no existe en Jira.",
-    foco: "Enabler transversal: habilita el KPI de tiempo y a Normalización de estados. Hoy vive como medición, no como producto construido.",
-    links: [{ tipo: "tablero", label: "Tiempo por fases (weekly)", href: "/proyectos/logistica/updates" }],
-  },
 
   // ── Depuración 28-jul ──────────────────────────────────────────────────────
   // Se retiró el bloque "Fuera del radar" (6 iniciativas que salieron de barrer
@@ -791,6 +745,24 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
   //     → 7 semanas en "Listo para hand off" sin moverse ni documentación.
   //   · PRM-118 Garantías de recolección a entrega → entregado; queda
   //     pendiente actualizar Jira y los documentos E2E (fuera de este tablero).
+  //
+  // Segunda depuración (19-ago, decisión de Juan): de 16 a 13. Salen tres para
+  // enfocar el tablero en lo que la célula está empujando de verdad:
+  //   · LOG-011 Torre de control / Tiempo por fases → NO era un proyecto, era
+  //     la métrica central. Vive ahora en el panel de KPIs de "Mi día".
+  //     ⚠️ Costo asumido: `estrategia/medicion-movilizacion-y-entrega.md` deja
+  //     dicho que sin LOG-011 las submétricas del KPI de 24h se calculan a mano
+  //     cada vez. El panel queda como transcripción manual hasta que se retome.
+  //   · LOG-003 Dirección confiable + geo → decisión de foco. Sus dos
+  //     experimentos (validacion-shop y encuesta-direccion) NO se borraron:
+  //     pasaron a LOG-002, que es el mismo tema y sí sigue vivo. Cargaban
+  //     impacto medido (618K sin validar, ~90K entregas en juego) y perderlo
+  //     habría costado más que el proyecto.
+  //   · LOG-010 Reducir devoluciones en pago contra entrega → decisión de foco.
+  //
+  // En Supabase los tres quedan `estado_interno = 'Cerrado'`, no borrados
+  // (migración 050): el histórico y los `related_*` de otras filas dependen de
+  // que la fila siga existiendo.
 ];
 
 // Alias público compatible. Los adaptadores de Darwin y las vistas existentes
@@ -1024,11 +996,11 @@ export const experimentos: Experimento[] = [
     proyecto: "Recolección proactiva (PRM-1465 candidato principal)",
     aprendizaje:
       "Ya está separado lo que se envía a la transportadora de lo que se detecta antes. El sistema prioriza y prepara el aviso, pero todavía no confirma que la recolección ocurrió. Falta definir responsables y correr un piloto con línea base para poder comparar.",
-    links: [{ tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://inidiana-map.vercel.app/mapa" }],
+    links: [{ tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://indiana-map.vercel.app/mapa" }],
   },
   {
     slug: "validacion-shop",
-    proyectoSlug: "direccion-geo",
+    proyectoSlug: "validacion-direcciones",
     nombre: "Activar validación de dirección en SHOP",
     hipotesis: "Forzar la validación de dirección en integraciones sube la movilización.",
     metrica: "% de movilización y entregas netas, comparando órdenes con dirección validada contra las que no la tienen.",
@@ -1069,7 +1041,7 @@ export const experimentos: Experimento[] = [
   },
   {
     slug: "encuesta-direccion",
-    proyectoSlug: "direccion-geo",
+    proyectoSlug: "validacion-direcciones",
     nombre: "Encuesta: ¿por qué no validan la dirección?",
     hipotesis: "El seller no valida por fricción/desconocimiento, no por falta de valor.",
     metrica: "Respuestas + motivos (Userpilot)",

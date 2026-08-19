@@ -127,32 +127,9 @@ export default function CelulasPage() {
   return (
     <main style={{ minHeight: "100vh", padding: "0", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1 }}>
-      <header style={{
-        background: "#fff",
-        borderBottom: "1px solid var(--border)",
-        padding: "20px 32px",
-        display: "flex",
-        alignItems: "center",
-        gap: 12,
-      }}>
-        <img
-          src="/darwin-logo.png"
-          alt="Darwin"
-          width={36}
-          height={36}
-          style={{ display: "block", borderRadius: 8 }}
-        />
-        <div>
-          <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
-            Darwin · Células
-          </h1>
-          <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
-            Directorio de células, personas y proyectos. Vista de solo lectura.
-          </p>
-        </div>
-      </header>
+      <div className="gnav-page" style={{ maxWidth: 1280, margin: "0 auto" }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>Células</h1>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
         {isSuperAdmin && (
           <div style={{
             background: "var(--card)", border: "1px solid var(--border)",

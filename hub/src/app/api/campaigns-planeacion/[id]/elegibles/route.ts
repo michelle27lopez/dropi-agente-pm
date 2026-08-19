@@ -22,6 +22,9 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
       approved_at: e.approved_at ?? null,
       view_count: e.view_count ?? 0,
       last_viewed_at: e.last_viewed_at ?? null,
+      meet_click_count: e.meet_click_count ?? 0,
+      meet_last_clicked_at: e.meet_last_clicked_at ?? null,
+      meet_attended: e.meet_attended ?? false,
       // Los productos que postuló, resueltos a nombre — para que el equipo
       // haga la curaduría viendo qué es cada cosa, no solo IDs.
       selected: (e.selectedProductIds ?? []).map((pid) => {

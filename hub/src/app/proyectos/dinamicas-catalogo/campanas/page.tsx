@@ -92,7 +92,7 @@ export default function PanelCampanasPage() {
     <div style={{ display: "flex", minHeight: "100vh", background: "#fff" }}>
       <Sidebar />
       <main style={{ flex: 1, minWidth: 0 }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 32px 80px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px" }}>
         <div style={{ marginBottom: 24, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
           <div>
             <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>
@@ -164,7 +164,7 @@ export default function PanelCampanasPage() {
                   return (
                     <tr
                       key={c.id}
-                      onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${c.id}/dashboard`)}
+                      onClick={() => router.push(`/proyectos/dinamicas-catalogo/planeacion/${c.id}/seguimiento`)}
                       style={{ cursor: "pointer", borderBottom: "1px solid #F3F4F6" }}
                       onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg, #F8F9FA)")}
                       onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}

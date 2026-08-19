@@ -133,7 +133,7 @@ export default function CalendarioPage() {
     <div style={{ display: "flex", minHeight: "100vh", background: "#fff" }}>
       <Sidebar />
       <main style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ maxWidth: 1040, margin: "0 auto", padding: "40px 32px 80px" }}>
+        <div style={{ maxWidth: 1040, margin: "0 auto", padding: "32px" }}>
           <div style={{ marginBottom: 24 }}>
             <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--fg)", marginBottom: 6 }}>Calendario</h1>
             <p style={{ fontSize: 14, color: "var(--muted)", lineHeight: 1.6 }}>

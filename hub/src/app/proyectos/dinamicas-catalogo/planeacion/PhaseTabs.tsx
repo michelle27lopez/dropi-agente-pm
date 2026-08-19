@@ -3,12 +3,12 @@
 import { useRouter } from "next/navigation";
 import { Check, Lock } from "lucide-react";
 
-export type PhaseTabKey = "resumen" | "ejecucion" | "cierre";
+export type PhaseTabKey = "seguimiento" | "metricas" | "ejecucion" | "resumen";
 
 const TABS: { key: PhaseTabKey; label: string }[] = [
+  { key: "seguimiento", label: "Seguimiento" },
+  { key: "metricas", label: "Métricas" },
   { key: "resumen", label: "Resumen" },
-  { key: "ejecucion", label: "Ejecución" },
-  { key: "cierre", label: "Cierre" },
 ];
 
 export function PhaseTabs({
@@ -16,35 +16,38 @@ export function PhaseTabs({
   active,
   planningComplete,
   isActive,
-  closingDone,
+  resultadosDone,
 }: {
   campaignId: string;
   active: PhaseTabKey;
   planningComplete: boolean;
   /** true si la campaña ya inició Ejecución (nodo de ejecución activo). */
   isActive: boolean;
-  /** true si el nodo Decisión ya tiene una decisión guardada — la campaña quedó cerrada. */
-  closingDone: boolean;
+  /** true si el nodo Resultados ya tiene los campos obligatorios completos — solo para el check visual de Métricas. */
+  resultadosDone?: boolean;
 }) {
   const router = useRouter();
 
   const locked: Record<PhaseTabKey, boolean> = {
-    resumen: false,
+    seguimiento: false,
+    metricas: false,
     ejecucion: !planningComplete,
-    cierre: !isActive,
+    resumen: false,
   };
   const done: Record<PhaseTabKey, boolean> = {
-    resumen: false,
+    seguimiento: false,
+    metricas: !!resultadosDone,
     ejecucion: isActive,
-    cierre: closingDone,
+    resumen: false,
   };
 
   const goTo = (tab: PhaseTabKey) => {
     if (locked[tab] || tab === active) return;
     const base = `/proyectos/dinamicas-catalogo/planeacion/${campaignId}`;
-    if (tab === "resumen") router.push(`${base}/dashboard`);
+    if (tab === "seguimiento") router.push(`${base}/seguimiento`);
+    if (tab === "metricas") router.push(`${base}/metricas`);
     if (tab === "ejecucion") router.push(`${base}/ejecucion`);
-    if (tab === "cierre") router.push(`${base}/cierre`);
+    if (tab === "resumen") router.push(`${base}/dashboard`);
   };
 
   return (

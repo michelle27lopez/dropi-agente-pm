@@ -121,7 +121,7 @@ export default function AlcanceTtvPage() {
         </div>
       </header>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px", display: "flex", flexDirection: "column", gap: 20 }}>
 
         {/* ¿Por qué 620? */}
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>

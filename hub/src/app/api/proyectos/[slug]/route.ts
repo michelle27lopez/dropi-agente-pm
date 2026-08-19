@@ -321,6 +321,39 @@ export async function PATCH(req: NextRequest, context: any) {
   return NextResponse.json(data);
 }
 
+// Borrado físico — pensado para limpiar basura/duplicados desde el front. La
+// confirmación ("escribe ELIMINAR") vive del lado del cliente; acá solo se
+// exige ser miembro de la célula dueña. No hay ON DELETE CASCADE en
+// parent_project_id/related_poc_id/related_delivery_id (ver migraciones 036/
+// 039/043), así que Postgres devuelve 23503 si el proyecto todavía tiene
+// POC, Delivery Proyecto o Following asociados — se traduce a un mensaje
+// legible en vez de dejar pasar el error crudo.
+export async function DELETE(req: NextRequest, context: any) {
+  if (!supabase) return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
+
+  const { slug } = await context.params;
+  const { project, error: findError } = await findProject(slug);
+  if (findError) return NextResponse.json({ error: findError }, { status: 500 });
+  if (!project) return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 });
+
+  const caller = await requireCelulaMember(project.celula_owner_id);
+  if (!caller) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+
+  const { error } = await supabase.from("projects").delete().eq("id", project.id);
+
+  if (error) {
+    if (error.code === "23503") {
+      return NextResponse.json(
+        { error: "Este proyecto todavía tiene POCs, Delivery Proyectos o Followings asociados. Elimínalos o desvincúlalos primero." },
+        { status: 409 },
+      );
+    }
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true });
+}
+
 // Crea un hijo (POC, Delivery Proyecto o Following) de este proyecto.
 // `body.type` default "POC" para no romper a los llamadores existentes.
 //

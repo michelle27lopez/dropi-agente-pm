@@ -1,21 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
+import { Wand2 } from "lucide-react";
 import {
-  NodeKey, NodeData, SavedNode, isPlanningComplete, EXECUTION_NODE_INDEX,
+  NODE_DEFINITIONS, NodeKey, NodeData, Field, SavedNode, isPlanningComplete, EXECUTION_NODE_INDEX,
   parseMilestones, MILESTONE_LABEL, milestoneState, parseMessages,
 } from "../../nodes";
 import { PhaseTabs } from "../../PhaseTabs";
 import { Sidebar } from "../../../Sidebar";
 
 type Campaign = { id: string; name: string; status: string };
-type EligibleSelected = { id: string | number; name: string; stock: number | null };
-type EligibleListEntry = {
-  token: string; supplier_name: string; product_count: number;
-  submitted_at?: string | null; approved_at?: string | null; selected: EligibleSelected[];
-};
+
+const DECISION_IDX = NODE_DEFINITIONS.findIndex((n) => n.key === "decision");
+const DECISION_DEF = NODE_DEFINITIONS[DECISION_IDX];
+const RESULTADOS_IDX = NODE_DEFINITIONS.findIndex((n) => n.key === "resultados");
 
 const ENRIQUE_DOC_URL = "https://claude.ai/code/artifact/9c320e5b-a72f-44ac-b8a4-3e8ab86bd72c";
 const SUPPLIER_PREVIEW_TOKEN = "14kC0tM0fztALhbD8jrVNw";
@@ -28,44 +27,8 @@ const TOKENS = `
   }
 `;
 
-function num(v: string | undefined): number {
-  const n = Number(v);
-  return Number.isFinite(n) ? n : 0;
-}
-
-function fmt(n: number): string {
-  return n.toLocaleString("es-CO");
-}
-
 function chipList(value: string | undefined): string[] {
   return value ? value.split("||").filter(Boolean) : [];
-}
-
-function StatCard({ label, value, accent }: { label: string; value: string; accent?: string }) {
-  return (
-    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "16px 18px" }}>
-      <div style={{ fontSize: 12, color: "var(--muted)", fontWeight: 600, marginBottom: 6 }}>{label}</div>
-      <div style={{ fontSize: 24, fontWeight: 800, color: accent || "var(--fg)" }}>{value}</div>
-    </div>
-  );
-}
-
-function FunnelChart({ data }: { data: { name: string; value: number }[] }) {
-  return (
-    <div style={{ width: "100%", height: 220 }}>
-      <ResponsiveContainer>
-        <BarChart data={data} layout="vertical" margin={{ left: 24, right: 24, top: 8, bottom: 8 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
-          <XAxis type="number" tick={{ fontSize: 12, fill: "#6B7280" }} axisLine={false} tickLine={false} />
-          <YAxis type="category" dataKey="name" tick={{ fontSize: 13, fill: "#111827" }} width={140} axisLine={false} tickLine={false} />
-          <Tooltip formatter={(v) => fmt(Number(v))} />
-          <Bar dataKey="value" radius={[0, 6, 6, 0]} barSize={22}>
-            {data.map((_, i) => <Cell key={i} fill={i === 0 ? "#F77F00" : i === data.length - 1 ? "#10B981" : "#FBBF7A"} />)}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
 }
 
 function Chips({ value, color = "#F77F00" }: { value?: string; color?: string }) {
@@ -120,65 +83,188 @@ function SummaryCard({
   );
 }
 
+function FieldInput({
+  field, value, onChange, onAiSuggest, aiLoading, aiError,
+}: {
+  field: Field; value: string; onChange: (v: string) => void;
+  onAiSuggest?: () => void; aiLoading?: boolean; aiError?: string;
+}) {
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, marginBottom: 6 }}>
+        <label style={{ fontSize: 13, fontWeight: 600, color: "#111827" }}>
+          {field.label}
+          {field.required ? <span style={{ color: "#F77F00", marginLeft: 2 }}>*</span> : <span style={{ fontSize: 11, fontWeight: 400, color: "#9ca3af", marginLeft: 4 }}>(opcional)</span>}
+        </label>
+        {field.aiSuggest && onAiSuggest && (
+          <button
+            type="button"
+            onClick={onAiSuggest}
+            disabled={aiLoading}
+            style={{
+              display: "flex", alignItems: "center", gap: 5, fontSize: 11.5, fontWeight: 600,
+              color: "#6366F1", background: "#EEF2FF", border: "1px solid rgba(99,102,241,.25)",
+              borderRadius: 999, padding: "4px 10px", cursor: aiLoading ? "default" : "pointer", fontFamily: "inherit",
+            }}
+          >
+            <Wand2 size={12} strokeWidth={2.4} />
+            {aiLoading ? "Generando..." : "Sugerir con IA"}
+          </button>
+        )}
+      </div>
+      {field.hint && <p style={{ fontSize: 12, color: "#6b7280", margin: "0 0 8px", lineHeight: 1.5 }}>{field.hint}</p>}
+      {aiError && <p style={{ fontSize: 12, color: "#EF4444", margin: "0 0 8px" }}>{aiError}</p>}
+
+      {field.type === "textarea" && (
+        <textarea
+          value={value}
+          placeholder={field.placeholder || ""}
+          onChange={(e) => onChange(e.target.value)}
+          rows={4}
+          style={{ width: "100%", border: "1px solid #d1d5db", borderRadius: 8, padding: "10px 12px", fontSize: 13.5, fontFamily: "inherit", resize: "vertical", boxSizing: "border-box" }}
+        />
+      )}
+      {field.type === "select" && field.optionDescriptions && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+          {field.options?.map((opt) => {
+            const isSel = value === opt;
+            return (
+              <button
+                key={opt}
+                type="button"
+                onClick={() => onChange(opt)}
+                style={{
+                  textAlign: "left", border: isSel ? "1px solid #F77F00" : "1px solid #e5e7eb",
+                  background: isSel ? "#FFF3E0" : "#fff", borderRadius: 8, padding: "10px 12px",
+                  cursor: "pointer", fontFamily: "inherit", display: "flex", flexDirection: "column", gap: 4,
+                }}
+              >
+                <span style={{ fontSize: 13, fontWeight: 700, color: isSel ? "#F77F00" : "#111827" }}>{opt}</span>
+                {field.optionDescriptions?.[opt] && <span style={{ fontSize: 11.5, color: "#6b7280", lineHeight: 1.45 }}>{field.optionDescriptions[opt]}</span>}
+              </button>
+            );
+          })}
+        </div>
+      )}
+      {field.type === "select" && !field.optionDescriptions && (
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          style={{ width: "100%", border: "1px solid #d1d5db", borderRadius: 8, padding: "10px 12px", fontSize: 13.5, fontFamily: "inherit", background: "#fff" }}
+        >
+          <option value="">Seleccionar...</option>
+          {field.options?.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+        </select>
+      )}
+    </div>
+  );
+}
+
 export default function CampaignDashboardPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [campaign, setCampaign] = useState<Campaign | null>(null);
   const [nodes, setNodes] = useState<SavedNode[]>([]);
   const [loading, setLoading] = useState(true);
-  const [eligibleList, setEligibleList] = useState<EligibleListEntry[]>([]);
-  const [eligibleSearch, setEligibleSearch] = useState("");
-  const [approving, setApproving] = useState(false);
+  const [decision, setDecision] = useState<NodeData>({});
+  const [saving, setSaving] = useState(false);
+  const [closing, setClosing] = useState(false);
+  const [showValidation, setShowValidation] = useState(false);
+  const [aiLoading, setAiLoading] = useState<Set<string>>(new Set());
+  const [aiErrors, setAiErrors] = useState<Record<string, string>>({});
 
-  async function refreshEligibles() {
-    const el = await fetch(`/api/campaigns-planeacion/${id}/elegibles`).then((r) => r.json());
-    setEligibleList(Array.isArray(el) ? el : []);
-  }
+  const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Aprobar dispara el cambio en la página pública del proveedor (su fase de
-  // fotos se desbloquea con `approved_at`, no con el calendario) — es el
-  // momento en que también debe salir el WhatsApp de "fuiste aprobado".
-  async function approveOne(token: string) {
-    setApproving(true);
-    try {
-      await fetch(`/api/campaigns-planeacion/${id}/elegibles/aprobar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
-      });
-      await refreshEligibles();
-    } finally {
-      setApproving(false);
-    }
-  }
-
-  async function approveAll(pending: number) {
-    if (!window.confirm(`¿Aprobar a los ${pending} proveedores que postularon y siguen pendientes? Sus páginas pasarán a "Aprobado" de inmediato.`)) return;
-    setApproving(true);
-    try {
-      await fetch(`/api/campaigns-planeacion/${id}/elegibles/aprobar`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ all: true }),
-      });
-      await refreshEligibles();
-    } finally {
-      setApproving(false);
-    }
-  }
-
-  useEffect(() => {
+  const load = useCallback(() => {
     Promise.all([
       fetch(`/api/campaigns-planeacion/${id}`).then((r) => r.json()),
       fetch(`/api/campaigns-planeacion/${id}/nodes`).then((r) => r.json()),
-      fetch(`/api/campaigns-planeacion/${id}/elegibles`).then((r) => r.json()),
-    ]).then(([camp, n, el]) => {
+    ]).then(([camp, n]) => {
       setCampaign(camp);
-      setNodes(Array.isArray(n) ? n : []);
-      setEligibleList(Array.isArray(el) ? el : []);
+      const list: SavedNode[] = Array.isArray(n) ? n : [];
+      setNodes(list);
+      setDecision(list.find((x) => x.node_index === DECISION_IDX)?.data ?? {});
       setLoading(false);
     }).catch(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  useEffect(() => { load(); }, [load]);
+  useEffect(() => () => { if (autosaveTimer.current) clearTimeout(autosaveTimer.current); }, []);
+
+  const getDecisionMissing = useCallback((data: NodeData) => {
+    let missing = 0;
+    DECISION_DEF.sections.forEach((sec) => sec.fields.forEach((f) => {
+      if (!f.required) return;
+      if (f.hidden && f.hidden({ decision: data })) return;
+      const v = data[f.key];
+      if (!v || (typeof v === "string" && v.trim() === "")) missing++;
+    }));
+    return missing;
+  }, []);
+
+  const saveDecision = useCallback(async (data: NodeData) => {
+    if (autosaveTimer.current) { clearTimeout(autosaveTimer.current); autosaveTimer.current = null; }
+    setSaving(true);
+    try {
+      await fetch(`/api/campaigns-planeacion/${id}/nodes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ node_index: DECISION_IDX, node_key: "decision", data, completed: getDecisionMissing(data) === 0 }),
+      });
+    } finally {
+      setSaving(false);
+    }
+  }, [id, getDecisionMissing]);
+
+  const handleDecisionChange = (key: string, value: string) => {
+    setDecision((prev) => {
+      const next = { ...prev, [key]: value };
+      if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
+      autosaveTimer.current = setTimeout(() => { saveDecision(next); }, 900);
+      return next;
+    });
+  };
+
+  const handleDecisionAiSuggest = async (field: Field) => {
+    const existing = decision[field.key] || "";
+    if (existing.trim() && !window.confirm("Esto va a reemplazar lo que ya escribiste en este campo. ¿Continuar?")) return;
+    setAiLoading((prev) => new Set(prev).add(field.key));
+    setAiErrors((prev) => { const next = { ...prev }; delete next[field.key]; return next; });
+    try {
+      const allData: Partial<Record<NodeKey, NodeData>> = {};
+      NODE_DEFINITIONS.forEach((n) => { allData[n.key] = nodes.find((x) => x.node_key === n.key)?.data ?? {}; });
+      allData.decision = decision;
+      const res = await fetch("/api/campaigns-planeacion/ai-suggest", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ nodeKey: "decision", fieldKey: field.key, fieldLabel: field.label, hint: field.hint, placeholder: field.placeholder, allData }),
+      });
+      const json = await res.json();
+      if (!res.ok || json.error) throw new Error(json.error || "No se pudo generar la sugerencia.");
+      handleDecisionChange(field.key, json.suggestion);
+    } catch (err) {
+      setAiErrors((prev) => ({ ...prev, [field.key]: err instanceof Error ? err.message : "Error desconocido" }));
+    } finally {
+      setAiLoading((prev) => { const next = new Set(prev); next.delete(field.key); return next; });
+    }
+  };
+
+  const handleCerrar = async () => {
+    await saveDecision(decision);
+    if (getDecisionMissing(decision) > 0) { setShowValidation(true); return; }
+    setClosing(true);
+    try {
+      await fetch(`/api/campaigns-planeacion/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: "completed" }),
+      });
+      setCampaign((prev) => (prev ? { ...prev, status: "completed" } : prev));
+    } finally {
+      setClosing(false);
+    }
+  };
 
   if (loading) {
     return <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", color: "var(--muted)", fontSize: 14 }}>Cargando dashboard...</div>;
@@ -195,7 +281,7 @@ export default function CampaignDashboardPage() {
   const vitrina = nd("vitrina");
   const handoff = nd("handoff");
   const resultados = nd("resultados");
-  const hasResultados = Object.keys(resultados).length > 0;
+  const resultadosDone = Object.keys(resultados).length > 0 && nodes.find((x) => x.node_index === RESULTADOS_IDX)?.completed === true;
 
   const milestones = parseMilestones(calendario.milestones);
   const supplierMessages = parseMessages(convocatoria.messages);
@@ -206,30 +292,10 @@ export default function CampaignDashboardPage() {
   const planningComplete = isPlanningComplete(nodes);
   const executionNode = nodes.find((n) => n.node_index === EXECUTION_NODE_INDEX);
   const isActive = executionNode?.data?.status === "active";
-  const closingDone = !!nd("decision").decision;
+  const decisionMissing = getDecisionMissing(decision);
 
   const base = `/proyectos/dinamicas-catalogo/planeacion/${id}`;
   const editHref = (key: NodeKey) => `${base}?node=${key}`;
-
-  const supplierFunnel = [
-    { name: "Invitados", value: num(resultados.suppliers_invited) },
-    { name: "Postularon", value: num(resultados.suppliers_applied) },
-    { name: "Aprobados", value: num(resultados.suppliers_approved) },
-    { name: "Con marco aplicado", value: num(resultados.suppliers_with_frame) },
-  ];
-  const dropshipperFunnel = [
-    { name: "Impactados", value: num(resultados.dropshippers_impacted) },
-    { name: "Clics en vitrina", value: num(resultados.banner_clicks) },
-    { name: "Productos vistos", value: num(resultados.products_viewed) },
-    { name: "Productos tomados", value: num(resultados.products_taken) },
-  ];
-
-  const participationRate = num(resultados.suppliers_invited) > 0
-    ? Math.round((num(resultados.suppliers_applied) / num(resultados.suppliers_invited)) * 100)
-    : 0;
-  const approvalRate = num(resultados.suppliers_applied) > 0
-    ? Math.round((num(resultados.suppliers_approved) / num(resultados.suppliers_applied)) * 100)
-    : 0;
 
   return (
     <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)" }}>
@@ -237,7 +303,7 @@ export default function CampaignDashboardPage() {
       <main style={{ flex: 1, minWidth: 0 }}>
       <style dangerouslySetInnerHTML={{ __html: TOKENS }} />
       <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)", padding: "0 24px", height: 52,
+        background: "#fff", borderBottom: "1px solid var(--border)", padding: "0 32px", height: 52,
         display: "flex", alignItems: "center", gap: 12, position: "sticky", top: 0, zIndex: 10,
       }}>
         <button onClick={() => router.push("/proyectos/dinamicas-catalogo/campanas")} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--muted)", fontSize: 13, padding: 0 }}>
@@ -245,9 +311,10 @@ export default function CampaignDashboardPage() {
         </button>
         <span style={{ color: "var(--border)" }}>/</span>
         <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>{campaign.name}</span>
+        {saving && <span style={{ marginLeft: "auto", fontSize: 12, color: "var(--muted)" }}>Guardando…</span>}
       </header>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px 80px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 8 }}>
           <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)", margin: 0 }}>{identidad.name || campaign.name}</h1>
           <button
@@ -258,12 +325,17 @@ export default function CampaignDashboardPage() {
           </button>
         </div>
 
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, marginBottom: 16 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 16 }}>
           <a
             href={ENRIQUE_DOC_URL}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none",
+              background: "rgba(247,127,0,.08)", border: "1px solid rgba(247,127,0,.3)",
+              borderRadius: 8, padding: "7px 12px",
+            }}
           >
             📄 Plantillas WhatsApp (Claude) →
           </a>
@@ -271,7 +343,12 @@ export default function CampaignDashboardPage() {
             href={`${base}/elegibles/${SUPPLIER_PREVIEW_TOKEN}`}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              fontSize: 12.5, fontWeight: 700, color: "var(--dropi)", textDecoration: "none",
+              background: "rgba(247,127,0,.08)", border: "1px solid rgba(247,127,0,.3)",
+              borderRadius: 8, padding: "7px 12px",
+            }}
           >
             🔗 Vista proveedor · prueba →
           </a>
@@ -283,7 +360,7 @@ export default function CampaignDashboardPage() {
             active="resumen"
             planningComplete={planningComplete}
             isActive={isActive}
-            closingDone={closingDone}
+            resultadosDone={resultadosDone}
           />
         </div>
 
@@ -379,101 +456,6 @@ export default function CampaignDashboardPage() {
           </SummaryCard>
         </div>
 
-        {eligibleList.length > 0 && (() => {
-          const pendingApproval = eligibleList.filter((e) => e.submitted_at && !e.approved_at).length;
-          const submittedCount = eligibleList.filter((e) => e.submitted_at).length;
-          return (
-          <SummaryCard
-            title={`Productos elegibles por proveedor (${eligibleList.length})`}
-            extra={
-              <>
-                {submittedCount > 0 && (
-                  <a
-                    href={`/api/campaigns-planeacion/${id}/elegibles/export`}
-                    style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", textDecoration: "none" }}
-                  >
-                    ⬇ Selecciones (CSV)
-                  </a>
-                )}
-                {pendingApproval > 0 && (
-                  <button
-                    onClick={() => approveAll(pendingApproval)}
-                    disabled={approving}
-                    style={{ background: "var(--success)", color: "#fff", border: "none", borderRadius: 8, padding: "5px 12px", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: approving ? 0.6 : 1 }}
-                  >
-                    Aprobar todos ({pendingApproval})
-                  </button>
-                )}
-              </>
-            }
-          >
-            <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "0 0 10px" }}>
-              Link personalizado por proveedor, sin login — es el que va en el mensaje "Formulario de postulación habilitado".
-              {submittedCount > 0 && ` ${submittedCount} ya postularon.`} Aprobar desbloquea la fase de fotos en la página del proveedor.
-            </p>
-            <input
-              type="text"
-              value={eligibleSearch}
-              onChange={(e) => setEligibleSearch(e.target.value)}
-              placeholder="Buscar proveedor..."
-              style={{ fontSize: 13, padding: "7px 10px", border: "1px solid var(--border)", borderRadius: 8, marginBottom: 10, width: 240, fontFamily: "inherit" }}
-            />
-            <div style={{ maxHeight: 320, overflowY: "auto", border: "1px solid var(--border)", borderRadius: 8 }}>
-              {eligibleList
-                .filter((e) => e.supplier_name.toLowerCase().includes(eligibleSearch.trim().toLowerCase()))
-                .map((e, i, arr) => (
-                  <div
-                    key={e.token}
-                    style={{ padding: "8px 12px", borderBottom: i < arr.length - 1 ? "1px solid #f3f4f6" : "none" }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
-                      <span style={{ fontSize: 13, fontWeight: 600, color: "var(--fg)" }}>{e.supplier_name}</span>
-                      <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                        {e.approved_at ? (
-                          <span style={{ fontSize: 11, fontWeight: 700, color: "#059669", background: "#ecfdf5", padding: "2px 7px", borderRadius: 20 }}>Aprobado ✓</span>
-                        ) : e.submitted_at ? (
-                          <>
-                            <span style={{ fontSize: 11, fontWeight: 700, color: "#6366F1", background: "#eef2ff", padding: "2px 7px", borderRadius: 20 }}>Postuló · {e.selected.length}</span>
-                            <button
-                              onClick={() => approveOne(e.token)}
-                              disabled={approving}
-                              style={{ background: "none", border: "1px solid var(--success)", color: "var(--success)", borderRadius: 8, padding: "3px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: approving ? 0.6 : 1 }}
-                            >
-                              Aprobar
-                            </button>
-                          </>
-                        ) : (
-                          <span style={{ fontSize: 12, color: "var(--muted)" }}>{e.product_count} producto{e.product_count === 1 ? "" : "s"}</span>
-                        )}
-                        <a
-                          href={`${base}/elegibles/${e.token}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", textDecoration: "none" }}
-                        >
-                          Abrir →
-                        </a>
-                      </span>
-                    </div>
-                    {e.submitted_at && e.selected.length > 0 && (
-                      <details style={{ marginTop: 4 }}>
-                        <summary style={{ fontSize: 12, color: "var(--muted)", cursor: "pointer" }}>Ver selección ({e.selected.length})</summary>
-                        <ul style={{ margin: "6px 0 2px", paddingLeft: 18 }}>
-                          {e.selected.map((p) => (
-                            <li key={String(p.id)} style={{ fontSize: 12.5, color: "var(--fg)", marginBottom: 2 }}>
-                              {p.name} <span style={{ color: "var(--muted)" }}>· #{p.id}{p.stock != null ? ` · ${fmt(p.stock)} u.` : ""}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    )}
-                  </div>
-                ))}
-            </div>
-          </SummaryCard>
-          );
-        })()}
-
         <SummaryCard
           title="Handoff operativo"
           editHref={editHref("handoff")}
@@ -490,50 +472,56 @@ export default function CampaignDashboardPage() {
           <Row label="Responsables" value={handoff.area_responsibilities} />
         </SummaryCard>
 
-        {hasResultados && (
-          <>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginTop: 8, marginBottom: 16 }}>
-              <StatCard label="Órdenes generadas" value={fmt(num(resultados.orders_generated))} accent="#F77F00" />
-              <StatCard label="GMV generado" value={`$${fmt(num(resultados.gmv_generated))}`} accent="#F77F00" />
-              <StatCard label="Tasa de participación" value={`${participationRate}%`} accent="#6366F1" />
-              <StatCard label="Tasa de aprobación" value={`${approvalRate}%`} accent="#6366F1" />
-            </div>
+        <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "8px 0 20px" }}>
+          Los números agregados de la campaña (órdenes, GMV, embudos) viven en la tab <strong>Métricas</strong>. El seguimiento por proveedor (clics, Meet, productos, órdenes) vive en <strong>Seguimiento</strong>.
+        </p>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
-              <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px" }}>
-                <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", margin: "0 0 12px" }}>Embudo de suppliers</h3>
-                <FunnelChart data={supplierFunnel} />
-              </div>
-              <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px" }}>
-                <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", margin: "0 0 12px" }}>Embudo de dropshippers</h3>
-                <FunnelChart data={dropshipperFunnel} />
-              </div>
-            </div>
+        <div style={{ marginTop: 8 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--fg)", margin: "0 0 4px" }}>Decisión</h3>
+          <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "0 0 10px" }}>Con los resultados reales en mano: ¿escalamos, iteramos o pausamos?</p>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 12, marginBottom: 16 }}>
-              <StatCard label="Productos con primera orden" value={fmt(num(resultados.products_first_order))} />
-              <StatCard label="Productos quietos activados" value={fmt(num(resultados.products_reactivated))} />
-              <StatCard label="Suppliers con al menos una venta" value={fmt(num(resultados.suppliers_with_sales))} />
-            </div>
-
-            {(resultados.vs_expected || resultados.learnings) && (
-              <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "20px 22px", display: "flex", flexDirection: "column", gap: 16 }}>
-                {resultados.vs_expected && (
-                  <div>
-                    <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", margin: "0 0 6px" }}>Real vs. esperado</h3>
-                    <p style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.55, margin: 0, whiteSpace: "pre-wrap" }}>{resultados.vs_expected}</p>
-                  </div>
-                )}
-                {resultados.learnings && (
-                  <div>
-                    <h3 style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", margin: "0 0 6px" }}>Aprendizajes</h3>
-                    <p style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.55, margin: 0, whiteSpace: "pre-wrap" }}>{resultados.learnings}</p>
-                  </div>
-                )}
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: "18px 22px" }}>
+            {campaign.status === "completed" && (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, background: "#F3F4F6", border: "1px solid var(--border)", borderRadius: 10, padding: "8px 12px", marginBottom: 16, fontSize: 12.5, color: "#374151", fontWeight: 600 }}>
+                ✓ Campaña cerrada
               </div>
             )}
-          </>
-        )}
+            {showValidation && decisionMissing > 0 && (
+              <div style={{ background: "var(--warn-light)", border: "1px solid rgba(245,158,11,.3)", borderRadius: 10, padding: "10px 14px", marginBottom: 16 }}>
+                <p style={{ fontSize: 13, fontWeight: 600, color: "#92400e", margin: 0 }}>
+                  Faltan {decisionMissing} campo{decisionMissing > 1 ? "s" : ""} obligatorio{decisionMissing > 1 ? "s" : ""} para cerrar la campaña.
+                </p>
+              </div>
+            )}
+            {DECISION_DEF.sections.map((sec) => {
+              const visibleFields = sec.fields.filter((f) => !(f.hidden && f.hidden({ decision })));
+              return (
+                <div key={sec.key}>
+                  {visibleFields.map((f) => (
+                    <FieldInput
+                      key={f.key}
+                      field={f}
+                      value={decision[f.key] || ""}
+                      onChange={(v) => handleDecisionChange(f.key, v)}
+                      onAiSuggest={f.aiSuggest ? () => handleDecisionAiSuggest(f) : undefined}
+                      aiLoading={aiLoading.has(f.key)}
+                      aiError={aiErrors[f.key]}
+                    />
+                  ))}
+                </div>
+              );
+            })}
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 8 }}>
+              <button
+                onClick={handleCerrar}
+                disabled={closing}
+                style={{ background: "var(--dropi)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontSize: 13.5, fontWeight: 700, cursor: closing ? "default" : "pointer" }}
+              >
+                {closing ? "Cerrando..." : "✓ Cerrar campaña"}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       </main>
     </div>

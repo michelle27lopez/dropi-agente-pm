@@ -5,7 +5,7 @@ export default function Prototipo1Page() {
       <header style={{
         background: "#fff",
         borderBottom: "1px solid var(--border)",
-        padding: "12px 24px",
+        padding: "12px 32px",
         display: "flex",
         alignItems: "center",
         gap: "16px",
