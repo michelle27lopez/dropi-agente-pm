@@ -18,12 +18,17 @@ function oauthClient(redirectUri: string) {
   return new google.auth.OAuth2(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, redirectUri);
 }
 
-export function buildConsentUrl(redirectUri: string): string {
+// `state` es obligatorio: Google lo devuelve tal cual en el callback y ahí se
+// compara contra la cookie que dejó la ruta de login. Sin él, un tercero puede
+// inducir a un usuario autorizado a canjear un `code` ajeno y terminar con el
+// refresh_token de otra cuenta guardado a su nombre (CSRF de OAuth).
+export function buildConsentUrl(redirectUri: string, state: string): string {
   const client = oauthClient(redirectUri);
   return client.generateAuthUrl({
     access_type: "offline",
     prompt: "consent",
     scope: SCOPES,
+    state,
   });
 }
 
