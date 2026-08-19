@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Gauge, Timer, Percent, Package, HeartPulse, Users, ChevronRight } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
+import { GRUPOS_LOGISTICA } from "./kpis-logistica";
 
 type TimeMetric = {
   scope: string;
@@ -28,7 +29,19 @@ const TARGETS = { activacion: 5, primera_orden: 25 } as const;
 // meta si ya cumple, en camino si está a menos de 20% de la meta, no
 // alcanzada en el resto. El 20% es una regla de UI para clasificar el pill,
 // no un dato — queda documentado por transparencia.
-function statusFor(value: number, target: number): "success" | "warning" | "danger" {
+// `dir` se agregó el 2026-08-19 al sumar Logística: las métricas de Suppliers
+// son tiempos (menor es mejor) pero la tasa de entrega y el % <24h son al revés.
+// Sin esto, un 99,4% de cumplimiento se pintaría en rojo.
+function statusFor(
+  value: number,
+  target: number,
+  dir: "mayor" | "menor" = "menor"
+): "success" | "warning" | "danger" {
+  if (dir === "mayor") {
+    if (value >= target) return "success";
+    if (value >= target * 0.8) return "warning";
+    return "danger";
+  }
   if (value <= target) return "success";
   if (value <= target * 1.2) return "warning";
   return "danger";
@@ -139,6 +152,8 @@ export default function KpiPreviewPanel() {
   }, [celulaSlug]);
 
   if (celulaSlug === undefined) return null;
+
+  if (celulaSlug === "logistica") return <KpisLogistica />;
 
   if (celulaSlug !== "suppliers") {
     return (
@@ -267,6 +282,79 @@ export default function KpiPreviewPanel() {
         style={{ display: "inline-flex", margin: "14px 20px 16px" }}
       >
         Ver métricas completas
+        <ChevronRight size={14} />
+      </a>
+    </div>
+  );
+}
+
+// Panel de KPIs de Logistic Success (2026-08-19). Reutiliza KpiCard y las
+// clases .midia-kpi-* tal cual; lo único distinto es que aquí no hay serie
+// temporal —los datos son cortes únicos transcritos de Power BI— así que va
+// sin sparklines y con el mes del corte impreso en cada grupo.
+function KpisLogistica() {
+  return (
+    <div className="midia-panel" style={{ animationDelay: "0ms" }}>
+      <div className="midia-panel-header">
+        <div className="midia-panel-header-left">
+          <span className="midia-panel-icon">
+            <Gauge size={14} />
+          </span>
+          <span className="midia-panel-label">KPIs de la célula</span>
+        </div>
+      </div>
+
+      {GRUPOS_LOGISTICA.map((grupo, gi) => (
+        <div key={grupo.titulo}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              gap: 8,
+              flexWrap: "wrap",
+              padding: "4px 20px 0",
+            }}
+          >
+            <span style={{ fontSize: 12, fontWeight: 600, color: "var(--fg)" }}>{grupo.titulo}</span>
+            <span style={{ fontSize: 11, color: "var(--muted)" }}>{grupo.corte}</span>
+          </div>
+          <div className="midia-kpi-grid">
+            {grupo.kpis.map((kpi) => {
+              const status = kpi.target === null ? null : statusFor(kpi.value, kpi.target, kpi.dir);
+              return (
+                <KpiCard
+                  key={kpi.label}
+                  variant={status ?? "empty"}
+                  icon={gi === 0 ? <Timer size={16} /> : <Percent size={16} />}
+                  label={kpi.label}
+                  value={kpi.valueLabel}
+                  meta={kpi.meta}
+                  pill={
+                    status
+                      ? { tone: status, label: STATUS_LABEL[status] }
+                      : { tone: "neutral", label: "Sin meta validada" }
+                  }
+                  spark={[]}
+                  sparkColor="var(--muted)"
+                />
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
+      <p style={{ fontSize: 11, color: "var(--muted)", margin: "4px 20px 0", lineHeight: 1.5 }}>
+        Cortes congelados: estas cifras se transcriben a mano desde Power BI, no se
+        refrescan solas. El acumulado creación→transportadora todavía no existe — las
+        fases no se pueden sumar porque manejan volúmenes distintos.
+      </p>
+
+      <a
+        href="/proyectos/logistica"
+        className="midia-panel-link"
+        style={{ display: "inline-flex", margin: "14px 20px 16px" }}
+      >
+        Ver el tablero de logística
         <ChevronRight size={14} />
       </a>
     </div>
