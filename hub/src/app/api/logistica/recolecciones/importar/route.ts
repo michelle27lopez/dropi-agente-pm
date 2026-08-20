@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as XLSX from "xlsx";
 import { supabase } from "@/lib/supabase";
-import { requireUser } from "@/lib/require-auth";
+import { requireAppAccess } from "@/lib/app-access";
 import {
   agruparPorBodega, resumir, validarColumnas, ubicar, fechaDelExport,
   type CoordCache, type FilaExport, type Precision,
@@ -20,8 +20,8 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
-  const user = await requireUser();
-  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  const user = await requireAppAccess("inidiana");
+  if (!user) return NextResponse.json({ error: "Sin acceso a Control de Recolecciones" }, { status: 403 });
   if (!supabase) return NextResponse.json({ error: "Sin cliente de Supabase" }, { status: 500 });
 
   const form = await req.formData().catch(() => null);

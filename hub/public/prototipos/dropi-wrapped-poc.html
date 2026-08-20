@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700;800&family=Rationale&display=swap" rel="stylesheet">
+<!-- html2canvas for instant HD PNG screenshot generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   :root {
     --ink: #050209;
@@ -104,12 +106,14 @@
     overflow: hidden;
     background-size: 200% 200% !important;
     animation: gradientShift 10s ease infinite;
+    z-index: 10;
   }
   
   .slide.active {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    z-index: 30;
   }
   
   @keyframes gradientShift {
@@ -478,6 +482,9 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
+    position: relative;
+    z-index: 90;
+    pointer-events: auto;
   }
   
   .btn {
@@ -489,6 +496,11 @@
     cursor: pointer;
     transition: transform 0.2s var(--ease), box-shadow 0.2s, background 0.3s;
     font-family: inherit;
+    position: relative;
+    z-index: 95;
+    pointer-events: auto;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
   }
   
   .btn.primary {
@@ -565,100 +577,167 @@
     filter: drop-shadow(0 0 35px rgba(255, 0, 0, 0.65));
   }
 
-  /* ---------- PM Lens container & Switch (Glassmorphism dashboard) ---------- */
-  #lensToggle {
-    position: absolute;
-    bottom: 26px;
-    left: 22px;
-    z-index: 35;
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #fff;
-    border-radius: 99px;
-    padding: 8px 14px;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
+
+
+  /* Mobile Fullscreen & Responsiveness */
+  @media(max-width: 479px) {
+    body {
+      background: #050209;
+      justify-content: flex-start;
+    }
+    #stage {
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100dvh;
+      margin-top: 0 !important;
+      border-radius: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    .slide {
+      padding: 60px 20px 80px;
+    }
+  }
+
+  /* Share Bottom Sheet Modal */
+  .share-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.78);
     backdrop-filter: blur(12px);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    transition: all 0.3s var(--ease);
-  }
-  
-  #lensToggle:hover {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-  }
-  
-  #lensToggle .sw {
-    width: 32px;
-    height: 18px;
-    border-radius: 99px;
-    background: rgba(255, 255, 255, 0.2);
-    position: relative;
-    transition: background 0.3s;
-  }
-  
-  #lensToggle .sw::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-    transition: left 0.3s var(--ease);
-  }
-  
-  body.lens #lensToggle .sw {
-    background: var(--color-maestro);
-  }
-  
-  body.lens #lensToggle .sw::after {
-    left: 16px;
-  }
- 
-  .lens {
-    position: absolute;
-    left: 22px;
-    right: 22px;
-    bottom: 74px;
-    z-index: 34;
-    background: rgba(5, 2, 9, 0.94);
-    border: 1px solid rgba(255, 133, 0, 0.35);
-    border-radius: 20px;
-    padding: 16px 18px;
-    backdrop-filter: blur(16px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
     opacity: 0;
-    transform: translateY(14px);
+    visibility: hidden;
     pointer-events: none;
-    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255,255,255,0.1);
+    transition: opacity 0.3s var(--ease), visibility 0.3s;
   }
-  
-  body.lens .slide.active .lens {
+  .share-modal-overlay.active {
     opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .share-modal-content {
+    width: 100%;
+    max-width: 440px;
+    background: #0e071c;
+    border: 1px solid rgba(255, 133, 0, 0.35);
+    border-radius: 28px 28px 0 0;
+    padding: 20px 22px 34px;
+    color: #fff;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.85);
+    transform: translateY(100%);
+    transition: transform 0.35s var(--ease);
+  }
+  .share-modal-overlay.active .share-modal-content {
     transform: translateY(0);
   }
-  
-  .lens .tt {
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--color-maestro);
-    margin-bottom: 6px;
+  .share-modal-handle {
+    width: 42px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 99px;
+    margin: 0 auto 16px;
   }
-  
-  .lens .tx {
+  .share-modal-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--color-maestro);
+    text-align: center;
+  }
+  .share-modal-sub {
+    font-size: 12.5px;
+    color: #b5a9cf;
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 16px;
+  }
+  .share-preview-card {
+    background: linear-gradient(135deg, rgba(255, 133, 0, 0.16) 0%, rgba(255, 0, 0, 0.1) 100%);
+    border: 1px solid rgba(255, 133, 0, 0.3);
+    border-radius: 16px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .sp-badge-img img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(255, 133, 0, 0.5));
+  }
+  .sp-name { font-size: 14.5px; font-weight: 800; color: #fff; }
+  .sp-rank { font-size: 12px; font-weight: 700; color: var(--color-maestro); margin-top: 1px; }
+  .sp-stats { font-size: 11px; color: #d0c4eb; margin-top: 2px; }
+
+  .share-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .share-opt-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: #fff;
+    font-family: inherit;
+    text-align: left;
+    transition: all 0.2s var(--ease);
+  }
+  .share-opt-btn:active {
+    transform: scale(0.96);
+  }
+  .share-opt-btn.whatsapp { border-color: rgba(37, 211, 102, 0.5); background: rgba(37, 211, 102, 0.1); }
+  .share-opt-btn.instagram { border-color: rgba(225, 48, 108, 0.5); background: rgba(225, 48, 108, 0.1); }
+  .share-opt-btn.facebook { border-color: rgba(24, 119, 242, 0.5); background: rgba(24, 119, 242, 0.1); }
+  .share-opt-btn.native { border-color: rgba(255, 133, 0, 0.5); background: rgba(255, 133, 0, 0.08); }
+
+  .opt-icon { font-size: 22px; flex-shrink: 0; }
+  .opt-name { display: block; font-size: 13px; font-weight: 800; }
+  .opt-desc { display: block; font-size: 10px; opacity: 0.75; color: #d0c4eb; }
+
+  .share-close-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 13px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .share-toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(16, 185, 129, 0.95);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 99px;
     font-size: 13px;
-    font-weight: 500;
-    line-height: 1.45;
-    color: #e5daff;
+    font-weight: 800;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s var(--ease);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .share-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 
   /* Confetti */
@@ -736,10 +815,6 @@
       <div class="med" style="font-size: 24px; margin-top: 5px;">Experto Plata III</div>
     </div>
     <div class="sub reveal d3" style="text-align:center; max-width: 320px; margin: 15px auto 0; line-height: 1.5; font-size: 13.5px;">Aquí se mide el poder de tu constancia. Repasemos el volumen de tu operación y tu estatus acumulado en el Imperio.<br><br>Toca para iniciar tu ascenso →</div>
-    <div class="lens">
-      <div class="tt">Lente PM · Identidad y Pertenencia (SDT)</div>
-      <div class="tx">Enmarcar el Wrapped como el camino transcurrido en el programa "Leyendas" (no estadísticas sueltas) activa la motivación intrínseca (Autonomía y Competencia) al dar significado al esfuerzo del seller.</div>
-    </div>
   </section>
 
   <!-- 1 · ÓRDENES / DROPS -->
@@ -748,10 +823,6 @@
     <div class="metric"><div class="big up" data-count="4820" data-dur="1600">0</div><span class="unit reveal d3" style="margin-left: 6px;">drops</span></div>
     <div class="lede reveal d3" style="margin-top:18px">Cada drop representa una orden completada con éxito. Has acumulado <span class="accent">1 drop cada 1.8 horas</span> de por vida de forma permanente.</div>
     <div class="delta reveal d4"><span><b>+63%</b> drops vs. tu 2024</span></div>
-    <div class="lens">
-      <div class="tt">Lente PM · Capital Acumulado (Sunk Cost Fallacy)</div>
-      <div class="tx">Los drops históricos son permanentes (1 orden = 1 drop). Al ser acumulativos y no expirar, actúan como un "lock-in" psicológico que eleva el costo percibido de abandonar la plataforma.</div>
-    </div>
   </section>
 
   <!-- 2 · VENTAS COD -->
@@ -760,10 +831,6 @@
     <div class="metric"><span class="med up" style="opacity:0.9; margin-right: 4px;">$</span><div class="big up" data-count="312" data-dur="1500">0</div><span class="unit reveal d3" style="margin-left: 6px;">M COP</span></div>
     <div class="lede reveal d3" style="margin-top:18px">Valor bruto movilizado mediante pago contra entrega (COD). Consolidaste tu operación comercial sin incurrir en costos de inventario propio.</div>
     <div class="delta reveal d4"><span>Tu mes récord: <b>Noviembre</b> · $48M transaccionados</span></div>
-    <div class="lens">
-      <div class="tt">Lente PM · Refuerzo de Capacidad (Self-Efficacy)</div>
-      <div class="tx">Hacer tangible el volumen total transaccionado sin apalancarse en inventarios propios refuerza la baja fricción operativa del modelo y empodera al dropshipper al visibilizar su capacidad de escala.</div>
-    </div>
   </section>
 
   <!-- 3 · TOP PRODUCTO -->
@@ -774,10 +841,6 @@
       <div class="chip first reveal d3"><span class="rank">1</span><span class="name">Kit bandas fitness</span><span class="qty">1.240 drops</span></div>
       <div class="chip reveal d3" style="transition-delay:0.5s"><span class="rank">2</span><span class="name">Organizador de closet</span><span class="qty">870 drops</span></div>
       <div class="chip reveal d4"><span class="rank">3</span><span class="name">Lámpara de luna 3D</span><span class="qty">640 drops</span></div>
-    </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Saliencia de Habilidad</div>
-      <div class="tx">Recordar los productos ganadores históricos ayuda a mitigar la fatiga de pauta y promueve la búsqueda de nuevos productos similares bajo la misma categoría ganadora.</div>
     </div>
   </section>
 
@@ -790,10 +853,6 @@
       <div class="chip reveal d3">🇨🇴 <span class="name">Colombia</span><span class="qty">3.910 drops</span></div>
       <div class="chip reveal d3" style="transition-delay:0.45s">🇲🇽 <span class="name">México</span><span class="qty">560 drops</span></div>
       <div class="chip reveal d4">🇨🇱 <span class="name">Chile</span><span class="qty">350 drops</span></div>
-    </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Mitigación de Fricción</div>
-      <div class="tx">Al resaltar las rutas de entrega más exitosas (Bogotá -> Medellín), guiamos al seller hacia zonas de bajo riesgo logístico, protegiendo su margen y fomentando la pauta continua.</div>
     </div>
   </section>
 
@@ -810,22 +869,13 @@
     </div>
     <div class="lede reveal d3" style="text-align:center; margin-top: 14px;">Subiste de <b>61%</b> a <b>74%</b> de efectividad.</div>
     <div class="delta reveal d4" style="margin:18px auto 0; display: flex; justify-content: center;"><span>A solo <b>1%</b> de la meta de excelencia (75%)</span></div>
-    <div class="lens">
-      <div class="tt">Lente PM · Gradiente de Meta (Goal-Gradient Effect)</div>
-      <div class="tx">La proximidad al hito acelera el esfuerzo. Enmarcar el logro como "a 1% de la meta" genera mayor urgencia e impulso conductual que reportar solo la cifra.</div>
-    </div>
   </section>
-
   <!-- 6 · RACHA -->
   <section class="slide g6">
     <div class="kicker reveal d1">Racha Activa de Permanencia (RAP)</div>
     <div class="metric"><div class="big up" data-count="18" data-dur="1200">0</div><span class="unit reveal d3" style="margin-left: 6px;">semanas</span></div>
     <div class="lede reveal d3" style="margin-top:18px">18 semanas consecutivas facturando órdenes completadas. Leyendas recompensa la consistencia operativa continua.</div>
     <div class="delta reveal d4"><span>Factura esta semana para <b>no enfriar tu racha</b> y mantener tu rango</span></div>
-    <div class="lens">
-      <div class="tt">Lente PM · Aversión a la Pérdida (Loss Aversion)</div>
-      <div class="tx">La racha activa de permanencia (RAP) de 18 semanas activa el temor a perder el logro acumulado. La alerta de facturar para no enfriar la racha combate la inactividad temporal del seller.</div>
-    </div>
   </section>
 
 
@@ -850,19 +900,69 @@
       <button class="btn primary" onclick="share()">Compartir mi Rango</button>
       <button class="btn ghost" onclick="restart()">Ver de nuevo</button>
     </div>
-    <div class="lens">
-      <div class="tt">Lente PM · Cierre de Bucle de Retención</div>
-      <div class="tx">Muestra la brecha (180 órdenes) para alcanzar la meta mensual (1.000 órdenes - Master de Oro). El beneficio operativo (soporte prioritario y Dropicard) genera tracción operativa inmediata.</div>
-    </div>
   </section>
 
   <!-- nav zones -->
   <div class="nav left"  onclick="prev()"></div>
   <div class="nav right" onclick="next()"></div>
 
-  <!-- PM lens -->
-  <div id="lensToggle" onclick="toggleLens(event)"><span class="sw"></span><span>Lente PM</span></div>
   <div class="pausehint">← → mueve · espacio pausa</div>
+</div>
+
+<!-- Share Bottom Sheet Modal -->
+<div id="shareModal" class="share-modal-overlay" onclick="closeShareModal(event)">
+  <div class="share-modal-content" onclick="event.stopPropagation()">
+    <div class="share-modal-handle"></div>
+    <div class="share-modal-title">👑 Compartir tu Estatus Leyendas</div>
+    <div class="share-modal-sub">¿Por dónde deseas publicar tu logro de hoy?</div>
+
+    <div class="share-preview-card">
+      <div class="sp-badge-img">
+        <img id="modalInsigniaImg" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/3.png" alt="Insignia Leyendas">
+      </div>
+      <div>
+        <div class="sp-name" id="modalSellerName">Valentina</div>
+        <div class="sp-rank" id="modalSellerRank">Experto Plata III 👑</div>
+        <div class="sp-stats" id="modalSellerStats">4.820 drops acumulados</div>
+      </div>
+    </div>
+
+    <div class="share-options-grid">
+      <button class="share-opt-btn whatsapp" onclick="shareTo('whatsapp')">
+        <span class="opt-icon">💬</span>
+        <div>
+          <span class="opt-name">WhatsApp</span>
+          <span class="opt-desc">Estados o Chats</span>
+        </div>
+      </button>
+
+      <button class="share-opt-btn instagram" onclick="shareTo('instagram')">
+        <span class="opt-icon">📸</span>
+        <div>
+          <span class="opt-name">Instagram</span>
+          <span class="opt-desc">Stories / Feed / Direct</span>
+        </div>
+      </button>
+
+      <button class="share-opt-btn facebook" onclick="shareTo('facebook')">
+        <span class="opt-icon">🔵</span>
+        <div>
+          <span class="opt-name">Facebook</span>
+          <span class="opt-desc">Publicar en Perfil</span>
+        </div>
+      </button>
+
+      <button class="share-opt-btn native" onclick="shareTo('native')">
+        <span class="opt-icon">📱</span>
+        <div>
+          <span class="opt-name">Más Opciones</span>
+          <span class="opt-desc">Menú celular / Descargar PNG</span>
+        </div>
+      </button>
+    </div>
+
+    <button class="share-close-btn" onclick="closeShareModal()">Cancelar</button>
+  </div>
 </div>
 
 <script>
@@ -961,11 +1061,128 @@
     }
   }
 
-  function toggleLens(e){ e.stopPropagation(); document.body.classList.toggle('lens'); }
-  function share(){
-    const txt='Consolidé 4.820 drops históricos en LEYENDAS y ascendí al rango Experto Plata III #LeyendasDropi';
-    if(navigator.share){ navigator.share({title:'Mi Estatus en Leyendas Dropi',text:txt}).catch(()=>{}); }
-    else { navigator.clipboard?.writeText(txt); const b=event.target; const o=b.textContent; b.textContent='✓ Copiado al portapapeles'; setTimeout(()=>b.textContent=o,1800); }
+
+  // ─── Share Modal Logic ───
+  function openShareModal() {
+    document.getElementById('shareModal').classList.add('active');
+  }
+
+  function closeShareModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.classList.contains('share-close-btn')) return;
+    document.getElementById('shareModal').classList.remove('active');
+  }
+
+  function showToast(msg) {
+    let t = document.getElementById('shareToast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'shareToast';
+      t.className = 'share-toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  async function generateImageBlob() {
+    const activeSlide = document.querySelector('.slide.active') || document.querySelector('.slide');
+    if (typeof html2canvas !== 'undefined') {
+      try {
+        const canvas = await html2canvas(activeSlide, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#050209',
+          logging: false
+        });
+        return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+      } catch (err) {
+        console.warn('Canvas capture error:', err);
+      }
+    }
+    return null;
+  }
+
+  async function shareTo(channel) {
+    const textMsg = `👑 ¡Consolidé 4.820 drops en Dropi y alcancé el rango Experto Plata III! #LeyendasDropi`;
+    const shareUrl = window.location.href;
+
+    closeShareModal();
+    showToast('Generando tarjeta de insignia...');
+
+    let blob = await generateImageBlob();
+    let file = blob ? new File([blob], `wrapped-dropi-leyendas.png`, { type: 'image/png' }) : null;
+
+    if (channel === 'whatsapp') {
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ title: 'Mi Wrapped Leyendas Dropi', text: textMsg, files: [file] });
+          showToast('✓ Compartido en WhatsApp');
+          return;
+        } catch (e) {}
+      }
+      const waUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(textMsg + '\n\n' + shareUrl)}`;
+      window.open(waUrl, '_blank');
+      showToast('✓ Abriendo WhatsApp...');
+    } 
+    else if (channel === 'instagram') {
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ title: 'Mi Wrapped Leyendas Dropi', text: textMsg, files: [file] });
+          showToast('✓ Imagen lista para Instagram Stories');
+          return;
+        } catch (e) {}
+      }
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `wrapped-dropi-leyendas.png`;
+        a.click();
+        showToast('📸 Imagen descargada. ¡Súbela a tu Instagram Story!');
+      } else {
+        navigator.clipboard?.writeText(textMsg);
+        showToast('✓ Texto copiado. Pégalo en tu Instagram Story');
+      }
+    } 
+    else if (channel === 'facebook') {
+      const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(textMsg)}`;
+      window.open(fbUrl, '_blank');
+      showToast('✓ Abriendo Facebook...');
+    } 
+    else if (channel === 'native') {
+      if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ title: 'Mi Wrapped Leyendas Dropi', text: textMsg, files: [file] });
+          return;
+        } catch (e) {}
+      }
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `wrapped-dropi-leyendas.png`;
+        a.click();
+        showToast('✓ Imagen descargada en HD');
+      } else {
+        navigator.clipboard?.writeText(textMsg + ' ' + shareUrl);
+        showToast('✓ Enlace copiado al portapapeles');
+      }
+    }
+  }
+
+  function share(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    openShareModal();
+  }
+
+  function restart(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    show(0);
   }
 
   // init

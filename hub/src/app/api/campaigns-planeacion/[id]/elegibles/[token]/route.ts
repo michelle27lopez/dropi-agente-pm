@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { localGetEligibleByToken, localRegisterEligibleView } from "@/lib/local-store-planeacion";
 import { supabaseGetEligibleByToken, supabaseRegisterEligibleView } from "@/lib/supabase-store-planeacion";
 
+// Sin esto, Next.js puede tratar este handler como estático (no usa cookies
+// ni headers del request) y cachear la respuesta — rompiendo tanto el reset
+// del token de QA como la lectura en vivo del estado real de un proveedor.
+export const dynamic = "force-dynamic";
+
 // Público a propósito (sin login) — el token es opaco y no se puede adivinar
 // ni derivar del ID real del proveedor, así que solo quien recibió su propio
 // link ve su propia lista. Un proveedor no puede ver la de otro cambiando
@@ -24,14 +29,18 @@ export type JourneyStep = {
 // Sin paso de curaduría: "fotos" empieza el mismo día que cierra "seleccion"
 // (no hay gate manual de aprobación entre medio — decidido con Kate/Michelle,
 // el equipo revisa por dentro pero el proveedor no espera a nadie).
+//
+// Fechas recorridas 18/08 por el terremoto del 10/08 (semana sin operación):
+// selección y fotos/marco cierran el mismo día (24 ago, sin margen entre
+// ambas), en vivo pasa de 18-31 ago a 25 ago-8 sep. Meet reagendado al 20/08.
 const PHASES: { key: JourneyStep["key"]; label: string; window: string; start: string; end: string }[] = [
   // "seleccion" abre desde el arranque de la convocatoria (31/07), no desde
   // el Meet (6/08) — Michelle decidió 30/07 que los proveedores que entren
   // el día del link deben poder elegir productos de una vez, en vez de
   // toparse con la pantalla bloqueada "Podrás seleccionar a partir del 6".
-  { key: "seleccion", label: "Elige tus productos", window: "31 jul – 14 ago", start: "2026-07-31", end: "2026-08-14" },
-  { key: "fotos", label: "Prepara tus productos", window: "14 – 17 ago", start: "2026-08-14", end: "2026-08-17" },
-  { key: "vivo", label: "Cyber Days en vivo", window: "18 – 31 ago", start: "2026-08-18", end: "2026-08-31" },
+  { key: "seleccion", label: "Elige tus productos", window: "31 jul – 23 ago", start: "2026-07-31", end: "2026-08-23" },
+  { key: "fotos", label: "Prepara tus productos", window: "23 ago", start: "2026-08-23", end: "2026-08-23" },
+  { key: "vivo", label: "Cyber Days en vivo", window: "24 ago – 7 sep", start: "2026-08-24", end: "2026-09-07" },
 ];
 
 function computeJourney(): JourneyStep[] {
@@ -45,10 +54,34 @@ function computeJourney(): JourneyStep[] {
   }));
 }
 
+// Token fijo de QA (ver scratchpad de seed) — cada vez que alguien del equipo
+// entra a este link, la respuesta se fuerza a estado "recién postulado" (sin
+// selección, sin checklist, sin feedback) aunque la fila real en la base
+// tenga cosas guardadas de la última prueba. Así el link siempre se siente
+// como la primera visita de un proveedor, sin tener que borrar nada a mano
+// entre pruebas — y sin arriesgar resetear la fila de un proveedor real.
+const QA_RESET_TOKEN = "qa-preview-campanas";
+
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string; token: string }> }) {
   const { id, token } = await params;
   const entry = (await supabaseGetEligibleByToken(id, token)) ?? (await localGetEligibleByToken(id, token));
   if (!entry) return NextResponse.json({ error: "No encontrado" }, { status: 404 });
+
+  if (token === QA_RESET_TOKEN) {
+    return NextResponse.json({
+      ...entry,
+      selectedProductIds: [],
+      submitted_at: null,
+      selection_updated_at: null,
+      approved_at: null,
+      readyChecklist: {},
+      feedback: undefined,
+      view_count: 0,
+      first_viewed_at: null,
+      last_viewed_at: null,
+      journey: computeJourney(),
+    });
+  }
 
   // Cuenta la visita real a la página pública — no bloquea la respuesta al
   // proveedor si falla, es solo analítica interna.

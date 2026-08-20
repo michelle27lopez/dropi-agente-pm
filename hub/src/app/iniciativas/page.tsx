@@ -142,7 +142,7 @@ export default function IniciativasPage() {
         </button>
       </header>
 
-      <div style={{ maxWidth: 860, margin: "0 auto", padding: "32px 24px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
         {/* Tabs */}
         <div style={{ display: "flex", gap: 4, marginBottom: 28, background: "#fff", border: "1px solid var(--border)", borderRadius: 10, padding: 4, width: "fit-content" }}>
           {[

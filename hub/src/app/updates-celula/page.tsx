@@ -191,7 +191,7 @@ export default function UpdatesCelulaPage() {
   }, []);
 
   return (
-    <div style={{ maxWidth: 980, margin: "0 auto", padding: "40px 24px" }}>
+    <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
 
       {/* Header */}
       <div style={{ marginBottom: 32 }}>

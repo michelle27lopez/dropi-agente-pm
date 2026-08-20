@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Breadcrumb from "@/components/Breadcrumb";
 
 type Status = "Backlog" | "Programada" | "Hecha" | "Documentada";
 type Source = "Programa" | "Comunidad";
@@ -715,18 +716,18 @@ export default function ExpertosNegocioRoadmapPage() {
 
   return (
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
-      <header style={{
-        background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "16px 32px", display: "flex", alignItems: "center", gap: 16,
-      }}>
-        <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-          ← Dropi PM Tools
-        </a>
-        <span style={{ color: "var(--border)" }}>/</span>
-        <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Expertos en el Negocio · Calendario</span>
+      <header style={{ background: "#fff", padding: "16px 0" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", display: "flex", alignItems: "center", gap: 16 }}>
+          <Breadcrumb
+            items={[
+              { label: "Proyectos", href: "/proyectos" },
+              { label: "Expertos en el Negocio · Calendario" },
+            ]}
+          />
+        </div>
       </header>
 
-      <div style={{ maxWidth: 980, margin: "0 auto", padding: "40px 24px 80px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px" }}>
         <div style={{ marginBottom: 20 }}>
           <span style={{ fontSize: 11, fontWeight: 700, background: "#F5F3FF", color: "#7C3AED", padding: "3px 9px", borderRadius: 20 }}>
             EXP-001

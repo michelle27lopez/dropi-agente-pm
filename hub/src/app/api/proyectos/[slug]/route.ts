@@ -6,11 +6,13 @@ import { nextProjectCode } from "@/lib/project-code";
 
 const ESTADOS_DISCOVERY = ["Research", "Ideación", "Concepción de experimento", "Activo", "Cerrado"];
 const ESTADOS_POC = ["Seguimiento", "En definición", "En priorización"];
-const ESTADOS_DELIVERY = ["En definición", "En priorización", "Pendiente Handoff", "en DEV"];
+const ESTADOS_DELIVERY = ["En definición", "En priorización", "Pendiente Handoff", "en DEV", "Activo", "Cerrado"];
+const ESTADOS_FOLLOWING = ["Beta controlada", "Producción", "Cerrado"];
 
 function estadosValidosPara(type: string | null) {
   if (type === "POC") return ESTADOS_POC;
   if (type === "Delivery Proyecto") return ESTADOS_DELIVERY;
+  if (type === "Following") return ESTADOS_FOLLOWING;
   return ESTADOS_DISCOVERY;
 }
 
@@ -57,29 +59,36 @@ export async function GET(req: NextRequest, context: any) {
     parent = data ?? null;
   }
 
-  // Hijos de este proyecto (POC y/o Delivery Proyecto), si este proyecto no
-  // es él mismo un POC ni un Delivery Proyecto.
+  // Hijos de este proyecto: POC y/o Delivery Proyecto si es un Discovery
+  // project; Followings (vía related_delivery_id, no parent_project_id) si
+  // es un Delivery Proyecto. Un POC o Following no tiene hijos.
   let children: { id: string; name: string; project_code: string | null; type: string | null; estado_interno: string | null; related_poc_id: string | null }[] = [];
-  if (project.type !== "POC" && project.type !== "Delivery Proyecto") {
+  if (project.type !== "POC" && project.type !== "Delivery Proyecto" && project.type !== "Following") {
     const { data } = await supabase
       .from("projects")
       .select("id, name, project_code, type, estado_interno, related_poc_id")
       .eq("parent_project_id", project.id);
     children = data ?? [];
+  } else if (project.type === "Delivery Proyecto") {
+    const { data } = await supabase
+      .from("projects")
+      .select("id, name, project_code, type, estado_interno, related_poc_id")
+      .eq("related_delivery_id", project.id);
+    children = data ?? [];
   }
 
   // Candidatos a "proyecto padre" para un POC o Delivery Proyecto sin
-  // vincular todavía — todos los Discovery projects (type distinto de POC y
-  // de Delivery Proyecto, incluyendo type sin definir) de la misma célula.
-  // Se filtra en JS porque `type` puede ser NULL y `.neq()` en SQL excluye
-  // los NULL por lógica de tres valores.
+  // vincular todavía — todos los Discovery projects (type distinto de POC,
+  // Delivery Proyecto y Following, incluyendo type sin definir) de la misma
+  // célula. Se filtra en JS porque `type` puede ser NULL y `.neq()` en SQL
+  // excluye los NULL por lógica de tres valores.
   let discoveryOptions: { id: string; name: string; project_code: string | null }[] = [];
   if ((project.type === "POC" || project.type === "Delivery Proyecto") && !project.parent_project_id) {
     const { data } = await supabase
       .from("projects")
       .select("id, name, project_code, type")
       .eq("celula_owner_id", project.celula_owner_id);
-    discoveryOptions = (data ?? []).filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.id !== project.id);
+    discoveryOptions = (data ?? []).filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following" && p.id !== project.id);
   }
 
   // POC relacionado (opcional) de un Delivery Proyecto, y todos los POC de
@@ -100,6 +109,28 @@ export async function GET(req: NextRequest, context: any) {
       .select("id, name, project_code, type")
       .eq("celula_owner_id", project.celula_owner_id);
     pocOptions = (data ?? []).filter((p) => p.type === "POC");
+  }
+
+  // Delivery Proyecto del que nace este Following (obligatorio en el flujo
+  // normal de creación, pero se deja re-vinculable igual que related_poc_id
+  // por si queda huérfano), y todos los Delivery Proyecto de la misma célula
+  // entre los que se puede elegir.
+  let relatedDelivery: { id: string; name: string; project_code: string | null } | null = null;
+  let deliveryOptions: { id: string; name: string; project_code: string | null }[] = [];
+  if (project.type === "Following") {
+    if (project.related_delivery_id) {
+      const { data } = await supabase
+        .from("projects")
+        .select("id, name, project_code")
+        .eq("id", project.related_delivery_id)
+        .maybeSingle();
+      relatedDelivery = data ?? null;
+    }
+    const { data } = await supabase
+      .from("projects")
+      .select("id, name, project_code, type")
+      .eq("celula_owner_id", project.celula_owner_id);
+    deliveryOptions = (data ?? []).filter((p) => p.type === "Delivery Proyecto");
   }
 
   // Fetch cycles associated with this project. Use either project_code or id as fallback
@@ -160,6 +191,8 @@ export async function GET(req: NextRequest, context: any) {
     discoveryOptions,
     relatedPoc,
     pocOptions,
+    relatedDelivery,
+    deliveryOptions,
     cycles: mappedCycles,
     decisions,
   });
@@ -216,7 +249,7 @@ export async function PATCH(req: NextRequest, context: any) {
       if (!candidate || candidate.celula_owner_id !== project.celula_owner_id) {
         return NextResponse.json({ error: "Proyecto padre inválido" }, { status: 400 });
       }
-      if (candidate.type === "POC" || candidate.type === "Delivery Proyecto") {
+      if (candidate.type === "POC" || candidate.type === "Delivery Proyecto" || candidate.type === "Following") {
         return NextResponse.json({ error: "El padre debe ser un Discovery project" }, { status: 400 });
       }
       if (candidate.id === project.id) {
@@ -249,6 +282,30 @@ export async function PATCH(req: NextRequest, context: any) {
     }
   }
 
+  // related_delivery_id: solo aplica a Following, y solo puede apuntar a un
+  // Delivery Proyecto de la misma célula — normalmente ya viene fijado al
+  // crear el Following desde la card de su Delivery, esto es para
+  // re-vincular uno que quedó huérfano.
+  if (body.related_delivery_id !== undefined) {
+    if (project.type !== "Following") {
+      return NextResponse.json({ error: "Solo un Following puede tener related_delivery_id" }, { status: 400 });
+    }
+    if (body.related_delivery_id === null) {
+      update.related_delivery_id = null;
+    } else {
+      const { data: candidate } = await supabase
+        .from("projects")
+        .select("id, type, celula_owner_id")
+        .eq("id", body.related_delivery_id)
+        .maybeSingle();
+
+      if (!candidate || candidate.celula_owner_id !== project.celula_owner_id || candidate.type !== "Delivery Proyecto") {
+        return NextResponse.json({ error: "related_delivery_id debe ser un Delivery Proyecto de la misma célula" }, { status: 400 });
+      }
+      update.related_delivery_id = candidate.id;
+    }
+  }
+
   if (Object.keys(update).length === 0) {
     return NextResponse.json({ error: "Nada que actualizar" }, { status: 400 });
   }
@@ -264,10 +321,56 @@ export async function PATCH(req: NextRequest, context: any) {
   return NextResponse.json(data);
 }
 
-// Crea un hijo (POC o Delivery Proyecto) de este proyecto, que debe ser un
-// Discovery project (type distinto de POC y de Delivery Proyecto). El hijo
-// nace con su propio project_code y URL. `body.type` default "POC" para no
-// romper a los llamadores existentes.
+// Borrado físico — pensado para limpiar basura/duplicados desde el front. La
+// confirmación ("escribe ELIMINAR") vive del lado del cliente; acá solo se
+// exige ser miembro de la célula dueña. No hay ON DELETE CASCADE en
+// parent_project_id/related_poc_id/related_delivery_id (ver migraciones 036/
+// 039/043), así que Postgres devuelve 23503 si el proyecto todavía tiene
+// POC, Delivery Proyecto o Following asociados — se traduce a un mensaje
+// legible en vez de dejar pasar el error crudo.
+export async function DELETE(req: NextRequest, context: any) {
+  if (!supabase) return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
+
+  const { slug } = await context.params;
+  const { project, error: findError } = await findProject(slug);
+  if (findError) return NextResponse.json({ error: findError }, { status: 500 });
+  if (!project) return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 });
+
+  const caller = await requireCelulaMember(project.celula_owner_id);
+  if (!caller) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
+
+  const { error } = await supabase.from("projects").delete().eq("id", project.id);
+
+  if (error) {
+    if (error.code === "23503") {
+      return NextResponse.json(
+        { error: "Este proyecto todavía tiene POCs, Delivery Proyectos o Followings asociados. Elimínalos o desvincúlalos primero." },
+        { status: 409 },
+      );
+    }
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true });
+}
+
+// Crea un hijo (POC, Delivery Proyecto o Following) de este proyecto.
+// `body.type` default "POC" para no romper a los llamadores existentes.
+//
+// Para POC/Delivery Proyecto, este proyecto (`slug`) debe ser un Discovery
+// project — se convierte en el `parent_project_id` directo del nuevo hijo.
+//
+// Para Following, este proyecto (`slug`) debe ser un Delivery Proyecto — el
+// Following nace un nivel más abajo, pero se preserva la invariante de árbol
+// plano (parent_project_id SIEMPRE apunta a un Discovery, nunca a un POC/
+// Delivery/Following): se sube al abuelo (`parentProject.parent_project_id`)
+// y se guarda el Delivery clickeado en `related_delivery_id`, mismo patrón
+// que `related_poc_id`. Si el Delivery en sí nació huérfano (sin Discovery
+// vinculado — pasa cuando se crea directo, no vía "+ Crear Delivery
+// Proyecto" de un Discovery), el Following también nace con
+// parent_project_id null: no bloqueamos la creación por eso, porque lo que
+// realmente lo hace visible (célula, pills, sección "Followings") es
+// related_delivery_id, no el árbol de Discovery.
 export async function POST(req: NextRequest, context: any) {
   if (!supabase) return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
 
@@ -276,17 +379,22 @@ export async function POST(req: NextRequest, context: any) {
   if (findError) return NextResponse.json({ error: findError }, { status: 500 });
   if (!parentProject) return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 });
 
-  if (parentProject.type === "POC" || parentProject.type === "Delivery Proyecto") {
+  const body = await req.json();
+  const type = body.type === "Delivery Proyecto" ? "Delivery Proyecto" : body.type === "Following" ? "Following" : "POC";
+
+  if (type === "Following") {
+    if (parentProject.type !== "Delivery Proyecto") {
+      return NextResponse.json({ error: "El padre de un Following debe ser un Delivery Proyecto" }, { status: 400 });
+    }
+  } else if (parentProject.type === "POC" || parentProject.type === "Delivery Proyecto" || parentProject.type === "Following") {
     return NextResponse.json({ error: "El padre debe ser un Discovery project" }, { status: 400 });
   }
 
   const caller = await requireCelulaMember(parentProject.celula_owner_id);
   if (!caller) return NextResponse.json({ error: "No autorizado" }, { status: 403 });
 
-  const body = await req.json();
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const summary = typeof body.summary === "string" ? body.summary.trim() : "";
-  const type = body.type === "Delivery Proyecto" ? "Delivery Proyecto" : "POC";
 
   if (!name || !summary) {
     return NextResponse.json({ error: "Faltan campos: name, summary" }, { status: 400 });
@@ -306,6 +414,10 @@ export async function POST(req: NextRequest, context: any) {
     }
     relatedPocId = candidate.id;
   }
+
+  const realParentId = type === "Following" ? parentProject.parent_project_id : parentProject.id;
+  const relatedDeliveryId = type === "Following" ? parentProject.id : null;
+  const estadoInicial = type === "Following" ? "Beta controlada" : "En definición";
 
   const { data: celula } = await supabase
     .from("celulas")
@@ -329,10 +441,11 @@ export async function POST(req: NextRequest, context: any) {
       status: "in_progress",
       type,
       handoff_status: "Experimentación",
-      estado_interno: "En definición",
+      estado_interno: estadoInicial,
       celula_owner_id: parentProject.celula_owner_id,
-      parent_project_id: parentProject.id,
+      parent_project_id: realParentId,
       related_poc_id: relatedPocId,
+      related_delivery_id: relatedDeliveryId,
     })
     .select()
     .single();

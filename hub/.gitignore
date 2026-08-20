@@ -11,3 +11,9 @@ next-env.d.ts
 *.csv
 /scratch/
 /.local-data/
+/public/logistica/recolecciones/datos-recolecciones*.json
+/public/logistica/recolecciones/pipeline/.env
+/public/logistica/recolecciones/pipeline/geocache-*.json
+/public/logistica/recolecciones/pipeline/cruces-resultado.json
+/public/logistica/recolecciones/pipeline/por-geocodificar.json
+.vercel

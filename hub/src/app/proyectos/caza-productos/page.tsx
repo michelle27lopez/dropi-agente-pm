@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
+import Breadcrumb from "@/components/Breadcrumb";
+import { FASE_LABEL, faseDe } from "@/lib/fase";
 import {
   BarChart,
   Bar,
@@ -91,6 +93,10 @@ type DropiMetrics = {
   siAcuerdo: number | null;
   noAcuerdo: number | null;
   recurrencia: number | null; // %
+  // Conteo de eventos totales (no usuarios únicos) — solo disponible desde Q4, vía MCP directo.
+  // No confundir con crearonPublicacion/publicaron, que son usuarios únicos (convención S1–Q3).
+  publicacionesEventosTotal?: number | null;
+  clicPublicarEventosTotal?: number | null;
 };
 
 type ProveedorMetrics = {
@@ -200,6 +206,67 @@ const PERIODOS: Periodo[] = [
       "CES proveedores sin respuestas nuevas en Q3: 0 de 2 mostradas completadas — no se puede confirmar si el bug \"no se envió mi oferta\" (visto en Q1) persiste.",
     ],
   },
+  {
+    id: "Q4", fechas: "1–15 jul 2026", cadencia: "Quincenal",
+    hallazgo: "Conversión sube a 52.5%, acuerdos en cero", hallazgoColor: "#F59E0B",
+    dropi: { crearonPublicacion: 408, publicaron: 214, conversion: 52.5, clicWhatsapp: 8, siAcuerdo: 0, noAcuerdo: 3, recurrencia: null, publicacionesEventosTotal: 521, clicPublicarEventosTotal: 320 },
+    proveedor: { vieronDetalle: 246, crearonOferta: 10, enviaronOferta: 8, tasaEnvio: 44.44 },
+    csat: {
+      respuestas: 22,
+      items: [
+        { label: "La negociación no avanzó", pct: 61.54, color: "#EF4444" },
+        { label: "Estamos conversando",        pct: 23.08, color: "#F59E0B" },
+        { label: "Ya estoy vendiendo",         pct: 15.38, color: "#10B981" },
+        { label: "Ya acordamos precio",        pct: 0,     color: "#9CA3AF" },
+      ],
+    },
+    ces: null,
+    notasMetodologicas: [
+      "Fuente: UserPilot MCP, dashboard 46, rango 1–15 jul 2026 (custom period, fixed). crearonPublicacion y publicaron toman la métrica Unique Users de los eventos 813 y 847 — misma convención usada en S1–Q3.",
+      "siAcuerdo = 0 en Q4 (vs 1 en Q3): 0 usuarios con el evento 879 en el rango — muestra insuficiente para leer patrón (menos de 5 eventos, no hay caída porcentual calculable desde 1).",
+      "CSAT recuperado directamente de la encuesta \"(CSAT) Dropshippers - Caza productos\" (survey 44, run.userpilot.io/surveys/44), no del dashboard 46 — esa encuesta no aparece entre los reports funnel/trend/retention del dashboard. 26 respuestas totales a la pregunta de estado, 22 a la de satisfacción (promedio 2.5/5, 54.55% marcó 1 o 2 — insatisfecho). Encuesta en estado \"draft\" desde 28 may 2026 (ya no se muestra a usuarios nuevos), pero conserva respuestas históricas.",
+      "CES proveedores (survey 43, \"¿qué tan fácil fue enviar tu oferta?\") sin dato representativo en Q4: solo 1 respuesta en el rango — muestra insuficiente para reportar como cifra.",
+      "Recurrencia sin dato: el report de retención 921 (\"Retención publicar dropshippers\") sí devuelve datos para este rango, pero Q1–Q3 (períodos quincenales) no incorporan este campo — se mantiene la misma convención para no romper comparabilidad dentro de la serie quincenal.",
+      "Publicaciones creadas y clics en \"Publicar\" en eventos totales (no usuarios únicos): 521 publicaciones creadas y 320 clics en \"Publicar\" en el rango — una persona puede crear más de una publicación, por eso este número es mayor que crearonPublicacion/publicaron (que cuentan usuarios únicos). Disponible solo desde Q4 vía MCP; no existe para S1–Q3.",
+    ],
+  },
+  {
+    id: "Q5", fechas: "15–29 jul 2026", cadencia: "Quincenal",
+    hallazgo: "Conversión sigue subiendo (55.4%), publicaciones caen 13%", hallazgoColor: "#F59E0B",
+    dropi: { crearonPublicacion: 354, publicaron: 196, conversion: 55.4, clicWhatsapp: 3, siAcuerdo: 0, noAcuerdo: 1, recurrencia: null, publicacionesEventosTotal: 430, clicPublicarEventosTotal: 349 },
+    proveedor: { vieronDetalle: 252, crearonOferta: 11, enviaronOferta: 11, tasaEnvio: 50 },
+    csat: {
+      respuestas: 12,
+      items: [
+        { label: "La negociación no avanzó",             pct: 55.56, color: "#EF4444" },
+        { label: "Estamos conversando",                   pct: 22.22, color: "#F59E0B" },
+        { label: "Ya estoy vendiendo",                    pct: 16.67, color: "#10B981" },
+        { label: "Ya acordamos precio",                   pct: 5.56,  color: "#10B981" },
+      ],
+    },
+    ces: null,
+    notasMetodologicas: [
+      "Fuente: UserPilot MCP, dashboard 46, rango 15–29 jul 2026 (custom period, fixed). Misma metodología que Q4: Unique Users de cada evento etiquetado.",
+      "siAcuerdo = 0 y noAcuerdo = 1 en Q5: muestras de menos de 5 usuarios en ambos casos — no se leen como patrón, solo se reportan los valores exactos.",
+      "clicWhatsapp cae de 8 (Q4) a 3 (Q5): 3 usuarios únicos, muestra pequeña — dato real, no se interpreta causa.",
+      "CSAT (survey 44) esta quincena: 18 respuestas a la pregunta de estado, 12 a la de satisfacción, promedio 2.67/5 (58.33% marcó 1 o 2). CES (survey 43) sin dato representativo: solo 2 respuestas en el rango.",
+      "Publicaciones creadas y clics en \"Publicar\" en eventos totales: 430 publicaciones creadas y 349 clics en \"Publicar\" en el rango (misma convención que Q4, ver nota ahí).",
+    ],
+  },
+  {
+    id: "Q6", fechas: "29 jul–3 ago 2026 (parcial)", cadencia: "Quincenal",
+    hallazgo: "Conversión 58.4% · corte parcial a 5 días", hallazgoColor: "#F59E0B",
+    dropi: { crearonPublicacion: 113, publicaron: 66, conversion: 58.4, clicWhatsapp: 5, siAcuerdo: 0, noAcuerdo: 0, recurrencia: null, publicacionesEventosTotal: 172, clicPublicarEventosTotal: 141 },
+    proveedor: { vieronDetalle: 85, crearonOferta: 7, enviaronOferta: 6, tasaEnvio: 46.15 },
+    csat: null, ces: null,
+    notasMetodologicas: [
+      "Corte parcial: Q6 cubre solo 5 días (29 jul–3 ago, fecha de corte = hoy) frente a ~14 días de Q4/Q5. Las cifras absolutas de Q6 no son comparables directamente contra un período quincenal completo sin normalizar por duración — la quincena sigue en curso.",
+      "siAcuerdo = 0 y noAcuerdo = 0 en Q6: cero eventos registrados en la ventana consultada — no hay muestra que analizar todavía.",
+      "Fuente: UserPilot MCP, dashboard 46, rango 2026-07-29 a 2026-08-03 (custom period, fixed). Misma metodología (Unique Users) que el resto de la serie.",
+      "CSAT/CES sin dato en Q6: 0 respuestas registradas en las encuestas 44 y 43 para este rango (corte parcial de 5 días) — no es que falte la fuente, simplemente nadie respondió todavía. Recurrencia sin dato, misma convención que Q1–Q5.",
+      "Publicaciones creadas y clics en \"Publicar\" en eventos totales: 172 publicaciones creadas y 141 clics en \"Publicar\" en el rango parcial de 5 días (misma convención que Q4/Q5, ver nota en Q4).",
+    ],
+  },
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -280,7 +347,7 @@ function Narrativa({ role, color, bg, hallazgo, detalle }: { role: string; color
   );
 }
 
-function KpiCard({ label, value, color, delta, deltaUnit }: { label: string; value: string | number; color: string; delta?: number | null; deltaUnit?: string }) {
+function KpiCard({ label, value, color, delta, deltaUnit, sub }: { label: string; value: string | number; color: string; delta?: number | null; deltaUnit?: string; sub?: string | null }) {
   return (
     <div style={{ ...card, padding: "14px 16px" }}>
       <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 6 }}>{label}</div>
@@ -289,6 +356,9 @@ function KpiCard({ label, value, color, delta, deltaUnit }: { label: string; val
         <div style={{ fontSize: 11, color: delta > 0 ? "#10B981" : delta < 0 ? "#EF4444" : "var(--muted)", marginTop: 4, fontWeight: 600 }}>
           {delta > 0 ? "↑" : delta < 0 ? "↓" : "="} {Math.abs(delta)}{deltaUnit ?? ""} vs. período anterior
         </div>
+      )}
+      {sub && (
+        <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 4 }}>{sub}</div>
       )}
     </div>
   );
@@ -373,8 +443,8 @@ function PeriodoPanel({ p, prev }: { p: Periodo; prev: Periodo | null }) {
       <Narrativa role="Dropshippers" color={ACCENT} bg={ACCENT_BG} hallazgo={p.hallazgo} detalle={dropiDetalle} />
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0,1fr))", gap: 12 }}>
-        <KpiCard label="Crearon publicación" value={d.crearonPublicacion} color={ACCENT} delta={prev ? d.crearonPublicacion - prev.dropi.crearonPublicacion : null} />
-        <KpiCard label="Publicaron" value={d.publicaron} color="#3B82F6" delta={prev ? d.publicaron - prev.dropi.publicaron : null} />
+        <KpiCard label="Crearon publicación" value={d.crearonPublicacion} color={ACCENT} delta={prev ? d.crearonPublicacion - prev.dropi.crearonPublicacion : null} sub={d.publicacionesEventosTotal != null ? `${d.publicacionesEventosTotal.toLocaleString("es-CO")} publicaciones creadas (eventos totales)` : null} />
+        <KpiCard label="Publicaron" value={d.publicaron} color="#3B82F6" delta={prev ? d.publicaron - prev.dropi.publicaron : null} sub={d.clicPublicarEventosTotal != null ? `${d.clicPublicarEventosTotal.toLocaleString("es-CO")} clics en "Publicar" (eventos totales)` : null} />
         <KpiCard label="Conversión" value={`${d.conversion}%`} color="#10B981" delta={prev ? Number((d.conversion - prev.dropi.conversion).toFixed(1)) : null} deltaUnit="pp" />
         <KpiCard label="Clic WhatsApp" value={d.clicWhatsapp ?? "—"} color="#8B5CF6" delta={prev && d.clicWhatsapp != null && prev.dropi.clicWhatsapp != null ? d.clicWhatsapp - prev.dropi.clicWhatsapp : null} />
       </div>
@@ -701,45 +771,49 @@ export default function CazaProductosPage() {
     <main style={{ minHeight: "100vh", background: "var(--card)" }}>
       {/* Header */}
       {!isEmbedded && (
-        <header style={{
-          background: "#fff", borderBottom: "1px solid var(--border)",
-          padding: "14px 32px", display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
-        }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
-            ← Dropi PM Tools
-          </a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Caza Productos</span>
-          <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-            <a
-              href="/proyectos/caza-productos/discovery"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 4,
-                fontSize: 12,
-                fontWeight: 700,
-                color: "#fff",
-                background: "var(--dropi, #F77F00)",
-                padding: "4px 10px",
-                borderRadius: 6,
-                textDecoration: "none",
-                transition: "opacity 0.2s",
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
-            >
-              🔍 Discovery B=MAP
-            </a>
-            <span style={tag(ACCENT, ACCENT_BG)}>CAZ-001</span>
-            <span style={tag("#3B82F6", "#EFF6FF")}>Oportunidad · Discovery</span>
-            <span style={tag("#EF4444", "#FEF2F2")}>Alerta crítica activa</span>
-            <span style={tag("#10B981", "#ECFDF5")}>8 abr – 1 jul 2026</span>
+        <header style={{ background: "#fff", padding: "16px 0" }}>
+          <div style={{
+            maxWidth: 1280, margin: "0 auto", padding: "0 32px",
+            display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap",
+          }}>
+            <Breadcrumb
+              items={[
+                { label: "Proyectos", href: "/proyectos" },
+                { label: FASE_LABEL[faseDe("Proyecto")] },
+                { label: "Caza Productos" },
+              ]}
+            />
+            <div style={{ marginLeft: "auto", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+              <a
+                href="/proyectos/caza-productos/discovery"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "#fff",
+                  background: "var(--dropi, #F77F00)",
+                  padding: "4px 10px",
+                  borderRadius: 6,
+                  textDecoration: "none",
+                  transition: "opacity 0.2s",
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.9")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+              >
+                🔍 Discovery B=MAP
+              </a>
+              <span style={tag(ACCENT, ACCENT_BG)}>CAZ-001</span>
+              <span style={tag("#3B82F6", "#EFF6FF")}>Oportunidad · Discovery</span>
+              <span style={tag("#EF4444", "#FEF2F2")}>Alerta crítica activa</span>
+              <span style={tag("#10B981", "#ECFDF5")}>8 abr – 1 jul 2026</span>
+            </div>
           </div>
         </header>
       )}
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "32px", display: "flex", flexDirection: "column", gap: 20 }}>
 
         {/* Title */}
         <div>

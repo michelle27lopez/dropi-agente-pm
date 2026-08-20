@@ -38,6 +38,7 @@ const ESTADO_STYLE: Record<EstadoExp, { color: string; bg: string }> = {
 
 type MetricaNegocio = { label: string; valor: string; nota?: string };
 type MetricaSemanal = { semana: number; fechaViernes: string; engagement: string; insight: string };
+type InsightDestacado = { label: string; valor: string; nota?: string };
 
 type Experimento = {
   nombre: string;
@@ -48,11 +49,12 @@ type Experimento = {
   proyecto: string;
   calendario?: string;
   aprendizaje?: string;
+  insightsDestacados?: InsightDestacado[];
+  insightsCaveat?: string;
   metricasNegocio?: MetricaNegocio[];
   metricasSemanales?: MetricaSemanal[];
   trackingUrl?: string;
-  plantillaWaConNovedad?: string;
-  plantillaWaSinNovedad?: string;
+  plantillaWaHibridaReal?: string;
 };
 
 const PENDIENTE = "— pendiente —";
@@ -64,11 +66,36 @@ const experimentos: Experimento[] = [
       "Creemos que si le devolvemos a la marca su propia información semanal (guías, en tránsito, novedades, devoluciones, entregadas) y le hacemos una pregunta puntual cuando esos números muestran alerta — sin comprometernos a gestionar o resolver, solo a entender qué está pasando — la marca va a sentir que Dropi le entrega valor real y la escucha, y eso la hace quedarse. De paso, recogemos insight real de qué le está pasando detrás de esas alertas. Fundamento: BAU Competitivo (entrevistas + CSAT) ya identificó la gestión de novedades/devoluciones como uno de los dolores más grandes, y los tiempos de respuesta como lentos.",
     metrica:
       "% ENGAGEMENT (respondió Sí/No a la pregunta) · bitácora cualitativa de qué está pasando (insight, no se promedia) · CSAT promedio (meta 4.5) · % retención mes vs mes (meta 56–58%)",
-    estado: "Diseñado",
+    estado: "Corriendo",
     impacto:
       "FASE PILOTO: arranca con 5 marcas (3 Escalando + 2 Pre-Escalando) = 8,881 órdenes propias/mes (5.1% del universo). Si valida, escala a las 64 marcas completas = 174,286 órdenes/mes · 60.1% del portafolio comercial L1 · 29% de la meta NSM 600K · baseline retención 53.1% (jun vs may).",
     proyecto: "Brands Success · Retención L1 (Escalando/Pre-Escalando)",
-    calendario: "Piloto (5 marcas): semana 1 lun 27 jul – vie 31 jul · escala a 64 marcas si valida · cierre operativo: vie 21 ago 2026",
+    calendario: "Piloto (5 marcas): semana 1 planeada lun 27 jul – vie 31 jul, envío real ejecutado miér 29 jul · escala a 64 marcas si valida · cierre operativo: vie 21 ago 2026",
+    aprendizaje:
+      "Piloto confirmado (29-jul): 628707 Dilan Pacheco, 91797 Arley Cubillos, 653912 Maria Paula Arrechea (Escalando) + 12795 WLDER VELASCO, 668649 MICHAEL BENAVIDES (Pre-Escalando) — reemplaza la lista de ejemplo del prompt original. Envío 100% vía WhatsApp propio del equipo, sin número de Back Office separado ni link de redirección — la marca responde en el mismo hilo. Pendiente de confirmar con Miguel: la columna 'con novedades' llegó en 0 para las 5 marcas — posible que mida solo novedades abiertas en tiempo real, no el acumulado del mes; generó un caso híbrido (0 novedades + devolución activa) no contemplado en las 2 ramas de plantilla originales, repetido en los 5 envíos de semana 1.",
+    insightsDestacados: [
+      {
+        label: "Dolor principal detectado",
+        valor: "Gestión de la transportadora",
+        nota: "Las 3 marcas que respondieron coinciden en lo mismo: no se ejecutan intentos reales de entrega ni contacto antes de marcar novedad o devolución. No es un problema de producto — es de última milla.",
+      },
+      {
+        label: "Transportadora más mencionada",
+        valor: "Interrapidísimo",
+        nota: "Nombrada explícitamente en 2 de 3 respuestas. WLDER VELASCO (12795) reporta 7 marcas más del Centro de Cali con el mismo problema — señal de patrón, no caso aislado.",
+      },
+      {
+        label: "Valor entregado — respuesta inmediata",
+        valor: "60% respondió el mismo día",
+        nota: "3 de 5 marcas piloto respondieron el día del envío, ya por encima de la meta semanal (40%+) que normalmente se mide hasta el viernes.",
+      },
+      {
+        label: "Inconformismo, no rechazo al mensaje",
+        valor: "Se quejan de la transportadora, no del reporte",
+        nota: "Responden con detalle y cifras propias — MICHAEL BENAVIDES (668649) cuantifica que ~60% de sus 216 novedades son atribuibles a la transportadora. Señal de que sienten que Dropi realmente quiere escuchar: valida la hipótesis del experimento.",
+      },
+    ],
+    insightsCaveat: "Lectura de día 1 (n=3) — se trata como señal inicial, se confirma como patrón si se repite en las próximas semanas.",
     trackingUrl: "https://docs.google.com/spreadsheets/d/1mBLpjqRzEEe_tkV256j7r2RX1ytOr6zSuN0SISeIFnM/edit?gid=1294240361#gid=1294240361",
     metricasNegocio: [
       {
@@ -86,22 +113,20 @@ const experimentos: Experimento[] = [
       },
     ],
     metricasSemanales: [
-      { semana: 1, fechaViernes: "31 jul 2026", engagement: PENDIENTE, insight: PENDIENTE },
+      { semana: 1, fechaViernes: "31 jul 2026", engagement: "60% (3/5) — lectura día 1, no cierre de viernes", insight: "Transportadora (Interrapidísimo) — ver insight destacado ↑" },
       { semana: 2, fechaViernes: "7 ago 2026", engagement: PENDIENTE, insight: PENDIENTE },
       { semana: 3, fechaViernes: "14 ago 2026", engagement: PENDIENTE, insight: PENDIENTE },
       { semana: 4, fechaViernes: "21 ago 2026", engagement: PENDIENTE, insight: PENDIENTE },
     ],
-    plantillaWaConNovedad:
-      "Hola Distribuidora XYZ 👋\n\nAsí va tu negocio con Dropi ahora mismo:\n\n📈 Guías generadas: 342 órdenes\n📦 En tránsito: 218 órdenes\n⚠️ Con novedades: 14 órdenes\n↩️ Con devolución: 9 órdenes\n✅ Entregadas: 289 órdenes\n\nVimos que tienes 14 novedades y 9 devoluciones esta semana.\nCuéntanos qué está pasando — nos ayuda a entender mejor tu operación.\n\n👉 wa.me/57NUMERO?text=Hola,%20quiero%20contarles...\n\nSeguimos aquí, contigo,\nBrands Success 🚀",
-    plantillaWaSinNovedad:
-      "Hola Marca Emprendedora 👋\n\nAsí va tu negocio con Dropi ahora mismo:\n\n📈 Guías generadas: 156 órdenes\n📦 En tránsito: 98 órdenes\n✅ Entregadas: 142 órdenes\n\n¡Todo limpio por aquí! 🎉 Sin novedades ni devoluciones que reportar.\n\nSeguimos aquí, contigo,\nBrands Success 🚀",
+    plantillaWaHibridaReal:
+      "Hola, Maria Paula! 👋 Soy Katerine de Dropi.\n\nFuiste seleccionado(a) para un grupo reducido de Marcas con quienes compartiremos un reporte semanal del comportamiento de tus órdenes.\n\nReporte del 1 al 27 de Julio de 2026\n\n📦 2.981 órdenes creadas\n🚚 758 en tránsito\n✅ 963 entregadas\n⚠️ 0 con novedades\n↩️ 374 en devolución\n\nLas 0 con novedades y las 374 en devolución. Cuéntanos qué está pasando nos ayuda a entender mejor tu operación.🧡",
   },
 ];
 
 export default function ExperimentosMarcasPage() {
   return (
     <main style={{ minHeight: "100vh", padding: "0 0 60px" }}>
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 24px 0" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 32px 0" }}>
         <a href="/proyectos/marcas" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
           ← Marcas
         </a>
@@ -130,7 +155,7 @@ export default function ExperimentosMarcasPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 24px 0" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 32px 0" }}>
         <div style={{ display: "grid", gap: 16 }}>
           {experimentos.map((e) => {
             const est = ESTADO_STYLE[e.estado];
@@ -189,6 +214,26 @@ export default function ExperimentosMarcasPage() {
                   </div>
                 )}
 
+                {e.insightsDestacados && (
+                  <>
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: AMBER, marginTop: 16, marginBottom: 8 }}>
+                      🔥 Insight semana 1 — dolor principal
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 6 }}>
+                      {e.insightsDestacados.map((ins, i) => (
+                        <div key={i} style={{ background: AMB_BG, border: "1px solid #FDE68A", borderRadius: 8, padding: "10px 12px" }}>
+                          <div style={{ fontSize: 10, color: "#92400E", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".4px", marginBottom: 3 }}>{ins.label}</div>
+                          <div style={{ fontSize: 15, fontWeight: 800, color: NAVY, marginBottom: ins.nota ? 3 : 0 }}>{ins.valor}</div>
+                          {ins.nota && <div style={{ fontSize: 10.5, color: "#78350F", lineHeight: 1.4 }}>{ins.nota}</div>}
+                        </div>
+                      ))}
+                    </div>
+                    {e.insightsCaveat && (
+                      <div style={{ fontSize: 10.5, color: "var(--muted)", fontStyle: "italic", marginBottom: 4 }}>{e.insightsCaveat}</div>
+                    )}
+                  </>
+                )}
+
                 {e.metricasNegocio && (
                   <>
                     <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: TEAL, marginTop: 16, marginBottom: 8 }}>
@@ -239,71 +284,38 @@ export default function ExperimentosMarcasPage() {
                   </>
                 )}
 
-                {(e.plantillaWaConNovedad || e.plantillaWaSinNovedad) && (
+                {e.plantillaWaHibridaReal && (
                   <>
                     <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--muted)", marginTop: 16, marginBottom: 8 }}>
-                      💬 Plantilla de WhatsApp (ejemplo ilustrativo)
+                      💬 Plantilla utilizada — envío real semana 1
                     </div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                      {e.plantillaWaConNovedad && (
-                        <div>
-                          <div style={{ fontSize: 10, fontWeight: 700, color: AMBER, marginBottom: 5 }}>CON novedad/devolución</div>
-                          <div
-                            style={{
-                              background: "#ECE5DD",
-                              borderRadius: 10,
-                              padding: 10,
-                            }}
-                          >
-                            <div
-                              style={{
-                                background: "white",
-                                borderRadius: 8,
-                                borderTopLeftRadius: 2,
-                                padding: "9px 11px",
-                                fontSize: 12,
-                                lineHeight: 1.5,
-                                color: "#111",
-                                whiteSpace: "pre-wrap",
-                                boxShadow: "0 1px 1px rgba(0,0,0,.08)",
-                              }}
-                            >
-                              {e.plantillaWaConNovedad}
-                            </div>
-                          </div>
+                    <div style={{ maxWidth: 380 }}>
+                      <div
+                        style={{
+                          background: "#ECE5DD",
+                          borderRadius: 10,
+                          padding: 10,
+                        }}
+                      >
+                        <div
+                          style={{
+                            background: "white",
+                            borderRadius: 8,
+                            borderTopLeftRadius: 2,
+                            padding: "9px 11px",
+                            fontSize: 12,
+                            lineHeight: 1.5,
+                            color: "#111",
+                            whiteSpace: "pre-wrap",
+                            boxShadow: "0 1px 1px rgba(0,0,0,.08)",
+                          }}
+                        >
+                          {e.plantillaWaHibridaReal}
                         </div>
-                      )}
-                      {e.plantillaWaSinNovedad && (
-                        <div>
-                          <div style={{ fontSize: 10, fontWeight: 700, color: TEAL, marginBottom: 5 }}>SIN novedad/devolución</div>
-                          <div
-                            style={{
-                              background: "#ECE5DD",
-                              borderRadius: 10,
-                              padding: 10,
-                            }}
-                          >
-                            <div
-                              style={{
-                                background: "white",
-                                borderRadius: 8,
-                                borderTopLeftRadius: 2,
-                                padding: "9px 11px",
-                                fontSize: 12,
-                                lineHeight: 1.5,
-                                color: "#111",
-                                whiteSpace: "pre-wrap",
-                                boxShadow: "0 1px 1px rgba(0,0,0,.08)",
-                              }}
-                            >
-                              {e.plantillaWaSinNovedad}
-                            </div>
-                          </div>
-                        </div>
-                      )}
+                      </div>
                     </div>
                     <div style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 6, lineHeight: 1.4 }}>
-                      Nombre y números son de ejemplo — no es un envío real.
+                      Envío real a Maria Paula Arrechea (653912), 29-jul-2026 — caso híbrido (novedades en 0, devolución activa).
                     </div>
                   </>
                 )}

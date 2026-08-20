@@ -1,6 +1,14 @@
 import HubFooter from "@/components/HubFooter";
+import Breadcrumb from "@/components/Breadcrumb";
 
 const guias = [
+  {
+    slug: "conceptos-basicos",
+    icon: "🧭",
+    title: "Conceptos básicos",
+    description: "Qué es una rama de git y cómo se usan bien, cómo están organizadas las carpetas del repo, cómo arrancar en un proyecto y qué es Antigravity.",
+    tag: "Onboarding · Fundamentos",
+  },
   {
     slug: "como-unirte-a-darwin",
     icon: "🧬",
@@ -14,6 +22,13 @@ const guias = [
     title: "Directorio de Skills",
     description: "Qué skills hay disponibles, agrupadas por categoría, y cuándo usar cada una en el trabajo de un PD.",
     tag: "Referencia · Skills",
+  },
+  {
+    slug: "nomenclatura-fases",
+    icon: "🧭",
+    title: "Nomenclatura de fases de proyecto",
+    description: "Cómo se nombran proyectos, fases (Epic) y subfases (tarea) en Jira. Borrador para revisar con Laura Contreras.",
+    tag: "Referencia · Nomenclatura",
   },
 ];
 
@@ -29,7 +44,7 @@ export default function GuiasIndexPage() {
           flexDirection: "column",
           gap: 10,
         }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
+          <Breadcrumb items={[{ label: "Guías" }]} />
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <img src="/darwin-logo.png" alt="Darwin" width={36} height={36} style={{ display: "block", borderRadius: 8 }} />
           <div>
@@ -43,7 +58,7 @@ export default function GuiasIndexPage() {
           </div>
         </header>
 
-        <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {guias.map((g) => (
               <a

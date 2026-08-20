@@ -12,7 +12,8 @@
     "sameday:fuentes": "cd public/logistica/same-day/pipeline && node osm.js --fetch && node zonas.js --fetch && node barrios.js --fetch && node red-vial.js --fetch",
     "sameday:geo": "node --max-old-space-size=6144 public/logistica/same-day/pipeline/geo-sameday.js",
     "sameday:simular": "node --max-old-space-size=6144 public/logistica/same-day/pipeline/simular.js",
-    "sameday:verificar": "node --max-old-space-size=6144 public/logistica/same-day/pipeline/verificar.js"
+    "sameday:verificar": "node --max-old-space-size=6144 public/logistica/same-day/pipeline/verificar.js",
+    "sameday:laminas": "node public/logistica/same-day/pipeline/laminas.js"
   },
   "dependencies": {
     "@supabase/ssr": "^0.10.3",
@@ -21,6 +22,7 @@
     "@types/pg": "^8.20.0",
     "d3-sankey": "^0.12.3",
     "d3-shape": "^3.2.0",
+    "googleapis": "^174.0.1",
     "gsap": "^3.15.0",
     "jszip": "^3.10.1",
     "lucide-react": "^1.16.0",
@@ -28,12 +30,14 @@
     "nodemailer": "^9.0.1",
     "openai": "^6.39.0",
     "pg": "^8.21.0",
+    "primeicons": "^8.0.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.8.1",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/d3-sankey": "^0.12.5",
     "@types/d3-shape": "^3.1.8",

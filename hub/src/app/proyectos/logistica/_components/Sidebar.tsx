@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Activity, Map, BookOpen, FlaskConical, ChevronRight,
-  CalendarDays, GanttChartSquare, ListTodo, FolderKanban,
+  CalendarDays, GanttChartSquare, ListTodo, FolderKanban, ClipboardCheck,
 } from "lucide-react";
 import { etapas, proyectos } from "@/app/proyectos/logistica/_lib/data";
 
@@ -38,6 +38,9 @@ const SECCIONES = [
   { href: `${BASE}/experimentos`, label: "Experimentos", icon: FlaskConical, exact: true },
   { href: `${BASE}/cronograma`, label: "Cronograma", icon: GanttChartSquare },
   { href: `${BASE}/pendientes`, label: "Pendientes", icon: ListTodo },
+  // Va con Pendientes y no con Iniciativas porque es trabajo por hacer, no una
+  // vista del portafolio: son los campos de Jira que la API no puede escribir.
+  { href: `${BASE}/documentacion-jira`, label: "Llenar Jira", icon: ClipboardCheck },
   { href: `${BASE}/updates`, label: "Updates", icon: CalendarDays },
   { href: `${BASE}/info-logistica`, label: "Info logística", icon: BookOpen },
 ];
@@ -85,7 +88,8 @@ export default function Sidebar() {
   const etapaAbierta = (n: string) => etapasAbiertas[n] ?? n === etapaDeLaRuta;
 
   return (
-    <aside style={ASIDE}>
+    <>
+    <aside className="log-nav" style={ASIDE}>
       <Link href="/celula/logistica" style={VOLVER}>
         ← Célula Logística
       </Link>
@@ -103,26 +107,58 @@ export default function Sidebar() {
           activo={pathname === SECCIONES[0].href}
         />
 
-        {/* ── El mapa, desplegable ─────────────────────────────────────────── */}
-        <button
-          type="button"
-          aria-expanded={mapaAbierto}
-          onClick={() => setMapa(!mapaAbierto)}
+        {/* ── El mapa: destino Y desplegable ───────────────────────────────────
+            Antes esta fila era un <button> que SOLO desplegaba el árbol, así que
+            el Mapa de la orden —una de las seis pantallas del tablero— no tenía
+            ningún enlace en toda la navegación: se podía ver la lista de etapas
+            pero nunca abrir el mapa. Una fila que se comporta como carpeta
+            cuando además es una página es un callejón sin salida silencioso.
+
+            Ahora son dos zonas de clic en la misma fila: el nombre navega, el
+            chevron despliega. Es el patrón estándar para un ítem de navegación
+            que es a la vez destino y contenedor. */}
+        <div
           style={{
             ...FILA,
-            ...(pathname.startsWith(`${BASE}/mapa`) ? ACTIVO : INACTIVO),
-            width: "100%",
-            border: "none",
-            cursor: "pointer",
-            textAlign: "left",
-            fontFamily: "inherit",
+            ...(pathname === `${BASE}/mapa` ? ACTIVO : INACTIVO),
+            padding: 0,
           }}
           className="nav-item"
         >
-          <Map size={15} strokeWidth={2} style={{ flex: "none" }} />
-          <span style={{ flex: 1, minWidth: 0 }}>Mapa de la orden</span>
-          <ChevronRight size={13} strokeWidth={2.2} className="nav-chevron" style={CHEVRON(mapaAbierto)} />
-        </button>
+          <Link
+            href={`${BASE}/mapa`}
+            style={{
+              ...FILA,
+              flex: 1,
+              minWidth: 0,
+              background: "transparent",
+              color: "inherit",
+              fontWeight: "inherit",
+            }}
+          >
+            <Map size={15} strokeWidth={2} style={{ flex: "none" }} />
+            <span style={{ flex: 1, minWidth: 0 }}>Mapa de la orden</span>
+          </Link>
+          <button
+            type="button"
+            aria-expanded={mapaAbierto}
+            aria-label={mapaAbierto ? "Contraer las etapas" : "Desplegar las etapas"}
+            onClick={() => setMapa(!mapaAbierto)}
+            style={{
+              display: "grid",
+              placeItems: "center",
+              width: 30,
+              alignSelf: "stretch",
+              flex: "none",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              color: "inherit",
+            }}
+          >
+            <ChevronRight size={13} strokeWidth={2.2} className="nav-chevron" style={CHEVRON(mapaAbierto)} />
+          </button>
+        </div>
 
         {mapaAbierto &&
           etapas.map((etapa) => {
@@ -157,18 +193,18 @@ export default function Sidebar() {
                     <span style={{ color: "var(--muted)", marginRight: 4 }}>{etapa.n}</span>
                     {etapa.nombre}
                   </span>
-                  {/* La fuga era "fuga 1" en rojo y se leía como error. Un punto
+                  {/* La perdida era "perdida 1" en rojo y se leía como error. Un punto
                       del tono dice lo mismo sin gritar; el detalle va en title. */}
-                  {etapa.fuga?.n && (
+                  {etapa.perdida?.n && (
                     <span
-                      title={`Fuga ${etapa.fuga.n} · ${etapa.fuga.label}`}
-                      aria-label={`Fuga ${etapa.fuga.n}`}
+                      title={etapa.perdida.label}
+                      aria-label={etapa.perdida.label}
                       style={{
                         width: 5,
                         height: 5,
                         flex: "none",
                         borderRadius: 999,
-                        background: TONO[etapa.fuga.tono],
+                        background: TONO[etapa.perdida.tono],
                       }}
                     />
                   )}
@@ -222,6 +258,15 @@ export default function Sidebar() {
 
       <div style={PIE}>Logistic Success · Dropi</div>
     </aside>
+    {/* Mismo patrón que proveedores/layout.tsx: bajo 900px el contenido pesa
+        más que la navegación. Sin esto el panel seguía ocupando 226px fijos
+        incluso cuando el nav global ya se había vuelto drawer. */}
+    <style>{`
+      @media (max-width: 900px) {
+        .log-nav { display: none; }
+      }
+    `}</style>
+    </>
   );
 }
 
@@ -246,16 +291,21 @@ function ItemNav({
 // dos cabeceras de grupo y un título que envolvía a dos líneas, y el panel no
 // cabía en pantalla.
 
+// Alto de .gnav-topbar (globals.css): es sticky con top:0 y z-index:30, así que
+// sin descontarla el primer ítem de este panel se mete debajo de la franja al
+// hacer scroll.
+const TOPBAR = 53;
+
 const ASIDE: React.CSSProperties = {
   width: 226,
   flexShrink: 0,
   background: "#fff",
   borderRight: "1px solid var(--border)",
-  minHeight: "100vh",
-  maxHeight: "100vh",
+  minHeight: `calc(100vh - ${TOPBAR}px)`,
+  maxHeight: `calc(100vh - ${TOPBAR}px)`,
   overflowY: "auto",
   position: "sticky",
-  top: 0,
+  top: TOPBAR,
   alignSelf: "flex-start",
   display: "flex",
   flexDirection: "column",

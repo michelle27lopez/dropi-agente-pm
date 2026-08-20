@@ -10,7 +10,7 @@ export default function MetasPage() {
       {!isEmbedded && (
         <header style={{
           background: "#161b22", borderBottom: "1px solid #30363d",
-          padding: "12px 24px", display: "flex", alignItems: "center",
+          padding: "12px 32px", display: "flex", alignItems: "center",
           gap: "16px", flexShrink: 0,
         }}>
           <a href="/proyectos/dinamicas-catalogo" style={{ fontSize: 13, color: "#8b949e", textDecoration: "none" }}>
