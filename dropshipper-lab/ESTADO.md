@@ -2,7 +2,7 @@
 
 > Este archivo representa el estado "vivo" de la Célula Seller Success. Ha sido auditado y redactado por el **Agente de Claridad Cross-Célula** para garantizar que cualquier miembro de Dropi (Tecnología, Logística, SAC, Growth, Brands o C-Level) entienda el 100% de nuestras iniciativas en 3 minutos sin jerga interna.
 
-**Última actualización:** 2026-08-04 · **PM:** Santiago Herrera · **Designer:** Alejandra Melo
+**Última actualización:** 2026-08-06 (Post Pre-Planning SSC) · **PM:** Santiago Herrera · **Designer:** Alejandra Melo
 
 > [!IMPORTANT]
 > 🔥 **MANTRA OFICIAL DE LA CÉLULA SELLER SUCCESS:**  

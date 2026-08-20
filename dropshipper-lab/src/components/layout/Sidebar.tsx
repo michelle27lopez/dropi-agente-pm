@@ -35,8 +35,9 @@ type NavItem = {
 
 const menuItems: NavItem[] = [
   { name: "Inicio",              icon: Home,            href: "/inicio" },
-  { name: "Dashboard",           icon: LayoutDashboard, href: "#",        badge: "Beta" },
+  { name: "Dashboard",           icon: LayoutDashboard, href: "/dashboard",    badge: "Beta" },
   { name: "Productos",           icon: Package,         href: "/productos", badge: "Nuevo" },
+  { name: "Solicitar Muestra",   icon: Package,         href: "/muestras",  badge: "Nuevo" },
   { name: "Contenido IA",        icon: Sparkles,        href: "/productos/v2", badge: "Nuevo" },
   { name: "Mis Pedidos",         icon: ShoppingCart,    href: "#",        hasSubmenu: true },
   { name: "Mis Garantías",       icon: ShieldCheck,     href: "#",        hasSubmenu: true },
