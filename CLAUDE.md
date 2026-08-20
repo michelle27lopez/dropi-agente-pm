@@ -265,6 +265,17 @@ Base: **3.036 usuarios activos del ecosistema completo** (Lente 2). Ortogonal a 
 
 ⚠️ **Umbrales oficiales:** Creciendo = 51–300 (NO 51–200). Consolidando = 301–700 (NO 201–700).
 
+### Regla oficial de cálculo — madurez por consistencia reciente (act. 2026-08-06)
+
+**Reemplaza cualquier método de "promedio de 6 meses cerrados" usado antes.** Para asignar el nivel de madurez de una marca:
+
+1. **Ventana:** tomar los últimos 3 meses cerrados en los que la marca tenga fila real en `fact_marcas` (nunca completar con 0 los meses anteriores a su primer registro). Si tiene menos de 3 meses de historia, usar los que tenga (mínimo 1).
+2. **Nivel de cada mes:** clasificar individualmente cada uno de esos meses con los rangos de la tabla de arriba.
+3. **Mayoría:** si 2 de los 3 meses (o todos, cuando la marca tiene menos de 3 meses de historia) coinciden en el mismo nivel → ese es el nivel final.
+4. **Desempate:** si los 3 meses caen en 3 niveles distintos (sin mayoría), el nivel final es el que resulte de clasificar el **promedio de esos mismos 3 meses**.
+
+**Por qué:** un promedio de 6 meses deja pasar "picos únicos" (un mes viejo espectacular que ya no se repite, ej. temporada o un solo mes fuerte) y castiga injustamente a marcas nuevas y consistentes que no llevan 6 meses de historia. Se comprobó empíricamente (1.421 marcas Lente 1, corte jul-2026) que agregar un paso de promedio de 6 meses solo cambiaba el resultado final en 0,70% de los casos frente a usar directo los últimos 3 meses — el filtro de consistencia reciente es el que decide.
+
 **Muro crítico:** cruzar 300 propias/mes (entrada a Consolidando). El 73% de Creciendo no lo ha cruzado.
 
 **Dato clave:** 87 Escalando = ~55% de las propias del ecosistema. Perder 1 Escalando (avg 2.765 propias/u) ≈ activar ~213 usuarios Iniciando (avg 13 propias/u).
