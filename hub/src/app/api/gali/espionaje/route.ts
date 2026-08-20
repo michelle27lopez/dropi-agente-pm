@@ -23,6 +23,10 @@ export async function POST(req: NextRequest) {
   if (!question?.trim()) {
     return NextResponse.json({ error: "question is required" }, { status: 400 });
   }
+  // Sin tope, el rate-limit de 10 req/min no acota el costo por minuto si
+  // los prompts son enormes. Ver AGP-07/AGP-23.
+  const boundedQuestion = question.trim().slice(0, 4000);
+  const boundedAdsListText = (adsListText ?? "").slice(0, 4000);
 
   const openai = new OpenAI({ apiKey });
 
@@ -37,10 +41,10 @@ Reglas de respuesta:
 - Basa tu análisis únicamente en los anuncios provistos por el usuario.
 - Si recomiendas un anuncio, menciona brevemente por qué (métrica + coherencia de ángulo + riesgo de proveedor si aplica).`;
 
-  const userPrompt = `Pregunta del usuario: "${question.trim()}"
+  const userPrompt = `Pregunta del usuario: "${boundedQuestion}"
 
 Anuncios disponibles:
-${adsListText || "(sin anuncios en contexto)"}`;
+${boundedAdsListText || "(sin anuncios en contexto)"}`;
 
   try {
     const completion = await openai.chat.completions.create({

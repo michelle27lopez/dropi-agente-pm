@@ -2,22 +2,20 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Supplier Lab es un clon/laboratorio interno — a diferencia de Darwin (hub),
-// no tiene flujos pensados para usuarios externos sin cuenta. Todo exige
-// sesión salvo login y el callback de magic link.
-function getIsPublicPath(pathname: string): boolean {
-  return pathname.startsWith("/login") || pathname.startsWith("/auth/callback");
-}
-
+// Metrics Lab sirve PII de proveedores del CRM (nombre, email, teléfono,
+// país). A diferencia de otras apps del monorepo, si falta la config de
+// Supabase esto debe fallar cerrado (503) en vez de dejar pasar la
+// petición sin autenticar.
 export async function proxy(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
   const pathname = request.nextUrl.pathname;
-  const isPublicPath = getIsPublicPath(pathname);
+  const isPublicPath =
+    pathname.startsWith("/login") ||
+    pathname.startsWith("/auth/callback");
 
   if (!supabaseUrl || !supabaseAnonKey) {
-    // Sin cliente de auth no hay forma de saber quién llama — fallar cerrado
-    // (503) en vez de dejar pasar todo sin autenticar. Ver AGP-19.
     if (isPublicPath) return NextResponse.next({ request });
     return new NextResponse("Autenticación no disponible.", {
       status: 503,
