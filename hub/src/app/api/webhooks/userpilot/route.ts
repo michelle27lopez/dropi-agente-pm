@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { timingSafeEqual } from "crypto";
 
 // Inicializar cliente Supabase con service_role key
 const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -7,10 +8,27 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_KEY || "";
 
 const supabase = supabaseUrl && supabaseServiceKey ? createClient(supabaseUrl, supabaseServiceKey) : null;
 
+function isValidSecret(received: string | null, expected: string): boolean {
+  if (!received) return false;
+  const a = Buffer.from(received);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
+}
+
 export async function POST(req: NextRequest) {
+  // Configura el mismo valor como header personalizado en el webhook de
+  // Userpilot (Settings → Webhooks) y en USERPILOT_WEBHOOK_SECRET acá.
+  const expectedSecret = process.env.USERPILOT_WEBHOOK_SECRET;
+  if (!expectedSecret) {
+    return NextResponse.json({ error: "USERPILOT_WEBHOOK_SECRET no está configurado todavía." }, { status: 501 });
+  }
+  if (!isValidSecret(req.headers.get("x-webhook-secret"), expectedSecret)) {
+    return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  }
+
   try {
     const payload = await req.json();
-    console.log("[Userpilot Webhook Received]:", JSON.stringify(payload, null, 2));
 
     if (!payload) {
       return NextResponse.json({ error: "Payload vacío" }, { status: 400 });
@@ -56,7 +74,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: error.message }, { status: 500 });
       }
 
-      console.log(`[Userpilot Webhook Success] Seller ${userId} (${supplierRecord.name || "Sin nombre"}) sincronizado en Supabase.`);
+      console.log(`[Userpilot Webhook Success] Seller ${userId} sincronizado en Supabase.`);
     }
 
     return NextResponse.json({
