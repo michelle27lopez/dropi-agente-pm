@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
 import { isSprintAllowed } from "@/lib/sprint-access";
+import Breadcrumb from "@/components/Breadcrumb";
+import { PriorityBadge } from "@/components/PriorityBadge";
 
 type SectionStatus = "pendiente" | "en_curso" | "hecho";
 type Section = { name: string; status: SectionStatus; notes: string; updatedAt?: string };
@@ -73,47 +75,9 @@ function progressColor(pct: number): string {
 }
 
 const PRIORITY_ORDER: Record<string, number> = { Highest: 0, High: 1, Medium: 2, Low: 3, Lowest: 4 };
-const PRIORITY_COLOR: Record<string, string> = {
-  Highest: "var(--danger)", High: "var(--danger)", Medium: "var(--warning)", Low: "var(--info)", Lowest: "var(--info)",
-};
 
 function priorityRank(p: string | null): number {
   return p != null && p in PRIORITY_ORDER ? PRIORITY_ORDER[p] : 99;
-}
-
-function PriorityIcon({ priority }: { priority: string }) {
-  const color = PRIORITY_COLOR[priority] ?? "var(--muted)";
-  const stroke = { stroke: color, strokeWidth: 2.2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, fill: "none" };
-
-  if (priority === "Medium") {
-    return (
-      <svg width={14} height={14} viewBox="0 0 16 16">
-        <line x1="3" y1="6" x2="13" y2="6" {...stroke} />
-        <line x1="3" y1="10" x2="13" y2="10" {...stroke} />
-      </svg>
-    );
-  }
-
-  const up = priority === "Highest" || priority === "High";
-  const double = priority === "Highest" || priority === "Lowest";
-  const points = up ? "3,9 8,4.5 13,9" : "3,7 8,11.5 13,7";
-
-  return (
-    <svg width={14} height={14} viewBox="0 0 16 16" style={{ overflow: "visible" }}>
-      <polyline points={points} {...stroke} />
-      {double && <polyline points={points} {...stroke} transform={`translate(0, ${up ? -5 : 5})`} />}
-    </svg>
-  );
-}
-
-function PriorityBadge({ priority }: { priority: string | null }) {
-  if (!priority) return null;
-  return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 700, color: PRIORITY_COLOR[priority] ?? "var(--muted)" }}>
-      <PriorityIcon priority={priority} />
-      {priority}
-    </span>
-  );
 }
 
 function bogotaToday(): string {
@@ -593,9 +557,7 @@ export default function SprintPage() {
         padding: "16px 32px", display: "flex", alignItems: "center", justifyContent: "space-between",
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <a href="/" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>← Dropi PM Tools</a>
-          <span style={{ color: "var(--border)" }}>/</span>
-          <span style={{ fontSize: 13, color: "var(--fg)", fontWeight: 600 }}>Sprint</span>
+          <Breadcrumb items={[{ label: "Sprint" }]} />
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <button
@@ -629,7 +591,7 @@ export default function SprintPage() {
 
       {showHelp && <HelpModal onClose={() => setShowHelp(false)} />}
 
-      <div style={{ maxWidth: 1180, margin: "0 auto", padding: "32px 24px 60px" }}>
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
         <div style={{ marginBottom: 24 }}>
           <h1 style={{ fontSize: 22, fontWeight: 700, color: "var(--fg)", marginBottom: 8 }}>
             🗓️ Sprint activo

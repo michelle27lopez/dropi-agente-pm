@@ -58,10 +58,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
     return NextResponse.json({ error: "Faltan campos: name, summary" }, { status: 400 });
   }
 
+  // project_code es único a nivel global (no por célula) — el cálculo del
+  // siguiente número debe mirar todos los proyectos, no solo los de esta
+  // célula, o dos células con el mismo prefijo derivado del slug (ej.
+  // "experience" y "expertos" → "EXP") chocan en el mismo código.
   const { data: existentes, error: existentesError } = await supabase
     .from("projects")
-    .select("project_code")
-    .eq("celula_owner_id", celula.id);
+    .select("project_code");
 
   if (existentesError) return NextResponse.json({ error: existentesError.message }, { status: 500 });
 

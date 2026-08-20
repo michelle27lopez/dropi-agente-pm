@@ -22,6 +22,7 @@
     "@types/pg": "^8.20.0",
     "d3-sankey": "^0.12.3",
     "d3-shape": "^3.2.0",
+    "googleapis": "^174.0.1",
     "gsap": "^3.15.0",
     "jszip": "^3.10.1",
     "lucide-react": "^1.16.0",
@@ -33,9 +34,10 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.8.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4",
     "@types/d3-sankey": "^0.12.5",
     "@types/d3-shape": "^3.1.8",

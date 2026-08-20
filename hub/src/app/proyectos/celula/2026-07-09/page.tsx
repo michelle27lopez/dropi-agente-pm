@@ -393,7 +393,7 @@ export default function Cellboard20260709Page() {
           background: BG_PANEL, borderBottom: "1px solid rgba(255,255,255,0.08)",
           padding: "16px 32px", display: "flex", alignItems: "center", gap: "16px",
         }}>
-          <a href="/" style={{ fontFamily: FONT_MONO, fontSize: 12, color: MUTED_LIGHT, textDecoration: "none" }}>← Dropi PM Tools</a>
+          <a href="/proyectos" style={{ fontFamily: FONT_MONO, fontSize: 12, color: MUTED_LIGHT, textDecoration: "none" }}>Proyectos</a>
           <span style={{ color: "rgba(255,255,255,0.2)" }}>/</span>
           <a href="/proyectos/celula" style={{ fontFamily: FONT_MONO, fontSize: 12, color: MUTED_LIGHT, textDecoration: "none" }}>Célula</a>
           <span style={{ color: "rgba(255,255,255,0.2)" }}>/</span>
@@ -401,7 +401,7 @@ export default function Cellboard20260709Page() {
         </header>
       )}
 
-      <div style={{ maxWidth: 780, margin: "0 auto", padding: "36px 24px 80px" }}>
+      <div style={{ maxWidth: 780, margin: "0 auto", padding: "32px" }}>
 
         {/* Portada del expediente */}
         <div style={{

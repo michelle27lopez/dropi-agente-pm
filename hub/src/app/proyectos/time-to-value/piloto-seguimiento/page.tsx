@@ -220,7 +220,7 @@ export default function PilotoSeguimientoTtvPage() {
         </div>
       </header>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 24px", display: "flex", flexDirection: "column", gap: 20 }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px", display: "flex", flexDirection: "column", gap: 20 }}>
 
         {loading ? (
           <div style={{ ...card, textAlign: "center", color: "var(--muted)" }}>Cargando...</div>

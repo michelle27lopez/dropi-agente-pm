@@ -42,12 +42,11 @@ const CANVA_LINK = "https://www.canva.com/design/DAHQC3nBq6c/qvqDaPIhyfMXBdvY2LB
 // para agregar a su tienda — a diferencia de CANVA_LINK arriba, que es el
 // activo visual (imagen) para difundir en redes/WhatsApp.
 const DROPI_CATALOG_LINK = "https://app.dropi.co/dashboard/search?search_type=simple&category=Cyber%20days";
-// Link de Google Meet para la reunión informativa del 6 de agosto
-// (2:00-3:00pm, America/Bogota) — jueves, no viernes: el 7 de agosto es
-// festivo en Colombia. Corregido 31/07 (el link anterior era del evento
-// mal agendado para el 7). Con esto la card del Meet se vuelve clickeable
-// con "Agéndate →".
-const LUMA_LINK = "https://meet.google.com/dwj-zeav-yvb";
+// Link de Google Meet para la reunión informativa, reagendada al jueves 20
+// de agosto (4:00-5:00pm, America/Bogota) tras el terremoto del 10/08 que
+// dejó al equipo sin operar esa semana. Con esto la card del Meet se vuelve
+// clickeable con "Agéndate →".
+const LUMA_LINK = "https://meet.google.com/zty-fqfh-xwr";
 
 const STEPPER_LABELS: Record<JourneyStep["key"], string> = {
   seleccion: "Elige", fotos: "Prepara", vivo: "En vivo",
@@ -927,7 +926,7 @@ const IntroOverlay = memo(function IntroOverlay({ onDone }: { onDone: () => void
       <HeroGrainient />
       <div className="cd-intro-scrim" />
       <div className="cd-intro-copy">
-        <div className="cd-intro-eyebrow">Del 18 al 31 de agosto</div>
+        <div className="cd-intro-eyebrow">Del 24 de agosto al 7 de septiembre</div>
         <div className="cd-intro-title">Cyber Days</div>
       </div>
     </div>
@@ -1107,10 +1106,10 @@ export default function ElegiblesPage() {
     if (!anim || !el) { done(); return; }
     gsap.to(el, { autoAlpha: 0, scale: 1.03, duration: 0.55, ease: "power2.in", onComplete: done });
   }
-  // El Meet del 6 de agosto deja de mostrarse cuando ya pasó, y solo aplica
+  // El Meet del 20 de agosto deja de mostrarse cuando ya pasó, y solo aplica
   // en el paso 1 (Elige) — no tiene sentido seguir empujándolo una vez el
   // proveedor ya avanzó de fase (23/07, antes se veía en cualquier paso).
-  const meetVisible = expandedIdx === 0 && Date.now() <= new Date("2026-08-06T23:59:59").getTime();
+  const meetVisible = expandedIdx === 0 && Date.now() <= new Date("2026-08-20T23:59:59").getTime();
 
   // Animación cinemática con GSAP + ScrollTrigger (reemplaza el sistema
   // anterior de IntersectionObserver + classList: aquel escribía clases a
@@ -1474,7 +1473,7 @@ export default function ElegiblesPage() {
           <div className="cd-hero-spacer" />
 
           <div className="cd-hero-copy">
-            <div className="cd-eyebrow" data-reveal>Del 18 al 31 de agosto</div>
+            <div className="cd-eyebrow" data-reveal>Del 24 de agosto al 7 de septiembre</div>
             <h1 className="cd-title"><TwoToneTitle text="Los Cyber Days te eligieron" anim={anim} /></h1>
             <p className="cd-stat-sentence" data-reveal data-delay="0.08">
               Puedes seleccionar <b><CountUp value={eligibleCount} anim={anim} /></b> producto{eligibleCount === 1 ? "" : "s"} para Cyber Days, con hasta{" "}
@@ -1541,11 +1540,23 @@ export default function ElegiblesPage() {
           {/* Banner fijo, visible en cualquier paso — antes vivía solo en la
               fase Elige y nadie sabía dónde volver a encontrarlo. */}
           {meetVisible && (LUMA_LINK ? (
-            <a className="cd-meet" href={LUMA_LINK} target="_blank" rel="noopener noreferrer" data-reveal>
+            <a
+              className="cd-meet"
+              href={LUMA_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-reveal
+              onClick={() => {
+                // Señal de clic para el comercial (tab Seguimiento) — no
+                // confirma asistencia real, solo que abrió el link. Fire-and-
+                // forget: nunca debe bloquear ni romper la navegación al Meet.
+                fetch(`/api/campaigns-planeacion/${id}/elegibles/${token}/meet`, { method: "POST" }).catch(() => {});
+              }}
+            >
               <span className="cd-meet-icon">🎥</span>
               <div className="cd-meet-body">
                 <div className="cd-meet-label">Reunión informativa de Cyber Days</div>
-                <div className="cd-meet-time">Jueves 6 de agosto · 2:00pm</div>
+                <div className="cd-meet-time">Jueves 20 de agosto · 4:00pm</div>
               </div>
               <span className="cd-meet-cta">Agéndate →</span>
             </a>
@@ -1554,7 +1565,7 @@ export default function ElegiblesPage() {
               <span className="cd-meet-icon">🎥</span>
               <div className="cd-meet-body">
                 <div className="cd-meet-label">Reunión informativa de Cyber Days</div>
-                <div className="cd-meet-time">Jueves 6 de agosto · 2:00pm</div>
+                <div className="cd-meet-time">Jueves 20 de agosto · 4:00pm</div>
               </div>
             </div>
           ))}
@@ -1610,7 +1621,7 @@ export default function ElegiblesPage() {
                   )}
                   {canEditSelection && (
                     <div className="cd-receipt-edit">
-                      <span>Puedes ajustar tu selección hasta el <b>14 de agosto</b>.</span>
+                      <span>Puedes ajustar tu selección hasta el <b>23 de agosto</b>.</span>
                       <button type="button" className="cd-toolcard-cta" onClick={startEdit}>Editar selección</button>
                     </div>
                   )}
@@ -1695,7 +1706,7 @@ export default function ElegiblesPage() {
                           </button>
                         )}
                         {submitError && <p style={{ color: "var(--cd-accent-2)", fontSize: 12, margin: 0 }}>{submitError}</p>}
-                        <div className="cd-readiness-warn">Podrás ajustar tu selección desde esta misma página hasta el 14 de agosto.</div>
+                        <div className="cd-readiness-warn">Podrás ajustar tu selección desde esta misma página hasta el 23 de agosto.</div>
                       </div>
                     )}
                   </div>
@@ -1759,7 +1770,7 @@ export default function ElegiblesPage() {
                           <div className="cd-step-num">2</div>
                           <div className="cd-step-body">
                             <div className="cd-step-title">Súbelos a tu Catálogo de difusión</div>
-                            <div className="cd-step-sub">El catálogo que reciben los dropshippers por WhatsApp: foto con marco, precio con descuento y nombre. Fecha límite <b style={{ color: "var(--cd-accent)" }}>17 de agosto</b> — lo que no esté montado ese día no sale.</div>
+                            <div className="cd-step-sub">El catálogo que reciben los dropshippers por WhatsApp: foto con marco, precio con descuento y nombre. Fecha límite <b style={{ color: "var(--cd-accent)" }}>23 de agosto</b> — lo que no esté montado ese día no sale.</div>
                             <div className="cd-step-checks">
                               <label className="cd-check-item">
                                 <input type="checkbox" checked={!!checklist.pasoCatalogo} onChange={() => toggleChecklist("pasoCatalogo")} />
@@ -1785,7 +1796,7 @@ export default function ElegiblesPage() {
                           <div className="cd-step-num">3</div>
                           <div className="cd-step-body">
                             <div className="cd-step-title">Actualiza tus productos en Dropi</div>
-                            <div className="cd-step-sub">Hazlo <b style={{ color: "var(--cd-ink)" }}>después del paso 2</b>, el <b style={{ color: "var(--cd-accent)" }}>17 de agosto</b>. Antes no — tus productos se verían vestidos de una campaña que todavía no empieza.</div>
+                            <div className="cd-step-sub">Hazlo <b style={{ color: "var(--cd-ink)" }}>después del paso 2</b>, el <b style={{ color: "var(--cd-accent)" }}>23 de agosto</b>. Antes no — tus productos se verían vestidos de una campaña que todavía no empieza.</div>
                             <div className="cd-step-checks">
                               <label className="cd-check-item">
                                 <input type="checkbox" checked={!!checklist.fotoDropi} onChange={() => toggleChecklist("fotoDropi")} />
@@ -1916,7 +1927,7 @@ export default function ElegiblesPage() {
               )}
 
               {vivoStep?.state === "bloqueado" && (
-                <div className="cd-phase-note"><Lock size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 5 }} />Del 18 al 31 de agosto tus productos aparecen en el catálogo para dropshippers.</div>
+                <div className="cd-phase-note"><Lock size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 5 }} />Del 24 de agosto al 7 de septiembre tus productos aparecen en el catálogo para dropshippers.</div>
               )}
               </div>
           </div>

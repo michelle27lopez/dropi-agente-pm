@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import "./globals.css";
 import { createClient } from "@/lib/supabase-server";
-import { isMiDiaOwner } from "@/lib/sprint-access";
 import GlobalNavShell from "@/components/GlobalNavShell";
 
 export const metadata: Metadata = {
@@ -13,8 +12,12 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  // Nav global: solo para Michelle por ahora, ver [[project_darwin_pd_dashboard]].
-  const showGlobalNav = isMiDiaOwner(user?.email);
+  // Nav global: para cualquier usuario autenticado (2026-08-17, globalización
+  // aprobada por Jaime). Antes era solo para Michelle/Jaime — esa bandera
+  // (isMiDiaOwner) ahora controla algo distinto: quién ve "Mi día" con
+  // contenido real en vez del estado "Pendiente". Ver
+  // [[project_darwin_pd_dashboard]].
+  const showGlobalNav = !!user;
 
   return (
     <html lang="es">

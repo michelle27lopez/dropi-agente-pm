@@ -370,7 +370,7 @@ export default function CampaignWizardPage() {
         #hdr {
           background: var(--card);
           border-bottom: 1px solid var(--border);
-          padding: 0 24px;
+          padding: 0 32px;
           height: 56px;
           display: flex;
           align-items: center;

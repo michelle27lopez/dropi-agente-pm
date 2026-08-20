@@ -1,0 +1,193 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   Composiciones de la HOME (nivel 1 · Indicadores).
+
+   POR QUÉ ESTE ARCHIVO Y NO tablero.css
+   tablero.css tiene 1.525 líneas y ~55 secciones, una por pantalla, sin
+   primitivos compartidos; ya perdió reglas una vez en un merge. El patrón que
+   empieza aquí es el contrario: los PRIMITIVOS viven en ui.css y son de todos,
+   y cada pantalla tiene una hoja pequeña y propia con lo único que es suyo —
+   su layout. Si una regla de aquí le sirve a otra pantalla, sube a ui.css; no
+   se copia.
+
+   Se importa desde page.tsx, no desde el layout: solo se carga con la home.
+
+   Cinco tamaños (--fs-*) y cuatro radios (8/12/20/999). Sin excepciones.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── El objetivo ─────────────────────────────────────────────────────────────
+   Un número en tamaño display y todo lo demás subordinado. Sustituye al bloque
+   `.ns`, que ponía cuatro métricas del mismo tamaño en fila: con cuatro
+   números iguales, el ojo no sabía cuál era la meta.                         */
+.log-root .obj {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.log-root .obj__main { display: flex; flex-direction: column; gap: 12px; }
+.log-root .obj__pie {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+}
+.log-root .obj__pie b { color: var(--text); font-weight: 600; }
+
+.log-root .obj__desglose {
+  border-left: 1px solid var(--border);
+  padding-left: 24px;
+}
+.log-root .obj__formula {
+  margin: 0 0 8px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 500;
+  color: var(--muted);
+}
+.log-root .obj__sumandos { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.log-root .obj__sumando {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+}
+.log-root .obj__sumando b {
+  display: block;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+/* La fuente citada no es adorno: sin ella, "21,4%" es una cifra sin dueño y el
+   Cell Board no puede discutirla. */
+.log-root .obj__fuente {
+  margin: 12px 0 0;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+.log-root .obj__fuente code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--fs-label);
+}
+
+@media (max-width: 760px) {
+  .log-root .obj { grid-template-columns: 1fr; }
+  .log-root .obj__desglose {
+    border-left: 0;
+    border-top: 1px solid var(--border);
+    padding-left: 0;
+    padding-top: 16px;
+  }
+}
+
+/* ── Insight de la semana ────────────────────────────────────────────────── */
+.log-root .insight {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.log-root .insight > .u-stat { max-width: 190px; }
+.log-root .insight__cuerpo { display: flex; flex-direction: column; gap: 8px; }
+.log-root .insight__cuerpo h3 {
+  margin: 0;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  font-weight: 600;
+}
+.log-root .insight__cuerpo p { margin: 0; color: var(--muted); }
+.log-root .insight__accion {
+  background: var(--soft);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text) !important;
+  max-width: 70ch;
+}
+.log-root .insight__accion b { font-weight: 600; }
+.log-root .insight__fuente {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+@media (max-width: 640px) {
+  .log-root .insight { grid-template-columns: 1fr; }
+}
+
+/* ── Rama del árbol (una fuga con sus palancas) ──────────────────────────── */
+.log-root .rama__tamano {
+  margin: 2px 0 0;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.log-root .rama__palancas {
+  margin-top: 16px;
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+}
+.log-root .rama__titulo {
+  display: block;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+/* Fila de iniciativa. Densa a propósito: el objetivo es poder contarlas de un
+   vistazo, no leerlas. El detalle está a un clic. */
+.log-root .palanca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  margin: 0 -8px;
+  border-radius: 8px;
+}
+.log-root .palanca:hover { background: var(--soft); }
+.log-root .palanca__salud {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  flex: none;
+  background: var(--dropi-gray-200);
+}
+.log-root .palanca__salud[data-salud="ok"] { background: var(--green); }
+.log-root .palanca__salud[data-salud="warn"] { background: var(--amber); }
+.log-root .palanca__salud[data-salud="risk"] { background: var(--red); }
+.log-root .palanca__nombre {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.log-root .palanca__codigo {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  flex: none;
+}
+
+/* ── Accesos ─────────────────────────────────────────────────────────────────
+   Sin emoji dentro de un cuadrado de color: eran cinco tintes distintos
+   haciendo de icono decorativo, y el color en este sistema significa estado.  */
+.log-root .acceso__titulo {
+  margin: 0 0 3px;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  font-weight: 600;
+}
+.log-root .acceso__desc {
+  margin: 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+}

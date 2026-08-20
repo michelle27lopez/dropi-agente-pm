@@ -1,25 +1,20 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase-browser";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Home,
-  LayoutDashboard,
   FolderKanban,
-  Zap,
   FileText,
   Calendar,
   GraduationCap,
   Settings,
-  Map,
-  ClipboardList,
-  Truck,
-  Bug,
-  Construction,
   Database,
   BarChart3,
-  Inbox,
-  FlaskConical,
+  Network,
+  Webhook,
+  Rss,
 } from "lucide-react";
 
 type NavItem = {
@@ -27,53 +22,66 @@ type NavItem = {
   label: string;
   href: string;
   icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
+  tag?: string;
 };
 
-// Nav primario: fijo, no crece con la cantidad de proyectos —
-// el listado completo de proyectos vive en /proyectos, no en el menú.
-const PRIMARY_ITEMS: NavItem[] = [
-  { key: "mi-dia", label: "Mi día", href: "/", icon: Home },
-  { key: "panorama", label: "Panorama", href: "/panorama", icon: LayoutDashboard },
-  { key: "proyectos", label: "Proyectos", href: "/proyectos", icon: FolderKanban },
-  { key: "sprint", label: "Sprint", href: "/sprint", icon: Zap },
-  { key: "notas", label: "Notas", href: "/notas", icon: FileText },
-  { key: "calendario", label: "Calendario", href: "/calendario", icon: Calendar },
-  { key: "data", label: "Data", href: "/data-solicitada", icon: Database },
-  { key: "metricas", label: "Métricas", href: "/metricas", icon: BarChart3 },
-  { key: "iniciativas", label: "Iniciativas", href: "/iniciativas", icon: Inbox },
-  { key: "guias", label: "Guías", href: "/guias", icon: GraduationCap },
-  { key: "pruebas-usuarios", label: "Pruebas con Usuarios", href: "/pruebas-usuarios", icon: FlaskConical },
-  { key: "configuracion", label: "Configuración", href: "/ajustes", icon: Settings },
-];
+// Nav primario reducido a 6 módulos (rediseño privado de Michelle, 2026-08-03):
+// Panorama, Sprint, Iniciativas y Updates se retiran de aquí porque pasan a
+// ser accesos rápidos dentro de Mi día (pendiente esa pasada). Pruebas con
+// Usuarios se elimina. Guías baja al pie del sidebar (ver footer).
+//
+// Proyectos/Data/Following son por célula (2026-08-17, Jaime): apuntan a
+// `/celula/${celulaActiva}/...` en vez de una ruta plana, para que el
+// switcher de célula (GlobalTopBar) y el sidebar cuenten la misma historia
+// — cambiar de célula ahí cambia lo que ves acá también. `celulaActiva` sale
+// del propio pathname si ya estás dentro de `/celula/[slug]/...`; si estás
+// en una página global (Mi día, Configuración) cae a tu propia célula.
+function buildPrimaryItems(celulaActiva: string | null): NavItem[] {
+  const c = celulaActiva ?? "";
+  return [
+    { key: "mi-dia", label: "Mi día", href: c ? `/celula/${c}` : "/", icon: Home },
+    { key: "proyectos", label: "Proyectos", href: c ? `/celula/${c}/proyectos` : "/proyectos", icon: FolderKanban },
+    { key: "data", label: "Data", href: c ? `/celula/${c}/data` : "/data-solicitada", icon: Database },
+    { key: "updates", label: "Updates", href: c ? `/celula/${c}/updates` : "/", icon: Rss },
+    { key: "metricas", label: "Following", href: c ? `/celula/${c}/following` : "/metricas", icon: BarChart3 },
+    { key: "calendario", label: "Calendario", href: "/calendario", icon: Calendar },
+    { key: "celulas", label: "Células", href: "/celulas", icon: Network },
+    { key: "integraciones", label: "Integraciones", href: "/integraciones", icon: Webhook },
+    { key: "configuracion", label: "Configuración", href: "/ajustes", icon: Settings },
+  ];
+}
 
-// Updates: rama fija de reportería, no son proyectos y no se filtran.
-// Mismos 5 destinos que ya vivían en el sidebar de mi-día.
-const UPDATES_ITEMS: NavItem[] = [
-  { key: "updates-roadmap", label: "Roadmap", href: "/roadmap-s2-2026", icon: Map },
-  { key: "updates-cell-board", label: "Weekly Stakeholders", href: "/updates-celula", icon: ClipboardList },
-  { key: "updates-weekly-ti", label: "Weekly TI", href: "/weekly", icon: Truck },
-  { key: "updates-bugs", label: "Bugs", href: "/bugs", icon: Bug },
-  { key: "updates-bloqueos", label: "Bloqueos/Dependencias", href: "/resumen", icon: Construction },
-];
+// Notas se queda visible fuera de los 6 módulos core, pero marcada "para mí"
+// — es la única sección que se queda privada incluso cuando el resto del
+// equipo vea este diseño.
+const NOTAS_ITEM: NavItem = { key: "notas", label: "Notas", href: "/notas", icon: FileText, tag: "Para mí" };
 
-function isActive(pathname: string, href: string) {
-  if (href === "/") return pathname === "/";
+const GUIAS_ITEM: NavItem = { key: "guias", label: "Guías", href: "/guias", icon: GraduationCap };
+
+// "Mi día" apunta a /celula/[slug] a secas (2026-08-17) — el mismo prefijo
+// del que cuelgan Proyectos/Data/Updates/Following. Sin match exacto, ese
+// link quedaba "activo" en las cuatro páginas hijas a la vez.
+function isActive(pathname: string, href: string, exact = false) {
+  if (href === "/" || exact) return pathname === href;
   return pathname === href || pathname.startsWith(href + "/");
 }
 
 function NavLink({ item, collapsed, active }: { item: NavItem; collapsed: boolean; active: boolean }) {
   const Icon = item.icon;
   return (
-    <a
+    <Link
       href={item.href}
       className={`gnav-nav-item ${active ? "gnav-nav-item--active" : ""}`}
-      title={collapsed ? item.label : undefined}
+      title={collapsed ? `${item.label}${item.tag ? ` · ${item.tag}` : ""}` : undefined}
     >
       <span className="gnav-nav-item__icon">
         <Icon size={20} strokeWidth={2} />
       </span>
       <span className="gnav-nav-item__label gnav-hide-on-collapse">{item.label}</span>
-    </a>
+      {item.tag && (
+        <span className="gnav-nav-item__tag gnav-hide-on-collapse">{item.tag}</span>
+      )}
+    </Link>
   );
 }
 
@@ -89,15 +97,18 @@ export default function GlobalNav({
   onCloseMobile: () => void;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
+  const [ownCelulaSlug, setOwnCelulaSlug] = useState<string | null>(null);
 
-  async function handleLogout() {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    sessionStorage.removeItem("darwin-home-routed");
-    router.push("/login");
-    router.refresh();
-  }
+  useEffect(() => {
+    fetch("/api/me")
+      .then((res) => res.json())
+      .then((data) => setOwnCelulaSlug(data?.profile?.celulas?.slug ?? null))
+      .catch(() => setOwnCelulaSlug(null));
+  }, []);
+
+  const celulaEnRuta = pathname.match(/^\/celula\/([^/]+)/)?.[1] ?? null;
+  const celulaActiva = celulaEnRuta ?? ownCelulaSlug;
+  const primaryItems = buildPrimaryItems(celulaActiva);
 
   return (
     <>
@@ -140,39 +151,22 @@ export default function GlobalNav({
 
         <nav className="gnav-section">
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            {PRIMARY_ITEMS.map((item) => (
-              <NavLink key={item.key} item={item} collapsed={collapsed} active={isActive(pathname, item.href)} />
+            {primaryItems.map((item) => (
+              <NavLink key={item.key} item={item} collapsed={collapsed} active={isActive(pathname, item.href, item.key === "mi-dia")} />
             ))}
           </div>
         </nav>
 
         <div className="gnav-section">
-          <p className="gnav-section__title gnav-hide-on-collapse">Updates</p>
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            {UPDATES_ITEMS.map((item) => (
-              <NavLink key={item.key} item={item} collapsed={collapsed} active={isActive(pathname, item.href)} />
-            ))}
+            <NavLink item={NOTAS_ITEM} collapsed={collapsed} active={isActive(pathname, NOTAS_ITEM.href)} />
           </div>
         </div>
 
         <div className="gnav-spacer" />
 
-        <div className="gnav-profile">
-          <img
-            src="/michelle-avatar.png"
-            alt="Michelle"
-            width={28}
-            height={28}
-            className="gnav-profile__avatar"
-            style={{ objectFit: "cover" }}
-          />
-          <div className="gnav-profile__info gnav-hide-on-collapse">
-            <p className="gnav-profile__name">Michelle</p>
-            <p className="gnav-profile__role">Product Designer</p>
-            <button type="button" className="gnav-profile__logout" onClick={handleLogout}>
-              Cerrar sesión
-            </button>
-          </div>
+        <div className="gnav-section gnav-section--footer">
+          <NavLink item={GUIAS_ITEM} collapsed={collapsed} active={isActive(pathname, GUIAS_ITEM.href)} />
         </div>
       </aside>
     </>

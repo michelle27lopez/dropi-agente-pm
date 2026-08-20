@@ -1305,7 +1305,7 @@ export default function TtvMetricasPage() {
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "28px 24px" }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "32px" }}>
         {loading && <p style={{ color: "var(--muted)", fontSize: 14 }}>Cargando datos...</p>}
 
         {!loading && !data && (

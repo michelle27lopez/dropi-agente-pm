@@ -1,5 +1,7 @@
 "use client";
 
+import { SectionTitle } from "@/app/proyectos/logistica/_components/ui";
+
 import { useEffect, useRef } from "react";
 
 // ── Data ────────────────────────────────────────────────────────────────────
@@ -211,7 +213,7 @@ export default function AutoconfirmacionResultados() {
       <style>{S}</style>
 
       {/* Score donuts */}
-      <div className="eyebrow" style={{ marginBottom: 14 }}>Métricas conductuales</div>
+      <SectionTitle>Métricas conductuales</SectionTitle>
       <div className="ut-donuts">
         {SCORES.map((s) => (
           <div key={s.label} className="ut-donut">
@@ -232,7 +234,7 @@ export default function AutoconfirmacionResultados() {
       </div>
 
       {/* Task bars */}
-      <div className="eyebrow" style={{ marginBottom: 14 }}>Tasa de éxito por tarea</div>
+      <SectionTitle>Tasa de éxito por tarea</SectionTitle>
       <div className="ut-tasks">
         {TASKS.map((t) => (
           <div key={t.id} className="ut-task">
@@ -248,7 +250,7 @@ export default function AutoconfirmacionResultados() {
       </div>
 
       {/* Heatmap */}
-      <div className="eyebrow" style={{ marginBottom: 14 }}>Detalle por participante</div>
+      <SectionTitle>Detalle por participante</SectionTitle>
       <div className="ut-heat">
         <div className="ut-hm">
           <div className="ut-hm-head" />
@@ -272,7 +274,7 @@ export default function AutoconfirmacionResultados() {
       </div>
 
       {/* Findings */}
-      <div className="eyebrow" style={{ marginBottom: 14 }}>Hallazgos clave</div>
+      <SectionTitle>Hallazgos clave</SectionTitle>
       <div className="ut-findings">
         {FINDINGS.map((f) => (
           <details key={f.title} className={`ut-finding ut-f-${f.severity}`}>
@@ -293,7 +295,7 @@ export default function AutoconfirmacionResultados() {
       </div>
 
       {/* Improvements */}
-      <div className="eyebrow" style={{ marginBottom: 14 }}>Mejoras priorizadas</div>
+      <SectionTitle>Mejoras priorizadas</SectionTitle>
       <div className="ut-imps">
         {IMPROVEMENTS.map((imp) => (
           <div key={imp.n} className="ut-imp">

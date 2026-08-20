@@ -182,7 +182,7 @@ export default function UsuariosAccesoPage() {
           </div>
         </header>
 
-        <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 24px" }}>
           <div style={{
             background: "var(--card)", border: "1px solid var(--border)",
             borderRadius: 16, padding: 24, marginBottom: 32,

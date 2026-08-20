@@ -28,8 +28,8 @@ export function Sidebar() {
       minHeight: "100vh", position: "sticky", top: 0, alignSelf: "flex-start",
       display: "flex", flexDirection: "column", padding: "20px 14px",
     }}>
-      <a href="/" style={{ fontSize: 12.5, color: "var(--muted)", textDecoration: "none", marginBottom: 18, padding: "0 8px" }}>
-        ← Dropi PM Tools
+      <a href="/proyectos" style={{ fontSize: 12.5, color: "var(--muted)", textDecoration: "none", marginBottom: 18, padding: "0 8px" }}>
+        ← Proyectos
       </a>
       <div style={{ fontSize: 16, fontWeight: 600, color: "var(--fg)", padding: "0 8px", marginBottom: 18 }}>
         Dinámicas de Catálogo

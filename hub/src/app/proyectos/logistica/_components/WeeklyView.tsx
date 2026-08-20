@@ -3,6 +3,24 @@
 import { useState } from "react";
 import { jiraUrl, type Weekly } from "@/app/proyectos/logistica/_lib/data";
 import PrintButton from "@/app/proyectos/logistica/_components/PrintButton";
+import { Card, Table, PageHeader, SectionTitle, type Column } from "@/app/proyectos/logistica/_components/ui";
+
+// Columnas de la comparación mensual. El delta se tiñe porque es lo único de
+// la tabla que pide una reacción; el resto son cifras de contexto.
+type FilaMensual = NonNullable<Weekly["comparacionMensual"]>["filas"][number];
+
+const COLUMNAS_MENSUAL: Column<FilaMensual>[] = [
+  { key: "metrica", header: "Métrica", width: "34%", render: (f) => f.metrica },
+  { key: "abril", header: "Abril", align: "right", render: (f) => f.abril },
+  { key: "mayo", header: "Mayo", align: "right", render: (f) => f.mayo },
+  { key: "junio", header: "Junio", align: "right", render: (f) => f.junio },
+  {
+    key: "delta",
+    header: "Delta",
+    align: "right",
+    render: (f) => <span className={`wk-delta is-${f.tono}`}>{f.delta}</span>,
+  },
+];
 
 function horasTono(horas: number): "verde" | "ambar" | "rojo" {
   if (horas <= 24) return "verde";
@@ -25,46 +43,32 @@ function ExecutiveWeekly({ w }: { w: Weekly }) {
 
   return (
     <>
-      <div className="eyebrow">1 · El indicador — ¿se movió?</div>
-      <section className="wk-kpi wk-monthly">
-        <div className="wk-monthly-head">
-          <div>
-            <h2>{comparacion.titulo}</h2>
-            <p>{comparacion.alcance}</p>
-          </div>
-          <span className="wk-monthly-status">Movilización plana</span>
-        </div>
-        <div className="wk-monthly-table" role="table" aria-label={comparacion.titulo}>
-          <div className="wk-monthly-row is-head" role="row">
-            <span role="columnheader">Métrica</span>
-            <span role="columnheader">Abril</span>
-            <span role="columnheader">Mayo</span>
-            <span role="columnheader">Junio</span>
-            <span role="columnheader">Delta</span>
-          </div>
-          {comparacion.filas.map((fila) => (
-            <div className="wk-monthly-row" role="row" key={fila.metrica}>
-              <strong role="cell">{fila.metrica}</strong>
-              <span role="cell" data-label="Abril">{fila.abril}</span>
-              <span role="cell" data-label="Mayo">{fila.mayo}</span>
-              <span role="cell" data-label="Junio">{fila.junio}</span>
-              <span role="cell" data-label="Delta" className={`is-${fila.tono}`}>{fila.delta}</span>
-            </div>
-          ))}
-        </div>
+      {/* Sin numeración: DESIGN.md §6 prohíbe el patrón "01 / 02 / 03" en los
+          títulos de sección. La secuencia ya la da el orden de lectura. */}
+      <SectionTitle hint={comparacion.alcance}>{comparacion.titulo}</SectionTitle>
+      <Card>
+        {/* Era una tabla falsa: divs con role="table" sobre CSS Grid. Funcionaba,
+            pero duplicaba el primitivo y obligaba a mantener su propio
+            responsive con data-label. Ahora es una <table> de verdad. */}
+        <Table
+          columns={COLUMNAS_MENSUAL}
+          rows={comparacion.filas}
+          getKey={(f) => f.metrica}
+        />
         <p className="wk-monthly-reading">{comparacion.lectura}</p>
-        <p className="wk-monthly-caveat"><strong>% entrega:</strong> {comparacion.entregaNota}</p>
-      </section>
+        <p className="wk-monthly-caveat">
+          <strong>% entrega:</strong> {comparacion.entregaNota}
+        </p>
+      </Card>
 
       {w.secciones.map((seccion, index) => (
         <section className="wk-executive-section" key={seccion.titulo}>
-          <div className="eyebrow">{index + 2} · {seccion.titulo}</div>
+          {/* El título vive en SectionTitle; la nota de la sección es su `hint`.
+              Antes se repetían: título de sección + <h3> idéntico debajo. */}
+          <SectionTitle hint={seccion.nota}>
+            {`${seccion.titulo} · ${seccion.proyectos.length}`}
+          </SectionTitle>
           <div className="wk-seccion">
-            <div className="wk-seccion-head">
-              <h3>{seccion.titulo}</h3>
-              <span className="wk-seccion-nota">{seccion.nota}</span>
-              <span className="wk-seccion-count">{seccion.proyectos.length}</span>
-            </div>
             {index === 0 && w.avanceInvestigacion && (
               <div className="wk-research-progress">
                 <div className="wk-research-intro">
@@ -120,7 +124,7 @@ function ExecutiveWeekly({ w }: { w: Weekly }) {
 
       {w.focoSiguienteSemana && (
         <section className="wk-next-focus">
-          <div className="eyebrow">{w.secciones.length + 2} · Foco de la siguiente semana</div>
+          <SectionTitle>Foco de la siguiente semana</SectionTitle>
           <div className="wk-kpi">
             <ol>
               {w.focoSiguienteSemana.map((foco) => <li key={foco}>{foco}</li>)}
@@ -159,37 +163,39 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
 
   return (
     <main className="page wk-print">
-      {/* Barra: elegir semana + bajar el PDF de esa semana. Selector desplegable
-          porque las semanas se acumulan y en botones no caben. */}
-      <div className="wk-switch no-print">
-        <label className="wk-switch-label" htmlFor="wk-semana">Semana</label>
-        <select
-          id="wk-semana"
-          className="wk-select"
-          value={idx}
-          onChange={(e) => setIdx(Number(e.target.value))}
-        >
-          {weeklies.map((wk, i) => (
-            <option key={wk.id} value={i}>
-              {wk.semana}{i === 0 ? " · actual" : ""}
-            </option>
-          ))}
-        </select>
-        <PrintButton docTitle={`Weekly Product · Logística — ${w.semana}`} />
-      </div>
-
-      {/* Cabecera */}
-      <section className="wk-hero">
-        <span className="tag">{w.semana}</span>
-        <h1>Weekly Product · Logística</h1>
-        <p className="wk-fecha">{w.fecha}</p>
-        <p className="wk-foco">{w.foco}</p>
-      </section>
+      {/* El selector de semana y el botón de imprimir van en la cabecera, no en
+          una barra suelta encima: son acciones sobre lo que se está viendo. */}
+      <PageHeader
+        title="Weekly Product · Logística"
+        subtitle={w.foco}
+        aside={
+          <div className="wk-switch no-print">
+            <label className="wk-switch-label" htmlFor="wk-semana">
+              Semana
+            </label>
+            <select
+              id="wk-semana"
+              className="wk-select"
+              value={idx}
+              onChange={(e) => setIdx(Number(e.target.value))}
+            >
+              {weeklies.map((wk, i) => (
+                <option key={wk.id} value={i}>
+                  {wk.semana}
+                  {i === 0 ? " · actual" : ""}
+                </option>
+              ))}
+            </select>
+            <PrintButton docTitle={`Weekly Product · Logística — ${w.semana}`} />
+          </div>
+        }
+      />
+      <p className="wk-fecha">{w.fecha}</p>
 
       {w.comparacionMensual ? <ExecutiveWeekly w={w} /> : <>
 
       {/* 1 · BRECHA DE ENTREGA */}
-      <div className="eyebrow">1 · La brecha de entrega — de dónde salen los puntos que faltan</div>
+      <SectionTitle hint="De dónde salen los puntos que faltan.">La brecha de entrega</SectionTitle>
       <div className="wk-kpi">
         <div className="wk-kpi-name">Tasa de entrega — dónde estamos vs. la meta (todos los países)</div>
         <div className="wk-gap-row">
@@ -219,7 +225,7 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
         </div>
         <p className="wk-pais-foco">{w.brecha.paisFoco}</p>
         <div className="wk-desglose">
-          {w.brecha.fugas.map((d) => (
+          {w.brecha.perdidas.map((d) => (
             <div key={d.label} className={`wk-desg-item d-${d.tono}`}>
               <span className="dv">{d.valor}</span>
               <span className="dl">{d.label}</span>
@@ -231,7 +237,7 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
       </div>
 
       {/* 2 · INDICADORES HOY */}
-      <div className="eyebrow">2 · Los indicadores, como están hoy</div>
+      <SectionTitle>Los indicadores, como están hoy</SectionTitle>
       <div className="wk-ind">
         {w.indicadores.map((k) => (
           <div key={k.nombre} className={`wk-ind-card i-${k.tono}`}>
@@ -249,7 +255,7 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
       </div>
 
       {/* 3 · TIEMPO POR FASES */}
-      <div className="eyebrow">3 · Primera lectura — tiempo de la orden por tramo (meta &lt;24h)</div>
+      <SectionTitle hint="Tiempo de la orden por tramo. La meta es menos de 24 horas.">Primera lectura</SectionTitle>
       <div className="wk-kpi">
         <div className="wk-tiempo-summary">
           <div>
@@ -365,7 +371,7 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
       </div>
 
       {/* 4 · HALLAZGOS */}
-      <div className="eyebrow">4 · Hallazgos de la semana</div>
+      <SectionTitle>Hallazgos de la semana</SectionTitle>
       <div className="wk-hallazgos">
         {w.hallazgos.map((h) => (
           <div key={h.titulo} className={`wk-hallazgo h-${h.tono}`}>
@@ -391,7 +397,7 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
       </div>
 
       {/* 5 · PROYECTOS POR SECCIÓN */}
-      <div className="eyebrow">5 · Proyectos — en qué va cada uno</div>
+      <SectionTitle hint="En qué va cada uno.">Proyectos</SectionTitle>
       <div className="wk-secciones">
         {w.secciones.map((s) => (
           <div key={s.titulo} className="wk-seccion">

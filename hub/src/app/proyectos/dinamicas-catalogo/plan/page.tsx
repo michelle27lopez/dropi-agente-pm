@@ -3,7 +3,7 @@ export default function PlanPage() {
     <main style={{ height: "100vh", display: "flex", flexDirection: "column", background: "var(--bg)" }}>
       <header style={{
         background: "#fff", borderBottom: "1px solid var(--border)",
-        padding: "12px 24px", display: "flex", alignItems: "center",
+        padding: "12px 32px", display: "flex", alignItems: "center",
         gap: "16px", flexShrink: 0,
       }}>
         <a href="/proyectos/dinamicas-catalogo" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>

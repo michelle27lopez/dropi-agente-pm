@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 
 export type Proyecto = {
   id: string; name: string; project_code: string | null;
@@ -153,7 +154,7 @@ export function ProjectCard({
         display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 12,
       }}
     >
-      <a href={url} style={{ textDecoration: "none", display: "block" }}>
+      <Link href={url} style={{ textDecoration: "none", display: "block" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12, gap: 8 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
             <span style={{ fontSize: 10, fontWeight: 800, background: `${color}${dark ? "25" : "18"}`, color, padding: "2px 8px", borderRadius: 4, textTransform: "uppercase" }}>
@@ -183,7 +184,7 @@ export function ProjectCard({
         <p style={{ fontSize: 12, color: muted, lineHeight: 1.5, marginBottom: 0 }}>
           {truncate(project.summary ?? project.business_area ?? "Sin descripción aún.", 160)}
         </p>
-      </a>
+      </Link>
 
       {canCreate && (
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -243,13 +244,13 @@ export function ProjectCard({
       {isDelivery && followings.length > 0 && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {followings.map((f) => (
-            <a
+            <Link
               key={f.id}
               href={projectUrl(f)}
               style={{ fontSize: 11, fontWeight: 700, color: "#8B5CF6", background: dark ? "rgba(139,92,246,0.12)" : "#F5F3FF", padding: "3px 8px", borderRadius: 999, textDecoration: "none" }}
             >
               📡 {f.name}
-            </a>
+            </Link>
           ))}
         </div>
       )}
@@ -307,22 +308,22 @@ export function ProjectCard({
       {isDiscovery && (pocs.length > 0 || deliveries.length > 0) && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {pocs.map((p) => (
-            <a
+            <Link
               key={p.id}
               href={projectUrl(p)}
               style={{ fontSize: 11, fontWeight: 700, color: "#F77F00", background: dark ? "rgba(247,127,0,0.12)" : "#FFF7ED", padding: "3px 8px", borderRadius: 999, textDecoration: "none" }}
             >
               🧪 {p.name}
-            </a>
+            </Link>
           ))}
           {deliveries.map((p) => (
-            <a
+            <Link
               key={p.id}
               href={projectUrl(p)}
               style={{ fontSize: 11, fontWeight: 700, color: "#0EA5E9", background: dark ? "rgba(14,165,233,0.12)" : "#EFF8FF", padding: "3px 8px", borderRadius: 999, textDecoration: "none" }}
             >
               🚚 {p.name}
-            </a>
+            </Link>
           ))}
         </div>
       )}

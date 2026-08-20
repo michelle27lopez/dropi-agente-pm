@@ -95,10 +95,12 @@ export default function HubHeader({
   const isMe = isMiDiaOwner(profile?.email);
   const initial = (profile?.nombre?.trim()?.[0] || profile?.email?.[0] || "?").toUpperCase();
 
-  // El navbar superior se reemplaza por el sidebar (GlobalNav) solo para
-  // Michelle — ver [[project_darwin_pd_dashboard]]. El resto del equipo
-  // sigue viendo este header normalmente.
-  if (loaded && isMe) return null;
+  // El navbar superior se reemplazó por el sidebar global (GlobalNav +
+  // GlobalTopBar), ahora para cualquier usuario autenticado (2026-08-17,
+  // globalización aprobada por Jaime) — ver [[project_darwin_pd_dashboard]].
+  // Se deja de renderizar en cuanto se sabe si hay sesión, para no duplicar
+  // header con el nuevo shell.
+  if (loaded) return null;
 
   return (
     <header style={{

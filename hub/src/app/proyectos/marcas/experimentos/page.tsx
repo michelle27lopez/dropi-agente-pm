@@ -126,7 +126,7 @@ const experimentos: Experimento[] = [
 export default function ExperimentosMarcasPage() {
   return (
     <main style={{ minHeight: "100vh", padding: "0 0 60px" }}>
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 24px 0" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 32px 0" }}>
         <a href="/proyectos/marcas" style={{ fontSize: 13, color: "var(--muted)", textDecoration: "none" }}>
           ← Marcas
         </a>
@@ -155,7 +155,7 @@ export default function ExperimentosMarcasPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 24px 0" }}>
+      <div style={{ maxWidth: 820, margin: "0 auto", padding: "24px 32px 0" }}>
         <div style={{ display: "grid", gap: 16 }}>
           {experimentos.map((e) => {
             const est = ESTADO_STYLE[e.estado];

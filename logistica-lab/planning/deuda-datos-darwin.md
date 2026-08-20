@@ -42,7 +42,7 @@ Además sellers usa claves de Jira (`PROD-*`, `PRM-*`) como `project_code` **a p
 
 ---
 
-## 🔴 2. Esas mismas cinco están tipadas `Delivery Proyecto` y el tablero dice otra cosa
+## ✅ 2. Esas mismas cinco están tipadas `Delivery Proyecto` y el tablero dice otra cosa — RESUELTO 19-ago
 
 En Supabase las cinco tienen `type = 'Delivery Proyecto'`. En el tablero, ninguna está en
 delivery: `LOG-002` y `LOG-005` están en Discovery, `LOG-004` y `LOG-007` en Definición,
@@ -52,8 +52,28 @@ fase es Definición.
 Las dos fuentes dicen cosas distintas sobre los mismos cinco proyectos. Desde que logística
 usa la estructura común, salen bajo "Delivery Proyectos" — no se tapa, es el hallazgo.
 
-**Decisión pendiente (Juan):** o se corrige el `type` en la base, o se corrige la fase en el
-tablero. Lo que no puede quedar es una versión distinta en cada lado.
+**Decisión de Juan (19-ago): SON Delivery.** El Delivery Backlog del direccionamiento de
+María (Confluence PD/1485471746) lista a las cinco como aprobadas y en ejecución, así que el
+`type` de Supabase estaba bien y el tablero era el que iba atrasado.
+
+Pero al ir a corregir apareció que **Supabase también se contradecía a sí misma**: las cinco
+tenían `estado_interno = 'en DEV'` mientras su `handoff_status` decía `Experimentación` en
+cuatro de ellas. No se puede estar en desarrollo sin que el handoff haya ocurrido — ese
+`en DEV` era un valor puesto en bloque. Copiarlo al tablero habría propagado el error.
+
+Lo que las tres fuentes sí sostienen: **son Delivery, y el handoff todavía no ocurrió.** El
+tablero ya lo decía bien en `handoff: "Pendiente"`, que coincide con `handoff_status`.
+
+Corregido en los dos lados (migración `050` + `_lib/data.ts`):
+
+| | Antes | Ahora |
+|---|---|---|
+| Supabase · las 4 en Experimentación | `en DEV` | `En definición` |
+| Supabase · PRM-1513 (Listo para handoff) | `en DEV` | `Pendiente Handoff` |
+| Tablero · LOG-002, LOG-005, LOG-008 | `fase: Discovery` | `fase: Definición` |
+| Tablero · LOG-004, LOG-007 | `fase: Definición` | sin cambio — ya estaba bien |
+
+El `type` no se tocó: era el dato correcto desde el principio.
 
 ### Lo que sí se corrigió el 5-ago (migración `047`)
 

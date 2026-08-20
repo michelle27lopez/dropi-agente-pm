@@ -115,12 +115,36 @@ export type EligibleEntry = {
   view_count?: number;
   first_viewed_at?: string | null;
   last_viewed_at?: string | null;
+  /** Clics registrados en el link del Meet de la campaña (señal automática,
+   * no confirma asistencia real — ver meet_attended). */
+  meet_click_count?: number;
+  meet_first_clicked_at?: string | null;
+  meet_last_clicked_at?: string | null;
+  /** Confirmación manual del comercial de que el proveedor sí asistió al Meet. */
+  meet_attended?: boolean;
+  meet_attended_marked_at?: string | null;
+  /** Clics en el botón "Agendarme" del mensaje de WhatsApp (vía /c/[token]?meet=1),
+   * separado de meet_click_count porque ese es del botón de adentro del panel —
+   * se quiere saber cuántos vinieron de cada canal. */
+  meet_rsvp_click_count?: number;
+  meet_rsvp_first_clicked_at?: string | null;
+  meet_rsvp_last_clicked_at?: string | null;
+  updated_at: string;
+};
+
+/** Órdenes generadas por producto dentro de una campaña — cargado a mano o por CSV, no hay integración en vivo con órdenes reales de Dropi. */
+export type ProductOrderEntry = {
+  campaign_id: string;
+  product_id: string;
+  product_name?: string;
+  orders_count: number;
+  source: "manual" | "import";
   updated_at: string;
 };
 
 type Store = {
   campaigns: Campaign[]; nodes: CampaignNode[]; sends?: CampaignSend[]; suppliers?: CampaignSupplier[];
-  eligibleProducts?: EligibleEntry[];
+  eligibleProducts?: EligibleEntry[]; productOrders?: ProductOrderEntry[];
 };
 
 async function readStore(): Promise<Store> {
@@ -399,6 +423,22 @@ export async function localApproveEligible(
   return store.eligibleProducts[idx];
 }
 
+// Invalida el link actual de un proveedor y le asigna uno nuevo — para
+// cuando un link se filtró o el proveedor lo perdió. `newToken` lo genera el
+// endpoint (mismo formato en Supabase y local, no cada store por su cuenta).
+export async function localResetEligibleToken(
+  campaignId: string,
+  oldToken: string,
+  newToken: string
+): Promise<EligibleEntry | null> {
+  const store = await readStore();
+  const idx = (store.eligibleProducts ?? []).findIndex((e) => e.campaign_id === campaignId && e.token === oldToken);
+  if (idx < 0 || !store.eligibleProducts) return null;
+  store.eligibleProducts[idx] = { ...store.eligibleProducts[idx], token: newToken, updated_at: new Date().toISOString() };
+  await writeStore(store);
+  return store.eligibleProducts[idx];
+}
+
 // Aprobación masiva: todos los que postularon y aún no están aprobados.
 // Devuelve cuántos se aprobaron en esta pasada.
 export async function localApproveAllEligible(campaignId: string): Promise<number> {
@@ -450,6 +490,110 @@ export async function localSetChecklistItem(
   };
   await writeStore(store);
   return store.eligibleProducts[idx];
+}
+
+// Registra un clic en el link del Meet — señal automática, no confirma
+// asistencia real (eso lo marca el comercial a mano con localSetMeetAttendance).
+// Público a propósito: se llama desde la página del proveedor, sin login.
+export async function localRegisterMeetClick(campaignId: string, token: string): Promise<EligibleEntry | null> {
+  const store = await readStore();
+  const idx = (store.eligibleProducts ?? []).findIndex((e) => e.campaign_id === campaignId && e.token === token);
+  if (idx < 0 || !store.eligibleProducts) return null;
+  const now = new Date().toISOString();
+  const prev = store.eligibleProducts[idx];
+  store.eligibleProducts[idx] = {
+    ...prev,
+    meet_click_count: (prev.meet_click_count ?? 0) + 1,
+    meet_first_clicked_at: prev.meet_first_clicked_at ?? now,
+    meet_last_clicked_at: now,
+  };
+  await writeStore(store);
+  return store.eligibleProducts[idx];
+}
+
+// Registra un clic en el botón "Agendarme" del mensaje de WhatsApp — llega
+// vía /c/[token]?meet=1, que redirige directo a Google Calendar sin pasar
+// por el panel. Contador separado de localRegisterMeetClick (ese es del
+// botón de adentro del panel) para poder comparar clics por canal.
+export async function localRegisterMeetRsvpClick(campaignId: string, token: string): Promise<EligibleEntry | null> {
+  const store = await readStore();
+  const idx = (store.eligibleProducts ?? []).findIndex((e) => e.campaign_id === campaignId && e.token === token);
+  if (idx < 0 || !store.eligibleProducts) return null;
+  const now = new Date().toISOString();
+  const prev = store.eligibleProducts[idx];
+  store.eligibleProducts[idx] = {
+    ...prev,
+    meet_rsvp_click_count: (prev.meet_rsvp_click_count ?? 0) + 1,
+    meet_rsvp_first_clicked_at: prev.meet_rsvp_first_clicked_at ?? now,
+    meet_rsvp_last_clicked_at: now,
+  };
+  await writeStore(store);
+  return store.eligibleProducts[idx];
+}
+
+// Confirmación manual del comercial de que el proveedor sí asistió al Meet
+// (detrás de login, ver require-auth en la ruta).
+export async function localSetMeetAttendance(
+  campaignId: string,
+  token: string,
+  attended: boolean
+): Promise<EligibleEntry | null> {
+  const store = await readStore();
+  const idx = (store.eligibleProducts ?? []).findIndex((e) => e.campaign_id === campaignId && e.token === token);
+  if (idx < 0 || !store.eligibleProducts) return null;
+  store.eligibleProducts[idx] = {
+    ...store.eligibleProducts[idx],
+    meet_attended: attended,
+    meet_attended_marked_at: new Date().toISOString(),
+  };
+  await writeStore(store);
+  return store.eligibleProducts[idx];
+}
+
+// ─── Órdenes por producto ────────────────────────────────────────────────
+
+export async function localListProductOrders(campaignId: string): Promise<ProductOrderEntry[]> {
+  const store = await readStore();
+  return (store.productOrders ?? []).filter((p) => p.campaign_id === campaignId);
+}
+
+export async function localUpsertProductOrder(
+  campaignId: string,
+  productId: string,
+  productName: string | undefined,
+  ordersCount: number,
+  source: "manual" | "import"
+): Promise<ProductOrderEntry> {
+  const store = await readStore();
+  store.productOrders = store.productOrders ?? [];
+  const now = new Date().toISOString();
+  const idx = store.productOrders.findIndex((p) => p.campaign_id === campaignId && p.product_id === productId);
+  const entry: ProductOrderEntry = { campaign_id: campaignId, product_id: productId, product_name: productName, orders_count: ordersCount, source, updated_at: now };
+  if (idx >= 0) store.productOrders[idx] = entry;
+  else store.productOrders.push(entry);
+  await writeStore(store);
+  return entry;
+}
+
+// Import de CSV: reemplaza en bloque las órdenes de los productos que vienen
+// en el archivo (no borra los que no aparecen — un CSV parcial no debe hacer
+// que el resto vuelva a cero).
+export async function localImportProductOrders(
+  campaignId: string,
+  rows: { productId: string; productName?: string; ordersCount: number }[]
+): Promise<ProductOrderEntry[]> {
+  const store = await readStore();
+  store.productOrders = store.productOrders ?? [];
+  const now = new Date().toISOString();
+  for (const row of rows) {
+    if (!row.productId?.trim()) continue;
+    const idx = store.productOrders.findIndex((p) => p.campaign_id === campaignId && p.product_id === row.productId);
+    const entry: ProductOrderEntry = { campaign_id: campaignId, product_id: row.productId, product_name: row.productName, orders_count: row.ordersCount, source: "import", updated_at: now };
+    if (idx >= 0) store.productOrders[idx] = entry;
+    else store.productOrders.push(entry);
+  }
+  await writeStore(store);
+  return store.productOrders.filter((p) => p.campaign_id === campaignId);
 }
 
 // Guarda el feedback de cierre ("ayúdanos a mejorar") — una sola vez por

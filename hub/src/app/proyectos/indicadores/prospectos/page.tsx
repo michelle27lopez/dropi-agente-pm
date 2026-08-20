@@ -670,7 +670,7 @@ export default function ProspectosAscensoPage() {
       <Sidebar seccion={seccion} onSeccion={setSeccion} listosVerificado={listosVerificado} listosPremium={listosPremium} collapsed={collapsed} onToggle={() => setCollapsed(c => !c)} />
 
       <main style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px 32px 60px", display: "flex", flexDirection: "column", gap: 20 }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "32px", display: "flex", flexDirection: "column", gap: 20 }}>
 
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
             <div>

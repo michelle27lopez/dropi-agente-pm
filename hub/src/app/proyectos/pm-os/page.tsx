@@ -110,7 +110,7 @@ export default async function PMOSPage() {
         </a>
       </header>
 
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "48px 24px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "32px" }}>
         {projects.length === 0 ? (
           <div
             style={{

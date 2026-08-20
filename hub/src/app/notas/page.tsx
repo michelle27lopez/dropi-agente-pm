@@ -185,7 +185,7 @@ export default function NotasPage() {
       <header style={{
         background: "#fff",
         borderBottom: "1px solid var(--border)",
-        padding: "16px 24px",
+        padding: "16px 32px",
         display: "flex", alignItems: "center", gap: 12,
       }}>
         <a href="/" style={{ fontSize: 12, color: "var(--muted)", textDecoration: "none" }}>← Hub</a>
