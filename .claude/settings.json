@@ -97,7 +97,10 @@
       "Bash(python3 fieles_julio.py)",
       "Bash(python3 cuidar_rescatar.py)",
       "Bash(python3 cuidar_rescatar_64_62.py)",
-      "Bash(python3 fieles_todo_el_anio.py)"
+      "Bash(python3 fieles_todo_el_anio.py)",
+      "Bash(grep -n \"Clasificación de madurez\\\\|promedio de \\\\`ordenes_mes_propias\\\\`\\\\|Regla fija.*madurez\\\\|nivel de madurez\" \"/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/CLAUDE.md\")",
+      "Bash(python3 -c \"import openpyxl; print\\('ok'\\)\")",
+      "Bash(open \"/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/agente-delivery/Documentos/informe-final-ruta-600k-13ago2026.html\")"
     ],
     "additionalDirectories": [
       "/Users/user/Documents/Proyecto_Brands_1/dropi-agente-pm/hub/src/app/proyectos/marcas"
