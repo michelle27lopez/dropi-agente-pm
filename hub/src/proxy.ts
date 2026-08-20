@@ -100,7 +100,11 @@ export async function proxy(request: NextRequest) {
 
   // Usuarios con role "contributor" solo pueden ver /iniciativas.
   // Cualquier otra ruta del Hub los redirige ahí.
-  const role = user?.user_metadata?.role;
+  // Se lee de app_metadata (solo escribible con service-role), no de
+  // user_metadata — ese lo puede reescribir el propio usuario desde el
+  // navegador con supabase.auth.updateUser(). Ver AGP-17 y
+  // scripts/migrate-role-to-app-metadata.js.
+  const role = user?.app_metadata?.role;
   const isIniciativasPath =
     pathname.startsWith("/iniciativas") || pathname.startsWith("/api/iniciativas");
 
