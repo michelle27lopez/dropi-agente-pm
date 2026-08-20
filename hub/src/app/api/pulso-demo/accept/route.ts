@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { escapeHtml } from "@/lib/escape-html";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
+
+const RATE_LIMIT = 10;
+const RATE_WINDOW_MS = 60_000;
 
 const EVOLUTION_URL = process.env.EVOLUTION_API_URL ?? "";
 const EVOLUTION_KEY = process.env.EVOLUTION_API_KEY ?? "";
@@ -59,6 +64,7 @@ async function notifySuppliers(dropshipperName: string, totalAccepted: number, t
             secure: false,
             auth: { user: smtpUser, pass: smtpPass },
           });
+          const safeDropshipperName = escapeHtml(dropshipperName);
           promises.push(
             transporter.sendMail({
               from: `Dropi Pulso <${smtpUser}>`,
@@ -75,7 +81,7 @@ async function notifySuppliers(dropshipperName: string, totalAccepted: number, t
                   </div>
                   <div style="padding: 28px 24px;">
                     <p style="font-size: 16px; font-weight: 800; color: #111; margin-bottom: 8px;">
-                      ${dropshipperName} acaba de confirmar
+                      ${safeDropshipperName} acaba de confirmar
                     </p>
                     <p style="font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 24px;">
                       Ya hay <strong>${totalAccepted} dropshipper${totalAccepted !== 1 ? "s" : ""}</strong> que confirmaron interés en tu campaña.
@@ -116,6 +122,11 @@ async function notifySuppliers(dropshipperName: string, totalAccepted: number, t
 }
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  if (isRateLimited(`pulso-demo-accept:${ip}`, RATE_LIMIT, RATE_WINDOW_MS)) {
+    return NextResponse.json({ error: "Demasiadas solicitudes, intenta de nuevo en un minuto" }, { status: 429 });
+  }
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
   const { token, committed_units } = await req.json();
   if (!token) return NextResponse.json({ error: "token required" }, { status: 400 });

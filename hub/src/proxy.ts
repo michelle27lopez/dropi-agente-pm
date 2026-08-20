@@ -67,7 +67,9 @@ export async function proxy(request: NextRequest) {
     ((pathname.startsWith("/pulso-demo") || pathname.startsWith("/api/pulso-demo")) &&
       !pathname.startsWith("/pulso-demo/admin") &&
       !pathname.startsWith("/api/pulso-demo/trigger") &&
-      !pathname.startsWith("/api/pulso-demo/reset")) ||
+      !pathname.startsWith("/api/pulso-demo/reset") &&
+      !pathname.startsWith("/api/pulso-demo/close") &&
+      !pathname.startsWith("/api/pulso-demo/supplier-accept")) ||
     pathname.startsWith("/proyectos/gali-demo") ||
     pathname.startsWith("/api/gali") ||
     pathname.startsWith("/proyectos/indicadores/ascenso") ||

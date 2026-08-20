@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
 
 const EVOLUTION_URL = process.env.EVOLUTION_API_URL ?? "";
 const EVOLUTION_KEY = process.env.EVOLUTION_API_KEY ?? "";
@@ -48,6 +49,9 @@ async function notifyDropshippers() {
 }
 
 export async function POST() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
 
   const sessionRes = await supabase
