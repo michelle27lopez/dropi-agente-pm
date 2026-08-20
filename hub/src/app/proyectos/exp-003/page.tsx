@@ -40,8 +40,8 @@ export default function Exp003Page() {
           {/* Detalle del Proyecto → bitácora, en pestaña nueva */}
           <div style={{ marginTop: 20, paddingTop: 16, borderTop: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
             <div>
-              <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📄 Detalle del Proyecto</strong>
-              <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Información completa de este proyecto</span>
+              <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>Bitácora del piloto</strong>
+              <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Colombia vs Paraguay · 4 semanas + línea base</span>
             </div>
             <a
               href="/proyectos/exp-003/bitacora"
@@ -50,10 +50,10 @@ export default function Exp003Page() {
               style={{
                 fontSize: 12.5, fontWeight: 750, color: "#fff", background: "var(--dropi)",
                 border: "none", borderRadius: 8, padding: "8px 16px", cursor: "pointer", textDecoration: "none",
-                display: "inline-flex", alignItems: "center", gap: 6,
+                display: "inline-flex", alignItems: "center", gap: 6, minHeight: 44,
               }}
             >
-              Ver Detalle del Proyecto <span style={{ fontSize: 11 }}>➔</span>
+              Abrir bitácora
             </a>
           </div>
         </div>
