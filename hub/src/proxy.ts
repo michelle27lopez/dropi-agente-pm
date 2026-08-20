@@ -2,68 +2,17 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export async function proxy(request: NextRequest) {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const pathname = request.nextUrl.pathname;
-  const isSensitiveLogisticsPath =
-    pathname.startsWith("/logistica/") ||
-    pathname.startsWith("/proyectos/logistica") ||
-    pathname.startsWith("/api/logistica") ||
-    pathname.startsWith("/proyectos/oportunidades-paises");
-
-  if (!supabaseUrl || !supabaseAnonKey) {
-    // Los artefactos bajo public/logistica se sirven como rutas directas. Si la
-    // autenticación está mal configurada, continuar dejaría documentación y
-    // datos operativos expuestos. Este cierre es deliberadamente acotado a
-    // Logistic Success para no cambiar el comportamiento del resto del Hub.
-    if (isSensitiveLogisticsPath) {
-      return new NextResponse("Autenticación no disponible.", {
-        status: 503,
-        headers: {
-          "Cache-Control": "no-store",
-          "Content-Type": "text/plain; charset=utf-8",
-        },
-      });
-    }
-    return NextResponse.next({ request });
-  }
-
-  let supabaseResponse = NextResponse.next({ request });
-
-  const supabase = createServerClient(
-    supabaseUrl,
-    supabaseAnonKey,
-    {
-      cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value }) =>
-            request.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
-      },
-    }
-  );
-
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const isPublicPath =
+function getIsPublicPath(pathname: string): boolean {
+  return (
     pathname.startsWith("/login") ||
     pathname.startsWith("/auth/callback") ||
     // Pulso Demo — piloto externo (los asistentes llegan por WhatsApp/QR,
     // sin cuenta en el hub). Las páginas y rutas de lectura/registro/
     // aceptación quedan públicas; el panel de control (/pulso-demo/admin)
     // y las rutas que disparan envíos reales o borran el estado del piloto
-    // (trigger, reset) quedan afuera — esas exigen login vía requireUser()
-    // en sus handlers. Si agregas otra ruta administrativa bajo pulso-demo,
-    // exclúyela aquí también.
+    // (trigger, reset, close, supplier-accept) quedan afuera — esas exigen
+    // login vía requireUser() en sus handlers. Si agregas otra ruta
+    // administrativa bajo pulso-demo, exclúyela aquí también.
     ((pathname.startsWith("/pulso-demo") || pathname.startsWith("/api/pulso-demo")) &&
       !pathname.startsWith("/pulso-demo/admin") &&
       !pathname.startsWith("/api/pulso-demo/trigger") &&
@@ -92,7 +41,56 @@ export async function proxy(request: NextRequest) {
       !pathname.endsWith("/elegibles/export-links")) ||
     // Link corto /c/[token] que redirige a la ruta de arriba — mismo token
     // opaco como control de acceso, ver hub/src/app/c/[token]/page.tsx.
-    pathname.startsWith("/c/");
+    pathname.startsWith("/c/")
+  );
+}
+
+export async function proxy(request: NextRequest) {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const pathname = request.nextUrl.pathname;
+
+  const isPublicPath = getIsPublicPath(pathname);
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // Sin cliente de auth no hay forma de saber quién llama. Todo lo que no
+    // sea explícitamente público debe fallar cerrado (503), no abierto — una
+    // variable de entorno mal configurada no puede convertirse en "todo el
+    // Hub es público". Ver AGP-19.
+    if (isPublicPath) return NextResponse.next({ request });
+    return new NextResponse("Autenticación no disponible.", {
+      status: 503,
+      headers: {
+        "Cache-Control": "no-store",
+        "Content-Type": "text/plain; charset=utf-8",
+      },
+    });
+  }
+
+  let supabaseResponse = NextResponse.next({ request });
+
+  const supabase = createServerClient(
+    supabaseUrl,
+    supabaseAnonKey,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) =>
+            request.cookies.set(name, value)
+          );
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) =>
+            supabaseResponse.cookies.set(name, value, options)
+          );
+        },
+      },
+    }
+  );
+
+  const { data: { user } } = await supabase.auth.getUser();
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();
