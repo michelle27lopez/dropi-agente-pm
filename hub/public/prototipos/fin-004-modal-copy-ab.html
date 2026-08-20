@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>FIN-004 — A/B Copy Modal USDT</title>
+<title>FIN-004 — A/B Segmentación Modal USDT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -141,12 +141,13 @@
 
   <div class="topbar">
     <div>
-      <h1>FIN-004 — A/B Testing: Copy del modal de retiros USDT</h1>
-      <div class="sub">Célula Fintech · Continuación de FIN-003 · Variable en prueba: <b>copy</b> (filtro de antigüedad se ajusta en UserPilot, banner descartado)</div>
+      <h1>FIN-004 — A/B Testing: Segmentación del modal de retiros USDT</h1>
+      <div class="sub">Célula Fintech · Continuación de FIN-003 · Variable en prueba ahora: <b>segmentación</b> (madurez de usuario vs. antigüedad de cuenta) · mismo copy nuevo en ambas versiones</div>
     </div>
-    <div style="display:flex; gap:8px;">
+    <div style="display:flex; gap:8px; flex-wrap:wrap;">
       <span class="badge badge-fin003">↳ Basado en FIN-003</span>
-      <span class="badge badge-poc">🧪 Prototipo — En definición</span>
+      <span class="badge" style="color:#166534; background:#f0fdf4;">🟡 En preparación</span>
+      <span class="badge badge-poc">🧪 Definido 20 ago 2026</span>
     </div>
   </div>
 
@@ -155,11 +156,15 @@
       <div class="toggle-row">
         <button class="toggle-btn active" data-variant="control" onclick="showVariant('control', this)">
           <div class="label">Control</div>
-          <div class="title">Copy actual (piloto 27 jul–13 ago)</div>
+          <div class="title">Copy técnico original (piloto 27 jul–20 ago)</div>
+        </button>
+        <button class="toggle-btn" data-variant="a" onclick="showVariant('a', this)">
+          <div class="label">Versión A</div>
+          <div class="title">Madurez de usuario (+50 órdenes)</div>
         </button>
         <button class="toggle-btn" data-variant="b" onclick="showVariant('b', this)">
-          <div class="label">Variante B</div>
-          <div class="title">Copy simplificado — dolor del módulo</div>
+          <div class="label">Versión B</div>
+          <div class="title">Antigüedad de cuenta (&gt;45 días)</div>
         </button>
       </div>
 
@@ -167,7 +172,7 @@
         <div class="variant-tag" id="variantTag">CONTROL</div>
         <div class="modal">
           <div class="modal-close">✕</div>
-          <img class="modal-banner" src="https://www.figma.com/api/mcp/asset/8ecbc0c0-f1e7-48a7-90fe-bd801952c385.png" alt="Banner USDT" />
+          <img class="modal-banner" id="mBanner" src="https://www.figma.com/api/mcp/asset/8ecbc0c0-f1e7-48a7-90fe-bd801952c385.png" alt="Banner USDT" />
           <div class="modal-body">
             <div class="modal-title" id="mTitle">¿Aún sin cuenta en USDT?</div>
             <div class="modal-text" id="mText">Agrega tu wallet de cripto como método de retiro y empieza a retirar en USDT cuando quieras.</div>
@@ -189,42 +194,88 @@
 
     <div class="panel-col">
       <div class="card">
-        <h3>🎯 Hipótesis de la variante</h3>
-        <span class="hipotesis-tag">HIPÓTESIS a validar</span>
-        <p id="hipotesisText">Creemos que el copy actual no baja la conversión por sí solo — el modal genera awareness (6,55% clic) pero rompe entre clic y retiro real (0,09% neto). Esta variante no cambia esa hipótesis raíz; sirve para descartar que el mensaje sea la barrera antes de investigar fricción de configuración de cuenta.</p>
+        <h3>📈 Contexto — mejora entre cortes de following</h3>
+        <table class="diff-table">
+          <thead><tr><th>Corte</th><th>Expuestos</th><th>Clic CTA</th><th>Retirantes nuevos</th><th>Monto atribuible</th></tr></thead>
+          <tbody>
+            <tr><td>13 ago</td><td>8.060</td><td>528 (6,55%)</td><td>7</td><td>13.632 USDT</td></tr>
+            <tr><td>20 ago</td><td>9.808</td><td>752 (7,67%)</td><td>21</td><td>39.384 USDT</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:8px;">Esta mejora confirmó que el tiempo de following del piloto original era insuficiente. En paralelo, Diana Aldana (Célula Dropi) introdujo la hipótesis de segmentación que se prueba en este A/B.</p>
       </div>
 
       <div class="card">
-        <h3>📋 Qué cambia respecto al control</h3>
+        <h3>🎯 Hipótesis de segmentación</h3>
+        <span class="hipotesis-tag">HIPÓTESIS a validar</span>
+        <p>Un usuario con alto volumen de órdenes gestionadas (independiente de cuánto tiempo lleva su cuenta creada) tiene mayor probabilidad de entender y adoptar el retiro en USDT, porque ya tiene experiencia operando dentro de Dropi — la madurez de uso predice mejor la conversión que la antigüedad de la cuenta.</p>
+        <p id="audienceNote" style="margin-top:8px; font-weight:700; color:var(--gray-700);"></p>
+      </div>
+
+      <div class="card">
+        <h3>📋 Diseño del experimento</h3>
+        <p>Ambas versiones comparten el <b>mismo copy nuevo</b> (ver stage) para aislar el efecto de la segmentación y no confundirlo con el efecto del mensaje.</p>
         <table class="diff-table" id="diffTable">
-          <thead><tr><th>Elemento</th><th>Control</th><th>Variante B</th></tr></thead>
+          <thead><tr><th>Elemento</th><th>Versión A — Madurez</th><th>Versión B — Antigüedad</th></tr></thead>
           <tbody>
-            <tr><td><b>Título</b></td><td>Pregunta genérica ("¿Aún sin cuenta?")</td><td>Apunta al dolor documentado del módulo Retiros de Saldo (lentitud/visibilidad)</td></tr>
-            <tr><td><b>Beneficios</b></td><td>4 bullets genéricos</td><td>2 bullets, enfocados en velocidad de retiro</td></tr>
-            <tr><td><b>CTA</b></td><td>"Agregar cuenta USDT"</td><td>Sin cambio — ya es claro y no fue la barrera identificada</td></tr>
-            <tr><td><b>Disclaimers legales</b></td><td>Igual</td><td>Sin cambio — pendiente confirmar con legal si esta pantalla (previa a "agregar cuenta") requiere las advertencias de fluctuación/garantía estatal/tributarias, o si esas van en el siguiente paso</td></tr>
+            <tr><td><b>Criterio</b></td><td>+50 órdenes creadas (histórico total, cualquier estado, manuales + integración, sin filtro por proveedor)</td><td>Cuenta creada hace &gt;45 días (ajustado desde 90 del piloto original)</td></tr>
+            <tr><td><b>Mecanismo</b></td><td>Identificación por correo — UserPilot no tiene el dato nativo; se carga manualmente desde el listado de Data</td><td>Nativo de UserPilot (fecha de creación de cuenta)</td></tr>
+            <tr><td><b>Roles</b></td><td>Dropshipper y Supplier</td><td>Dropshipper y Supplier</td></tr>
+            <tr><td><b>Países</b></td><td>Colombia, Ecuador, México, Chile, Perú</td><td>Colombia, Ecuador, México, Chile, Perú</td></tr>
+            <tr><td><b>Exclusión cruzada</b></td><td colspan="2">Configurada para que ningún usuario vea ambas variantes</td></tr>
           </tbody>
         </table>
       </div>
 
       <div class="card">
-        <h3>📊 Baseline a superar (FIN-003, Colombia, 18 días)</h3>
-        <div class="metric-pill"><span>Clic en CTA</span><b>6,55% (528/8.060)</b></div>
-        <div class="metric-pill"><span>Retiro nuevo atribuible (30d)</span><b>0,09% (7/8.060)</b></div>
-        <div class="metric-pill"><span>Tasa de dismissed</span><b>91,8%</b></div>
+        <h3>🗂️ Datos solicitados a Data (Miguel Ángel Gutiérrez)</h3>
+        <p><b>Columnas:</b> nombre completo, correo, teléfono, tiempo desde creación de cuenta, país, rol, número de órdenes.</p>
+        <p style="margin-top:6px;"><b>Criterio de número de órdenes:</b></p>
+        <ul>
+          <li>Todos los estados (creadas, entregadas, canceladas, etc.)</li>
+          <li>Manuales e integración, ambas cuentan</li>
+          <li>Histórico total sin límite de tiempo</li>
+          <li>Sin filtrar por proveedor específico</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>📊 Baseline a superar (FIN-003, Colombia, corte 20 ago)</h3>
+        <div class="metric-pill"><span>Clic en CTA</span><b>7,67% (752/9.808)</b></div>
+        <div class="metric-pill"><span>Retirantes nuevos (30d)</span><b>2,12% (21/752)</b></div>
+        <div class="metric-pill"><span>Monto atribuible</span><b>39.384 USDT</b></div>
         <div class="metric-pill"><span>Meta interna (no alcanzada)</span><b>25%</b></div>
       </div>
 
+      <div class="card">
+        <h3>✅ Criterios de aceptación</h3>
+        <ul>
+          <li>Recibir de Miguel Ángel Gutiérrez el listado de usuarios con +50 órdenes creadas, por país y rol</li>
+          <li>Duplicar el flujo actual en UserPilot y configurar Versión A y B con Laura Torres</li>
+          <li>Confirmar la exclusión cruzada entre ambas versiones</li>
+          <li>Validar copy y pieza visual con Laura Contreras antes de publicar</li>
+          <li>Definir duración del test (sugerido: 2 semanas)</li>
+        </ul>
+      </div>
+
       <div class="note">
-        <b>Nota de alcance:</b> este prototipo cubre solo la variable de copy. El filtro de antigüedad (ahora &gt;30 días) se configura directo en UserPilot y queda documentado en FIN-004 sin representación visual aquí. El banner de refuerzo no se prototipa — sigue descartado por límite técnico de UserPilot.
+        <b>Manejo en producción:</b> se decidió no pausar el experimento vigente (copy técnico, filtro &gt;90 días) mientras se preparan las versiones A y B, para no perder días de recolección de datos. Se pausará el mismo día en que ambas nuevas versiones salgan a producción.
+      </div>
+
+      <div class="note" style="background:#fffbeb; border-color:#fde68a; color:#92400e;">
+        <b>Estado:</b> 🟡 En preparación — pendiente de datos de Miguel Ángel Gutiérrez y montaje en UserPilot con Laura Torres.
       </div>
     </div>
   </main>
 
 <script>
+  const HERO_NEW = "/prototipos/assets/fin-004-hero-usdt.png";
+  const BANNER_CONTROL = "https://www.figma.com/api/mcp/asset/8ecbc0c0-f1e7-48a7-90fe-bd801952c385.png";
+
   const COPIES = {
     control: {
       tag: "CONTROL",
+      banner: BANNER_CONTROL,
       title: "¿Aún sin cuenta en USDT?",
       text: "Agrega tu wallet de cripto como método de retiro y empieza a retirar en USDT cuando quieras.",
       benefits: [
@@ -234,18 +285,25 @@
         "Disponible sin importar dónde operes"
       ],
       cta: "Agregar cuenta USDT",
-      hipotesis: "Creemos que el copy actual no baja la conversión por sí solo — el modal genera awareness (6,55% clic) pero rompe entre clic y retiro real (0,09% neto). Esta variante no cambia esa hipótesis raíz; sirve para descartar que el mensaje sea la barrera antes de investigar fricción de configuración de cuenta."
+      audience: "Copy técnico original — piloto 27 jul–20 ago, filtro de antigüedad >90 días."
+    },
+    a: {
+      tag: "VERSIÓN A — MADUREZ",
+      banner: HERO_NEW,
+      title: "Retira tu dinero en USDT",
+      text: "Agrega tu wallet una vez y recibe tus pagos en minutos, sin bancos, sin intermediarios, sin complicaciones.",
+      benefits: [],
+      cta: "Agregar cuenta USDT",
+      audience: "Audiencia: usuarios con +50 órdenes creadas (histórico total), sin importar antigüedad de la cuenta."
     },
     b: {
-      tag: "VARIANTE B",
-      title: "Tus retiros, sin la espera de siempre",
-      text: "Configura tu cuenta USDT en minutos y recibe tus pagos sin depender del proceso bancario tradicional.",
-      benefits: [
-        "Retiros más rápidos, sin intermediarios bancarios",
-        "Ideal para pagarle a tus proveedores al instante"
-      ],
+      tag: "VERSIÓN B — ANTIGÜEDAD",
+      banner: HERO_NEW,
+      title: "Retira tu dinero en USDT",
+      text: "Agrega tu wallet una vez y recibe tus pagos en minutos, sin bancos, sin intermediarios, sin complicaciones.",
+      benefits: [],
       cta: "Agregar cuenta USDT",
-      hipotesis: "Creemos que si el copy nombra el dolor real del módulo Retiros de Saldo (lentitud, rechazos, falta de visibilidad — reportado en discovery de FIN-003) en vez de una pregunta genérica, aumentará la tasa de clic sobre el 6,55% actual y reducirá el 91,8% de dismissed, porque el usuario reconocerá una solución a un problema que ya vive, no una oferta abstracta. Si la conversión no se mueve, la barrera no es el mensaje — hay que investigar la fricción de configurar la cuenta."
+      audience: "Audiencia: usuarios con cuenta creada hace más de 45 días, sin importar número de órdenes."
     }
   };
 
@@ -254,13 +312,17 @@
     btn.classList.add('active');
     const c = COPIES[key];
     document.getElementById('variantTag').textContent = c.tag;
+    document.getElementById('mBanner').src = c.banner;
     document.getElementById('mTitle').textContent = c.title;
     document.getElementById('mText').textContent = c.text;
     document.getElementById('mCta').textContent = c.cta;
-    document.getElementById('hipotesisText').textContent = c.hipotesis;
+    document.getElementById('audienceNote').textContent = c.audience;
     const benefitsEl = document.getElementById('mBenefits');
+    benefitsEl.style.display = c.benefits.length ? 'flex' : 'none';
     benefitsEl.innerHTML = c.benefits.map(b => `<div class="benefit"><span class="check">✓</span><span>${b}</span></div>`).join('');
   }
+
+  showVariant('control', document.querySelector('.toggle-btn[data-variant="control"]'));
 </script>
 
 </body>
