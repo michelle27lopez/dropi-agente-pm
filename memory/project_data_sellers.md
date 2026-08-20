@@ -228,5 +228,26 @@ Toda la planeación de la célula se estructura para que cada iniciativa respond
 *   **Gobernanza Jira (Laura Contreras):**
     *   Se aprueba taxonomía oficial con etiqueta `[DISCOVERY]` para experimentos en etapa de hipótesis y clasificación de tareas operativas bajo *Operación Producto*.
 
+---
 
+## 9. Cellboard Seller Success — Acuerdos (Agosto 19, 2026)
 
+*   **Notificaciones Proactivas WhatsApp/Email — Diseño Experimental:**
+    *   **Grupo de tratamiento:** Dropshippers huérfanos (sin comunidad) → reciben notificaciones proactivas.
+    *   **Grupo de control:** Dropshippers de comunidad → NO reciben notificaciones.
+    *   **Hipótesis:** Las notificaciones reducen la brecha de activación entre huérfanos y comunidad.
+    *   **País piloto propuesto:** Argentina (~260K–270K registros en ~4 meses).
+    *   **Segmentación:** Por volumen de ventas y madurez — no notificar 1-a-1 a sellers de alto volumen (cientos de órdenes/día).
+*   **Integración CRM de Growth (hallazgo clave de Enrique):**
+    *   El equipo de Growth **ya tiene conexión funcional** con data de órdenes por dropshipper vía Cronos — sin depender de desarrollo.
+    *   El CRM ya puede enviar WhatsApp y correos con dominios de Dropi.
+    *   Se usará para automatizar flujos de adquisición, onboarding, activación y mantenimiento.
+    *   **Próximo paso:** Reunión semana del 25 agosto con Growth (Enrique, José, Ion) para extender extracción de data a huérfanos (no solo comunidades) y definir protocolo de trabajo.
+*   **Fake Door — Catálogo WhatsApp Business:**
+    *   Se montará un fake door vía User Pilot con botón "Agregar a catálogo de WhatsApp" + lista de espera + 2 preguntas sobre uso de WhatsApp para vender.
+    *   Gobernanza con Chatea Pro: no invadir su territorio (mensajería/cierre de venta). Funcionalidad pensada para negocios que solo usan WhatsApp Business app, no API masiva.
+    *   **Dato pendiente:** Cifra de dropshippers que usan WhatsApp como herramienta principal de venta — nadie la tenía a la mano.
+*   **Solicitar Muestra — Discovery sobre motivaciones:**
+    *   No hay respaldo de que el problema sea "muchos pasos". El motivo real de baja adopción es desconocido.
+    *   Hipótesis de uso: (a) uso personal/compra barata, (b) testeo de transportadoras, (c) verificar calidad/garantía, (d) validar tiempos de entrega.
+    *   Se montará investigación vía User Pilot cruzando: pidieron muestras + no vendieron vs. pidieron + venden mucho vs. pidieron + no vendieron ese producto.
