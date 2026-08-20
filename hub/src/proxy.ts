@@ -73,7 +73,6 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/proyectos/indicadores/ascenso") ||
     pathname.startsWith("/api/proyectos/ascenso-ofertas") ||
     pathname.startsWith("/api/public") ||
-    pathname.startsWith("/docs") ||
     // Webhooks entrantes de sistemas externos (n8n, pipeline de Dagster, …):
     // no llegan con cookie de sesión del Hub, llegan con su propio token/
     // header de auth, que cada ruta valida adentro (ver p.ej.
