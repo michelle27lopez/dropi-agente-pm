@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   Card,
   Pill,
@@ -192,64 +192,127 @@ function TabAlcance() {
 // Métricas de éxito del experimento
 // ---------------------------------------------------------------------------
 
+const KPIS = [
+  { label: "Tasa de cobro exitoso", value: "85%+", pct: 85, color: "#22c77e", ringColor: "#22c77e" },
+  { label: "Tiempo promedio de cobro", value: "<15 días", pct: 62, color: "#e8a020", ringColor: "#e8a020" },
+  { label: "Proveedores en mora >60d", value: "<5%", pct: 95, color: "#22c77e", ringColor: "#22c77e" },
+  { label: "Países cubiertos (6 meses)", value: "100%", pct: 100, color: "#22c77e", ringColor: "#22c77e" },
+];
+
+const CIRC = 2 * Math.PI * 40; // 251.33
+
+const METRICAS_CSS = `
+.mk-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin: 0 0 24px; }
+.mk-tile { background: var(--card, #fff); border: 1px solid var(--border); border-radius: 14px;
+  padding: 24px 16px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; cursor: default; }
+.mk-tile:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.mk-svg { width: 110px; height: 110px; margin: 0 auto 12px; display: block; }
+.mk-track { fill: none; stroke: var(--border); stroke-width: 6; }
+.mk-ring { fill: none; stroke-width: 6; stroke-linecap: round; transform-origin: center;
+  transform: rotate(-90deg); transition: stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1); }
+.mk-num { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.mk-label { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.3; text-transform: uppercase;
+  letter-spacing: 0.03em; font-weight: 600; }
+.mk-phase { background: var(--card, #fff); border: 1px solid var(--border); border-radius: 14px;
+  padding: 20px; transition: transform 0.15s, box-shadow 0.15s; cursor: default; }
+.mk-phase:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+.mk-phase-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.mk-phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.mk-phase-title { font-size: 14px; font-weight: 700; color: var(--fg); }
+.mk-phase li { margin-bottom: 6px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+.mk-phase li strong { color: var(--fg); }
+.mk-north { background: linear-gradient(135deg, rgba(247,127,0,0.08) 0%, rgba(247,127,0,0.02) 100%);
+  border: 2px solid var(--brand, #F77F00); border-radius: 14px; padding: 20px 24px;
+  animation: mk-pulse 3s ease-in-out infinite; }
+@keyframes mk-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(247,127,0,0.15); } 50% { box-shadow: 0 0 0 8px rgba(247,127,0,0); } }
+.mk-north-title { font-size: 14px; font-weight: 700; color: var(--brand, #F77F00); margin-bottom: 6px; }
+.mk-north p { margin: 0; color: var(--muted); line-height: 1.6; font-size: 13px; }
+@media (max-width: 700px) { .mk-grid { grid-template-columns: repeat(2, 1fr); } }
+`;
+
 function TabMetricas() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const timer = setTimeout(() => {
+      el.querySelectorAll<SVGCircleElement>(".mk-ring").forEach((r) => {
+        r.style.strokeDashoffset = r.dataset.target!;
+      });
+    }, 150);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <>
+    <div ref={ref}>
+      <style>{METRICAS_CSS}</style>
+
       <SectionTitle hint="Cómo saber si la herramienta está funcionando y moviendo el P&L">
         Métricas de éxito del experimento
       </SectionTitle>
 
-      {/* KPI tiles */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, margin: "0 0 20px" }}>
-        <Card>
-          <Stat label="Tasa de cobro exitoso" value="85%+" tone="ok" />
-        </Card>
-        <Card>
-          <Stat label="Tiempo promedio de cobro" value="<15 días" tone="warn" />
-        </Card>
-        <Card>
-          <Stat label="Proveedores en mora >60d" value="<5%" tone="ok" />
-        </Card>
-        <Card>
-          <Stat label="Países cubiertos (meta 6 meses)" value="100%" tone="ok" />
-        </Card>
+      {/* Donut KPIs */}
+      <div className="mk-grid">
+        {KPIS.map((k) => {
+          const offset = CIRC * (1 - k.pct / 100);
+          return (
+            <div key={k.label} className="mk-tile">
+              <svg className="mk-svg" viewBox="0 0 100 100">
+                <circle className="mk-track" cx="50" cy="50" r="40" />
+                <circle className="mk-ring" cx="50" cy="50" r="40"
+                  stroke={k.ringColor} strokeDasharray={CIRC}
+                  strokeDashoffset={CIRC} data-target={String(offset)} />
+                <text x="50" y="50" textAnchor="middle" dominantBaseline="central"
+                  className="mk-num" fill={k.color}>{k.value}</text>
+              </svg>
+              <div className="mk-label">{k.label}</div>
+            </div>
+          );
+        })}
       </div>
 
       {/* Métricas por fase */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
-        <Card tone="ok">
-          <strong style={{ display: "block", marginBottom: 10 }}>Métricas de captura (mes 1–2)</strong>
-          <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 6, fontSize: "var(--fs-body, 13px)", color: "var(--muted)", lineHeight: 1.5 }}>
-            <li><strong style={{ color: "var(--fg)" }}>Revenue capturado</strong> vs revenue potencial por servicio</li>
-            <li><strong style={{ color: "var(--fg)" }}>Proveedores con contrato firmado</strong> vs total en bodega</li>
-            <li><strong style={{ color: "var(--fg)" }}>Tiempo de carga a cobro</strong> (desde que logística sube Excel hasta que facturación descuenta)</li>
-            <li><strong style={{ color: "var(--fg)" }}>Errores de importación</strong> (filas rechazadas por formato)</li>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 20 }}>
+        <div className="mk-phase">
+          <div className="mk-phase-head">
+            <span className="mk-phase-dot" style={{ background: "#22c77e" }} />
+            <span className="mk-phase-title">Métricas de captura (mes 1–2)</span>
+          </div>
+          <ul style={{ margin: 0, paddingLeft: 18 }}>
+            <li><strong>Revenue capturado</strong> vs revenue potencial por servicio</li>
+            <li><strong>Proveedores con contrato firmado</strong> vs total en bodega</li>
+            <li><strong>Tiempo de carga a cobro</strong> (desde que logística sube Excel hasta que facturación descuenta)</li>
+            <li><strong>Errores de importación</strong> (filas rechazadas por formato)</li>
           </ul>
-        </Card>
-        <Card tone="warn">
-          <strong style={{ display: "block", marginBottom: 10 }}>Métricas de operación (mes 3+)</strong>
-          <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 6, fontSize: "var(--fs-body, 13px)", color: "var(--muted)", lineHeight: 1.5 }}>
-            <li><strong style={{ color: "var(--fg)" }}>Deuda acumulada</strong> por proveedor y antigüedad</li>
-            <li><strong style={{ color: "var(--fg)" }}>Servicios activados</strong> (de 5 posibles, cuántos se cobran por país)</li>
-            <li><strong style={{ color: "var(--fg)" }}>Reversa rate</strong> (cobros revertidos / cobros totales)</li>
-            <li><strong style={{ color: "var(--fg)" }}>P&L fulfillment delta</strong> (antes vs después de la herramienta)</li>
+        </div>
+        <div className="mk-phase">
+          <div className="mk-phase-head">
+            <span className="mk-phase-dot" style={{ background: "#e8a020" }} />
+            <span className="mk-phase-title">Métricas de operación (mes 3+)</span>
+          </div>
+          <ul style={{ margin: 0, paddingLeft: 18 }}>
+            <li><strong>Deuda acumulada</strong> por proveedor y antigüedad</li>
+            <li><strong>Servicios activados</strong> (de 5 posibles, cuántos se cobran por país)</li>
+            <li><strong>Reversa rate</strong> (cobros revertidos / cobros totales)</li>
+            <li><strong>P&L fulfillment delta</strong> (antes vs después de la herramienta)</li>
           </ul>
-        </Card>
+        </div>
       </div>
 
-      {/* KPI que importa */}
-      <Card tone="risk">
-        <strong style={{ display: "block", marginBottom: 6, color: "var(--fg)" }}>
+      {/* North Star con pulso */}
+      <div className="mk-north">
+        <div className="mk-north-title">
           El KPI que importa: dinero nuevo que entra al P&L de fulfillment
-        </strong>
-        <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.6 }}>
+        </div>
+        <p>
           Todo lo demás (adopción, uptime, velocidad) son proxies. La herramienta existe para facturar
           servicios que hoy se prestan gratis. Si al mes 3 no hay revenue nuevo entrando, algo falló:
           o los proveedores no firmaron, o la data no se carga, o las tarifas son incorrectas. Medir
           desde día 1.
         </p>
-      </Card>
-    </>
+      </div>
+    </div>
   );
 }
 
