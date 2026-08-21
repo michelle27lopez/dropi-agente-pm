@@ -86,7 +86,7 @@ function StatusPill({ tone, children }: { tone: "ok" | "warn" | "bad"; children:
 }
 
 const links = [
-  { label: "Documento de referencia técnico", href: "https://claude.ai/code/artifact/e27b2d8c-be66-4e0a-8783-2417e4268b44", icon: FileText, desc: "11 secciones: kick-off, las 3 superficies, arquitectura de escala, GEO/AEO, insumos de datos, narrativa, 7 historias de usuario con QA." },
+  { label: "Documento completo del proyecto", href: "https://claude.ai/code/artifact/e27b2d8c-be66-4e0a-8783-2417e4268b44", icon: FileText, desc: "11 secciones: kick-off, las 3 superficies, arquitectura de escala, GEO/AEO, insumos de datos, narrativa, 7 historias de usuario con QA." },
 ];
 
 export default function Gro004ProjectPage() {
@@ -204,7 +204,7 @@ export default function Gro004ProjectPage() {
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: 18, fontWeight: 900, color: "#1E1B4B" }}>Contexto ampliado del proyecto</span>
-                  <span style={badgeStyle("#0E7C74", "#E3F3F0")}>Fuente: documento de referencia, agosto 2026</span>
+                  <span style={badgeStyle("#0E7C74", "#E3F3F0")}>Fuente: documento del proyecto, agosto 2026</span>
                 </div>
                 <p style={{ fontSize: 13, color: "#475569", margin: "2px 0 0 0" }}>
                   Todo lo trabajado hasta ahora: problema, las 3 superficies, arquitectura de escala, GEO/AEO, beta técnica con QA, pendientes y equipo.
