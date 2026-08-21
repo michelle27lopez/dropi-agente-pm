@@ -382,7 +382,7 @@ function TabHallazgos() {
               value: (
                 <a
                   className="u-link"
-                  href="https://rpplab.vercel.app/autoconfirmacion"
+                  href="https://dropitesters.co/old/configuraciones/configuracion-de-tienda?wizard=autoconfirmacion"
                   target="_blank"
                   rel="noreferrer"
                 >
