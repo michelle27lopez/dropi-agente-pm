@@ -111,9 +111,10 @@ const fases: Fase[] = [
 // Tabs
 // ---------------------------------------------------------------------------
 
-type Tab = "leakage" | "servicios" | "riesgos";
+type Tab = "alcance" | "leakage" | "servicios" | "riesgos";
 
 const TABS: { key: Tab; label: string }[] = [
+  { key: "alcance", label: "Alcance" },
   { key: "leakage", label: "Revenue leakage" },
   { key: "servicios", label: "Servicio por servicio" },
   { key: "riesgos", label: "Riesgos y roadmap" },
@@ -122,6 +123,69 @@ const TABS: { key: Tab; label: string }[] = [
 // ---------------------------------------------------------------------------
 // Tab contents
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Alcance homologado
+// ---------------------------------------------------------------------------
+
+type AlcanceItem = { concepto: string; detalle: string };
+
+const DENTRO: AlcanceItem[] = [
+  { concepto: "Nombre", detalle: '"Servicios en Bodega" (nunca "Fulfillment")' },
+  { concepto: "5 servicios", detalle: "Almacenamiento, Kits, Recepción, Etiquetado, Multi-unidad (F4)" },
+  { concepto: "Contratos", detalle: "Campo editable contract_status por proveedor (firmado/pendiente/rechazado). Sin validación legal automática" },
+  { concepto: "4 roles", detalle: "Logística (Alexis), Facturación (Camila), Admin (Jorge/Andrés), Comercial (por definir)" },
+  { concepto: "Import Excel", detalle: "Wizard 4 pasos con validación Zod, preview, país/periodo" },
+  { concepto: "Motor cálculo", detalle: "calculateBreakdown() sin sumando base fulfillment" },
+  { concepto: "Auditoría", detalle: "Triggers en DB: log_charge_status_change, check_supplier_contract" },
+  { concepto: "Bloqueo por deuda", detalle: "Política implementada en schema" },
+];
+
+const FUERA: { concepto: string; razon: string }[] = [
+  { concepto: "Tarifa base fulfillment $2,800/orden", razon: "Ya se cobra desde core Dropi" },
+  { concepto: "Descuento por volumen", razon: "Eliminado — no aplica" },
+  { concepto: "Validación legal de contratos", razon: "Solo campo editable, sin bloqueo automático" },
+  { concepto: "TARIFA_BASE_ORDEN, calcFulfillmentBase", razon: "Removidos del código" },
+];
+
+const colsDentro: Column<AlcanceItem>[] = [
+  { key: "concepto", header: "Concepto", render: (r) => <strong>{r.concepto}</strong> },
+  { key: "detalle", header: "Detalle", render: (r) => r.detalle },
+];
+
+const colsFuera: Column<{ concepto: string; razon: string }>[] = [
+  { key: "concepto", header: "Concepto", render: (r) => <strong>{r.concepto}</strong> },
+  { key: "razon", header: "Razón", render: (r) => r.razon },
+];
+
+function TabAlcance() {
+  return (
+    <>
+      <SectionTitle hint="Lo que entra en la plataforma de Servicios en Bodega">
+        DENTRO (homologado)
+      </SectionTitle>
+      <Card tone="ok">
+        <Table columns={colsDentro} rows={DENTRO} getKey={(r) => r.concepto} />
+      </Card>
+
+      <SectionTitle hint="Lo que queda explícitamente fuera del alcance">
+        FUERA (eliminado)
+      </SectionTitle>
+      <Card tone="risk">
+        <Table columns={colsFuera} rows={FUERA} getKey={(r) => r.concepto} />
+      </Card>
+
+      <Card tone="warn">
+        <p style={{ margin: 0, lineHeight: 1.6 }}>
+          <strong>Regla de naming:</strong> esta herramienta se llama &quot;Servicios en Bodega&quot;, nunca
+          &quot;Fulfillment&quot;. Llamarla fulfillment causa confusión con el cobro base por orden que ya
+          existe en el core de Dropi. El proveedor necesita entender que se le cobra por servicios
+          específicos que su inventario consume en bodega, no por fulfillment general.
+        </p>
+      </Card>
+    </>
+  );
+}
 
 function TabLeakage() {
   return (
@@ -323,7 +387,7 @@ function TabRiesgos() {
 // ---------------------------------------------------------------------------
 
 export default function PocServiciosBodegaContent() {
-  const [tab, setTab] = useState<Tab>("leakage");
+  const [tab, setTab] = useState<Tab>("alcance");
 
   return (
     <>
@@ -339,6 +403,7 @@ export default function PocServiciosBodegaContent() {
         ))}
       </div>
 
+      {tab === "alcance" && <TabAlcance />}
       {tab === "leakage" && <TabLeakage />}
       {tab === "servicios" && <TabServicios />}
       {tab === "riesgos" && <TabRiesgos />}
