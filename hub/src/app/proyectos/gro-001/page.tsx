@@ -77,7 +77,7 @@ function Callout({ tone, title, children }: { tone: "warning" | "info" | "danger
 }
 
 const links = [
-  { label: "Documento de traspaso técnico", href: "https://claude.ai/code/artifact/a366b8e4-9468-41e4-8fc0-bd929308dceb", icon: FileText, desc: "13 secciones: contexto, equipo/gobernanza, arquitectura, monetización, fases, diccionario de datos, CRM vs. Webe, riesgos." },
+  { label: "Documento de referencia técnico", href: "https://claude.ai/code/artifact/a366b8e4-9468-41e4-8fc0-bd929308dceb", icon: FileText, desc: "13 secciones: contexto, equipo/gobernanza, arquitectura, monetización, fases, diccionario de datos, CRM vs. Webe, riesgos." },
 ];
 
 export default function Gro001ProjectPage() {
@@ -186,7 +186,7 @@ export default function Gro001ProjectPage() {
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ fontSize: 18, fontWeight: 900, color: "#1E1B4B" }}>Contexto ampliado del proyecto</span>
-                  <span style={badgeStyle("#9F2C56", "#FBEAF0")}>Fuente: documento de traspaso, agosto 2026</span>
+                  <span style={badgeStyle("#9F2C56", "#FBEAF0")}>Fuente: documento de referencia, agosto 2026</span>
                 </div>
                 <p style={{ fontSize: 13, color: "#475569", margin: "2px 0 0 0" }}>
                   Todo lo trabajado hasta ahora: contexto de negocio, equipo/gobernanza, arquitectura, monetización, fases, datos reales, CRM vs. Webe, y riesgos consolidados.
