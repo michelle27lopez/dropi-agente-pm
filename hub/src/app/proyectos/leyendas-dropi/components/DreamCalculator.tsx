@@ -4,7 +4,9 @@ import { TIERS } from "../mock/tiers";
 
 const MARGEN = 15000;
 
-const DREAMS = [
+type Dream = { label: string; sub: string; cost: number; months: number };
+
+const DREAMS: Dream[] = [
   { label: "Un viaje al mar", sub: "7 días, dos personas, todo pago", cost: 4_500_000, months: 3 },
   { label: "Un celular nuevo", sub: "El equipo con el que trabajas mejor", cost: 3_200_000, months: 2 },
   { label: "Pagar mis deudas", sub: "Quedar en cero y respirar", cost: 15_000_000, months: 4 },
@@ -15,7 +17,7 @@ const DREAMS = [
   { label: "Mi casa propia", sub: "Cuota inicial y gastos de escritura", cost: 250_000_000, months: 6 },
   { label: "Mi propia bodega y equipo", sub: "Espacio, inventario y gente contratada", cost: 600_000_000, months: 5 },
   { label: "Mi empresa de e-commerce", sub: "Operación regional con marca propia", cost: 1_800_000_000, months: 5 },
-] as const;
+];
 
 const TIER_MIN = [0, 1, 101, 1001, 2501, 5001, 20001];
 function tierForOrders(o: number) {

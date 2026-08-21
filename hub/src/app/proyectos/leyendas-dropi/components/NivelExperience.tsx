@@ -262,7 +262,9 @@ export default function NivelExperience({ variant = "pill" }: { variant?: "pill"
                   <input
                     key={i}
                     id={`otp-input-${i}`}
-                    ref={(el) => (inputsRef.current[i] = el)}
+                    ref={(el) => {
+                      inputsRef.current[i] = el;
+                    }}
                     value={v}
                     onChange={(e) => handleOtpChange(i, e.target.value)}
                     onKeyDown={(e) => handleOtpKeyDown(i, e)}
