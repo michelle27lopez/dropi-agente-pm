@@ -8,13 +8,24 @@ import type { NextRequest } from "next/server";
 const buckets = new Map<string, { count: number; resetAt: number }>();
 
 export function getClientIp(req: NextRequest): string {
+  // x-real-ip lo fija la plataforma; el primer valor de x-forwarded-for lo
+  // puede prefijar el cliente. Ver AGP-38.
+  const realIp = req.headers.get("x-real-ip");
+  if (realIp) return realIp.trim();
   const forwarded = req.headers.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-  return req.headers.get("x-real-ip") ?? "unknown";
+  if (forwarded) {
+    const parts = forwarded.split(",").map((p) => p.trim()).filter(Boolean);
+    return parts[parts.length - 1] ?? "unknown";
+  }
+  return "unknown";
 }
 
 export function isRateLimited(key: string, limit: number, windowMs: number): boolean {
   const now = Date.now();
+  if (buckets.size > 10_000) {
+    for (const [k, v] of buckets) if (now > v.resetAt) buckets.delete(k);
+  }
+
   const bucket = buckets.get(key);
 
   if (!bucket || now > bucket.resetAt) {
