@@ -27,8 +27,9 @@ const JIRA = "https://dropi-it.atlassian.net/browse/";
 // del repo de prototipos; no se adivina. Valores posibles: dropshipper,
 // proveedor, admin. Verificado el 5-ago contra origin/main.
 type PerfilRpp = "dropshipper" | "proveedor" | "admin";
-function rpp(ruta: string, perfil: PerfilRpp) {
-  return `${RPP_BASE_URL}/${ruta}?profile=${perfil}`;
+function rpp(ruta: string, perfil: PerfilRpp, extra?: string) {
+  const base = `${RPP_BASE_URL}/${ruta}?profile=${perfil}`;
+  return extra ? `${base}&${extra}` : base;
 }
 export function jiraUrl(ticket?: string) {
   return ticket ? JIRA + ticket : undefined;
@@ -781,7 +782,7 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     proximoPaso: "Resolver el gate abierto: ¿ChateaPro tolera un gate antes de su disparo? Sin eso, no se puede experimentar.",
     foco: "POC del wizard de 3 pasos (reglas → comunicación → simulador). 18 órdenes mock, 4 acciones ChateaPro modeladas (confirmación/verificación/confío/escalamiento). Deployado en RPP (commit aedf743, ruta /old/configuraciones/configuracion-de-tienda). Hallazgos de mesas documentados en artefacto.",
     links: [
-      { tipo: "prototipo", label: "RPP · Wizard autoconfirmación × ChateaPro", href: rpp("old/configuraciones/configuracion-de-tienda", "dropshipper") },
+      { tipo: "prototipo", label: "RPP · Wizard autoconfirmación × ChateaPro", href: rpp("old/configuraciones/configuracion-de-tienda", "dropshipper", "wizard=autoconfirmacion") },
       { tipo: "doc", label: "Avance y hallazgos ChateaPro", href: "https://claude.ai/code/artifact/d1e28a0c-90c9-4df0-acc8-9806f6017540" },
     ],
     experimentos: ["autoconfirmacion-chateapro"],
@@ -1134,7 +1135,7 @@ export const experimentos: Experimento[] = [
     impacto: "4 acciones ChateaPro modeladas: confirmación exitosa, verificación IA de dirección, pago anticipado (Confío) y escalamiento a asesor. 18 órdenes mock con costo real de flete, margen y huella del comprador.",
     proyecto: "POC Autoconfirmación × ChateaPro (LOG-019)",
     links: [
-      { tipo: "prototipo", label: "RPP · Wizard 3 pasos", href: rpp("old/configuraciones/configuracion-de-tienda", "dropshipper") },
+      { tipo: "prototipo", label: "RPP · Wizard 3 pasos", href: rpp("old/configuraciones/configuracion-de-tienda", "dropshipper", "wizard=autoconfirmacion") },
       { tipo: "doc", label: "Hallazgos ChateaPro", href: "https://claude.ai/code/artifact/d1e28a0c-90c9-4df0-acc8-9806f6017540" },
     ],
   },
