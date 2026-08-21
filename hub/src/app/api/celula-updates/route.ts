@@ -24,15 +24,18 @@ export async function POST(req: NextRequest) {
   if (!supabase) return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
 
   const body = await req.json();
-  const { week_date, title, content } = body;
+  const { week_date, title, content, tipo } = body;
 
   if (!week_date || !title || !content) {
     return NextResponse.json({ error: "Faltan campos: week_date, title, content" }, { status: 400 });
   }
 
+  // El UNIQUE pasó de (week_date) a (celula_id, week_date, tipo) — ver
+  // 051_celula_updates_tipo.sql. Este endpoint legacy no recibe celula_id,
+  // así que el onConflict ya no puede apuntar solo a week_date.
   const { data, error } = await supabase
     .from("celula_updates")
-    .upsert({ week_date, title, content }, { onConflict: "week_date" })
+    .upsert({ week_date, title, content, tipo: tipo ?? "weekly" }, { onConflict: "celula_id,week_date,tipo" })
     .select()
     .single();
 
