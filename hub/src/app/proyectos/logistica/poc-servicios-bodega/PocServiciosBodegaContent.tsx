@@ -192,11 +192,14 @@ function TabAlcance() {
 // Métricas de éxito del experimento
 // ---------------------------------------------------------------------------
 
-const KPIS = [
-  { label: "Tasa de cobro exitoso", value: "85%+", pct: 85, color: "#22c77e", ringColor: "#22c77e" },
-  { label: "Tiempo promedio de cobro", value: "<15 días", pct: 62, color: "#e8a020", ringColor: "#e8a020" },
-  { label: "Proveedores en mora >60d", value: "<5%", pct: 95, color: "#22c77e", ringColor: "#22c77e" },
-  { label: "Países cubiertos (6 meses)", value: "100%", pct: 100, color: "#22c77e", ringColor: "#22c77e" },
+type KPI = { label: string; value: string; color: string; type: "donut"; pct: number; ringColor: string }
+  | { label: string; value: string; color: string; type: "big"; icon: string };
+
+const KPIS: KPI[] = [
+  { label: "Tasa de cobro exitoso", value: "85%+", pct: 85, color: "#22c77e", ringColor: "#22c77e", type: "donut" },
+  { label: "Tiempo promedio de cobro", value: "<15 días", color: "#e8a020", type: "big", icon: "⏱" },
+  { label: "Proveedores en mora >60d", value: "<5%", color: "#e85050", type: "big", icon: "⚠" },
+  { label: "Países cubiertos (6 meses)", value: "100%", pct: 100, color: "#22c77e", ringColor: "#22c77e", type: "donut" },
 ];
 
 const CIRC = 2 * Math.PI * 40; // 251.33
@@ -213,6 +216,12 @@ const METRICAS_CSS = `
 .mk-num { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .mk-label { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.3; text-transform: uppercase;
   letter-spacing: 0.03em; font-weight: 600; }
+.mk-big { display: flex; flex-direction: column; align-items: center; justify-content: center;
+  height: 110px; margin-bottom: 12px; }
+.mk-big-icon { font-size: 28px; margin-bottom: 6px; opacity: 0; animation: mk-pop 0.5s 0.3s forwards; }
+.mk-big-val { font-size: 36px; font-weight: 800; font-variant-numeric: tabular-nums;
+  opacity: 0; animation: mk-pop 0.5s 0.5s forwards; }
+@keyframes mk-pop { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
 .mk-phase { background: var(--card, #fff); border: 1px solid var(--border); border-radius: 14px;
   padding: 20px; transition: transform 0.15s, box-shadow 0.15s; cursor: default; }
 .mk-phase:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
@@ -252,24 +261,28 @@ function TabMetricas() {
         Métricas de éxito del experimento
       </SectionTitle>
 
-      {/* Donut KPIs */}
+      {/* KPI tiles: donut for rates, big number for thresholds */}
       <div className="mk-grid">
-        {KPIS.map((k) => {
-          const offset = CIRC * (1 - k.pct / 100);
-          return (
-            <div key={k.label} className="mk-tile">
+        {KPIS.map((k) => (
+          <div key={k.label} className="mk-tile">
+            {k.type === "donut" ? (
               <svg className="mk-svg" viewBox="0 0 100 100">
                 <circle className="mk-track" cx="50" cy="50" r="40" />
                 <circle className="mk-ring" cx="50" cy="50" r="40"
                   stroke={k.ringColor} strokeDasharray={CIRC}
-                  strokeDashoffset={CIRC} data-target={String(offset)} />
+                  strokeDashoffset={CIRC} data-target={String(CIRC * (1 - k.pct / 100))} />
                 <text x="50" y="50" textAnchor="middle" dominantBaseline="central"
                   className="mk-num" fill={k.color}>{k.value}</text>
               </svg>
-              <div className="mk-label">{k.label}</div>
-            </div>
-          );
-        })}
+            ) : (
+              <div className="mk-big">
+                <span className="mk-big-icon">{k.icon}</span>
+                <span className="mk-big-val" style={{ color: k.color }}>{k.value}</span>
+              </div>
+            )}
+            <div className="mk-label">{k.label}</div>
+          </div>
+        ))}
       </div>
 
       {/* Métricas por fase */}
