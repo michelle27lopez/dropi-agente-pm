@@ -60,8 +60,9 @@ ${boundedAdsListText || "(sin anuncios en contexto)"}`;
     const content = completion.choices[0].message?.content?.trim() ?? "";
     return NextResponse.json({ content });
   } catch (err: unknown) {
+    console.error("[Gali Espionaje Error]:", err);
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Unknown error" },
+      { error: "Error interno generando la respuesta" },
       { status: 500 }
     );
   }

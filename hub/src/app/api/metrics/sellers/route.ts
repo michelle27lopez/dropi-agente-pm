@@ -4,9 +4,10 @@ import { requireUser } from "@/lib/require-auth";
 
 export async function GET(req: NextRequest) {
   const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   try {
-    if (user && supabase) {
+    if (supabase) {
       const [
         { data: userpilotData, error: upError },
         { data: jiraData, error: jiraError },
