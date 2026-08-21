@@ -111,10 +111,11 @@ const fases: Fase[] = [
 // Tabs
 // ---------------------------------------------------------------------------
 
-type Tab = "alcance" | "leakage" | "servicios" | "riesgos";
+type Tab = "alcance" | "metricas" | "leakage" | "servicios" | "riesgos";
 
 const TABS: { key: Tab; label: string }[] = [
   { key: "alcance", label: "Alcance" },
+  { key: "metricas", label: "Métricas de éxito" },
   { key: "leakage", label: "Revenue leakage" },
   { key: "servicios", label: "Servicio por servicio" },
   { key: "riesgos", label: "Riesgos y roadmap" },
@@ -181,6 +182,71 @@ function TabAlcance() {
           &quot;Fulfillment&quot;. Llamarla fulfillment causa confusión con el cobro base por orden que ya
           existe en el core de Dropi. El proveedor necesita entender que se le cobra por servicios
           específicos que su inventario consume en bodega, no por fulfillment general.
+        </p>
+      </Card>
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Métricas de éxito del experimento
+// ---------------------------------------------------------------------------
+
+function TabMetricas() {
+  return (
+    <>
+      <SectionTitle hint="Cómo saber si la herramienta está funcionando y moviendo el P&L">
+        Métricas de éxito del experimento
+      </SectionTitle>
+
+      {/* KPI tiles */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 14, margin: "0 0 20px" }}>
+        <Card>
+          <Stat label="Tasa de cobro exitoso" value="85%+" tone="ok" />
+        </Card>
+        <Card>
+          <Stat label="Tiempo promedio de cobro" value="<15 días" tone="warn" />
+        </Card>
+        <Card>
+          <Stat label="Proveedores en mora >60d" value="<5%" tone="ok" />
+        </Card>
+        <Card>
+          <Stat label="Países cubiertos (meta 6 meses)" value="100%" tone="ok" />
+        </Card>
+      </div>
+
+      {/* Métricas por fase */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, marginBottom: 20 }}>
+        <Card tone="ok">
+          <strong style={{ display: "block", marginBottom: 10 }}>Métricas de captura (mes 1–2)</strong>
+          <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 6, fontSize: "var(--fs-body, 13px)", color: "var(--muted)", lineHeight: 1.5 }}>
+            <li><strong style={{ color: "var(--fg)" }}>Revenue capturado</strong> vs revenue potencial por servicio</li>
+            <li><strong style={{ color: "var(--fg)" }}>Proveedores con contrato firmado</strong> vs total en bodega</li>
+            <li><strong style={{ color: "var(--fg)" }}>Tiempo de carga a cobro</strong> (desde que logística sube Excel hasta que facturación descuenta)</li>
+            <li><strong style={{ color: "var(--fg)" }}>Errores de importación</strong> (filas rechazadas por formato)</li>
+          </ul>
+        </Card>
+        <Card tone="warn">
+          <strong style={{ display: "block", marginBottom: 10 }}>Métricas de operación (mes 3+)</strong>
+          <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 6, fontSize: "var(--fs-body, 13px)", color: "var(--muted)", lineHeight: 1.5 }}>
+            <li><strong style={{ color: "var(--fg)" }}>Deuda acumulada</strong> por proveedor y antigüedad</li>
+            <li><strong style={{ color: "var(--fg)" }}>Servicios activados</strong> (de 5 posibles, cuántos se cobran por país)</li>
+            <li><strong style={{ color: "var(--fg)" }}>Reversa rate</strong> (cobros revertidos / cobros totales)</li>
+            <li><strong style={{ color: "var(--fg)" }}>P&L fulfillment delta</strong> (antes vs después de la herramienta)</li>
+          </ul>
+        </Card>
+      </div>
+
+      {/* KPI que importa */}
+      <Card tone="risk">
+        <strong style={{ display: "block", marginBottom: 6, color: "var(--fg)" }}>
+          El KPI que importa: dinero nuevo que entra al P&L de fulfillment
+        </strong>
+        <p style={{ margin: 0, color: "var(--muted)", lineHeight: 1.6 }}>
+          Todo lo demás (adopción, uptime, velocidad) son proxies. La herramienta existe para facturar
+          servicios que hoy se prestan gratis. Si al mes 3 no hay revenue nuevo entrando, algo falló:
+          o los proveedores no firmaron, o la data no se carga, o las tarifas son incorrectas. Medir
+          desde día 1.
         </p>
       </Card>
     </>
@@ -404,6 +470,7 @@ export default function PocServiciosBodegaContent() {
       </div>
 
       {tab === "alcance" && <TabAlcance />}
+      {tab === "metricas" && <TabMetricas />}
       {tab === "leakage" && <TabLeakage />}
       {tab === "servicios" && <TabServicios />}
       {tab === "riesgos" && <TabRiesgos />}
