@@ -79,7 +79,6 @@ function Callout({ tone, title, children }: { tone: "warning" | "info" | "danger
 const links = [
   { label: "Demo pública (Vercel)", href: "https://leyendas-dropi-share.vercel.app", icon: Rocket, desc: "Prototipo standalone, sin login de Darwin — código simulado 000000 para pitch interno." },
   { label: "Beta conectada en Darwin", href: "/proyectos/leyendas-dropi", icon: Layers, desc: "Misma experiencia, con OTP real por correo y datos de Supabase (5 vendedores de prueba)." },
-  { label: "Documento completo del proyecto", href: "https://claude.ai/code/artifact/a88d5dab-6d09-4db9-ac3a-08b8abb7bfbd", icon: FileText, desc: "16 secciones: kick-off, discovery, hand-off técnico, diccionario de datos, 11 HU, naming, cronograma." },
 ];
 
 export default function Gro002ProjectPage() {
@@ -454,7 +453,7 @@ Usuario ingresa código
                       <li><code>E2E Leyendas Dropi.md</code> — Borrador funcional, especificación funcional y hand-off a DEV y stakeholders (Hito 1), Tech Lead José Giraldo, 05/08/2026.</li>
                       <li><code>Dropi_Leyendas_v7.docx.md</code> — PRD &quot;Leyendas Dropi&quot; v7.0, Growth Dropi, junio 2026, lanzamiento MVP estimado septiembre 2026.</li>
                       <li>Prototipos de baja fidelidad (Figma/mockups): testimonio de leyenda, ficha de comunidad, ranking, landing del programa, card expandida, card contraída, wrapped, one page nivel.</li>
-                      <li><code>leyendas-dropi-handoff-darwin.md</code> — documento completo del proyecto, agosto 2026 (ver enlace al artifact arriba).</li>
+                      <li><code>leyendas-dropi-handoff-darwin.md</code> — documento completo del proyecto, agosto 2026.</li>
                     </ul>
 
                     <Callout tone="success" title="📌 Anexo D — Backlog de Historias de Usuario (Hito 1)">

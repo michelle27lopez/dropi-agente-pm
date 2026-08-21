@@ -5,7 +5,7 @@ import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
 import {
   ChevronDown, ChevronUp, FileText, Rocket, Layers,
-  Users, ExternalLink, Wrench, GitBranch, Search, Sparkles,
+  Users, Wrench, GitBranch, Search, Sparkles,
 } from "lucide-react";
 
 /* ── Shared styles (mismos tokens que gro-002 / fin-001 / marcas) ── */
@@ -85,10 +85,6 @@ function StatusPill({ tone, children }: { tone: "ok" | "warn" | "bad"; children:
   return <span style={{ ...badgeStyle(map.fg, map.bg), marginRight: 8 }}>{children}</span>;
 }
 
-const links = [
-  { label: "Documento completo del proyecto", href: "https://claude.ai/code/artifact/e27b2d8c-be66-4e0a-8783-2417e4268b44", icon: FileText, desc: "11 secciones: kick-off, las 3 superficies, arquitectura de escala, GEO/AEO, insumos de datos, narrativa, 7 historias de usuario con QA." },
-];
-
 export default function Gro004ProjectPage() {
   const [docOpen, setDocOpen] = useState(true);
   const [tab, setTab] = useState("resumen");
@@ -157,22 +153,6 @@ export default function Gro004ProjectPage() {
 
         {/* ── Documentos ── */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 28 }}>
-          {links.map((l) => {
-            const Icon = l.icon;
-            return (
-              <a key={l.href} href={l.href} target="_blank" rel="noreferrer" style={{ textDecoration: "none", background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 16, display: "flex", gap: 12, alignItems: "flex-start" }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: "#E3F3F0", color: "#0E7C74", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <Icon size={18} />
-                </div>
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: "#0F172A", display: "flex", alignItems: "center", gap: 6 }}>
-                    {l.label} <ExternalLink size={12} color="#94A3B8" />
-                  </div>
-                  <div style={{ fontSize: 12, color: "#64748B", marginTop: 3, lineHeight: 1.5 }}>{l.desc}</div>
-                </div>
-              </a>
-            );
-          })}
           <div style={{ background: "#FFFBEB", border: "1px dashed #FDE68A", borderRadius: 12, padding: 16, display: "flex", gap: 12, alignItems: "flex-start" }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: "#FEF3C7", color: "#92400E", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <Rocket size={18} />

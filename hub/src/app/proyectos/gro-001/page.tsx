@@ -4,8 +4,8 @@ import { useState } from "react";
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
 import {
-  ChevronDown, ChevronUp, FileText, Rocket, Layers,
-  Users, ExternalLink, Wrench, GitBranch, DollarSign, AlertTriangle,
+  ChevronDown, ChevronUp, FileText, Layers,
+  Users, Wrench, GitBranch, DollarSign, AlertTriangle,
 } from "lucide-react";
 
 /* ── Shared styles (mismos tokens que gro-002 / gro-004 / fin-001 / marcas) ── */
@@ -76,10 +76,6 @@ function Callout({ tone, title, children }: { tone: "warning" | "info" | "danger
   );
 }
 
-const links = [
-  { label: "Documento completo del proyecto", href: "https://claude.ai/code/artifact/a366b8e4-9468-41e4-8fc0-bd929308dceb", icon: FileText, desc: "13 secciones: contexto, equipo/gobernanza, arquitectura, monetización, fases, diccionario de datos, CRM vs. Webe, riesgos." },
-];
-
 export default function Gro001ProjectPage() {
   const [docOpen, setDocOpen] = useState(true);
   const [tab, setTab] = useState("resumen");
@@ -144,26 +140,6 @@ export default function Gro001ProjectPage() {
               <div style={{ fontSize: 12, color: "#94A3B8", marginTop: 2 }}>{k.sub}</div>
             </div>
           ))}
-        </div>
-
-        {/* ── Documentos ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 28 }}>
-          {links.map((l) => {
-            const Icon = l.icon;
-            return (
-              <a key={l.href} href={l.href} target="_blank" rel="noreferrer" style={{ textDecoration: "none", background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 16, display: "flex", gap: 12, alignItems: "flex-start" }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: "#FBEAF0", color: "#9F2C56", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <Icon size={18} />
-                </div>
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: "#0F172A", display: "flex", alignItems: "center", gap: 6 }}>
-                    {l.label} <ExternalLink size={12} color="#94A3B8" />
-                  </div>
-                  <div style={{ fontSize: 12, color: "#64748B", marginTop: 3, lineHeight: 1.5 }}>{l.desc}</div>
-                </div>
-              </a>
-            );
-          })}
         </div>
 
         {/* ── Alerta principal: CRM vs Webe ── */}
