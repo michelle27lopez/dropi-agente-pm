@@ -146,7 +146,11 @@ export async function POST(req: NextRequest) {
   }
 
   const updatePayload: Record<string, unknown> = { accepted_at: new Date().toISOString() };
-  if (committed_units != null) updatePayload.committed_units = committed_units;
+  const validUnits =
+    Number.isInteger(committed_units) && committed_units >= 0 && committed_units <= 100000
+      ? committed_units
+      : null;
+  if (validUnits != null) updatePayload.committed_units = validUnits;
 
   const { error: updateError } = await supabase
     .from("pulso_demo_attendees")
@@ -158,7 +162,7 @@ export async function POST(req: NextRequest) {
       .from("pulso_demo_attendees")
       .update({ accepted_at: new Date().toISOString() })
       .eq("token", token);
-    if (retryError) return NextResponse.json({ error: retryError.message }, { status: 500 });
+    if (retryError) return NextResponse.json({ error: "Error interno confirmando la aceptación" }, { status: 500 });
   }
 
   // Obtener stats actualizados para notificar al proveedor
@@ -171,8 +175,20 @@ export async function POST(req: NextRequest) {
   const totalAccepted = (allAccepted ?? []).length;
   const totalCommitted = (allAccepted ?? []).reduce((sum, a) => sum + (a.committed_units ?? 0), 0);
 
-  // Notificar a los proveedores registrados (sin await para no bloquear la respuesta)
-  notifySuppliers(attendee.name, totalAccepted, totalCommitted).catch(() => null);
+  // Cooldown global del blast (AGP-04, parcial): `register` no verifica que
+  // el whatsapp/email pertenezca a quien lo registra, y este envío usa el
+  // WhatsApp Business / correo del negocio, no de un usuario — cada accept
+  // reenvía a TODOS los suppliers registrados. El rate-limit por IP de
+  // arriba no evita que alguien dispare varios accepts (tokens distintos)
+  // seguidos; este cooldown limita cuántas veces se puede reenviar el blast
+  // completo, sin importar cuántos accepts individuales lo disparen. No
+  // cierra el hueco de fondo (registrar un contacto ajeno como "supplier"
+  // sigue siendo posible) — eso requiere decidir si se agrega verificación
+  // de contacto antes de notificar, que es un cambio de producto, no de
+  // seguridad pura.
+  if (!isRateLimited("pulso-demo-notify-suppliers", 1, 120_000)) {
+    notifySuppliers(attendee.name, totalAccepted, totalCommitted).catch(() => null);
+  }
 
   return NextResponse.json({ ok: true, name: attendee.name });
 }
