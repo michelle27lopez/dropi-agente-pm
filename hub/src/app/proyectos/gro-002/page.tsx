@@ -247,7 +247,7 @@ export default function Gro002ProjectPage() {
 
                     <h4 style={subHeadingStyle}>Usuario objetivo</h4>
                     <ul style={ulStyle}>
-                      <li><strong>Dropshipper (vendedor individual):</strong> progresa por 7 niveles según volumen de órdenes del mes en curso (no acumulado histórico) — ver tabla completa en la pestaña Solución.</li>
+                      <li><strong>Dropshipper (vendedor individual):</strong> progresa por 6 niveles según volumen de órdenes del mes en curso (no acumulado histórico) — ver tabla completa en la pestaña Solución.</li>
                       <li><strong>Líder de comunidad (gestor de red de afiliados):</strong> se evalúa en 3 ejes independientes y no jerárquicos — Efectividad, Popularidad e Impacto Económico. Puede destacar en uno, dos o los tres simultáneamente.</li>
                       <li>Un mismo usuario puede ser <strong>dropshipper y líder de comunidad al mismo tiempo</strong> — la Card de Leyendas en Home refleja ambos roles con un toggle.</li>
                       <li>El programa opera con <strong>independencia por país</strong>: umbrales, niveles y beneficios se calibran según la capacidad operativa local, multipaís desde el diseño.</li>
@@ -263,7 +263,7 @@ export default function Gro002ProjectPage() {
                       <strong>% de dropshippers que cruzan el umbral de 100 órdenes/mes</strong> (punto de no-churn). Baseline y meta: <em>pendientes de definir con Growth/Data</em> — no están cuantificados en la documentación fuente todavía.
                     </p>
                     <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>
-                      Métricas secundarias sugeridas (no confirmadas por negocio): retención mes a mes por nivel, % que abre el Wrapped en su primera sesión del día, líderes activos en al menos un eje, conversión Bienvenido → Aprendiz.
+                      Métricas secundarias sugeridas (no confirmadas por negocio): retención mes a mes por nivel, % que abre el Wrapped en su primera sesión del día, líderes activos en al menos un eje, conversión Bienvenido → Explorador.
                     </p>
                   </div>
                 )}
@@ -276,7 +276,7 @@ export default function Gro002ProjectPage() {
                       <li><strong>Modal Wrapped:</strong> resumen animado del mes cerrado (Mes N-1), insignia asignada, brecha al siguiente nivel, descarga de imagen PNG vertical (9:16) para compartir.</li>
                       <li><strong>Insignia persistente en Header:</strong> muestra nivel/rango vigente, tooltip al hover, reabre el Wrapped al clic.</li>
                       <li><strong>Card de Leyendas en Home</strong> (contraída y expandida): 3 casos — usuario nuevo (0% activado), usuario con experiencia (histórico de logros), y dropshipper+líder (toggle entre vistas).</li>
-                      <li><strong>Landing pública — Dropshippers:</strong> testimonios de leyendas actuales, mecánica del programa, cards de los 7 niveles, y OnePage por nivel (mindset, rangos, meta, 4 recursos, navegación siguiente/anterior).</li>
+                      <li><strong>Landing pública — Dropshippers:</strong> testimonios de leyendas actuales, mecánica del programa, cards de los 6 niveles, y OnePage por nivel (mindset, rangos, meta, 4 recursos, navegación siguiente/anterior).</li>
                       <li><strong>Landing pública — Líderes de Comunidad:</strong> Ranking de Comunidades (filtrado por país, buscador), Ficha de Comunidad (modal con demografía y métricas), Ligas informativas (Efectividad, Popularidad, Impacto Económico).</li>
                       <li><strong>Footer transversal:</strong> Términos y Condiciones y Preguntas Frecuentes — ambos contenido nuevo, específico del programa.</li>
                       <li>Sistema de niveles basado <strong>100% en órdenes entregadas</strong> — sin ningún concepto de puntaje o Dropicoins expuesto en la UI de este hito.</li>
@@ -291,27 +291,26 @@ export default function Gro002ProjectPage() {
                       <thead><tr><th style={tableHeaderStyle}>#</th><th style={tableHeaderStyle}>Nivel</th><th style={tableHeaderStyle}>Órdenes/mes</th><th style={tableHeaderStyle}>Perfil</th></tr></thead>
                       <tbody>
                         {[
-                          ["1", "Bienvenido", "0", "Usuario sin ventas aún; en proceso de activación."],
-                          ["2", "Aprendiz", "1 – 100", "Primeros pasos. Meta: cruzar el punto de no-churn (100 órdenes)."],
-                          ["3", "Explorador", "101 – 1.000", "Ya cruzó el umbral de no-churn. Segmento más grande (44% de órdenes activas, mar 2026)."],
-                          ["4", "Maestro", "1.001 – 2.500", "Desempeño aceptable, aprendiendo a escalar el negocio."],
-                          ["5", "Experto", "2.501 – 5.000", "Alto potencial de escala; foco en optimización operativa."],
-                          ["6", "Sabio VIP", "5.001 – 20.000", "Aliado estratégico de alto rendimiento."],
-                          ["7", "Leyenda", "20.001+", "Máxima distinción del ecosistema Dropi."],
+                          ["1", "Bienvenido", "0 – 100", "Primeros pasos, hasta cruzar el punto de no-churn. Incluye lo que antes era el nivel Aprendiz (1–100), retirado el 24 ago 2026."],
+                          ["2", "Explorador", "101 – 1.000", "Ya cruzó el umbral de no-churn. Segmento más grande (44% de órdenes activas, mar 2026)."],
+                          ["3", "Master", "1.001 – 2.500", "Desempeño aceptable, aprendiendo a escalar el negocio."],
+                          ["4", "Experto", "2.501 – 5.000", "Alto potencial de escala; foco en optimización operativa."],
+                          ["5", "Sabio VIP", "5.001 – 20.000", "Aliado estratégico de alto rendimiento."],
+                          ["6", "Leyenda", "20.001+", "Máxima distinción del ecosistema Dropi."],
                         ].map((row) => (
                           <tr key={row[0]}><td style={tableCellStyle}>{row[0]}</td><td style={tableCellStyle}><strong>{row[1]}</strong></td><td style={tableCellStyle}>{row[2]}</td><td style={tableCellStyle}>{row[3]}</td></tr>
                         ))}
                       </tbody>
                     </table>
                     <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>
-                      El naming &quot;Aprendiz&quot; (nivel 2) coincide con &quot;Aprendiz&quot; de la Dimensión 2 del Programa de Iniciación Dropshipping del PRD v7 — dos taxonomías distintas que comparten término; revisar si genera confusión en copy.
+                      <strong>Cambio de alcance (24 ago 2026):</strong> el equipo comercial imprimió material físico (medallas, cartelería) sin contemplar el nivel Aprendiz y no puede corregirlo — Growth ajustó la plataforma para que coincida: Bienvenido pasó a cubrir 0–100 órdenes/mes, absorbiendo el rango completo que tenía Aprendiz. Aplicado tanto en el standalone conectado a Darwin como en la demo pública de Vercel.
                     </p>
 
                     <h4 style={subHeadingStyle}>Anexo C — Reconocimientos de Líderes de Comunidad</h4>
                     <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: 8 }}>
                       <thead><tr><th style={tableHeaderStyle}>Eje</th><th style={tableHeaderStyle}>Niveles / umbrales</th><th style={tableHeaderStyle}>Medición</th></tr></thead>
                       <tbody>
-                        <tr><td style={tableCellStyle}><strong>Efectividad</strong></td><td style={tableCellStyle}>Maestro (+10.000 órdenes acumuladas), Elite (+50.000), Leyenda (+100.000)</td><td style={tableCellStyle}>Permanente — solo suma, nunca baja.</td></tr>
+                        <tr><td style={tableCellStyle}><strong>Efectividad</strong></td><td style={tableCellStyle}>Master (+10.000 órdenes acumuladas), Elite (+50.000), Leyenda (+100.000)</td><td style={tableCellStyle}>Permanente — solo suma, nunca baja.</td></tr>
                         <tr><td style={tableCellStyle}><strong>Popularidad</strong></td><td style={tableCellStyle}>Umbrales retirados del alcance de Hito 1 (pendientes de negocio)</td><td style={tableCellStyle}>Mensual — afiliados activos (≥1 orden en últimos 90 días).</td></tr>
                         <tr><td style={tableCellStyle}><strong>Impacto Económico</strong></td><td style={tableCellStyle}>Formador de Millonarios (≥ USD 1.000.000 GMV/mes)</td><td style={tableCellStyle}>Mensual — no acumulativo, se gana cada mes.</td></tr>
                       </tbody>
@@ -392,7 +391,7 @@ Usuario ingresa código
 
                     <h4 style={subHeadingStyle}>✅ Decisiones tomadas (no reabrir sin validación)</h4>
                     <ul style={ulStyle}>
-                      <li>Estructura de 7 niveles de dropshipper con umbrales exactos (ver tabla en Solución).</li>
+                      <li>Estructura de <strong>6 niveles</strong> de dropshipper con umbrales exactos (ver tabla en Solución) — <strong>se retiró Aprendiz (24 ago 2026):</strong> el equipo comercial ya había impreso material físico sin ese nivel y no podía corregirlo, así que Bienvenido absorbió su rango completo (0–100 órdenes/mes) para que la plataforma coincida con lo impreso.</li>
                       <li>El Wrapped y la insignia de Header siempre reflejan el <strong>mes cerrado</strong> (Mes N-1); nunca el mes en curso.</li>
                       <li>Actualización de datos: <strong>batch diario</strong>, no tiempo real — dato del día anterior.</li>
                       <li>En Hito 1, el rango dentro de cada nivel se muestra solo como texto, sin barra de progreso funcional.</li>
@@ -400,7 +399,7 @@ Usuario ingresa código
                       <li>El toggle &quot;Como dropshipper / Como líder de comunidad&quot; solo aparece si el usuario lidera una comunidad propia.</li>
                       <li>Hito 1 no incluye ningún concepto de puntaje/Dropicoins en la UI — único driver visible: &quot;órdenes entregadas&quot;.</li>
                       <li>Liga Impacto Económico tiene un único nivel: &quot;Formador de Millonarios&quot; (≥ USD 1M GMV/mes) — nombre validado por Laura Sánchez.</li>
-                      <li><strong>Naming &quot;Master vs. Maestro&quot; resuelto a nivel técnico:</strong> el enum SQL <code>tier_name</code> y los archivos de medalla ya usan &quot;Master&quot;. La documentación de negocio (PRD v7) sigue usando &quot;Maestro&quot; — pendiente alinear copy de negocio antes de que se propague más.</li>
+                      <li><strong>Naming &quot;Master&quot; resuelto y unificado (24 ago 2026):</strong> se usa &quot;Master&quot; tanto para el nivel 3 de dropshipper como para el primer nivel del Eje Efectividad de líderes — misma palabra en ambos contextos, ya no hay colisión de naming.</li>
                     </ul>
 
                     <h4 style={subHeadingStyle}>❓ Preguntas abiertas</h4>

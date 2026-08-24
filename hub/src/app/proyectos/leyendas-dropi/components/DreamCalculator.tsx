@@ -19,7 +19,7 @@ const DREAMS: Dream[] = [
   { label: "Mi empresa de e-commerce", sub: "Operación regional con marca propia", cost: 1_800_000_000, months: 5 },
 ];
 
-const TIER_MIN = [0, 1, 101, 1001, 2501, 5001, 20001];
+const TIER_MIN = [0, 101, 1001, 2501, 5001, 20001];
 function tierForOrders(o: number) {
   let k = 0;
   for (let j = 0; j < TIER_MIN.length; j++) if (o >= TIER_MIN[j]) k = j;

@@ -9,7 +9,7 @@
 
 do $$ begin
   create type tier_name as enum (
-    'Bienvenido','Aprendiz','Explorador','Master',
+    'Bienvenido','Explorador','Master',
     'Experto','Sabio VIP','Leyenda'
   );
 exception when duplicate_object then null; end $$;
@@ -19,7 +19,7 @@ exception when duplicate_object then null; end $$;
 create table if not exists tiers (
   id            smallint    primary key,
   name          tier_name   not null unique,
-  eyebrow       varchar(2)  not null,          -- "01".."07"
+  eyebrow       varchar(2)  not null,          -- "01".."06"
   min_orders    integer     not null check (min_orders >= 0),
   max_orders    integer,                        -- null = rango abierto
   created_at    timestamptz not null default now()
@@ -122,39 +122,41 @@ create policy if not exists "snapshots_service_only" on seller_month_snapshots
 -- ─── Seed: Tiers ─────────────────────────────────────────────────────────
 
 insert into tiers (id, name, eyebrow, min_orders, max_orders) values
-  (0, 'Bienvenido', '01',     0,     0),
-  (1, 'Aprendiz',   '02',     1,   100),
-  (2, 'Explorador', '03',   100,  1000),
-  (3, 'Master',     '04',  1001,  2500),
-  (4, 'Experto',    '05',  2501,  5000),
-  (5, 'Sabio VIP',  '06',  5001, 20000),
-  (6, 'Leyenda',    '07', 20001,  null)
+  (0, 'Bienvenido', '01',     0,   100),
+  (1, 'Explorador', '02',   101,  1000),
+  (2, 'Master',     '03',  1001,  2500),
+  (3, 'Experto',    '04',  2501,  5000),
+  (4, 'Sabio VIP',  '05',  5001, 20000),
+  (5, 'Leyenda',    '06', 20001,  null)
 on conflict (id) do nothing;
 
 -- ─── Seed: Sub-niveles ───────────────────────────────────────────────────
+-- Nota (21 ago 2026): el equipo comercial imprimió material físico sin el
+-- nivel Aprendiz — se retiró como nivel propio y su rango (1-100 órdenes)
+-- se fusionó dentro de Bienvenido. Los badges 'aprendiz-*.png' se reutilizan
+-- ahí porque son medallones genéricos sin texto (verificado visualmente).
 
 insert into sub_levels (tier_id, code, label, min_orders, max_orders, badge_url, sort_order) values
-  -- Bienvenido
+  -- Bienvenido (incluye el rango que antes era Aprendiz)
   (0, 'unica', 'Categoría de entrada',    0,    0, null,                       1),
-  -- Aprendiz
-  (1, 'I',     'Subnivel I',              1,    9, '/badges/aprendiz-1.png',  1),
-  (1, 'II',    'Subnivel II',            10,   50, '/badges/aprendiz-2.png',  2),
-  (1, 'III',   'Subnivel III',           51,  100, '/badges/aprendiz-3.png',  3),
+  (0, 'I',     'Subnivel I',              1,    9, '/badges/aprendiz-1.png',  2),
+  (0, 'II',    'Subnivel II',            10,   50, '/badges/aprendiz-2.png',  3),
+  (0, 'III',   'Subnivel III',           51,  100, '/badges/aprendiz-3.png',  4),
   -- Explorador
-  (2, 'I',     'Subnivel I',            100,  299, null,                       1),
-  (2, 'II',    'Subnivel II',           300,  599, null,                       2),
-  (2, 'III',   'Subnivel III',          600, 1000, null,                       3),
+  (1, 'I',     'Subnivel I',            101,  299, null,                       1),
+  (1, 'II',    'Subnivel II',           300,  599, null,                       2),
+  (1, 'III',   'Subnivel III',          600, 1000, null,                       3),
   -- Master
-  (3, 'I',     'Subnivel I',           1001, 1500, '/badges/master-1.png',    1),
-  (3, 'II',    'Subnivel II',          1501, 2500, '/badges/master-2.png',    2),
+  (2, 'I',     'Subnivel I',           1001, 1500, '/badges/master-1.png',    1),
+  (2, 'II',    'Subnivel II',          1501, 2500, '/badges/master-2.png',    2),
   -- Experto
-  (4, 'I',     'Subnivel I',           2501, 3500, '/badges/experto-1.png',   1),
-  (4, 'II',    'Subnivel II',          3501, 5000, '/badges/experto-2.png',   2),
+  (3, 'I',     'Subnivel I',           2501, 3500, '/badges/experto-1.png',   1),
+  (3, 'II',    'Subnivel II',          3501, 5000, '/badges/experto-2.png',   2),
   -- Sabio VIP
-  (5, 'I',     'Subnivel I',           5001, 9999, '/badges/sabio-1.png',     1),
-  (5, 'II',    'Subnivel II',         10000,20000, null,                       2),
+  (4, 'I',     'Subnivel I',           5001, 9999, '/badges/sabio-1.png',     1),
+  (4, 'II',    'Subnivel II',         10000,20000, null,                       2),
   -- Leyenda
-  (6, 'unica', 'Rango único',         20001,  null, '/badges/leyenda.png',    1)
+  (5, 'unica', 'Rango único',         20001,  null, '/badges/leyenda.png',    1)
 on conflict (tier_id, code) do nothing;
 
 -- ─── Seed: Sellers ───────────────────────────────────────────────────────
@@ -172,20 +174,20 @@ on conflict (email) do nothing;
 
 insert into seller_month_snapshots
   (seller_id, month_date, tier_id, sub_level_code, orders_delivered, leveled_up, points)
-select id, '2026-06-01'::date, 2, 'III',  780, false, 1404 from sellers where email = 'oscar.galeano@dropi.co' union all
-select id, '2026-07-01'::date, 3, 'I',   1005, true,  1809 from sellers where email = 'oscar.galeano@dropi.co' union all
-select id, '2026-08-01'::date, 3, 'I',   1180, false, 2124 from sellers where email = 'oscar.galeano@dropi.co' union all
+select id, '2026-06-01'::date, 1, 'III',  780, false, 1404 from sellers where email = 'oscar.galeano@dropi.co' union all
+select id, '2026-07-01'::date, 2, 'I',   1005, true,  1809 from sellers where email = 'oscar.galeano@dropi.co' union all
+select id, '2026-08-01'::date, 2, 'I',   1180, false, 2124 from sellers where email = 'oscar.galeano@dropi.co' union all
 
-select id, '2026-06-01'::date, 3, 'II',  2100, false, 3780 from sellers where email = 'maria.ruiz@dropi.co' union all
-select id, '2026-07-01'::date, 4, 'I',   2650, true,  4770 from sellers where email = 'maria.ruiz@dropi.co' union all
-select id, '2026-08-01'::date, 4, 'I',   2900, false, 5220 from sellers where email = 'maria.ruiz@dropi.co' union all
+select id, '2026-06-01'::date, 2, 'II',  2100, false, 3780 from sellers where email = 'maria.ruiz@dropi.co' union all
+select id, '2026-07-01'::date, 3, 'I',   2650, true,  4770 from sellers where email = 'maria.ruiz@dropi.co' union all
+select id, '2026-08-01'::date, 3, 'I',   2900, false, 5220 from sellers where email = 'maria.ruiz@dropi.co' union all
 
-select id, '2026-06-01'::date, 1, 'I',      6, false,   11 from sellers where email = 'juan.perez@dropi.co' union all
-select id, '2026-07-01'::date, 1, 'II',    28, false,   50 from sellers where email = 'juan.perez@dropi.co' union all
-select id, '2026-08-01'::date, 1, 'II',    32, false,   58 from sellers where email = 'juan.perez@dropi.co' union all
+select id, '2026-06-01'::date, 0, 'I',      6, false,   11 from sellers where email = 'juan.perez@dropi.co' union all
+select id, '2026-07-01'::date, 0, 'II',    28, false,   50 from sellers where email = 'juan.perez@dropi.co' union all
+select id, '2026-08-01'::date, 0, 'II',    32, false,   58 from sellers where email = 'juan.perez@dropi.co' union all
 
-select id, '2026-06-01'::date, 6, 'unica',21800, false, 39240 from sellers where email = 'lucia.gomez@dropi.co' union all
-select id, '2026-07-01'::date, 6, 'unica',23000, false, 41400 from sellers where email = 'lucia.gomez@dropi.co' union all
-select id, '2026-08-01'::date, 6, 'unica',24500, false, 44100 from sellers where email = 'lucia.gomez@dropi.co'
+select id, '2026-06-01'::date, 5, 'unica',21800, false, 39240 from sellers where email = 'lucia.gomez@dropi.co' union all
+select id, '2026-07-01'::date, 5, 'unica',23000, false, 41400 from sellers where email = 'lucia.gomez@dropi.co' union all
+select id, '2026-08-01'::date, 5, 'unica',24500, false, 44100 from sellers where email = 'lucia.gomez@dropi.co'
 -- carlos.vera: sin snapshots (nivel Bienvenido, 0 órdenes)
 on conflict (seller_id, month_date) do nothing;

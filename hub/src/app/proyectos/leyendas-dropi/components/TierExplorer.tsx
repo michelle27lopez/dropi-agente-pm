@@ -4,22 +4,20 @@ import { TIERS } from "../mock/tiers";
 
 const LEAD: Record<number, string> = {
   0: "El primer paso es conocer y entender.",
-  1: "Atrévete a dar el primer paso y comprueba que vender por internet sí funciona.",
-  2: "Experimenta, encuentra tus productos ganadores y comprueba que los ingresos son reales.",
-  3: "Replica lo que funciona y convierte tus ventas en una operación sostenible.",
-  4: "Cero miedo, cero improvisación: tu tienda ya es un motor de ventas predecible.",
-  5: "Dominas el mercado, generas tu propia demanda y transformas Dropi en tu gran empresa.",
-  6: "La cima del e-commerce: inspiras al mercado y lideras la industria.",
+  1: "Experimenta, encuentra tus productos ganadores y comprueba que los ingresos son reales.",
+  2: "Replica lo que funciona y convierte tus ventas en una operación sostenible.",
+  3: "Cero miedo, cero improvisación: tu tienda ya es un motor de ventas predecible.",
+  4: "Dominas el mercado, generas tu propia demanda y transformas Dropi en tu gran empresa.",
+  5: "La cima del e-commerce: inspiras al mercado y lideras la industria.",
 };
 
 const HERO_IMG: Record<number, string> = {
   0: "/leyendas/heroes/bienvenido.png",
-  1: "/leyendas/heroes/aprendiz.png",
-  2: "/leyendas/heroes/explorador.png",
-  3: "/leyendas/heroes/master.png",
-  4: "/leyendas/heroes/experto.png",
-  5: "/leyendas/heroes/sabio-vip.png",
-  6: "/leyendas/heroes/leyenda.png",
+  1: "/leyendas/heroes/explorador.png",
+  2: "/leyendas/heroes/master.png",
+  3: "/leyendas/heroes/experto.png",
+  4: "/leyendas/heroes/sabio-vip.png",
+  5: "/leyendas/heroes/leyenda.png",
 };
 
 export default function TierExplorer() {
@@ -64,8 +62,6 @@ export default function TierExplorer() {
           <div className="flex flex-wrap items-center gap-2 text-sm font-bold" style={{ color: "#FF8500" }}>
             {tier.maxOrders === null
               ? `${tier.minOrders.toLocaleString("es-CO")}+ órdenes/mes`
-              : tier.minOrders === 0
-              ? "0 órdenes/mes"
               : `${tier.minOrders.toLocaleString("es-CO")}–${tier.maxOrders.toLocaleString("es-CO")} órdenes/mes`}
           </div>
           <p className="max-w-md text-[17px] font-bold leading-snug text-[#EAEAEA]">{LEAD[tierIdx]}</p>
@@ -103,7 +99,7 @@ export default function TierExplorer() {
 
       {/* Tier rail */}
       <div
-        className="grid grid-cols-4 gap-2 p-4 sm:grid-cols-7"
+        className="grid grid-cols-3 gap-2 p-4 sm:grid-cols-6"
         style={{ borderTop: "1px solid rgba(234,234,234,0.1)", background: "rgba(9,9,9,0.6)" }}
       >
         {TIERS.map((t, i) => (

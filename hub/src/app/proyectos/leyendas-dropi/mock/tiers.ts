@@ -6,7 +6,7 @@ export const TIERS: Tier[] = [
     name: "Bienvenido",
     eyebrow: "01",
     minOrders: 0,
-    maxOrders: 0,
+    maxOrders: 100,
     subLevels: [
       {
         code: "unica",
@@ -15,15 +15,6 @@ export const TIERS: Tier[] = [
         maxOrders: 0,
         badgeUrl: null,
       },
-    ],
-  },
-  {
-    id: 1,
-    name: "Aprendiz",
-    eyebrow: "02",
-    minOrders: 1,
-    maxOrders: 100,
-    subLevels: [
       {
         code: "I",
         label: "Subnivel I",
@@ -48,16 +39,16 @@ export const TIERS: Tier[] = [
     ],
   },
   {
-    id: 2,
+    id: 1,
     name: "Explorador",
-    eyebrow: "03",
-    minOrders: 100,
+    eyebrow: "02",
+    minOrders: 101,
     maxOrders: 1000,
     subLevels: [
       {
         code: "I",
         label: "Subnivel I",
-        minOrders: 100,
+        minOrders: 101,
         maxOrders: 299,
         badgeUrl: null,
       },
@@ -78,9 +69,9 @@ export const TIERS: Tier[] = [
     ],
   },
   {
-    id: 3,
+    id: 2,
     name: "Master",
-    eyebrow: "04",
+    eyebrow: "03",
     minOrders: 1001,
     maxOrders: 2500,
     subLevels: [
@@ -101,9 +92,9 @@ export const TIERS: Tier[] = [
     ],
   },
   {
-    id: 4,
+    id: 3,
     name: "Experto",
-    eyebrow: "05",
+    eyebrow: "04",
     minOrders: 2501,
     maxOrders: 5000,
     subLevels: [
@@ -124,9 +115,9 @@ export const TIERS: Tier[] = [
     ],
   },
   {
-    id: 5,
+    id: 4,
     name: "Sabio VIP",
-    eyebrow: "06",
+    eyebrow: "05",
     minOrders: 5001,
     maxOrders: 20000,
     subLevels: [
@@ -147,9 +138,9 @@ export const TIERS: Tier[] = [
     ],
   },
   {
-    id: 6,
+    id: 5,
     name: "Leyenda",
-    eyebrow: "07",
+    eyebrow: "06",
     minOrders: 20001,
     maxOrders: null,
     subLevels: [

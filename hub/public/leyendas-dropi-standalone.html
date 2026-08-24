@@ -1595,7 +1595,7 @@
 <script type="text/x-dc" data-dc-script="" data-props="{&quot;simularFallos&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;QA · estados de error&quot;,&quot;label&quot;:&quot;Simular fallos de backend&quot;},&quot;datosDesactualizados&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;QA · estados de error&quot;,&quot;label&quot;:&quot;Ranking con datos desactualizados&quot;}}">
 const B = "https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/";
 const BADGE_IDS = { "1_3.png": "badge0", "1.png": "badge1", "1_2.png": "badge2", "3.png": "badge3", "2.png": "badge4", "4.png": "badge5", "5.png": "badge6", "2_2.png": "badge7", "2_3.png": "badge8", "3_2.png": "badge9" };
-const LVL_IMG_IDS = { "assets/opt/bienvenido.png": "lvlImgBienvenido", "assets/opt/aprendiz.png": "lvlImgAprendiz", "assets/opt/Explorador.png": "lvlImgExplorador", "assets/opt/Maestros.png": "lvlImgMaestros", "assets/opt/experto.png": "lvlImgExperto", "assets/opt/SabioVIP.png": "lvlImgSabio", "assets/opt/Leyenda.png": "lvlImgLeyenda", "assets/opt/Todos.png": "imgTodos" };
+const LVL_IMG_IDS = { "assets/opt/bienvenido.png": "lvlImgBienvenido", "assets/opt/Explorador.png": "lvlImgExplorador", "assets/opt/Maestros.png": "lvlImgMaestros", "assets/opt/experto.png": "lvlImgExperto", "assets/opt/SabioVIP.png": "lvlImgSabio", "assets/opt/Leyenda.png": "lvlImgLeyenda", "assets/opt/Todos.png": "imgTodos" };
 const IMG = (p) => {
   const r = (typeof window !== "undefined" && window.__resources) || {};
   return r[LVL_IMG_IDS[p]] || p;
@@ -1628,7 +1628,7 @@ const DREAMS = [
   { label: "Mi empresa de e-commerce", ask: "¿Cuánto capital necesitas?", sub: "Operación regional con marca propia", cost: 1800000000, months: 5 }
 ];
 const COP = (n) => "$" + String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-const TIER_MIN = [0, 1, 101, 1001, 2501, 5001, 20001];
+const TIER_MIN = [0, 101, 1001, 2501, 5001, 20001];
 const ordersFromSlider = (v) => {
   const raw = 10 * Math.pow(3000, Math.min(100, Math.max(0, v)) / 100);
   const q = raw < 100 ? 5 : raw < 1000 ? 25 : raw < 5000 ? 100 : 500;
@@ -1648,34 +1648,30 @@ const metaOf = (i) => {
   return { num: true, big: last, pre: /m[áa]s de/i.test(src) ? "+" : (nums.length > 1 ? "hasta" : ""), text: "" };
 };
 const TIERS = [
-        { rank: "00", name: "Bienvenido", badge: BG("1.png"), orders: "0 órdenes", levels: ["I"],
+        { rank: "00", name: "Bienvenido", badge: BG("1.png"), orders: "0 a 100 órdenes/mes", levels: ["I"],
           lead: "El primer paso es conocer y entender.",
-          body: "Es tu primera vez en el universo del comercio electrónico. Queremos que entiendas por qué Dropi es la plataforma para transformar tu vida." },
-        { rank: "01", name: "Aprendiz", badge: BG("1_2.png"), orders: "1 a 100 órdenes/mes", levels: ["II"],
-          lead: "Atrévete a dar el primer paso y comprueba que vender por internet sí funciona.",
-          body: "Das tus primeros pasos en Dropi Academy, conoces la plataforma y vives la emoción de tus primeras ventas. Tu viaje hacia un negocio rentable empieza hoy." },
-        { rank: "02", name: "Explorador", badge: BG("1_3.png"), orders: "101 a 1,000 órdenes/mes", levels: ["III"],
+          body: "Es tu primera vez en el universo del comercio electrónico. Das tus primeros pasos en Dropi Academy y vives la emoción de tus primeras ventas — tu viaje hacia un negocio rentable empieza hoy." },
+        { rank: "01", name: "Explorador", badge: BG("1_3.png"), orders: "101 a 1,000 órdenes/mes", levels: ["III"],
           lead: "Experimenta, encuentra tus productos ganadores y comprueba que los ingresos son reales.",
           body: "Dominas las técnicas del e-commerce, integras herramientas a tu flujo y encuentras los proveedores ideales para consolidar tu oferta." },
-        { rank: "03", name: "Maestro", badge: BG("2.png"), orders: "1,001 a 2,500 órdenes/mes", levels: ["I", "II", "III"],
+        { rank: "02", name: "Master", badge: BG("2.png"), orders: "1,001 a 2,500 órdenes/mes", levels: ["I", "II", "III"],
           lead: "Replica lo que funciona y convierte tus ventas en una operación sostenible.",
           body: "Ya sabes vender. Ahora estandarizas tus procesos, aplicas mejores prácticas y utilizas herramientas avanzadas para escalar sin freno." },
-        { rank: "04", name: "Experto", badge: BG("3.png"), orders: "2,501 a 5,000 órdenes/mes", levels: ["I", "II"],
+        { rank: "03", name: "Experto", badge: BG("3.png"), orders: "2,501 a 5,000 órdenes/mes", levels: ["I", "II"],
           lead: "Cero miedo, cero improvisación: tu tienda ya es un motor de ventas predecible.",
           body: "Tu volumen es considerable. Te relacionas directamente con múltiples proveedores, dominas la operación y resuelves retos comerciales de forma proactiva." },
-        { rank: "05", name: "Sabio VIP", badge: BG("4.png"), orders: "5,001 a 20,000 órdenes/mes", levels: ["Única"],
+        { rank: "04", name: "Sabio VIP", badge: BG("4.png"), orders: "5,001 a 20,000 órdenes/mes", levels: ["Única"],
           lead: "Dominas el mercado, generas tu propia demanda y transformas Dropi en tu gran empresa.",
           body: "Tienes visión 360° del negocio. Sabes seducir al comprador, predecir tendencias y moverte con maestría por todos los caminos del e-commerce." },
-        { rank: "06", name: "Leyenda", badge: BG("5.png"), orders: "+20,000 órdenes/mes", levels: ["Única"],
+        { rank: "05", name: "Leyenda", badge: BG("5.png"), orders: "+20,000 órdenes/mes", levels: ["Única"],
           lead: "La cima del e-commerce: inspiras al mercado y lideras la industria.",
           body: "Eres el referente que todos quieren seguir. Lideras una estructura con equipo propio, construyes cultura de e-commerce y marcas el camino en la región." }
-      
+
 ];
 
 const SUBS = [
-  [{ lo: 0, hi: 0, label: "Categoría de entrada", miss: true }],
-  [{ lo: 1, hi: 9, img: "assets/opt/Nivel Aprendiz Sub1.png" }, { lo: 10, hi: 50, img: "assets/opt/Nivel Aprendiz Sub2.png" }, { lo: 51, hi: 100, img: "assets/opt/Nivel Aprendiz Sub3.png" }],
-  [{ lo: 100, hi: 299, miss: true }, { lo: 300, hi: 599, miss: true }, { lo: 600, hi: 1000, miss: true }],
+  [{ lo: 0, hi: 0, label: "Categoría de entrada", miss: true }, { lo: 1, hi: 9, label: "Subnivel I", img: "assets/opt/Nivel Aprendiz Sub1.png" }, { lo: 10, hi: 50, label: "Subnivel II", img: "assets/opt/Nivel Aprendiz Sub2.png" }, { lo: 51, hi: 100, label: "Subnivel III", img: "assets/opt/Nivel Aprendiz Sub3.png" }],
+  [{ lo: 101, hi: 299, miss: true }, { lo: 300, hi: 599, miss: true }, { lo: 600, hi: 1000, miss: true }],
   [{ lo: 1001, hi: 1500, img: "assets/opt/Nivel Master Sub1.png" }, { lo: 1501, hi: 2500, img: "assets/opt/Nivel Master Sub2.png" }],
   [{ lo: 2501, hi: 3500, img: "assets/opt/Nivel Experto Sub1.png" }, { lo: 3501, hi: 5000, img: "assets/opt/Nivel Experto Sub2.png" }],
   [{ lo: 5001, hi: 9999, img: "assets/opt/Nivel Sabio Sub1.png" }, { lo: 10000, hi: 20000, miss: true }],
@@ -1705,14 +1701,6 @@ const PAGES = [
     photo: "retrato — bienvenida", img: IMG("assets/opt/bienvenido.png"),
     goal: ["Entender como este tipo de herramientas te pueden transformar la vida"],
     items: ["Qué es el comercio electrónico", "Qué es el dropshipping", "Casos de éxito de dropshippers Dropi", "Registrarme y activar mi cuenta"] },
-  { q: "“Y con esto me puedo volver rico?”",
-    a: "RESPUESTA CORTA: Si le mete ganas, SI",
-    title: "Aprendiz, es momento de atreverse",
-    intro: "Pierde el miedo, domina la plataforma y cierra tus primeras ventas. El modelo sí funciona.",
-    mindset: "Quiero aprender y ver mis primeras ganancias",
-    photo: "retrato — aprendiz", img: IMG("assets/opt/aprendiz.png"),
-    goal: ["Cruzar la barrera de las 100 órdenes mensuales", "(el punto donde aprendes a generar dinero con ventas digitales)"],
-    items: ["Ruta inicial en Dropi Academy", "Explorar el catálogo de proveedores", "Cómo crear y seguir tus órdenes", "Guía para tus primeras campañas"] },
   { q: "Funciono! y ahora? qué más hago?",
     a: "RESPUESTA: No pares, no dudes, Tu puedes ir por más!",
     title: "Explorador, es momento de Validar*",
@@ -1723,10 +1711,10 @@ const PAGES = [
     items: ["Automatizar tus mensajes con Chatea Pro", "Medir tus campañas con Roax", "Cómo validar un producto ganador", "Unirme a una comunidad Dropi"] },
   { q: "Ya no es un pasatiempo, Dropi me esta ayudando a salir adelante",
     a: "RESPUESTA: Te lo dijimos! Era cuestión de confianza y disciplina",
-    title: "Maestro, es momento de Sistematizar*",
+    title: "Master, es momento de Sistematizar*",
     intro: "Automatiza: gestiona el volumen, acelera confirmaciones y protege tu margen operativo.",
     mindset: "Sé lo que hago y voy a replicar lo que funciona",
-    photo: "retrato — maestro", img: IMG("assets/opt/Maestros.png"),
+    photo: "retrato — master", img: IMG("assets/opt/Maestros.png"),
     goal: ["Estandarizar la operación para dar el salto a las 2,500 órdenes mensuales.", "(Dejaste de experimentar. tu incertidumbre económica empezó a desaparecer)"],
     items: ["Estandarizar tu operación diaria", "Herramientas de automatización Dropi", "Tablero de métricas y márgenes", "Volverme líder de comunidad"] },
   { q: "Hey Dropi, Tengo preguntas, Requerimientos porque Voy a tope!",
@@ -1756,31 +1744,31 @@ const PAGES = [
 ];
 
 const FAMILIAS = [
-  { rank: "01", name: "Iniciado", levels: "I · II · III", tier: 1, alsoTiers: [0, 2],
+  { rank: "01", name: "Iniciado", levels: "I · II · III", tier: 0, alsoTiers: [1],
     main: "1.png", subs: ["1_2.png", "1_3.png"],
     voluntad: "Atreverme a dar el primer paso aunque no tenga todo resuelto.",
     meta: "De tu activación a tus primeras 1,000 órdenes entregadas al mes.",
     proposito: "Comprobar con hechos que vender por internet sí funciona.",
     unlocks: ["Dropi Academy completo", "Catálogo con proveedores verificados", "Acompañamiento en tus primeras ventas"] },
-  { rank: "02", name: "Experto", levels: "I · II · III", tier: 3, hideName: true,
+  { rank: "02", name: "Experto", levels: "I · II · III", tier: 2, hideName: true,
     main: "2.png", subs: ["2_2.png", "2_3.png"],
     voluntad: "Dejar de improvisar y replicar lo que ya me funciona.",
     meta: "1,001 a 2,500 órdenes entregadas al mes.",
     proposito: "Convertir ventas sueltas en una operación que sostiene tu vida.",
     unlocks: ["Herramientas de automatización", "Integraciones y métricas avanzadas", "Comisiones preferenciales"] },
-  { rank: "03", name: "Master", levels: "I · II", tier: 4, hideName: true,
+  { rank: "03", name: "Master", levels: "I · II", tier: 3, hideName: true,
     main: "3.png", subs: ["3_2.png"],
     voluntad: "Tomarme el negocio en serio y sostener el volumen.",
     meta: "2,501 a 5,000 órdenes entregadas al mes.",
     proposito: "Tener ingresos predecibles y un equipo que te acompañe.",
     unlocks: ["Negociación directa con proveedores", "Soporte prioritario", "Desarrollo de productos de alto margen"] },
-  { rank: "04", name: "Sabio", levels: "Única", tier: 5,
+  { rank: "04", name: "Sabio", levels: "Única", tier: 4,
     main: "4.png", subs: [],
     voluntad: "Crear demanda en lugar de esperarla.",
     meta: "5,001 a 20,000 órdenes entregadas al mes.",
     proposito: "Que Dropi deje de ser un ingreso extra y sea tu empresa.",
     unlocks: ["Beneficios exclusivos de alto nivel", "Mesa de relacionamiento con importadores", "Círculo de élite del e-commerce"] },
-  { rank: "05", name: "Leyenda", levels: "Única", tier: 6,
+  { rank: "05", name: "Leyenda", levels: "Única", tier: 5,
     main: "5.png", subs: [],
     voluntad: "Construir algo que siga creciendo sin mí.",
     meta: "Más de 20,000 órdenes entregadas al mes.",
@@ -1809,11 +1797,11 @@ const COMUNIDADES = [
   { name: "Última Milla Caribe", leader: "Jorge Barrios", city: "Barranquilla", members: 15870, orders: 742100, ligas: ["Elite", "Rock Star"] },
   { name: "Dropshippers del Valle", leader: "Diana Restrepo", city: "Cali", members: 13260, orders: 651300, ligas: ["Elite", "Rock Star"] },
   { name: "Conquista Santander", leader: "Miguel Peñaloza", city: "Bucaramanga", members: 11040, orders: 528700, ligas: ["Elite", "Estrella"] },
-  { name: "Pueblos que Venden", leader: "Sandra Cárdenas", city: "Tunja", members: 9310, orders: 417500, ligas: ["Maestro", "Estrella"] },
-  { name: "Eje Cafetero Pro", leader: "Julián Cardona", city: "Pereira", members: 8120, orders: 366200, ligas: ["Maestro", "Estrella"] },
-  { name: "Costa Digital", leader: "Laura Mendoza", city: "Cartagena", members: 6940, orders: 298400, ligas: ["Maestro"] },
-  { name: "Andes Emprende", leader: "Camilo Tovar", city: "Manizales", members: 5480, orders: 214600, ligas: ["Maestro"] },
-  { name: "Llanos Comercio", leader: "Paola Guzmán", city: "Villavicencio", members: 4130, orders: 168900, ligas: ["Maestro"] },
+  { name: "Pueblos que Venden", leader: "Sandra Cárdenas", city: "Tunja", members: 9310, orders: 417500, ligas: ["Master", "Estrella"] },
+  { name: "Eje Cafetero Pro", leader: "Julián Cardona", city: "Pereira", members: 8120, orders: 366200, ligas: ["Master", "Estrella"] },
+  { name: "Costa Digital", leader: "Laura Mendoza", city: "Cartagena", members: 6940, orders: 298400, ligas: ["Master"] },
+  { name: "Andes Emprende", leader: "Camilo Tovar", city: "Manizales", members: 5480, orders: 214600, ligas: ["Master"] },
+  { name: "Llanos Comercio", leader: "Paola Guzmán", city: "Villavicencio", members: 4130, orders: 168900, ligas: ["Master"] },
   { name: "Sur Sin Frenos", leader: "Óscar Chicaiza", city: "Pasto", members: 3260, orders: 121400, ligas: ["Estrella"] },
   { name: "Nueva Generación", leader: "Valentina Ríos", city: "Ibagué", members: 2410, orders: 94300, ligas: ["Estrella"] }
 ];
@@ -1832,7 +1820,7 @@ const LIGAS = [
   { name: "Liga Efectividad",
     desc: "Premia el volumen acumulado de ordenes entregadas por la comunidad. Es una metrica permanente: las ordenes nunca se restan, el nivel solo sube.",
     tiers: [
-      { name: "Maestro", req: "Mas de 10,000 ordenes entregadas acumuladas" },
+      { name: "Master", req: "Mas de 10,000 ordenes entregadas acumuladas" },
       { name: "Elite", req: "Mas de 50,000 ordenes entregadas acumuladas" },
       { name: "Leyenda", req: "Mas de 100,000 ordenes entregadas acumuladas" }
     ] },
@@ -2982,7 +2970,7 @@ class Component extends DCLogic {
         incomeRef: this.cRef("income"), monthsRef: this.cRef("months"), monthsWordRef: this.cRef("monthsWord"),
         tierName: t.name, tierOrders: t.orders, badgeRef: setImg(tierBadgeOf(ti)), hasBadge: !!tierBadgeOf(ti), noBadge: !tierBadgeOf(ti),
         segs: TIERS.map((x, k) => ({ bg: k <= ti ? (k === ti ? "#FF8500" : "rgba(255,133,0,.55)") : "rgba(234,234,234,.14)" })),
-        step: "Nivel " + (ti + 1) + " de 7 · " + eyebrowFor(ti),
+        step: "Nivel " + (ti + 1) + " de 6 · " + eyebrowFor(ti),
         cta: ti === 0 ? "Empezar desde cero" : "Quiero ser " + t.name,
         open: this.openLevel(ti)
       };
@@ -3016,7 +3004,7 @@ class Component extends DCLogic {
         onSelect: this.selectSub(k)
       })),
       onOpen: this.openLevel(sel),
-      step: "Nivel " + (sel + 1) + " de 7"
+      step: "Nivel " + (sel + 1) + " de 6"
     };
 
     const i = this.state.level;

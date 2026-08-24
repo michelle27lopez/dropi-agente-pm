@@ -1,6 +1,5 @@
 export type TierName =
   | "Bienvenido"
-  | "Aprendiz"
   | "Explorador"
   | "Master"
   | "Experto"
@@ -16,9 +15,9 @@ export interface SubLevel {
 }
 
 export interface Tier {
-  id: number; // 0..6, orden de progresión
+  id: number; // 0..5, orden de progresión
   name: TierName;
-  eyebrow: string; // "01".."07" (rango autoritativo del playbook)
+  eyebrow: string; // "01".."06" (rango autoritativo del playbook)
   minOrders: number;
   maxOrders: number | null;
   subLevels: SubLevel[];
