@@ -333,6 +333,45 @@ export async function supabaseResetEligibleToken(
   return fromEligibleRow(data as EligibleRow);
 }
 
+// Devuelve la fila al estado inicial SIN cambiar el token — pensado para el
+// proveedor de QA (token fijo `qa-cyberdays`), que se reusa una y otra vez.
+// Distinto de supabaseResetEligibleToken: ahí lo que cambia es el link; aquí
+// el link es justamente lo único que se conserva, junto con el catálogo.
+export async function supabaseResetEligibleEstado(
+  campaignId: string,
+  token: string
+): Promise<EligibleEntry | null> {
+  if (!supabase) return null;
+  const { data, error } = await supabase
+    .from("campaign_planeacion_eligible")
+    .update({
+      selected_product_ids: null,
+      submitted_at: null,
+      selection_updated_at: null,
+      approved_at: null,
+      ready_checklist: null,
+      feedback: null,
+      view_count: 0,
+      first_viewed_at: null,
+      last_viewed_at: null,
+      meet_click_count: 0,
+      meet_first_clicked_at: null,
+      meet_last_clicked_at: null,
+      meet_attended: null,
+      meet_attended_marked_at: null,
+      meet_rsvp_click_count: 0,
+      meet_rsvp_first_clicked_at: null,
+      meet_rsvp_last_clicked_at: null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("campaign_id", campaignId)
+    .eq("token", token)
+    .select()
+    .single();
+  if (error) return null;
+  return fromEligibleRow(data as EligibleRow);
+}
+
 export async function supabaseApproveAllEligible(campaignId: string): Promise<number | null> {
   if (!supabase) return null;
   const { data, error } = await supabase
