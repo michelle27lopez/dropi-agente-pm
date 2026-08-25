@@ -615,31 +615,42 @@
 
   <sc-if value="{{ isProductDetail }}" hint-placeholder-val="{{ false }}">
     <div sc-camel-on-click="{{ product.close }}" style="position:fixed;inset:0;z-index:96;background:rgba(4,4,4,.9);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:clamp(8px,3vw,32px);overflow:auto;animation:lg-fade .35s ease both">
-      <div sc-camel-on-click="{{ stop }}" style="position:relative;width:100%;max-width:640px;margin:auto;background:#121212;border:1px solid rgba(255,133,0,.35);overflow:hidden;box-shadow:0 40px 120px -40px rgba(255,72,0,.55)">
+      <div sc-camel-on-click="{{ stop }}" style="position:relative;width:100%;max-width:640px;margin:auto;background:#121212;border:1px solid rgba(255,133,0,.35);overflow:hidden;box-shadow:0 40px 120px -40px rgba(255,72,0,.55);animation:lg-boot .5s cubic-bezier(.16,1,.3,1) both">
         <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
           <div style="position:absolute;left:-20%;right:-20%;bottom:-14%;height:58%;background-image:linear-gradient(rgba(255,133,0,.16) 1px, rgba(11,11,11,0) 1px),linear-gradient(90deg, rgba(255,133,0,.11) 1px, rgba(11,11,11,0) 1px);background-size:70px 70px, 70px 70px;transform:perspective(600px) rotateX(74deg);transform-origin:50% 100%;animation:lg-floor 6.5s linear infinite;mask-image:linear-gradient(to top, #000 0%, transparent 78%);-webkit-mask-image:linear-gradient(to top, #000 0%, transparent 78%)"></div>
         </div>
         <button type="button" sc-camel-on-click="{{ product.close }}" style="position:absolute;top:16px;right:16px;z-index:3;background:rgba(11,11,11,.6);border:1px solid rgba(234,234,234,.18);color:rgba(234,234,234,.6);font-family:inherit;font-size:13px;line-height:1;padding:8px 11px;cursor:pointer;transition:color .3s ease, border-color .3s ease, transform .25s ease" style-hover="color:#EAEAEA;border-color:#EAEAEA;transform:rotate(90deg)">✕</button>
-        <div style="position:relative;height:200px;display:flex;align-items:center;justify-content:center;font-size:88px;background:linear-gradient(135deg,#1c1c1c 0%,#0e0e0e 100%);border-bottom:1px solid rgba(234,234,234,.1)">{{ product.emoji }}</div>
+        <div style="position:relative;height:230px;overflow:hidden;background:#0e0e0e;border-bottom:1px solid rgba(234,234,234,.1)">
+          <img src="{{ product.image }}" alt="{{ product.name }}" style="width:100%;height:100%;object-fit:cover;display:block">
+          <span style="position:absolute;left:14px;bottom:14px;display:inline-flex;align-items:center;gap:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0b0b0b;background:#FF8500;padding:5px 9px;border-radius:3px">✓ Verificado</span>
+        </div>
         <div style="position:relative;padding:clamp(20px,4vw,36px)">
-          <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(234,234,234,.45)">{{ product.category }}</span>
-          <h2 style="font-size:clamp(24px,3.2vw,32px);font-weight:700;line-height:1.12;margin:8px 0 18px;color:#F5F5F5;text-wrap:pretty">{{ product.name }}</h2>
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:22px">
-            <div style="border:1px solid rgba(234,234,234,.14);padding:14px">
-              <div style="font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.45);margin-bottom:6px">Precio venta</div>
-              <div style="font-size:22px;font-weight:700;color:#FF8500">{{ product.price }}</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(234,234,234,.45)">{{ product.category }}</span>
+            <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;color:#6FCF97">Stock {{ product.stock }} u.</span>
+          </div>
+          <h2 style="font-size:clamp(24px,3.2vw,32px);font-weight:700;line-height:1.12;margin:8px 0 6px;color:#F5F5F5;text-wrap:pretty">{{ product.name }}</h2>
+          <p style="font-size:13px;margin:0 0 20px;color:rgba(234,234,234,.5)">Provider: <span style="color:#7EB8FF;font-weight:700">{{ product.provider }}</span></p>
+
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:14px;border:1px solid rgba(234,234,234,.14);padding:16px 18px;margin-bottom:14px">
+            <div>
+              <div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.45);margin-bottom:5px">Precio proveedor</div>
+              <div style="font-size:19px;font-weight:700;color:rgba(234,234,234,.55);text-decoration:line-through;text-decoration-color:rgba(234,234,234,.32)">{{ product.costPrice }}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#FF8500;margin-bottom:5px">Precio sugerido</div>
+              <div style="font-size:30px;font-weight:700;color:#FF8500;line-height:1">{{ product.suggestedPrice }}</div>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px">
+            <div style="border:1px solid rgba(255,133,0,.4);background:rgba(255,133,0,.08);padding:14px">
+              <div style="font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:#FF8500;margin-bottom:6px">Utilidad media</div>
+              <div style="font-size:20px;font-weight:700;color:#FF8500">{{ product.utilidad }}</div>
             </div>
             <div style="border:1px solid rgba(234,234,234,.14);padding:14px">
               <div style="font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.45);margin-bottom:6px">Flete (desde–hasta)</div>
               <div style="font-size:16px;font-weight:700;color:#F5F5F5">{{ product.freightRange }}</div>
-            </div>
-            <div style="border:1px solid rgba(234,234,234,.14);padding:14px">
-              <div style="font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.45);margin-bottom:6px">Utilidad media</div>
-              <div style="font-size:16px;font-weight:700;color:#F5F5F5">{{ product.margin }}</div>
-            </div>
-            <div style="border:1px solid rgba(234,234,234,.14);padding:14px">
-              <div style="font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.45);margin-bottom:6px">Stock disponible</div>
-              <div style="font-size:16px;font-weight:700;color:#F5F5F5">{{ product.stock }} u.</div>
             </div>
           </div>
           <p style="font-size:14.5px;line-height:1.6;color:rgba(234,234,234,.65);margin:0 0 24px;text-wrap:pretty">{{ product.description }}</p>
@@ -880,18 +891,33 @@
         </sc-for>
       </div>
 
-      <div style="display:flex;gap:14px;overflow-x:auto;padding:4px 4px 16px">
+      <div data-prod-row="" style="display:flex;gap:14px;overflow-x:auto;padding:4px 4px 16px">
         <sc-for list="{{ prodList }}" as="p" hint-placeholder-count="4">
-          <div sc-camel-on-click="{{ p.onOpen }}" style="flex:0 0 auto;width:min(220px,72vw);background:#141414;border:1px solid rgba(234,234,234,.14);cursor:pointer;overflow:hidden;transition:transform .3s cubic-bezier(.16,1,.3,1), border-color .3s ease" style-hover="transform:translateY(-5px);border-color:#FF8500">
-            <div style="height:132px;display:flex;align-items:center;justify-content:center;font-size:42px;background:linear-gradient(135deg,#1c1c1c 0%,#0e0e0e 100%)">{{ p.emoji }}</div>
-            <div style="padding:14px 14px 16px;display:flex;flex-direction:column;gap:5px">
-              <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(234,234,234,.4)">{{ p.category }}</span>
+          <div sc-camel-on-click="{{ p.onOpen }}" style="flex:0 0 auto;width:min(230px,74vw);background:#141414;border:1px solid rgba(234,234,234,.14);cursor:pointer;overflow:hidden;transition:transform .3s cubic-bezier(.16,1,.3,1), border-color .3s ease;animation:lg-in .45s cubic-bezier(.16,1,.3,1) {{ p.delay }} both" style-hover="transform:translateY(-5px);border-color:#FF8500">
+            <div style="position:relative;height:150px;overflow:hidden;background:#0e0e0e">
+              <img src="{{ p.image }}" alt="{{ p.name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.16,1,.3,1)" style-hover="transform:scale(1.06)">
+              <span style="position:absolute;left:8px;bottom:8px;display:inline-flex;align-items:center;gap:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0b0b0b;background:#FF8500;padding:4px 8px;border-radius:3px">✓ Verificado</span>
+            </div>
+            <div style="padding:13px 14px 15px;display:flex;flex-direction:column;gap:5px">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.4)">{{ p.category }}</span>
+                <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;letter-spacing:.06em;color:#6FCF97">Stock {{ p.stock }}</span>
+              </div>
               <span style="font-size:14px;font-weight:700;line-height:1.28;color:#F5F5F5;min-height:36px">{{ p.name }}</span>
-              <span style="font-size:19px;font-weight:700;color:#FF8500;margin-top:2px">{{ p.price }}</span>
-              <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px;padding-top:10px;border-top:1px solid rgba(234,234,234,.1);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;color:rgba(234,234,234,.5)">
-                <span>Flete: {{ p.freightRange }}</span>
-                <span>Utilidad: {{ p.margin }}</span>
-                <span>Stock: {{ p.stock }} u.</span>
+              <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9.5px;color:rgba(234,234,234,.4)">Provider: <span style="color:#7EB8FF">{{ p.provider }}</span></span>
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:8px;margin-top:8px;padding-top:10px;border-top:1px solid rgba(234,234,234,.1)">
+                <div>
+                  <div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(234,234,234,.4)">Proveedor</div>
+                  <div style="font-size:12.5px;font-weight:700;color:rgba(234,234,234,.5);text-decoration:line-through;text-decoration-color:rgba(234,234,234,.32)">{{ p.costPrice }}</div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:#FF8500">Sugerido</div>
+                  <div style="font-size:19px;font-weight:700;color:#FF8500;line-height:1.1">{{ p.suggestedPrice }}</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px">
+                <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;font-weight:700;letter-spacing:.04em;color:#0b0b0b;background:rgba(255,133,0,.9);padding:4px 8px;border-radius:3px">Utilidad {{ p.utilidad }}</span>
+                <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:8.5px;color:rgba(234,234,234,.35);white-space:nowrap">Flete {{ p.freightRange }}</span>
               </div>
             </div>
           </div>
@@ -1930,20 +1956,20 @@ const PAISES = [
 ];
 
 const PRODUCT_CATEGORIES = ["Todos", "Hogar y cocina", "Tecnología", "Moda y accesorios", "Belleza y cuidado personal", "Deportes"];
-const CATEGORY_EMOJI = { "Hogar y cocina": "🏠", "Tecnología": "📱", "Moda y accesorios": "👜", "Belleza y cuidado personal": "💄", "Deportes": "🏋️" };
 // Mock provisional — catálogo real de "productos ganadores" de ExpoWinners (12 sept 2026)
-// pendiente de Producto/Comercial. Reemplazar por el feed real cuando exista.
+// pendiente de Producto/Comercial. Fotos: Pexels/Unsplash libres de uso, solo para simular
+// el catálogo real mientras llega. Reemplazar todo el bloque cuando exista el feed real.
 const EXPOWINNERS_PRODUCTS = [
-  { name: "Set de organizadores de cocina x6", category: "Hogar y cocina", price: 79900, freightMin: 8000, freightMax: 13500, margin: 22000, stock: 3200, description: "Organiza alacena, nevera y clóset con un set apilable de 6 piezas. Producto de rotación alta, ideal para public­idad en video." },
-  { name: "Lámpara LED de escritorio recargable", category: "Hogar y cocina", price: 65900, freightMin: 7500, freightMax: 12000, margin: 19000, stock: 1850, description: "Tres tonos de luz, batería recargable y brazo flexible. Se vende muy bien en campañas de regreso a clases y home office." },
-  { name: "Audífonos inalámbricos TWS Pro", category: "Tecnología", price: 89900, freightMin: 9000, freightMax: 15000, margin: 28000, stock: 4100, description: "Bluetooth 5.3, estuche de carga y cancelación de ruido básica. El producto de tecnología con mejor rotación del catálogo." },
-  { name: "Smartwatch deportivo multifunción", category: "Tecnología", price: 129900, freightMin: 10000, freightMax: 16500, margin: 35000, stock: 2200, description: "Monitor de ritmo cardiaco, notificaciones y resistencia al agua. Ticket alto, buena utilidad por unidad." },
-  { name: "Bolso cruzado impermeable unisex", category: "Moda y accesorios", price: 69900, freightMin: 8500, freightMax: 13000, margin: 21000, stock: 2760, description: "Diseño unisex, material impermeable y compartimento acolchado. Fácil de mostrar en fotos de producto simples." },
-  { name: "Gafas de sol polarizadas UV400", category: "Moda y accesorios", price: 45900, freightMin: 7000, freightMax: 11000, margin: 15000, stock: 5400, description: "Protección UV400 y lente polarizada. Ticket bajo, ideal para vender por volumen en redes sociales." },
-  { name: "Kit de cepillos de maquillaje x10", category: "Belleza y cuidado personal", price: 39900, freightMin: 6500, freightMax: 10500, margin: 13000, stock: 6100, description: "Set completo con estuche. Uno de los productos con más recompra del catálogo de belleza." },
-  { name: "Plancha alisadora cerámica profesional", category: "Belleza y cuidado personal", price: 99900, freightMin: 9500, freightMax: 15500, margin: 31000, stock: 1400, description: "Placas cerámicas, temperatura ajustable. Ticket alto y buena conversión en demos de video." },
-  { name: "Banda de resistencia set x5", category: "Deportes", price: 34900, freightMin: 6000, freightMax: 10000, margin: 11500, stock: 7300, description: "Cinco niveles de resistencia con guía de ejercicios. Producto liviano y barato de enviar." },
-  { name: "Botella deportiva con filtro de agua", category: "Deportes", price: 29900, freightMin: 5500, freightMax: 9500, margin: 9800, stock: 8900, description: "Filtro integrado y marcador de consumo diario. El de mayor stock disponible del catálogo." }
+  { name: "Batidora de Mano Profesional", category: "Hogar y cocina", provider: "TIENDA QCARACHITOS", image: "https://images.pexels.com/photos/8357682/pexels-photo-8357682.jpeg?auto=compress&cs=tinysrgb&w=500", costPrice: 59900, suggestedPrice: 99900, freightMin: 8000, freightMax: 13500, stock: 3200, description: "Motor potente, varias velocidades y vaso medidor incluido. Producto de rotación alta, ideal para mostrarlo en video." },
+  { name: "Lámpara LED de Escritorio Recargable", category: "Hogar y cocina", provider: "ON.L1NE", image: "https://images.pexels.com/photos/823841/pexels-photo-823841.jpeg?auto=compress&cs=tinysrgb&w=500", costPrice: 42000, suggestedPrice: 65900, freightMin: 7500, freightMax: 12000, stock: 1850, description: "Tres tonos de luz, batería recargable y brazo flexible. Se vende muy bien en campañas de regreso a clases y home office." },
+  { name: "Audífonos Inalámbricos TWS Pro", category: "Tecnología", provider: "SEENCOM TECH", image: "https://images.pexels.com/photos/33298188/pexels-photo-33298188.jpeg?auto=compress&cs=tinysrgb&w=500", costPrice: 54000, suggestedPrice: 89900, freightMin: 9000, freightMax: 15000, stock: 4100, description: "Bluetooth 5.3, estuche de carga y cancelación de ruido básica. El producto de tecnología con mejor rotación del catálogo." },
+  { name: "Smartwatch Deportivo Multifunción", category: "Tecnología", provider: "TIENDAS TOP", image: "https://images.pexels.com/photos/9130515/pexels-photo-9130515.jpeg?auto=compress&cs=tinysrgb&w=500", costPrice: 82000, suggestedPrice: 129900, freightMin: 10000, freightMax: 16500, stock: 2200, description: "Monitor de ritmo cardiaco, notificaciones y resistencia al agua. Ticket alto, buena utilidad por unidad." },
+  { name: "Bolso Cruzado Impermeable Unisex", category: "Moda y accesorios", provider: "FRAGANCE STORE", image: "https://images.unsplash.com/photo-1586413595198-1840407316e9?auto=format&fit=crop&w=500&q=70", costPrice: 44000, suggestedPrice: 69900, freightMin: 8500, freightMax: 13000, stock: 2760, description: "Diseño unisex, material resistente al agua y compartimento acolchado. Fácil de mostrar en fotos de producto simples." },
+  { name: "Gafas de Sol Polarizadas UV400", category: "Moda y accesorios", provider: "PERFUMERIA GLOW", image: "https://images.pexels.com/photos/27353350/pexels-photo-27353350.jpeg?auto=compress&cs=tinysrgb&w=500", costPrice: 28000, suggestedPrice: 45900, freightMin: 7000, freightMax: 11000, stock: 5400, description: "Protección UV400 y lente polarizada. Ticket bajo, ideal para vender por volumen en redes sociales." },
+  { name: "Kit de Brochas de Maquillaje Profesional", category: "Belleza y cuidado personal", provider: "ZAMIA NATURALEZA", image: "https://images.pexels.com/photos/7675855/pexels-photo-7675855.jpeg?auto=compress&cs=tinysrgb&w=500", costPrice: 24000, suggestedPrice: 39900, freightMin: 6500, freightMax: 10500, stock: 6100, description: "Set completo con estuche de viaje. Uno de los productos con más recompra del catálogo de belleza." },
+  { name: "Plancha Alisadora Cerámica Profesional", category: "Belleza y cuidado personal", provider: "LATINA BEAUTY", image: "https://images.pexels.com/photos/3738359/pexels-photo-3738359.jpeg?auto=compress&cs=tinysrgb&w=500", costPrice: 61000, suggestedPrice: 99900, freightMin: 9500, freightMax: 15500, stock: 1400, description: "Placas cerámicas, temperatura ajustable. Ticket alto y buena conversión en demos de video." },
+  { name: "Set de Bandas de Resistencia x5", category: "Deportes", provider: "FITOVIT SPORT", image: "https://images.pexels.com/photos/8846282/pexels-photo-8846282.jpeg?auto=compress&cs=tinysrgb&w=500", costPrice: 21000, suggestedPrice: 34900, freightMin: 6000, freightMax: 10000, stock: 7300, description: "Cinco niveles de resistencia con guía de ejercicios. Producto liviano y barato de enviar." },
+  { name: "Botella Deportiva con Filtro de Agua", category: "Deportes", provider: "TIENDAS TOP", image: "https://images.pexels.com/photos/1325711/pexels-photo-1325711.jpeg?auto=compress&cs=tinysrgb&w=500", costPrice: 18000, suggestedPrice: 29900, freightMin: 5500, freightMax: 9500, stock: 8900, description: "Filtro integrado y marcador de consumo diario. El de mayor stock disponible del catálogo." }
 ];
 
 class Component extends DCLogic {
@@ -2398,7 +2424,23 @@ class Component extends DCLogic {
   goBack = () => { const p = this._prev || "leyendas"; this.goScreen(p === "terminos" || p === "faq" ? "leyendas" : p)(); };
   onSearch = (e) => this.setState({ q: e.target.value });
   selectPais = (name, soon) => () => { if (soon) return; this.setState({ pais: name, q: "" }); };
-  selectProdCat = (cat) => () => this.setState({ prodCat: cat });
+  selectProdCat = (cat) => () => {
+    if ((this.state.prodCat || "Todos") === cat) return;
+    const row = this.rootEl && this.rootEl.querySelector("[data-prod-row]");
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!row || reduce) { this.setState({ prodCat: cat }); return; }
+    row.style.transition = "opacity .16s ease, transform .16s ease";
+    row.style.opacity = "0";
+    row.style.transform = "translateY(6px)";
+    setTimeout(() => {
+      this.setState({ prodCat: cat });
+      requestAnimationFrame(() => {
+        row.style.transition = "opacity .3s ease, transform .3s cubic-bezier(.16,1,.3,1)";
+        row.style.opacity = "1";
+        row.style.transform = "translateY(0)";
+      });
+    }, 160);
+  };
   openProduct = (i) => () => {
     this.xwipe();
     this.setState({ view: "product", productIdx: i });
@@ -2899,10 +2941,12 @@ class Component extends DCLogic {
     out.prodList = EXPOWINNERS_PRODUCTS
       .map((p, gi) => ({ p, gi }))
       .filter(({ p }) => prodCatActive === "Todos" || p.category === prodCatActive)
-      .map(({ p, gi }) => ({
-        name: p.name, category: p.category, emoji: CATEGORY_EMOJI[p.category] || "🏷️",
-        price: COP(p.price), freightRange: COP(p.freightMin) + "–" + COP(p.freightMax),
-        margin: "~" + COP(p.margin), stock: nfmt(p.stock),
+      .map(({ p, gi }, k) => ({
+        name: p.name, category: p.category, image: p.image, provider: p.provider,
+        costPrice: COP(p.costPrice), suggestedPrice: COP(p.suggestedPrice),
+        utilidad: COP(p.suggestedPrice - p.costPrice),
+        freightRange: COP(p.freightMin) + "–" + COP(p.freightMax), stock: nfmt(p.stock),
+        delay: Math.min(k, 8) * 0.045 + "s",
         onOpen: this.openProduct(gi)
       }));
     out.noProdList = out.prodList.length === 0;
@@ -3168,9 +3212,10 @@ class Component extends DCLogic {
       const pd = EXPOWINNERS_PRODUCTS[pIdx];
       out.isProductDetail = true;
       out.product = {
-        name: pd.name, category: pd.category, emoji: CATEGORY_EMOJI[pd.category] || "🏷️",
-        price: COP(pd.price), freightRange: COP(pd.freightMin) + "–" + COP(pd.freightMax),
-        margin: "~" + COP(pd.margin), stock: nfmt(pd.stock),
+        name: pd.name, category: pd.category, image: pd.image, provider: pd.provider,
+        costPrice: COP(pd.costPrice), suggestedPrice: COP(pd.suggestedPrice),
+        utilidad: COP(pd.suggestedPrice - pd.costPrice),
+        freightRange: COP(pd.freightMin) + "–" + COP(pd.freightMax), stock: nfmt(pd.stock),
         description: pd.description || "",
         close: this.close, sell: this.open
       };
