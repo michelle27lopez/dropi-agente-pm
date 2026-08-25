@@ -9,7 +9,7 @@ import { useIsEmbedded } from "@/lib/use-is-embedded";
 // Rutas públicas de solo pantalla completa (las ve un proveedor real, sin
 // login, con su propio look oscuro) — el shell del hub no debe envolverlas
 // aunque quien esté logueada sea del equipo (ej. usando ?vista= para QA).
-const FULLSCREEN_PATH_PATTERNS = [/\/elegibles\/[^/]+$/, /^\/c\/[^/]+$/];
+const FULLSCREEN_PATH_PATTERNS = [/\/elegibles\/[^/]+$/, /^\/c\/[^/]+$/, /^\/cyberdays-catalogo$/];
 
 // Shell del nav global de Darwin: arranca colapsado a rail de iconos en
 // tablet/laptop chico (<1024px), expandido en desktop. En mobile (<768px)

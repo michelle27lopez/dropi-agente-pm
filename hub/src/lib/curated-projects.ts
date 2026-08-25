@@ -21,6 +21,7 @@ export const PROJECT_STYLE: Record<string, { url: string; color: string; icon: s
   "GALI-001": { url: "/proyectos/gali-demo", color: "#FF6102", icon: "🦊" },
   "ACT-001": { url: "/proyectos/dropi-activa", color: "#7C3AED", icon: "🚀" },
   "ESP-001": { url: "/proyectos/espionaje", color: "#10B981", icon: "🕵️" },
+  "DOC-001": { url: "/proveedores", color: "#FF6102", icon: "🧭" },
 };
 
 function truncate(text: string, max: number) {

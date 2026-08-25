@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { Anton } from "next/font/google";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { BookOpen, FileImage, Layers, Lock, MousePointerClick, Rocket, Star, Store, TrendingUp } from "lucide-react";
+import { BookOpen, FileImage, Layers, Lock, MousePointerClick, Rocket, Star, Store, TrendingUp, Upload } from "lucide-react";
 import JSZip from "jszip";
 import { createClient } from "@/lib/supabase-browser";
 
@@ -23,15 +23,19 @@ type EligibleEntry = {
   selectedProductIds?: (string | number)[];
   submitted_at?: string | null;
   selection_updated_at?: string | null;
+  /** Aprobación de la curaduría por el equipo — lo único que sella la
+   * selección ahora que no hay cierre por fecha. */
+  approved_at?: string | null;
   readyChecklist?: Partial<Record<ChecklistKey, boolean>>;
   feedback?: { rating: number; comment?: string; submitted_at: string };
   journey: JourneyStep[];
 };
 
 const MAX_PRODUCTS = 10;
-// Orden real del journey de la fase "Prepara": descargar fotos (1) desbloquea
-// subir al catálogo (2). El paso 3 (Dropi) no se puede bloquear técnicamente
-// — es una plataforma externa — así que solo se comunica el orden con copy.
+// Orden real del journey de la fase "Prepara": fotos (1) → catálogo de
+// difusión (2) → Dropi (3). Ninguno bloquea al siguiente (24/08): el orden se
+// comunica con el copy y con la numeración, no con gates. Los tres checks son
+// autorreporte del proveedor.
 const CHECKLIST_KEYS: ChecklistKey[] = ["pasoFotos", "pasoCatalogo", "fotoDropi", "nombre", "categoria"];
 
 // Link real del Catálogo de difusión (Canva), recibido de Michelle el 28/07.
@@ -42,12 +46,11 @@ const CANVA_LINK = "https://www.canva.com/design/DAHQC3nBq6c/qvqDaPIhyfMXBdvY2LB
 // para agregar a su tienda — a diferencia de CANVA_LINK arriba, que es el
 // activo visual (imagen) para difundir en redes/WhatsApp.
 const DROPI_CATALOG_LINK = "https://app.dropi.co/dashboard/search?search_type=simple&category=Cyber%20days";
-// Link de Google Meet para la reunión informativa del 6 de agosto
-// (2:00-3:00pm, America/Bogota) — jueves, no viernes: el 7 de agosto es
-// festivo en Colombia. Corregido 31/07 (el link anterior era del evento
-// mal agendado para el 7). Con esto la card del Meet se vuelve clickeable
-// con "Agéndate →".
-const LUMA_LINK = "https://meet.google.com/dwj-zeav-yvb";
+// Link de Google Meet para la reunión informativa, reagendada al jueves 20
+// de agosto (4:00-5:00pm, America/Bogota) tras el terremoto del 10/08 que
+// dejó al equipo sin operar esa semana. Con esto la card del Meet se vuelve
+// clickeable con "Agéndate →".
+const LUMA_LINK = "https://meet.google.com/zty-fqfh-xwr";
 
 const STEPPER_LABELS: Record<JourneyStep["key"], string> = {
   seleccion: "Elige", fotos: "Prepara", vivo: "En vivo",
@@ -140,6 +143,8 @@ async function frameProductPhoto(marco: HTMLImageElement, photoSrc: string): Pro
   canvas.height = marco.naturalHeight;
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
   const { x, y, w, h } = MARCO_WINDOW;
   const scale = Math.max(w / photo.naturalWidth, h / photo.naturalHeight);
   const dw = photo.naturalWidth * scale;
@@ -173,6 +178,53 @@ async function downloadFramedPhotosZip(products: EligibleProduct[], supplierName
   a.remove();
   URL.revokeObjectURL(url);
   return { skipped, downloaded: true };
+}
+
+// ─── Fotos propias del proveedor (mismo paso 1 de "Prepara") ───
+// El ZIP de arriba usa la foto que Dropi ya tiene de cada producto, pero 137
+// productos no tienen ninguna y otros proveedores prefieren una suya. Esto
+// les deja subir sus propias imágenes y bajarlas con el mismo marco.
+// Todo pasa en el navegador (canvas + object URLs): ninguna foto viaja a un
+// servidor, así no hace falta storage ni endpoint nuevo. Un blob local
+// además no contamina el canvas, a diferencia de una imagen remota.
+export type FramedUpload = { name: string; url: string; blob: Blob };
+
+async function frameUploadedPhotos(files: File[]): Promise<{ framed: FramedUpload[]; skipped: string[] }> {
+  const marco = await loadImage(MARCO_SRC);
+  const framed: FramedUpload[] = [];
+  const skipped: string[] = [];
+  for (const file of files) {
+    const src = URL.createObjectURL(file);
+    try {
+      const blob = await frameProductPhoto(marco, src);
+      if (!blob) { skipped.push(file.name); continue; }
+      framed.push({ name: file.name, url: URL.createObjectURL(blob), blob });
+    } finally {
+      // La foto original ya está dibujada en el canvas — solo se conserva la
+      // object URL del resultado enmarcado (esa la revoca el componente).
+      URL.revokeObjectURL(src);
+    }
+  }
+  return { framed, skipped };
+}
+
+async function downloadUploadsZip(framed: FramedUpload[], supplierName: string) {
+  const zip = new JSZip();
+  framed.forEach((f, i) => {
+    // El nombre del archivo original puede repetirse o venir sin extensión
+    // usable, así que se numera y se normaliza.
+    const base = slugify(f.name.replace(/\.[^.]+$/, ""));
+    zip.file(`${String(i + 1).padStart(2, "0")}-${base}.png`, f.blob);
+  });
+  const content = await zip.generateAsync({ type: "blob" });
+  const url = URL.createObjectURL(content);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `fotos-cyber-days-${slugify(supplierName)}-propias.zip`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
 
 // Página pública (sin login) para un proveedor: el panel completo de su
@@ -655,6 +707,18 @@ const CSS = `
   }
   .cd-toolcard-cta:active { transform: scale(.97); }
   .cd-toolcard-cta.is-pending { color: var(--cd-muted-2); background: rgba(255,255,255,.03); border-color: var(--cd-card-border); cursor: default; }
+  /* Variante secundaria: subir fotos propias es la alternativa al botón
+     naranja de descargar, no un CTA que compita con él. */
+  .cd-toolcard-cta.is-ghost { background: rgba(255,255,255,.04); color: var(--cd-ink); border-color: var(--cd-card-border); }
+  .cd-toolcard-cta.is-ghost:disabled { opacity: .6; cursor: default; }
+
+  /* Bloque de fotos propias, dentro del paso 1 de "Prepara" */
+  .cd-upload { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--cd-card-border); }
+  .cd-upload-head { display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; }
+  .cd-upload-title { font-size: 13px; font-weight: 800; color: var(--cd-ink); }
+  .cd-upload-sub { font-size: 12px; color: var(--cd-muted); line-height: 1.5; }
+  .cd-upload-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px; margin: 12px 0; }
+  .cd-upload-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 10px; border: 1px solid var(--cd-card-border); background: rgba(0,0,0,.2); }
 
   /* Link al manual de instrucciones — vive junto al título de "Prepara"
      (no dentro de un paso puntual) porque cubre los 3 pasos, no solo el
@@ -927,7 +991,7 @@ const IntroOverlay = memo(function IntroOverlay({ onDone }: { onDone: () => void
       <HeroGrainient />
       <div className="cd-intro-scrim" />
       <div className="cd-intro-copy">
-        <div className="cd-intro-eyebrow">Del 18 al 31 de agosto</div>
+        <div className="cd-intro-eyebrow">Del 24 de agosto al 7 de septiembre</div>
         <div className="cd-intro-title">Cyber Days</div>
       </div>
     </div>
@@ -966,6 +1030,12 @@ export default function ElegiblesPage() {
   const [submitting, setSubmitting] = useState(false);
   const [framing, setFraming] = useState(false);
   const [framingNote, setFramingNote] = useState("");
+  // Fotos propias que el proveedor sube para enmarcar (viven solo en memoria
+  // del navegador, ver frameUploadedPhotos).
+  const [uploads, setUploads] = useState<FramedUpload[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [uploadNote, setUploadNote] = useState("");
+  const uploadInputRef = useRef<HTMLInputElement>(null);
   // Flash de éxito en el botón antes de saltar al recibo — sin esto, el
   // cambio de vista era instantáneo y el clic se sentía como si no hiciera
   // nada (Michelle lo probó y no vio ninguna reacción).
@@ -1040,13 +1110,29 @@ export default function ElegiblesPage() {
       const idx = PREVIEW_ORDER[vista];
       return base.map((s, i) => ({ ...s, state: i < idx ? "hecho" : i === idx ? "actual" : "bloqueado" }));
     }
-    return base;
-  }, [entry?.journey, vista]);
+    // Los dos primeros pasos los manda el progreso real del proveedor, no la
+    // fecha: sin esto, quien nunca postuló veía "Elige" y "Prepara" con el ✓
+    // verde de completado (el calendario ya pasó) mientras la pantalla le
+    // pedía elegir productos. "En vivo" sí sigue siendo puro calendario — esa
+    // no depende de él. `pasoFotos`/`pasoCatalogo`/... son autorreporte, así
+    // que "Prepara" se da por hecho cuando marcó todo su checklist.
+    const submittedNow = !!entry?.submitted_at;
+    const prepDone = CHECKLIST_KEYS.every((k) => entry?.readyChecklist?.[k]);
+    return base.map((s) => {
+      if (s.key === "seleccion") return { ...s, state: submittedNow ? "hecho" as const : "actual" as const };
+      if (s.key === "fotos") return { ...s, state: !submittedNow ? "bloqueado" as const : prepDone ? "hecho" as const : "actual" as const };
+      return s;
+    });
+  }, [entry?.journey, entry?.submitted_at, entry?.readyChecklist, vista]);
   const submitted = !!entry?.submitted_at;
   const seleccionStep = journey.find((j) => j.key === "seleccion");
   const vivoStep = journey.find((j) => j.key === "vivo");
-  const canSelect = seleccionStep?.state === "actual";
-  const selectionWindowClosed = seleccionStep?.state === "hecho";
+  // Seleccionar ya no depende del calendario (24/08): antes era
+  // `seleccionStep.state === "actual"`, así que al pasar el 23 de agosto la
+  // grilla quedaba muerta para todos. Ahora lo único que sella la selección
+  // es que el equipo apruebe la curaduría — mismo criterio que valida el
+  // endpoint. En vista previa manda el preview, para no romper el QA visual.
+  const canSelect = vista ? seleccionStep?.state === "actual" : !entry?.approved_at;
   // De los 3 pasos de "Prepara", solo el 3 (actualizar en Dropi) hay que
   // esperar a que abra por calendario: es el único que ensucia el catálogo
   // real antes de que arranque la campaña. Los pasos 1 y 2 (fotos, catálogo
@@ -1074,17 +1160,23 @@ export default function ElegiblesPage() {
   // de "Elige" cuando ya tiene algo pendiente por hacer.
   const autoIdx = useMemo(() => {
     if (journey.length === 0) return 0;
+    // Quien todavía no postuló aterriza siempre en "Elige", sin importar la
+    // fecha: con la selección ya sin cierre, mandarlo a "En vivo" (que es lo
+    // que decía el calendario) lo dejaba viendo una campaña andando sin
+    // haberse inscrito, y sin nada accionable en pantalla. En vista previa
+    // manda el preview, no este atajo.
+    if (!vista && !submitted) return 0;
     const activeIdx = journey.findIndex((j) => j.state === "actual");
     const calendarIdx = activeIdx === -1 ? (journey.every((j) => j.state === "hecho") ? journey.length - 1 : 0) : activeIdx;
     const vivoStarted = journey.find((j) => j.key === "vivo")?.state !== "bloqueado";
     const prepPending = CHECKLIST_KEYS.some((k) => !checklist[k]);
     if (calendarIdx === 0 && submitted && prepPending && !vivoStarted) return 1;
     return calendarIdx;
-  }, [journey, submitted, checklist]);
+  }, [journey, submitted, checklist, vista]);
   const expandedIdx = openPhase ?? autoIdx;
   // Hero a pantalla completa solo mientras participar es la acción pendiente
   // (antes de la campaña o durante la selección sin postular todavía).
-  const heroFull = !isSealed && autoIdx === 0 && !selectionWindowClosed;
+  const heroFull = !isSealed && autoIdx === 0;
   // Primera visita: solo se ve el banner; "Quiero participar" lo disuelve y
   // entra al paso 1. En reentradas el banner es el IntroOverlay (se disuelve
   // solo) y se aterriza directo en la pantalla del paso actual.
@@ -1107,10 +1199,10 @@ export default function ElegiblesPage() {
     if (!anim || !el) { done(); return; }
     gsap.to(el, { autoAlpha: 0, scale: 1.03, duration: 0.55, ease: "power2.in", onComplete: done });
   }
-  // El Meet del 6 de agosto deja de mostrarse cuando ya pasó, y solo aplica
+  // El Meet del 20 de agosto deja de mostrarse cuando ya pasó, y solo aplica
   // en el paso 1 (Elige) — no tiene sentido seguir empujándolo una vez el
   // proveedor ya avanzó de fase (23/07, antes se veía en cualquier paso).
-  const meetVisible = expandedIdx === 0 && Date.now() <= new Date("2026-08-06T23:59:59").getTime();
+  const meetVisible = expandedIdx === 0 && Date.now() <= new Date("2026-08-20T23:59:59").getTime();
 
   // Animación cinemática con GSAP + ScrollTrigger (reemplaza el sistema
   // anterior de IntersectionObserver + classList: aquel escribía clases a
@@ -1295,6 +1387,45 @@ export default function ElegiblesPage() {
     }
   }
 
+  // Fotos propias: cada tanda reemplaza la anterior (no acumula) para que lo
+  // que se ve en pantalla sea exactamente lo que baja en el ZIP.
+  async function handleUploadPhotos(files: FileList | null) {
+    const list = Array.from(files ?? []);
+    if (list.length === 0) return;
+    setUploading(true);
+    setUploadNote("");
+    try {
+      const { framed, skipped } = await frameUploadedPhotos(list);
+      setUploads((prev) => {
+        prev.forEach((u) => URL.revokeObjectURL(u.url));
+        return framed;
+      });
+      if (framed.length === 0) setUploadNote("No pudimos leer ninguna de esas imágenes. Prueba con archivos JPG o PNG.");
+      else if (skipped.length > 0) setUploadNote(`${skipped.length} archivo${skipped.length === 1 ? "" : "s"} no se pudo leer como imagen y quedó por fuera.`);
+    } catch {
+      setUploadNote("No pudimos preparar tus fotos. Intenta de nuevo o escríbenos si el problema sigue.");
+    } finally {
+      setUploading(false);
+      // Sin esto, volver a elegir el mismo archivo no dispara onChange.
+      if (uploadInputRef.current) uploadInputRef.current.value = "";
+    }
+  }
+
+  async function handleDownloadUploads() {
+    if (uploads.length === 0) return;
+    try {
+      await downloadUploadsZip(uploads, entry?.supplier_name ?? "proveedor");
+    } catch {
+      setUploadNote("No pudimos armar el ZIP. Intenta de nuevo.");
+    }
+  }
+
+  // Las object URLs de las fotos enmarcadas se sueltan al salir de la página
+  // (las de cada tanda anterior ya se revocan al reemplazarla).
+  useEffect(() => {
+    return () => { uploads.forEach((u) => URL.revokeObjectURL(u.url)); };
+  }, [uploads]);
+
   // Preview enmarcada de un producto real (paso "En vivo") — la pantalla se
   // veía vacía con solo la copa y texto, esto le da algo concreto que mostrar:
   // "así se ve tu catálogo". Reutiliza el mismo canvas de frameProductPhoto,
@@ -1474,7 +1605,7 @@ export default function ElegiblesPage() {
           <div className="cd-hero-spacer" />
 
           <div className="cd-hero-copy">
-            <div className="cd-eyebrow" data-reveal>Del 18 al 31 de agosto</div>
+            <div className="cd-eyebrow" data-reveal>Del 24 de agosto al 7 de septiembre</div>
             <h1 className="cd-title"><TwoToneTitle text="Los Cyber Days te eligieron" anim={anim} /></h1>
             <p className="cd-stat-sentence" data-reveal data-delay="0.08">
               Puedes seleccionar <b><CountUp value={eligibleCount} anim={anim} /></b> producto{eligibleCount === 1 ? "" : "s"} para Cyber Days, con hasta{" "}
@@ -1557,7 +1688,7 @@ export default function ElegiblesPage() {
               <span className="cd-meet-icon">🎥</span>
               <div className="cd-meet-body">
                 <div className="cd-meet-label">Reunión informativa de Cyber Days</div>
-                <div className="cd-meet-time">Jueves 6 de agosto · 2:00pm</div>
+                <div className="cd-meet-time">Jueves 20 de agosto · 4:00pm</div>
               </div>
               <span className="cd-meet-cta">Agéndate →</span>
             </a>
@@ -1566,7 +1697,7 @@ export default function ElegiblesPage() {
               <span className="cd-meet-icon">🎥</span>
               <div className="cd-meet-body">
                 <div className="cd-meet-label">Reunión informativa de Cyber Days</div>
-                <div className="cd-meet-time">Jueves 6 de agosto · 2:00pm</div>
+                <div className="cd-meet-time">Jueves 20 de agosto · 4:00pm</div>
               </div>
             </div>
           ))}
@@ -1622,7 +1753,7 @@ export default function ElegiblesPage() {
                   )}
                   {canEditSelection && (
                     <div className="cd-receipt-edit">
-                      <span>Puedes ajustar tu selección hasta el <b>14 de agosto</b>.</span>
+                      <span>Puedes ajustar tu selección <b>cuando quieras</b>, desde esta misma página.</span>
                       <button type="button" className="cd-toolcard-cta" onClick={startEdit}>Editar selección</button>
                     </div>
                   )}
@@ -1651,7 +1782,7 @@ export default function ElegiblesPage() {
                     ))}
                   </div>
                   {!canEditSelection && (
-                    <div className="cd-receipt-note">Esta selección ya está sellada. ¿Necesitas un cambio? Escríbenos por el mismo canal donde recibiste este link.</div>
+                    <div className="cd-receipt-note">Tu selección ya fue aprobada por el equipo, así que quedó sellada. ¿Necesitas un cambio? Escríbenos por el mismo canal donde recibiste este link.</div>
                   )}
                 </>
               ) : (
@@ -1662,10 +1793,6 @@ export default function ElegiblesPage() {
 
                   {editing && (
                     <div className="cd-phase-note" style={{ marginBottom: 14 }}>Tu selección sigue enviada. Al guardar, la reemplazamos con esta.</div>
-                  )}
-
-                  {selectionWindowClosed && (
-                    <div className="cd-phase-note" style={{ marginBottom: 14 }}>La selección ya cerró y no alcanzaste a enviar la tuya. Escríbenos si crees que es un error.</div>
                   )}
 
                   <div className="cd-selection-layout">
@@ -1707,7 +1834,7 @@ export default function ElegiblesPage() {
                           </button>
                         )}
                         {submitError && <p style={{ color: "var(--cd-accent-2)", fontSize: 12, margin: 0 }}>{submitError}</p>}
-                        <div className="cd-readiness-warn">Podrás ajustar tu selección desde esta misma página hasta el 14 de agosto.</div>
+                        <div className="cd-readiness-warn">Puedes ajustar tu selección desde esta misma página cuando quieras.</div>
                       </div>
                     )}
                   </div>
@@ -1761,17 +1888,59 @@ export default function ElegiblesPage() {
                               </button>
                             </div>
                             {framingNote && <div className="cd-phase-note" style={{ marginTop: 8 }}>{framingNote}</div>}
+
+                            {/* Fotos propias: para los productos sin foto en Dropi y
+                                para quien prefiera una imagen suya. Mismo marco, mismo
+                                canvas — pero la foto la pone el proveedor. */}
+                            <div className="cd-upload">
+                              <div className="cd-upload-head">
+                                <span className="cd-upload-title">¿Prefieres usar tus propias fotos?</span>
+                                <span className="cd-upload-sub">Súbelas y te las devolvemos con el marco puesto. Se procesan aquí mismo, en tu navegador: no se suben a ningún lado.</span>
+                              </div>
+                              <input
+                                ref={uploadInputRef}
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                style={{ display: "none" }}
+                                onChange={(e) => handleUploadPhotos(e.target.files)}
+                              />
+                              <div className="cd-step-actions">
+                                <button type="button" className="cd-toolcard-cta is-ghost" onClick={() => uploadInputRef.current?.click()} disabled={uploading}>
+                                  <Upload size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 6 }} />
+                                  {uploading ? "Poniendo el marco…" : uploads.length > 0 ? "Elegir otras fotos" : "Subir mis propias fotos"}
+                                </button>
+                              </div>
+                              {uploads.length > 0 && (
+                                <>
+                                  <div className="cd-upload-grid">
+                                    {uploads.map((u) => (
+                                      /* eslint-disable-next-line @next/next/no-img-element */
+                                      <img key={u.url} src={u.url} alt={u.name} className="cd-upload-thumb" />
+                                    ))}
+                                  </div>
+                                  <div className="cd-step-actions">
+                                    <button type="button" className="cd-toolcard-cta" onClick={handleDownloadUploads}>
+                                      Descargar estas {uploads.length} foto{uploads.length === 1 ? "" : "s"} con el marco →
+                                    </button>
+                                  </div>
+                                </>
+                              )}
+                              {uploadNote && <div className="cd-phase-note" style={{ marginTop: 8 }}>{uploadNote}</div>}
+                            </div>
                           </div>
                         </div>
 
                         {/* Paso 2: Catálogo de difusión (antes "Vitrina Cyber Days", antes de
-                            eso "catálogo PDF") — bloqueado hasta que el paso 1 esté marcado,
-                            así el proveedor no llega sin fotos. */}
+                            eso "catálogo PDF"). Estuvo bloqueado hasta marcar el paso 1, para
+                            que nadie llegara sin fotos; se abrió (24/08) porque el orden ya se
+                            comunica con el copy y el gate frenaba a quien ya tenía sus fotos
+                            listas por fuera y solo venía a montarlas. */}
                         <div className="cd-step">
                           <div className="cd-step-num">2</div>
                           <div className="cd-step-body">
                             <div className="cd-step-title">Súbelos a tu Catálogo de difusión</div>
-                            <div className="cd-step-sub">El catálogo que reciben los dropshippers por WhatsApp: foto con marco, precio con descuento y nombre. Fecha límite <b style={{ color: "var(--cd-accent)" }}>17 de agosto</b> — lo que no esté montado ese día no sale.</div>
+                            <div className="cd-step-sub">El catálogo que reciben los dropshippers por WhatsApp: foto con marco, precio con descuento y nombre. Fecha límite <b style={{ color: "var(--cd-accent)" }}>23 de agosto</b> — lo que no esté montado ese día no sale.</div>
                             <div className="cd-step-checks">
                               <label className="cd-check-item">
                                 <input type="checkbox" checked={!!checklist.pasoCatalogo} onChange={() => toggleChecklist("pasoCatalogo")} />
@@ -1780,9 +1949,7 @@ export default function ElegiblesPage() {
                               </label>
                             </div>
                             <div className="cd-step-actions">
-                              {!checklist.pasoFotos ? (
-                                <span className="cd-toolcard-cta is-pending"><Lock size={12} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -1, marginRight: 4 }} />Descarga tus fotos primero (paso 1)</span>
-                              ) : CANVA_LINK ? (
+                              {CANVA_LINK ? (
                                 <a className="cd-toolcard-cta" href={CANVA_LINK} target="_blank" rel="noopener noreferrer">Abrir Catálogo de difusión →</a>
                               ) : (
                                 <span className="cd-toolcard-cta is-pending">Link pendiente</span>
@@ -1797,7 +1964,7 @@ export default function ElegiblesPage() {
                           <div className="cd-step-num">3</div>
                           <div className="cd-step-body">
                             <div className="cd-step-title">Actualiza tus productos en Dropi</div>
-                            <div className="cd-step-sub">Hazlo <b style={{ color: "var(--cd-ink)" }}>después del paso 2</b>, el <b style={{ color: "var(--cd-accent)" }}>17 de agosto</b>. Antes no — tus productos se verían vestidos de una campaña que todavía no empieza.</div>
+                            <div className="cd-step-sub">Hazlo <b style={{ color: "var(--cd-ink)" }}>después del paso 2</b>, el <b style={{ color: "var(--cd-accent)" }}>23 de agosto</b>. Antes no — tus productos se verían vestidos de una campaña que todavía no empieza.</div>
                             <div className="cd-step-checks">
                               <label className="cd-check-item">
                                 <input type="checkbox" checked={!!checklist.fotoDropi} onChange={() => toggleChecklist("fotoDropi")} />
@@ -1928,7 +2095,7 @@ export default function ElegiblesPage() {
               )}
 
               {vivoStep?.state === "bloqueado" && (
-                <div className="cd-phase-note"><Lock size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 5 }} />Del 18 al 31 de agosto tus productos aparecen en el catálogo para dropshippers.</div>
+                <div className="cd-phase-note"><Lock size={13} strokeWidth={2.5} style={{ display: "inline", verticalAlign: -2, marginRight: 5 }} />Del 24 de agosto al 7 de septiembre tus productos aparecen en el catálogo para dropshippers.</div>
               )}
               </div>
           </div>

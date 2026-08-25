@@ -67,7 +67,11 @@ export async function proxy(request: NextRequest) {
       !pathname.endsWith("/elegibles/export-links")) ||
     // Link corto /c/[token] que redirige a la ruta de arriba — mismo token
     // opaco como control de acceso, ver hub/src/app/c/[token]/page.tsx.
-    pathname.startsWith("/c/");
+    pathname.startsWith("/c/") ||
+    // Catálogo público de productos Cyber Days — pensado para compartirse
+    // como link o PDF fuera del equipo, sin token por proveedor (es un
+    // único catálogo global, no data por usuario). Ver hub/src/app/cyberdays-catalogo/page.tsx.
+    pathname.startsWith("/cyberdays-catalogo");
 
   if (!user && !isPublicPath) {
     const url = request.nextUrl.clone();
