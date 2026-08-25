@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import Link from "next/link";
+import { ChevronDown } from "lucide-react";
 import HubFooter from "@/components/HubFooter";
 import { ESTADOS_DELIVERY } from "@/components/ProjectCard";
 
@@ -101,6 +102,7 @@ export default function DeliveryPage() {
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [vista, setVista] = useState<"celula" | "prioridad">("celula");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [collapsedIds, setCollapsedIds] = useState<Set<string>>(() => new Set());
 
   useEffect(() => {
     fetch("/api/celulas")
@@ -162,6 +164,14 @@ export default function DeliveryPage() {
   const toggleCelula = (id: string) =>
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   const selectAll = () => setSelectedIds(celulas.map((c) => c.id));
+
+  const toggleCollapse = (id: string) =>
+    setCollapsedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   const visibleCelulas = celulas.filter((c) => selectedIds.includes(c.id));
 
@@ -251,17 +261,37 @@ export default function DeliveryPage() {
                 {visibleCelulas.map((c) => {
                   const proyectos = deliveryPorCelula.get(c.id) || [];
                   const editable = c.id === ownCelulaId || isSuperAdmin;
+                  const collapsed = collapsedIds.has(c.id);
                   return (
                     <div key={c.id}>
-                      <div
+                      <button
+                        type="button"
+                        onClick={() => toggleCollapse(c.id)}
                         style={{
+                          width: "100%",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "space-between",
+                          gap: 8,
                           marginBottom: 8,
+                          padding: 0,
+                          background: "transparent",
+                          border: "none",
+                          cursor: "pointer",
+                          textAlign: "left",
                         }}
                       >
-                        <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)" }}>{c.nombre}</h2>
+                        <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                          <ChevronDown
+                            size={16}
+                            style={{
+                              color: "var(--gray-400)",
+                              transform: collapsed ? "rotate(-90deg)" : "none",
+                              transition: "transform 0.15s ease",
+                            }}
+                          />
+                          <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)" }}>{c.nombre}</h2>
+                        </span>
                         <span
                           style={{
                             fontSize: 10,
@@ -274,17 +304,18 @@ export default function DeliveryPage() {
                         >
                           {proyectos.length} en delivery
                         </span>
-                      </div>
-                      {proyectos.length === 0 ? (
-                        <EmptyState />
-                      ) : (
-                        <PipelineBoard
-                          proyectos={proyectos}
-                          mostrarCelula={false}
-                          editableFn={() => editable}
-                          onPrioridadChange={handlePrioridadChange}
-                        />
-                      )}
+                      </button>
+                      {!collapsed &&
+                        (proyectos.length === 0 ? (
+                          <EmptyState />
+                        ) : (
+                          <PipelineBoard
+                            proyectos={proyectos}
+                            mostrarCelula={false}
+                            editableFn={() => editable}
+                            onPrioridadChange={handlePrioridadChange}
+                          />
+                        ))}
                     </div>
                   );
                 })}
