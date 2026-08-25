@@ -15,6 +15,7 @@ import {
   Network,
   Webhook,
   Rss,
+  Flag,
 } from "lucide-react";
 
 type NavItem = {
@@ -50,6 +51,12 @@ function buildPrimaryItems(celulaActiva: string | null): NavItem[] {
     { key: "configuracion", label: "Configuración", href: "/ajustes", icon: Settings },
   ];
 }
+
+// Prioridades es cross-célula (todas ven todas), por eso no cuelga de
+// /celula/[slug] como Proyectos/Data/Following — vive fuera de los 6
+// módulos core para no reabrir esa poda (ver buildPrimaryItems), en su
+// propia sección, visible para todo el equipo.
+const PRIORIDADES_ITEM: NavItem = { key: "prioridades", label: "Prioridades", href: "/prioridades", icon: Flag };
 
 // Notas se queda visible fuera de los 6 módulos core, pero marcada "para mí"
 // — es la única sección que se queda privada incluso cuando el resto del
@@ -159,6 +166,7 @@ export default function GlobalNav({
 
         <div className="gnav-section">
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <NavLink item={PRIORIDADES_ITEM} collapsed={collapsed} active={isActive(pathname, PRIORIDADES_ITEM.href)} />
             <NavLink item={NOTAS_ITEM} collapsed={collapsed} active={isActive(pathname, NOTAS_ITEM.href)} />
           </div>
         </div>
