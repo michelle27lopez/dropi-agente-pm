@@ -613,6 +613,42 @@
     </div>
   </sc-if>
 
+  <sc-if value="{{ isProductDetail }}" hint-placeholder-val="{{ false }}">
+    <div sc-camel-on-click="{{ product.close }}" style="position:fixed;inset:0;z-index:96;background:rgba(4,4,4,.9);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:clamp(8px,3vw,32px);overflow:auto;animation:lg-fade .35s ease both">
+      <div sc-camel-on-click="{{ stop }}" style="position:relative;width:100%;max-width:640px;margin:auto;background:#121212;border:1px solid rgba(255,133,0,.35);overflow:hidden;box-shadow:0 40px 120px -40px rgba(255,72,0,.55)">
+        <div style="position:absolute;inset:0;overflow:hidden;pointer-events:none">
+          <div style="position:absolute;left:-20%;right:-20%;bottom:-14%;height:58%;background-image:linear-gradient(rgba(255,133,0,.16) 1px, rgba(11,11,11,0) 1px),linear-gradient(90deg, rgba(255,133,0,.11) 1px, rgba(11,11,11,0) 1px);background-size:70px 70px, 70px 70px;transform:perspective(600px) rotateX(74deg);transform-origin:50% 100%;animation:lg-floor 6.5s linear infinite;mask-image:linear-gradient(to top, #000 0%, transparent 78%);-webkit-mask-image:linear-gradient(to top, #000 0%, transparent 78%)"></div>
+        </div>
+        <button type="button" sc-camel-on-click="{{ product.close }}" style="position:absolute;top:16px;right:16px;z-index:3;background:rgba(11,11,11,.6);border:1px solid rgba(234,234,234,.18);color:rgba(234,234,234,.6);font-family:inherit;font-size:13px;line-height:1;padding:8px 11px;cursor:pointer;transition:color .3s ease, border-color .3s ease, transform .25s ease" style-hover="color:#EAEAEA;border-color:#EAEAEA;transform:rotate(90deg)">✕</button>
+        <div style="position:relative;height:200px;display:flex;align-items:center;justify-content:center;font-size:88px;background:linear-gradient(135deg,#1c1c1c 0%,#0e0e0e 100%);border-bottom:1px solid rgba(234,234,234,.1)">{{ product.emoji }}</div>
+        <div style="position:relative;padding:clamp(20px,4vw,36px)">
+          <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(234,234,234,.45)">{{ product.category }}</span>
+          <h2 style="font-size:clamp(24px,3.2vw,32px);font-weight:700;line-height:1.12;margin:8px 0 18px;color:#F5F5F5;text-wrap:pretty">{{ product.name }}</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:22px">
+            <div style="border:1px solid rgba(234,234,234,.14);padding:14px">
+              <div style="font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.45);margin-bottom:6px">Precio venta</div>
+              <div style="font-size:22px;font-weight:700;color:#FF8500">{{ product.price }}</div>
+            </div>
+            <div style="border:1px solid rgba(234,234,234,.14);padding:14px">
+              <div style="font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.45);margin-bottom:6px">Flete (desde–hasta)</div>
+              <div style="font-size:16px;font-weight:700;color:#F5F5F5">{{ product.freightRange }}</div>
+            </div>
+            <div style="border:1px solid rgba(234,234,234,.14);padding:14px">
+              <div style="font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.45);margin-bottom:6px">Utilidad media</div>
+              <div style="font-size:16px;font-weight:700;color:#F5F5F5">{{ product.margin }}</div>
+            </div>
+            <div style="border:1px solid rgba(234,234,234,.14);padding:14px">
+              <div style="font-size:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:rgba(234,234,234,.45);margin-bottom:6px">Stock disponible</div>
+              <div style="font-size:16px;font-weight:700;color:#F5F5F5">{{ product.stock }} u.</div>
+            </div>
+          </div>
+          <p style="font-size:14.5px;line-height:1.6;color:rgba(234,234,234,.65);margin:0 0 24px;text-wrap:pretty">{{ product.description }}</p>
+          <button type="button" sc-camel-on-click="{{ product.sell }}" style="font-family:inherit;cursor:pointer;border:0;font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#0b0b0b;background:#FF8500;padding:16px clamp(16px,5vw,30px);clip-path:polygon(14px 0,100% 0,100% calc(100% - 14px),calc(100% - 14px) 100%,0 100%,0 14px);transition:background .3s ease, transform .25s cubic-bezier(.16,1,.3,1), box-shadow .3s ease" style-hover="background:#FF4800;transform:translateY(-3px);box-shadow:0 18px 44px -16px rgba(255,72,0,.95)" style-active="transform:translateY(0) scale(.97)">Empezar a vender este producto</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
   <div style="position:relative;text-align:center;padding:7px 16px;background:#0c0c0c;border-bottom:1px solid rgba(234,234,234,.08)">
     <span sc-camel-on-click="{{ tipDataUpdated.onClick }}" sc-camel-on-mouse-enter="{{ tipDataUpdated.onEnter }}" sc-camel-on-mouse-leave="{{ tipDataUpdated.onLeave }}" style="position:relative;display:inline-block;cursor:help;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;letter-spacing:.08em;color:rgba(234,234,234,.4)">
       Última actualización {{ dataUpdated }}
@@ -635,6 +671,7 @@
     </div>
     <nav style="display:flex;align-items:center;flex-wrap:wrap;gap:clamp(12px,2.4vw,28px)">
       <a href="#pasos" sc-camel-on-click="{{ goPasos }}" data-m-hide="" style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(234,234,234,.6);padding-bottom:3px;box-shadow:inset 0 -1px 0 0 rgba(255,133,0,0);transition:color .3s ease, box-shadow .3s ease, transform .3s cubic-bezier(.16,1,.3,1)" style-hover="color:#EAEAEA;box-shadow:inset 0 -1px 0 0 #FF8500;transform:translateY(-2px)">Cómo funciona</a>
+      <a href="#productos" sc-camel-on-click="{{ goProductos }}" data-m-hide="" style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(234,234,234,.6);padding-bottom:3px;box-shadow:inset 0 -1px 0 0 rgba(255,133,0,0);transition:color .3s ease, box-shadow .3s ease, transform .3s cubic-bezier(.16,1,.3,1)" style-hover="color:#EAEAEA;box-shadow:inset 0 -1px 0 0 #FF8500;transform:translateY(-2px)">Productos</a>
       <a href="#camino" sc-camel-on-click="{{ goCamino }}" data-m-hide="" style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(234,234,234,.6);padding-bottom:3px;box-shadow:inset 0 -1px 0 0 rgba(255,133,0,0);transition:color .3s ease, box-shadow .3s ease, transform .3s cubic-bezier(.16,1,.3,1)" style-hover="color:#EAEAEA;box-shadow:inset 0 -1px 0 0 #FF8500;transform:translateY(-2px)">Rangos</a>
       <a href="#premios" sc-camel-on-click="{{ goPremios }}" data-m-hide="" style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(234,234,234,.6);padding-bottom:3px;box-shadow:inset 0 -1px 0 0 rgba(255,133,0,0);transition:color .3s ease, box-shadow .3s ease, transform .3s cubic-bezier(.16,1,.3,1)" style-hover="color:#EAEAEA;box-shadow:inset 0 -1px 0 0 #FF8500;transform:translateY(-2px)">Premios</a>
       <a href="#" sc-camel-on-click="{{ goLideres }}" style="font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:rgba(234,234,234,.6);padding-bottom:3px;box-shadow:inset 0 -1px 0 0 rgba(255,133,0,0);transition:color .3s ease, box-shadow .3s ease, transform .3s cubic-bezier(.16,1,.3,1)" style-hover="color:#EAEAEA;box-shadow:inset 0 -1px 0 0 #FF8500;transform:translateY(-2px)">Líderes</a>
@@ -824,6 +861,44 @@
           <h3 style="font-size:19px;font-weight:700;margin:0 0 10px;color:#FF8500">Sube de nivel cada mes</h3>
           <p style="font-size:15px;line-height:1.65;margin:0;color:rgba(234,234,234,.66);text-wrap:pretty">Alcanza la meta de órdenes del mes, sube de rango y desbloquea mejores beneficios.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="productos" style="padding:0 clamp(16px,5vw,40px) clamp(57px,7vw,110px)">
+    <div style="max-width:1400px;margin:0 auto">
+      <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px">
+        <span style="width:7px;height:7px;background:#FF4800;border-radius:50%;display:block;animation:lg-pulse 2.4s ease-in-out infinite"></span>
+        <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#FF8500">Catálogo ExpoWinners · 12 sept 2026</span>
+      </div>
+      <h2 data-reveal="0" style="font-size:clamp(23px,2.86vw,40px);font-weight:700;text-align:center;margin:0 0 12px">¿Qué vas a vender?</h2>
+      <p style="text-align:center;font-size:16px;margin:0 auto 34px;color:rgba(234,234,234,.62);max-width:640px;text-wrap:pretty">Estos son los productos ganadores que los proveedores llevan a ExpoWinners. Elige uno, véndelo por el canal que prefieras — WhatsApp, redes sociales, como quieras — y gestiona la orden con Dropi, con pago contra entrega.</p>
+
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:8px;margin-bottom:20px">
+        <sc-for list="{{ prodCategories }}" as="c" hint-placeholder-count="6">
+          <button type="button" sc-camel-on-click="{{ c.onSelect }}" style="flex:0 0 auto;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};white-space:nowrap;transition:border-color .25s ease, background .25s ease, color .25s ease">{{ c.name }}</button>
+        </sc-for>
+      </div>
+
+      <div style="display:flex;gap:14px;overflow-x:auto;padding:4px 4px 16px">
+        <sc-for list="{{ prodList }}" as="p" hint-placeholder-count="4">
+          <div sc-camel-on-click="{{ p.onOpen }}" style="flex:0 0 auto;width:min(220px,72vw);background:#141414;border:1px solid rgba(234,234,234,.14);cursor:pointer;overflow:hidden;transition:transform .3s cubic-bezier(.16,1,.3,1), border-color .3s ease" style-hover="transform:translateY(-5px);border-color:#FF8500">
+            <div style="height:132px;display:flex;align-items:center;justify-content:center;font-size:42px;background:linear-gradient(135deg,#1c1c1c 0%,#0e0e0e 100%)">{{ p.emoji }}</div>
+            <div style="padding:14px 14px 16px;display:flex;flex-direction:column;gap:5px">
+              <span style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:rgba(234,234,234,.4)">{{ p.category }}</span>
+              <span style="font-size:14px;font-weight:700;line-height:1.28;color:#F5F5F5;min-height:36px">{{ p.name }}</span>
+              <span style="font-size:19px;font-weight:700;color:#FF8500;margin-top:2px">{{ p.price }}</span>
+              <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px;padding-top:10px;border-top:1px solid rgba(234,234,234,.1);font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;color:rgba(234,234,234,.5)">
+                <span>Flete: {{ p.freightRange }}</span>
+                <span>Utilidad: {{ p.margin }}</span>
+                <span>Stock: {{ p.stock }} u.</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noProdList }}" hint-placeholder-val="{{ false }}">
+          <p style="flex:1;text-align:center;color:rgba(234,234,234,.4);padding:24px 0">No hay productos en esta categoría todavía.</p>
+        </sc-if>
       </div>
     </div>
   </section>
@@ -1854,10 +1929,27 @@ const PAISES = [
   { name: "Guatemala", flag: "🇬🇹", soon: true }
 ];
 
+const PRODUCT_CATEGORIES = ["Todos", "Hogar y cocina", "Tecnología", "Moda y accesorios", "Belleza y cuidado personal", "Deportes"];
+const CATEGORY_EMOJI = { "Hogar y cocina": "🏠", "Tecnología": "📱", "Moda y accesorios": "👜", "Belleza y cuidado personal": "💄", "Deportes": "🏋️" };
+// Mock provisional — catálogo real de "productos ganadores" de ExpoWinners (12 sept 2026)
+// pendiente de Producto/Comercial. Reemplazar por el feed real cuando exista.
+const EXPOWINNERS_PRODUCTS = [
+  { name: "Set de organizadores de cocina x6", category: "Hogar y cocina", price: 79900, freightMin: 8000, freightMax: 13500, margin: 22000, stock: 3200, description: "Organiza alacena, nevera y clóset con un set apilable de 6 piezas. Producto de rotación alta, ideal para public­idad en video." },
+  { name: "Lámpara LED de escritorio recargable", category: "Hogar y cocina", price: 65900, freightMin: 7500, freightMax: 12000, margin: 19000, stock: 1850, description: "Tres tonos de luz, batería recargable y brazo flexible. Se vende muy bien en campañas de regreso a clases y home office." },
+  { name: "Audífonos inalámbricos TWS Pro", category: "Tecnología", price: 89900, freightMin: 9000, freightMax: 15000, margin: 28000, stock: 4100, description: "Bluetooth 5.3, estuche de carga y cancelación de ruido básica. El producto de tecnología con mejor rotación del catálogo." },
+  { name: "Smartwatch deportivo multifunción", category: "Tecnología", price: 129900, freightMin: 10000, freightMax: 16500, margin: 35000, stock: 2200, description: "Monitor de ritmo cardiaco, notificaciones y resistencia al agua. Ticket alto, buena utilidad por unidad." },
+  { name: "Bolso cruzado impermeable unisex", category: "Moda y accesorios", price: 69900, freightMin: 8500, freightMax: 13000, margin: 21000, stock: 2760, description: "Diseño unisex, material impermeable y compartimento acolchado. Fácil de mostrar en fotos de producto simples." },
+  { name: "Gafas de sol polarizadas UV400", category: "Moda y accesorios", price: 45900, freightMin: 7000, freightMax: 11000, margin: 15000, stock: 5400, description: "Protección UV400 y lente polarizada. Ticket bajo, ideal para vender por volumen en redes sociales." },
+  { name: "Kit de cepillos de maquillaje x10", category: "Belleza y cuidado personal", price: 39900, freightMin: 6500, freightMax: 10500, margin: 13000, stock: 6100, description: "Set completo con estuche. Uno de los productos con más recompra del catálogo de belleza." },
+  { name: "Plancha alisadora cerámica profesional", category: "Belleza y cuidado personal", price: 99900, freightMin: 9500, freightMax: 15500, margin: 31000, stock: 1400, description: "Placas cerámicas, temperatura ajustable. Ticket alto y buena conversión en demos de video." },
+  { name: "Banda de resistencia set x5", category: "Deportes", price: 34900, freightMin: 6000, freightMax: 10000, margin: 11500, stock: 7300, description: "Cinco niveles de resistencia con guía de ejercicios. Producto liviano y barato de enviar." },
+  { name: "Botella deportiva con filtro de agua", category: "Deportes", price: 29900, freightMin: 5500, freightMax: 9500, margin: 9800, stock: 8900, description: "Filtro integrado y marcador de consumo diario. El de mayor stock disponible del catálogo." }
+];
+
 class Component extends DCLogic {
   state = { view: "landing", email: "", error: "", loading: false, result: null, hover: null, util: 15000,
     pais: "Colombia", ligasStatus: "ok", fichaStatus: "ok", itemErr: null, badgeErr: {},
-    legend: null, legendErr: false, legendKey: 0, sesTab: "dropshipper" };
+    legend: null, legendErr: false, legendKey: 0, sesTab: "dropshipper", prodCat: "Todos" };
 
   setSesTab = (tab) => () => this.setState({ sesTab: tab });
 
@@ -2306,6 +2398,12 @@ class Component extends DCLogic {
   goBack = () => { const p = this._prev || "leyendas"; this.goScreen(p === "terminos" || p === "faq" ? "leyendas" : p)(); };
   onSearch = (e) => this.setState({ q: e.target.value });
   selectPais = (name, soon) => () => { if (soon) return; this.setState({ pais: name, q: "" }); };
+  selectProdCat = (cat) => () => this.setState({ prodCat: cat });
+  openProduct = (i) => () => {
+    this.xwipe();
+    this.setState({ view: "product", productIdx: i });
+    window.scrollTo(0, 0);
+  };
   retryLigas = () => {
     this.setState({ ligasStatus: "loading" });
     clearTimeout(this._lt);
@@ -2789,6 +2887,25 @@ class Component extends DCLogic {
     out.goPasos = this.goAnchor("pasos");
     out.goCamino = this.goAnchor("camino");
     out.goPremios = this.goAnchor("premios");
+    out.goProductos = this.goAnchor("productos");
+    const prodCatActive = this.state.prodCat || "Todos";
+    out.prodCategories = PRODUCT_CATEGORIES.map((cat) => ({
+      name: cat,
+      bg: cat === prodCatActive ? "rgba(255,133,0,.15)" : "transparent",
+      bd: cat === prodCatActive ? "#FF8500" : "rgba(234,234,234,.22)",
+      fg: cat === prodCatActive ? "#FF8500" : "rgba(234,234,234,.6)",
+      onSelect: this.selectProdCat(cat)
+    }));
+    out.prodList = EXPOWINNERS_PRODUCTS
+      .map((p, gi) => ({ p, gi }))
+      .filter(({ p }) => prodCatActive === "Todos" || p.category === prodCatActive)
+      .map(({ p, gi }) => ({
+        name: p.name, category: p.category, emoji: CATEGORY_EMOJI[p.category] || "🏷️",
+        price: COP(p.price), freightRange: COP(p.freightMin) + "–" + COP(p.freightMax),
+        margin: "~" + COP(p.margin), stock: nfmt(p.stock),
+        onOpen: this.openProduct(gi)
+      }));
+    out.noProdList = out.prodList.length === 0;
     out.stop = this.stop;
     out.isSesion = scr === "sesion";
     out.ses = out.isSesion ? this.sesionVals() : null;
@@ -3044,6 +3161,22 @@ class Component extends DCLogic {
     } else {
       out.isLevel = false;
       out.lvl = null;
+    }
+
+    const pIdx = this.state.productIdx;
+    if (this.state.view === "product" && typeof pIdx === "number" && EXPOWINNERS_PRODUCTS[pIdx]) {
+      const pd = EXPOWINNERS_PRODUCTS[pIdx];
+      out.isProductDetail = true;
+      out.product = {
+        name: pd.name, category: pd.category, emoji: CATEGORY_EMOJI[pd.category] || "🏷️",
+        price: COP(pd.price), freightRange: COP(pd.freightMin) + "–" + COP(pd.freightMax),
+        margin: "~" + COP(pd.margin), stock: nfmt(pd.stock),
+        description: pd.description || "",
+        close: this.close, sell: this.open
+      };
+    } else {
+      out.isProductDetail = false;
+      out.product = null;
     }
     return out;
   }
