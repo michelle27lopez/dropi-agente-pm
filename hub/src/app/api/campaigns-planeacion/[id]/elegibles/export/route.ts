@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { localListEligibleProducts } from "@/lib/local-store-planeacion";
+import { localListEligibleProducts, QA_ELIGIBLE_TOKEN } from "@/lib/local-store-planeacion";
 import { supabaseListEligibleProducts } from "@/lib/supabase-store-planeacion";
 import { requireUser } from "@/lib/require-auth";
 
@@ -20,6 +20,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
 
   const rows: string[] = ["Proveedor;ID proveedor;ID producto;Producto;Categoría;Stock;Fecha postulación;Aprobado"];
   for (const e of entries) {
+    if (e.token === QA_ELIGIBLE_TOKEN) continue;
     if (!e.submitted_at) continue;
     const fecha = new Date(e.submitted_at).toLocaleDateString("es-CO");
     const aprobado = e.approved_at ? new Date(e.approved_at).toLocaleDateString("es-CO") : "Pendiente";
