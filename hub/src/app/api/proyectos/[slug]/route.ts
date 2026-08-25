@@ -222,6 +222,14 @@ export async function PATCH(req: NextRequest, context: any) {
     update.estado_interno = body.estado_interno;
   }
 
+  if (body.prioridad !== undefined) {
+    const NIVELES_PRIORIDAD = ["P0", "P1", "P2", "P3", "P4"];
+    if (body.prioridad !== null && !NIVELES_PRIORIDAD.includes(body.prioridad)) {
+      return NextResponse.json({ error: "prioridad inválida" }, { status: 400 });
+    }
+    update.prioridad = body.prioridad;
+  }
+
   if (body.vpv !== undefined) {
     const vpv = body.vpv === null ? null : Number(body.vpv);
     if (vpv !== null && Number.isNaN(vpv)) {
