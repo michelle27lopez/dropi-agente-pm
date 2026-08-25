@@ -30,6 +30,8 @@ type NavItem = {
 // Panorama, Sprint, Iniciativas y Updates se retiran de aquí porque pasan a
 // ser accesos rápidos dentro de Mi día (pendiente esa pasada). Pruebas con
 // Usuarios se elimina. Guías baja al pie del sidebar (ver footer).
+// Delivery se suma después (2026-08-25, Jaime) como 2do módulo, debajo de
+// Mi día — visibilidad cross-célula de prioridades, pedida explícitamente.
 //
 // Proyectos/Data/Following son por célula (2026-08-17, Jaime): apuntan a
 // `/celula/${celulaActiva}/...` en vez de una ruta plana, para que el
@@ -41,6 +43,9 @@ function buildPrimaryItems(celulaActiva: string | null): NavItem[] {
   const c = celulaActiva ?? "";
   return [
     { key: "mi-dia", label: "Mi día", href: c ? `/celula/${c}` : "/", icon: Home },
+    // Cross-célula (todas ven todas), a diferencia de Proyectos/Data/Following
+    // que son por célula — por eso no cuelga de /celula/[slug].
+    { key: "delivery", label: "Delivery", href: "/delivery", icon: Flag },
     { key: "proyectos", label: "Proyectos", href: c ? `/celula/${c}/proyectos` : "/proyectos", icon: FolderKanban },
     { key: "data", label: "Data", href: c ? `/celula/${c}/data` : "/data-solicitada", icon: Database },
     { key: "updates", label: "Updates", href: c ? `/celula/${c}/updates` : "/", icon: Rss },
@@ -51,12 +56,6 @@ function buildPrimaryItems(celulaActiva: string | null): NavItem[] {
     { key: "configuracion", label: "Configuración", href: "/ajustes", icon: Settings },
   ];
 }
-
-// Prioridades es cross-célula (todas ven todas), por eso no cuelga de
-// /celula/[slug] como Proyectos/Data/Following — vive fuera de los 6
-// módulos core para no reabrir esa poda (ver buildPrimaryItems), en su
-// propia sección, visible para todo el equipo.
-const PRIORIDADES_ITEM: NavItem = { key: "prioridades", label: "Prioridades", href: "/prioridades", icon: Flag };
 
 // Notas se queda visible fuera de los 6 módulos core, pero marcada "para mí"
 // — es la única sección que se queda privada incluso cuando el resto del
@@ -166,7 +165,6 @@ export default function GlobalNav({
 
         <div className="gnav-section">
           <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <NavLink item={PRIORIDADES_ITEM} collapsed={collapsed} active={isActive(pathname, PRIORIDADES_ITEM.href)} />
             <NavLink item={NOTAS_ITEM} collapsed={collapsed} active={isActive(pathname, NOTAS_ITEM.href)} />
           </div>
         </div>
