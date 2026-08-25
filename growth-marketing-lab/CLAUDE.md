@@ -28,6 +28,8 @@ Operaciones para convertir funcionalidades lanzadas en adopción medible.
 Es el framework fundacional del área Product Growth Marketing, organizado en carpetas
 numeradas (ver `README` implícito en la estructura de carpetas):
 
+- `Lanzamientos Dropi/` — proyectos concretos de la célula (código `GRO-XXX`), uno por
+  carpeta con su `spec.md` como fuente de verdad. Ver `Lanzamientos Dropi/_index.md`.
 - `00_Project/` — visión, roadmap, backlog, changelog del OS.
 - `01_Framework/` — propósito, principios y North Star Metric del área.
 - `02_Launch_System/` — metodología de lanzamientos (AS-IS y TO-BE), roles y responsabilidades.
