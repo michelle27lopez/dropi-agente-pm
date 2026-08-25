@@ -143,6 +143,8 @@ async function frameProductPhoto(marco: HTMLImageElement, photoSrc: string): Pro
   canvas.height = marco.naturalHeight;
   const ctx = canvas.getContext("2d");
   if (!ctx) return null;
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
   const { x, y, w, h } = MARCO_WINDOW;
   const scale = Math.max(w / photo.naturalWidth, h / photo.naturalHeight);
   const dw = photo.naturalWidth * scale;
