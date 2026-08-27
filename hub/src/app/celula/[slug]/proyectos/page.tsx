@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { MoreVertical, Search, Trash2 } from "lucide-react";
@@ -673,55 +674,98 @@ function PrototypeLinks({ urls }: { urls: string[] }) {
 // Menú "⋮" por fila para colgar un POC o un Delivery Proyecto de un Discovery
 // project sin abrir su ficha. Solo se renderiza en filas Discovery y con
 // permiso de edición; el POST igual exige ser miembro de la célula dueña.
+//
+// El desplegable se monta en un portal a <body> con `position: fixed` porque
+// el contenedor de la tabla (`.proytable-wrap`) tiene `overflow-x: auto`, y
+// eso hace que el eje Y también recorte — un dropdown `absolute` dentro de la
+// fila (sobre todo la última) quedaba cortado por debajo del borde de la
+// tabla. Con coordenadas calculadas desde el rect del botón se escapa del
+// clipping y, si no hay espacio abajo, abre hacia arriba.
+const MENU_W = 208;
+const MENU_H = 84;
+
 function RowActionsMenu({ onCrearPoc, onCrearDelivery }: { onCrearPoc: () => void; onCrearDelivery: () => void }) {
   const [open, setOpen] = useState(false);
+  const [coords, setCoords] = useState<{ top: number; left: number } | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function place() {
+      const r = btnRef.current?.getBoundingClientRect();
+      if (!r) return;
+      const abajo = window.innerHeight - r.bottom;
+      const top = abajo < MENU_H + 12 ? r.top - MENU_H - 4 : r.bottom + 4;
+      const left = Math.max(8, Math.min(r.right - MENU_W, window.innerWidth - MENU_W - 8));
+      setCoords({ top, left });
+    }
+    place();
+
+    function onDocDown(e: MouseEvent) {
+      const t = e.target as Node;
+      if (btnRef.current?.contains(t) || menuRef.current?.contains(t)) return;
+      setOpen(false);
+    }
+    function onScrollOrResize() {
+      setOpen(false);
+    }
+    document.addEventListener("mousedown", onDocDown);
+    window.addEventListener("resize", onScrollOrResize);
+    window.addEventListener("scroll", onScrollOrResize, true);
+    return () => {
+      document.removeEventListener("mousedown", onDocDown);
+      window.removeEventListener("resize", onScrollOrResize);
+      window.removeEventListener("scroll", onScrollOrResize, true);
+    };
+  }, [open]);
 
   const itemStyle: CSSProperties = {
     display: "flex", alignItems: "center", gap: 8, width: "100%",
     fontSize: 12, fontWeight: 600, fontFamily: "inherit", textAlign: "left",
-    color: "var(--fg)", background: "none", border: "none", padding: "8px 12px", cursor: "pointer",
+    color: "var(--fg)", background: "none", border: "none", padding: "9px 12px", cursor: "pointer",
   };
 
   return (
-    <div
-      style={{ position: "relative" }}
-      onClick={(e) => e.stopPropagation()}
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false);
-      }}
-    >
+    <div style={{ display: "inline-flex" }} onClick={(e) => e.stopPropagation()}>
       <button
+        ref={btnRef}
         type="button"
         onClick={() => setOpen((v) => !v)}
         title="Crear POC o Delivery Proyecto"
         style={{
           display: "flex", alignItems: "center", justifyContent: "center",
           width: 28, height: 28, borderRadius: 8, border: "none",
-          background: "transparent", color: "var(--gray-400)", cursor: "pointer",
+          background: open ? "var(--gray-100)" : "transparent", color: "var(--gray-400)", cursor: "pointer",
         }}
       >
         <MoreVertical size={15} strokeWidth={1.8} />
       </button>
-      {open && (
-        <div
-          style={{
-            position: "absolute", top: "calc(100% + 4px)", right: 0, zIndex: 20,
-            background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8,
-            boxShadow: "0 8px 24px rgba(0,0,0,0.12)", minWidth: 200, overflow: "hidden",
-          }}
-        >
-          <button type="button" style={itemStyle} onClick={() => { setOpen(false); onCrearPoc(); }}>
-            🧪 Crear POC
-          </button>
-          <button
-            type="button"
-            style={{ ...itemStyle, borderTop: "1px solid var(--border)" }}
-            onClick={() => { setOpen(false); onCrearDelivery(); }}
+      {open && coords && typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={menuRef}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "fixed", top: coords.top, left: coords.left, zIndex: 1000,
+              width: MENU_W, background: "var(--card)", border: "1px solid var(--border)",
+              borderRadius: 8, boxShadow: "0 8px 24px rgba(0,0,0,0.16)", overflow: "hidden",
+            }}
           >
-            🚚 Crear Delivery Proyecto
-          </button>
-        </div>
-      )}
+            <button type="button" style={itemStyle} onClick={() => { setOpen(false); onCrearPoc(); }}>
+              🧪 Crear POC
+            </button>
+            <button
+              type="button"
+              style={{ ...itemStyle, borderTop: "1px solid var(--border)" }}
+              onClick={() => { setOpen(false); onCrearDelivery(); }}
+            >
+              🚚 Crear Delivery Proyecto
+            </button>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
