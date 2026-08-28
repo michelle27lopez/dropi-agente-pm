@@ -5,7 +5,7 @@ import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
 import {
   ChevronDown, ChevronUp, FileText, Rocket, Layers,
-  Users, Wrench, GitBranch, Search, Sparkles,
+  Users, Wrench, GitBranch, Search, Sparkles, ExternalLink,
 } from "lucide-react";
 
 /* ── Shared styles (mismos tokens que gro-002 / fin-001 / marcas) ── */
@@ -153,16 +153,23 @@ export default function Gro004ProjectPage() {
 
         {/* ── Documentos ── */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 28 }}>
-          <div style={{ background: "#FFFBEB", border: "1px dashed #FDE68A", borderRadius: 12, padding: 16, display: "flex", gap: 12, alignItems: "flex-start" }}>
+          <a href="https://helpcenter-dropi.vercel.app" target="_blank" rel="noreferrer" style={{ textDecoration: "none", background: "#FFFBEB", border: "1px dashed #FDE68A", borderRadius: 12, padding: 16, display: "flex", gap: 12, alignItems: "flex-start", transition: "border-color 0.15s" }}>
             <div style={{ width: 36, height: 36, borderRadius: 10, background: "#FEF3C7", color: "#92400E", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
               <Rocket size={18} />
             </div>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 800, color: "#92400E" }}>Prototipo vibecodeado (superficie WebSite)</div>
-              <div style={{ fontSize: 12, color: "#78350F", marginTop: 3, lineHeight: 1.5 }}>Existe y tiene QA completa (7 HU) — falta que José confirme la URL para enlazarlo aquí.</div>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "#92400E", display: "flex", alignItems: "center", gap: 6 }}>
+                Prototipo vibecodeado (superficie WebSite) <ExternalLink size={12} color="#92400E" />
+              </div>
+              <div style={{ fontSize: 12, color: "#78350F", marginTop: 3, lineHeight: 1.5 }}>Existe y tiene QA completa (7 HU) — publicado en Vercel para revisión.</div>
             </div>
-          </div>
+          </a>
         </div>
+
+        {/* ── Actualización semanal ── */}
+        <Callout tone="info" title="📌 Tres frentes convergiendo en la misma base de conocimiento (28 ago 2026)">
+          Esta semana se le mostró el proyecto a <strong>Diana Aldana</strong> para que oriente el desarrollo desde las mejores prácticas de experiencia — quedamos a la espera de sus recomendaciones. En paralelo, <strong>José Hurtado</strong> está recopilando varias bases de conocimiento para tener un punto de partida alineado con el experimento que ya está al aire en Argentina. Y todavía tenemos pendiente una reunión con <strong>Kike</strong> para integrar esa base de conocimiento a Intercom. Los tres frentes conducen al mismo lugar: una sola base de conocimiento para las 3 superficies, construida sobre las buenas prácticas de GEO y AEO ya definidas (ver pestaña GEO/AEO).
+        </Callout>
 
         {/* ── Alerta narrativa/marca ── */}
         <Callout tone="warning" title="⚠️ Punto de coherencia narrativa — promesa de marca incumplida en el prototipo">
@@ -377,7 +384,7 @@ export default function Gro004ProjectPage() {
                     <ul style={ulStyle}>
                       <li><strong>Matriz de FAQ compartida:</strong> el contenido de FAQ de Leyendas Dropi se piensa como una categoría dentro de la misma matriz que usa Gali/Help Center.</li>
                       <li><strong>Personalización por nivel de Leyendas Dropi:</strong> el botón flotante y las cards deben poder leer el nivel del usuario — dependencia técnica real, no solo conceptual.</li>
-                      <li><strong>Misma base de conocimiento:</strong> gobernanza de la matriz — dueño propuesto Jose Hurtado (Customer Success), sin confirmar todavía.</li>
+                      <li><strong>Misma base de conocimiento:</strong> gobernanza de la matriz — dueño propuesto Jose Hurtado (Customer Success). Ya está recopilando varias bases de conocimiento para alinear el punto de partida con el experimento que está al aire en Argentina; sigue pendiente confirmar si acepta formalmente el rol de dueño.</li>
                     </ul>
 
                     <h3 style={{ ...sectionHeadingStyle, marginTop: 20 }}><Users size={16} /><span>9. Pendientes</span></h3>
@@ -389,6 +396,8 @@ export default function Gro004ProjectPage() {
                       <li>Asignar Product Designer del proyecto.</li>
                       <li>Definir técnicamente cómo se implementa la base de conocimiento compartida entre las 3 superficies.</li>
                       <li>Confirmar con Jose Hurtado si acepta el rol de dueño de mantener vigente la matriz de FAQ.</li>
+                      <li>Reunión pendiente con Kike (Growth/CRM) para integrar la base de conocimiento a Intercom.</li>
+                      <li>Recibir de Diana Aldana las recomendaciones de mejores prácticas de experiencia, tras mostrarle el proyecto esta semana.</li>
                       <li>Resolver, en orden de prioridad, los 4 bugs/gaps del prototipo (ver pestaña Beta técnica).</li>
                     </ul>
 
