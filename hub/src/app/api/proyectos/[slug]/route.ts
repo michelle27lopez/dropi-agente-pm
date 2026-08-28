@@ -220,6 +220,32 @@ export async function PATCH(req: NextRequest, context: any) {
       return NextResponse.json({ error: `estado_interno inválido para type=${project.type}` }, { status: 400 });
     }
     update.estado_interno = body.estado_interno;
+
+    // Autofill de fecha_inicio_dev: la primera vez que un Delivery Proyecto
+    // pasa a 'en DEV' y todavía no tiene fecha, se sella con hoy. Editable a
+    // mano después (body.fecha_inicio_dev explícito gana). Ver 053_*.sql.
+    if (
+      body.estado_interno === "en DEV" &&
+      !project.fecha_inicio_dev &&
+      body.fecha_inicio_dev === undefined
+    ) {
+      update.fecha_inicio_dev = new Date().toISOString().slice(0, 10);
+    }
+  }
+
+  // fecha_inicio_dev / fecha_entrega_propuesta: 'YYYY-MM-DD' o null. Solo
+  // tienen sentido en un Delivery Proyecto pero no se bloquea por type —
+  // la UI solo las expone ahí.
+  const FECHA_RE = /^\d{4}-\d{2}-\d{2}$/;
+  for (const campo of ["fecha_inicio_dev", "fecha_entrega_propuesta"] as const) {
+    if (body[campo] === undefined) continue;
+    if (body[campo] === null) {
+      update[campo] = null;
+    } else if (typeof body[campo] === "string" && FECHA_RE.test(body[campo])) {
+      update[campo] = body[campo];
+    } else {
+      return NextResponse.json({ error: `${campo} debe ser una fecha YYYY-MM-DD o null` }, { status: 400 });
+    }
   }
 
   if (body.prioridad !== undefined) {
