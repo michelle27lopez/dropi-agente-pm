@@ -60,11 +60,10 @@ export default function BarrasHorizontales({
   return (
     <div
       className="u-chart"
-      style={{ height: alto }}
       role="img"
       aria-label={`${nombre}: ${filas.map((f) => `${f.label} ${fmt(f.valor)}`).join(", ")}`}
     >
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height={alto} debounce={60}>
         <BarChart data={filas} layout="vertical" margin={{ top: 4, right: 56, left: 4, bottom: 0 }} barCategoryGap={6}>
           <XAxis
             type="number"

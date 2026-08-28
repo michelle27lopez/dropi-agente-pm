@@ -14,7 +14,7 @@ import {
   GanttChartSquare,
   ListTodo,
   Map,
-  PackageX,
+  Lightbulb,
 } from "lucide-react";
 import { etapas, proyectos } from "@/app/proyectos/logistica/_lib/data";
 
@@ -45,10 +45,11 @@ const SECCIONES = [
   // ítem desplegable.
   { href: `${BASE}/iniciativas`, label: "Iniciativas", icon: FolderKanban },
   { href: `${BASE}/experimentos`, label: "Experimentos", icon: FlaskConical, exact: true },
-  // Un research con pantalla propia. Va aquí, entre lo que se prueba y el
-  // cronograma, porque responde "¿qué encontramos?" — no es referencia de
-  // consulta ocasional: es el argumento con el que se prioriza novedades.
-  { href: `${BASE}/novedades`, label: "Novedades", icon: PackageX },
+  // Lo que aprendimos, con su evidencia. Va aquí, entre lo que se prueba y el
+  // cronograma, porque responde "¿qué sabemos?" — no es referencia de consulta
+  // ocasional: es el argumento con el que se prioriza. Hoy tiene un research
+  // (novedades, jun-2026); el siguiente entra como una sección más.
+  { href: `${BASE}/insights`, label: "Insights", icon: Lightbulb },
   { href: `${BASE}/cronograma`, label: "Cronograma", icon: GanttChartSquare },
   { href: `${BASE}/pendientes`, label: "Pendientes", icon: ListTodo },
   // Va con Pendientes y no con Iniciativas porque es trabajo por hacer, no una

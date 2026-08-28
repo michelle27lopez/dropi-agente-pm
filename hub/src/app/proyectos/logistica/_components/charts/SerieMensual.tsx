@@ -94,8 +94,8 @@ export default function SerieMensual({ meses, valores, nombre, tone = "neutral",
   );
 
   return (
-    <div className="u-chart" style={{ height }} role="img" aria-label={`${nombre} por mes: ${data.map((d) => `${d.mes} ${d.texto}`).join(", ")}`}>
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="u-chart" role="img" aria-label={`${nombre} por mes: ${data.map((d) => `${d.mes} ${d.texto}`).join(", ")}`}>
+      <ResponsiveContainer width="100%" height={height} debounce={60}>
         {pct ? (
           <AreaChart data={data} margin={{ top: 18, right: 12, left: -12, bottom: 0 }}>
             <defs>

@@ -737,9 +737,9 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     slug: "novedad-triaje",
     nombreCorto: "Triaje de novedades",
     codigo: "LOG-008",
-    // El research de junio tiene pantalla propia: /novedades. La ficha la
-    // ofrece y el sidebar enlaza directo (ver `vista` en el tipo).
-    vista: "/proyectos/logistica/novedades",
+    // El research de junio vive en Insights. La ficha lo ofrece y el sidebar
+    // enlaza directo (ver `vista` en el tipo).
+    vista: "/proyectos/logistica/insights",
     // El árbol reabsorbe la rama de Novedad dentro de la perdida ②: "el dato de
     // novedades es inusable y el desenlace real es la devolución".
     aportaA: "Devolución",
@@ -1356,29 +1356,7 @@ export const weeklies: Weekly[] = [
             nombre: "Respuestas de los proveedores",
             estado: "En producción",
             estadoTono: "verde",
-            nota:
-              "El webhook acepta la vuelta del CRM aunque llegue sin cabecera ni id de mensaje. Si falta la credencial, la respuesta se guarda igual pero no cierra lotes: no se pierde nada y no se cierra de más.",
-          },
-          {
-            nombre: "Armado de solicitudes",
-            estado: "En producción",
-            estadoTono: "verde",
-            nota:
-              "Pantalla nueva de armado con control de versión concurrente (migración 014): dos personas trabajando el mismo transportador no se pisan.",
-          },
-          {
-            nombre: "Interfaz, calidad y mapa",
-            estado: "Cerrado",
-            estadoTono: "verde",
-            nota:
-              "Estados de error, carga y vacío en todo el panel y accesibilidad del login corregida. Pruebas end-to-end con Playwright y CI en cada push. CARTO empezó a exigir API key y el mapa salía tachado: ya está cargada, producción limpia.",
-          },
-          {
-            nombre: "Deploy y accesos",
-            estado: "Pendiente",
-            estadoTono: "ambar",
-            nota:
-              "El proyecto sigue en la cuenta personal de Jaime. Falta moverlo a un team de Vercel de Dropi y sembrar los accesos (RLS 043) para que logística y comercial vean la misma información.",
+            nota: "El sistema ya recibe y registra la respuesta del proveedor, y no cierra un lote sin confirmación.",
           },
         ],
       },

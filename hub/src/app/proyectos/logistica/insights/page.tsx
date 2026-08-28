@@ -37,20 +37,26 @@ import {
   type Tone,
 } from "@/app/proyectos/logistica/_components/ui";
 
-export const metadata = { title: "Novedades · Research jun-2026 — Tablero Logística" };
+export const metadata = { title: "Insights · Tablero Logística" };
 
-// Nivel 2 de la escalera (ley: logistica-lab/metodologia/tablero-diseno.md §1):
-// la pantalla densa de un research. Existe porque el research vive en un .md de
-// 623 líneas y en un artifact, y ninguno de los dos se puede consultar en una
-// reunión: nadie abre markdown para responder "¿cuánto vale coordinación?".
+// INSIGHTS de la célula: lo que aprendimos, con su evidencia.
+//
+// Existe porque el research vive en un .md de 623 líneas y en un artifact, y
+// ninguno de los dos se puede consultar en una reunión: nadie abre markdown
+// para responder "¿cuánto vale coordinación?".
+//
+// Cómo está armada: RESUMEN Y DATOS IMPORTANTES arriba —las cifras que hay que
+// saberse y los siete hallazgos—, y el sustento debajo. Lo que no se cita en
+// una conversación (las cinco arquitecturas del módulo, las quince acciones,
+// el caso #80542212, los doce motivos) baja a plegables: no se pierde, deja de
+// competir con lo que sí se cita.
 //
 // Lo que NO hace: recalcular. Cada cifra viene de `_lib/novedades-data.ts`, que
 // transcribe el research con su fuente. Si una cifra cambia, cambia allá.
 //
-// El orden es el argumento, no el índice del documento: primero el universo,
-// después POR QUÉ pasa (la acción, no la causa), después DÓNDE (clúster, país),
-// después QUÉ HACER (triaje, fases) y al final los límites. Los vacíos van al
-// final pero van: un research sin sus límites declarados es una opinión.
+// Hoy hay un research (novedades, jun-2026). El siguiente —el cualitativo de
+// quejas, que este mismo declara como su vacío #1— entra como otra sección,
+// sin rediseñar nada.
 
 const FUENTE_LABEL: Record<string, string> = { data: "export", obs: "observado", hipotesis: "hipótesis" };
 
@@ -154,9 +160,9 @@ export default function NovedadesPage() {
   return (
     <main className="page">
       <PageHeader
-        title="Novedades · qué encontramos en junio"
-        subtitle="La novedad dice qué pasó. Nunca dice qué hacer. Research RES-LOG-NOV-001 sobre 911.168 novedades de 10 países."
-        back={{ href: "/proyectos/logistica/proyecto/novedad-triaje", label: "Triaje de novedades" }}
+        title="Insights de la célula"
+        subtitle="Lo que aprendimos, con su evidencia. Hoy: novedades y devoluciones — la novedad dice qué pasó, nunca dice qué hacer."
+        back={{ href: "/proyectos/logistica", label: "Indicadores" }}
         aside={
           <div className="u-row">
             <a className="u-link" href={RESEARCH.artifact} target="_blank" rel="noreferrer">
@@ -169,6 +175,9 @@ export default function NovedadesPage() {
         }
       />
 
+      <SectionTitle hint={`${RESEARCH.id} · ${RESEARCH.periodo} · ${RESEARCH.alcance} · alimenta ${RESEARCH.tickets.join(" · ")}`}>
+        Novedades y devoluciones
+      </SectionTitle>
       <div className="u-grid" style={{ ["--u-min" as string]: "220px" }}>
         <KpiCard
           label="Novedades en junio"
@@ -357,6 +366,7 @@ export default function NovedadesPage() {
       </div>
 
       {/* ── El módulo ──────────────────────────────────────────────────────── */}
+      <Disclosure summary="El módulo por dentro: cinco arquitecturas, las 15 acciones y lo que no deja ver">
       <SectionTitle hint="19 fichas observadas en producción entre el 24 y el 25 de agosto, en Colombia y Ecuador. Solo lectura.">
         El formulario cambia por transportadora — y ninguno tiene fecha
       </SectionTitle>
@@ -400,7 +410,9 @@ export default function NovedadesPage() {
         rows={CEGUERAS}
         getKey={(c) => c.que}
       />
+      </Disclosure>
 
+      <Disclosure summary="El caso completo: una orden, 55 días y cero soluciones">
       {/* ── El caso ────────────────────────────────────────────────────────── */}
       <SectionTitle hint={`${CASO.carrier} · ${CASO.contexto}`}>
         {`Una orden, de principio a fin: ${CASO.orden}`}
@@ -417,12 +429,15 @@ export default function NovedadesPage() {
         </ol>
         <p className="u-fuente">{CASO.cierre}</p>
       </Card>
+      </Disclosure>
 
       {/* ── Qué construir ──────────────────────────────────────────────────── */}
+      <Disclosure summary="Los 12 motivos canónicos, con su triaje y lo que tienen en juego">
       <SectionTitle hint="Cobertura de la homologación: 99,5% del volumen. Cada motivo con su triaje y lo que tiene en juego.">
         324 etiquetas caben en 12 motivos
       </SectionTitle>
       <Table columns={columnasMotivo} rows={MOTIVOS} getKey={(m) => m.id} />
+      </Disclosure>
 
       <SectionTitle hint="El orden importa: sin lo primero, nada de lo demás es medible.">
         El orden de construcción
