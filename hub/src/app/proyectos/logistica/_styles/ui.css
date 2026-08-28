@@ -713,3 +713,14 @@
   line-height: var(--lh-body);
   color: var(--muted);
 }
+
+/* ── Chart ───────────────────────────────────────────────────────────────────
+   Contenedor de las gráficas recharts. Solo fija el alto y evita que el SVG
+   se salga: la gráfica hereda color y tipografía del tablero.               */
+.log-root .u-chart {
+  width: 100%;
+  min-width: 0;
+  font-family: inherit;
+}
+.log-root .u-chart .recharts-text { font-family: inherit; }
+.log-root .u-chart .recharts-tooltip-wrapper { outline: none; }
