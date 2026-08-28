@@ -105,7 +105,7 @@ export default function Gro002ProjectPage() {
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
                 <span style={badgeStyle("#C2410C", "var(--dropi-light)")}>🌱 Célula Growth</span>
                 <span style={badgeStyle("#166534", "#DCFCE7")}>🟢 Activo — beta técnica funcionando</span>
-                <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧭 Definición → Shaping</span>
+                <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧭 POC</span>
                 <span style={badgeStyle("#B45309", "#FEF3C7")}>📅 Fecha dura: ExpoWinners, 12 sept 2026</span>
               </div>
               <h1 style={{ fontSize: 26, fontWeight: 900, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>
@@ -169,8 +169,8 @@ export default function Gro002ProjectPage() {
         </div>
 
         {/* ── Alerta de decisión reciente ── */}
-        <Callout tone="warning" title="⚠️ Resolución de alcance con Tech Lead (20 ago 2026)">
-          José Giraldo (Tech Lead) no había sido consultado sobre el job batch diario ni la integración de login que se venían asumiendo. Su capacidad está comprometida con el MVP del 12 de septiembre (evento presencial ExpoWinners: operarios buscan por nombre/correo/ID y ven el nivel del usuario, sin sesión). <strong>Decisión:</strong> no tocar la plataforma de Dropi ni pedirle desarrollo. Growth sigue en paralelo — la consulta de nivel vive solo en la landing, la data se trae por consulta directa coordinada con Miguel Ángel (Data), y se avisa al usuario que los datos pueden no ser en tiempo real. La pregunta de login (¿landing aparte o embebida en Dropi?) queda pospuesta.
+        <Callout tone="warning" title="⚠️ Frente 1 descartado para ExpoWinners — resolución final con Tech Lead (25 ago 2026)">
+          Esta semana se llevó el alcance del Frente 1 (insignia y card en la plataforma, reutilizando el componente de Dropi Turbo, más el Wrapped en su versión simple) al equipo técnico. José Giraldo (Tech Lead) confirmó que no tiene capacidad para integrarlo a su backlog antes del 12 de septiembre. <strong>Decisión:</strong> el Frente 1 queda descartado para la fecha de ExpoWinners; el programa avanza únicamente con el Frente 2 (la landing pública), donde también hubo ajustes. Adicionalmente, José Giraldo no puede garantizar la seguridad de las consultas que se necesitarían para pintar en pantalla el resumen de desempeño (Wrapped), así que ese resumen ahora se entrega por CRM — correo electrónico o WhatsApp — en lugar de mostrarse dentro del sitio.
         </Callout>
 
         {/* ════════════════════════════════════════════════════════════
@@ -273,17 +273,18 @@ export default function Gro002ProjectPage() {
                   <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20 }}>
                     <h3 style={sectionHeadingStyle}><span>🎮 2. Solución propuesta — MVP Hito 1</span></h3>
                     <ul style={ulStyle}>
-                      <li><strong>Modal Wrapped:</strong> resumen animado del mes cerrado (Mes N-1), insignia asignada, brecha al siguiente nivel, descarga de imagen PNG vertical (9:16) para compartir.</li>
-                      <li><strong>Insignia persistente en Header:</strong> muestra nivel/rango vigente, tooltip al hover, reabre el Wrapped al clic.</li>
-                      <li><strong>Card de Leyendas en Home</strong> (contraída y expandida): 3 casos — usuario nuevo (0% activado), usuario con experiencia (histórico de logros), y dropshipper+líder (toggle entre vistas).</li>
-                      <li><strong>Landing pública — Dropshippers:</strong> testimonios de leyendas actuales, mecánica del programa, cards de los 6 niveles, y OnePage por nivel (mindset, rangos, meta, 4 recursos, navegación siguiente/anterior).</li>
-                      <li><strong>Landing pública — Líderes de Comunidad:</strong> Ranking de Comunidades (filtrado por país, buscador), Ficha de Comunidad (modal con demografía y métricas), Ligas informativas (Efectividad, Popularidad, Impacto Económico).</li>
+                      <li><strong>Landing pública — Dropshippers:</strong> mecánica del programa, cards de los 6 niveles y OnePage por nivel (mindset, rangos, meta, 4 recursos, navegación siguiente/anterior).</li>
+                      <li><strong>Catálogo de productos:</strong> módulo nuevo dentro de la landing — el usuario selecciona de una vez el producto que va a vender. Se conecta con el sitio de productos real; el feed que lo abastece para el lanzamiento todavía está pendiente de definir (posiblemente con Jaime).</li>
+                      <li><strong>Simulador de Dropi:</strong> experiencia interactiva entregada por Jaime, integrada al frente de landing. Es previsible que surjan ajustes después del lanzamiento, una vez haya uso real.</li>
+                      <li><strong>CTA &quot;Simula tu experiencia en Dropi&quot;</strong> (antes &quot;Consultar nivel&quot;): el objetivo deja de ser mostrar el nivel y pasa a ser prospectar dropshippers antes de que vivan la experiencia del simulador.</li>
+                      <li><strong>Resumen de desempeño (antes Wrapped en pantalla):</strong> se entrega por CRM, vía correo electrónico o WhatsApp — ver la decisión del 25 de agosto arriba.</li>
+                      <li><strong>Landing pública — Líderes de Comunidad:</strong> Ranking de Comunidades (filtrado por país, buscador), Ficha de Comunidad (modal con demografía y métricas), Ligas informativas (Efectividad, Popularidad, Impacto Económico). Sigue siendo el módulo menos maduro del programa — ver pendientes en la pestaña de Decisiones.</li>
                       <li><strong>Footer transversal:</strong> Términos y Condiciones y Preguntas Frecuentes — ambos contenido nuevo, específico del programa.</li>
                       <li>Sistema de niveles basado <strong>100% en órdenes entregadas</strong> — sin ningún concepto de puntaje o Dropicoins expuesto en la UI de este hito.</li>
                     </ul>
 
                     <Callout tone="danger" title="🚫 Explícitamente fuera del MVP (Hito 1)">
-                      Redención de Dropicoins (falta definir tasa de conversión drops→DC) · Card Resumen en Dashboard · micro-barras de progreso por rango · umbrales numéricos de la Liga Popularidad · bloque de Premios y Reconocimientos (Release 2) · Grupo empresarial (arquitectura a diseñar, no a lanzar) · puntos por calidad operativa (v2) · acumulación global entre países · perfiles de proveedor.
+                      <strong>Todo el Frente 1</strong> — Modal Wrapped en pantalla, Insignia persistente en Header y Card de Leyendas en Home (ver decisión del 25 de agosto) · Redención de Dropicoins (falta definir tasa de conversión drops→DC) · Card Resumen en Dashboard · micro-barras de progreso por rango · umbrales numéricos de la Liga Popularidad · bloque de Premios y Reconocimientos (Release 2) · Grupo empresarial (arquitectura a diseñar, no a lanzar) · puntos por calidad operativa (v2) · acumulación global entre países · perfiles de proveedor.
                     </Callout>
 
                     <h4 style={subHeadingStyle}>Anexo B — Niveles de Dropshipper (referencia completa)</h4>
@@ -377,6 +378,11 @@ Usuario ingresa código
     → UI muestra Wrapped → Session Summary`}
                     </pre>
 
+                    <h4 style={subHeadingStyle}>Sistema de diseño de la rearquitectura (26 ago)</h4>
+                    <p style={pStyle}>
+                      Se reemplazaron los tokens visuales del primer prototipo por el sistema de diseño real de la rearquitectura de Dropi: naranja de marca <code>#FF6102</code> (antes <code>#FF8500</code>, un valor aproximado), tipografía <strong>Inter</strong> (antes Chakra Petch) y esquinas redondeadas en botones y tarjetas (antes esquina cortada con clip-path). Se mantiene el fondo oscuro y la sensación &quot;wrapped&quot; de la landing — es un refinamiento de marca, no una conversión a tema claro.
+                    </p>
+
                     <h4 style={subHeadingStyle}>Documento del proyecto integrado a Darwin (21 ago)</h4>
                     <p style={pStyle}>
                       José entregó el hand-off técnico completo (16 secciones: kick-off, discovery, definición, diccionario de datos, 11 HU con hallazgos de QA, incentivos, inventario de recursos, equipo, pendientes críticos, 6 esquemas de naming en conflicto, cronograma a ExpoWinners, estrategia de comunicación). Se publicó como documento navegable y se conectó a esta misma ficha de proyecto.
@@ -400,6 +406,10 @@ Usuario ingresa código
                       <li>Hito 1 no incluye ningún concepto de puntaje/Dropicoins en la UI — único driver visible: &quot;órdenes entregadas&quot;.</li>
                       <li>Liga Impacto Económico tiene un único nivel: &quot;Formador de Millonarios&quot; (≥ USD 1M GMV/mes) — nombre validado por Laura Sánchez.</li>
                       <li><strong>Naming &quot;Master&quot; resuelto y unificado (24 ago 2026):</strong> se usa &quot;Master&quot; tanto para el nivel 3 de dropshipper como para el primer nivel del Eje Efectividad de líderes — misma palabra en ambos contextos, ya no hay colisión de naming.</li>
+                      <li><strong>Frente 1 descartado para ExpoWinners (25 ago 2026):</strong> insignia, card reutilizada de Dropi Turbo y Wrapped simple en plataforma quedan fuera de esta fecha — José Giraldo no tiene capacidad para integrarlos a su backlog. El programa avanza solo con el Frente 2 (landing).</li>
+                      <li><strong>El resumen de desempeño se entrega por CRM, no en pantalla (25 ago 2026):</strong> José Giraldo no puede garantizar la seguridad de las consultas necesarias para pintar esos datos en el sitio, así que se envía por correo electrónico o WhatsApp en su lugar.</li>
+                      <li>El botón &quot;Consultar nivel&quot; migra a <strong>&quot;Simula tu experiencia en Dropi&quot;</strong> — el objetivo cambia de mostrar el nivel a prospectar dropshippers antes de que vivan la experiencia del simulador.</li>
+                      <li>Se integra a la landing el <strong>sistema de diseño de la rearquitectura</strong> (naranja de marca, tipografía Inter, esquinas redondeadas) — ver detalle en la pestaña Beta técnica.</li>
                     </ul>
 
                     <h4 style={subHeadingStyle}>❓ Preguntas abiertas</h4>
@@ -411,6 +421,9 @@ Usuario ingresa código
                       <li>Definición técnica exacta y cierre formal de &quot;orden completada&quot; (Data + Producto) — estado validado con ~20 días de espera, no evento en tiempo real.</li>
                       <li>Contenido legal definitivo de Términos y Condiciones y contenido de Preguntas Frecuentes — ambos pendientes de redacción, no solo de desarrollo.</li>
                       <li>Diseño de arquitectura de &quot;Grupo empresarial&quot; — sesión técnica recomendada con Fabian Castro antes de desarrollo del MVP, aunque no se lance en este hito.</li>
+                      <li>Quién entrega el feed real del catálogo de productos para el lanzamiento — posiblemente Jaime, sin confirmar todavía.</li>
+                      <li>Qué ajustes necesitará el simulador de Jaime después de lanzarlo y verlo en uso real.</li>
+                      <li>Cómo debe evolucionar el módulo de Líderes de Comunidad — sigue siendo el menos maduro del programa; se espera la lectura de Laura Sánchez después de mostrarle la experiencia completa, de cara a su estrategia.</li>
                     </ul>
 
                     <h4 style={subHeadingStyle}>⚠️ Riesgos</h4>
@@ -418,6 +431,13 @@ Usuario ingresa código
                       <li>Generación client-side de imagen PNG del Wrapped: posible latencia o fallo en navegadores móviles.</li>
                       <li>Consistencia de datos: posible desfase entre plataforma transaccional in-app y tabla de ranking pública de comunidades.</li>
                       <li>Contenido faltante que puede bloquear release: Términos y Condiciones (Legal) y FAQ (Producto/Growth) no existen aún.</li>
+                    </ul>
+
+                    <h4 style={subHeadingStyle}>🤝 Pendientes con otros equipos</h4>
+                    <ul style={ulStyle}>
+                      <li><strong>Marketing:</strong> seguimiento a los recursos visuales que todavía faltan — insignias y videos testimoniales.</li>
+                      <li><strong>Legal:</strong> validar que el programa esté completamente mapeado en términos legales.</li>
+                      <li><strong>Financiero:</strong> confirmar la viabilidad económica del sistema de premios y recompensas — todavía no está validada.</li>
                     </ul>
 
                     <h4 style={subHeadingStyle}>Pendiente — conexión a datos reales de Dropi</h4>
