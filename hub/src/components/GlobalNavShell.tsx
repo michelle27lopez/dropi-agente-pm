@@ -39,7 +39,6 @@ export default function GlobalNavShell({ children }: { children: React.ReactNode
         onCloseMobile={() => setMobileOpen(false)}
       />
       <div className="gnav-content">
-        <GlobalTopBar />
         <button
           type="button"
           className="gnav-mobile-trigger"
@@ -48,6 +47,7 @@ export default function GlobalNavShell({ children }: { children: React.ReactNode
         >
           ☰
         </button>
+        <GlobalTopBar />
         {children}
       </div>
     </div>

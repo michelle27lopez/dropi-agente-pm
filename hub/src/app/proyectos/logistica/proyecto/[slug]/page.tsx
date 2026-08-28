@@ -1,204 +1,335 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import "@/app/proyectos/logistica/_styles/ficha.css";
 import {
-  proyectos, proyectoPorSlug, linksDe, experimentos, etapas,
+  proyectos,
+  proyectoPorSlug,
+  linksDe,
+  experimentos,
+  etapas,
+  saludDe,
+  motivoSalud,
+  APORTA_GLOSA,
+  LINK_ICONO,
+  type LinkRef,
+  type Proyecto,
 } from "@/app/proyectos/logistica/_lib/data";
-import LinkList from "@/app/proyectos/logistica/_components/LinkList";
+import {
+  Card,
+  Pill,
+  DataList,
+  Disclosure,
+  PageHeader,
+  SectionTitle,
+  type Dato,
+} from "@/app/proyectos/logistica/_components/ui";
+
+// NIVEL 3 de la escalera — la ficha lo tiene TODO, y es la única pantalla que
+// puede permitírselo (ley: logistica-lab/metodologia/tablero-diseno.md §6).
+//
+// Qué estaba roto y cómo se arregla:
+//
+// 1. LA SOPA DE METADATOS. La cabecera decía "Proyecto · Definición ·
+//    [Pendiente] · Generación · spec parcial": cinco ejes distintos en una
+//    fila, sin etiquetas, con un solo color repartido al azar. Ahora cada dato
+//    lleva su nombre encima (DataList) y el color solo aparece donde significa
+//    algo.
+//
+// 2. NO DECÍA PARA QUÉ SIRVE, NI QUIÉN LO LLEVA, NI QUÉ SIGUE. Las tres
+//    preguntas con las que alguien abre una ficha no tenían respuesta en
+//    ninguna parte. Ahora son el primer bloque, antes que cualquier otra cosa.
+//
+// 3. BLOQUES IDÉNTICOS CON IMPORTANCIA DISTINTA. "Estado en Jira" y "Foco" se
+//    veían iguales. El foco —hasta 790 caracteres de trazabilidad— era lo
+//    tercero que se leía. Ahora baja a un plegable: no se pierde, deja de
+//    estorbar.
+//
+// 4. SIETE PASTILLAS NARANJAS IGUALES en Enlaces. El naranja es el acento de
+//    marca y va en un elemento por vista, no en siete. Ahora los enlaces se
+//    agrupan por tipo y son texto.
 
 export function generateStaticParams() {
   return proyectos.map((p) => ({ slug: p.slug }));
 }
 
-// Mismas etiquetas que usa el registro en /iniciativas, para que un proyecto no
-// se describa de dos maneras distintas según por dónde se mire.
 const DOC_LABEL: Record<string, string> = {
-  completo: "spec completo",
-  parcial: "spec parcial",
-  ninguno: "sin documentar",
+  completo: "Spec completo",
+  parcial: "Spec parcial",
+  ninguno: "Sin documentar",
 };
 
-export default async function ProyectoPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+const GRUPO_LINK: Record<string, string> = {
+  jira: "Jira",
+  figma: "Figma",
+  prototipo: "Prototipos",
+  poc: "Prototipos",
+  doc: "Documentación",
+  drive: "Documentación",
+  tablero: "En este tablero",
+};
+
+export default async function ProyectoPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const p = proyectoPorSlug(slug);
   if (!p) notFound();
-
   if (p.entregable) redirect(p.entregable);
 
-  const exps = experimentos.filter(
-    (e) => e.proyectoSlug === p.slug || p.experimentos?.includes(e.slug)
-  );
-
-  const relatedSet = new Set(
-    (p.etapasRelacionadas ?? []).map((r) => r.etapa)
-  );
-  // Dos cosas distintas que antes se decidían con la misma condición: el badge
-  // "Transversal" solo tiene sentido con más de una etapa, pero el detalle de
-  // rol por etapa hay que pintarlo aunque sea una sola — si no, ese dato se
-  // perdía en silencio al caer en la rama de etapa única.
-  const isTransversal = relatedSet.size > 1;
-  const tieneRelacionadas = relatedSet.size > 0;
+  const exps = experimentos.filter((e) => e.proyectoSlug === p.slug || p.experimentos?.includes(e.slug));
+  const relacionadas = p.etapasRelacionadas ?? [];
+  const esTransversal = new Set(relacionadas.map((r) => r.etapa)).size > 1;
+  const salud = saludDe(p);
+  const links = linksDe(p);
 
   return (
     <main className="page">
-      <Link href="/proyectos/logistica/iniciativas" className="back">
-        ← Registro de iniciativas
-      </Link>
+      <PageHeader
+        title={p.nombre}
+        subtitle={p.descripcion}
+        back={{ href: "/proyectos/logistica/iniciativas", label: "Registro de iniciativas" }}
+        aside={p.codigo ? <Pill code>{p.codigo}</Pill> : <Pill tone="warn">sin registrar en Darwin</Pill>}
+      />
 
-      <div className="detail">
-        {/* El título abre la ficha. Antes venían seis pastillas de colores
-            primero y había que leerlas todas para saber qué proyecto era. */}
-        {p.codigo && <span className="detail-codigo">{p.codigo}</span>}
-        <h1>{p.nombre}</h1>
-        <p className="lead">{p.descripcion}</p>
+      <div className="ficha__layout">
+        <div className="ficha__main">
+      {/* ── Lo esencial: las tres preguntas con las que se abre una ficha ─── */}
+      <Card tone={salud}>
+        <DataList
+          items={[
+            {
+              label: "Aporta a",
+              value:
+                p.aportaA === "Sin definir" ? (
+                  <span className="ficha__pendiente" title={APORTA_GLOSA[p.aportaA]}>
+                    Sin definir
+                  </span>
+                ) : (
+                  <span title={APORTA_GLOSA[p.aportaA]}>{p.aportaA}</span>
+                ),
+              hint: "Si mueve movilización o devolución",
+            },
+            { label: "Responsable", value: p.owner },
+            { label: "Próximo paso", value: p.proximoPaso },
+            {
+              label: "Salud",
+              value: (
+                <span className="ficha__salud">
+                  <span className="u-salud" data-salud={salud} />
+                  {salud === "risk" ? "Bloqueado" : salud === "warn" ? "Información incompleta" : "En avance"}
+                </span>
+              ),
+              hint: motivoSalud(p),
+            },
+          ]}
+        />
+        {p.porQue && <p className="ficha__porque">{p.porQue}</p>}
+      </Card>
 
-        {/* Los metadatos son texto, no pastillas: son categorías (qué es, en qué
-            fase va, qué etapa ataca) y el color no debe usarse para eso. Solo se
-            destacan con .tag las dos cosas que piden acción. */}
-        <div className="detail-meta">
-          <strong>{p.tipo}</strong>
-          <span className="sep">·</span>
-          {/* `fase` y `handoff` son ejes distintos, pero colapsan al mismo valor
-              en fulfillment y tarifas — se decía dos veces seguidas. */}
-          {p.fase !== p.handoff && (
-            <>
-              <span>{p.fase}</span>
-              <span className="sep">·</span>
-            </>
-          )}
-          {/* Mismo trato que en el registro: handoff son los cuatro estados, así
-              que lleva color; el resto de la línea es texto. */}
-          <span className={`pill h-${p.handoff.replace(/\s/g, "-")}`}>{p.handoff}</span>
-          <span className="sep">·</span>
-          <span>{isTransversal ? "transversal a la cadena" : p.etapa}</span>
+      {/* El bloqueo va inmediatamente después, y solo si existe. No lleva
+          mayúsculas ni emoji: el rojo ya dice que es urgente, gritarlo encima
+          es redundante y hace que todo lo demás parezca menos importante. */}
+      {p.bloqueo && (
+        <>
+          <SectionTitle>Bloqueo</SectionTitle>
+          <Card tone="risk">
+            <p className="u-prose">{p.bloqueo}</p>
+          </Card>
+        </>
+      )}
 
-          {p.destacado && (
-            <>
-              <span className="sep">·</span>
-              <span>⭐ en foco</span>
-            </>
-          )}
+      {p.vista && (
+        <p className="ficha__vista">
+          <Link href={p.vista} className="u-link">
+            Abrir la pantalla de {p.nombre} →
+          </Link>
+        </p>
+      )}
 
-          {!p.codigo && <span className="pill is-warn">sin registrar en Darwin</span>}
-          {(p.doc ?? "ninguno") === "ninguno" ? (
-            <span className="pill is-risk">sin documentar</span>
-          ) : (
-            <span>{DOC_LABEL[p.doc ?? "ninguno"]}</span>
-          )}
-        </div>
+      {/* El estado literal de Jira: cuando no coincide con nuestra lectura, esa
+          diferencia ES el hallazgo — para eso existe el campo. */}
+      {p.jira && (
+        <>
+          <SectionTitle hint="Tal como está hoy en el ticket. Si no coincide con la fase de arriba, esa diferencia es el hallazgo.">
+            Estado en Jira
+          </SectionTitle>
+          <Card>
+            <p className="u-prose">{p.jira}</p>
+          </Card>
+        </>
+      )}
 
-        {/* Same Day tiene página propia y estaba en el sidebar, pero su ficha no
-            sabía que existía: no había ni link ni `entregable`. Ahora cualquier
-            iniciativa con `vista` la ofrece desde arriba. */}
-        {p.vista && (
-          <p className="detail-hint" style={{ marginBottom: 14 }}>
-            <Link href={p.vista}>Abrir la pantalla de {p.nombre} →</Link>
+      {/* ── Cobertura en la cadena ────────────────────────────────────────── */}
+      {relacionadas.length > 0 && (
+        <>
+          <SectionTitle hint={esTransversal ? "Este proyecto toca varias etapas de la orden." : undefined}>
+            {esTransversal ? "Cobertura en la cadena de valor" : "Etapa de la orden"}
+          </SectionTitle>
+          <Card>
+            {esTransversal && <CadenaValor proyecto={p} />}
+            <DataList
+              columns={1}
+              items={relacionadas.map((r) => ({ label: r.etapa, value: r.rol }))}
+            />
+          </Card>
+        </>
+      )}
+
+      {/* ── Experimentos ──────────────────────────────────────────────────── */}
+      <SectionTitle>Experimentos</SectionTitle>
+      <Card>
+        {exps.length > 0 ? (
+          <ul className="ficha__exps">
+            {exps.map((e) => (
+              <li key={e.slug}>
+                <Pill tone={e.estado === "Validado" ? "ok" : e.estado === "Corriendo" ? "warn" : "info"}>
+                  {e.estado}
+                </Pill>
+                <span>{e.nombre}</span>
+                {e.demoHref && (
+                  <Link href={e.demoHref} className="u-link">
+                    probar →
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="u-prose" style={{ color: "var(--muted)" }}>
+            Todavía no hay experimentos asociados. Se gestionan en{" "}
+            <Link href="/proyectos/logistica/experimentos" className="u-link">
+              Experimentos
+            </Link>
+            .
           </p>
         )}
+      </Card>
 
-        {p.bloqueo && (
-          <div className="detail-bloqueo">
-            <b>⛔ Qué lo detiene</b>
-            {p.bloqueo}
-          </div>
-        )}
-
-        {p.jira && (
-          <div className="detail-field">
-            <b>Estado en Jira</b>
-            {p.jira}
-          </div>
-        )}
-
-        <div className="detail-field">
-          <b>Foco</b>
-          {p.foco}
-        </div>
-
-        {/* La cadena de las 6 etapas SOLO se pinta cuando el proyecto es
-            transversal: ahí la cobertura es el dato. Para una iniciativa de una
-            sola etapa era caro y redundante — la etapa ya está en la línea de
-            metadatos de arriba y en el sidebar. */}
-        {isTransversal && (
-          <div className="detail-field">
-            <b>Cobertura en la cadena de valor</b>
-            <div className="fx-chain">
-              {etapas.map((e) => {
-                const isRelated = relatedSet.has(e.nombre);
-                const isPrimary = e.nombre === p.etapa || p.etapa.startsWith(e.nombre) || e.nombre.startsWith(p.etapa);
-                return (
-                  <span
-                    key={e.n}
-                    className={`fx-chain-step${isPrimary ? " is-current" : isRelated ? " is-related" : ""}`}
-                  >
-                    {e.nombre}
-                  </span>
-                );
-              })}
-            </div>
-            <div className="vigia-etapas">
-              {p.etapasRelacionadas!.map((r) => {
-                const et = etapas.find((e) => e.nombre === r.etapa);
-                return (
-                  <div key={r.etapa} className="vigia-etapa-row">
-                    <span className="vigia-etapa-name" style={{ borderLeftColor: et?.color ?? "#6366f1" }}>
-                      {r.etapa}
-                    </span>
-                    <span className="vigia-etapa-role">{r.rol}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Una sola etapa relacionada: el rol se perdía en silencio al no ser
-            "transversal". Se dice en una línea, sin la cadena. */}
-        {!isTransversal && tieneRelacionadas && (
-          <div className="detail-field">
-            <b>Etapa de la orden</b>
-            {p.etapasRelacionadas!.map((r) => (
-              <span key={r.etapa}>
-                <strong>{r.etapa}</strong> — {r.rol}
-              </span>
-            ))}
-          </div>
-        )}
-
-        <LinkList links={linksDe(p)} titulo="Enlaces" />
-        {linksDe(p).length === 0 && (
-          <p className="detail-hint">
+      {/* ── Enlaces, agrupados ────────────────────────────────────────────── */}
+      <SectionTitle>Enlaces</SectionTitle>
+      <Card>
+        {links.length > 0 ? (
+          <Enlaces links={links} />
+        ) : (
+          <p className="u-prose" style={{ color: "var(--muted)" }}>
             Sin ticket ni enlaces todavía — esta iniciativa vive solo en discovery.
           </p>
         )}
+      </Card>
 
-        <div className="detail-exps">
-          <b>Experimentos</b>
-          {exps.length > 0 ? (
-            <ul>
-              {exps.map((e) => (
-                <li key={e.slug}>
-                  <span className={`estado e-${e.estado}`}>{e.estado}</span> {e.nombre}
-                  {e.demoHref && (
-                    <>
-                      {" · "}
-                      <Link href={e.demoHref}>probar →</Link>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="detail-hint">
-              Aún no hay experimentos asociados. Los experimentos de la célula se
-              gestionan en <Link href="/proyectos/logistica/experimentos">Experimentos</Link>.
-            </p>
-          )}
+      {/* ── El contexto largo, disponible pero fuera del camino ───────────── */}
+      <Disclosure summary="Contexto, antecedentes y trazabilidad">
+        {p.foco}
+      </Disclosure>
         </div>
+
+        {/* ── Rail: la clasificación, siempre visible, nunca primero ─────────
+            Va al lado y no arriba a propósito. Subirla sería volver al problema
+            original de esta pantalla: metadatos antes que significado. Tipo,
+            Fase y Handoff no responden ninguna pregunta, solo etiquetan — pero
+            se consultan a cada rato, así que tampoco pueden estar enterradas.
+            El rail resuelve las dos cosas: presentes siempre, primeras nunca.
+            Es el mismo patrón de GitHub, Linear y Jira en sus vistas de
+            detalle, y no por moda: es la única posición que no obliga a elegir
+            entre visibilidad y jerarquía. */}
+        <aside className="ficha__rail">
+          <Card>
+            <span className="ficha__rail-titulo">Clasificación</span>
+            <DataList
+              columns={1}
+              items={
+                [
+                  { label: "Tipo", value: p.tipo, hint: "Qué es" },
+                  { label: "Fase", value: p.fase, hint: "Dónde va dentro de su ciclo" },
+                  {
+                    label: "Handoff",
+                    value: <Pill tone={handoffTono(p)}>{p.handoff}</Pill>,
+                    hint: "¿TI ya puede tomarlo?",
+                  },
+                  {
+                    label: "Etapa de la orden",
+                    value: esTransversal ? "Transversal a la cadena" : p.etapa,
+                  },
+                  { label: "Ticket", value: p.ticket, hint: "El ticket paraguas en Jira" },
+                  {
+                    label: "Documentación",
+                    value:
+                      (p.doc ?? "ninguno") === "ninguno" ? (
+                        <span className="ficha__pendiente">Sin documentar</span>
+                      ) : (
+                        DOC_LABEL[p.doc ?? "ninguno"]
+                      ),
+                  },
+                ] as Dato[]
+              }
+            />
+          </Card>
+        </aside>
       </div>
     </main>
+  );
+}
+
+function handoffTono(p: Proyecto) {
+  if (p.handoff === "Handoff hecho") return "ok" as const;
+  if (p.handoff === "Listo para handoff") return "info" as const;
+  if (p.handoff === "Pendiente") return "warn" as const;
+  return "neutral" as const;
+}
+
+/** Las 6 etapas con las que toca este proyecto resaltadas. Solo si es transversal. */
+function CadenaValor({ proyecto }: { proyecto: Proyecto }) {
+  const relacionadas = new Set((proyecto.etapasRelacionadas ?? []).map((r) => r.etapa));
+  return (
+    <div className="ficha__cadena">
+      {etapas.map((e) => {
+        const principal =
+          e.nombre === proyecto.etapa ||
+          proyecto.etapa.startsWith(e.nombre) ||
+          e.nombre.startsWith(proyecto.etapa);
+        const estado = principal ? "principal" : relacionadas.has(e.nombre) ? "toca" : "no";
+        return (
+          <span key={e.n} className="ficha__cadena-paso" data-estado={estado}>
+            {e.nombre}
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Enlaces agrupados por tipo. Siete pastillas iguales no son navegación, son un muro. */
+function Enlaces({ links }: { links: LinkRef[] }) {
+  const grupos = new Map<string, LinkRef[]>();
+  for (const l of links) {
+    const g = GRUPO_LINK[l.tipo] ?? "Otros";
+    grupos.set(g, [...(grupos.get(g) ?? []), l]);
+  }
+
+  return (
+    <div className="ficha__links">
+      {[...grupos].map(([grupo, items]) => (
+        <div key={grupo} className="ficha__links-grupo">
+          <span className="ficha__links-titulo">{grupo}</span>
+          <ul>
+            {items.map((l) => (
+              <li key={l.label + l.href}>
+                {l.falta || !l.href ? (
+                  <span className="ficha__pendiente" title="Falta el enlace">
+                    {l.label}
+                  </span>
+                ) : l.href.startsWith("http") ? (
+                  <a href={l.href} target="_blank" rel="noreferrer">
+                    <span aria-hidden>{LINK_ICONO[l.tipo]}</span> {l.label} ↗
+                  </a>
+                ) : (
+                  <Link href={l.href}>
+                    <span aria-hidden>{LINK_ICONO[l.tipo]}</span> {l.label} →
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
   );
 }

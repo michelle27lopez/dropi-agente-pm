@@ -10,12 +10,12 @@
 
 ### 📊 Contrastación Meta vs. Realidad
 
-| Métrica / Outcome | Realidad Actual | Meta S2 (Q3-Q4) | Brecha / Status | Definición & Fuente |
+| Métrica / Outcome | Realidad Actual (Cierre JUL) | Meta S2 (Q3-Q4) | Brecha / Status | Definición & Fuente |
 | :--- | :---: | :---: | :---: | :--- |
-| **OKR 1 / KR 1.1 (Compañía)** | **3.351.359 ord/mes** | **7.800.000 ord/mes** | 🔴 **-4.448.641 ord** (42.9% cumpl.) | OKR 1.1 Holding (Confluence Space PD) |
-| **NSM (Métrica Estrella Célula)**| **3.351.359 ord/mes** | **3.571.042 ord/mes** | 🟡 **-219.683 ord** (97.5%) | Órdenes mensuales movilizadas (Reporte CPO Jul 29) |
+| **OKR 1 / KR 1.1 (Compañía)** | **3.687.786 ord/mes** | **7.800.000 ord/mes** | 🔴 **-4.112.214 ord** (47.3% cumpl.) | OKR 1.1 Holding (Confluence Space PD) |
+| **NSM (Métrica Estrella Célula)**| **3.687.786 ord/mes** | **3.571.042 ord/mes** | 🟢 **+116.744 ord** (103.3%) | Órdenes mensuales movilizadas (Cierre Oficial CPO Julio 2026) |
 | **Tasa de Activación Neta** | **5.2%** | **8.0%** | 🔴 **-2.8 pp** (Falta +53.8%) | Sellers registrados con $\ge 1$ orden entregada |
-| **Tasa de Activación Bruta** | **7.6%** | **12.0%** | 🔴 **-4.4 pp** | Sellers registrados with $\ge 1$ orden creada (TTFO) |
+| **Tasa de Activación Bruta** | **7.6%** | **12.0%** | 🔴 **-4.4 pp** | Sellers registrados con $\ge 1$ orden creada (TTFO) |
 | **Mediana de TTV Neto** | **16.0 días** | **< 12.0 días** | 🔴 **+4.0 días** (+25% latencia) | Días de registro a 1ª orden entregada |
 | **Mediana de TTV Bruto** | **7.4 días** | **< 4.0 días** | 🔴 **+3.4 días** | Días de registro a 1ª orden creada |
 | **Supervivencia 30d (Retención)** | **69.38%** (69.7%) | **75.0%** | 🟡 **-5.62 pp** (Brecha 7.5%) | % de sellers con actividad pasados 30 días (`es_activo_30d`) |
@@ -26,7 +26,7 @@
 ## 📈 Métricas de Volumen y Comportamiento Operativo
 
 *   **Sellers Registrados (Histórico):** 397.000 (397k)
-*   **Usuarios Identificados en DB Célula:** 46.208 (36.056 Dropshippers puros)
+*   **Usuarios Identificados en DB Célula (UserPilot Sync):** 54.241 sellers del Auth0/UserPilot en tabla compartida de 103.892 registros totales en Supabase
 *   **Usuarios Activos Diarios (DAU):** 14.262 usuarios/día (Userpilot UI)
 *   **Usuarios Activos Mensuales (MAU):** 81.521 usuarios/mes (Userpilot UI - Tráfico global)
 *   **Mediana días a 2ª orden:** 0,8 días (Promedio: 5,0 días)
@@ -52,20 +52,88 @@
 *   *Perú:* 52,0%
 *   *Argentina:* 44,4%
 
-### 📦 3. Volumen de Órdenes Movilizadas (1 al 29 de Julio 2026 - Datos Oficiales CPO)
-| País | Cierre Junio | del 1 al 29 de JUN | del 1 al 29 de JUL | % Crecimiento | Meta Julio | % Proy. cumplimiento |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| 🇨🇴 COLOMBIA | 2.537.091 | 2.424.403 | 2.430.474 | +0,25% | 2.664.050 | 97,52% |
-| 🇪🇨 ECUADOR | 248.618 | 240.601 | 261.436 | +8,65% | 234.096 | 119,38% |
-| 🇨🇱 CHILE | 232.625 | 224.607 | 232.894 | +3,68% | 235.685 | 105,63% |
-| 🇲🇽 MÉXICO | 231.459 | 224.206 | 219.393 | -2,14% | 229.163 | 102,33% |
-| 🇬🇹 GUATEMALA | 126.010 | 120.992 | 147.391 | +21,81% | 133.829 | 117,72% |
-| 🇵🇾 PARAGUAY | 25.862 | 24.902 | 27.718 | +11,30% | 30.412 | 97,42% |
-| 🇵🇦 PANAMÁ | 23.400 | 22.352 | 21.875 | -2,13% | 26.826 | 87,16% |
-| 🇦🇷 ARGENTINA | 12.091 | 11.775 | 9.934 | -15,63% | 12.682 | 83,73% |
-| 🇨🇷 COSTA RICA | 2.803 | 2.699 | 4.011 | +48,61% | 3.290 | 130,32% |
-| 🇵🇪 PERÚ | 841 | 811 | 622 | -23,30% | 1.009 | 65,89% |
-| **GLOBAL** | **3.435.363** | **3.292.025** | **3.351.359** | **+1,80%** | **3.571.042** | **100,32%** |
+---
+
+## 🏛️ Desempeño Operativo de Comerciales (KAMs) y Comunidades Top (Julio 2026)
+
+> **Insumo:** Seguimiento diario de ingreso de órdenes (3.149.280 órdenes rastreadas del 1 al 31 de Julio 2026).
+
+### 👥 1. Ranking de Comerciales / KAMs por Volumen Manejado
+| Comercial / KAM | Órdenes Movilizadas (Julio) | % Participación | Foco Principal |
+| :--- | :---: | :---: | :--- |
+| 👑 **Angela Parrado** | **290.857 ord** | **9,24%** | Comunidades & VIP |
+| 🥈 **Angie Hurtado** | **271.521 ord** | **8,62%** | Cuentas VIP & Escalamiento |
+| 🥉 **Victoria Hurtado** | **201.798 ord** | **6,41%** | Comunidades Top |
+| **Isabella Villa** | **192.905 ord** | **6,13%** | Cuentas VIP |
+| **Britany Mesa** | **145.427 ord** | **4,62%** | Cuentas VIP |
+| **Stephanie Castro** | **109.899 ord** | **3,49%** | Acompañamiento Seller |
+| **Paula Madroñero** | **96.225 ord** | **3,06%** | Cuentas en Crecimiento |
+| **Nadia Boada** | **95.756 ord** | **3,04%** | Cuentas en Crecimiento |
+
+### 🏆 2. Top 10 Comunidades de Dropshipping por Volumen
+| Comunidad | Órdenes Movilizadas (Julio) | Tipo / Enfoque | KAM Responsable |
+| :--- | :---: | :--- | :--- |
+| 🥇 **Comunidad Iván Caicedo** | **294.707 ord** | Formación & Escalamiento Masivo | Victoria Hurtado |
+| 🥈 **Unlocked Academy** | **70.390 ord** | Academia & Pauta Digital | Angela Parrado |
+| 🥉 **TikTok Mastery** | **47.818 ord** | Tráfico Orgánico & TikTok Ads | Angela Parrado |
+| **Prana Society** | **38.822 ord** | Comunidad E-commerce | Angela Parrado |
+| **Guerrero Ads** | **37.513 ord** | Pauta & Media Buying | Angie Hurtado |
+| **WiFi Money** | **37.455 ord** | Dropshippers Jóvenes | Angela Parrado |
+| **Goldbox** | **36.971 ord** | Producto Ganador & Pauta | Angela Parrado |
+| **Leyendas Ecom** | **36.865 ord** | Programa de Crecimiento | Angie Hurtado |
+| **Comunidad Mercy Pardo** | **28.193 ord** | Formación E-commerce | Angela Parrado |
+| **EcomCircle** | **27.431 ord** | Círculo de Escalamiento | Valentina García |
+
+### 📊 3. Distribución por Segmento de Atención
+> ⚠️ **Nota:** Los porcentajes se calculan sobre las **3.149.280 órdenes rastreadas** en el seguimiento diario (85,4% del cierre oficial de 3.687.786). Sobre el cierre total, los porcentajes son ~15% menores.
+
+*   **Comunidades Afiliadas:** `1.357.391 órdenes` (**43,1% del rastreado** · 36,8% del cierre oficial).
+*   **Cuentas VIP / Top Sellers:** `146.642 órdenes` (**4,66% del rastreado**).
+*   **Dropshippers Puros / Orgánicos:** `46.065 órdenes` (**1,46% del rastreado**).
+
+---
+
+## ⚡ Programa de Acompañamiento Comercial 360 & Cuidado de Campañas
+
+> **Insumo:** Data maestra de 4.939 campañas acompañadas y 250 Sellers Pareto (datos de **mayo-junio 2026**; columna de julio vacía/pendiente de actualización por equipo comercial).
+
+### 📈 1. Crecimiento de Volumen de Órdenes Acompañadas (Mayo → Junio 2026)
+* **Mayo 2026:** `167.837 órdenes` (419.080 unidades).
+* **Junio 2026:** **`380.648 órdenes`** (534.152 unidades).  
+* **Impacto Comercial:** Crecimiento del **+126,8% MoM** en el volumen respaldado con acompañamiento comercial directo.
+* ⚠️ **Datos de Julio 2026 no disponibles aún** en este dataset — pendiente de actualización por el equipo comercial.
+
+### 🛡️ 2. Protección de Inventario & Privatización de Catálogo
+* **315 Campañas** cuentan con acuerdo de **Producto Privatizado / Stock Reservado con Proveedor** para blindar el inventario durante el escalamiento de pauta y prevenir quiebres de stock.
+
+### 👑 3. Top Sellers Pareto 360 (Vendedores Élite Acompañados)
+| ID Seller | Nombre del Seller / Comercio | KAM Asignado | Órdenes Mensuales | Producto Ganador Acompañado |
+| :---: | :--- | :--- | :---: | :--- |
+| **`87669`** | **Joan Sebastián Otero Muriel** | Angela Ivone Parrado | **21.687 ord** | Gel Recubrimiento V |
+| **`651604`** | **Carlos Vergara** | Isabella Villa Sepúlveda | **11.685 ord** | Varicose Veins Crema |
+| **`561133`** | **Faja Compresión Perfecta** | Sara Victoria Hurtado | **11.397 ord** | Faja Compresión |
+| **`15752`** | **Adriel Mandrá Faccini** | Isabella Villa Sepúlveda | **11.194 ord** | Oxímetro Medilisk |
+| **`63986`** | **Mariana Gómez** | Angela Ivone Parrado | **9.701 ord** | Slim Patch x 30 |
+| **`142560`** | **Augusto Genghammer** | Angela Ivone Parrado | **8.786 ord** | Parches Detox Kin |
+| **`760323`** | **Víctor Vargas** | Angela Ivone Parrado | **8.108 ord** | Shampoo en Barra x2 |
+| **`256887`** | **Natalia Mina** | Angela Ivone Parrado | **6.725 ord** | Taladro Inalámbrico |
+| **`214986`** | **María Alarcón** | Isabella Villa Sepúlveda | **6.299 ord** | Serum + Hilo tensor |
+| **`571994`** | **Carlos Muñoz** | Paula Madroñero | **6.229 ord** | Crema Avanzada Arrugas |
+
+### 📦 3. Volumen de Órdenes Movilizadas (Comparativa: Corte 29-Jul vs. Cierre Definitivo Julio 2026)
+| País | Cierre JUN | Corte 29-JUL *(Foto Congelada)* | Cierre Definitivo JUL | Remate Final (Delta) | % Crec. MoM | Meta Julio | % Cumplimiento | Status vs Meta |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 🇨🇴 COLOMBIA | 2.537.148 | 2.430.474 *(97,52%)* | **2.671.864** | **+241.390** | +5,30% | 2.664.050 | **100,29%** | 🟢 Superó Meta (+7.814) |
+| 🇪🇨 ECUADOR | 248.618 | 261.436 *(119,38%)* | **286.380** | **+24.944** | +15,18% | 234.096 | **122,33%** | 🟢 Superó Meta (+52.284) |
+| 🇨🇱 CHILE | 232.626 | 232.894 *(105,63%)* | **254.878** | **+21.984** | +9,56% | 235.685 | **108,14%** | 🟢 Superó Meta (+19.193) |
+| 🇲🇽 MÉXICO | 231.484 | 219.393 *(102,33%)* | **243.053** | **+23.660** | +4,99% | 229.163 | **106,06%** | 🟢 Superó Meta (+13.890) |
+| 🇬🇹 GUATEMALA | 126.014 | 147.391 *(117,72%)* | **161.217** | **+13.826** | +27,93% | 133.829 | **120,46%** | 🟢 Superó Meta (+27.388) |
+| 🇵🇾 PARAGUAY | 25.861 | 27.718 *(97,42%)* | **30.293** | **+2.575** | +17,13% | 30.412 | **99,60%** | 🟨 Cerca (Faltan 119) |
+| 🇵🇦 PANAMÁ | 23.400 | 21.875 *(87,16%)* | **23.730** | **+1.855** | +1,41% | 26.826 | **88,45%** | 🔴 Bajo Meta (-3.096) |
+| 🇦🇷 ARGENTINA | 12.091 | 9.934 *(83,73%)* | **11.201** | **+1.267** | -7,36% | 12.682 | **88,32%** | 🔴 Bajo Meta (-1.481) |
+| 🇨🇷 COSTA RICA | 2.803 | 4.011 *(130,32%)* | **4.442** | **+431** | +58,47% | 3.290 | **135,01%** | 🟢 Superó Meta (+1.152) |
+| 🇵🇪 PERÚ | 841 | 622 *(65,89%)* | **728** | **+106** | -13,43% | 1.009 | **72,15%** | 🔴 Bajo Meta (-281) |
+| **GLOBAL** | **3.440.886** | **3.351.359 *(100,32%)*** | **3.687.786** | **+336.427** | **+7,17%** | **3.571.042** | **103,26%** | 🟢 **Meta Superada (+116.744)** |
 
 ---
 
@@ -86,3 +154,18 @@
 *   [ ] **Simplificación de Muestras (PROD-MUESTRA-SIMP):** UI de solicitud 1-Clic (autofill, transportadora opcional) y botones. (Lidera Alejandra)
 *   [ ] **Dropi Wrapped (PROD-WRAPPED):** Conceptualización visual y de Discovery para reactivación. (Lidera Alejandra)
 *   [ ] **Second Best (PROD-SEC-BEST):** Pruebas de guerrilla con 5 comercios Pareto sobre sobrecostos de flete. (Lidera Alejandra)
+
+---
+
+## 🔬 Matriz de Product Discovery, Hipótesis & Experimentos (OST Framework)
+
+> Ver pliego metodológico completo en [DISCOVERY_FRAMEWORK.md](file:///Users/santiago.herrera/Downloads/dropi-agente-pm/dropshipper-lab/DISCOVERY_FRAMEWORK.md).
+
+| Iniciativa / Proyecto | Problema Concreto Resuelto (Pain Point) | Hipótesis Falsable | Métrica de Validación & Criterio Go |
+| :--- | :--- | :--- | :--- |
+| **Dropify 2.0 (APIs)** | Fricción manual de 4h/día en digitación de órdenes | `SI` sincronizamos pedidos vía API `ENTONCES` las ord/activo subirán a >300 | Tasa de Sync Error <0,5% y >300 ord/activo |
+| **Dropi Wrapped 2026** | Churn silencioso y falta de lealtad a la marca | `SI` gamificamos los 6 Niveles de Leyendas `ENTONCES` la retención 30d subirá al 75% | >40% de virallity y +5,6pp en retención 30d |
+| **Bifurcación Onboarding** | Registro plano abruma novatos y aburre VIPs | `SI` bifurcamos Express vs Guiado `ENTONCES` TTV Bruto bajará de 7,4 a <4 días | TTV Bruto reducido en ≥2,5 días |
+| **Muestras 1-Clic** | Novato no confía en producto sin verlo | `SI` habilitamos muestra 1-clic con stock privatizado `ENTONCES` conversión a 1ª ord subirá +25% | >15% de conversión de muestra a pauta activa |
+| **PoC Shopi / PoolMax** | Desperdicio de pauta centralizada en comunidades | `SI` repartimos órdenes por API proporcionalmente `ENTONCES` el volumen de comunidad subirá +35% | 100% de precisión en distribución API sin duplicados |
+| **Deflexión Help Center** | 0,0% deflexión con 3.664 tickets de PQs abiertos | `SI` desplegamos triaje e in-app FAQs `ENTONCES` la deflexión alcanzará el 40,0% | Reducción del 20% en tickets entrantes de Wallet |

@@ -195,3 +195,17 @@ Toda la planeación de la célula se estructura para que cada iniciativa respond
 *   **Retención Prematura:** $\ge 70\%$ de recurrencia tras la primera orden entregada (Mediana de cohortes).
 *   **Adopción de Integraciones:** Transición de órdenes manuales a automatizadas (Shopify/WooCommerce/Tienda Nube).
 
+---
+
+## 7. Equipo y Stakeholders
+* **Santiago Herrera (PM):** Líder de Célula Seller Success.
+* **Alejandra Melo Salazar (UX/UI):** Product Designer.
+* **Jose Giraldo (TI):** Tech Lead.
+* **Diego Pérez (TI):** Software Developer.
+* **Miguel Ángel (Data):** Data Analyst.
+* **Jose Hurtado (Customer Success):** Integrante de Customer Success (acompañamiento y retención de sellers).
+* **Laura Núñez (SAC Lead):** Líder del área de SAC (Servicio de Atención al Cliente / Soporte).
+* **Catherin Salazar / Francisco Velandia:** Leads de proyectos/experimentos (Page Pilot, User Pilot).
+
+
+

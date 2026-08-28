@@ -3,6 +3,10 @@ import "./_styles/tablero.css";
 // Badges, enlaces y ficha de proyecto. Van aparte porque un merge (40842ed) ya
 // las borró una vez de tablero.css — ver la cabecera de registro.css.
 import "./_styles/registro.css";
+// Primitivos (u-card, u-table, u-stat, u-bar…). Van de últimas porque son el
+// sistema al que converge todo lo anterior: si una regla vieja de tablero.css
+// choca con un primitivo, gana el primitivo. Ver logistica-lab/metodologia/tablero-diseno.md.
+import "./_styles/ui.css";
 import Sidebar from "./_components/Sidebar";
 
 // Layout de la sección de Logistic Success dentro del hub.

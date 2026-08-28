@@ -4,9 +4,16 @@
 > [`jaimeguevara-dropi/dropi-agente-pm`](https://github.com/jaimeguevara-dropi/dropi-agente-pm),
 > carpeta `hub/` (Next.js + Supabase). La pantalla `/celula/logistica` no inventa nada: cruza
 > **dos fuentes** y muestra el hueco entre ellas.
-> **Estado (29-jul, tarde):** el SQL **ya se corrió en Supabase** (dicho por Juan; no verificado
-> desde aquí, sin credenciales). ⚠️ Por confirmar si corrieron los dos bloques o solo el refresco de
-> las 11. Lo que sigue pendiente está en la sección 6. Revisado contra el código el 2026-07-29.
+> **Actualización verificada (2-ago):** se consultó la tabla `projects` directamente y LOG-012…LOG-016
+> existen. LOG-014 es una sola fila (`43d4047c-3a0b-4b8c-8c24-ae44aefe6f6e`), conserva `Blocked`,
+> `Listo para handoff`, owner Juan y equipo Logistic Success. Solo se refrescó su `summary`; no se
+> cambiaron estado, handoff, owner, `estado_interno` ni `prototype_url`. Las secciones históricas de
+> diagnóstico de 29-jul se conservan para explicar la migración, pero sus “faltantes” ya no describen
+> el estado actual.
+
+> **Corrección LOG-001 (02-ago):** la ficha puede conservar `Research` mientras el programa siga en discovery, pero su resumen ya no debe decir “pendiente de personas”. Hubo 6 sesiones de usabilidad entre el 18 y el 25-jul. Siguen pendientes el gate ChateaPro, la visibilidad económica y la prueba de impacto; por eso no corresponde `Validado` ni un handoff.
+>
+> **Corrección LOG-012 (02-ago):** PRM-1469 es `Solicitud` en `Inv. y definición` y Maria pidió tratarla como proyecto en definición, no como iniciativa/segundo experimento. Como Darwin no tiene tipo `Solicitud`, el mapeo propuesto es `Proyecto · Discovery · Experimentación`, con `estado_interno = Ideación`. La ficha viva aún conserva `Oportunidad / Research`; migración de alineación preparada, no aplicada.
 
 ## 1. Cómo está armado (lo que leí en el código)
 
@@ -74,10 +81,10 @@ ciclo cargado** (la API los busca por `project_code` y vuelve vacía).
 2. **El `summary` viene del seed del 21-jul** (`031_darwin_celula_logistica.sql`) y ya quedó viejo:
    dice cosas como *"Delivery Backlog EJECUTAR"* mientras el tablero, actualizado el 28-jul, tiene
    textos mejores y datos nuevos. La ficha de LOG-007 en Darwin no cuenta lo del catálogo v0.1.
-3. **5 de 16 iniciativas no tienen ficha**: Autogeneración de guías · Recolección proactiva ·
+3. **Hallazgo histórico, ya resuelto:** 5 de 16 iniciativas no tenían ficha: Autogeneración de guías · Recolección proactiva ·
    Parametrización de fulfillment · Vigía · Pruebas de entrega (POD). El seed las dejó fuera a
    propósito ("sin carpeta/spec todavía"), pero dos de ellas son los **huecos de documentación #1 y
-   #2** del tablero: están listas para hand off y no existen en Darwin.
+   #2** del tablero. Al corte 2-ago ya existen en Darwin y el cruce por `project_code` está operativo.
 4. **`vpv` vacío en el único POC** (LOG-004) y ese POC no tiene padre — el API ya prevé el caso
    (`discoveryOptions`), falta decidir de qué proyecto cuelga.
 5. **Ningún prototipo enlazado** (`prototype_url` vacío) aunque hay 6 pantallas construidas dentro
@@ -89,11 +96,11 @@ ciclo cargado** (la API los busca por `project_code` y vuelve vacía).
 
 | Código | Ficha | Etapa | type / status / handoff | Por qué entra |
 |---|---|---|---|---|
-| LOG-012 | Autogeneración de guías | Despacho | Oportunidad · Discovery · Experimentación | PRM-1469. Hermano de autoconfirmación: ataca los 10,37h de "generación de guía" |
-| LOG-013 | Recolección proactiva | Despacho | Oportunidad · Discovery · Experimentación | Fase "Recogido por Dropi" = el peor cumplimiento de la ruta Dropi (80,64%). Prototipo vivo |
-| LOG-014 | Parametrización de fulfillment | Despacho | Proyecto · Blocked · **Listo para handoff** | PRM-1446. 92.000 órdenes/mes en 2PL; 20–25% nunca se cobran. Hueco de doc #1 |
+| LOG-012 | Autogeneración de guías | Despacho | Proyecto · Discovery · Experimentación | PRM-1469/INVS-67. Solicitud para alto volumen; concepto existente, necesidad/viabilidad/prueba propia pendientes |
+| LOG-013 | Recolección proactiva | Despacho | Oportunidad · Discovery · Experimentación | PRM-1468 fue fusionada dentro de PRM-1465; comentario 51003 verificado. Pickups externos + carrier interno + Hub/Indiana; PAU adyacente y Warranties excluido. Owners, RLS, ciclo real y outcome pendientes. |
+| LOG-014 | Parametrización de fulfillment | Despacho | Proyecto · Blocked · **Listo para handoff (workflow)** | PRM-1446. Handoff transversal bloqueado: PROD-1526 en Dependencia, PROD-240 backlog y E2E incompleto. Spec y síntesis Confluence ya creados. |
 | LOG-015 | Vigía | Tránsito (transversal) | Oportunidad · Discovery · Experimentación | Dueño Michel Pino. Único frente transversal a las 5 etapas. No existe en Jira |
-| LOG-016 | Pruebas de entrega (POD) | Entrega / Devolución | Proyecto · Discovery · Experimentación | PRM-1517 + 7 tickets. Hueco de doc #2. El 80% de las solicitudes a carriers son POD |
+| LOG-016 | Pruebas de entrega (POD) | Entrega / Devolución | Proyecto · Discovery · Experimentación | Árbol por carrier documentado; PROD-1525 en Dependencia; PROD-1072 excluido por ser Print On Demand. Spec, Jira 50932 y Confluence 1531772949 sincronizados. |
 
 ### Paso 2 — Refrescar el `summary` de las 11 existentes
 
@@ -127,10 +134,10 @@ hay valor correcto y forzar uno miente. Propuesta: dejarlos sin definir y que su
 | LOG-006 Tarifas | Listo para handoff | — (manda `handoff_status`) |
 | LOG-007 Normalización de estados | Definición | Concepción de experimento |
 | LOG-008 Novedad: dueño y triaje | Discovery | Ideación |
-| LOG-009 Guías reemplazatorias | Beta | — (Handoff hecho) |
-| LOG-010 Reducir devoluciones COD | Backlog | Research |
+| LOG-009 Guías reemplazatorias | Beta con evidencia operativa por reconciliar; rollout no demostrado | — (Handoff hecho) |
+| LOG-010 Reducir devoluciones COD | Discovery; Jira en backlog y token en piloto de conciliación | Research |
 | LOG-011 Torre de control | Discovery | Ideación |
-| LOG-012 Autogeneración de guías | Research | Research |
+| LOG-012 Autogeneración de guías | Discovery | Ideación |
 | LOG-013 Recolección proactiva | Research | Research |
 | LOG-014 Fulfillment | Listo para handoff | — (Listo para handoff) |
 | LOG-015 Vigía | Diseño | Concepción de experimento |
@@ -143,9 +150,9 @@ proyecto**. Quedarían así (se crean con el botón "+ Crear POC", pide nombre y
 
 | POC | Cuelga de | Estado |
 |---|---|---|
-| Autoconfirmación por madurez | LOG-001 | corriendo — pendiente de personas para la muestra |
-| Autogeneración de guías (perfil proveedor) | LOG-012 | listo para probar |
-| Control de recolecciones (mapa DANE) | LOG-013 | prototipo con datos mock |
+| Autoconfirmación por madurez | LOG-001 | usabilidad completada (6); impacto y gate técnico pendientes |
+| Autogeneración de guías (perfil proveedor) | LOG-012 | POC por diseñar: primero contraevidencia, baseline, lotes/impresión y carrier |
+| Control de recolecciones (mapa DANE) | LOG-013 | experimento restringido; consume base autorizada o estado vacío, sin snapshot público ni ciclo E2E |
 | Vigía (extensión Chrome) | LOG-015 | diseño, sin desarrollo |
 | Activar validación en SHOP | LOG-002 | diseñado |
 | Ruteo carrier × zona | **ya existe como LOG-004** | falta vincularlo a un padre |
@@ -182,8 +189,8 @@ a Jaime que registre `logistica` con su carpeta.
 ## 5. Decisiones que faltan (tuyas, no las tomo yo)
 
 1. **¿PR o SQL Editor?** (y si es PR, ¿lo abro yo desde una rama o lo pasas tú a Jaime?).
-2. **LOG-014 y LOG-016 no tienen spec en el cerebro** — son justo los dos huecos de documentación.
-   ¿Se registran igual en Darwin (visibilidad ahora, spec después) o primero el spec?
+2. **Resuelto 2-ago:** LOG-014 y LOG-016 ya tienen `spec.md`; LOG-014 además quedó enlazado por
+   comentario Jira #50931 y síntesis Confluence #1572732930.
 3. **LOG-004 es un POC sin padre.** ¿De qué proyecto de discovery cuelga? Hoy no hay ficha padre
    para selección de transportadoras; la alternativa es cambiarle el `type` a Proyecto.
 4. **VPV:** ¿lo dejamos vacío hasta que Jaime defina la fórmula, o cargamos una estimación propia
@@ -209,8 +216,8 @@ a Jaime que registre `logistica` con su carpeta.
 6. **El discovery de LOG-007** en `discovery_cycles` — la única carga que de verdad llena una ficha.
    Es la que sigue en valor y la que va a doler, porque los gates F0–F1 piden segmento conductual y
    causa B=MAP confirmada.
-7. **Specs que faltan en el cerebro:** LOG-014 fulfillment y LOG-016 POD siguen sin `spec.md` — ahora
-   con más razón, porque ya tienen ficha pública en Darwin.
+7. **Resuelto 2-ago:** LOG-014 fulfillment y LOG-016 POD ya tienen `spec.md`. Falta cerrar el
+   contenido E2E en Drive; tener spec no convierte el handoff ni el desarrollo en completo.
 8. **Ownership:** pedirle a Jaime registrar `logistica` en `celula_paths` de
    `.github/ownership.json` (hoy `hub/src/app/proyectos/` figura como carpeta de suppliers).
 

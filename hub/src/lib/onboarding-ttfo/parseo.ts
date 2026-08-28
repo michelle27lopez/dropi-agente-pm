@@ -49,6 +49,26 @@ function segmentoDeRespuesta(valor: unknown): Segmento | null {
 }
 
 /**
+ * Segmento de una fila de Encuesta — a pedido de Kate (06-ago-2026): "no
+ * quiero que vuelva a pasar, no debe salir en blanco la columna Segmento".
+ * Primero intenta la columna conocida (rápido, caso normal); si el header
+ * del CSV varía (numeración de pregunta distinta, mojibake no previsto,
+ * export con otra codificación), escanea TODAS las columnas de la fila por
+ * la primera que arranque con "Marca:"/"Proveedor:" — el prefijo de la
+ * respuesta es el dato real, no depende de acertarle al nombre de columna.
+ */
+function segmentoDeFila(fila: FilaCruda): Segmento | null {
+  const directo = fila["1.¿Cómo quieres usar Dropi?"] ?? fila["1.Â¿CÃ³mo quieres usar Dropi?"];
+  const segmentoDirecto = segmentoDeRespuesta(directo);
+  if (segmentoDirecto) return segmentoDirecto;
+  for (const valor of Object.values(fila)) {
+    const segmento = segmentoDeRespuesta(valor);
+    if (segmento) return segmento;
+  }
+  return null;
+}
+
+/**
  * Parsea la Encuesta y aplica la regla de dedup: si un User ID aparece más
  * de una vez, se queda con la fila de Submitted At más reciente.
  */
@@ -65,22 +85,37 @@ export function parsearEncuesta(filas: FilaCruda[]): FilaEncuesta[] {
     const signedUp = normalizarFecha(fila["Signed Up"]);
     if (!signedUp) continue;
 
-    const preguntaUso = fila["1.¿Cómo quieres usar Dropi?"] ?? fila["1.Â¿CÃ³mo quieres usar Dropi?"];
     const candidato: FilaEncuesta = {
       userId,
       nombre: limpiarNulo(fila["Full Name"] ?? fila["Name"]) ?? "",
       submittedAt,
       signedUp,
-      segmento: segmentoDeRespuesta(preguntaUso),
+      segmento: segmentoDeFila(fila),
       ventasMesDeclaradas: limpiarNulo(
         fila["7.¿Cuántas ventas realiza tu marca al mes?"] ?? fila["7.Â¿CuÃ¡ntas ventas realiza tu marca al mes?"]
       ),
       email: limpiarNulo(fila["Email"]),
     };
 
+    // Se queda con la fila más reciente, pero sin dejar que un segmento/
+    // ventas en blanco de esa fila más nueva borre un valor ya bueno de una
+    // fila vieja del mismo User ID duplicado — mismo criterio que
+    // combinarFilaEncuesta en rawData.ts (a pedido de Kate, 06-ago-2026).
     const existente = porUsuario.get(userId);
-    if (!existente || candidato.submittedAt > existente.submittedAt) {
+    if (!existente) {
       porUsuario.set(userId, candidato);
+    } else if (candidato.submittedAt > existente.submittedAt) {
+      porUsuario.set(userId, {
+        ...candidato,
+        segmento: candidato.segmento ?? existente.segmento,
+        ventasMesDeclaradas: candidato.ventasMesDeclaradas ?? existente.ventasMesDeclaradas,
+      });
+    } else {
+      porUsuario.set(userId, {
+        ...existente,
+        segmento: existente.segmento ?? candidato.segmento,
+        ventasMesDeclaradas: existente.ventasMesDeclaradas ?? candidato.ventasMesDeclaradas,
+      });
     }
   }
 

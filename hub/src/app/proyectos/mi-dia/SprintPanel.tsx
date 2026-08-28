@@ -150,7 +150,7 @@ function StatusMenu({ task, onChanged }: { task: Task; onChanged: (jiraKey: stri
 // tengo en curso en el sprint") — stats arriba, lista de tareas del sprint
 // con progreso/estado/links debajo. Ver [[project_darwin_pd_dashboard]].
 export default function SprintPanel() {
-  const { tasks, activeSprint, updateTaskStatus } = useMiDiaData();
+  const { tasks, activeSprint, sprintAllowed, updateTaskStatus } = useMiDiaData();
   const [syncing, setSyncing] = useState(false);
   const [syncError, setSyncError] = useState<string | null>(null);
 
@@ -168,6 +168,24 @@ export default function SprintPanel() {
             </div>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  if (!sprintAllowed) {
+    return (
+      <div className="midia-panel" style={{ animationDelay: "60ms" }}>
+        <div className="midia-panel-header">
+          <div className="midia-panel-header-left">
+            <span className="midia-panel-icon">
+              <Zap size={14} />
+            </span>
+            <span className="midia-panel-label">Sprint actual</span>
+          </div>
+        </div>
+        <div className="midia-row">
+          <p style={{ fontSize: 13, color: "var(--muted)" }}>Pendiente — tu Jira todavía no está conectado a este panel.</p>
+        </div>
       </div>
     );
   }

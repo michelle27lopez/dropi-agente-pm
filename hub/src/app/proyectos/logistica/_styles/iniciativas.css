@@ -1,0 +1,144 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   Composiciones del REGISTRO DE INICIATIVAS (nivel 2 · capa densa).
+   Primitivos en ui.css; aquí solo lo propio de esta pantalla.
+   Cinco tamaños (--fs) y cuatro radios (8/12/20/999).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* ── Filtros ─────────────────────────────────────────────────────────────────
+   Un filtro es lo único que reduce densidad sin perder ni un dato — por eso
+   estos chips sustituyen a la tentación de "mostrar menos columnas".
+
+   Llevan el número DELANTE del texto y no debajo: son a la vez cifra y acción,
+   y leerlos como frase ("4 bloqueadas") es más rápido que leer un número
+   grande y bajar la vista a su etiqueta. Los que valen 0 se deshabilitan en
+   lugar de ocultarse: que un filtro exista y esté vacío también informa.      */
+.log-root .ini-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.log-root .ini-filtro {
+  font: inherit;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  cursor: pointer;
+  transition: border-color 0.14s ease, background 0.14s ease;
+}
+.log-root .ini-filtro b {
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.log-root .ini-filtro:hover:not(:disabled) { border-color: var(--dropi-gray-200); }
+.log-root .ini-filtro:disabled { opacity: 0.45; cursor: default; }
+
+/* Activo: se tiñe con el color de su significado, no con el naranja de marca —
+   el acento va en un solo elemento por vista y aquí puede haber siete chips. */
+.log-root .ini-filtro[aria-pressed="true"] { color: var(--text); }
+.log-root .ini-filtro[aria-pressed="true"][data-tone="risk"] {
+  background: var(--tint-red);
+  border-color: var(--edge-red);
+  color: var(--on-red);
+}
+.log-root .ini-filtro[aria-pressed="true"][data-tone="warn"] {
+  background: var(--tint-amber);
+  border-color: var(--edge-amber);
+  color: var(--on-amber);
+}
+.log-root .ini-filtro[aria-pressed="true"][data-tone="info"] {
+  background: var(--tint-info);
+  border-color: var(--edge-info);
+  color: var(--on-info);
+}
+.log-root .ini-filtro[aria-pressed="true"][data-tone="neutral"] {
+  background: var(--tint-neutral);
+  border-color: var(--edge-neutral);
+}
+.log-root .ini-filtro[aria-pressed="true"] b { color: inherit; }
+.log-root .ini-filtros__label {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  align-self: center;
+  margin-right: 2px;
+}
+
+/* ── Acuse de recibo ─────────────────────────────────────────────────────────
+   Un filtro que no dice cuánto quitó se siente roto aunque funcione: al pasar
+   de 16 a 13 filas no hay forma de notar el cambio sin contar.               */
+.log-root .ini-estado {
+  margin: 0 0 10px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+.log-root .ini-estado b { color: var(--text); font-weight: 600; }
+.log-root .ini-limpiar {
+  font: inherit;
+  font-size: var(--fs-label);
+  background: none;
+  border: 0;
+  padding: 0;
+  margin-left: 10px;
+  color: var(--dropi-primary-600);
+  font-weight: 600;
+  cursor: pointer;
+}
+.log-root .ini-limpiar:hover { text-decoration: underline; }
+
+/* ── Higiene del registro ────────────────────────────────────────────────────
+   Deliberadamente pequeña y al pie: no es una lente sobre el portafolio, es
+   una lista de tareas del PM. Y su meta es DESAPARECER — cuando llegue a cero
+   se pinta en verde y deja de pedir atención.                                */
+.log-root .ini-higiene {
+  margin: 12px 0 0;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+.log-root .ini-higiene__link {
+  font: inherit;
+  font-size: var(--fs-label);
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--on-amber);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+.log-root .ini-higiene__link[aria-pressed="true"] { font-weight: 700; }
+.log-root .ini-higiene__ok { color: var(--on-green); }
+
+/* ── Celdas ──────────────────────────────────────────────────────────────── */
+.log-root .ini-link {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-weight: 500;
+}
+.log-root .ini-link:hover { color: var(--dropi-primary-600); }
+/* El punto de salud se alinea con la primera línea del nombre aunque este
+   envuelva a dos líneas. */
+.log-root .ini-link .u-salud { position: relative; top: -1px; }
+
+.log-root .ini-codigo {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  font-weight: 400;
+  margin-top: 2px;
+}
+
+/* El bloqueo dentro de la celda: rojo en el texto, sin caja ni emoji. En una
+   tabla, una caja de color por fila convierte la columna en un semáforo
+   ilegible; el color del texto basta para que salte al escanear. */
+.log-root .ini-bloqueo-celda { color: var(--on-red); }

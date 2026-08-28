@@ -1,0 +1,225 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   MAPA DE LA ORDEN — carriles (nivel 2).
+   Primitivos en ui.css; aquí solo el layout propio de esta pantalla.
+   Cinco tamaños (--fs) y cuatro radios (8/12/20/999).
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Esta pantalla necesita más ancho que las demás: seis carriles legibles no
+   caben en 1120px. Es la única excepción de ancho del tablero y está aquí
+   declarada, no repartida por reglas sueltas. */
+.log-root .mapa-page { max-width: 1440px; }
+
+/* ── Filtros ─────────────────────────────────────────────────────────────── */
+.log-root .mapa-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.log-root .mapa-filtros__label {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+.log-root .mapa-filtro {
+  font: inherit;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  cursor: pointer;
+}
+.log-root .mapa-filtro b { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.log-root .mapa-filtro:disabled { opacity: 0.45; cursor: default; }
+.log-root .mapa-filtro[aria-pressed="true"][data-tone="risk"] {
+  background: var(--tint-red); border-color: var(--edge-red); color: var(--on-red);
+}
+.log-root .mapa-filtro[aria-pressed="true"][data-tone="warn"] {
+  background: var(--tint-amber); border-color: var(--edge-amber); color: var(--on-amber);
+}
+.log-root .mapa-filtro[aria-pressed="true"][data-tone="info"] {
+  background: var(--tint-info); border-color: var(--edge-info); color: var(--on-info);
+}
+.log-root .mapa-filtro[aria-pressed="true"] b { color: inherit; }
+.log-root .mapa-limpiar {
+  font: inherit; font-size: var(--fs-label); background: none; border: 0;
+  color: var(--dropi-primary-600); font-weight: 600; cursor: pointer;
+}
+
+/* ── Leyenda ─────────────────────────────────────────────────────────────────
+   Explica los TRES colores que la pantalla usa de verdad. El mockup traía una
+   leyenda de cuatro estados que las tarjetas apenas usaban: una leyenda que
+   explica colores que no aparecen es un síntoma, no una ayuda.               */
+.log-root .mapa-leyenda {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+.log-root .mapa-leyenda .u-salud { margin-left: 12px; }
+.log-root .mapa-leyenda .u-salud:first-child { margin-left: 0; }
+
+/* ── Carriles ────────────────────────────────────────────────────────────────
+   Scroll horizontal propio: seis columnas no caben en una pantalla estrecha, y
+   la alternativa —encogerlas hasta que quepan— las vuelve ilegibles. El body
+   nunca hace scroll horizontal; lo hace este contenedor.                     */
+.log-root .mapa-carriles {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(230px, 1fr);
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  align-items: start;
+}
+
+.log-root .mapa-carril {
+  background: var(--soft);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 12px;
+  min-width: 0;
+}
+.log-root .mapa-carril__head { margin-bottom: 12px; }
+.log-root .mapa-carril__titulo { display: flex; align-items: center; gap: 8px; }
+.log-root .mapa-carril__n {
+  width: 20px; height: 20px; flex: none;
+  display: grid; place-items: center;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  color: var(--muted);
+}
+.log-root .mapa-carril__head h2 {
+  margin: 0;
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  font-weight: 600;
+}
+.log-root .mapa-carril__sub {
+  margin: 6px 0 8px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+.log-root .mapa-carril__conteo {
+  margin: 8px 0 0;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.log-root .mapa-carril__nodos { display: flex; flex-direction: column; gap: 8px; }
+
+/* ── Nodo ────────────────────────────────────────────────────────────────────
+   Cinco datos y ninguno más: nombre, código, a qué fuga aporta, fase y punto
+   de salud. Los enlaces de Jira/Figma NO están aquí a propósito: cuatro por
+   nodo × dieciséis nodos serían 64 elementos clicables compitiendo con el
+   único que importa, que es el nodo entero.                                  */
+.log-root .mapa-nodo {
+  display: block;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 11px;
+  transition: border-color 0.14s ease, box-shadow 0.14s ease, opacity 0.14s ease;
+}
+.log-root .mapa-nodo:hover,
+.log-root .mapa-nodo:focus-visible {
+  border-color: var(--dropi-gray-200);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.log-root .mapa-nodo__head { display: flex; align-items: baseline; gap: 7px; }
+.log-root .mapa-nodo__head .u-salud { position: relative; top: -1px; }
+.log-root .mapa-nodo__nombre {
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: 500;
+}
+.log-root .mapa-nodo__meta {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin: 7px 0 0 15px;
+}
+.log-root .mapa-nodo__fase {
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+/* Código y transversalidad al pie y en la misma línea: son referencia, no
+   contenido. Antes cada uno gastaba una línea propia y estiraba el nodo. */
+.log-root .mapa-nodo__pie {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 7px 0 0 15px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  color: var(--muted);
+}
+.log-root .mapa-nodo__codigo {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ── Transversal ─────────────────────────────────────────────────────────────
+   Una iniciativa que toca varias etapas aparece en cada una. La aparición
+   secundaria (el "eco") va con borde punteado para que no se lea como un
+   proyecto duplicado, y en vez de repetir sus metadatos dice qué papel juega
+   EN ESA etapa — que es la información nueva.
+
+   Al pasar el ratón por cualquier aparición se resaltan todas y se atenúa el
+   resto: eso ES la conexión, sin dibujar líneas que habría que recalcular en
+   cada resize y que en el mockup acababan insinuando dependencias falsas.    */
+/* El ECO: una línea, sin caja. Una iniciativa que toca cinco etapas no puede
+   aparecer cinco veces como tarjeta completa — se comería el mapa y haría
+   creer que es la mitad del portafolio. Aquí solo dice que también pasa por
+   esta etapa y qué papel juega; su ficha completa vive en su etapa principal. */
+.log-root .mapa-eco {
+  display: block;
+  padding: 7px 11px 7px 9px;
+  border-left: 2px dashed var(--edge-info);
+  color: var(--muted);
+  transition: background 0.14s ease, opacity 0.14s ease;
+}
+.log-root .mapa-eco:hover { background: var(--card); }
+.log-root .mapa-eco__nombre {
+  display: block;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+  font-weight: 600;
+  color: var(--on-info);
+}
+.log-root .mapa-eco__rol {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 2px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-label);
+}
+.log-root .mapa-eco[data-resaltado] {
+  background: var(--tint-info);
+  border-left-style: solid;
+  border-left-color: var(--info);
+}
+.log-root .mapa-eco[data-atenuado] { opacity: 0.35; }
+
+.log-root .mapa-nodo__transversal { color: var(--on-info); }
+.log-root .mapa-nodo[data-resaltado] {
+  border-color: var(--info);
+  border-style: solid;
+  box-shadow: 0 0 0 2px var(--tint-info);
+}
+.log-root .mapa-nodo[data-atenuado] { opacity: 0.4; }

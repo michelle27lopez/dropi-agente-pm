@@ -19,7 +19,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
 
   const [{ data: miembros }, { data: proyectos }, { data: updates }, { data: roadmap }] = await Promise.all([
     supabase.from("profiles").select("id, email, nombre, is_super_admin").eq("celula_id", celula.id),
-    supabase.from("projects").select("id, name, project_code, status, type, handoff_status, summary, business_area, prototype_url, parent_project_id, estado_interno, vpv, related_poc_id").eq("celula_owner_id", celula.id),
+    supabase.from("projects").select("id, name, project_code, status, type, handoff_status, summary, business_area, prototype_url, parent_project_id, estado_interno, vpv, related_poc_id, related_delivery_id").eq("celula_owner_id", celula.id),
     supabase.from("celula_updates").select("*").eq("celula_id", celula.id).order("week_date", { ascending: false }),
     supabase.from("roadmap_items").select("*").eq("celula_id", celula.id).order("target_date", { ascending: true }),
   ]);
@@ -58,10 +58,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ slug: s
     return NextResponse.json({ error: "Faltan campos: name, summary" }, { status: 400 });
   }
 
+  // project_code es único a nivel global (no por célula) — el cálculo del
+  // siguiente número debe mirar todos los proyectos, no solo los de esta
+  // célula, o dos células con el mismo prefijo derivado del slug (ej.
+  // "experience" y "expertos" → "EXP") chocan en el mismo código.
   const { data: existentes, error: existentesError } = await supabase
     .from("projects")
-    .select("project_code")
-    .eq("celula_owner_id", celula.id);
+    .select("project_code");
 
   if (existentesError) return NextResponse.json({ error: existentesError.message }, { status: 500 });
 

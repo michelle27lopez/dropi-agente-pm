@@ -5,8 +5,27 @@ import type { NextRequest } from "next/server";
 export async function proxy(request: NextRequest) {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const pathname = request.nextUrl.pathname;
+  const isSensitiveLogisticsPath =
+    pathname.startsWith("/logistica/") ||
+    pathname.startsWith("/proyectos/logistica") ||
+    pathname.startsWith("/api/logistica") ||
+    pathname.startsWith("/proyectos/oportunidades-paises");
 
   if (!supabaseUrl || !supabaseAnonKey) {
+    // Los artefactos bajo public/logistica se sirven como rutas directas. Si la
+    // autenticación está mal configurada, continuar dejaría documentación y
+    // datos operativos expuestos. Este cierre es deliberadamente acotado a
+    // Logistic Success para no cambiar el comportamiento del resto del Hub.
+    if (isSensitiveLogisticsPath) {
+      return new NextResponse("Autenticación no disponible.", {
+        status: 503,
+        headers: {
+          "Cache-Control": "no-store",
+          "Content-Type": "text/plain; charset=utf-8",
+        },
+      });
+    }
     return NextResponse.next({ request });
   }
 
@@ -35,7 +54,6 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
-  const pathname = request.nextUrl.pathname;
   const isPublicPath =
     pathname.startsWith("/login") ||
     pathname.startsWith("/auth/callback") ||
@@ -56,6 +74,12 @@ export async function proxy(request: NextRequest) {
     pathname.startsWith("/api/proyectos/ascenso-ofertas") ||
     pathname.startsWith("/api/public") ||
     pathname.startsWith("/docs") ||
+    // Webhooks entrantes de sistemas externos (n8n, pipeline de Dagster, …):
+    // no llegan con cookie de sesión del Hub, llegan con su propio token/
+    // header de auth, que cada ruta valida adentro (ver p.ej.
+    // /api/webhooks/cuidado-de-campanas). Sin esta excepción, este gate los
+    // redirige a /login antes de que su propia auth corra.
+    pathname.startsWith("/api/webhooks/") ||
     // Página de "productos elegibles" que se le manda a cada proveedor por
     // WhatsApp — pública a propósito, el token opaco en la URL es el control
     // de acceso (ver hub/src/lib/local-store-planeacion.ts). OJO: las rutas

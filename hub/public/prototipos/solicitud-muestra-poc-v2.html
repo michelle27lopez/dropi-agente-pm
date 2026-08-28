@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dropi — Detalle de Producto · Solicitud de Muestra (POC)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg-light: #f4f6f9;
+    --border-color: #e2e8f0;
+    --orange-primary: #F77F00;
+    --orange-hover: #e0531f;
+    --orange-light: #FFF3E0;
+    --orange-muted: #FFF8F0;
+    --text-main: #2d3748;
+    --text-muted: #718096;
+    --sidebar-width: 250px;
+    --header-height: 60px;
+    --green: #10b981;
+    --red: #e11d48;
+    --blue: #2563eb;
+    --purple: #7c3aed;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+  }
+
+  body {
+    background-color: var(--bg-light);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+  }
+
+  /* ───────── Sidebar (fiel a app.dropi.co) ───────── */
+  .sidebar {
+    width: var(--sidebar-width);
+    background: #fff;
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+  .sidebar-logo {
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 8px;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+  .dropi-mark {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--orange-primary);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .dropi-mark::before, .dropi-mark::after {
+    content: "";
+    position: absolute;
+    width: 6px; height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    top: 12px;
+  }
+  .dropi-mark::before { left: 7px; }
+  .dropi-mark::after { right: 7px; }
+  .sidebar-logo .wordmark {
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--orange-primary);
+  }
+  .sidebar-logo i.ti-menu-2 { margin-left: auto; color: var(--text-muted); font-size: 18px; cursor: pointer; }
+
+  .sidebar-menu {
+    flex: 1;
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    overflow-y: auto;
+  }
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 9px 22px;
+    gap: 11px;
+    color: var(--text-main);
+    font-size: 13.2px;
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .menu-item:hover, .menu-item.active {
+    background: #fafbfc;
+    color: var(--orange-primary);
+    border-left-color: var(--orange-primary);
+  }
+  .menu-item i { font-size: 17px; color: var(--text-muted); width: 18px; text-align: center; }
+  .menu-item:hover i, .menu-item.active i { color: var(--orange-primary); }
+  .menu-item .chev { margin-left: auto; font-size: 13px !important; }
+  .badge-new, .badge-beta {
+    background: var(--green);
+    color: #fff;
+    font-size: 8.5px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 700;
+    margin-left: auto;
+  }
+
+  /* ───────── Main area ───────── */
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .top-header {
+    height: var(--header-height);
+    background: #fff;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 100;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-main);
+    font-weight: 500;
+  }
+  .header-left .mini-mark {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--orange-light);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+  .lang-pick { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-main); cursor: pointer; }
+  .wallet-pill { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 600; color: var(--text-main); }
+  .wallet-pill i { font-size: 16px; color: var(--text-muted); }
+
+  .profile-chip { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+  .avatar-circ {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--orange-light); color: var(--orange-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+  }
+  .profile-chip span { font-size: 13px; font-weight: 600; color: var(--text-main); }
+  .profile-chip i { font-size: 12px; color: var(--text-muted); }
+
+  .beta-pill { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--green); }
+  .beta-toggle { width: 34px; height: 18px; background: var(--green); border-radius: 10px; position: relative; }
+  .beta-toggle::after { content: ""; position: absolute; width: 14px; height: 14px; background: #fff; border-radius: 50%; top: 2px; right: 2px; }
+
+  /* ───────── Page body ───────── */
+  .page-body { padding: 22px 30px 60px; }
+
+  .breadcrumb {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: var(--text-muted); margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .breadcrumb i.ti-home { color: var(--text-muted); font-size: 15px; }
+  .breadcrumb .crumb-sep { color: #cbd5e0; }
+  .breadcrumb .crumb-current { color: var(--text-main); font-weight: 600; }
+
+  .product-detail-grid {
+    display: grid;
+    grid-template-columns: 460px 1fr;
+    gap: 32px;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 26px;
+  }
+
+  /* ── Galería ── */
+  .product-gallery { display: flex; flex-direction: column; gap: 14px; }
+  .main-image-frame {
+    position: relative;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    height: 460px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(160deg, #eef2f7, #e2e8f0);
+    overflow: hidden;
+  }
+  .main-image-frame .brand-chip {
+    position: absolute; top: 14px; left: 14px;
+    background: #fff; border-radius: 4px; padding: 4px 10px;
+    font-weight: 900; font-size: 15px; color: #101820;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .main-image-frame .brand-chip span { color: #e11d48; }
+  .main-image-frame img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .main-image-frame .image-label {
+    position: absolute; bottom: 14px; left: 14px;
+    background: rgba(17,24,39,0.72); color: #fff;
+    font-size: 11.5px; font-weight: 600; padding: 5px 12px; border-radius: 20px;
+  }
+  .main-image-frame .image-credit {
+    position: absolute; bottom: 14px; right: 14px;
+    background: rgba(17,24,39,0.55); color: #fff;
+    font-size: 9.5px; font-weight: 500; padding: 4px 9px; border-radius: 20px;
+  }
+  .gallery-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 34px; height: 34px; border-radius: 50%;
+    background: #fff; border: 1px solid var(--border-color);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text-muted); box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+  .gallery-arrow.prev { left: 12px; }
+  .gallery-arrow.next { right: 12px; }
+  .gallery-arrow:hover { color: var(--orange-primary); }
+
+  .thumb-strip { display: flex; align-items: center; gap: 10px; }
+  .thumb-strip .thumb-nav { color: var(--text-muted); cursor: pointer; font-size: 16px; flex-shrink: 0; }
+  .thumb-list { display: flex; gap: 10px; overflow: hidden; flex: 1; }
+  .thumb {
+    width: 74px; height: 74px; border-radius: 8px; flex-shrink: 0;
+    border: 2px solid var(--border-color);
+    background: #eef2f7;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .thumb.active { border-color: var(--orange-primary); }
+
+  /* ── Info del producto ── */
+  .product-info { display: flex; flex-direction: column; }
+  .product-id { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; }
+  .product-title { font-size: 21px; font-weight: 800; color: var(--text-main); margin-bottom: 4px; }
+  .product-sku { font-size: 12.5px; color: var(--text-muted); margin-bottom: 10px; }
+  .product-tag {
+    display: inline-block; background: var(--bg-light); color: var(--text-muted);
+    font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 20px;
+    margin-bottom: 14px; width: fit-content;
+  }
+  .meta-row { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+  .meta-row b { color: var(--text-main); }
+
+  .variant-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12.5px; }
+  .variant-table th {
+    text-align: left; color: var(--text-muted); font-weight: 700; font-size: 11.5px;
+    padding: 8px 10px; border-bottom: 1px solid var(--border-color);
+  }
+  .variant-table td { padding: 9px 10px; border-bottom: 1px solid #f1f4f8; color: var(--text-main); }
+  .variant-id {
+    display: inline-block; border: 1px solid var(--border-color); border-radius: 5px;
+    padding: 2px 7px; font-size: 11.5px; color: var(--text-muted); background: var(--bg-light);
+  }
+
+  .stock-row { display: flex; gap: 10px; margin-bottom: 16px; }
+  .stock-badge {
+    background: var(--orange-muted); color: var(--orange-primary);
+    font-size: 11.5px; font-weight: 700; padding: 5px 12px; border-radius: 20px;
+  }
+
+  .action-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+  .btn-primary {
+    background: var(--orange-primary); color: #fff; border: none;
+    padding: 10px 18px; border-radius: 8px; font-weight: 700; font-size: 13px;
+    cursor: pointer; display: flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--orange-hover); }
+  .btn-outline {
+    background: #fff; color: var(--orange-primary); border: 1.5px solid var(--orange-primary);
+    padding: 9px 16px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer;
+  }
+  .btn-outline:hover { background: var(--orange-muted); }
+  .icon-btn {
+    width: 38px; height: 38px; border-radius: 8px; border: 1px solid var(--border-color);
+    background: #fff; color: var(--text-muted); display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-size: 15px;
+  }
+  .icon-btn:hover { color: var(--orange-primary); border-color: var(--orange-primary); }
+
+  .util-icon-row { display: flex; gap: 14px; margin-bottom: 18px; }
+  .util-icon-row i {
+    width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border-color);
+    display: flex; align-items: center; justify-content: center; color: var(--text-muted);
+    cursor: pointer; font-size: 15px;
+  }
+  .util-icon-row i:hover { color: var(--orange-primary); border-color: var(--orange-primary); }
+
+  .seller-card {
+    display: flex; align-items: center; gap: 14px;
+    border: 1px solid var(--border-color); border-radius: 10px; padding: 14px 16px;
+  }
+  .seller-logo {
+    width: 46px; height: 46px; border-radius: 50%; background: #101820; color: #fff;
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    font-size: 8.5px; font-weight: 900; line-height: 1.15; flex-shrink: 0;
+  }
+  .seller-info { flex: 1; }
+  .seller-info strong { font-size: 13.5px; color: var(--blue); display: block; }
+  .seller-info .seller-plan { font-size: 11.5px; color: var(--text-muted); }
+  .seller-info .seller-loc { font-size: 11.5px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+  .btn-contact {
+    background: #fff; border: 1px solid var(--border-color); border-radius: 8px;
+    padding: 8px 14px; font-size: 12.5px; font-weight: 700; color: var(--text-main);
+    display: flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap;
+  }
+  .btn-contact:hover { border-color: var(--orange-primary); color: var(--orange-primary); }
+
+  /* ── Tabs + specs ── */
+  .tabs-row {
+    display: flex; gap: 28px; border-bottom: 1px solid var(--border-color);
+    margin-top: 26px; padding: 0 26px;
+  }
+  .tab { padding: 10px 2px; font-size: 13.5px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab.active { color: var(--orange-primary); border-bottom-color: var(--orange-primary); }
+
+  .specs-panel { background: #fff; border: 1px solid var(--border-color); border-top: none; border-radius: 0 0 14px 14px; padding: 24px 26px 30px; }
+  .specs-panel h3 { font-size: 15px; font-weight: 800; margin-bottom: 14px; }
+  .specs-panel ul { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+  .specs-panel li { font-size: 13px; color: var(--text-main); line-height: 1.5; }
+  .specs-panel li b { font-weight: 700; }
+  .specs-panel .specs-strong { font-weight: 800; margin-top: 6px; }
+  .specs-panel .specs-links b { display: inline-block; min-width: 78px; }
+  .specs-panel a { color: var(--blue); text-decoration: none; }
+  .specs-panel a:hover { text-decoration: underline; }
+
+  /* ───────── Botones flotantes (fiel a app.dropi.co) ───────── */
+  .float-actions { position: fixed; bottom: 26px; right: 26px; display: flex; flex-direction: column; gap: 12px; z-index: 250; }
+  .float-btn {
+    width: 46px; height: 46px; border-radius: 50%; background: var(--orange-primary); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2); cursor: pointer;
+  }
+
+  .footer-credits {
+    display: flex; justify-content: space-between; padding: 14px 30px;
+    font-size: 11.5px; color: var(--text-muted);
+  }
+
+  .poc-tag {
+    position: fixed; bottom: 18px; left: calc(var(--sidebar-width) + 18px);
+    background: rgba(17,24,39,0.92); color:#fff; font-size:11px; font-weight:700;
+    padding: 8px 12px; border-radius: 8px; z-index: 400;
+    display:flex; align-items:center; gap:10px;
+  }
+  .poc-tag i.ti-flask { color: var(--orange-primary); }
+  .poc-reset-btn {
+    background: none; border: 1px solid rgba(255,255,255,0.3); color: #fff;
+    font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 20px;
+    cursor: pointer; display: flex; align-items: center; gap: 5px;
+  }
+  .poc-reset-btn:hover { background: rgba(255,255,255,0.12); }
+
+  /* ───────── Tour guiado (spotlight + tooltip) ───────── */
+  .tour-blocker { position: fixed; inset: 0; z-index: 4999; background: transparent; }
+  .tour-spotlight {
+    position: fixed; z-index: 5000; border-radius: 8px; border: 2px solid var(--orange-primary);
+    box-shadow: 0 0 0 9999px rgba(15, 20, 30, 0.65); transition: all 0.3s ease; pointer-events: none;
+  }
+  .tour-tooltip {
+    position: fixed; z-index: 5001; width: 290px; background: #fff; border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25); padding: 16px 18px; transition: top 0.3s ease, left 0.3s ease;
+  }
+  .tour-step-count { font-size: 10px; font-weight: 700; color: var(--orange-primary); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
+  .tour-tooltip h4 { font-size: 14px; color: var(--text-main); margin-bottom: 6px; }
+  .tour-tooltip p { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px; }
+  .tour-tooltip-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .tour-skip-btn { background: none; border: none; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; }
+  .tour-skip-btn:hover { color: var(--text-main); }
+  .tour-nav-btns { display: flex; gap: 8px; }
+  .tour-btn { padding: 8px 14px; font-size: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; }
+  .tour-btn-outline { background: #fff; border: 1px solid var(--border-color); color: var(--text-main); }
+  .tour-btn-primary { background: var(--orange-primary); color: #fff; }
+  .tour-btn-primary:hover { background: var(--orange-hover); }
+
+  /* ───────── Modal: Solicitud de muestra ───────── */
+  .sample-modal-overlay {
+    position: fixed; inset: 0; background: rgba(17,24,39,0.55);
+    z-index: 800; display: none; align-items: flex-start; justify-content: center;
+    padding: 40px 20px; overflow-y: auto;
+  }
+  .sample-modal-overlay.active { display: flex; }
+  .sample-modal {
+    background: #fff; border-radius: 14px; width: 100%; max-width: 1180px;
+    padding: 28px 32px 24px; position: relative; box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+  }
+  .sample-modal-close {
+    position: absolute; top: 24px; right: 28px; background: none; border: none;
+    color: var(--text-muted); font-size: 20px; cursor: pointer;
+  }
+  .sample-modal-close:hover { color: var(--text-main); }
+  .sample-modal-title { font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 20px; }
+
+  .sample-modal-grid {
+    display: grid; grid-template-columns: 1.15fr 1fr 0.85fr; gap: 26px;
+    align-items: start;
+  }
+  .sample-col-title { font-size: 14px; font-weight: 700; color: var(--text-main); margin-bottom: 12px; }
+
+  .sample-input, .sample-select {
+    width: 100%; border: 1px solid var(--border-color); border-radius: 8px;
+    padding: 10px 12px; font-size: 13px; color: var(--text-main); background: #fff;
+    font-family: inherit;
+  }
+  .sample-input::placeholder { color: #a0aec0; }
+  .sample-input.invalid { border-color: var(--red); }
+  .sample-select:disabled { background: var(--bg-light); color: #a0aec0; cursor: not-allowed; }
+  .sample-input[readonly] { background: var(--bg-light); color: var(--text-muted); cursor: not-allowed; }
+  .sample-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .sample-field { margin-bottom: 10px; }
+  .field-error { display: flex; align-items: center; gap: 5px; color: var(--red); font-size: 11px; font-weight: 600; margin: -5px 0 8px; }
+  .phone-row { display: grid; grid-template-columns: 78px 1fr; gap: 10px; }
+  .phone-code { display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 13px; }
+
+  .notes-toggle-row { display: flex; align-items: center; gap: 10px; margin: 4px 0 18px; font-size: 12.5px; color: var(--text-main); }
+  .mini-toggle { width: 34px; height: 18px; background: #cbd5e0; border-radius: 10px; position: relative; flex-shrink: 0; cursor: pointer; }
+  .mini-toggle::after { content: ""; position: absolute; width: 14px; height: 14px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: left 0.15s; }
+  .mini-toggle.on { background: var(--green); }
+  .mini-toggle.on::after { left: 18px; }
+
+  .selected-product-card { background: var(--bg-light); border-radius: 10px; padding: 14px; }
+  .selected-product-top { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+  .selected-product-thumb { width: 48px; height: 48px; border-radius: 8px; background: #fff; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+  .selected-product-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .selected-product-name { font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+  .selected-product-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-muted); }
+  .selected-product-price { font-size: 12.5px; color: var(--text-main); margin-top: 8px; }
+
+  .sample-modal-hr { border: none; border-top: 1px solid var(--border-color); margin: 12px 0; }
+
+  .client-summary-card { background: var(--bg-light); border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+  .client-summary-row { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: var(--text-main); padding: 5px 0; }
+  .client-summary-row i { color: var(--text-muted); font-size: 14px; width: 16px; text-align: center; flex-shrink: 0; }
+
+  .warning-banner {
+    display: flex; align-items: center; gap: 8px; background: #FEECEE; color: #B4232F;
+    border: 1px solid #F6C6CB; border-radius: 8px; padding: 10px 14px; font-size: 12.5px; font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .warning-banner i { font-size: 15px; flex-shrink: 0; }
+  .carrier-price.quoted { color: var(--text-main); }
+
+  .payment-mode-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .payment-mode-opt {
+    display: flex; align-items: center; gap: 8px; border: 1.5px solid var(--border-color); border-radius: 8px;
+    padding: 10px 12px; font-size: 12.5px; font-weight: 600; color: var(--text-muted); cursor: pointer;
+  }
+  .payment-mode-opt.disabled { color: #cbd5e0; cursor: not-allowed; background: #fafbfc; }
+  .payment-mode-opt.selected { border-color: var(--orange-primary); background: var(--orange-muted); color: var(--text-main); }
+  .radio-dot { width: 15px; height: 15px; border-radius: 50%; border: 1.5px solid #cbd5e0; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .payment-mode-opt.selected .radio-dot { border-color: var(--orange-primary); }
+  .payment-mode-opt.selected .radio-dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--orange-primary); }
+
+  .carrier-list { display: flex; flex-direction: column; gap: 8px; max-height: 380px; overflow-y: auto; padding-right: 4px; }
+  .carrier-row {
+    display: flex; align-items: center; gap: 10px; border: 1px solid var(--border-color); border-radius: 8px;
+    padding: 9px 12px; font-size: 12.5px; font-weight: 600; color: var(--text-main); cursor: pointer;
+  }
+  .carrier-row:hover { border-color: #cbd5e0; }
+  .carrier-icon {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9.5px; font-weight: 800; color: #fff;
+  }
+  .carrier-name { flex: 1; }
+  .carrier-price { color: var(--text-muted); font-weight: 700; }
+
+  .order-summary-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+  .order-summary-table th {
+    text-align: left; font-size: 11.5px; color: var(--text-muted); font-weight: 700;
+    padding-bottom: 8px; border-bottom: 1px solid var(--border-color);
+  }
+  .order-summary-table th:last-child, .order-summary-table td:last-child { text-align: right; }
+  .order-summary-product { padding: 12px 0; border-bottom: 1px solid var(--border-color); vertical-align: top; }
+  .order-summary-product .osp-name { font-size: 12.5px; font-weight: 700; color: var(--text-main); }
+  .order-summary-product .osp-color { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .order-summary-product .osp-color::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #6b4423; }
+  .order-summary-price { padding: 12px 0; border-bottom: 1px solid var(--border-color); font-size: 12.5px; font-weight: 700; vertical-align: top; }
+
+  .summary-totals { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; font-size: 12.5px; }
+  .summary-totals-row { display: flex; justify-content: space-between; color: var(--text-muted); }
+  .summary-totals-row.total { color: var(--text-main); font-weight: 800; font-size: 13.5px; border-top: 1px solid var(--border-color); padding-top: 10px; margin-top: 4px; }
+
+  .sample-modal-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 22px; }
+  .btn-cancel-outline {
+    background: #fff; border: 1.5px solid var(--border-color); color: var(--text-main);
+    padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer;
+  }
+  .btn-submit-sample {
+    background: #FBBE85; border: none; color: #fff;
+    padding: 10px 22px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: not-allowed;
+  }
+  .btn-submit-sample:not(:disabled) {
+    background: var(--orange-primary); cursor: pointer;
+  }
+  .btn-submit-sample:not(:disabled):hover { background: var(--orange-hover); }
+
+  /* ───────── Toast ───────── */
+  .toast-container {
+    position: fixed; top: 20px; right: 24px; z-index: 900;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .toast {
+    background: #1B2A3A; color: #fff; padding: 12px 18px; border-radius: 10px;
+    font-size: 13px; font-weight: 600; box-shadow: 0 14px 30px rgba(0,0,0,0.25);
+    display: flex; align-items: center; gap: 9px;
+    opacity: 0; transform: translate(20px, -8px);
+    transition: all 0.28s var(--ease);
+  }
+  .toast.show { opacity: 1; transform: translate(0, 0); }
+  .toast i { color: var(--green); font-size: 16px; }
+
+  @media (max-width: 1000px) {
+    .sample-modal-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ───────── Sidebar ───────── -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="dropi-mark"></div>
+    <span class="wordmark">dropi</span>
+    <i class="ti ti-menu-2"></i>
+  </div>
+  <div class="sidebar-menu">
+    <div class="menu-item"><i class="ti ti-home"></i>Inicio</div>
+    <div class="menu-item"><i class="ti ti-chart-bar"></i>Dashboard<span class="badge-beta">Beta</span></div>
+    <div class="menu-item active"><i class="ti ti-search"></i>Productos<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-shopping-cart"></i>Mis Pedidos<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item"><i class="ti ti-shield-check"></i>Mis Garantias<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item"><i class="ti ti-users"></i>Clientes</div>
+    <div class="menu-item"><i class="ti ti-plug"></i>Mis Integraciones</div>
+    <div class="menu-item"><i class="ti ti-history"></i>Historial de Cartera</div>
+    <div class="menu-item"><i class="ti ti-users-group"></i>Mis usuarios</div>
+    <div class="menu-item"><i class="ti ti-user-plus"></i>Mis Referidos</div>
+    <div class="menu-item"><i class="ti ti-settings"></i>Configuraciones<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-calendar"></i>Calendario</div>
+    <div class="menu-item"><i class="ti ti-speakerphone"></i>Marketing<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item"><i class="ti ti-rocket"></i>ROAX<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-report"></i>Reportes<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-file-invoice"></i>Facturas</div>
+    <div class="menu-item"><i class="ti ti-truck"></i>Transportadora<i class="ti ti-chevron-down chev"></i></div>
+    <div class="menu-item"><i class="ti ti-credit-card"></i>Dropi Card<span class="badge-new">Nuevo</span></div>
+    <div class="menu-item"><i class="ti ti-headset"></i>CAS<i class="ti ti-chevron-down chev"></i></div>
+  </div>
+</div>
+
+<!-- ───────── Main ───────── -->
+<div class="main-content">
+  <div class="top-header">
+    <div class="header-left">
+      <div class="mini-mark">🐼</div>
+      Miembro De: PRUEBAS PRODUCTO DROPI
+    </div>
+    <div class="header-right">
+      <div class="lang-pick">🇺🇸 English</div>
+      <div class="wallet-pill"><i class="ti ti-briefcase"></i> $ 192.506</div>
+      <div class="profile-chip">
+        <div class="avatar-circ">UX</div>
+        <span>ux</span>
+        <i class="ti ti-chevron-down"></i>
+      </div>
+      <div class="beta-pill">BETA <div class="beta-toggle"></div></div>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="breadcrumb">
+      <i class="ti ti-home"></i>
+      <span class="crumb-sep">/</span>
+      <a href="catalogo-productos-poc.html" style="color: var(--text-muted); text-decoration: none;">Todos los productos</a>
+      <span class="crumb-sep">/</span>
+      <span id="breadcrumbProveedor">Proveedor: Curren Latam</span>
+      <span class="crumb-sep">/</span>
+      <span class="crumb-current" id="breadcrumbProduct">Reloj Curren 8489 Silicona</span>
+    </div>
+
+    <div class="product-detail-grid">
+      <!-- Galería -->
+      <div class="product-gallery">
+        <div class="main-image-frame" id="mainImageFrame">
+          <div class="brand-chip" id="brandChipEl"><span id="brandChipAccent">C</span><span id="brandChipText">URREN</span></div>
+          <div class="gallery-arrow prev" onclick="shiftThumb(-1)"><i class="ti ti-chevron-left"></i></div>
+          <img id="mainProductImage" src="" alt="">
+          <span class="image-label" id="mainImageLabel"></span>
+          <span class="image-credit">Foto de referencia · Pexels</span>
+          <div class="gallery-arrow next" onclick="shiftThumb(1)"><i class="ti ti-chevron-right"></i></div>
+        </div>
+        <div class="thumb-strip">
+          <i class="ti ti-chevron-left thumb-nav"></i>
+          <div class="thumb-list" id="thumbList"></div>
+          <i class="ti ti-chevron-right thumb-nav"></i>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="product-info">
+        <div class="product-id" id="productIdLabel"></div>
+        <h1 class="product-title" id="productTitleLabel"></h1>
+        <div class="product-sku" id="productSkuLabel"></div>
+        <div class="product-tag" id="productTagLabel"></div>
+        <div class="meta-row">Tipo de producto: <b id="productTipoLabel"></b></div>
+        <div class="meta-row" style="margin-bottom: 14px;">Producto disponible en: <b id="productDisponibleLabel"></b></div>
+
+        <table class="variant-table">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Descripción</th>
+              <th>Existencia</th>
+              <th>Precio del proveedor</th>
+              <th>Precio sugerido</th>
+            </tr>
+          </thead>
+          <tbody id="variantTableBody"></tbody>
+        </table>
+
+        <div class="stock-row">
+          <span class="stock-badge" id="stockLabel"></span>
+          <span class="stock-badge" id="stockPrivadoLabel"></span>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-primary"><i class="ti ti-send"></i> Enviar al cliente</button>
+          <button class="btn-outline" id="btnSolicitarMuestra" onclick="onSolicitarMuestra()">Solicitar muestra</button>
+          <button class="btn-outline">Ver informe</button>
+          <button class="btn-outline">Calculadora de flete</button>
+          <button class="icon-btn"><i class="ti ti-file-text"></i></button>
+        </div>
+
+        <div class="util-icon-row">
+          <i class="ti ti-heart"></i>
+          <i class="ti ti-share-2"></i>
+        </div>
+
+        <div class="seller-card">
+          <div class="seller-logo" id="sellerLogoEl"></div>
+          <div class="seller-info">
+            <strong id="sellerNameLabel"></strong>
+            <span class="seller-plan" id="sellerPlanLabel"></span>
+          </div>
+          <div class="seller-info" style="flex: none; text-align: right;">
+            <span class="seller-loc"><i class="ti ti-map-pin"></i> <span id="sellerLocationLabel"></span></span>
+          </div>
+          <button class="btn-contact"><i class="ti ti-headset"></i> Contactar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tabs-row">
+      <div class="tab active">Detalles</div>
+      <div class="tab">Garantías</div>
+      <div class="tab">Recursos adicionales</div>
+    </div>
+    <div class="specs-panel">
+      <h3>Especificaciones:</h3>
+      <ul id="specsListEl"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- Botones flotantes -->
+<div class="float-actions">
+  <div class="float-btn"><i class="ti ti-fingerprint"></i></div>
+  <div class="float-btn"><i class="ti ti-antenna"></i></div>
+  <div class="float-btn"><i class="ti ti-message-circle-2"></i></div>
+</div>
+
+<div class="poc-tag">
+  <i class="ti ti-flask"></i> PROD-MUESTRA-POC-1 · Detalle de producto (Mock) — réplica base
+  <button class="poc-reset-btn" onclick="resetSavedClientInfo()"><i class="ti ti-trash"></i> Borrar datos guardados</button>
+</div>
+
+<!-- ───────── Modal: Solicitud de muestra ───────── -->
+<div class="sample-modal-overlay" id="sampleModalOverlay">
+  <div class="sample-modal">
+    <button class="sample-modal-close" onclick="closeSampleModal()"><i class="ti ti-x"></i></button>
+    <div class="sample-modal-title">Solicitud de muestra</div>
+
+    <div class="sample-modal-grid">
+      <!-- Columna 1: Información del cliente -->
+      <div>
+        <div id="clientInfoSection">
+        <div class="sample-col-title">Información del cliente:</div>
+
+        <!-- Vista resumida: cuando ya hay datos guardados del cliente -->
+        <div class="client-summary-card" id="clientSummaryView" style="display:none;">
+          <div class="client-summary-row"><i class="ti ti-user"></i> <span id="summaryClientName"></span></div>
+          <div class="client-summary-row"><i class="ti ti-phone"></i> <span id="summaryClientPhone"></span></div>
+          <div class="client-summary-row"><i class="ti ti-map-pin"></i> <span id="summaryClientAddress"></span></div>
+          <div class="client-summary-row"><i class="ti ti-mail"></i> <span id="summaryClientEmail"></span></div>
+          <button class="btn-outline" style="margin-top: 10px; width: 100%;" onclick="editClientInfo()">Cambiar información del cliente</button>
+        </div>
+
+        <!-- Formulario editable -->
+        <div id="clientFormFields">
+          <div class="sample-row-2">
+            <input class="sample-input invalid" type="text" id="nombresInput" placeholder="Nombres">
+            <input class="sample-input" type="text" id="apellidosInput" placeholder="Apellidos">
+          </div>
+          <div class="field-error" id="nombreError"><i class="ti ti-info-circle"></i> Ingrese un nombre válido</div>
+
+          <div class="sample-field">
+            <div class="phone-row">
+              <div class="sample-input phone-code">🇨🇴 57 <i class="ti ti-chevron-down" style="font-size:11px;"></i></div>
+              <input class="sample-input" type="text" id="telefonoInput" placeholder="Número de teléfono">
+            </div>
+          </div>
+
+          <div class="sample-row-2">
+            <select class="sample-select" id="departmentSelect" onchange="onDepartmentChange()">
+              <option value="">Departamento</option>
+            </select>
+            <select class="sample-select" id="citySelect" disabled>
+              <option value="">Selecciona un departamento primero</option>
+            </select>
+          </div>
+
+          <div class="sample-field">
+            <input class="sample-input" type="text" id="direccionInput" placeholder="Dirección y complementos">
+          </div>
+
+          <div class="sample-field">
+            <input class="sample-input" type="email" id="correoInput" placeholder="Correo electrónico">
+          </div>
+        </div>
+
+        <!-- Siempre visibles: no forman parte de la info guardada del cliente, son por cada solicitud -->
+        <div class="sample-field">
+          <select class="sample-select" id="tiendaSelect">
+            <option value="">Tienda</option>
+            <option value="tienda-principal">Tienda Principal</option>
+          </select>
+        </div>
+
+        <div class="notes-toggle-row">
+          <div class="mini-toggle" onclick="this.classList.toggle('on')"></div>
+          ¿Desea agregar notas para el proveedor?
+        </div>
+        </div>
+
+        <div class="sample-col-title">Producto seleccionado</div>
+        <div class="selected-product-card">
+          <div class="selected-product-top">
+            <div class="selected-product-thumb"><img id="modalProductThumb" src="" alt=""></div>
+            <div>
+              <div class="selected-product-name" id="modalProductName"></div>
+              <div class="selected-product-meta">
+                <span class="variant-id" id="modalProductIdBadge"></span>
+                <span id="modalProductProveedor"></span>
+              </div>
+              <div class="selected-product-price">Precio de proveedor: <b id="modalProviderPrice"></b></div>
+            </div>
+          </div>
+
+          <div class="sample-field">
+            <select class="sample-select" id="variationSelect" onchange="onVariationChange()"></select>
+          </div>
+          <div class="sample-row-2" style="margin-bottom: 0;">
+            <div>
+              <label style="font-size: 11px; color: var(--text-muted); display:block; margin-bottom:4px;">Precio de venta</label>
+              <input class="sample-input" type="text" id="salePriceInput" value="" readonly>
+            </div>
+            <div>
+              <label style="font-size: 11px; color: var(--text-muted); display:block; margin-bottom:4px;">Cantidad</label>
+              <input class="sample-input" type="text" value="1" readonly>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna 2: Transportadora -->
+      <div>
+        <div class="sample-col-title">Seleccione una transportadora:</div>
+        <div class="warning-banner" id="carrierWarningBanner"><i class="ti ti-circle-x"></i> Para cotizar, selecciona ciudad de destino.</div>
+
+        <div class="payment-mode-row">
+          <div class="payment-mode-opt disabled"><div class="radio-dot"></div> Con Recaudo</div>
+          <div class="payment-mode-opt selected"><div class="radio-dot"></div> Sin Recaudo</div>
+        </div>
+
+        <div class="carrier-list">
+          <label class="carrier-row"><input type="radio" name="carrier" style="display:none;"><div class="carrier-icon" style="background:#EC1E63;">V</div><span class="carrier-name">Veloces</span><span class="carrier-price">$ --</span></label>
+          <label class="carrier-row"><input type="radio" name="carrier" style="display:none;"><div class="carrier-icon" style="background:#21C15C;">99</div><span class="carrier-name">99minutos</span><span class="carrier-price">$ --</span></label>
+          <label class="carrier-row"><input type="radio" name="carrier" style="display:none;"><div class="carrier-icon" style="background:#1B2A4A;">D</div><span class="carrier-name">Domina</span><span class="carrier-price">$ --</span></label>
+          <label class="carrier-row"><input type="radio" name="carrier" style="display:none;"><div class="carrier-icon" style="background:#0EA5B7;">C</div><span class="carrier-name">Coordinadora</span><span class="carrier-price">$ --</span></label>
+          <label class="carrier-row"><input type="radio" name="carrier" style="display:none;"><div class="carrier-icon" style="background:#E11D2E;">E</div><span class="carrier-name">Envia</span><span class="carrier-price">$ --</span></label>
+          <label class="carrier-row"><input type="radio" name="carrier" style="display:none;"><div class="carrier-icon" style="background:#111111;">I</div><span class="carrier-name">Interrapidisimo</span><span class="carrier-price">$ --</span></label>
+          <label class="carrier-row"><input type="radio" name="carrier" style="display:none;"><div class="carrier-icon" style="background:#D62828;">T</div><span class="carrier-name">Tcc</span><span class="carrier-price">$ --</span></label>
+          <label class="carrier-row"><input type="radio" name="carrier" style="display:none;"><div class="carrier-icon" style="background:#1D4ED8;">J</div><span class="carrier-name">Jamv-drive</span><span class="carrier-price">$ --</span></label>
+        </div>
+      </div>
+
+      <!-- Columna 3: Resumen -->
+      <div>
+        <div class="sample-col-title">Resumen de la orden:</div>
+        <table class="order-summary-table">
+          <thead>
+            <tr><th>Producto</th><th>Precio de venta</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="order-summary-product">
+                <div class="osp-name" id="summaryProductName"></div>
+                <div class="osp-color" id="summaryProductColor"></div>
+              </td>
+              <td class="order-summary-price" id="summaryProductPrice"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="summary-totals">
+          <div class="summary-totals-row"><span>Precio proveedor:</span><span id="summaryProviderPrice">$ 0</span></div>
+          <div class="summary-totals-row"><span>Precio de envío:</span><span id="summaryShippingPrice">$ 0</span></div>
+          <div class="summary-totals-row"><span>Comisión de la plataforma:</span><span id="summaryCommission">$ 0</span></div>
+          <div class="summary-totals-row total"><span>Total:</span><span id="summaryTotal">$ 0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sample-modal-footer">
+      <button class="btn-cancel-outline" onclick="closeSampleModal()">Cancelar</button>
+      <button class="btn-submit-sample" id="btnSubmitSample" disabled onclick="submitSampleRequest()">Solicitar muestra</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // ───────── Catálogo de productos del mock (3 productos, referenciados por ?product=) ─────────
+  const PRODUCTS = {
+    'reloj-curren': {
+      id: '2113468', sku: 'CR-8489', tag: 'Bisutería', title: 'Reloj Curren 8489 Silicona',
+      tipoProducto: 'Variable', disponibleEn: 'Bogota',
+      stock: 74, stockPrivado: 0,
+      proveedorNombre: 'Curren Latam', proveedorPlan: 'Exclusivo', proveedorUbicacion: 'BOGOTA', proveedorLogo: 'URRE<br>LATAM',
+      brandChip: { accent: 'C', text: 'URREN' },
+      images: [
+        { label: 'Azul', src: 'https://images.pexels.com/photos/3766111/pexels-photo-3766111.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/3766111/pexels-photo-3766111.jpeg?auto=compress&cs=tinysrgb&w=200' },
+        { label: 'Verde', src: 'https://images.pexels.com/photos/32612242/pexels-photo-32612242.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/32612242/pexels-photo-32612242.jpeg?auto=compress&cs=tinysrgb&w=200' },
+        { label: 'Negro Dorado', src: 'https://images.pexels.com/photos/9848542/pexels-photo-9848542.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/9848542/pexels-photo-9848542.jpeg?auto=compress&cs=tinysrgb&w=200' },
+        { label: 'Gris', src: 'https://images.pexels.com/photos/38106548/pexels-photo-38106548.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/38106548/pexels-photo-38106548.jpeg?auto=compress&cs=tinysrgb&w=200' },
+        { label: 'Negro', src: 'https://images.pexels.com/photos/32188760/pexels-photo-32188760.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/32188760/pexels-photo-32188760.jpeg?auto=compress&cs=tinysrgb&w=200' },
+      ],
+      variants: [
+        { variantId: '2061253', desc: 'Color: <b>Negro Dorado</b>', existencia: 14, proveedor: 88000, sugerido: 88000 },
+        { variantId: '2061250', desc: 'Color: <b>Gris</b>', existencia: 5, proveedor: 88000, sugerido: 88000 },
+        { variantId: '2061251', desc: 'Color: <b>Negro Rojo</b>', existencia: 15, proveedor: 88000, sugerido: 88000 },
+        { variantId: '2061252', desc: 'Color: <b>Verde</b>', existencia: 10, proveedor: 88000, sugerido: 88000 },
+        { variantId: '2061248', desc: 'Color: <b>Negro</b>', existencia: 15, proveedor: 88000, sugerido: 88000 },
+        { variantId: '2061249', desc: 'Color: <b>Azul</b>', existencia: 15, proveedor: 88000, sugerido: 88000 },
+      ],
+      specs: [
+        'Material del pulso: <b>Siliconado</b>',
+        'Material de la caja: <b>Acero inoxidable</b>',
+        'Tipo de cierre: <b>Con hebilla</b>',
+        'Diámetro de la caja: <b>52 mm</b>',
+        'Diámetro del dial: <b>36 mm</b>',
+        'Ancho del pulso: <b>23 mm</b>',
+        'Grosor de la caja: <b>15 mm</b>',
+        'Longitud del pulso: <b>20,5 cm</b>',
+        'Peso del reloj: <b>98 g</b>',
+        'Material del vidrio: <b>Hardlex</b>',
+        'Movimiento: <b>Cuarzo</b>',
+        'Visualización: <b>Analógico</b>',
+        'Reloj para <b>Hombre</b>',
+        'Marca: <b>Curren</b>',
+        'Modelo: <b>8489</b>',
+        'Estilo: <b>A la moda y casual</b>',
+        '<b>Característica</b>: Calendario y cronógrafos funcionales (segundero, minutero, 24 horas). Adecuado para el uso diario, resistente a salpicaduras y lluvia. No es adecuado para ducharse, bañarse, nadar, practicar snorkel, trabajos relacionados con el agua caliente agua salada y pescar.',
+        { strong: true, text: 'SOMOS CURREN LATAM REPRESENTANTES DE LA MARCA CURREN EN LATINOAMÉRICA' },
+        'Te dejamos los links en los cuales encontrarás información de nuestros productos para que puedas generar tus ventas con mayor facilidad; en ellas tendrás fotos, videos, descripciones, medidas y hasta peso del reloj.',
+        { link: true, label: 'NUBE', text: 'https://drive.google.com/drive/folders/1NIKS2-dwTL4vOfOshiLbDqy16zCTIxyX' },
+        { link: true, label: 'TELEGRAM', text: 'https://t.me/+wZ6dwC-gGjFiNTE5' },
+        { link: true, label: 'INSTAGRAM', text: '@CURRENLATAM', noLink: true },
+        { link: true, label: 'WhatsApp', text: 'https://wa.me/+573172205750' },
+        { link: true, label: 'CATÁLOGO', text: 'https://www.canva.com/design/DAGV0RFVIMc/...' },
+      ],
+    },
+    'yerba-magic': {
+      id: '3350210', sku: 'YM-60CAP', tag: 'Belleza', title: 'Yerba Magic X 60 Cap',
+      tipoProducto: 'Único', disponibleEn: 'Bogota',
+      stock: 1000, stockPrivado: 0,
+      proveedorNombre: 'Biodrop Laboratorios', proveedorPlan: 'Verificado', proveedorUbicacion: 'BOGOTA', proveedorLogo: 'BIO<br>DROP',
+      brandChip: null,
+      images: [
+        { label: 'Frasco', src: 'https://images.pexels.com/photos/17820733/pexels-photo-17820733.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/17820733/pexels-photo-17820733.jpeg?auto=compress&cs=tinysrgb&w=200' },
+        { label: 'Cápsulas', src: 'https://images.pexels.com/photos/31406897/pexels-photo-31406897.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/31406897/pexels-photo-31406897.jpeg?auto=compress&cs=tinysrgb&w=200' },
+        { label: 'Detalle', src: 'https://images.pexels.com/photos/14631437/pexels-photo-14631437.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/14631437/pexels-photo-14631437.jpeg?auto=compress&cs=tinysrgb&w=200' },
+      ],
+      variants: [
+        { variantId: '3350210', desc: 'Presentación: <b>Único</b>', existencia: 1000, proveedor: 21000, sugerido: 80000 },
+      ],
+      specs: [
+        'Contenido: <b>60 cápsulas</b>',
+        'Presentación: <b>Frasco</b>',
+        'Uso recomendado: <b>1 cápsula al día</b>',
+        'Categoría: <b>Suplemento herbal</b>',
+        'Marca: <b>Biodrop</b>',
+        { link: true, label: 'CATÁLOGO', text: 'https://www.canva.com/design/ejemplo-yerba-magic/...' },
+      ],
+    },
+    'mascara-s': {
+      id: '2894471', sku: 'MSK-S01', tag: 'Herramientas', title: 'Mascara S',
+      tipoProducto: 'Único', disponibleEn: 'Bogota',
+      stock: 2, stockPrivado: 0,
+      proveedorNombre: 'Joesma Prov.', proveedorPlan: 'Verificado', proveedorUbicacion: 'BOGOTA', proveedorLogo: 'JOES<br>MA',
+      brandChip: null,
+      images: [
+        { label: 'Vista frontal', src: 'https://images.pexels.com/photos/36548332/pexels-photo-36548332.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/36548332/pexels-photo-36548332.jpeg?auto=compress&cs=tinysrgb&w=200' },
+        { label: 'En uso', src: 'https://images.pexels.com/photos/926688/pexels-photo-926688.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/926688/pexels-photo-926688.jpeg?auto=compress&cs=tinysrgb&w=200' },
+        { label: 'Detalle', src: 'https://images.pexels.com/photos/13497469/pexels-photo-13497469.jpeg?auto=compress&cs=tinysrgb&w=800', thumb: 'https://images.pexels.com/photos/13497469/pexels-photo-13497469.jpeg?auto=compress&cs=tinysrgb&w=200' },
+      ],
+      variants: [
+        { variantId: '2894471', desc: 'Presentación: <b>Único</b>', existencia: 2, proveedor: 38000, sugerido: 60000 },
+      ],
+      specs: [
+        'Material: <b>Policarbonato</b>',
+        'Protección: <b>UV400</b>',
+        'Uso: <b>Deportes de nieve / motociclismo</b>',
+        'Categoría: <b>Herramientas y protección</b>',
+        { link: true, label: 'CATÁLOGO', text: 'https://www.canva.com/design/ejemplo-mascara-s/...' },
+      ],
+    },
+  };
+
+  function getSelectedProductSlug() {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('product');
+    return PRODUCTS[slug] ? slug : 'reloj-curren';
+  }
+
+  let currentProduct = null;
+
+  function renderProduct(product) {
+    currentProduct = product;
+    document.title = `Dropi — ${product.title}`;
+
+    document.getElementById('breadcrumbProveedor').textContent = `Proveedor: ${product.proveedorNombre}`;
+    document.getElementById('breadcrumbProduct').textContent = product.title;
+
+    const brandChipEl = document.getElementById('brandChipEl');
+    if (product.brandChip) {
+      brandChipEl.style.display = '';
+      document.getElementById('brandChipAccent').textContent = product.brandChip.accent;
+      document.getElementById('brandChipText').textContent = product.brandChip.text;
+    } else {
+      brandChipEl.style.display = 'none';
+    }
+
+    // Galería
+    const thumbList = document.getElementById('thumbList');
+    thumbList.innerHTML = '';
+    product.images.forEach((img, idx) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'thumb' + (idx === 0 ? ' active' : '');
+      thumb.dataset.label = img.label;
+      thumb.dataset.src = img.src;
+      thumb.onclick = () => selectThumb(thumb);
+      thumb.innerHTML = `<img src="${img.thumb}" alt="${img.label}">`;
+      thumbList.appendChild(thumb);
+    });
+    document.getElementById('mainProductImage').src = product.images[0].src;
+    document.getElementById('mainProductImage').alt = `${product.title} — ${product.images[0].label}`;
+    document.getElementById('mainImageLabel').textContent = `${product.title} — ${product.images[0].label}`;
+
+    // Info
+    document.getElementById('productIdLabel').textContent = `ID:${product.id}`;
+    document.getElementById('productTitleLabel').textContent = product.title;
+    document.getElementById('productSkuLabel').textContent = `SKU: ${product.sku}`;
+    document.getElementById('productTagLabel').textContent = product.tag;
+    document.getElementById('productTipoLabel').textContent = product.tipoProducto;
+    document.getElementById('productDisponibleLabel').textContent = product.disponibleEn;
+
+    // Tabla de variantes
+    const tbody = document.getElementById('variantTableBody');
+    tbody.innerHTML = product.variants.map((v) => `
+      <tr>
+        <td><span class="variant-id">${v.variantId}</span></td>
+        <td>${v.desc}</td>
+        <td>${v.existencia}</td>
+        <td>${formatCurrency(v.proveedor)}</td>
+        <td>${formatCurrency(v.sugerido)}</td>
+      </tr>
+    `).join('');
+
+    document.getElementById('stockLabel').textContent = `Stock: ${product.stock}`;
+    document.getElementById('stockPrivadoLabel').textContent = `Stock Privado: ${product.stockPrivado}`;
+
+    // Vendedor
+    document.getElementById('sellerLogoEl').innerHTML = product.proveedorLogo;
+    document.getElementById('sellerNameLabel').textContent = product.proveedorNombre.toUpperCase();
+    document.getElementById('sellerPlanLabel').textContent = product.proveedorPlan;
+    document.getElementById('sellerLocationLabel').textContent = `Bodegas: ${product.proveedorUbicacion}`;
+
+    // Especificaciones
+    const specsListEl = document.getElementById('specsListEl');
+    specsListEl.innerHTML = product.specs.map((spec) => {
+      if (typeof spec === 'string') return `<li>${spec}</li>`;
+      if (spec.strong) return `<li class="specs-strong">${spec.text}</li>`;
+      if (spec.link) {
+        const inner = spec.noLink ? spec.text : `<a href="#" onclick="return false;">${spec.text}</a>`;
+        return `<li class="specs-links"><b>${spec.label}:</b> ${inner}</li>`;
+      }
+      return '';
+    }).join('');
+
+    // Modal: producto seleccionado + selector de variación
+    document.getElementById('modalProductThumb').src = product.images[0].thumb;
+    document.getElementById('modalProductThumb').alt = product.title;
+    document.getElementById('modalProductName').textContent = product.title;
+    document.getElementById('modalProductIdBadge').textContent = `ID: ${product.id}`;
+    document.getElementById('modalProductProveedor').textContent = `Proveedor: ${product.proveedorNombre}`;
+
+    const variationSelect = document.getElementById('variationSelect');
+    variationSelect.innerHTML = product.variants.map((v, idx) => {
+      const plainDesc = v.desc.replace(/<[^>]+>/g, '');
+      return `<option value="${idx}">${plainDesc}</option>`;
+    }).join('');
+    variationSelect.selectedIndex = 0;
+
+    applySelectedVariant();
+  }
+
+  function applySelectedVariant() {
+    const idx = parseInt(document.getElementById('variationSelect').value || '0', 10);
+    const variant = currentProduct.variants[idx];
+
+    document.getElementById('modalProviderPrice').textContent = formatCurrency(variant.proveedor);
+    document.getElementById('salePriceInput').value = variant.proveedor.toLocaleString('es-CO');
+
+    document.getElementById('summaryProductName').textContent = `${currentProduct.title} (1)`;
+    document.getElementById('summaryProductColor').textContent = variant.desc.replace(/<[^>]+>/g, '');
+    document.getElementById('summaryProductPrice').textContent = formatCurrency(variant.proveedor);
+
+    recalcSummary();
+  }
+
+  function onVariationChange() {
+    applySelectedVariant();
+  }
+
+  const thumbs = () => Array.from(document.querySelectorAll('.thumb'));
+
+  function selectThumb(el) {
+    thumbs().forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('mainProductImage').src = el.dataset.src;
+    document.getElementById('mainImageLabel').textContent = `${currentProduct.title} — ${el.dataset.label}`;
+  }
+
+  function shiftThumb(dir) {
+    const list = thumbs();
+    const currentIdx = list.findIndex(t => t.classList.contains('active'));
+    const nextIdx = (currentIdx + dir + list.length) % list.length;
+    selectThumb(list[nextIdx]);
+  }
+
+  function onSolicitarMuestra() {
+    document.getElementById('sampleModalOverlay').classList.add('active');
+
+    const saved = loadClientInfo();
+    if (saved) {
+      fillClientForm(saved);
+      showClientSummary(saved);
+    } else {
+      showClientForm();
+    }
+    recalcSummary();
+    updateSubmitState();
+  }
+
+  // ───────── Información del cliente: se guarda para no volver a pedirla ─────────
+  const CLIENT_INFO_KEY = 'sampleClientInfo';
+
+  function collectClientInfo() {
+    return {
+      nombres: document.getElementById('nombresInput').value.trim(),
+      apellidos: document.getElementById('apellidosInput').value.trim(),
+      telefono: document.getElementById('telefonoInput').value.trim(),
+      departamento: document.getElementById('departmentSelect').value,
+      ciudad: document.getElementById('citySelect').value,
+      direccion: document.getElementById('direccionInput').value.trim(),
+      correo: document.getElementById('correoInput').value.trim(),
+      tienda: document.getElementById('tiendaSelect').value,
+    };
+  }
+
+  function saveClientInfo() {
+    localStorage.setItem(CLIENT_INFO_KEY, JSON.stringify(collectClientInfo()));
+  }
+
+  function loadClientInfo() {
+    try {
+      const raw = localStorage.getItem(CLIENT_INFO_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Solo para demos/pruebas: simula "primera vez" borrando la info del cliente guardada en este navegador.
+  function resetSavedClientInfo() {
+    localStorage.removeItem(CLIENT_INFO_KEY);
+    localStorage.removeItem('sampleTourCompleted');
+
+    ['nombresInput', 'apellidosInput', 'telefonoInput', 'direccionInput', 'correoInput'].forEach((id) => {
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('departmentSelect').value = '';
+    onDepartmentChange();
+    document.getElementById('tiendaSelect').value = '';
+
+    showClientForm();
+    updateSubmitState();
+    showToast('Datos guardados del cliente y del tour eliminados');
+  }
+
+  function fillClientForm(info) {
+    document.getElementById('nombresInput').value = info.nombres || '';
+    document.getElementById('apellidosInput').value = info.apellidos || '';
+    document.getElementById('telefonoInput').value = info.telefono || '';
+    document.getElementById('direccionInput').value = info.direccion || '';
+    document.getElementById('correoInput').value = info.correo || '';
+    document.getElementById('tiendaSelect').value = info.tienda || '';
+
+    if (info.departamento) {
+      document.getElementById('departmentSelect').value = info.departamento;
+      onDepartmentChange();
+      if (info.ciudad) {
+        document.getElementById('citySelect').value = info.ciudad;
+        quoteFreightForCity();
+      }
+    }
+  }
+
+  function renderClientSummary(info) {
+    document.getElementById('summaryClientName').textContent = `${info.nombres} ${info.apellidos}`.trim();
+    document.getElementById('summaryClientPhone').textContent = `🇨🇴 +57 ${info.telefono}`;
+    document.getElementById('summaryClientAddress').textContent = `${info.direccion}, ${info.ciudad}, ${info.departamento}`;
+    document.getElementById('summaryClientEmail').textContent = info.correo;
+  }
+
+  function showClientSummary(info) {
+    renderClientSummary(info);
+    document.getElementById('clientFormFields').style.display = 'none';
+    document.getElementById('clientSummaryView').style.display = 'block';
+  }
+
+  function showClientForm() {
+    document.getElementById('clientFormFields').style.display = '';
+    document.getElementById('clientSummaryView').style.display = 'none';
+  }
+
+  function editClientInfo() {
+    showClientForm();
+    updateSubmitState();
+  }
+
+  // ───────── Departamentos y ciudades de Colombia ─────────
+  const COLOMBIA_LOCATIONS = {
+    "Amazonas": ["Leticia", "Puerto Nariño"],
+    "Antioquia": ["Medellín", "Bello", "Itagüí", "Envigado", "Rionegro", "Apartadó", "Turbo", "Caucasia", "Sabaneta", "Copacabana"],
+    "Arauca": ["Arauca", "Saravena", "Tame", "Arauquita"],
+    "Atlántico": ["Barranquilla", "Soledad", "Malambo", "Sabanalarga", "Puerto Colombia", "Baranoa"],
+    "Bogotá D.C.": ["Bogotá"],
+    "Bolívar": ["Cartagena", "Magangué", "Turbaco", "Arjona", "El Carmen de Bolívar", "Mompóx"],
+    "Boyacá": ["Tunja", "Duitama", "Sogamoso", "Chiquinquirá", "Paipa", "Villa de Leyva"],
+    "Caldas": ["Manizales", "Villamaría", "Chinchiná", "La Dorada", "Riosucio"],
+    "Caquetá": ["Florencia", "San Vicente del Caguán", "Puerto Rico"],
+    "Casanare": ["Yopal", "Aguazul", "Villanueva", "Tauramena"],
+    "Cauca": ["Popayán", "Santander de Quilichao", "Puerto Tejada", "El Bordo"],
+    "Cesar": ["Valledupar", "Aguachica", "Codazzi", "Bosconia"],
+    "Chocó": ["Quibdó", "Istmina", "Condoto"],
+    "Córdoba": ["Montería", "Lorica", "Cereté", "Sahagún", "Planeta Rica"],
+    "Cundinamarca": ["Soacha", "Chía", "Zipaquirá", "Facatativá", "Fusagasugá", "Girardot", "Mosquera", "Madrid"],
+    "Guainía": ["Inírida"],
+    "Guaviare": ["San José del Guaviare"],
+    "Huila": ["Neiva", "Pitalito", "Garzón", "La Plata"],
+    "La Guajira": ["Riohacha", "Maicao", "Uribia", "Fonseca"],
+    "Magdalena": ["Santa Marta", "Ciénaga", "Fundación", "El Banco"],
+    "Meta": ["Villavicencio", "Acacías", "Granada", "Puerto López"],
+    "Nariño": ["Pasto", "Tumaco", "Ipiales", "Túquerres"],
+    "Norte de Santander": ["Cúcuta", "Ocaña", "Pamplona", "Villa del Rosario"],
+    "Putumayo": ["Mocoa", "Puerto Asís", "Orito"],
+    "Quindío": ["Armenia", "Calarcá", "Montenegro", "La Tebaida"],
+    "Risaralda": ["Pereira", "Dosquebradas", "Santa Rosa de Cabal"],
+    "San Andrés y Providencia": ["San Andrés", "Providencia"],
+    "Santander": ["Bucaramanga", "Floridablanca", "Girón", "Piedecuesta", "Barrancabermeja", "San Gil"],
+    "Sucre": ["Sincelejo", "Corozal", "Sampués"],
+    "Tolima": ["Ibagué", "Espinal", "Melgar", "Honda", "Líbano"],
+    "Valle del Cauca": ["Cali", "Palmira", "Buenaventura", "Tuluá", "Cartago", "Buga", "Yumbo", "Jamundí"],
+    "Vaupés": ["Mitú"],
+    "Vichada": ["Puerto Carreño"],
+  };
+
+  function populateDepartments() {
+    const select = document.getElementById('departmentSelect');
+    Object.keys(COLOMBIA_LOCATIONS).sort((a, b) => a.localeCompare(b, 'es')).forEach((dept) => {
+      const opt = document.createElement('option');
+      opt.value = dept;
+      opt.textContent = dept;
+      select.appendChild(opt);
+    });
+  }
+
+  function onDepartmentChange() {
+    const dept = document.getElementById('departmentSelect').value;
+    const citySelect = document.getElementById('citySelect');
+    citySelect.innerHTML = '';
+
+    if (!dept) {
+      citySelect.disabled = true;
+      citySelect.innerHTML = '<option value="">Selecciona un departamento primero</option>';
+      quoteFreightForCity();
+      updateSubmitState();
+      return;
+    }
+
+    citySelect.disabled = false;
+    const placeholder = document.createElement('option');
+    placeholder.value = '';
+    placeholder.textContent = 'Ciudad';
+    citySelect.appendChild(placeholder);
+
+    COLOMBIA_LOCATIONS[dept].forEach((city) => {
+      const opt = document.createElement('option');
+      opt.value = city;
+      opt.textContent = city;
+      citySelect.appendChild(opt);
+    });
+
+    quoteFreightForCity(); // reinicia la cotización: aún no hay ciudad seleccionada
+    updateSubmitState();
+  }
+
+  renderProduct(PRODUCTS[getSelectedProductSlug()]);
+  populateDepartments();
+  document.getElementById('citySelect').addEventListener('change', quoteFreightForCity);
+
+  // ───────── Cotización simulada de fletes por ciudad ─────────
+  function hashString(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = (hash * 31 + str.charCodeAt(i)) >>> 0;
+    }
+    return hash;
+  }
+
+  function quoteFreightForCity() {
+    const dept = document.getElementById('departmentSelect').value;
+    const city = document.getElementById('citySelect').value;
+    const banner = document.getElementById('carrierWarningBanner');
+    const rows = document.querySelectorAll('.carrier-row');
+
+    if (!dept || !city) {
+      banner.style.display = 'flex';
+      rows.forEach((row) => {
+        row.querySelector('.carrier-price').textContent = '$ --';
+        row.querySelector('.carrier-price').classList.remove('quoted');
+      });
+      recalcSummary();
+      return;
+    }
+
+    banner.style.display = 'none';
+
+    rows.forEach((row) => {
+      const carrierName = row.querySelector('.carrier-name').textContent;
+      const seed = hashString(city + carrierName);
+      const price = 8000 + (seed % 11) * 1000; // rango $8.000 - $18.000, determinístico por ciudad+transportadora
+      const priceEl = row.querySelector('.carrier-price');
+      priceEl.textContent = `$ ${price.toLocaleString('es-CO')}`;
+      priceEl.dataset.value = price;
+      priceEl.classList.add('quoted');
+    });
+    recalcSummary();
+  }
+
+  // ───────── Resumen de la orden: se recalcula según lo seleccionado ─────────
+  function parseCurrency(text) {
+    const digits = (text || '').replace(/[^0-9]/g, '');
+    return digits ? parseInt(digits, 10) : 0;
+  }
+
+  function formatCurrency(value) {
+    return `$ ${value.toLocaleString('es-CO')}`;
+  }
+
+  function recalcSummary() {
+    const providerPrice = parseCurrency(document.getElementById('salePriceInput').value);
+    const checkedCarrier = document.querySelector('.carrier-row input[type="radio"]:checked');
+    const shippingPrice = checkedCarrier ? parseCurrency(checkedCarrier.closest('.carrier-row').querySelector('.carrier-price').textContent) : 0;
+    const commission = 0;
+    const total = providerPrice + shippingPrice + commission;
+
+    document.getElementById('summaryProviderPrice').textContent = formatCurrency(providerPrice);
+    document.getElementById('summaryShippingPrice').textContent = formatCurrency(shippingPrice);
+    document.getElementById('summaryCommission').textContent = formatCurrency(commission);
+    document.getElementById('summaryTotal').textContent = formatCurrency(total);
+  }
+
+  function closeSampleModal() {
+    document.getElementById('sampleModalOverlay').classList.remove('active');
+  }
+
+  document.getElementById('sampleModalOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeSampleModal();
+  });
+
+  document.querySelectorAll('.carrier-row').forEach((row) => {
+    row.addEventListener('click', () => {
+      document.querySelectorAll('.carrier-row').forEach((r) => r.style.borderColor = '');
+      row.style.borderColor = 'var(--orange-primary)';
+      row.querySelector('input[type="radio"]').checked = true;
+      recalcSummary();
+      updateSubmitState();
+    });
+  });
+
+  document.querySelectorAll('.payment-mode-opt:not(.disabled)').forEach((opt) => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.payment-mode-opt').forEach((o) => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+  });
+
+  // ───────── Validación: habilita "Solicitar muestra" solo con el formulario completo ─────────
+  function isFormComplete() {
+    const required = ['nombresInput', 'apellidosInput', 'telefonoInput', 'direccionInput', 'correoInput'];
+    const filled = required.every((id) => document.getElementById(id).value.trim() !== '');
+    const depto = document.getElementById('departmentSelect').value;
+    const ciudad = document.getElementById('citySelect').value;
+    const carrier = document.querySelector('.carrier-row input[type="radio"]:checked');
+    return filled && !!depto && !!ciudad && !!carrier;
+  }
+
+  function updateSubmitState() {
+    document.getElementById('btnSubmitSample').disabled = !isFormComplete();
+
+    const nombresInput = document.getElementById('nombresInput');
+    const hasNombre = nombresInput.value.trim() !== '';
+    nombresInput.classList.toggle('invalid', !hasNombre);
+    document.getElementById('nombreError').style.display = hasNombre ? 'none' : 'flex';
+  }
+
+  ['nombresInput', 'apellidosInput', 'telefonoInput', 'direccionInput', 'correoInput'].forEach((id) => {
+    document.getElementById(id).addEventListener('input', updateSubmitState);
+  });
+  document.getElementById('tiendaSelect').addEventListener('change', updateSubmitState);
+  document.getElementById('citySelect').addEventListener('change', updateSubmitState);
+
+  recalcSummary();
+  updateSubmitState();
+
+  // ───────── Envío de la solicitud ─────────
+  function submitSampleRequest() {
+    if (document.getElementById('btnSubmitSample').disabled) return;
+    saveClientInfo();
+    showToast('Pedido realizado');
+    closeSampleModal();
+  }
+
+  function showToast(message) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<i class="ti ti-circle-check"></i> ${message}`;
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+
+  /* ──────────────────────────────────────────────────────────────
+     TOUR GUIADO: primera solicitud de muestra (spotlight + tooltip)
+     Empieza justo aquí, en el botón "Solicitar muestra" — el
+     catálogo solo invita a elegir un producto libremente, sin
+     forzar un paso guiado allá.
+  ────────────────────────────────────────────────────────────── */
+  const SAMPLE_TOUR_TOTAL = 5;
+  const sampleTourSteps = [
+    { globalStep: 1, target: '#btnSolicitarMuestra', placement: 'top',
+      title: 'Pide tu primera muestra',
+      text: 'Al solicitar una muestra te conviertes en tu propio cliente: es una autocompra que te permite vivir de principio a fin el proceso logístico de Dropi, antes de vendérselo a alguien más.',
+      buttonLabel: 'Solicitar muestra',
+      action: () => {
+        onSolicitarMuestra();
+        sampleTourIndex++;
+        setTimeout(renderSampleTourStep, 380);
+      } },
+    { globalStep: 2, target: '#clientInfoSection', placement: 'right', noBack: true,
+      title: 'Tu información',
+      text: 'Completa con tu información. Se guarda automáticamente para que no tengas que repetirla la próxima vez que le envíes una muestra.' },
+    { globalStep: 3, target: '.carrier-list', placement: 'left', noBack: true,
+      title: 'Elige la transportadora',
+      text: 'Selecciona con qué transportadora se enviará la muestra. El costo se cotiza según tu ciudad.' },
+    { globalStep: 4, target: '.summary-totals', placement: 'left', noBack: true,
+      title: 'Resumen del pedido',
+      text: 'Aquí revisas el precio del proveedor, el envío y el total antes de confirmar la solicitud.' },
+    { globalStep: 5, target: '#btnSubmitSample', placement: 'top', noBack: true,
+      title: 'Confirma tu solicitud',
+      text: 'Cuando toda la información esté completa, confirma aquí para enviar tu solicitud de muestra.' },
+  ];
+
+  let sampleTourIndex = 0;
+
+  function startSampleTour() {
+    sampleTourIndex = 0;
+    buildSampleTourChrome();
+    renderSampleTourStep();
+    window.addEventListener('resize', repositionSampleTourStep);
+  }
+
+  function buildSampleTourChrome() {
+    if (document.getElementById('tourBlocker')) return;
+    const blocker = document.createElement('div');
+    blocker.className = 'tour-blocker';
+    blocker.id = 'tourBlocker';
+    document.body.appendChild(blocker);
+
+    const spotlight = document.createElement('div');
+    spotlight.className = 'tour-spotlight';
+    spotlight.id = 'tourSpotlight';
+    document.body.appendChild(spotlight);
+
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tour-tooltip';
+    tooltip.id = 'tourTooltip';
+    document.body.appendChild(tooltip);
+  }
+
+  function renderSampleTourStep() {
+    const step = sampleTourSteps[sampleTourIndex];
+    const target = document.querySelector(step.target);
+    if (!target) { nextSampleStep(); return; }
+
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => positionSampleTourElements(target, step), 280);
+  }
+
+  function repositionSampleTourStep() {
+    if (!document.getElementById('tourSpotlight')) return;
+    const step = sampleTourSteps[sampleTourIndex];
+    const target = document.querySelector(step.target);
+    if (target) positionSampleTourElements(target, step);
+  }
+
+  function positionSampleTourElements(target, step) {
+    const rect = target.getBoundingClientRect();
+    const pad = 6;
+
+    const spotlight = document.getElementById('tourSpotlight');
+    spotlight.style.top = (rect.top - pad) + 'px';
+    spotlight.style.left = (rect.left - pad) + 'px';
+    spotlight.style.width = (rect.width + pad * 2) + 'px';
+    spotlight.style.height = (rect.height + pad * 2) + 'px';
+
+    const isLast = sampleTourIndex === sampleTourSteps.length - 1;
+    const tooltip = document.getElementById('tourTooltip');
+    tooltip.innerHTML = `
+      <div class="tour-step-count">Paso ${step.globalStep} de ${SAMPLE_TOUR_TOTAL}</div>
+      <h4>${step.title}</h4>
+      <p>${step.text}</p>
+      <div class="tour-tooltip-controls">
+        <button class="tour-skip-btn" onclick="endSampleTour()">Omitir</button>
+        <div class="tour-nav-btns">
+          ${sampleTourIndex > 0 && !step.noBack ? '<button class="tour-btn tour-btn-outline" onclick="prevSampleStep()">Atrás</button>' : ''}
+          <button class="tour-btn tour-btn-primary" id="tourPrimaryBtn">${step.buttonLabel || (isLast ? 'Listo' : 'Siguiente')}</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('tourPrimaryBtn').addEventListener('click', () => {
+      if (step.action) { step.action(); return; }
+      if (isLast) { endSampleTour(); } else { nextSampleStep(); }
+    });
+
+    const tw = 290, gap = 14;
+    const th = tooltip.offsetHeight;
+    let top, left;
+    switch (step.placement) {
+      case 'bottom': top = rect.bottom + gap; left = rect.left; break;
+      case 'top': top = rect.top - th - gap; left = rect.left; break;
+      case 'left': top = rect.top; left = rect.left - tw - gap; break;
+      default: top = rect.top; left = rect.right + gap; break;
+    }
+    left = Math.max(12, Math.min(left, window.innerWidth - tw - 12));
+    top = Math.max(12, Math.min(top, window.innerHeight - th - 12));
+    tooltip.style.top = top + 'px';
+    tooltip.style.left = left + 'px';
+  }
+
+  function nextSampleStep() {
+    if (sampleTourIndex < sampleTourSteps.length - 1) { sampleTourIndex++; renderSampleTourStep(); }
+    else endSampleTour();
+  }
+
+  function prevSampleStep() {
+    if (sampleTourIndex > 0) { sampleTourIndex--; renderSampleTourStep(); }
+  }
+
+  function endSampleTour() {
+    ['tourBlocker', 'tourSpotlight', 'tourTooltip'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    });
+    window.removeEventListener('resize', repositionSampleTourStep);
+    localStorage.setItem('sampleTourCompleted', '1');
+  }
+
+  if (!localStorage.getItem('sampleTourCompleted')) {
+    setTimeout(startSampleTour, 700);
+  }
+</script>
+</body>
+</html>

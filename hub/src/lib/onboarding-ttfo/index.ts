@@ -8,3 +8,6 @@ export * from "./cohorte";
 export * from "./pruebas";
 export * from "./alertas";
 export * from "./activacionHistorica";
+export * from "./rawData";
+export * from "./calculoCompleto";
+export * from "./texto";

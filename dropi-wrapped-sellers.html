@@ -1,0 +1,1518 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Programa Leyendas Dropi — Wrapped 2026 Oficial</title>
+<!-- Google Fonts: Chakra Petch & Rationale -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;500;600;700;800&family=Rationale&display=swap" rel="stylesheet">
+<!-- html2canvas for instant HD PNG screenshot generation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root {
+    --ink: #050209;
+    --paper: #f4f2f7;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+    
+    /* Paleta Oficial Leyendas Dropi */
+    --color-bienvenido: #EAEAEA;
+    --color-explorador: #A8B2C1;
+    --color-master: #FF8500;
+    --color-experto: #FF6A00;
+    --color-sabiovip: #FF4800;
+    --color-leyenda: #FF0000;
+    
+    font-family: 'Chakra Petch', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  html, body {
+    height: 100%;
+    background: #020104;
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+  
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #1b0c03 0%, #030107 100%);
+  }
+
+
+
+  /* Stage (iPhone frame) */
+  #stage {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    max-width: 412px;
+    max-height: 860px;
+    background: var(--ink);
+    overflow: hidden;
+    user-select: none;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8), 0 0 50px rgba(255, 72, 0, 0.25);
+    transition: all 0.5s var(--ease);
+    margin-top: 40px;
+  }
+  
+  @media(min-width: 480px) {
+    #stage {
+      border: 8px solid rgba(255, 255, 255, 0.08);
+      border-radius: 44px;
+      height: 88vh;
+    }
+    
+    #stage::before {
+      content: "";
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 110px;
+      height: 26px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 50;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.1);
+    }
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 70px 26px 90px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+    color: #fff;
+    overflow: hidden;
+    background-size: 200% 200% !important;
+    animation: gradientShift 10s ease infinite;
+    z-index: 10;
+  }
+  
+  .slide.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 30;
+  }
+  
+  @keyframes gradientShift {
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
+  }
+
+  /* Slide Backgrounds */
+  .g0 { background: radial-gradient(circle at 10% 10%, rgba(255, 133, 0, 0.3) 0%, #0d0d0d 60%, #050209 100%); }
+  .g1 { background: radial-gradient(circle at 90% 10%, rgba(255, 72, 0, 0.35) 0%, #141414 60%, #050209 100%); }
+  .g2 { background: radial-gradient(circle at 10% 90%, #FF8500 0%, #241100 60%, #050209 100%); }
+  .g3 { background: radial-gradient(circle at 90% 90%, #FF4800 0%, #2e0800 60%, #050209 100%); }
+  .g4 { background: radial-gradient(circle at 50% 10%, #FF0000 0%, #300000 60%, #050209 100%); }
+  .g5 { background: radial-gradient(circle at 50% 50%, #FF8500 0%, #2a0b00 50%, #050209 100%); }
+
+  /* Typography */
+  .kicker {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-master);
+    text-shadow: 0 0 10px rgba(255,133,0,0.3);
+    margin-bottom: 12px;
+  }
+  
+  .big {
+    font-size: clamp(40px, 12vw, 72px);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    background: linear-gradient(to right, #fff, #ffe2cc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .med {
+    font-size: clamp(24px, 7vw, 34px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  
+  .lede {
+    font-size: clamp(15px, 4.5vw, 18px);
+    font-weight: 500;
+    line-height: 1.4;
+    opacity: 0.92;
+  }
+  
+  .sub {
+    font-size: 13.5px;
+    font-weight: 400;
+    color: #e5def5;
+    margin-top: 12px;
+    line-height: 1.45;
+  }
+  
+  .accent {
+    color: var(--color-master);
+    background: rgba(255, 133, 0, 0.12);
+    padding: 0.15em 0.4em;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 133, 0, 0.2);
+    font-weight: 600;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  }
+  
+  .slide.active .reveal {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .slide.active .d1 { transition-delay: 0.1s; }
+  .slide.active .d2 { transition-delay: 0.25s; }
+  .slide.active .d3 { transition-delay: 0.4s; }
+  .slide.active .d4 { transition-delay: 0.55s; }
+
+  /* Progress bars */
+  #bars {
+    position: absolute;
+    top: 50px;
+    left: 20px;
+    right: 20px;
+    display: flex;
+    gap: 4px;
+    z-index: 50;
+  }
+  
+  @media(max-width: 479px) { #bars { top: 16px; } }
+  
+  .bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .bar > i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 0 10px #ffffff, 0 0 4px #ff8500;
+  }
+  
+  .bar.done > i {
+    width: 100% !important;
+    animation: none !important;
+  }
+
+  .bar.run > i {
+    animation: barProgress var(--dur, 6200ms) linear forwards !important;
+  }
+
+  @keyframes barProgress {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
+
+  /* Top brand row */
+  #brand {
+    position: absolute;
+    top: 60px;
+    left: 22px;
+    right: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 30;
+    color: rgba(255, 255, 255, 0.95);
+  }
+  
+  @media(max-width: 479px) { #brand { top: 28px; } }
+  
+  #brand .brand-logo-img {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 2px 14px rgba(255, 133, 0, 0.5));
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  
+  #brand .logo-wrapped {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #fff;
+    opacity: 0.85;
+  }
+
+  /* Touch Nav (occupies top 60% of stage, 0% overlap with bottom buttons) */
+  .nav {
+    position: absolute;
+    top: 60px;
+    height: 55%;
+    width: 35%;
+    z-index: 40;
+    cursor: pointer;
+    pointer-events: auto;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav.left { left: 0; }
+  .nav.right { right: 0; width: 65%; }
+
+  /* Insignia Official Images Container */
+  .insignia-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 8px 0;
+    gap: 6px;
+  }
+  
+  .insignia-img-official {
+    width: 155px;
+    height: 155px;
+    object-fit: contain;
+    animation: floatInsignia 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 25px rgba(255, 133, 0, 0.65));
+    transition: all 0.4s var(--ease);
+  }
+
+  @keyframes floatInsignia {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-8px) scale(1.03); }
+  }
+
+  /* Metric cards */
+  .metric-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 16px 18px;
+    margin-top: 14px;
+    backdrop-filter: blur(12px);
+  }
+
+  /* Ring */
+  .ring {
+    width: 170px;
+    height: 170px;
+    margin: 15px auto 10px;
+    position: relative;
+  }
+  .ring svg { transform: rotate(-90deg); }
+  .ring .val {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    background: linear-gradient(135deg, #fff, var(--color-master));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .ringtrack { stroke: rgba(255, 255, 255, 0.08); }
+  .ringbar {
+    stroke: url(#ringGrad);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1.4s var(--ease) 0.3s;
+    filter: drop-shadow(0 0 8px rgba(255, 133, 0, 0.5));
+  }
+
+  /* Goal bar */
+  .goal { margin-top: 18px; }
+  .goal .track {
+    height: 16px;
+    border-radius: 99px;
+    background: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .goal .track > i {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--color-master), var(--color-leyenda));
+    transition: width 1.4s var(--ease) 0.4s;
+  }
+  .goal .lbl {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 800;
+    color: #e5def5;
+  }
+
+  /* Buttons */
+  .cta {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    z-index: 100;
+    pointer-events: auto;
+  }
+  .btn {
+    border: none;
+    border-radius: 16px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.2s var(--ease);
+    position: relative;
+    z-index: 101;
+    pointer-events: auto;
+    user-select: none;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn.primary {
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+  .btn.ghost {
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+  }
+
+
+
+  /* Mobile Fullscreen & Responsiveness for iOS & Android */
+  @media(max-width: 479px) {
+    body {
+      background: #050209;
+      justify-content: flex-start;
+    }
+    #stage {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100dvh;
+      margin-top: 0 !important;
+      border-radius: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    #bars {
+      top: calc(env(safe-area-inset-top, 0px) + 14px) !important;
+    }
+
+    #brand {
+      top: calc(env(safe-area-inset-top, 0px) + 26px) !important;
+    }
+
+    .slide {
+      padding: calc(env(safe-area-inset-top, 0px) + 60px) 20px calc(env(safe-area-inset-bottom, 0px) + 30px) !important;
+    }
+
+    .insignia-img-official {
+      max-width: 38vw;
+      max-height: 140px;
+    }
+
+    .metric .big {
+      font-size: clamp(38px, 12vw, 56px) !important;
+    }
+
+    .share-modal-content {
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px) !important;
+    }
+  }
+
+  /* Compact Viewports (iPhone SE / Short Android devices <= 680px height) */
+  @media(max-height: 680px) and (max-width: 479px) {
+    .insignia-img-official {
+      max-width: 30vw;
+      max-height: 110px;
+    }
+    .kicker {
+      font-size: 10.5px;
+      margin-bottom: 4px;
+    }
+    .med {
+      font-size: 18px !important;
+    }
+    .sub, .lede {
+      font-size: 12px !important;
+      margin-top: 8px !important;
+    }
+    .cta {
+      margin-top: 12px;
+      gap: 8px;
+    }
+    .btn {
+      padding: 12px;
+      font-size: 13.5px;
+    }
+  }
+
+  /* Share Bottom Sheet Modal */
+  .share-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease), visibility 0.3s;
+  }
+  .share-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  .share-modal-content {
+    width: 100%;
+    max-width: 440px;
+    background: #0e071c;
+    border: 1px solid rgba(255, 133, 0, 0.35);
+    border-radius: 28px 28px 0 0;
+    padding: 20px 22px 34px;
+    color: #fff;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.85);
+    transform: translateY(100%);
+    transition: transform 0.35s var(--ease);
+  }
+  .share-modal-overlay.active .share-modal-content {
+    transform: translateY(0);
+  }
+  .share-modal-handle {
+    width: 42px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 99px;
+    margin: 0 auto 16px;
+  }
+  .share-modal-title {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--color-master);
+    text-align: center;
+  }
+  .share-modal-sub {
+    font-size: 12.5px;
+    color: #b5a9cf;
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 16px;
+  }
+  .share-preview-card {
+    background: linear-gradient(135deg, rgba(255, 133, 0, 0.16) 0%, rgba(255, 0, 0, 0.1) 100%);
+    border: 1px solid rgba(255, 133, 0, 0.3);
+    border-radius: 16px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .sp-badge-img img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(255, 133, 0, 0.5));
+  }
+  .sp-name { font-size: 14.5px; font-weight: 800; color: #fff; }
+  .sp-rank { font-size: 12px; font-weight: 700; color: var(--color-master); margin-top: 1px; }
+  .sp-stats { font-size: 11px; color: #d0c4eb; margin-top: 2px; }
+
+  .share-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .share-opt-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    color: #fff;
+    font-family: inherit;
+    text-align: left;
+    transition: all 0.2s var(--ease);
+  }
+  .share-opt-btn:active {
+    transform: scale(0.96);
+  }
+  .share-opt-btn.whatsapp { border-color: rgba(37, 211, 102, 0.4); background: rgba(37, 211, 102, 0.08); }
+  .share-opt-btn.instagram { border-color: rgba(225, 48, 108, 0.4); background: rgba(225, 48, 108, 0.08); }
+  .share-opt-btn.facebook { border-color: rgba(24, 119, 242, 0.4); background: rgba(24, 119, 242, 0.08); }
+  .share-opt-btn.native { border-color: rgba(255, 133, 0, 0.4); background: rgba(255, 133, 0, 0.08); }
+
+  .opt-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .opt-svg { display: block; }
+  .opt-name { display: block; font-size: 13px; font-weight: 800; }
+  .opt-desc { display: block; font-size: 10px; opacity: 0.75; color: #d0c4eb; margin-top: 1px; }
+
+  .share-close-btn {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
+    padding: 13px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .share-toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: rgba(16, 185, 129, 0.95);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 99px;
+    font-size: 13px;
+    font-weight: 800;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s var(--ease);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  .share-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Offscreen Poster container for HD 9:16 story export with Instagram/WhatsApp Safe Zones */
+  .export-poster-hidden {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    width: 440px;
+    height: 780px;
+    background: radial-gradient(circle at 50% 30%, #280e02 0%, #0c0517 70%, #030107 100%);
+    border: 2px solid rgba(255, 133, 0, 0.45);
+    box-sizing: border-box;
+    /* SAFE ZONES: 80px Top (avoids story headers), 125px Bottom (avoids reply/caption input), 36px Sides */
+    padding: 80px 36px 125px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    font-family: 'Chakra Petch', -apple-system, sans-serif;
+  }
+  .ep-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .ep-logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    filter: drop-shadow(0 4px 18px rgba(255, 133, 0, 0.5));
+    transform: translateZ(0);
+  }
+  .ep-edition {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--color-master);
+    text-transform: uppercase;
+  }
+  .ep-seller-box {
+    text-align: center;
+  }
+  .ep-seller-kicker {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    color: #a8b2c1;
+  }
+  .ep-seller-name {
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    margin-top: 4px;
+    text-shadow: 0 0 20px rgba(255, 133, 0, 0.4);
+  }
+  .ep-insignia-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 6px 0;
+  }
+  .ep-insignia-img {
+    width: 155px;
+    height: 155px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 35px rgba(255, 133, 0, 0.6));
+  }
+  .ep-rank-title {
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--color-master);
+    margin-top: 8px;
+  }
+  .ep-quote-box {
+    background: linear-gradient(135deg, rgba(255, 133, 0, 0.18) 0%, rgba(255, 0, 0, 0.12) 100%);
+    border: 1px solid rgba(255, 133, 0, 0.35);
+    border-radius: 14px;
+    padding: 10px 16px;
+    text-align: center;
+    width: 100%;
+    margin: 4px 0;
+  }
+  .ep-quote-text {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
+  }
+  .ep-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    width: 100%;
+  }
+  .ep-stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 133, 0, 0.3);
+    border-radius: 16px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .ep-stat-val {
+    font-size: 23px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .ep-stat-lbl {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #d0c4eb;
+    margin-top: 2px;
+  }
+  .ep-footer {
+    text-align: center;
+  }
+  .ep-footer-tag {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--color-master);
+    letter-spacing: 0.06em;
+  }
+  .ep-footer-sub {
+    font-size: 10px;
+    color: #a8b2c1;
+    margin-top: 2px;
+  }
+
+  /* Particles */
+  #fx { position: absolute; inset: 0; pointer-events: none; z-index: 25; overflow: hidden; }
+  .confetti {
+    position: absolute;
+    top: -16px;
+    width: 7px;
+    height: 12px;
+    border-radius: 2px;
+    opacity: 0.9;
+    animation: fall linear forwards;
+  }
+  @keyframes fall { to { transform: translateY(105vh) rotate(540deg); opacity: 0.8; } }
+</style>
+</head>
+<body>
+
+<div id="stage" aria-label="Programa Leyendas Dropi Wrapped 2026">
+  <div id="bars"></div>
+  <div id="brand">
+    <img class="brand-logo-img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Programa Leyendas Dropi Logo" crossorigin="anonymous">
+    <span class="logo-wrapped" id="sellerBadgeTop">Leyendas 2026</span>
+  </div>
+
+  <div id="fx"></div>
+
+  <!-- SVG Gradient definition -->
+  <svg style="width:0; height:0; position:absolute;">
+    <defs>
+      <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FF8500" />
+        <stop offset="100%" stop-color="#FF0000" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- SLIDE 0: INTRO / INSIGNIA RECURSO GRÁFICO OFICIAL -->
+  <section class="slide g0 active" id="slide0">
+    <div class="kicker reveal d1" id="s0_kicker">¡Hola! Tu Wrapped 2026</div>
+    <div class="insignia-container reveal d2">
+      <!-- Recurso gráfico oficial del Playbook de Leyendas Dropi -->
+      <img class="insignia-img-official" id="s0_insignia_img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/1.png" alt="Insignia Oficial Leyendas">
+      <div class="med" style="font-size: 22px; margin-top: 8px;" id="s0_rank">...</div>
+    </div>
+    <div class="sub reveal d3" style="text-align:center; max-width: 310px; margin: 10px auto 0;" id="s0_sub">
+      Bienvenido a tu retrospectiva oficial en el programa <strong>Leyendas Dropi (v7.0)</strong>. Repasemos tu desempeño acumulado.
+    </div>
+  </section>
+
+  <!-- SLIDE 1: ÓRDENES TOTALES / DROPS -->
+  <section class="slide g1" id="slide1">
+    <div class="kicker reveal d1">Drops Totales Completados</div>
+    <div class="metric"><div class="big up" id="s1_orders" data-dur="1500">0</div><span class="unit reveal d3" style="margin-left: 6px; font-size: 22px; font-weight:800;">drops</span></div>
+    <div class="lede reveal d3" style="margin-top:16px" id="s1_lede">
+      Has acumulado <span class="accent" id="s1_accent">...</span> drops en la plataforma. 1 orden completada = 1 drop acumulado permanentemente en tu saldo de Leyendas.
+    </div>
+    <div class="metric-card reveal d4">
+      <div style="font-size: 11px; font-weight:800; color: var(--color-master); text-transform: uppercase;">Mecánica del Nivel</div>
+      <div style="font-size: 13.5px; font-weight: 600; color: #fff; margin-top: 4px;" id="s1_status">...</div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2: INGRESOS TOTALES (GMV) -->
+  <section class="slide g2" id="slide2">
+    <div class="kicker reveal d1">Facturación Bruta (COD)</div>
+    <div class="metric"><span class="med up" style="opacity:0.9; margin-right: 4px;">$</span><div class="big up" id="s2_income" data-dur="1600">0</div><span class="unit reveal d3" style="margin-left: 6px; font-size: 20px; font-weight:800;" id="s2_unit">COP</span></div>
+    <div class="lede reveal d3" style="margin-top:16px" id="s2_lede">
+      Valor bruto transaccionado mediante Pago Contra Entrega (COD). Consolidaste tu operación comercial sin incurrir en costos de inventario propio.
+    </div>
+    <div class="metric-card reveal d4" id="s2_card">
+      <div style="font-size: 11px; font-weight:800; color: #ffd23f; text-transform: uppercase;">Escala Operativa</div>
+      <div style="font-size: 13.5px; font-weight:600; color: #fff; margin-top: 4px;" id="s2_detail">...</div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: PRODUCTO TOP -->
+  <section class="slide g3" id="slide3">
+    <div class="kicker reveal d1">Tu Producto #1 Más Vendido</div>
+    <div class="med reveal d2" style="margin-bottom: 8px; font-size: 22px;" id="s3_product">...</div>
+    <div class="metric-card reveal d3">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-size: 11px; font-weight:800; color: var(--color-master);">ID PRODUCTO</span>
+        <span style="font-size: 12px; font-weight:700; color:#fff;" id="s3_prod_id">#...</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+        <span style="font-size: 11px; font-weight:800; color: var(--color-master);">DROPS COMPLETADOS</span>
+        <span style="font-size: 15px; font-weight:800; color:#fff;" id="s3_prod_orders">0</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+        <span style="font-size: 11px; font-weight:700; color: #e5def5;">CONCENTRACIÓN DE VENTA</span>
+        <span style="font-size: 12px; font-weight:800; color: #ffd23f;" id="s3_prod_pct">0% del total</span>
+      </div>
+    </div>
+    <div class="sub reveal d4" style="text-align:center;" id="s3_sub">
+      Este producto representó tu mayor acelerador de volumen en la plataforma.
+    </div>
+  </section>
+
+  <!-- SLIDE 4: EFECTIVIDAD LOGÍSTICA -->
+  <section class="slide g4" id="slide4">
+    <div class="kicker reveal d1">Efectividad Logística (COD)</div>
+    <div class="ring pop">
+      <svg width="170" height="170" viewBox="0 0 170 170">
+        <circle class="ringtrack" cx="85" cy="85" r="74" fill="none" stroke-width="14"/>
+        <circle id="ringCircle" class="ringbar" cx="85" cy="85" r="74" fill="none" stroke-width="14"
+                stroke-dasharray="465" stroke-dashoffset="465"/>
+      </svg>
+      <div class="val"><span id="s4_eff">0</span>%</div>
+    </div>
+    <div class="lede reveal d3" style="text-align:center; margin-top: 10px;" id="s4_lede">
+      Tasa de entregas confirmadas exitosamente sobre el total generado.
+    </div>
+    <div class="metric-card reveal d4" style="text-align:center;" id="s4_card">
+      ...
+    </div>
+  </section>
+
+  <!-- SLIDE 5: RESUMEN Y ASCENSO CON INSIGNIA OFICIAL -->
+  <section class="slide g5" id="slide5">
+    <div class="kicker reveal d1">Tu Posición en Leyendas Dropi</div>
+    <div class="insignia-container reveal d2">
+      <img class="insignia-img-official" id="s5_insignia_img" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/1.png" alt="Insignia Oficial Leyendas" style="width:125px; height:125px;">
+      <div class="med" style="font-size: 20px; margin-top: 6px;" id="s5_rank">...</div>
+    </div>
+    <div class="goal reveal d3">
+      <div class="track"><i id="goalbar"></i></div>
+      <div class="lbl"><span id="s5_goal_curr">0 de 0</span><span id="s5_goal_rem">...</span></div>
+    </div>
+    <div class="sub reveal d3" style="font-size: 12.5px; text-align:center; margin-top: 8px; line-height: 1.45;" id="s5_sub">
+      ¡Sigue escalando! En el Programa Leyendas, cruzar el umbral de <strong>100 órdenes mensuales</strong> reduce la cancelación en <strong>82%</strong> y desbloquea beneficios exclusivos.
+    </div>
+    <div class="cta reveal d4">
+      <button class="btn primary" onclick="share(event)" ontouchend="share(event)" type="button">Compartir Estatus Leyendas</button>
+      <button class="btn ghost" onclick="restart(event)" ontouchend="restart(event)" type="button">Ver de nuevo</button>
+    </div>
+  </section>
+
+  <!-- Touch Nav -->
+  <div class="nav left" onclick="prev()"></div>
+  <div class="nav right" onclick="next()"></div>
+</div>
+
+<!-- Dedicated High-Res Export Poster Canvas (SAFE ZONE DESIGN FOR INSTAGRAM & WHATSAPP STORIES) -->
+<div id="exportPoster" class="export-poster-hidden">
+  <div class="ep-header">
+    <img class="ep-logo" src="https://cdropi.github.io/Playbook-Leyendas/Resource/logo-leyendas-h.png" alt="Programa Leyendas Dropi Logo" crossorigin="anonymous">
+    <div class="ep-edition">RETROSPECTIVA OFICIAL 2026</div>
+  </div>
+
+  <div class="ep-seller-box">
+    <div class="ep-seller-kicker">MI ESTATUS EN LEYENDAS</div>
+    <div class="ep-seller-name" id="ep_name">Seller</div>
+  </div>
+
+  <div class="ep-insignia-box">
+    <img class="ep-insignia-img" id="ep_insignia" src="https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/1.png" alt="Insignia Leyendas">
+    <div class="ep-rank-title" id="ep_rank">Nivel Leyendas</div>
+  </div>
+
+  <div class="ep-quote-box">
+    <div class="ep-quote-text" id="ep_quote">"¡Consolidé mis drops en el Programa Leyendas Dropi!"</div>
+  </div>
+
+  <div class="ep-stats-grid">
+    <div class="ep-stat-card">
+      <div class="ep-stat-val" id="ep_drops">0</div>
+      <div class="ep-stat-lbl">DROPS COMPLETADOS</div>
+    </div>
+    <div class="ep-stat-card">
+      <div class="ep-stat-val" id="ep_eff">0%</div>
+      <div class="ep-stat-lbl">EFECTIVIDAD LOGÍSTICA</div>
+    </div>
+  </div>
+
+  <div class="ep-footer">
+    <div class="ep-footer-tag">👑 MIEMBRO OFICIAL LEYENDAS DROPI</div>
+    <div class="ep-footer-sub">Plataforma #1 de Dropshipping en Latinoamérica</div>
+  </div>
+</div>
+
+<!-- Share Bottom Sheet Modal -->
+<div id="shareModal" class="share-modal-overlay" onclick="closeShareModal(event)">
+  <div class="share-modal-content" onclick="event.stopPropagation()">
+    <div class="share-modal-handle"></div>
+    <div class="share-modal-title">👑 Compartir tu Estatus Leyendas</div>
+    <div class="share-modal-sub">¿Por dónde deseas publicar tu logro de hoy?</div>
+
+    <div class="share-preview-card">
+      <div class="sp-badge-img">
+        <img id="modalInsigniaImg" src="" alt="Insignia Leyendas">
+      </div>
+      <div>
+        <div class="sp-name" id="modalSellerName">Seller</div>
+        <div class="sp-rank" id="modalSellerRank">Nivel Leyendas</div>
+        <div class="sp-stats" id="modalSellerStats">0 drops acumulados</div>
+      </div>
+    </div>
+
+    <div class="share-options-grid">
+      <button class="share-opt-btn whatsapp" onclick="shareTo('whatsapp')" type="button">
+        <div class="opt-icon-wrapper">
+          <svg class="opt-svg" viewBox="0 0 24 24" width="28" height="28" fill="none">
+            <path d="M12 2C6.48 2 2 6.48 2 12C2 13.81 2.49 15.5 3.35 16.97L2.05 21.72L6.91 20.45C8.36 21.27 10.12 21.75 12 21.75C17.52 21.75 22 17.27 22 11.75C22 6.23 17.52 2 12 2Z" fill="#25D366"/>
+            <path d="M17.47 14.38C17.24 14.27 16.11 13.71 15.9 13.63C15.69 13.55 15.54 13.51 15.39 13.74C15.24 13.97 14.81 14.47 14.68 14.63C14.55 14.78 14.42 14.8 14.19 14.69C13.96 14.58 12.99 14.26 11.84 13.23C10.94 12.43 10.33 11.44 10.16 11.14C9.99 10.84 10.14 10.68 10.26 10.56C10.36 10.46 10.49 10.29 10.6 10.16C10.71 10.03 10.75 9.93 10.83 9.77C10.91 9.61 10.87 9.47 10.81 9.35C10.75 9.23 10.3 8.12 10.11 7.66C9.93 7.21 9.75 7.27 9.61 7.26H9.18C9.03 7.26 8.78 7.32 8.57 7.55C8.36 7.78 7.77 8.33 7.77 9.46C7.77 10.59 8.59 11.68 8.71 11.84C8.83 12 10.33 14.3 12.63 15.29C13.18 15.53 13.6 15.67 13.94 15.78C14.49 15.95 14.99 15.93 15.39 15.87C15.83 15.8 16.74 15.31 16.93 14.78C17.12 14.25 17.12 13.8 17.06 13.7C17 13.6 17.7 13.49 17.47 14.38Z" fill="white"/>
+          </svg>
+        </div>
+        <div>
+          <span class="opt-name">WhatsApp</span>
+          <span class="opt-desc">Abrir App Directo</span>
+        </div>
+      </button>
+
+      <button class="share-opt-btn instagram" onclick="shareTo('instagram')" type="button">
+        <div class="opt-icon-wrapper">
+          <svg class="opt-svg" viewBox="0 0 24 24" width="28" height="28">
+            <defs>
+              <linearGradient id="igGradModal" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#fdf497" />
+                <stop offset="5%" stop-color="#fdf497" />
+                <stop offset="45%" stop-color="#fd5949" />
+                <stop offset="60%" stop-color="#d6249f" />
+                <stop offset="100%" stop-color="#285AEB" />
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="6" fill="url(#igGradModal)"/>
+            <path d="M12 7C9.24 7 7 9.24 7 12C7 14.76 9.24 17 12 17C14.76 17 17 14.76 17 12C17 9.24 14.76 7 12 7ZM12 15C10.34 15 9 13.66 9 12C9 10.34 10.34 9 12 9C13.66 9 15 10.34 15 12C15 13.66 13.66 15 12 15ZM17.25 5.5C16.56 5.5 16 6.06 16 6.75C16 7.44 16.56 8 17.25 8C17.94 8 18.5 7.44 18.5 6.75C18.5 6.06 17.94 5.5 17.25 5.5Z" fill="white"/>
+          </svg>
+        </div>
+        <div>
+          <span class="opt-name">Instagram</span>
+          <span class="opt-desc">Abrir Cámara / Story</span>
+        </div>
+      </button>
+
+      <button class="share-opt-btn facebook" onclick="shareTo('facebook')" type="button">
+        <div class="opt-icon-wrapper">
+          <svg class="opt-svg" viewBox="0 0 24 24" width="28" height="28">
+            <circle cx="12" cy="12" r="10" fill="#1877F2"/>
+            <path d="M15 12H13V19H10V12H8.5V9.5H10V8C10 6.62 10.88 5.5 12.75 5.5H15V8H13.5C13.04 8 13 8.19 13 8.5V9.5H15L15 12Z" fill="white"/>
+          </svg>
+        </div>
+        <div>
+          <span class="opt-name">Facebook</span>
+          <span class="opt-desc">Publicar en Perfil</span>
+        </div>
+      </button>
+
+      <button class="share-opt-btn native" onclick="shareTo('native')" type="button">
+        <div class="opt-icon-wrapper">
+          <svg class="opt-svg" viewBox="0 0 24 24" width="28" height="28" fill="none">
+            <circle cx="12" cy="12" r="10" fill="rgba(255, 133, 0, 0.15)"/>
+            <path d="M12 7V14M12 14L9 11M12 14L15 11M8 17H16" stroke="#FF8500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div>
+          <span class="opt-name">Descargar HD</span>
+          <span class="opt-desc">Guardar Imagen PNG</span>
+        </div>
+      </button>
+    </div>
+
+    <button class="share-close-btn" onclick="closeShareModal()">Cancelar</button>
+  </div>
+</div>
+
+<script>
+  // ─── CSV Data (10 Sellers) + Nombres Reales UserPilot ─────────────────
+  const SELLERS_DATA = [
+    { user_id: "671121", name: "Sandry Rodelo", email: "sandryrodelo07@gmail.com", total_orders: 393, total_income: 43721699.00, top_product: "1381150", product_name: "Fundas Navideñas Para Puertas", orders_with_product: 220, efectivity_delivery: 0.72 },
+    { user_id: "206810", name: "Victor Agudelo (MultiverseTecnology)", email: "dropi-provider@goevery.co", total_orders: 379885, total_income: 44352374715.00, top_product: "1199302", product_name: "MultiverseTecnology - Bogota", orders_with_product: 20872, efectivity_delivery: 0.72 },
+    { user_id: "1361", name: "Juan Sánchez", email: "juan.sanchezportillo1@gmail.com", total_orders: 417212, total_income: 39661406568.00, top_product: "730122", product_name: "MEDILISK LUNG CLEANING SPRAY 60ML", orders_with_product: 43655, efectivity_delivery: 0.54 },
+    { user_id: "390575", name: "Disnarda Peñaranda", email: "arturogonzalez4561@outlook.com", total_orders: 84, total_income: 10888300.00, top_product: "2149034", product_name: "Reloj APRUEBA DE AGUA", orders_with_product: 75, efectivity_delivery: 0.77 },
+    { user_id: "9825", name: "Yerlein Gil", email: "yercyshop@gmail.com", total_orders: 220117, total_income: 18078619279.00, top_product: "156592", product_name: "DESPACHO EXPRESS & PRIORITARIO", orders_with_product: 120023, efectivity_delivery: 0.48 },
+    { user_id: "140824", name: "Facundo Cohrs", email: "support@selmoc.com", total_orders: 289705, total_income: 26302732650.00, top_product: "1187534", product_name: "Medias De Compresión", orders_with_product: 169218, efectivity_delivery: 0.66 },
+    { user_id: "170111", name: "José Ardila", email: "josegeosk8@gmail.com", total_orders: 98, total_income: 8151376.00, top_product: "1554081", product_name: "Well Fresh elimina el mal aliento", orders_with_product: 39, efectivity_delivery: 0.50 },
+    { user_id: "10", name: "Shopi Pauta (Christian Valenzuela)", email: "info@shopi.com.co", total_orders: 566094, total_income: 50255427235.00, top_product: "1526477", product_name: "MASCARA DE SEGURIDAD", orders_with_product: 20384, efectivity_delivery: 0.64 },
+    { user_id: "31785", name: "Andrés Flórez", email: "tiendalotengo1@gmail.com", total_orders: 180929, total_income: 19613008451.00, top_product: "1001053", product_name: "Pendientes germanio Terapia Magnetica DP", orders_with_product: 11526, efectivity_delivery: 0.65 },
+    { user_id: "204873", name: "Nicol Álvarez", email: "nicolalvarez200421@gmail.com", total_orders: 157999, total_income: 17252337491.00, top_product: "1707318", product_name: "MAQUINA PROFESIONAL+PATILLERA INALAMBRIC", orders_with_product: 35927, efectivity_delivery: 0.48 }
+  ];
+
+  // ─── RECURSOS GRÁFICOS OFICIALES DEL PLAYBOOK DE LEYENDAS DROPI ───
+  // URLs directas de los assets en https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/
+  function getOfficialLeyendasLevel(orders) {
+    const baseImgUrl = "https://cdropi.github.io/Playbook-Leyendas/Resource/Insignias/";
+    if (orders >= 20001) {
+      return {
+        levelNum: 6,
+        name: "Leyenda",
+        emoji: "👑",
+        desc: "Élite del Ecosistema · Máxima Distinción",
+        insigniaImg: baseImgUrl + "6.png",
+        glowColor: "rgba(255, 0, 0, 0.85)",
+        min: 20001,
+        max: 500000,
+        nextGoal: 500000,
+        nextName: "Top #1 Global"
+      };
+    }
+    if (orders >= 5001) {
+      return {
+        levelNum: 5,
+        name: "Sabio VIP",
+        emoji: "🔥",
+        desc: "Aliado Estratégico · Excelencia Operativa",
+        insigniaImg: baseImgUrl + "5.png",
+        glowColor: "rgba(255, 72, 0, 0.8)",
+        min: 5001,
+        max: 20000,
+        nextGoal: 20001,
+        nextName: "Leyenda"
+      };
+    }
+    if (orders >= 2501) {
+      return {
+        levelNum: 4,
+        name: "Experto",
+        emoji: "🦅",
+        desc: "Alto Volumen · Perfeccionamiento & Escala",
+        insigniaImg: baseImgUrl + "4.png",
+        glowColor: "rgba(255, 106, 0, 0.75)",
+        min: 2501,
+        max: 5000,
+        nextGoal: 5001,
+        nextName: "Sabio VIP"
+      };
+    }
+    if (orders >= 1001) {
+      return {
+        levelNum: 3,
+        name: "Master",
+        emoji: "🌟",
+        desc: "Operador Establecido · Escalamiento Sostenido",
+        insigniaImg: baseImgUrl + "3.png",
+        glowColor: "rgba(255, 133, 0, 0.75)",
+        min: 1001,
+        max: 2500,
+        nextGoal: 2501,
+        nextName: "Experto"
+      };
+    }
+    if (orders >= 101) {
+      return {
+        levelNum: 2,
+        name: "Explorador",
+        emoji: "⚔️",
+        desc: "Primeras Ventas Sostenidas · Zona Libre de Churn",
+        insigniaImg: baseImgUrl + "2_3.png",
+        glowColor: "rgba(168, 178, 193, 0.7)",
+        min: 101,
+        max: 1000,
+        nextGoal: 1001,
+        nextName: "Master"
+      };
+    }
+    return {
+      levelNum: 1,
+      name: "Bienvenido",
+      emoji: "🌱",
+      desc: "Nuevo Vendedor · En Proceso de Activación",
+      insigniaImg: baseImgUrl + "1_1.png",
+      glowColor: "rgba(234, 234, 234, 0.6)",
+      min: 0,
+      max: 100,
+      nextGoal: 101,
+      nextName: "Explorador"
+    };
+  }
+
+  function formatMoney(amount) {
+    if (amount >= 1e9) {
+      return { val: (amount / 1e9).toFixed(2), unit: "Mil Millones COP ($B)" };
+    }
+    if (amount >= 1e6) {
+      return { val: (amount / 1e6).toFixed(1), unit: "Millones COP ($M)" };
+    }
+    return { val: Math.round(amount).toLocaleString('es-CO'), unit: "COP" };
+  }
+
+  let currentSeller = SELLERS_DATA[0];
+  const slides = [...document.querySelectorAll('.slide')];
+  const barsWrap = document.getElementById('bars');
+  const DUR = 6200;
+  let i = 0, timer = null, barEl = null, paused = false;
+
+  barsWrap.innerHTML = '';
+  slides.forEach(() => {
+    const b = document.createElement('div');
+    b.className = 'bar';
+    b.innerHTML = '<i></i>';
+    barsWrap.appendChild(b);
+  });
+  const bars = [...barsWrap.children];
+
+  function loadSeller(userId) {
+    currentSeller = SELLERS_DATA.find(s => s.user_id === userId) || SELLERS_DATA[0];
+    updateSellerData();
+    show(0);
+  }
+
+  function updateSellerData() {
+    const s = currentSeller;
+    const lvl = getOfficialLeyendasLevel(s.total_orders);
+    const money = formatMoney(s.total_income);
+    const effPct = Math.round(s.efectivity_delivery * 100);
+    const prodPct = ((s.orders_with_product / s.total_orders) * 100).toFixed(1);
+
+    document.getElementById('sellerBadgeTop').textContent = s.name;
+
+    // Slide 0: Insignia Oficial
+    const firstName = s.name ? s.name.split(' ')[0] : 'Seller';
+    document.getElementById('s0_kicker').textContent = `¡Hola, ${firstName}!`;
+    const img0 = document.getElementById('s0_insignia_img');
+    img0.src = lvl.insigniaImg;
+    img0.alt = `Insignia Oficial ${lvl.name}`;
+    img0.style.filter = `drop-shadow(0 0 30px ${lvl.glowColor})`;
+    
+    document.getElementById('s0_rank').textContent = `Nivel ${lvl.levelNum} · ${lvl.name}`;
+    document.getElementById('s0_sub').innerHTML = `Has acumulado <span class="accent">${s.total_orders.toLocaleString('es-CO')} drops</span> en el programa <strong>Leyendas Dropi (v7.0)</strong>. Tu estatus oficial es <strong>${lvl.name}</strong> (${lvl.desc}).`;
+
+    // Slide 1
+    const el1 = document.getElementById('s1_orders');
+    el1.dataset.count = s.total_orders;
+    document.getElementById('s1_accent').textContent = `${s.total_orders.toLocaleString('es-CO')}`;
+    document.getElementById('s1_status').textContent = `Nivel ${lvl.levelNum} ${lvl.name} · ${s.total_orders >= 100 ? "Has superado la meta de 100 órdenes mensuales" : "En ruta a alcanzar las 100 órdenes de activación"}`;
+
+    // Slide 2
+    const el2 = document.getElementById('s2_income');
+    el2.dataset.count = parseFloat(money.val.replace(',', '.'));
+    document.getElementById('s2_unit').textContent = money.unit;
+    document.getElementById('s2_detail').textContent = `Facturación total de $${s.total_income.toLocaleString('es-CO')} COP en ventas Pago Contra Entrega (COD).`;
+
+    // Slide 3
+    document.getElementById('s3_product').textContent = s.product_name;
+    document.getElementById('s3_prod_id').textContent = `#${s.top_product}`;
+    document.getElementById('s3_prod_orders').textContent = s.orders_with_product.toLocaleString('es-CO');
+    document.getElementById('s3_prod_pct').textContent = `${prodPct}% de tus órdenes`;
+
+    // Slide 4
+    document.getElementById('s4_eff').textContent = effPct;
+    const effCard = document.getElementById('s4_card');
+    if (effPct >= 70) {
+      effCard.innerHTML = `<span style="color:#059669; font-weight:800;">✓ Excelente Efectividad Logística (${effPct}%)</span><div style="font-size:12px; color:#e5def5; margin-top:4px;">Tu operación cumple con los estándares de calidad de Leyendas.</div>`;
+    } else {
+      effCard.innerHTML = `<span style="color:#D97706; font-weight:800;">⚠️ Oportunidad de Optimización (${effPct}%)</span><div style="font-size:12px; color:#e5def5; margin-top:4px;">Optimizando guías en estado generado podrías subir tu margen.</div>`;
+    }
+
+    // Slide 5: Insignia Oficial Resumen
+    const img5 = document.getElementById('s5_insignia_img');
+    img5.src = lvl.insigniaImg;
+    img5.alt = `Insignia Oficial ${lvl.name}`;
+    img5.style.filter = `drop-shadow(0 0 25px ${lvl.glowColor})`;
+
+    document.getElementById('s5_rank').textContent = `Nivel ${lvl.levelNum} — ${lvl.name}`;
+    
+    const rem = Math.max(0, lvl.nextGoal - s.total_orders);
+    document.getElementById('s5_goal_curr').textContent = `${s.total_orders.toLocaleString()} de ${lvl.nextGoal.toLocaleString()} drops`;
+    document.getElementById('s5_goal_rem').textContent = rem > 0 ? `Faltan ${rem.toLocaleString()} para Nivel ${lvl.levelNum < 6 ? lvl.levelNum + 1 : 6} (${lvl.nextName})` : "¡Nivel Máximo Leyenda alcanzado!";
+  }
+
+  function show(n) {
+    if (n < 0) n = 0;
+    if (n > slides.length - 1) n = slides.length - 1;
+    slides[i].classList.remove('active');
+    i = n;
+    slides[i].classList.add('active');
+    bars.forEach((b, k) => {
+      b.classList.remove('run', 'done');
+      const inner = b.querySelector('i');
+      inner.style.animation = 'none';
+      if (k < i) b.classList.add('done');
+    });
+    runBar();
+    triggerSlide(i);
+  }
+
+  function runBar() {
+    clearTimeout(timer);
+    if (barEl) {
+      barEl.classList.remove('run');
+      const oldInner = barEl.querySelector('i');
+      oldInner.style.animation = 'none';
+    }
+    barEl = bars[i];
+    if (!barEl) return;
+    const inner = barEl.querySelector('i');
+    inner.style.animation = 'none';
+    void inner.offsetWidth;
+    barEl.style.setProperty('--dur', DUR + 'ms');
+    barEl.classList.add('run');
+    if (!paused) timer = setTimeout(() => { if (i < slides.length - 1) next(); }, DUR);
+  }
+
+  function next(e) {
+    if (e) e.stopPropagation();
+    if (i < slides.length - 1) show(i + 1);
+  }
+
+  function prev(e) {
+    if (e) e.stopPropagation();
+    if (i > 0) show(i - 1);
+    else runBar();
+  }
+  function restart() { show(0); }
+
+  function triggerSlide(n) {
+    const s = slides[n];
+    s.querySelectorAll('[data-count]').forEach(el => countUp(el));
+
+    if (n === 4) {
+      const ring = s.querySelector('#ringCircle');
+      const effPct = currentSeller.efectivity_delivery;
+      ring.style.strokeDashoffset = 465;
+      requestAnimationFrame(() => {
+        ring.style.strokeDashoffset = 465 * (1 - effPct);
+      });
+    }
+
+    if (n === 5) {
+      const g = s.querySelector('#goalbar');
+      const lvl = getOfficialLeyendasLevel(currentSeller.total_orders);
+      const pct = Math.min(100, Math.round((currentSeller.total_orders / lvl.nextGoal) * 100));
+      g.style.width = '0';
+      requestAnimationFrame(() => { g.style.width = `${pct}%`; });
+    }
+
+    if ([0, 1, 5].includes(n)) confetti();
+  }
+
+  function countUp(el) {
+    const target = +el.dataset.count, dur = +(el.dataset.dur || 1300);
+    const start = performance.now();
+    const isFloat = target % 1 !== 0;
+    const fmt = isFloat ? (v => v.toFixed(1)) : (v => Math.round(v).toLocaleString('es-CO'));
+    function step(t) {
+      let p = Math.min(1, (t - start) / dur);
+      p = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(target * p);
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function confetti() {
+    const fx = document.getElementById('fx');
+    const cols = ['#FF8500', '#FF4800', '#FF0000', '#ffffff'];
+    for (let k = 0; k < 45; k++) {
+      const c = document.createElement('div');
+      c.className = 'confetti';
+      c.style.left = Math.random() * 100 + '%';
+      c.style.background = cols[k % cols.length];
+      c.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+      c.style.animationDelay = (Math.random() * .3) + 's';
+      fx.appendChild(c);
+      setTimeout(() => c.remove(), 3200);
+    }
+  }
+
+
+
+  // ─── Share Modal Logic ───
+  function openShareModal() {
+    const s = currentSeller;
+    const lvl = getOfficialLeyendasLevel(s.total_orders);
+    document.getElementById('modalInsigniaImg').src = lvl.insigniaImg;
+    document.getElementById('modalSellerName').textContent = s.name;
+    document.getElementById('modalSellerRank').textContent = `Nivel ${lvl.levelNum}: ${lvl.name} ${lvl.emoji}`;
+    document.getElementById('modalSellerStats').textContent = `${s.total_orders.toLocaleString()} drops completados`;
+    document.getElementById('shareModal').classList.add('active');
+  }
+
+  function closeShareModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.classList.contains('share-close-btn')) return;
+    document.getElementById('shareModal').classList.remove('active');
+  }
+
+  function showToast(msg) {
+    let t = document.getElementById('shareToast');
+    if (!t) {
+      t = document.createElement('div');
+      t.id = 'shareToast';
+      t.className = 'share-toast';
+      document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3200);
+  }
+
+  async function generateImageBlob() {
+    const s = currentSeller;
+    const lvl = getOfficialLeyendasLevel(s.total_orders);
+    const effPct = Math.round(s.efectivity_delivery * 100);
+
+    // Populate offscreen poster data inside Stories Safe Zone Grid
+    document.getElementById('ep_name').textContent = s.name;
+    document.getElementById('ep_insignia').src = lvl.insigniaImg;
+    document.getElementById('ep_rank').textContent = `Nivel ${lvl.levelNum} · ${lvl.name} ${lvl.emoji}`;
+    document.getElementById('ep_quote').textContent = `“¡Consolidé ${s.total_orders.toLocaleString('es-CO')} drops acumulados en el Programa Leyendas Dropi!”`;
+    document.getElementById('ep_drops').textContent = s.total_orders.toLocaleString('es-CO');
+    document.getElementById('ep_eff').textContent = `${effPct}%`;
+
+    const poster = document.getElementById('exportPoster');
+
+    if (typeof html2canvas !== 'undefined') {
+      try {
+        const canvas = await html2canvas(poster, {
+          scale: 2.5,
+          useCORS: true,
+          backgroundColor: '#050209',
+          logging: false
+        });
+        return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+      } catch (err) {
+        console.warn('Canvas capture error:', err);
+      }
+    }
+    return null;
+  }
+
+  async function shareTo(channel) {
+    const s = currentSeller;
+    const lvl = getOfficialLeyendasLevel(s.total_orders);
+    const textMsg = `👑 ¡Consolidé ${s.total_orders.toLocaleString('es-CO')} drops acumulados en el Programa Leyendas Dropi y alcancé el Nivel ${lvl.levelNum} (${lvl.name})! #LeyendasDropi`;
+
+    closeShareModal();
+    showToast('Generando tarjeta HD de resumen...');
+
+    let blob = await generateImageBlob();
+    let file = blob ? new File([blob], `leyendas-dropi-${s.user_id}.png`, { type: 'image/png' }) : null;
+
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+    if (file && navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          title: 'Mi Estatus Leyendas Dropi',
+          text: textMsg,
+          files: [file]
+        });
+        showToast('✓ Tarjeta e imagen compartidas');
+        return;
+      } catch (e) {
+        console.log('Native share fallback triggered', e);
+      }
+    }
+
+    if (channel === 'whatsapp') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+      }
+      try {
+        if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+      } catch(e) {}
+
+      showToast('💬 Abriendo WhatsApp...');
+      setTimeout(() => {
+        if (isMobile) {
+          window.location.href = `whatsapp://send?text=${encodeURIComponent(textMsg)}`;
+        } else {
+          window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(textMsg)}`, '_blank');
+        }
+      }, 300);
+    } 
+    else if (channel === 'instagram') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+      }
+      try {
+        if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+      } catch(e) {}
+
+      showToast('📸 Tarjeta guardada. Abriendo Instagram...');
+      setTimeout(() => {
+        if (isMobile) {
+          window.location.href = "instagram://story-camera";
+          setTimeout(() => { window.location.href = "instagram://app"; }, 700);
+        } else {
+          window.open("https://www.instagram.com/", '_blank');
+        }
+      }, 400);
+    } 
+    else if (channel === 'facebook') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+      }
+      try {
+        if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+      } catch(e) {}
+
+      showToast('🔵 Abriendo Facebook...');
+      setTimeout(() => {
+        window.open(`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(textMsg)}`, '_blank');
+      }, 300);
+    } 
+    else if (channel === 'native') {
+      if (blob) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `leyendas-dropi-${s.user_id}.png`;
+        a.click();
+        showToast('✓ Tarjeta HD guardada en fotos');
+      } else {
+        try {
+          if (navigator.clipboard) await navigator.clipboard.writeText(textMsg);
+        } catch(e) {}
+        showToast('✓ Texto de estado copiado');
+      }
+    }
+  }
+
+  let lastActionTime = 0;
+  function share(e) {
+    if (e) {
+      if (e.cancelable) e.preventDefault();
+      e.stopPropagation();
+    }
+    const now = Date.now();
+    if (now - lastActionTime < 400) return;
+    lastActionTime = now;
+    openShareModal();
+  }
+
+  function restart(e) {
+    if (e) {
+      if (e.cancelable) e.preventDefault();
+      e.stopPropagation();
+    }
+    const now = Date.now();
+    if (now - lastActionTime < 400) return;
+    lastActionTime = now;
+    show(0);
+  }
+
+  // Init: Check URL parameter ?user_id=... or default to first seller
+  const urlParams = new URLSearchParams(window.location.search);
+  const userIdParam = urlParams.get('user_id') || urlParams.get('user') || urlParams.get('seller');
+  const initialSeller = SELLERS_DATA.find(s => s.user_id === userIdParam) || SELLERS_DATA[0];
+  loadSeller(initialSeller.user_id);
+</script>
+</body>
+</html>

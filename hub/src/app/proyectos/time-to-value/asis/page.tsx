@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { TTV_FASE_1, TTV_FASE_2, TTV_COMPARACION } from "@/lib/ttv-fases-data";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 type Stats = {
@@ -257,6 +258,102 @@ export default function AsisTtvPage() {
 
           return (
             <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+
+              {/* Métricas por Fase */}
+              <div style={card}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16, flexWrap: "wrap", gap: 8 }}>
+                  <div>
+                    <div style={sectionTitle}>Métricas por fase</div>
+                    <div style={sectionSub}>
+                      De dónde partimos (línea base histórica) a qué medimos hoy (pipeline dedicado, mes a mes).
+                    </div>
+                  </div>
+                  <a
+                    href={TTV_FASE_2.metabaseUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      background: "var(--dropi)", color: "#fff", textDecoration: "none",
+                      padding: "8px 14px", borderRadius: 8, fontSize: 12, fontWeight: 700,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    📊 Ver dashboard en vivo (Metabase)
+                  </a>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                  {/* Fase 1 */}
+                  <div style={{ background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 12, padding: 16 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                      <span style={tag("#6366F1", "#EEF2FF")}>Fase 1</span>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>Levantamiento inicial</span>
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 14 }}>
+                      {TTV_FASE_1.periodo}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                      {[
+                        { l: "Registrados (total)", v: TTV_FASE_1.registradosLabel, sub: TTV_FASE_1.registradosSub },
+                        { l: "Activados (≥1 orden, histórico)", v: TTV_FASE_1.activadosLabel, sub: TTV_FASE_1.activadosSub },
+                        { l: "Tasa de activación", v: TTV_FASE_1.tasaActivacion, sub: null },
+                        { l: "Churn (inactivos +15 días)", v: TTV_FASE_1.churn, sub: null },
+                      ].map(m => (
+                        <div key={m.l} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "6px 0", borderBottom: "1px solid #E5E7EB" }}>
+                          <span style={{ fontSize: 12, color: "var(--muted)" }}>{m.l}{m.sub ? <span style={{ display: "block", fontSize: 10, color: "var(--faint, #9CA3AF)" }}>{m.sub}</span> : null}</span>
+                          <span style={{ fontSize: 15, fontWeight: 800, color: "var(--fg)" }}>{m.v}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ marginTop: 10, fontSize: 11, color: "var(--muted)", fontStyle: "italic" }}>
+                      Medición acumulada histórica — sin pipeline dedicado, sin corte mes a mes.
+                    </div>
+                  </div>
+
+                  {/* Fase 2 */}
+                  <div style={{ background: "#ECFDF5", border: "1px solid #A7F3D0", borderRadius: 12, padding: 16 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                      <span style={tag("#10B981", "#D1FAE5")}>Fase 2</span>
+                      <span style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)" }}>Pipeline CRM/GHL — medible mes a mes</span>
+                    </div>
+                    <div style={{ fontSize: 11, color: "#065F46", marginBottom: 14 }}>
+                      {TTV_FASE_2.periodo}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                      {[
+                        { l: "Registrados (en el CRM)", v: TTV_FASE_2.registradosLabel },
+                        { l: "Activación bruta (orden generada)", v: TTV_FASE_2.activacionBruta, sub: TTV_FASE_2.activacionBrutaSub },
+                        { l: "Activación neta (orden entregada)", v: TTV_FASE_2.activacionNeta, sub: TTV_FASE_2.activacionNetaSub },
+                        { l: "Generadas ÷ Entregadas (ratio)", v: TTV_FASE_2.ratioGeneradasEntregadas },
+                        { l: "Días registro → orden entregada (prom., desde 30-jun-2026)", v: TTV_FASE_2.tiempoRegistroEntrega },
+                        { l: "Brecha 41→18 (generada → entregada)", v: TTV_FASE_2.fuga },
+                      ].map(m => (
+                        <div key={m.l} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "6px 0", borderBottom: "1px solid #D1FAE5", gap: 12 }}>
+                          <span style={{ fontSize: 12, color: "#065F46" }}>
+                            {m.l}
+                            {"sub" in m && m.sub ? <span style={{ display: "block", fontSize: 10, color: "#10B981" }}>{m.sub}</span> : null}
+                          </span>
+                          <span style={{ fontSize: 15, fontWeight: 800, color: "#059669", whiteSpace: "nowrap" }}>{m.v}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div style={{ marginTop: 10, fontSize: 11, color: "#065F46", fontStyle: "italic" }}>
+                      Plan de choque Fast Track (10 llamadas manuales) no rindió como se esperaba — bajo interés
+                      del proveedor, formulario de volumen declarado no confiable. Pivote decidido: agente de WA
+                      que filtra por comportamiento real antes del contacto humano (arranca semana 04-ago).
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: 14, padding: "12px 16px", background: "#EEF2FF", borderRadius: 10, border: "1px solid #C7D2FE", fontSize: 13, color: "#312E81", lineHeight: 1.6 }}>
+                  <strong>Comparación en los mismos términos (orden entregada, sobre el total de registrados):</strong>
+                  {" "}{TTV_COMPARACION.texto}
+                </div>
+                <div style={{ marginTop: 8, padding: "8px 14px", background: "#FFFBEB", borderRadius: 10, border: "1px solid #FDE68A", fontSize: 11, color: "#78350F", lineHeight: 1.5 }}>
+                  <strong>Ojo con el universo:</strong> {TTV_COMPARACION.ojoUniverso}
+                </div>
+              </div>
 
               {/* KPIs principales */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px,1fr))", gap: 14 }}>

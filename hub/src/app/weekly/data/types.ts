@@ -92,14 +92,24 @@ export type KpiOkr = {
   nota?: string;       // aviso opcional bajo la barra (e.g. "Medición manual por ahora")
 };
 
+export type CelulaUpdateItem = {
+  emoji: string;        // "🟢" | "🟡" | "🔴" | "🔵"
+  nombre: string;       // "Dropi Pulso · PUL-001"
+  estado: string;       // texto corto del estado
+  hitos: string[];      // qué pasó esta semana
+  accionables: string[]; // qué hay que hacer y quién
+  novedad: string;      // una línea de lo más relevante
+};
+
 export type WeeklySnapshot = {
   week: string;          // "Semana 19–25 jun 2026"
   subtitle: string;
   heroBadge: string;     // chip pill en el hero
   heroTitle: string;     // h1 principal
   heroStrip: HeroChip[]; // los chips de métricas del hero
-  kpiOkrs?: KpiOkr[];    // una o más tarjetas OKR con barra de progreso (opcional)
-  kpis?: KpiCard[];      // grilla de métricas clave (opcional)
+  kpiOkrs?: KpiOkr[];          // una o más tarjetas OKR con barra de progreso (opcional)
+  kpis?: KpiCard[];            // grilla de métricas clave (opcional)
+  updateCelula?: CelulaUpdateItem[]; // update conciso por frente para ritual de equipo (opcional)
   insights?: Insight[];  // siempre primera sección — se agregan durante la semana
   oportunidades: Oportunidad[];
   documentos?: Documento[];

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUser } from "@/lib/require-auth";
-import { isMiDiaOwner, MI_DIA_OWNER_EMAIL } from "@/lib/sprint-access";
+import { isMiDiaOwner } from "@/lib/sprint-access";
 import { supabase } from "@/lib/supabase";
 import { getTodayEvents } from "@/lib/google-calendar";
 
@@ -14,11 +14,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
   if (!supabase) return NextResponse.json({ error: "Supabase no configurado" }, { status: 500 });
+  const personEmail = user!.email!;
 
   const { data: tokenRow, error: tokenError } = await supabase
     .from("google_oauth_tokens")
     .select("refresh_token")
-    .eq("person_email", MI_DIA_OWNER_EMAIL)
+    .eq("person_email", personEmail)
     .maybeSingle();
 
   if (tokenError) return NextResponse.json({ error: tokenError.message }, { status: 500 });
@@ -44,7 +45,7 @@ export async function POST(request: NextRequest) {
   const { error: deleteError } = await supabase
     .from("today_meetings")
     .delete()
-    .eq("person_email", MI_DIA_OWNER_EMAIL)
+    .eq("person_email", personEmail)
     .eq("event_date", today);
 
   if (deleteError) return NextResponse.json({ error: deleteError.message }, { status: 500 });
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
   if (events.length > 0) {
     const { error: insertError } = await supabase.from("today_meetings").insert(
       events.map((event) => ({
-        person_email: MI_DIA_OWNER_EMAIL,
+        person_email: personEmail,
         event_date: today,
         start_time: event.start_time,
         end_time: event.end_time,

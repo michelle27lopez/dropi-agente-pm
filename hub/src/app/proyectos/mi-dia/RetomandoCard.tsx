@@ -8,13 +8,27 @@ import { carpetaLink, pickFoco } from "./utils";
 // lo primero que Michelle busca al abrir el home, por eso va en la fila hero
 // — ver [[project_darwin_pd_dashboard]].
 export default function RetomandoCard() {
-  const { tasks } = useMiDiaData();
+  const { tasks, sprintAllowed } = useMiDiaData();
 
   if (tasks === null) {
     return (
       <div className="midia-retomando" style={{ animationDelay: "0ms" }}>
         <div className="midia-skeleton" style={{ width: 120, height: 12, marginBottom: 14 }} />
         <div className="midia-skeleton" style={{ width: "70%", height: 15 }} />
+      </div>
+    );
+  }
+
+  if (!sprintAllowed) {
+    return (
+      <div className="midia-retomando" style={{ animationDelay: "0ms" }}>
+        <div className="midia-retomando-header">
+          <span className="midia-panel-icon">
+            <Target size={14} />
+          </span>
+          <span className="midia-panel-label" style={{ color: "var(--dropi)" }}>Retomando</span>
+        </div>
+        <p style={{ fontSize: 13, color: "var(--muted)" }}>Pendiente — tu Jira todavía no está conectado a este panel.</p>
       </div>
     );
   }
