@@ -479,3 +479,29 @@
 .log-root .wk-delta.is-verde { color: var(--on-green); }
 .log-root .wk-delta.is-ambar { color: var(--on-amber); }
 .log-root .wk-delta.is-rojo { color: var(--on-red); }
+
+/* Desglose por país del mes cerrado. La participación va bajo el nombre y no
+   como columna propia: es contexto para leer la fila, no un eje de comparación
+   — y una columna más habría empujado la tabla a scroll horizontal. */
+.log-root .wk-pais-nombre { display: block; font-weight: 600; }
+.log-root .wk-pais-part {
+  display: block;
+  margin-top: 1px;
+  font-size: var(--fs-label);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+/* La barra y su cifra en la misma celda: la barra da la comparación de un
+   vistazo y el número da la precisión que la barra no puede dar a 8px. */
+.log-root .wk-pais-mov {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.log-root .wk-pais-mov .u-bar { flex: 1; min-width: 60px; }
+.log-root .wk-pais-mov > span {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  min-width: 46px;
+  text-align: right;
+}

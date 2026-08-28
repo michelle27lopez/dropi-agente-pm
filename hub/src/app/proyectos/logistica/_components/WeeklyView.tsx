@@ -3,24 +3,79 @@
 import { useState } from "react";
 import { jiraUrl, type Weekly } from "@/app/proyectos/logistica/_lib/data";
 import PrintButton from "@/app/proyectos/logistica/_components/PrintButton";
-import { Card, Table, PageHeader, SectionTitle, type Column } from "@/app/proyectos/logistica/_components/ui";
+import { Bar, Card, Table, PageHeader, SectionTitle, type Column, type Tone } from "@/app/proyectos/logistica/_components/ui";
 
 // Columnas de la comparación mensual. El delta se tiñe porque es lo único de
 // la tabla que pide una reacción; el resto son cifras de contexto.
 type FilaMensual = NonNullable<Weekly["comparacionMensual"]>["filas"][number];
+type FilaPais = NonNullable<NonNullable<Weekly["comparacionMensual"]>["porPais"]>["filas"][number];
 
-const COLUMNAS_MENSUAL: Column<FilaMensual>[] = [
-  { key: "metrica", header: "Métrica", width: "34%", render: (f) => f.metrica },
-  { key: "abril", header: "Abril", align: "right", render: (f) => f.abril },
-  { key: "mayo", header: "Mayo", align: "right", render: (f) => f.mayo },
-  { key: "junio", header: "Junio", align: "right", render: (f) => f.junio },
-  {
-    key: "delta",
-    header: "Delta",
-    align: "right",
-    render: (f) => <span className={`wk-delta is-${f.tono}`}>{f.delta}</span>,
-  },
-];
+// Los meses eran tres columnas fijas (abril/mayo/junio). Al cerrar julio había
+// que renombrarlas todas o tirar abril, así que la cabecera se arma desde los
+// datos: la ventana se corre cambiando `meses` y el render no se entera.
+function columnasMensual(meses: string[]): Column<FilaMensual>[] {
+  return [
+    { key: "metrica", header: "Métrica", width: "28%", render: (f) => f.metrica },
+    ...meses.map((mes, i) => ({
+      key: mes,
+      header: mes,
+      align: "right" as const,
+      render: (f: FilaMensual) => f.valores[i] ?? "",
+    })),
+    {
+      key: "delta",
+      header: "Delta",
+      align: "right" as const,
+      render: (f: FilaMensual) => <span className={`wk-delta is-${f.tono}`}>{f.delta}</span>,
+    },
+  ];
+}
+
+// Tono por distancia a la meta de movilización, no por umbrales inventados: en
+// la meta o encima es verde, hasta diez puntos por debajo es ámbar, más abajo
+// es rojo. Con meta 90% eso deja a casi todos los países en ámbar — que es
+// exactamente lo que dice el dato.
+function tonoMovilizacion(pct: number, meta: number): Tone {
+  if (pct >= meta) return "ok";
+  if (pct >= meta - 10) return "warn";
+  return "risk";
+}
+
+function columnasPais(meta: number): Column<FilaPais>[] {
+  return [
+    {
+      key: "pais",
+      header: "País",
+      width: "22%",
+      render: (f) => (
+        <>
+          <strong className="wk-pais-nombre">{f.pais}</strong>
+          <span className="wk-pais-part">{f.participacion}</span>
+        </>
+      ),
+    },
+    { key: "ordenes", header: "Órdenes", align: "right", render: (f) => f.ordenes },
+    {
+      key: "movilizacion",
+      header: "Movilización",
+      width: "24%",
+      render: (f) => (
+        <div className="wk-pais-mov">
+          <Bar
+            value={f.movilizacion}
+            meta={meta}
+            tone={tonoMovilizacion(f.movilizacion, meta)}
+            label={`${f.pais}: ${formatPct1(f.movilizacion)} de movilización, meta ${meta}%`}
+          />
+          <span>{formatPct1(f.movilizacion)}</span>
+        </div>
+      ),
+    },
+    { key: "noMovilizado", header: "No movilizado", align: "right", render: (f) => f.noMovilizado },
+    { key: "entrega", header: "% entrega", align: "right", render: (f) => formatPct1(f.entrega) },
+    { key: "transportadoras", header: "Transp.", align: "right", render: (f) => f.transportadoras },
+  ];
+}
 
 function horasTono(horas: number): "verde" | "ambar" | "rojo" {
   if (horas <= 24) return "verde";
@@ -37,6 +92,12 @@ function formatPct(pct?: number) {
   return `${pct.toFixed(2).replace(".", ",")}%`;
 }
 
+// Un decimal, coma decimal. La tabla mensual viene en texto ya formateado; el
+// desglose por país guarda números porque la barra los necesita en escala.
+function formatPct1(pct: number) {
+  return `${pct.toFixed(1).replace(".", ",")}%`;
+}
+
 function ExecutiveWeekly({ w }: { w: Weekly }) {
   const comparacion = w.comparacionMensual;
   if (!comparacion) return null;
@@ -51,7 +112,7 @@ function ExecutiveWeekly({ w }: { w: Weekly }) {
             pero duplicaba el primitivo y obligaba a mantener su propio
             responsive con data-label. Ahora es una <table> de verdad. */}
         <Table
-          columns={COLUMNAS_MENSUAL}
+          columns={columnasMensual(comparacion.meses)}
           rows={comparacion.filas}
           getKey={(f) => f.metrica}
         />
@@ -60,6 +121,21 @@ function ExecutiveWeekly({ w }: { w: Weekly }) {
           <strong>% entrega:</strong> {comparacion.entregaNota}
         </p>
       </Card>
+
+      {/* El consolidado esconde que el rango va de 58,8% a 90,3%: un solo
+          número ponderado por Colombia no deja ver dónde está la fuga. */}
+      {comparacion.porPais && (
+        <>
+          <SectionTitle hint={comparacion.porPais.nota}>{comparacion.porPais.titulo}</SectionTitle>
+          <Card>
+            <Table
+              columns={columnasPais(comparacion.porPais.metaMovilizacion)}
+              rows={comparacion.porPais.filas}
+              getKey={(f) => f.pais}
+            />
+          </Card>
+        </>
+      )}
 
       {w.secciones.map((seccion, index) => (
         <section className="wk-executive-section" key={seccion.titulo}>
