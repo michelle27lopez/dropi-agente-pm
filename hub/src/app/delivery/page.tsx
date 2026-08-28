@@ -15,7 +15,30 @@ type Proyecto = {
   prioridad: string | null;
   celula_owner_id: string;
   updated_at: string | null;
+  created_at: string | null;
+  fecha_inicio_dev: string | null;
+  fecha_entrega_propuesta: string | null;
 };
+
+// Estados de un Delivery Proyecto en los que ya tiene sentido registrar
+// cuándo arrancó desarrollo.
+const ESTADOS_CON_INICIO_DEV = new Set(["Pendiente Handoff", "en DEV", "Activo", "Cerrado"]);
+
+const ESTADO_BAR_COLOR: Record<string, string> = {
+  "En definición": "#94A3B8",
+  "En priorización": "#94A3B8",
+  "Pendiente Handoff": "#D97706",
+  "en DEV": "#2563EB",
+  Activo: "#0EA5E9",
+  Cerrado: "#0ABB87",
+};
+
+function fmtFechaCorta(iso: string | null) {
+  if (!iso) return null;
+  // iso es 'YYYY-MM-DD' — se parsea como fecha local sin desfase de zona.
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("es-CO", { day: "2-digit", month: "short" });
+}
 
 type Comentario = { id: string; autor: string; comentario: string; created_at: string };
 
@@ -105,7 +128,7 @@ export default function DeliveryPage() {
   const [ownCelulaNombre, setOwnCelulaNombre] = useState<string | null>(null);
   const [ownEmail, setOwnEmail] = useState<string | null>(null);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
-  const [vista, setVista] = useState<"celula" | "prioridad">("celula");
+  const [vista, setVista] = useState<"celula" | "prioridad" | "roadmap">("celula");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [collapsedIds, setCollapsedIds] = useState<Set<string>>(() => new Set());
   const [showCrear, setShowCrear] = useState(false);
@@ -190,6 +213,48 @@ export default function DeliveryPage() {
     }
   }
 
+  // Edición optimista de fecha_inicio_dev / fecha_entrega_propuesta desde la
+  // tarjeta. `valor` es 'YYYY-MM-DD' o null. Si el PATCH devuelve el proyecto
+  // (trae el autofill de fecha_inicio_dev cuando aplica), se usa esa versión.
+  async function handleFechaChange(
+    celulaId: string,
+    projectId: string,
+    campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
+    valor: string | null,
+  ) {
+    let prev: string | null = null;
+    setCelulas((cs) =>
+      cs.map((c) =>
+        c.id !== celulaId
+          ? c
+          : {
+              ...c,
+              proyectos: c.proyectos.map((p) => {
+                if (p.id !== projectId) return p;
+                prev = p[campo];
+                return { ...p, [campo]: valor };
+              }),
+            },
+      ),
+    );
+
+    const res = await fetch(`/api/proyectos/${projectId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [campo]: valor }),
+    }).catch(() => null);
+
+    if (!res || !res.ok) {
+      setCelulas((cs) =>
+        cs.map((c) =>
+          c.id !== celulaId
+            ? c
+            : { ...c, proyectos: c.proyectos.map((p) => (p.id === projectId ? { ...p, [campo]: prev } : p)) },
+        ),
+      );
+    }
+  }
+
   const allSelected = celulas.length > 0 && selectedIds.length === celulas.length;
   const toggleCelula = (id: string) =>
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
@@ -267,6 +332,13 @@ export default function DeliveryPage() {
             >
               Por prioridad
             </button>
+            <button
+              type="button"
+              onClick={() => setVista("roadmap")}
+              style={tabButtonStyle(vista === "roadmap")}
+            >
+              Roadmap
+            </button>
           </div>
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 24 }}>
@@ -293,7 +365,13 @@ export default function DeliveryPage() {
 
           {!loading &&
             visibleCelulas.length > 0 &&
-            (vista === "prioridad" ? (
+            (vista === "roadmap" ? (
+              <GanttBoard
+                proyectos={flatPrioridad}
+                editableFn={(p) => p.celula_owner_id === ownCelulaId || isSuperAdmin}
+                onFechaChange={handleFechaChange}
+              />
+            ) : vista === "prioridad" ? (
               flatPrioridad.length === 0 ? (
                 <EmptyState />
               ) : (
@@ -302,6 +380,7 @@ export default function DeliveryPage() {
                   mostrarCelula
                   editableFn={(p) => p.celula_owner_id === ownCelulaId || isSuperAdmin}
                   onPrioridadChange={handlePrioridadChange}
+                  onFechaChange={handleFechaChange}
                   commentCounts={commentCounts}
                   onOpenComentarios={setCommentTarget}
                 />
@@ -364,6 +443,7 @@ export default function DeliveryPage() {
                             mostrarCelula={false}
                             editableFn={() => editable}
                             onPrioridadChange={handlePrioridadChange}
+                            onFechaChange={handleFechaChange}
                             commentCounts={commentCounts}
                             onOpenComentarios={setCommentTarget}
                           />
@@ -417,6 +497,7 @@ function PipelineBoard({
   mostrarCelula,
   editableFn,
   onPrioridadChange,
+  onFechaChange,
   commentCounts,
   onOpenComentarios,
 }: {
@@ -424,6 +505,12 @@ function PipelineBoard({
   mostrarCelula: boolean;
   editableFn: (p: Proyecto) => boolean;
   onPrioridadChange: (celulaId: string, projectId: string, prioridad: string | null) => void;
+  onFechaChange: (
+    celulaId: string,
+    projectId: string,
+    campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
+    valor: string | null,
+  ) => void;
   commentCounts: Record<string, number>;
   onOpenComentarios: (p: Proyecto) => void;
 }) {
@@ -489,6 +576,7 @@ function PipelineBoard({
                     celulaNombre={mostrarCelula ? p.celulaNombre : undefined}
                     editable={editableFn(p)}
                     onPrioridadChange={(v) => onPrioridadChange(p.celula_owner_id, p.id, v)}
+                    onFechaChange={(campo, valor) => onFechaChange(p.celula_owner_id, p.id, campo, valor)}
                     commentCount={commentCounts[p.id]}
                     onOpenComentarios={() => onOpenComentarios(p)}
                   />
@@ -511,6 +599,7 @@ function DeliveryCard({
   celulaNombre,
   editable,
   onPrioridadChange,
+  onFechaChange,
   commentCount,
   onOpenComentarios,
 }: {
@@ -518,10 +607,12 @@ function DeliveryCard({
   celulaNombre?: string;
   editable: boolean;
   onPrioridadChange: (prioridad: string | null) => void;
+  onFechaChange: (campo: "fecha_inicio_dev" | "fecha_entrega_propuesta", valor: string | null) => void;
   commentCount?: number;
   onOpenComentarios: () => void;
 }) {
   const dias = diasDesde(p.updated_at);
+  const mostrarInicioDev = !!p.fecha_inicio_dev || ESTADOS_CON_INICIO_DEV.has(p.estado_interno ?? "");
 
   return (
     <div
@@ -558,6 +649,24 @@ function DeliveryCard({
           <span style={{ fontSize: 10, fontWeight: 400, color: "var(--gray-400)" }}> ({celulaNombre})</span>
         )}
       </p>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", marginTop: 8 }}>
+        {mostrarInicioDev && (
+          <FechaEditor
+            label="Inicio dev"
+            valor={p.fecha_inicio_dev}
+            editable={editable}
+            onChange={(v) => onFechaChange("fecha_inicio_dev", v)}
+          />
+        )}
+        <FechaEditor
+          label="Entrega prop."
+          valor={p.fecha_entrega_propuesta}
+          editable={editable}
+          onChange={(v) => onFechaChange("fecha_entrega_propuesta", v)}
+        />
+      </div>
+
       <div
         style={{
           display: "flex",
@@ -1034,5 +1143,304 @@ function PrioridadEditor({
     >
       {prioridad ?? "Sin prioridad"}
     </button>
+  );
+}
+
+// Chip "label: fecha" que al hacer click se vuelve un <input type="date"> y
+// guarda al elegir/salir. Mismo patrón que PrioridadEditor. Read-only si no
+// se puede editar (célula ajena).
+function FechaEditor({
+  label,
+  valor,
+  editable,
+  onChange,
+}: {
+  label: string;
+  valor: string | null;
+  editable: boolean;
+  onChange: (valor: string | null) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const texto = valor ? fmtFechaCorta(valor) : "—";
+
+  if (editing && editable) {
+    return (
+      <input
+        type="date"
+        autoFocus
+        defaultValue={valor ?? ""}
+        onChange={(e) => {
+          onChange(e.target.value || null);
+          setEditing(false);
+        }}
+        onBlur={() => setEditing(false)}
+        style={{
+          fontSize: 10.5, fontFamily: "inherit", color: "var(--gray-600)",
+          background: "#fff", border: "1px solid var(--gray-200)", borderRadius: 6, padding: "1px 4px",
+        }}
+      />
+    );
+  }
+
+  return (
+    <span
+      onClick={editable ? () => setEditing(true) : undefined}
+      title={editable ? `Editar ${label.toLowerCase()}` : undefined}
+      style={{
+        fontSize: 10, fontWeight: 600, color: valor ? "var(--gray-600)" : "var(--gray-400)",
+        cursor: editable ? "pointer" : "default",
+        display: "inline-flex", alignItems: "center", gap: 3,
+      }}
+    >
+      <span style={{ color: "var(--gray-400)", fontWeight: 500 }}>{label}:</span>
+      {texto}
+    </span>
+  );
+}
+
+// ─── Roadmap / Gantt ──────────────────────────────────────────────────────
+// Barras de los Delivery Proyecto que ya tienen fecha de entrega propuesta,
+// de fecha_inicio_dev (o created_at, o la misma entrega si no hay nada) a
+// fecha_entrega_propuesta. Agrupado por célula. Los que no tienen fecha de
+// entrega van en una lista aparte para no esconderlos.
+
+const PX_POR_DIA = 5;
+
+function isoADate(iso: string | null): Date | null {
+  if (!iso) return null;
+  const solo = iso.slice(0, 10);
+  const [y, m, d] = solo.split("-").map(Number);
+  if (!y || !m || !d) return null;
+  return new Date(y, m - 1, d);
+}
+
+function difDias(a: Date, b: Date) {
+  return Math.round((b.getTime() - a.getTime()) / 86_400_000);
+}
+
+function primerDiaDelMes(d: Date) {
+  return new Date(d.getFullYear(), d.getMonth(), 1);
+}
+
+function fechaCortaDeDate(d: Date) {
+  return d.toLocaleDateString("es-CO", { day: "2-digit", month: "short" });
+}
+
+function GanttBoard({
+  proyectos,
+  editableFn,
+  onFechaChange,
+}: {
+  proyectos: ProyectoConCelula[];
+  editableFn: (p: Proyecto) => boolean;
+  onFechaChange: (
+    celulaId: string,
+    projectId: string,
+    campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
+    valor: string | null,
+  ) => void;
+}) {
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+
+  const conFecha = proyectos.filter((p) => !!p.fecha_entrega_propuesta);
+  const sinFecha = proyectos.filter((p) => !p.fecha_entrega_propuesta);
+
+  const barras = useMemo(() => {
+    return conFecha
+      .map((p) => {
+        const fin = isoADate(p.fecha_entrega_propuesta)!;
+        let ini = isoADate(p.fecha_inicio_dev) ?? isoADate(p.created_at) ?? fin;
+        if (ini.getTime() > fin.getTime()) ini = fin;
+        return { p, ini, fin };
+      })
+      .sort((a, b) => a.ini.getTime() - b.ini.getTime() || a.fin.getTime() - b.fin.getTime());
+  }, [conFecha]);
+
+  if (barras.length === 0 && sinFecha.length === 0) {
+    return <EmptyState />;
+  }
+
+  const fechas = barras.flatMap((b) => [b.ini, b.fin]).concat([hoy]);
+  const min = primerDiaDelMes(new Date(Math.min(...fechas.map((d) => d.getTime()))));
+  const maxRaw = new Date(Math.max(...fechas.map((d) => d.getTime())));
+  const fin = new Date(maxRaw.getFullYear(), maxRaw.getMonth() + 1, 0); // último día de su mes
+  const totalDias = Math.max(1, difDias(min, fin));
+  const anchoTotal = totalDias * PX_POR_DIA;
+
+  // Cabecera de meses.
+  const meses: { label: string; dias: number }[] = [];
+  const cursor = new Date(min);
+  while (cursor.getTime() <= fin.getTime()) {
+    const finMes = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0);
+    const desde = cursor.getTime() < min.getTime() ? min : cursor;
+    const hasta = finMes.getTime() > fin.getTime() ? fin : finMes;
+    meses.push({
+      label: cursor.toLocaleDateString("es-CO", { month: "short", year: "2-digit" }),
+      dias: difDias(desde, hasta) + 1,
+    });
+    cursor.setMonth(cursor.getMonth() + 1, 1);
+  }
+
+  const hoyLeft = difDias(min, hoy) * PX_POR_DIA;
+
+  // Agrupar barras por célula, preservando orden de aparición.
+  const porCelula: { celula: string; items: typeof barras }[] = [];
+  for (const b of barras) {
+    const nombre = b.p.celulaNombre ?? "Sin célula";
+    let grupo = porCelula.find((g) => g.celula === nombre);
+    if (!grupo) {
+      grupo = { celula: nombre, items: [] };
+      porCelula.push(grupo);
+    }
+    grupo.items.push(b);
+  }
+
+  const LABEL_W = 220;
+
+  return (
+    <div>
+      <div style={{ overflowX: "auto", border: "1px solid var(--border)", borderRadius: 12, background: "#fff" }}>
+        <div style={{ minWidth: LABEL_W + anchoTotal }}>
+          {/* Cabecera de meses */}
+          <div style={{ display: "flex", borderBottom: "1px solid var(--border)", background: "var(--gray-50, #F7F8FA)" }}>
+            <div style={{ flex: `0 0 ${LABEL_W}px`, padding: "6px 12px", fontSize: 11, fontWeight: 700, color: "var(--muted)" }}>
+              Proyecto
+            </div>
+            <div style={{ position: "relative", width: anchoTotal, display: "flex" }}>
+              {meses.map((m, i) => (
+                <div
+                  key={i}
+                  style={{
+                    width: m.dias * PX_POR_DIA,
+                    padding: "6px 8px",
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    color: "var(--gray-400)",
+                    textTransform: "capitalize",
+                    borderLeft: i === 0 ? "none" : "1px solid var(--border)",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {m.label}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Filas por célula */}
+          {porCelula.map((g) => (
+            <div key={g.celula}>
+              <div
+                style={{
+                  padding: "5px 12px",
+                  fontSize: 11,
+                  fontWeight: 800,
+                  color: "var(--fg)",
+                  background: "var(--gray-50, #F7F8FA)",
+                  borderBottom: "1px solid var(--border)",
+                }}
+              >
+                {g.celula}
+              </div>
+              {g.items.map(({ p, ini, fin: finBarra }) => {
+                const left = difDias(min, ini) * PX_POR_DIA;
+                const width = Math.max(PX_POR_DIA, (difDias(ini, finBarra) + 1) * PX_POR_DIA);
+                const color = ESTADO_BAR_COLOR[p.estado_interno ?? ""] ?? "#94A3B8";
+                return (
+                  <div key={p.id} style={{ display: "flex", alignItems: "center", borderBottom: "1px solid var(--gray-100)", minHeight: 34 }}>
+                    <div style={{ flex: `0 0 ${LABEL_W}px`, padding: "4px 12px", overflow: "hidden" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                        {p.project_code && (
+                          <span style={{ fontSize: 9, fontWeight: 700, color: "var(--dropi)", background: "var(--dropi-light)", borderRadius: 3, padding: "0 4px" }}>
+                            {p.project_code}
+                          </span>
+                        )}
+                        <Link href={projectUrl(p)} style={{ fontSize: 11, fontWeight: 600, color: "var(--fg)", textDecoration: "none", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {p.name}
+                        </Link>
+                      </div>
+                    </div>
+                    <div style={{ position: "relative", width: anchoTotal, height: 34 }}>
+                      {/* línea de hoy */}
+                      {hoyLeft >= 0 && hoyLeft <= anchoTotal && (
+                        <div style={{ position: "absolute", left: hoyLeft, top: 0, bottom: 0, width: 1, background: "#DC2626", opacity: 0.5 }} />
+                      )}
+                      <div
+                        title={`${p.name}\n${fechaCortaDeDate(ini)} → ${fechaCortaDeDate(finBarra)}\n${p.estado_interno ?? "sin estado"}`}
+                        style={{
+                          position: "absolute",
+                          left,
+                          top: 8,
+                          width,
+                          height: 18,
+                          background: color,
+                          borderRadius: 5,
+                          display: "flex",
+                          alignItems: "center",
+                          paddingLeft: 6,
+                          fontSize: 9.5,
+                          fontWeight: 700,
+                          color: "#fff",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {p.prioridad ?? ""}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10, fontSize: 10, color: "var(--muted)" }}>
+        {Object.entries(ESTADO_BAR_COLOR)
+          .filter(([k]) => k !== "En priorización")
+          .map(([k, v]) => (
+            <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <span style={{ width: 10, height: 10, borderRadius: 3, background: v, display: "inline-block" }} />
+              {k === "En definición" ? "En definición / priorización" : k}
+            </span>
+          ))}
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+          <span style={{ width: 1, height: 12, background: "#DC2626", display: "inline-block" }} /> Hoy
+        </span>
+      </div>
+
+      {sinFecha.length > 0 && (
+        <div style={{ marginTop: 20, border: "1px dashed var(--border)", borderRadius: 12, padding: "12px 14px", background: "var(--gray-50, #F7F8FA)" }}>
+          <p style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", margin: "0 0 10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+            Sin fecha de entrega planeada ({sinFecha.length})
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            {sinFecha.map((p) => (
+              <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                {p.project_code && (
+                  <span style={{ fontSize: 9, fontWeight: 700, color: "var(--dropi)", background: "var(--dropi-light)", borderRadius: 3, padding: "0 4px" }}>
+                    {p.project_code}
+                  </span>
+                )}
+                <Link href={projectUrl(p)} style={{ fontSize: 11.5, fontWeight: 600, color: "var(--fg)", textDecoration: "none" }}>
+                  {p.name}
+                </Link>
+                <span style={{ fontSize: 10, color: "var(--gray-400)" }}>({p.celulaNombre})</span>
+                <span style={{ marginLeft: "auto" }}>
+                  <FechaEditor
+                    label="Entrega prop."
+                    valor={p.fecha_entrega_propuesta}
+                    editable={editableFn(p)}
+                    onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_entrega_propuesta", v)}
+                  />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
