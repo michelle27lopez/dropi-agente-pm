@@ -770,3 +770,32 @@
 @media (max-width: 760px) {
   .log-root .wk-research-steps { grid-template-columns: 1fr 1fr; }
 }
+
+/* ── Timeline de un caso ─────────────────────────────────────────────────────
+   Una fila por evento, con el punto de salud a la izquierda. No es un
+   componente nuevo: reutiliza .u-salud, que es el semáforo del sistema.      */
+.log-root .nov-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.log-root .nov-timeline li {
+  display: grid;
+  grid-template-columns: 8px 72px 1fr;
+  gap: 12px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.log-root .nov-timeline li:last-child { border-bottom: 0; }
+.log-root .nov-timeline .u-salud { align-self: center; }
+.log-root .nov-timeline__fecha {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.log-root .nov-timeline__texto { color: var(--text); max-width: 80ch; }

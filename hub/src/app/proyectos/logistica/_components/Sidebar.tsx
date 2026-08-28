@@ -4,8 +4,17 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Activity, Map, BookOpen, FlaskConical, ChevronRight,
-  CalendarDays, GanttChartSquare, ListTodo, FolderKanban, ClipboardCheck,
+  Activity,
+  BookOpen,
+  CalendarDays,
+  ChevronRight,
+  ClipboardCheck,
+  FlaskConical,
+  FolderKanban,
+  GanttChartSquare,
+  ListTodo,
+  Map,
+  PackageX,
 } from "lucide-react";
 import { etapas, proyectos } from "@/app/proyectos/logistica/_lib/data";
 
@@ -36,6 +45,10 @@ const SECCIONES = [
   // ítem desplegable.
   { href: `${BASE}/iniciativas`, label: "Iniciativas", icon: FolderKanban },
   { href: `${BASE}/experimentos`, label: "Experimentos", icon: FlaskConical, exact: true },
+  // Un research con pantalla propia. Va aquí, entre lo que se prueba y el
+  // cronograma, porque responde "¿qué encontramos?" — no es referencia de
+  // consulta ocasional: es el argumento con el que se prioriza novedades.
+  { href: `${BASE}/novedades`, label: "Novedades", icon: PackageX },
   { href: `${BASE}/cronograma`, label: "Cronograma", icon: GanttChartSquare },
   { href: `${BASE}/pendientes`, label: "Pendientes", icon: ListTodo },
   // Va con Pendientes y no con Iniciativas porque es trabajo por hacer, no una

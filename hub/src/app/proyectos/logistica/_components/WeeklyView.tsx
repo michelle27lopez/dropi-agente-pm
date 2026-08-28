@@ -5,7 +5,7 @@ import { jiraUrl, type IndicadorHoy, type ProyectoLite, type Weekly } from "@/ap
 import { formatHoras, formatPct, formatPct1 } from "@/app/proyectos/logistica/_lib/format";
 import PrintButton from "@/app/proyectos/logistica/_components/PrintButton";
 import SerieMensual from "@/app/proyectos/logistica/_components/charts/SerieMensual";
-import PaisBars from "@/app/proyectos/logistica/_components/charts/PaisBars";
+import BarrasHorizontales from "@/app/proyectos/logistica/_components/charts/BarrasHorizontales";
 import {
   Bar,
   Card,
@@ -260,10 +260,12 @@ function ExecutiveWeekly({ w }: { w: Weekly }) {
         <>
           <SectionTitle hint={comparacion.porPais.nota}>{comparacion.porPais.titulo}</SectionTitle>
           <Card>
-            <PaisBars
+            <BarrasHorizontales
+              nombre="Movilización"
               meta={comparacion.porPais.metaMovilizacion}
+              metaLabel={`Meta ${comparacion.porPais.metaMovilizacion}%`}
               filas={comparacion.porPais.filas.map((f) => ({
-                pais: f.pais,
+                label: f.pais,
                 valor: f.movilizacion,
                 tone: tonoMovilizacion(f.movilizacion, comparacion.porPais!.metaMovilizacion),
                 detalle: `${f.ordenes} órdenes · ${f.noMovilizado} sin movilizar`,

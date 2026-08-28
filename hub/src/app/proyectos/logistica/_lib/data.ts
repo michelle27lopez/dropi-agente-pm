@@ -737,6 +737,9 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     slug: "novedad-triaje",
     nombreCorto: "Triaje de novedades",
     codigo: "LOG-008",
+    // El research de junio tiene pantalla propia: /novedades. La ficha la
+    // ofrece y el sidebar enlaza directo (ver `vista` en el tipo).
+    vista: "/proyectos/logistica/novedades",
     // El árbol reabsorbe la rama de Novedad dentro de la perdida ②: "el dato de
     // novedades es inusable y el desenlace real es la devolución".
     aportaA: "Devolución",
@@ -1247,13 +1250,13 @@ export const weeklies: Weekly[] = [
       alcance:
         "Consolidado de los 10 países del tablero, ponderado por volumen. Julio sigue siendo el último mes cerrado; agosto madura en septiembre.",
       lectura:
-        "Se repite el cierre del 21-ago. La movilización subió a 82,7% (+0,4 pts, primer movimiento desde abril) y aun así el no movilizado creció 48.708 órdenes porque el volumen creció 9%. Sigue pendiente confirmar con Data si Guatemala y Costa Rica entran nuevas al consolidado: de eso depende si el +9% es crecimiento o cambio de alcance.",
+        "Se repite el cierre del 21-ago. La movilización subió a 82,7% (+0,4 pts, primer movimiento desde abril) y aun así el no movilizado creció 48.265 órdenes porque el volumen creció 9%. Sigue pendiente confirmar con Data si Guatemala y Costa Rica entran nuevas al consolidado: de eso depende si el +9% es crecimiento o cambio de alcance.",
       entregaNota:
-        "Sigue sin ser comparable hasta tener el export por cohorte de Data. En crudo, tres países bajo el 60%: México 55,7%, Costa Rica 58,4% y Argentina 59,6%.",
+        "Sigue sin ser comparable hasta tener el export por cohorte de Data. En crudo, tres países bajo el 60%: México 55,9%, Costa Rica 58,8% y Argentina 59,7%.",
       meses: ["Abril", "Mayo", "Junio", "Julio"],
       filas: [
         { metrica: "Movilización", valores: ["81,9%", "82,3%", "82,3%", "82,7%"], delta: "+0,4 pts", tono: "bueno" },
-        { metrica: "No movilizado", valores: ["700.281", "716.957", "737.865", "786.573"], delta: "+48.708", tono: "malo" },
+        { metrica: "No movilizado", valores: ["700.281", "716.957", "737.865", "786.130"], delta: "+48.265", tono: "malo" },
         { metrica: "Órdenes", valores: ["3,86M", "4,04M", "4,17M", "4,55M"], delta: "+9,0%", tono: "alerta" },
       ],
     },
@@ -1308,7 +1311,7 @@ export const weeklies: Weekly[] = [
     // Formato ejecutivo: usa comparación mensual + secciones. Estos campos se
     // conservan por compatibilidad con el render de semanas históricas.
     brecha: {
-      actual: 73.7, actualLabel: "73,7% crudo CO",
+      actual: 73.8, actualLabel: "73,8% crudo CO",
       meta: 70, metaLabel: "70%",
       gap: "No comparable", metaQ3: "Pendiente cohorte",
       paisFoco: "Colombia representa 71,9% del volumen de julio.",
@@ -1444,13 +1447,13 @@ export const weeklies: Weekly[] = [
       alcance:
         "Consolidado de los 10 países del tablero, ponderado por volumen. Julio es el primer mes cerrado nuevo desde junio.",
       lectura:
-        "La movilización sube a 82,7% (+0,4 pts): es el primer movimiento desde abril, después de tres meses planos. Pero el no movilizado sube 48.708 órdenes — más que abril→mayo (+16.676) y mayo→junio (+20.908) juntos. No es contradicción: el denominador creció 9% y una mejora de 0,4 pts no alcanza a absorberlo. Leer solo el porcentaje diría que julio fue el mejor mes del año; en órdenes reales fue el peor. ⚠️ El alcance también se movió: los cierres anteriores se reportaron sobre 9 países y julio trae 10. Guatemala (180.540 órdenes, 4,0% del volumen) y Costa Rica (5.182) aparecen con volumen — si son entradas nuevas al consolidado, cerca de la mitad del +9% es alcance y no crecimiento. [confirmar con Data antes de leer el delta de órdenes como crecimiento]",
+        "La movilización sube a 82,7% (+0,4 pts): es el primer movimiento desde abril, después de tres meses planos. Pero el no movilizado sube 48.265 órdenes — más que abril→mayo (+16.676) y mayo→junio (+20.908) juntos. No es contradicción: el denominador creció 9% y una mejora de 0,4 pts no alcanza a absorberlo. Leer solo el porcentaje diría que julio fue el mejor mes del año; en órdenes reales fue el peor. ⚠️ El alcance también se movió: los cierres anteriores se reportaron sobre 9 países y julio trae 10. Guatemala (180.540 órdenes, 4,0% del volumen) y Costa Rica (5.182) aparecen con volumen — si son entradas nuevas al consolidado, cerca de la mitad del +9% es alcance y no crecimiento. [confirmar con Data antes de leer el delta de órdenes como crecimiento]",
       entregaNota:
-        "Sigue sin ser comparable hasta tener el export por cohorte de Data — el mismo caveat que arrastra desde el 17-jul. En crudo, tres países quedan bajo el 60%: México 55,7%, Costa Rica 58,4% y Argentina 59,6%. Colombia va en 73,7%.",
+        "Sigue sin ser comparable hasta tener el export por cohorte de Data — el mismo caveat que arrastra desde el 17-jul. En crudo, tres países quedan bajo el 60%: México 55,9%, Costa Rica 58,8% y Argentina 59,7%. Colombia va en 73,8%.",
       meses: ["Abril", "Mayo", "Junio", "Julio"],
       filas: [
         { metrica: "Movilización", valores: ["81,9%", "82,3%", "82,3%", "82,7%"], delta: "+0,4 pts", tono: "bueno" },
-        { metrica: "No movilizado", valores: ["700.281", "716.957", "737.865", "786.573"], delta: "+48.708", tono: "malo" },
+        { metrica: "No movilizado", valores: ["700.281", "716.957", "737.865", "786.130"], delta: "+48.265", tono: "malo" },
         { metrica: "Órdenes", valores: ["3,86M", "4,04M", "4,17M", "4,55M"], delta: "+9,0%", tono: "alerta" },
       ],
       porPais: {
@@ -1459,16 +1462,16 @@ export const weeklies: Weekly[] = [
           "Meta de movilización 90% (KR2.1 de la CPO, movilizaciones 80→90%). La marca de la barra es esa meta: hoy solo Guatemala la cruza.",
         metaMovilizacion: 90,
         filas: [
-          { pais: "Colombia", participacion: "71,9% del volumen", ordenes: "3.266.371", movilizacion: 83.3, noMovilizado: "546.135", entrega: 73.7, transportadoras: 10 },
-          { pais: "Ecuador", participacion: "7,7%", ordenes: "352.309", movilizacion: 82.3, noMovilizado: "62.252", entrega: 72.3, transportadoras: 5 },
-          { pais: "Chile", participacion: "7,5%", ordenes: "342.048", movilizacion: 77.5, noMovilizado: "76.938", entrega: 73.8, transportadoras: 4 },
-          { pais: "México", participacion: "6,9%", ordenes: "315.250", movilizacion: 79.0, noMovilizado: "66.287", entrega: 55.7, transportadoras: 6 },
-          { pais: "Guatemala", participacion: "4,0%", ordenes: "180.540", movilizacion: 90.3, noMovilizado: "17.569", entrega: 75.0, transportadoras: 2 },
-          { pais: "Paraguay", participacion: "0,9%", ordenes: "40.638", movilizacion: 76.7, noMovilizado: "9.478", entrega: 74.7, transportadoras: 4 },
-          { pais: "Panamá", participacion: "0,6%", ordenes: "28.264", movilizacion: 84.7, noMovilizado: "4.314", entrega: 70.2, transportadoras: 2 },
-          { pais: "Argentina", participacion: "0,3%", ordenes: "14.093", movilizacion: 83.3, noMovilizado: "2.358", entrega: 59.6, transportadoras: 2 },
-          { pais: "Costa Rica", participacion: "0,1%", ordenes: "5.182", movilizacion: 86.3, noMovilizado: "712", entrega: 58.4, transportadoras: 2 },
-          { pais: "Perú", participacion: "0,0%", ordenes: "1.286", movilizacion: 58.8, noMovilizado: "530", entrega: 60.8, transportadoras: 3 },
+          { pais: "Colombia", participacion: "71,9% del volumen", ordenes: "3.266.371", movilizacion: 83.3, noMovilizado: "545.918", entrega: 73.8, transportadoras: 10 },
+          { pais: "Ecuador", participacion: "7,7%", ordenes: "352.309", movilizacion: 82.3, noMovilizado: "62.241", entrega: 72.3, transportadoras: 5 },
+          { pais: "Chile", participacion: "7,6%", ordenes: "342.048", movilizacion: 77.5, noMovilizado: "76.915", entrega: 73.9, transportadoras: 4 },
+          { pais: "México", participacion: "6,9%", ordenes: "315.250", movilizacion: 79.0, noMovilizado: "66.098", entrega: 55.9, transportadoras: 6 },
+          { pais: "Guatemala", participacion: "4,0%", ordenes: "180.540", movilizacion: 90.3, noMovilizado: "17.568", entrega: 75.5, transportadoras: 2 },
+          { pais: "Paraguay", participacion: "0,9%", ordenes: "40.638", movilizacion: 76.7, noMovilizado: "9.478", entrega: 74.8, transportadoras: 4 },
+          { pais: "Panamá", participacion: "0,6%", ordenes: "28.264", movilizacion: 84.7, noMovilizado: "4.312", entrega: 70.2, transportadoras: 2 },
+          { pais: "Argentina", participacion: "0,3%", ordenes: "14.093", movilizacion: 83.3, noMovilizado: "2.358", entrega: 59.7, transportadoras: 2 },
+          { pais: "Costa Rica", participacion: "0,1%", ordenes: "5.182", movilizacion: 86.3, noMovilizado: "712", entrega: 58.8, transportadoras: 2 },
+          { pais: "Perú", participacion: "0,0%", ordenes: "1.286", movilizacion: 58.8, noMovilizado: "530", entrega: 61.4, transportadoras: 3 },
         ],
       },
     },
@@ -1486,7 +1489,7 @@ export const weeklies: Weekly[] = [
     },
 
     focoSiguienteSemana: [
-      "Cierre de julio: confirmar con Data si Guatemala y Costa Rica entran nuevas al consolidado. De esa respuesta depende si el +9% de órdenes es crecimiento o cambio de alcance — y si el salto de 48.708 no movilizadas es del negocio o del corte.",
+      "Cierre de julio: confirmar con Data si Guatemala y Costa Rica entran nuevas al consolidado. De esa respuesta depende si el +9% de órdenes es crecimiento o cambio de alcance — y si el salto de 48.265 no movilizadas es del negocio o del corte.",
       "Recolecciones: completar PRM-1465 con owner y frontera México/PAU, y sembrar los accesos antes de aplicar la RLS 043 — hoy el entorno tiene 0 accesos — para poder correr el piloto — Driver: Juan Diego.",
       "Indiana: mover el proyecto a un team de Vercel de Dropi con Juan adentro. Vive en la cuenta personal de Jaime y lleva 28 commits sin publicar desde el 28-jul — Responsable: Jaime / Juan Diego.",
       "PRM-1462 (ENVÍA): pegar a mano los nueve campos que ya están en el comentario 52186. Se confirmó contra la API que no hay atajo — Polaris no acepta escritura de ningún campo.",
@@ -1506,11 +1509,11 @@ export const weeklies: Weekly[] = [
       },
       {
         nombre: "Órdenes no movilizadas",
-        valor: "786.573",
+        valor: "786.130",
         tono: "malo",
-        estado: "+48.708",
+        estado: "+48.265",
         trend: "up",
-        nota: "Mayor salto mensual del año — más que abr→may y may→jun juntos. Colombia aporta 546.135 (69% del total).",
+        nota: "Mayor salto mensual del año — más que abr→may y may→jun juntos. Colombia aporta 545.918 (69% del total).",
         serie: "No movilizado",
       },
       {
@@ -1525,7 +1528,7 @@ export const weeklies: Weekly[] = [
     // Formato ejecutivo: usa comparación mensual + secciones. Estos campos se
     // conservan por compatibilidad con el render de semanas históricas.
     brecha: {
-      actual: 73.7, actualLabel: "73,7% crudo CO",
+      actual: 73.8, actualLabel: "73,8% crudo CO",
       meta: 70, metaLabel: "70%",
       gap: "No comparable", metaQ3: "Pendiente cohorte",
       paisFoco: "Colombia representa 71,9% del volumen de julio.",
