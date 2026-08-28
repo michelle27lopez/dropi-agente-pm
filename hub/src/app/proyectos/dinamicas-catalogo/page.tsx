@@ -112,6 +112,13 @@ export default function DinamicasCatalogoDashboardPage() {
                   <div style={{ fontSize: 12, color: "var(--muted)" }}>Productividad del catálogo · ruta a 10M</div>
                 </div>
               </a>
+              <a href="/proyectos/dinamicas-catalogo/hallazgos" style={{ display: "flex", alignItems: "center", gap: 10, background: "#F8FAFC", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 16px", textDecoration: "none", flex: "1 1 200px", minWidth: 200, maxWidth: 260 }}>
+                <span style={{ fontSize: 20, flexShrink: 0 }}>🔎</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", marginBottom: 2 }}>Hallazgos Cyber Days</div>
+                  <div style={{ fontSize: 12, color: "var(--muted)" }}>Oferta, demanda y palancas · primera campaña</div>
+                </div>
+              </a>
             </div>
           )}
         </div>
