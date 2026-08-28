@@ -360,6 +360,14 @@ export type ProyectoMetadataLogistica = {
    * sidebar— no sabía que su propia vista existía.
    */
   vista?: string;
+  /**
+   * Lo que de esta iniciativa YA está en beta o producción, aunque la
+   * iniciativa siga en Discovery. Es la columna Following del stage gate
+   * (Discovery / POC / Delivery / Following) y se declara aquí, no en
+   * Supabase: Indiana es el deploy real de LOG-013 y no tiene fila propia
+   * en Darwin — inventársela sería duplicar la ficha.
+   */
+  following?: { nombre: string; subestado: "Beta controlada" | "Producción"; nota: string; href?: string }[];
 };
 
 // Nombre histórico conservado para no romper los consumidores del tablero.
@@ -504,6 +512,17 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
       { tipo: "prototipo", label: "Indiana · Mapa de recolecciones", href: "https://indiana-map.vercel.app/mapa" },
       { tipo: "prototipo", label: "Control de recolecciones (versión del hub)", href: "/proyectos/logistica/recolecciones" },
     ],
+    // Lo que de LOG-013 ya está en producción, aunque la oportunidad siga en
+    // Discovery: el deploy de Indiana. Semana 21–27 ago: envío por WhatsApp,
+    // respuestas del CRM, armado concurrente, e2e + CI, key de CARTO.
+    following: [
+      {
+        nombre: "Indiana · Mapa de recolecciones",
+        subestado: "Producción",
+        nota: "Envío por WhatsApp, respuestas del CRM y armado concurrente desplegados. Faltan team de Vercel de Dropi y accesos sembrados (RLS 043).",
+        href: "https://indiana-map.vercel.app/mapa",
+      },
+    ],
     experimentos: ["recoleccion-proactiva"],
   },
   {
@@ -611,8 +630,11 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     bloqueo: "Capacidad de TI (cola de dev) + negociación de la mesa logística.",
     descripcion: "Parametrizar el cobro de fulfillment con sus dos esquemas (mensual y diario).",
     porQue: "92.000 órdenes al mes en bodegas de terceros, y entre el 20% y el 25% de las despachadas no llegan a entregarse.",
-    proximoPaso: "Cerrar los gates de economía y elegibilidad; esperar respuesta de TI.",
-    foco: "Corte transversal auditado: la cadena PROD-238/648/785/995/1171/1330/1526 prueba iteración de Producto, no desarrollo. PROD-1526 está en Dependencia, PROD-240 sigue en backlog sin assignee e INVS-66 está en curso. Bodegas 2PL Bogotá/Cali/Medellín = 92.000 órdenes/mes; 20–25% de órdenes preparadas/despachadas no llegan a Entregado. Alcance: base, multi-unidad, etiquetado, kits/combos, almacenamiento y recepción. Gates: E2E, +68%/+78%, economía, triggers, elegibilidad, wallet/reversos, actores, países y respuesta TI. Darwin LOG-014, Jira comentario 50931 y Confluence 1572732930 ya coinciden.",
+    proximoPaso: "Confirmar con Growth Ops el proyecto y ticket con los que se entrega el backoffice.",
+    // 28-ago: el backoffice de fulfillment (facturar mejor los costos
+    // pendientes) se organizó con Growth Ops para entregarlo junto a otro
+    // proyecto que ellos llevan. Nombre del proyecto y ticket: por confirmar.
+    foco: "Backoffice de fulfillment (28-ago): facturar mejor los costos pendientes; organizado con Growth Ops para entregarlo junto a un proyecto de ellos — proyecto y ticket por confirmar. Corte transversal auditado: la cadena PROD-238/648/785/995/1171/1330/1526 prueba iteración de Producto, no desarrollo. PROD-1526 está en Dependencia, PROD-240 sigue en backlog sin assignee e INVS-66 está en curso. Bodegas 2PL Bogotá/Cali/Medellín = 92.000 órdenes/mes; 20–25% de órdenes preparadas/despachadas no llegan a Entregado. Alcance: base, multi-unidad, etiquetado, kits/combos, almacenamiento y recepción. Gates: E2E, +68%/+78%, economía, triggers, elegibilidad, wallet/reversos, actores, países y respuesta TI. Darwin LOG-014, Jira comentario 50931 y Confluence 1572732930 ya coinciden.",
     links: [
       { tipo: "prototipo", label: "RPP · Parametrizar fulfillment", href: rpp("old/fulfillment/parametrizar", "admin") },
       { tipo: "figma", label: "Diseño en Figma", href: "https://www.figma.com/design/iR3wuYGNrfTfaDKpViDf0Y?node-id=2233-35839" },
@@ -731,6 +753,11 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
     links: [
       { tipo: "drive", label: "Drive · Kickoff prevención de devoluciones", href: "https://drive.google.com/file/d/1joY2mYtgDpgtXpxuvRQToFdIP5x2xNUL/view" },
       { tipo: "doc", label: "Confluence · Síntesis existente", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1530560555" },
+      // Research de novedades de junio 2026 (RES-LOG-NOV-001, 24-ago): 324
+      // etiquetas → 12 motivos, triaje y techo de +95.688 entregas/mes.
+      { tipo: "doc", label: "Manifiesto de Novedades · RES-LOG-NOV-001 (artifact)", href: "https://claude.ai/code/artifact/eca3603b-444a-4e81-9a49-4e781ea63a7b" },
+      { tipo: "doc", label: "Research novedades jun-2026 (repo)", href: "https://github.com/jaimeguevara-dropi/dropi-agente-pm/blob/main/logistica-lab/proyectos/novedad-dueno-triaje/research-novedades-jun2026.md" },
+      { tipo: "doc", label: "Catálogo de motivos y acciones (repo)", href: "https://github.com/jaimeguevara-dropi/dropi-agente-pm/blob/main/logistica-lab/proyectos/novedad-dueno-triaje/catalogo-motivos-y-acciones.md" },
     ],
   },
 
@@ -1088,6 +1115,11 @@ export type IndicadorHoy = {
   tono: "bueno" | "alerta" | "malo";
   estado: string; // etiqueta corta del estado
   nota: string;
+  /** Dirección del cambio. Pinta la flecha del delta; el color lo da `tono`. */
+  trend?: "up" | "down" | "flat";
+  /** Nombre de la métrica de `comparacionMensual.filas` que grafica este
+      indicador al elegirlo. Sin `serie`, la card no cambia la gráfica. */
+  serie?: string;
 };
 
 // Brecha de entrega (para la barra visual).
@@ -1194,7 +1226,209 @@ export type Weekly = {
 // Cada semana es una entrada. La primera del array es la más reciente (la que se
 // muestra por defecto). NO borrar semanas viejas: el switch de /updates las conserva.
 export const weeklies: Weekly[] = [
-  // ── Semana 17 – 21 ago 2026 (actual) ────────────────────────────────────────
+  // ── Semana 24 – 28 ago 2026 (actual) ────────────────────────────────────────
+  // Semana de operación y de research, no de cifra mensual: julio sigue
+  // siendo el último mes cerrado, así que la comparación se repite SIN el
+  // desglose por país (regla del tipo: no se republica como dato fresco).
+  //
+  // Las cifras de bodegas lejanas ("5 → 2 días", "~10 mil órdenes/semana")
+  // las declaró Juan Diego el 28-ago sobre lo que se coordinó con la
+  // transportadora; no hay export que las respalde todavía. Se publican
+  // marcadas como declaradas, no como medidas.
+  {
+    id: "2026-w35",
+    fecha: "Viernes 28 de agosto de 2026",
+    semana: "Semana 24 – 28 ago",
+    foco:
+      "Indiana salió a producción y la operación movió las bodegas lejanas. El envío de recolecciones por WhatsApp, las respuestas del CRM y el armado concurrente ya están desplegados; y en Garzón, Cúcuta y Bucaramanga las guías que tardaban 5 días en moverse ahora tardan 2. El research de novedades cerró: 911.168 novedades en junio, 17% se rescatan, y el formulario no tiene el campo que más rescata. El backoffice de fulfillment se organizó con Growth Ops para entregarlo junto a un proyecto de ellos. Julio sigue siendo el último mes cerrado.",
+
+    comparacionMensual: {
+      titulo: "Cierre julio — sin mes nuevo esta semana",
+      alcance:
+        "Consolidado de los 10 países del tablero, ponderado por volumen. Julio sigue siendo el último mes cerrado; agosto madura en septiembre.",
+      lectura:
+        "Se repite el cierre del 21-ago. La movilización subió a 82,7% (+0,4 pts, primer movimiento desde abril) y aun así el no movilizado creció 48.708 órdenes porque el volumen creció 9%. Sigue pendiente confirmar con Data si Guatemala y Costa Rica entran nuevas al consolidado: de eso depende si el +9% es crecimiento o cambio de alcance.",
+      entregaNota:
+        "Sigue sin ser comparable hasta tener el export por cohorte de Data. En crudo, tres países bajo el 60%: México 55,7%, Costa Rica 58,4% y Argentina 59,6%.",
+      meses: ["Abril", "Mayo", "Junio", "Julio"],
+      filas: [
+        { metrica: "Movilización", valores: ["81,9%", "82,3%", "82,3%", "82,7%"], delta: "+0,4 pts", tono: "bueno" },
+        { metrica: "No movilizado", valores: ["700.281", "716.957", "737.865", "786.573"], delta: "+48.708", tono: "malo" },
+        { metrica: "Órdenes", valores: ["3,86M", "4,04M", "4,17M", "4,55M"], delta: "+9,0%", tono: "alerta" },
+      ],
+    },
+
+    avanceInvestigacion: {
+      titulo: "Investigación de oportunidades por fase",
+      descripcion:
+        "'Recogido por Dropi' sigue siendo la fase activa y esta semana sí se movió con campo: Indiana en producción y bodegas lejanas coordinadas con la transportadora. Falta el piloto con outcome medido.",
+      pasos: [
+        { nombre: "Confirmación", detalle: "Oportunidades levantadas + 6 sesiones moderadas (18–25 jul), aceptación 81/100", estado: "listo" },
+        { nombre: "Generación de guía", detalle: "Proyecto en definición, no experimento listo", estado: "listo" },
+        { nombre: "Recogido por Dropi", detalle: "Indiana en producción; bodegas lejanas 5 → 2 días; faltan accesos y piloto con outcome", estado: "activo" },
+        { nombre: "Conectar el flujo", detalle: "WhatsApp ya conectado; falta cerrar el ciclo solicitud → acuse → resultado", estado: "siguiente" },
+      ],
+    },
+
+    focoSiguienteSemana: [
+      "Indiana: mover el proyecto a un team de Vercel de Dropi y sembrar los accesos (RLS 043) para logística y comercial — hoy el entorno tiene 0 accesos — Responsable: Jaime / Juan Diego.",
+      "Bodegas lejanas: pedir a Data el export de tiempo guía generada → recogida por bodega para convertir el '5 → 2 días' declarado en cifra medida.",
+      "Novedades: validar los 12 motivos con quien gestiona novedades y confirmar con TI qué carriers exponen API de reprogramación — Envía primero, es el 37% del volumen.",
+      "Novedades: resolver con Data el 46% de México sin explicar antes de llevar cualquier cifra a negocio.",
+      "Backoffice de fulfillment: confirmar con Growth Ops el proyecto con el que se entrega y su ticket.",
+    ],
+
+    indicadores: [
+      {
+        nombre: "Movilización consolidada",
+        valor: "82,7%",
+        meta: "90%",
+        tono: "alerta",
+        estado: "sin cierre nuevo",
+        nota: "Julio sigue siendo el último mes cerrado. Solo Guatemala (90,3%) alcanza la meta de la CPO.",
+        serie: "Movilización",
+      },
+      {
+        nombre: "Recolección en bodegas lejanas",
+        valor: "2 días",
+        tono: "bueno",
+        estado: "antes 5 días",
+        trend: "down",
+        nota: "Garzón, Cúcuta y Bucaramanga: ~10 mil órdenes/semana que tardaban 5 días en moverse ahora tardan 2. Declarado por la célula, pendiente de export.",
+      },
+      {
+        nombre: "Novedades de junio",
+        valor: "911.168",
+        tono: "malo",
+        estado: "17,0% se rescatan",
+        nota: "74,3% terminan devueltas. Techo conservador: +95.688 entregas/mes llevando cada motivo al P75 de su clúster.",
+      },
+    ] as IndicadorHoy[],
+
+    // Formato ejecutivo: usa comparación mensual + secciones. Estos campos se
+    // conservan por compatibilidad con el render de semanas históricas.
+    brecha: {
+      actual: 73.7, actualLabel: "73,7% crudo CO",
+      meta: 70, metaLabel: "70%",
+      gap: "No comparable", metaQ3: "Pendiente cohorte",
+      paisFoco: "Colombia representa 71,9% del volumen de julio.",
+      lectura: "El crudo de julio no evalúa el KR: falta el export por cohorte de Data.",
+      perdidas: [],
+    },
+    tiempo: {
+      lectura: "Sin medición nueva del KPI de tiempo por fases esta semana.",
+      dropi: [
+        { fase: "Ruta Dropi hasta transportadora", horas: 44.9, metaHoras: 24, responsable: "Célula", palanca: "medición manual mientras no se retome LOG-011" },
+      ],
+      carrier: [
+        { fase: "Maduración de entrega", horas: 24, metaHoras: 24, palanca: "comparar cohortes cerradas" },
+      ],
+      proximosPasos: [],
+    },
+    hallazgos: [],
+
+    secciones: [
+      {
+        titulo: "Recolecciones · Indiana",
+        nota: "Semana 21–27 ago. Lo que salió a producción y lo que se movió en la operación.",
+        proyectos: [
+          {
+            nombre: "Bodegas lejanas: de 5 a 2 días",
+            ticket: "PRM-1465",
+            estado: "Movido",
+            estadoTono: "verde",
+            nota:
+              "Garzón (Huila), Cúcuta y Bucaramanga tenían guías listas sin recoger. Se coordinó con la transportadora con mensajes y los excels que genera la célula; ~10 mil órdenes/semana pasaron de moverse en 5 días a 2.",
+            impacto: "Órdenes movilizadas en menos tiempo. Cifra declarada por la célula, pendiente del export de Data.",
+          },
+          {
+            nombre: "Envío de recolecciones por WhatsApp",
+            estado: "En producción",
+            estadoTono: "verde",
+            nota:
+              "Se manda el número correcto al CRM —elegido entre los que trae el proveedor— con plantilla propia, lote_id asignado antes del despacho y registro de cada envío. La vista previa muestra el texto real del canal que se va a usar.",
+            enlace: { label: "Abrir Indiana", href: "https://indiana-map.vercel.app/mapa" },
+          },
+          {
+            nombre: "Respuestas de los proveedores",
+            estado: "En producción",
+            estadoTono: "verde",
+            nota:
+              "El webhook acepta la vuelta del CRM aunque llegue sin cabecera ni id de mensaje. Si falta la credencial, la respuesta se guarda igual pero no cierra lotes: no se pierde nada y no se cierra de más.",
+          },
+          {
+            nombre: "Armado de solicitudes",
+            estado: "En producción",
+            estadoTono: "verde",
+            nota:
+              "Pantalla nueva de armado con control de versión concurrente (migración 014): dos personas trabajando el mismo transportador no se pisan.",
+          },
+          {
+            nombre: "Interfaz, calidad y mapa",
+            estado: "Cerrado",
+            estadoTono: "verde",
+            nota:
+              "Estados de error, carga y vacío en todo el panel y accesibilidad del login corregida. Pruebas end-to-end con Playwright y CI en cada push. CARTO empezó a exigir API key y el mapa salía tachado: ya está cargada, producción limpia.",
+          },
+          {
+            nombre: "Deploy y accesos",
+            estado: "Pendiente",
+            estadoTono: "ambar",
+            nota:
+              "El proyecto sigue en la cuenta personal de Jaime. Falta moverlo a un team de Vercel de Dropi y sembrar los accesos (RLS 043) para que logística y comercial vean la misma información.",
+          },
+        ],
+      },
+      {
+        titulo: "Research · Novedades",
+        nota: "Discovery con datos antes de comprometer desarrollo. Alimenta PRM-1512 y PRM-1523.",
+        proyectos: [
+          {
+            nombre: "Manifiesto de Novedades · RES-LOG-NOV-001",
+            ticket: "PRM-1512",
+            estado: "Research cerrado",
+            estadoTono: "verde",
+            nota:
+              "324 etiquetas de 10 países caben en 12 motivos. El motivo casi no predice el desenlace; lo predice si existe una acción que ofrecerle al comprador. Y en el módulo, la acción que más rescata —una fecha— es la única que el formulario no tiene.",
+            impacto: "+95.688 entregas/mes de techo, 58% en Coordinación. 43.053 están en una sola etiqueta: COORDINAR LA ENTREGA · Envía · Colombia.",
+            enlace: { label: "Leer el manifiesto", href: "https://claude.ai/code/artifact/eca3603b-444a-4e81-9a49-4e781ea63a7b" },
+          },
+          {
+            nombre: "Triaje: pelear, soltar, rediseñar",
+            estado: "Propuesta",
+            estadoTono: "azul",
+            nota:
+              "Soltar los 314K rechazos (rescate 5,9%): devolver rápido y barato. Rediseñar los 230K donde vive el techo. Pelear los 110K que ya funcionan en algún país: copiar el proceso del mejor, costo de desarrollo ≈ 0.",
+            enlace: { label: "Research completo", href: "https://github.com/jaimeguevara-dropi/dropi-agente-pm/blob/main/logistica-lab/proyectos/novedad-dueno-triaje/research-novedades-jun2026.md" },
+          },
+          {
+            nombre: "Lo que el research no puede decir",
+            estado: "Vacíos declarados",
+            estadoTono: "ambar",
+            nota:
+              "Sin voz del comprador, un solo mes y México con 46% sin explicar. Los 12 motivos salieron de la data: falta validarlos con operación y confirmar con TI qué carriers exponen API de reprogramación.",
+          },
+        ],
+      },
+      {
+        titulo: "Delivery · fulfillment",
+        nota: "Economía de la orden (KR3.1), no tasa de entrega.",
+        proyectos: [
+          {
+            nombre: "Backoffice de fulfillment",
+            ticket: "PRM-1446",
+            estado: "En organización con Growth Ops",
+            estadoTono: "azul",
+            nota:
+              "Facturar mejor los costos pendientes de fulfillment. Estos días se organizó todo con Growth Ops para entregarlo junto a otro proyecto que ellos están haciendo. Falta confirmar con qué proyecto y bajo qué ticket.",
+            enlace: { label: "Ver Parametrización de fulfillment", href: "/proyectos/logistica/proyecto/fulfillment" },
+          },
+        ],
+      },
+    ] as SeccionProyectos[],
+  },
+
+  // ── Semana 17 – 21 ago 2026 ────────────────────────────────────────
   // Cubre las tres semanas transcurridas desde el weekly del 31-jul: no hubo
   // entradas w32 ni w33, así que este cierre las consolida en vez de fingir que
   // la semana empezó el lunes.
@@ -1266,14 +1500,18 @@ export const weeklies: Weekly[] = [
         meta: "90%",
         tono: "alerta",
         estado: "+0,4 pts",
+        trend: "up",
         nota: "Primer movimiento desde abril, tras tres meses planos. Solo Guatemala (90,3%) alcanza la meta de la CPO.",
+        serie: "Movilización",
       },
       {
         nombre: "Órdenes no movilizadas",
         valor: "786.573",
         tono: "malo",
         estado: "+48.708",
+        trend: "up",
         nota: "Mayor salto mensual del año — más que abr→may y may→jun juntos. Colombia aporta 546.135 (69% del total).",
+        serie: "No movilizado",
       },
       {
         nombre: "Portafolio de la célula",

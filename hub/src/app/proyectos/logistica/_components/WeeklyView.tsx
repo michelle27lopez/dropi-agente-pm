@@ -1,12 +1,51 @@
 "use client";
 
 import { useState } from "react";
-import { jiraUrl, type Weekly } from "@/app/proyectos/logistica/_lib/data";
+import { jiraUrl, type IndicadorHoy, type ProyectoLite, type Weekly } from "@/app/proyectos/logistica/_lib/data";
+import { formatHoras, formatPct, formatPct1 } from "@/app/proyectos/logistica/_lib/format";
 import PrintButton from "@/app/proyectos/logistica/_components/PrintButton";
-import { Bar, Card, Table, PageHeader, SectionTitle, type Column, type Tone } from "@/app/proyectos/logistica/_components/ui";
+import SerieMensual from "@/app/proyectos/logistica/_components/charts/SerieMensual";
+import PaisBars from "@/app/proyectos/logistica/_components/charts/PaisBars";
+import {
+  Bar,
+  Card,
+  FilterPills,
+  KpiCard,
+  Narrativa,
+  Pill,
+  Table,
+  PageHeader,
+  SectionTitle,
+  type Column,
+  type Tone,
+} from "@/app/proyectos/logistica/_components/ui";
 
-// Columnas de la comparación mensual. El delta se tiñe porque es lo único de
-// la tabla que pide una reacción; el resto son cifras de contexto.
+// El Weekly Product de Logística.
+//
+// Dos renders según el dato: las semanas con `comparacionMensual` usan el
+// formato ejecutivo (ExecutiveWeekly); las anteriores (w27–w30) conservan su
+// layout histórico (HistoricWeekly) sin tocar — se dejaron de escribir así el
+// 17-jul y no vale la pena migrarlas.
+//
+// El formato ejecutivo se rediseñó el 28-ago sobre el kit `ui/`, replicando lo
+// que funciona en las pantallas de Suppliers: KPI cards elegibles que cambian
+// la gráfica de al lado, serie mensual con recharts, países en barras contra
+// la meta, y cada sección de proyectos como cards con estado. Antes cada bloque
+// tenía su propia card (.wk-ind-card, .wk-proj2, .wk-kpi) y su propio badge
+// (.wk-estado.est-*): cuatro vocabularios para decir "estado".
+
+// Vocabulario del weekly → los cuatro estados del sistema. `IndicadorHoy` y
+// `ProyectoLite` hablan en verde/ámbar/rojo porque así los escribe quien
+// redacta; el kit habla en ok/warn/risk. La traducción vive aquí, una vez.
+const TONO_INDICADOR: Record<IndicadorHoy["tono"], Tone> = { bueno: "ok", alerta: "warn", malo: "risk" };
+const TONO_ESTADO: Record<ProyectoLite["estadoTono"], Tone> = {
+  verde: "ok",
+  ambar: "warn",
+  rojo: "risk",
+  azul: "info",
+  gris: "neutral",
+};
+
 type FilaMensual = NonNullable<Weekly["comparacionMensual"]>["filas"][number];
 type FilaPais = NonNullable<NonNullable<Weekly["comparacionMensual"]>["porPais"]>["filas"][number];
 
@@ -83,69 +122,166 @@ function horasTono(horas: number): "verde" | "ambar" | "rojo" {
   return "rojo";
 }
 
-function formatHoras(horas: number) {
-  return `${horas.toFixed(horas % 1 === 0 ? 0 : 1).replace(".", ",")}h`;
+// La conclusión primero. `foco` y `lectura` son párrafos de 300–500
+// caracteres; la primera frase es el titular (ley §2: "el título dice la
+// conclusión") y el resto baja a detalle.
+function partir(texto: string): [string, string] {
+  const m = texto.match(/^([^]+?[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡"'])/);
+  if (!m) return [texto, ""];
+  return [m[1], texto.slice(m[0].length)];
 }
 
-function formatPct(pct?: number) {
-  if (pct === undefined) return "";
-  return `${pct.toFixed(2).replace(".", ",")}%`;
-}
-
-// Un decimal, coma decimal. La tabla mensual viene en texto ya formateado; el
-// desglose por país guarda números porque la barra los necesita en escala.
-function formatPct1(pct: number) {
-  return `${pct.toFixed(1).replace(".", ",")}%`;
+function Proyectos({ proyectos }: { proyectos: ProyectoLite[] }) {
+  return (
+    <div className="u-grid" style={{ ["--u-min" as string]: "300px" }}>
+      {proyectos.map((p) => {
+        const tone = TONO_ESTADO[p.estadoTono];
+        const jira = jiraUrl(p.ticket);
+        return (
+          <Card key={p.nombre} tone={tone}>
+            <div className="u-row" style={{ justifyContent: "space-between", alignItems: "flex-start" }}>
+              <span className="u-card__title">{p.nombre}</span>
+              <Pill tone={tone}>{p.estado}</Pill>
+            </div>
+            <p className="u-card__body">{p.nota}</p>
+            {p.impacto && (
+              <div className="u-row u-card__impacto">
+                <Pill tone="ok">Impacto</Pill>
+                <span>{p.impacto}</span>
+              </div>
+            )}
+            {(p.enlace || jira) && (
+              <div className="u-row" style={{ marginTop: 10, gap: 14 }}>
+                {p.enlace && (
+                  <a href={p.enlace.href} className="u-link" target={p.enlace.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+                    {p.enlace.label} →
+                  </a>
+                )}
+                {jira && (
+                  <a href={jira} target="_blank" rel="noreferrer" className="u-link">
+                    {p.ticket} ↗
+                  </a>
+                )}
+              </div>
+            )}
+          </Card>
+        );
+      })}
+    </div>
+  );
 }
 
 function ExecutiveWeekly({ w }: { w: Weekly }) {
   const comparacion = w.comparacionMensual;
+  // La serie que se grafica. Arranca en la del primer indicador que declare
+  // una; si ninguno la declara, en la primera fila de la tabla.
+  const [serie, setSerie] = useState<string>(
+    () => w.indicadores.find((k) => k.serie)?.serie ?? comparacion?.filas[0]?.metrica ?? "",
+  );
   if (!comparacion) return null;
+
+  const fila = comparacion.filas.find((f) => f.metrica === serie) ?? comparacion.filas[0];
+  const [focoTitulo, focoDetalle] = partir(w.foco);
+  const [lecturaTitulo, lecturaDetalle] = partir(comparacion.lectura);
+  const [entregaTitulo, entregaDetalle] = partir(comparacion.entregaNota);
+  const metaSerie = fila.metrica === "Movilización" ? comparacion.porPais?.metaMovilizacion ?? 90 : undefined;
 
   return (
     <>
-      {/* Sin numeración: DESIGN.md §6 prohíbe el patrón "01 / 02 / 03" en los
-          títulos de sección. La secuencia ya la da el orden de lectura. */}
-      <SectionTitle hint={comparacion.alcance}>{comparacion.titulo}</SectionTitle>
-      <Card>
-        {/* Era una tabla falsa: divs con role="table" sobre CSS Grid. Funcionaba,
-            pero duplicaba el primitivo y obligaba a mantener su propio
-            responsive con data-label. Ahora es una <table> de verdad. */}
-        <Table
-          columns={columnasMensual(comparacion.meses)}
-          rows={comparacion.filas}
-          getKey={(f) => f.metrica}
-        />
-        <p className="wk-monthly-reading">{comparacion.lectura}</p>
-        <p className="wk-monthly-caveat">
-          <strong>% entrega:</strong> {comparacion.entregaNota}
-        </p>
-      </Card>
+      <Narrativa eyebrow={w.semana} titulo={focoTitulo}>
+        {focoDetalle && <p>{focoDetalle}</p>}
+      </Narrativa>
 
-      {/* El consolidado esconde que el rango va de 58,8% a 90,3%: un solo
-          número ponderado por Colombia no deja ver dónde está la fuga. */}
+      {/* ── Los indicadores, como están hoy ─────────────────────────────────
+          Una KPI card por indicador. La que declara `serie` se puede elegir
+          y cambia la gráfica del cierre mensual — mismo patrón que el Metrics
+          Lab de Suppliers, sin duplicar el dato. */}
+      <SectionTitle>Los indicadores, como están hoy</SectionTitle>
+      <div className="u-grid" style={{ ["--u-min" as string]: "240px" }}>
+        {w.indicadores.map((k) => {
+          const tone = TONO_INDICADOR[k.tono];
+          return (
+            <KpiCard
+              key={k.nombre}
+              label={k.nombre}
+              value={k.valor}
+              meta={k.meta}
+              tone={tone}
+              delta={{ text: k.estado, trend: k.trend, tone }}
+              hint={k.nota}
+              selected={k.serie ? k.serie === serie : undefined}
+              onSelect={k.serie ? () => setSerie(k.serie!) : undefined}
+            />
+          );
+        })}
+      </div>
+
+      {/* ── Cierre mensual ──────────────────────────────────────────────────
+          Tabla y gráfica leen el mismo texto; la gráfica es la tendencia y la
+          tabla la precisión. Sin numeración de secciones (DESIGN.md §6). */}
+      <SectionTitle hint={comparacion.alcance}>{comparacion.titulo}</SectionTitle>
+      <div className="u-grid" style={{ ["--u-min" as string]: "340px", alignItems: "start" }}>
+        <Table columns={columnasMensual(comparacion.meses)} rows={comparacion.filas} getKey={(f) => f.metrica} />
+        <Card>
+          <div className="u-row" style={{ justifyContent: "space-between" }}>
+            <span className="u-stat__label">Serie mensual</span>
+            <FilterPills
+              label="Métrica de la gráfica"
+              options={comparacion.filas.map((f) => ({ value: f.metrica, label: f.metrica }))}
+              value={fila.metrica}
+              onChange={setSerie}
+            />
+          </div>
+          <SerieMensual
+            key={fila.metrica}
+            meses={comparacion.meses}
+            valores={fila.valores}
+            nombre={fila.metrica}
+            tone={TONO_INDICADOR[fila.tono]}
+            meta={metaSerie}
+            height={200}
+          />
+        </Card>
+      </div>
+      <div className="u-grid" style={{ ["--u-min" as string]: "340px", marginTop: 12 }}>
+        <Narrativa eyebrow="Lectura" titulo={lecturaTitulo}>
+          {lecturaDetalle && <p>{lecturaDetalle}</p>}
+        </Narrativa>
+        <Narrativa eyebrow="% entrega" tone="warn" titulo={entregaTitulo}>
+          {entregaDetalle && <p>{entregaDetalle}</p>}
+        </Narrativa>
+      </div>
+
+      {/* ── Por país ────────────────────────────────────────────────────────
+          El consolidado esconde que el rango va de 58,8% a 90,3%: un solo
+          número ponderado por Colombia no deja ver dónde está la fuga. Las
+          barras dan el vistazo; la tabla, las seis columnas. */}
       {comparacion.porPais && (
         <>
           <SectionTitle hint={comparacion.porPais.nota}>{comparacion.porPais.titulo}</SectionTitle>
           <Card>
-            <Table
-              columns={columnasPais(comparacion.porPais.metaMovilizacion)}
-              rows={comparacion.porPais.filas}
-              getKey={(f) => f.pais}
+            <PaisBars
+              meta={comparacion.porPais.metaMovilizacion}
+              filas={comparacion.porPais.filas.map((f) => ({
+                pais: f.pais,
+                valor: f.movilizacion,
+                tone: tonoMovilizacion(f.movilizacion, comparacion.porPais!.metaMovilizacion),
+                detalle: `${f.ordenes} órdenes · ${f.noMovilizado} sin movilizar`,
+              }))}
             />
           </Card>
+          <div style={{ marginTop: 12 }}>
+            <Table columns={columnasPais(comparacion.porPais.metaMovilizacion)} rows={comparacion.porPais.filas} getKey={(f) => f.pais} />
+          </div>
         </>
       )}
 
+      {/* ── Proyectos, por sección ─────────────────────────────────────────── */}
       {w.secciones.map((seccion, index) => (
-        <section className="wk-executive-section" key={seccion.titulo}>
-          {/* El título vive en SectionTitle; la nota de la sección es su `hint`.
-              Antes se repetían: título de sección + <h3> idéntico debajo. */}
-          <SectionTitle hint={seccion.nota}>
-            {`${seccion.titulo} · ${seccion.proyectos.length}`}
-          </SectionTitle>
-          <div className="wk-seccion">
-            {index === 0 && w.avanceInvestigacion && (
+        <section key={seccion.titulo}>
+          <SectionTitle hint={seccion.nota}>{`${seccion.titulo} · ${seccion.proyectos.length}`}</SectionTitle>
+          {index === 0 && w.avanceInvestigacion && (
+            <Card flush className="wk-research-card">
               <div className="wk-research-progress">
                 <div className="wk-research-intro">
                   <strong>{w.avanceInvestigacion.titulo}</strong>
@@ -163,61 +299,31 @@ function ExecutiveWeekly({ w }: { w: Weekly }) {
                   ))}
                 </div>
               </div>
-            )}
-            <div className="wk-seccion-body">
-              {seccion.proyectos.map((proyecto) => {
-                const url = jiraUrl(proyecto.ticket);
-                return (
-                  <div className="wk-proj2" key={proyecto.nombre}>
-                    <div className="wk-proj2-top">
-                      <span className="wk-proj2-nombre">{proyecto.nombre}</span>
-                      <span className={`wk-estado est-${proyecto.estadoTono}`}>{proyecto.estado}</span>
-                    </div>
-                    <p className="wk-proj2-nota">{proyecto.nota}</p>
-                    {proyecto.impacto && (
-                      <p className="wk-proj2-impacto">
-                        <span className="wk-impacto-badge">💰 Impacto</span>
-                        {proyecto.impacto}
-                      </p>
-                    )}
-                    {proyecto.enlace && (
-                      <a href={proyecto.enlace.href} className="wk-proj-ticket">
-                        {proyecto.enlace.label} →
-                      </a>
-                    )}
-                    {url && (
-                      <a href={url} target="_blank" rel="noreferrer" className="wk-proj-ticket">
-                        {proyecto.ticket} ↗
-                      </a>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+            </Card>
+          )}
+          <Proyectos proyectos={seccion.proyectos} />
         </section>
       ))}
 
       {w.focoSiguienteSemana && (
-        <section className="wk-next-focus">
+        <section>
           <SectionTitle>Foco de la siguiente semana</SectionTitle>
-          <div className="wk-kpi">
-            <ol>
-              {w.focoSiguienteSemana.map((foco) => <li key={foco}>{foco}</li>)}
+          <Card>
+            <ol className="u-lista">
+              {w.focoSiguienteSemana.map((foco) => (
+                <li key={foco}>{foco}</li>
+              ))}
             </ol>
-          </div>
+          </Card>
         </section>
       )}
     </>
   );
 }
 
-// El Weekly Product con switch de semana: se conservan todas las semanas y se
-// elige cuál ver (por defecto, la más reciente = weeklies[0]).
-export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
-  const [idx, setIdx] = useState(0);
-  const w = weeklies[idx];
-
+// Layout histórico (w27–w30): brecha, indicadores, Gantt de tiempos, hallazgos
+// y proyectos. Se conserva tal cual; ver nota de cabecera.
+function HistoricWeekly({ w }: { w: Weekly }) {
   const gapPct = w.brecha.meta - w.brecha.actual;
   const dropiTotal = w.tiempo.dropi.reduce((sum, f) => sum + f.horas, 0);
   const dropiMetaTotal = w.tiempo.dropi.reduce((sum, f) => sum + f.metaHoras, 0);
@@ -238,38 +344,7 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
   const carrierTicks = Array.from({ length: carrierScale / 24 + 1 }, (_, i) => i * 24);
 
   return (
-    <main className="page wk-print">
-      {/* El selector de semana y el botón de imprimir van en la cabecera, no en
-          una barra suelta encima: son acciones sobre lo que se está viendo. */}
-      <PageHeader
-        title="Weekly Product · Logística"
-        subtitle={w.foco}
-        aside={
-          <div className="wk-switch no-print">
-            <label className="wk-switch-label" htmlFor="wk-semana">
-              Semana
-            </label>
-            <select
-              id="wk-semana"
-              className="wk-select"
-              value={idx}
-              onChange={(e) => setIdx(Number(e.target.value))}
-            >
-              {weeklies.map((wk, i) => (
-                <option key={wk.id} value={i}>
-                  {wk.semana}
-                  {i === 0 ? " · actual" : ""}
-                </option>
-              ))}
-            </select>
-            <PrintButton docTitle={`Weekly Product · Logística — ${w.semana}`} />
-          </div>
-        }
-      />
-      <p className="wk-fecha">{w.fecha}</p>
-
-      {w.comparacionMensual ? <ExecutiveWeekly w={w} /> : <>
-
+    <>
       {/* 1 · BRECHA DE ENTREGA */}
       <SectionTitle hint="De dónde salen los puntos que faltan.">La brecha de entrega</SectionTitle>
       <div className="wk-kpi">
@@ -515,7 +590,55 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
           </div>
         ))}
       </div>
-      </>}
+    </>
+  );
+}
+
+// Selector de semana: pills mientras quepan de un vistazo (≤ 8), select después.
+// Se conservan todas las semanas; por defecto la más reciente = weeklies[0].
+export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
+  const [idx, setIdx] = useState(0);
+  const w = weeklies[idx];
+
+  const selector =
+    weeklies.length <= 8 ? (
+      <FilterPills
+        label="Semana"
+        value={idx}
+        onChange={setIdx}
+        options={weeklies.map((wk, i) => ({
+          value: i,
+          label: wk.semana.replace(/^Semana\s+/, ""),
+          hint: i === 0 ? "actual" : undefined,
+        }))}
+      />
+    ) : (
+      <select id="wk-semana" className="wk-select" value={idx} onChange={(e) => setIdx(Number(e.target.value))} aria-label="Semana">
+        {weeklies.map((wk, i) => (
+          <option key={wk.id} value={i}>
+            {wk.semana}
+            {i === 0 ? " · actual" : ""}
+          </option>
+        ))}
+      </select>
+    );
+
+  return (
+    <main className="page wk-print">
+      {/* El selector de semana y el botón de imprimir van en la cabecera, no en
+          una barra suelta encima: son acciones sobre lo que se está viendo. */}
+      <PageHeader
+        title="Weekly Product · Logística"
+        subtitle={w.fecha}
+        aside={
+          <div className="u-row no-print">
+            {selector}
+            <PrintButton docTitle={`Weekly Product · Logística — ${w.semana}`} />
+          </div>
+        }
+      />
+
+      {w.comparacionMensual ? <ExecutiveWeekly key={w.id} w={w} /> : <HistoricWeekly w={w} />}
     </main>
   );
 }

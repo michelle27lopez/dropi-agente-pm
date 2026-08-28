@@ -724,3 +724,49 @@
 }
 .log-root .u-chart .recharts-text { font-family: inherit; }
 .log-root .u-chart .recharts-tooltip-wrapper { outline: none; }
+
+/* ── Card: título y cuerpo ───────────────────────────────────────────────────
+   Para una card de proyecto (weekly, following): nombre en 16px, prosa en
+   13px gris. Antes cada lista tenía su par (.wk-proj2-nombre/.wk-proj2-nota,
+   .exp-nombre/.exp-desc…).                                                   */
+.log-root .u-card__title {
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  font-weight: 600;
+  color: var(--text);
+  min-width: 0;
+}
+.log-root .u-card__body {
+  margin: 6px 0 0;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--muted);
+  max-width: 70ch;
+}
+.log-root .u-card__impacto {
+  margin-top: 10px;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--text);
+  align-items: flex-start;
+}
+.log-root .u-card__impacto > span:last-child { flex: 1; min-width: 200px; }
+
+/* Lista numerada dentro de una card: foco de la siguiente semana. */
+.log-root .u-lista {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 8px;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.log-root .u-lista li { padding-left: 4px; max-width: 80ch; }
+
+/* El stepper de investigación del weekly vive dentro de una Card sin padding
+   y ya no necesita su propio borde inferior. */
+.log-root .wk-research-card { margin-bottom: 12px; }
+.log-root .wk-research-card .wk-research-progress { border-bottom: 0; background: var(--card); }
+@media (max-width: 760px) {
+  .log-root .wk-research-steps { grid-template-columns: 1fr 1fr; }
+}
