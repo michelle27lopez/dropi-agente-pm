@@ -1,44 +1,10 @@
 /* ───────────────────────────────────────────────────────────────────────────
    Sistema visual del tablero — CSS plano, colorido y presentable.
-   Los colores/espaciados base vienen del Design System real de Dropi
-   (ds-tokens.generated.css, fuente: ds-registry del RPP). Los alias de abajo
-   mapean la semántica del tablero a esos tokens: editar el mapeo aquí, nunca
-   los valores crudos (se regeneran con `npm run tokens`).
+   Los tokens viven en tokens.css (se cargan también desde fuera de esta
+   sección); acá queda el sistema de pantallas que converge a los primitivos
+   de _components/ui/.
    ─────────────────────────────────────────────────────────────────────────── */
-@import "./ds-tokens.generated.css";
-
-.log-root {
-  /* Neutros → escala gray de Dropi */
-  --bg: var(--dropi-gray-50);
-  --card: var(--dropi-white);
-  --border: var(--dropi-gray-100);
-  --text: var(--dropi-gray-800);
-  --muted: var(--dropi-gray-500);
-  --soft: var(--dropi-gray-50);
-
-  /* Acentos → alineados al DESIGN.md del hub: un solo acento de marca y
-     CUATRO colores de estado (verde/ámbar/rojo/azul). La "Regla de los Cuatro
-     Estados" prohíbe introducir morado/índigo/cian para diferenciar categorías;
-     para eso están la tipografía y el layout. Los alias --indigo/--sky/--purple
-     se conservan (los usan ~45 reglas) pero apuntan al azul informativo, así la
-     convergencia es un cambio de mapeo y no una reescritura de cada regla. */
-  --brand: var(--dropi-primary-500);
-  --info: #3B82F6;               /* Azul Información (DESIGN.md) */
-  --indigo: var(--info);
-  --sky: var(--info);
-  --purple: var(--info);
-  --green: var(--dropi-semantic-success);
-  --amber: var(--dropi-semantic-warning);
-  --red: var(--dropi-semantic-error);
-
-  /* Elevación: "La Regla del Hover-Only" — superficie plana en reposo, la
-     sombra es feedback de interacción. --shadow queda en none para que las ~31
-     reglas que lo usan dejen de elevar sin motivo; --shadow-lg se reserva a hover. */
-  --shadow: none;
-  --shadow-hover: 0 1px 3px rgba(0,0,0,.06);
-  --shadow-lg: var(--shadow-hover);
-  --radius: var(--dropi-radius-xl);
-}
+@import "./tokens.css";
 
 .log-root, .log-root * { box-sizing: border-box; }
 .log-root { scroll-behavior: smooth; }
