@@ -56,3 +56,20 @@ export function formatCompacto(n: number) {
 export function formatHoras(horas: number) {
   return `${horas.toFixed(horas % 1 === 0 ? 0 : 1).replace(".", ",")}h`;
 }
+
+/**
+ * Parte un párrafo en titular + resto por la primera frase.
+ *
+ * La ley del tablero (§2) pide que el título diga la conclusión, y los textos
+ * del weekly ya están escritos así: la primera frase de `foco` o de `lectura`
+ * ES la conclusión, y lo que sigue la sustenta. En vez de pedirle a quien
+ * redacta que escriba dos campos, se parte al renderizar.
+ *
+ * Si no hay un corte claro, devuelve todo como titular: mejor un titular largo
+ * que un detalle huérfano.
+ */
+export function partir(texto: string): [string, string] {
+  const m = texto.match(/^([^]+?[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡"'])/);
+  if (!m) return [texto, ""];
+  return [m[1], texto.slice(m[0].length)];
+}

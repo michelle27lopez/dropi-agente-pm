@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { jiraUrl, type IndicadorHoy, type ProyectoLite, type Weekly } from "@/app/proyectos/logistica/_lib/data";
-import { formatHoras, formatPct, formatPct1 } from "@/app/proyectos/logistica/_lib/format";
+import { formatHoras, formatPct, formatPct1, partir } from "@/app/proyectos/logistica/_lib/format";
 import PrintButton from "@/app/proyectos/logistica/_components/PrintButton";
 import SerieMensual from "@/app/proyectos/logistica/_components/charts/SerieMensual";
 import BarrasHorizontales from "@/app/proyectos/logistica/_components/charts/BarrasHorizontales";
@@ -120,15 +121,6 @@ function horasTono(horas: number): "verde" | "ambar" | "rojo" {
   if (horas <= 24) return "verde";
   if (horas <= 48) return "ambar";
   return "rojo";
-}
-
-// La conclusión primero. `foco` y `lectura` son párrafos de 300–500
-// caracteres; la primera frase es el titular (ley §2: "el título dice la
-// conclusión") y el resto baja a detalle.
-function partir(texto: string): [string, string] {
-  const m = texto.match(/^([^]+?[.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡"'])/);
-  if (!m) return [texto, ""];
-  return [m[1], texto.slice(m[0].length)];
 }
 
 function Proyectos({ proyectos }: { proyectos: ProyectoLite[] }) {
@@ -596,18 +588,47 @@ function HistoricWeekly({ w }: { w: Weekly }) {
   );
 }
 
+// `useSearchParams` obliga a un límite de Suspense (Next lo exige para poder
+// prerenderizar la parte estática de la página).
+export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
+  return (
+    <Suspense fallback={null}>
+      <WeeklyContent weeklies={weeklies} />
+    </Suspense>
+  );
+}
+
 // Selector de semana: pills mientras quepan de un vistazo (≤ 8), select después.
 // Se conservan todas las semanas; por defecto la más reciente = weeklies[0].
-export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
-  const [idx, setIdx] = useState(0);
+//
+// La semana vive en la URL (`?semana=2026-w34`), no solo en el estado. Sin eso
+// no se podía enlazar a una semana concreta —por eso la pantalla de updates de
+// la célula colapsaba las siete en una sola tarjeta que siempre abría en la
+// última— y volver atrás desde el weekly perdía dónde estabas. Un id
+// desconocido no rompe nada: cae en la más reciente.
+function WeeklyContent({ weeklies }: { weeklies: Weekly[] }) {
+  const router = useRouter();
+  const params = useSearchParams();
+  const pedida = params.get("semana");
+  const desdeUrl = weeklies.findIndex((wk) => wk.id === pedida);
+  const [idx, setIdx] = useState(desdeUrl >= 0 ? desdeUrl : 0);
   const w = weeklies[idx];
+
+  // Escribe la URL al cambiar, que es la mitad que /weekly dejó sin hacer:
+  // allá el deep-link entra pero no sale, así que no se puede compartir "mira
+  // la semana que estoy viendo".
+  const elegir = (i: number) => {
+    setIdx(i);
+    const id = weeklies[i]?.id;
+    if (id) router.replace(`?semana=${id}`, { scroll: false });
+  };
 
   const selector =
     weeklies.length <= 8 ? (
       <FilterPills
         label="Semana"
         value={idx}
-        onChange={setIdx}
+        onChange={elegir}
         options={weeklies.map((wk, i) => ({
           value: i,
           label: wk.semana.replace(/^Semana\s+/, ""),
@@ -615,7 +636,7 @@ export default function WeeklyView({ weeklies }: { weeklies: Weekly[] }) {
         }))}
       />
     ) : (
-      <select id="wk-semana" className="wk-select" value={idx} onChange={(e) => setIdx(Number(e.target.value))} aria-label="Semana">
+      <select id="wk-semana" className="wk-select" value={idx} onChange={(e) => elegir(Number(e.target.value))} aria-label="Semana">
         {weeklies.map((wk, i) => (
           <option key={wk.id} value={i}>
             {wk.semana}

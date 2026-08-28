@@ -119,7 +119,11 @@ export default function UpdatesPorCelulaPage() {
             />
           )}
 
-          {updates.length === 0 && (
+          {/* Solo para las células que se renderizan con <Section>. Logística y
+              Backoffice traen su propio contenido —que no sale de `updates`— y
+              su propio mensaje de vacío: sin esta guarda, la pantalla mostraba
+              el weekly de Logística Y "aún no hay updates" debajo. */}
+          {!isLogistica && !isBackoffice && updates.length === 0 && (
             <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
           )}
         </div>
