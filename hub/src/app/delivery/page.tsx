@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, MessageSquare, Plus, X } from "lucide-react";
 import HubFooter from "@/components/HubFooter";
 import { ESTADOS_DELIVERY } from "@/components/ProjectCard";
 
@@ -16,6 +16,8 @@ type Proyecto = {
   celula_owner_id: string;
   updated_at: string | null;
 };
+
+type Comentario = { id: string; autor: string; comentario: string; created_at: string };
 
 type ProyectoConCelula = Proyecto & { celulaNombre?: string };
 
@@ -99,29 +101,57 @@ export default function DeliveryPage() {
   const [celulas, setCelulas] = useState<Celula[]>([]);
   const [loading, setLoading] = useState(true);
   const [ownCelulaId, setOwnCelulaId] = useState<string | null>(null);
+  const [ownCelulaSlug, setOwnCelulaSlug] = useState<string | null>(null);
+  const [ownCelulaNombre, setOwnCelulaNombre] = useState<string | null>(null);
+  const [ownEmail, setOwnEmail] = useState<string | null>(null);
   const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [vista, setVista] = useState<"celula" | "prioridad">("celula");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [collapsedIds, setCollapsedIds] = useState<Set<string>>(() => new Set());
+  const [showCrear, setShowCrear] = useState(false);
+  const [commentTarget, setCommentTarget] = useState<Proyecto | null>(null);
+  const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
+  // La primera carga fija la selección de células a "todas"; los refetch
+  // posteriores (tras crear un Delivery) respetan lo que el usuario tenga
+  // seleccionado.
+  const primeraCarga = useRef(true);
+
+  const loadCelulas = useCallback(async () => {
+    const res = await fetch("/api/celulas").catch(() => null);
+    const data = res ? await res.json().catch(() => null) : null;
+    const list: Celula[] = Array.isArray(data) ? data : [];
+    setCelulas(list);
+    if (primeraCarga.current) {
+      setSelectedIds(list.map((c) => c.id));
+      primeraCarga.current = false;
+    }
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
-    fetch("/api/celulas")
-      .then((res) => res.json())
-      .then((data) => {
-        const list: Celula[] = Array.isArray(data) ? data : [];
-        setCelulas(list);
-        setSelectedIds(list.map((c) => c.id));
-      })
-      .finally(() => setLoading(false));
+    loadCelulas();
 
     fetch("/api/me")
       .then((res) => res.json())
       .then((data) => {
         setOwnCelulaId(data?.profile?.celula_id ?? null);
+        setOwnCelulaSlug(data?.profile?.celulas?.slug ?? null);
+        setOwnCelulaNombre(data?.profile?.celulas?.nombre ?? null);
+        setOwnEmail(data?.profile?.email ?? data?.user?.email ?? null);
         setIsSuperAdmin(!!data?.profile?.is_super_admin);
       })
       .catch(() => {});
-  }, []);
+  }, [loadCelulas]);
+
+  // Discovery projects de la célula del usuario — candidatos a los que
+  // colgar un Delivery Proyecto nuevo. Discovery = type que no sea POC /
+  // Delivery Proyecto / Following (incluye NULL y 'Idea'/'Oportunidad').
+  const misDiscovery = useMemo(() => {
+    const mia = celulas.find((c) => c.id === ownCelulaId);
+    return (mia?.proyectos ?? []).filter(
+      (p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following",
+    );
+  }, [celulas, ownCelulaId]);
 
   // Edición rápida tipo Jira, mismo patrón que EstadoEditor en
   // /celula/[slug]/proyectos: optimista, revierte si el PATCH falla.
@@ -193,10 +223,28 @@ export default function DeliveryPage() {
     <main style={{ minHeight: "100vh", padding: "0", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1 }}>
         <div className="gnav-page" style={{ maxWidth: 1400, margin: "0 auto" }}>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>Delivery</h1>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+            <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>Delivery</h1>
+            {ownCelulaSlug && (
+              <button
+                type="button"
+                onClick={() => setShowCrear(true)}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 6,
+                  fontSize: 12.5, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
+                  padding: "8px 14px", borderRadius: 9, border: "none",
+                  background: "var(--dropi)", color: "#fff",
+                }}
+              >
+                <Plus size={15} strokeWidth={2.4} />
+                Delivery Proyecto
+              </button>
+            )}
+          </div>
           <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 20 }}>
             Proyectos de Delivery de todas las células, por etapa del pipeline. P0 es la más urgente.
             Cada célula solo puede editar la prioridad de sus propios proyectos.
+            {ownCelulaNombre && ` Al crear uno, se asocia a tu célula (${ownCelulaNombre}).`}
           </p>
 
           <div
@@ -254,6 +302,8 @@ export default function DeliveryPage() {
                   mostrarCelula
                   editableFn={(p) => p.celula_owner_id === ownCelulaId || isSuperAdmin}
                   onPrioridadChange={handlePrioridadChange}
+                  commentCounts={commentCounts}
+                  onOpenComentarios={setCommentTarget}
                 />
               )
             ) : (
@@ -314,6 +364,8 @@ export default function DeliveryPage() {
                             mostrarCelula={false}
                             editableFn={() => editable}
                             onPrioridadChange={handlePrioridadChange}
+                            commentCounts={commentCounts}
+                            onOpenComentarios={setCommentTarget}
                           />
                         ))}
                     </div>
@@ -324,6 +376,30 @@ export default function DeliveryPage() {
         </div>
       </div>
       <HubFooter />
+
+      {showCrear && ownCelulaSlug && (
+        <CrearDeliveryModal
+          celulaSlug={ownCelulaSlug}
+          celulaNombre={ownCelulaNombre}
+          discoveryOptions={misDiscovery}
+          onCancel={() => setShowCrear(false)}
+          onCreated={async () => {
+            setShowCrear(false);
+            await loadCelulas();
+          }}
+        />
+      )}
+
+      {commentTarget && (
+        <ComentariosModal
+          proyecto={commentTarget}
+          autorEmail={ownEmail}
+          onClose={() => setCommentTarget(null)}
+          onCountChange={(n) =>
+            setCommentCounts((prev) => ({ ...prev, [commentTarget.id]: n }))
+          }
+        />
+      )}
     </main>
   );
 }
@@ -341,11 +417,15 @@ function PipelineBoard({
   mostrarCelula,
   editableFn,
   onPrioridadChange,
+  commentCounts,
+  onOpenComentarios,
 }: {
   proyectos: ProyectoConCelula[];
   mostrarCelula: boolean;
   editableFn: (p: Proyecto) => boolean;
   onPrioridadChange: (celulaId: string, projectId: string, prioridad: string | null) => void;
+  commentCounts: Record<string, number>;
+  onOpenComentarios: (p: Proyecto) => void;
 }) {
   const grupos = useMemo(() => agruparPorEtapa(proyectos), [proyectos]);
 
@@ -409,6 +489,8 @@ function PipelineBoard({
                     celulaNombre={mostrarCelula ? p.celulaNombre : undefined}
                     editable={editableFn(p)}
                     onPrioridadChange={(v) => onPrioridadChange(p.celula_owner_id, p.id, v)}
+                    commentCount={commentCounts[p.id]}
+                    onOpenComentarios={() => onOpenComentarios(p)}
                   />
                 ))
             )}
@@ -419,33 +501,35 @@ function PipelineBoard({
   );
 }
 
-// Tarjeta clickeable — lleva al detalle del proyecto (mismo destino que
-// projectUrl de ProjectCard). El editor de prioridad frena la propagación
-// del click para no navegar sin querer al tocarlo.
+// Tarjeta NO navegable: antes toda la card era un <Link> y cualquier click
+// —incluido el chip de prioridad— llevaba al detalle del proyecto porque
+// stopPropagation no cancela el default del <a>. Ahora es un <div> y entrar
+// al proyecto es un botón explícito "Ver proyecto", sin choque con el editor
+// de prioridad ni con el botón de comentarios.
 function DeliveryCard({
   proyecto: p,
   celulaNombre,
   editable,
   onPrioridadChange,
+  commentCount,
+  onOpenComentarios,
 }: {
   proyecto: Proyecto;
   celulaNombre?: string;
   editable: boolean;
   onPrioridadChange: (prioridad: string | null) => void;
+  commentCount?: number;
+  onOpenComentarios: () => void;
 }) {
   const dias = diasDesde(p.updated_at);
 
   return (
-    <Link
-      href={projectUrl(p)}
+    <div
       style={{
-        display: "block",
         background: "#fff",
         border: "1px solid var(--border)",
         borderRadius: 10,
         padding: 10,
-        textDecoration: "none",
-        color: "inherit",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, flexWrap: "wrap" }}>
@@ -463,9 +547,7 @@ function DeliveryCard({
             {p.project_code}
           </span>
         )}
-        <span onClick={(e) => e.stopPropagation()}>
-          <PrioridadEditor prioridad={p.prioridad} editable={editable} onChange={onPrioridadChange} />
-        </span>
+        <PrioridadEditor prioridad={p.prioridad} editable={editable} onChange={onPrioridadChange} />
         {dias !== null && (
           <span style={{ marginLeft: "auto", fontSize: 10, color: "var(--gray-400)" }}>hace {dias}d</span>
         )}
@@ -476,7 +558,399 @@ function DeliveryCard({
           <span style={{ fontSize: 10, fontWeight: 400, color: "var(--gray-400)" }}> ({celulaNombre})</span>
         )}
       </p>
-    </Link>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 8,
+          marginTop: 8,
+          paddingTop: 8,
+          borderTop: "1px solid var(--gray-100)",
+        }}
+      >
+        <button
+          type="button"
+          onClick={onOpenComentarios}
+          title="Comentarios"
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 4,
+            fontSize: 11, fontWeight: 600, fontFamily: "inherit", cursor: "pointer",
+            border: "none", background: "transparent", color: "var(--gray-500)", padding: 0,
+          }}
+        >
+          <MessageSquare size={13} strokeWidth={1.8} />
+          {commentCount ? commentCount : "Comentar"}
+        </button>
+        <Link
+          href={projectUrl(p)}
+          style={{
+            fontSize: 11, fontWeight: 700, textDecoration: "none",
+            color: "var(--dropi)",
+          }}
+        >
+          Ver proyecto →
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+// Modal para crear un Delivery Proyecto asociado a la célula del usuario. Se
+// cuelga de un Discovery project existente de esa célula o de uno nuevo que
+// se crea en el mismo flujo (POST /api/celulas/[slug] → type 'Idea', que
+// cuenta como Discovery). Luego POST /api/proyectos/[discoveryId] con
+// type 'Delivery Proyecto'.
+function CrearDeliveryModal({
+  celulaSlug,
+  celulaNombre,
+  discoveryOptions,
+  onCancel,
+  onCreated,
+}: {
+  celulaSlug: string;
+  celulaNombre: string | null;
+  discoveryOptions: Proyecto[];
+  onCancel: () => void;
+  onCreated: () => void | Promise<void>;
+}) {
+  const hayDiscovery = discoveryOptions.length > 0;
+  const [modo, setModo] = useState<"asociar" | "nuevo">(hayDiscovery ? "asociar" : "nuevo");
+  const [discoveryId, setDiscoveryId] = useState(hayDiscovery ? discoveryOptions[0].id : "");
+  const [discoveryName, setDiscoveryName] = useState("");
+  const [discoverySummary, setDiscoverySummary] = useState("");
+  const [deliveryName, setDeliveryName] = useState("");
+  const [deliverySummary, setDeliverySummary] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const discoveryListo = modo === "asociar" ? !!discoveryId : discoveryName.trim() && discoverySummary.trim();
+  const puedeCrear = !!discoveryListo && deliveryName.trim().length > 0 && deliverySummary.trim().length > 0;
+
+  const inputStyle: CSSProperties = {
+    width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)",
+    fontSize: 13, boxSizing: "border-box", fontFamily: "inherit", background: "#fff", color: "var(--fg)",
+  };
+
+  async function crear() {
+    setSaving(true);
+    setError(null);
+    try {
+      let parentId = discoveryId;
+
+      if (modo === "nuevo") {
+        const rd = await fetch(`/api/celulas/${celulaSlug}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: discoveryName.trim(), summary: discoverySummary.trim() }),
+        });
+        if (!rd.ok) {
+          const d = await rd.json().catch(() => null);
+          throw new Error(d?.error ?? "No se pudo crear el Discovery project.");
+        }
+        parentId = (await rd.json()).id;
+      }
+
+      const re = await fetch(`/api/proyectos/${parentId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: deliveryName.trim(),
+          summary: deliverySummary.trim(),
+          type: "Delivery Proyecto",
+        }),
+      });
+      if (!re.ok) {
+        const d = await re.json().catch(() => null);
+        throw new Error(d?.error ?? "No se pudo crear el Delivery Proyecto.");
+      }
+      await onCreated();
+    } catch (e: any) {
+      setError(e.message ?? "No se pudo crear.");
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div
+      onClick={onCancel}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24, zIndex: 100, backdropFilter: "blur(4px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff", border: "1px solid var(--border)", borderRadius: 16,
+          maxWidth: 460, width: "100%", padding: 24, maxHeight: "90vh", overflowY: "auto",
+        }}
+      >
+        <h3 style={{ fontSize: 16, fontWeight: 800, color: "var(--fg)", margin: "0 0 4px" }}>
+          Nuevo Delivery Proyecto
+        </h3>
+        <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "0 0 16px" }}>
+          Se asocia a tu célula{celulaNombre ? ` (${celulaNombre})` : ""}.
+        </p>
+
+        <p style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 8px" }}>
+          Discovery project
+        </p>
+        <div style={{ display: "inline-flex", border: "1px solid var(--border)", borderRadius: 8, padding: 2, marginBottom: 10 }}>
+          <button
+            type="button"
+            onClick={() => setModo("asociar")}
+            disabled={!hayDiscovery}
+            style={{
+              fontSize: 11.5, fontWeight: 700, fontFamily: "inherit", padding: "5px 12px", borderRadius: 6, border: "none",
+              cursor: hayDiscovery ? "pointer" : "not-allowed",
+              background: modo === "asociar" ? "var(--fg)" : "transparent",
+              color: modo === "asociar" ? "#fff" : hayDiscovery ? "var(--muted)" : "var(--gray-300)",
+            }}
+          >
+            Asociar a uno existente
+          </button>
+          <button
+            type="button"
+            onClick={() => setModo("nuevo")}
+            style={{
+              fontSize: 11.5, fontWeight: 700, fontFamily: "inherit", padding: "5px 12px", borderRadius: 6, border: "none", cursor: "pointer",
+              background: modo === "nuevo" ? "var(--fg)" : "transparent",
+              color: modo === "nuevo" ? "#fff" : "var(--muted)",
+            }}
+          >
+            Crear uno nuevo
+          </button>
+        </div>
+
+        {modo === "asociar" ? (
+          <select value={discoveryId} onChange={(e) => setDiscoveryId(e.target.value)} style={{ ...inputStyle, marginBottom: 16 }}>
+            {discoveryOptions.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.project_code ? `${d.project_code} · ` : ""}{d.name}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+            <input
+              value={discoveryName}
+              onChange={(e) => setDiscoveryName(e.target.value)}
+              placeholder="Nombre del Discovery project"
+              style={inputStyle}
+            />
+            <textarea
+              value={discoverySummary}
+              onChange={(e) => setDiscoverySummary(e.target.value)}
+              placeholder="De qué se trata"
+              rows={2}
+              style={{ ...inputStyle, resize: "vertical" }}
+            />
+          </div>
+        )}
+
+        <p style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 8px" }}>
+          Delivery Proyecto
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <input
+            value={deliveryName}
+            onChange={(e) => setDeliveryName(e.target.value)}
+            placeholder="Nombre del Delivery Proyecto"
+            style={inputStyle}
+          />
+          <textarea
+            value={deliverySummary}
+            onChange={(e) => setDeliverySummary(e.target.value)}
+            placeholder="De qué se trata"
+            rows={2}
+            style={{ ...inputStyle, resize: "vertical" }}
+          />
+        </div>
+
+        {error && <p style={{ fontSize: 12, color: "#DC2626", margin: "12px 0 0" }}>{error}</p>}
+
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 18 }}>
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8,
+              border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", cursor: "pointer",
+            }}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            disabled={!puedeCrear || saving}
+            onClick={crear}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8, border: "none",
+              background: puedeCrear ? "var(--dropi)" : "var(--gray-200)", color: puedeCrear ? "#fff" : "var(--muted)",
+              cursor: puedeCrear && !saving ? "pointer" : "not-allowed",
+            }}
+          >
+            {saving ? "Creando…" : "Crear"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Hilo de comentarios de un proyecto (tabla project_comments vía
+// /api/proyectos/[id]/comentarios). Cualquier usuario autenticado puede leer
+// y agregar; la autoría queda por correo del lado del servidor.
+function ComentariosModal({
+  proyecto,
+  autorEmail,
+  onClose,
+  onCountChange,
+}: {
+  proyecto: Proyecto;
+  autorEmail: string | null;
+  onClose: () => void;
+  onCountChange: (n: number) => void;
+}) {
+  const [comentarios, setComentarios] = useState<Comentario[] | null>(null);
+  const [texto, setTexto] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let vivo = true;
+    fetch(`/api/proyectos/${proyecto.id}/comentarios`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("No se pudieron cargar los comentarios."))))
+      .then((data: Comentario[]) => {
+        if (!vivo) return;
+        setComentarios(data);
+        onCountChange(data.length);
+      })
+      .catch((e) => vivo && setError(e.message));
+    return () => {
+      vivo = false;
+    };
+    // onCountChange se recrea en cada render del padre; no debe re-disparar el fetch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [proyecto.id]);
+
+  async function enviar() {
+    if (!texto.trim()) return;
+    setEnviando(true);
+    setError(null);
+    try {
+      const r = await fetch(`/api/proyectos/${proyecto.id}/comentarios`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comentario: texto.trim() }),
+      });
+      if (!r.ok) {
+        const d = await r.json().catch(() => null);
+        throw new Error(d?.error ?? "No se pudo enviar el comentario.");
+      }
+      const nuevo: Comentario = await r.json();
+      setComentarios((prev) => {
+        const next = [...(prev ?? []), nuevo];
+        onCountChange(next.length);
+        return next;
+      });
+      setTexto("");
+    } catch (e: any) {
+      setError(e.message ?? "No se pudo enviar.");
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  function fmtFecha(iso: string) {
+    return new Date(iso).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+  }
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24, zIndex: 100, backdropFilter: "blur(4px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff", border: "1px solid var(--border)", borderRadius: 16,
+          maxWidth: 460, width: "100%", padding: 20, maxHeight: "85vh", display: "flex", flexDirection: "column",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12, marginBottom: 4 }}>
+          <div>
+            <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--fg)", margin: 0 }}>Comentarios</h3>
+            <p style={{ fontSize: 12, color: "var(--muted)", margin: "2px 0 0" }}>
+              {proyecto.project_code ? `${proyecto.project_code} · ` : ""}{proyecto.name}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--gray-400)", padding: 4 }}
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        <div style={{ flex: 1, overflowY: "auto", margin: "12px 0", display: "flex", flexDirection: "column", gap: 10 }}>
+          {comentarios === null && !error && (
+            <p style={{ fontSize: 12, color: "var(--muted)" }}>Cargando…</p>
+          )}
+          {comentarios !== null && comentarios.length === 0 && (
+            <p style={{ fontSize: 12, color: "var(--gray-300)", fontStyle: "italic" }}>Sin comentarios todavía.</p>
+          )}
+          {comentarios?.map((c) => (
+            <div key={c.id} style={{ borderLeft: "2px solid var(--gray-100)", paddingLeft: 10 }}>
+              <div style={{ display: "flex", gap: 6, alignItems: "baseline", flexWrap: "wrap" }}>
+                <span style={{ fontSize: 11.5, fontWeight: 700, color: "var(--fg)" }}>
+                  {c.autor === autorEmail ? "Tú" : c.autor}
+                </span>
+                <span style={{ fontSize: 10, color: "var(--gray-400)" }}>{fmtFecha(c.created_at)}</span>
+              </div>
+              <p style={{ fontSize: 12.5, color: "var(--fg)", margin: "2px 0 0", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
+                {c.comentario}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {error && <p style={{ fontSize: 12, color: "#DC2626", margin: "0 0 8px" }}>{error}</p>}
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, borderTop: "1px solid var(--border)", paddingTop: 12 }}>
+          <textarea
+            value={texto}
+            onChange={(e) => setTexto(e.target.value)}
+            placeholder="Escribe un comentario…"
+            rows={2}
+            style={{
+              width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)",
+              fontSize: 13, boxSizing: "border-box", fontFamily: "inherit", resize: "vertical",
+            }}
+          />
+          <button
+            type="button"
+            disabled={!texto.trim() || enviando}
+            onClick={enviar}
+            style={{
+              alignSelf: "flex-end",
+              fontSize: 12.5, fontWeight: 700, fontFamily: "inherit", padding: "7px 14px", borderRadius: 8, border: "none",
+              background: texto.trim() ? "var(--dropi)" : "var(--gray-200)", color: texto.trim() ? "#fff" : "var(--muted)",
+              cursor: texto.trim() && !enviando ? "pointer" : "not-allowed",
+            }}
+          >
+            {enviando ? "Enviando…" : "Comentar"}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
