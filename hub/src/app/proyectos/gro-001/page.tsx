@@ -100,7 +100,7 @@ export default function Gro001ProjectPage() {
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6, flexWrap: "wrap" }}>
                 <span style={badgeStyle("#C2410C", "var(--dropi-light)")}>🌱 Célula Growth</span>
                 <span style={badgeStyle("#7C3AED", "#F3E8FF")}>📦 Delivery Backlog (más avanzado que Discovery)</span>
-                <span style={badgeStyle("#B42318", "#FEE4E2")}>🔴 Solapa con Webe — sin resolver</span>
+                <span style={badgeStyle("#B45309", "#FEF3C7")}>🟡 Pausado — recomendación: avanzar como 2 POCs</span>
               </div>
               <h1 style={{ fontSize: 26, fontWeight: 900, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>
                 🤝 CRM Líderes de Comunidad
@@ -132,7 +132,7 @@ export default function Gro001ProjectPage() {
             { label: "Activación con líder vs. huérfano", value: "~23%", sub: "palanca de activación más fuerte del ecosistema — mayor ROI histórico", color: "var(--dropi)" },
             { label: "Estudiantes sin ninguna orden", value: "52.28%", sub: "validado en el extracto real (394 afiliados / 8 líderes) — coincide con la cifra de la presentación", color: "#B42318" },
             { label: "Proyección de margen (495 líderes)", value: "$282K–$1.66M", sub: "USD/año según escenario de gasto — modelo lateral, no decidido", color: "#9F2C56" },
-            { label: "Sesión de alineación CRM vs. Webe", value: "25 ago", sub: "9–10am — define fusión, coexistencia vía API, o modelo escalonado", color: "#B45309" },
+            { label: "Estado tras la pausa del 27 ago", value: "2 POCs", sub: "recomendación de Growth y Producto: CRM (GHL) y Webe corren en paralelo, valida el usuario", color: "#B45309" },
           ].map((k) => (
             <div key={k.label} style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 18 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: "#64748B", textTransform: "uppercase" }}>{k.label}</div>
@@ -143,8 +143,8 @@ export default function Gro001ProjectPage() {
         </div>
 
         {/* ── Alerta principal: CRM vs Webe ── */}
-        <Callout tone="danger" title="🔴 El tema más importante sin resolver: CRM vs. Webe">
-          El proyecto se solapa con <strong>Webe</strong> — otra iniciativa con el mismo sponsor (Luis Domínguez) que también incluye un CRM propio para el líder, más un &quot;school&quot; de mentorías con mira a Q4 2026. Dos equipos llevaban tiempo corriendo en paralelo sin conocerse entre sí. Caminos posibles: <strong>(a)</strong> absorber el CRM dentro de Webe, o <strong>(b)</strong> que Webe consuma los datos del CRM vía API y coexistan. Riesgo nombrado explícitamente en la reunión: &quot;puede llegar a existir una competencia entre ambas plataformas por quién entrega mayor valor&quot;. Sesión de alineación formal: <strong>martes 25 de agosto, 9–10am</strong>. Hasta entonces, cualquier avance en cualquiera de los dos proyectos corre el riesgo de tener que deshacerse.
+        <Callout tone="warning" title="🟡 CRM vs. Webe — pausa temporal y recomendación de avanzar como 2 POCs (28 ago 2026)">
+          Esta semana el equipo se reunió con <strong>Webe</strong> para entender el foco de cada proyecto y buscar complementariedad de cara al servicio del usuario. El jueves 27 de agosto llegó la indicación de pausar las actividades del CRM, para no duplicar esfuerzos con la herramienta que le ayudará al líder de comunidad a dinamizar su comunidad. El CRM ya tiene pipelines y estructura montada en Go High Level — no arranca de cero. <strong>Recomendación de Growth y Producto:</strong> seguir abordando ambos frentes como POC — Frente 1: CRM para Líderes de Comunidad (Go High Level); Frente 2: Webe como sistema de gestión de comunidad — y dejar que sea el usuario, con el uso real de ambos flujos de trabajo, quien indique cómo se complementan. Growth Ops y Producto, junto con Nicolás, ya concluyeron que son dos herramientas distintas que pueden entregarse al usuario en dos etapas diferentes del servicio. El equipo insiste en continuar el flujo de trabajo para lanzar el POC del CRM.
         </Callout>
 
         {/* ════════════════════════════════════════════════════════════
@@ -256,7 +256,7 @@ export default function Gro001ProjectPage() {
 
                     <Callout tone="warning" title="⚠️ Dos alertas de calidad del transcript">
                       <strong>Identidad sin confirmar:</strong> un asistente registrado como &quot;+57 316...58&quot; participó en ambas reuniones sin que su identidad quedara confirmada.<br /><br />
-                      <strong>Posible error de diarización:</strong> varios participantes se dirigen a la persona etiquetada como &quot;Daniel Lombo&quot; llamándola &quot;Gabi&quot;/&quot;Gabriela&quot;, y esa persona usa concordancia femenina al hablar de sí misma. Confirmar identidad real antes de citar sus decisiones en cualquier documento oficial.
+                      <strong>Posible error de diarización:</strong> varios participantes se dirigen a la persona etiquetada como &quot;Daniel Lombo&quot; llamándola &quot;Gabi&quot;/&quot;Gabriela&quot;, y esa persona usa concordancia femenina al hablar de sí misma. <em>Actualización (28 ago):</em> la convocatoria al ejercicio de service blueprint incluye a Gabriela y a Daniel Lombo como invitados distintos, lo que apunta a que sí son dos personas — pero no se ha confirmado explícitamente, así que se mantiene la cautela al citar decisiones de cualquiera de las dos en documentos oficiales.
                     </Callout>
 
                     <h4 style={subHeadingStyle}>Líderes piloto — ambigüedad sin resolver</h4>
@@ -352,11 +352,14 @@ export default function Gro001ProjectPage() {
                     <p style={pStyle}>
                       Webe ya incluye un CRM propio para el líder y su comunidad, más un &quot;school&quot; de mentorías (Q4 2026), liderado por Laura Sánchez y Luis Domínguez. Caminos propuestos por el equipo de Webe: <strong>(a)</strong> absorber el CRM dentro de Webe, o <strong>(b)</strong> que Webe consuma los datos del CRM vía API. Modelo escalonado planteado en vivo: dar el CRM a líderes pequeños y &quot;saltarlos&quot; a Webe cuando crezcan — contemplado como &quot;aspiracional&quot;, sin decidir formalmente.
                     </p>
+                    <p style={pStyle}>
+                      <strong>Actualización (28 ago):</strong> tras la pausa del 27 de agosto, Growth y Producto recomiendan no elegir entre las dos herramientas todavía — correrlas como dos POC en paralelo (CRM vía Go High Level y Webe) y dejar que el uso real del usuario indique cómo se complementan en distintas etapas del servicio (ver alerta arriba). Antes del anuncio de la pausa ya estaba agendada una reunión con Laura Contreras, Gabriela y Daniel Lombo para un ejercicio de <em>service blueprint</em> — el equipo insiste en sostenerla para no frenar el flujo hacia el lanzamiento del POC de CRM.
+                    </p>
                     <p style={{ ...pStyle, fontSize: 12, color: "#64748B" }}>Conexión con Leyendas Dropi: este CRM ya construye exactamente el mapa de afiliación líder–comunidad que Leyendas Dropi necesitaba desde cero para sus 3 Ligas de Líderes — confirmar antes de duplicar esa infraestructura. Mismos referentes de Data (Miguel, John Cerón) en ambos proyectos.</p>
 
                     <h3 style={{ ...sectionHeadingStyle, marginTop: 20 }}><AlertTriangle size={16} /><span>10. Riesgos y pendientes consolidados</span></h3>
                     <ul style={ulStyle}>
-                      <li>🔴 Duplicidad con Webe — discusión activa sin resolver. Sesión: martes 25 de agosto, 9–10am.</li>
+                      <li>🟡 Duplicidad con Webe — actividades del CRM en pausa desde el 27 de agosto; recomendación de Growth y Producto es correr ambos frentes como POC en paralelo (ver alerta arriba), pendiente de decisión formal del sponsor.</li>
                       <li>🔴 Ownership del proyecto sin confirmar formalmente con Producto/CPO.</li>
                       <li>🔴 Identidad de &quot;+57 316...58&quot; sin confirmar, incluso después de dos reuniones.</li>
                       <li>🔴 Identidad de &quot;Daniel Lombo&quot; en duda — posible error de diarización del transcript.</li>

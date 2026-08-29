@@ -31,6 +31,131 @@ export type WeeklyBackoffice = {
 
 export const weeklyBackoffice: WeeklyBackoffice[] = [
   {
+    id: "2026-08-28",
+    fecha: "28 agosto 2026",
+    fechaISO: "2026-08-28",
+    foco: "Reglas de negocio Sumsub definidas · Argentina beta próxima semana · Guatemala activo esta semana",
+    temas: [
+      {
+        titulo: "🔑 CAS — Activación CAS Argentina y Paraguay",
+        color: "#0EA5E9",
+        blocks: [
+          {
+            type: "p",
+            text: "Nueva solicitud que debe entrar al Dropiscore: la activación CAS Argentina y Paraguay. Quedan gestionadas las HU y la épica para pasarlas a TI una vez ingrese al Dropiscore.",
+          },
+        ],
+      },
+      {
+        titulo: "🪪 Sumsub — Criterios de aceptación y reglas de negocio definidos",
+        badge: "📌 Reglas definidas",
+        color: "#6366F1",
+        blocks: [
+          {
+            type: "list",
+            label: "📌 Reglas de negocio acordadas — bloqueo transaccional:",
+            items: [
+              "El bloqueo aplica solo sobre acciones transaccionales: retiro, transferencia entre wallets, solicitud de DropiCard y retiro de DropiCard. El resto de la plataforma permanece disponible.",
+              "Todo usuario sin validación aprobada está bloqueado para transacciones — nuevo o activo. El umbral de 20 órdenes determina solo el nivel de insistencia de alertas en el home, no si el usuario está bloqueado.",
+              "DropiCard queda bloqueada para usuarios sin validación — hoy existe un vacío donde el usuario puede solicitar y usar DropiCard sin datos personales ni de facturación. Este proyecto cierra ese vacío.",
+              "Después de 3 intentos fallidos en Sumsub: el sistema pausa retiros y transferencias, retira el botón de reintento y dirige al usuario a soporte.",
+              "Bloqueo cross-country: un usuario bloqueado no puede eludir el bloqueo abriendo una cuenta en otro país de Dropi.",
+            ],
+          },
+          {
+            type: "list",
+            label: "📌 Orden de validación — identidad primero, facturación después:",
+            items: [
+              "El usuario debe completar primero el KYC de identidad antes de poder iniciar la validación de datos de facturación. Si intenta saltarse el orden, el sistema lo bloquea y le indica que debe validar su identidad primero.",
+              "Facturación: si el responsable es la misma persona natural dueña de la cuenta → KYC. Si es una persona jurídica o tercero → KYB.",
+              "Cada flujo transaccional (retiro, transferencia, DropiCard, facturación) evalúa el estado de validación de forma independiente y muestra la alerta específica de ese flujo.",
+            ],
+          },
+          {
+            type: "callout",
+            tone: "info",
+            label: "📌 Principio clave — sin doble diligenciamiento",
+            text: "La información validada en Sumsub llega a Dropi vía API y se guarda en base de datos. El usuario no vuelve a llenarla. Elimina el doble formulario actual (datos personales + datos de facturación por separado) y reduce falsos positivos.",
+          },
+          {
+            type: "p",
+            text: "Cambio en el prototipo: se eliminó el estado 'incompleto' (usuario que abandona a mitad del proceso). Si abandona, vuelve al estado inicial de 'sin validación' y se le invita a reiniciar. El resto son ajustes visuales de cómo se muestran las alertas.",
+          },
+        ],
+        acciones: [
+          { owner: "Víctor + Paula + Catalina + José", texto: "reunirse con carácter urgente para consolidar los criterios de aceptación por flujo específico (retiro, transferencia, DropiCard, facturación) — es el desbloqueante del desarrollo." },
+          { owner: "Víctor", texto: "revisar el dashboard de Sumsub para conocer flujos y niveles ya configurados por país." },
+          { owner: "Víctor", texto: "gestionar con Sumsub las 7 preguntas técnicas pendientes e investigar alternativas de implementación." },
+          { owner: "Catalina + Paula", texto: "evaluar la política de modificación de datos personales (correo/teléfono) después de la validación y mapear escenarios concretos de KYC y KYB para que TI pueda dar estimación de tiempo de desarrollo." },
+        ],
+      },
+      {
+        titulo: "🇬🇹 Guatemala — Activación link KYC",
+        color: "#F59E0B",
+        blocks: [
+          {
+            type: "p",
+            text: "Prioridad inmediata: identificar y duplicar el flujo correcto de KYC que usa Coloca en Guatemala, obtener el link y activarlo en User Pilot. Esto detiene el cobro de Coloca por las validaciones. Jonatan se reúne con Camilo (Sumsub) para identificar cuál flujo de Coloca está activo en Guatemala, duplicarlo con nombre y logo de Dropi, y obtener el link de KYC y KYB.",
+          },
+          {
+            type: "p",
+            text: "Instancia de compliance en botón flotante Guatemala: Juan Camilo crea dentro del botón flotante una opción de compliance ('Tengo problemas con mi validación'), replicando el modelo de Colombia con Truora. Primero valida con John (SAC) cuántas solicitudes de ese tipo ya llegan por WhatsApp y si existe una opción en la plataforma.",
+          },
+          {
+            type: "p",
+            text: "Migración de base histórica: la firma del contrato 'Share' con Coloca está pendiente de información que Jonatan debe suministrar para designar al representante legal. En proceso. Además, queda por definir con TI cómo se importa a Dropi la base histórica de usuarios ya validados en Guatemala (en PDF hasta julio 2026).",
+          },
+        ],
+        acciones: [
+          { owner: "Jonatan", texto: "reunirse con Camilo (Sumsub) para identificar el flujo activo de Guatemala, duplicarlo con marca Dropi y obtener los links de KYC y KYB." },
+          { owner: "Jonatan", texto: "validar con John (SAC Guatemala) cuántas solicitudes de validación llegan por WhatsApp y si existe opción de ayuda en la plataforma. Compartir resultado con Juan Camilo." },
+          { owner: "Juan Camilo", texto: "crear dentro del botón flotante de Guatemala la instancia de compliance ('Tengo problemas con mi validación')." },
+          { owner: "Jonatan", texto: "coordinar y agendar la capacitación completa de Sumsub (dashboard, flujos, compliance, exportar datos) e informar quiénes deben participar." },
+        ],
+      },
+      {
+        titulo: "🇦🇷 Facturación Argentina — Nuevos bugs en módulo admin + beta pública próxima semana",
+        badge: "📌 Beta pública próxima semana",
+        color: "#F97316",
+        blocks: [
+          {
+            type: "callout",
+            tone: "warning",
+            label: "📌 Decisión",
+            text: "Lanzamiento público la próxima semana, una vez José resuelva los ajustes.",
+          },
+          {
+            type: "list",
+            label: "Bugs identificados en sesión del 25 agosto — José prioriza esta semana:",
+            items: [
+              "Exportación masiva de datos: el archivo corta información esencial (correo del usuario). Impide que Financiero pueda facturar. Prioridad más alta. La exportación está en la sección Órdenes, no en Revisión.",
+              "Filtros de búsqueda: al filtrar por 'Argentina dropshipper', el sistema se bloquea o arroja resultados inconsistentes.",
+              "Selectores sin estado de error visual: los selectores (listas desplegables) no muestran borde rojo al reportar error — solo los campos de texto libre lo hacen.",
+              "Contador de resultados incorrecto: el historial muestra conteos erróneos (ej. indica '2 resultados' cuando no debería haber coincidencias).",
+              "Visualización de imágenes: las imágenes de documentos abren en nueva pestaña en lugar de mostrarse dentro de la vista actual.",
+              "Nacionalidad no visible para usuarios de Paraguay en los registros.",
+            ],
+          },
+        ],
+        acciones: [
+          { owner: "José", texto: "priorizar y resolver esta semana los 6 bugs identificados." },
+          { owner: "Catalina + Paula", texto: "hacer QA de los ajustes antes de aprobar el lanzamiento beta público." },
+          { owner: "Paula", texto: "hacer seguimiento a TI (José) sobre la fecha de entrega de las correcciones — sin esa fecha no se puede activar el lanzamiento. Marketing ya está avisada y en espera." },
+        ],
+      },
+      {
+        titulo: "🔄 Conciliaciones — Levantamiento de flujos en curso",
+        color: "#8B5CF6",
+        blocks: [
+          {
+            type: "p",
+            text: "Juan Camilo está mapeando los tres frentes de conciliación con los equipos internos: (1) conciliación de facturación con transportadoras, (2) conciliación de cuentas bancarias (retiros, recargas, aplicativos), (3) PQRS y garantías. Va por la mitad.",
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: "2026-07-30",
     fecha: "30 julio 2026",
     fechaISO: "2026-07-30",
