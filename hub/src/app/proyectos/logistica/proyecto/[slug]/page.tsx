@@ -10,7 +10,6 @@ import {
   saludDe,
   motivoSalud,
   APORTA_GLOSA,
-  LINK_ICONO,
   type LinkRef,
   type Proyecto,
 } from "@/app/proyectos/logistica/_lib/data";
@@ -22,7 +21,7 @@ import {
   PageHeader,
   SectionTitle,
   type Dato,
-} from "@/app/proyectos/logistica/_components/ui";
+  Recursos,} from "@/app/proyectos/logistica/_components/ui";
 
 // NIVEL 3 de la escalera — la ficha lo tiene TODO, y es la única pantalla que
 // puede permitírselo (ley: logistica-lab/metodologia/tablero-diseno.md §6).
@@ -58,15 +57,6 @@ const DOC_LABEL: Record<string, string> = {
   ninguno: "Sin documentar",
 };
 
-const GRUPO_LINK: Record<string, string> = {
-  jira: "Jira",
-  figma: "Figma",
-  prototipo: "Prototipos",
-  poc: "Prototipos",
-  doc: "Documentación",
-  drive: "Documentación",
-  tablero: "En este tablero",
-};
 
 export default async function ProyectoPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -204,10 +194,12 @@ export default async function ProyectoPage({ params }: { params: Promise<{ slug:
       </Card>
 
       {/* ── Enlaces, agrupados ────────────────────────────────────────────── */}
-      <SectionTitle>Enlaces</SectionTitle>
+      <SectionTitle hint="Lo que existe de esta iniciativa. Lo que falta se dibuja igual: que no exista es el dato.">
+        Recursos
+      </SectionTitle>
       <Card>
         {links.length > 0 ? (
-          <Enlaces links={links} />
+          <Recursos links={links} />
         ) : (
           <p className="u-prose" style={{ color: "var(--muted)" }}>
             Sin ticket ni enlaces todavía — esta iniciativa vive solo en discovery.
@@ -296,40 +288,3 @@ function CadenaValor({ proyecto }: { proyecto: Proyecto }) {
   );
 }
 
-/** Enlaces agrupados por tipo. Siete pastillas iguales no son navegación, son un muro. */
-function Enlaces({ links }: { links: LinkRef[] }) {
-  const grupos = new Map<string, LinkRef[]>();
-  for (const l of links) {
-    const g = GRUPO_LINK[l.tipo] ?? "Otros";
-    grupos.set(g, [...(grupos.get(g) ?? []), l]);
-  }
-
-  return (
-    <div className="ficha__links">
-      {[...grupos].map(([grupo, items]) => (
-        <div key={grupo} className="ficha__links-grupo">
-          <span className="ficha__links-titulo">{grupo}</span>
-          <ul>
-            {items.map((l) => (
-              <li key={l.label + l.href}>
-                {l.falta || !l.href ? (
-                  <span className="ficha__pendiente" title="Falta el enlace">
-                    {l.label}
-                  </span>
-                ) : l.href.startsWith("http") ? (
-                  <a href={l.href} target="_blank" rel="noreferrer">
-                    <span aria-hidden>{LINK_ICONO[l.tipo]}</span> {l.label} ↗
-                  </a>
-                ) : (
-                  <Link href={l.href}>
-                    <span aria-hidden>{LINK_ICONO[l.tipo]}</span> {l.label} →
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  );
-}

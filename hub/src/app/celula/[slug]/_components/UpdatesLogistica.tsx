@@ -65,7 +65,7 @@ function SemanaCard({ w, actual }: { w: Weekly; actual: boolean }) {
         <span className="u-card__title">{w.semana}</span>
         <span className="u-link">Abrir →</span>
       </div>
-      <span className="wk-pais-part">{w.fecha}</span>
+      <span className="u-celda__sub">{w.fecha}</span>
       <p className="u-card__body u-clamp">{titulo}</p>
       {/* Los títulos de sección con su conteo dicen de qué trató la semana sin
           que nadie tenga que abrirla. Es lo que en el registro de cellboards
@@ -112,7 +112,7 @@ export default function UpdatesLogistica({
       <div className="u-row" style={{ justifyContent: "space-between", marginBottom: 12 }}>
         <div className="u-row">
           <Pill tone="warn">✦ Esta semana</Pill>
-          <span className="wk-pais-part">{ultima.fecha}</span>
+          <span className="u-celda__sub">{ultima.fecha}</span>
         </div>
         <Link className="u-link" href={hrefDe(ultima)}>
           Ver el weekly completo →

@@ -86,7 +86,7 @@ const columnasCluster: Column<(typeof CLUSTERES)[number]>[] = [
     align: "right",
     width: "26%",
     render: (c) => (
-      <div className="wk-pais-mov">
+      <div className="u-celda__medida">
         <Bar value={(c.techo / 55703) * 100} tone={c.tone} label={`${c.cluster}: ${formatMiles(c.techo)} entregas de techo`} />
         <span>+{formatMiles(c.techo)}</span>
       </div>
@@ -101,8 +101,8 @@ const columnasPais: Column<PaisNovedad>[] = [
     width: "20%",
     render: (p) => (
       <>
-        <strong className="wk-pais-nombre">{p.pais}</strong>
-        <span className="wk-pais-part">
+        <strong className="u-celda__nombre">{p.pais}</strong>
+        <span className="u-celda__sub">
           {p.etiquetas} etiquetas · {p.carriers} {p.carriers === 1 ? "carrier" : "carriers"}
         </span>
       </>
@@ -144,8 +144,8 @@ const columnasMotivo: Column<Motivo>[] = [
 const columnasArquitectura: Column<(typeof ARQUITECTURAS)[number]>[] = [
   { key: "quien", header: "Carrier · país", width: "22%", render: (a) => (
       <>
-        <strong className="wk-pais-nombre">{a.quien}</strong>
-        {a.nota && <span className="wk-pais-part">{a.nota}</span>}
+        <strong className="u-celda__nombre">{a.quien}</strong>
+        {a.nota && <span className="u-celda__sub">{a.nota}</span>}
       </>
     ) },
   { key: "estructura", header: "Estructura del formulario", render: (a) => a.estructura },
@@ -230,15 +230,15 @@ export default function NovedadesPage() {
         columns={[
           { key: "tipo", header: "Tipo de etiqueta", width: "30%", render: (t) => (
               <>
-                <strong className="wk-pais-nombre">{t.tipo}</strong>
-                <span className="wk-pais-part">{t.ejemplos}</span>
+                <strong className="u-celda__nombre">{t.tipo}</strong>
+                <span className="u-celda__sub">{t.ejemplos}</span>
               </>
             ) },
           { key: "etiquetas", header: "Etiq.", align: "right", render: (t) => t.etiquetas },
           { key: "novedades", header: "Novedades", align: "right", render: (t) => formatMiles(t.novedades) },
           { key: "mix", header: "% del mix", align: "right", render: (t) => formatPct1(t.mix) },
           { key: "rescate", header: "Rescate", align: "right", width: "22%", render: (t) => (
-              <div className="wk-pais-mov">
+              <div className="u-celda__medida">
                 <Bar value={t.rescate} tone={t.tone} label={`${t.tipo}: ${formatPct1(t.rescate)} de rescate`} />
                 <span>{formatPct1(t.rescate)}</span>
               </div>

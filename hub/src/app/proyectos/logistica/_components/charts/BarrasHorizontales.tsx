@@ -3,6 +3,7 @@
 import { Bar, BarChart, Cell, LabelList, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { formatCompacto, formatMiles, formatPct1 } from "../../_lib/format";
 import type { Tone } from "../ui/tone";
+import { FS_BODY, FS_LABEL } from "./escala";
 
 // Ranking en barras horizontales, opcionalmente contra una meta.
 //
@@ -70,13 +71,13 @@ export default function BarrasHorizontales({
             domain={dominio}
             tickLine={false}
             axisLine={false}
-            tick={{ fontSize: 11, fill: "var(--dropi-gray-500)" }}
+            tick={{ fontSize: FS_LABEL, fill: "var(--dropi-gray-500)" }}
             tickFormatter={(v) => (pct ? `${v}%` : formatCompacto(v))}
           />
-          <YAxis type="category" dataKey="label" width={anchoLabel} tickLine={false} axisLine={false} tick={{ fontSize: 11, fill: "var(--dropi-gray-700)" }} interval={0} />
+          <YAxis type="category" dataKey="label" width={anchoLabel} tickLine={false} axisLine={false} tick={{ fontSize: FS_LABEL, fill: "var(--dropi-gray-700)" }} interval={0} />
           <Tooltip
             cursor={{ fill: "var(--soft)" }}
-            contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid var(--border)", boxShadow: "0 4px 12px rgba(0,0,0,0.08)", background: "var(--card)" }}
+            contentStyle={{ fontSize: FS_BODY, borderRadius: 8, border: "1px solid var(--border)", boxShadow: "0 4px 12px rgba(0,0,0,0.08)", background: "var(--card)" }}
             formatter={(v, _n, item) => [
               `${typeof v === "number" ? fmt(v) : String(v)}${item?.payload?.detalle ? ` · ${item.payload.detalle}` : ""}`,
               nombre,
@@ -87,11 +88,11 @@ export default function BarrasHorizontales({
               x={meta}
               stroke="var(--dropi-gray-700)"
               strokeDasharray="4 4"
-              label={{ value: metaLabel ?? `Meta ${fmt(meta)}`, position: "insideTopRight", fill: "var(--dropi-gray-600)", fontSize: 10, fontWeight: 600 }}
+              label={{ value: metaLabel ?? `Meta ${fmt(meta)}`, position: "insideTopRight", fill: "var(--dropi-gray-600)", fontSize: FS_LABEL, fontWeight: 600 }}
             />
           )}
           <Bar dataKey="valor" name={nombre} radius={[0, 4, 4, 0]} maxBarSize={18}>
-            <LabelList dataKey="valor" position="right" formatter={(v: unknown) => (typeof v === "number" ? fmt(v) : "")} style={{ fontSize: 10, fill: "var(--dropi-gray-600)", fontWeight: 600 }} />
+            <LabelList dataKey="valor" position="right" formatter={(v: unknown) => (typeof v === "number" ? fmt(v) : "")} style={{ fontSize: FS_LABEL, fill: "var(--dropi-gray-600)", fontWeight: 600 }} />
             {filas.map((f) => (
               <Cell key={f.label} fill={TONO[f.tone]} />
             ))}

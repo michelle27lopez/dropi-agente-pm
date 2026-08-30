@@ -262,9 +262,6 @@ export const APORTA_GLOSA: Record<AportaA, string> = {
 export type LinkTipo = "jira" | "figma" | "prototipo" | "poc" | "doc" | "drive" | "tablero";
 export type LinkRef = { tipo: LinkTipo; label: string; href: string; falta?: boolean };
 
-export const LINK_ICONO: Record<LinkTipo, string> = {
-  jira: "🎫", figma: "🎨", prototipo: "🖥️", poc: "🧪", doc: "📄", drive: "📁", tablero: "🧭",
-};
 
 export type ProyectoMetadataLogistica = {
   nombre: string;
@@ -2351,7 +2348,7 @@ export const weeklies: Weekly[] = [
             nombre: "Guías reemplazatorias en Ecom Scanner",
             ticket: "PRM-745",
             estado: "Beta por reconciliar",
-            estadoTono: "amarillo",
+            estadoTono: "ambar",
             nota: "Dev finalizado y beta reportada en tres carriers. Falta reconciliar el bloqueo operativo del 27-jul, cerrar medición/activación y demostrar rollout global. PROD-1045 permanece como historia canónica de Laura.",
           },
           {

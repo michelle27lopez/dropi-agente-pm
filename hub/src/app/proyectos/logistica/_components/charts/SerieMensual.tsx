@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import { esPorcentaje, formatCompacto, formatMiles, formatPct1, parseValor } from "../../_lib/format";
 import type { Tone } from "../ui/tone";
+import { FS_BODY, FS_LABEL } from "./escala";
 
 // Serie mensual del weekly: los meses de `comparacionMensual` como gráfica.
 //
@@ -39,9 +40,9 @@ const TONO: Record<Tone, string> = {
   info: "var(--info)",
 };
 
-const EJE = { fontSize: 11, fill: "var(--dropi-gray-500)" } as const;
+const EJE = { fontSize: FS_LABEL, fill: "var(--dropi-gray-500)" } as const;
 const TOOLTIP = {
-  fontSize: 12,
+  fontSize: FS_BODY,
   borderRadius: 8,
   border: "1px solid var(--border)",
   boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
@@ -89,7 +90,7 @@ export default function SerieMensual({ meses, valores, nombre, tone = "neutral",
       y={meta}
       stroke="var(--dropi-gray-400)"
       strokeDasharray="4 4"
-      label={{ value: `Meta ${formato(meta)}`, position: "insideTopRight", fill: "var(--dropi-gray-500)", fontSize: 10, fontWeight: 600 }}
+      label={{ value: `Meta ${formato(meta)}`, position: "insideTopRight", fill: "var(--dropi-gray-500)", fontSize: FS_LABEL, fontWeight: 600 }}
     />
   );
 
@@ -110,7 +111,7 @@ export default function SerieMensual({ meses, valores, nombre, tone = "neutral",
             {tooltip}
             {referencia}
             <Area type="monotone" dataKey="valor" stroke={color} strokeWidth={2.25} fill={`url(#${gradId})`} dot={{ r: 3, fill: color, strokeWidth: 0 }} activeDot={{ r: 5 }} connectNulls>
-              <LabelList dataKey="texto" position="top" style={{ fontSize: 10, fill: "var(--dropi-gray-600)", fontWeight: 600 }} />
+              <LabelList dataKey="texto" position="top" style={{ fontSize: FS_LABEL, fill: "var(--dropi-gray-600)", fontWeight: 600 }} />
             </Area>
           </AreaChart>
         ) : (
@@ -121,7 +122,7 @@ export default function SerieMensual({ meses, valores, nombre, tone = "neutral",
             {tooltip}
             {referencia}
             <Bar dataKey="valor" name={nombre} radius={[4, 4, 0, 0]} maxBarSize={44}>
-              <LabelList dataKey="texto" position="top" style={{ fontSize: 10, fill: "var(--dropi-gray-600)", fontWeight: 600 }} />
+              <LabelList dataKey="texto" position="top" style={{ fontSize: FS_LABEL, fill: "var(--dropi-gray-600)", fontWeight: 600 }} />
               {data.map((d) => (
                 <Cell key={d.mes} fill={d.mes === activo ? color : "var(--dropi-gray-200)"} />
               ))}

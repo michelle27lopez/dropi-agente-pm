@@ -475,16 +475,21 @@
 
 /* Delta de la comparación mensual del weekly. Se tiñe porque es lo único de esa
    tabla que pide reacción; el resto son cifras de contexto. */
-.log-root .wk-delta { font-variant-numeric: tabular-nums; font-weight: 600; }
-.log-root .wk-delta.is-verde { color: var(--on-green); }
-.log-root .wk-delta.is-ambar { color: var(--on-amber); }
-.log-root .wk-delta.is-rojo { color: var(--on-red); }
+.log-root .u-delta { font-variant-numeric: tabular-nums; font-weight: 600; }
+.log-root .u-delta.is-verde { color: var(--on-green); }
+.log-root .u-delta.is-ambar { color: var(--on-amber); }
+.log-root .u-delta.is-rojo { color: var(--on-red); }
 
-/* Desglose por país del mes cerrado. La participación va bajo el nombre y no
-   como columna propia: es contexto para leer la fila, no un eje de comparación
-   — y una columna más habría empujado la tabla a scroll horizontal. */
-.log-root .wk-pais-nombre { display: block; font-weight: 600; }
-.log-root .wk-pais-part {
+/* Celda de dos líneas: un nombre y su contexto debajo. Nació para el desglose
+   por país (la participación no es un eje de comparación, es contexto para leer
+   la fila; como columna propia habría empujado la tabla a scroll horizontal) y
+   hoy la usan también Insights y los updates de la célula — por eso dejó de
+   llamarse `wk-`, que prometía un uso que ya no tiene.
+
+   La barra y su cifra van en la misma celda: la barra da la comparación de un
+   vistazo, el número da la precisión que a 8px la barra no puede dar. */
+.log-root .u-celda__nombre { display: block; font-weight: 600; }
+.log-root .u-celda__sub {
   display: block;
   margin-top: 1px;
   font-size: var(--fs-label);
@@ -493,13 +498,13 @@
 }
 /* La barra y su cifra en la misma celda: la barra da la comparación de un
    vistazo y el número da la precisión que la barra no puede dar a 8px. */
-.log-root .wk-pais-mov {
+.log-root .u-celda__medida {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.log-root .wk-pais-mov .u-bar { flex: 1; min-width: 60px; }
-.log-root .wk-pais-mov > span {
+.log-root .u-celda__medida .u-bar { flex: 1; min-width: 60px; }
+.log-root .u-celda__medida > span {
   font-variant-numeric: tabular-nums;
   font-weight: 600;
   min-width: 46px;
@@ -799,3 +804,15 @@
   white-space: nowrap;
 }
 .log-root .nov-timeline__texto { color: var(--text); max-width: 80ch; }
+
+/* ── Comparación dentro de un hallazgo ────────────────────────────────────
+   Dos barras enfrentadas con su etiqueta. Antes era `.wk-compara`, con dos
+   barras de gradiente propias; ahora las barras son el primitivo y aquí solo
+   queda el espaciado. */
+.log-root .u-compara { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.log-root .u-compara__tit {
+  font-size: var(--fs-label);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
