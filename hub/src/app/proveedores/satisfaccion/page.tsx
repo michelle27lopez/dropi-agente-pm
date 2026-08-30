@@ -16,6 +16,31 @@ const NPS_MES = [
   { mes: "Agosto 2026 (al día 19)", score: 48, n: 188 },
 ];
 
+// ── Marco NPS vs CSAT vs CES · CustomerGauge
+const MARCO_METRICAS = [
+  {
+    metrica: "NPS",
+    mide: "Lealtad general hacia Dropi",
+    pregunta: "¿Qué tan probable es que nos recomiende? (0–10)",
+    formula: "% Promotores − % Detractores",
+    predice: "Retención y crecimiento a largo plazo",
+  },
+  {
+    metrica: "CSAT",
+    mide: "Satisfacción con una interacción puntual",
+    pregunta: "¿Qué tan satisfecho quedó con [X]?",
+    formula: "% de respuestas top-2 sobre el total",
+    predice: "Débil: sirve para cerrar el ciclo de un caso, no para anticipar churn",
+  },
+  {
+    metrica: "CES",
+    mide: "Facilidad para resolver algo",
+    pregunta: "¿Qué tan fácil fue resolver tu problema?",
+    formula: "Promedio de las respuestas",
+    predice: "Moderada: mucho esfuerzo percibido correlaciona con abandono",
+  },
+];
+
 // ── CSAT donde el proveedor evalúa su propia experiencia
 const CAS_CASO = [
   { label: "1 · Muy difícil", n: 18, pct: 50.0 },
@@ -53,12 +78,12 @@ const FALTA_INFO = [
 ];
 
 const INVENTARIO = [
-  { id: "55", nombre: "[Evergreen] [CSAT] Indicadores de Proveedores", responde: "Dropshipper", sobre: "El proveedor", estado: "Publicada", n: "1.796", color: "var(--info)" },
-  { id: "61", nombre: "[Evergreen] [CSAT] CAS Caso abierto Proveedor", responde: "Proveedor", sobre: "Su propia experiencia", estado: "Publicada", n: "36", color: "var(--success)" },
-  { id: "62", nombre: "[Evergreen] [CSAT] CAS Cierre Proveedor", responde: "Proveedor", sobre: "Su propia experiencia", estado: "Publicada, sin una sola vista", n: "0", color: "var(--danger)" },
-  { id: "43", nombre: "(CES) Proveedores · Caza Productos", responde: "Proveedor", sobre: "Su propia experiencia", estado: "No publicada", n: "17", color: "var(--warning)" },
-  { id: "32", nombre: "[Evergreen] Clasificación Proveedores y Marcas", responde: "Proveedor", sobre: "Perfilamiento, no satisfacción", estado: "Publicada", n: "7.678", color: "var(--muted)" },
-  { id: "41", nombre: "[Evergreen] Comunidades · Clasificación Marcas y proveedores", responde: "Proveedor", sobre: "Perfilamiento, no satisfacción", estado: "Publicada", n: "—", color: "var(--muted)" },
+  { id: "55", nombre: "[Evergreen] [CSAT] Indicadores de Proveedores", responde: "Dropshipper", sobre: "El proveedor", estado: "Publicada", n: "1.796", resultado: "4,33 / 5", color: "var(--info)" },
+  { id: "61", nombre: "[Evergreen] [CSAT] CAS Caso abierto Proveedor", responde: "Proveedor", sobre: "Su propia experiencia", estado: "Publicada", n: "36", resultado: "2,44 / 5", color: "var(--success)" },
+  { id: "62", nombre: "[Evergreen] [CSAT] CAS Cierre Proveedor", responde: "Proveedor", sobre: "Su propia experiencia", estado: "Publicada, sin una sola vista", n: "0", resultado: "—", color: "var(--danger)" },
+  { id: "43", nombre: "(CES) Proveedores · Caza Productos", responde: "Proveedor", sobre: "Su propia experiencia", estado: "No publicada", n: "17", resultado: "3,82 / 5", color: "var(--warning)" },
+  { id: "32", nombre: "[Evergreen] Clasificación Proveedores y Marcas", responde: "Proveedor", sobre: "Perfilamiento, no satisfacción", estado: "Publicada", n: "7.678", resultado: "—", color: "var(--muted)" },
+  { id: "41", nombre: "[Evergreen] Comunidades · Clasificación Marcas y proveedores", responde: "Proveedor", sobre: "Perfilamiento, no satisfacción", estado: "Publicada", n: "—", resultado: "—", color: "var(--muted)" },
 ];
 
 export default function SatisfaccionPage() {
@@ -83,6 +108,37 @@ export default function SatisfaccionPage() {
         <Callout icon="📉" color="var(--warning)">
           El proveedor está nueve puntos por debajo del promedio de la plataforma y tiene un tercio más de
           detractores. No es una caída puntual: es el nivel sostenido de los últimos tres meses.
+        </Callout>
+      </SectionCard>
+
+      <SectionCard>
+        <H2>Qué mide cada métrica</H2>
+        <P>
+          NPS, CSAT y CES no son intercambiables: cada una responde una pregunta distinta y predice cosas
+          distintas. Tenerlo claro importa porque, como se ve más abajo, en Dropi ya hay una encuesta
+          nombrada como una cosa que en realidad mide otra.
+        </P>
+
+        <Tabla head={["Métrica", "Qué mide", "Pregunta típica", "Fórmula", "Qué predice"]}>
+          {MARCO_METRICAS.map((m) => (
+            <tr key={m.metrica}>
+              <Td bold>{m.metrica}</Td>
+              <Td>{m.mide}</Td>
+              <Td>{m.pregunta}</Td>
+              <Td>{m.formula}</Td>
+              <Td>{m.predice}</Td>
+            </tr>
+          ))}
+        </Tabla>
+        <Fuente origen="CustomerGauge · blog «NPS vs CSAT vs CES» (customergauge.com/blog/nps-csat-ces)" />
+
+        <Callout icon="⚠️" color="var(--warning)">
+          La encuesta 61 se llama <em>[Evergreen] [CSAT] CAS Caso abierto Proveedor</em>, pero su pregunta
+          real es «¿qué tan fácil fue encontrar y tomar este caso?» — eso es un CES, no un CSAT. El
+          «2,44 / 5» del resumen mide qué tan fácil le resultó al proveedor tomar un caso puntual dentro del
+          flujo CAS (comunicación dropshipper↔proveedor), no su satisfacción con el soporte en general ni con
+          Dropi como plataforma. Es un motivo más por el que sigue sin existir una medición real de
+          satisfacción relacional del proveedor (ver «Lo que sigue sin saberse», más abajo).
         </Callout>
       </SectionCard>
 
@@ -150,6 +206,15 @@ export default function SatisfaccionPage() {
         </Callout>
         <Fuente origen="UserPilot survey 61 · «¿Qué dificultó tomar el caso?» · n=12" corte="ene–ago 2026" />
 
+        <P>
+          Esto es un touchpoint puntual del flujo CAS, no la relación completa del proveedor con Dropi. El
+          detalle del sistema CAS (tracking, embudo de cierre, adopción por filtro) vive en{" "}
+          <a href="/proyectos/cas-comunicacion" style={{ color: "var(--fg)", textDecoration: "none", borderBottom: "1px solid var(--border)" }}>
+            su propia bitácora UX
+          </a>
+          — CAS todavía no tiene entrada en Following.
+        </P>
+
         <H3>Enviar una oferta en Caza Productos · «¿Qué tan fácil fue enviar tu oferta?»</H3>
         {CES_OFERTA.map((r) => (
           <Barra key={r.label} label={r.label} pct={r.pct} valor={`${r.n} · ${r.pct}%`} color={r.label.startsWith("1") ? "var(--danger)" : "var(--info)"} />
@@ -162,6 +227,14 @@ export default function SatisfaccionPage() {
           La distribución está partida en dos: el 58,82% lo encontró muy fácil y el 23,53% lo encontró muy
           difícil, sin casi nadie en el medio. De los cinco que reportaron problemas, tres marcaron error y
           uno dijo que su oferta no se envió.
+        </P>
+        <P>
+          Esto también es un touchpoint puntual, específico del flujo de ofertas. El resto de métricas de
+          Caza Productos (no solo esta encuesta) está en{" "}
+          <a href="/metricas?p=caza-productos" style={{ color: "var(--fg)", textDecoration: "none", borderBottom: "1px solid var(--border)" }}>
+            Following
+          </a>
+          .
         </P>
       </SectionCard>
 
@@ -202,7 +275,7 @@ export default function SatisfaccionPage() {
           y una de esas tres lleva meses publicada sin que nadie la vea.
         </P>
 
-        <Tabla min={900} head={["#", "Encuesta", "Quién responde", "Sobre qué", "Estado", "Respuestas"]}>
+        <Tabla min={980} head={["#", "Encuesta", "Quién responde", "Sobre qué", "Estado", "Respuestas", "Resultado"]}>
           {INVENTARIO.map((s) => (
             <tr key={s.id}>
               <Td bold>{s.id}</Td>
@@ -211,6 +284,7 @@ export default function SatisfaccionPage() {
               <Td>{s.sobre}</Td>
               <Td color={s.color}>{s.estado}</Td>
               <Td bold>{s.n}</Td>
+              <Td bold>{s.resultado}</Td>
             </tr>
           ))}
         </Tabla>
