@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FIN-005 — Onboarding multipaís dropiPay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --page-bg: #f4f6f9;
+    --gray-900: #1c1917;
+    --gray-700: #32394d;
+    --gray-600: #475066;
+    --gray-500: #69738c;
+    --gray-300: #a3abbf;
+    --gray-100: #e6eaf2;
+    --orange: #ff9166;
+    --orange-solid: #f49a3d;
+    --purple: #6366f1;
+    --purple-bg: #eef2ff;
+    /* dropiPay app dark tokens (Figma) */
+    --app-bg: #181513;
+    --app-title: #ebe7e4;
+    --app-subtitle: #bab6b4;
+    --app-label: #bab6b4;
+    --app-placeholder: #74716e;
+    --app-border: #45423f;
+    --app-input-bg: rgba(9,7,5,0.48);
+    --app-btn-bg: #45423f;
+    --app-btn-text: #95918f;
+  }
+  body { font-family: 'Figtree', -apple-system, sans-serif; background: var(--page-bg); color: var(--gray-700); min-height: 100vh; }
+
+  .topbar { background: #fff; border-bottom: 1px solid var(--gray-100); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .topbar h1 { font-size: 18px; font-weight: 800; font-family: 'Figtree', sans-serif; }
+  .topbar .sub { font-size: 12.5px; color: var(--gray-500); margin-top: 2px; }
+  .back-link { font-size: 12.5px; color: var(--gray-500); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+  .badge { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 700; color: #4338ca; background: var(--purple-bg); }
+
+  main { max-width: 1280px; margin: 0 auto; padding: 24px 24px 60px; }
+
+  /* ── Selectors ── */
+  .selector-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .country-btn {
+    display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px;
+    border: 1.5px solid var(--gray-100); background: #fff; cursor: pointer; font-family: inherit;
+    font-size: 13px; font-weight: 700; color: var(--gray-600); transition: all .15s ease;
+  }
+  .country-btn .flag { font-size: 18px; }
+  .country-btn.active { border-color: var(--orange-solid); background: #fff8f0; color: #b45309; }
+
+  .selector-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--gray-500); margin-bottom: 6px; }
+
+  .tipo-btn {
+    display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px;
+    border: 1.5px solid var(--gray-100); background: #fff; cursor: pointer; font-family: inherit;
+    font-size: 13px; font-weight: 700; color: var(--gray-600); transition: all .15s ease;
+  }
+  .tipo-btn.active { border-color: var(--purple); background: var(--purple-bg); color: #4338ca; }
+
+  .screen-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+  .screen-tab {
+    padding: 8px 14px; border-radius: 8px; border: 1px solid var(--gray-100); background: #fff;
+    font-size: 12.5px; font-weight: 700; color: var(--gray-500); cursor: pointer; font-family: inherit;
+  }
+  .screen-tab.active { background: var(--gray-700); color: #fff; border-color: var(--gray-700); }
+
+  /* ── Layout ── */
+  .content-row { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+  .stage-col { flex: 0 0 auto; }
+  .panel-col { flex: 1 1 380px; min-width: 320px; display: flex; flex-direction: column; gap: 16px; }
+
+  /* ── Phone mockup ── */
+  .stage {
+    background: #d8dde6; border-radius: 24px; padding: 28px; display: flex; align-items: center; justify-content: center;
+  }
+  .phone {
+    width: 380px; background: var(--app-bg); border-radius: 40px; overflow: hidden; position: relative;
+    box-shadow: 0 16px 40px rgba(0,0,0,.3); border: 7px solid #0c0a09;
+  }
+  .phone::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 120px 340px at 50% -40px, rgba(255,145,102,0.16), transparent 70%);
+  }
+  .status-bar { display: flex; justify-content: space-between; align-items: center; padding: 14px 22px 4px; font-size: 13px; font-weight: 700; color: var(--app-title); position: relative; z-index: 1; }
+  .status-icons { display: flex; gap: 5px; align-items: center; font-size: 11px; opacity: .9; }
+  .app-content { padding: 8px 20px 24px; position: relative; z-index: 1; }
+  .app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .icon-circle {
+    width: 40px; height: 40px; border-radius: 999px; background: rgba(9,7,5,0.48); border: 1px solid var(--app-border);
+    display: flex; align-items: center; justify-content: center; color: var(--app-title); font-size: 15px;
+    cursor: pointer; transition: opacity .15s ease;
+  }
+  .icon-circle.disabled { opacity: .3; cursor: default; pointer-events: none; }
+  .icon-circle:not(.disabled):hover { border-color: var(--orange); }
+
+  .progress-row { display: flex; gap: 5px; margin-bottom: 14px; }
+  .progress-dot { height: 4px; flex: 1; border-radius: 999px; background: var(--app-border); transition: background .2s ease; }
+  .progress-dot.done { background: var(--app-placeholder); }
+  .progress-dot.active { background: var(--orange); }
+
+  .app-title { font-family: 'Geist', 'Figtree', sans-serif; font-weight: 700; font-size: 26px; color: var(--app-title); line-height: 1.2; margin-bottom: 8px; letter-spacing: -0.3px; }
+  .app-subtitle { font-size: 15px; color: var(--app-subtitle); line-height: 1.4; margin-bottom: 22px; }
+  .field { margin-bottom: 14px; }
+  .field-row { display: flex; gap: 10px; }
+  .field-row .field { flex: 1; }
+  .field-label { font-size: 11px; font-weight: 600; color: var(--app-label); margin-bottom: 5px; display: block; }
+  .field-input {
+    background: var(--app-input-bg); border: 1px solid var(--app-border); border-radius: 999px;
+    padding: 12px 16px; display: flex; align-items: center; gap: 8px; font-size: 14px;
+  }
+  .field-input:focus-within { border-color: var(--orange); }
+  .field-input .value { flex: 1; color: var(--app-subtitle); }
+  .field-input .value.placeholder { color: var(--app-placeholder); }
+  .field-input .ic { font-size: 14px; opacity: .8; }
+  .field-input .chev { color: var(--app-placeholder); font-size: 12px; pointer-events: none; }
+  .field-helper { font-size: 11px; color: var(--app-placeholder); margin-top: 5px; }
+  .field-helper b { color: var(--orange); font-weight: 700; }
+
+  .field-real-input {
+    flex: 1; min-width: 0; background: transparent; border: none; outline: none; color: var(--app-subtitle);
+    font-family: 'Figtree', sans-serif; font-size: 14px; color-scheme: dark;
+  }
+  .field-real-input::placeholder { color: var(--app-placeholder); }
+  .field-select {
+    flex: 1; min-width: 0; background: transparent; border: none; outline: none; color: var(--app-subtitle);
+    font-family: 'Figtree', sans-serif; font-size: 14px; appearance: none; -webkit-appearance: none; cursor: pointer; color-scheme: dark;
+  }
+  .field-select option { background: #181513; color: #ebe7e4; }
+  .field-input.warn { border-color: #f59e0b; }
+  .field-input.warn .field-select { color: #fbbf24; }
+  .new-field-tag {
+    display: inline-block; font-size: 9px; font-weight: 800; color: #fff; background: var(--orange);
+    border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: middle;
+  }
+  .app-cta { background: var(--app-btn-bg); color: var(--app-btn-text); border-radius: 999px; padding: 14px; text-align: center; font-size: 16px; font-weight: 600; margin-top: 26px; cursor: pointer; user-select: none; transition: transform .08s ease; }
+  .app-cta:active { transform: scale(.98); }
+  .app-cta.active { background: var(--app-title); color: #090705; }
+
+  .toast {
+    position: absolute; left: 20px; right: 20px; bottom: 76px; z-index: 5;
+    background: #f7f3ef; color: #090705; font-size: 12.5px; font-weight: 700; text-align: center;
+    padding: 10px 14px; border-radius: 10px; box-shadow: 0 6px 18px rgba(0,0,0,.3);
+    opacity: 0; transform: translateY(6px); pointer-events: none; transition: all .2s ease;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  .radiocard {
+    display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 12px; margin-bottom: 8px;
+    border: 2px solid transparent; background: transparent; cursor: pointer; transition: background .12s ease;
+  }
+  .radiocard:hover { background: rgba(255,255,255,0.04); }
+  .radiocard.selected { background: #2b2826; border-color: #d7d3d0; }
+  .radiocard-icon {
+    width: 44px; height: 44px; border-radius: 999px; background: #2b2826; display: flex; align-items: center;
+    justify-content: center; font-size: 19px; flex-shrink: 0;
+  }
+  .radiocard.selected .radiocard-icon { background: #090705; }
+  .radiocard-text { flex: 1; min-width: 0; }
+  .radiocard-title { font-size: 15px; font-weight: 700; color: #f7f3ef; margin-bottom: 1px; }
+  .radiocard-desc { font-size: 11.5px; color: #95918f; line-height: 1.35; }
+  .radiocard-radio { width: 20px; height: 20px; border-radius: 999px; border: 2px solid #45423f; flex-shrink: 0; }
+  .radiocard.selected .radiocard-radio { border-color: #ebe7e4; display: flex; align-items: center; justify-content: center; }
+  .radiocard.selected .radiocard-radio::after { content: ""; width: 10px; height: 10px; border-radius: 999px; background: #ebe7e4; }
+
+  .upload-card {
+    display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px;
+    background: rgba(9,7,5,0.16); border: 1px dashed #45423f; margin-bottom: 10px;
+  }
+  .upload-icon-circle {
+    width: 44px; height: 44px; border-radius: 999px; background: #2b2826; display: flex;
+    align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+  }
+  .upload-text { flex: 1; min-width: 0; }
+  .upload-title { font-size: 14px; font-weight: 600; color: #f7f3ef; margin-bottom: 1px; }
+  .upload-sub { font-size: 10.5px; color: #95918f; line-height: 1.4; }
+  .upload-sub2 { font-size: 10.5px; color: #5b5755; }
+  .upload-btn { font-size: 16px; opacity: .85; flex-shrink: 0; }
+  .dropdown-helper { font-size: 10.5px; color: var(--app-placeholder); margin-top: 5px; }
+  .dropdown-helper.warn { color: #fbbf24; }
+  .home-indicator { display: flex; justify-content: center; padding: 10px 0 14px; }
+  .home-indicator .bar { width: 120px; height: 4px; border-radius: 999px; background: var(--app-title); opacity: .85; }
+
+  /* ── Panel ── */
+  .card { background: #fff; border: 1px solid var(--gray-100); border-radius: 12px; padding: 18px 20px; }
+  .card h3 { font-size: 13px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; color: var(--gray-700); }
+  .card p, .card li { font-size: 12.5px; color: var(--gray-600); line-height: 1.65; }
+  .card ul { padding-left: 18px; }
+  .country-note { font-size: 12.5px; color: var(--gray-600); line-height: 1.65; }
+  .diff-list { display: flex; flex-direction: column; gap: 8px; }
+  .diff-item {
+    display: flex; gap: 8px; align-items: flex-start; font-size: 12px; background: #f8fafc;
+    border: 1px solid var(--gray-100); border-radius: 8px; padding: 8px 10px;
+  }
+  .diff-item .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--orange-solid); margin-top: 5px; flex-shrink: 0; }
+  .baseline-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #0369a1; background: #e0f2fe; border-radius: 999px; padding: 3px 10px; margin-bottom: 8px; }
+  .note {
+    background: var(--purple-bg); border: 1px solid #c7d2fe; border-radius: 10px; padding: 12px 14px;
+    font-size: 12px; color: #3730a3; line-height: 1.55;
+  }
+
+  .glosario-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; border-bottom: 1px solid var(--gray-100); }
+  .glosario-item:last-child { border-bottom: none; }
+  .glosario-sigla {
+    flex-shrink: 0; min-width: 34px; text-align: center; font-size: 10.5px; font-weight: 800; color: #0369a1;
+    background: #e0f2fe; border-radius: 6px; padding: 3px 4px;
+  }
+  .glosario-text { font-size: 12px; color: var(--gray-600); line-height: 1.5; }
+  .glosario-text b { color: var(--gray-700); }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div>
+      <a class="back-link" href="/proyectos/fin-005">← Volver a FIN-005</a>
+      <h1 style="margin-top:6px;">FIN-005 — Onboarding multipaís: tipo de usuario × país</h1>
+      <div class="sub">Célula Fintech · Basado en dropiPay Design v2.0 (Figma) + homologacion-campos-multipais.md</div>
+    </div>
+    <span class="badge">🌎 5 países · 🧩 3 tipos de usuario</span>
+  </div>
+
+  <main>
+    <div class="selector-label">1. Tipo de usuario</div>
+    <div class="selector-row" id="tipoUsuarioRow"></div>
+    <div class="selector-label">2. País</div>
+    <div class="selector-row" id="countryRow"></div>
+    <div class="selector-label">3. Pantalla</div>
+    <div class="screen-tabs" id="screenRow"></div>
+
+    <div class="content-row">
+      <div class="stage-col">
+        <div class="stage">
+          <div class="phone">
+            <div class="status-bar">
+              <span>9:41</span>
+              <span id="langBadge" style="font-size:10px; font-weight:800; letter-spacing:.04em; opacity:0; padding:2px 7px; border-radius:999px; border:1px solid var(--app-border); background:rgba(9,7,5,0.4);"></span>
+              <span class="status-icons">▮▮▮▮ 📶 🔋</span>
+            </div>
+            <div class="app-content">
+              <div class="app-header">
+                <div class="icon-circle" id="backBtn" onclick="goBack()">←</div>
+                <div class="icon-circle">🎧</div>
+              </div>
+              <div class="progress-row" id="progressRow"></div>
+              <div class="app-title" id="screenTitle"></div>
+              <div class="app-subtitle" id="screenSubtitle"></div>
+              <div id="fieldsContainer"></div>
+              <div class="app-cta" id="ctaBtn" onclick="goNext()">Continuar</div>
+            </div>
+            <div class="toast" id="toast"></div>
+            <div class="home-indicator"><div class="bar"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-col">
+        <div class="card">
+          <h3>🔎 Qué cambia en <span id="panelCountryName">Colombia</span></h3>
+          <div id="baselineTag"></div>
+          <div class="diff-list" id="diffList"></div>
+        </div>
+
+        <div class="card" id="glosarioCard" style="display:none;">
+          <h3>📖 Glosario de documentos — <span id="glosarioCountryName"></span></h3>
+          <div id="glosarioList"></div>
+          <p style="font-size:11px; color:#94a3b8; margin-top:10px; line-height:1.5;">Referencia informativa basada en FIN-005 (2.3). La lista final de documentos aceptados para KYC debe confirmarse con Compliance/Legal y con Truora antes de implementar.</p>
+        </div>
+
+        <div class="card">
+          <h3>📋 Dos capas de diferenciación</h3>
+          <p><b>Tipo de usuario:</b> Persona Natural (identificación, datos personales, ubicación) · Empresa sin registrar (representante legal + Tipo de negocio) · Empresa registrada (suma Datos de la compañía + Documentación, y su propio Tipo de negocio con 5 opciones distintas — incluye "Operaciones con USDT" explícito).</p>
+          <p style="margin-top:8px;"><b>País:</b> cambia terminología, formato y a veces la existencia misma de un campo, dentro de la pantalla que ya elegiste. OTP, PIN y verificación facial no se prototipan — no cambian por país ni por tipo de usuario.</p>
+        </div>
+
+        <div class="note">
+          <b>Nota de alcance:</b> este prototipo muestra la estructura de campos por tipo de usuario y país, no el flujo de validación completo (Truora, backend). Las equivalencias de documentos siguen pendientes de confirmar con Compliance/Legal antes de implementar, como quedó registrado en FIN-005.
+        </div>
+      </div>
+    </div>
+  </main>
+
+<script>
+  const COUNTRIES = {
+    co: { flag: "🇨🇴", name: "Colombia", isBaseline: true },
+    br: { flag: "🇧🇷", name: "Brasil" },
+    mx: { flag: "🇲🇽", name: "México" },
+    cl: { flag: "🇨🇱", name: "Chile" },
+    ec: { flag: "🇪🇨", name: "Ecuador" },
+  };
+
+  // Glosario de documentos de identificación aceptables por país (FIN-005, sección 2.3).
+  // El primero de cada lista es el documento principal (el que aparece seleccionado por defecto).
+  const GLOSARIO_DOCUMENTOS = {
+    co: [
+      { sigla: "CC", nombre: "Cédula de Ciudadanía", desc: "Documento de identidad estándar para ciudadanos colombianos mayores de edad. Es el documento principal del flujo." },
+      { sigla: "CE", nombre: "Cédula de Extranjería", desc: "Identifica a extranjeros con residencia legal en Colombia." },
+      { sigla: "—", nombre: "Pasaporte", desc: "Documento de viaje internacional, aceptado como identificación alterna." },
+      { sigla: "PPT", nombre: "Permiso por Protección Temporal", desc: "Documento para migrantes venezolanos en proceso de regularización migratoria." },
+      { sigla: "PEP", nombre: "Permiso Especial de Permanencia", desc: "Antecesor del PPT — todavía vigente para algunos migrantes venezolanos que no han hecho el tránsito." },
+    ],
+    br: [
+      { sigla: "CPF", nombre: "Cadastro de Pessoas Físicas", desc: "Número de registro tributario individual. En Brasil funciona como identificador universal — bancario, fiscal y comercial. Es el documento principal del flujo." },
+      { sigla: "RG", nombre: "Registro Geral", desc: "Cédula de identidad emitida por cada estado brasileño (no hay un único formato nacional)." },
+      { sigla: "—", nombre: "Passaporte", desc: "Documento de viaje internacional." },
+      { sigla: "CNH", nombre: "Carteira Nacional de Habilitação", desc: "Licencia de conducción — aceptada como identificación válida en Brasil." },
+    ],
+    mx: [
+      { sigla: "INE", nombre: "Credencial para Votar (INE)", desc: "Identificación oficial de facto en México, aunque su propósito original es electoral. Es el documento principal del flujo." },
+      { sigla: "CURP", nombre: "Clave Única de Registro de Población", desc: "Código alfanumérico único asignado a cada persona registrada en México. No es numérico — requiere teclado alfanumérico." },
+      { sigla: "—", nombre: "Pasaporte", desc: "Documento de viaje internacional." },
+    ],
+    cl: [
+      { sigla: "RUN", nombre: "Cédula de Identidad (RUN)", desc: "Rol Único Nacional — número de identificación único para personas naturales en Chile, con dígito verificador. Es el documento principal del flujo." },
+      { sigla: "—", nombre: "Pasaporte", desc: "Documento de viaje internacional." },
+    ],
+    ec: [
+      { sigla: "—", nombre: "Cédula de Identidad", desc: "Documento nacional de identidad ecuatoriano, 10 dígitos sin dígito verificador especial. Es el documento principal del flujo." },
+      { sigla: "—", nombre: "Pasaporte", desc: "Documento de viaje internacional." },
+    ],
+  };
+
+  const TIPOS_USUARIO = {
+    natural: { flag: "🧍", name: "Persona Natural", screens: ["identificacion", "personales", "ubicacion"] },
+    empresa_no_reg: { flag: "🏪", name: "Empresa sin registrar", screens: ["identificacion", "representante", "ubicacion", "tipo_negocio"] },
+    empresa_reg: { flag: "🏢", name: "Empresa registrada", screens: ["identificacion", "representante", "ubicacion", "compania", "documentacion", "tipo_negocio_empresa"] },
+  };
+
+  const SCREENS = {
+    identificacion: { label: "🪪 Identificación" },
+    personales: { label: "🧑 Datos personales" },
+    representante: { label: "🧑‍💼 Representante legal" },
+    ubicacion: { label: "📍 Ubicación" },
+    tipo_negocio: { label: "🎯 Tipo de negocio" },
+    compania: { label: "🏢 Datos de la compañía" },
+    documentacion: { label: "📎 Documentación" },
+    tipo_negocio_empresa: { label: "🎯 Tipo de negocio" },
+  };
+
+  // Cada pantalla: { co: {...}, br: {...}, ... } — title/subtitle/fields/diffs
+  const DATA = {
+    identificacion: {
+      title: "¿Cuál es tu nacionalidad?",
+      subtitle: "Selecciona el país de tu nacionalidad",
+      co: {
+        fields: [
+          { type: "dropdown", label: "País *", value: "Colombia" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Tipo de documento *", value: "Cédula de Ciudadanía (CC)", options: ["Cédula de Ciudadanía (CC)", "Cédula de Extranjería (CE)", "Pasaporte", "PPT", "PEP"] },
+            { type: "input", label: "Número de documento *", placeholder: "Ej: 1020304050" },
+          ]},
+        ],
+        diffs: [
+          "Baseline del diseño actual · 8–10 dígitos, teclado numérico.",
+          "El dropdown ahora incluye los 5 documentos aceptables de FIN-005 2.3, no solo el principal — ver glosario a la derecha.",
+        ],
+      },
+      br: {
+        title: "Qual é a sua nacionalidade?",
+        subtitle: "Selecione o país da sua nacionalidade",
+        fields: [
+          { type: "dropdown", label: "País *", value: "Brasil" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Tipo de documento *", value: "CPF", options: ["CPF", "RG", "Passaporte", "CNH"] },
+            { type: "input", label: "Número do documento *", placeholder: "Ex: 123.456.789-00" },
+          ]},
+        ],
+        diffs: [
+          "El CPF tiene dígito verificador — se puede validar el formato en cliente antes de enviarlo al backend.",
+          "El dropdown ahora incluye los 4 documentos aceptables de FIN-005 2.3 — ver glosario a la derecha.",
+        ],
+      },
+      mx: {
+        fields: [
+          { type: "dropdown", label: "País *", value: "México" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Tipo de documento *", value: "INE / Credencial para Votar", options: ["INE / Credencial para Votar", "CURP", "Pasaporte"] },
+            { type: "input", label: "CURP *", placeholder: "Ej: VEGJ850315HDFXXX01" },
+          ]},
+        ],
+        diffs: [
+          "⚠️ La CURP es alfanumérica, no numérica — el teclado numérico actual del diseño no funciona para México, no basta con cambiar el label.",
+          "El dropdown ahora incluye los 3 documentos aceptables de FIN-005 2.3 — ver glosario a la derecha.",
+        ],
+      },
+      cl: {
+        fields: [
+          { type: "dropdown", label: "País *", value: "Chile" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Tipo de documento *", value: "Cédula de Identidad (RUN)", options: ["Cédula de Identidad (RUN)", "Pasaporte"] },
+            { type: "input", label: "Número de documento *", placeholder: "Ej: 12.345.678-9" },
+          ]},
+        ],
+        diffs: [
+          "El RUN tiene dígito verificador (letra final) — mismo tratamiento de validación en cliente que el CPF brasileño.",
+          "El dropdown ahora incluye los 2 documentos aceptables de FIN-005 2.3 — ver glosario a la derecha.",
+        ],
+      },
+      ec: {
+        fields: [
+          { type: "dropdown", label: "País *", value: "Ecuador" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Tipo de documento *", value: "Cédula de Identidad", options: ["Cédula de Identidad", "Pasaporte"] },
+            { type: "input", label: "Número de documento *", placeholder: "Ej: 1234567890" },
+          ]},
+        ],
+        diffs: [
+          "10 dígitos sin dígito verificador especial — la estructura más cercana a Colombia de los 5 países.",
+          "El dropdown ahora incluye los 2 documentos aceptables de FIN-005 2.3 — ver glosario a la derecha.",
+        ],
+      },
+    },
+
+    personales: {
+      title: "Cuéntanos quién eres",
+      subtitle: "Escribe tus nombres y apellidos como aparecen en tu documento",
+      co: {
+        fields: [
+          { type: "input", label: "Primer nombre *", placeholder: "Ej: Julián" },
+          { type: "input", label: "Segundo nombre", placeholder: "Ej: Andrés" },
+          { type: "input", label: "Primer apellido *", placeholder: "Ej: Vásquez" },
+          { type: "input", label: "Segundo apellido", placeholder: "Ej: Guerrero" },
+          { type: "dropdown", label: "Fecha de nacimiento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["Baseline del diseño actual — estructura nombre(s) + apellido paterno + apellido materno."],
+      },
+      br: {
+        title: "Conte-nos quem você é",
+        subtitle: "Escreva seu nome e sobrenome como aparecem no seu documento",
+        fields: [
+          { type: "input", label: "Primeiro nome *", placeholder: "Ex: Julián" },
+          { type: "input", label: "Segundo nome", placeholder: "Ex: Andrés" },
+          { type: "input", label: "Primeiro sobrenome *", placeholder: "Ex: Vásquez" },
+          { type: "input", label: "Segundo sobrenome", placeholder: "Ex: Guerrero" },
+          { type: "dropdown", label: "Data de nascimento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["✅ Resuelto en Figma (19/08/2026): ahora usa la misma estructura de 4 campos que los demás países — 'Segundo sobrenome' es opcional, así que un usuario brasileño puede dejarlo vacío sin que el registro falle. Sigue siendo una estructura pensada para apellido paterno/materno que no es el estándar brasileño, pero ya no bloquea."],
+      },
+      mx: {
+        fields: [
+          { type: "input", label: "Primer nombre *", placeholder: "Ej: Julián" },
+          { type: "input", label: "Segundo nombre", placeholder: "Ej: Andrés" },
+          { type: "input", label: "Primer apellido *", placeholder: "Ej: Vásquez" },
+          { type: "input", label: "Segundo apellido", placeholder: "Ej: Guerrero" },
+          { type: "dropdown", label: "Fecha de nacimiento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["Estructura actual sirve sin cambios."],
+      },
+      cl: {
+        fields: [
+          { type: "input", label: "Primer nombre *", placeholder: "Ej: Julián" },
+          { type: "input", label: "Segundo nombre", placeholder: "Ej: Andrés" },
+          { type: "input", label: "Primer apellido *", placeholder: "Ej: Vásquez" },
+          { type: "input", label: "Segundo apellido", placeholder: "Ej: Guerrero" },
+          { type: "dropdown", label: "Fecha de nacimiento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["Estructura actual sirve sin cambios."],
+      },
+      ec: {
+        fields: [
+          { type: "input", label: "Primer nombre *", placeholder: "Ej: Julián" },
+          { type: "input", label: "Segundo nombre", placeholder: "Ej: Andrés" },
+          { type: "input", label: "Primer apellido *", placeholder: "Ej: Vásquez" },
+          { type: "input", label: "Segundo apellido", placeholder: "Ej: Guerrero" },
+          { type: "dropdown", label: "Fecha de nacimiento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["Estructura actual sirve sin cambios."],
+      },
+    },
+
+    representante: {
+      title: "Datos representante legal",
+      subtitle: "Cuéntanos quién representa tu compañía.",
+      co: {
+        fields: [
+          { type: "input", label: "Primer nombre *", placeholder: "Ej: Julián" },
+          { type: "input", label: "Segundo nombre", placeholder: "Ej: Andrés" },
+          { type: "input", label: "Primer apellido *", placeholder: "Ej: Vásquez" },
+          { type: "input", label: "Segundo apellido", placeholder: "Ej: Guerrero" },
+          { type: "dropdown", label: "Fecha de nacimiento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["Mismo formulario que Persona Natural, aplicado al representante legal en vez del titular de la cuenta."],
+      },
+      br: {
+        title: "Dados do representante legal",
+        subtitle: "Conte-nos quem representa sua empresa.",
+        fields: [
+          { type: "input", label: "Primeiro nome *", placeholder: "Ex: Julián" },
+          { type: "input", label: "Segundo nome", placeholder: "Ex: Andrés" },
+          { type: "input", label: "Primeiro sobrenome *", placeholder: "Ex: Vásquez" },
+          { type: "input", label: "Segundo sobrenome", placeholder: "Ex: Guerrero" },
+          { type: "dropdown", label: "Data de nascimento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["✅ Mismo fix que en Persona Natural: 'Segundo sobrenome' ya es opcional, así que el representante legal brasileño puede dejarlo vacío sin que el registro falle."],
+      },
+      mx: {
+        fields: [
+          { type: "input", label: "Primer nombre *", placeholder: "Ej: Julián" },
+          { type: "input", label: "Segundo nombre", placeholder: "Ej: Andrés" },
+          { type: "input", label: "Primer apellido *", placeholder: "Ej: Vásquez" },
+          { type: "input", label: "Segundo apellido", placeholder: "Ej: Guerrero" },
+          { type: "dropdown", label: "Fecha de nacimiento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["Estructura actual sirve sin cambios."],
+      },
+      cl: {
+        fields: [
+          { type: "input", label: "Primer nombre *", placeholder: "Ej: Julián" },
+          { type: "input", label: "Segundo nombre", placeholder: "Ej: Andrés" },
+          { type: "input", label: "Primer apellido *", placeholder: "Ej: Vásquez" },
+          { type: "input", label: "Segundo apellido", placeholder: "Ej: Guerrero" },
+          { type: "dropdown", label: "Fecha de nacimiento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["Estructura actual sirve sin cambios."],
+      },
+      ec: {
+        fields: [
+          { type: "input", label: "Primer nombre *", placeholder: "Ej: Julián" },
+          { type: "input", label: "Segundo nombre", placeholder: "Ej: Andrés" },
+          { type: "input", label: "Primer apellido *", placeholder: "Ej: Vásquez" },
+          { type: "input", label: "Segundo apellido", placeholder: "Ej: Guerrero" },
+          { type: "dropdown", label: "Fecha de nacimiento *", value: "DD / MM / AAAA", icon: "📅" },
+        ],
+        diffs: ["Estructura actual sirve sin cambios."],
+      },
+    },
+
+    ubicacion: {
+      title: "Ubicación",
+      subtitle: "Usamos esta información para verificar tu cuenta",
+      co: {
+        fields: [
+          { type: "dropdown", label: "País *", value: "Colombia" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Departamento *", placeholder: "Selecciona", options: ["Selecciona", "Antioquia", "Cundinamarca", "Valle del Cauca", "Atlántico"] },
+            { type: "dropdown", label: "Ciudad *", placeholder: "Selecciona", options: ["Selecciona", "Bogotá", "Medellín", "Cali", "Barranquilla"] },
+          ]},
+          { type: "input", label: "Dirección *", placeholder: "Agrega una dirección", icon: "📍" },
+          { type: "input", label: "Código postal *", placeholder: "Ej: 110112", helper: "No sé mi código postal. <b>Consúltalo aquí</b>" },
+        ],
+        diffs: ["El código postal es el bloqueante principal — casi nadie lo conoce. Decisión en curso: derivarlo del municipio o hacerlo opcional."],
+      },
+      br: {
+        title: "Localização",
+        subtitle: "Usamos essa informação para verificar sua conta",
+        fields: [
+          { type: "dropdown", label: "País *", value: "Brasil" },
+          { type: "input", label: "CEP *", placeholder: "Ex: 01310-100", helper: "O CEP preenche automaticamente o restante do endereço" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Estado *", value: "São Paulo", helper2: "auto" },
+            { type: "dropdown", label: "Município *", value: "São Paulo", helper2: "auto" },
+          ]},
+          { type: "input", label: "Logradouro + número *", placeholder: "Ex: Av. Paulista, 1000" },
+          { type: "input", label: "Bairro *", placeholder: "Ex: Bela Vista", tag: "CAMPO NOVO" },
+        ],
+        diffs: [
+          "El CEP es de uso cotidiano — va PRIMERO en el formulario, invirtiendo el orden de Colombia, porque autocompleta estado/município/dirección.",
+          "Falta el campo 'bairro' (barrio) — es parte obligatoria de una dirección válida en Brasil y hoy no existe en el formulario.",
+        ],
+      },
+      mx: {
+        fields: [
+          { type: "dropdown", label: "País *", value: "México" },
+          { type: "input", label: "Código Postal *", placeholder: "Ej: 06600", helper: "El CP autocompleta estado y municipio" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Estado *", value: "CDMX", helper2: "auto" },
+            { type: "dropdown", label: "Municipio / Alcaldía *", value: "Cuauhtémoc", helper2: "auto" },
+          ]},
+          { type: "input", label: "Calle + número ext. / int. *", placeholder: "Ej: Reforma 222, int. 4" },
+          { type: "input", label: "Colonia *", placeholder: "Ej: Juárez", tag: "CAMPO NUEVO" },
+        ],
+        diffs: [
+          "El Código Postal es de uso común en México — va primero para derivar estado y municipio automáticamente.",
+          "Falta el campo 'colonia' — es parte estándar de una dirección mexicana y hoy no existe en el formulario.",
+        ],
+      },
+      cl: {
+        fields: [
+          { type: "dropdown", label: "País *", value: "Chile" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Región *", placeholder: "Selecciona", options: ["Selecciona", "Metropolitana", "Valparaíso", "Biobío"] },
+            { type: "dropdown", label: "Comuna *", placeholder: "Selecciona", options: ["Selecciona", "Santiago", "Providencia", "Ñuñoa"] },
+          ]},
+          { type: "input", label: "Dirección *", placeholder: "Calle + número + depto/casa", icon: "📍" },
+          { type: "input", label: "Código postal", placeholder: "Opcional", helper: "Poco usado en Chile — se deja opcional" },
+        ],
+        diffs: ["'Departamento/Ciudad' se reemplaza por 'Región/Comuna'. El código postal es poco usado — igual que en Colombia, se mantiene opcional."],
+      },
+      ec: {
+        fields: [
+          { type: "dropdown", label: "País *", value: "Ecuador" },
+          { type: "row", fields: [
+            { type: "dropdown", label: "Provincia *", placeholder: "Selecciona", options: ["Selecciona", "Pichincha", "Guayas", "Azuay"] },
+            { type: "dropdown", label: "Cantón *", placeholder: "Selecciona", options: ["Selecciona", "Quito", "Guayaquil", "Cuenca"] },
+          ]},
+          { type: "input", label: "Dirección *", placeholder: "Calle principal + número + calle secundaria", icon: "📍" },
+          { type: "input", label: "Código postal", placeholder: "Opcional", helper: "Poco usado en Ecuador — se deja opcional" },
+        ],
+        diffs: ["'Departamento/Ciudad' se reemplaza por 'Provincia/Cantón'. La dirección usa intersección de calles (calle secundaria), no numeración simple como en Colombia."],
+      },
+    },
+
+    tipo_negocio: {
+      title: "¿Cómo haces crecer tu negocio?",
+      subtitle: "Queremos adaptar dropiPay a la forma en que vendes y recibes tu dinero.",
+      co: {
+        fields: [
+          { type: "radiocard", icon: "🛍️", title: "Vendo Productos", desc: "Tengo una tienda física, online o vendo por redes sociales." },
+          { type: "radiocard", icon: "💼", title: "Ofrezco Servicios", desc: "Trabajo como freelancer, consultor o profesional independiente." },
+          { type: "radiocard", icon: "📦", title: "Hago dropshipping", desc: "Vendo sin manejar inventario propio ni hacer envíos directamente.", selected: true },
+          { type: "radiocard", icon: "🌍", title: "Vendo a otros países", desc: "Compro o vendo internacionalmente y recibo pagos del exterior." },
+          { type: "radiocard", icon: "🚀", title: "Estoy Empezando", desc: "Quiero lanzar mi negocio y empezar a vender." },
+        ],
+        activeCta: true,
+        diffs: ["Baseline del diseño actual — mismas 5 opciones para los 3 tipos de usuario, con copy distinto por tipo (FIN-005 2.6: Persona Natural dice 'Cuéntanos sobre tu negocio', Empresa registrada dice '¿Qué impulsa tu empresa?')."],
+      },
+      br: {
+        title: "Como você faz seu negócio crescer?",
+        subtitle: "Queremos adaptar o dropiPay à forma como você vende e recebe seu dinheiro.",
+        fields: [
+          { type: "radiocard", icon: "🛍️", title: "Vendo Produtos", desc: "Tenho uma loja física, online ou vendo pelas redes sociais." },
+          { type: "radiocard", icon: "💼", title: "Ofereço Serviços", desc: "Trabalho como freelancer, consultor ou profissional autônomo." },
+          { type: "radiocard", icon: "📦", title: "Faço dropshipping", desc: "Vendo sem gerenciar estoque próprio nem fazer envios diretamente.", selected: true },
+          { type: "radiocard", icon: "🌍", title: "Vendo para outros países", desc: "Compro ou vendo internacionalmente e recebo pagamentos do exterior.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "🚀", title: "Estou Começando", desc: "Quero lançar meu negócio e começar a vender." },
+        ],
+        activeCta: true,
+        diffs: ["Pendiente regulatorio (FIN-005 2.6): confirmar con Compliance si 'Vendo a otros países' (transferencias internacionales) está habilitado en Brasil antes de mostrarlo sin restricción."],
+      },
+      mx: {
+        fields: [
+          { type: "radiocard", icon: "🛍️", title: "Vendo Productos", desc: "Tengo una tienda física, online o vendo por redes sociales." },
+          { type: "radiocard", icon: "💼", title: "Ofrezco Servicios", desc: "Trabajo como freelancer, consultor o profesional independiente." },
+          { type: "radiocard", icon: "📦", title: "Hago dropshipping", desc: "Vendo sin manejar inventario propio ni hacer envíos directamente.", selected: true },
+          { type: "radiocard", icon: "🌍", title: "Vendo a otros países", desc: "Compro o vendo internacionalmente y recibo pagos del exterior.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "🚀", title: "Estoy Empezando", desc: "Quiero lanzar mi negocio y empezar a vender." },
+        ],
+        activeCta: true,
+        diffs: ["Mismo pendiente regulatorio que Brasil — confirmar disponibilidad de transferencias internacionales para México con Compliance."],
+      },
+      cl: {
+        fields: [
+          { type: "radiocard", icon: "🛍️", title: "Vendo Productos", desc: "Tengo una tienda física, online o vendo por redes sociales." },
+          { type: "radiocard", icon: "💼", title: "Ofrezco Servicios", desc: "Trabajo como freelancer, consultor o profesional independiente." },
+          { type: "radiocard", icon: "📦", title: "Hago dropshipping", desc: "Vendo sin manejar inventario propio ni hacer envíos directamente.", selected: true },
+          { type: "radiocard", icon: "🌍", title: "Vendo a otros países", desc: "Compro o vendo internacionalmente y recibo pagos del exterior.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "🚀", title: "Estoy Empezando", desc: "Quiero lanzar mi negocio y empezar a vender." },
+        ],
+        activeCta: true,
+        diffs: ["Mismo pendiente regulatorio — confirmar disponibilidad de transferencias internacionales para Chile con Compliance."],
+      },
+      ec: {
+        fields: [
+          { type: "radiocard", icon: "🛍️", title: "Vendo Productos", desc: "Tengo una tienda física, online o vendo por redes sociales." },
+          { type: "radiocard", icon: "💼", title: "Ofrezco Servicios", desc: "Trabajo como freelancer, consultor o profesional independiente." },
+          { type: "radiocard", icon: "📦", title: "Hago dropshipping", desc: "Vendo sin manejar inventario propio ni hacer envíos directamente.", selected: true },
+          { type: "radiocard", icon: "🌍", title: "Vendo a otros países", desc: "Compro o vendo internacionalmente y recibo pagos del exterior.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "🚀", title: "Estoy Empezando", desc: "Quiero lanzar mi negocio y empezar a vender." },
+        ],
+        activeCta: true,
+        diffs: ["Mismo pendiente regulatorio — confirmar disponibilidad de transferencias internacionales para Ecuador con Compliance."],
+      },
+    },
+
+    compania: {
+      title: "Datos de la compañía",
+      subtitle: "Ayúdanos a conocer más sobre tu empresa.",
+      co: {
+        fields: [
+          { type: "dropdown", label: "Tipo de compañía *", value: "Sociedad Colombiana", options: ["Sociedad Colombiana", "LLC (United States)"], helper: "Opciones actuales del diseño: Sociedad Colombiana · LLC (United States)" },
+        ],
+        diffs: [
+          "Baseline del diseño actual — pero el dropdown solo tiene 2 opciones y ninguna dice explícitamente 'S.A.S.', 'S.A.' o 'Ltda.'; 'Sociedad Colombiana' es un valor genérico.",
+          "⚠️ Esta pantalla NO incluye NIT, nombre legal, entidad de registro ni fecha de constitución — contradice lo que FIN-005 sección 3.1 documentó como campos esperados. Confirmar con diseño si existen en otra pantalla o falta agregarlos.",
+        ],
+      },
+      br: {
+        title: "Dados da empresa",
+        subtitle: "Ajude-nos a conhecer mais sobre sua empresa.",
+        fields: [
+          { type: "dropdown", label: "Tipo de empresa *", placeholder: "Selecione", warn: true, options: ["Selecione", "Sociedad Colombiana", "LLC (United States)"], helper: "⚠️ Nenhuma opção do desenho atual se aplica — só existem 'Sociedad Colombiana' e 'LLC (United States)'" },
+        ],
+        diffs: [
+          "Deben agregarse LTDA, S.A., MEI, EIRELI como opciones para Brasil (FIN-005 3.1).",
+          "Sigue sin existir el campo CNPJ en esta pantalla — mismo gap que en Colombia, más el problema de opciones inexistentes.",
+        ],
+      },
+      mx: {
+        fields: [
+          { type: "dropdown", label: "Tipo de compañía *", placeholder: "Selecciona", warn: true, options: ["Selecciona", "Sociedad Colombiana", "LLC (United States)"], helper: "⚠️ Ninguna opción del diseño actual aplica — solo existen 'Sociedad Colombiana' y 'LLC (United States)'" },
+        ],
+        diffs: [
+          "Deben agregarse S.A. de C.V., S. de R.L. de C.V. como opciones para México (FIN-005 3.1).",
+          "Sigue sin existir el campo RFC en esta pantalla.",
+        ],
+      },
+      cl: {
+        fields: [
+          { type: "dropdown", label: "Tipo de compañía *", placeholder: "Selecciona", warn: true, options: ["Selecciona", "Sociedad Colombiana", "LLC (United States)"], helper: "⚠️ Ninguna opción del diseño actual aplica — solo existen 'Sociedad Colombiana' y 'LLC (United States)'" },
+        ],
+        diffs: [
+          "Deben agregarse SpA, Ltda., S.A. como opciones para Chile (FIN-005 3.1).",
+          "Sigue sin existir el campo RUT de empresa en esta pantalla.",
+        ],
+      },
+      ec: {
+        fields: [
+          { type: "dropdown", label: "Tipo de compañía *", placeholder: "Selecciona", warn: true, options: ["Selecciona", "Sociedad Colombiana", "LLC (United States)"], helper: "⚠️ Ninguna opción del diseño actual aplica — solo existen 'Sociedad Colombiana' y 'LLC (United States)'" },
+        ],
+        diffs: [
+          "Deben agregarse Cía. Ltda., S.A., S.A.S. como opciones para Ecuador (FIN-005 3.1).",
+          "Sigue sin existir el campo RUC en esta pantalla.",
+        ],
+      },
+    },
+
+    documentacion: {
+      title: "Documentación",
+      subtitle: "Por favor, adjunta los siguientes documentos",
+      co: {
+        fields: [
+          { type: "upload", title: "Certificado cámara de comercio" },
+          { type: "upload", title: "RUT (Registro Único Tributario)" },
+        ],
+        diffs: ["Baseline del diseño actual — 2 documentos con nombre 100% colombiano."],
+      },
+      br: {
+        title: "Documentação",
+        subtitle: "Por favor, anexe os seguintes documentos",
+        fields: [
+          { type: "upload", title: "Contrato Social + Cartão CNPJ", sub: "Formatos aceitos PDF e TIFF", sub2: "Tamanho máximo 10 MB" },
+          { type: "upload", title: "Comprovante de Inscrição CNPJ", sub: "Formatos aceitos PDF e TIFF", sub2: "Tamanho máximo 10 MB" },
+        ],
+        diffs: ["El nombre y tipo de documento cambian por completo — no son traducciones literales de 'Cámara de Comercio'/'RUT', son documentos distintos del sistema registral brasileño."],
+      },
+      mx: {
+        fields: [
+          { type: "upload", title: "Acta Constitutiva" },
+          { type: "upload", title: "Constancia de Situación Fiscal" },
+        ],
+        diffs: ["Mismo patrón: nombres de documento totalmente distintos a los de Colombia."],
+      },
+      cl: {
+        fields: [
+          { type: "upload", title: "Escritura de constitución" },
+          { type: "upload", title: "Certificado de vigencia" },
+          { type: "upload", title: "e-RUT (Cédula RUT de empresa)", tag: "3er documento" },
+        ],
+        diffs: ["⚠️ Chile necesita 3 documentos, no 2 — el componente de carga actual del diseño asume exactamente dos casillas fijas (FIN-005 3.2)."],
+      },
+      ec: {
+        fields: [
+          { type: "upload", title: "Escritura de constitución" },
+          { type: "upload", title: "Nombramiento de representante legal" },
+          { type: "upload", title: "RUC (certificado)", tag: "3er documento" },
+        ],
+        diffs: ["⚠️ Ecuador también necesita 3 documentos — mismo problema de componente rígido que Chile."],
+      },
+    },
+
+    tipo_negocio_empresa: {
+      title: "¿Qué impulsa tu empresa?",
+      subtitle: "Personalizaremos DropiPay según la forma en que opera tu empresa.",
+      co: {
+        fields: [
+          { type: "radiocard", icon: "🌍", title: "Comercio internacional", desc: "Pago proveedores, recibo clientes o muevo dinero entre países." },
+          { type: "radiocard", icon: "💳", title: "Cobros y pagos", desc: "Necesito recibir pagos y gestionar transferencias para mi operación." },
+          { type: "radiocard", icon: "👥", title: "Pagar proveedores y equipo", desc: "Realizo pagos frecuentes a proveedores, colaboradores o aliados." },
+          { type: "radiocard", icon: "💰", title: "Operaciones con USDT", desc: "Compro, vendo o utilizo USDT como parte de mi operación." },
+          { type: "radiocard", icon: "📈", title: "Tesorería empresarial", desc: "Quiero centralizar y optimizar el flujo de dinero de mi empresa." },
+        ],
+        diffs: [
+          "Baseline del diseño actual — a diferencia de Empresa sin registrar, aquí ninguna opción viene preseleccionada y el botón permanece inactivo hasta elegir.",
+          "'Operaciones con USDT' nombra USDT explícitamente — es la opción más directamente conectada al piloto de FIN-003/FIN-004.",
+        ],
+      },
+      br: {
+        title: "O que impulsiona sua empresa?",
+        subtitle: "Vamos personalizar o dropiPay de acordo com a forma como sua empresa opera.",
+        fields: [
+          { type: "radiocard", icon: "🌍", title: "Comércio internacional", desc: "Pago fornecedores, recebo clientes ou movimento dinheiro entre países.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "💳", title: "Cobranças e pagamentos", desc: "Preciso receber pagamentos e gerenciar transferências para minha operação." },
+          { type: "radiocard", icon: "👥", title: "Pagar fornecedores e equipe", desc: "Realizo pagamentos frequentes a fornecedores, colaboradores ou parceiros." },
+          { type: "radiocard", icon: "💰", title: "Operações com USDT", desc: "Compro, vendo ou utilizo USDT como parte da minha operação.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "📈", title: "Tesouraria empresarial", desc: "Quero centralizar e otimizar o fluxo de caixa da minha empresa." },
+        ],
+        diffs: ["Pendiente regulatorio (FIN-005 2.6): 'Comercio internacional' y 'Operaciones con USDT' deben confirmarse con Compliance antes de mostrarse sin restricción en Brasil."],
+      },
+      mx: {
+        fields: [
+          { type: "radiocard", icon: "🌍", title: "Comercio internacional", desc: "Pago proveedores, recibo clientes o muevo dinero entre países.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "💳", title: "Cobros y pagos", desc: "Necesito recibir pagos y gestionar transferencias para mi operación." },
+          { type: "radiocard", icon: "👥", title: "Pagar proveedores y equipo", desc: "Realizo pagos frecuentes a proveedores, colaboradores o aliados." },
+          { type: "radiocard", icon: "💰", title: "Operaciones con USDT", desc: "Compro, vendo o utilizo USDT como parte de mi operación.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "📈", title: "Tesorería empresarial", desc: "Quiero centralizar y optimizar el flujo de dinero de mi empresa." },
+        ],
+        diffs: ["Mismo pendiente regulatorio que Brasil — confirmar 'Comercio internacional' y 'Operaciones con USDT' para México."],
+      },
+      cl: {
+        fields: [
+          { type: "radiocard", icon: "🌍", title: "Comercio internacional", desc: "Pago proveedores, recibo clientes o muevo dinero entre países.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "💳", title: "Cobros y pagos", desc: "Necesito recibir pagos y gestionar transferencias para mi operación." },
+          { type: "radiocard", icon: "👥", title: "Pagar proveedores y equipo", desc: "Realizo pagos frecuentes a proveedores, colaboradores o aliados." },
+          { type: "radiocard", icon: "💰", title: "Operaciones con USDT", desc: "Compro, vendo o utilizo USDT como parte de mi operación.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "📈", title: "Tesorería empresarial", desc: "Quiero centralizar y optimizar el flujo de dinero de mi empresa." },
+        ],
+        diffs: ["Mismo pendiente regulatorio — confirmar 'Comercio internacional' y 'Operaciones con USDT' para Chile."],
+      },
+      ec: {
+        fields: [
+          { type: "radiocard", icon: "🌍", title: "Comercio internacional", desc: "Pago proveedores, recibo clientes o muevo dinero entre países.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "💳", title: "Cobros y pagos", desc: "Necesito recibir pagos y gestionar transferencias para mi operación." },
+          { type: "radiocard", icon: "👥", title: "Pagar proveedores y equipo", desc: "Realizo pagos frecuentes a proveedores, colaboradores o aliados." },
+          { type: "radiocard", icon: "💰", title: "Operaciones con USDT", desc: "Compro, vendo o utilizo USDT como parte de mi operación.", tag: "⚠️ VERIFICAR" },
+          { type: "radiocard", icon: "📈", title: "Tesorería empresarial", desc: "Quiero centralizar y optimizar el flujo de dinero de mi empresa." },
+        ],
+        diffs: ["Mismo pendiente regulatorio — confirmar 'Comercio internacional' y 'Operaciones con USDT' para Ecuador."],
+      },
+    },
+  };
+
+  let currentTipoUsuario = "natural";
+  let currentCountry = "co";
+  let currentScreen = "identificacion";
+
+  function renderSelectors() {
+    const tipoRow = document.getElementById("tipoUsuarioRow");
+    tipoRow.innerHTML = Object.entries(TIPOS_USUARIO).map(([key, t]) => `
+      <button class="tipo-btn ${key === currentTipoUsuario ? "active" : ""}" data-tipo="${key}">
+        <span class="flag">${t.flag}</span> ${t.name}
+      </button>
+    `).join("");
+    tipoRow.querySelectorAll(".tipo-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        currentTipoUsuario = btn.dataset.tipo;
+        if (!TIPOS_USUARIO[currentTipoUsuario].screens.includes(currentScreen)) {
+          currentScreen = TIPOS_USUARIO[currentTipoUsuario].screens[0];
+        }
+        render();
+      });
+    });
+
+    const countryRow = document.getElementById("countryRow");
+    countryRow.innerHTML = Object.entries(COUNTRIES).map(([key, c]) => `
+      <button class="country-btn ${key === currentCountry ? "active" : ""}" data-country="${key}">
+        <span class="flag">${c.flag}</span> ${c.name} ${c.isBaseline ? "<span style=\"font-size:10px;color:#94a3b8;\">(base)</span>" : ""}
+      </button>
+    `).join("");
+    countryRow.querySelectorAll(".country-btn").forEach(btn => {
+      btn.addEventListener("click", () => { currentCountry = btn.dataset.country; render(); });
+    });
+
+    const screenRow = document.getElementById("screenRow");
+    const visibleScreens = TIPOS_USUARIO[currentTipoUsuario].screens;
+    screenRow.innerHTML = visibleScreens.map((key) => `
+      <button class="screen-tab ${key === currentScreen ? "active" : ""}" data-screen="${key}">${SCREENS[key].label}</button>
+    `).join("");
+    screenRow.querySelectorAll(".screen-tab").forEach(btn => {
+      btn.addEventListener("click", () => { currentScreen = btn.dataset.screen; render(); });
+    });
+  }
+
+  function fieldHtml(f) {
+    if (f.type === "row") {
+      return `<div class="field-row">${f.fields.map(fieldHtml).join("")}</div>`;
+    }
+    if (f.type === "radiocard") {
+      const isSelected = f._idx === selectedRadioIdx;
+      return `
+        <div class="radiocard ${isSelected ? "selected" : ""}" onclick="selectRadio(${f._idx})">
+          <div class="radiocard-icon">${f.icon}</div>
+          <div class="radiocard-text">
+            <div class="radiocard-title">${f.title}${f.tag ? `<span class="new-field-tag" style="background:#f59e0b;">${f.tag}</span>` : ""}</div>
+            <div class="radiocard-desc">${f.desc}</div>
+          </div>
+          <div class="radiocard-radio"></div>
+        </div>`;
+    }
+    if (f.type === "upload") {
+      return `
+        <div class="upload-card">
+          <div class="upload-icon-circle">📄</div>
+          <div class="upload-text">
+            <div class="upload-title">${f.title}${f.tag ? `<span class="new-field-tag">${f.tag}</span>` : ""}</div>
+            <div class="upload-sub">${f.sub || "Formatos admitidos PDF y TIFF"}</div>
+            <div class="upload-sub2">${f.sub2 || "Peso máximo 10 MB"}</div>
+          </div>
+          <div class="upload-btn">⬆️</div>
+        </div>`;
+    }
+    if (f.type === "dropdown" && f.icon === "📅") {
+      // Fecha — input real de tipo date
+      return `
+        <div class="field">
+          <label class="field-label">${f.label}</label>
+          <div class="field-input">
+            <span class="ic">${f.icon}</span>
+            <input type="date" class="field-real-input" />
+          </div>
+        </div>`;
+    }
+    if (f.type === "dropdown" && f.helper2 === "auto") {
+      // Autocompletado (CEP/CP) — no editable, refleja el valor derivado
+      return `
+        <div class="field">
+          <label class="field-label">${f.label}</label>
+          <div class="field-input" style="opacity:.75;">
+            <span class="value">${f.value} ✓</span>
+          </div>
+        </div>`;
+    }
+    if (f.type === "dropdown") {
+      const opts = f.options || (f.value ? [f.value] : ["Selecciona"]);
+      const selectHtml = `<select class="field-select">${opts.map(o => `<option ${o === f.value ? "selected" : ""}>${o}</option>`).join("")}</select>`;
+      return `
+        <div class="field">
+          <label class="field-label">${f.label}${f.tag ? `<span class="new-field-tag">${f.tag}</span>` : ""}</label>
+          <div class="field-input ${f.warn ? "warn" : ""}">
+            ${f.icon ? `<span class="ic">${f.icon}</span>` : ""}
+            ${selectHtml}
+            <span class="chev">⌄</span>
+          </div>
+          ${f.helper ? `<div class="dropdown-helper ${f.warn ? "warn" : ""}">${f.helper}</div>` : ""}
+        </div>`;
+    }
+    // input — editable de verdad
+    return `
+      <div class="field">
+        <label class="field-label">${f.label}${f.tag ? `<span class="new-field-tag">${f.tag}</span>` : ""}</label>
+        <div class="field-input">
+          ${f.icon ? `<span class="ic">${f.icon}</span>` : ""}
+          <input type="text" class="field-real-input" placeholder="${f.placeholder || ""}" />
+        </div>
+        ${f.helper ? `<div class="field-helper">${f.helper}</div>` : ""}
+      </div>`;
+  }
+
+  let radioSelections = {};
+  let selectedRadioIdx = -1;
+
+  function radioKey() { return currentTipoUsuario + "|" + currentScreen; }
+
+  function selectRadio(idx) {
+    radioSelections[radioKey()] = idx;
+    render();
+  }
+
+  function currentFlowIndex() {
+    return TIPOS_USUARIO[currentTipoUsuario].screens.indexOf(currentScreen);
+  }
+
+  function goNext() {
+    const screens = TIPOS_USUARIO[currentTipoUsuario].screens;
+    const idx = currentFlowIndex();
+    if (idx === screens.length - 1) {
+      showToast("✅ Fin del flujo de Datos básicos — reiniciando");
+      currentScreen = screens[0];
+    } else {
+      currentScreen = screens[idx + 1];
+    }
+    render();
+  }
+
+  function goBack() {
+    const screens = TIPOS_USUARIO[currentTipoUsuario].screens;
+    const idx = currentFlowIndex();
+    if (idx > 0) {
+      currentScreen = screens[idx - 1];
+      render();
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(window._toastTimer);
+    window._toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
+  }
+
+  function render() {
+    renderSelectors();
+    const screenData = DATA[currentScreen];
+    const countryData = screenData[currentCountry];
+    const fields = countryData.fields;
+
+    const hasRadio = fields.some(f => f.type === "radiocard");
+    if (hasRadio) {
+      fields.forEach((f, i) => { f._idx = i; });
+      const key = radioKey();
+      selectedRadioIdx = (key in radioSelections) ? radioSelections[key] : fields.findIndex(f => f.selected);
+    } else {
+      selectedRadioIdx = -1;
+    }
+
+    document.getElementById("screenTitle").textContent = countryData.title || screenData.title;
+    document.getElementById("screenSubtitle").textContent = countryData.subtitle || screenData.subtitle;
+
+    const langBadge = document.getElementById("langBadge");
+    langBadge.textContent = currentCountry === "br" ? "PT-BR" : "";
+    langBadge.style.opacity = currentCountry === "br" ? "1" : "0";
+    document.getElementById("fieldsContainer").innerHTML = fields.map(fieldHtml).join("");
+
+    const activeState = hasRadio ? (selectedRadioIdx !== -1) : !!countryData.activeCta;
+    const ctaEl = document.getElementById("ctaBtn");
+    ctaEl.classList.toggle("active", activeState);
+
+    const screens = TIPOS_USUARIO[currentTipoUsuario].screens;
+    const idx = currentFlowIndex();
+    ctaEl.textContent = idx === screens.length - 1 ? "Finalizar" : "Continuar";
+
+    document.getElementById("progressRow").innerHTML = screens.map((_, i) => `
+      <span class="progress-dot ${i === idx ? "active" : ""} ${i < idx ? "done" : ""}"></span>
+    `).join("");
+
+    document.getElementById("backBtn").classList.toggle("disabled", idx === 0);
+
+    const tipoNombre = TIPOS_USUARIO[currentTipoUsuario].name;
+    document.getElementById("panelCountryName").textContent = tipoNombre + " · " + COUNTRIES[currentCountry].flag + " " + COUNTRIES[currentCountry].name;
+    document.getElementById("baselineTag").innerHTML = currentCountry === "co"
+      ? `<span class="baseline-tag">📐 Diseño base (Figma)</span>`
+      : `<span class="baseline-tag" style="color:#b45309;background:#fef3c7;">🌎 Variante homologada</span>`;
+    document.getElementById("diffList").innerHTML = countryData.diffs.map(d => `
+      <div class="diff-item"><span class="dot"></span><span>${d}</span></div>
+    `).join("");
+
+    const glosarioCard = document.getElementById("glosarioCard");
+    if (currentScreen === "identificacion") {
+      glosarioCard.style.display = "block";
+      document.getElementById("glosarioCountryName").textContent = COUNTRIES[currentCountry].flag + " " + COUNTRIES[currentCountry].name;
+      document.getElementById("glosarioList").innerHTML = GLOSARIO_DOCUMENTOS[currentCountry].map(d => `
+        <div class="glosario-item">
+          <div class="glosario-sigla">${d.sigla}</div>
+          <div class="glosario-text"><b>${d.nombre}</b><br/>${d.desc}</div>
+        </div>
+      `).join("");
+    } else {
+      glosarioCard.style.display = "none";
+    }
+  }
+
+  render();
+</script>
+
+</body>
+</html>

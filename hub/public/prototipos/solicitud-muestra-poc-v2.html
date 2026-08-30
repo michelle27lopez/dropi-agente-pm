@@ -372,28 +372,6 @@
   }
   .poc-reset-btn:hover { background: rgba(255,255,255,0.12); }
 
-  /* ───────── Tour guiado (spotlight + tooltip) ───────── */
-  .tour-blocker { position: fixed; inset: 0; z-index: 4999; background: transparent; }
-  .tour-spotlight {
-    position: fixed; z-index: 5000; border-radius: 8px; border: 2px solid var(--orange-primary);
-    box-shadow: 0 0 0 9999px rgba(15, 20, 30, 0.65); transition: all 0.3s ease; pointer-events: none;
-  }
-  .tour-tooltip {
-    position: fixed; z-index: 5001; width: 290px; background: #fff; border-radius: 10px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.25); padding: 16px 18px; transition: top 0.3s ease, left 0.3s ease;
-  }
-  .tour-step-count { font-size: 10px; font-weight: 700; color: var(--orange-primary); text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
-  .tour-tooltip h4 { font-size: 14px; color: var(--text-main); margin-bottom: 6px; }
-  .tour-tooltip p { font-size: 12px; color: var(--text-muted); line-height: 1.5; margin-bottom: 14px; }
-  .tour-tooltip-controls { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-  .tour-skip-btn { background: none; border: none; color: var(--text-muted); font-size: 11px; font-weight: 600; cursor: pointer; }
-  .tour-skip-btn:hover { color: var(--text-main); }
-  .tour-nav-btns { display: flex; gap: 8px; }
-  .tour-btn { padding: 8px 14px; font-size: 12px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; }
-  .tour-btn-outline { background: #fff; border: 1px solid var(--border-color); color: var(--text-main); }
-  .tour-btn-primary { background: var(--orange-primary); color: #fff; }
-  .tour-btn-primary:hover { background: var(--orange-hover); }
-
   /* ───────── Modal: Solicitud de muestra ───────── */
   .sample-modal-overlay {
     position: fixed; inset: 0; background: rgba(17,24,39,0.55);
@@ -449,9 +427,6 @@
 
   .sample-modal-hr { border: none; border-top: 1px solid var(--border-color); margin: 12px 0; }
 
-  .client-summary-card { background: var(--bg-light); border-radius: 10px; padding: 14px; margin-bottom: 16px; }
-  .client-summary-row { display: flex; align-items: center; gap: 9px; font-size: 12.5px; color: var(--text-main); padding: 5px 0; }
-  .client-summary-row i { color: var(--text-muted); font-size: 14px; width: 16px; text-align: center; flex-shrink: 0; }
 
   .warning-banner {
     display: flex; align-items: center; gap: 8px; background: #FEECEE; color: #B4232F;
@@ -534,6 +509,52 @@
   @media (max-width: 1000px) {
     .sample-modal-grid { grid-template-columns: 1fr; }
   }
+
+  /* ───────── Modal: Encuesta contextual de muestras ───────── */
+  .survey-modal-overlay {
+    position: fixed; inset: 0; background: rgba(17,24,39,0.55);
+    z-index: 900; display: none; align-items: center; justify-content: center;
+    padding: 24px; overflow-y: auto;
+  }
+  .survey-modal-overlay.active { display: flex; }
+  .survey-modal {
+    background: #fff; border-radius: 14px; width: 100%; max-width: 520px;
+    padding: 30px 32px 26px; position: relative; box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+  }
+  .survey-modal-close {
+    position: absolute; top: 22px; right: 24px; background: none; border: none;
+    color: var(--text-muted); font-size: 19px; cursor: pointer;
+  }
+  .survey-modal-close:hover { color: var(--text-main); }
+  .survey-progress { font-size: 11.5px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.3px; margin-bottom: 14px; }
+  .survey-question { font-size: 19px; font-weight: 800; color: var(--text-main); line-height: 1.35; margin-bottom: 22px; padding-right: 20px; }
+  .survey-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+  .survey-option {
+    display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--border-color); border-radius: 10px;
+    padding: 13px 14px; font-size: 13.5px; font-weight: 600; color: var(--text-main); cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .survey-option:hover { border-color: #cbd5e0; }
+  .survey-option.selected { border-color: var(--orange-primary); background: var(--orange-muted); }
+  .survey-option .radio-dot { flex-shrink: 0; }
+  .survey-option.selected .radio-dot { border-color: var(--orange-primary); }
+  .survey-option.selected .radio-dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--orange-primary); }
+  .survey-other-input {
+    width: 100%; border: 1px solid var(--border-color); border-radius: 8px;
+    padding: 10px 12px; font-size: 13px; color: var(--text-main); background: #fff;
+    font-family: inherit; margin: -2px 0 4px;
+  }
+  .survey-modal-footer { display: flex; justify-content: flex-end; margin-top: 24px; }
+  .survey-modal-footer .btn-primary { width: 100%; justify-content: center; padding: 11px 18px; font-size: 13.5px; }
+  .survey-modal-footer .btn-primary:disabled { background: #FBBE85; cursor: not-allowed; }
+
+  .survey-confirmation { text-align: center; padding: 10px 4px 4px; }
+  .survey-confirmation .survey-confirm-icon {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--orange-muted); color: var(--orange-primary);
+    display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 18px;
+  }
+  .survey-confirmation h3 { font-size: 19px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; }
+  .survey-confirmation p { font-size: 13.5px; color: var(--text-muted); line-height: 1.5; margin-bottom: 24px; }
 </style>
 </head>
 <body>
@@ -690,8 +711,9 @@
 </div>
 
 <div class="poc-tag">
-  <i class="ti ti-flask"></i> PROD-MUESTRA-POC-1 · Detalle de producto (Mock) — réplica base
-  <button class="poc-reset-btn" onclick="resetSavedClientInfo()"><i class="ti ti-trash"></i> Borrar datos guardados</button>
+  <i class="ti ti-flask"></i> PROD-MUESTRA-POC-1 · Encuesta contextual de muestras (Mock)
+  <button class="poc-reset-btn" onclick="replaySurvey()"><i class="ti ti-refresh"></i> Repetir encuesta</button>
+  <button class="poc-reset-btn" onclick="resetSavedClientInfo()"><i class="ti ti-trash"></i> Reiniciar formulario</button>
 </div>
 
 <!-- ───────── Modal: Solicitud de muestra ───────── -->
@@ -706,16 +728,6 @@
         <div id="clientInfoSection">
         <div class="sample-col-title">Información del cliente:</div>
 
-        <!-- Vista resumida: cuando ya hay datos guardados del cliente -->
-        <div class="client-summary-card" id="clientSummaryView" style="display:none;">
-          <div class="client-summary-row"><i class="ti ti-user"></i> <span id="summaryClientName"></span></div>
-          <div class="client-summary-row"><i class="ti ti-phone"></i> <span id="summaryClientPhone"></span></div>
-          <div class="client-summary-row"><i class="ti ti-map-pin"></i> <span id="summaryClientAddress"></span></div>
-          <div class="client-summary-row"><i class="ti ti-mail"></i> <span id="summaryClientEmail"></span></div>
-          <button class="btn-outline" style="margin-top: 10px; width: 100%;" onclick="editClientInfo()">Cambiar información del cliente</button>
-        </div>
-
-        <!-- Formulario editable -->
         <div id="clientFormFields">
           <div class="sample-row-2">
             <input class="sample-input invalid" type="text" id="nombresInput" placeholder="Nombres">
@@ -748,7 +760,6 @@
           </div>
         </div>
 
-        <!-- Siempre visibles: no forman parte de la info guardada del cliente, son por cada solicitud -->
         <div class="sample-field">
           <select class="sample-select" id="tiendaSelect">
             <option value="">Tienda</option>
@@ -845,6 +856,14 @@
       <button class="btn-cancel-outline" onclick="closeSampleModal()">Cancelar</button>
       <button class="btn-submit-sample" id="btnSubmitSample" disabled onclick="submitSampleRequest()">Solicitar muestra</button>
     </div>
+  </div>
+</div>
+
+<!-- ───────── Modal: Encuesta contextual de muestras ───────── -->
+<div class="survey-modal-overlay" id="surveyModalOverlay">
+  <div class="survey-modal">
+    <button class="survey-modal-close" onclick="closeSurveyModal()"><i class="ti ti-x"></i></button>
+    <div id="surveyModalBody"></div>
   </div>
 </div>
 
@@ -1083,51 +1102,13 @@
 
   function onSolicitarMuestra() {
     document.getElementById('sampleModalOverlay').classList.add('active');
-
-    const saved = loadClientInfo();
-    if (saved) {
-      fillClientForm(saved);
-      showClientSummary(saved);
-    } else {
-      showClientForm();
-    }
     recalcSummary();
     updateSubmitState();
   }
 
-  // ───────── Información del cliente: se guarda para no volver a pedirla ─────────
-  const CLIENT_INFO_KEY = 'sampleClientInfo';
-
-  function collectClientInfo() {
-    return {
-      nombres: document.getElementById('nombresInput').value.trim(),
-      apellidos: document.getElementById('apellidosInput').value.trim(),
-      telefono: document.getElementById('telefonoInput').value.trim(),
-      departamento: document.getElementById('departmentSelect').value,
-      ciudad: document.getElementById('citySelect').value,
-      direccion: document.getElementById('direccionInput').value.trim(),
-      correo: document.getElementById('correoInput').value.trim(),
-      tienda: document.getElementById('tiendaSelect').value,
-    };
-  }
-
-  function saveClientInfo() {
-    localStorage.setItem(CLIENT_INFO_KEY, JSON.stringify(collectClientInfo()));
-  }
-
-  function loadClientInfo() {
-    try {
-      const raw = localStorage.getItem(CLIENT_INFO_KEY);
-      return raw ? JSON.parse(raw) : null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  // Solo para demos/pruebas: simula "primera vez" borrando la info del cliente guardada en este navegador.
+  // Solo para demos/pruebas: reinicia el formulario de solicitud de muestra y el estado de la encuesta.
   function resetSavedClientInfo() {
-    localStorage.removeItem(CLIENT_INFO_KEY);
-    localStorage.removeItem('sampleTourCompleted');
+    localStorage.removeItem(SURVEY_COMPLETED_KEY);
 
     ['nombresInput', 'apellidosInput', 'telefonoInput', 'direccionInput', 'correoInput'].forEach((id) => {
       document.getElementById(id).value = '';
@@ -1136,50 +1117,8 @@
     onDepartmentChange();
     document.getElementById('tiendaSelect').value = '';
 
-    showClientForm();
     updateSubmitState();
-    showToast('Datos guardados del cliente y del tour eliminados');
-  }
-
-  function fillClientForm(info) {
-    document.getElementById('nombresInput').value = info.nombres || '';
-    document.getElementById('apellidosInput').value = info.apellidos || '';
-    document.getElementById('telefonoInput').value = info.telefono || '';
-    document.getElementById('direccionInput').value = info.direccion || '';
-    document.getElementById('correoInput').value = info.correo || '';
-    document.getElementById('tiendaSelect').value = info.tienda || '';
-
-    if (info.departamento) {
-      document.getElementById('departmentSelect').value = info.departamento;
-      onDepartmentChange();
-      if (info.ciudad) {
-        document.getElementById('citySelect').value = info.ciudad;
-        quoteFreightForCity();
-      }
-    }
-  }
-
-  function renderClientSummary(info) {
-    document.getElementById('summaryClientName').textContent = `${info.nombres} ${info.apellidos}`.trim();
-    document.getElementById('summaryClientPhone').textContent = `🇨🇴 +57 ${info.telefono}`;
-    document.getElementById('summaryClientAddress').textContent = `${info.direccion}, ${info.ciudad}, ${info.departamento}`;
-    document.getElementById('summaryClientEmail').textContent = info.correo;
-  }
-
-  function showClientSummary(info) {
-    renderClientSummary(info);
-    document.getElementById('clientFormFields').style.display = 'none';
-    document.getElementById('clientSummaryView').style.display = 'block';
-  }
-
-  function showClientForm() {
-    document.getElementById('clientFormFields').style.display = '';
-    document.getElementById('clientSummaryView').style.display = 'none';
-  }
-
-  function editClientInfo() {
-    showClientForm();
-    updateSubmitState();
+    showToast('Formulario y encuesta reiniciados');
   }
 
   // ───────── Departamentos y ciudades de Colombia ─────────
@@ -1381,7 +1320,6 @@
   // ───────── Envío de la solicitud ─────────
   function submitSampleRequest() {
     if (document.getElementById('btnSubmitSample').disabled) return;
-    saveClientInfo();
     showToast('Pedido realizado');
     closeSampleModal();
   }
@@ -1400,144 +1338,158 @@
   }
 
   /* ──────────────────────────────────────────────────────────────
-     TOUR GUIADO: primera solicitud de muestra (spotlight + tooltip)
-     Empieza justo aquí, en el botón "Solicitar muestra" — el
-     catálogo solo invita a elegir un producto libremente, sin
-     forzar un paso guiado allá.
+     ENCUESTA CONTEXTUAL: experiencia con muestras en Dropi.
+     Aparece como modal al entrar al detalle del producto. Reemplaza
+     por completo el recorrido guiado anterior — no es un tour, es
+     una microencuesta de 2 o 3 pasos según la respuesta inicial.
   ────────────────────────────────────────────────────────────── */
-  const SAMPLE_TOUR_TOTAL = 5;
-  const sampleTourSteps = [
-    { globalStep: 1, target: '#btnSolicitarMuestra', placement: 'top',
-      title: 'Pide tu primera muestra',
-      text: 'Al solicitar una muestra te conviertes en tu propio cliente: es una autocompra que te permite vivir de principio a fin el proceso logístico de Dropi, antes de vendérselo a alguien más.',
-      buttonLabel: 'Solicitar muestra',
-      action: () => {
-        onSolicitarMuestra();
-        sampleTourIndex++;
-        setTimeout(renderSampleTourStep, 380);
-      } },
-    { globalStep: 2, target: '#clientInfoSection', placement: 'right', noBack: true,
-      title: 'Tu información',
-      text: 'Completa con tu información. Se guarda automáticamente para que no tengas que repetirla la próxima vez que le envíes una muestra.' },
-    { globalStep: 3, target: '.carrier-list', placement: 'left', noBack: true,
-      title: 'Elige la transportadora',
-      text: 'Selecciona con qué transportadora se enviará la muestra. El costo se cotiza según tu ciudad.' },
-    { globalStep: 4, target: '.summary-totals', placement: 'left', noBack: true,
-      title: 'Resumen del pedido',
-      text: 'Aquí revisas el precio del proveedor, el envío y el total antes de confirmar la solicitud.' },
-    { globalStep: 5, target: '#btnSubmitSample', placement: 'top', noBack: true,
-      title: 'Confirma tu solicitud',
-      text: 'Cuando toda la información esté completa, confirma aquí para enviar tu solicitud de muestra.' },
-  ];
+  const SURVEY_COMPLETED_KEY = 'sampleSurveyCompleted';
 
-  let sampleTourIndex = 0;
+  const SURVEY_STEPS = {
+    initial: {
+      step: 1, total: 3,
+      question: '¿Has solicitado alguna vez una muestra de un producto en Dropi?',
+      options: [
+        { value: 'yes', label: 'Sí, he solicitado muestras.' },
+        { value: 'no', label: 'No, nunca he solicitado una muestra.' },
+      ],
+    },
+    objective: {
+      step: 2, total: 3,
+      question: '¿Cuál es el principal objetivo por el que solicitas una muestra?',
+      options: [
+        { value: 'content', label: 'Crear fotos, videos o contenido propio para promocionarlo.' },
+        { value: 'quality', label: 'Probar el producto antes de ofrecerlo y evaluar su calidad y presentación.' },
+        { value: 'personal', label: 'Conocer el producto para uso personal.' },
+        { value: 'other', label: 'Otro', other: true },
+      ],
+    },
+    outcome: {
+      step: 3, total: 3,
+      question: 'Después de recibir la muestra, ¿vendiste ese producto?',
+      options: [
+        { value: 'sold_after', label: 'Sí, empecé a venderlo después de recibir la muestra.' },
+        { value: 'sold_before', label: 'Sí, ya lo vendía antes de solicitar la muestra.' },
+        { value: 'not_sold', label: 'No, finalmente no lo vendí.' },
+        { value: 'not_received', label: 'No recibí la muestra.' },
+      ],
+    },
+    neverReason: {
+      step: 2, total: 2,
+      question: 'Si nunca has solicitado una muestra, ¿cuál es la principal razón?',
+      options: [
+        { value: 'unaware', label: 'No sabía que podía solicitar muestras en Dropi o no sé cómo hacerlo.' },
+        { value: 'cost', label: 'No quiero asumir el costo de la muestra.' },
+        { value: 'no_product', label: 'Aún no he encontrado un producto que quiera probar.' },
+        { value: 'other', label: 'Otro', other: true },
+      ],
+    },
+  };
 
-  function startSampleTour() {
-    sampleTourIndex = 0;
-    buildSampleTourChrome();
-    renderSampleTourStep();
-    window.addEventListener('resize', repositionSampleTourStep);
+  let surveyCurrentStepId = 'initial';
+  let surveySelection = null;
+  const surveyAnswers = {};
+
+  function openSurveyModal() {
+    surveyCurrentStepId = 'initial';
+    surveySelection = null;
+    document.getElementById('surveyModalOverlay').classList.add('active');
+    showSurveyStep();
   }
 
-  function buildSampleTourChrome() {
-    if (document.getElementById('tourBlocker')) return;
-    const blocker = document.createElement('div');
-    blocker.className = 'tour-blocker';
-    blocker.id = 'tourBlocker';
-    document.body.appendChild(blocker);
-
-    const spotlight = document.createElement('div');
-    spotlight.className = 'tour-spotlight';
-    spotlight.id = 'tourSpotlight';
-    document.body.appendChild(spotlight);
-
-    const tooltip = document.createElement('div');
-    tooltip.className = 'tour-tooltip';
-    tooltip.id = 'tourTooltip';
-    document.body.appendChild(tooltip);
+  function closeSurveyModal() {
+    document.getElementById('surveyModalOverlay').classList.remove('active');
   }
 
-  function renderSampleTourStep() {
-    const step = sampleTourSteps[sampleTourIndex];
-    const target = document.querySelector(step.target);
-    if (!target) { nextSampleStep(); return; }
+  document.getElementById('surveyModalOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeSurveyModal();
+  });
 
-    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    setTimeout(() => positionSampleTourElements(target, step), 280);
+  function showSurveyStep() {
+    if (surveyCurrentStepId === 'confirmation') { renderSurveyConfirmation(); return; }
+    renderSurveyQuestion();
   }
 
-  function repositionSampleTourStep() {
-    if (!document.getElementById('tourSpotlight')) return;
-    const step = sampleTourSteps[sampleTourIndex];
-    const target = document.querySelector(step.target);
-    if (target) positionSampleTourElements(target, step);
-  }
+  function renderSurveyQuestion() {
+    const step = SURVEY_STEPS[surveyCurrentStepId];
+    const isLastQuestion = surveyCurrentStepId === 'outcome' || surveyCurrentStepId === 'neverReason';
+    const ctaLabel = isLastQuestion ? 'Enviar respuesta' : 'Continuar';
 
-  function positionSampleTourElements(target, step) {
-    const rect = target.getBoundingClientRect();
-    const pad = 6;
-
-    const spotlight = document.getElementById('tourSpotlight');
-    spotlight.style.top = (rect.top - pad) + 'px';
-    spotlight.style.left = (rect.left - pad) + 'px';
-    spotlight.style.width = (rect.width + pad * 2) + 'px';
-    spotlight.style.height = (rect.height + pad * 2) + 'px';
-
-    const isLast = sampleTourIndex === sampleTourSteps.length - 1;
-    const tooltip = document.getElementById('tourTooltip');
-    tooltip.innerHTML = `
-      <div class="tour-step-count">Paso ${step.globalStep} de ${SAMPLE_TOUR_TOTAL}</div>
-      <h4>${step.title}</h4>
-      <p>${step.text}</p>
-      <div class="tour-tooltip-controls">
-        <button class="tour-skip-btn" onclick="endSampleTour()">Omitir</button>
-        <div class="tour-nav-btns">
-          ${sampleTourIndex > 0 && !step.noBack ? '<button class="tour-btn tour-btn-outline" onclick="prevSampleStep()">Atrás</button>' : ''}
-          <button class="tour-btn tour-btn-primary" id="tourPrimaryBtn">${step.buttonLabel || (isLast ? 'Listo' : 'Siguiente')}</button>
+    const optionsHtml = step.options.map((opt) => {
+      const selected = !!(surveySelection && surveySelection.value === opt.value);
+      const otherInput = (opt.other && selected)
+        ? `<input class="survey-other-input" id="surveyOtherInput" type="text" placeholder="Cuéntanos más..." value="${(surveySelection.otherText || '').replace(/"/g, '&quot;')}" oninput="onSurveyOtherInput(this.value)">`
+        : '';
+      return `
+        <div class="survey-option${selected ? ' selected' : ''}" onclick="selectSurveyOption('${opt.value}')">
+          <div class="radio-dot"></div>
+          <span>${opt.label}</span>
         </div>
+        ${otherInput}
+      `;
+    }).join('');
+
+    document.getElementById('surveyModalBody').innerHTML = `
+      <div class="survey-progress">${step.step} de ${step.total}</div>
+      <div class="survey-question">${step.question}</div>
+      <div class="survey-options">${optionsHtml}</div>
+      <div class="survey-modal-footer">
+        <button class="btn-primary" id="surveyContinueBtn" ${surveySelection ? '' : 'disabled'} onclick="onSurveyContinue()">${ctaLabel}</button>
       </div>
     `;
+  }
 
-    document.getElementById('tourPrimaryBtn').addEventListener('click', () => {
-      if (step.action) { step.action(); return; }
-      if (isLast) { endSampleTour(); } else { nextSampleStep(); }
-    });
+  function renderSurveyConfirmation() {
+    document.getElementById('surveyModalBody').innerHTML = `
+      <div class="survey-confirmation">
+        <div class="survey-confirm-icon"><i class="ti ti-circle-check"></i></div>
+        <h3>¡Gracias por compartir tu experiencia!</h3>
+        <p>Tu respuesta nos ayuda a mejorar la experiencia de muestras en Dropi.</p>
+        <button class="btn-primary" style="width:100%; justify-content:center;" onclick="finishSurvey()">Listo</button>
+      </div>
+    `;
+  }
 
-    const tw = 290, gap = 14;
-    const th = tooltip.offsetHeight;
-    let top, left;
-    switch (step.placement) {
-      case 'bottom': top = rect.bottom + gap; left = rect.left; break;
-      case 'top': top = rect.top - th - gap; left = rect.left; break;
-      case 'left': top = rect.top; left = rect.left - tw - gap; break;
-      default: top = rect.top; left = rect.right + gap; break;
+  function selectSurveyOption(value) {
+    const keepOtherText = surveySelection && surveySelection.value === value ? surveySelection.otherText : '';
+    surveySelection = { value, otherText: keepOtherText || '' };
+    renderSurveyQuestion();
+    const otherInput = document.getElementById('surveyOtherInput');
+    if (otherInput) otherInput.focus();
+  }
+
+  function onSurveyOtherInput(value) {
+    if (surveySelection) surveySelection.otherText = value;
+  }
+
+  function onSurveyContinue() {
+    if (!surveySelection) return;
+    surveyAnswers[surveyCurrentStepId] = { value: surveySelection.value, otherText: surveySelection.otherText || '' };
+
+    if (surveyCurrentStepId === 'initial') {
+      surveyCurrentStepId = surveySelection.value === 'yes' ? 'objective' : 'neverReason';
+    } else if (surveyCurrentStepId === 'objective') {
+      surveyCurrentStepId = 'outcome';
+    } else {
+      surveyCurrentStepId = 'confirmation';
     }
-    left = Math.max(12, Math.min(left, window.innerWidth - tw - 12));
-    top = Math.max(12, Math.min(top, window.innerHeight - th - 12));
-    tooltip.style.top = top + 'px';
-    tooltip.style.left = left + 'px';
+    surveySelection = null;
+    showSurveyStep();
   }
 
-  function nextSampleStep() {
-    if (sampleTourIndex < sampleTourSteps.length - 1) { sampleTourIndex++; renderSampleTourStep(); }
-    else endSampleTour();
+  function finishSurvey() {
+    localStorage.setItem(SURVEY_COMPLETED_KEY, '1');
+    closeSurveyModal();
   }
 
-  function prevSampleStep() {
-    if (sampleTourIndex > 0) { sampleTourIndex--; renderSampleTourStep(); }
+  // Solo para demos/pruebas: relanza la encuesta desde el inicio sin recargar la página.
+  function replaySurvey() {
+    localStorage.removeItem(SURVEY_COMPLETED_KEY);
+    openSurveyModal();
   }
 
-  function endSampleTour() {
-    ['tourBlocker', 'tourSpotlight', 'tourTooltip'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.remove();
-    });
-    window.removeEventListener('resize', repositionSampleTourStep);
-    localStorage.setItem('sampleTourCompleted', '1');
-  }
-
-  if (!localStorage.getItem('sampleTourCompleted')) {
-    setTimeout(startSampleTour, 700);
+  if (!localStorage.getItem(SURVEY_COMPLETED_KEY)) {
+    setTimeout(openSurveyModal, 500);
   }
 </script>
 </body>

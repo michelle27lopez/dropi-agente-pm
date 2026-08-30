@@ -7,6 +7,7 @@
 !.claude/skills/salsa/
 !.claude/skills/weekly-product-sync/
 !.claude/skills/roadmap-stage-gate/
+!.claude/skills/jira-monthly-report/
 .mcp.json
 .impeccable/
 
@@ -35,3 +36,4 @@ hub/public/logistica/recolecciones/pipeline/por-geocodificar.json
 hub/public/logistica/recolecciones/pipeline/geocode-final.json
 hub/public/logistica/recolecciones/pipeline/cruces-resultado.json
 hub/public/logistica/recolecciones/pipeline/*.csv
+/.node-dist/

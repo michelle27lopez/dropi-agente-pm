@@ -103,7 +103,18 @@ export default function HoyPanel() {
         <p style={{ fontSize: 11, color: "var(--danger)", margin: "0 20px 8px" }}>{syncError}</p>
       )}
       {!connected ? (
-        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 20px 16px" }}>Pendiente — tu calendario todavía no está conectado.</p>
+        /* Hasta 2026-08-19 esto era solo el texto "Pendiente", sin salida: la
+           única forma de conectar era escribir /api/auth/google/login a mano en
+           el navegador. Un panel que anuncia que algo falta y no ofrece cómo
+           resolverlo se lee como roto, así que va el botón. */
+        <div style={{ margin: "0 20px 16px", display: "flex", flexDirection: "column", gap: 10, alignItems: "flex-start" }}>
+          <p style={{ fontSize: 13, color: "var(--muted)", margin: 0 }}>
+            Tu calendario todavía no está conectado.
+          </p>
+          <a href="/api/auth/google/login" className="midia-btn-primary" style={{ padding: "7px 12px", fontSize: 12 }}>
+            Conectar Google Calendar
+          </a>
+        </div>
       ) : meetings.length === 0 ? (
         <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 20px 16px" }}>Sin reuniones agendadas para hoy.</p>
       ) : !proxima ? (

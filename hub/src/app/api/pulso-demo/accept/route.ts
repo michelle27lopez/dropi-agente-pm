@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { escapeHtml } from "@/lib/escape-html";
+import { getClientIp, isRateLimited } from "@/lib/rate-limit";
+
+const RATE_LIMIT = 10;
+const RATE_WINDOW_MS = 60_000;
 
 const EVOLUTION_URL = process.env.EVOLUTION_API_URL ?? "";
 const EVOLUTION_KEY = process.env.EVOLUTION_API_KEY ?? "";
@@ -59,6 +64,7 @@ async function notifySuppliers(dropshipperName: string, totalAccepted: number, t
             secure: false,
             auth: { user: smtpUser, pass: smtpPass },
           });
+          const safeDropshipperName = escapeHtml(dropshipperName);
           promises.push(
             transporter.sendMail({
               from: `Dropi Pulso <${smtpUser}>`,
@@ -75,7 +81,7 @@ async function notifySuppliers(dropshipperName: string, totalAccepted: number, t
                   </div>
                   <div style="padding: 28px 24px;">
                     <p style="font-size: 16px; font-weight: 800; color: #111; margin-bottom: 8px;">
-                      ${dropshipperName} acaba de confirmar
+                      ${safeDropshipperName} acaba de confirmar
                     </p>
                     <p style="font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 24px;">
                       Ya hay <strong>${totalAccepted} dropshipper${totalAccepted !== 1 ? "s" : ""}</strong> que confirmaron interés en tu campaña.
@@ -116,6 +122,11 @@ async function notifySuppliers(dropshipperName: string, totalAccepted: number, t
 }
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIp(req);
+  if (isRateLimited(`pulso-demo-accept:${ip}`, RATE_LIMIT, RATE_WINDOW_MS)) {
+    return NextResponse.json({ error: "Demasiadas solicitudes, intenta de nuevo en un minuto" }, { status: 429 });
+  }
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
   const { token, committed_units } = await req.json();
   if (!token) return NextResponse.json({ error: "token required" }, { status: 400 });
@@ -135,7 +146,11 @@ export async function POST(req: NextRequest) {
   }
 
   const updatePayload: Record<string, unknown> = { accepted_at: new Date().toISOString() };
-  if (committed_units != null) updatePayload.committed_units = committed_units;
+  const validUnits =
+    Number.isInteger(committed_units) && committed_units >= 0 && committed_units <= 100000
+      ? committed_units
+      : null;
+  if (validUnits != null) updatePayload.committed_units = validUnits;
 
   const { error: updateError } = await supabase
     .from("pulso_demo_attendees")
@@ -147,7 +162,7 @@ export async function POST(req: NextRequest) {
       .from("pulso_demo_attendees")
       .update({ accepted_at: new Date().toISOString() })
       .eq("token", token);
-    if (retryError) return NextResponse.json({ error: retryError.message }, { status: 500 });
+    if (retryError) return NextResponse.json({ error: "Error interno confirmando la aceptación" }, { status: 500 });
   }
 
   // Obtener stats actualizados para notificar al proveedor
@@ -160,8 +175,20 @@ export async function POST(req: NextRequest) {
   const totalAccepted = (allAccepted ?? []).length;
   const totalCommitted = (allAccepted ?? []).reduce((sum, a) => sum + (a.committed_units ?? 0), 0);
 
-  // Notificar a los proveedores registrados (sin await para no bloquear la respuesta)
-  notifySuppliers(attendee.name, totalAccepted, totalCommitted).catch(() => null);
+  // Cooldown global del blast (AGP-04, parcial): `register` no verifica que
+  // el whatsapp/email pertenezca a quien lo registra, y este envío usa el
+  // WhatsApp Business / correo del negocio, no de un usuario — cada accept
+  // reenvía a TODOS los suppliers registrados. El rate-limit por IP de
+  // arriba no evita que alguien dispare varios accepts (tokens distintos)
+  // seguidos; este cooldown limita cuántas veces se puede reenviar el blast
+  // completo, sin importar cuántos accepts individuales lo disparen. No
+  // cierra el hueco de fondo (registrar un contacto ajeno como "supplier"
+  // sigue siendo posible) — eso requiere decidir si se agrega verificación
+  // de contacto antes de notificar, que es un cambio de producto, no de
+  // seguridad pura.
+  if (!isRateLimited("pulso-demo-notify-suppliers", 1, 120_000)) {
+    notifySuppliers(attendee.name, totalAccepted, totalCommitted).catch(() => null);
+  }
 
   return NextResponse.json({ ok: true, name: attendee.name });
 }

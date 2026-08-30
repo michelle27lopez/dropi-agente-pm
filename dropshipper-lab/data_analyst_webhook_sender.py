@@ -6,12 +6,15 @@ Permite enviar archivos CSV o estructuras JSON con la data actualizada de seller
 
 import json
 import csv
+import os
 import urllib.request
 import sys
 
 # Configuración del Webhook de la Célula Seller Success
-WEBHOOK_URL = "http://localhost:3000/api/webhooks/seller-success"  # O la URL pública de producción
-API_KEY = "seller-success-secret-2026"
+WEBHOOK_URL = os.environ.get("SELLER_SUCCESS_WEBHOOK_URL", "http://localhost:3000/api/webhooks/seller-success")
+API_KEY = os.environ.get("SELLER_SUCCESS_WEBHOOK_KEY")
+if not API_KEY:
+    sys.exit("Falta la variable de entorno SELLER_SUCCESS_WEBHOOK_KEY (pídela al equipo de hub, ya no hay secreto por defecto).")
 
 def send_seller_data(sellers_list):
     """

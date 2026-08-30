@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { requireUser } from "@/lib/require-auth";
+import { escapeHtml } from "@/lib/escape-html";
 
 const EVOLUTION_URL = process.env.EVOLUTION_API_URL ?? "";
 const EVOLUTION_KEY = process.env.EVOLUTION_API_KEY ?? "";
@@ -40,6 +42,10 @@ async function sendKitEmail(to: string, name: string, kitLink: string, product: 
     auth: { user: smtpUser, pass: smtpPass },
   });
 
+  const safeName = escapeHtml(name);
+  const safeSupplierName = escapeHtml(product.supplier_name);
+  const safeProductName = escapeHtml(product.name);
+
   await transporter.sendMail({
     from: `Dropi Pulso <${smtpUser}>`,
     to,
@@ -55,11 +61,11 @@ async function sendKitEmail(to: string, name: string, kitLink: string, product: 
         </div>
         <div style="padding: 28px 24px;">
           <p style="font-size: 16px; font-weight: 800; color: #111; margin-bottom: 8px;">
-            ¡${name}, la negociación fue exitosa!
+            ¡${safeName}, la negociación fue exitosa!
           </p>
           <p style="font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 24px;">
-            <strong>${product.supplier_name}</strong> confirmó las condiciones y la campaña está lista.
-            Aquí están todos los materiales para empezar a vender <strong>${product.name}</strong>.
+            <strong>${safeSupplierName}</strong> confirmó las condiciones y la campaña está lista.
+            Aquí están todos los materiales para empezar a vender <strong>${safeProductName}</strong>.
           </p>
           <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 10px; padding: 16px; margin-bottom: 24px;">
             <div style="font-size: 13px; color: #15803D; font-weight: 700; margin-bottom: 8px;">Tu kit incluye:</div>
@@ -86,6 +92,9 @@ async function sendKitEmail(to: string, name: string, kitLink: string, product: 
 }
 
 export async function POST() {
+  const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
 
   // 1. Verificar que el proveedor haya aceptado

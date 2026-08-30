@@ -1,0 +1,17 @@
+/* Alcance local a la bitácora EXP-003. No toca la paleta global del hub. */
+
+.exp003-bitacora button:focus-visible,
+.exp003-bitacora a:focus-visible {
+  outline: 2px solid var(--dropi);
+  outline-offset: 2px;
+}
+
+.exp003-chevron {
+  transition: transform 180ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exp003-chevron {
+    transition: none;
+  }
+}

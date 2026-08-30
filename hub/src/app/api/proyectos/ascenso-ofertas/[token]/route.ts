@@ -60,6 +60,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tok
   if (!supabase) return NextResponse.json({ error: "No client" }, { status: 500 });
   const { token } = await params;
   const { accepted, motivo } = await req.json();
+  const trimmedMotivo = typeof motivo === "string" ? motivo.slice(0, 500) : null;
 
   const { data: oferta, error: fetchError } = await supabase
     .from("ascenso_ofertas")
@@ -77,7 +78,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ tok
     .from("ascenso_ofertas")
     .update({
       estado: accepted ? "aceptada" : "rechazada",
-      motivo_rechazo: accepted ? null : (motivo ?? null),
+      motivo_rechazo: accepted ? null : trimmedMotivo,
       respondida_at: new Date().toISOString(),
     })
     .eq("token", token)

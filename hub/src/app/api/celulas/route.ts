@@ -23,7 +23,9 @@ export async function GET() {
 
   const { data: projects, error: projectsError } = await supabase
     .from("projects")
-    .select("id, name, project_code, status, type, handoff_status, celula_owner_id");
+    .select(
+      "id, name, project_code, status, type, handoff_status, celula_owner_id, estado_interno, prioridad, updated_at, created_at, fecha_inicio_dev, fecha_entrega_propuesta",
+    );
 
   if (projectsError) return NextResponse.json({ error: projectsError.message }, { status: 500 });
 

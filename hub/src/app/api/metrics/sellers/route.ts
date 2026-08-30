@@ -64,15 +64,17 @@ function calculateSellersMetrics(
     global: {
       totalSellers: 46208, // Base real identificada en Supabase userpilot_suppliers
       totalRegisteredHistorical: 397271, // Histórico acumulado
-      activationRate: 7.56, // Activación Bruta (TTFO)
-      activationRateNet: 5.2, // Activación Neta (TTV) - Baseline Oficial
+      activationRate: 5.0, // Activación Bruta 90d (TTFO) - Auditado Parquet
+      activationRateNet: 2.3, // Activación Neta 90d (TTV) - Auditado Parquet
       activationRateNetTarget: 8.0,
-      activeRate: 10.82,
+      activeRate: 48.70, // 22504 / 46208
       bounceRate: 74.3,
-      survivalRate: 69.38, // Retención 30d
+      survivalRate: 67.8, // Retención Genuina Multi-Día (sobrevive_30d_otro_dia) - Auditado Parquet
+      survivalRateSameDay: 68.3, // Adopción Carga Multi-Orden Mismo Día
       survivalRateTarget: 75.0,
-      ttvNetoMedian: 16.0, // TTV Neto Baseline
+      ttvNetoMedian: 6.8, // TTV Neto Mediana - Auditado Parquet
       ttvNetoMedianTarget: 12.0,
+      ttvBrutoMedian: 5.2, // TTV Bruto Mediana - Auditado Parquet
       nsmCurrent: 3687786, // Cierre Oficial JUL 2026
       okrTarget: 3571042, // Meta Julio Oficial CPO
       okrTargetCompany: 7800000, // OKR 1 / KR 1.1 Holding (7.8M/mes)
@@ -87,9 +89,9 @@ function calculateSellersMetrics(
         { step: "2a. Tienda: nombre / rol declarado", count: 36056, pct: 78.0, color: "#8B5CF6" },
         { step: "2d. Configuración bancaria cargada", count: 4503, pct: 9.75, color: "#3B82F6" },
         { step: "3. Catálogo poblado (Productos publicados)", count: 1448, pct: 3.13, color: "#F59E0B" },
-        { step: "4. Primera orden creada (Act. Bruta TTFO)", count: 3512, pct: 7.6, color: "#EC4899" },
-        { step: "7a. Primera orden entregada (Act. Neta TTV)", count: 2403, pct: 5.2, color: "#10B981" },
-        { step: "8. Retención sostenida (Activo 30d)", count: 32059, pct: 69.38, color: "#14B8A6" }
+        { step: "4. Primera orden creada (Act. Bruta 90d)", count: 3558, pct: 7.7, color: "#EC4899" },
+        { step: "7a. Primera orden entregada (Act. Neta 90d)", count: 2218, pct: 4.8, color: "#10B981" },
+        { step: "8. Retención Multi-día (Día distinto 30d)", count: 13862, pct: 30.0, color: "#14B8A6" }
       ]
     },
     CO: {
