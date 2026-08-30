@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { jiraUrl, type IndicadorHoy, type ProyectoLite, type Weekly } from "@/app/proyectos/logistica/_lib/data";
+import { jiraUrl, type Hallazgo, type IndicadorHoy, type ProyectoLite, type Weekly } from "@/app/proyectos/logistica/_lib/data";
 import { formatHoras, formatPct, formatPct1, partir } from "@/app/proyectos/logistica/_lib/format";
 import PrintButton from "@/app/proyectos/logistica/_components/PrintButton";
 import SerieMensual from "@/app/proyectos/logistica/_components/charts/SerieMensual";
@@ -39,6 +39,12 @@ import {
 // `ProyectoLite` hablan en verde/ámbar/rojo porque así los escribe quien
 // redacta; el kit habla en ok/warn/risk. La traducción vive aquí, una vez.
 const TONO_INDICADOR: Record<IndicadorHoy["tono"], Tone> = { bueno: "ok", alerta: "warn", malo: "risk" };
+const TONO_HALLAZGO: Record<Hallazgo["tono"], Tone> = {
+  confirmacion: "risk",
+  carrier: "info",
+  zona: "ok",
+};
+
 const TONO_ESTADO: Record<ProyectoLite["estadoTono"], Tone> = {
   verde: "ok",
   ambar: "warn",
@@ -66,7 +72,7 @@ function columnasMensual(meses: string[]): Column<FilaMensual>[] {
       key: "delta",
       header: "Delta",
       align: "right" as const,
-      render: (f: FilaMensual) => <span className={`wk-delta is-${f.tono}`}>{f.delta}</span>,
+      render: (f: FilaMensual) => <span className={`u-delta is-${f.tono}`}>{f.delta}</span>,
     },
   ];
 }
@@ -89,8 +95,8 @@ function columnasPais(meta: number): Column<FilaPais>[] {
       width: "22%",
       render: (f) => (
         <>
-          <strong className="wk-pais-nombre">{f.pais}</strong>
-          <span className="wk-pais-part">{f.participacion}</span>
+          <strong className="u-celda__nombre">{f.pais}</strong>
+          <span className="u-celda__sub">{f.participacion}</span>
         </>
       ),
     },
@@ -100,7 +106,7 @@ function columnasPais(meta: number): Column<FilaPais>[] {
       header: "Movilización",
       width: "24%",
       render: (f) => (
-        <div className="wk-pais-mov">
+        <div className="u-celda__medida">
           <Bar
             value={f.movilizacion}
             meta={meta}
@@ -316,9 +322,13 @@ function ExecutiveWeekly({ w }: { w: Weekly }) {
 }
 
 // Layout histórico (w27–w30): brecha, indicadores, Gantt de tiempos, hallazgos
-// y proyectos. Se conserva tal cual; ver nota de cabecera.
+// y proyectos. Estas semanas no tuvieron cierre mensual, así que no pueden
+// renderizarse como las nuevas — pero sí con los mismos primitivos: hasta el
+// 29-ago pintaban `.wk-ind-card`, `.wk-estado` y tres barras con gradiente, de
+// modo que pasar de w35 a w28 era cambiar de diseño a mitad de navegación. El
+// Gantt de tiempos se queda en CSS propio: es el único de su tipo y ningún
+// primitivo lo cubre.
 function HistoricWeekly({ w }: { w: Weekly }) {
-  const gapPct = w.brecha.meta - w.brecha.actual;
   const dropiTotal = w.tiempo.dropi.reduce((sum, f) => sum + f.horas, 0);
   const dropiMetaTotal = w.tiempo.dropi.reduce((sum, f) => sum + f.metaHoras, 0);
   const dropiPlan = w.tiempo.dropi.reduce(
@@ -361,13 +371,7 @@ function HistoricWeekly({ w }: { w: Weekly }) {
             <span className="v">{w.brecha.metaQ3}</span>
           </div>
         </div>
-        <div className="wk-gap-bar">
-          <i style={{ width: `${w.brecha.actual}%` }} />
-          <span className="wk-gap-shade" style={{ left: `${w.brecha.actual}%`, width: `${gapPct}%` }} />
-          <span className="wk-gap-tick" style={{ left: `${w.brecha.meta}%` }}>
-            <b>meta 70%</b>
-          </span>
-        </div>
+        <Bar value={w.brecha.actual} meta={w.brecha.meta} tone="warn" label={`Faltan ${w.brecha.gap} para la meta`} />
         <p className="wk-pais-foco">{w.brecha.paisFoco}</p>
         <div className="wk-desglose">
           {w.brecha.perdidas.map((d) => (
@@ -383,20 +387,21 @@ function HistoricWeekly({ w }: { w: Weekly }) {
 
       {/* 2 · INDICADORES HOY */}
       <SectionTitle>Los indicadores, como están hoy</SectionTitle>
-      <div className="wk-ind">
-        {w.indicadores.map((k) => (
-          <div key={k.nombre} className={`wk-ind-card i-${k.tono}`}>
-            <div className="wk-ind-top">
-              <span className="wk-ind-nombre">{k.nombre}</span>
-              <span className={`wk-ind-estado e-${k.tono}`}>{k.estado}</span>
-            </div>
-            <div className="wk-ind-valor">
-              {k.valor}
-              {k.meta && <span className="wk-ind-meta">/ meta {k.meta}</span>}
-            </div>
-            <p className="wk-ind-nota">{k.nota}</p>
-          </div>
-        ))}
+      <div className="u-grid" style={{ ["--u-min" as string]: "240px" }}>
+        {w.indicadores.map((k) => {
+          const tone = TONO_INDICADOR[k.tono];
+          return (
+            <KpiCard
+              key={k.nombre}
+              label={k.nombre}
+              value={k.valor}
+              meta={k.meta}
+              tone={tone}
+              delta={{ text: k.estado, trend: k.trend, tone }}
+              hint={k.nota}
+            />
+          );
+        })}
       </div>
 
       {/* 3 · TIEMPO POR FASES */}
@@ -517,73 +522,27 @@ function HistoricWeekly({ w }: { w: Weekly }) {
 
       {/* 4 · HALLAZGOS */}
       <SectionTitle>Hallazgos de la semana</SectionTitle>
-      <div className="wk-hallazgos">
+      <div className="u-grid" style={{ ["--u-min" as string]: "340px" }}>
         {w.hallazgos.map((h) => (
-          <div key={h.titulo} className={`wk-hallazgo h-${h.tono}`}>
-            <h3>{h.titulo}</h3>
+          <Narrativa key={h.titulo} tone={TONO_HALLAZGO[h.tono]} titulo={h.titulo}>
             <p>{h.detalle}</p>
             {h.compara && (
-              <div className="wk-compara">
-                <span className="wk-compara-tit">{h.compara.etiqueta}</span>
-                <div className="wk-compara-row">
-                  <span className="lbl">{h.compara.a.label}</span>
-                  <div className="wk-compara-bar"><i className="b-verde" style={{ width: `${h.compara.a.pct * 2}%` }} /></div>
-                  <span className="pct c-verde">{h.compara.a.pct}%</span>
-                </div>
-                <div className="wk-compara-row">
-                  <span className="lbl">{h.compara.b.label}</span>
-                  <div className="wk-compara-bar"><i className="b-rojo" style={{ width: `${h.compara.b.pct * 2}%` }} /></div>
-                  <span className="pct c-rojo">{h.compara.b.pct}%</span>
-                </div>
+              <div className="u-compara">
+                <span className="u-compara__tit">{h.compara.etiqueta}</span>
+                <Bar value={h.compara.a.pct} tone="ok" label={`${h.compara.a.label} · ${h.compara.a.pct}%`} />
+                <Bar value={h.compara.b.pct} tone="risk" label={`${h.compara.b.label} · ${h.compara.b.pct}%`} />
               </div>
             )}
-          </div>
+          </Narrativa>
         ))}
       </div>
 
-      {/* 5 · PROYECTOS POR SECCIÓN */}
-      <SectionTitle hint="En qué va cada uno.">Proyectos</SectionTitle>
-      <div className="wk-secciones">
-        {w.secciones.map((s) => (
-          <div key={s.titulo} className="wk-seccion">
-            <div className="wk-seccion-head">
-              <h3>{s.titulo}</h3>
-              <span className="wk-seccion-nota">{s.nota}</span>
-              <span className="wk-seccion-count">{s.proyectos.length}</span>
-            </div>
-            <div className="wk-seccion-body">
-              {s.proyectos.map((p) => {
-                const url = jiraUrl(p.ticket);
-                return (
-                  <div key={p.nombre} className="wk-proj2">
-                    <div className="wk-proj2-top">
-                      <span className="wk-proj2-nombre">{p.nombre}</span>
-                      <span className={`wk-estado est-${p.estadoTono}`}>{p.estado}</span>
-                    </div>
-                    <p className="wk-proj2-nota">{p.nota}</p>
-                    {p.impacto && (
-                      <p className="wk-proj2-impacto">
-                        <span className="wk-impacto-badge">💰 Impacto</span>
-                        {p.impacto}
-                      </p>
-                    )}
-                    {p.enlace && (
-                      <a href={p.enlace.href} className="wk-proj-ticket">
-                        {p.enlace.label} →
-                      </a>
-                    )}
-                    {url && (
-                      <a href={url} target="_blank" rel="noreferrer" className="wk-proj-ticket">
-                        {p.ticket} ↗
-                      </a>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
+      {w.secciones.map((seccion) => (
+        <section key={seccion.titulo}>
+          <SectionTitle hint={seccion.nota}>{`${seccion.titulo} · ${seccion.proyectos.length}`}</SectionTitle>
+          <Proyectos proyectos={seccion.proyectos} />
+        </section>
+      ))}
     </>
   );
 }
