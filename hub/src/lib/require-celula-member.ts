@@ -24,7 +24,7 @@ export async function requireCelulaMember(celulaId: string) {
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("id, celula_id, is_super_admin")
+    .select("id, celula_id, is_super_admin, email")
     .eq("id", user.id)
     .maybeSingle();
 
