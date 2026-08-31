@@ -31,6 +31,13 @@ const guias = [
     tag: "Referencia · Nomenclatura",
   },
   {
+    slug: "product-lab",
+    icon: "🧪",
+    title: "Product Lab",
+    description: "Índice de sesiones de Product Lab 2.0 — fecha, facilitador y punteros al detalle completo en el Dropi Brain (Confluence).",
+    tag: "Referencia · Product Lab",
+  },
+  {
     slug: "userpilot-mcp",
     icon: "🔌",
     title: "Documentar tu vertical con UserPilot + Claude Code",
