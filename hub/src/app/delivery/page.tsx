@@ -42,6 +42,23 @@ function fmtFechaCorta(iso: string | null) {
 
 type Comentario = { id: string; autor: string; comentario: string; created_at: string };
 
+type Cambio = {
+  id: string;
+  autor: string | null;
+  campo: string;
+  valor_anterior: string | null;
+  valor_nuevo: string | null;
+  nota: string | null;
+  created_at: string;
+};
+
+const CAMPO_LABEL: Record<string, string> = {
+  fecha_inicio_dev: "Inicio dev",
+  fecha_entrega_propuesta: "Entrega propuesta",
+  estado_interno: "Estado",
+  prioridad: "Prioridad",
+};
+
 type ProyectoConCelula = Proyecto & { celulaNombre?: string };
 
 type Celula = {
@@ -134,6 +151,7 @@ export default function DeliveryPage() {
   const [showCrear, setShowCrear] = useState(false);
   const [commentTarget, setCommentTarget] = useState<Proyecto | null>(null);
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
+  const [detalleTarget, setDetalleTarget] = useState<ProyectoConCelula | null>(null);
   // La primera carga fija la selección de células a "todas"; los refetch
   // posteriores (tras crear un Delivery) respetan lo que el usuario tenga
   // seleccionado.
@@ -213,15 +231,16 @@ export default function DeliveryPage() {
     }
   }
 
-  // Edición optimista de fecha_inicio_dev / fecha_entrega_propuesta desde la
-  // tarjeta. `valor` es 'YYYY-MM-DD' o null. Si el PATCH devuelve el proyecto
-  // (trae el autofill de fecha_inicio_dev cuando aplica), se usa esa versión.
+  // Edición optimista de fecha_inicio_dev / fecha_entrega_propuesta. `valor`
+  // es 'YYYY-MM-DD' o null; `nota` es un comentario opcional que se guarda en
+  // el log de cambios junto a esa edición. Devuelve true si el PATCH pasó.
   async function handleFechaChange(
     celulaId: string,
     projectId: string,
     campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
     valor: string | null,
-  ) {
+    nota?: string | null,
+  ): Promise<boolean> {
     let prev: string | null = null;
     setCelulas((cs) =>
       cs.map((c) =>
@@ -241,7 +260,7 @@ export default function DeliveryPage() {
     const res = await fetch(`/api/proyectos/${projectId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ [campo]: valor }),
+      body: JSON.stringify(nota ? { [campo]: valor, nota } : { [campo]: valor }),
     }).catch(() => null);
 
     if (!res || !res.ok) {
@@ -252,7 +271,34 @@ export default function DeliveryPage() {
             : { ...c, proyectos: c.proyectos.map((p) => (p.id === projectId ? { ...p, [campo]: prev } : p)) },
         ),
       );
+      return false;
     }
+
+    // El servidor puede haber autollenado fecha_inicio_dev (al pasar a 'en
+    // DEV'); reconciliar con la fila devuelta.
+    const actualizado = await res.json().catch(() => null);
+    if (actualizado?.id) {
+      setCelulas((cs) =>
+        cs.map((c) =>
+          c.id !== celulaId
+            ? c
+            : {
+                ...c,
+                proyectos: c.proyectos.map((p) =>
+                  p.id === projectId
+                    ? {
+                        ...p,
+                        fecha_inicio_dev: actualizado.fecha_inicio_dev ?? null,
+                        fecha_entrega_propuesta: actualizado.fecha_entrega_propuesta ?? null,
+                        estado_interno: actualizado.estado_interno ?? p.estado_interno,
+                      }
+                    : p,
+                ),
+              },
+        ),
+      );
+    }
+    return true;
   }
 
   const allSelected = celulas.length > 0 && selectedIds.length === celulas.length;
@@ -370,6 +416,7 @@ export default function DeliveryPage() {
                 proyectos={flatPrioridad}
                 editableFn={(p) => p.celula_owner_id === ownCelulaId || isSuperAdmin}
                 onFechaChange={handleFechaChange}
+                onOpenDetalle={setDetalleTarget}
               />
             ) : vista === "prioridad" ? (
               flatPrioridad.length === 0 ? (
@@ -477,6 +524,21 @@ export default function DeliveryPage() {
           onClose={() => setCommentTarget(null)}
           onCountChange={(n) =>
             setCommentCounts((prev) => ({ ...prev, [commentTarget.id]: n }))
+          }
+        />
+      )}
+
+      {detalleTarget && (
+        <RoadmapDetalleModal
+          proyecto={detalleTarget}
+          autorEmail={ownEmail}
+          editable={detalleTarget.celula_owner_id === ownCelulaId || isSuperAdmin}
+          onFechaChange={(campo, valor, nota) =>
+            handleFechaChange(detalleTarget.celula_owner_id, detalleTarget.id, campo, valor, nota)
+          }
+          onClose={() => setDetalleTarget(null)}
+          onCountChange={(n) =>
+            setCommentCounts((prev) => ({ ...prev, [detalleTarget.id]: n }))
           }
         />
       )}
@@ -1198,6 +1260,265 @@ function FechaEditor({
   );
 }
 
+// Modal de detalle de un proyecto del Roadmap: editar las dos fechas, ver el
+// log de cambios (project_changelog vía /api/proyectos/[id]/historial) y
+// dejar comentarios (project_comments, misma ruta que ComentariosModal).
+function RoadmapDetalleModal({
+  proyecto,
+  autorEmail,
+  editable,
+  onFechaChange,
+  onClose,
+  onCountChange,
+}: {
+  proyecto: ProyectoConCelula;
+  autorEmail: string | null;
+  editable: boolean;
+  onFechaChange: (
+    campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
+    valor: string | null,
+    nota?: string | null,
+  ) => Promise<boolean>;
+  onClose: () => void;
+  onCountChange: (n: number) => void;
+}) {
+  const [fechas, setFechas] = useState({
+    fecha_inicio_dev: proyecto.fecha_inicio_dev,
+    fecha_entrega_propuesta: proyecto.fecha_entrega_propuesta,
+  });
+  const [notaFecha, setNotaFecha] = useState("");
+  const [historial, setHistorial] = useState<Cambio[] | null>(null);
+  const [comentarios, setComentarios] = useState<Comentario[] | null>(null);
+  const [texto, setTexto] = useState("");
+  const [enviando, setEnviando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const cargarHistorial = useCallback(() => {
+    fetch(`/api/proyectos/${proyecto.id}/historial`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("No se pudo cargar el historial."))))
+      .then((data: Cambio[]) => setHistorial(data))
+      .catch(() => setHistorial([]));
+  }, [proyecto.id]);
+
+  useEffect(() => {
+    cargarHistorial();
+    fetch(`/api/proyectos/${proyecto.id}/comentarios`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error("No se pudieron cargar los comentarios."))))
+      .then((data: Comentario[]) => {
+        setComentarios(data);
+        onCountChange(data.length);
+      })
+      .catch(() => setComentarios([]));
+    // onCountChange se recrea cada render del padre; no debe re-disparar.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [proyecto.id, cargarHistorial]);
+
+  async function cambiarFecha(campo: "fecha_inicio_dev" | "fecha_entrega_propuesta", valor: string | null) {
+    const prev = fechas[campo];
+    setFechas((f) => ({ ...f, [campo]: valor }));
+    const ok = await onFechaChange(campo, valor, notaFecha.trim() || null);
+    if (!ok) {
+      setFechas((f) => ({ ...f, [campo]: prev }));
+      setError("No se pudo guardar la fecha.");
+      return;
+    }
+    setNotaFecha("");
+    setTimeout(cargarHistorial, 250);
+  }
+
+  async function enviarComentario() {
+    if (!texto.trim()) return;
+    setEnviando(true);
+    setError(null);
+    try {
+      const r = await fetch(`/api/proyectos/${proyecto.id}/comentarios`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ comentario: texto.trim() }),
+      });
+      if (!r.ok) {
+        const d = await r.json().catch(() => null);
+        throw new Error(d?.error ?? "No se pudo enviar el comentario.");
+      }
+      const nuevo: Comentario = await r.json();
+      setComentarios((prev) => {
+        const next = [...(prev ?? []), nuevo];
+        onCountChange(next.length);
+        return next;
+      });
+      setTexto("");
+    } catch (e: any) {
+      setError(e.message ?? "No se pudo enviar.");
+    } finally {
+      setEnviando(false);
+    }
+  }
+
+  function fmtRel(iso: string) {
+    return new Date(iso).toLocaleString("es-CO", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+  }
+  function fmtValor(campo: string, v: string | null) {
+    if (v == null || v === "") return "—";
+    if (campo.startsWith("fecha_")) return fmtFechaCorta(v) ?? v;
+    return v;
+  }
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24, zIndex: 100, backdropFilter: "blur(4px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff", border: "1px solid var(--border)", borderRadius: 16,
+          maxWidth: 520, width: "100%", padding: 20, maxHeight: "88vh", display: "flex", flexDirection: "column",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 12 }}>
+          <div>
+            <h3 style={{ fontSize: 15, fontWeight: 800, color: "var(--fg)", margin: 0 }}>
+              {proyecto.project_code ? `${proyecto.project_code} · ` : ""}{proyecto.name}
+            </h3>
+            <p style={{ fontSize: 12, color: "var(--muted)", margin: "2px 0 0" }}>
+              {proyecto.celulaNombre} · {proyecto.estado_interno ?? "sin estado"}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--gray-400)", padding: 4 }}
+          >
+            <X size={16} />
+          </button>
+        </div>
+
+        <div style={{ overflowY: "auto", marginTop: 14, display: "flex", flexDirection: "column", gap: 18 }}>
+          {/* Fechas */}
+          <section>
+            <p style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 8px" }}>
+              Fechas
+            </p>
+            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+              <FechaEditor
+                label="Inicio dev"
+                valor={fechas.fecha_inicio_dev}
+                editable={editable}
+                onChange={(v) => cambiarFecha("fecha_inicio_dev", v)}
+              />
+              <FechaEditor
+                label="Entrega propuesta"
+                valor={fechas.fecha_entrega_propuesta}
+                editable={editable}
+                onChange={(v) => cambiarFecha("fecha_entrega_propuesta", v)}
+              />
+            </div>
+            {editable && (
+              <input
+                value={notaFecha}
+                onChange={(e) => setNotaFecha(e.target.value)}
+                placeholder="Nota para el próximo cambio de fecha (opcional)"
+                style={{
+                  width: "100%", marginTop: 8, padding: "6px 10px", borderRadius: 8, border: "1px solid var(--border)",
+                  fontSize: 12, boxSizing: "border-box", fontFamily: "inherit",
+                }}
+              />
+            )}
+          </section>
+
+          {/* Log de cambios */}
+          <section>
+            <p style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 8px" }}>
+              Log de cambios
+            </p>
+            {historial === null && <p style={{ fontSize: 12, color: "var(--muted)" }}>Cargando…</p>}
+            {historial !== null && historial.length === 0 && (
+              <p style={{ fontSize: 12, color: "var(--gray-300)", fontStyle: "italic" }}>Sin cambios registrados.</p>
+            )}
+            {historial && historial.length > 0 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {historial.map((h) => (
+                  <div key={h.id} style={{ borderLeft: "2px solid var(--gray-100)", paddingLeft: 10 }}>
+                    <div style={{ fontSize: 11.5, color: "var(--fg)" }}>
+                      <strong>{CAMPO_LABEL[h.campo] ?? h.campo}</strong>{" "}
+                      <span style={{ color: "var(--gray-400)" }}>{fmtValor(h.campo, h.valor_anterior)}</span>
+                      {" → "}
+                      <span style={{ fontWeight: 700 }}>{fmtValor(h.campo, h.valor_nuevo)}</span>
+                    </div>
+                    {h.nota && <div style={{ fontSize: 11.5, color: "var(--fg)", marginTop: 1 }}>“{h.nota}”</div>}
+                    <div style={{ fontSize: 10, color: "var(--gray-400)", marginTop: 1 }}>
+                      {h.autor === autorEmail ? "Tú" : h.autor ?? "—"} · {fmtRel(h.created_at)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+
+          {/* Comentarios */}
+          <section>
+            <p style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 8px" }}>
+              Comentarios
+            </p>
+            {comentarios === null && <p style={{ fontSize: 12, color: "var(--muted)" }}>Cargando…</p>}
+            {comentarios !== null && comentarios.length === 0 && (
+              <p style={{ fontSize: 12, color: "var(--gray-300)", fontStyle: "italic" }}>Sin comentarios todavía.</p>
+            )}
+            {comentarios && comentarios.length > 0 && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 10 }}>
+                {comentarios.map((c) => (
+                  <div key={c.id} style={{ borderLeft: "2px solid var(--gray-100)", paddingLeft: 10 }}>
+                    <div style={{ display: "flex", gap: 6, alignItems: "baseline", flexWrap: "wrap" }}>
+                      <span style={{ fontSize: 11.5, fontWeight: 700, color: "var(--fg)" }}>
+                        {c.autor === autorEmail ? "Tú" : c.autor}
+                      </span>
+                      <span style={{ fontSize: 10, color: "var(--gray-400)" }}>{fmtRel(c.created_at)}</span>
+                    </div>
+                    <p style={{ fontSize: 12.5, color: "var(--fg)", margin: "2px 0 0", lineHeight: 1.4, whiteSpace: "pre-wrap" }}>
+                      {c.comentario}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <textarea
+                value={texto}
+                onChange={(e) => setTexto(e.target.value)}
+                placeholder="Escribe un comentario…"
+                rows={2}
+                style={{
+                  width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)",
+                  fontSize: 13, boxSizing: "border-box", fontFamily: "inherit", resize: "vertical",
+                }}
+              />
+              <button
+                type="button"
+                disabled={!texto.trim() || enviando}
+                onClick={enviarComentario}
+                style={{
+                  alignSelf: "flex-end",
+                  fontSize: 12.5, fontWeight: 700, fontFamily: "inherit", padding: "7px 14px", borderRadius: 8, border: "none",
+                  background: texto.trim() ? "var(--dropi)" : "var(--gray-200)", color: texto.trim() ? "#fff" : "var(--muted)",
+                  cursor: texto.trim() && !enviando ? "pointer" : "not-allowed",
+                }}
+              >
+                {enviando ? "Enviando…" : "Comentar"}
+              </button>
+            </div>
+          </section>
+        </div>
+
+        {error && <p style={{ fontSize: 12, color: "#DC2626", margin: "10px 0 0" }}>{error}</p>}
+      </div>
+    </div>
+  );
+}
+
 // ─── Roadmap / Gantt ──────────────────────────────────────────────────────
 // Barras de los Delivery Proyecto que ya tienen fecha de entrega propuesta,
 // de fecha_inicio_dev (o created_at, o la misma entrega si no hay nada) a
@@ -1230,6 +1551,7 @@ function GanttBoard({
   proyectos,
   editableFn,
   onFechaChange,
+  onOpenDetalle,
 }: {
   proyectos: ProyectoConCelula[];
   editableFn: (p: Proyecto) => boolean;
@@ -1239,6 +1561,7 @@ function GanttBoard({
     campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
     valor: string | null,
   ) => void;
+  onOpenDetalle: (p: ProyectoConCelula) => void;
 }) {
   const hoy = new Date();
   hoy.setHours(0, 0, 0, 0);
@@ -1296,7 +1619,8 @@ function GanttBoard({
     grupo.items.push(b);
   }
 
-  const LABEL_W = 220;
+  const LABEL_W = 300;
+  const ROW_H = 54;
 
   return (
     <div>
@@ -1347,9 +1671,10 @@ function GanttBoard({
                 const left = difDias(min, ini) * PX_POR_DIA;
                 const width = Math.max(PX_POR_DIA, (difDias(ini, finBarra) + 1) * PX_POR_DIA);
                 const color = ESTADO_BAR_COLOR[p.estado_interno ?? ""] ?? "#94A3B8";
+                const puedeEditar = editableFn(p);
                 return (
-                  <div key={p.id} style={{ display: "flex", alignItems: "center", borderBottom: "1px solid var(--gray-100)", minHeight: 34 }}>
-                    <div style={{ flex: `0 0 ${LABEL_W}px`, padding: "4px 12px", overflow: "hidden" }}>
+                  <div key={p.id} style={{ display: "flex", alignItems: "stretch", borderBottom: "1px solid var(--gray-100)", minHeight: ROW_H }}>
+                    <div style={{ flex: `0 0 ${LABEL_W}px`, padding: "6px 12px", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center", gap: 3 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
                         {p.project_code && (
                           <span style={{ fontSize: 9, fontWeight: 700, color: "var(--dropi)", background: "var(--dropi-light)", borderRadius: 3, padding: "0 4px" }}>
@@ -1360,18 +1685,43 @@ function GanttBoard({
                           {p.name}
                         </Link>
                       </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "2px 10px", flexWrap: "wrap" }}>
+                        <FechaEditor
+                          label="Inicio"
+                          valor={p.fecha_inicio_dev}
+                          editable={puedeEditar}
+                          onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_inicio_dev", v)}
+                        />
+                        <FechaEditor
+                          label="Entrega"
+                          valor={p.fecha_entrega_propuesta}
+                          editable={puedeEditar}
+                          onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_entrega_propuesta", v)}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => onOpenDetalle(p)}
+                          style={{
+                            fontSize: 9.5, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
+                            border: "none", background: "transparent", color: "var(--dropi)", padding: 0,
+                          }}
+                        >
+                          Detalles
+                        </button>
+                      </div>
                     </div>
-                    <div style={{ position: "relative", width: anchoTotal, height: 34 }}>
+                    <div style={{ position: "relative", width: anchoTotal, minHeight: ROW_H }}>
                       {/* línea de hoy */}
                       {hoyLeft >= 0 && hoyLeft <= anchoTotal && (
                         <div style={{ position: "absolute", left: hoyLeft, top: 0, bottom: 0, width: 1, background: "#DC2626", opacity: 0.5 }} />
                       )}
                       <div
+                        onClick={() => onOpenDetalle(p)}
                         title={`${p.name}\n${fechaCortaDeDate(ini)} → ${fechaCortaDeDate(finBarra)}\n${p.estado_interno ?? "sin estado"}`}
                         style={{
                           position: "absolute",
                           left,
-                          top: 8,
+                          top: (ROW_H - 18) / 2,
                           width,
                           height: 18,
                           background: color,
@@ -1384,6 +1734,7 @@ function GanttBoard({
                           color: "#fff",
                           whiteSpace: "nowrap",
                           overflow: "hidden",
+                          cursor: "pointer",
                         }}
                       >
                         {p.prioridad ?? ""}
@@ -1428,7 +1779,23 @@ function GanttBoard({
                   {p.name}
                 </Link>
                 <span style={{ fontSize: 10, color: "var(--gray-400)" }}>({p.celulaNombre})</span>
-                <span style={{ marginLeft: "auto" }}>
+                <button
+                  type="button"
+                  onClick={() => onOpenDetalle(p)}
+                  style={{
+                    fontSize: 9.5, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
+                    border: "none", background: "transparent", color: "var(--dropi)", padding: 0,
+                  }}
+                >
+                  Detalles
+                </button>
+                <span style={{ marginLeft: "auto", display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  <FechaEditor
+                    label="Inicio"
+                    valor={p.fecha_inicio_dev}
+                    editable={editableFn(p)}
+                    onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_inicio_dev", v)}
+                  />
                   <FechaEditor
                     label="Entrega prop."
                     valor={p.fecha_entrega_propuesta}

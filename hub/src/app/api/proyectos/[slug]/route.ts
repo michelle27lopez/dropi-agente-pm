@@ -352,6 +352,27 @@ export async function PATCH(req: NextRequest, context: any) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Log de cambios (best-effort — no tumba el PATCH si falla). Una fila por
+  // campo "de gestión" que cambió de valor. `nota` es un comentario opcional
+  // que el front adjunta a esa edición puntual. Ver 054_darwin_project_changelog.sql.
+  const CAMPOS_LOG = ["fecha_inicio_dev", "fecha_entrega_propuesta", "estado_interno", "prioridad"] as const;
+  const nota = typeof body.nota === "string" && body.nota.trim() ? body.nota.trim() : null;
+  const filasLog = CAMPOS_LOG.filter((campo) => campo in update && (project as any)[campo] !== (data as any)[campo]).map(
+    (campo) => ({
+      project_id: project.id,
+      autor: (caller as any).email ?? null,
+      campo,
+      valor_anterior: (project as any)[campo] != null ? String((project as any)[campo]) : null,
+      valor_nuevo: (data as any)[campo] != null ? String((data as any)[campo]) : null,
+      nota,
+    }),
+  );
+  if (filasLog.length > 0) {
+    const { error: logError } = await supabase.from("project_changelog").insert(filasLog);
+    if (logError) console.warn("[proyectos PATCH] no se pudo escribir project_changelog:", logError.message);
+  }
+
   return NextResponse.json(data);
 }
 
