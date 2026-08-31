@@ -1241,7 +1241,170 @@ export type Weekly = {
 // Cada semana es una entrada. La primera del array es la más reciente (la que se
 // muestra por defecto). NO borrar semanas viejas: el switch de /updates las conserva.
 export const weeklies: Weekly[] = [
-  // ── Semana 27 – 31 jul 2026 (actual) ────────────────────────────────────────
+  // ── Semana 18 – 22 ago 2026 (actual) ────────────────────────────────────────
+  {
+    id: "2026-w34",
+    fecha: "Viernes 22 de agosto de 2026",
+    semana: "Semana 18 – 22 ago",
+    foco:
+      "Semana de aportes a la célula: se entregaron dos POCs completos — Autoconfirmación × ChateaPro (LOG-019) y Servicios en Bodega (LOG-020). El POC de Servicios en Bodega avanzó de prototipo a especificación de diseño completa: sistema de diseño, modelo de estados de dos máquinas, accesibilidad WCAG 2.2 AA y plan de ejecución en 6 fases. Autoconfirmación consolidó wizard, hallazgos de ChateaPro y gates pendientes en ficha de discovery publicada.",
+
+    comparacionMensual: {
+      titulo: "Cierre julio — pendiente de consolidación",
+      alcance: "Consolidado de 9 países, ponderado por volumen. Julio en proceso de cierre.",
+      lectura:
+        "El avance de la semana fue de especificación y diseño, no de cifra. Los dos POCs entregados (Autoconfirmación × ChateaPro y Servicios en Bodega) aterrizaron como fichas de discovery en el tablero y como especificaciones ejecutables. El indicador de movilización sigue sin cierre nuevo de julio.",
+      entregaNota:
+        "% entrega sigue sin ser comparable hasta tener el export por cohorte de Data.",
+      filas: [
+        { metrica: "Movilización", abril: "81,9%", mayo: "82,3%", junio: "82,3%", delta: "≈ 0 · plano", tono: "alerta" },
+        { metrica: "No movilizado", abril: "700.281", mayo: "716.957", junio: "737.865", delta: "+20.908", tono: "malo" },
+        { metrica: "Órdenes", abril: "3,86M", mayo: "4,04M", junio: "4,17M", delta: "+3,3%", tono: "bueno" },
+      ],
+    },
+
+    avanceInvestigacion: {
+      titulo: "Aportes a la célula — semana 19 ago",
+      descripcion:
+        "Dos POCs entregados como fichas de discovery publicadas en el tablero. Autoconfirmación integra hallazgos de ChateaPro; Servicios en Bodega escala de prototipo a especificación completa con modelo de estados y sistema de diseño.",
+      pasos: [
+        { nombre: "Confirmación", detalle: "POC Autoconfirmación × ChateaPro publicado (LOG-019)", estado: "listo" },
+        { nombre: "Servicios Bodega", detalle: "POC Servicios en Bodega especificado: diseño + modelo de estados (LOG-020)", estado: "listo" },
+        { nombre: "Gates pendientes", detalle: "Gate ChateaPro (autoconfirmación) + D-11 disputed (bodega)", estado: "activo" },
+        { nombre: "Implementación", detalle: "6 fases definidas para Servicios en Bodega; Autoconf. pendiente de gate", estado: "siguiente" },
+      ],
+    },
+
+    focoSiguienteSemana: [
+      "Servicios en Bodega: resolver P-01 (confirmar estado disputed en enum) y P-03 (valores iniciales de tarifa por país) antes de ejecutar el Prompt B de migración — Responsable: Michel Pino / Facturación.",
+      "Autoconfirmación × ChateaPro: resolver el gate abierto con ChateaPro (¿tolera un gate antes de su disparo?) — Responsable: Michel Pino / Juan Diego.",
+      "Servicios en Bodega: ejecutar Fase 0 (modelo de estados — migración SQL, funciones de transición, jobs, RLS) — Responsable: Michel Pino.",
+      "Autoconfirmación: incorporar los 3 hallazgos de mayor frecuencia al prototipo RPP (impacto en ganancia, precios flete, alerta pérdida) — Responsable: Michel Pino.",
+    ],
+
+    indicadores: [
+      {
+        nombre: "Movilización consolidada",
+        valor: "82,3%",
+        tono: "alerta",
+        estado: "Plano",
+        nota: "Sin cierre nuevo de julio. Autoconfirmación × ChateaPro ataca esta palanca — el gate con ChateaPro es el blocker.",
+      },
+      {
+        nombre: "Revenue leakage bodega",
+        valor: "$2.9M–6.4M MXN/mes",
+        tono: "malo",
+        estado: "Especificado",
+        nota: "POC Servicios en Bodega cuantificó la fuga en 12 países. 4 de 5 servicios no se cobran. Especificación de diseño y modelo de estados listos para implementación.",
+      },
+      {
+        nombre: "POCs entregados a la célula",
+        valor: "2",
+        tono: "bueno",
+        estado: "Publicados",
+        nota: "LOG-019 (Autoconfirmación × ChateaPro) y LOG-020 (Servicios en Bodega) publicados como fichas de discovery en el tablero.",
+      },
+    ] as IndicadorHoy[],
+
+    brecha: {
+      actual: 73.5, actualLabel: "73,5% crudo CO",
+      meta: 70, metaLabel: "70%",
+      gap: "No comparable", metaQ3: "Pendiente cohorte",
+      paisFoco: "Colombia representa 73% del negocio.",
+      lectura: "Julio sigue madurando; no se usa esta cifra para evaluar el KR.",
+      perdidas: [],
+    },
+    tiempo: {
+      lectura:
+        "El foco de la semana fue especificación de diseño, no reducción de tiempos. Los dos POCs aportan a fases distintas: Autoconfirmación a Confirmación (pre-red), Servicios en Bodega a Despacho/fulfillment.",
+      dropi: [
+        { fase: "Ruta Dropi hasta transportadora", horas: 44.9, metaHoras: 24, responsable: "Célula", palanca: "POC Autoconfirmación × ChateaPro ataca confirmación" },
+      ],
+      carrier: [
+        { fase: "Maduración de entrega", horas: 24, metaHoras: 24, palanca: "comparar cohortes cerradas" },
+      ],
+      proximosPasos: ["Resolver gates pendientes de ambos POCs y ejecutar Fase 0 de Servicios en Bodega (modelo de estados)."],
+    },
+    hallazgos: [],
+
+    secciones: [
+      {
+        titulo: "Aportes a la célula",
+        nota: "POCs entregados esta semana como fichas de discovery publicadas.",
+        proyectos: [
+          {
+            nombre: "POC Autoconfirmación × ChateaPro",
+            ticket: "PRM-1497",
+            estado: "Publicado · gate pendiente",
+            estadoTono: "ambar",
+            nota:
+              "Wizard de 3 pasos integrado con ChateaPro: reglas con impacto económico, comunicación automática al cliente y simulador con acciones por orden. Ficha de discovery publicada con concepto, hallazgos de sesiones con ChateaPro y gates pendientes. El gate abierto: ¿ChateaPro tolera un gate antes de su disparo?",
+            enlace: { label: "Ver POC Autoconfirmación × ChateaPro", href: "/proyectos/logistica/poc-autoconfirmacion-chateapro" },
+          },
+          {
+            nombre: "POC Servicios en Bodega",
+            ticket: "PRM-1446",
+            estado: "Especificado · listo para Fase 0",
+            estadoTono: "verde",
+            nota:
+              "Escaló de prototipo a especificación completa: benchmark de 24 referencias, sistema de diseño (Inter Variable, tokens, densidad), modelo de estados de dos máquinas (ciclo del periodo + ciclo del cobro), accesibilidad WCAG 2.2 AA, métricas de esfuerzo con KLM, y plan de ejecución en 6 fases. Hallazgo estructural: el sistema mezclaba en un solo campo '¿este número puede cambiar?' y '¿esta plata entró?' — causa raíz de las reversas manuales.",
+            impacto: "Revenue leakage estimado: $2.9M–6.4M MXN/mes en 12 países. 4 de 5 servicios sin cobrar.",
+            enlace: { label: "Ver POC Servicios en Bodega", href: "/proyectos/logistica/poc-servicios-bodega" },
+          },
+        ],
+      },
+      {
+        titulo: "Experimentos",
+        nota: "Validar la palanca y su impacto antes de escalar desarrollo.",
+        proyectos: [
+          {
+            nombre: "Autoconfirmación de órdenes",
+            ticket: "PRM-1497",
+            estado: "POC con hallazgos",
+            estadoTono: "ambar",
+            nota:
+              "Las pruebas de usabilidad (6 usuarios) siguen vigentes: Claridad 58, Satisfacción 81. Los 3 hallazgos de mayor frecuencia (impacto ganancia, precios flete, alerta pérdida) están pendientes de incorporar al prototipo RPP.",
+            enlace: { label: "Ver resultados del experimento", href: "/proyectos/logistica/experimentos/autoconfirmacion" },
+          },
+          {
+            nombre: "Vigía",
+            estado: "En iteración",
+            estadoTono: "gris",
+            nota: "Sin cambios esta semana.",
+          },
+        ],
+      },
+      {
+        titulo: "Delivery Road map · WIP = 1",
+        nota: "Una iniciativa activa; el resto conserva su posición explícita.",
+        proyectos: [
+          {
+            nombre: "Normalización de estados",
+            ticket: "PRM-1297",
+            estado: "Pendiente enviar a María",
+            estadoTono: "ambar",
+            nota: "Prioridad #1 del Delivery. Propuesta organizada, pendiente de envío.",
+          },
+          {
+            nombre: "Same Day",
+            ticket: "PRM-1366",
+            estado: "Inv. y definición",
+            estadoTono: "gris",
+            nota: "Sin cambios esta semana.",
+          },
+          {
+            nombre: "Fulfillment",
+            ticket: "PRM-1446",
+            estado: "Listo para hand off",
+            estadoTono: "ambar",
+            nota: "Diseño validado, en 'Listo para hand off'.",
+          },
+        ],
+      },
+    ] as SeccionProyectos[],
+  },
+
+  // ── Semana 27 – 31 jul 2026 ────────────────────────────────────────────────
   {
     id: "2026-w31",
     fecha: "Viernes 31 de julio de 2026",
