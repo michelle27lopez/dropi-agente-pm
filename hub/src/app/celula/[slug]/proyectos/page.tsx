@@ -75,6 +75,10 @@ export default function ProyectosPorCelulaPage() {
   // Alta de POC / Delivery Proyecto desde la tabla (menú "⋮" de cada fila
   // Discovery) — evita entrar a la ficha solo para colgar un hijo.
   const [crearTarget, setCrearTarget] = useState<{ parent: Proyecto; tipo: "POC" | "Delivery Proyecto" } | null>(null);
+  // Alta de un Discovery project raíz (sin padre). El botón vivía solo en la
+  // home de la célula (/celula/[slug]), que dejó de estar en el nav global —
+  // "Proyectos" del sidebar entra acá, así que el botón tiene que estar acá.
+  const [showCrearRaiz, setShowCrearRaiz] = useState(false);
   // Modo lectura (2026-08-17, Jaime): mismo criterio que la home de célula —
   // ver la tabla de una célula que no es la tuya ya no deja editar/eliminar
   // sin distinción visual. "Editar de todos modos" es el escape hatch.
@@ -189,6 +193,24 @@ export default function ProyectosPorCelulaPage() {
     setCrearTarget(null);
   }
 
+  // Crea un Discovery project raíz (type "Idea", handoff "Experimentación")
+  // en la célula de la URL — mismo POST /api/celulas/[slug] que usa la home
+  // de la célula. El servidor exige ser miembro de esa célula.
+  async function handleCrearRaiz(name: string, summary: string) {
+    const res = await fetch(`/api/celulas/${params.slug}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      throw new Error(data?.error ?? "No se pudo crear el proyecto.");
+    }
+    const created = await res.json();
+    setProyectosReales((prev) => [...prev, created]);
+    setShowCrearRaiz(false);
+  }
+
   // POC hermanos (mismo Discovery padre) entre los que un Delivery Proyecto
   // nuevo puede elegir su `related_poc_id` opcional.
   const siblingPocs = crearTarget
@@ -239,9 +261,24 @@ export default function ProyectosPorCelulaPage() {
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <div className="gnav-page" style={{ flex: 1, maxWidth: 1280, margin: "0 auto", width: "100%" }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>
-          Proyectos {celulaNombre && <span style={{ color: "var(--muted)", fontWeight: 600 }}>· {celulaNombre}</span>}
-        </h1>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>
+            Proyectos {celulaNombre && <span style={{ color: "var(--muted)", fontWeight: 600 }}>· {celulaNombre}</span>}
+          </h1>
+          {canEditar && (
+            <button
+              type="button"
+              onClick={() => setShowCrearRaiz(true)}
+              style={{
+                fontSize: 12, fontWeight: 700, color: "#F77F00", fontFamily: "inherit",
+                background: "#FFF7ED", border: "1px solid #FFEDD5", borderRadius: 8,
+                padding: "8px 14px", cursor: "pointer",
+              }}
+            >
+              + Nuevo proyecto
+            </button>
+          )}
+        </div>
 
         {!esCelulaPropia && isSuperAdmin && (
           <div style={{ marginTop: 20 }}>
@@ -403,6 +440,14 @@ export default function ProyectosPorCelulaPage() {
           onConfirm={(name, summary, relatedPocId) =>
             handleCrearHijo(crearTarget.parent, crearTarget.tipo, name, summary, relatedPocId)
           }
+        />
+      )}
+
+      {showCrearRaiz && (
+        <CrearRaizModal
+          celulaNombre={celulaNombre}
+          onCancel={() => setShowCrearRaiz(false)}
+          onConfirm={handleCrearRaiz}
         />
       )}
     </main>
@@ -875,6 +920,108 @@ function CrearHijoModal({
             style={{
               fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8, border: "none",
               background: puedeCrear ? acento : "var(--gray-200)", color: puedeCrear ? "#fff" : "var(--muted)",
+              cursor: puedeCrear && !saving ? "pointer" : "not-allowed",
+            }}
+          >
+            {saving ? "Creando…" : "Crear"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Alta de un Discovery project raíz (sin padre). Nace como `type: "Idea"` /
+// handoff "Experimentación" — el arranque de fase Discovery. Después se
+// promueve a POC/Delivery desde el menú "⋮" de su fila.
+function CrearRaizModal({
+  celulaNombre,
+  onCancel,
+  onConfirm,
+}: {
+  celulaNombre: string | null;
+  onCancel: () => void;
+  onConfirm: (name: string, summary: string) => Promise<void>;
+}) {
+  const [name, setName] = useState("");
+  const [summary, setSummary] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const puedeCrear = name.trim().length > 0 && summary.trim().length > 0;
+
+  async function handleConfirm() {
+    setSaving(true);
+    setError(null);
+    try {
+      await onConfirm(name.trim(), summary.trim());
+    } catch (e: any) {
+      setError(e.message ?? "No se pudo crear.");
+      setSaving(false);
+    }
+  }
+
+  const inputStyle: CSSProperties = {
+    width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)",
+    fontSize: 13, boxSizing: "border-box", fontFamily: "inherit", background: "var(--card)", color: "var(--fg)",
+  };
+
+  return (
+    <div
+      onClick={onCancel}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24, zIndex: 100, backdropFilter: "blur(4px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+          maxWidth: 440, width: "100%", padding: 24,
+        }}
+      >
+        <h3 style={{ fontSize: 16, fontWeight: 800, color: "var(--fg)", margin: "0 0 4px" }}>
+          Nuevo proyecto
+        </h3>
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 16px", lineHeight: 1.5 }}>
+          Entra en fase <strong>Discovery</strong>{celulaNombre ? `, en ${celulaNombre}` : ""}. Luego se le cuelgan POC y Delivery desde su fila.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <input
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nombre del proyecto"
+            style={inputStyle}
+          />
+          <textarea
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            placeholder="De qué se trata"
+            rows={3}
+            style={{ ...inputStyle, resize: "vertical" }}
+          />
+        </div>
+        {error && <p style={{ fontSize: 12, color: "#DC2626", margin: "12px 0 0" }}>{error}</p>}
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8,
+              border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)", cursor: "pointer",
+            }}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            disabled={!puedeCrear || saving}
+            onClick={handleConfirm}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8, border: "none",
+              background: puedeCrear ? "#F77F00" : "var(--gray-200)", color: puedeCrear ? "#fff" : "var(--muted)",
               cursor: puedeCrear && !saving ? "pointer" : "not-allowed",
             }}
           >
