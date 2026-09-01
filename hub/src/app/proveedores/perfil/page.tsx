@@ -4,7 +4,7 @@ import { SectionCard, H1, H2, H3, P, Fuente, Vacio, Discrepancia, Callout, Tabla
 
 // ── Distribución por nivel · Supabase userpilot_suppliers, registros al 3-ago-2026
 const NIVELES = [
-  { nivel: "Sin clasificar", total: 102751, co: "—", mx: "—", ec: "—", color: "#9CA3AF" },
+  { nivel: "No Verificado", total: 102751, co: "—", mx: "—", ec: "—", color: "#9CA3AF" },
   { nivel: "Verificado", total: 696, co: "664", mx: "3", ec: "2", color: "var(--info)" },
   { nivel: "Premium", total: 96, co: "93", mx: "0", ec: "0", color: "var(--dropi)" },
   { nivel: "Premium Exclusivo", total: 61, co: "58", mx: "0", ec: "0", color: "#8B5CF6" },
@@ -54,6 +54,42 @@ const CATEGORIAS = [
   { label: "Mascotas, bebés, deportes y vehículos", n: 88, pct: 3.94 },
 ];
 
+// ── Perfil cuantitativo por nivel — síntesis de reglas + conteo real, no investigación cualitativa
+const PERFIL_NIVEL = [
+  {
+    nivel: "No Verificado",
+    color: "#9CA3AF",
+    n: "102.751 (98,9% del total, nivel por defecto)",
+    entra: "Sin requisitos de entrada, sin antigüedad mínima",
+    comportamiento: "Excluido del sistema de recomendación de catálogo: no aparece cuando Gali/ADA Spy sugiere proveedores a un dropshipper",
+    gana: "Solo la plataforma base, sin beneficios comerciales adicionales",
+  },
+  {
+    nivel: "Verificado",
+    color: "var(--info)",
+    n: "696 (664 en Colombia)",
+    entra: "Mínimo 3.000 órdenes/trimestre, 3 meses de antigüedad, certificación obligatoria",
+    comportamiento: "Uso obligatorio de Ecom Scanner (dejar de usarlo es motivo de descenso) y confirmación de pedidos por Chatea Pro; despacho menor a 48h",
+    gana: "Visibilidad, catálogo, aprobación automática, insignias y Plan Kanguro de garantías",
+  },
+  {
+    nivel: "Premium",
+    color: "var(--dropi)",
+    n: "96 (93 en Colombia)",
+    entra: "Mínimo 20.000 órdenes/trimestre (o 45.000 según la otra fuente, ver discrepancia abajo), 6 meses de antigüedad, Cámara de Comercio",
+    comportamiento: "Despacho menor a 24h, garantías 100% en menos de 24h; primero en el sistema de recomendación de catálogo",
+    gana: "Todo lo de Verificado, más atención personalizada, informe mensual, back office logístico y presencia en showroom",
+  },
+  {
+    nivel: "Premium Exclusivo",
+    color: "#8B5CF6",
+    n: "61 (58 en Colombia)",
+    entra: "Contrato propio negociado con Dropi (requisitos operativos no confirmados, ver discrepancia abajo)",
+    comportamiento: "Prioridad total en recomendación de catálogo",
+    gana: "Todo lo de Premium, más créditos de importación y gestión de inventarios",
+  },
+];
+
 const BENEFICIOS = [
   {
     nivel: "Verificado",
@@ -84,10 +120,12 @@ export default function PerfilPage() {
           comercial. Sobre ella se apoya todo lo demás.
         </P>
 
-        <Callout icon="⚠️" color="var(--danger)">
-          El 98,9% de los registros de proveedor no tiene nivel asignado en la base. La segmentación
-          oficial existe en las reglas y en el discurso comercial, pero como dato solo cubre a 1.141
-          usuarios de 103.892.
+        <Callout icon="ℹ️" color="var(--info)">
+          El 98,9% de los registros está en No Verificado — el nivel por defecto antes de que un proveedor
+          se verifique. En la base esto no se escribe como un valor propio: el campo queda vacío o con «-»
+          (48.508 nulos y 54.241 con guion, ambos leídos como No Verificado). No es un dato faltante, es
+          cómo se representa este nivel. El vacío real es otro: 288 registros con un valor que no es
+          ninguno de los 4 niveles oficiales (ver más abajo).
         </Callout>
       </SectionCard>
 
@@ -96,9 +134,9 @@ export default function PerfilPage() {
 
         <KPIRow>
           <KPI valor="103.892" label="Registros de proveedor" sub="CO 87.107 · MX 929 · EC 766" />
-          <KPI valor="1.141" label="Con nivel asignado" sub="1,1% del total" color="var(--warning)" />
-          <KPI valor="853" label="Con nivel oficial" sub="Verificado, Premium o Exclusivo" color="var(--info)" />
-          <KPI valor="288" label="Con valor no documentado" sub="Nivel que no existe en ninguna regla" color="var(--danger)" />
+          <KPI valor="102.751" label="No Verificado" sub="98,9% · nivel por defecto, campo vacío o «-»" color="#9CA3AF" />
+          <KPI valor="853" label="Con nivel oficial superior" sub="Verificado, Premium o Exclusivo · 0,8%" color="var(--info)" />
+          <KPI valor="288" label="Con valor no documentado" sub="0,3% · nivel que no existe en ninguna regla" color="var(--danger)" />
         </KPIRow>
 
         <Tabla head={["Nivel", "Total", "Colombia", "México", "Ecuador"]}>
@@ -115,7 +153,7 @@ export default function PerfilPage() {
         <Fuente
           origen="Supabase · tabla userpilot_suppliers, campo tipo_proveedor. El campo se llena cruzando el export de Dropi contra los registros de UserPilot (hub/supabase/seed_operational_data.py)"
           corte="registros hasta el 3-ago-2026"
-          nota="Sin clasificar agrupa los valores vacíos y el guion: 48.508 nulos y 54.241 con «-»."
+          nota="No Verificado no se escribe como valor explícito en el campo: agrupa 48.508 registros nulos y 54.241 con «-», que es como la base representa a quien todavía no se ha verificado."
         />
 
         <Callout icon="🌎" color="var(--info)">
@@ -196,6 +234,42 @@ export default function PerfilPage() {
           las recomendaciones. Un proveedor sin nivel no compite: no aparece.
         </Callout>
         <Fuente origen="Reglas de recomendación de catálogo del agente Gali/ADA Spy, documentadas en RB-004 §1" corte="jul-2026" />
+      </SectionCard>
+
+      <SectionCard>
+        <H2>Perfil por nivel</H2>
+        <P>
+          Esto no es investigación cualitativa ni personas de research: es una síntesis de las reglas
+          oficiales y el conteo real de usuarios por nivel. No hay entrevistas a proveedores todavía (ver
+          «Lo que sigue sin saberse», al final), así que ningún nivel tiene una historia, una foto ni una
+          cita — solo lo que las reglas de negocio y la base de datos confirman.
+        </P>
+
+        {PERFIL_NIVEL.map((p) => (
+          <div key={p.nivel} style={{ marginBottom: 16 }}>
+            <div style={{ marginBottom: 8 }}>
+              <Tag color={p.color}>{p.nivel}</Tag>
+            </div>
+            <Tabla head={["Cuántos hay", "Cómo se entra", "Comportamiento confirmado", "Qué gana"]}>
+              <tr>
+                <Td bold>{p.n}</Td>
+                <Td>{p.entra}</Td>
+                <Td>{p.comportamiento}</Td>
+                <Td>{p.gana}</Td>
+              </tr>
+            </Tabla>
+          </div>
+        ))}
+        <Fuente
+          origen="Síntesis propia sobre research-brain/RB-004, hub/supabase/019_supplier_ascenso_panel.sql y Supabase userpilot_suppliers — mismas fuentes ya citadas arriba, sin dato nuevo"
+          corte="jul–ago 2026"
+        />
+
+        <Callout icon="⚠️" color="var(--warning)">
+          El perfilamiento de entrada de UserPilot (siguiente sección, n=7.678) es agregado: no está cruzado
+          contra el nivel oficial del proveedor. No se puede afirmar, por ejemplo, qué categoría vende más un
+          Premium que un Verificado — esa pregunta no tiene respuesta con los datos disponibles hoy.
+        </Callout>
       </SectionCard>
 
       <SectionCard>

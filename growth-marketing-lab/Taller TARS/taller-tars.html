@@ -1,0 +1,2790 @@
+<style>
+  :root{
+    --bg:#0A0908;
+    --bg-soft:#191309;
+    --surface:#17130F;
+    --surface-2:#1D170F;
+    --border:rgba(243,237,226,0.13);
+    --border-strong:rgba(243,237,226,0.22);
+    --ink:#F3EDE2;
+    --ink-soft:#B7AF9E;
+    --muted:#8A8074;
+    --muted-2:#655C4E;
+    --accent:#FF6A1A;
+    --accent-2:#FFAB6E;
+    --accent-deep:#7A2C0C;
+    --accent-wash:rgba(255,106,26,0.09);
+    --good:#33C285;
+    --good-wash:rgba(51,194,133,0.12);
+    --warn:#E0A012;
+    --warn-wash:rgba(224,160,18,0.12);
+    --bad:#FF6B5E;
+    --bad-wash:rgba(255,107,94,0.12);
+    --shadow-sm:0 1px 0 rgba(255,255,255,0.02), 0 6px 16px rgba(0,0,0,0.35);
+    --shadow-md:0 1px 0 rgba(255,255,255,0.03), 0 14px 34px rgba(0,0,0,0.5);
+    --radius:14px;
+    --radius-sm:8px;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ background:var(--bg); }
+  body{
+    margin:0;
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4,p,ul,figure{ margin:0; }
+  ul{ padding:0; list-style:none; }
+  button{ font-family:inherit; }
+
+  :focus-visible{
+    outline:2.5px solid var(--accent-2);
+    outline-offset:2px;
+    border-radius:4px;
+  }
+
+  .kicker, .pill, .eyebrow-tag, .nav-brand, .nav-count, .nav-act,
+  .formula-row, .slider-value, .funnel-top .val, .st-label, .bn-label,
+  .quad-label, .matrix-axis-x, .matrix-axis-y, .contrast-label,
+  .act-num, .fn-tag, .num, #toc-panel button{
+    font-family:var(--mono);
+  }
+
+  /* ================= layout shell ================= */
+  #deck{
+    position:relative;
+    min-height:100dvh;
+    padding-bottom:88px;
+    background:
+      radial-gradient(ellipse 900px 560px at 92% 0%, rgba(255,106,26,0.14), transparent 60%),
+      radial-gradient(ellipse 1100px 700px at 4% 100%, rgba(122,44,12,0.22), transparent 55%),
+      var(--bg);
+  }
+  .slide{
+    display:none;
+    min-height:calc(100dvh - 88px);
+    padding:72px 48px 64px;
+  }
+  .slide.is-active{ display:block; }
+  .slide-inner{
+    max-width:760px;
+    margin:0 auto;
+  }
+  .slide-inner.wide{ max-width:1080px; }
+  .slide-inner.xwide{ max-width:1220px; }
+  .slide-inner.narrow{ max-width:600px; }
+
+  @media (max-width:720px){
+    .slide{ padding:56px 22px 48px; }
+  }
+
+  /* ================= typography ================= */
+  .kicker{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    margin-bottom:18px;
+  }
+  .kicker::before{
+    content:"";
+    width:18px; height:2px;
+    background:var(--accent);
+    display:inline-block;
+    border-radius:2px;
+  }
+  .kicker.on-dark{ color:var(--accent-2); }
+  .kicker.on-dark::before{ background:var(--accent-2); }
+
+  .h-xl{
+    font-size:clamp(32px,5vw,52px);
+    font-weight:800;
+    letter-spacing:-0.02em;
+    line-height:1.05;
+    text-wrap:balance;
+    color:var(--ink);
+  }
+  .h-lg{
+    font-size:clamp(26px,3.6vw,36px);
+    font-weight:800;
+    letter-spacing:-0.015em;
+    line-height:1.12;
+    text-wrap:balance;
+    color:var(--ink);
+  }
+  .h-md{
+    font-size:clamp(19px,2.4vw,23px);
+    font-weight:700;
+    letter-spacing:-0.005em;
+    line-height:1.3;
+    color:var(--ink);
+  }
+  .lede{
+    font-size:clamp(16px,2vw,19px);
+    color:var(--ink-soft);
+    line-height:1.55;
+    margin-top:16px;
+    max-width:56ch;
+  }
+  .portada-quote{
+    font-style:italic;
+    font-family:Georgia, 'Times New Roman', serif;
+    font-size:clamp(15px,1.9vw,17.5px);
+    color:var(--accent-2);
+    line-height:1.5;
+    margin-top:20px;
+    max-width:50ch;
+    border-left:2px solid var(--accent);
+    padding-left:16px;
+  }
+  .body-copy{
+    font-size:15.5px;
+    line-height:1.6;
+    color:var(--ink-soft);
+  }
+  .eyebrow-tag{
+    display:inline-block;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    padding:4px 10px;
+    border-radius:99px;
+  }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:11.5px;
+    font-weight:700;
+    letter-spacing:0.04em;
+    padding:5px 11px;
+    border-radius:99px;
+  }
+  .pill.sim{ background:var(--warn-wash); color:var(--warn); }
+  .pill.real{ background:var(--good-wash); color:var(--good); }
+
+  /* ================= cards / grids ================= */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);
+    padding:26px;
+  }
+  .card-grid{
+    display:grid;
+    gap:16px;
+    margin-top:28px;
+  }
+  .cols-2{ grid-template-columns:repeat(2,1fr); }
+  .cols-3{ grid-template-columns:repeat(3,1fr); }
+  .cols-4{ grid-template-columns:repeat(4,1fr); }
+  @media (max-width:780px){
+    .cols-2, .cols-3, .cols-4{ grid-template-columns:1fr; }
+  }
+  .card h4{
+    font-size:14px;
+    font-weight:800;
+    letter-spacing:0.01em;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+  .card p{
+    font-size:13.5px;
+    line-height:1.55;
+    color:var(--ink-soft);
+  }
+  .card .num{
+    font-size:12px;
+    font-weight:800;
+    color:var(--accent);
+    letter-spacing:0.06em;
+    margin-bottom:10px;
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* ================= act divider ================= */
+  .slide.divider{
+    background:
+      radial-gradient(ellipse 620px 380px at 50% 15%, rgba(255,106,26,0.14), transparent 65%),
+      linear-gradient(155deg, #241007 0%, #100b06 65%, #060504 100%);
+    color:#fff;
+    display:none;
+  }
+  .slide.divider.is-active{ display:flex; align-items:center; }
+  .divider-inner{ max-width:820px; margin:0 auto; padding-bottom:60px; }
+  .act-num{
+    font-size:14px;
+    font-weight:800;
+    letter-spacing:0.22em;
+    color:var(--accent-2);
+    margin-bottom:20px;
+  }
+  .divider .h-xl{ color:#fff; }
+  .divider .lede{ color:#D9CEC0; }
+
+  /* ================= formula card ================= */
+  .formula{
+    margin-top:24px;
+    background:var(--accent-wash);
+    border:1px solid var(--border-strong);
+    border-radius:var(--radius);
+    padding:26px 28px;
+  }
+  .formula-row{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    font-size:clamp(15px,2.2vw,19px);
+    font-weight:700;
+    color:var(--accent-2);
+    font-variant-numeric:tabular-nums;
+  }
+  .formula-row .op{ color:var(--muted); font-weight:500; }
+  .formula-note{ margin-top:10px; font-size:13px; color:var(--ink-soft); }
+
+  /* ================= flow diagrams ================= */
+  .flow{
+    display:flex;
+    flex-direction:column;
+    gap:0;
+  }
+  .flow-step{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 16px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    font-weight:700;
+    font-size:14px;
+  }
+  .flow-arrow{
+    align-self:center;
+    color:var(--muted-2);
+    font-size:14px;
+    padding:2px 0;
+  }
+  .flow.compact .flow-step{ font-size:13px; padding:8px 14px; }
+
+  .contrast-wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+    margin-top:30px;
+  }
+  @media (max-width:780px){ .contrast-wrap{ grid-template-columns:1fr; } }
+  .contrast-col{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+  }
+  .contrast-col.old{ opacity:0.75; }
+  .contrast-col.new{ border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-wash); }
+  .contrast-label{
+    font-size:11.5px;
+    font-weight:800;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+    color:var(--muted);
+  }
+  .contrast-col.new .contrast-label{ color:var(--accent); }
+
+  /* ================= buttons ================= */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 20px;
+    border-radius:99px;
+    font-size:13.5px;
+    font-weight:700;
+    letter-spacing:0.01em;
+    border:1.5px solid var(--accent);
+    background:var(--accent);
+    color:#160F09;
+    cursor:pointer;
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+  }
+  .btn:hover{ background:var(--accent-2); border-color:var(--accent-2); }
+  .btn:active{ transform:scale(0.98); }
+  .btn.ghost{
+    background:transparent;
+    color:var(--accent);
+  }
+  .btn.ghost:hover{ background:var(--accent-wash); }
+  .btn:disabled{ opacity:0.45; cursor:not-allowed; }
+  .btn-row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:20px; }
+
+  /* ================= poll ================= */
+  .poll-item{
+    display:grid;
+    grid-template-columns:1.1fr 2fr;
+    align-items:center;
+    gap:16px;
+    padding:14px 16px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+  }
+  .poll-item + .poll-item{ margin-top:10px; }
+  @media (max-width:700px){ .poll-item{ grid-template-columns:1fr; } }
+  .poll-feature{ font-weight:700; font-size:14.5px; }
+  .poll-feature small{ display:block; font-weight:500; color:var(--muted); font-size:12px; margin-top:2px; }
+  .poll-opts{ display:flex; gap:8px; flex-wrap:wrap; }
+  .poll-opt{
+    padding:8px 13px;
+    border-radius:99px;
+    border:1.5px solid var(--border-strong);
+    background:var(--surface-2);
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .poll-opt.is-selected{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+  }
+  .poll-opt.is-correct{
+    background:var(--good);
+    border-color:var(--good);
+    color:#08150F;
+  }
+  .poll-opt.is-wrong{
+    background:var(--bad);
+    border-color:var(--bad);
+    color:#2b0a06;
+  }
+  .poll-feedback{
+    display:none;
+    margin-top:10px;
+    font-size:12.5px;
+    line-height:1.5;
+    color:var(--ink-soft);
+  }
+  .poll-feedback.is-open{ display:block; }
+  .poll-feedback .tag-ok{ color:var(--good); font-weight:800; }
+  .poll-feedback .tag-bad{ color:var(--bad); font-weight:800; }
+
+  /* ================= worksheet fields ================= */
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-top:16px;
+  }
+  .field label{
+    font-size:12px;
+    font-weight:700;
+    color:var(--ink-soft);
+    letter-spacing:0.02em;
+  }
+  .field input[type="text"], .field textarea, .field select{
+    font-family:inherit;
+    font-size:14.5px;
+    padding:11px 13px;
+    border-radius:var(--radius-sm);
+    border:1.5px solid var(--border-strong);
+    background:var(--surface);
+    color:var(--ink);
+  }
+  .field textarea{ resize:vertical; min-height:64px; }
+  .field-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px 20px; }
+  @media (max-width:700px){ .field-grid{ grid-template-columns:1fr; } }
+
+  /* ================= semaforo ================= */
+  .semaforo{ display:flex; gap:14px; margin-top:22px; flex-wrap:wrap; }
+  .sem-opt{
+    flex:1;
+    min-width:150px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    padding:20px 14px;
+    border-radius:var(--radius);
+    border:2px solid var(--border);
+    background:var(--surface);
+    cursor:pointer;
+    font-weight:700;
+    font-size:13.5px;
+    color:var(--ink-soft);
+  }
+  .sem-dot{ width:22px; height:22px; border-radius:50%; }
+  .sem-opt[data-level="baja"] .sem-dot{ background:var(--good); }
+  .sem-opt[data-level="media"] .sem-dot{ background:var(--warn); }
+  .sem-opt[data-level="alta"] .sem-dot{ background:var(--bad); }
+  .sem-opt.is-active[data-level="baja"]{ border-color:var(--good); background:var(--good-wash); color:var(--good); }
+  .sem-opt.is-active[data-level="media"]{ border-color:var(--warn); background:var(--warn-wash); color:var(--warn); }
+  .sem-opt.is-active[data-level="alta"]{ border-color:var(--bad); background:var(--bad-wash); color:var(--bad); }
+  .sem-opt[data-level="ofensiva"] .sem-dot{ background:var(--accent); }
+  .sem-opt[data-level="defensiva"] .sem-dot{ background:var(--good); }
+  .sem-opt.is-active[data-level="ofensiva"]{ border-color:var(--accent); background:var(--accent-wash); color:var(--accent-2); }
+  .sem-opt.is-active[data-level="defensiva"]{ border-color:var(--good); background:var(--good-wash); color:var(--good); }
+
+  /* ================= calculator ================= */
+  .calc{
+    margin-top:26px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:20px;
+    box-shadow:var(--shadow-md);
+    padding:28px;
+  }
+  .calc-grid{
+    display:grid;
+    grid-template-columns:1.1fr 1.4fr;
+    gap:28px;
+  }
+  @media (max-width:920px){ .calc-grid{ grid-template-columns:1fr; } }
+
+  .slider-row{ margin-bottom:20px; }
+  .slider-row:last-child{ margin-bottom:0; }
+  .slider-row .slider-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:8px;
+  }
+  .slider-row label{ font-size:13px; font-weight:700; color:var(--ink-soft); }
+  .slider-value{
+    font-size:15px;
+    font-weight:800;
+    color:var(--accent);
+    font-variant-numeric:tabular-nums;
+  }
+  input[type="range"]{
+    width:100%;
+    -webkit-appearance:none;
+    appearance:none;
+    height:6px;
+    border-radius:99px;
+    background:var(--bg-soft);
+    outline:none;
+  }
+  input[type="range"]::-webkit-slider-thumb{
+    -webkit-appearance:none;
+    width:20px; height:20px;
+    border-radius:50%;
+    background:var(--accent);
+    border:3px solid #fff;
+    box-shadow:0 1px 4px rgba(122,44,12,0.5);
+    cursor:pointer;
+  }
+  input[type="range"]::-moz-range-thumb{
+    width:20px; height:20px;
+    border-radius:50%;
+    background:var(--accent);
+    border:3px solid #fff;
+    box-shadow:0 1px 4px rgba(122,44,12,0.5);
+    cursor:pointer;
+  }
+  .num-input{
+    width:100%;
+    margin-top:8px;
+    font-size:13px;
+    padding:7px 10px;
+    border-radius:8px;
+    border:1.5px solid var(--border-strong);
+    background:var(--surface-2);
+    color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+  }
+
+  .funnel{ display:flex; flex-direction:column; gap:10px; }
+  .funnel-stage{ }
+  .funnel-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin-bottom:5px;
+  }
+  .funnel-top .val{
+    font-size:16px;
+    font-weight:800;
+    color:var(--ink);
+    font-variant-numeric:tabular-nums;
+  }
+  .funnel-bar-track{
+    height:14px;
+    background:var(--bg-soft);
+    border-radius:99px;
+    overflow:hidden;
+  }
+  .funnel-bar-fill{
+    height:100%;
+    border-radius:99px;
+    background:linear-gradient(90deg, var(--accent-2), var(--accent));
+    transition:width .25s ease;
+    min-width:3%;
+  }
+  .funnel-sub{ font-size:11px; color:var(--muted); margin-top:4px; font-variant-numeric:tabular-nums; }
+
+  .st-block{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  @media (max-width:520px){ .st-block{ grid-template-columns:1fr; } }
+  .st-card{
+    background:linear-gradient(135deg, #2A0F05, var(--accent-deep) 75%);
+    border:1px solid rgba(255,178,107,0.22);
+    border-radius:14px;
+    padding:18px 20px;
+    color:#fff;
+  }
+  .st-card .st-label{ font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--accent-2); font-family:var(--mono); }
+  .st-card .st-value{ font-size:clamp(26px,3vw,34px); font-weight:800; margin-top:6px; font-variant-numeric:tabular-nums; }
+  .bottleneck-card{
+    background:var(--bad-wash);
+    border-radius:14px;
+    padding:18px 20px;
+  }
+  .bottleneck-card .bn-label{ font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--bad); }
+  .bottleneck-card .bn-value{ font-size:19px; font-weight:800; margin-top:6px; color:var(--ink); }
+  .bottleneck-card .bn-note{ font-size:11.5px; color:var(--ink-soft); margin-top:6px; line-height:1.4; }
+
+  .compare-box{
+    margin-top:18px;
+    padding:14px 16px;
+    background:var(--surface-2);
+    border:1px dashed var(--border-strong);
+    border-radius:12px;
+    font-size:13px;
+    color:var(--ink-soft);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .compare-box b{ color:var(--ink); }
+  .compare-delta{ font-weight:800; }
+  .compare-delta.up{ color:var(--good); }
+  .compare-delta.down{ color:var(--bad); }
+  .compare-actions{ margin-top:10px; }
+
+  .reto-banner{
+    margin-top:18px;
+    padding:16px 18px;
+    border-radius:14px;
+    background:var(--warn-wash);
+    color:var(--warn);
+    font-weight:700;
+    font-size:14px;
+    transition:background .2s, color .2s;
+  }
+  .reto-banner.success{ background:var(--good-wash); color:var(--good); }
+
+  .summary-box{
+    margin-top:22px;
+    padding:20px 22px;
+    background:var(--accent-wash);
+    border:1px solid var(--border-strong);
+    border-radius:var(--radius);
+    font-size:14.5px;
+    line-height:1.6;
+    color:var(--ink);
+  }
+  .summary-box .summary-tag{
+    font-size:11px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent);
+    display:block; margin-bottom:8px;
+  }
+  .export-row{
+    margin-top:18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .export-status{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--good);
+    min-height:1em;
+  }
+  .export-status.is-error{ color:var(--bad); }
+  .export-panel{
+    display:none;
+    margin-top:14px;
+  }
+  .export-panel.is-open{ display:block; }
+  .export-panel label{
+    display:block;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .export-panel textarea{
+    width:100%;
+    font-family:var(--mono);
+    font-size:12px;
+    line-height:1.5;
+    padding:14px;
+    border-radius:var(--radius-sm);
+    border:1.5px solid var(--border-strong);
+    background:var(--surface);
+    color:var(--ink);
+    resize:vertical;
+  }
+
+  /* ================= matrix ================= */
+  .matrix-wrap{ display:flex; gap:30px; margin-top:26px; flex-wrap:wrap; }
+  .matrix-box{
+    position:relative;
+    width:340px; height:340px;
+    background:var(--surface);
+    border:1.5px solid var(--border-strong);
+    border-radius:16px;
+    flex:none;
+  }
+  .matrix-box::before, .matrix-box::after{
+    content:"";
+    position:absolute;
+    background:var(--border);
+  }
+  .matrix-box::before{ left:50%; top:0; bottom:0; width:1px; }
+  .matrix-box::after{ top:50%; left:0; right:0; height:1px; }
+  .quad-label{
+    position:absolute;
+    font-size:10.5px;
+    font-weight:800;
+    line-height:1.25;
+    color:var(--muted);
+    width:44%;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
+  .quad-label.tl{ top:10px; left:10px; }
+  .quad-label.tr{ top:10px; right:10px; text-align:right; }
+  .quad-label.bl{ bottom:10px; left:10px; }
+  .quad-label.br{ bottom:10px; right:10px; text-align:right; }
+  .matrix-dot{
+    position:absolute;
+    width:16px; height:16px;
+    border-radius:50%;
+    background:var(--accent);
+    border:3px solid #fff;
+    box-shadow:0 1px 6px rgba(122,44,12,0.55);
+    transform:translate(-50%,50%);
+    transition:left .25s ease, bottom .25s ease;
+  }
+  .matrix-axis-x, .matrix-axis-y{
+    font-size:11px;
+    font-weight:700;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .matrix-side{ flex:1; min-width:220px; }
+
+  /* ================= retention curve ================= */
+  .curve-wrap{ display:flex; gap:24px; margin-top:24px; flex-wrap:wrap; }
+  .curve-card{ flex:1; min-width:240px; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; }
+  .curve-card svg{ width:100%; height:auto; display:block; }
+  .curve-card h4{ font-size:13px; margin-bottom:10px; }
+  .curve-card p{ font-size:12.5px; color:var(--ink-soft); margin-top:8px; }
+
+  /* ================= facilitator notes ================= */
+  .facnotes{
+    display:none;
+    margin-top:30px;
+    padding:18px 20px;
+    background:#050403;
+    border:1px dashed var(--border-strong);
+    color:var(--ink-soft);
+    border-radius:14px;
+    font-size:13px;
+    line-height:1.6;
+  }
+  body.notes-on .facnotes{ display:block; }
+  .facnotes .fn-tag{
+    display:block;
+    font-size:10.5px;
+    font-weight:800;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--accent-2);
+    margin-bottom:8px;
+  }
+  .facnotes ul{ padding-left:18px; list-style:disc; margin-top:6px; }
+  .facnotes li{ margin-bottom:4px; }
+  .facnotes strong{ color:var(--ink); }
+
+  /* ================= examples grid (rompehielos) ================= */
+  .example-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px;
+  }
+  .example-card .ex-name{ font-weight:800; font-size:15px; }
+  .example-card .ex-desc{ font-size:12.5px; color:var(--ink-soft); margin-top:6px; line-height:1.5; }
+
+  /* ================= closing ================= */
+  .closing-line{
+    font-size:clamp(24px,4vw,38px);
+    font-weight:800;
+    letter-spacing:-0.015em;
+    line-height:1.2;
+    color:#fff;
+  }
+  .closing-line.dim{ color:var(--accent-2); font-weight:700; font-size:clamp(16px,2.2vw,20px); }
+
+  /* ================= nav bar ================= */
+  #navbar{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    background:rgba(10,9,8,0.88);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--border);
+    padding:10px 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    z-index:50;
+  }
+  .nav-left{ display:flex; align-items:center; gap:10px; min-width:0; }
+  .nav-brand{ font-weight:800; font-size:13px; color:var(--ink); white-space:nowrap; }
+  .nav-act{ font-size:11.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .nav-mid{ display:flex; align-items:center; gap:8px; }
+  .nav-count{ font-size:11.5px; color:var(--muted); font-variant-numeric:tabular-nums; min-width:52px; text-align:center; }
+  .nav-btn{
+    width:34px; height:34px;
+    border-radius:50%;
+    border:1.5px solid var(--border-strong);
+    background:var(--surface);
+    color:var(--ink);
+    font-size:15px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .nav-btn:hover{ border-color:var(--accent); color:var(--accent); }
+  .nav-btn:disabled{ opacity:0.35; cursor:not-allowed; }
+  .nav-right{ display:flex; align-items:center; gap:8px; }
+  .nav-toggle{
+    font-size:11.5px;
+    font-weight:700;
+    padding:8px 13px;
+    border-radius:99px;
+    border:1.5px solid var(--border-strong);
+    background:var(--surface);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .nav-toggle.is-on{ background:var(--accent); border-color:var(--accent); color:#fff; }
+  #progress-track{
+    position:fixed; left:0; right:0; bottom:54px;
+    height:3px; background:var(--bg-soft); z-index:49;
+  }
+  #progress-fill{ height:100%; background:var(--accent); width:0%; transition:width .2s ease; }
+
+  @media (max-width:640px){
+    .nav-act{ display:none; }
+  }
+
+  /* ================= TOC panel ================= */
+  #toc-panel{
+    position:fixed;
+    right:16px; bottom:70px;
+    width:280px;
+    max-height:60vh;
+    overflow-y:auto;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:14px;
+    box-shadow:var(--shadow-md);
+    padding:12px;
+    display:none;
+    z-index:60;
+  }
+  #toc-panel.is-open{ display:block; }
+  #toc-panel button{
+    display:block;
+    width:100%;
+    text-align:left;
+    background:transparent;
+    border:none;
+    padding:9px 10px;
+    border-radius:8px;
+    font-size:13px;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  #toc-panel button:hover{ background:var(--accent-wash); color:var(--accent-2); }
+
+  em.hl{ color:var(--accent); font-style:normal; font-weight:700; }
+  .qmark{ color:var(--accent); }
+
+  @media (prefers-reduced-motion:no-preference){
+    .slide.is-active{ animation:fadein .3s ease; }
+    @keyframes fadein{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+  }
+</style>
+
+<div id="deck">
+
+  <!-- 0 :: PORTADA -->
+  <section class="slide is-active" data-toc="Portada">
+    <div class="slide-inner">
+      <span class="kicker">Taller TARS · Product Manager y Product Design</span>
+      <h1 class="h-xl">El nuevo arte de<br>lanzar productos<br>en Dropi</h1>
+      <p class="lede">Del producto a la adopción.</p>
+      <p class="portada-quote">"Construir la película es lo que hacemos en Producto. Conseguir que la gente la vea, la termine y quiera volver es lo que vamos a hacer en Product Growth Marketing."</p>
+      <p class="body-copy" style="margin-top:26px; max-width:52ch;">Hoy vamos a dejar de pensar en un lanzamiento como una tarea de comunicación. Vamos a tratarlo como la producción de una película: primero la historia, después el casting, luego la producción — y solo al final, el estreno.</p>
+      <div class="btn-row">
+        <span class="eyebrow-tag">🎬 Trabajo en parejas: PM + Product Designer</span>
+        <span class="eyebrow-tag">🧮 Con calculadora TARS en vivo</span>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Bienvenida breve (2 min). Presenta el objetivo: salir con un TARS preliminar de una funcionalidad real de su célula.</li>
+        <li>Aclara la dinámica: parejas PM + Designer, trabajarán con su propia funcionalidad desde el Acto 2.</li>
+        <li>Menciona que la presentación es también la herramienta: la calculadora TARS se usa en vivo, no es solo teoría.</li>
+        <li>Activa el botón <strong>Notas</strong> (abajo a la derecha) solo en tu pantalla de facilitador — al proyectar, apágalo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 1 :: ACTO 0 DIVIDER -->
+  <section class="slide divider" data-toc="Acto 0 · El tráiler">
+    <div class="divider-inner slide-inner">
+      <div class="act-num">ACTO 0</div>
+      <h2 class="h-xl">El tráiler</h2>
+      <p class="lede">Antes de hablar de metodología, vamos a hacer una predicción.</p>
+    </div>
+  </section>
+
+  <!-- 2 :: rompehielos examples -->
+  <section class="slide" data-toc="🎬 Rompehielos">
+    <div class="slide-inner wide">
+      <span class="kicker">Rompehielos</span>
+      <h2 class="h-lg">¿Éxito de taquilla <span class="qmark">o</span> fracaso?</h2>
+      <p class="lede">Cuatro funcionalidades que seguramente ya conoces.</p>
+      <div class="card-grid cols-4" style="margin-top:30px;">
+        <div class="example-card"><div class="ex-name">Tinder</div><div class="ex-desc">Deslizar para elegir.</div></div>
+        <div class="example-card"><div class="ex-name">Spotify</div><div class="ex-desc">Guardar podcasts desde la web.</div></div>
+        <div class="example-card"><div class="ex-name">Splitwise</div><div class="ex-desc">Pagos nativos entre usuarios.</div></div>
+        <div class="example-card"><div class="ex-name">DocuSign</div><div class="ex-desc">Firma electrónica.</div></div>
+      </div>
+      <p class="body-copy" style="margin-top:26px;">Imagina que mañana tienes que lanzar cada una de estas funcionalidades. <strong>¿Qué crees que pasaría?</strong></p>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Lee las cuatro funcionalidades en voz alta. No expliques nada todavía sobre si funcionaron o no — eso no es el punto del ejercicio.</li>
+        <li>Pasa a la siguiente diapositiva para votar por cada una.</li>
+        <li>Tiempo: 2 minutos.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3 :: poll -->
+  <section class="slide" data-toc="🗳️ Votación">
+    <div class="slide-inner wide">
+      <span class="kicker">Vota levantando la mano</span>
+      <h2 class="h-lg">Para cada una, ¿qué crees que pasó?</h2>
+      <p class="lede">A. Éxito de taquilla &nbsp;·&nbsp; B. Película de culto &nbsp;·&nbsp; C. Fracaso de taquilla</p>
+
+      <div style="margin-top:26px;" id="poll-list">
+        <div class="poll-item" data-poll="tinder">
+          <div class="poll-feature">Tinder <small>Deslizar para elegir</small></div>
+          <div class="poll-opts">
+            <button class="poll-opt" data-opt="A">A · Éxito de taquilla</button>
+            <button class="poll-opt" data-opt="B">B · Película de culto</button>
+            <button class="poll-opt" data-opt="C">C · Fracaso de taquilla</button>
+          </div>
+          <div class="poll-feedback"></div>
+        </div>
+        <div class="poll-item" data-poll="spotify">
+          <div class="poll-feature">Spotify <small>Guardar podcasts desde la web</small></div>
+          <div class="poll-opts">
+            <button class="poll-opt" data-opt="A">A · Éxito de taquilla</button>
+            <button class="poll-opt" data-opt="B">B · Película de culto</button>
+            <button class="poll-opt" data-opt="C">C · Fracaso de taquilla</button>
+          </div>
+          <div class="poll-feedback"></div>
+        </div>
+        <div class="poll-item" data-poll="splitwise">
+          <div class="poll-feature">Splitwise <small>Pagos nativos</small></div>
+          <div class="poll-opts">
+            <button class="poll-opt" data-opt="A">A · Éxito de taquilla</button>
+            <button class="poll-opt" data-opt="B">B · Película de culto</button>
+            <button class="poll-opt" data-opt="C">C · Fracaso de taquilla</button>
+          </div>
+          <div class="poll-feedback"></div>
+        </div>
+        <div class="poll-item" data-poll="docusign">
+          <div class="poll-feature">DocuSign <small>Firma electrónica</small></div>
+          <div class="poll-opts">
+            <button class="poll-opt" data-opt="A">A · Éxito de taquilla</button>
+            <button class="poll-opt" data-opt="B">B · Película de culto</button>
+            <button class="poll-opt" data-opt="C">C · Fracaso de taquilla</button>
+          </div>
+          <div class="poll-feedback"></div>
+        </div>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Pide voto a mano alzada por cada funcionalidad (A/B/C) ANTES de que alguien haga clic — así el voto real no se contamina con el color del botón.</li>
+        <li>Después de la mano alzada, invita a un voluntario a hacer clic en pantalla: el botón revela si acertó y por qué, con la lógica de alcance × lealtad que van a usar todo el taller.</li>
+        <li>La respuesta "correcta" es una clasificación razonada nuestra (Tinder y DocuSign = éxito de taquilla, Spotify = película de culto, Splitwise = fracaso de taquilla) — no un dato verificado de cada empresa. Acláralo si alguien pregunta.</li>
+        <li>Tiempo: 3-4 minutos. Avanza a la reflexión.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 4 :: reveal 1 -->
+  <section class="slide" data-toc="Giro">
+    <div class="slide-inner narrow" style="padding-top:14vh;">
+      <h2 class="h-lg">¿Y si te dijera que el éxito no depende únicamente de <em class="hl">qué tan buena</em> es la funcionalidad?</h2>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Pausa deliberada. Deja que la pregunta respire antes de avanzar.</li>
+        <li>Conecta: "La calidad del producto es necesaria, pero no es suficiente."</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 5 :: reveal 2 -->
+  <section class="slide" data-toc="Giro 2">
+    <div class="slide-inner narrow" style="padding-top:10vh;">
+      <h2 class="h-lg">Depende de:</h2>
+      <ul style="margin-top:22px; display:flex; flex-direction:column; gap:14px;">
+        <li class="h-md">QUIÉN la necesita</li>
+        <li class="h-md">CUÁNTO <em class="hl">valor</em> le genera</li>
+        <li class="h-md">SI la <em class="hl">adopta</em></li>
+        <li class="h-md">SI <em class="hl">regresa</em></li>
+        <li class="h-md">SI realmente está <em class="hl">satisfecho</em></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6 :: TARS reveal -->
+  <section class="slide" data-toc="TARS">
+    <div class="slide-inner narrow" style="padding-top:16vh; text-align:center;">
+      <div class="h-xl" style="font-size:clamp(48px,9vw,96px);">TARS</div>
+      <p class="lede" style="margin:20px auto 0;">Eso es exactamente lo que vamos a aprender hoy.</p>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Momento de énfasis. Pausa 2-3 segundos antes de decir la frase de cierre.</li>
+        <li>Transición al Acto 1: "Pero antes de llegar a TARS, tenemos que hablar de dónde empieza realmente un lanzamiento."</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7 :: ACTO 1 DIVIDER -->
+  <section class="slide divider" data-toc="Acto 1 · La historia">
+    <div class="divider-inner slide-inner">
+      <div class="act-num">ACTO 1</div>
+      <h2 class="h-xl">La historia</h2>
+      <p class="lede">Toda película necesita una historia antes de tener un guion técnico.</p>
+    </div>
+  </section>
+
+  <!-- 8 :: statement -->
+  <section class="slide" data-toc="La historia">
+    <div class="slide-inner narrow" style="padding-top:14vh;">
+      <h2 class="h-lg">Una funcionalidad no comienza con un Figma.</h2>
+      <p class="h-md" style="margin-top:14px; color:var(--accent);">Comienza con un problema.</p>
+    </div>
+  </section>
+
+  <!-- 9 :: contrast -->
+  <section class="slide" data-toc="Antes / ahora">
+    <div class="slide-inner wide">
+      <span class="kicker">El cambio de lógica</span>
+      <h2 class="h-lg">De una tarea operativa a una estrategia de crecimiento</h2>
+      <div class="contrast-wrap">
+        <div class="contrast-col old">
+          <div class="contrast-label">Antes</div>
+          <div class="flow compact">
+            <div class="flow-step">Funcionalidad</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Materiales</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Piezas</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Publicación</div>
+          </div>
+        </div>
+        <div class="contrast-col new">
+          <div class="contrast-label">Ahora</div>
+          <div class="flow compact">
+            <div class="flow-step">Problema</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Usuario</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Valor</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Hipótesis</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Estrategia</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Lanzamiento</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Adopción</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Retención</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Satisfacción</div><div class="flow-arrow">↓</div>
+            <div class="flow-step">Aprendizaje</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 :: discussion -->
+  <section class="slide" data-toc="Reflexión">
+    <div class="slide-inner narrow" style="padding-top:16vh;">
+      <span class="kicker">Para discutir en mesa</span>
+      <h2 class="h-lg">¿Qué cambia cuando dejamos de pensar en el lanzamiento como una tarea y empezamos a verlo como una estrategia?</h2>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Discusión abierta, 2-3 minutos. Pide 2-3 respuestas en voz alta, no fuerces consenso.</li>
+        <li>Respuesta que buscas (sin decirla tú primero): pensar antes en el usuario y el problema cambia qué construimos y cómo lo medimos, no solo cómo lo comunicamos.</li>
+        <li>Transición: "Toda producción empieza eligiendo para quién es la película. Eso es el Acto 2."</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 11 :: ACTO 2 DIVIDER -->
+  <section class="slide divider" data-toc="Acto 2 · El casting">
+    <div class="divider-inner slide-inner">
+      <div class="act-num">ACTO 2</div>
+      <h2 class="h-xl">El casting</h2>
+      <p class="lede">Población objetivo</p>
+    </div>
+  </section>
+
+  <!-- 12 :: poblacion objetivo -->
+  <section class="slide" data-toc="Población objetivo">
+    <div class="slide-inner wide">
+      <span class="kicker">Antes de producir, elegimos para quién</span>
+      <h2 class="h-lg">Población objetivo</h2>
+      <p class="lede">Es el segmento de usuarios activos del producto que tiene mayor probabilidad de obtener valor de la funcionalidad.</p>
+      <div class="card-grid cols-3">
+        <div class="card">
+          <div class="num">Usuarios principales</div>
+          <p>Para quienes la funcionalidad fue diseñada específicamente. Mayor probabilidad de obtener valor.</p>
+        </div>
+        <div class="card">
+          <div class="num">Usuarios adyacentes</div>
+          <p>Podrían encontrar valor, pero no son el segmento principal.</p>
+        </div>
+        <div class="card">
+          <div class="num">Usuarios no adyacentes</div>
+          <p>La funcionalidad no fue diseñada para ellos.</p>
+        </div>
+      </div>
+      <div class="formula" style="margin-top:24px;">
+        <div class="formula-row" style="font-size:16px;">Regla de oro: <em class="hl">comienza por los usuarios principales.</em></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 :: tamaño objetivo -->
+  <section class="slide" data-toc="Tamaño objetivo">
+    <div class="slide-inner">
+      <span class="kicker">¿Qué tan grande es esa audiencia?</span>
+      <h2 class="h-lg">Tamaño objetivo</h2>
+      <p class="lede">El porcentaje estimado de nuestra base de usuarios activos en todo el producto que representa nuestro segmento objetivo.</p>
+      <div class="card" style="margin-top:22px; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-wash);">
+        <h4 style="color:var(--accent-2);">Importante</h4>
+        <p>Solo contabilizamos usuarios objetivo que sean <strong>usuarios activos del producto</strong>. Esto nos permite distinguir:</p>
+        <p style="margin-top:8px;"><strong>"El problema está en la funcionalidad"</strong> — de — <strong>"el usuario simplemente no utiliza el producto."</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 :: actividad elige tu audiencia -->
+  <section class="slide" data-toc="🎬 Elige tu audiencia">
+    <div class="slide-inner wide">
+      <span class="kicker">Actividad · en pareja · 8 minutos</span>
+      <h2 class="h-lg">Elige a tu audiencia</h2>
+      <p class="lede">Trabaja ya sobre la funcionalidad real de tu célula.</p>
+      <div class="field-grid" style="margin-top:24px;">
+        <div class="field">
+          <label for="f-usuario-principal">1 · ¿Quién es el usuario principal?</label>
+          <input type="text" id="f-usuario-principal" placeholder="Ej. Dropshippers activos con más de 3 meses de antigüedad">
+        </div>
+        <div class="field">
+          <label for="f-problema">2 · ¿Qué problema tiene?</label>
+          <input type="text" id="f-problema" placeholder="Ej. Le toma horas crear una landing page persuasiva">
+        </div>
+        <div class="field">
+          <label for="f-comportamiento">3 · ¿Qué comportamiento demuestra que tiene ese problema?</label>
+          <input type="text" id="f-comportamiento" placeholder="Ej. Abandona el flujo de creación de tienda antes de publicar">
+        </div>
+        <div class="field">
+          <label for="f-tamano">4 · ¿Qué % estimas que representa dentro de los usuarios activos?</label>
+          <input type="text" id="f-tamano" placeholder="Ej. 20%">
+        </div>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Cada pareja responde sobre su propia funcionalidad — no sobre un caso ficticio.</li>
+        <li>Recuérdales: es una estimación, no necesitan el dato exacto todavía.</li>
+        <li>Tiempo: 8 minutos. Cierra preguntando a 1-2 parejas su usuario principal en voz alta.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 15 :: ACTO 3 DIVIDER -->
+  <section class="slide divider" data-toc="Acto 3 · La producción">
+    <div class="divider-inner slide-inner">
+      <div class="act-num">ACTO 3</div>
+      <h2 class="h-xl">La producción</h2>
+      <p class="lede">Mapa cualitativo</p>
+    </div>
+  </section>
+
+  <!-- 16 :: mapa cualitativo -->
+  <section class="slide" data-toc="Mapa cualitativo">
+    <div class="slide-inner wide">
+      <span class="kicker">Antes de los números</span>
+      <h2 class="h-lg">El mapa de características</h2>
+      <div class="card-grid cols-3">
+        <div class="card">
+          <div class="num">Población objetivo</div>
+          <p>Descripción del objetivo.</p>
+          <p style="margin-top:6px;">Tamaño objetivo.</p>
+        </div>
+        <div class="card">
+          <div class="num">Valor del usuario</div>
+          <p>Problema.</p>
+          <p style="margin-top:6px;">Frecuencia del problema.</p>
+          <p style="margin-top:6px;">Gravedad del problema.</p>
+        </div>
+        <div class="card">
+          <div class="num">Valor del negocio</div>
+          <p>Impacto en el negocio.</p>
+          <p style="margin-top:6px;">Importancia estratégica.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 :: gravedad -->
+  <section class="slide" data-toc="Gravedad">
+    <div class="slide-inner wide">
+      <span class="kicker">"¿Qué pasa si esta funcionalidad NO existe?"</span>
+      <h2 class="h-lg">Gravedad</h2>
+      <p class="lede">Mide qué tan importante es el problema que estamos resolviendo.</p>
+      <div class="card-grid cols-2" style="margin-top:26px;">
+        <div class="card" style="border-color:var(--good);">
+          <div class="num" style="color:var(--good);">🟢 Gravedad baja</div>
+          <p>Splitwise — pagos nativos entre usuarios.</p>
+          <p style="margin-top:6px;">Spotify — guardar podcasts desde la web.</p>
+        </div>
+        <div class="card" style="border-color:var(--bad);">
+          <div class="num" style="color:var(--bad);">🔴 Gravedad alta</div>
+          <p>Tinder — la experiencia de deslizar.</p>
+          <p style="margin-top:6px;">DocuSign — firma electrónica.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 :: semaforo activity -->
+  <section class="slide" data-toc="🎬 Semáforo de gravedad">
+    <div class="slide-inner">
+      <span class="kicker">Actividad · en pareja · 5 minutos</span>
+      <h2 class="h-lg">Semáforo de gravedad</h2>
+      <p class="lede">Clasifica la funcionalidad de tu célula.</p>
+      <div class="semaforo" id="semaforo-gravedad">
+        <button class="sem-opt" data-level="baja"><span class="sem-dot"></span>Baja</button>
+        <button class="sem-opt" data-level="media"><span class="sem-dot"></span>Media</button>
+        <button class="sem-opt" data-level="alta"><span class="sem-dot"></span>Alta</button>
+      </div>
+      <div class="field">
+        <label for="f-gravedad-just">Justifica tu elección</label>
+        <textarea id="f-gravedad-just" placeholder="¿Qué pasaría si esta funcionalidad no existiera para tu usuario principal?"></textarea>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>No hay clasificación "correcta" — lo importante es la justificación, no el color elegido.</li>
+        <li>Tiempo: 5 minutos. Pide a 1 pareja que comparta su clasificación y por qué.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 18b :: impacto en el negocio explainer -->
+  <section class="slide" data-toc="Impacto en el negocio">
+    <div class="slide-inner wide">
+      <span class="kicker">"¿Esta funcionalidad hace crecer la película, o evita que se caiga del cartel?"</span>
+      <h2 class="h-lg">Impacto en el negocio: ¿ofensiva o defensiva?</h2>
+      <p class="lede">Para cerrar el "Valor del negocio" del mapa cualitativo, hay que identificar si la funcionalidad está orientada a atacar o a defender.</p>
+      <div class="card-grid cols-2" style="margin-top:26px;">
+        <div class="card" style="border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-wash);">
+          <div class="num" style="color:var(--accent);">🎯 Ofensiva</div>
+          <p>Impulsa proactivamente un KPI de producto: adquisición, retención o monetización. Agrega valor a nivel neto — incluso después de cualquier canibalización, mejora el indicador.</p>
+          <p style="margin-top:10px; color:var(--ink-soft);"><strong>Ejemplos:</strong> pago integrado de Eventbrite · canal compartido de Slack.</p>
+        </div>
+        <div class="card" style="border-color:var(--good); box-shadow:0 0 0 3px var(--good-wash);">
+          <div class="num" style="color:var(--good);">🛡️ Defensiva</div>
+          <p>Es necesaria para que el producto funcione correctamente o para cumplir los requisitos mínimos del mercado (MMR). Puede no mejorar directamente los KPI — pero evita que se deterioren.</p>
+          <p style="margin-top:10px; color:var(--ink-soft);"><strong>Ejemplos:</strong> cancelación en Uber · sincronización entre dispositivos en Notion.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:22px; border-color:var(--border-strong);">
+        <h4 style="color:var(--accent-2);">Vuelve al Acto 0</h4>
+        <p class="body-copy">Tinder (deslizar) y DocuSign (firma electrónica) fueron <em class="hl">éxitos de taquilla</em> — funciones ofensivas que dispararon adopción, retención y monetización a la vez. Splitwise intentó ser ofensiva con pagos nativos y no logró tracción real → <em class="hl">fracaso de taquilla</em>. Guardar podcasts en Spotify nunca buscó ser un blockbuster — es defensiva, protege a un nicho de la frustración → <em class="hl">película de culto</em>. Y eso está bien: no todo lo defensivo tiene que arrasar en taquilla.</p>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Esta pregunta completa el tercer pilar del mapa cualitativo (Acto 3): Población objetivo · Valor del usuario (gravedad) · Valor del negocio (esto).</li>
+        <li>Aclara que "defensiva" no es sinónimo de "poco importante" — sin funciones defensivas el producto deja de ser viable.</li>
+        <li>Si el grupo no hace la conexión solo, señala explícitamente el vínculo con el rompehielos del Acto 0.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 18c :: clasificador ofensiva/defensiva activity -->
+  <section class="slide" data-toc="🎬 Ofensiva o defensiva">
+    <div class="slide-inner">
+      <span class="kicker">Actividad · en pareja · 5 minutos <span class="pill real" style="margin-left:6px;">🟢 Datos del ejercicio</span></span>
+      <h2 class="h-lg">Clasifica tu funcionalidad</h2>
+      <p class="lede">Esto es parte del "Valor del negocio" que van a diligenciar en el documento E2E.</p>
+
+      <div class="semaforo" id="semaforo-impacto" style="margin-top:22px;">
+        <button class="sem-opt" data-level="ofensiva"><span class="sem-dot"></span>Ofensiva</button>
+        <button class="sem-opt" data-level="defensiva"><span class="sem-dot"></span>Defensiva</button>
+      </div>
+
+      <div class="field-grid" style="margin-top:6px;">
+        <div class="field">
+          <label for="f-impacto-kpi">Si es ofensiva: ¿qué KPI impulsa? (adquisición / retención / monetización)</label>
+          <input type="text" id="f-impacto-kpi" placeholder="Ej. Retención — reduce el abandono de tienda">
+        </div>
+        <div class="field">
+          <label for="f-impacto-mmr">Si es defensiva: ¿qué requisito mínimo del mercado cubre?</label>
+          <input type="text" id="f-impacto-mmr" placeholder="Ej. Sin esto, el usuario no puede completar su tienda">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-impacto-just">Justifica tu elección</label>
+        <textarea id="f-impacto-just" placeholder="¿Por qué es ofensiva o defensiva tu funcionalidad?"></textarea>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>No hay clasificación "correcta" — igual que en el semáforo de gravedad, lo importante es la justificación.</li>
+        <li>Tiempo: 5 minutos. Esta clasificación alimenta la "Importancia estratégica" que van a usar más adelante en la Matriz de características (Acto 6).</li>
+        <li>Recuérdales guardar esta respuesta — la necesitarán al diligenciar el documento E2E.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 19 :: ACTO 4 DIVIDER -->
+  <section class="slide divider" data-toc="Acto 4 · El estreno">
+    <div class="divider-inner slide-inner">
+      <div class="act-num">ACTO 4</div>
+      <h2 class="h-xl">El estreno</h2>
+      <p class="lede">Adopción</p>
+    </div>
+  </section>
+
+  <!-- 20 :: adopcion -->
+  <section class="slide" data-toc="Adopción">
+    <div class="slide-inner wide">
+      <span class="kicker">"Una película puede ser excelente y aun así fracasar si nadie entra a verla."</span>
+      <h2 class="h-lg">Adopción</h2>
+      <p class="lede">Es la proporción de usuarios objetivo activos que realizan el evento que demuestra que adoptaron la funcionalidad.</p>
+      <div class="card-grid cols-4">
+        <div class="card"><div class="num">1</div><p>Definir población objetivo.</p></div>
+        <div class="card"><div class="num">2</div><p>Definir evento de adopción.</p></div>
+        <div class="card"><div class="num">3</div><p>Medir usuarios adoptados.</p></div>
+        <div class="card"><div class="num">4</div><p>Calcular adopción.</p></div>
+      </div>
+      <div class="formula">
+        <div class="formula-row">Adopción = <span class="op">(</span>Usuarios objetivo que adoptaron<span class="op"> ÷ </span>Usuarios objetivo activos<span class="op">)</span> × 100</div>
+      </div>
+      <div class="card" style="margin-top:22px; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-wash);">
+        <h4 style="color:var(--accent-2);">Evento de adopción ≠ Métrica de adopción</h4>
+        <p>El <strong>evento de adopción</strong> es el dato técnico que se dispara (snake_case) — lo que van a solicitar en el Acto 7. La <strong>métrica de adopción</strong> es la definición de negocio, en lenguaje humano, de qué significa "haber adoptado" la funcionalidad — es lo que va en el documento E2E.</p>
+        <p style="margin-top:8px;"><strong>Ejemplo:</strong> en el creador de páginas con IA de Dropi, la métrica de adopción es "exportar correctamente páginas a Shopify."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 21 :: ACTO 5 DIVIDER -->
+  <section class="slide divider" data-toc="Acto 5 · La taquilla">
+    <div class="divider-inner slide-inner">
+      <div class="act-num">ACTO 5</div>
+      <h2 class="h-xl">La taquilla</h2>
+      <p class="lede">TARS cuantitativo</p>
+    </div>
+  </section>
+
+  <!-- 22 :: tars overview -->
+  <section class="slide" data-toc="TARS: las 4 preguntas">
+    <div class="slide-inner wide">
+      <span class="kicker">Cada etapa responde una pregunta distinta</span>
+      <h2 class="h-lg">Población objetivo → Adopción → Retención → Satisfacción</h2>
+      <div class="card-grid cols-4" style="margin-top:30px;">
+        <div class="card"><div class="num">Población objetivo</div><p>¿A quién debería importarle?</p></div>
+        <div class="card"><div class="num">Adopción</div><p>¿Lo empezó a usar?</p></div>
+        <div class="card"><div class="num">Retención</div><p>¿Sigue obteniendo valor?</p></div>
+        <div class="card"><div class="num">Satisfacción</div><p>¿La experiencia realmente le resulta valiosa y fácil?</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 23 :: ejemplo hipotetico -->
+  <section class="slide" data-toc="Ejemplo hipotético">
+    <div class="slide-inner wide">
+      <span class="kicker">Ejemplo de referencia <span class="pill sim" style="margin-left:6px;">🟡 Simulación</span></span>
+      <h2 class="h-lg">Un ejemplo hipotético de Dropi</h2>
+      <p class="lede">Los números son hipotéticos — no son datos reales de Dropi.</p>
+      <div class="funnel" style="margin-top:26px;">
+        <div class="funnel-stage">
+          <div class="funnel-top"><span>Usuarios activos</span><span class="val">100.000</span></div>
+          <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:100%;"></div></div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-top"><span>Población objetivo (20%)</span><span class="val">20.000</span></div>
+          <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:20%;"></div></div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-top"><span>Adoptados (70% de objetivo)</span><span class="val">14.000</span></div>
+          <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:14%;"></div></div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-top"><span>Retenidos (60% de adoptados)</span><span class="val">8.400</span></div>
+          <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:8.4%;"></div></div>
+        </div>
+        <div class="funnel-stage">
+          <div class="funnel-top"><span>Satisfechos (85% de retenidos)</span><span class="val">7.140</span></div>
+          <div class="funnel-bar-track"><div class="funnel-bar-fill" style="width:7.14%;"></div></div>
+        </div>
+      </div>
+      <div class="formula">
+        <div class="formula-row">20% → 14% → 8,4% → 7,14% <span class="op">sobre el total de usuarios activos</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 24 :: calc intro -->
+  <section class="slide" data-toc="🧮 Calculadora TARS">
+    <div class="slide-inner narrow" style="padding-top:14vh;">
+      <span class="kicker">La herramienta central del taller</span>
+      <h2 class="h-xl" style="font-size:clamp(30px,5vw,44px);">🧮 La calculadora TARS</h2>
+      <p class="lede">Vamos a usarla en vivo, ahora mismo. Muevan los controles y observen cómo cambia el resultado.</p>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Proyecta la siguiente diapositiva y muévela tú primero para demostrar cómo funciona.</li>
+        <li>Luego invita: "cada pareja, abran este mismo enlace en su computador y jueguen con los números del ejemplo de Dropi."</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 25 :: main calculator (demo) -->
+  <section class="slide" data-toc="🧮 Calculadora (ejemplo)">
+    <div class="slide-inner xwide">
+      <span class="kicker">Ejemplo guiado <span class="pill sim" style="margin-left:6px;">🟡 Simulación</span></span>
+      <h2 class="h-lg">Mueve los controles y observa el resultado</h2>
+      <div class="calc" data-calc="demo">
+        <div class="calc-grid">
+          <div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="demo-activos">Usuarios activos del producto</label><span class="slider-value" data-out="activos">100.000</span></div>
+              <input type="range" id="demo-activos" data-key="activos" min="1000" max="500000" step="1000" value="100000">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="demo-pObjetivo">% Población objetivo</label><span class="slider-value" data-out="pObjetivo">20%</span></div>
+              <input type="range" id="demo-pObjetivo" data-key="pObjetivo" min="0" max="100" step="1" value="20">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="demo-pAdopcion">% Adopción</label><span class="slider-value" data-out="pAdopcion">70%</span></div>
+              <input type="range" id="demo-pAdopcion" data-key="pAdopcion" min="0" max="100" step="1" value="70">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="demo-pRetencion">% Retención</label><span class="slider-value" data-out="pRetencion">60%</span></div>
+              <input type="range" id="demo-pRetencion" data-key="pRetencion" min="0" max="100" step="1" value="60">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="demo-pSatisfaccion">% Satisfacción</label><span class="slider-value" data-out="pSatisfaccion">85%</span></div>
+              <input type="range" id="demo-pSatisfaccion" data-key="pSatisfaccion" min="0" max="100" step="1" value="85">
+            </div>
+
+            <div class="compare-box">
+              <span>Punto de partida: <b data-out="baselineSt">S/T 35,7%</b> → ahora: <b class="compare-delta" data-out="deltaSt">+0,0 pp</b></span>
+            </div>
+            <div class="compare-actions">
+              <button class="btn ghost" data-action="rebaseline">Fijar este momento como punto de partida</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="funnel">
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios activos</span><span class="val" data-out="valActivos">100.000</span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="activos" style="width:100%;"></div></div>
+                <div class="funnel-sub" data-out="subActivos">100% de los activos</div>
+              </div>
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios objetivo</span><span class="val" data-out="valObjetivo">20.000</span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="objetivo"></div></div>
+                <div class="funnel-sub" data-out="subObjetivo"></div>
+              </div>
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios adoptados</span><span class="val" data-out="valAdoptados">14.000</span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="adoptados"></div></div>
+                <div class="funnel-sub" data-out="subAdoptados"></div>
+              </div>
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios retenidos</span><span class="val" data-out="valRetenidos">8.400</span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="retenidos"></div></div>
+                <div class="funnel-sub" data-out="subRetenidos"></div>
+              </div>
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios satisfechos</span><span class="val" data-out="valSatisfechos">7.140</span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="satisfechos"></div></div>
+                <div class="funnel-sub" data-out="subSatisfechos"></div>
+              </div>
+            </div>
+
+            <div class="st-block">
+              <div class="st-card">
+                <div class="st-label">Puntuación S/T</div>
+                <div class="st-value" data-out="st">35,7%</div>
+              </div>
+              <div class="bottleneck-card">
+                <div class="bn-label">Principal oportunidad</div>
+                <div class="bn-value" data-out="bottleneck">Retención</div>
+                <div class="bn-note">Sugiere dónde investigar primero — no es una verdad causal.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Demuestra "¿qué pasaría si...?": sube Retención de 60% a 80% y lee en voz alta cómo sube el S/T.</li>
+        <li>Explica el badge de "principal oportunidad": es la etapa con menor tasa (Adopción, Retención o Satisfacción), no necesariamente la causa raíz.</li>
+        <li>El botón "fijar este momento" solo actualiza el punto de comparación local en esta pantalla.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 26 :: cuello de botella explainer -->
+  <section class="slide" data-toc="Cuello de botella">
+    <div class="slide-inner">
+      <span class="kicker">Cómo leer el badge rojo de la calculadora</span>
+      <h2 class="h-lg">Encuentra el cuello de botella</h2>
+      <p class="lede">La calculadora identifica cuál de las tres etapas — Adopción, Retención o Satisfacción — tiene la menor proporción.</p>
+      <div class="card" style="margin-top:22px; border-color:var(--bad); background:var(--bad-wash);">
+        <p style="color:var(--ink);">Esto <strong>sugiere dónde investigar primero</strong>. No es una verdad causal — es un punto de partida para hacer la siguiente pregunta.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 27 :: reto mode -->
+  <section class="slide" data-toc="🎮 Juega con los números">
+    <div class="slide-inner xwide">
+      <span class="kicker">Reto rápido · en pareja</span>
+      <h2 class="h-lg">Juega con los números</h2>
+      <p class="lede">Reto: lleva el S/T por encima del 50%.</p>
+
+      <div class="calc" data-calc="reto" style="margin-top:24px;">
+        <div id="reto-banner" class="reto-banner">Reto activo — S/T actual: <span data-out="st">17,9%</span></div>
+        <div class="calc-grid" style="margin-top:20px;">
+          <div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="reto-activos">Usuarios activos del producto</label><span class="slider-value" data-out="activos">100.000</span></div>
+              <input type="range" id="reto-activos" data-key="activos" min="1000" max="500000" step="1000" value="100000">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="reto-pObjetivo">% Población objetivo</label><span class="slider-value" data-out="pObjetivo">20%</span></div>
+              <input type="range" id="reto-pObjetivo" data-key="pObjetivo" min="0" max="100" step="1" value="20">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="reto-pAdopcion">% Adopción</label><span class="slider-value" data-out="pAdopcion">40%</span></div>
+              <input type="range" id="reto-pAdopcion" data-key="pAdopcion" min="0" max="100" step="1" value="40">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="reto-pRetencion">% Retención</label><span class="slider-value" data-out="pRetencion">50%</span></div>
+              <input type="range" id="reto-pRetencion" data-key="pRetencion" min="0" max="100" step="1" value="50">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="reto-pSatisfaccion">% Satisfacción</label><span class="slider-value" data-out="pSatisfaccion">70%</span></div>
+              <input type="range" id="reto-pSatisfaccion" data-key="pSatisfaccion" min="0" max="100" step="1" value="70">
+            </div>
+          </div>
+          <div>
+            <div class="st-block" style="grid-template-columns:1fr;">
+              <div class="st-card">
+                <div class="st-label">Puntuación S/T</div>
+                <div class="st-value" data-out="stBig">17,9%</div>
+              </div>
+            </div>
+            <p class="body-copy" style="margin-top:18px;">Después de lograrlo, discutan: <strong>¿qué variable cambiaron? ¿por qué? ¿qué aprendieron?</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Tiempo: 3-4 minutos de juego libre.</li>
+        <li>Cuando el banner se ponga verde, pide que compartan qué palanca movieron primero.</li>
+        <li>Insight a reforzar: normalmente es más fácil subir Retención o Satisfacción que ampliar Población objetivo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 28 :: indicador de datos -->
+  <section class="slide" data-toc="Indicador de datos">
+    <div class="slide-inner">
+      <span class="kicker">Cómo etiquetar los números que uses</span>
+      <h2 class="h-lg">Indicador de datos</h2>
+      <div class="card-grid cols-2" style="margin-top:24px;">
+        <div class="card">
+          <span class="pill sim">🟡 Simulación</span>
+          <p style="margin-top:12px;">"Los números de este ejercicio son hipotéticos."</p>
+        </div>
+        <div class="card">
+          <span class="pill real">🟢 Datos del ejercicio</span>
+          <p style="margin-top:12px;">"Utiliza datos reales cuando estén disponibles. Si no existen, registra la cifra como hipótesis."</p>
+        </div>
+      </div>
+      <p class="body-copy" style="margin-top:20px;">La calculadora no inventa datos. Trabaja únicamente con los valores que ustedes introduzcan.</p>
+    </div>
+  </section>
+
+  <!-- 29 :: actividad central divider -->
+  <section class="slide divider" data-toc="🎬 Produce tu propia taquilla">
+    <div class="divider-inner slide-inner">
+      <div class="act-num">ACTIVIDAD CENTRAL</div>
+      <h2 class="h-xl">Produce tu propia taquilla</h2>
+      <p class="lede">Ahora es tu turno. Trabaja con la funcionalidad real de tu célula.</p>
+    </div>
+  </section>
+
+  <!-- 30 :: mi tars workbench -->
+  <section class="slide" data-toc="Mi TARS">
+    <div class="slide-inner xwide">
+      <span class="kicker">Actividad · en pareja · 25–35 minutos <span class="pill real" style="margin-left:6px;">🟢 Datos del ejercicio</span></span>
+      <h2 class="h-lg">Ahora es tu turno</h2>
+      <p class="lede">El Product Manager aporta contexto de negocio, impacto e hipótesis. El Product Designer aporta comportamiento, experiencia y fricciones. Constrúyanlo juntos.</p>
+
+      <div class="field-grid" style="margin-top:26px;">
+        <div class="field">
+          <label for="mt-nombre">Nombre de la funcionalidad</label>
+          <input type="text" id="mt-nombre" placeholder="Ej. Creador de landings con IA">
+        </div>
+        <div class="field">
+          <label for="mt-poblacion">Población objetivo (descripción)</label>
+          <input type="text" id="mt-poblacion" placeholder="Ej. Dropshippers activos sin conocimientos técnicos">
+        </div>
+        <div class="field">
+          <label for="mt-evento">Evento de adopción</label>
+          <input type="text" id="mt-evento" placeholder="Ej. Publicar una landing generada con IA">
+        </div>
+        <div class="field">
+          <label for="mt-metrica-adopcion">Métrica de adopción (documento E2E)</label>
+          <input type="text" id="mt-metrica-adopcion" placeholder="Ej. Exportar correctamente páginas a Shopify">
+        </div>
+        <div class="field">
+          <label for="mt-frecuencia">Frecuencia natural</label>
+          <select id="mt-frecuencia">
+            <option value="">Selecciona...</option>
+            <option>Diario</option>
+            <option>Semanal</option>
+            <option>Mensual</option>
+            <option>Ocasional</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="mt-accion">Acción principal</label>
+          <input type="text" id="mt-accion" placeholder="Ej. Publicar una nueva landing cada mes">
+        </div>
+        <div class="field">
+          <label for="mt-satisfaccion-metodo">Método de satisfacción</label>
+          <input type="text" id="mt-satisfaccion-metodo" placeholder="Ej. Pregunta de esfuerzo (CES) post-publicación">
+        </div>
+      </div>
+
+      <div class="calc" data-calc="mitars" style="margin-top:30px;">
+        <div class="calc-grid">
+          <div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="mitars-activos">Usuarios activos del producto</label><span class="slider-value" data-out="activos">10.000</span></div>
+              <input type="range" id="mitars-activos" data-key="activos" min="500" max="500000" step="500" value="10000">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="mitars-pObjetivo">% Población objetivo</label><span class="slider-value" data-out="pObjetivo">20%</span></div>
+              <input type="range" id="mitars-pObjetivo" data-key="pObjetivo" min="0" max="100" step="1" value="20">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="mitars-pAdopcion">% Adopción</label><span class="slider-value" data-out="pAdopcion">30%</span></div>
+              <input type="range" id="mitars-pAdopcion" data-key="pAdopcion" min="0" max="100" step="1" value="30">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="mitars-pRetencion">% Retención</label><span class="slider-value" data-out="pRetencion">40%</span></div>
+              <input type="range" id="mitars-pRetencion" data-key="pRetencion" min="0" max="100" step="1" value="40">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="mitars-pSatisfaccion">% Satisfacción</label><span class="slider-value" data-out="pSatisfaccion">50%</span></div>
+              <input type="range" id="mitars-pSatisfaccion" data-key="pSatisfaccion" min="0" max="100" step="1" value="50">
+            </div>
+          </div>
+          <div>
+            <div class="funnel">
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios activos</span><span class="val" data-out="valActivos">10.000</span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="activos" style="width:100%;"></div></div>
+                <div class="funnel-sub" data-out="subActivos"></div>
+              </div>
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios objetivo</span><span class="val" data-out="valObjetivo"></span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="objetivo"></div></div>
+                <div class="funnel-sub" data-out="subObjetivo"></div>
+              </div>
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios adoptados</span><span class="val" data-out="valAdoptados"></span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="adoptados"></div></div>
+                <div class="funnel-sub" data-out="subAdoptados"></div>
+              </div>
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios retenidos</span><span class="val" data-out="valRetenidos"></span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="retenidos"></div></div>
+                <div class="funnel-sub" data-out="subRetenidos"></div>
+              </div>
+              <div class="funnel-stage">
+                <div class="funnel-top"><span>Usuarios satisfechos</span><span class="val" data-out="valSatisfechos"></span></div>
+                <div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="satisfechos"></div></div>
+                <div class="funnel-sub" data-out="subSatisfechos"></div>
+              </div>
+            </div>
+            <div class="st-block">
+              <div class="st-card"><div class="st-label">Puntuación S/T</div><div class="st-value" data-out="st"></div></div>
+              <div class="bottleneck-card"><div class="bn-label">Principal oportunidad</div><div class="bn-value" data-out="bottleneck"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-box" id="mt-summary">
+        <span class="summary-tag">Este es el TARS de tu funcionalidad</span>
+        <span id="mt-summary-text">Completa los campos y mueve la calculadora para generar el resumen de tu funcionalidad.</span>
+        <p class="body-copy" style="margin-top:12px;">Al final del taller (Acto 7) vas a poder exportar un resumen completo con esto y con todas las demás actividades — no hace falta copiar nada todavía.</p>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Tiempo: 25–35 minutos. Avísales a mitad de tiempo cuánto les queda.</li>
+        <li>Recuérdales que los % de adopción/retención/satisfacción pueden ser hipótesis razonadas, no datos exactos — lo importante es dejarlas explícitas.</li>
+        <li>El resumen inferior se actualiza solo — pídeles que lo lean en voz alta como primer borrador de su TARS.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 31 :: ACTO 6 DIVIDER -->
+  <section class="slide divider" data-toc="Acto 6 · La segunda función">
+    <div class="divider-inner slide-inner">
+      <div class="act-num">ACTO 6</div>
+      <h2 class="h-xl">La segunda función</h2>
+      <p class="lede">Retención</p>
+    </div>
+  </section>
+
+  <!-- 32 :: adopcion != retencion -->
+  <section class="slide" data-toc="Adopción ≠ Retención">
+    <div class="slide-inner narrow" style="padding-top:15vh;">
+      <span class="kicker">"Que alguien compre la entrada no significa que haya disfrutado la película."</span>
+      <h2 class="h-lg">Adopción <span style="color:var(--bad);">≠</span> Retención</h2>
+      <p class="lede">La retención indica si la funcionalidad continúa generando valor.</p>
+    </div>
+  </section>
+
+  <!-- 33 :: frecuencia natural -->
+  <section class="slide" data-toc="Frecuencia natural">
+    <div class="slide-inner wide">
+      <span class="kicker">"¿Cada cuánto ocurre naturalmente el problema que resolvemos?"</span>
+      <h2 class="h-lg">Frecuencia natural</h2>
+      <div class="card-grid cols-4">
+        <div class="card"><div class="num">Diario</div></div>
+        <div class="card"><div class="num">Semanal</div></div>
+        <div class="card"><div class="num">Mensual</div></div>
+        <div class="card"><div class="num">Ocasional</div></div>
+      </div>
+      <p class="body-copy" style="margin-top:20px;">La frecuencia natural de la funcionalidad puede ser distinta a la frecuencia general del producto.</p>
+    </div>
+  </section>
+
+  <!-- 34 :: accion principal + curva -->
+  <section class="slide" data-toc="Curva de retención">
+    <div class="slide-inner wide">
+      <span class="kicker">La acción que demuestra valor sostenido</span>
+      <h2 class="h-lg">Acción principal &amp; curva de retención</h2>
+      <p class="lede">Eje X: tiempo / frecuencia natural. Eje Y: % de usuarios adoptados que continúan activos.</p>
+      <div class="curve-wrap">
+        <div class="curve-card">
+          <h4 style="color:var(--good);">Se estabiliza</h4>
+          <svg viewBox="0 0 220 110" preserveAspectRatio="none">
+            <polyline points="10,20 55,55 100,78 145,86 210,88" fill="none" stroke="#33C285" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p>Existe una señal de valor sostenido.</p>
+        </div>
+        <div class="curve-card">
+          <h4 style="color:var(--bad);">Sigue cayendo</h4>
+          <svg viewBox="0 0 220 110" preserveAspectRatio="none">
+            <polyline points="10,20 55,50 100,72 145,92 210,104" fill="none" stroke="#FF6B5E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <p>Existe una señal para investigar un problema de retención.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 35 :: satisfaccion / CES -->
+  <section class="slide" data-toc="Satisfacción / CES">
+    <div class="slide-inner wide">
+      <span class="kicker">Retención no es lo mismo que satisfacción</span>
+      <h2 class="h-lg">Satisfacción</h2>
+      <p class="lede">Una funcionalidad puede utilizarse y seguir siendo frustrante. Por eso medimos también el esfuerzo percibido — el <em class="hl">Customer Effort Score</em> (puntuación de esfuerzo del cliente).</p>
+      <p class="body-copy" style="margin-top:14px;"><strong>Pregunta base:</strong> "¿Qué tan fácil fue para ti realizar esta tarea utilizando la funcionalidad?"</p>
+      <div class="card-grid cols-4" style="margin-top:18px;">
+        <div class="card" style="text-align:center;"><div class="num">1</div><p>Muy difícil</p></div>
+        <div class="card" style="text-align:center;"><div class="num">2–3</div><p>Difícil</p></div>
+        <div class="card" style="text-align:center;"><div class="num">4</div><p>Neutral</p></div>
+        <div class="card" style="text-align:center;"><div class="num">5</div><p>Muy fácil</p></div>
+      </div>
+      <div class="field" style="margin-top:24px;">
+        <label for="mt-ces">Actividad: escribe tu propia pregunta de satisfacción para tu funcionalidad</label>
+        <input type="text" id="mt-ces" placeholder="Ej. ¿Qué tan fácil fue publicar tu landing con el creador de IA?">
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Tiempo: 4 minutos. Que cada pareja escriba su propia pregunta de esfuerzo adaptada a su funcionalidad.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 36 :: matriz -->
+  <section class="slide" data-toc="Matriz de características">
+    <div class="slide-inner xwide">
+      <span class="kicker">S/T vs. Importancia estratégica</span>
+      <h2 class="h-lg">Matriz de características</h2>
+      <p class="lede">Ubica tu funcionalidad (con el S/T que calculaste en "Mi TARS") según su importancia estratégica.</p>
+
+      <div class="matrix-wrap">
+        <div>
+          <div class="matrix-box" id="matrix-box">
+            <span class="quad-label tl">Características de alto rendimiento</span>
+            <span class="quad-label tr">Características principales</span>
+            <span class="quad-label bl">Características de proyecto</span>
+            <span class="quad-label br">Responsabilidades</span>
+            <div class="matrix-dot" id="matrix-dot" style="left:20%; bottom:36%;"></div>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:8px;">
+            <span class="matrix-axis-y">↑ S/T</span>
+            <span class="matrix-axis-x">Importancia estratégica →</span>
+          </div>
+        </div>
+        <div class="matrix-side">
+          <div class="field">
+            <label for="mt-importancia">Importancia estratégica de tu funcionalidad</label>
+            <select id="mt-importancia">
+              <option value="20">Baja</option>
+              <option value="50" selected>Media</option>
+              <option value="85">Alta</option>
+            </select>
+          </div>
+          <div class="card" style="margin-top:16px;">
+            <p><strong id="matrix-feature-name">Tu funcionalidad</strong> — S/T actual: <strong id="matrix-st-readout">—</strong></p>
+          </div>
+          <div class="formula" style="margin-top:16px;">
+            <div class="formula-row" style="font-size:14px;">S/T = <span class="op">(</span>% activos satisfechos<span class="op"> ÷ </span>% activos objetivo<span class="op">)</span> × 100</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>El punto se calcula automáticamente desde los valores que la pareja dejó en la calculadora "Mi TARS" (Acto 6, actividad central).</li>
+        <li>Si el punto no se mueve, pide que vuelvan a esa calculadora y ajusten un valor (dispara el recálculo).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 37 :: ejemplos reales -->
+  <section class="slide" data-toc="Ejemplos reales">
+    <div class="slide-inner wide">
+      <span class="kicker">Conceptos que ya reconoces en estos productos</span>
+      <h2 class="h-lg">Ejemplos reales</h2>
+      <div class="card-grid cols-3" style="margin-top:26px;">
+        <div class="card"><h4>Eventbrite</h4><p>Crear un evento como acción principal de valor.</p></div>
+        <div class="card"><h4>Slack</h4><p>Invitar a un canal como evento de adopción.</p></div>
+        <div class="card"><h4>Tinder</h4><p>Deslizar como el comportamiento nuclear del producto.</p></div>
+        <div class="card"><h4>DocuSign</h4><p>Firmar un documento como acción de alta gravedad.</p></div>
+        <div class="card"><h4>Spotify</h4><p>Guardar contenido como señal de retención.</p></div>
+        <div class="card"><h4>Splitwise</h4><p>Registrar un gasto como frecuencia natural del problema.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 38 :: caso dropi landings -->
+  <section class="slide" data-toc="Caso: Landings con IA">
+    <div class="slide-inner xwide">
+      <span class="kicker">Caso de práctica Dropi <span class="pill sim" style="margin-left:6px;">🟡 Datos hipotéticos para el ejercicio</span></span>
+      <h2 class="h-lg">Nuevo creador de landings con IA</h2>
+      <p class="lede">La creación de una landing page persuasiva requiere conocimientos técnicos y de diseño, lo que genera alta fricción operativa y puede tomar hasta 48 horas de trabajo manual. Además, el flujo de conexión con Shopify mediante tokens representa un bloqueo técnico severo para perfiles no técnicos.</p>
+
+      <div class="flow compact" style="margin-top:22px; max-width:520px;">
+        <div class="flow-step">Problema: crear una landing toma hasta 48h y requiere conocimiento técnico</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Población objetivo: dropshippers activos sin equipo de diseño</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Gravedad: alta — bloquea publicar sin ayuda externa</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Adopción: publicar una landing generada con IA</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Retención: publicar una nueva landing cada mes</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Satisfacción: pregunta de esfuerzo post-publicación</div>
+      </div>
+
+      <div class="calc" data-calc="landing" style="margin-top:26px;">
+        <div class="calc-grid">
+          <div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="landing-activos">Usuarios activos del producto</label><span class="slider-value" data-out="activos">100.000</span></div>
+              <input type="range" id="landing-activos" data-key="activos" min="1000" max="500000" step="1000" value="100000">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="landing-pObjetivo">% Población objetivo</label><span class="slider-value" data-out="pObjetivo">15%</span></div>
+              <input type="range" id="landing-pObjetivo" data-key="pObjetivo" min="0" max="100" step="1" value="15">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="landing-pAdopcion">% Adopción</label><span class="slider-value" data-out="pAdopcion">45%</span></div>
+              <input type="range" id="landing-pAdopcion" data-key="pAdopcion" min="0" max="100" step="1" value="45">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="landing-pRetencion">% Retención</label><span class="slider-value" data-out="pRetencion">55%</span></div>
+              <input type="range" id="landing-pRetencion" data-key="pRetencion" min="0" max="100" step="1" value="55">
+            </div>
+            <div class="slider-row">
+              <div class="slider-top"><label for="landing-pSatisfaccion">% Satisfacción</label><span class="slider-value" data-out="pSatisfaccion">65%</span></div>
+              <input type="range" id="landing-pSatisfaccion" data-key="pSatisfaccion" min="0" max="100" step="1" value="65">
+            </div>
+          </div>
+          <div>
+            <div class="funnel">
+              <div class="funnel-stage"><div class="funnel-top"><span>Usuarios activos</span><span class="val" data-out="valActivos"></span></div><div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="activos" style="width:100%;"></div></div><div class="funnel-sub" data-out="subActivos"></div></div>
+              <div class="funnel-stage"><div class="funnel-top"><span>Usuarios objetivo</span><span class="val" data-out="valObjetivo"></span></div><div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="objetivo"></div></div><div class="funnel-sub" data-out="subObjetivo"></div></div>
+              <div class="funnel-stage"><div class="funnel-top"><span>Usuarios adoptados</span><span class="val" data-out="valAdoptados"></span></div><div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="adoptados"></div></div><div class="funnel-sub" data-out="subAdoptados"></div></div>
+              <div class="funnel-stage"><div class="funnel-top"><span>Usuarios retenidos</span><span class="val" data-out="valRetenidos"></span></div><div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="retenidos"></div></div><div class="funnel-sub" data-out="subRetenidos"></div></div>
+              <div class="funnel-stage"><div class="funnel-top"><span>Usuarios satisfechos</span><span class="val" data-out="valSatisfechos"></span></div><div class="funnel-bar-track"><div class="funnel-bar-fill" data-bar="satisfechos"></div></div><div class="funnel-sub" data-out="subSatisfechos"></div></div>
+            </div>
+            <div class="st-block">
+              <div class="st-card"><div class="st-label">Puntuación S/T</div><div class="st-value" data-out="st"></div></div>
+              <div class="bottleneck-card"><div class="bn-label">Principal oportunidad</div><div class="bn-value" data-out="bottleneck"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Todos los números de este caso son hipotéticos, construidos solo para el ejercicio — acláralo antes de mostrar el slide.</li>
+        <li>Úsalo como demo adicional si el grupo necesita un segundo ejemplo antes de trabajar con su propia funcionalidad.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 39 :: trabajo practico -->
+  <section class="slide" data-toc="Trabajo práctico">
+    <div class="slide-inner wide">
+      <span class="kicker">25–35 minutos · en pareja</span>
+      <h2 class="h-lg">Trabajo práctico</h2>
+      <p class="lede">Entregable: un TARS preliminar de su funcionalidad real (usa la herramienta "Mi TARS" del Acto 5).</p>
+      <div class="card-grid cols-2" style="margin-top:26px;">
+        <div class="card">
+          <div class="num">Product Manager aporta</div>
+          <p>Contexto de negocio · impacto · hipótesis · conocimiento del usuario.</p>
+        </div>
+        <div class="card">
+          <div class="num">Product Designer aporta</div>
+          <p>Comportamiento · experiencia · problema · fricciones · acciones.</p>
+        </div>
+      </div>
+      <p class="body-copy" style="margin-top:18px;">Ambos construyen el documento en conjunto.</p>
+    </div>
+  </section>
+
+  <!-- 40 :: presentacion equipos -->
+  <section class="slide" data-toc="Presentación de equipos">
+    <div class="slide-inner wide">
+      <span class="kicker">Máximo 3 minutos por equipo</span>
+      <h2 class="h-lg">Presentación de equipos</h2>
+      <ol style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:10px 24px; padding-left:20px; list-style:decimal; color:var(--ink-soft); font-size:14px;">
+        <li>¿Cuál es la funcionalidad?</li>
+        <li>¿Quién es el usuario principal?</li>
+        <li>¿Cuál es el tamaño objetivo?</li>
+        <li>¿Qué evento define adopción?</li>
+        <li>¿Cuál es la frecuencia natural?</li>
+        <li>¿Cómo medirán retención?</li>
+        <li>¿Cómo medirán satisfacción?</li>
+        <li>¿Cuál es su TARS?</li>
+        <li>¿Cuál es su S/T?</li>
+        <li>¿Dónde creen que está el principal riesgo?</li>
+      </ol>
+      <p class="body-copy" style="margin-top:18px;">La audiencia podrá cuestionar las hipótesis.</p>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Selecciona 2-4 equipos según el tiempo disponible. Cronometra los 3 minutos con visibilidad para todos.</li>
+        <li>Fomenta preguntas del resto del grupo después de cada presentación (1-2 min de preguntas).</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 41 :: documento E2E -->
+  <section class="slide" data-toc="Documento E2E">
+    <div class="slide-inner narrow" style="padding-top:14vh;">
+      <div class="card" style="padding:32px; text-align:center;">
+        <h3 class="h-md">🎞️ Puedes ir revisando nuestro documento E2E para lanzamientos</h3>
+        <p class="body-copy" style="margin-top:12px;">Ahí encontrarás la nueva estructura que utilizaremos para construir estratégicamente nuestros lanzamientos.</p>
+        <div style="margin-top:20px;">
+          <a class="btn" href="https://docs.google.com/document/d/1pw2H33wc4jGrHRFNLdyl6U4M7sXu76FLzkIlhQX9DZg/edit?tab=t.abw9tcqk4jgr" target="_blank" rel="noopener noreferrer">Revisar documento E2E →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 41b :: ACTO 7 DIVIDER -->
+  <section class="slide divider" data-toc="Acto 7 · El conteo de taquilla">
+    <div class="divider-inner slide-inner">
+      <div class="act-num">ACTO 7</div>
+      <h2 class="h-xl">El conteo de taquilla</h2>
+      <p class="lede">Ninguna película es un éxito de taquilla si nadie cuenta las entradas vendidas.</p>
+    </div>
+  </section>
+
+  <!-- 41c :: statement tracking -->
+  <section class="slide" data-toc="Sin eventos no hay taquilla">
+    <div class="slide-inner narrow" style="padding-top:14vh;">
+      <h2 class="h-lg">Todo lo que calculamos en el Acto 5 — Adopción, Retención, Satisfacción — depende de un dato que alguien tuvo que pedir antes del lanzamiento.</h2>
+      <p class="h-md" style="margin-top:14px; color:var(--accent);">Ese dato es un evento.</p>
+    </div>
+  </section>
+
+  <!-- 41d :: que es un evento -->
+  <section class="slide" data-toc="¿Qué es un evento?">
+    <div class="slide-inner wide">
+      <span class="kicker">La unidad mínima de medición</span>
+      <h2 class="h-lg">¿Qué es un evento?</h2>
+      <div class="card-grid cols-2" style="margin-top:26px;">
+        <div class="card">
+          <div class="num">Acción pasada</div>
+          <p>Es la acción que ocurrió, representada siempre en pasado. Se describe en <strong>snake_case</strong>.</p>
+          <div style="margin-top:12px; background:var(--surface-2); border-radius:8px; padding:12px 14px; font-family:var(--mono); font-size:13px;">
+            <span style="color:var(--accent-2);">landing_published</span><br>
+            <span style="color:var(--ink-soft); font-size:12px;">La landing fue publicada (pasado)</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="num">Atributos</div>
+          <p>El contexto de la acción — las propiedades que componen el evento.</p>
+          <div style="margin-top:12px; background:var(--surface-2); border-radius:8px; padding:12px 14px; font-family:var(--mono); font-size:12px; color:var(--ink-soft); white-space:pre-wrap; line-height:1.6;">// Estructura del evento
+{
+  event: "landing_published",
+  user_id: "user_48213",
+  role: "dropshipper",
+  template: "producto-unico"
+}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 41e :: como funciona un evento -->
+  <section class="slide" data-toc="¿Cómo funciona un evento?">
+    <div class="slide-inner wide">
+      <span class="kicker">Flujo de ejecución</span>
+      <h2 class="h-lg">¿Cómo funciona un evento?</h2>
+      <div class="flow" style="margin-top:26px; max-width:520px;">
+        <div class="flow-step">1 · El usuario actúa</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">2 · Se ejecuta el evento programado</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">3 · Se envía a la plataforma (Userpilot, para eventos de producto)</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">4 · Es visible en el dashboard</div>
+      </div>
+      <p class="body-copy" style="margin-top:22px;">Este es el mismo dato que después llena cada barra de la calculadora TARS del Acto 5.</p>
+    </div>
+  </section>
+
+  <!-- 41f :: tipos de eventos -->
+  <section class="slide" data-toc="Tipos de eventos">
+    <div class="slide-inner wide">
+      <span class="kicker">Dos guiones distintos, dos responsables distintos</span>
+      <h2 class="h-lg">Eventos de Feature y Eventos Generales</h2>
+      <div class="contrast-wrap">
+        <div class="contrast-col new">
+          <div class="contrast-label">Eventos de Feature — Front · Userpilot</div>
+          <p class="body-copy">Vinculados a un proyecto o funcionalidad específica del producto. Miden interacción y comportamiento en la interfaz.</p>
+          <p class="body-copy" style="margin-top:10px;"><strong>Solicitados por:</strong> Product Manager</p>
+          <p class="body-copy" style="margin-top:4px;"><strong>Documentación:</strong> Documento E2E del proyecto</p>
+          <p class="body-copy" style="margin-top:10px;"><strong>Ejemplos:</strong> landing_published, ai_generation_started, checkout_started</p>
+        </div>
+        <div class="contrast-col" style="opacity:1;">
+          <div class="contrast-label">Eventos Generales — Back · transaccional</div>
+          <p class="body-copy">Transversales al producto. No están atados a un proyecto — miden comportamientos globales, muchas veces a nivel de backend (pagos, pedidos, movimientos de dinero).</p>
+          <p class="body-copy" style="margin-top:10px;"><strong>Solicitados por:</strong> Product Ops</p>
+          <p class="body-copy" style="margin-top:4px;"><strong>Documentación:</strong> Tablero POP + Documento E2E</p>
+          <p class="body-copy" style="margin-top:10px;"><strong>Ejemplos:</strong> orden_pagada, retiro_procesado, usuario_verificado</p>
+        </div>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Aclara que "front/back" es una simplificación operativa: lo que realmente distingue a un evento no es la capa técnica sino quién lo solicita y si está atado a un proyecto.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 41g :: como solicitar evento feature -->
+  <section class="slide" data-toc="Solicitar evento de Feature">
+    <div class="slide-inner wide">
+      <span class="kicker">Solicitado por el Product Manager</span>
+      <h2 class="h-lg">¿Cómo solicito un evento de Feature?</h2>
+      <div class="card-grid cols-4" style="margin-top:28px;">
+        <div class="card"><div class="num">1</div><p>Crear documento E2E: documentar el flujo completo, el alcance y las interacciones del usuario.</p></div>
+        <div class="card"><div class="num">2</div><p>Revisar con Analista de Datos.</p></div>
+        <div class="card"><div class="num">3</div><p>Revisar con TL y Desarrollador.</p></div>
+        <div class="card"><div class="num">4</div><p>Documentar en el E2E.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 41h :: como solicitar evento general -->
+  <section class="slide" data-toc="Solicitar evento General">
+    <div class="slide-inner wide">
+      <span class="kicker">Solicitado por Product Ops</span>
+      <h2 class="h-lg">¿Cómo solicito un evento General?</h2>
+      <div class="card-grid cols-4" style="margin-top:28px;">
+        <div class="card" style="border-color:var(--accent);"><div class="num" style="color:var(--accent);">Inicio</div><p>Crear la solución en el tablero POP — registrar la necesidad y el objetivo a nivel de negocio.</p></div>
+        <div class="card"><div class="num">1</div><p>Crear documento E2E.</p></div>
+        <div class="card"><div class="num">2</div><p>Revisar con Analista de Datos.</p></div>
+        <div class="card"><div class="num">3–4</div><p>Revisar con TL y Desarrollador → documentar en el E2E.</p></div>
+      </div>
+      <div class="formula" style="margin-top:22px;">
+        <div class="formula-row" style="font-size:14px;">Diferencia clave: <span class="op">los eventos generales empiezan en el tablero POP, no en el E2E.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 41i :: actividad solicita tus eventos -->
+  <section class="slide" data-toc="🎬 Solicita tus eventos">
+    <div class="slide-inner wide">
+      <span class="kicker">Actividad · en pareja · 8 minutos <span class="pill real" style="margin-left:6px;">🟢 Datos del ejercicio</span></span>
+      <h2 class="h-lg">Solicita los eventos de tu funcionalidad</h2>
+      <p class="lede">Vuelve a la funcionalidad que trabajaste en "Mi TARS" (Acto 5). Antes de lanzarla, ¿qué eventos necesitas pedir?</p>
+      <div class="field-grid" style="margin-top:24px;">
+        <div class="field">
+          <label for="f-evento-feature">Evento de Feature a solicitar (Front / Userpilot)</label>
+          <input type="text" id="f-evento-feature" placeholder="Ej. landing_published">
+        </div>
+        <div class="field">
+          <label for="f-evento-general">Evento General / transaccional a solicitar (Back)</label>
+          <input type="text" id="f-evento-general" placeholder="Ej. orden_pagada">
+        </div>
+        <div class="field">
+          <label for="f-evento-porque">¿Por qué debes pedirlo ANTES del lanzamiento?</label>
+          <textarea id="f-evento-porque" placeholder="Ej. Sin este evento no podré medir mi % de adopción real"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>Tiempo: 8 minutos. Recuérdales: si no piden el evento antes de lanzar, en el Acto 5 solo van a tener hipótesis, nunca datos reales (🟡 en vez de 🟢).</li>
+        <li>Cierra pidiendo a 1 pareja que comparta su evento de Feature y su evento General.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 41j :: resumen event tracking -->
+  <section class="slide" data-toc="Resumen: eventos">
+    <div class="slide-inner wide">
+      <span class="kicker">Ya sabes todo sobre eventos</span>
+      <h2 class="h-lg">Regla de oro del Acto 7</h2>
+      <div class="card-grid cols-4" style="margin-top:26px;">
+        <div class="card"><div class="num">Evento</div><p>Acción pasada en snake_case, con atributos de contexto.</p></div>
+        <div class="card"><div class="num">Evento de Feature</div><p>Solicitado por el PM, ligado a un proyecto — front / Userpilot.</p></div>
+        <div class="card"><div class="num">Evento General</div><p>Solicitado por Product Ops, empieza en el tablero POP — back / transaccional.</p></div>
+        <div class="card" style="border-color:var(--accent);"><div class="num" style="color:var(--accent);">Regla de oro</div><p>Solicita tus eventos ANTES del lanzamiento — no después.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 41k :: resumen completo del taller / export -->
+  <section class="slide" data-toc="📋 Resumen completo">
+    <div class="slide-inner wide">
+      <span class="kicker">Todo lo que diligenciaste, en un solo lugar</span>
+      <h2 class="h-lg">Dos resúmenes, dos usos distintos</h2>
+      <p class="lede">Uno es el recuerdo del taller completo. El otro es solo lo que le sirve a tu documento E2E.</p>
+      <div class="card-grid cols-2" style="margin-top:22px;">
+        <div class="card"><div class="num">Resumen del taller</div><p>Incluye el rompehielos — sirve como recuerdo y para compartir la experiencia, no para el E2E.</p></div>
+        <div class="card" style="border-color:var(--accent);"><div class="num" style="color:var(--accent);">Solo TARS (E2E)</div><p>Acto 2, 3, 5, 6 y 7 — exactamente lo que necesitas pegar en el documento E2E.</p></div>
+      </div>
+
+      <div class="summary-box" style="margin-top:24px;">
+        <span class="summary-tag">1 · Resumen del taller (para compartir)</span>
+        <span>Junta todo lo que llenaron ambos — PM y Designer — incluido el rompehielos. Útil como recuerdo, no para el E2E.</span>
+        <div class="export-row">
+          <button class="btn ghost" id="mt-export-btn" type="button">📋 Copiar resumen del taller</button>
+          <span id="mt-export-status" class="export-status" aria-live="polite"></span>
+        </div>
+        <div id="mt-export-panel" class="export-panel">
+          <label for="mt-export-text">Ya está copiado al portapapeles. Si prefieres guardarlo como archivo: selecciona todo el texto de abajo, cópialo (Cmd/Ctrl+C) y pégalo en un editor de texto (Notas, Bloc de notas) para guardarlo como .txt:</label>
+          <textarea id="mt-export-text" readonly rows="16"></textarea>
+        </div>
+      </div>
+
+      <div class="summary-box" style="margin-top:16px; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-wash);">
+        <span class="summary-tag">2 · Solo TARS — para el documento E2E</span>
+        <span>Solo Acto 2 (población), Acto 3 (gravedad + impacto en el negocio), Acto 5 (Mi TARS), Acto 6 (CES) y Acto 7 (eventos). Sin rompehielos.</span>
+        <div class="export-row">
+          <button class="btn ghost" id="e2e-export-btn" type="button">📄 Copiar solo TARS (E2E)</button>
+          <span id="e2e-export-status" class="export-status" aria-live="polite"></span>
+        </div>
+        <div id="e2e-export-panel" class="export-panel">
+          <label for="e2e-export-text">Ya está copiado al portapapeles. Si prefieres guardarlo como archivo: selecciona todo el texto de abajo, cópialo (Cmd/Ctrl+C) y pégalo en un editor de texto (Notas, Bloc de notas) para guardarlo como .txt:</label>
+          <textarea id="e2e-export-text" readonly rows="16"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="facnotes">
+      <span class="fn-tag">Notas del facilitador</span>
+      <ul>
+        <li>No hay botón de descarga: la plataforma no permite ofrecer descarga de archivos en artefactos compartidos públicamente (verificado directamente al intentar publicarlo). "Copiar" es la única vía posible aquí; si el portapapeles falla, aparece el texto seleccionable para copiar manualmente o pegar en un editor y guardarlo como .txt.</li>
+        <li>El botón 1 (resumen del taller) reemplaza al que antes estaba en "Mi TARS" (Acto 5) — ahora junta todo, incluido el rompehielos.</li>
+        <li>El botón 2 (solo TARS) es el que deben usar para pegar directamente en el documento E2E — evita que se copien datos del rompehielos que no le sirven a ese documento.</li>
+        <li>Pide a cada pareja que copie y pegue antes de cerrar la sesión — nada de esto se guarda solo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 42 :: acto final flow -->
+  <section class="slide" data-toc="La película no termina">
+    <div class="slide-inner wide">
+      <span class="kicker">Acto final</span>
+      <h2 class="h-lg">La película no termina</h2>
+      <p class="lede">Publicar no es terminar. Publicar es empezar a medir.</p>
+      <div class="flow compact" style="margin-top:26px; max-width:360px;">
+        <div class="flow-step">Lanzamiento</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Medición</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Aprendizaje</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Iteración</div><div class="flow-arrow">↓</div>
+        <div class="flow-step">Nuevo lanzamiento</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 43 :: closing statement -->
+  <section class="slide divider" data-toc="Cierre">
+    <div class="divider-inner slide-inner" style="text-align:center; max-width:760px;">
+      <p class="closing-line">En Dropi no vamos a lanzar funcionalidades.</p>
+      <p class="closing-line dim" style="margin-top:22px;">Vamos a estrenar experiencias que generen valor.</p>
+      <p class="closing-line" style="margin-top:30px; font-size:clamp(18px,2.6vw,24px);">El éxito de una funcionalidad no se mide por haberla publicado.<br>Se mide por el valor que logra capturar.</p>
+    </div>
+  </section>
+
+  <!-- 44 :: final mantra -->
+  <section class="slide divider" data-toc="Mantra final">
+    <div class="divider-inner slide-inner" style="text-align:center; max-width:640px;">
+      <p class="closing-line" style="font-size:clamp(22px,3.6vw,32px);">El número no nos dice qué hacer.</p>
+      <p class="closing-line dim" style="margin-top:18px; font-size:clamp(16px,2.2vw,20px);">Nos ayuda a saber qué pregunta hacer después.</p>
+    </div>
+  </section>
+
+</div>
+
+<div id="progress-track"><div id="progress-fill"></div></div>
+<nav id="navbar">
+  <div class="nav-left">
+    <span class="nav-brand">TARS</span>
+    <span class="nav-act" id="nav-act">Portada</span>
+  </div>
+  <div class="nav-mid">
+    <button class="nav-btn" id="nav-prev" aria-label="Anterior">←</button>
+    <span class="nav-count" id="nav-count">1 / 57</span>
+    <button class="nav-btn" id="nav-next" aria-label="Siguiente">→</button>
+  </div>
+  <div class="nav-right">
+    <button class="nav-toggle" id="toggle-notes">Notas</button>
+    <button class="nav-toggle" id="toggle-toc">Índice</button>
+  </div>
+</nav>
+<div id="toc-panel"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var fmtInt = new Intl.NumberFormat('es-CO', {maximumFractionDigits:0});
+  var fmtPct1 = new Intl.NumberFormat('es-CO', {minimumFractionDigits:1, maximumFractionDigits:1});
+  function money(n){ return fmtInt.format(Math.round(n||0)); }
+  function pct1(n){ return fmtPct1.format(n||0) + '%'; }
+  function pct0(n){ return Math.round(n||0) + '%'; }
+
+  function computeTars(v){
+    var objetivo = v.activos * v.pObjetivo/100;
+    var adoptados = objetivo * v.pAdopcion/100;
+    var retenidos = adoptados * v.pRetencion/100;
+    var satisfechos = retenidos * v.pSatisfaccion/100;
+    var pctObjetivo = v.pObjetivo;
+    var pctAdoptados = v.activos ? adoptados/v.activos*100 : 0;
+    var pctRetenidos = v.activos ? retenidos/v.activos*100 : 0;
+    var pctSatisfechos = v.activos ? satisfechos/v.activos*100 : 0;
+    var st = pctObjetivo>0 ? (pctSatisfechos/pctObjetivo*100) : 0;
+    var stages = {Adopción:v.pAdopcion, Retención:v.pRetencion, Satisfacción:v.pSatisfaccion};
+    var bnKey = Object.keys(stages)[0];
+    Object.keys(stages).forEach(function(k){ if(stages[k] < stages[bnKey]) bnKey = k; });
+    return {
+      objetivo:objetivo, adoptados:adoptados, retenidos:retenidos, satisfechos:satisfechos,
+      pctObjetivo:pctObjetivo, pctAdoptados:pctAdoptados, pctRetenidos:pctRetenidos, pctSatisfechos:pctSatisfechos,
+      st:st, bottleneck:bnKey
+    };
+  }
+
+  function initCalculator(root, opts){
+    opts = opts || {};
+    var sliders = {};
+    root.querySelectorAll('input[type="range"][data-key]').forEach(function(inp){
+      sliders[inp.getAttribute('data-key')] = inp;
+    });
+
+    function readValues(){
+      return {
+        activos: parseFloat(sliders.activos.value) || 0,
+        pObjetivo: parseFloat(sliders.pObjetivo.value) || 0,
+        pAdopcion: parseFloat(sliders.pAdopcion.value) || 0,
+        pRetencion: parseFloat(sliders.pRetencion.value) || 0,
+        pSatisfaccion: parseFloat(sliders.pSatisfaccion.value) || 0
+      };
+    }
+
+    var baseline = null;
+
+    function setBar(key, pct){
+      var el = root.querySelector('[data-bar="'+key+'"]');
+      if(el) el.style.width = Math.max(pct, pct>0?2:0) + '%';
+    }
+    function setOut(key, text){
+      var el = root.querySelector('[data-out="'+key+'"]');
+      if(el) el.textContent = text;
+    }
+
+    function render(){
+      var v = readValues();
+      var r = computeTars(v);
+
+      setOut('activos', money(v.activos));
+      setOut('pObjetivo', pct0(v.pObjetivo));
+      setOut('pAdopcion', pct0(v.pAdopcion));
+      setOut('pRetencion', pct0(v.pRetencion));
+      setOut('pSatisfaccion', pct0(v.pSatisfaccion));
+
+      setOut('valActivos', money(v.activos));
+      setOut('valObjetivo', money(r.objetivo));
+      setOut('valAdoptados', money(r.adoptados));
+      setOut('valRetenidos', money(r.retenidos));
+      setOut('valSatisfechos', money(r.satisfechos));
+
+      setBar('activos', 100);
+      setBar('objetivo', r.pctObjetivo);
+      setBar('adoptados', r.pctAdoptados);
+      setBar('retenidos', r.pctRetenidos);
+      setBar('satisfechos', r.pctSatisfechos);
+
+      setOut('subActivos', '100% de los activos');
+      setOut('subObjetivo', pct1(r.pctObjetivo) + ' del total activo');
+      setOut('subAdoptados', pct1(r.pctAdoptados) + ' del total activo');
+      setOut('subRetenidos', pct1(r.pctRetenidos) + ' del total activo');
+      setOut('subSatisfechos', pct1(r.pctSatisfechos) + ' del total activo');
+
+      setOut('st', pct1(r.st));
+      setOut('stBig', pct1(r.st));
+      setOut('bottleneck', r.bottleneck);
+
+      if(baseline===null) baseline = r.st;
+      var delta = r.st - baseline;
+      setOut('baselineSt', 'S/T ' + pct1(baseline));
+      var deltaEl = root.querySelector('[data-out="deltaSt"]');
+      if(deltaEl){
+        var sign = delta>=0 ? '+' : '';
+        deltaEl.textContent = sign + fmtPct1.format(delta) + ' pp';
+        deltaEl.classList.remove('up','down');
+        if(delta > 0.05) deltaEl.classList.add('up');
+        else if(delta < -0.05) deltaEl.classList.add('down');
+      }
+
+      var banner = root.querySelector('.reto-banner');
+      if(banner){
+        var stSpan = banner.querySelector('[data-out="st"]');
+        if(stSpan) stSpan.textContent = pct1(r.st);
+        var leadText = banner.childNodes[0];
+        if(r.st > 50){
+          banner.classList.add('success');
+          if(leadText) leadText.textContent = '¡Reto superado! S/T actual: ';
+        } else {
+          banner.classList.remove('success');
+          if(leadText) leadText.textContent = 'Reto activo — S/T actual: ';
+        }
+      }
+
+      if(typeof opts.onUpdate === 'function') opts.onUpdate(r, v);
+    }
+
+    Object.keys(sliders).forEach(function(k){
+      sliders[k].addEventListener('input', render);
+    });
+
+    var rebase = root.querySelector('[data-action="rebaseline"]');
+    if(rebase){
+      rebase.addEventListener('click', function(){
+        var v = readValues();
+        baseline = computeTars(v).st;
+        render();
+      });
+    }
+
+    render();
+    return {
+      getState: function(){ var v = readValues(); return computeTars(v); },
+      getRaw: function(){ return readValues(); }
+    };
+  }
+
+  var calcInstances = {};
+  document.querySelectorAll('[data-calc]').forEach(function(el){
+    var name = el.getAttribute('data-calc');
+    calcInstances[name] = initCalculator(el, {
+      onUpdate: name==='mitars' ? updateSummaryAndMatrix : null
+    });
+  });
+
+  // ---- worksheet -> summary text (Mi TARS) ----
+  function val(id){ var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+
+  function updateSummaryAndMatrix(){
+    var nombre = val('mt-nombre') || 'tu funcionalidad';
+    var poblacion = val('mt-poblacion');
+    var evento = val('mt-evento');
+    var metrica = val('mt-metrica-adopcion');
+    var frecuencia = val('mt-frecuencia');
+    var accion = val('mt-accion');
+    var metodo = val('mt-satisfaccion-metodo');
+    var state = calcInstances.mitars ? calcInstances.mitars.getState() : null;
+
+    var parts = [];
+    parts.push('<strong>' + escapeHtml(nombre) + '</strong> está dirigida a ' + (poblacion ? escapeHtml(poblacion) : '<em>[población objetivo]</em>') + '.');
+    if(evento) parts.push('Adopción se mide cuando el usuario ' + escapeHtml(evento).toLowerCase() + '.');
+    if(metrica) parts.push('Su métrica de adopción para el E2E es: ' + escapeHtml(metrica).toLowerCase() + '.');
+    if(frecuencia) parts.push('El problema ocurre de forma ' + escapeHtml(frecuencia).toLowerCase() + '.');
+    if(accion) parts.push('La acción principal que demuestra valor sostenido es: ' + escapeHtml(accion).toLowerCase() + '.');
+    if(metodo) parts.push('La satisfacción se mide con: ' + escapeHtml(metodo).toLowerCase() + '.');
+    if(state) parts.push('Con los supuestos actuales, el TARS proyectado alcanza una puntuación <strong>S/T de ' + pct1(state.st) + '</strong>, con ' + state.bottleneck.toLowerCase() + ' como principal oportunidad a investigar.');
+
+    var out = document.getElementById('mt-summary-text');
+    if(out) out.innerHTML = parts.join(' ');
+
+    // matrix
+    var nameEl = document.getElementById('matrix-feature-name');
+    if(nameEl) nameEl.textContent = nombre;
+    var stReadout = document.getElementById('matrix-st-readout');
+    if(stReadout && state) stReadout.textContent = pct1(state.st);
+    positionMatrixDot();
+  }
+
+  function escapeHtml(s){
+    return s.replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function positionMatrixDot(){
+    var dot = document.getElementById('matrix-dot');
+    var sel = document.getElementById('mt-importancia');
+    if(!dot || !sel || !calcInstances.mitars) return;
+    var state = calcInstances.mitars.getState();
+    var x = parseFloat(sel.value) || 50;
+    var y = Math.min(Math.max(state.st, 2), 98);
+    dot.style.left = x + '%';
+    dot.style.bottom = y + '%';
+  }
+  var importanciaSel = document.getElementById('mt-importancia');
+  if(importanciaSel) importanciaSel.addEventListener('change', positionMatrixDot);
+
+  ['mt-nombre','mt-poblacion','mt-evento','mt-metrica-adopcion','mt-frecuencia','mt-accion','mt-satisfaccion-metodo'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.addEventListener('input', updateSummaryAndMatrix);
+  });
+  updateSummaryAndMatrix();
+
+  // ---- exportar mi TARS ----
+  function pollLine(key, label){
+    var item = document.querySelector('.poll-item[data-poll="' + key + '"]');
+    var map = {A:'Éxito de taquilla', B:'Película de culto', C:'Fracaso de taquilla'};
+    var sel = item ? item.querySelector('.poll-opt.is-selected') : null;
+    if(!sel) return label + ': — no votado —';
+    var chosen = sel.getAttribute('data-opt');
+    var out = map[chosen] || chosen;
+    var answer = (typeof POLL_ANSWERS !== 'undefined') ? POLL_ANSWERS[key] : null;
+    if(answer){
+      out += chosen === answer.correct
+        ? ' (✓ correcto)'
+        : ' (✗ la respuesta era ' + answer.correct + ' · ' + map[answer.correct] + ')';
+    }
+    return label + ': ' + out;
+  }
+
+  function semaforoLevel(id){
+    var group = document.getElementById(id);
+    var active = group ? group.querySelector('.sem-opt.is-active') : null;
+    return active ? active.textContent.trim() : '— sin clasificar —';
+  }
+
+  function buildExportText(){
+    var fecha = new Date().toLocaleDateString('es-CO', {year:'numeric', month:'long', day:'numeric'});
+    var nombre = val('mt-nombre') || 'Sin nombre';
+    var state = calcInstances.mitars ? calcInstances.mitars.getState() : null;
+    var raw = calcInstances.mitars ? calcInstances.mitars.getRaw() : null;
+
+    var lines = [];
+    lines.push('TARS — ' + nombre);
+    lines.push('Taller: El nuevo arte de lanzar productos en Dropi · ' + fecha);
+    lines.push('');
+
+    lines.push('ACTO 0 · ROMPEHIELOS (predicciones iniciales)');
+    lines.push(pollLine('tinder', 'Tinder — deslizar para elegir'));
+    lines.push(pollLine('spotify', 'Spotify — guardar podcasts desde la web'));
+    lines.push(pollLine('splitwise', 'Splitwise — pagos nativos'));
+    lines.push(pollLine('docusign', 'DocuSign — firma electrónica'));
+    lines.push('');
+
+    lines.push('ACTO 2 · POBLACIÓN OBJETIVO');
+    lines.push('Usuario principal: ' + (val('f-usuario-principal') || '—'));
+    lines.push('Problema: ' + (val('f-problema') || '—'));
+    lines.push('Comportamiento que lo demuestra: ' + (val('f-comportamiento') || '—'));
+    lines.push('% estimado dentro de usuarios activos: ' + (val('f-tamano') || '—'));
+    lines.push('');
+
+    lines.push('ACTO 3 · GRAVEDAD DEL PROBLEMA');
+    lines.push('Clasificación: ' + semaforoLevel('semaforo-gravedad'));
+    lines.push('Justificación: ' + (val('f-gravedad-just') || '—'));
+    lines.push('');
+
+    lines.push('ACTO 3 · IMPACTO EN EL NEGOCIO');
+    lines.push('Clasificación: ' + semaforoLevel('semaforo-impacto'));
+    lines.push('KPI que impulsa (si ofensiva): ' + (val('f-impacto-kpi') || '—'));
+    lines.push('Requisito mínimo que cubre (si defensiva): ' + (val('f-impacto-mmr') || '—'));
+    lines.push('Justificación: ' + (val('f-impacto-just') || '—'));
+    lines.push('');
+
+    lines.push('ACTO 5 · MI TARS');
+    lines.push('Población objetivo: ' + (val('mt-poblacion') || '—'));
+    if(raw) lines.push('Tamaño objetivo: ' + pct0(raw.pObjetivo) + '  →  ' + money(state.objetivo) + ' de ' + money(raw.activos) + ' usuarios activos');
+    lines.push('Evento de adopción: ' + (val('mt-evento') || '—'));
+    lines.push('Métrica de adopción (E2E): ' + (val('mt-metrica-adopcion') || '—'));
+    if(raw) lines.push('% Adopción: ' + pct0(raw.pAdopcion) + '  →  ' + money(state.adoptados) + ' usuarios');
+    lines.push('Frecuencia natural: ' + (val('mt-frecuencia') || '—'));
+    lines.push('Acción principal (retención): ' + (val('mt-accion') || '—'));
+    if(raw) lines.push('% Retención: ' + pct0(raw.pRetencion) + '  →  ' + money(state.retenidos) + ' usuarios');
+    lines.push('Método de satisfacción: ' + (val('mt-satisfaccion-metodo') || '—'));
+    if(raw) lines.push('% Satisfacción: ' + pct0(raw.pSatisfaccion) + '  →  ' + money(state.satisfechos) + ' usuarios');
+    lines.push('');
+
+    lines.push('ACTO 6 · SATISFACCIÓN (CES)');
+    lines.push('Pregunta de esfuerzo propuesta: ' + (val('mt-ces') || '—'));
+    lines.push('');
+
+    lines.push('ACTO 7 · EVENTOS A SOLICITAR ANTES DEL LANZAMIENTO');
+    lines.push('Evento de Feature (front / Userpilot): ' + (val('f-evento-feature') || '—'));
+    lines.push('Evento General / transaccional (back): ' + (val('f-evento-general') || '—'));
+    lines.push('Por qué pedirlo antes del lanzamiento: ' + (val('f-evento-porque') || '—'));
+    lines.push('');
+
+    lines.push('RESULTADO TARS');
+    if(state){
+      lines.push('Puntuación S/T: ' + pct1(state.st));
+      lines.push('Principal oportunidad a investigar: ' + state.bottleneck);
+    } else {
+      lines.push('—');
+    }
+    lines.push('');
+    lines.push('🟡 Nota: estos porcentajes y respuestas son hipótesis de partida definidas en el taller, no datos verificados todavía.');
+    return lines.join('\n');
+  }
+
+  function buildE2EExportText(){
+    var fecha = new Date().toLocaleDateString('es-CO', {year:'numeric', month:'long', day:'numeric'});
+    var nombre = val('mt-nombre') || 'Sin nombre';
+    var state = calcInstances.mitars ? calcInstances.mitars.getState() : null;
+    var raw = calcInstances.mitars ? calcInstances.mitars.getRaw() : null;
+
+    var lines = [];
+    lines.push('TARS — ' + nombre);
+    lines.push('Insumo para documento E2E · Taller: El nuevo arte de lanzar productos en Dropi · ' + fecha);
+    lines.push('');
+
+    lines.push('ACTO 2 · POBLACIÓN OBJETIVO');
+    lines.push('Usuario principal: ' + (val('f-usuario-principal') || '—'));
+    lines.push('Problema: ' + (val('f-problema') || '—'));
+    lines.push('Comportamiento que lo demuestra: ' + (val('f-comportamiento') || '—'));
+    lines.push('% estimado dentro de usuarios activos: ' + (val('f-tamano') || '—'));
+    lines.push('');
+
+    lines.push('ACTO 3 · GRAVEDAD DEL PROBLEMA');
+    lines.push('Clasificación: ' + semaforoLevel('semaforo-gravedad'));
+    lines.push('Justificación: ' + (val('f-gravedad-just') || '—'));
+    lines.push('');
+
+    lines.push('ACTO 3 · IMPACTO EN EL NEGOCIO');
+    lines.push('Clasificación: ' + semaforoLevel('semaforo-impacto'));
+    lines.push('KPI que impulsa (si ofensiva): ' + (val('f-impacto-kpi') || '—'));
+    lines.push('Requisito mínimo que cubre (si defensiva): ' + (val('f-impacto-mmr') || '—'));
+    lines.push('Justificación: ' + (val('f-impacto-just') || '—'));
+    lines.push('');
+
+    lines.push('ACTO 5 · MI TARS');
+    lines.push('Población objetivo: ' + (val('mt-poblacion') || '—'));
+    if(raw) lines.push('Tamaño objetivo: ' + pct0(raw.pObjetivo) + '  →  ' + money(state.objetivo) + ' de ' + money(raw.activos) + ' usuarios activos');
+    lines.push('Evento de adopción: ' + (val('mt-evento') || '—'));
+    lines.push('Métrica de adopción (E2E): ' + (val('mt-metrica-adopcion') || '—'));
+    if(raw) lines.push('% Adopción: ' + pct0(raw.pAdopcion) + '  →  ' + money(state.adoptados) + ' usuarios');
+    lines.push('Frecuencia natural: ' + (val('mt-frecuencia') || '—'));
+    lines.push('Acción principal (retención): ' + (val('mt-accion') || '—'));
+    if(raw) lines.push('% Retención: ' + pct0(raw.pRetencion) + '  →  ' + money(state.retenidos) + ' usuarios');
+    lines.push('Método de satisfacción: ' + (val('mt-satisfaccion-metodo') || '—'));
+    if(raw) lines.push('% Satisfacción: ' + pct0(raw.pSatisfaccion) + '  →  ' + money(state.satisfechos) + ' usuarios');
+    lines.push('');
+
+    lines.push('ACTO 6 · SATISFACCIÓN (CES)');
+    lines.push('Pregunta de esfuerzo propuesta: ' + (val('mt-ces') || '—'));
+    lines.push('');
+
+    lines.push('ACTO 7 · EVENTOS A SOLICITAR ANTES DEL LANZAMIENTO');
+    lines.push('Evento de Feature (front / Userpilot): ' + (val('f-evento-feature') || '—'));
+    lines.push('Evento General / transaccional (back): ' + (val('f-evento-general') || '—'));
+    lines.push('Por qué pedirlo antes del lanzamiento: ' + (val('f-evento-porque') || '—'));
+    lines.push('');
+
+    lines.push('RESULTADO TARS');
+    if(state){
+      lines.push('Puntuación S/T: ' + pct1(state.st));
+      lines.push('Principal oportunidad a investigar: ' + state.bottleneck);
+    } else {
+      lines.push('—');
+    }
+    lines.push('');
+    lines.push('🟡 Nota: estos porcentajes y respuestas son hipótesis de partida definidas en el taller, no datos verificados todavía.');
+    return lines.join('\n');
+  }
+
+  function showExportStatus(statusId, msg, isError){
+    var status = document.getElementById(statusId);
+    if(!status) return;
+    status.textContent = msg;
+    status.classList.toggle('is-error', !!isError);
+    if(!isError){
+      window.clearTimeout(status._t);
+      status._t = window.setTimeout(function(){ status.textContent = ''; }, 4000);
+    }
+  }
+
+  function openExportFallback(panelId, textId, text){
+    var panel = document.getElementById(panelId);
+    var ta = document.getElementById(textId);
+    if(!panel || !ta) return;
+    ta.value = text;
+    panel.classList.add('is-open');
+    ta.focus();
+    ta.select();
+  }
+
+  function wireExportButton(btnId, statusId, panelId, textId, buildFn){
+    var btn = document.getElementById(btnId);
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var text = buildFn();
+      openExportFallback(panelId, textId, text);
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(function(){
+          showExportStatus(statusId, 'Copiado al portapapeles ✓ — o guarda el texto de abajo como .txt.');
+        }, function(){
+          showExportStatus(statusId, 'Selecciona el texto de abajo y copia con Cmd/Ctrl+C.', true);
+        });
+      } else {
+        showExportStatus(statusId, 'Selecciona el texto de abajo y copia con Cmd/Ctrl+C.', true);
+      }
+    });
+  }
+
+  wireExportButton('mt-export-btn', 'mt-export-status', 'mt-export-panel', 'mt-export-text', buildExportText);
+  wireExportButton('e2e-export-btn', 'e2e-export-status', 'e2e-export-panel', 'e2e-export-text', buildE2EExportText);
+
+
+  // ---- poll interactions ----
+  var POLL_LABELS = { A:'Éxito de taquilla', B:'Película de culto', C:'Fracaso de taquilla' };
+  var POLL_ANSWERS = {
+    tinder: {
+      correct: 'A',
+      explain: 'Alcance masivo — es el 100% de la interacción del producto — con lealtad altísima (es adictivo, por diseño). Se construyó como ofensiva y ganó en las tres etapas de TARS a la vez.'
+    },
+    spotify: {
+      correct: 'B',
+      explain: 'Bajo alcance — solo le importa a un nicho de power users — pero alta lealtad dentro de ese nicho. Es defensiva: nunca buscó ser masiva, y eso está bien.'
+    },
+    splitwise: {
+      correct: 'C',
+      explain: 'Competía contra hábitos ya arraigados (Venmo, Zelle, transferencias). Probablemente se pensó como ofensiva, pero no logró la tracción esperada.'
+    },
+    docusign: {
+      correct: 'A',
+      explain: 'Es la razón de ser del producto: alcance total, lealtad total. Ofensiva que definió la categoría completa.'
+    }
+  };
+
+  document.querySelectorAll('.poll-item').forEach(function(item){
+    var answer = POLL_ANSWERS[item.getAttribute('data-poll')];
+    var opts = item.querySelectorAll('.poll-opt');
+    var feedback = item.querySelector('.poll-feedback');
+    opts.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var chosen = btn.getAttribute('data-opt');
+        opts.forEach(function(o){ o.classList.remove('is-selected','is-correct','is-wrong'); });
+        if(!answer){ btn.classList.add('is-selected'); return; }
+        var ok = chosen === answer.correct;
+        btn.classList.add('is-selected', ok ? 'is-correct' : 'is-wrong');
+        if(feedback){
+          var lead = ok
+            ? '✅ ¡Correcto!'
+            : '❌ No exactamente — la respuesta era ' + answer.correct + ' · ' + POLL_LABELS[answer.correct] + '.';
+          feedback.innerHTML = '<span class="' + (ok ? 'tag-ok' : 'tag-bad') + '">' + lead + '</span> ' + answer.explain;
+          feedback.classList.add('is-open');
+        }
+      });
+    });
+  });
+
+  // ---- semaforo ----
+  document.querySelectorAll('.semaforo').forEach(function(group){
+    var opts = group.querySelectorAll('.sem-opt');
+    opts.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        opts.forEach(function(o){ o.classList.remove('is-active'); });
+        btn.classList.add('is-active');
+      });
+    });
+  });
+
+  // ================= deck navigation =================
+  var slides = Array.prototype.slice.call(document.querySelectorAll('#deck > .slide'));
+  var current = 0;
+  var matrixSlideIndex = slides.findIndex(function(s){ return s.getAttribute('data-toc') === 'Matriz de características'; });
+
+  var navPrev = document.getElementById('nav-prev');
+  var navNext = document.getElementById('nav-next');
+  var navCount = document.getElementById('nav-count');
+  var navAct = document.getElementById('nav-act');
+  var progressFill = document.getElementById('progress-fill');
+  var tocPanel = document.getElementById('toc-panel');
+
+  var lastToc = 'Portada';
+
+  function goTo(i){
+    if(i < 0 || i >= slides.length) return;
+    slides[current].classList.remove('is-active');
+    current = i;
+    slides[current].classList.add('is-active');
+    var toc = slides[current].getAttribute('data-toc');
+    if(toc) lastToc = toc;
+    navAct.textContent = lastToc;
+    navCount.textContent = (current+1) + ' / ' + slides.length;
+    navPrev.disabled = current===0;
+    navNext.disabled = current===slides.length-1;
+    progressFill.style.width = ((current+1)/slides.length*100) + '%';
+    if(current===matrixSlideIndex) positionMatrixDot();
+    window.scrollTo(0,0);
+  }
+
+  navPrev.addEventListener('click', function(){ goTo(current-1); });
+  navNext.addEventListener('click', function(){ goTo(current+1); });
+
+  document.addEventListener('keydown', function(e){
+    var tag = (e.target && e.target.tagName) || '';
+    if(['INPUT','TEXTAREA','SELECT'].indexOf(tag) !== -1) return;
+    if(e.key==='ArrowRight' || e.key===' '){ e.preventDefault(); goTo(current+1); }
+    if(e.key==='ArrowLeft'){ e.preventDefault(); goTo(current-1); }
+  });
+
+  var toggleNotes = document.getElementById('toggle-notes');
+  toggleNotes.addEventListener('click', function(){
+    document.body.classList.toggle('notes-on');
+    toggleNotes.classList.toggle('is-on');
+  });
+
+  var toggleToc = document.getElementById('toggle-toc');
+  var tocBuilt = false;
+  function buildToc(){
+    if(tocBuilt) return;
+    slides.forEach(function(s, i){
+      var label = s.getAttribute('data-toc');
+      if(!label) return;
+      var btn = document.createElement('button');
+      btn.textContent = label;
+      btn.addEventListener('click', function(){ goTo(i); tocPanel.classList.remove('is-open'); });
+      tocPanel.appendChild(btn);
+    });
+    tocBuilt = true;
+  }
+  toggleToc.addEventListener('click', function(){
+    buildToc();
+    tocPanel.classList.toggle('is-open');
+  });
+
+  goTo(0);
+})();
+</script>
+
+</body></html>
