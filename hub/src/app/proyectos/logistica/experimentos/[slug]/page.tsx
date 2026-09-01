@@ -8,7 +8,6 @@ import {
   aportaDeExperimento,
   estaDisenado,
   APORTA_GLOSA,
-  LINK_ICONO,
   type EstadoExp,
   type AportaA,
 } from "@/app/proyectos/logistica/_lib/data";
@@ -19,7 +18,7 @@ import {
   PageHeader,
   SectionTitle,
   type Dato,
-} from "@/app/proyectos/logistica/_components/ui";
+  Recursos,} from "@/app/proyectos/logistica/_components/ui";
 
 // Ficha de un experimento — nivel 3 de la escalera, igual que la de proyecto.
 //
@@ -190,7 +189,7 @@ export default async function ExperimentoPage({ params }: { params: Promise<{ sl
 
           {(e.links?.length || e.demoHref) && (
             <>
-              <SectionTitle>Enlaces</SectionTitle>
+              <SectionTitle>Recursos</SectionTitle>
               <Card>
                 <div className="exp-ficha__pie" style={{ marginTop: 0, paddingTop: 0, borderTop: 0 }}>
                   {e.demoHref && (
@@ -198,21 +197,7 @@ export default async function ExperimentoPage({ params }: { params: Promise<{ sl
                       Probar el simulador →
                     </Link>
                   )}
-                  {(e.links ?? []).map((l) =>
-                    l.falta || !l.href ? (
-                      <span key={l.label} className="exp-ficha__falta-link" title="Falta el enlace">
-                        {l.label}
-                      </span>
-                    ) : l.href.startsWith("http") ? (
-                      <a key={l.label} href={l.href} target="_blank" rel="noreferrer" className="u-link">
-                        <span aria-hidden>{LINK_ICONO[l.tipo]}</span> {l.label} ↗
-                      </a>
-                    ) : (
-                      <Link key={l.label} href={l.href} className="u-link">
-                        <span aria-hidden>{LINK_ICONO[l.tipo]}</span> {l.label} →
-                      </Link>
-                    )
-                  )}
+                  <Recursos links={e.links ?? []} compact />
                 </div>
               </Card>
             </>
