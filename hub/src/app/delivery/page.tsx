@@ -16,9 +16,15 @@ type Proyecto = {
   celula_owner_id: string;
   updated_at: string | null;
   created_at: string | null;
+  // Pipeline de fechas — ver 055_darwin_delivery_fechas_pipeline.sql.
+  fecha_handoff: string | null;
   fecha_inicio_dev: string | null;
-  fecha_entrega_propuesta: string | null;
+  fecha_entrega_qa: string | null;
+  fecha_salida_produccion: string | null;
 };
+
+// Campos de fecha editables de un Delivery Proyecto, en orden del ciclo.
+type FechaCampo = "fecha_handoff" | "fecha_inicio_dev" | "fecha_entrega_qa" | "fecha_salida_produccion";
 
 // Estados de un Delivery Proyecto en los que ya tiene sentido registrar
 // cuándo arrancó desarrollo.
@@ -40,6 +46,26 @@ function fmtFechaCorta(iso: string | null) {
   return new Date(y, m - 1, d).toLocaleDateString("es-CO", { day: "2-digit", month: "short" });
 }
 
+// 'YYYY-MM-DD' de hoy en hora local (no UTC, para no saltar de día de noche).
+function hoyISO() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+// Tras un PATCH el servidor puede haber tocado campos por su cuenta (autofill
+// de fecha_inicio_dev al pasar a 'en DEV', p. ej.). Trae estado + las 4 fechas
+// desde la fila devuelta, preservando el resto del proyecto local.
+function reconciliarProyecto(p: Proyecto, fila: Record<string, unknown>): Proyecto {
+  return {
+    ...p,
+    estado_interno: (fila.estado_interno as string | null) ?? p.estado_interno,
+    fecha_handoff: (fila.fecha_handoff as string | null) ?? null,
+    fecha_inicio_dev: (fila.fecha_inicio_dev as string | null) ?? null,
+    fecha_entrega_qa: (fila.fecha_entrega_qa as string | null) ?? null,
+    fecha_salida_produccion: (fila.fecha_salida_produccion as string | null) ?? null,
+  };
+}
+
 type Comentario = { id: string; autor: string; comentario: string; created_at: string };
 
 type Cambio = {
@@ -53,8 +79,10 @@ type Cambio = {
 };
 
 const CAMPO_LABEL: Record<string, string> = {
+  fecha_handoff: "Handoff",
   fecha_inicio_dev: "Inicio dev",
-  fecha_entrega_propuesta: "Entrega propuesta",
+  fecha_entrega_qa: "Entrega / inicio QA",
+  fecha_salida_produccion: "Salida a producción",
   estado_interno: "Estado",
   prioridad: "Prioridad",
 };
@@ -151,6 +179,8 @@ export default function DeliveryPage() {
   const [showCrear, setShowCrear] = useState(false);
   const [commentTarget, setCommentTarget] = useState<Proyecto | null>(null);
   const [commentCounts, setCommentCounts] = useState<Record<string, number>>({});
+  // Proyecto en el que se está confirmando el paso 'Pendiente Handoff' → 'en DEV'.
+  const [pasoDevTarget, setPasoDevTarget] = useState<ProyectoConCelula | null>(null);
   const [detalleTarget, setDetalleTarget] = useState<ProyectoConCelula | null>(null);
   // La primera carga fija la selección de células a "todas"; los refetch
   // posteriores (tras crear un Delivery) respetan lo que el usuario tenga
@@ -231,13 +261,127 @@ export default function DeliveryPage() {
     }
   }
 
-  // Edición optimista de fecha_inicio_dev / fecha_entrega_propuesta. `valor`
-  // es 'YYYY-MM-DD' o null; `nota` es un comentario opcional que se guarda en
-  // el log de cambios junto a esa edición. Devuelve true si el PATCH pasó.
+  // Cambia el estado_interno de un Delivery Proyecto. Optimista y con
+  // reconciliación: al pasar a 'en DEV' el servidor puede sellar
+  // fecha_inicio_dev con hoy. Cambiar el estado re-agrupa la card en el
+  // Roadmap (otra lista / barra / hito).
+  async function handleEstadoChange(celulaId: string, projectId: string, estado: string | null) {
+    let prev: string | null = null;
+    setCelulas((cs) =>
+      cs.map((c) =>
+        c.id !== celulaId
+          ? c
+          : {
+              ...c,
+              proyectos: c.proyectos.map((p) => {
+                if (p.id !== projectId) return p;
+                prev = p.estado_interno;
+                return { ...p, estado_interno: estado };
+              }),
+            },
+      ),
+    );
+
+    const res = await fetch(`/api/proyectos/${projectId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado_interno: estado }),
+    }).catch(() => null);
+
+    if (!res || !res.ok) {
+      setCelulas((cs) =>
+        cs.map((c) =>
+          c.id !== celulaId
+            ? c
+            : { ...c, proyectos: c.proyectos.map((p) => (p.id === projectId ? { ...p, estado_interno: prev } : p)) },
+        ),
+      );
+      return;
+    }
+
+    const actualizado = await res.json().catch(() => null);
+    if (actualizado?.id) {
+      setCelulas((cs) =>
+        cs.map((c) =>
+          c.id !== celulaId
+            ? c
+            : {
+                ...c,
+                proyectos: c.proyectos.map((p) => (p.id === projectId ? reconciliarProyecto(p, actualizado) : p)),
+              },
+        ),
+      );
+    }
+  }
+
+  // Confirma el paso 'Pendiente Handoff' → 'en DEV' con las fechas del ciclo
+  // de dev en un solo PATCH (una fila de log por cada fecha que cambia).
+  // Optimista; revierte el proyecto completo si el PATCH falla.
+  async function handlePasoADev(
+    celulaId: string,
+    projectId: string,
+    fechas: { fecha_inicio_dev: string | null; fecha_entrega_qa: string | null; fecha_salida_produccion: string | null },
+    nota: string | null,
+  ): Promise<boolean> {
+    let prev: Proyecto | null = null;
+    setCelulas((cs) =>
+      cs.map((c) =>
+        c.id !== celulaId
+          ? c
+          : {
+              ...c,
+              proyectos: c.proyectos.map((p) => {
+                if (p.id !== projectId) return p;
+                prev = p;
+                return { ...p, estado_interno: "en DEV", ...fechas };
+              }),
+            },
+      ),
+    );
+
+    const res = await fetch(`/api/proyectos/${projectId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ estado_interno: "en DEV", ...fechas, ...(nota ? { nota } : {}) }),
+    }).catch(() => null);
+
+    if (!res || !res.ok) {
+      const snapshot = prev;
+      if (snapshot) {
+        setCelulas((cs) =>
+          cs.map((c) =>
+            c.id !== celulaId
+              ? c
+              : { ...c, proyectos: c.proyectos.map((p) => (p.id === projectId ? snapshot : p)) },
+          ),
+        );
+      }
+      return false;
+    }
+
+    const actualizado = await res.json().catch(() => null);
+    if (actualizado?.id) {
+      setCelulas((cs) =>
+        cs.map((c) =>
+          c.id !== celulaId
+            ? c
+            : {
+                ...c,
+                proyectos: c.proyectos.map((p) => (p.id === projectId ? reconciliarProyecto(p, actualizado) : p)),
+              },
+        ),
+      );
+    }
+    return true;
+  }
+
+  // Edición optimista de una de las 4 fechas del pipeline. `valor` es
+  // 'YYYY-MM-DD' o null; `nota` es un comentario opcional que se guarda en el
+  // log de cambios junto a esa edición. Devuelve true si el PATCH pasó.
   async function handleFechaChange(
     celulaId: string,
     projectId: string,
-    campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
+    campo: FechaCampo,
     valor: string | null,
     nota?: string | null,
   ): Promise<boolean> {
@@ -284,16 +428,7 @@ export default function DeliveryPage() {
             ? c
             : {
                 ...c,
-                proyectos: c.proyectos.map((p) =>
-                  p.id === projectId
-                    ? {
-                        ...p,
-                        fecha_inicio_dev: actualizado.fecha_inicio_dev ?? null,
-                        fecha_entrega_propuesta: actualizado.fecha_entrega_propuesta ?? null,
-                        estado_interno: actualizado.estado_interno ?? p.estado_interno,
-                      }
-                    : p,
-                ),
+                proyectos: c.proyectos.map((p) => (p.id === projectId ? reconciliarProyecto(p, actualizado) : p)),
               },
         ),
       );
@@ -304,7 +439,8 @@ export default function DeliveryPage() {
   const allSelected = celulas.length > 0 && selectedIds.length === celulas.length;
   const toggleCelula = (id: string) =>
     setSelectedIds((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
-  const selectAll = () => setSelectedIds(celulas.map((c) => c.id));
+  // "Todas" alterna: si ya están todas seleccionadas, las deselecciona.
+  const toggleAll = () => setSelectedIds(allSelected ? [] : celulas.map((c) => c.id));
 
   const toggleCollapse = (id: string) =>
     setCollapsedIds((prev) => {
@@ -388,7 +524,7 @@ export default function DeliveryPage() {
           </div>
 
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 24 }}>
-            <button type="button" onClick={selectAll} style={pillStyle(allSelected)}>
+            <button type="button" onClick={toggleAll} style={pillStyle(allSelected)}>
               Todas
             </button>
             {celulas.map((c) => (
@@ -416,6 +552,9 @@ export default function DeliveryPage() {
                 proyectos={flatPrioridad}
                 editableFn={(p) => p.celula_owner_id === ownCelulaId || isSuperAdmin}
                 onFechaChange={handleFechaChange}
+                onEstadoChange={handleEstadoChange}
+                onPrioridadChange={handlePrioridadChange}
+                onPasoADev={setPasoDevTarget}
                 onOpenDetalle={setDetalleTarget}
               />
             ) : vista === "prioridad" ? (
@@ -542,6 +681,23 @@ export default function DeliveryPage() {
           }
         />
       )}
+
+      {pasoDevTarget && (
+        <PasoADevModal
+          proyecto={pasoDevTarget}
+          onCancel={() => setPasoDevTarget(null)}
+          onConfirm={async (fechas, nota) => {
+            const ok = await handlePasoADev(
+              pasoDevTarget.celula_owner_id,
+              pasoDevTarget.id,
+              fechas,
+              nota,
+            );
+            if (ok) setPasoDevTarget(null);
+            return ok;
+          }}
+        />
+      )}
     </main>
   );
 }
@@ -570,7 +726,7 @@ function PipelineBoard({
   onFechaChange: (
     celulaId: string,
     projectId: string,
-    campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
+    campo: FechaCampo,
     valor: string | null,
   ) => void;
   commentCounts: Record<string, number>;
@@ -669,7 +825,7 @@ function DeliveryCard({
   celulaNombre?: string;
   editable: boolean;
   onPrioridadChange: (prioridad: string | null) => void;
-  onFechaChange: (campo: "fecha_inicio_dev" | "fecha_entrega_propuesta", valor: string | null) => void;
+  onFechaChange: (campo: FechaCampo, valor: string | null) => void;
   commentCount?: number;
   onOpenComentarios: () => void;
 }) {
@@ -713,6 +869,14 @@ function DeliveryCard({
       </p>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px", marginTop: 8 }}>
+        {(!!p.fecha_handoff || p.estado_interno === "Pendiente Handoff") && (
+          <FechaEditor
+            label="Handoff"
+            valor={p.fecha_handoff}
+            editable={editable}
+            onChange={(v) => onFechaChange("fecha_handoff", v)}
+          />
+        )}
         {mostrarInicioDev && (
           <FechaEditor
             label="Inicio dev"
@@ -722,10 +886,10 @@ function DeliveryCard({
           />
         )}
         <FechaEditor
-          label="Entrega prop."
-          valor={p.fecha_entrega_propuesta}
+          label="Producción"
+          valor={p.fecha_salida_produccion}
           editable={editable}
-          onChange={(v) => onFechaChange("fecha_entrega_propuesta", v)}
+          onChange={(v) => onFechaChange("fecha_salida_produccion", v)}
         />
       </div>
 
@@ -1208,6 +1372,88 @@ function PrioridadEditor({
   );
 }
 
+// Mismo patrón que PrioridadEditor pero para estado_interno: chip clickeable
+// que se vuelve <select> con las etapas de un Delivery Proyecto. Cambiar el
+// estado re-agrupa la card en el Roadmap.
+function EstadoEditor({
+  estado,
+  editable,
+  onChange,
+}: {
+  estado: string | null;
+  editable: boolean;
+  onChange: (estado: string | null) => void;
+}) {
+  const [editing, setEditing] = useState(false);
+  const color = estado ? ESTADO_BAR_COLOR[estado] ?? "var(--gray-400)" : "var(--gray-300)";
+
+  if (!editable) {
+    return (
+      <span
+        style={{
+          fontSize: 9,
+          fontWeight: 700,
+          color,
+          border: `1px solid ${color}`,
+          borderRadius: 999,
+          padding: "0 6px",
+        }}
+      >
+        {estado ?? "sin estado"}
+      </span>
+    );
+  }
+
+  if (editing) {
+    return (
+      <select
+        autoFocus
+        defaultValue={estado ?? ""}
+        onChange={(e) => {
+          onChange(e.target.value || null);
+          setEditing(false);
+        }}
+        onBlur={() => setEditing(false)}
+        style={{
+          fontSize: 10.5,
+          fontFamily: "inherit",
+          color: "var(--gray-600)",
+          background: "#fff",
+          border: "1px solid var(--gray-200)",
+          borderRadius: 6,
+          padding: "1px 4px",
+        }}
+      >
+        {ESTADOS_DELIVERY.map((s) => (
+          <option key={s} value={s}>
+            {s}
+          </option>
+        ))}
+      </select>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={() => setEditing(true)}
+      title="Cambiar estado"
+      style={{
+        fontSize: 9,
+        fontWeight: 700,
+        color,
+        border: `1px solid ${color}`,
+        borderRadius: 999,
+        padding: "0 6px",
+        background: "transparent",
+        cursor: "pointer",
+      }}
+    >
+      {estado ?? "sin estado"}
+    </button>
+  );
+}
+
 // Chip "label: fecha" que al hacer click se vuelve un <input type="date"> y
 // guarda al elegir/salir. Mismo patrón que PrioridadEditor. Read-only si no
 // se puede editar (célula ajena).
@@ -1260,8 +1506,9 @@ function FechaEditor({
   );
 }
 
-// Modal de detalle de un proyecto del Roadmap: editar las dos fechas, ver el
-// log de cambios (project_changelog vía /api/proyectos/[id]/historial) y
+// Modal de detalle de un proyecto del Roadmap: editar las 4 fechas del
+// pipeline (handoff, inicio dev, entrega/inicio QA, salida a producción), ver
+// el log de cambios (project_changelog vía /api/proyectos/[id]/historial) y
 // dejar comentarios (project_comments, misma ruta que ComentariosModal).
 function RoadmapDetalleModal({
   proyecto,
@@ -1275,16 +1522,18 @@ function RoadmapDetalleModal({
   autorEmail: string | null;
   editable: boolean;
   onFechaChange: (
-    campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
+    campo: FechaCampo,
     valor: string | null,
     nota?: string | null,
   ) => Promise<boolean>;
   onClose: () => void;
   onCountChange: (n: number) => void;
 }) {
-  const [fechas, setFechas] = useState({
+  const [fechas, setFechas] = useState<Record<FechaCampo, string | null>>({
+    fecha_handoff: proyecto.fecha_handoff,
     fecha_inicio_dev: proyecto.fecha_inicio_dev,
-    fecha_entrega_propuesta: proyecto.fecha_entrega_propuesta,
+    fecha_entrega_qa: proyecto.fecha_entrega_qa,
+    fecha_salida_produccion: proyecto.fecha_salida_produccion,
   });
   const [notaFecha, setNotaFecha] = useState("");
   const [historial, setHistorial] = useState<Cambio[] | null>(null);
@@ -1313,7 +1562,7 @@ function RoadmapDetalleModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proyecto.id, cargarHistorial]);
 
-  async function cambiarFecha(campo: "fecha_inicio_dev" | "fecha_entrega_propuesta", valor: string | null) {
+  async function cambiarFecha(campo: FechaCampo, valor: string | null) {
     const prev = fechas[campo];
     setFechas((f) => ({ ...f, [campo]: valor }));
     const ok = await onFechaChange(campo, valor, notaFecha.trim() || null);
@@ -1403,7 +1652,13 @@ function RoadmapDetalleModal({
             <p style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 8px" }}>
               Fechas
             </p>
-            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "8px 20px", flexWrap: "wrap" }}>
+              <FechaEditor
+                label="Handoff"
+                valor={fechas.fecha_handoff}
+                editable={editable}
+                onChange={(v) => cambiarFecha("fecha_handoff", v)}
+              />
               <FechaEditor
                 label="Inicio dev"
                 valor={fechas.fecha_inicio_dev}
@@ -1411,10 +1666,16 @@ function RoadmapDetalleModal({
                 onChange={(v) => cambiarFecha("fecha_inicio_dev", v)}
               />
               <FechaEditor
-                label="Entrega propuesta"
-                valor={fechas.fecha_entrega_propuesta}
+                label="Entrega / inicio QA"
+                valor={fechas.fecha_entrega_qa}
                 editable={editable}
-                onChange={(v) => cambiarFecha("fecha_entrega_propuesta", v)}
+                onChange={(v) => cambiarFecha("fecha_entrega_qa", v)}
+              />
+              <FechaEditor
+                label="Salida a producción"
+                valor={fechas.fecha_salida_produccion}
+                editable={editable}
+                onChange={(v) => cambiarFecha("fecha_salida_produccion", v)}
               />
             </div>
             {editable && (
@@ -1520,10 +1781,16 @@ function RoadmapDetalleModal({
 }
 
 // ─── Roadmap / Gantt ──────────────────────────────────────────────────────
-// Barras de los Delivery Proyecto que ya tienen fecha de entrega propuesta,
-// de fecha_inicio_dev (o created_at, o la misma entrega si no hay nada) a
-// fecha_entrega_propuesta. Agrupado por célula. Los que no tienen fecha de
-// entrega van en una lista aparte para no esconderlos.
+// Un solo timeline agrupado por célula, con dos tipos de marca según la etapa
+// del Delivery Proyecto:
+//   • "en DEV" / "Activo" / "Cerrado" con salida a producción → barra completa
+//     (fecha_inicio_dev → fecha_salida_produccion).
+//   • "Pendiente Handoff" con fecha de handoff                → hito ◆ sobre
+//     fecha_handoff. Solo marca la fecha tentativa en que Ingeniería nos
+//     recibe; no lleva fin porque todavía está por validar.
+// Todo lo demás ("En definición" / "En priorización", o proyectos a los que
+// les falta la fecha que su etapa necesita) baja a las listas por etapa de
+// "Sin planear en el timeline" para no esconderlo.
 
 const PX_POR_DIA = 5;
 
@@ -1547,10 +1814,19 @@ function fechaCortaDeDate(d: Date) {
   return d.toLocaleDateString("es-CO", { day: "2-digit", month: "short" });
 }
 
+const DEV_ESTADOS = new Set(["en DEV", "Activo", "Cerrado"]);
+
+type TimelineItem =
+  | { kind: "bar"; p: ProyectoConCelula; ini: Date; fin: Date }
+  | { kind: "hito"; p: ProyectoConCelula; fecha: Date };
+
 function GanttBoard({
   proyectos,
   editableFn,
   onFechaChange,
+  onEstadoChange,
+  onPrioridadChange,
+  onPasoADev,
   onOpenDetalle,
 }: {
   proyectos: ProyectoConCelula[];
@@ -1558,33 +1834,81 @@ function GanttBoard({
   onFechaChange: (
     celulaId: string,
     projectId: string,
-    campo: "fecha_inicio_dev" | "fecha_entrega_propuesta",
+    campo: FechaCampo,
     valor: string | null,
   ) => void;
+  onEstadoChange: (celulaId: string, projectId: string, estado: string | null) => void;
+  onPrioridadChange: (celulaId: string, projectId: string, prioridad: string | null) => void;
+  onPasoADev: (p: ProyectoConCelula) => void;
   onOpenDetalle: (p: ProyectoConCelula) => void;
 }) {
   const hoy = new Date();
   hoy.setHours(0, 0, 0, 0);
 
-  const conFecha = proyectos.filter((p) => !!p.fecha_entrega_propuesta);
-  const sinFecha = proyectos.filter((p) => !p.fecha_entrega_propuesta);
+  // Cambio de estado desde el Roadmap. El paso 'Pendiente Handoff' → 'en DEV'
+  // abre el modal de fechas; el resto es un cambio directo.
+  const cambiarEstado = (p: ProyectoConCelula, next: string | null) => {
+    if (p.estado_interno === "Pendiente Handoff" && next === "en DEV") {
+      onPasoADev(p);
+    } else {
+      onEstadoChange(p.celula_owner_id, p.id, next);
+    }
+  };
 
-  const barras = useMemo(() => {
-    return conFecha
-      .map((p) => {
-        const fin = isoADate(p.fecha_entrega_propuesta)!;
+  // Clasificación por etapa: barra (DEV con salida a producción), hito
+  // (Pendiente Handoff con fecha de handoff) o "sin planear" (el resto —
+  // incluye "En definición").
+  const { items, sinPlanear } = useMemo(() => {
+    const items: TimelineItem[] = [];
+    const sinPlanear: ProyectoConCelula[] = [];
+    for (const p of proyectos) {
+      const estado = p.estado_interno ?? "";
+      if (DEV_ESTADOS.has(estado) && p.fecha_salida_produccion) {
+        const fin = isoADate(p.fecha_salida_produccion)!;
         let ini = isoADate(p.fecha_inicio_dev) ?? isoADate(p.created_at) ?? fin;
         if (ini.getTime() > fin.getTime()) ini = fin;
-        return { p, ini, fin };
-      })
-      .sort((a, b) => a.ini.getTime() - b.ini.getTime() || a.fin.getTime() - b.fin.getTime());
-  }, [conFecha]);
+        items.push({ kind: "bar", p, ini, fin });
+      } else if (estado === "Pendiente Handoff" && p.fecha_handoff) {
+        items.push({ kind: "hito", p, fecha: isoADate(p.fecha_handoff)! });
+      } else {
+        sinPlanear.push(p);
+      }
+    }
+    items.sort((a, b) => {
+      const da = a.kind === "bar" ? a.ini.getTime() : a.fecha.getTime();
+      const db = b.kind === "bar" ? b.ini.getTime() : b.fecha.getTime();
+      if (da !== db) return da - db;
+      const fa = a.kind === "bar" ? a.fin.getTime() : da;
+      const fb = b.kind === "bar" ? b.fin.getTime() : db;
+      return fa - fb;
+    });
+    return { items, sinPlanear };
+  }, [proyectos]);
 
-  if (barras.length === 0 && sinFecha.length === 0) {
+  if (items.length === 0 && sinPlanear.length === 0) {
     return <EmptyState />;
   }
 
-  const fechas = barras.flatMap((b) => [b.ini, b.fin]).concat([hoy]);
+  const HANDOFF_COLOR = ESTADO_BAR_COLOR["Pendiente Handoff"];
+
+  // Sin nada que ubicar en el tiempo: solo las listas por etapa.
+  if (items.length === 0) {
+    return (
+      <SinPlanearLista
+        proyectos={sinPlanear}
+        editableFn={editableFn}
+        onFechaChange={onFechaChange}
+        onCambiarEstado={cambiarEstado}
+        onPrioridadChange={onPrioridadChange}
+        onOpenDetalle={onOpenDetalle}
+      />
+    );
+  }
+
+  // Rango temporal: cubre barras (ini/fin), hitos (fecha) y hoy.
+  const fechas = items
+    .flatMap((it) => (it.kind === "bar" ? [it.ini, it.fin] : [it.fecha]))
+    .concat([hoy]);
   const min = primerDiaDelMes(new Date(Math.min(...fechas.map((d) => d.getTime()))));
   const maxRaw = new Date(Math.max(...fechas.map((d) => d.getTime())));
   const fin = new Date(maxRaw.getFullYear(), maxRaw.getMonth() + 1, 0); // último día de su mes
@@ -1607,16 +1931,16 @@ function GanttBoard({
 
   const hoyLeft = difDias(min, hoy) * PX_POR_DIA;
 
-  // Agrupar barras por célula, preservando orden de aparición.
-  const porCelula: { celula: string; items: typeof barras }[] = [];
-  for (const b of barras) {
-    const nombre = b.p.celulaNombre ?? "Sin célula";
+  // Agrupar por célula, preservando orden de aparición.
+  const porCelula: { celula: string; items: TimelineItem[] }[] = [];
+  for (const it of items) {
+    const nombre = it.p.celulaNombre ?? "Sin célula";
     let grupo = porCelula.find((g) => g.celula === nombre);
     if (!grupo) {
       grupo = { celula: nombre, items: [] };
       porCelula.push(grupo);
     }
-    grupo.items.push(b);
+    grupo.items.push(it);
   }
 
   const LABEL_W = 300;
@@ -1667,11 +1991,12 @@ function GanttBoard({
               >
                 {g.celula}
               </div>
-              {g.items.map(({ p, ini, fin: finBarra }) => {
-                const left = difDias(min, ini) * PX_POR_DIA;
-                const width = Math.max(PX_POR_DIA, (difDias(ini, finBarra) + 1) * PX_POR_DIA);
-                const color = ESTADO_BAR_COLOR[p.estado_interno ?? ""] ?? "#94A3B8";
+              {g.items.map((it) => {
+                const p = it.p;
                 const puedeEditar = editableFn(p);
+                const esHito = it.kind === "hito";
+                const refDate = it.kind === "bar" ? it.ini : it.fecha;
+                const left = difDias(min, refDate) * PX_POR_DIA;
                 return (
                   <div key={p.id} style={{ display: "flex", alignItems: "stretch", borderBottom: "1px solid var(--gray-100)", minHeight: ROW_H }}>
                     <div style={{ flex: `0 0 ${LABEL_W}px`, padding: "6px 12px", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "center", gap: 3 }}>
@@ -1686,18 +2011,34 @@ function GanttBoard({
                         </Link>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "2px 10px", flexWrap: "wrap" }}>
-                        <FechaEditor
-                          label="Inicio"
-                          valor={p.fecha_inicio_dev}
+                        <EstadoEditor
+                          estado={p.estado_interno}
                           editable={puedeEditar}
-                          onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_inicio_dev", v)}
+                          onChange={(v) => cambiarEstado(p, v)}
                         />
-                        <FechaEditor
-                          label="Entrega"
-                          valor={p.fecha_entrega_propuesta}
-                          editable={puedeEditar}
-                          onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_entrega_propuesta", v)}
-                        />
+                        {esHito ? (
+                          <FechaEditor
+                            label="Handoff"
+                            valor={p.fecha_handoff}
+                            editable={puedeEditar}
+                            onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_handoff", v)}
+                          />
+                        ) : (
+                          <>
+                            <FechaEditor
+                              label="Inicio"
+                              valor={p.fecha_inicio_dev}
+                              editable={puedeEditar}
+                              onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_inicio_dev", v)}
+                            />
+                            <FechaEditor
+                              label="Producción"
+                              valor={p.fecha_salida_produccion}
+                              editable={puedeEditar}
+                              onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_salida_produccion", v)}
+                            />
+                          </>
+                        )}
                         <button
                           type="button"
                           onClick={() => onOpenDetalle(p)}
@@ -1715,30 +2056,48 @@ function GanttBoard({
                       {hoyLeft >= 0 && hoyLeft <= anchoTotal && (
                         <div style={{ position: "absolute", left: hoyLeft, top: 0, bottom: 0, width: 1, background: "#DC2626", opacity: 0.5 }} />
                       )}
-                      <div
-                        onClick={() => onOpenDetalle(p)}
-                        title={`${p.name}\n${fechaCortaDeDate(ini)} → ${fechaCortaDeDate(finBarra)}\n${p.estado_interno ?? "sin estado"}`}
-                        style={{
-                          position: "absolute",
-                          left,
-                          top: (ROW_H - 18) / 2,
-                          width,
-                          height: 18,
-                          background: color,
-                          borderRadius: 5,
-                          display: "flex",
-                          alignItems: "center",
-                          paddingLeft: 6,
-                          fontSize: 9.5,
-                          fontWeight: 700,
-                          color: "#fff",
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {p.prioridad ?? ""}
-                      </div>
+                      {it.kind === "bar" ? (
+                        <div
+                          onClick={() => onOpenDetalle(p)}
+                          title={`${p.name}\n${fechaCortaDeDate(it.ini)} → ${fechaCortaDeDate(it.fin)}\n${p.estado_interno ?? "sin estado"}`}
+                          style={{
+                            position: "absolute",
+                            left,
+                            top: (ROW_H - 18) / 2,
+                            width: Math.max(PX_POR_DIA, (difDias(it.ini, it.fin) + 1) * PX_POR_DIA),
+                            height: 18,
+                            background: ESTADO_BAR_COLOR[p.estado_interno ?? ""] ?? "#94A3B8",
+                            borderRadius: 5,
+                            display: "flex",
+                            alignItems: "center",
+                            paddingLeft: 6,
+                            fontSize: 9.5,
+                            fontWeight: 700,
+                            color: "#fff",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {p.prioridad ?? ""}
+                        </div>
+                      ) : (
+                        <div
+                          onClick={() => onOpenDetalle(p)}
+                          title={`${p.name}\nHandoff tentativo: ${fechaCortaDeDate(it.fecha)}\n${p.estado_interno ?? "sin estado"} — fin por validar`}
+                          style={{
+                            position: "absolute",
+                            left: left - 8,
+                            top: (ROW_H - 16) / 2,
+                            width: 16,
+                            height: 16,
+                            background: HANDOFF_COLOR,
+                            borderRadius: 3,
+                            transform: "rotate(45deg)",
+                            cursor: "pointer",
+                          }}
+                        />
+                      )}
                     </div>
                   </div>
                 );
@@ -1750,64 +2109,293 @@ function GanttBoard({
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginTop: 10, fontSize: 10, color: "var(--muted)" }}>
         {Object.entries(ESTADO_BAR_COLOR)
-          .filter(([k]) => k !== "En priorización")
+          .filter(([k]) => k !== "En priorización" && k !== "Pendiente Handoff")
           .map(([k, v]) => (
             <span key={k} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
               <span style={{ width: 10, height: 10, borderRadius: 3, background: v, display: "inline-block" }} />
               {k === "En definición" ? "En definición / priorización" : k}
             </span>
           ))}
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
+          <span
+            style={{
+              width: 10,
+              height: 10,
+              background: HANDOFF_COLOR,
+              display: "inline-block",
+              transform: "rotate(45deg)",
+            }}
+          />
+          Pendiente Handoff (fecha tentativa)
+        </span>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
           <span style={{ width: 1, height: 12, background: "#DC2626", display: "inline-block" }} /> Hoy
         </span>
       </div>
 
-      {sinFecha.length > 0 && (
-        <div style={{ marginTop: 20, border: "1px dashed var(--border)", borderRadius: 12, padding: "12px 14px", background: "var(--gray-50, #F7F8FA)" }}>
-          <p style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", margin: "0 0 10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
-            Sin fecha de entrega planeada ({sinFecha.length})
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {sinFecha.map((p) => (
-              <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                {p.project_code && (
-                  <span style={{ fontSize: 9, fontWeight: 700, color: "var(--dropi)", background: "var(--dropi-light)", borderRadius: 3, padding: "0 4px" }}>
-                    {p.project_code}
+      {sinPlanear.length > 0 && (
+        <SinPlanearLista
+          proyectos={sinPlanear}
+          editableFn={editableFn}
+          onFechaChange={onFechaChange}
+          onCambiarEstado={cambiarEstado}
+          onPrioridadChange={onPrioridadChange}
+          onOpenDetalle={onOpenDetalle}
+        />
+      )}
+    </div>
+  );
+}
+
+// Proyectos que no entran al timeline (todavía sin las fechas que su etapa
+// necesita): se muestran en listas separadas por estado — "en DEV",
+// "Pendiente Handoff", "En definición", etc. Dentro de cada lista van por
+// prioridad (P0 → P4, sin prioridad al final). Prioridad y estado se editan
+// en la fila: cambiar el estado mueve la card a la lista que corresponde (y el
+// paso a 'en DEV' abre el modal de fechas vía onCambiarEstado).
+function SinPlanearLista({
+  proyectos,
+  editableFn,
+  onFechaChange,
+  onCambiarEstado,
+  onPrioridadChange,
+  onOpenDetalle,
+}: {
+  proyectos: ProyectoConCelula[];
+  editableFn: (p: Proyecto) => boolean;
+  onFechaChange: (
+    celulaId: string,
+    projectId: string,
+    campo: FechaCampo,
+    valor: string | null,
+  ) => void;
+  onCambiarEstado: (p: ProyectoConCelula, estado: string | null) => void;
+  onPrioridadChange: (celulaId: string, projectId: string, prioridad: string | null) => void;
+  onOpenDetalle: (p: ProyectoConCelula) => void;
+}) {
+  // Orden de las listas en el Roadmap: primero lo más en marcha ("en DEV"),
+  // luego lo que espera recepción ("Pendiente Handoff"), y el resto en el
+  // orden del pipeline. No sigue el orden canónico de ESTADOS_DELIVERY.
+  const ORDEN_LISTAS = ["en DEV", "Pendiente Handoff", "En definición", "En priorización", "Activo", "Cerrado"];
+  const rankLista = (estado: string) => {
+    const i = ORDEN_LISTAS.indexOf(estado);
+    return i === -1 ? ORDEN_LISTAS.length : i;
+  };
+  const grupos = agruparPorEtapa(proyectos)
+    .filter((g) => g.items.length > 0)
+    .sort((a, b) => rankLista(a.estado) - rankLista(b.estado));
+
+  return (
+    <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 14 }}>
+      {grupos.map((g) => {
+        const color = ESTADO_BAR_COLOR[g.estado] ?? "var(--gray-400)";
+        return (
+          <div
+            key={g.estado}
+            style={{ border: "1px dashed var(--border)", borderRadius: 12, padding: "12px 14px", background: "var(--gray-50, #F7F8FA)" }}
+          >
+            <p style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, fontWeight: 800, color: "var(--fg)", margin: "0 0 10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              <span style={{ width: 8, height: 8, borderRadius: 2, background: color, display: "inline-block" }} />
+              {g.estado}
+              <span style={{ fontWeight: 700, color: "var(--muted)" }}>({g.items.length})</span>
+            </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {g.items
+                .slice()
+                .sort((a, b) => priorityRank(a.prioridad) - priorityRank(b.prioridad) || a.name.localeCompare(b.name))
+                .map((p) => (
+                <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                  {p.project_code && (
+                    <span style={{ fontSize: 9, fontWeight: 700, color: "var(--dropi)", background: "var(--dropi-light)", borderRadius: 3, padding: "0 4px" }}>
+                      {p.project_code}
+                    </span>
+                  )}
+                  <PrioridadEditor
+                    prioridad={p.prioridad}
+                    editable={editableFn(p)}
+                    onChange={(v) => onPrioridadChange(p.celula_owner_id, p.id, v)}
+                  />
+                  <Link href={projectUrl(p)} style={{ fontSize: 11.5, fontWeight: 600, color: "var(--fg)", textDecoration: "none" }}>
+                    {p.name}
+                  </Link>
+                  <span style={{ fontSize: 10, color: "var(--gray-400)" }}>({p.celulaNombre})</span>
+                  <EstadoEditor
+                    estado={p.estado_interno}
+                    editable={editableFn(p)}
+                    onChange={(v) => onCambiarEstado(p, v)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => onOpenDetalle(p)}
+                    style={{
+                      fontSize: 9.5, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
+                      border: "none", background: "transparent", color: "var(--dropi)", padding: 0,
+                    }}
+                  >
+                    Detalles
+                  </button>
+                  <span style={{ marginLeft: "auto", display: "flex", gap: 12, flexWrap: "wrap" }}>
+                    {g.estado === "Pendiente Handoff" ? (
+                      <FechaEditor
+                        label="Handoff"
+                        valor={p.fecha_handoff}
+                        editable={editableFn(p)}
+                        onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_handoff", v)}
+                      />
+                    ) : (
+                      <>
+                        <FechaEditor
+                          label="Inicio"
+                          valor={p.fecha_inicio_dev}
+                          editable={editableFn(p)}
+                          onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_inicio_dev", v)}
+                        />
+                        <FechaEditor
+                          label="Producción"
+                          valor={p.fecha_salida_produccion}
+                          editable={editableFn(p)}
+                          onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_salida_produccion", v)}
+                        />
+                      </>
+                    )}
                   </span>
-                )}
-                <Link href={projectUrl(p)} style={{ fontSize: 11.5, fontWeight: 600, color: "var(--fg)", textDecoration: "none" }}>
-                  {p.name}
-                </Link>
-                <span style={{ fontSize: 10, color: "var(--gray-400)" }}>({p.celulaNombre})</span>
-                <button
-                  type="button"
-                  onClick={() => onOpenDetalle(p)}
-                  style={{
-                    fontSize: 9.5, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
-                    border: "none", background: "transparent", color: "var(--dropi)", padding: 0,
-                  }}
-                >
-                  Detalles
-                </button>
-                <span style={{ marginLeft: "auto", display: "flex", gap: 12, flexWrap: "wrap" }}>
-                  <FechaEditor
-                    label="Inicio"
-                    valor={p.fecha_inicio_dev}
-                    editable={editableFn(p)}
-                    onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_inicio_dev", v)}
-                  />
-                  <FechaEditor
-                    label="Entrega prop."
-                    valor={p.fecha_entrega_propuesta}
-                    editable={editableFn(p)}
-                    onChange={(v) => onFechaChange(p.celula_owner_id, p.id, "fecha_entrega_propuesta", v)}
-                  />
-                </span>
-              </div>
-            ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// Modal al pasar un proyecto de 'Pendiente Handoff' a 'en DEV': captura las
+// fechas del ciclo de desarrollo en un solo PATCH. Inicio dev se precarga con
+// hoy (o la fecha que ya tuviera); QA y producción quedan vacías si no las
+// llenan. La nota se adjunta a las filas del log de ese cambio.
+function PasoADevModal({
+  proyecto,
+  onCancel,
+  onConfirm,
+}: {
+  proyecto: ProyectoConCelula;
+  onCancel: () => void;
+  onConfirm: (
+    fechas: {
+      fecha_inicio_dev: string | null;
+      fecha_entrega_qa: string | null;
+      fecha_salida_produccion: string | null;
+    },
+    nota: string | null,
+  ) => Promise<boolean>;
+}) {
+  const [inicioDev, setInicioDev] = useState(proyecto.fecha_inicio_dev ?? hoyISO());
+  const [entregaQa, setEntregaQa] = useState(proyecto.fecha_entrega_qa ?? "");
+  const [salidaProd, setSalidaProd] = useState(proyecto.fecha_salida_produccion ?? "");
+  const [nota, setNota] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function confirmar() {
+    setSaving(true);
+    setError(null);
+    const ok = await onConfirm(
+      {
+        fecha_inicio_dev: inicioDev || hoyISO(),
+        fecha_entrega_qa: entregaQa || null,
+        fecha_salida_produccion: salidaProd || null,
+      },
+      nota.trim() || null,
+    );
+    if (!ok) {
+      setError("No se pudo pasar el proyecto a DEV.");
+      setSaving(false);
+    }
+  }
+
+  const inputStyle: CSSProperties = {
+    width: "100%", padding: "7px 10px", borderRadius: 8, border: "1px solid var(--border)",
+    fontSize: 13, boxSizing: "border-box", fontFamily: "inherit", background: "#fff", color: "var(--fg)",
+  };
+  const labelStyle: CSSProperties = {
+    fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em",
+    display: "block", margin: "0 0 4px",
+  };
+
+  return (
+    <div
+      onClick={onCancel}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24, zIndex: 100, backdropFilter: "blur(4px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "#fff", border: "1px solid var(--border)", borderRadius: 16,
+          maxWidth: 420, width: "100%", padding: 22, maxHeight: "90vh", overflowY: "auto",
+        }}
+      >
+        <h3 style={{ fontSize: 16, fontWeight: 800, color: "var(--fg)", margin: "0 0 2px" }}>Pasar a DEV</h3>
+        <p style={{ fontSize: 12.5, color: "var(--muted)", margin: "0 0 4px" }}>
+          {proyecto.project_code ? `${proyecto.project_code} · ` : ""}{proyecto.name}
+        </p>
+        <p style={{ fontSize: 12, color: "var(--gray-400)", margin: "0 0 16px" }}>
+          Confirma las fechas del ciclo de desarrollo. Si todavía no tienes QA o producción, déjalas vacías.
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <div>
+            <label style={labelStyle}>Inicio dev</label>
+            <input type="date" value={inicioDev} onChange={(e) => setInicioDev(e.target.value)} style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Entrega / inicio QA</label>
+            <input type="date" value={entregaQa} onChange={(e) => setEntregaQa(e.target.value)} style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Salida a producción</label>
+            <input type="date" value={salidaProd} onChange={(e) => setSalidaProd(e.target.value)} style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Nota para el log (opcional)</label>
+            <input
+              value={nota}
+              onChange={(e) => setNota(e.target.value)}
+              placeholder="Por qué se mueven estas fechas"
+              style={inputStyle}
+            />
           </div>
         </div>
-      )}
+
+        {error && <p style={{ fontSize: 12, color: "#DC2626", margin: "12px 0 0" }}>{error}</p>}
+
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 18 }}>
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8,
+              border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", cursor: "pointer",
+            }}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            disabled={saving}
+            onClick={confirmar}
+            style={{
+              fontSize: 13, fontWeight: 700, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8, border: "none",
+              background: "var(--dropi)", color: "#fff", cursor: saving ? "not-allowed" : "pointer",
+            }}
+          >
+            {saving ? "Guardando…" : "Pasar a DEV"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
