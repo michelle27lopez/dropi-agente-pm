@@ -30,6 +30,20 @@ const guias = [
     description: "Cómo se nombran proyectos, fases (Epic) y subfases (tarea) en Jira. Borrador para revisar con Laura Contreras.",
     tag: "Referencia · Nomenclatura",
   },
+  {
+    slug: "product-lab",
+    icon: "🧪",
+    title: "Product Lab",
+    description: "Índice de sesiones de Product Lab 2.0 — fecha, facilitador y punteros al detalle completo en el Dropi Brain (Confluence).",
+    tag: "Referencia · Product Lab",
+  },
+  {
+    slug: "userpilot-mcp",
+    icon: "🔌",
+    title: "Documentar tu vertical con UserPilot + Claude Code",
+    description: "Cómo conectar UserPilot vía MCP con la cuenta compartida del equipo y el prompt para replicar la doc de /proveedores en tu propio vertical.",
+    tag: "Onboarding · Nuevo vertical",
+  },
 ];
 
 export default function GuiasIndexPage() {

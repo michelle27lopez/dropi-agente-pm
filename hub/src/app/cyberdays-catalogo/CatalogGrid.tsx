@@ -13,18 +13,26 @@ type CatalogProduct = {
   dropiUrl: string;
 };
 
+// Mismo marco (marcoo2.png) y misma ventana medida sobre su canal alfa que
+// usa el panel de proveedor para el ZIP de fotos enmarcadas (ver MARCO_WINDOW
+// en elegibles/[token]/page.tsx) — acá se aplica con CSS puro (object-fit:
+// cover posicionado dentro de la ventana + el PNG del marco encima) en vez
+// de canvas, porque es una grilla pública de N productos y no hace falta
+// generar un archivo por foto, solo que se vea enmarcada.
+const MARCO_SRC = "/cyberdays/assets/marcoo2.png";
+
 function ProductImage({ image, name }: { image: string; name: string }) {
   const [failed, setFailed] = useState(false);
-  if (!image || failed) {
-    return (
-      <div className="catalog-card-image">
-        <span className="catalog-card-image-fallback">{name.slice(0, 2).toUpperCase()}</span>
-      </div>
-    );
-  }
   return (
     <div className="catalog-card-image">
-      <img src={encodeURI(image)} alt="" loading="lazy" onError={() => setFailed(true)} />
+      <div className="catalog-card-photo-window">
+        {!image || failed ? (
+          <span className="catalog-card-image-fallback">{name.slice(0, 2).toUpperCase()}</span>
+        ) : (
+          <img src={encodeURI(image)} alt="" loading="lazy" onError={() => setFailed(true)} />
+        )}
+      </div>
+      <img className="catalog-card-frame" src={MARCO_SRC} alt="" aria-hidden="true" loading="lazy" />
     </div>
   );
 }

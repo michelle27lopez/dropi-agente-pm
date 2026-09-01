@@ -65,7 +65,7 @@ export default function ResumenPage() {
 
         <KPIRow>
           <KPI valor="103.892" label="Registros de proveedor" sub="84% en Colombia" />
-          <KPI valor="1,1%" label="Con nivel asignado" sub="1.141 de 103.892" color="var(--danger)" />
+          <KPI valor="0,8%" label="Con nivel oficial superior" sub="853 de 103.892 · el resto es No Verificado, el nivel por defecto" color="var(--danger)" />
           <KPI valor="48" label="NPS del proveedor" sub="9 puntos bajo el de la plataforma" color="var(--warning)" />
           <KPI valor="1,36%" label="Completa el registro" sub="~40 de 2.212 guarda un producto" color="var(--danger)" />
         </KPIRow>
@@ -77,8 +77,9 @@ export default function ResumenPage() {
 
         <Callout icon="📌" color="var(--dropi)">
           Estas cuatro cifras cuentan la misma historia desde ángulos distintos: entra muchísima gente,
-          casi nadie llega a operar, y de los que llegan casi nadie queda clasificado. El vertical no tiene
-          un problema de demanda, tiene un problema de conversión y de medición.
+          casi nadie llega a operar, y de los que llegan casi nadie avanza del nivel de entrada (No
+          Verificado). El vertical no tiene un problema de demanda, tiene un problema de conversión y de
+          progresión.
         </Callout>
       </SectionCard>
 

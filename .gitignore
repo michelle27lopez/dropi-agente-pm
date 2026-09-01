@@ -37,3 +37,9 @@ hub/public/logistica/recolecciones/pipeline/geocode-final.json
 hub/public/logistica/recolecciones/pipeline/cruces-resultado.json
 hub/public/logistica/recolecciones/pipeline/*.csv
 /.node-dist/
+
+# Trabajo temporal de análisis (scripts pandas, CSV intermedios) y transcripts
+# de reuniones descargados a la raíz: insumos, no entregables. Lo que sale de
+# ahí se versiona ya sintetizado en logistica-lab/ o en el hub.
+/scratch/
+/*.docx
