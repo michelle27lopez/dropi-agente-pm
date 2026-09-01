@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
 import {
-  ChevronDown, ChevronUp, FileText, AlertTriangle, Rocket, Layers,
+  ChevronDown, ChevronUp, FileText, AlertTriangle,
   Clock, Users, Trophy, ExternalLink, Wrench, GitBranch, ShieldAlert,
 } from "lucide-react";
 
@@ -77,19 +77,31 @@ function Callout({ tone, title, children }: { tone: "warning" | "info" | "danger
 }
 
 const links = [
-  { label: "Demo pública (Vercel)", href: "https://leyendas-dropi-share.vercel.app", icon: Rocket, desc: "Prototipo standalone, sin login de Darwin — código simulado 000000 para pitch interno." },
-  { label: "Beta conectada en Darwin", href: "/proyectos/leyendas-dropi", icon: Layers, desc: "Misma experiencia, con OTP real por correo y datos de Supabase (5 vendedores de prueba)." },
+  { label: "SimulaDrop (Vercel)", href: "https://leyendas-dropi-simulador.vercel.app", desc: "Simulador activo integrado a la landing — reemplaza al demo standalone anterior." },
+  { label: "Beta conectada en Darwin", href: "/proyectos/leyendas-dropi", desc: "Experiencia con OTP real por correo y datos de Supabase (5 vendedores de prueba)." },
+  { label: "Prototipo Figma", href: "https://www.figma.com/proto/nbOen2E796FuJhYTrQJVqY/Leyendas-Dropi?node-id=803-22738&viewport=-6453%2C-6654%2C0.35&t=KisHcWsC4Zrox8rB-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1&starting-point-node-id=803%3A22738&show-proto-sidebar=1", desc: "Prototipo navegable de la experiencia completa del programa." },
+  { label: "Prototipo interactivo (Netlify)", href: "https://dashing-twilight-53f5e5.netlify.app/", desc: "Segundo prototipo interactivo, complementario al de Figma." },
 ];
+
+type PocChild = { id: string; name: string; project_code: string | null; estado_interno: string | null };
 
 export default function Gro002ProjectPage() {
   const [docOpen, setDocOpen] = useState(true);
   const [tab, setTab] = useState("resumen");
+  const [pocs, setPocs] = useState<PocChild[]>([]);
+
+  useEffect(() => {
+    fetch("/api/proyectos/gro-002")
+      .then((res) => res.json())
+      .then((data) => setPocs((data?.children ?? []).filter((c: { type: string }) => c.type === "POC")))
+      .catch(() => {});
+  }, []);
 
   return (
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
         title="GRO-002 · Leyendas Dropi y Gamification"
-        subtitle="Célula Growth · PM: José Pineda"
+        subtitle="José Pineda · Growth Product Manager"
         currentSlug="gro-002"
       />
 
@@ -117,7 +129,7 @@ export default function Gro002ProjectPage() {
             </div>
             <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
               <div style={{ background: "#fff", border: "1px solid #E2E8F0", padding: "10px 16px", borderRadius: 10, textAlign: "right" }}>
-                <div style={{ fontSize: 11, color: "#64748B", fontWeight: 700, textTransform: "uppercase" }}>PM / Owner</div>
+                <div style={{ fontSize: 11, color: "#64748B", fontWeight: 700, textTransform: "uppercase" }}>Growth Product Manager</div>
                 <div style={{ fontSize: 14, fontWeight: 800, color: "#0F172A" }}>José Pineda</div>
               </div>
               <div style={{ background: "#fff", border: "1px solid #E2E8F0", padding: "10px 16px", borderRadius: 10, textAlign: "right" }}>
@@ -137,8 +149,6 @@ export default function Gro002ProjectPage() {
           {[
             { label: "Reducción de churn al cruzar 100 órdenes/mes", value: "82%", sub: "Insight ancla de todo el diseño del programa", color: "#DC2626" },
             { label: "Nivel Explorador (101–1.000 órdenes/mes)", value: "44%", sub: "de las órdenes activas de la plataforma (mar 2026) — mayor apalancamiento", color: "var(--dropi)" },
-            { label: "Historias de usuario redactadas", value: "11", sub: "Hito 1 · con Gherkin, DoD, supuestos y pendientes", color: "#7C3AED" },
-            { label: "VPV estimado", value: "$60M", sub: "Valor potencial de venta (COP) — campo Darwin", color: "#0EA5E9" },
           ].map((k) => (
             <div key={k.label} style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 18 }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: "#64748B", textTransform: "uppercase" }}>{k.label}</div>
@@ -149,24 +159,46 @@ export default function Gro002ProjectPage() {
         </div>
 
         {/* ── Prototipos y documentos ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 14, marginBottom: 28 }}>
-          {links.map((l) => {
-            const Icon = l.icon;
-            return (
-              <a key={l.href} href={l.href} target="_blank" rel="noreferrer" style={{ textDecoration: "none", background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 16, display: "flex", gap: 12, alignItems: "flex-start", transition: "border-color 0.15s" }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: "var(--dropi-light)", color: "var(--dropi)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                  <Icon size={18} />
-                </div>
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: "#0F172A", display: "flex", alignItems: "center", gap: 6 }}>
-                    {l.label} <ExternalLink size={12} color="#94A3B8" />
-                  </div>
-                  <div style={{ fontSize: 12, color: "#64748B", marginTop: 3, lineHeight: 1.5 }}>{l.desc}</div>
-                </div>
-              </a>
-            );
-          })}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 24 }}>
+          {links.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              target="_blank"
+              rel="noreferrer"
+              title={l.desc}
+              style={{
+                textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 5,
+                fontSize: 12, fontWeight: 700, color: "#64748B",
+                background: "#fff", border: "1px solid #E2E8F0", borderRadius: 999, padding: "6px 12px",
+              }}
+            >
+              {l.label} <ExternalLink size={11} color="#94A3B8" />
+            </a>
+          ))}
         </div>
+
+        {/* ── POCs de este proyecto ── */}
+        {pocs.length > 0 && (
+          <div style={{ marginBottom: 28 }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: "#64748B", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 10 }}>
+              🧩 POCs de este proyecto ({pocs.length})
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+              {pocs.map((p) => (
+                <a
+                  key={p.id}
+                  href={p.project_code ? `/proyectos/${p.project_code.toLowerCase()}` : "#"}
+                  style={{ textDecoration: "none", background: "#fff", border: "1px solid #E2E8F0", borderRadius: 10, padding: "12px 14px" }}
+                >
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "var(--dropi)" }}>{p.project_code}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: "#0F172A", marginTop: 2 }}>{p.name}</div>
+                  <div style={{ fontSize: 11.5, color: "#94A3B8", marginTop: 3 }}>{p.estado_interno ?? "Sin definir"}</div>
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ── Alerta de decisión reciente ── */}
         <Callout tone="warning" title="⚠️ Frente 1 descartado para ExpoWinners — resolución final con Tech Lead (25 ago 2026)">
@@ -215,6 +247,7 @@ export default function Gro002ProjectPage() {
                     { id: "beta", label: "🛠️ 3. Beta técnica (agosto)" },
                     { id: "decisiones", label: "🔀 4. Decisiones y pendientes" },
                     { id: "equipo", label: "👥 5. Equipo & fuentes" },
+                    { id: "pocs", label: "🧩 6. Contexto de lanzamiento & POCs" },
                   ].map((t) => (
                     <button key={t.id} onClick={() => setTab(t.id)} style={{ background: tab === t.id ? "var(--dropi)" : "#ffffff", color: tab === t.id ? "#ffffff" : "#475569", border: tab === t.id ? "1px solid var(--dropi)" : "1px solid #CBD5E1", borderRadius: 8, padding: "8px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap", transition: "all 0.15s ease" }}>
                       {t.label}
@@ -273,6 +306,7 @@ export default function Gro002ProjectPage() {
                   <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20 }}>
                     <h3 style={sectionHeadingStyle}><span>🎮 2. Solución propuesta — MVP Hito 1</span></h3>
                     <ul style={ulStyle}>
+                      <li><strong>Fase de expectativa (ExpoWinners):</strong> antes de la landing operativa, una experiencia con enfoque aspiracional sobre el usuario — no explica el funcionamiento del programa, busca generar expectativa de cara al evento del 12 y 13 de septiembre.</li>
                       <li><strong>Landing pública — Dropshippers:</strong> mecánica del programa, cards de los 6 niveles y OnePage por nivel (mindset, rangos, meta, 4 recursos, navegación siguiente/anterior).</li>
                       <li><strong>Catálogo de productos:</strong> módulo nuevo dentro de la landing — el usuario selecciona de una vez el producto que va a vender. Se conecta con el sitio de productos real; el feed que lo abastece para el lanzamiento todavía está pendiente de definir (posiblemente con Jaime).</li>
                       <li><strong>Simulador de Dropi:</strong> experiencia interactiva entregada por Jaime, integrada al frente de landing. Es previsible que surjan ajustes después del lanzamiento, una vez haya uso real.</li>
@@ -480,6 +514,56 @@ Usuario ingresa código
                       <strong>Célula Web External (Landings):</strong> US-LND-01 Landing Dropshippers · US-LND-02 Landing Líderes · US-LND-03 OnePage de Nivel · US-LND-04 Ranking de Comunidades · US-LND-05 Ficha de Comunidad · US-LND-06 Términos y Condiciones · US-LND-07 Preguntas Frecuentes.<br /><br />
                       Detalle completo (Contexto, Criterios de Aceptación, Gherkin, DoD) en <code>Leyendas_Dropi_Historias_Usuario_Hito1.docx</code>.
                     </Callout>
+                  </div>
+                )}
+
+                {/* TAB 6 — CONTEXTO DE LANZAMIENTO & POCs */}
+                {tab === "pocs" && (
+                  <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 12, padding: 20 }}>
+                    <h3 style={sectionHeadingStyle}><span>🧩 6. Contexto de lanzamiento (28 ago 2026)</span></h3>
+                    <p style={pStyle}>
+                      Aún no se tiene una fecha de lanzamiento general del programa. Se requiere definir el alcance del primer lanzamiento para que el equipo pueda establecer a qué grupo se le lanzará: el programa contempla un lanzamiento local, pero también uno a través de internet, y todavía está pendiente definir a qué grupo se dirige este segundo frente — ¿a toda la población de usuarios de Dropi, o a un segmento acotado? Mientras esa definición no exista, en ExpoWinners (12 y 13 de septiembre) se llevará una experiencia de expectativa del programa, no su lanzamiento formal.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>Modelo de negocio y marco legal</h4>
+                    <p style={pStyle}>
+                      Para garantizar la sostenibilidad financiera del programa, se requiere apoyo en la definición de su modelo de negocio: el principio rector es no otorgar incentivos de forma indiscriminada, sino entregarlos cuando el desempeño del negocio lo permita y en la proporción correspondiente. En paralelo, se necesita un análisis legal formal que dé seguridad jurídica a las dinámicas de recompensa que el programa podría utilizar — incentivos, puntos, sorteos o cualquier otro mecanismo de recompensa no monetaria.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>SimulaDrop y narrativa del programa</h4>
+                    <p style={pStyle}>
+                      Se integró la experiencia de SimulaDrop a la landing del programa y se desarrolló una nueva sección, &quot;Mis primeros productos&quot;, orientada a reforzar la misión inicial del usuario: vender productos por internet. Queda pendiente el taller de narrativas del producto, a cargo de Product Growth, que se retomará después de ExpoWinners — este taller define el hilo narrativo del programa: la historia que le contamos al dropshipper sobre por qué Dropi es una plataforma que transforma su negocio y su vida.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>Madurez de la oferta por segmento</h4>
+                    <p style={pStyle}>
+                      La oferta del programa para el segmento Dropshipper está madura y en fase de refinamiento junto con Laura Sánchez. La oferta para Líderes de Comunidad, en cambio, está en construcción con Gabriela y Laura Sánchez, y sigue siendo incipiente lo que hoy existe reflejado en la landing del programa.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>POC 1 — Expectativa ExpoWinners</h4>
+                    <p style={pStyle}>
+                      Landing pensada específicamente para el evento ExpoWinners (12 y 13 de septiembre), cuyo propósito es generar expectativa sobre el programa Leyendas Dropi mostrando una experiencia aspiracional — no operativa — de lo que representa alcanzar cada nivel. No busca explicar el funcionamiento ni las mecánicas del programa, sino despertar el interés y la aspiración del dropshipper de cara al evento.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>POC 2 — Landing del Programa</h4>
+                    <p style={pStyle}>
+                      Landing operativa que sirve de guía sobre la experiencia en Dropi, explicándole al dropshipper los hitos de su ciclo de vida y organizando los recursos disponibles bajo una narrativa de progreso y superación. Es la experiencia que el usuario encontrará una vez el programa cuente con una fecha y un alcance de lanzamiento definidos.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>POC 3 — Wrapped vía CRM</h4>
+                    <p style={pStyle}>
+                      Mecanismo mediante el cual se le comunica al usuario su nivel dentro del programa a través de GoHighLevel (GHL), por correo o WhatsApp, en lugar de una consulta directa en la plataforma. Nace del riesgo de seguridad que representa exponer información de órdenes en una consulta abierta.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>POC 4 — UserPilot Gamification</h4>
+                    <p style={pStyle}>
+                      Alternativa para mostrarle al usuario su nivel dentro del programa mediante un modal u otro tipo de asset visual construido en UserPilot, sin requerir capacidad del equipo de desarrollo — pensada para los casos en que el frente de plataforma no pueda abordarse directamente con ingeniería.
+                    </p>
+
+                    <h4 style={subHeadingStyle}>POC 5 — Experiencia Plataforma</h4>
+                    <p style={pStyle}>
+                      Frente que valida la experiencia del usuario dentro del ecosistema de Dropi, compuesta por la insignia en el header, la card reutilizada de Dropi Turbo y el Wrapped de 3 pasos. Es la versión del programa pensada para vivir de forma nativa dentro de la plataforma.
+                    </p>
                   </div>
                 )}
 
