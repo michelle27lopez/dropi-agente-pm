@@ -50,6 +50,22 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // AGP-05: autenticar no es autorizar. Metrics Lab comparte el mismo
+  // proyecto Supabase que hub — cualquier cuenta con sesión ahí (incluidos
+  // "contributor" y pruebas@dropi.co, que en hub quedan acotados a una sola
+  // ruta inofensiva) podía entrar acá y ver PII de proveedores. Esta app no
+  // tiene una zona segura equivalente a la que redirigirlos: se niega
+  // directo en vez de mandarlos a alguna otra página interna.
+  if (user && !isPublicPath) {
+    const role = user.app_metadata?.role;
+    if (role === "contributor" || user.email === "pruebas@dropi.co") {
+      return new NextResponse("No autorizado.", {
+        status: 403,
+        headers: { "Cache-Control": "no-store", "Content-Type": "text/plain; charset=utf-8" },
+      });
+    }
+  }
+
   return supabaseResponse;
 }
 

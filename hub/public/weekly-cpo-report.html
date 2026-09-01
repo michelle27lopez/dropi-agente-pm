@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CPO Executive Briefing | Célula Seller Success</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #FF5400;
+      --indigo: #4F46E5;
+      --emerald: #10B981;
+      --amber: #D97706;
+      --dark: #0F172A;
+      --border: #CBD5E1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .slide {
+      width: 100%;
+      height: 100vh;
+      padding: 14px 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    /* Top Bar Header */
+    .header {
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+      color: white;
+      border-radius: 12px;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 8px 20px -6px rgba(15, 23, 42, 0.3);
+    }
+
+    .header-badge {
+      background: rgba(255, 84, 0, 0.25);
+      color: #FF7D3B;
+      border: 1px solid rgba(255, 84, 0, 0.4);
+      padding: 2px 8px;
+      border-radius: 99px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .header-title {
+      font-size: 19px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-top: 1px;
+    }
+
+    .header-meta {
+      text-align: right;
+      font-size: 11px;
+      color: #94A3B8;
+    }
+
+    .header-meta strong {
+      color: #F8FAFC;
+      font-weight: 800;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 850;
+      color: #0F172A;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    /* 4 Thermometer Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-label {
+      font-size: 10px;
+      font-weight: 800;
+      color: #475569;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .card-val {
+      font-size: 24px;
+      font-weight: 900;
+      color: #0F172A;
+      letter-spacing: -0.03em;
+    }
+
+    .badge-good {
+      background: #DCFCE7;
+      color: #15803D;
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-size: 10px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .progress-bar-bg {
+      height: 5px;
+      background: #E2E8F0;
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 4px 0 3px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+    }
+
+    /* Hero Card Pareto */
+    .hero-card {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--indigo);
+      padding: 12px 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .segment-box {
+      border-radius: 6px;
+      padding: 8px 10px;
+    }
+
+    /* Discovery & Delivery Grid (3 Columns) */
+    .discovery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .discovery-card {
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+    }
+
+    .discovery-card h4 {
+      font-size: 11.5px;
+      font-weight: 850;
+      color: #0F172A;
+      margin-bottom: 4px;
+    }
+
+    .discovery-list {
+      font-size: 10.5px;
+      color: #334155;
+      line-height: 1.4;
+    }
+
+    .discovery-list li {
+      margin-left: 12px;
+      margin-bottom: 2px;
+    }
+
+    .footer {
+      font-size: 10px;
+      color: #94A3B8;
+      text-align: center;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide">
+
+    <!-- 1. Header -->
+    <header class="header">
+      <div>
+        <span class="header-badge">CPO Weekly Briefing · W32 2026</span>
+        <h1 class="header-title">Célula Seller Success & Retención</h1>
+      </div>
+      <div class="header-meta">
+        <div>PM: <strong>Santiago Herrera</strong></div>
+        <div>Fuentes: Parquet <code>fact_supervivencia.csv</code> & Agente Discovery v4.0</div>
+      </div>
+    </header>
+
+    <!-- 2. DATA PRIMERO: 4 Pulsómetros Grid -->
+    <div>
+      <div class="section-label">📊 4 Pulsómetros de Salud de la Célula (Data en Vivo)</div>
+      <div class="metrics-grid">
+        
+        <div class="card">
+          <div>
+            <div class="card-label">Activación Bruta (1ª Venta Creada)</div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 2px;">
+              <span class="card-val">5.0%</span>
+              <span class="badge-good" style="background: #FEE2E2; color: #DC2626;">▼ -2.7 pp WoW</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 41.7%; background: #DB2777;"></div></div>
+          </div>
+          <div style="font-size: 10px; color: #475569; font-weight: 600;">Meta S2: 12.0% · Falta: 7.0 pp</div>
+        </div>
+
+        <div class="card">
+          <div>
+            <div class="card-label">Activación Neta (1ª Venta Entregada)</div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 2px;">
+              <span class="card-val">2.3%</span>
+              <span class="badge-good" style="background: #FEE2E2; color: #DC2626;">▼ -2.5 pp WoW</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 28.7%; background: #10B981;"></div></div>
+          </div>
+          <div style="font-size: 10px; color: #475569; font-weight: 600;">Meta S2: 8.0% · Falta: 5.7 pp</div>
+        </div>
+
+        <div class="card">
+          <div>
+            <div class="card-label">Retención Real (Venta Día 2+)</div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 2px;">
+              <span class="card-val">67.8%</span>
+              <span class="badge-good">▲ +37.8 pp MoM</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 90.4%; background: #D97706;"></div></div>
+          </div>
+          <div style="font-size: 10px; color: #475569; font-weight: 600;">Meta S2: 75.0% (Recurrencia Día 2+)</div>
+        </div>
+
+        <div class="card">
+          <div>
+            <div class="card-label">TTV Neto (Días a 1ª Entrega)</div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 2px;">
+              <span class="card-val">6.8 <span style="font-size: 13px;">días</span></span>
+              <span class="badge-good">▼ -10.3 d MoM</span>
+            </div>
+            <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 100%; background: #10B981;"></div></div>
+          </div>
+          <div style="font-size: 10px; color: #15803D; font-weight: 800;">Meta S2: &lt; 12.0d (✅ En Meta)</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 3. DATA PARETO: Hero Card (Tipologías Oficiales Dropi) -->
+    <div class="hero-card">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h3 style="font-size: 14px; font-weight: 900; color: #0F172A;">🛍️ Mediana de Órdenes por Seller Activo: 14.2 ord/mes</h3>
+          <p style="font-size: 10.5px; color: #475569;">Tipologías Oficiales (Playbook de Leyendas v7.0 & Audit Parquet 16.9k Sellers)</p>
+        </div>
+        <div style="text-align: right; background: #F8FAFC; border: 1px solid #E2E8F0; padding: 3px 12px; border-radius: 6px;">
+          <span style="font-size: 16px; font-weight: 900; color: #4F46E5;">14.2 <span style="font-size: 10px;">ord/mes</span></span>
+          <div style="font-size: 10px; color: #16A34A; font-weight: 800;">Meta S2: 15.0 ord</div>
+        </div>
+      </div>
+
+      <div class="hero-grid">
+        <div class="segment-box" style="background: #F9FAFB; border: 1px solid #E5E7EB;">
+          <div style="font-size: 10.5px; font-weight: 800; color: #374151;">🥉 Nivel 1: Novato (1–100 ord) · 69.8% Base</div>
+          <div style="font-size: 15px; font-weight: 900; color: #1F2937; margin: 1px 0;">11.833 sellers</div>
+          <p style="font-size: 10px; color: #6B7280;">Mueven el <strong>6.2% del volumen total</strong> (32.3k ord). Mayor fricción en onboarding.</p>
+        </div>
+
+        <div class="segment-box" style="background: #EFF6FF; border: 1px solid #DBEAFE;">
+          <div style="font-size: 10.5px; font-weight: 800; color: #1E40AF;">🥈 Nivel 2: Explorador (101–500 ord) · 18.8% Base</div>
+          <div style="font-size: 15px; font-weight: 900; color: #1E3A8A; margin: 1px 0;">3.181 sellers</div>
+          <p style="font-size: 10px; color: #1E40AF;">Mueven el <strong>15.4% del volumen total</strong> (80.6k ord). <em>Superar 100 ord reduce churn 82%.</em></p>
+        </div>
+
+        <div class="segment-box" style="background: #FFF7ED; border: 1px solid #FFEDD5;">
+          <div style="font-size: 10.5px; font-weight: 800; color: #C2410C;">🥇 Nivel 3+ Master & Leyenda (&gt;500 ord) · 11.4% Base</div>
+          <div style="font-size: 15px; font-weight: 900; color: #9A3412; margin: 1px 0;">1.929 sellers</div>
+          <p style="font-size: 10px; color: #C2410C;">Concentran el <strong>78.5% del volumen Pareto</strong> (411.9k ord). Núcleo del GMV.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. AVANCES COMPLETO: AGENTE DISCOVERY v4.0 + DISCOVERY PROJECTS + DELIVERY -->
+    <div>
+      <div class="section-label">🔬 ESTADO DEL MONOREPO: Agente Discovery v4.0, Proyectos & Delivery</div>
+
+      <div class="discovery-grid">
+        <!-- Columna 1: Agente Discovery v4.0 -->
+        <div class="discovery-card" style="border-left: 4px solid #FF5400;">
+          <h4>🤖 Agente Discovery v4.0 (Rigor P1–P9)</h4>
+          <ul class="discovery-list">
+            <li><strong>Protocolos P1–P9:</strong> Rigor de consulta previa en repo + Anti-Solutioneering + Gate P9 Pre-Flight Handoff (Explore $\rightarrow$ Make).</li>
+            <li><strong>Auditoría 4 Riesgos (`DISCOVERY_RIGOR_AUDIT.md`):</strong> Evaluación Cagan (Deseabilidad, Usabilidad, Factibilidad, Viabilidad) en 57 iniciativas.</li>
+            <li><strong>Framework Conductual B=MAP + Dual Process:</strong> Diagnóstico de capacidad cognitiva y 3 checks de Autonomía/Mastery SDT.</li>
+          </ul>
+        </div>
+
+        <!-- Columna 2: Discovery Projects & Experimentos RAT -->
+        <div class="discovery-card" style="border-left: 4px solid #4F46E5;">
+          <h4>🧪 Discovery Projects & Experimentos RAT</h4>
+          <ul class="discovery-list">
+            <li><strong>`PROD-MUESTRA-SIMP` (Muestras 1-Clic):</strong> Sprint activo UX/UI por Aleja Melo para validar sin pauta.</li>
+            <li><strong>`PROD-HELP` (Ayuda Contextual In-App):</strong> Flujo 4 pasos (Widget + FAQ + Triaje AI + Closed Loop).</li>
+            <li><strong>`PROD-EXP-WPP` / `PROD-1478` (Exportador Wpp):</strong> Test RAT deseabilidad novatos (`falsificacion-wpp-novatos-poc.html`).</li>
+            <li><strong>`PROD-WRAPPED` (Dropi Wrapped ExpoWinners):</strong> Retención Leyendas socializada con Growth/Dev.</li>
+          </ul>
+        </div>
+
+        <!-- Columna 3: Delivery Projects -->
+        <div class="discovery-card" style="border-left: 4px solid #10B981;">
+          <h4>🚀 Delivery Track & Handoff TI</h4>
+          <ul class="discovery-list">
+            <li><strong>`STID-6598` Bugs Tienda Nube V1:</strong> 6 errores en DEV (Bloqueante recurso dev TI).</li>
+            <li><strong>`DROP-25311` Tienda Nube V2:</strong> Pre-handoff por Aleja Melo con Diego Pérez.</li>
+            <li><strong>`PRM-1238-DEL` Page Pilot Landings:</strong> Handoff hecho a QA (Matriz beta 120 comercios).</li>
+            <li><strong>`PROD-580` Dropify Shopify 2.0:</strong> Pruebas PT2 en QA (Pendiente combos).</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      Dropi Executive Product Reporting System · Célula Seller Success & Retención · Monorepo Darwin (Agente Discovery v4.0)
+    </footer>
+
+  </div>
+
+</body>
+</html>

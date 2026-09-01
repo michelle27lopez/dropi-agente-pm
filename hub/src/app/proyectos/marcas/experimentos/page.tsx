@@ -39,10 +39,25 @@ const ESTADO_STYLE: Record<EstadoExp, { color: string; bg: string }> = {
 type MetricaNegocio = { label: string; valor: string; nota?: string };
 type MetricaSemanal = { semana: number; fechaViernes: string; engagement: string; insight: string };
 type InsightDestacado = { label: string; valor: string; nota?: string };
+type CierreHallazgo = { titulo: string; detalle: string[] };
+type CierreTablaGrupo = { prioridad: string; columnas: string[]; filas: string[][] };
+type CierreFlujo = { hallazgo: string; pasos: string[]; metrica: string };
+type CierreResumenItem = { aspecto: string; estado: string };
+type Cierre = {
+  periodo: string;
+  metodologia: string;
+  conclusiones: string[];
+  hallazgos: CierreHallazgo[];
+  oportunidades: CierreTablaGrupo[];
+  relacionamientos: CierreFlujo[];
+  resumenEjecutivo: CierreResumenItem[];
+  mesasAbiertas: string[];
+  notaFinal: string;
+};
 
 type Experimento = {
   nombre: string;
-  hipotesis: string;
+  hipotesis?: string;
   metrica: string;
   estado: EstadoExp;
   impacto: string;
@@ -55,6 +70,8 @@ type Experimento = {
   metricasSemanales?: MetricaSemanal[];
   trackingUrl?: string;
   plantillaWaHibridaReal?: string;
+  plantillaWaDefinitivaReal?: string;
+  cierre?: Cierre;
 };
 
 const PENDIENTE = "— pendiente —";
@@ -66,7 +83,7 @@ const experimentos: Experimento[] = [
       "Creemos que si le devolvemos a la marca su propia información semanal (guías, en tránsito, novedades, devoluciones, entregadas) y le hacemos una pregunta puntual cuando esos números muestran alerta — sin comprometernos a gestionar o resolver, solo a entender qué está pasando — la marca va a sentir que Dropi le entrega valor real y la escucha, y eso la hace quedarse. De paso, recogemos insight real de qué le está pasando detrás de esas alertas. Fundamento: BAU Competitivo (entrevistas + CSAT) ya identificó la gestión de novedades/devoluciones como uno de los dolores más grandes, y los tiempos de respuesta como lentos.",
     metrica:
       "% ENGAGEMENT (respondió Sí/No a la pregunta) · bitácora cualitativa de qué está pasando (insight, no se promedia) · CSAT promedio (meta 4.5) · % retención mes vs mes (meta 56–58%)",
-    estado: "Corriendo",
+    estado: "Descartado",
     impacto:
       "FASE PILOTO: arranca con 5 marcas (3 Escalando + 2 Pre-Escalando) = 8,881 órdenes propias/mes (5.1% del universo). Si valida, escala a las 64 marcas completas = 174,286 órdenes/mes · 60.1% del portafolio comercial L1 · 29% de la meta NSM 600K · baseline retención 53.1% (jun vs may).",
     proyecto: "Brands Success · Retención L1 (Escalando/Pre-Escalando)",
@@ -95,7 +112,7 @@ const experimentos: Experimento[] = [
         nota: "Responden con detalle y cifras propias — MICHAEL BENAVIDES (668649) cuantifica que ~60% de sus 216 novedades son atribuibles a la transportadora. Señal de que sienten que Dropi realmente quiere escuchar: valida la hipótesis del experimento.",
       },
     ],
-    insightsCaveat: "Lectura de día 1 (n=3) — se trata como señal inicial, se confirma como patrón si se repite en las próximas semanas.",
+    insightsCaveat: "Cierre a 4 semanas (21-ago): engagement cayó de 60% (S1) a 40% (S2), 0% (S3) y 20% (S4) sobre los 5 confirmados — 653912 (Maria Paula) no salió del piloto, simplemente dejó de responder desde S2. El insight de S1 (transportadora, Interrapidísimo) sí se repitió en más de un periodo — WLDER VELASCO (12795) lo reportó de nuevo en S2 y S4 — cumple el criterio de patrón, pero la caída de engagement es la señal más fuerte del cierre: la marca dejó de contestar, no de tener el problema resuelto.",
     trackingUrl: "https://docs.google.com/spreadsheets/d/1mBLpjqRzEEe_tkV256j7r2RX1ytOr6zSuN0SISeIFnM/edit?gid=1294240361#gid=1294240361",
     metricasNegocio: [
       {
@@ -114,12 +131,160 @@ const experimentos: Experimento[] = [
     ],
     metricasSemanales: [
       { semana: 1, fechaViernes: "31 jul 2026", engagement: "60% (3/5) — lectura día 1, no cierre de viernes", insight: "Transportadora (Interrapidísimo) — ver insight destacado ↑" },
-      { semana: 2, fechaViernes: "7 ago 2026", engagement: PENDIENTE, insight: PENDIENTE },
-      { semana: 3, fechaViernes: "14 ago 2026", engagement: PENDIENTE, insight: PENDIENTE },
-      { semana: 4, fechaViernes: "21 ago 2026", engagement: PENDIENTE, insight: PENDIENTE },
+      { semana: 2, fechaViernes: "7 ago 2026", engagement: "40% (2/5)", insight: "Transportadora otra vez (12795, 2da mención) + devolución injustificada sin evidencia clara (668649)" },
+      { semana: 3, fechaViernes: "14 ago 2026", engagement: "0% (0/5)", insight: "Sin respuesta — nadie contestó esta semana" },
+      { semana: 4, fechaViernes: "21 ago 2026", engagement: "20% (1/5)", insight: "Transportadora, 3ra vez consecutiva (12795, WLDER VELASCO) — mismo dolor de semana 1 y 2" },
     ],
     plantillaWaHibridaReal:
       "Hola, Maria Paula! 👋 Soy Katerine de Dropi.\n\nFuiste seleccionado(a) para un grupo reducido de Marcas con quienes compartiremos un reporte semanal del comportamiento de tus órdenes.\n\nReporte del 1 al 27 de Julio de 2026\n\n📦 2.981 órdenes creadas\n🚚 758 en tránsito\n✅ 963 entregadas\n⚠️ 0 con novedades\n↩️ 374 en devolución\n\nLas 0 con novedades y las 374 en devolución. Cuéntanos qué está pasando nos ayuda a entender mejor tu operación.🧡",
+    plantillaWaDefinitivaReal:
+      "¡Hola Maria Paula! 🌟 Así va tu operación del 1 al 17 de agosto:\n\n📦 2062 creadas\n❌ 101 canceladas\n🏷️ 1080 con guía\n📄 881 sin guía\n🚚 401 en tránsito\n⚠️ 185 novedades\n↩️ 52 devolución\n✅ 414 entregadas\n\nVimos movimiento en sin guía, novedades y devoluciones — ¿ya sabes qué pasó ahí? ¿Los gestionaste por CAS o algún canal? Cuéntanos 💛\n\n¿Te está sirviendo recibir este resumen? Queremos que te aporte, no ser un reporte más.",
+    cierre: {
+      periodo: "Junio – Agosto 2026",
+      metodologia: "Entrevistas + encuestas + análisis de casos",
+      conclusiones: [
+        "Experimento cumplió identificación, NO impacto en retención",
+        "Reporte sin feedback positivo ni negativo (indiferencia)",
+        "Usuarios buscaban soluciones inmediatas, no diagnósticos",
+        "Derivar a mesas de Logística para construcción de soluciones",
+      ],
+      hallazgos: [
+        {
+          titulo: "1. Desconocimiento Logístico Masivo (80% usuarios)",
+          detalle: [
+            "Dropi enseña a vender, NO acompaña en logística.",
+            "Usuarios no saben: dónde reportar (CAS vs SAC), qué foto enviar, tiempos reales.",
+            "Carga SAC/CAS aumenta 30%+ por falta de educación.",
+            "1.1 Paralelo: el área comercial de marca tomó la iniciativa de construir un manual (en proceso) de tiempos y procesos de la transportadora para gestiones logísticas. Se arma mesa para que ayuden con el insumo de los acuerdos de servicio ante la necesidad de definir tiempos y procesos frente al reporte de los usuarios.",
+          ],
+        },
+        {
+          titulo: "2. Desconfianza en Estados Dropi",
+          detalle: [
+            "Usuarios ven \"En bodega Origen\" en Dropi pero \"Su pedido presenta una novedad\" en la transportadora — para el usuario es una desincronización.",
+            "Causa: cada transportadora tiene estados intermedios; Dropi normaliza a estados concluyentes.",
+            "Resultado: usuarios consultan directamente en la transportadora, evitan Dropi.",
+          ],
+        },
+        {
+          titulo: "3. Guías Reemplazatorias Invisibles",
+          detalle: [
+            "3 transportadoras las usan: Coordinadora ✓ | TCC ✓ | Interrapidísimo ✓",
+            "El usuario NO ve en Dropi la guía reemplazatoria porque sigue ligada a la primera, que está cerrada y con el cobro de la devolución antes de que llegue (2-15 días).",
+            "Si se pierde → indemnización (meses).",
+          ],
+        },
+        {
+          titulo: "4. Brecha en Gestión VIP",
+          detalle: [
+            "LogiApp existe (centraliza garantías, indemnizaciones, excepciones).",
+            "Problema: solo marcas VIP lo conocen; marcas que mueven 64% del volumen pueden estar en SAC/CAS masivo.",
+            "Pendiente: totalizar usuarios VIP y cuantificar cobertura — el VIP no está dado por segmento de madurez, sino por otros criterios (constancia, reconocimiento, volumen). Pueden existir fugas y descuidos.",
+          ],
+        },
+        {
+          titulo: "5. Intentos Fallidos sin Validación",
+          detalle: [
+            "No hay métrica de \"intento fallido\" vs evidencia.",
+            "Contradicción: la transportadora dice \"3 intentos\" pero el cliente dice \"nunca vinieron\".",
+            "Caso MercadoLibre: toman foto como prueba.",
+          ],
+        },
+      ],
+      oportunidades: [
+        {
+          prioridad: "Prioridad 1 · Educación Logística (sin desarrollo)",
+          columnas: ["Qué", "Owner", "Timeline", "Impacto"],
+          filas: [
+            ["Manual de Logística (reportar, fotos, tiempos)", "Growth + Logística", "2-3 sem", "Reduce SAC/CAS"],
+            ["Videos guías reemplazatorias", "Dropi Academy", "2-3 sem", "Reduce abandono"],
+            ["Campaña antifraude: links autorizados vs WhatsApp", "Growth + Logística", "1 sem", "Evita fraude"],
+          ],
+        },
+        {
+          prioridad: "Prioridad 2 · Cuantificación (decisiones de priorización)",
+          columnas: ["Métrica", "Owner", "Impacto", "Para qué"],
+          filas: [
+            ["Mercancía >3kg", "Logística", "Pendiente data", "Priorizar \"Mercancía Industrial\" (ya listo)"],
+            ["Intentos fallidos sin foto", "Logística", "Pendiente data", "Priorizar \"Evidencia de Intento\""],
+            ["Guías reemplazatorias perdidas", "Logística", "Alto", "Acelerar ECOM Scanner"],
+            ["Usuarios VIP vs volumen", "Data + Comercial", "Medio", "Migrar a LogiApp"],
+          ],
+        },
+        {
+          prioridad: "Prioridad 3 · Proyectos en Desarrollo (acelerar)",
+          columnas: ["Proyecto", "Owner", "Status", "Línea de llegada"],
+          filas: [
+            ["ECOM Scanner", "JD", "Prueba exitosa (Veloces)", "Lanzar para Coordinadora/TCC/Inter"],
+            ["Evidencia de Intento (foto)", "JD", "Veloces operando", "Expandir a todas las transportadoras"],
+            ["Token Dinámico (confirmar devolución)", "JD", "En roadmap", "Tipo Bancolombia: la marca recibe código"],
+            ["Nuevo módulo órdenes", "JD", "En roadmap", "Simplificar estados (origen → destino → reparto → entregado)"],
+          ],
+        },
+        {
+          prioridad: "Prioridad 4 · Proyectos Bloqueados (esperan cuantificación)",
+          columnas: ["Proyecto", "Owner", "Bloqueador", "Si se desbloquea"],
+          filas: [
+            ["Mercancía Industrial (>3kg)", "JD", "Falta métrica de usuarios", "Reduce refacturaciones sorpresivas, abandono"],
+            ["Homologación de Estados 100%", "JD", "Muy complejo", "Resuelve desincronización Dropi vs transportadora"],
+          ],
+        },
+      ],
+      relacionamientos: [
+        {
+          hallazgo: "Desconocimiento logístico (80% usuarios)",
+          pasos: ["Manual + Videos (Helen + UX) → reduce carga SAC/CAS", "Proyecto: Educación Logística (Dropi Academy)"],
+          metrica: "Reducir tickets SAC/CAS 30% en 3 meses",
+        },
+        {
+          hallazgo: "Guías reemplazatorias invisibles",
+          pasos: [
+            "ECOM Scanner (mapea auto) + Manual de logística",
+            "Proyectos: ECOM Scanner (JD – lanzar) · Manual guías reemplazatorias (Helen + UX) · Token dinámico para devoluciones (JD)",
+          ],
+          metrica: "Reducir \"guía perdida\" 50% en 6 meses",
+        },
+        {
+          hallazgo: "Desconfianza en estados Dropi",
+          pasos: [
+            "Link directo a transportadora (JD – simple) · Nuevo módulo órdenes simplificado (JD – roadmap) · Homologación de estados (JD – complejo, bloqueado)",
+          ],
+          metrica: "Usuarios que consultan transportadora directa ↓ 40%",
+        },
+        {
+          hallazgo: "Intentos fallidos sin validación",
+          pasos: ["Evidencia de Intento (foto del repartidor)", "Proyecto: ECOM Scanner + Foto de intento (JD)"],
+          metrica: "Cuantificar intentos vs foto; expandir modelo MercadoLibre",
+        },
+        {
+          hallazgo: "Marcas VIP en flujo SAC/CAS masivo",
+          pasos: [
+            "Cuantificar + migrar a LogiApp",
+            "Proyectos: Totalizar usuarios VIP (Data) · Separar flujo VIP en LogiApp (Comercial + Logística)",
+          ],
+          metrica: "64% del volumen en LogiApp dentro de 2 meses",
+        },
+        {
+          hallazgo: "Mercancía >3kg con refacturación sorpresiva",
+          pasos: ["Cuantificar + Proyecto Mercancía Industrial (ya listo)", "Proyecto: Mercancía Industrial (JD – bloqueado)"],
+          metrica: "Una vez cuantificado, desbloquear y reducir abandonos",
+        },
+      ],
+      resumenEjecutivo: [
+        { aspecto: "Experimento", estado: "✅ Cerrado - Derivar a construcción" },
+        { aspecto: "Hallazgos", estado: "✅ 5 validados (desconocimiento, guías, estados, intentos, VIP)" },
+        { aspecto: "Oportunidades", estado: "✅ 12 identificadas (educación, cuantificación, proyectos)" },
+        { aspecto: "Proyectos en curso", estado: "✅ 4 activos (ECOM, Evidencia, Token, Módulo órdenes)" },
+        { aspecto: "Proyectos bloqueados", estado: "⏳ 2 (Mercancía Industrial, Homologación)" },
+        { aspecto: "Próxima acción", estado: "📍 3 mesas de trabajo (Cuantificación, Educación, Técnica)" },
+      ],
+      mesasAbiertas: [
+        "Mesa Cuantificación (1 semana) → validar métricas para priorizar",
+        "Mesa Educación Logística (2-3 semanas) → manual + videos + campaña",
+        "Mesa Técnica (4-8 semanas) → ECOM Scanner + link de transportadoras + token",
+      ],
+      notaFinal: "Documento cerrado. Ejecución comienza semana próxima.",
+    },
   },
 ];
 
@@ -179,12 +344,14 @@ export default function ExperimentosMarcasPage() {
                 </div>
                 <h3 style={{ margin: "0 0 12px", fontSize: 16, lineHeight: 1.25, color: NAVY }}>{e.nombre}</h3>
 
-                <div style={{ fontSize: 13, color: "#39415a", margin: "8px 0", lineHeight: 1.5 }}>
-                  <b style={{ display: "block", fontSize: 11, textTransform: "uppercase", letterSpacing: ".5px", color: "var(--muted)", marginBottom: 2 }}>
-                    Hipótesis
-                  </b>
-                  {e.hipotesis}
-                </div>
+                {e.hipotesis && (
+                  <div style={{ fontSize: 13, color: "#39415a", margin: "8px 0", lineHeight: 1.5 }}>
+                    <b style={{ display: "block", fontSize: 11, textTransform: "uppercase", letterSpacing: ".5px", color: "var(--muted)", marginBottom: 2 }}>
+                      Hipótesis
+                    </b>
+                    {e.hipotesis}
+                  </div>
+                )}
                 <div style={{ fontSize: 13, color: "#39415a", margin: "8px 0", lineHeight: 1.5 }}>
                   <b style={{ display: "block", fontSize: 11, textTransform: "uppercase", letterSpacing: ".5px", color: "var(--muted)", marginBottom: 2 }}>
                     Métrica
@@ -213,7 +380,6 @@ export default function ExperimentosMarcasPage() {
                     {e.aprendizaje}
                   </div>
                 )}
-
                 {e.insightsDestacados && (
                   <>
                     <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: AMBER, marginTop: 16, marginBottom: 8 }}>
@@ -317,6 +483,185 @@ export default function ExperimentosMarcasPage() {
                     <div style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 6, lineHeight: 1.4 }}>
                       Envío real a Maria Paula Arrechea (653912), 29-jul-2026 — caso híbrido (novedades en 0, devolución activa).
                     </div>
+                  </>
+                )}
+
+                {e.plantillaWaDefinitivaReal && (
+                  <>
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--muted)", marginTop: 16, marginBottom: 8 }}>
+                      💬 Plantilla utilizada — envío real semana 2, 3 y 4
+                    </div>
+                    <div style={{ maxWidth: 380 }}>
+                      <div
+                        style={{
+                          background: "#ECE5DD",
+                          borderRadius: 10,
+                          padding: 10,
+                        }}
+                      >
+                        <div
+                          style={{
+                            background: "white",
+                            borderRadius: 8,
+                            borderTopLeftRadius: 2,
+                            padding: "9px 11px",
+                            fontSize: 12,
+                            lineHeight: 1.5,
+                            color: "#111",
+                            whiteSpace: "pre-wrap",
+                            boxShadow: "0 1px 1px rgba(0,0,0,.08)",
+                          }}
+                        >
+                          {e.plantillaWaDefinitivaReal}
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ fontSize: 10.5, color: "var(--muted)", marginTop: 6, lineHeight: 1.4 }}>
+                      Envío real a Maria Paula Arrechea (653912), acumulado 1–17 ago 2026 — plantilla definitiva de 8 KPIs (creadas → canceladas → con guía → sin guía → tránsito → novedades → devolución → entregadas), usada desde semana 2 en adelante para las 5 marcas del piloto.
+                    </div>
+                  </>
+                )}
+
+                {e.cierre && (
+                  <>
+                    <div
+                      style={{
+                        marginTop: 20,
+                        padding: "14px 16px",
+                        borderRadius: 10,
+                        background: NAVY,
+                        color: "white",
+                      }}
+                    >
+                      <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 4 }}>📊 Cierre del experimento</div>
+                      <div style={{ fontSize: 11.5, color: "rgba(255,255,255,.7)" }}>
+                        Período: {e.cierre.periodo} · Metodología: {e.cierre.metodologia}
+                      </div>
+                    </div>
+
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: TEAL, marginTop: 16, marginBottom: 8 }}>
+                      🎯 Conclusiones
+                    </div>
+                    <ul style={{ margin: "0 0 4px", paddingLeft: 18, fontSize: 13, color: "#39415a", lineHeight: 1.6 }}>
+                      {e.cierre.conclusiones.map((c, i) => (
+                        <li key={i}>{c}</li>
+                      ))}
+                    </ul>
+
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: AMBER, marginTop: 16, marginBottom: 8 }}>
+                      💡 Hallazgos
+                    </div>
+                    <div style={{ display: "grid", gap: 8, marginBottom: 4 }}>
+                      {e.cierre.hallazgos.map((h, i) => (
+                        <div key={i} style={{ background: AMB_BG, border: "1px solid #FDE68A", borderRadius: 8, padding: "10px 12px" }}>
+                          <div style={{ fontSize: 12.5, fontWeight: 800, color: NAVY, marginBottom: 4 }}>{h.titulo}</div>
+                          <ul style={{ margin: 0, paddingLeft: 16, fontSize: 11.5, color: "#78350F", lineHeight: 1.5 }}>
+                            {h.detalle.map((d, j) => (
+                              <li key={j}>{d}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: BLUE, marginTop: 16, marginBottom: 8 }}>
+                      🚀 Oportunidades
+                    </div>
+                    <div style={{ display: "grid", gap: 12, marginBottom: 4 }}>
+                      {e.cierre.oportunidades.map((grupo, i) => (
+                        <div key={i}>
+                          <div style={{ fontSize: 12, fontWeight: 700, color: NAVY, marginBottom: 6 }}>{grupo.prioridad}</div>
+                          <div style={{ border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
+                            <div
+                              style={{
+                                display: "grid",
+                                gridTemplateColumns: "1.6fr 1fr 0.8fr 1.4fr",
+                                background: "var(--bg)",
+                                borderBottom: "1px solid var(--border)",
+                                padding: "6px 10px",
+                                fontSize: 9,
+                                fontWeight: 700,
+                                textTransform: "uppercase",
+                                letterSpacing: ".06em",
+                                color: "var(--muted)",
+                                gap: 6,
+                              }}
+                            >
+                              {grupo.columnas.map((col, k) => (
+                                <div key={k}>{col}</div>
+                              ))}
+                            </div>
+                            {grupo.filas.map((fila, r) => (
+                              <div
+                                key={r}
+                                style={{
+                                  display: "grid",
+                                  gridTemplateColumns: "1.6fr 1fr 0.8fr 1.4fr",
+                                  padding: "8px 10px",
+                                  gap: 6,
+                                  fontSize: 11.5,
+                                  color: "var(--muted)",
+                                  borderBottom: r < grupo.filas.length - 1 ? "1px solid var(--border)" : "none",
+                                }}
+                              >
+                                {fila.map((celda, c) => (
+                                  <div key={c} style={c === 0 ? { color: NAVY, fontWeight: 600 } : undefined}>
+                                    {celda}
+                                  </div>
+                                ))}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--muted)", marginTop: 16, marginBottom: 8 }}>
+                      🔗 Relacionamiento de proyectos
+                    </div>
+                    <div style={{ display: "grid", gap: 8, marginBottom: 4 }}>
+                      {e.cierre.relacionamientos.map((r, i) => (
+                        <div key={i} style={{ background: GREY_BG, borderRadius: 8, padding: "10px 12px", fontSize: 11.5, lineHeight: 1.6 }}>
+                          <div style={{ fontWeight: 800, color: NAVY }}>Hallazgo: {r.hallazgo}</div>
+                          {r.pasos.map((p, j) => (
+                            <div key={j} style={{ color: "#39415a", paddingLeft: 10 }}>↓ {p}</div>
+                          ))}
+                          <div style={{ color: "#0F766E", paddingLeft: 10, fontWeight: 700 }}>↓ Métrica: {r.metrica}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--muted)", marginTop: 16, marginBottom: 8 }}>
+                      📋 Resumen ejecutivo
+                    </div>
+                    <div style={{ border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden", marginBottom: 4 }}>
+                      {e.cierre.resumenEjecutivo.map((r, i) => (
+                        <div
+                          key={i}
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns: "1fr 2fr",
+                            padding: "8px 10px",
+                            gap: 6,
+                            fontSize: 12,
+                            borderBottom: i < e.cierre!.resumenEjecutivo.length - 1 ? "1px solid var(--border)" : "none",
+                          }}
+                        >
+                          <div style={{ fontWeight: 700, color: NAVY }}>{r.aspecto}</div>
+                          <div style={{ color: "var(--muted)" }}>{r.estado}</div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase", color: "var(--muted)", marginTop: 16, marginBottom: 8 }}>
+                      ✅ Mesas abiertas
+                    </div>
+                    <ul style={{ margin: "0 0 8px", paddingLeft: 18, fontSize: 13, color: "#39415a", lineHeight: 1.6 }}>
+                      {e.cierre.mesasAbiertas.map((m, i) => (
+                        <li key={i}>{m}</li>
+                      ))}
+                    </ul>
+                    <div style={{ fontSize: 11.5, fontStyle: "italic", color: "var(--muted)" }}>{e.cierre.notaFinal}</div>
                   </>
                 )}
 

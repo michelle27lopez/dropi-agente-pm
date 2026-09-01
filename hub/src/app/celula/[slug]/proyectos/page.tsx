@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Search, Trash2 } from "lucide-react";
+import { MoreVertical, Search, Trash2 } from "lucide-react";
 import HubFooter from "@/components/HubFooter";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
@@ -71,6 +72,13 @@ export default function ProyectosPorCelulaPage() {
   const [celulaNombre, setCelulaNombre] = useState<string | null>(null);
   const [proyectosReales, setProyectosReales] = useState<Proyecto[]>([]);
   const [deleteTarget, setDeleteTarget] = useState<Proyecto | null>(null);
+  // Alta de POC / Delivery Proyecto desde la tabla (menú "⋮" de cada fila
+  // Discovery) — evita entrar a la ficha solo para colgar un hijo.
+  const [crearTarget, setCrearTarget] = useState<{ parent: Proyecto; tipo: "POC" | "Delivery Proyecto" } | null>(null);
+  // Alta de un Discovery project raíz (sin padre). El botón vivía solo en la
+  // home de la célula (/celula/[slug]), que dejó de estar en el nav global —
+  // "Proyectos" del sidebar entra acá, así que el botón tiene que estar acá.
+  const [showCrearRaiz, setShowCrearRaiz] = useState(false);
   // Modo lectura (2026-08-17, Jaime): mismo criterio que la home de célula —
   // ver la tabla de una célula que no es la tuya ya no deja editar/eliminar
   // sin distinción visual. "Editar de todos modos" es el escape hatch.
@@ -155,6 +163,60 @@ export default function ProyectosPorCelulaPage() {
     setDeleteTarget(null);
   }
 
+  // Crea un POC o Delivery Proyecto colgando de un Discovery project sin
+  // abrir su ficha — mismo POST /api/proyectos/[parentId] que usa ProjectCard
+  // en el detalle. El hijo nuevo entra directo a la tabla que le toca (POC →
+  // "Pruebas de concepto", Delivery → "Proyectos") y el conteo de "Asociados"
+  // se recalcula solo desde `childCounts`.
+  async function handleCrearHijo(
+    parent: Proyecto,
+    tipo: "POC" | "Delivery Proyecto",
+    name: string,
+    summary: string,
+    relatedPocId: string | null,
+  ) {
+    const body =
+      tipo === "POC"
+        ? { name, summary }
+        : { name, summary, type: "Delivery Proyecto", related_poc_id: relatedPocId };
+    const res = await fetch(`/api/proyectos/${parent.id}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      throw new Error(data?.error ?? "No se pudo crear.");
+    }
+    const created = await res.json();
+    setProyectosReales((prev) => [...prev, created]);
+    setCrearTarget(null);
+  }
+
+  // Crea un Discovery project raíz (type "Idea", handoff "Experimentación")
+  // en la célula de la URL — mismo POST /api/celulas/[slug] que usa la home
+  // de la célula. El servidor exige ser miembro de esa célula.
+  async function handleCrearRaiz(name: string, summary: string) {
+    const res = await fetch(`/api/celulas/${params.slug}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      throw new Error(data?.error ?? "No se pudo crear el proyecto.");
+    }
+    const created = await res.json();
+    setProyectosReales((prev) => [...prev, created]);
+    setShowCrearRaiz(false);
+  }
+
+  // POC hermanos (mismo Discovery padre) entre los que un Delivery Proyecto
+  // nuevo puede elegir su `related_poc_id` opcional.
+  const siblingPocs = crearTarget
+    ? proyectosReales.filter((p) => p.type === "POC" && p.parent_project_id === crearTarget.parent.id)
+    : [];
+
   const porFase = (p: Proyecto) => fase === "todas" || faseDe(p.type) === fase;
   // Fuera de logística `mapaEtapas` siempre es null, así que esto no filtra
   // nada para el resto de células.
@@ -199,9 +261,24 @@ export default function ProyectosPorCelulaPage() {
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <div className="gnav-page" style={{ flex: 1, maxWidth: 1280, margin: "0 auto", width: "100%" }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>
-          Proyectos {celulaNombre && <span style={{ color: "var(--muted)", fontWeight: 600 }}>· {celulaNombre}</span>}
-        </h1>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap" }}>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>
+            Proyectos {celulaNombre && <span style={{ color: "var(--muted)", fontWeight: 600 }}>· {celulaNombre}</span>}
+          </h1>
+          {canEditar && (
+            <button
+              type="button"
+              onClick={() => setShowCrearRaiz(true)}
+              style={{
+                fontSize: 12, fontWeight: 700, color: "#F77F00", fontFamily: "inherit",
+                background: "#FFF7ED", border: "1px solid #FFEDD5", borderRadius: 8,
+                padding: "8px 14px", cursor: "pointer",
+              }}
+            >
+              + Nuevo proyecto
+            </button>
+          )}
+        </div>
 
         {!esCelulaPropia && isSuperAdmin && (
           <div style={{ marginTop: 20 }}>
@@ -293,6 +370,7 @@ export default function ProyectosPorCelulaPage() {
               router={router}
               onEstadoChange={handleEstadoChange}
               onDeleteClick={setDeleteTarget}
+              onCrearHijo={(parent, tipo) => setCrearTarget({ parent, tipo })}
               childCounts={childCounts}
               canEditar={canEditar}
             />
@@ -305,6 +383,7 @@ export default function ProyectosPorCelulaPage() {
             router={router}
             onEstadoChange={handleEstadoChange}
             onDeleteClick={setDeleteTarget}
+            onCrearHijo={(parent, tipo) => setCrearTarget({ parent, tipo })}
             childCounts={childCounts}
             canEditar={canEditar}
           />
@@ -351,6 +430,26 @@ export default function ProyectosPorCelulaPage() {
           onConfirm={() => handleDeleteConfirm(deleteTarget)}
         />
       )}
+
+      {crearTarget && (
+        <CrearHijoModal
+          parent={crearTarget.parent}
+          tipo={crearTarget.tipo}
+          siblingPocs={siblingPocs}
+          onCancel={() => setCrearTarget(null)}
+          onConfirm={(name, summary, relatedPocId) =>
+            handleCrearHijo(crearTarget.parent, crearTarget.tipo, name, summary, relatedPocId)
+          }
+        />
+      )}
+
+      {showCrearRaiz && (
+        <CrearRaizModal
+          celulaNombre={celulaNombre}
+          onCancel={() => setShowCrearRaiz(false)}
+          onConfirm={handleCrearRaiz}
+        />
+      )}
     </main>
   );
 }
@@ -365,6 +464,7 @@ function ProjectsTable({
   router,
   onEstadoChange,
   onDeleteClick,
+  onCrearHijo,
   childCounts,
   canEditar,
 }: {
@@ -373,6 +473,7 @@ function ProjectsTable({
   router: RouterLike;
   onEstadoChange: (id: string, estado: string) => void;
   onDeleteClick: (proyecto: Proyecto) => void;
+  onCrearHijo: (parent: Proyecto, tipo: "POC" | "Delivery Proyecto") => void;
   childCounts: Map<string, { poc: number; delivery: number }>;
   canEditar: boolean;
 }) {
@@ -394,6 +495,7 @@ function ProjectsTable({
               <th style={{ width: 130 }}>Asociados</th>
               <th style={{ width: 160 }}>Estado</th>
               <th style={{ width: 150 }}>Prototipo</th>
+              <th style={{ width: 32 }}></th>
               <th style={{ width: 32 }}></th>
               <th style={{ width: 32 }}></th>
             </tr>
@@ -455,6 +557,14 @@ function ProjectsTable({
                   </td>
                   <td onClick={(e) => e.stopPropagation()}>
                     <PrototypeLinks urls={prototypeUrls} />
+                  </td>
+                  <td onClick={(e) => e.stopPropagation()}>
+                    {canEditar && fase === "discovery" && (
+                      <RowActionsMenu
+                        onCrearPoc={() => onCrearHijo(proyecto, "POC")}
+                        onCrearDelivery={() => onCrearHijo(proyecto, "Delivery Proyecto")}
+                      />
+                    )}
                   </td>
                   <td onClick={(e) => e.stopPropagation()}>
                     {canEditar && (
@@ -602,6 +712,323 @@ function PrototypeLinks({ urls }: { urls: string[] }) {
           ))}
         </div>
       )}
+    </div>
+  );
+}
+
+// Menú "⋮" por fila para colgar un POC o un Delivery Proyecto de un Discovery
+// project sin abrir su ficha. Solo se renderiza en filas Discovery y con
+// permiso de edición; el POST igual exige ser miembro de la célula dueña.
+//
+// El desplegable se monta en un portal a <body> con `position: fixed` porque
+// el contenedor de la tabla (`.proytable-wrap`) tiene `overflow-x: auto`, y
+// eso hace que el eje Y también recorte — un dropdown `absolute` dentro de la
+// fila (sobre todo la última) quedaba cortado por debajo del borde de la
+// tabla. Con coordenadas calculadas desde el rect del botón se escapa del
+// clipping y, si no hay espacio abajo, abre hacia arriba.
+const MENU_W = 208;
+const MENU_H = 84;
+
+function RowActionsMenu({ onCrearPoc, onCrearDelivery }: { onCrearPoc: () => void; onCrearDelivery: () => void }) {
+  const [open, setOpen] = useState(false);
+  const [coords, setCoords] = useState<{ top: number; left: number } | null>(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function place() {
+      const r = btnRef.current?.getBoundingClientRect();
+      if (!r) return;
+      const abajo = window.innerHeight - r.bottom;
+      const top = abajo < MENU_H + 12 ? r.top - MENU_H - 4 : r.bottom + 4;
+      const left = Math.max(8, Math.min(r.right - MENU_W, window.innerWidth - MENU_W - 8));
+      setCoords({ top, left });
+    }
+    place();
+
+    function onDocDown(e: MouseEvent) {
+      const t = e.target as Node;
+      if (btnRef.current?.contains(t) || menuRef.current?.contains(t)) return;
+      setOpen(false);
+    }
+    function onScrollOrResize() {
+      setOpen(false);
+    }
+    document.addEventListener("mousedown", onDocDown);
+    window.addEventListener("resize", onScrollOrResize);
+    window.addEventListener("scroll", onScrollOrResize, true);
+    return () => {
+      document.removeEventListener("mousedown", onDocDown);
+      window.removeEventListener("resize", onScrollOrResize);
+      window.removeEventListener("scroll", onScrollOrResize, true);
+    };
+  }, [open]);
+
+  const itemStyle: CSSProperties = {
+    display: "flex", alignItems: "center", gap: 8, width: "100%",
+    fontSize: 12, fontWeight: 600, fontFamily: "inherit", textAlign: "left",
+    color: "var(--fg)", background: "none", border: "none", padding: "9px 12px", cursor: "pointer",
+  };
+
+  return (
+    <div style={{ display: "inline-flex" }} onClick={(e) => e.stopPropagation()}>
+      <button
+        ref={btnRef}
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        title="Crear POC o Delivery Proyecto"
+        style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          width: 28, height: 28, borderRadius: 8, border: "none",
+          background: open ? "var(--gray-100)" : "transparent", color: "var(--gray-400)", cursor: "pointer",
+        }}
+      >
+        <MoreVertical size={15} strokeWidth={1.8} />
+      </button>
+      {open && coords && typeof document !== "undefined" &&
+        createPortal(
+          <div
+            ref={menuRef}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "fixed", top: coords.top, left: coords.left, zIndex: 1000,
+              width: MENU_W, background: "var(--card)", border: "1px solid var(--border)",
+              borderRadius: 8, boxShadow: "0 8px 24px rgba(0,0,0,0.16)", overflow: "hidden",
+            }}
+          >
+            <button type="button" style={itemStyle} onClick={() => { setOpen(false); onCrearPoc(); }}>
+              🧪 Crear POC
+            </button>
+            <button
+              type="button"
+              style={{ ...itemStyle, borderTop: "1px solid var(--border)" }}
+              onClick={() => { setOpen(false); onCrearDelivery(); }}
+            >
+              🚚 Crear Delivery Proyecto
+            </button>
+          </div>,
+          document.body,
+        )}
+    </div>
+  );
+}
+
+// Alta rápida de un POC / Delivery Proyecto desde la tabla. Reproduce los
+// campos del formulario inline de ProjectCard (nombre + de qué se trata, y
+// para Delivery el POC relacionado opcional entre los POC hermanos).
+function CrearHijoModal({
+  parent,
+  tipo,
+  siblingPocs,
+  onCancel,
+  onConfirm,
+}: {
+  parent: Proyecto;
+  tipo: "POC" | "Delivery Proyecto";
+  siblingPocs: Proyecto[];
+  onCancel: () => void;
+  onConfirm: (name: string, summary: string, relatedPocId: string | null) => Promise<void>;
+}) {
+  const [name, setName] = useState("");
+  const [summary, setSummary] = useState("");
+  const [relatedPocId, setRelatedPocId] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const puedeCrear = name.trim().length > 0 && summary.trim().length > 0;
+  const acento = tipo === "POC" ? "#F77F00" : "#0EA5E9";
+
+  async function handleConfirm() {
+    setSaving(true);
+    setError(null);
+    try {
+      await onConfirm(name.trim(), summary.trim(), relatedPocId || null);
+    } catch (e: any) {
+      setError(e.message ?? "No se pudo crear.");
+      setSaving(false);
+    }
+  }
+
+  const inputStyle: CSSProperties = {
+    width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)",
+    fontSize: 13, boxSizing: "border-box", fontFamily: "inherit", background: "var(--card)", color: "var(--fg)",
+  };
+
+  return (
+    <div
+      onClick={onCancel}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24, zIndex: 100, backdropFilter: "blur(4px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+          maxWidth: 440, width: "100%", padding: 24,
+        }}
+      >
+        <h3 style={{ fontSize: 16, fontWeight: 800, color: "var(--fg)", margin: "0 0 4px" }}>
+          {tipo === "POC" ? "Nuevo POC" : "Nuevo Delivery Proyecto"}
+        </h3>
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 16px", lineHeight: 1.5 }}>
+          Cuelga de <strong>{parent.name}</strong>{parent.project_code ? ` (${parent.project_code})` : ""}.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <input
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder={tipo === "POC" ? "Nombre del POC" : "Nombre del Delivery Proyecto"}
+            style={inputStyle}
+          />
+          <textarea
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            placeholder="De qué se trata"
+            rows={3}
+            style={{ ...inputStyle, resize: "vertical" }}
+          />
+          {tipo === "Delivery Proyecto" && siblingPocs.length > 0 && (
+            <select value={relatedPocId} onChange={(e) => setRelatedPocId(e.target.value)} style={inputStyle}>
+              <option value="">POC relacionado: ninguno</option>
+              {siblingPocs.map((p) => (
+                <option key={p.id} value={p.id}>POC relacionado: {p.name}</option>
+              ))}
+            </select>
+          )}
+        </div>
+        {error && <p style={{ fontSize: 12, color: "#DC2626", margin: "12px 0 0" }}>{error}</p>}
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8,
+              border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)", cursor: "pointer",
+            }}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            disabled={!puedeCrear || saving}
+            onClick={handleConfirm}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8, border: "none",
+              background: puedeCrear ? acento : "var(--gray-200)", color: puedeCrear ? "#fff" : "var(--muted)",
+              cursor: puedeCrear && !saving ? "pointer" : "not-allowed",
+            }}
+          >
+            {saving ? "Creando…" : "Crear"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Alta de un Discovery project raíz (sin padre). Nace como `type: "Idea"` /
+// handoff "Experimentación" — el arranque de fase Discovery. Después se
+// promueve a POC/Delivery desde el menú "⋮" de su fila.
+function CrearRaizModal({
+  celulaNombre,
+  onCancel,
+  onConfirm,
+}: {
+  celulaNombre: string | null;
+  onCancel: () => void;
+  onConfirm: (name: string, summary: string) => Promise<void>;
+}) {
+  const [name, setName] = useState("");
+  const [summary, setSummary] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const puedeCrear = name.trim().length > 0 && summary.trim().length > 0;
+
+  async function handleConfirm() {
+    setSaving(true);
+    setError(null);
+    try {
+      await onConfirm(name.trim(), summary.trim());
+    } catch (e: any) {
+      setError(e.message ?? "No se pudo crear.");
+      setSaving(false);
+    }
+  }
+
+  const inputStyle: CSSProperties = {
+    width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)",
+    fontSize: 13, boxSizing: "border-box", fontFamily: "inherit", background: "var(--card)", color: "var(--fg)",
+  };
+
+  return (
+    <div
+      onClick={onCancel}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24, zIndex: 100, backdropFilter: "blur(4px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+          maxWidth: 440, width: "100%", padding: 24,
+        }}
+      >
+        <h3 style={{ fontSize: 16, fontWeight: 800, color: "var(--fg)", margin: "0 0 4px" }}>
+          Nuevo proyecto
+        </h3>
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 16px", lineHeight: 1.5 }}>
+          Entra en fase <strong>Discovery</strong>{celulaNombre ? `, en ${celulaNombre}` : ""}. Luego se le cuelgan POC y Delivery desde su fila.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <input
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nombre del proyecto"
+            style={inputStyle}
+          />
+          <textarea
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            placeholder="De qué se trata"
+            rows={3}
+            style={{ ...inputStyle, resize: "vertical" }}
+          />
+        </div>
+        {error && <p style={{ fontSize: 12, color: "#DC2626", margin: "12px 0 0" }}>{error}</p>}
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8,
+              border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)", cursor: "pointer",
+            }}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            disabled={!puedeCrear || saving}
+            onClick={handleConfirm}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8, border: "none",
+              background: puedeCrear ? "#F77F00" : "var(--gray-200)", color: puedeCrear ? "#fff" : "var(--muted)",
+              cursor: puedeCrear && !saving ? "pointer" : "not-allowed",
+            }}
+          >
+            {saving ? "Creando…" : "Crear"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

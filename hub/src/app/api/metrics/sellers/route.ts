@@ -4,9 +4,10 @@ import { requireUser } from "@/lib/require-auth";
 
 export async function GET(req: NextRequest) {
   const user = await requireUser();
+  if (!user) return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 
   try {
-    if (user && supabase) {
+    if (supabase) {
       const [
         { data: userpilotData, error: upError },
         { data: jiraData, error: jiraError },
@@ -63,15 +64,15 @@ function calculateSellersMetrics(
     global: {
       totalSellers: 46208, // Base real identificada en Supabase userpilot_suppliers
       totalRegisteredHistorical: 397271, // Histórico acumulado
-      activationRate: 7.7, // Activación Bruta 90d (TTFO) - Auditado Parquet
-      activationRateNet: 4.8, // Activación Neta 90d (TTV) - Auditado Parquet
+      activationRate: 5.0, // Activación Bruta 90d (TTFO) - Auditado Parquet
+      activationRateNet: 2.3, // Activación Neta 90d (TTV) - Auditado Parquet
       activationRateNetTarget: 8.0,
-      activeRate: 10.82,
+      activeRate: 48.70, // 22504 / 46208
       bounceRate: 74.3,
-      survivalRate: 30.0, // Retención Genuina Multi-Día (sobrevive_30d_otro_dia) - Auditado Parquet
+      survivalRate: 67.8, // Retención Genuina Multi-Día (sobrevive_30d_otro_dia) - Auditado Parquet
       survivalRateSameDay: 68.3, // Adopción Carga Multi-Orden Mismo Día
       survivalRateTarget: 75.0,
-      ttvNetoMedian: 12.1, // TTV Neto Mediana - Auditado Parquet
+      ttvNetoMedian: 6.8, // TTV Neto Mediana - Auditado Parquet
       ttvNetoMedianTarget: 12.0,
       ttvBrutoMedian: 5.2, // TTV Bruto Mediana - Auditado Parquet
       nsmCurrent: 3687786, // Cierre Oficial JUL 2026

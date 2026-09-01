@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { localListEligibleProducts } from "@/lib/local-store-planeacion";
+import { localListEligibleProducts, QA_ELIGIBLE_TOKEN } from "@/lib/local-store-planeacion";
 import { supabaseListEligibleProducts } from "@/lib/supabase-store-planeacion";
 import { requireUser } from "@/lib/require-auth";
 
@@ -22,6 +22,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 
   const rows: string[] = ["Proveedor;ID proveedor;Token;Link personalizado"];
   for (const e of entries) {
+    // El link de QA no puede colarse en la convocatoria.
+    if (e.token === QA_ELIGIBLE_TOKEN) continue;
     rows.push([
       esc(e.supplier_name),
       esc(String(e.supplier_id).replace(".0", "")),

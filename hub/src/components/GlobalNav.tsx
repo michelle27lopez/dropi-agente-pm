@@ -15,6 +15,7 @@ import {
   Network,
   Webhook,
   Rss,
+  Flag,
 } from "lucide-react";
 
 type NavItem = {
@@ -29,6 +30,8 @@ type NavItem = {
 // Panorama, Sprint, Iniciativas y Updates se retiran de aquí porque pasan a
 // ser accesos rápidos dentro de Mi día (pendiente esa pasada). Pruebas con
 // Usuarios se elimina. Guías baja al pie del sidebar (ver footer).
+// Delivery se suma después (2026-08-25, Jaime) como 2do módulo, debajo de
+// Mi día — visibilidad cross-célula de prioridades, pedida explícitamente.
 //
 // Proyectos/Data/Following son por célula (2026-08-17, Jaime): apuntan a
 // `/celula/${celulaActiva}/...` en vez de una ruta plana, para que el
@@ -40,6 +43,9 @@ function buildPrimaryItems(celulaActiva: string | null): NavItem[] {
   const c = celulaActiva ?? "";
   return [
     { key: "mi-dia", label: "Mi día", href: c ? `/celula/${c}` : "/", icon: Home },
+    // Cross-célula (todas ven todas), a diferencia de Proyectos/Data/Following
+    // que son por célula — por eso no cuelga de /celula/[slug].
+    { key: "delivery", label: "Delivery", href: "/delivery", icon: Flag },
     { key: "proyectos", label: "Proyectos", href: c ? `/celula/${c}/proyectos` : "/proyectos", icon: FolderKanban },
     { key: "data", label: "Data", href: c ? `/celula/${c}/data` : "/data-solicitada", icon: Database },
     { key: "updates", label: "Updates", href: c ? `/celula/${c}/updates` : "/", icon: Rss },
