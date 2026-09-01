@@ -22,6 +22,30 @@ export const PROJECT_STYLE: Record<string, { url: string; color: string; icon: s
   "ACT-001": { url: "/proyectos/dropi-activa", color: "#7C3AED", icon: "🚀" },
   "ESP-001": { url: "/proyectos/espionaje", color: "#10B981", icon: "🕵️" },
   "DOC-001": { url: "/proveedores", color: "#FF6102", icon: "🧭" },
+
+  // Growth — cada POC hereda el ícono/color de su proyecto padre, para que
+  // en la tabla de /celula/growth/proyectos se identifiquen a simple vista
+  // como parte de la misma familia (ver también el punto de color por
+  // parent_project_id en esa misma página).
+  "GRO-001": { url: "/proyectos/gro-001", color: "#9F2C56", icon: "🤝" }, // CRM Líderes de Comunidad
+  "GRO-013": { url: "/proyectos/gro-013", color: "#9F2C56", icon: "🤝" }, // POC — CRM Líderes de Comunidad
+
+  "GRO-002": { url: "/proyectos/gro-002", color: "#FF6102", icon: "🏆" }, // Leyendas Dropi y Gamification
+  "GRO-005": { url: "/proyectos/gro-005", color: "#FF6102", icon: "🏆" }, // POC — Landing del Programa
+  "GRO-009": { url: "/proyectos/gro-009", color: "#FF6102", icon: "🏆" }, // POC — Expectativa ExpoWinners
+  "GRO-010": { url: "/proyectos/gro-010", color: "#FF6102", icon: "🏆" }, // POC — Wrapped vía CRM
+  "GRO-011": { url: "/proyectos/gro-011", color: "#FF6102", icon: "🏆" }, // POC — UserPilot Gamification
+  "GRO-012": { url: "/proyectos/gro-012", color: "#FF6102", icon: "🏆" }, // POC — Experiencia Plataforma
+
+  "GRO-004": { url: "/proyectos/gro-004", color: "#0E7C74", icon: "📚" }, // HelpCenter / Biblia IA
+  "GRO-007": { url: "/proyectos/gro-007", color: "#0E7C74", icon: "📚" }, // POC — Website
+  "GRO-015": { url: "/proyectos/gro-015", color: "#0E7C74", icon: "📚" }, // POC — HelpCenter Intercom
+  "GRO-016": { url: "/proyectos/gro-016", color: "#0E7C74", icon: "📚" }, // POC — GEO/AEO
+
+  "GRO-006": { url: "/proyectos/gro-006", color: "#0891B2", icon: "👤" }, // Perfil de Líderes de Comunidad
+  "GRO-014": { url: "/proyectos/gro-014", color: "#0891B2", icon: "👤" }, // POC — Perfil de Líder de Comunidad
+
+  "GRO-017": { url: "/proyectos/gro-017", color: "#7C3AED", icon: "⚙️" }, // BackOffice Operación Líderes de Comunidad
 };
 
 const TYPE_ICON: Record<string, string> = {
