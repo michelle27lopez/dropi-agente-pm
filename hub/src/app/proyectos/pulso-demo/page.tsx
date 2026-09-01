@@ -85,6 +85,16 @@ const ACCESS_CARDS = [
     external: false,
     badge: "Research",
   },
+  {
+    href: "/proyectos/pulso-demo/hallazgos",
+    icon: "🔎",
+    title: "Hallazgos · Señales",
+    sub: "Confirmación de dropshippers en el oráculo de demanda · data en vivo",
+    color: "#F77F00",
+    colorBg: "#FFF8F0",
+    external: false,
+    badge: "Hallazgos",
+  },
 ];
 
 const FLOW_STEPS = [

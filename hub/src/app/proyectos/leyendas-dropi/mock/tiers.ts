@@ -1,0 +1,156 @@
+import { Tier } from "../types";
+
+export const TIERS: Tier[] = [
+  {
+    id: 0,
+    name: "Bienvenido",
+    eyebrow: "01",
+    minOrders: 0,
+    maxOrders: 100,
+    subLevels: [
+      {
+        code: "unica",
+        label: "Categoría de entrada",
+        minOrders: 0,
+        maxOrders: 0,
+        badgeUrl: null,
+      },
+      {
+        code: "I",
+        label: "Subnivel I",
+        minOrders: 1,
+        maxOrders: 9,
+        badgeUrl: "/badges/aprendiz-1.png",
+      },
+      {
+        code: "II",
+        label: "Subnivel II",
+        minOrders: 10,
+        maxOrders: 50,
+        badgeUrl: "/badges/aprendiz-2.png",
+      },
+      {
+        code: "III",
+        label: "Subnivel III",
+        minOrders: 51,
+        maxOrders: 100,
+        badgeUrl: "/badges/aprendiz-3.png",
+      },
+    ],
+  },
+  {
+    id: 1,
+    name: "Explorador",
+    eyebrow: "02",
+    minOrders: 101,
+    maxOrders: 1000,
+    subLevels: [
+      {
+        code: "I",
+        label: "Subnivel I",
+        minOrders: 101,
+        maxOrders: 299,
+        badgeUrl: null,
+      },
+      {
+        code: "II",
+        label: "Subnivel II",
+        minOrders: 300,
+        maxOrders: 599,
+        badgeUrl: null,
+      },
+      {
+        code: "III",
+        label: "Subnivel III",
+        minOrders: 600,
+        maxOrders: 1000,
+        badgeUrl: null,
+      },
+    ],
+  },
+  {
+    id: 2,
+    name: "Master",
+    eyebrow: "03",
+    minOrders: 1001,
+    maxOrders: 2500,
+    subLevels: [
+      {
+        code: "I",
+        label: "Subnivel I",
+        minOrders: 1001,
+        maxOrders: 1500,
+        badgeUrl: "/badges/master-1.png",
+      },
+      {
+        code: "II",
+        label: "Subnivel II",
+        minOrders: 1501,
+        maxOrders: 2500,
+        badgeUrl: "/badges/master-2.png",
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: "Experto",
+    eyebrow: "04",
+    minOrders: 2501,
+    maxOrders: 5000,
+    subLevels: [
+      {
+        code: "I",
+        label: "Subnivel I",
+        minOrders: 2501,
+        maxOrders: 3500,
+        badgeUrl: "/badges/experto-1.png",
+      },
+      {
+        code: "II",
+        label: "Subnivel II",
+        minOrders: 3501,
+        maxOrders: 5000,
+        badgeUrl: "/badges/experto-2.png",
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "Sabio VIP",
+    eyebrow: "05",
+    minOrders: 5001,
+    maxOrders: 20000,
+    subLevels: [
+      {
+        code: "I",
+        label: "Subnivel I",
+        minOrders: 5001,
+        maxOrders: 9999,
+        badgeUrl: "/badges/sabio-1.png",
+      },
+      {
+        code: "II",
+        label: "Subnivel II",
+        minOrders: 10000,
+        maxOrders: 20000,
+        badgeUrl: null,
+      },
+    ],
+  },
+  {
+    id: 5,
+    name: "Leyenda",
+    eyebrow: "06",
+    minOrders: 20001,
+    maxOrders: null,
+    subLevels: [
+      {
+        code: "unica",
+        label: "Rango único",
+        minOrders: 20001,
+        maxOrders: null,
+        badgeUrl: "/badges/leyenda.png",
+      },
+    ],
+  },
+];

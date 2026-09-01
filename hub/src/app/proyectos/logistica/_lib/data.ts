@@ -27,8 +27,9 @@ const JIRA = "https://dropi-it.atlassian.net/browse/";
 // del repo de prototipos; no se adivina. Valores posibles: dropshipper,
 // proveedor, admin. Verificado el 5-ago contra origin/main.
 type PerfilRpp = "dropshipper" | "proveedor" | "admin";
-function rpp(ruta: string, perfil: PerfilRpp) {
-  return `${RPP_BASE_URL}/${ruta}?profile=${perfil}`;
+function rpp(ruta: string, perfil: PerfilRpp, extra?: string) {
+  const base = `${RPP_BASE_URL}/${ruta}?profile=${perfil}`;
+  return extra ? `${base}&${extra}` : base;
 }
 export function jiraUrl(ticket?: string) {
   return ticket ? JIRA + ticket : undefined;
@@ -790,6 +791,54 @@ export const metadataProyectosLogistica: ProyectoMetadataLogistica[] = [
   // En Supabase los tres quedan `estado_interno = 'Cerrado'`, no borrados
   // (migración 050): el histórico y los `related_*` de otras filas dependen de
   // que la fila siga existiendo.
+
+  // ── Inyectados weekly 19-ago ──────────────────────────────────────────────
+  {
+    nombre: "POC Autoconfirmación × ChateaPro",
+    nombreCorto: "Autoconf. × ChateaPro",
+    slug: "autoconfirmacion-chateapro",
+    codigo: "LOG-019",
+    aportaA: "Movilización",
+    vista: "/proyectos/logistica/poc-autoconfirmacion-chateapro",
+    etapa: "Confirmación", tipo: "Experimento", fase: "Diseño", handoff: "Pendiente",
+    ticket: "PRM-1497", destacado: true,
+    owner: "Michel Pino",
+    descripcion:
+      "Wizard de 3 pasos que integra autoconfirmación con ChateaPro: reglas con impacto económico en tiempo real, comunicación automática al cliente (mensajes por producto, Confío, verificación IA de dirección), y simulador con acciones ChateaPro por orden.",
+    porQue: "Insight de las mesas con ChateaPro: 'si no hay comunicación, la autoconfirmación no sirve'. Sin avisarle al cliente que su orden fue confirmada, se pierde la oportunidad de verificar dirección y ofrecer pago anticipado.",
+    proximoPaso: "Resolver el gate abierto: ¿ChateaPro tolera un gate antes de su disparo? Sin eso, no se puede experimentar.",
+    foco: "POC del wizard de 3 pasos (reglas → comunicación → simulador). 18 órdenes mock, 4 acciones ChateaPro modeladas (confirmación/verificación/confío/escalamiento). Deployado en RPP (commit aedf743, ruta /old/configuraciones/configuracion-de-tienda). Hallazgos de mesas documentados en artefacto.",
+    links: [
+      { tipo: "prototipo", label: "RPP · Wizard autoconfirmación × ChateaPro", href: rpp("old/configuraciones/configuracion-de-tienda", "dropshipper", "wizard=autoconfirmacion") },
+      { tipo: "doc", label: "Avance y hallazgos ChateaPro", href: "https://claude.ai/code/artifact/d1e28a0c-90c9-4df0-acc8-9806f6017540" },
+    ],
+    experimentos: ["autoconfirmacion-chateapro"],
+    etapasRelacionadas: [
+      { etapa: "Confirmación", rol: "Reglas de autoconfirmación (tope flete, huella, variantes, duplicadas)" },
+      { etapa: "Novedad / Posventa", rol: "Confío + verificación dirección IA reducen novedad pre-entrega" },
+    ],
+  },
+  {
+    nombre: "POC Servicios en Bodega",
+    nombreCorto: "Servicios Bodega",
+    slug: "servicios-bodega",
+    codigo: "LOG-020",
+    aportaA: "Fuera del centro",
+    vista: "/proyectos/logistica/poc-servicios-bodega",
+    etapa: "Despacho", tipo: "Proyecto", fase: "Discovery", handoff: "Pendiente",
+    ticket: "PRM-1446",
+    owner: "Michel Pino",
+    descripcion:
+      "Auditoría y plataforma de cobros para los 5 servicios en bodega que Dropi presta pero no factura: almacenamiento, etiquetado, armado de kits, recepción de mercancía y recargo multi-unidad.",
+    porQue: "Revenue leakage de $2.9M–6.4M MXN/mes en 12 países. 4 de 5 servicios no se cobran. Dropi asume el costo operativo sin capturar el valor.",
+    proximoPaso: "MVP con 2 servicios (almacenamiento + recepción) que tienen data limpia y fórmula clara. Etiquetado y kits en Fase 2.",
+    foco: "Corrección de alcance: la tarifa base por orden ($2,800/orden) NO entra — ya se cobra desde el core de Dropi. Solo los 5 servicios de bodega. Dato real: Excel mayo México, 124 proveedores, $62,000 MXN solo en almacenamiento. Riesgo R1: resistencia del proveedor si no hay contrato firmado. Naming: 'Servicios en Bodega', no 'Fulfillment' — evita confusión con el cobro base. Motor de cálculo del prototipo corregido: se eliminan TARIFA_BASE_ORDEN y fulfillmentBaseOrdenes; calcSubtotal queda con 5 sumandos; IVA parametrizable por país.",
+    links: [
+      { tipo: "doc", label: "Auditoría completa (artefacto)", href: "https://claude.ai/code/artifact/eb1d84d4-e13c-41a6-acd2-299ae146843b" },
+      { tipo: "prototipo", label: "RPP · Parametrizar fulfillment", href: rpp("old/fulfillment/parametrizar", "admin") },
+      { tipo: "doc", label: "Confluence · Síntesis auditada", href: "https://dropi-it.atlassian.net/wiki/spaces/PD/pages/1572732930" },
+    ],
+  },
 ];
 
 // Alias público compatible. Los adaptadores de Darwin y las vistas existentes
@@ -1099,6 +1148,23 @@ export const experimentos: Experimento[] = [
     proyecto: "Vigía (sin ticket todavía)",
     aprendizaje:
       "El diseño cubre los dos roles, dropshipper y proveedor, y la parte técnica ya está probada. El valor no está solo en la alerta: está en que el mensaje al proveedor sale con su contacto real y con el contexto de la orden ya cargado. Sin eso, el dropshipper tiene que buscar el contacto a mano.",
+  },
+  {
+    slug: "autoconfirmacion-chateapro",
+    proyectoSlug: "autoconfirmacion-chateapro",
+    nombre: "POC Autoconfirmación × ChateaPro (wizard 3 pasos)",
+    hipotesis:
+      "Si la autoconfirmación se integra con ChateaPro (mensaje de confirmación + verificación IA de dirección + Confío para pago anticipado), el usuario corrige antes del despacho y la devolución baja sin sacrificar la experiencia.",
+    metrica: "Gate: ¿ChateaPro tolera esperar la decisión del autoconfirmador? Si sí → piloto con 18 órdenes reales midiendo: tasa de corrección de dirección, conversión Confío, y reducción de devolución post-confirmación.",
+    decide: "Si ChateaPro puede actuar condicionalmente (después de la evaluación de reglas) o solo dispara en bloque.",
+    estado: "Diseñado",
+    impactoEsperado: { indicador: "Comunicación pre-despacho" },
+    impacto: "4 acciones ChateaPro modeladas: confirmación exitosa, verificación IA de dirección, pago anticipado (Confío) y escalamiento a asesor. 18 órdenes mock con costo real de flete, margen y huella del comprador.",
+    proyecto: "POC Autoconfirmación × ChateaPro (LOG-019)",
+    links: [
+      { tipo: "prototipo", label: "RPP · Wizard 3 pasos", href: rpp("old/configuraciones/configuracion-de-tienda", "dropshipper", "wizard=autoconfirmacion") },
+      { tipo: "doc", label: "Hallazgos ChateaPro", href: "https://claude.ai/code/artifact/d1e28a0c-90c9-4df0-acc8-9806f6017540" },
+    ],
   },
 ];
 

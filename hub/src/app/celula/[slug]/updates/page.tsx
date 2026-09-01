@@ -18,7 +18,7 @@ import { previewUpdateContent } from "@/lib/update-preview";
 const UpdatesLogistica = dynamic(() => import("../_components/UpdatesLogistica"), { ssr: false });
 const UpdatesBackoffice = dynamic(() => import("../_components/UpdatesBackoffice"), { ssr: false });
 
-type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
+type Update = { id: string; week_date: string; title: string; content: string; url: string | null; tipo: "weekly" | "cell_board" };
 type CelulaHome = { id: string; nombre: string; slug: string; updates: Update[] };
 
 function truncate(text: string | undefined | null, max: number) {
@@ -33,8 +33,8 @@ function updateToItem(u: Update): Item {
     description: previewUpdateContent(u.content),
     url: u.url ?? undefined,
     tag: u.week_date,
-    color: "#6366F1",
-    icon: "📋",
+    color: u.tipo === "weekly" ? "#6366F1" : "#059669",
+    icon: u.tipo === "weekly" ? "📋" : "🎯",
   };
 }
 
@@ -72,11 +72,30 @@ export default function UpdatesPorCelulaPage() {
   const isBackoffice = params.slug === "backoffice";
 
   const semanasCelula = SEMANAS.filter((s) => s.celula === celula.slug && REGISTRY[s.date]);
-  const updateEntries = [
-    ...celula.updates.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
+
+  // Weekly = sync con TI/Delivery (PL-PO-PM) · Cell Board = avance hacia las
+  // metas de la célula. Antes vivían mezclados en una sola lista sin
+  // distinción — separados a pedido de Kate (2026-08-20).
+  // `tipo` no existe todavía en producción hasta que se corra la migración
+  // 051_celula_updates_tipo.sql — mientras tanto llega undefined desde la API,
+  // así que no puede tratarse como "no es weekly ni cell_board" o los updates
+  // viejos desaparecen de las dos secciones. Undefined cae en cell_board,
+  // igual que el DEFAULT que trae la columna en la migración.
+  const weeklyUpdates = celula.updates.filter((u) => u.tipo === "weekly");
+  const cellBoardUpdates = celula.updates.filter((u) => u.tipo !== "weekly");
+
+  const weeklyEntries = [
+    ...weeklyUpdates.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
     ...semanasCelula.map((s) => ({ item: weeklyToItem(s), sortKey: s.date.slice(0, 10) })),
   ].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
-  const updates = updateEntries.map((e) => e.item);
+  const weeklyItems = weeklyEntries.map((e) => e.item);
+
+  const cellBoardItems = cellBoardUpdates
+    .slice()
+    .sort((a, b) => b.week_date.localeCompare(a.week_date))
+    .map((u) => updateToItem(u));
+
+  const updates = [...weeklyItems, ...cellBoardItems];
   const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
 
   return (
@@ -108,23 +127,35 @@ export default function UpdatesPorCelulaPage() {
           )}
 
           {!isLogistica && !isBackoffice && (
-            <Section
-              title="Updates"
-              items={updates}
-              ctaLabel="Ver →"
-              onItemClick={(item) => {
-                const u = updatesById.get(item.key);
-                if (u) setOpenUpdate(u);
-              }}
-            />
-          )}
+            <>
+              <Section
+                title="Weekly"
+                items={weeklyItems}
+                ctaLabel="Ver →"
+                onItemClick={(item) => {
+                  const u = updatesById.get(item.key);
+                  if (u) setOpenUpdate(u);
+                }}
+              />
+              {weeklyItems.length === 0 && (
+                <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates de Weekly.</p>
+              )}
 
-          {/* Solo para las células que se renderizan con <Section>. Logística y
-              Backoffice traen su propio contenido —que no sale de `updates`— y
-              su propio mensaje de vacío: sin esta guarda, la pantalla mostraba
-              el weekly de Logística Y "aún no hay updates" debajo. */}
-          {!isLogistica && !isBackoffice && updates.length === 0 && (
-            <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates registrados.</p>
+              <div style={{ marginTop: 32 }}>
+                <Section
+                  title="Cell Board"
+                  items={cellBoardItems}
+                  ctaLabel="Ver →"
+                  onItemClick={(item) => {
+                    const u = updatesById.get(item.key);
+                    if (u) setOpenUpdate(u);
+                  }}
+                />
+                {cellBoardItems.length === 0 && (
+                  <p style={{ fontSize: 13, color: "var(--muted)" }}>Aún no hay updates de Cell Board.</p>
+                )}
+              </div>
+            </>
           )}
         </div>
       </div>

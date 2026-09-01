@@ -6,6 +6,7 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
 import { TTV_FASE_1, TTV_FASE_2 } from "@/lib/ttv-fases-data";
 import { CATALOGO_METAS } from "@/lib/catalogo-metas-data";
+import { TTV_RESULTADOS, PULSO_RESULTADOS } from "@/lib/iniciativas-resultados-data";
 
 type MetricsProject = {
   key: string;
@@ -195,6 +196,31 @@ function FollowingContent() {
                       {TTV_FASE_2.tiempoRegistroEntrega}
                     </div>
                   </div>
+                  <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid var(--border)", display: "flex", gap: 24, flexWrap: "wrap" }}>
+                    <div>
+                      <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Proveedores activos</div>
+                      <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em", color: "var(--fg)" }}>
+                        {TTV_RESULTADOS.proveedoresActivos}
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Activación neta · 1ª orden</div>
+                      <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em", color: "var(--fg)" }}>
+                        {TTV_RESULTADOS.diasActivacionNeta}
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Órdenes generadas</div>
+                      <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em", color: TTV_RESULTADOS.ordenesGeneradas ? "var(--fg)" : "var(--faint, #9CA3AF)" }}>
+                        {TTV_RESULTADOS.ordenesGeneradas ?? "—"}
+                      </div>
+                      {!TTV_RESULTADOS.ordenesGeneradas && (
+                        <div style={{ fontSize: 10, color: "var(--faint, #9CA3AF)", marginTop: 2, fontStyle: "italic", maxWidth: 140 }}>
+                          {TTV_RESULTADOS.ordenesGeneradasNota}
+                        </div>
+                      )}
+                    </div>
+                  </div>
                   <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 14, lineHeight: 1.5 }}>
                     Activación neta ya supera el baseline. La brecha sigue entre generar la orden ({TTV_FASE_2.activacionBruta})
                     y entregarla — punto exacto detrás del pivote a agente de WA.
@@ -240,6 +266,49 @@ function FollowingContent() {
                 </div>
               </Link>
             </div>
+
+            <h2 style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 700, margin: "32px 0 14px" }}>
+              Resultados de iniciativas
+            </h2>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, maxWidth: 960 }}>
+              <Link href={PULSO_RESULTADOS.detalleUrl} style={{ textDecoration: "none", color: "inherit" }}>
+                <div style={{
+                  background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+                  padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", height: "100%",
+                  transition: "box-shadow 0.15s",
+                }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+                    <p style={{ fontSize: 13, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.08em", fontWeight: 600, margin: 0 }}>
+                      ⚡ Dropi Pulso · Resultados
+                    </p>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--dropi)", background: "var(--dropi-light)", padding: "3px 9px", borderRadius: 20 }}>
+                      Ver detalle →
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", gap: 24, marginTop: 16, flexWrap: "wrap" }}>
+                    <div>
+                      <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Señales enviadas</div>
+                      <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", color: "var(--fg)" }}>
+                        {PULSO_RESULTADOS.senalesEnviadas}
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Productos aceptados para privatizar</div>
+                      <div style={{ fontSize: 34, fontWeight: 800, letterSpacing: "-0.03em", color: "var(--fg)" }}>
+                        {PULSO_RESULTADOS.productosAceptadosPrivatizar}
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: 18, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
+                    <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4 }}>Órdenes generadas</div>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: PULSO_RESULTADOS.ordenesGeneradas ? "var(--fg)" : "var(--faint, #9CA3AF)" }}>
+                      {PULSO_RESULTADOS.ordenesGeneradas ?? PULSO_RESULTADOS.ordenesGeneradasNota}
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+
             <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 24 }}>
               Elegí una métrica en el panel de la izquierda para ver el detalle completo.
             </p>

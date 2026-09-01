@@ -45,6 +45,14 @@ type CampaignSend = {
 export type SupplierStatus = "contactado" | "respondio" | "aplico" | "activo";
 export const SUPPLIER_STATUS_ORDER: SupplierStatus[] = ["contactado", "respondio", "aplico", "activo"];
 
+/**
+ * Token del proveedor de pruebas de Cyber Days. No es un proveedor real: se
+ * excluye de los contadores del panel y de los dos CSV (el de selecciones y,
+ * sobre todo, el de links — ese se usa para la convocatoria y no debe llevar
+ * el link de QA a nadie).
+ */
+export const QA_ELIGIBLE_TOKEN = "qa-cyberdays";
+
 type SupplierContact = { label: string; sent_at: string };
 
 type CampaignSupplier = {
@@ -435,6 +443,30 @@ export async function localResetEligibleToken(
   const idx = (store.eligibleProducts ?? []).findIndex((e) => e.campaign_id === campaignId && e.token === oldToken);
   if (idx < 0 || !store.eligibleProducts) return null;
   store.eligibleProducts[idx] = { ...store.eligibleProducts[idx], token: newToken, updated_at: new Date().toISOString() };
+  await writeStore(store);
+  return store.eligibleProducts[idx];
+}
+
+// Devuelve la fila al estado inicial SIN cambiar el token — pensado para el
+// proveedor de QA (token fijo `qa-cyberdays`), que se reusa una y otra vez.
+// Distinto de localResetEligibleToken: ahí lo que cambia es el link; aquí el
+// link es justamente lo único que se conserva, junto con el catálogo.
+export async function localResetEligibleEstado(
+  campaignId: string,
+  token: string
+): Promise<EligibleEntry | null> {
+  const store = await readStore();
+  const idx = (store.eligibleProducts ?? []).findIndex((e) => e.campaign_id === campaignId && e.token === token);
+  if (idx < 0 || !store.eligibleProducts) return null;
+  const prev = store.eligibleProducts[idx];
+  store.eligibleProducts[idx] = {
+    campaign_id: prev.campaign_id,
+    token: prev.token,
+    supplier_id: prev.supplier_id,
+    supplier_name: prev.supplier_name,
+    products: prev.products,
+    updated_at: new Date().toISOString(),
+  };
   await writeStore(store);
   return store.eligibleProducts[idx];
 }

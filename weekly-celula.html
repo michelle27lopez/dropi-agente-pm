@@ -474,6 +474,14 @@
       </div>
     </div>
 
+    <div class="menu-item" onclick="goToSlide(13)">
+      <div class="item-left">
+        <i class="ti ti-activity"></i>
+        <span class="label">3. Pulsómetros Dashboard</span>
+      </div>
+      <span class="badge-tag badge-green">Nuevo</span>
+    </div>
+
     <div class="sidebar-section-title">🚚 Delivery Proyectos</div>
 
     <div class="menu-item" onclick="goToSlide(2)">
@@ -1040,29 +1048,81 @@
       </div>
     </div>
 
-    <!-- SLIDE 12: WPP CONCIERGE & WRAPPED -->
-    <div class="slide-container" id="slide-12">
+    <!-- SLIDE 13: PULSÓMETROS DASHBOARD -->
+    <div class="slide-container" id="slide-13">
       <div class="card-slide">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>🧪 Concierge Wpp Novatos & Dropi Wrapped</h1>
-            <div class="slide-subtitle">Experimento Causal de acompañamiento directivo y retrospectiva de gala</div>
+            <h1>⏱️ Pulsómetros Operativos PM & Velocímetros WoW</h1>
+            <div class="slide-subtitle">Rediseño UX/UI de tarjetas KPI con Doble Pulso (Foto 90d + Pulso Semanal WoW) y Rangos de Control</div>
           </div>
-          <span class="badge-tag badge-purple" style="font-size:12px; padding:6px 12px;">Discovery Causal & Gamificación</span>
+          <span class="badge-tag badge-green" style="font-size:12px; padding:6px 12px;">Nuevo Framework KPI</span>
         </div>
 
         <div class="grid-2">
-          <div class="info-box alert-purple">
-            <div class="box-title" style="color:var(--purple-primary);"><i class="ti ti-message-dots"></i> Concierge Wpp Novatos (`PROD-EXP-WPP`)</div>
-            <p style="font-size:13.5px; color:var(--text-main); line-height:1.5;">
-              Spec completo y prototipo UI navegable (<a href="file:///Users/santiago.herrera/Downloads/dropi-agente-pm/hub/public/prototipos/falsificacion-wpp-novatos-poc.html" target="_blank" style="color:var(--orange-primary); text-decoration:underline;">Ver Prototipo Concierge</a>) para validar si el acompañamiento por Wpp logra 1ª orden rentable en $\le 7$ días.
-            </p>
+          <!-- Card Pulsómetro 1: Activación Neta -->
+          <div class="info-box alert-green" style="padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div class="box-title" style="color:var(--green-success);"><i class="ti ti-target-arrow"></i> Activación Neta (90d vs WoW)</div>
+              <span class="badge-tag badge-green">Piso Mínimo → Techo Meta</span>
+            </div>
+            
+            <div style="display:flex; align-items:baseline; gap:12px; margin-top:12px;">
+              <span style="font-size:32px; font-weight:800; color:#fff;">4.8%</span>
+              <span style="font-size:14px; font-weight:700; color:var(--green-success);">▲ +0.5 pp (vs Sem. Pasada)</span>
+              <span style="font-size:12px; color:var(--text-muted);">| Pulso Semanal: <strong>6.2%</strong></span>
+            </div>
+
+            <!-- Bullet Chart Visual -->
+            <div style="margin-top:16px;">
+              <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); font-weight:700; margin-bottom:4px;">
+                <span>Piso Crítico: 3.5%</span>
+                <span style="color:#fff;">Foto Actual: 4.8%</span>
+                <span style="color:var(--green-success);">Techo Meta S2: 8.0%</span>
+              </div>
+              <div style="height:10px; background:rgba(255,255,255,0.1); border-radius:5px; position:relative; overflow:hidden;">
+                <div style="position:absolute; left:0; width:43.75%; height:100%; background:var(--red-alert); opacity:0.4;"></div>
+                <div style="position:absolute; left:43.75%; width:60%; height:100%; background:linear-gradient(90deg, var(--yellow-warning), var(--green-success));"></div>
+                <div style="position:absolute; left:60%; width:4px; height:100%; background:#fff; box-shadow:0 0 8px #fff;"></div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; font-size:12px; color:var(--text-muted);">
+              <span>📈 Sparkline 8 sem: <strong style="color:var(--green-success);"> ▂▃▅▄▅▇█ (+1.4 pp Q3)</strong></span>
+              <span>⏱️ Run-rate: <strong style="color:#fff;">Llegada Sem. 41</strong></span>
+            </div>
           </div>
-          <div class="info-box alert-green">
-            <div class="box-title" style="color:var(--green-success);"><i class="ti ti-trophy"></i> Dropi Wrapped ExpoWinners (`PROD-WRAPPED`)</div>
-            <p style="font-size:13.5px; color:var(--text-main); line-height:1.5;">
-              Retrospectiva interactiva de racha y percentiles acordada entre Growth y Dev para premiar y fidelizar a los Top Sellers en la gala ExpoWinners.
-            </p>
+
+          <!-- Card Pulsómetro 2: Time-to-Value Neto -->
+          <div class="info-box alert-blue" style="padding:24px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div class="box-title" style="color:var(--blue-primary);"><i class="ti ti-clock"></i> Time-to-Value (TTV) Neto</div>
+              <span class="badge-tag badge-blue">Techo Max → Piso Óptimo</span>
+            </div>
+
+            <div style="display:flex; align-items:baseline; gap:12px; margin-top:12px;">
+              <span style="font-size:32px; font-weight:800; color:#fff;">12.1 <span style="font-size:18px;">días</span></span>
+              <span style="font-size:14px; font-weight:700; color:var(--green-success);">▼ -1.8 d (vs Sem. Pasada)</span>
+              <span style="font-size:12px; color:var(--text-muted);">| Pulso Semanal: <strong>10.4 d</strong></span>
+            </div>
+
+            <!-- Bullet Chart Visual -->
+            <div style="margin-top:16px;">
+              <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--text-muted); font-weight:700; margin-bottom:4px;">
+                <span style="color:var(--green-success);">Piso Óptimo: <12.0 d</span>
+                <span style="color:#fff;">Foto Actual: 12.1 d</span>
+                <span>Techo Max: 14.0 d</span>
+              </div>
+              <div style="height:10px; background:rgba(255,255,255,0.1); border-radius:5px; position:relative; overflow:hidden;">
+                <div style="position:absolute; left:0; width:86.4%; height:100%; background:linear-gradient(90deg, var(--green-success), var(--yellow-warning));"></div>
+                <div style="position:absolute; left:86.4%; width:4px; height:100%; background:#fff; box-shadow:0 0 8px #fff;"></div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; font-size:12px; color:var(--text-muted);">
+              <span>📉 Sparkline 8 sem: <strong style="color:var(--green-success);">█▇▆▅▄▃▂ (-3.9 d Q3)</strong></span>
+              <span>⏱️ Status: <strong style="color:var(--green-success);">🟢 Casi en Meta S2</strong></span>
+            </div>
           </div>
         </div>
       </div>
@@ -1072,7 +1132,7 @@
 
   <!-- Footer Controls & Progress Bar -->
   <div class="footer-bar">
-    <div class="slide-counter" id="slide-counter">Slide 1 de 13</div>
+    <div class="slide-counter" id="slide-counter">Slide 1 de 14</div>
 
     <div class="progress-bar-container">
       <div class="progress-fill" id="progress-fill"></div>
@@ -1086,7 +1146,7 @@
 
 <script>
   let currentSlide = 0;
-  const totalSlides = 13;
+  const totalSlides = 14;
 
   function showSlide(index) {
     if (index < 0) index = 0;

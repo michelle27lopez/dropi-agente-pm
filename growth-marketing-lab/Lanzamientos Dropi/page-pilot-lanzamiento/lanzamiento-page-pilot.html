@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Pilot — Documento de Lanzamiento</title>
+<style>
+  :root{
+    --page-bg:#f7f7f5;
+    --surface:#ffffff;
+    --surface-sunken:#fbfbfa;
+    --ink:#0b0b0b;
+    --ink-secondary:#52514e;
+    --ink-muted:#898781;
+    --border:rgba(11,11,11,0.09);
+    --border-strong:rgba(11,11,11,0.14);
+    --accent:#2a78d6;
+    --accent-soft:#eaf2fc;
+    --violet:#4a3aa7;
+    --violet-soft:#eeecf9;
+    --aqua:#1baf7a;
+    --aqua-soft:#e6f7f0;
+    --orange:#eb6834;
+    --orange-soft:#fdece4;
+    --good:#0ca30c;
+    --good-soft:#e7f6e3;
+    --warning:#b9790a;
+    --warning-soft:#fdf1da;
+    --serious:#c85a34;
+    --serious-soft:#fbe9e1;
+    --critical:#d03b3b;
+    --critical-soft:#fbe6e6;
+    --radius-lg:16px;
+    --radius-md:12px;
+    --radius-sm:8px;
+    --shadow-sm:0 1px 2px rgba(11,11,11,0.04), 0 1px 1px rgba(11,11,11,0.03);
+    --shadow-md:0 4px 16px rgba(11,11,11,0.06), 0 1px 3px rgba(11,11,11,0.05);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font);
+    background:var(--page-bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  img,svg{display:block;}
+  a{color:inherit;text-decoration:none;}
+
+  .icon{width:18px;height:18px;flex-shrink:0;}
+  .icon-sm{width:14px;height:14px;}
+  .icon-lg{width:22px;height:22px;}
+
+  /* ============ LAYOUT ============ */
+  .shell{max-width:1180px;margin:0 auto;padding:0 24px 96px;}
+  section{scroll-margin-top:84px;}
+
+  /* ============ TOPBAR ============ */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(255,255,255,0.86);
+    backdrop-filter:blur(10px) saturate(160%);
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:1180px;margin:0 auto;padding:12px 24px;
+    display:flex;align-items:center;gap:20px;
+  }
+  .brand{display:flex;align-items:center;gap:9px;font-weight:650;font-size:14px;white-space:nowrap;}
+  .brand-mark{
+    width:26px;height:26px;border-radius:7px;
+    background:linear-gradient(135deg,var(--accent),var(--violet));
+    display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;
+  }
+  .brand-mark svg{width:15px;height:15px;}
+  .navpills{
+    display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;flex:1;
+  }
+  .navpills::-webkit-scrollbar{display:none;}
+  .navpill{
+    padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:560;
+    color:var(--ink-secondary);white-space:nowrap;transition:background .15s,color .15s;
+    border:1px solid transparent;
+  }
+  .navpill:hover{background:var(--surface-sunken);color:var(--ink);}
+  .navpill.active{background:var(--ink);color:#fff;}
+
+  /* ============ HERO / HEADER ============ */
+  .hero{
+    margin-top:24px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-md);
+    padding:32px 34px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;
+    background:radial-gradient(circle, var(--accent-soft) 0%, transparent 72%);
+    pointer-events:none;
+  }
+  .hero-kicker{
+    display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:650;
+    color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;
+  }
+  .hero-title{font-size:clamp(24px,3.4vw,34px);font-weight:700;letter-spacing:-0.015em;margin:0 0 16px;max-width:760px;}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px;}
+  .hero-foot{display:flex;flex-wrap:wrap;gap:28px;align-items:center;padding-top:20px;border-top:1px solid var(--border);}
+  .hero-foot-item{display:flex;align-items:center;gap:9px;}
+  .hero-foot-label{font-size:11px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.05em;font-weight:650;margin-bottom:2px;}
+  .hero-foot-value{font-size:13.5px;font-weight:600;color:var(--ink);}
+  .team-chips{display:flex;flex-wrap:wrap;gap:6px;}
+  .team-chip{
+    font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;
+    background:var(--surface-sunken);border:1px solid var(--border);color:var(--ink-secondary);
+  }
+
+  /* ============ BADGES ============ */
+  .badge{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:650;
+    border:1px solid transparent;
+  }
+  .badge svg{width:13px;height:13px;}
+  .badge-neutral{background:var(--surface-sunken);color:var(--ink-secondary);border-color:var(--border);}
+  .badge-accent{background:var(--accent-soft);color:var(--accent);}
+  .badge-violet{background:var(--violet-soft);color:var(--violet);}
+  .badge-aqua{background:var(--aqua-soft);color:#0f8a5f;}
+  .badge-good{background:var(--good-soft);color:#1f7a10;}
+  .badge-warning{background:var(--warning-soft);color:var(--warning);}
+  .badge-serious{background:var(--serious-soft);color:var(--serious);}
+  .badge-critical{background:var(--critical-soft);color:var(--critical);}
+  .badge-orange{background:var(--orange-soft);color:#b4501f;}
+
+  /* ============ SECTION HEADINGS ============ */
+  .section-head{margin:64px 0 22px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .section-eyebrow{display:flex;align-items:center;gap:9px;color:var(--ink-muted);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+  .section-eyebrow .num{
+    width:20px;height:20px;border-radius:6px;background:var(--ink);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;
+  }
+  .section-title{font-size:22px;font-weight:700;letter-spacing:-0.01em;margin:0;}
+  .section-sub{font-size:13.5px;color:var(--ink-secondary);margin-top:6px;max-width:640px;}
+
+  /* ============ CARDS / GRIDS ============ */
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);
+    box-shadow:var(--shadow-sm);padding:22px;
+  }
+  .grid{display:grid;gap:16px;}
+  .grid-2{grid-template-columns:repeat(2,1fr);}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  .grid-4{grid-template-columns:repeat(4,1fr);}
+  @media (max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:620px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
+
+  /* Executive summary */
+  .summary-card{padding:26px 28px;}
+  .summary-text{font-size:15px;color:var(--ink-secondary);max-width:820px;line-height:1.68;}
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px;}
+  @media (max-width:900px){.kpi-row{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:480px){.kpi-row{grid-template-columns:1fr;}}
+  .kpi-tile{
+    border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 16px 14px;
+    background:var(--surface-sunken);
+  }
+  .kpi-label{font-size:11.5px;font-weight:650;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
+  .kpi-value{font-size:24px;font-weight:700;letter-spacing:-0.01em;margin-bottom:6px;}
+  .kpi-delta{font-size:12px;font-weight:650;display:flex;align-items:center;gap:4px;}
+  .kpi-delta.up{color:#1f7a10;}
+  .kpi-delta.down{color:var(--critical);}
+  .kpi-delta.flat{color:var(--ink-muted);}
+
+  /* Objective / finding / learning cards */
+  .obj-card, .finding-card, .learning-card{display:flex;flex-direction:column;gap:12px;}
+  .icon-tile{
+    width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .obj-title, .finding-title, .learning-title{font-size:14.5px;font-weight:650;margin:0;}
+  .obj-desc, .finding-desc, .learning-desc{font-size:13px;color:var(--ink-secondary);line-height:1.6;}
+  .finding-tag{font-size:11px;color:var(--ink-muted);font-weight:600;margin-top:2px;}
+
+  /* TARS */
+  .tars-banner{
+    display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--radius-sm);
+    background:var(--violet-soft);color:var(--violet);font-size:13px;font-weight:600;margin-bottom:18px;
+  }
+  .tars-card{border-top:3px solid var(--accent);}
+  .tars-card:nth-child(2){border-top-color:var(--aqua);}
+  .tars-card:nth-child(3){border-top-color:var(--orange);}
+  .tars-card:nth-child(4){border-top-color:var(--violet);}
+  .tars-letter{font-size:26px;font-weight:800;color:var(--ink);opacity:.14;line-height:1;margin-bottom:2px;}
+  .tars-label{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);margin-bottom:8px;}
+  .tars-text{font-size:13.5px;color:var(--ink-secondary);line-height:1.62;}
+
+  /* Table */
+  .table-wrap{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);
+    box-shadow:var(--shadow-sm);overflow:hidden;
+  }
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead th{
+    text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+    color:var(--ink-muted);padding:13px 18px;background:var(--surface-sunken);border-bottom:1px solid var(--border);
+    white-space:nowrap;
+  }
+  tbody td{padding:15px 18px;border-bottom:1px solid var(--border);vertical-align:top;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:var(--surface-sunken);}
+  .cell-primary{font-weight:600;color:var(--ink);}
+  .cell-muted{color:var(--ink-secondary);font-size:12.8px;line-height:1.55;}
+  .table-scroll{overflow-x:auto;}
+  .rank-badge{
+    width:22px;height:22px;border-radius:6px;background:var(--ink);color:#fff;font-size:11px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* Progress bar */
+  .progress-track{height:6px;border-radius:99px;background:var(--border);overflow:hidden;width:100%;min-width:80px;}
+  .progress-fill{height:100%;border-radius:99px;background:var(--accent);}
+  .progress-with-label{display:flex;align-items:center;gap:8px;}
+  .progress-num{font-size:12.5px;font-weight:700;width:30px;text-align:right;flex-shrink:0;}
+
+  /* Timeline */
+  .timeline{position:relative;padding-left:30px;}
+  .timeline::before{content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;background:var(--border-strong);}
+  .tl-item{position:relative;padding-bottom:28px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-dot{
+    position:absolute;left:-30px;top:2px;width:20px;height:20px;border-radius:50%;
+    background:var(--surface);border:2px solid var(--border-strong);display:flex;align-items:center;justify-content:center;
+  }
+  .tl-dot.done{border-color:var(--good);background:var(--good);}
+  .tl-dot.active{border-color:var(--accent);}
+  .tl-dot.active::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);}
+  .tl-dot svg{width:11px;height:11px;color:#fff;}
+  .tl-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);padding:16px 18px;}
+  .tl-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+  .tl-phase{font-size:14.5px;font-weight:650;}
+  .tl-date{font-size:12px;color:var(--ink-muted);font-weight:600;margin-top:2px;}
+  .tl-desc{font-size:13px;color:var(--ink-secondary);line-height:1.6;margin-bottom:10px;}
+  .tl-milestones{display:flex;flex-wrap:wrap;gap:6px;}
+  .milestone-chip{font-size:11.5px;background:var(--surface-sunken);border:1px solid var(--border);color:var(--ink-secondary);padding:4px 9px;border-radius:999px;}
+
+  /* Next steps */
+  .step-row{display:flex;align-items:center;gap:14px;padding:14px 18px;border-bottom:1px solid var(--border);}
+  .step-row:last-child{border-bottom:none;}
+  .step-check{
+    width:20px;height:20px;border-radius:6px;border:2px solid var(--border-strong);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step-check.done{background:var(--good);border-color:var(--good);}
+  .step-check.progress{border-color:var(--accent);background:var(--accent-soft);}
+  .step-check svg{width:12px;height:12px;color:#fff;}
+  .step-main{flex:1;min-width:180px;}
+  .step-task{font-size:13.5px;font-weight:600;}
+  .step-owner{font-size:12px;color:var(--ink-muted);margin-top:2px;}
+  .step-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;}
+  .step-date{font-size:12px;color:var(--ink-secondary);font-weight:600;white-space:nowrap;}
+
+  /* Roadmap */
+  .roadmap-track{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  @media (max-width:900px){.roadmap-track{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:520px){.roadmap-track{grid-template-columns:1fr;}}
+  .rm-card{border-top:3px solid var(--border-strong);display:flex;flex-direction:column;gap:10px;min-height:170px;}
+  .rm-card.status-active{border-top-color:var(--accent);}
+  .rm-card.status-next{border-top-color:var(--orange);}
+  .rm-card.status-future{border-top-color:var(--border-strong);}
+  .rm-quarter{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);}
+  .rm-title{font-size:14.5px;font-weight:650;}
+  .rm-desc{font-size:12.8px;color:var(--ink-secondary);line-height:1.58;flex:1;}
+
+  /* Footer */
+  .footer{
+    margin-top:72px;padding:30px 34px;border-radius:var(--radius-lg);
+    background:var(--ink);color:#fff;
+  }
+  .footer-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:22px;}
+  .footer-brand{display:flex;align-items:center;gap:10px;font-weight:650;font-size:14px;}
+  .footer-note{font-size:12.5px;color:rgba(255,255,255,0.55);max-width:420px;line-height:1.6;}
+  .footer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.12);}
+  @media (max-width:700px){.footer-grid{grid-template-columns:1fr;}}
+  .footer-label{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,0.45);font-weight:700;margin-bottom:8px;}
+  .footer-value{font-size:13px;color:rgba(255,255,255,0.9);line-height:1.7;}
+  .footer-participants{display:flex;flex-wrap:wrap;gap:6px;}
+  .footer-chip{font-size:11.5px;background:rgba(255,255,255,0.08);padding:4px 9px;border-radius:999px;color:rgba(255,255,255,0.85);}
+
+  .edit-hint{
+    max-width:1180px;margin:20px auto 0;padding:0 24px;font-size:11.5px;color:var(--ink-muted);
+  }
+  .edit-hint code{background:var(--surface-sunken);border:1px solid var(--border);padding:1px 6px;border-radius:5px;}
+
+  @media (max-width:700px){
+    .hero{padding:24px 20px;}
+    .grid-2{grid-template-columns:1fr;}
+    thead{display:none;}
+    table, tbody, tr, td{display:block;width:100%;}
+    tbody tr{border-bottom:1px solid var(--border);padding:12px 0;}
+    tbody td{border:none;padding:5px 18px;}
+    tbody td::before{content:attr(data-label);display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-muted);margin-bottom:3px;}
+    .step-row{flex-wrap:wrap;}
+    .step-meta{justify-content:flex-start;width:100%;padding-left:34px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+/* ================================================================================
+   OBJETO DE DATOS DEL DOCUMENTO
+   -------------------------------------------------------------------------------
+   Edita únicamente el contenido de WORKSHOP_DATA para actualizar el documento.
+   Ninguna otra parte del HTML/CSS/JS necesita tocarse: todas las 13 secciones
+   se renderizan dinámicamente a partir de este objeto.
+   ================================================================================ */
+const WORKSHOP_DATA = {
+
+  meta: {
+    docTitle: "Page Pilot — Documento de Lanzamiento",
+    brand: "Product Growth"
+  },
+
+  // 1. HEADER --------------------------------------------------------------
+  header: {
+    kicker: "Documento oficial · Workshop Estratégico de Lanzamiento",
+    launchName: "Page Pilot — Creador de Páginas de Producto",
+    tier: "Tier 1 · Estratégico",
+    status: "En Piloto",
+    statusTone: "accent",
+    date: "Workshop 3 · 24 de julio, 2026",
+    teams: ["Product Growth", "Producto", "Marketing", "Academy", "Customer Success"]
+  },
+
+  // 2. EXECUTIVE SUMMARY -----------------------------------------------------
+  executiveSummary: {
+    text: "Page Pilot es la funcionalidad que permite a los sellers de Dropi crear y exportar páginas de producto optimizadas para probar distintos ángulos de venta con muy poca inversión. En el Workshop 3 el equipo de Product Growth, Producto, Marketing, Academy y Customer Success alineó la estrategia de adopción para la fase de piloto: un CTA directo desde las cards de producto, un sistema de créditos para incentivar el testeo de múltiples ángulos, y contenido educativo (Academy + video in-app) enfocado en el paso donde más sellers abandonan hoy el flujo — la integración con Shopify. Los datos de esta sección son de ejemplo y deben reemplazarse con las cifras reales del piloto.",
+    kpis: [
+      { label: "Adopción del piloto", value: "34%", delta: "+8 pp vs. semana 1", trend: "up" },
+      { label: "Páginas creadas", value: "1,248", delta: "+312 esta semana", trend: "up" },
+      { label: "Ángulos testeados / seller", value: "2.4", delta: "meta: 3.0", trend: "flat" },
+      { label: "NPS del piloto", value: "8.2 / 10", delta: "+0.6 vs. Workshop 2", trend: "up" }
+    ]
+  },
+
+  // 3. OBJETIVOS DEL WORKSHOP -------------------------------------------------
+  objectives: [
+    {
+      icon: "compass",
+      title: "Alinear la estrategia de adopción",
+      description: "Unificar el criterio de Producto, Growth y Marketing sobre cómo llevar Page Pilot de piloto a lanzamiento general en Colombia."
+    },
+    {
+      icon: "target",
+      title: "Priorizar experimentos con ICE",
+      description: "Puntuar y ordenar las iniciativas propuestas por Impacto, Confianza y Facilidad para enfocar los primeros dos sprints."
+    },
+    {
+      icon: "sparkles",
+      title: "Definir el sistema de incentivos",
+      description: "Validar un modelo de créditos/tokens que reduzca la fricción de crear y exportar múltiples páginas por producto."
+    },
+    {
+      icon: "book-open",
+      title: "Diseñar el plan de contenido y educación",
+      description: "Definir qué se enseña vía Academy y qué se comunica in-app (mini videos, pautas puntuales) para reducir la fricción de uso."
+    },
+    {
+      icon: "shield-alert",
+      title: "Mapear riesgos de abandono",
+      description: "Identificar en qué punto del journey se pierden más sellers después de exportar su primera página y definir mitigaciones."
+    }
+  ],
+
+  // 4. RESUMEN ESTRATÉGICO (FRAMEWORK TARS) ------------------------------------
+  tars: {
+    frameworkNote: "Framework interno TARS — Tensión, Audiencia, Resultado esperado, Solución.",
+    tension: "Los sellers con poca inversión inicial no logran crear páginas de producto atractivas ni testear ángulos de venta con rapidez, lo que limita su conversión y el uso recurrente de la plataforma.",
+    audience: "Sellers activos en Dropi con bajo o nulo uso de herramientas de creación de páginas, en especial quienes inician operación con capital limitado.",
+    result: "Incrementar la tasa de activación neta y la retención a 30 días mediante una herramienta de creación de páginas simple, rápida y acompañada de educación.",
+    solution: "Page Pilot: un creador de páginas de producto con sistema de créditos, contenido educativo integrado (Academy + video in-app) y un CTA directo desde las cards de producto hacia la funcionalidad."
+  },
+
+  // 5. DECISIONES TOMADAS DURANTE EL WORKSHOP -----------------------------------
+  decisions: [
+    {
+      decision: "Incluir un CTA directo en las cards de producto que redireccione de inmediato a Page Pilot.",
+      area: "Producto / UX",
+      owner: "Catherin Salazar",
+      rationale: "Reduce pasos entre el descubrimiento del producto y la creación de la página."
+    },
+    {
+      decision: "Explotar Page Pilot desde distintos ángulos con testimonios de micro-líderes que muestren su uso real.",
+      area: "Marketing",
+      owner: "María José Calderón",
+      rationale: "Genera contenido desde ángulos que el equipo interno no había contemplado."
+    },
+    {
+      decision: "Enseñar por Academy cómo generar ángulos de venta acordes al producto para robustecer la página.",
+      area: "Educación",
+      owner: "Catherin Salazar",
+      rationale: "Los sellers no explotan hoy todo el potencial de páginas múltiples por producto."
+    },
+    {
+      decision: "Comunicar la prueba gratuita dentro de la plataforma con mini videos o mini pauta en pantallas puntuales.",
+      area: "Producto / Comms",
+      owner: "Producto",
+      rationale: "Hoy la prueba gratuita no se comunica en los momentos clave del journey."
+    },
+    {
+      decision: "Validar un sistema de tokens/créditos para creación y exportación masiva, con créditos gratis iniciales.",
+      area: "Producto / Monetización",
+      owner: "Esteban Solano",
+      rationale: "Facilita el testeo recurrente de ángulos sin fricción de pago por transacción pequeña."
+    },
+    {
+      decision: "Comunicar que se puede validar un producto con menor inversión que montando una tienda completa.",
+      area: "Marketing",
+      owner: "Alejandra",
+      rationale: "Es el diferencial más claro frente a crear una tienda con otros medios."
+    },
+    {
+      decision: "Producir un video con una persona de Dropi mostrando cómo integrar la tienda (paso identificado como el más difícil).",
+      area: "Educación / Soporte",
+      owner: "Alejandra",
+      rationale: "La integración con la tienda es el cuello de botella principal detectado en el piloto."
+    },
+    {
+      decision: "Mostrar un video post-exportación explicando cómo cambiar las imágenes del producto directamente en Shopify.",
+      area: "Producto / Onboarding",
+      owner: "Alejandra",
+      rationale: "Muchos sellers se quedan varados después de exportar su primera página y dejan de usar la funcionalidad."
+    },
+    {
+      decision: "Adoptar el mensaje 'comienza tu negocio sin mucha inversión' como eje de comunicación del piloto.",
+      area: "Marketing",
+      owner: "Diana Aldana",
+      rationale: "Conecta directamente con la promesa central de valor de Page Pilot."
+    }
+  ],
+
+  // 6. EXPERIMENTOS PRIORIZADOS (ICE) ------------------------------------------
+  experiments: [
+    {
+      name: "CTA directo en cards de producto → Page Pilot",
+      description: "Botón visible en cada card que lleva de inmediato al creador de páginas.",
+      impact: 9, confidence: 8, ease: 8,
+      owner: "Catherin Salazar", status: "En progreso"
+    },
+    {
+      name: "Video post-exportación: cómo cambiar imágenes en Shopify",
+      description: "Video corto que aparece justo después de exportar la primera página.",
+      impact: 7, confidence: 8, ease: 7,
+      owner: "Alejandra", status: "Por iniciar"
+    },
+    {
+      name: "Mini video / pauta in-app sobre la prueba gratuita",
+      description: "Comunicación puntual dentro de la plataforma en momentos clave del journey.",
+      impact: 7, confidence: 7, ease: 8,
+      owner: "Producto", status: "Por iniciar"
+    },
+    {
+      name: "Video de integración con Shopify (paso más difícil)",
+      description: "Video con un vocero de Dropi mostrando el paso donde más sellers abandonan.",
+      impact: 8, confidence: 7, ease: 6,
+      owner: "Alejandra", status: "Por iniciar"
+    },
+    {
+      name: "Módulo Academy: ángulos de venta por producto",
+      description: "Contenido educativo para enseñar a generar ángulos acordes al producto.",
+      impact: 6, confidence: 7, ease: 7,
+      owner: "Catherin Salazar", status: "Por iniciar"
+    },
+    {
+      name: "Sistema de créditos/tokens con créditos gratis iniciales",
+      description: "Mecánica de incentivo para el testeo recurrente de páginas y ángulos.",
+      impact: 8, confidence: 6, ease: 5,
+      owner: "Esteban Solano", status: "En definición"
+    },
+    {
+      name: "Testimonios de micro-líderes usando Page Pilot",
+      description: "Contenido de marketing generado a partir de casos de uso reales.",
+      impact: 6, confidence: 6, ease: 6,
+      owner: "María José Calderón", status: "Por iniciar"
+    }
+  ],
+
+  // 7. TIMELINE DEL LANZAMIENTO ------------------------------------------------
+  timeline: [
+    {
+      phase: "Descubrimiento y Workshops 1–2",
+      date: "Mayo 2026",
+      status: "done",
+      description: "Investigación inicial con sellers y primeras hipótesis sobre fricción de creación de páginas.",
+      milestones: ["Entrevistas a sellers", "Mapeo de journey", "Hipótesis iniciales"]
+    },
+    {
+      phase: "Workshop 3 · Alineación estratégica y priorización ICE",
+      date: "24 de julio, 2026",
+      status: "done",
+      description: "Definición de decisiones, framework TARS y priorización de experimentos con el equipo completo.",
+      milestones: ["Framework TARS", "9 decisiones", "7 experimentos ICE"]
+    },
+    {
+      phase: "Piloto cerrado con sellers seleccionados",
+      date: "Agosto 2026",
+      status: "active",
+      description: "Activación del CTA en cards y medición de adopción con un grupo controlado de sellers.",
+      milestones: ["CTA en cards", "Medición de adopción", "Feedback cualitativo"]
+    },
+    {
+      phase: "Lanzamiento de contenido educativo",
+      date: "Ago – Sep 2026",
+      status: "next",
+      description: "Publicación del módulo Academy y los videos in-app sobre integración con Shopify.",
+      milestones: ["Video integración Shopify", "Video post-exportación", "Módulo Academy"]
+    },
+    {
+      phase: "Sistema de créditos (Beta)",
+      date: "Septiembre 2026",
+      status: "next",
+      description: "Prueba del modelo de créditos/tokens con un subconjunto de sellers del piloto.",
+      milestones: ["Pricing definido", "Créditos gratis iniciales"]
+    },
+    {
+      phase: "Lanzamiento general (GA) — Colombia",
+      date: "Octubre 2026",
+      status: "next",
+      description: "Disponibilidad de Page Pilot para toda la base de sellers activos en Colombia.",
+      milestones: ["Rollout 100%", "Campaña de comunicación"]
+    },
+    {
+      phase: "Expansión regional",
+      date: "Q4 2026 – Q1 2027",
+      status: "next",
+      description: "Extensión de Page Pilot a Ecuador, Chile y México siguiendo el mismo playbook.",
+      milestones: ["Ecuador", "Chile", "México"]
+    }
+  ],
+
+  // 8. HALLAZGOS PRINCIPALES ----------------------------------------------------
+  findings: [
+    {
+      icon: "alert-triangle",
+      title: "La integración con Shopify concentra el mayor abandono",
+      description: "Es el paso donde más sellers detienen el flujo después de exportar su primera página.",
+      source: "Alejandra"
+    },
+    {
+      icon: "sparkles",
+      title: "Probar con poca inversión resuena fuerte",
+      description: "Los sellers valoran validar un producto antes de comprometer capital en una tienda completa.",
+      source: "Diana Aldana"
+    },
+    {
+      icon: "message-quote",
+      title: "El testimonio de pares genera más confianza",
+      description: "Los micro-líderes que muestran su propio uso convencen más que la comunicación institucional.",
+      source: "María José Calderón"
+    },
+    {
+      icon: "layers",
+      title: "El potencial multi-ángulo está subutilizado",
+      description: "Muchos sellers no saben que pueden testear varios ángulos de venta para un mismo producto.",
+      source: "Esteban Solano"
+    },
+    {
+      icon: "clock",
+      title: "Falta comunicación in-platform en momentos clave",
+      description: "La prueba gratuita no se comunica dentro de la plataforma en los pasos donde más importa.",
+      source: "Producto"
+    }
+  ],
+
+  // 9. RIESGOS IDENTIFICADOS ------------------------------------------------------
+  risks: [
+    {
+      risk: "Abandono post primera página exportada por desconocimiento de los próximos pasos.",
+      probability: "Alta",
+      impact: "Alto",
+      level: "critical",
+      levelLabel: "Crítico",
+      mitigation: "Video guiado inmediatamente después de exportar (cambio de imágenes en Shopify).",
+      owner: "Alejandra"
+    },
+    {
+      risk: "Baja recurrencia de uso por fricción al crear múltiples páginas para testear ángulos.",
+      probability: "Media",
+      impact: "Alto",
+      level: "serious",
+      levelLabel: "Serio",
+      mitigation: "Sistema de créditos con créditos gratis iniciales + simplificación del flujo.",
+      owner: "Esteban Solano"
+    },
+    {
+      risk: "El mensaje de 'baja inversión' no llega con fuerza suficiente al segmento objetivo.",
+      probability: "Media",
+      impact: "Medio",
+      level: "warning",
+      levelLabel: "Advertencia",
+      mitigation: "Campaña con eje 'comienza tu negocio sin mucha inversión' y testimonios reales.",
+      owner: "Diana Aldana"
+    },
+    {
+      risk: "Dependencia de contenido de Academy que puede retrasar el lanzamiento educativo.",
+      probability: "Baja",
+      impact: "Medio",
+      level: "warning",
+      levelLabel: "Advertencia",
+      mitigation: "Mini videos in-app como respaldo mientras se produce el contenido de Academy.",
+      owner: "Producto"
+    }
+  ],
+
+  // 10. PRÓXIMOS PASOS -------------------------------------------------------------
+  nextSteps: [
+    { task: "Diseñar y desarrollar el CTA en las cards de producto", owner: "Catherin Salazar · Producto", dueDate: "15 ago 2026", priority: "Alta", status: "progress" },
+    { task: "Grabar video de integración con Shopify con vocero de Dropi", owner: "Alejandra", dueDate: "20 ago 2026", priority: "Alta", status: "pending" },
+    { task: "Producir video post-exportación (cambio de imágenes en Shopify)", owner: "Alejandra", dueDate: "22 ago 2026", priority: "Alta", status: "pending" },
+    { task: "Diseñar el módulo Academy de ángulos de venta", owner: "Catherin Salazar", dueDate: "29 ago 2026", priority: "Media", status: "pending" },
+    { task: "Definir mecánica y pricing del sistema de créditos", owner: "Esteban Solano", dueDate: "05 sep 2026", priority: "Media", status: "pending" },
+    { task: "Activar testimonios de micro-líderes en campaña", owner: "María José Calderón", dueDate: "10 sep 2026", priority: "Media", status: "pending" },
+    { task: "Comunicar la prueba gratuita in-app en pantallas puntuales", owner: "Producto", dueDate: "12 sep 2026", priority: "Alta", status: "pending" }
+  ],
+
+  // 11. APRENDIZAJES METODOLÓGICOS -----------------------------------------------
+  learnings: [
+    {
+      icon: "target",
+      title: "ICE enfocó al equipo",
+      description: "Priorizar con ICE ayudó a concentrar el esfuerzo en 3 iniciativas de alto impacto en lugar de dispersarlo en 9."
+    },
+    {
+      icon: "layers",
+      title: "Un mismo síntoma, causas distintas por rol",
+      description: "Las notas divergentes de Producto, Marketing y Educación revelaron que el 'abandono temprano' tenía causas distintas según el momento del journey."
+    },
+    {
+      icon: "flag",
+      title: "Nombrar el 'paso más difícil' evitó dispersión",
+      description: "Identificar explícitamente la integración con Shopify como el cuello de botella mantuvo el foco de la Fase 1."
+    },
+    {
+      icon: "book-open",
+      title: "Educación desde el día uno",
+      description: "Involucrar a Academy y Contenido desde el workshop —y no después del desarrollo— redujo el riesgo de lanzar sin soporte educativo."
+    },
+    {
+      icon: "sparkles",
+      title: "Los incentivos necesitan validación previa",
+      description: "La discusión sobre créditos mostró que el equipo debe validar supuestos de comportamiento antes de comprometer desarrollo."
+    }
+  ],
+
+  // 12. ROADMAP DE EVOLUCIÓN DEL PROYECTO -----------------------------------------
+  roadmap: [
+    {
+      quarter: "Q3 2026",
+      title: "Piloto y fundamentos",
+      description: "Piloto cerrado, CTA en cards de producto y contenido educativo base (Academy + video in-app).",
+      status: "active"
+    },
+    {
+      quarter: "Q4 2026",
+      title: "Lanzamiento general Colombia",
+      description: "GA en Colombia, sistema de créditos en beta y activación de testimonios de micro-líderes.",
+      status: "next"
+    },
+    {
+      quarter: "Q1 2027",
+      title: "Expansión regional",
+      description: "Extensión a Ecuador, Chile y México, y primeras pruebas de personalización de ángulos con IA.",
+      status: "future"
+    },
+    {
+      quarter: "Q2 2027",
+      title: "Integraciones ampliadas",
+      description: "Integración nativa con más plataformas de tienda además de Shopify.",
+      status: "future"
+    }
+  ],
+
+  // 13. FOOTER EJECUTIVO ------------------------------------------------------------
+  footer: {
+    preparedBy: "Catherin Salazar · Product Growth",
+    participants: ["Catherin Salazar", "María José Calderón", "Pipe", "Alejandra", "Esteban Solano", "Diana Aldana", "Equipo de Producto"],
+    version: "v1.0 — Documento vivo y editable",
+    confidentiality: "Uso interno · Comité Directivo",
+    generatedNote: "Generado a partir del Workshop 3 de lanzamiento de Page Pilot."
+  }
+};
+
+/* ================================================================================
+   ICONOS (SVG minimalistas, trazo único)
+   ================================================================================ */
+const ICONS = {
+  target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/>',
+  users: '<circle cx="9" cy="8" r="3.4"/><path d="M3 20c0-3.6 2.7-6.2 6-6.2s6 2.6 6 6.2"/><path d="M16 8.2a3 3 0 0 1 0 5.9"/><path d="M18.5 14.2c2 .5 3.5 2.6 3.5 5.3"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2.2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
+  flag: '<path d="M5 21V4"/><path d="M5 4.5h13l-3 4 3 4H5"/>',
+  compass: '<circle cx="12" cy="12" r="9"/><polygon points="15,9 13,13 9,15 11,11"/>',
+  lightbulb: '<path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.3 1 2.5h6c0-1.2.3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
+  layers: '<polygon points="12,3 21,8 12,13 3,8"/><polyline points="3,13 12,18 21,13"/><polyline points="3,17.5 12,22.5 21,17.5"/>',
+  table: '<rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 16,14"/>',
+  "alert-triangle": '<path d="M12 3 22 20H2Z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="16.8" r="0.6" fill="currentColor"/>',
+  "check-circle": '<circle cx="12" cy="12" r="9"/><polyline points="8,12.3 11,15.3 16,9"/>',
+  "arrow-up-right": '<line x1="7" y1="17" x2="17" y2="7"/><polyline points="8,7 17,7 17,16"/>',
+  "book-open": '<path d="M3 5.5c3 0 6 1 9 3v11c-3-2-6-3-9-3Z"/><path d="M21 5.5c-3 0-6 1-9 3v11c3-2 6-3 9-3Z"/>',
+  "trending-up": '<polyline points="3,17 10,10 14,14 21,6"/><polyline points="15,6 21,6 21,12"/>',
+  map: '<polygon points="3,6 9,3.3 15,6 21,3.3 21,18 15,20.7 9,18 3,20.7"/><line x1="9" y1="3.3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="20.7"/>',
+  "shield-alert": '<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6Z"/><line x1="12" y1="8" x2="12" y2="13"/><circle cx="12" cy="16" r="0.6" fill="currentColor"/>',
+  rocket: '<path d="M12 2.5c3 1.1 5 4.2 5 8 0 3-1 6-3 8l-2-2-2 2c-2-2-3-5-3-8 0-3.8 2-6.9 5-8Z"/><circle cx="12" cy="10" r="1.6"/><path d="M8 16.5l-2 4.5 4.5-2"/><path d="M16 16.5l2 4.5-4.5-2"/>',
+  sparkles: '<path d="M12 3l1.6 4.6L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.4Z"/><path d="M19 15l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7Z"/>',
+  "git-branch": '<line x1="6" y1="3" x2="6" y2="14.5"/><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="6" r="2.4"/><path d="M18 8.4v1.6A5.5 5.5 0 0 1 12.5 15.5H9.5"/>',
+  award: '<circle cx="12" cy="8" r="5.6"/><polyline points="8.3,13 6.5,20.5 12,17.5 17.5,20.5 15.7,13"/>',
+  "message-quote": '<path d="M4 4.5h16v12H8.5l-4.5 4Z"/><line x1="8" y1="9" x2="10" y2="9"/><line x1="8" y1="12" x2="14" y2="12"/>',
+  "list-checks": '<polyline points="3,7 4.3,8.3 6.7,5.7"/><line x1="10" y1="7" x2="21" y2="7"/><polyline points="3,13 4.3,14.3 6.7,11.7"/><line x1="10" y1="13" x2="21" y2="13"/><polyline points="3,19 4.3,20.3 6.7,17.7"/><line x1="10" y1="19" x2="21" y2="19"/>'
+};
+
+function icon(name, sizeClass){
+  const inner = ICONS[name] || ICONS["sparkles"];
+  return '<svg class="icon ' + (sizeClass||'') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">' + inner + '</svg>';
+}
+
+/* ================================================================================
+   HELPERS
+   ================================================================================ */
+function esc(str){
+  return String(str==null?'':str).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function slugify(str){
+  return str.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+}
+function toneClass(prefix, tone){ return prefix + '-' + (tone || 'neutral'); }
+
+function statusMap(kind, value){
+  // Devuelve {label, tone, icon} normalizado para distintos tipos de estado
+  const maps = {
+    headerStatus: {
+      "En Piloto": {tone:'accent', icon:'rocket'},
+      "Activo": {tone:'good', icon:'check-circle'},
+      "Pausado": {tone:'warning', icon:'clock'},
+      "Completado": {tone:'good', icon:'check-circle'}
+    },
+    riskLevel: {
+      critical: {tone:'critical', icon:'alert-triangle'},
+      serious: {tone:'serious', icon:'alert-triangle'},
+      warning: {tone:'warning', icon:'alert-triangle'},
+      good: {tone:'good', icon:'check-circle'}
+    },
+    tlStatus: {
+      done: {tone:'good', label:'Completado', icon:'check-circle'},
+      active: {tone:'accent', label:'En curso', icon:'clock'},
+      next: {tone:'neutral', label:'Próximo', icon:'flag'}
+    },
+    stepStatus: {
+      done: {tone:'good', label:'Completado'},
+      progress: {tone:'accent', label:'En progreso'},
+      pending: {tone:'neutral', label:'Pendiente'}
+    },
+    priority: {
+      "Alta": {tone:'critical'},
+      "Media": {tone:'warning'},
+      "Baja": {tone:'good'}
+    },
+    rmStatus: {
+      active: {tone:'accent', label:'En curso'},
+      next: {tone:'orange', label:'Próximo'},
+      future: {tone:'neutral', label:'Futuro'}
+    }
+  };
+  return (maps[kind] && maps[kind][value]) || {tone:'neutral', label:value, icon:'sparkles'};
+}
+
+function badge(text, tone, iconName){
+  return '<span class="badge badge-' + tone + '">' + (iconName ? icon(iconName) : '') + esc(text) + '</span>';
+}
+
+/* ================================================================================
+   RENDER: TOPBAR / NAV
+   ================================================================================ */
+const SECTIONS_NAV = [
+  {id:'resumen', label:'Resumen'},
+  {id:'objetivos', label:'Objetivos'},
+  {id:'estrategia', label:'Estrategia'},
+  {id:'decisiones', label:'Decisiones'},
+  {id:'experimentos', label:'Experimentos'},
+  {id:'timeline', label:'Timeline'},
+  {id:'hallazgos', label:'Hallazgos'},
+  {id:'riesgos', label:'Riesgos'},
+  {id:'proximos-pasos', label:'Próximos pasos'},
+  {id:'aprendizajes', label:'Aprendizajes'},
+  {id:'roadmap', label:'Roadmap'}
+];
+
+function renderTopbar(data){
+  const pills = SECTIONS_NAV.map(function(s){
+    return '<a class="navpill" data-target="' + s.id + '" href="#' + s.id + '">' + esc(s.label) + '</a>';
+  }).join('');
+  return (
+    '<div class="topbar"><div class="topbar-inner">' +
+      '<div class="brand"><span class="brand-mark">' + icon('rocket') + '</span>' + esc(data.meta.brand) + '</div>' +
+      '<div class="navpills">' + pills + '</div>' +
+    '</div></div>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 1. HEADER (HERO)
+   ================================================================================ */
+function renderHero(h){
+  const st = statusMap('headerStatus', h.status);
+  const teamChips = h.teams.map(function(t){ return '<span class="team-chip">' + esc(t) + '</span>'; }).join('');
+  return (
+    '<header class="hero">' +
+      '<div class="hero-kicker">' + icon('sparkles') + esc(h.kicker) + '</div>' +
+      '<h1 class="hero-title">' + esc(h.launchName) + '</h1>' +
+      '<div class="hero-meta">' +
+        badge(h.tier, 'violet', 'award') +
+        badge(h.status, st.tone, st.icon) +
+      '</div>' +
+      '<div class="hero-foot">' +
+        '<div class="hero-foot-item">' + icon('calendar') +
+          '<div><div class="hero-foot-label">Fecha</div><div class="hero-foot-value">' + esc(h.date) + '</div></div>' +
+        '</div>' +
+        '<div class="hero-foot-item">' + icon('users') +
+          '<div><div class="hero-foot-label">Equipos participantes</div><div class="team-chips">' + teamChips + '</div></div>' +
+        '</div>' +
+      '</div>' +
+    '</header>'
+  );
+}
+
+/* ================================================================================
+   RENDER: SECTION HEAD helper
+   ================================================================================ */
+function sectionHead(num, id, title, sub, iconName){
+  return (
+    '<div class="section-head" id="' + id + '">' +
+      '<div>' +
+        '<div class="section-eyebrow"><span class="num">' + num + '</span>' + icon(iconName) + '</div>' +
+        '<h2 class="section-title">' + esc(title) + '</h2>' +
+        (sub ? '<div class="section-sub">' + esc(sub) + '</div>' : '') +
+      '</div>' +
+    '</div>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 2. EXECUTIVE SUMMARY
+   ================================================================================ */
+function renderExecutiveSummary(d){
+  const trendArrow = {up:'&#8593;', down:'&#8595;', flat:'&#8594;'};
+  const kpis = d.kpis.map(function(k){
+    return (
+      '<div class="kpi-tile">' +
+        '<div class="kpi-label">' + esc(k.label) + '</div>' +
+        '<div class="kpi-value">' + esc(k.value) + '</div>' +
+        '<div class="kpi-delta ' + k.trend + '">' + trendArrow[k.trend] + ' ' + esc(k.delta) + '</div>' +
+      '</div>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('01', 'resumen', 'Executive Summary', 'Visión general del estado del piloto para el comité directivo.', 'trending-up') +
+      '<div class="card summary-card">' +
+        '<p class="summary-text">' + esc(d.text) + '</p>' +
+        '<div class="kpi-row">' + kpis + '</div>' +
+      '</div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 3. OBJETIVOS DEL WORKSHOP
+   ================================================================================ */
+function renderObjectives(list){
+  const cards = list.map(function(o){
+    return (
+      '<div class="card obj-card">' +
+        '<div class="icon-tile badge-accent">' + icon(o.icon, 'icon-lg') + '</div>' +
+        '<h3 class="obj-title">' + esc(o.title) + '</h3>' +
+        '<p class="obj-desc">' + esc(o.description) + '</p>' +
+      '</div>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('02', 'objetivos', 'Objetivos del Workshop', 'Lo que el equipo se propuso definir en la sesión.', 'compass') +
+      '<div class="grid grid-3">' + cards + '</div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 4. RESUMEN ESTRATÉGICO (TARS)
+   ================================================================================ */
+function renderTars(t){
+  const items = [
+    {letter:'T', label:'Tensión', text:t.tension},
+    {letter:'A', label:'Audiencia', text:t.audience},
+    {letter:'R', label:'Resultado esperado', text:t.result},
+    {letter:'S', label:'Solución', text:t.solution}
+  ];
+  const cards = items.map(function(it){
+    return (
+      '<div class="card tars-card">' +
+        '<div class="tars-letter">' + it.letter + '</div>' +
+        '<div class="tars-label">' + esc(it.label) + '</div>' +
+        '<p class="tars-text">' + esc(it.text) + '</p>' +
+      '</div>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('03', 'estrategia', 'Resumen Estratégico de la Funcionalidad', 'Basado en el framework interno TARS.', 'layers') +
+      '<div class="tars-banner">' + icon('sparkles') + esc(t.frameworkNote) + '</div>' +
+      '<div class="grid grid-4">' + cards + '</div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 5. DECISIONES TOMADAS
+   ================================================================================ */
+function renderDecisions(list){
+  const rows = list.map(function(row){
+    return (
+      '<tr>' +
+        '<td data-label="Decisión" class="cell-primary">' + esc(row.decision) + '</td>' +
+        '<td data-label="Área">' + badge(row.area, 'accent') + '</td>' +
+        '<td data-label="Responsable" class="cell-muted">' + esc(row.owner) + '</td>' +
+        '<td data-label="Racional" class="cell-muted">' + esc(row.rationale) + '</td>' +
+      '</tr>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('04', 'decisiones', 'Decisiones Tomadas Durante el Workshop', 'Acuerdos concretos alcanzados por el equipo.', 'check-circle') +
+      '<div class="table-wrap table-scroll"><table>' +
+        '<thead><tr><th style="width:32%">Decisión</th><th>Área</th><th>Responsable</th><th>Racional</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table></div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 6. EXPERIMENTOS PRIORIZADOS (ICE)
+   ================================================================================ */
+function renderExperiments(list){
+  const scored = list.map(function(e){
+    const ice = (e.impact + e.confidence + e.ease) / 3;
+    return Object.assign({}, e, {ice: ice});
+  }).sort(function(a,b){ return b.ice - a.ice; });
+
+  function miniBar(val){
+    return (
+      '<div class="progress-with-label">' +
+        '<div class="progress-track"><div class="progress-fill" style="width:' + (val*10) + '%"></div></div>' +
+        '<div class="progress-num">' + val.toFixed(0) + '</div>' +
+      '</div>'
+    );
+  }
+
+  const rows = scored.map(function(e, i){
+    return (
+      '<tr>' +
+        '<td data-label="#"><span class="rank-badge">' + (i+1) + '</span></td>' +
+        '<td data-label="Experimento"><div class="cell-primary">' + esc(e.name) + '</div><div class="cell-muted">' + esc(e.description) + '</div></td>' +
+        '<td data-label="Impacto">' + miniBar(e.impact) + '</td>' +
+        '<td data-label="Confianza">' + miniBar(e.confidence) + '</td>' +
+        '<td data-label="Facilidad">' + miniBar(e.ease) + '</td>' +
+        '<td data-label="ICE"><span class="badge badge-violet">' + e.ice.toFixed(1) + '</span></td>' +
+        '<td data-label="Responsable" class="cell-muted">' + esc(e.owner) + '</td>' +
+        '<td data-label="Estado">' + badge(e.status, 'neutral') + '</td>' +
+      '</tr>'
+    );
+  }).join('');
+
+  return (
+    '<section>' +
+      sectionHead('05', 'experimentos', 'Experimentos Priorizados (ICE)', 'Impacto, Confianza y Facilidad en escala 1–10 · ordenados por score ICE.', 'target') +
+      '<div class="table-wrap table-scroll"><table>' +
+        '<thead><tr><th></th><th style="width:30%">Experimento</th><th>Impacto</th><th>Confianza</th><th>Facilidad</th><th>ICE</th><th>Responsable</th><th>Estado</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table></div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 7. TIMELINE DEL LANZAMIENTO
+   ================================================================================ */
+function renderTimeline(list){
+  const items = list.map(function(t){
+    const st = statusMap('tlStatus', t.status);
+    const dotClass = t.status === 'done' ? 'done' : (t.status === 'active' ? 'active' : '');
+    const dotIcon = t.status === 'done' ? icon('check-circle') : '';
+    const chips = t.milestones.map(function(m){ return '<span class="milestone-chip">' + esc(m) + '</span>'; }).join('');
+    return (
+      '<div class="tl-item">' +
+        '<div class="tl-dot ' + dotClass + '">' + dotIcon + '</div>' +
+        '<div class="tl-card">' +
+          '<div class="tl-head">' +
+            '<div><div class="tl-phase">' + esc(t.phase) + '</div><div class="tl-date">' + esc(t.date) + '</div></div>' +
+            badge(st.label, st.tone, st.icon) +
+          '</div>' +
+          '<p class="tl-desc">' + esc(t.description) + '</p>' +
+          '<div class="tl-milestones">' + chips + '</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('06', 'timeline', 'Timeline del Lanzamiento', 'Fases desde el descubrimiento hasta la expansión regional.', 'clock') +
+      '<div class="timeline">' + items + '</div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 8. HALLAZGOS PRINCIPALES
+   ================================================================================ */
+function renderFindings(list){
+  const cards = list.map(function(f){
+    return (
+      '<div class="card finding-card">' +
+        '<div class="icon-tile badge-orange">' + icon(f.icon, 'icon-lg') + '</div>' +
+        '<h3 class="finding-title">' + esc(f.title) + '</h3>' +
+        '<p class="finding-desc">' + esc(f.description) + '</p>' +
+        '<div class="finding-tag">Fuente: ' + esc(f.source) + '</div>' +
+      '</div>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('07', 'hallazgos', 'Hallazgos Principales', 'Insights recogidos por el equipo durante la sesión.', 'lightbulb') +
+      '<div class="grid grid-3">' + cards + '</div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 9. RIESGOS IDENTIFICADOS
+   ================================================================================ */
+function renderRisks(list){
+  const rows = list.map(function(r){
+    const st = statusMap('riskLevel', r.level);
+    return (
+      '<tr>' +
+        '<td data-label="Riesgo" class="cell-primary" style="max-width:280px">' + esc(r.risk) + '</td>' +
+        '<td data-label="Probabilidad" class="cell-muted">' + esc(r.probability) + '</td>' +
+        '<td data-label="Impacto" class="cell-muted">' + esc(r.impact) + '</td>' +
+        '<td data-label="Nivel">' + badge(r.levelLabel, st.tone, st.icon) + '</td>' +
+        '<td data-label="Mitigación" class="cell-muted">' + esc(r.mitigation) + '</td>' +
+        '<td data-label="Responsable" class="cell-muted">' + esc(r.owner) + '</td>' +
+      '</tr>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('08', 'riesgos', 'Riesgos Identificados', 'Amenazas para la adopción del piloto y su mitigación.', 'shield-alert') +
+      '<div class="table-wrap table-scroll"><table>' +
+        '<thead><tr><th style="width:26%">Riesgo</th><th>Probabilidad</th><th>Impacto</th><th>Nivel</th><th>Mitigación</th><th>Responsable</th></tr></thead>' +
+        '<tbody>' + rows + '</tbody>' +
+      '</table></div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 10. PRÓXIMOS PASOS
+   ================================================================================ */
+function renderNextSteps(list){
+  const rows = list.map(function(s){
+    const st = statusMap('stepStatus', s.status);
+    const pr = statusMap('priority', s.priority);
+    const checkIcon = s.status === 'done' ? icon('check-circle') : (s.status === 'progress' ? icon('clock') : '');
+    return (
+      '<div class="step-row">' +
+        '<div class="step-check ' + s.status + '">' + checkIcon + '</div>' +
+        '<div class="step-main">' +
+          '<div class="step-task">' + esc(s.task) + '</div>' +
+          '<div class="step-owner">' + esc(s.owner) + '</div>' +
+        '</div>' +
+        '<div class="step-meta">' +
+          badge(s.priority, pr.tone) +
+          badge(st.label, st.tone) +
+          '<span class="step-date">' + icon('calendar','icon-sm') + ' ' + esc(s.dueDate) + '</span>' +
+        '</div>' +
+      '</div>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('09', 'proximos-pasos', 'Próximos Pasos', 'Plan de acción inmediato con responsables y fechas.', 'list-checks') +
+      '<div class="table-wrap">' + rows + '</div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 11. APRENDIZAJES METODOLÓGICOS
+   ================================================================================ */
+function renderLearnings(list){
+  const cards = list.map(function(l){
+    return (
+      '<div class="card learning-card">' +
+        '<div class="icon-tile badge-aqua">' + icon(l.icon, 'icon-lg') + '</div>' +
+        '<h3 class="learning-title">' + esc(l.title) + '</h3>' +
+        '<p class="learning-desc">' + esc(l.description) + '</p>' +
+      '</div>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('10', 'aprendizajes', 'Aprendizajes Metodológicos', 'Qué funcionó del proceso de workshop en sí mismo.', 'award') +
+      '<div class="grid grid-3">' + cards + '</div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 12. ROADMAP DE EVOLUCIÓN DEL PROYECTO
+   ================================================================================ */
+function renderRoadmap(list){
+  const cards = list.map(function(r){
+    const st = statusMap('rmStatus', r.status);
+    return (
+      '<div class="card rm-card status-' + r.status + '">' +
+        '<div class="rm-quarter">' + esc(r.quarter) + '</div>' +
+        '<div class="rm-title">' + esc(r.title) + '</div>' +
+        '<p class="rm-desc">' + esc(r.description) + '</p>' +
+        badge(st.label, st.tone) +
+      '</div>'
+    );
+  }).join('');
+  return (
+    '<section>' +
+      sectionHead('11', 'roadmap', 'Roadmap de Evolución del Proyecto', 'Hacia dónde va Page Pilot después del lanzamiento inicial.', 'map') +
+      '<div class="roadmap-track">' + cards + '</div>' +
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 13. FOOTER EJECUTIVO
+   ================================================================================ */
+function renderFooter(f, meta){
+  const chips = f.participants.map(function(p){ return '<span class="footer-chip">' + esc(p) + '</span>'; }).join('');
+  return (
+    '<footer class="footer">' +
+      '<div class="footer-top">' +
+        '<div>' +
+          '<div class="footer-brand">' + icon('rocket') + esc(meta.docTitle) + '</div>' +
+          '<p class="footer-note">' + esc(f.generatedNote) + '</p>' +
+        '</div>' +
+      '</div>' +
+      '<div class="footer-grid">' +
+        '<div><div class="footer-label">Preparado por</div><div class="footer-value">' + esc(f.preparedBy) + '</div></div>' +
+        '<div><div class="footer-label">Participantes del workshop</div><div class="footer-participants">' + chips + '</div></div>' +
+        '<div><div class="footer-label">Versión &amp; confidencialidad</div><div class="footer-value">' + esc(f.version) + '<br>' + esc(f.confidentiality) + '</div></div>' +
+      '</div>' +
+    '</footer>'
+  );
+}
+
+/* ================================================================================
+   RENDER APP
+   ================================================================================ */
+function renderApp(){
+  const d = WORKSHOP_DATA;
+  document.title = d.meta.docTitle;
+
+  const html = (
+    renderTopbar(d) +
+    '<div class="shell">' +
+      renderHero(d.header) +
+      renderExecutiveSummary(d.executiveSummary) +
+      renderObjectives(d.objectives) +
+      renderTars(d.tars) +
+      renderDecisions(d.decisions) +
+      renderExperiments(d.experiments) +
+      renderTimeline(d.timeline) +
+      renderFindings(d.findings) +
+      renderRisks(d.risks) +
+      renderNextSteps(d.nextSteps) +
+      renderLearnings(d.learnings) +
+      renderRoadmap(d.roadmap) +
+      renderFooter(d.footer, d.meta) +
+    '</div>'
+  );
+
+  document.getElementById('app').innerHTML = html;
+  setupScrollSpy();
+}
+
+function setupScrollSpy(){
+  const pills = Array.prototype.slice.call(document.querySelectorAll('.navpill'));
+  const sections = SECTIONS_NAV.map(function(s){ return document.getElementById(s.id); }).filter(Boolean);
+  if (!('IntersectionObserver' in window) || !sections.length) return;
+
+  const observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting){
+        const id = entry.target.id;
+        pills.forEach(function(p){ p.classList.toggle('active', p.dataset.target === id); });
+      }
+    });
+  }, { rootMargin: '-96px 0px -70% 0px', threshold: 0 });
+
+  sections.forEach(function(s){ observer.observe(s); });
+}
+
+renderApp();
+</script>
+</body>
+</html>

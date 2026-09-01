@@ -17,3 +17,12 @@ next-env.d.ts
 /public/logistica/recolecciones/pipeline/cruces-resultado.json
 /public/logistica/recolecciones/pipeline/por-geocodificar.json
 .vercel
+
+# AGP-34: PII real de sellers (7.486 correos) — se queda en disco para que
+# la app siga funcionando, pero deja de versionarse hacia adelante. Los
+# commits ya existentes con estos archivos siguen en el historial de git;
+# purgarlos es una operación aparte (reescribe historia, requiere force-push
+# coordinado), no algo que este .gitignore resuelve por sí solo.
+/data/onboarding-ttfo-fuentes.json
+/data/onboarding-ttfo-fuentes.backup-historico.json
+/data/onboarding-ttfo-fuentes.backup-rawdata.json

@@ -8,17 +8,18 @@
 
 > **Dato Oficial Confirmado de Activación:** La **Tasa de Activación Neta** se establece en **5.2%** (sellers con $\ge 1$ orden entregada).
 
-### 📊 Contrastación Meta vs. Realidad
+### 📊 Contrastación Meta vs. Realidad (Validadas sobre Parquet)
 
-| Métrica / Outcome | Realidad Actual (Cierre JUL) | Meta S2 (Q3-Q4) | Brecha / Status | Definición & Fuente |
+| Métrica / Outcome | Realidad Actual (Auditoría Parquet) | Meta S2 (Q3-Q4) | Brecha / Status | Definición & Fuente |
 | :--- | :---: | :---: | :---: | :--- |
 | **OKR 1 / KR 1.1 (Compañía)** | **3.687.786 ord/mes** | **7.800.000 ord/mes** | 🔴 **-4.112.214 ord** (47.3% cumpl.) | OKR 1.1 Holding (Confluence Space PD) |
 | **NSM (Métrica Estrella Célula)**| **3.687.786 ord/mes** | **3.571.042 ord/mes** | 🟢 **+116.744 ord** (103.3%) | Órdenes mensuales movilizadas (Cierre Oficial CPO Julio 2026) |
-| **Tasa de Activación Neta** | **5.2%** | **8.0%** | 🔴 **-2.8 pp** (Falta +53.8%) | Sellers registrados con $\ge 1$ orden entregada |
-| **Tasa de Activación Bruta** | **7.6%** | **12.0%** | 🔴 **-4.4 pp** | Sellers registrados con $\ge 1$ orden creada (TTFO) |
-| **Mediana de TTV Neto** | **16.0 días** | **< 12.0 días** | 🔴 **+4.0 días** (+25% latencia) | Días de registro a 1ª orden entregada |
-| **Mediana de TTV Bruto** | **7.4 días** | **< 4.0 días** | 🔴 **+3.4 días** | Días de registro a 1ª orden creada |
-| **Supervivencia 30d (Retención)** | **69.38%** (69.7%) | **75.0%** | 🟡 **-5.62 pp** (Brecha 7.5%) | % de sellers con actividad pasados 30 días (`es_activo_30d`) |
+| **Tasa de Activación Neta (90d)** | **4.8%** | **8.0%** | 🔴 **-3.2 pp** (Brecha 40.0%) | % Sellers registrados con $\ge 1$ orden entregada |
+| **Tasa de Activación Bruta (90d)**| **7.7%** | **12.0%** | 🔴 **-4.3 pp** | % Sellers registrados con $\ge 1$ orden creada (TTFO) |
+| **Mediana de TTV Neto** | **12.1 días** | **< 12.0 días** | 🟨 **+0.1 días** (Cerca a meta) | Días de registro a 1ª orden entregada |
+| **Mediana de TTV Bruto** | **5.2 días** | **< 4.0 días** | 🔴 **+1.2 días** | Días de registro a 1ª orden creada |
+| **Retención Genuina (`sobrevive_30d_otro_dia`)** | **~30.0%** (37.0% hist.) | **75.0%** | 🔴 **-45.0 pp** (Titular PM/Junta) | % Sellers que crean 2ª orden en un **DÍA DISTINTO** en 30d |
+| **Adopción Carga Multi-Orden (`sobrevive_30d`)** | **68.3%** | N/A | ℹ️ *56% el mismo día* | % Sellers con $\ge 1$ orden adicional en 30d (incluye misma sesión) |
 | **Deflexión Soporte Técnico** | **0.0%** (3.664 pqs) | **40.0%** | 🔴 **-40.0 pp** | Autogestión in-app vía FAQs (`PROD-HELP-MOD`) |
 
 ---

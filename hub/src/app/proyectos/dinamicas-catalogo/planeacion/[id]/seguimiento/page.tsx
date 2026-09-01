@@ -17,6 +17,14 @@ type EligibleListEntry = {
 };
 type ProductOrderEntry = { product_id: string; product_name?: string; orders_count: number };
 
+// Proveedor de pruebas de la campaña: token fijo y legible que nunca se
+// resetea, para hacer QA del panel público sin quemar el link de un
+// proveedor real. Se muestra aparte, arriba de la tabla, y no suma a los
+// contadores. Copia del QA_ELIGIBLE_TOKEN de local-store-planeacion.ts — ese
+// módulo lee del disco (node:fs) y no se puede importar en un componente
+// cliente; si cambia el token, cambiarlo en los dos lados.
+const QA_TOKEN = "qa-cyberdays";
+
 function fmt(n: number): string {
   return n.toLocaleString("es-CO");
 }
@@ -49,6 +57,7 @@ export default function SeguimientoPage() {
   const [orderSaving, setOrderSaving] = useState<string | null>(null);
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
   const [resettingToken, setResettingToken] = useState<string | null>(null);
+  const [resettingEstado, setResettingEstado] = useState<string | null>(null);
 
   const load = () => {
     Promise.all([
@@ -103,6 +112,19 @@ export default function SeguimientoPage() {
     }
   };
 
+  // Solo para el proveedor de QA: borra su progreso (selección, aprobación,
+  // checklist, contadores) y conserva el link, para poder repetir el recorrido.
+  const resetEstado = async (token: string) => {
+    if (!window.confirm("Esto borra el progreso del proveedor de pruebas y conserva su enlace. ¿Confirmar?")) return;
+    setResettingEstado(token);
+    try {
+      await fetch(`/api/campaigns-planeacion/${id}/elegibles/${token}/reset-estado`, { method: "POST" });
+      load();
+    } finally {
+      setResettingEstado(null);
+    }
+  };
+
   const toggleAttendance = async (token: string, attended: boolean) => {
     setAttendanceSaving(token);
     setEligibles((prev) => prev.map((e) => (e.token === token ? { ...e, meet_attended: attended } : e)));
@@ -135,17 +157,23 @@ export default function SeguimientoPage() {
     }
   };
 
+  // La fila de QA se saca del conjunto real: no es un proveedor, así que no
+  // debe sumar a los contadores de arriba ni perderse entre las 77 filas.
+  // Se muestra aparte, fija encima de la tabla.
+  const qaEntry = useMemo(() => eligibles.find((e) => e.token === QA_TOKEN) ?? null, [eligibles]);
+  const realEntries = useMemo(() => eligibles.filter((e) => e.token !== QA_TOKEN), [eligibles]);
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return q ? eligibles.filter((e) => e.supplier_name.toLowerCase().includes(q)) : eligibles;
-  }, [eligibles, search]);
+    return q ? realEntries.filter((e) => e.supplier_name.toLowerCase().includes(q)) : realEntries;
+  }, [realEntries, search]);
 
   const totals = useMemo(() => ({
-    total: eligibles.length,
-    clicked: eligibles.filter((e) => e.view_count > 0).length,
-    meetAttended: eligibles.filter((e) => e.meet_attended).length,
-    submitted: eligibles.filter((e) => e.submitted_at).length,
-  }), [eligibles]);
+    total: realEntries.length,
+    clicked: realEntries.filter((e) => e.view_count > 0).length,
+    meetAttended: realEntries.filter((e) => e.meet_attended).length,
+    submitted: realEntries.filter((e) => e.submitted_at).length,
+  }), [realEntries]);
 
   if (loading) {
     return <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", color: "#9ca3af", fontSize: 14 }}>Cargando...</div>;
@@ -223,6 +251,39 @@ export default function SeguimientoPage() {
                   </a>
                 )}
               </div>
+
+              {/* Link de pruebas: fijo aquí arriba y siempre visible (no lo
+                  filtra la búsqueda ni suma a los contadores) para no tener que
+                  buscarlo entre los proveedores reales cada vez que se hace QA. */}
+              {qaEntry && (
+                <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", border: "1px dashed #d1d5db", background: "#F8F9FA", borderRadius: 12, padding: "12px 14px", marginBottom: 14 }}>
+                  <span style={{ fontSize: 10.5, fontWeight: 800, color: "#6b7280", background: "#e5e7eb", padding: "3px 8px", borderRadius: 20, letterSpacing: "0.04em" }}>PRUEBAS</span>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: "#111827" }}>{qaEntry.supplier_name}</div>
+                    <div style={{ fontSize: 11.5, color: "#6b7280" }}>
+                      Link fijo para QA — no cuenta en las cifras de arriba. {qaEntry.submitted_at ? `Postuló el ${fmtDate(qaEntry.submitted_at)}` : "Sin postular"} · {qaEntry.view_count} visita{qaEntry.view_count === 1 ? "" : "s"}
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: "auto" }}>
+                    <a href={`/proyectos/dinamicas-catalogo/planeacion/${id}/elegibles/${qaEntry.token}`} target="_blank" rel="noreferrer" style={{ fontSize: 11.5, fontWeight: 700, color: "#F77F00", textDecoration: "none" }}>
+                      Abrir →
+                    </a>
+                    <button
+                      onClick={() => copyLink(qaEntry.token)}
+                      style={{ background: "#fff", border: "1px solid #d1d5db", color: "#374151", borderRadius: 8, padding: "3px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}
+                    >
+                      {copiedToken === qaEntry.token ? "Copiado ✓" : "Copiar"}
+                    </button>
+                    <button
+                      onClick={() => resetEstado(qaEntry.token)}
+                      disabled={resettingEstado === qaEntry.token}
+                      style={{ background: "#fff", border: "1px solid #d1d5db", color: "#6b7280", borderRadius: 8, padding: "3px 10px", fontSize: 11.5, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", opacity: resettingEstado === qaEntry.token ? 0.6 : 1 }}
+                    >
+                      {resettingEstado === qaEntry.token ? "..." : "Reiniciar prueba"}
+                    </button>
+                  </div>
+                </div>
+              )}
 
               {filtered.length === 0 ? (
                 <p style={{ fontSize: 13, color: "#9ca3af", margin: 0 }}>Ningún proveedor coincide con "{search}".</p>

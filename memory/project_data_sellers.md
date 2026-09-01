@@ -57,21 +57,36 @@ Donde:
 
 ---
 
-## 📊 Requerimiento de Data e Instrumentación (PROD-1341)
+## 📊 Requerimiento de Data e Instrumentación (PROD-1341) — Resultados Validados
 
-Especificaciones enviadas a Miguel Ángel (Data Analyst) para auditar el baseline y preparar la sesión con Finanzas:
+Especificaciones y hallazgos validados por Miguel Ángel (Data Analyst) tras auditoría directa sobre archivos Parquet (Agosto 2026) para preparar la sesión con Finanzas:
 
-### 1. Métricas Solicitadas y Rangos de Fechas Calculados
-*   **Activación bruta:** % de sellers registrados que crean su 1ª orden.
-    *   *Rango 90 días:* **24 de abril de 2026 a 23 de julio de 2026**.
-    *   *Rango histórico (6 meses):* **1 de enero de 2026 a 30 de junio de 2026** (meses cerrados) + Julio 2026 (en curso).
-*   **Activación neta:** % de sellers registrados cuya 1ª orden llega a "entregada".
-    *   *Rango 90 días:* **24 de abril de 2026 a 23 de julio de 2026**.
-    *   *Rango histórico (6 meses):* **1 de enero de 2026 a 30 de junio de 2026** (meses cerrados) + Julio 2026 (en curso).
-*   **TTV bruto:** Mediana de días entre registro y 1ª orden creada (Rango 90 días: **24 de abril a 23 de julio de 2026**).
-*   **TTV neto:** Mediana de días entre registro y 1ª orden entregada (Rango 90 días: **24 de abril a 23 de julio de 2026**).
-*   **Cohorte de supervivencia post 1ª orden:** % de dropshippers con $\ge 1$ orden adicional en los 30 días posteriores a la primera (Cohortes de los últimos 3 meses cerrados: **Abril 2026, Mayo 2026 y Junio 2026**).
-*   **Órdenes por dropshipper activo:** Promedio mensual de sellers con $\ge 1$ orden en el mes (Últimos 3 meses cerrados: **Abril 2026, Mayo 2026 y Junio 2026**).
+### 1. Baseline de Métricas Validadas (Cohortes Abril – Junio 2026)
+
+* **Activación Bruta (90d):** **7,7%** (sellers registrados que crean 1ª orden en 90 días).
+* **Activación Neta (90d):** **4,8%** (sellers registrados cuya 1ª orden llega a estado "ENTREGADO").
+* **Time-to-Value (TTV) Bruto:** **5,2 días** (mediana entre registro y 1ª orden creada).
+* **Time-to-Value (TTV) Neto:** **12,1 días** (mediana entre registro y 1ª orden entregada).
+* **Cohorte de Supervivencia Post 1ª Orden (Abril – Junio 2026):**
+  * `sobrevive_30d` *(Adopción Carga Multi-Orden / Brief técnico)*: **68,3%** (~56% crea 2ª orden el mismo día por carga masiva/misma sesión).
+  * `sobrevive_30d_otro_dia` *(Retención Genuina / Hábito)*: **~30,0%** (37,0% en dataset completo; 32,2% en GT, 4,0% en Origen Masivo). **Métrica Titular para Junta/PM**.
+* **Reconciliación Financiera:** Cierra a **$0,00 de diferencia** en los 10 países con TRM 100% trazada sin fallbacks.
+* **Ticket Promedio:** Plausible entre **$31 y $57 USD** según el país.
+
+### 2. Hallazgos Críticos y Caveats Operativos
+
+1. 🔴 **Supervivencia Inflada por Misma Sesión:**
+   * El 56% de los "sobrevivientes" crea la 2ª orden el mismo día (y 97% en carga masiva).
+   * **Decisión PM:** Se emitirán ambas columnas (`sobrevive_30d` y `sobrevive_30d_otro_dia`). En informes estratégicos se usará `sobrevive_30d_otro_dia` (~30%) para evitar falsas lecturas de retención.
+2. 🔴 **Subconteo Instrumental de Ingreso Dropi en Guatemala (GT):**
+   * GT reporta un ingreso Dropi canónico de apenas **$0,06 USD/orden** (vs $1,61 en CO, $2,97 en MX, $1,60 en CL), a pesar de tener un spread de flete normal ($2,42 USD/orden) y 576k entregas.
+   * **Causa:** El campo `dropi_shipping_increment_amount` viene desfasado/vacío ($0,006/orden). GT registra su margen en otro campo/tabla no estándar.
+   * **Acción PM:** No presentar a Finanzas sin el caveat. Pregunta clave para la sesión: *¿En qué campo de BD registra GT su margen real?*
+3. 🟠 **Filtros por Defecto en Tablero (Páginas 2–4):**
+   * El histórico acumulado mezcla 19 meses (2020–2026), desfasando las tarjetas al abrir "en frío" (ej. Supervivencia 72% vs 68% del brief).
+   * **Acción PM:** Implementar filtros por defecto a nivel de página en Páginas 2 a 4 para fijar la ventana del brief (Abr-Jun / 90d), dejando Página 1 intacta.
+4. 🟡 **Recaudo a Pérdida en Ecuador (EC):**
+   * EC mantiene un margen de recaudo negativo (-$0,25 USD/orden) en la vista por mes de entrega. Pendiente confirmación con Operaciones sobre si responde a política comercial deliberada.
 
 ### 2. Desagregaciones Requeridas
 *   Total acumulado y por país.
@@ -197,15 +212,42 @@ Toda la planeación de la célula se estructura para que cada iniciativa respond
 
 ---
 
-## 7. Equipo y Stakeholders
-* **Santiago Herrera (PM):** Líder de Célula Seller Success.
-* **Alejandra Melo Salazar (UX/UI):** Product Designer.
-* **Jose Giraldo (TI):** Tech Lead.
-* **Diego Pérez (TI):** Software Developer.
-* **Miguel Ángel (Data):** Data Analyst.
-* **Jose Hurtado (Customer Success):** Integrante de Customer Success (acompañamiento y retención de sellers).
-* **Laura Núñez (SAC Lead):** Líder del área de SAC (Servicio de Atención al Cliente / Soporte).
-* **Catherin Salazar / Francisco Velandia:** Leads de proyectos/experimentos (Page Pilot, User Pilot).
 
+---
 
+## 8. Acuerdos y Decisiones de Pre-Planning & Planning (Agosto 18, 2026)
 
+*   **Catálogo WhatsApp Business (API Meta):**
+    *   PoC funcional demostrada conectada con el API de Meta Commerce Manager para vincular productos de Dropi al catálogo de WhatsApp Business.
+    *   Permite a dropshippers sin tienda web (Shopify/Tienda Nube) exhibir catálogo profesional y cerrar ventas por WhatsApp.
+*   **Módulo de Notificaciones 360° RPP vs. Notificaciones Proactivas (WhatsApp & Email):**
+    *   *Delivery (PROD-2092):* Centro de control de notificaciones (diseñado por Aleja, 1 vista UI, 4h). Flujo único estándar para todos los roles (Dropshipper, Supplier, Marca).
+    *   *Discovery / Experimento (PROD-2230):* Campaña de notificaciones proactivas vía WhatsApp/Email para mover Activación (novatos) y Retención (sellers en caída de ventas/churn).
+*   **Experimento "Solicitar Muestra" 1-Clic:**
+    *   Rediseño de botonería en RPP para reducir la fricción de pedir muestras físicas (<15 segundos sin redirecciones).
+*   **Gobernanza Jira (Laura Contreras):**
+    *   Se aprueba taxonomía oficial con etiqueta `[DISCOVERY]` para experimentos en etapa de hipótesis y clasificación de tareas operativas bajo *Operación Producto*.
+
+---
+
+## 9. Cellboard Seller Success — Acuerdos (Agosto 19, 2026)
+
+*   **Notificaciones Proactivas WhatsApp/Email — Diseño Experimental:**
+    *   **Grupo de tratamiento:** Dropshippers huérfanos (sin comunidad) → reciben notificaciones proactivas.
+    *   **Grupo de control:** Dropshippers de comunidad → NO reciben notificaciones.
+    *   **Hipótesis:** Las notificaciones reducen la brecha de activación entre huérfanos y comunidad.
+    *   **País piloto propuesto:** Argentina (~260K–270K registros en ~4 meses).
+    *   **Segmentación:** Por volumen de ventas y madurez — no notificar 1-a-1 a sellers de alto volumen (cientos de órdenes/día).
+*   **Integración CRM de Growth (hallazgo clave de Enrique):**
+    *   El equipo de Growth **ya tiene conexión funcional** con data de órdenes por dropshipper vía Cronos — sin depender de desarrollo.
+    *   El CRM ya puede enviar WhatsApp y correos con dominios de Dropi.
+    *   Se usará para automatizar flujos de adquisición, onboarding, activación y mantenimiento.
+    *   **Próximo paso:** Reunión semana del 25 agosto con Growth (Enrique, José, Ion) para extender extracción de data a huérfanos (no solo comunidades) y definir protocolo de trabajo.
+*   **Fake Door — Catálogo WhatsApp Business:**
+    *   Se montará un fake door vía User Pilot con botón "Agregar a catálogo de WhatsApp" + lista de espera + 2 preguntas sobre uso de WhatsApp para vender.
+    *   Gobernanza con Chatea Pro: no invadir su territorio (mensajería/cierre de venta). Funcionalidad pensada para negocios que solo usan WhatsApp Business app, no API masiva.
+    *   **Dato pendiente:** Cifra de dropshippers que usan WhatsApp como herramienta principal de venta — nadie la tenía a la mano.
+*   **Solicitar Muestra — Discovery sobre motivaciones:**
+    *   No hay respaldo de que el problema sea "muchos pasos". El motivo real de baja adopción es desconocido.
+    *   Hipótesis de uso: (a) uso personal/compra barata, (b) testeo de transportadoras, (c) verificar calidad/garantía, (d) validar tiempos de entrega.
+    *   Se montará investigación vía User Pilot cruzando: pidieron muestras + no vendieron vs. pidieron + venden mucho vs. pidieron + no vendieron ese producto.

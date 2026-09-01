@@ -3,11 +3,11 @@ import { localGetEligibleByToken, localSetEligibleSelection } from "@/lib/local-
 import { supabaseGetEligibleByToken, supabaseSetEligibleSelection } from "@/lib/supabase-store-planeacion";
 
 const MAX_PRODUCTS = 10;
-// Cierre de la ventana de selección — mismo hardcode de campaña única que el
-// journey del GET ([token]/route.ts). Hasta esta fecha (inclusive) el
-// proveedor puede reenviar su selección las veces que quiera; después queda
-// sellada y los cambios van por WhatsApp.
-const SELECTION_END = "2026-08-23";
+// Sin cierre por fecha (24/08): antes había un SELECTION_END que sellaba la
+// selección el 23 de agosto, y quien entrara después se topaba con la grilla
+// muerta y un 403. Decisión de Michelle — la selección queda siempre abierta;
+// lo único que la sella es que el equipo apruebe la curaduría (ver abajo).
+// Las fechas del journey ([token]/route.ts) siguen siendo informativas.
 
 // Pública (sin login) — el proveedor postula sus productos directo desde su
 // página de token, reemplazando el formulario de Google.
@@ -26,9 +26,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const usingSupabase = Boolean(await supabaseGetEligibleByToken(id, token));
   const entry = usingSupabase ? await supabaseGetEligibleByToken(id, token) : await localGetEligibleByToken(id, token);
   if (!entry) return NextResponse.json({ error: "No encontrado" }, { status: 404 });
-  if (new Date().toISOString().slice(0, 10) > SELECTION_END) {
-    return NextResponse.json({ error: "La selección cerró el 23 de agosto. Escríbenos por WhatsApp para cambios." }, { status: 403 });
-  }
   if (entry.approved_at) {
     return NextResponse.json({ error: "Tu selección ya fue aprobada y no se puede editar. Escríbenos por WhatsApp para cambios." }, { status: 403 });
   }
