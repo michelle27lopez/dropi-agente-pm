@@ -3,6 +3,13 @@ import Breadcrumb from "@/components/Breadcrumb";
 
 const guias = [
   {
+    slug: "entendimiento-360-ecosistema",
+    icon: "🧭",
+    title: "Entendimiento 360 del ecosistema",
+    description: "Qué sabemos hoy de arquetipos/user personas y journeys de experiencia y servicio, célula por célula — por usuario y por proceso.",
+    tag: "Service design · Proyecto PRO-001",
+  },
+  {
     slug: "conceptos-basicos",
     icon: "🧭",
     title: "Conceptos básicos",
