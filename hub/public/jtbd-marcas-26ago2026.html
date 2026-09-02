@@ -1,0 +1,210 @@
+<title>JTBD-Hipótesis Marcas Dropi · 26 ago 2026</title>
+<style>
+  .viz-root {
+    --surface-1: #fcfcfb; --page-plane: #f9f9f7; --text-primary: #0b0b0b; --text-secondary: #52514e;
+    --text-muted: #898781; --gridline: #e1e0d9; --border: rgba(11,11,11,0.10);
+    --series-blue: #2a78d6; --series-violet: #4a3aa7;
+    --good: #0ca30c; --warning: #fab219; --serious: #ec835a; --critical: #d03b3b;
+    --good-bg: rgba(12,163,12,0.10); --warning-bg: rgba(250,178,25,0.16); --serious-bg: rgba(236,131,90,0.14);
+    --critical-bg: rgba(208,59,59,0.10); --muted-bg: rgba(137,135,129,0.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    .viz-root { --surface-1:#1a1a19; --page-plane:#0d0d0d; --text-primary:#fff; --text-secondary:#c3c2b7; --text-muted:#898781;
+      --gridline:#2c2c2a; --border:rgba(255,255,255,0.10); --series-blue:#3987e5; --series-violet:#9085e9;
+      --good-bg:rgba(12,163,12,0.16); --warning-bg:rgba(250,178,25,0.14); --serious-bg:rgba(236,131,90,0.16);
+      --critical-bg:rgba(208,59,59,0.16); --muted-bg:rgba(137,135,129,0.16); }
+  }
+  :root[data-theme="dark"] .viz-root { --surface-1:#1a1a19; --page-plane:#0d0d0d; --text-primary:#fff; --text-secondary:#c3c2b7; --text-muted:#898781;
+    --gridline:#2c2c2a; --border:rgba(255,255,255,0.10); --series-blue:#3987e5; --series-violet:#9085e9;
+    --good-bg:rgba(12,163,12,0.16); --warning-bg:rgba(250,178,25,0.14); --serious-bg:rgba(236,131,90,0.16);
+    --critical-bg:rgba(208,59,59,0.16); --muted-bg:rgba(137,135,129,0.16); }
+  :root[data-theme="light"] .viz-root { --surface-1:#fcfcfb; --page-plane:#f9f9f7; --text-primary:#0b0b0b; --text-secondary:#52514e;
+    --text-muted:#898781; --gridline:#e1e0d9; --border:rgba(11,11,11,0.10); --series-blue:#2a78d6; --series-violet:#4a3aa7;
+    --good-bg:rgba(12,163,12,0.10); --warning-bg:rgba(250,178,25,0.16); --serious-bg:rgba(236,131,90,0.14);
+    --critical-bg:rgba(208,59,59,0.10); --muted-bg:rgba(137,135,129,0.12); }
+
+  * { box-sizing: border-box; } body { margin: 0; }
+  .viz-root { font-family: system-ui,-apple-system,"Segoe UI",sans-serif; background: var(--page-plane); color: var(--text-primary); padding: 32px 16px 64px; }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  header.top { margin-bottom: 26px; }
+  .eyebrow { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--series-blue); margin:0 0 6px; }
+  h1 { font-size:25px; margin:0 0 6px; line-height:1.25; }
+  .subtitle { color:var(--text-secondary); font-size:14px; margin:0; max-width:760px; }
+  .meta-row { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+  .meta-row span b { color:var(--text-secondary); font-weight:600; }
+  .badge { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:3px 10px 3px 8px; border-radius:999px; white-space:nowrap; }
+  .badge.warning { background:var(--warning-bg); color:#8a5a00; } .badge.critical { background:var(--critical-bg); color:var(--critical); } .badge.good{background:var(--good-bg);color:var(--good);}
+  @media (prefers-color-scheme: dark) { .badge.warning { color:#fab219; } } :root[data-theme="dark"] .badge.warning { color:#fab219; }
+  .badge::before { content:""; width:7px; height:7px; border-radius:50%; background:currentColor; }
+  section { margin-bottom: 34px; }
+  h2 { font-size:15px; margin:0 0 14px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-secondary); font-weight:700; }
+  .section-note { font-size:12.5px; color:var(--text-muted); margin:-8px 0 14px; }
+  .colbox { background:var(--surface-1); border:1px solid var(--border); border-radius:10px; padding:14px 16px; }
+  .cols2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .colbox .title { font-size:13px; font-weight:700; margin-bottom:8px; }
+  .job-card { background:var(--surface-1); border:1px solid var(--border); border-left:4px solid var(--series-blue); border-radius:10px; padding:16px 18px; margin-bottom:12px; }
+  .job-card .kind { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--series-blue); margin-bottom:6px; }
+  .job-card .stmt { font-size:15px; font-weight:600; line-height:1.5; color:var(--text-primary); }
+  .forces-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+  .force { border-radius:10px; padding:14px 16px; border:1px solid var(--border); }
+  .force.push { background: var(--critical-bg); } .force.pull { background: var(--warning-bg); }
+  .force.anxiety { background: var(--muted-bg); } .force.habit { background: var(--good-bg); }
+  .force .h { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; margin-bottom:8px; }
+  .force ul { margin:0; padding-left:16px; font-size:12.5px; color:var(--text-secondary); line-height:1.6; }
+  .force li { margin-bottom:6px; }
+  table { width:100%; border-collapse:collapse; background:var(--surface-1); border:1px solid var(--border); border-radius:10px; overflow:hidden; font-size:12.5px; }
+  thead th { text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.03em; color:var(--text-muted); font-weight:600; padding:9px 12px; border-bottom:1px solid var(--gridline); }
+  tbody td { padding:9px 12px; border-bottom:1px solid var(--gridline); color:var(--text-secondary); vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  td.cap { color:var(--text-primary); font-weight:700; white-space:nowrap; }
+  .table-scroll { overflow-x:auto; }
+  .quote { font-style:italic; font-size:12.5px; color:var(--text-secondary); border-left:2px solid var(--border); padding-left:10px; margin:6px 0; }
+  .footnote { font-size:12px; color:var(--text-muted); border-top:1px solid var(--gridline); padding-top:14px; margin-top:8px; }
+  @media (max-width:720px){ .cols2,.forces-grid{ grid-template-columns:1fr; } }
+</style>
+
+<div class="viz-root">
+  <div class="wrap">
+
+    <header class="top">
+      <p class="eyebrow">Data_Brands · JTBD-hipótesis · Célula Brands Success</p>
+      <h1>Jobs To Be Done — Marcas en Dropi (hipótesis, no validado)</h1>
+      <p class="subtitle">Primera versión del JTBD construida con la evidencia que ya existe: 9 entrevistas, 6 negocios perdidos, y ahora la encuesta de satisfacción (716 respuestas, 16-jul-2026). No reemplaza una entrevista de switch dedicada al método — es el punto de partida para diseñarla.</p>
+      <div class="meta-row">
+        <span><b>Fecha:</b> 26 ago 2026</span>
+        <span><b>Base CSAT:</b> 716 respuestas (205 con dolor_reportado, 81 con sugerencia_mejora)</span>
+        <span><b>Estado:</b> hipótesis — falta switch-interview dedicada</span>
+      </div>
+      <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+        <span class="badge critical">Ninguna afirmación de este documento es certeza — todo es [HIPÓTESIS a validar]</span>
+      </div>
+    </header>
+
+    <section>
+      <div class="colbox" style="border-left:3px solid var(--critical);">
+        <p style="font-size:12.5px; color:var(--text-secondary); margin:0; line-height:1.6;">
+          <b style="color:var(--text-primary);">Alerta de dato no documentado (regla anti-alucinación):</b> la columna <code>tipo_activo_churn_jun</code> de este archivo CSAT trae los valores <b>&quot;Fiel&quot;</b> (624/716, 87,2%) y <b>&quot;Activo Viejo&quot;</b> (3/716) — ninguno de los dos está en la tabla oficial de <code>tipo_activo_churn</code> (Nuevo activado / Recurrente / Antiguo activado / Reactivado / En riesgo / Perdido). No se fuerzan a encajar en esas categorías en este documento — se reportan tal cual y quedan pendientes de aclarar contigo antes de usarlos para segmentar nada.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Qué job están tratando de resolver — 3 capas</h2>
+      <div class="job-card">
+        <div class="kind">Job funcional</div>
+        <div class="stmt">Cuando despacho un pedido contraentrega, quiero tener certeza de que se va a resolver sin que yo tenga que perseguirlo, para poder dedicar mi tiempo a vender en vez de a apagar incendios operativos.</div>
+      </div>
+      <div class="job-card" style="border-left-color:var(--series-violet);">
+        <div class="kind" style="color:var(--series-violet);">Job emocional</div>
+        <div class="stmt">Quiero sentir que Dropi me acompaña activamente, no que estoy sola resolviendo con soporte que no responde — incluso llevando años en la plataforma.</div>
+      </div>
+      <div class="job-card" style="border-left-color:var(--serious);">
+        <div class="kind" style="color:var(--serious);">Job social</div>
+        <div class="stmt">Quiero que mi cliente final me vea como una marca seria y confiable, no como alguien que no sabe qué pasó con su pedido — la comunicación automática protege mi reputación frente a mi propio comprador.</div>
+      </div>
+      <p class="section-note">[HIPÓTESIS a validar]: los tres jobs se infieren del cruce de entrevistas + verbatims CSAT — ninguno viene de una pregunta directa tipo "¿para qué contrataste a Dropi?".</p>
+    </section>
+
+    <section>
+      <h2>Evidencia cuantitativa nueva — CSAT 16-jul-2026 (716 respuestas)</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Categoría de dolor reportado</th><th>Menciones totales</th><th>% sobre 716 respuestas</th><th>% entre baja satisfacción (1-2, n=96)</th></tr></thead>
+          <tbody>
+            <tr><td class="cap">💬 Soporte y atención al cliente</td><td>100</td><td>14,0%</td><td>42,7% (41/96)</td></tr>
+            <tr><td class="cap">🚨 Solución de novedades</td><td>63</td><td>8,8%</td><td>21,9% (21/96)</td></tr>
+            <tr><td class="cap">💰 Costos, tarifas o políticas</td><td>31</td><td>4,3%</td><td>14,6% (14/96)</td></tr>
+            <tr><td class="cap">📦 Devoluciones y garantías</td><td>29</td><td>4,1%</td><td>10,4% (10/96)</td></tr>
+            <tr><td class="cap">🚚 Logística y transportadoras</td><td>27</td><td>3,8%</td><td>9,4% (9/96)</td></tr>
+            <tr><td class="cap">📑 Trámites y anulación de guías</td><td>25</td><td>3,5%</td><td>11,5% (11/96)</td></tr>
+            <tr><td class="cap">💻 Errores o lentitud de la web</td><td>24</td><td>3,4%</td><td>11,5% (11/96)</td></tr>
+            <tr><td class="cap">📦 Estados y tracking de envíos</td><td>21</td><td>2,9%</td><td>9,4% (9/96)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="section-note" style="margin-top:8px;">Denominador: 716 respuestas totales de la encuesta; 96 respuestas con satisfacción 1-2 (13,4% del total). &quot;Soporte&quot; es la categoría #1 en ambos cortes — no es un dolor solo de quien está insatisfecho: aparece también en 33 de 540 respuestas (6,1%) con satisfacción 4-5.</p>
+
+      <div class="cols2" style="margin-top:14px;">
+        <div class="colbox">
+          <div class="title">Verbatim — push activo (satisfacción 1)</div>
+          <p class="quote">&quot;...lo peor, no hay acompañamiento real entre transportadoras y agentes para resolución de novedades, se ha vuelto muy malo dropi, no demoro en cambiarme.&quot;</p>
+          <p class="quote">&quot;llevo 4 años trabajando con dropi y hasta la fecha jamás me han contactado para verificarme como proveedor y cuando necesito soporte nunca están disponibles.&quot;</p>
+        </div>
+        <div class="colbox">
+          <div class="title">Verbatim — dolor pese a satisfacción alta (4-5)</div>
+          <p class="quote">&quot;Dropi debería tener, como otras plataformas, un seguimiento automático.&quot;</p>
+          <p class="quote">&quot;Mejorar el contacto con las transportadoras.&quot;</p>
+        </div>
+      </div>
+      <p class="section-note" style="margin-top:8px;">El segundo verbatim confirma en voz propia de la marca el Hallazgo 2/13 del tracker BAU (comunicación automática nativa) — viene de alguien satisfecho en general, lo que sugiere que el job de "saber qué pasa con mi pedido sin perseguirlo" sigue sin resolverse incluso cuando la relación con Dropi es buena en conjunto.</p>
+    </section>
+
+    <section>
+      <h2>El dolor de soporte no es de un segmento — es transversal</h2>
+      <p class="section-note">Corte por nivel de madurez (Protocolo 5 — declarar segmento). % de respuestas de ese nivel que marcaron la categoría, sobre el total de encuestados de ese nivel.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Nivel de madurez</th><th>n encuestas</th><th>💬 Soporte</th><th>🚨 Novedades</th></tr></thead>
+          <tbody>
+            <tr><td class="cap">Iniciando</td><td>214</td><td>15,4% (33)</td><td>10,3% (22)</td></tr>
+            <tr><td class="cap">Creciendo</td><td>237</td><td>14,8% (35)</td><td>11,4% (27)</td></tr>
+            <tr><td class="cap">Consolidando</td><td>96</td><td>13,5% (13)</td><td>6,2% (6)</td></tr>
+            <tr><td class="cap">Pre-Escalando</td><td>41</td><td>12,2% (5)</td><td>7,3% (3)</td></tr>
+            <tr><td class="cap">Escalando</td><td>116</td><td>11,2% (13)</td><td>3,4% (4)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="section-note" style="margin-top:8px;">Soporte se mantiene entre 11-15% en los 5 niveles — no colapsa en un solo segmento (Protocolo 6). Novedades sí baja con la madurez (10,3%→3,4%) — [HIPÓTESIS a validar]: las marcas de mayor volumen resuelven novedades con workarounds propios (gestor comercial, conocimiento operativo) en vez de que Dropi lo resuelva, no porque el problema desaparezca.</p>
+    </section>
+
+    <section>
+      <h2>Las 4 fuerzas del progreso</h2>
+      <div class="forces-grid">
+        <div class="force push">
+          <div class="h" style="color:var(--critical);">Push — empuja a buscar algo mejor</div>
+          <ul>
+            <li>Soporte que no responde: 100 menciones/716 (14,0%), sube a 42,7% entre baja satisfacción.</li>
+            <li>Novedades sin resolución: 63 menciones (8,8%).</li>
+            <li>Bug de peso/guía le costó a Santiago Lubo -58% de órdenes propias en 4 meses (caso único, causalidad clara).</li>
+          </ul>
+        </div>
+        <div class="force pull">
+          <div class="h" style="color:#8a5a00;">Pull — atrae hacia la alternativa</div>
+          <ul>
+            <li>5 de 8-11 competidores ya notifican automáticamente al comprador tras el despacho.</li>
+            <li>Aveonline: IA de ruteo + anticipo de recaudo; Skydropx: comparador de tarifas visible.</li>
+            <li>Ingrid Pinzón migró 100% a SkyDrop por automatización y transparencia de wallet (aunque luego regresó).</li>
+          </ul>
+        </div>
+        <div class="force anxiety">
+          <div class="h">Anxiety — frena el cambio</div>
+          <ul>
+            <li>Santiago Lubo no migra pese al bug porque depende de integraciones Shopify/Chatea Pro exclusivas de Dropi.</li>
+            <li>Reaprender un flujo operativo nuevo tiene costo — [HIPÓTESIS a validar], sin entrevista directa sobre esto todavía.</li>
+          </ul>
+        </div>
+        <div class="force habit">
+          <div class="h" style="color:var(--good);">Habit — ancla al status quo</div>
+          <ul>
+            <li>54,2% de la base tiene 2+ años de antigüedad en Dropi (fact_marcas.csv, tracker BAU).</li>
+            <li>Soluciones caseras ya aprendidas: inflar inventario, revisar guías a las 9am, grabar video al recibir paquetes — cambiar de plataforma implica desaprenderlas.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Qué falta para que esto deje de ser hipótesis</h2>
+      <ul style="font-size:13px; color:var(--text-secondary); line-height:1.8;">
+        <li>3-4 switch-interviews estructuradas (Ingrid Pinzón, Santiago Lubo, y 1-2 de los negocios perdidos de Comercial si aceptan hablar) con la pregunta específica del método: reconstruir la línea de tiempo del momento en que empezaron a buscar alternativa.</li>
+        <li>Confirmar con Kate el significado real de &quot;Fiel&quot; / &quot;Activo Viejo&quot; en <code>tipo_activo_churn_jun</code> antes de usar esa columna para cruzar el job por segmento de churn.</li>
+        <li>Correr el experimento de notificación automática (ya definido en el tracker BAU) — si el job es real, debería bajar la categoría &quot;novedades&quot; del CSAT en la siguiente ronda de la encuesta.</li>
+      </ul>
+    </section>
+
+    <div class="footnote">
+      Fuentes: <code>Diagnostico_Marcas_CSAT_16jul2026.xlsx</code> (716 respuestas, columna <code>dolor_reportado</code> y <code>sugerencia_mejora</code>) · 9 entrevistas cualitativas (hub/entrevistas) · Insumo Comercial 22-jul-2026 (6 negocios perdidos) · tracker <code>bau-competitivo-marcas/page.tsx</code> · cierre de investigación 25-ago-2026.
+    </div>
+
+  </div>
+</div>
