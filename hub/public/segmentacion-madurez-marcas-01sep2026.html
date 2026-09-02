@@ -1,0 +1,584 @@
+<title>Segmentación por madurez · Marcas Dropi · 1 sep 2026</title>
+<style>
+  /* Paleta Dropi en tonos pastel · primario naranja #e58017 · secundario cian #008dbf */
+  .viz-root {
+    --surface-1:#ffffff; --page-plane:#ffffff; --text-primary:#0d0d0d; --text-secondary:#2b2b2b;
+    --text-muted:#6b7280; --gridline:#e4e7ee; --border:rgba(13,13,13,0.12);
+    --series-blue:#0a7ea3; --series-violet:#c9701a;         /* L2 = cian Dropi · L1 = naranja Dropi */
+    --good:#4a9d55; --warning:#c9701a; --serious:#e58017; --critical:#d1495b;
+    --good-bg:#eaf5ec; --warning-bg:#fbf1de; --serious-bg:#fdf0e2;
+    --critical-bg:#fbebee; --muted-bg:#eef0f4;
+    --dato-bg:#e8f3f8;      /* cian pastel */
+    --insight-bg:#fbf0e2;   /* naranja pastel */
+    --hip-bg:#fdf6e6;       /* ámbar pastel */
+    --op-bg:#eaf5ec;        /* verde pastel */
+  }
+  /* Documento con un solo look: fondo blanco, letra negra, acentos pastel Dropi — no cambia con el tema del sistema. */
+
+  * { box-sizing:border-box; } html,body { margin:0; background:#ffffff; }
+  .viz-root { font-family:system-ui,-apple-system,"Segoe UI",sans-serif; background:#ffffff; color:var(--text-primary); padding:32px 16px 72px; }
+  .wrap { max-width:1080px; margin:0 auto; }
+  header.top { margin-bottom:26px; }
+  .eyebrow { font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--series-blue); margin:0 0 6px; }
+  h1 { font-size:25px; margin:0 0 6px; line-height:1.25; }
+  .subtitle { color:var(--text-secondary); font-size:14px; margin:0; max-width:820px; }
+  .meta-row { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; font-size:12.5px; color:var(--text-muted); }
+  .meta-row span b { color:var(--text-secondary); font-weight:600; }
+  section { margin-bottom:40px; }
+  h2 { font-size:15px; margin:0 0 6px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-secondary); font-weight:700; border-top:2px solid var(--gridline); padding-top:16px; }
+  h3 { font-size:17px; margin:26px 0 10px; }
+  .section-note { font-size:12.5px; color:var(--text-muted); margin:2px 0 16px; max-width:820px; }
+  p { font-size:13.5px; line-height:1.62; color:var(--text-secondary); max-width:820px; }
+  ul { font-size:13.5px; line-height:1.6; color:var(--text-secondary); max-width:820px; padding-left:20px; }
+  li { margin-bottom:5px; }
+  .tag { display:inline-block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; padding:2px 7px; border-radius:5px; margin-right:6px; vertical-align:middle; }
+  .tag.dato { background:var(--dato-bg); color:var(--series-blue); }
+  .tag.insight { background:var(--insight-bg); color:var(--series-violet); }
+  .tag.hip { background:var(--hip-bg); color:#a9701a; }
+  .tag.op { background:var(--op-bg); color:var(--good); }
+  .table-scroll { overflow-x:auto; margin:10px 0; }
+  table { width:100%; border-collapse:collapse; background:var(--surface-1); border:1px solid var(--border); border-radius:10px; overflow:hidden; font-size:12px; min-width:640px; }
+  thead th { text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.03em; color:var(--text-muted); font-weight:600; padding:9px 11px; border-bottom:1px solid var(--gridline); }
+  tbody td { padding:8px 11px; border-bottom:1px solid var(--gridline); color:var(--text-secondary); vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  td.cap, th.cap { color:var(--text-primary); font-weight:700; white-space:nowrap; }
+  tbody tr.hi td { background:var(--warning-bg); }
+  .lvl-card { background:var(--surface-1); border:1px solid var(--border); border-left:4px solid var(--series-blue); border-radius:12px; padding:20px 22px; margin-bottom:18px; }
+  .lvl-card h3 { margin-top:0; }
+  .lvl-card .rango { font-size:12px; color:var(--text-muted); font-weight:600; }
+  .lvl-card h4 { font-size:12.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--series-blue); margin:18px 0 6px; }
+  .callout { background:var(--muted-bg); border-radius:9px; padding:12px 15px; font-size:12.5px; color:var(--text-secondary); margin:12px 0; }
+  .callout.warn { background:var(--critical-bg); }
+  .kpi-strip { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0 4px; }
+  .kpi { background:var(--page-plane); border:1px solid var(--border); border-radius:8px; padding:7px 11px; font-size:11.5px; color:var(--text-secondary); }
+  .kpi b { color:var(--text-primary); font-size:13px; display:block; }
+  .foot { font-size:11.5px; color:var(--text-muted); margin-top:8px; }
+
+  /* ---- Dos lentes ---- */
+  .lens-legend { display:flex; gap:12px; flex-wrap:wrap; margin:14px 0 4px; }
+  .lens-legend > div { flex:1; min-width:260px; border-radius:10px; padding:12px 15px; font-size:12.5px; line-height:1.55; }
+  .lens-legend .l2 { background:var(--dato-bg); border-left:4px solid var(--series-blue); }
+  .lens-legend .l1 { background:var(--insight-bg); border-left:4px solid var(--series-violet); }
+  .lens-pill { display:inline-block; font-size:10.5px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; padding:2px 8px; border-radius:5px; color:#fff; margin-bottom:6px; }
+  .lens-pill.l2 { background:var(--series-blue); }
+  .lens-pill.l1 { background:var(--series-violet); }
+  .lens-block { border-radius:12px; padding:4px 14px 14px; margin:12px 0; border:1px solid var(--border); }
+  .lens-block.l2 { background:var(--dato-bg); border-left:4px solid var(--series-blue); }
+  .lens-block.l1 { background:var(--insight-bg); border-left:4px solid var(--series-violet); }
+  .lens-block > .lens-pill { margin:12px 0 4px; }
+  .lens-block .foot { margin-bottom:2px; }
+  .kpi-lens { font-size:10.5px; font-weight:800; letter-spacing:.04em; text-transform:uppercase; margin:12px 0 4px; }
+  .kpi-lens.l2 { color:var(--series-blue); }
+  .kpi-lens.l1 { color:var(--series-violet); }
+  table.l2 thead th { color:var(--series-blue); border-bottom-color:var(--series-blue); }
+  table.l1 thead th { color:var(--series-violet); border-bottom-color:var(--series-violet); }
+  .lens-block table { background:var(--surface-1); }
+</style>
+
+<div class="viz-root"><div class="wrap">
+
+<header class="top">
+  <p class="eyebrow">Célula Brands Success · Cerebro de Producto</p>
+  <h1>Segmentación de Marcas por nivel de madurez operativa</h1>
+  <p class="subtitle">Cinco niveles ya definidos (Iniciando → Creciendo → Consolidando → Pre-Escalando → Escalando), reconstruidos desde <code>fact_marcas</code> / <code>dim_marcas</code> / <code>ltv_marcas_usuario</code>. Volumen como eje de corte; crecimiento, automatización, logística, pagos, novedades, devoluciones y dependencia manual como retrato de comportamiento de cada nivel.</p>
+  <div class="meta-row">
+    <span><b>Corte de datos:</b> 31-ago-2026 (carpeta <code>Data 31-08-2026</code>)</span>
+    <span><b>Ventana de clasificación:</b> may / jun / jul 2026 (3 meses cerrados)</span>
+    <span><b>País:</b> CO</span>
+    <span><b>Métrica base:</b> <code>ordenes_mes_propias</code> (NSM · user_id = supplier_id)</span>
+  </div>
+  <p class="foot">Agosto-2026 se excluye de la clasificación: sigue rezagado (425.611 propias vs. 479.418 de julio) y se rellena a lo largo de las semanas siguientes al cierre. Regla oficial: la madurez nunca se calcula sobre el mes en curso / parcial.</p>
+</header>
+
+<section>
+  <h2>Cómo leer este documento</h2>
+  <p class="section-note">Formato Cell Board: primero la evidencia, después la interpretación. Cada afirmación lleva su etiqueta.</p>
+  <ul>
+    <li><span class="tag dato">Dato</span> sale directo de <code>fact_marcas</code> / <code>dim_marcas</code> / <code>ltv_marcas_usuario</code>. Verificable.</li>
+    <li><span class="tag insight">Insight</span> lectura de un patrón en los datos. No es opinión, pero ya es interpretación.</li>
+    <li><span class="tag hip">Hipótesis</span> explicación de comportamiento / motivación. Falsable, aún sin validar. Respaldo cualitativo (entrevistas, CSAT) es secundario — la data manda.</li>
+    <li><span class="tag op">Oportunidad</span> posible apuesta de producto que se abre desde el dato. No es una decisión ni un compromiso de roadmap.</li>
+  </ul>
+
+  <h3 style="margin-top:22px;">Los dos lentes — se leen siempre por separado</h3>
+  <div class="lens-legend">
+    <div class="l2">
+      <span class="lens-pill l2">Lente 2 · Ecosistema</span><br>
+      <b>Todas</b> las marcas con órdenes propias, tengan o no gestión comercial. <b>Universo total en el radar:</b> 9.091 marcas con órdenes propias en su historia (7.412 sin contar baneadas). <b>De esas, activas en may–jul 2026: 3.183</b> — son las únicas que se clasifican aquí (una marca inactiva no tiene nivel de madurez). Sirve para visión de negocio completa y mapeo de oportunidades.
+    </div>
+    <div class="l1">
+      <span class="lens-pill l1">Lente 1 · Portafolio comercial</span><br>
+      Solo marcas con <code>comercial_id</code> ∈ {21553, 71445}. <b>Universo total en el radar:</b> 4.328 marcas en el portafolio (3.822 sin baneadas; 4.264 con alguna orden propia en su historia). <b>De esas, activas en may–jul 2026: 1.805</b> — las que se clasifican; las otras ~2.017 están inactivas o en churn en la ventana. Sirve para cumplimiento de meta y gestión de KAM.
+    </div>
+  </div>
+  <p class="section-note"><b>Toda cifra por nivel de este documento es de marcas ACTIVAS</b> (≥1 orden propia en may–jul 2026). El universo total de arriba está solo para tener en el radar cuántas marcas existen. · En todo el documento: lo <span style="color:var(--series-blue);font-weight:700;">cian</span> es Lente 2 (ecosistema), lo <span style="color:var(--series-violet);font-weight:700;">naranja</span> es Lente 1 (portafolio comercial) — paleta Dropi.</p>
+</section>
+
+<!-- ============ PARTE 1 ============ -->
+<section>
+  <h2>Parte 1 · Patrones encontrados en los datos</h2>
+  <p class="section-note">Todo lo de abajo es <span class="tag dato">Dato</span>, agregado sobre la ventana may–jul 2026. Tasas calculadas <em>pooled</em> (suma / suma), nunca promedio de tasas individuales. "Propias" = órdenes donde la marca es su propio proveedor.</p>
+
+  <h3>1.1 · Tamaño de cada nivel — cuántas marcas y cuántas órdenes</h3>
+
+  <div class="lens-block l2">
+    <span class="lens-pill l2">Lente 2 · Ecosistema</span>
+    <div class="table-scroll">
+    <table class="l2">
+      <thead><tr><th class="cap">Nivel</th><th>Rango propias/mes</th><th>Marcas</th><th>% de las marcas</th><th>Órd. propias/mes</th><th>% del NSM ecosistema</th></tr></thead>
+      <tbody>
+        <tr><td class="cap">Iniciando</td><td>1–50</td><td>2.304</td><td>72,4%</td><td>30.247</td><td>6,5%</td></tr>
+        <tr><td class="cap">Creciendo</td><td>51–300</td><td>577</td><td>18,1%</td><td>78.957</td><td>17,0%</td></tr>
+        <tr><td class="cap">Consolidando</td><td>301–700</td><td>173</td><td>5,4%</td><td>76.053</td><td>16,4%</td></tr>
+        <tr><td class="cap">Pre-Escalando</td><td>701–1.000</td><td>40</td><td>1,3%</td><td>33.533</td><td>7,2%</td></tr>
+        <tr class="hi"><td class="cap">Escalando</td><td>1.001+</td><td>89</td><td>2,8%</td><td>244.789</td><td>52,8%</td></tr>
+        <tr><td class="cap">Total ACTIVAS (clasificadas)</td><td>—</td><td>3.183</td><td>100%</td><td>463.578</td><td>100%</td></tr>
+        <tr><td class="cap">No activas en la ventana (inactivas / churn)</td><td>—</td><td>~4.229</td><td>—</td><td>0 este trimestre</td><td>—</td></tr>
+        <tr><td class="cap">Universo total en el radar (con órd. propias lifetime, sin baneadas)</td><td>—</td><td>7.412</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="lens-block l1">
+    <span class="lens-pill l1">Lente 1 · Portafolio comercial (comercial_id 21553 / 71445)</span>
+    <div class="table-scroll">
+    <table class="l1">
+      <thead><tr><th class="cap">Nivel</th><th>Rango propias/mes</th><th>Marcas</th><th>% de las marcas</th><th>Órd. propias/mes</th><th>% del NSM portafolio</th></tr></thead>
+      <tbody>
+        <tr><td class="cap">Iniciando</td><td>1–50</td><td>1.287</td><td>71,3%</td><td>18.476</td><td>6,5%</td></tr>
+        <tr><td class="cap">Creciendo</td><td>51–300</td><td>355</td><td>19,7%</td><td>47.858</td><td>16,9%</td></tr>
+        <tr><td class="cap">Consolidando</td><td>301–700</td><td>96</td><td>5,3%</td><td>41.927</td><td>14,8%</td></tr>
+        <tr><td class="cap">Pre-Escalando</td><td>701–1.000</td><td>18</td><td>1,0%</td><td>15.509</td><td>5,5%</td></tr>
+        <tr class="hi"><td class="cap">Escalando</td><td>1.001+</td><td>49</td><td>2,7%</td><td>159.626</td><td>56,3%</td></tr>
+        <tr><td class="cap">Total ACTIVAS (clasificadas)</td><td>—</td><td>1.805</td><td>100%</td><td>283.397</td><td>100%</td></tr>
+        <tr><td class="cap">No activas en la ventana (inactivas / churn)</td><td>—</td><td>~2.017</td><td>—</td><td>0 este trimestre</td><td>—</td></tr>
+        <tr><td class="cap">Universo total del portafolio (comercial_id 21553/71445, sin baneadas)</td><td>—</td><td>3.822</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <p class="foot">"Activas" = con ≥1 orden propia en la ventana may–jul 2026. Denominador = NSM de cada lente (<code>ordenes_mes_propias</code>). No se usa "órdenes movilizadas del rol Supplier" (≈2,0 M/mes) porque incluye órdenes externas que también pertenecen a Dropshippers. Movilizadas propias/mes: L2 = 387.070, L1 = 235.855; los % por nivel se mueven ±1 pp respecto a órdenes creadas.</p>
+  <p><span class="tag insight">Insight</span> La distribución es un martillo: <b>2,8% de las marcas (Escalando) mueve el 53% del NSM</b>; el 72% (Iniciando) mueve el 6,5%. Los tres niveles altos juntos (Consolidando+Pre-Escalando+Escalando = 302 marcas L2, 9,5%) mueven el 76%. En Lente 1 el núcleo Pre-Escalando+Escalando son <b>67 marcas = 61,8% del NSM del portafolio</b> — la cifra que veníamos llamando "los 64 / 68".</p>
+  <p><span class="tag insight">Insight</span> <b>Frente a la meta NSM de 600.000 órd/mes:</b> el ecosistema activo hoy pone <b>463.578 (77,3% de la meta)</b> y el portafolio comercial <b>283.397 (47,2%)</b>. El faltante del portafolio para llegar a 600 k (~317 k órd/mes) es más que todo lo que hoy mueven Iniciando + Creciendo + Consolidando + Pre-Escalando juntos en L1 (123.770). Es decir: la meta no se cierra sumando marcas chicas — o se hace crecer al núcleo (Escalando/Pre-Escalando) o se recupera volumen de marcas grandes hoy inactivas.</p>
+
+  <h3>1.2 · Retrato de comportamiento por nivel</h3>
+  <p class="section-note">La misma tabla, dos veces: primero el ecosistema completo, después el portafolio comercial. Las dos cuentan la misma historia — los patrones son iguales. La única divergencia real es Pre-Escalando, porque en Lente 1 son solo 18 marcas. Segunda fila = <b>relación con la meta NSM de 600.000 órd/mes</b>: hoy el ecosistema activo cubre el <b>77,3%</b> de esa meta (falta ~136 k) y el portafolio comercial cubre el <b>47,2%</b> (falta ~317 k).</p>
+
+  <div class="lens-block l2">
+    <span class="lens-pill l2">Lente 2 · Ecosistema — 3.183 marcas activas</span>
+    <div class="table-scroll">
+    <table class="l2">
+      <thead><tr><th class="cap">Señal</th><th>Iniciando</th><th>Creciendo</th><th>Consolidando</th><th>Pre-Esc.*</th><th>Escalando</th></tr></thead>
+      <tbody>
+        <tr><td class="cap">Marcas activas (may–jul)</td><td>2.304</td><td>577</td><td>173</td><td>40</td><td>89</td></tr>
+        <tr><td class="cap">Aporte a la meta NSM · 600.000 órd/mes</td><td>5,0%</td><td>13,2%</td><td>12,7%</td><td>5,6%</td><td>40,8%</td></tr>
+        <tr><td class="cap">Crecimiento — % de marcas creciendo</td><td>30%</td><td>44%</td><td>55%</td><td>56%</td><td>71%</td></tr>
+        <tr><td class="cap">— % cayendo &gt;15%</td><td>60%</td><td>36%</td><td>27%</td><td>22%</td><td>9%</td></tr>
+        <tr><td class="cap">Consistencia — % meses con venta (12m)</td><td>75%</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td></tr>
+        <tr><td class="cap">Pasó por "En riesgo" / "Perdido" en 12m</td><td>61%</td><td>20%</td><td>12%</td><td>18%</td><td>9%</td></tr>
+        <tr><td class="cap">Creación de órdenes — % manual</td><td>76%</td><td>75%</td><td>58%</td><td>45%</td><td>31%</td></tr>
+        <tr><td class="cap">— % por integración</td><td>18%</td><td>22%</td><td>39%</td><td>51%</td><td>64%</td></tr>
+        <tr><td class="cap">Integración conectada <b>y activa</b></td><td>10%</td><td>28%</td><td>51%</td><td>68%</td><td>70%</td></tr>
+        <tr><td class="cap">Conectada <b>sin uso</b></td><td>21%</td><td>16%</td><td>12%</td><td>8%</td><td>8%</td></tr>
+        <tr><td class="cap">Usa Shopify</td><td>27%</td><td>40%</td><td>60%</td><td>68%</td><td>75%</td></tr>
+        <tr><td class="cap">Usa "Chatea" Dropi</td><td>7%</td><td>14%</td><td>36%</td><td>45%</td><td>63%</td></tr>
+        <tr><td class="cap">Pago — % anticipado (resto COD)</td><td>22%</td><td>15%</td><td>10%</td><td>11%</td><td>9%</td></tr>
+        <tr><td class="cap">Logística — tasa de entrega</td><td>84%</td><td>85%</td><td>82%</td><td>81%</td><td>78%</td></tr>
+        <tr><td class="cap">— tasa de devolución</td><td>15,9%</td><td>15,1%</td><td>17,8%</td><td>18,5%</td><td>21,8%</td></tr>
+        <tr><td class="cap">— tasa de novedad</td><td>8,3%</td><td>8,6%</td><td>11,3%</td><td>11,3%</td><td>13,8%</td></tr>
+        <tr><td class="cap">— % de novedades resueltas</td><td>59%</td><td>70%</td><td>69%</td><td>72%</td><td>78%</td></tr>
+        <tr><td class="cap">Bodegas — mediana / promedio</td><td>1 / 1,7</td><td>1 / 1,6</td><td>1 / 1,7</td><td>1 / 1,4</td><td>2 / 15,4</td></tr>
+        <tr><td class="cap">Fulfillment Dropi</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td></tr>
+        <tr><td class="cap">Antigüedad en Dropi — mediana (meses)</td><td>19</td><td>17</td><td>18</td><td>16</td><td>21</td></tr>
+        <tr><td class="cap">TTV — mediana días</td><td>37</td><td>22</td><td>20</td><td>24</td><td>21</td></tr>
+        <tr><td class="cap">Ingreso Dropi y ganancia/orden</td><td colspan="5" style="color:var(--text-muted)">solo disponible para Lente 1 → ver tabla de abajo</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="lens-block l1">
+    <span class="lens-pill l1">Lente 1 · Portafolio comercial — 1.805 marcas activas</span>
+    <div class="table-scroll">
+    <table class="l1">
+      <thead><tr><th class="cap">Señal</th><th>Iniciando</th><th>Creciendo</th><th>Consolidando</th><th>Pre-Esc.*</th><th>Escalando</th></tr></thead>
+      <tbody>
+        <tr><td class="cap">Marcas activas (may–jul)</td><td>1.287</td><td>355</td><td>96</td><td>18</td><td>49</td></tr>
+        <tr><td class="cap">Aporte a la meta NSM · 600.000 órd/mes</td><td>3,1%</td><td>8,0%</td><td>7,0%</td><td>2,6%</td><td>26,6%</td></tr>
+        <tr><td class="cap">Crecimiento — % de marcas creciendo</td><td>31%</td><td>41%</td><td>54%</td><td>67%</td><td>66%</td></tr>
+        <tr><td class="cap">— % cayendo &gt;15%</td><td>59%</td><td>36%</td><td>27%</td><td>7%</td><td>16%</td></tr>
+        <tr><td class="cap">Consistencia — % meses con venta (12m)</td><td>80%</td><td>100%</td><td>100%</td><td>100%</td><td>100%</td></tr>
+        <tr><td class="cap">Pasó por "En riesgo" / "Perdido" en 12m</td><td>62%</td><td>18%</td><td>11%</td><td>17%</td><td>8%</td></tr>
+        <tr><td class="cap">Creación de órdenes — % manual</td><td>77%</td><td>80%</td><td>62%</td><td>56%</td><td>30%</td></tr>
+        <tr><td class="cap">— % por integración</td><td>15%</td><td>18%</td><td>34%</td><td>40%</td><td>65%</td></tr>
+        <tr><td class="cap">Integración conectada <b>y activa</b></td><td>11%</td><td>24%</td><td>45%</td><td>50%</td><td>71%</td></tr>
+        <tr><td class="cap">Conectada <b>sin uso</b></td><td>21%</td><td>19%</td><td>11%</td><td>11%</td><td>8%</td></tr>
+        <tr><td class="cap">Usa Shopify</td><td>26%</td><td>37%</td><td>54%</td><td>44%</td><td>76%</td></tr>
+        <tr><td class="cap">Usa "Chatea" Dropi</td><td>7%</td><td>13%</td><td>38%</td><td>33%</td><td>65%</td></tr>
+        <tr><td class="cap">Pago — % anticipado (resto COD)</td><td>23%</td><td>17%</td><td>11%</td><td>22%</td><td>9%</td></tr>
+        <tr><td class="cap">Logística — tasa de entrega</td><td>84%</td><td>86%</td><td>83%</td><td>86%</td><td>78%</td></tr>
+        <tr><td class="cap">— tasa de devolución</td><td>15,8%</td><td>14,0%</td><td>17,0%</td><td>13,5%</td><td>21,6%</td></tr>
+        <tr><td class="cap">— tasa de novedad</td><td>6,8%</td><td>7,4%</td><td>9,5%</td><td>6,5%</td><td>13,5%</td></tr>
+        <tr><td class="cap">— % de novedades resueltas</td><td>58%</td><td>70%</td><td>65%</td><td>57%</td><td>79%</td></tr>
+        <tr><td class="cap">Bodegas — mediana / promedio</td><td>1 / 1,7</td><td>1 / 1,6</td><td>1 / 1,8</td><td>1 / 1,5</td><td>2 / 25,9</td></tr>
+        <tr><td class="cap">Fulfillment Dropi</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td><td>0%</td></tr>
+        <tr><td class="cap">Antigüedad en Dropi — mediana (meses)</td><td>22</td><td>18</td><td>19</td><td>24</td><td>26</td></tr>
+        <tr><td class="cap">TTV — mediana días</td><td>39</td><td>24</td><td>26</td><td>33</td><td>26</td></tr>
+        <tr><td class="cap">Ingreso Dropi / mes <b>por marca</b> — mediana (COP)</td><td>$52 k</td><td>$422 k</td><td>$1,33 M</td><td>$2,27 M</td><td>$4,48 M</td></tr>
+        <tr><td class="cap">Ingreso Dropi / mes <b>total del nivel</b> — suma (COP)</td><td>$201 M</td><td>$197 M</td><td>$132 M</td><td>$47 M</td><td>$316 M</td></tr>
+        <tr><td class="cap">Ganancia de la marca / orden entregada — mediana</td><td>$63 k</td><td>$71 k</td><td>$54 k</td><td>$62 k</td><td>$30 k</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <p class="foot">* Pre-Escalando: n=40 en L2, <b>solo 18 en L1</b> — es el nivel más ruidoso; varias de sus tasas se invierten respecto a la tendencia por tamaño de muestra, no por comportamiento real. Léelo como umbral de paso. · <b>Ingreso Dropi</b> = lo que Dropi factura (no lo que factura la marca), de <code>ltv_marcas_usuario</code>; ese archivo solo trae marcas del portafolio comercial, por eso estas 3 filas están únicamente en Lente 1. "Por marca" = mediana de una sola marca del nivel; "total del nivel" = suma de todas. · <b>Ganancia de la marca / orden</b> = margen de la propia marca por pedido entregado; <code>ganancia_total_mes</code> es una columna que CLAUDE.md marca como incoherente al normalizar por orden → <span class="tag hip">Hipótesis direccional</span>, no dato firme.</p>
+
+  <h3>1.3 · Los patrones limpios (monótonos con la madurez)</h3>
+  <p class="section-note">Los rangos citados abajo son Lente 2; en Lente 1 la forma de cada patrón es la misma (ver columnas L1 de la tabla 1.2) — la única divergencia real es Pre-Escalando, por n=18.</p>
+  <ul>
+    <li><span class="tag insight">Insight</span> <b>La automatización sube y el trabajo manual baja, escalón por escalón.</b> Creación manual 76% → 31%; creación por integración 18% → 64%; integración conectada y activa 10% → 70%. No hay saltos: es un gradiente continuo.</li>
+    <li><span class="tag insight">Insight</span> <b>La fricción logística sube con el volumen.</b> Devolución 15,9% → 21,8%, novedad 8,3% → 13,8%, tasa de entrega 84% → 78%. Las marcas grandes NO tienen mejor logística — tienen peor tasa unitaria, compensada por escala y por mejor resolución de novedades (59% → 78%).</li>
+    <li><span class="tag insight">Insight</span> <b>El pago anticipado es cosa de marcas chicas.</b> 22% en Iniciando → 9% en Escalando. A más volumen, más contraentrega pura — más exposición a novedad y devolución, más dependencia del recaudo de Dropi.</li>
+    <li><span class="tag insight">Insight</span> <b>El riesgo de abandono se concentra casi entero en Iniciando</b> (61% pasó por "En riesgo"/"Perdido" en 12m; consistencia 75%; 60% cayendo). De Creciendo hacia arriba, el abandono cae a 9–20% y la consistencia es 100%. Cruzar un nivel es, sobre todo, dejar de ser frágil.</li>
+    <li><span class="tag insight">Insight</span> <b>Dropi gana ~85× más por una marca Escalando que por una Iniciando</b> ($4,48 M vs. $52 k/mes), pero la marca gana <em>menos</em> margen por orden a medida que escala ($63 k → $29 k). <span class="tag hip">Hipótesis</span>: al escalar, las marcas bajan precio / entran a categorías de menor margen y su rentabilidad depende cada vez más de la eficiencia logística (devolución, flete) — justo la variable que se les deteriora.</li>
+    <li><span class="tag dato">Dato</span> <b>Fulfillment Dropi = 0% en los cinco niveles.</b> Toda la operación de bodega es propia. Solo Escalando muestra multi-bodega real (promedio 15,4; en L1, 25,9) — el resto opera desde 1.</li>
+    <li><span class="tag insight">Insight</span> <b>"Falsa automatización" en la base:</b> 21% de Iniciando tiene una integración conectada pero sin uso (baja a 8% en Escalando). Conectar la tienda no es lo mismo que operar con ella.</li>
+    <li><span class="tag dato">Dato</span> <b>Contaminación de medición, concentrada abajo:</b> 31% de Iniciando tiene <code>comportamiento_algoritmico</code> = "Mayoritariamente Dropshippers" (parte de su volumen podría no ser negocio propio). En Escalando eso baja a 2%; los niveles altos son casi puros "Evidente" + "Mayoritariamente Supplier".</li>
+  </ul>
+</section>
+
+<!-- ============ PARTE 2 ============ -->
+<section>
+  <h2>Parte 2 · Reglas objetivas y reproducibles de clasificación</h2>
+
+  <h3>2.1 · Regla primaria — nivel por consistencia reciente de volumen</h3>
+  <p>Es la regla oficial vigente (CLAUDE.md, act. 2026-08-06). Se aplica sobre <code>ordenes_mes_propias</code>, nunca sobre <code>ordenes_creadas</code>.</p>
+  <ol style="font-size:13.5px;line-height:1.6;color:var(--text-secondary);max-width:820px;">
+    <li><b>Ventana:</b> los últimos 3 meses <em>cerrados</em> en los que la marca tenga fila real en <code>fact_marcas</code>. Nunca rellenar con 0 los meses previos a su registro. Si tiene &lt;3 meses de historia, usar los que tenga (mínimo 1).</li>
+    <li><b>Nivel de cada mes:</b> clasificar cada mes por separado con los rangos: Iniciando ≤50 · Creciendo 51–300 · Consolidando 301–700 · Pre-Escalando 701–1.000 · Escalando 1.001+.</li>
+    <li><b>Mayoría:</b> si 2 de 3 meses (o todos, si son &lt;3) caen en el mismo nivel → ese es el nivel final.</li>
+    <li><b>Desempate:</b> si los 3 meses caen en 3 niveles distintos → nivel del <em>promedio</em> de esos 3 meses.</li>
+  </ol>
+  <div class="callout">Umbrales cerrados: Creciendo = 51–300 (no 51–200). Consolidando = 301–700 (no 201–700). El muro crítico es cruzar 300 propias/mes.</div>
+  <p><span class="tag dato">Dato</span> Reproducibilidad: con este criterio, la ventana may–jul da 3.183 marcas activas L2 y el reparto de la tabla 1.1. Cambiar la ventana a jun–ago (con agosto rezagado) mueve el conteo de Escalando L1 de 49 a 44 y el núcleo de 67 a 64 — por eso la ventana se fija en meses cerrados.</p>
+
+  <h3>2.2 · Ejes secundarios — describen, no reclasifican</h3>
+  <p><span class="tag insight">Insight</span> Las señales de la Parte 1 (automatización, logística, pago, crecimiento) <b>no cortan mejor que el volumen</b>: todas se mueven de forma monótona con el nivel, así que no aportan un corte independiente. Su valor es de <em>diagnóstico dentro del nivel</em> — detectar a la marca adelantada o atrasada respecto a sus pares. Reglas reproducibles para sub-etiquetar:</p>
+  <div class="table-scroll">
+  <table>
+    <thead><tr><th class="cap">Sub-etiqueta</th><th>Regla objetiva (sobre la misma ventana de 3 meses)</th><th>Para qué sirve</th></tr></thead>
+    <tbody>
+      <tr><td class="cap">Frágil</td><td>Nivel = Iniciando <b>o</b> pasó por "En riesgo"/"Perdido" ≥1 vez en la ventana <b>o</b> consistencia 12m &lt; 80%</td><td>Prioridad de acompañamiento / rescate</td></tr>
+      <tr><td class="cap">Ascendente</td><td>propias del mes 3 &gt; propias del mes 1 en ≥15% <b>y</b> sin mes en "En riesgo"</td><td>Candidata a salto de nivel — dónde empujar</td></tr>
+      <tr><td class="cap">Descendente</td><td>propias del mes 3 &lt; mes 1 en ≥15%, o bajó de nivel vs. los 3 meses previos</td><td>Alerta temprana antes del churn</td></tr>
+      <tr><td class="cap">Manual-dependiente</td><td><code>ordenes_creadas_manual_propias</code> / creadas ≥ 70%</td><td>Techo operativo por carga manual</td></tr>
+      <tr><td class="cap">Automatizada</td><td>integración ≥ 50% de creadas <b>y</b> <code>estado_integracion</code> = "Conectada y activa"</td><td>Base instalada para features avanzadas</td></tr>
+      <tr><td class="cap">Falsa-automatización</td><td><code>estado_integracion</code> = "Conectada sin uso" <b>y</b> manual ≥ 70%</td><td>Activación de integración a medio camino</td></tr>
+      <tr><td class="cap">Logística-tensionada</td><td>(devolución + novedad) / movilizadas por encima de la mediana de su nivel</td><td>Riesgo de rentabilidad y de fuga a competencia</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="foot">El identificador de marca es <code>user_id</code>. Lente 1 = <code>comercial_id</code> ∈ {21553, 71445}. Lente 2 = toda marca con ≥1 orden propia. La comunidad Brands (410) ya no define pertenencia a Lente 1.</p>
+</section>
+
+<!-- ============ PARTE 3 ============ -->
+<section>
+  <h2>Parte 3 · Los cinco niveles</h2>
+  <p class="section-note">Cada ficha abre con su tamaño en los <b>dos lentes</b> (bloque <span style="color:var(--series-blue);font-weight:700;">cian</span> = ecosistema, bloque <span style="color:var(--series-violet);font-weight:700;">naranja</span> = portafolio comercial), y sigue con: arquetipo · buyer persona · JTBD · señales de evolución/riesgo · oportunidades de producto. Arquetipos y personas son <span class="tag hip">Hipótesis</span> construidas sobre los patrones de la Parte 1 y respaldadas —en segundo plano— por las entrevistas y el CSAT de 716 respuestas (16-jul-2026). El arquetipo y el JTBD son iguales en los dos lentes; lo que cambia entre L2 y L1 son solo los tamaños y algún punto de las señales.</p>
+  <div class="callout"><b>Base cualitativa de los arquetipos y los JTBD:</b> ~10 conversaciones jun–jul 2026 — marcas de <b>~100 a más de 5.000 órdenes/mes</b> en 5 nichos distintos, más 2 prospectos que evaluaron Dropi y no adoptaron. Todas las citas van <b>generalizadas</b>: ningún nombre de marca ni caso puntual, porque el producto se diseña para todo el segmento, no para un usuario. <b>Vacío conocido:</b> falta la cohorte de churn total (marcas que se fueron del todo). La data manda; las entrevistas refuerzan o matizan.
+    <p style="margin:8px 0 0;font-size:12.5px;"><b>Hallazgo transversal que cruza los 5 niveles</b> <span class="tag hip">Hipótesis</span>: preguntadas por qué siguen en Dropi, <b>ninguna respondió "porque entregan mejor"</b>. Lo que retiene es la <b>huella del comprador</b> (saber a quién se le vende antes de despachar contraentrega), la <b>velocidad del recaudo</b> (retiro diario sin prepagar flete) y las <b>integraciones</b>. Y <b>nadie —de ningún tamaño— nombró el precio del flete como problema</b>; la frase que se repite es "no me interesa un flete barato, me interesa un pedido entregado". El job de fondo, común a todos: <b>poder salvar la venta</b> — saber a quién le vendo, intervenir cuando la entrega falla y cobrar al día siguiente.</p>
+  </div>
+  <div class="callout"><b>Cómo leer las tarjetas de KPI (idénticas en los 5 niveles):</b>
+    <ul style="margin:6px 0 0;">
+      <li><b>Órdenes manuales / integración activa / pago anticipado / devolución / novedad</b> — % del volumen del nivel (tasas <em>pooled</em>: suma sobre suma).</li>
+      <li><b>Pasó por riesgo/perdido</b> — % de las marcas del nivel que estuvieron en estado "En riesgo" o "Perdido" al menos un mes en los últimos 12.</li>
+      <li><b>TTV mediana</b> — días desde el registro hasta la primera orden entregada con flujo completo (activación neta), mediana de las marcas del nivel.</li>
+      <li><b>Los 3 chips en violeta</b> (ingreso Dropi por marca · ingreso Dropi total del nivel · ganancia de la marca por orden) aparecen <b>solo en el bloque de Lente 1</b>, porque <code>ltv_marcas_usuario</code> únicamente trae marcas del portafolio comercial. <b>"Ingreso Dropi por marca / mes (mediana)"</b> = lo que <b>Dropi</b> factura (no la marca) en un mes típico <b>por UNA sola marca</b> del nivel — ej.: la marca mediana de Iniciando le deja a Dropi <b>$52.000/mes</b>; la de Creciendo, <b>$422.000/mes</b>. El chip de al lado da la <b>suma de todas</b> las marcas del nivel.</li>
+    </ul>
+  </div>
+
+  <!-- INICIANDO -->
+  <div class="lvl-card">
+    <h3>1 · Iniciando <span class="rango">· 1–50 propias/mes</span></h3>
+    <p class="kpi-lens l2">Lente 2 · Ecosistema — 2.304 marcas activas (72%) · 30.247 órd propias/mes · 6,5% del NSM · 5,0% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>76%</b>órdenes manuales</span>
+      <span class="kpi"><b>10%</b>integración activa</span>
+      <span class="kpi"><b>22%</b>pago anticipado</span>
+      <span class="kpi"><b>15,9%</b>devolución</span>
+      <span class="kpi"><b>8,3%</b>novedad</span>
+      <span class="kpi"><b>61%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>37 d</b>TTV mediana (días a 1ª entrega)</span>
+    </div>
+    <p class="kpi-lens l1">Lente 1 · Portafolio comercial — 1.287 marcas activas (71%) · 18.476 órd propias/mes · 6,5% del NSM L1 · 3,1% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>77%</b>órdenes manuales</span>
+      <span class="kpi"><b>11%</b>integración activa</span>
+      <span class="kpi"><b>23%</b>pago anticipado</span>
+      <span class="kpi"><b>15,8%</b>devolución</span>
+      <span class="kpi"><b>6,8%</b>novedad</span>
+      <span class="kpi"><b>62%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>39 d</b>TTV mediana (días a 1ª entrega)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$52.000</b>ingreso Dropi por marca/mes (mediana)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$201 M/mes</b>ingreso Dropi total del nivel</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$63 k</b>ganancia de la marca por orden (mediana)</span>
+    </div>
+    <p class="foot">Chips en violeta = solo Lente 1 (<code>ltv_marcas_usuario</code> solo cubre el portafolio comercial; 1.278 marcas con dato). "Ingreso Dropi" = lo que factura Dropi, no la marca.</p>
+
+    <h4>Arquetipo</h4>
+    <p><span class="tag hip">Hipótesis</span> No es "una marca que empieza": la antigüedad mediana es 19 meses. Es una marca <b>intermitente</b> — vende poco, algunos meses no vende, opera casi todo a mano y todavía no confía la operación a Dropi. Aquí conviven dos poblaciones: (a) marcas que nunca despegaron y (b) marcas que estuvieron más arriba y colapsaron (60% viene cayendo). Necesita: primeros casos de éxito repetibles, previsibilidad de que el pedido llega, y una razón para volver el mes que no vendió.</p>
+    <p><b>Lo que dicen las entrevistas</b> <span class="tag hip">Hipótesis</span>: el gancho de "flujo de caja / que me paguen rápido" <b>solo pesa de verdad en el segmento novato</b> — las marcas que ya tienen caja lo declaran irrelevante. En este nivel la primera mala experiencia logística no se amortigua con hábito: una devolución con reclamo o una novedad sin resolver en la primera semana es motivo suficiente para apagarse. La marca chica ya filtra a mano qué pedido despacha y cuál no, porque no se puede dar el lujo de perder ninguno.</p>
+
+    <h4>Buyer Persona</h4>
+    <p><b>Quién decide:</b> la dueña, sola. Es operación, ventas, empaque y servicio al cliente a la vez. <b>Qué busca:</b> vender esta semana y que le paguen el recaudo rápido. <b>Qué le preocupa:</b> perder plata en una devolución, que un cliente la exponga por un pedido perdido, que Dropi "le cobre" algo que no entiende. <b>Cómo decide:</b> por urgencia y por boca a boca — <span class="tag dato">Dato</span> ninguna marca entrevistada reportó haber activado con Academy o soporte oficial; todas mencionaron a un contacto externo.</p>
+
+    <h4>JTBD</h4>
+    <p><em>"Cuando tengo pocos pedidos y no me puedo dar el lujo de perder ninguno, quiero comprobar —sin arriesgar mi plata y sin pelearme con un sistema nuevo— que con Dropi el pedido llega y el recaudo entra rápido, para decidir si le meto más."</em></p>
+
+    <h4>Señales de evolución o riesgo</h4>
+    <ul>
+      <li><b>Avanza:</b> encadena 2–3 meses seguidos con venta; sube de &lt;20 a &gt;40 propias/mes; conecta y <em>usa</em> una integración; TTV de la 2ª–3ª orden cae por debajo de 15 días.</li>
+      <li><b>Se estanca:</b> vende 5–15 órdenes cada mes durante 6 meses sin variar; integración conectada sin uso.</li>
+      <li><b>Retrocede:</b> un mes en 0 tras venir vendiendo; primera novedad sin resolver en &gt;7 días; primera devolución con reclamo. <span class="tag hip">Hipótesis</span>: la primera mala experiencia logística en este nivel pesa más que 10 buenas — no hay hábito que la amortigüe.</li>
+    </ul>
+
+    <h4>Oportunidades de producto</h4>
+    <ul>
+      <li><span class="tag op">Oportunidad</span> <b>Onboarding que llega hasta la 3ª orden entregada, no hasta la 1ª creada.</b> El hueco está entre activación bruta y neta: TTV mediana 37 días duplica al de cualquier otro nivel. Evidencia: patrón de consistencia 75% + 61% de paso por riesgo. (Conecta con el proyecto Onboarding guiado TTFO ya en curso.)</li>
+      <li><span class="tag op">Oportunidad</span> <b>Reactivación del mes en cero</b> — disparador cuando una marca con historial reciente pasa un mes sin crear órdenes, antes de que caiga a "Perdido".</li>
+      <li><span class="tag op">Oportunidad</span> <b>Certeza de recaudo visible</b> — dado que este nivel usa más pago anticipado (22%) y teme "que le cobren", mostrar de forma simple cuánto va a recibir y cuándo por cada pedido COD.</li>
+      <li><span class="tag hip">Hipótesis</span> <b>A validar antes de construir</b>: no separar todavía la integración — este nivel opera a mano por elección, no por falta de herramienta. Validar con test si el bloqueo es la herramienta o la carga cognitiva.</li>
+    </ul>
+  </div>
+
+  <!-- CRECIENDO -->
+  <div class="lvl-card">
+    <h3>2 · Creciendo <span class="rango">· 51–300 propias/mes</span></h3>
+    <p class="kpi-lens l2">Lente 2 · Ecosistema — 577 marcas activas (18%) · 78.957 órd propias/mes · 17,0% del NSM · 13,2% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>75%</b>órdenes manuales</span>
+      <span class="kpi"><b>28%</b>integración activa</span>
+      <span class="kpi"><b>15%</b>pago anticipado</span>
+      <span class="kpi"><b>15,1%</b>devolución</span>
+      <span class="kpi"><b>8,6%</b>novedad</span>
+      <span class="kpi"><b>20%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>22 d</b>TTV mediana (días a 1ª entrega)</span>
+    </div>
+    <p class="kpi-lens l1">Lente 1 · Portafolio comercial — 355 marcas activas (20%) · 47.858 órd propias/mes · 16,9% del NSM L1 · 8,0% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>80%</b>órdenes manuales</span>
+      <span class="kpi"><b>24%</b>integración activa</span>
+      <span class="kpi"><b>17%</b>pago anticipado</span>
+      <span class="kpi"><b>14,0%</b>devolución</span>
+      <span class="kpi"><b>7,4%</b>novedad</span>
+      <span class="kpi"><b>18%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>24 d</b>TTV mediana (días a 1ª entrega)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$422.000</b>ingreso Dropi por marca/mes (mediana)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$197 M/mes</b>ingreso Dropi total del nivel</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$71 k</b>ganancia de la marca por orden (mediana)</span>
+    </div>
+    <p class="foot">Chips en violeta = solo Lente 1 (<code>ltv_marcas_usuario</code> solo cubre el portafolio comercial; 355 marcas con dato). "Ingreso Dropi" = lo que factura Dropi, no la marca.</p>
+
+    <h4>Arquetipo</h4>
+    <p><span class="tag hip">Hipótesis</span> La marca que <b>ya tiene demanda pero todavía la sostiene con las manos</b>. Venta continua (consistencia 100%), abandono bajo (20%), pero 75% de las órdenes se crean manualmente y solo 28% opera con integración activa. Es el nivel donde la carga operativa empieza a competir con la venta. Necesita apoyo para <em>crecer</em>, no aún para escalar. El "muro" del segmento: 44% crece, 36% cae — el resto oscila.</p>
+    <p><b>Lo que dicen las entrevistas</b> <span class="tag hip">Hipótesis</span>: a este volumen la marca ya montó su <b>propio sistema de control paralelo</b> — revisar guías cada mañana directo en la web de la transportadora, una hoja de cálculo con semáforo por pedido, doble verificación de tracking — porque el panel de Dropi no le alcanza. Responder "¿dónde va mi pedido?" a mano por WhatsApp se lleva buena parte de la semana del equipo. Lo que pide no son más funcionalidades: es que la plataforma le <b>quite ese trabajo</b>, no que le agregue otro tablero.</p>
+
+    <h4>Buyer Persona</h4>
+    <p><b>Quién decide:</b> la dueña, empezando a apoyarse en 1 persona (un familiar, un asistente de empaque o de WhatsApp). <b>Qué busca:</b> quitarse tareas repetitivas para dedicar tiempo a conseguir más ventas. <b>Qué le preocupa:</b> que un error operativo (guía mal generada, stock desactualizado) le cueste pedidos; que crecer signifique trabajar el doble. <b>Cómo decide:</b> prueba herramientas si la fricción de adoptarlas es baja y el beneficio es inmediato; desconfía de procesos largos de configuración.</p>
+
+    <h4>JTBD</h4>
+    <p><em>"Cuando el volumen ya no me cabe en el día y me la paso apagando incendios operativos, quiero que la plataforma me quite el seguimiento y el control manuales, para dedicar mi tiempo a vender en vez de a operar lo que ya vendí."</em></p>
+
+    <h4>Señales de evolución o riesgo</h4>
+    <ul>
+      <li><b>Avanza:</b> conecta integración y la creación manual baja de 75% a &lt;50%; supera de forma sostenida 300 propias/mes; incorpora una 2ª persona al equipo.</li>
+      <li><b>Se estanca:</b> 6 meses entre 100–200 propias sin tendencia; sigue 90%+ manual; devolución subiendo sin que suba el volumen.</li>
+      <li><b>Retrocede:</b> aparece un mes en "En riesgo"; la tasa de novedad cruza el 12%; la dueña reporta que "no da abasto".</li>
+    </ul>
+
+    <h4>Oportunidades de producto</h4>
+    <ul>
+      <li><span class="tag op">Oportunidad</span> <b>Adopción asistida de integración en el momento de dolor</b> — este nivel tiene el mayor delta potencial (manual 75% → podría ir a ~40% como Consolidando). Evidencia: el salto de automatización entre Creciendo y Consolidando es el más grande de toda la escalera (28% → 51% integración activa).</li>
+      <li><span class="tag op">Oportunidad</span> <b>Panel "mis ventas" operativo</b> — con stock, guías del día y novedades abiertas en una vista, para la marca que aún no tiene sistema propio. (Conecta con el módulo Dashboard del proyecto Perfil Marca Independiente.)</li>
+      <li><span class="tag op">Oportunidad</span> <b>Creación masiva simple</b> — hoy solo 2–3% de las órdenes son masivas; es la palanca de productividad más directa para quien crea 100–300 guías a mano al mes.</li>
+    </ul>
+  </div>
+
+  <!-- CONSOLIDANDO -->
+  <div class="lvl-card">
+    <h3>3 · Consolidando <span class="rango">· 301–700 propias/mes</span></h3>
+    <p class="kpi-lens l2">Lente 2 · Ecosistema — 173 marcas activas (5,4%) · 76.053 órd propias/mes · 16,4% del NSM · 12,7% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>58%</b>órdenes manuales</span>
+      <span class="kpi"><b>51%</b>integración activa</span>
+      <span class="kpi"><b>10%</b>pago anticipado</span>
+      <span class="kpi"><b>17,8%</b>devolución</span>
+      <span class="kpi"><b>11,3%</b>novedad</span>
+      <span class="kpi"><b>12%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>20 d</b>TTV mediana (días a 1ª entrega)</span>
+    </div>
+    <p class="kpi-lens l1">Lente 1 · Portafolio comercial — 96 marcas activas (5,3%) · 41.927 órd propias/mes · 14,8% del NSM L1 · 7,0% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>62%</b>órdenes manuales</span>
+      <span class="kpi"><b>45%</b>integración activa</span>
+      <span class="kpi"><b>11%</b>pago anticipado</span>
+      <span class="kpi"><b>17,0%</b>devolución</span>
+      <span class="kpi"><b>9,5%</b>novedad</span>
+      <span class="kpi"><b>11%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>26 d</b>TTV mediana (días a 1ª entrega)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$1.331.000</b>ingreso Dropi por marca/mes (mediana)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$132 M/mes</b>ingreso Dropi total del nivel</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$54 k</b>ganancia de la marca por orden (mediana)</span>
+    </div>
+    <p class="foot">Chips en violeta = solo Lente 1 (<code>ltv_marcas_usuario</code> solo cubre el portafolio comercial; 96 marcas con dato). "Ingreso Dropi" = lo que factura Dropi, no la marca.</p>
+
+    <h4>Arquetipo</h4>
+    <p><span class="tag hip">Hipótesis</span> La marca que <b>cruzó el muro de las 300 y ahora pelea por no colapsar con su propio volumen</b>. Mitad automatizada, mitad manual. La fricción logística ya es material (devolución 17,8%, novedad 11,3%) y empieza a comerse el margen ($52 k/orden, primer nivel donde la ganancia unitaria baja). No busca crecer a toda costa — busca estabilidad operativa. Según la muestra PMF, es un <b>estado de tránsito</b>, no una identidad: pocas marcas "viven" aquí mucho tiempo, suben o bajan.</p>
+    <p><b>Lo que dicen las entrevistas</b> (el rango donde la evidencia cualitativa es más densa) <span class="tag hip">Hipótesis</span>: aquí la fricción logística deja de ser molestia y se vuelve <b>plata que se descuenta todos los meses</b>. La resolución de novedades llega al 4º o 5º día — cuando el cliente ya no quiere el pedido — y la brecha frente a la competencia (que responde en menos de 2 horas por WhatsApp) es lo que empieza a hacerlas evaluar irse. Otro dolor repetido: la transportadora marca "cliente ausente" sin haber ido, y la marca no tiene con qué disputarlo. No se van por precio: se van por no poder <b>resolver</b>.</p>
+
+    <h4>Buyer Persona</h4>
+    <p><b>Quién decide:</b> la dueña + un encargado de operación / logística. Ya hay división de roles. <b>Qué busca:</b> control — saber en tiempo real qué pedidos están en novedad, cuánto va a recaudar, qué transportadora le está fallando. <b>Qué le preocupa:</b> que las devoluciones y novedades escalen más rápido que las ventas; depender de una sola transportadora; que soporte no responda cuando algo grande se rompe. <b>Cómo decide:</b> evalúa alternativas y ya compara con otras plataformas por su resolución de novedades — este es el nivel donde empiezan las switch-interviews reales.</p>
+
+    <h4>JTBD</h4>
+    <p><em>"Cuando manejo cientos de pedidos al mes y cada novedad sin resolver es plata que pierdo, quiero saber a quién le vendo antes de despachar y poder intervenir de verdad cuando la entrega falla, para que la operación no se me coma el margen ni la venta."</em></p>
+
+    <h4>Señales de evolución o riesgo</h4>
+    <ul>
+      <li><b>Avanza:</b> sostiene &gt;700 propias 2 de 3 meses; integración activa &gt;60%; % de novedades resueltas sube; suma canales de venta.</li>
+      <li><b>Se estanca:</b> oscila 400–600 durante 6 meses; devolución estable pero alta; no adopta herramientas nuevas.</li>
+      <li><b>Retrocede:</b> devolución + novedad combinadas por encima de la mediana del nivel dos meses seguidos; cae por debajo de 300; menciones de "me estoy yendo a otra plataforma" en CSAT o al gestor.</li>
+    </ul>
+
+    <h4>Oportunidades de producto</h4>
+    <ul>
+      <li><span class="tag op">Oportunidad</span> <b>Centro de novedades accionable</b> — priorización, causa por transportadora, acción en lote. Evidencia: novedad 11,3% con solo 69% resuelto; CSAT sitúa "solución de novedades" como dolor #2 (21,9% entre baja satisfacción). (Conecta con el prototipo Centro de Novedades del proyecto PMF Brand.)</li>
+      <li><span class="tag op">Oportunidad</span> <b>Notificación automática al comprador tras el despacho</b> — 5 de 8–11 competidores ya lo hacen; el job "que mi cliente sepa qué pasa sin que yo lo persiga" aparece incluso en marcas satisfechas. (Ya definido en el tracker BAU competitivo.)</li>
+      <li><span class="tag op">Oportunidad</span> <b>Visibilidad de recaudo y conciliación</b> — con COD ya en 90% y volumen de cientos de órdenes, el flujo de caja depende de entender el recaudo; la transparencia de wallet y el retiro diario aparecen en las entrevistas como razón declarada de permanencia (y de regreso, tras probar competencia).</li>
+      <li><span class="tag hip">Hipótesis</span> <b>A validar</b>: la retención de este nivel se juega en logística/novedades, no en features de crecimiento. Confirmar con las switch-interviews pendientes antes de priorizar.</li>
+    </ul>
+  </div>
+
+  <!-- PRE-ESCALANDO -->
+  <div class="lvl-card">
+    <h3>4 · Pre-Escalando <span class="rango">· 701–1.000 propias/mes</span></h3>
+    <p class="kpi-lens l2">Lente 2 · Ecosistema — 40 marcas activas (1,3%) · 33.533 órd propias/mes · 7,2% del NSM · 5,6% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>45%</b>órdenes manuales</span>
+      <span class="kpi"><b>68%</b>integración activa</span>
+      <span class="kpi"><b>11%</b>pago anticipado</span>
+      <span class="kpi"><b>18,5%</b>devolución</span>
+      <span class="kpi"><b>11,3%</b>novedad</span>
+      <span class="kpi"><b>18%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>24 d</b>TTV mediana (días a 1ª entrega)</span>
+    </div>
+    <p class="kpi-lens l1">Lente 1 · Portafolio comercial — 18 marcas activas (1,0%) · 15.509 órd propias/mes · 5,5% del NSM L1 · 2,6% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>56%</b>órdenes manuales</span>
+      <span class="kpi"><b>50%</b>integración activa</span>
+      <span class="kpi"><b>22%</b>pago anticipado</span>
+      <span class="kpi"><b>13,5%</b>devolución</span>
+      <span class="kpi"><b>6,5%</b>novedad</span>
+      <span class="kpi"><b>17%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>33 d</b>TTV mediana (días a 1ª entrega)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$2.270.000</b>ingreso Dropi por marca/mes (mediana)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$47 M/mes</b>ingreso Dropi total del nivel</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$62 k</b>ganancia de la marca por orden (mediana)</span>
+    </div>
+    <p class="foot">Chips en violeta = solo Lente 1 (<code>ltv_marcas_usuario</code> solo cubre el portafolio comercial; 18 marcas con dato). "Ingreso Dropi" = lo que factura Dropi, no la marca.</p>
+    <div class="callout warn">Nivel más pequeño y ruidoso: 40 marcas en Lente 2, <b>solo 18 en Lente 1</b>. Es un umbral de paso, no una población estable. Donde los dos lentes divergen (devolución 18,5% vs 13,5%, integración activa 68% vs 50%) es por tamaño de muestra, no por comportamiento distinto — leer con cautela.</div>
+
+    <h4>Arquetipo</h4>
+    <p><span class="tag hip">Hipótesis</span> La marca <b>a punto de volverse operación seria</b>: casi mil pedidos al mes, 68% con integración activa, pero todavía en 1 bodega y con 45% de creación manual — la infraestructura no terminó de alcanzar al volumen. Lo que necesita ya no es acompañamiento, es <b>confiabilidad</b>: que el sistema no se caiga, que las guías salgan bien, que el recaudo cuadre. La devolución (18,5%) sobre este volumen es plata real todos los meses.</p>
+    <p><b>Lo que dicen las entrevistas</b> <span class="tag hip">Hipótesis</span>: a este volumen un fallo del sistema —el peso del producto que no se transmite a la guía, órdenes que se duplican— se traduce en <b>un mes de ventas perdido</b>, y la marca ya no acepta un soporte que responde en días. Varias operan <b>sin gestor comercial asignado</b>, sostenidas por comunidades que cobran comisión sobre el flete sin dar servicio real. El pedido explícito y repetido: un <b>responsable con nombre</b> que resuelva las novedades, no un canal centralizado que solo redirige.</p>
+
+    <h4>Buyer Persona</h4>
+    <p><b>Quién decide:</b> dueño/a + equipo de operación (2–4 personas), a veces un socio. Empiezan las conversaciones con el gestor comercial (Carol / Vanessa / Mayra). <b>Qué busca:</b> robustez y datos — reporting de devoluciones por causa, SLAs, previsibilidad de recaudo. <b>Qué le preocupa:</b> un fallo técnico que le tumbe las órdenes de un mes; quedar amarrado a Dropi por las integraciones sin tener alternativa. <b>Cómo decide:</b> racionalmente, con números; negocia condiciones.</p>
+
+    <h4>JTBD</h4>
+    <p><em>"Cuando mi operación ya depende de que Dropi funcione todos los días, quiero un responsable identificable que me resuelva las novedades y un sistema que no se caiga, para poder crecer sin que un fallo o una novedad sin dueño me borre un mes."</em></p>
+
+    <h4>Señales de evolución o riesgo</h4>
+    <ul>
+      <li><b>Avanza:</b> cruza 1.000 propias 2 de 3 meses; abre 2ª bodega; creación manual &lt;30%; inicia conversación de API / condiciones.</li>
+      <li><b>Se estanca:</b> se mantiene 700–950 varios meses; sigue en 1 bodega con 45%+ manual; no adopta reporting.</li>
+      <li><b>Retrocede:</b> un incidente técnico sin resolución rápida; caída &gt;20% mes a mes; el gestor reporta insatisfacción con soporte de nivel enterprise.</li>
+    </ul>
+
+    <h4>Oportunidades de producto</h4>
+    <ul>
+      <li><span class="tag op">Oportunidad</span> <b>Reporting de devoluciones y novedades por causa / transportadora / zona</b> — para gestionar 150–200 devoluciones/mes hace falta agregación, no lista.</li>
+      <li><span class="tag op">Oportunidad</span> <b>Robustez y estado del sistema visibles</b> — dado el peso del riesgo "un bug me borra el mes", SLA de guías, alertas proactivas de fallos, y canal de soporte diferenciado por volumen.</li>
+      <li><span class="tag op">Oportunidad</span> <b>Multi-bodega y reglas de asignación</b> — hoy operan desde 1 bodega; el salto a Escalando coincide con multi-bodega. Preparar esa transición.</li>
+      <li><span class="tag hip">Hipótesis</span> este nivel + Escalando son "el núcleo" (67 marcas L1, 62% del NSM). El experimento de Retención Proactiva ya corre aquí — usarlo como vehículo, no crear iniciativa nueva.</li>
+    </ul>
+  </div>
+
+  <!-- ESCALANDO -->
+  <div class="lvl-card">
+    <h3>5 · Escalando <span class="rango">· 1.001+ propias/mes</span></h3>
+    <p class="kpi-lens l2">Lente 2 · Ecosistema — 89 marcas activas (2,8%) · 244.789 órd propias/mes · 52,8% del NSM · 40,8% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>31%</b>órdenes manuales</span>
+      <span class="kpi"><b>70%</b>integración activa</span>
+      <span class="kpi"><b>9%</b>pago anticipado</span>
+      <span class="kpi"><b>21,8%</b>devolución</span>
+      <span class="kpi"><b>13,8%</b>novedad</span>
+      <span class="kpi"><b>9%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>21 d</b>TTV mediana (días a 1ª entrega)</span>
+    </div>
+    <p class="kpi-lens l1">Lente 1 · Portafolio comercial — 49 marcas activas (2,7%) · 159.626 órd propias/mes · 56,3% del NSM L1 · 26,6% de la meta 600k</p>
+    <div class="kpi-strip">
+      <span class="kpi"><b>30%</b>órdenes manuales</span>
+      <span class="kpi"><b>71%</b>integración activa</span>
+      <span class="kpi"><b>9%</b>pago anticipado</span>
+      <span class="kpi"><b>21,6%</b>devolución</span>
+      <span class="kpi"><b>13,5%</b>novedad</span>
+      <span class="kpi"><b>8%</b>pasó por riesgo/perdido (12m)</span>
+      <span class="kpi"><b>26 d</b>TTV mediana (días a 1ª entrega)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$4.476.000</b>ingreso Dropi por marca/mes (mediana)</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$316 M/mes</b>ingreso Dropi total del nivel</span>
+      <span class="kpi" style="border-color:var(--series-violet);"><b>$30 k</b>ganancia de la marca por orden (mediana)</span>
+    </div>
+    <p class="foot">Chips en violeta = solo Lente 1 (<code>ltv_marcas_usuario</code> solo cubre el portafolio comercial; 49 marcas con dato). "Ingreso Dropi" = lo que factura Dropi, no la marca.</p>
+
+    <h4>Arquetipo</h4>
+    <p><span class="tag hip">Hipótesis</span> <b>Empresa, no emprendimiento.</b> Promedio 2.750 propias/mes (3.258 en L1), 64% por integración, multi-bodega real (15,4 en promedio; 25,9 en L1), 63% usa Chatea, vida activa mediana 23 meses. Es la más rentable para Dropi ($4,48 M/mes) y la que menos abandona (9%), pero también la de peor logística unitaria (entrega 78%, devolución 21,8%, novedad 13,8%) y menor margen por orden ($29 k). Su relación con Dropi es de <b>infraestructura crítica</b> — y por eso cada fricción pesa, aunque casi ninguna se vaya.</p>
+    <p><b>Lo que dicen las entrevistas</b> <span class="tag hip">Hipótesis</span>: a esta escala lo que amarra a la marca <b>no es la logística</b> — es la huella del comprador, la velocidad del recaudo, las integraciones y la red. Preguntadas qué perderían si Dropi desapareciera, ninguna nombró la entrega. Varias ya tienen la operación <b>partida con otra plataforma</b> y resuelven su ciudad principal con mensajería propia, porque el último kilómetro con relación humana es lo primero que se llevan cuando pueden. Y aparece una demanda que hoy Dropi no nombra: que además de operar, le <b>ayuden a vender más</b> ("no trabajo, pero pago").</p>
+
+    <h4>Buyer Persona</h4>
+    <p><b>Quién decide:</b> comité — dueño/a o CEO, jefe de operaciones/logística, a veces finanzas o tecnología. Interlocutor comercial dedicado (Mayra, alto volumen). <b>Qué busca:</b> acuerdos — API robusta, integraciones empresariales, tarifas negociadas, SLAs contractuales, un punto de contacto que responda. <b>Qué le preocupa:</b> concentración de riesgo en un solo operador logístico; que la tasa de devolución/novedad erosione un margen ya delgado; que el logo de Dropi en la guía se lea como señal de estafa y golpee su reputación. <b>Cómo decide:</b> proceso formal, con datos y por trade-offs medidos — el costo de cambiar es alto (anclado por integraciones) pero no infinito.</p>
+
+    <h4>JTBD</h4>
+    <p><em>"Cuando Dropi es la columna vertebral de mi empresa, quiero un responsable que conteste, integración que no falle y —cada vez más— apoyo para vender, para operar a escala con margen predecible sin que una novedad mal gestionada me cueste un cliente."</em></p>
+
+    <h4>Señales de evolución o riesgo</h4>
+    <ul>
+      <li><b>Avanza (expansión):</b> crece &gt;15% sostenido; abre bodegas / ciudades; sube % vía API; adopta nuevos módulos.</li>
+      <li><b>Se estanca:</b> volumen plano varios meses con devolución subiendo; no adopta nada nuevo; contacto solo reactivo.</li>
+      <li><b>Retrocede (alto impacto):</b> caída sostenida de propias; tasa de devolución +3 pp trimestre; el interlocutor menciona diversificar operador. <span class="tag dato">Dato</span> perder 1 Escalando (≈2.750–3.258 propias/mes) ≈ perder ~150–200 activaciones nuevas tipo Iniciando.</li>
+    </ul>
+
+    <h4>Oportunidades de producto</h4>
+    <ul>
+      <li><span class="tag op">Oportunidad</span> <b>Capa enterprise:</b> API documentada y con soporte, webhooks, gestión de múltiples bodegas y reglas de ruteo, panel de SLA. Base instalada lista: 80% ya usa integración e-commerce en L1.</li>
+      <li><span class="tag op">Oportunidad</span> <b>Programa de fiabilidad logística sobre la base leal</b> — el ángulo no es "que no se vayan" (abandono 9%), es sostener la experiencia: reducir devolución/novedad unitaria, dar herramientas de mitigación (validación de dirección, gestión proactiva de novedad). Es donde se erosiona su margen y su paciencia.</li>
+      <li><span class="tag op">Oportunidad</span> <b>Reporting financiero / conciliación de recaudo a nivel empresa</b> — con COD al 91% y millones en recaudo mensual, la tesorería de la marca depende de esto.</li>
+      <li><span class="tag hip">Hipótesis</span> <b>A validar</b>: la amenaza real no es churn total sino <em>diversificación</em> (mandar parte del volumen a otro operador). No se ve en <code>fact_marcas</code> —solo mide lo que pasa dentro de Dropi—; requiere switch-interviews y señal comercial.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ CIERRE ============ -->
+<section>
+  <h2>Preguntas abiertas para el Cell Board</h2>
+  <ul>
+    <li>El núcleo Pre-Escalando + Escalando (67 marcas L1) sostiene el 62% del NSM y tiene la peor logística unitaria. ¿La apuesta del trimestre es <b>proteger fiabilidad del núcleo</b> o <b>engrosar Consolidando</b> (173 marcas, muro de las 300)? Los datos no deciden esto — es una decisión de estrategia.</li>
+    <li>Iniciando es 72% de las marcas y 6,5% del volumen, con 61% de fragilidad. ¿Vale product effort, o es un problema de acompañamiento comercial / Academy?</li>
+    <li>La ganancia de la marca por orden cae al escalar ($63 k → $29 k). ¿Es un artefacto de la columna <code>ganancia_total_mes</code> o una señal real de que Dropi ayuda a crecer volumen a costa de margen? Hay que pedirle a Data una métrica de margen limpia antes de construir sobre esto.</li>
+    <li>¿Confirmamos la ventana de clasificación en <b>meses cerrados</b> (may–jul hoy) como estándar, y recalculamos el núcleo cada corte? La cifra "68" de Kate (20-ago) vs. 67 (este corte) vs. 64 (jun–ago) viene de la ventana, no de un cambio real.</li>
+  </ul>
+  <p class="foot">Fuentes: <code>Data 31-08-2026/</code> — <code>fact_marcas.csv</code> (278 k filas), <code>dim_marcas.csv</code> (9.466 marcas), <code>ltv_marcas_usuario.csv</code> (4.160), <code>fact_integraciones_mensual.csv</code>. Respaldo cualitativo secundario: ~10 entrevistas jun–jul 2026 (8 a marcas activas de ~100 a &gt;5.000 órd/mes + 2 a prospectos que no adoptaron; carpeta <code>agente-delivery/Documentos/Entrevistas/</code> e informe PMF), CSAT 16-jul-2026 (716 respuestas), tracker BAU competitivo, jtbd-marcas-26ago2026. Falta cohorte de churn total. Regla de madurez: CLAUDE.md act. 2026-08-06. Elaborado 1-sep-2026.</p>
+</section>
+
+</div></div>
