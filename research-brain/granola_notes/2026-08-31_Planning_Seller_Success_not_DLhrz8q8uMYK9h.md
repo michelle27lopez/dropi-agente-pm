@@ -1,0 +1,566 @@
+# Planning Seller Success
+
+- **ID:** `not_DLhrz8q8uMYK9h`
+- **Fecha:** 2026-08-31T15:29:51.952Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/9a918e24-90c8-43a6-8881-16ea9d31103d)
+- **Asistentes:** Santiago Herrera Acosta, Laura Torres, Alejandra Melo, Diana Margarita Aldana Echeverry, Laura Contreras, Catherin Salazar
+
+---
+
+## Resumen de la Reunión
+# Foco de la Semana: Expo Winners
+
+- Sprint 100% enfocado en expo y webinars
+- Dependencias de desarrollo pausadas (Dropify/Shopify, tienda nube) para este sprint
+- Fase 2 del proyecto Expo Winners en curso: estructura (Aleja) + diseño de flujos
+
+# Avances y Decisiones del Experimento Gali
+
+- Catálogo ampliado de 25 a 200 productos (mínimo esperado: 100)
+  - Productos seleccionados por suppliers: los más vendidos y aptos para primera venta
+  - Se descartó MCP por fallas y complejidad para usuarios novatos
+- Tienda nativa de Dropi para dropshippers nuevos en desarrollo (Santiago)
+  - Hipótesis: puerta de entrada fácil, con migración orgánica posterior a Shopify
+  - Hipótesis adicional: solicitud de muestra antes de vender, para medir confianza del usuario
+- Sesión con Roacks hoy para explorar fondos como créditos para pauta
+  - Alinear con comercial para no pisar premios/beneficios de la ruta winner
+- Anuncios en el flujo: riesgo si no coinciden con el catálogo cerrado de 200 productos
+  - Si el producto no se encuentra, evaluar si dejarlo fuera del flujo o incluirlo en otro punto
+- Métricas de éxito definidas: flujo completado en menos de 15 min = éxito; más de 20 min = fracaso (churn cognitivo)
+- Documento de métricas e hipótesis listo para compartir en Confluence y recibir feedback
+- Reunión hoy en la tarde (Santiago + Aleja) para revisar preguntas a usuarios al final del flujo
+  - Foco en bifurcaciones clave: por qué eligen Shopify sobre Dropi, por qué rechazan pauta con créditos
+
+# Alineación de Equipo y Próximos Pasos
+
+- Dirección estratégica de Laura Contreras: el copiloto de IA debe alinearse con la visión de Dropi como producto logístico que la gente disfruta usar
+  - Experiencias simples, valor percibido de forma intuitiva
+  - Aplica no solo a Expo Winners sino a todo lo que se desarrolle y escale
+- Métricas de esfuerzo (UX): Aleja debe definir métricas de interacción ligadas a job-to-be-done
+  - Relacionadas con activación, adopción, retención y satisfacción
+  - Diana compartirá infografía sobre cómo medir NPS correctamente
+- Sesión del jueves: alineación de perfiles de dropshipper entre todas las áreas
+  - Diana escribirá al grupo para confirmar asistencia y cómo cada área denomina a los dropshippers
+  - Santiago y Aleja deben interiorizar los niveles y características del dropshipper antes de la sesión
+- Registro de esfuerzo en la herramienta: consenso en ser sinceros con los días reales trabajados
+
+# Próximos Pasos
+
+- **Compartir documento de métricas e hipótesis en Confluence** (Santiago)
+
+  Recibir feedback del equipo sobre lo ya definido y sumar los eventos de interacción.
+- **Alinear con Roacks los créditos para pauta y evitar pisarse con premios comerciales** (Santiago)
+
+  Sesión agendada para hoy; dejar clara la distinción entre beneficio de prueba y premio de ruta winner.
+- **Solicitar lista de productos top por temporada (amor y amistad) a Jaime** (Santiago)
+
+  Tenerlo en cuenta al pedir el catálogo de 200 productos a suppliers.
+- **Definir métricas de esfuerzo e interacción para el experimento** (Alejandra)
+
+  Ligadas a job-to-be-done y alineadas con las métricas de éxito ya definidas.
+- **Confirmar asistencia a sesión del jueves sobre perfiles de dropshipper** (Diana)
+
+  Escribir al grupo para alinear cómo cada área denomina a los dropshippers antes de la sesión.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/8b7e5ea4-de51-4b35-b0e2-f5b72a972f2b](https://notes.granola.ai/t/8b7e5ea4-de51-4b35-b0e2-f5b72a972f2b)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[15:30] Yo:** A ver,
+- **[15:30] Yo:** I look at you.
+- **[15:30] Catherin Salazar:** Hola, Santi, buenos días. ¿Cómo vas?
+- **[15:30] Yo:** Un minuto.
+- **[15:30] Laura Catherine Torres Ciendua:** Hello.
+- **[15:30] Yo:** Hello?
+- **[15:30] Catherin Salazar:** Hola, hola, ¿cómo van?
+- **[15:30] Yo:** Todo muy bien, gracias, ¿tú?
+- **[15:31] Diana Aldana:** Hola, buenos días.
+- **[15:31] Yo:** Hola, Denis, ¿cómo estás?
+- **[15:31] Diana Aldana:** Bien, bien.
+- **[15:31] Catherin Salazar:** Hola, buenos días.
+- **[15:32] Laura Catherine Torres Ciendua:** No funciona.
+- **[15:32] Laura Catherine Torres Ciendua:** Gedaan.
+- **[15:33] Yo:** Hello?
+- **[15:33] Yo:** Awesome.
+- **[15:33] Laura Contreras:** No one?
+- **[15:33] Laura Contreras:** Ese es el ese es el plan con más cámaras prendidas que hay.
+- **[15:33] Yo:** Come on?
+- **[15:33] Laura Contreras:** Ese es el
+- **[15:33] Laura Contreras:** el planning son más cámaras prendidas de todos.
+- **[15:33] Laura Contreras:** ¿Cierto, Lau?
+- **[15:33] Laura Contreras:** Me hizo que la voz
+- **[15:33] Diana Aldana:** se levantó con
+- **[15:33] Laura Contreras:** ganas de tener su cámara.
+- **[15:33] Diana Aldana:** Así, bueno, yo también prendo, entonces.
+- **[15:33] Laura Catherine Torres Ciendua:** ¿Por qué nunca la prendo?
+- **[15:33] Laura Contreras:** Ay, sí me encanta, ¿verdad?, la charalá.
+- **[15:33] Laura Contreras:** Esa interacción, ¿no?, cuando haciendo la cara, todo.
+- **[15:34] Diana Aldana:** Yo soy
+- **[15:34] Laura Contreras:** muy
+- **[15:34] Diana Aldana:** Buena, me dice, bueno,
+- **[15:34] Laura Contreras:** se alejas, Santi.
+- **[15:34] Yo:** Yo igual estoy ahora con ella.
+- **[15:34] Laura Contreras:** Día de
+- **[15:34] Yo:** Con ella planning,
+- **[15:34] Laura Contreras:** esa es la marzo.
+- **[15:34] Yo:** no sé
+- **[15:34] Diana Aldana:** Por eso no aprendo cámara a veces, porque hago muchas caras mientras hablo. No entiendo.
+- **[15:34] Laura Contreras:** Pero que Diana no prenda la cámara, que no se está haciendo mala cara, ya
+- **[15:34] Diana Aldana:** saben.
+- **[15:34] Yo:** Yo también hago que era muy fundable, la otra antes.
+- **[15:34] Laura Contreras:** Yo también digo
+- **[15:34] Diana Aldana:** todo con
+- **[15:34] Laura Contreras:** la cara, pero, oiga,
+- **[15:34] Laura Contreras:** también es importante.
+- **[15:34] Laura Catherine Torres Ciendua:** Listo, ¿qué cree que para expo winners?
+- **[15:34] Yo:** ¿Cómo, cómo era?
+- **[15:34] Laura Catherine Torres Ciendua:** ¿Cómo el
+- **[15:34] Laura Contreras:** sábado? ¿Señora?
+- **[15:34] Laura Catherine Torres Ciendua:** Cuando llegan ustedes a Expo Winners, ¿El mismo sábado?
+- **[15:34] Yo:** Sí, la gente arriesgada, pero, bueno.
+- **[15:34] Laura Contreras:** Dinero.
+- **[15:34] Yo:** Yo llego desde el jueves,
+- **[15:34] Yo:** el jueves en la noche,
+- **[15:34] Laura Contreras:** Santi compró como una semana antes.
+- **[15:34] Yo:** el jueves en la noche y me vuelvo el lunes en la noche.
+- **[15:34] Laura Catherine Torres Ciendua:** Ah, bueno, bien.
+- **[15:35] Yo:** Porque ya suficientes traumas
+- **[15:35] Yo:** como para volver a hacer eso.
+- **[15:35] Diana Aldana:** No. Y eso
+- **[15:35] Yo:** No me volvió a pasar.
+- **[15:35] Yo:** ¿Eso eso de llegar?
+- **[15:35] Diana Aldana:** I
+- **[15:35] Laura Catherine Torres Ciendua:** Y tú
+- **[15:35] Laura Contreras:** la voy.
+- **[15:35] Yo:** Día, irse el mismo día, no, no, no, gracias.
+- **[15:35] Laura Catherine Torres Ciendua:** Sí, es el
+- **[15:35] Laura Contreras:** sábado, ocho am.
+- **[15:35] Laura Catherine Torres Ciendua:** No, Marcy.
+- **[15:35] Diana Aldana:** Llegando a las nueve del aeropuerto, llegando por el
+- **[15:35] Diana Aldana:** las diez y media con los trancones del
+- **[15:35] Laura Catherine Torres Ciendua:** sábado? No, porque del aeropuerto a crufería
+- **[15:35] Diana Aldana:** son
+- **[15:35] Laura Catherine Torres Ciendua:** veinte minutos
+- **[15:35] Laura Catherine Torres Ciendua:** veinticinco minutos.
+- **[15:35] Diana Aldana:** Nada.
+- **[15:35] Diana Aldana:** Por
+- **[15:35] Laura Contreras:** ahí que sean positivos.
+- **[15:35] Diana Aldana:** Mentira. Es
+- **[15:35] Laura Contreras:** tan densa.
+- **[15:35] Diana Aldana:** Increíble. De bueno.
+- **[15:35] Yo:** Bueno.
+- **[15:35] Laura Contreras:** Es que les va a ir, tú vas a
+- **[15:35] Diana Aldana:** ir, ¿no?
+- **[15:35] Diana Aldana:** Va a ir, nos va a ir, nos va ir
+- **[15:35] Laura Contreras:** increíble. Ah, yo como que ¿Cómo es que?
+- **[15:35] Diana Aldana:** Pues mi mi parte mi parte de Virgo, que es muy analítica y
+- **[15:36] Laura Contreras:** Alejandra, ¿cómo estás? Buenos días.
+- **[15:36] Laura Contreras:** Hola,
+- **[15:36] Alejandra Melo:** buenos días,
+- **[15:36] Laura Contreras:** bien,
+- **[15:36] Alejandra Melo:** bien. Yo no voy a ir, entonces,
+- **[15:36] Laura Contreras:** queca ya.
+- **[15:36] Laura Contreras:** Te va a
+- **[15:36] Laura Catherine Torres Ciendua:** ir? Te va a venir?
+- **[15:36] Laura Contreras:** No creo.
+- **[15:36] Laura Contreras:** No, Bricky estás tú, Lau.
+- **[15:36] Laura Catherine Torres Ciendua:** Está bien. O
+- **[15:36] Laura Contreras:** sea, tú eres la dupla de Katy.
+- **[15:36] Laura Contreras:** Ah, listo, listo.
+- **[15:36] Laura Contreras:** Bueno.
+- **[15:36] Yo:** Bueno.
+- **[15:36] Alejandra Melo:** Hace
+- **[15:36] Yo:** Bueno, entonces, ya ahí compartiendo ¿cierto? Sí.
+- **[15:36] Laura Contreras:** mil
+- **[15:36] Alejandra Melo:** Sí.
+- **[15:36] Alejandra Melo:** Sí.
+- **[15:36] Yo:** Listo para esta semana, cien por ciento foco en expo webinars. Teníamos
+- **[15:36] Yo:** cositas que
+- **[15:36] Yo:** no no atenderíamos como, bueno,
+- **[15:36] Yo:** igual hay dependencia de desarrollo,
+- **[15:36] Yo:** para
+- **[15:36] Yo:** continuar con con las pruebas de de
+- **[15:36] Yo:** de dropify para Shopify para tienda nueve, hacer el hang off. Entonces, eso nos incluye en este
+- **[15:37] Yo:** en este sprint.
+- **[15:37] Yo:** Para esto, entonces, tenemos la fase dos,
+- **[15:37] Yo:** tanto de la estructura del proyecto de expo winners por el lado de Aleja,
+- **[15:37] Yo:** y el diseño, esta organización ya hace referencia
+- **[15:37] Yo:** Nosotros construimos un
+- **[15:37] Yo:** ya un documento, pero les comparto, no sé,
+- **[15:37] Yo:** sé dónde lo dejó Darwin, apenas le lo lo monté.
+- **[15:37] Yo:** Sobre las métricas,
+- **[15:37] Yo:** sobre las métricas de éxito que vamos a tener. Entonces,
+- **[15:37] Yo:** con eso, junto con ellas, estamos ya diseñando
+- **[15:37] Yo:** los flujos,
+- **[15:37] Yo:** Bueno, Aleja es de la parte claramente más de usabilidad,
+- **[15:37] Yo:** Como ya el el el el alcance se amplió a que nosotros
+- **[15:37] Yo:** podamos entregar una herramienta que realmente logre vender,
+- **[15:37] Yo:** Vamos a
+- **[15:37] Yo:** vamos a tener una tienda nativa de dropping,
+- **[15:37] Yo:** Entonces, esa parte de la tienda nativa la estoy adelantando yo.
+- **[15:37] Yo:** La idea es para esta semana ya, por lo menos, tener la integración entre Gali, fue el que se entregó ya hace dos semanas, el que estaba trabajando a Lehanna,
+- **[15:38] Yo:** y esa tienda esa tienda de de ecommerce para los nuevos dropshippers.
+- **[15:38] Yo:** Ya están montados las la estrategia.
+- **[15:38] Yo:** En el sentido de de métricas de cómo se evaluar cuando
+- **[15:38] Yo:** cuáles son los criterios de de éxito, cuáles son las hipótesis. Aquí les mando como el documento ya para que lo puedan leer.
+- **[15:38] Yo:** Adicional, bueno, está de lo que nos entregaron la semana anterior, tipo de marketing,
+- **[15:38] Yo:** sobre el tema de los los los visuales, y es que esta semana le haya que pueda implementarlos también en
+- **[15:38] Yo:** flujo de Galley.
+- **[15:38] Yo:** Y y, pues, de mi lado también integrarlos en la parte del
+- **[15:38] Yo:** la tienda.
+- **[15:38] Yo:** Adicional, esta semana tenemos, dentro de eso está dentro de reuniones, está una una sesión con Roacks,
+- **[15:38] Yo:** para
+- **[15:38] Yo:** para ver si nos entregan algunos fondos
+- **[15:38] Yo:** para ofrecer como créditos a los dropshippers y que puedan de una vez así así como
+- **[15:38] Yo:** colocan el producto en en el ecommerce,
+- **[15:38] Yo:** de una vez comenzarlo a pautar.
+- **[15:38] Yo:** Y con eso vamos a tener ahí ahí ahí incluido
+- **[15:38] Yo:** unas métricas para saber cuáles son las
+- **[15:39] Yo:** los principales motivantes o fricciones que puede tener un dropshipper que apenas está iniciando.
+- **[15:39] Yo:** Un huérfano que no sabe de ecommerce,
+- **[15:39] Yo:** al momento de querer pautar.
+- **[15:39] Yo:** Tenemos otras también para evaluar sobre si la
+- **[15:39] Laura Contreras:** 20, I
+- **[15:39] Laura Contreras:** Ahí sabes, te toca alinear que, bueno,
+- **[15:39] Laura Contreras:** teníamos como una alineación muy general sobre las apps,
+- **[15:39] Laura Contreras:** que fue lo que vimos el viernes,
+- **[15:39] Laura Contreras:** pero toca entrar un poquito más y ver, por ejemplo, en la ruta winner,
+- **[15:39] Laura Contreras:** alinearnos mucho con marketing, van a tener unos premios desde cada vertical, ¿no?
+- **[15:39] Yo:** Sí.
+- **[15:39] Laura Contreras:** Entonces, si ahorita vas a van alinear eso con Roaxis, que no nos pisemos entre la estrategia que ellos tengan a nivel comercial, ¿cierto?, no sé cuál vaya a ser el premio de RUAX, no lo recuerdo,
+- **[15:39] Laura Contreras:** lo que nosotros estemos solicitando para poder que la prueba funcione.
+- **[15:39] Laura Contreras:** Entonces, yo creo que ellos ya deben haber conversado eso con
+- **[15:39] Laura Contreras:** con con comercial, o sea, ya lo deben tener superclaro.
+- **[15:39] Laura Contreras:** Pero sí, como evitar que nos vayamos a pisar, pues,
+- **[15:39] Laura Contreras:** para que no se dé un beneficio que de pronto nosotros como participaron en la prueba,
+- **[15:40] Laura Contreras:** o los que interactúen con con Dali, pues sí les estamos dando.
+- **[15:40] Yo:** No, pero ahí, la, acá está, acabó de pronto el punto.
+- **[15:40] Laura Contreras:** Ok.
+- **[15:40] Yo:** No es que por participar en la prueba se haya un beneficio,
+- **[15:40] Yo:** sino que le es como
+- **[15:40] Laura Contreras:** Sí, no, no, no.
+- **[15:40] Yo:** Dale.
+- **[15:40] Laura Contreras:** No,
+- **[15:40] Laura Contreras:** solo como hacer con ellos, mediante el
+- **[15:40] Laura Contreras:** sea de pronto un beneficio y nos vayamos a pisar.
+- **[15:40] Laura Contreras:** Para marketing, ¿sí me entiendes? No sé, que alineemos eso.
+- **[15:40] Yo:** Listo, listo, pues, la la sesión con ellos la la tenemos hoy, entonces,
+- **[15:40] Laura Contreras:** Iris.
+- **[15:40] Yo:** igual dejamos como bien bien en clara esa parte. Pero sí, aquí el
+- **[15:40] Yo:** el el el beneficio estaría es más para que
+- **[15:40] Yo:** o sea, no no
+- **[15:40] Yo:** realmente lo que se quiere validar
+- **[15:40] Yo:** es si un usuario
+- **[15:40] Yo:** que no ha vendido antes
+- **[15:40] Yo:** productos por Internet
+- **[15:40] Yo:** tiene la suficiente motivación
+- **[15:40] Yo:** para pautar
+- **[15:40] Yo:** sobre, o sea, hacer una inversión, por más de que los fondos no sean propios,
+- **[15:40] Yo:** hacer una inversión sobre
+- **[15:41] Yo:** producto desconocido, que tú no sabes si va a llegar, cómo funciona,
+- **[15:41] Yo:** que no tenía su primera experiencia vendiendo.
+- **[15:41] Yo:** Y eso, realmente, yo ya lo conversé con
+- **[15:41] Yo:** con
+- **[15:41] Yo:** sobre
+- **[15:41] Yo:** sobre que, de alguna forma, la la idea es que
+- **[15:41] Yo:** ellos desde, también desde el inicio,
+- **[15:41] Yo:** con eso que hemos hablado con con Josefina, también desde Growth,
+- **[15:41] Yo:** empieza a haber como un
+- **[15:41] Yo:** del lado usuario, un discovery muy orgánico.
+- **[15:41] Yo:** De qué me empieza a ofrecer Adentropy en medida que avance. Al principio, arrancó con
+- **[15:41] Yo:** solamente
+- **[15:41] Yo:** ver productos, luego pasa a escoger, luego pasa a
+- **[15:41] Yo:** montar una tienda,
+- **[15:41] Yo:** luego pasa a pautar en una tienda, ver métricas de esa pauta,
+- **[15:41] Yo:** y como la Gali permite luego ver
+- **[15:41] Yo:** el desempeño del producto, ya entonces la calculadora se va a ver mucho más
+- **[15:41] Yo:** robustecida, porque realmente Gálico va a conocer cuánto empezó a pautar. Pero pero me queda claro el punto, Laura, gracias.
+- **[15:41] Diana Aldana:** Yo tengo un comentario.
+- **[15:41] Diana Aldana:** En en eso que tú mencionas de, bueno, del
+- **[15:42] Diana Aldana:** la incertidumbre del usuario, no saber si está escogiendo el producto ideal,
+- **[15:42] Diana Aldana:** Normalmente, lo que hacen muchas comunidades es que les dan el listado como de los
+- **[15:42] Diana Aldana:** top veinte de los productos más rentables, y la gente comienza a hacer experimentos de
+- **[15:42] Diana Aldana:** campañas con esos con esos productos. Entonces, sí,
+- **[15:42] Diana Aldana:** si Dropi o en este experimento se pueda
+- **[15:42] Diana Aldana:** se les pueda dar esos diez productos que más se están moviendo, eso por un lado,
+- **[15:42] Diana Aldana:** Y por otro lado, para evaluar si un producto es rentable o no,
+- **[15:42] Diana Aldana:** Aléjame confirmara en su momento cuando tuvimos clases con César, él nos dio como una matriz para poder seleccionar si un producto era
+- **[15:42] Diana Aldana:** o no, tenía que cumplir con una serie de requisitos y eso daba como un ponderado
+- **[15:42] Diana Aldana:** No sé si esa experiencia también la podamos como como llevar a este experimento.
+- **[15:42] Diana Aldana:** Ah, Alejandra se se desconectó.
+- **[15:42] Yo:** Igual igual ahí respondí otra parte. Oh, no, Aleja,
+- **[15:42] Diana Aldana:** Gracias.
+- **[15:42] Yo:** ¿alcás de escuchar la pregunta, Denis?
+- **[15:42] Alejandra Melo:** Por darle
+- **[15:42] Diana Aldana:** clic
+- **[15:42] Alejandra Melo:** en en el de silencio, le di clic, pues, cerrar la llamada.
+- **[15:43] Alejandra Melo:** Esa esa parte nosotros la pusimos en
+- **[15:43] Alejandra Melo:** en la experiencia, eso todo lo vemos como contemplado.
+- **[15:43] Alejandra Melo:** También lo de los checks que nos mostró Edison es
+- **[15:43] Yo:** Sí,
+- **[15:43] Alejandra Melo:** que se llama el de
+- **[15:43] Diana Aldana:** dropping,
+- **[15:43] Alejandra Melo:** todo eso estaba ahí.
+- **[15:43] Yo:** Sí, y ahí y ahí incluimos
+- **[15:43] Diana Aldana:** Ah, genial.
+- **[15:43] Yo:** vamos a hacer un cambio
+- **[15:43] Yo:** lo lo el viernes ya cerrando la tarde con con Jaime,
+- **[15:43] Yo:** no nos iríamos por el MCP,
+- **[15:43] Yo:** porque está presentando muchas fallas
+- **[15:43] Yo:** agrega complejidad, sobre todo para usuarios que no conocen este mundo. Entonces,
+- **[15:43] Yo:** es necesario.
+- **[15:43] Yo:** Y lo que vamos a hacer es un catálogo de
+- **[15:43] Yo:** inicialmente, la proporción veinticinco,
+- **[15:43] Yo:** les dio el feedback de que eran muy pocos productos y que la probabilidad de que se
+- **[15:43] Yo:** repitieran productos en en un grupo igual pequeño dentro del todo,
+- **[15:43] Yo:** pues, era muy alta.
+- **[15:43] Yo:** Entonces, vamos a extenderlo a doscientos productos.
+- **[15:43] Yo:** Esos doscientos productos hacen parte de lo que Jaime trajo
+- **[15:43] Yo:** hace unas sesiones de de que el lado de suppliers podían contactar
+- **[15:43] Yo:** con algunos proveedores para seleccionar esos productos como que más se venden, y son buenos para una primera
+- **[15:43] Yo:** venta.
+- **[15:44] Yo:** Y todo está marcado así en en hacerlo un poco más cerrado.
+- **[15:44] Yo:** Vamos a pedir doscientos, esperamos de que
+- **[15:44] Yo:** lo agendar esos doscientos.
+- **[15:44] Yo:** Y, si no, por lo menos, pues, logramos cien productos.
+- **[15:44] Yo:** Pero sí, creo que los dos puntos que mencionas, Diane, sí sí están ya contemplados.
+- **[15:44] Diana Aldana:** Y a veces los productos, no sé, tal vez eso es obvio, pero a veces los productos
+- **[15:44] Diana Aldana:** son por temporadas,
+- **[15:44] Diana Aldana:** se venden más por temporadas, como lo que pasó en ExpoWill, los de Navidad. Ahorita
+- **[15:44] Diana Aldana:** Expo Winner es en es en septiembre, que es amor y amistad,
+- **[15:44] Diana Aldana:** No sé si también hay un top de productos que más se muevan por amor y amistad.
+- **[15:44] Yo:** No nos han pasado la lista, pero vamos a
+- **[15:44] Diana Aldana:** Ok.
+- **[15:44] Yo:** a a a tener en cuenta al momento de de de solicitarle, sino que hable con eso con Gmail
+- **[15:44] Diana Aldana:** Okay.
+- **[15:44] Yo:** como a las seis de la tarde.
+- **[15:44] Diana Aldana:** Ah, okay. So
+- **[15:44] Yo:** Pero ahora le le le le voy a comentar.
+- **[15:44] Diana Aldana:** Dale.
+- **[15:44] Alejandra Melo:** Igual la idea es como educar al dropshipper, al
+- **[15:44] Alejandra Melo:** y decirle que no necesariamente tienen que ser productos de temporada, no.
+- **[15:44] Alejandra Melo:** Porque igual ya septiembre ya
+- **[15:44] Alejandra Melo:** ya ya se pasó como la época como para uno poder escoger el producto.
+- **[15:44] Yo:** Sí, se lo pongo para octubre, ya.
+- **[15:45] Diana Aldana:** Ajá. Ya ya viene Ah, producto
+- **[15:45] Alejandra Melo:** de diciembre, ¿ustedes saben que en septiembre?
+- **[15:45] Diana Aldana:** Ok. Sí, no, ya se fue diciembre, en en septiembre, se siente diciembre.
+- **[15:45] Diana Aldana:** Como dice la
+- **[15:45] Alejandra Melo:** Sí, ajá, a mí lo único que yo le decía a Santi que me
+- **[15:45] Alejandra Melo:** preocupa, aquí como ya que están ustedes, es la parte de los anuncios.
+- **[15:45] Alejandra Melo:** Ustedes saben que uno para buscar productos siempre buscan los anuncios.
+- **[15:45] Alejandra Melo:** Teníamos pensado como quitar esa
+- **[15:45] Alejandra Melo:** parte, porque, o sea, bueno, no sé, toca como mirar
+- **[15:45] Alejandra Melo:** que los anuncios coincidan con los productos que nos vayan a pasar. Sería eso.
+- **[15:45] Yo:** Sí, ahí ahí es
+- **[15:45] Yo:** la parte que estamos, dice, esa es la fase, justamente, de la organización
+- **[15:45] Yo:** proyecto, y está en que tenemos a APIFI,
+- **[15:45] Yo:** Pero, claro, como ya el catálogo se cierra muchísimo más, solamente doscientos también la probabilidad de que no existan esos productos dentro de esos doscientos, esa alta Eso evidentemente, puede llegar al desborde de pulso, está perfecto. Pero como pulso también es una herramienta que no es para usuarios tan novatos, puede confundir Entonces, estamos pensando en cómo esa parte del flujo de de de compensarlo un poco con que no se vaya también no se vaya al vacío dropping, no se sienta como una herramienta poco poco robusta en sentido de catálogo.
+- **[15:45] Participante:** Parece
+- **[15:46] Yo:** Entonces, la idea sería, en caso de que no no no se encuentre el producto,
+- **[15:46] Yo:** igual hacer como, viendo también un poco la experiencia que se tenga dentro del flujo,
+- **[15:46] Yo:** lo dejamos igual por fuera, como está hoy.
+- **[15:46] Yo:** O si definitivamente tenemos que incluirlo en un punto.
+- **[15:46] Yo:** Ah, bueno, y sobre esa parte como de de de de tomar elecciones por parte de usuario, está
+- **[15:46] Yo:** también al final con la tienda que vamos a poner para los non log shippers.
+- **[15:46] Yo:** Está la selección de la tienda. Hay hay varias
+- **[15:46] Yo:** hecho,
+- **[15:46] Yo:** hipótesis que se quieren trabajar.
+- **[15:46] Yo:** Dentro de esas está
+- **[15:46] Yo:** sí tendría sentido a futuro mantener el concepto de esa tienda propia,
+- **[15:46] Yo:** en en desde dropping, ¿sí?, para usuarios principiantes,
+- **[15:46] Yo:** Claramente, la idea no estaría en generar una nueva, por lo por lo menos ahora,
+- **[15:46] Yo:** una nueva vertical de negocio, porque el core de dropi
+- **[15:47] Yo:** no es
+- **[15:47] Yo:** ser un ecommerce como, ofrecer infraestructura de ecommerce como los Shopify y tienda nube,
+- **[15:47] Yo:** pero por usuarios principiantes,
+- **[15:47] Yo:** termina siendo una puerta de fácil acceso para posteriormente lograr migrar, es decir, cuando
+- **[15:47] Yo:** a mayor
+- **[15:47] Yo:** una una una una mayor
+- **[15:47] Yo:** pauta o simplemente pasarelas de pago, pues ahí es donde
+- **[15:47] Yo:** de forma muy muy orgánica, tenemos que llevarlos a que entonces
+- **[15:47] Yo:** empiecen a migrar a Shopify, que igual ya nosotros, pues.
+- **[15:47] Yo:** Estamos integrados, no no no perderíamos ese tráfico.
+- **[15:47] Yo:** Y, por otro lado, está lo de la hipótesis de de solicitar muestra,
+- **[15:47] Yo:** Veríamos cuántos usuarios, ya hay unas métricas de éxito, cuántos usuarios se nos quedan
+- **[15:47] Yo:** en solicitar muestra y cuántos desisten, entonces, de
+- **[15:47] Yo:** salir a vender un producto sin que antes llegue esa muestra.
+- **[15:47] Yo:** Entonces, ver un poco también cómo, para un usuario novato, está la concepción de
+- **[15:47] Yo:** qué tan seguro es vender algo que yo no conozco.
+- **[15:47] Yo:** Hay varias hipótesis que en el documento van a ver, ¿listo?
+- **[15:47] Yo:** Sí, Lau.
+- **[15:48] Yo:** La ucontres.
+- **[15:48] Laura Contreras:** Perdón, perdón,
+- **[15:48] Laura Contreras:** se confió el otro. Sí, no, no, o sea, la voy dejar terminar como para, yo creo que
+- **[15:48] Laura Contreras:** Ay, ¿me escuchan? Hola, hola.
+- **[15:48] Diana Aldana:** Sí, sí,
+- **[15:48] Yo:** Sí, ya ahí te escuchaste.
+- **[15:48] Laura Contreras:** sí.
+- **[15:48] Laura Contreras:** ¿Ahí?
+- **[15:48] Laura Contreras:** Ya.
+- **[15:48] Laura Contreras:** Bueno, me tocó pagar a Fomara. Yo creo que está Dayla uno
+- **[15:48] Laura Contreras:** nos han, me van a escuchar Idiani decir esto todo el día.
+- **[15:48] Laura Contreras:** Pero solo quería como empezar a que nos alineáramos
+- **[15:48] Laura Contreras:** en los nuevos direccionamientos, que vamos a empezar a hablar durante la semana.
+- **[15:48] Laura Contreras:** En cada mesa con cada célula, pero para que un poco, como sé que lo van a
+- **[15:48] Laura Contreras:** ya lo están trabajando desde Gali, que lo empecemos a llevar desde ya,
+- **[15:48] Laura Contreras:** principalmente como Aleja y Santi, es
+- **[15:48] Laura Contreras:** pensemos en que la experiencia de este copiloto de IA no solo para la prueba de expo winners, sino también para lo que vayamos a
+- **[15:48] Laura Contreras:** a desarrollar más adelante y a escalar.
+- **[15:49] Laura Contreras:** Cómo hacemos que esté alineado al pensamiento de
+- **[15:49] Laura Contreras:** cómo Dropy es el producto logístico que todo el mundo ama.
+- **[15:49] Laura Contreras:** ¿Qué pasa? Como que nos entregaron ese reto a Aleja, más que todo enfocado a los product designers, pero bueno, Santi está involucrado ahí.
+- **[15:49] Laura Contreras:** Y ya lo hablaremos en la mesa de la célula. Y es
+- **[15:49] Laura Contreras:** cómo nos volvemos un producto logístico que la gente de verdad
+- **[15:49] Laura Contreras:** disfrute usar, ¿sí?, con con experiencias sencillas, simplificadas,
+- **[15:49] Laura Contreras:** que la gente entienda como o perciba ese valor
+- **[15:49] Laura Contreras:** de una manera como muy, sí, muy muy sencilla.
+- **[15:49] Laura Contreras:** Cómo cómo tenemos una experiencia de fácil uso. Entonces, como
+- **[15:49] Laura Contreras:** devolvernos un poquito a lo que de pronto no se aleja, si tú
+- **[15:49] Laura Contreras:** en la universidad lo veías, o al inicio cuando empezábamos a diseñar
+- **[15:49] Laura Contreras:** productos, que era, yo quiero hacer algo que la gente, de pronto,
+- **[15:49] Laura Contreras:** disfrute ver, disfrute utilizar, un poco como ese mindset. Eso, por un lado.
+- **[15:49] Laura Contreras:** ¿Cómo hacemos que este copiloto de IA sea o aporte a
+- **[15:49] Laura Contreras:** seres
+- **[15:50] Laura Contreras:** todo Soy soy yo, don Laura a eso queremos llegar, a eso nos vamos Laura,
+- **[15:50] Laura Contreras:** como que eso ahora vamos a estar trabajando en cada uno de los proyectos que que hacemos así.
+- **[15:50] Laura Contreras:** ¿Ahí me escuchan?
+- **[15:50] Yo:** Sí te cortaste un poquito, pero creo que la idea se entendió, ¿no?
+- **[15:50] Laura Contreras:** Aló.
+- **[15:50] Yo:** Es que creo que tienes como un lack
+- **[15:50] Laura Contreras:** No. Bueno.
+- **[15:50] Yo:** de cuatro segundos.
+- **[15:50] Laura Contreras:** Bueno, sí, vale, me voy a alargar. ¿Y el segundo punto?
+- **[15:50] Laura Contreras:** Y el segundo punto es el cese. Oigan, lo que vieron con Kate y, bueno, en el product lab de la semana pasada, yo sé que apenas recibimos esa información.
+- **[15:50] Laura Contreras:** Pero y Santi ya dijo que las métricas de de éxito están definidas para
+- **[15:50] Laura Contreras:** para el testeo, para la prueba?
+- **[15:50] Laura Contreras:** Pero un poco más hacia
+- **[15:50] Laura Contreras:** el diseño y hacia la plataforma, Aleja, de pronto ahí pensar cuáles son
+- **[15:50] Laura Contreras:** cuáles van a ser esas métricas de esfuerzo en cuanto a interacción con el producto, que nos vayan a medir a nosotros ese éxito, ¿sí? Deben estar relacionadas seguramente con lo que ya definieron, pero pensemos más bien en en interacción, en un job to be done, o sea, ¿cuál es la tarea que nos va a decir, listo, el nivel de esfuerzo que tuvo el es el necesario, ¿sí?, va va a ser satisfactorio y más adelante, pues, va a en en las otras métricas, o activación, adopción, retención y satisfacción. Entonces, eso, esas dos cositas, no sé si Kate, Dianys o Laud quieran
+- **[15:51] Laura Contreras:** ampliar un poco más como lo
+- **[15:51] Laura Contreras:** con logística. Para que quede un poco más claro.
+- **[15:51] Catherin Salazar:** Dale, Diane.
+- **[15:51] Diana Aldana:** No, no, yo dije, sí, es que ya les iba a compartir por el link.
+- **[15:51] Diana Aldana:** Como donde está como una infografía para entender bien cómo medir
+- **[15:51] Laura Contreras:** la y
+- **[15:51] Diana Aldana:** NPS,
+- **[15:51] Diana Aldana:** ahí está como más claro para para que se entienda. Pero sí, lo, o sea,
+- **[15:51] Diana Aldana:** complementando lo del lado que hablamos en logísticas, como ver cuál es ese evento,
+- **[15:52] Diana Aldana:** que real mide el esfuerzo
+- **[15:52] Diana Aldana:** de lo que se va a hacer con con Gali. Y también, pues, cuál es ese evento que mide que haya sido un éxito este experimento.
+- **[15:52] Yo:** Listo. ¿Les parecería así?
+- **[15:52] Yo:** Ya les comparto el documento?
+- **[15:52] Yo:** No.
+- **[15:52] Yo:** Publicar ya en Confluence.
+- **[15:52] Yo:** Eso claramente seguro no cubre todo lo que lo que estoy mencionando, pero como para que
+- **[15:52] Yo:** también nos den ahí un feedback más
+- **[15:52] Yo:** inmediato con lo que ya está hecho. Igual, creo que
+- **[15:52] Yo:** se le puede sumar
+- **[15:52] Yo:** justamente lo de los eventos. O sea, hay eventos
+- **[15:52] Yo:** primero, pues, ya acotándolo
+- **[15:52] Yo:** qué se entiende por evento dentro de del marco, ¿cierto? Y es
+- **[15:52] Yo:** ejemplo, aquí hablamos de
+- **[15:52] Yo:** digamos, un
+- **[15:52] Yo:** las bifurcaciones, ¿no?
+- **[15:52] Yo:** Escoge la tienda de dropping,
+- **[15:52] Yo:** o se va por Shopify.
+- **[15:52] Yo:** ¿Cierto?
+- **[15:52] Yo:** Ahí tenemos
+- **[15:52] Yo:** tipo de elección hace el usuario. Sin embargo, si ya nos referimos a
+- **[15:52] Yo:** es que va a haber un botón que va a permitir o que sea un drop donde va a elegir
+- **[15:52] Yo:** uno o el otro, o ahí una configuración, muy puntual hacia visuales como
+- **[15:53] Yo:** temas de diseño, donde yo ya no
+- **[15:53] Yo:** tanto,
+- **[15:53] Yo:** eso esa parte no estaría.
+- **[15:53] Yo:** ¿Listo?, pero hacia
+- **[15:53] Yo:** la métrica de
+- **[15:53] Yo:** se considere exitoso si el usuario completa el flujo
+- **[15:53] Yo:** dentro de los primeros quince minutos y sería un fracaso, debe morir.
+- **[15:53] Yo:** Digamos, la prueba, si supera los veinte minutos, porque posiblemente
+- **[15:53] Yo:** es un churn cognitivo, es decir, el usuario va a desistir
+- **[15:53] Yo:** porque lo ve muy complejo, eso sí está.
+- **[15:53] Yo:** Si les parece
+- **[15:53] Yo:** comparto el documento, y y sobre ese nos nos van comentando como
+- **[15:53] Diana Aldana:** Mhmm.
+- **[15:53] Yo:** qué qué qué consideran deberíamos ampliar,
+- **[15:53] Yo:** si creen que hay algo que no se entiende muy bien. ¿Les parece?
+- **[15:53] Alejandra Melo:** East.
+- **[15:53] Alejandra Melo:** Igual ustedes me preguntaban la otra vez que si había
+- **[15:53] Alejandra Melo:** unas preguntas para hacer al final a los usuarios.
+- **[15:53] Alejandra Melo:** Esas también las vamos a
+- **[15:53] Alejandra Melo:** ¿A qué?
+- **[15:53] Alejandra Melo:** De hecho, hoy teníamos una reunión ahorita en la tarde con Santi, para revisar también esto.
+- **[15:53] Yo:** Sí, y y y, sobre todo, para para las las
+- **[15:54] Yo:** sobre todo, para los caminos en donde
+- **[15:54] Yo:** necesitamos ampliar un poco más la información, ¿no? Por ejemplo,
+- **[15:54] Yo:** si escoge
+- **[15:54] Yo:** en vez de Dropi para su ecommerce, el por qué se va por Shopify,
+- **[15:54] Yo:** o cuando no quiere pautar, no quiere usar Roblox, aunque se le están dando unos créditos y prefiere seguir
+- **[15:54] Yo:** seguir con una venta orgánica,
+- **[15:54] Yo:** qué prefiere la venta orgánica?
+- **[15:54] Yo:** Hay unos puntos muy específicos en donde queremos
+- **[15:54] Yo:** claramente, hacer un zoom hacia
+- **[15:54] Yo:** nosotros
+- **[15:54] Diana Aldana:** Ok.
+- **[15:54] Yo:** tenemos
+- **[15:54] Yo:** no voy a volver como a lo a lo que ya me han escuchado en otras sesiones,
+- **[15:54] Alejandra Melo:** Ok.
+- **[15:54] Yo:** tenemos una conducta esperada del usuario,
+- **[15:54] Yo:** y queremos saber por qué no se está yendo por esa conducta.
+- **[15:54] Diana Aldana:** Así es.
+- **[15:54] Yo:** Para ver cómo lo reencaminamos
+- **[15:54] Yo:** ¿listo? Que eso es como lo que
+- **[15:54] Diana Aldana:** Una
+- **[15:54] Yo:** Correcto.
+- **[15:54] Diana Aldana:** Sí, una cosa es lo que dice el usuario, otra cosa es lo que hace.
+- **[15:54] Diana Aldana:** Entonces,
+- **[15:54] Diana Aldana:** complementando eso,
+- **[15:54] Diana Aldana:** lo que también estamos hablando a todas las células es que hay que profundizar en el en el
+- **[15:54] Diana Aldana:** del usuario.
+- **[15:54] Diana Aldana:** Yo les había compartido la semana pasada
+- **[15:54] Diana Aldana:** una sesión donde íbamos como a identificar
+- **[15:55] Diana Aldana:** específicamente el perfil de dropshipper, cómo lo están llamando el resto de las células y qué
+- **[15:55] Diana Aldana:** atributos y qué características tiene el segmento de dropshippers.
+- **[15:55] Diana Aldana:** La idea es que el jueves
+- **[15:55] Diana Aldana:** vamos a tener esa sesión, ahorita voy escribir por el grupo,
+- **[15:55] Diana Aldana:** para que nos confirmen el resto de de áreas como
+- **[15:55] Diana Aldana:** cómo están llamando ahorita a los dropshippers, porque me he dado cuenta que cada célula lo llama, perdón,
+- **[15:55] Diana Aldana:** cada área está llamando de diferente forma los dropshippers.
+- **[15:55] Diana Aldana:** Entonces, también sería bueno que Santiago y Aleja bueno, interiorizáramos para nosotros
+- **[15:55] Diana Aldana:** esos niveles de dropshiper y qué características tiene.
+- **[15:55] Diana Aldana:** Cada uno, para que cuando lleguemos a sesión estemos nosotros como alineados
+- **[15:55] Diana Aldana:** ¿Vale?
+- **[15:55] Yo:** Listo, listo.
+- **[15:55] Yo:** De una.
+- **[15:55] Yo:** De nuestro lado, la semana la semana se nos va en expo, bueno,
+- **[15:55] Laura Contreras:** Me diste en ti, te alejas.
+- **[15:55] Yo:** ante cualquier novedad, les vamos contando, ¿vale?
+- **[15:55] Laura Contreras:** Listo.
+- **[15:55] Yo:** Lau, pregunta,
+- **[15:56] Yo:** no sé si
+- **[15:56] Yo:** Lau Contreras o Lau Torres, realmente,
+- **[15:56] Yo:** algunas cosas que
+- **[15:56] Yo:** ver,
+- **[15:56] Yo:** por lo menos, mi parte creo que les aleja también,
+- **[15:56] Yo:** bueno, por lo menos me pasó la semana pasada.
+- **[15:56] Yo:** Algunas cosas. Yo, la verdad, tuve que trabajar las
+- **[15:56] Yo:** sábado, domingo,
+- **[15:56] Yo:** para alcanzar,
+- **[15:56] Yo:** no sé si a nivel de métrica eso pueda, o sea, si pongo sea, si sí está bien, si pongo seis, siete días, en cuanto al esfuerzo real, o lo acoto así me extralimité, igual me hago el que no pasó nada y lo dejo en los cinco. O sea, ya hablando de la herramienta, ¿soy sincero o no tan sincero? Y lo dejo cinco para que no se desconfigure por ahí una métrica.
+- **[15:56] Laura Catherine Torres Ciendua:** Yo siempre soy sincera,
+- **[15:56] Laura Catherine Torres Ciendua:** si me pasé de cinco días, lo pongo Hasta el momento no ha pasado nada así, no ha pasado nada.
+- **[15:56] Yo:** Listo, listo,
+- **[15:56] Alejandra Melo:** Puedes poner la semana y media que te
+- **[15:56] Laura Catherine Torres Ciendua:** tumbe
+- **[15:56] Laura Contreras:** más. Los veinte días. Sí, sí, sí.
+- **[15:57] Yo:** Bueno, ahora para aclarar eso de pronto, Anahí.
+- **[15:57] Yo:** Más, y que luego
+- **[15:57] Yo:** una remita de ramo.
+- **[15:57] Yo:** Ciento cincuenta por ciento y no se pudiera.
+- **[15:57] Yo:** Listo. Bueno, gracias.
+- **[15:57] Laura Contreras:** Estén muy bien. Chao.
+- **[15:57] Diana Aldana:** Chao,
+- **[15:57] Alejandra Melo:** que estén bien.
+- **[15:57] Catherin Salazar:** Bien.

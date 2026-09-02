@@ -1,0 +1,300 @@
+# Avancemos en Gali 🤖
+
+- **ID:** `not_ZZhTrXGlaLQ0QZ`
+- **Fecha:** 2026-09-01T15:04:42.387Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/5b9fe53a-8e56-4c2e-b62d-c82e25f99dee)
+- **Asistentes:** Santiago Herrera Acosta, Catalina Giraldo, Laura Contreras, Diana Margarita Aldana Echeverry, Jaime Guevara, Alejandra Melo
+
+---
+
+## Resumen de la Reunión
+# Contexto y Alcance de Gali para Expo Winners
+
+- Gali evolucionó: ya no solo “encontrar el primer producto”, sino llevarlo hasta publicar la página de venta
+- Usuario objetivo: emprendedor digital sin experiencia en e-commerce ni dropshipping (no un dropshipper)
+  - Foco en huérfanos que no han vendido: 40% de la base, de los cuales 90% nunca ha vendido online
+- Meta de éxito redefinida: producto encontrado, landing creada, listo para salir a vender
+  - Éxito neto real sería venta + entrega + ingreso de dinero, pero el corte es publicación
+- Se explora integración con Roax para pauta desde el mismo flujo, sin configuración de TikTok/Meta Ads
+  - Cuentas compartidas para nuevos emprendedores como impulso inicial
+
+# Métricas y Umbrales de Éxito
+
+- Métrica principal: tiempo de completar el flujo completo
+  - Meta: 15 minutos para encontrar producto, generar landing y dejarlo publicable
+  - Zona de riesgo: más de 20 minutos (fatiga cognitiva, churn mental)
+- Umbrales de tasa de completitud del flujo:
+  - Más del 70%: Gali resuelve la barrera técnica con éxito
+  - 40–70%: genera valor pero hay fricción en varios pasos
+  - Menos del 40%: flujo no funciona, evaluar pivotar a otra solución
+- Barreras identificadas en corrección con Alejandra:
+  - Terminología técnica (fulfillment, CPA, apalancar, pauta) inaccesible para nuevos usuarios
+  - Hoja en blanco: se resuelve con catálogo cerrado de 200 productos (no MCP, por mayor certeza)
+  - Confianza: el usuario debe sentir que cada paso del flujo tiene sentido y es viable
+
+# Encuesta y Dinámica del Workshop en Expo Winners
+
+- Propuesta de Laura: preguntar al usuario antes del flujo cuánto se demora actualmente eligiendo un producto
+  - Objetivo: tener un punto de partida para contrastar con el tiempo en Gali
+  - Diana apoya: incluir también cómo hacen el ángulo de ventas hoy
+- Encuesta separada del flujo para no afectar la métrica de tiempo
+  - \~10 minutos para la encuesta inicial, \~20 minutos para el flujo
+  - No contaminar la muestra con framing de product marketing al comparar tiempos
+- Hipótesis de Santiago: la data más valiosa vendrá del uso abierto de los 2 días, no del workshop
+  - Workshop sirve más para la encuesta y para diversidad de perfiles
+- Diversidad de usuarios en workshop: apuntar a representar los 6 tipos de leyenda Dropi
+  - Tamaño sugerido: máximo 60 personas (10 por tipo), manejable para el storytelling
+- Dropy Pulso en el evento: riesgo de no hacer match con catálogo cerrado
+  - Se usaría solo para rankear/ponderar productos, no para selección dentro de Gali
+  - Propuesta: 10 minutos de presentación de Pulso (tipo jobs presentation) para generar adopción orgánica
+
+# Próximos Pasos
+
+- **Actualizar documento de métricas con encuesta y desglose por fases** (Santiago)
+
+  Incluir encuesta inicial, tiempos por hito del flujo, y preguntas sobre disposición a pautar vs. venta orgánica.
+- **Agendar jornada dedicada de Gali/workshop el martes 8 de septiembre en la tarde** (Santiago)
+
+  Bloquear tarde completa para definiciones, simulación del experimento y corte de pendientes.
+- **Agendar espacio de storytelling del evento con Laura**
+
+  Definir en qué momentos se lanzan preguntas clave para guiar la percepción del usuario durante el workshop.
+- **Alinear con Jaime la presentación de Pulso y la integración de apps en Expo Winners**
+
+  Evitar que la experiencia multi-app genere fricción; consolidar como un solo hub.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/b7245448-753d-45d4-a3dd-530ff16ccb08](https://notes.granola.ai/t/b7245448-753d-45d4-a3dd-530ff16ccb08)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[15:04] Laura Contreras:** Faltaban temas para conversar. Tal vez un poquito podemos revisar es métricas, más que creo que es el documento que acabas de enviar ahí, Santi.
+- **[15:04] Yo:** Sí, sí les voy a proponer, si les parece. Ayer les mencioné que se los iba a compartir, creo que sirve para que lo aclaremos un poquito. Si tienen dudas, tienen más comentarios, que lo hagamos aquí como en vivo, que eso acabamos también de salir de una con Dianis para poder empezar a trabajar en la homologación de lo que es el término de leyendas dropy de las 6 categorías, ver cómo hacia adentro ya lo empezamos a con user personas para que todos como que hacia es que lo que le decía en ese rato era con María con Lucho hemos hablado de que de forma transversal leyendas es el concepto que Toca todo dropino. Entonces todo el mundo termina hablando un poco en función de leyendas dropino, de las seis categorías. Sin embargo hacia adentro para lograr que todos podamos hacer un mejor trabajo pues tenemos que hablarlo hacia user personas, sí, pero todavía no hay esa escala de aquí en bienvenido que es de 0 a 100 órdenes, cuáles son los user personas que están dentro de bienvenido. Entonces lo que exacto, entonces lo que
+- **[15:04] Laura Contreras:** Mm-hmm.
+- **[15:05] Laura Contreras:** Sí, yo.
+- **[15:05] Laura Contreras:** ¿Cómo conectan?
+- **[15:05] Yo:** trabajaríamos con la data que nos deja Expo Winners es empezar a identificar cuáles son esos patrones y asimismo empezar a clasificarlos. Entonces, no sé, hay 5 tipos de user personas que están dentro de bienvenidos, son estos. Listo, entonces vamos a incluir dentro de
+- **[15:06] Yo:** dentro de este documento que les acabo de enviar. Ay, no se lo envié a Cata, pero
+- **[15:06] Yo:** Esta es la estrategia puntualmente para Expo Winners. Si hay errores de tipografía es porque Darwin lo creó, no fui yo. Con todo lo que hemos hablado Entonces así se ve un dropy con Y.
+- **[15:06] Yo:** la transcripción.
+- **[15:06] Yo:** Bueno, entonces esto en gran parte, pues primero les quiero recomendar una herramienta que se llama Granola. No sé si la han usado, es re buena para justamente reuniones porque empieza a hacer como lea.
+- **[15:06] Yo:** No es como Gemini que te empieza a generar los resúmenes.
+- **[15:06] Yo:** desagregados por sesión, cierto, por reunión, sino que este realmente queda transversal a todas las reuniones. Entonces después busca el contexto de las reuniones, te genera un resumen. Pues está bien, y aparte se puede conectar con Darwin. Yo la tengo conectada con Darwin, entonces por API te va actualizando también la memoria de Darwin. Entonces eso verá cómo pauta no paga por granola, suerte buena.
+- **[15:07] Laura Contreras:** A Chévere.
+- **[15:07] Laura Contreras:** Y eso, y eso, seguridad, ¿nos lo pasan así, cierto?
+- **[15:07] Yo:** Pues yo le conté y ya le grano a alguien, no vieron nada. Entonces lo tomaré como lo que no está prohibido está permitido.
+- **[15:07] Laura Contreras:** Okay.
+- **[15:07] Yo:** Aquí me dijo María, haga hasta que lo frenen. Entonces yo estoy haciendo hasta que me frenen. Bueno, entonces esta es la estrategia. Omito la parte de introducción. Bueno.
+- **[15:07] Yo:** Todo partió entonces, Gali, para Expo Winners, para que todo esto me alinee, por favor me corrigen si no es así, pero partimos de que Gali realmente no estaba
+- **[15:07] Yo:** O no contenía por el momento.
+- **[15:08] Yo:** Una capa.
+- **[15:08] Yo:** Digamos, de estrategias hacia qué métricas vamos a sacar, o bien hacia quién está dirigido. Eso de hecho se fue creando a medida de las sesiones que fueron avanzando. De hecho, la que más creo que le dio cuerpo fue la sesión del Lunes anterior con María, así que fue como, bueno, queremos el equipo de producto de sellers, tiene que estar enfocado en dropshippers huérfanos que no se han activado, es decir, 40%, dentro de ese 40% El 99%, y ese 99%, el 90% que no sabe utilizar.
+- **[15:08] Yo:** No ha vendido antes a través de un e-commerce ni sabe hacer dropshipping, ¿verdad?
+- **[15:08] Laura Contreras:** Okay.
+- **[15:08] Yo:** Eso también como contexto de pronto pues para quienes no estuvieran en esa sesión. Entonces aquí ya no solamente hablamos de encontrar mi primer producto, que era un poco la premisa de De Gali, sino que aquí ya hablamos de cómo hacemos que un nuevo usuario, ni siquiera le podemos llamar dropshipper porque no ha hecho dropshipping ni conoce dropshipping. Es decir, ese emprendedor digital, que es el concepto que hemos querido ir como acuñando dentro de la celular, va a entrar a una plataforma que le va a permitir comenzar a vender bajo un Modelo que ese usuario aún no conoce, que es dropshipping, ¿verdad? Entonces ese usuario va a tener unas herramientas disponibles que son las que ya entran en el flujo de Gali, que le van a permitir encontrar mi primer producto. Pero aquí ya no hablamos solamente de encontrar, sino que también es salir a vender ese primer producto, porque estamos, tenemos que
+- **[15:09] Yo:** agregarle que para nosotros realmente el éxito no es que alguien encuentre un producto, es que salga y lo venda. Inclusive el éxito real, el éxito neto, es que lo venda, se entregue y le ingrese dinero, pero dejémoslo hasta que lo publique para salir a venderlo, sí, que por lo menos le esté dando las suficientes herramientas para que realmente salga y venda. Es decir, que Gali no solamente entonces queda Hasta como, digamos, voy a usar el, lo recibimos con alegría hace ya 2 semanas.
+- **[15:10] Yo:** Hasta encontrar el producto, identificar y generar como todas esas diferentes capas del ángulo de venta, de la parte financiera.
+- **[15:10] Yo:** De qué ingresos iba a recibir, la inversión, el costo y demás.
+- **[15:10] Yo:** Si no está publicarlo.
+- **[15:10] Yo:** En una página del producto.
+- **[15:10] Yo:** Y eso, en una sesión que tuvimos ayer con Roax, estudiar la posibilidad de que inclusive ya pueda generar desde ese mismo momento, digamos, dentro de Expo Winners, pagarle pauta.
+- **[15:10] Yo:** Estamos viendo de qué manera logramos de que inclusive no tenga que ser ninguna configuración con TikTok, con Meta Ads, con absolutamente nada. Serían unas cuentas compartidas que justamente para nuevos emprendedores Para gente que no ha hecho esto antes puede funcionarle. Es decir, estamos dándole el impulso. Vuelvo con lo que he dicho antes, es no queremos que ese nuevo usuario aprenda a caminar. Para nosotros va a ser suficiente con que gatee. Yo no necesito 10 órdenes. Una, la primera, la segunda, de ahí en adelante donde ya la plataforma tendrá que ir llevando a qué
+- **[15:11] Laura Contreras:** Mm-hmm.
+- **[15:11] Yo:** se retenga y que escape. Pero bueno, eso es como muy una extensa introducción que quería hacer. Entonces
+- **[15:11] Yo:** Voy a bajar un poquito más.
+- **[15:11] Yo:** Listo, entonces.
+- **[15:11] Yo:** ¿Qué barreras estamos encontrando que estamos en proceso de corrección con Aleja? Terminología, claramente personas ya
+- **[15:11] Yo:** más maduras o más que tienen un nivel de conciencia mayor con el negocio, con el dropshipping o con el e-commerce. Es decir, que palabras, no digo que este estaba, no recuerdo si este estaba explícito No en la plataforma, pero no sé, fulfillment, CPA, inclusive tenemos como creo que era, ¿cuál era Aleja?
+- **[15:12] Yo:** Apalancar.
+- **[15:12] Yo:** Pauta.
+- **[15:12] Yo:** Para personas que no han vendido antes pueden ser palabras que por lo menos
+- **[15:12] Yo:** hacen que no identifiquen realmente el para qué va a funcionar la herramienta.
+- **[15:12] Laura Contreras:** Okay.
+- **[15:12] Yo:** Entonces, ¿quieres decir algo, Aleja?
+- **[15:12] Alejandra Melo:** No, no, yo completaré y proye.
+- **[15:12] Yo:** Entonces, uno es barrera de lenguaje. Estamos haciendo correcciones de copies para que sea mucho más de fácil entendimiento para personas que no han hecho e-commerce ni nada por el estilo. La barrera de la hoja en blanco que trata igual de resolver claramente Dropy con lo que ya hayan lanzado Cata y Jaime de bueno. Le empiezo a preguntar por dónde va. Sin embargo, pues ya quedamos en que va a ser un catálogo cerrado. Para, se solicitó 200, se solicitaron 200 productos. No nos vamos a ir por el MCP, sino por un catálogo cerrado. Eso más por fallas del MCP realmente que porque queramos hacerlo así, es porque nos da mayor certeza que funcione. La carrera de confianza es no basta con mostrarle opciones, sino que necesitamos que el usuario sienta que todo lo que está avanzando en la completitud del flujo tiene
+- **[15:13] Laura Contreras:** Mm-hmm.
+- **[15:13] Yo:** sentido y va a ser viable. Es decir, por eso es que era tan importante, creo que lo mencioné en un espacio, en crear de alguna forma una meta.
+- **[15:13] Yo:** Mi opinión personal es, Galí no tenía una meta, una meta en el sentido de usuario donde yo como estudio en el end-to-end siento que está lento, sí, siento que se está cerrando el flujo en donde yo quiero que termine el usuario. Ahora el flujo va a ser que no solamente lo encuentre, cree el proyecto, que era el concepto que se tenía, sino que al proyecto ya le va a generar La página de venta. Listo, ahí yo considero como producto que el usuario entendió el para qué de la herramienta y le va y avanza en salir a vender. Listo, entonces ahí ya teniendo eso, esto, dale, dime.
+- **[15:13] Laura Contreras:** Okay.
+- **[15:14] Laura Contreras:** Santi.
+- **[15:14] Laura Contreras:** Perdón, no sé si me voy a adelantar. Como ya empezamos a hablar como de las métricas del CES y demás, o sea, tú medirías el esfuerzo del usuario solo cuando terminó todo el flujo, o sea, en ese punto de crear la página de venta.
+- **[15:14] Yo:** Si hablamos en temas de esfuerzos como usabilidad, en el aspecto usabilidad, de hecho eso es lo que tenemos que trabajar todo con Aleja porque está, digamos que la unidad
+- **[15:14] Laura Contreras:** Sí.
+- **[15:14] Yo:** que estamos utilizando por ahora.
+- **[15:14] Yo:** La principal termina siendo tiempo, variable tiempo.
+- **[15:14] Laura Contreras:** Mm-hmm.
+- **[15:14] Yo:** Es en 15 minutos.
+- **[15:14] Yo:** Un usuario que no ha vendido nada.
+- **[15:14] Yo:** Que no sabe hacer e-commerce debe poder.
+- **[15:14] Yo:** Encontrar un producto.
+- **[15:14] Yo:** Escogerlo.
+- **[15:14] Yo:** Generar una landing.
+- **[15:14] Yo:** Y comenzar a vender. Comenzar a vender es que ya queda compartible, exportable, publicable, entiéndase por donde puede que se agache. Es decir, en 15 minutos debe lograrse eso.
+- **[15:15] Laura Contreras:** Ya.
+- **[15:15] Laura Contreras:** Yo ahí tenía, yo ahí tenía de hecho una idea que quería, bueno, Dianis, Cata y Aleja, no sé si justo ayer estábamos hablando de cómo medimos mejor los experimentos y no sé si va a alguien La pena, además no solo de la meta de éxito, o sea, como del job.
+- **[15:15] Laura Contreras:** Hecho de los 15 minutos o menos, sino también preguntar de pronto al usuario si tiene un referente de selección de productos, de tiempo en selección de producto. Entonces me imaginaba Ustedes ya me, ojalá me tumben la idea.
+- **[15:15] Laura Contreras:** Me imaginaba preguntarle antes de que empiece el flujo como una simple pregunta, como cuánto te demoras actualmente seleccionando un producto para probarlo en promedio, ¿cierto? Él no nos va a decir pues obviamente no, 20 minutos. Él nos va a decir, me tomó 3 días en toda la evaluación, ta ta ta, selección, listo, 3 días. Y ahí empezamos el flujo y medimos como por hitos. Entonces, selección del producto, 2 minutos, ¿cierto? Bueno, estoy poniendo un tiempo y no sé si sería chévere como poner como el cronómetro al final, el tiempo en el que en comparación él nos dijo me demoró 3 días Ah, con Gali me demoré 3 minutos. Justo eso era como una idea que quería dejar aquí, a ver cómo la ven. Sí, de
+- **[15:16] Diana Aldana:** acuerdo. O sea, me parece chévere como preguntar. Actualmente ellos cómo hacen ese proceso, tanto encontrar el producto como hacer el ángulo de ventas, como todos esos pasos que recreamos en GALI, ellos cómo lo hacen en su cotidianidad. Y así pues podemos
+- **[15:16] Laura Contreras:** hacer
+- **[15:16] Diana Aldana:** como un comparativo de esa eficiencia y efectividad.
+- **[15:16] Diana Aldana:** No
+- **[15:16] Laura Contreras:** sé, ahí Santi y Aleja, ¿cómo lo ven?
+- **[15:16] Yo:** Sí, yo, bueno, Aleja se quiere dar ya ahí.
+- **[15:16] Yo:** Si vas a decir algo antes.
+- **[15:16] Alejandra Melo:** Pues sí, a mí me parece que se puede preguntar, pero pues no sé si empezar con una pregunta estaría bien.
+- **[15:17] Yo:** Yo lo que tendría eso, como el fútbol va a estar realmente abierto durante los 2 días.
+- **[15:17] Laura Contreras:** Acuérdate que es un workshop igual, ¿no? Como
+- **[15:17] Yo:** Creo que lo que más se le puede sacar valor al workshop, realmente. Y luego vamos a poder filtrar, aunque esté abierto 2 días y todo el mundo puede ingresar, luego por base de datos vamos a poder cruzar con los huérfanos, que de hecho nos vamos a pasar la idea, y los huérfanos que no han vendido No ha cambiado nada en lo que hasta está el corte del 31 de agosto. Desde luego, como científica, cómo se comportan esos usuarios. Pero para el workshop creo que sí podríamos abrir con el formulario. No lo incluiría dentro de Gali porque eso es lo Lo que nos va a hacer es afectar directamente también la métrica de éxito en los tiempos de completar flujo, porque un flujo convencional no va a estarte preguntando todo el tiempo. Si es más una encuesta que un flujo para vender, pues lo cierro. Sí, entonces para no afectar el rendimiento dentro del flujo, podríamos arrancar con, no sé, 10, 15, las que sean cantidad de preguntas. Eso no se cuenta claramente dentro de los tiempos. Entonces no estoy hablando de tiempos de completar un flujo, sino que lo que yo estoy haciendo es una ficha para luego poder contrastar. Me parece perfecto, podemos hacerlo así. Es viendo
+- **[15:18] Laura Contreras:** Sí, de acuerdo.
+- **[15:18] Laura Contreras:** Pensando más en el storytelling, Santi, como del espacio, y de acuerdo contigo, o sea, no tiene que hacer parte del flujo como tal, y el Y todo de Gali, cierto, de completar el flujo hasta que cree la página. Y como dice Cata, no, sí podemos consultar en Darwin el promedio. Sí, Cata, seguro en Darwin tenemos un promedio, pero Imaginémonos el workshop, no, el evento. O sea, estamos ya desenfocados en revisar por ahora, darle respeto a eso. Y es, imagínate que a mí como usuario me sientes y me digas, ¿cuánto te demoras hoy? 2 días. Listo. Y entonces, ¿qué pasa si tú le das a la opción de y le das a la opción de agregar al carrito? Entonces, ¿qué pasa si tú le das a la opción de agregar al carrito y le das a la opción de agregar al carrito y le das a la opción de agregar Definen de acuerdo a storytelling. Creo que eso puede ser una reunión que trabajemos ya la otra semana antes de llegar al evento, y es cómo vamos a, en qué momento tiramos ciertas preguntas para que estratégicamente el usuario haga como esas
+- **[15:19] Laura Contreras:** comparaciones o tenga como esas respuestas y podamos como guiarle en la percepción de valor, algo así.
+- **[15:19] Yo:** Ahí tendríamos que tener cuidado de no
+- **[15:19] Yo:** O sea, te entiendo el punto, pero no contaminar la muestra.
+- **[15:19] Yo:** De que no vayamos a generar un sesgo sobre la percepción de valor. De que es que yo, o sea, porque alguna forma terminó de alguna forma haciéndote medio product marketing, diciéndote me dijiste el Al principio que te demoraba 2 días, ahora mira, 15 minutos. O sea, en este punto creo que la intención no está en vender el valor, creo que el valor va a ser de alguna forma demasiado perceptible para el usuario.
+- **[15:19] Laura Contreras:** Algo parecido, ok.
+- **[15:19] Yo:** Porque él sabe que llevó 2 días, o sea, ya, ¿por qué te digo que te demoraste 15? Lo digo es más para no generar de pronto un sesgo, termina siendo el bias ahí de no, no, de inducirlo.
+- **[15:20] Laura Contreras:** Okay.
+- **[15:20] Yo:** Hay que entender valor, que creo que ahí es, de pronto nos estaríamos yendo por otro lado, pero definitivamente sí, en el workshop se debería manejar entonces el formulario inicial para ver el punto de partida. Hay data, lo que sí dice Sin embargo, teniendo en cuenta que van a ser usuarios que muchos de ellos no han usado lo suficiente Dropy, capaz no han elegido su primer producto, o sea, si nos vamos a la data, vamos a tener nerviosos. Entonces creo que para sacarle el máximo provecho al workshop definitivamente sí debería ser así. Inclusive pensándolo como lo estás tratando de llevar, Lau, creo que ahí sí sería muy útil inclusive
+- **[15:20] Yo:** No solo quedarnos con la data de los a los que les queremos llegar, que son los huérfanos que nos han vendido, no, es también cómo lo han hecho los que ya venden.
+- **[15:21] Yo:** ¿Cuánto te demoraste en escoger tu primer producto? Alguien que ya venda 10,000 por mes, dígame usted cuánto se demoró la primera vez que escogió un producto también.
+- **[15:21] Laura Contreras:** De acuerdo.
+- **[15:21] Yo:** Entonces creo que lo podemos llevar ahí y también las es más fácil.
+- **[15:21] Yo:** Es más fácil, no creo que la respuesta más precisa suele estar en esas preguntas que yo hago post proceso.
+- **[15:21] Laura Contreras:** Sí.
+- **[15:21] Yo:** No me refiero a después de que se haga el gale, sino es más certera la información cuando yo te pregunto cuánto te demoraste en abrir tu cuenta de Google, a que yo te pregunte cuánto esperas demorarte.
+- **[15:21] Laura Contreras:** Sí, ok.
+- **[15:21] Yo:** Entonces es más fácil que, de hecho, yo les pregunté la última vez que escogiste un producto, ¿cuánto te demoraste? O más bien, la primera vez que escogiste el producto, ¿cuánto te demoraste? Entonces la persona ya es consciente de Realmente, ¿cuánto se demoró a que yo le pregunte? Y esto es para que igual todos también lo veamos o participemos sobre eso. Es diferente que yo le pregunte cuánto espera demorarte, me dice 5 minutos. Pero 5 minutos, capaz no tiene presente todo el proceso que hay detrás y todo lo que tiene que escoger y parametrizar y configurar y entender. Entonces creo que generaría mucho de valor de que si le preguntamos antecedentes
+- **[15:22] Laura Contreras:** Yeah.
+- **[15:22] Yo:** Bueno, entonces
+- **[15:22] Laura Contreras:** Listo.
+- **[15:22] Laura Contreras:** Entonces, tiempo, tiempo es la primera.
+- **[15:22] Yo:** 15 minutos en flujo completo.
+- **[15:22] Laura Contreras:** Yeah.
+- **[15:22] Yo:** Y aquí toca empezar a desagregarlo.
+- **[15:22] Yo:** Entonces, una zona de riesgo son más de 20. Realmente, pues esto no, a ver, no podemos llevarlo a exactitud. ¿Por qué no arranca más de 15? Porque pues a ver, aquí también tenemos que empezar a ser flexibles con Que no son 15 o te mueres. Es como, a ver, la meta son 15, pero alguien que se demoró 15 minutos, 10 segundos, está, sí, es más un riesgo aparte. De 20, tratando de dejar como un poquito, sí, un colchón, ¿verdad? Que cosas pueden pasar, que pregunten, que se distraen, que entren en una llamada, lo que sea. Es más, por eso es que se dejan Estos 5 minutos, como que aclaro, si no les parece, pues por favor me dicen, son a riesgo. Entonces, más de 20, realmente lo que se entendería es de la parte cognitiva del usuario es que entre a una zona de churn mental.
+- **[15:22] Laura Contreras:** Sí.
+- **[15:22] Laura Contreras:** Ya, hermano.
+- **[15:23] Yo:** Es decir, ya me saturé de información, no lo entendí, me dispersé, me fui por otro lado. Eso se entiende normalmente como fatiga cognitiva, sí, me estoy demorando demasiado en un proceso Que debería ser de 15, ya me demoré más de 20. Ahí no le vamos a decir al usuario, el usuario lo vamos a dejar que termine. Sin embargo, ya vemos que pueden haber ciertas fricciones y pueden haber ciertos tipos de usuarios. Por ejemplo, si Tenemos diversidad y vamos a tenerla en usuarios de 15 minutos, pero es que solamente los que ya venden se demoraron 15 minutos, pero los que nunca han vendido ya fueron 20. Es decir que todavía no es lo suficientemente fácil de utilizar para usuarios que no han vendido nada de Melau.
+- **[15:23] Laura Contreras:** Santi.
+- **[15:24] Laura Contreras:** Ya, perdóname, al final solo una preguntita rápida como para confirmar. ¿Ya confirmaste cuál sería la muestra o ya confirmaron de pronto con Aleja? Ya pensaron, habíamos Sí, los que estén en los, creo que dos primeros niveles, si no estoy mal, o el primer nivel que era antes de 100 órdenes, bienvenido, creo que se llama, no me acuerdo. Sería solo los de ese nivel, pero ¿cuántas personas invitadas que queremos lograr en el workshop. De pronto eso lo
+- **[15:24] Yo:** Sabes que toca ajustar ahí, Lau. Es, o sea, sí, desde parte de Gali sí se tiene a quién le queremos llegar. Sin embargo, como Lo que hemos hablado con Juan es que del lado de logística todavía no se tiene claro. Tenemos que llegar al punto en donde tanto para logística como para sellers funcione, porque yo te podría decir no, a mí solamente No me interesan. Si nos enfocamos solo en Galicia, solo me interesan personas.
+- **[15:24] Yo:** que no han vendido absolutamente nada.
+- **[15:25] Yo:** Apenas van a arrancar, pero resulta que para logística, por el tipo de módulo que están diseñando, sí necesitan personas que hayan vendido y que conozcan un poco más del modelo de dropshipping. Entonces ahí ya como que
+- **[15:25] Laura Contreras:** Sí.
+- **[15:25] Laura Contreras:** Pero, ¿te
+- **[15:25] Diana Aldana:** acuerdas que íbamos
+- **[15:25] Laura Contreras:** como a confirmar al menos una muestra de los novatos que tú querías tener? O sea, al final dijimos todos los que van a estar en el workshop van a interactuar, ¿cierto? Como 5, 5 y 5. Hagamos que Juan D escoge 5, Jaime escoge 5, tú escoges 5. Voy a poner un ejemplo. Los 15 van a interactuar, de los 15 vamos a tener feedback, pero necesitamos al menos esa muestra para enviar las invitaciones. Invitaciones y ver cuánto es el aforo que sí o sí queremos tener en el workshop, o quieres dejarlo abierto y que lleguen las personas. Pero creo que tenemos que poner un máximo porque si no perdemos manejo de la gente.
+- **[15:25] Yo:** ¿Cuántas personas están? ¿Cuántas personas? O sea, ¿a cuánto?
+- **[15:25] Laura Contreras:** No, no tenemos, señor, por eso te pregunto. O sea, de hecho, por eso les pregunto.
+- **[15:25] Yo:** No, no, o sea, va a ser uno, una sala, o lo de no es que las salas son
+- **[15:25] Laura Contreras:** A las salas para 176 personas, 176 nos caben, pero 176 siento que es pues perder a la gente muy fácil de pronto o dificultar un poco el storytelling.
+- **[15:26] Yo:** Ah, no, son un huevo, o sea.
+- **[15:26] Laura Contreras:** Daniels.
+- **[15:26] Laura Contreras:** Sino
+- **[15:26] Diana Aldana:** como solo para complementar a esta conversación, considero que ya de por sí, como la comunicación de ExpoWinners ya seca un poco el tipo de usuario que va a visitar el evento, o sea yo analizando toda la exposición, toda la publicidad de Expo Winners habla de negocios, de encuentra proveedores únicos. Para mí eso ya es una publicidad para un dropshipper que ya está un poco más escalado.
+- **[15:26] Yo:** Yo tengo una hipótesis del evento y es que la gente, de acuerdo, sí, de acuerdo conmigo. Y yo tengo la hipótesis del evento para nosotros y es que realmente nuestra data no va a estar en el workshop, sino que va a estar Justamente en el uso abierto de los dos días.
+- **[15:26] Laura Contreras:** De los días.
+- **[15:26] Laura Contreras:** De acuerdo.
+- **[15:26] Yo:** Y realmente en el workshop, ¿qué dicen ustedes? Pero digo, es más bien planteemos la encuesta, que me parece que ahí donde más creo que entra a completar un punto que todavía me hacía algo de ruido, y es ¿Cómo le sacamos provecho al espacio, a esos 30 minutos, a la hora, lo que sea? Y es, creo que sería definitivamente la encuesta, porque es que la encuesta me sirve no solamente Para los que no, de hecho, me sirve más aplicársela a los que ya escogieron, porque de alguna forma me trazan el camino de cuánto se podrían demorar. Ahora vamos con Aleja, es cuánto era sobre el de cuánto había logrado vender el primer Es una cifra totalmente diferente a la que puede tener Santiago si empieza a vender el primer mes. Entonces lo que ya podemos hacer ahí es tendencias, y es un promedio aproximadamente. Una persona puede demorar 3 días en escoger el primer producto y 5 en publicarlo en una página o en crearle una landing. Entonces lo que podemos hacer en el workshop es tengamos diversidad de usuarios
+- **[15:27] Yo:** usuarios.
+- **[15:27] Yo:** Diversidad me refería, me referiría es a tratar de tener de forma proporcional. Necesitaríamos la base también de cuántas personas van a asistir, pero que si son 6 tipos por el tema de leyenda o dropy, que tengamos de los 6
+- **[15:28] Laura Contreras:** Son como 10,000 personas.
+- **[15:28] Yo:** Listo. No, no, no, hablo de estemos 6, tengamos de las 6 personas, y pensando en el grupo que das, en el tamaño de la sala, no lo haría más de 10, 10. 10, 10, o sea, tener 60 personas, pero no sé cómo lo ven.
+- **[15:28] Yo:** Y de ahí aplicamos la encuesta de Gali, llamémoslo así.
+- **[15:28] Yo:** Y también le sirve, pues ahí también va a servir para que utilicen pulso.
+- **[15:28] Laura Contreras:** Ahí también sabes que tenemos que diferenciar, perdón, ya creo que nos quedan 2 minuticos, pero creo el tiempo era la única métrica o tenemos más, o la revisamos. Ah, ok, perdón. Perdón, Santi, iba a decir algo. No sé si podemos diferenciar, y creería que sí, las personas que asistan al workshop y estén enfocadas en la tarea, porque creo que nos va a romper un poco la métrica aquellas que escaneen el QR o entren en cualquier momento y de pronto se queden en el flujo, se les olvide, lo cierren, si me entiendes, como por fuera del espacio de concentración.
+- **[15:28] Yo:** No, tenemos entonces completamente reiterado.
+- **[15:29] Yo:** Claro.
+- **[15:29] Yo:** Tomaría 30 minutos.
+- **[15:29] Yo:** 10 minutos, va a ser de una hora, me confirmaste, ¿cierto?
+- **[15:29] Laura Contreras:** Sí señora, sí señor.
+- **[15:29] Yo:** Listo, pondría.
+- **[15:29] Yo:** 10 minutos, creo que el tiempo da 10 minutos para solamente la encuesta, esperando de lo mismo al que no le llega el QR, al que experimente una llamada de arranco, al lo que sea. 10 minutos para esa encuesta.
+- **[15:29] Yo:** Que tampoco puede ser tan extensa, y dejarlos aproximadamente 20 minutos o los que ya arranquen con el flujo.
+- **[15:29] Laura Contreras:** Ok.
+- **[15:29] Yo:** Y después de que termine, ya realmente sería hacer el empalme con Juan Di para que siga con lo de selección de transportadores. Creo que nos da el tiempo.
+- **[15:29] Laura Contreras:** Tú al fin vas a conectar con Drop y Pulso, o sea, el siguiente
+- **[15:29] Yo:** Sí, pero Dropy Pulso, el dilema que está es que como no vamos a tener el MCP
+- **[15:29] Alejandra Melo:** sería Drop y Pulso.
+- **[15:29] Laura Contreras:** Sí.
+- **[15:29] Yo:** Significa que vamos a tener un catálogo cerrado y por ende lo más probable es que no sea match. Es decir, que ahí tenemos es un riesgo de Hacer ver a Dropy como incompleto o vacío en cuanto a, claro, será limitado.
+- **[15:30] Laura Contreras:** Es que no haga match con los productos.
+- **[15:30] Laura Contreras:** Limitado.
+- **[15:30] Laura Contreras:** Ok.
+- **[15:30] Yo:** Y la realidad es que no, es como, ¿cómo te explico que no lo encontraste pero hay más de un millón de? No, sí me entendés, es como, creo que ahí no, de hecho no lo hemos hablado con Jaime, pero Ahí Pulso termina inclusive para la intención era utilizar el escáner de productos.
+- **[15:30] Laura Contreras:** Ajá.
+- **[15:30] Yo:** The winners.
+- **[15:30] Yo:** E incluirlo dentro del flujo de Gali. Pero el riesgo es que muy probablemente el producto que escanees no va a estar en Gali porque es un catálogo cerrado, porque no está el MCP. Lo que sí va a servir es como para que lo ranquee y lo pondere y le diga Sí, súper buen producto, lo que sea, pero no va a servir más que para eso.
+- **[15:30] Laura Contreras:** Ya.
+- **[15:30] Laura Contreras:** Ok, ok.
+- **[15:31] Yo:** O sea, mucho también.
+- **[15:31] Laura Contreras:** Uf.
+- **[15:31] Laura Contreras:** O sea, solo nos quedaríamos con Galicia, elección.
+- **[15:31] Yo:** Sí.
+- **[15:31] Laura Contreras:** Mm-hmm.
+- **[15:31] Yo:** Cali Selección, y lo que le va a proponer a Jaime era dediquémosle, por si mucha gente puede que no lo conozca, hagamos un tipo No sé, no sé si es un lanzamiento, realmente no es, pero un poco la pauta para que se utilice más pulso.
+- **[15:31] Yo:** Y es de pronto mostrar, hey, esto es pulso, así funciona.
+- **[15:31] Laura Contreras:** Sostachelli.
+- **[15:31] Yo:** Un tipo como, se me olvidó el nombre que le tienen a eso, tipo jobs presentation.
+- **[15:31] Yo:** De cuando sales, hey, esto es pulso, esto es lo que ha hecho el equipo, el equipo de Dropi, para que ahora ya ta ta ta, y no sé qué. Jaime coja y explique.
+- **[15:31] Yo:** O sea, es pulso funcionado así, esto es lo que ha resultado. Tenemos clientes, usuarios que están reportando que mejoraron sus ventas o que encontraron productos que antes no podían. Entonces, como 10 minutos, pauta, y que todo el mundo como que se enganche. con la idea de pulso y alguna forma es en vivo y de forma, llamémoslo, orgánica.
+- **[15:32] Yo:** Hacer, hacer llegar a pulso a más usuarios.
+- **[15:32] Yo:** Creo que esa es la forma más práctica de hacerlo. Bueno, para cerrar esa partecita entonces de métricas.
+- **[15:32] Laura Contreras:** Ok.
+- **[15:32] Yo:** Entonces esperaremos que más del 70% logre terminar el flujo, es decir, que como lo estamos haciendo, Gali está resolviendo la barrera técnica, sí, la barrera de habilidad del usuario.
+- **[15:32] Laura Contreras:** Mm-hmm.
+- **[15:32] Yo:** Si se logra más de un 40%, un 70%, es decir que sí genera valor, pero todavía hay fricción en muchos de los pasos.
+- **[15:32] Yo:** Menos del 40%, realmente el flujo no nos está llegando como queremos, no está logrando tener el éxito que queremos. Es decir, es que aquí está la decisión, ¿no? Si deberíamos conservarlo y creo que que considerarlo seguramente, si deberíamos pivotear a otro tipo de solución. De hecho, ayer justo hablamos con Jaime de una idea que podría incluirse dentro de Gali, pero todas no vamos a llegar a los jóvenes con eso.
+- **[15:33] Laura Contreras:** Yo creo que hemos incluido cosas, asegurémonos que funcione. Sí, sí, me la mostró.
+- **[15:33] Yo:** Sí, ya tocó.
+- **[15:33] Yo:** Aquí bueno, aquí es lo que se está utilizando, implicación. Bueno, si quieren ya terminarlo y como lo leen, voy a incluir lo que dijimos ahora, la de la encuesta.
+- **[15:33] Yo:** Identificación de algunos de estas personas que también lo hablamos con Dianis ahora y ya eso sería como el documento de métricas e incluir el que decías por fases ya poder hacer el Pero por cada una de las, cuánto se demora en inclusive saber qué quiere, en seleccionar si tiene un producto, si quiere explorar qué está haciendo. Podemos hacerlo uno por uno. De hecho, aquí allí Ayer apenas terminamos una reunión con Roax en la tarde. Voy a incluir una parte de eso porque también vamos a agregarle cuántos estarían dispuestos a pautar un producto que todavía no han probado y sin haber vendido antes, cuántos no están dispuestos, cuántos se van por venta orgánica.
+- **[15:33] Laura Contreras:** Listo.
+- **[15:33] Participante:** Listo.
+- **[15:34] Laura Contreras:** Esas preguntas, esas preguntas están muy chéveres. Creo que nos dan mucha luz de oportunidad. De Expo Winners, no sé si James ya te recomendó que nosotros deberíamos un poco como liderar la definición de la app, incluso la de marketing. O sea, obviamente ellos tienen el requerimiento Entonces, que sí, sí, sí, sí, sí, sí, sí Perdonen, es que es demasiada gente y como que invité como algunos y se me quedó por fuera. Discúlpenme, eso sí, soy, es como mi cabeza, pero es como Hacemos que la experiencia de una app que contiene otras apps no sea demasiado, demasiada fricción para el usuario. Como que con Jaime, desde que lo revisamos
+- **[15:35] Laura Contreras:** en momento cero la posibilidad de integrarnos en cuanto a apps, no lo veíamos tan grave, pero creo que sí tenemos que evaluarlo porque ya ayer nos dijeron no puede ser que sean como demasiadas apps. Eso está mal hecho, ta ta ta. Y pues nosotros nos veíamos como islitas independientes y tienen toda la razón. Tenemos es que vernos como algo consolidado, no cada equipo con su producto y ya está. Entonces, un poco como esa es la visión de la alineación de esta tarde, como volvámonos de verdad un, sí, como un solo hub de todas las dinámicas que tengamos y ver cómo lo logramos. Entonces comentarles eso. No sé si quieren igual estas redes de Gali y Cata, no sé si viste que tienes algo más que aportar, o sea, este espacio, pues a pesar de que tú ya no lo tienes, pues tú creaste, Gali. Entonces la idea es que sigamos alineando como, cómo medimos esos éxitos. Creo que ya lo tienen muy bien definido, es simplemente ir agregando cositas. Tenemos otro espacio de Gali cuando
+- **[15:36] Laura Contreras:** Pues los MCPs de estas reuniones de la tarde, creo que eso sí los voy a quitar y dejamos solo la de la semana que viene. ¿Les parece o necesitamos otro espacio para seguir alineando métricas o lo hacemos offline? Como quieran.
+- **[15:36] Laura Contreras:** Online, offline.
+- **[15:36] Laura Contreras:** Asíncrono.
+- **[15:36] Yo:** Para este pensador, pensador, pensador.
+- **[15:36] Yo:** No, yo creo que vamos a sincronizar. De hecho, necesitamos ese tiempo para meterle mano a ese repo y echarle a esta tablita con esa agenda full.
+- **[15:36] Laura Contreras:** Ya.
+- **[15:36] Yo:** Y se necesita, entonces es como el offline y más de ella, digamos.
+- **[15:36] Laura Contreras:** Listo.
+- **[15:36] Laura Contreras:** Dejamos la semana que viene listo.
+- **[15:36] Laura Contreras:** De una. Y Santi, y yo creo que la semana que viene sí nos voy a separar un espacio para que hablemos solo como del storytelling del espacio, sí, ya, ya por fuera de la app.
+- **[15:36] Yo:** Sí, de hecho yo sé que es difícil, pero les iba a proponer a los que sean que tengan que estar, deberíamos realmente hacer jornada dedicada de Galí o el workshop del evento.
+- **[15:37] Yo:** Sería perfectamente bloquear un día completo. Yo no sé si les quedaría fácil, no sé, irnos a encontrar algún lado a los que se puedan también. No sé si, no sé, los que vayamos ahí de pronto De hecho, desde acá de Cali, y organizar hacer como el workshop completo del día.
+- **[15:37] Alejandra Melo:** Sí.
+- **[15:37] Yo:** ¿Qué dije? De un día solamente a definir, porque sabes que no sé, me está pasando de salto reunión en reunión, algunas de Cali, otras no.
+- **[15:37] Yo:** La mayoría sí son de Cali, pero siento que igual no hay continuidad. Entonces como que podemos sentarnos un día completo y barrer con todo y realmente hacer unas definiciones y hacer un corte.
+- **[15:37] Laura Contreras:** Sí.
+- **[15:37] Laura Contreras:** Y hacer una prueba del
+- **[15:37] Diana Aldana:** experimento. Diana, ¿en qué momento
+- **[15:37] Laura Contreras:** volviste? Sí, como una simulación, estoy de acuerdo. Es que el weekly
+- **[15:37] Diana Aldana:** experience toco Aleja, y otra
+- **[15:37] Laura Contreras:** cosa, yo sé que esto es el sábado, yo sé que pues obviamente no todo el equipo podía ir y gestionamos, fue realmente los que Los que nos aprobaron, pero no sé si creo sería una buena oportunidad. Y si puedes ese sábado también estar como, es el domingo, el World Es una hora, pero no sé si te gustaría estar conectada como escuchando feedback y eso. Eso también podemos gestionarlo.
+- **[15:38] Laura Contreras:** Tampoco quiero entrar como en tus horarios, qué pena, familiares. Entonces yo sé que obviamente no podemos ir todo el equipo, nos aprobaron los que ya están en el listado. Pero igual sería chévere que si se pueden conectar a ese workshop y de alguna manera escuchar el feedback o poder alimentar la dinámica con algo o hacer parte del storytelling, creo que también estaría chévere. Sí, miramos qué
+- **[15:38] Alejandra Melo:** podemos hacer también desde offline. De
+- **[15:38] Laura Contreras:** acuerdo,
+- **[15:38] Alejandra Melo:** pues offline
+- **[15:38] Laura Contreras:** no, online. Eso, listo, listo. Santi, sí creo que es una buena idea bloquearnos un día. O al menos toda una tarde y seguir haciéndolo. Yo creo que el jueves, no sé si está muy encima el jueves como para arreglar cosas, o el martes en la tarde, tal vez martes 8.
+- **[15:39] Yo:** Eso.
+- **[15:39] Yo:** Sí, me parece.
+- **[15:39] Laura Contreras:** Y de una vez quieres, la citas tú, que eres como el dueño de lo que va a pasar. Los dueños de lo que va a pasar son ustedes y nos vamos alineando en todo.
+- **[15:39] Yo:** Vamos.
+- **[15:39] Yo:** Listo, ya, ya la programamos el domingo.
+- **[15:39] Laura Contreras:** De uña.
+- **[15:39] Yo:** Todos casi estamos más James y no sé.
+- **[15:39] Laura Contreras:** Sí.
+- **[15:39] Laura Contreras:** Pues a mí me parece interesante que tú estés en todo porque de ti partió. ¿Quieres estar? ¿Puedes estar?
+- **[15:39] Yo:** Ok.
+- **[15:39] Laura Contreras:** Listo.
+- **[15:39] Yo:** Listo.
+- **[15:39] Laura Contreras:** De uña.
+- **[15:39] Yo:** Bueno, ya la envió.
+- **[15:39] Laura Contreras:** Bueno, que estén muy bien.
+- **[15:39] Yo:** Gracias.
+- **[15:39] Catalina Giraldo Aguirre:** Gracias.

@@ -1,0 +1,820 @@
+# 1:1 Jaime / Santiago
+
+- **ID:** `not_pb4Miq8i17cmJa`
+- **Fecha:** 2026-08-27T15:01:00.668Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/e04263e8-7f13-4e31-be3e-9e5ec2919f3a)
+- **Asistentes:** Santiago Herrera Acosta
+
+---
+
+## Resumen de la Reunión
+# Dirección Estratégica: Foco en Huérfanos
+
+- Lineamientos de María para el segundo semestre: foco en el 40% de usuarios huérfanos
+  - Del 40%, el 99% no se ha activado
+  - Del 99%, el 90% no sabe hacer dropshipping
+- Objetivo: ecommerce para dummies, alguien que nunca ha vendido digital
+- Promesa de valor: escalonada, no “saca un mínimo el primer mes”
+  - Meta realista: salario mínimo al sexto mes, creciendo gradualmente
+- “Aha moment” del negocio: cuando el dropshipper recibe el dinero en su wallet
+  - Pero hay mini-moments en el journey que sostienen la motivación
+  - Momento clave: publicar el primer producto en la tienda
+
+# Prototipo Ecommerce: ExpoWinners y Más Allá
+
+- Métrica central: 10 minutos desde “quiero vender” hasta producto publicado en la mini-tienda
+  - Benchmark de industria (Shopify y similares): 11-15 minutos para lo mínimo necesario
+- Plan para ExpoWinners: lanzar el prototipo para validar usabilidad y generación de valor
+  - Dos puntos de contacto con el usuario vía QR
+  - Pendiente definir con Juandi y Michel: ¿qué quieren estudiar, a quiénes llegar, cuáles son sus hipótesis?
+  - Opciones: prueba de usabilidad, encuesta/video demo informativo, o grupo de control con reto de selección de transportadora
+- Hoja de ruta post-ExpoWinners: iterar, mejorar, pasar a producción
+  - Luego “plan canguro”: si funciona, escalar al resto de la base
+
+# Gamificación, Pauta y Modelo Freemium
+
+- Capa ROAX: agregar pauta como valor adicional una vez el usuario tiene su tienda
+  - Bifurcación en el flujo: ¿quieres pagar pauta? Sí / No
+  - Si sí: créditos gratis iniciales, luego cobro (freemium)
+  - Si no: capturar la fricción, ¿por qué no quiere pagar?
+- Venta orgánica como alternativa válida: redes, WhatsApp, grupos familiares
+  - Modelo Argentina: líderes de comunidad débiles, estrategia orgánica fuerte
+- Órdenes generables sin pauta: usuario comparte externamente, el checkout llega a Dropi, él monta la orden manualmente
+  - Data recolectable: qué órdenes se generaron a partir del prototipo ExpoWinners
+
+# Cantera de Huérfanos y Siguientes Pasos
+
+- Modelo “cantera”: usar el prototipo para identificar a los huérfanos con más potencial
+  - Perfilar por: tiempo de completación, disposición a pagar pauta, calidad de productos escogidos
+  - Comercial hace el acompañamiento cercano con los perfiles más prometedores
+- Líderes de comunidad: el producto debe ser lo suficientemente robusto para que un líder pueda hacer un curso completo de punta a punta
+  - Flujo: encontrar producto, seleccionarlo, publicarlo y pautarlo, todo en un solo flujo
+- Coordinación con José Pineda en gamificación: considerada fundamental para el core del producto
+- Hexa (herramienta de deep research): en uso, $0.22 gastados, primer mes gratis, $10/mes después
+  - Propuesta: compartirlo en Product Week / Product Labs; distribuir cuota entre suppliers, sellers, brands y logística
+
+# Próximos Pasos
+
+- **Alinear con Juandi y Michel los criterios del experimento en ExpoWinners**
+
+  Definir hipótesis, a quiénes quieren llegar y qué resultado consideran exitoso o fracasado.
+- **Definir formato de participación en ExpoWinners**
+
+  Decidir entre usabilidad, encuesta/demo informativo o grupo de control; evaluar si se incluye en la landing principal o con código de acceso en el workshop.
+- **Reunión con líderes de comunidad** (Jaime, Santiago)
+
+  Evaluar si la herramienta les sirve a líderes de comunidad y si puede soportar un curso completo de punta a punta.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/b650eea3-8dc9-4ffd-b0c8-9401490c426d](https://notes.granola.ai/t/b650eea3-8dc9-4ffd-b0c8-9401490c426d)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[15:02] Jaime Guevara:** Ole.
+- **[15:02] Yo:** Que mais, hein? Isso, moto.
+- **[15:02] Jaime Guevara:** Bien, ok.
+- **[15:02] Yo:** Bien, bien. Aquí.
+- **[15:02] Jaime Guevara:** No te escucho.
+- **[15:02] Yo:** Ya.
+- **[15:02] Yo:** Todo.
+- **[15:02] Jaime Guevara:** Bien, dame un segundito, me estoy moviendo.
+- **[15:02] Yo:** Hágale.
+- **[15:02] Jaime Guevara:** Y voy.
+- **[15:02] Jaime Guevara:** ¿Está despierta? Awen, espérame un segundito, ya.
+- **[15:03] Jaime Guevara:** Preparado, mami. Mami, ahí ahí preparado.
+- **[15:03] Jaime Guevara:** Es que ando así en la oficina.
+- **[15:03] Jaime Guevara:** Listo.
+- **[15:03] Yo:** Bien, ok.
+- **[15:03] Jaime Guevara:** De una. Bien, ok.
+- **[15:03] Jaime Guevara:** Bueno, nuestro primer
+- **[15:03] Jaime Guevara:** nuestro primer uno a uno.
+- **[15:03] Yo:** ¿Cómo arrancamos?
+- **[15:03] Jaime Guevara:** Con la
+- **[15:03] Yo:** ¿Cómo arrancamos? ¿Cómo quiere arrancar con los buenos días?
+- **[15:03] Jaime Guevara:** Con los buenos días.
+- **[15:03] Yo:** ¿Qué más? ¿Por qué esto, y es lo que está yendo a la oficina?
+- **[15:03] Jaime Guevara:** No, no estoy en la oficina.
+- **[15:03] Yo:** Ah, no, no sé, estás allá.
+- **[15:03] Jaime Guevara:** No, estoy donde mis suegras.
+- **[15:03] Yo:** Ah, ok.
+- **[15:03] Jaime Guevara:** Pero ayer sí estuve en la oficina.
+- **[15:04] Jaime Guevara:** Reuniones con comercial,
+- **[15:04] Jaime Guevara:** o sea, yo extrañé la oficina.
+- **[15:04] Yo:** L'officide
+- **[15:04] Yo:** por la, o sea, por el equipo, por verlo, está
+- **[15:04] Yo:** por ver a todo el mundo, pero no por ir a la oficina.
+- **[15:04] Jaime Guevara:** Nada,
+- **[15:04] Yo:** O sea, ¿sabes qué sabes qué? Lo único, de hecho,
+- **[15:04] Jaime Guevara:** Sí,
+- **[15:04] Yo:** la oficina, la la parqueada.
+- **[15:04] Jaime Guevara:** Ah, sí, yo, obvio.
+- **[15:04] Yo:** Realmente.
+- **[15:04] Yo:** Como jamón, es como, ay,
+- **[15:04] Yo:** eso no
+- **[15:04] Yo:** uno tener que ir como que coger el carro, de pronto es nueva, lo llego a trans, y
+- **[15:04] Yo:** Entonces, tránsito a veces jode a los que están sobre la vía, pero hace sobre los que están sobre el andén,
+- **[15:04] Yo:** es como lo lo la única canción.
+- **[15:04] Jaime Guevara:** Total.
+- **[15:04] Jaime Guevara:** Bueno, ahora
+- **[15:04] Jaime Guevara:** que
+- **[15:04] Jaime Guevara:** vamos a pasarnos a la otra oficina.
+- **[15:04] Yo:** Os monos.
+- **[15:04] Jaime Guevara:** De pronto
+- **[15:04] Yo:** Vamos a mornos.
+- **[15:04] Jaime Guevara:** ¿Cómo?
+- **[15:04] Jaime Guevara:** Sí, esa es la idea.
+- **[15:04] Yo:** Pero ¿cuál es la otra?
+- **[15:05] Jaime Guevara:** Esto no se puede
+- **[15:05] Jaime Guevara:** Esto no se puede contar, pero vaya todo el mundo lo sabe.
+- **[15:05] Jaime Guevara:** Pero
+- **[15:05] Jaime Guevara:** sí, por eso me siento mal.
+- **[15:05] Jaime Guevara:** Es que todo el mundo lo hace mal. Pero sí, hay todavía hay hay problemas
+- **[15:05] Yo:** Porque no estoy
+- **[15:05] Jaime Guevara:** no lo saben, pero ahí te cuento, ahí a a Cascajal en unas nuevas oficinas que están construyendo.
+- **[15:05] Yo:** A que tinha
+- **[15:05] Yo:** quetima
+- **[15:05] Jaime Guevara:** No, pues, usted bien, porque le queda cerquita.
+- **[15:05] Yo:** quetima,
+- **[15:05] Yo:** Sí, sí, me alegré, fue como literalmente acá al lado.
+- **[15:05] Jaime Guevara:** Sí, y es más,
+- **[15:05] Yo:** Qué
+- **[15:05] Jaime Guevara:** cuando uno va a Cascajal a a Bochalema son como cinco minutos.
+- **[15:05] Jaime Guevara:** No es más.
+- **[15:05] Yo:** Sí. Aquí uno coge la la de atrás, la
+- **[15:05] Yo:** Excelente.
+- **[15:05] Jaime Guevara:** ¿Y ahí
+- **[15:05] Jaime Guevara:** Ya hay parqueader.
+- **[15:05] Jaime Guevara:** Bueno.
+- **[15:05] Yo:** No, lo máximo.
+- **[15:05] Jaime Guevara:** Parcel,
+- **[15:05] Jaime Guevara:** ¿qué te cuento? Te
+- **[15:06] Jaime Guevara:** muestra la primera,
+- **[15:06] Jaime Guevara:** Hay hay hay ya unos direccionamientos de María, digamos que todos los
+- **[15:06] Jaime Guevara:** todo lo que es ahorita segundo semestre de del año,
+- **[15:06] Jaime Guevara:** Todo es direccionamiento de María.
+- **[15:06] Jaime Guevara:** María, pues, como sabes, se va de vacaciones,
+- **[15:06] Jaime Guevara:** creo que ya no vuelve a la oficina, ella ahorita está en Bogotá, ya no vuelve a la oficina.
+- **[15:06] Jaime Guevara:** Entonces,
+- **[15:06] Jaime Guevara:** por eso aceleró esa reunión del lunes,
+- **[15:06] Jaime Guevara:** y por eso la hizo a decir como como muy
+- **[15:06] Yo:** Sí.
+- **[15:06] Jaime Guevara:** pues, un poco rápida.
+- **[15:06] Jaime Guevara:** Dando, pues, como lineamientos. Ahí hemos intentado, porque la verdad es que
+- **[15:06] Jaime Guevara:** no nos hemos podido comunicar y están en unas capacitaciones ahorita,
+- **[15:06] Jaime Guevara:** pero intentado un poco como que ella nos transmita también a nosotros, a Laura y a mí,
+- **[15:06] Jaime Guevara:** esa nueva visión, porque eso, literal,
+- **[15:06] Jaime Guevara:** no lo está intentando pasar desde esta semana, esta anterior semana.
+- **[15:06] Jaime Guevara:** ¿Por qué por qué te lo digo? Como para que trabajemos
+- **[15:07] Jaime Guevara:** súper en equipo, porque no es que yo tenga todo el contexto,
+- **[15:07] Yo:** Okay.
+- **[15:07] Jaime Guevara:** pero la idea es apoyar
+- **[15:07] Jaime Guevara:** en este caso, es apoyar a que ese lineamiento se
+- **[15:07] Jaime Guevara:** se pueda desarrollar de la mejor manera.
+- **[15:07] Jaime Guevara:** Y, básicamente, yo ya te lo venía comentando, y es lo de, o sea, yo
+- **[15:07] Jaime Guevara:** me me daban como alineamientos, te te he estado como comentando.
+- **[15:07] Jaime Guevara:** Y es básicamente como concentrarnos en esa
+- **[15:07] Jaime Guevara:** ese uno por ciento, en los huérfanos.
+- **[15:07] Jaime Guevara:** Cómo hacemos que para el usuario
+- **[15:07] Jaime Guevara:** inicial, que llegue la con la ilusión.
+- **[15:07] Yo:** En ese en ese en ese cuarenta por ciento.
+- **[15:07] Jaime Guevara:** Sí.
+- **[15:07] Jaime Guevara:** Pues, en el en el
+- **[15:07] Jaime Guevara:** sí, las la
+- **[15:07] Yo:** En el en el noventa y nueve por ciento del cuarenta por ciento.
+- **[15:07] Yo:** Ajá.
+- **[15:07] Jaime Guevara:** Exactamente, exactamente.
+- **[15:07] Jaime Guevara:** ¿Cómo logramos...?
+- **[15:07] Jaime Guevara:** Esas personas que vengan con esa ilusión de tener un nuevo negocio, un emprendimiento,
+- **[15:08] Jaime Guevara:** lo consigan.
+- **[15:08] Jaime Guevara:** Y ojalá llegara a un salario mínimo, que
+- **[15:08] Jaime Guevara:** la verdad es que un salario mínimo lo veo un poco difícil,
+- **[15:08] Yo:** Oh,
+- **[15:08] Jaime Guevara:** Porque para
+- **[15:08] Yo:** Hay gente que que que logra sacar más, pero pero
+- **[15:08] Jaime Guevara:** Sí. Lo digo, es más que todo por el tema de la
+- **[15:08] Yo:** claro, para para arrancar no es fácil, es el punto.
+- **[15:08] Jaime Guevara:** La inversión, porque para sacar dos
+- **[15:08] Jaime Guevara:** millones seguramente va a tener que invertir por ahí unos tres, cuatro millones de pesos en pauta.
+- **[15:08] Yo:** Yo yo creo yo creo
+- **[15:08] Yo:** yo pensando en eso,
+- **[15:08] Yo:** James, y es como, sí, te va a tocar dos, pero es que
+- **[15:08] Yo:** o sea, yo creo que la promesa no puede ser en que en el primer mes vas a sacar uno,
+- **[15:08] Yo:** un mínimo. No debe ser así, pues, como vas a lograr sacar el mínimo, es que, o sea,
+- **[15:08] Jaime Guevara:** Sí, no.
+- **[15:08] Yo:** que puedas invertir
+- **[15:08] Yo:** dos
+- **[15:08] Yo:** pero porque fuiste ganando, no sé, cien mil, doscientos, mil quinientos,
+- **[15:08] Yo:** mil, ochocientos mil, un millón, entonces, ahí vas aumentando
+- **[15:08] Yo:** la la la pauta
+- **[15:08] Yo:** Y yo creo que es más
+- **[15:08] Yo:** en cuánto vas a poder sacar el mínimo,
+- **[15:08] Yo:** No sé, en
+- **[15:08] Yo:** los seis, cortando un dato una cifra ronda.
+- **[15:09] Yo:** Los siguientes seis meses, al sexto mes, vas a poderte sacar un mínimo completo.
+- **[15:09] Yo:** Porque es es es escalonado.
+- **[15:09] Yo:** Pero pero pero de de esa reunión me pareció bacanísima,
+- **[15:09] Yo:** porque creo que logró
+- **[15:09] Yo:** no sé si alinear
+- **[15:09] Yo:** pero
+- **[15:09] Yo:** pero me dio paso interior.
+- **[15:09] Yo:** Porque, digamos que así es como estaba tratando, quería ver el el mundo dropping,
+- **[15:09] Yo:** del lado de dropshippers.
+- **[15:09] Yo:** Pero sentía que no estaba de todo del todo como
+- **[15:09] Yo:** como así un match entre lo que
+- **[15:09] Yo:** como lo quería hacer era un poco, bueno, toca seguir la línea y sigamos el cuento,
+- **[15:09] Yo:** pues igual hay una estructura ya mucho más grande
+- **[15:09] Yo:** gigante,
+- **[15:09] Yo:** que lo quieran ver, por ejemplo, como emprendedor digital,
+- **[15:09] Yo:** que quieran enfocarse en los huérfanos, que no saben hacer truckshipping, porque la barra de
+- **[15:09] Yo:** Por por eso se me, de hecho, de ahí fue que salió un poco la
+- **[15:09] Yo:** la inspiración de Mary, que, pues, hagamos nuestro ecommerce, o sea,
+- **[15:10] Yo:** pongámosle a Jaime en una tiendita pequeñita que arranque y empiece a vender que este man
+- **[15:10] Yo:** Jaime, supongamos, no sabe nada de cómo nunca ha vendido digital,
+- **[15:10] Yo:** que arranque, y ya cuando empiece a escalar, cuando tenga platica meter la pauta,
+- **[15:10] Yo:** bueno, movamos los Shopify, movamos los los arrobax,
+- **[15:10] Yo:** a la versión premium de chatter pro. Entonces, ahí vamos metiéndole, ¿no?
+- **[15:10] Yo:** Yo creo que ahí tenemos que trabajar muy, muy de la mano con con con José, Pineda, por lo de lo de gamificación.
+- **[15:10] Yo:** Porque yo creo que ese esa esa parte es
+- **[15:10] Yo:** pues, es fundamental, o sea, ahí está el core.
+- **[15:10] Yo:** Y
+- **[15:10] Yo:** la forma en la que en la que creo que vamos a poder empezar a trabajar me parece
+- **[15:10] Yo:** parece muy bacana.
+- **[15:10] Yo:** Y que nos están dando cada una libertad de
+- **[15:10] Yo:** de hágalo viable,
+- **[15:10] Yo:** sea, ¿qué necesita para que eso funcione?
+- **[15:10] Yo:** No, esta APIs, esta APIs, esta APIs. O
+- **[15:10] Yo:** que pague una una una suscripción aquí,
+- **[15:10] Yo:** que me, para pagar esta estas transacciones de esta búsqueda,
+- **[15:11] Yo:** y ya, y con eso funciona. Listo, tenga.
+- **[15:11] Yo:** O sea, eso me parece bacanísimo, o sea, porque uno sabe quién no todas las empresas.
+- **[15:11] Yo:** Muy pocas empresas funcionan así.
+- **[15:11] Yo:** Y eso facilita hacer producto, por lo menos, prototipar,
+- **[15:11] Yo:** ya que, si desarrollo se demora tres años, eso va ser luego un problema,
+- **[15:11] Yo:** porque, pues, bueno, de aquí a, o sea, yo yo yo le
+- **[15:11] Yo:** le pegamos a a a la idea,
+- **[15:11] Yo:** pero de aquí a pues, ya va ser obsoleta. Entonces, pues, ahí es donde volvemos y con
+- **[15:11] Yo:** se pierde un poco.
+- **[15:11] Yo:** Y, de pronto, la salida se va a hacer tener una
+- **[15:11] Yo:** un espejo de dropi donde podamos, lo lo que dijimos, de
+- **[15:11] Yo:** venga, montámosle eso y que y que eso le
+- **[15:11] Yo:** de alguna forma, si logramos tener las APIs, eso sí genere órdenes por debajo.
+- **[15:11] Yo:** De pronto, no, sería casi que tener dos apps
+- **[15:11] Yo:** teóricamente hablando.
+- **[15:11] Yo:** Teóricamente hablando, técnicamente hablando, dos apps.
+- **[15:11] Yo:** Pero, de alguna forma, una le pasa información a la otra, como que, entonces, no dependamos de desarrollo al cien por
+- **[15:11] Jaime Guevara:** De una,
+- **[15:12] Jaime Guevara:** No, total.
+- **[15:12] Yo:** Si quieres, bueno, no no sé cómo es el que quieras llevar el revú, te puedo, yo
+- **[15:12] Yo:** igual con lo que compartiste, yo ya estaba adelantando lo del tablero de de Darwin,
+- **[15:12] Yo:** No le subía
+- **[15:12] Jaime Guevara:** Bueno, no, ¿cómo está? Muy bien. Sí, igual era más
+- **[15:12] Jaime Guevara:** charlar de todo ese tipo de cosas.
+- **[15:12] Yo:** Sí, veo, este, le quiero mostrar unas cosas ahí para que, de hecho, tengamos una
+- **[15:12] Yo:** como a saltar.
+- **[15:12] Yo:** Es como, mirá,
+- **[15:12] Yo:** yo adelanto esta parte ya, so, no no le echo PR porque
+- **[15:12] Yo:** esto ya le metí Hexa, me parece una una una una cutería, bueno, o sea, la verdad vale la pena.
+- **[15:12] Yo:** Siento que logré hacer un deep research fuerte,
+- **[15:12] Yo:** y aquí... Comparto.
+- **[15:12] Yo:** Este es Hexa, este es como el panel de uso,
+- **[15:12] Yo:** la verdad le he tirado ya
+- **[15:12] Yo:** varias, le he en que le he un poquito, a ver como que me haga consulticas más fuertes.
+- **[15:12] Yo:** Y por ahora, mira, no he gastado más
+- **[15:12] Yo:** veinte centavos.
+- **[15:12] Jaime Guevara:** Buenísimo.
+- **[15:12] Yo:** Veintidós centavos.
+- **[15:12] Yo:** Y da al mes gratuito, o sea, el primer mes, veinte dólares,
+- **[15:12] Yo:** y al segundo en adelante de a diez, gratuito, o sea, ahí no se paga absolutamente nada.
+- **[15:12] Yo:** Y, por ahora,
+- **[15:13] Yo:** va bien,
+- **[15:13] Yo:** No me he sentado a hacer la exploración de qué tan
+- **[15:13] Yo:** de las fuentes, la calidad y demás, pero, por ahora, pinta bien.
+- **[15:13] Yo:** Sea, he verificadores fuentes, he verificadores datos, todo parece bien. Me refiero a
+- **[15:13] Yo:** no sé, no he hecho un benchmark de CX es mejor que Crayon, que es otra que es buena. Que Cryon es más comercial, esto es más de solamente deep research. Pero por ahora, esto es chévere, para que, igual, eso quiere en el por si alguien quiere empezarlo a usar, Luego podemos hacer, si querés, en lo de product week, product labs,
+- **[15:13] Jaime Guevara:** Buenísimo, total.
+- **[15:13] Yo:** de pronto meter algo así de de de hacer
+- **[15:13] Yo:** Ahora, si nos agotamos ese saldo y demás,
+- **[15:13] Yo:** luego hacemos pagar, pagar lo que haga falta. O decir, bueno, hay una cuota
+- **[15:13] Yo:** al mes de tanto,
+- **[15:13] Yo:** y se, y y y, de pronto, tener cuotas por celular, ¿no? Son diez dólares, son
+- **[15:13] Yo:** ¿Cuántas células son?
+- **[15:13] Yo:** ¿Siete?
+- **[15:13] Jaime Guevara:** Sí.
+- **[15:13] Yo:** Son un montón, son un huevo de células.
+- **[15:13] Yo:** O o dejarlo dejarlo
+- **[15:14] Yo:** aquí como más interno, y que solamente suppliers,
+- **[15:14] Yo:** sellers, brands y logistic,
+- **[15:14] Yo:** puedan usarlo, tata tata, esas cuatro.
+- **[15:14] Yo:** Son diez dólares, cada una tiene dos con cincuenta.
+- **[15:14] Yo:** O si vemos que unas necesitan más... O sea, por ejemplo,
+- **[15:14] Yo:** yo creo que brands y
+- **[15:14] Yo:** sellers pueden estar necesitando hacer más más benchmark, ¿no? Es más fácil hacer un benchmark
+- **[15:14] Yo:** el lado de nosotros, que, de pronto, hacerlo desde suppliers o hacerlo desde
+- **[15:14] Yo:** porque es más de un conocimiento muy de nicho.
+- **[15:14] Yo:** Capaz de eso no sea tan fácil de hacerle una búsqueda.
+- **[15:14] Yo:** Pero está bacano que que lo podamos utilizar, sea transversal.
+- **[15:14] Jaime Guevara:** Total, buenísimo.
+- **[15:14] Yo:** Y volviendo a esta,
+- **[15:14] Yo:** mira, nosotros teníamos
+- **[15:14] Yo:** ya esta data es la que se ha presentado en los weeklies, no hay que tener eso que,
+- **[15:14] Yo:** igual, conversan entre otras cosas. Pero estos son todos los proyectos que están
+- **[15:14] Yo:** andando, ¿no?
+- **[15:14] Yo:** Entonces, este concierge estaba
+- **[15:14] Yo:** se refería se refería
+- **[15:14] Yo:** ¿Se refería qué?, al al
+- **[15:15] Yo:** Es un que está dotado muy, muy, muy prematuro, muy apenas en ideación,
+- **[15:15] Yo:** pero era un poco la guía, no no era lo del exportar catálogo por WhatsApp, es este,
+- **[15:15] Yo:** pero esas están, digamos, detenidas hasta que realmente
+- **[15:15] Yo:** es que todo está detenido hasta que no salga lo de gallo.
+- **[15:15] Yo:** De de todo tenía, me refiero desde ideas,
+- **[15:15] Yo:** concepto. Hay otras cosas que claramente se está moviendo.
+- **[15:15] Yo:** Porque para el Lehigh, para mí, esta semana
+- **[15:15] Yo:** las dos siguientes hasta el evento, van a ser full
+- **[15:15] Yo:** full expo winners, para saber qué data vamos a sacar,
+- **[15:15] Yo:** poderle hacer, que la aplicación sea más móvil, o sea, darle más fuerza a eso.
+- **[15:15] Yo:** Y el foco
+- **[15:15] Yo:** James, para para también que estemos alineados con nosotros, después de la reunión con María, yo ya tenía varias sesiones con Aleja,
+- **[15:15] Yo:** y estamos claros en lo que decías ahora,
+- **[15:15] Yo:** El foco son los cuarenta por ciento huérfanos
+- **[15:15] Yo:** ¿sí?,
+- **[15:15] Yo:** Y de ahí
+- **[15:15] Jaime Guevara:** Exacto.
+- **[15:15] Yo:** el noventa y nueve por ciento
+- **[15:16] Yo:** que no se ha activado, que no se activa,
+- **[15:16] Yo:** y de ahí
+- **[15:16] Yo:** el noventa por ciento que no va saber ese dropshipping.
+- **[15:16] Jaime Guevara:** Ajá.
+- **[15:16] Yo:** ¿Sí? O sea, hay un foco, o sea,
+- **[15:16] Yo:** se hizo el, se está haciendo el tamizaje completo para saber a quiénes les queremos llegar,
+- **[15:16] Yo:** y cómo les tenemos que llegar. Por eso de ahí que
+- **[15:16] Yo:** sea lo más
+- **[15:16] Yo:** dummy posible,
+- **[15:16] Yo:** ¿sí? O sea, obviamente,
+- **[15:16] Yo:** ecommerce para dummies, o sea, es
+- **[15:16] Yo:** alguien que no tiene ni puta idea de nada.
+- **[15:16] Jaime Guevara:** Yep.
+- **[15:16] Yo:** Entonces,
+- **[15:16] Yo:** de eso está saliendo toda la estrategia, todas las métricas, toda la toda la, de hecho, la el research que estoy utilizando con Excel enfocado en cuánto se demoran esto por acá. Ejemplo, la industria, hablando de de de todo, de de Shopify y otras tiendas para montar sus propios ecommerce, encontrar
+- **[15:16] Yo:** productos. Ahí hablamos de todo un poco, ¿no?
+- **[15:16] Yo:** Normalmente, no supera los once a quince minutos en el
+- **[15:16] Yo:** completo, por lo menos para lo mínimo necesario.
+- **[15:17] Yo:** ¿Listo?
+- **[15:17] Yo:** Entonces, por eso es que la métrica está enfocada en diez minutos.
+- **[15:17] Yo:** Diez minutos desde que arrancas en Gali, dices,
+- **[15:17] Yo:** quiero vender.
+- **[15:17] Yo:** Desde ahí.
+- **[15:17] Yo:** Hasta que publicas el producto
+- **[15:17] Yo:** en la tienda, en la en el mini ecommerce que estamos diciendo, ¿no?, en el ecommerce de dropping.
+- **[15:17] Yo:** No sé,
+- **[15:17] Yo:** Jaime Chops.
+- **[15:17] Yo:** Y ya.
+- **[15:17] Yo:** Que a eso claramente
+- **[15:17] Yo:** sería el éxito, en el sentido de que lo pudiste montar, salir a vender ahora
+- **[15:17] Yo:** vamos a ponerle como capa adicional, es, me quedé pensando en lo que decís,
+- **[15:17] Yo:** ayer, venga, agreguémosle Roax. Hablemos con Roax a ver qué podemos agregar. Pero si te pones a ver, eso es un valor agregado adicional,
+- **[15:17] Jaime Guevara:** Sí.
+- **[15:17] Yo:** ¿sí?
+- **[15:17] Yo:** Porque realmente yo, hay dos formas en la que se
+- **[15:17] Yo:** se moviendo, y eso lo he venido hablando con el equipo de growth,
+- **[15:17] Yo:** y es que ellos, por ejemplo, para Argentina, que en donde los líderes de comunidad no son tan fuertes y demás,
+- **[15:17] Yo:** pues casi que nulo, ellos están haciendo unas estrategias de ventas orgánicas.
+- **[15:17] Yo:** ¿Sí?
+- **[15:17] Yo:** Y venta orgánica es sin pagar publicidad, literalmente
+- **[15:18] Yo:** agarre un concepto y empiézelo a compartir por redes, por
+- **[15:18] Yo:** WhatsApp, escríbele a conocidos, mándale al grupo a la familia.
+- **[15:18] Yo:** Acá lo que te pone Ari, si nos vamos al acorde, es necesario que yo pueda vender así,
+- **[15:18] Yo:** O sea, que necesite pagar pauta, digo,
+- **[15:18] Yo:** no,
+- **[15:18] Yo:** pero le agregaríamos muchísimo valor.
+- **[15:18] Jaime Guevara:** Bueno, pero es un dueño.
+- **[15:18] Yo:** ¿Sí o no?
+- **[15:18] Yo:** Yo, para generar pauta, pues, necesito una tienda. Entonces, ahí estamos, digamos que
+- **[15:18] Yo:** con la tienda, por eso es que
+- **[15:18] Yo:** lo he pensado así, la tienda es como esa esa meta imaginaria, ¿no?
+- **[15:18] Yo:** El el llegaste, la lograste, listo, ya tienes una tienda, tú puedes empezar a vender esto.
+- **[15:18] Yo:** Ahora, necesitas impulsar tu tienda
+- **[15:18] Yo:** hacerla despegar,
+- **[15:18] Yo:** le agregas capa ROAX.
+- **[15:18] Yo:** Y ahí podemos
+- **[15:18] Yo:** de lo que está analizando en discovery, es
+- **[15:18] Yo:** generemos métricas de
+- **[15:18] Yo:** con el nivel de motivación que se genera en el journey,
+- **[15:18] Yo:** ¿cierto?, y ante la expectativa, ¿cuánta gente estaría dispuesta
+- **[15:18] Yo:** a arrancar a pagarle publicidad.
+- **[15:19] Yo:** Desde cero.
+- **[15:19] Yo:** Nunca has vendido nada, apenas estás iniciando.
+- **[15:19] Yo:** Es decir, ¿qué tanta fricción hay en que yo le ponga en un en un
+- **[15:19] Yo:** en un paso muy
+- **[15:19] Yo:** anticipado, ¿sí?, porque, pues, apenas estás arrancando,
+- **[15:19] Yo:** él venga
+- **[15:19] Yo:** oblíquelo y páutelo.
+- **[15:19] Jaime Guevara:** No, César Total.
+- **[15:19] Yo:** Porque páuteles pague,
+- **[15:19] Yo:** Y es como, ahí podemos ver,
+- **[15:19] Yo:** claramente podemos ver la opción de de de freemium,
+- **[15:19] Yo:** y, de pronto, que las primeras, no sé, los primeros dos días gratis,
+- **[15:19] Yo:** Roax lo cubre, pero luego le toca pagar,
+- **[15:19] Yo:** porque yo estaba, era justamente viendo
+- **[15:19] Yo:** que que que espérate, por acá lo tengo.
+- **[15:19] Yo:** Se me hizo superinteresante el el concepto de la palabra,
+- **[15:19] Yo:** a ver.
+- **[15:19] Jaime Guevara:** Pero ese está superbuena, o sea, el el llegar hasta el punto de
+- **[15:19] Jaime Guevara:** llegar hasta el punto de
+- **[15:20] Jaime Guevara:** de, o sea, ese esa esa división,
+- **[15:20] Jaime Guevara:** me parece bien interesante, como que la el seteo
+- **[15:20] Jaime Guevara:** que es el setup moment,
+- **[15:20] Yo:** Mhmm.
+- **[15:20] Jaime Guevara:** y de ahí ya pasar al, el ajá moment se da y
+- **[15:20] Jaime Guevara:** iniciando, pues, con la pauta, porque
+- **[15:20] Yo:** Va.
+- **[15:20] Yo:** Yo yo yo
+- **[15:20] Yo:** ahí son,
+- **[15:20] Yo:** termina siendo más un tema de de
+- **[15:20] Yo:** semántico, ¿no?, como lo queramos decir.
+- **[15:20] Yo:** Pero
+- **[15:20] Yo:** y creo que en en Drupin hemos encontrado ese punto, y es importante que, de producto, se dé, ¿no?
+- **[15:20] Yo:** De que
+- **[15:20] Yo:** para como negocio,
+- **[15:20] Yo:** el se da cuando
+- **[15:20] Yo:** el dropshipper recibe la plata en su cuenta.
+- **[15:20] Yo:** ¿Correcto?
+- **[15:20] Yo:** Es decir, el moment no está ni cuando encuentre un producto
+- **[15:20] Yo:** no está cuando envía el producto,
+- **[15:20] Yo:** no está
+- **[15:20] Yo:** sino hasta que
+- **[15:20] Yo:** se deposite en su wallet la plata.
+- **[15:20] Yo:** ¿Correcto? O sea, así está en drop in en en la estructura, literalmente,
+- **[15:21] Yo:** explicado por María cuando entré.
+- **[15:21] Yo:** Sin embargo,
+- **[15:21] Yo:** hablándolo desde
+- **[15:21] Yo:** más que, eso eso es casi casi, inclusive, podríamos decir,
+- **[15:21] Yo:** ese es el
+- **[15:21] Yo:** ajá moment del negocio,
+- **[15:21] Yo:** pero desde producto creo que hay muchos
+- **[15:21] Yo:** es que no sé qué palabra ponerle, mini hummements,
+- **[15:21] Jaime Guevara:** Sí, sí, sí.
+- **[15:21] Yo:** Teóricamente, no sé
+- **[15:21] Yo:** la palabra, seguramente la habrá ya algún
+- **[15:21] Yo:** gringo de Product School la la habrá creado.
+- **[15:21] Jaime Guevara:** Es que hay varios moments, sí.
+- **[15:21] Yo:** Exacto, pero el journey hay un ajá moment principal,
+- **[15:21] Yo:** y están los que
+- **[15:21] Yo:** me permiten ir creciendo
+- **[15:21] Yo:** dentro del flujo.
+- **[15:21] Yo:** Y una, por ejemplo, para nosotros,
+- **[15:21] Yo:** te pones a ver en Gali, hay varios.
+- **[15:21] Yo:** Uno,
+- **[15:21] Yo:** encontrar el producto.
+- **[15:21] Yo:** Pero el encontrar el producto no solamente es decir, me voy con este, porque yo me puedo volver, yo puedo ir a
+- **[15:21] Yo:** no, no hago buena plata o ningún ángulo de venta me gusta, yo creo que este producto no es como lo que yo quiero.
+- **[15:21] Yo:** De la homeowner está cuando yo lo
+- **[15:21] Yo:** publico,
+- **[15:21] Yo:** Yo me voy con este y lo voy a poner en mi tienda,
+- **[15:22] Yo:** por primera vez, porque ya cuando lo hago varias veces, pues ya
+- **[15:22] Yo:** la dopamina bajó, ya sabes cómo funciona.
+- **[15:22] Yo:** El hummus está el primer producto, pero el segundo me parece
+- **[15:22] Yo:** que es muy importante,
+- **[15:22] Yo:** es...
+- **[15:22] Yo:** ¿Qué tan motivado sigo?
+- **[15:22] Jaime Guevara:** Total.
+- **[15:22] Yo:** ¿Qué tan sigo después de que lo
+- **[15:22] Yo:** escogí? Y y ese nivel de motivación lo podríamos llegar a, de alguna forma, cuantificar
+- **[15:22] Yo:** desde Chile.
+- **[15:22] Yo:** Me animaría a pagarle pauta,
+- **[15:22] Yo:** o, si no,
+- **[15:22] Yo:** y, de hecho, en los flujos, como lo tengo pensado para, es como, bueno, ya lo tienes,
+- **[15:22] Yo:** quieres, y, entonces, un poco un banner o algo muy simple de
+- **[15:22] Yo:** bueno, tienes producto, estamos listos, impúlsalo,
+- **[15:22] Yo:** generando pauta.
+- **[15:22] Yo:** Y es un poco la bifurcación, ¿no?,
+- **[15:22] Jaime Guevara:** Sí, sí.
+- **[15:22] Yo:** ¿Quieres pagar pauta?
+- **[15:22] Yo:** No quieres pagar pauta?
+- **[15:22] Yo:** Si quieres, genial, algo va a pasar ahí, se le va a dar unos créditos gratis,
+- **[15:22] Yo:** y va va va a cobrársele, que veremos que sí se le cobra o no.
+- **[15:23] Yo:** Es un poco más lo cognitivo, ¿no?, el el usuario no sabe si le va a tocar pagar directamente ahí.
+- **[15:23] Jaime Guevara:** Sí.
+- **[15:23] Yo:** No sé si realmente, como es una prueba, le va a tocar sacar de su su tarjeta y empezar a meter el número.
+- **[15:23] Yo:** O no sé si se le va a descontar de ningún lado.
+- **[15:23] Yo:** Pero por el otro es, no
+- **[15:23] Yo:** ¿cierto? No quiero pagar
+- **[15:23] Yo:** Y ahí es cuando tenemos que atacar
+- **[15:23] Yo:** quién no te anima
+- **[15:23] Yo:** la pregunta, ¿por qué no quieres pagar pauta? Y la respuesta es simple,
+- **[15:23] Yo:** primero quiero saber cómo me va
+- **[15:23] Yo:** Aún no sé, aún a un dropee
+- **[15:23] Yo:** no sé, aún no tengo tanta confianza en dropee como para pagar.
+- **[15:23] Yo:** Unas tres, cuatro opciones.
+- **[15:23] Yo:** Vamos a entender qué es lo que
+- **[15:23] Yo:** cuál es la fricción para que no pague.
+- **[15:23] Yo:** Después de que no pagó, está perfecto, si no paga, no pasa nada, igual,
+- **[15:23] Yo:** que no pague no significa que no pueda coger esa plataforma, y él mismo
+- **[15:23] Yo:** irá a Meta, él mismo a hacer un video en TikTok, él mismo
+- **[15:23] Yo:** compartirlo en WhatsApp.
+- **[15:23] Yo:** No cambia nada. Finalmente,
+- **[15:23] Yo:** la orden se va a poder dar porque si alguien entra a un externo total
+- **[15:24] Yo:** entra a la plataforma, hace el proceso de pago, el checkout,
+- **[15:24] Yo:** lo que dijimos, le va a llegar la notificación a él para que entre a droppy
+- **[15:24] Yo:** y manualmente monte la orden.
+- **[15:24] Yo:** ¿Sí?
+- **[15:24] Yo:** Y lo que nosotros, luego, podríamos hacer es que
+- **[15:24] Jaime Guevara:** Y
+- **[15:24] Yo:** sabemos quién le solicitó la orden, los datos,
+- **[15:24] Yo:** a qué tienda,
+- **[15:24] Yo:** qué usuario,
+- **[15:24] Yo:** y luego podemos, solicitando la información de órdenes,
+- **[15:24] Yo:** ver si
+- **[15:24] Yo:** es el mismo usuario el que pidió el producto.
+- **[15:24] Yo:** O sea, porque tenemos la data,
+- **[15:24] Yo:** O sea, lo, inclusive, podemos ni siquiera para no no hacerlo incómodo
+- **[15:24] Yo:** sí, no no agregarle pasos, clics,
+- **[15:24] Yo:** tenemos que preguntarle a él, ¿esto fue producto de el prototipo ExpoWindows? No,
+- **[15:24] Yo:** si al final no yo, nosotros podemos recoger. Ahora, esa es la fácil, ¿no? Decir, ¿sí o no?
+- **[15:24] Yo:** O sea, puede ser que no, porque no entienda que el WhatsApp era por los expo winners. Pero al final podríamos recolectar, cuánta data cuánta cuánto cuántas órdenes se generaron a partir de ese modelo más simple.
+- **[15:25] Jaime Guevara:** De una, b,
+- **[15:25] Yo:** Diez mil, mil.
+- **[15:25] Jaime Guevara:** y
+- **[15:25] Jaime Guevara:** nos quedan cinco minutos.
+- **[15:25] Jaime Guevara:** La idea es lanzarlo en expo winner, ¿no?
+- **[15:25] Yo:** Sí, pero aparte de yo creo que
+- **[15:25] Yo:** bueno, ayer hablaba con con con con Juandi y con Michel,
+- **[15:25] Yo:** hay algo que no hemos definido, o sea, se ha hablado, pero
+- **[15:25] Yo:** para mí,
+- **[15:25] Yo:** si me preguntas a mí, eso eso todavía está muy en el aire.
+- **[15:25] Yo:** ¿Sí?
+- **[15:25] Yo:** Algo más como para como un como
+- **[15:25] Yo:** feedback al evento, para que, de pronto, no sé si lo tratemos hoy en la en la tarde,
+- **[15:25] Yo:** Pero es, se ha hablado de
+- **[15:25] Yo:** que hay una aplicación ahí al inicio, que se escanea un QR, en el QR hay un call to action para
+- **[15:25] Yo:** que lleve a la aplicación esta de de producto, ¿cierto?
+- **[15:25] Yo:** Ese es uno. Hay otro flujo que vamos a tener por ahí nosotros, que
+- **[15:25] Yo:** va ser el QR, va a llegar directo.
+- **[15:26] Yo:** Al final, son dos QRs, pero llevan el mismo punto.
+- **[15:26] Yo:** Son dos puntos de contacto con el usuario, pero se lleva.
+- **[15:26] Yo:** ¿Sí?
+- **[15:26] Yo:** Yo le pregunto a
+- **[15:26] Yo:** quiero ver que te mande el resumen.
+- **[15:26] Yo:** Que es algo carayola.
+- **[15:26] Yo:** Me dice, Granola,
+- **[15:26] Yo:** que
+- **[15:26] Yo:** qué
+- **[15:26] Yo:** qué esperan?
+- **[15:26] Yo:** O sea, what
+- **[15:26] Yo:** o Michel? Dice, ¿cuál es su cuál es su pregunta? O sea, ¿qué
+- **[15:26] Yo:** qué quieren saber?
+- **[15:26] Yo:** Ellos dijeron que que todavía estaban como apenas pensándolo, porque apenas como que
+- **[15:26] Yo:** creo que hablaron contigo la semana pasada, algo así.
+- **[15:26] Yo:** Yo les dije, es importante para que sepamos dónde incluirlo aquí,
+- **[15:26] Yo:** a quiénes quieren llegar ustedes, qué les
+- **[15:26] Yo:** quieren preguntar? ¿Cuáles son sus hipótesis? ¿Cuándo ustedes dan el resultado por exitoso o fracasado. ¿Sí? ¿Cuáles son sus...? Simplificando, ¿cuáles son sus criterios?
+- **[15:26] Jaime Guevara:** Ajá.
+- **[15:26] Yo:** Porque
+- **[15:26] Yo:** me parece a mí
+- **[15:26] Yo:** desde que no haya una pregunta, James,
+- **[15:26] Yo:** ¿qué quieres mostrar algo? O sea,
+- **[15:26] Yo:** ¿sí me hago entender? Es como,
+- **[15:27] Yo:** Porque yo les, inclusive, yo no sabía qué tan adelantado estaba,
+- **[15:27] Yo:** el proyecto, y yo pensé que, de hecho, ya estaba en desarrollo o algo así.
+- **[15:27] Yo:** Yo le dije, porque si es que si ya está, si no hay pregunta,
+- **[15:27] Yo:** pues fue más como los tiempos de la conversación, porque arrancamos como en un poco en la, sin saberlo.
+- **[15:27] Yo:** Sin saber en qué punto están ellos.
+- **[15:27] Yo:** Si ya está, pues podríamos hacer, más bien, ¿no?, el workshop, como workshop de que
+- **[15:27] Yo:** alguien trabaje y, bueno, pues, hagan un lanzamiento tipo como lo hace Apple, como lo hace Microsoft. Venga,
+- **[15:27] Yo:** es lo nuevo que traemos, úsenlo.
+- **[15:27] Yo:** Pero entiende que eso no está desarrollado, lo que quieren es
+- **[15:27] Jaime Guevara:** Total.
+- **[15:27] Yo:** llenarse de argumentos
+- **[15:27] Yo:** para que eso se lo se los prioricen.
+- **[15:27] Yo:** Entonces, ahí, que fue lo que te compartí, les dije,
+- **[15:27] Yo:** ¿cuál es el argumento que ustedes creen sería más fuerte? Yo no sé si pase por SAPPLA,
+- **[15:27] Yo:** si, pues, pues, ese es su pero yo les dije como, ¿cuál es el argumento que
+- **[15:27] Yo:** consideran más fuerte o más convincente?
+- **[15:27] Yo:** Para que esto se los viabilicen y los prioricen?
+- **[15:27] Yo:** Hasta ahí dicen, no, pues, que apenas lo estamos pensando, y
+- **[15:27] Yo:** normal. Pues yo dije, marca, yo estoy apenas literal en las mismas, porque, pues, esto no lo lo tenemos ya
+- **[15:28] Yo:** firme desde el desde la semana pasada.
+- **[15:28] Yo:** Yo les dije como, a mí me aparece,
+- **[15:28] Yo:** sería interesante si usted ya tiene el prototipo,
+- **[15:28] Yo:** si sabe que hay un flujo actual que
+- **[15:28] Yo:** que es para selección de transportadora, ¿cierto?
+- **[15:28] Jaime Guevara:** Mhmm.
+- **[15:28] Yo:** Les dije, hagan un grupo de control, yo le dije,
+- **[15:28] Yo:** pónganle un reto,
+- **[15:28] Yo:** Es decir, tenemos tres paquetes, uno va para Neyma, otro va
+- **[15:28] Yo:** para otro va para Riohacha y otro va para
+- **[15:28] Yo:** no sé, algún municipio
+- **[15:28] Yo:** Sí, se lee.
+- **[15:28] Yo:** Algún municipio sin Celejo.
+- **[15:28] Yo:** Algo algo sin se alejo Entonces,
+- **[15:28] Yo:** tienes tres o dos o uno, no importa.
+- **[15:28] Yo:** Yo le dije,
+- **[15:28] Yo:** vas a pedir, y y con la información, ¿cómo se le entregarías a un usuario con la plataforma actual?
+- **[15:28] Yo:** Que
+- **[15:28] Yo:** transportadora? Usted, Jaime, sin que yo le dé ninguna herramienta más que lo que
+- **[15:28] Yo:** en drop in, utilizaría para enviarlo a cada ciudad.
+- **[15:28] Yo:** Vas a escoger, y y y tiempos, ¿no?
+- **[15:28] Yo:** Este, este, este y este.
+- **[15:29] Yo:** ¿Sí o no?
+- **[15:29] Yo:** Ahora, a la gente que le voy a la herramienta para que la use, para que le meta a ella, que haga
+- **[15:29] Yo:** todas las capacidades.
+- **[15:29] Yo:** ¿Cuánto se demora en seleccionarlo? Ta ta ta ta.
+- **[15:29] Yo:** Y luego ver quién obtuvo el mejor resultado.
+- **[15:29] Yo:** ¿Sí?
+- **[15:29] Yo:** ¿Eso qué te da? Es decir,
+- **[15:29] Yo:** al grupo
+- **[15:29] Yo:** que probó la herramienta,
+- **[15:29] Yo:** se demoró
+- **[15:29] Yo:** cincuenta por ciento menos, treinta por ciento menos,
+- **[15:29] Yo:** pero eso no es lo más importante. Lo más importante es que aumentó su
+- **[15:29] Yo:** en la selección de transportadora en un cuarenta por ciento.
+- **[15:29] Yo:** Porque los otros no lo hicieron tan bien como lo habían podido hacer. O sea, no
+- **[15:29] Yo:** hablando ya matemáticamente, no escogieron el el mejor,
+- **[15:29] Yo:** El mejor lo pudo escoger el algoritmo por debajo,
+- **[15:29] Yo:** Es decir, la herramienta supera inclusive
+- **[15:29] Yo:** la gente que ya sabe de esto y que sabe más o menos.
+- **[15:29] Yo:** Obvio, habrá unos cracks que saben, municipio por municipio, quién es el mejor,
+- **[15:29] Yo:** pero, pues, ese no es el ese no es el ese no es el gran volumen de dropping.
+- **[15:29] Yo:** O sea, la forma en la que para mí
+- **[15:30] Yo:** le justificaría más fuerte
+- **[15:30] Yo:** la importancia, vea, si nosotros ponemos esta herramienta,
+- **[15:30] Yo:** vamos a aumentar en un cuarenta por ciento de la eficiencia de la transportadora reduciendo un
+- **[15:30] Yo:** no sé,
+- **[15:30] Yo:** veinte por ciento los tiempos de entrega.
+- **[15:30] Jaime Guevara:** Sí. ¿Sabes cuál es la vaina que
+- **[15:30] Jaime Guevara:** Sí.
+- **[15:30] Jaime Guevara:** No estoy mal,
+- **[15:30] Jaime Guevara:** el contexto de ese proyecto era un
+- **[15:30] Jaime Guevara:** pues, un capricho, como algo que venía de Lucho.
+- **[15:30] Jaime Guevara:** De pronto, por eso están como un poco, o sea,
+- **[15:30] Yo:** Yeah.
+- **[15:30] Jaime Guevara:** como que todo se vino se vino generando de
+- **[15:30] Jaime Guevara:** de ideas de lucha.
+- **[15:30] Yo:** Sí, como la mayoría de cosas,
+- **[15:30] Jaime Guevara:** Sí.
+- **[15:30] Yo:** la realidad.
+- **[15:30] Jaime Guevara:** Entonces, pues sí, yo le había preguntado a Juandi como que qué quiere hacer, como hacer lanzamiento,
+- **[15:30] Jaime Guevara:** mostrarlo,
+- **[15:30] Jaime Guevara:** o querés es que alguien interactúe allá tomar métricas?
+- **[15:30] Yo:** Ah, eso eso te dije yo.
+- **[15:30] Yo:** Porque la fácil es, Marica, ponga a usar la gente y solamente quiere hacer pros de usabilidad.
+- **[15:31] Yo:** Saber dónde se le queda la gente, si no entiende el copy, si el call to action debería ser
+- **[15:31] Yo:** más grande, más pequeño, a la izquierda, a la derecha, pintado en rojo, pintado en azul.
+- **[15:31] Yo:** Eso es otra cosa, si es usabilidad, pues, más fácil.
+- **[15:31] Yo:** Y al final,
+- **[15:31] Yo:** ya para cerrar esa tema, es como,
+- **[15:31] Yo:** dependiendo qué quieran estudiar,
+- **[15:31] Yo:** quiénes quieran llegar,
+- **[15:31] Yo:** vemos cómo lo incluimos en la landing principal de ExpoWinners, porque
+- **[15:31] Yo:** si es un grupo muy cerrado, la propuesta, para que luego la revisemos, James, es
+- **[15:31] Yo:** podemos generar es un banner pequeñito o una cart adicional,
+- **[15:31] Yo:** que sea como workshop producto. Yo le decía,
+- **[15:31] Yo:** para que no se cierran, que solamente van a ser x personas, yo les dije,
+- **[15:31] Yo:** podemos es, al momento del workshop, se da el código, un código,
+- **[15:31] Yo:** un código alfanumérico.
+- **[15:31] Jaime Guevara:** Sí, o sabes también también qué puede ser,
+- **[15:31] Jaime Guevara:** O sea, lo que va a ser como como
+- **[15:31] Jaime Guevara:** hay un tema ahí con el tema de leyendas, la base de datos, bueno, hay varios temas ahí.
+- **[15:31] Jaime Guevara:** Lo que va a hacer, José,
+- **[15:31] Jaime Guevara:** es simplemente informativo.
+- **[15:32] Jaime Guevara:** O sea, como que la gente le dé clic a lo de leyendas
+- **[15:32] Jaime Guevara:** y le dé toda la información y todo.
+- **[15:32] Jaime Guevara:** Que la gente se informe, no que la gente tenga el y todo eso, sino que la gente se informe
+- **[15:32] Jaime Guevara:** porque no están... Bueno, hay un tema ahí con la base de datos, con la aplicación de
+- **[15:32] Jaime Guevara:** Firebase que estaban haciendo marketing. Entonces, como el plan b es,
+- **[15:32] Jaime Guevara:** simplemente informativo, el plan, la nueva iniciativa de oyentes.
+- **[15:32] Jaime Guevara:** Sí, vamos a poner unos call to action de ahí, dentro de leyendas,
+- **[15:32] Jaime Guevara:** al catálogo, a varias cosas.
+- **[15:32] Jaime Guevara:** Entonces, de pronto, en el peor de los casos es
+- **[15:32] Jaime Guevara:** Juandi lo haga más que todo informativo, como que quieres conocer la nueva manera de
+- **[15:32] Jaime Guevara:** de selección de transportadoras y
+- **[15:32] Yo:** Sí, una interacción, una encuística.
+- **[15:32] Jaime Guevara:** interactúa y nos deja un comentario.
+- **[15:32] Jaime Guevara:** Ajá.
+- **[15:32] Yo:** Como que le hagan tipo una un recorrido, un video demo,
+- **[15:32] Jaime Guevara:** Exacto.
+- **[15:32] Yo:** ¿te parece que esto facilitaría los tiempos de ta ta ta ta de lo que sea?
+- **[15:32] Jaime Guevara:** Es también puede ser algo así. Pero bueno, igual eso eso no no es
+- **[15:32] Jaime Guevara:** Te preguntaba es más de Gali, ¿cuánto crees que...? O sea,
+- **[15:33] Jaime Guevara:** la idea es lanzarlo, ¿no? Hay hay un tema ahí y es
+- **[15:33] Jaime Guevara:** parece, en en, yo creo que
+- **[15:33] Jaime Guevara:** digamos que suppliers y sellers,
+- **[15:33] Jaime Guevara:** tienen una oportunidad gigante de sacar experimentos.
+- **[15:33] Jaime Guevara:** Este experimento de de Gali y de ponerle la
+- **[15:33] Jaime Guevara:** aplicación en el bolsillo, por ejemplo, lo que te mostré de pulso ayer fue
+- **[15:33] Jaime Guevara:** lo y parece que funcionó.
+- **[15:33] Jaime Guevara:** Ya
+- **[15:33] Jaime Guevara:** ya, por lo menos, de palabra del dropshipper, dijo, quiero que me privaticen
+- **[15:33] Jaime Guevara:** esas en, no sé, vamos siete horas y solo
+- **[15:33] Jaime Guevara:** unas señales ahí que mandamos. Más o menos son ciento sesenta
+- **[15:33] Jaime Guevara:** órdenes que
+- **[15:33] Jaime Guevara:** se van a privatizar, pues, o productos que se van a privatizar.
+- **[15:33] Jaime Guevara:** Entonces, me sería chévere que
+- **[15:33] Jaime Guevara:** desde desde sellers también
+- **[15:33] Jaime Guevara:** pudiéramos tener esos resultados.
+- **[15:33] Jaime Guevara:** Pueblo dropping lo podríamos, dropping es que
+- **[15:33] Jaime Guevara:** es que pulso lo podríamos mandar a desarrollo y eso lo van a tener por ahí en el dos mil treinta. Pero ya actualmente funciona. Pues, de cierta manera, ya vamos a reiterarlo,
+- **[15:34] Yo:** Yo te voy a proponer
+- **[15:34] Yo:** algo, creo que vamos a lo mismo,
+- **[15:34] Yo:** montemos la aplicación completa, James.
+- **[15:34] Yo:** Montemos, lo que que que por mucho le pidamos
+- **[15:34] Yo:** a si algo que generemos un banner dentro de Dropi, porque igual el
+- **[15:34] Yo:** registro real principal sea dentro de Dropi,
+- **[15:34] Yo:** pero que nosotros eso,
+- **[15:34] Yo:** que toda esa
+- **[15:34] Yo:** de ecommerce y demás nos la dejen montar a nosotros,
+- **[15:34] Yo:** y que, al momento de pedir una orden y demás,
+- **[15:34] Yo:** le llegue el correo de drop y o el, o sea, sí tenemos que tratar de unificar
+- **[15:34] Yo:** otra vez, volver a reencaminar a drop y no, porque digamos que desde es una vitrina, pero podríamos hacer eso.
+- **[15:34] Jaime Guevara:** Sí, sí, sí.
+- **[15:34] Jaime Guevara:** Sí, sí, o sea, esa es la idea, pero, pues, todavía no nos han dado APIs de eso.
+- **[15:34] Jaime Guevara:** Ese es otro, es un tema ahí ayer hablando
+- **[15:34] Yo:** Sí.
+- **[15:34] Yo:** Pero ¿ahí ahí cuál es cuál es tu pregunta? O sea,
+- **[15:35] Jaime Guevara:** con Lucho,
+- **[15:35] Jaime Guevara:** No, no, ¿cuándo crees que...? O sea,
+- **[15:35] Jaime Guevara:** ¿lo estás viendo como
+- **[15:35] Jaime Guevara:** como que al final sí nos va a generar como un resultado? Pues ya ya vi esos resultados.
+- **[15:35] Jaime Guevara:** Lo que acabaste de decir, las dos los dos caminos, me parece genial.
+- **[15:35] Jaime Guevara:** Hasta ahí no hemos generado ninguna orden, ¿no?
+- **[15:35] Yo:** No, y y y
+- **[15:35] Yo:** lo que estamos haciendo es
+- **[15:35] Yo:** activar, realmente, eso es lo que te lo que le te diera ese
+- **[15:35] Jaime Guevara:** Ajá.
+- **[15:35] Yo:** es el empujón para, eso ni siquiera es para que ya el usuario escale, es para que empiece a vender.
+- **[15:35] Yo:** Que hágalo, porque ahora, como está la plataforma, le tocaría aprender Shopify, le toca aprender en muchas cosas.
+- **[15:35] Jaime Guevara:** Exacto. No, no, está bien. ¿Cómo cómo...? Mejor dicho,
+- **[15:35] Yo:** Para que tengas
+- **[15:35] Yo:** Pero si nos vamos a la data,
+- **[15:35] Jaime Guevara:** en cuestión de tiempos,
+- **[15:35] Yo:** Espérame, si me
+- **[15:35] Jaime Guevara:** o sea, yo sé que lo estás mandando para para para expo winners y lo dejamos para expo winners.
+- **[15:35] Jaime Guevara:** Pero de ahí en adelante tenés la visión de
+- **[15:35] Jaime Guevara:** liberamos, le hacemos plan canguro,
+- **[15:35] Yo:** Sí,
+- **[15:35] Jaime Guevara:** Si funciona, entonces se lo mandamos a
+- **[15:36] Yo:** Sí, le he hecho algo.
+- **[15:36] Yo:** Le es iterarlo,
+- **[15:36] Jaime Guevara:** a la... Uy, terremoto.
+- **[15:36] Yo:** Ok.
+- **[15:36] Jaime Guevara:** Cuatro punto ocho en el Chocó. Ahí, diez.
+- **[15:36] Yo:** Muy
+- **[15:36] Jaime Guevara:** Jesús.
+- **[15:36] Yo:** Venga, no, la idea es, esto es el prototipo para saber si es
+- **[15:36] Yo:** usable, si se entiende, si genera valor,
+- **[15:36] Yo:** que esperemos sea así,
+- **[15:36] Yo:** pero sí, la idea, como lo tengo en la cabeza, es
+- **[15:36] Yo:** nos quedamos con esto,
+- **[15:36] Jaime Guevara:** Exacto.
+- **[15:36] Yo:** lo mejoramos,
+- **[15:36] Yo:** lo ponemos ya en
+- **[15:36] Jaime Guevara:** Ajá.
+- **[15:36] Yo:** producción, como se entienda producción,
+- **[15:36] Yo:** y venda.
+- **[15:36] Jaime Guevara:** Listo. Y se lo mandamos a lo, ahí la idea es
+- **[15:36] Jaime Guevara:** o sea, en el punto, yo sé que va a haber un una brecha en la que
+- **[15:36] Jaime Guevara:** igual la gente tiene que generar órdenes, pero para eso,
+- **[15:36] Jaime Guevara:** tenemos al equipo de comercial. O sea, el equipo de comerciales que
+- **[15:36] Yo:** Lo que podemos hacer es
+- **[15:36] Jaime Guevara:** de hacer los relacionamientos.
+- **[15:36] Yo:** ese es un buen punto, y es,
+- **[15:36] Yo:** cojamos... Esta esto ya lo vio, de hecho, el ID, y el ID es la que me va a pasar la la
+- **[15:37] Jaime Guevara:** Ok.
+- **[15:37] Yo:** información de los huérfanos que no han vendido. Es, venga, ¿quiénes logran completarlo? Hacemos un perfilamiento, porque igual ella es, pues, es mucha gente, bueno, eso es muchísima gente. Perfilamos a los que lograron hacerlo en el mejor tiempo, que se animaron a pagar pauta, los que mejor pervilemos, ¿no? Los que mejores productos hayan escogido, porque también nosotros podemos ver si realmente era un producto que tiene potencial o no. Y de ahí, comercial empieza a hacer el acompañamiento más de cerca, Entonces, termina siendo como un apadrinamiento venga, exacto, es como si fuera una una cantera, Nosotros ya logramos proyectar Venga, ustedes, de todos estos huérfanos que habían, estos miles de huérfanos que nadie sabía a quién agarrar,
+- **[15:37] Jaime Guevara:** Mhmm.
+- **[15:37] Jaime Guevara:** Todo es mucho, sí.
+- **[15:37] Jaime Guevara:** Exact
+- **[15:37] Jaime Guevara:** Es un plan canguro ahí.
+- **[15:37] Jaime Guevara:** Exactamente.
+- **[15:37] Yo:** con esta herramienta logramos identificar los que tienen más motivación, los que saben
+- **[15:37] Yo:** mejor la herramienta,
+- **[15:37] Yo:** que más potencial tienen a despegar.
+- **[15:37] Yo:** Usted hágalos despegar.
+- **[15:37] Yo:** Y que ahí los metan a los programas que tengan, a
+- **[15:38] Yo:** y que los metan a tanta cosa tengan, pero ya, por lo menos, tienen un un una plataforma donde aterrizar.
+- **[15:38] Jaime Guevara:** De una, ese tema de la cantera
+- **[15:38] Jaime Guevara:** me me gustó el término, está chévere. No, hágale de una, bueno,
+- **[15:38] Yo:** Sí.
+- **[15:38] Yo:** De una
+- **[15:38] Yo:** Bueno,
+- **[15:38] Jaime Guevara:** tengo otra reunión, pero listo, de ahí
+- **[15:38] Jaime Guevara:** tenemos pendiente reunión con líderes de comunidad. Sea, la idea es que
+- **[15:38] Jaime Guevara:** también nuevos,
+- **[15:38] Jaime Guevara:** los puedan puedan ver si esa herramienta la
+- **[15:38] Jaime Guevara:** le sirve también a los líderes de comunidad.
+- **[15:38] Jaime Guevara:** Que la potencia es
+- **[15:38] Yo:** La el objetivo el objetivo me quedó, me pareció
+- **[15:38] Yo:** es
+- **[15:38] Yo:** el producto, el el delivery,
+- **[15:38] Yo:** tiene que ser lo suficientemente robusto, James, para
+- **[15:38] Yo:** un líder de comunidad pueda hacer un curso completo de eso.
+- **[15:38] Jaime Guevara:** Exactamente.
+- **[15:38] Yo:** Pueda hacer un punta a punta. Venga, le enseño con lo nuevo que sacó Dropi,
+- **[15:38] Jaime Guevara:** Exacto.
+- **[15:38] Yo:** como encuentra un producto, lo selecciona,
+- **[15:38] Yo:** lo publica y lo pauta todo en un solo flujo sin
+- **[15:38] Jaime Guevara:** Exactamente.
+- **[15:38] Yo:** Entonces, estamos en lo mismo.
+- **[15:38] Jaime Guevara:** Sería buenísimo. Listo, bueno, todo bien. Nos vi.
+- **[15:38] Yo:** Te voy a
+- **[15:38] Jaime Guevara:** Chau.
