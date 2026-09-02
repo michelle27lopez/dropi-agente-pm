@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rearquitectura — Centro de Comando</title>
+<style>
+  :root{
+    --page-bg:#f7f7f5;
+    --surface:#ffffff;
+    --surface-sunken:#fbfbfa;
+    --surface-raised:#ffffff;
+    --ink:#0b0b0b;
+    --ink-secondary:#52514e;
+    --ink-muted:#898781;
+    --border:rgba(11,11,11,0.09);
+    --border-strong:rgba(11,11,11,0.16);
+    --accent:#2a78d6;
+    --accent-soft:#eaf2fc;
+    --violet:#4a3aa7;
+    --violet-soft:#eeecf9;
+    --aqua:#1baf7a;
+    --aqua-soft:#e6f7f0;
+    --orange:#eb6834;
+    --orange-soft:#fdece4;
+    --good:#0ca30c;
+    --good-soft:#e7f6e3;
+    --warning:#b9790a;
+    --warning-soft:#fdf1da;
+    --serious:#c85a34;
+    --serious-soft:#fbe9e1;
+    --critical:#d03b3b;
+    --critical-soft:#fbe6e6;
+    --radius-lg:16px;
+    --radius-md:12px;
+    --radius-sm:8px;
+    --shadow-sm:0 1px 2px rgba(11,11,11,0.04), 0 1px 1px rgba(11,11,11,0.03);
+    --shadow-md:0 4px 16px rgba(11,11,11,0.06), 0 1px 3px rgba(11,11,11,0.05);
+    --shadow-lg:0 12px 32px rgba(11,11,11,0.10), 0 2px 6px rgba(11,11,11,0.06);
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --sidebar-w: 264px;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --page-bg:#131211;
+      --surface:#1c1b19;
+      --surface-sunken:#232220;
+      --surface-raised:#28271f;
+      --ink:#f3f2ef;
+      --ink-secondary:#c2bfb6;
+      --ink-muted:#8b877c;
+      --border:rgba(255,255,255,0.09);
+      --border-strong:rgba(255,255,255,0.16);
+      --accent:#6ea4ea;
+      --accent-soft:#20344f;
+      --violet:#a596e8;
+      --violet-soft:#2c2652;
+      --aqua:#4fd3a0;
+      --aqua-soft:#123529;
+      --orange:#ff9a68;
+      --orange-soft:#3d2517;
+      --good:#5fd45f;
+      --good-soft:#173319;
+      --warning:#e8b04a;
+      --warning-soft:#3a2c0e;
+      --serious:#ef8f68;
+      --serious-soft:#3a2117;
+      --critical:#f2726b;
+      --critical-soft:#3d1a17;
+      --shadow-sm:0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+      --shadow-md:0 4px 16px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+      --shadow-lg:0 12px 32px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --page-bg:#131211;
+    --surface:#1c1b19;
+    --surface-sunken:#232220;
+    --surface-raised:#28271f;
+    --ink:#f3f2ef;
+    --ink-secondary:#c2bfb6;
+    --ink-muted:#8b877c;
+    --border:rgba(255,255,255,0.09);
+    --border-strong:rgba(255,255,255,0.16);
+    --accent:#6ea4ea;
+    --accent-soft:#20344f;
+    --violet:#a596e8;
+    --violet-soft:#2c2652;
+    --aqua:#4fd3a0;
+    --aqua-soft:#123529;
+    --orange:#ff9a68;
+    --orange-soft:#3d2517;
+    --good:#5fd45f;
+    --good-soft:#173319;
+    --warning:#e8b04a;
+    --warning-soft:#3a2c0e;
+    --serious:#ef8f68;
+    --serious-soft:#3a2117;
+    --critical:#f2726b;
+    --critical-soft:#3d1a17;
+    --shadow-sm:0 1px 2px rgba(0,0,0,0.3), 0 1px 1px rgba(0,0,0,0.2);
+    --shadow-md:0 4px 16px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.25);
+    --shadow-lg:0 12px 32px rgba(0,0,0,0.45), 0 2px 6px rgba(0,0,0,0.3);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:var(--font);
+    background:var(--page-bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  img,svg{display:block;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+  ::selection{background:var(--accent-soft);}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+
+  .icon{width:18px;height:18px;flex-shrink:0;}
+  .icon-sm{width:14px;height:14px;}
+  .icon-lg{width:22px;height:22px;}
+
+  /* ============ SHELL / LAYOUT ============ */
+  .shell{display:flex;min-height:100vh;}
+  .main{flex:1;min-width:0;max-width:1180px;margin:0 auto;padding:28px 32px 96px;}
+  section{scroll-margin-top:24px;padding-top:8px;}
+  @media (max-width:980px){ .shell{display:block;} .main{max-width:none;padding:20px 18px 80px;} }
+
+  /* ============ SIDEBAR ============ */
+  .sidebar{
+    width:var(--sidebar-w);flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;
+    background:var(--surface);border-right:1px solid var(--border);padding:20px 14px 24px;
+  }
+  @media (max-width:980px){
+    .sidebar{position:static;height:auto;width:100%;border-right:none;border-bottom:1px solid var(--border);
+      display:flex;overflow-x:auto;overflow-y:hidden;padding:12px;gap:6px;}
+    .sidebar-brand,.sidebar-foot{display:none;}
+    .navlist{display:flex;gap:6px;}
+    .navlist li{flex-shrink:0;}
+  }
+  .sidebar-brand{display:flex;align-items:center;gap:10px;padding:6px 10px 18px;font-weight:650;font-size:14px;}
+  .brand-mark{
+    width:28px;height:28px;border-radius:8px;flex-shrink:0;
+    background:linear-gradient(135deg,var(--accent),var(--violet));
+    display:flex;align-items:center;justify-content:center;color:#fff;
+  }
+  .brand-mark svg{width:16px;height:16px;}
+  .brand-sub{font-size:11px;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.05em;}
+  .navlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;}
+  .navlink{
+    display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:560;
+    color:var(--ink-secondary);white-space:nowrap;transition:background .15s,color .15s;
+  }
+  .navlink:hover{background:var(--surface-sunken);color:var(--ink);}
+  .navlink.active{background:var(--accent-soft);color:var(--accent);}
+  .navlink .navnum{font-size:10.5px;font-weight:700;color:var(--ink-muted);width:16px;flex-shrink:0;font-variant-numeric:tabular-nums;}
+  .navlink.active .navnum{color:var(--accent);}
+  .sidebar-foot{margin-top:18px;padding:12px 10px 4px;border-top:1px solid var(--border);}
+  .theme-toggle{
+    display:flex;gap:4px;background:var(--surface-sunken);border:1px solid var(--border);border-radius:8px;padding:3px;
+  }
+  .theme-toggle button{
+    flex:1;border:none;background:none;padding:6px 4px;border-radius:6px;font-size:11px;font-weight:650;cursor:pointer;color:var(--ink-muted);
+  }
+  .theme-toggle button.active{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-sm);}
+
+  /* ============ BADGES / TAGS ============ */
+  .badge{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:650;
+    border:1px solid transparent;white-space:nowrap;
+  }
+  .badge svg{width:13px;height:13px;}
+  .badge-neutral{background:var(--surface-sunken);color:var(--ink-secondary);border-color:var(--border);}
+  .badge-accent{background:var(--accent-soft);color:var(--accent);}
+  .badge-violet{background:var(--violet-soft);color:var(--violet);}
+  .badge-aqua{background:var(--aqua-soft);color:var(--aqua);}
+  .badge-good{background:var(--good-soft);color:var(--good);}
+  .badge-warning{background:var(--warning-soft);color:var(--warning);}
+  .badge-serious{background:var(--serious-soft);color:var(--serious);}
+  .badge-critical{background:var(--critical-soft);color:var(--critical);}
+  .badge-orange{background:var(--orange-soft);color:var(--orange);}
+
+  /* status pills: definido / construccion / pendiente / propuesta */
+  .status{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:3px 9px 3px 7px;border-radius:999px;white-space:nowrap;letter-spacing:.01em;}
+  .status::before{content:"";width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+  .status-definido{background:var(--good-soft);color:var(--good);}
+  .status-definido::before{background:var(--good);}
+  .status-construccion{background:var(--warning-soft);color:var(--warning);}
+  .status-construccion::before{background:var(--warning);}
+  .status-pendiente{background:var(--critical-soft);color:var(--critical);}
+  .status-pendiente::before{background:var(--critical);}
+  .status-propuesta{background:var(--accent-soft);color:var(--accent);}
+  .status-propuesta::before{background:var(--accent);}
+
+  .src-tag{
+    display:inline-flex;align-items:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--ink-muted);border:1px solid var(--border);border-radius:5px;padding:2px 6px;white-space:nowrap;
+    font-family:var(--font-mono);
+  }
+  .fact-row{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+  .fact-row .fact-text{flex:1;min-width:200px;}
+
+  /* ============ HERO / PANEL EJECUTIVO ============ */
+  .hero{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-md);padding:30px 32px;position:relative;overflow:hidden;margin-bottom:8px;
+  }
+  .hero::before{
+    content:"";position:absolute;top:-70px;right:-70px;width:260px;height:260px;border-radius:50%;
+    background:radial-gradient(circle, var(--accent-soft) 0%, transparent 72%);pointer-events:none;
+  }
+  .hero-kicker{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:650;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+  .hero-title{font-size:clamp(22px,3vw,30px);font-weight:750;letter-spacing:-0.015em;margin:0 0 10px;max-width:820px;text-wrap:balance;}
+  .hero-sub{font-size:14px;color:var(--ink-secondary);max-width:720px;line-height:1.65;margin-bottom:20px;}
+  .hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;}
+
+  .exec-grid{display:grid;grid-template-columns:1.1fr 1fr 1fr 1fr 1.2fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-top:22px;}
+  @media (max-width:900px){.exec-grid{grid-template-columns:repeat(2,1fr);}}
+  .exec-tile{background:var(--surface);padding:16px 16px 14px;display:flex;flex-direction:column;gap:6px;}
+  .exec-label{font-size:10.5px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.05em;}
+  .exec-value{font-size:17px;font-weight:700;letter-spacing:-0.01em;line-height:1.25;}
+  .exec-value.small{font-size:13px;font-weight:650;line-height:1.4;}
+  .exec-progress{display:flex;align-items:center;gap:10px;}
+  .exec-ring{position:relative;width:44px;height:44px;flex-shrink:0;}
+  .exec-ring svg{width:44px;height:44px;transform:rotate(-90deg);}
+  .exec-ring-track{fill:none;stroke:var(--border-strong);stroke-width:5;}
+  .exec-ring-fill{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round;transition:stroke-dashoffset .4s;}
+  .exec-ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:750;font-variant-numeric:tabular-nums;}
+
+  /* ============ SECTION HEADINGS ============ */
+  .section-head{margin:56px 0 20px;display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .section-head:first-of-type{margin-top:40px;}
+  .section-eyebrow{display:flex;align-items:center;gap:9px;color:var(--ink-muted);font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+  .section-eyebrow .num{
+    width:20px;height:20px;border-radius:6px;background:var(--ink);color:var(--page-bg);
+    display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;
+  }
+  .section-title{font-size:21px;font-weight:750;letter-spacing:-0.01em;margin:0;text-wrap:balance;}
+  .section-sub{font-size:13.5px;color:var(--ink-secondary);margin-top:6px;max-width:680px;line-height:1.6;}
+
+  /* ============ CARDS / GRIDS ============ */
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);
+    box-shadow:var(--shadow-sm);padding:20px;
+  }
+  .grid{display:grid;gap:14px;}
+  .grid-2{grid-template-columns:repeat(2,1fr);}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  .grid-4{grid-template-columns:repeat(4,1fr);}
+  .grid-6{grid-template-columns:repeat(6,1fr);}
+  @media (max-width:900px){.grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} .grid-6{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:620px){.grid-2,.grid-3,.grid-4,.grid-6{grid-template-columns:1fr;}}
+
+  .prose{font-size:13.5px;color:var(--ink-secondary);line-height:1.7;max-width:760px;}
+  .prose strong{color:var(--ink);}
+  .prose p{margin:0 0 10px;}
+  .prose p:last-child{margin-bottom:0;}
+
+  /* TARS */
+  .tars-banner{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--radius-sm);background:var(--violet-soft);color:var(--violet);font-size:13px;font-weight:600;margin-bottom:18px;}
+  .tars-card{border-top:3px solid var(--accent);display:flex;flex-direction:column;gap:10px;}
+  .tars-card:nth-child(2){border-top-color:var(--aqua);}
+  .tars-card:nth-child(3){border-top-color:var(--orange);}
+  .tars-card:nth-child(4){border-top-color:var(--violet);}
+  .tars-letter{font-size:24px;font-weight:800;color:var(--ink);opacity:.16;line-height:1;}
+  .tars-label{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);}
+  .tars-text{font-size:13.2px;color:var(--ink-secondary);line-height:1.6;}
+
+  .field-list{display:flex;flex-direction:column;gap:14px;}
+  .field-item{border-bottom:1px solid var(--border);padding-bottom:14px;}
+  .field-item:last-child{border:none;padding-bottom:0;}
+  .field-label{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+  .field-value{font-size:13.5px;color:var(--ink);line-height:1.6;}
+
+  /* comunicacion vs adopcion split */
+  .split-compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;}
+  @media (max-width:700px){.split-compare{grid-template-columns:1fr;}}
+  .split-col{background:var(--surface);padding:20px;}
+  .split-col h4{margin:0 0 8px;font-size:14.5px;font-weight:700;display:flex;align-items:center;gap:8px;}
+  .split-col p{margin:0;font-size:13px;color:var(--ink-secondary);line-height:1.6;}
+  .split-col.a h4{color:var(--accent);}
+  .split-col.b h4{color:var(--aqua);}
+
+  /* Historia timeline */
+  .story-track{position:relative;padding-left:26px;display:flex;flex-direction:column;gap:22px;}
+  .story-track::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--border-strong);}
+  .story-step{position:relative;}
+  .story-dot{position:absolute;left:-26px;top:2px;width:16px;height:16px;border-radius:50%;background:var(--surface);border:2px solid var(--accent);}
+  .story-step-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+  .story-step-text{font-size:13px;color:var(--ink-secondary);line-height:1.65;max-width:680px;}
+
+  /* video brief */
+  .video-brief{background:linear-gradient(135deg,var(--violet-soft),var(--accent-soft));border:1px solid var(--border);border-radius:var(--radius-md);padding:24px;}
+  .video-concept{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:750;margin-bottom:14px;flex-wrap:wrap;}
+  .video-concept span{padding:5px 12px;border-radius:999px;background:var(--surface);box-shadow:var(--shadow-sm);}
+  .video-concept svg{width:16px;height:16px;color:var(--ink-muted);}
+
+  /* modulo cards */
+  .modulo-card{display:flex;flex-direction:column;gap:12px;cursor:pointer;transition:box-shadow .15s, transform .15s;}
+  .modulo-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px);}
+  .modulo-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .modulo-name{font-size:15px;font-weight:750;}
+  .modulo-need{font-size:12.5px;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.03em;font-weight:650;}
+  .modulo-pp{font-size:13px;color:var(--ink-secondary);line-height:1.55;}
+  .modulo-pp b{color:var(--ink);}
+
+  .raw-notes{display:flex;flex-direction:column;gap:10px;}
+  .raw-note{border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;background:var(--surface-sunken);}
+  .raw-note-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:6px;}
+  .raw-note-mod{font-size:11px;font-weight:700;color:var(--violet);text-transform:uppercase;letter-spacing:.04em;}
+  .raw-note-author{font-size:11px;color:var(--ink-muted);font-weight:600;}
+  .raw-note-body{font-size:12.5px;color:var(--ink-secondary);line-height:1.6;white-space:pre-line;}
+
+  /* audiencia */
+  .kpi-tile{border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 16px 14px;background:var(--surface-sunken);}
+  .kpi-label{font-size:11px;font-weight:650;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
+  .kpi-value{font-size:24px;font-weight:750;letter-spacing:-0.01em;font-variant-numeric:tabular-nums;}
+  .kpi-sub{font-size:11.5px;color:var(--ink-muted);margin-top:4px;}
+
+  .madurez-track{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+  @media (max-width:900px){.madurez-track{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:520px){.madurez-track{grid-template-columns:repeat(2,1fr);}}
+  .madurez-card{border-top:3px solid var(--border-strong);padding:14px 12px;display:flex;flex-direction:column;gap:6px;min-height:118px;}
+  .madurez-name{font-size:13px;font-weight:700;}
+  .madurez-vol{font-size:11px;color:var(--ink-muted);font-variant-numeric:tabular-nums;}
+  .madurez-risk{margin-top:auto;}
+
+  .axis-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+  .axis-row:last-child{border:none;}
+  .axis-name{font-size:12.5px;font-weight:650;width:190px;flex-shrink:0;}
+  .axis-bar{flex:1;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--accent-soft),var(--accent));position:relative;}
+  .axis-ends{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-muted);width:130px;flex-shrink:0;}
+
+  .placeholder-box{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;
+    padding:32px 20px;border:1.5px dashed var(--border-strong);border-radius:var(--radius-md);background:var(--surface-sunken);
+  }
+  .placeholder-box svg{width:30px;height:30px;color:var(--ink-muted);}
+  .placeholder-title{font-size:14px;font-weight:700;}
+  .placeholder-text{font-size:12.5px;color:var(--ink-muted);max-width:420px;line-height:1.55;}
+
+  /* journey */
+  .journey-table{width:100%;border-collapse:collapse;font-size:13px;}
+  .journey-table th{text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);padding:12px 16px;background:var(--surface-sunken);border-bottom:1px solid var(--border);}
+  .journey-table td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink-secondary);}
+  .journey-table tr:last-child td{border-bottom:none;}
+  .journey-table .hoy{color:var(--ink-muted);}
+  .journey-table .futuro{color:var(--ink);font-weight:600;}
+
+  .flow-behavior{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px;font-weight:700;margin:4px 0 4px;}
+  .flow-behavior span{padding:6px 14px;border-radius:999px;background:var(--accent-soft);color:var(--accent);}
+  .flow-behavior svg{width:15px;height:15px;color:var(--ink-muted);}
+
+  /* comms tabs + timeline */
+  .tabs{display:flex;gap:4px;background:var(--surface-sunken);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:20px;width:fit-content;}
+  .tab-btn{border:none;background:none;padding:8px 16px;border-radius:7px;font-size:12.5px;font-weight:650;color:var(--ink-muted);cursor:pointer;white-space:nowrap;}
+  .tab-btn.active{background:var(--surface);color:var(--ink);box-shadow:var(--shadow-sm);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  .phase-card{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface);box-shadow:var(--shadow-sm);overflow:hidden;margin-bottom:14px;}
+  .phase-head{padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;background:var(--surface-sunken);border-bottom:1px solid var(--border);}
+  .phase-name{font-size:14.5px;font-weight:750;}
+  .phase-day{font-size:11.5px;color:var(--ink-muted);font-weight:600;margin-top:2px;}
+  .phase-body{padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
+  .phase-msg{font-size:13.5px;color:var(--ink);line-height:1.6;font-style:italic;border-left:3px solid var(--accent);padding-left:12px;}
+  .phase-meta-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .chip{font-size:11.5px;background:var(--surface-sunken);border:1px solid var(--border);color:var(--ink-secondary);padding:4px 10px;border-radius:999px;}
+
+  /* hipotesis */
+  .hip-card{display:flex;flex-direction:column;gap:10px;}
+  .hip-num{width:26px;height:26px;border-radius:8px;background:var(--violet-soft);color:var(--violet);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:750;flex-shrink:0;}
+  .hip-text{font-size:13.5px;color:var(--ink);line-height:1.65;}
+  .hip-if{color:var(--accent);font-weight:700;}
+  .hip-then{color:var(--aqua);font-weight:700;}
+
+  /* editable table */
+  .table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);overflow:hidden;}
+  .table-scroll{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  thead th{text-align:left;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);padding:12px 14px;background:var(--surface-sunken);border-bottom:1px solid var(--border);white-space:nowrap;}
+  tbody td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--ink-secondary);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:var(--surface-sunken);}
+  .cell-primary{font-weight:600;color:var(--ink);}
+  .cell-muted{color:var(--ink-secondary);font-size:12.5px;line-height:1.5;}
+  .cell-num{font-variant-numeric:tabular-nums;text-align:center;}
+  .editable-input{
+    width:100%;min-width:60px;border:1px solid transparent;background:transparent;padding:5px 6px;border-radius:6px;
+    font-size:12.8px;color:var(--ink);font-family:inherit;
+  }
+  .editable-input:hover{border-color:var(--border);}
+  .editable-input:focus{border-color:var(--accent);background:var(--surface);outline:none;}
+  select.editable-input{cursor:pointer;}
+  .num-input{width:52px;text-align:center;}
+  .row-actions{display:flex;gap:6px;}
+  .icon-btn{
+    width:26px;height:26px;border-radius:7px;border:1px solid var(--border);background:var(--surface);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-muted);flex-shrink:0;
+  }
+  .icon-btn:hover{background:var(--surface-sunken);color:var(--ink);}
+  .icon-btn svg{width:13px;height:13px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:9px;font-size:12.8px;font-weight:650;
+    border:1px solid var(--border-strong);background:var(--surface);color:var(--ink);cursor:pointer;white-space:nowrap;
+  }
+  .btn:hover{background:var(--surface-sunken);}
+  .btn svg{width:14px;height:14px;}
+  .btn-primary{background:var(--ink);color:var(--page-bg);border-color:var(--ink);}
+  .btn-primary:hover{opacity:.88;background:var(--ink);}
+  .btn-ghost{border-color:transparent;background:none;}
+  .btn-ghost:hover{background:var(--surface-sunken);}
+  .btn-link{border:none;background:none;padding:0;color:var(--accent);font-weight:650;font-size:12.8px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+  .toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+
+  /* ICE matrix */
+  .ice-wrap{display:grid;grid-template-columns:220px 1fr;gap:20px;}
+  @media (max-width:800px){.ice-wrap{grid-template-columns:1fr;}}
+  .ice-legend{display:flex;flex-direction:column;gap:10px;}
+  .ice-legend .quad-tag{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:650;padding:8px 10px;border-radius:8px;background:var(--surface-sunken);border:1px solid var(--border);}
+  .ice-legend .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .ice-plot{
+    position:relative;aspect-ratio:1.3/1;background:var(--surface-sunken);border:1px solid var(--border);border-radius:var(--radius-md);
+    display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;
+  }
+  .ice-quad{border:none;position:relative;}
+  .ice-quad.qw{border-right:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .ice-quad.ga{border-bottom:1px solid var(--border);}
+  .ice-quad.rl{border-right:1px solid var(--border);}
+  .quad-label{position:absolute;top:8px;left:10px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-muted);}
+  .ice-axis-label{position:absolute;font-size:10.5px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.05em;}
+  .ice-axis-y{left:-70px;top:50%;transform:rotate(-90deg) translateX(50%);transform-origin:left center;white-space:nowrap;}
+  .ice-axis-x{bottom:-26px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+  .ice-dot{
+    position:absolute;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:750;transform:translate(-50%,50%);
+    box-shadow:var(--shadow-md);border:2px solid var(--surface);cursor:default;
+  }
+
+  /* marcas blancas / doc placeholder */
+  .doc-card{display:flex;align-items:center;gap:14px;padding:16px 18px;}
+  .doc-icon{width:40px;height:40px;border-radius:10px;background:var(--surface-sunken);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .doc-title{font-size:13.5px;font-weight:700;}
+  .doc-desc{font-size:12px;color:var(--ink-muted);margin-top:2px;}
+
+  /* roadmap */
+  .roadmap-col{display:flex;flex-direction:column;gap:10px;}
+  .roadmap-col-head{font-size:12px;font-weight:750;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-muted);padding-bottom:8px;border-bottom:2px solid var(--border-strong);margin-bottom:4px;}
+  .roadmap-item{border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;background:var(--surface);box-shadow:var(--shadow-sm);}
+  .roadmap-item-title{font-size:12.8px;font-weight:650;margin-bottom:6px;}
+  .roadmap-item-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;color:var(--ink-muted);}
+
+  /* pendientes list */
+  .pending-list{display:flex;flex-direction:column;gap:2px;}
+  .pending-item{display:flex;align-items:flex-start;gap:12px;padding:13px 4px;border-bottom:1px solid var(--border);}
+  .pending-item:last-child{border:none;}
+  .pending-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--critical);flex-shrink:0;margin-top:1px;}
+  .pending-text{font-size:13.3px;color:var(--ink);line-height:1.5;}
+
+  /* modal */
+  .modal-overlay{position:fixed;inset:0;background:rgba(11,11,11,0.5);display:none;align-items:center;justify-content:center;z-index:100;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--surface);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);max-width:520px;width:100%;max-height:86vh;overflow-y:auto;padding:26px;}
+  .modal h3{margin:0 0 16px;font-size:16px;font-weight:750;}
+  .modal-field{margin-bottom:14px;}
+  .modal-field label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+  .modal-field textarea, .modal-field input[type="text"]{
+    width:100%;border:1px solid var(--border-strong);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;
+    background:var(--surface);color:var(--ink);
+  }
+  .modal-field textarea{min-height:80px;resize:vertical;}
+  .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;}
+
+  .footer{margin-top:72px;padding:26px 30px;border-radius:var(--radius-lg);background:var(--ink);color:var(--page-bg);}
+  .footer-row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;}
+  .footer-note{font-size:12px;color:rgba(255,255,255,0.55);}
+  :root[data-theme="dark"] .footer-note, :root:not([data-theme="light"]) .footer-note{color:rgba(0,0,0,0.5);}
+  .footer p{margin:0;font-size:12.5px;}
+
+  .link-row{display:flex;flex-wrap:wrap;gap:8px;}
+
+  @media (max-width:700px){
+    .hero{padding:22px 20px;}
+    .grid-2{grid-template-columns:1fr;}
+    .exec-grid{grid-template-columns:repeat(2,1fr);}
+    thead{display:none;}
+    table.stack, table.stack tbody, table.stack tr, table.stack td{display:block;width:100%;}
+    table.stack tbody tr{border-bottom:1px solid var(--border);padding:10px 0;}
+    table.stack td{border:none;padding:4px 14px;}
+    table.stack td::before{content:attr(data-label);display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-muted);margin-bottom:2px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalBody"></div>
+</div>
+
+<script>
+/* ================================================================================
+   DATOS — todo lo real extraído de las 3 fuentes. Editar solo esto para actualizar
+   contenido fijo. El contenido editable en vivo (experimentos, marcas blancas,
+   estado de próximos pasos) vive en localStorage, ver STORE más abajo.
+   Fuentes: WORKSHOP = PDF "Lanzamiento Rearquitectura Dropi - Workshop Tier 3"
+            ENTREVISTA = Notas Gemini, entrevista Catherin Salazar / Maria Ossa, 20-ago-2026
+            BRIEF = instrucciones directas de Catherin para este artefacto
+   ================================================================================ */
+const DATA = {
+  meta:{ docTitle:"Rearquitectura Dropi — Centro de Comando de Lanzamiento" },
+
+  exec:{
+    tier:"Tier 3 — Lanzamiento estratégico",
+    fecha:"12 de septiembre de 2026",
+    fechaNota:"Lanzamiento en ExpoWinners + canales internos, 3 días",
+    alcanceTotal:"174.841",
+    alcanceDetalle:"159.142 dropshippers + 15.699 proveedores",
+    objetivo:"Migrar limpia y eficazmente a todos los usuarios a la nueva arquitectura, garantizando adaptabilidad rápida y cero interrupción.",
+    comportamiento:["Entender","Encontrar","Usar","Descubrir","Adoptar"]
+  },
+
+  // Checklist real de los 9 entregables que el propio workshop se propuso — de aquí
+  // se calcula el % de avance del panel ejecutivo. status: definido | construccion | pendiente
+  checklist:[
+    {item:"Narrativa estratégica de la rearquitectura", status:"definido", nota:"Historia completa + narrativa de módulos + promesa de valor"},
+    {item:"Comportamientos que queremos cambiar", status:"definido", nota:"Flujo Entender→Encontrar→Usar→Descubrir→Adoptar + tabla Hoy/Futuro"},
+    {item:"Segmentos y niveles de riesgo de migración", status:"construccion", nota:"Niveles nombrados; riesgo y frecuencia solo parcialmente poblados"},
+    {item:"Journey de transición", status:"construccion", nota:"Mensajes por fase definidos; numeración de fases sin consolidar"},
+    {item:"Estrategia de comunicación", status:"construccion", nota:"Mensajes listos; canales solo completos en Fase 0 (lanzamiento)"},
+    {item:"Estrategia de educación", status:"pendiente", nota:"Academy aparece como canal, sin contenido definido"},
+    {item:"Hipótesis y experimentos", status:"construccion", nota:"4 hipótesis redactadas; solo 1 con ficha de experimento completa"},
+    {item:"KPIs de migración, adaptación y descubrimiento", status:"construccion", nota:"North Star definido; tabla de medición y baseline pendientes"},
+    {item:"Plan de acción antes/durante/después", status:"pendiente", nota:"Solo categorías por equipo, sin fechas ni responsables individuales"}
+  ],
+
+  tars:{
+    tension:"Dispersión y desubicación de pantallas fuera de sus módulos lógicos, lo que dificulta la localización de herramientas. Problema diario (WORKSHOP): ocurre en cada sesión de trabajo al intentar navegar entre funcionalidades. Gravedad alta — fricción constante; la alternativa interna es media/alta porque no hay buscador ni ruta simple.",
+    audiencia:"Dropshippers, Proveedores y Marcas activos con operación transaccional diaria en la plataforma, de todos los países. 100% de la base de usuarios activos globales de Dropi: 159.142 dropshippers + 15.699 proveedores = 174.841 usuarios.",
+    resultado:"Migrar limpia y eficazmente a todos los usuarios a la nueva arquitectura, garantizando adaptabilidad rápida y cero interrupción. Impacto de negocio: ayudar a todos los usuarios a ubicar sus herramientas operativas en segundos, sin la fricción de menús desordenados.",
+    solucion:"Reorganizar la plataforma alrededor de la cadena de valor del negocio: Productos → Marketing → Logística → Órdenes → Informes → Financiero, en vez de la estructura fragmentada heredada de años de crecimiento orgánico."
+  },
+  tarsFields:[
+    {label:"Descripción del objetivo", value:"Dropshippers, Proveedores y Marcas activos con operación transaccional diaria en la plataforma, de todos los países."},
+    {label:"Tamaño del objetivo", value:"100% de la base de usuarios activos globales de Dropi. Dropshippers: 159.142 · Proveedores: 15.699 · Total: 174.841."},
+    {label:"Problema del usuario (Job To Be Done)", value:"Dispersión y desubicación de pantallas fuera de sus módulos lógicos, lo que dificulta la localización de herramientas."},
+    {label:"Frecuencia del problema", value:"Diaria. Sucede en cada sesión de trabajo al intentar navegar entre diferentes funcionalidades."},
+    {label:"Gravedad del problema", value:"Alta. Fricción constante en la operación. Alternativa interna: media o alta (reduce velocidad al no haber buscador o ruta simple)."},
+    {label:"¿Existe alternativa a este problema?", value:"Búsqueda manual por prueba y error, o memorización de rutas legacy largas e ineficientes."},
+    {label:"Importancia estratégica", value:"Completar una tarea operativa dentro del nuevo módulo correspondiente, interactuando con la reorganización del menú."},
+    {label:"Impacto en el negocio", value:"Ayuda a todos los usuarios a ubicar sus herramientas operativas en segundos, sin la fricción de menús desordenados."},
+    {label:"Problema que resuelve", value:"Mayor navegabilidad, plataforma más intuitiva."}
+  ],
+  comVsAdopcion:{
+    comunicacion:{ titulo:"Comunicación / Difusión", objetivo:"Que los usuarios sepan que Dropi evolucionó, entiendan qué está cambiando y mantengan confianza durante la transición.", detalle:"Dirigida al resto del ecosistema: comunicar la evolución del producto, fortalecer la percepción de innovación y mantener informada a la comunidad — sin que la adopción sea el indicador principal de éxito." },
+    adopcion:{ titulo:"Adopción", objetivo:"Que los usuarios comprendan, encuentren y utilicen correctamente las herramientas dentro de la nueva arquitectura.", detalle:"Dirigida exclusivamente a los segmentos con mayor probabilidad de utilizar la funcionalidad por primera vez. Estrategia experimental, basada en hipótesis y optimizada mediante iteraciones." }
+  },
+
+  historia:[
+    {t:"Nació de una plantilla", d:"Dropi nació originalmente a partir de una plantilla y se desarrolló de forma orgánica durante aproximadamente 6–7 años.", src:"ENTREVISTA"},
+    {t:"Creció orgánicamente", d:"El crecimiento fue incorporando funcionalidades sin un plan de arquitectura unificado, respondiendo a necesidades puntuales en cada etapa.", src:"ENTREVISTA"},
+    {t:"La estructura se fragmentó", d:"Con el tiempo, ese modelo fragmentado empezó a limitar la escalabilidad: pantallas dispersas fuera de sus módulos lógicos, dificultando que el usuario encuentre sus herramientas.", src:"ENTREVISTA + WORKSHOP"},
+    {t:"Se investigó con ingeniería inversa", d:"El equipo hizo ingeniería inversa sobre la cadena de valor del comercio electrónico (productos, marketing, logística, gestión de órdenes, informes, servicios financieros) para definir los módulos nuevos.", src:"ENTREVISTA"},
+    {t:"Se rediseñó alrededor del negocio", d:"La nueva arquitectura organiza Dropi alrededor de las necesidades del negocio del seller, no de la estructura técnica heredada: Productos → Marketing → Logística → Órdenes → Informes → Financiero.", src:"WORKSHOP"},
+    {t:"Se validó con usuarios", d:"Las pruebas con usuarios demostraron que la nueva interfaz es intuitiva y permite encontrar fácilmente las funcionalidades — lo que reforzó comunicar la propuesta de valor y el crecimiento del negocio en vez de una campaña de expectativa extensa.", src:"ENTREVISTA"},
+    {t:"Ahora: lanzamiento", d:"Consolida ~3 años de evolución y aprendizaje de producto. No es un rediseño visual — es una decisión estratégica para soportar el crecimiento futuro de Dropi. Lanzamiento general: 12 de septiembre de 2026.", src:"ENTREVISTA + BRIEF"}
+  ],
+  menuStructure:{
+    d:"María Ossa detalla la nueva estructura del menú: se divide en dos secciones separadas por una línea horizontal. Arriba, las herramientas de gestión del negocio (productos, órdenes, finanzas). Abajo, los módulos de soporte e infraestructura: centro de atención, Academia de Dropi y configuración de la cuenta.",
+    src:"ENTREVISTA"
+  },
+  videoBrief:{
+    concepto:["ANTES","EVOLUCIÓN","AHORA"],
+    d:"Mostrar visualmente cómo Dropi ha evolucionado desde hace aproximadamente 7 años: una plataforma inicialmente construida sobre una plantilla, crecimiento progresivo, incorporación de funcionalidades, evolución del ecosistema, aumento de complejidad, necesidad de reorganización y construcción de la nueva arquitectura. Usar pantallas antiguas → evolución de interfaces → nuevas versiones → nueva arquitectura.",
+    evitar:"“Cambiamos el diseño.”",
+    comunicar:"“Dropi evolucionó y ahora su experiencia también evoluciona para acompañar todo lo que el usuario necesita para crecer.”",
+    nota:"Brief para Marketing / Diseño / Video — concepto de equipo, no pieza en producción."
+  },
+
+  modulos:[
+    {id:"productos", nombre:"Productos", icon:"box", need:"No sé qué vender", problema:"No sé qué vender.", promesa:"Encuentra productos para poner tu negocio en movimiento.", accion:"Explorar productos.", resultado:"Seleccionar productos para vender.", tono:"accent"},
+    {id:"marketing", nombre:"Marketing", icon:"megaphone", need:"Convertir productos en ventas", problema:"Convertir productos en oportunidades de venta.", promesa:"", accion:"", resultado:"", tono:"violet"},
+    {id:"logistica", nombre:"Logística", icon:"truck", need:"Hacer llegar mis productos", problema:"Hacer llegar sus productos a sus clientes.", promesa:"", accion:"", resultado:"", tono:"aqua"},
+    {id:"ordenes", nombre:"Órdenes", icon:"list-checks", need:"Gestionar mi operación", problema:"Gestionar y controlar su operación.", promesa:"", accion:"", resultado:"", tono:"orange"},
+    {id:"informes", nombre:"Informes", icon:"bar-chart", need:"Entender mi negocio", problema:"Entender qué está funcionando en su negocio.", promesa:"", accion:"", resultado:"", tono:"accent"},
+    {id:"financiero", nombre:"Financiero", icon:"wallet", need:"Crecer mi operación", problema:"Tener herramientas que faciliten el crecimiento de su operación.", promesa:"", accion:"", resultado:"", tono:"violet"}
+  ],
+  moduloNotasCrudas:{
+    nota:"Notas de exploración tal como aparecen en el board de Figma del workshop — el layout espacial no garantiza que cada nota quedara bajo el módulo final correcto. No se reinterpretaron ni reagruparon.",
+    items:[
+      {modulo:"Logística", autor:"Diana Aldana", texto:"Problema: alta tasa de devoluciones (novedades), transportadoras lentas y falta de trazabilidad en tiempo real en pedidos COD; seleccionar una transportadora que no tenga cobertura.\nPromesa: automatización del despacho y optimización de las entregas en el menor tiempo posible."},
+      {modulo:"Logística", autor:"Maria Jose Calderon", texto:"Problema (perfil proveedor): apartados dispersos — bodega por fuera, torre logística por fuera, etc.\nPromesa: todo el apartado de logística en un solo lugar."},
+      {modulo:"Logística", autor:"Producto", texto:"Problema: la sección de logística no es intuitiva; secciones dispersas (creación de bodega, torre logística y demás).\nPromesa: toda la logística del negocio en un solo lugar o un solo módulo."},
+      {modulo:"Informes / Dashboard", autor:"Catherin Salazar", texto:"Problema: no hay entendimiento de la gestión de la tienda; el usuario percibe el dashboard actual como “mentiroso”.\nPromesa: ver mejor la eficiencia operativa de la tienda. Herramientas: IA, mayor intuición, mejor diseño, mayor interacción.\nAcción: revisar la eficiencia de la tienda. Resultado: mayor uso del dashboard, mayores órdenes, mayor eficiencia operativa."},
+      {modulo:"Informes", autor:"Maria Jose Calderon", texto:"Problema: quiero respaldar mi expertise y operación con info real desde la misma plataforma.\nPromesa: mostrar con un “documento” (imagen) verídico amparado por Dropi que mi operación y logros son reales.\nAcción: compartir con mi comunidad info real. Resultado: credibilidad, fidelización, confianza."},
+      {modulo:"Informes", autor:"Producto", texto:"Problema: no hay una buena visualización de las métricas del negocio.\nPromesa: visualizar y conocer cómo se mueve tu negocio en tiempo real.\nAcción: explorar o interactuar con los diferentes reportes. Resultado: ayudar a escalar la operación del negocio."},
+      {modulo:"Informes", autor:"Diana Aldana", texto:"Problema: no tengo claridad de mi operación.\nPromesa: toma decisiones estratégicas de tu negocio con data.\nAcción: consultar data de mi operación. Resultado: escalar mi operación."},
+      {modulo:"Productos (según header original, contenido de tono financiero)", autor:"Diana Aldana", texto:"Problema: incertidumbre sobre la rentabilidad real de la tienda y dispersión de datos de ventas versus costos.\nPromesa: visibilidad total de la operación con datos analíticos para la toma de decisiones."},
+      {modulo:"Marketing (según header original, contenido sobre catálogo)", autor:"Diana Aldana", texto:"Problema: encontrar un buen producto para vender.\nPromesa: encontrar un portafolio amplio de productos para vender.\nAcción: buscar productos. Resultado: crear una orden o enlazar mi producto a mi tienda."},
+      {modulo:"Reportes / Productos", autor:"Producto", texto:"Problema: la búsqueda de productos o proveedores no es sencilla, se siente confusa y desorganizada.\nPromesa: búsqueda mucho más organizada e intuitiva en el mismo módulo; poder preguntar a proveedores por productos fuera del catálogo.\nHerramientas: buscador de productos, buscador de proveedores, caza producto.\nResultado: crear una orden manual, contactar a un proveedor o publicar una búsqueda de producto fuera de catálogo."},
+      {modulo:"Reportes", autor:"Diana Aldana", texto:"Problema: es una sección poco usada, no se evidencia mucho su valor. (Promesa sin definir)"},
+      {modulo:"Marketing", autor:"Maria Jose Calderon", texto:"Problema (perfil proveedor): apartados dispersos del apartado de marketing / marcas.\nPromesa: todas las herramientas de marketing en un mismo lugar.\nResultado: entender mejor el abanico de posibilidades para crecer la operación desde comunicación y marketing."},
+      {modulo:"Productos", autor:"Catherin Salazar", texto:"Problema: encontrar un producto ganador no es fácil. Herramientas: caza productos.\nAcción: que los usuarios puedan encontrar el producto que quieren. Resultado: conseguir un producto ganador privado."},
+      {modulo:"Productos", autor:"Maria Jose Calderon", texto:"Problema (perfil proveedor): las acciones por producto solo tenían un isotipo que no daba la info completa de la acción.\nPromesa: mayor orden, mejor experiencia del usuario y mayor información de las acciones disponibles."},
+      {modulo:"Órdenes / Pedidos", autor:"Diana Aldana", texto:"Problema: no es tan eficiente la gestión operativa de mis órdenes.\nPromesa: facilitar la gestión. Acción: gestionar mi pedido fácil, rápido y seguro.\nResultado: aumento de órdenes entregadas."},
+      {modulo:"Financiero", autor:"Diana Aldana", texto:"Problema: fricción en el flujo de caja, dispersión de comisiones y cobros demorados por parte de transportadoras.\nPromesa: liquidación transparente y desembolsos rápidos del dinero recaudado por Pagos."},
+      {modulo:"Órdenes / Pedidos", autor:"Kevin Daniel Paternina Martinez", texto:"Problema: la sección se percibe desorganizada, no se sabe por dónde empezar.\nHerramientas: listado de pedidos, buscador, filtros, estados, detalle del pedido, acciones de gestión y etiquetas.\nAcción: buscar, revisar y gestionar un pedido según su estado o novedad.\nResultado: identificar el estado de mis pedidos y actuar sin tanto caos visual."}
+    ]
+  },
+
+  comportamiento:{
+    pregunta:"¿Qué creemos que hará que la rearquitectura tenga éxito?",
+    exito:[
+      "Permitirle a usuarios expertos y novatos encontrar las herramientas necesarias para su operación de manera fácil y rápida. (Kevin Daniel Paternina Martinez)",
+      "Que los usuarios nos vean como una plataforma donde sea más fácil digerir la información. (Catherin Salazar)",
+      "La facilidad de navegar la plataforma será mucho más intuitiva, con rutas más claras. (Producto)",
+      "Funcionalidades con poca adopción hoy serán más visibles y probablemente tengan más uso. (Producto)",
+      "Puede aumentar la adopción transversal: si entra a un módulo, descubre que puede hacer más cosas o encuentra nuevas herramientas. (Producto)",
+      "Puede reducir la carga del equipo de soporte asociada a navegación, herramientas y descubrimiento. (Producto)"
+    ],
+    fracaso:[
+      "Tener una mala transición: si la nueva arquitectura necesita demasiada explicación para entenderse, hay un problema de diseño de fondo. (Producto)",
+      "Salir a producción sin corregir bugs críticos, aunque solo sean de UI. (Kevin Daniel Paternina Martinez)",
+      "Que los usuarios generen desconfianza. (Catherin Salazar)",
+      "Usuarios con cargos operativos desconfíen o sean muy reactivos al cambio. (Catherin Salazar)",
+      "No tener una estrategia de seguridad para evitar suplantación de la página. (Diana Aldana)"
+    ],
+    medir:[
+      "Identificar si disminuye el porcentaje de usuarios que abandona la plataforma. (Kevin Daniel Paternina Martinez, Alejandra)",
+      "Éxito en tareas: si el usuario consigue hacer lo que quería y en cuánto tiempo. (Producto)",
+      "Identificar si hay mayor activación por entendimiento de la plataforma; mayor adopción en herramientas que no hacían parte de los módulos frecuentes. (Maria Jose Calderon)",
+      "Dependencia de soporte: comparar antes vs. después. (Producto)",
+      "Medir el CES y el CSAT de los módulos. (Diana Aldana)"
+    ],
+    hoyFuturo:[
+      {hoy:"El usuario conoce algunas rutas específicas.", futuro:"El usuario entiende la lógica de Dropi."},
+      {hoy:"Memoriza dónde están sus herramientas.", futuro:"Encuentra fácilmente lo que necesita."},
+      {hoy:"Utiliza solamente las funcionalidades que conoce.", futuro:"Descubre herramientas relacionadas."},
+      {hoy:"Puede desconocer herramientas relacionadas.", futuro:"Utiliza más capacidades de la plataforma."},
+      {hoy:"—", futuro:"Construye su operación dentro de Dropi; encuentra herramientas que pueden ayudarlo a crecer."}
+    ]
+  },
+
+  ejesRiesgo:[
+    {nombre:"Frecuencia de uso", de:"Baja", a:"Alta"},
+    {nombre:"Antigüedad", de:"Nuevo", a:"Antiguo"},
+    {nombre:"Dependencia de rutas actuales", de:"Baja", a:"Alta"},
+    {nombre:"Complejidad operativa", de:"Baja", a:"Alta"}
+  ],
+  madurez:[
+    {nombre:"Bienvenido", vol:"Rango no definido", riesgo:"Bajo", freq:"Pendiente"},
+    {nombre:"Explorador", vol:"Rango no definido", riesgo:"Pendiente", freq:"Pendiente"},
+    {nombre:"Master", vol:"1.001 – 2.500 órdenes", riesgo:"Alto", freq:"Alta", nota:"Antiguo. Módulos de mayor uso: buscar productos, gestionar pedidos y Wallet. (Diana Aldana)"},
+    {nombre:"Experto", vol:"2.501 – 5.000 órdenes", riesgo:"Medio", freq:"Alta"},
+    {nombre:"Sabio VIP", vol:"5.001 – 20.000 órdenes", riesgo:"Medio", freq:"Alta"},
+    {nombre:"Leyenda", vol:"20.001+ órdenes", riesgo:"Medio", freq:"Alta", nota:"Segmento con condición: tienda conectada en Shopify."}
+  ],
+  proveedoresRiesgo:{ riesgoMarca:"Medio–Alto", frecuencia:"Alto", antiguedad:"Variado", dependenciaRutas:"Alta", complejidad:"Alta" },
+
+  hipotesis:[
+    {n:1, si:"hacemos un blog que cuente la narrativa de la rearquitectura y explique los cambios grandes de la interfaz", then:"aumentaremos el entendimiento del usuario y favoreceremos la adopción", canal:"Intercom / Blog", metrica:"Discovery Rate", autor:"Producto"},
+    {n:2, si:"hacemos microvideos que expliquen los diferentes módulos de la plataforma", then:"tendremos mayor adopción y entendimiento de la rearquitectura", canal:"", metrica:"", autor:"Diana Aldana · Marketing"},
+    {n:3, si:"hacemos un tour guiado por toda la interfaz de la plataforma", then:"el usuario podrá entender cómo se organizan sus herramientas según la necesidad de su negocio", canal:"", metrica:"", autor:"Catherin Salazar"},
+    {n:4, si:"generamos clips de 1 minuto por cada módulo con sus respectivas herramientas", then:"el usuario conocerá a fondo cada módulo y aumentará la adopción", canal:"Video clips de 1 min", metrica:"", autor:"Catherin Salazar · Product Growth"}
+  ],
+
+  experimentosSeed:[
+    {id:"exp-1", hipotesis:"H1 — Blog narrativa de la rearquitectura", experimento:"AB test", segmento:"Usuarios activos nivel Master", control:"Resto de usuarios (no reciben nada)", tratamiento:"Usuarios activos nivel Master", canal:"Intercom / Blog", kpi:"Discovery Rate", impacto:null, confianza:null, esfuerzo:null, responsable:"Producto", estado:"En definición"},
+    {id:"exp-2", hipotesis:"H2 — Microvideos por módulo", experimento:"", segmento:"", control:"", tratamiento:"", canal:"", kpi:"", impacto:null, confianza:null, esfuerzo:null, responsable:"Marketing", estado:"Por definir"},
+    {id:"exp-3", hipotesis:"H3 — Tour guiado de interfaz", experimento:"", segmento:"", control:"", tratamiento:"", canal:"", kpi:"", impacto:null, confianza:null, esfuerzo:null, responsable:"Producto", estado:"Por definir"},
+    {id:"exp-4", hipotesis:"H4 — Clips de 1 min por módulo", experimento:"", segmento:"", control:"", tratamiento:"", canal:"Video", kpi:"", impacto:null, confianza:null, esfuerzo:null, responsable:"Product Growth", estado:"Por definir"}
+  ],
+
+  medicion:{
+    nsm:{ nombre:"North Star de la rearquitectura", def:"% de usuarios que completan exitosamente una tarea dentro de la nueva arquitectura.", fuente:"WORKSHOP" },
+    filas:[
+      {tipo:"Awareness", pregunta:"¿El usuario recibió / vio la comunicación?", kpi:"Pendiente de definir", frecuencia:"Pendiente", responsable:"Pendiente", fuenteDatos:"Pendiente", estado:"pendiente"},
+      {tipo:"Understanding", pregunta:"¿Comprendió el cambio?", kpi:"Pendiente de definir", frecuencia:"Pendiente", responsable:"Pendiente", fuenteDatos:"Pendiente", estado:"pendiente"},
+      {tipo:"Discovery", pregunta:"¿Encontró herramientas que antes no encontraba?", kpi:"Discovery Rate (métrica de la hipótesis 1)", frecuencia:"Pendiente", responsable:"Pendiente", fuenteDatos:"Pendiente", estado:"construccion"},
+      {tipo:"First Use", pregunta:"¿Realizó correctamente una tarea dentro de la nueva arquitectura?", kpi:"% usuarios que completan exitosamente una tarea (North Star)", frecuencia:"Pendiente", responsable:"Pendiente", fuenteDatos:"Pendiente", estado:"construccion"},
+      {tipo:"Adoption", pregunta:"¿Utiliza la nueva experiencia?", kpi:"% usuarios que usan una funcionalidad", frecuencia:"Pendiente", responsable:"Pendiente", fuenteDatos:"Pendiente", estado:"construccion"},
+      {tipo:"Habit / Retention", pregunta:"¿La nueva arquitectura se convierte en su forma natural de navegar?", kpi:"Pendiente de definir", frecuencia:"Pendiente", responsable:"Pendiente", fuenteDatos:"Pendiente", estado:"pendiente"}
+    ],
+    baseline:"Baseline por construir con el primer lanzamiento medido bajo la nueva metodología — Dropi históricamente no ha documentado ni medido sistemáticamente los lanzamientos, y este proyecto empieza a construir esa capacidad."
+  },
+  comunicacionGlobal:{
+    objetivo:"Definir cómo comunicaremos la funcionalidad al resto del ecosistema Dropi, diferenciando entre usuarios objetivo de adopción y demás usuarios.",
+    filas:[
+      {segmento:"Master (1.001–2.500 órdenes)", objetivo:"Darle a conocer la nueva funcionalidad", piensa:"Pendiente", mensaje:"Pendiente", canal:"Pendiente"},
+      {segmento:"Experto (2.501–5.000 órdenes)", objetivo:"Darle a conocer la nueva funcionalidad", piensa:"Pendiente", mensaje:"Pendiente", canal:"Pendiente"},
+      {segmento:"Sabio VIP (5.001–20.000 órdenes)", objetivo:"Darle a conocer la nueva funcionalidad", piensa:"Pendiente", mensaje:"Pendiente", canal:"Pendiente"},
+      {segmento:"Leyenda (20.001+, con tienda Shopify)", objetivo:"Darle a conocer la nueva funcionalidad", piensa:"Pendiente", mensaje:"Pendiente", canal:"Pendiente"},
+      {segmento:"Proveedores", objetivo:"Pendiente", piensa:"Pendiente", mensaje:"Pendiente", canal:"Pendiente"}
+    ]
+  },
+
+  comunicacion:{
+    prelanzamiento:[
+      {fase:"Fase 1 — “Algo está evolucionando”", dia:"Lunes", mensaje:"Durante 6 años construimos Dropi contigo. Ahora estamos construyendo una nueva forma de vivirlo.", ideas:["Video narrativo de campaña de expectativa: contextualización histórica.","Robot de Dropi cambiando de outfit / renovando sus partes — se está renovando."], canales:"Pendiente de ideación de canales."},
+      {fase:"Fase 2 — “Entiende por qué”", dia:"Martes", mensaje:"¿Por qué Dropi está cambiando? 6 años → evolución → crecimiento → nuevas necesidades → nueva arquitectura.", ideas:["Robot de Dropi viajando en el tiempo por épocas de la historia, evolucionando hasta la versión pro.","Robot de Dropi remodelando su casa (la plataforma)."], canales:"Ejemplo propuesto: blog explicando la nueva narrativa de Dropi."},
+      {fase:"Fase 3 — “Algo está a punto de cambiar”", dia:"Miércoles", mensaje:"Estamos construyendo una nueva forma de vivir Dropi. Después de 6 años, Dropi evoluciona.", ideas:[], canales:"Ejemplo propuesto: blog explicando la nueva narrativa de Dropi."},
+      {fase:"Fase 4 — “Mañana”", dia:"Jueves y viernes", mensaje:"Mañana conoces lo nuevo de Dropi.", ideas:[], canales:"Pendiente de ideación de canales."}
+    ],
+    lanzamiento:{
+      fase:"Fase 0 — “Ya estás aquí”", dia:"12 de septiembre · 3 días", contexto:"Lanzamiento general en ExpoWinners + canales internos.",
+      mensaje:"“Bienvenido al nuevo Dropi.” Una nueva experiencia para ayudarte a encontrar las herramientas que necesitas para escalar tu negocio. Refuerzo de ciberseguridad: “Nueva experiencia. Misma URL.”",
+      ideas:["Pantallas en ExpoWinners.","Aplicación de juego del equipo de producto.","Aplicación de juego — ruta Winner Academy.","“Hablemos con Lucho”.","Minivideos del equipo de producto."],
+      canales:[
+        "Stand de Academy en ExpoWinners: CTA a video de la historia de la rearquitectura (ref: video 1.000.000 de órdenes) + CTA a clase de rearquitectura con Academy.",
+        "Blog contando la historia de la rearquitectura (referencia externa: blog de rediseño de Facebook).",
+        "“Hablemos con Lucho”: entrevistas al equipo de producto en mini videos.",
+        "Juego del equipo de producto — pendiente por confirmar incluir rearquitectura.",
+        "Video con la narrativa e historia de la rearquitectura en pantallas de ExpoWinners — pendiente por confirmar con Jenny Collazos y equipo comercial."
+      ]
+    },
+    postlanzamientoAdopcion:{
+      nota:"El material fuente mezcla dos numeraciones de fase distintas para el post-lanzamiento (una serie “Descubre” y otra “Aprende / Realiza / Convierte”) — se muestran tal cual, sin forzar una numeración única, hasta consolidar en la próxima mesa.",
+      fases:[
+        {fase:"Encuentra lo que ya conoces", dia:"2 días después de ExpoWinners", objetivo:"Ayudar al usuario a encontrar rápidamente las funcionalidades que ya utiliza habitualmente.", mensaje:"Tus herramientas siguen aquí. Ahora están organizadas y pensadas para tus necesidades y escalar tus negocios.", pregunta:"¿Qué rutas antiguas debemos ayudar a reconstruir primero?"},
+        {fase:"Entiende la nueva lógica", dia:"2 días", objetivo:"Que el usuario comprenda por qué las herramientas están agrupadas así.", mensaje:"Ahora Dropi está organizado alrededor de lo que haces en tu negocio. Cadena de valor: Productos → Marketing → Logística → Órdenes → Informes → Financiero.", pregunta:"¿Cómo hacemos que el usuario entienda la lógica sin explicársela toda?"},
+        {fase:"Descubre más", dia:"2 días", objetivo:"Pasar de usar solo funcionalidades conocidas a descubrir herramientas relacionadas y usar más capacidades de la plataforma.", mensaje:"Descubre más herramientas para hacer crecer tu negocio.", pregunta:"¿Qué herramienta debería descubrir un usuario después de usar cada módulo?"},
+        {fase:"Descubre todo lo que Dropi puede hacer por ti", dia:"2 días", objetivo:"Que el usuario entienda que Dropi no solo gestiona su operación — le da herramientas para potenciar su negocio.", mensaje:"Tu negocio tiene necesidades y Dropi tiene herramientas para acompañarte en cada una de ellas.", pregunta:"¿Qué historias podemos contar para demostrar que Dropi acompaña todo el crecimiento del negocio?"},
+        {fase:"Aprende", dia:"2 días", objetivo:"Resolver dudas que aparezcan después del cambio.", mensaje:"¿Necesitas ayuda para encontrar algo? Te mostramos cómo.", pregunta:"¿Qué preguntas aparecerán durante la adopción y cómo resolverlas antes de que lleguen a servicio al cliente?", canales:"Academy, tutoriales, videos, soporte, Hablemos con Lucho, mensajes contextuales."},
+        {fase:"Realiza", dia:"2 días", objetivo:"Que el usuario complete tareas reales dentro de la nueva rearquitectura.", mensaje:"Ahora realiza tareas más fáciles de lo que necesitas para hacer crecer tu negocio.", pregunta:"¿Qué preguntas aparecerán durante la adopción y cómo resolverlas antes de que lleguen a servicio al cliente?", canales:"Academy, tutoriales."},
+        {fase:"Convierte la nueva experiencia en hábito", dia:"2 días", objetivo:"Consolidar la nueva arquitectura como la forma natural de navegar.", mensaje:"Seguimos innovando y construyendo herramientas para ayudarte a crecer y escalar tu negocio.", pregunta:"¿Qué preguntas aparecerán durante la adopción y cómo resolverlas antes de que lleguen a servicio al cliente?", canales:"Academy, tutoriales."}
+      ]
+    }
+  },
+
+  marcasBlancas:{
+    estado:"pendiente",
+    d:"Las marcas blancas tienen marca propia, hacen su propio marketing, tienen inventario propio y usan Dropi principalmente como soporte logístico y tecnológico para sus envíos. La rearquitectura también modifica interfaces que ellas usan — el insumo oficial de comunicación para este segmento todavía no ha sido entregado."
+  },
+
+  insumos:{
+    documentoPrincipal:{ nombre:"Insumos rearquitectura (documento maestro)", nota:"PDF con investigaciones y referencias del proyecto — pídelo a Catherin (Drive) para subirlo como recurso descargable aquí." },
+    investigaciones:[
+      {n:1, nombre:"Card Sorting", objetivo:"Comprender la percepción de dropshippers, proveedores y marcas sobre la organización y uso de las secciones.", url:"https://www.figma.com/deck/aEoI8hn7k0uKTnIyXHMFpP/Informe-de-Cardsorting-Nueva-arquitectura?node-id=1-4917&viewport=-71%2C-122%2C0.57&t=S0mOezGL8fgUiUtE-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1"},
+      {n:2, nombre:"Pruebas de Rearquitectura", objetivo:"Entender cómo los usuarios perciben la nueva experiencia y qué tan fácil les resulta encontrar las funcionalidades.", url:"https://www.figma.com/deck/XDUXTVo8yt1mllpFoAF86p/Informe-Pruebas-arquitectura?node-id=15-470&viewport=-71%2C-1088%2C0.57&t=TSXmB53B8027M0tE-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1"},
+      {n:3, nombre:"Navegación", objetivo:"Propuesta y viabilidad técnica de la nueva navegación.", url:"https://www.figma.com/deck/wixvMv3ePTvjnFd4rRZwUt/Light-slides?node-id=1-553&viewport=-71%2C-122%2C0.57&t=uxbQqVFwYPfGgi1J-1&scaling=min-zoom&content-scaling=fixed&page-id=0%3A1"}
+    ],
+    prototipos:[
+      {nombre:"Wireframes — Nueva Arquitectura", url:"https://www.figma.com/design/FwepMIbyEDq2rsjM1r9dvI/Wireframes—Nueva-Arquitectura?node-id=81-14354&t=t4lIq7OA1Yc2mVLH-1"},
+      {nombre:"Re-arquitectura — Fase 1", url:"https://www.figma.com/design/vQjbCxnvlgTQTYFZqJUEtV/Re-arquitectura—Fase-1?node-id=2-253&t=DypS4HAynKPDLK9s-1"},
+      {nombre:"UI Oficial", url:"https://www.figma.com/design/Ub7Up7f5K0WGuDC6g2jdCu/Re-arquitectura—UI-Oficial?node-id=7797-112080&t=kyuB5RkAwyusYmZ7-1"}
+    ],
+    matrizComparativa:{ nombre:"Matriz comparativa (arquitectura anterior vs. nueva)", url:"https://www.figma.com/board/pnfAPXGao1VXbHHQ2LJWZq/Matriz-de-comparaci%C3%B3n-entre-pantallas?node-id=11-29450&p=f&t=2qlPeMQmPiVEHfS1-0" }
+  },
+
+  proximaMesa:[
+    "Completar estrategia de canales para Fases 1–4 de prelanzamiento (hoy solo tienen mensaje, sin canal definido).",
+    "Completar comunicación por segmento y nivel de madurez — falta “¿qué queremos que piense?”, mensaje y canal para Master, Experto, Sabio VIP, Leyenda y Proveedores; y rangos de volumen de Bienvenido/Explorador.",
+    "Completar documentación de Marcas Blancas — insumo oficial aún no entregado.",
+    "Completar fichas de experimento para H2, H3 y H4 (segmento, control, tratamiento, canal, KPI).",
+    "Puntuar Impacto / Confianza / Esfuerzo (ICE) de los 4 experimentos para poder priorizar con la matriz.",
+    "Completar la tabla de medición: KPI, frecuencia y responsable para Awareness, Understanding, Adoption y Habit/Retention.",
+    "Definir plan de acción antes/durante/después con fechas, responsables individuales y estado por tarea.",
+    "Consolidar la numeración de fases del journey de post-lanzamiento (hoy conviven dos series distintas en el material fuente).",
+    "Definir estrategia de educación (Academy) — hoy solo aparece como canal, sin contenido diseñado."
+  ],
+
+  roadmapEjecucion:{
+    antes:[
+      {t:"Medición — instrumentar tracking de la nueva arquitectura", equipo:"Producto"},
+      {t:"Piezas de email", equipo:"Marketing"},
+      {t:"Creación de contenido", equipo:"Marketing"}
+    ],
+    durante:[
+      {t:"Medición en vivo del lanzamiento", equipo:"Product Growth"}
+    ],
+    despues:[
+      {t:"Medición post-lanzamiento", equipo:"Producto"},
+      {t:"Contenido educativo", equipo:"Academy"},
+      {t:"Atención de dudas de navegación", equipo:"Servicio al cliente"}
+    ],
+    nota:"Solo hay categorías por equipo en el material fuente — sin fechas ni responsables individuales todavía."
+  },
+
+  entrevista:{
+    fecha:"20 de agosto de 2026", participantes:"Catherin Salazar, Maria Ossa (CPO)",
+    preguntas:[
+      {q:"¿Por qué nació la Rearquitectura?", a:"Es la piedra angular del área de producto: consolida 3 años de trabajo para entender la evolución de Dropi. Decisión estratégica, no un cambio visual — necesaria para respaldar el crecimiento tras 6 años de plataforma."},
+      {q:"¿Qué problema histórico estaba resolviendo?", a:"Dropi nació de una plantilla y creció orgánicamente; esa estructura, con el tiempo, limitó la escalabilidad. La rearquitectura reemplaza el modelo fragmentado por una consolidación organizada de procesos."},
+      {q:"¿Cómo evolucionó Dropi?", a:"De plantilla inicial a plataforma con funcionalidades incorporadas de forma progresiva durante ~6-7 años, sin arquitectura unificada, hasta requerir reorganización."},
+      {q:"¿Qué significa estratégicamente?", a:"Asegura que la arquitectura soporte futuras expansiones y esté alineada a los OKRs de Dropi — activación de usuarios y adopción de funcionalidades, no solo navegación."},
+      {q:"¿Cómo se definieron los módulos?", a:"Ingeniería inversa sobre la cadena de valor del comercio electrónico: productos, marketing, logística, gestión de órdenes, informes, servicios financieros. Cada módulo responde a una necesidad específica del negocio del usuario."},
+      {q:"¿Cuál es la narrativa que debemos comunicar?", a:"Dropi no cambia porque sí — evoluciona para acompañar el crecimiento del negocio del usuario. Concepto de “suite” integral de crecimiento, no una actualización visual."},
+      {q:"¿Qué cambios de comportamiento esperamos?", a:"Que los usuarios antiguos cambien su forma de navegar sin perder confianza ni productividad, y que tanto usuarios antiguos como nuevos comprendan el valor de la plataforma agrupada por propósito."},
+      {q:"¿Qué debe entender el usuario?", a:"Que la URL no cambia, su cuenta y operación continúan igual, y el cambio es de experiencia/navegación — organizado alrededor de sus necesidades de negocio, no una migración de sistema."},
+      {q:"¿Qué no debemos comunicar?", a:"No presentar el cambio como “rediseño visual”. Evitar que el usuario sienta que “lo hackearon”, que “está en otra página” o que “perdió sus cosas” — el mensaje no es sobre estética, es sobre acompañar su crecimiento."}
+    ]
+  }
+};
+
+/* ================================================================================
+   ICONOS
+   ================================================================================ */
+const ICONS = {
+  target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.2"/><circle cx="12" cy="12" r="0.6" fill="currentColor"/>',
+  users:'<circle cx="9" cy="8" r="3.4"/><path d="M3 20c0-3.6 2.7-6.2 6-6.2s6 2.6 6 6.2"/><path d="M16 8.2a3 3 0 0 1 0 5.9"/><path d="M18.5 14.2c2 .5 3.5 2.6 3.5 5.3"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="2.2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
+  flag:'<path d="M5 21V4"/><path d="M5 4.5h13l-3 4 3 4H5"/>',
+  compass:'<circle cx="12" cy="12" r="9"/><polygon points="15,9 13,13 9,15 11,11"/>',
+  lightbulb:'<path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.3 1 2.5h6c0-1.2.3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
+  layers:'<polygon points="12,3 21,8 12,13 3,8"/><polyline points="3,13 12,18 21,13"/><polyline points="3,17.5 12,22.5 21,17.5"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><polyline points="12,7 12,12 16,14"/>',
+  "alert-triangle":'<path d="M12 3 22 20H2Z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="16.8" r="0.6" fill="currentColor"/>',
+  "check-circle":'<circle cx="12" cy="12" r="9"/><polyline points="8,12.3 11,15.3 16,9"/>',
+  "book-open":'<path d="M3 5.5c3 0 6 1 9 3v11c-3-2-6-3-9-3Z"/><path d="M21 5.5c-3 0-6 1-9 3v11c3-2 6-3 9-3Z"/>',
+  map:'<polygon points="3,6 9,3.3 15,6 21,3.3 21,18 15,20.7 9,18 3,20.7"/><line x1="9" y1="3.3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="20.7"/>',
+  "shield-alert":'<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6Z"/><line x1="12" y1="8" x2="12" y2="13"/><circle cx="12" cy="16" r="0.6" fill="currentColor"/>',
+  rocket:'<path d="M12 2.5c3 1.1 5 4.2 5 8 0 3-1 6-3 8l-2-2-2 2c-2-2-3-5-3-8 0-3.8 2-6.9 5-8Z"/><circle cx="12" cy="10" r="1.6"/><path d="M8 16.5l-2 4.5 4.5-2"/><path d="M16 16.5l2 4.5-4.5-2"/>',
+  sparkles:'<path d="M12 3l1.6 4.6L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.4Z"/><path d="M19 15l.7 1.9 1.9.7-1.9.7-.7 1.9-.7-1.9-1.9-.7 1.9-.7Z"/>',
+  award:'<circle cx="12" cy="8" r="5.6"/><polyline points="8.3,13 6.5,20.5 12,17.5 17.5,20.5 15.7,13"/>',
+  "message-quote":'<path d="M4 4.5h16v12H8.5l-4.5 4Z"/><line x1="8" y1="9" x2="10" y2="9"/><line x1="8" y1="12" x2="14" y2="12"/>',
+  "list-checks":'<polyline points="3,7 4.3,8.3 6.7,5.7"/><line x1="10" y1="7" x2="21" y2="7"/><polyline points="3,13 4.3,14.3 6.7,11.7"/><line x1="10" y1="13" x2="21" y2="13"/><polyline points="3,19 4.3,20.3 6.7,17.7"/><line x1="10" y1="19" x2="21" y2="19"/>',
+  box:'<path d="M21 8 12 3 3 8v8l9 5 9-5Z"/><path d="M3 8l9 5 9-5"/><line x1="12" y1="13" x2="12" y2="21"/>',
+  megaphone:'<path d="M3 10v4h3l5 4V6L6 10Z"/><path d="M13 8a4 4 0 0 1 0 8"/><path d="M17 5.5a8 8 0 0 1 0 13"/>',
+  truck:'<rect x="2.5" y="7" width="12" height="9" rx="1.4"/><path d="M14.5 10.5H18l3 3V16h-6.5Z"/><circle cx="6.5" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/>',
+  "bar-chart":'<line x1="4" y1="20" x2="20" y2="20"/><rect x="6" y="12" width="3" height="7"/><rect x="13" y="8" width="3" height="11"/><rect x="17.5" y="4" width="0" height="0"/>',
+  wallet:'<rect x="3" y="6.5" width="18" height="12" rx="2"/><path d="M3 10h18"/><circle cx="16.5" cy="14" r="1"/>',
+  history:'<path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3,4 3,9 8,9"/><polyline points="12,7 12,12 16,14"/>',
+  edit:'<path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17Z"/><line x1="13" y1="6" x2="17" y2="10"/>',
+  plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+  trash:'<path d="M4 7h16"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/>',
+  "external-link":'<path d="M14 4h6v6"/><line x1="20" y1="4" x2="10" y2="14"/><path d="M18 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h5"/>',
+  file:'<path d="M6 3h8l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v5h5"/>',
+  moon:'<path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z"/>',
+  sun:'<circle cx="12" cy="12" r="4.2"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="4.5" y1="12" x2="2" y2="12"/><line x1="22" y1="12" x2="19.5" y2="12"/><line x1="5.3" y1="5.3" x2="7" y2="7"/><line x1="17" y1="17" x2="18.7" y2="18.7"/><line x1="18.7" y1="5.3" x2="17" y2="7"/><line x1="7" y1="17" x2="5.3" y2="18.7"/>'
+};
+function icon(name, cls){ return '<svg class="icon '+(cls||'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+(ICONS[name]||ICONS.sparkles)+'</svg>'; }
+
+/* ================================================================================
+   HELPERS
+   ================================================================================ */
+function esc(str){ return String(str==null?'':str).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function nl2br(str){ return esc(str).replace(/\n/g,'<br>'); }
+function uid(){ return 'x'+Math.random().toString(36).slice(2,9); }
+function badge(text, tone, iconName){ return '<span class="badge badge-'+tone+'">'+(iconName?icon(iconName):'')+esc(text)+'</span>'; }
+const STATUS_LABEL = {definido:'Definido', construccion:'En construcción', pendiente:'Pendiente', propuesta:'Propuesta'};
+function statusPill(status){ return '<span class="status status-'+status+'">'+STATUS_LABEL[status]+'</span>'; }
+function srcTag(text){ return text ? '<span class="src-tag">'+esc(text)+'</span>' : ''; }
+function factRow(text, status, src){
+  return '<div class="fact-row"><div class="fact-text">'+esc(text)+'</div>'+(status?statusPill(status):'')+(src?srcTag(src):'')+'</div>';
+}
+
+/* ================================================================================
+   STORE — estado editable, persistido en localStorage (por navegador/viewer)
+   ================================================================================ */
+const LS_KEY = 'rearq-command-center-v1';
+function loadStore(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return { experimentos: JSON.parse(JSON.stringify(DATA.experimentosSeed)), marcasBlancasDoc: null, theme: 'system' };
+}
+function saveStore(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(STORE)); }catch(e){} }
+let STORE = loadStore();
+if(!STORE.experimentos) STORE.experimentos = JSON.parse(JSON.stringify(DATA.experimentosSeed));
+
+/* ================================================================================
+   NAV
+   ================================================================================ */
+const NAV = [
+  {id:'resumen', label:'Resumen ejecutivo'},
+  {id:'tars', label:'TARS'},
+  {id:'historia', label:'Historia'},
+  {id:'arquitectura', label:'Nueva arquitectura'},
+  {id:'audiencias', label:'Audiencias'},
+  {id:'journey', label:'Journey'},
+  {id:'comunicacion', label:'Comunicación'},
+  {id:'hipotesis', label:'Hipótesis'},
+  {id:'experimentos', label:'Experimentos'},
+  {id:'ice', label:'Matriz ICE'},
+  {id:'medicion', label:'Medición'},
+  {id:'insumos', label:'Insumos Marketing'},
+  {id:'marcas-blancas', label:'Marcas blancas'},
+  {id:'proximos-pasos', label:'Próximos pasos'},
+  {id:'documentacion', label:'Documentación'}
+];
+
+function renderSidebar(){
+  const items = NAV.map((s,i)=>'<li><a class="navlink" data-target="'+s.id+'" href="#'+s.id+'"><span class="navnum">'+String(i+1).padStart(2,'0')+'</span>'+esc(s.label)+'</a></li>').join('');
+  return (
+    '<aside class="sidebar">'+
+      '<div class="sidebar-brand"><span class="brand-mark">'+icon('rocket')+'</span><div><div>Rearquitectura</div><div class="brand-sub">Centro de Comando</div></div></div>'+
+      '<ul class="navlist">'+items+'</ul>'+
+      '<div class="sidebar-foot">'+
+        '<div class="theme-toggle" id="themeToggle">'+
+          '<button data-mode="light">'+icon('sun','icon-sm')+'</button>'+
+          '<button data-mode="system">Auto</button>'+
+          '<button data-mode="dark">'+icon('moon','icon-sm')+'</button>'+
+        '</div>'+
+      '</div>'+
+    '</aside>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 00. HERO / PANEL EJECUTIVO
+   ================================================================================ */
+function computeProgress(){
+  const w = {definido:1, construccion:0.5, pendiente:0};
+  const total = DATA.checklist.length;
+  const sum = DATA.checklist.reduce((a,c)=>a+w[c.status],0);
+  return Math.round((sum/total)*100);
+}
+function renderHero(){
+  const pct = computeProgress();
+  const r = 18, c = 2*Math.PI*r;
+  const offset = c - (pct/100)*c;
+  const comportChips = DATA.exec.comportamiento.map((c,i)=>(i>0?icon('sparkles','icon-sm'):'')+'<span>'+esc(c)+'</span>').join('');
+  return (
+    '<header class="hero" id="resumen">'+
+      '<div class="hero-kicker">'+icon('sparkles')+'Centro de comando del lanzamiento</div>'+
+      '<h1 class="hero-title">Rearquitectura de Dropi</h1>'+
+      '<p class="hero-sub">La nueva arquitectura organiza Dropi alrededor de la cadena de valor del negocio del seller: Productos → Marketing → Logística → Órdenes → Informes → Financiero. No es un rediseño visual — es la consolidación de 3 años de evolución de producto.</p>'+
+      '<div class="hero-meta">'+badge(DATA.exec.tier,'violet','award')+badge('Lanzamiento: '+DATA.exec.fecha,'accent','calendar')+'</div>'+
+      '<div class="exec-grid">'+
+        '<div class="exec-tile"><div class="exec-label">Tier</div><div class="exec-value small">'+esc(DATA.exec.tier)+'</div></div>'+
+        '<div class="exec-tile"><div class="exec-label">Fecha</div><div class="exec-value">'+esc(DATA.exec.fecha)+'</div><div class="kpi-sub">'+esc(DATA.exec.fechaNota)+'</div></div>'+
+        '<div class="exec-tile"><div class="exec-label">Alcance</div><div class="exec-value">'+esc(DATA.exec.alcanceTotal)+'</div><div class="kpi-sub">'+esc(DATA.exec.alcanceDetalle)+'</div></div>'+
+        '<div class="exec-tile"><div class="exec-label">Comportamiento</div><div class="exec-value small">Entender → Encontrar → Usar → Descubrir → Adoptar</div></div>'+
+        '<div class="exec-tile">'+
+          '<div class="exec-label">Estado del Strategy Package</div>'+
+          '<div class="exec-progress">'+
+            '<div class="exec-ring"><svg viewBox="0 0 44 44"><circle class="exec-ring-track" cx="22" cy="22" r="'+r+'"/><circle class="exec-ring-fill" cx="22" cy="22" r="'+r+'" stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+offset.toFixed(1)+'"/></svg><div class="exec-ring-num">'+pct+'%</div></div>'+
+            '<div class="exec-value small">'+DATA.checklist.filter(c=>c.status==='definido').length+' definidos · '+DATA.checklist.filter(c=>c.status==='construccion').length+' en construcción · '+DATA.checklist.filter(c=>c.status==='pendiente').length+' pendientes</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</header>'+
+    '<div class="card" style="margin-top:14px;">'+
+      '<div class="section-eyebrow" style="margin-bottom:10px;">'+icon('list-checks','icon-sm')+'Los 9 entregables que el propio workshop se propuso</div>'+
+      '<div style="display:flex;flex-direction:column;">'+
+        DATA.checklist.map(c=>'<div class="pending-item" style="border-color:var(--border);"><div style="flex:1;"><div class="pending-text" style="font-weight:600;">'+esc(c.item)+'</div><div class="kpi-sub" style="margin-top:3px;">'+esc(c.nota)+'</div></div>'+statusPill(c.status)+'</div>').join('')+
+      '</div>'+
+    '</div>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 01. TARS
+   ================================================================================ */
+function renderTars(){
+  const t = DATA.tars;
+  const cards = [
+    {l:'T', label:'Tensión', text:t.tension},
+    {l:'A', label:'Audiencia', text:t.audiencia},
+    {l:'R', label:'Resultado esperado', text:t.resultado},
+    {l:'S', label:'Solución', text:t.solucion}
+  ].map(c=>'<div class="card tars-card"><div class="tars-letter">'+c.l+'</div><div class="tars-label">'+esc(c.label)+'</div><p class="tars-text">'+esc(c.text)+'</p></div>').join('');
+
+  const fields = DATA.tarsFields.map(f=>'<div class="field-item"><div class="field-label">'+esc(f.label)+'</div><div class="field-value">'+esc(f.value)+'</div></div>').join('');
+
+  return (
+    '<section id="tars">'+
+      sectionHead('01','TARS — la estructura estratégica','Tensión → Audiencia → Resultado → Solución. Conecta problema, público, comportamiento, comunicación, adopción y medición — no es una sección decorativa.','target')+
+      '<div class="tars-banner">'+icon('sparkles')+'TARS: Tensión, Audiencia, Resultado esperado, Solución. Todo lo demás en este artefacto se deriva de esta definición.</div>'+
+      '<div class="grid grid-4" style="margin-bottom:22px;">'+cards+'</div>'+
+      '<div class="card"><div class="field-list">'+fields+'</div></div>'+
+      '<div class="section-head" style="margin:36px 0 16px;"><div><div class="section-sub" style="margin-top:0;font-weight:650;color:var(--ink);">Comunicación ≠ Adopción</div><div class="section-sub">No todos los usuarios reciben el mismo mensaje ni tienen el mismo objetivo. El lanzamiento puede tener comunicación masiva mientras la estrategia de adopción es mucho más segmentada.</div></div></div>'+
+      '<div class="split-compare">'+
+        '<div class="split-col a"><h4>'+icon('megaphone','icon-sm')+esc(DATA.comVsAdopcion.comunicacion.titulo)+'</h4><p><strong>Objetivo:</strong> '+esc(DATA.comVsAdopcion.comunicacion.objetivo)+'</p><p style="margin-top:8px;">'+esc(DATA.comVsAdopcion.comunicacion.detalle)+'</p></div>'+
+        '<div class="split-col b"><h4>'+icon('target','icon-sm')+esc(DATA.comVsAdopcion.adopcion.titulo)+'</h4><p><strong>Objetivo:</strong> '+esc(DATA.comVsAdopcion.adopcion.objetivo)+'</p><p style="margin-top:8px;">'+esc(DATA.comVsAdopcion.adopcion.detalle)+'</p></div>'+
+      '</div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 02. HISTORIA
+   ================================================================================ */
+function renderHistoria(){
+  const steps = DATA.historia.map(h=>'<div class="story-step"><div class="story-dot"></div><div class="story-step-title">'+esc(h.t)+' '+srcTag(h.src)+'</div><div class="story-step-text">'+esc(h.d)+'</div></div>').join('');
+  return (
+    '<section id="historia">'+
+      sectionHead('02','La historia detrás del cambio','Insumo directo para Marketing — así se cuenta por qué Dropi cambia.','history')+
+      '<div class="card" style="margin-bottom:20px;"><div class="story-track">'+steps+'</div></div>'+
+      '<div class="card" style="margin-bottom:20px;">'+
+        '<div class="field-label" style="margin-bottom:8px;">Estructura del nuevo menú '+srcTag('ENTREVISTA')+'</div>'+
+        '<p class="prose">'+esc(DATA.menuStructure.d)+'</p>'+
+      '</div>'+
+      '<div class="section-head" style="margin:30px 0 16px;"><div class="section-eyebrow">'+icon('sparkles','icon-sm')+'Brief creativo'+statusPill('propuesta')+'</div><h3 class="section-title" style="font-size:17px;">Video principal — historia de la rearquitectura</h3></div>'+
+      '<div class="video-brief">'+
+        '<div class="video-concept">'+DATA.videoBrief.concepto.map((c,i)=>(i>0?icon('sparkles','icon-sm'):'')+'<span>'+esc(c)+'</span>').join('')+'</div>'+
+        '<p class="prose" style="margin-bottom:12px;">'+esc(DATA.videoBrief.d)+'</p>'+
+        '<div class="split-compare" style="margin-top:14px;">'+
+          '<div class="split-col a" style="background:var(--surface);"><h4 style="color:var(--critical);">'+icon('alert-triangle','icon-sm')+'Evitar comunicar</h4><p>'+esc(DATA.videoBrief.evitar)+'</p></div>'+
+          '<div class="split-col b" style="background:var(--surface);"><h4 style="color:var(--good);">'+icon('check-circle','icon-sm')+'Comunicar</h4><p>'+esc(DATA.videoBrief.comunicar)+'</p></div>'+
+        '</div>'+
+        '<p class="kpi-sub" style="margin-top:12px;">'+esc(DATA.videoBrief.nota)+'</p>'+
+      '</div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 03. NUEVA ARQUITECTURA
+   ================================================================================ */
+function renderArquitectura(){
+  const cards = DATA.modulos.map(m=>{
+    const hasFull = m.promesa;
+    return (
+      '<div class="card modulo-card" data-modal="modulo" data-id="'+m.id+'">'+
+        '<div class="modulo-icon badge-'+m.tono+'">'+icon(m.icon,'icon-lg')+'</div>'+
+        '<div><div class="modulo-name">'+esc(m.nombre)+'</div><div class="modulo-need">"'+esc(m.need)+'"</div></div>'+
+        '<div class="modulo-pp"><b>Problema:</b> '+esc(m.problema)+(hasFull?'<br><b>Promesa:</b> '+esc(m.promesa):'')+'</div>'+
+        (hasFull? '<span class="btn-link">Ver acción → resultado '+icon('external-link','icon-sm')+'</span>' : '<span class="kpi-sub">Detalle acción/resultado: pendiente de próxima mesa</span>')+
+      '</div>'
+    );
+  }).join('');
+
+  const rawNotes = DATA.moduloNotasCrudas.items.map(n=>(
+    '<div class="raw-note"><div class="raw-note-head"><span class="raw-note-mod">'+esc(n.modulo)+'</span><span class="raw-note-author">'+esc(n.autor)+'</span></div><div class="raw-note-body">'+nl2br(n.texto)+'</div></div>'
+  )).join('');
+
+  return (
+    '<section id="arquitectura">'+
+      sectionHead('03','Nueva arquitectura — 6 módulos','La plataforma organizada alrededor de la cadena de valor del negocio del seller.','layers')+
+      '<div class="grid grid-3" style="margin-bottom:8px;">'+cards+'</div>'+
+      '<p class="kpi-sub" style="margin:10px 2px 28px;">Ejemplo formal de la dinámica Problema→Promesa→Acción→Resultado (Productos): "No sé qué vender" → "Encuentra productos para poner tu negocio en movimiento" → Explorar productos → Seleccionar productos para vender. '+srcTag('WORKSHOP')+'</p>'+
+      '<div class="section-head" style="margin:30px 0 14px;"><div><div class="section-eyebrow">'+icon('sparkles','icon-sm')+'Exploración cruda del workshop'+statusPill('propuesta')+'</div><h3 class="section-title" style="font-size:16px;">Notas de discovery por módulo (sin curar)</h3><div class="section-sub">'+esc(DATA.moduloNotasCrudas.nota)+'</div></div></div>'+
+      '<div class="raw-notes">'+rawNotes+'</div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 04. AUDIENCIAS
+   ================================================================================ */
+function renderAudiencias(){
+  const madurezCards = DATA.madurez.map(m=>(
+    '<div class="card madurez-card"><div class="madurez-name">'+esc(m.nombre)+'</div><div class="madurez-vol">'+esc(m.vol)+'</div>'+(m.nota?'<div class="kpi-sub">'+esc(m.nota)+'</div>':'')+
+    '<div class="madurez-risk">'+badge('Riesgo: '+m.riesgo, m.riesgo==='Alto'?'critical':(m.riesgo==='Medio'?'warning':(m.riesgo==='Bajo'?'good':'neutral')))+'</div></div>'
+  )).join('');
+
+  const axes = DATA.ejesRiesgo.map(e=>(
+    '<div class="axis-row"><div class="axis-name">'+esc(e.nombre)+'</div><div class="axis-bar"></div><div class="axis-ends"><span>'+esc(e.de)+'</span><span>'+esc(e.a)+'</span></div></div>'
+  )).join('');
+
+  return (
+    '<section id="audiencias">'+
+      sectionHead('04','¿A quién comunicamos?','Audiencia total impactada vs. usuarios sobre los que medimos adopción.','users')+
+      '<div class="grid grid-4" style="margin-bottom:20px;">'+
+        '<div class="kpi-tile"><div class="kpi-label">Dropshippers</div><div class="kpi-value">159.142</div></div>'+
+        '<div class="kpi-tile"><div class="kpi-label">Proveedores</div><div class="kpi-value">15.699</div></div>'+
+        '<div class="kpi-tile"><div class="kpi-label">Total base activa</div><div class="kpi-value">174.841</div></div>'+
+        '<div class="kpi-tile"><div class="kpi-label">Países</div><div class="kpi-value">Todos</div></div>'+
+      '</div>'+
+      '<p class="prose" style="margin-bottom:26px;"><strong>La comunicación es general para toda la base</strong> — todos son impactados por el cambio de interfaz. La <strong>estrategia de adopción y medición</strong> diferencia niveles de madurez sobre los que se observa comportamiento específico.</p>'+
+
+      '<div class="section-head" style="margin:0 0 14px;"><h3 class="section-title" style="font-size:16px;">Niveles de madurez</h3></div>'+
+      '<div class="madurez-track" style="margin-bottom:26px;">'+madurezCards+'</div>'+
+
+      '<div class="card" style="margin-bottom:26px;">'+
+        '<div class="field-label" style="margin-bottom:6px;">Proveedores '+srcTag('WORKSHOP')+'</div>'+
+        '<div class="prose">Riesgo de migración de marca: <strong>'+DATA.proveedoresRiesgo.riesgoMarca+'</strong> · Frecuencia de uso: <strong>'+DATA.proveedoresRiesgo.frecuencia+'</strong> · Antigüedad: <strong>'+DATA.proveedoresRiesgo.antiguedad+'</strong> · Dependencia de rutas actuales: <strong>'+DATA.proveedoresRiesgo.dependenciaRutas+'</strong> · Complejidad operativa: <strong>'+DATA.proveedoresRiesgo.complejidad+'</strong></div>'+
+      '</div>'+
+
+      '<div class="section-head" style="margin:0 0 8px;"><h3 class="section-title" style="font-size:16px;">Ejes del mapa de riesgo de migración</h3><div class="section-sub">Framework definido para clasificar usuarios — sin poblar aún por segmento individual más allá de lo mostrado arriba.</div></div>'+
+      '<div class="card" style="margin-bottom:30px;">'+axes+'</div>'+
+
+      '<div class="section-head" style="margin:0 0 14px;"><h3 class="section-title" style="font-size:16px;">Comunicación para Marcas Blancas</h3></div>'+
+      '<div class="placeholder-box" id="marcasBlancasBox"></div>'+
+    '</section>'
+  );
+}
+
+function renderMarcasBlancasBox(){
+  const doc = STORE.marcasBlancasDoc;
+  const box = document.getElementById('marcasBlancasBox');
+  if(!box) return;
+  if(doc){
+    box.innerHTML = (
+      '<div class="doc-card" style="width:100%;text-align:left;">'+
+        '<div class="doc-icon">'+icon('file')+'</div>'+
+        '<div style="flex:1;"><div class="doc-title">'+esc(doc.titulo)+'</div><div class="doc-desc">'+esc(doc.nota||'Agregado manualmente')+'</div>'+
+        (doc.url? '<a class="btn-link" href="'+esc(doc.url)+'" target="_blank" rel="noopener" style="margin-top:6px;">Abrir enlace '+icon('external-link','icon-sm')+'</a>' : '')+
+        '</div>'+
+        '<button class="icon-btn" onclick="removeMarcasBlancasDoc()">'+icon('trash')+'</button>'+
+      '</div>'
+    );
+  } else {
+    box.innerHTML = (
+      icon('shield-alert')+
+      '<div class="placeholder-title">'+statusPill('pendiente')+' Pendiente de insumo</div>'+
+      '<div class="placeholder-text">'+esc(DATA.marcasBlancas.d)+'</div>'+
+      '<button class="btn btn-primary" onclick="openMarcasBlancasModal()">'+icon('plus','icon-sm')+' Agregar documentación de marcas blancas</button>'
+    );
+  }
+}
+
+/* ================================================================================
+   RENDER: 05. JOURNEY
+   ================================================================================ */
+function renderJourney(){
+  const rows = DATA.comportamiento.hoyFuturo.map(r=>'<tr><td class="hoy">'+esc(r.hoy)+'</td><td class="futuro">'+esc(r.futuro)+'</td></tr>').join('');
+  const listBlock = (title, items, tone) => (
+    '<div class="card"><div class="field-label" style="margin-bottom:10px;color:var(--'+tone+');">'+esc(title)+'</div><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px;">'+
+    items.map(i=>'<li class="cell-muted" style="font-size:12.8px;">'+esc(i)+'</li>').join('')+'</ul></div>'
+  );
+  return (
+    '<section id="journey">'+
+      sectionHead('05','Journey de transición','Qué comportamiento queremos cambiar en el usuario.','compass')+
+      '<div class="flow-behavior">'+DATA.exec.comportamiento.map((c,i)=>(i>0?icon('sparkles','icon-sm'):'')+'<span>'+esc(c)+'</span>').join('')+'</div>'+
+      '<p class="prose" style="margin:14px 0 26px;">'+esc(DATA.comportamiento.pregunta)+'</p>'+
+      '<div class="grid grid-2" style="margin-bottom:26px;">'+
+        listBlock('¿Qué creemos que hará que tenga éxito?', DATA.comportamiento.exito, 'good')+
+        listBlock('¿Qué creemos que puede hacer fracasar el lanzamiento?', DATA.comportamiento.fracaso, 'critical')+
+      '</div>'+
+      listBlock('¿Qué necesitamos medir para saber si funcionó?', DATA.comportamiento.medir, 'accent')+
+      '<div class="section-head" style="margin:32px 0 14px;"><h3 class="section-title" style="font-size:16px;">Hoy vs. futuro</h3></div>'+
+      '<div class="table-wrap table-scroll"><table><thead><tr><th>Hoy</th><th>En el futuro</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 06. COMUNICACIÓN
+   ================================================================================ */
+function renderComunicacion(){
+  const pre = DATA.comunicacion.prelanzamiento.map(f=>(
+    '<div class="phase-card"><div class="phase-head"><div><div class="phase-name">'+esc(f.fase)+'</div><div class="phase-day">'+esc(f.dia)+'</div></div>'+statusPill(f.canales && f.canales.indexOf('Pendiente')===-1 ? 'construccion':'pendiente')+'</div>'+
+    '<div class="phase-body"><div class="phase-msg">"'+esc(f.mensaje)+'"</div>'+
+    (f.ideas.length? '<div><div class="field-label">Ideas creativas '+srcTag('PROPUESTA')+'</div><div class="phase-meta-row">'+f.ideas.map(i=>'<span class="chip">'+esc(i)+'</span>').join('')+'</div></div>' : '')+
+    '<div><div class="field-label">Canales</div><div class="cell-muted">'+esc(f.canales)+'</div></div>'+
+    '</div></div>'
+  )).join('');
+
+  const l = DATA.comunicacion.lanzamiento;
+  const lanz = (
+    '<div class="phase-card" style="border-color:var(--accent);"><div class="phase-head" style="background:var(--accent-soft);"><div><div class="phase-name">'+esc(l.fase)+'</div><div class="phase-day">'+esc(l.dia)+' · '+esc(l.contexto)+'</div></div>'+statusPill('definido')+'</div>'+
+    '<div class="phase-body"><div class="phase-msg">'+esc(l.mensaje)+'</div>'+
+    '<div><div class="field-label">Ideas</div><div class="phase-meta-row">'+l.ideas.map(i=>'<span class="chip">'+esc(i)+'</span>').join('')+'</div></div>'+
+    '<div><div class="field-label">Canales — activación por canal</div><ul style="margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px;">'+l.canales.map(c=>'<li class="cell-muted" style="font-size:12.8px;">'+esc(c)+'</li>').join('')+'</ul></div>'+
+    '</div></div>'
+  );
+
+  const post = DATA.comunicacion.postlanzamientoAdopcion.fases.map(f=>(
+    '<div class="phase-card"><div class="phase-head"><div><div class="phase-name">'+esc(f.fase)+'</div><div class="phase-day">'+esc(f.dia)+'</div></div></div>'+
+    '<div class="phase-body"><div class="field-label">Objetivo</div><div class="cell-muted" style="margin-bottom:6px;">'+esc(f.objetivo)+'</div>'+
+    '<div class="phase-msg">"'+esc(f.mensaje)+'"</div>'+
+    '<div><div class="field-label">Pregunta abierta</div><div class="cell-muted">'+esc(f.pregunta)+'</div></div>'+
+    (f.canales? '<div><div class="field-label">Canales</div><div class="cell-muted">'+esc(f.canales)+'</div></div>' : '')+
+    '</div></div>'
+  )).join('');
+
+  return (
+    '<section id="comunicacion">'+
+      sectionHead('06','Estrategia de comunicación','Prelanzamiento → Lanzamiento → Post-lanzamiento / adopción.','flag')+
+      '<div class="tabs" role="tablist">'+
+        '<button class="tab-btn active" data-tab="pre">Prelanzamiento</button>'+
+        '<button class="tab-btn" data-tab="lanz">Lanzamiento</button>'+
+        '<button class="tab-btn" data-tab="post">Post-lanzamiento / Adopción</button>'+
+      '</div>'+
+      '<div class="tab-panel active" data-panel="pre">'+pre+'</div>'+
+      '<div class="tab-panel" data-panel="lanz">'+lanz+'</div>'+
+      '<div class="tab-panel" data-panel="post"><p class="kpi-sub" style="margin-bottom:14px;">'+esc(DATA.comunicacion.postlanzamientoAdopcion.nota)+'</p>'+post+'</div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 07. HIPÓTESIS
+   ================================================================================ */
+function renderHipotesis(){
+  const cards = DATA.hipotesis.map(h=>(
+    '<div class="card hip-card"><div style="display:flex;gap:12px;align-items:flex-start;">'+
+    '<div class="hip-num">H'+h.n+'</div>'+
+    '<div class="hip-text">Si <span class="hip-if">'+esc(h.si)+'</span>, entonces <span class="hip-then">'+esc(h.then)+'</span>.</div>'+
+    '</div>'+
+    '<div class="phase-meta-row" style="margin-left:38px;">'+
+      (h.canal? '<span class="chip">Canal: '+esc(h.canal)+'</span>' : '<span class="chip" style="color:var(--critical);">Canal: pendiente</span>')+
+      (h.metrica? '<span class="chip">Métrica: '+esc(h.metrica)+'</span>' : '<span class="chip" style="color:var(--critical);">Métrica: pendiente</span>')+
+      '<span class="chip">'+esc(h.autor)+'</span>'+
+    '</div></div>'
+  )).join('');
+  return (
+    '<section id="hipotesis">'+
+      sectionHead('07','Hipótesis','Generadas directamente en la mesa estratégica.','lightbulb')+
+      '<div class="grid grid-2">'+cards+'</div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 08. EXPERIMENTOS (editable)
+   ================================================================================ */
+function ice(e){
+  if(e.impacto==null || e.confianza==null || e.esfuerzo==null) return null;
+  return ((Number(e.impacto)+Number(e.confianza)+Number(e.esfuerzo))/3);
+}
+function renderExperimentos(){
+  const rows = STORE.experimentos.map(e=>{
+    const score = ice(e);
+    return (
+      '<tr data-id="'+e.id+'">'+
+        '<td><input class="editable-input cell-primary" style="min-width:200px;" data-field="hipotesis" value="'+esc(e.hipotesis)+'"></td>'+
+        '<td><input class="editable-input" style="min-width:110px;" data-field="experimento" value="'+esc(e.experimento)+'" placeholder="AB test..."></td>'+
+        '<td><input class="editable-input" style="min-width:120px;" data-field="segmento" value="'+esc(e.segmento)+'" placeholder="Pendiente"></td>'+
+        '<td><input class="editable-input" style="min-width:120px;" data-field="control" value="'+esc(e.control)+'" placeholder="Pendiente"></td>'+
+        '<td><input class="editable-input" style="min-width:120px;" data-field="tratamiento" value="'+esc(e.tratamiento)+'" placeholder="Pendiente"></td>'+
+        '<td><input class="editable-input" style="min-width:100px;" data-field="canal" value="'+esc(e.canal)+'" placeholder="Pendiente"></td>'+
+        '<td><input class="editable-input" style="min-width:100px;" data-field="kpi" value="'+esc(e.kpi)+'" placeholder="Pendiente"></td>'+
+        '<td><input type="number" min="1" max="10" class="editable-input num-input" data-field="impacto" value="'+(e.impacto??'')+'" placeholder="—"></td>'+
+        '<td><input type="number" min="1" max="10" class="editable-input num-input" data-field="confianza" value="'+(e.confianza??'')+'" placeholder="—"></td>'+
+        '<td><input type="number" min="1" max="10" class="editable-input num-input" data-field="esfuerzo" value="'+(e.esfuerzo??'')+'" placeholder="—"></td>'+
+        '<td class="cell-num">'+(score!=null? '<span class="badge badge-violet">'+score.toFixed(1)+'</span>' : '<span class="kpi-sub">—</span>')+'</td>'+
+        '<td><input class="editable-input" style="min-width:110px;" data-field="responsable" value="'+esc(e.responsable)+'"></td>'+
+        '<td>'+
+          '<select class="editable-input" data-field="estado">'+
+            ['Por definir','En definición','Listo para correr','En curso','Concluido'].map(s=>'<option '+(e.estado===s?'selected':'')+'>'+s+'</option>').join('')+
+          '</select>'+
+        '</td>'+
+        '<td><div class="row-actions"><button class="icon-btn" data-action="delete">'+icon('trash')+'</button></div></td>'+
+      '</tr>'
+    );
+  }).join('');
+
+  return (
+    '<section id="experimentos">'+
+      sectionHead('08','Backlog de experimentos','Editable — cambia cualquier celda o agrega filas nuevas. Se guarda en este navegador.','list-checks')+
+      '<div class="toolbar">'+
+        '<span class="kpi-sub">Solo H1 tiene ficha completa en el material fuente. El resto: pendiente de definir en la próxima mesa.</span>'+
+        '<button class="btn btn-primary" id="addExpBtn">'+icon('plus','icon-sm')+' Nuevo experimento</button>'+
+      '</div>'+
+      '<div class="table-wrap table-scroll"><table id="expTable"><thead><tr>'+
+        '<th>Hipótesis</th><th>Experimento</th><th>Segmento</th><th>Control</th><th>Tratamiento</th><th>Canal</th><th>KPI</th><th>Imp.</th><th>Conf.</th><th>Esf.</th><th>ICE</th><th>Responsable</th><th>Estado</th><th></th>'+
+      '</tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 09. MATRIZ ICE
+   ================================================================================ */
+function renderIce(){
+  const scored = STORE.experimentos.filter(e=>ice(e)!=null);
+  const dots = scored.map(e=>{
+    const s = ice(e);
+    const impacto = Number(e.impacto), esfuerzo = Number(e.esfuerzo);
+    const left = Math.min(96, Math.max(4, (esfuerzo/10)*100));
+    const bottom = Math.min(96, Math.max(4, (impacto/10)*100));
+    return '<div class="ice-dot" title="'+esc(e.hipotesis)+' — ICE '+s.toFixed(1)+'" style="left:'+left+'%;bottom:'+bottom+'%;">'+s.toFixed(1)+'</div>';
+  }).join('');
+  return (
+    '<section id="ice">'+
+      sectionHead('09','Matriz ICE — Impacto × Esfuerzo','Se actualiza sola al puntuar experimentos en la sección anterior.','target')+
+      '<div class="ice-wrap">'+
+        '<div class="ice-legend">'+
+          '<div class="quad-tag"><span class="dot" style="background:var(--good);"></span>Quick Wins — alto impacto, bajo esfuerzo</div>'+
+          '<div class="quad-tag"><span class="dot" style="background:var(--accent);"></span>Grandes apuestas — alto impacto, alto esfuerzo</div>'+
+          '<div class="quad-tag"><span class="dot" style="background:var(--warning);"></span>Relleno — bajo impacto, bajo esfuerzo</div>'+
+          '<div class="quad-tag"><span class="dot" style="background:var(--critical);"></span>No ahora — bajo impacto, alto esfuerzo</div>'+
+        '</div>'+
+        '<div>'+
+          '<div class="ice-plot">'+
+            '<div class="ice-quad qw"><span class="quad-label">Quick wins</span></div>'+
+            '<div class="ice-quad ga"><span class="quad-label">Grandes apuestas</span></div>'+
+            '<div class="ice-quad rl"><span class="quad-label">Relleno</span></div>'+
+            '<div class="ice-quad na"><span class="quad-label">No ahora</span></div>'+
+            (scored.length? dots : '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;"><span class="kpi-sub">Sin experimentos puntuados aún — asigna Impacto/Confianza/Esfuerzo en el backlog de experimentos.</span></div>')+
+            '<span class="ice-axis-label ice-axis-y">Impacto →</span><span class="ice-axis-label ice-axis-x">Esfuerzo →</span>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 10. MEDICIÓN
+   ================================================================================ */
+function renderMedicion(){
+  const rows = DATA.medicion.filas.map(f=>(
+    '<tr><td class="cell-primary">'+esc(f.tipo)+'</td><td class="cell-muted">'+esc(f.pregunta)+'</td><td>'+esc(f.kpi)+'</td><td class="cell-muted">'+esc(f.frecuencia)+'</td><td class="cell-muted">'+esc(f.responsable)+'</td><td>'+statusPill(f.estado)+'</td></tr>'
+  )).join('');
+  const segRows = DATA.comunicacionGlobal.filas.map(f=>(
+    '<tr><td class="cell-primary">'+esc(f.segmento)+'</td><td class="cell-muted">'+esc(f.objetivo)+'</td><td class="cell-muted">'+esc(f.piensa)+'</td><td class="cell-muted">'+esc(f.mensaje)+'</td><td class="cell-muted">'+esc(f.canal)+'</td></tr>'
+  )).join('');
+  return (
+    '<section id="medicion">'+
+      sectionHead('10','Plan de medición','¿Cómo sabremos si segmentación, comunicación, marketing y experimentación funcionan?','bar-chart')+
+      '<div class="card" style="margin-bottom:22px;">'+
+        '<div class="field-label">'+esc(DATA.medicion.nsm.nombre)+' '+srcTag(DATA.medicion.nsm.fuente)+'</div>'+
+        '<div class="exec-value" style="margin-top:6px;">'+esc(DATA.medicion.nsm.def)+'</div>'+
+      '</div>'+
+      '<div class="table-wrap table-scroll" style="margin-bottom:14px;"><table><thead><tr><th>Etapa</th><th>Pregunta</th><th>KPI</th><th>Frecuencia</th><th>Responsable</th><th>Estado</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+
+      '<div class="card" style="margin-bottom:26px;border-left:3px solid var(--warning);">'+
+        '<div class="field-label" style="color:var(--warning);">Baseline</div><div class="cell-muted" style="color:var(--ink);">'+esc(DATA.medicion.baseline)+'</div>'+
+      '</div>'+
+      '<div class="section-head" style="margin:0 0 14px;"><h3 class="section-title" style="font-size:16px;">Comunicación global por segmento</h3><div class="section-sub">'+esc(DATA.comunicacionGlobal.objetivo)+'</div></div>'+
+      '<div class="table-wrap table-scroll"><table><thead><tr><th>Segmento</th><th>Objetivo de comunicación</th><th>¿Qué queremos que piense?</th><th>Mensaje</th><th>Canal</th></tr></thead><tbody>'+segRows+'</tbody></table></div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 11. INSUMOS PARA MARKETING
+   ================================================================================ */
+function renderInsumos(){
+  const inv = DATA.insumos.investigaciones.map(i=>(
+    '<div class="card"><div class="field-label" style="margin-bottom:6px;">Investigación '+i.n+'</div><div class="modulo-name" style="font-size:14px;margin-bottom:8px;">'+esc(i.nombre)+'</div><p class="cell-muted" style="margin-bottom:14px;">'+esc(i.objetivo)+'</p><a class="btn btn-primary" href="'+esc(i.url)+'" target="_blank" rel="noopener">'+icon('external-link','icon-sm')+' Abrir en Figma</a></div>'
+  )).join('');
+  const proto = DATA.insumos.prototipos.map(p=>'<a class="btn" href="'+esc(p.url)+'" target="_blank" rel="noopener">'+icon('external-link','icon-sm')+' '+esc(p.nombre)+'</a>').join('');
+  return (
+    '<section id="insumos">'+
+      sectionHead('11','Insumos para creación de contenido','Todo lo que Marketing necesita para producir piezas y complementar la estrategia ya existente.','book-open')+
+      '<div class="doc-card card" style="margin-bottom:24px;">'+
+        '<div class="doc-icon">'+icon('file')+'</div>'+
+        '<div style="flex:1;"><div class="doc-title">'+esc(DATA.insumos.documentoPrincipal.nombre)+'</div><div class="doc-desc">'+esc(DATA.insumos.documentoPrincipal.nota)+'</div></div>'+
+        statusPill('pendiente')+
+      '</div>'+
+      '<div class="grid grid-3" style="margin-bottom:26px;">'+inv+'</div>'+
+      '<div class="section-head" style="margin:0 0 14px;"><h3 class="section-title" style="font-size:16px;">Prototipos</h3></div>'+
+      '<div class="link-row" style="margin-bottom:26px;"><a class="btn" href="#" style="pointer-events:none;opacity:.55;">'+icon('file','icon-sm')+' Versión 0 (plataforma actual) — sin enlace directo</a>'+proto+'</div>'+
+      '<div class="section-head" style="margin:0 0 14px;"><h3 class="section-title" style="font-size:16px;">Matriz comparativa</h3></div>'+
+      '<a class="btn btn-primary" href="'+esc(DATA.insumos.matrizComparativa.url)+'" target="_blank" rel="noopener">'+icon('external-link','icon-sm')+' '+esc(DATA.insumos.matrizComparativa.nombre)+'</a>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 12. MARCAS BLANCAS (sección dedicada, además del placeholder en Audiencias)
+   ================================================================================ */
+function renderMarcasBlancasSection(){
+  return (
+    '<section id="marcas-blancas">'+
+      sectionHead('12','Marcas Blancas','Perfil distinto dentro de Dropi: marca propia, marketing propio, inventario propio — usan Dropi como soporte logístico y tecnológico.','shield-alert')+
+      '<div class="placeholder-box" id="marcasBlancasBox2"></div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 13. PRÓXIMOS PASOS
+   ================================================================================ */
+function renderProximaMesa(){
+  const items = DATA.proximaMesa.map(p=>'<div class="pending-item"><div class="pending-check"></div><div class="pending-text">'+esc(p)+'</div></div>').join('');
+  const cols = [
+    {label:'Antes del lanzamiento', items:DATA.roadmapEjecucion.antes},
+    {label:'Durante el lanzamiento', items:DATA.roadmapEjecucion.durante},
+    {label:'Después del lanzamiento', items:DATA.roadmapEjecucion.despues}
+  ].map(c=>(
+    '<div class="roadmap-col"><div class="roadmap-col-head">'+esc(c.label)+'</div>'+
+    c.items.map(i=>'<div class="roadmap-item"><div class="roadmap-item-title">'+esc(i.t)+'</div><div class="roadmap-item-meta"><span>'+esc(i.equipo)+'</span><span class="badge badge-neutral" style="padding:3px 8px;">No iniciado</span></div></div>').join('')+
+    '</div>'
+  )).join('');
+  return (
+    '<section id="proximos-pasos">'+
+      sectionHead('13','Próxima mesa estratégica','Lista viva de lo que falta construir — no se asume que estas decisiones ya están tomadas.','flag')+
+      '<div class="card" style="margin-bottom:30px;"><div class="pending-list">'+items+'</div></div>'+
+      '<div class="section-head" style="margin:0 0 14px;"><h3 class="section-title" style="font-size:16px;">Roadmap de ejecución</h3><div class="section-sub">'+esc(DATA.roadmapEjecucion.nota)+'</div></div>'+
+      '<div class="grid grid-3">'+cols+'</div>'+
+    '</section>'
+  );
+}
+
+/* ================================================================================
+   RENDER: 14. DOCUMENTACIÓN
+   ================================================================================ */
+function renderDocumentacion(){
+  const qas = DATA.entrevista.preguntas.map(p=>'<div class="field-item"><div class="field-label">'+esc(p.q)+'</div><div class="field-value">'+esc(p.a)+'</div></div>').join('');
+  return (
+    '<section id="documentacion">'+
+      sectionHead('14','Historia del proyecto — entrevista con María','Resumen ejecutivo para que el equipo no tenga que leer toda la entrevista.','message-quote')+
+      '<div class="doc-card card" style="margin-bottom:20px;">'+
+        '<div class="doc-icon">'+icon('file')+'</div>'+
+        '<div style="flex:1;"><div class="doc-title">Entrevista completa — Cuéntame un poco de la historia (Notas de Gemini)</div><div class="doc-desc">'+esc(DATA.entrevista.fecha)+' · '+esc(DATA.entrevista.participantes)+' — pídela a Catherin (Drive) para subirla como recurso descargable aquí.</div></div>'+
+      '</div>'+
+      '<div class="card"><div class="field-list">'+qas+'</div></div>'+
+      '<div class="section-head" style="margin:36px 0 12px;"><h3 class="section-title" style="font-size:15px;">Convención de etiquetas usada en todo el artefacto</h3></div>'+
+      '<div class="grid grid-4">'+
+        '<div class="card">'+statusPill('definido')+'<p class="kpi-sub" style="margin-top:8px;">Decidido y confirmado.</p></div>'+
+        '<div class="card">'+statusPill('construccion')+'<p class="kpi-sub" style="margin-top:8px;">Parcialmente definido.</p></div>'+
+        '<div class="card">'+statusPill('pendiente')+'<p class="kpi-sub" style="margin-top:8px;">Sin definir todavía.</p></div>'+
+        '<div class="card">'+statusPill('propuesta')+'<p class="kpi-sub" style="margin-top:8px;">Idea del equipo, no decisión final.</p></div>'+
+      '</div>'+
+    '</section>'
+  );
+}
+
+function sectionHead(num, title, sub, iconName){
+  return (
+    '<div class="section-head">'+
+      '<div><div class="section-eyebrow"><span class="num">'+num+'</span>'+icon(iconName)+'</div>'+
+      '<h2 class="section-title">'+esc(title)+'</h2>'+
+      (sub?'<div class="section-sub">'+esc(sub)+'</div>':'')+
+      '</div>'+
+    '</div>'
+  );
+}
+
+/* ================================================================================
+   RENDER APP
+   ================================================================================ */
+function renderApp(){
+  document.title = DATA.meta.docTitle;
+  const html = (
+    '<div class="shell">'+
+      renderSidebar()+
+      '<main class="main">'+
+        renderHero()+
+        renderTars()+
+        renderHistoria()+
+        renderArquitectura()+
+        renderAudiencias()+
+        renderJourney()+
+        renderComunicacion()+
+        renderHipotesis()+
+        renderExperimentos()+
+        renderIce()+
+        renderMedicion()+
+        renderInsumos()+
+        renderMarcasBlancasSection()+
+        renderProximaMesa()+
+        renderDocumentacion()+
+        '<footer class="footer"><div class="footer-row"><p>Rearquitectura de Dropi — Centro de Comando · Product Growth Marketing</p><p class="footer-note">Los cambios en Experimentos y Marcas Blancas se guardan en este navegador.</p></div></footer>'+
+      '</main>'+
+    '</div>'
+  );
+  document.getElementById('app').innerHTML = html;
+  renderMarcasBlancasBox();
+  mirrorMarcasBlancasBox2();
+  setupScrollSpy();
+  setupTabs();
+  setupThemeToggle();
+  setupExperimentTable();
+  setupModuloModal();
+}
+function mirrorMarcasBlancasBox2(){
+  const b1 = document.getElementById('marcasBlancasBox');
+  const b2 = document.getElementById('marcasBlancasBox2');
+  if(b1 && b2) b2.innerHTML = b1.innerHTML;
+}
+
+function setupScrollSpy(){
+  const links = Array.prototype.slice.call(document.querySelectorAll('.navlink'));
+  const sections = NAV.map(s=>document.getElementById(s.id)).filter(Boolean);
+  if(!('IntersectionObserver' in window) || !sections.length) return;
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        const id = entry.target.id;
+        links.forEach(l=>l.classList.toggle('active', l.dataset.target===id));
+      }
+    });
+  }, {rootMargin:'-10% 0px -75% 0px', threshold:0});
+  sections.forEach(s=>obs.observe(s));
+}
+
+function setupTabs(){
+  document.querySelectorAll('.tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const tab = btn.dataset.tab;
+      const parent = btn.closest('.tabs').parentElement;
+      parent.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b===btn));
+      parent.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active', p.dataset.panel===tab));
+    });
+  });
+}
+
+function setupThemeToggle(){
+  const wrap = document.getElementById('themeToggle');
+  if(!wrap) return;
+  function apply(mode){
+    if(mode==='light') document.documentElement.setAttribute('data-theme','light');
+    else if(mode==='dark') document.documentElement.setAttribute('data-theme','dark');
+    else document.documentElement.removeAttribute('data-theme');
+    wrap.querySelectorAll('button').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+    STORE.theme = mode; saveStore();
+  }
+  wrap.querySelectorAll('button').forEach(b=>b.addEventListener('click', ()=>apply(b.dataset.mode)));
+  apply(STORE.theme||'system');
+}
+
+function setupExperimentTable(){
+  const table = document.getElementById('expTable');
+  if(!table) return;
+  table.addEventListener('input', e=>{
+    const field = e.target.dataset.field;
+    if(!field) return;
+    const tr = e.target.closest('tr');
+    const id = tr.dataset.id;
+    const exp = STORE.experimentos.find(x=>x.id===id);
+    if(!exp) return;
+    if(field==='impacto'||field==='confianza'||field==='esfuerzo'){
+      exp[field] = e.target.value===''? null : Number(e.target.value);
+    } else {
+      exp[field] = e.target.value;
+    }
+    saveStore();
+    if(field==='impacto'||field==='confianza'||field==='esfuerzo'){
+      const iceSection = document.getElementById('ice');
+      if(iceSection) iceSection.outerHTML = renderIce();
+      const tdIce = tr.querySelector('td:nth-child(11)');
+      const s = ice(exp);
+      tdIce.innerHTML = s!=null ? '<span class="badge badge-violet">'+s.toFixed(1)+'</span>' : '<span class="kpi-sub">—</span>';
+    }
+  });
+  table.addEventListener('click', e=>{
+    const btn = e.target.closest('[data-action="delete"]');
+    if(!btn) return;
+    const tr = btn.closest('tr');
+    const id = tr.dataset.id;
+    if(!confirm('¿Eliminar este experimento del backlog?')) return;
+    STORE.experimentos = STORE.experimentos.filter(x=>x.id!==id);
+    saveStore();
+    tr.remove();
+    const iceSection = document.getElementById('ice');
+    if(iceSection) iceSection.outerHTML = renderIce();
+  });
+  const addBtn = document.getElementById('addExpBtn');
+  if(addBtn) addBtn.addEventListener('click', ()=>{
+    STORE.experimentos.push({id:uid(), hipotesis:'Nuevo experimento', experimento:'', segmento:'', control:'', tratamiento:'', canal:'', kpi:'', impacto:null, confianza:null, esfuerzo:null, responsable:'', estado:'Por definir'});
+    saveStore();
+    const section = document.getElementById('experimentos');
+    if(section) section.outerHTML = renderExperimentos();
+    setupExperimentTable();
+  });
+}
+
+function setupModuloModal(){
+  document.querySelectorAll('[data-modal="modulo"]').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const m = DATA.modulos.find(x=>x.id===card.dataset.id);
+      if(!m || !m.promesa) return;
+      openModal(
+        '<h3>'+esc(m.nombre)+'</h3>'+
+        '<div class="field-list">'+
+          '<div class="field-item"><div class="field-label">Problema</div><div class="field-value">'+esc(m.problema)+'</div></div>'+
+          '<div class="field-item"><div class="field-label">Promesa</div><div class="field-value">'+esc(m.promesa)+'</div></div>'+
+          (m.accion? '<div class="field-item"><div class="field-label">Acción</div><div class="field-value">'+esc(m.accion)+'</div></div>' : '')+
+          (m.resultado? '<div class="field-item"><div class="field-label">Resultado</div><div class="field-value">'+esc(m.resultado)+'</div></div>' : '')+
+        '</div>'+
+        '<div class="modal-actions"><button class="btn" onclick="closeModal()">Cerrar</button></div>'
+      );
+    });
+  });
+}
+
+/* ================================================================================
+   MODAL genérico + Marcas Blancas
+   ================================================================================ */
+function openModal(html){
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); }
+document.addEventListener('click', e=>{ if(e.target.id==='modalOverlay') closeModal(); });
+
+function openMarcasBlancasModal(){
+  openModal(
+    '<h3>Agregar documentación de Marcas Blancas</h3>'+
+    '<div class="modal-field"><label>Título del documento</label><input type="text" id="mbTitulo" placeholder="Ej: Brief de comunicación Marcas Blancas"></div>'+
+    '<div class="modal-field"><label>Enlace (Drive, Figma, Notion...)</label><input type="text" id="mbUrl" placeholder="https://..."></div>'+
+    '<div class="modal-field"><label>Nota</label><textarea id="mbNota" placeholder="Contexto breve..."></textarea></div>'+
+    '<div class="modal-actions"><button class="btn" onclick="closeModal()">Cancelar</button><button class="btn btn-primary" id="mbSave">Guardar</button></div>'
+  );
+  document.getElementById('mbSave').addEventListener('click', ()=>{
+    const titulo = document.getElementById('mbTitulo').value.trim();
+    if(!titulo){ document.getElementById('mbTitulo').focus(); return; }
+    STORE.marcasBlancasDoc = {
+      titulo,
+      url: document.getElementById('mbUrl').value.trim(),
+      nota: document.getElementById('mbNota').value.trim()
+    };
+    saveStore();
+    closeModal();
+    renderMarcasBlancasBox();
+    mirrorMarcasBlancasBox2();
+  });
+}
+function removeMarcasBlancasDoc(){
+  if(!confirm('¿Quitar este documento?')) return;
+  STORE.marcasBlancasDoc = null;
+  saveStore();
+  renderMarcasBlancasBox();
+  mirrorMarcasBlancasBox2();
+}
+
+renderApp();
+</script>
+</body>
+</html>
