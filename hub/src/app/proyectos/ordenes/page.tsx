@@ -3,8 +3,10 @@ import HubFooter from "@/components/HubFooter";
 import WeeklySelector from "../seguimiento/WeeklySelector";
 import RoadmapGantt from "../seguimiento/RoadmapGantt";
 
-// Estructura: Promp/Documento de Seguimiento.md (plantilla de seguimiento de proyecto)
-// Insumo: Dropi App/Plan Estrategico_ Dropi App (2).md — 20 mayo 2026
+// Estructura: Promp/Documento de Seguimiento.md (misma plantilla que Rearquitectura)
+// Insumo: Ordenes/Proyectos E2E - Rediseño modulo de Ordenes.md — documento
+// aún sin campos propios del proyecto llenos (solo la guía/plantilla base),
+// por eso varios campos quedan "Pendiente de definir".
 
 const badgeStyle = (color: string, bg: string): React.CSSProperties => ({
   display: "inline-flex",
@@ -96,13 +98,13 @@ const metric: React.CSSProperties = {
   padding: "12px 14px",
 };
 
-export default function DropiAppPage() {
+export default function OrdenesPage() {
   return (
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
-        title="Dropi App · Plan Estratégico"
+        title="Órdenes · Rediseño del módulo de Órdenes"
         subtitle="Célula Experience · PO: Diana Aldana"
-        currentSlug="dropi-app"
+        currentSlug="ordenes"
       />
 
       <main style={{ maxWidth: 1100, width: "100%", margin: "0 auto", padding: "24px 20px", flex: 1 }}>
@@ -117,40 +119,39 @@ export default function DropiAppPage() {
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, marginBottom: 6 }}>
             <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Experience</span>
             <span style={badgeStyle("#1458A8", "#EFF6FF")}>🚚 Delivery · En definición</span>
-            <span style={badgeStyle("#EA580C", "#FFEDD5")}>DROP-25313</span>
+            <span style={badgeStyle("#EA580C", "#FFEDD5")}>EXP-002</span>
           </div>
           <h1 style={{ fontSize: 26, fontWeight: 900, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>
-            De Vitrina a Herramienta de Gestión de Negocio
+            Rediseño del módulo de Órdenes
           </h1>
-          <p style={{ fontSize: 14, color: "var(--muted)", marginTop: 6 }}>Plan Estratégico · Dropi App — 20 mayo 2026</p>
         </div>
 
         {/* 🎯 Objetivos Macro */}
         <Section icon="🎯" title="Objetivos Macro">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
-            <Field term="Target">Usuarios de la Dropi App (Dropshippers, Marcas/Emprendedores en móvil).</Field>
-            <Field term="Adopción">Descargas iOS 22,486 · Android 73,686 (baseline corte 19 may 2026).</Field>
-            <Field term="Retención">Ratio DAU/Descargas actual ~3.6% (problema severo) — meta numérica {pending}.</Field>
-            <Field term="Satisfacción (NPS/CSAT)">{pending}</Field>
+            <Field term="Target">Dropshippers activos que gestionan órdenes — ~6.000 usuarios activos diarios (Fase 1 · MVP).</Field>
+            <Field term="Adopción">{pending}</Field>
+            <Field term="Retención">50% de usuarios que reutilizan una nueva funcionalidad del MVP en 30 días (meta Fase 1).</Field>
+            <Field term="Satisfacción (NPS/CSAT)">&gt;80% de respuestas "Como esperaba" o mejor (meta Fase 1).</Field>
           </div>
         </Section>
 
         {/* 📌 Definición del Proyecto */}
         <Section icon="📌" title="Definición del Proyecto">
           <Field term="Descripción">
-            La Dropi App no es una copia de la plataforma web — debe convertirse en la herramienta para gestionar el negocio desde el bolsillo (modelo Shopify Mobile), enfocada en métricas de ventas, notificaciones push inteligentes, búsqueda de productos y gestión de órdenes, para resolver el problema severo de retención actual.
+            Rediseño del módulo de órdenes.
           </Field>
           <div style={{ marginBottom: 6 }}>
             <div style={label}>Enlaces clave</div>
             <table style={table}>
               <tbody>
                 <tr>
-                  <td style={{ ...td, fontWeight: 700, width: 260 }}>📄 Documento de Lanzamiento (Kick-off)</td>
+                  <td style={{ ...td, fontWeight: 700, width: 260 }}>📄 Documento de Lanzamiento (Kickoff)</td>
                   <td style={td}>
-                    Para consultar el detalle completo de la visión y alcance inicial, accede al{" "}
-                    <a href="https://docs.google.com/document/d/1IBNlQN3widRjmeB77ri6aUDXh46BbRpX05ht_zSveYY/edit?usp=sharing" target="_blank" rel="noreferrer" style={{ color: "var(--dropi)", fontWeight: 700 }}>
-                      Documento de Kick-off
-                    </a>.
+                    <a href="https://docs.google.com/document/d/1SZ72iVSs3uILPSm9XBGH2y96NNxLmNe979A8V_tMMYY/edit?tab=t.jgkvmdz5t5fg#heading=h.i2ccblcxh8ao" target="_blank" rel="noreferrer" style={{ color: "var(--dropi)", fontWeight: 700 }}>
+                      Documento de Kickoff
+                    </a>
+                    {" "}(Proyectos E2E - Rediseño modulo de Ordenes.md, carpeta Ordenes)
                   </td>
                 </tr>
                 <tr>
@@ -176,11 +177,11 @@ export default function DropiAppPage() {
               </tr>
               <tr>
                 <td style={{ ...td, fontWeight: 700 }}>UX/UI Designer</td>
-                <td style={td}>Kevin Paternina</td>
+                <td style={td}>{pending}</td>
               </tr>
               <tr>
                 <td style={{ ...td, fontWeight: 700 }}>Frontend Developer</td>
-                <td style={td}>Martin Gonzales</td>
+                <td style={td}>{pending}</td>
               </tr>
               <tr>
                 <td style={{ ...td, fontWeight: 700, borderBottom: "none" }}>Tecnología Growth</td>
@@ -223,34 +224,38 @@ export default function DropiAppPage() {
         </Section>
 
         {/* 🗺️ Roadmap */}
-        <Section icon="🗺️" title="Roadmap del Proyecto">
+        <Section icon="🗺️" title="Roadmap">
           <RoadmapGantt
-            axisStart="2025-11"
+            axisStart="2026-06"
             axisEnd="2026-12"
             fases={[
               {
-                nombre: "Fase 1: Gestión de Novedades",
-                estado: "completada",
-                inicio: "2025-11",
-                fin: "2025-11",
-                detalle: "Implementación y centralización de la gestión de novedades para optimizar la operativa inicial. Entregada en noviembre de 2025.",
+                nombre: "Fase 1 · MVP Órdenes 2.0",
+                estado: "bloqueada",
+                inicio: "2026-06",
+                fin: "2026-09",
+                detalle: "Importación, exportación, etiquetas y optimización de creación manual de órdenes. Mapeada desde junio 2026, handoff a desarrollo el 2 de julio de 2026; piloto de seguimiento de 12 semanas bloqueado hasta contar con recurso de Tecnología.",
+                href: "/proyectos/ordenes/fase-1",
+                bloqueo: "Bloqueado hasta contar con recurso de Tecnología",
               },
               {
-                nombre: "Fase 2: Búsqueda Avanzada",
+                nombre: "Fase 2",
                 estado: "proxima",
                 inicio: "2026-10",
                 fin: "2026-11",
-                detalle: "Motor de búsqueda clásica (texto/palabras clave), búsqueda por ID para acceso directo, y búsqueda potenciada con Inteligencia Artificial para mejorar la relevancia de los resultados.",
+                detalle: "Implementación de filtros, tabs de estados y rediseño de las tablas y cards donde se visualizan los pedidos. En definición: consolidando la matriz de hallazgos y oportunidades.",
+                href: "/proyectos/ordenes/fase-2",
               },
               {
-                nombre: "Fase 3: Escalamiento y Feed",
+                nombre: "Fase 3 · Proveedores",
                 estado: "proxima",
                 inicio: "2026-11",
                 fin: "2026-12",
-                detalle: "Soporte e infraestructura para arquitectura Multipaís, y diseño e implementación del nuevo Feed de experiencia.",
+                detalle: "Ajustes de órdenes de proveedores.",
+                href: "/proyectos/ordenes/fase-3",
               },
             ]}
-            nota="Fase 1 entregada en noviembre de 2025 (confirmado). Fases 2 y 3: fechas estimadas a partir del Weekly Status más reciente (semana del 25 de agosto de 2026) — se ajustan cuando el equipo confirme fechas exactas."
+            nota="Fechas estimadas a partir del estado reportado en el Weekly Status más reciente (semana del 25 de agosto de 2026). Se ajustan cuando el equipo confirme fechas exactas."
           />
         </Section>
 
@@ -260,8 +265,8 @@ export default function DropiAppPage() {
             <WeeklySelector />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <Field term="Resumen de la semana">Continuidad en la fase de pruebas de calidad (QA).</Field>
-            <Field term="Retos y Bloqueos">{pending}</Field>
+            <Field term="Resumen de la semana">Consolidación y estructuración de la matriz de hallazgos y oportunidades de mejora para las Fases 2 y 3.</Field>
+            <Field term="Retos y Bloqueos">Fase 1 (MVP Órdenes 2.0) bloqueada hasta contar con recurso de Tecnología asignado.</Field>
           </div>
         </Section>
 
@@ -269,17 +274,15 @@ export default function DropiAppPage() {
         <Section icon="📊" title="Métricas de Seguimiento">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 }}>
             <div style={metric}>
-              <div style={{ fontSize: 11, color: "var(--muted)" }}>Métrica 1 · Ratio DAU/Descargas</div>
-              <div style={{ fontSize: 14, fontWeight: 700 }}>Línea base: ~3.6% → Meta: pendiente</div>
+              <div style={{ fontSize: 11, color: "var(--muted)" }}>Métrica 1</div>
+              <div style={{ fontSize: 14, fontWeight: 700 }}>Pendiente de definir</div>
             </div>
             <div style={metric}>
-              <div style={{ fontSize: 11, color: "var(--muted)" }}>Métrica 2 · DAU total</div>
-              <div style={{ fontSize: 14, fontWeight: 700 }}>Línea base: ~3,443 → Meta: pendiente</div>
+              <div style={{ fontSize: 11, color: "var(--muted)" }}>Métrica 2</div>
+              <div style={{ fontSize: 14, fontWeight: 700 }}>Pendiente de definir</div>
             </div>
           </div>
-          <Field term="Comentarios de rendimiento">
-            De cada 100 usuarios que descargan la app, solo ~4 regresan diariamente — evidencia un problema severo de retención que la Fase 2 busca resolver.
-          </Field>
+          <Field term="Comentarios de rendimiento">{pending}</Field>
         </Section>
       </main>
 
