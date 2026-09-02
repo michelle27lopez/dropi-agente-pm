@@ -44,6 +44,20 @@ const guias = [
     description: "Cómo conectar UserPilot vía MCP con la cuenta compartida del equipo y el prompt para replicar la doc de /proveedores en tu propio vertical.",
     tag: "Onboarding · Nuevo vertical",
   },
+  {
+    slug: "metricas",
+    icon: "📊",
+    title: "Métricas",
+    description: "Métricas clave del ecosistema, activación (TTFO/TTV), retención/churn mensual y clasificación de madurez operativa — con cifras y metas de referencia.",
+    tag: "Referencia · Métricas",
+  },
+  {
+    slug: "entendimiento-negocio",
+    icon: "🧠",
+    title: "Entendimiento del Negocio",
+    description: "Roles (Supplier vs. Marca/Emprendedor), comportamiento algorítmico, las dos lentes de análisis y el modelo de Funnel, Palancas y Loops del ecosistema Dropi.",
+    tag: "Referencia · Negocio",
+  },
 ];
 
 export default function GuiasIndexPage() {
