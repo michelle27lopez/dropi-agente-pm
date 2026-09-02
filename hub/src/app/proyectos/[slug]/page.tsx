@@ -26,6 +26,15 @@ type ProjectDetails = {
 
 type ProjectRef = { id: string; name: string; project_code: string | null; type?: string | null; estado_interno?: string | null };
 
+type ProjectArtifact = {
+  id: string;
+  nombre: string;
+  url: string;
+  descripcion: string | null;
+  creado_por: string | null;
+  created_at: string;
+};
+
 const ESTADOS_DISCOVERY = ["Research", "Ideación", "Concepción de experimento", "Activo", "Cerrado"];
 const ESTADOS_POC = ["Seguimiento", "En definición", "En priorización"];
 const ESTADOS_DELIVERY = ["En definición", "En priorización", "Pendiente Handoff", "en DEV", "Activo", "Cerrado"];
@@ -96,6 +105,13 @@ export default function ProjectDashboardPage() {
   const [linkingDelivery, setLinkingDelivery] = useState(false);
   const [cycles, setCycles] = useState<Cycle[]>([]);
   const [decisions, setDecisions] = useState<Decision[]>([]);
+  const [artifacts, setArtifacts] = useState<ProjectArtifact[]>([]);
+  const [showArtifactForm, setShowArtifactForm] = useState(false);
+  const [artifactNombre, setArtifactNombre] = useState("");
+  const [artifactUrl, setArtifactUrl] = useState("");
+  const [artifactDescripcion, setArtifactDescripcion] = useState("");
+  const [artifactSubmitting, setArtifactSubmitting] = useState(false);
+  const [artifactError, setArtifactError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -172,6 +188,11 @@ export default function ProjectDashboardPage() {
         setCycles(data.cycles || []);
         setDecisions(data.decisions || []);
 
+        fetch(`/api/proyectos/${slug}/artefactos`)
+          .then((r) => (r.ok ? r.json() : []))
+          .then((list) => setArtifacts(Array.isArray(list) ? list : []))
+          .catch((err) => console.error("Error cargando artefactos:", err));
+
         // El tablero de logística se pide aparte y solo si el proyecto es de
         // esa célula: su registro son ~1.800 líneas que no deben entrar al
         // bundle de la ficha de las demás células. Mismo patrón que usa la
@@ -237,6 +258,40 @@ export default function ProjectDashboardPage() {
     if (!res.ok) return;
     const updated = await res.json();
     setProject(updated);
+  }
+
+  async function handleCrearArtifact(e: React.FormEvent) {
+    e.preventDefault();
+    setArtifactError(null);
+    setArtifactSubmitting(true);
+    const res = await fetch(`/api/proyectos/${slug}/artefactos`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nombre: artifactNombre,
+        url: artifactUrl,
+        descripcion: artifactDescripcion || null,
+      }),
+    });
+    setArtifactSubmitting(false);
+    if (!res.ok) {
+      const body = await res.json().catch(() => null);
+      setArtifactError(body?.error || "No se pudo agregar el artefacto.");
+      return;
+    }
+    const nuevo = await res.json();
+    setArtifacts((prev) => [...prev, nuevo]);
+    setArtifactNombre("");
+    setArtifactUrl("");
+    setArtifactDescripcion("");
+    setShowArtifactForm(false);
+  }
+
+  async function handleEliminarArtifact(id: string) {
+    if (!confirm("¿Quitar este artefacto de la lista?")) return;
+    const res = await fetch(`/api/proyectos/${slug}/artefactos?id=${id}`, { method: "DELETE" });
+    if (!res.ok) return;
+    setArtifacts((prev) => prev.filter((a) => a.id !== id));
   }
 
   async function handleVincularPadre() {
@@ -725,6 +780,124 @@ export default function ProjectDashboardPage() {
             </div>
           )}
         </div>
+
+        {/* Artefactos del proyecto — distintos de `prototype_url` (que es
+            uno solo): un proyecto como GRO-003 acumula varios artefactos
+            (uno por lanzamiento/workshop) y necesitan verse por separado,
+            con su propio nombre y link, no pisándose entre sí. */}
+        {(artifacts.length > 0 || showArtifactForm) && (
+          <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 24, marginBottom: 32 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: artifacts.length > 0 ? 16 : 0 }}>
+              <h3 style={{ fontSize: 14, fontWeight: 700, margin: 0, color: "var(--fg)" }}>
+                📦 Artefactos {artifacts.length > 0 && <span style={{ color: "var(--muted)", fontWeight: 500 }}>({artifacts.length})</span>}
+              </h3>
+              {!showArtifactForm && (
+                <button
+                  onClick={() => setShowArtifactForm(true)}
+                  style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", background: "none", border: "1px solid var(--dropi)", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}
+                >
+                  + Agregar artefacto
+                </button>
+              )}
+            </div>
+
+            {artifacts.length > 0 && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 12, marginBottom: showArtifactForm ? 16 : 0 }}>
+                {artifacts.map((a) => (
+                  <div key={a.id} style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 8 }}>
+                      <strong style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.3 }}>{a.nombre}</strong>
+                      <button
+                        onClick={() => handleEliminarArtifact(a.id)}
+                        title="Quitar artefacto"
+                        style={{ fontSize: 12, color: "#DC2626", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0 }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                    {a.descripcion && (
+                      <p style={{ fontSize: 11.5, color: "var(--muted)", margin: 0, lineHeight: 1.45 }}>{a.descripcion}</p>
+                    )}
+                    <a
+                      href={a.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontSize: 12, fontWeight: 700, color: "#fff", background: "var(--dropi)",
+                        border: "none", borderRadius: 8, padding: "7px 12px", textDecoration: "none",
+                        display: "inline-flex", alignItems: "center", gap: 6, alignSelf: "flex-start", marginTop: 2,
+                      }}
+                    >
+                      Abrir artefacto <span style={{ fontSize: 11 }}>➔</span>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {showArtifactForm && (
+              <form onSubmit={handleCrearArtifact} style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: artifacts.length > 0 ? 16 : 0, borderTop: artifacts.length > 0 ? "1px solid var(--border)" : "none" }}>
+                <input
+                  type="text"
+                  placeholder="Nombre del artefacto (ej: Page Pilot — Documento de Lanzamiento)"
+                  value={artifactNombre}
+                  onChange={(e) => setArtifactNombre(e.target.value)}
+                  required
+                  style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                />
+                <input
+                  type="text"
+                  placeholder="https://claude.ai/code/artifact/..."
+                  value={artifactUrl}
+                  onChange={(e) => setArtifactUrl(e.target.value)}
+                  required
+                  style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)" }}
+                />
+                <textarea
+                  placeholder="Descripción breve (opcional)"
+                  value={artifactDescripcion}
+                  onChange={(e) => setArtifactDescripcion(e.target.value)}
+                  rows={2}
+                  style={{ fontSize: 13, padding: "8px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "#fff", color: "var(--fg)", resize: "vertical" }}
+                />
+                {artifactError && <span style={{ fontSize: 12, color: "#DC2626" }}>{artifactError}</span>}
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button
+                    type="submit"
+                    disabled={artifactSubmitting}
+                    style={{ fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "8px 16px", cursor: artifactSubmitting ? "default" : "pointer" }}
+                  >
+                    {artifactSubmitting ? "Guardando…" : "Guardar artefacto"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { setShowArtifactForm(false); setArtifactError(null); }}
+                    style={{ fontSize: 12.5, fontWeight: 700, color: "var(--muted)", background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        )}
+
+        {/* Cuando el proyecto no tiene artefactos todavía, igual se ofrece el
+            botón de agregar el primero — sin esperar a que exista contenido. */}
+        {artifacts.length === 0 && !showArtifactForm && (
+          <div style={{ background: "#fff", border: "1px dashed var(--border)", borderRadius: 14, padding: 20, marginBottom: 32, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+            <div>
+              <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📦 Sin artefactos todavía</strong>
+              <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Links a páginas o prototipos publicados para este proyecto (uno por lanzamiento/workshop).</span>
+            </div>
+            <button
+              onClick={() => setShowArtifactForm(true)}
+              style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", background: "none", border: "1px solid var(--dropi)", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}
+            >
+              + Agregar artefacto
+            </button>
+          </div>
+        )}
 
         {/* Estado interno · Jerarquía Discovery ↔ POC · VPV */}
         <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 24, marginBottom: 32 }}>
