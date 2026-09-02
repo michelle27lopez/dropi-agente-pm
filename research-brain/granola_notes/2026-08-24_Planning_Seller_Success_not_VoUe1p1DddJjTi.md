@@ -1,0 +1,632 @@
+# Planning Seller Success
+
+- **ID:** `not_VoUe1p1DddJjTi`
+- **Fecha:** 2026-08-24T15:31:12.645Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/2fdddfe8-23a7-4920-b936-8fe7a5236589)
+- **Asistentes:** Santiago Herrera Acosta, Laura Torres, Alejandra Melo, Diana Margarita Aldana Echeverry, Laura Contreras, Catherin Salazar
+
+---
+
+## Resumen de la Reunión
+# Semana Anterior: Avances
+
+- Flujos de ayuda contextual en User Pilot creados por Aleja; confirmación pendiente de si quedan seteados esta semana
+- Notificaciones por WhatsApp y email organizadas: sin API de catálogo/órdenes, los copies quedan ambiguos (ej. “revisa órdenes pendientes” en lugar de cifras exactas)
+- Reunión con Growth movida al jueves para definir primeros mensajes de prueba
+  - Base de dropshippers segmentada: activación vs. retención
+  - Maho alineada; confirmar si Tatiana (CRM) debe incluirse en la citación
+- Centro de control: diseño actualizado con cambios de Laura Contreras (más detalle por canal, disclaimer incluido)
+- Solicitud de muestra: flujo listo por Aleja, pendiente de pasarlo a Laura Torres para montar en User Pilot
+  - Segmentos definidos por Miguel: nunca han pedido muestra, piden sin vender, venden y piden ocasionalmente
+
+# Gali / ExpoWinners: Foco de Esta Semana
+
+- Entrega de Gali a sellers hecha (fase ExpoWinners); fase más transversal con el resto de Dropi viene después
+- Esta semana y posiblemente la siguiente: full foco en organización del proyecto
+  - Santiago: exploración de repositorio, endpoints, lógica de negocio, agente de Discovery, viabilidad de nuevas integraciones
+  - Aleja: métricas de usabilidad, concepto mobile, flujos UX/UI
+- Fase 1 de diseño acotada a lo que alcance: cards con copies más cortos, navegación por tabs en lugar de scroll, enfoque mobile
+- Hipótesis y métricas de éxito por definir antes del evento
+  - No llegarán hasta creación de órdenes (sin API), pero sí métricas intermedias (ej. productos publicados, usuarios que completan el flujo)
+  - Laura Contreras pide llevar la conexión métrica de célula → objetivo de activación → medición de éxito clara para el evento
+- Segmentación clave para ExpoWinners (señalado por Diana)
+  - Gali fase 1 apunta a dropshippers principiantes (catálogo público)
+  - Asistentes al evento buscan negociaciones con proveedores para catálogo privado: audiencia diferente
+  - Igual se pondrá a probar a todos los niveles para capturar feedback de percepción de valor
+- Coherencia de diseño con Leyendas y rearquitectura: recomendación de alinear la interfaz de Gali al producto general de Dropi
+  - Narrativa visual (tema espacial, copies, paleta) aún por definir en Leyendas
+  - Diana: fase 1 fue funcionalidad/lógica; ahora toca consistencia de UI
+- Búsqueda semántica: fase 2 arranca con nueva exploración y discovery, con fuerte impacto de la fase 1 de Gali
+  - Catálogo con IA (cards similares a Gali, estrategia incluida) sería fase 2; dueño es el equipo de Suppliers
+- Dos tareas bloqueadas por desarrollo: pruebas de Shopify y Tienda Nueva (en tabla de seguimiento de Lau Sánchez)
+- Caída de integración la semana pasada ya resuelta; ajustes pendientes de Therapy Fades 0.0
+
+# Próximos Pasos
+
+- **Confirmar inclusión de Tatiana (CRM) en reunión del jueves con Growth**
+
+  Las notificaciones de WhatsApp correrán por CRM; necesita estar alineada con el flujo.
+- **Pedirle a Aleja que pase el flujo de solicitud de muestra a Laura Torres** (Santiago)
+
+  Laura Torres no lo tiene montado aún en User Pilot.
+- **Revisar archivo de ideación de Gali compartido por Laura Contreras** (Santiago)
+
+  Laura etiquetó a Santiago; confirmar acceso y complementar con el agente de Discovery.
+- **Definir hipótesis y métricas de éxito para ExpoWinners** (Santiago, Aleja)
+
+  Conectar con objetivos de activación de la célula; llevar claro al evento para medir si el experimento fue exitoso.
+- **Alinear segmentación de usuarios para el experimento de Gali en ExpoWinners**
+
+  Definir tamaño de muestra y perfiles objetivo; priorizar dropshippers principiantes con catálogo público.
+- **Confirmar a Laura Torres cuándo quedan listos los flujos en User Pilot**
+
+  Para saber desde cuándo iniciar el seguimiento de métricas.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/a28e9605-6054-4652-9e05-c4b1fb280d01](https://notes.granola.ai/t/a28e9605-6054-4652-9e05-c4b1fb280d01)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[15:31] Yo:** Hello?
+- **[15:31] Laura Contreras:** Hola, buenos días.
+- **[15:31] Yo:** Nós.
+- **[15:31] Laura Contreras:** ¿Cómo vas?
+- **[15:31] Laura Contreras:** Muy bien, ¿y tú?
+- **[15:31] Yo:** Bien, gracias.
+- **[15:31] Laura Contreras:** Bien,
+- **[15:31] Yo:** La u
+- **[15:31] Yo:** Aleja me dijo que estaba en cita,
+- **[15:31] Laura Contreras:** Sí.
+- **[15:31] Yo:** médica pero, pues, esta veo veo que no tenemos más agenda disponible en la tarde.
+- **[15:31] Yo:** ¿Te parece igual si la hacemos sin ella
+- **[15:31] Yo:** aquí queda grabada?
+- **[15:31] Laura Contreras:** Ah,
+- **[15:31] Yo:** Igual, yo hice preplaning el viernes.
+- **[15:32] Laura Contreras:** Ah, ok, ustedes ahí hicieron preplanning.
+- **[15:32] Yo:** Yeah.
+- **[15:32] Laura Contreras:** Sí, no, o sea, simplemente
+- **[15:32] Laura Contreras:** y si están haciendo preplanning, creo que yo voy a dejar estas sesiones solo para ustedes,
+- **[15:32] Laura Contreras:** Quería como avisar, yo te vuelvo a ti, editor, y a, bueno,
+- **[15:32] Laura Contreras:** a Aleja también, espera, te lo voy a hacer de una vez.
+- **[15:32] Laura Contreras:** Aunque creo que ya era... Ah, pues tú, este este es tuyo.
+- **[15:32] Laura Contreras:** Listo. Para
+- **[15:32] Laura Contreras:** o sea, ya no asistir, sino que
+- **[15:32] Laura Contreras:** si quieren hacer preplanning e igual llegan al planning como para empezar, ya
+- **[15:32] Laura Contreras:** el manejo será como de ustedes. Creo que ya vamos
+- **[15:32] Laura Contreras:** con las otras reuniones que tenemos con Jaime y con
+- **[15:32] Laura Contreras:** la célula en general, podemos como o puedo yo salir de este
+- **[15:32] Laura Contreras:** espacio y dejárselo a ustedes.
+- **[15:32] Laura Contreras:** O de pronto con Diani también, Sí. Exacto. Hola, Dianys, ¿cómo estás? Si me en revisar algo y demás, también.
+- **[15:32] Laura Contreras:** Pero listo, si quieres empecemos. O sea, Alejandro va a estar, Dianys,
+- **[15:33] Laura Contreras:** entonces
+- **[15:33] Laura Contreras:** ¿Pero todo está bien?
+- **[15:33] Laura Contreras:** Santi, ¿sabes?
+- **[15:33] Yo:** Sí, ella tenía cita médica como a las nueve,
+- **[15:33] Yo:** me dijo que
+- **[15:33] Yo:** bueno, pero era más temprano,
+- **[15:33] Yo:** pero
+- **[15:33] Yo:** no habían logrado llegar
+- **[15:33] Yo:** que a la hora, entonces, como que no los estaban atendiendo y, pues, de pronto se iba a demorar.
+- **[15:33] Yo:** Entonces,
+- **[15:33] Laura Contreras:** Ya, listo.
+- **[15:33] Yo:** con la tacita, era como un control, según le entendí.
+- **[15:33] Laura Contreras:** Listo, listo.
+- **[15:33] Yo:** De la niña.
+- **[15:33] Yo:** Listo. Bueno, ya les comparto pantalla.
+- **[15:33] Laura Contreras:** Sin
+- **[15:33] Yo:** Hablé con Jaime ahora y me
+- **[15:33] Yo:** Hable con mi memoria y quedamos en que... Yo lo había hecho recién,
+- **[15:33] Yo:** recién comenzando
+- **[15:33] Yo:** al
+- **[15:33] Yo:** Andropi, pero lo había dejado de hacer, dar más tres vision.
+- **[15:33] Yo:** De incluir acá las las áreas también de ¿listo?
+- **[15:33] Yo:** Pero, entonces, para voy a ocultarlo un momentico para que volteamos bien la
+- **[15:34] Yo:** aquí arribita.
+- **[15:34] Yo:** Esta semana,
+- **[15:34] Yo:** Ya. Para la... Un segundo, apago esta aspiradora robot, que suena pero vamos a mentirle. Se activa cuando entra a reunión.
+- **[15:34] Laura Contreras:** Ay, también, ¿la tienes?
+- **[15:34] Laura Contreras:** Buenísima, ¿no?
+- **[15:34] Laura Contreras:** ¿Por qué?
+- **[15:34] Yo:** No, pues, coincidente
+- **[15:34] Yo:** normalmente, cada cada una reunión, y siempre se se se
+- **[15:34] Laura Contreras:** Yo
+- **[15:34] Yo:** Tengo aquí al lado del estudio, entonces, siempre suena horrible.
+- **[15:34] Yo:** Sí, sí, sí.
+- **[15:34] Yo:** Bueno, entonces, la la semana anterior,
+- **[15:34] Yo:** se adelantaron los flujos que que estaba trabajando
+- **[15:34] Yo:** está la la
+- **[15:34] Yo:** ¿estaba trabajando
+- **[15:34] Yo:** sobre lo de ello contextual en user pilot. Entiendo ahora
+- **[15:34] Yo:** nos confirmas la la si eso se podría comenzar a dejar seteada en user
+- **[15:34] Yo:** por esta semana. Pero, bueno, del lado de la
+- **[15:34] Laura Catherine Torres Ciendua:** Sí.
+- **[15:34] Yo:** Súper, listo. Del lado de Aleja, entonces, se crearon esos flujos de ayuda contextual,
+- **[15:35] Yo:** se revisaron las las
+- **[15:35] Yo:** en cómo se iban a trabajar ahora
+- **[15:35] Yo:** siendo que va a tocar ser por, que que van a tener que ser por WhatsApp, sin embargo, esta esta
+- **[15:35] Yo:** que teníamos de validación por user, pero, se canceló doc y no
+- **[15:35] Yo:** creo que la moneda era viable montarlas allí por la el tema transaccional.
+- **[15:35] Yo:** Alejandro me dijo que esta esta tarea, de hecho, la terminó hoy en la mañana,
+- **[15:35] Yo:** Esta esta organización notificaciones por WhatsApp, email,
+- **[15:35] Yo:** hace referencia a
+- **[15:35] Yo:** Bueno, hoy Jaime también me confirma de que todavía no tenemos el API
+- **[15:35] Laura Contreras:** Sí,
+- **[15:35] Yo:** de catálogo, de órdenes. Entonces, lo que
+- **[15:35] Yo:** en caso de no tenerlo como
+- **[15:35] Yo:** digamos, suponíamos que iba a ocurrir,
+- **[15:35] Yo:** era hacerlas un poco más ambiguas para igual no frenarnos, es decir,
+- **[15:35] Yo:** no hablar de, tienes diez órdenes
+- **[15:35] Yo:** pendientes por confirmar, sino hablar de
+- **[15:35] Yo:** sé, recuerda revisar órdenes que tengas pendiente por confirmar para evitar demoras.
+- **[15:35] Laura Contreras:** Okay.
+- **[15:35] Yo:** Esos copy tech puntualmente los estuvo revisando Aleja,
+- **[15:35] Yo:** enfocados en las métricas, en activación y retención, Esta semana, hoy vamos a tener la reunión con Growth para aprovechar los canales ya tenemos de marketing para para ahí por email y por WhatsApp. Sin embargo, nos pidieron moverla para el jueves, bueno, nos pidieron moverla y la despacio acá el jueves. La idea es poder realmente definir cuáles van a ser esos primeros mensajes, ¿no?, de prueba, ya tenemos el la base de de varios dropshippers que requieren activación, otros que requieren revisar temas de retención, eso es lo que hemos estado revisando también en comercial. En diseño y centro de control, Alejandro estaba terminando hasta el viernes, faltaría que
+- **[15:36] Yo:** Dime.
+- **[15:36] Laura Contreras:** Perdóname, perdón, es que tengo una pregunta sobre las
+- **[15:36] Laura Contreras:** de WhatsApp e email. ¿Esa alineación también fue con marketing?
+- **[15:36] Yo:** Sí, eso se dio desde
+- **[15:36] Yo:** desde la misma célula, entonces, Maho está está enterada.
+- **[15:36] Laura Contreras:** Okay.
+- **[15:36] Yo:** Igual para el jueves, de hecho, voy a confirmar si si si
+- **[15:36] Yo:** está incluida en la citación, pero pero sí, eso está alineado con con con todo marketing.
+- **[15:36] Laura Contreras:** Eso eso, porque sí nos levantaron la mano, bueno,
+- **[15:37] Laura Contreras:** sí, como que todo lo que vaya a comunicación directa al usuario
+- **[15:37] Laura Contreras:** tenga que filtrar lo marketing, más que todo, supongo para hacer como
+- **[15:37] Laura Contreras:** un tono coherente. ¿No? Como plataforma, publicaciones
+- **[15:37] Laura Contreras:** por más,
+- **[15:37] Laura Contreras:** maneje el mismo tono, ajá, la misma voz.
+- **[15:37] Yo:** Perfecto.
+- **[15:37] Yo:** De una
+- **[15:37] Laura Contreras:** Entonces, sí, la incluyan.
+- **[15:37] Laura Contreras:** Listo, dale.
+- **[15:37] Yo:** de una Jack.
+- **[15:37] Yo:** Y y de
+- **[15:37] Diana Aldana:** Perdón, Santi, tú sabes quién es Tatiana, ¿cierto? Tatiana es como la que
+- **[15:37] Diana Aldana:** también
+- **[15:37] Laura Contreras:** ayuda
+- **[15:37] Diana Aldana:** con todo el tema de CRM,
+- **[15:37] Yo:** Yo no he trabajado con Tatiana, he trabajado con Maha, nada más.
+- **[15:37] Diana Aldana:** Ok. Hay el grupo donde donde
+- **[15:37] Diana Aldana:** ya reviso, el grupo de comunicación masiva,
+- **[15:37] Diana Aldana:** supone que en ese grupo es donde estás en ese grupo.
+- **[15:37] Yo:** Sí, en ese sí estoy.
+- **[15:37] Laura Contreras:** Sí. Ok,
+- **[15:37] Diana Aldana:** vale.
+- **[15:37] Laura Contreras:** Sí, ver si también habría que incluir a Tatiana para
+- **[15:37] Laura Contreras:** para ese flujo, no sé, porque me imagino que las de WhatsApp serían
+- **[15:37] Laura Contreras:** sí, por CRM,
+- **[15:38] Yo:** Sí.
+- **[15:38] Yo:** Ahora hemos pensado que va ser por CRM. Igual que la de email, entiendo
+- **[15:38] Yo:** no sé cómo está esa integración o cómo está ese flujo, pero
+- **[15:38] Laura Contreras:** También.
+- **[15:38] Laura Contreras:** Ya.
+- **[15:38] Laura Contreras:** No sé si si, bueno, esas alineaciones con todos ellos para que todos estén
+- **[15:38] Laura Contreras:** alineados.
+- **[15:38] Laura Contreras:** Listo.
+- **[15:38] Yo:** De una.
+- **[15:38] Yo:** Este centro de control, el diseño
+- **[15:38] Yo:** ahora le pido a Alejandro que nos confirme por el chat de esta
+- **[15:38] Yo:** ya quedó el viernes.
+- **[15:38] Yo:** La actualización,
+- **[15:38] Yo:** Ese es solamente hacia parte de los... Ahí, Dianys me comentó de las de las los comentarios que tú le diste. Sobre sobre ampliar un poquito la el detalle de ya del canal puntualmente, que, porque por ahora está como muy muy llámelo, muy muy delimitado solamente a a los módulos, activar y desactivar módulos. Y dejar claro, entonces, cuáles no se podían por temas ya de la operación. Ahí por abajito está el disclaimer en el diseño, que me Aleja, pero, que le iba hacer los cambios que tú le
+- **[15:39] Yo:** le mencionaste.
+- **[15:39] Laura Contreras:** А,
+- **[15:39] Diana Aldana:** dale, супер.
+- **[15:39] Yo:** Bueno, solicitud de muestra,
+- **[15:39] Yo:** este este flujo también ya, Aleja, lo lo lo dejó hecho, entiendo que este también
+- **[15:39] Yo:** ahí, ¿cierto?, la U, el el de, eso está para montar el Nissan Pilot, la U otra vez.
+- **[15:39] Yo:** Entiendo que está
+- **[15:39] Yo:** este también montó untó ya la solicitud.
+- **[15:39] Laura Catherine Torres Ciendua:** ¿El de cuál, perdón?
+- **[15:39] Yo:** Y ya,
+- **[15:39] Yo:** el de solicitud de muestra, este, déjame ver si tiene el detach.
+- **[15:39] Yo:** En donde
+- **[15:39] Yo:** para el botón, una vez, tenemos una lista ya de usuarios,
+- **[15:39] Yo:** ya ya eso nos lo nos los pasó Miguel,
+- **[15:39] Yo:** que hay diferentes tipos. Entonces, están los que ya han
+- **[15:39] Yo:** pedido muestra y no han vendido nada,
+- **[15:39] Yo:** o sea, piden de forma, que pronto muestra no ha pedido nada, no han
+- **[15:39] Yo:** vendido nada, los que venden y
+- **[15:39] Yo:** de vez en cuando piden, los que nunca piden,
+- **[15:39] Yo:** y ahí hay un par de preguntas que
+- **[15:40] Yo:** que les vamos a hacer para identificar cuáles son las motivaciones.
+- **[15:40] Yo:** Que tienen al usar ese botón. Pero ese ese
+- **[15:40] Yo:** esa ese flujo me dijo Alexa que ya lo tenía, no sé si ella ya te lo pasó, sino para
+- **[15:40] Laura Catherine Torres Ciendua:** No, no me lo ha pasado, no lo tengo montado y
+- **[15:40] Yo:** decirle que te lo
+- **[15:40] Yo:** Listo, listo, ya ya hablo con ella.
+- **[15:40] Laura Catherine Torres Ciendua:** como historia.
+- **[15:40] Participante:** Va.
+- **[15:40] Yo:** Ajá.
+- **[15:40] Yo:** Bueno, eso es la semana anterior para esta, esta entonces.
+- **[15:40] Yo:** Dado que se hizo la entrega de Gali, a
+- **[15:40] Yo:** sellers,
+- **[15:40] Yo:** Gali, entendiéndose como solamente la parte expo winners,
+- **[15:40] Yo:** que ya después veamos lo
+- **[15:40] Yo:** lo
+- **[15:40] Yo:** lo de ellos un
+- **[15:40] Laura Contreras:** ¿El resto?
+- **[15:40] Yo:** mucho más grande, ¿cierto?, de que
+- **[15:40] Yo:** más transversal, tres a sesenta, con el resto de dropi,
+- **[15:40] Yo:** por lo menos, para ExpoWinner sí está viendo la prioridad que tiene,
+- **[15:40] Yo:** lo conversé con la legisla, la idea es darle full foco esta semana y capaz la siguiente,
+- **[15:40] Yo:** a ver los diferentes flujos, las métricas de éxito, entonces, es mucho de esta semana va estar, por lo menos, dos días en la organización del proyecto. Aleja, aquí, ya lo lo adoptó como organización proyecto, pero esto incluye estrategia, definir métricas, dibujo de
+- **[15:41] Yo:** algunos flujos,
+- **[15:41] Yo:** pero ella va estar enfocada más en la parte, tratando de verlo de alguna forma, como en la parte front,
+- **[15:41] Yo:** y quedamos en que yo me voy encargar como una parte más back,
+- **[15:41] Yo:** ¿sí? Entonces, reviso integraciones, endpoints,
+- **[15:41] Yo:** la lógica detrás de la aplicación, como para dividirnos y poder avanzar más rápido.
+- **[15:41] Yo:** Entonces, ella, más hacia métricas de usabilidad, de concept, lo que hablábamos de de hacerlo más mobile, ¿sí?
+- **[15:41] Laura Contreras:** Sal.
+- **[15:41] Laura Contreras:** Ahí tengo una duda porque entiendo que la entrega la hizo James y con Dianys y Catala estuvimos trabajando un poco antes de que entrara James,
+- **[15:41] Laura Contreras:** y quería preguntarte si el concepto de Gali sobre la propuesta de valor de entregar
+- **[15:41] Laura Contreras:** proyectos con objetivos claros,
+- **[15:41] Laura Contreras:** más que simplemente como
+- **[15:41] Laura Contreras:** tener una IA para completar flujos quedó superclara.
+- **[15:41] Laura Contreras:** No sé si James se devolvió como a la propuesta de valor que teníamos definido,
+- **[15:42] Laura Contreras:** quieres que te pasemos el archivo y ya ustedes nos hacen preguntas.
+- **[15:42] Yo:** So
+- **[15:42] Laura Contreras:** O...?
+- **[15:42] Yo:** No me acuerdo el archivo, lo estuvimos conversando, pero
+- **[15:42] Yo:** pues, si me lo compartes, si de pronto hay algo que ya hizo yo omitido, aunque la verdad no me quedó
+- **[15:42] Laura Contreras:** Listo.
+- **[15:42] Yo:** claro el el
+- **[15:42] Yo:** el por qué, para qué, de dónde surgió y todo,
+- **[15:42] Yo:** más tener archivo,
+- **[15:42] Yo:** Igual, yo le quiero hacer una pasada por el agente también de Discovery,
+- **[15:42] Yo:** ver qué qué qué
+- **[15:42] Laura Contreras:** Uh-huh.
+- **[15:42] Yo:** qué vacíos pueden haber conceptuales,
+- **[15:42] Yo:** y ya.
+- **[15:42] Yo:** Pero no me pasó el archivo, no me pasó si me lo comparten superbién, eso me ayudó a complementar.
+- **[15:42] Laura Contreras:** Listo. No es algo tan tan
+- **[15:42] Laura Contreras:** o sea, de verdad que era como un archivo que teníamos de ideación entre todos,
+- **[15:42] Laura Contreras:** y ahí lo que salió fue,
+- **[15:42] Laura Contreras:** Diani, si quieres agregar algo, es que es una herramienta para
+- **[15:42] Laura Contreras:** en acción, entonces es una combinación entre herramientas
+- **[15:42] Laura Contreras:** y conocimientos en un solo ecosistema. Y la idea es que el
+- **[15:42] Laura Contreras:** el el la el que le habíamos puesto era tú pones la visión, Gary se
+- **[15:43] Laura Contreras:** encarga de orquestar el resto. Entonces, siempre con un objetivo claro, que al inicio
+- **[15:43] Laura Contreras:** creo que viste como esta fase es como muy enfocada en aquellos
+- **[15:43] Laura Contreras:** que nos no han seleccionado algún producto alguna vez para vender, un producto winner,
+- **[15:43] Laura Contreras:** Entonces, es el objetivo, por ejemplo, es encontrar un producto ganador,
+- **[15:43] Laura Contreras:** y nosotros te te orquestamos el resto del proceso. Pero la idea es trabajar en
+- **[15:43] Laura Contreras:** el objetivo
+- **[15:43] Laura Contreras:** personalizado según la estrategia de cada uno de los usuarios.
+- **[15:43] Yo:** Mhmm.
+- **[15:43] Laura Contreras:** Ahí te etiqueté en el archivo, me me dices si puedes ingresar,
+- **[15:43] Laura Contreras:** y está como una historia, ¿no?, como de arriba hacia abajo,
+- **[15:43] Laura Contreras:** está como todo el discovery que tenemos, y ya se
+- **[15:43] Laura Contreras:** al final fueron como las últimas ideaciones que trabajamos en el archivo, ya solo para pasar al
+- **[15:43] Laura Contreras:** al al experimento como tal a costo.
+- **[15:43] Laura Contreras:** A la construcción. Entonces, ahí hay varias cositas
+- **[15:43] Diana Aldana:** Vale. Quiero mencionar algo importante, Preciso ahorita estaba en una reunión con
+- **[15:43] Diana Aldana:** y con Jaime, estábamos hablando de búsqueda semántica, porque, pues, se recuerdan que el viernes hubo
+- **[15:44] Diana Aldana:** un poquito como, no hubo como mucha claridad.
+- **[15:44] Diana Aldana:** Por qué nos iba a seguir promocionando búsqueda semántica. Bueno,
+- **[15:44] Diana Aldana:** el caso es que expusimos con más detalle la
+- **[15:44] Diana Aldana:** a a Jaime, y llegamos a la conclusión, que ya
+- **[15:44] Laura Contreras:** busqué
+- **[15:44] Diana Aldana:** a semántica,
+- **[15:44] Diana Aldana:** va a llegar, va a comenzar una segunda fase, iniciando nuevamente con
+- **[15:44] Diana Aldana:** exploración y discovery, donde va a tener un gran impacto esta primera fase de Gale. Siguiente, tenemos el la el catálogo normalito,
+- **[15:44] Diana Aldana:** como lo
+- **[15:44] Laura Contreras:** ven,
+- **[15:44] Diana Aldana:** estábamos pensando hacer un catálogo con IA, y ese catálogo con IA iba a tener las cards muy similares a las que tiene Gali. Ya es una forma tú encontrar un producto con estrategia.
+- **[15:44] Diana Aldana:** Porque el catálogo normal se encuentra, no sé, un zapato y ya, pero catálogo con IA,
+- **[15:44] Diana Aldana:** te da la estrategia. Entonces, ahí sí sería bueno, entonces, alinearnos
+- **[15:44] Diana Aldana:** ya esa fase posterior a este experimento que se tenga en ExpoWinner,
+- **[15:44] Diana Aldana:** esa segunda fase de de catálogo
+- **[15:44] Laura Contreras:** unidad duda, proyecto lo alinearon para que esté en manos de suppliers, ¿sí?
+- **[15:45] Diana Aldana:** Se supone que era fase dos, búsqueda semanal.
+- **[15:45] Diana Aldana:** Entonces, por eso también es como alinearnos.
+- **[15:45] Diana Aldana:** No no me quedó tan claro
+- **[15:45] Diana Aldana:** lo vuelvo a traer
+- **[15:45] Laura Contreras:** sobre la
+- **[15:45] Diana Aldana:** mesa,
+- **[15:45] Laura Contreras:** que
+- **[15:45] Diana Aldana:** seguiría la fase dos.
+- **[15:45] Diana Aldana:** Porque como,
+- **[15:45] Laura Contreras:** pues, como
+- **[15:45] Diana Aldana:** Carla lo tiene, dijimos, ah, bueno, vamos a seguir explorando, pero ahorita que
+- **[15:45] Diana Aldana:** que tú hablas, Santi, digo, bueno, esta sería ya una fase dos
+- **[15:45] Diana Aldana:** de catálogo, de Gali,
+- **[15:45] Laura Contreras:** Sí. Como
+- **[15:45] Diana Aldana:** para que
+- **[15:45] Laura Contreras:** lo Eso eso sí que lo alineamos en estas
+- **[15:45] Laura Contreras:** las rebuscas de esta semana por cédula,
+- **[15:45] Laura Contreras:** Pero sí, el dueño del catálogo es suppliers, ¿no? Entonces, según lo que te escucho,
+- **[15:45] Laura Contreras:** eso debería pasar directo a suppliers, pero si quieres lo hablamos en el planning de de suppliers.
+- **[15:45] Laura Contreras:** Está chévere. De una. Listo, y de una. Ya,
+- **[15:45] Laura Contreras:** Te te etiqueto en ese archivo, si algo no entiendes, si lo quieres pasar,
+- **[15:45] Laura Contreras:** nos nos cuentas. Danis, Cata y yo tenemos el contexto.
+- **[15:45] Yo:** Dale, ahí ya,
+- **[15:45] Laura Contreras:** James también creo que
+- **[15:45] Yo:** Dale, ahí ya confirmo que sí, me dejo me dejo ingresar sin problema, listo.
+- **[15:45] Laura Contreras:** Listo, Dora.
+- **[15:46] Yo:** Bueno, entonces, para esta semana lo que les decía era, organización de proyecto, ya les conté qué va,
+- **[15:46] Yo:** enseñó UXUI, aquí lo faseamos. Entonces, fase uno,
+- **[15:46] Yo:** realmente esta fase uno
+- **[15:46] Yo:** está muy atada a qué tanto encontremos acá en la organización de proyecto.
+- **[15:46] Yo:** Entonces, fase uno,
+- **[15:46] Yo:** le tratamos con con de edad, y y suena muy, todavía, muy como muy ambiguo, pero de edad
+- **[15:46] Yo:** bueno, hasta dónde va, pero como no sabemos qué tanto vamos a encontrar organización de proyecto, qué
+- **[15:46] Yo:** tanto detalles en la qué tanto
+- **[15:46] Yo:** del benchmark igual se quiere hacer hacia hacia convertir en un mobile
+- **[15:46] Yo:** tengamos
+- **[15:46] Yo:** digamos que esta esta fase puede ser aún muy
+- **[15:46] Yo:** digamos, corta de un día, igual la la semana no no nos va a dar para muchos sabernos que dos
+- **[15:46] Yo:** van a ir en estrategia y y
+- **[15:46] Yo:** y y revisión, de pronto, de
+- **[15:46] Yo:** de algunos flujos similares. Claramente, en benchmark no nos vamos a encontrar una
+- **[15:46] Yo:** app.
+- **[15:46] Yo:** Como, o en un, sí, un flujo como el el que se propone aquí, porque está muy en
+- **[15:46] Yo:** a un nicho
+- **[15:46] Yo:** pero en concepto
+- **[15:46] Yo:** en journey, creo que se podía encontrar algunas cosas interesantes. Entonces,
+- **[15:47] Yo:** esta fase uno realmente va a estar hasta donde nos alcance.
+- **[15:47] Yo:** Fase uno estaría, de pronto, en en en lo que hablamos de, no
+- **[15:47] Yo:** sé, de que las cards tengan copies más
+- **[15:47] Yo:** pequeños,
+- **[15:47] Yo:** en que la interacción no sea tanto de scrolling, más bien en tabs,
+- **[15:47] Yo:** Pensarlo más hacia móvil.
+- **[15:47] Yo:** Igual, en el discovery, también desde PPM se haga,
+- **[15:47] Yo:** pues va a entrar a complementar acá, ¿sí la hubo?
+- **[15:47] Laura Contreras:** Santia, y yo tenía
+- **[15:47] Laura Contreras:** Santi, ahí yo tenía una observación, que de hecho le hablamos con Dianys y con
+- **[15:47] Laura Contreras:** Jaime, bueno,
+- **[15:47] Laura Contreras:** algo se mencionó, pero como iba a pasar ya sus manos para que la tengan en cuenta,
+- **[15:47] Laura Contreras:** que algo que también hablamos con José en cuanto a leyendas, y es
+- **[15:47] Laura Contreras:** ¿cómo logramos que las tres cosas
+- **[15:47] Laura Contreras:** Porque estamos hablando ya de la interfaz, de cómo se va a ver esto ante el usuario,
+- **[15:47] Laura Contreras:** se sientan como un mismo producto. Entonces, no sé si has visto lo que está
+- **[15:47] Laura Contreras:** construyendo José de leyendas, él entiendo que ha estado en esa alineación con
+- **[15:47] Laura Contreras:** y lo mismo debería pasar con Gali, que no se sienta como tan ajeno o se sienta más bien
+- **[15:47] Laura Contreras:** alineado a lo que se está haciendo en rearquitectura, al cómo va a quedar el producto,
+- **[15:48] Laura Contreras:** ya sea que sea como un modo IA y se vea o o me transporte como a una
+- **[15:48] Laura Contreras:** capa sobre el producto original, que eso está bien, pero que sí tenga coherencia entre las
+- **[15:48] Laura Contreras:** como recomendación para Aleja, que
+- **[15:48] Laura Contreras:** pues, Aleja tiene como bastante manejo de lo que
+- **[15:48] Laura Contreras:** es interfaz.
+- **[15:48] Yo:** Yo yo la semana pasada, yo yo sí sí sí sé cómo
+- **[15:48] Yo:** trabajando porque, igual, le ayudé ahí en la migración por antigravity,
+- **[15:48] Laura Contreras:** Uh-huh.
+- **[15:48] Yo:** Y algo que me dijo,
+- **[15:48] Yo:** es que todavía la narrativa
+- **[15:48] Yo:** No sé si ya hoy, lunes,
+- **[15:48] Yo:** ya está.
+- **[15:48] Yo:** Pero que la narrativa aún está por definirse
+- **[15:48] Yo:** en el sentido de
+- **[15:48] Yo:** sí va a ser definitivamente como tipo, naves espaciales, viaje intergaláctico,
+- **[15:48] Yo:** tatatatá,
+- **[15:48] Yo:** qué tipo de línguas sé usar, los copies cómo van a
+- **[15:48] Yo:** estar ajustados, si se va a hacer, entonces,
+- **[15:48] Yo:** creo que hay algo que se llama como así como cadetes espacial. ¿Cómo cómo iba a estar eso? Desde el concepto
+- **[15:48] Yo:** desde, sí, desde el concepto de diseño
+- **[15:49] Yo:** si lo que tenía él... Porque, digamos, yo yo anoté lo mismo de que
+- **[15:49] Yo:** lo que teníamos en expo winners galley,
+- **[15:49] Diana Aldana:** Sí.
+- **[15:49] Yo:** no era completamente más que la paleta de colores
+- **[15:49] Laura Contreras:** Exacto.
+- **[15:49] Yo:** coincida con
+- **[15:49] Yo:** pero de resto,
+- **[15:49] Laura Contreras:** De
+- **[15:49] Diana Aldana:** acuerdo.
+- **[15:49] Yo:** está muy
+- **[15:49] Laura Contreras:** Me parece mucho a leyendas, pero está muy ajeno a lo que es, sea, Droppy. Como cuando el momento que lo vayamos a tener dentro de Droppy,
+- **[15:49] Laura Contreras:** creo que va a chocar bastante el tema de y, ay, que ahí Dianys siento que es como full acompañamiento de
+- **[15:49] Laura Contreras:** esa definitiva, ¿Alejano? No,
+- **[15:49] Diana Aldana:** a ver, esta primera fase era como
+- **[15:49] Diana Aldana:** funcionamiento, lógicas, pero ya
+- **[15:49] Diana Aldana:** ya que está estable, ya pasamos esas a esa etapa de
+- **[15:49] Diana Aldana:** de que tenga una consistencia con nuestro UI
+- **[15:49] Laura Contreras:** Listo, te voy a dar. Listo, Sandy. Bueno.
+- **[15:49] Yo:** That's right.
+- **[15:49] Yo:** Vale. Aquí todavía no le hemos añadido las épicas, ya se las incluyo.
+- **[15:49] Yo:** Pues no teníamos una creada para Expo Winners.
+- **[15:49] Yo:** En catálogo Fator está
+- **[15:50] Yo:** lo quieres,
+- **[15:50] Yo:** lo que presenté el viernes,
+- **[15:50] Yo:** Aquí, entonces, está incluido hacer
+- **[15:50] Yo:** la el el benchmark
+- **[15:50] Yo:** yo lo voy a hacer por mi parte,
+- **[15:50] Yo:** de lo que recomendó
+- **[15:50] Yo:** María,
+- **[15:50] Yo:** con estrellas,
+- **[15:50] Yo:** Sin embargo,
+- **[15:50] Yo:** Aleja también... Pues, esto esto se hizo, de hecho, esta
+- **[15:50] Yo:** se hizo después de de la reforma María. Entonces, dentro de eso también estaba aquella
+- **[15:50] Yo:** algunos conceptos para ver cómo podemos mejorar lo del fake door,
+- **[15:50] Yo:** y el flujo, para preguntarle, entonces, a los usuarios
+- **[15:50] Yo:** lo que les decía, el los el volumen por ventas, de pronto, por
+- **[15:50] Yo:** herramientas como WhatsApp y demás. Entonces, está un poco en esa
+- **[15:50] Yo:** Son cuatro horas, está ajustado, puede que igual se termine priorizando si vemos que de esta
+- **[15:50] Yo:** parte hay demasiado por trabajar.
+- **[15:50] Yo:** Esta se podría ¿listo?
+- **[15:50] Yo:** Tenemos estas dos caseritas que estamos arrastrando, que ya están en la tabla de ese
+- **[15:50] Yo:** seguimiento que se le muestra a Lau Sánchez.
+- **[15:50] Yo:** Que es, pues, la las dos cosas que tengo bloqueada por por desarrollo.
+- **[15:51] Yo:** Son las pruebas de Shopify para para para Shopify y para tienda nueva.
+- **[15:51] Yo:** ¿Listo? Teníamos una novedad la semana pasada
+- **[15:51] Yo:** con una caída de la integración por completo, eso ya se solucionó.
+- **[15:51] Yo:** Pero, bueno, de hecho, me acaban de reportar como que otros errores, pero también tenemos unos ajustes
+- **[15:51] Yo:** pendientes de therapy fades punto cero.
+- **[15:51] Yo:** Listo, eso por el lado de Aleja.
+- **[15:51] Yo:** Por el lado mío,
+- **[15:51] Yo:** y que claramente entra a complementar lo que ha estado trabajando Aleja porque los dos vamos a estar trabajando sobre la misma línea,
+- **[15:51] Yo:** Está, entonces, exploración de repositorio con los endpoints, principalmente lo que
+- **[15:51] Yo:** decía la hacia hacia lógica de negocio, dentro de eso también está aplicar al agente de discovery.
+- **[15:51] Yo:** Ajá. Definición de métricas de éxito, cuando esta parte está hecha,
+- **[15:51] Yo:** claramente definición de métricas de éxito no va a tomar mucho tiempo.
+- **[15:51] Yo:** Hay un el diflujo de business user journeys, dímelo.
+- **[15:51] Laura Contreras:** Dentro de esas de éxito,
+- **[15:52] Laura Contreras:** creo que también va, antes de definir el éxito, que tú puedas
+- **[15:52] Laura Contreras:** ya una vez conozcas todo Gali, hagan como toda esa
+- **[15:52] Laura Contreras:** contextualización que van a hacer, ¿sí?, como esa exploración que van a hacer de las con
+- **[15:52] Laura Contreras:** y demás,
+- **[15:52] Laura Contreras:** como ver si realmente se conectan con tus objetivos
+- **[15:52] Laura Contreras:** como célula, ¿no?, y con las métricas que queremos mover. Nosotros dijimos sí,
+- **[15:52] Laura Contreras:** y por eso se entrega a sellers, porque esto la idea es que tenga
+- **[15:52] Laura Contreras:** la activación
+- **[15:52] Laura Contreras:** atienda directamente la activación bruta, ¿no?, como el crear órdenes. Bueno,
+- **[15:52] Laura Contreras:** en en parte, porque no llegamos hasta la fase uno no llega hasta allá.
+- **[15:52] Yo:** Mhmm.
+- **[15:52] Laura Contreras:** Pero es la idea, entender bien si realmente
+- **[15:52] Laura Contreras:** sí cumple como con esa, sí, con esa hipótesis y no sé si
+- **[15:52] Laura Contreras:** escribir como la hipótesis, porque al momento de
+- **[15:52] Laura Contreras:** a Mary como el plan de expo winners y y creo que Gali va a devolucionar, va a salir de eso y va a ir mucho más allá,
+- **[15:52] Laura Contreras:** Sí nos preguntó como
+- **[15:52] Laura Contreras:** como cuál era el objetivo o la hipótesis sobre el por qué
+- **[15:53] Yo:** Ahí ahí, al
+- **[15:53] Laura Contreras:** llevar este experimento precisamente a ese espacio, o por
+- **[15:53] Laura Contreras:** Ajá.
+- **[15:53] Yo:** que que discutiremos acá, ¿qué les parece? Y es que
+- **[15:53] Yo:** de de de lo que estoy diciendo, cien por ciento de acuerdo, y y por eso salió esta tarea que
+- **[15:53] Yo:** no está para ese sprint,
+- **[15:53] Yo:** pero realmente es porque no daba el tiempo acá, de aquí ya se llenado las manos.
+- **[15:53] Laura Contreras:** Sí.
+- **[15:53] Yo:** Y es la la la viabilidad de nuevas integraciones. Lo que va a pasar muy probablemente,
+- **[15:53] Yo:** cuando se explore el repositorio con la sede, puede iniciar la otra vez
+- **[15:53] Yo:** digamos,
+- **[15:53] Yo:** retroactivamente el discovery, ¿no?, volvamos otra vez a la al al
+- **[15:53] Yo:** del asunto, al problema, lo que está solucionando y demás.
+- **[15:53] Yo:** Metiendo las métricas vamos a encontrar
+- **[15:53] Yo:** fisuras, y lo que vamos a poder
+- **[15:53] Yo:** con el
+- **[15:53] Yo:** con dos semanas al menos, es poder ver nuevas integraciones
+- **[15:53] Yo:** entre plataforma o con externos, ¿sí?, como ya se hace, pues, con API, lo que sea.
+- **[15:53] Yo:** Eso ya nos puede ayudar a la definición de métricas. Entonces, una opción es de que, claro, cuando se explea el repositorio, vamos a ver, básicamente, tener el diagnóstico completo, ¿sí?, la imagen tres sesenta, de qué está y qué no está, La definición de métrica de éxito estaría tal a lo que tú dices, con las que tiene la célula,
+- **[15:54] Yo:** pero sí sí o sí vamos a tener aquí un una brecha, porque definitivamente igual no se dice
+- **[15:54] Yo:** como no se hizo desde el desde el principio teniendo las métricas que, pues, salieron después,
+- **[15:54] Yo:** ¿cierto?,
+- **[15:54] Yo:** tenerlas bien claras y y estarlas trabajando,
+- **[15:54] Yo:** puede que alcancemos a cubrir
+- **[15:54] Yo:** a hablar con Jaime la el viernes,
+- **[15:54] Yo:** y me mostró un poco el alcance que tenía ahora, qué está desde la lógica,
+- **[15:54] Yo:** y yo tengo algunas que
+- **[15:54] Yo:** digamos, paralelamente, había estado revisando, haciendo algunas
+- **[15:54] Yo:** alguna alguna inteligencia competitiva de de otras herramientas, dentro de esas, algunos que que mencionó Lucho,
+- **[15:54] Yo:** y puede que logremos, entonces, agregándole un par de cosas más,
+- **[15:54] Yo:** inclusive llegar no hasta el creador órdenes porque no tenemos el API,
+- **[15:54] Laura Contreras:** Sí.
+- **[15:54] Yo:** ¿cierto?
+- **[15:54] Yo:** Pero sí llegara hasta un punto donde, primero logré hacer una
+- **[15:54] Yo:** una un escenario un poco más completo,
+- **[15:55] Yo:** alargar ese ese ese
+- **[15:55] Yo:** ese flujo final, por eso es que el
+- **[15:55] Yo:** el user journey está ahí, el dibujado de, no no al nivel de detalle de user de clic
+- **[15:55] Yo:** por clic,
+- **[15:55] Yo:** sino de intenciones, ¿no?
+- **[15:55] Yo:** De de qué espero que haga el usuario
+- **[15:55] Laura Contreras:** Sí, de hitos.
+- **[15:55] Yo:** va a ser muy
+- **[15:55] Yo:** Exacto, por eso solo son cuatro horas, porque no es un un journey a nivel de UI,
+- **[15:55] Yo:** ¿cierto?, sino que es un journey a nivel de
+- **[15:55] Yo:** que
+- **[15:55] Yo:** logre materializar, entonces, mi mi intención como como plataforma.
+- **[15:55] Yo:** Por eso está acá, pero dentro del, solo estoy desaclarando, sí está esa parte en la u,
+- **[15:55] Yo:** no se es
+- **[15:55] Yo:** por tiempos, porque dices que María está esperando como que se definieran esos, de pronto, esa esa
+- **[15:55] Yo:** hipótesis o que la intención, ¿cierto?
+- **[15:55] Yo:** Si esta la agregamos para esta semana,
+- **[15:55] Yo:** el problema es que no va dar por demás reuniones,
+- **[15:55] Laura Contreras:** Claro.
+- **[15:55] Yo:** Entonces,
+- **[15:55] Yo:** no sé
+- **[15:55] Yo:** prioridad te está dando María que se le entregue eso.
+- **[15:55] Laura Contreras:** No, Sandy, ¿ella quiere que le socialicemos?
+- **[15:55] Laura Contreras:** Que lo llevemos nosotros muy claro, porque creo que con eso
+- **[15:56] Laura Contreras:** sí construimos primero como un storytelling del evento,
+- **[15:56] Laura Contreras:** ¿cierto? Y segundo, como esa medición de, sí,
+- **[15:56] Laura Contreras:** fue exitoso o no, no no no cumplió con
+- **[15:56] Laura Contreras:** con lo que esperábamos, entonces definitivamente tenemos que iterar.
+- **[15:56] Laura Contreras:** Entonces creo que es más llevar clara la conexión entre
+- **[15:56] Laura Contreras:** la métrica de la célula, el objetivo como tal de de
+- **[15:56] Laura Contreras:** activación que tú tienes y cómo medir el éxito o qué busca
+- **[15:56] Laura Contreras:** buscamos alcanzar en ese evento, justo lo que dices. Entonces,
+- **[15:56] Laura Contreras:** no van a ser órdenes porque no vamos a a a llegar hasta ese punto del flujo, pero van a ser tantos productos publicados. No sé, estoy dando un ejemplo. Tantas publicaciones o van a ser, no sé, tantas tantos usuarios que completaron el flujo de o cuál es esa métrica, ¿cierto? Que eso viene de
+- **[15:56] Laura Contreras:** pensar cómo está conectado a los objetivos. Dale, Denise.
+- **[15:56] Diana Aldana:** No, es entender cómo este
+- **[15:56] Diana Aldana:** cómo este experimento, obviamente, se va a probar en un evento donde como que el eslogan es como una una rueda de negocio con proveedores, como profundizar un poco más. Pero entonces ahí van a estar muchos proveedores, Y yo creo que lo que el el la mayor motivación de muchos de los asistentes es lograr negociaciones con proveedores para lograr acuerdos de productos privados. Porque recordemos que en la en la escala dropshipper, creo que esto ya lo habíamos hablado con Santi,
+- **[15:57] Diana Aldana:** hay varias escalas. La primera escala está el dropshipper normal
+- **[15:57] Diana Aldana:** el que el que vende catálogo público, Después, cuando tú subes de nivel, comienzas a vender catálogo privado,
+- **[15:57] Diana Aldana:** después cuando subes al tercer nivel importas y te y eres un dropshipper
+- **[15:57] Diana Aldana:** vende los productos que importan y y cuarto nivel marcas.
+- **[15:57] Diana Aldana:** Entonces, esta experiencia de Gali que estamos vendiendo claramente
+- **[15:57] Diana Aldana:** se va a gestionar y orquestar
+- **[15:57] Diana Aldana:** con productos públicos.
+- **[15:57] Diana Aldana:** Entonces, esos dropshippers
+- **[15:57] Diana Aldana:** realmente, ¿qué les interesa?
+- **[15:57] Diana Aldana:** No sé qué, o sea, son
+- **[15:58] Diana Aldana:** usuarios que apenas están iniciando y los que realmente venden
+- **[15:58] Diana Aldana:** público.
+- **[15:58] Diana Aldana:** Cuando tú ya subes de nivel, vendes ese catálogo privado.
+- **[15:58] Diana Aldana:** Y por eso te conviene hacer negociaciones con esos proveedores que van a asistir
+- **[15:58] Diana Aldana:** a este evento.
+- **[15:58] Diana Aldana:** Entonces, por eso es muy importante lo que sí hemos hablado de la segmentación de la gente
+- **[15:58] Diana Aldana:** que realmente le va a importar este experimento de Gali, son usuarios principiantes, porque alguien que está
+- **[15:58] Diana Aldana:** que vende catálogo privado,
+- **[15:58] Laura Contreras:** sería
+- **[15:58] Diana Aldana:** un Gali de catálogo privado, no un Gali de catálogo público.
+- **[15:58] Diana Aldana:** Ya viendo sus necesidades y sus hábitos de comportamiento y
+- **[15:58] Diana Aldana:** cómo va escalando en el mundo del ecommerce. De
+- **[15:58] Laura Contreras:** acuerdo.
+- **[15:58] Laura Contreras:** De acuerdo, Diani. Sí, de hecho, que eso está en los accionables que vimos hasta el viernes, ¿no? Como
+- **[15:58] Laura Contreras:** claro como cuál sería primero la la el tamaño de la muestra y segundo la
+- **[15:58] Laura Contreras:** segmentación, que a Santi, específicamente para Gali, le interesa tener.
+- **[15:58] Laura Contreras:** Ya hablamos igual de que todos los niveles se los vamos a poner a probar también para recibir el
+- **[15:59] Laura Contreras:** feedback de
+- **[15:59] Laura Contreras:** potencial ve usted en esto, así no no entre dentro de su nivel de madurez, ¿no?
+- **[15:59] Laura Contreras:** Porque Gali es una prueba, una fase uno muy enfocada hacia una
+- **[15:59] Laura Contreras:** un una propuesta de valor de
+- **[15:59] Laura Contreras:** entiendo el dropshipper y y encuentro tu producto winner.
+- **[15:59] Laura Contreras:** ¿Cierto?, y publícalo. Entonces, pero bueno, sí, de acuerdo,
+- **[15:59] Laura Contreras:** eso eso de la segmentación tiene que también ir muy ligado y muy claro para el evento.
+- **[15:59] Laura Contreras:** Listo, Santi.
+- **[15:59] Yo:** De acuerdo.
+- **[15:59] Laura Contreras:** Sé qué más
+- **[15:59] Laura Contreras:** creo que todo está como muy asociado a lo de Aldijah, entonces está chévere que estén trabajando
+- **[15:59] Laura Contreras:** superalineados en eso en ese aspecto.
+- **[15:59] Yo:** Sí, de acuerdo, hay algunas iniciativas que
+- **[15:59] Yo:** que, digamos, fue para esta semana estarían en
+- **[15:59] Yo:** pues, no no en pausa porque son las que toma la U Torres para montar el user pilot,
+- **[15:59] Yo:** Entonces, para la siguiente, ya lo que deberíamos es empezar a
+- **[15:59] Yo:** esa línea no es esta semana, Lau, para para
+- **[15:59] Yo:** que nos confirmes cuánto quedarían.
+- **[15:59] Yo:** Nosotros a ver, entonces,
+- **[16:00] Yo:** desde desde qué momento podemos empezar a hacer el seguimiento.
+- **[16:00] Yo:** Y
+- **[16:00] Yo:** y ya con eso, pues nada, seguramente para la siguiente tendríamos algunas tareas relacionadas y la
+- **[16:00] Yo:** y y ver si tenemos directamente accionables o podemos dejarla un rato más. Yo creo que
+- **[16:00] Yo:** perfectamente de aquí hasta el evento podríamos dejarlas andando muchas de esas y
+- **[16:00] Yo:** ya con la data, pues, ya ahí se puede se puede trabajar más fácil.
+- **[16:00] Yo:** Igual,
+- **[16:00] Yo:** si nos queda el tiempo, no esta semana,
+- **[16:00] Yo:** no la siguiente, un justo a la que va antes, veníamos y
+- **[16:00] Yo:** nos si nos da el espacio para trabajar también sobre
+- **[16:00] Yo:** sobre el escáner,
+- **[16:00] Yo:** también de expo winners,
+- **[16:00] Yo:** Pero, bueno, todo dependerá de cómo lo vayamos viendo. Y, si
+- **[16:00] Yo:** qué tanto tengamos que modificar entre
+- **[16:00] Yo:** lo que tú decías, Lau, Lau Contreras, de
+- **[16:00] Yo:** de ver cómo está Leyendas, cómo está el
+- **[16:00] Yo:** Expo Winners.
+- **[16:00] Yo:** Quiere ver cómo, o nos acercamos más a muy bien delimitado
+- **[16:00] Yo:** no sé, el diseño o a estar solamente así por Winners, y luego a migrar a
+- **[16:01] Yo:** hacer otra vez.
+- **[16:01] Yo:** ¿Cómo es?
+- **[16:01] Yo:** Que nada más por el tema de de del dark modes, ya es superdiferente.
+- **[16:01] Yo:** Entonces,
+- **[16:01] Yo:** bueno, voy ver cómo lo manejemos.
+- **[16:01] Laura Contreras:** So
+- **[16:01] Yo:** Ya, por, no no sería más de mi parte.
+- **[16:01] Laura Contreras:** Listo, Santi.
+- **[16:01] Laura Contreras:** No, superalineados, qué chévere que estén haciendo ese pro planning.
+- **[16:01] Laura Contreras:** Y estén tan preparados.
+- **[16:01] Laura Contreras:** Bueno, cualquier cosa estamos superpendientes que
+- **[16:01] Laura Contreras:** de dudas que tengas, Degali, como que creo que la propuesta de valor está superclara y
+- **[16:01] Laura Contreras:** logramos como proyectarnos hacia algo que fuera diferente
+- **[16:01] Laura Contreras:** a cualquier chat con IA, entonces
+- **[16:01] Laura Contreras:** no, estamos ahí. ¿Listo?
+- **[16:01] Laura Contreras:** Dale, que estén muy bien.

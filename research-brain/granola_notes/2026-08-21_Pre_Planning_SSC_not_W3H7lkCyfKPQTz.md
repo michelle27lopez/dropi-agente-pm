@@ -1,0 +1,442 @@
+# Pre Planning SSC
+
+- **ID:** `not_W3H7lkCyfKPQTz`
+- **Fecha:** 2026-08-21T20:25:29.296Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/01ee8e27-31ee-4624-b8f3-74fcfacf955b)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo
+
+---
+
+## Resumen de la Reunión
+# Contexto General
+
+- Pre-planning del sprint enfocado en el proyecto Asistente AI (Expo Winners / Gali)
+- Jaime entregó el repositorio y presentó el proyecto; punto de partida para el sprint
+- Feedback inicial: presentación algo saturada e informal, debe ser autoexplicativa sin necesidad de explicación verbal
+
+# Estado del Proyecto Asistente AI
+
+- Proyecto no está listo para tomarlo y presentarlo directamente
+- Problemas identificados:
+  - Varias conexiones móviles aún fallando
+  - Alcance de Expo Winners no está definido
+  - Métricas de éxito no están establecidas
+- Core del proyecto aún muy basado en web, requiere rediseño fuerte para móvil
+
+# Estructura de Épicas Propuesta
+
+- Épica 1: Organización del Proyecto (estrategia)
+  - Benchmark de herramientas y conceptos similares
+  - Exploración del repositorio y flujos
+  - Definición de métricas de éxito (clics, pasos, interacciones)
+  - Estimación: 2 días
+- Épica 2: Experimentación / UX UI (diseño móvil)
+  - Rediseño orientado a móvil: tabs, tarjetas pequeñas, menos texto
+  - Fase 1: hasta donde alcance en el sprint actual
+  - Estimación: 1 día (lo que quede pasa al siguiente sprint)
+
+# División de Trabajo
+
+- Santiago: backend e integraciones
+  - Documentación de APIs, MCPs y terceros
+  - Variables de entorno y lógica por debajo
+  - Que el asistente consulte, traiga resultados y ejecute la saga correctamente
+- Alejandra: parte visual y móvil
+  - UX UI adaptado a móvil (navegador, no app nativa)
+  - Diseño más amigable y accesible desde dispositivos móviles
+
+# Prioridades y Estimaciones del Sprint
+
+- Asistente AI: prioridad más alta
+- Notificaciones WhatsApp: prioridad media
+- Handoff tasks: reducidas a 2 horas cada una (2 + 2 horas)
+- Total estimado: 4 días, 6 horas
+- Evento objetivo: 12 de septiembre; dos semanas disponibles para pruebas y validaciones
+
+# Próximos Pasos
+
+- **Agregar tareas propias al Jira y compartir con Alejandra para revisión** (Santiago)
+
+  Pendiente de completar tras la reunión para cerrar la planeación del sprint.
+- **Preparar diseño de emails el lunes en la mañana** (Alejandra)
+
+  Mostrar cómo quedarían; evitar extender demasiado esa tarea.
+- **Confirmar si Jaime compartió el repositorio con Alejandra** (Santiago)
+
+  Santiago ya tiene acceso; verificar que Alejandra también lo tenga para arrancar.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/8c332e39-687a-4b15-bb03-9ad54f448788](https://notes.granola.ai/t/8c332e39-687a-4b15-bb03-9ad54f448788)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[20:25] Yo:** Solo es una amiga.
+- **[20:25] Yo:** ¿La leja con vos?
+- **[20:25] Participante:** Hola, Santi.
+- **[20:25] Yo:** Bueno, como viste lo que nos mostró Jaime.
+- **[20:25] Participante:** Tengo que volverlo
+- **[20:25] Participante:** O sea, yo lo que vi, lo vi bien.
+- **[20:25] Alejandra Melo:** Pues, lo que les dije, algo como que un poquito como saturado e informal.
+- **[20:26] Alejandra Melo:** No digo que no
+- **[20:26] Alejandra Melo:** que no lo vayan a entender, si uno lo explica, pues entiende, pero la idea es
+- **[20:26] Alejandra Melo:** que al solo verlo lo puedan entender sin necesidad de explicar.
+- **[20:26] Yo:** Le le le explicarle. Ajá, total.
+- **[20:26] Alejandra Melo:** Ajá.
+- **[20:26] Yo:** Listo, no, de una vez. Entonces, ven
+- **[20:26] Yo:** A ver, no alcanzo a la mañana para irme para ver.
+- **[20:26] Yo:** Meterle la mano al gira. De igual momento, vamos a estar aquí rapidito.
+- **[20:26] Yo:** Ay,
+- **[20:26] Yo:** Que ahora se me murió
+- **[20:26] Yo:** murió el computador, casi no encuentro el cargador, y
+- **[20:26] Yo:** me pidió, cuando lo encontré y lo arranqué, me estaba me
+- **[20:26] Yo:** tenía actualización pendiente, pues casi casi que no
+- **[20:26] Yo:** Jira.
+- **[20:26] Yo:** Bueno,
+- **[20:26] Yo:** compartir pantalla.
+- **[20:26] Yo:** Estamos acá.
+- **[20:26] Yo:** Estamos en este.
+- **[20:26] Yo:** Bueno, entonces,
+- **[20:27] Yo:** aquí este,
+- **[20:27] Yo:** igualito.
+- **[20:27] Yo:** De
+- **[20:27] Yo:** Ya, Ruth, ya otra semana, ¿cómo cómo estás?
+- **[20:27] Participante:** De reels, yo te digo.
+- **[20:27] Participante:** Porque esta la tenía como con seis horas, pero, pues igual.
+- **[20:27] Participante:** Ay, dios
+- **[20:27] Yo:** Lo que tengas, añámole unas
+- **[20:27] Yo:** yo creo que unas cuatro horas más, pensando en que nos va a tocar reunirnos para ver flujos y eso.
+- **[20:27] Yo:** Pues pensando lo de Gali, eso creo que
+- **[20:27] Participante:** Listo.
+- **[20:27] Yo:** o sea, yo sí quisiera meterle un poquito más de mano.
+- **[20:27] Yo:** O sea, no tomarlo como nos lo dieron y ya,
+- **[20:27] Yo:** sino mejorarle varias cositas.
+- **[20:27] Participante:** Listo, dame un segundo, yo voy a poner aquí
+- **[20:27] Participante:** reunión. Ay, yo esta no la puse en en
+- **[20:27] Participante:** curso.
+- **[20:27] Participante:** Reuniones, ay, ya la creaste.
+- **[20:28] Participante:** Poner un día.
+- **[20:28] Participante:** Listo.
+- **[20:28] Yo:** Sí.
+- **[20:28] Participante:** Hay que bajarlo de tienda nube, hay que bajarlo de dropify.
+- **[20:28] Yo:** Sí, entonces,
+- **[20:28] Yo:** se va.
+- **[20:28] Yo:** Tienda, no
+- **[20:28] Yo:** De aquí, ¿qué más esto que es?
+- **[20:28] Yo:** Catálogo ¿Este es el caso que me diste Sprint?
+- **[20:28] Participante:** El de Héctor, de pronto, el lunes. Pero no estoy segura. De hecho, de hecho, aquí le iba a poner a esto de revisar notificaciones. Entra esto a un día.
+- **[20:28] Yo:** Pues, no, yo, o sea, vámonos lo que si se empieza a hacer una del otro sprint.
+- **[20:29] Participante:** Mhmm.
+- **[20:29] Yo:** Hello?
+- **[20:29] Participante:** Ya José, pero ya me dijeron que los de marketing iban a ser las insignias, entonces,
+- **[20:29] Yo:** Ah, no. I'm gonna have
+- **[20:29] Participante:** pues no.
+- **[20:29] Participante:** Ajá.
+- **[20:29] Yo:** Luna. Ahora sí,
+- **[20:29] Yo:** de
+- **[20:29] Yo:** experimentación, eso es más de
+- **[20:29] Yo:** diseño.
+- **[20:29] Yo:** Nosotros teníamos antes de este
+- **[20:29] Yo:** que tiene corchete, este no me lo prendo, hay unos que se les puede poner
+- **[20:29] Yo:** experiment.
+- **[20:29] Yo:** Hay unos que se puede poner productos producto diseño, ¿cierto?
+- **[20:29] Participante:** Sí.
+- **[20:29] Yo:** Historia.
+- **[20:30] Yo:** Pensando en Gali, lo que nos presentó Jaime,
+- **[20:30] Yo:** ¿yo cómo lo ponemos la siguiente semana? Espérate.
+- **[20:30] Yo:** En hora, en en calendario, como estamos, ese evento es el doce, tenemos una, tenemos, digamos, dos semanas.
+- **[20:30] Yo:** ¿La siguiente semana qué la tomamos? Va ser
+- **[20:30] Yo:** hacer como exploración del
+- **[20:30] Yo:** cosas por el estilo, ¿te parece?, para ver si ya el
+- **[20:30] Yo:** la que
+- **[20:30] Yo:** va después, o sea, la primera ya de septiembre le trabajamos a diseño, o o o o no sé si a la siguiente alcanzáramos como a hacer
+- **[20:30] Yo:** una exploración rápida de de, no herramientas similares, porque no creo que haya muchas,
+- **[20:30] Yo:** pero como conceptos, ¿no?, conceptos de de pronto hacerlo más
+- **[20:30] Yo:** cómo hacerlo más más no, cómo hacerlo realmente una solución un poco más móvil,
+- **[20:30] Yo:** más dedicada a móvil,
+- **[20:30] Yo:** y empezar a trabajar como en cambios sobre el repo,
+- **[20:30] Participante:** De
+- **[20:31] Participante:** Sí.
+- **[20:31] Yo:** O sea, en una una serie de
+- **[20:31] Yo:** creo que podemos partirla en dos,
+- **[20:31] Yo:** épicas,
+- **[20:31] Yo:** Podría ser una
+- **[20:31] Participante:** Però, pues,
+- **[20:31] Yo:** exploración repositorio
+- **[20:31] Participante:** Pero, pues, ellos ya no hicieron todo lo de bench y todo eso.
+- **[20:31] Yo:** asistente,
+- **[20:31] Yo:** Sì, no, perché
+- **[20:31] Yo:** tienen algo, pero te pone a saber y realmente
+- **[20:31] Yo:** no, mira, qué móvil no está
+- **[20:31] Yo:** varias conexiones todavía están fallando.
+- **[20:31] Yo:** O sea,
+- **[20:31] Yo:** el proyecto no es tan como
+- **[20:31] Yo:** tómalo y preséntelo, sino que es como que tómalo y tratamos de mejorarlo.
+- **[20:31] Yo:** O sea, si nos vamos a eso, pues,
+- **[20:31] Yo:** no, no lo tienen.
+- **[20:31] Yo:** O sea, el proyecto no está listo.
+- **[20:31] Yo:** O sea, por ejemplo, la definición del alcance,
+- **[20:31] Yo:** de qué se espera que hagan expo winners no está cuáles van a ser las las métricas de éxito que queremos
+- **[20:31] Yo:** monitorear en, no sé, cada uno de los clics o pasos y demás,
+- **[20:31] Participante:** Mhmm.
+- **[20:32] Yo:** Nada, eso está
+- **[20:32] Yo:** Entonces, esto sería
+- **[20:32] Yo:** ¿Cómo le ponemos? Yo yo yo quiero como una que sea de estrategia,
+- **[20:32] Yo:** se me se me ocurre así.
+- **[20:32] Yo:** ¿Cómo lo ves? Como nada más de estrategia y otra ya de diseño.
+- **[20:32] Participante:** Sí.
+- **[20:32] Yo:** Entonces, estrategia estaría benchmark, estaría métricas,
+- **[20:32] Yo:** inclusive,
+- **[20:32] Yo:** en en en en
+- **[20:32] Yo:** qué? Sí, como todo el pitch de el del
+- **[20:32] Yo:** del valor que genera, todo el product marketing, llámalo, sin
+- **[20:32] Yo:** o sea, no no va a product marketing como lo, en el proceso que lo hace ahora ya,
+- **[20:32] Yo:** Katherine Salazar,
+- **[20:32] Yo:** sino, sí, el refinar los flujos,
+- **[20:32] Yo:** el
+- **[20:32] Yo:** el la muestra la muestra que vamos a tener en el evento, cuántos
+- **[20:32] Participante:** Pues, ¿va a escoger
+- **[20:32] Yo:** todo eso, ¿te parece?
+- **[20:32] Participante:** Pues, más es como de organización del proyecto.
+- **[20:32] Yo:** Sí, realmente.
+- **[20:32] Participante:** Tener organizado,
+- **[20:32] Yo:** Organización
+- **[20:33] Yo:** proyecto,
+- **[20:33] Yo:** eso, digamos, llevémoslo a
+- **[20:33] Yo:** ¿Cómo fue que la acusación? Asistente.
+- **[20:33] Yo:** AI, para no ponerle Gali, porque su nombre
+- **[20:33] Yo:** x...
+- **[20:33] Participante:** Windows.
+- **[20:33] Yo:** Yo no sé si lo estaban escribiendo juntos, ¿cierto?
+- **[20:33] Participante:** Sí.
+- **[20:33] Yo:** No, debería ser separado, pero
+- **[20:33] Participante:** Arriba, expo y abajo, winners. Entonces, sí lo están haciendo separado.
+- **[20:33] Participante:** No, no sé.
+- **[20:33] Yo:** Y en otro
+- **[20:33] Yo:** Entonces, pues, esto no termina diciendo, ¿cuál es cuál cuál es la otra categoría que hay para esto?
+- **[20:33] Yo:** Diseño,
+- **[20:33] Yo:** en definición podría ser, ¿no? Mejor.
+- **[20:33] Yo:** Bueno, definición,
+- **[20:33] Yo:** experimentación,
+- **[20:33] Participante:** ¿Eso no es experimentación?
+- **[20:33] Yo:** Sí, alguna forma, si ese experimentación, pues, pongaban experimentación.
+- **[20:34] Participante:** Pues que eso es la experimentación.
+- **[20:34] Yo:** Experimentación.
+- **[20:34] Yo:** Esto.
+- **[20:34] Yo:** Agreguemos una más.
+- **[20:34] Yo:** Aquí, de parecería,
+- **[20:34] Yo:** cambios
+- **[20:34] Yo:** cambio cambios UX UI,
+- **[20:34] Yo:** fluids for winners, algo así.
+- **[20:34] Yo:** No sé si haya
+- **[20:34] Participante:** Rediseño,
+- **[20:34] Yo:** el mejor nombre.
+- **[20:34] Yo:** ¿La diseño?
+- **[20:34] Participante:** Sí, es que eso es rediseñar, vamos a rediseñar.
+- **[20:34] Participante:** No, porque, ¿usted se rediseña?
+- **[20:34] Participante:** No, porque no es, ¿sabes?, usted
+- **[20:34] Yo:** O pongámosle pongámosle pongámosle
+- **[20:34] Yo:** responsive, algo así.
+- **[20:34] Yo:** O asistente AI responsive,
+- **[20:34] Yo:** ¿Te suena o no?
+- **[20:35] Yo:** Te voy a poner esto, la otro que tú me dijiste la otra vez, voy a poner esto adelante, para que no
+- **[20:35] Yo:** Así, así.
+- **[20:35] Yo:** ¿Esto serías antes qué?
+- **[20:35] Participante:** Diseño,
+- **[20:35] Yo:** Diseño diseño diseño móvil, algo así.
+- **[20:35] Participante:** Sí, diseño.
+- **[20:35] Yo:** No, no.
+- **[20:35] Yo:** Diseño
+- **[20:35] Yo:** diseño,
+- **[20:35] Participante:** UI.
+- **[20:35] Yo:** Yeah.
+- **[20:35] Participante:** UX UI
+- **[20:35] Yo:** Listo.
+- **[20:35] Participante:** Entonces, vamos a ir de todo.
+- **[20:35] Yo:** De lo
+- **[20:35] Yo:** Sí, me
+- **[20:35] Participante:** Con todas con eso.
+- **[20:35] Yo:** Sí, metémosle todo eso porque, pues, es tenerlo para el evento, el el doce, que tenemos toda la otra semana, la última de agosto,
+- **[20:36] Yo:** y tenemos la siguiente, que va
+- **[20:36] Participante:** Ahí.
+- **[20:36] Yo:** la siguiente acá, ¿va qué?
+- **[20:36] Yo:** La siguiente acaba un cuatro,
+- **[20:36] Yo:** Tendremos un la las dos siguientes semanas y la
+- **[20:36] Yo:** como para terminar de hacer pruebas y validaciones pequeñitas.
+- **[20:36] Yo:** Pero yo diría, estas dos semanas que vienen,
+- **[20:36] Yo:** todo esto, o
+- **[20:36] Yo:** sin problema, ¿qué qué día acá nos queda como de de hacerle nosotros seguimiento
+- **[20:36] Yo:** realmente?
+- **[20:36] Yo:** Tendríamos, entonces, esta que había de
+- **[20:36] Yo:** organización, notificaciones, WhatsApp, pues, estas ya están como tal los copies y demás, ¿cierto?
+- **[20:36] Participante:** Sí, falta organizar el email
+- **[20:36] Yo:** La siguiente
+- **[20:36] Yo:** Exacto, la
+- **[20:36] Participante:** como se vería.
+- **[20:36] Yo:** Exacto, la siguiente semana, o sea, esta,
+- **[20:36] Yo:** esta podemos sacarle una segunda parte, ¿te parece?
+- **[20:36] Participante:** Sí, pues, que yo creo que ya como
+- **[20:36] Participante:** Sí, pues, es que yo creo que es ya como mucho tiempo para eso.
+- **[20:37] Participante:** De hecho, yo los emails
+- **[20:37] Participante:** hago hago los hago el lunes en la mañana, de cómo quedarían y ya. Sí, para no hacer esa tarea tan larga, porque yo sé que Diana luego me va a decir, oye, pero ¿por qué tanto tiempo para eso?
+- **[20:37] Yo:** Bueno, listo. Ahora, listo, perfecto. No, no,
+- **[20:37] Yo:** De una a una.
+- **[20:37] Yo:** Este asistente, en temas de organización del proyecto,
+- **[20:37] Yo:** pongámosle, no sé, o sea, yo creo que entre, realmente, entenderlo
+- **[20:37] Yo:** que nos están entregando,
+- **[20:37] Yo:** en temas de códigos, en benchmarks,
+- **[20:37] Yo:** definir métricas y demás, perfectamente pueden estar siendo unas, o sea, dos días completos. Haciéndolo bien, pero no se llevó más tiempo.
+- **[20:37] Participante:** Mhmm.
+- **[20:37] Participante:** Dos días completos.
+- **[20:37] Participante:** Un día, un día.
+- **[20:37] Yo:** Sí, sí, más o menos, o sea, hablo de
+- **[20:37] Yo:** dedicándoseles al benchmark intensivo,
+- **[20:37] Yo:** a a documentar,
+- **[20:38] Yo:** a explorar el repositorio, a ver con qué se conecta, cuáles son los flujos y los flujos
+- **[20:38] Yo:** tienen sentido con
+- **[20:38] Yo:** una con un con un dispositivo móvil,
+- **[20:38] Yo:** porque es que todavía mira que mucho el core está basado en web,
+- **[20:38] Yo:** Entonces, creo que va a haber un rediseño fuerte,
+- **[20:38] Yo:** pero antes del mismo rediseño, perfectamente el el estudio, es decir, bueno,
+- **[20:38] Yo:** en el móvil deberíamos empezar a medir, y ya entendiendo el código y lo que nos den en el repositorio,
+- **[20:38] Yo:** bueno, aquí debemos medir este clic,
+- **[20:38] Yo:** si esto realmente lo usan, si no lo usan, porque realmente el el la idea es un poco
+- **[20:38] Yo:** aprovechar que tenemos un montón de drops de dropshippers allá metidos,
+- **[20:38] Yo:** sentarlos y que prueben.
+- **[20:38] Yo:** ¿Qué es lo que queremos medir? O sea, es como
+- **[20:38] Yo:** la oportunidad perfecta para
+- **[20:38] Yo:** nosotros
+- **[20:38] Yo:** una cosa por cosa,
+- **[20:38] Yo:** definir cómo la queremos medir.
+- **[20:38] Yo:** Y vamos a poner, entonces, aquí un botón, y,
+- **[20:38] Yo:** se nos tiene la gana, venga, aprovechemos y metamos lo de WhatsApp,
+- **[20:39] Yo:** agrégalo a a tu catálogo de WhatsApp, cualquier cosa. Para eso necesitamos entender muy bien lo que lo que está, no, lo lo que nos está entregando Jaime.
+- **[20:39] Participante:** Sí.
+- **[20:39] Yo:** Dos días,
+- **[20:39] Yo:** parece?
+- **[20:39] Participante:** Dos días.
+- **[20:39] Yo:** Dos días, y yo creo que ya perfectamente en este diseño, en cambio, bueno,
+- **[20:39] Yo:** pensando nada más en lo que viste, si tocara rediseñarlo,
+- **[20:39] Yo:** no solo responsive, porque, pues, responsive es pedirle a
+- **[20:39] Yo:** Cloud que lo haga responsive y ya.
+- **[20:39] Participante:** Pues,
+- **[20:39] Yo:** Pero en realmente aplicarle
+- **[20:39] Yo:** conceptos de UI para móvil
+- **[20:39] Yo:** aunque claramente no va ser un app, sino que va ser, pues, a través de un de de de un navegador,
+- **[20:39] Yo:** ¿cierto? Pero igual que sea lo mismo.
+- **[20:39] Yo:** Que sea, se me ocurre a mí que sea a través de tabs, que sean tarjetas más pequeñas, menos texto,
+- **[20:39] Yo:** O sea, realmente pensar en el diseño,
+- **[20:39] Yo:** en UX UI,
+- **[20:39] Participante:** También, Lucía,
+- **[20:39] Yo:** ¿cuánto crees que debería?
+- **[20:39] Yo:** Podría ser?
+- **[20:39] Participante:** También dos días.
+- **[20:39] Participante:** O muy poquito.
+- **[20:39] Yo:** Son cuantos minutos.
+- **[20:39] Participante:** Dos días, este,
+- **[20:40] Participante:** de este sprint, ya pongámosle un día, porque,
+- **[20:40] Participante:** igual mira que ya son cuatro días ahí.
+- **[20:40] Yo:** Entonces,
+- **[20:40] Participante:** Y ya lo pasamos para el otro sprint, lo que quede faltando.
+- **[20:40] Yo:** Entonces, acotemos esto un poquito más. Dos días...
+- **[20:40] Participante:** Oh, yeah.
+- **[20:40] Yo:** Ahí una semana o un día
+- **[20:40] Yo:** Sí, aquí pongámosle un día, pero entonces ese día cotémoslo más, ¿te parece? Ay, dios.
+- **[20:40] Yo:** Un día.
+- **[20:40] Yo:** Entonces, dice, este UI
+- **[20:40] Yo:** pongámosle en alcance,
+- **[20:40] Yo:** pongamos
+- **[20:40] Participante:** Con el UX UI.
+- **[20:40] Yo:** No sé, ¿cómo le podríamos como tratar de
+- **[20:40] Yo:** hacer?
+- **[20:40] Yo:** Mhmm.
+- **[20:40] Participante:** Es que yo creería que lo primero que hacemos, que es
+- **[20:40] Participante:** no sé cómo lo vaya a empezar
+- **[20:40] Participante:** O sea, es que lo mismo, parte uno y la otra parte dos.
+- **[20:40] Yo:** Entonces, pongámosle fase uno ya, o sea, fase uno es lo que, literal, como estamos
+- **[20:40] Participante:** Que no
+- **[20:40] Participante:** funcionó.
+- **[20:41] Yo:** y y yo creo que no hay problema justificarlo así,
+- **[20:41] Yo:** como estamos, como estamos entendiendo, tratando de meter la mano en
+- **[20:41] Yo:** para no
+- **[20:41] Yo:** ¿sí?, para no... La fase uno, revisemos
+- **[20:41] Yo:** qué tanto nos sale de acá y lo que alcancemos realmente, fase uno es hasta donde alcancemos.
+- **[20:41] Yo:** Porque es que está, como vamos a arrancar
+- **[20:41] Yo:** casi que las dos, no a la par, pero sí, esta depende de esta, si aquí en esta se nos van
+- **[20:41] Yo:** supongamos, tres días,
+- **[20:41] Yo:** pues aquí el tiempo que vamos a tener para diseño va ser menor.
+- **[20:41] Participante:** Mhmm.
+- **[20:41] Yo:** Yo voy a estar más
+- **[20:41] Yo:** Yo voy a estar más enfocado
+- **[20:41] Yo:** Aleja, en en en integraciones,
+- **[20:41] Yo:** O sea, ¿en qué en qué funcione el, entre comillas, backend?
+- **[20:41] Yo:** En que sí traiga el resultado, en que sí haga la consulta, en que sí
+- **[20:41] Yo:** vaya a API file, o si podemos agregarles una API más
+- **[20:41] Yo:** y, pues, que la saga
+- **[20:41] Yo:** que ejecute bien todo. O sea, ya hablándolo como muy
+- **[20:41] Yo:** ya hablando también del mismo desarrollo, no sé, ya lo había pensado como que tratar
+- **[20:41] Yo:** que nos rinde y ser más eficientes,
+- **[20:42] Yo:** hacer un poco two front back,
+- **[20:42] Yo:** para para que todo lo que tengamos que hacer en en temas de
+- **[20:42] Yo:** variables de entorno, y yo yo ya me yo me encargaría de esa parte.
+- **[20:42] Participante:** This.
+- **[20:42] Yo:** ¿Sí?
+- **[20:42] Yo:** De tragarme como de toda la documentación de de de de de terceros, de APIs, de MCPs,
+- **[20:42] Yo:** Todos esos apartos me encargo de que funcione, de que tenga la lógica por debajo que funcione,
+- **[20:42] Yo:** y tú toda la parte de que sea un poco más un poco, pues, mucho más amigable de lo móvil, ¿te suena?
+- **[20:42] Participante:** Visuales.
+- **[20:42] Yo:** De una.
+- **[20:42] Yo:** Mí ya Jaime me pasó el entonces, ya te lo comparte, le pregunto si también te lo compartí a ti.
+- **[20:42] Participante:** Sí, sí.
+- **[20:42] Yo:** Ah, bueno, listo, de una.
+- **[20:42] Yo:** Así. Bueno, aquí ya están los, esto realmente son las
+- **[20:42] Yo:** esta es la mayor prioridad.
+- **[20:42] Yo:** Esto también tiene alta prioridad, pero, pues,
+- **[20:42] Yo:** ajá, toca dejarlo así.
+- **[20:42] Yo:** Luego WhatsApp medio, medio... Así.
+- **[20:42] Participante:** Sí, así
+- **[20:42] Yo:** ¿Parece?
+- **[20:42] Participante:** Sí, así está bien. Y eso que se hizo una semana y cuatro horas, ¿a qué...?
+- **[20:43] Yo:** Igual es que también están estas dos,
+- **[20:43] Participante:** Ah, sí, sí, sí, ajá.
+- **[20:43] Yo:** están estas de handoff, que, pues, si, no sé, le bajáramos a
+- **[20:43] Participante:** Es que es que, ¿sabes?
+- **[20:43] Yo:** o o le
+- **[20:43] Participante:** Ah, no, sí, déjemelos ahí.
+- **[20:43] Yo:** ¿O o le bajo estas alejas estas dos a dos y dos
+- **[20:43] Yo:** como para
+- **[20:43] Participante:** Sí.
+- **[20:43] Yo:** ¿Sí?
+- **[20:43] Participante:** Sí.
+- **[20:43] Yo:** Dos horas y
+- **[20:43] Yo:** dos horas.
+- **[20:43] Yo:** Cuatro días, seis horas. Ahí está.
+- **[20:43] Yo:** Listo, déjamelos, entonces.
+- **[20:43] Yo:** Yo ya agrego las mías y te cuento para que, si quieres, las revises.
+- **[20:43] Participante:** Vale.
+- **[20:43] Participante:** No.
+- **[20:43] Yo:** Bueno, creo que no es más.
+- **[20:43] Yo:** Hablando.
+- **[20:43] Participante:** Más. Que esté muy bien, Santi.
+- **[20:43] Participante:** Aún.
+- **[20:43] Yo:** Bueno, bueno, mañana,
+- **[20:43] Yo:** ¿Vieron?
+- **[20:44] Yo:** Bien,
+- **[20:44] Yo:** en sentido de que
+- **[20:44] Yo:** de que ella tiene muchísimo conocimiento sobre dropshipping,
+- **[20:44] Yo:** sobre historia de de cómo funciona la discoteca que lleva
+- **[20:44] Yo:** disco de
+- **[20:44] Yo:** ya hacia la
+- **[20:44] Yo:** dinámica de trabajo,
+- **[20:44] Yo:** No no no sé si es porque, justamente, lleva tres años, que en algunas
+- **[20:44] Yo:** cosas siento que como que todavía se
+- **[20:44] Yo:** se está muy muy acoplada como al ritmo de tres años de Europa, ¿no?
+- **[20:44] Yo:** Bueno, más que ritmo.
+- **[20:44] Yo:** Formas de trabajo o el esquema que yo haría,
+- **[20:44] Yo:** por ejemplo, todo lo de y demás, de RPP,
+- **[20:44] Yo:** siento que como que no se se sentía tan cómoda, pero ya, o sea,
+- **[20:44] Yo:** ya ha venido como cambiando un poco el chip.
+- **[20:44] Yo:** Ahora hecho acá de salir de
+- **[20:44] Yo:** con ella y
+- **[20:44] Yo:** y siento que ya ha mejorado mucho más
+- **[20:44] Yo:** Entonces, no, pero, la verdad, bien. O sea, inicialmente, era

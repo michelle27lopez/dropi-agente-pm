@@ -1,0 +1,1180 @@
+# Pre Planning
+
+- **ID:** `not_KdAbAJstUQmjFL`
+- **Fecha:** 2026-08-31T14:01:54.801Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/73742903-d0ba-4109-a37b-1249648c6d53)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo
+
+---
+
+## Resumen de la Reunión
+### Contexto y Conversación Inicial
+
+- Reunión de pre-planning entre Santiago y Alejandra
+- Sofía (hija de Alejandra) entra a estudiar mañana, fin de las vacaciones
+- Santiago trabajó el fin de semana en ajustes de tesis de maestría
+  - Sesión con asesor hoy a las 5 p.m.
+  - Maestría en estrategia de negocios digitales (CESI), presenta trabajo de grado en diciembre
+  - Tema de investigación: cómo el nivel de autonomía de agentes de IA afecta la confianza y percepción de control del usuario
+  - Hipótesis: mayor autonomía reduce percepción de control, genera disyuntiva entre delegar o no
+  - Sustentado en papers sobre reducción de productividad al dejar de usar IA
+
+### Métricas de Éxito para el Workshop (Gali / Expo Winners)
+
+- Se acordaron 4 métricas clave con criterios de aceptación para el workshop de 30 minutos con segmento de huérfanos:
+
+  1. **Time to value:** éxito si se completa en menos de 15 min; más de 20 min genera carga cognitiva
+    - Ajustado de 10 a 15 minutos en la reunión
+  2. **Tasa de completitud:** éxito si más del 70% termina el flujo; menos del 40% en workshop controlado invalida la promesa de la IA
+  3. **Parálisis por riesgo:** % de clics en botón simulado de “pedir muestra física”; si supera el 40%, confirma que no tocar el producto es bloqueador de onboarding
+  4. **Adopción freemium:** se espera que al menos el 60% elija tienda nativa de Dropi; si más del 80% elige Shopify, la hipótesis de tienda propia queda inválida
+
+- Jaime confirmó que se pueden pedir hasta 200 productos para el ejercicio
+
+- Documento subido a Darwin; ajuste de 15 minutos ya incorporado
+
+### Flujos y Diseño de Gali
+
+- Santiago tiene un adelanto del diseño del marketplace/ecommerce, pero aún incompleto
+  - Falta incorporar logo motion y texturas enviadas por el equipo
+  - Pendiente integración con disparador de comunicación para confirmación de ventas
+- Se revisará el diseño completo en la reunión de la tarde (2 p.m.)
+- Alejandra identificó un caso no cubierto: ¿qué pasa si el usuario elige un producto fuera del catálogo de 200?
+  - Requiere revisar y ajustar el flujo
+- Plan para la tarde: revisar flujos con clics puntuales, pantalla por pantalla, para que María, Jaime y Laura puedan entender el flujo visualmente
+
+### Organización del Proyecto en Jira
+
+- Épica de organización del proyecto marcada como fase 1; fase 2 se genera por separado
+- Tareas identificadas y asignadas:
+  - Reorganización del flujo (Alejandra)
+  - Solicitar data de los 200 productos
+  - Implementar UI kit / manual de estilos enviado por el equipo
+- Sprint configurado: estimado de 1 semana y 7 horas (aprox. 3 días)
+- Varias tareas estaban en “en curso” por error de Santiago; corregido en la reunión
+
+### Reunión Expo Winners y Próximos Pasos
+
+- Alejandra preguntó si debe asistir a la reunión de Expo Winners (martes y viernes)
+  - Santiago: no es fundamental; le pasará el resumen de Granola con foco en diseño
+- Alejandra se concentrará full en Expo Winners esta semana; quiere tenerlo listo antes del evento
+  - Evento: sábado 8 (12 de septiembre)
+  - Prueba de usabilidad: se pospone a la semana siguiente, lunes 8 de septiembre
+- Equipo de tienda (José) enfocado en corrección de errores esta semana, sin entregas esperadas
+
+### Próximos Pasos
+
+- **Compartir diseño de Gali en reunión de la tarde** (Santiago)
+
+  Incluir logo motion, texturas e integración con disparador de ventas antes de mostrar.
+
+- **Ajustar flujo para productos fuera del catálogo de 200** (Alejandra)
+
+  Definir qué sucede cuando el usuario selecciona un producto no disponible en el catálogo.
+
+- **Solicitar data de los 200 productos**
+
+  Necesaria para que Alejandra pueda validar y ajustar los flujos de selección de producto.
+
+- **Pasar resumen de Expo Winners con foco en diseño a Alejandra** (Santiago)
+
+  Usar resumen de Granola para que Alejandra no tenga que asistir a las reuniones del martes y viernes.
+
+- **Agendar prueba de usabilidad para el lunes 7 de septiembre**
+
+  El viernes no alcanza; se pospone a la semana siguiente antes del evento del sábado 12.
+
+# Contexto y Conversación Inicial
+
+- Reunión de pre-planning entre Santiago y Alejandra
+- Sofía (hija de Alejandra) entra a estudiar mañana, fin de las vacaciones
+- Santiago trabajó el fin de semana en ajustes de tesis de maestría
+  - Sesión con asesor hoy a las 5 p.m.
+  - Maestría en estrategia de negocios digitales (CESI), presenta trabajo de grado en diciembre
+  - Tema de investigación: cómo el nivel de autonomía de agentes de IA afecta la confianza y percepción de control del usuario
+  - Hipótesis: mayor autonomía reduce percepción de control, genera disyuntiva entre delegar o no
+  - Sustentado en papers sobre reducción de productividad al dejar de usar IA
+
+# Métricas de Éxito para el Workshop (Gali / Expo Winners)
+
+- Se acordaron 4 métricas clave con criterios de aceptación para el workshop de 30 minutos con segmento de huérfanos:
+  1. **Time to value:** éxito si se completa en menos de 15 min; más de 20 min genera carga cognitiva
+    - Ajustado de 10 a 15 minutos en la reunión
+  2. **Tasa de completitud:** éxito si más del 70% termina el flujo; menos del 40% en workshop controlado invalida la promesa de la IA
+  3. **Parálisis por riesgo:** % de clics en botón simulado de “pedir muestra física”; si supera el 40%, confirma que no tocar el producto es bloqueador de onboarding
+  4. **Adopción freemium:** se espera que al menos el 60% elija tienda nativa de Dropi; si más del 80% elige Shopify, la hipótesis de tienda propia queda inválida
+- Jaime confirmó que se pueden pedir hasta 200 productos para el ejercicio
+- Documento subido a Darwin; ajuste de 15 minutos ya incorporado
+
+# Flujos y Diseño de Gali
+
+- Santiago tiene un adelanto del diseño del marketplace/ecommerce, pero aún incompleto
+  - Falta incorporar logo motion y texturas enviadas por el equipo
+  - Pendiente integración con disparador de comunicación para confirmación de ventas
+- Se revisará el diseño completo en la reunión de la tarde (2 p.m.)
+- Alejandra identificó un caso no cubierto: ¿qué pasa si el usuario elige un producto fuera del catálogo de 200?
+  - Requiere revisar y ajustar el flujo
+- Plan para la tarde: revisar flujos con clics puntuales, pantalla por pantalla, para que María, Jaime y Laura puedan entender el flujo visualmente
+
+# Organización del Proyecto en Jira
+
+- Épica de organización del proyecto marcada como fase 1; fase 2 se genera por separado
+- Tareas identificadas y asignadas:
+  - Reorganización del flujo (Alejandra)
+  - Solicitar data de los 200 productos
+  - Implementar UI kit / manual de estilos enviado por el equipo
+- Sprint configurado: estimado de 1 semana y 7 horas (aprox. 3 días)
+- Varias tareas estaban en “en curso” por error de Santiago; corregido en la reunión
+
+# Reunión Expo Winners y Próximos Pasos
+
+- Alejandra preguntó si debe asistir a la reunión de Expo Winners (martes y viernes)
+  - Santiago: no es fundamental; le pasará el resumen de Granola con foco en diseño
+- Alejandra se concentrará full en Expo Winners esta semana; quiere tenerlo listo antes del evento
+  - Evento: sábado 8 (12 de septiembre)
+  - Prueba de usabilidad: se pospone a la semana siguiente, lunes 8 de septiembre
+- Equipo de tienda (José) enfocado en corrección de errores esta semana, sin entregas esperadas
+
+# Próximos Pasos
+
+- **Compartir diseño de Gali en reunión de la tarde** (Santiago)
+
+  Incluir logo motion, texturas e integración con disparador de ventas antes de mostrar.
+- **Ajustar flujo para productos fuera del catálogo de 200** (Alejandra)
+
+  Definir qué sucede cuando el usuario selecciona un producto no disponible en el catálogo.
+- **Solicitar data de los 200 productos**
+
+  Necesaria para que Alejandra pueda validar y ajustar los flujos de selección de producto.
+- **Pasar resumen de Expo Winners con foco en diseño a Alejandra** (Santiago)
+
+  Usar resumen de Granola para que Alejandra no tenga que asistir a las reuniones del martes y viernes.
+- **Agendar prueba de usabilidad para el lunes 7 de septiembre**
+
+  El viernes no alcanza; se pospone a la semana siguiente antes del evento del sábado 12.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/9c769ab3-cea2-452b-80f9-d16caedaf794](https://notes.granola.ai/t/9c769ab3-cea2-452b-80f9-d16caedaf794)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[14:04] Yo:** Hola, Leja, ¿cómo estás?
+- **[14:04] Yo:** ¿Oyes?
+- **[14:05] Alejandra Melo:** Hola,
+- **[14:05] Alejandra Melo:** Hola, Santi, ¿ahí me escuchas?
+- **[14:05] Yo:** Sí, allí te escucho. ¿Cómo estás?
+- **[14:05] Alejandra Melo:** Bien, bien, ¿y tú cómo estás?
+- **[14:05] Yo:** Bien, bien.
+- **[14:05] Yo:** Todavía con
+- **[14:05] Yo:** síntoma agresivo, pero nada, que me arranque el equipo.
+- **[14:05] Yo:** ¿Qué tal el finde?
+- **[14:05] Alejandra Melo:** Bien, bien.
+- **[14:05] Alejandra Melo:** Lo último fin de semana de vacaciones de Sofía, entonces.
+- **[14:05] Alejandra Melo:** Estuvimos con ella.
+- **[14:06] Alejandra Melo:** Jugando.
+- **[14:06] Alejandra Melo:** Y un poquito.
+- **[14:06] Yo:** Qué grado está allá?
+- **[14:06] Alejandra Melo:** Está en transición.
+- **[14:06] Alejandra Melo:** O sea, pasó a transition.
+- **[14:06] Yo:** Ok,
+- **[14:06] Alejandra Melo:** Ya entra mañana a estudiar.
+- **[14:06] Yo:** Y es, yo normalmente voy a contratando a los papás
+- **[14:06] Yo:** vuelven a a los a los veo que les da re duro y luego son como felices porque ya
+- **[14:06] Yo:** como que
+- **[14:06] Yo:** obviamente, es una
+- **[14:06] Yo:** una
+- **[14:06] Yo:** una tarea superfuerte estarles poniendo atención ahí en la casa durante la semana, ¿no?
+- **[14:06] Alejandra Melo:** Sí,
+- **[14:06] Alejandra Melo:** aunque ya estuvo con la abuelita, pues vieron días en que no me la pudieron tener, entonces, la teníamos acá.
+- **[14:06] Alejandra Melo:** ¿Y y qué? Uy, no, me va a dar duro ahorita que entre
+- **[14:06] Alejandra Melo:** estudiar, porque anda de educadas a las cuatro y media.
+- **[14:06] Yo:** ¿Tiene ruta o qué?
+- **[14:06] Alejandra Melo:** No, pero me toca el Antero, el desayuno, dejarle el almuerzo,
+- **[14:06] Alejandra Melo:** entonces se lo dejo empaco, luego la levanto a ella, la y la
+- **[14:07] Alejandra Melo:** despachamos. La llevamos, pues,
+- **[14:07] Yo:** K. Okay.
+- **[14:07] Alejandra Melo:** aunque el colegio se queda cerquita, como a diez minutos,
+- **[14:07] Alejandra Melo:** pero igual,
+- **[14:07] Yo:** ¿De qué hora entra siete?
+- **[14:07] Alejandra Melo:** a las siete tiene que estar, de seis y cuarenta y cinco a siete tiene que estar allá, ya en el colegio. A siete cierran y ya. Toca entrarla por otra parte. ¿Qué más, Santi?
+- **[14:07] Yo:** Ya
+- **[14:07] Yo:** Bueno, bueno.
+- **[14:07] Yo:** Bien, ahora estoy recorriendo el fin de semana, fui por un estado de maestría.
+- **[14:07] Yo:** Porque
+- **[14:07] Yo:** porque yo estuve en el último semestre, entonces,
+- **[14:07] Yo:** estaba estaba de aquí a hacernos cambios de la tesis,
+- **[14:07] Yo:** entonces, estuve estoy corriendo para hacerle los ajustes,
+- **[14:07] Yo:** porque hoy a las cinco tengo sesión con el con el asesor, sino que uno no los en la maestría se lo asignan.
+- **[14:07] Yo:** Según el tema que estés tratando.
+- **[14:07] Yo:** Entonces, tuve, fui corriendo para ver qué se cambió la CIA, porque, pues,
+- **[14:08] Yo:** pues nada, igual yo ya había pasado como la propuesta, entonces le escribí como por Internet por WhatsApp de
+- **[14:08] Yo:** sí se podía hacer un ajuste, me dijo como que sí, pero tocaba tenerla clara ya para
+- **[14:08] Yo:** la llamada que tenemos hoy en la en la noche.
+- **[14:08] Yo:** Bueno
+- **[14:08] Yo:** Es es una maestría ahí, Cesi, que es de estrategia de negocio digitales.
+- **[14:08] Yo:** Pero a mí me gustaba bastante la investigación,
+- **[14:08] Yo:** Entonces,
+- **[14:08] Yo:** hay una línea de investigación.
+- **[14:08] Yo:** Que son cheveries, que son sobre
+- **[14:08] Yo:** hay unas que son sobre neuroeconomía digital, y otras que son de de interacción humano computadora.
+- **[14:08] Yo:** Y qué, y quería ver si había chance como de meter
+- **[14:09] Yo:** unos temitas ahí como, pues, más para aprovechar también trabajar esos
+- **[14:09] Yo:** temas ya de una forma un poquito más formal,
+- **[14:09] Yo:** porque
+- **[14:09] Yo:** porque, pues, son temas que me, uno, me gustan, y segundo,
+- **[14:09] Yo:** yo entrar a
+- **[14:09] Yo:** a ser mentor de ICECI,
+- **[14:09] Yo:** eso es como un
+- **[14:09] Yo:** voluntariados, uno realmente como
+- **[14:09] Yo:** estar
+- **[14:09] Yo:** está contratado por ese cine ni nada, pero es
+- **[14:09] Yo:** Sí es como para que uno uno se postula
+- **[14:09] Yo:** entonces ellos escogen algunas hojas de vida que les sirven para
+- **[14:09] Yo:** dar mentoría
+- **[14:09] Yo:** a estos centros de investigación, de negocios,
+- **[14:09] Yo:** dar algunas charlas en estudiantes de pregrado, de pregrado o de maestría.
+- **[14:09] Alejandra Melo:** No, a ti te gusta todo eso.
+- **[14:09] Yo:** Es una
+- **[14:09] Yo:** Sí, me gusta
+- **[14:09] Alejandra Melo:** Qué charity.
+- **[14:09] Yo:** desarrollo. Me gusta como el tema de educación,
+- **[14:09] Yo:** pero
+- **[14:09] Yo:** educación e investigación, pero muy muy aplicado.
+- **[14:09] Yo:** O sea, ya, si no, si si no, si
+- **[14:10] Yo:** llevándolo como a temas ya más formales y como tan protocolarios,
+- **[14:10] Yo:** y
+- **[14:10] Yo:** y densos teóricos, ya se me hace harto.
+- **[14:10] Yo:** Me pierdo y se me aburre.
+- **[14:10] Yo:** Tengo que ver... De hecho, esta es la
+- **[14:10] Yo:** es como que encuentro un tema como que me gusta investigar mucho,
+- **[14:10] Yo:** porque realmente siento, o sea, se puede aplicar. Entonces, por ejemplo,
+- **[14:10] Yo:** hice si tiene unos unos laboratorios de
+- **[14:10] Yo:** de experiencia de usuario,
+- **[14:10] Yo:** tiene otros laboratorios de
+- **[14:10] Yo:** de neuro neurociencia para hacer como
+- **[14:10] Yo:** mapeo de
+- **[14:10] Yo:** de del comportamiento de los ojos mientras ve una pantalla.
+- **[14:10] Yo:** Y
+- **[14:10] Yo:** y de impulsos como cerebrales al tener estímulos.
+- **[14:10] Yo:** Como que no puede conectar eso entre
+- **[14:10] Yo:** lo mismo, entre lo que uno le da como producto y el impacto que realmente está generando.
+- **[14:10] Yo:** Sin ni siquiera preguntarle al usuario nada, o sea, no está haciéndote a
+- **[14:10] Yo:** a la capa donde el usuario puede mentirte.
+- **[14:11] Yo:** Entonces, realmente estás viendo el estímulo que se genera en una primera impresión,
+- **[14:11] Yo:** Entonces, todo ese problema me gustó, pero lo que te digo,
+- **[14:11] Yo:** tiene que ser muy aplicado, si no, no lo encuentra como en sentido. Cuando uno se pone como
+- **[14:11] Yo:** ya le meten temas ya demasiado
+- **[14:11] Yo:** salidos de la realidad o que no se pueden aplicar fácilmente sobre algo, es como que
+- **[14:11] Alejandra Melo:** Ya no te gusta. Bueno, claro.
+- **[14:11] Yo:** me pierdo.
+- **[14:11] Yo:** Sí,
+- **[14:11] Yo:** O cuando me, alguien habla, pero no tiene ni idea de cómo funciona
+- **[14:11] Yo:** hacer un producto, por ejemplo,
+- **[14:11] Yo:** y no sé, pues, cada quien tiene su rol, su tema, su su línea de de
+- **[14:11] Yo:** línea profesional,
+- **[14:11] Yo:** pero
+- **[14:11] Yo:** pero sí, cuando ellos se ponen como solos superteóricos y
+- **[14:11] Yo:** pero nunca entran a comprar nada, no me gusta, pero pero esta línea
+- **[14:11] Yo:** me hace muy chores, porque sí lo hacen.
+- **[14:11] Yo:** Es como superinterdisciplinar, porque
+- **[14:11] Yo:** suelen estar, pues, al día la la gente de de ciencias de la
+- **[14:11] Yo:** ingenieros de sistemas,
+- **[14:11] Yo:** psicólogos, diseñadores,
+- **[14:12] Yo:** de todo.
+- **[14:12] Yo:** Eso es más
+- **[14:12] Yo:** y y y siempre se, hay hay una entregable
+- **[14:12] Yo:** o se hace un producto
+- **[14:12] Yo:** o hay un estudio base para que se construya un producto, o sea, ese es como el
+- **[14:12] Yo:** de alguna forma, pues, más académico, ¿no?, pero ese es el discovery para que se productos, o sea, este deja la
+- **[14:12] Yo:** esa teoría hecha para que luego no te toque ir a ir a
+- **[14:12] Yo:** evidenciar
+- **[14:12] Yo:** que si si eso ayuda o una ayuda. Eso no se
+- **[14:12] Yo:** voy a ver cómo cómo sale esa partecita, a ver si
+- **[14:12] Yo:** si funciona bien. Pero sí, estuve como todo el fin de semana trabajando el día de eso,
+- **[14:12] Alejandra Melo:** ¿Cuándo la tenés que presentar?
+- **[14:12] Yo:** y ya,
+- **[14:12] Yo:** Dime.
+- **[14:12] Alejandra Melo:** ¿Cuándo la tienes que presentar?
+- **[14:12] Yo:** El trabajo de grado lo presento en el
+- **[14:12] Yo:** de diciembre, pero
+- **[14:12] Yo:** todo este semestre,
+- **[14:12] Yo:** todo lo que queda, pues ya no busques a tanto, toca irla trabajando
+- **[14:12] Yo:** en las
+- **[14:12] Yo:** en los diferentes
+- **[14:13] Yo:** las diferentes partes del documento, sino que la maestra, igual, está muy enfocada más hacia
+- **[14:13] Yo:** hacia hacia negocio, hacia hacia a la aplicabilidad,
+- **[14:13] Yo:** el objetivo, realmente, del trabajo de grado,
+- **[14:13] Yo:** es entregar un MVP o una
+- **[14:13] Yo:** de negocio que resuelva un problema corporativo.
+- **[14:13] Alejandra Melo:** Ja,
+- **[14:13] Yo:** Entonces, yo lo, obviamente, planteo desde
+- **[14:13] Yo:** yo había trabajado hace unos meses antes de therapy, en
+- **[14:13] Yo:** solución de, es una era una plataforma que tenía unos agentes para
+- **[14:13] Yo:** equipos legales,
+- **[14:13] Yo:** y lo que hacían era como automatizar todos esos cuellos de botella,
+- **[14:13] Yo:** y gestionar todos los PQRs, analizarlos, clasificarlos, jurisprudencia,
+- **[14:13] Yo:** y dejarlos todo listo para que el abogado solo entrar y y con un clic aprobará, y del otro
+- **[14:13] Yo:** lado el
+- **[14:13] Yo:** el reclamante.
+- **[14:13] Yo:** Viera como la interfaz y viera el progreso del
+- **[14:13] Yo:** una justificación más clara, no solamente si sí o si no, sino que tuviera la estructura completa.
+- **[14:13] Yo:** Pero eso
+- **[14:14] Yo:** no no no son altos, digo, lo estoy tomando para la forma de este día.
+- **[14:14] Yo:** Que estuviera más avanzado,
+- **[14:14] Yo:** y lo que estoy haciendo ahora es que
+- **[14:14] Yo:** le quiero meter la parte más de investigación de de
+- **[14:14] Yo:** lo que te conteo la academia,
+- **[14:14] Yo:** es
+- **[14:14] Yo:** tratar de hacer como un poco un un una un híbrido ahí,
+- **[14:14] Yo:** entre que la la el producto
+- **[14:14] Yo:** sea el instrumento para la investigación.
+- **[14:14] Yo:** Entonces, la investigación
+- **[14:14] Yo:** realmente, va a estar hacia
+- **[14:14] Yo:** se me cerró esta ventana aquí, va.
+- **[14:14] Yo:** Key
+- **[14:14] Yo:** Entonces, ¿qué?
+- **[14:14] Yo:** Entonces, el
+- **[14:15] Yo:** Listo, ya. Perdón, aquí estoy aquí tratando
+- **[14:15] Yo:** igual buscando el el el
+- **[14:15] Yo:** Te decía que... No, el el
+- **[14:15] Yo:** si le des a hacer un híbrido,
+- **[14:15] Yo:** entre lo que ella tenía como solución de, bueno,
+- **[14:15] Alejandra Melo:** Mhmm.
+- **[14:15] Yo:** un producto que soluciona tal problema,
+- **[14:15] Yo:** hacia
+- **[14:16] Yo:** hacia una pregunta más más amp,
+- **[14:16] Yo:** más amplia para meter la investigación, que es cómo afecta
+- **[14:16] Yo:** el nivel de autonomía de los agentes de inteligencia artificial la confianza, percepción de control y disposición a que los usuarios deleguen
+- **[14:16] Yo:** decisiones en productos digitales.
+- **[14:16] Yo:** Entonces, ahí ya le meto como la parte más cognitiva,
+- **[14:16] Yo:** y de aceptación de de de de una herramienta que
+- **[14:16] Yo:** o sea, el el problema identificada es que
+- **[14:16] Yo:** ese tipo de soluciones generan fricción en los nuevos usuarios porque
+- **[14:16] Yo:** claramente tiene la concepción de que van a ser reemplazados.
+- **[14:16] Yo:** ¿Sí?, porque son más fácilmente desechables por una empresa.
+- **[14:16] Alejandra Melo:** Sí.
+- **[14:16] Yo:** Entonces,
+- **[14:16] Yo:** eso es que
+- **[14:16] Yo:** entre mayor autonomía, la hipótesis es que
+- **[14:16] Yo:** aumenta la confianza
+- **[14:16] Yo:** en la toma de decisiones,
+- **[14:16] Yo:** aumenta la percepción del control
+- **[14:16] Yo:** sobre lo que, perdón, se reduce la percepción de control sobre lo
+- **[14:17] Yo:** hay en la empresa, porque ya dejas de estar entrando, me metí en la minucia.
+- **[14:17] Yo:** Y los usuarios
+- **[14:17] Yo:** tienen esa
+- **[14:17] Yo:** disyuntiva, esa esa ese gran conflicto entre si delegar o no.
+- **[14:17] Yo:** Porque saben que lo está haciendo bien,
+- **[14:17] Yo:** pero están perdiendo el control.
+- **[14:17] Yo:** Y eso, por debajo, tiene varios estudios de
+- **[14:17] Yo:** cómo
+- **[14:17] Yo:** ya está demostrado que, para algunos escenarios, igual son varios
+- **[14:17] Yo:** entre más inteligente se vuelve la herramienta de IA,
+- **[14:17] Yo:** más estúpida se vuelve el humano.
+- **[14:17] Yo:** Porque
+- **[14:17] Yo:** pasa de que ella también está
+- **[14:17] Yo:** demostrado en varios papers que
+- **[14:17] Yo:** por ejemplo, para hacer búsquedas, generar contenido
+- **[14:17] Yo:** dar respuestas, lo que sea.
+- **[14:17] Yo:** Por ejemplo,
+- **[14:17] Yo:** se aumenta, usan, sin usaría, tienes como la la el punto de partida, ¿no?
+- **[14:17] Yo:** Pero cuando la empiezas a incorporar,
+- **[14:17] Yo:** aumentar tu productividad en un veinte por ciento.
+- **[14:17] Yo:** Si está ahí, pues chévere, ¿cierto?
+- **[14:18] Yo:** Pero cuando la dejas de usar,
+- **[14:18] Yo:** reduces tu productividad casi en la
+- **[14:18] Yo:** proporción en la que lo aumentaste respecto al inicio.
+- **[14:18] Yo:** Es decir, tú, supón que estabas en un
+- **[14:18] Yo:** si te, yo pudiera calificar, como en en Alejandra,
+- **[14:18] Yo:** ella
+- **[14:18] Yo:** la calidad de escritura, la rapidez, la actividad, todo el
+- **[14:18] Yo:** de escritura de Alejandra es ochenta.
+- **[14:18] Yo:** Con IA llega a noventa y cinco.
+- **[14:18] Yo:** Pero después de que utilizó IA durante un par de meses, si le quitó la IA,
+- **[14:18] Yo:** la escritura se rebaja al sesenta.
+- **[14:18] Yo:** Porque ya
+- **[14:18] Alejandra Melo:** Sí, por la costumbre.
+- **[14:18] Yo:** claro, delegó y se y mentalmente se volvió presosa.
+- **[14:18] Yo:** Eso replicarlo a muchísimas personas. Entonces, era, pues, un parte también de
+- **[14:18] Yo:** que
+- **[14:18] Yo:** el el cómo lograr que
+- **[14:18] Yo:** el humano
+- **[14:18] Yo:** mejore mejore
+- **[14:18] Yo:** en su trabajo, sin al mismo tiempo volverse pendejo.
+- **[14:18] Yo:** Es eso.
+- **[14:18] Yo:** Y eso es lo que quiero meter, pero, pues, me toca, lo tengo que meter como muy muy
+- **[14:19] Yo:** muy bien justificado porque, pues, como el propósito de la maestría no es
+- **[14:19] Yo:** tan de investigación, sino más de propuesta de valor para
+- **[14:19] Yo:** para corporativos o para lo que sea.
+- **[14:19] Yo:** Sí, eso eso eso pasa, es que toca tener como un muy buen balance para que
+- **[14:19] Yo:** no la no la vayan a rechazar.
+- **[14:19] Alejandra Melo:** Ojalá no.
+- **[14:19] Yo:** Bueno,
+- **[14:19] Yo:** extendí el resto
+- **[14:19] Alejandra Melo:** No, igual tú eres un
+- **[14:19] Yo:** Sí, me han dicho.
+- **[14:19] Alejandra Melo:** un ñoño.
+- **[14:19] Alejandra Melo:** Entonces,
+- **[14:19] Yo:** O luego luego luego uno comienza a investigar, Parceli, y dice, no, no, sabes un culo.
+- **[14:19] Yo:** O hay gente demasiado sollada, brillante, que es como...
+- **[14:19] Yo:** Uno se siente un simple
+- **[14:19] Yo:** Me siento, leo esas cosas y me siento como como si estuviera en primaria, como,
+- **[14:19] Alejandra Melo:** Yo solo
+- **[14:19] Alejandra Melo:** Yo solamente digo una cosa, a mí me gusta el dinero.
+- **[14:19] Alejandra Melo:** Porque con el dinero se pueden hacer demasiadas cosas y si tú me pones
+- **[14:19] Alejandra Melo:** me dices, haz este curso en YouTube y con este curso en
+- **[14:20] Alejandra Melo:** le puedes hacer y tú puedes empezar a ganar tus primeros diez millones y
+- **[14:20] Alejandra Melo:** y eso, y luego veinte, y gente que no no ha hecho ni maestrías ni nada de eso.
+- **[14:20] Alejandra Melo:** No, yo quiero hacerle hacer dinero.
+- **[14:20] Yo:** Cien por ciento, eso.
+- **[14:20] Yo:** cien por ciento, y eso y eso es y eso es
+- **[14:20] Yo:** a mí eso se me hace demasiado
+- **[14:20] Yo:** demasiado top.
+- **[14:20] Yo:** Digo, no hay nada más
+- **[14:20] Yo:** admirable
+- **[14:20] Yo:** que una persona que
+- **[14:20] Yo:** que entienda eso de forma rápida,
+- **[14:20] Yo:** porque hay mucha gente que lo va lo lo va entendiendo con con los años,
+- **[14:20] Alejandra Melo:** Mhmm.
+- **[14:20] Yo:** pero
+- **[14:20] Yo:** pero es que, por lo menos ahora,
+- **[14:20] Yo:** ya no se necesita
+- **[14:20] Yo:** tener ni siquiera la primaria.
+- **[14:20] Yo:** Sea,
+- **[14:20] Yo:** alguien, hay muchas formas, desde cosas digitales, hoy hoy van a
+- **[14:20] Yo:** facilitan que uno
+- **[14:20] Yo:** pueda hacer, por ejemplo, plata digital, que sepas manejar un computador, que sepas de
+- **[14:20] Yo:** de muchas cosas,
+- **[14:20] Yo:** Facilita, pero
+- **[14:20] Yo:** pero la gente que hace plata y que y que tiene ese espíritu de
+- **[14:21] Yo:** de o hacer negocio o ni siquiera montar un negocio como
+- **[14:21] Yo:** sino
+- **[14:21] Yo:** saber en qué parte del modelo de negocio se mete para sacar plata? Demasiado sea, pero eso yo creo que es un skill muy particular. O sea, yo, por ejemplo, no tengo eso, a mí me gusta a mí me gusta idear, me gusta montar, pero ya en el en la operación del negocio,
+- **[14:21] Yo:** no, no, como que no me siento no me siento como estado, pero no me siento
+- **[14:21] Yo:** tan cómodo como me siento yendo más a la investigación,
+- **[14:21] Yo:** Y
+- **[14:21] Yo:** y como que no sé, es
+- **[14:21] Yo:** no no no no no encuentro esa parte de
+- **[14:21] Yo:** No sé si tenga que ver con con con
+- **[14:21] Yo:** que de pronto me me disfruto demasiado de lo que hago,
+- **[14:21] Yo:** o sea,
+- **[14:21] Yo:** profesionalmente, yo me siento cien por ciento realizado,
+- **[14:21] Alejandra Melo:** Mhmm.
+- **[14:21] Yo:** que me encanta lo que hago,
+- **[14:22] Yo:** si alguien que le, por ejemplo, tu caso,
+- **[14:22] Yo:** obviamente, no sé si tú amas así supermuchísimo lo que haces,
+- **[14:22] Yo:** pero
+- **[14:22] Yo:** pero en mi caso, que me gusta tanto lo que hago, es como que
+- **[14:22] Yo:** encuentro ese balance entre que sé que podría sacarle más provecho
+- **[14:22] Yo:** en en, por ejemplo, todo ese tiempo que me dedico, vamos a investigar, a leer, a hacer.
+- **[14:22] Yo:** A por el ñoño,
+- **[14:22] Yo:** hacer plata,
+- **[14:22] Yo:** Pero
+- **[14:22] Yo:** el asunto
+- **[14:22] Yo:** que, claro, ahí lo empezó allá como un trabajo adicional,
+- **[14:22] Yo:** y
+- **[14:22] Yo:** y siento que, entonces, ya en la mi casa no tiene de
+- **[14:22] Yo:** descanso.
+- **[14:22] Yo:** Mientras que
+- **[14:22] Yo:** aunque termina siendo una forma de trabajo, investigar, leer, escribir, no sé qué,
+- **[14:22] Yo:** Me gusta tanto que
+- **[14:22] Yo:** que lo siento cómodo, o sea, yo podría hacer esto gratis,
+- **[14:22] Yo:** pero yo siempre, eso se le hacía, reclamaría en la entrevista.
+- **[14:22] Alejandra Melo:** Pero tienes que comer.
+- **[14:22] Yo:** No, yo podría hacerlo gratis, pero digo,
+- **[14:23] Yo:** afortunadamente, lo que hago lo pagan bien.
+- **[14:23] Yo:** ¿Entiendes? O sea, afortunadamente, di con una
+- **[14:23] Yo:** una profesión en que la pagan bien,
+- **[14:23] Yo:** y el, por lo menos para PMS, el
+- **[14:23] Yo:** ochenta por ciento de la agenda del día, esas reuniones están hablando.
+- **[14:23] Yo:** Y eso también mucho el el arte de saber
+- **[14:23] Alejandra Melo:** Sí.
+- **[14:23] Yo:** de de saber hablar mierda, o sea,
+- **[14:23] Yo:** Y eso que es muy enfocado a investigación, a research,
+- **[14:23] Yo:** a discovery, a prototipo,
+- **[14:23] Yo:** como que esa parte que
+- **[14:23] Yo:** imaginen y resuélvanlo y genial.
+- **[14:23] Yo:** Pero otros equipos de producto no son eso, o sea, los, normalmente, los equipos de productos
+- **[14:23] Yo:** ya ahora ahora estaba en otros,
+- **[14:23] Yo:** Bueno, desde diseño, de pronto, no les toca, no no no toca estar tan de frente a
+- **[14:23] Yo:** al al
+- **[14:23] Yo:** los tomatazos.
+- **[14:23] Yo:** De
+- **[14:23] Yo:** de de la operación, ¿no?, de que falló, de que no se resuelve,
+- **[14:23] Yo:** estar lidiando ya directamente con el delivery de desarrollo,
+- **[14:23] Yo:** se llega hasta la entrega de haga esto, pero
+- **[14:24] Yo:** no que el Buk no se resolvió
+- **[14:24] Alejandra Melo:** Mhmm.
+- **[14:24] Yo:** que el rollback y esas cosas?
+- **[14:24] Yo:** En otro tipo de productos, sí sí me ha pasado. De hecho,
+- **[14:24] Yo:** en la mayoría,
+- **[14:24] Yo:** Y, pues, eso hace que cambié, o sea, como
+- **[14:24] Yo:** como que igual lo lo lo lo lo volvió frustrante en algún punto,
+- **[14:24] Yo:** como que siente que tiene tiene y no tiene el control, o, por lo menos, centropión sabe que simplemente uno no
+- **[14:24] Yo:** responde por desarrollo, cuando le toca estar distanciándolo y ya.
+- **[14:24] Yo:** Y y ahí sí que se se hace cierto que, no hay caso, me pagan por alguien que
+- **[14:24] Yo:** o sea, eso de y montar la aplicación, y aquí y acá, monto un experimento.
+- **[14:24] Yo:** Lo hago gratis, pero, afortunadamente,
+- **[14:24] Yo:** lo puedo cobrar lo puedo cobrar
+- **[14:24] Yo:** Y ahí es donde como que lo cobro, no no, pues, se paga bien,
+- **[14:24] Yo:** Y eso, ¿qué me? Porque está en Colombia y, pues, bendito tercer mundo, pero
+- **[14:24] Yo:** uno sabe que si tuviera chance de irse a otro país, esto se lo pagarían
+- **[14:24] Yo:** una vaina loquísima.
+- **[14:25] Yo:** Pagarían
+- **[14:25] Yo:** ridículamente bien,
+- **[14:25] Yo:** pero igual, aunque la hubiese pagado ya. Como que eso hace que
+- **[14:25] Yo:** como que a veces, pues yo quise emprender iniciando año,
+- **[14:25] Alejandra Melo:** Mhmm.
+- **[14:25] Yo:** montando lo lo que te decía la aplicación de la la la la de agentes,
+- **[14:25] Yo:** Yo alcancé a decir unos eventos,
+- **[14:25] Yo:** tuve algunos pilotos, por ejemplo, ahí está algunas cajas de compensación por el subsidio,
+- **[14:25] Yo:** pero eso me absorbió por completo.
+- **[14:25] Yo:** Eso me absorbió por completo, o no tenía fines de semana, no tenía
+- **[14:25] Yo:** Y ya ese nivel de, si esto no sale, no hago plata,
+- **[14:25] Yo:** me consumió de ahí donde dije, no, vuelvo a buscar.
+- **[14:25] Yo:** O sea, vuelvo a a ubicarme como empleado porque hacer producto es más fácil cuando queda más plata ajena.
+- **[14:25] Yo:** Entonces, es cuando, pues sí,
+- **[14:25] Yo:** te financian estar viendo a ver si funciona y probando y pronto
+- **[14:25] Yo:** sabes que tu plata te llega.
+- **[14:25] Yo:** Pero pero ahí ya es donde, por ejemplo, es como que si tomas lo que tú decías, si tomas este curso,
+- **[14:25] Yo:** y sacas diez palos,
+- **[14:25] Yo:** no sé, yo, o sea, yo no, ese impulso yo no lo tengo,
+- **[14:26] Yo:** pero es porque
+- **[14:26] Yo:** no sé si es porque me disperso demasiado rápido,
+- **[14:26] Yo:** o porque
+- **[14:26] Yo:** tengo que entender
+- **[14:26] Yo:** normalmente, siento que tengo que entender muy bien un tema,
+- **[14:26] Yo:** poderme meter, si no desconfío.
+- **[14:26] Yo:** So,
+- **[14:26] Yo:** Usuario desconfiado.
+- **[14:26] Yo:** No porque sienta que me van a tumbar, no porque, nada de eso,
+- **[14:26] Yo:** sino porque
+- **[14:26] Yo:** me siento incómodo, me gusta manejar el tema.
+- **[14:26] Yo:** Gusta manejarlo bien.
+- **[14:26] Yo:** Y, si no, esa, que me digas que tengo que una curva de aprendizaje,
+- **[14:26] Yo:** pues para todo lo hay.
+- **[14:26] Yo:** Me me no no se me me echo atrás porque digo,
+- **[14:26] Yo:** sé ya sé muy bien algo, ya sé muy bien otros temas.
+- **[14:26] Yo:** Entonces, ¿como qué?
+- **[14:26] Alejandra Melo:** Okay.
+- **[14:26] Yo:** Pero
+- **[14:26] Yo:** literal, o sea, pero mira que son son puntos de vista, es como
+- **[14:26] Yo:** Y y prefiero es saber
+- **[14:26] Yo:** por temas que sé que me pueden pagar bien,
+- **[14:26] Yo:** seguirme enfocando por ese lado, sino que no es tan inmediato.
+- **[14:27] Yo:** Entonces, por ejemplo, no sé,
+- **[14:27] Yo:** que me pudiera dar el campo y empezar a dar
+- **[14:27] Yo:** algunas clases en en las noches de maestría, hacer investigación, y que por eso me pasen por los lados. Ah, como como ingreso adicional, como es algo que podría ser gratis, porque me lo disfruto tanto, como que sigo por ese lado, ¿sí me entendés? Pero no me toca arrancar en algo diferente, o sea, no me toca, aprende a no sé, manejar las ads de Google y
+- **[14:27] Alejandra Melo:** Sí.
+- **[14:27] Yo:** yo sé cómo funciona, pues trabajo en esto.
+- **[14:27] Yo:** Pero en el detalle de ir a la configuración, seteo aquí, seteo acá, tata tata,
+- **[14:27] Yo:** O sea, yo ser el usuario que lo usa, no, o sea,
+- **[14:27] Yo:** yo quiero estar del lado que lo diseña.
+- **[14:27] Yo:** Y y y
+- **[14:27] Yo:** pero, pues, no digo que no, si aprendo lo del lo del dropshipping, pues, aparte de porque toca aprender para hacerlo bien,
+- **[14:27] Alejandra Melo:** Mhmm.
+- **[14:27] Yo:** digo, de una gran forma
+- **[14:27] Alejandra Melo:** Okay.
+- **[14:27] Yo:** no no sé ustedes, que también les vaya, pero
+- **[14:27] Yo:** pero como ingreso de muchas personas, como un nuevo ingreso
+- **[14:28] Yo:** para empezar a migrar de lo que hacen convencionalmente,
+- **[14:28] Yo:** y generamos plata, pues genial.
+- **[14:28] Yo:** Ahora, pues, también eso seguramente irá cambiando con el tiempo.
+- **[14:28] Yo:** No sé.
+- **[14:28] Yo:** Puede también depender
+- **[14:28] Yo:** cuando, en el punto cuando está buscando trabajo,
+- **[14:28] Yo:** este,
+- **[14:28] Yo:** cuando dejé lo del emprendimiento este,
+- **[14:28] Yo:** buscar trabajo, dije, mientras busco, hasta Uber me meto
+- **[14:28] Yo:** O sea, ya son son, esas son también, de esto, es cuestión de contexto, tampoco es como tan...
+- **[14:28] Yo:** Nunca hago nada que no sea lo que me gusta, pues, tampoco.
+- **[14:28] Alejandra Melo:** Focus. Okay.
+- **[14:28] Yo:** ¿Ah?
+- **[14:28] Alejandra Melo:** Que tampoco está allá.
+- **[14:28] Yo:** Sí, no, pues, tampoco es como
+- **[14:28] Yo:** tan caprichosa. Si toca hacer lo que sea, lo hago.
+- **[14:28] Yo:** Pero pero si me pueden pagar por lo que me disfruto.
+- **[14:28] Yo:** En Cali,
+- **[14:28] Yo:** pues eso, entonces, aquí los salarios son un poquito más bajos que en Bogotá.
+- **[14:29] Yo:** Pero pero es lo mismo, o sea, ahí ya, ahí es como que
+- **[14:29] Yo:** es la forma que uno lo empiece a ver,
+- **[14:29] Yo:** Pero en Bogotá, yo, Bogotá gana un poquito más.
+- **[14:29] Yo:** Pero pero el nivel de
+- **[14:29] Yo:** tres, no del trabajo, que también,
+- **[14:29] Yo:** sino de la ciudad,
+- **[14:29] Yo:** dejar todo.
+- **[14:29] Yo:** Digo, un poquito menos, pero es que al final es tema de también cuánto gastas acá, que también es mucho más barato.
+- **[14:29] Yo:** Y...
+- **[14:29] Yo:** Y como que algunas cosas tranquilas de paz,
+- **[14:29] Yo:** pues no no tienen presupuesto. Yo creo que, creo que la otra vez decía, no, es cuando comparas
+- **[14:29] Yo:** Kelly con Palmira, Ahí Palmira es mucho más tranquilo.
+- **[14:29] Alejandra Melo:** Claro, suena bien.
+- **[14:29] Yo:** Ajá.
+- **[14:29] Yo:** Yo viví toda la vida en Calaisa los
+- **[14:29] Yo:** veintitrés.
+- **[14:29] Yo:** Yo la tengo veintisiete, voy a cumplir la veintiocho. Yo estuve cuatro años por
+- **[14:29] Yo:** en Bogotá,
+- **[14:29] Yo:** y
+- **[14:30] Yo:** y volví a Cali, y fue como que, ay, no sé si ella.
+- **[14:30] Yo:** Siento que se refleja todo. O sea, me siento de vacaciones permanentes,
+- **[14:30] Alejandra Melo:** Sí, Bogotá, Bogotá es tres a
+- **[14:30] Alejandra Melo:** Bogotá es una cosa seria.
+- **[14:30] Yo:** tiene que tenerla muy clara, muy clara lo que a lo que va a Bogotá.
+- **[14:30] Yo:** O sea, ciento Dejo
+- **[14:30] Alejandra Melo:** Exacto.
+- **[14:30] Alejandra Melo:** ¿Cada cumpleaños, Santi?
+- **[14:30] Yo:** el veintiséis de noviembre.
+- **[14:30] Yo:** Veintiséis de noviembre, veintiocho
+- **[14:30] Alejandra Melo:** Veintiocho años.
+- **[14:30] Yo:** Sí, ve que ya pasó por la crisis de los veinte, cuando no tenía ni idea qué iba a hacer.
+- **[14:30] Alejandra Melo:** Pues
+- **[14:30] Yo:** Hasta ahí no me ha vuelto a dar más crisis, no me ha vuelto dar más crisis.
+- **[14:30] Yo:** No sé si a los treinta van a hallar crisis.
+- **[14:30] Alejandra Melo:** No, a los hombres les da como a los cuarenta.
+- **[14:30] Yo:** Ah, no, me me dio una mini crisis a los veinticinco,
+- **[14:30] Yo:** cuando no, pero no fue tan dura, pero era una crisis como de que no sabía
+- **[14:31] Yo:** una crisis más como como como
+- **[14:31] Yo:** como
+- **[14:31] Yo:** cálmica, porque no sabía si iba a poder arrancar o si debía hacer una maestría o si... La verdad, esta maestría, o sea, perfectamente, de hecho, en muchas partes, algunas clases me las o sea, me meto, pero en la asignoro por completo, porque son cosas que hablo todo el día, o sea, muchas son de hacer producto, que sí, podría entrar y participar, vale, vale, bueno, sea, realmente yo estoy allá a ver el cartón. Es como si te metieras en una maestría de diseño. ¿Qué qué tanto te pueden enseñar realmente? Dice, Sí, ¿no?, y, pues, son cosas que todo el día hablé de producto, me llegas en la noche
+- **[14:31] Alejandra Melo:** No te haré de relleno.
+- **[14:31] Yo:** hablar otro ratico, me dices, producto no tienes es cuando, o sea, pues,
+- **[14:31] Yo:** y es virtual, o sea, dices, pero virtual.
+- **[14:31] Yo:** Entonces,
+- **[14:31] Yo:** aprovecho hacer cualquier otra cosa para investigar o adelantar
+- **[14:32] Yo:** cosas de otra vez, desde otra de las materias.
+- **[14:32] Yo:** Pero tenía esa esa duda, y es como,
+- **[14:32] Yo:** sé que me va a servir,
+- **[14:32] Yo:** para en algún momento
+- **[14:32] Yo:** Es útil para para también escalar profesionalmente.
+- **[14:32] Yo:** Es más simple.
+- **[14:32] Yo:** Entonces, fue como que por eso me metí y, ay,
+- **[14:32] Yo:** Mejor tenerla, aparte,
+- **[14:32] Yo:** tuve unas unos beneficios de financiación por la empresa donde está mi papá, dije, ay,
+- **[14:32] Yo:** sea, realmente,
+- **[14:32] Yo:** una, aparte es maestría con especialización, salió, pues, buen precio, o sea, maestría más
+- **[14:32] Yo:** especialización en business analytics.
+- **[14:32] Yo:** Salió como en
+- **[14:32] Yo:** treinta millones las dos cosas, o sea, salió, para una maestría en y sesión con especialización salió bien.
+- **[14:32] Yo:** Pues, bueno, bien, pero igual,
+- **[14:32] Yo:** mí fue diferente, porque yo toda mi educación había sido pública.
+- **[14:32] Yo:** Sí, estudiante
+- **[14:32] Yo:** egresé al colegio público, educación de Univalle también, pero
+- **[14:32] Yo:** fue raro pagar por educación, pero
+- **[14:32] Yo:** uno sabe qué... Ajá, aquí ver, bueno.
+- **[14:33] Yo:** ¿Qué te iba a decir? Bueno,
+- **[14:33] Yo:** esta vuelta. Yo puse una en la, no sé si
+- **[14:33] Yo:** no sé si es porque es la misma de... Ay, Madrid se me fue.
+- **[14:33] Yo:** Te envié una invitación para las
+- **[14:33] Yo:** para que en la tarde diera un diseño de Gali, pero
+- **[14:33] Yo:** quedó rechazada. Ah, ¿estás fuera de la oficina? ¿Necesitas que la
+- **[14:33] Yo:** la movamos?
+- **[14:33] Participante:** Cuando... Ah, no.
+- **[14:33] Yo:** Está bien a las dos.
+- **[14:33] Participante:** No, no.
+- **[14:33] Participante:** Sí, ahí ya te la acepté.
+- **[14:33] Yo:** Ahora, listo.
+- **[14:33] Yo:** Listo. Entonces,
+- **[14:33] Yo:** que revisemos bien los diseños, yo
+- **[14:33] Yo:** alcancé a trabajarle, pero no está terminada la partecita que te di, como el marketplace.
+- **[14:33] Yo:** Del el ecommerce, ¿me entiendes eso?
+- **[14:33] Participante:** ¿Tienes ahí para mostrarla?
+- **[14:34] Yo:** Espérame un segundo, estoy viendo el
+- **[14:34] Yo:** Sí, necesitan unas aprobación de
+- **[14:34] Yo:** queremos saber si aquí están todos o llegamos a gestionar. Tenemos ya tratamiento de datos.
+- **[14:34] Yo:** No creo. Seguridad, entiendo que ya hicieron la
+- **[14:34] Yo:** con Diana Sierra. Tiene un reporte de
+- **[14:34] Yo:** aprobación.
+- **[14:34] Yo:** Capacidad discal,
+- **[14:34] Yo:** que revisáramos eso.
+- **[14:34] Yo:** Me llegó a llegar su pregunta.
+- **[14:34] Yo:** No, yo te lo voy mostrar eso porque, o sea, es
+- **[14:34] Yo:** mostrárselo a cualquier persona, pero un diseñador no todavía no podría.
+- **[14:34] Yo:** Lo muestro en la tarde.
+- **[14:34] Yo:** Porque todavía está muy basiquito, porque ahí hice un research,
+- **[14:34] Yo:** pero, bueno, mientras, es que no sé si lo tengo el local, a ver si lo tengo el local.
+- **[14:34] Yo:** Si ya lo subí al local igual.
+- **[14:34] Yo:** Que me lléve media hora hablando mierda,
+- **[14:35] Yo:** que lo rinda. Entonces, tengo tengo yo un un adelanto, Aleja,
+- **[14:35] Yo:** pero voy a, no no le no no tiene todavía son lo de lo que nos compartieron acá
+- **[14:35] Yo:** en recursos,
+- **[14:35] Yo:** Que el ese el
+- **[14:35] Yo:** ¿qué es el logo motion?
+- **[14:35] Yo:** Eso todavía no lo tiene, todavía no tiene las
+- **[14:35] Yo:** todo lo que nos mandaron de texturas.
+- **[14:35] Yo:** Eso todavía no lo tiene, voy a incluirlo.
+- **[14:35] Yo:** Y eso, pues, no todo, ¿no?, porque yo sé que igual hay varias cositas que
+- **[14:35] Yo:** varias cositas.
+- **[14:35] Yo:** Que no hacen parte de la aplicación, sino que son más para
+- **[14:35] Yo:** más para ejemplificar
+- **[14:35] Yo:** ya lo termino porque estoy viendo si logro hacer una integración con un
+- **[14:35] Yo:** disparador de de comunicación. Para cuando se confirmen ventas. Y te lo muestro ahora en la en la en la de la tarde, ¿listo?
+- **[14:36] Yo:** ¿Qué más te iba a decir? Está eso. Bueno, ahora sí,
+- **[14:36] Yo:** yéndonos acá al Jira. Entonces, de esto,
+- **[14:36] Yo:** este, organizar el proyecto, creo que igual ya está, en cuanto en temas de de
+- **[14:36] Yo:** me confirman, ¿no?, de de estrategia, de métricas y demás. O sea, lo menos de de a quién les queremos llegar y eso. O sea, esa parte creo que ya se ya se ya se ejecutó. Ay, madre, a mí me ha dicho a mí me había dicho Jaime, aquí.
+- **[14:36] Yo:** Pusiera estas cosas,
+- **[14:36] Yo:** pero
+- **[14:36] Yo:** Tenemos ya épica de expo bonus, creo que no, ¿cierto?
+- **[14:36] Alejandra Melo:** No.
+- **[14:36] Alejandra Melo:** No sé.
+- **[14:36] Alejandra Melo:** ¿Te han dicho a ti que la crearas?
+- **[14:36] Yo:** Sí, pues, dentro de nuestro espacio, sí, que tuviéramos una etiqueta.
+- **[14:36] Yo:** Eso es experimentación.
+- **[14:37] Yo:** ¿Cierto?
+- **[14:37] Alejandra Melo:** Reuniones.
+- **[14:37] Yo:** Espacio épica.
+- **[14:37] Yo:** Buenos.
+- **[14:38] Yo:** So this is a cup
+- **[14:38] Alejandra Melo:** Ves, Santi, una pregunta. ¿Tú crees que yo deba de estar en esa reunión de expo winners?
+- **[14:38] Alejandra Melo:** Porque yo veo que la única designer ahí soy yo.
+- **[14:38] Alejandra Melo:** Y por lo que veo son solamente los PMs.
+- **[14:38] Yo:** Cuál es?
+- **[14:38] Alejandra Melo:** En la que dice, expublinars, alineemos a las apps.
+- **[14:38] Yo:** Pero cuál, o sea, ¿cuándo tenemos reunión?
+- **[14:38] Alejandra Melo:** Dice, el martes y el viernes.
+- **[14:38] Yo:** Ah, ya lo vi, ya lo vi, ya lo vi, ya lo vi.
+- **[14:38] Alejandra Melo:** No me martes los viernes. ¿O solamente estoy ahí como para que vea los videos?
+- **[14:39] Yo:** Es es para que, es como como estamos haciendo el empalme entre
+- **[14:39] Yo:** la aplicación principal de marketing comercial,
+- **[14:39] Yo:** y Gali, es más para tema de concepto en el diseño.
+- **[14:39] Yo:** Que veas cómo está funcionando lo, de pronto, los flujos,
+- **[14:39] Yo:** si tenemos dudas, si necesitas algún recurso para el diseño,
+- **[14:39] Yo:** o sea, es más para que quede
+- **[14:39] Yo:** como algún un un
+- **[14:39] Yo:** un
+- **[14:39] Yo:** una entrega, no sé si es una entrega, pero sí, ¿tú me entiendes?, el
+- **[14:39] Yo:** como que se haga bien la transición entre lo que están haciendo ellos y nosotros,
+- **[14:39] Yo:** Lo principal, yo creo que igual ya está con
+- **[14:39] Yo:** con lo del
+- **[14:39] Yo:** con lo que nos entregaron por el chat.
+- **[14:39] Participante:** Mhmm.
+- **[14:39] Yo:** En los recursos,
+- **[14:39] Yo:** pero, pues, no
+- **[14:39] Yo:** yo creo que no, no,
+- **[14:39] Yo:** no es no es
+- **[14:39] Yo:** no es que
+- **[14:39] Yo:** no es fundamental, pues, que este sea, luego él yo te paso el el resumen por
+- **[14:39] Alejandra Melo:** Ah, listo.
+- **[14:39] Yo:** el que hace Granola, te lo paso por chat.
+- **[14:40] Yo:** En caso de que...
+- **[14:40] Yo:** En caso de que
+- **[14:40] Yo:** pues, le pido que haga como foco en diseño y ya.
+- **[14:40] Yo:** Y y
+- **[14:40] Alejandra Melo:** Listo.
+- **[14:40] Yo:** y te la paso.
+- **[14:40] Yo:** Realmente, de hecho,
+- **[14:40] Yo:** creo que ese es el mismo del chat. Creo que, inclusive, yo no te yo no te
+- **[14:40] Yo:** yo no te reenvié directamente la la
+- **[14:40] Yo:** invitaciones, sino que yo te uní al al grupo
+- **[14:40] Yo:** fue para que vieras las carpetas que yo ido mandando, cosas así.
+- **[14:40] Alejandra Melo:** Sí.
+- **[14:40] Yo:** Pero seguramente ya se te alineó con, se te sincronizó con el calendario.
+- **[14:40] Yo:** No, si quieres, no, o sea, no es necesario que yo te paso el resumen, si veo que hay cosas de diseño.
+- **[14:40] Alejandra Melo:** Ah, listo, vale.
+- **[14:40] Yo:** Listo.
+- **[14:40] Yo:** Aún no está en notificaciones.
+- **[14:40] Yo:** Su seguidor.
+- **[14:40] Yo:** Esto es
+- **[14:40] Yo:** esto es experimentación.
+- **[14:41] Yo:** Esta sería
+- **[14:41] Yo:** Okay. I
+- **[14:41] Yo:** So
+- **[14:42] Yo:** Bueno,
+- **[14:42] Yo:** entonces, dale a esta de organización proyecto, yo creo que ya la doy como cerrada.
+- **[14:42] Alejandra Melo:** Pero, pues habíamos dicho
+- **[14:42] Alejandra Melo:** Pero, pues habíamos dicho que lo que yo estaba haciendo, tú tú dices que
+- **[14:42] Alejandra Melo:** que hiciste algo este fin de semana?
+- **[14:42] Yo:** Sí, pues, antecito, de hecho, que lo busco aquí en
+- **[14:42] Alejandra Melo:** Porque
+- **[14:42] Yo:** Mira,
+- **[14:42] Alejandra Melo:** lo que yo hice es, prácticamente,
+- **[14:42] Alejandra Melo:** lo que yo hice prácticamente es
+- **[14:42] Alejandra Melo:** como que
+- **[14:42] Alejandra Melo:** depender del MCP,
+- **[14:42] Alejandra Melo:** y y de Apify. Pero, pues,
+- **[14:42] Alejandra Melo:** todo tiene que
+- **[14:42] Yo:** Ah, hablo ni siquiera de esa parte, hablo de
+- **[14:42] Yo:** hablo de otra cosa. Espérate,
+- **[14:42] Yo:** dónde me quedó ese ese documento.
+- **[14:42] Yo:** Dame un segundito, veo si encuentro el documento,
+- **[14:42] Yo:** Marica se me cerró. Ah, no, aquí está.
+- **[14:43] Yo:** Ve lo que hice, cómo quedó.
+- **[14:43] Yo:** Hablé con Jaime el viernes y me dijo que
+- **[14:43] Yo:** que sí podíamos pedir más productos.
+- **[14:43] Yo:** Entonces, ¿en cuántos quedamos alejados?
+- **[14:43] Yo:** ¿Cien o doscientos, doscientos cincuenta, cuántos?
+- **[14:43] Alejandra Melo:** Doscientos
+- **[14:43] Yo:** Listo,
+- **[14:43] Yo:** mira,
+- **[14:43] Yo:** Entonces, idea es evaluar. Mira, según la
+- **[14:44] Yo:** cuatro métricas clave,
+- **[14:44] Yo:** con criterios de decisión, que van... Ahí no te estoy compartiendo porque estoy viéndolo en en
+- **[14:44] Yo:** en anti gravity, eso no se ve.
+- **[14:44] Yo:** No me deja compartirlo.
+- **[14:44] Yo:** Cuatro métricas clave con con sus criterios de aceptación. Que van a hablar sobre el segmento de huérfanos durante workshop treinta minutos.
+- **[14:44] Yo:** Son, uno, time to value, dos,
+- **[14:44] Yo:** tasa de completitud,
+- **[14:44] Alejandra Melo:** ¿Tú me estás mostrando algo?
+- **[14:44] Yo:** Tres,
+- **[14:44] Yo:** No, pero ¿sabes qué? Te lo voy a compartir por acá.
+- **[14:44] Alejandra Melo:** Ok.
+- **[14:44] Yo:** Te lo voy compartir por el chat para que nos quede
+- **[14:44] Yo:** A los dos.
+- **[14:44] Yo:** Aquí Te lo mandé.
+- **[14:44] Yo:** Entonces,
+- **[14:44] Yo:** lo mando en una forma terrible, pero, bueno,
+- **[14:44] Yo:** queda. Es, entonces, time to value,
+- **[14:44] Yo:** en donde vamos a ver el éxito, sería que se complete en menos de diez minutos,
+- **[14:45] Yo:** completar ya entendemos que es hasta que cierre, o sea, hasta
+- **[14:45] Yo:** que puede montarlo en su en su tienda,
+- **[14:45] Alejandra Melo:** Diez minutos no es muy poquito.
+- **[14:45] Alejandra Melo:** Sí.
+- **[14:45] Yo:** para el primer producto, ¿no?
+- **[14:45] Yo:** Pues en en en en el
+- **[14:45] Yo:** que hizo el agente,
+- **[14:45] Yo:** Compañía fue, entonces, encontró que para flujos de de de poder publicar en tienda, de hecho,
+- **[14:45] Yo:** estaba alrededor de once minutos.
+- **[14:45] Yo:** Así se hacía en mucho más.
+- **[14:45] Yo:** Perder. Pero ¿podemos aumentarlo, ok, dices quince o qué?
+- **[14:45] Alejandra Melo:** Sí, a quince.
+- **[14:45] Yo:** Listo.
+- **[14:45] Yo:** Ajustemos a que el éxito
+- **[14:45] Yo:** que el equipo sea en quince.
+- **[14:45] Yo:** O menos,
+- **[14:45] Yo:** y si es
+- **[14:46] Yo:** más de veinte,
+- **[14:46] Yo:** This is what I have.
+- **[14:46] Yo:** Menos de quince
+- **[14:46] Yo:** perfecto, y si en promedio, se demora más de unos
+- **[14:46] Yo:** veinte minutos,
+- **[14:46] Yo:** generaría como, eso se le llamaba un trunk cognitivo.
+- **[14:46] Yo:** Es decir, que
+- **[14:46] Yo:** eso hace que el el usuario suelte la plataforma, o, por lo menos,
+- **[14:46] Yo:** muy posiblemente, desista seguirla usando.
+- **[14:46] Yo:** En tasa de completitud, entonces está, ¿cuántos asistentes logran
+- **[14:46] Yo:** terminar todo el lujo en Gali, dropping para...? O sea, puede que, por ejemplo, el
+- **[14:46] Yo:** cien por ciento lo terminen, ahí luego vemos cuántos menos de diez en más de quince. Entonces, competition rate,
+- **[14:46] Yo:** Si está más del setenta, muestra que la IA sí rompió la barrera técnica.
+- **[14:46] Alejandra Melo:** Ajá.
+- **[14:47] Yo:** Si está ante el cuarenta setenta, el rendimiento promedio requiere cortar pasos.
+- **[14:47] Yo:** Ejemplo, autocompletar cosas o dejar de pronto escribirle tanto texto.
+- **[14:47] Yo:** Para casos, menos del, si es menos del cuarenta, si estamos debajo del umbral,
+- **[14:47] Yo:** en un ambiente woodwork workshop controlado, la promesa de la nos sirvió para bajar la fricción.
+- **[14:47] Yo:** Tres, parálisis por riesgo.
+- **[14:47] Yo:** En el botón de solicitar muestra el que dijimos de que era una buena forma también de ver eso.
+- **[14:47] Yo:** Evalúa así el miedo a vender algo intangible
+- **[14:47] Yo:** es el verdadero bloqueador.
+- **[14:47] Yo:** Porcentaje de clics en el botón simulado,
+- **[14:47] Yo:** de pedir muestra física.
+- **[14:47] Yo:** Validación,
+- **[14:47] Yo:** si la caída determina el flujo
+- **[14:47] Yo:** es mayor al cuarenta por ciento, si confirma que no poder tocar el producto
+- **[14:47] Yo:** es un bloqueador de onboarding masivo
+- **[14:47] Yo:** que Dryo pidió resolver a nivel logístico.
+- **[14:47] Alejandra Melo:** Sí.
+- **[14:47] Yo:** ¿Se entiende cierto?
+- **[14:47] Yo:** Listo.
+- **[14:47] Yo:** A opción del freemium, drop-pee versus Shopify versus Pout.
+- **[14:48] Yo:** Mide qué elige el usuario cuando Gali lo enfrenta a la decisión final de arrancar,
+- **[14:48] Yo:** Uno, tienda nativa de Dropi, se espera que al menos el sesenta por
+- **[14:48] Yo:** ciento elija
+- **[14:48] Yo:** eso está validado
+- **[14:48] Yo:** ah, no, validando necesidad de que sí necesitamos un sandbox, es decir, que que
+- **[14:48] Yo:** crear su tienda. Si más del ochenta por ciento
+- **[14:48] Yo:** elige descargar Shopify,
+- **[14:48] Yo:** o creo que podríamos, lo que podríamos hacer, te iba a proponer, era
+- **[14:48] Yo:** poner un botón de
+- **[14:48] Yo:** de llame al Choque Fe para crear mi tienda, algo así.
+- **[14:48] Yo:** O sea, ver ver cómo lo hacen los usuarios.
+- **[14:48] Yo:** La hipótesis, se espera que al menos el sesenta por ciento elija
+- **[14:48] Yo:** nos elija a nosotros,
+- **[14:48] Yo:** si más del ochenta
+- **[14:48] Yo:** elige descargar Shopify,
+- **[14:48] Yo:** a Shopify, la hipótesis de tienda,
+- **[14:48] Yo:** tienda de aprendizaje queda inválida, es decir, que no tiene sentido que nosotros montemos una tienda,
+- **[14:48] Yo:** al final los usuarios prefieren seguir por Shopify.
+- **[14:49] Alejandra Melo:** Sí.
+- **[14:49] Yo:** Y está pautado box, porcentaje de usuarios que aceptan créditos gratis versus los
+- **[14:49] Yo:** los declinan.
+- **[14:49] Yo:** Los que los declinan se les capturan el motivo, falta de confianza versus venta orgánica.
+- **[14:49] Alejandra Melo:** Sí, a mí
+- **[14:49] Yo:** ¿Cómo lo ves?
+- **[14:49] Alejandra Melo:** Sí, a mí me parece que está bien.
+- **[14:49] Yo:** Listo, eso como para saber. Ahora sí,
+- **[14:49] Alejandra Melo:** Eso lo dejas en Darwin, ¿cierto?
+- **[14:49] Yo:** por
+- **[14:49] Yo:** Sí, yo aquí lo sesiono, ya ya lo ya le hago el push a main.
+- **[14:49] Yo:** Aquí, por lo menos, ya deja deja la bobada de de
+- **[14:49] Yo:** que teníamos, de que no no había métrica que quería, o sea, no sabíamos qué estábamos midiendo.
+- **[14:49] Yo:** Ya aquí sí sabemos qué onda.
+- **[14:49] Yo:** De hecho, aquí hay un
+- **[14:49] Yo:** documento más extenso,
+- **[14:49] Yo:** lo voy mandar por aca, pues, igual.
+- **[14:49] Yo:** Que es el el documento literal que está en Darwin.
+- **[14:50] Yo:** Igual,
+- **[14:50] Yo:** a quedar en producción, pero, pues, por si acaso.
+- **[14:50] Alejandra Melo:** Vale.
+- **[14:50] Yo:** Listo, y ya le puse lo de que
+- **[14:50] Yo:** lo de
+- **[14:50] Yo:** que haga el ajuste, ¿listo?, de de de que sea quince minutos.
+- **[14:50] Yo:** Listo.
+- **[14:50] Alejandra Melo:** Sí, sí.
+- **[14:50] Yo:** De una.
+- **[14:50] Yo:** Esa parte ya está.
+- **[14:50] Yo:** En cuanto a estrategia, bueno, estrategias, esta parte era
+- **[14:50] Yo:** lo que yo quería llegar a métricas de éxito. Ay, Métricas de éxito
+- **[14:50] Yo:** De hecho, estos flujos al final
+- **[14:50] Yo:** yo vi, sino que como los conversamos tanto, yo vi los estos estos
+- **[14:50] Yo:** todos estos lujosales, y, la verdad, pues, es que no le creo nada por decir.
+- **[14:50] Yo:** Si te dijera algo, sería como
+- **[14:50] Alejandra Melo:** No. A mí
+- **[14:50] Yo:** por relleno, creo que no es
+- **[14:50] Alejandra Melo:** No, a mí lo único que me genera
+- **[14:50] Yo:** Lo de API
+- **[14:51] Alejandra Melo:** me genera...
+- **[14:51] Yo:** Lo de API file y lo del MCP, ¿ok?
+- **[14:51] Alejandra Melo:** Sí, o sea, que, por ejemplo,
+- **[14:51] Alejandra Melo:** yo creo que me toca cambiar ese flujo porque
+- **[14:51] Alejandra Melo:** si, por ejemplo, le dan clic en, yo ya tengo una idea del
+- **[14:51] Alejandra Melo:** producto y si el producto está fuera de los doscientos, pues entonces
+- **[14:51] Alejandra Melo:** ¿ahí qué pasaría?, ¿ya? Entonces, me toca como que mirar
+- **[14:51] Yo:** Sí.
+- **[14:51] Alejandra Melo:** cuáles son esos doscientos productos.
+- **[14:51] Yo:** Eso es lo que quería que viéramos hoy en la, más que en el,
+- **[14:51] Yo:** diseño, pues creo que nos va quedar tiempo.
+- **[14:51] Yo:** Revisamos ya flujos con clic
+- **[14:51] Yo:** puntualmente. Es como, bueno, hago esto, hago esto, hago esto, qué pasa cuando hago esto, y ya ahí vamos
+- **[14:51] Yo:** Y me, no sé si te parece con con, que creo que ya lo hizo, que que que lo desmontó en otros
+- **[14:51] Yo:** casos.
+- **[14:51] Yo:** Ya pone el flujo con pantalla,
+- **[14:51] Yo:** O sea, pone la pantalla, es como cuando llega este paso,
+- **[14:51] Yo:** Ya para para hacerlo también más gráfico, no para nosotros, porque ya entendemos cómo queremos que funcione.
+- **[14:51] Alejandra Melo:** Mhmm.
+- **[14:51] Yo:** Sino para, no sé, María, Jaime, Laura,
+- **[14:51] Yo:** que vean a qué nos referimos en algunas partes del flujo, porque aunque ellos nos lo entregaron,
+- **[14:52] Yo:** comillas,
+- **[14:52] Yo:** ellos ya se están haciendo, pues, para seguir con sus cosas. Entonces, pues, para que nosotros quedemos bien ahí.
+- **[14:52] Alejandra Melo:** Yes.
+- **[14:52] Yo:** Como
+- **[14:52] Yo:** lo podamos explicar bien.
+- **[14:52] Yo:** Entonces, bien, esta organización del proyecto, pues esta sí te parece igual,
+- **[14:52] Yo:** se remueve porque igual es que creo que se consumiera los dos días,
+- **[14:52] Alejandra Melo:** Sí.
+- **[14:52] Yo:** y lo que
+- **[14:52] Yo:** hacer es generémosla como parte dos, ¿te parece?
+- **[14:52] Alejandra Melo:** Sí.
+- **[14:52] Yo:** Entonces, aquí es fase uno.
+- **[14:52] Yo:** Listo.
+- **[14:52] Yo:** Este diseño es, esto es lo mismo también hecho.
+- **[14:52] Yo:** ¿Qué fue? ¿Qué me ha
+- **[14:52] Yo:** Necesitamos urgente estos formatos.
+- **[14:53] Yo:** Algo de los viáticos de Bogotá.
+- **[14:53] Yo:** Voy a duplicar esta, generar
+- **[14:53] Alejandra Melo:** La dupliqué.
+- **[14:53] Yo:** Ah,
+- **[14:53] Alejandra Melo:** Trabajo.
+- **[14:53] Alejandra Melo:** That was good.
+- **[14:53] Yo:** Sí, ya.
+- **[14:53] Yo:** Listo.
+- **[14:53] Yo:** Entonces, te va lo mismo, experimentación.
+- **[14:53] Yo:** Es que se movieron.
+- **[14:53] Yo:** Ahí está.
+- **[14:53] Yo:** Ay, pues madre mía.
+- **[14:54] Yo:** Madre, Laura, que fue
+- **[14:54] Yo:** Estas políticas están diseñadas,
+- **[14:54] Yo:** ¿Qué es esto?
+- **[14:55] Yo:** Legalización de óptimos, sí.
+- **[14:55] Yo:** Perdóname, es me puso leer algo, Laura.
+- **[14:55] Yo:** El colaborador está obligado a entregar los comprobantes de procesos grotizados.
+- **[14:55] Yo:** Día completo,
+- **[14:55] Yo:** ya.
+- **[14:57] Yo:** Y
+- **[14:57] Yo:** Aleja este paperwork en que quedó.
+- **[14:57] Yo:** ¿Me recuerdas?
+- **[14:57] Alejandra Melo:** Ese era el que yo te estaba preguntando si tenías
+- **[14:57] Alejandra Melo:** el mock up en Darwin, que es que yo no sé por qué lo uso.
+- **[14:58] Alejandra Melo:** No lo encontraba. Es que tú me preguntaste qué cosa y luego me ocupé
+- **[14:58] Yo:** Este, o sea, esto no se trajo nada, lo puedo bajar.
+- **[14:58] Alejandra Melo:** otra cosa y no te respondí.
+- **[14:58] Alejandra Melo:** Sí, bájalo.
+- **[14:58] Yo:** Ya revisamos, porque ya ya ahí me acuerdo en qué qué es eso.
+- **[14:58] Alejandra Melo:** Pero pero ¿qué te iba a decir? O sea, yo me voy a concentrar
+- **[14:58] Alejandra Melo:** full, en lo expo winners.
+- **[14:58] Yo:** Sí, de acuerdo,
+- **[14:58] Alejandra Melo:** La idea, ya mañana es primero y yo yo no quiero que nos coja
+- **[14:58] Yo:** Por ciento.
+- **[14:58] Alejandra Melo:** el tiempo con eso, o sea, yo quiero dejarlo terminado, los
+- **[14:58] Alejandra Melo:** ser posible,
+- **[14:58] Alejandra Melo:** mucho antes de
+- **[14:58] Yo:** Dejar hanging off, esto es hanging off acá,
+- **[14:58] Alejandra Melo:** de que
+- **[14:58] Yo:** esto lo bajo, lo de tienda no es,
+- **[14:58] Yo:** choppy fade no nos importa, o en sí nos importa porque al rato
+- **[14:58] Yo:** pendiente, pero seguramente no nos van a entregar nada igual esta semana porque ellos están en lo mismo.
+- **[14:58] Yo:** No, lo que dijo José es que se van a estar enfocándose en errores, entonces,
+- **[14:58] Alejandra Melo:** Oye, esta semana sí que hay reuniones.
+- **[14:58] Alejandra Melo:** Tengo un día, siete, casi dos días en reuniones.
+- **[14:59] Yo:** estas son, ¿sí? Ya las haste así,
+- **[14:59] Alejandra Melo:** Sí.
+- **[14:59] Yo:** Ah, bueno, listo.
+- **[14:59] Yo:** Te voy quitar esto, que se fue con...
+- **[14:59] Alejandra Melo:** Eliminas principal.
+- **[14:59] Alejandra Melo:** Dale clic
+- **[14:59] Yo:** ¿Cómo le pone el primer principal? Dios mío.
+- **[14:59] Alejandra Melo:** Dale clic donde dice experimentación, ahí en el
+- **[14:59] Yo:** Ah, ok, ya.
+- **[14:59] Alejandra Melo:** y abajo dice eliminar, así, bueno, ya.
+- **[14:59] Alejandra Melo:** Sí.
+- **[14:59] Alejandra Melo:** Ahorita nos reunimos para mirar lo de spobinar, ¿cierto?
+- **[14:59] Alejandra Melo:** Listo.
+- **[14:59] Yo:** Sí.
+- **[14:59] Alejandra Melo:** Vuelvo a la reunión,
+- **[14:59] Alejandra Melo:** Vuelvo a las reuniones y yo que van cancelando, digamos, pues lo mismo hermano el tiempo.
+- **[14:59] Yo:** También por eso, porque ya me dijeron que
+- **[14:59] Yo:** las coloca ahí, ya.
+- **[15:00] Yo:** Uy, Jean Rodríguez, esto ya
+- **[15:00] Yo:** mientras hoy estoy, esta semana estaba más suave.
+- **[15:00] Yo:** Esta semana está más suave según yo.
+- **[15:00] Yo:** Se
+- **[15:00] Yo:** ¿Qué se me hizo?
+- **[15:00] Yo:** Diez
+- **[15:00] Yo:** y cinco.
+- **[15:00] Yo:** Dieciocho cinco.
+- **[15:00] Yo:** Dieciocho cinco,
+- **[15:00] Alejandra Melo:** Dieciocho horas.
+- **[15:00] Yo:** Dieciocho cinco cinco.
+- **[15:00] Yo:** Dieciocho horas.
+- **[15:00] Yo:** Illegal, Epic.
+- **[15:00] Yo:** Eso es toca que mandamos,
+- **[15:00] Yo:** Mhmm.
+- **[15:00] Yo:** listo.
+- **[15:01] Yo:** listo.
+- **[15:01] Yo:** Voy, igual, de una vez, ponerte eso que
+- **[15:01] Yo:** pues, lo vayas a iniciar.
+- **[15:01] Yo:** Voy a quitarme a mí.
+- **[15:01] Yo:** Así, así, así, así.
+- **[15:01] Yo:** No, pues ya.
+- **[15:01] Yo:** Ah, no,
+- **[15:01] Yo:** ¿Qué hacemos, Aleja?
+- **[15:01] Yo:** Dice que te demoras
+- **[15:01] Yo:** semana y siete días.
+- **[15:01] Alejandra Melo:** ¿Por qué?
+- **[15:01] Alejandra Melo:** ¿Qué qué hay ahí?
+- **[15:01] Alejandra Melo:** No, porque hice semanas hace reiniciar.
+- **[15:01] Alejandra Melo:** Reiniciarlo tan raro, ¿por qué?
+- **[15:01] Yo:** Pero no...
+- **[15:01] Yo:** Uno cuatro
+- **[15:01] Alejandra Melo:** ¿Y por qué están en curso?
+- **[15:01] Alejandra Melo:** Todas?
+- **[15:01] Yo:** No sé la que vi.
+- **[15:01] Yo:** Sé si, bueno, no sé si es lo que se queda en las mías.
+- **[15:01] Yo:** Pero igual, ya eso se arrancó, ¿no?
+- **[15:01] Yo:** Arranca hasta este hoy,
+- **[15:01] Yo:** Igual es que la pasea es que a continuación de la misma vaina.
+- **[15:02] Alejandra Melo:** Pero ¿por qué dice que está bien
+- **[15:02] Yo:** Yo creo
+- **[15:02] Alejandra Melo:** Ah, ¿tú le dices, Thelun dice algo?
+- **[15:02] Yo:** Yo creo que pensé que en las mías sí las puse en curso.
+- **[15:02] Alejandra Melo:** Movido por Santiago.
+- **[15:02] Yo:** Ah, sí.
+- **[15:02] Yo:** Sí, bueno, fui yo, perdón.
+- **[15:02] Alejandra Melo:** Listo,
+- **[15:02] Alejandra Melo:** Listo. Una semana y siete horas.
+- **[15:02] Alejandra Melo:** Son tres días, acabo de ponerle dos días.
+- **[15:02] Alejandra Melo:** Ya, ya está.
+- **[15:02] Alejandra Melo:** Listo.
+- **[15:02] Alejandra Melo:** Igual, yo creo que van a ser varias reuniones esta semana para irnos
+- **[15:02] Alejandra Melo:** para ir viendo el flujo, cómo va quedando y cosa que vaya quedando superbién.
+- **[15:02] Alejandra Melo:** Entonces, le sigo trabajando al flujo en
+- **[15:02] Alejandra Melo:** en fiction
+- **[15:02] Yo:** Y, por favor,
+- **[15:02] Alejandra Melo:** Volvemos y lo revisamos.
+- **[15:02] Alejandra Melo:** Y
+- **[15:02] Alejandra Melo:** Pero ¿tú crees que vamos de quitar...? No, ahorita hablamos de eso, no es bien.
+- **[15:02] Yo:** Dale.
+- **[15:03] Alejandra Melo:** Estoy tomando una reunión para que no es para esto. Listo, Santi.
+- **[15:03] Yo:** Dice
+- **[15:03] Alejandra Melo:** Nos vemos, entonces, ahorita.
+- **[15:03] Yo:** De aquí de aquí, espérate,
+- **[15:03] Yo:** Ay, ¿ya no tengamos problema?
+- **[15:03] Yo:** Ya arrancamos planning, ¿cierto?
+- **[15:03] Alejandra Melo:** ¿Cómo?
+- **[15:03] Alejandra Melo:** No.
+- **[15:03] Yo:** Ah, no, no,
+- **[15:03] Yo:** Preguntar.
+- **[15:03] Yo:** De esto, Alejandro,
+- **[15:03] Yo:** acá.
+- **[15:03] Yo:** Para esta...
+- **[15:03] Yo:** Para esa otra pregunta, hagámosle la
+- **[15:03] Yo:** porque
+- **[15:03] Alejandra Melo:** Eso sería reorganización del
+- **[15:03] Yo:** aquí, entonces, se va a trabajar.
+- **[15:03] Alejandra Melo:** flujo.
+- **[15:03] Alejandra Melo:** Del flujo
+- **[15:03] Yo:** Lujo.
+- **[15:03] Yo:** Sí.
+- **[15:03] Alejandra Melo:** Ay, se me fue.
+- **[15:04] Alejandra Melo:** Solicitar ese
+- **[15:04] Alejandra Melo:** Solicitar, ese también es de solicitar la data de los
+- **[15:04] Alejandra Melo:** productos.
+- **[15:04] Yo:** Doscientos productos.
+- **[15:04] Alejandra Melo:** ¿Qué más sería?
+- **[15:04] Alejandra Melo:** ¿Ya?
+- **[15:04] Yo:** Ah, bueno, implementar el el implementar los diseños
+- **[15:04] Yo:** ¿cómo se llama eso?, el manual el manual este que mandaron, ¿no?
+- **[15:04] Alejandra Melo:** Ah, sí.
+- **[15:04] Yo:** O sea, que
+- **[15:04] Yo:** estilo.
+- **[15:04] Yo:** UI.
+- **[15:04] Alejandra Melo:** Pero es que se va en el otro.
+- **[15:04] Yo:** Sería.
+- **[15:04] Yo:** Ah, diseño, sí.
+- **[15:04] Alejandra Melo:** Porque el otro dice,
+- **[15:04] Alejandra Melo:** ay,
+- **[15:04] Alejandra Melo:** ¿qué se hizo el otro?
+- **[15:04] Yo:** ¿Cuál?
+- **[15:04] Alejandra Melo:** Ya me quedaron, fue tres días.
+- **[15:04] Alejandra Melo:** Había había uno que era el de
+- **[15:04] Alejandra Melo:** el de organización proyecto fase dos y ya no lo veo por ninguna parte.
+- **[15:04] Yo:** Es que quedó conmigo.
+- **[15:04] Yo:** Desde este.
+- **[15:05] Yo:** ¿Cierto?
+- **[15:05] Alejandra Melo:** Es es
+- **[15:05] Yo:** Sí.
+- **[15:05] Yo:** Ya.
+- **[15:05] Alejandra Melo:** Ah, listo, sí, de la, sí.
+- **[15:05] Alejandra Melo:** Sí, este es el que le estás haciendo la descripción.
+- **[15:05] Alejandra Melo:** ¿Cierto?
+- **[15:05] Yo:** No, le estaba haciendo organización.
+- **[15:05] Alejandra Melo:** Ah, porque yo te estaba diciendo esta organización.
+- **[15:05] Yo:** Parece que lo fijo en el Salino, lo acordé.
+- **[15:05] Participante:** Sí.
+- **[15:05] Yo:** Che girà a jogar do... Ah, non qui sta
+- **[15:05] Yo:** Todavía acá está.
+- **[15:05] Yo:** Aquí, scam, aplicación.
+- **[15:05] Yo:** UI Expo
+- **[15:05] Yo:** envía
+- **[15:05] Alejandra Melo:** Aí
+- **[15:06] Yo:** Listo.
+- **[15:06] Alejandra Melo:** Ahí dice, ¿no?, el desarrollo del flujo.
+- **[15:06] Alejandra Melo:** El desarrollo del flujo, igual si yo que los puedo organizar ese
+- **[15:06] Alejandra Melo:** esa descripción, pues la organizo.
+- **[15:06] Yo:** Para que quede ahí, como no quede vacioso.
+- **[15:06] Yo:** Listo. ¿Crees que al
+- **[15:06] Yo:** al
+- **[15:06] Yo:** al viernes,
+- **[15:06] Yo:** nos alcanza para hacer una prueba de usabilidad.
+- **[15:06] Alejandra Melo:** Creo que ya la otra semana podemos hacer la produzabilidad.
+- **[15:06] Alejandra Melo:** El lunes, fui algo.
+- **[15:06] Alejandra Melo:** El lunes es ocho.
+- **[15:06] Yo:** Lente,
+- **[15:06] Alejandra Melo:** ¿Cados qué es el evento?
+- **[15:06] Yo:** El
+- **[15:06] Yo:** de este sábado en ocho.
+- **[15:06] Yo:** Es el doce.
+- **[15:07] Alejandra Melo:** Listo. Uy, hay que hacerle a eso.
+- **[15:07] Yo:** Bueno, listo, así.
+- **[15:07] Alejandra Melo:** Dale, dale.
+- **[15:07] Yo:** Listo, chau.
+- **[15:07] Alejandra Melo:** Ciao,

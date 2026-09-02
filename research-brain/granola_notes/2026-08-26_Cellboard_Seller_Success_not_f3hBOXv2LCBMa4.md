@@ -1,0 +1,1189 @@
+# Cellboard Seller Success
+
+- **ID:** `not_f3hBOXv2LCBMa4`
+- **Fecha:** 2026-08-26T15:59:10.332Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/dade5f38-ba8a-411d-9f73-3f170cbfc84f)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo, Jhainey Perez, Jose Giraldo, Juan Rojas, Enrique Lopez, Laura Nunez, Leydi Bello, Maria Calderon, Catherin Salazar, Jose Pineda, Jose Hurtado
+
+---
+
+## Resumen de la Reunión
+
+# Contexto y Reunión Mañana
+
+- Jose Hurtado pide incluir a Johnny y Juan en la reunión de mañana
+  - Tema: CRM para líderes de comunidad, ya hay datos preliminares
+- Wibi (doble u, e, b): plataforma nueva liderada por Lucho Ramos y Nicolás
+  - Objetivo: agrupar líderes de comunidad dentro de Wibi con API propia
+  - Jose Hurtado, Jose Pineda y Juan Rojas heredaron el proyecto de CRM para líderes
+  - Se está articulando con GoHighLevel y conectando con Wibi
+  - Juan Sebastián Maldonado (comercial) será incluido en la próxima reunión de Wibi
+
+# Foco de la Célula Seller: Activación
+
+- Retención es buena una vez el usuario tiene hábito; el problema crítico es **activación**
+- Datos clave del problema:
+  - 40% de nuevos registros son “huérfanos” (sin comunidad)
+  - De esos huérfanos, solo el 1% se activa
+  - Más del 90% de ese 40% nunca ha hecho dropshipping ni ecommerce
+- Objetivo del workshop en ExpoWinners (12 y 13): recolectar data, identificar fricciones, validar experimentos con usuarios reales
+
+# Gali: Asistente de Primera Venta (Copiloto AI)
+
+- Nombre clave “Gali”; naming definitivo aún sin definir
+- Flujo actual (entregado por Jaime y Catalina) es demasiado robusto para usuarios principiantes
+- Alejandra y Santiago están simplificando el flujo a la mínima expresión
+- Dos fuentes de datos por debajo:
+  - API de Apify: scraping de tendencias de mercado externas
+  - Catálogo de Dropi: productos disponibles para vender
+- Flujo propuesto:
+  1. Usuario elige categoría o dice “no sé qué vender”
+  2. Plataforma sugiere productos tendencia que existen en Dropi
+  3. Se genera plan de venta simplificado (calculadora de ganancia estimada, ángulo de venta)
+  4. Usuario elige canal: WhatsApp o landing page
+  5. Se genera mini ecommerce dentro de Dropi
+- Lenguaje: reemplazar términos técnicos (CPA, ROAS, stock) por copies coloquiales y explicativos
+  - Meta: que el usuario venda sin saber el glosario, no que lo memorice
+
+# Mini Ecommerce de Dropi (Experimento Central)
+
+- Propuesta: generar una “tienda temporal” dentro de Dropi para usuarios principiantes
+  - URL tipo: jose-hurtado.shopping (sin exponer que es Dropi por detrás)
+  - Máximo 3 productos en la versión del evento
+  - Pago contra entrega, sin pasarela de pagos, sin integraciones externas
+  - Las órdenes se conectan al flujo normal de Dropi
+- Métrica de éxito propuesta: usuario completa todo el flujo en menos de 10 minutos desde cero
+  - Desde registro hasta publicar su primer producto en su mini tienda
+- Progresión esperada:
+  - Ventas 1 a 10: dentro del mini ecommerce de Dropi
+  - Al alcanzar hábito (10+ ventas), migración guiada a Shopify, Tiendanube, WooCommerce
+- Limitaciones para ExpoWinners:
+  - No se puede conectar API de TikTok ni Meta (requiere verificación de partner)
+  - No se puede exportar a Shopify en el prototipo
+  - Si llegan las APIs antes del evento, el alcance podría ampliarse para hacer órdenes reales
+
+# Feedback y Sugerencias del Equipo
+
+- Jose Hurtado: incluir calculadora de precios en el flujo; muchos usuarios arrancan y no vuelven por órdenes devueltas
+  - Hitos clave a no perder de vista: activación, primera orden, 10 órdenes, 100 órdenes
+- Jose Hurtado: no eliminar la opción de seguir usando el mini ecommerce si el usuario ya está vendiendo bien
+- Leydi: usuarios con manilla de “bienvenidos” en ExpoWinners serían el segmento ideal para probar el flujo
+  - Dato de cuántos asistentes no han vendido nada: disponible al cierre de agosto
+- Jose Pineda: involucrar a Jose Hurtado (Customer Success) en la definición de la experiencia del dropshipper
+  - Tiene conocimiento de ecosistemas de comercialización digital y un proyecto de referidos relacionado
+- Juan Rojas: experiencia propia validando que la fricción de Shopify, WooCommerce y pauta frena a usuarios nuevos
+  - Sugiere que todo quede embebido en Dropi con UX/UI que permita controlar el dropshipping desde un solo módulo
+- Concepto de “Estrellas” mencionado como referente cercano: catálogo propio con link único para compartir
+
+# Próximos Pasos
+
+- **Entregar dato de usuarios nuevos sin ventas al cierre de agosto** (Leydi)
+
+  Incluir cuántos asistentes a ExpoWinners son completamente nuevos y cuántos no han vendido nada.
+- **Rediseñar flujo de Gali con Alejandra para ExpoWinners** (Santiago)
+
+  Simplificar copies, reducir términos técnicos y definir máximo de productos en el mini ecommerce (propuesta: 3).
+- **Incluir a Juan Sebastián Maldonado en la próxima reunión de Wibi** (Jose Hurtado)
+
+  Es el responsable comercial del proyecto; la reunión es en aproximadamente 8 días.
+- **Presentar versión actualizada del flujo en el próximo weekly** (Santiago)
+
+  Para entonces ya habrá cambios definidos con Alejandra más cercanos a lo que se mostrará en ExpoWinners.
+- **Explorar vinculación del proyecto de referidos de Jose Hurtado con el flujo de Gali** (Jose Pineda)
+
+  Jose Hurtado ya mostró el proyecto; hay puntos de conexión con la iniciativa de activación.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/aa396def-6ef7-46b8-b561-94534ddf1859](https://notes.granola.ai/t/aa396def-6ef7-46b8-b561-94534ddf1859)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[16:00] Yo:** Sorry.
+- **[16:01] Alejandra Melo:** Hola, hola.
+- **[16:01] Jose Hurtado:** Hola.
+- **[16:01] Jose Hurtado:** Chicos, ¿cómo están?, ¿cómo vamos?
+- **[16:01] Yo:** Todo bien, afortunadamente.
+- **[16:01] Jose Hurtado:** Ve, Santi,
+- **[16:01] Jose Hurtado:** Ve, Santi, para la reunión de mañana de de ese,
+- **[16:01] Jose Hurtado:** también invita a los muchachos, a Johnny y a John,
+- **[16:01] Jose Hurtado:** yo les comenté y para estar
+- **[16:01] Jose Hurtado:** ¿vale?
+- **[16:01] Yo:** Mañana.
+- **[16:01] Yo:** Asi,
+- **[16:01] Jose Hurtado:** Mhmm.
+- **[16:01] Jose Hurtado:** Y además porque ahí en Palma, por lo que estamos haciendo también de CRM de para líderes de comunidad que estamos ya algunos datos, alguna información. Entonces, seguramente podemos ahí como complementar.
+- **[16:02] Yo:** So, mi teléfono de José, también.
+- **[16:02] Yo:** Un ratico, a ver si se nos unen los demás. Igual, para esta
+- **[16:02] Yo:** la verdad,
+- **[16:02] Yo:** le voy poner al tanto que estamos haciendo desde el producto,
+- **[16:02] Yo:** Porque con el evento para, el evento del doce, estamos priorizando varias varios temas nuevos que se nos entregaron a la célula. Si quieres, deme unos tres minuticos, a ver si se nos abren a tres personas, ¿vale?
+- **[16:02] Jose Hurtado:** Dale, papà.
+- **[16:06] Yo:** Bueno, yo creo que vayamos iniciando. José, no no
+- **[16:06] Yo:** como no no está, no hay tanta gente, yo creo que que va a ser como superpuntual,
+- **[16:06] Yo:** para nosotros
+- **[16:06] Yo:** Vamos a estar el doce y trece
+- **[16:06] Yo:** con parte del equipo de producto en Bogotá. Nosotros nos habilitaron
+- **[16:06] Yo:** la Juanca,
+- **[16:06] Yo:** habilitaron, un espacio para
+- **[16:06] Yo:** hacer un workshop,
+- **[16:06] Yo:** lo que estamos haciendo es de la semana pasada esta y seguramente la siguiente, seguramente
+- **[16:07] Yo:** seguro la siguiente,
+- **[16:07] Yo:** es trabajar en un
+- **[16:07] Yo:** en un prototipo
+- **[16:07] Yo:** de
+- **[16:07] Yo:** sacar realmente data que nos sirva para facilitar nuestros flujos
+- **[16:07] Yo:** de nuevos dropshippers. Nosotros tenemos reuniones con María esta semana,
+- **[16:07] Yo:** María y con Jaime.
+- **[16:07] Yo:** Con Lau, contrario, esta semana para definir, entonces,
+- **[16:07] Yo:** qué se esperaba de de la célula de seller,
+- **[16:07] Yo:** Llegamos a que realmente
+- **[16:07] Yo:** esta célula de Elfo pueda estar claramente en activación, en retención la data muestra
+- **[16:07] Yo:** que tenemos una buena retención después de que ya los usuarios empiecen a tener un hábito
+- **[16:07] Yo:** en el uso de la plataforma, entender el modelo de negocio,
+- **[16:07] Yo:** pero en activación claramente todos son los que estamos, pues,
+- **[16:07] Yo:** con con una oportunidad muy grande para para empezar realmente a a mover esas
+- **[16:07] Yo:** personas que no saben de dropshipping, que no saben inclusive de ecommerce.
+- **[16:07] Yo:** Por eso se está trabajando en un en un prototipo que creo que
+- **[16:07] Yo:** puede que ya hayan visto en otros espacios,
+- **[16:07] Yo:** Ya les voy a compartir
+- **[16:08] Yo:** Déjeme voy al principal.
+- **[16:08] Yo:** A ver.
+- **[16:08] Participante:** Una preguntita.
+- **[16:08] Participante:** Qué pena.
+- **[16:08] Yo:** ¿Quién es Vivi?
+- **[16:08] Participante:** Tú sabes que en
+- **[16:08] Juan Camilo Rojas:** Weebie, Weebie, doble v e, b
+- **[16:08] Yo:** Vivi.
+- **[16:08] Yo:** No.
+- **[16:08] Juan Camilo Rojas:** Ajá.
+- **[16:08] Yo:** ¿Por qué?
+- **[16:08] Juan Camilo Rojas:** Es que tenemos una iniciativa
+- **[16:08] Juan Camilo Rojas:** que nos pasaron del lado producto, que se llama
+- **[16:08] Juan Camilo Rojas:** Wibi, doble u e, b de burro, e,
+- **[16:08] Juan Camilo Rojas:** Dice, producto para que los líderes de comunidad gestionen su
+- **[16:08] Juan Camilo Rojas:** comunidades directamente desde la plataforma de
+- **[16:08] Juan Camilo Rojas:** Esto está en el h tres.
+- **[16:08] Juan Camilo Rojas:** No sé.
+- **[16:08] Juan Camilo Rojas:** Esto nos los paso
+- **[16:08] Juan Camilo Rojas:** María Osa en un listado, en un listado que ustedes hicieron de todo lo
+- **[16:08] Juan Camilo Rojas:** levantamiento, bueno, aquí dice, sí,
+- **[16:08] Yo:** De pronto, Jaime te te para el el el
+- **[16:08] Juan Camilo Rojas:** Dale.
+- **[16:08] Yo:** porque hay varias iniciativas que él estuvo moviendo con María,
+- **[16:08] Juan Camilo Rojas:** De una.
+- **[16:09] Yo:** de
+- **[16:09] Juan Camilo Rojas:** Perdón, sí, Juanca, lo que, we be
+- **[16:09] Jose Hurtado:** is
+- **[16:09] Jose Hurtado:** es una plataforma que se está desarrollando
+- **[16:09] Jose Hurtado:** lo está liderando específicamente o lo que está
+- **[16:09] Jose Hurtado:** No. Luis, Lucho Ramos,
+- **[16:09] Jose Hurtado:** con una persona que se llama Nicolás que, pues, está afuera,
+- **[16:09] Jose Hurtado:** y, básicamente, están se está construyendo, es como una vertical
+- **[16:09] Jose Hurtado:** nueva, digámoslo de esta manera,
+- **[16:09] Jose Hurtado:** Nicolás está trabajando en conjunto con con Gabriela.
+- **[16:09] Jose Hurtado:** Nosotros hoy, precisamente, nos juntamos con Enrique, Nicolás y demás,
+- **[16:09] Jose Hurtado:** Y Webe es como, básicamente, es una
+- **[16:09] Jose Hurtado:** donde
+- **[16:09] Jose Hurtado:** se va a convertir en una en una vertical de de dropping,
+- **[16:09] Jose Hurtado:** pero que, en principio, como objetivo es agrupar
+- **[16:09] Jose Hurtado:** o incluir dentro de Webe todos los líderes de comunidad, ¿listo?
+- **[16:09] Jose Hurtado:** Ya, y alimentar eso con una API, ahí que ellos puedan hacer todo su
+- **[16:10] Jose Hurtado:** Sí,
+- **[16:10] Juan Camilo Rojas:** paso, básicamente.
+- **[16:10] Juan Camilo Rojas:** Sí, básicamente, es es es eso. ¿Por qué nos juntamos?
+- **[16:10] Jose Hurtado:** Porque nosotros desde Grow
+- **[16:10] Jose Hurtado:** Lucho, John, José Pineda y yo, heredamos el proyecto,
+- **[16:10] Jose Hurtado:** de líderes de, el CRM para líderes de comunidad,
+- **[16:10] Jose Hurtado:** en principio lo estamos como empalmando con, obviamente, con Google HighLevel,
+- **[16:10] Jose Hurtado:** Enrique. Ajá. Y en ese empalme, en esa articulación, nos encontramos
+- **[16:10] Jose Hurtado:** con Wibi, supimos de Wibi y ya nos estamos como
+- **[16:10] Jose Hurtado:** como ahí conectando. Si de pronto por ahí
+- **[16:10] Jose Hurtado:** necesitas o requerís lo que sea, me me me me decís. Sí, porque
+- **[16:10] Jose Hurtado:** necesitamos estar, sobre todo esta persona que te voy a poner ahí en el
+- **[16:10] Jose Hurtado:** en el en el chat,
+- **[16:10] Jose Hurtado:** Maldonado.
+- **[16:10] Jose Hurtado:** Que es Juan Sebastián, que es mi compañero.
+- **[16:10] Jose Hurtado:** Que está todo encargado de toda la parte de comercial.
+- **[16:10] Juan Camilo Rojas:** Ajá. Entonces, sí necesitamos estar ahí.
+- **[16:10] Juan Camilo Rojas:** Bueno, precisamente,
+- **[16:10] Juan Camilo Rojas:** precisamente,
+- **[16:10] Juan Camilo Rojas:** precisamente dentro de ocho días,
+- **[16:11] Juan Camilo Rojas:** tenemos
+- **[16:11] Participante:** otra reunión, entonces lo voy a incluir a él, ¿vale?
+- **[16:11] Juan Camilo Rojas:** De una.
+- **[16:11] Juan Camilo Rojas:** Una. Gracias, José. Todo bien, papá.
+- **[16:11] Juan Camilo Rojas:** Qué pena ahí, Santi, que le le rodeó una
+- **[16:11] Yo:** No, estoy viendo bien.
+- **[16:11] Yo:** Espacio es justamente eso.
+- **[16:11] Yo:** Bueno, les muestro un poco en lo que se ha estado trabajando, las demás
+- **[16:11] Yo:** actividades,
+- **[16:11] Yo:** No se han pausado, pero
+- **[16:11] Yo:** se han, digamos,
+- **[16:11] Yo:** despriorizado en cuanto en cuanto la la carga de horas que van van a tener.
+- **[16:11] Yo:** Por ejemplo, WhatsApp, igual tenemos sobre el tema de WhatsApp para el envío de de no
+- **[16:11] Yo:** se tiene la sesión mañana, por parte del equipo,
+- **[16:11] Yo:** Se han trabajado en prototipos, en algunos flujos para empezar a a
+- **[16:11] Yo:** a mapear la información desde desde user pilot.
+- **[16:11] Yo:** Pero principalmente el foco
+- **[16:11] Yo:** el foco de nosotros ha estado en este flujo de
+- **[16:11] Yo:** de galley,
+- **[16:11] Yo:** Nosotros, para ExpoWinners...
+- **[16:11] Yo:** Tablero principal.
+- **[16:11] Yo:** Que este está en el punto exploto.
+- **[16:12] Yo:** The goal experience.
+- **[16:12] Yo:** Bueno, dentro de dentro de los workshops que se van a tener, va
+- **[16:12] Yo:** estar el el manejo de
+- **[16:12] Yo:** manejo de Gali, Gali no es el nombre, es un nombre clave que le teníamos, esto va ser como el asistente de primera venta,
+- **[16:12] Yo:** copiloto de AI, todavía el naming no lo hemos definido.
+- **[16:12] Yo:** Lo que se hace en el workshop es, entonces... Bueno, pregunta, ¿ya habían visto este flujo, de pronto?
+- **[16:12] Yo:** Esta pantalla?
+- **[16:12] Yo:** José, Juanca.
+- **[16:12] Yo:** O primera vez?
+- **[16:12] Participante:** Yo Es primera vez. Yo no lo había visto, ajá.
+- **[16:12] Yo:** Entonces, para el workshop,
+- **[16:12] Yo:** lo que se va a hacer es llevar
+- **[16:12] Yo:** varios experimentos
+- **[16:12] Yo:** Lo que tenemos es como una
+- **[16:12] Participante:** Qué pena. Es que, sí, como Jaime me había mostrado algo antier,
+- **[16:12] Participante:** creo que este es algo muy similar al casa productos.
+- **[16:12] Participante:** Pero la ventaja
+- **[16:12] Yo:** ¿Está relacionado en algún punto?
+- **[16:12] Yo:** En algún punto se toca, justamente, porque los flujos se se empiezan a conectar, ¿verdad? Sí.
+- **[16:12] Participante:** Ajá, pero la
+- **[16:13] Participante:** Ok. Y la ventaja de Gali es que no solo
+- **[16:13] Participante:** le va a encontrar a, le va a ayudar a encontrar productos, sino que le va a ayudar
+- **[16:13] Participante:** a entender el
+- **[16:13] Participante:** digamos,
+- **[16:13] Jose Hurtado:** como algunos productos son estacionarios o tienen
+- **[16:13] Jose Hurtado:** digamos, un comportamiento de consumidor diferente a otros,
+- **[16:13] Jose Hurtado:** Algunos son evergreen, otros no.
+- **[16:13] Jose Hurtado:** Este le va ayudar como a decir, en ese momento en que esté testeando,
+- **[16:13] Jose Hurtado:** qué está pasando con ese producto
+- **[16:13] Juan Camilo Rojas:** en el mercado, si es bueno, si es una categoría fuerte, si
+- **[16:13] Juan Camilo Rojas:** está competido.
+- **[16:13] Juan Camilo Rojas:** Entiendo que va por ese camino,
+- **[16:13] Yo:** Ahora iba,
+- **[16:13] Juan Camilo Rojas:** entiendo.
+- **[16:13] Yo:** Y realmente lo que estamos ahora con la hija, porque el proyecto lo he estado llevando Jaime,
+- **[16:13] Yo:** con Catalina,
+- **[16:13] Yo:** sin embargo, ya se le entregó a la célula de sellers,
+- **[16:13] Yo:** Lo que ya estamos viendo con Aleja es realmente
+- **[16:13] Yo:** aterrizarlo a las expectativas del negocio de dropping,
+- **[16:13] Yo:** y es que podamos con esta herramienta... Nosotros lo que revisimos fue un recurso inicial
+- **[16:13] Yo:** ¿cierto? El recurso era
+- **[16:13] Yo:** facilitemos la activación a los dropshippers, o, bueno, la venta realmente
+- **[16:14] Yo:** encontrar productos.
+- **[16:14] Yo:** Pero el el problema que estamos teniendo ahora, como les decía hace rato, es activación.
+- **[16:14] Yo:** Sobre todo activación de la gente que nunca hecho ecommerce o dropshipping.
+- **[16:14] Yo:** Entonces, lo que estamos planteando con el hija, todavía este es el flujo que nos entregaron, ya estamos trabajando
+- **[16:14] Yo:** en el en el
+- **[16:14] Yo:** digamos, en la nueva versión de de lo que vamos a llegar a llevar a ExpoWinners.
+- **[16:14] Yo:** Es cómo hacemos, cómo le entregamos un producto a un usuario que no
+- **[16:14] Yo:** sabe de ecommerce, no ha vendido de forma digital,
+- **[16:14] Yo:** o sabe dropshipping,
+- **[16:14] Yo:** que, justamente, lo que tú decías, no sabe que existen
+- **[16:14] Yo:** estacionalidades
+- **[16:14] Yo:** ¿sí?, que hay picos de demanda de unos productos, que otros no, no saben nada de
+- **[16:14] Yo:** tendencias de mercado,
+- **[16:14] Yo:** persona que llegó a dropi,
+- **[16:14] Yo:** porque sabe que en dropi puede generar ingresos.
+- **[16:14] Yo:** ¿Listo? Y que le llamó la atención
+- **[16:14] Yo:** la forma en la que se puede ganar ingresos a través de
+- **[16:14] Yo:** el flujo
+- **[16:14] Yo:** es sencillo,
+- **[16:14] Yo:** en concepto,
+- **[16:14] Yo:** lo que estamos haciendo con la alejada es ya poderlo llevar a algo mucho más fácil, la de parte de esto
+- **[16:15] Yo:** va a tener
+- **[16:15] Yo:** una
+- **[16:15] Yo:** una demanda importante de dispositivos móviles,
+- **[16:15] Yo:** decir que
+- **[16:15] Yo:** porque, pues, va a ser durante el evento no todos van a tener
+- **[16:15] Yo:** computadores.
+- **[16:15] Yo:** Entonces, lo que se hace es
+- **[16:15] Yo:** arrancar el flujo a través de que, no sé, voy a esperar mi primer producto,
+- **[16:15] Yo:** empieza a llevarse a través de un flujo de no sé qué vender, tengo una idea, quiero
+- **[16:15] Yo:** explorar categorías,
+- **[16:15] Yo:** Al explorar categorías, esto por debajo de lo que está haciendo
+- **[16:15] Yo:** es conectarse
+- **[16:15] Yo:** realmente a la base, al catálogo de productos que tiene dropping, omitan todo el diseño, el diseño está, es lo que justamente con Aleja vamos a empezar a mejorar lo que está aquí es hay unas sugerencias, lo que lo lo que tenemos acá nosotros es son dos son son dos consumos uno es una API de Apify,
+- **[16:15] Yo:** ¿sí?, que lo que hace es como un scrapping de tendencias de apps,
+- **[16:15] Yo:** qué se está vendiendo en el mercado, ¿listo? Es una API
+- **[16:16] Yo:** externa totalmente. Y por otro lado, nosotros llevamos
+- **[16:16] Yo:** a emparejarlo con lo que pueda venderse el dropping.
+- **[16:16] Yo:** Por ejemplo, acá llega uno a un c, esto es un organizador,
+- **[16:16] Yo:** ¿listo? Es organizador de
+- **[16:16] Yo:** de para la casa, ¿no?, organizador multifuncional.
+- **[16:16] Yo:** Supongamos que me va a ir con este, ¿listo?
+- **[16:16] Yo:** Y este organizador multifuncional, entonces, lo que hace flujo es empezarle a describir un poco
+- **[16:16] Yo:** Entonces,
+- **[16:16] Yo:** lo que se puede generar por venta, el precio sugerido de venta, el CPA objetivo,
+- **[16:16] Yo:** mucha información, y ese es el reto que tenemos ahora con Alejay, es
+- **[16:16] Yo:** cómo llevamos esto a minimizarlo, o sea, empezando porque si yo le hablo a un usuario que
+- **[16:16] Yo:** no sabe nada de esto,
+- **[16:16] Yo:** no va a saber qué es un CPA.
+- **[16:16] Yo:** Qué roas, ¿sí?
+- **[16:16] Yo:** Capaz llegamos a usuarios que no saben que es un stock,
+- **[16:16] Yo:** ¿Qué es stock?
+- **[16:16] Yo:** ¿Ya? Inventario, no tienen no tienen
+- **[16:16] Yo:** de pronto el entendimiento completo, pues, del negocio, justamente ese es el propósito de esto,
+- **[16:16] Yo:** que no van a saber para qué sirve esto. O sea, ellos ven que, claro, te puedo la plataforma, pero eso no no
+- **[16:17] Yo:** entienden el propósito, el fin último de todo esto, aparte de un montón de texto,
+- **[16:17] Yo:** ahora lo que queremos hacer con Aleja es empezar a reducir
+- **[16:17] Yo:** lo mínimo necesario para que un cliente pueda entender que es
+- **[16:17] Yo:** hay una conexión de productos que tiene un ecosistema de abajo, que le va a sugerir los mejores productos,
+- **[16:17] Yo:** Esto, luego vamos a
+- **[16:17] Yo:** una vez se escoge la estrategia y demás,
+- **[16:17] Yo:** Si a un plan, el plan, entonces, es se puede pedir una prueba,
+- **[16:17] Yo:** se pueden entender, entonces,
+- **[16:17] Yo:** básicamente, los pasos que debería tener.
+- **[16:17] Yo:** Un un dropshipper al momento de de de lanzar algo,
+- **[16:17] Yo:** no hay mucho texto, mucha información.
+- **[16:17] Yo:** Que se le estaría entregando a una persona totalmente principiante,
+- **[16:17] Yo:** Pero lo lo más relevante acá, güey, mucho más rápido, es
+- **[16:17] Yo:** va a empezar de una vez, y esta es la parte más importante, es
+- **[16:17] Yo:** cómo va a empezar a generarle realmente valor al usuario y es
+- **[16:17] Yo:** vea, ya le estoy dando los ángulos de venta,
+- **[16:17] Yo:** ¿sí?
+- **[16:17] Yo:** Unas propuestas de ángulos de venta,
+- **[16:17] Yo:** Entonces, supongamos, voy decir, va ser este ángulo de urgencia.
+- **[16:18] Yo:** Aquí le va a preguntar por dónde va a venderlos, por WhatsApp,
+- **[16:18] Yo:** o por landing page.
+- **[16:18] Yo:** Vamos a hacer landing page.
+- **[16:18] Yo:** Entonces, lo que tenemos pensado con Aleja,
+- **[16:18] Yo:** pues, vamos a construir,
+- **[16:18] Yo:** Droppy claramente no ofrece
+- **[16:18] Yo:** una interfaz
+- **[16:18] Yo:** en donde, tipo Shopify, donde el dropshipper sale a vender root.
+- **[16:18] Yo:** ¿Correcto?
+- **[16:18] Yo:** Porque ya solamente es
+- **[16:18] Yo:** justamente, el el back office de alguien que está haciendo dropshipping. ¿Verdad? Sin embargo, para una persona que no tiene idea, y por eso estoy siendo tan enfático en a quién les queremos llegar, personas que no saben de o que pasaron ya por el proceso y saben lo difícil que fue arrancar, ¿no? Una persona que de apenas está iniciando, que tiene tanta información alrededor, tantas comunidades ads, de de que apenas empiece, entonces, a meterse en el cuento, va a estar sobresaturado. Lo que tenemos pensado es como experimento, es generar un llámelo, un mini ecommerce, desde el mismo European.
+- **[16:19] Yo:** No con el fin de que escalen
+- **[16:19] Yo:** porque la idea va a ser que progresivamente empecemos a migrar estos
+- **[16:19] Yo:** nuevos usuarios
+- **[16:19] Yo:** hacia Shopify, Tienda Nove, WooCommerce,
+- **[16:19] Yo:** cuántas hayan.
+- **[16:19] Yo:** Pero sí es el punto, por lo menos, en donde yo voy a lograr convertir
+- **[16:19] Yo:** un usuario que no sabe nada,
+- **[16:19] Yo:** que cree una landing
+- **[16:19] Yo:** que se vea los productos y que pueda gestionar órdenes.
+- **[16:19] Yo:** ¿Sí? Es decir, que va a montar como otro pinche, va hacer pago contra entrega, no es
+- **[16:19] Yo:** pasarela de pagos, no necesitamos nada de eso. Entonces, al final va a ser
+- **[16:19] Yo:** supongamos,
+- **[16:19] Yo:** mi tienda José punto shop.
+- **[16:19] Yo:** Por algo.
+- **[16:19] Yo:** Como lo maneja Shopify.
+- **[16:19] Yo:** Vamos a permitirle dar
+- **[16:19] Yo:** un máximo de de de de de de productos,
+- **[16:19] Yo:** tres productos, porque justamente la idea es no retener, la idea es que
+- **[16:19] Yo:** solamente pase de cero al menos a un producto,
+- **[16:19] Yo:** y cuando ya logremos generar hábito, es decir, un usuario que ya genere, no sé,
+- **[16:19] Yo:** diez ventas,
+- **[16:20] Yo:** ahí es donde lo la la idea sería, si vemos que esto da resultado en el experimento,
+- **[16:20] Yo:** ya empezamos, entonces, esa migración hacia Shopify, es necesitas escalar,
+- **[16:20] Yo:** algo más robusto desde ya, ¿sí?, desde esa vitrina que va haber tu comprador final, entonces, ya Shopify Tiendanube, cualquier herramienta externa, que igual se va a poder conectar con Drop.
+- **[16:20] Yo:** Entonces, esto es solamente un poco del empujón
+- **[16:20] Yo:** para esos usuarios
+- **[16:20] Yo:** Justamente el foco son los usuarios de huerta, pues,
+- **[16:20] Yo:** con una comunidad mucho más fácil,
+- **[16:20] Yo:** que Ibanca y Sedo llegue y te te tome la mano y te lleve hasta el
+- **[16:20] Yo:** punto en donde, no sé, esto es Shopify, esto es
+- **[16:20] Yo:** échate a pro, esto es Dropi, une esto, esto, esto, y hay un seguimiento un poco personalizado. Como el foco está en esos huérfanos que nadie les está explicando, que la plataforma tiene que ser lo suficientemente intuitiva y cercana para llevarlos de no saber nada empezarles a poco meter conceptos le das un poco que el mismo drop y proporcione ese ecosistema, esa esa parte, ese punto a un drop y no lo toca. Y es que dropping sirva a esos principiantes, como como como vitrina, ¿sí? Solamente que, claro, hoy tenemos que cuidar un tema de que no se vea que no sé punto dropping, porque, pues, claramente, un usuario que vaya a comparar vaya a dropping, a un
+- **[16:21] Yo:** y se va a enterar de que
+- **[16:21] Yo:** esa tienda lo que tiene por debajo
+- **[16:21] Yo:** es justamente un proveedor con muchos productos,
+- **[16:21] Yo:** y que muchas tiendas van a ofrecer lo mismo.
+- **[16:21] Yo:** Ahí tendríamos
+- **[16:21] Yo:** sí, todo dependerá si si nos va bien o no con con con el experimento en
+- **[16:21] Yo:** en expo winners, ver si tiene sentido,
+- **[16:21] Yo:** y lo importante de eso es cómo acotamos, porque, claro, puede haber un conflicto de intereses también con las
+- **[16:21] Yo:** con los e-commerce.
+- **[16:21] Yo:** ¿Sí?, Shopify, por ejemplo.
+- **[16:21] Yo:** Y, finalmente, nuestro core de negocio no es ser el ecommerce,
+- **[16:21] Yo:** pero, de alguna forma, tenemos que mover
+- **[16:21] Yo:** ¿sí? Yo creo que todos estamos claros en que la activación
+- **[16:21] Yo:** para los huérfanos es del uno por ciento apenas, es supremamente baja,
+- **[16:21] Yo:** pero una vez logremos que haya esa conversión de que al menos venda uno, dos, tres
+- **[16:22] Yo:** productos, va ser más fácil, entonces, ya entregárselo, ¿no?
+- **[16:22] Yo:** O sea, se se se se cede esa
+- **[16:22] Yo:** esa capacidad, esa infraestructura, realmente, a quienes su corte de negocios es ese,
+- **[16:22] Yo:** ya
+- **[16:22] Yo:** encontramos la la encontramos la manera que, obviamente, sincroniza
+- **[16:22] Yo:** justamente los productos que ya tienen Dropi,
+- **[16:22] Yo:** Shopify, y, pues, de ahí se hace como ese salto para que logre escalar
+- **[16:22] Yo:** es como ya el siguiente gran paso.
+- **[16:22] Yo:** Aquí como que queremos aprovechar es el el workshop,
+- **[16:22] Yo:** para recolectar toda esa información que hoy no tenemos.
+- **[16:22] Yo:** ¿Sí?, porque hoy la plataforma todavía no no no propone
+- **[16:22] Yo:** un flujo mucho más sencillo para alguien que no sabe hacerlo.
+- **[16:22] Yo:** Por ejemplo, dentro de lo que ustedes ya han visto en otros casos,
+- **[16:22] Yo:** está lo de casa productos, entonces,
+- **[16:22] Yo:** si no entiendes un producto, escríbelo acá y vamos a encontrar
+- **[16:22] Yo:** que el el el el
+- **[16:22] Yo:** el supplier, el proveedor que te lo va a entregar, y entonces vas a poder negociar
+- **[16:22] Yo:** alguien que no sabe de esto, le estás hablando en Chino, o sea,
+- **[16:22] Yo:** no sé qué me estás diciendo, qué esperas que haga, cómo así, me van a cobrar antes, no me van a cobrar antes, esto
+- **[16:23] Yo:** sigue siendo dropshipping.
+- **[16:23] Yo:** Es eso, esas herramientas todas ellas están para igual
+- **[16:23] Yo:** seguir
+- **[16:23] Yo:** alimentando la retención
+- **[16:23] Yo:** o que la activación sea mayor,
+- **[16:23] Yo:** pero lo que queremos acá es esta parte, esta gente que es
+- **[16:23] Yo:** totalmente
+- **[16:23] Yo:** digámoslo, ignorante del mundo del modelo de negocio.
+- **[16:23] Yo:** ¿Listo? Pues como como la propuesta, no sé qué. Si tienen comentarios
+- **[16:23] Yo:** les parece una buena idea, si hay alguna información que
+- **[16:23] Yo:** tengan que que nos pueda ayudar. Claramente, esto
+- **[16:23] Yo:** a alguien más se le tuvo que haber ocurrido antes.
+- **[16:23] Yo:** No tenemos antecedentes de por qué no se ha hecho antes,
+- **[16:23] Yo:** Suponemos de, bueno,
+- **[16:23] Yo:** puede ser por un conflicto de intereses, pero por eso estamos delimitando muy bien
+- **[16:23] Yo:** Ojo, esto no es que queremos que sea una nueva vertical,
+- **[16:23] Yo:** queremos sacar la versión de Shopify de nativa de dropping,
+- **[16:23] Yo:** Claramente, sí tenemos que, de alguna forma,
+- **[16:23] Yo:** tomar esos conceptos y llevarlos, pero de una forma muy
+- **[16:23] Yo:** paso uno,
+- **[16:23] Yo:** Ya el paso dos es sálgase de esta de este mini comer de dropping,
+- **[16:23] Yo:** ahí sí monte sus productos en Shopify.
+- **[16:24] Yo:** No sé cómo cómo cómo lo ve, qué opiniones tienen.
+- **[16:24] Yo:** Y Aleja, si omití algo
+- **[16:24] Yo:** me complementos ahí, pero
+- **[16:24] Participante:** Je crois que ya
+- **[16:24] Participante:** Yo creo que ya lo dijiste todo, Santi.
+- **[16:24] Participante:** De pronto, si tienen dudas o preguntas hasta ahí, o mejor
+- **[16:24] Participante:** sugerencias como para las actualizaciones o las mejoras que le vamos a hacer,
+- **[16:24] Participante:** serían bien recibidas.
+- **[16:24] Participante:** Sé que
+- **[16:24] Participante:** tengan hasta el momento.
+- **[16:24] Participante:** Nosotros, Santiago, Aleja y todo el equipo, nosotros en en Argentina estamos un proceso
+- **[16:24] Participante:** de acompañamiento
+- **[16:24] Participante:** a los usuarios en cada una de sus etapas.
+- **[16:24] Participante:** Sea, estamos integrando los registros que se están haciendo en dropping,
+- **[16:24] Participante:** y una y unas acciones que estamos ejecutando desde go high level,
+- **[16:24] Participante:** tienen también como propósito de la compañía como
+- **[16:24] Participante:** el tema de activación.
+- **[16:24] Participante:** Por la oportunidad que se tiene. De pronto, por ahí
+- **[16:24] Participante:** ahí se están haciendo, allá se están haciendo temas dentro de ese flujo,
+- **[16:25] Participante:** temas, por ejemplo, para apoyar la activación como estrategia,
+- **[16:25] Participante:** una forma de vender de forma orgánica.
+- **[16:25] Participante:** Y esto lo tiene, ese contenido es un contenido que tiene Dupi
+- **[16:25] Participante:** un video,
+- **[16:25] Participante:** que de verdad a mí me pareció muy interesante, porque
+- **[16:25] Jose Hurtado:** coincido de que la gente entra a Dropi, se registra y y entra como con mucho ímpetu, con mucha efusividad, quiere empezar a vender y de verdad no. Les cuesta y nos lo muestran los números. Entonces, una de las de las barreras que uno comienza a tener cuando antes de de arrancar, es que, por ejemplo, el tema de la publicidad, el pago de la publicidad, las integraciones que se requieren hacer, lo que vos mencionabas de chatea pro, que esto es chatea, que esto es Shopify, que luego hay que integrar, bueno,
+- **[16:25] Jose Hurtado:** todo ese tipo de cosas. Creo que son fricciones con las que los usuarios
+- **[16:26] Jose Hurtado:** empezando y que no tienen un conocimiento de ecommerce se chocan.
+- **[16:26] Jose Hurtado:** Entonces, la pregunta va,
+- **[16:26] Jose Hurtado:** o la sugerencia va si de pronto por ahí podemos incluir
+- **[16:26] Jose Hurtado:** parte de ese ejercicio acá. Por ejemplo, ese contenido de vender de forma orgánica
+- **[16:26] Jose Hurtado:** lo que hacen
+- **[16:26] Jose Hurtado:** lo que se explica en ese video.
+- **[16:26] Jose Hurtado:** Es cómo una persona puede entrar
+- **[16:26] Jose Hurtado:** empezar a vender sin necesidad de publicar.
+- **[16:26] Jose Hurtado:** Sin pagar de en publicidad. Entonces, ¿cómo? A través del WhatsApp, por ejemplo,
+- **[16:26] Jose Hurtado:** Entonces, ahí se le explica, coge, escoge un producto,
+- **[16:26] Jose Hurtado:** y compártelo en tus estados, compártelo en tus grupos de familiares,
+- **[16:26] Jose Hurtado:** amigos, publícalo en marketplace de forma gratis,
+- **[16:26] Jose Hurtado:** y utiliza drop EC para el evento del despacho y la recepción de la
+- **[16:26] Jose Hurtado:** de de de de de la ganancia en este caso.
+- **[16:26] Jose Hurtado:** Y
+- **[16:26] Jose Hurtado:** también de en Argentina se está haciendo algo, y es que
+- **[16:26] Jose Hurtado:** algo que estaba vía ahí,
+- **[16:26] Jose Hurtado:** nosotros le pedimos dentro de ese onboarding, aparte de ver el video que escoja ya el producto,
+- **[16:27] Jose Hurtado:** que nos lo comparta, y nosotros le entregamos copy, le entregamos una serie de cosas. Entonces,
+- **[16:27] Jose Hurtado:** la pregunta
+- **[16:27] Jose Hurtado:** y la sugerencia es si podemos incluir
+- **[16:27] Jose Hurtado:** dentro de este proceso contenido como ese, o sea, esos videos, por ejemplo.
+- **[16:27] Yo:** ¿Sí podemos incluirlos?
+- **[16:27] Yo:** La la
+- **[16:27] Yo:** una de las métricas que estamos ya tratando de de dejar fijas es
+- **[16:27] Yo:** cómo vamos a definir si es exitoso o no,
+- **[16:27] Yo:** ¿cierto? Es
+- **[16:27] Yo:** yo cuando digo que el experimento fue exitoso,
+- **[16:27] Yo:** o si la la prueba de conceptos exitosa realmente es,
+- **[16:27] Yo:** por por una cifra puede ser diez minutos. Si en diez minutos el usuario desde punto cero es de registro.
+- **[16:27] Yo:** Logra escoger un producto
+- **[16:27] Yo:** cubrir, pues, explorar las opciones,
+- **[16:27] Yo:** definir el ángulo de venta,
+- **[16:27] Yo:** y publicar. Por eso, un poco también la la la la
+- **[16:27] Yo:** la salita esta de, bueno,
+- **[16:28] Yo:** esto es como tu mini ecommerce, ¿cierto?, dentro de dropping.
+- **[16:28] Yo:** Es más para también
+- **[16:28] Yo:** lograr llegar al paso final, ¿no?,
+- **[16:28] Yo:** O sea, esta es la meta, tengo que crear dibujar una meta.
+- **[16:28] Yo:** Y la meta es, listo, lo publiqué porque entendí todo el flujo, escogí producto,
+- **[16:28] Yo:** lo publico,
+- **[16:28] Yo:** estamos pensando así también
+- **[16:28] Yo:** puesta la opción entre el
+- **[16:28] Yo:** seguir con dropping
+- **[16:28] Yo:** tendríamos como esa ese stage ahí de
+- **[16:28] Yo:** de cuál es la vitrina para que también, por ejemplo, dentro de WhatsApp,
+- **[16:28] Yo:** comparta, pues, su tienda de dropping, o sea, él no no le tocó el usuario que no sabe nada de Shopify,
+- **[16:28] Yo:** ir a entender Shopify, crearse una cuenta,
+- **[16:28] Yo:** sino que directamente exporta todo lo que ella tiene ahí en Dropping.
+- **[16:28] Yo:** O para los que igual ya conozcan, hayan vendido,
+- **[16:28] Yo:** pues, todavía no a través del modelo de dropshipping, sino que hayan vendido un ecommerce,
+- **[16:28] Yo:** con con Shopify, no sé, su propia marca, algo por el estilo,
+- **[16:28] Yo:** sugerí en una reunión que tuvimos, de hecho, tener descargar temas.
+- **[16:28] Yo:** Para que, entonces, directamente,
+- **[16:28] Yo:** un usuario que
+- **[16:29] Yo:** para que no tenga que empezar tan desde cero en Shopify, pues lo que hace es
+- **[16:29] Yo:** arrastrar el tema de drop y a a Shopify,
+- **[16:29] Yo:** para facilitar como ese
+- **[16:29] Yo:** Sin embargo, por lo mismo, eso ya serían usuarios que conocen
+- **[16:29] Yo:** manejan el concepto un tema, saben que
+- **[16:29] Yo:** Shopify se puede importar temas de otros lados,
+- **[16:29] Yo:** Pero lo que tú dices, lo de incluir videos, claro que se podría. De hecho, creo que, bueno, Alehái
+- **[16:29] Yo:** como lo ves,
+- **[16:29] Yo:** poder hacer más robusto también el flujo,
+- **[16:29] Yo:** tendríamos que cuidar es que eso no nos aumente los tiempos.
+- **[16:29] Yo:** ¿Sí? O sea, que no que no haga que
+- **[16:29] Yo:** se desvíe y que sea muy bien, justamente, escogí los videos para
+- **[16:29] Yo:** evitar
+- **[16:29] Yo:** confundir al usuario,
+- **[16:29] Yo:** pero creo que serían importantísimos, sobre todo, había pensado, de hecho,
+- **[16:29] Yo:** por eso les quería mostrar esa pantalla, una vez se exporta, ya ya ya te doy la palabra de ley,
+- **[16:29] Yo:** doy la, una vez exporta, esto, bueno, esto es información que está quemada, esto esto lo debe de la
+- **[16:29] Yo:** la idea es de que
+- **[16:29] Yo:** cuando ya tengo montado el producto,
+- **[16:29] Yo:** voy a poder ver las estadísticas de ese producto.
+- **[16:30] Yo:** ¿Sí?, el que escogí, el que exporté.
+- **[16:30] Yo:** Ahora, hay hay
+- **[16:30] Yo:** no me acuerdo si está yo la alcancé a dejar más más adelantada, déjenme les muestro.
+- **[16:30] Yo:** Para ver, entonces, cómo se vería
+- **[16:30] Yo:** pongamos, voy a repetir esto, esto no está muy adelantado.
+- **[16:30] Yo:** Eso es, por ejemplo, listo, esta sería como
+- **[16:30] Yo:** no sé, la la parte en donde voy a ver
+- **[16:30] Yo:** todos los productos que tengo de Deropilos, ya escogí en el flujo principal,
+- **[16:30] Yo:** ¿sí?
+- **[16:30] Yo:** Ahí es, copio el link, y este link es el que voy a compartir en estados de WhatsApp.
+- **[16:30] Yo:** ¿Cierto?
+- **[16:30] Yo:** Y cuando ya me empiezan a pedir, bueno, aquí es donde ya puedo cambiarlos,
+- **[16:30] Yo:** yo puedo ya editar ese
+- **[16:30] Yo:** cosas más.
+- **[16:30] Yo:** Es como algo muy muy sencillito, y, de pronto, aquí es donde
+- **[16:30] Yo:** aquí, buen staff, me vuelves a porta acá.
+- **[16:30] Yo:** Que justamente está con Meta TikTok. Esta conexión está ahí quemada, pero realmente esto no es tan fácil de hacer por
+- **[16:30] Yo:** temas ya de
+- **[16:30] Yo:** de verificación de la app y todo el protocolo que hay que hacer para hacer TikTok, barra y todo el cuento.
+- **[16:30] Yo:** Para hacer prototipos rápidos, pues, no es tan fácil activarlo. Pero, por ejemplo, podría ser como
+- **[16:30] Yo:** comienza a pautar o
+- **[16:31] Yo:** aprende cómo
+- **[16:31] Yo:** hacer pauta de tus de de de tus productos a través de Meta,
+- **[16:31] Yo:** lo que es algo mucho más, o o o tips para vender por WhatsApp. Entonces, desde acá, tratar de facilitarle
+- **[16:31] Yo:** poco eso.
+- **[16:31] Yo:** Ya una vez tiene como toda la estructura del ángulo de venta, el producto, la
+- **[16:31] Yo:** ya sabe el stock,
+- **[16:31] Yo:** cuánto va a ganar. Es lo mismo, es esto, pues, lo que queremos hacer es
+- **[16:31] Yo:** hacerlo mucho más simple.
+- **[16:31] Yo:** CLAD,
+- **[16:31] Yo:** ¿Cómo así?
+- **[16:31] Participante:** Hola, ¿bien?
+- **[16:31] Participante:** Por acá un poquito como perdida.
+- **[16:31] Participante:** Pero no sé si de pronto ya lo habían dicho, lo habían pensado,
+- **[16:31] Participante:** parece el tema de la activación, de que antes que se le
+- **[16:31] Participante:** de pronto, mostrara como la herramienta o o se le ofreciera como
+- **[16:31] Participante:** los flujos a los usuarios, se pudiera haber hecho como una un perfilamiento del usuario?
+- **[16:31] Yo:** Sí, bueno, entonces, pongo el el el contexto de de
+- **[16:31] Yo:** por qué estamos en este punto y qué es lo que estamos
+- **[16:31] Yo:** revisando acá.
+- **[16:31] Yo:** Vale.
+- **[16:31] Yo:** Para para expo winners,
+- **[16:31] Yo:** Jaime adelantó con Catalina, de de de
+- **[16:32] Yo:** design,
+- **[16:32] Yo:** una herramienta
+- **[16:32] Yo:** para facilitar encontrar productos, ¿sí?
+- **[16:32] Yo:** Diferente a casa producto, diferente a es decir, esto es
+- **[16:32] Yo:** estoy
+- **[16:32] Yo:** buscando qué vender.
+- **[16:32] Yo:** Sin embargo, ya ando mucho, tardando a explorar mucho más qué es lo que
+- **[16:32] Yo:** quiere resolver como negocio,
+- **[16:32] Yo:** realmente está en la activación.
+- **[16:32] Yo:** Pero
+- **[16:32] Yo:** haciendo un zoom en la activación,
+- **[16:32] Yo:** tenemos que el cuarenta por ciento de los dropshippers
+- **[16:32] Yo:** los nuevos registros, son huérfanos, ¿cierto?
+- **[16:32] Yo:** Y si hacemos un zoom dentro de esos huérfanos, vemos que solo el uno por ciento se activa.
+- **[16:32] Yo:** ¿Sí? Y si vemos de ese cuarenta por ciento de nuevo,
+- **[16:32] Yo:** cómo están clasificados, el
+- **[16:32] Yo:** noventa por ciento más del noventa por ciento,
+- **[16:32] Yo:** nunca ha hecho dropshipping.
+- **[16:32] Yo:** ¿Sí?
+- **[16:32] Yo:** Entonces,
+- **[16:32] Yo:** llegando como a ese nivel de detalle,
+- **[16:32] Yo:** estábamos, pues, estamos tratando de de de analizar propuestas. Estos
+- **[16:33] Yo:** lo que, también en pantalla lo que hemos visto a esta hora, es un poco lo que hacen.
+- **[16:33] Yo:** Adelantó, y es también para darles contexto hasta que Jaime nos lo entregó la semana pasada.
+- **[16:33] Yo:** Lo que estamos haciendo ahora para ser mucho más precisos, porque es como
+- **[16:33] Yo:** queremos llevar
+- **[16:33] Yo:** al evento en el en el espacio que nos está abriendo
+- **[16:33] Yo:** se le está abriendo el equipo de producto,
+- **[16:33] Yo:** pues,
+- **[16:33] Yo:** varios experimentos para sacar información, identificar patrones, señales y demás.
+- **[16:33] Yo:** Fallas que podemos corregir.
+- **[16:33] Yo:** Y, entonces, lo que queremos llevar es una herramienta
+- **[16:33] Yo:** que permita
+- **[16:33] Yo:** que nuevos usuarios
+- **[16:33] Yo:** puedan
+- **[16:33] Yo:** realmente empezar a vender.
+- **[16:33] Yo:** Por eso es que
+- **[16:33] Yo:** esto es un paso atrás
+- **[16:33] Yo:** varios pasos atrás de usuarios que ya han vendido
+- **[16:33] Yo:** así no sea, fotoshopping, que ya saben vender por WhatsApp, inclusive.
+- **[16:33] Yo:** Que tiene una tiendita, un stocking, ponen estados y
+- **[16:33] Yo:** lo suben al catálogo de Facebook.
+- **[16:33] Yo:** O sea, esa es ya gente que igual ya tiene una curva pequeña, pero ya tiene una curva de cómo van a ser por Internet.
+- **[16:33] Yo:** ¿O cómo sacarle provecho a a temas digitales?
+- **[16:34] Yo:** Estamos hablando de un par de personas que apenas están explorando el nivel general ventas por
+- **[16:34] Yo:** cómo lo facilitamos. Entonces,
+- **[16:34] Yo:** dentro de eso estamos usando el catálogo, que ya tenemos conexión a través de
+- **[16:34] Yo:** de de este prototipo de therapy, y unas APIs externas que
+- **[16:34] Yo:** que hacen es monitorear un radar de productos tendencia en el mercado.
+- **[16:34] Yo:** Luego, lo que hace es un prefiltrado, ¿no?, entonces, encuentra que se están vendiendo, no sé,
+- **[16:34] Yo:** está en superintendencia, libros, libros,
+- **[16:34] Yo:** de colorear de agua,
+- **[16:34] Yo:** encuentra eso. Luego monitorea dentro del dentro de lo que tenemos,
+- **[16:34] Yo:** siéndolo que existe.
+- **[16:34] Yo:** ¿Sí?
+- **[16:34] Yo:** Si no existe, ahí es donde se conecta, por ejemplo, con el casa productos, con
+- **[16:34] Yo:** se puede conectar después con pulso,
+- **[16:34] Yo:** pero estamos yendo todavía, ya ya estamos yendo hacia usuarios que ya saben de esto.
+- **[16:34] Yo:** Si nos mantenemos con
+- **[16:34] Yo:** los que no saben,
+- **[16:34] Yo:** vamos a llegar a que igual vaya a encontrar, va a lograr entender qué productos sí están en drop.
+- **[16:34] Yo:** Le va a empezar a sugerir, entonces, mi primer producto,
+- **[16:35] Yo:** no sé qué vender,
+- **[16:35] Yo:** qué categorías podría querer, vamos a hacer moda,
+- **[16:35] Yo:** Entonces, aquí busca,
+- **[16:35] Yo:** ahí donde está buscando de forma externa,
+- **[16:35] Yo:** el con con con Apify, y luego ve que hay en dropping.
+- **[16:35] Yo:** Voy a explorar el catálogo,
+- **[16:35] Yo:** aquí podría buscar
+- **[16:35] Yo:** otros
+- **[16:35] Yo:** Y, por ejemplo, aquí va ver un error, yo puse moda y aquí hay productos para mascotas.
+- **[16:35] Yo:** Error ahí de de la integración. Entonces, si puse moda, me voy a poner los productos
+- **[16:35] Yo:** están en drop y de moda.
+- **[16:35] Yo:** Voy a escoger este, supongamos.
+- **[16:35] Yo:** Y lo que va a hacer la plataforma ahora es generarme un plan de venta,
+- **[16:35] Yo:** Este plan todo es muy robusto para una persona que no vendió por Internet antes.
+- **[16:35] Yo:** ¿Listo?
+- **[16:35] Yo:** Lo que vamos, estamos trabajando con Aleja es cómo lo empezamos a simplificar a la mínima expresión
+- **[16:35] Yo:** que pueda salir adelante.
+- **[16:35] Yo:** Entonces, supongamos todo esto de, por ejemplo,
+- **[16:35] Yo:** CPA, roas, por un persona que no vendió antes por Internet, o que no ha vendido, que no es vendedor, pues es es nuevo, ¿listo?, o capaz maneja los términos pero no sabe que existen, como CPA o como ROADF.
+- **[16:36] Yo:** Luego, continuar, va a entender el plan de ejecución,
+- **[16:36] Yo:** claramente, en la versión mucho más sencilla, más user friendly.
+- **[16:36] Participante:** O sea, ya ahí le voy a mostrar entonces como muy detalladamente
+- **[16:36] Yo:** Y
+- **[16:36] Participante:** cuáles son esos términos que debe conocer
+- **[16:36] Participante:** para finalmente llegar a a a vender, pues, por decirlo así.
+- **[16:36] Yo:** No de forma académica,
+- **[16:36] Yo:** sino que va
+- **[16:36] Yo:** a
+- **[16:36] Yo:** acotarlo
+- **[16:36] Yo:** muy hacia, dicho, aquí creo que en el botón de vuelve a ser.
+- **[16:36] Yo:** Aquí está la estrategia. Te voy decir, de ese producto, muy puntualmente,
+- **[16:36] Yo:** va a ver los escenarios para que más o menos se calcule cuánto cree que
+- **[16:36] Yo:** poder ganar.
+- **[16:36] Yo:** ¿Sí?
+- **[16:36] Yo:** Entonces, por ejemplo, un CPA alto,
+- **[16:36] Yo:** el coste proveedor dice que es veinte mil, el precio de venta sugerido es de cincuenta y cinco, esto lo toma directamente
+- **[16:36] Yo:** ya del catálogo.
+- **[16:36] Yo:** Entonces, mire, ganancia estimada vendiéndola por treinta días, con un CPA de uno
+- **[16:36] Yo:** punto cinco, entonces, aquí le hace un estimado, ¿no?, es como una proyección
+- **[16:37] Participante:** O eso sería como una calculadora, pues.
+- **[16:37] Yo:** Exacto, como una calculadora, pero
+- **[16:37] Yo:** aquí está
+- **[16:37] Yo:** lo mismo, estoy tratando tratando de ejemplificar. Sabemos que hay un montón de costos ocultos como
+- **[16:37] Yo:** la publicidad y demás, que aquí no se tienen en cuenta. Pero, entonces, para alguien que no es
+- **[16:37] Yo:** no sabe todavía el negocio, tenemos que tratar de explicarle, hey, es que hay unas hay,
+- **[16:37] Yo:** algo, el costo está compuesto por
+- **[16:37] Yo:** costo proveedor, el precio que usted está vendiendo o
+- **[16:37] Yo:** CPA máximo, ¿Qué CPA?
+- **[16:37] Yo:** Ahí es donde tenemos que explicarle, un doce por ciento de devolución, un doce por ciento de chute bastante bajo.
+- **[16:37] Yo:** El CPA objetivo, cuarenta por ciento
+- **[16:37] Yo:** deja el cuarenta por ciento de utilidad,
+- **[16:37] Yo:** hay unos costos de aceite asociados,
+- **[16:37] Yo:** Sí, Juan Carlos.
+- **[16:37] Participante:** Sí, yes, digamos.
+- **[16:37] Jose Hurtado:** A existir un botón donde yo le diga, listo, sí, este producto es el que quiero vender
+- **[16:37] Jose Hurtado:** y lo integro directamente con con Shopify. Desde este módulo,
+- **[16:37] Jose Hurtado:** bueno, igual esto es como un mock up, de de lo que de lo que va a pasar.
+- **[16:37] Yo:** Claro, este es un muka,
+- **[16:38] Yo:** como esto es para su mente,
+- **[16:38] Yo:** en una hora tratar de validar
+- **[16:38] Yo:** si este flujo
+- **[16:38] Yo:** eso les decía que estamos dibujando una meta, ¿no? La meta es
+- **[16:38] Yo:** que seleccionó, escogió, dijo, sí, me me este producto me gusta, veo que
+- **[16:38] Yo:** tiene una buena ganancia,
+- **[16:38] Yo:** luego me me genera un un un un embudo, ¿no? Entonces, arma tu embudo.
+- **[16:38] Yo:** Puedo pedir una unidad de prueba, esto es un mock, esto no va a pedir unidad de prueba.
+- **[16:38] Yo:** Vamos a hacer si pide una unidad de prueba? Es,
+- **[16:38] Yo:** cuántos usuarios se nos quedan
+- **[16:38] Yo:** en pedir una muestra antes de
+- **[16:38] Yo:** escoger el producto.
+- **[16:38] Juan Camilo Rojas:** Ya.
+- **[16:38] Yo:** ¿Por qué lo están haciendo? Porque quieren testear la calidad
+- **[16:38] Yo:** los usuarios nuevos de nuevo,
+- **[16:38] Yo:** claramente un usuario que genera, pide diez, no sé, diez pruebas
+- **[16:38] Yo:** mes,
+- **[16:38] Yo:** solamente, no sé, para explorar garantías o para explorar cómo cuánto se le demora a cada
+- **[16:38] Yo:** Ahora, pues, son escenarios diferentes, aquí queremos ver
+- **[16:38] Yo:** cómo reaccionan son los usuarios que nunca han
+- **[16:38] Yo:** realmente
+- **[16:38] Yo:** interactuado con este tipo de herramientas. Al final, lo que
+- **[16:38] Yo:** lo lo que dice de de Shopify, lo que por eso es que
+- **[16:39] Yo:** en este mock nosotros no podemos exportar nada a Shopify, de hecho, tendríamos que ser
+- **[16:39] Yo:** dentro ya de estas credenciales, o sea, hablando no como dropping,
+- **[16:39] Yo:** tener todas las APIs de de partner y demás.
+- **[16:39] Participante:** Ya.
+- **[16:39] Yo:** Lo que queremos hacer es probar
+- **[16:39] Yo:** y y y el concepto Shopify, exportar ecommerce todavía para
+- **[16:39] Yo:** usuarios muy principiantes son
+- **[16:39] Yo:** no compridos, pero son y necesitan un tiempo.
+- **[16:39] Yo:** Lo que estamos proponiendo acá, ahí Lady creo que fue con el entraste, es, venga, ¿qué pasa?
+- **[16:39] Participante:** Sí, justamente ayer estábamos discutiendo eso, que que
+- **[16:39] Participante:** o sea, existe como tipos de perfil de
+- **[16:39] Participante:** en donde tal vez algunos hayan hecho ecommerce, mas no dropshipping.
+- **[16:39] Yo:** Correcto.
+- **[16:39] Participante:** Entonces, digamos, sí estamos relacionados con este tema, pero los que definitivamente están en cero
+- **[16:39] Participante:** pues, lógicamente por eso era que yo te preguntaba como que si eso es, le iba
+- **[16:39] Juan Camilo Rojas:** explicar cómo específicamente de qué se trata todo ese un poco de
+- **[16:39] Juan Camilo Rojas:** de términos, porque obviamente para él va a ser muy complicado llegar
+- **[16:39] Participante:** de nuevo y de pronto meterse de lleno a a esto.
+- **[16:39] Yo:** Claro, y ahí lo
+- **[16:40] Yo:** Claro, y ahí lo que estamos haciendo con Ale es ajustar.
+- **[16:40] Yo:** Estos copies son un poco lo que, el mock que se montó hasta la semana pasada, lo que queremos hacer con Aleje de hecho, invertirlo. Aquí uno aparece como, robas tanto,
+- **[16:40] Yo:** tiene que ser explicativo,
+- **[16:40] Yo:** ¿Sí?
+- **[16:40] Yo:** Entonces, no sé, un escenario es como
+- **[16:40] Yo:** lo que te va a quedar a ti o lo que vas a ganar,
+- **[16:40] Yo:** ¿sí?, entre paréntesis,
+- **[16:40] Yo:** el concepto diminutivo, etiqueta de que que tenga en el mundo del dropshipping.
+- **[16:40] Yo:** ¿Listo?
+- **[16:40] Yo:** No es CPA, ponemos un un copy que sea muy explicativo, muy diciente hacia qué es lo que está generando. ¿Sí? Entonces, lo que vamos a hacer es llevarlo hacia un lenguaje muy natural, coloquial, para que se entienda de forma fácil y de a poco lo que tiene que empezar a hacer el dropping ahí con lo que vayamos trabajando con José desde desde la parte de camificación,
+- **[16:40] Yo:** es empezarle a entregar conceptos nuevos,
+- **[16:40] Yo:** Entonces, a mí no me interesa que mi usuario
+- **[16:40] Yo:** sepa en el momento uno qué es un CPA,
+- **[16:41] Yo:** ¿sí?,
+- **[16:41] Yo:** mí me interesa que sepa
+- **[16:41] Yo:** es más, que lo sin que sepa cómo se llama,
+- **[16:41] Yo:** es mucho más favorable para nosotros, que solamente a que sepa que existe el término.
+- **[16:41] Yo:** Que sea un experto vendiendo,
+- **[16:41] Yo:** que se sepa todo el glosario de términos del dropshipping o del ecommerce.
+- **[16:41] Yo:** O de ventas.
+- **[16:41] Participante:** Sí, de acuerdo. Santi, ¿y han hecho alguno tipo
+- **[16:41] Participante:** de prueba con con algún usuario?
+- **[16:41] Yo:** Es lo que queremos hacer, justamente, en expo
+- **[16:41] Yo:** O sea, es la vitrina de nosotros para ver todo esto, esta de concepto,
+- **[16:41] Yo:** aplicarlas y recolectar data.
+- **[16:41] Participante:** Bueno. Es porque sabes
+- **[16:41] Yo:** Tenemos, por ejemplo,
+- **[16:41] Participante:** que, no sé si ustedes lo sabían, pero pues nosotros vamos a ir obviamente con leyendas.
+- **[16:41] Yo:** Sí.
+- **[16:41] Participante:** Y resulta que con leyendas vamos a tener la marcación de los usuarios con unas manillas.
+- **[16:41] Participante:** Es decir, van a haber unas manillas de bienvenidos, y esas manillas de bienvenido
+- **[16:41] Participante:** siento que serían, pues, como el foco especial para
+- **[16:41] Leydi Geovana Bello:** hacer como tal la prueba de estos de este tipo como de de iniciativas.
+- **[16:41] Leydi Geovana Bello:** Porque realmente es un usuario que no conoce como tal de
+- **[16:41] Yo:** Lady, ¿sabes cuánto, o sea, en el
+- **[16:41] Leydi Geovana Bello:** de de de dropshipping.
+- **[16:42] Yo:** no me acuerdo si se pregunta o no, pero ¿sabe más o menos cuántos están en bienvenido?
+- **[16:42] Participante:** Ahí está
+- **[16:42] Yo:** O sea, ¿saben cuántos asistentes, inclusive, más detallado, saben cuántos de los
+- **[16:42] Leydi Geovana Bello:** No,
+- **[16:42] Yo:** no han vendido nada?
+- **[16:42] Leydi Geovana Bello:** Todavía no lo he sacado porque ese registro lo voy a sacar con el
+- **[16:42] Yo:** Okay.
+- **[16:42] Leydi Geovana Bello:** resultado de agosto, porque obviamente se se saca como con lo lo último, el último mes.
+- **[16:42] Leydi Geovana Bello:** Entonces, yo te voy te puedo sacar esa información, yo tengo a
+- **[16:42] Leydi Geovana Bello:** acceso al registro, pero tenemos que esperar a que termine agosto.
+- **[16:42] Yo:** Ok, perfecto.
+- **[16:42] Yo:** Ahora, entonces, lo lo que nosotros proponíamos
+- **[16:42] Yo:** como la gente estábamos pensando, es
+- **[16:42] Yo:** por ahora, este flujo
+- **[16:42] Yo:** se entiende a qué va, ¿no?, entonces, como que el paso a paso hasta que usted monte todo.
+- **[16:42] Yo:** Sin embargo, no teníamos una una meta clara de, bueno, cuándo decimos
+- **[16:42] Yo:** que lo que te decía ahora es, ahí creo que entraste,
+- **[16:42] Yo:** cuándo decimos que esto
+- **[16:42] Yo:** tuvo resultado?
+- **[16:42] Yo:** ¿Cierto?
+- **[16:42] Yo:** Realmente, nosotros no no no nos podemos
+- **[16:42] Yo:** en el prototipo.
+- **[16:42] Yo:** Conectar, estamos hablando solamente encapsúlenlo en en en el expo fitness, por Ya después se pueden hacer muchas más cosas con tecnología. Pero para el evento, nosotros no podemos conectarlo con el API de TikTok ni con el API de Meta, porque requiere una de de de de partner. ¿Sí? Generar ads y todo el Pero podríamos decir, no, pues, cuando lo cuando lo publiquen la ecommerce, Decimos, bueno, para que lo publique en ecommerce, un usuario que no sabe nada de esto, sobre todo huérfano, que no han tenido una comunidad explicándoles y dándoles más conceptos, pues me va a tocar sacarlos a que tengan algo en Shopify, entonces, lo conecten, pero esto
+- **[16:43] Yo:** un mock que no puedo darles a Shopify, ¿verdad?
+- **[16:43] Yo:** Lo que se lo que se se nos ocurrió fue
+- **[16:43] Yo:** ¿qué pasa
+- **[16:43] Yo:** José, ahí importante que que que me digas cómo cómo lo ves tú también desde el lado de de growth, por
+- **[16:43] Yo:** y luego para gamificación. ¿Qué pasa si nosotros le damos
+- **[16:43] Yo:** un stage ¿cierto?, un un paso previo antes de que un dropshipper empiece a aprender de Shopify, integre y luego importe y sincronice
+- **[16:44] Yo:** diez mil productos, quinientos productos. Mucho antes de eso,
+- **[16:44] Yo:** yo le doy un escenario
+- **[16:44] Yo:** llamémoslo prueba, test,
+- **[16:44] Yo:** como de una
+- **[16:44] Yo:** mini, de un mini ecommerce,
+- **[16:44] Yo:** ¿sí?, en donde va a poder cargar tres, cinco productos que encontré en Shopi, en Endropi,
+- **[16:44] Yo:** perdón.
+- **[16:44] Yo:** Y desde ahí,
+- **[16:44] Yo:** como, pues, drop y se va a hacer contra entrega,
+- **[16:44] Yo:** no necesitamos tener pasarela de pago, no no necesitamos nada raro,
+- **[16:44] Yo:** realmente es
+- **[16:44] Yo:** genera su tiendita
+- **[16:44] Yo:** de dropping,
+- **[16:44] Yo:** la que le va a compartir a usuarios finales, la que podría llegar a
+- **[16:44] Yo:** pagarle alguna pauta meta. Después,
+- **[16:44] Yo:** no entró al evento,
+- **[16:44] Yo:** y que las órdenes que generé ahí realmente
+- **[16:44] Yo:** pues, a la larga,
+- **[16:44] Yo:** se conectan a dropping,
+- **[16:44] Yo:** ¿cierto?, y empezó a vender, es decir,
+- **[16:44] Yo:** la venta uno, dos, tres, cuatro, por ahí hasta la diez,
+- **[16:44] Yo:** va a ser dentro del ecommerce de dropping.
+- **[16:44] Yo:** No la pasarela, no no la plataforma como de Dropi, estamos hablando de un
+- **[16:45] Yo:** una nueva pantalla, ¿no?, la nueva pantalla que hacía como administrador de mi tienda.
+- **[16:45] Yo:** Hagan de cuenta como si
+- **[16:45] Yo:** Dropli quedara su Shopify.
+- **[16:45] Participante:** Se, perdón, o se volvería como un tema de
+- **[16:45] Yo:** Para
+- **[16:45] Participante:** de de plan de referidos?
+- **[16:45] Participante:** O sea, lo que entiendo es que él podría, o sea, escoge los, va a escoger los productos,
+- **[16:45] Yo:** Sí.
+- **[16:45] Participante:** y puede generar
+- **[16:45] Participante:** una página aparte
+- **[16:45] Participante:** una página
+- **[16:45] Participante:** que va a estar, va a ser droppy, pero droppy
+- **[16:45] Yo:** Sí.
+- **[16:45] Participante:** es la Santiago, con cinco o seis productos,
+- **[16:45] Participante:** Eso va a generar un link, va a tener una página
+- **[16:45] Participante:** una página, minipágina, como lo mencionabas,
+- **[16:45] Participante:** yo comparto esa página en mis estados de WhatsApp, en mi marketplace, en mis
+- **[16:45] Participante:** perfiles de Facebook, todo,
+- **[16:45] Yo:** Sí, la tratarías como como como utilizas tu página.
+- **[16:45] Jose Hurtado:** como fuera mi página, pero una forma orgánica, digámoslo así.
+- **[16:45] Yo:** Sí.
+- **[16:45] Jose Hurtado:** O sea, que se vuelve
+- **[16:45] Jose Hurtado:** voy a expresarlo así, su operación sería como
+- **[16:45] Jose Hurtado:** como, sí, como un plan de referidos?
+- **[16:46] Jose Hurtado:** Como lo que hace estrellas, por ejemplo,
+- **[16:46] Jose Hurtado:** que la gente, los usuarios lo
+- **[16:46] Yo:** No no no referidos porque realmente
+- **[16:46] Yo:** lo que haces es
+- **[16:46] Yo:** utilizar
+- **[16:46] Yo:** la tienda de Dropi como utilizas Shopify.
+- **[16:46] Yo:** ¿Sí? Solo que no te estoy llevando a que mallas montes una tienda en Shopify,
+- **[16:46] Yo:** asocies productos, sincronices, que ese ya es el
+- **[16:46] Yo:** el escenario en donde tenemos un usuario que sabe manejar
+- **[16:46] Yo:** las dos herramientas,
+- **[16:46] Yo:** que tiene o una comunidad está pagando un curso, ya está muy metido en el
+- **[16:46] Yo:** sino que venga,
+- **[16:46] Yo:** monte su tienda acá,
+- **[16:46] Yo:** Actualmente, tropiezo lo llega hasta el punto en donde
+- **[16:46] Yo:** estos son todos productos que usted puede vender.
+- **[16:46] Yo:** ¿Por dónde? Yo no sé.
+- **[16:46] Yo:** Usted arregle, vea a Shopee, fue allá a tienda nube, WooCommerce,
+- **[16:46] Yo:** ponga al WhatsApp una foto y luego venga acá y manualmente móntelo.
+- **[16:46] Yo:** ¿Correcto? Así estamos hoy.
+- **[16:46] Participante:** Sí.
+- **[16:46] Yo:** ¿Qué pasa?
+- **[16:46] Yo:** Si
+- **[16:46] Yo:** le genero
+- **[16:46] Yo:** el mini ecommerce
+- **[16:46] Yo:** diciendo mini porque no va tener todas las capacidades de un Shopify, ¿no?
+- **[16:47] Yo:** Mini es solamente
+- **[16:47] Yo:** la landing en donde usted va a poder compartir la landing, que
+- **[16:47] Yo:** José Vineda entre
+- **[16:47] Yo:** y le compre,
+- **[16:47] Yo:** ¿cierto?
+- **[16:47] Yo:** Y le compre va a pasar, como esto está conectado a dropping,
+- **[16:47] Yo:** pues, la orden se va a crear y va a dispararse el flujo
+- **[16:47] Yo:** común y corriente con el pago contra entrega y con todo el
+- **[16:47] Yo:** Pero esto con un límite,
+- **[16:47] Yo:** porque como nuestro core de negocio no es
+- **[16:47] Yo:** montar landings, ¿cierto?,
+- **[16:47] Yo:** es ser Shopify, es ser Dropi,
+- **[16:47] Yo:** pues ahí es donde vamos a tener que, progresivamente, después de la mejor de número
+- **[16:47] Yo:** cinco, diez, de que el el usuario ya despegó, lo que está haciendo es solamente
+- **[16:47] Yo:** generarle la atracción, ¿no?, el el el el startazo.
+- **[16:47] Yo:** Arranque,
+- **[16:47] Yo:** ya arrancó Miguel. Ya logré que usted tuviera una una landing, porque es que si no, me va a tocar aquí usted
+- **[16:47] Yo:** se le diera la gana de ir a Shopify y aprender a usar Shopify.
+- **[16:47] Yo:** Mientras, para para que esa transición sea muy rápida,
+- **[16:47] Yo:** la meta que estamos poniendo es, venga, pues genere el money de landing rápido.
+- **[16:48] Yo:** Es este producto, estos son los cinco productos de antes. Estas son las cinco landings, este es
+- **[16:48] Yo:** es su ecommerce que comparta,
+- **[16:48] Participante:** Ah, va a, perdón, va a generar una landing por producto.
+- **[16:48] Yo:** su grupo en la familia y que su
+- **[16:48] Yo:** Si al final es un detalle por producto,
+- **[16:48] Yo:** o sea, no es como como se genera
+- **[16:48] Yo:** por ejemplo,
+- **[16:48] Yo:** en page pilot, si ya lo han visto, que es como el detalle del producto, pero está
+- **[16:48] Yo:** totalmente como ajeno al resto.
+- **[16:48] Yo:** La idea es de que se pueda
+- **[16:48] Yo:** navegar entre si ya escogí cinco productos
+- **[16:48] Yo:** pues tengo mi tienda con los cinco productos ya elegidos.
+- **[16:48] Yo:** Voy a compartir.
+- **[16:48] Yo:** Claramente, todo esto sabemos que es hacia nivel de mock, visual, que el
+- **[16:48] Yo:** usuario entienda el journey completo desde que ingresó
+- **[16:48] Yo:** hasta que seleccionó los cinco productos, y ahí decimos,
+- **[16:48] Yo:** ya el usuario entiende
+- **[16:48] Yo:** y vemos si hay fricciones en el escoger un producto,
+- **[16:48] Yo:** y ponerlo en su ecommerce.
+- **[16:48] Yo:** ¿Sí? ¿Y su ecommerce cuál es?
+- **[16:48] Yo:** El mismo dropping. Por ahora,
+- **[16:48] Yo:** Porque lo que le digo, bueno, no podemos conectarnos a ningún otro ecommerce por
+- **[16:48] Yo:** tema ya de accesos y demás,
+- **[16:48] Yo:** estamos generando. Ahora, lo que estamos planteando con Aleja es,
+- **[16:49] Yo:** demos la posibilidad de que siga por dropping para que los monte en el mismo dropping con su
+- **[16:49] Yo:** vitrina, ¿no?, para que comparta
+- **[16:49] Yo:** o
+- **[16:49] Yo:** por eso es diferente estrellas, no es como que yo entro y empiezo a compartir y ya, a nivel general,
+- **[16:49] Yo:** tengo mi tienda, o sea, es
+- **[16:49] Yo:** BancoDropi punto shop punto Santiago.
+- **[16:49] Yo:** ¿Sí? O sea, es mi tienda,
+- **[16:49] Yo:** es lo que yo hago yo en Shopi Pay, pero es
+- **[16:49] Yo:** ahora Dropi tiene su propia tienda.
+- **[16:49] Yo:** Solo que claramente aquí estaríamos tendríamos que cuidarnos si vemos que esto es viable,
+- **[16:49] Yo:** a la larga de, pues, de cuidar el el
+- **[16:49] Yo:** un poco la la la
+- **[16:49] Yo:** esa esa esa capa, esa magia que hay del dropshipping, ¿no? Y es que yo no sé
+- **[16:49] Yo:** es su proveedor. O sea, no puede ser una que diga dropi,
+- **[16:49] Yo:** sino que va a ser, no sé,
+- **[16:49] Yo:** Shopping, supongamos, que se se fuera a manejar a través de de una URL como la de Shopping.
+- **[16:49] Yo:** Entonces,
+- **[16:49] Yo:** José Hurtado punto Shopping va a ser la tienda de José Hurtado, solamente con los productos que José Hurtado ya probó, ya revisó todo este flujo que les mostramos ahora.
+- **[16:49] Yo:** Ah, José ya la rompió, ya está vendiendo cincuenta productos por mes.
+- **[16:50] Yo:** Ya José, hasta acá llega esa tienda como
+- **[16:50] Yo:** temporal, podríamos inclusive decirle, temporal de dropping,
+- **[16:50] Yo:** venga,
+- **[16:50] Yo:** necesito que empiece a migrar a Shopify, a Tiendanube, a cualquier otro sistema,
+- **[16:50] Yo:** que le permita realmente tener rendimiento y ventas y tener
+- **[16:50] Yo:** pues, toda esa parte de ecommerce por un lado, y ya Andropi sigue haciendo solo una cosa.
+- **[16:50] Yo:** Que es
+- **[16:50] Yo:** gestionar el dropshipping.
+- **[16:50] Yo:** No sé si se se entiende la idea hasta ahí donde
+- **[16:50] Participante:** Sí, no, no, no, yo yo la entiendo.
+- **[16:50] Participante:** Pues, digamos que te te relacionaba el tema con estrellas, es porque en estrellas
+- **[16:50] Participante:** ya no solamente se puede compartir un solo un solo producto,
+- **[16:50] Participante:** o una sola landing, sino que mira que ahí también ya
+- **[16:50] Participante:** se puede, uno puede construir su propia página desde ahí,
+- **[16:50] Participante:** uno escoge cinco o diez productos, los que quieras, como construir una especie de de
+- **[16:50] Participante:** de catálogo, y y eso genera el link único,
+- **[16:50] Participante:** y uno lo comparte y la gente compra, bueno, hace todo el proceso tal
+- **[16:51] Participante:** como lo estabas como mencionando, por eso estaba haciendo como la relación.
+- **[16:51] Yo:** Pero pero, de alguna forma, en concepto, sí se acerca mucho a eso.
+- **[16:51] Jose Hurtado:** Sí, sí, sí, es va lo veo por ahí,
+- **[16:51] Yo:** En concepto, sí, porque tú estás agarrando productos
+- **[16:51] Yo:** sin saber nada de y no sabes nada de comer, ¿no?
+- **[16:51] Yo:** Hecho, hablando con María, María sugirió
+- **[16:51] Jose Hurtado:** okay.
+- **[16:51] Yo:** acercarnos al concepto estrellas.
+- **[16:51] Yo:** Es,
+- **[16:51] Yo:** no sé nada de ecommerce,
+- **[16:51] Yo:** tomemos, de hecho, no lo he, yo no lo he hecho de forma
+- **[16:51] Yo:** muy cercana, pero cuando lo dijo, sé sé sé por qué te refieres a eso, espero,
+- **[16:51] Yo:** agarro productos
+- **[16:51] Yo:** aquí le estamos agregando una capa un poquito más de, bueno,
+- **[16:51] Yo:** no se va quedar solamente en compartir, sino que usted sí va a estar gestionando todo lo que tiene que gestionar
+- **[16:51] Yo:** O sea, porque usted ya tomó sus cinco productos,
+- **[16:51] Yo:** supongamos que a la larga genera una orden,
+- **[16:51] Yo:** bueno, ya sabemos de ahí para adelante lo que sigue en complejidad de Ropi, ¿no?
+- **[16:51] Yo:** Confírmeme la orden, hágale el seguimiento,
+- **[16:51] Jose Hurtado:** Sí, ya viene el tema de gestión. Claro, de
+- **[16:51] Yo:** Y, o sea, a Tropi.
+- **[16:51] Yo:** Pero este es como ese ese empujón,
+- **[16:51] Participante:** Ajá.
+- **[16:51] Participante:** Ahora,
+- **[16:51] Yo:** sea, ¿qué qué en este empuja al
+- **[16:51] Yo:** uno por cien, al al noventa y nueve por ciento del cuarenta por ciento que no se
+- **[16:52] Yo:** activa,
+- **[16:52] Yo:** pues que no tiene una forma rápida de hacerlo, porque entran
+- **[16:52] Yo:** todos esos conceptos
+- **[16:52] Participante:** A mí mí a mí
+- **[16:52] Yo:** Jose, ¿cómo lo ves? Y le
+- **[16:52] Participante:** a mí me gusta, le veo mucho sentido,
+- **[16:52] Participante:** creo que es un
+- **[16:52] Participante:** también atiende mucho la
+- **[16:52] Participante:** la el tema de activación,
+- **[16:52] Jose Hurtado:** Yo, de pronto, por ahí, obviamente, lo que lo que cuadraríamos ahí en la
+- **[16:52] Jose Hurtado:** el tema de de de de ese de ese alineamiento o de esa de ese journey para para este tipo
+- **[16:52] Jose Hurtado:** de usuario.
+- **[16:52] Participante:** Todas estas variables que ya sabemos y entendemos son complejas para el que no
+- **[16:52] Participante:** no conoce, no está.
+- **[16:52] Participante:** Por ejemplo, algo que es vital,
+- **[16:52] Participante:** para el proceso es, yo incluiría ahí la calculadora de precios.
+- **[16:52] Jose Hurtado:** Muchas personas de verdad hasta empiezan a vender
+- **[16:52] Jose Hurtado:** y no vuelven a vender más. El tema ya va pasa por el tema de
+- **[16:52] Jose Hurtado:** y cuando uno ya mira la data y analiza la data, es que dentro de esos
+- **[16:52] Jose Hurtado:** poquito, porcentualmente poquitos que se activan,
+- **[16:53] Jose Hurtado:** muy poquitos, de esos poquitos que se activan, valga la redundancia,
+- **[16:53] Jose Hurtado:** tienen órdenes entregadas, los otros tienen órdenes de vueltas,
+- **[16:53] Jose Hurtado:** sea, y creo que va va va mucho por ese lado.
+- **[16:53] Jose Hurtado:** Agregaría eso como para efectos de de de
+- **[16:53] Jose Hurtado:** de de ese proceso, de ese journey que mencionábamos,
+- **[16:53] Jose Hurtado:** y yo
+- **[16:53] Jose Hurtado:** pues, chico, yo yo yo yo, la verdad, Santi, yo no yo no consideraría
+- **[16:53] Jose Hurtado:** en quitar esa opción. O sea, entiendo que
+- **[16:53] Jose Hurtado:** el objetivo es la activación. Recuerde que hay tres hitos importantes
+- **[16:53] Jose Hurtado:** que es la activación, primera orden, diez órdenes,
+- **[16:53] Jose Hurtado:** y cien órdenes. Cuando los usuarios llegan, se activan con estos
+- **[16:53] Jose Hurtado:** que acabo de mencionar, el porcentaje de short baja considerablemente, o sea, ya se vuelven
+- **[16:53] Jose Hurtado:** estables en los siguientes meses. Yo, la verdad, Santi, yo no lo quitaría
+- **[16:53] Yo:** No, no, me me, hay hay algo
+- **[16:53] Jose Hurtado:** yo lo, o sea, si si yo funciona, hágale, siga vendiendo por ahí,
+- **[16:53] Jose Hurtado:** y aprendió y quiere escalar, entonces va a buscar un líder de
+- **[16:53] Jose Hurtado:** para aprender y ya aprender de y toda la vaina que lo siga haciendo, pero
+- **[16:54] Yo:** de acuerdo, aquí aquí lo que estamos haciendo es acotarlo un montón,
+- **[16:54] Jose Hurtado:** siga con esa herramienta, Mario.
+- **[16:54] Yo:** no porque el resto o no vaya a estar a un importe,
+- **[16:54] Yo:** sino que nos toca ser muy precisos qué queremos medir.
+- **[16:54] Jose Hurtado:** Sí, total.
+- **[16:54] Yo:** Es por eso.
+- **[16:54] Yo:** Pero, y es como muy controladito, ¿no? Es como, venga, hasta diez minutos, hasta dos minutos,
+- **[16:54] Yo:** se demora acá, cuánto se me queda aquí, por eso es que toca ser como muy preciso
+- **[16:54] Yo:** en literalmente empezarlos a piñar uno por uno.
+- **[16:54] Yo:** Pero de que, por ejemplo,
+- **[16:54] Yo:** si ponemos el límite
+- **[16:54] Yo:** que van a ser diez productos o cinco productos,
+- **[16:54] Yo:** aquí aquí, Aleja, podríamos pensar en
+- **[16:54] Yo:** máximo, puedes tres productos. ¿No? En la en esa micro,
+- **[16:54] Yo:** ese micro ecommerce que va a ser de de dropping.
+- **[16:54] Yo:** Son muy pocos,
+- **[16:54] Yo:** Pregunta al usuario, ¿quieres agregar más? ¿Cuántos quieren agregar más después del tercero? Por ejemplo.
+- **[16:54] Yo:** Y empezar a mapear cuántos podríamos llegar a hacer,
+- **[16:54] Yo:** Tocaba evaluar, ahora, de hecho, tenemos una reunión con con con el equipo
+- **[16:54] Yo:** si, de alguna forma,
+- **[16:55] Yo:** estamos teniendo en cuenta algo estratégico que hubo alguna regla de negocio en donde por contrato me meta cualquier cosa. Por contrato con Shopify yo no puedo tener mi propio
+- **[16:55] Yo:** entonces que no, por eso es que no se ha hecho antes.
+- **[16:55] Yo:** Por eso es que estamos como apenas explorándolo, haciendo el discovery,
+- **[16:55] Yo:** ya.
+- **[16:55] Yo:** Eso.
+- **[16:55] Participante:** Sí, hay importante
+- **[16:55] Participante:** complementando lo que decía José, ver el tema del de los user persona. No sé si eso ya está mapeado,
+- **[16:55] Participante:** porque, para mí, un supuesto es que yo no, o sea,
+- **[16:55] Jose Hurtado:** no puedo tener mi ecommerce
+- **[16:55] Jose Hurtado:** Perdón, yo puedo tener un ecommerce o puedo tener una idea de negocio
+- **[16:55] Participante:** y no necesariamente tengo que usar todo lo que me ofrece Dropi,
+- **[16:55] Participante:** o todo el ecosistema, porque es que, de entrada, cuando uno entra a Dropping, todo uno se imagina
+- **[16:55] Juan Camilo Rojas:** que no, que ya hay que hacer pauta, que debo
+- **[16:55] Jose Hurtado:** tener Shopify o que debo tener un WooCommerce.
+- **[16:55] Juan Camilo Rojas:** Y no sé nada de programación, y y eso frena mucho, se los digo por experiencia.
+- **[16:55] Yo:** Si.
+- **[16:56] Yo:** ¿Hay algo ahí?
+- **[16:56] Yo:** Juanca? Perdóname.
+- **[16:56] Juan Camilo Rojas:** Ahí te tuve una... Señor, sí, dale.
+- **[16:56] Yo:** Perdóname, perdóname. ¿Hay algo ahí superimportante para que también sea
+- **[16:56] Yo:** todos estamos alineados.
+- **[16:56] Yo:** Hablamos con María el lunes, es
+- **[16:56] Yo:** ¿qué tal si todo un curso, ¿verdad?, un líder de comunidad para nivel
+- **[16:56] Yo:** nulo,
+- **[16:56] Yo:** se puede hacer dentro de dropping.
+- **[16:56] Yo:** Digamos que también nos basamos en eso, ¿sí?
+- **[16:56] Yo:** Y es
+- **[16:56] Yo:** ¿qué qué qué va a buscar el usuario por fuera de? Ah, no, Shopify.
+- **[16:56] Yo:** Venga, tengamos un mini Shopify de acá,
+- **[16:56] Yo:** que usted no tenga que salir.
+- **[16:56] Yo:** Ahí vamos a estar iterando a que venga, ¿qué necesitamos para que desde
+- **[16:56] Yo:** mismo pueda disparar la pauta a Meta o a TikTok?
+- **[16:56] Yo:** Para que no tenga que ir allá a montar una. ¿Esas API ya existen?
+- **[16:56] Yo:** O sea, todo dentro de Dropy, como ecosistema, a que si al final quiere irse por otro lado a Meta, sí. Pero creo que vamos alineados en eso. Dale, dale.
+- **[16:56] Participante:** De una
+- **[16:56] Participante:** Sí, y y te lo digo por experiencia, porque yo trabajé con una pañalera,
+- **[16:56] Participante:** En ese entonces, no existían, o existían pañaleras
+- **[16:56] Participante:** virtuales muy pocas,
+- **[16:57] Participante:** e hicimos unos ejercicios ahí, digamos,
+- **[16:57] Participante:** pues no tenía todo el músculo
+- **[16:57] Juan Camilo Rojas:** Era yo solito con los dueños de la de la empresa, ellos tenían una pañalera física, yo les monté todo el sistema Como emprendedor, creé, les creé un perfil de proveedor, perdón, y de ahí nos surtíamos para empezar a hacer ventas por por WhatsApp. Entonces, hay muchas personas que, mira, no necesitamos tener o ya ellos tenían adelantado un WooCommerce, pero yo usé Dropi para solamente la generación de guías, que es lo que el core de nosotros. Entonces, dependiendo del user persona, sí. Unos que no tienen ni idea de qué es dropping, hay otros que quizá lleguen muy emocionados, pero cuando dicen, no, es que usted tiene que tener diseñador, tiene que tener, no sé,
+- **[16:57] Juan Camilo Rojas:** qué, tiene que tener no sé qué, pues va va a frenarse, y parte de lo que te preguntaba ahora también
+- **[16:57] Juan Camilo Rojas:** con lo de Shopify es es precisamente eso, que podamos tener todo embebido
+- **[16:57] Juan Camilo Rojas:** y que no tengamos que ir
+- **[16:57] Juan Camilo Rojas:** o sea, que la UX y la UI sea tan bacana que yo no,
+- **[16:58] Juan Camilo Rojas:** pueda controlar.
+- **[16:58] Juan Camilo Rojas:** El dropshipping
+- **[16:58] Yo:** Sí.
+- **[16:58] Juan Camilo Rojas:** desde un solo módulo, y ahí llamarlo algo. O sea, ahí ponerle un nombre a ese proyecto,
+- **[16:58] Yo:** De hecho,
+- **[16:58] Juan Camilo Rojas:** llama Gali, pero le podemos llamar otra forma
+- **[16:58] Yo:** una una una fase
+- **[16:58] Juan Camilo Rojas:** más más bacano.
+- **[16:58] Yo:** una fase que sería mucho era explorar a futuro,
+- **[16:58] Yo:** Hoy Aleja lo mencionaba en una reunión,
+- **[16:58] Yo:** era
+- **[16:58] Yo:** tal cual como la HPV, ¿qué tal que yo pueda configurar las los dominios desde drop y
+- **[16:58] Yo:** Entonces, si yo ya apure una tienda,
+- **[16:58] Yo:** puedo montar un dominio
+- **[16:58] Yo:** yo ahora la una un
+- **[16:58] Yo:** una gran
+- **[16:58] Yo:** parte del tráfico que se me mueve
+- **[16:58] Yo:** es por Shopify, creo que es el setenta por ciento, si me suena.
+- **[16:58] Yo:** Es una cifra alta.
+- **[16:58] Yo:** Y los que están apenas arrancando,
+- **[16:58] Yo:** son todas las órdenes, son manuales.
+- **[16:58] Yo:** Yo ahí no estoy compitiendo ni siquiera con chocolate, es que
+- **[16:58] Yo:** entre más expertos sea el usuario,
+- **[16:58] Yo:** él mismo en su crecimiento, en teoría se va a ver forzado a migrar algo más
+- **[16:58] Participante:** Sí, va a, no, y van requiriendo cosas.
+- **[16:58] Yo:** robusto.
+- **[16:58] Yo:** Y no, entonces yo ya no solamente quiero pago contra entrega, sino pasaré la de pagos y entonces,
+- **[16:58] Participante:** Otras cosas.
+- **[16:59] Yo:** entonces, ahí ya si se se hace más complejo el usuario, está perfecto.
+- **[16:59] Yo:** Pero estos que no saben la
+- **[16:59] Yo:** pues,
+- **[16:59] Yo:** yo poco les tengo que pedir, y mejor, si lo puedo hacer todo en dropping,
+- **[16:59] Yo:** hago lo hago todo en dropping. Nosotros estamos esperando que nos den unas
+- **[16:59] Yo:** unas APIs
+- **[16:59] Yo:** Si llegaran a entregársenos esas APIs antes del evento,
+- **[16:59] Yo:** capaz el alcance que ahora le estoy estoy diciendo como que no, hasta allá no, porque no podemos, no podemos, no podemos,
+- **[16:59] Yo:** capaz y lograríamos hasta
+- **[16:59] Yo:** hacerlo mucho más completo para realmente hasta
+- **[16:59] Yo:** hacer una orden de verdad.
+- **[16:59] Yo:** O sea, hacer como un espejo de dropping
+- **[16:59] Yo:** para la prueba del concepto, ver qué tal nos va a montar una orden y gestionar un pedido,
+- **[16:59] Yo:** y ver si eso
+- **[16:59] Yo:** tiene tiene un alcance que veamos nosotros interesante gente que apenas está arrancando. Entonces,
+- **[16:59] Yo:** ahí
+- **[16:59] Yo:** cerrar perdones que tengo Raúl con el otro equipo de, con el resto del equipo.
+- **[16:59] Yo:** Creo que nos subió de un montón, Lady. Si nos puedes entregar el dato ahora que cierre agosto,
+- **[16:59] Participante:** Sí, claro, de una.
+- **[16:59] Yo:** para
+- **[16:59] Participante:** Yo les tendría el dato y también voy a sacar el dato de
+- **[16:59] Participante:** primero. Cuántos usuarios son nuevos completamente,
+- **[17:00] Yo:** Sí.
+- **[17:00] Participante:** porque tenemos muchísimos, o sea, va a haber mucha gente nueva.
+- **[17:00] Yo:** Superbién.
+- **[17:00] Yo:** Sería sería ideal con ellos, listo.
+- **[17:00] Yo:** Una. Bueno, si tienen igual más preguntas, comentarios, lo que sea, José, no,
+- **[17:00] Yo:** Josefina no no alcanzó a escuchar todo ahora y volvemos a hablar.
+- **[17:00] Yo:** Pues me los mandan, por
+- **[17:00] Yo:** Apenas nosotros tengamos
+- **[17:00] Yo:** cambios sobre los que les mostré, porque, digo, esto va a cambiar con lo que estamos definiendo con Alejandro,
+- **[17:00] Yo:** Creía que para el otro weekly vamos a tener ya otros conceptos ya de lo que
+- **[17:00] Yo:** conversado y, pues, va a estar un poco más cercano a la a lo que se va mostrar en
+- **[17:00] Leydi Geovana Bello:** Listo, de una. Igual yo creo que va a
+- **[17:00] Leydi Geovana Bello:** De una. Igual yo creo que va a ser muy diciente el momento en que hagamos las pruebas,
+- **[17:00] Leydi Geovana Bello:** porque finalmente con las personas que necesitamos que pruebe, pues vamos a darnos
+- **[17:00] Leydi Geovana Bello:** cuenta si realmente es fácil y no es fácil, porque también, pues,
+- **[17:00] Leydi Geovana Bello:** podemos tener algún sesgo ahí con el tema de que para nosotros los
+- **[17:00] Yo:** Sí.
+- **[17:00] Yo:** Ok,
+- **[17:00] Participante:** términos ya ya son demasiado familiares.
+- **[17:00] Yo:** Okay, listo, de una.
+- **[17:00] Participante:** Sí.
+- **[17:00] Yo:** Perfecto.
+- **[17:00] Leydi Geovana Bello:** Yo yo solamente quiero como
+- **[17:00] Leydi Geovana Bello:** como una recomendación, Santi, es
+- **[17:01] Participante:** ¿pues, si es algo así? Bueno.
+- **[17:01] Participante:** José Hurtado es el customer success, y José Hurtado tiene ya un montón de conocimiento
+- **[17:01] Leydi Geovana Bello:** temas como de movilización de los ecosistemas de comercialización a través de
+- **[17:01] Leydi Geovana Bello:** pues, de comercialización digitales. Entonces,
+- **[17:01] Yo:** Déjame
+- **[17:01] Leydi Geovana Bello:** como que sí sería muy interesante que él
+- **[17:01] Leydi Geovana Bello:** sea como parte de los definidores de cómo nosotros estamos formulando estas experiencias para el dropshipper, para garantizar que eso esté
+- **[17:01] Jose Hurtado:** alineado con la estrategia
+- **[17:01] Jose Pineda Pitre:** de customer success, que al final es es el que la la dirige. Entonces, como para ahí, porque además él él me había en él ya me mostró como también un proyecto de referidos, que sería superinteresante, José, que busquemos la forma en la que
+- **[17:01] Jose Pineda Pitre:** sí lo podamos vincular a esto que está haciendo Santos. Sí Pues, quedamos ya ahí estábamos conversando
+- **[17:01] Jose Pineda Pitre:** poquito porque estuvimos desde la implementación del tema de estrella, entonces
+- **[17:01] Jose Pineda Pitre:** tiene mucho que ver ahí, por eso te hablaba de referir. Epa.
+- **[17:01] Jose Pineda Pitre:** Es eso. A mí me encanta, la verdad, todo lo que nos traiga dropshippers maduros
+- **[17:02] Jose Pineda Pitre:** superbién. Pasar que que
+- **[17:02] Yo:** De una, de una, listo. Así, los dejo, que tengo otra llamada ahí.
+- **[17:02] Jose Pineda Pitre:** Dale.
+- **[17:02] Yo:** Que estén bien, se cuidan.

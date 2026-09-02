@@ -1,0 +1,397 @@
+# Entrega Wrapped a Growth
+
+- **ID:** `not_9jekakcHz0ftdS`
+- **Fecha:** 2026-08-21T21:00:53.720Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/5e979cec-3f9a-4f2d-a463-8845c1204758)
+- **Asistentes:** Santiago Herrera Acosta, Jose Pineda
+
+---
+
+## Resumen de la Reunión
+# Traspaso del Proyecto Wrapped a Growth
+
+- Santiago le entrega el proyecto Wrapped a José (célula de Growth)
+- Plan: Santiago le pide a su agente (Claude) que organice bien el proyecto, genere un PR y produzca un prompt estructurado para pasarle al agente de José
+  - El prompt debe incluir indicaciones de carpeta, recursos y todo lo necesario para que el agente de José pueda hacer la implementación
+- Entrega programada para el lunes
+  - José no va a revisar nada hoy; ambos sin tokens ni ganas
+
+# Estado de la Data y Fórmulas
+
+- La data actual viene de cruzar IDs que pasó James con lo que está en User Pilot
+  - Identifica dropshippers y tiene info de órdenes, productos más vendidos, etc.
+- Las fórmulas del Wrapped dependen de la estructura que entregue Miguel
+  - Sin modelo de datos de Miguel, no hay fórmula posible
+  - Están esperando que Miguel confirme la estructura completa
+
+# Coordinación con Miguel
+
+- José va a sacar un espacio con Miguel después de la reunión del lunes
+- Objetivo: revisar la experiencia del dropshipper en Leyendas dato a dato
+- Santiago sugiere preguntar variable por variable a Miguel:
+  - Nombre exacto de cada variable (ej. ordenes_entregadas, producto_mas_vendido)
+  - Frecuencia de actualización
+  - Si entrega el dato en crudo o ya masticado (con fórmulas de negocio aplicadas)
+- Si el dato llega en crudo, tocaría coordinar con el equipo que está haciendo el dashboard para alinear fórmulas
+
+# Integración con Leyendas y Wrapped
+
+- El core de la data va a vivir en Leyendas; Wrapped la sintetiza y la presenta de forma interactiva y visual
+- José Giraldo cuestionó que José Pineda estuviera trabajando solo en la landing de Leyendas
+  - Reunión de hora y media agendada para el lunes en la tarde para alinear
+- Santiago seguirá uniéndose a las reuniones con Miguel para mantenerse al tanto
+
+# Próximos Pasos
+
+- **Organizar el proyecto Wrapped y generar PR + prompt de traspaso** (Santiago)
+
+  Pedirle al agente que estructure bien los archivos locales y los de producción; generar el prompt que el agente de José necesita para hacer la implementación.
+- **Reunión con José Giraldo el lunes en la tarde** (Jose)
+
+  Alinear sobre la landing de Leyendas, que salió diferente a lo planeado.
+- **Coordinar con Miguel para obtener el modelo de datos** (Jose)
+
+  Preguntar variable por variable: nombre, frecuencia de actualización y si entrega dato crudo o con fórmulas aplicadas.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/c87818bf-c816-4246-97c6-0290e7da8d12](https://notes.granola.ai/t/c87818bf-c816-4246-97c6-0290e7da8d12)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[21:00] Yo:** Yes.
+- **[21:02] Yo:** Papa,
+- **[21:03] Jose Pineda Pitre:** Llegué, llegué, perdón, la tardanza.
+- **[21:03] Yo:** Aguanta, aguanta, aguanta, que estoy sirviendo mi café, espérame.
+- **[21:03] Jose Pineda Pitre:** Buenas.
+- **[21:03] Jose Pineda Pitre:** Aguanta, aguanta burro.
+- **[21:04] Yo:** Listo, que dice el crazy dog.
+- **[21:04] Jose Pineda Pitre:** No, pues, mismo aquí
+- **[21:04] Jose Pineda Pitre:** trabajando. So, salen proyectos por todo el lado,
+- **[21:04] Jose Pineda Pitre:** todo el mundo quiere hacer algo, todo el mundo se siente innovador.
+- **[21:04] Jose Pineda Pitre:** Y, ay, güey, puta. No, equipo técnico.
+- **[21:04] Yo:** Todo el mundo se inspira a los y Ernesto, el hijo de puta mundo inspirándose a los
+- **[21:04] Yo:** puta viernes.
+- **[21:04] Jose Pineda Pitre:** Y fue, marica, y yo,
+- **[21:04] Jose Pineda Pitre:** son las tres de la tarde, ya no me pide hacer productivo. Es como, amigo.
+- **[21:04] Yo:** And
+- **[21:04] Jose Pineda Pitre:** Ajá,
+- **[21:04] Yo:** Ay, bueno. Pero pero pero
+- **[21:04] Yo:** pero, pues, dentro del lado bueno, pues, estamos vivos.
+- **[21:04] Jose Pineda Pitre:** vivos, hay camello,
+- **[21:04] Jose Pineda Pitre:** estamos teletrabajando, estamos teletrabajando.
+- **[21:04] Yo:** Sí, sí.
+- **[21:04] Jose Pineda Pitre:** Ya no hay placa,
+- **[21:05] Jose Pineda Pitre:** Sí, no, hay varias cosas buenas, hay varias cosas buenas.
+- **[21:05] Yo:** Ay, parsi.
+- **[21:05] Yo:** Y ahora con el superproyecto de wrapped,
+- **[21:05] Yo:** que deja acá.
+- **[21:05] Jose Pineda Pitre:** Eso eso eso se vendió más rápido de lo que yo esperaba
+- **[21:05] Jose Pineda Pitre:** Santiago.
+- **[21:05] Yo:** Me dijeron, Santi, suelte suyo.
+- **[21:05] Jose Pineda Pitre:** Déjeles eso a José, y que él se den la jeta con tecnología.
+- **[21:05] Yo:** Jaime, así como
+- **[21:05] Yo:** Así como todo sutil,
+- **[21:05] Yo:** pues,
+- **[21:05] Yo:** dejen de su apósito. Sigue con Gali, yo.
+- **[21:05] Yo:** Pues sí, ¿no?
+- **[21:05] Yo:** La verdad, después de que me dijo que me iba a entregar Gali, el el el, este, con el que el
+- **[21:05] Yo:** que es el MCP,
+- **[21:05] Yo:** O sea, no es el mismo Gali de soporte, ¿no? Ese es
+- **[21:05] Yo:** es otro proyecto.
+- **[21:05] Jose Pineda Pitre:** Hay otro
+- **[21:05] Yo:** Sí, sí, le pusieron Gali, no sé por qué coincidieron en el nombre, realmente.
+- **[21:05] Yo:** Pero es otra cosa totalmente diferente.
+- **[21:05] Jose Pineda Pitre:** Cuando
+- **[21:06] Jose Pineda Pitre:** Cuando me dijeron que era Gali, yo pensaba que era Gali Galeano.
+- **[21:06] Jose Pineda Pitre:** No, Gali Leo, Gali Leigh.
+- **[21:06] Yo:** Es que era
+- **[21:06] Yo:** Es que la cultura general poco, poco.
+- **[21:06] Jose Pineda Pitre:** Sí, no, yo no debo de ser popular.
+- **[21:06] Jose Pineda Pitre:** Vení, ¿y qué más te dijo y qué más te dijo James?
+- **[21:06] Yo:** No, eso nada más... Ah, bueno,
+- **[21:06] Yo:** No, nada más, o sea, del evento realmente, solo sé que
+- **[21:06] Yo:** la la verdad me dijeron que yo no voy,
+- **[21:06] Jose Pineda Pitre:** Yo no quiero ir a adentro, Santiago.
+- **[21:06] Yo:** y y un poco descansé, porque
+- **[21:06] Jose Pineda Pitre:** Oof, Mary. I don't know. And
+- **[21:06] Yo:** porque, o sea, antes del terremoto estábamos como, ah, rico ahí, ¿no?, pues,
+- **[21:06] Yo:** bueno, no.
+- **[21:06] Yo:** Si si toca ir, voy a ir a la... Después del terremoto, como que...
+- **[21:06] Jose Pineda Pitre:** No.
+- **[21:06] Yo:** ¿Qué necesidad dónde has?
+- **[21:06] Yo:** Acá,
+- **[21:06] Jose Pineda Pitre:** No, fue puta. ¿Y cuándo me dijeron de
+- **[21:07] Jose Pineda Pitre:** dizque, no, es que aquí hay que defender el el el viaje, y yo
+- **[21:07] Jose Pineda Pitre:** ¿Ustedes están conscientes que eso es un sábado y un domingo?
+- **[21:07] Jose Pineda Pitre:** ¿Ustedes están conscientes de que uno debería de ir
+- **[21:07] Jose Pineda Pitre:** lo menos dos días para garantizar que
+- **[21:07] Jose Pineda Pitre:** sabe qué va a hacer allá,
+- **[21:07] Jose Pineda Pitre:** O sea, yo no sé qué voy a hacer allá todavía.
+- **[21:07] Yo:** Cien por ciento.
+- **[21:07] Jose Pineda Pitre:** Entonces,
+- **[21:07] Yo:** Sí.
+- **[21:07] Yo:** No, la verdad, me dijeron que no, que que iba a ir
+- **[21:07] Yo:** José, Laui, Jaime, o yo,
+- **[21:07] Jose Pineda Pitre:** En Arica, no.
+- **[21:07] Yo:** ahí me pasó acá.
+- **[21:07] Yo:** No no sé.
+- **[21:07] Jose Pineda Pitre:** Yo estoy como aquí. ¿Sí ve lo que yo le decía a lo del
+- **[21:07] Yo:** Sí,
+- **[21:07] Jose Pineda Pitre:** extrovertido que a mí? A veces no me gusta ser extrovertido,
+- **[21:07] Jose Pineda Pitre:** ¿O fue puta? Yo yo
+- **[21:07] Yo:** sí, porque ese golpe está callado, mal encarado, y yo,
+- **[21:07] Yo:** a ese sirve,
+- **[21:07] Jose Pineda Pitre:** A mí no, a mí me cogieron de payaso.
+- **[21:07] Jose Pineda Pitre:** Entonces, tú, José, los pones, los saludas cuando entras y les pones la
+- **[21:07] Yo:** Y te vas a disfrazar de astronauta,
+- **[21:07] Yo:** y te vas a hacer en la entrada repartiendo abrazos.
+- **[21:08] Jose Pineda Pitre:** Hola, hola, hola. Güey, puta.
+- **[21:08] Jose Pineda Pitre:** Y no y ojalá y yo tuviera todo listo, pero por allá
+- **[21:08] Jose Pineda Pitre:** el marica este, José Giraldo,
+- **[21:08] Jose Pineda Pitre:** me dijo, ¿usted por qué está haciendo todo solo?
+- **[21:08] Jose Pineda Pitre:** Y yo se emputó.
+- **[21:08] Jose Pineda Pitre:** Se emputó
+- **[21:08] Jose Pineda Pitre:** ¿Cómo cómo cómo así que ves cómo así que estás mandando
+- **[21:08] Jose Pineda Pitre:** updates de esa landing de leyendas si esto está completamente diferente a lo que
+- **[21:08] Jose Pineda Pitre:** habíamos planeado tú y yo. Entonces, yo le dije como que,
+- **[21:08] Jose Pineda Pitre:** pues es que tú, o sea, yo me hice el marica, así marica.
+- **[21:08] Jose Pineda Pitre:** Le dije como, pero es que tú me dijiste que no ibas a hacer nada de lo que
+- **[21:08] Jose Pineda Pitre:** Le dije tú, es de que tú es que tú me dijiste que tú dijiste que no ibas a hacer.
+- **[21:08] Jose Pineda Pitre:** Tú me dijiste que no ibas a hacer nada de lo que habíamos
+- **[21:08] Jose Pineda Pitre:** a definir con producto, entonces nosotros nos pusimos a montar todo eso,
+- **[21:08] Jose Pineda Pitre:** para no generarte impactos a ti, no generarte
+- **[21:08] Jose Pineda Pitre:** procesos,
+- **[21:08] Jose Pineda Pitre:** Y el fue como que, no, no, no, no, pero
+- **[21:09] Jose Pineda Pitre:** esto no puede salir así. Este, yo fue como, ay, bueno, entonces el lunes nos vemos.
+- **[21:09] Jose Pineda Pitre:** Te vas a sacar una reunión de una hora y media.
+- **[21:09] Jose Pineda Pitre:** Lunes me vas
+- **[21:09] Yo:** ¿Aquí en la mañana?
+- **[21:09] Yo:** Uf, después de almuerzo.
+- **[21:09] Jose Pineda Pitre:** en la en la tarde, a las de las
+- **[21:09] Jose Pineda Pitre:** literal, que se acuerde de mí, y me da ese muchacho.
+- **[21:09] Yo:** Ay, qué mierda. No, pero, afortunadamente,
+- **[21:09] Yo:** igual con el tema del wrap,
+- **[21:09] Yo:** ellos sí tienen mucho sentido más ahora que va a estar en dentro del la página de leyendas,
+- **[21:09] Jose Pineda Pitre:** And
+- **[21:09] Yo:** que lo tengas.
+- **[21:09] Yo:** Que lo tengas en cuanto al poder modificar lo que quieras.
+- **[21:09] Yo:** Y más que igual, o sea, de hecho, el
+- **[21:09] Yo:** como que el core de la data va estar es en leyendas,
+- **[21:09] Yo:** y lo que va a hacer Wrap es como sintetizarla y ponerla a
+- **[21:09] Yo:** chiquita, resumidita, interactiva o bonita.
+- **[21:09] Jose Pineda Pitre:** Y cuando
+- **[21:09] Jose Pineda Pitre:** haces ese grap, y cuando me, cuando yo vi esta reunión de entrega grappet a growth,
+- **[21:09] Jose Pineda Pitre:** como que usted le va a decir a
+- **[21:09] Jose Pineda Pitre:** su Darwin... En este momento yo ya no tengo tokens, entonces, hoy yo ya no trabajo más.
+- **[21:10] Jose Pineda Pitre:** Entonces, usted le va a decir, entréguele esto
+- **[21:10] Yo:** Comparte comparta comparta el panel del uso, por favor, para
+- **[21:10] Yo:** confirmar eso.
+- **[21:10] Jose Pineda Pitre:** No, yo no tengo yo no tengo no tengo en este momento, tengo, a ver,
+- **[21:10] Yo:** Mí a mí a mí se me cayó el Internet.
+- **[21:10] Jose Pineda Pitre:** No, vea, yo le voy a mostrar, la voy a mostrar.
+- **[21:10] Yo:** Sea, aquí estoy por Cosmos System.
+- **[21:10] Jose Pineda Pitre:** Sí, por un...
+- **[21:10] Yo:** Renovado,
+- **[21:10] Yo:** un punto renovado.
+- **[21:10] Jose Pineda Pitre:** Mirá,
+- **[21:10] Jose Pineda Pitre:** cien por ciento usado,
+- **[21:10] Yo:** El el
+- **[21:10] Jose Pineda Pitre:** se
+- **[21:10] Yo:** está como, ya no aguantobas.
+- **[21:10] Jose Pineda Pitre:** ¿O este?
+- **[21:10] Yo:** Ah, no, pero en una hora, vea, a las cinco, cinco y diez de la tarde puede empezar a retomar. El
+- **[21:10] Jose Pineda Pitre:** Entonces,
+- **[21:10] Jose Pineda Pitre:** yo me imagino que vos le vas a decir a Claude o a Antigrabetty,
+- **[21:10] Jose Pineda Pitre:** pásele todo este proyecto
+- **[21:10] Jose Pineda Pitre:** a José Pineda, la célula de growth,
+- **[21:10] Yo:** Sí.
+- **[21:10] Jose Pineda Pitre:** y yo, y
+- **[21:10] Jose Pineda Pitre:** y yo le voy a consultar a mi antigravity, Santiago me acabó de pasar el gobierno del grappet de growth.
+- **[21:10] Jose Pineda Pitre:** Quiero integrarlo a mi sistema de leyendas para que el
+- **[21:11] Jose Pineda Pitre:** wrappet de Santiago sea el nuevo wrappet oficial.
+- **[21:11] Yo:** Total, yo voy a hacerle la la petición a Amora,
+- **[21:11] Jose Pineda Pitre:** ¿Es así?
+- **[21:11] Yo:** Sí.
+- **[21:11] Jose Pineda Pitre:** Ay, bueno.
+- **[21:11] Yo:** Pues es la forma más eficiente, entonces, yo hacerlo ahora,
+- **[21:11] Yo:** pues no, se lo voy a pedir un poco más más estructurado al mío,
+- **[21:11] Yo:** que lo organice bien, porque no sé qué tan disperso lo tiene dentro de diferentes archivos
+- **[21:11] Yo:** locales y, pues, los que están en producción,
+- **[21:11] Yo:** Así es que lo organice bien.
+- **[21:11] Yo:** La hago el hago el PR, A mí no se me ha acabado los tokens, solamente no se me va dar la gana hacerlo ya. Lo vamos hacer el lunes.
+- **[21:11] Jose Pineda Pitre:** Tranquilo, yo tampoco
+- **[21:11] Jose Pineda Pitre:** Tranquilo, yo tampoco, papel que lo hagas ya, porque yo no voy a revisar nada ya, o sea,
+- **[21:11] Yo:** Entonces entonces, pero ¿lo hago el lunes, José?
+- **[21:11] Yo:** Y apenas quede, lo que me genere un prompt para pasarte el prompt y que
+- **[21:11] Yo:** tu agente sepa dónde consultar. Es decir, como deme el prompt que tengo que pasarle al agente de José para que haga toda la implementación.
+- **[21:11] Jose Pineda Pitre:** Et bon.
+- **[21:11] Yo:** Para que le diga las indicaciones de la carpeta,
+- **[21:11] Yo:** recursos, todo. Y de ahí en adelante, realmente es como
+- **[21:11] Yo:** ese es el punto en donde te lo dejo,
+- **[21:12] Yo:** ya si le querés que
+- **[21:12] Jose Pineda Pitre:** Hagan lo que a ustedes le lagran, puta gana.
+- **[21:12] Yo:** Sí, o sea, ya queda con lo de compartir por historia, ya, ya estaba adelantadito.
+- **[21:12] Yo:** Estaba más bonito, pero
+- **[21:12] Jose Pineda Pitre:** ¿Los datos los los los
+- **[21:12] Jose Pineda Pitre:** los
+- **[21:12] Jose Pineda Pitre:** Voy a hacer una pregunta medio perezosa,
+- **[21:12] Jose Pineda Pitre:** y es, ¿las fórmulas ya están
+- **[21:12] Jose Pineda Pitre:** bien, ¿cierto? Como que las fórmulas de lo que él calcula en cada uno de las
+- **[21:12] Jose Pineda Pitre:** de las de los spikes del graph?
+- **[21:12] Yo:** lo que está pasando es que
+- **[21:12] Yo:** nosotros en el subpovis que tenemos tenemos la data ya de varios dropshippers.
+- **[21:12] Yo:** ¿Cierto?
+- **[21:12] Yo:** Lo que a mí hizo James en un momento fue pasarme una tabla sacada de no sé dónde,
+- **[21:12] Yo:** con unos IDs,
+- **[21:12] Yo:** Yo crucé esos IDs con lo que está en user pilot,
+- **[21:12] Yo:** identifiqué cuáles eran los dropshippers,
+- **[21:12] Yo:** y ahí ahí ya estaba la información de órdenes, de productos más vendidos, de todo eso.
+- **[21:12] Yo:** O sea, por eso es que tengo la data.
+- **[21:12] Yo:** Pero realmente la fórmula
+- **[21:12] Yo:** va a basarse según lo que nos entregue Miguel, ¿sí?
+- **[21:13] Yo:** Si Miguel nos entrega, supongamos, es una base de datos, pero otro chip dividida por
+- **[21:13] Yo:** me invento cualquier cosa, semanas.
+- **[21:13] Yo:** Semana uno, semana dos, semana tres,
+- **[21:13] Yo:** de la una hasta la, no sé,
+- **[21:13] Yo:** sesenta, qué sé yo.
+- **[21:13] Yo:** Pues, claro, la fórmula va a tener que ser sumatoria de todas las semanas,
+- **[21:13] Yo:** pero esa sumatoria no está, o sea, no hay fórmula sin que antes haya data.
+- **[21:13] Yo:** Cómo no hay data?
+- **[21:13] Yo:** Estamos esperando que Miguel nos confirme toda la estructura.
+- **[21:13] Jose Pineda Pitre:** Ok, ok.
+- **[21:13] Yo:** Pero una vez la tengamos, lo que toca hacer, que ahí es donde igual te digo, o sea, es porque
+- **[21:13] Yo:** ha resuelto a hacer,
+- **[21:13] Yo:** Igual Jaime se me dijo, sí, síguelo síguelo apoyando en lo que necesite.
+- **[21:13] Jose Pineda Pitre:** No no no es ese maricá solo porque se vuelve loco.
+- **[21:13] Yo:** Apenas
+- **[21:13] Yo:** Apenas no, apenas entreguen la data, o sea, sígueme, pues, si te parece bien, uniéndome a las reuniones con Miguel, con todos, que igual, pues, salgo ahí
+- **[21:13] Yo:** me entero también, siento que no me van a llevar, porque
+- **[21:13] Yo:** Entonces, pues, entero qué carajos van a ser, y
+- **[21:13] Jose Pineda Pitre:** Voy a firmar ese fin de semana y le voy a decir, oh,
+- **[21:13] Yo:** y ahí organizamos. O sea,
+- **[21:13] Jose Pineda Pitre:** la siguiente persona que conoce todo es Santiago.
+- **[21:13] Yo:** Es que no...
+- **[21:14] Yo:** Se me acaba de morir una hormiga en la casa.
+- **[21:14] Yo:** Pero sí, apenas tenga
+- **[21:14] Yo:** como claridad sobre la data, mandamos todas las fórmulas.
+- **[21:14] Yo:** Usamos todas las fórmulas. Ahora,
+- **[21:14] Yo:** ¿qué diría pasar? Que Miguel así lo hizo la otra vez conmigo, él él nos pasa el modelo de datos.
+- **[21:14] Yo:** El modelo de datos donde consultar, o sea, de hecho, Miguel nos puede pasar ya las fórmulas que utiliza.
+- **[21:14] Yo:** O sea,
+- **[21:14] Yo:** es que no sé qué tan en bruto nos pasa el dato.
+- **[21:14] Jose Pineda Pitre:** No, pues, después de la reunión que te
+- **[21:14] Jose Pineda Pitre:** el el lunes con, porque en esa reunión también está Miguel, pues yo me voy a sentar con Miguel. Sea, yo le voy sacar un espacio a Miguel y le voy a decir, bueno, Miguel, vamos
+- **[21:14] Jose Pineda Pitre:** a revisar la experiencia del dropshipper
+- **[21:14] Yo:** Yo te diría,
+- **[21:14] Jose Pineda Pitre:** en leyendas dropping y el líder de comunidad, dato a dato.
+- **[21:14] Yo:** es,
+- **[21:14] Yo:** Miguel,
+- **[21:14] Jose Pineda Pitre:** Para mí.
+- **[21:14] Yo:** entregadas,
+- **[21:14] Yo:** Dígame de dónde me va a entregar órdenes entregadas
+- **[21:15] Yo:** cómo se llama la variable órdenes de Airgas.
+- **[21:15] Yo:** Llama orden raya al piso entregadas.
+- **[21:15] Yo:** Ok.
+- **[21:15] Yo:** Y esa acá, me la pasas?
+- **[21:15] Yo:** Esa cada cuánto se actualizó, no sé, diariamente, tata tata.
+- **[21:15] Yo:** Y esa variable
+- **[21:15] Yo:** ¿qué datos...?
+- **[21:15] Yo:** Contiene?
+- **[21:15] Yo:** Ah, contiene O sea, uno por uno
+- **[21:15] Yo:** Producto más vendido,
+- **[21:15] Yo:** producto más vendido,
+- **[21:15] Yo:** ¿cómo me entregas la variable?
+- **[21:15] Yo:** Producto raya al piso más raya al piso vendido.
+- **[21:15] Jose Pineda Pitre:** Okay.
+- **[21:15] Yo:** Y ese es
+- **[21:15] Yo:** consolidado de cada, o sea, ya existe muy
+- **[21:15] Yo:** a la a al al a la en crudo,
+- **[21:15] Yo:** para que también a la gente le sepas explicar.
+- **[21:15] Yo:** Es qué.
+- **[21:15] Yo:** Es qué cosa, cada cosa.
+- **[21:15] Yo:** Si él te entrega el modelo de datos, si es que vea aquí, apunta aquí, esto le saca pues mejor, bueno.
+- **[21:15] Jose Pineda Pitre:** Please.
+- **[21:15] Yo:** O, si no, que yo te diga, dígame cómo lo va a utilizar toda la gente de dashboard
+- **[21:15] Yo:** pero si no es que no sabemos si él se las va a entregar ya masticadita o si la gente que está haciendo el dashboard en la
+- **[21:15] Yo:** va a aplicar las fórmulas de negocio.
+- **[21:15] Yo:** Y si y si te dicen, ah, pues esa gente es la que,
+- **[21:16] Yo:** pues sería tocar la puerta a todos estos que estén haciendo el dashboard, que entiendo que es
+- **[21:16] Yo:** y no sé con quién,
+- **[21:16] Yo:** sí les venga.
+- **[21:16] Yo:** Tíreme ahí la fórmula, que estamos hablando de lo mismo?
+- **[21:16] Jose Pineda Pitre:** Okay. Okay. Okay.
+- **[21:16] Yo:** Ahí lo hay, Mariana.
+- **[21:16] Yo:** Sí, realmente la entrega es como que habláramos y
+- **[21:16] Yo:** barrieramos a la ruta, porque la entrega es decirle a la gente, Marica, entreguele eso a este
+- **[21:16] Jose Pineda Pitre:** Y que el set
+- **[21:16] Yo:** Igual, como ya lo conoces, pues bien.
+- **[21:16] Jose Pineda Pitre:** como que tiene que defenderse. Ay, bendito.
+- **[21:16] Yo:** Y me y me toca demostrar que había una reunión.
+- **[21:16] Jose Pineda Pitre:** Como
+- **[21:16] Jose Pineda Pitre:** Ay, vea qué pasó aquí. Buenos días, nos dejó aquí los compromisos de accionables pendientes.
+- **[21:16] Jose Pineda Pitre:** Ay, esa Laura ahí me puso en muchos lugares. Confirmar el orden del
+- **[21:16] Jose Pineda Pitre:** para definir dinámicas,
+- **[21:16] Jose Pineda Pitre:** Ay, no, este poco de cosas yo no...
+- **[21:16] Yo:** Alinear.
+- **[21:16] Jose Pineda Pitre:** Pensaba que ese trabajo iba a ser más chilly, ese trabajo iba a ser.
+- **[21:16] Jose Pineda Pitre:** Te va a hacer dar charlas de crecimiento. No.
+- **[21:16] Yo:** Venga, ¿qué...? Pero ¿canceló la reunión?
+- **[21:16] Jose Pineda Pitre:** No.
+- **[21:16] Jose Pineda Pitre:** ¿Quién?
+- **[21:16] Yo:** No, la reunión igual está, ¿no?
+- **[21:17] Jose Pineda Pitre:** Sí.
+- **[21:17] Yo:** Sí, ¿qué mando eso?
+- **[21:17] Jose Pineda Pitre:** Yo no sé, pues aquí, día uno,
+- **[21:17] Jose Pineda Pitre:** día dos, alinear si leyendas va a tener base de datos,
+- **[21:17] Jose Pineda Pitre:** Excel una vez entregado.
+- **[21:17] Jose Pineda Pitre:** Están leyendas, dinámica de segmentación y graph.
+- **[21:17] Jose Pineda Pitre:** Listo, ¿no?
+- **[21:17] Yo:** Bueno, voy a mandar el miércoles ticket que tenga,
+- **[21:17] Yo:** Alright.
+- **[21:17] Jose Pineda Pitre:** Santi, ¿te puedo hacer una pregunta?
+- **[21:17] Jose Pineda Pitre:** Que me da un poco de vergüenza hacerte?
+- **[21:17] Jose Pineda Pitre:** Con esta montada de la antigua BT,
+- **[21:17] Jose Pineda Pitre:** Yo, Sergio, yo estaba trabajando en antigravity en mi cloud.
+- **[21:17] Yo:** Sí.
+- **[21:17] Jose Pineda Pitre:** Y los
+- **[21:18] Jose Pineda Pitre:** y lo cerré,
+- **[21:18] Jose Pineda Pitre:** y ahorita ya no está mi Claude.
+- **[21:18] Jose Pineda Pitre:** Ah,
+- **[21:18] Jose Pineda Pitre:** No,
+- **[21:18] Yo:** Fue fue más rápido lo que esperaste, es como que, pues,
+- **[21:18] Jose Pineda Pitre:** Creo que tu presencia tiene un efecto.
+- **[21:18] Jose Pineda Pitre:** Creo que tu presencia tiene un
+- **[21:18] Yo:** Eso pasa con mi esposa. A esposa, a cada rato le fallan, pues, bueno, le fallan las vainas.
+- **[21:18] Yo:** Ah, no puedo, no sé qué, y yo puedo, le miro la pantalla.
+- **[21:18] Yo:** Yo, muéstrame.
+- **[21:18] Yo:** Ya.
+- **[21:18] Yo:** Sirvió.
+- **[21:18] Yo:** Funcionó ello.
+- **[21:18] Yo:** Cuando cuando cuando cuando ¿qué?, cuando los
+- **[21:18] Jose Pineda Pitre:** Sí,
+- **[21:18] Yo:** cuando las aplicaciones sienten el rigor de un experto, ya
+- **[21:18] Jose Pineda Pitre:** Literal, literal, María yo.
+- **[21:18] Jose Pineda Pitre:** Acabo de sentirme un poco tonto,
+- **[21:18] Yo:** Entonces, a mí me pasó eso, a mí me pasaba eso con
+- **[21:18] Jose Pineda Pitre:** pero yo lo digo,
+- **[21:18] Yo:** con Visual Studio, me pasaba mucho, más que con el de Gravy,
+- **[21:18] Yo:** Con antigravity, de hecho, no no
+- **[21:18] Jose Pineda Pitre:** No tiene.
+- **[21:18] Yo:** Después yo lo tengo, no lo uso con Flat,
+- **[21:18] Yo:** Uf, la primera vez que a mí se me perdió
+- **[21:19] Yo:** Claude...
+- **[21:19] Yo:** En Visual Studio,
+- **[21:19] Yo:** casi no lo encuentro.
+- **[21:19] Yo:** O sea, era posible, o le di treinta mil clics y apenas está aprendiendo a hacer live coding.
+- **[21:19] Yo:** No,
+- **[21:19] Jose Pineda Pitre:** Reinicié el computador, quiero que se pase, o sea, fue como
+- **[21:19] Yo:** Tranquilo, a mí me pasó
+- **[21:19] Yo:** Tranquilo, a mí me pasó, yo reinicié el computador en ese momento con
+- **[21:19] Yo:** estudio dos veces, pensando que así va aparecer otro
+- **[21:19] Yo:** Pasa.
+- **[21:19] Yo:** Bueno, nos vemos ahorita, entonces.
+- **[21:19] Jose Pineda Pitre:** nos vemos ahorita.
+- **[21:19] Yo:** Suerte. Chao.
+- **[21:19] Jose Pineda Pitre:** Gracias, Santi.
+- **[21:19] Yo:** Bueno.

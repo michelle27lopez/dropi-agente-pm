@@ -1,0 +1,288 @@
+# Revisemos perfil de usuario sellers
+
+- **ID:** `not_FE7nx6UNIJAYRC`
+- **Fecha:** 2026-09-01T14:32:21.184Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/c9fcec02-7d34-4af7-b3eb-82160ba4435b)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo, Diana Margarita Aldana Echeverry
+
+---
+
+## Resumen de la Reunión
+
+# Estado Actual de los Perfiles de Usuario
+
+- Documentación existente creada por Pau: arquetipos, encuestas de perfilación y 5 segmentos definidos
+  - Novato, novato entrada extra, negocio constante, experimentado escalando, power user VIP
+- Categorización comercial actual: niveles de leyendas (bienvenido, explorador, master, experto, sabio, leyenda)
+  - Basada únicamente en cantidad de órdenes mensuales: demasiado genérica
+  - No refleja necesidades reales ni curva de aprendizaje del usuario
+- Existe también un estudio antropológico (apasionado, necesitada, estratega, maestro): consenso de no mezclarlo con user personas de producto
+  - Va más directo contra el concepto de leyendas que contra los perfiles de producto
+  - Unificar los 3 marcos (comercial, producto, antropológico) generaría más confusión
+
+# Alineación de Conceptos y Brechas Identificadas
+
+- Acuerdo: toda la organización habla en torno a leyendas como lenguaje común (interno y externo)
+  - Cada nivel de leyenda debe tener homologación con los user personas de producto
+  - Ej.: el nivel “bienvenido” (0-100 órdenes) puede abarcar varios tipos de user persona distintos
+- Brecha clave: no se ha segmentado entre usuarios huérfanos (\~40%) y usuarios que llegan por comunidad
+  - El factor comunidad impacta significativamente la adopción y el escalamiento en Dropi
+- Escalamiento en e-commerce no es lineal: producto público → producto privado → importador → marca
+  - Un usuario “leyenda” puede estar en ese nivel quedándose en dropshipping básico o siendo ya importador
+- Líderes de comunidad (ej. Iván Caicedo) ya crean contenido segmentado por tipo de dropshipper: fuente de insight relevante
+
+# Próximos Pasos
+
+- Comenzar construcción del user persona del perfil “bienvenido” como primer caso
+  - Revisar documentación existente y confrontar con hallazgos de Expo Winners
+  - Incluir en el análisis con Gaby el entendimiento de usuarios huérfanos (lista de asistentes a Expo Winners sin ventas a cierre de agosto, que Lady enviará)
+- Incluir tarea de research de usuarios en el planning semanal (Santiago)
+- Reprogramar el taller de user personas para dentro de 2 semanas, post Expo Winners, con data en mano
+
+# Próximos Pasos
+
+- **Reprogramar taller de user personas para después de Expo Winners** (Diana)
+
+  Esperar hallazgos del experimento antes de socializar con el resto del equipo: aproximadamente 2 semanas.
+- **Incluir entendimiento de usuarios huérfanos en el análisis con Gaby** (Santiago)
+
+  Lady enviará lista de asistentes a Expo Winners que eran huérfanos y no habían vendido nada al cierre de agosto.
+- **Agendar reunión con líderes de comunidad** (Alejandra)
+
+  Entender cómo segmentan ellos a sus propios users personas y qué contenido crean para cada tipo.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/6440ab25-857e-4514-aecc-cde378389bb6](https://notes.granola.ai/t/6440ab25-857e-4514-aecc-cde378389bb6)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[14:32] Yo:** Hola, buenos días.
+- **[14:33] Alejandra Melo:** Hola, hola.
+- **[14:33] Yo:** Welcome, boss.
+- **[14:33] Alejandra Melo:** Give me a minute to come in the chat.
+- **[14:33] Yo:** Good morning, good morning, guys.
+- **[14:33] Alejandra Melo:** Oh, wait.
+- **[14:33] Alejandra Melo:** Oh my Lord.
+- **[14:33] Alejandra Melo:** Permítame 5 minutos.
+- **[14:33] Yo:** Okay.
+- **[14:34] Diana Aldana:** Listo.
+- **[14:34] Diana Aldana:** Hola Aleja, hola Santi, ¿cómo
+- **[14:34] Yo:** Hola, Denise.
+- **[14:34] Alejandra Melo:** van? Hola Diana,
+- **[14:34] Diana Aldana:** bien, ¿y tú? Todo bien.
+- **[14:34] Diana Aldana:** Bueno, lo cité a este espacio porque me parece como súper importante que estemos alineados de cómo estamos construyendo el user personas de Stellar. Como les comenté En otras sesiones identifiqué que el user persona diferentes áreas lo llaman y lo categorizan de diferentes formas. Entonces quería entender ustedes cómo están llamando a nuestro ¿Qué tal?
+- **[14:35] Diana Aldana:** que tienen hasta el momento.
+- **[14:35] Diana Aldana:** Yo tengo una información que levanté hace mucho tiempo con Paola, no sé si están utilizando esa misma información o han identificado una nueva. Ya les comparto pantalla.
+- **[14:35] Diana Aldana:** En su momento.
+- **[14:35] Participante:** En nuestra parte de Future.
+- **[14:35] Participante:** Nosotros acá en la carpeta Future Strategy, en su momento con Pau, nosotros teníamos acá una documentación de todas las investigaciones que se han hecho para Identificar el perfil de usuario de Dropi. Entre esos, vamos a hacer rápidamente un recorrido.
+- **[14:35] Participante:** Entre esos pues estaban estos arquetipos levantados por Pau en su momento.
+- **[14:35] Participante:** De diferentes tipos de usuarios. Esto fue como un taller que se hizo en su momento.
+- **[14:36] Participante:** Pero bueno, este taller como que está súper incompleto.
+- **[14:36] Participante:** Vámonos a otro documento que está más completo.
+- **[14:36] Participante:** Estaba este documento que lo vemos incompleto. Miren este otro documento de Groot. Este sí, este como que lo hicieron desde Groot.
+- **[14:36] Participante:** Esto está Futures por países.
+- **[14:36] Participante:** ¿Qué más tenemos por acá? Tenemos acá proveedores, este dropshipper. Vamos aquí a ver.
+- **[14:36] Participante:** Acceder acá.
+- **[14:36] Participante:** Que nos envía.
+- **[14:36] Participante:** Ah, mentira, este es un prompt que creó Pau en su momento para crear el user personas. Listo, esta es como documentación, y a partir de esa documentación lo que hizo Pau en su momento fue crear estos perfiles de usuario que están acá.
+- **[14:36] Participante:** Perfiles de usuarios.
+- **[14:37] Participante:** Listo.
+- **[14:37] Participante:** Tenemos estos perfiles de usuario que también fueron, fueron pues construidos a partir también de unas encuestas de perfilación que hizo Pau en su momento. A partir de los resultados de esas encuestas poder identificar segmentos de usuarios. Se sacaron varios segmentos, está el segmento novato.
+- **[14:37] Participante:** El segmento novato entrada extra.
+- **[14:37] Participante:** El segmento general negocio constante, el segmento experimentado escalando y segmento 5 power user VIP necesito future enterprise. Y ya, aquí están como las características.
+- **[14:37] Participante:** Los objetivos, las motivaciones, relaciones, tecnología y canales. Y pues acá se hizo como una imagen, supongo que en su momento en ChatGPT.
+- **[14:37] Participante:** ¿Ustedes tienen conocimiento de esta información, de este insumo?
+- **[14:38] Alejandra Melo:** No, yo la verdad no la tenía presente.
+- **[14:38] Yo:** Yo tengo, no sé, ese es el mismo que tú me compartiste, si no estoy mal, ¿cierto? Sí, yo sí lo conocía. O sea, ahí, ahí, como para aclarar.
+- **[14:38] Diana Aldana:** Sí, exacto.
+- **[14:38] Diana Aldana:** Sí.
+- **[14:38] Yo:** El punto es, por lo menos desde el lado de estrategia, como los, como los entregables o las líneas que se han movido Desde que entré hace ya hace unos 3 meses, han sido tan proyectos heredados.
+- **[14:38] Yo:** Y ahora pues tenemos que ha sido como más el empalme con el equipo comercial de Growth y demás. Todo en principio estaba muy alineado.
+- **[14:38] Yo:** El concepto Legendary Drop, pero ese concepto es un concepto muy comercial, correcto.
+- **[14:38] Yo:** Es decir, no, no sirve o que es insuficiente.
+- **[14:38] Yo:** Para poder hacer investigación más profunda de producto, correcto.
+- **[14:39] Yo:** Es decir, que en esa parte nosotros todavía no hemos entrado, que sería perfecto de hecho ya aplicarlo para, de hecho, para Gali, por ejemplo, Expo Winners, de una vez aplicarlo como concepto. En las investigaciones que vamos a iniciar. Pero no se ha hecho antes, es más porque no estaba, digamos que los proyectos ya no eran tan amplios como para poder meter directamente los perfiles de usuario. Pero yo sí los conocí, sí lo tenía presente.
+- **[14:39] Diana Aldana:** Listo.
+- **[14:39] Diana Aldana:** Sí, o sea, es porque sí hay que entrar como a revisar obviamente estos perfiles que se crearon y definir como células si los vamos a querer seguir llamando de esta forma, no, hasta Entiendo, sí, sí consideramos que son estos niveles tan detallados: 1, 2, 3, 4, son 5 niveles porque hay otra perspectiva. Bueno, hay Aquí están los perfiles de usuario, porque hay otra perspectiva que era el taller pues que se supone que vamos a hacer la semana pasada, cómo identificar cómo cada área lo está llamando. Ayer, por ejemplo, estoy, estaba en el comité de lanzamiento de arquitectura, y Caterina estaba haciendo como, como un ejercicio para poder identificar, para poder identificar qué riesgo Durante el lanzamiento de la arquitectura iba a tener cada uno de estos perfiles, pero ella lo estaba llamando perfil bienvenido, perfil explorador, perfil master, experto, sabio, leyenda.
+- **[14:40] Yo:** Esos son los de leyendas de aplicación.
+- **[14:40] Alejandra Melo:** Leyenda.
+- **[14:40] Diana Aldana:** Exacto, pero donde me queda la laguna es que estos de leyendas, ¿en qué tipo de perfil de usuario?
+- **[14:40] Diana Aldana:** Nosotros lo estamos ubicando en donde están viviendo.
+- **[14:40] Yo:** Mira que no se ha hecho. De hecho, hay una, no creo, sí fue con José en algún momento, José Pineda, que lo conversamos. Y es que yo le mencionaba, no hay desde producto hasta donde tenga entendido, una homologación, cierto, de para comercial son estos 6 y está perfecto, son temas comerciales y de growth y demás, y está perfecto. Pero nosotros, ¿cuáles de los, de las personas?
+- **[14:40] Diana Aldana:** Ajá.
+- **[14:41] Diana Aldana:** Exacto.
+- **[14:41] Yo:** Estamos incluyendo en cada uno. Porque creería que perfectamente por el volumen de ventas que nada más tiene el bienvenido, que eso es un rango amplio capaz puede encarar hasta 3 tipos de user personas.
+- **[14:41] Yo:** Porque bueno, sí, 3 de los novatos.
+- **[14:41] Yo:** Podrían incluirse ahí. Y creo que, por ejemplo, hay uno que son VIP, pero son un nivel de órdenes, o sea, que ya solamente los más pro lo alcanzan.
+- **[14:41] Diana Aldana:** Exacto.
+- **[14:41] Diana Aldana:** O sea que está esta categorización, está por cantidad de órdenes, correcto.
+- **[14:41] Yo:** Sí.
+- **[14:41] Diana Aldana:** Cantidad de órdenes.
+- **[14:41] Yo:** Sí, y Dina lo entregó.
+- **[14:41] Diana Aldana:** Ok.
+- **[14:41] Yo:** Déjame revisar si te puedo pasar por aquí la tabla y si está solamente por órdenes.
+- **[14:41] Diana Aldana:** Listo.
+- **[14:41] Diana Aldana:** Exacto.
+- **[14:41] Diana Aldana:** Es para, exacto, siguen estos a nivel comercial. La idea es que nosotros ubiquemos estos perfiles también en este nivel comercial para poder, pues, para que tú digas, ah, es que el usuario bienvenido tiene estas Y también está la categorización por las necesidades, no solamente por el número de órdenes.
+- **[14:42] Yo:** No sé si yo alcancé a hablar en su momento con María.
+- **[14:42] Yo:** María me dijo que tratáramos de seguir mucho la misma, a ver, los mismos conceptos en el discurso, al menos de Por eso es que en todas las reuniones como que se habla mucho solamente de la parte de leyendas. También es como para todos hablar el mismo idioma, pero lo importante sí sería que entonces, me parece, tiene en reuniones, sesiones de producto, Ya lo hablemos con la granularidad necesaria. Y bueno, ya estamos hablando de estos user personas.
+- **[14:42] Yo:** Puede ser por eso, y de pronto no hemos llegado al consenso todos de, bueno, de hablar de producto, qué hacia afuera exponemos como leyendas y cómo hacia adentro se entiende cada uno de esos niveles.
+- **[14:43] Diana Aldana:** Perfecto, eso es. Cómo se entiende hacia afuera y cómo se entiende hacia adentro, eso es.
+- **[14:43] Yo:** Déjenme les comparto por acá la imagen que me compartió.
+- **[14:43] Diana Aldana:** De hacia afuera.
+- **[14:43] Yo:** Mira, Denis, esos son los que me compartió en su momento.
+- **[14:43] Yo:** Y sí, es solamente por órdenes mensuales.
+- **[14:43] Diana Aldana:** Ah.
+- **[14:43] Diana Aldana:** Okay.
+- **[14:43] Yo:** Ya.
+- **[14:43] Yo:** Lo toman como perfil, pero lo hacen demasiado general. Entonces es, no sé si lo estás viendo, lo compartí por el chat, entonces son 0 a 100 y es como nueva plataforma en proceso de activación, pero sin Si nos vamos a producto en proceso de activación, realmente para que yo como producto, hasta como está la documentación, no te considere activo, es con que entres la primera orden. Con la primera, para mí, en producto ya estás activado.
+- **[14:43] Diana Aldana:** Sí, sí, sí.
+- **[14:43] Diana Aldana:** Obvio.
+- **[14:43] Yo:** Correcto.
+- **[14:43] Diana Aldana:** Además, un usuario bienvenido, Aleja, ¿quién me puede como apoyar? Es muy extraño que un usuario que apenas inicie haga 100 órdenes el primer mes, por mucho. Ahora, ¿cuántas, Aleja, en un mes? Es la primera persona que recién hace
+- **[14:44] Alejandra Melo:** dropshipping. Ahí sí no te sé decir, porque nosotros cuando entramos ya habíamos hecho las, o sea, después de la primera pasamos las 100 rápido.
+- **[14:44] Yo:** O sea, lograron la 100 en el primer mes.
+- **[14:44] Alejandra Melo:** Sí.
+- **[14:44] Diana Aldana:** Ah, bueno, bueno, se supone que charity.
+- **[14:44] Yo:** Yo qué hago acá, yo, porque no está haciendo dropshipping.
+- **[14:44] Diana Aldana:** Esto ya nos vamos a poner a hacer dropshipping nuevamente. Bueno, bueno, seguramente porque ustedes tenían como buenas. Pero por ejemplo
+- **[14:44] Alejandra Melo:** está
+- **[14:44] Diana Aldana:** Mariángel,
+- **[14:44] Alejandra Melo:** ¿te acuerdas de Mariángel? Mariángel de
+- **[14:44] Diana Aldana:** llanta. Y
+- **[14:44] Alejandra Melo:** también nosotros que
+- **[14:44] Diana Aldana:** estamos haciendo dropshipping, también Misha ha hecho poquitas. El reto de que está en Academy de haz dropshipping en 7 días, o sea Realmente qué características tiene que tener un usuario o qué cosas tiene que hacer para lograr realmente las 100 órdenes en un mes. Eso también es chévere entrar a profundizar.
+- **[14:45] Yo:** Quizás que te quede ahí, ahí está mi la la.
+- **[14:45] Yo:** El aspecto de si están en comunidad o no, o sea, entiendo, Aleja, tú de una vez estuviste muy envuelta en comunidad. No sé si estás en una en particular o solamente estás dentro muy ya del ecosistema y de Entonces, Aleja y César, entiendo, están muy envueltos ya en todo el rollo de dropshipping.
+- **[14:45] Yo:** Mientras que usuarios que son huérfanos
+- **[14:45] Yo:** capaz del 0 a 100 van a migrar de huérfanos a algunas comunidades, se van a querer vincular a alguna comunidad. Pero si partimos del huérfanos, que igual es el 40%, dentro de ese 40%, si no le agrego factor comunidad, va a estar relegado.
+- **[14:45] Diana Aldana:** Correcto.
+- **[14:45] Diana Aldana:** A ese punto quería llegar también.
+- **[14:45] Diana Aldana:** En el momento de segmentar a nuestros usuarios, y es importante segmentarlo también, esos usuarios huérfanos y los que llegan de comunidad, porque eso sí también va a impactar mucho su nivel de adopción. Y escalamiento en Dropi, y eso no lo tenemos bien segmentado acá.
+- **[14:46] Diana Aldana:** Aquí quiere arrancar cada vez, pero entró y no sé por dónde empezar. Entré con ganas, tengo el plan, pero algo no está haciendo clic todavía. Bueno, aquí sí lo tengo segmentado un poco.
+- **[14:46] Yo:** Sabes qué nos puede ayudar ahí. De hecho, en Galico los 3 flujos que están planteados, nos como tenemos tanto enfoque también en huérfanos, Lady me pidió que, que, que esperemos, digamos una espera comercial a que cerrara agosto y que estos primeros días de septiembre nos dio a pasar la lista de los asistentes al evento Expo Winners que eran huérfanos y que todavía no habían vendido nada hasta el cierre de agosto.
+- **[14:46] Diana Aldana:** Okay, come on.
+- **[14:46] Yo:** Lo que podríamos hacer es con eso dentro del flujo ya está, por ejemplo, quiere arrancar a vender sin que sepas nada.
+- **[14:46] Yo:** Y está, tengo una idea.
+- **[14:46] Yo:** El no sé qué vender.
+- **[14:46] Yo:** Y cuál era la otra lejanza, pero se me olvidó la tercera, que todavía es que nosotros no la hemos revisado tanto. Y tengo un nicho, no.
+- **[14:47] Yo:** Con la tercera lejanza, se me olvidó.
+- **[14:47] Alejandra Melo:** Está hablando, tengo un nicho, una categoría.
+- **[14:47] Yo:** Eso, tengo nicho en la categoría.
+- **[14:47] Yo:** Hay 3, cierto, son 3 preconcepciones o predisposición a salir a vender.
+- **[14:47] Yo:** Y creo que con eso podríamos, uno de los propósitos igual de ExpoVenez es para nosotros recopilar mucha data, y con eso podríamos ya generar una tipología o taxonomía, no sé qué se le ajuste mejor. Por ahí de los tipos de dropshippers dentro del grupo de huérfanos.
+- **[14:47] Yo:** cuando van a empezar la venta.
+- **[14:47] Yo:** Entonces ahí ya podemos empezar con todo el flujo que van a hacer, cuáles son las motivaciones, qué intenciones tienen, dónde tienen fricciones. Por ejemplo, ahí dentro del flujo lo podemos hablar ya en un rato cuando Que entremos a profundidad, Gali, pero esto es el flujo de si quiere iniciar pauta, qué lo motivó a pautar, por qué no quiere pautar. Entonces ya van a, vamos a, si quiere solicitar una muestra Porque está solicitando la muestra, y si eso hace que, si eso impide que termine el flujo para salir a vender, o sea, vamos a casi que de alguna forma en un solo flujo agrupar muchas de las de las, de los aspectos que entran en el journey del usuario.
+- **[14:48] Yo:** Hoy en drop-in, ¿no?
+- **[14:48] Yo:** Entonces ahí vamos a poder de alguna forma identificar si tenemos capaz nos aparezcan 5, ¿no? Entonces uno es el que entra motivado porque tiene un nicho, pero no va a comprar hasta que le llegue la prueba.
+- **[14:48] Yo:** Diríamos que ese es uno.
+- **[14:48] Yo:** Si me corrigen, si no, me estoy desviando. Otro es el que entra por curiosidad, está dispuesto a vender sin tener el producto con él.
+- **[14:48] Yo:** Y entra.
+- **[14:48] Yo:** ¿Tan convencido de que funciona?
+- **[14:49] Yo:** Que va inclusive a hacer una inversión en producto.
+- **[14:49] Yo:** Ahí podemos empezar a jugar un poco e identificar patrones.
+- **[14:49] Yo:** ¿Qué tipo de usuarios?
+- **[14:49] Yo:** Entran a Dropi huérfanos, sin una madurez del modelo de negocio.
+- **[14:49] Yo:** Tengamos preconcebida por comunidad, por otros medios.
+- **[14:49] Diana Aldana:** Okay.
+- **[14:49] Yo:** Y de alguna forma podríamos de pronto hacer ese zoom que entiendo estás planteando, ¿no? De bueno, identifiquemos.
+- **[14:49] Diana Aldana:** Sí.
+- **[14:49] Diana Aldana:** Exacto, digamos que acá mirándolo como más en detalle, aquí sí está identificado que es un usuario autodidacta que escuchó sobre dropshipping y lo está haciendo, y aquí está así el usuario que pagó el curso Pago el plan y pues está como activándose. Sí, sería cómo hacerle como zoom a esto y profundizar también con los hallazgos que tengamos entonces en Expo Winner. Pero entonces también a lo que Quiero llegar es también entonces alinear conceptos, si los vamos a llamar de esta forma. Así nos vamos a alinear a nivel interno y externo, los vamos a llamar de esta forma, o a nivel externo No se van a llamar de esta forma y a nivel interno los vamos a llamar de otra forma, poder categorizar bien los tipos de sellers que hay. Sabemos que un seller, por más que llegue novato o con O con aprendizaje comunidad, su curva de aprendizaje en la plataforma pues va a variar muchísimo, enfrentar con diferentes retos, pero en la esencia pues es una que tenemos que definir, como esas necesidades de
+- **[14:50] Diana Aldana:** iniciales que seguramente en el viaje se irán definiendo.
+- **[14:50] Diana Aldana:** Eso por un lado. Por otro lado, también quería traer sobre la mesa, en su momento había una información que nos había pasado que nos haya pasado, que nos haya pasado producto. No sé si recuerdas, Aleja, esa presentación antropológica que nos hizo María en su momento.
+- **[14:51] Diana Aldana:** En donde ella también perfilaba el perfil de
+- **[14:51] Alejandra Melo:** usuario.
+- **[14:51] Diana Aldana:** Entonces esperen a ver si lo traemos aquí sobre la mesa también, donde lo tenemos.
+- **[14:51] Yo:** Ahí sabes yo qué opinaría, Denis, que de pronto si traemos, o sea, termina siendo como 3 concepciones de usuario.
+- **[14:51] Yo:** Está el comercial.
+- **[14:51] Yo:** Llamémoslo el de
+- **[14:51] Yo:** Producto.
+- **[14:51] Yo:** Llamémoslo como producto, ¿cierto? Y el otro es más, el del estudio es más una concepción antropológica, ¿no? Es que es el reptiliano y demás.
+- **[14:51] Yo:** Creo que tratamos de unificar los 3, puede llegar a ser confuso y volver a que caigamos en no sabemos cuál de qué estamos hablando.
+- **[14:51] Diana Aldana:** Ajá.
+- **[14:51] Yo:** No sé es qué tanto se usa a nivel transversal en el resto de áreas.
+- **[14:51] Yo:** El estudio antropológico, yo de hecho pues iniciando me leí ese documento de la graduación y demás.
+- **[14:52] Diana Aldana:** Ok, perfecto.
+- **[14:52] Yo:** Y lo tengo muy presente. De hecho, hay varios puntos en la documentación, y si ustedes quieren dar clic, que por ahí se mencionan algunos conceptos de la parte antropológica. Sin embargo, también cuando estuve revisando Ya más a profundidad, tratando de justamente hacer como un match entre la parte de identificación, tipología de usuario, desde la parte UX/UI, cierto, desde la parte de producto.
+- **[14:52] Yo:** Encontré mucha documentación que de alguna forma en temas de usuario, digamos que desestimaba o descartaba la parte antropológica.
+- **[14:52] Yo:** Antropológica en el sentido de los conceptos que ponía, como de reptiliano, y se me olvidan los otros, más por unos temas de que terminaba como
+- **[14:52] Yo:** viendo otras dimensiones del usuario mucho más extensas. Entonces, a lo que voy es revisemos bien. Sí, me parece perfecto la parte comercial, la de leyendas, la de identificación del user que se haga del producto, pero con mucho cuidado ver qué tanto profundizamos en el antropológico como está en el documento.
+- **[14:53] Yo:** Por lo que te digo, puede volver a generar una dispersión de conceptos y que volvamos a caer en el estamos hablando de cosas diferentes, o es muy constante que todos estemos como siendo reiterativos de Esto es igual a esto, que es igual a esto, como para que hasta que ya es súper claro.
+- **[14:53] Diana Aldana:** Sí.
+- **[14:53] Diana Aldana:** Ah.
+- **[14:53] Diana Aldana:** Exacto, aquí estoy abriendo el antropológico y está el apasionado, la necesitada, el estratega, el maestro.
+- **[14:53] Diana Aldana:** Entonces es ver también ese análisis antropológico, cómo nutrimos pues a nuestro user persona final a partir como de esas, son características realmente, porque seguramente en un usuario no O a Tom pues va a llegar el apasionado, va a llegar la persona que se unió a Dropi por necesidad. Es también como características de la personalidad que llega, como su historia de vida realmente.
+- **[14:54] Diana Aldana:** Pero hagamos de cuenta que yo me quedé sin trabajo. Si yo me quedé sin trabajo, obviamente voy a hacer Dropi por necesidad, pero lo puedo hacer de dos formas: o pago un curso con un líder O comienzo a ver cursos de forma independiente. Pero si me hago entender, este análisis antropológico son más características de la personalidad que a la final yo decido por qué cambiar Termino irme y eso comienza como a construir mi identidad dentro de Dropik. Si me hago entender un poco para que también no me cueste.
+- **[14:54] Yo:** De hecho, mira que yo viéndolo, viéndolo en otra cita donde Ana Luisa habló, de hecho la parte antropológica creo que inclusive va más directo contra
+- **[14:54] Yo:** Vamos directo contra leyendas, Dropi.
+- **[14:54] Yo:** que contra los user personas que nosotros podemos identificar.
+- **[14:55] Yo:** Porque de alguna forma los agrupa.
+- **[14:55] Yo:** De una forma más directa, no, maestro.
+- **[14:55] Yo:** Entusiasta.
+- **[14:55] Yo:** De alguna forma como que logra, pero es que entusiasta son mundos. En entusiasta le cabe tantos usuarios como y con tantas características como quisieras.
+- **[14:55] Yo:** Entonces creo que va más directo contra leyendas que contra el mismo producto, si me hago entender, contra el mismo concepto de user persona de producto.
+- **[14:55] Diana Aldana:** Exacto, pero también siento que solamente categorizar esto por el tipo de órdenes nos sesga mucho entender la necesidad cada uno de estos, porque eso también quiero traer la correlación y también sobre la mesa. En su momento hablamos que en el mundo del e-commerce por lo general la persona va escalando. Así es como lo tenemos actualmente, pero en su momento hablábamos, creo que contigo y con Aleja, que primero tú comienzas en el mundo del dropshipping vendiendo producto público, después vendes producto privado, después te vuelves en un importador y después escalas a una marca.
+- **[14:56] Diana Aldana:** Puede que un usuario, y también entender, puede ser un usuario realmente que está, que está en fase leyenda.
+- **[14:56] Diana Aldana:** Está generando esas órdenes quedándose en el primer nivel, o sabemos que un usuario leyenda está generando esos miles de órdenes porque realmente se volvió un importador o una marca. Para entender bien a nuestro
+- **[14:56] Alejandra Melo:** usuario. Ustedes han pensado también en que los líderes de comunidad también tienen, son
+- **[14:56] Diana Aldana:** importadores.
+- **[14:56] Alejandra Melo:** Ellos no, los líderes de comunidad también tienen a los dropshippers, así tienen sus users personas. Entonces, por ejemplo, ellos no hacen contenido para todos, ellos hacen contenido contenido para cierto tipo de dropshippers. Entonces, al contenido gratuito, por ejemplo, Iván Caicedo tiene un programa gratuito en YouTube que dura como 3 horas. Y eso más pensado es hacia los que nunca han generado ventas.
+- **[14:57] Alejandra Melo:** O sea, nuevos los está trayendo.
+- **[14:57] Alejandra Melo:** Ah, bueno, esos no son los que los está trayendo, sino que esos ya los atrajo. Ahora tengan este curso, pero antes tienen unos que son los que no saben qué es dropshipping, no saben qué es. Entonces hacen contenido Para cada tipo de usuario. Entonces, ¿cómo tienen ellos
+- **[14:57] Diana Aldana:** esos,
+- **[14:57] Alejandra Melo:** esos users persona?
+- **[14:57] Alejandra Melo:** También sería interesante como, no sé, tener una reunión con
+- **[14:57] Diana Aldana:** los
+- **[14:57] Alejandra Melo:** líderes de comunidad
+- **[14:57] Diana Aldana:** para preguntar ese tipo de cosas y demás.
+- **[14:57] Alejandra Melo:** Me
+- **[14:57] Diana Aldana:** parece genial esa idea, Lea. Listo, ok.
+- **[14:57] Diana Aldana:** Pero bueno, ya como para ir cerrando, que nos quedan 2 minuticos, yo creo que ya todos entendimos como la necesidad de interiorizar mejor.
+- **[14:57] Yo:** De acuerdo, sí, para llegar como a puntos.
+- **[14:57] Yo:** Lo que es, y hemos clarificado varias cosas. Uno es definitivamente lo que está, y Kate en algún momento preguntó que cuál era el nombre como científico. Yo Y parte de lo que se le dio fe tanto por José Pineda conmigo es como si va a hablar hacia, o sea, vamos a hablar de conceptos entre áreas porque pues igual ella se relaciona un montón con marketing.
+- **[14:58] Yo:** En algunas partes con tecnología, con nosotros como producto, obviamente está el de nivel de dropshipper como lo tiene comercial, y leyendas está haciendo también lo Lo que ha hecho Lucho y lo que ha hecho María, y de alguna forma el concepto transversal a toda la organización. O sea, todo el mundo trata de apuntar a identificarlo a través de leyendas Dropy. Sin embargo, creo que Entonces, creo que lo que estamos llegando es, está perfecto que toda la organización hable en torno a leyendas.
+- **[14:58] Yo:** Pero que cada uno de esos niveles de leyendas debe tener
+- **[14:59] Yo:** Identificados a su vez, tener como esa homologación de a qué user persona apunta.
+- **[14:59] Yo:** Creo que si llegamos a eso, entonces ya es que nos pongamos en la tarea de, bueno, cuántos caben en bienvenidos, quiénes están, cuántos en explorador, cuántos en master, cuántos en experto. Puede que pase que un user persona comparta master experto y sabio VIP porque él realmente después de las mil órdenes para nosotros ya supongamos no ya está realizado es como un dropshipper la concepción ya se activó ya está retenido Ya usa todo lo que tiene que usar, y es más un tema de, sí, que empezó a agregar más, más productos de catálogos privados.
+- **[14:59] Yo:** Cualquier otra cosa, no.
+- **[14:59] Yo:** O está escalando de otra forma, pero no porque la herramienta, la plataforma, lo esté llevando a eso.
+- **[14:59] Yo:** Sino porque encontró una forma de crear su propia herramienta a través de no-code para automatizar unos flujos que ni siquiera Dropy le permite hacer. Y ahí iremos identificando, pero creo que sí llegamos al mismo punto.
+- **[15:00] Diana Aldana:** Listo, entonces exacto, nos alineamos que estos van a ser los nombres que vamos a llamar tanto interno como externamente. Segundo paso, actualmente lo estamos categorizando por la cantidad de órdenes.
+- **[15:00] Diana Aldana:** Este perfil realmente está muy genérico.
+- **[15:00] Diana Aldana:** Tenemos que entrar entonces a profundizar.
+- **[15:00] Diana Aldana:** categorizar y bien cada uno de estos. Entonces la idea es que hagamos como, comencemos entonces como a nutrirlo. Entonces comenzaríamos con este perfil de bienvenida. En donde se va a revisar la documentación actual que tenemos.
+- **[15:00] Diana Aldana:** Y se va a confrontar también como con lo que se obtenga del experimento Expo Winner, correcto. Eso va a contribuir al entendimiento de este usuario bienvenido.
+- **[15:00] Yo:** Correcto.
+- **[15:00] Diana Aldana:** Listo, entonces sí comenzaríamos entonces a la construcción del user persona y a un mini research para entender los atributos de este perfil de usuario.
+- **[15:01] Diana Aldana:** Listo.
+- **[15:01] Diana Aldana:** Sí, sería entonces que en el planning que se haga entonces semanalmente, no sé si podamos meter una tarea de entendimiento a profundidad del usuario y se pueda asignar Santi como una tarea de research y entendimiento de todos estos usuarios.
+- **[15:01] Yo:** Yo creo que estamos a tiempo de también poderlo incluir dentro del análisis que se va a hacer ahora con, con Gaby. Entonces podríamos incluirlo. De hecho, de que no les envió el documento, ya se los comparto. Pero entonces lo hace la modificación, Dianis, para que quede como a través del experimento vamos a lograr identificar eso. ¿Te parece?
+- **[15:01] Diana Aldana:** Y este
+- **[15:01] Participante:** Sí.
+- **[15:01] Diana Aldana:** Listo.
+- **[15:01] Diana Aldana:** Ajá, exacto. A través del experimento vamos a entender a profundidad nuestro usuario. Y adicional, adicional a eso, también está el journey del usuario.
+- **[15:01] Diana Aldana:** Acá tenemos un primer journey.
+- **[15:02] Diana Aldana:** El usuario que entra a Dropi. La idea es que también cuál es el journey que vamos a mapear en este experimento y cómo se adaptaría pues al journey convencional de Dropi.
+- **[15:02] Yo:** Aquí les estoy enviando. Me le toca. Está Aleja, Jaime, Laura Contreras, Diana Aldana, Laura Torres. ¿Quién me está faltando?
+- **[15:02] Yo:** Se lo ha Catherine.
+- **[15:02] Yo:** Acate.
+- **[15:02] Yo:** el esfuerzo oficial que te pinta al azar de lo que va de hecho ahora lo podemos revisar listo
+- **[15:02] Diana Aldana:** Okay.
+- **[15:02] Diana Aldana:** De una.
+- **[15:02] Diana Aldana:** Ok, listo. Y bueno, y esto a la final se conecta con la charla que dimos el viernes muy general de service design, Santiago Aleja, que si queremos crear experiencias memorables tenemos que iniciar en Entendiendo muy bien al usuario, entendiendo el journey del usuario, y a partir de eso pues poder identificar sus puntos de dolor y ahí comenzar a atacar.
+- **[15:02] Diana Aldana:** Sabemos que una buena experiencia es la sumatoria de diferentes sucesos durante el viaje.
+- **[15:03] Diana Aldana:** Entonces digamos que se complementa uno con lo otro.
+- **[15:03] Diana Aldana:** Listo, bueno, entonces ya, perdón, yo sé que ya tenemos reunión, entonces ya para finalizar quiero saber, ¿ustedes ven prudente entonces la reunión que había agendado el jueves Entonces, si yo quiero hacer una experiencia de user persona o la cancelo hasta que hagamos el levantamiento bien de los usuarios para socializarla con el resto, porque ustedes
+- **[15:03] Yo:** Yo creo que hay suficiente tarea para que traigamos más info y de pronto capaz nos sirve más es como ese espacio para usar esa información. debatirlo. O sea, no te digo cancelarlo, sino propondría reprogramarlo para después de Expo Winners, que con la data ya nos sentemos como organizarlo y que todos lleguemos al consenso. No sé cómo lo ven.
+- **[15:03] Diana Aldana:** Ok, ok, o sea, como en 2 semanas sentarnos a ver qué ha pasado con el descubrimiento del usuario.
+- **[15:03] Yo:** Sí, exacto.
+- **[15:03] Diana Aldana:** Ok.
+- **[15:03] Yo:** Sí, sí les parece.
+- **[15:04] Diana Aldana:** Sí, porque esta etapa pues ya están las cosas como están, con leyendas, ya hay una definición. De aquí a 2 semanas pues no van a haber cambios. Entonces sí la veo prudente entonces reprogramarlo en 2 semanas.
+- **[15:04] Yo:** Listo, de una.
+- **[15:04] Diana Aldana:** Listo, bueno, bueno, súper, nos alineamos de buena.
+- **[15:04] Yo:** Gracias, Chau.
+- **[15:04] Alejandra Melo:** Vale, nos vemos,
+- **[15:04] Diana Aldana:** chau.

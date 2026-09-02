@@ -1,0 +1,691 @@
+# Sellers success - Daily
+
+- **ID:** `not_McO9Ljpy9RfrEl`
+- **Fecha:** 2026-08-27T13:32:54.000Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/ece471b1-4554-47dd-965b-2da6549cb2ba)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo, Diana Margarita Aldana Echeverry, Laura Contreras
+
+---
+
+## Resumen de la Reunión
+# Scanner de Productos: Riesgos y Validación
+
+- Riesgo de que usuarios escaneen productos de exposición/e-commerce con mala calificación
+  - Propuesta: evitar que el score baje de 60, o no dar score definitivo hasta completar varios pasos
+- Variables que distorsionan el scanner: ángulo, distancia, tamaño percibido del producto
+  - Dos usuarios escaneando el mismo producto pueden obtener resultados distintos
+  - Riesgo de que el score refleje mal la oportunidad real del producto
+
+# Notificaciones WhatsApp y Email
+
+- Reunión de alineación con marketing hoy a las 11 AM
+  - Objetivo: ver qué data hay disponible, definir estrategia de envío y alinear copies
+  - Alejandra no estará en la tarde (cita médica de la niña)
+- Segmento objetivo: vendedores estancados, no usuarios inactivos totales
+  - Notificación a inactivos totales tiene poco impacto real
+  - Foco en usuarios que ya han vendido pero cuyas ventas han caído
+  - Santiago pedirá a Lady la base comercial de agosto para identificar ese segmento
+- Concepto: crecimiento en ventas, no activación
+  - Copies ya trabajados por Alejandra: hacerlos más generales, menos transaccionales, más call to action
+  - Revisar varios del Excel con Mahoka en la reunión; resto se confirma por separado
+
+# Centro de Aplicaciones y Estrategia de Integraciones
+
+- Idea de app center (estilo Jira): módulo con micro-apps de terceros integradas nativamente en Dropi
+  - Usuario instala, se autentica, y la app arranca desde ahí
+  - Evita conflictos internos con verticales del holding (ej. Chatea Pro, módulo de marketing actual)
+- Integración vía API: Dropi envía info, la ejecución ocurre en el tercero
+  - No se necesita replicar el 100% de la app externa: con 3-4 funciones bien hechas es suficiente
+  - Ejemplo pauta: disparar, cancelar, ver resultados, o solo traer data de gasto a Dropi
+- Prueba de concepto Pull Max (pedida por Lucho): pauta desde Dropi
+  - Jaime tiene contacto en Roax: explorar modelo freemium para que dropshippers puedan pautar
+  - Pendiente: no confundir prueba de concepto con producto final no controlable
+- Encuesta a usuarios: sondear qué herramientas usan (CRMs, pauta, confirmación de ventas, etc.)
+  - Objetivo: entender qué integraciones priorizar para el centro de apps
+
+# Copiloto y Documentación
+
+- Alejandra comparte flujo de Figma del copiloto con Diana y Laura: bien recibido
+- Pendiente agregar paso de “campañas” en las cards del copiloto
+  - Hay tabla con todos los pasos y videos de referencia (Diana envió app similar para revisar)
+- Ideas y proyectos se sincronizan en Darwin (integrado con Granola)
+  - Propuesta: complementar con un FigJam para tener mapa visual de iniciativas
+- Preguntas para usuarios al finalizar el copiloto: revisar si el agente ya las generó; si no, crear unas 5-10
+
+# Próximos Pasos
+
+- **Pedir base comercial de agosto a Lady** (Santiago)
+
+  Identificar vendedores estancados o con caída en ventas para el segmento de notificaciones.
+- **Revisar cards del copiloto y agregar paso de campañas** (Santiago)
+
+  Alejandra ya envió el link con las cards y la tabla de pasos.
+- **Revisar si el agente ya generó preguntas para el copiloto** (Santiago)
+
+  Si no existen, crear entre 5 y 10 preguntas para validar con usuarios al finalizar el flujo.
+- **Revisar app enviada por Diana y añadirla al análisis del copiloto** (Alejandra)
+
+  Incluir hallazgos en las cards de referencia.
+- **Contactar a Roax para explorar integración freemium de pauta**
+
+  Jaime tiene el contacto; evaluar si dropshippers pueden pautar desde Dropi hacia Instagram u otras plataformas.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/0c5a6ff0-592e-4f69-8073-45addaca93d5](https://notes.granola.ai/t/0c5a6ff0-592e-4f69-8073-45addaca93d5)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[13:34] Yo:** Speaker A: MBC 뉴스 이덕영입니다.
+- **[13:34] Alejandra Melo:** Bien, bien.
+- **[13:34] Yo:** Listo, Yale,
+- **[13:34] Alejandra Melo:** Listo, ahora sí te escucho mejor.
+- **[13:35] Yo:** Súper. ¿Qué me decías, entonces?
+- **[13:35] Alejandra Melo:** No, pues que si había algo que
+- **[13:35] Alejandra Melo:** decir, de pronto, en esta reunión, que
+- **[13:35] Alejandra Melo:** que ya no supiéramos. Yo ayer hice la
+- **[13:35] Alejandra Melo:** la que les mostré cómo
+- **[13:35] Alejandra Melo:** a Diana y a
+- **[13:35] Alejandra Melo:** y a Lau, como el flujo, así como contemplado el copilotock,
+- **[13:35] Alejandra Melo:** y... Ay, dame un segundo.
+- **[13:35] Alejandra Melo:** Qué pena, Santi, dame un segundito.
+- **[13:35] Yo:** Tranqui, tranqui.
+- **[13:36] Alejandra Melo:** Lady Susante te decía que le mostré como el el flujo, el que te envié por
+- **[13:36] Alejandra Melo:** de Figma, ¿Les gustó? Lo único que me decían era que cuando fuéramos a incluir los scanner, tuviéramos en cuenta que no se puede hablar, pues, de que de pronto lleguen a escanear un producto de de e-commerce scanner, de e-commerce scanner, de
+- **[13:36] Alejandra Melo:** de la exposición, ¿cierto?, que van a hacer, que
+- **[13:37] Alejandra Melo:** a sacar como varios productos, varios proveedores y que les dé por escanear un producto de esos y luego
+- **[13:37] Alejandra Melo:** tenga una mala calificación. Entonces, hay que tener mucho cuidado de eso.
+- **[13:37] Yo:** Sí, eso eso creo que se lo comentaron a Jaime una vez que lo presentó.
+- **[13:37] Yo:** Y creo que fue donde él dijo, no, pues, si se le pica aquí, aquí, aquí, pues, se ve como
+- **[13:37] Yo:** puede mejorar.
+- **[13:37] Yo:** Pero tocaría hacerle alguna alguna maroma para
+- **[13:37] Yo:** que eso, no sé, no vaya a bajar de sesenta, algo así.
+- **[13:37] Yo:** O podríamos, no sé, voy voy, pero sí, te da razón eso, eso, como lo hacemos tal, Gali, no le no lo ha revisado tanto,
+- **[13:37] Yo:** o podríamos como no darle un score definitivo, sino que le
+- **[13:37] Yo:** score vaya después de que haya algunos pasos, ¿no?, como de
+- **[13:37] Yo:** a pensarlo, sea, como como
+- **[13:37] Yo:** cómo podríamos hacer para que no vayamos a a quemar algún producto?
+- **[13:37] Alejandra Melo:** Sí, sí, sí, eso es
+- **[13:37] Yo:** ¿Y sabes qué es lo otro? Que
+- **[13:38] Yo:** que ahí es donde a mí se me hace que que es tan complejo usar
+- **[13:38] Yo:** usar
+- **[13:38] Yo:** y o o prototipar, de forma tan
+- **[13:38] Yo:** porque no sé, de hecho, cómo está el en esa parte del escáner,
+- **[13:38] Yo:** pero ¿qué pasa si dos personas escanean el mismo producto?
+- **[13:38] Yo:** A los dos le sale exactamente igual,
+- **[13:38] Yo:** creo que
+- **[13:38] Yo:** no, después de
+- **[13:38] Yo:** o sea, o puede que sí, sí lo estamos guardando en cacheo o en memoria,
+- **[13:38] Yo:** ¿cierto?
+- **[13:38] Yo:** Pero pero pero sí lo detectó igual, que, pero sí,
+- **[13:38] Yo:** por ejemplo, tú coges y le tomas, cogemos el plato de de agua para perro, que podríamos trabajar en,
+- **[13:38] Yo:** pasa si yo se lo tomo de forma lateral,
+- **[13:38] Yo:** y de forma como, no sé, un poquito más inclinada, y detecta que es otra
+- **[13:38] Yo:** o detecta que es más grande o más pequeño.
+- **[13:38] Yo:** Ahí empiezan las las las variables
+- **[13:38] Yo:** que pueden distorsionar la información, entonces, a que a ti te parezca que es un hit, porque
+- **[13:38] Yo:** es pequeño, portátil, lo puede llevar a todos lados, y el mío no se lo
+- **[13:38] Yo:** como que es un bull gigante para huésped.
+- **[13:38] Yo:** Como que no es tan práctico, no es tan
+- **[13:39] Yo:** lo que sea, y ahí y empieza a ser como buen gasto, no funciona, porque
+- **[13:39] Yo:** no lo está haciendo bien.
+- **[13:39] Yo:** Es como el el gran riesgo.
+- **[13:39] Alejandra Melo:** Igual ahí vamos mirando a ver cómo vamos metiendo lo de
+- **[13:39] Yo:** Sí.
+- **[13:39] Yo:** Sí, sí, sí.
+- **[13:39] Yo:** D'accord.
+- **[13:39] Yo:** Listo. ¿Algo más?
+- **[13:39] Alejandra Melo:** No.
+- **[13:39] Yo:** Súper. Yo, después de la con
+- **[13:39] Yo:** con Juandi... Ah, bueno, tú, como usted se habló con Juandi y con con Mitchell.
+- **[13:39] Yo:** Sea, pensé que ellos estaban
+- **[13:39] Yo:** de hecho, tenía miedo de que ellos estuvieran mucho más adelantados,
+- **[13:39] Yo:** y que, pronto, nos tocara
+- **[13:39] Yo:** ajustarnos como a lo que ellos estuvieran haciendo, en algún en algún sentido. No sé en cuál, pero en algún sentido,
+- **[13:39] Yo:** no sabía ellos cómo estaban.
+- **[13:39] Yo:** Entendí que ellos todavía estaban, justamente, explicando cómo lo iban a presentar, ¿no?
+- **[13:39] Yo:** Yo leí, le compartí a Jaime hecho lo lo la tal cual, la la resumen que puso Granola, pues, como como él no logró entrar a esa reunión, y él y él quiere ponerse ya al día con nosotros, no no no no nos hemos podido reunir, pues ahí le mandé como la info de Inkeston,
+- **[13:40] Yo:** Ya creo que depende, pues, más de ellos el
+- **[13:40] Yo:** qué quieren hacer, y nosotros
+- **[13:40] Yo:** realmente, el trabajo tiene que estar en integrar el flujo, ¿sí?, en en cómo hacemos ese paso.
+- **[13:40] Yo:** Todas esas opciones, ¿cuál es tema? O sea, mí me pareció como una buena idea lo de, hey,
+- **[13:40] Yo:** un, usualmente, un bannercito ahí, un cart,
+- **[13:40] Yo:** que sea como workshop producto y que solamente
+- **[13:40] Yo:** nada, con un copy como, este espacio es para las personas que están
+- **[13:40] Yo:** fueron escogidas o, bueno, registradas al final
+- **[13:40] Yo:** Hoy en la tarde hacemos una reunión de alineación con marketing y eventos.
+- **[13:40] Yo:** Para entender bien el flujo cómo está, ¿no?
+- **[13:40] Yo:** Que solamente, desde ahí, puedan arrancar. Entonces, por ejemplo, hacer lo de
+- **[13:40] Yo:** lo de selección de transportadoras o
+- **[13:40] Yo:** arranquen el flujo completo de Gali, lo que sea.
+- **[13:40] Yo:** Pues, que lo que lo hagan desde ahí para no hacerlo como tan
+- **[13:41] Yo:** ultracomplejo, porque ahí solamente es una autenticación.
+- **[13:41] Yo:** Que ahí, en el WhatsApp, tenemos un código, uno dos tres cuatro, listo, ya con eso pueden arrancar.
+- **[13:41] Yo:** Para saber cuáles son los usuarios que realmente sí están
+- **[13:41] Yo:** entrando dentro de ese espacio, y que no empezamos a recolectar data de
+- **[13:41] Yo:** todo lado,
+- **[13:41] Yo:** que
+- **[13:41] Yo:** a veces, bueno, a veces no tanto,
+- **[13:41] Yo:** pero, pues, hasta que ellos no definan mucho más de formas que
+- **[13:41] Yo:** clara, quiénes le van a llegar, cómo le van a llegar, qué data quieren escoger,
+- **[13:41] Yo:** creo que ahí nosotros quedémonos nos quedamos quietos, ¿cierto? ¿Te parece?
+- **[13:41] Alejandra Melo:** Sí, pues que yo no
+- **[13:41] Alejandra Melo:** Pues que yo no le vi como
+- **[13:41] Alejandra Melo:** complejidad.
+- **[13:41] Yo:** Sí. O sea, al al final, para nosotros,
+- **[13:41] Yo:** ahí no tenemos que trabajarle
+- **[13:41] Yo:** a la funcionalidad, sino que es a
+- **[13:41] Yo:** a garantizar que
+- **[13:41] Yo:** que, de alguna forma, se llegue allá.
+- **[13:41] Alejandra Melo:** Mhmm.
+- **[13:41] Yo:** ¿Sí? El punto. Ya luego
+- **[13:41] Yo:** punto.
+- **[13:41] Yo:** Lo vamos conversando. Inclusive, puede que ni siquiera tenga que estar en esas aplicaciones, sino
+- **[13:41] Yo:** solamente se le vaya a mandar un link a todos los que están en el workshop. Creo que es más tema de
+- **[13:42] Yo:** del cómo llegan al al al al
+- **[13:42] Yo:** al prototipo que tenga Michelle.
+- **[13:42] Alejandra Melo:** Relección de transportadora, ¿cierto? ¿Qué es ese?
+- **[13:42] Yo:** Dime.
+- **[13:42] Alejandra Melo:** Es el de selección de transportadoras, el que había hecho Michel López y
+- **[13:42] Yo:** Sí, y y el asunto ahí es
+- **[13:42] Yo:** pues, ya es un tema de ellos, pero lo
+- **[13:42] Yo:** el punto es que entiendo que eso ya está en el licence, el RAPP, está todo,
+- **[13:42] Alejandra Melo:** Sí.
+- **[13:42] Yo:** Entonces,
+- **[13:42] Yo:** creo, o sea, lo que percibo es que todavía no hay no hay pregunta.
+- **[13:42] Yo:** ¿Sí? Es como, ok, ¿tienes algo?
+- **[13:42] Yo:** Que quieres validar?
+- **[13:42] Yo:** Entiendo, por como lo lo lo lo estoy diciendo, Michelle, que
+- **[13:42] Yo:** que es usabilidad.
+- **[13:42] Yo:** O sea, porque se enfocó full con la sabría, que sí, que entiendan el paso, que sepan que
+- **[13:42] Yo:** entender qué qué opciones son las que están utilizando, que si eso si es usabilidad, pues, superfácil ellos.
+- **[13:42] Yo:** Más.
+- **[13:42] Yo:** Más práctico. Pero, bueno, listo, eso es ya tema de ellos.
+- **[13:43] Yo:** Que apenas lo definan,
+- **[13:43] Yo:** volvernos a reunir a ver, bueno, en qué parte lo incluimos nosotros.
+- **[13:43] Yo:** Si en el menú principal, si en otro lado y ya.
+- **[13:43] Alejandra Melo:** Eso sí.
+- **[13:43] Yo:** Aparte de lo de ayer,
+- **[13:43] Yo:** yo estuve revisando otras
+- **[13:43] Yo:** otro par de integraciones,
+- **[13:43] Yo:** No no las integraciones como tal, sino el estado de las integraciones actuales.
+- **[13:43] Yo:** Para ver cómo estaba
+- **[13:43] Yo:** realmente buscando a Excel, que te dije, de de ver si estaba aportando o no.
+- **[13:43] Yo:** Antes de aplicarlo dentro del flujo, porque me di cuenta que el MCP no estaba funcionando,
+- **[13:43] Yo:** lo que hice fue aplicarlo para para para refinar un
+- **[13:43] Yo:** poco más lo del documento de de Discovery, pues, el documento que
+- **[13:43] Yo:** no existía de definir, bueno, las métricas que se va a evaluar,
+- **[13:43] Yo:** qué corte se va a usar,
+- **[13:43] Yo:** qué qué se quiere qué se quiere como entender, cuáles son las preguntas, las hipótesis.
+- **[13:44] Yo:** Te dije que te iba decir, te dije que te lo iba a enviar. No te lo envió porque, pues, le estaba aplicando esa parte de discovery,
+- **[13:44] Yo:** pero pero ya, ya ya ya después de que la información que me trajo a creo que
+- **[13:44] Yo:** como unas buenas comparativas.
+- **[13:44] Yo:** Lo que les mencionaba en la arroba ayer de la tarde.
+- **[13:44] Yo:** De que que lo que hizo fue como en un benchmark
+- **[13:44] Yo:** de discovery de ecommerce. Entonces,
+- **[13:44] Yo:** hay fondos, bueno, los, como los hacen los ecommerce o los flujos
+- **[13:44] Yo:** que envuelven en la la ventas digitales,
+- **[13:44] Yo:** son tantos minutos,
+- **[13:44] Yo:** no tienen que ser más de cuatro, cinco pantallas, no me acuerdo bien cuántas eran.
+- **[13:44] Yo:** Era como cuántas
+- **[13:44] Yo:** opciones deberíamos mostrarle, que no sé si te sirva ya de de diseño, ¿no?
+- **[13:44] Yo:** Tampoco están rígidos, solamente son como lo mismo, comparativas.
+- **[13:44] Yo:** De cómo lo hacen los demás.
+- **[13:44] Yo:** Y, pues, nosotros, que
+- **[13:44] Yo:** pues, ya es justo a lo a lo que también necesitemos. Igual,
+- **[13:44] Yo:** lo mismo es,
+- **[13:44] Yo:** más un prototipo para levantar data,
+- **[13:44] Yo:** es más eso, que por qué se vaya a hacer el producto final.
+- **[13:45] Yo:** Y ya, yo ya tengo los tickets para el viaje, entonces,
+- **[13:45] Yo:** yo, al llegar,
+- **[13:45] Yo:** desde el jueves en la noche, porque
+- **[13:45] Yo:** no me gusta llegar el mismo día, Jaime y
+- **[13:45] Yo:** Jaime y Lauzi van a llegar el mismo día, muy temprano en la mañana,
+- **[13:45] Yo:** y se van a ir tarde, domingo en la noche.
+- **[13:45] Yo:** Ya por traumas traumas pasados.
+- **[13:45] Yo:** Me gusta hacer eso porque siento que al final es llegar corriendo ciruelos a retrasos, toca
+- **[13:45] Yo:** con maleta corriendo al evento, eso es un
+- **[13:45] Yo:** lo peor. Y luego, lo mismo, uno cuando va a salir,
+- **[13:45] Yo:** salga, recoja la maleta, o llévese la maleta todo el día ya
+- **[13:45] Alejandra Melo:** Sí, eso es mejor un tiempo.
+- **[13:45] Yo:** horrible.
+- **[13:45] Yo:** Entonces, yo los vuelvo a llegar el jueves en la noche,
+- **[13:45] Yo:** y me vuelvo el lunes en la noche. Y, pues, ¿cómo igual? Estuve
+- **[13:45] Yo:** cuatro años en Bogotá, pues, aprovecho también, veo amigos y todo el cuento,
+- **[13:45] Yo:** me intereso esto esos días.
+- **[13:45] Yo:** Familia, que también tengo allá.
+- **[13:45] Yo:** No, nada por ahora eso, Aleja. De de hoy tenemos la con con con lo de WhatsApp y y e email, La idea es alinear, entonces, ahí, lo que yo... Ya tú trabajaste, con con las notificaciones. Por ahora, nosotros no tenemos acceso a la a la infotransaccional. Ellos dicen que sí, entonces, creo que podríamos enfocarlo Bueno, ¿qué qué qué data es la que usted tiene? O sea, muéstreme su data. Listo. Podemos sacar que para Juan Pérez se podemos, las las novedades, o podemos ver
+- **[13:46] Yo:** podemos ver pedidos por confirmar, podemos ver lo que sea.
+- **[13:46] Yo:** Y eso, entonces, podemos puede ser lo que notifiquemos.
+- **[13:46] Yo:** Y es unirlo con marketing,
+- **[13:46] Yo:** que fue lo que recomendaron mucho, de que, venga, estos son los copies que vamos a a enviar
+- **[13:46] Yo:** ¿cierto?
+- **[13:46] Yo:** Inclusive, para no revisar uno por una sesión,
+- **[13:46] Yo:** podemos ver varios de los que ya están en el Excel, que tú ya tú trabajaste
+- **[13:47] Yo:** en hacerlos más ambiguos, ¿no?, en amigos míos, o sea, no no no hacerlos como
+- **[13:47] Yo:** tan transaccionales, sino un poco más generales, más de call to action.
+- **[13:47] Yo:** Imos, y y y hablar de algunos con con con Mahoka,
+- **[13:47] Yo:** y el resto, bueno, por favor, revíselas y confírmeme si todo bien o si tenemos que hacer modificaciones.
+- **[13:47] Yo:** Y ya con eso
+- **[13:47] Alejandra Melo:** Listo.
+- **[13:47] Yo:** nos nos vamos.
+- **[13:47] Yo:** Por ahí, nosotros teníamos... Ah, bueno, tú tienes la la
+- **[13:47] Yo:** los dos tenemos data de de de de usuarios que a los que podríamos enviar notificaciones,
+- **[13:47] Yo:** igual podemos hacer como un chequeo, un doble chequeo, si quieres, hoy en la tarde,
+- **[13:47] Yo:** de qué es lo que les, cuáles les vamos a enviar, para hacer cómo lo vamos
+- **[13:47] Alejandra Melo:** Pero estoy en la tarde,
+- **[13:47] Yo:** Dime.
+- **[13:47] Alejandra Melo:** ¿Estoy en la tarde en la reunión? No, no era
+- **[13:47] Yo:** No, le le lo de WhatsApp es en la a las once.
+- **[13:47] Alejandra Melo:** Ajá.
+- **[13:47] Yo:** Hablo es que en la en la tarde en la tarde uno. Es que no sé a qué tanto es lo que vamos a avanzar.
+- **[13:47] Yo:** No sé si no sé si, o sea, creo que el espacio no va a ser para que envíe la notificación ahí,
+- **[13:48] Yo:** nomás para que veamos estrategia de qué data hay, cómo le vamos a enviar a quiénes.
+- **[13:48] Yo:** Alineamos el mensaje con marketing, que estemos todos claros ahí.
+- **[13:48] Yo:** Y, solo ya por confirmar, es como, bueno,
+- **[13:48] Yo:** cuántas personas van a recibir estas notificaciones, que tú y yo ya lo confirmemos.
+- **[13:48] Yo:** Porque, pues, nosotros ya tenemos la las bases de de de sus usuarios, ¿no?
+- **[13:48] Yo:** La data que necesitamos enviarles.
+- **[13:48] Yo:** Entonces, podríamos organizarlo así, ¿o qué piensas?
+- **[13:48] Alejandra Melo:** Sí,
+- **[13:48] Yo:** O sea, la mañana es estrategia, pero ya en la tarde, bueno,
+- **[13:48] Yo:** son estos quinientos,
+- **[13:48] Yo:** y vamos a medir esto de tanto tiempo a tanto tiempo, o sea, ya directamente
+- **[13:48] Yo:** quiénes y en qué momento, y a partir de qué fecha se la han
+- **[13:48] Yo:** enviar. Si decimos que se puede a partir hoy, hoy en la mañana, decimos
+- **[13:48] Yo:** que se puede a partir de hoy, partir del viernes a partir del sábado, pues hagámoslo así. Es más como para que tú y yo estemos como claros en esa parte.
+- **[13:48] Alejandra Melo:** Sí, lo único es que en la tarde yo no voy a estar.
+- **[13:48] Yo:** Ah, entonces,
+- **[13:49] Alejandra Melo:** Porque como las las citas que tenía, las
+- **[13:49] Alejandra Melo:** semana del del terremoto, pues me me llamaron ayer
+- **[13:49] Alejandra Melo:** para citarme para la cita que tenía la niña para ahorita en la tarde.
+- **[13:49] Yo:** De una... ¿Tú tienes la la...? ¿Me puedes
+- **[13:49] Yo:** Creo que nosotros no no hemos llegado, ¿cierto?, a hablar de
+- **[13:49] Yo:** ya puntualmente, como, bueno, son
+- **[13:49] Yo:** vamos a enviar activación
+- **[13:49] Yo:** ¿de acuerdo?
+- **[13:49] Yo:** Enviamos solamente los que son de activación,
+- **[13:49] Yo:** Y, de la base que te pasó, Miguel,
+- **[13:49] Yo:** ¿qué qué qué qué tipos de usuarios tenemos?
+- **[13:49] Yo:** Pues, principalmente, diría los que, si es que no que es una activación, son los que nos han enviado absoluta
+- **[13:49] Yo:** nada, y es querer los mover a crear su primera orden.
+- **[13:49] Yo:** Pero es que con esa plataforma como la tenemos, difícilmente se activa.
+- **[13:49] Yo:** Porque podríamos hacer una activación desde
+- **[13:49] Yo:** O sea, el concepto no es que esté como
+- **[13:49] Yo:** no es que exista en drop it, pero una activación en el sentido de cero app
+- **[13:50] Yo:** tu primer orden,
+- **[13:50] Yo:** sino que
+- **[13:50] Yo:** que,
+- **[13:50] Yo:** usuarios que estén, no sé, ya hayan tenido cinco, seis, siete órdenes,
+- **[13:50] Yo:** tratarlos de mover más a ver si logramos impulsar impulsar ventas, o sea, crecimiento en ventas.
+- **[13:50] Yo:** Ni siquieraámoslo por activación, sino que lo abriría en crecimiento en ventas.
+- **[13:50] Yo:** Porque, ¿o o qué piensas? Porque es que si lo andamos como, bueno,
+- **[13:50] Yo:** los que no han enviado, no no han vendido nada, yo, o sea, difícilmente creo
+- **[13:50] Yo:** una notificación por WhatsApp o por email haga que ellos realmente
+- **[13:50] Yo:** entren a la plataforma y se pongan a vender.
+- **[13:50] Yo:** O sea, no creo que lo hagan.
+- **[13:50] Yo:** Okey okey.
+- **[13:50] Alejandra Melo:** No, yo tampoco creo que lo hagan.
+- **[13:50] Yo:** O sea, yo me iría por los que ya han vendido algo, ya estamos
+- **[13:50] Alejandra Melo:** Más bien por los
+- **[13:50] Yo:** otra acción, o los que han
+- **[13:50] Alejandra Melo:** Más bien por los que están como estancados, como que han vendido, pero se quedaron como ahí.
+- **[13:50] Yo:** Eso. Yo le voy pedir a a a Lady que me pase la
+- **[13:50] Yo:** la base de comercial de
+- **[13:50] Yo:** de inicios de julio, de agosto, perdón,
+- **[13:50] Alejandra Melo:** Uh-huh.
+- **[13:51] Yo:** podemos ver los que están estancados en agosto, los que empezaron, por ejemplo, a caer
+- **[13:51] Yo:** en en ventas.
+- **[13:51] Alejandra Melo:** Eso sí.
+- **[13:51] Yo:** Listo.
+- **[13:51] Alejandra Melo:** De una.
+- **[13:51] Yo:** Es una
+- **[13:51] Yo:** ¿Cuál es el concepto de eso? O sea,
+- **[13:51] Yo:** no es de activa, están activos, no es retención,
+- **[13:51] Yo:** no, realmente es crecimiento, es impulsar ventas.
+- **[13:51] Alejandra Melo:** Mhmm.
+- **[13:51] Yo:** Listo.
+- **[13:51] Yo:** Pero, a lo mejor, un mensaje de activación. Listo, dejémoslo así, entonces.
+- **[13:51] Alejandra Melo:** No hemos como comenzado a hacer algo que
+- **[13:51] Alejandra Melo:** realmente tenga que ver, implicar bien, bien una activación, ¿no?, que reviso
+- **[13:51] Alejandra Melo:** bien eso.
+- **[13:51] Alejandra Melo:** De pronto, esto que estamos haciendo de
+- **[13:51] Alejandra Melo:** de copiloto, pero no
+- **[13:51] Alejandra Melo:** no algo como que implique realmente en lo
+- **[13:51] Yo:** De acuerdo, de acuerdo con eso.
+- **[13:51] Alejandra Melo:** lo que ya está.
+- **[13:51] Yo:** Es porque arrancamos como,
+- **[13:51] Yo:** he pensado en lo mismo, de como
+- **[13:51] Yo:** o sea, si nos piden como
+- **[13:51] Yo:** no sientan, no me dicen, ¿qué qué hemos hecho
+- **[13:52] Yo:** para activar usuarios?
+- **[13:52] Yo:** Realmente, no es una lista muy larga.
+- **[13:52] Alejandra Melo:** Exacto.
+- **[13:52] Yo:** Porque,
+- **[13:52] Yo:** no, de hecho, lo más grande, grande no,
+- **[13:52] Yo:** sea, lo lo lo más enfocado es por inflación.
+- **[13:52] Yo:** Pero es una mierda.
+- **[13:52] Yo:** Entonces, no es como algo, o sea, es algo que quisiera ocultar, que sea,
+- **[13:52] Alejandra Melo:** Yo, la verdad, siento que uno
+- **[13:52] Alejandra Melo:** dice, lo voy a enseñar al usuario.
+- **[13:52] Alejandra Melo:** A hacer lo de Meta y hacer lo de Shopify, con eso ya va
+- **[13:52] Alejandra Melo:** es que dropping realmente no es un problem.
+- **[13:52] Alejandra Melo:** Dropping se maneja superbién.
+- **[13:52] Alejandra Melo:** El problema son como plataforma
+- **[13:52] Yo:** por ejemplo, lo lo que tú
+- **[13:52] Yo:** me quedo sanando mucho lo que tú dijiste de de lo del tema para Shopify.
+- **[13:52] Yo:** Que se pudiera como un tema. ¿Sabes qué parte es un...?
+- **[13:52] Yo:** Caos total?
+- **[13:52] Yo:** Ese módulo de marketing.
+- **[13:52] Yo:** Todo ese módulo de marketing de envío de ese
+- **[13:52] Yo:** envío de email.
+- **[13:53] Alejandra Melo:** Pero no lo usamos, nadie lo usa en drop en drop
+- **[13:53] Alejandra Melo:** shipping, no nadie lo usa.
+- **[13:53] Yo:** Por eso, es un caos, o sea, está ahí, pero estorba.
+- **[13:53] Alejandra Melo:** Estorba. Y creo que María dijo que eso como
+- **[13:53] Yo:** Y
+- **[13:53] Yo:** creo que
+- **[13:53] Yo:** Exacto, y eso se le
+- **[13:53] Alejandra Melo:** se iba a quitar.
+- **[13:53] Yo:** puede, no a ese, como tal, sino al concepto de
+- **[13:53] Yo:** sino que es que
+- **[13:53] Yo:** ya opinión muy
+- **[13:53] Yo:** propia, es que creo que
+- **[13:53] Yo:** también el tener ya diferentes verticales de negocio con diferentes
+- **[13:53] Yo:** del holding,
+- **[13:53] Yo:** empieza a generar lo del famoso conflicto, ¿no?
+- **[13:53] Alejandra Melo:** Mhmm.
+- **[13:53] Yo:** Y, entonces, por ejemplo, que, para marketing,
+- **[13:53] Yo:** nosotros como que no podemos ir tan libremente a construir
+- **[13:53] Yo:** cosas de marketing porque existe
+- **[13:53] Yo:** eso frena, o que no podemos hacer un poco más de omnicanalidad
+- **[13:53] Yo:** porque existe chatea pro,
+- **[13:53] Yo:** eso frena.
+- **[13:53] Alejandra Melo:** Miremos miremos la opción que te dije de
+- **[13:53] Alejandra Melo:** de, a mí me aparece la de
+- **[13:53] Yo:** Last apps?
+- **[13:53] Alejandra Melo:** tener el módulo con las apps, micro apps de terceros y todo eso.
+- **[13:53] Yo:** Ese precio brutal.
+- **[13:53] Yo:** Esa me pareció brutal. Yo yo ahora estoy, eso está medio estancado, pero estoy, de hecho,
+- **[13:54] Yo:** justo es eso y es una prueba de concepto que pidió
+- **[13:54] Yo:** Lucho, que creo que yo te he contado ya, que se llama Pull Max.
+- **[13:54] Yo:** Que es para
+- **[13:54] Yo:** hacer pauta.
+- **[13:54] Yo:** Claro, siempre se ha pensado mucho en como, bueno, ¿cómo hace como que un drop y esté eso?
+- **[13:54] Yo:** Pero es un módulo que se come medio aparte.
+- **[13:54] Yo:** Pasa si hacemos que se vea más nativo en dropping?
+- **[13:54] Yo:** Y no sea como tan tan tan rígido? Por ejemplo,
+- **[13:54] Yo:** a mí me parece que todo esto de Roads, chatea pro, podríamos inclusive, que siga siendo una vertical aparte, con facturación aparte, si quieren, pero que dentro de drop-y, se vea se vea más nativa. ¿Sí? O sea, porque cuando uno está en droppy y y pasas, por ejemplo, entras al modelo racks, tú notas la diferencia, ¿no?, el concepto de como que hasta No me acuerdo si eso está así, pero o sea, te pide el el el el el registro y como que está embebido, ¿no? Es como si fuera un ese de ahí medio embebido. Pero no es como que tú lo actives a través de, por ejemplo, un centro de aplicaciones,
+- **[13:55] Yo:** que es como lo tiene, no sé si tú lo hiciste basada, por ejemplo, en como lo tiene Jira,
+- **[13:55] Alejandra Melo:** Ajá.
+- **[13:55] Yo:** o como lo tienen, que son como este app center,
+- **[13:55] Yo:** o no creo cómo se llaman, de Jira. Y, tal cual, lo que tú dices, como es como que le haces como instalar
+- **[13:55] Yo:** o, sí, instalar, pero, cuando le das instalar, hizo una aplicación de un tercero, ahí mismo te pide el registro, ¿no?
+- **[13:55] Yo:** Entonces, credenciales.
+- **[13:55] Yo:** Te das de alta, y ahí empieza, ahí arranca
+- **[13:55] Yo:** Eso me pareció interesante,
+- **[13:55] Yo:** Tendemos que verlo es, ¿sabes qué?, con ojos
+- **[13:55] Yo:** de cómo está en la en la rearquitectura.
+- **[13:55] Yo:** Porque creo que la parte de integración la quiere
+- **[13:55] Yo:** la quieren modificar, eso no significa que no la podemos trabajar, ¿no?, porque sé que le están haciendo un rediseño,
+- **[13:55] Yo:** y ver qué podemos montar, pero sí, el centro de aplicaciones se me hace chévere.
+- **[13:56] Yo:** Ese creo que lo facilitaría mucho
+- **[13:56] Yo:** y, definitivamente, ahí podemos despedirle bastante,
+- **[13:56] Yo:** a Katherine Salazar,
+- **[13:56] Yo:** sobre
+- **[13:56] Yo:** y a y a Lau Torres, sobre product marketing,
+- **[13:56] Yo:** para todos esos flujos. Porque, por ejemplo,
+- **[13:56] Yo:** en la en la notificación, o sea, creamos las pantallas, ¿no?, la visual, como si
+- **[13:56] Yo:** instala, todo el
+- **[13:56] Yo:** pero que el video está actualizado, que esté bien la descripción,
+- **[13:56] Yo:** que
+- **[13:56] Yo:** ese ese detalle, esos grandes, esos pequeños detalles, pero que al final son los que hacen la experiencia completa,
+- **[13:56] Yo:** que la hacen robusta,
+- **[13:56] Yo:** son los que pueden estarnos faltando.
+- **[13:56] Yo:** Que yo le diga al usuario,
+- **[13:56] Yo:** A mí me encantaría que, por ejemplo, nosotros no no tuviéramos que pedir tokens.
+- **[13:56] Yo:** Porque para usuarios, pues es como por ejemplo, cuando
+- **[13:56] Yo:** cuando tú instalas algo en Jira, Jira
+- **[13:56] Yo:** depende de la aplicación también, depende mucho del tercero.
+- **[13:56] Yo:** Te pide un token, solamente instalas, te pide
+- **[13:56] Yo:** si acaso, correo o contraseña,
+- **[13:56] Yo:** eso, que normalmente no.
+- **[13:56] Yo:** Claro, depende que en el otro lado ya exista la cuenta, ¿no?
+- **[13:56] Alejandra Melo:** Uh-huh.
+- **[13:57] Yo:** Pero es más fácil eso, a que le pidas como, ve al
+- **[13:57] Yo:** ve al módulo token y copia, pega. Si toca, pues toca ahí, se le pedirá.
+- **[13:57] Yo:** Pero, por ejemplo, eso, de
+- **[13:57] Yo:** que el video sea muy claro de dónde se consulta, dónde se copia, dónde se pega,
+- **[13:57] Yo:** Creo que todo eso todo eso me parece me parece como superpráctico.
+- **[13:57] Yo:** Y, al final, es
+- **[13:57] Yo:** como nosotros no dependeríamos
+- **[13:57] Yo:** tocaría verlo así, que que es, ¿entiendes?, como tú lo estás viendo. Como nosotros no,
+- **[13:57] Yo:** dependemos de la
+- **[13:57] Yo:** de la facturación de un tercero,
+- **[13:57] Yo:** es como, venga, por ejemplo,
+- **[13:57] Yo:** si dijeramos
+- **[13:57] Yo:** que existe un CRM, ¿no?,
+- **[13:57] Yo:** que es, pongamos, es hotspot,
+- **[13:57] Yo:** o Zendesk, o cualquiera de estas cosas.
+- **[13:57] Yo:** Soho.
+- **[13:57] Yo:** Y
+- **[13:57] Yo:** usted lo tiene,
+- **[13:57] Yo:** intégrelo acá.
+- **[13:57] Yo:** Pero intégrelo solamente, de de alta para que ellos sincronice, no sé, sus contactos con los míos,
+- **[13:58] Yo:** Es eso, ¿cierto? Así es como tú me lo estás viendo.
+- **[13:58] Alejandra Melo:** Hablando sola.
+- **[13:58] Alejandra Melo:** Sí, sí.
+- **[13:58] Alejandra Melo:** ¿Qué te iba a decir?
+- **[13:58] Alejandra Melo:** Hay que anotar todo eso, que lo,
+- **[13:58] Yo:** No, no, pero eso tengo, por eso tengo que
+- **[13:58] Alejandra Melo:** se nota. Ah, ¿verdad que tú tienes...?
+- **[13:58] Yo:** A la
+- **[13:58] Yo:** habla libremente, que, aparte de aparte de lo de me ha gustado mucho, porque
+- **[13:58] Yo:** toda esa charlita, al principio, in America, take a sickle más de gripa, el otro
+- **[13:58] Yo:** dolor de cabeza, el otro, no sé, mañana se casan mis
+- **[13:58] Yo:** primos, todo eso lo omite esto, esto literalmente
+- **[13:58] Yo:** como tiene foco profesional, él solamente capta como
+- **[13:58] Alejandra Melo:** Uh-huh.
+- **[13:58] Alejandra Melo:** Okay.
+- **[13:58] Yo:** pasos a seguir. Como toda la charla
+- **[13:58] Yo:** no no laboral, la excluye.
+- **[13:58] Yo:** Entonces, al final saca todo el recopilado, y
+- **[13:58] Alejandra Melo:** Sí.
+- **[13:58] Alejandra Melo:** Todo lo que es rapport lo quita.
+- **[13:58] Alejandra Melo:** Listo.
+- **[13:58] Alejandra Melo:** ¿Ve qué te iba a decir? Listo.
+- **[13:59] Alejandra Melo:** Hay que hay que sentarnos.
+- **[13:59] Alejandra Melo:** Santi.
+- **[13:59] Alejandra Melo:** Tener como un fig, ya, no sé, en alguna parte
+- **[13:59] Alejandra Melo:** y mapear todo lo que estamos hablando, como para tenerlo en cuenta,
+- **[13:59] Alejandra Melo:** porque a mí, la verdad, mañana se me pierde. Yo sé que está en Granola,
+- **[13:59] Alejandra Melo:** pero a mí se me pierde el mapa. Me voy a poner como alertas acordarme.
+- **[13:59] Yo:** Just throw me
+- **[13:59] Yo:** yo estoy poniendo
+- **[13:59] Yo:** o sea, lo que te, lo que te contestes,
+- **[13:59] Yo:** Granola está ya integrado al
+- **[13:59] Alejandra Melo:** Mhmm.
+- **[13:59] Yo:** y el está el de Darwin.
+- **[13:59] Alejandra Melo:** Sí.
+- **[13:59] Yo:** Él se está sincronizando diario.
+- **[13:59] Yo:** Y
+- **[13:59] Yo:** en la célula, en el de Darwin,
+- **[13:59] Yo:** cuando uno entra, ve todos los proyectos, ahí está,
+- **[13:59] Yo:** o sea, ahí va va a estar. O sea, todo lo que empiezan a hacer como ideas de proyectos,
+- **[13:59] Yo:** lo que voy a hacer es como
+- **[13:59] Yo:** si quiero, es que siento que igual, como ya le están metiendo el diseño a Darwin, se lo están
+- **[13:59] Yo:** claramente haciendo un poco más rígido,
+- **[14:00] Yo:** pero, por ejemplo, todos los procesos de discovery, que son solamente ideas,
+- **[14:00] Yo:** Es más, ni siquiera son ideas, apenas son problemas, iniciativas,
+- **[14:00] Yo:** muy generales, que todavía no se han no están aterrizadas.
+- **[14:00] Yo:** Ver cómo las ponemos. Pero
+- **[14:00] Yo:** en en el tú puedes consultarlo para que tengamos
+- **[14:00] Alejandra Melo:** Mhmm.
+- **[14:00] Yo:** como toda la lista. Pero ¿de acuerdo que es más visual tenerlo también en un ficha?
+- **[14:00] Yo:** De acuerdo que es más más fácil tenerlo en un fitjam, que que tenga
+- **[14:00] Alejandra Melo:** Listo.
+- **[14:00] Yo:** como todas las posibles cosas que se pueden hacer.
+- **[14:00] Yo:** A mí me encantaría, por ejemplo, que nosotros nos nos fuésemos
+- **[14:00] Yo:** directo contra
+- **[14:00] Yo:** muchas
+- **[14:00] Yo:** muchas aplicaciones. Yo entiendo que
+- **[14:00] Yo:** lo mismo, es como la fricción, de hecho, yo tengo que hablar con con la gente de Roblox, pero
+- **[14:00] Yo:** ver que hasta dónde está llegando Roax nosotros nos podríamos meter por algún lado
+- **[14:00] Yo:** un lado más freemium,
+- **[14:00] Yo:** ¿cierto?
+- **[14:00] Yo:** Que, pues, realmente, hagan un cobro del lado del que haga las ads.
+- **[14:01] Yo:** Pero no sé si hay un si hay una herramienta que sirva para hacer
+- **[14:01] Yo:** marketing, que sirva para hacer propaganda,
+- **[14:01] Yo:** sirva para hacer exploración de mercados,
+- **[14:01] Yo:** No tiene que ser de drop, es de un tercero que ofrece un MCP y un API que se conecte, pues yo la pongo ahí,
+- **[14:01] Yo:** que es como terminan funcionando todos los centros de apps.
+- **[14:01] Yo:** Yo la pongo, usted vaya y consuma eso. Ah, le gusta, pues vaya y pague la suscripción.
+- **[14:01] Yo:** De esa vaina, o sea, no es conmigo.
+- **[14:01] Yo:** Que apenas usted la tenga allá, la puede usar acá.
+- **[14:01] Yo:** Y eso es lo que le le es versatilidad, entonces,
+- **[14:01] Yo:** sería interesante
+- **[14:01] Yo:** que eso, ¿sabes qué?, sí, creo que lo podríamos hacer para el
+- **[14:01] Yo:** no sé, sí, para el workshop,
+- **[14:01] Yo:** No en cuanto el, no no agregarle más cosas a Gali, sino que, aparte,
+- **[14:01] Yo:** creo que tenemos el tiempo para
+- **[14:01] Yo:** ejemplo, enviar una encuesta. O ni ni es que tenemos que hacer un workshop, mentiras.
+- **[14:01] Alejandra Melo:** Eso me estaba diciendo Lau y y Diana, que
+- **[14:01] Yo:** ¿Qué herramientas son las que más?
+- **[14:01] Alejandra Melo:** que hiciéramos
+- **[14:01] Alejandra Melo:** que que es esto también que estábamos haciendo de
+- **[14:02] Alejandra Melo:** ahorita que me habló esta encuesta, para que no se me vaya a olvidar.
+- **[14:02] Alejandra Melo:** Quisiéramos lo de las
+- **[14:02] Alejandra Melo:** preguntas. ¿Qué preguntas vamos a a
+- **[14:02] Alejandra Melo:** pedirle al usuario aquí en esta parte de copiloto cuando la terminen?
+- **[14:02] Alejandra Melo:** Que no no la
+- **[14:02] Alejandra Melo:** Que no no lo hemos pensado tampoco.
+- **[14:02] Alejandra Melo:** Para que la tengas ahí
+- **[14:02] Alejandra Melo:** cuenta.
+- **[14:02] Yo:** ¿Sabes qué? No sé si el el agente puso unas preguntas,
+- **[14:02] Yo:** voy a revisarlas, pero sí, de acuerdo, de acuerdo, voy a pedir que, voy
+- **[14:02] Yo:** a revisar si las tiene y, si no, las creamos,
+- **[14:02] Yo:** Creo que son como dos,
+- **[14:02] Yo:** ¿no?
+- **[14:02] Yo:** Pero deberían ser un poquito más, por lo menos unas, no sé,
+- **[14:02] Yo:** cinco, diez preguntas.
+- **[14:02] Yo:** Sí, de acuerdo con eso.
+- **[14:02] Yo:** Pero lo que te iba decir era que, con el tema de preguntas, su encuesta,
+- **[14:02] Yo:** de forma muy general, veamos cómo podemos hacer el sondeo de
+- **[14:02] Yo:** herramientas que más utilizas
+- **[14:02] Yo:** para hacer dropshipping o para tus tiendas, para, o sea, que sea muy, también muy general,
+- **[14:03] Yo:** sino no solamente dropshipping,
+- **[14:03] Yo:** o sea, para todo, para para pauta, para confirmar ventas,
+- **[14:03] Yo:** para absolutamente todo. ¿Qué es lo que ustedes más utilizan?
+- **[14:03] Yo:** Si, vamos a ver, Facebook Messenger,
+- **[14:03] Yo:** ok, Facebook Messenger, o sea, algo que no teníamos en cuenta.
+- **[14:03] Yo:** Eso nos facilita un montón entender cuáles son todas esas
+- **[14:03] Yo:** posibilidades
+- **[14:03] Yo:** para un usuario. O sea, si pudiéramos integrar todos los
+- **[14:03] Yo:** todos no, pero una buena parte de, no sé, si son CRMs, herramientas,
+- **[14:03] Yo:** o lo que decíamos, lo del centro de aplicaciones, como publica aquí tu tu aplicación,
+- **[14:03] Yo:** Para la prueba de concepto que se está haciendo con esta persona es ya
+- **[14:03] Yo:** con la idea más madura que tengamos,
+- **[14:03] Yo:** Por ejemplo, decirle a a Lucho, como venga, ¿qué tal si nosotros no nos ponemos a inventario
+- **[14:03] Yo:** y a montar esto dentro de
+- **[14:03] Yo:** ¿sí?, de forma muy, o sea, desde cero.
+- **[14:03] Yo:** Sino que, venga, aquí esa gente
+- **[14:03] Yo:** tenga su contrato, su sus claves o acceso con
+- **[14:04] Yo:** con estas personas de de de de Coolmax, de esas y cualquier otra cualquier otra otro tipo de producto, y aquí lo único que hace es simplemente instalar la aplicación y arranca. O sea, claramente, los los los que tienen esas aplicaciones las hacen muy muy muy muy muy muy artesanalmente, no, ni tan diferente como lo hacemos nosotros, ¿no?, con live coding y con no code. Arrancan a hacerlo así, y luego, lo que hacen por debajo es que es que, pues, los procesos así automáticos realmente, los hacen son humanos. Pero nosotros, sí podríamos decirle, venga, que esa persona nos entregue la no nos entregue la aplicación
+- **[14:04] Yo:** sino que nos entregue solamente el API,
+- **[14:04] Yo:** Y desde Dropi, nosotros le mandamos la información y que eso se ejecute por allá.
+- **[14:04] Yo:** Pero no en dropping.
+- **[14:04] Yo:** Para nosotros, asimismo, también como ser mucho más eficientes.
+- **[14:04] Yo:** Eso creo que es lo que toca como dejar ya estrategia de cómo de producto se concibe,
+- **[14:05] Yo:** hasta dónde deberíamos llegar,
+- **[14:05] Yo:** o sea,
+- **[14:05] Yo:** qué qué qué se permite a través de una pantalla que el usuario vea,
+- **[14:05] Yo:** ¿cierto? Eso sí, yo instalo pues, yo nada más que quiera
+- **[14:05] Yo:** tener embebido sino que, no sé,
+- **[14:05] Yo:** quiero que todos los pedidos que le envíe a
+- **[14:05] Yo:** las órdenes que cree, en automático se me vayan creando el
+- **[14:05] Yo:** o que, cuando yo vaya a ver listas de, vaya a los pedidos enviados,
+- **[14:05] Yo:** se sincroniza la información con la que tengo en el CDM, o sea, ver qué
+- **[14:05] Yo:** por integración, qué quiero tener
+- **[14:05] Yo:** que no tiene que ser todo, que es creo que pasa eso.
+- **[14:05] Yo:** Se se se se espera que se tenga
+- **[14:05] Yo:** el cien por ciento de la otra aplicación metida en en en la principal, ¿no?
+- **[14:05] Yo:** Y, pues, nada, o sea, con que hagamos tres, cuatro cosas que se hagan bien hechas, pues está bien.
+- **[14:05] Yo:** Si es pauta, es disparar pauta, cancelar, pauta, ver resultados de pauta.
+- **[14:05] Alejandra Melo:** Okay.
+- **[14:05] Yo:** No más.
+- **[14:05] Yo:** Eso es lo que podríamos tratar de traer, o traer sola, jalar sola
+- **[14:06] Yo:** Si usted monta pauta por otro lado,
+- **[14:06] Yo:** conectar las APIs para que dentro de Droppy
+- **[14:06] Yo:** usted tenga la data de cuánto ha gastado en pauta, por ejemplo.
+- **[14:06] Yo:** Hacerlo como más preciso, más cerradito.
+- **[14:06] Yo:** Bueno, ya, es es, ya ya ya buscamos el
+- **[14:06] Yo:** entonces, para hablarle a Oleja.
+- **[14:06] Yo:** Jaime me dio el contacto alguien de Roax.
+- **[14:06] Yo:** Porque la idea
+- **[14:06] Yo:** pues, lo dijo en la reunión, es que podamos, entonces,
+- **[14:06] Yo:** pues, aprovechando que ya lanzaríamos
+- **[14:06] Yo:** llegaremos hasta la parte de hacer como el mini ecommerce,
+- **[14:06] Yo:** llegar hasta la parte de
+- **[14:06] Yo:** de, inclusive, mandar pauta. Entonces, le debes hablar con Roacks,
+- **[14:06] Yo:** a ver si hacemos un
+- **[14:06] Yo:** ahí, freemium, como para que el que cree su su
+- **[14:06] Yo:** su su su mini su su mi marketplace,
+- **[14:06] Yo:** su ecommerce, perdón, pueda pautar
+- **[14:06] Yo:** Entonces,
+- **[14:07] Yo:** qué clase tiene, o sea, ver que pueda disparar una pauta hacia Instagram o lo que sea.
+- **[14:07] Yo:** Solo que hay que ver
+- **[14:07] Yo:** no no confundir entre lo que es la prueba de concepto
+- **[14:07] Yo:** que eso se materialice en en algo que, de pronto, no podemos luego controlar.
+- **[14:07] Yo:** Pero como está de que, pronto, sí es interesante
+- **[14:07] Yo:** De hecho, el reto se nos quedó a que sí, ahora sí sea muy funcional,
+- **[14:07] Yo:** porque inclusive que se puedan
+- **[14:07] Yo:** realmente, si se monta en esos momentos
+- **[14:07] Yo:** y durante la siguiente semana se crean órdenes,
+- **[14:07] Yo:** que el dropshipper pueda ir a crear la orden. Solo que toca decirle ahí, no la hace acá, le toca ir a drop y montarla. Pero pero, bueno, creo que eso, de alguna forma, podemos manejarlo.
+- **[14:07] Alejandra Melo:** Sí. Pues,
+- **[14:07] Alejandra Melo:** creo que es mucha información.
+- **[14:07] Alejandra Melo:** Y vamos revisando, entonces.
+- **[14:07] Yo:** Listo, dale, nos vemos en rotico.
+- **[14:07] Yo:** Bueno,
+- **[14:07] Alejandra Melo:** Dale, dale. ¿Qué te iba a decir? Yo te escribo
+- **[14:08] Yo:** okay.
+- **[14:08] Alejandra Melo:** yo ahorita en la tarde no voy a estar entonces,
+- **[14:08] Alejandra Melo:** y ahorita en la mañana, pues te escribo
+- **[14:08] Alejandra Melo:** que voy a estar trabajando o no, porque voy viendo con un dolor de cabeza pero impresionante, no sé por
+- **[14:08] Alejandra Melo:** qué no. Desde ayer, no se me quiere quitar.
+- **[14:08] Yo:** Dale, Alito, bien.
+- **[14:08] Alejandra Melo:** Es como solo el lado izquierdo. Y
+- **[14:08] Alejandra Melo:** y qué? Revísale, échale una revisadita a lo de copiloto que yo hice
+- **[14:08] Alejandra Melo:** que son puras cards ahí que puse.
+- **[14:08] Alejandra Melo:** Pero
+- **[14:08] Alejandra Melo:** ve puras notas el que te te había mostrado,
+- **[14:08] Alejandra Melo:** y hay como una tablita también que
+- **[14:08] Alejandra Melo:** que dejé,
+- **[14:08] Alejandra Melo:** que, pues ahí también, en la tabla están como todos los pasos.
+- **[14:08] Alejandra Melo:** Y en las cards me hace falta como poner el paso de
+- **[14:08] Alejandra Melo:** crear, ah, no, de crear, no, el de campañas. Y ya, ¿listo?
+- **[14:08] Yo:** De una, de una otra.
+- **[14:08] Alejandra Melo:** Luego para que lo revise.
+- **[14:08] Yo:** Voy a ver que es que ayer que algo decía el computador, cerré varias pestañas, espérame ver si le
+- **[14:08] Alejandra Melo:** Ahí te lo envié.
+- **[14:08] Yo:** encuentro. Si no, te pido el link por
+- **[14:09] Yo:** Ah, no, ya lo tenía.
+- **[14:09] Yo:** Espérate, si sí es el mismo. Bueno, igual tú me lo viste.
+- **[14:09] Alejandra Melo:** Y en una de las páginas, yo
+- **[14:09] Alejandra Melo:** puse como tres videos,
+- **[14:09] Alejandra Melo:** Pueden ser más, pero van a ser exactamente los mismos.
+- **[14:09] Alejandra Melo:** Voy a poner un un cuarto.
+- **[14:09] Alejandra Melo:** Porque yo analicé los videos y los pasos son
+- **[14:09] Alejandra Melo:** muy similares a los que estamos haciendo.
+- **[14:09] Alejandra Melo:** Diana me envió también un
+- **[14:09] Alejandra Melo:** una aplicación que hace
+- **[14:09] Alejandra Melo:** lo que nosotros estamos haciendo, entonces voy a revisar esa app
+- **[14:09] Alejandra Melo:** y ahí lo pongo, cualquier cosa.
+- **[14:09] Yo:** Listo. Yo sobre esta, Alejandra, no puedo... Ah, noventa y
+- **[14:09] Alejandra Melo:** Sí, ya te
+- **[14:09] Yo:** Si es que no me está dando poner las notes, las noticas, ya.
+- **[14:09] Yo:** Listo, de una.
+- **[14:09] Yo:** Me quedo, corazón.
+- **[14:09] Alejandra Melo:** Listo.
+- **[14:09] Alejandra Melo:** Bueno, chequeamos, chau.
+- **[14:09] Yo:** Buenas

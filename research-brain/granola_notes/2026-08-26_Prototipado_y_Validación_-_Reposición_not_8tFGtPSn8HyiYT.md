@@ -1,0 +1,1626 @@
+# Prototipado y Validación - Reposición
+
+- **ID:** `not_8tFGtPSn8HyiYT`
+- **Fecha:** 2026-08-26T00:13:33.764Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/ac38030f-69a9-4c35-852b-e4671b21505e)
+- **Asistentes:** Santiago Herrera Acosta
+
+---
+
+## Resumen de la Reunión
+# Propuesta de Valor: Marco General
+
+- Objetivo central: demostrar que la solución genera valor superior al costo, esfuerzo y riesgo de implementarla
+- Propuesta de valor no es una frase de marketing: es una promesa estratégica
+- Cuatro características de una buena promesa:
+  1. Específica
+  2. Centrada en un actor determinado
+  3. Diferenciada
+  4. Comprobable
+- La tecnología es un medio, no el fin: el usuario adopta resultados, no características
+  - Dashboard = detectar desviaciones antes invisibles
+  - Automatización = reducir trabajo operativo
+  - Analítica predictiva = anticipar riesgos
+
+# Coherencia: Problema, Persona y Progreso
+
+- Toda propuesta sólida conecta tres elementos: problema, persona y progreso
+- Progreso: pasar de una situación actual a una significativamente mejor
+- Ejemplos de progreso por área:
+  - Financiera: cerrar información en horas, no días
+  - Comercial: anticipar pérdida de clientes y actuar proactivamente
+  - Operacional: disminuir errores en procesos productivos
+  - Gerencial: tomar decisiones con información en tiempo real
+
+# Sistema de Actores: Usuario, Beneficiario, Comprador, Decisor
+
+- No siempre es la misma persona quien usa, se beneficia, compra y decide
+- Ejemplo corporativo: analistas usan la herramienta, el área de compras se beneficia, finanzas captura el valor económico, TI aprueba arquitectura, el comité de inversiones autoriza recursos
+- Cuatro preguntas clave:
+  1. ¿Qué ofrecemos?
+  2. ¿Para quién?
+  3. ¿Por qué es valioso?
+  4. ¿Por qué es diferente?
+- Una innovación técnicamente excelente puede fracasar si no se entiende quién debe adoptarla, autorizarla y percibir el valor
+
+# Ejemplos de Propuestas Compartidas por Equipos
+
+- Jairo y Natalia: analizador de capacidades para equipos de agentes AI/humanos
+  - Usuarios: equipo de RRHH que hace assessments
+  - Beneficiarios/decisores: líderes de área
+- Melissa y Santiago: herramienta para Secretaría de Movilidad de Cali
+  - Valor público, no monetario en esta fase
+  - Beneficiario final: ciudadanía de Cali (menos siniestros viales, mejor movilidad)
+  - Escalable a otras ciudades en fases posteriores
+- Gustavo: plataforma de evaluación de proyectos energéticos en Cali
+  - Segmento interno: profesionales de estructuración y análisis de proyectos energéticos
+  - Potencial de comercialización a otros corporativos con objetivos similares a mediano plazo
+
+# Perfil del Cliente y Priorización
+
+- Cuatro elementos del perfil: trabajos, dolores, ganancias y contexto
+- No resolver todos los problemas: elegir dónde ser extraordinariamente relevante
+- Tres criterios para priorizar:
+  1. Importancia: ¿realmente importa?
+  2. Intensidad: ¿el dolor es suficientemente fuerte?
+  3. Evidencia: ¿qué dato, observación o testimonio lo respalda?
+- Fuentes de evidencia válidas: entrevistas, datos operacionales, PQRS, quejas recurrentes, tiempos y costos de proceso
+- Diferencia crítica: lo que creemos que ocurre vs. lo que tenemos evidencia de que ocurre
+
+# Mapa de Valor y Diferenciación
+
+- Pasar del perfil del cliente a las decisiones de diseño: qué entregar, cómo reducir dolores, cómo generar resultados
+- Propuesta de valor como hipótesis medible: no basta decir “reducimos tiempos”, hay que cuantificar cuánto
+  - “Lo que no se mide, no se gerencia” (Norton y Kaplan)
+- Estructura de formulación de valor:
+  - Para \[segmento\] que necesita \[progreso\], ofrecemos \[solución\] que produce \[beneficio\] frente a \[alternativa\]
+- Diferenciación: no ser mejor en todo, sino elegir dónde competir
+  - Debe ser relevante, creíble y defendible
+  - Fuentes de defensa: datos, conocimiento institucional, integraciones, algoritmos, red, capacidad de ejecución
+- Curva de valor (strategy canvas): qué reducir, incrementar, eliminar y crear frente a competidores
+
+# Deseabilidad, Factibilidad y Viabilidad
+
+- Toda propuesta debe superar las tres pruebas:
+  - Deseabilidad: demostrada con comportamiento, no con cortesía
+    - ¿Dedica tiempo y dinero al problema? ¿Ha creado soluciones improvisadas? ¿Aceptaría ser piloto?
+  - Factibilidad: identificar la parte más incierta y probarla primero
+    - Riesgos frecuentes: calidad de datos, integración, escalabilidad, ciberseguridad, resistencia organizacional
+    - Herramienta recomendada: seis sombreros de De Bono (sombrero negro para peores escenarios)
+  - Viabilidad: demostrar la economía del valor
+    - Negocios digitales: quién paga, cómo, cuánto y con qué frecuencia
+    - Intraemprendimientos: horas ahorradas, errores evitados, riesgo reducido, calidad aumentada
+
+# Entregable y Errores Frecuentes
+
+- Estructura del entregable de propuesta de valor (cinco partes):
+  1. Segmento y contexto
+  2. Progreso buscado
+  3. La propuesta concreta
+  4. Diferenciación
+  5. Modelo de creación y captura de valor (ahorro, eficiencia, riesgo o ingresos)
+- Errores frecuentes a evitar:
+  - Empezar con funcionalidades antes de entender el problema
+  - Intentar servir a todos los segmentos
+  - Prometer demasiado en el MVP
+  - Confundir precio con modelo de ingresos
+  - Declarar DFV sin evidencia ni pruebas
+- Recurso recomendado: artículo de Javier Mejías, “Noventa formas de generar ingresos”
+- Cierre clave: el proyecto no es la tecnología; el proyecto es el cambio que somos capaces de producir con ella
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/14914855-921a-45b4-bd49-01ee8835f9a2](https://notes.granola.ai/t/14914855-921a-45b4-bd49-01ee8835f9a2)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[00:13] Participante:** Tecnológicos, ¿sí?
+- **[00:13] Participante:** Entonces,
+- **[00:13] Participante:** en el entretenimiento, pues esto significa que la organización
+- **[00:13] Participante:** captura un valor suficiente
+- **[00:13] Participante:** como justificar esa inversión Sí.
+- **[00:13] Participante:** Que vamos a hacer, vale la pena
+- **[00:13] Participante:** de hacer el esfuerzo de implementarlo,
+- **[00:13] Participante:** y que adicionalmente, si de verdad estamos pensando bajo la lógica de la transformación digital,
+- **[00:13] Participante:** esto va a lograr que tengamos un cambio organizacional.
+- **[00:14] Participante:** Y ese es el matiz, digamos, fundamental
+- **[00:14] Participante:** de esto, ¿sí? No todos tienen que vender algo, ¿sí?
+- **[00:14] Participante:** Pero ojo,
+- **[00:14] Participante:** El negocio digital, sí, intenta comercializar, pero
+- **[00:14] Participante:** los intraempreendedores
+- **[00:14] Participante:** tienen que demostrar el valor, ¿sí?
+- **[00:14] Participante:** Cómo cómo crean valor,
+- **[00:14] Participante:** y que ese valor es superior al esfuerzo, al costo,
+- **[00:14] Participante:** y al y al riesgo necesario para producir.
+- **[00:14] Participante:** Y, entonces, señoras y señores, ahí está,
+- **[00:14] Participante:** el quit,
+- **[00:14] Participante:** No me he podido como acomodar bien.
+- **[00:14] Participante:** El CUIT de de de de
+- **[00:14] Participante:** de lo que nosotros estamos desarrollando
+- **[00:14] Participante:** aquí como proyecto, ese es el quit del asunto.
+- **[00:14] Participante:** Y es llegar y determinar
+- **[00:14] Participante:** realmente tenemos una una una una propuesta valor
+- **[00:14] Participante:** esa solución
+- **[00:14] Participante:** de un problema
+- **[00:14] Participante:** a un usuario, beneficiario o cliente que identificamos,
+- **[00:14] Participante:** que tiene alto impacto, que tiene diferenciación.
+- **[00:15] Participante:** Que va a hacer que esa organización
+- **[00:15] Participante:** o que esos clientes obtengan realmente unos beneficios.
+- **[00:15] Participante:** Entonces,
+- **[00:15] Participante:** ahora, pues, entonces vamos, se
+- **[00:15] Participante:** y, pues, digamos que, cuando vimos problema,
+- **[00:15] Participante:** mirando qué problema era el que valía la pena abordar,
+- **[00:15] Participante:** Después entendimos ya el segmento,
+- **[00:15] Participante:** ¿cierto?, las alternativas, y aquí
+- **[00:15] Participante:** lo que diseñamos es realmente
+- **[00:15] Participante:** una respuesta coherente con todo lo que hemos aprendido, ¿cierto?
+- **[00:15] Participante:** Entonces, encontramos la evidencia,
+- **[00:15] Participante:** Definimos el problema,
+- **[00:15] Participante:** para tal segmento,
+- **[00:15] Participante:** y ahora, ¿cierto?, con con con con esas alternativas que ya hemos ido
+- **[00:15] Participante:** determinando, vamos a diseñar la propuesta.
+- **[00:15] Participante:** La ruta de trabajo, pues, tiene, digamos, cinco movimientos,
+- **[00:15] Participante:** Primero, pues, se recupera todo eso que hemos aprendido,
+- **[00:16] Participante:** perfilar al usuario, cliente o actor,
+- **[00:16] Participante:** diseñar la propuesta concreta,
+- **[00:16] Participante:** entender cómo se cree y captura valor,
+- **[00:16] Participante:** y quinto, pues justificar. Y, entonces, aquí, en este punto, pues,
+- **[00:16] Participante:** quiero llamar, digamos, la atención porque,
+- **[00:16] Participante:** Justificar
+- **[00:16] Participante:** Y y ojo con esto, ¿sí?
+- **[00:16] Participante:** Justificar, te temo las justificaciones como un tema de
+- **[00:16] Participante:** una reacción de un proyecto, las justificaciones, entonces, en marco lógico.
+- **[00:16] Participante:** Metodología general ajustada,
+- **[00:16] Participante:** MGA, en SOAP, en en también cuando diseñamos un proyecto bajo el enfoque del PMI, ¿cierto?, bajo prints, Pero pero pero no solamente es un tema de de de la justificación es un tema administrativo o es una herramienta de gestión de proyectos? La generar justificaciones es un tema de carácter estratégico. No vayan a olvidar esto, ¿no? Entonces, ¿por qué? Porque cuando yo justifico me hago preguntas que que que que tengo que responder, ¿sí? Y tengo que responder pensando, precisamente, en su facilidad, y el impacto que yo genero. En un corporativo o el impacto que yo genero en un en un cliente.
+- **[00:17] Participante:** Esas justificaciones tienen que ver en por qué este segmento, ¿sí?
+- **[00:17] Participante:** Por qué esta o aquella funcionalidad,
+- **[00:17] Participante:** ¿Por qué esta experiencia que estoy desarrollando?
+- **[00:17] Participante:** ¿Por qué adopto esta tecnología?, que creo que es un tema importante y para los que
+- **[00:17] Participante:** son, digamos,
+- **[00:17] Participante:** expertos tecnológicos
+- **[00:17] Participante:** son ingenieros de sistemas, administrador de expertos informáticos y demás, lo han observado en los corporativos, Generalmente, tenemos unas malas selecciones de tecnología.
+- **[00:17] Participante:** ¿Por qué este mecanismo de ingreso, cierto?, de generar ingresos,
+- **[00:17] Participante:** ojo, en el interpretimiento también podemos generar ingresos, se hace porque yo lo que hago
+- **[00:17] Participante:** termino también volviendo en un producto del corporativo,
+- **[00:18] Participante:** o porque es un servicio de soporte a algo que genere ingresos en el corporativo.
+- **[00:18] Participante:** ¿Cierto? No solamente es reducción de costos, gastos e inversiones,
+- **[00:18] Participante:** también varias soluciones de transformación digital
+- **[00:18] Participante:** son para generación de ingresos.
+- **[00:18] Participante:** Aquí está este cojoncito, a ver.
+- **[00:18] Participante:** También justificar
+- **[00:18] Participante:** tendría que ver con
+- **[00:18] Participante:** con, por ejemplo, qué proceso debería automatizarse, Por aquí,
+- **[00:18] Participante:** que que tenemos a
+- **[00:18] Participante:** a a a a un todo,
+- **[00:18] Participante:** Y y, entonces, en ese sentido, pues una buena propuesta,
+- **[00:18] Participante:** no solamente, pues dice qué es lo que vamos a hacer, explica
+- **[00:18] Yo:** Olá, bom? Então aqui, então,
+- **[00:18] Participante:** por qué
+- **[00:18] Participante:** tiene sentido hacerlo. O sea, ese realmente es el
+- **[00:18] Participante:** por qué tiene sentido hacer eso que estamos proponiendo.
+- **[00:18] Participante:** Una una propuesta de valor
+- **[00:19] Participante:** digamos, no no no no está
+- **[00:19] Participante:** buscando una frase de marketing, que es otro vicio,
+- **[00:19] Participante:** pues, de de de de mentores, consultores y asesores que
+- **[00:19] Participante:** trabajan bajo la metodología de modelo de negocios, específicamente, en este bloque de
+- **[00:19] Yo:** Yeah.
+- **[00:19] Participante:** de segmento, ¿sí?
+- **[00:19] Participante:** Estamos es realmente, y ojo con esto, buscando
+- **[00:19] Participante:** una promesa estratégica.
+- **[00:19] Participante:** Y una buena promesa, digamos, tiene estas cuatro características.
+- **[00:19] Participante:** Primero, debe ser específica.
+- **[00:19] Participante:** Debe estar centrada en una persona o actor determinado.
+- **[00:19] Yo:** Trumpi, trumpi, ya.
+- **[00:19] Participante:** Debe ser diferenciada,
+- **[00:19] Participante:** y debe ser comprobar.
+- **[00:19] Participante:** Y aquí lo que quiero destacar es es es progreso, ¿sí?
+- **[00:19] Yo:** ¿Bueno?
+- **[00:19] Participante:** Una una persona compra,
+- **[00:19] Participante:** adopta,
+- **[00:19] Participante:** y utiliza una solución
+- **[00:19] Participante:** porque, pues, realmente, lo que quiere es pasar de una situación actual
+- **[00:19] Participante:** a una situación mejor.
+- **[00:19] Participante:** ¿Sí?
+- **[00:19] Participante:** Ese ese ese esa esa esa
+- **[00:19] Participante:** eso que tenemos todos,
+- **[00:19] Participante:** neurológicamente, esa mentalidad de crecimiento, de desarrollo.
+- **[00:20] Participante:** Que que que va implícita en la naturaleza del ser humano, ¿sí?
+- **[00:20] Participante:** Y esto, pues, también sucede dentro de los corporativos, pues, que realmente es
+- **[00:20] Participante:** ¿qué es un corporativo?, ¿qué es una organización?, pues, realmente es
+- **[00:20] Participante:** la la la suma de unos seres humanos
+- **[00:20] Participante:** que tienen un propósito, ¿sí?
+- **[00:20] Yo:** ¿Cómo le espero hoy?
+- **[00:20] Participante:** Entonces, ese, dentro de una empresa, por ejemplo, el área financiera
+- **[00:20] Yo:** Bien.
+- **[00:20] Participante:** puede estar queriendo cerrar información
+- **[00:20] Yo:** Sobre todo, para calle, Ajá.
+- **[00:20] Participante:** solamente en horas, sino en días. Digamos que ese es un proceso muy crítico
+- **[00:20] Yo:** Para acá viene el
+- **[00:20] Participante:** en en en en en áreas financieras de los corporativos.
+- **[00:20] Participante:** Por ejemplo, pensemos en temas comerciales.
+- **[00:20] Participante:** Puede querer anticipar cuando se está
+- **[00:20] Participante:** perdiendo clientes, entonces, hacerlo
+- **[00:20] Participante:** hacer un un un una previsión
+- **[00:20] Participante:** de
+- **[00:20] Participante:** de de de esa pérdida, ¿sí?, y tomar
+- **[00:20] Participante:** antes de, ¿sí?, proactivamente, predictivamente,
+- **[00:20] Participante:** acciones, pero para no perder clientes.
+- **[00:20] Yo:** Viviendo.
+- **[00:20] Participante:** Digamos, en el tema operacional,
+- **[00:21] Yo:** Seis.
+- **[00:21] Participante:** disminuir errores en un proceso productivo.
+- **[00:21] Yo:** Turmiendito. A mejor como me di ahorita nada más por toda la tardanza de unión.
+- **[00:21] Participante:** O si es una empresa de servicios, disminuir errores en la construcción de
+- **[00:21] Participante:** ese servicio.
+- **[00:21] Participante:** Digamos, en el plano gerencial, que es para lo que lo estamos formando ustedes, ¿cierto?
+- **[00:21] Participante:** Entonces, ellos, pues, queremos, por ejemplo, tomar unas decisiones
+- **[00:21] Participante:** con información en tiempo real.
+- **[00:21] Participante:** Eso es lo que llamaríamos nosotros progreso, ¿sí?
+- **[00:21] Participante:** La tecnología solo tiene ese sentido
+- **[00:21] Participante:** si realmente estamos habilitando ese cambio.
+- **[00:21] Participante:** Y, en ese sentido,
+- **[00:21] Participante:** vamos a hablar de coherencia,
+- **[00:21] Participante:** Una una propuesta de verdad sólida comienza conectando tres elementos.
+- **[00:21] Participante:** El problema,
+- **[00:21] Participante:** la persona,
+- **[00:21] Participante:** y ese progreso, ¿cierto?, ese ese
+- **[00:21] Participante:** ese quid, ese lead motiv de la promesa de de la propuesta de valor, que es
+- **[00:21] Yo:** Muy bien, contento, la verdad.
+- **[00:21] Yo:** Sí veo a Bogotá.
+- **[00:21] Participante:** mostrar ese ese ese ese progreso.
+- **[00:21] Yo:** Así, vamos por la empresa.
+- **[00:21] Participante:** Entonces, pues, para esto nosotros debemos estar entendiendo qué está ocurriendo.
+- **[00:21] Yo:** ¿Estás cuidado?
+- **[00:21] Participante:** Y por eso se va volviendo tan relevante el tema de los experimentos
+- **[00:22] Participante:** de hacer una validación del problema.
+- **[00:22] Yo:** Ok, coincido.
+- **[00:22] Participante:** De hacer unas entrevistas, unas encuestas validando el problema, que realmente
+- **[00:22] Yo:** ¿Logres a
+- **[00:22] Participante:** estemos entendiendo el dolor
+- **[00:22] Participante:** Y ahí yo ya puedo hacer un experimento validando el segmento,
+- **[00:22] Participante:** Y un tercer experimento validando la propuesta de valor, ¿o sea?
+- **[00:22] Participante:** Pero yo solamente puedo hacer eso cuando
+- **[00:22] Participante:** lo que está ocurriendo, entiendo la problemática.
+- **[00:22] Yo:** Y allá
+- **[00:22] Participante:** Y, entonces, realmente, cuando hago experimentos de problema y segmento, lo
+- **[00:22] Yo:** eso es un fin de semana, pero yo creo que vamos a viajar, pues, desde el jueves,
+- **[00:22] Participante:** yo trato de entender, lo que yo quiero precisar realmente es
+- **[00:22] Yo:** poder ir a
+- **[00:22] Participante:** quién está viviendo realmente esa situación, ese problema.
+- **[00:22] Yo:** Y
+- **[00:22] Participante:** O o o o o quién quiere esa oportunidad.
+- **[00:22] Participante:** Y ahí finalmente, pues,
+- **[00:22] Yo:** los compré de reembolso.
+- **[00:22] Participante:** establecemos cuál es ese
+- **[00:22] Participante:** resultado significativamente mejor.
+- **[00:22] Participante:** Y aquí,
+- **[00:22] Participante:** para para para para los que trabajan,
+- **[00:22] Participante:** interpretimentos,
+- **[00:22] Participante:** hay un tema que
+- **[00:22] Participante:** que que, una pregunta,
+- **[00:22] Participante:** que podríamos desarrollar, y es,
+- **[00:23] Participante:** ¿quién tiene el problema?
+- **[00:23] Participante:** Y quién necesita
+- **[00:23] Participante:** ese problema desaparezca.
+- **[00:23] Participante:** Puede ser una una una una buena
+- **[00:23] Yo:** Sí, ¿qué quiere?
+- **[00:23] Yo:** ¿Listo qué pedimos?
+- **[00:23] Participante:** una una buena pregunta dentro del corporativo, ¿cierto?
+- **[00:23] Participante:** No no suena bonito dentro del tema de transformación digital,
+- **[00:23] Participante:** pero realmente
+- **[00:23] Participante:** revisemos
+- **[00:23] Participante:** que muchas veces la transformación digital desde la perspectiva de la optimización
+- **[00:23] Participante:** realmente es que
+- **[00:23] Participante:** queremos es que desaparezcan problemas.
+- **[00:23] Yo:** Se lo
+- **[00:23] Participante:** Eso significa, pues, que no necesariamente siempre es la misma persona,
+- **[00:23] Participante:** Hay que entender que los usuarios
+- **[00:23] Yo:** Le mando
+- **[00:23] Participante:** estar sufriendo la fricción
+- **[00:23] Yo:** Pero no en la ciudad. De hecho, estuve en un museo hoy,
+- **[00:23] Participante:** El gerente puede estar, por ejemplo,
+- **[00:23] Participante:** sufriendo un impacto económico frente a ese problema, ¿cierto?
+- **[00:23] Yo:** que no me mandó
+- **[00:23] Participante:** Desde la perspectiva tecnológica,
+- **[00:23] Yo:** O sea,
+- **[00:23] Participante:** pues, ¿qué tecnología debería asumir esa implementación?
+- **[00:23] Yo:** y entonces ya hablando, ah, bueno, mandó
+- **[00:23] Participante:** Del área tecnológica, pues, qué qué, con qué tecnología deberíamos asumir esa
+- **[00:24] Participante:** Digamos, en una en una en un líder gerente, vicepresidente de de de de de un área, pues es el que está tomando una decisión, ¿cierto? Recuerden que hablábamos en la sesión pasada del segmento, muy importante determinar los quién realmente es el usuario beneficiario, y eso, pues, nos ayudó muchísimo a determinar muy bien el segmento, ¿saben? Y y por eso, pues necesitamos entender fundamentalmente, pues, cuál es el sistema de actores con qué están
+- **[00:24] Yo:** Es...
+- **[00:24] Yo:** Ahí les se lo envío,
+- **[00:24] Participante:** trabajando para poder, pues, llegar y y y y y y y desarrollar
+- **[00:24] Participante:** nuestra propuesta.
+- **[00:24] Participante:** Entonces, aquí volvemos a coger un elemento que ya habíamos hablado, ¿cierto?
+- **[00:24] Participante:** De beneficiario, usuario,
+- **[00:24] Participante:** comprador,
+- **[00:24] Participante:** decisor,
+- **[00:24] Participante:** De decisor,
+- **[00:24] Participante:** eso.
+- **[00:25] Participante:** Y es que,
+- **[00:25] Yo:** Ah, pues, a ver si hay también ahí, para no esperar domicilio, hay arepitas de yuca.
+- **[00:25] Participante:** podemos entender esto respondiendo
+- **[00:25] Yo:** ¿Quieres? Ah,
+- **[00:25] Participante:** estas cuatro preguntas,
+- **[00:25] Yo:** No sé si voy a
+- **[00:25] Participante:** Primero, ¿qué ofrecemos?
+- **[00:25] Participante:** ¿Para quién le ofrecemos?
+- **[00:25] Participante:** Por qué eso es valioso,
+- **[00:25] Participante:** y por qué
+- **[00:25] Participante:** es diferente.
+- **[00:25] Participante:** Si esto no lo podemos contestar
+- **[00:25] Participante:** de una manera sencilla,
+- **[00:25] Participante:** simple, es porque realmente no estamos entendiendo la propuesta, ¿o sea?
+- **[00:25] Participante:** No estamos entendiendo la propuesta.
+- **[00:25] Participante:** Y y y ahí,
+- **[00:25] Participante:** ¿cierto?, es donde empezamos a que entendemos que el beneficiario,
+- **[00:25] Participante:** quien se beneficia no necesariamente es el usuario,
+- **[00:25] Participante:** sea?
+- **[00:25] Participante:** Pasa muchísimo, por ejemplo,
+- **[00:25] Participante:** cuando tenemos productos educativos, ¿ajá?
+- **[00:25] Participante:** Producto creativos, el socio es el beneficiario.
+- **[00:25] Participante:** Digamos, en en en
+- **[00:26] Participante:** productos de de mejora, optimización,
+- **[00:26] Yo:** Se nos perdió, nos vamos sin Fernando por el otro lado.
+- **[00:26] Participante:** de de temas de personas. No necesariamente el usuario es beneficiario, o sea,
+- **[00:26] Participante:** en en los corporativos, no necesariamente
+- **[00:26] Participante:** el usuario es el beneficiario, puede estar el área de
+- **[00:26] Participante:** de marketing trabajando una herramienta para hacer planes estratégicos, pero realmente el beneficiario
+- **[00:26] Participante:** es el el director comercial, ¿sí?
+- **[00:26] Participante:** Quien usa usuario no necesariamente es el que compra,
+- **[00:26] Yo:** Gracias, mami.
+- **[00:26] Participante:** Quien compra no necesariamente es el que decide, ¿sí?
+- **[00:26] Participante:** Ojo con comprador, ustedes todos, inclusive en los interpretimentos, tienen un comprador.
+- **[00:26] Participante:** Alguien que está diciendo sí o no, ¿cierto?
+- **[00:26] Participante:** Para para a invertirle, a generar un presupuesto,
+- **[00:26] Participante:** para que podamos continuar con lo que iniciamos en en, aquí, prototipo de validación.
+- **[00:26] Participante:** Y que ustedes documenten un trabajo de grado, pero, pues, la idea es que estas soluciones digitales queden
+- **[00:26] Participante:** y que y que los que están haciendo negocios digitales, pues, realmente los implementen
+- **[00:27] Participante:** y creen una una una oportunidad
+- **[00:27] Participante:** solamente una nueva fuente de ingreso,
+- **[00:27] Participante:** sino que creer una
+- **[00:27] Participante:** un negocio del cual vivir
+- **[00:27] Participante:** completamente, o sea.
+- **[00:27] Participante:** Entonces, por ejemplo,
+- **[00:27] Participante:** en un negocio B2B, business to business, ¿cierto?
+- **[00:27] Yo:** A ver,
+- **[00:27] Participante:** Esto ocurre permanentemente, ¿ya?
+- **[00:27] Participante:** Pero en los intraprendimientos ocurre todavía más.
+- **[00:27] Participante:** Por ejemplo, podemos tener una solución para automatizar un proceso de compras.
+- **[00:27] Participante:** Los analistas pueden ser los usuarios.
+- **[00:27] Participante:** El área de compras es la beneficiaria.
+- **[00:27] Participante:** La vicepresidencia financiera, ¿cierto?, o el director del área financiera.
+- **[00:27] Participante:** Es el que captura una buena parte del valor económico
+- **[00:27] Participante:** en TI, ¿cierto?, aprueban la arquitectura y la seguridad, y el comité de inversiones,
+- **[00:27] Participante:** puede estar autorizando los recursos, pues, para continuar
+- **[00:27] Participante:** la escalabilidad del proyecto.
+- **[00:27] Participante:** Por eso, una innovación puede ser técnicamente excelente,
+- **[00:27] Participante:** y, a una cifra, casar,
+- **[00:28] Participante:** si realmente no entendemos quién debe adoptarla
+- **[00:28] Participante:** quién debe autorizarla y quién necesita percibir.
+- **[00:28] Participante:** El valor.
+- **[00:28] Participante:** Entonces, no sé si alguno de ustedes quiere compartir
+- **[00:28] Participante:** que esto no se vuelva un monólogo. Sé que estamos corriendo, pues, para que
+- **[00:28] Participante:** para que todo quede como muy organizado, pero
+- **[00:28] Participante:** quisiera que me me compartieran
+- **[00:28] Participante:** parte de las iniciativas, los que ya han venido desarrollando el ejercicio de segmento,
+- **[00:28] Participante:** que, de de dentro de lo que ustedes están proponiendo, ¿cierto?, el problema que están abordando,
+- **[00:28] Participante:** quién, y ese proyecto que se están imaginando,
+- **[00:28] Participante:** quién es el que usa
+- **[00:28] Participante:** quién es el que se beneficia,
+- **[00:28] Participante:** quién decide y quién controla los recursos. No sé quién quiere
+- **[00:28] Participante:** contarnos.
+- **[00:28] Participante:** Pero de a uno, no sentimios.
+- **[00:28] Participante:** Profe, yo puedo, pues, comentarte sobre
+- **[00:29] Participante:** Sí. La iniciativa que tenemos con la compañera Natalia sobre
+- **[00:29] Participante:** el el analizador de capacidades para
+- **[00:29] Participante:** equipos de agentes AI, humanos, agentes de AI.
+- **[00:29] Participante:** ¿Cierto? Nosotros hemos distinguido un segmento en el cual, pues,
+- **[00:29] Participante:** marcado en líderes de recursos humanos,
+- **[00:29] Participante:** vicepresidencia de recursos humanos, líderes que utilizan este tipo de de agentes, ¿cierto? Entonces, nosotros vemos, de pronto, como
+- **[00:29] Participante:** aprobadores de iniciativa o en en la iniciativa, el
+- **[00:29] Participante:** los líderes como tal de las áreas,
+- **[00:29] Participante:** ¿cierto? Y como usuarios, las personas que de
+- **[00:29] Participante:** humanos, que van a hacer los assessments a los líderes.
+- **[00:29] Participante:** ¿Cierto? Los líderes, como tal, no van a utilizar la herramienta que nosotros queremos implementar, sino
+- **[00:29] Participante:** la gente de recursos humanos que está encargada de medir las capacidades de las
+- **[00:29] Participante:** personas o de los líderes en uso de agentes de AI. Así, más o menos, lo hemos lo lo hemos lo lo hemos
+- **[00:30] Participante:** revisado y lo hemos visualizado.
+- **[00:30] Participante:** Excelente, Jairo, súper.
+- **[00:30] Participante:** Melissa, alzó la mano.
+- **[00:30] Participante:** Hola,
+- **[00:30] Participante:** Hola, buenas noches. Profes, nuestro caso,
+- **[00:30] Participante:** la propuesta,
+- **[00:30] Participante:** el principal
+- **[00:30] Participante:** usuario de la solución va ser la secretaría de movilidad de Cali,
+- **[00:30] Participante:** Entonces, yo ahorita iba a levantar la mano, profe, cuando estabas hablando de
+- **[00:30] Participante:** la propuesta de valor, porque o o la
+- **[00:30] Participante:** de la idea de negocio
+- **[00:30] Participante:** Sí. Pensaba desde el punto de vista de Monetización, Es Porque Para Nosotros No Va Ser Como Tal Una Fuente De Ingresos Al Menos No Por Ahora, Porque Va A Estar, O Sea, Es Más Dirigida, Un Tema De Generar Valor Público, Tanto En La Secretaría De Movilidad Como En Ruta, Que Es En La Empresa A La Que Pertenezco Y Con La Que Estamos Trabajando Con Santiago, pues es una entidad pública y
+- **[00:30] Participante:** las herramientas ya las tenemos, entonces, o sea, la tecnología
+- **[00:30] Participante:** existe, el tema es que no se está aprovechando de la mejor manera,
+- **[00:31] Participante:** pero entonces este primer
+- **[00:31] Participante:** trabajo con ellos no es no va a generar algún tipo de
+- **[00:31] Participante:** pues, rédito o algún beneficio económico.
+- **[00:31] Participante:** Quizás sí, y lo planteamos
+- **[00:31] Participante:** en el documento que vamos a a
+- **[00:31] Participante:** a colgar en la
+- **[00:31] Participante:** en la plataforma,
+- **[00:31] Participante:** es que, ya teniendo el piloto en Cali, los resultados en Cali, pues sí lo
+- **[00:31] Participante:** podemos escalar a otras ciudades y quizás ahí ya se vuelva un tema más de unidad de negocio.
+- **[00:31] Participante:** Pero para Cali no, porque finalmente hace parte de esa
+- **[00:31] Participante:** gestión interinstitucional entre entidades públicas.
+- **[00:31] Participante:** Y, en este caso, pues, para la pregunta, ¿quién va a recibir
+- **[00:31] Participante:** O sea,
+- **[00:31] Participante:** el primer beneficiario en ruta sería la secretaría de movilidad, pero si nos vamos a
+- **[00:31] Participante:** fondo, pues el beneficiario va a ser
+- **[00:31] Participante:** pues, toda la ciudadanía de Cali.
+- **[00:31] Participante:** Con el modelo que que esperamos hacer.
+- **[00:31] Participante:** Porque la idea es entregarle herramientas a la secretaría para tomar mejores
+- **[00:31] Participante:** decisiones y que esas decisiones se vean reflejadas en
+- **[00:31] Participante:** menos siniestros viales y, pues, una mejor movilidad para la ciudad. Excelente, Milit. Realmente, esa es la ese ese sería el modelo de generación de ingresos de ustedes, es un tema de impacto social. En que reducimos la conservamos la vida, hacemos que la gente, pues, no se meta en problemas, no le toque pagar fulanos a todos, todo un sistema beneficiario beneficiado por por hacer las cosas bien, a nivel de tránsito, y, realmente, pues, el el que era un tema que discutíamos, y esto les va a servir mucho para la gestión de transformación, que era un tema que estábamos hablando con los compañeros en Cali.
+- **[00:32] Yo:** Bueno, gracias.
+- **[00:32] Participante:** Hay cuatro formas de gestionar la transformación, se los voy a regalar en un
+- **[00:32] Participante:** videoclip pequeño, que le le le adjunto al
+- **[00:32] Participante:** al chat.
+- **[00:32] Participante:** Algo importante es que hay veces que hay que tener es
+- **[00:32] Participante:** medidas coercitivas. Entonces,
+- **[00:32] Participante:** muchas veces la cultura y no, vamos es que a crear una cultura,
+- **[00:32] Participante:** dentro de una organización. Esto para temas de transformación digital, que recuerden que ya lo he dicho varias veces,
+- **[00:33] Participante:** la brecha no es en transformación digital
+- **[00:33] Participante:** tener soluciones digitales.
+- **[00:33] Participante:** La brecha es un tema de estrategia y cultura, y ese es el gran dolor
+- **[00:33] Participante:** Y la creación de cultura, ¿cierto?, muchas veces se puede hacer desde positivo,
+- **[00:33] Participante:** pero otras veces, en otras oportunidades, pues hay que trabajar
+- **[00:33] Participante:** es con mecanismos de de penalización.
+- **[00:33] Participante:** Entonces, volvemos a lo que sería la teoría z administrativa,
+- **[00:33] Participante:** que hablaba de garrote y zanahoria. No necesariamente esa siempre es la opción.
+- **[00:33] Participante:** Pero hay elementos de cultura que a veces solo se cambian,
+- **[00:33] Participante:** dando, penalizando.
+- **[00:33] Participante:** Gustavo,
+- **[00:33] Participante:** Sí, muy buenas noches.
+- **[00:33] Participante:** A todos. Profes, mira,
+- **[00:33] Participante:** para nuestro caso,
+- **[00:33] Participante:** pues el segmento objetivo inicial se define como
+- **[00:33] Participante:** un segmento interno en Cali. ¿Cierto? Que está compuesto, pues, por los profesionales que participan directo
+- **[00:33] Participante:** en todo lo que tiene que ver con la estructuración, evaluación y análisis de proyectos energéticos,
+- **[00:34] Participante:** así como también los responsables, pues,
+- **[00:34] Participante:** financiar y y priorizar esas inversiones. ¿Sí?
+- **[00:34] Participante:** Y porque, pues, estos son los que los que interactúan con el proceso de evaluar
+- **[00:34] Participante:** y generan o analizan. ¿Sí? Toda la información.
+- **[00:34] Participante:** ¿Sí? Toman las decisiones y demás.
+- **[00:34] Participante:** En algún momento se pensó
+- **[00:34] Yo:** Yo no voy comer nada, Oli.
+- **[00:34] Participante:** por por el análisis que está haciendo de las diferentes soluciones que existen alrededor de de de de este tipo de evaluación de proyectos de de energéticos alternativos se pensó que pudiese ser pudiese ser más adelante, a manera de de digamos, de intraemprendimiento, una solución que podría resolver, digamos, a otro tipo de entidades esta misma necesidad. Pero preliminarmente, digamos que que se enfoca exclusivamente a la necesidad de de en Cali, siendo también, pues, esto un un objetivo estratégico en
+- **[00:34] Yo:** ¿No al fondo?
+- **[00:34] Participante:** la empresa y, por ende, un una un una plataforma
+- **[00:35] Participante:** que ayude a resolver también esa necesidad, pues, se vuelve interesante.
+- **[00:35] Participante:** Es como como un proyecto a mediano y largo plazo,
+- **[00:35] Participante:** pensar también que sea un
+- **[00:35] Participante:** un, se vuelvan un producto para comercializar
+- **[00:35] Participante:** a otros corporativos que tienen objetos similares en Cali, en este caso, pues,
+- **[00:35] Participante:** los que están adoptando soluciones de
+- **[00:35] Participante:** energías alternativas.
+- **[00:35] Participante:** Súper.
+- **[00:35] Participante:** Muchas gracias.
+- **[00:35] Participante:** Gustavo. Bueno, voy a continuar aquí.
+- **[00:35] Participante:** Entonces, antes de, pues, de estar pensando,
+- **[00:35] Participante:** en funciones, en funcionalidades,
+- **[00:35] Participante:** tenemos que entender es cuatro elementos.
+- **[00:35] Participante:** Desde las funcionalidades de la aplicación.
+- **[00:35] Participante:** Ojo, que esto es muy importante y ese es parte de la dinámica estratégica, y sé que todos los presentes
+- **[00:35] Participante:** en algún momento lo han escuchado en sus trabajos,
+- **[00:35] Participante:** por parte de los gerentes, o lo han escuchado en esta formación de alto nivel, ¿sí? No se enamoren de la solución, enamórense del problema. Porque inclusive en el tiempo las soluciones van cambiando, la tecnología va cambiando, el mercado o o a quien nos dirigimos va cambiando, pero los los problemas sobreviven, El ser humano siempre ha tenido problemas de transporte. ¿Cierto? El ser humano siempre ha tenido problemas de de productividad, de producción, El ser humano siempre ha tenido, entonces, x y z. Lo que ha venido cambiando es cómo lo solucionamos. Entonces, pues, transporte, pues, camine, ¿cierto? Después de que la rueda, los caballos,
+- **[00:36] Participante:** los el carro, el avión, el tren, Entonces,
+- **[00:36] Participante:** vamos mutando, ¿no?
+- **[00:36] Participante:** Entonces, aquí
+- **[00:36] Participante:** en en estos cuatro elementos, ¿o
+- **[00:36] Participante:** Entonces, el primero, los trabajos,
+- **[00:36] Participante:** son importantes determinarlos, ¿cierto?
+- **[00:36] Participante:** Esos trabajos que esa persona,
+- **[00:36] Participante:** de estos que ya determinamos arriba,
+- **[00:36] Participante:** que intenta realizar,
+- **[00:37] Participante:** Los dolores que dificultan esos trabajos
+- **[00:37] Participante:** las ganancias que espera obtener, ¿cierto?
+- **[00:37] Participante:** Recuerden ganancias,
+- **[00:37] Participante:** no solamente como un tema de generación económica de valor,
+- **[00:37] Participante:** sino en ahorro, en confianza, ¿cierto?, en mejoras, ¿sí?
+- **[00:37] Participante:** Y el contexto en el cual todo esto ocurre,
+- **[00:37] Participante:** Entonces, aquí cliente debe entender de manera amplia. ¿Cierto?
+- **[00:37] Participante:** Debe entenderse, pues, de una manera muy amplia,
+- **[00:37] Participante:** porque puede ser un consumidor, puede ser una empresa,
+- **[00:37] Participante:** puede ser un funcionario, un colaborador,
+- **[00:37] Participante:** un área de negocio, una gerencia,
+- **[00:37] Participante:** o o o inclusive, o hoy que estamos hablando mucho de eso,
+- **[00:37] Yo:** Entonces, ¿qué se cuentan?
+- **[00:37] Participante:** un ecosistema
+- **[00:37] Participante:** un ecosistema.
+- **[00:37] Yo:** Que dice el five, que dice las datos, que dice los
+- **[00:37] Participante:** Y me recuerda a los que
+- **[00:37] Participante:** los que, con los que les voy a hacer mentoría,
+- **[00:37] Yo:** Bueno, FABY, baraja de
+- **[00:37] Participante:** hablarles un poco de esto, porque
+- **[00:37] Participante:** digamos que hoy, como tecnología futura,
+- **[00:37] Participante:** de de de abordaje de alto valor,
+- **[00:37] Participante:** debemos tener una terminología muy orientada a hablar en temas ecosistémicos.
+- **[00:38] Yo:** Ya conoció el apartamento.
+- **[00:38] Participante:** No, no, pero ¿cómo así que solamente a los
+- **[00:38] Participante:** Yo no sé, fue Jairo el que me acordó de las
+- **[00:38] Participante:** de los ejemplos del benchmark.
+- **[00:38] Participante:** ¿Cierto que sí?
+- **[00:38] Participante:** Sí.
+- **[00:38] Participante:** Sí.
+- **[00:38] Participante:** Entonces, ¿me recuerdas mañana por la mañana?
+- **[00:38] Participante:** Porque hoy me levanté a las tres y treinta, no iba a ser capaz de hacer Listo, no hay ningún problema. Cierro aquí y me voy a dormir. Entonces, me voy a dormir. Entonces, el el, me recuerdan eso, hablar desde ecosistema, ¿y qué más les iba a enviar así, en cortico?
+- **[00:38] Yo:** El fin de semana del cinco de
+- **[00:38] Participante:** Qué pena que ese ya
+- **[00:38] Participante:** ¿Tengo tengo que...?
+- **[00:38] Participante:** El tengo la energía, no tengo, por ejemplo, podrías seguirte, de hecho, hasta mañana.
+- **[00:38] Participante:** Pero pero ya no tengo la la la concentración, la focalización, ahí, entonces, ya está
+- **[00:38] Participante:** ya está penando.
+- **[00:38] Participante:** La cabeza. ¿Qué qué más les dije que les iban a mandar en un
+- **[00:39] Participante:** tipcito?
+- **[00:39] Participante:** ¿Me recuerdan?
+- **[00:39] Participante:** Fue buenas noches. La presentación de segmentos y esta.
+- **[00:39] Participante:** Segmentos no la veo en la plataforma.
+- **[00:39] Participante:** Y es
+- **[00:39] Yo:** le manzarolli, exámenes,
+- **[00:39] Participante:** Perfecto. Pero ¿les dije algo más que les iba a dar un?
+- **[00:39] Participante:** Un verbatín de siete a cinco minuticos.
+- **[00:39] Participante:** ¿Qué sería? Peri, a ver.
+- **[00:39] Participante:** Paseo, beneficiario. Toca aplicar a la grabación, por
+- **[00:39] Participante:** para recordar.
+- **[00:39] Participante:** Si usted comentó que nos iba a compartir por el chat,
+- **[00:39] Participante:** algo pequeñito, pero no no
+- **[00:39] Participante:** no tengo la palabrita para recordar.
+- **[00:39] Participante:** Ya lo reviso. Muchas gracias.
+- **[00:39] Participante:** Ey, ustedes me ponen, ¿y acuerdas en el chat? Habló de un verbatim en los primeros minutos, ¿listo?
+- **[00:39] Participante:** Bueno, entonces aquí, ¿sí?, este es uno de los errores más
+- **[00:39] Participante:** frecuentes en innovación tecnológica,
+- **[00:39] Participante:** y es que a veces confundimos
+- **[00:39] Participante:** tecnología con valor.
+- **[00:39] Participante:** Y la tecnología es un medio,
+- **[00:40] Participante:** No es el propósito, no es el fin, ¿o sea?
+- **[00:40] Participante:** Miren que, pues, creo que, o sea,
+- **[00:40] Participante:** si no, replantíense qué ha pasado en este año y medio, muchachos.
+- **[00:40] Participante:** Yo yo, cuando ustedes escuchan a decirle a la gente, oiga, tenemos inteligencia
+- **[00:40] Participante:** artificial, tenemos un dashboard, tenemos automatizaciones,
+- **[00:40] Participante:** no, ya tenemos analítica predictiva.
+- **[00:40] Participante:** Ojo,
+- **[00:40] Participante:** eso no significa que nosotros
+- **[00:40] Yo:** la pequeña o no, mami?
+- **[00:40] Participante:** tengamos, estemos generando valor y estemos generando transformación dentro de un corporativo.
+- **[00:40] Participante:** Esas son características, ¿cierto? Unas características,
+- **[00:40] Yo:** No.
+- **[00:40] Participante:** que están hablando del medio, ¿cierto?
+- **[00:40] Yo:** Ah, bueno.
+- **[00:40] Participante:** Pero
+- **[00:40] Participante:** el usuario
+- **[00:40] Participante:** ¿sí?, y recuerden nuevamente, la transformación digital
+- **[00:40] Participante:** que también aplica los negocios digitales, ¿cierto?
+- **[00:40] Participante:** No no es como un tema de proceso, sino como en el mismo negocio digital, es un
+- **[00:40] Participante:** nos transformamos permanentemente.
+- **[00:40] Participante:** Tenemos que entender esa dinámica cognitiva del usuario, ¿cierto?
+- **[00:41] Participante:** Porque el usuario no adopta características, el el usuario adopta resultados.
+- **[00:41] Participante:** Entonces,
+- **[00:41] Participante:** entonces, por ejemplo, puse, ejemplo, el dashboard, ¿cierto?
+- **[00:41] Participante:** El dashboard puede permitir detectar unas desviaciones que antes no estábamos viendo,
+- **[00:41] Participante:** Una automatización, ah, no, pues está disminuyendo las
+- **[00:41] Participante:** de trabajo operativo, ¿cierto?
+- **[00:41] Participante:** Ahí estamos hablando del de valor, ¿cierto?
+- **[00:41] Participante:** Una, hicimos una integración con unas APIs y demás,
+- **[00:41] Participante:** entonces, pues estamos eliminando reproceso.
+- **[00:41] Participante:** Hablamos de analítica predictiva,
+- **[00:41] Participante:** entonces puedo estar anticipando
+- **[00:41] Participante:** un riesgo, ¿cierto? No es la analítica, es predictivo, es el
+- **[00:41] Participante:** es la disipación del riesgo, pues el valor que estoy dando. Entonces,
+- **[00:41] Participante:** cuando cuando estamos hablando, ¿cierto?,
+- **[00:41] Participante:** de de funcionalidades en nuestra propuesta de valor, porque sí las vamos a hablar,
+- **[00:41] Participante:** ¿cierto? Vamos a contar.
+- **[00:41] Yo:** No, es que él morde tarde, como a las cinco.
+- **[00:41] Participante:** Qué qué qué es lo que pretendemos funcionalmente, ¿sí? Con eso uno cierra,
+- **[00:41] Participante:** pues no no es poner la funcionalidad, sino
+- **[00:41] Yo:** Pechuguita de pollo gratinada.
+- **[00:42] Participante:** como preguntar, ¿no?, ¿cierto? La la la pregunta
+- **[00:42] Yo:** Con papita criolla,
+- **[00:42] Participante:** profesional, la pregunta estratégica,
+- **[00:42] Participante:** es es, ¿y esto qué cambia? ¿Sí?
+- **[00:42] Participante:** Si esa pregunta no podemos responderla, entonces, realmente, ahí estamos
+- **[00:42] Yo:** Ah, ok.
+- **[00:42] Yo:** Lo llamo a
+- **[00:42] Participante:** pues, desarrollando una tecnología sin una hipótesis clara de valor.
+- **[00:42] Participante:** Y, realmente,
+- **[00:42] Participante:** nada en un corporativo
+- **[00:42] Participante:** debe desarrollarse si no crea valor.
+- **[00:42] Participante:** Los proyectos que uno trabaja
+- **[00:42] Participante:** en un negocio digital
+- **[00:42] Participante:** en una transformación digital, siempre están en dos variables.
+- **[00:42] Participante:** Facilidad, impacto.
+- **[00:42] Participante:** Si yo no tengo, ¿cierto?
+- **[00:42] Participante:** Valor
+- **[00:42] Participante:** pues no estoy generando impacto.
+- **[00:42] Participante:** Económico, impacto social, impacto ambiental, ¿cierto?
+- **[00:42] Participante:** De desarrollo marcario,
+- **[00:42] Participante:** Entonces, fundamental la propuesta de no estar atada
+- **[00:42] Participante:** a
+- **[00:42] Participante:** al cómo, ¿cierto?, con con con qué tecnologías
+- **[00:42] Participante:** sino a a a que realmente
+- **[00:42] Participante:** qué es lo que le estamos dando de valor, ¿cierto?, qué es lo que estamos generando de valor,
+- **[00:43] Participante:** a a a nuestros clientes.
+- **[00:43] Participante:** Entonces, el valor puede ser funcional, puede ser económico,
+- **[00:43] Participante:** puede ser emocional, puede ser social,
+- **[00:43] Participante:** Y, entonces, pues, ojo, porque ese valor
+- **[00:43] Participante:** pues, no necesariamente
+- **[00:43] Participante:** o exclusivamente, inclusive en un negocio,
+- **[00:43] Participante:** es económico, Muchas acciones corporativas
+- **[00:43] Participante:** se desarrollan
+- **[00:43] Participante:** no solo para generar nuevos ingresos,
+- **[00:43] Participante:** ¿cierto?
+- **[00:43] Participante:** Sino que otro tipo de acciones que que que generan valor, ¿cierto?
+- **[00:43] Participante:** Por ejemplo, el valor funcional,
+- **[00:43] Participante:** hacer algo mejor
+- **[00:43] Participante:** hacerlo más rápido,
+- **[00:43] Participante:** hacerlo con mayor precisión,
+- **[00:43] Participante:** en el valor económico. Obviamente, hay que reducir costos,
+- **[00:43] Participante:** evitar pérdidas o generar ingresos, ¿cierto?
+- **[00:43] Participante:** En el valor emocional, ya te doy la palabra, Jairo.
+- **[00:43] Participante:** El valor emocional, aumentar la tranquilidad, la confianza,
+- **[00:44] Participante:** Un elemento que se vuelve muy importante en los corporativos,
+- **[00:44] Participante:** la sensación de control, porque tenemos todo un mercado en incertidumbre
+- **[00:44] Participante:** por lo menos tener control de lo que desarrollamos de puertas hacia adentro,
+- **[00:44] Participante:** Y en valor social, todo el tema de
+- **[00:44] Participante:** de reputación, de reconocimiento o o pertinencia.
+- **[00:44] Participante:** Aquí, piensen, por ejemplo,
+- **[00:44] Participante:** en una solución, por ejemplo, de analítica, hacemos una solución interna de analítica.
+- **[00:44] Participante:** ¿Cierto? Su valor funcional
+- **[00:44] Participante:** de analítica puede ser
+- **[00:44] Participante:** acelerar una decisión,
+- **[00:44] Participante:** El económico, pues evitar pérdidas,
+- **[00:44] Participante:** El emocional,
+- **[00:44] Participante:** sería darle confianza a quien toma decisiones.
+- **[00:44] Yo:** No, bueno, en realidad.
+- **[00:44] Participante:** Y el social, entonces, pues posicionar el área,
+- **[00:44] Participante:** como un referente en transformación digital, en gestión de la innovación,
+- **[00:44] Participante:** en gestión de la sabiduría dentro de la organización.
+- **[00:44] Participante:** Entonces, realmente una buena propuesta
+- **[00:44] Participante:** tiene todos esos elementos conjuntos, ¿listo?
+- **[00:45] Participante:** Jairo, Sí, profe. En tu experiencia, ¿cuál sería la mejor manera o
+- **[00:45] Participante:** digamos, una manera adecuada para medir el valor emocional y social?
+- **[00:45] Participante:** Valores emocional y social desde una propuesta de valor.
+- **[00:45] Participante:** ¿Qué indicadores hay?
+- **[00:45] Participante:** Hay indicadores para medir eso.
+- **[00:45] Participante:** ¿Cierto?
+- **[00:45] Participante:** Indicadores de satisfacción,
+- **[00:45] Participante:** Hay, inclusive, formulaciones. O sea, es un tema que
+- **[00:45] Participante:** no necesariamente nos transmiten, pero que hay artículos de investigación de de durísimos, hay libros sobre el tema. Generalmente, y y y y y y aquí es uno... No, no, no está, en este momento, en el avión. Pues yo me retorné a primera hora, pero el hombre salió todavía Ah, es Juan.
+- **[00:45] Participante:** Juan, valor emocional de lo que tú
+- **[00:45] Participante:** porque eso lo lo haces todo todos los días el tema de de de experiencia de cliente, ¿cierto?
+- **[00:46] Participante:** Pues, distinto a temas de confianza, de satisfacción, ¿qué otros elementos
+- **[00:46] Participante:** mires.
+- **[00:46] Participante:** En los datos corporativos? Por
+- **[00:46] Participante:** el arroz de tinebra, eso se usaba para escribir oficiales
+- **[00:46] Participante:** y es como un tres sesenta de agitaciones de elementos que pueden generar
+- **[00:46] Participante:** Pensando en esto es en el CSI que me hicieron, le genera
+- **[00:46] Yo:** O una más
+- **[00:46] Participante:** la relación con con lo
+- **[00:46] Participante:** Y ahí hay agrupaciones, hay conversaciones, y eso no debe ser solo,
+- **[00:46] Participante:** sino que debe estar cruzado con otros indicadores
+- **[00:46] Participante:** para que hagan sentido con los variables. Al final del día,
+- **[00:46] Yo:** Lo que es que normalmente Laura es la que
+- **[00:46] Participante:** dentro del journey, que tiene un cliente,
+- **[00:46] Yo:** Laura es la que desayunaba.
+- **[00:46] Participante:** esos elementos, cuando usted nos identifica con claridad, puede decir, ah, ok, ya
+- **[00:46] Participante:** estoy entendiendo
+- **[00:46] Participante:** estoy satisfecho, te puedo recomendar o no
+- **[00:46] Yo:** Ahora lo que salió, ¿no? Como
+- **[00:46] Participante:** o insatisfecho en lo que te den,
+- **[00:46] Participante:** pero que genere unos sentimientos implicitos positivos o negativos,
+- **[00:46] Yo:** No, es
+- **[00:46] Participante:** pero que están relacionados con los datos incitadores. Entonces, mis recomendaciones de
+- **[00:46] Yo:** No no no me levanto con hambre.
+- **[00:47] Participante:** si se va hacer el el tipo de
+- **[00:47] Participante:** solo indicadores nocionales, tiene que estar atado a otros indicadores,
+- **[00:47] Participante:** para que explicas
+- **[00:47] Participante:** y entender realmente cuál es el
+- **[00:47] Participante:** la experiencia de esa percepción que pueda tener el cliente contigo.
+- **[00:47] Participante:** Está carreteando en Cali, porque esa gracia que está haciendo es
+- **[00:47] Participante:** imposible carreteando en Bogotá.
+- **[00:47] Participante:** No funciona en no importa el operador que tenga.
+- **[00:47] Participante:** Además de que lo dejan a uno cuarenta minutos, una hora carreteando, ay, no, dios mío.
+- **[00:47] Participante:** Pérdida de tiempo tan berraca.
+- **[00:47] Participante:** En Bogotá.
+- **[00:47] Participante:** Uy. Ahí se, ahí ahí ahí lo lo lo voy a hacer
+- **[00:47] Participante:** cuentas cuando llegue, Bogotá lo puedo hablar. ¿Sí? Dice, ella va hacer todo
+- **[00:47] Participante:** bajándose de las mil cuarenta y cinco, cincuenta minutos.
+- **[00:47] Participante:** No sé si pude ayudarte. No sé quién preguntó, porque no alcanzo a su Es Jairo, Jairo. Jairo. Jairo, no sé si te pude dar algún contexto sobre eso.
+- **[00:48] Participante:** Sí, sí, alcancé a se te escuchó un poquito entrecortado, pero sí alcancé a
+- **[00:48] Participante:** escuchar antes de que el tema es como tener el el el user journey claro,
+- **[00:48] Participante:** ver cómo yo puedo trasladar, digamos, la satisfacción de cliente a indicadores concretos.
+- **[00:48] Participante:** Y, Jairo, como como llegar
+- **[00:48] Participante:** como yo trabajo es, a mí me llamas como metólogo.
+- **[00:48] Participante:** Grandes intervenciones,
+- **[00:48] Participante:** Yo yo, ya de esa especificidad, o sea, yo yo yo marco toda la estrategia.
+- **[00:48] Participante:** En esa especificidad, no no, pues, los dos que te dije no
+- **[00:48] Participante:** no no caigo en cuenta como más.
+- **[00:48] Participante:** Pero, por favor, escríbeme, porque yo tengo un repositorio de conocimiento, una
+- **[00:48] Participante:** que desarrollamos frente al tema,
+- **[00:48] Participante:** y y y el consultor sea,
+- **[00:48] Participante:** eran como quince, dieciséis variables que
+- **[00:48] Participante:** él él él puso en la nube de lo que iba a evaluar y tomó unas decisiones de cuatro o cinco.
+- **[00:48] Participante:** Entonces, si si me recuerdas, por
+- **[00:48] Participante:** te envío te envío
+- **[00:48] Participante:** te envío, les envío a todos, que les quede, les envío el el el
+- **[00:49] Participante:** pues, no todo el documento, porque, pues, eso eso es confidencial, pero, por lo menos, las variables, ¿listo?
+- **[00:49] Participante:** Vale, gracias.
+- **[00:49] Participante:** Voy.
+- **[00:49] Participante:** Aquí la solución importa, pues, cuánto está
+- **[00:49] Participante:** explicando el cambio que produce, entonces,
+- **[00:49] Participante:** aquí podemos observar la diferencia entre estas dos maneras de hablar, pero
+- **[00:49] Participante:** por ejemplo, yo podría decir,
+- **[00:49] Participante:** tenemos una plataforma con inteligencia artificial, alertas, tableros e integraciones.
+- **[00:49] Participante:** Y así son generalmente
+- **[00:49] Participante:** los modelos de negocios, y específicamente aquí este bloque de propuesta de valor,
+- **[00:49] Participante:** de casi todos los trabajos que se que se desarrollan.
+- **[00:49] Participante:** Y y, oye, pues, muchachos, eso no está mal,
+- **[00:49] Participante:** sea, no está mal.
+- **[00:49] Participante:** Pero pero pero pero, realmente, o sea, estamos hablando de estrategias, ¿o sea?
+- **[00:49] Yo:** Quemado, glorificado, quemado.
+- **[00:49] Participante:** Entonces, tenemos que mostrar realmente el valor,
+- **[00:49] Participante:** Que yo lo puedo inferir,
+- **[00:49] Participante:** yo debería estar diciendo,
+- **[00:49] Participante:** permitimos a los responsables de proyectos
+- **[00:49] Participante:** anticipar desviaciones y reducir retrabajos, reprocesos,
+- **[00:50] Participante:** integrando señales críticas en una sola vista accionable.
+- **[00:50] Participante:** Miren que todo está muy orientado
+- **[00:50] Participante:** es a a a
+- **[00:50] Participante:** no hablar de la tecnología,
+- **[00:50] Participante:** sino hablar de la solución que me da la tecnología.
+- **[00:50] Participante:** Y ahí es donde, miren que vamos viendo que la tecnología es lo de menos, porque
+- **[00:50] Participante:** inclusive, ¿cierto?,
+- **[00:50] Participante:** anticipar de desviaciones, reducir el
+- **[00:50] Participante:** retrabajo, reprocesos.
+- **[00:50] Participante:** Integrando, pues, estas señales críticas de una vista accionable,
+- **[00:50] Participante:** pues eso lo podemos hacer, inclusive, con herramientas
+- **[00:50] Participante:** no digitales,
+- **[00:50] Participante:** o sea, un cuaderno, un lapicero,
+- **[00:50] Participante:** y hágale, o sea,
+- **[00:50] Participante:** así de simple, ¿sí?
+- **[00:50] Participante:** Y ahí es donde vuelve y juega. La la la tecnología es muy indiferente,
+- **[00:50] Participante:** y y por eso muchas veces, muchas veces,
+- **[00:50] Participante:** en los procesos de transformación digital,
+- **[00:50] Participante:** que acompañamos a los grandes corporativos,
+- **[00:51] Participante:** cojo los equipos ágiles,
+- **[00:51] Participante:** y y cuando Tani, no, estamos cuadrando la propuesta de Tani, venga,
+- **[00:51] Participante:** póngamelo en un papel, o sea,
+- **[00:51] Participante:** E inclusive,
+- **[00:51] Participante:** la solución en un papel o o en un proceso manual,
+- **[00:51] Participante:** porque ese
+- **[00:51] Participante:** desde ahí, inclusive, ya empezamos a ver que, desde esa simplicidad,
+- **[00:51] Participante:** puedo captar esa simplicidad, no necesariamente todos pueden hacerse así, ¿no?
+- **[00:51] Participante:** Pero si cambio desde esa simplicidad,
+- **[00:51] Participante:** ya, entre otras, la la la las las tecnologías con que yo puedo implementar y solucionar,
+- **[00:51] Participante:** se vuelven muy fáciles de apropiar.
+- **[00:51] Participante:** Entonces, en esta primera, la etapa funcional, ¿cierto?,
+- **[00:51] Participante:** estamos describiendo cosas, nuestra promesa de valor, realmente una promesa de valor,
+- **[00:51] Participante:** estamos describiendo el progreso, ¿cierto? Les decía, importante tercer punto, progreso.
+- **[00:51] Participante:** ¿Cierto? Y, entonces, adoptemos esa lógica, ¿ya?
+- **[00:51] Participante:** Y y les invito no solamente, pues, hacer el
+- **[00:51] Participante:** trabajo de propuesta de valor, no es la lógica de lo que de de de
+- **[00:51] Participante:** cómo habla un estratega, de cómo habla un gran líder, de cómo habla un gran gerente,
+- **[00:52] Participante:** de cómo habla un gran empresario, ¿cierto? Hace parte de eso una la narrativa. Habla de un resultado valioso de un mecanismo creíble, ¿cierto?, y de mostrar una diferenciación relevante. Resultado valioso, mecanismo creíble, y diferenciación relevante. Entonces, miren que, inclusive, la generación de una propuesta en una sola frase esos tres elementos son de alto impacto. Eso eso eso es un elemento que que nos regaló no la neurociencia, sino el PNL,
+- **[00:52] Participante:** un poquito antes, ¿cierto?, de de de cómo tener conversaciones de alto impacto.
+- **[00:52] Participante:** ¿Cierto? Y nos traemos todos esos elementos aquí para el desarrollo de propuesta de valor tipo Canva.
+- **[00:52] Participante:** Business model generation, Alexander, Walter, ¿cierto?
+- **[00:52] Participante:** Venga, hablemos de resultado valioso, hablemos del
+- **[00:52] Participante:** mecanismo que
+- **[00:52] Participante:** permitir ese resultado valioso y hablemos de esa diferencia relevante, ¿cierto?
+- **[00:52] Participante:** Entonces, ¿qué es lo que vamos a hacer?
+- **[00:53] Participante:** ¿Cómo lo vamos a hacer?, ¿cierto?
+- **[00:53] Participante:** Y y por qué lo vamos a hacer. Ahí el golden circle, el círculo de oro,
+- **[00:53] Participante:** ¿cierto?, otro otro elemento, comunicación de alto impacto,
+- **[00:53] Participante:** de para para la propuesta de valor, ¿cierto?
+- **[00:53] Participante:** Aquí estamos haciendo una una una una combinación
+- **[00:53] Participante:** mucho más poderosa, pues, que dar una lista de funcionalidades,
+- **[00:53] Participante:** Que es lo que generalmente caemos y que, obviamente, ustedes
+- **[00:53] Participante:** de ahora en adelante, pues no no no no no van a desarrollar.
+- **[00:53] Participante:** Esta esta separación en el lienzo, ¿cierto?, metodológica,
+- **[00:53] Participante:** creo que es fundamental, porque de un lado tenemos el cliente usuario,
+- **[00:53] Participante:** con los trabajos, los dolores, las ganancias que hablábamos ahora,
+- **[00:53] Participante:** pero de este otro lado tenemos las decisiones que nosotros tomamos.
+- **[00:53] Participante:** La decisión del producto, la decisión del servicio,
+- **[00:53] Participante:** la decisión de esos aliviadores que vamos a presentar o esos
+- **[00:53] Participante:** creadores de valores que vamos a a presentar, ¿cierto?
+- **[00:54] Participante:** Aliviadores de un problema o o de una oportunidad, una, que
+- **[00:54] Participante:** estamos, pues, presentando para crear valor.
+- **[00:54] Participante:** Y por qué es importante separar, ¿cierto?,
+- **[00:54] Participante:** ese cliente usuario frente a las decisiones? ¿Por qué?
+- **[00:54] Participante:** Existe un un
+- **[00:54] Participante:** muy peligroso
+- **[00:54] Participante:** Y es que, si nos enamoramos de nuestra solución,
+- **[00:54] Participante:** después empezamos a buscar argumentos
+- **[00:54] Participante:** para justificarla.
+- **[00:54] Participante:** Que, ponerle un ejemplo muy claro, es cuando
+- **[00:54] Participante:** tienes una pareja que ya no te funciona la relación, estás en una relación tóxica y demás. Entonces,
+- **[00:54] Participante:** como que como ya invertí un tiempo ahí, ¿cierto?, ya hice unas inversiones,
+- **[00:54] Yo:** K.
+- **[00:54] Participante:** pues entonces yo lo que hago es buscar argumentos, pues, justificar que sigo ahí, o sea.
+- **[00:54] Yo:** El prototipo de validación.
+- **[00:54] Participante:** Y y y y y, realmente, como todo en la vida y como lo
+- **[00:54] Participante:** todo esto que hemos venido apropiando,
+- **[00:54] Participante:** en este último milenio,
+- **[00:54] Participante:** es muy importante, pero hacer lo contrario, ¿cierto?
+- **[00:54] Participante:** Primero yo entiendo las cosas, después las diseño.
+- **[00:55] Participante:** ¿Las entiendo? Las diseño.
+- **[00:55] Participante:** Entonces, entiendo los trabajos, entiendo los dolores del cliente,
+- **[00:55] Participante:** entiendo qué ganancias puedo dar,
+- **[00:55] Participante:** y aquí yo ya tomo decisiones
+- **[00:55] Participante:** ¿cierto?
+- **[00:55] Participante:** Presentando lo lo que diseño, ¿cierto?, el producto, el servicio,
+- **[00:55] Participante:** ese nuevo proceso de alto impacto.
+- **[00:55] Participante:** Entonces, allí el encaje ¿Cierto?
+- **[00:55] Participante:** Ese ese ese problem solution fit,
+- **[00:55] Participante:** que lo pueden buscar, es una muy chévere, ajuste
+- **[00:55] Participante:** problema, solución,
+- **[00:55] Participante:** Me permite demostrar de cada elemento importante de nuestra solución
+- **[00:55] Participante:** pues cómo estar, de verdad, respondiendo a una prioridad real,
+- **[00:55] Participante:** de los usuarios.
+- **[00:55] Participante:** Por eso les decía, para mí, en sus trabajos de grado,
+- **[00:55] Participante:** un experimento
+- **[00:55] Participante:** muy claro es,
+- **[00:55] Participante:** al segmento objetivo que elegí
+- **[00:55] Participante:** entender los problemas que tienen.
+- **[00:55] Participante:** De ahí planteo solución propuesta valor, que también puedo validarla,
+- **[00:56] Participante:** y validar ese producto mínimo viable que presentamos.
+- **[00:56] Participante:** Aquí, pues, lo lo primero es que construimos el perfil del cliente, lo
+- **[00:56] Participante:** lo listamos, lo precisamos, lo priorizamos, lo validamos,
+- **[00:56] Participante:** y y y y quiero determinarme en priorizar, ¿cierto?
+- **[00:56] Participante:** Porque una organización puede tener veinte problemas,
+- **[00:56] Participante:** un un consumidor puede tener diez frustraciones.
+- **[00:56] Participante:** Pero nuestra propuesta no tiene que resolverlas todas.
+- **[00:56] Participante:** Ayer, y y para eso pasó algo en el MBA,
+- **[00:56] Participante:** salió una solución
+- **[00:56] Participante:** de de de una que ya va
+- **[00:56] Participante:** ya va a terminar y ya ya creo la aplicación y
+- **[00:56] Participante:** demás, que es, por ejemplo, el el entendimiento de de de
+- **[00:56] Participante:** que ese, pues, digamos que el quid el cómo,
+- **[00:56] Participante:** es que las mujeres en la app
+- **[00:56] Participante:** suben la ropa que tienen,
+- **[00:56] Participante:** y, según el clima, las emociones o el evento que tienen, les sugiere cómo vestirse.
+- **[00:57] Participante:** Entonces,
+- **[00:57] Participante:** entonces, ¿qué pasó? La la la las dos iniciativas que se llevan
+- **[00:57] Participante:** un semestre cada una,
+- **[00:57] Participante:** surgen bajo, ¿ve?, ¿y por qué no tener una aplicación? Pensado en la solución.
+- **[00:57] Participante:** Pero cuando nos echamos para atrás y empezamos a
+- **[00:57] Participante:** a a a a, de verdad, a a a determinar qué es lo que quiere el cliente,
+- **[00:57] Participante:** resultaron dos soluciones tecnológicas muy distintas.
+- **[00:57] Participante:** Una que está haciendo un tema de comercialización,
+- **[00:57] Participante:** y otra que está soportando
+- **[00:57] Participante:** a a a a a personal shopper
+- **[00:57] Participante:** para para hacer campañas de mercadeo, ¿cierto?
+- **[00:57] Participante:** Soluciones digitales, marca blanca,
+- **[00:57] Participante:** cómo escoger ropa.
+- **[00:57] Participante:** Ves?
+- **[00:57] Participante:** Y y ahí les estoy hablando de la solución,
+- **[00:57] Participante:** De de cómo cómo lucen las soluciones. Las propuestas de valor se vuelven totalmente diferentes.
+- **[00:57] Participante:** En una es la es el es el encuentro de
+- **[00:57] Participante:** de a través de
+- **[00:57] Participante:** necesidades reales de clientes,
+- **[00:58] Participante:** Llegaría a hacer un cierre efectivo de negocios con con
+- **[00:58] Participante:** productos de mi portafolio, ¿cierto?
+- **[00:58] Participante:** En la segunda es tener
+- **[00:58] Participante:** un mecanismo de mercadeo, promoción, publicidad, comunicación,
+- **[00:58] Participante:** directa,
+- **[00:58] Participante:** con clientes,
+- **[00:58] Participante:** a a a a a a través de una de de una plataforma de
+- **[00:58] Participante:** asistencia en el vestib.
+- **[00:58] Participante:** Bueno,
+- **[00:58] Participante:** Entonces, nuestra propuesta,
+- **[00:58] Participante:** no tiene que resolver
+- **[00:58] Participante:** esos veinte problemas, ¿cierto?
+- **[00:58] Participante:** Esas diez frustraciones de los clientes, no tiene que resolverlas todas,
+- **[00:58] Participante:** Lo que lo que tratamos de hacer, innovando,
+- **[00:58] Participante:** también consiste, es más bien en decidir que no vamos a
+- **[00:58] Participante:** qué no vamos a resolver todavía.
+- **[00:58] Participante:** Y esto, muchachos,
+- **[00:58] Participante:** vuelve y juega, es pensamiento estratégico de altísimo nivel.
+- **[00:58] Participante:** Un estratega se conoce, no por lo que apuesta,
+- **[00:59] Participante:** un estratega se conoce,
+- **[00:59] Participante:** es por lo que
+- **[00:59] Participante:** renuncia.
+- **[00:59] Participante:** Y aquí hago
+- **[00:59] Participante:** un stop,
+- **[00:59] Participante:** y les dejo
+- **[00:59] Participante:** eso
+- **[00:59] Participante:** para una reflexión
+- **[00:59] Participante:** de su vida,
+- **[00:59] Participante:** de su
+- **[00:59] Participante:** hacemos procesos donde realmente
+- **[00:59] Participante:** estamos frente a todo eso que queremos,
+- **[00:59] Participante:** y donde nos imaginamos en una visión
+- **[00:59] Participante:** estamos decidiendo qué vamos a hacer
+- **[00:59] Participante:** y a qué vamos a renunciar.
+- **[00:59] Participante:** Porque si hay un recurso, eso es de recursos y capacidades, miren que en cuál empecé,
+- **[00:59] Participante:** con tiempo,
+- **[00:59] Participante:** Y y y adicionalmente,
+- **[00:59] Participante:** romper el el el paradigma
+- **[00:59] Participante:** profesionalizante,
+- **[00:59] Participante:** que inclusive hasta los más jóvenes aquí presentes,
+- **[00:59] Participante:** fueron invadidos con ese paradigma,
+- **[00:59] Participante:** de que yo planteo, planeo
+- **[00:59] Participante:** después llego agua, que esa es la esa
+- **[01:00] Participante:** esa postura de carácter frequentista. No, estamos en un mundo
+- **[01:00] Participante:** vallesiano,
+- **[01:00] Participante:** donde vamos caminando y vamos aprendiendo en el camino.
+- **[01:00] Participante:** Realmente, eso es la vida, y así son los negocios, así es
+- **[01:00] Participante:** los nuevos negocios, así son lo lo lo lo que hago en transformación para una
+- **[01:00] Participante:** Entonces,
+- **[01:00] Participante:** tomo decisiones, yo no voy a resolver todos los problemas,
+- **[01:00] Participante:** tomo la decisión, ¿a qué le voy a apostar?
+- **[01:00] Participante:** yo esperaría, qué chévere, porque sé que muchos están compitiendo por esos cinco premios,
+- **[01:00] Participante:** y se están haciendo de todo ganarse esos cinco premios.
+- **[01:00] Participante:** ¿Cierto?
+- **[01:00] Participante:** Pero pero
+- **[01:00] Participante:** pero pero pero
+- **[01:00] Participante:** digamos, aquí, en la funcionalidad que esperaríamos en el producto mínimo viable,
+- **[01:00] Participante:** es que haya una,
+- **[01:00] Participante:** y que esa que haya, ¿cierto?,
+- **[01:00] Participante:** funcione o no funcione, porque puede ser la simulación de la funcionalidad.
+- **[01:00] Participante:** Es válido como producto mínimo viable,
+- **[01:00] Participante:** es que eso sea lo de más alto impacte
+- **[01:00] Participante:** para el usuario, beneficiario, cliente, sponsor, en que yo me estoy dirigiendo.
+- **[01:00] Participante:** Una propuesta enfocada, normalmente,
+- **[01:01] Participante:** tiene muchas más posibilidades de producir.
+- **[01:01] Participante:** Un verdadero resultado, un resultado de carácter significativo, que una una propuesta que intenta abarcar de todo.
+- **[01:01] Participante:** ¿Cómo vamos hasta ahí, muchachos?
+- **[01:01] Participante:** Listo.
+- **[01:01] Participante:** Entonces, prioricemos el perfil para evitar una propuesta genérica, ¿cierto?
+- **[01:01] Participante:** Entonces, hay tres criterios, son importancia, intensidad y evidencia.
+- **[01:01] Participante:** Entonces,
+- **[01:01] Participante:** ¿esto realmente importa?
+- **[01:01] Participante:** El dolor
+- **[01:01] Participante:** es suficientemente intenso
+- **[01:01] Participante:** tenemos evidencia de qué ocurre.
+- **[01:01] Participante:** Y eso no solamente pasa en transformación, que ya me imagino que se están viendo
+- **[01:01] Participante:** todos los elementos, los los actores del segmento al que se está dirigiendo.
+- **[01:01] Participante:** En el negocio digital,
+- **[01:01] Participante:** El negocio digital
+- **[01:01] Participante:** el problema no ha sido, o sea,
+- **[01:01] Participante:** mejor dicho, más bien, los negocios digitales exitosos
+- **[01:02] Participante:** determinan un segmento.
+- **[01:02] Participante:** Realmente hacen ejercicio mucho más allá
+- **[01:02] Participante:** es de microsegmentación. En un segmento empiezan a generar microsegmentos
+- **[01:02] Participante:** les interesa dirigirse, ¿cierto?
+- **[01:02] Participante:** En lo poco o muchos recursos que tengan comunicarse,
+- **[01:02] Participante:** promocionarse, hacer mercadeo, marketing, etcétera, ¿o sea?
+- **[01:02] Participante:** Entonces, los dirigen a realmente, a quien le importa
+- **[01:02] Participante:** la solución de ese problema,
+- **[01:02] Participante:** y a que, de verdad, ese dolor
+- **[01:02] Participante:** es intenso, porque, si no, no nos van a comprar.
+- **[01:02] Participante:** Lo mismo pasa en el interpretimiento, o sea,
+- **[01:02] Participante:** yo puedo tener un maremano de iniciativas de transformación digital,
+- **[01:02] Participante:** pero realmente estoy solventando un dolor y ese dolor es intenso en la organización.
+- **[01:02] Participante:** Porque, además de importante, ¿cierto?,
+- **[01:02] Participante:** de de de de hacer cosas importantes
+- **[01:02] Participante:** para el corporativo en su misión. Claro. Su visión, perdón,
+- **[01:02] Participante:** también tenemos que hacer cosas que
+- **[01:02] Participante:** que mejoren, optimicen el trabajo.
+- **[01:03] Participante:** Es lo que realmente se
+- **[01:03] Participante:** está al noventa por ciento del tiempo en la organización.
+- **[01:03] Participante:** Y, en ese sentido, entender qué es lo que más le duele, dónde estás más intenso el dolor,
+- **[01:03] Participante:** pues es donde voy a caer.
+- **[01:03] Participante:** Y, en ese sentido, frente a un problema específico con un microsegmento específico,
+- **[01:03] Participante:** un segmento que estoy trabajando,
+- **[01:03] Participante:** pues,
+- **[01:03] Participante:** entender realmente
+- **[01:03] Participante:** cuál es esa funcionalidad con que voy a arrancar,
+- **[01:03] Participante:** eso es lo mejor, porque
+- **[01:03] Participante:** si si voy a la que más le duele,
+- **[01:03] Participante:** pues más fácil va a adoptarlo, más fácil va a eliminarlo.
+- **[01:03] Participante:** Es una solución de transformación digital. Y en un negocio digital, pues más fácil
+- **[01:03] Participante:** comprar, ¿ya? Entonces, mi
+- **[01:03] Participante:** así era la tercera pregunta de la evidencia, ¿cierto?
+- **[01:03] Participante:** De de de que si tenemos evidencia de que esto ocurre, ¿cierto?
+- **[01:03] Participante:** Y que observación, dato, testimonio, respalda esa prioridad,
+- **[01:03] Participante:** Porque cuando hacemos la gestión de la transformación,
+- **[01:03] Participante:** hacemos innovación en negocios digitales,
+- **[01:03] Participante:** debemos diferenciar permanentemente entre
+- **[01:03] Participante:** qué creemos que ocurre
+- **[01:03] Participante:** y en qué tenemos evidencia de
+- **[01:04] Participante:** qué ocurre, o sea.
+- **[01:04] Participante:** Entonces, ojo, a nivel de trabajo de grado, lo que ustedes van a subir de tarea
+- **[01:04] Participante:** pues no necesariamente están haciendo los experimentos.
+- **[01:04] Participante:** Pero realmente, más adelante, por eso es que hacemos experimentos para entender esto,
+- **[01:04] Participante:** porque queremos captar evidencia. Ahora bien,
+- **[01:04] Participante:** pueden tener la la evidencia con fuentes secundarias en un corporativo,
+- **[01:04] Participante:** pueden tener la evidencia. Por eso iniciamos con un trabajo de análisis pues, digamos, como una pequeña vigilancia tecnológica, pero fue más un análisis de trends, pues, porque, pues, hacer una vigilancia completa, pues, se se se hace con más cosas. Y, entonces, ¿qué evidencias pueden ser? Puede ser una entrevista, un dato operacional,
+- **[01:04] Participante:** Los PQRS son excelentes darnos información.
+- **[01:04] Participante:** Una queja que es recurrente. En un negocio digital,
+- **[01:04] Participante:** ese churn, esa esa esa tasa de abandono.
+- **[01:04] Participante:** En un proceso administrativo operacional, ¿qué estoy haciendo?
+- **[01:04] Participante:** Un tema de transformación digital, pues el tiempo del proceso, el costo del proceso,
+- **[01:04] Participante:** ¿cierto?
+- **[01:04] Participante:** Eso nos ayuda a convertir percepciones en evidencia, ¿sí?
+- **[01:05] Participante:** Ese es un elemento fundamental en la propuesta de valor.
+- **[01:05] Participante:** Aquí, en el mapa de valor, convierte
+- **[01:05] Participante:** prioridades en decisiones de diseño.
+- **[01:05] Participante:** Ahí pasamos al otro lado, ¿cierto? Estamos hablando del lado del usuario cliente, ahora pasamos
+- **[01:05] Participante:** al al otro lado, lo que nosotros, las decisiones que tomamos y qué es lo que vamos a proponer, ¿cierto?
+- **[01:05] Participante:** Entonces,
+- **[01:05] Participante:** lo lo primero es que vamos a preguntarnos qué vamos a entregar,
+- **[01:05] Participante:** cómo reduce dolores,
+- **[01:05] Participante:** cómo genera resultados,
+- **[01:05] Participante:** cómo
+- **[01:05] Participante:** demostramos que que funciona,
+- **[01:05] Participante:** Y y y aquí, en este último elemento, es donde ustedes, como
+- **[01:05] Participante:** en estrategia digital de negocio,
+- **[01:05] Participante:** pues tienen un peso fundamental en ese diálogo sociotécnico corporativo, o sea, sea sea un nuevo negocio digital o un corporativo ya
+- **[01:05] Participante:** establecido, ¿cierto? Porque no basta decir, vamos a reducir tiempos, sino que
+- **[01:05] Participante:** preguntémonos
+- **[01:05] Participante:** cuánto.
+- **[01:05] Participante:** ¿No?
+- **[01:05] Participante:** Cuánto tiempo vamos a reducir.
+- **[01:06] Participante:** Eso es una pregunta estratégica. No basta decir, vamos a mejorar productividad,
+- **[01:06] Participante:** Lo que tenemos que preguntarnos es,
+- **[01:06] Participante:** ¿cómo medimos esa esa ese ese ese incremento de productividad?
+- **[01:06] Participante:** No bastaría decir,
+- **[01:06] Participante:** vamos a mejorar la experiencia,
+- **[01:06] Participante:** Hay que tenemos que
+- **[01:06] Participante:** preguntarnos es qué indicador cambiará
+- **[01:06] Participante:** en esa experiencia de cliente.
+- **[01:06] Participante:** Entonces, una propuesta de un estratega,
+- **[01:06] Participante:** una una propuesta de valor
+- **[01:06] Participante:** de de de de de de un profesional de alto nivel, convierte la promesa en una hipótesis medible. Y ahí es donde Norton y Kaplan hicieron una una revolución,
+- **[01:06] Participante:** ¿cierto?, y nos regalan esa máxima corporativa. Lo que no se mide, no se gerencia.
+- **[01:06] Participante:** Punto.
+- **[01:06] Participante:** Bueno.
+- **[01:06] Participante:** Hablemos de ese product
+- **[01:06] Participante:** fit, ¿cierto?, ese encaje.
+- **[01:06] Participante:** Prioridad por prioridad, y miren que aquí en la tabla estamos representando muy bien
+- **[01:07] Participante:** esa ese
+- **[01:07] Participante:** ese ese manse de esa
+- **[01:07] Participante:** esa disciplina que que estamos buscando en ustedes como estrategia, ¿cierto?
+- **[01:07] Participante:** Cada prioridad debe tener una respuesta, ¿cierto?
+- **[01:07] Participante:** Y cada respuesta, pues, debe tener una prueba,
+- **[01:07] Participante:** Entonces, detectar desvíos tempranos, entonces alerta sobre señales
+- **[01:07] Participante:** críticas, ¿cierto? Cuando, ¿cierto?, te hice tiempo de anticipación.
+- **[01:07] Participante:** Pues cuanto antes.
+- **[01:07] Participante:** Si queremos reducir la consolidación manual, entonces venga, ¿cuántas horas queremos reducirlo?
+- **[01:07] Participante:** Si queremos mejorar la confianza en una alerta, entonces qué precisión necesitamos desarrollar.
+- **[01:07] Participante:** Si queremos facilitar la adopción, entonces, ¿cuánto tiempo
+- **[01:07] Participante:** debería tomar alcanzar ese
+- **[01:07] Participante:** ese primer valor en esa adopción.
+- **[01:07] Participante:** Miren,
+- **[01:07] Participante:** miren
+- **[01:07] Participante:** fijémonos que
+- **[01:07] Participante:** estamos empezando a convertir
+- **[01:07] Participante:** una idea en un sistema de hipótesis,
+- **[01:07] Participante:** Y y esto va a ser fundamental cuando pasemos, pues, a todo el tema
+- **[01:07] Participante:** de de de de experimentación.
+- **[01:08] Participante:** Diferenciarnos sin
+- **[01:08] Participante:** Diferenciar no significa ser mejores en absolutamente todo,
+- **[01:08] Participante:** Diferenciar significa elegir, ¿cierto?
+- **[01:08] Participante:** Entonces, era lo que les decía a hora de llegar y y, de verdad,
+- **[01:08] Participante:** hacer renuncias, ¿cierto? No necesariamente es que vaya a renunciar de todo, ¿no? En el futuro,
+- **[01:08] Participante:** de pronto voy a adoptarlo, dejo
+- **[01:08] Participante:** dejo en el banco de proyectos, o sea,
+- **[01:08] Participante:** Entonces,
+- **[01:08] Participante:** es una elección de dónde quiero ser
+- **[01:08] Participante:** extraordinariamente relevante. Y miren que la pregunta es muy
+- **[01:08] Participante:** ¿dónde queremos ser
+- **[01:08] Participante:** extraordinariamente relevantes? ¿Saben?
+- **[01:08] Participante:** Una diferencia poderosa
+- **[01:08] Participante:** debe cumplir estas tres condiciones, ¿sí?
+- **[01:08] Participante:** Debe ser relevante,
+- **[01:08] Participante:** debe ser creíble,
+- **[01:08] Participante:** y debe ser defendible, ¿cierto? En lo posible defendible.
+- **[01:08] Participante:** No todo es defendible, ¿cierto?, porque puedo ser tan disruptivo que no tengo los elementos
+- **[01:08] Participante:** para para para para para
+- **[01:08] Participante:** para perfilar bien esa ese ese ese tema de de ser defendible, ¿cierto?
+- **[01:08] Participante:** Pero en todo proyecto digital,
+- **[01:09] Participante:** no importando si es negocio o transformación,
+- **[01:09] Yo:** Para la casa, quedamos quitarla.
+- **[01:09] Participante:** pues esta defensa puede proponer de datos,
+- **[01:09] Participante:** puede de repositorios de conocimiento,
+- **[01:09] Participante:** puede provenir de una integración
+- **[01:09] Yo:** Que soy hacer.
+- **[01:09] Participante:** puede provenir de una red,
+- **[01:09] Participante:** puede provenir de una experiencia,
+- **[01:09] Participante:** puede provenir ahora, la IA nos regala mucho
+- **[01:09] Participante:** de de de de de un algoritmo, ¿cierto?
+- **[01:09] Participante:** Puede puede venir de de un tema de capacidad de ejecución, ¿sí?
+- **[01:09] Participante:** En proyectos digitales.
+- **[01:09] Participante:** En en un entretenimiento, ¿cierto?, puede provenir
+- **[01:09] Participante:** pues, además de los de los anteriores,
+- **[01:09] Participante:** ¿cierto?
+- **[01:09] Participante:** De de de algo
+- **[01:09] Participante:** extremadamente poderoso, ¿cierto?,
+- **[01:09] Participante:** que es el conocimiento profundo
+- **[01:09] Participante:** de la propia organización.
+- **[01:09] Participante:** De
+- **[01:09] Participante:** la organización,
+- **[01:09] Participante:** de sus procesos
+- **[01:09] Participante:** sus datos.
+- **[01:09] Participante:** Cuando yo conozco muy bien mi empresa,
+- **[01:09] Participante:** corporativo,
+- **[01:09] Participante:** sus procesos y los datos que genera,
+- **[01:10] Participante:** llego y puedo tener realmente
+- **[01:10] Participante:** un tema diferenciador
+- **[01:10] Participante:** porque lo que propongo, ¿cierto?,
+- **[01:10] Participante:** ya ya sé qué son los dolores, el problema, lo que hablaba de usuario cliente,
+- **[01:10] Participante:** ahora yo tomo la decisión de qué voy a priorizar.
+- **[01:10] Participante:** Entonces, digamos, con la curva de valor,
+- **[01:10] Participante:** yo yo puedo decidir dónde competir, y yo les decía,
+- **[01:10] Participante:** recuerden que la curva de valor no solamente es hacer un análisis comparativo,
+- **[01:10] Participante:** ¿cierto?
+- **[01:10] Participante:** Pues que realmente, pues, lo llamamos curva de valor, pero yo les decía,
+- **[01:10] Participante:** porque Chang lo puso de moda, pero eso viene desde los treinta, y era un análisis comparativo
+- **[01:10] Participante:** por un un plano cartesiano, donde tenemos las abscisas de manera
+- **[01:10] Participante:** con atributos cualitativos, ¿cierto?
+- **[01:10] Participante:** Entonces, y pero les decía que eso es un strategy canvas,
+- **[01:10] Participante:** Cuando lo lo pongo, ¿con qué reduzco, qué incremento, qué creo y qué elimino?
+- **[01:10] Participante:** ¿Cierto?
+- **[01:10] Participante:** Que es, recortemos acá, porque eso es
+- **[01:10] Participante:** espero, pues, más que la herramienta ahí en Excel y calificar, eso no tiene mayor gracia.
+- **[01:11] Participante:** Que les quede eso en el mindset, ¿cierto?, en el mindset como estrategias,
+- **[01:11] Participante:** Y es que, ojo, no no es que yo tenga que
+- **[01:11] Participante:** aumentar, ¿cierto?,
+- **[01:11] Participante:** incrementar
+- **[01:11] Participante:** todos los factores, ¿cierto?
+- **[01:11] Participante:** Miro qué es lo que le incremento, qué es lo que mejoro.
+- **[01:11] Participante:** Yo miro
+- **[01:11] Participante:** cuáles debo reducir, ¿cierto?
+- **[01:11] Participante:** Miro qué elimino porque realmente no genera suficiente valor, ¿cierto?
+- **[01:11] Participante:** Y y y y y, en ese plano, pues, además, comparándome con lo que está pasando en el
+- **[01:11] Participante:** de mis competidores, pues venga, ¿qué voy a crear diferenciador? ¿O sea?
+- **[01:11] Participante:** Nuevamente esto implica renuncias, ¿sí?
+- **[01:11] Participante:** Y las renuncias hacen parte de tener una buena estrategia.
+- **[01:11] Participante:** Una solución, digamos, sencilla,
+- **[01:11] Participante:** y profundamente útil puede ser mucho más valiosa
+- **[01:11] Participante:** que una solución técnicamente sofisticada
+- **[01:11] Participante:** pero
+- **[01:11] Participante:** difícil de adoptar.
+- **[01:11] Participante:** Una buena formulación,
+- **[01:12] Participante:** hace hace hace explícita esta lógica de valor, ¿sí?
+- **[01:12] Participante:** Podemos utilizar esta esta
+- **[01:12] Participante:** estructura, la podemos utilizar como
+- **[01:12] Participante:** como un test, ¿cierto? Entonces, para determinado segmento,
+- **[01:12] Participante:** que necesita determinado progreso,
+- **[01:12] Participante:** ofrecemos determinada solución.
+- **[01:12] Participante:** Que produce determinado beneficio
+- **[01:12] Participante:** frente a determinada alternativa. Miren, esa es una buena formulación de lógica de valor.
+- **[01:12] Participante:** Así debería quedar, eso es una buena narrativa para que queden ustedes con ella.
+- **[01:12] Participante:** No necesariamente tiene que quedar redactado así, ojo,
+- **[01:12] Participante:** es una
+- **[01:12] Participante:** un ejemplo,
+- **[01:12] Participante:** Lo importante es que los elementos existan,
+- **[01:12] Participante:** segmento, progreso, solución, beneficio,
+- **[01:12] Participante:** alternativa,
+- **[01:12] Participante:** y y esa evidencia o capacidad,
+- **[01:12] Participante:** Digamos que, para los que están en transformación,
+- **[01:12] Participante:** uno podría decir Cierto.
+- **[01:12] Participante:** Para los equipos comerciales que necesitan priorizar oportunidades,
+- **[01:13] Participante:** digamos, con
+- **[01:13] Participante:** con mayor probabilidad de cierre, ¿sí?, un un tema, un dolor en el área comercial,
+- **[01:13] Participante:** es prospecting, la prospectación, ¿cierto?
+- **[01:13] Participante:** De clientes. Entonces,
+- **[01:13] Participante:** y además de prospectarlos, captarlos, hacer la labor de priorización.
+- **[01:13] Participante:** Hacer una b c de clientes, para los que hayan trabajado gestión comercial.
+- **[01:13] Participante:** Entonces, pues, ¿quiénes son más probables?, ¿quiénes son esos potenciales clientes? Ah, porque
+- **[01:13] Participante:** todavía no son a, ¿cierto?
+- **[01:13] Participante:** Entonces,
+- **[01:13] Participante:** a, un equipo comercial que necesita producir esa oportunidad, o
+- **[01:13] Participante:** con mayor probabilidad de cierre,
+- **[01:13] Participante:** entonces, proponemos un sistema de recomendación
+- **[01:13] Participante:** que integre información comercial y comportamiento histórico,
+- **[01:13] Participante:** para enfocar el esfuerzo en las oportunidades de mayor potencial.
+- **[01:13] Participante:** Frente a la procesalización actual, basada principalmente en criterio individual.
+- **[01:13] Participante:** Ahí ya tenemos una propuesta que es defendible.
+- **[01:13] Participante:** Y que puedo ir a experimentar, ¿cierto?, llegar y presentar,
+- **[01:13] Participante:** se hace porque
+- **[01:13] Participante:** creo una página web con la propuesta,
+- **[01:13] Participante:** y y la envío que me la validen
+- **[01:14] Participante:** segmentos de usuarios,
+- **[01:14] Participante:** sea ese porque lo
+- **[01:14] Participante:** lo lo, tengo un diálogo sociotécnico expresando mi mi propuesta de valor en una
+- **[01:14] Participante:** en una entrevista. Se hace porque creé una encuesta
+- **[01:14] Participante:** se la mando a los clientes mirar si esta es una propuesta de valor de peso, ¿cierto?
+- **[01:14] Participante:** Entonces, por ejemplo, un negocio digital, una plataforma innovadora,
+- **[01:14] Participante:** gestionar proyectos, segmento,
+- **[01:14] Participante:** implícito beneficio genérico, diferencia sin sustento, ¿cierto? Pero después, entonces, para una PMO, mediana, una vista integrada, que está anticipando desvíos, reduce retrabajo, frente al seguimiento manual fragmentado. Bueno. Salté. Me salté. Una buena propuesta de valor debe superar estas estas tres pruebas y conservar la coherencia, ¿cierto? Entonces, deseabilidad, factibilidad y viabilidad. Sea, desde la primera clase hablando de esos tres elementos, ¿cierto? Entonces, una una una iniciativa tecnológica no importa tanto si es mercado, si es un tema interno, puede ser tecnológicamente posible, pero, pues, no interesarle a nadie.
+- **[01:15] Participante:** Puede ser muy deseable,
+- **[01:15] Participante:** ¿cierto? Pues,
+- **[01:15] Participante:** si si le interesa a alguien,
+- **[01:15] Participante:** pero ser imposible implementar.
+- **[01:15] Participante:** No tengo cómo cómo desarrollarlo, no tengo el equipo, la tecnología, etcétera.
+- **[01:15] Participante:** Puede ser deseable y factible,
+- **[01:15] Participante:** pero no es viable porque me destruye muy
+- **[01:15] Participante:** valor, o sea, me toca hacer unas inversiones ingentes
+- **[01:15] Participante:** o o o el retorno que me puede dar a través de generación de ingresos
+- **[01:15] Participante:** pues no da para sustentar esa inversión.
+- **[01:15] Participante:** Realmente una propuesta de valor buena debe tenerlos
+- **[01:15] Participante:** los tres elementos, ¿cierto?, esas tres condiciones, ¿sí?
+- **[01:15] Participante:** Que sea deseable, que sea factible y que sea viable.
+- **[01:15] Participante:** Y, además, que
+- **[01:15] Participante:** tenga mucha coherencia.
+- **[01:15] Participante:** Ese mismo hilo argumental, ¿cierto?,
+- **[01:16] Participante:** de de de de si había factible y viabilidad, pues,
+- **[01:16] Participante:** conecta, ¿con qué?, con el problema,
+- **[01:16] Participante:** con el segmento, con la solución,
+- **[01:16] Participante:** con la diferenciación y con la captura de valor,
+- **[01:16] Participante:** que hablábamos, digamos, de
+- **[01:16] Participante:** de cómo puede ser redactada
+- **[01:16] Participante:** esa esa esa esa propuesta de valor.
+- **[01:16] Participante:** Vamos a hacer un zoom in en en cada uno de esos temas,
+- **[01:16] Participante:** la la la la la deseabilidad, ¿cierto?, se demuestra
+- **[01:16] Participante:** con contoncta, no con cortesía,
+- **[01:16] Participante:** Entonces, aquí, pues, cuando entrevistamos personas,
+- **[01:16] Participante:** para averiguar si es deseable,
+- **[01:16] Participante:** aparece
+- **[01:16] Participante:** aparece un riesgo, y es que
+- **[01:16] Participante:** pues, solemos ser amables. Cierto.
+- **[01:16] Participante:** Entonces, uno termina diciendo, no, sí, me parece
+- **[01:16] Participante:** interesante. Ay, sí, yo lo usaría, ¿cierto?
+- **[01:16] Participante:** Pero mire que eso tiene poca, este, relativamente
+- **[01:16] Participante:** tiene poco valor como evidencia, ¿cierto?
+- **[01:16] Participante:** Hay que buscar es el comportamiento. Entonces,
+- **[01:16] Participante:** ir a preguntar es sobre el comportamiento. Actualmente, dedícate
+- **[01:17] Participante:** tiempo a resolver ese problema.
+- **[01:17] Participante:** O sea, le le staga, los dólares que eso le quita tiempo, o sea,
+- **[01:17] Participante:** está gastando dinero por ese problema.
+- **[01:17] Participante:** Ha ha creado soluciones improvisadas para solucionar ese problema,
+- **[01:17] Participante:** está dispuesto a darnos información para que le solventemos ese problema,
+- **[01:17] Participante:** ¿Aceptaría ser un piloto? Miren que ahí es muy distinto.
+- **[01:17] Participante:** A que yo le decía, de que, ah, ¿qué qué te parece eso? No, la berraquera, venga.
+- **[01:17] Participante:** Va a acompañarnos en el piloto de prueba. Ay, ay,
+- **[01:17] Participante:** si me interesa, yo lo hago, si no, no, ¿cierto?
+- **[01:17] Participante:** Cambiaría un proceso,
+- **[01:17] Participante:** invertiría un presupuesto en esto,
+- **[01:17] Participante:** la la la la la evidencia
+- **[01:17] Participante:** ahí estoy pidiendo evidencia.
+- **[01:17] Participante:** Aumenta medida, pues, que
+- **[01:17] Participante:** va va aumentando el compromiso.
+- **[01:17] Participante:** En esta
+- **[01:17] Participante:** gestión de la innovación o la gestión de la transformación,
+- **[01:17] Participante:** la acción vale mucho más que un cumplir.
+- **[01:17] Participante:** Es un error que pasa en los experimentos, que hacemos es preguntas que nos den cumplidos.
+- **[01:18] Participante:** No, oiga, validemos con una acción.
+- **[01:18] Participante:** ¿Quiénes están dispuestos a
+- **[01:18] Participante:** si está dispuesto, es porque de verdad quiere.
+- **[01:18] Participante:** Eso es un experimento que sí me está aportando valor,
+- **[01:18] Participante:** Vamos a revisar la factibilidad, el segundo elemento.
+- **[01:18] Participante:** Y y esto de deseabilidad, factibilidad,
+- **[01:18] Participante:** y viabilidad,
+- **[01:18] Participante:** también está en el maiz de un estratégico.
+- **[01:18] Participante:** O sea, un gerente de alto nivel siempre está pensando en eso. ¿Cierto? Es deseable, es viable, es factible, es viable, Siempre tiene eso en el mindset. Y vuelve y juega, estas herramientas no sirven solamente en la gestión organizacional, en el en el emprendimiento, sino, o sea, esto para la vida, o sea, cuántas veces no no no no no tomamos decisiones porque en un alto nivel de deseabilidad pero realmente no evaluamos la factibilidad, ¿cierto? Tomamos decisiones que son con un alto grado de deseabilidad y son factibles, pero nunca miramos ese ese costo que tenía, qué tan viable era, y metemos la pata.
+- **[01:19] Participante:** Bueno, vamos a la factibilidad, ¿cierto? Entonces,
+- **[01:19] Participante:** aquí lo que nos exige es probar la parte más incierta,
+- **[01:19] Participante:** la factibilidad no no significa simplemente decir, tenemos la tecnología.
+- **[01:19] Participante:** Tenemos que es identificar que esa promesa
+- **[01:19] Participante:** que parte de esa, de la promesa,
+- **[01:19] Participante:** es difícil, ¿cierto?
+- **[01:19] Participante:** Puede ser integración,
+- **[01:19] Participante:** puede ser un tema de calidad de datos, puede ser un tema de precisión,
+- **[01:19] Participante:** puede ser un tema de escalabilidad, porque hay unos que
+- **[01:19] Participante:** cogido, digamos, aquí tenemos a varios que ya ya ya ya arrancaron de algo
+- **[01:19] Participante:** que ya vi en el corporativo. Entonces,
+- **[01:19] Participante:** nuestro desafío de factibilidad es la escalabilidad. Puede ser un tema
+- **[01:19] Participante:** y y, muchachos, y aquí otro énfasis muy importante
+- **[01:19] Participante:** hablando en transformación digital,
+- **[01:19] Participante:** que un elemento que siempre debemos tener
+- **[01:19] Participante:** priorizado,
+- **[01:19] Participante:** temas digitales de negocios.
+- **[01:19] Participante:** Esto, el tema de ciberseguridad,
+- **[01:20] Participante:** sea,
+- **[01:20] Participante:** se volvió un tema totalmente crítico.
+- **[01:20] Participante:** Y transversal en la estrategia.
+- **[01:20] Participante:** Y para los que es
+- **[01:20] Participante:** salgan de aquí a ser directores de ahí,
+- **[01:20] Participante:** que, como les he dicho desde el principio, es mucho más que hacer un director TI, sea, es que realmente sean gerentes, ¿cierto? Cualquier tipo de la organización, porque ustedes se preparan, es para gestionar la transformación, o crear empresas de una vez con ese valor agregado digital. La ciberseguridad es un dolor en incremento, más con la evolución de la inteligencia artificial como está. Puede ser un tema de de de regulación, ser un tema de disponibilidad de talento, de recurso humano, Puede ser un tema de de dependencia de terceros, que pasa mucho en algunos y, venga, ya no quiero depender. Puede ser un tema de del, yo les he hablado mucho de implementación, implantación,
+- **[01:20] Participante:** puede ser un tema de de
+- **[01:20] Participante:** de de qué es resistencia organizacional a adoptar, que las cosas que se implementan realmente
+- **[01:20] Participante:** se implanten, ¿cierto?
+- **[01:21] Participante:** Puede ser, entonces, pues, digamos que en
+- **[01:21] Participante:** que todo eso de transformación digital
+- **[01:21] Participante:** muchas veces el mayor riesgo
+- **[01:21] Participante:** no está en desarrollar resolución,
+- **[01:21] Participante:** sino que está en cómo la integro, la adopto,
+- **[01:21] Participante:** y realmente cambio el comportamiento de los seres humanos
+- **[01:21] Participante:** alrededor de ella.
+- **[01:21] Participante:** La prueba de factibilidad, realmente,
+- **[01:21] Participante:** debe concentrarse precisamente
+- **[01:21] Participante:** en aquello que puede hacer fracasar la propuesta.
+- **[01:21] Participante:** Aquí aquí aquí tenemos que tener una rentabilidad
+- **[01:21] Participante:** ley de Murphy,
+- **[01:21] Participante:** Les recomiendo que también esto hace parte del kit de un buen estratega,
+- **[01:21] Participante:** los seis sombreros para pensar dedor de bono.
+- **[01:21] Participante:** Que, además, pues, una
+- **[01:21] Participante:** una herramienta de carácter creativo
+- **[01:21] Participante:** que sirve crear innovaciones, sirve muchísimo para
+- **[01:21] Participante:** hacer trabajos con equipos de alto desempeño.
+- **[01:21] Participante:** Porque tengo el sombrero azul, quien es el que lidera,
+- **[01:21] Participante:** tengo sombrero verde, que me está gestionando ideas, el amarillo, que es optimista,
+- **[01:22] Participante:** el negro que es pesimista, el blanco que me habla con datos reales, ¿cierto?
+- **[01:22] Participante:** Entonces, aquí es muy importante en la factibilidad
+- **[01:22] Participante:** ponerse el sombrero negro, pensando en los peores escenarios,
+- **[01:22] Participante:** para
+- **[01:22] Participante:** llegar y y hacer los experimentos precisos, pues, para saber
+- **[01:22] Participante:** si algo es factible o
+- **[01:22] Participante:** Y el tema de habilidad, pues,
+- **[01:22] Participante:** realmente comienza
+- **[01:22] Participante:** al explicar, pues, entender muy claramente
+- **[01:22] Participante:** pues, quién
+- **[01:22] Participante:** es el que captura el nivel del valor, ¿cierto?
+- **[01:22] Yo:** ¿Cómo les fue?
+- **[01:22] Participante:** Voy a voy a dar una lectura distinta,
+- **[01:22] Participante:** porque aquí hablamos
+- **[01:22] Participante:** modelo de generación de ingresos,
+- **[01:22] Participante:** que le vamos a hacer zoom in también a eso,
+- **[01:22] Participante:** Pesando, ¿cierto?
+- **[01:22] Participante:** Hablando de los de que son negocios digitales, ¿cierto?
+- **[01:22] Participante:** Aquí, en un negocio digital, pues yo tengo que mirar es quién paga,
+- **[01:23] Participante:** cómo paga, ¿cierto?, el mecanismo.
+- **[01:23] Participante:** Cuánto paga, el precio,
+- **[01:23] Yo:** Función.
+- **[01:23] Participante:** y y con qué frecuencia, que es realmente donde yo miro qué tan viable es el tema,
+- **[01:23] Participante:** es porque, pues,
+- **[01:23] Participante:** que me compren una vez y no vas, ¿no? Necesito un long tail, una cora larga,
+- **[01:23] Participante:** que realmente haya un permanente.
+- **[01:23] Participante:** Pero
+- **[01:23] Participante:** en el intraemprendimiento cambia un poquito la la la la la la pregunta, ¿cierto?
+- **[01:23] Participante:** Y es, ¿quién captura el valor
+- **[01:23] Participante:** y quién tiene incentivos suficientes
+- **[01:23] Participante:** para asignar recursos al proyecto.
+- **[01:23] Participante:** Entonces, digamos, podemos tener una inversión de
+- **[01:23] Participante:** de de de de
+- **[01:23] Participante:** de cien, ¿cierto?
+- **[01:23] Participante:** Y generar doscientas unidades de ahorro.
+- **[01:23] Participante:** Podemos reducir, por ejemplo, un riesgo material,
+- **[01:23] Participante:** podemos estar liberando una capacidad organizacional,
+- **[01:23] Participante:** podríamos estar acelerando el proceso de ventas, ¿cierto?
+- **[01:23] Participante:** Podemos estar reduciendo el abandono, pues, de un producto digital,
+- **[01:24] Participante:** o inclusive, pues, están en la misma área de talento humano.
+- **[01:24] Participante:** Podemos estar aumentando la calidad,
+- **[01:24] Participante:** Entonces, en este caso, pues, no necesariamente estamos hablando
+- **[01:24] Participante:** viabilidad como un tema de precio, ¿sí?
+- **[01:24] Participante:** Pero sí está existiendo una economía del valor, ¿cierto?
+- **[01:24] Participante:** Y debemos demostrarla.
+- **[01:24] Participante:** De disminuir riesgo, de reducir costos, de aumentar la calidad,
+- **[01:24] Participante:** de de de acelerar ahí.
+- **[01:24] Participante:** Entonces, es un mecanismo de ingresos
+- **[01:24] Participante:** debe corresponder a ese uso y valor, ¿cierto?
+- **[01:24] Participante:** Entonces, para proyectos con lógica de mercado, los negocios digitales,
+- **[01:24] Participante:** pues hay diferentes mecanismos, la venta, la suscripción,
+- **[01:24] Participante:** el pago por uso, la comisión, la licencia.
+- **[01:24] Participante:** Y y y y
+- **[01:24] Participante:** y, realmente, trato,
+- **[01:24] Participante:** la pregunta no es de de estas opciones, porque hay muchas,
+- **[01:24] Participante:** ¿Me recuerdan, por favor,
+- **[01:24] Participante:** Javier Mejías, con g,
+- **[01:25] Participante:** noventa formas de generar ingresos.
+- **[01:25] Participante:** Y léanse ese artículo, que es viejo como la panela, pero qué buen
+- **[01:25] Participante:** repositorio, el de Javier Mejías,
+- **[01:25] Participante:** Era un blogger que dejó de escribir hace muchos años, pero un excelente repositorio.
+- **[01:25] Participante:** Javier Mejías, con g,
+- **[01:25] Participante:** noventa formas de generar ingresos. Me recuerdan para enviárselo.
+- **[01:25] Participante:** Por el WhatsApp.
+- **[01:25] Participante:** ¿Le sirve...? O sea, por favor,
+- **[01:25] Yo:** Lo metimos pero no
+- **[01:25] Participante:** los que están haciendo interemprendimiento, léenselo, es cortico, no les quita cinco minutos.
+- **[01:25] Yo:** Bueno,
+- **[01:25] Participante:** Pero hablen las múltiples perspectivas de cómo puedo monetizar algo.
+- **[01:25] Participante:** Muy chévere.
+- **[01:25] Yo:** Amiticaid.
+- **[01:25] Participante:** Muy shared.
+- **[01:25] Participante:** Y y y es una buena entrada para para también mirar el tema de
+- **[01:25] Participante:** de de generación de ingresos, ¿cierto?
+- **[01:25] Participante:** Entonces, la pregunta que realmente yo me hago acá, ¿cierto?,
+- **[01:25] Yo:** Bueno,
+- **[01:25] Participante:** es cuál corresponde mejor a un comportamiento
+- **[01:25] Participante:** mediante el cual se genera valor, no cuál está de moda, ¿cierto?
+- **[01:25] Participante:** Ahora, por ejemplo, pues está muy de moda las venga, no,
+- **[01:25] Participante:** es la que?
+- **[01:25] Participante:** La que la que
+- **[01:25] Participante:** la me me me me me ayuda a generar valor?
+- **[01:26] Participante:** En el caso de los intraemprendimientos, ¿cierto?, el ejercicio es equivalente.
+- **[01:26] Participante:** ¿Cuál es la unidad de valor, cierto?
+- **[01:26] Participante:** Horas ahorradas, transacciones automatizadas,
+- **[01:26] Participante:** errores evitados,
+- **[01:26] Participante:** incremento de la conversión,
+- **[01:26] Participante:** disminución de tiempo de respuesta,
+- **[01:26] Participante:** una reducción de incidentes.
+- **[01:26] Participante:** En ambos casos, necesitamos identificar la unidad económica,
+- **[01:26] Participante:** que hace visible el valor.
+- **[01:26] Participante:** ¿Cierto?
+- **[01:26] Participante:** Bueno,
+- **[01:26] Participante:** El modelo debe conectar creación, entrega y captura de valor.
+- **[01:26] Participante:** Y esto realmente es lo más importante aquí cuando nosotros planteamos
+- **[01:26] Participante:** propuestas de valor, que no necesariamente es
+- **[01:26] Participante:** una transformación o montar un negocio digital. O sea,
+- **[01:27] Participante:** en todo estamos creando propuestas de valor, en la vida cotidiana estamos creando
+- **[01:27] Participante:** propuestas de valor. O problema, planteamos una solución, o sea, como una propuesta de valor.
+- **[01:27] Participante:** Pues dándole valor agregado, diferenciación.
+- **[01:27] Participante:** Entonces, esta esta es una idea muy importante, ¿cierto? Un un modelo
+- **[01:27] Participante:** ¿cierto?
+- **[01:27] Participante:** No no no no es solamente un mecanismo de cómo genero ingresos o reduzco costos.
+- **[01:27] Participante:** Un modelo, ¿cierto?, de negocios,
+- **[01:27] Participante:** debe estar explicando cómo creamos valor
+- **[01:27] Participante:** cómo lo entregamos
+- **[01:27] Participante:** y cómo capturamos una parte de ese valor.
+- **[01:27] Participante:** Entonces, como ponerlo en ejemplo, un negocio digital,
+- **[01:27] Participante:** ¿cierto?
+- **[01:27] Participante:** Capturamos valor principalmente, pues, a través de los ingresos de que me paguen, ¿cierto?
+- **[01:27] Participante:** Y el margen que me queda
+- **[01:27] Participante:** ¿cierto? Entonces, ingresos menos egresos, igual a a margen de utilidad.
+- **[01:27] Participante:** Los ingresos y esa utilidad.
+- **[01:27] Participante:** En un interreprendimiento, pues, lo lo capturamos por productividad, por eficiencia,
+- **[01:27] Yo:** Oreo.
+- **[01:27] Participante:** velocidad, de de reducciones de riesgo,
+- **[01:28] Participante:** ingresos incrementales, calidad,
+- **[01:28] Yo:** Oreo.
+- **[01:28] Participante:** no no hemos hablado de experiencia.
+- **[01:28] Participante:** La experiencia.
+- **[01:28] Participante:** En fin,
+- **[01:28] Yo:** Veo. Oreo.
+- **[01:28] Participante:** realmente, todos esos atributos de valor
+- **[01:28] Participante:** que que que que espero que lo hubiéramos entendido muy bien en el módulo
+- **[01:28] Yo:** ¿Y ven?
+- **[01:28] Participante:** pasado para plantear el tema del benchmarking,
+- **[01:28] Participante:** y hacer un estudio corporativo, es atributo general
+- **[01:28] Participante:** ¿lo podríamos reunir en qué?
+- **[01:28] Participante:** Son e,
+- **[01:28] Participante:** nuevas o optimizadas capacidades estratégicas
+- **[01:28] Yo:** Hola,
+- **[01:28] Participante:** organizacionales, ¿cierto? Del negocio digital o de o de
+- **[01:28] Yo:** Let me know.
+- **[01:28] Participante:** o de la empresa que estuvo haciendo transformación, ¿cierto?
+- **[01:28] Participante:** Entonces, por eso es que yo yo personalmente,
+- **[01:28] Participante:** soy más de los que piensa que
+- **[01:28] Participante:** que pensemos el modelo como una arquitectura de creación,
+- **[01:28] Participante:** de entrega y captura de valor.
+- **[01:28] Participante:** Como una una arquitectura de creación
+- **[01:28] Participante:** creo,
+- **[01:28] Participante:** entrego y capturo valor, tengo mi retorno, ¿sí?
+- **[01:29] Participante:** Entonces, ahí la propuesta valor es el sustento,
+- **[01:29] Participante:** y el modelo es el que explica cómo lo hago realidad.
+- **[01:29] Participante:** Ya ese ese ese lo lo lo, todo ese tema,
+- **[01:29] Participante:** lo lo lo ampliamos en nuestro próximo módulo, ¿sí?
+- **[01:29] Participante:** Entonces, el entregable, ¿cierto?
+- **[01:29] Participante:** Lo redactamos así, pues primero,
+- **[01:29] Participante:** el segmento y el contexto,
+- **[01:29] Participante:** Segundo, cuál es ese progreso que estamos buscando, ¿cierto? Así planteamos la propuesta de valor.
+- **[01:29] Participante:** Tercero, la propuesta, ¿cierto?
+- **[01:29] Participante:** Este cuarto, que es la diferenciación. El quinto, pues,
+- **[01:29] Participante:** qué qué qué qué qué modelos o pruebas, pues, está vos, ¿cierto?
+- **[01:29] Participante:** Qué estamos solucionando. Estoy, pues, ahorrando costos, generando eficiencias,
+- **[01:29] Participante:** reduciendo riesgo o estamos generando ingresos, eso hay que contarlo, o sea.
+- **[01:29] Participante:** Entonces, si
+- **[01:29] Participante:** si si alguien lee estas cinco partes, ¿cierto?,
+- **[01:29] Participante:** ¿qué qué pasa? Va a comprender perfectamente
+- **[01:29] Participante:** la lógica de lo que ustedes están ofertando o están desarrollando.
+- **[01:30] Participante:** Porque miren que estamos explicando, pues, primero, que qué ocurre.
+- **[01:30] Participante:** Segundo, a quién afecta.
+- **[01:30] Participante:** Qué es lo que queremos cambiar.
+- **[01:30] Participante:** Cuarto, cómo pensamos cambiarlo.
+- **[01:30] Participante:** ¿Cierto?
+- **[01:30] Participante:** Quinto, por qué nos lo lo lo lo nuestra propuesta es diferente, ¿cierto?
+- **[01:30] Participante:** Y y sé esto, ¿cierto?
+- **[01:30] Participante:** Y y y qué es lo que necesitamos demostrar a través de esa propuesta de valor.
+- **[01:30] Participante:** Hay unos errores frecuentes,
+- **[01:30] Participante:** y, pues, voy a pasar rápidamente por acá.
+- **[01:30] Participante:** Porque, pues, ya ya ya lo hemos hablado con pregunta idea, pues empezar con funcionalidades,
+- **[01:30] Participante:** No, señores.
+- **[01:30] Participante:** Volver al trabajo, el dolor, la ganancia prioritaria,
+- **[01:30] Participante:** bien el problema y mirar qué es lo
+- **[01:30] Participante:** ¿cierto?
+- **[01:30] Participante:** Cuando yo hago una buena priorización,
+- **[01:30] Participante:** entiendo, ahí sí ya voy encontrando la función.
+- **[01:30] Participante:** ¿Servir a todos? No, tengo que elegir el segmento, el contexto y el actor principal.
+- **[01:30] Participante:** ¿Prometer el máximo? No.
+- **[01:30] Participante:** Elegir unas ventajas y renunciar a ciertos aspectos,
+- **[01:31] Participante:** en en la propuesta de valor, ¿cierto? Y y, sobre todo, en el producto mínimo de
+- **[01:31] Participante:** Del prototipo, ¿confundir el precio con modelo? No.
+- **[01:31] Participante:** Definir el pagador, el mecanismo, la unidad de recurrencia.
+- **[01:31] Participante:** Definiré
+- **[01:31] Participante:** esos dos esos
+- **[01:31] Participante:** de de declarar, pues, todo ese tema de deseabilidad, factibilidad y viabilidad,
+- **[01:31] Participante:** sin evidencia, ¿cierto?, sin pruebas.
+- **[01:31] Participante:** El DFV, DFV, ¿cierto?
+- **[01:31] Participante:** No, tengo que estar registrando la evidencia,
+- **[01:31] Participante:** los supuestos, y y y sigo con el
+- **[01:31] Participante:** entender todo todo el modelo.
+- **[01:31] Participante:** Entonces, bueno, no, yo creo que
+- **[01:31] Participante:** que ahí tenemos
+- **[01:31] Participante:** aquí como cerrar,
+- **[01:31] Participante:** la idea es que defendemos una lógica de valor,
+- **[01:31] Participante:** no una lista de funciones,
+- **[01:31] Participante:** no una lista de funciones,
+- **[01:31] Participante:** y
+- **[01:32] Participante:** no estamos buscando que el final
+- **[01:32] Participante:** pues, de una vez tengamos una solución terminada, ¿cierto?
+- **[01:32] Participante:** Estamos buscando
+- **[01:32] Participante:** intelectualmente algo mucho más importante,
+- **[01:32] Participante:** una lógica de valor defendible.
+- **[01:32] Participante:** Que vamos a validar en experimentos.
+- **[01:32] Participante:** Entonces,
+- **[01:32] Participante:** que que que que que yo pueda expresar en uno o dos minutos
+- **[01:32] Participante:** oiga, ¿para quién estoy trabajando?
+- **[01:32] Participante:** Qué progreso quiero
+- **[01:32] Participante:** cuál es su propuesta, por qué es diferente,
+- **[01:32] Participante:** cómo se crea y captura valor, ¿cierto?
+- **[01:32] Participante:** Y cuál es el supuesto más importante que necesito validar, o sea,
+- **[01:32] Participante:** negocio digital,
+- **[01:32] Participante:** esa lógica, pues, eventualmente,
+- **[01:32] Participante:** demostrará que existe un mercado, ¿cierto?,
+- **[01:32] Participante:** que va a pagar por esa propuesta, ¿cierto?
+- **[01:32] Participante:** Y proceso y proyecto de transformación digital,
+- **[01:32] Participante:** esto
+- **[01:32] Participante:** suficiente valor
+- **[01:32] Participante:** humano, tecnología, et c, et c,
+- **[01:33] Participante:** ¿cierto?
+- **[01:33] Participante:** Va a ser la adopción, el esfuerzo de adopción,
+- **[01:33] Participante:** va a ser el esfuerzo de hacer el cambio
+- **[01:33] Participante:** cuando llegue esa propuesta de valor.
+- **[01:33] Participante:** En ambos existe el mismo principio,
+- **[01:33] Participante:** es que la tecnología no es el proyecto, o sea,
+- **[01:33] Participante:** proyecto es el cambio que somos capaces de producir
+- **[01:33] Participante:** con esa tecnología, ¿sí?
+- **[01:33] Participante:** Y una buena propuesta valor hace ese cambio
+- **[01:33] Participante:** que sea claro, que sea relevante,
+- **[01:33] Participante:** y sea demostrable, ¿justificar qué?
+- **[01:33] Participante:** Cómo avanzo, justificar
+- **[01:33] Participante:** el progreso, ¿sí?
+- **[01:33] Participante:** Entonces,
+- **[01:33] Participante:** no se enamoren de la solución,
+- **[01:33] Participante:** enamorémonos de de del progreso que quieren producir,
+- **[01:33] Participante:** y
+- **[01:33] Participante:** pues, utilicemos la evidencia diseñar ese
+- **[01:33] Participante:** mejor manera de lograrlo, ¿cierto?
+- **[01:33] Participante:** Vamos a hacer esta propuesta inicial y vamos a experimentarlo.
+- **[01:33] Participante:** No sé si alguien
+- **[01:33] Participante:** quiere con esto, pues, cerramos,
+- **[01:33] Participante:** el día de hoy,
+- **[01:33] Participante:** Alguien quiere contar su potencial propuesta de valor,
+- **[01:34] Participante:** con lo que vimos el día de hoy,
+- **[01:34] Participante:** pues decirle al aire, obviamente,
+- **[01:34] Participante:** esto en cada equipo, pues tendrá sus discusiones, ¿sí?
+- **[01:34] Participante:** Pero pero pero que me cuenten un poquito
+- **[01:34] Participante:** qué qué se imaginan de propuesta de valor después de de de este módulo.
+- **[01:34] Participante:** Pues
+- **[01:34] Participante:** Pues,
+- **[01:34] Participante:** Carlos, a ver,
+- **[01:34] Participante:** no no te voy a expresar exactamente, pues, en en en prosa la
+- **[01:34] Participante:** la la propuesta de valor, pero sí creo que en el caso nuestro, como son modelos de apoyo,
+- **[01:34] Participante:** para la toma de decisiones,
+- **[01:34] Participante:** ¿sí?, aquí hay algunos atributos
+- **[01:34] Participante:** que tú mencionaste que que que seguramente van a ser
+- **[01:34] Participante:** van a ser propios de esa de esa propuesta valor, como tiene que
+- **[01:34] Participante:** como como es, por ejemplo, el aprovechamiento del conocimiento institucional.
+- **[01:34] Participante:** ¿Sí?
+- **[01:34] Participante:** Para que para que eso deje de ser disperso o depender de personas específicas.
+- **[01:35] Participante:** O, por ejemplo, el tema de trazabilidad y auditabilidad, donde cada evaluación o análisis
+- **[01:35] Participante:** que se haga quede respaldada
+- **[01:35] Participante:** con criterios y evidencias de que que se puedan verificar. ¿Sí?
+- **[01:35] Participante:** O o el de la mayor calidad de de toma de decisiones.
+- **[01:35] Participante:** ¿Sí?
+- **[01:35] Participante:** Donde, obviamente, apoyado por ese instrumento, que es la tecnología con analítica y
+- **[01:35] Participante:** y que nos llega a tener menos
+- **[01:35] Participante:** menos riesgos en en errores humanos, ¿no?
+- **[01:35] Participante:** Digamos que que lo veo en algunos atributos que
+- **[01:35] Participante:** alguna forma generan valor.
+- **[01:35] Participante:** ¿Sí? Obviamente, cuando hablamos de esa de esas de ese
+- **[01:35] Participante:** digamos, de soluciones que apoyan decisiones,
+- **[01:35] Participante:** a veces uno siempre busca todo cuantificarlo.
+- **[01:35] Participante:** ¿Cómo lo llevo realmente a plata?
+- **[01:35] Participante:** ¿Sí? O lo que decías, ¿cómo lo llevo a que esa decisión va a ser
+- **[01:35] Participante:** de mayor calidad y en menor tiempo
+- **[01:35] Participante:** lograr ese tiempo no es una no es algo sencillo.
+- **[01:35] Participante:** ¿Sí?
+- **[01:35] Participante:** Pero pero por lo menos, pues vemos elementos que
+- **[01:36] Participante:** que sí se pueden demostrar
+- **[01:36] Participante:** que que que que son una una una apuesta o una una
+- **[01:36] Participante:** de valor
+- **[01:36] Participante:** importante para la empresa.
+- **[01:36] Participante:** Muy bien, muchas gracias, Gustavo.
+- **[01:36] Participante:** ¿Alguien más para cerrar?
+- **[01:36] Participante:** Hay
+- **[01:36] Participante:** Felipe y después Alejandro.
