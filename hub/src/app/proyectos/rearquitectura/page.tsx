@@ -1,5 +1,7 @@
 import HubHeader from "@/components/HubHeader";
 import HubFooter from "@/components/HubFooter";
+import WeeklySelector from "../seguimiento/WeeklySelector";
+import RoadmapGantt from "../seguimiento/RoadmapGantt";
 
 // Estructura: Promp/Documento de Seguimiento.md (plantilla de seguimiento de proyecto)
 // Insumo: Rearquitectura/Proyectos E2E - Re-arquitectura.md
@@ -216,19 +218,46 @@ export default function RearquitecturaPage() {
 
         {/* 🗺️ Roadmap */}
         <Section icon="🗺️" title="Roadmap">
-          <Field term="Fase 1 (MVP / Q1)">Duplicación segura de pantallas actuales, reorganización modular por afinidad funcional, exploración de tabs alineados al UI Kit v2.0.</Field>
-          <Field term="Fase 2 (Escala / Q2)">Telemetría de comportamiento de usuario, pruebas de usabilidad con prototipos de alta fidelidad, arquitectura C4 N2-4 y diagrama PERT.</Field>
-          <Field term="Próximos pasos inmediatos">Definir la Estrategia de Comunicación con Marketing (hoy marcada N/A en el doc fuente).</Field>
+          <RoadmapGantt
+            axisStart="2026-07"
+            axisEnd="2026-12"
+            fases={[
+              {
+                nombre: "Fase 1 (MVP / Q1)",
+                estado: "completada",
+                inicio: "2026-07",
+                fin: "2026-07",
+                detalle: "Duplicación segura de pantallas actuales, reorganización modular por afinidad funcional, exploración de tabs alineados al UI Kit v2.0.",
+              },
+              {
+                nombre: "Fase 2 (Escala / Q2)",
+                estado: "en-curso",
+                inicio: "2026-08",
+                fin: "2026-09",
+                detalle: "Telemetría de comportamiento de usuario, pruebas de usabilidad con prototipos de alta fidelidad, arquitectura C4 N2-4 y diagrama PERT. En curso: pruebas de QA en integración con proveedores.",
+              },
+              {
+                nombre: "Próximos pasos inmediatos",
+                estado: "bloqueada",
+                inicio: "2026-09",
+                fin: "2026-10",
+                detalle: "Definir la Estrategia de Comunicación con Marketing (hoy marcada N/A en el doc fuente).",
+                bloqueo: "Estrategia de Comunicación sin definir",
+              },
+            ]}
+            nota="Fechas estimadas a partir del estado reportado en el Weekly Status más reciente (semana del 25 de agosto de 2026). Se ajustan cuando el equipo confirme fechas exactas."
+          />
         </Section>
 
         {/* 🗓️ Weekly Status */}
         <Section icon="🗓️" title="Weekly Status (Sincronización Semanal)">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
-            <Field term="Semana del">{pending}</Field>
-            <Field term="Estado general">{pending}</Field>
+          <div style={{ marginBottom: 24, paddingBottom: 24, borderBottom: "1px solid var(--border)" }}>
+            <WeeklySelector />
           </div>
-          <Field term="Resumen de la semana">{pending} — sin registros todavía.</Field>
-          <Field term="Retos y Bloqueos">Estrategia de Comunicación (Marketing) sin definir.</Field>
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <Field term="Resumen de la semana">Avance en la ejecución de pruebas de aseguramiento de calidad (QA) en integración con proveedores.</Field>
+            <Field term="Retos y Bloqueos">Estrategia de Comunicación (Marketing) sin definir.</Field>
+          </div>
         </Section>
 
         {/* 📊 Métricas de Seguimiento */}

@@ -3,6 +3,13 @@ import Breadcrumb from "@/components/Breadcrumb";
 
 const guias = [
   {
+    slug: "entendimiento-360-ecosistema",
+    icon: "🧭",
+    title: "Entendimiento 360 del ecosistema",
+    description: "Qué sabemos hoy de arquetipos/user personas y journeys de experiencia y servicio, célula por célula — por usuario y por proceso.",
+    tag: "Service design · Proyecto PRO-001",
+  },
+  {
     slug: "conceptos-basicos",
     icon: "🧭",
     title: "Conceptos básicos",
@@ -29,6 +36,34 @@ const guias = [
     title: "Nomenclatura de fases de proyecto",
     description: "Cómo se nombran proyectos, fases (Epic) y subfases (tarea) en Jira. Borrador para revisar con Laura Contreras.",
     tag: "Referencia · Nomenclatura",
+  },
+  {
+    slug: "product-lab",
+    icon: "🧪",
+    title: "Product Lab",
+    description: "Índice de sesiones de Product Lab 2.0 — fecha, facilitador y punteros al detalle completo en el Dropi Brain (Confluence).",
+    tag: "Referencia · Product Lab",
+  },
+  {
+    slug: "userpilot-mcp",
+    icon: "🔌",
+    title: "Documentar tu vertical con UserPilot + Claude Code",
+    description: "Cómo conectar UserPilot vía MCP con la cuenta compartida del equipo y el prompt para replicar la doc de /proveedores en tu propio vertical.",
+    tag: "Onboarding · Nuevo vertical",
+  },
+  {
+    slug: "metricas",
+    icon: "📊",
+    title: "Métricas",
+    description: "Métricas clave del ecosistema, activación (TTFO/TTV), retención/churn mensual y clasificación de madurez operativa — con cifras y metas de referencia.",
+    tag: "Referencia · Métricas",
+  },
+  {
+    slug: "entendimiento-negocio",
+    icon: "🧠",
+    title: "Entendimiento del Negocio",
+    description: "Roles (Supplier vs. Marca/Emprendedor), comportamiento algorítmico, las dos lentes de análisis y el modelo de Funnel, Palancas y Loops del ecosistema Dropi.",
+    tag: "Referencia · Negocio",
   },
 ];
 

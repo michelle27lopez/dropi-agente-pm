@@ -2,6 +2,19 @@ function truncate(text: string, max: number) {
   return text.length > max ? text.slice(0, max - 1).trimEnd() + "…" : text;
 }
 
+// Limpia los tokens de formato ("## ", "- ", líneas "---") antes de recortar
+// para la fila/tarjeta de la lista — el modal sí los interpreta, la lista
+// solo necesita texto corrido.
+function stripMarkup(text: string) {
+  return text
+    .split("\n")
+    .filter((line) => line.trim() !== "---")
+    .map((line) => line.replace(/^#+\s*/, "").replace(/^-\s*/, ""))
+    .join(" ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 // Preview de una fila de `celula_updates` para la tarjeta/fila de la lista
 // (2026-08-17, Jaime) — el detalle completo se sigue viendo tal cual al abrir
 // el modal. La mayoría de `content` es texto libre (markdown a mano), pero al
@@ -24,5 +37,5 @@ export function previewUpdateContent(content: string): string {
       return "Resumen con métricas — ver detalle.";
     }
   }
-  return truncate(content, 160);
+  return truncate(stripMarkup(content), 160);
 }

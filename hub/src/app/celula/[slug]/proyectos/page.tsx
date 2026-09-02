@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { MoreVertical, Search, Trash2 } from "lucide-react";
+import { ClipboardList, MoreVertical, Search, Trash2 } from "lucide-react";
 import HubFooter from "@/components/HubFooter";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
@@ -62,6 +62,22 @@ function parsePrototypeUrls(raw: string | null): string[] {
     .filter((u) => u.startsWith("/") || u.startsWith("http"));
 }
 
+type CelulaUpdate = { id: string; week_date: string; title: string; content: string; url: string | null; tipo: "weekly" | "cell_board" };
+
+// Mismo parser línea a línea que /celula/[slug]/updates: "## " es un
+// subtítulo, "---" es un separador, línea vacía es un respiro, y todo lo
+// demás es texto plano (la convención de los updates ya escritos usa
+// prefijos de emoji por línea en vez de bullets de markdown reales).
+function renderUpdateContent(content: string) {
+  return content.split("\n").map((line, i) => {
+    const trimmed = line.trim();
+    if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid var(--border)", margin: "16px 0" }} />;
+    if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
+    if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
+    return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
+  });
+}
+
 export default function ProyectosPorCelulaPage() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
@@ -71,10 +87,17 @@ export default function ProyectosPorCelulaPage() {
   const [celulaId, setCelulaId] = useState<string | null>(null);
   const [celulaNombre, setCelulaNombre] = useState<string | null>(null);
   const [proyectosReales, setProyectosReales] = useState<Proyecto[]>([]);
+  const [celulaUpdates, setCelulaUpdates] = useState<CelulaUpdate[]>([]);
+  const [openWeekly, setOpenWeekly] = useState(false);
+  const [selectedWeeklyId, setSelectedWeeklyId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Proyecto | null>(null);
   // Alta de POC / Delivery Proyecto desde la tabla (menú "⋮" de cada fila
   // Discovery) — evita entrar a la ficha solo para colgar un hijo.
   const [crearTarget, setCrearTarget] = useState<{ parent: Proyecto; tipo: "POC" | "Delivery Proyecto" } | null>(null);
+  // Alta de un Discovery project raíz (sin padre). El botón vivía solo en la
+  // home de la célula (/celula/[slug]), que dejó de estar en el nav global —
+  // "Proyectos" del sidebar entra acá, así que el botón tiene que estar acá.
+  const [showCrearRaiz, setShowCrearRaiz] = useState(false);
   // Modo lectura (2026-08-17, Jaime): mismo criterio que la home de célula —
   // ver la tabla de una célula que no es la tuya ya no deja editar/eliminar
   // sin distinción visual. "Editar de todos modos" es el escape hatch.
@@ -98,6 +121,7 @@ export default function ProyectosPorCelulaPage() {
         setCelulaNombre(data?.nombre ?? null);
         if (Array.isArray(data?.proyectos)) setProyectosReales(data.proyectos);
         else setProyectosReales([]);
+        setCelulaUpdates(Array.isArray(data?.updates) ? data.updates : []);
       })
       .finally(() => setLoading(false));
 
@@ -189,6 +213,24 @@ export default function ProyectosPorCelulaPage() {
     setCrearTarget(null);
   }
 
+  // Crea un Discovery project raíz (type "Idea", handoff "Experimentación")
+  // en la célula de la URL — mismo POST /api/celulas/[slug] que usa la home
+  // de la célula. El servidor exige ser miembro de esa célula.
+  async function handleCrearRaiz(name: string, summary: string) {
+    const res = await fetch(`/api/celulas/${params.slug}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, summary }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => null);
+      throw new Error(data?.error ?? "No se pudo crear el proyecto.");
+    }
+    const created = await res.json();
+    setProyectosReales((prev) => [...prev, created]);
+    setShowCrearRaiz(false);
+  }
+
   // POC hermanos (mismo Discovery padre) entre los que un Delivery Proyecto
   // nuevo puede elegir su `related_poc_id` opcional.
   const siblingPocs = crearTarget
@@ -221,7 +263,18 @@ export default function ProyectosPorCelulaPage() {
   }
 
   const proyectos = toRows(proyectosReales.filter((p) => p.type !== "POC"));
-  const poc = toRows(proyectosReales.filter((p) => p.type === "POC"));
+
+  // Los POC se agrupan por proyecto padre — mismo orden en que aparece el
+  // padre en la tabla de arriba — en vez de quedar intercalados por fecha de
+  // creación. `sort` es estable, así que dentro de cada grupo se conserva el
+  // orden original.
+  const parentOrder = new Map<string, number>();
+  proyectos.forEach((row, i) => parentOrder.set(row.proyecto.id, i));
+  const poc = toRows(proyectosReales.filter((p) => p.type === "POC")).sort((a, b) => {
+    const ao = a.proyecto.parent_project_id ? parentOrder.get(a.proyecto.parent_project_id) ?? Infinity : Infinity;
+    const bo = b.proyecto.parent_project_id ? parentOrder.get(b.proyecto.parent_project_id) ?? Infinity : Infinity;
+    return ao - bo;
+  });
 
   const hasResults = proyectos.length + poc.length > 0;
 
@@ -236,12 +289,81 @@ export default function ProyectosPorCelulaPage() {
     childCounts.set(p.parent_project_id, entry);
   }
 
+  // Color determinístico por Discovery project que ya tiene al menos un POC
+  // — antes no había forma de saber, mirando solo la tabla de "Pruebas de
+  // concepto", a qué proyecto pertenecía cada fila. Se pinta un punto del
+  // mismo color en el proyecto padre y en cada uno de sus POC.
+  const PARENT_COLORS = ["#7C3AED", "#0E9F6E", "#DC6803", "#DB2777", "#2563EB", "#B45309", "#0891B2", "#BE123C"];
+  const parentInfoById = new Map<string, { color: string; name: string }>();
+  {
+    let colorIdx = 0;
+    for (const p of proyectosReales) {
+      if (p.type === "POC" || p.type === "Delivery Proyecto" || p.type === "Following") continue;
+      const counts = childCounts.get(p.id);
+      if (counts && counts.poc > 0) {
+        parentInfoById.set(p.id, { color: PARENT_COLORS[colorIdx % PARENT_COLORS.length], name: p.name });
+        colorIdx++;
+      }
+    }
+  }
+
+  // La columna `tipo` (migración 051_celula_updates_tipo.sql) todavía no se
+  // ha corrido en producción — mientras no exista, todo update llega sin
+  // `tipo` y el filtro estricto de abajo nunca encuentra nada. Fallback: si
+  // hay al menos un update marcado "weekly" de verdad, usar solo esos (ya
+  // migrado); si no, mostrar el más reciente de la célula sin distinguir de
+  // Cell Board. En cuanto alguien corra la migración, esto se vuelve estricto
+  // solo con los datos, sin tocar código otra vez.
+  const weeklyEtiquetados = celulaUpdates.filter((u) => u.tipo === "weekly");
+  const weeklyHistorial = (weeklyEtiquetados.length > 0 ? weeklyEtiquetados : celulaUpdates)
+    .slice()
+    .sort((a, b) => b.week_date.localeCompare(a.week_date));
+  const activeWeekly = weeklyHistorial.find((u) => u.id === selectedWeeklyId) ?? weeklyHistorial[0] ?? null;
+
+  function formatWeekDate(iso: string) {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d).toLocaleDateString("es-CO", { day: "numeric", month: "short", year: "numeric" });
+  }
+
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <div className="gnav-page" style={{ flex: 1, maxWidth: 1280, margin: "0 auto", width: "100%" }}>
-        <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>
-          Proyectos {celulaNombre && <span style={{ color: "var(--muted)", fontWeight: 600 }}>· {celulaNombre}</span>}
-        </h1>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
+          <h1 style={{ fontSize: 24, fontWeight: 800, color: "var(--fg)" }}>
+            Proyectos {celulaNombre && <span style={{ color: "var(--muted)", fontWeight: 600 }}>· {celulaNombre}</span>}
+          </h1>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedWeeklyId(null);
+                setOpenWeekly(true);
+              }}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                fontSize: 13, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
+                padding: "9px 16px", borderRadius: 10,
+                border: "1px solid var(--dropi)", background: "var(--dropi-light)", color: "var(--dropi)",
+              }}
+            >
+              <ClipboardList size={16} />
+              Weekly de Producto
+            </button>
+            {canEditar && (
+              <button
+                type="button"
+                onClick={() => setShowCrearRaiz(true)}
+                style={{
+                  fontSize: 12, fontWeight: 700, color: "#F77F00", fontFamily: "inherit",
+                  background: "#FFF7ED", border: "1px solid #FFEDD5", borderRadius: 8,
+                  padding: "8px 14px", cursor: "pointer",
+                }}
+              >
+                + Nuevo proyecto
+              </button>
+            )}
+          </div>
+        </div>
 
         {!esCelulaPropia && isSuperAdmin && (
           <div style={{ marginTop: 20 }}>
@@ -335,6 +457,7 @@ export default function ProyectosPorCelulaPage() {
               onDeleteClick={setDeleteTarget}
               onCrearHijo={(parent, tipo) => setCrearTarget({ parent, tipo })}
               childCounts={childCounts}
+              parentInfoById={parentInfoById}
               canEditar={canEditar}
             />
           </div>
@@ -348,6 +471,7 @@ export default function ProyectosPorCelulaPage() {
             onDeleteClick={setDeleteTarget}
             onCrearHijo={(parent, tipo) => setCrearTarget({ parent, tipo })}
             childCounts={childCounts}
+            parentInfoById={parentInfoById}
             canEditar={canEditar}
           />
         )}
@@ -405,6 +529,91 @@ export default function ProyectosPorCelulaPage() {
           }
         />
       )}
+
+      {openWeekly && (
+        <div
+          onClick={() => setOpenWeekly(false)}
+          style={{
+            position: "fixed", inset: 0, background: "rgba(10,22,40,0.55)",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            padding: 24, zIndex: 50,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              background: "var(--card)", borderRadius: 16, maxWidth: 640, width: "100%",
+              maxHeight: "80vh", overflowY: "auto", padding: "28px 28px 24px",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+            }}
+          >
+            {activeWeekly ? (
+              <>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 14 }}>
+                  <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--fg)", lineHeight: 1.3, margin: 0 }}>Weekly de Producto</h2>
+                  <button
+                    onClick={() => setOpenWeekly(false)}
+                    style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "var(--muted)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                    aria-label="Cerrar"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                {weeklyHistorial.length > 1 && (
+                  <div style={{ display: "flex", gap: 6, overflowX: "auto", paddingBottom: 4, marginBottom: 18 }}>
+                    {weeklyHistorial.map((u) => (
+                      <button
+                        key={u.id}
+                        onClick={() => setSelectedWeeklyId(u.id)}
+                        style={{
+                          flexShrink: 0, fontSize: 11.5, fontWeight: 700, fontFamily: "inherit", cursor: "pointer",
+                          padding: "6px 12px", borderRadius: 999, whiteSpace: "nowrap",
+                          border: `1px solid ${u.id === activeWeekly.id ? "var(--dropi)" : "var(--border)"}`,
+                          background: u.id === activeWeekly.id ? "var(--dropi-light)" : "var(--card)",
+                          color: u.id === activeWeekly.id ? "var(--dropi)" : "var(--muted)",
+                        }}
+                      >
+                        {formatWeekDate(u.week_date)}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <h3 style={{ fontSize: 14.5, fontWeight: 800, color: "var(--fg)", lineHeight: 1.35, margin: "0 0 2px" }}>{activeWeekly.title}</h3>
+                <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 0, marginBottom: 18 }}>{formatWeekDate(activeWeekly.week_date)}</p>
+                <div style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7 }}>
+                  {renderUpdateContent(activeWeekly.content)}
+                </div>
+              </>
+            ) : (
+              <>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
+                  <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--fg)", margin: 0 }}>Weekly de Producto</h2>
+                  <button
+                    onClick={() => setOpenWeekly(false)}
+                    style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "var(--muted)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                    aria-label="Cerrar"
+                  >
+                    ×
+                  </button>
+                </div>
+                <p style={{ fontSize: 13, color: "var(--muted)", marginTop: 12 }}>
+                  Aún no hay un weekly de producto publicado para esta célula.
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {showCrearRaiz && (
+        <CrearRaizModal
+          celulaNombre={celulaNombre}
+          onCancel={() => setShowCrearRaiz(false)}
+          onConfirm={handleCrearRaiz}
+        />
+      )}
     </main>
   );
 }
@@ -421,6 +630,7 @@ function ProjectsTable({
   onDeleteClick,
   onCrearHijo,
   childCounts,
+  parentInfoById,
   canEditar,
 }: {
   title: string;
@@ -430,6 +640,7 @@ function ProjectsTable({
   onDeleteClick: (proyecto: Proyecto) => void;
   onCrearHijo: (parent: Proyecto, tipo: "POC" | "Delivery Proyecto") => void;
   childCounts: Map<string, { poc: number; delivery: number }>;
+  parentInfoById: Map<string, { color: string; name: string }>;
   canEditar: boolean;
 }) {
   return (
@@ -474,15 +685,29 @@ function ProjectsTable({
                     <span className="proytable-icon">{item.icon}</span>
                   </td>
                   <td>
-                    <a
-                      href={item.url}
-                      target={isExternal ? "_blank" : undefined}
-                      rel={isExternal ? "noopener noreferrer" : undefined}
-                      className="proytable-name"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {item.name}
-                    </a>
+                    <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                      {parentInfoById.has(proyecto.id) && (
+                        <span
+                          title="Este proyecto tiene POCs asociados"
+                          style={{ width: 8, height: 8, borderRadius: "50%", background: parentInfoById.get(proyecto.id)!.color, flexShrink: 0 }}
+                        />
+                      )}
+                      <a
+                        href={item.url}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
+                        className="proytable-name"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {item.name}
+                      </a>
+                    </div>
+                    {proyecto.type === "POC" && proyecto.parent_project_id && parentInfoById.has(proyecto.parent_project_id) && (
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 3 }}>
+                        <span style={{ width: 7, height: 7, borderRadius: "50%", background: parentInfoById.get(proyecto.parent_project_id)!.color, flexShrink: 0 }} />
+                        <span style={{ fontSize: 10.5, color: "var(--muted)" }}>{parentInfoById.get(proyecto.parent_project_id)!.name}</span>
+                      </div>
+                    )}
                   </td>
                   <td>
                     <span className="proytable-code">{proyecto.project_code ?? "—"}</span>
@@ -875,6 +1100,108 @@ function CrearHijoModal({
             style={{
               fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8, border: "none",
               background: puedeCrear ? acento : "var(--gray-200)", color: puedeCrear ? "#fff" : "var(--muted)",
+              cursor: puedeCrear && !saving ? "pointer" : "not-allowed",
+            }}
+          >
+            {saving ? "Creando…" : "Crear"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Alta de un Discovery project raíz (sin padre). Nace como `type: "Idea"` /
+// handoff "Experimentación" — el arranque de fase Discovery. Después se
+// promueve a POC/Delivery desde el menú "⋮" de su fila.
+function CrearRaizModal({
+  celulaNombre,
+  onCancel,
+  onConfirm,
+}: {
+  celulaNombre: string | null;
+  onCancel: () => void;
+  onConfirm: (name: string, summary: string) => Promise<void>;
+}) {
+  const [name, setName] = useState("");
+  const [summary, setSummary] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const puedeCrear = name.trim().length > 0 && summary.trim().length > 0;
+
+  async function handleConfirm() {
+    setSaving(true);
+    setError(null);
+    try {
+      await onConfirm(name.trim(), summary.trim());
+    } catch (e: any) {
+      setError(e.message ?? "No se pudo crear.");
+      setSaving(false);
+    }
+  }
+
+  const inputStyle: CSSProperties = {
+    width: "100%", padding: "8px 12px", borderRadius: 8, border: "1px solid var(--border)",
+    fontSize: 13, boxSizing: "border-box", fontFamily: "inherit", background: "var(--card)", color: "var(--fg)",
+  };
+
+  return (
+    <div
+      onClick={onCancel}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(15,23,42,0.6)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: 24, zIndex: 100, backdropFilter: "blur(4px)",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+          maxWidth: 440, width: "100%", padding: 24,
+        }}
+      >
+        <h3 style={{ fontSize: 16, fontWeight: 800, color: "var(--fg)", margin: "0 0 4px" }}>
+          Nuevo proyecto
+        </h3>
+        <p style={{ fontSize: 13, color: "var(--muted)", margin: "0 0 16px", lineHeight: 1.5 }}>
+          Entra en fase <strong>Discovery</strong>{celulaNombre ? `, en ${celulaNombre}` : ""}. Luego se le cuelgan POC y Delivery desde su fila.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <input
+            autoFocus
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nombre del proyecto"
+            style={inputStyle}
+          />
+          <textarea
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+            placeholder="De qué se trata"
+            rows={3}
+            style={{ ...inputStyle, resize: "vertical" }}
+          />
+        </div>
+        {error && <p style={{ fontSize: 12, color: "#DC2626", margin: "12px 0 0" }}>{error}</p>}
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 16 }}>
+          <button
+            type="button"
+            onClick={onCancel}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8,
+              border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)", cursor: "pointer",
+            }}
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            disabled={!puedeCrear || saving}
+            onClick={handleConfirm}
+            style={{
+              fontSize: 13, fontWeight: 600, fontFamily: "inherit", padding: "8px 14px", borderRadius: 8, border: "none",
+              background: puedeCrear ? "#F77F00" : "var(--gray-200)", color: puedeCrear ? "#fff" : "var(--muted)",
               cursor: puedeCrear && !saving ? "pointer" : "not-allowed",
             }}
           >

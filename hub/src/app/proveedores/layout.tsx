@@ -15,6 +15,7 @@ const NAV: { href: string; icon: string; label: string; sub: string }[] = [
   { href: "/proveedores/satisfaccion",    icon: "📊", label: "Satisfacción",     sub: "NPS, CSAT y CES" },
   { href: "/proveedores/funcionalidades", icon: "🧱", label: "Funcionalidades",  sub: "Producción y pipeline" },
   { href: "/proveedores/onboarding",      icon: "🛬", label: "Onboarding",       sub: "Blueprint de servicio" },
+  { href: "/proveedores/blueprint",       icon: "🗺️", label: "Blueprint general", sub: "Uso completo de la plataforma" },
   { href: "/proveedores/herramientas",    icon: "🧰", label: "Herramientas",     sub: "Ecosistema de software" },
 ];
 

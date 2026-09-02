@@ -423,29 +423,74 @@ export default function CelulaHomePage() {
               onClick={(e) => e.stopPropagation()}
               style={{
                 background: "#ffffff", border: "1px solid #e2e8f0", borderRadius: 16, maxWidth: 640, width: "100%",
-                maxHeight: "80vh", overflowY: "auto", padding: "28px",
+                maxHeight: "80vh", overflowY: "auto", padding: 0,
                 boxShadow: "0 20px 60px rgba(0,0,0,0.15)", color: "#0f172a"
               }}
             >
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
-                <h2 style={{ fontSize: 17, fontWeight: 800, color: "#0f172a", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
+              <div
+                style={{
+                  position: "sticky", top: 0, background: "#ffffff", zIndex: 1,
+                  display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16,
+                  padding: "24px 28px 16px", borderBottom: "1px solid #e2e8f0",
+                }}
+              >
+                <div>
+                  <h2 style={{ fontSize: 17, fontWeight: 800, color: "#0f172a", lineHeight: 1.3, margin: "0 0 8px" }}>{openUpdate.title}</h2>
+                  <span style={{
+                    display: "inline-flex", alignItems: "center", gap: 4, fontSize: 11.5, fontWeight: 700,
+                    color: "#6D28D9", background: "#F5F3FF", borderRadius: 999, padding: "3px 10px",
+                  }}>
+                    🗓️ {openUpdate.week_date}
+                  </span>
+                </div>
                 <button
                   onClick={() => setOpenUpdate(null)}
-                  style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "#64748b", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                  style={{
+                    flexShrink: 0, width: 28, height: 28, borderRadius: "50%",
+                    background: "#f8fafc", border: "1px solid #e2e8f0",
+                    fontSize: 16, color: "#64748b", cursor: "pointer", lineHeight: 1,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}
                   aria-label="Cerrar"
                 >
                   ×
                 </button>
               </div>
-              <p style={{ fontSize: 12, color: "#64748b", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
-              <div style={{ fontSize: 13.5, color: "#334155", lineHeight: 1.7 }}>
-                {openUpdate.content.split("\n").map((line, i) => {
-                  const trimmed = line.trim();
-                  if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid #e2e8f0", margin: "16px 0" }} />;
-                  if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
-                  if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
-                  return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
-                })}
+              <div style={{ fontSize: 13.5, color: "#334155", lineHeight: 1.7, padding: "20px 28px 28px" }}>
+                {(() => {
+                  const palette = ["#7C3AED", "#2563EB", "#DB2777", "#F77F00", "#0D9488", "#16A34A", "#475569"];
+                  let headingIdx = -1;
+                  return openUpdate.content.split("\n").map((line, i) => {
+                    const trimmed = line.trim();
+                    if (trimmed === "---") return <div key={i} style={{ height: 1, background: "#e2e8f0", margin: "20px 0" }} />;
+                    if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
+                    if (trimmed.startsWith("## ")) {
+                      headingIdx += 1;
+                      const color = palette[headingIdx % palette.length];
+                      return (
+                        <h3 key={i} style={{
+                          display: "flex", alignItems: "center", gap: 8,
+                          fontSize: 15, fontWeight: 800, margin: headingIdx === 0 ? "0 0 10px" : "24px 0 10px", color: "#0f172a",
+                        }}>
+                          <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                          {trimmed.slice(3)}
+                        </h3>
+                      );
+                    }
+                    if (trimmed.startsWith("- ")) {
+                      return (
+                        <div key={i} style={{ display: "flex", gap: 8, margin: "0 0 6px" }}>
+                          <span aria-hidden style={{ color: "#64748b", flexShrink: 0 }}>•</span>
+                          <span style={{ whiteSpace: "pre-wrap" }}>{trimmed.slice(2)}</span>
+                        </div>
+                      );
+                    }
+                    if (trimmed.endsWith(":") && trimmed.length > 1) {
+                      return <p key={i} style={{ margin: "10px 0 4px", fontWeight: 700 }}>{trimmed}</p>;
+                    }
+                    return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
+                  });
+                })()}
               </div>
             </div>
           </div>
@@ -650,29 +695,74 @@ export default function CelulaHomePage() {
             onClick={(e) => e.stopPropagation()}
             style={{
               background: "var(--card)", borderRadius: 16, maxWidth: 640, width: "100%",
-              maxHeight: "80vh", overflowY: "auto", padding: "28px 28px 24px",
+              maxHeight: "80vh", overflowY: "auto", padding: 0,
               boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
             }}
           >
-            <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16, marginBottom: 4 }}>
-              <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--fg)", lineHeight: 1.3, margin: 0 }}>{openUpdate.title}</h2>
+            <div
+              style={{
+                position: "sticky", top: 0, background: "var(--card)", zIndex: 1,
+                display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16,
+                padding: "24px 28px 16px", borderBottom: "1px solid var(--border)",
+              }}
+            >
+              <div>
+                <h2 style={{ fontSize: 17, fontWeight: 800, color: "var(--fg)", lineHeight: 1.3, margin: "0 0 8px" }}>{openUpdate.title}</h2>
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: 4, fontSize: 11.5, fontWeight: 700,
+                  color: "#6D28D9", background: "#F5F3FF", borderRadius: 999, padding: "3px 10px",
+                }}>
+                  🗓️ {openUpdate.week_date}
+                </span>
+              </div>
               <button
                 onClick={() => setOpenUpdate(null)}
-                style={{ flexShrink: 0, background: "none", border: "none", fontSize: 20, color: "var(--muted)", cursor: "pointer", lineHeight: 1, padding: 4 }}
+                style={{
+                  flexShrink: 0, width: 28, height: 28, borderRadius: "50%",
+                  background: "var(--bg)", border: "1px solid var(--border)",
+                  fontSize: 16, color: "var(--muted)", cursor: "pointer", lineHeight: 1,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}
                 aria-label="Cerrar"
               >
                 ×
               </button>
             </div>
-            <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 0, marginBottom: 18 }}>{openUpdate.week_date}</p>
-            <div style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7 }}>
-              {openUpdate.content.split("\n").map((line, i) => {
-                const trimmed = line.trim();
-                if (trimmed === "---") return <hr key={i} style={{ border: "none", borderTop: "1px solid var(--border)", margin: "16px 0" }} />;
-                if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
-                if (trimmed.startsWith("## ")) return <h3 key={i} style={{ fontSize: 15, fontWeight: 800, margin: "0 0 8px" }}>{trimmed.slice(3)}</h3>;
-                return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
-              })}
+            <div style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7, padding: "20px 28px 28px" }}>
+              {(() => {
+                const palette = ["#7C3AED", "#2563EB", "#DB2777", "#F77F00", "#0D9488", "#16A34A", "#475569"];
+                let headingIdx = -1;
+                return openUpdate.content.split("\n").map((line, i) => {
+                  const trimmed = line.trim();
+                  if (trimmed === "---") return <div key={i} style={{ height: 1, background: "var(--border)", margin: "20px 0" }} />;
+                  if (trimmed === "") return <div key={i} style={{ height: 6 }} />;
+                  if (trimmed.startsWith("## ")) {
+                    headingIdx += 1;
+                    const color = palette[headingIdx % palette.length];
+                    return (
+                      <h3 key={i} style={{
+                        display: "flex", alignItems: "center", gap: 8,
+                        fontSize: 15, fontWeight: 800, margin: headingIdx === 0 ? "0 0 10px" : "24px 0 10px", color: "var(--fg)",
+                      }}>
+                        <span aria-hidden style={{ width: 8, height: 8, borderRadius: "50%", background: color, flexShrink: 0 }} />
+                        {trimmed.slice(3)}
+                      </h3>
+                    );
+                  }
+                  if (trimmed.startsWith("- ")) {
+                    return (
+                      <div key={i} style={{ display: "flex", gap: 8, margin: "0 0 6px" }}>
+                        <span aria-hidden style={{ color: "var(--muted)", flexShrink: 0 }}>•</span>
+                        <span style={{ whiteSpace: "pre-wrap" }}>{trimmed.slice(2)}</span>
+                      </div>
+                    );
+                  }
+                  if (trimmed.endsWith(":") && trimmed.length > 1) {
+                    return <p key={i} style={{ margin: "10px 0 4px", fontWeight: 700 }}>{trimmed}</p>;
+                  }
+                  return <p key={i} style={{ margin: "0 0 4px", whiteSpace: "pre-wrap" }}>{line}</p>;
+                });
+              })()}
             </div>
           </div>
         </div>
