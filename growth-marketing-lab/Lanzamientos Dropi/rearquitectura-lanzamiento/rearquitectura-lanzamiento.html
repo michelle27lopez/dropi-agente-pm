@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rearquitectura — Centro de Comando</title>
+<title>Rearquitectura — Lanzamiento</title>
 <style>
   :root{
     --page-bg:#f7f7f5;
@@ -515,14 +515,15 @@
             BRIEF = instrucciones directas de Catherin para este artefacto
    ================================================================================ */
 const DATA = {
-  meta:{ docTitle:"Rearquitectura Dropi — Centro de Comando de Lanzamiento" },
+  meta:{ docTitle:"Rearquitectura — Lanzamiento" },
 
   exec:{
     tier:"Tier 3 — Lanzamiento estratégico",
     fecha:"12 de septiembre de 2026",
     fechaNota:"Lanzamiento en ExpoWinners + canales internos, 3 días",
-    alcanceTotal:"174.841",
+    alcanceTotal:"174.841 usuarios activos",
     alcanceDetalle:"159.142 dropshippers + 15.699 proveedores",
+    alcanceNota:"*Usuarios con los que se mide la adopción.",
     objetivo:"Migrar limpia y eficazmente a todos los usuarios a la nueva arquitectura, garantizando adaptabilidad rápida y cero interrupción.",
     comportamiento:["Entender","Encontrar","Usar","Descubrir","Adoptar"]
   },
@@ -927,7 +928,7 @@ function renderHero(){
       '<div class="exec-grid">'+
         '<div class="exec-tile"><div class="exec-label">Tier</div><div class="exec-value small">'+esc(DATA.exec.tier)+'</div></div>'+
         '<div class="exec-tile"><div class="exec-label">Fecha</div><div class="exec-value">'+esc(DATA.exec.fecha)+'</div><div class="kpi-sub">'+esc(DATA.exec.fechaNota)+'</div></div>'+
-        '<div class="exec-tile"><div class="exec-label">Alcance</div><div class="exec-value">'+esc(DATA.exec.alcanceTotal)+'</div><div class="kpi-sub">'+esc(DATA.exec.alcanceDetalle)+'</div></div>'+
+        '<div class="exec-tile"><div class="exec-label">Alcance</div><div class="exec-value small">'+esc(DATA.exec.alcanceTotal)+'</div><div class="kpi-sub">'+esc(DATA.exec.alcanceDetalle)+'</div><div class="kpi-sub" style="margin-top:4px;font-style:italic;">'+esc(DATA.exec.alcanceNota)+'</div></div>'+
         '<div class="exec-tile"><div class="exec-label">Comportamiento</div><div class="exec-value small">Entender → Encontrar → Usar → Descubrir → Adoptar</div></div>'+
         '<div class="exec-tile">'+
           '<div class="exec-label">Estado del Strategy Package</div>'+
