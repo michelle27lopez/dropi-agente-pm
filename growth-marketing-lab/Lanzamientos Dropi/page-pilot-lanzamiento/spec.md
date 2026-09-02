@@ -1,12 +1,18 @@
-# Spec · Page Pilot — Documento de Lanzamiento (GRO-003)
+# Spec · Page Pilot — Documento de Lanzamiento
 
-> Fuente de verdad interna de este proyecto. Estados: ⚪ discovery · 🟡 definido ·
+> Fuente de verdad interna de este artefacto. Estados: ⚪ discovery · 🟡 definido ·
 > 🔵 en diseño · 🟢 construido · ⛔ no-objetivo.
+>
+> **Vive dentro de GRO-003** ("Mesa estratégica Lanzamientos - Product Growth
+> Marketing"), el proyecto del HUB que centraliza los aprendizajes de las mesas
+> estratégicas de todos los lanzamientos. Page Pilot es su primer artefacto
+> documentado, no un proyecto aparte.
 
 | Campo | Valor |
 |-------|-------|
 | Owner / PM | Catherin Salazar |
 | Célula | Growth Marketing |
+| Proyecto HUB | GRO-003 — Mesa estratégica Lanzamientos |
 | Fase del Launch System | `02_Launch_System` — documentación / comunicación del lanzamiento |
 | Estado global | 🔵 en diseño (piloto funcional, en iteración) |
 | Última actualización | 2026-08-25 |
@@ -15,7 +21,8 @@
 Página HTML autocontenida (`lanzamiento-page-pilot.html`) que genera un documento de
 lanzamiento a partir de datos de entrada (nombre del lanzamiento + secciones): hero,
 secciones de contenido con íconos, etc. Es el piloto de una plantilla estándar para
-comunicar lanzamientos dentro del Launch System de Product Growth Marketing.
+comunicar lanzamientos dentro del Launch System de Product Growth Marketing, y el
+primer artefacto concreto del dashboard GRO-003.
 
 ## 1 · Qué resuelve
 Hoy cada lanzamiento arma su propia página/documento de comunicación sin un formato
@@ -36,13 +43,16 @@ lanzamientos y se pueda iterar en un solo lugar.
   los alimenta.
 - Publicación: dónde vive la versión final por lanzamiento (¿HUB, Drive, link público?).
 
-## 3 · Archivos
-- [`lanzamiento-page-pilot.html`](lanzamiento-page-pilot.html) — el pilot completo (HTML+CSS+JS en un solo archivo).
+## 3 · Archivos y links
+- [`lanzamiento-page-pilot.html`](lanzamiento-page-pilot.html) — el pilot completo (HTML+CSS+JS en un solo archivo), fuente de verdad del contenido.
+- Artefacto visualizable: https://claude.ai/code/artifact/c1e05f11-447e-46a2-a2f5-38d143c12533 (privado, compartir desde el menú de la página).
+- En el HUB: GRO-003 tiene este link cargado en `prototype_url` — la tarjeta del proyecto en `/celula/growth-marketing` abre directo al artefacto.
 
 ## 4 · Trazabilidad
 | Tipo | Referencia |
 |------|-----------|
 | Célula | Growth Marketing |
+| Proyecto HUB | GRO-003 — Mesa estratégica Lanzamientos |
 | Proyecto ancla del lab | GMR-001 (Product Growth Marketing Agent OS) |
 | Relacionado | `02_Launch_System/Launch_Workflow.md`, `05_Templates/` |
 
@@ -51,6 +61,12 @@ lanzamientos y se pueda iterar en un solo lugar.
 - [ ] ¿Reemplaza o complementa las plantillas de `05_Templates/`? — responsable: Catherin
 
 ## 6 · Changelog
-- 2026-08-25 — Proyecto creado en Darwin como GRO-003. Se mueve el HTML desde
+- 2026-08-25 — Carpeta creada en el repo, HTML movido desde
   `Workshops lanzamientos Dropi - Product Growth Marketing/` a
-  `growth-marketing-lab/proyectos/page-pilot-lanzamiento/`.
+  `growth-marketing-lab/Lanzamientos Dropi/page-pilot-lanzamiento/`.
+- 2026-08-25 — Se intentó como proyecto propio (GRO-003, luego GRO-004) hasta
+  confirmar que GRO-003 ya existía en el HUB como el dashboard de mesas
+  estratégicas de lanzamiento — el hogar correcto de Page Pilot, no un
+  proyecto aparte.
+- 2026-08-25 — Publicado artefacto visualizable y cargado en `summary` y
+  `prototype_url` de GRO-003 en Supabase.
