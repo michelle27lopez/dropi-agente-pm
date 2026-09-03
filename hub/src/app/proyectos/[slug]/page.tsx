@@ -276,7 +276,7 @@ export default function ProjectDashboardPage() {
     setArtifactSubmitting(false);
     if (!res.ok) {
       const body = await res.json().catch(() => null);
-      setArtifactError(body?.error || "No se pudo agregar el artefacto.");
+      setArtifactError(body?.error || "No se pudo agregar el workshop.");
       return;
     }
     const nuevo = await res.json();
@@ -288,7 +288,7 @@ export default function ProjectDashboardPage() {
   }
 
   async function handleEliminarArtifact(id: string) {
-    if (!confirm("¿Quitar este artefacto de la lista?")) return;
+    if (!confirm("¿Quitar este workshop de la lista?")) return;
     const res = await fetch(`/api/proyectos/${slug}/artefactos?id=${id}`, { method: "DELETE" });
     if (!res.ok) return;
     setArtifacts((prev) => prev.filter((a) => a.id !== id));
@@ -789,14 +789,14 @@ export default function ProjectDashboardPage() {
           <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 24, marginBottom: 32 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: artifacts.length > 0 ? 16 : 0 }}>
               <h3 style={{ fontSize: 14, fontWeight: 700, margin: 0, color: "var(--fg)" }}>
-                📦 Artefactos {artifacts.length > 0 && <span style={{ color: "var(--muted)", fontWeight: 500 }}>({artifacts.length})</span>}
+                📦 Workshops - Lanzamientos {artifacts.length > 0 && <span style={{ color: "var(--muted)", fontWeight: 500 }}>({artifacts.length})</span>}
               </h3>
               {!showArtifactForm && (
                 <button
                   onClick={() => setShowArtifactForm(true)}
                   style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", background: "none", border: "1px solid var(--dropi)", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}
                 >
-                  + Agregar artefacto
+                  + Agregar workshop
                 </button>
               )}
             </div>
@@ -809,7 +809,7 @@ export default function ProjectDashboardPage() {
                       <strong style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.3 }}>{a.nombre}</strong>
                       <button
                         onClick={() => handleEliminarArtifact(a.id)}
-                        title="Quitar artefacto"
+                        title="Quitar workshop"
                         style={{ fontSize: 12, color: "#DC2626", background: "none", border: "none", cursor: "pointer", flexShrink: 0, padding: 0 }}
                       >
                         ✕
@@ -828,7 +828,7 @@ export default function ProjectDashboardPage() {
                         display: "inline-flex", alignItems: "center", gap: 6, alignSelf: "flex-start", marginTop: 2,
                       }}
                     >
-                      Abrir artefacto <span style={{ fontSize: 11 }}>➔</span>
+                      Abrir workshop <span style={{ fontSize: 11 }}>➔</span>
                     </a>
                   </div>
                 ))}
@@ -839,7 +839,7 @@ export default function ProjectDashboardPage() {
               <form onSubmit={handleCrearArtifact} style={{ display: "flex", flexDirection: "column", gap: 10, paddingTop: artifacts.length > 0 ? 16 : 0, borderTop: artifacts.length > 0 ? "1px solid var(--border)" : "none" }}>
                 <input
                   type="text"
-                  placeholder="Nombre del artefacto (ej: Page Pilot — Documento de Lanzamiento)"
+                  placeholder="Nombre del workshop (ej: Page Pilot — Documento de Lanzamiento)"
                   value={artifactNombre}
                   onChange={(e) => setArtifactNombre(e.target.value)}
                   required
@@ -867,7 +867,7 @@ export default function ProjectDashboardPage() {
                     disabled={artifactSubmitting}
                     style={{ fontSize: 12.5, fontWeight: 700, color: "#fff", background: "var(--dropi)", border: "none", borderRadius: 8, padding: "8px 16px", cursor: artifactSubmitting ? "default" : "pointer" }}
                   >
-                    {artifactSubmitting ? "Guardando…" : "Guardar artefacto"}
+                    {artifactSubmitting ? "Guardando…" : "Guardar workshop"}
                   </button>
                   <button
                     type="button"
@@ -887,14 +887,14 @@ export default function ProjectDashboardPage() {
         {artifacts.length === 0 && !showArtifactForm && (
           <div style={{ background: "#fff", border: "1px dashed var(--border)", borderRadius: 14, padding: 20, marginBottom: 32, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
             <div>
-              <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📦 Sin artefactos todavía</strong>
+              <strong style={{ fontSize: 12.5, display: "block", color: "var(--fg)" }}>📦 Sin workshops todavía</strong>
               <span style={{ fontSize: 11.5, color: "var(--muted)" }}>Links a páginas o prototipos publicados para este proyecto (uno por lanzamiento/workshop).</span>
             </div>
             <button
               onClick={() => setShowArtifactForm(true)}
               style={{ fontSize: 12, fontWeight: 700, color: "var(--dropi)", background: "none", border: "1px solid var(--dropi)", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}
             >
-              + Agregar artefacto
+              + Agregar workshop
             </button>
           </div>
         )}
