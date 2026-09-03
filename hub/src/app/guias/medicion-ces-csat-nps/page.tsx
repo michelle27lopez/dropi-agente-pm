@@ -2,376 +2,677 @@
 
 import { useState } from "react";
 import HubFooter from "@/components/HubFooter";
+import {
+  MessageCircle, Package, Heart, Info, CheckCircle2, AlertTriangle, XCircle,
+  ShoppingBag, CreditCard, ClipboardList, PackageCheck, Bell, Truck, Send,
+  BarChart3, PlayCircle, RotateCcw, Star, TrendingUp, ThumbsUp,
+} from "lucide-react";
 
-// Insumo: Metricas/PROYECTO.md — spec de la infografía interactiva "CX
-// Metrics" (React + Vite + Tailwind) que explica CES, CSAT y NPS aplicadas
-// al dropshipping. Esta página reconstruye esa experiencia (simulador +
-// gauges) dentro de Darwin, no solo documenta el spec como texto.
-//
-// La paleta roja/ámbar/verde del doc fuente (detractor/pasivo/promotor) no
-// pasa el validador de contraste CVD del skill de dataviz (ΔE 4.9, bajo el
-// piso de 8) — se sustituye por #DC2626 / #CA8A04 / #15803D, que sí separan.
+// Réplica del prototipo Figma Site (https://pale-bet-02909846.figma.site),
+// spec original en Metricas/PROYECTO.md. La paleta roja/ámbar del original
+// (detractor/pasivo) no separa lo suficiente para daltonismo (ΔE 4.9, bajo
+// el piso de 8 del validador de contraste del skill de dataviz) — se usa
+// #DC2626 / #CA8A04 / #15803D en su lugar.
 
-const CES_TOKEN = "#1D4ED8"; // --color-info
-const CSAT_TOKEN = "#0F766E"; // --color-warning (nombre del token, no del semáforo)
-const NPS_ZONES = [
-  { min: 0, max: 6, label: "Detractor", color: "#DC2626", icon: "👎" },
-  { min: 7, max: 8, label: "Pasivo", color: "#CA8A04", icon: "😐" },
-  { min: 9, max: 10, label: "Promotor", color: "#15803D", icon: "👍" },
-];
+const THEME = {
+  ces: { accent: "#2563EB", light: "#EFF6FF" },
+  csat: { accent: "#0D9488", light: "#F0FDFA" },
+  nps: { accent: "#C2410C", light: "#FFF7ED" },
+};
 
-function zoneFor(score: number) {
-  return NPS_ZONES.find((z) => score >= z.min && score <= z.max)!;
-}
+const QUALITY = {
+  good: { bg: "#F0FDF4", border: "#BBF7D0", text: "#15803D", icon: CheckCircle2 },
+  ok: { bg: "#FFFBEB", border: "#FDE68A", text: "#B45309", icon: AlertTriangle },
+  bad: { bg: "#FEF2F2", border: "#FECACA", text: "#B91C1C", icon: XCircle },
+};
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+function Badge({ children, color }: { children: React.ReactNode; color: string }) {
   return (
-    <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--fg)", marginTop: 48, marginBottom: 12 }}>
+    <span style={{
+      display: "inline-flex", alignItems: "center", gap: 4, fontSize: 11, fontWeight: 700,
+      color, background: `${color}18`, borderRadius: 999, padding: "3px 10px",
+    }}>
       {children}
-    </h2>
+    </span>
   );
 }
 
-function Callout({ tone, children }: { tone: "pending" | "info" | "success"; children: React.ReactNode }) {
-  const map = {
-    pending: { bg: "#FFF6E5", border: "#F0C766" },
-    info: { bg: "var(--dropi-light)", border: "var(--dropi)" },
-    success: { bg: "#F0FDF4", border: "#15803D" },
-  } as const;
-  const { bg, border } = map[tone];
+function QualityRow({ tone, label, range, text }: { tone: "good" | "ok" | "bad"; label: string; range: string; text: string }) {
+  const q = QUALITY[tone];
+  const Icon = q.icon;
   return (
     <div style={{
-      background: bg, border: `1px solid ${border}`, borderRadius: 10,
-      padding: "12px 16px", fontSize: 13, color: "var(--fg)", lineHeight: 1.6, marginTop: 12, marginBottom: 12,
+      display: "flex", alignItems: "center", gap: 12, background: q.bg,
+      border: `1px solid ${q.border}`, borderRadius: 8, padding: "10px 14px", marginBottom: 8,
     }}>
+      <Icon size={16} color={q.text} style={{ flexShrink: 0 }} />
+      <strong style={{ fontSize: 12.5, color: q.text, width: 64, flexShrink: 0 }}>{label}</strong>
+      <code style={{ fontSize: 11.5, color: q.text, fontWeight: 700, width: 90, flexShrink: 0 }}>{range}</code>
+      <span style={{ fontSize: 12.5, color: "var(--fg)" }}>{text}</span>
+    </div>
+  );
+}
+
+function Bar({ label, pct, color, sub }: { label: string; pct: number; color: string; sub?: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+      <span style={{ fontSize: 11.5, color: "var(--muted)", width: 96, flexShrink: 0, textAlign: "right" }}>{label}</span>
+      <div style={{ flex: 1, height: 8, borderRadius: 999, background: "var(--bg)", overflow: "hidden" }}>
+        <div style={{ width: `${pct}%`, height: "100%", background: color, borderRadius: 999 }} />
+      </div>
+      <span style={{ fontSize: 11.5, fontWeight: 700, color: "var(--fg)", width: 34, flexShrink: 0 }}>{pct}%</span>
+      {sub}
+    </div>
+  );
+}
+
+function ResultBox({ value, label, sub, color }: { value: string; label: string; sub: string; color: string }) {
+  return (
+    <div style={{ border: `1px solid ${color}`, background: `${color}0D`, borderRadius: 10, padding: "18px 20px", textAlign: "center" }}>
+      <div style={{ fontSize: 32, fontWeight: 800, color }}>{value}</div>
+      <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{label}</div>
+      <div style={{ fontSize: 11.5, fontWeight: 700, color: "#15803D", marginTop: 2 }}>{sub}</div>
+    </div>
+  );
+}
+
+function Formula({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 10, padding: 18, marginBottom: 12 }}>
+      <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 8 }}>FÓRMULA</div>
       {children}
     </div>
   );
 }
 
-function Code({ children }: { children: React.ReactNode }) {
+// ── Sección genérica por métrica ─────────────────────────────────────────
+function MetricSection({
+  theme, icon: Icon, etapa, titulo, queMide, porQueImporta, calidad, children, footer,
+}: {
+  theme: { accent: string; light: string };
+  icon: React.ElementType;
+  etapa: string;
+  titulo: string;
+  queMide: React.ReactNode;
+  porQueImporta: React.ReactNode;
+  calidad: { tone: "good" | "ok" | "bad"; label: string; range: string; text: string }[];
+  children: React.ReactNode;
+  footer: string;
+}) {
   return (
-    <code style={{
-      background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6,
-      padding: "2px 6px", fontSize: 12.5, color: "var(--fg)",
-    }}>
-      {children}
-    </code>
-  );
-}
-
-// ── Meter — spec del skill de dataviz: el fill lleva la severidad, el
-// track sin llenar es un paso más claro de la misma rampa, valor directo. ──
-function Meter({ value, max, color, label, valueLabel }: { value: number; max: number; color: string; label: string; valueLabel: string }) {
-  const pct = Math.max(0, Math.min(100, (value / max) * 100));
-  return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>{label}</span>
-        <span style={{ fontSize: 18, fontWeight: 800, color: "var(--fg)" }}>{valueLabel}</span>
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${theme.accent}`, borderRadius: 14, padding: 28, marginBottom: 24 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+        <div style={{ width: 40, height: 40, borderRadius: 10, background: theme.light, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <Icon size={20} color={theme.accent} />
+        </div>
+        <div>
+          <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.08em", color: theme.accent, textTransform: "uppercase" }}>{etapa}</div>
+          <h2 style={{ fontSize: 19, fontWeight: 800, color: "var(--fg)", margin: 0 }}>{titulo}</h2>
+        </div>
       </div>
-      <div style={{ height: 10, borderRadius: 999, background: `${color}22`, overflow: "hidden" }}>
-        <div style={{ height: "100%", width: `${pct}%`, background: color, borderRadius: 999, transition: "width 300ms ease" }} />
-      </div>
-    </div>
-  );
-}
 
-function NpsMeter({ score }: { score: number }) {
-  const pct = ((score + 100) / 200) * 100;
-  return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em" }}>NPS</span>
-        <span style={{ fontSize: 18, fontWeight: 800, color: "var(--fg)" }}>{score > 0 ? `+${score}` : score}</span>
-      </div>
-      <div style={{ position: "relative", height: 10, borderRadius: 999, overflow: "hidden", display: "flex" }}>
-        <div style={{ flex: "0 0 35%", background: "#FCA5A5" }} />
-        <div style={{ flex: "0 0 15%", background: "#FDE68A" }} />
-        <div style={{ flex: "0 0 50%", background: "#86EFAC" }} />
-        <div aria-hidden style={{
-          position: "absolute", top: -2, left: `${pct}%`, transform: "translateX(-50%)",
-          width: 3, height: 14, borderRadius: 2, background: "#0f172a",
-        }} />
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: 10, color: "var(--muted)" }}>
-        <span>-100</span><span>0</span><span>+100</span>
-      </div>
-    </div>
-  );
-}
-
-const METRICAS = [
-  { metrica: "CES", color: CES_TOKEN, icon: "💬", mide: "Esfuerzo del cliente en soporte", touchpoint: "Chat pre-venta" },
-  { metrica: "CSAT", color: CSAT_TOKEN, icon: "📦", mide: "Satisfacción con la entrega", touchpoint: "Tarjeta post-entrega" },
-  { metrica: "NPS", color: "#C2550A", icon: "✉️", mide: "Lealtad y recomendación", touchpoint: "Email 30 días post-compra" },
-];
-
-type Stage = { n: number; titulo: string; detalle: string; metrica?: "CES" | "NPS" | "dashboard" };
-
-const STAGES: Stage[] = [
-  { n: 1, titulo: "Descubrimiento", detalle: "Diana busca \"Luces LED H4\" en el catálogo." },
-  { n: 2, titulo: "Soporte Pre-venta", detalle: "Escribe al chat para confirmar compatibilidad — aquí se mide CES.", metrica: "CES" },
-  { n: 3, titulo: "Compra", detalle: "Confirma la orden #DS-2847 por $42.00 USD." },
-  { n: 4, titulo: "Compra al Proveedor", detalle: "El pedido se despacha a CJ Dropshipping por $9.80 USD." },
-  { n: 5, titulo: "Confirmación y Tracking", detalle: "Recibe el email automático con la guía de seguimiento." },
-  { n: 6, titulo: "Entrega", detalle: "El paquete llega en buen estado, dentro del tiempo estimado." },
-  { n: 7, titulo: "Encuesta NPS", detalle: "30 días después, responde \"¿qué tan probable es que nos recomiendes?\" — aquí se mide NPS.", metrica: "NPS" },
-  { n: 8, titulo: "Análisis en Dashboard", detalle: "El equipo de CX ve el agregado de miles de respuestas como la de Diana.", metrica: "dashboard" },
-];
-
-function CesCapture({ value, onChange }: { value: number | null; onChange: (v: number) => void }) {
-  return (
-    <div>
-      <p style={{ fontSize: 13, color: "var(--fg)", marginBottom: 10 }}>
-        "¿Qué tanto esfuerzo te tomó resolver tu duda con nuestro equipo?" <span style={{ color: "var(--muted)" }}>(1 = mucho esfuerzo · 7 = muy fácil)</span>
+      <p style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7, marginBottom: 4 }}>
+        <Info size={13} color={theme.accent} style={{ display: "inline", marginRight: 4, marginBottom: -1 }} />
+        <strong>¿Qué mide? </strong>{queMide}
       </p>
-      <div style={{ display: "flex", gap: 6 }}>
-        {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-          <button
-            key={n}
-            onClick={() => onChange(n)}
-            style={{
-              width: 36, height: 36, borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: "pointer",
-              border: `1.5px solid ${value === n ? CES_TOKEN : "var(--border)"}`,
-              background: value === n ? CES_TOKEN : "var(--card)",
-              color: value === n ? "#fff" : "var(--fg)",
-            }}
-          >
-            {n}
-          </button>
-        ))}
-      </div>
-      {value !== null && (
-        <Callout tone={value >= 5 ? "success" : "pending"}>
-          {value >= 5 ? "✅" : "⚠️"} Diana registró un esfuerzo de <strong>{value}/7</strong> — evento <Code>ces_response_submitted</Code> capturado en el chat de pre-venta.
-        </Callout>
-      )}
-    </div>
-  );
-}
-
-function NpsCapture({ value, onChange }: { value: number | null; onChange: (v: number) => void }) {
-  return (
-    <div>
-      <p style={{ fontSize: 13, color: "var(--fg)", marginBottom: 10 }}>
-        "¿Qué tan probable es que nos recomiendes a otro dropshipper?" <span style={{ color: "var(--muted)" }}>(0 = nada probable · 10 = muy probable)</span>
+      <p style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7, marginBottom: 16 }}>
+        <strong>¿Por qué importa? </strong>{porQueImporta}
       </p>
-      <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
-        {Array.from({ length: 11 }, (_, n) => n).map((n) => {
-          const zone = zoneFor(n);
-          const selected = value === n;
-          return (
-            <button
-              key={n}
-              onClick={() => onChange(n)}
-              style={{
-                width: 32, height: 32, borderRadius: 8, fontWeight: 700, fontSize: 12.5, cursor: "pointer",
-                border: `1.5px solid ${selected ? zone.color : "var(--border)"}`,
-                background: selected ? zone.color : "var(--card)",
-                color: selected ? "#fff" : "var(--fg)",
-              }}
-            >
-              {n}
-            </button>
-          );
-        })}
+
+      <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 8 }}>
+        ¿QUÉ SE CONSIDERA BUENO O MALO?
       </div>
-      {value !== null && (() => {
-        const zone = zoneFor(value);
-        return (
-          <Callout tone={zone.label === "Detractor" ? "pending" : "success"}>
-            {zone.icon} Diana respondió <strong>{value}/10</strong> → <strong style={{ color: zone.color }}>{zone.label}</strong> de NPS.
-          </Callout>
-        );
-      })()}
+      {calidad.map((c) => <QualityRow key={c.label} {...c} />)}
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginTop: 20 }}>
+        {children}
+      </div>
+
+      <p style={{ fontSize: 12, color: theme.accent, fontWeight: 600, marginTop: 20, marginBottom: 0 }}>
+        › {footer}
+      </p>
     </div>
   );
 }
 
 export default function MedicionCesCsatNpsPage() {
-  const [activeStep, setActiveStep] = useState(1);
-  const [cesAnswer, setCesAnswer] = useState<number | null>(null);
-  const [npsAnswer, setNpsAnswer] = useState<number | null>(9);
-  const stage = STAGES.find((s) => s.n === activeStep)!;
-
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1 }}>
-        <header style={{
-          background: "var(--card)", borderBottom: "1px solid var(--border)",
-          padding: "20px 32px", display: "flex", alignItems: "center", gap: 12,
+        {/* ── Hero ── */}
+        <div style={{
+          background: "linear-gradient(135deg, #C2410C, #EA580C)", padding: "48px 32px", textAlign: "center",
+          position: "relative", overflow: "hidden",
         }}>
-          <div style={{
-            width: 36, height: 36, borderRadius: 8, flex: "none",
-            background: "var(--dropi-light)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18,
-          }}>
-            🎯
-          </div>
-          <div>
-            <h1 style={{ fontSize: 16, fontWeight: 700, color: "var(--fg)", lineHeight: 1.2 }}>
-              Métricas de CX en Dropshipping
-            </h1>
-            <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
-              <a href="/guias" style={{ color: "var(--muted)" }}>Guías</a> · Simulador interactivo de CES, CSAT y NPS
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <span style={{
+              display: "inline-block", fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.06em",
+              background: "rgba(255,255,255,0.15)", borderRadius: 999, padding: "5px 14px", marginBottom: 16,
+            }}>
+              📦 E-COMMERCE · DROPSHIPPING · CX INTELLIGENCE
+            </span>
+            <h1 style={{ fontSize: 34, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Métricas de CX en Dropshipping</h1>
+            <p style={{ fontSize: 16, color: "rgba(255,255,255,0.92)", margin: "0 0 4px" }}>
+              Cómo medir <strong>CES</strong>, <strong>CSAT</strong> y <strong>NPS</strong> al vender un producto
             </p>
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.75)", margin: "0 0 20px" }}>
+              Ejemplo real: Luces LED para Carro
+            </p>
+            <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+              <a href="#ces" style={pillLink}><MessageCircle size={13} /> Pre-compra</a>
+              <a href="#csat" style={pillLink}><Package size={13} /> Post-entrega</a>
+              <a href="#nps" style={pillLink}><Heart size={13} /> Lealtad 30d</a>
+            </div>
           </div>
-        </header>
+        </div>
 
-        <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
-          <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.6, marginBottom: 8 }}>
-            Dónde se captura cada métrica de experiencia en el recorrido real de un dropshipper, y cómo se lee
-            el resultado agregado en el dashboard. Recorre los 8 pasos y responde como Diana para ver cómo se
-            arma cada dato.
+        <div style={{ maxWidth: 980, margin: "0 auto", padding: "32px 24px" }}>
+          <p style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 24 }}>
+            <a href="/guias" style={{ color: "var(--muted)" }}>Guías</a> · Réplica interactiva del prototipo — spec en <code style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 4, padding: "1px 5px" }}>Metricas/PROYECTO.md</code>
           </p>
 
-          <Callout tone="info">
-            📌 <strong>Fuente:</strong> <Code>Metricas/PROYECTO.md</Code> — spec de la infografía interactiva
-            "CX Metrics". Este simulador reconstruye esa experiencia dentro de Darwin.
-          </Callout>
-
-          <SectionTitle>Métricas cubiertas</SectionTitle>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
-            {METRICAS.map((m) => (
-              <div key={m.metrica} style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${m.color}`, borderRadius: 10, padding: 16 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                  <span style={{ fontSize: 16 }}>{m.icon}</span>
-                  <strong style={{ fontSize: 14, color: "var(--fg)" }}>{m.metrica}</strong>
-                </div>
-                <p style={{ fontSize: 12.5, color: "var(--fg)", margin: "0 0 4px" }}>{m.mide}</p>
-                <p style={{ fontSize: 11.5, color: "var(--muted)", margin: 0 }}>📍 {m.touchpoint}</p>
-              </div>
-            ))}
-          </div>
-
-          <SectionTitle>Simulador — el recorrido de Diana</SectionTitle>
-
-          {/* Stepper */}
-          <div style={{ display: "flex", alignItems: "center", marginBottom: 24, overflowX: "auto", paddingBottom: 4 }}>
-            {STAGES.map((s, i) => (
-              <div key={s.n} style={{ display: "flex", alignItems: "center", flex: i < STAGES.length - 1 ? 1 : "none" }}>
-                <button
-                  onClick={() => setActiveStep(s.n)}
-                  title={s.titulo}
-                  style={{
-                    width: 34, height: 34, borderRadius: "50%", flexShrink: 0, cursor: "pointer",
-                    border: `2px solid ${activeStep === s.n ? "var(--dropi)" : activeStep > s.n ? "#15803D" : "var(--border)"}`,
-                    background: activeStep === s.n ? "var(--dropi)" : activeStep > s.n ? "#F0FDF4" : "var(--card)",
-                    color: activeStep === s.n ? "#fff" : activeStep > s.n ? "#15803D" : "var(--muted)",
-                    fontWeight: 800, fontSize: 13,
-                  }}
-                >
-                  {activeStep > s.n ? "✓" : s.n}
-                </button>
-                {i < STAGES.length - 1 && (
-                  <div style={{ flex: 1, height: 2, minWidth: 12, background: activeStep > s.n ? "#15803D" : "var(--border)" }} />
-                )}
-              </div>
-            ))}
-          </div>
-
-          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 24 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-              <span style={{
-                width: 26, height: 26, borderRadius: "50%", background: "var(--dropi-light)", color: "var(--dropi)",
-                display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 12, flexShrink: 0,
-              }}>
-                {stage.n}
-              </span>
-              <strong style={{ fontSize: 15, color: "var(--fg)" }}>{stage.titulo}</strong>
-            </div>
-            <p style={{ fontSize: 13.5, color: "var(--muted)", lineHeight: 1.6, marginBottom: stage.metrica ? 18 : 0 }}>
-              {stage.detalle}
-            </p>
-
-            {stage.metrica === "CES" && <CesCapture value={cesAnswer} onChange={setCesAnswer} />}
-            {stage.metrica === "NPS" && <NpsCapture value={npsAnswer} onChange={setNpsAnswer} />}
-            {stage.metrica === "dashboard" && (
+          {/* ── CES ── */}
+          <div id="ces">
+            <MetricSection
+              theme={THEME.ces}
+              icon={MessageCircle}
+              etapa="Etapa 1 · Pre-compra"
+              titulo="CES — Customer Effort Score"
+              queMide="El nivel de esfuerzo que debe hacer el cliente para resolver su duda, completar una compra o solucionar un problema. Usa una escala del 1 (muy difícil) al 7 (muy fácil)."
+              porQueImporta="Un proceso complicado genera abandono de carrito. Cuanto menos esfuerzo perciba el cliente, más probable es que finalice la compra y vuelva a comprar."
+              calidad={[
+                { tone: "good", label: "Bueno", range: "5.5 – 7.0", text: "Experiencia fluida: el cliente resolvió su duda sin fricción y completó la compra." },
+                { tone: "ok", label: "Regular", range: "4.0 – 5.4", text: "Experiencia aceptable: hubo algo de esfuerzo; revisa el chat o la página de producto." },
+                { tone: "bad", label: "Malo", range: "1.0 – 3.9", text: "Experiencia con fricción: alta probabilidad de abandono; rediseña el soporte y la navegación." },
+              ]}
+              footer="Producto entregado → encuesta de satisfacción"
+            >
               <div>
-                <p style={{ fontSize: 12.5, color: "var(--muted)", marginBottom: 16 }}>
-                  Diana es un caso dentro de miles — así se ve el agregado real en el dashboard del equipo de CX:
-                </p>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20, marginBottom: 16 }}>
-                  <Meter value={6.2} max={7} color={CES_TOKEN} label="CES promedio" valueLabel="6.2 / 7" />
-                  <Meter value={75} max={100} color={CSAT_TOKEN} label="CSAT" valueLabel="75%" />
+                <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.06em", color: THEME.ces.accent, marginBottom: 10 }}>
+                  CASO REAL — ORDEN #DS-2847
                 </div>
-                <NpsMeter score={50} />
+                <div style={{ border: `1px solid ${THEME.ces.accent}`, borderRadius: 10, overflow: "hidden", marginBottom: 12 }}>
+                  <div style={{ background: THEME.ces.accent, color: "#fff", padding: "10px 14px" }}>
+                    <div style={{ fontSize: 12.5, fontWeight: 700 }}>Soporte AutoLED Store</div>
+                    <div style={{ fontSize: 10.5, opacity: 0.85 }}>● En línea ahora</div>
+                  </div>
+                  <div style={{ padding: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+                    <ChatBubble align="left">¡Hola! 👋 ¿En qué puedo ayudarte con tu pedido?</ChatBubble>
+                    <ChatBubble align="right" accent={THEME.ces.accent}>¿Las Luces LED H4 6000K son compatibles con un Honda Civic 2019?</ChatBubble>
+                    <ChatBubble align="left">✅ ¡Sí! Son 100% compatibles. El Honda Civic 2019 usa casquillo H4. ¿Te ayudo a finalizar la compra?</ChatBubble>
+                    <div style={{ fontSize: 10.5, color: THEME.ces.accent, border: `1px dashed ${THEME.ces.accent}`, borderRadius: 6, padding: "6px 10px", textAlign: "center" }}>
+                      📊 Encuesta CES enviada al cerrar el chat
+                    </div>
+                  </div>
+                </div>
+                <MiniPanel>
+                  <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", marginBottom: 6 }}>PREGUNTA ENVIADA AL CLIENTE</div>
+                  <p style={{ fontSize: 13, fontStyle: "italic", color: "var(--fg)", marginBottom: 8 }}>"¿Qué tan fácil fue resolver tus dudas sobre la compatibilidad de las Luces LED hoy?"</p>
+                  <Badge color={THEME.ces.accent}>ESCALA 1-7</Badge> <span style={{ fontSize: 11, color: "var(--muted)" }}>1 = muy difícil · 7 = muy fácil</span>
+                </MiniPanel>
+                <Formula>
+                  <code style={{ fontSize: 12, color: THEME.ces.accent }}>CES = Suma total de puntuaciones ÷ Número total de respuestas</code>
+                  <div style={{ fontSize: 26, fontWeight: 800, color: THEME.ces.accent, margin: "10px 0 4px" }}>CES = 6.2</div>
+                  <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>310 puntos ÷ 50 respuestas → Proceso ágil y sin fricción</p>
+                </Formula>
+                <p style={{ fontSize: 11.5, color: "var(--muted)" }}>💡 Puntaje <strong>alto = menos esfuerzo</strong> → menos abandono de carrito.</p>
               </div>
-            )}
-          </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 16 }}>
-            <button
-              onClick={() => setActiveStep((s) => Math.max(1, s - 1))}
-              disabled={activeStep === 1}
-              style={{
-                fontSize: 13, fontWeight: 600, padding: "8px 14px", borderRadius: 8,
-                border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)",
-                cursor: activeStep === 1 ? "default" : "pointer", opacity: activeStep === 1 ? 0.4 : 1,
-              }}
-            >
-              ← Anterior
-            </button>
-            <button
-              onClick={() => setActiveStep((s) => Math.min(8, s + 1))}
-              disabled={activeStep === 8}
-              style={{
-                fontSize: 13, fontWeight: 700, padding: "8px 14px", borderRadius: 8,
-                border: "none", background: "var(--dropi)", color: "#fff",
-                cursor: activeStep === 8 ? "default" : "pointer", opacity: activeStep === 8 ? 0.4 : 1,
-              }}
-            >
-              Siguiente →
-            </button>
-          </div>
-
-          <Callout tone="success">
-            ✅ <strong>Resultado del caso Diana:</strong> respondió 9/10 en NPS → Promotora. Margen neto del
-            dropshipper en esta orden: $32.20 USD.
-          </Callout>
-
-          <details style={{ marginTop: 40 }}>
-            <summary style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)", cursor: "pointer" }}>
-              Ficha técnica del prototipo original (stack, tokens, estructura de archivos)
-            </summary>
-            <div style={{ marginTop: 16 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16, marginBottom: 20 }}>
-                <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 18 }}>
-                  <strong style={{ fontSize: 13, color: "var(--fg)" }}>Stack técnico</strong>
-                  <ul style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.8, margin: "8px 0 0", paddingLeft: 18 }}>
-                    <li>React 19 + Vite 8 + Tailwind CSS v4</li>
-                    <li>lucide-react para iconos</li>
-                    <li>SVG puro para visualizaciones</li>
-                    <li>Paleta de marca Dropi (#FB9445)</li>
-                    <li>Accesibilidad WCAG AA</li>
-                  </ul>
+              <div>
+                <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 10 }}>
+                  DISTRIBUCIÓN DE RESPUESTAS (EJEMPLO, 50 ENCUESTADOS)
                 </div>
-                <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 18 }}>
-                  <strong style={{ fontSize: 13, color: "var(--fg)" }}>Estructura de archivos</strong>
-                  <pre style={{ fontSize: 12, color: "var(--fg)", background: "var(--bg)", padding: 12, borderRadius: 8, marginTop: 8, overflowX: "auto" }}>
-{`src/
-├── App.tsx       # UI completa
-├── index.css     # Design system tokens
-└── main.tsx      # Punto de entrada`}
-                  </pre>
+                <Bar label="1 — Muy difícil" pct={4} color="#FCA5A5" />
+                <Bar label="2" pct={6} color="#FCA5A5" />
+                <Bar label="3" pct={10} color="#FDBA74" />
+                <Bar label="4 — Neutral" pct={14} color="#FDE68A" />
+                <Bar label="5" pct={16} color="#BFDBFE" />
+                <Bar label="6" pct={22} color="#93C5FD" />
+                <Bar label="7 — Muy fácil" pct={28} color={THEME.ces.accent} />
+                <div style={{ marginTop: 16 }}>
+                  <ResultBox value="6.2" label="CES Promedio / 7" sub="✓ Experiencia sin fricción" color={THEME.ces.accent} />
                 </div>
               </div>
-              <p style={{ fontSize: 12.5, color: "var(--muted)", lineHeight: 1.7 }}>
-                La paleta original de detractor/pasivo/promotor del spec (<Code>#B91C1C</Code> / <Code>#B45309</Code> / <Code>#15803D</Code>)
-                no separa lo suficiente para daltonismo (ΔE 4.9, por debajo del piso de 8 del validador de contraste) —
-                este simulador usa <Code>#DC2626</Code> / <Code>#CA8A04</Code> / <Code>#15803D</Code> en su lugar, que sí pasan.
-              </p>
-              <ul style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.9, paddingLeft: 18, marginTop: 12 }}>
-                <li><strong>Colores:</strong> tokens originales en <Code>src/index.css</Code> del prototipo Vite.</li>
-                <li><strong>Nombre del cliente:</strong> "Diana" en <Code>src/App.tsx</Code>.</li>
-                <li><strong>Datos del simulador:</strong> arreglo <Code>STAGES</Code> dentro de <Code>OrderSimulator</Code>.</li>
-                <li><strong>Rangos de métricas:</strong> props de <Code>MetricExplainer</Code> por sección.</li>
-              </ul>
+            </MetricSection>
+          </div>
+
+          {/* ── CSAT ── */}
+          <div id="csat">
+            <MetricSection
+              theme={THEME.csat}
+              icon={Package}
+              etapa="Etapa 2 · Post-entrega"
+              titulo="CSAT — Customer Satisfaction Score"
+              queMide="El porcentaje de clientes que declaran estar satisfechos (4 o 5 estrellas) con un producto o servicio específico. Se mide en un punto de contacto concreto, como la entrega del pedido."
+              porQueImporta="En dropshipping no controlas el inventario ni el envío directamente. El CSAT te dice si tu proveedor está cumpliendo con la calidad y los tiempos prometidos al cliente."
+              calidad={[
+                { tone: "good", label: "Bueno", range: "80% – 100%", text: "Excelente: proveedor confiable; los clientes están satisfechos con el producto y la entrega." },
+                { tone: "ok", label: "Regular", range: "60% – 79%", text: "Aceptable: hay oportunidades de mejora; evalúa tiempos de envío o calidad del empaque." },
+                { tone: "bad", label: "Malo", range: "0% – 59%", text: "Crítico: cambia de proveedor o renegocia condiciones; los clientes están decepcionados." },
+              ]}
+              footer="30 días después → encuesta de lealtad y recomendación"
+            >
+              <div>
+                <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.06em", color: THEME.csat.accent, marginBottom: 10 }}>
+                  CASO REAL — ORDEN #DS-2847 ENTREGADA
+                </div>
+                <div style={{ border: `1px solid ${THEME.csat.accent}`, borderRadius: 10, overflow: "hidden", marginBottom: 12 }}>
+                  <div style={{ background: THEME.csat.accent, color: "#fff", padding: "10px 14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: 12.5, fontWeight: 700 }}>📦 AutoLED Store — Confirmación de entrega</span>
+                    <Badge color="#fff">✓ Entregado</Badge>
+                  </div>
+                  <div style={{ padding: 14 }}>
+                    <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
+                      <div style={{ width: 40, height: 40, borderRadius: 8, background: "var(--bg)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>💡</div>
+                      <div>
+                        <strong style={{ fontSize: 12.5 }}>Kit LED H4 6000K — Bombillo Xenón</strong>
+                        <p style={{ fontSize: 11.5, color: "var(--muted)", margin: 0 }}>Qty: 1 · SKU: LED-H4-6K · $42.00 USD</p>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", gap: 16, fontSize: 11, color: "var(--muted)", marginBottom: 10 }}>
+                      <span>PEDIDO<br /><strong style={{ color: "var(--fg)" }}>28 Jul 2026</strong></span>
+                      <span>ENTREGADO<br /><strong style={{ color: "var(--fg)" }}>06 Ago 2026</strong></span>
+                      <span>TRANSPORTADORA<br /><strong style={{ color: "var(--fg)" }}>YunExpress</strong></span>
+                    </div>
+                    <div style={{ fontSize: 10.5, color: THEME.csat.accent, border: `1px dashed ${THEME.csat.accent}`, borderRadius: 6, padding: "6px 10px", textAlign: "center" }}>
+                      🔔 Encuesta CSAT enviada 24h después de confirmar entrega
+                    </div>
+                  </div>
+                </div>
+                <MiniPanel>
+                  <div style={{ fontSize: 10.5, fontWeight: 700, color: "var(--muted)", marginBottom: 6 }}>PREGUNTA ENVIADA AL CLIENTE</div>
+                  <p style={{ fontSize: 13, fontStyle: "italic", color: "var(--fg)", marginBottom: 8 }}>"¿Qué tan satisfecho estás con la calidad de tus Luces LED y el tiempo de entrega?"</p>
+                  <Badge color={THEME.csat.accent}>ESCALA 1-5</Badge> <span style={{ fontSize: 11, color: "var(--muted)" }}>4–5 cuentan como satisfechos</span>
+                </MiniPanel>
+                <Formula>
+                  <code style={{ fontSize: 12, color: THEME.csat.accent }}>CSAT = (Respuestas 4 y 5) × 100 ÷ Total de respuestas</code>
+                  <div style={{ fontSize: 26, fontWeight: 800, color: THEME.csat.accent, margin: "10px 0 4px" }}>CSAT = 75%</div>
+                  <p style={{ fontSize: 12, color: "var(--muted)", margin: 0 }}>150 satisfechos ÷ 200 encuestados → Proveedor cumple con la calidad</p>
+                </Formula>
+                <p style={{ fontSize: 11.5, color: "var(--muted)" }}>💡 Controla la <strong>calidad de tus proveedores</strong> (AliExpress, CJ Dropshipping…)</p>
+              </div>
+
+              <div>
+                <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 10 }}>
+                  ESCALA DE SATISFACCIÓN (200 RESPUESTAS)
+                </div>
+                <Bar label="😞 Muy insatisfecho" pct={5} color="#FCA5A5" />
+                <Bar label="🙁 Insatisfecho" pct={7} color="#FDBA74" />
+                <Bar label="😐 Neutral" pct={13} color="#FDE68A" />
+                <Bar label="🙂 Satisfecho ✓" pct={38} color="#5EEAD4" />
+                <Bar label="😄 Muy satisfecho ✓" pct={37} color={THEME.csat.accent} />
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 16 }}>
+                  <ResultBox value="75%" label="CSAT Score" sub="" color={THEME.csat.accent} />
+                  <ResultBox value="150" label="Satisfechos / 200" sub="" color={THEME.csat.accent} />
+                </div>
+              </div>
+            </MetricSection>
+          </div>
+
+          {/* ── NPS ── */}
+          <div id="nps">
+            <MetricSection
+              theme={THEME.nps}
+              icon={Heart}
+              etapa="Etapa 3 · Lealtad 30 días"
+              titulo="NPS — Net Promoter Score"
+              queMide="La probabilidad de que un cliente recomiende tu tienda a otras personas, medida en una escala del 0 al 10. Clasifica a los clientes en Promotores, Pasivos y Detractores para calcular la salud de tu marca."
+              porQueImporta="En dropshipping, la reputación lo es todo. Un NPS alto significa que tus clientes se convierten en vendedores gratuitos de tu tienda. Un NPS negativo puede destruir tu marca con reseñas públicas antes de que puedas actuar."
+              calidad={[
+                { tone: "good", label: "Bueno", range: "+50 → +100", text: "Excelente: base sólida de promotores; ideal para campañas de referidos y remarketing." },
+                { tone: "ok", label: "Regular", range: "0 → +49", text: "Aceptable: más promotores que detractores, pero hay margen de mejora en la experiencia postventa." },
+                { tone: "bad", label: "Malo", range: "-100 → -1", text: "Crítico: los detractores superan a los promotores; riesgo alto de reseñas negativas y churn masivo." },
+              ]}
+              footer="De 100 compradores encuestados al mes · Excelente salud de marca para hacer remarketing"
+            >
+              <div>
+                <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.06em", color: THEME.nps.accent, marginBottom: 10 }}>
+                  CASO REAL — EMAIL NPS · DÍA 30 TRAS ORDEN #DS-2847
+                </div>
+                <div style={{ border: `1px solid ${THEME.nps.accent}`, borderRadius: 10, overflow: "hidden", marginBottom: 12 }}>
+                  <div style={{ padding: "10px 14px", background: "var(--bg)", fontSize: 11, color: "var(--muted)" }}>
+                    <div>De: noreply@autoleds.store</div>
+                    <div>Para: diana.garcia@email.com</div>
+                    <div>Asunto: ⭐ Diana, ¿nos recomendarías? — Cuéntanos tu experiencia</div>
+                  </div>
+                  <div style={{ background: THEME.nps.accent, color: "#fff", padding: "8px 14px", fontSize: 12, fontWeight: 700 }}>
+                    ⭐ AutoLED Store · Encuesta de lealtad
+                  </div>
+                  <div style={{ padding: 14 }}>
+                    <p style={{ fontSize: 12.5, margin: "0 0 8px" }}>¡Hola Diana! 👋 Han pasado 30 días desde que recibiste tu <strong>Kit LED H4 6000K</strong>. Nos encantaría saber cómo ha sido tu experiencia.</p>
+                    <p style={{ fontSize: 12.5, fontWeight: 700, marginBottom: 8 }}>¿Qué probabilidad hay de que recomiendes nuestra tienda a un amigo?</p>
+                    <div style={{ display: "flex", gap: 3, marginBottom: 6, flexWrap: "wrap" }}>
+                      {Array.from({ length: 11 }, (_, n) => n).map((n) => (
+                        <span key={n} style={{
+                          width: 22, height: 22, borderRadius: 5, fontSize: 10.5, fontWeight: 700,
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          border: `1px solid ${n === 9 ? "#15803D" : zoneColor(n)}`,
+                          color: n === 9 ? "#fff" : zoneColor(n), background: n === 9 ? "#15803D" : "transparent",
+                        }}>
+                          {n}
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--muted)", marginBottom: 10 }}>
+                      <span>0 = Nada probable</span><span>10 = Muy probable</span>
+                    </div>
+                    <div style={{ background: "#F0FDF4", border: "1px solid #BBF7D0", borderRadius: 6, padding: "6px 10px", fontSize: 12, color: "#15803D" }}>
+                      ✓ Diana respondió: <strong>9 / 10</strong> — Promotora ✓
+                    </div>
+                  </div>
+                </div>
+                <Formula>
+                  <code style={{ fontSize: 12, color: THEME.nps.accent }}>NPS = % Promotores (9–10) − % Detractores (0–6)</code>
+                  <p style={{ fontSize: 12, color: "var(--fg)", margin: "8px 0" }}>NPS = 65% − 15% = +50</p>
+                  <div style={{ fontSize: 26, fontWeight: 800, color: THEME.nps.accent, margin: "4px 0" }}>NPS = +50</div>
+                </Formula>
+              </div>
+
+              <div>
+                <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.06em", color: "var(--muted)", marginBottom: 10 }}>
+                  ESCALA DEL NPS (0–10)
+                </div>
+                <div style={{ display: "flex", gap: 3, marginBottom: 6, flexWrap: "wrap" }}>
+                  {Array.from({ length: 11 }, (_, n) => n).map((n) => (
+                    <span key={n} style={{
+                      width: 26, height: 26, borderRadius: 6, fontSize: 11, fontWeight: 700,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      border: `1px solid ${zoneColor(n)}`, color: zoneColor(n),
+                    }}>
+                      {n}
+                    </span>
+                  ))}
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, fontWeight: 700, marginBottom: 16 }}>
+                  <span style={{ color: "#DC2626" }}>DETRACTORES (0–6)</span>
+                  <span style={{ color: "#CA8A04" }}>PASIVOS (7–8)</span>
+                  <span style={{ color: "#15803D" }}>PROMOTORES (9–10)</span>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+                  <NpsCard icon="🙂" color="#15803D" bg="#F0FDF4" pct="65%" n="65 clientes" label="Promotores" rango="Puntuación 9–10" text="Clientes entusiasmados y totalmente satisfechos. Te volverán a comprar y recomendarán tu tienda por voz a voz de forma gratuita." accion="Activa campañas de referidos y reseñas en Google." />
+                  <NpsCard icon="😐" color="#CA8A04" bg="#FFFBEB" pct="20%" n="20 clientes" label="Pasivos" rango="Puntuación 7–8" text="Clientes neutros. Quedaron satisfechos, pero sin lealtad hacia tu marca; si la competencia ofrece las mismas Luces LED más baratas, se irán." accion="Envía cupón de descuento exclusivo para fidelizarlos." />
+                  <NpsCard icon="🙁" color="#DC2626" bg="#FEF2F2" pct="15%" n="10 clientes" label="Detractores" rango="Puntuación 0–6" text="Clientes insatisfechos (por retrasos en el envío o fallas en el producto). Pueden dañar tu reputación con malas reseñas en redes sociales." accion="Contacta inmediatamente · ofrece reemplazo o reembolso." />
+                </div>
+              </div>
+            </MetricSection>
+          </div>
+
+          {/* ── Resumen ── */}
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.nps.accent}`, borderRadius: 14, padding: 28, marginBottom: 32 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18 }}>
+              <Star size={16} color={THEME.nps.accent} />
+              <strong style={{ fontSize: 13, letterSpacing: "0.04em", color: "var(--fg)", textTransform: "uppercase" }}>Resumen de utilidad para dropshippers</strong>
             </div>
-          </details>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14, marginBottom: 16 }}>
+              <SummaryCard icon={MessageCircle} color={THEME.ces.accent} bg={THEME.ces.light} title="CES" subtitle="Reduce carritos abandonados" text="Optimiza la navegación, el chat y el proceso de pago para que el cliente resuelva sus dudas antes de pagar." />
+              <SummaryCard icon={ThumbsUp} color={THEME.csat.accent} bg={THEME.csat.light} title="CSAT" subtitle="Controla tus proveedores" text="Evalúa la calidad de AliExpress, CJ Dropshipping y otros suppliers. Si el CSAT baja, cambia de proveedor." />
+              <SummaryCard icon={TrendingUp} color={THEME.nps.accent} bg={THEME.nps.light} title="NPS" subtitle="Maximiza el LTV" text="Identifica a quién hacer campañas de retención (Promotores) y a quién resolver problemas antes de una queja pública (Detractores)." />
+            </div>
+            <p style={{ fontSize: 11, color: "var(--muted)", textAlign: "center", margin: 0 }}>
+              Dashboard CX · Dropshipping · Métricas NPS · CSAT · CES · 2026
+            </p>
+          </div>
+
+          <p style={{ textAlign: "center", fontSize: 12.5, fontWeight: 700, color: THEME.nps.accent, marginBottom: 24 }}>
+            › Practica el ciclo completo con el simulador interactivo
+          </p>
+
+          <Simulator />
         </div>
       </div>
       <HubFooter />
     </main>
+  );
+}
+
+const pillLink: React.CSSProperties = {
+  display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 600, color: "#fff",
+  background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.3)", borderRadius: 999,
+  padding: "6px 14px", textDecoration: "none",
+};
+
+function ChatBubble({ children, align, accent }: { children: React.ReactNode; align: "left" | "right"; accent?: string }) {
+  return (
+    <div style={{
+      alignSelf: align === "right" ? "flex-end" : "flex-start",
+      maxWidth: "85%", fontSize: 12, lineHeight: 1.5, borderRadius: 10, padding: "8px 12px",
+      background: align === "right" ? accent : "var(--bg)",
+      color: align === "right" ? "#fff" : "var(--fg)",
+    }}>
+      {children}
+    </div>
+  );
+}
+
+function MiniPanel({ children }: { children: React.ReactNode }) {
+  return <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 10, padding: 14, marginBottom: 12 }}>{children}</div>;
+}
+
+function zoneColor(n: number) {
+  if (n <= 6) return "#DC2626";
+  if (n <= 8) return "#CA8A04";
+  return "#15803D";
+}
+
+function NpsCard({ icon, color, bg, pct, n, label, rango, text, accion }: {
+  icon: string; color: string; bg: string; pct: string; n: string; label: string; rango: string; text: string; accion: string;
+}) {
+  return (
+    <div style={{ background: bg, border: `1px solid ${color}44`, borderRadius: 10, padding: 14 }}>
+      <div style={{ fontSize: 18, marginBottom: 4 }}>{icon}</div>
+      <div style={{ fontSize: 22, fontWeight: 800, color }}>{pct}</div>
+      <div style={{ fontSize: 10.5, color: "var(--muted)", marginBottom: 8 }}>{n}</div>
+      <strong style={{ fontSize: 12.5, color: "var(--fg)" }}>{label}</strong>
+      <div style={{ fontSize: 10.5, fontWeight: 700, color, marginBottom: 6 }}>{rango}</div>
+      <p style={{ fontSize: 11, color: "var(--fg)", lineHeight: 1.5, marginBottom: 8 }}>{text}</p>
+      <p style={{ fontSize: 10.5, fontWeight: 600, color, margin: 0 }}>◎ {accion}</p>
+    </div>
+  );
+}
+
+function SummaryCard({ icon: Icon, color, bg, title, subtitle, text }: { icon: React.ElementType; color: string; bg: string; title: string; subtitle: string; text: string }) {
+  return (
+    <div style={{ background: bg, borderRadius: 10, padding: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+        <Icon size={15} color={color} />
+        <strong style={{ fontSize: 13, color }}>{title}</strong>
+      </div>
+      <p style={{ fontSize: 12.5, fontWeight: 700, color: "var(--fg)", margin: "0 0 4px" }}>{subtitle}</p>
+      <p style={{ fontSize: 11.5, color: "var(--muted)", lineHeight: 1.5, margin: 0 }}>{text}</p>
+    </div>
+  );
+}
+
+// ── Simulador interactivo ────────────────────────────────────────────────
+type Step = {
+  n: number; role: "Cliente" | "Dropshipper" | "Proveedor" | "Sistema"; tag: string;
+  icon: React.ElementType; titulo: string; detalle: string;
+  encuesta?: { metrica: string; color: string; pregunta: string; nota: string };
+};
+
+const ROLE_COLOR: Record<Step["role"], string> = {
+  Cliente: "#2563EB", Dropshipper: "#EA580C", Proveedor: "#C2410C", Sistema: "#15803D",
+};
+
+const STEPS: Step[] = [
+  { n: 1, role: "Cliente", tag: "Tienda online", icon: ShoppingBag, titulo: "Cliente encuentra el producto", detalle: "Diana busca «Luces LED H4» en tu tienda online y tiene dudas sobre la compatibilidad con su auto. Abre el chat de soporte.", encuesta: { metrica: "CES", color: THEME.ces.accent, pregunta: "¿Qué tan fácil fue resolver tus dudas sobre compatibilidad?", nota: "Se envía al cerrar el chat de soporte (pre-compra)." } },
+  { n: 2, role: "Cliente", tag: "$42.00 USD", icon: CreditCard, titulo: "Cliente hace el pago", detalle: "Diana confirma el pedido: 1× Kit LED H4 6000K — $42.00 USD. El pago se procesa vía Stripe. Tu tienda recibe la orden #DS-2847." },
+  { n: 3, role: "Dropshipper", tag: "CJ Dropshipping", icon: ClipboardList, titulo: "Dropshipper crea la orden al proveedor", detalle: "Tú (dropshipper) ingresas a CJ Dropshipping y haces el pedido del mismo producto por $9.80 USD. Indicas la dirección de Diana como destino final. Margen bruto: $32.20 USD." },
+  { n: 4, role: "Proveedor", tag: "En tránsito", icon: PackageCheck, titulo: "Proveedor prepara y despacha", detalle: "El almacén en Shenzhen empaca el kit LED y lo entrega a YunExpress. Número de tracking: YT2400847326CN. Tiempo estimado: 7–12 días hábiles." },
+  { n: 5, role: "Sistema", tag: "Email automático", icon: Bell, titulo: "Notificación de seguimiento al cliente", detalle: "Tu tienda envía un email automático a Diana con el número de tracking y el enlace de rastreo. Esto reduce la ansiedad del cliente durante la espera." },
+  { n: 6, role: "Cliente", tag: "Día 9", icon: Truck, titulo: "Entrega al domicilio (día 9)", detalle: "El paquete con las Luces LED llega a casa de Diana. Condición del empaque: buena. El producto funciona correctamente en su auto Honda Civic 2019.", encuesta: { metrica: "CSAT", color: THEME.csat.accent, pregunta: "¿Qué tan satisfecha estás con la calidad de tus Luces LED y el tiempo de entrega?", nota: "Se envía por email 24h después de marcar el pedido como entregado." } },
+  { n: 7, role: "Sistema", tag: "Día 30", icon: Send, titulo: "Campaña de retención (día 30)", detalle: "30 días después de la compra, tu sistema de email marketing envía la encuesta NPS a Diana junto con una oferta de accesorios relacionados (funda de volante, cargador USB).", encuesta: { metrica: "NPS", color: THEME.nps.accent, pregunta: "¿Qué probabilidad hay de que recomiendes nuestra tienda a un amigo?", nota: "Se envía a los 30 días post-compra mediante email marketing automatizado." } },
+  { n: 8, role: "Dropshipper", tag: "Dashboard CX", icon: BarChart3, titulo: "Dropshipper revisa métricas CX", detalle: "Tú accedes al dashboard y ves: CES 6.2 (chat fluido ✓), CSAT 75% (proveedor aceptable), NPS +50 (Diana fue Promotora y recomendó tu tienda). Acción: optimizar proveedor para subir CSAT." },
+];
+
+function Simulator() {
+  const [state, setState] = useState<"idle" | "running" | "done">("idle");
+  const [step, setStep] = useState(1);
+  const current = STEPS.find((s) => s.n === step)!;
+
+  function reset() {
+    setState("idle");
+    setStep(1);
+  }
+
+  return (
+    <div style={{ background: "var(--card)", border: `1px solid ${THEME.nps.accent}55`, borderTop: `3px solid ${THEME.nps.accent}`, borderRadius: 14, padding: 28 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 18 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 10, background: THEME.nps.light, display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <PlayCircle size={20} color={THEME.nps.accent} />
+          </div>
+          <div>
+            <div style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: "0.08em", color: THEME.nps.accent, textTransform: "uppercase" }}>Caso interactivo · Simulador</div>
+            <h2 style={{ fontSize: 18, fontWeight: 800, color: "var(--fg)", margin: 0 }}>Crea una orden como Dropshipper</h2>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          {(["Cliente", "Dropshipper", "Proveedor", "Sistema"] as const).map((r) => (
+            <Badge key={r} color={ROLE_COLOR[r]}>{r}</Badge>
+          ))}
+        </div>
+      </div>
+
+      {/* progress bar */}
+      <div style={{ display: "flex", gap: 4, marginBottom: 8 }}>
+        {STEPS.map((s) => (
+          <div key={s.n} style={{ flex: 1, height: 4, borderRadius: 999, background: (state !== "idle" && s.n <= step) ? THEME.nps.accent : "var(--border)" }} />
+        ))}
+      </div>
+      <div style={{ textAlign: "right", fontSize: 11.5, color: "var(--muted)", marginBottom: 18 }}>
+        {state === "idle" ? "Presiona \"Siguiente paso\" para comenzar" : `Paso ${step} de 8`}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 24 }}>
+        {/* step list */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {STEPS.map((s) => {
+            const completed = state === "done" || (state === "running" && s.n < step);
+            const active = state !== "idle" && s.n === step;
+            return (
+              <div key={s.n} style={{
+                display: "flex", alignItems: "flex-start", gap: 10, padding: "8px 10px", borderRadius: 8,
+                background: active ? `${THEME.nps.accent}12` : "transparent",
+                border: active ? `1px solid ${THEME.nps.accent}55` : "1px solid transparent",
+              }}>
+                {completed ? (
+                  <CheckCircle2 size={18} color="#15803D" style={{ flexShrink: 0, marginTop: 1 }} />
+                ) : (
+                  <span style={{
+                    width: 18, height: 18, borderRadius: "50%", flexShrink: 0, fontSize: 10, fontWeight: 700,
+                    display: "flex", alignItems: "center", justifyContent: "center", marginTop: 1,
+                    background: active ? THEME.nps.accent : "var(--border)", color: active ? "#fff" : "var(--muted)",
+                  }}>
+                    {s.n}
+                  </span>
+                )}
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: active ? 700 : 500, color: active ? THEME.nps.accent : "var(--fg)", lineHeight: 1.3 }}>{s.titulo}</div>
+                  <div style={{ fontSize: 10.5, fontWeight: 600, color: ROLE_COLOR[s.role] }}>{s.role}</div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* detail panel */}
+        <div>
+          {state === "idle" && (
+            <div style={{ textAlign: "center", padding: "40px 20px" }}>
+              <div style={{
+                width: 64, height: 64, borderRadius: "50%", background: THEME.nps.light, display: "flex",
+                alignItems: "center", justifyContent: "center", margin: "0 auto 16px",
+              }}>
+                <PlayCircle size={30} color={THEME.nps.accent} />
+              </div>
+              <strong style={{ fontSize: 15, color: "var(--fg)" }}>Simulación: orden de Luces LED H4</strong>
+              <p style={{ fontSize: 13, color: "var(--muted)", maxWidth: 380, margin: "8px auto 0", lineHeight: 1.6 }}>
+                Recorre los 8 pasos del ciclo completo: desde que el cliente Diana hace su pedido hasta que tú
+                analizas las métricas CX en tu dashboard.
+              </p>
+            </div>
+          )}
+
+          {state === "running" && (
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                <div style={{ width: 34, height: 34, borderRadius: 8, border: `1px solid ${ROLE_COLOR[current.role]}55`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                  <current.icon size={16} color={ROLE_COLOR[current.role]} />
+                </div>
+                <Badge color={ROLE_COLOR[current.role]}>{current.role}</Badge>
+                <span style={{ fontSize: 11.5, color: "var(--muted)" }}>{current.tag}</span>
+              </div>
+              <strong style={{ fontSize: 15, color: "var(--fg)" }}>{current.titulo}</strong>
+              <p style={{ fontSize: 13, color: "var(--fg)", lineHeight: 1.6, background: "var(--bg)", borderRadius: 10, padding: 14, margin: "10px 0" }}>
+                {current.detalle}
+              </p>
+              {current.encuesta && (
+                <div style={{ border: `1px solid ${current.encuesta.color}55`, borderRadius: 10, padding: 14 }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: current.encuesta.color, marginBottom: 6 }}>
+                    🔔 ENCUESTA CX — {current.encuesta.metrica}
+                  </div>
+                  <p style={{ fontSize: 13, fontStyle: "italic", color: "var(--fg)", margin: "0 0 6px" }}>"{current.encuesta.pregunta}"</p>
+                  <p style={{ fontSize: 11.5, color: "var(--muted)", margin: 0, display: "flex", alignItems: "center", gap: 4 }}>
+                    <Info size={12} /> {current.encuesta.nota}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {state === "done" && (
+            <div style={{ textAlign: "center", padding: "24px 10px" }}>
+              <div style={{ width: 64, height: 64, borderRadius: "50%", background: "#F0FDF4", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px" }}>
+                <CheckCircle2 size={30} color="#15803D" />
+              </div>
+              <strong style={{ fontSize: 17, color: "#15803D" }}>¡Ciclo completo! 🎉</strong>
+              <p style={{ fontSize: 13, color: "var(--fg)", maxWidth: 400, margin: "10px auto 20px", lineHeight: 1.6 }}>
+                Diana recibió sus Luces LED, quedó satisfecha (Promotora NPS 9/10) y ya recomendó tu tienda a
+                2 amigos. Tu margen neto fue de <strong style={{ color: "#15803D" }}>$32.20 USD</strong> en esta orden.
+              </p>
+              <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
+                <ResultBox value="6.2" label="CES" sub="" color={THEME.ces.accent} />
+                <ResultBox value="75%" label="CSAT" sub="" color={THEME.csat.accent} />
+                <ResultBox value="+50" label="NPS" sub="" color={THEME.nps.accent} />
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, paddingTop: 18, borderTop: "1px solid var(--border)" }}>
+        <button
+          onClick={reset}
+          style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "var(--fg)", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
+        >
+          <RotateCcw size={14} /> Reiniciar
+        </button>
+
+        {state !== "done" ? (
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {state === "running" && (
+              <span style={{ fontSize: 12, color: "var(--muted)" }}>
+                {step === 8 ? "Último paso" : `${8 - step} pasos restantes`}
+              </span>
+            )}
+            <button
+              onClick={() => {
+                if (state === "idle") { setState("running"); setStep(1); return; }
+                if (step < 8) { setStep((s) => s + 1); return; }
+                setState("done");
+              }}
+              style={{ fontSize: 13, fontWeight: 700, color: "#fff", background: THEME.nps.accent, border: "none", borderRadius: 8, padding: "9px 18px", cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}
+            >
+              {step === 8 && state === "running" ? <>✓ Ver resultado final</> : <>Siguiente paso →</>}
+            </button>
+          </div>
+        ) : (
+          <button disabled style={{ fontSize: 13, fontWeight: 700, color: "var(--muted)", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 8, padding: "9px 18px" }}>
+            ✓ Ver resultado final
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
