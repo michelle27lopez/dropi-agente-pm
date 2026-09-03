@@ -52,13 +52,6 @@ const guias = [
     tag: "Onboarding · Nuevo vertical",
   },
   {
-    slug: "metricas",
-    icon: "📊",
-    title: "Métricas",
-    description: "Métricas clave del ecosistema, activación (TTFO/TTV), retención/churn mensual y clasificación de madurez operativa — con cifras y metas de referencia.",
-    tag: "Referencia · Métricas",
-  },
-  {
     slug: "entendimiento-negocio",
     icon: "🧠",
     title: "Entendimiento del Negocio",
