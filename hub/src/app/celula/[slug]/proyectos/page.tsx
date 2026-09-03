@@ -39,12 +39,18 @@ function estadosValidosPara(type: string | null) {
 //
 // Preview: sigue gateada a isMiDiaOwner en el layout — no se globaliza a
 // todas las células hasta aprobación explícita.
-const FASES: { value: Fase | "todas"; label: string }[] = [
+// "historico" es un tab local a esta página, no una Fase real de
+// lib/fase.ts (que es compartido con ProjectCard/breadcrumb y no debe
+// cargar con este concepto). Un proyecto entra a Histórico por
+// `status === "Archivado"` — despriorizado, sin continuación — y por eso
+// mismo desaparece de los demás tabs (ver `porFase` más abajo).
+const FASES: { value: Fase | "todas" | "historico"; label: string }[] = [
   { value: "discovery", label: "Discovery" },
   { value: "poc", label: "POC" },
   { value: "delivery", label: "Delivery" },
   { value: "following", label: "Following" },
   { value: "todas", label: "Todos" },
+  { value: "historico", label: "Histórico" },
 ];
 
 // Varios prototipos por proyecto se guardan en `prototype_url` separados por
@@ -82,7 +88,7 @@ export default function ProyectosPorCelulaPage() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
   const [query, setQuery] = useState("");
-  const [fase, setFase] = useState<Fase | "todas">("todas");
+  const [fase, setFase] = useState<Fase | "todas" | "historico">("todas");
   const [loading, setLoading] = useState(true);
   const [celulaId, setCelulaId] = useState<string | null>(null);
   const [celulaNombre, setCelulaNombre] = useState<string | null>(null);
@@ -237,7 +243,12 @@ export default function ProyectosPorCelulaPage() {
     ? proyectosReales.filter((p) => p.type === "POC" && p.parent_project_id === crearTarget.parent.id)
     : [];
 
-  const porFase = (p: Proyecto) => fase === "todas" || faseDe(p.type) === fase;
+  const porFase = (p: Proyecto) => {
+    const archivado = p.status === "Archivado";
+    if (fase === "historico") return archivado;
+    if (archivado) return false; // fuera de Histórico, un proyecto archivado no aparece en ningún otro tab
+    return fase === "todas" || faseDe(p.type) === fase;
+  };
   // Fuera de logística `mapaEtapas` siempre es null, así que esto no filtra
   // nada para el resto de células.
   const pasaEtapa = (p: Proyecto) => {
@@ -716,6 +727,11 @@ function ProjectsTable({
                     <span className="proytable-badge" style={{ background: FASE_COLOR[fase] }}>
                       {FASE_LABEL[fase]}
                     </span>
+                    {proyecto.status === "Archivado" && (
+                      <span className="proytable-badge" style={{ background: "var(--muted)", marginLeft: 6 }}>
+                        Archivado
+                      </span>
+                    )}
                   </td>
                   <td>
                     {counts && (counts.poc > 0 || counts.delivery > 0) ? (
