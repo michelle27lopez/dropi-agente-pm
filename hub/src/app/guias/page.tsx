@@ -68,8 +68,8 @@ const guias = [
   {
     slug: "medicion-ces-csat-nps",
     icon: "🎯",
-    title: "Medición CES, CSAT y NPS",
-    description: "Qué mide cada métrica de experiencia y en qué touchpoint se captura, con el simulador interactivo del recorrido de un dropshipper como caso de referencia.",
+    title: "Métricas de CX en Dropshipping",
+    description: "Simulador interactivo del recorrido de un dropshipper: dónde se captura CES, CSAT y NPS, con captura en vivo de respuestas y el dashboard agregado.",
     tag: "Referencia · Métricas",
   },
 ];
