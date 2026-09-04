@@ -266,7 +266,7 @@ export default function OrdenesPage() {
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <Field term="Resumen de la semana">
-              Prioridad P1 · Delivery en DEV. Pendiente: pruebas del módulo de etiquetas.
+              Prioridad P1 · Delivery en DEV. Pendiente: pruebas del módulo de etiquetas. Se realizará un research con proveedores para validar las funcionalidades que quieren ver en el módulo de Órdenes.
             </Field>
             <Field term="Retos y Bloqueos">🚨 Bloqueado por falta de asignación de un desarrollador.</Field>
           </div>

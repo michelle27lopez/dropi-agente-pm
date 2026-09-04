@@ -128,7 +128,7 @@ const PROYECTOS: Proyecto[] = [
       { nombre: "Fase 2", estado: "proxima", inicio: "2026-10", fin: "2026-11", detalle: "Filtros, tabs de estados y rediseño de tablas y cards de pedidos. En definición.", href: "/proyectos/ordenes/fase-2" },
       { nombre: "Fase 3 · Proveedores", estado: "proxima", inicio: "2026-11", fin: "2026-12", detalle: "Ajustes de órdenes de proveedores.", href: "/proyectos/ordenes/fase-3" },
     ],
-    weekly: { semana: PENDING, estado: PENDING, resumen: "Prioridad P1 · Delivery en DEV. Pendiente: pruebas del módulo de etiquetas.", retos: "🚨 Bloqueado por falta de asignación de un desarrollador." },
+    weekly: { semana: PENDING, estado: PENDING, resumen: "Prioridad P1 · Delivery en DEV. Pendiente: pruebas del módulo de etiquetas. Se realizará un research con proveedores para validar las funcionalidades que quieren ver en el módulo de Órdenes.", retos: "🚨 Bloqueado por falta de asignación de un desarrollador." },
     metricas: { metrica1: PENDING, metrica2: PENDING, comentarios: PENDING },
   },
   {
