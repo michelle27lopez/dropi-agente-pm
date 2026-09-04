@@ -1,0 +1,886 @@
+# Reunión Trabajo de Grado
+
+- **ID:** `not_gY0iY0dVOsfTnS`
+- **Fecha:** 2026-08-31T22:09:04.417Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/897bb681-1833-4419-b33f-788d5094b4d0)
+- **Asistentes:** Santiago Herrera Acosta
+
+---
+
+## Resumen de la Reunión
+# Pivote del Proyecto: Legal Tech → Herramienta de Validación
+
+- Decisión de pivotar el trabajo de grado desde Legal Tech hacia una plataforma de experimentación para emprendedores
+- Concepto central: “mentor digital” que guíe experimentos de validación de modelos de negocio
+- Referente clave: herramienta Javelin, automatizar y agrupar metodologías similares
+- Alcance para la maestría: enfocarse en dos módulos del Business Model Canvas
+  - Segmento de clientes
+  - Propuesta de valor
+- Escalabilidad planteada como fases futuras: módulo de finanzas, servicios, etc.
+- Posible nombre tentativo mencionado: “Validation AI”
+
+# Diseño del Producto y MVP
+
+- MVP basado en experimentos, no en la herramienta completamente desarrollada
+  - Los primeros experimentos validan qué metodologías incluir en la plataforma
+  - “El experimento de los experimentos”
+- Arquitectura modular inspirada en el Business Model Canvas (9 campos)
+- Incluir diagnóstico de madurez del emprendimiento antes de recomendar experimentos
+  - Referencia al modelo de madurez de experiencia de cliente que usa el mentor en su consultoría
+  - Permite personalizar la ruta según el estado del usuario (idea incipiente vs. producto ya lanzado)
+- Entregables deben producir data analizable: reportes, gráficos, diagnósticos
+  - Advertencia explícita: no entregar data “en bruto” sin estructura
+- Proceso iterativo: el usuario vuelve a usar la herramienta en cada ciclo de validación
+
+# Fuentes de Datos y Validación
+
+- Santiago tiene acceso a comunidades clave para levantar información:
+  - Grupos de product managers, product owners, gerentes de proyectos y emprendedores
+  - Nido (Cámara de Comercio, Alcaldía y Gobernación)
+- Evento de dropshippers en Bogotá: 12 y 13 de septiembre
+  - Perfil de usuario ideal: emprendedores digitales sin experiencia previa
+  - Oportunidad de validar expectativas, motivaciones y fricciones en menos de 15 minutos
+  - Mentor interesado en asistir si hay cupo disponible
+- Posible validación beta con estudiantes del siguiente semestre
+
+# Próximos Pasos Administrativos y de Entregables
+
+- Redactar correo formal a Carlos Hugo justificando el pivote
+  - Incluir: decisión tomada, alcance del nuevo proyecto, justificaciones y fechas de entrega
+  - Con copia a: el mentor (Juan) y Andrés Felipe Millán
+- Entregables del nuevo proyecto comprometidos para el viernes (5 de septiembre)
+  - Fecha límite oficial del programa: 6 de septiembre
+- Revisar entregables anteriores de Legal Tech para rescatar estructura aplicable
+- Uso de IA permitido como apoyo, no como autor principal
+  - Estructura y párrafos deben reflejar el pensamiento propio de Santiago
+  - Aplicar normas APA específicas de la universidad (no APA genérico)
+- Compartir presentación de “deseable, factible y viable” al mentor (su computador fue formateado)
+- Próxima sesión: el mentor contacta esta semana para agendar
+
+# Próximos Pasos
+
+- **Enviar correo de pivote a Carlos Hugo, con copia a Juan y Andrés Millán** (Santiago)
+
+  Incluir decisión, alcance del nuevo proyecto, justificaciones y fechas de entrega comprometidas.
+- **Entregar los cuatro entregables del nuevo proyecto antes del viernes 4 de septiembre** (Santiago)
+
+  Fecha límite oficial del programa es el 6 de septiembre; comprometido a tenerlos listos antes.
+- **Compartir presentación de "deseable, factible y viable" al mentor** (Santiago)
+
+  El mentor perdió sus archivos tras un formateo; necesita la presentación para continuar la revisión.
+- **Confirmar disponibilidad de entrada al evento de Bogotá (12-13 septiembre) para el mentor** (Santiago)
+
+  El evento es gratuito; verificar si aún hay registro disponible y enviar el link por WhatsApp.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/5c0a3947-683b-44ad-92d4-e3addc7bdbcb](https://notes.granola.ai/t/5c0a3947-683b-44ad-92d4-e3addc7bdbcb)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[22:09] Participante:** Lo primero,
+- **[22:09] Participante:** No te voy dar la solución, porque no existe ahorita, pero sí
+- **[22:09] Participante:** te voy a decir
+- **[22:09] Participante:** qué pasa si cogemos una línea para montar
+- **[22:09] Participante:** una solución a un problema que
+- **[22:09] Participante:** tienen los emprendedores como tú o que hacen MBAs
+- **[22:09] Participante:** como tú, con emprendimientos, intraprendimientos.
+- **[22:09] Participante:** Y que la herramienta nos ayude a desarrollar
+- **[22:09] Participante:** rápidamente
+- **[22:09] Participante:** experimentos.
+- **[22:09] Participante:** Entonces, montar
+- **[22:09] Participante:** las metodologías en una herramienta
+- **[22:09] Participante:** para que se agrupen, porque los experimentos tienen diferentes
+- **[22:09] Participante:** cosas, y ahí te tocaría investigar y y y montar, inclusive,
+- **[22:09] Participante:** tres o cuatro, y que quede como un gran proyecto.
+- **[22:09] Participante:** Ese es un proyecto que me pasaría espectacular.
+- **[22:09] Participante:** Por ejemplo, la herramienta Javelin, entonces, ¿cómo la automatizamos? Porque lo que aquí estamos haciendo es agrupar metodologías y automatizarlas. Inclusive, puede quedar para la universidad, porque al final del día tú monetizar eso va a ser muy difícil, porque ya existe, ya la gente lo baja. Pero puede ser algo interesante, de pronto, Exactamente. Como un open source de decir, venga, voy a coger tres, las learning cards y la, no sé, encuestas bases o qué sé yo, pago dos, cualquiera de las metodologías que hay, ¿sí?, de las no sé cuál. Tú ya tuviste una clase sobre eso, ¿cierto?
+- **[22:10] Yo:** Como un open source
+- **[22:10] Yo:** Como un open source, por ejemplo, para el hub de investigación, dice ese.
+- **[22:10] Yo:** Sí,
+- **[22:10] Yo:** Sí, y, pues, la verdad, es mi es mi día a día, realmente, o sea,
+- **[22:10] Participante:** Y es tu día a día.
+- **[22:10] Yo:** Entiendo bien la profundidad de y las implicaciones,
+- **[22:10] Participante:** Exacto. Entonces, ¿qué pasa si
+- **[22:10] Participante:** cogemos eso?
+- **[22:10] Participante:** Y lo automatizamos en una en en en un en un ejercicio
+- **[22:10] Participante:** ¿sí?
+- **[22:10] Participante:** En un ejercicio, pero nos salimos de, me desmarco,
+- **[22:11] Participante:** el tema del legal tech, porque no tiene nada que ver.
+- **[22:11] Participante:** O sea, no tiene nada que ver porque este es un,
+- **[22:11] Participante:** quién es ahí tu cliente. Tu cliente es cualquier persona
+- **[22:11] Participante:** entra a un MBA que quiera hacer un modelo de negocio y que necesite validaciones.
+- **[22:11] Participante:** Y eso sería una herramienta con un aporte
+- **[22:11] Participante:** súper, súper...
+- **[22:11] Participante:** Bueno, porque tendrías una excelente herramienta. Y te lo digo como mentor, porque
+- **[22:11] Participante:** porque, pues, esa es una es una habilidad que tenemos, no no existe, no las
+- **[22:11] Participante:** sea, hay diferentes en todos lados, pero, entonces, a cada uno le toca salir y coger.
+- **[22:11] Yo:** Sí, y y poderlo y poderlo recopilar en
+- **[22:11] Yo:** un en un solo punto y que realmente sea un poco tu
+- **[22:11] Yo:** tu mentor digital, de alguna forma.
+- **[22:11] Participante:** Exacto, es como tu mentor digital, porque es que
+- **[22:11] Yo:** Que te lleve al amor.
+- **[22:11] Participante:** yo, por ejemplo, como mentor, necesito no evaluar si dónde fue que lo hiciste, si no,
+- **[22:11] Participante:** cuál es el resultado que obtuviste.
+- **[22:11] Yo:** Sí, las brechas que tienes, qué qué huecos todavía hay, qué
+- **[22:11] Participante:** Ese es
+- **[22:11] Participante:** Exacto. Mi valor contigo
+- **[22:12] Participante:** como Santiago, es mi conversación, y si te diste cuenta, mi valor contigo está en
+- **[22:12] Participante:** lo que yo pueda corregir contigo en donde, oye, ¿cómo ves estratégicamente esto? Porque necesito
+- **[22:12] Participante:** ponerte a pensar desde el punto de vista estratégico. Es más, tú
+- **[22:12] Participante:** estás en esta en esta en esta maestría para que se
+- **[22:12] Participante:** digamos, complemente tu conocimiento y aprendas a hacer las preguntas
+- **[22:12] Participante:** correctas que alguien haga los experimentos.
+- **[22:12] Yo:** Sí.
+- **[22:12] Participante:** ¿Sí?
+- **[22:12] Yo:** Sí.
+- **[22:12] Participante:** Entonces, de pronto tú le dices, mira, aquí hay una herramienta de cuatro
+- **[22:12] Participante:** experimentos, usemos esta, porque para este target
+- **[22:12] Participante:** por este no sé qué, haga estos experimentos. Y
+- **[22:12] Yo:** Y que y que de ahí la puedas disparar, recopilar nada,
+- **[22:12] Participante:** Exacto.
+- **[22:12] Yo:** contrastar, validar.
+- **[22:12] Participante:** Ahora, lo importante es que yo sí haría el MVP
+- **[22:12] Participante:** con entregables
+- **[22:12] Participante:** que se puedan analizar, porque si me das la data sola, mira,
+- **[22:12] Participante:** estoy en este momento en un lío del verraco con un proveedor mío,
+- **[22:12] Participante:** ¿sí?
+- **[22:12] Participante:** Toda una investigación para una compañía de salud
+- **[22:12] Participante:** se demoraron, la embarraron en las preguntas,
+- **[22:13] Participante:** Nosotros hacemos miles y miles y miles de encuestas. Entonces,
+- **[22:13] Participante:** ¿qué nos entregaron? Una data totalmente desconfigurada,
+- **[22:13] Participante:** preguntas acá y allá. Y y y me estaban preguntando esta mañana, oiga, que están que cómo nos fue, no sé qué. Y les dije, pues qué pena, pero lo como una mierda, ¿por qué? Pues porque tengo que, me tocó contratar tres personas interpretar toda la data, organizarla, no sé qué, después de haber sentado, con ustedes, papá, papá, y el y el cliente, y No, a mí me la me la dan en bruto, pero, a ver, una cosa es en bruto, pero este re bruto, en re bruto me la dieron. Entonces, ahora, mi cliente está molesto porque no lo voy a cumplir. Y no puedo hacer un informe porque, pues, si no tengo la data bien, no
+- **[22:13] Yo:** Okay.
+- **[22:13] Yo:** Sí.
+- **[22:13] Participante:** no puedo hacer un informe. ¿Sí me entiendes? Entonces,
+- **[22:13] Participante:** voy más allá que la que la que la que la herramienta
+- **[22:13] Participante:** digamos, nos dé una data, porque el MVP lo podemos hacer rápidamente y usted
+- **[22:14] Participante:** ya tiene las validaciones.
+- **[22:14] Participante:** Entreviste a todos los mentores, entreviste a todos los mentores que hay acá, ahí ya
+- **[22:14] Participante:** base, entreviste a todos los alumnos, y ahí
+- **[22:14] Yo:** No, nada más tengo tengo unos grupos gigantescos de
+- **[22:14] Yo:** de product manager, product owner, gerentes de proyectos, emprendedores. Tengo conexión con
+- **[22:14] Participante:** Exactamente.
+- **[22:14] Yo:** No sé si lo has escuchado.
+- **[22:14] Yo:** Con con Nido, de la Cámara de Comercio, que está lleno de emprendedores que es con en en asociación con la Cámara de Comercio, Alcaldía y Gobernación,
+- **[22:14] Participante:** Sí.
+- **[22:14] Participante:** Sí,
+- **[22:14] Yo:** o sea, hay una cantidad de personas, usuarios reales
+- **[22:14] Yo:** están necesitando ese tipo de productos,
+- **[22:14] Yo:** Y más allá que lo que te digo, que creo que el el el el el punto, claro, me me encantaba
+- **[22:14] Participante:** ¿Te gusta la idea de la aproximación?
+- **[22:14] Yo:** Sí, sí, me encanta la la propuesta.
+- **[22:14] Yo:** Y creo que definitivamente tengo cómo acudir a esa data.
+- **[22:14] Yo:** Directamente, o a levantar esa información,
+- **[22:14] Yo:** hacer las encuestas,
+- **[22:14] Yo:** De hecho,
+- **[22:14] Yo:** hoy en, ahora en en septiembre voy para Bogotá,
+- **[22:15] Yo:** a un evento
+- **[22:15] Yo:** es de dropshipper, pero justamente es de
+- **[22:15] Participante:** Ok.
+- **[22:15] Yo:** emprendedores digitales,
+- **[22:15] Yo:** Entonces,
+- **[22:15] Yo:** de emprendedores digitales y para validación de modelos de negocio.
+- **[22:15] Yo:** De en menos de quince minutos.
+- **[22:15] Yo:** Ahí va a salir muchísima data, qué expectativas tienen, qué motivaciones tienen, qué fricciones encuentran,
+- **[22:15] Participante:** E
+- **[22:15] Participante:** ¿Y cuándo es ese evento?
+- **[22:15] Yo:** Doce y trece.
+- **[22:15] Participante:** Invíame de pronto, y si te puedo acompañar, ahí vamos
+- **[22:15] Yo:** Déjame déjame veo
+- **[22:15] Yo:** el, creo que todavía registro, ya, déjame pregunto si todavía entras, es gratuito, de hecho,
+- **[22:15] Yo:** eso lo lo montó a la empresa en la que estoy en drop dropping.
+- **[22:15] Participante:** Sí.
+- **[22:15] Yo:** Es para dropshippers,
+- **[22:15] Participante:** Sí.
+- **[22:15] Yo:** y claramente es muy de nicho,
+- **[22:15] Yo:** pero
+- **[22:15] Yo:** más que sea de nicho, es el tipo de usuario al que vamos a llegar, son es personas que no tienen ni siquiera
+- **[22:15] Yo:** siquiera
+- **[22:15] Yo:** experiencia vendiendo muchos de ellos, ¿ah? Hay otros que sí son los
+- **[22:15] Yo:** duros en el tema,
+- **[22:15] Yo:** pero muchos de ellos no tienen experiencia todo vendiendo por Internet, no saben del modelo de dropshipping,
+- **[22:15] Yo:** y quieren empezar a generar ingresos a partir de ahí.
+- **[22:15] Yo:** De hecho, lo que estamos haciendo por este concepto es
+- **[22:15] Yo:** generar
+- **[22:15] Yo:** un punta a punta en donde le ponemos unas interfaces al usuario
+- **[22:16] Yo:** para aprender a a vender
+- **[22:16] Participante:** Ok.
+- **[22:16] Yo:** para dummies.
+- **[22:16] Yo:** ¿Sí? Entonces, ya ahí hay muchas personas también en el mismo drop y por el
+- **[22:16] Yo:** de de de ecommerce en Colombia,
+- **[22:16] Yo:** generan soluciones, ¿verdad?, claramente con herramientas IA de prototipados muy rápido. Entonces, utilizan, no sé, Loaball y montan una
+- **[22:16] Yo:** en cinco minutos y empiezan y ya tiene una landing page.
+- **[22:16] Yo:** Entonces, ya ya te mando el link, a ver, creo que todavía está ahí disponibles entradas.
+- **[22:16] Yo:** Y no, pero la idea me parece genial,
+- **[22:16] Yo:** Realmente, sí sí me parecería
+- **[22:16] Yo:** sí me parecería muy muy valioso que que
+- **[22:16] Yo:** pudiera ser enfocado a algo así,
+- **[22:16] Yo:** Y ahora, con con lo del hub de de Ceci, creo que podrían dar buenas buenas cosas que se pueden
+- **[22:16] Yo:** encontrar. Déjame, creo que todavía es tan siguiente, te la voy a compartir para este chat.
+- **[22:16] Yo:** Y te la también te la mando ahora por WhatsApp.
+- **[22:17] Yo:** Listo.
+- **[22:17] Yo:** Listo. No, me me parece genial. Entonces,
+- **[22:17] Yo:** ¿qué necesitaríamos
+- **[22:17] Yo:** los los cuatro entregables
+- **[22:17] Yo:** que subí a la plataforma, te los vuelvo y te los entrego a ti o lo devuelvo y los genero
+- **[22:17] Yo:** intentos? ¿Cómo cómo lo haríamos en ese aspecto?
+- **[22:17] Participante:** A ver, ¿tú ya hiciste
+- **[22:17] Yo:** Sí,
+- **[22:17] Participante:** A ver, tú ya hiciste unas entregables, ¿cierto?
+- **[22:17] Yo:** de hecho, ya hice los entregarles hasta la hasta el MVP, porque
+- **[22:17] Participante:** No, es que el problema es que te
+- **[22:17] Yo:** No, Y está bien y puedo No, no, no, realmente, dedicado esta semana puedo sacarlo. Sin problema, porque, o sea, finalmente no tengo que entenderlo, o sea, dentro del dentro del mercado objetivo, entiendo los problemas, realmente es algo es mi día a día, inclusive es más cercano que el mismo legal tech y lo que está como applied. Tengo más fuentes de información, el mismo día a día laboral hace que pueda dedicarle horas laborales a investigar. Porque finalmente es para lo que trabajo. Entonces, podría, sin ningún problema, tenerlo de aquí al viernes. ¿Funcionaría? Necesitarías que esté antes?
+- **[22:17] Participante:** toca arrancar de cero y y hacer un catch up de todo.
+- **[22:17] Participante:** Tú te demoras en hacer eso.
+- **[22:18] Participante:** No, no, no.
+- **[22:18] Participante:** No, no, no, yo creo que sí podría funcionar sin ningún problema.
+- **[22:18] Participante:** Yo lo que tengo es que
+- **[22:18] Yo:** Uh-huh.
+- **[22:18] Participante:** debes
+- **[22:18] Participante:** decirle a Carlos Hugo,
+- **[22:18] Participante:** ¿sí?,
+- **[22:18] Participante:** a Carlos Hugo, que es el líder
+- **[22:18] Yo:** Sí.
+- **[22:18] Yo:** Sí.
+- **[22:18] Yo:** Ajá.
+- **[22:18] Participante:** para que Carlos esté con copia a mí,
+- **[22:18] Participante:** ¿sí?
+- **[22:18] Participante:** Y con copia a Andrés Millán.
+- **[22:18] Yo:** Okay.
+- **[22:18] Participante:** ¿Sí?
+- **[22:18] Participante:** Ok. Y, entonces, le, lo que me estás contando de eso, después de hacer una revisión inicial
+- **[22:18] Participante:** de nuestro proyecto, se tomó la siguiente decisión,
+- **[22:18] Participante:** de pivotar a este proyecto con este alcance, con este tata tata tata,
+- **[22:18] Participante:** y los entregables se alcanzarán de todo el día tal.
+- **[22:18] Yo:** Listo, de una
+- **[22:18] Participante:** Te comprometes a eso y lo haces. ¿Sí me entiendes? Por
+- **[22:18] Participante:** si eso te va a funcionar a ti, Santiago... Y te voy a decir una cosa,
+- **[22:18] Participante:** lo valoras y ya, mucho, te vamos a tener que dar dos títulos, porque es que
+- **[22:19] Participante:** ya con el primero hermano avanzaste y aprendiste cosas.
+- **[22:19] Yo:** So
+- **[22:19] Participante:** Ahora vas a reforzarles tus conocimientos. Por eso yo les decía
+- **[22:19] Participante:** si ustedes son capaces de otro proyecto y empezar a aplicar los mismos
+- **[22:19] Participante:** pues, de eso se trata esta maestría.
+- **[22:19] Participante:** Porque estás aprendiendo a pensar de manera gerencial
+- **[22:19] Participante:** y no importa el proyecto que venga. Mañana no estás en en drop y estás en como
+- **[22:19] Participante:** vicepresidente en otra compañía, y entonces
+- **[22:19] Participante:** serás capaz de aplicar esos conceptos. Digamos,
+- **[22:19] Participante:** el objetivo del de la maestría se logra, ¿sí me entiendes?
+- **[22:19] Participante:** Porque la maestría no te dice, tiene que tener un un proyecto que sea
+- **[22:19] Participante:** obviamente, lo más cercano posible a la realidad, pero
+- **[22:19] Participante:** tiene que tener todos los resultados. No, no, no, lo le estamos enseñando es en el proceso.
+- **[22:19] Yo:** Sí.
+- **[22:19] Yo:** Sí, porque yo, siéndote muy, muy transparente,
+- **[22:19] Yo:** y creo profundamente que se puede
+- **[22:19] Yo:** tanto desde la parte teórica, dar todos los fundamentos necesarios para que den el el soporte de la justicia
+- **[22:20] Yo:** real al proyecto.
+- **[22:20] Yo:** Pero también
+- **[22:20] Yo:** se le puede dar viabilidad
+- **[22:20] Yo:** real a que funcione, y a inclusive entregarlo durante este mismo semestre
+- **[22:20] Yo:** como una, más allá de, la capa de
+- **[22:20] Yo:** seguridad de la información y cese y y todos los accesos y que sea utilizado y
+- **[22:20] Participante:** No, o lo lo lo presentas tú y
+- **[22:20] Yo:** adoptado un proceso.
+- **[22:20] Yo:** Claro, exacto. Más allá de eso,
+- **[22:20] Participante:** listo, no hay problema.
+- **[22:20] Participante:** O se lo vendes a Icesi, qué sé yo, yo no tengo ni idea. O sea, al final del día decidimos cualquier cosa, lo que tú quieras.
+- **[22:20] Yo:** No me acuerdo, creo, por eso.
+- **[22:20] Yo:** Podría ser perfectamente. Ahora, el
+- **[22:20] Yo:** yo tengo la primera, la la charla que me da de de inducción al tema de
+- **[22:20] Yo:** de emprendedores, de, perdóname, de mentorías,
+- **[22:20] Yo:** Ahí creo que también podría ser
+- **[22:20] Yo:** diferentes grupos en donde también se podría alcanzar a tipificar por
+- **[22:20] Yo:** niveles de madurez o conciencia de de de emprendimiento. Entonces,
+- **[22:20] Yo:** podríamos tomar desde
+- **[22:20] Yo:** alguna tipología más más más
+- **[22:20] Yo:** más nueva, menos cercana con generar valor
+- **[22:21] Yo:** en un producto, y otra que
+- **[22:21] Yo:** por ejemplo, creo que tengo con con con varios de mis padres que ya tienen años haciendo
+- **[22:21] Yo:** investigando, pivoteando,
+- **[22:21] Yo:** cómo se comportan, qué se
+- **[22:21] Yo:** qué qué qué puntos en común hay, qué divergencias hay, si hay que hacer
+- **[22:21] Yo:** niveles o o rutas de aprendizaje por el producto,
+- **[22:21] Yo:** Ya es un tema muy particular mío, a mí me gusta, y y y, la verdad,
+- **[22:21] Yo:** puedo hacerlo porque ya lo he montado varias veces,
+- **[22:21] Yo:** a través solamente de se puede montar
+- **[22:21] Yo:** todo el producto
+- **[22:21] Yo:** ni siquiera como
+- **[22:21] Yo:** mínimo viable, sino como
+- **[22:21] Participante:** Ok, pero, entonces, hay una cosa
+- **[22:21] Yo:** realmente un producto ya usable.
+- **[22:21] Yo:** ¿Sí?
+- **[22:21] Participante:** Ok, pero, entonces, hay una cosa, es la siguiente.
+- **[22:21] Participante:** Hay diferentes aproximaciones a esto, porque esto esto
+- **[22:21] Participante:** esto puede ser tan grande, Santiago, como tú quieras.
+- **[22:21] Yo:** Sí.
+- **[22:21] Participante:** Entonces,
+- **[22:21] Participante:** una es, sí es,
+- **[22:21] Participante:** validaciones de producto de de modelo de servicio de
+- **[22:21] Participante:** pricing, no sé qué, entonces ahí ya se te abre un abanico de opciones
+- **[22:22] Participante:** en donde eso confluye en una herramienta que se llame, no sé,
+- **[22:22] Participante:** validation AI,
+- **[22:22] Participante:** ¿sí?
+- **[22:22] Participante:** Listo.
+- **[22:22] Participante:** Y entonces, validation AI es la validación de
+- **[22:22] Participante:** es llevar
+- **[22:22] Participante:** a
+- **[22:22] Participante:** automatizar o, por lo menos, a tener una guía un mapeo de validación, ¿sí?,
+- **[22:22] Yo:** Un mapeo, en Vale.
+- **[22:22] Participante:** con diferentes opciones en cada una de las dimensiones.
+- **[22:22] Participante:** Producto, servicio, finanzas, dime.
+- **[22:22] Yo:** ¿Sabes qué ha pensado?
+- **[22:22] Yo:** Que, de alguna forma, más la la la
+- **[22:22] Yo:** la la arquitectura del producto.
+- **[22:22] Yo:** No en temas técnicos, sino más hacia, digámoslo, no sé, taxonomía o la o la
+- **[22:22] Yo:** qué tan modular puede ser.
+- **[22:22] Yo:** Más más cercano hacia lo que es el business model Canvas.
+- **[22:22] Yo:** Entonces, como ejes temáticos dentro de la plataforma,
+- **[22:22] Yo:** puesta la propuesta de valor, que ya incluye, entonces, toda esa generación
+- **[22:23] Yo:** de, bueno, ¿qué yo qué le estoy ofreciendo al cliente, al a mi usuario final?
+- **[22:23] Yo:** Un módulo de costos, módulo
+- **[22:23] Yo:** de cuáles son los
+- **[22:23] Yo:** estratégicos, un modelo de cómo le ayuda al cliente, entonces, estaría toda la parte de marketing y demás. Entonces, a través son, no me acuerdo si son nueve campos, no me acuerdo la
+- **[22:23] Participante:** Sí, son nueve campos
+- **[22:23] Participante:** pero tú estás en este momento, y es que para allá iba.
+- **[22:23] Participante:** Tú puedes hacer lo siguiente, y es, nos vamos por uno focalizado
+- **[22:23] Participante:** y en la presentación de tu trabajo de grado final,
+- **[22:23] Participante:** pones el escalamiento de las etapas que faltan, porque tú ahorita no lo la puedes hacer todo,
+- **[22:23] Yo:** Sí, de acuerdo.
+- **[22:23] Participante:** O sea, eso eso olvídate que lo... Strategizer probablemente
+- **[22:23] Participante:** mucho más avanzado que tú.
+- **[22:23] Participante:** Entonces, busca en strategizer qué es lo que ha hecho para el Canvas, y y va a estar mucho más avanzado que tú. Entonces,
+- **[22:23] Yo:** Sí.
+- **[22:23] Participante:** lo que te quiero decir es,
+- **[22:23] Participante:** un gran dolor que ayuda, que ayuda y resuelve un problema,
+- **[22:23] Participante:** es un problema de timing que tenemos en este momento con ustedes.
+- **[22:24] Participante:** Y necesitamos tres experimentos rápidamente. Pues madre, hagamos la herramienta hacer
+- **[22:24] Participante:** seis o siete opciones de experimentos,
+- **[22:24] Participante:** haga el haga el el muñeco,
+- **[22:24] Participante:** revisemos ya sus entregables para mirar cómo lo aplicamos,
+- **[22:24] Participante:** Yo hablo con Carlos Hugo y le lo, de pronto tenemos una una reunión
+- **[22:24] Participante:** con Carlos, que Carlos tiene también muchas ideas,
+- **[22:24] Participante:** y te damos mucho más masa
+- **[22:24] Yo:** Sí.
+- **[22:24] Participante:** para que que lo pongamos bien robusto. ¿Te parece?
+- **[22:24] Yo:** Genial,
+- **[22:24] Yo:** Genial, genial, el cagomullo sí me me muy buena idea.
+- **[22:24] Participante:** Entonces,
+- **[22:24] Participante:** muéstrame muéstrame los entregables y a ver cómo nos aproximamos en el proyecto
+- **[22:24] Yo:** Si se puede, sí.
+- **[22:24] Participante:** Entonces, nos olvidamos del Digantec.
+- **[22:24] Participante:** No, pues es, hermano, a ver, usted va a ser una
+- **[22:24] Yo:** Sea, si se puede,
+- **[22:24] Yo:** No, por eso te digo,
+- **[22:24] Participante:** no seis maestrías.
+- **[22:24] Yo:** No, por eso te digo, si si si fue más el caso,
+- **[22:24] Yo:** sea, si me pones escoger, digo, sí,
+- **[22:24] Participante:** No, es que se puede, es que se es que se puede, es que se puede, no tiene problema.
+- **[22:24] Yo:** Perfecto.
+- **[22:24] Yo:** Listo, de una.
+- **[22:24] Participante:** O sea,
+- **[22:24] Participante:** Pero necesito que el mail
+- **[22:25] Yo:** De una, ya lo hago.
+- **[22:25] Participante:** y yo hablo con Carlos Zugo.
+- **[22:25] Participante:** ¿Listo?
+- **[22:25] Participante:** Y usted lo justifica y no sé qué, inclusive, y
+- **[22:25] Participante:** pone las fechas de compromiso, me copia a mí,
+- **[22:25] Yo:** Perfect.
+- **[22:25] Participante:** le copia a Carlos Hugo, le copia a Andrés, para que todos estemos enterados.
+- **[22:25] Yo:** Perfecto, ya te voy a presentar, entonces, cuáles fueron los entregables
+- **[22:25] Yo:** Ahora, son, pero estos son los entregables de legaltech, ¿no importa?
+- **[22:25] Participante:** Es que quiero ver entre los entregables de legal tech
+- **[22:25] Participante:** qué cosas
+- **[22:25] Yo:** Yeah.
+- **[22:25] Participante:** pueden aplicar para ti, no no copiar sino la estructura.
+- **[22:25] Yo:** D uno.
+- **[22:25] Participante:** ¿Me los muestras, por favor? Eso es lo que necesito saber.
+- **[22:25] Yo:** Vamos a documentos.
+- **[22:25] Yo:** Bueno, esta, entonces, creo que arranca el orden
+- **[22:25] Yo:** Si no estoy mal, ya te confirmo cuál era los entregables.
+- **[22:25] Yo:** Tipo de validación. Creo que el primero era el de segmento, si no estoy mal.
+- **[22:25] Yo:** Selecciono, Propuesta de valor,
+- **[22:25] Yo:** Le
+- **[22:26] Participante:** Bueno,
+- **[22:26] Yo:** viendo mi pantalla, ¿sí?
+- **[22:26] Participante:** Sí, señor.
+- **[22:26] Yo:** Listo, te voy a bajar un poquito acá. Déjame le hago
+- **[22:26] Yo:** Zoom.
+- **[22:26] Participante:** O sea, a usted le toca hacer todo esto,
+- **[22:26] Yo:** Sí, sí, sí, consciente.
+- **[22:26] Participante:** Bueno,
+- **[22:26] Yo:** Consciente de eso, creo que eso.
+- **[22:26] Participante:** ojo con la IA.
+- **[22:26] Yo:** No,
+- **[22:26] Participante:** ¿Ok?
+- **[22:26] Yo:** Sí, sí,
+- **[22:26] Participante:** Usted puede utilizar la IA, pero
+- **[22:26] Participante:** por favor, el cien por ciento del documento no puede ser IA.
+- **[22:26] Yo:** De acuerdo.
+- **[22:26] Participante:** O sea, necesitamos su cabeza,
+- **[22:26] Yo:** Sí, sí.
+- **[22:26] Participante:** Ayúdese que le organice la información y usted la ajusta.
+- **[22:26] Yo:** De bueno.
+- **[22:26] Participante:** ¿Ok?
+- **[22:26] Yo:** Perfecto. Yo lo que estoy haciendo, te voy a preguntar, yo lo que estoy haciendo es
+- **[22:26] Participante:** Listo.
+- **[22:26] Yo:** yo estoy escribiendo el documento
+- **[22:26] Yo:** digamos que la la la estructura completa, párrafos completos,
+- **[22:26] Yo:** y lo que lo que estoy pidiendo es
+- **[22:26] Yo:** una limpieza gramatical y y y que
+- **[22:26] Yo:** sea, con con mis ideas, no no no sé si eso tenga algún problema. De hecho, te hablo, pero yo te pregunto,
+- **[22:26] Yo:** Decir, ¿el párrafo completo con las estructuras
+- **[22:26] Yo:** si son
+- **[22:27] Yo:** bueno, para la la construcción de gráficas, que a me toca aplicar algunas, por ejemplo, no sé si
+- **[22:27] Yo:** este tiene, unas gráficas muy puntuales,
+- **[22:27] Yo:** y para yo con todos los las citas que que que, pues, que
+- **[22:27] Yo:** estoy ya recopilando, lo que hago es como aplíqueles formato APA, pues,
+- **[22:27] Participante:** No, pero aplique en
+- **[22:27] Yo:** para no entrar a hacer el APA uno por uno.
+- **[22:27] Yo:** Listo.
+- **[22:27] Participante:** No, pero aplique de una, el formato APA que pide la universidad.
+- **[22:27] Participante:** Acuérdese que es distinto el APA al que
+- **[22:27] Participante:** de la universidad, tiene una una... ¿Usted ya recibió la indicación de la
+- **[22:27] Yo:** Sí, sí, sí.
+- **[22:27] Yo:** Sí, sí, ya tengo el documento de donde están todas las
+- **[22:27] Participante:** Ok, entonces, que lo aplique con esas normas APA.
+- **[22:27] Yo:** Pero ¿está bien como como
+- **[22:27] Yo:** sea, está bien? ¿Hay algún problema?
+- **[22:27] Participante:** Sí, lo que lo que queremos decir es que igual se
+- **[22:27] Participante:** tener filtro de ida, pero lo que queremos es que, pues,
+- **[22:27] Yo:** Sí, que no ponga a escribir a la IA como si fuera yo así, ¿no?
+- **[22:27] Participante:** ver tu tu
+- **[22:27] Participante:** No, pues, que no, pues, entonces, para eso calificamos la idea y y le y
+- **[22:27] Yo:** No, pero como te digo que lo estoy haciendo, ¿está bien?, ¿o hay algún inconveniente?
+- **[22:27] Participante:** usted nos gira el cheque.
+- **[22:27] Participante:** No, no, no, está bien, lo que queremos es tú,
+- **[22:27] Yo:** Ok.
+- **[22:27] Participante:** tu, que que uno vea que, efectivamente, está tu pensamiento y no es de la IA, La IA organiza información, inclusive escribe demasiado bonito. Entonces, quiero saber, en la introducción, pues, tienes que cambiarla el contexto también, las fuentes tienes que cambiarlas, ¿sí?
+- **[22:28] Yo:** Listo,
+- **[22:28] Yo:** No, es que sí, no, como sea, a eso, Juan,
+- **[22:28] Yo:** realmente todo cambia,
+- **[22:28] Yo:** porque no se no se puede reutilizar nada.
+- **[22:28] Participante:** No, quiero,
+- **[22:28] Yo:** No se puede reutilizar segmento, no se puede
+- **[22:28] Participante:** que quiero ver el alcance, porque como yo no tenía acceso, quiero ver el alcance acá.
+- **[22:28] Yo:** No,
+- **[22:28] Yo:** listo, listo.
+- **[22:28] Participante:** Yo no yo no conozco este documento, entonces,
+- **[22:28] Participante:** Ok, listo. Baja, por favor.
+- **[22:28] Participante:** El progreso buscado, ok.
+- **[22:28] Participante:** La propuesta concreta.
+- **[22:28] Participante:** Esa debe ser
+- **[22:28] Participante:** la propuesta concreta debe ser la que sustente el cambio en el mail
+- **[22:28] Yo:** Perfecto, listo.
+- **[22:28] Participante:** Andrés Felipe Millán.
+- **[22:28] Participante:** ¿Ok?
+- **[22:28] Yo:** Ok.
+- **[22:28] Participante:** ¿Listo?
+- **[22:28] Participante:** Y en conjunto con el mentor, después de revisar la propuesta
+- **[22:28] Participante:** tata tata tata de los entregables, no sé qué. He sido como un proyecto
+- **[22:29] Participante:** que tiene mayor impacto y mayor alcance el siguiente,
+- **[22:29] Participante:** ta ta ta ta, y pones las cuatro justificaciones,
+- **[22:29] Participante:** Mi plan de trabajo es el siguiente,
+- **[22:29] Participante:** ¿sí? Entonces,
+- **[22:29] Participante:** revisión de propuesta de entregable propuesta valor, alcance, pues,
+- **[22:29] Participante:** valor, o sea, todos los entregables que tienes
+- **[22:29] Yo:** Ajá.
+- **[22:29] Participante:** y entonces, ¿y y para cuándo los vas a entregar?
+- **[22:29] Yo:** Ok.
+- **[22:29] Participante:** Y, de hecho, pues los primeros experimentos
+- **[22:29] Participante:** no serán con la herramienta
+- **[22:29] Participante:** desarrollada, sino que se va a validar precisamente
+- **[22:29] Participante:** como insumos para la herramienta que se va, el MVP que se va a construir.
+- **[22:29] Yo:** Yes.
+- **[22:29] Yo:** Toca ver la herramienta como el
+- **[22:29] Yo:** producto, el delivery, lo que se van a hacer justamente son los experimentos,
+- **[22:29] Participante:** Esa
+- **[22:29] Yo:** voy a hacer el experimento de los experimentos realmente, tengo que ver cuáles van a ser los
+- **[22:29] Participante:** Exactamente.
+- **[22:29] Yo:** experimentos que voy a llevar a la por plataforma, porque veo que
+- **[22:29] Yo:** los que mayor
+- **[22:29] Participante:** Perfecto.
+- **[22:29] Yo:** valor le generaron a mi segmento.
+- **[22:30] Participante:** Perfecto. Eso es eso es, propuesta concreta,
+- **[22:30] Participante:** Listo.
+- **[22:30] Participante:** Baja. Límites de la propuesta, sí, señor.
+- **[22:30] Yo:** Aquí pongo las limitas.
+- **[22:30] Yo:** Y esto es lo que me dijiste o anotación, como lo la
+- **[22:30] Yo:** diferenciación frente a otras alternativas. Aquí incluiría lo que justamente
+- **[22:30] Yo:** estás diciendo, vuelvo
+- **[22:30] Yo:** a algunas herramientas. De hecho de hecho, hay hay una hay una hay un estado
+- **[22:30] Yo:** bien
+- **[22:30] Yo:** bien chévere.
+- **[22:30] Yo:** Que
+- **[22:30] Yo:** que creo que puede respaldar lo que tú dices de de de que genera más
+- **[22:30] Yo:** valor posiblemente.
+- **[22:30] Yo:** Porque hasta
+- **[22:30] Yo:** febrero de este año,
+- **[22:30] Yo:** de hecho, Y Combinator sacó
+- **[22:30] Participante:** Ajá.
+- **[22:30] Yo:** un listado de las posibles herramientas que
+- **[22:30] Yo:** muy probablemente serían las más disruptivas o más valor que le generarían a nivel global a las empresas
+- **[22:30] Yo:** y una de ellas
+- **[22:30] Yo:** era
+- **[22:30] Yo:** una herramienta que, dentro de sus funcionalidades,
+- **[22:30] Yo:** el call realmente está hacer una herramienta para generar producto.
+- **[22:30] Yo:** Y era como
+- **[22:30] Yo:** el lo que sería el equivalente al Jira
+- **[22:31] Participante:** Ok.
+- **[22:31] Yo:** de los product managers.
+- **[22:31] Yo:** Y por eso es que Jira ha estado tan acelerado también en incluir muchas funcionalidades muy focalizadas a un
+- **[22:31] Yo:** un a un a un segmento, que son product managers,
+- **[22:31] Yo:** pero esta no solamente se quería como hacer producto, sino que realmente estaría más
+- **[22:31] Yo:** más transversal, ¿no?, por lo que tú mencionas.
+- **[22:31] Participante:** ¿Tú tienes una presentación en donde está lo de deseable,
+- **[22:31] Participante:** factible y viable, ¿cierto? Una presentación de PowerPoint de clase,
+- **[22:31] Yo:** Sí.
+- **[22:31] Yo:** Sí, sí, sí.
+- **[22:31] Participante:** ¿Me la puedes compartir, por favor? Es que me hicieron un
+- **[22:31] Participante:** un un un formateo en mi computador, me están pasando los archivos,
+- **[22:31] Participante:** y me tienen loco hace una semana que no ha pasado todo, hermano, y estoy bloqueado.
+- **[22:31] Yo:** Ya te la paso.
+- **[22:31] Participante:** Entonces, es importantísimo
+- **[22:31] Yo:** Déjame ver.
+- **[22:31] Participante:** lo siguiente, plantear
+- **[22:31] Participante:** la investigación competitiva
+- **[22:31] Participante:** ¿sí?,
+- **[22:31] Yo:** Sí.
+- **[22:31] Participante:** Pero
+- **[22:31] Participante:** y y y y ya tendremos una sesión para mirar, entonces,
+- **[22:31] Participante:** las dimensiones de esa de esa investigación competitiva,
+- **[22:31] Participante:** ¿sí?,
+- **[22:32] Participante:** Hay que dejar muy claro el alcance
+- **[22:32] Participante:** de los experimentos
+- **[22:32] Participante:** para el entregable,
+- **[22:32] Participante:** Ya ya les dijeron cuándo uno era la fecha, entonces, pues,
+- **[22:32] Participante:** que es el seis de septiembre,
+- **[22:32] Yo:** No, no,
+- **[22:32] Participante:** O sea, no tienes muchos días.
+- **[22:32] Yo:** No, no, no, mucho, por eso es que igual me me
+- **[22:32] Participante:** Pero pero no importa, pero igual,
+- **[22:32] Participante:** idea es tratar de llegar a ese día. Si si, pues, si necesitas un día más,
+- **[22:32] Participante:** pues pídelo, porque no hay ningún problema, pero necesito que lo escribas.
+- **[22:32] Participante:** Baja, por favor,
+- **[22:32] Participante:** Esa habilidad
+- **[22:32] Participante:** En este antecedente de piloto de trabajo manual en la jurídica no sé aquí. Factibilidad,
+- **[22:32] Participante:** Ok. También, y viabilidad, Ok, captura de valor, inclusive el crecimiento. Porque tú vas a tener que lograr vas a tener que hacer una cosa que sí es fundamental acá, y es la siguiente, y es que lo que planteemos o sea, tenemos que plantear como como una flor todos los alcances de la herramienta. Es aplicable para servicios, finanzas, para no sé qué y para no sé qué. Pero en para la del trabajo de maestría, mi estimado Santiago, es
+- **[22:33] Participante:** tenemos que coger un una vertical,
+- **[22:33] Participante:** Si quieres que es la de producto, entonces, nos dedicamos a hacer todo el trabajo de grado
+- **[22:33] Participante:** para experimentos para producto.
+- **[22:33] Participante:** Montamos toda una herramienta automatizada con
+- **[22:33] Yo:** Sería
+- **[22:33] Participante:** con el MVP, con todo el tema para producto. ¿Sí me entiendes? Y dejas
+- **[22:33] Participante:** planteado, pero escúchame un segundo, y dejas planteado como escalabilidad
+- **[22:33] Participante:** de las siguientes fases, o sea, porque alguien te va a preguntar, bueno, ¿y qué sigue de esto? Ah, no,
+- **[22:33] Participante:** sigue montar el módulo de finanzas, después el módulo de servicios.
+- **[22:33] Participante:** Después el módulo no sé qué, porque tú no vas a poder hacer todo.
+- **[22:33] Participante:** ¿Ok?
+- **[22:33] Yo:** De acuerdo.
+- **[22:33] Participante:** Es importante que lo tengas en cuenta.
+- **[22:33] Yo:** No, te iba a decir
+- **[22:33] Participante:** Dime.
+- **[22:33] Yo:** de pronto, no sé si tengas el dato
+- **[22:34] Yo:** de
+- **[22:34] Yo:** tratando de acercarlo bastante a Yessi, para que también sea una herramienta que al corto plazo se puedan
+- **[22:34] Yo:** a adoptar y aprovechando también lo de las mentorías.
+- **[22:34] Yo:** El porcentaje
+- **[22:34] Yo:** aproximado
+- **[22:34] Yo:** de
+- **[22:34] Yo:** sí, un poco la tipología de de de todos estos emprendimientos que llegan al hub de innovación.
+- **[22:34] Yo:** Si en su mayoría son servicios,
+- **[22:34] Yo:** son productos,
+- **[22:34] Yo:** o simplemente llegan en c. También, de pronto, el el nivel de madurez con el que llegan al de negocio sería interesante, eso ayudaría tratar de enfocarlo muy bien a, por ejemplo, productos de personas que llegan simplemente con una idea y quieren validar la idea, y a partir de ahí, la plataforma ayuda a la construcción de lo que ya dijimos, ¿no?, por ejemplo, propuesta de valor, comunicación a clientes. Solo eso va a borrar la plataforma.
+- **[22:34] Participante:** Bueno,
+- **[22:34] Participante:** te voy a mostrar te voy a mostrar parte de lo que yo hago en esta compañía, en esta
+- **[22:34] Participante:** Mi compañía aquí
+- **[22:34] Participante:** te voy a mostrar un poco lo que yo hago. Entonces, mira,
+- **[22:35] Participante:** te voy a robar la pantalla, déjame, yo abro acá.
+- **[22:35] Participante:** Descargas.
+- **[22:35] Participante:** Chévere que me mostraras tú dónde está.
+- **[22:35] Participante:** Entonces...
+- **[22:35] Participante:** Ya te voy a mostrar, dame unos par de segundos que esto ahora.
+- **[22:35] Participante:** So
+- **[22:35] Participante:** Está haciendo como un proceso como por debajo,
+- **[22:35] Participante:** y me tiene loco. Bueno, entonces te digo que es que
+- **[22:35] Participante:** superbloqueado, llevo una semana y media fregado con este computador.
+- **[22:35] Participante:** Que tocó reformatearlo todo, perdí información,
+- **[22:35] Participante:** No, estoy me estoy me estoy enloqueciendo.
+- **[22:35] Participante:** La presentación de servicios. Entonces, dos mil veintiséis.
+- **[22:36] Participante:** Presentar
+- **[22:36] Participante:** A ver,
+- **[22:36] Participante:** Mira,
+- **[22:36] Participante:** Select the win
+- **[22:36] Participante:** Select the window.
+- **[22:36] Participante:** Dame un
+- **[22:36] Participante:** Dame un momentico, que abra esto acá, porque no está abriendo.
+- **[22:36] Participante:** Share.
+- **[22:36] Participante:** Cuál pantalla está viendo acá?
+- **[22:36] Participante:** ¿Cuál pantalla vio, abrió?
+- **[22:36] Participante:** No, esa no es.
+- **[22:36] Yo:** As a
+- **[22:36] Participante:** Es mi hijo, hermano.
+- **[22:36] Yo:** As the
+- **[22:36] Participante:** No,
+- **[22:36] Participante:** ese ese es una que que salió esta semana
+- **[22:37] Participante:** ya ya como comandante, que ya lo chequé hace como cinco o seis meses, y llegó por primera vez a su esposa, a Praga, Él Vuela En En Arabia.
+- **[22:37] Participante:** En en en Emiratos, él vuela en Emiratos. Entonces,
+- **[22:37] Participante:** ahí estaba yendo a Praga,
+- **[22:37] Yo:** Bacano.
+- **[22:37] Participante:** Entonces, a llevar a su esposa como por primera vez, entonces,
+- **[22:37] Participante:** él como comandante. Entonces, usted podrás imaginar eso para
+- **[22:37] Yo:** Claro que
+- **[22:37] Participante:** Superfelices.
+- **[22:37] Yo:** Qué bueno.
+- **[22:37] Participante:** Entonces mira,
+- **[22:37] Participante:** nosotros en
+- **[22:37] Participante:** aplicamos
+- **[22:37] Participante:** para los clientes,
+- **[22:37] Participante:** hay un modelo con una metodología estructurada ¿sí?, en lo que hacemos, para experiencia de clientes que tiene varias dimensiones. Architecture es, digamos,
+- **[22:37] Yo:** Sí.
+- **[22:37] Participante:** la herramienta que tenemos. Entonces, tiene clientes, proceso de estructura, gente y cultura,
+- **[22:37] Participante:** datos y herramienta, todo orientado al tema de experiencia de clientes, modelos de servicio,
+- **[22:37] Participante:** y todo eso. Pero ¿qué sucede?
+- **[22:38] Participante:** El primer paso se llama madurez de experiencia.
+- **[22:38] Participante:** El segundo ya son los modelos, lo que tuviste anterior,
+- **[22:38] Participante:** y después un aseguramiento. Entonces, yo en el modelo,
+- **[22:38] Participante:** tengo una herramienta para saber cuál es el estado de
+- **[22:38] Participante:** madurez de experiencia que tiene su compañía.
+- **[22:38] Participante:** ¿Ves? Entonces,
+- **[22:38] Yo:** Okay.
+- **[22:38] Participante:** al al final del día, lo importante es
+- **[22:38] Participante:** oiga,
+- **[22:38] Participante:** ¿usted dónde está? No importa en la posición en que esté,
+- **[22:38] Participante:** ese es su estado de madurez.
+- **[22:38] Participante:** Entonces,
+- **[22:38] Participante:** es más o menos un poco lo que me estás planteando.
+- **[22:38] Participante:** Con unos steps.
+- **[22:38] Participante:** ¿Sí? No sé si exista eso en el mercado, habrá que mirarlo, no no lo sé,
+- **[22:38] Participante:** pero, pues, está hablarte uno, dos, tres o cuatro, sí, donde
+- **[22:38] Participante:** esté, o lo ponemos, o nos lo inventamos, porque al final del día,
+- **[22:38] Participante:** a mí a veces me da risa porque no, es que tal
+- **[22:38] Participante:** cosa en tal lado, en Harvard... Sí, pero ¿usted qué quién cree que inventó lo de Harvard?
+- **[22:38] Participante:** Pues la misma gente de Harvard.
+- **[22:39] Participante:** Los mismos profesores, los mismos mentores, en la misma vaina. Entonces, nosotros también podemos hacerlo.
+- **[22:39] Participante:** También es, nadie es dueño de su propio modelo. Mientras pueda,
+- **[22:39] Participante:** científicamente, probarlo y sustentarlo.
+- **[22:39] Participante:** ¿Ok? Entonces, es un poquito eso, y me parece
+- **[22:39] Participante:** que creo que, de pronto, la herramienta necesita
+- **[22:39] Participante:** esto anteriormente. Porque cuando yo hago una consultoría, siempre hago esto,
+- **[22:39] Participante:** para poderle decir, usted está aquí,
+- **[22:39] Participante:** en unas dimensiones,
+- **[22:39] Participante:** y yo le entrego un informe. Y en esas dimensiones, yo le digo, ¿sabe qué?
+- **[22:39] Participante:** Entonces, su compañía está bajo esto,
+- **[22:39] Participante:** tenemos que enfocarnos en estos y estas cosas,
+- **[22:39] Participante:** porque yo no puedo simplemente llegar a intervenir algo que ya
+- **[22:39] Participante:** existe, funciona y nadie está interesado. No, el estado de madurez me dice
+- **[22:39] Participante:** en qué lugar está y a dónde quieres llegar, porque
+- **[22:39] Participante:** si estás acá, de pronto, ya ya estás estás muy
+- **[22:39] Participante:** muy bien, estás muy cerca de hacer cosas pequeñas. Dependiendo de cada cliente,
+- **[22:40] Participante:** es distinto. Y, como tú bien lo dijiste, oiga,
+- **[22:40] Participante:** usted es un startup que apenas tiene una ideita de negocio, ¿listo?
+- **[22:40] Participante:** Estás en un estado incipiente, ¿sí? No, pero es que tú tienes un
+- **[22:40] Participante:** mucho mayor, porque ya tienes un producto y
+- **[22:40] Participante:** no sé qué, y lo que pasa es que no se está vendiendo. Entonces, ahí podemos ver
+- **[22:40] Participante:** cuáles son los esos elementos. Te te dejo esa idea para que veas cómo lo hacemos
+- **[22:40] Participante:** nosotros y estás totalmente alineado con el concepto.
+- **[22:40] Yo:** Sí, cien por ciento. Y y creo que esa esa esa esa parte que
+- **[22:40] Yo:** que es el, termina siendo como el
+- **[22:40] Yo:** el c t o inicial de la plataforma, es básico para
+- **[22:40] Yo:** poder entender y realmente que la plataforma le genere el valor
+- **[22:40] Yo:** suficiente al tipo de usuario que vaya a llegar.
+- **[22:40] Yo:** Y que no vaya a empezar a hacerle
+- **[22:40] Yo:** que que no sea una plataforma estandarizada y que parezca que tiene quemado y por defecto todo el paso a paso, porque será diferente el el la estructura del entregable para una persona que, para una empresa, ya está mucho más arriba como lo mostrabas, a una que está apenas iniciando. Entonces, yo creo que esa parte sería bien, bien interesante poderla incluir. Y ahí ahí para volver un poquito hacia hacia lo del estado del arte. Yo había iniciado también, antes de de tomarlo, darle el el giro, ¿cierto?, hacia qué tipo de o el por qué quería hacer el cambio, realmente, estaba sobre el tema de la investigación.
+- **[22:41] Yo:** ¿Cierto?
+- **[22:41] Yo:** Creo que, entonces, lo que podríamos hacer
+- **[22:41] Yo:** para seguramente lo que más fuerza ahí tendría es el es el estado del arte,
+- **[22:41] Yo:** es cómo aplicamos o cómo se aplican varios experimentos
+- **[22:41] Yo:** tendría que ya sentarme con calma, ver cuáles se podrían escoger,
+- **[22:41] Yo:** y y cómo eso, entonces, facilita un poco el el el el nivel de
+- **[22:41] Yo:** el nivel de progreso
+- **[22:41] Yo:** se podría entender,
+- **[22:41] Yo:** de una persona frente a su emprendimiento, ¿no?
+- **[22:41] Participante:** Claro, lo que pasa es
+- **[22:41] Yo:** Frente a su su idea de negocio.
+- **[22:41] Participante:** Claro, lo que pasa es que, en la medida del nivel de progreso, será un proceso iterativo
+- **[22:41] Participante:** en validaciones y experimentos permanentes, que es lo que tú haces.
+- **[22:42] Participante:** ¿Por qué? Porque tú partes del punto uno y dices, bueno, tú estás acá, este es
+- **[22:42] Participante:** estado del arte hoy. Listo. ¿Qué tienes que hacer? Haz un MVP,
+- **[22:42] Participante:** ajustas
+- **[22:42] Participante:** mock up, MVP, ajustas, sales el producto, todo el proceso que tú conoces.
+- **[22:42] Participante:** ¿Sí?
+- **[22:42] Participante:** Porque no es perfecto, simplemente no es perfecto. Tú todos los días estás modificando
+- **[22:42] Participante:** tus productos, yo lo hago todos los días, ¿sí? Hay una estructura base,
+- **[22:42] Participante:** pero el veinte por ciento me toca modificarlo.
+- **[22:42] Yo:** De acuerdo.
+- **[22:42] Participante:** Porque, pues, el mercado está cambiando todo el tiempo.
+- **[22:42] Participante:** Entonces, como viene ese proceso iterativo, vuelve a usar las mismas herramientas, inclusive
+- **[22:42] Participante:** puedes cobrar por eso.
+- **[22:42] Participante:** Entonces, al final del día, sí es tan robusto el el modelo
+- **[22:42] Participante:** de experimentos, tan chévere, queda entregables, queda un
+- **[22:42] Participante:** reporte con un diagnóstico, con resultados, con gráficos, con qué
+- **[22:42] Participante:** sé yo, con una cantidad de cosas superchéveres, entonces,
+- **[22:42] Participante:** te va a ayudar a tomar decisiones. Y dices, ¿qué te hace falta para?
+- **[22:42] Participante:** ¿Sí?
+- **[22:42] Participante:** Tú estás metiendo una gran cantidad de cosas, igual desde lo cualitativo,
+- **[22:43] Participante:** porque desde lo cuantitativo tienes que meter diseños, mostrarles estadísticos,
+- **[22:43] Participante:** soportados con información, como
+- **[22:43] Participante:** nosotros lo hacemos.
+- **[22:43] Participante:** ¿Sí?
+- **[22:43] Participante:** Porque yo asesoro compañías, yo tengo diseños muestran estructurados con metodologías
+- **[22:43] Participante:** internacionales y que soportan estadísticamente las
+- **[22:43] Participante:** del universo.
+- **[22:43] Participante:** Ni siquiera el desglose a veces, sino representatividad y desglose son cosas distintas.
+- **[22:43] Participante:** Entonces,
+- **[22:43] Participante:** puedes llegar a un nivel básico,
+- **[22:43] Participante:** es para cierto tipo de emprendedores con una validación primaria,
+- **[22:43] Participante:** hay una validación más profunda y hay una, de pronto, con consultoría.
+- **[22:43] Participante:** Inclusive, pueden llegar a tener ese negocio de esa manera.
+- **[22:43] Yo:** Sí.
+- **[22:43] Participante:** ¿Sí?
+- **[22:43] Participante:** Pero esos son los escalamientos. La pregunta que te hago en ese momento y la que te debes hacer,
+- **[22:43] Participante:** es,
+- **[22:43] Participante:** ¿hasta dónde quiero llegar en la maestría?
+- **[22:43] Participante:** Porque no vas a alcanzar a hacer todo por el tiempo que te queda.
+- **[22:43] Yo:** Yo creo yo creo que
+- **[22:44] Yo:** sí o sí,
+- **[22:44] Yo:** Obvio, déjame lo pienso, pero también lo he ido pensando en borrador acá,
+- **[22:44] Yo:** guardarte una respuesta como como se
+- **[22:44] Yo:** tratando de procesar es
+- **[22:44] Yo:** Creo que el el mayor foco podría estar, y pensando también el mismo del Canvas, que el
+- **[22:44] Yo:** estén en la propuesta de valor,
+- **[22:44] Yo:** Creo que del el de la propuesta de valor
+- **[22:44] Yo:** es donde surgen las demás preguntas y un poco
+- **[22:44] Yo:** qué metodológicamente la plataforma es llevar hacia una un tipo
+- **[22:44] Yo:** cascada,
+- **[22:44] Yo:** pensando más en la iteración,
+- **[22:44] Yo:** yo como corto en, de la propuesta valor,
+- **[22:44] Yo:** y me suena bastante también un poco la comunicación, factor comunicación.
+- **[22:44] Participante:** Pero es que mira, en el campus está
+- **[22:44] Yo:** ¿Sí?
+- **[22:44] Participante:** el canvas de la propuesta valor inclusive
+- **[22:44] Participante:** hoy en día, todavía más avanzado que este que yo construí y y y puse.
+- **[22:44] Yo:** Sí, ese ya lo ya ya hicieron modular el mismo
+- **[22:44] Participante:** Exactamente, pero pero, para hacer esto, tú sabes,
+- **[22:44] Participante:** y para priorizar y hacer todo el proceso, ¿sí?, para hacer todo el proceso,
+- **[22:45] Participante:** pues no sé si te va a alcanzar a dar la vida, porque lo primero que uno
+- **[22:45] Participante:** tiene que hacer, realmente, lo fundamental, y a lo que yo le apostaría es a estos
+- **[22:45] Participante:** dos. Estos dos elementos son los más críticos del Canvas. El segmento
+- **[22:45] Yo:** Sí.
+- **[22:45] Participante:** y la propuesta valor.
+- **[22:45] Participante:** Entonces,
+- **[22:45] Participante:** por eso te digo, puede ser tan grande como te lo imagines, si terminas inventando la
+- **[22:45] Participante:** o
+- **[22:45] Participante:** te vas en foco y dices, mire, voy a trabajar experimentos encontrar segmentos
+- **[22:45] Participante:** para encontrar
+- **[22:45] Participante:** para validar en en las hipótesis
+- **[22:45] Participante:** estos experimentos, con estas dimensiones, hasta ahí.
+- **[22:45] Yo:** Pensarías que
+- **[22:45] Yo:** bueno, claramente tendría que ver el tiempo, ahora que me sientes ya a redactar de nuevo los
+- **[22:45] Yo:** los documentos.
+- **[22:45] Yo:** Pero encontrar un balance en que me parecía
+- **[22:45] Yo:** o sea,
+- **[22:45] Yo:** claramente,
+- **[22:46] Yo:** haré haré experimentos que me permitan ver cuáles son esos experimentos que
+- **[22:46] Yo:** que debería tener la plataforma,
+- **[22:46] Yo:** Pero yo particularmente, de hecho, todo lo que te venía contando de de líneas de investigación que
+- **[22:46] Yo:** me llama la atención,
+- **[22:46] Yo:** hacen parte también de, llámemelo
+- **[22:46] Yo:** mi portafolio, mi caja de herramientas para hacer producto. ¿Sí? Y dentro de eso, por ejemplo, hay unos conceptos bastante interesantes, sobre ejemplo, lo del VMAP, que es para la la, básicamente, las variables que yo, al hacer un producto, al entregar una propuesta de valor, tengo que cuidar para hacer que el comportamiento de mi usuario sea el que yo espero. Ejemplo, si quiero que complete un proceso de checkout ¿sí?, en un carrito de compras, ver qué es lo que no está permitiendo, de pronto, que esa variable se me mueva positivamente. Eso consta de motivación, de habilidad del usuario en temas, pues, ofimática para hacerlo simplemente,
+- **[22:46] Participante:** Ajá.
+- **[22:46] Yo:** o simplemente prompts,
+- **[22:46] Yo:** slash trigger, es decir, que yo esté dándole
+- **[22:46] Yo:** esté tocando en los puntos exactos. Por ejemplo, recordar
+- **[22:47] Yo:** de abandono de carrito de compras,
+- **[22:47] Yo:** le muestre que tiene
+- **[22:47] Yo:** procesos por completar para para para para para comprar,
+- **[22:47] Yo:** Entonces, hay temas ya
+- **[22:47] Yo:** por eso por eso el
+- **[22:47] Yo:** que te mencioné al principio, más
+- **[22:47] Yo:** cognitivos aplicados a tecnología,
+- **[22:47] Participante:** Okay.
+- **[22:47] Yo:** que a mí particularmente me llama mucho la atención que quisiera
+- **[22:47] Yo:** después de maestría, seguir estudiando,
+- **[22:47] Participante:** Es que te va a tocar, por eso te digo, tienes que darle un alcance
+- **[22:47] Yo:** la
+- **[22:47] Participante:** a eso, porque el producto es inmenso.
+- **[22:47] Yo:** Claro, claro. Entonces, a eso quiero llegar, ¿te parece
+- **[22:47] Yo:** que una línea correcta, digámoslo,
+- **[22:47] Yo:** verlo por fases,
+- **[22:47] Yo:** ¿cierto?, es que para la maestría
+- **[22:47] Yo:** claramente se delimita y me parece muy chévere la propuesta de llevarlo
+- **[22:47] Yo:** a a a que sea la propuesta valor y segmento,
+- **[22:47] Yo:** ¿cierto?, acotarlo, y dentro de eso trabajarlo muy bien para que se entienda
+- **[22:47] Yo:** parte por parte del cómo está compuesto el software y
+- **[22:47] Yo:** qué puede esperar el usuario que yo le entregue, ¿cierto?, como valor.
+- **[22:47] Yo:** Y, a partir de ahí, todo eso por debajo claramente
+- **[22:48] Yo:** va a tener una
+- **[22:48] Yo:** unas raíces que van a ser los experimentos, ¿no?, una entramada, una telaraña por debajo que van a ser los
+- **[22:48] Yo:** cómo piensa la plataforma,
+- **[22:48] Yo:** Y eso, un poco, sería lo que
+- **[22:48] Yo:** Arturo podría seguirse
+- **[22:48] Yo:** trabajando de forma un poco ya más conceptual.
+- **[22:48] Participante:** Claro.
+- **[22:48] Yo:** Y es básicamente la plataforma aprovecha
+- **[22:48] Yo:** todo lo que el entramado de experimentación por debajo
+- **[22:48] Yo:** está justificándole al usuario. ¿A qué me refiero? De que si yo le digo al usuario
+- **[22:48] Participante:** Listo.
+- **[22:48] Yo:** plataforma, caja de herramientas,
+- **[22:48] Yo:** le va a decir,
+- **[22:48] Yo:** pruebe para el checkout
+- **[22:48] Yo:** que
+- **[22:48] Yo:** el recordatorio de abandono del carrito de compras
+- **[22:48] Yo:** supongamos, no va a ser a través de un WhatsApp, como lo funciona en la mayoría,
+- **[22:48] Yo:** sino que va a ser a través de una llamada automatizada en flujo de voz.
+- **[22:48] Yo:** Esa es la conclusión después de una conversación muy larga y de muchos inputs y outcomes, ¿cierto?
+- **[22:48] Yo:** Eso debería estar justificado por debajo
+- **[22:48] Yo:** por todos los experimentos que se le recomendaron
+- **[22:49] Yo:** en teoría
+- **[22:49] Yo:** el usuario completó
+- **[22:49] Yo:** y
+- **[22:49] Yo:** luego la capa lógica que la herramienta tuvo que haber aplicado,
+- **[22:49] Yo:** para llegar a esa conclusión.
+- **[22:49] Yo:** Yo es como que la la plataforma le pide recursos,
+- **[22:49] Yo:** para pensar, procesar y entregar.
+- **[22:49] Yo:** Claramente, esto a un nivel
+- **[22:49] Yo:** eso sí a nivel MVP, realmente no podemos hacer un corpus gigantesco y un motor
+- **[22:49] Yo:** gigante, porque también por tema de costos, pues,
+- **[22:49] Yo:** ¿no?, y tiempos no va a dar
+- **[22:49] Yo:** Pero creo que esa sería una forma de
+- **[22:49] Participante:** Sí.
+- **[22:49] Yo:** de acotarlo, hablara como lo es.
+- **[22:49] Participante:** Perfecto, perfecto. Hagámoslo, avanza en esa dirección.
+- **[22:49] Participante:** Y aquí te apoyamos.
+- **[22:49] Yo:** Perfecto. ¿Lo es más sensato que lo que
+- **[22:49] Participante:** ¿Listo?
+- **[22:49] Participante:** Sí.
+- **[22:49] Yo:** se está No, lo es... Ok.
+- **[22:49] Participante:** No es distinto, es distinto, pero pero tiene un dolor rápidamente
+- **[22:49] Participante:** Es más, va ser plausible porque, inclusive,
+- **[22:49] Participante:** lamentablemente, no lo tenemos listo podernos
+- **[22:49] Participante:** ponerlo en práctica con los que tengan proyectos así.
+- **[22:49] Yo:** Pero mira mira que
+- **[22:49] Participante:** Pero ¿podríamos validarlo el próximo semestre?
+- **[22:49] Yo:** Claro.
+- **[22:50] Yo:** Claro, y
+- **[22:50] Participante:** Para mucha gente.
+- **[22:50] Participante:** ¿Te parece?
+- **[22:50] Yo:** y la idea sería que, por ejemplo, si hay avances beta se puedan poner en práctica, ¿por qué no...?
+- **[22:50] Participante:** Claro,
+- **[22:50] Yo:** Listo, de una
+- **[22:50] Participante:** Por eso te digo que la escalabilidad tiene todo el sentido del mundo.
+- **[22:50] Yo:** Listo.
+- **[22:50] Participante:** Mi querido amigo, no, lo felicito, nada, no sé,
+- **[22:50] Participante:** Qué bueno por atreverse, qué buena qué buena idea.
+- **[22:50] Participante:** ¿Es suya?
+- **[22:50] Participante:** Hágale.
+- **[22:50] Yo:** Gracias, Juan, te agradezco. Ya, entonces, mando, preparo el correo y lo mando, ¿vale?
+- **[22:50] Participante:** ¿Listo?
+- **[22:50] Participante:** Listo. Y yo y yo
+- **[22:50] Participante:** te hablo esta semana para ver cuándo nos volvemos a sentar.
+- **[22:50] Yo:** Listo, listo.
+- **[22:50] Participante:** ¿Ok? ¿Listo?
+- **[22:50] Yo:** Gracias.
+- **[22:50] Yo:** Que esté bien. Chao.
+- **[22:50] Participante:** Bueno, hermano.
+- **[22:50] Participante:** Feliz tarde. Chao.

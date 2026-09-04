@@ -1,0 +1,1124 @@
+# Revisión diseños Gali
+
+- **ID:** `not_GI9YMdLLoVDs1m`
+- **Fecha:** 2026-08-31T19:12:38.446Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/a6a410e0-c8bc-4c38-97f5-abab9177c277)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo
+
+---
+
+## Resumen de la Reunión
+# Alcance del Ecommerce: Decisión Clave
+
+- Descartado el mini ecommerce completo (tipo Shopify) como entregable
+  - Dropshipping funciona con product pages individuales, no tiendas con catálogo
+  - Crear una tienda completa confundiría a usuarios nuevos sobre cómo funciona el modelo
+- Enfoque acordado: generar product pages por producto, no una tienda navegable
+  - El comprador final solo ve el detalle del producto, precio y formulario de compra
+  - Sin menú, sin categorías, sin navegación entre productos
+
+# Flujo de Gali y Product Page
+
+- Meta inmediata: igualar en diseño propio lo que dejaron Cata y Jaime
+  - Flujo hasta creación del proyecto, versión Dropi
+  - Selección de producto, revisión de márgenes, generación de proyecto
+- Desde copiloto, el usuario genera la landing con un botón “Crear página”
+  - Si ya tiene página creada, el botón cambia a “Ver mi página”
+  - Proyectos pueden quedar guardados sin haber generado landing aún
+- La generación de landing consume: producto, descripción, fotos y copies del proyecto
+
+# “Mi Tienda”: Concepto de Administración
+
+- Propuesta: darle al usuario una vista tipo administrador llamada “Mi tienda”
+  - No es una tienda pública navegable, es una interfaz interna de gestión
+  - Lista las product pages generadas desde copiloto
+  - Permite editar imagen, texto, sin volver a Gali
+- Dos caminos para generar una landing:
+  1. Desde copiloto, dentro del proyecto
+  2. Desde “Mi tienda”, con botón que pregunta cuál producto de copiloto lanzar
+- Métricas básicas dentro de “Mi tienda”:
+  - Órdenes recibidas (capturadas por formulario de compra)
+  - El dropshipper entra manualmente a Dropi a crear la orden (por ahora)
+  - Si hay volumen de órdenes, Lucho gestionaría el API de Dropi para automatizar
+
+# Nomenclatura y UX
+
+- Evitar términos técnicos como “landing” para usuarios nuevos
+  - Propuesta: usar “Mi tienda” para la sección de administración
+  - Copiloto o nombre similar para la sección de proyectos en curso
+- Vista de landings: cards en móvil (descartadas tablas por usabilidad en celular)
+  - Mayoría de usuarios accede desde celular
+- Copies, garantías y formulario de compra aún requieren trabajo
+  - Benchmark en curso contra Shopify, Tienda Nube y WooCommerce
+
+# Coordinación y Próximos Pasos
+
+- Alejandra continúa trabajando Gali en entregas cortas e iterativas
+  - Fase 1: producto seleccionado y entregado
+  - Fase 2: creativos (imágenes mínimo)
+  - Fase 3: landing con edición, guardado y flujos completos
+  - Meta: tener generador funcionando antes del 11 de septiembre
+- Santiago trabaja en paralelo el generador de product page para no bloquear a Alejandra
+- Reunión pendiente con Roax para entender flujo de pauta
+  - Definir si el usuario crea cuenta propia en Meta/TikTok o hay capa de integración
+  - Alejandra participará para hacer preguntas desde perspectiva de dropshipping
+
+# Próximas Acciones
+
+- **Reunirse con Roax para definir flujo de pauta** (Santiago, Alejandra)
+
+  Entender cómo conectar cuenta de Meta/TikTok, qué genera Roax y cómo mostrar inversión publicitaria dentro de "Mi tienda".
+- **Avanzar en generador de product page** (Santiago)
+
+  Trabajar en paralelo a Gali para tener listo el flujo de "Crear página" antes del 11 de septiembre.
+- **Continuar diseño de Gali con entregas cortas por fases** (Alejandra)
+
+  Priorizar fase 1 (producto) y fase 2 (creativos) antes de abordar la landing completa.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/393cfe9f-5c6b-4c81-bac1-65c4878325c9](https://notes.granola.ai/t/393cfe9f-5c6b-4c81-bac1-65c4878325c9)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[19:12] Yo:** ¿Me deja?
+- **[19:12] Alejandra Melo:** Hola. Santi.
+- **[19:12] Yo:** Bienvenido.
+- **[19:12] Alejandra Melo:** Bien.
+- **[19:12] Yo:** Vale, dame un segundo.
+- **[19:13] Yo:** Bueno, Alejandro, un segundito, que está viendo algo.
+- **[19:13] Yo:** Bueno, te voy compartir pantalla
+- **[19:13] Yo:** aquí para que vayamos viendo cómo está.
+- **[19:13] Yo:** La parte del ecommerce, que es como la que todavía no no
+- **[19:13] Yo:** hemos hablado de nada, ¿te parece?, en como en ninguna sesión.
+- **[19:13] Alejandra Melo:** Listo.
+- **[19:13] Yo:** Listo, te comparto acá.
+- **[19:13] Yo:** Bueno, entonces, la idea es
+- **[19:13] Yo:** todavía no no lo he unido con el con el flujo de galley, porque, pues igual, se está trabajando,
+- **[19:13] Yo:** en ese como para no estar haciendo reposesos,
+- **[19:13] Yo:** pero una vez ya se escogen
+- **[19:13] Yo:** una vez uno escoge productos, eso se lo lo lo toma, pues,
+- **[19:14] Yo:** hasta donde está el recojo de Jaime, lo toma como si fueran proyectos, ¿no?
+- **[19:14] Alejandra Melo:** Sí.
+- **[19:14] Yo:** Correcto, hasta ahí, bien.
+- **[19:14] Yo:** Listo. Cuando uno ya entra al proyecto, cuando ya se creó,
+- **[19:14] Yo:** ahí es donde aparece como ver mi tienda, no sé qué, no sé qué. Esa parte creo que
+- **[19:14] Yo:** es donde nos toca empezar a a modificar el flujo de cómo va a llevar a esta parte.
+- **[19:14] Yo:** Porque un poco la idea es que se siente igual que
+- **[19:14] Yo:** que
+- **[19:14] Yo:** que se está creando una tienda, ¿no? No, o sea, hacer muy explícito esa parte.
+- **[19:14] Yo:** Entonces, aquí la idea es que sea como bastante simple, apenas digo,
+- **[19:14] Yo:** ajustando cositas a, si hay alguna que nos permita, por lo menos de forma provisional, tener alguna
+- **[19:14] Yo:** URLs, o ¿cómo funcionaría?
+- **[19:14] Yo:** Los copies y demás,
+- **[19:14] Yo:** Los copies y demás, te va a falta ajustarlos.
+- **[19:14] Yo:** Entonces, y estas cosas, pues, igual las que es como del prompt, pues, todo va ir codeado.
+- **[19:14] Yo:** Pues, obviamente, nosotros no esperamos que que el usuario sepa que le estamos tomando el tiempo.
+- **[19:14] Yo:** La idea es que yo por debajo quiero ponerle como unos
+- **[19:14] Yo:** pues, el mapeo dos, no sé si conectarlo a
+- **[19:15] Yo:** a user pilot o
+- **[19:15] Yo:** lo lo lo quería ver si hacíamos por el free trial de
+- **[19:15] Yo:** de pronto de amplitud,
+- **[19:15] Yo:** o podríamos hacerlo con con con Clarity también?
+- **[19:15] Yo:** A ver un poco el el cómo se conduce el usuario, yo creo que eso sería chévere, ya desde diseño que
+- **[19:15] Yo:** que, pues, tú sabes, la que la que lo la que lo defina, de cómo veremos más bien
+- **[19:15] Yo:** sobre la el uso sobre de la herramienta.
+- **[19:15] Yo:** Y que podamos capturar todas esas métricas. Entonces, digamos que se va a llamar aleja store. ¿Cierto? Digamos que, supuestamente, va cargar el punto shopping, pero, ajá. Esto realmente todavía no pasa, aquí es aquí es donde tendríamos que ver si lo hacemos por ver a algo que nos quede una URL provisional, ¿cómo lo hacemos? Listo, aquí confirmas. Aquí te voy traer los productos que ya hayas seleccionado aquí, realmente, lo está haciendo como es un mock que que agarra. Porque aquí tendría los precios, ¿no? Lo que dice, lo que costo proveedor, precio de venta, esto claramente es editable, y, pues, te va calculando el margen, ¿no?
+- **[19:16] Yo:** No sé, si voy ponerle cuarenta mil,
+- **[19:16] Yo:** De hecho, aquí hay un bug. Mira que, cuando llego a una, no me deja.
+- **[19:16] Yo:** Cuarenta mil
+- **[19:16] Yo:** ¿Y con ella como cuánto margen tengo? Pero, pues, uno sabe que aquí
+- **[19:16] Yo:** toca agregar todo al tema de de publicidad.
+- **[19:16] Yo:** Aquí está la parte, esto de solicitar muestra no debería estar,
+- **[19:16] Yo:** porque, pues, se supone que eso lo hacemos antes de, no cuando yo estoy configurando ya la tienda.
+- **[19:16] Yo:** Omitando esta parte.
+- **[19:16] Yo:** Sino que es que
+- **[19:16] Yo:** Google es terrible para diseñarlo, una mierda.
+- **[19:16] Yo:** Entonces, ya, de hecho, acabo de pagar la otra vez la suscripción de Cloud
+- **[19:16] Yo:** Cloud Code para tener Cloud Design.
+- **[19:16] Yo:** Bueno, su pública es tienda, ¿no? Invisamos esa parte.
+- **[19:16] Yo:** Pública extienda. Esto claramente no vamos a dejarlo visible,
+- **[19:16] Yo:** dejaremos esto en una tienda publicada cien por ciento activa,
+- **[19:17] Yo:** y aquí podríamos ver cómo
+- **[19:17] Yo:** vista comprador, bueno, algo algo, storefront
+- **[19:17] Yo:** nosotros qué significa, pero, pues,
+- **[19:17] Yo:** aquí ponerlo como, ¿cómo lo ve mi cómo lo ven mis compradores?, algo así.
+- **[19:17] Yo:** Órdenes recibidas, esto sí lo vamos a dejar así, de idea que
+- **[19:17] Yo:** registrarlas y luego
+- **[19:17] Yo:** ir a la europea crearlas.
+- **[19:17] Yo:** Entonces, cuando se ve acá, esto está terrible todavía,
+- **[19:17] Yo:** Es como se vería, entonces, ya a Aleja store, pero, pues, ya con todos los productos creados, ¿no?
+- **[19:17] Yo:** Quitándole el clano y todos los los los
+- **[19:17] Yo:** parece que son terribles.
+- **[19:17] Yo:** Aquí es donde entraríamos a hablar lo de los copies, ¿no?, son, sí son sin productos.
+- **[19:17] Yo:** Que los cien productos tengan diferentes
+- **[19:17] Yo:** lo que tú desees, las las imágenes,
+- **[19:17] Yo:** lo ítems como de garantía,
+- **[19:17] Yo:** compra de entrega, este formulario toca mejorarlo todavía, eso es lo que eso es lo que estoy.
+- **[19:17] Yo:** Para que quede más profesional.
+- **[19:17] Yo:** De hecho, estoy haciendo ahí el bench con con
+- **[19:18] Yo:** Shopify, con tienda nube, con WooCommerce,
+- **[19:18] Yo:** de como tienen el flujo. Igual, esto está muy acotado a que es pago contra entrega,
+- **[19:18] Yo:** y, pues, al final, cuando se diligencia todo eso,
+- **[19:18] Yo:** es donde queda
+- **[19:18] Yo:** confirmar pedido.
+- **[19:18] Yo:** Esto hay que mejorarlo claramente, y aquí
+- **[19:18] Yo:** ya lo que debería de pasar, que el creo que no me devuelve a ningún lado,
+- **[19:18] Yo:** es que yo ya debería poder ver, entonces, las órdenes que me hayan creado.
+- **[19:18] Alejandra Melo:** Tú me estás mostrando la parte de
+- **[19:18] Yo:** Aquí, de hecho,
+- **[19:18] Yo:** ¿De cómo lo ve la otra persona?
+- **[19:18] Alejandra Melo:** No.
+- **[19:18] Yo:** Esto.
+- **[19:18] Yo:** Bueno, mira.
+- **[19:18] Yo:** Cuando ya
+- **[19:18] Yo:** como que dejas ver esto... ¿Esto sí lo habías visto?
+- **[19:18] Alejandra Melo:** Sí.
+- **[19:18] Yo:** Ah, bueno, listo. Cuando haces esto, esto fue lo que no viste.
+- **[19:18] Alejandra Melo:** Ok.
+- **[19:18] Yo:** Esta vamos.
+- **[19:18] Yo:** Esto ha estado muy mal.
+- **[19:18] Yo:** Toca ajustarla que sea como
+- **[19:18] Yo:** como lo vería uno cuando entra en una tienda de Shopify, que varios productos y demás,
+- **[19:18] Yo:** realmente no vamos a poner, tener todas esas capas, que era lo que les decía hoy en la
+- **[19:18] Yo:** en la en la
+- **[19:18] Yo:** en la en la planning,
+- **[19:18] Yo:** pues, nuestro call notes en la infraestructura para todo esto, estamos dejándole lo mínimo para que
+- **[19:19] Yo:** el usuario pudiera, desde acá,
+- **[19:19] Yo:** que todavía faltan muchos menús, ayudas, opciones y demás,
+- **[19:19] Yo:** crear, editar sus productos,
+- **[19:19] Yo:** Por ejemplo, el link para compartir en tus campañas, entonces, que yo
+- **[19:19] Yo:** el link, obviamente este link aquí no me va
+- **[19:19] Yo:** no me va a llevar a nada, pues, este, obviamente, este dominio no no
+- **[19:19] Yo:** no existe.
+- **[19:19] Yo:** Lo que toca ver tema de dominio de cómo lo podríamos manejar, por lo menos para la demo,
+- **[19:19] Yo:** para la demo no, para el para el el beta,
+- **[19:19] Yo:** y ya, es como lo principal.
+- **[19:19] Yo:** Nada, garantías. Realmente, esto sí es dejarlo
+- **[19:19] Yo:** sea, que no nos vaya a quedar como
+- **[19:19] Yo:** como lo que hace PagePilot, que es tan horrible.
+- **[19:19] Yo:** No,
+- **[19:19] Yo:** Que no vaya a caer con Page es tan horrible, que, de es muy parecido a esto.
+- **[19:19] Yo:** Sino que nos quede, pues, más chévere.
+- **[19:19] Yo:** Realmente, nos permita que aquí el usuario
+- **[19:19] Yo:** en esta parte,
+- **[19:19] Yo:** donde ya tiene, administrar su tienda, es una de administración,
+- **[19:20] Yo:** de editar los productos. Mira que cuando se crean, ya no deja cambiar los
+- **[19:20] Yo:** productos, o sea, ya tocaba meterla,
+- **[19:20] Yo:** producto al producto.
+- **[19:20] Yo:** Pero esa es como la idea, realmente,
+- **[19:20] Alejandra Melo:** Mhmm.
+- **[19:20] Yo:** bastante
+- **[19:20] Yo:** sencillo,
+- **[19:20] Yo:** pero, pues, nada, no alcancé a trabajarle mucho más el fin de semana.
+- **[19:20] Yo:** Y ya, es como la idea.
+- **[19:20] Alejandra Melo:** Ya, pero, entonces, sería, o sea, yo lo veo más como hacia la parte de
+- **[19:20] Alejandra Melo:** crear la la product page, ¿cierto?
+- **[19:20] Alejandra Melo:** Más que como que escoger el producto. Tú lo hiciste como pensando,
+- **[19:20] Yo:** No, no, no, o sea,
+- **[19:20] Alejandra Melo:** ese fuera todo el flujo.
+- **[19:20] Alejandra Melo:** Ah, ok, sí.
+- **[19:20] Yo:** esta es la parte del product page, o sea, esto
+- **[19:20] Yo:** se va a alimentar de galley,
+- **[19:20] Alejandra Melo:** Ajá.
+- **[19:20] Yo:** que era lo que habíamos, pues, no sé, de pronto no, voy mal en
+- **[19:20] Yo:** pero lo lo que traté de cierta semana pasada es
+- **[19:20] Yo:** para poder ir avanzando, y porque yo sé que yo claramente estás ya a full con
+- **[19:20] Participante:** Mhmm.
+- **[19:21] Yo:** con Gali, yo ir adelantando product page,
+- **[19:21] Yo:** más hacia hacia el concepto, hacia el mock,
+- **[19:21] Alejandra Melo:** Eso.
+- **[19:21] Yo:** que se entendiera más o menos. Esto todavía le falta mucho trabajo, pero mientras
+- **[19:21] Yo:** tú termines de hacer
+- **[19:21] Yo:** el resto de Gali,
+- **[19:21] Yo:** esto también se mejora en que, lo menos, entiendan los flujos de qué debería llevar a dónde, o sea, más allá que el bot
+- **[19:21] Yo:** esté feo y debería tener otro copy u otro tipo de texto,
+- **[19:21] Yo:** pues nada, eso se cambia. Y y quedé acá
+- **[19:21] Yo:** y más que el mismo diseño,
+- **[19:21] Yo:** lograr que, por ejemplo, estas cosas de métrica, instrumento y demás, esto no, obviamente, no está en el front, no
+- **[19:21] Yo:** en el front del usuario,
+- **[19:21] Yo:** sino que está en el backing, que esto esté conectado a algo que realmente no recopile la data.
+- **[19:21] Yo:** Lo que no nos importa ahora.
+- **[19:21] Yo:** Es como eso.
+- **[19:21] Yo:** Sí, lo que trabajé fue más fácil para poder diseñar un poco el el el product page.
+- **[19:21] Yo:** Porque
+- **[19:21] Yo:** o sea, todo parte de que
+- **[19:21] Yo:** de que... Déjeme, me devuelvo. Es más que esto ni siquiera todavía tiene la
+- **[19:21] Yo:** ni siquiera tiene la la opción de devolverse, no estoy mal, no, todavía no tiene opción de devolver
+- **[19:22] Yo:** Me tocaría como borrar cookies que esto vuelva a No, ni siquiera.
+- **[19:22] Yo:** Esto aparte de que todos estos productos son los que ya se ya se
+- **[19:22] Yo:** ya se hayan escogido como proyectos y la gente les haya dado
+- **[19:22] Yo:** en agregar.
+- **[19:22] Yo:** Porque cuando yo estamos acá, ¿cierto?
+- **[19:22] Yo:** Entonces, coge el primer producto,
+- **[19:22] Yo:** Yo sé que esto está cambiando, pero bueno, seleccionamos esto, dejamos que es este.
+- **[19:22] Yo:** Este,
+- **[19:22] Yo:** me llegan mis cosas.
+- **[19:23] Yo:** Bueno, ¿cuándo se seleccione el producto? Vimos que entiendo.
+- **[19:23] Yo:** Tengo que buscar este, el export catálogo, continuar estrategia.
+- **[19:23] Yo:** Sigo acá, sigo, sigo. Bueno.
+- **[19:23] Yo:** Llegamos acá. Digamos que hacer este.
+- **[19:23] Yo:** Landing,
+- **[19:23] Yo:** Continuar campaña.
+- **[19:23] Yo:** Esto, pues,
+- **[19:23] Yo:** todo lo que está, toca trabajarle un montón.
+- **[19:23] Alejandra Melo:** Uh-huh.
+- **[19:23] Yo:** Lanza de proyectos, ¿cierto?
+- **[19:23] Yo:** Se lazar proyecto, realmente esto no, lo que ha pensado, esto no debería de una vez
+- **[19:23] Yo:** montarlo en la página.
+- **[19:23] Yo:** Podemos guardar como ordenador o sí publicar en página.
+- **[19:23] Yo:** También, ¿no?, publicar en ecommerce.
+- **[19:23] Yo:** Cuando se haga esto,
+- **[19:23] Yo:** ¿cierto?,
+- **[19:23] Yo:** lo que debería pasar, confirmar el lanzarme,
+- **[19:23] Yo:** Al hacer esto, realmente lo que debería pasar es que lleve
+- **[19:23] Yo:** lo pensé así,
+- **[19:23] Yo:** al crear, si no tiene el sitio creado, lo creas, ¿no?
+- **[19:23] Yo:** Montas lo que al principio no haría. ¿Cómo se llama tu sitio?
+- **[19:23] Yo:** Listo, montas ese producto. Cuando
+- **[19:24] Yo:** cuando no está,
+- **[19:24] Yo:** Check in lo sacó de esto.
+- **[19:24] Yo:** Cuando no está, entonces, lo que voy a hacer es que yo voy a hacer esto,
+- **[19:24] Yo:** Esto aquí no tiene, como dice, los proyectos.
+- **[19:24] Yo:** Este flujo está
+- **[19:24] Yo:** luego
+- **[19:24] Yo:** este.
+- **[19:24] Yo:** Este continuar, WhatsApp.
+- **[19:24] Yo:** Se quiero WhatsApp mentiras.
+- **[19:24] Yo:** Otros.
+- **[19:24] Yo:** Hacia nos
+- **[19:24] Yo:** Vamos a cambiar el Landing.
+- **[19:24] Yo:** ¿Sí o no? Continuar campaña.
+- **[19:25] Yo:** Revisar lanzamiento.
+- **[19:25] Yo:** Eso queda como en esta parte, lanzar proyecto.
+- **[19:25] Yo:** Yo cancelar, nos guarda como borrar.
+- **[19:25] Yo:** Ahí se guardó aparentemente.
+- **[19:25] Yo:** Y queda ahí, pero lo que yo digo es
+- **[19:25] Yo:** esta parte nos debería llevar a la tienda,
+- **[19:25] Alejandra Melo:** Sí, exacto.
+- **[19:25] Yo:** Y si ya entonces, ya lo que hace es simplemente es que añada.
+- **[19:25] Yo:** Es decir, a esta partecita de acá,
+- **[19:25] Yo:** de acá, ya se hay tienda creada, entonces, solo había uno, ahora hay dos, ahora hay cuatro, cinco,
+- **[19:25] Alejandra Melo:** ¿Todo eso cómo funciona?
+- **[19:25] Yo:** seis, siete.
+- **[19:25] Yo:** El el el
+- **[19:25] Alejandra Melo:** ¿Visto cómo funciona Fluxi?
+- **[19:25] Yo:** No, pero lo buscamos, ya te
+- **[19:25] Yo:** flujo.
+- **[19:25] Alejandra Melo:** Uh-huh.
+- **[19:25] Yo:** Fluxi x I griega, ¿cierto?
+- **[19:25] Yo:** Ah, no, I la I latina.
+- **[19:25] Yo:** Ah, Flux, no me tira así, si yo hice Fluxy porque ese es el que
+- **[19:25] Yo:** querían, de hecho, integrar hace un tiempo con Drop, y creo que al final no pasa.
+- **[19:25] Alejandra Melo:** Aha. Ese ese fluk, sí,
+- **[19:25] Alejandra Melo:** ellos manejan, eso es superfácil uno montar ahí los productos. Entonces,
+- **[19:25] Alejandra Melo:** uno llega, es eso, arrastra el producto
+- **[19:26] Alejandra Melo:** ya lo único que tienes que hacer es esperar a que se genere la página.
+- **[19:26] Alejandra Melo:** Pero
+- **[19:26] Yo:** Ok.
+- **[19:26] Yo:** Porque lo que yo, a veces, o sea, tú, pero esa parte estaría
+- **[19:26] Alejandra Melo:** o sea,
+- **[19:26] Yo:** en Gali,
+- **[19:26] Alejandra Melo:** Sí.
+- **[19:26] Alejandra Melo:** Pero no no tienes que arrastrar, sino que como ya seleccionas el producto, es sino darle clic como
+- **[19:26] Alejandra Melo:** a generar página, pero
+- **[19:26] Alejandra Melo:** hay que tener como un lugar donde se almacenen más landing.
+- **[19:26] Alejandra Melo:** Que es la que tú tienes.
+- **[19:26] Yo:** A eso voy, porque es que yo quiero algo.
+- **[19:26] Yo:** Yo en choppy,
+- **[19:26] Yo:** en Shopping, en Shopify creé esta página,
+- **[19:26] Yo:** probando el MCP de
+- **[19:26] Alejandra Melo:** ¿Cuál? Es
+- **[19:26] Yo:** stack.
+- **[19:26] Yo:** El MCP de de de Shopee file,
+- **[19:26] Alejandra Melo:** Ajá.
+- **[19:26] Yo:** con GPT.
+- **[19:26] Yo:** Lo que yo quiero
+- **[19:26] Yo:** es
+- **[19:26] Yo:** que, literal, pass, bueno, esta parte de inserción no,
+- **[19:26] Yo:** pase esto de que
+- **[19:26] Yo:** el usuario al que le van a vender, al al comprador final, entre a algo así,
+- **[19:27] Yo:** ¿cierto?
+- **[19:27] Yo:** Entonces, va a haber
+- **[19:27] Yo:** categorías, va a haber productos, va a entrar el producto,
+- **[19:27] Alejandra Melo:** Sí.
+- **[19:27] Yo:** este flujo.
+- **[19:27] Yo:** ¿Sí?
+- **[19:27] Yo:** Ese es otro producto, o sea, que navegue en una página web.
+- **[19:27] Yo:** ¿Ya? No solamente que sean como
+- **[19:27] Alejandra Melo:** Es que de eso se trata el
+- **[19:27] Yo:** landing sueltas,
+- **[19:27] Yo:** no sé,
+- **[19:27] Alejandra Melo:** Santi.
+- **[19:27] Alejandra Melo:** Prácticamente, o sea, lo que pasa es que
+- **[19:27] Alejandra Melo:** esto es más como de ventas por impulso,
+- **[19:27] Alejandra Melo:** funciona solamente como con landings. Por eso tú siempre
+- **[19:27] Alejandra Melo:** escuchas hablar es de product page, más que de la página,
+- **[19:27] Alejandra Melo:** entera como tal, y que ya tiene un catálogo y tiene como treinta productos ahí en en la página. Eso, pues, muy pocos lo hacen. Entonces, funciona eso.
+- **[19:27] Yo:** Okay.
+- **[19:27] Yo:** Listo.
+- **[19:27] Yo:** Yo yo lo pensaba
+- **[19:27] Yo:** por la investigación que hice,
+- **[19:27] Yo:** más hacia, y como no son tantos productos, era más
+- **[19:28] Yo:** fácil poder hacer hacer una un acercamiento más fácil para ecommerce.
+- **[19:28] Yo:** Pero tú crees que no deberíamos hacerlo así
+- **[19:28] Alejandra Melo:** Sí.
+- **[19:28] Yo:** y más bien, entonces, solo enfocarlo a product page y ya.
+- **[19:28] Yo:** Sería más fácil en últimas.
+- **[19:28] Alejandra Melo:** Exacto.
+- **[19:28] Alejandra Melo:** Enfocarlo más a a
+- **[19:28] Alejandra Melo:** a darle a los usuarios una product page. Ya si quieren montar
+- **[19:28] Alejandra Melo:** una tienda, pues ya que se vayan a Shopify y lo hagan superbién.
+- **[19:28] Yo:** Pero, entonces, ahí ahí ahí se ahí es que se
+- **[19:28] Alejandra Melo:** Solo así.
+- **[19:28] Yo:** se desnuja
+- **[19:28] Yo:** O sea, ¿cómo cómo tomaríamos en ese en ese
+- **[19:28] Yo:** caso, donde no pongamos tienda, si no dejemos, no permitamos crear una tienda?
+- **[19:28] Yo:** Sino solo con product page
+- **[19:28] Yo:** cuando el usuario fue exitoso, o sea,
+- **[19:28] Yo:** solo
+- **[19:28] Yo:** solo al momento de
+- **[19:28] Alejandra Melo:** Sí.
+- **[19:28] Yo:** de que creé la primera,
+- **[19:28] Yo:** dices tú.
+- **[19:28] Yo:** O sea, con
+- **[19:28] Yo:** es un, no sé, un espesor para
+- **[19:28] Yo:** sí, para el patio,
+- **[19:28] Yo:** Cuando inicia el flujo,
+- **[19:29] Yo:** complete, lanza el proyecto, genera la
+- **[19:29] Yo:** la product page,
+- **[19:29] Yo:** hay lo de port terminado, y lo que debería pasar es que en el flujo de Gali, yo vea todas las product page creadas.
+- **[19:29] Alejandra Melo:** Exato. Uhum.
+- **[19:29] Yo:** ¿Sí?
+- **[19:29] Yo:** Ok.
+- **[19:29] Alejandra Melo:** Igual que, no no,
+- **[19:29] Alejandra Melo:** no lo vamos a tomar, bueno, sí, lo vamos a tomar
+- **[19:29] Alejandra Melo:** por product page o por proyecto?
+- **[19:29] Yo:** No, yo creo, al al final el proyecto
+- **[19:29] Alejandra Melo:** Porque va a guardar proyectos
+- **[19:29] Alejandra Melo:** o sea, él va a guardar el proyecto entero.
+- **[19:29] Alejandra Melo:** Entonces, lo guarda y que cuando lo guarde,
+- **[19:29] Alejandra Melo:** y vaya a entrar, diga,
+- **[19:29] Alejandra Melo:** esté la opción de ver la product page.
+- **[19:29] Yo:** k.
+- **[19:29] Yo:** Hecho, podría crear el proyecto sin generar product page.
+- **[19:29] Yo:** ¿No?
+- **[19:29] Alejandra Melo:** Mhmm.
+- **[19:29] Yo:** Pero ¿qué es mejor, me hace pensando, sí?
+- **[19:29] Alejandra Melo:** Claro, porque si tú terminas el flujo hasta la mitad, pues, por lo menos,
+- **[19:30] Alejandra Melo:** te lo guardes y luego regresas y que ahí esté
+- **[19:30] Yo:** Aló. O sea, que que yo, inclusive, no, que yo monté todo el
+- **[19:30] Yo:** no significa que todavía generé la product page.
+- **[19:30] Yo:** Yo podría tener proyectos adelantados que
+- **[19:30] Yo:** no sé si lo es así, que que ya le vi margen, ya la utilidad, ya
+- **[19:30] Yo:** de venta, pero por cualquier razón todavía no la quiero generar.
+- **[19:30] Alejandra Melo:** Mhmm.
+- **[19:30] Yo:** O sea, yo podría tener proyecto como, y tener el borrador
+- **[19:30] Yo:** cien por ciento completo al borrador,
+- **[19:30] Yo:** pero aún no lanzado.
+- **[19:30] Yo:** No no se ha lanzado a la
+- **[19:30] Yo:** Entonces, entiendo es
+- **[19:30] Yo:** entre igual sí se sí se hablan,
+- **[19:30] Yo:** ¿cierto?, y es, yo lo puedo relacionar, normalmente, sea en la parte
+- **[19:30] Yo:** en la parte de abajo de la project page con los
+- **[19:30] Yo:** productos que ya ya la sald dropshipper.
+- **[19:30] Yo:** O sea,
+- **[19:30] Alejandra Melo:** ¿Cómo?
+- **[19:30] Yo:** O sea, cuando yo me voy a esta parte de
+- **[19:30] Yo:** acá, ¿cierto?
+- **[19:30] Yo:** Es lo que ve el el usuario.
+- **[19:30] Yo:** El comprador.
+- **[19:31] Yo:** Normalmente, por acá o más abajo,
+- **[19:31] Alejandra Melo:** Sí.
+- **[19:31] Yo:** bueno, me parece mejor que este es un buen ejemplo.
+- **[19:31] Yo:** Cuando yo me voy acá, acá,
+- **[19:31] Yo:** ¿sí o no?
+- **[19:31] Yo:** No, ¿no te aparecen estos?
+- **[19:31] Alejandra Melo:** No.
+- **[19:31] Yo:** Ok.
+- **[19:31] Alejandra Melo:** No, porque eso distrae.
+- **[19:31] Yo:** Ok, solamente acá.
+- **[19:31] Alejandra Melo:** Ajá.
+- **[19:31] Yo:** Ok.
+- **[19:31] Alejandra Melo:** Ni siquiera tiene menú, nada de eso.
+- **[19:31] Alejandra Melo:** Todo eso se quita.
+- **[19:31] Yo:** Esto nada, solamente es
+- **[19:31] Yo:** el producto
+- **[19:31] Yo:** compre, bueno, aquí no, pues, voy decir, pero no.
+- **[19:31] Yo:** Disponible, tatatá.
+- **[19:31] Yo:** La descripción, el por qué, bla, todo el cuento, y ya, y sale.
+- **[19:31] Alejandra Melo:** Exacto.
+- **[19:31] Yo:** Hasta acá.
+- **[19:31] Yo:** Hasta acá.
+- **[19:31] Yo:** O sea, que como esto tampoco se deba, porque esto es de página web.
+- **[19:31] Alejandra Melo:** No.
+- **[19:31] Alejandra Melo:** Exakt.
+- **[19:31] Yo:** Y esta parte, o sea, que como lo genera PagePilot,
+- **[19:31] Yo:** de alguna forma también está
+- **[19:31] Yo:** normal, pero, pues, no orientado a dropshipping, porque Page Pilot
+- **[19:31] Yo:** genera este contenido acá abajo, ¿te acuerdas?
+- **[19:31] Alejandra Melo:** No, no lo genera.
+- **[19:31] Yo:** Pero en en las plantillas estaba.
+- **[19:32] Alejandra Melo:** No.
+- **[19:32] Alejandra Melo:** No, no.
+- **[19:32] Alejandra Melo:** Yo no lo oí.
+- **[19:32] Yo:** Pero, pues, ¿no?, se lo
+- **[19:32] Yo:** Porque yo, de hecho, cuando vi
+- **[19:32] Yo:** cuando doy las
+- **[19:32] Alejandra Melo:** De pronto tienen plantillas sí que van enfocadas, pero no,
+- **[19:32] Yo:** No, pero, o sea, pero, por ejemplo, el
+- **[19:32] Yo:** Mira, este, de hecho, es una de las plantillas.
+- **[19:32] Yo:** Esta así tal cual, bueno, para que se
+- **[19:32] Yo:** Esto normal, lo que ya sabemos, y por acá,
+- **[19:32] Yo:** las plantillas, bueno, esto es reviews normal,
+- **[19:32] Yo:** y está este, otros productos recomendados.
+- **[19:32] Alejandra Melo:** Producto recomendado es uso uno siempre lo quita.
+- **[19:32] Yo:** Bueno, no, te digo que lo trae,
+- **[19:32] Alejandra Melo:** Ah, ok.
+- **[19:32] Yo:** y cuando y cuando la solicitud, de hecho, creo que entra los flujos que
+- **[19:32] Yo:** que se revisaron de cuando estaba saliendo mal,
+- **[19:33] Alejandra Melo:** Mhmm.
+- **[19:33] Yo:** estaba eso.
+- **[19:33] Yo:** Pero listo, de una.
+- **[19:33] Yo:** Ok, pero entonces me dejaste pensando en
+- **[19:33] Yo:** no necesitamos, listo, no necesitamos la página
+- **[19:33] Yo:** que ya creo que te entiendo mejor la idea de por qué no estabas de acuerdo.
+- **[19:33] Yo:** De por qué no estás de acuerdo con generar como un mini ecommerce.
+- **[19:33] Yo:** Era por eso.
+- **[19:33] Alejandra Melo:** Sí, o sea, no no
+- **[19:33] Alejandra Melo:** no lo veo como
+- **[19:33] Alejandra Melo:** como si fueran marcas,
+- **[19:33] Alejandra Melo:** ¿sí?, no tratarlo como tal, como lo que es
+- **[19:33] Alejandra Melo:** en el dropshipping, como lo manejan las mejores
+- **[19:33] Alejandra Melo:** porque no no no sería como ideal confundir
+- **[19:33] Alejandra Melo:** a las personas de, mira, que puedo agregar acá más productos y es
+- **[19:33] Yo:** Claro. Ah, sí, sí, por y y alguien que no está, que que está arrancando,
+- **[19:33] Yo:** que
+- **[19:33] Yo:** se le permita crear una página completa como
+- **[19:33] Yo:** la que te mostré ahora, que se hace en Shopify,
+- **[19:33] Alejandra Melo:** Mhmm.
+- **[19:33] Yo:** es confundir la
+- **[19:33] Yo:** cómo se hace dropshipping.
+- **[19:33] Yo:** Y el dropshipping es como tú acabas de decir, es
+- **[19:34] Yo:** solamente con el page builder,
+- **[19:34] Yo:** ¿sí?
+- **[19:34] Yo:** El constructor de páginas, pero es solamente el detalle del producto, precio, compra y ya, chao.
+- **[19:34] Alejandra Melo:** Que hay quienes
+- **[19:34] Alejandra Melo:** Que hay quienes ya tienen muy bien
+- **[19:34] Alejandra Melo:** pues, su su marca y todo eso y ya tienen como una especie de
+- **[19:34] Alejandra Melo:** tienda bien con varios productos y todo eso.
+- **[19:34] Yo:** Pero entiendo una marca que bajo dropshipping, o sea, pero acá no.
+- **[19:34] Alejandra Melo:** Los hay, pero son muy
+- **[19:34] Alejandra Melo:** pocos.
+- **[19:34] Alejandra Melo:** Ajá, exacto, eso.
+- **[19:34] Yo:** Y eso, ¿qué tan alejado está de lo que nosotros
+- **[19:34] Alejandra Melo:** Pues,
+- **[19:34] Yo:** crees que podríamos crear?
+- **[19:34] Alejandra Melo:** Pues, yo pienso que para iniciar, como te digo, dejémoslo en product page.
+- **[19:34] Alejandra Melo:** Y que, obviamente, tenga su
+- **[19:34] Yo:** Okay.
+- **[19:34] Alejandra Melo:** su qué?
+- **[19:34] Alejandra Melo:** Su ingreso acá a una de sus product page desde Gali.
+- **[19:34] Yo:** Pero, entonces,
+- **[19:34] Yo:** Pero, entonces, ¿ahí ahí cambiaría el alcance
+- **[19:34] Yo:** Es decir,
+- **[19:34] Yo:** no sigo tocando esto,
+- **[19:34] Yo:** ¿para qué?, porque sí va a estar sobre Gali, para que tú puedas seguir trabajando a Gali, y me da más bien un foco en las conexiones o qué.
+- **[19:35] Alejandra Melo:** O más bien que Gali lo lleve a esto.
+- **[19:35] Alejandra Melo:** Pero, entonces, hacerlo como te digo.
+- **[19:35] Yo:** No, sí, que lo puedes llevar a eso, pero me refiero a eso.
+- **[19:35] Yo:** Creo que no puedo estarle metiendo mano si tú le estás trabajando.
+- **[19:35] Yo:** Porque te puedo estar como como
+- **[19:35] Yo:** sí, no, pues, me me lo tiro.
+- **[19:35] Alejandra Melo:** Será?
+- **[19:35] Yo:** Claro.
+- **[19:35] Yo:** Claro, porque si tú estás cambiándole flujo, diseño, el el el diseño es la mente.
+- **[19:35] Yo:** Pero el flujo, los tiempos, los campos,
+- **[19:35] Yo:** todo eso,
+- **[19:35] Yo:** esta parte,
+- **[19:35] Yo:** se va a demorar, o sea, no no no no va a estar estable.
+- **[19:35] Yo:** Porque esto se dispara
+- **[19:35] Yo:** bueno, podría, esto se dispara una vez,
+- **[19:35] Yo:** si si definimos que
+- **[19:35] Alejandra Melo:** Mhmm.
+- **[19:35] Yo:** se creen los proyectos, ¿cierto?
+- **[19:35] Yo:** Va a haber un botón que dice crear
+- **[19:35] Yo:** página,
+- **[19:35] Yo:** ¿cierto?
+- **[19:35] Yo:** Página de ventas, por ejemplo.
+- **[19:36] Alejandra Melo:** Sí.
+- **[19:36] Yo:** Y si abre esto, te digo, perfecto, no trabajo así.
+- **[19:36] Yo:** Y es que cada vez lo que va a hacer es que se va ir a consultar el campo
+- **[19:36] Yo:** producto, descripción producto, fotos, va a ir a consumir todo eso para crearla.
+- **[19:36] Yo:** Literalmente me encargaría de hacer como un
+- **[19:36] Alejandra Melo:** Uh-huh.
+- **[19:36] Yo:** PagePilot.
+- **[19:36] Yo:** ¿Cierto?
+- **[19:36] Yo:** Interno de dropping.
+- **[19:36] Yo:** Y que ya después de que la creó,
+- **[19:36] Yo:** lo que debería pasar es que, si vuelve a entrar a ese proyecto, ya no va
+- **[19:36] Yo:** aparece un botón de crear página, sino
+- **[19:36] Alejandra Melo:** Mhmm.
+- **[19:36] Yo:** ver mi página, por ejemplo.
+- **[19:36] Yo:** Y al lado, como podría ser, como lo tiene ahora Jaime,
+- **[19:36] Yo:** con el que nos entregó fue que el lado estuviera como
+- **[19:36] Yo:** pautar esta página, o o dentro de la misma página, cuando ya se montó,
+- **[19:36] Yo:** no sé, de vuelta aquí arribita que
+- **[19:36] Yo:** no sé, dijera
+- **[19:36] Yo:** no sé, pautar con Roax, pensé, pues, en la reunión que tenemos ahora en un rato.
+- **[19:36] Yo:** Pautar con RoAX y que ya ahí generar otro flujo.
+- **[19:36] Yo:** Pero, entonces, me refiero más a Aleja es para que nos coordinemos
+- **[19:36] Yo:** en
+- **[19:37] Yo:** hasta dónde vas a trabajarle tú en ese flujo,
+- **[19:37] Yo:** para saber
+- **[19:37] Yo:** y y creo que, o sea, lo principal es que
+- **[19:37] Yo:** tú seas la que le puede meter mano
+- **[19:37] Yo:** yo no no quiero ir como a
+- **[19:37] Yo:** a obstaculizar
+- **[19:37] Yo:** ¿sí?
+- **[19:37] Yo:** O a dañar cosas que tú necesites intervenir, quieres como
+- **[19:37] Alejandra Melo:** Más bien le voy a ciento,
+- **[19:37] Alejandra Melo:** la voy haciendo porque a mí me tocó devolverme por lo de los doscientos
+- **[19:37] Alejandra Melo:** productos y que, pues, ya como como con el tema de los anuncios no
+- **[19:37] Alejandra Melo:** a ver si de pronto ya no no no se pone.
+- **[19:37] Yo:** Mhmm.
+- **[19:37] Alejandra Melo:** ¿Todavía me estás escuchando?
+- **[19:37] Yo:** Sí.
+- **[19:37] Alejandra Melo:** Listo, es que me salió una me salió un aviso.
+- **[19:37] Alejandra Melo:** Y
+- **[19:37] Alejandra Melo:** yo te los voy mostrando y lo vamos trabajando.
+- **[19:37] Alejandra Melo:** Te voy haciendo como entregas cortas,
+- **[19:37] Alejandra Melo:** y lo vamos viendo, y tú me vas diciendo, a ver, Solís, ya cuando lleguemos a este punto, pero seguimos trabajando igual, te voy mostrando, tú me vas diciendo, sí, sí, o o no, revisémoslo o revisémoslo con esta otra persona. ¿Sí? ¿Qué te parece? Por por ejemplo, lo que yo te mostré, ya me tocó devolverme. Me tocó devolverme, entonces, queda uno ahí como o sea, estoy empezando otra vez de cero.
+- **[19:38] Yo:** Sí, sí.
+- **[19:38] Yo:** Perfecto.
+- **[19:38] Yo:** Agual así.
+- **[19:38] Yo:** Ok.
+- **[19:38] Yo:** Ya. Sí, no, claro.
+- **[19:38] Alejandra Melo:** Y y, entonces, yo decirte como que no, lo va hacer hasta tal punto en tanto tiempo,
+- **[19:38] Alejandra Melo:** sí, el tiempo que tengo es poquito, porque, por ejemplo, esta semana, entonces,
+- **[19:38] Alejandra Melo:** poco de reuniones,
+- **[19:38] Alejandra Melo:** y
+- **[19:38] Alejandra Melo:** y qué?
+- **[19:38] Alejandra Melo:** Si es que son varios reúns.
+- **[19:38] Alejandra Melo:** No, las reuniones, ¿qué? Perfil de usuario de Diana.
+- **[19:38] Alejandra Melo:** Más las de
+- **[19:38] Yo:** En que
+- **[19:39] Alejandra Melo:** Yo por eso te digo,
+- **[19:39] Alejandra Melo:** Yo por eso te digo, hagámoslo hasta donde llegue,
+- **[19:39] Alejandra Melo:** que siempre entregue como algo, ¿cierto? Siempre entregue algo.
+- **[19:39] Yo:** yo creo que la
+- **[19:39] Alejandra Melo:** Por ejemplo, en esta
+- **[19:39] Yo:** Dime.
+- **[19:39] Alejandra Melo:** en esta fase uno va a entregarme un producto.
+- **[19:39] Yo:** Dime.
+- **[19:39] Alejandra Melo:** La segunda fase es que me entregue los los creativos.
+- **[19:39] Alejandra Melo:** Obviamente, videos no me van a entregar, pero, por lo menos, los creativos.
+- **[19:39] Alejandra Melo:** Que son las, por lo menos imágenes. ¿Cierto? Y la landing, Y la landing sería un tercer, una tercera fase, lo que, pues, vamos a incluir varias cosas, que los guarde, que los pueda editar y demás.
+- **[19:39] Yo:** Sí.
+- **[19:39] Alejandra Melo:** Como para que no nos vaya a coger de pronto
+- **[19:39] Alejandra Melo:** el doce y nosotros decir, no, no alcanzamos a hacer esto o hacerlo mal,
+- **[19:39] Alejandra Melo:** o a las carreras,
+- **[19:39] Alejandra Melo:** Pienso,
+- **[19:39] Yo:** Porque
+- **[19:39] Yo:** sí, porque, o sea, lo que podemos hacer es,
+- **[19:39] Yo:** o sea, terminamos el flujo punta a punta,
+- **[19:40] Alejandra Melo:** Mhmm.
+- **[19:40] Yo:** el punta a punta me refiero en Gali, a lo como está hoy,
+- **[19:40] Yo:** o sea, el el punto a punto donde lo dejó Cata y Jaime,
+- **[19:40] Yo:** fue hasta cuando se crea el proyecto, ¿cierto?
+- **[19:40] Alejandra Melo:** Sí.
+- **[19:40] Yo:** Nada de ahí en adelante, digamos, que está
+- **[19:40] Yo:** ellos no, ni siquiera lo tenían pensado en cómo iba cómo iba a a generarse, ¿no?
+- **[19:40] Yo:** Nosotros sí, o sea, nosotros sí podemos pensar en cómo deberían quedar,
+- **[19:40] Yo:** Yo creo que es terminemos el el flujo
+- **[19:40] Yo:** lo mismo, hasta donde lo dejaron ellos, pero
+- **[19:40] Yo:** sé cómo cómo cómo hacerme entender esa parte.
+- **[19:40] Yo:** Hasta donde lo dejaron ellos, pero versión nosotros,
+- **[19:40] Alejandra Melo:** Mhmm.
+- **[19:40] Yo:** es decir,
+- **[19:40] Yo:** selecciona el producto, lo encuentras, lo trabajas, revisa,
+- **[19:40] Yo:** de todo lo que tiene que ver, genera proyecto. Listo, hasta ahí, digamos que
+- **[19:40] Yo:** igualamos en nuestra versión
+- **[19:40] Yo:** el entregable de ellos.
+- **[19:40] Alejandra Melo:** Eso.
+- **[19:40] Yo:** ¿Verdad?
+- **[19:40] Yo:** Y ahí
+- **[19:40] Yo:** es donde yo digo, bueno,
+- **[19:40] Yo:** ¿qué deberíamos empezar a hacer
+- **[19:40] Yo:** Pero pero lo lo cierto es que si nosotros
+- **[19:41] Yo:** no podemos generar algo más
+- **[19:41] Yo:** en donde yo le pueda decir al usuario, vea, vaya y venda, porque al final
+- **[19:41] Yo:** la intención sí está
+- **[19:41] Yo:** en que esto sirva para que los nuevos dropshippers puedan vender.
+- **[19:41] Alejandra Melo:** Sí.
+- **[19:41] Yo:** Entonces,
+- **[19:41] Yo:** sí necesitamos
+- **[19:41] Yo:** que se genere la landing
+- **[19:41] Yo:** con, yo sé que
+- **[19:41] Yo:** capaz no va a ser como lo haría
+- **[19:41] Yo:** un dropshipper que ya sabe,
+- **[19:41] Yo:** Pero ¿qué mínimo necesita, entonces, Santiago, que está arrancando
+- **[19:41] Yo:** le entregue la página?
+- **[19:41] Yo:** Y es que le entregue el proyecto con todos los cálculos que se hace pase, ¿cierto?, de de
+- **[19:41] Yo:** ganancias y eso,
+- **[19:41] Yo:** los ángulos de venta,
+- **[19:41] Yo:** los copies, lo que necesite, y poder generar
+- **[19:41] Yo:** la pantalla.
+- **[19:41] Yo:** La la el el el
+- **[19:41] Alejandra Melo:** Mhmm.
+- **[19:41] Yo:** la la la página de venta.
+- **[19:41] Yo:** ¿Cierto?
+- **[19:41] Yo:** Y
+- **[19:41] Yo:** es un extra, es un plus,
+- **[19:41] Yo:** si se quiere pautar con Roax.
+- **[19:41] Yo:** Esto es lo que vamos a ver ahora con con este man.
+- **[19:42] Yo:** Pero yo creo que el el el el
+- **[19:42] Yo:** el el el uso del trabajo claramente está en igualar.
+- **[19:42] Yo:** Que es lo que tú estás haciendo, igualar lo que
+- **[19:42] Yo:** en la versión ya lo que debería ser Gali, Creo que podrías ir ir trabajando de mi parte
+- **[19:42] Yo:** entonces, en el generador,
+- **[19:42] Alejandra Melo:** Sí.
+- **[19:42] Yo:** ¿no?
+- **[19:42] Yo:** En el generador de la ¿ok?
+- **[19:42] Alejandra Melo:** Sí.
+- **[19:42] Alejandra Melo:** Sí, sí, o sea, yo te digo, es como
+- **[19:42] Alejandra Melo:** dejar cortes
+- **[19:42] Alejandra Melo:** cosa de que si
+- **[19:42] Alejandra Melo:** llega a ser once, por ejemplo, de septiembre y el generador todavía no está
+- **[19:42] Alejandra Melo:** funcionando full, por lo menos uno puede decir, no, déjemelo, entonces, hasta aquí.
+- **[19:42] Alejandra Melo:** ¿Ya?
+- **[19:42] Yo:** Sí.
+- **[19:42] Alejandra Melo:** Cosa que, pues, la idea es que esté no.
+- **[19:42] Yo:** Sí, no, y de hecho, toca que esté antes,
+- **[19:42] Yo:** esa parte por medio del generador,
+- **[19:42] Yo:** Pues por por es que no quiero, o sea, no no no quieres como que
+- **[19:42] Yo:** que todo caiga en ti para que alcancemos.
+- **[19:42] Yo:** Porque si no vas a estar colapsando a las reuniones, es para para poderte dar, de alguna forma, una mano
+- **[19:43] Yo:** en temas de de de
+- **[19:43] Yo:** ya los flujos completos,
+- **[19:43] Yo:** porque que tú puedas encargarte de esa parte. Lo que tengamos que hacer al final es un poco
+- **[19:43] Yo:** pegarlo, pues, integrarlo.
+- **[19:43] Yo:** Que tú digas, no, yo ya tengo cien por ciento de todo el fuje de Gali, y yo digo, no, ya tengo cien por ciento de qué pasa cuando el usuario
+- **[19:43] Yo:** el botón crear página.
+- **[19:43] Yo:** Ya está, listo, ya se monta.
+- **[19:43] Yo:** Es como eso,
+- **[19:43] Alejandra Melo:** Sí.
+- **[19:43] Yo:** Porque definitivamente, yo digo, si no, por eso es que me refiero tanto a
+- **[19:43] Yo:** lo de cuál es nuestra
+- **[19:43] Yo:** meta desde, o sea, meta, o sea, cuál es la meta del usuario.
+- **[19:43] Yo:** El otro usuario es es hasta que no lo publique,
+- **[19:43] Yo:** no es exitoso, y publicar es
+- **[19:43] Alejandra Melo:** No es exitoso.
+- **[19:43] Yo:** Por por eso lo lo inicié con lo de crear una tienda, crear mi tienda,
+- **[19:43] Alejandra Melo:** Mhmm.
+- **[19:43] Yo:** Ahora, también es porque, ¿sabes qué pasa? Que
+- **[19:43] Yo:** mira que es lo que tú me explicaste,
+- **[19:43] Yo:** igual,
+- **[19:44] Yo:** lo proceso más rápido,
+- **[19:44] Yo:** porque, o sea, no no no no no lo había visto así, pero lo proceso más rápido porque ya, pues, ya llevo
+- **[19:44] Yo:** meses en intershipping.
+- **[19:44] Yo:** Desde producto.
+- **[19:44] Yo:** Pero no sé qué tan fácil de
+- **[19:44] Yo:** qué tan qué tan digerible
+- **[19:44] Yo:** es para un nuevo dropshipper.
+- **[19:44] Alejandra Melo:** Sí.
+- **[19:44] Yo:** ¿Ya?
+- **[19:44] Yo:** De que, ¿cómo así que me genera el landings?, pero ¿cómo así?, yo quiero mi tienda.
+- **[19:44] Yo:** ¿Cuál es mi tienda? O sea, ¿qué ve?, pero ¿cómo así que está separado? Y, entonces,
+- **[19:44] Yo:** el usuario quiere navegar entre un producto y otro, cómo hace?
+- **[19:44] Yo:** No, es que ese no es el fin último, y, entonces, ahí entran las buenas prácticas y cómo se hace más eficiente,
+- **[19:44] Yo:** Pero no sé, creo que puede ser por un usuario
+- **[19:44] Yo:** que está en cero,
+- **[19:44] Yo:** más fácil de digerir,
+- **[19:44] Yo:** si le pongo un
+- **[19:44] Yo:** entre comillas, tienda.
+- **[19:44] Yo:** Que es van a ser tres productos
+- **[19:44] Alejandra Melo:** Mhmm.
+- **[19:44] Yo:** y sale a vender.
+- **[19:44] Yo:** No sé qué es más digerible para un usuario,
+- **[19:44] Yo:** Si tener landings por separado,
+- **[19:44] Yo:** lo digerible para entender el negocio.
+- **[19:44] Yo:** Para para generar confianza, para arrancar a vender,
+- **[19:45] Yo:** Ese es ese es ese es
+- **[19:45] Yo:** como el mi mi mi mi lema todavía.
+- **[19:45] Alejandra Melo:** A ver si cómo lo veo. Yo entro y tengo
+- **[19:45] Alejandra Melo:** mi mi dashboard, ¿cierto? Y ahí van a estar
+- **[19:45] Alejandra Melo:** mis
+- **[19:45] Alejandra Melo:** landings.
+- **[19:45] Alejandra Melo:** O
+- **[19:45] Yo:** Vas a ver... Espérate,
+- **[19:45] Yo:** muestro cómo lo tengo acá.
+- **[19:45] Yo:** O sea, realmente lo que debería pasar
+- **[19:45] Yo:** es que
+- **[19:45] Yo:** debería... Espérame que, a ver si lo encuentro.
+- **[19:45] Yo:** ¿Dónde
+- **[19:46] Yo:** Lo que yo había pensado, Alia, era
+- **[19:46] Yo:** pues, démosle al usuario
+- **[19:46] Yo:** Dale al usuario
+- **[19:46] Yo:** una interfaz similar, no igual,
+- **[19:46] Yo:** pero similar a lo que da Shopify acá es en esta parte.
+- **[19:46] Alejandra Melo:** Pero eso ya es interno, o sea, darle eso al usuario pero interno.
+- **[19:46] Yo:** ¿Sí?
+- **[19:46] Yo:** Sí,
+- **[19:46] Alejandra Melo:** Es a lo que yo me refiero.
+- **[19:46] Alejandra Melo:** Ajá.
+- **[19:46] Yo:** Sí, al que va hacer topshipping.
+- **[19:46] Yo:** Claro, porque, pues, el que va a comprar
+- **[19:46] Yo:** va a ver lo que lo que te decía acá.
+- **[19:46] Yo:** Va a entrar a a esto.
+- **[19:46] Yo:** Pero no no tiene que entrar directamente, pues puedes
+- **[19:46] Yo:** como lo mismo, lo que va a putar el usuario
+- **[19:46] Yo:** por eso quería la la la reunión con Roa Igual, lo que ha
+- **[19:46] Yo:** ahí se aplica el dropshipping, es no
+- **[19:46] Yo:** pauta
+- **[19:46] Yo:** no lo dejo pautar la página completa, lo dejo que paute el producto.
+- **[19:47] Alejandra Melo:** Exacto.
+- **[19:47] Yo:** O sea, yo dejo que usted pautee
+- **[19:47] Yo:** organizador
+- **[19:47] Yo:** esquinero telescópico.
+- **[19:47] Yo:** Yo no dejo que usted
+- **[19:47] Yo:** comparta el general de home de su, porque sabemos que ahí ahí ya muere
+- **[19:47] Yo:** ¿no?
+- **[19:47] Yo:** Por lo menos en esa primera intención.
+- **[19:47] Yo:** Entonces, digo, al usuario, cuando
+- **[19:47] Yo:** genera proyectos,
+- **[19:47] Yo:** es como, expórtelos a su tienda,
+- **[19:47] Yo:** Aquí no me acuerdo uno, aquí.
+- **[19:47] Yo:** Es como si viera esto, es como
+- **[19:47] Yo:** que
+- **[19:47] Yo:** mi intención era como darle algo así al usuario, es como, mira, esta es su tienda,
+- **[19:47] Yo:** esos son los productos que usted ya escogió en Gali. ¿Sí o qué?
+- **[19:47] Yo:** Y esto,
+- **[19:47] Yo:** usted puede, no no con todo esto que ya tiene esta gente, pues,
+- **[19:47] Yo:** se dedican a esta vaina,
+- **[19:47] Yo:** pero que yo le pudiera, de alguna forma,
+- **[19:47] Yo:** permitir modificar cositas acá,
+- **[19:47] Yo:** si luego quiere cambiar la imagen que la cambie, editar el texto,
+- **[19:47] Yo:** sin devolverse a Gali, porque es que Gali es para encontrar el producto y lanzarlo.
+- **[19:47] Yo:** Después de que lo lance,
+- **[19:47] Yo:** tiene una cantidad de productos x,
+- **[19:48] Yo:** ¿cierto?, y que son los que puede empezar a pautar.
+- **[19:48] Yo:** Pero, de nuevo, siento yo que puede ser más fácil
+- **[19:48] Yo:** yo como usuario entrar a esto, que diga como mi tienda online,
+- **[19:48] Yo:** ¿sí?
+- **[19:48] Yo:** Y están los productos aquí enlistaditos, tatata, o sea, esto termina siendo una mezcla entre
+- **[19:48] Yo:** y mis productos.
+- **[19:48] Yo:** ¿Ya?
+- **[19:48] Yo:** Y que pueda como que el tema, no sé, y ponerles tres tipos de temas, lo mismo, no nos interesa
+- **[19:48] Yo:** ser robustos en esta parte, nos interesa es que
+- **[19:48] Yo:** sientan que pueden salir a vender.
+- **[19:48] Yo:** ¿No?
+- **[19:48] Yo:** No sé, por ahí un tema cálido, un tema frío y un tema dark,
+- **[19:48] Yo:** vaya y venda.
+- **[19:48] Yo:** Que seleccionó, no dos, tres tipos de letra,
+- **[19:48] Yo:** budget,
+- **[19:48] Yo:** y la pauta solo se hace
+- **[19:48] Yo:** si va directamente a los productos que ya escogió previamente en Gali, y, pues, vamos aquí, va, dice, no sé,
+- **[19:48] Yo:** lanzar pauta con Roblox o iniciar con Roblox o algo así.
+- **[19:48] Yo:** Eso es como lo que tengo
+- **[19:49] Yo:** en mente, así como muy en borrador,
+- **[19:49] Yo:** Lo mismo, él termina siendo, para darle confianza en que tiene una tienda, entre comillas,
+- **[19:49] Yo:** pero lo que ve el usuario que va a comprar
+- **[19:49] Yo:** no va a entrar, no debería entrar directamente a la tienda, por
+- **[19:49] Yo:** si va a pautar o va a compartir un link o lo que sea, va a ser del detalle del producto.
+- **[19:49] Yo:** No de la tienda en general.
+- **[19:49] Yo:** Más para
+- **[19:49] Yo:** sentir la percepción de administrar una tienda.
+- **[19:49] Participante:** Okay.
+- **[19:49] Alejandra Melo:** Okay.
+- **[19:49] Yo:** ¿Muy raro?
+- **[19:49] Alejandra Melo:** Trenando abajo un poquito
+- **[19:49] Alejandra Melo:** Lo veo como un poquito más complejo.
+- **[19:49] Yo:** Pero ¿complejo en el uso o complejo en poder tenerlo?
+- **[19:49] Alejandra Melo:** En poder tenerlo.
+- **[19:49] Alejandra Melo:** Del uso, no.
+- **[19:49] Yo:** No.
+- **[19:49] Yo:** Pues, entonces, veamos los de ahí, es
+- **[19:49] Yo:** en cuanto al valor
+- **[19:49] Yo:** ofrecido, al valor propuesto para el usuario, ¿lo ves más allá de
+- **[19:49] Yo:** omite...? O sea, sé que no
+- **[19:49] Yo:** no es lo no es lo
+- **[19:49] Yo:** es como de alineada a lo que hemos dicho, pero
+- **[19:49] Yo:** omite los tiempos de entrega
+- **[19:50] Yo:** de la producto.
+- **[19:50] Yo:** ¿Eso es lo que genera más valor?
+- **[19:50] Alejandra Melo:** Es que
+- **[19:50] Alejandra Melo:** Es que yo tenía pensado es que como
+- **[19:50] Alejandra Melo:** soy muy visual, como lo estoy viendo, no, me cuesta como un poco.
+- **[19:50] Alejandra Melo:** Pero yo, por ejemplo, era como que
+- **[19:50] Alejandra Melo:** tengo la parte de del copiloto, de Gali, que son los
+- **[19:50] Alejandra Melo:** productos que he elegido y que dejo a la mitad, ¿cierto? Puedo también eliminarlos.
+- **[19:50] Alejandra Melo:** Esa era parte de las landing.
+- **[19:50] Alejandra Melo:** O, más bien,
+- **[19:50] Alejandra Melo:** como esta parte de... Ah, pero yo aquí no tengo
+- **[19:50] Alejandra Melo:** Shopify.
+- **[19:50] Alejandra Melo:** Pero por qué?
+- **[19:51] Alejandra Melo:** Sé que lo pega.
+- **[19:51] Alejandra Melo:** Siempre queda pegado.
+- **[19:51] Alejandra Melo:** ¿Tú has visto las
+- **[19:51] Alejandra Melo:** tablas donde están los productos?
+- **[19:51] Yo:** Las tablas donde están los
+- **[19:51] Yo:** productos,
+- **[19:51] Yo:** No sé, pero ¿no son las que te mostré ahora?
+- **[19:51] Yo:** Está en producto.
+- **[19:51] Alejandra Melo:** No.
+- **[19:51] Alejandra Melo:** No, no, yo lo hablo, es más como el
+- **[19:51] Alejandra Melo:** Es que eso no me quiere cargar.
+- **[19:51] Yo:** Ok.
+- **[19:51] Alejandra Melo:** He tenido como, esta mañana era cloud, que no me quería se quedaba así en blanco. Ahora, este, es una tabla ¿cierto? Y viene con el producto,
+- **[19:52] Alejandra Melo:** Ay, no me acuerdo qué más era.
+- **[19:52] Alejandra Melo:** Bueno, está el producto, entonces aquí está
+- **[19:52] Alejandra Melo:** la caja.
+- **[19:52] Alejandra Melo:** Aquí está el Mac.
+- **[19:52] Alejandra Melo:** Bueno, ya están todos los productos.
+- **[19:52] Alejandra Melo:** Y aquí el
+- **[19:52] Alejandra Melo:** ver página,
+- **[19:52] Alejandra Melo:** Es que no nos
+- **[19:52] Alejandra Melo:** lo quería mostrar directamente desde acá.
+- **[19:52] Yo:** O sea, a ver si, es que no sé, siento que es el mismo.
+- **[19:52] Alejandra Melo:** Ah, sí, tú me
+- **[19:52] Yo:** O sea, está viendo mi
+- **[19:52] Alejandra Melo:** Ah, sí, tú me la mostraste. Sí, es que ahorita no me la mostraste,
+- **[19:52] Alejandra Melo:** estabas hablando y hablando en la
+- **[19:52] Yo:** productos, uno por uno, y acá, si doy clic,
+- **[19:52] Yo:** me manda a ver el producto acá, así,
+- **[19:52] Alejandra Melo:** Así.
+- **[19:52] Yo:** Sí.
+- **[19:52] Yo:** Y, entonces, ¿qué pasa?
+- **[19:52] Alejandra Melo:** O sea, quiero es como hacerlo, como está la par
+- **[19:52] Alejandra Melo:** de copiloto con todos los proyectos, pero así con las tablas.
+- **[19:53] Alejandra Melo:** Y usar la parte de landings, también así, en versión
+- **[19:53] Alejandra Melo:** tabla, no no con cards,
+- **[19:53] Alejandra Melo:** me genera, de pronto, un poco más de
+- **[19:53] Alejandra Melo:** qué? Como que espacio,
+- **[19:53] Alejandra Melo:** de ruido. Lo quiero hacer un poco más
+- **[19:53] Alejandra Melo:** ¿más qué? Más
+- **[19:53] Alejandra Melo:** fácil de de leer.
+- **[19:53] Alejandra Melo:** Así de pronto es fácil de leer, pero es
+- **[19:53] Alejandra Melo:** si si tengo, por ejemplo, no sé, treinta productos, pues van a ser treinta cards
+- **[19:53] Alejandra Melo:** sino
+- **[19:53] Alejandra Melo:** más bien tener aquí como la parte de copiloto, la parte
+- **[19:53] Alejandra Melo:** de como de los proyectos. Yo le digo copiloto, pero son los proyectos,
+- **[19:53] Alejandra Melo:** pues. Landing, y si yo le doy clic acá, pues me va a mostrar
+- **[19:53] Alejandra Melo:** entonces, la tabla.
+- **[19:53] Alejandra Melo:** No apitemos esto, que sean tablas.
+- **[19:53] Alejandra Melo:** Que sean tablas,
+- **[19:53] Alejandra Melo:** ¿Cierto?
+- **[19:53] Yo:** You are
+- **[19:54] Yo:** Igual, ahí habría que ver, porque si si
+- **[19:54] Yo:** si justamente el el
+- **[19:54] Yo:** lo menos en el evento,
+- **[19:54] Yo:** la mayoría va a estar a través de un celular, toca que sea demasiado amigable por
+- **[19:54] Alejandra Melo:** Ah,
+- **[19:54] Alejandra Melo:** Ah, verdad, verdad, verdad, que este es el celular.
+- **[19:54] Yo:** móvil.
+- **[19:54] Alejandra Melo:** Entonces, si es en
+- **[19:54] Alejandra Melo:** Dejémoslo con cards.
+- **[19:54] Alejandra Melo:** Pero no así.
+- **[19:54] Alejandra Melo:** Y que si le da clic acá,
+- **[19:54] Alejandra Melo:** me lleva a ver la landing.
+- **[19:54] Alejandra Melo:** Ajá.
+- **[19:54] Alejandra Melo:** Sería así, ese se supone que es
+- **[19:54] Alejandra Melo:** donde estoy, no en Lande.
+- **[19:54] Alejandra Melo:** Y está copiloto.
+- **[19:54] Alejandra Melo:** Que propoder ver así los productos,
+- **[19:54] Alejandra Melo:** pero no no en la página.
+- **[19:54] Alejandra Melo:** No no como un ecommerce que yo tengo que entrar y
+- **[19:54] Alejandra Melo:** Ah, bueno.
+- **[19:55] Yo:** O sea, importante, pero pero sí me haces que no cuenta algo, sí.
+- **[19:55] Alejandra Melo:** Este es el el
+- **[19:55] Yo:** Lo importante es que
+- **[19:55] Yo:** cuando quede en mis proyectos,
+- **[19:55] Yo:** o sea,
+- **[19:55] Yo:** que yo pueda, sobre esa misma pantalla,
+- **[19:55] Yo:** ver todo.
+- **[19:55] Yo:** ¿Dices tú?
+- **[19:55] Alejandra Melo:** No, o sea, yo tengo aparte las landings, que son todas estas, que
+- **[19:55] Alejandra Melo:** está seleccionada y no que...
+- **[19:55] Alejandra Melo:** Pongámoslo aquí.
+- **[19:55] Alejandra Melo:** De un color, se supone que es sat.
+- **[19:55] Alejandra Melo:** Seleccionado.
+- **[19:55] Alejandra Melo:** A
+- **[19:55] Yo:** Ok.
+- **[19:55] Alejandra Melo:** Ser que está seleccionado.
+- **[19:55] Yo:** ¿Está sobre una, o sea, sobre una misma
+- **[19:55] Yo:** pantalla, o sea, cambias de cambias de opción de botón,
+- **[19:55] Alejandra Melo:** Uh-huh.
+- **[19:55] Yo:** pero
+- **[19:55] Yo:** o sea, es uno del otro, clic, clic, pero baja solamente, o sea,
+- **[19:55] Yo:** cambias cambias la vista, obviamente, es ya no es
+- **[19:55] Alejandra Melo:** Cambia la vista.
+- **[19:55] Yo:** landings, pero está sobre la misma pantalla, me refiero.
+- **[19:55] Alejandra Melo:** Sí, sobre la misma.
+- **[19:55] Yo:** Ok.
+- **[19:55] Alejandra Melo:** A ver, yo tengo un copiloto acá y tengo todos los los
+- **[19:56] Alejandra Melo:** los proyectos en los que he estado trabajando. Por ejemplo, este lo dejé apenas en
+- **[19:56] Alejandra Melo:** la parte de anuncios y no lo continué, pero, pues, puedo eliminarlos.
+- **[19:56] Yo:** Sí, sí.
+- **[19:56] Alejandra Melo:** ¿No?
+- **[19:56] Alejandra Melo:** Y, si algo, pues, puedo bajar a las landing,
+- **[19:56] Yo:** Pero esa
+- **[19:56] Alejandra Melo:** Y en landing,
+- **[19:56] Yo:** refleja lo que estamos diciendo, o sea, al final,
+- **[19:56] Yo:** me parece que es el tuyo es más más cercano a a
+- **[19:56] Yo:** sea fácil entender y mezcla el
+- **[19:56] Yo:** o sea, al final, yo creo que es que hay que vendérselo a lo lucero como que este
+- **[19:56] Yo:** el administrador de su tienda,
+- **[19:56] Yo:** ¿cierto?
+- **[19:56] Yo:** Sin que sea una tienda desde una configuración hipercompleja.
+- **[19:56] Yo:** Déjeme ver como esta es su tienda,
+- **[19:56] Yo:** Entonces,
+- **[19:56] Yo:** ejemplo, en landing no le pongamos, hablen más solamente hacia el
+- **[19:56] Yo:** concepto, el copy, el cómo el usuario que no sabe de esto, ¿me entiende?
+- **[19:56] Yo:** Si yo le digo landing a una persona que no vendió el public commerce, puede que no entienda,
+- **[19:56] Yo:** qué pasa si le ponemos mi tienda,
+- **[19:56] Yo:** Y mi tienda es donde tengo productos creados,
+- **[19:56] Yo:** ¿De dónde los creé? De los que me copiloto
+- **[19:57] Yo:** dije, genéremelo como un
+- **[19:57] Yo:** genera a mí, genéralo o no sé qué, cuál sería el copy,
+- **[19:57] Yo:** déjalo listo para la venta, crea crea portafolio o no sé, o no, tú me entiendes a qué
+- **[19:57] Alejandra Melo:** Yo estaba ahora mirando si
+- **[19:57] Yo:** quiero llegar.
+- **[19:57] Alejandra Melo:** Yo estaba ahora mirando, si copiloto sí se entiende.
+- **[19:57] Alejandra Melo:** O
+- **[19:57] Alejandra Melo:** O winners.
+- **[19:57] Yo:** No, cómo unas los matas.
+- **[19:57] Yo:** Drop drop, época de volario muy dropshipper, esos serían
+- **[19:57] Alejandra Melo:** ¿Qué dice?
+- **[19:57] Alejandra Melo:** Productos del mes.
+- **[19:57] Alejandra Melo:** Estaba pensando, tendencias,
+- **[19:57] Alejandra Melo:** nuevos ganadores, proveedores, historial,
+- **[19:57] Yo:** No, yo que, como como se pasa por un filtro,
+- **[19:57] Alejandra Melo:** ¿Enquilo?
+- **[19:57] Yo:** esto, yo creo que debería ser una palabra, solo una palabra,
+- **[19:57] Yo:** o por por si acaso, como mi tienda, ¿cierto? Pero
+- **[19:58] Yo:** que haga referencia a que son los que tú elegiste,
+- **[19:58] Yo:** No sé si guardado, preseleccionados podría ser, no sé.
+- **[19:58] Yo:** Algo por el estilo, como yo, eso fue, fueron los que tú filtraste, los que están ahí para
+- **[19:58] Yo:** terminar de ver.
+- **[19:58] Yo:** Y que esos son los que vas a luego.
+- **[19:58] Yo:** Generar landing cuando generes
+- **[19:58] Yo:** decir, la generación de landing se debería dar
+- **[19:58] Yo:** dentro de copiloto.
+- **[19:58] Yo:** Yo en copiloto de un proyecto le doy generar landing, y en mi tienda se va a ver reflejado.
+- **[19:58] Alejandra Melo:** Uh-huh.
+- **[19:58] Yo:** ¿Sí?
+- **[19:58] Yo:** En compilato tengo treinta,
+- **[19:58] Yo:** pero solo a dos les les pido generar landing, va
+- **[19:58] Yo:** va en mi tienda se van a ver reflejados esos dos.
+- **[19:58] Yo:** Ahora, en mi tienda también podría darle un botoncito de más,
+- **[19:58] Yo:** y que me pregunte, los que tengo en copiloto, ¿cuál le quiero generar?
+- **[19:58] Participante:** Okay.
+- **[19:58] Yo:** Sería como, digamos, sería como lo que por dos caminos llego.
+- **[19:58] Yo:** Y cuando genero la landing, solo ahí,
+- **[19:58] Yo:** le puedo decir,
+- **[19:58] Yo:** iniciar pauta
+- **[19:59] Yo:** ejemplo.
+- **[19:59] Yo:** O iniciar pauta, no ROACs, iniciar pauta.
+- **[19:59] Yo:** Y en iniciar pauta, ahí empieza el flujo de racks, que es el que toca revisar con este man.
+- **[19:59] Yo:** Bueno, ¿qué vamos a hacer?, ¿cómo usted nos puede ayudar?
+- **[19:59] Yo:** Para empezar a generarlo. Ahí te voy a pedir el favor
+- **[19:59] Yo:** ya, de hecho, ya toca reunión con este tipo de
+- **[19:59] Yo:** tú que sabes más de dropshipping,
+- **[19:59] Yo:** O sea, yo quiero llegar a entender el
+- **[19:59] Yo:** el qué es lo que pauta, porque yo en ese momento yo ni siquiera sé tan bien cómo funciona Roblox.
+- **[19:59] Yo:** Y es, hay una cuenta pública, o sea, o al usuario le toca
+- **[19:59] Yo:** ir, crear una cuenta en Meta o crear una cuenta en TikTok,
+- **[19:59] Yo:** y desde ahí conectarse con robo, acceso a integración,
+- **[19:59] Yo:** o podríamos tratar de que eso haya como una capa
+- **[19:59] Yo:** que homologue todo eso y que Roxed, que hace la publicidad supergeneral.
+- **[19:59] Alejandra Melo:** Pues yo nunca
+- **[19:59] Yo:** No sé cómo funciona.
+- **[19:59] Alejandra Melo:** Pues yo nunca he usado Roblox.
+- **[19:59] Yo:** Bueno, pero sale más de dropshipping. Es dropshipping, que hecho, entonces,
+- **[19:59] Yo:** por ahí, por lo menos,
+- **[19:59] Yo:** puedes hacer preguntas más más puntuales.
+- **[19:59] Yo:** Nos sirve, entonces, a los dos para entender cómo Roblox tiene sus flujos,
+- **[20:00] Yo:** y y mostrémosle mostrémosle cómo lo estamos haciendo.
+- **[20:00] Yo:** ¿Sí?, y en qué puntos queremos que toque, porque la idea sería que
+- **[20:00] Yo:** genere genere el el alarming de prueba
+- **[20:00] Yo:** que eso sea lo que pauta, lo que llega al usuario,
+- **[20:00] Yo:** y luego ver si hay forma de que Roax nos diga,
+- **[20:00] Yo:** cuánto está, de cuánto fue la inversión de publicidad, a ver si lo ponemos dentro de
+- **[20:00] Yo:** dentro de dentro de mi tienda.
+- **[20:00] Yo:** Que hecho en mi tienda, entonces deberíamos tener que un desempeño de vistas del producto,
+- **[20:00] Yo:** o de ventas o de órdenes, número de órdenes, algo así, ¿no?
+- **[20:00] Alejandra Melo:** Peor.
+- **[20:00] Yo:** ¿O no?
+- **[20:00] Yo:** O sea, cuando, no, claramente aquí no puedes montar una orden.
+- **[20:00] Yo:** A lo que me refiero es cuando estás en mi tienda,
+- **[20:00] Yo:** que ves las landing creadas,
+- **[20:00] Alejandra Melo:** Mhmm.
+- **[20:00] Yo:** ¿sí?
+- **[20:00] Yo:** Puedes eliminarla, pero la idea es
+- **[20:00] Yo:** que yo ahí también pueda entrar
+- **[20:00] Yo:** y editar editarla o no.
+- **[20:00] Yo:** Listo, la editas. Y también podría
+- **[20:00] Alejandra Melo:** Sí.
+- **[20:01] Yo:** ver cuántas órdenes tengo,
+- **[20:01] Alejandra Melo:** Pues no sé si eso
+- **[20:01] Alejandra Melo:** se podría hacer. ¿No me pueden ver los productos de No la puedo ver.
+- **[20:01] Yo:** No, pero es que ahí omitamos de que no hay conexión a dropping,
+- **[20:01] Yo:** es
+- **[20:01] Yo:** nos van a dar doscientos productos,
+- **[20:01] Yo:** Por eso es importante que
+- **[20:01] Yo:** él se fluje cuando crea la página, por eso me importaba tanto que sí se viera más o más como una tienda,
+- **[20:01] Yo:** es el usuario final, el comprador,
+- **[20:01] Yo:** ¿Sí?
+- **[20:01] Yo:** Va a tratar de comprar
+- **[20:01] Yo:** y que al tratar de comprar, eso va ser simplemente un formulario,
+- **[20:01] Yo:** en mi tienda yo puedo ver quiénes quiénes están comprando.
+- **[20:01] Yo:** Y lo que yo tengo que ir a hacer como dropshipper es manualmente en Dropi entrar y montar la orden.
+- **[20:01] Yo:** O sea, es la
+- **[20:01] Alejandra Melo:** A que se haga manoir.
+- **[20:01] Yo:** O sea, es la forma que esto sirva.
+- **[20:01] Yo:** Dime.
+- **[20:01] Yo:** Sí, Manuel, claro.
+- **[20:01] Yo:** Porque no tenemos la
+- **[20:01] Alejandra Melo:** ¿Y no dijiste que miráramos como si todo estuviera funcionando?
+- **[20:01] Alejandra Melo:** Me dijiste que si se podía ver las órdenes.
+- **[20:01] Yo:** Comaji.
+- **[20:02] Alejandra Melo:** Cantidad de orden, o sea, que él capture lo los datos
+- **[20:02] Alejandra Melo:** formulario, pues sí se puede.
+- **[20:02] Yo:** Sí, sí, por eso, o sea, en la hora de tengan de
+- **[20:02] Alejandra Melo:** ¿Cierto? Y, entonces, algo que diga aquí como debajo, como mis órdenes,
+- **[20:02] Yo:** Sí.
+- **[20:02] Alejandra Melo:** Mis órdenes.
+- **[20:02] Yo:** Y pero mis mis órdenes son las que las que
+- **[20:02] Yo:** por el formulario
+- **[20:02] Yo:** personas, por decir algo,
+- **[20:02] Yo:** le hicieron, no sé, entraron a la aspiradora portátil,
+- **[20:02] Participante:** Mhmm.
+- **[20:02] Yo:** y la pidieron.
+- **[20:02] Yo:** Y que eso sea lo que
+- **[20:02] Yo:** él tiene que entrar
+- **[20:02] Yo:** lastimosamente, a una integración con Dropi, eso eso ya se hablado con Lucho.
+- **[20:02] Yo:** Con Jaime y todo eso.
+- **[20:02] Yo:** Hagamos que funcione, hagamos el bypass,
+- **[20:02] Yo:** lo que toca decirle a su usuario es,
+- **[20:02] Yo:** entra en drop y crea la orden.
+- **[20:02] Yo:** ¿Sí?
+- **[20:02] Yo:** Y el punto en donde vamos a decir, no, es que es que está muy lento, que esto es manual,
+- **[20:02] Alejandra Melo:** Sí.
+- **[20:02] Yo:** ah, bueno, ahí es el push para, pues, marica, migre a Shopify.
+- **[20:02] Yo:** Migre a Tienda Nube, hágalo automático ya.
+- **[20:02] Yo:** ¿Listo? Porque por ahora
+- **[20:02] Yo:** Pero la solución sería, pues, supuestamente, no sé si va ser verdad o no,
+- **[20:03] Yo:** lo que le dijo Lucho a a Jaime, es que
+- **[20:03] Yo:** si esto tiene viabilidad, si eso mueve órdenes, pues se para que nos den el API, que desde acá pudiéramos crear órdenes nosotros. En automático. Pero ese es el punto de hacerlo muy viable que se vea lo más cercano a la realidad de cómo nos gustaría que funcionara. Para que esto
+- **[20:03] Alejandra Melo:** Okay.
+- **[20:03] Alejandra Melo:** Mira que a mí esto,
+- **[20:03] Alejandra Melo:** esto de mi tienda y eso, a mí no me preocupa tanto, porque es que ni siquiera
+- **[20:03] Alejandra Melo:** no no pude ni siquiera empezar. Entonces, a mí me preocupa que, por ejemplo,
+- **[20:03] Alejandra Melo:** yo no pueda poner
+- **[20:03] Alejandra Melo:** esto,
+- **[20:03] Alejandra Melo:** tengo un producto en mente o quiero explorar una
+- **[20:03] Alejandra Melo:** Bueno, eso solo tanto, pero, por ejemplo, si él ya tiene un producto en mente, lo del escáner,
+- **[20:03] Alejandra Melo:** pues ya no se podría hacer porque, pues ya apenas van a haber doscientos productos,
+- **[20:03] Yo:** Hello.
+- **[20:03] Alejandra Melo:** Esto de buscar anuncios, pues, ya no se podría hacer porque, pues, solamente son ciertos
+- **[20:03] Yo:** Eso es lo que te si quieres ver,
+- **[20:03] Alejandra Melo:** Entonces,
+- **[20:03] Yo:** Si quieres, ven, salgamos de reunión con Roblox, y, si quieres, nos lo vamos a reunir.
+- **[20:03] Alejandra Melo:** Dale, dale,
+- **[20:03] Yo:** Bueno, chao.

@@ -1,0 +1,782 @@
+# Revisemos estrategia evento Expowinners P2
+
+- **ID:** `not_IKJl5YruZ9iqdl`
+- **Fecha:** 2026-08-21T21:31:35.781Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/f1d2c042-8e76-4bc1-b005-a44dcfa80d0f)
+- **Asistentes:** Santiago Herrera Acosta, Laura Torres, Diana Margarita Aldana Echeverry, Jaime Guevara, Laura Contreras, Dropinews, Jose Pineda, Catherin Salazar, Juan Bautista
+
+---
+
+## Resumen de la Reunión
+# Contexto del Evento (12-13 de septiembre)
+
+- Expowinners: evento comercial con dos días de actividades
+  - Segmentos objetivo: proveedores y dropshippers
+- Día 1: registro en stand de Leyendas Dropi, segmentación, invitación al workshop, investigación guerrilla
+- Día 2: workshop de 60 minutos con usuarios seleccionados
+  - Tres iniciativas a mostrar: Gali, HydropiPulso, y selección de transportadoras
+  - Interacciones con la app de Ruta Winners (app de marketing)
+
+# Iniciativas y Ajustes Técnicos
+
+- Gali e HydropiPulso: se confirma versión mobile (iOS y Android)
+  - Santi y Aleja refinan el experimento para dropshippers
+  - Foco en interacciones tipo TAP, gestos cortos, menos scroll
+  - Copies más pequeños y resumidos para usuarios no expertos
+- Selección de transportadoras (Juan): pendiente definir si va en mobile o web
+  - Opción de mantener web para quienes no traigan computador
+  - Alternativa: mix (web en computadores del equipo + mobile rotando)
+  - Juan Diego sugiere hacer la prueba y ver cómo se ve en mobile
+- App de scanner y juego de aprendizaje de Jaime: también en revisión para mobile
+- Agente de tecnología (rearquitectura): equipo tiene fecha de entrega el 12 de septiembre, probablemente no alcanza para mostrarse en el evento
+
+# Segmentación del Workshop y Rearquitectura
+
+- Segmentación de Leyendas Dropi: 6 segmentos por órdenes entregadas (de 0 a +20.000)
+  - Foco del workshop: segmentos Bienvenido, Explorador y Maestro (≈46% de la base)
+  - José Pineda define el pool; el equipo pedirá cuántos de cada segmento invitar
+- Ideas de rearquitectura para el evento (Catherin y Diana):
+  - Ruta de rearquitectura integrada en la Ruta Winners (recorrido por stands con metas y beneficios)
+  - Pantalla táctil para interacción en vivo con la plataforma y recolección de feedback
+  - Restricción: stand es de las holdings, hay que ser estratégicos para no competir
+- Presupuesto para pantallas/iPads: debe salir de producto/growth, no de comercial
+  - Majo sugiere aliarse con otras verticales y explorar alquiler en volumen
+
+# Próximos Pasos
+
+- Santi: al miércoles 26 de agosto entrega pendientes de Gali (métricas de éxito, criterios por experimento, revisión de flujos mobile)
+- Majo: el lunes 24 de agosto pasa mapa del evento y ubicación de pantallas
+- Reunión de alineación final con Jenny: semana del 24 de agosto (lunes)
+- Revisión general del plan: jueves 27 de agosto (para ajustar el viernes si hace falta)
+- Invitar a Pipe y a Esteban a la próxima reunión de alineación
+
+
+- **Entregar pendientes de Gali: métricas de éxito y flujos mobile** (Santiago)
+
+  Incluye criterios de éxito por experimento y revisión de Gali, scanner y Pulso. Meta: miércoles 26 de agosto.
+- **Pasar mapa del evento y ubicación de pantallas** (Majo)
+
+  Necesario para definir espacios promocionales y logística de stands. Meta: lunes 24 de agosto.
+- **Coordinar reunión de alineación final con Jenny** (Laura Contreras)
+
+  Presentar el plan completo para aprobación. Semana del 24 de agosto.
+- **Invitar a Pipe y a Esteban a la próxima reunión** (Laura Contreras)
+
+  Esteban tiene una parte de experiencia con Academy y necesita contexto del plan.
+- **Definir si selección de transportadoras va en mobile o web** (Juan Diego)
+
+  Revisar con Jaime el formato de la app; evaluar si es estratégico adaptarlo a mobile o usar computadores en rotación.
+- **Consultar presupuesto para pantallas/iPads desde producto o growth**
+
+  Explorar alquiler en volumen aliándose con otras verticales del evento.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/f396a3c2-6c96-4aa8-9737-78a557524aec](https://notes.granola.ai/t/f396a3c2-6c96-4aa8-9737-78a557524aec)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[21:32] Catherin Salazar:** Inhumanista la hora interna, entonces por eso
+- **[21:32] Catherin Salazar:** ahorita te dije la señal supermalo.
+- **[21:32] Yo:** Hola.
+- **[21:32] Catherin Salazar:** Hola. Hola.
+- **[21:32] Juan Diego Bautista Vasquez:** Hola. ¿Cómo están?
+- **[21:32] Jose Pineda Pitre:** Samuel, ese
+- **[21:32] Laura Contreras:** rato no lo escuchábamos.
+- **[21:32] Jose Pineda Pitre:** ¿Dónde está Laura?
+- **[21:32] Laura Contreras:** En un cafecito. ¿En
+- **[21:32] Jose Pineda Pitre:** dónde estás trabaja?, ¿en qué cafecito?
+- **[21:32] Laura Contreras:** En Café Quindío.
+- **[21:32] Jose Pineda Pitre:** Ah. ¿En cuál? ¿En el de Premier?
+- **[21:32] Laura Contreras:** No, Granada.
+- **[21:33] Laura Contreras:** Lau, creo que te escuchás como en una caja.
+- **[21:33] Laura Catherine Torres Ciendua:** ¿Yo? Es
+- **[21:33] Laura Contreras:** que estoy
+- **[21:33] Laura Catherine Torres Ciendua:** intentando conectar los audífonos y no
+- **[21:33] Laura Catherine Torres Ciendua:** sirven.
+- **[21:33] Laura Contreras:** Ok.
+- **[21:33] Laura Contreras:** Listo. Bueno, esperemos a Jaime a ver si podemos irnos.
+- **[21:33] Laura Contreras:** Porque creo que nos falta poquito, por eso la pusimos hoy ya.
+- **[21:33] Laura Contreras:** Para poder terminar.
+- **[21:33] Laura Contreras:** Bueno, y que cada uno se vaya con sus temas para alinear.
+- **[21:33] Laura Contreras:** Bueno, que James se demora, entonces podemos poner a grabar.
+- **[21:33] Laura Contreras:** Tengo este dibujar de partes.
+- **[21:33] Laura Contreras:** Tienes que lo pendiente ayer, o que las extra tenemos,
+- **[21:33] Laura Contreras:** alineación pendiente, además de la de Juan, respecto al objetivo de
+- **[21:34] Laura Contreras:** por qué llevar selección de transportadoras a
+- **[21:34] Yo:** La actualización.
+- **[21:34] Laura Contreras:** al workshop. Juan, bienvenido, no es que te queramos. Señor, dime.
+- **[21:34] Yo:** Ahora ahora estoy reunido con Jaime y con
+- **[21:34] Yo:** para la entrega de Gali, ya, pues, en temas de del repo.
+- **[21:34] Laura Contreras:** Okay.
+- **[21:34] Yo:** Sí llegamos a que definitivamente se va a necesitar
+- **[21:34] Yo:** tener
+- **[21:34] Yo:** una interacción más desde móvil,
+- **[21:34] Yo:** Ayer habíamos dicho que igual, por ser workshop,
+- **[21:34] Yo:** pues, está bien que fuera más de de de web en computador,
+- **[21:34] Yo:** Pero, hablando con Jaime, los dos flujos, igual, de entrada a
+- **[21:34] Yo:** a a a Gali, bueno, era asistente ahí ahí,
+- **[21:34] Yo:** por móvil. Entonces, con Aleja vamos a trabajar en
+- **[21:34] Yo:** en el ajuste por
+- **[21:34] Yo:** por cómo se vería a través de
+- **[21:34] Yo:** tanto iPhone como Android, ¿listo? IOS como Android.
+- **[21:34] Laura Contreras:** Ok, súper, Santi. Entonces, este sería
+- **[21:34] Yo:** Sino que funcione un poquito más con tab,
+- **[21:34] Yo:** con unas cartas más pequeñas, copies más pequeños, bueno, más, sí, más resumidos.
+- **[21:35] Laura Contreras:** Lau,
+- **[21:35] Diana Aldana:** pregunta, o sea, ¿que Cata ya no sigue haciendo Gali?
+- **[21:35] Diana Aldana:** ¿Ya pasa cien por ciento a Aleja?
+- **[21:35] Laura Contreras:** No, Dianys, acuérdate que este enfoque es solo es webinars.
+- **[21:35] Laura Contreras:** Ya en la REU del martes hablamos de las diferencias.
+- **[21:35] Laura Contreras:** Es básicamente
+- **[21:35] Laura Contreras:** a ExpoWinners vamos a llevar esa primera partecita, y como Santi Aleja son los owners de dropshippers,
+- **[21:35] Laura Contreras:** ellos son quienes van a refinar ese experimento,
+- **[21:35] Laura Contreras:** puede seguir trabajando en la visión global de Gridging.
+- **[21:35] Laura Contreras:** Ya es
+- **[21:35] Laura Contreras:** ¿te acuerdas?, como siguientes fases y demás. Ok,
+- **[21:35] Diana Aldana:** ok.
+- **[21:35] Laura Contreras:** Universo que teníamos.
+- **[21:35] Laura Contreras:** Vale,
+- **[21:35] Diana Aldana:** listo.
+- **[21:35] Laura Contreras:** Listo, Santi. Tengo una duda ahí, porque
+- **[21:35] Laura Contreras:** si Gali, HidropiPulso van a estar en versión mobile, inclusive en el workshop, selección de transportadoras, si podemos como hacer el switch y cambiar a web, ¿cierto? ¿O cómo lo ven? Wendy,
+- **[21:36] Laura Contreras:** y Santi.
+- **[21:36] Laura Contreras:** Un poco de como en, imaginémonos el storytelling del workshop, no es que lo hayamos definido
+- **[21:36] Laura Contreras:** ya.
+- **[21:36] Laura Contreras:** Pero si ambos los vamos a utilizar, Gali, Hydrop y Pulse en mobile,
+- **[21:36] Laura Contreras:** hacer el salto a web,
+- **[21:36] Laura Contreras:** para selección de transportadoras entenderlo, ¿está ok?
+- **[21:36] Laura Contreras:** ¿O cómo lo ven todos? Yo
+- **[21:36] Juan Diego Bautista Vasquez:** creo que incluso tocaría mantener web,
+- **[21:36] Juan Diego Bautista Vasquez:** como para no matar de que los que no traigan computador
+- **[21:36] Laura Contreras:** y
+- **[21:36] Juan Diego Bautista Vasquez:** eso, ¿no? Mobile, perdón.
+- **[21:36] Juan Diego Bautista Vasquez:** O yo creo que toca ver cómo adaptarlo a mobile,
+- **[21:36] Laura Contreras:** porque
+- **[21:36] Juan Diego Bautista Vasquez:** ¿qué decir? El que no trae computadora ¿O a menos? Sí.
+- **[21:36] Juan Diego Bautista Vasquez:** Guau, menos. Chévere.
+- **[21:36] Diana Aldana:** Qué la invitación.
+- **[21:36] Diana Aldana:** O tocará que en la invitación se especifique que es importante que tengan computador.
+- **[21:36] Diana Aldana:** Se les va a enviar antes.
+- **[21:36] Diana Aldana:** Bien.
+- **[21:36] Yo:** Pero es que en lo en lo en lo que hablamos,
+- **[21:36] Laura Contreras:** Eso toca revisarlos.
+- **[21:36] Yo:** Sí, es que entiendo que
+- **[21:36] Yo:** uno de los puntos de entrada al a la landing de expo winners
+- **[21:37] Yo:** es en la aplicación que entiendo está siendo
+- **[21:37] Yo:** marcada, ¿correcto?
+- **[21:37] Yo:** Comercial, no no sé quién lo está haciendo.
+- **[21:37] Yo:** Ese es un un un punto de entrada, ¿verdad?
+- **[21:37] Participante:** And
+- **[21:37] Yo:** Y que de ahí, o, digamos, hay una pauta, un cold toxin a expo uñas.
+- **[21:37] Yo:** Ahí partimos. ¿Y y qué eso es a través de un QR?
+- **[21:37] Yo:** Sea, partimos de que eso es nuevo.
+- **[21:37] Yo:** Y la segunda,
+- **[21:37] Yo:** que era en el stand o en el lugar de expo bueno, este también iba a ser por QR.
+- **[21:37] Yo:** O sea, es que
+- **[21:37] Laura Contreras:** Sí, seño.
+- **[21:37] Yo:** hay hay
+- **[21:37] Yo:** unos casos específicos, unos flujos que
+- **[21:37] Yo:** por eso era la pregunta de de de ayer, y era porque
+- **[21:37] Yo:** estaba estaba sobre sobre computador,
+- **[21:37] Yo:** y entiendo que por el workshop
+- **[21:37] Yo:** es
+- **[21:37] Yo:** lo lo lo ideal es que esté en un computador,
+- **[21:37] Yo:** pero en el resto del evento, los dos días de evento, salidos de esa hora,
+- **[21:37] Yo:** la mayoría seguramente va a estar es con con celular.
+- **[21:37] Yo:** O la otra es que se lo queda pensar aquí en el workshop se se se se
+- **[21:38] Yo:** por móvil para no tener una fricción y pasarse un dispositivo a otro.
+- **[21:38] Yo:** Y no sé si se vaya a poder, no sé, presentar igual a ser una pequeña como
+- **[21:38] Yo:** demo intro, que sí sea a través de navegador.
+- **[21:38] Yo:** De computador, que le muestre igual cómo se veía esa interfaz
+- **[21:38] Yo:** desde desde desde el computador.
+- **[21:38] Laura Contreras:** Listo. Yo creo que también podría ser un mix, darle, Majo. Sea, como nosotros nuestros computadores igual los vamos a tener, ¿no? Los que estemos dentro del workshop podríamos hacer un mix entre manejar la versión web, algunos le pasamos el mobile y vamos también revisando. ¿Majo?
+- **[21:38] Maria Jose Calderon:** Yo
+- **[21:38] Maria Jose Calderon:** Hola, que
+- **[21:38] Maria Jose Calderon:** que no les había ¿Con con los usuarios o
+- **[21:38] Laura Contreras:** van a hacer la
+- **[21:38] Maria Jose Calderon:** convocatoria al workshop?
+- **[21:38] Maria Jose Calderon:** Eso
+- **[21:38] Laura Contreras:** que
+- **[21:39] Maria Jose Calderon:** no no lo voy a defender.
+- **[21:39] Laura Contreras:** Sí, no, Majo, no.
+- **[21:39] Laura Contreras:** Comercial nació un espaciecito de una hora en uno de los talones.
+- **[21:39] Laura Contreras:** Vamos a hacer una convocatoria a un workshop el día domingo para invitar
+- **[21:39] Laura Contreras:** a unos usuarios seleccionados, ahí todavía no hemos decidido bien
+- **[21:39] Laura Contreras:** cómo cerrar la segmentación y a cuántos invitar.
+- **[21:39] Laura Contreras:** Para que el domingo aprovechemos esa hora al máximo mostrando las tres
+- **[21:39] Laura Contreras:** iniciativas de las que hablábamos ayer.
+- **[21:39] Laura Contreras:** Ah, buenísimo, listo. Sí, señora.
+- **[21:39] Laura Contreras:** Santi, ¿algo más que quieras tener en cuenta o...?
+- **[21:39] Laura Contreras:** Necesitemos? Eso está buenísimo revisar la interacción del workshop
+- **[21:39] Laura Contreras:** si debe ser modo idle web,
+- **[21:39] Laura Contreras:** Eso creo que le dice a Juan si debemos llevar selección de
+- **[21:39] Laura Contreras:** mobile o web o podemos hacer el mix.
+- **[21:39] Yo:** No,
+- **[21:39] Yo:** de mi parte no, yo creo que es más eso de ella.
+- **[21:39] Yo:** Que no
+- **[21:39] Yo:** no no sé en selección de transportadoras, Juan de Ips,
+- **[21:39] Yo:** si
+- **[21:40] Yo:** baste con hacerlo solamente responsive, no no no tengo otra presente como los flujos,
+- **[21:40] Yo:** Nosotros ya, propiamente, en en en el asistente IA y en
+- **[21:40] Yo:** pulso, si alcanzamos a trabajarle algo,
+- **[21:40] Yo:** perdón, en en el de encontrar el el el producto, en el de escanear producto,
+- **[21:40] Yo:** vamos a ver
+- **[21:40] Yo:** si hay algunas mejoras
+- **[21:40] Yo:** para hacer unos diseños más hacia hacia móvil realmente, como con interacciones más de TAP,
+- **[21:40] Yo:** o como drops, como cortos de gestos,
+- **[21:40] Yo:** Pues no sé si selección también vea que de pronto tiene que ajustar a algún tema de diseño para que
+- **[21:40] Yo:** esté más
+- **[21:40] Yo:** más más cercano móvil. Nosotros lo que quede
+- **[21:40] Yo:** queremos evitar es
+- **[21:40] Yo:** como tanto, troll,
+- **[21:40] Yo:** tanto uso del scroll y y, de pronto, saturar el usuario y que se pierda,
+- **[21:40] Yo:** sobre todo por los tipos de usuarios a los que queremos llegar, que no son tan expertos.
+- **[21:40] Yo:** Que se pueden fácilmente confundir cuando vean o abrumar con tanta información.
+- **[21:40] Yo:** Entonces, es como eso como para que lo tengan en cuenta.
+- **[21:40] Laura Contreras:** De una.
+- **[21:40] Laura Contreras:** De una, Santi.
+- **[21:41] Laura Contreras:** Listo. Y creo que aquí ya está Kate y Lau,
+- **[21:41] Laura Contreras:** para que podamos también alinear lanzamientos.
+- **[21:41] Laura Contreras:** Y presentarlo todo desde un mismo... Ah, bueno, Juan,
+- **[21:41] Laura Contreras:** antes de pasar a eso, ayer estábamos hablando de
+- **[21:41] Laura Contreras:** qué posible segmentación nos podría funcionar,
+- **[21:41] Laura Contreras:** desde leyendas, el stand de leyendas,
+- **[21:41] Laura Contreras:** No sé si quieres un poquito de contexto para que puedas
+- **[21:41] Laura Contreras:** tenerlo, pero básicamente van a estar segmentados y José lo puede ampliar ahí.
+- **[21:41] Laura Contreras:** Por el rango de órdenes
+- **[21:41] Laura Contreras:** que tienen los dropshippers.
+- **[21:41] Laura Contreras:** Entonces, estábamos más o menos dando como una primera definición de segmentación,
+- **[21:41] Laura Contreras:** ver a quién podíamos invitar.
+- **[21:41] Laura Contreras:** Estratégicamente para evaluar o
+- **[21:41] Laura Contreras:** recibir feedback de cada uno de los proyectos que vamos a llevar al workshop.
+- **[21:41] Laura Contreras:** Bueno.
+- **[21:41] Laura Contreras:** Pero
+- **[21:41] Jose Pineda Pitre:** Lau, puedes volver a repetir para compilar.
+- **[21:42] Jose Pineda Pitre:** Para volver a entender lo la la pregunta que le hiciste a
+- **[21:42] Laura Contreras:** Sí, de bueno. Es viernes,
+- **[21:42] Jose Pineda Pitre:** esta tarde.
+- **[21:42] Laura Contreras:** Es viernes esta tarde, ya todos tenemos sueño, hambre y todo.
+- **[21:42] Yo:** Se me acabaron los dos.
+- **[21:42] Laura Contreras:** Estoy de acuerdo.
+- **[21:42] Laura Contreras:** Se nos acabaron los tokens. Bueno,
+- **[21:42] Laura Contreras:** entonces acordémonos, voy a pasar rápidamente de nuevo por el plan.
+- **[21:42] Laura Contreras:** Creo que lo simplifiqué un poquito para que
+- **[21:42] Laura Contreras:** sea más fácil de presentar. Entonces, tenemos dos días, ¿no?
+- **[21:42] Laura Contreras:** Doce y trece de septiembre. La idea es aprovechar al máximo el evento
+- **[21:42] Laura Contreras:** idealmente de los segmentos que están involucrados, que son
+- **[21:42] Laura Contreras:** proveedores y dropshippers, ¿cierto? Esas esas como el enfoque del del evento.
+- **[21:42] Laura Contreras:** Es un evento comercial, entonces, recordemos que nos abrieron un espacio
+- **[21:42] Laura Contreras:** y vamos a aprovechar ciertas dinámicas para traer esa información.
+- **[21:42] Laura Contreras:** Eso es básicamente como la estrategia y la propuesta que
+- **[21:42] Laura Contreras:** le llevamos a comercial.
+- **[21:42] Laura Contreras:** El primer día lo que vamos a hacer es simplemente
+- **[21:43] Laura Contreras:** tener data del registro,
+- **[21:43] Laura Contreras:** aprovechar lo que se va a hacer en el stand de leyendas droppy,
+- **[21:43] Laura Contreras:** Idealmente, el representante es José, segmentar a partir de
+- **[21:43] Laura Contreras:** la segmentación que se hace en el stand y compartir la invitación al workshop.
+- **[21:43] Laura Contreras:** ¿Cierto? Y escuchar, escuchar cómo
+- **[21:43] Laura Contreras:** Discovery Guerrilla o Investigación Guerrilla, que es
+- **[21:43] Laura Contreras:** ir por los stands, descubriendo cómo son las conversaciones entre usuarios, proveedores
+- **[21:43] Laura Contreras:** dropshippers, y con la aplicación que nos mostró ayer
+- **[21:43] Laura Contreras:** Jaime, que tiene como varias interacciones en versión mobile.
+- **[21:43] Laura Contreras:** Para contexto de Juan y de Caten,
+- **[21:43] Laura Contreras:** son hay un juego, hay una interacción de escanea tu producto y le vamos a dar como
+- **[21:43] Laura Contreras:** ciertos insights al usuario para que él tome la decisión de
+- **[21:43] Laura Contreras:** qué producto, con qué producto podría empezar o
+- **[21:43] Laura Contreras:** podría empezar a vender. Y está Gali, Hydropipulso, que ustedes ya, un poco de contexto, creo que creo que tienen.
+- **[21:44] Laura Contreras:** Eso el día uno, y el día dos tenemos el workshop. Entonces, yo les decía,
+- **[21:44] Laura Contreras:** un espacio de sesenta minutos, donde vamos a invitar a ciertos usuarios, estamos
+- **[21:44] Laura Contreras:** intentando definir más o menos la segmentación para que José Pineda, que está aquí, que es el representante de leyendas,
+- **[21:44] Laura Contreras:** nos pueda decir así va a funcionar nuestra base de datos,
+- **[21:44] Laura Contreras:** entonces nosotros podamos saber cómo vamos a seleccionar como a este
+- **[21:44] Laura Contreras:** a estos usuarios en esa en esa piscina.
+- **[21:44] Laura Contreras:** Y hacemos lo mismo, una investigación
+- **[21:44] Laura Contreras:** e interacciones en la app de ruta winner, que es la app que va a tener marketing.
+- **[21:44] Laura Contreras:** Ese es básicamente el contexto. Entonces, estaba preguntando si Juan con selección de transportadoras, le gustaría tener algún contexto
+- **[21:44] Laura Contreras:** de la segmentación que va a tener leyendas dropping para invitar
+- **[21:44] Laura Contreras:** estratégicamente a unos dropshippers de cierto nivel.
+- **[21:44] Laura Contreras:** Juan.
+- **[21:44] Jose Pineda Pitre:** Ya ya ya te caché. Listo.
+- **[21:44] Laura Contreras:** Sí.
+- **[21:44] Jose Pineda Pitre:** La segmentación muy alto nivel que tenemos en este momento es
+- **[21:44] Jose Pineda Pitre:** segmentación por órdenes entregadas
+- **[21:44] Jose Pineda Pitre:** Entonces, digamos que nosotros tenemos, sí queremos
+- **[21:45] Jose Pineda Pitre:** dividirlo, tenemos seis segmentos de usuarios que van desde
+- **[21:45] Jose Pineda Pitre:** cero órdenes entregadas hasta más de veinte mil órdenes
+- **[21:45] Jose Pineda Pitre:** entregadas. El foco más grande, donde nosotros necesitamos
+- **[21:45] Jose Pineda Pitre:** por lo menos, desde leyendas dropping, como estimular
+- **[21:45] Jose Pineda Pitre:** el conocimiento de las personas, está en el segmento bienvenido,
+- **[21:45] Jose Pineda Pitre:** en el segmento explorador y en el segmento maestro, maestro creo que es.
+- **[21:45] Jose Pineda Pitre:** Maestro, sí. Que son los tres segmentos que, básicamente,
+- **[21:45] Jose Pineda Pitre:** corresponden casi que al cuarenta y seis por ciento de la población en droppers.
+- **[21:45] Jose Pineda Pitre:** Y, pues, necesitamos movilizarlos. Entonces,
+- **[21:45] Jose Pineda Pitre:** está el segmento
+- **[21:45] Jose Pineda Pitre:** VIP, está el el segmento experto, el segmento
+- **[21:45] Jose Pineda Pitre:** expertos, y leyenda,
+- **[21:45] Jose Pineda Pitre:** que ya son personas que tienen un know-how de cómo utilizar Dropi,
+- **[21:45] Jose Pineda Pitre:** cuáles son... Exacto, eso. Que cuáles son
+- **[21:46] Jose Pineda Pitre:** sus sus sus segmentos de producto,
+- **[21:46] Jose Pineda Pitre:** sus clientes, ya estos
+- **[21:46] Jose Pineda Pitre:** tres últimos, digamos que tienen una experiencia ya con la plataforma, ya saben generar
+- **[21:46] Jose Pineda Pitre:** riqueza alrededor de drop.
+- **[21:46] Jose Pineda Pitre:** Primeros tres, digamos que son los más
+- **[21:46] Jose Pineda Pitre:** dentro de la experiencia.
+- **[21:46] Jose Pineda Pitre:** Incluso, los primeros dos, diría yo.
+- **[21:46] Jose Pineda Pitre:** Entonces, ese, digamos, es como la opción que tenemos para
+- **[21:46] Jose Pineda Pitre:** para para segmentar. Y de ahí ese pool, me imagino que ustedes me dirán,
+- **[21:46] Jose Pineda Pitre:** quiero veinte exploradores, treinta expertos,
+- **[21:46] Jose Pineda Pitre:** doscientos bienvenidos.
+- **[21:46] Laura Contreras:** Esa es la idea. Yo creo que
+- **[21:46] Juan Diego Bautista Vasquez:** en su mayoría
+- **[21:46] Juan Diego Bautista Vasquez:** el proyecto es para los primeros, para el de bienvenidos
+- **[21:46] Juan Diego Bautista Vasquez:** no sé qué,
+- **[21:46] Juan Diego Bautista Vasquez:** O sea, pues, yo creo que sí es importante ver la distribución en el momento, ¿no?, porque
+- **[21:46] Juan Diego Bautista Vasquez:** no sé, puede darse el caso de que no haya bienvenidos.
+- **[21:47] Juan Diego Bautista Vasquez:** Pero más que todo, el proyecto está más
+- **[21:47] Juan Diego Bautista Vasquez:** pensado en como ese usuario inicial
+- **[21:47] Juan Diego Bautista Vasquez:** que no tiene toda esa experiencia y esa cancha a nivel del conocimiento o ese
+- **[21:47] Juan Diego Bautista Vasquez:** incluso de de
+- **[21:47] Juan Diego Bautista Vasquez:** efectividad de entrega, de transportadoras, de de
+- **[21:47] Juan Diego Bautista Vasquez:** de esto, y la idea es ayudarlo con esas, con con muy buenas prácticas de los nuevos.
+- **[21:47] Juan Diego Bautista Vasquez:** De los viejos, perdón, y de los grandes.
+- **[21:47] Juan Diego Bautista Vasquez:** Yo creo que serían esos canales iniciales, como casi que hasta máster. Bienvenido a explorador y máster.
+- **[21:47] Jose Pineda Pitre:** Ok, ok.
+- **[21:47] Juan Diego Bautista Vasquez:** Todavía máster te puede servir
+- **[21:47] Laura Contreras:** Bueno.
+- **[21:47] Laura Contreras:** Listo.
+- **[21:47] Laura Contreras:** Explorador y más, sí. La idea también
+- **[21:47] Laura Contreras:** Señor, dinos.
+- **[21:47] Juan Diego Bautista Vasquez:** Yo creo que igual,
+- **[21:47] Juan Diego Bautista Vasquez:** o sea, también como, pues, aprovechando el
+- **[21:48] Juan Diego Bautista Vasquez:** y de
+- **[21:48] Laura Contreras:** pronto fuera
+- **[21:48] Juan Diego Bautista Vasquez:** del workshop otro espacio como para hablar con el resto de personas, ¿no?
+- **[21:48] Juan Diego Bautista Vasquez:** Creo que
+- **[21:48] Laura Contreras:** eso también
+- **[21:48] Juan Diego Bautista Vasquez:** sería supervalioso.
+- **[21:48] Laura Contreras:** Sí, esa es esta. O sea, nosotros vamos a estar ahí como
+- **[21:48] Laura Contreras:** escuchando, bueno, a los que asistan, escuchando, hablando,
+- **[21:48] Laura Contreras:** tenemos la aplicación, y en la aplicación también se pueden meter preguntas, Dianys.
+- **[21:48] Laura Contreras:** Por si acaso, o bueno, todos los que estamos aquí.
+- **[21:48] Laura Contreras:** También se podríamos meter como un unas microsurfaces de
+- **[21:48] Laura Contreras:** no sé, cuál es el producto que con el que tienes que complementar tu
+- **[21:48] Laura Contreras:** o cuál es el producto logístico
+- **[21:48] Laura Contreras:** de referencia que que utilizas por fuera de dropping, o o
+- **[21:48] Laura Contreras:** así también para hacer como ese ese tema de discovery. Sea, dentro de esta app que nos mostró Jaime ayer, como que
+- **[21:48] Laura Contreras:** pueden haber muchas oportunidades.
+- **[21:48] Laura Contreras:** Pero bueno, creo que la estoy quitando. Ese también es
+- **[21:48] Laura Contreras:** era espacio de Kate y Lau,
+- **[21:48] Laura Contreras:** para decirnos como en cuanto a y ver cómo conectábamos
+- **[21:48] Laura Contreras:** el plan que llevamos
+- **[21:48] Laura Contreras:** como de discovery con lo que tienen ustedes pensado de
+- **[21:49] Laura Contreras:** señora. Sí,
+- **[21:49] Catherin Salazar:** nosotros habíamos pensado en su momento la otra
+- **[21:49] Catherin Salazar:** llevarlo a expo winners, sino que después
+- **[21:49] Catherin Salazar:** como que todo se cambió y nos dijeron que
+- **[21:49] Catherin Salazar:** rearquitectura no se podía llevar a expo winners.
+- **[21:49] Catherin Salazar:** No sé por qué nos dijeron eso, y hoy me dijeron que ya rearquitectura sale para
+- **[21:49] Catherin Salazar:** Entonces, pues, como que esa confusión sí nos generó
+- **[21:49] Catherin Salazar:** pues, como mucho ruido, pero igual la idea
+- **[21:49] Catherin Salazar:** nosotros habíamos pensado con Diani muchas cosas
+- **[21:49] Laura Contreras:** para
+- **[21:49] Catherin Salazar:** rearquitectura en expo winners y
+- **[21:49] Catherin Salazar:** Maho también me dio como varias ideas.
+- **[21:49] Catherin Salazar:** Habíamos pensado, ¿te
+- **[21:49] Laura Contreras:** acuerdas?, que nosotros
+- **[21:49] Catherin Salazar:** lo hablamos
+- **[21:49] Catherin Salazar:** en una como en una ruta de rearquitectura,
+- **[21:49] Catherin Salazar:** de los stands que tiene que hacer el dropshipper al principio, pues no que tiene,
+- **[21:49] Catherin Salazar:** pero cuando hace ese recorrido por los stands y pasa como ese jueguito que
+- **[21:49] Catherin Salazar:** están haciendo para Expo Winners, El que yo les presenté una vez como en un en el en la reunión que tienen con el
+- **[21:50] Catherin Salazar:** con el equipo de diseño.
+- **[21:50] Catherin Salazar:** No sé si lo recuerdan.
+- **[21:50] Catherin Salazar:** Bueno, un jueguito que de ellos deben cumplir como metas
+- **[21:50] Catherin Salazar:** para poder como pasar al siguiente nivel y
+- **[21:50] Catherin Salazar:** que les den beneficios con las holding.
+- **[21:50] Catherin Salazar:** Que es como la ruta winners.
+- **[21:50] Laura Contreras:** Sí, ese es el que van a hacer el departamento
+- **[21:50] Catherin Salazar:** Exacto. Nosotros habíamos pensado que
+- **[21:50] Catherin Salazar:** don Diani, que como cada módulo
+- **[21:50] Catherin Salazar:** de la rearquitectura
+- **[21:50] Catherin Salazar:** se se
+- **[21:50] Catherin Salazar:** pues, digamos que tiene una parte de cada uno de los stands o de esas holding,
+- **[21:50] Catherin Salazar:** pues hacer como la ruta de rearquitectura también.
+- **[21:50] Catherin Salazar:** En esa ruta winners. Eso era una de las ideas que se tenía pensada.
+- **[21:50] Catherin Salazar:** Sin embargo, yo le hablé con María, y María me dijo cómo Kate tienen
+- **[21:50] Catherin Salazar:** ser muy estratégicos porque ese es el stand de las holding, no pueden
+- **[21:50] Catherin Salazar:** entrar a competir.
+- **[21:50] Catherin Salazar:** Tenemos que ser muy estratégicos a ver cómo nos involucramos para que realmente, pues,
+- **[21:50] Catherin Salazar:** se potencie también como esa marca y también se
+- **[21:51] Catherin Salazar:** un poco como ese tema de la arquitectura. Y es y también con Majo habíamos hablado, Majo también nos había propuesto como tener una pantalla táctil
+- **[21:51] Catherin Salazar:** donde las personas pudieran como interactuar con la rear kit de
+- **[21:51] Catherin Salazar:** de Dropi,
+- **[21:51] Catherin Salazar:** y que en ese mismo momento también nosotros, digamos, que le
+- **[21:51] Catherin Salazar:** podamos dar feedback o si de pronto tienen como
+- **[21:51] Catherin Salazar:** sugerencias o lo que podamos hacer, pues, para que
+- **[21:51] Catherin Salazar:** veamos la interacción directa en vivo o en directo,
+- **[21:51] Catherin Salazar:** de los usuarios con la rearquitectura como tal o con la plataforma.
+- **[21:51] Laura Contreras:** Esas eran
+- **[21:51] Catherin Salazar:** las dos ideas que habíamos hablado,
+- **[21:51] Catherin Salazar:** La de la ruta de rearquitectura se me hace muy chévere,
+- **[21:51] Catherin Salazar:** la verdad creo que tiene un potencial muy grande, solo que sí tenemos que saber
+- **[21:51] Catherin Salazar:** cómo estratégicamente nos podemos alinear a las holding.
+- **[21:51] Catherin Salazar:** ¿Sí? Digamos que Roblox, pues está en el módulo de marketing,
+- **[21:51] Catherin Salazar:** bueno, no sé, las demás
+- **[21:51] Catherin Salazar:** hay un stand de dropping, tengo entendido también que es como el principio,
+- **[21:52] Catherin Salazar:** pero creo que sí podría ser como esa ruta de rearquitectura.
+- **[21:52] Catherin Salazar:** Eso es lo que hemos pensado, Lau, no, hasta el momento no tenemos más, porque
+- **[21:52] Catherin Salazar:** bueno, digamos que los otros lanzamientos que tenemos con esa prueba piloto, pues no los habíamos pensado para que
+- **[21:52] Catherin Salazar:** La idea era también como sentarnos como a a pensar
+- **[21:52] Catherin Salazar:** qué otra cosa podíamos llevar, pero igual como rearquitectura es como hilo de lanzamiento
+- **[21:52] Catherin Salazar:** más grandes, creo que sí puede entrar muy bien a Expo winners.
+- **[21:52] Laura Contreras:** Eso es,
+- **[21:52] Catherin Salazar:** Lau.
+- **[21:52] Laura Contreras:** Señora?
+- **[21:52] Catherin Salazar:** No, era
+- **[21:52] Diana Aldana:** solamente confirmar, porque eso
+- **[21:52] Diana Aldana:** eso nos faltó hablar en la reunión de la mañana,
+- **[21:52] Diana Aldana:** Si bien
+- **[21:52] Catherin Salazar:** ya nos
+- **[21:52] Diana Aldana:** dieron el go para que salga rearquitectura
+- **[21:52] Diana Aldana:** el agente que está
+- **[21:52] Catherin Salazar:** ¿Que está qué?
+- **[21:52] Diana Aldana:** Diari,
+- **[21:52] Catherin Salazar:** no sé si salga o yo o ¿Aló?
+- **[21:52] Diana Aldana:** ¿Ya?
+- **[21:52] Catherin Salazar:** Ay,
+- **[21:52] Diana Aldana:** perdón, es que multi
+- **[21:52] Laura Contreras:** No, soy fine.
+- **[21:52] Diana Aldana:** Era era
+- **[21:52] Catherin Salazar:** Aló, ¿me
+- **[21:52] Diana Aldana:** escuchas?
+- **[21:53] Diana Aldana:** Sí, esa pregunta
+- **[21:53] Diana Aldana:** El agente que está desarrollando tecnología va va a tener un
+- **[21:53] Diana Aldana:** espacio para
+- **[21:53] Diana Aldana:** para mostrárselo a la gente,
+- **[21:53] Laura Contreras:** No,
+- **[21:53] Catherin Salazar:** creo que es
+- **[21:53] Catherin Salazar:** nos toca hablarlo con
+- **[21:53] Laura Contreras:** Jenny.
+- **[21:53] Juan Diego Bautista Vasquez:** Creo
+- **[21:53] Diana Aldana:** que no
+- **[21:53] Juan Diego Bautista Vasquez:** alcanza.
+- **[21:53] Juan Diego Bautista Vasquez:** Yo hablo con el equipo de día, porque ellos también están trabajando en algo de selecciones de las
+- **[21:53] Juan Diego Bautista Vasquez:** y ellos tienen fecha de entrega como el
+- **[21:53] Juan Diego Bautista Vasquez:** ah, justamente es el doce, No sé si estén pensando mostrarlo o no. Pero creo que está muy pronto, porque le están trabajando full, como que han tenido un par de temas con eso. Creo que no alcanzan.
+- **[21:53] Laura Contreras:** Sí, era para eso de
+- **[21:53] Diana Aldana:** era para saber en la experiencia si si se estaba contemplando eso de tecnología.
+- **[21:53] Diana Aldana:** Pero, pues... Ok. No,
+- **[21:53] Laura Contreras:** creo que eso todavía no lo le
+- **[21:54] Laura Contreras:** no lo han alineado mucho precisamente por eso, Diane, y supongo que las pruebas
+- **[21:54] Laura Contreras:** pueden ser bien extensas.
+- **[21:54] Laura Contreras:** Bueno, ahí yo creo que Kate, en cuanto a
+- **[21:54] Laura Contreras:** rearquitectura y bueno, Dianys y Majo, sería ver si también podemos
+- **[21:54] Laura Contreras:** lo que nos mostró Jaime, como algo en la app.
+- **[21:54] Laura Contreras:** O algo del workshop.
+- **[21:54] Laura Contreras:** Ya en el workshop, pues hay, obviamente, tres cosas, tres actividades,
+- **[21:54] Laura Contreras:** Creo que una hora es poco tiempo como para meter algo más,
+- **[21:54] Laura Contreras:** pero sí podemos tener como la interacción ahí con el nuevo menú
+- **[21:54] Laura Contreras:** y es simplemente una estación
+- **[21:54] Laura Contreras:** que alguien quiera entrar dentro de esa hora?
+- **[21:54] Laura Contreras:** A a explorar, pues creo que también estaría bien. O sea, como para que la
+- **[21:54] Laura Contreras:** lo definan ahí.
+- **[21:54] Laura Contreras:** Muy bien y podamos mejor.
+- **[21:54] Laura Contreras:** Bueno, creo que eso sería. Después de
+- **[21:54] Laura Contreras:** hacer como todas estas definiciones, que creo que también es
+- **[21:54] Laura Contreras:** alinearnos mucho con el equipo comercial. Yo creo que
+- **[21:54] Laura Contreras:** el siguiente lunes vamos a buscar esa reunión con Jenny, como esa reunión final.
+- **[21:55] Laura Contreras:** Creo que ya la gran parte queda sobre José y sobre la app de James.
+- **[21:55] Laura Contreras:** Con el visto bueno de Santi para dropshippers. Y estamos. ¿Alguien más tiene alguna otra idea, actividad, Dianys?
+- **[21:55] Laura Contreras:** Yo tengo
+- **[21:55] Jose Pineda Pitre:** una pregunta, una pregunta.
+- **[21:55] Laura Contreras:** Señor.
+- **[21:55] Jose Pineda Pitre:** Nosotros sabemos como el formato
+- **[21:55] Jose Pineda Pitre:** de los stands, dónde van a ser las pantallas,
+- **[21:55] Jose Pineda Pitre:** para saber
+- **[21:55] Jose Pineda Pitre:** si
+- **[21:55] Jose Pineda Pitre:** para saber si podemos como ir pensando en
+- **[21:55] Jose Pineda Pitre:** Ay, no, Pajo, no me hagas esto.
+- **[21:55] Catherin Salazar:** Para
+- **[21:55] Jose Pineda Pitre:** saber si podemos ir pensando en
+- **[21:55] Jose Pineda Pitre:** en qué poner, dónde ponerlo,
+- **[21:55] Jose Pineda Pitre:** si vamos a ¿Como
+- **[21:55] Diana Aldana:** un mapa?
+- **[21:55] Jose Pineda Pitre:** ¿Quién
+- **[21:55] Diana Aldana:** es un mapa?
+- **[21:55] Diana Aldana:** Creo que sí hay un mapa del evento, ¿no? Catelo, Catelo
+- **[21:55] Laura Contreras:** Pero si era uno
+- **[21:55] Laura Contreras:** era uno provisional, lo iban
+- **[21:55] Catherin Salazar:** a plantear.
+- **[21:55] Laura Contreras:** Sí,
+- **[21:55] Catherin Salazar:** tenemos, o
+- **[21:55] Maria Jose Calderon:** sea, yo
+- **[21:55] Maria Jose Calderon:** creo que la próxima semana, el lunes a primera hora les puedo pasar eso, porque
+- **[21:56] Maria Jose Calderon:** también nosotros estamos necesitando todo el tema de la ubicación de pantallas, porque, pues,
+- **[21:56] Maria Jose Calderon:** para que tengan conocimiento, se va a vender, pues espacio promocional para
+- **[21:56] Maria Jose Calderon:** líderes, para marcas, entre
+- **[21:56] Maria Jose Calderon:** otros, es decir, marcas válgase holding. Entonces,
+- **[21:56] Maria Jose Calderon:** tan pronto lo tenga, también les les voy pasando eso
+- **[21:56] Maria Jose Calderon:** también para ver si de pronto a ustedes también les gustaría tener como
+- **[21:56] Maria Jose Calderon:** algún espacio
+- **[21:56] Jose Pineda Pitre:** y ver ya
+- **[21:56] Maria Jose Calderon:** con el área comercial, a ver si si se puede presentar ese
+- **[21:56] Maria Jose Calderon:** espacio o no. Sí
+- **[21:56] Jose Pineda Pitre:** me gustaría tener un espacio, unas cuatro pantallas
+- **[21:56] Laura Contreras:** gigantes.
+- **[21:56] Laura Contreras:** Literal. No
+- **[21:56] Jose Pineda Pitre:** parece chiste, pero si si si tenés
+- **[21:56] Jose Pineda Pitre:** por Eso
+- **[21:56] Catherin Salazar:** estaba pensando.
+- **[21:56] Jose Pineda Pitre:** No alcanzamos a llegar a tenerte requerimiento
+- **[21:56] Jose Pineda Pitre:** El equipo de producto necesita pantallas gigantes, o sea, no sabemos para qué
+- **[21:56] Maria Jose Calderon:** Claro.
+- **[21:56] Jose Pineda Pitre:** Vamos a tener
+- **[21:56] Laura Contreras:** pero ahí
+- **[21:56] Laura Contreras:** pero ahí Lau, José, ¿no te no te ha alineado con
+- **[21:56] Laura Contreras:** con como los presupuestos que se tienen por stand?
+- **[21:56] Jose Pineda Pitre:** Eso
+- **[21:56] Catherin Salazar:** mismo, pues.
+- **[21:56] Laura Contreras:** Porque hay unos presupuestos por stand.
+- **[21:57] Laura Contreras:** Sí, no, hay que, oigan, alineación,
+- **[21:57] Laura Contreras:** pero yo creo que podemos partir de estas definiciones
+- **[21:57] Laura Contreras:** vámonos organizando nosotros como área. Maho nos pasa
+- **[21:57] Laura Contreras:** lo que ellos alcancen a definir,
+- **[21:57] Laura Contreras:** con José también vamos alineando y nosotros también vamos a intentar tener esa review con Jenny la otra semana.
+- **[21:57] Laura Contreras:** Pregunta
+- **[21:57] Jose Pineda Pitre:** a la uno.
+- **[21:57] Laura Contreras:** Bueno.
+- **[21:57] Laura Contreras:** La pregunta, pues,
+- **[21:57] Jose Pineda Pitre:** seguimos seguimos trabajando,
+- **[21:57] Laura Contreras:** Oigan, esa pregunta hicimos hoy.
+- **[21:57] Laura Contreras:** ¿Y todavía no tenemos
+- **[21:57] Jose Pineda Pitre:** respuesta?
+- **[21:57] Laura Contreras:** Sí, no.
+- **[21:57] Laura Contreras:** Ay My
+- **[21:57] Catherin Salazar:** notion es
+- **[21:57] Maria Jose Calderon:** largo,
+- **[21:57] Catherin Salazar:** es yo
+- **[21:57] Yo:** Por si acaso.
+- **[21:57] Maria Jose Calderon:** les voy a decir que es largo, yo creo que
+- **[21:57] Jose Pineda Pitre:** son meses.
+- **[21:57] Maria Jose Calderon:** O
+- **[21:57] Jose Pineda Pitre:** sea
+- **[21:57] Maria Jose Calderon:** ¿Qué más?
+- **[21:57] Catherin Salazar:** No,
+- **[21:57] Laura Contreras:** No, dices no, Majo. Yo
+- **[21:57] Maria Jose Calderon:** tengo entendido que
+- **[21:57] Jose Pineda Pitre:** mucho.
+- **[21:57] Yo:** Quedó grabada.
+- **[21:57] Jose Pineda Pitre:** Se cayó mucho.
+- **[21:57] Catherin Salazar:** Meses. No,
+- **[21:57] Laura Contreras:** oiga,
+- **[21:57] Yo:** Sí,
+- **[21:57] Catherin Salazar:** no, ahí sí tengo la foto.
+- **[21:57] Laura Contreras:** Ustedes esperen las
+- **[21:57] Catherin Salazar:** noticias, esperen noticias.
+- **[21:57] Yo:** Si algo Laura dijo que si
+- **[21:58] Jose Pineda Pitre:** O sea, sin sin me poder de viaje.
+- **[21:58] Yo:** A Bogotá.
+- **[21:58] Laura Contreras:** Ansiosos, no sean ansiosos. Ninguna
+- **[21:58] Maria Jose Calderon:** parte. Sí,
+- **[21:58] Jose Pineda Pitre:** igual esperen
+- **[21:58] Catherin Salazar:** a
+- **[21:58] Maria Jose Calderon:** que a que su líder les
+- **[21:58] Jose Pineda Pitre:** diga,
+- **[21:58] Maria Jose Calderon:** que con qué.
+- **[21:58] Yo:** Ya el libro dijo que sí.
+- **[21:58] Catherin Salazar:** No, la otra semana
+- **[21:58] Laura Contreras:** no vamos todavía a la oficina, no. ¿No?
+- **[21:58] Maria Jose Calderon:** Por
+- **[21:58] Laura Contreras:** favor Es lejos, sí, es
+- **[21:58] Juan Diego Bautista Vasquez:** lejos.
+- **[21:58] Yo:** Si.
+- **[21:58] Maria Jose Calderon:** Bueno
+- **[21:58] Laura Contreras:** Wandy. Ajá,
+- **[21:58] Maria Jose Calderon:** es lejito, es lejito. Pregunta.
+- **[21:58] Yo:** Pero no que no sabía, si ve que sí sabe, tiene información que nos está diciendo.
+- **[21:58] Laura Contreras:** ¿Quién?
+- **[21:58] Yo:** Laura, Laura es que no, no sé, luego no, sí, la otra no.
+- **[21:58] Maria Jose Calderon:** Sorbito, sorbito, Laura. ¿No?
+- **[21:58] Laura Contreras:** Ya, oigan, ya nos llegará la información.
+- **[21:58] Laura Contreras:** Ustedes tranquilos.
+- **[21:58] Laura Contreras:** Pues, sobre todo, el
+- **[21:58] Maria Jose Calderon:** beneficio es que muchos
+- **[21:58] Maria Jose Calderon:** espacios están hechos con panel yeso,
+- **[21:58] Maria Jose Calderon:** Nosotros inclusive no sabemos cómo está la la parte del estudio,
+- **[21:58] Maria Jose Calderon:** ahí hay cámaras de alto valor y todo eso y no sabemos cómo está.
+- **[21:58] Maria Jose Calderon:** No dejan subir porque está como
+- **[21:59] Maria Jose Calderon:** delicadita la cosa.
+- **[21:59] Maria Jose Calderon:** Y parece ser que hay monitores que están
+- **[21:59] Maria Jose Calderon:** dañaditos,
+- **[21:59] Maria Jose Calderon:** etcétera.
+- **[21:59] Laura Contreras:** Así es.
+- **[21:59] Laura Contreras:** Lo que podemos hacer en Cali, si quieren
+- **[21:59] Yo:** La carretera, la
+- **[21:59] Laura Contreras:** si quieren... Ay, el mío también, yo lo amaba, era amarillo, era hermoso.
+- **[21:59] Laura Contreras:** Oigan nuestro spot de café. Aquí Este era
+- **[21:59] Laura Contreras:** Y Marika
+- **[21:59] Maria Jose Calderon:** está allá, y
+- **[21:59] Yo:** Esa carpeta la se inclusive grabar.
+- **[21:59] Catherin Salazar:** un montón de cafetera
+- **[21:59] Catherin Salazar:** que yo demoro como cinco años en llegar.
+- **[21:59] Laura Contreras:** Lo que sí podemos organizar es ir a trabajar, pero al muelle. Entiendo que nos pueden abrir un espacio No pero todos muy juntos. ¿No? Entonces Hay
+- **[21:59] Yo:** Yes. Yes, Enrique.
+- **[21:59] Jose Pineda Pitre:** muchos mosquitos, sorry. José
+- **[21:59] Catherin Salazar:** se es el más feliz de no ir, obvio.
+- **[21:59] Jose Pineda Pitre:** Mira,
+- **[21:59] Laura Contreras:** intentar café
+- **[21:59] Diana Aldana:** quindío con Lau. Sí,
+- **[21:59] Jose Pineda Pitre:** no, la próxima nos
+- **[21:59] Diana Aldana:** vemos en
+- **[21:59] Jose Pineda Pitre:** Café Quindío, muchachos.
+- **[21:59] Jose Pineda Pitre:** Así
+- **[21:59] Catherin Salazar:** es, así,
+- **[21:59] Laura Contreras:** Jenny.
+- **[21:59] Catherin Salazar:** Nos vemos en tres horas, tres días.
+- **[21:59] Catherin Salazar:** Amable. Por ahora, nos
+- **[21:59] Laura Contreras:** vemos
+- **[21:59] Catherin Salazar:** mañana,
+- **[21:59] Laura Contreras:** los que estamos en Cali.
+- **[22:00] Jose Pineda Pitre:** Ay, perdón,
+- **[22:00] Catherin Salazar:** nos
+- **[22:00] Jose Pineda Pitre:** pusieron a trabajar y el compensatorio,
+- **[22:00] Laura Contreras:** Tu salud mental.
+- **[22:00] Catherin Salazar:** Está muy bien. Es
+- **[22:00] Laura Contreras:** el compensatorio. No,
+- **[22:00] Catherin Salazar:** pero esperen, esperen, antes de seguir con los Una pregunta, es decir que no podríamos contar con un presupuesto para esa pantalla táctica, que de pronto propuso Maho, Lau? Pues
+- **[22:00] Maria Jose Calderon:** tendríamos que ver si viene de la central de costos de producto.
+- **[22:00] Catherin Salazar:** Ok. No tanto
+- **[22:00] Maria Jose Calderon:** de comercial.
+- **[22:00] Maria Jose Calderon:** Oigan,
+- **[22:00] Laura Contreras:** yo y y yo voy a decir algo muy sinceramente, y creo que es
+- **[22:00] Laura Contreras:** como más fácil ver si nosotros mismos nos
+- **[22:00] Laura Contreras:** gestionamos como en nuestras propias, o sea, por ejemplo, workshops
+- **[22:00] Laura Contreras:** necesitamos computadores, llevamos los nuestros, ¿sí? Como
+- **[22:00] Laura Contreras:** es mucho más fácil, siento que así, porque sí, el tema de los
+- **[22:00] Laura Contreras:** presupuestos está complejo, porque está muy enfocado
+- **[22:00] Laura Contreras:** a comercial y que salga de cada área o del presupuesto del stand, pues
+- **[22:00] Laura Contreras:** creo que no.
+- **[22:00] Laura Contreras:** Yo
+- **[22:00] Maria Jose Calderon:** tengo entendido
+- **[22:01] Laura Contreras:** que hay otras verticales
+- **[22:01] Maria Jose Calderon:** que quieren como también hacer uso de pantallas,
+- **[22:01] Maria Jose Calderon:** etcétera, entonces sí sería bueno. Yo hablo con Jackie para que nos pase
+- **[22:01] Maria Jose Calderon:** todo el tema de, bueno, qué pantallas contamos, etcétera, pero también de pronto
+- **[22:01] Maria Jose Calderon:** si ustedes quieren como el tema de iPads, tendría que ser
+- **[22:01] Maria Jose Calderon:** ver si se alían con alguna otra vertical que también
+- **[22:01] Maria Jose Calderon:** quiere llevar a cabo la dinámica, y hay empresas que hacen como todo el tema de alquiler de esos insumos. Entonces, pueden mirar a ver si el alquiler es como en mayor cantidad, de pronto les sale mucho más económico. Pero eso sí, mirar si ese es de la central de costos, pues, desde la parte de producto o growth o o desde dónde va a salir. Sí,
+- **[22:01] Laura Contreras:** eso tendría que salir del de productos. De
+- **[22:01] Catherin Salazar:** una de una
+- **[22:01] Maria Jose Calderon:** Pero
+- **[22:01] Laura Contreras:** preguntemos, nada perdemos con preguntar, oiga. Bueno, creo que estamos. ¿Cuándo queremos alinear el plan y los pendientes? Señores.
+- **[22:02] Jose Pineda Pitre:** No, pues yo no
+- **[22:02] Laura Contreras:** superpreparados.
+- **[22:02] Yo:** Yo
+- **[22:02] Yo:** yo tengo yo tengo
+- **[22:02] Yo:** o sea, ya hice preplaning con Alehub, y el el core de la siguiente semana va a estar en todo lo de Gali, lo de
+- **[22:02] Laura Contreras:** Mhmm.
+- **[22:02] Yo:** para Expo Winners.
+- **[22:02] Yo:** Dos días son de
+- **[22:02] Yo:** exhaustivamente revisar todo el todo lo que está construido ya,
+- **[22:02] Yo:** a detalle, desde adentro, y con eso tendríamos, y y y
+- **[22:02] Yo:** y dentro de eso está la estrategia de métricas de éxito y todo lo que ya hemos hablado.
+- **[22:02] Yo:** La, como el planteamiento estratégico. Entonces, yo creo que
+- **[22:02] Yo:** al miércoles ya tendría
+- **[22:02] Yo:** los pendientes que marcaste en el chat.
+- **[22:02] Laura Contreras:** Listo. Santi,
+- **[22:02] Yo:** Lau.
+- **[22:02] Laura Contreras:** tú tienes la mayor parte. ¿No? O sea, creo que Gali, bueno,
+- **[22:02] Laura Contreras:** entiendo que Fulso ya está alineado con James,
+- **[22:02] Laura Contreras:** pero, por ejemplo, el la app de scanner que él hizo,
+- **[22:02] Laura Contreras:** y el juego,
+- **[22:02] Laura Contreras:** que es para aprender dropshipping como si fuéramos niños,
+- **[22:03] Laura Contreras:** Creo quizás ese también tendría que pasar, a ver
+- **[22:03] Laura Contreras:** por una y por un
+- **[22:03] Yo:** Sí, ya, me, él él me compartió todo el y
+- **[22:03] Laura Contreras:** una revisión.
+- **[22:03] Laura Contreras:** Estratégica de
+- **[22:03] Yo:** en que, o sea, lo principal, porque creo que eso es lo que más le puede estar
+- **[22:03] Yo:** algo de trabajo sobre el sobre lo móvil,
+- **[22:03] Yo:** es Gali, pero la idea es también alcanzar la
+- **[22:03] Yo:** al escáner y algo de pulso, más desde el
+- **[22:03] Yo:** el como, desde otro flujo se llega a pulso.
+- **[22:03] Yo:** Entonces, sí, pues, está presente. Pero pero hablando más de métricas y de los
+- **[22:03] Yo:** como lo que creo que más está haciendo falta para el Lidianos, que es como la expectativa de
+- **[22:03] Yo:** el criterio de éxito de cada experimento, yo creo que al al miércoles ya está.
+- **[22:03] Yo:** Ya sobre el diseño y la implementación y otras cosas, pues sí, claramente nos vamos a demorar más.
+- **[22:03] Laura Contreras:** Listo.
+- **[22:03] Laura Contreras:** Listo, Debora.
+- **[22:03] Laura Contreras:** Bueno, no, yo creo que entonces démonos una semanita.
+- **[22:03] Laura Contreras:** Ya igual con el plan nos vamos,
+- **[22:03] Laura Contreras:** presentamos, a que nos aprueben cómo llegamos, señora, señor.
+- **[22:03] Jose Pineda Pitre:** El
+- **[22:03] Laura Contreras:** el
+- **[22:03] Jose Pineda Pitre:** el jueves. No nos esperemos hasta el viernes.
+- **[22:04] Jose Pineda Pitre:** Como el jueves al final del día, ¿no?
+- **[22:04] Jose Pineda Pitre:** Para que si tenemos
+- **[22:04] Laura Contreras:** que
+- **[22:04] Jose Pineda Pitre:** hacer cosas,
+- **[22:04] Jose Pineda Pitre:** las hagamos el viernes en la mañana.
+- **[22:04] Yo:** Tokens.
+- **[22:04] Jose Pineda Pitre:** Muchas
+- **[22:04] Laura Contreras:** gracias. Listo, listo. Majo,
+- **[22:04] Laura Contreras:** ¿de pronto quieres que invitemos a Pipe con lo de la app?
+- **[22:04] Laura Contreras:** O tú nos traes como
+- **[22:04] Laura Contreras:** como los chismes y las alineaciones? No,
+- **[22:04] Maria Jose Calderon:** Ajá.
+- **[22:04] Maria Jose Calderon:** Listo,
+- **[22:04] Laura Contreras:** invitamos a Pipe. O es que
+- **[22:04] Laura Contreras:** parecería también
+- **[22:04] Maria Jose Calderon:** chévere que contaran con Esteban para
+- **[22:04] Maria Jose Calderon:** él también estuviera alineado? Él también tiene como una parte de
+- **[22:04] Maria Jose Calderon:** experiencia que va a hacer con Academy, pero, pues también como
+- **[22:04] Maria Jose Calderon:** para que él tenga noción, pues, de de qué se va a hacer, en caso
+- **[22:04] Maria Jose Calderon:** tal y que, pues, tenga un poquito más de contexto.
+- **[22:04] Maria Jose Calderon:** Listo,
+- **[22:04] Laura Contreras:** claro que sí, se lo podemos compartir toda.
+- **[22:04] Laura Contreras:** Entonces, compartir con Esteban,
+- **[22:04] Laura Contreras:** con Esteban de acá de mí,
+- **[22:04] Laura Contreras:** Esperen que si yo no anoto, oigan.
+- **[22:04] Laura Contreras:** Ni siquiera las grabaciones me sirven.
+- **[22:05] Jose Pineda Pitre:** Montón de
+- **[22:05] Laura Contreras:** información.
+- **[22:05] Laura Contreras:** Sí, Y lo otro fue invitar a Pipe. Pipe,
+- **[22:05] Laura Contreras:** usuario tiene?
+- **[22:05] Laura Contreras:** Far, no, no lo he encontrado.
+- **[22:05] Laura Contreras:** Bueno, creo que estamos feliz viernes, descansen mucho. Au.
+- **[22:05] Juan Diego Bautista Vasquez:** Una una última
+- **[22:05] Maria Jose Calderon:** pregunta rápida
+- **[22:05] Juan Diego Bautista Vasquez:** para el tema de selección de
+- **[22:05] Juan Diego Bautista Vasquez:** portadoras mobile. ¿Lo miramos con con Jaime, con Santiago o con quién es o contigo?
+- **[22:05] Laura Contreras:** Con Jaime.
+- **[22:05] Laura Contreras:** Jaime tira la app.
+- **[22:05] Laura Contreras:** Por si quieres ver el formato que al que él cometió Gali, por ejemplo.
+- **[22:05] Laura Contreras:** Sí. De hecho, lo compartió, él no lo mandó ayer, esperen.
+- **[22:05] Laura Contreras:** ¿Él no lo mandó ayer?
+- **[22:05] Laura Contreras:** Es que no.
+- **[22:05] Laura Contreras:** Sí, no, James tiene la app,
+- **[22:05] Laura Contreras:** Wendy.
+- **[22:05] Laura Contreras:** Y y también
+- **[22:05] Laura Contreras:** veamos que que esté a perspectiva la manera de aprobar eso, o sea,
+- **[22:05] Laura Contreras:** yo recuerdo que el principio llegó
+- **[22:05] Juan Diego Bautista Vasquez:** Ajá.
+- **[22:06] Laura Contreras:** Muchas muchos detalles, mucha interacción Sí.
+- **[22:06] Laura Contreras:** Ver como macro, no sé si sea estratégico llevarle ese,
+- **[22:06] Laura Contreras:** precisamente a mobile.
+- **[22:06] Laura Contreras:** Pensémoslo, Juan Diego, si no,
+- **[22:06] Laura Contreras:** tres computadores, tres personas y
+- **[22:06] Laura Contreras:** rotamos la farmacia. Sitios.
+- **[22:06] Laura Contreras:** Igual
+- **[22:06] Juan Diego Bautista Vasquez:** igual hacer la prueba, ¿no?, hacer la prueba, ver cómo se ve
+- **[22:06] Juan Diego Bautista Vasquez:** ver si funciona,
+- **[22:06] Laura Contreras:** cómo funciona,
+- **[22:06] Juan Diego Bautista Vasquez:** como intentarlo.
+- **[22:06] Juan Diego Bautista Vasquez:** Como para que tampoco perder la experiencia que la gente, pues lo pueda tener, lo pueda
+- **[22:06] Juan Diego Bautista Vasquez:** y pueda ver qué, creo que están supervaliosos.
+- **[22:06] Juan Diego Bautista Vasquez:** Y ahí sí,
+- **[22:06] Laura Contreras:** los beneficios.
+- **[22:06] Juan Diego Bautista Vasquez:** ¿Listo?
+- **[22:06] Laura Contreras:** De bueno.
+- **[22:06] Laura Contreras:** Bueno, nos vemos el jueves. Muy bien. Gracias, que estén muy bien. Chao.
+- **[22:06] Catherin Salazar:** Gracias.

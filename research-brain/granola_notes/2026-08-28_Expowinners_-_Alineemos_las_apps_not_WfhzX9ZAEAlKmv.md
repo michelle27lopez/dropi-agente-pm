@@ -1,0 +1,528 @@
+# Expowinners - Alineemos las apps
+
+- **ID:** `not_WfhzX9ZAEAlKmv`
+- **Fecha:** 2026-08-28T20:31:02.763Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/94b0af07-06a7-48eb-9b4e-7ba0ea59daa9)
+- **Asistentes:** Santiago Herrera Acosta, Jaime Guevara, Andres Salazar, Laura Contreras, Maria Calderon, Jose Pineda, Esteban Solano, Juan Bautista
+
+---
+
+## Resumen de la Reunión
+# Prototipos de Producto (lado Producer)
+
+- Tres flujos principales para validar en el workshop de Expowinners:
+  - **Copiloto IA**: guía a nuevos usuarios sin experiencia en dropshipping a encontrar y publicar un producto
+    - Catálogo cerrado de \~25 productos ganadores (sin APIs de TetherOpi)
+    - Mini ecommerce de Dropi tipo Shopify para usuarios inexpertos, listo la próxima semana
+  - **Escanear to Winner**: escanea productos del evento y genera un score de viabilidad con OpenAI
+    - Pendiente afinar el mensaje para productos con score bajo
+    - Oportunidad de integrar API de Apify para datos de productos pautados
+  - **Únete a Pulso**: conecta dropshippers con proveedores (dirigido a usuarios con experiencia)
+- Objetivo: recopilar data e insights de usuarios reales, primera oportunidad de experimentar con features reales a esta escala
+
+# App de Expowinners (lado Logística / TI)
+
+- App web existente con tres secciones principales:
+  - Generación de tickets con QR para asistentes
+  - Perfil de usuario con datos de registro y comunidad elegida
+  - Ruta Winner: trivia por stands (7 en total), con sistema de premios desbloqueables al completarlos todos
+- Universo Dropi en el centro de la app: islitas por vertical (Academy, Pau, Leyendas, Common, Prowatch)
+- Academy tiene su propio flujo de onboarding dentro de la app
+- Revisión de ciberseguridad ya realizada con Diana Sierra; envío de datos entre apps muy restringido
+
+# Integración: Product Lab en la App
+
+- Acuerdo: el equipo de producto tendrá su propia islita llamada “Product Lab” en el centro de la app, al mismo nivel que Academy
+- Integración vía URL: botón en la app de Expowinners abre el URL del Product Lab
+  - Product Lab incluirá botón de regreso (“home”) para volver a la app principal
+- Tracking de usuarios: Jaime propone pasar nombre y teléfono (o un ID) en la URL para cruzar datos post-evento
+  - Carlos recomienda validar el mecanismo con Diana Sierra antes de implementar
+  - Alternativa mínima: pasar solo el ID y cruzar tablas después del evento
+- UI del Product Lab debe adaptarse visualmente al ADN de la app de Expowinners
+
+# Próximos Pasos
+
+- **Coordinar adaptación del UI del Product Lab**
+
+  Alinear con Carlos y Luisa para que la app de producto se vea consistente con el resto de la app de Expowinners.
+- **Validar mecanismo de paso de datos (ID o nombre/teléfono) con Diana Sierra**
+
+  Definir si se puede enviar datos en la URL o si se cruzan tablas por ID post-evento.
+- **Continuar coordinación por el grupo de chat**
+
+  Pipe propuso usar el grupo existente para updates, necesidades de cada lado y avances de integración.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/0e968afa-5c57-41da-9e0e-b2fcaaa1e92e](https://notes.granola.ai/t/0e968afa-5c57-41da-9e0e-b2fcaaa1e92e)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[20:31] Yo:** Okay.
+- **[20:32] Yo:** I mean,
+- **[20:33] Maria Jose Calderon:** Bien, ¿y tú?
+- **[20:33] Laura Contreras:** Oiga, la reunión más movida de la historia.
+- **[20:33] Maria Jose Calderon:** ¿Y usted? Sí.
+- **[20:33] Maria Jose Calderon:** Como No,
+- **[20:33] Laura Contreras:** como ochenta y seis veces
+- **[20:33] Maria Jose Calderon:** Ajá, y que es que no se va dejar para los
+- **[20:33] Maria Jose Calderon:** viernes, que los viernes sí estamos muy cansados, que no sé qué.
+- **[20:33] Maria Jose Calderon:** Otra vez Ay,
+- **[20:33] Laura Contreras:** es cierto, es cierto, perdóneme,
+- **[20:33] Laura Contreras:** y si no lo hacemos ahorita,
+- **[20:33] Laura Contreras:** no no sé en qué momento nos vamos a a integrar las dos cosas.
+- **[20:33] Laura Contreras:** Bueno, ese era el espacio paraíso. Digamos que
+- **[20:33] Laura Contreras:** Perdóname. Jaime, no, creo que
+- **[20:33] Laura Contreras:** se demora un poco en otro espacio y
+- **[20:33] Laura Contreras:** ajá, sí, se va a quedar en otro espacio. Pero aquí tenemos a Santi, que fue,
+- **[20:34] Laura Contreras:** Santi es el pm, oigan, de seller success, o
+- **[20:34] Laura Contreras:** sea, el encargado del dropshippers, y tenemos a Juandi, por parte de logística.
+- **[20:34] Laura Contreras:** El punto de esta reunión era, no sé si recuerdan,
+- **[20:34] Laura Contreras:** cuando hablamos contigo hace un tiempo, y vamos seguramente en la reunión pasada,
+- **[20:34] Laura Contreras:** que nosotros pudiéramos integrar lo que nosotros
+- **[20:34] Laura Contreras:** estamos haciendo para nuestros experimentos y pruebas dentro de expo winners,
+- **[20:34] Laura Contreras:** a su aplicativo,
+- **[20:34] Laura Contreras:** el que entiendo que ya están desarrollando
+- **[20:34] Laura Contreras:** directamente con el equipo de TI, ver si eso era posible,
+- **[20:34] Laura Contreras:** simplemente tener un acceso hacia lo que
+- **[20:34] Laura Contreras:** estamos proponiendo de este lado de Producer.
+- **[20:34] Laura Contreras:** No sé si quieren contarnos si
+- **[20:34] Laura Contreras:** es posible, si tenemos que ir a otra reunión,
+- **[20:34] Laura Contreras:** o si nos quieran mostrar, y nosotros les mostramos también qué tenemos, como para que empecemos a
+- **[20:34] Laura Contreras:** integrar las dos cosas.
+- **[20:34] Andres Felipe Salazar:** Bueno, de una, no, de una,
+- **[20:34] Andres Felipe Salazar:** ¿les parece si si nos muestran primero ustedes como para pillar
+- **[20:35] Andres Felipe Salazar:** qué tienen ahí mientras que nosotros vamos organizando?
+- **[20:35] Yo:** Listo de one one.
+- **[20:35] Yo:** Ya les comparto
+- **[20:35] Yo:** les comparto pantalla.
+- **[20:35] Yo:** Lo lo que decía ahora, Low, que nosotros desde producto, estamos trabajando en unos prototipos La idea es poder presentarlo durante el workshop. Que, bueno, no sé si la UCTema ya se habló en otro espacio, o también lo lo alineamos acá. Por ahora, tenemos
+- **[20:35] Laura Contreras:** No, ellos ya saben
+- **[20:35] Laura Contreras:** grandes rasgos nuestro plan, Santi, pero bueno, contárselo como
+- **[20:35] Yo:** Listo,
+- **[20:35] Yo:** Entonces, la idea es de que nosotros para el workshop
+- **[20:35] Yo:** vamos a tener el espacio de la hora, pero adicional,
+- **[20:35] Yo:** la idea es de que nosotros los diferentes prototipos que queramos entrar a a validar el tipo de producto lleva
+- **[20:35] Yo:** unas hipótesis, unas preguntas,
+- **[20:35] Yo:** que realmente, pues, nos interesan para, sobre todo, eso,
+- **[20:35] Yo:** ser este un instrumento como para
+- **[20:35] Yo:** recopilar data.
+- **[20:35] Yo:** Y dentro de lo que está ahora, esto lo están viendo
+- **[20:35] Yo:** muy estrecho, la idea es para web hacerlo más amplio y hacerlo también
+- **[20:36] Yo:** y hacerlo responsive para los dispositivos móviles.
+- **[20:36] Yo:** Entonces, nosotros hoy tenemos tres flujos,
+- **[20:36] Yo:** hay uno principal que es este copiloto IA,
+- **[20:36] Yo:** que realmente lo que queremos descubrir acá
+- **[20:36] Yo:** es si este flujo que se va a plantear
+- **[20:36] Yo:** facilita que los nuevos usuarios que no saben de dropshipping ni de
+- **[20:36] Yo:** commerce
+- **[20:36] Yo:** puedan encontrar un producto que les interese para salir a vender,
+- **[20:36] Yo:** y llegar a un fondos hasta donde se publique.
+- **[20:36] Yo:** Actualmente, el flujo
+- **[20:36] Yo:** permite descubrir productos
+- **[20:36] Yo:** ver cuáles serían los ángulos de venta,
+- **[20:36] Yo:** ver la rentabilidad aproximada de un producto,
+- **[20:36] Yo:** y lo que vamos a hacer ya para la siguiente semana es generar un
+- **[20:36] Yo:** llámele, un mini ecommerce
+- **[20:36] Yo:** del mismo Droppy, es decir, como si Droppy tuviera su propio Shopify, pero para usuarios
+- **[20:36] Yo:** inexpertos que apenas quieren arrancar, y eso será un instrumento de
+- **[20:36] Yo:** de salida, activación.
+- **[20:36] Yo:** Entonces, ese es el flujo principal, este se va a presentar en el
+- **[20:36] Yo:** pero también vamos, dependiendo de algunos resultados, hay temas que se terminen de delinear durante estos
+- **[20:37] Yo:** próximos días.
+- **[20:37] Yo:** Ver si también lo generamos para los dos días de evento.
+- **[20:37] Yo:** En conjunto con este, este igual para que no quede tan en el aire, entonces, se
+- **[20:37] Yo:** seleccione un producto, digamos que no sé qué vender.
+- **[20:37] Yo:** Hay algunas categorías,
+- **[20:37] Yo:** belleza,
+- **[20:37] Yo:** Esto está conectado con algunas herramientas de Aquí estamos
+- **[20:37] Yo:** de ajustarlos y, de hecho,
+- **[20:37] Yo:** muy seguramente lo que vamos a hacer es
+- **[20:37] Yo:** no conectarnos a unas unas APIs que tenemos de TetherOpi,
+- **[20:37] Yo:** sino hacerlo con un catálogo cerrado. Que se está lidiando con los proveedores de los veinticinco productos como más ganadores para primera venta, ¿no? Se selecciona el producto, Un pequeño asistente, digamos que selecciona, no sé, este.
+- **[20:37] Yo:** Aquí, entonces, por ejemplo, yo puedo comparar proveedor,
+- **[20:37] Yo:** digamos que
+- **[20:37] Yo:** aquí va a aparecer la información. Ahí estamos trabajando en que sea mucho más
+- **[20:37] Yo:** minimalista o mucho más
+- **[20:37] Yo:** limpio para personas que no sepan de hacer ecommerce o
+- **[20:38] Yo:** o similares,
+- **[20:38] Yo:** Y, bueno, esto es como el flujo, ¿sí?, a grandes rasgos, se continúa con la estrategia.
+- **[20:38] Yo:** Aquí todavía estamos muy en etapa de probar cómo cuál es la mejor forma de hacerlo, todavía hay mucha
+- **[20:38] Yo:** que minimizarla.
+- **[20:38] Yo:** Pero bueno, este es el flujo a nivel general, ¿listo?
+- **[20:38] Yo:** Adicional,
+- **[20:38] Yo:** este,
+- **[20:38] Yo:** que es el principal de nosotros recopilar esa la
+- **[20:38] Yo:** herramientas ganadoras por un nuevo dropshipper,
+- **[20:38] Yo:** está el escanear to winner,
+- **[20:38] Yo:** que aquí lo que hacemos nosotros es monover tantos productos durante el evento,
+- **[20:38] Yo:** desde desde acá se va a escanear el producto, aquí vamos a
+- **[20:38] Yo:** conectadas de OpenAI,
+- **[20:38] Yo:** para que se identifiques todo un score de qué tan bueno es el producto para
+- **[20:38] Yo:** salir a vender. Acá hay unos temas que estamos
+- **[20:38] Yo:** ajustando, porque
+- **[20:38] Yo:** es importante que no vayamos a dar un mal score a ningún producto,
+- **[20:38] Yo:** tenemos que ver con uno de unos mínimos, o matizamos el mensaje de pronto cuando no es un producto
+- **[20:38] Yo:** que de pronto genere tanta
+- **[20:38] Yo:** tanto ¿no?
+- **[20:38] Yo:** Aparte, pues, igual va por ahora de crudo contra una
+- **[20:38] Yo:** la
+- **[20:38] Yo:** OpenAI,
+- **[20:39] Yo:** ende, pues no está haciendo un un un scrapping, digamos, más robusto de producto realmente que
+- **[20:39] Yo:** estén vendiendo.
+- **[20:39] Yo:** Aquí hay unas oportunidades de integrar con algunas APIs adicionales,
+- **[20:39] Yo:** para que se acerque realmente, por ejemplo, a productos que se están pautando, y está el API de Apify,
+- **[20:39] Yo:** entonces, recolecta a través de de diferentes sitios.
+- **[20:39] Yo:** Cuáles son los productos que más están pautando.
+- **[20:39] Yo:** Otro flujo es de únete a pulso, no sé si esta si esta está acá.
+- **[20:39] Yo:** Nada, no sé si ya han conocido a pulso, han hablado con Jaime. Jaime, pues, es el que está oyendo más este tema.
+- **[20:39] Yo:** Pero realmente este ya está más
+- **[20:39] Yo:** dirigido a usuarios que
+- **[20:39] Yo:** ya hacen dropshipping, que entienden cuál es la importancia
+- **[20:39] Yo:** de
+- **[20:39] Yo:** lograr ese contacto, esa unión con un proveedor
+- **[20:39] Yo:** que ofrezca el producto que ellos quieren ofrecer,
+- **[20:39] Yo:** Este es otro de los flujos, entonces, de juguetería, entonces,
+- **[20:39] Yo:** aquí, por ejemplo, bueno, aquí esto es porque no, Jaime no le ha dado de alta
+- **[20:39] Yo:** alguna que esto tiene por debajo, pero lo que hace es conectar, justamente, para que ya el dropshipper pueda
+- **[20:40] Yo:** hacer
+- **[20:40] Yo:** como ese esas esas ese flujo completo que ya se tiene en pulso y solicitar
+- **[20:40] Yo:** Y adicional, está un tema que hasta
+- **[20:40] Yo:** cuando fue funding, que nos reunimos ayer o anteayer,
+- **[20:40] Yo:** un tema de de logística, entonces, ahí si quiere funding ya
+- **[20:40] Yo:** entra ahí tú a cómo explicarlo mejor que yo.
+- **[20:40] Yo:** Pero la idea es que todo eso lo unifiquemos en un solo flujo de producto, llamémoslo así,
+- **[20:40] Yo:** y ya. Pero el el el punto es
+- **[20:40] Yo:** creo que, y creo que proceso del espacio, lleguemos a a como a la claridad de
+- **[20:40] Yo:** a través de qué flujos, digamos, entraría el usuario a a
+- **[20:40] Yo:** participar dentro de estas dentro de estas diferentes opciones o
+- **[20:40] Yo:** o funcionalidades, estudios que se van a hacer.
+- **[20:40] Yo:** Porque entiendo que hay una aplicación que se
+- **[20:40] Yo:** existe al inicio para todos los nuevos, para los registros,
+- **[20:40] Yo:** pero no sé si también
+- **[20:40] Yo:** lo que hemos hablado de pronto es que hayan QR dentro de los diferentes puestos o puntos, entonces,
+- **[20:40] Yo:** para alinear eso. Entonces, Juandi, si quieres ahí tu partecita.
+- **[20:41] Laura Contreras:** I think I
+- **[20:41] Laura Contreras:** Pero pero la idea, entonces, es lo que dice Santi.
+- **[20:41] Laura Contreras:** Pife, Majo y, bueno, todo el equipo, Carlos y Luis, también entiendo eso.
+- **[20:41] Laura Contreras:** ¿Cómo nos pegamos a lo que ustedes tienen para generar un acceso a este lugar?
+- **[20:41] Laura Contreras:** Que a esta app, perdón, que es básicamente como
+- **[20:41] Laura Contreras:** discovery activo, un discovery guerrilla que queremos
+- **[20:41] Laura Contreras:** tener desde el área de producto, desde muchos frentes. Si se puede QR, si se puede
+- **[20:41] Laura Contreras:** anclar nuestra aplicación,
+- **[20:41] Laura Contreras:** y vamos a tener también nuestro workshop de una ahorita.
+- **[20:41] Laura Contreras:** Sí No sé cómo la ven.
+- **[20:41] Andres Felipe Salazar:** Esta esta primero que todo, pues,
+- **[20:41] Andres Felipe Salazar:** está demasiado interesante el ejercicio, está muy chévere,
+- **[20:41] Andres Felipe Salazar:** muy enfocado, entiendo yo cómo hacia la operación o, por lo menos, el ejercicio del dropshipper,
+- **[20:41] Andres Felipe Salazar:** Lo lo que sí quiero que, digamos, como que
+- **[20:41] Andres Felipe Salazar:** dejemos claro, es que nuestro
+- **[20:41] Andres Felipe Salazar:** el objetivo principal de la, pues, de esta app web que se creó en un principio,
+- **[20:42] Andres Felipe Salazar:** digamos que tenía como prioridad
+- **[20:42] Andres Felipe Salazar:** sofisticar un poquito el proceso de registro.
+- **[20:42] Andres Felipe Salazar:** Porque, pues, como somos una empresa de tecnología, seguíamos haciendo eventos
+- **[20:42] Andres Felipe Salazar:** y y estamos
+- **[20:42] Andres Felipe Salazar:** invirtiendo mucha plata, todavía en papel, lápiz, backings impresos,
+- **[20:42] Andres Felipe Salazar:** flyers y todo esto, y la idea es digitalizar un poquito los procesos. Entonces,
+- **[20:42] Andres Felipe Salazar:** a raíz de de de sentir esa necesidad o de la necesidad de
+- **[20:42] Andres Felipe Salazar:** sofisticar, pues, como el proceso de registro,
+- **[20:42] Andres Felipe Salazar:** con la participación de las verticales, pues, digamos que
+- **[20:42] Andres Felipe Salazar:** tenemos ahí una pequeña trilha. Entonces, no sé, Charles ¿estás por ahí? Bueno, les presento a Carlos y a Luisa Pérez, por ahí las por ahí lo están viendo.
+- **[20:42] Andres Felipe Salazar:** Con los que estamos avanzando en temas en temas de diseño, hemos configurado algunas
+- **[20:42] Andres Felipe Salazar:** Entonces, Carlos, si podréis ir compartiendo, por
+- **[20:42] Andres Felipe Salazar:** pantalla, por favor, para ver cómo podemos hacer
+- **[20:43] Andres Felipe Salazar:** de que esta infraestructura que nos está mostrando Santiago la podamos integrar
+- **[20:43] Andres Felipe Salazar:** a esta como modal al a, no sé si como modal o
+- **[20:43] Andres Felipe Salazar:** botón, no lo sé,
+- **[20:43] Andres Felipe Salazar:** a la experiencia que tenemos, porque principalmente tenemos
+- **[20:43] Andres Felipe Salazar:** tres tipos de
+- **[20:43] Andres Felipe Salazar:** digamos, como de ventanas en esta en esta app.
+- **[20:43] Andres Felipe Salazar:** Es la
+- **[20:43] Andres Felipe Salazar:** la de generación de tickets, para que la gente vea sus QR,
+- **[20:43] Andres Felipe Salazar:** ¿sí? La de perfil, que es donde el
+- **[20:43] Andres Felipe Salazar:** usuario, una vez registrado, pues va a ver todos sus datos con los que se registró y ahí ya
+- **[20:43] Andres Felipe Salazar:** aparece, inclusive, a que comunidad
+- **[20:43] Andres Felipe Salazar:** decidió, pues, como
+- **[20:43] Andres Felipe Salazar:** pertenecer o entrar, no sé.
+- **[20:43] Andres Felipe Salazar:** Lo último, que es, digamos, como la más robusta, que es la parte como
+- **[20:43] Andres Felipe Salazar:** dinámica, es la de ruta winner.
+- **[20:43] Andres Felipe Salazar:** Ya creo que ya todos ustedes creo que saben que es ruta winner.
+- **[20:43] Andres Felipe Salazar:** No sé si tenemos, no sé si podríamos como
+- **[20:44] Andres Felipe Salazar:** integrarla como una ventana más,
+- **[20:44] Andres Felipe Salazar:** Y, obviamente, fortalecer todos nuestros canales de comunicación para
+- **[20:44] Andres Felipe Salazar:** que la gente entienda que esto es una app con muchas cositas que
+- **[20:44] Andres Felipe Salazar:** tiene que explorar el día del evento, ¿sí?
+- **[20:44] Andres Felipe Salazar:** Porque la experiencia que ustedes están desarrollando es muy bacana, es
+- **[20:44] Andres Felipe Salazar:** pues, me parece que es demasiado inmersiva, pero, entonces, eso
+- **[20:44] Andres Felipe Salazar:** chévere que la gente, de verdad,
+- **[20:44] Andres Felipe Salazar:** haga todo el ejercicio. Lo mismo el riesgo que nosotros estamos asumiendo con ruta winner,
+- **[20:44] Andres Felipe Salazar:** que estamos pretendiendo que la gente vaya a los stands, haga esto, bueno, en fin.
+- **[20:44] Andres Felipe Salazar:** Pues así está por ahora la la la la app,
+- **[20:44] Andres Felipe Salazar:** esto es lo que sería, pues, ruta winner.
+- **[20:44] Andres Felipe Salazar:** Bueno, adicional a esto, este, resulta que
+- **[20:44] Andres Felipe Salazar:** para temas de registro me voy a devolver un poquitico.
+- **[20:44] Andres Felipe Salazar:** Para temas de registro, la idea es que el área comercial
+- **[20:44] Participante:** tenga presencia en esa zona del del evento,
+- **[20:45] Participante:** y tenga un escáner. Ah,
+- **[20:45] Participante:** Charles, no sé si te dije que sí la puede la puede ir
+- **[20:45] Participante:** compartir, porque, pues sí es importante que
+- **[20:45] Participante:** mostremos cómo le va a aparecer el usuario de admin a los de
+- **[20:45] Participante:** para poder escanear los los, ¿cómo se llama?, los QR.
+- **[20:45] Participante:** Entonces, tienen unos contadores y tiene como su propia basecita de datos, por decirlo así.
+- **[20:45] Participante:** ¿Ya? No sé, Charles, si querés, volvamos, entonces, ya
+- **[20:45] Participante:** a lo de a lo, como aparece ya lo de la trivia y
+- **[20:45] Participante:** todo esto y los premios y todo el tema,
+- **[20:45] Participante:** porque, pues, también sí integramos
+- **[20:45] Participante:** esto,
+- **[20:45] Participante:** pues tendríamos que vestirlo con el brand
+- **[20:45] Participante:** de de de ruta o diner y Entonces, pues,
+- **[20:45] Participante:** Charles, si querés explicate, tengo que ausentarme un segundito,
+- **[20:45] Participante:** Qué pena. Charles, explícate, por cómo es el tema de los
+- **[20:45] Andres Felipe Salazar:** premios y cómo la gente ve como el récord y todo el tema y la trivia, por
+- **[20:46] Andres Felipe Salazar:** Ya ya vengo, es único.
+- **[20:46] Carlos Diaz:** Listo. Hola, hola a todos, buenas tardes.
+- **[20:46] Carlos Diaz:** Hola.
+- **[20:46] Carlos Diaz:** Muy bien, gracias. Bueno, como comentaba Pipe, esta es la
+- **[20:46] Carlos Diaz:** el apartado de de ruta winner. Como pueden ver, aquí tenemos, pues, la la
+- **[20:46] Carlos Diaz:** de los registros de las entradas donde cada persona adquiere una boleta.
+- **[20:46] Carlos Diaz:** Y aquí la pueden visualizar.
+- **[20:46] Carlos Diaz:** Aquí les aparece el QR, y ya por medio del del que les acabo de mostrar del staff,
+- **[20:46] Carlos Diaz:** las personas van a poder
+- **[20:46] Carlos Diaz:** hacer como quien dice el
+- **[20:46] Carlos Diaz:** el escaneo de
+- **[20:46] Carlos Diaz:** de ese QR se van a validar, y aquí, tanto en el día uno como en el día dos, va a quedar el registro de
+- **[20:46] Carlos Diaz:** personas asistieron. Va a haber una lista y se puede descargar el
+- **[20:46] Carlos Diaz:** ese registro.
+- **[20:46] Carlos Diaz:** Bueno, aquí en el computador no tengo cámara, pero aquí se visualiza la cámara y, pues, se puede escanear en caso tal de que no funcione por alguna razón, pues también se puede ingresar el código. Como pueden ver, el código también trae números, en caso tal de que no funcione la cámara ese día o algo, se puede escribir, pues, el código y va a ser validada de igual forma. En cuanto a la ruta winner, aquí en la parte de afuera tenemos todo lo que son las las trivias que va a ver y el sistema de de de premios que va a entregar cada uno, pues, como sabemos,
+- **[20:47] Carlos Diaz:** sí o sí tienen que completarse los siete, entonces vamos a ir ingresando, por ejemplo, primero aquí
+- **[20:47] Carlos Diaz:** confío pagos.
+- **[20:47] Carlos Diaz:** Comenzamos, respondemos las preguntas,
+- **[20:47] Carlos Diaz:** Hay una validación, se debe hacer la validación de que sí estuviste en el stand,
+- **[20:47] Carlos Diaz:** pues que no lo hagan, por ejemplo, desde sus casas o por fuera, en otras partes, que
+- **[20:47] Carlos Diaz:** simplemente respondan las preguntas y ya, sino realmente validar que están dentro del stand.
+- **[20:47] Carlos Diaz:** Y una vez comprobado que la la validación sea exitosa, se va a marcar
+- **[20:47] Carlos Diaz:** que ya
+- **[20:47] Carlos Diaz:** el stand de confío pagos ya está. Igual, acá abajo ya dice,
+- **[20:47] Carlos Diaz:** que hay uno de siete stands. Acá también se pueden ver aquí están todos bloqueados, pero confío pagos
+- **[20:47] Carlos Diaz:** pre desbloqueado. No podemos visualizar aún qué premio tengo en confío
+- **[20:48] Carlos Diaz:** pues porque todavía faltan completar el resto de
+- **[20:48] Carlos Diaz:** de stands. Y así, uno por uno. Cuando se completen los siete,
+- **[20:48] Carlos Diaz:** que todos estén
+- **[20:48] Carlos Diaz:** desbloqueados, pues ya todos se van a a iluminar.
+- **[20:48] Carlos Diaz:** Y ya puedo pasar a reclamar mis premios. Ya todos están acá y ya
+- **[20:48] Carlos Diaz:** dentro de cada uno puedo visualizar cuál es el el beneficio
+- **[20:48] Carlos Diaz:** que cada uno me da. Entonces, con FioPagos me da una tarifa especial por los primeros veinte días,
+- **[20:48] Carlos Diaz:** Atom ya es un contacto directo con el con el proveedor, o sea,
+- **[20:48] Carlos Diaz:** ahí ya podemos ver los diferentes
+- **[20:48] Carlos Diaz:** beneficios que da cada cada uno. Y para reclamarlos,
+- **[20:48] Carlos Diaz:** esta parte toda está en desarrollo, nos vamos aquí y la persona puede elegir cuáles
+- **[20:48] Carlos Diaz:** los premios que quiere de los siete. Por ejemplo, seleccione estos tres, y aquí, en confirmar selección, ya. Estos son los premios que la persona ha elegido. Y por parte del staff, en el staff podemos ver aquí en este icono, que también se está ajustando esto todavía muy grande, También la persona, cuáles fueron los premios que cada persona eligió.
+- **[20:49] Carlos Diaz:** Para ya tema de data comercial y ideas.
+- **[20:49] Carlos Diaz:** Esto es para las verticales,
+- **[20:49] Carlos Diaz:** Aquí en el centro van a aparecer lo que es el universo dropping, que, en este caso,
+- **[20:49] Carlos Diaz:** lo ideal, tal vez, sería ver cómo integramos esta que
+- **[20:49] Carlos Diaz:** tienen aquí adentro,
+- **[20:49] Carlos Diaz:** Cada una, pues, representa las
+- **[20:49] Carlos Diaz:** lo del universo de Entonces, aquí está Pau,
+- **[20:49] Carlos Diaz:** va a estar leyendas, aquí va a estar academy y Common y Prowatch. La otra.
+- **[20:49] Luisa Perez:** También va a estar una de ellas que
+- **[20:49] Luisa Perez:** Ah, sí, la de la de Lucho, que
+- **[20:49] Carlos Diaz:** está en estas cinco. La la
+- **[20:49] Luisa Perez:** de ella.
+- **[20:49] Luisa Perez:** Y, pues, a mí nos tocaría que integrar ahí en el universo dropping
+- **[20:49] Luisa Perez:** también la la de ustedes. Pero, pues, la idea también es que, pues, aparte se está
+- **[20:49] Luisa Perez:** realizando como una app dinámica
+- **[20:49] Luisa Perez:** diferente, pues, a la de las verticales para Academy. Entonces, creo que ahí, pues, perfecto,
+- **[20:49] Luisa Perez:** se podría incluir la de ustedes.
+- **[20:50] Laura Contreras:** La de acá de mi, perdón, ahí no te entendí. ¿Se vería como otra islita o
+- **[20:50] Laura Contreras:** o es algo totalmente aparte?
+- **[20:50] Carlos Diaz:** ¿Estar aquí
+- **[20:50] Luisa Perez:** adentro,
+- **[20:50] Carlos Diaz:** estaría aquí
+- **[20:50] Luisa Perez:** en el centro? En
+- **[20:50] Luisa Perez:** Pero
+- **[20:50] Carlos Diaz:** no es si ingrese, es una visual totalmente diferente a la que
+- **[20:50] Carlos Diaz:** que tienen estas verticales, que
+- **[20:50] Luisa Perez:** Sí.
+- **[20:50] Carlos Diaz:** Ahí, si quieres, se las puedes mostrar que vean que es
+- **[20:50] Luisa Perez:** Sí, sí, ya.
+- **[20:50] Carlos Diaz:** Es un apartado, digamos, diferente, o sea, va a estar aquí adentro porque es dentro del universo
+- **[20:50] Carlos Diaz:** que es esta isla central,
+- **[20:50] Carlos Diaz:** pero tiene una visual diferente, que ya mi compañera les pasará a a mostrar.
+- **[20:50] Jaime Guevara:** Mientras
+- **[20:50] Jaime Guevara:** mientras nos muestran, le doy una pregunta con la base de datos, Alvin.
+- **[20:50] Jaime Guevara:** ¿Continúan con con Firebase o...?
+- **[20:50] Jaime Guevara:** Hay algunos cambios? Es que nos estaban diciendo algo en
+- **[20:50] Andres Felipe Salazar:** Sí, no,
+- **[20:50] Jaime Guevara:** al principio
+- **[20:50] Andres Felipe Salazar:** digamos que
+- **[20:50] Andres Felipe Salazar:** tuvimos un un un pequeño inconveniente de de
+- **[20:51] Andres Felipe Salazar:** el objetivo de, digamos que de registros fue cambiando
+- **[20:51] Andres Felipe Salazar:** paralelo al al desarrollo de todo lo que se está haciendo,
+- **[20:51] Andres Felipe Salazar:** Entonces, pues tocó, básicamente, tener como un plan con
+- **[20:51] Andres Felipe Salazar:** y, pues, digamos que ya solucionado el tema. De hecho, ya
+- **[20:51] Andres Felipe Salazar:** tuvimos como la revisión con Diana Sierra para temas de ciberseguridad y, bueno,
+- **[20:51] Andres Felipe Salazar:** todo ese tema. Eso que están viendo acá ya es la parte de
+- **[20:51] Andres Felipe Salazar:** específica de academy. Porque Esteban, que es el líder, pues, de academy, es
+- **[20:51] Andres Felipe Salazar:** como una especie de
+- **[20:51] Andres Felipe Salazar:** un ejercicio
+- **[20:51] Andres Felipe Salazar:** algo parecido, pero no es para nada, o sea,
+- **[20:51] Andres Felipe Salazar:** es decir, quería como hacer como una especie de onboarding, por decir,
+- **[20:51] Andres Felipe Salazar:** decirlo así, de los primeros pasos
+- **[20:51] Andres Felipe Salazar:** de lo que sería la experiencia
+- **[20:51] Andres Felipe Salazar:** en la plataforma.
+- **[20:51] Andres Felipe Salazar:** ¿Verdad?
+- **[20:51] Andres Felipe Salazar:** Entonces, pues,
+- **[20:51] Andres Felipe Salazar:** bueno, ese fue el desarrollo que se hizo o que se está terminando de hacer.
+- **[20:52] Andres Felipe Salazar:** ¿Qué qué podemos hacer? Pues encontrar
+- **[20:52] Andres Felipe Salazar:** no sé, ustedes qué opinan, en dónde creen que pueda llegar
+- **[20:52] Andres Felipe Salazar:** como a
+- **[20:52] Andres Felipe Salazar:** habituar como esta, no sé, como que
+- **[20:52] Andres Felipe Salazar:** que
+- **[20:52] Andres Felipe Salazar:** la gente lo vea y que en realidad no se le pase
+- **[20:52] Andres Felipe Salazar:** a hacer este paso, a hacer esto, a hacer esta trivia, a hacer, sino que, pues,
+- **[20:52] Andres Felipe Salazar:** procurar de que haga todo.
+- **[20:52] Laura Contreras:** Pues,
+- **[20:52] Laura Contreras:** nosotros lo estábamos pensando, Carlos, y bueno, el equipo de marketing y equipo en Jaime,
+- **[20:52] Laura Contreras:** Santi y Juan,
+- **[20:52] Laura Contreras:** Un poco llamar al espacio como product lab,
+- **[20:52] Laura Contreras:** y que fuera como una isla como la que es la
+- **[20:52] Laura Contreras:** Academy. Entonces, así como desde, entiendo que va estar en el centro, puedo ingresar a esta de Academy,
+- **[20:52] Laura Contreras:** nosotros podamos tener algún espacio para que ingresemos al lab de producto.
+- **[20:52] Laura Contreras:** ¿Por qué? Porque, digamos que los fines de nuestra aplicación son diferentes,
+- **[20:52] Laura Contreras:** son traer insights, sí, más que todo research y demás,
+- **[20:52] Laura Contreras:** Acá en mi idea de tener ya, pues, me enfoque un poco más en
+- **[20:53] Laura Contreras:** en, sí, en cómo mostrar esta información
+- **[20:53] Laura Contreras:** respecto a
+- **[20:53] Laura Contreras:** lo que ya existe en academy. Entonces, no sé si separarla les parezca bien, como nos estaban diciendo,
+- **[20:53] Laura Contreras:** que desde el centro de su aplicación,
+- **[20:53] Laura Contreras:** como
+- **[20:53] Laura Contreras:** la que es original de la ruta winner, nosotros podamos tener ahí una islita
+- **[20:53] Laura Contreras:** en la que puedan ingresar a la nuestra, de
+- **[20:53] Andres Felipe Salazar:** Ok. Ok.
+- **[20:53] Jaime Guevara:** Sí, de pronto yo quiero ahí agregar algo y ver si de pronto vendemos un poquito la idea. Y es, digamos, es es es muy importante para nosotros, para producto y para el el el crecimiento de esa primera parte. Creo que es la primera vez que tenemos una oportunidad tan buena de experimentar con features reales, la mayoría de los features, pues, a pesar de ser experimentos, son pruebas de concepto literal, experimentos, pero ya es probando cosas muy reales que nos van a dar dar para priorizar o no priorizar desarrollos ya en dropping. Entonces, es supervalioso
+- **[20:54] Jaime Guevara:** tengamos
+- **[20:54] Jaime Guevara:** como una visibilidad bastante bastante buena
+- **[20:54] Jaime Guevara:** para tener la mayor cantidad, pues, de de de feedback posible.
+- **[20:54] Jaime Guevara:** Entonces, si se puede, pues, lo ideal sería que
+- **[20:54] Jaime Guevara:** tuviera, pues, como esa relevancia como los otros.
+- **[20:54] Andres Felipe Salazar:** Claro, sí, de hecho,
+- **[20:54] Andres Felipe Salazar:** pues, no sé si, es decir, me imagino que le vamos a hacer como toda
+- **[20:54] Andres Felipe Salazar:** para que tenga como esa integración también a nivel visual, ¿no? O sea, como
+- **[20:54] Andres Felipe Salazar:** el ADN de todo lo que se está construyendo.
+- **[20:54] Andres Felipe Salazar:** Es es bastante, pero hay que hacerlo.
+- **[20:54] Laura Contreras:** O sea, ¿ustedes también van a meter mano en academy? ¿Todo se tiene que ver igual?
+- **[20:54] Laura Contreras:** Manejar la misma
+- **[20:54] Laura Contreras:** Sí, eso está.
+- **[20:54] Andres Felipe Salazar:** Pues,
+- **[20:54] Andres Felipe Salazar:** exacto, eso que estás viendo, pues es precisamente lo que se trabajó con Esteban.
+- **[20:55] Andres Felipe Salazar:** Decirlo así.
+- **[20:55] Jaime Guevara:** Hay que poner eso, obvio.
+- **[20:55] Jaime Guevara:** Decides como que adaptemos el el UI a
+- **[20:55] Jaime Guevara:** a como lo tienen en en el app?
+- **[20:55] Jaime Guevara:** Igual no hay, pues creo que no hay lío, igual nosotros, Wake, digamos, entonces.
+- **[20:55] Andres Felipe Salazar:** Ah, bueno.
+- **[20:55] Jaime Guevara:** No, es breve. Pues
+- **[20:55] Andres Felipe Salazar:** Sí, o sea,
+- **[20:55] Andres Felipe Salazar:** la idea es como que, pues, lo que necesiten de nosotros de una, o sea,
+- **[20:55] Andres Felipe Salazar:** ustedes nos dicen y, pues, no sé,
+- **[20:55] Andres Felipe Salazar:** en equipo, lo que sea, como me digan, como nos digan, está bien.
+- **[20:55] Jaime Guevara:** Te te hago una pregunta ahí
+- **[20:55] Jaime Guevara:** Dipe. Digamos que, supongamos que tenemos el botón ahí,
+- **[20:55] Jaime Guevara:** ese botón va a llevar es a nuestro URL, ¿cierto?, como a nuestro espacio.
+- **[20:55] Jaime Guevara:** ¿Cierto? Es que
+- **[20:55] Andres Felipe Salazar:** eso es que eso es lo que entiendo yo, es
+- **[20:55] Jaime Guevara:** como Sí, sí,
+- **[20:55] Jaime Guevara:** ahí No, está bien.
+- **[20:55] Yo:** Y creo que creo que sería lo ideal para que no tengan que beber
+- **[20:55] Andres Felipe Salazar:** Sí, o es como
+- **[20:55] Jaime Guevara:** Claro.
+- **[20:55] Yo:** todo lo que hay,
+- **[20:55] Yo:** se complique.
+- **[20:55] Jaime Guevara:** Claro, si no sé si si les complica a ustedes
+- **[20:55] Yo:** No sé si
+- **[20:55] Yo:** Sí.
+- **[20:55] Jaime Guevara:** bastante y, pues, la idea es iterar.
+- **[20:56] Jaime Guevara:** Alexandy, perdón, te te interrumpí, que
+- **[20:56] Yo:** No, no, sí, tal cual eso, y de pronto nosotros lo que sí podemos hacer
+- **[20:56] Yo:** es un un un botón acceso para devolvernos a la a la principal.
+- **[20:56] Jaime Guevara:** Exacto.
+- **[20:56] Yo:** O sea, el URL, pero igual para no perder un poco el flujo,
+- **[20:56] Yo:** dejamos un botón de home o algo parecido, y que vuelva el centro
+- **[20:56] Yo:** al centro de la aplicación para que siga navegando.
+- **[20:56] Yo:** No sé cómo lo vayan.
+- **[20:56] Jaime Guevara:** Y y ahí te iba a decir
+- **[20:56] Jaime Guevara:** Felipe, Felipe,
+- **[20:56] Jaime Guevara:** de pronto en esa URL, o sea,
+- **[20:56] Jaime Guevara:** no sé qué implicaciones de seguridad tengan, creo, no sé,
+- **[20:56] Jaime Guevara:** tocaría preguntar. Pero si me puedes mandar
+- **[20:56] Jaime Guevara:** si en la URL en el botón, o sea, cuando den clic en el botón,
+- **[20:56] Jaime Guevara:** en la URL nos pueden mandar como el el nombre y el teléfono nosotros loguearlo y nosotros
+- **[20:56] Jaime Guevara:** también trackear, porque nuestra idea es trackear las personas que
+- **[20:56] Jaime Guevara:** que usan, pues, las herramientas. Por ejemplo, Jaime con el teléfono tal, tal, tal, utilizó x herramientas.
+- **[20:57] Andres Felipe Salazar:** Claro.
+- **[20:57] Andres Felipe Salazar:** Ah, pues muy interesante. Pues,
+- **[20:57] Andres Felipe Salazar:** Charles, ¿cómo crees que lo podríamos manejar entonces
+- **[20:57] Andres Felipe Salazar:** como para segmentar esa información, así como lo está diciendo Jaime?
+- **[20:57] Jaime Guevara:** O encriptada y la desencriptando.
+- **[20:57] Carlos Diaz:** Sí, pues igual tocaría, de pronto, hablar con Dina Sierra porque, pues igual el tema de seguridad
+- **[20:57] Carlos Diaz:** se ha ampliado muchísimo y el manejo de envío de datos
+- **[20:57] Carlos Diaz:** está siendo complicado, de hecho, está siendo muy restringido.
+- **[20:57] Carlos Diaz:** Ni siquiera internamente entre la app nos nos estamos enviando
+- **[20:57] Carlos Diaz:** porque, pues fueron recomendaciones de ellos mismos,
+- **[20:57] Carlos Diaz:** que
+- **[20:57] Jaime Guevara:** sería
+- **[20:57] Carlos Diaz:** hablarlo con ella, ver qué opciones tenemos para hacer ese ese cruce,
+- **[20:57] Carlos Diaz:** y ver cómo cómo podemos
+- **[20:57] Carlos Diaz:** sí, hacer el envío de esa info para que no se pierda tampoco conexión y que se
+- **[20:57] Carlos Diaz:** que volver a loguear y y aumentarle como, digamos, flujo al
+- **[20:57] Carlos Diaz:** al usuario, porque, igual
+- **[20:57] Jaime Guevara:** se vuelve
+- **[20:57] Carlos Diaz:** tedioso.
+- **[20:57] Carlos Diaz:** Pero sí, sería sería preguntarlo y ver cómo podemos implementar ese tema.
+- **[20:58] Jaime Guevara:** De una, en el peor de los estados, el peor de los estados, yo creo que nos puedes mandar un ID
+- **[20:58] Jaime Guevara:** registramos, y después ya después que se acabe el evento, ya podemos es
+- **[20:58] Jaime Guevara:** cruzar con la tabla de ustedes el ID, ahí ya tenemos los datos.
+- **[20:58] Jaime Guevara:** Creería
+- **[20:58] Andres Felipe Salazar:** yo.
+- **[20:58] Jaime Guevara:** Pero bueno Sí,
+- **[20:58] Carlos Diaz:** sí, también. De hecho de hecho, lo podríamos
+- **[20:58] Carlos Diaz:** sería más sencillo y volvamos a validémoslo primero con Diana, porque
+- **[20:58] Carlos Diaz:** sería, de pronto, más más fácil si ya de por sí trae la data correcta.
+- **[20:58] Carlos Diaz:** Pero, como dices, sí podemos hacer envío del ID, por medio del ID luego
+- **[20:58] Carlos Diaz:** cruzamos datos, también sería fácil, pero, pues, miramos a ver si se puede hacer el flujo de una vez.
+- **[20:58] Laura Contreras:** Listo.
+- **[20:58] Laura Contreras:** Bueno, no, Pipe, Carlos, no sé,
+- **[20:58] Laura Contreras:** en qué momento, entonces, podemos hacer un checkpoint como de
+- **[20:58] Laura Contreras:** si nuestra islita fue creada, ustedes necesitan un nombre, nosotros con qué recursos podemos contar para hacer el tema como de la transformación del UI de la app que tenemos de este lado y que se vea muy similar a lo que ustedes tienen de ese lado.
+- **[20:59] Laura Contreras:** ¿Cómo serían los las siguientes accionables?
+- **[20:59] Andres Felipe Salazar:** Pues mira, yo esto queda como grupo de chat,
+- **[20:59] Andres Felipe Salazar:** si no si no estoy mal,
+- **[20:59] Laura Contreras:** Yo
+- **[20:59] Andres Felipe Salazar:** creo
+- **[20:59] Laura Contreras:** que chats, pues,
+- **[20:59] Andres Felipe Salazar:** básicamente como que
+- **[20:59] Laura Contreras:** hagamos
+- **[20:59] Andres Felipe Salazar:** como
+- **[20:59] Andres Felipe Salazar:** como un update
+- **[20:59] Laura Contreras:** de
+- **[20:59] Andres Felipe Salazar:** en qué estamos,
+- **[20:59] Andres Felipe Salazar:** qué se necesita de ellos
+- **[20:59] Laura Contreras:** y de nosotros,
+- **[20:59] Andres Felipe Salazar:** y nos vamos hablando por el grupo y vamos trabajando así como en equipo, o sea, como
+- **[20:59] Laura Contreras:** que
+- **[20:59] Andres Felipe Salazar:** Porque yo también entiendo que, pues, esto básicamente
+- **[20:59] Andres Felipe Salazar:** se necesita hacer pruebas,
+- **[20:59] Andres Felipe Salazar:** ya estamos como un poquitico ya más cerca del del evento. Entonces,
+- **[20:59] Andres Felipe Salazar:** pues, ¿les parece si por el grupo vamos dejando, entonces, todo?
+- **[20:59] Yo:** Listo, perfecto.
+- **[20:59] Andres Felipe Salazar:** Ok, listo.
+- **[21:00] Andres Felipe Salazar:** Entonces, pues
+- **[21:00] Laura Contreras:** De una, muchísimas gracias.
+- **[21:00] Andres Felipe Salazar:** No, gracias a ustedes, de una, todo bien. Entonces, pues cualquier cosa escriben por ahí.
+- **[21:00] Andres Felipe Salazar:** Estamos muy pendientes.
+- **[21:00] Yo:** Gracias.
+- **[21:00] Jaime Guevara:** Gracias. Chau.
+- **[21:00] Laura Contreras:** De una.
+- **[21:00] Carlos Diaz:** Todo bien. Chau,
+- **[21:00] Andres Felipe Salazar:** chau, chau.

@@ -1,0 +1,896 @@
+# Prototipo Jaime
+
+- **ID:** `not_22KMUfy0zg9eCs`
+- **Fecha:** 2026-08-31T16:33:02.935Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/0979bca1-0427-4c48-88fe-2bad336bf5cc)
+- **Asistentes:** Santiago Herrera Acosta
+
+---
+
+## Resumen de la Reunión
+# Hipótesis: Catálogo como Oportunidades Accionables
+
+- Problema central: el dropshipper busca productos por fuera de Dropi; el catálogo no funciona como fuente de decisión
+- Tesis revisada: no dar más visibilidad al catálogo, sino convertirlo en oportunidades accionables
+- Insight clave: suppliers con catálogo grande tienen foco real en una gama pequeña
+- El novato se agobia con catálogos infinitos; líderes de comunidad ya recomiendan “escoge tres y pruébalos”
+
+# Prototipo Tinder de Selección de Productos
+
+- Interfaz tipo Tinder: el dropshipper ve productos uno a uno y decide si le interesa o no
+- Métricas que habilita:
+  - Cuántas veces el usuario vuelve a la app (señal de abandono)
+  - Productos guardados por usuario (actualmente no existe en Dropi)
+  - Cuáles considera para testear, y en qué grupos
+- Flujo propuesto:
+  1. Usuario navega y guarda productos (“por probar”)
+  2. De los guardados, selecciona al menos tres para iniciar testeo
+  3. Dropi acompaña el proceso hasta que tome la decisión de iterar
+- Pregunta abierta: ¿armar un set es obligatorio o se puede iterar de forma individual?
+  - Jaime: se puede tirar individual; el diseño de ese paso aún no está definido
+
+# Algoritmo de Recomendación
+
+- Objetivo: recomendar productos con mayor probabilidad de venta para novatos, no mostrar catálogo completo
+- Fuentes del algoritmo (tres capas):
+  1. Data transaccional de Dropi: productos que más se han vendido (top de \~30K IDs activos de \~1M)
+  2. Reviews de dropshippers novatos (0-100 órdenes): cuánto invirtieron en pauta, qué tan fácil fue vender, tiempos de entrega, ciudades
+  3. Señales de suppliers: qué productos quieren mover (con sesgo conocido: pueden querer evacuar stock estancado)
+- Experimento A/B propuesto:
+  - Modelo 1: sin influencia de suppliers (solo data + reviews de novatos)
+  - Modelo 2: con influencia de suppliers
+  - Métricas de comparación: productos guardados, selecciones “por probar”, tasa de entrega, órdenes generadas
+- Señales del catálogo también retroalimentan al supplier:
+  - Ej: “el 90% de novatos prefiere bebés, pero usted tiene 80% en hogar; consiga más catálogo de bebés”
+- Riesgo de data: ventas muy concentradas en pocos productos; la data puede quedar sesgada
+  - Mitigación: cruzar con reviews de novatos y señal de suppliers como capas adicionales
+
+# Próximos Pasos
+
+- Prioridad inmediata: cerrar layers de Gali antes del miércoles 9 de septiembre (sin tocar más después de esa tarde)
+- Retomar esta conversación después del evento Expo Winners (jueves/viernes de la semana siguiente)
+- Santiago seguirá revisando investigación de Gali y compartirá si encuentra algo relevante
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/3c6a7344-a011-4ff8-a327-26b5a3f5e520](https://notes.granola.ai/t/3c6a7344-a011-4ff8-a327-26b5a3f5e520)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[16:33] Yo:** Buenas
+- **[16:33] Jaime Guevara:** Entonces, bien, ok.
+- **[16:33] Yo:** ¿Todo bien,
+- **[16:33] Jaime Guevara:** ¿O
+- **[16:33] Yo:** Dímelo.
+- **[16:33] Jaime Guevara:** Bueno. Vientos, vientos.
+- **[16:34] Yo:** Super.
+- **[16:34] Jaime Guevara:** Tengo una hipótesis.
+- **[16:34] Jaime Guevara:** Que es construir el fin de semana.
+- **[16:34] Jaime Guevara:** La hipótesis... Espérame, ya te muestro.
+- **[16:34] Jaime Guevara:** De qué
+- **[16:34] Participante:** ¿Tengo
+- **[16:34] Participante:** Listo, y ya.
+- **[16:34] Jaime Guevara:** Nosotros estamos trabajando al lado del sub player, pues con Mitch. Todas las aseguranzas. En catálogo.
+- **[16:34] Jaime Guevara:** ¿Cierto?, en cómo el catálogo de verdad sirve
+- **[16:34] Jaime Guevara:** para que el dropshipper tome la decisión, porque ahorita lo que está pasando es
+- **[16:35] Jaime Guevara:** el dropshipper busca por fuera y y llegas a buscar el catálogo, pero el catálogo como una fuente de
+- **[16:35] Jaime Guevara:** de decisión, digamos que no tenemos métricas que sí sea una fuente de decisión.
+- **[16:35] Yo:** Sí.
+- **[16:35] Jaime Guevara:** Entonces,
+- **[16:35] Yo:** Sí.
+- **[16:35] Jaime Guevara:** Entonces,
+- **[16:35] Jaime Guevara:** seguramente ya dentro de eso encontramos unas tesis, o bueno, nos hicimos unas tesis.
+- **[16:35] Jaime Guevara:** Para nosotros como suppliers es
+- **[16:35] Jaime Guevara:** dar más... La tesis cambia de dar más visibilidad, porque ahorita la estábamos
+- **[16:35] Jaime Guevara:** como en
+- **[16:35] Jaime Guevara:** queremos darle más visibilidad al catálogo de los de los subplayers, pero en los ejercicios que hicimos de pulso y de campañas, eso esos resultados hicieron cambiar la perspectiva a no hacer solo visibilidad, porque, pues, no sirve nada mostrar todo el catálogo, sino que un
+- **[16:35] Jaime Guevara:** convertir el catálogo en oportunidades accionables.
+- **[16:35] Jaime Guevara:** Así sean pocos, o sea, porque hay suppliers que tienen como
+- **[16:36] Jaime Guevara:** mil, dos mil productos,
+- **[16:36] Jaime Guevara:** pero generalmente su enfoque está en una gama muy pequeña.
+- **[16:36] Jaime Guevara:** Entonces,
+- **[16:36] Jaime Guevara:** aquí está el problema
+- **[16:36] Jaime Guevara:** puede tener mucho catálogo, pero el seller novato, sea, y bueno, y del lado del
+- **[16:36] Jaime Guevara:** del que aquí es donde nos integramos con vos,
+- **[16:36] Jaime Guevara:** Dame un segundito que llego al rápido. Ya vengo.
+- **[16:37] Yo:** Yes.
+- **[16:42] Yo:** Ya
+- **[16:43] Jaime Guevara:** Hola, hola. Hola, hola. ¿Estás ahí?
+- **[16:43] Jaime Guevara:** Espera?
+- **[16:43] Yo:** Sí, sí, dale, dale,
+- **[16:43] Jaime Guevara:** Listo, entonces, Bueno. Entonces, íbamos con la tesis, que es
+- **[16:43] Jaime Guevara:** que el novato se nos agobia. Y aquí, pues, esta tesis la tengo yo desde acá, pero
+- **[16:43] Jaime Guevara:** la idea es como
+- **[16:43] Jaime Guevara:** como aliarla con vos.
+- **[16:43] Jaime Guevara:** De seleccionar pocos productos por sesión
+- **[16:43] Jaime Guevara:** para sellers y operar por excepciones para
+- **[16:43] Jaime Guevara:** suppliers con catálogo grande. O sea, los suppliers con catálogo grande
+- **[16:43] Jaime Guevara:** para nosotros vamos a hacer una estrategia de que solo se enfoquen en
+- **[16:43] Jaime Guevara:** el catálogo de verdad quieren mover, o sea, como el que el que quieren el catálogo de oportunidades.
+- **[16:43] Jaime Guevara:** Y para el seller novato,
+- **[16:44] Jaime Guevara:** no agobiarlo con un catálogo muy grande. Igual también investigué y no es
+- **[16:44] Jaime Guevara:** no no hay una métrica que diga que
+- **[16:44] Jaime Guevara:** un catálogo más pequeño
+- **[16:44] Jaime Guevara:** Oye,
+- **[16:44] Jaime Guevara:** Oye, estaban hablando
+- **[16:44] Yo:** Que te escucho un poquito ruido al
+- **[16:44] Jaime Guevara:** No existe como
+- **[16:44] Jaime Guevara:** ¿No existe como como que
+- **[16:44] Jaime Guevara:** un resumen, un un como una conclusión de que
+- **[16:44] Jaime Guevara:** si le damos menos productos va a tener menos agobio.
+- **[16:44] Jaime Guevara:** Pero es una hipótesis.
+- **[16:44] Jaime Guevara:** Bueno, sigamos por acá.
+- **[16:44] Jaime Guevara:** Su subset tiene dos tensiones simultáneas.
+- **[16:44] Jaime Guevara:** Activación y confiabilidad. Lo que ya sabemos, el proveedor está al día de estratégico, usuario y su
+- **[16:44] Jaime Guevara:** o cumplimiento fallan, fallan el ecosistema. El reto no es solo publicar
+- **[16:45] Jaime Guevara:** es que ese catálogo venda, cumpla y crezca.
+- **[16:45] Jaime Guevara:** Bueno, más o menos, basado en esto,
+- **[16:45] Jaime Guevara:** Mire, vamos a ver. Basado en esto, nuestra hipótesis del serer novato es que no necesita un catálogo infinito, necesita llegar de manera guía a tres productos.
+- **[16:45] Jaime Guevara:** Que pueda probar, que eso es lo que más o menos
+- **[16:45] Jaime Guevara:** hemos estado viendo en los líderes de comunidad, que les dicen, venga, seleccione tres y pruebe esos tres.
+- **[16:45] Jaime Guevara:** Queremos llegar como como a ese tema.
+- **[16:45] Jaime Guevara:** Bueno,
+- **[16:45] Jaime Guevara:** El tema,
+- **[16:45] Jaime Guevara:** que te quería decir es, bueno,
+- **[16:45] Jaime Guevara:** nosotros actualmente no tenemos la manera de
+- **[16:45] Jaime Guevara:** medir como todo ese journey o como todo ese
+- **[16:45] Jaime Guevara:** ese proceso del
+- **[16:45] Jaime Guevara:** del dropshipping, para saber en qué punto se nos está quedando. Entonces,
+- **[16:45] Jaime Guevara:** diseñé un prototipo
+- **[16:45] Jaime Guevara:** y ya te lo muestro, donde, en ese prototipo,
+- **[16:46] Jaime Guevara:** pensémoslo simplemente como un prototipo, no es como la última
+- **[16:46] Jaime Guevara:** como como lo que lo que
+- **[16:46] Jaime Guevara:** Ese prototipo simplemente es como para tener una
+- **[16:46] Yo:** Sí, está solamente con el wireframe ahí, como para
+- **[16:46] Jaime Guevara:** un
+- **[16:46] Yo:** tener algo sobre qué
+- **[16:46] Yo:** dibujar. O sea, estás estás dibujando esa
+- **[16:46] Jaime Guevara:** algo así.
+- **[16:46] Yo:** Ajá.
+- **[16:46] Jaime Guevara:** Pillado.
+- **[16:46] Jaime Guevara:** Funciona... Ah, acá tengo todo ese mostrando.
+- **[16:46] Jaime Guevara:** Y ya te digo qué qué qué preguntas responde.
+- **[16:46] Jaime Guevara:** Más bien. Está, el prototipo está hecho para responder preguntas.
+- **[16:46] Jaime Guevara:** Entonces,
+- **[16:46] Jaime Guevara:** la idea es que aquí la persona
+- **[16:46] Jaime Guevara:** decida si le interesa o no le interesa el producto.
+- **[16:46] Jaime Guevara:** ¿Cierto? Entonces, bueno,
+- **[16:46] Jaime Guevara:** ¿qué preguntas me responde aquí este
+- **[16:46] Jaime Guevara:** Es como un Tinder.
+- **[16:46] Jaime Guevara:** Entonces,
+- **[16:46] Jaime Guevara:** ¿qué me responde aquí? Uno, que yo puedo medir
+- **[16:46] Jaime Guevara:** cuántas veces la persona vuelve a entrar a la aplicación.
+- **[16:47] Jaime Guevara:** Ejemplo, en este momento, en Dropi,
+- **[16:47] Jaime Guevara:** podemos medir cuántas veces entra a ver el catálogo pero no puede hacer ninguna acción, y puede que entre una, dos, tres veces,
+- **[16:47] Jaime Guevara:** Y si ya sabemos que entró tres, si es novato, nuevo,
+- **[16:47] Jaime Guevara:** entró tres veces, ya sabemos que esa persona se fue, o sea, no vuelve.
+- **[16:47] Jaime Guevara:** O tiene que pasar mucho, bueno, hay muchas cosas que pueden pasar alrededor, pero no no
+- **[16:47] Jaime Guevara:** tenemos como control de eso. Entonces, ¿qué responde esto?
+- **[16:47] Jaime Guevara:** Responde, entra,
+- **[16:47] Jaime Guevara:** hace una acción.
+- **[16:47] Jaime Guevara:** En este caso, ¿cuál va a ser la acción? Veo este producto y dice, sí, me parece bueno.
+- **[16:47] Jaime Guevara:** Tiene costo, ta ta ta.
+- **[16:47] Jaime Guevara:** Me dice aquí un poco cierta información.
+- **[16:47] Jaime Guevara:** Aunque me dice que cuarenta y nueve por ciento,
+- **[16:47] Jaime Guevara:** como que este no está muy bien, pero a mí me gusta, podría venderlo.
+- **[16:47] Jaime Guevara:** Vamos a seguir viendo, bueno. Y así me va diciendo,
+- **[16:47] Jaime Guevara:** como ya lo estoy escuchando, por ejemplo, aquí ya
+- **[16:47] Jaime Guevara:** este usuario ya tiene siete
+- **[16:47] Jaime Guevara:** posibles productos que le ha gustado. Entonces,
+- **[16:48] Jaime Guevara:** eso no lo tenemos actualmente en dropping. ¿A qué responde esto? Responde a que
+- **[16:48] Jaime Guevara:** nosotros ya sabemos que el usuario ha guardado
+- **[16:48] Jaime Guevara:** está interesado en siete productos.
+- **[16:48] Jaime Guevara:** Y eso lo podemos iterar, podemos mandarle un mensaje, podemos, entonces, ya estamos escuchando al usuario.
+- **[16:48] Jaime Guevara:** Ahí,
+- **[16:48] Jaime Guevara:** acá podemos saber
+- **[16:48] Jaime Guevara:** cuáles son esos productos que el usuario ha guardado. Entonces, eso nos da métrica a nosotros el catálogo.
+- **[16:48] Jaime Guevara:** Porque esto todo nos salió, nació, pues, del lado del catálogo.
+- **[16:48] Jaime Guevara:** También podemos saber
+- **[16:48] Jaime Guevara:** de esos,
+- **[16:48] Jaime Guevara:** que él ha guardado, como que le interese, que nosotros le hemos pucheado para que él
+- **[16:48] Jaime Guevara:** para que él intente, sabemos que él ya dijo como, por ejemplo,
+- **[16:48] Jaime Guevara:** estos dos me interesan para testearlos.
+- **[16:48] Jaime Guevara:** En un grupo, y también estos dos me interesan, estos tres me interesa
+- **[16:48] Jaime Guevara:** para un grupo. Entonces, ya también tenemos una métrica de cuáles son los que él considera que puede testear en grupos.
+- **[16:48] Jaime Guevara:** Y toda esta información le puede dar
+- **[16:49] Jaime Guevara:** a mí su player,
+- **[16:49] Jaime Guevara:** nuestros suppliers, información sobre qué tan relevante está haciendo
+- **[16:49] Jaime Guevara:** ese catálogo de oportunidad y qué tan relevante no. Entonces, nos responden
+- **[16:49] Jaime Guevara:** varias preguntas. Este este prototipo, o bueno, o esta hipótesis,
+- **[16:49] Jaime Guevara:** estuviera en el mercado, nos responden varias
+- **[16:49] Jaime Guevara:** preguntas que podemos, con las cuales podemos ayudar al supplier
+- **[16:49] Jaime Guevara:** a
+- **[16:49] Jaime Guevara:** tomar, pues, dropshipper a tomar la decisión de continuar
+- **[16:49] Jaime Guevara:** o, bueno, o o sí, o seguir, por ejemplo, aquí, ya otra vez vuelve a
+- **[16:49] Jaime Guevara:** porque ya seleccioné tres.
+- **[16:49] Jaime Guevara:** Él lo que me dice acá es, o la hipótesis es,
+- **[16:49] Jaime Guevara:** selecciona tres, si si ya tienes diez vistos,
+- **[16:49] Jaime Guevara:** que te gustan, selecciona tres para iterarlos.
+- **[16:49] Jaime Guevara:** Y continúa, y continúa, y continúa. Y así nosotros podemos
+- **[16:49] Jaime Guevara:** sabemos en qué momento del proceso de selección está el dropshipper,
+- **[16:49] Jaime Guevara:** para nosotros hacerle push y lograr acompañarlo hasta que tome la decisión
+- **[16:50] Jaime Guevara:** de iterarlo. Lo mismo, también adicional aquí, yo creo que
+- **[16:50] Jaime Guevara:** podría ayudar en el proceso de
+- **[16:50] Jaime Guevara:** Ay, no, se me olvidó lo que iba a hacer. Pero, bueno, listo. Nada, ¿cómo lo ves?
+- **[16:50] Yo:** Estaba estaba hablando de
+- **[16:50] Yo:** Me gusta el concepto hacia hacia la usabilidad,
+- **[16:50] Yo:** hacia quien
+- **[16:50] Yo:** inicialmente,
+- **[16:50] Yo:** te le digo desde desde
+- **[16:50] Yo:** pues, de una posición más más
+- **[16:50] Yo:** más de
+- **[16:50] Yo:** Apenas estoy arrancando, quiero entender, ¿cierto?
+- **[16:50] Yo:** Siento que mi propósito hacia
+- **[16:50] Yo:** nosotros
+- **[16:50] Yo:** o sea, siento que nos da más
+- **[16:50] Yo:** valor a nosotros como drop y que al usuario.
+- **[16:50] Yo:** ¿Sí?
+- **[16:50] Yo:** Porque
+- **[16:51] Yo:** con el concepto de que sea Tinder,
+- **[16:51] Yo:** tipo Tinder en cuanto a a
+- **[16:51] Yo:** a un poco la la la la interacción, ¿no?, con con la herramienta.
+- **[16:51] Yo:** Veo que el mocking inclusive se montó un poco más hacia, por lo que estuviera sobre el app
+- **[16:51] Yo:** no que esté sobre la web o que pueden estar en la web.
+- **[16:51] Yo:** Siento que eso funciona bien, pero me me me
+- **[16:51] Yo:** perdí un poco
+- **[16:51] Yo:** o sea, al final de producto te entiendo el concepto, pero me pierdo como usuario un poco
+- **[16:51] Yo:** cuando ya empiezas
+- **[16:51] Yo:** a agregarle, o no sé si esa es la intención y y
+- **[16:51] Yo:** y ahí devuélvete, agregarle esas capas ya de
+- **[16:51] Yo:** que seleccionas en grupos,
+- **[16:51] Yo:** tienes varios, y entonces los iteras, y entonces ahí
+- **[16:51] Yo:** yo ya me habría churneado.
+- **[16:51] Yo:** ¿Sí? Más porque siento que
+- **[16:51] Yo:** no sé si es porque me lo contaste como como que en
+- **[16:51] Yo:** en en en una sola línea, ¿cierto?, entender todo el proyecto.
+- **[16:51] Yo:** Y no sé si, de pronto, dentro de esos hay espacios o tiempos
+- **[16:51] Yo:** llámale,
+- **[16:51] Yo:** tiempos que que
+- **[16:52] Yo:** digamos
+- **[16:52] Yo:** esperan de algún trigger, ¿no? Entonces, selección, digamos, pasa esto,
+- **[16:52] Yo:** y y te empiezo como a preguntar, pasa esto, ¿no?, yo seleccionó, digamos, esa ese
+- **[16:52] Yo:** champú, ¿cierto?
+- **[16:52] Yo:** Yo lo guardo.
+- **[16:52] Yo:** ¿Verdad? Cuando lo guardo, me queda en, por probar, ¿sí?
+- **[16:52] Yo:** Así?
+- **[16:52] Yo:** Dime.
+- **[16:52] Jaime Guevara:** Sí, sí, perdón, te comento.
+- **[16:52] Yo:** Listo.
+- **[16:52] Yo:** Entonces, ahí pasa por probar. ¿Puedes ir, por
+- **[16:52] Participante:** Ok,
+- **[16:52] Yo:** algo.
+- **[16:52] Yo:** A ver si yo entendí bien el flujo.
+- **[16:52] Yo:** Cuando ya vas a ver los que guardaste,
+- **[16:52] Yo:** entonces vas a ir a por probar. Ahí están por probar, Eva.
+- **[16:52] Yo:** Y, entonces,
+- **[16:52] Yo:** ahí tienes
+- **[16:52] Yo:** sets en curso,
+- **[16:52] Yo:** ¿verdad?
+- **[16:52] Yo:** Y
+- **[16:52] Yo:** lo que, ahí fue donde yo dije, ya como un usuario nuevo,
+- **[16:52] Yo:** de pronto puede ser simplemente tema de copies o de llevar un poco más,
+- **[16:52] Yo:** pero tienes los productos, supongamos que todavía no hay sets,
+- **[16:52] Yo:** ¿verdad?
+- **[16:52] Yo:** Porque ahí entra el concepto de
+- **[16:52] Yo:** producto
+- **[16:52] Yo:** set
+- **[16:52] Yo:** iteración,
+- **[16:53] Yo:** ¿Qué más hay?
+- **[16:53] Yo:** Set
+- **[16:53] Yo:** No, sí, eso, se sueltan eso, ¿cierto?, como conceptos.
+- **[16:53] Yo:** Y entiendo que unas agrupan otras y otras son fases de la agrupación.
+- **[16:53] Yo:** ¿Sí estoy entendiéndote bien?
+- **[16:53] Participante:** Ahí ya quedó.
+- **[16:53] Jaime Guevara:** Sí, digamos que allí, mire, veamos lo de, sí, totalmente.
+- **[16:53] Jaime Guevara:** Aquí está, digamos, que seleccionaste todos estos trece. Listo.
+- **[16:53] Yo:** Sí.
+- **[16:53] Yo:** Y, entonces, cuando seleccionas
+- **[16:53] Jaime Guevara:** Ajá.
+- **[16:53] Yo:** Bueno, ok, esos están por probar. Entonces, ahí tienes un check
+- **[16:53] Yo:** que vas a seleccionar dos.
+- **[16:53] Yo:** Supongamos.
+- **[16:53] Yo:** Yo tengo que armar un set antes de
+- **[16:53] Yo:** que
+- **[16:53] Yo:** O sea, ¿tengo que armar armar un set es un paso obligatorio o yo puedo continuar?
+- **[16:53] Yo:** Iterando
+- **[16:53] Yo:** de forma individual.
+- **[16:53] Jaime Guevara:** Podés tirar de forma individual,
+- **[16:53] Jaime Guevara:** o sea,
+- **[16:53] Jaime Guevara:** lo que pasa es que no quiero irme a la a la, o sea, eso eso ya es del diseño, pero
+- **[16:53] Jaime Guevara:** pero te entiendo. No no, la verdad es que no he iterado hasta tan allá, o sea, no
+- **[16:53] Yo:** Porque mira,
+- **[16:54] Jaime Guevara:** no...
+- **[16:54] Yo:** Porque mira mira que yo había pensado
+- **[16:54] Jaime Guevara:** Pero pero pero mirémoslo en el concepto, ¿sí?
+- **[16:54] Yo:** pensado desde afuera James, había pensado desde afuera, sino que no me había metido hasta allá porque, pues,
+- **[16:54] Jaime Guevara:** Sí.
+- **[16:54] Yo:** tratando de respetar un poco lo de catálogo y, pues, porque estoy en lo todo lo de
+- **[16:54] Yo:** Pero yo la otra vez me me quedé pensando, de hecho, en algo como Tinder, ¿no?
+- **[16:54] Yo:** Más más porque estamos pensando en que para móvil
+- **[16:54] Yo:** fuera muy concepto de swipe, ¿no?
+- **[16:54] Yo:** Pero pensando en eso, dije, ¿cómo aplicamos
+- **[16:54] Yo:** Inclusive, empecé mal desde la desde la ideación, porque empecé, bueno,
+- **[16:54] Yo:** ¿cómo podríamos extrapolar ese concepto a algo que nos funciona a nosotros más por
+- **[16:54] Yo:** Porque, pues, igual, de alguna forma, tienen un stickiness fuerte, ¿no?
+- **[16:54] Yo:** Como de
+- **[16:54] Jaime Guevara:** Uh-huh.
+- **[16:54] Yo:** solamente por hacer one la gente le gusta, o sea,
+- **[16:54] Yo:** sí, no, sí, no, sí.
+- **[16:54] Yo:** Está eso.
+- **[16:54] Jaime Guevara:** Sí, obvio.
+- **[16:54] Yo:** Pero entonces yo dije, bueno, ¿cómo cómo se podría llevar eso ahora?, y pensé en catálogo.
+- **[16:54] Yo:** Pero no no lo pensé cómo le estás poniendo ahí,
+- **[16:54] Yo:** porque dije, ¿cómo hago que eso le ayude? Lo mismo, ahí sí, pensando para para shippers novatos.
+- **[16:54] Yo:** Y es algo similar hasta un punto donde lo tienes, y yo le lo lo lo que
+- **[16:55] Yo:** me vino a la cabeza fue como, bueno, ¿qué tal si
+- **[16:55] Yo:** Yo como
+- **[16:55] Yo:** o sea, yo, hay hay hay creo que les la vas mostrando,
+- **[16:55] Yo:** parten
+- **[16:55] Yo:** de
+- **[16:55] Yo:** un catálogo que los suppliers
+- **[16:55] Yo:** digamos, priorizaron.
+- **[16:55] Participante:** Correcto.
+- **[16:55] Yo:** ¿Correcto?
+- **[16:55] Yo:** Es lo que más quieren vender.
+- **[16:55] Yo:** ¿Correcto?
+- **[16:55] Yo:** Pero
+- **[16:55] Yo:** ahí yo tendría una una
+- **[16:55] Yo:** ahí ya se me hacían preguntas más hacia investigación, y es como,
+- **[16:55] Yo:** lo que los suppliers quieren vender
+- **[16:55] Yo:** es lo mismo que van a querer
+- **[16:55] Yo:** los dropshippers,
+- **[16:55] Yo:** qué va la pregunta?
+- **[16:55] Yo:** ¿Cuáles son las motivaciones que mueven aquí un
+- **[16:55] Yo:** player ponga un producto ahí? Porque
+- **[16:55] Yo:** darte un ejemplo de, no, pues, es que yo quiero
+- **[16:55] Yo:** que
+- **[16:55] Yo:** droppy me ayude a evacuar todo ese inventario estancado que tengo ahí. Supongamos. Es una... Otra, sí puede ser, claro, se me vende superbién aquí, en el local, entonces, quiero que o en algo, o con mis otros compradores, entonces, que dropice un canal.
+- **[16:56] Yo:** Pero puede pasar el escenario negativo en donde dice, no, es yo quiero salirme de todo ese
+- **[16:56] Yo:** que compré y nada que se vende.
+- **[16:56] Yo:** ¿Verdad?
+- **[16:56] Yo:** Es decir, que la motivación es diferente, y eso quiere decir que es un producto que no es
+- **[16:56] Yo:** tan, no tiene tan buena salida.
+- **[16:56] Yo:** Aparentemente. Estoy partiendo de un escenario
+- **[16:56] Yo:** negativo,
+- **[16:56] Yo:** Pero
+- **[16:56] Yo:** ¿Eso no qué eso no fuiste vos?
+- **[16:56] Jaime Guevara:** Sì sì sì. Beni, no no,
+- **[16:56] Yo:** Es que no,
+- **[16:56] Jaime Guevara:** pará yo un momentico, puedes sostener la idea siguiente un momentico mientras esperamos esa
+- **[16:56] Jaime Guevara:** eso que dijiste.
+- **[16:56] Jaime Guevara:** Total,
+- **[16:56] Jaime Guevara:** digamos que el
+- **[16:56] Jaime Guevara:** el el el ejercicio que hicimos de pulso,
+- **[16:56] Jaime Guevara:** nació de esa concepto, de esa hipótesis de que la gente quiere salir de un catálogo pegado.
+- **[16:56] Jaime Guevara:** Pero en el proceso,
+- **[16:57] Jaime Guevara:** nos dimos cuenta,
+- **[16:57] Jaime Guevara:** que también existen
+- **[16:57] Jaime Guevara:** por ejemplo, yo, como supplier,
+- **[16:57] Jaime Guevara:** tengo
+- **[16:57] Jaime Guevara:** tengo una
+- **[16:57] Jaime Guevara:** un un proveedor
+- **[16:57] Jaime Guevara:** de importación que me vende cierto producto,
+- **[16:57] Jaime Guevara:** muy barato y que tengo una ventaja competitiva.
+- **[16:57] Jaime Guevara:** Entonces, yo quiero
+- **[16:57] Jaime Guevara:** darle con toda a ese producto. Entonces, ese
+- **[16:57] Jaime Guevara:** también es una oportunidad que yo quiero que se
+- **[16:57] Jaime Guevara:** que se visibilice más.
+- **[16:57] Jaime Guevara:** Entonces, también dentro de dentro de ese análisis que hicimos,
+- **[16:57] Jaime Guevara:** no solo está el catálogo que que que quiere, cual se quiere deshacer,
+- **[16:57] Jaime Guevara:** sino también del catálogo que él, como proveedor,
+- **[16:57] Jaime Guevara:** sabe que funciona en el mercado y que puede hacer muchas ventas de él.
+- **[16:57] Jaime Guevara:** Hipótesis, obviamente.
+- **[16:57] Yo:** Sí.
+- **[16:57] Yo:** Sí.
+- **[16:58] Jaime Guevara:** Pero ahí ahí ahí vamos.
+- **[16:58] Yo:** Sí, porque porque a mí, bueno, ya para cerrar lo que te estaba diciendo
+- **[16:58] Yo:** que va, es que va va orientado a lo mismo,
+- **[16:58] Yo:** Yo era, ¿cuál es el
+- **[16:58] Yo:** cuál es mi argumento, o yo estoy partiendo de qué?
+- **[16:58] Yo:** Para recomendar, porque de alguna forma es una recomendación, ¿no?,
+- **[16:58] Yo:** cuando yo yo no te pongo el catálogo completo, sino que te voy soltando a poquito, vaya, devolviéndonos a a concepto Tinder, que sería, no sé si ya ya le hiciste el el research, me parecería una putería Salno, y es
+- **[16:58] Yo:** debajo hay un algoritmo,
+- **[16:58] Yo:** de soporte más, ¿no?
+- **[16:58] Yo:** Y ese algoritmo se basa en muchas cosas.
+- **[16:58] Yo:** ¿Sí?
+- **[16:58] Yo:** Nosotros en que quisiéramos se basara nuestro algoritmo,
+- **[16:58] Yo:** O sea, pero nuestro, esa pregunta, tratando de responderla rápido, que eso necesita más desarrollo más
+- **[16:58] Yo:** más profundo, es
+- **[16:58] Yo:** yo debería basarme al algoritmo en poder recomendar
+- **[16:58] Yo:** los productos que mejor se venden.
+- **[16:58] Yo:** ¿Sí?
+- **[16:58] Yo:** Simplificándolo.
+- **[16:59] Jaime Guevara:** Correcto.
+- **[16:59] Yo:** Pero a mí, ¿cuál es la mejor fuente? Entonces, ahí yo empiezo con variables.
+- **[16:59] Yo:** ¿Cuál es la fuente
+- **[16:59] Yo:** que mejor me puede empezar a dar respuesta a cuáles son las
+- **[16:59] Yo:** que mejor me pueden, las variables que mejor me pueden dar respuesta a esa pregunta.
+- **[16:59] Yo:** Realmente, quienes me dicen qué es lo que mejor se vende,
+- **[16:59] Yo:** pues son dos.
+- **[16:59] Yo:** Una, claramente los suppliers, porque son los que mueven el el el el el los productos,
+- **[16:59] Yo:** pero realmente no es ni siquiera preguntarle a suppliers,
+- **[16:59] Yo:** que vámonos a la data, o sea, la data sobre
+- **[16:59] Yo:** el dato mata relato,
+- **[16:59] Yo:** No me diga usted cuál se venden más, yo sé cuáles se venden porque yo soy el que le maneja el proceso logístico a usted.
+- **[16:59] Yo:** ¿Sí? Y por otro lado,
+- **[16:59] Yo:** pensé tal cual lo que estás poniendo ahí,
+- **[16:59] Yo:** pero bueno, no tal cual en cuanto a tan Tinder en ese momento,
+- **[16:59] Yo:** sino que se me vino a la cabeza en su momento que como venga, nosotros
+- **[16:59] Yo:** ¿qué qué hay después?
+- **[16:59] Yo:** ¿Cómo funciona Mercado Libre, Amazon?, todas las que piden reviews.
+- **[16:59] Yo:** ¿No?
+- **[16:59] Yo:** Yo, ¿por qué
+- **[16:59] Jaime Guevara:** Total.
+- **[17:00] Yo:** hay unos dropshippers que están arrancando. Yo podría poner principiante nivel no vende nada,
+- **[17:00] Yo:** no vende
+- **[17:00] Yo:** nada,
+- **[17:00] Yo:** principiante ya
+- **[17:00] Yo:** no sé, ya está entre las diez y las veinte órdenes, veinte ochenta, ochenta, noventa cien, ¿cierto? Pensando, por ejemplo, en ese rango que dijimos de cero a cien órdenes, ¿de acuerdas? ¿Qué pasa si ya los que ya están empezando a vender les empiezo a preguntar ¿por qué a ellos?, porque ellos son los que están apenas cogiendo productos que sirven para alguna primera venta. Si yo le pregunto a alguien que ya vende mil órdenes al mes, pues me va dar otro tipo de productos, seguramente catálogos privados no me va a servir. Que alguien me recomiende sobre el catálogo abierto,
+- **[17:00] Jaime Guevara:** Mhmm.
+- **[17:00] Yo:** ¿qué tal si
+- **[17:00] Yo:** si le pregunto...? Uno, el dato ya está sobre lo, es es más o menos un cruce de información, ¿no?
+- **[17:00] Yo:** Más o menos no, es un cruce de información. Entre lo que ya sea data del supplier, porque yo soy el que le maneja el proceso de
+- **[17:00] Yo:** de la forma,
+- **[17:00] Yo:** una buena parte.
+- **[17:00] Yo:** Por otro lado, le empiezo a preguntar cosas muy puntuales a cada
+- **[17:00] Yo:** que empezó a vender.
+- **[17:01] Yo:** Y ahí empezamos a gamificar más o menos. En donde yo le pregunto,
+- **[17:01] Yo:** cómo le fue con este producto, qué tan fácil fue venderlo y cuánto le invirtió en pauta.
+- **[17:01] Yo:** Más por ahí va, ¿cierto? Preguntas tienen que ser pocas para que haya incentivo respuesta.
+- **[17:01] Yo:** Ahí yo le estoy pidiendo al al usuario que haga una inversión sobre la plataforma.
+- **[17:01] Yo:** ¿Sí?, hace hace el el famoso investments sobre plataforma.
+- **[17:01] Yo:** Pero él él necesita que eso, de alguna forma,
+- **[17:01] Yo:** le genere algún valor.
+- **[17:01] Yo:** Y el valor no va a ser más que yo le diga,
+- **[17:01] Yo:** después de diez calificaciones,
+- **[17:01] Yo:** no sé, un envío gratis,
+- **[17:01] Yo:** o después de diez calificaciones,
+- **[17:01] Yo:** no te cobramos tal,
+- **[17:01] Yo:** te damos créditos en ROAX, o algún incentivo debe haber, ¿no?
+- **[17:01] Yo:** Es más que ayudar.
+- **[17:01] Yo:** O o puedes desbloquear cosas suponiendo que nos fuéramos por el lado de la tienda de
+- **[17:01] Yo:** de ecommerce de drop y la que hemos dicho, la nativa,
+- **[17:01] Yo:** por ejemplo, que a futuro digan, no, pues vas a tener beneficios sobre esto, vas a desbloquear esto,
+- **[17:01] Yo:** Debe un incentivo,
+- **[17:01] Yo:** Y, entonces, lo que yo hago es
+- **[17:01] Yo:** basarme
+- **[17:02] Yo:** en la experiencia de dropshippers que ya están demostrando un patrón de venta y sobre eso yo le puedo, y cruzado con la información de los del del catálogo abierto y de los suppliers, ahí sí le recomiendo. O sea, aquí estoy solamente en la capa, ¿qué qué alimenta el algoritmo?, ¿qué hace a mí me aparezca tigre musical bailarín?
+- **[17:02] Yo:** ¿Sí? Y ya con eso, yo como nuevo dropshipper,
+- **[17:02] Yo:** no voy a ser claramente cómo piensa, pero realmente lo que está pasando por debajo es que dropping me está poniendo ahí sí productos
+- **[17:02] Yo:** sabe que tienen rotación, que se están vendiendo, que están públicos,
+- **[17:02] Yo:** y que dropshippers recientes comenzaron a vender.
+- **[17:02] Yo:** Así lo pensé yo, no he hecho ni miedo, no he hecho prototipos, solamente
+- **[17:02] Yo:** tenía la idea en la cabeza, pero no me metí hasta allá.
+- **[17:02] Yo:** No sé cómo lo ves y sí ya me estoy alejando mucho de lo que tú querías.
+- **[17:02] Jaime Guevara:** No, lite
+- **[17:02] Jaime Guevara:** No, literal, literal que esta también
+- **[17:02] Jaime Guevara:** Lo voy a decir en otras palabras, a ver si le pego.
+- **[17:02] Jaime Guevara:** Esta forma de interactuar
+- **[17:02] Jaime Guevara:** con el catálogo es una excusa para
+- **[17:03] Jaime Guevara:** para, uno, probar esa esa IA o ese algoritmo,
+- **[17:03] Jaime Guevara:** de muestra y para iterarlo, porque también basado en lo que a
+- **[17:03] Jaime Guevara:** le guste, nosotros vamos a tener señales.
+- **[17:03] Yo:** Claro, claro. Y y
+- **[17:03] Jaime Guevara:** Y lo vamos a refinar.
+- **[17:03] Yo:** esa señal la puedes replicar hacia categorías, y luego le puedes decir a las
+- **[17:03] Jaime Guevara:** Exacto.
+- **[17:03] Yo:** venga, usted tiene
+- **[17:03] Yo:** tres categorías.
+- **[17:03] Yo:** Hogar,
+- **[17:03] Yo:** llamémosle limpieza, y bebés.
+- **[17:03] Yo:** Y usted tiene ochenta por ciento en hogar limpieza, pero resulta que, según el algoritmo,
+- **[17:03] Yo:** los dropshippers que se están iniciando
+- **[17:03] Yo:** el noventa por ciento le gusta bebés o o está empezando, le gusta, no, está empezando a vender bebés.
+- **[17:03] Yo:** Vea, vaya y consiga más catálogo de bebés que usted pueda ofrecer más productos le empiecen a mover más el ingreso. Entonces, de por ese lado lo veo. Pero a lo que voy es, entonces, mira que en ese punto solamente estamos en en esta en esta capa que alimenta, o qué me da argumentos para yo decir que el tigre musical bailarín es un es una opción buena para usted, ¿no?
+- **[17:03] Jaime Guevara:** Correcto.
+- **[17:03] Yo:** Y no y no cualquier otra, no un ventilador portátil de escritorio. Yo, es ese, yo avanzo, yo lo guardo, ¿verdad?, ya me queda en por probar. Por probar, significaría que, o sea, el concepto de por probar más que el nombre, o el diseño, eso no. ¿Cuál es mi intención ahí? Ya una vez el usuario llame su atención, ¿qué quiero que haga el usuario después?
+- **[17:04] Participante:** Bueno, la hipótesis es
+- **[17:04] Jaime Guevara:** que es llevarlo en el camino.
+- **[17:04] Jaime Guevara:** Primero selecciona producto,
+- **[17:04] Jaime Guevara:** ahora la intención es
+- **[17:04] Jaime Guevara:** ayudarlo
+- **[17:04] Jaime Guevara:** a que
+- **[17:04] Jaime Guevara:** de todo ese de todos esos productos que que dijo
+- **[17:04] Yo:** Mhmm.
+- **[17:04] Jaime Guevara:** le gustaría
+- **[17:04] Jaime Guevara:** probar para vender,
+- **[17:04] Jaime Guevara:** seleccione al menos tres,
+- **[17:04] Jaime Guevara:** para iniciar un proceso de testeo.
+- **[17:04] Jaime Guevara:** Actualmente, simplemente yo lo selecciono,
+- **[17:05] Jaime Guevara:** y digo, voy a probar estos,
+- **[17:05] Jaime Guevara:** como para hacer, y aquí
+- **[17:05] Yo:** Sí, es es
+- **[17:05] Jaime Guevara:** lo que pasa es que hasta hasta aquí llegué, ¿no?, pero
+- **[17:05] Jaime Guevara:** ¿qué seguiría ahí? El tema de que Dropi te diga, por ejemplo,
+- **[17:05] Jaime Guevara:** si basado, pues, en, no sé, con el mismo algoritmo o con
+- **[17:05] Jaime Guevara:** ChatGPT, los anuncios, cuánto yo tendría que invertir por estos, el etcétera, etcétera. Ajá.
+- **[17:05] Yo:** A eso eso eso se eso se une, creo, con lo que te está diciendo ahora, es
+- **[17:05] Yo:** ya
+- **[17:05] Yo:** no nos iríamos claramente poner una una capa de un
+- **[17:05] Yo:** ahí abajo o alguna data que arrastre y haga un cálculo más preciso, pero
+- **[17:05] Yo:** ahí es donde creo que a nosotros,
+- **[17:05] Yo:** nos sirve un montón la data que saquemos de los dropshippers como
+- **[17:05] Yo:** vendió diez, dígame usted cuánto invirtió en este producto.
+- **[17:05] Yo:** O dígame cuáles fueron las las principales
+- **[17:05] Yo:** bueno, incluso, tendría que preguntar eso, yo sé cuáles son los principales, no sé, ciudades o departamentos donde lo está entregando,
+- **[17:05] Yo:** donde le están comprando.
+- **[17:05] Yo:** Habría un montón de cosas,
+- **[17:05] Yo:** pero como me lo estás
+- **[17:06] Yo:** ahí, yo lo veo muy alineado, de hecho, a lo que quiere Gali. ¿Sí?
+- **[17:06] Jaime Guevara:** Sí, claro.
+- **[17:06] Yo:** Entonces,
+- **[17:06] Yo:** ¿por qué qué...? O sea, porque pensando en en en en en, no sé cuál era mi
+- **[17:06] Yo:** muchos, pero
+- **[17:06] Yo:** hay varias que tienen como una parte que es como
+- **[17:06] Jaime Guevara:** Mhmm.
+- **[17:06] Yo:** descubre,
+- **[17:06] Yo:** como discovery, ¿no?
+- **[17:06] Yo:** Discovery, como el feed, el gran feed de cosas.
+- **[17:06] Yo:** Y en donde hay una aplicación que tiene eso, se me olvidó el nombre.
+- **[17:06] Yo:** De hecho, tengo en la cabeza que sé que he visto varias aplicaciones con el concepto, pero no a mí ni ninguna en la casa.
+- **[17:06] Yo:** Y es,
+- **[17:06] Yo:** es tal cual lo, bueno, como está Gali, ¿cierto?
+- **[17:06] Yo:** ¿Y por qué qué pasaría si en Gali Yo te pongo tres opciones, ¿no?
+- **[17:06] Yo:** Actualmente está el
+- **[17:06] Yo:** no sé qué vender,
+- **[17:06] Yo:** ¿Verdad?
+- **[17:06] Yo:** Y el no sé qué vender está, entonces, te empieza a preguntar, o sí,
+- **[17:06] Yo:** no, elegir mi primer producto,
+- **[17:06] Yo:** y te ponen, no sé qué vender, tengo una idea, ¿verdad?
+- **[17:06] Yo:** ¿Qué pasa si si si sigo por el no sé qué vender,
+- **[17:06] Yo:** También hay una forma de, no digo que lo incluyamos Yagali, porque no creo que ahí sea el
+- **[17:07] Yo:** no creo que
+- **[17:07] Yo:** alcancemos realmente.
+- **[17:07] Yo:** Para tener el evento y para que realmente sea robusto. Pero
+- **[17:07] Yo:** ¿qué tal si en Gali, entonces, tenemos un flujo que, cuando quieres descubrir,
+- **[17:07] Yo:** yo puedo empezarte a mostrar
+- **[17:07] Yo:** productos para que hagan tal cual lo que tú estás poniendo ahí?
+- **[17:07] Yo:** O el otra opción es lo que hemos visto, ¿no?
+- **[17:07] Yo:** Selecciona categoría, y entonces ella te muestra unos productos, seleccionas el producto,
+- **[17:07] Yo:** lo que haya una opción, es decir, yo estoy navegando y la nada digo como,
+- **[17:07] Yo:** quiero ver qué me qué qué qué me sugiere esta vaina.
+- **[17:07] Yo:** Ver qué qué agarro, qué qué cojo acá.
+- **[17:07] Yo:** Ya me acordé.
+- **[17:07] Yo:** Esa aplicación
+- **[17:07] Yo:** yo creo que ya está, está muerta.
+- **[17:07] Yo:** Se llamaba
+- **[17:07] Yo:** Ay, me entiende, no me acuerdo el nombre preciso, pero estaba
+- **[17:07] Yo:** en varias ciudades de
+- **[17:07] Yo:** de Colombia, no sé si era
+- **[17:07] Yo:** no sé si era ahí en otros países, pero en Colombia al menos,
+- **[17:07] Yo:** y
+- **[17:07] Yo:** ofrecía la opción
+- **[17:07] Yo:** de que era un catálogo de restaurantes,
+- **[17:08] Yo:** ¿sí?
+- **[17:08] Yo:** Y el catálogo de restaurantes
+- **[17:08] Yo:** empezaba, lo que empezaba a hacer era, te mostré el catálogo general, ¿no?
+- **[17:08] Yo:** En Cali, en Granada, en Panza, hay, ¿cierto?
+- **[17:08] Yo:** Y después, en algún punto, como que te cansabas de buscar así por barra de busca,
+- **[17:08] Yo:** o por filtros?
+- **[17:08] Yo:** Y tenía una opción
+- **[17:08] Yo:** era
+- **[17:08] Yo:** sugerencias, algo algo así se llamaba la la opción.
+- **[17:08] Yo:** Era un botón
+- **[17:08] Yo:** dabas clic y haz de cuenta que te abrió un Tinder,
+- **[17:08] Yo:** ¿sí? Y en el Tinder te empezaba a simplemente
+- **[17:08] Yo:** dar sugerencias,
+- **[17:08] Yo:** cosas a las que no habrías llegado tan rápido
+- **[17:08] Yo:** a través de una búsqueda manual.
+- **[17:08] Yo:** ¿Ya? Te empezaba a decir, no,
+- **[17:08] Yo:** no sé, la trattoria, la, no sé, mister Wings, y y empezaba a mandarte cosas así.
+- **[17:08] Yo:** Es decir, que
+- **[17:08] Yo:** al final es un es otro tipo de búsqueda,
+- **[17:08] Yo:** ¿sí?, es otro tipo de búsqueda.
+- **[17:08] Yo:** Pero lo que hacía por debajo de eso es, uno, claro, al usuario le da la la la
+- **[17:09] Yo:** la la herramienta o el la el método, para descubrir cosas nuevas que le pudieran interesar,
+- **[17:09] Yo:** porque, pues, debajo de eso hay un algoritmo que, por lo menos, trata de entender, de ser más preciso, pues,
+- **[17:09] Yo:** en ese momento el, en ese momento no había IA, todavía me,
+- **[17:09] Yo:** Machine learning apenas estaba llegando como, bum,
+- **[17:09] Yo:** ¿no?
+- **[17:09] Yo:** Eso era puro backend tratando de lanzar sugerencias.
+- **[17:09] Yo:** Pero
+- **[17:09] Yo:** pero
+- **[17:09] Yo:** eso, del lado de negocio, del lado de
+- **[17:09] Yo:** es sacar una cantidad de data ridícula del usuario.
+- **[17:09] Yo:** Porque después de que ibas,
+- **[17:09] Yo:** te empezaba a preguntar
+- **[17:09] Yo:** cómo te había ido,
+- **[17:09] Yo:** ¿cierto?
+- **[17:09] Jaime Guevara:** Mhmm.
+- **[17:09] Yo:** Pues te pregunto si ibas, ¿no?, pero eso no tenía georreferenciación ni nada,
+- **[17:09] Yo:** pregunto si había sido, si tú le calificabas que sí o que no.
+- **[17:09] Yo:** Claramente que sí,
+- **[17:09] Yo:** te empecé a preguntar,
+- **[17:09] Yo:** tal los precios, si había sido la primera vez que había sido, sacaba data.
+- **[17:09] Yo:** ¿Qué pasa? Que a medida que le ibas dando data,
+- **[17:10] Yo:** pues, si lo hacemos a un modelo de machine learning,
+- **[17:10] Yo:** lo que va a pasar es que ese esos restaurantes que se probaban por primera vez
+- **[17:10] Yo:** que le iba bien a los usuarios, que no sé qué, eran los que normalmente empezaba a
+- **[17:10] Yo:** ponderar mejor y hacer las primeras sugerencias para
+- **[17:10] Yo:** personas que también estuvieran buscando, pues, restaurantes nuevos que conocer.
+- **[17:10] Yo:** Al final, el concepto es el mismo, solo que aquí lo vemos desde un lado de producto, ¿no?, de un lado de
+- **[17:10] Yo:** producto, bueno, de venta, productos.
+- **[17:10] Yo:** Pero creo que se basaría en lo mismo.
+- **[17:10] Yo:** Lo que no me suena en este momento
+- **[17:10] Yo:** es lo
+- **[17:10] Yo:** es lo de la
+- **[17:10] Yo:** Bueno, no será no porque me dijiste que hasta habías llegado, es ver cómo se manejaría lo de los tres
+- **[17:10] Yo:** productos.
+- **[17:10] Yo:** ¿Qué qué qué significaría iterar tres productos? Hacerle como ya, por ejemplo, que pasara
+- **[17:10] Yo:** lo que en Gali es la revisión de margen y todo eso?
+- **[17:10] Jaime Guevara:** La verdad, no sé, ¿oíste?
+- **[17:10] Yo:** Tú como lo estás poniendo ahí, yo lo pegaría.
+- **[17:10] Jaime Guevara:** Pues todavía no no había pensado en eso.
+- **[17:10] Jaime Guevara:** Ajá.
+- **[17:10] Yo:** Siento que tiene todo el sentido en pegarlo.
+- **[17:10] Yo:** Ayudes, o sea, al final es una forma
+- **[17:11] Yo:** de escoger productos,
+- **[17:11] Yo:** ¿sí?
+- **[17:11] Yo:** Y
+- **[17:11] Yo:** una forma no solamente porque lo presenta diferentes, porque
+- **[17:11] Yo:** un algoritmo por debajo que me ayuda a ponerle primero que, segundo que,
+- **[17:11] Yo:** que por otro lado tiene que estar basado también o o tener una entrada, un input,
+- **[17:11] Yo:** de cómo le fue a los dropshippers nuevos que empezaron a venderlo.
+- **[17:11] Yo:** ¿Sí?
+- **[17:11] Yo:** Y
+- **[17:11] Yo:** ya el iterar, yo siento que la iteración, una vez yo
+- **[17:11] Yo:** también pensando en Gali, una vez yo los vi
+- **[17:11] Yo:** lo escogí,
+- **[17:11] Yo:** yo quiero saber la parte financiera
+- **[17:11] Yo:** y la parte de mercadeo.
+- **[17:11] Yo:** Es decir, que iterar, podríamos, más que llamarle iterar, es como
+- **[17:11] Yo:** avancemos, exploremos,
+- **[17:11] Jaime Guevara:** Sí, sí, sí. Yo yo creo que igual
+- **[17:11] Yo:** podemos realizar estudio de mercado, algo así, algo, bueno, alguna
+- **[17:11] Jaime Guevara:** yo lo que
+- **[17:11] Yo:** palabra más sencilla.
+- **[17:11] Jaime Guevara:** yo lo que pensaba un poco es
+- **[17:11] Jaime Guevara:** igual este está para el novato, ¿no? Seguramente conforme el
+- **[17:11] Jaime Guevara:** la conciencia sobre
+- **[17:11] Jaime Guevara:** sobre, pues, el dropshipping
+- **[17:11] Jaime Guevara:** cambia. Igual, seguramente, es
+- **[17:12] Jaime Guevara:** misma interfaz no le va a gustar a una persona con mayor experiencia.
+- **[17:12] Yo:** Claro.
+- **[17:12] Yo:** Pero iba a pasar lo que nos dijo
+- **[17:12] Jaime Guevara:** Ajá.
+- **[17:12] Yo:** nos dijo María,
+- **[17:12] Yo:** que fue lo de que vuelvan a empezar a buscar catálogo cerrado, privado,
+- **[17:12] Jaime Guevara:** Entonces podría tener otras
+- **[17:12] Yo:** Pero es que, o sea, si uno hace una cuenta
+- **[17:12] Yo:** muy muy muy general,
+- **[17:12] Yo:** El
+- **[17:12] Yo:** cuarenta por ciento, casi que el cuarenta, porque solamente el uno por ciento es activa,
+- **[17:12] Yo:** el cuarenta por ciento de la base de Europa es una vaina gigantesca.
+- **[17:12] Jaime Guevara:** Total.
+- **[17:12] Yo:** Es es ridículamente grande, o sea, si esa gente vendiera
+- **[17:12] Jaime Guevara:** Total.
+- **[17:12] Yo:** cinco cositas, diez cositas por mes,
+- **[17:12] Yo:** por mes, eso es una cantidad de plata ridícula.
+- **[17:12] Jaime Guevara:** Sí, no, total.
+- **[17:12] Yo:** Entonces,
+- **[17:12] Yo:** yo lo haría por ahí,
+- **[17:12] Yo:** Si si si lo ves, lo podemos empezar a trabajar, bueno, no sé si quiera, si solo querías validar o si
+- **[17:12] Yo:** querías que también con que lo tomara.
+- **[17:12] Jaime Guevara:** No, charlemos, sigamos charlándolo. Lo van
+- **[17:13] Jaime Guevara:** va a ser la la cara del catálogo, o sea, la la otra parte.
+- **[17:13] Jaime Guevara:** O sea, como como
+- **[17:13] Jaime Guevara:** logramos...? Porque nos falta esa parte, ¿cómo logramos que
+- **[17:13] Jaime Guevara:** los subplayers
+- **[17:13] Jaime Guevara:** organicen, tengan, pues, su su
+- **[17:13] Jaime Guevara:** su catálogo de oportunidades.
+- **[17:13] Yo:** Yo yo yo
+- **[17:13] Yo:** मैं मैं
+- **[17:13] Jaime Guevara:** Porque si los si los traemos,
+- **[17:13] Jaime Guevara:** netamente, o sea, ya nos dimos cuenta una cosa con Mitch, y es que
+- **[17:13] Jaime Guevara:** lo que está en el catálogo la mayoría es mentira.
+- **[17:13] Yo:** Por eso te digo, o sea, para mí la tendencia de mente
+- **[17:13] Yo:** del supplier es muy alta, porque al supplier le interesa salir de un stock
+- **[17:13] Yo:** sea por la razón que sea.
+- **[17:13] Yo:** Mi mi
+- **[17:13] Yo:** mi forma de verlo
+- **[17:13] Yo:** botella.
+- **[17:13] Yo:** Yo
+- **[17:13] Yo:** no le generaría ningún tipo de interfaz
+- **[17:13] Yo:** al al su player todavía,
+- **[17:13] Yo:** le generaría una pantalla una vez ya tenga data y le pueda decir, vea, estas son
+- **[17:14] Yo:** sus señales, ¿no?, estas son las señales que le logré encontrar de toda esta gente que está empezando a vender, pero yo, inicialmente, mis fuentes de información te digo, sería la la data de de de de la, sobre los productos que se están vendiendo, sé que eso igual por ahora está complejo con lo del app y todo el cuento, pues, se podría igual traer transaccional, que traigan alguna base que nos lleguen sobre los productos que se están vendiendo. Yo generaría es el flujo completo de del, ¿cómo se escoge?, y lo de la como un poco la la interacción o el flujo de interacción,
+- **[17:14] Yo:** para preguntarle a los dropshippers novatos, que ya empezaron a vender esos productos, ¿cómo les fue?
+- **[17:14] Yo:** Y que generaran generaran esas reviews
+- **[17:14] Yo:** para
+- **[17:14] Yo:** recolectar información y empezar a mejorar el modelo usar.
+- **[17:14] Yo:** Yo
+- **[17:14] Yo:** yo te diría que yo
+- **[17:14] Yo:** yo yo empezaría por el modelo,
+- **[17:14] Yo:** Ahora, si te sirve,
+- **[17:14] Yo:** me parece que está una una una una chimba de eso,
+- **[17:14] Yo:** podría ayudarle, si si quieres, con el tema del modelo.
+- **[17:15] Yo:** Sea, el modelo no en cuanto al modelo de
+- **[17:15] Yo:** de de IA, hablo de
+- **[17:15] Yo:** de de cómo va a pensar el algoritmo.
+- **[17:15] Yo:** Si te
+- **[17:15] Yo:** es como
+- **[17:15] Yo:** ya más allá de cuáles fueran las fuentes, si si igual tú dices, no, no no importa
+- **[17:15] Yo:** me parece que igual quiero ver qué nos ponen los suppliers, es una forma de hacerlo también,
+- **[17:15] Jaime Guevara:** Sí,
+- **[17:15] Yo:** También es una,
+- **[17:15] Jaime Guevara:** Sí, o sea, no, primero el, o sea, los sí le vamos a dar una versión a los subtyers porque
+- **[17:15] Jaime Guevara:** porque tocó por el tema de de de pulso.
+- **[17:15] Yo:** Okay.
+- **[17:15] Jaime Guevara:** O sea, esa fue como la
+- **[17:15] Yo:** También podemos hacer dos cosas churros, James.
+- **[17:15] Yo:** Les dan la la la les dan la
+- **[17:15] Yo:** la versión, la la la la interfaz,
+- **[17:15] Yo:** Lo que podríamos hacer, James, son
+- **[17:15] Yo:** son contrastes,
+- **[17:15] Jaime Guevara:** Ajá.
+- **[17:15] Yo:** y es
+- **[17:15] Yo:** vemos un algoritmo
+- **[17:15] Yo:** con sugerencias de suppliers
+- **[17:15] Yo:** y otro algoritmo sin las sugerencias del supplier.
+- **[17:15] Jaime Guevara:** Correcto, sí, sí.
+- **[17:15] Yo:** Y
+- **[17:15] Yo:** y vemos cuál responde mejor.
+- **[17:16] Yo:** Entonces,
+- **[17:16] Jaime Guevara:** Eso eso lo hicimos, chévere.
+- **[17:16] Yo:** un un grupo de control
+- **[17:16] Yo:** que no tiene absolutamente
+- **[17:16] Yo:** ninguna influencia del supplier,
+- **[17:16] Yo:** influencia directa hacia que el supplier diga, no, es que estas
+- **[17:16] Yo:** se venden en una putería, y otro que, pues,
+- **[17:16] Yo:** yo me voy a la data, y es la data, dice que las maracas no se han vendido desde octubre del veinte veintitrés. ¿Sí?
+- **[17:16] Jaime Guevara:** Ajá. Sino que no tenemos esa data, ¿no?, ese es el problema.
+- **[17:16] Yo:** Pero en producto, no, en tiempo real no, pero en cortes no podemos sacar esa data,
+- **[17:16] Yo:** si le pido a Miguel cuáles han sido los productos que más se han vendido de suppliers
+- **[17:16] Jaime Guevara:** Tocaría tocaría ver. Lo que pasa es que es muy poco lo que, o sea,
+- **[17:16] Jaime Guevara:** yo yo no, o sea, es eso que dices,
+- **[17:16] Jaime Guevara:** o sea, tiene sentido si
+- **[17:16] Jaime Guevara:** Tiene sentido y no tiene sentido en la data, porque
+- **[17:16] Jaime Guevara:** actualmente, por ejemplo, el mes pasado,
+- **[17:16] Jaime Guevara:** se vendieron del millón de productos, se vendían de millón de IDs,
+- **[17:16] Jaime Guevara:** que hay, se vendieron solo como treinta mil. Entonces, muchas de la
+- **[17:17] Jaime Guevara:** órdenes se concentran en pocos productos, entonces seguramente vas a, o sea, seguramente
+- **[17:17] Jaime Guevara:** vas a encontrar data como muy cesada.
+- **[17:17] Yo:** Pero ¿por qué por qué si yo me estoy yendo directamente solamente sobre lo que es
+- **[17:17] Jaime Guevara:** Por eso.
+- **[17:17] Yo:** se ha vendido?
+- **[17:17] Jaime Guevara:** O sea, seguramente,
+- **[17:17] Jaime Guevara:** no no no tan no tan
+- **[17:17] Jaime Guevara:** o sea, para algunas cosas te va a funcionar, pero no va a ser como el el
+- **[17:17] Jaime Guevara:** no creo, igual igual lo probamos, ¿no?, no hay lío.
+- **[17:17] Jaime Guevara:** No creo que que que eso al final
+- **[17:17] Jaime Guevara:** sea sostenible, porque no no hay muchos
+- **[17:17] Jaime Guevara:** productos que se vendan.
+- **[17:17] Jaime Guevara:** Son pocos.
+- **[17:17] Yo:** No, pues, por eso, o
+- **[17:17] Jaime Guevara:** Entonces, digamos que los dos productos van a ser fijos.
+- **[17:17] Yo:** yo yo te pongo es como una una
+- **[17:17] Yo:** o sea, termina siendo como la
+- **[17:17] Yo:** al final del modelo, como una ecuación, ¿no?
+- **[17:17] Yo:** Allá a grandes rasgos.
+- **[17:17] Yo:** Pero son tres uno
+- **[17:17] Yo:** lo que tú dices, y por eso es que, o sea, el model es que si
+- **[17:17] Yo:** no fuéramos como, vea, esto es solo lo que se ha vendido,
+- **[17:18] Yo:** por por la data, ¿no?, porque estos son los treinta mil productos que se han vendido, pues no estoy haciendo nada, lo que
+- **[17:18] Yo:** haciendo es transferir la información al usuario, pues no le estoy ayudando en nada.
+- **[17:18] Yo:** Por eso te digo, es esa parte es, un factor es eso, lo que se vende.
+- **[17:18] Yo:** Lo que se ha vendido
+- **[17:18] Yo:** los, no sé, el top
+- **[17:18] Yo:** igual es que está en una, no no puede ser infinita de mil cosas, porque al final se usatura el usuario.
+- **[17:18] Yo:** Algún punto yo tengo que decirle, no hay más sugerencias por hoy,
+- **[17:18] Yo:** ¿sí?
+- **[17:18] Yo:** O o o vuelven un rato, ¿sí?, para renovar eso, pero
+- **[17:18] Yo:** yo podría coger el top
+- **[17:18] Yo:** top cien, top doscientos, quinientos, mil, ¿sí?, que igual mil de treinta mil.
+- **[17:18] Yo:** Pues también igual es treinta mil es buena data.
+- **[17:18] Yo:** Y esos
+- **[17:18] Yo:** listo, ahora voy a ver de lo que se vendió
+- **[17:18] Yo:** vendieron
+- **[17:18] Yo:** los novatos.
+- **[17:18] Yo:** Pero no solamente qué vendieron los novatos, le voy a preguntar al novato
+- **[17:18] Yo:** cosas específicas.
+- **[17:18] Yo:** Cuánto invierto en publicidad,
+- **[17:18] Jaime Guevara:** Eso sí.
+- **[17:18] Yo:** cuántos
+- **[17:18] Yo:** cuánto se demora en venderlo,
+- **[17:18] Jaime Guevara:** Súper.
+- **[17:18] Yo:** tan difícil fue contactarse con el proveedor. Empiezo a a
+- **[17:19] Yo:** a generar, por eso te digo que al final
+- **[17:19] Yo:** toca pensar muy bien en cuál sería el algoritmo,
+- **[17:19] Yo:** y ahí cruzo. Bueno, ya cruzo, entonces, contra lo que
+- **[17:19] Yo:** sé que se vende contra las referencias que me dan los dropshippers.
+- **[17:19] Yo:** ¿Cierto?
+- **[17:19] Yo:** Ahí ya hay una,
+- **[17:19] Yo:** sería un modelo, pero igual el referencia de dropshippers también hay muchas más variables de ahí debajo, ¿no?
+- **[17:19] Yo:** Como en segundo grado.
+- **[17:19] Yo:** Luego está
+- **[17:19] Yo:** lo que se que se vende,
+- **[17:19] Yo:** ¿verdad?, que solamente supongo son treinta mil, pero
+- **[17:19] Yo:** igual igual toca tomarlo,
+- **[17:19] Yo:** lo que midigan los dropshippers, y adicional una capa,
+- **[17:19] Yo:** que es lo que los suppliers
+- **[17:19] Yo:** dicen que se va a vender, o que quieren vender más bien.
+- **[17:19] Yo:** Entonces lo mismo, por un lado sugiero
+- **[17:19] Yo:** modelo uno sin influencias suppliers, modelo dos con influencia suppliers.
+- **[17:19] Yo:** ¿Cuál
+- **[17:19] Yo:** genera
+- **[17:19] Yo:** mayor efecto o mejor efecto sobre los dropshippers nuevos?
+- **[17:19] Yo:** ¿Sí?
+- **[17:19] Yo:** Y eso lo podríamos ver con, no sé,
+- **[17:19] Yo:** podríamos ver
+- **[17:20] Yo:** cuál de los dos genera más órdenes, exhibiéndonos como algo muy general, ¿no?
+- **[17:20] Yo:** ¿Cuál genera más órdenes o cuál genera lo mismo?
+- **[17:20] Yo:** ¿Cuál genera menos devoluciones?
+- **[17:20] Jaime Guevara:** Sí, me me iría más al al punto de cuál
+- **[17:20] Yo:** ¿Cuál genera?
+- **[17:20] Jaime Guevara:** cuál, pues, y y son otras métricas las que sería
+- **[17:20] Jaime Guevara:** interesante. No no ellos no están toda la
+- **[17:20] Jaime Guevara:** generalidad y las órdenes, sino
+- **[17:20] Jaime Guevara:** genera más productos guardados,
+- **[17:20] Jaime Guevara:** cuál genera más opciones de iniciar una
+- **[17:20] Yo:** Tanto como cuál cuál
+- **[17:20] Yo:** por ejemplo, cuál genera
+- **[17:20] Yo:** mayor cantidad
+- **[17:20] Yo:** de selecciones por probar.
+- **[17:20] Jaime Guevara:** Ese
+- **[17:20] Yo:** Ejemplo.
+- **[17:20] Yo:** Es que el modelo no dice suppliers, no no no se mete suppliers,
+- **[17:20] Yo:** el promedio de de de de ítems guardados son treinta.
+- **[17:20] Jaime Guevara:** Mhmm.
+- **[17:20] Yo:** Y el cuando recomienda los suppliers son veinte.
+- **[17:20] Yo:** Bueno, ya hay una grande del treinta por ciento approx.
+- **[17:20] Jaime Guevara:** Total.
+- **[17:20] Yo:** Treinta y tres por ciento.
+- **[17:20] Yo:** Entonces, ahí lo mismo, o va, una vez se venden,
+- **[17:20] Yo:** la tasa
+- **[17:20] Yo:** pues vámonos, la la tasa de entrega
+- **[17:21] Yo:** por ejemplo,
+- **[17:21] Yo:** o el el promedio de entrega de cuando no le recomienda un supplier es de diez días.
+- **[17:21] Yo:** Y cuando lo recomienda un supplier, de quince. Hay algo raro, ahí ahí podemos empezar a a jugar con eso, no sé, o no sé si me estoy yendo por otro lado, James, si quería yo hablar por otro, pues, para
+- **[17:21] Yo:** Perdón.
+- **[17:21] Jaime Guevara:** No, pues el chiste era charlar nomás
+- **[17:21] Jaime Guevara:** sí, al final,
+- **[17:21] Jaime Guevara:** creo que la excusa más fuerte fue que tengamos un algoritmo o una chimba.
+- **[17:21] Jaime Guevara:** Que nos ayude a a a que la gente
+- **[17:21] Jaime Guevara:** la decisión más rápido.
+- **[17:21] Yo:** Hagamos algo, si te parece,
+- **[17:21] Yo:** O sea, ya te pregunto,
+- **[17:21] Yo:** ¿cómo quieres
+- **[17:21] Yo:** que...? Si, o sea, ¿quieres que sigamos?, ¿lo seguimos hablando por
+- **[17:21] Yo:** o sea, ¿cuáles quieren que sean los pasos a seguir?
+- **[17:21] Yo:** ¿Quieres que te apoye con algo
+- **[17:21] Participante:** Pero ahorita.
+- **[17:21] Yo:** o o lo quieres seguir liderando con con y me hablas de
+- **[17:21] Participante:** Pero ahorita. ¿Cómo cómo?
+- **[17:21] Jaime Guevara:** Como, yo creo que podemos
+- **[17:21] Yo:** ¿Cómo quieres manejarlo?
+- **[17:21] Jaime Guevara:** terminar lo de Mitch, Ella va a integrar la aplicación.
+- **[17:22] Jaime Guevara:** Y esto seguirlo charlando. Yo creería que podemos
+- **[17:22] Jaime Guevara:** es como
+- **[17:22] Jaime Guevara:** como seguir echando carreta, porque vos como esta, o sea, lo igual la ahorita la prioridad es
+- **[17:22] Yo:** CX bullwit n'y nå.
+- **[17:22] Jaime Guevara:** lo de
+- **[17:22] Yo:** Por lo menos, layers,
+- **[17:22] Yo:** al miércoles de la siguiente semana,
+- **[17:22] Yo:** ya tener todo,
+- **[17:22] Yo:** para anotarlo tan encima y tener varios días de de de validar estabilidad, de que funcione bien,
+- **[17:22] Yo:** O sea, la idea es no meterle mano
+- **[17:22] Yo:** más después del miércoles en la tarde.
+- **[17:22] Yo:** Ya es como quede y cerrar versión, porque o si no,
+- **[17:22] Yo:** vamos a estar horas antes del evento probando cosas, y no, no es la idea.
+- **[17:22] Jaime Guevara:** Exacto. Sí, no, pues esperemos una semanita y después ya retomamos.
+- **[17:22] Yo:** Exacto. Sí,
+- **[17:22] Yo:** Exacto. Si quieres, igual, como vamos a estar en un tema expo winners,
+- **[17:22] Yo:** pero, pues seguramente, uno, pues, el evento va a va dar espacio que lo hablemos,
+- **[17:22] Jaime Guevara:** Mhmm.
+- **[17:22] Yo:** y si no, pues mientras también se terminan de
+- **[17:22] Yo:** pues nada,
+- **[17:22] Yo:** jueves, viernes, vamos a tener chance de seguirlo revisando.
+- **[17:22] Yo:** Igual yo por los lados, como estoy viendo cosas de
+- **[17:23] Yo:** de de aquí, de cosas de investigación de para lo de Gali, pues ahí, por eso es que se me vino la idea que te que te estoy diciendo,
+- **[17:23] Yo:** porque, pues, nada, igual no cruzo información de varios de de varios temas.
+- **[17:23] Yo:** Entonces, si si veo algo interesante, te cuento.
+- **[17:23] Jaime Guevara:** De una... Hágale.
+- **[17:23] Jaime Guevara:** Dale, tantito, nos vamos.
+- **[17:23] Yo:** James, todo bien.
+- **[17:23] Yo:** Bien. Chao.
+- **[17:23] Jaime Guevara:** Chau.
