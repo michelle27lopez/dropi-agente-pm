@@ -9,6 +9,7 @@ import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
 import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
+import { localCellBoards } from "@/app/celula/_cell-board";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
 import { previewUpdateContent } from "@/lib/update-preview";
@@ -245,12 +246,23 @@ export default function CelulaHomePage() {
   // Weekly PM de esta célula (si tiene alguno) — mismo look de tarjeta,
   // ordenado por fecha descendente.
   const semanasCelula = SEMANAS.filter((s) => s.celula === celula.slug && REGISTRY[s.date]);
+  // Cell Board servido desde el repo (hub/src/app/celula/_cell-board) — mismo
+  // flujo que el Weekly PM. Si una fecha ya viene como fila de la base, gana
+  // el archivo del repo.
+  const localCB = localCellBoards(celula.slug);
+  const localCBDates = new Set(localCB.map((u) => u.week_date));
   const updateEntries = [
-    ...celula.updates.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
+    ...celula.updates
+      .filter((u) => !localCBDates.has(u.week_date))
+      .map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
+    ...localCB.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
     ...semanasCelula.map((s) => ({ item: weeklyToItem(s), sortKey: s.date.slice(0, 10) })),
   ].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
   const updates = updateEntries.map((e) => e.item);
-  const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
+  const updatesById = new Map<string, Update>([
+    ...celula.updates.map((u) => [u.id, u] as const),
+    ...localCB.map((u) => [u.id, u] as const),
+  ]);
 
   const isSellers = params.slug === "sellers";
   // El grid de tarjetas, el filtro de etapa y "sin ficha Darwin" de logística
