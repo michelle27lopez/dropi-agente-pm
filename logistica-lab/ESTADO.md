@@ -5,7 +5,67 @@
 > Aquí va lo VIVO (dónde vamos, decisiones recientes, próximo paso). Lo estable vive
 > en `DASHBOARD.md`, `metodologia/`, `conocimiento/`.
 
-**Última actualización:** 2026-08-10 (documentación del portafolio en Jira · hallazgo del segundo árbol de Normalización)
+**Última actualización:** 2026-09-01 (lanzamiento de guías reemplazatorias + adopción de Ecom Scanner)
+
+---
+
+**[01-sep · preparar el lanzamiento de guías reemplazatorias + adopción de Ecom Scanner]**
+
+Juan pidió dejar diligenciada la plantilla E2E (Estrategia de Lanzamiento + Following) para
+guías reemplazatorias y para la adopción de Ecom Scanner, **preparándolo en paralelo mientras
+TI arregla los pendientes técnicos**. Los documentos quedaron listos, con fechas expresadas como
+**T+n desde T0** (T0 = confirmación de cierre técnico) para no depender de una fecha que aún no
+existe. En el camino la revisión de Jira destapó cosas que el cerebro no tenía registradas y que
+cambian qué hay que confirmar antes de apretar el botón:
+
+- **🔴 El trabajo migró a otro proyecto sin que Producto se enterara.** La épica
+  **`TECH-480`** *"Guias reemplazatorias - EcomScanner"* (creada 12-ago por Francisco Ramirez,
+  Backlog) es hoy el hogar real de la iniciativa, y **`PROD-1045` no la referencia**. TECH-480
+  exige cinco condiciones antes de graduar el beta `return_guide` —BFF en vez de acceso directo
+  al servicio Go, exportaciones masivas, persistencia desde Devolutions, migración versionada
+  de `guide_replacements` y pruebas de volumen >500 guías— y declara *"FECHA PUESTA EN PRUEBAS:
+  Por definir — FECHA PUESTA EN PRODUCCIÓN: Por definir"*. Cuelgan TECH-522/629/630/639/641/
+  680/812/813 y DROP-27024/27026. **PROD-1045 describe un estado del mundo de hace siete semanas.**
+
+- **🔴 Coordinadora estuvo rota todo el beta.** `DROP-26971` (18→28-ago): *"return-guide siempre
+  devuelve 404 por mapeo incorrecto de la respuesta del tracking API"*. Cambió su API y el
+  `json.Unmarshal` decodificaba vacío en silencio. El cierre dice *"al ser una conexión ilegítima
+  y algo temporal solo nos queda adaptarnos"* → **fix interino**. `TECH-641` (resolución
+  bidireccional) está **Blocked** y `STID-6847` sigue abierto desde el 28-jul. **Una de las tres
+  transportadoras del alcance no está verificada en producción.**
+
+- **🔴 El acuerdo del 27-jul nunca se escribió.** Se buscó el hotfix en DROP y STID: no existe.
+  Lo único fechado ese día es `PROD-1682`, marcada **"hecho"** y **completamente vacía**. Queda
+  cerrado con resultado negativo el pendiente #1 de la auditoría de agosto.
+
+- **🟡 Las cifras que usábamos verbalmente no se sostienen como estaban.** El "25% de los pedidos
+  se devuelve" es en realidad **26,04% sobre movilizadas** (abril cerrado) o **~21% sobre creadas**;
+  citarlo sobre "pedidos" sobrestima ~4 pts contra nuestro propio baseline. Y el **"50% no se podía
+  escanear" no tiene ninguna fuente** en todo el repo — queda marcado como hipótesis y se pide a Data.
+
+- **🟡 Tampoco se puede argumentar con soporte.** Hay 298 tickets STID de guías (jun–ago), pero son
+  de *generación/impresión de guías de salida*. En todo el histórico de STID **solo 2 tickets**
+  mencionan "reemplazatoria" — la bodega levanta el sticker a mano y no reporta.
+
+**Decisión de Juan para esta iniciativa (01-sep):** Jira se usa **solo como lectura**. No se crea,
+comenta, transiciona ni vincula nada. **Es una restricción de este proyecto, no una regla general
+del cerebro.**
+
+**Qué quedó hecho:** `guias-reemplazatorias/lanzamiento-e2e.md` (formato E2E completo + gate de
+graduación de 10 condiciones + instrumentación) · `ecom-scanner/sintesis.md` (la fila del índice
+decía "_por crear_" desde el origen) · `ecom-scanner/lanzamiento-adopcion-e2e.md` (el push de
+adopción como Tier 2 separado, con banco de 7 intervenciones) · `ecom-scanner/peticion-data-adopcion-ecom.md`
+· spec y auditoría de LOG-009 actualizados · `_index.md`, `todos.md` y la card del hub.
+
+**Próximo paso:** **enviar la petición de data** (Juan define destinatario y fecha). Es lo único
+del plan que no depende de TI y de lo que salen el Target, la línea base y la meta — conviene que
+llegue antes de T0. En paralelo, coordinar con Front la instrumentación de 2.1/2.2 y con Laura el
+Tango, para llegar al cierre técnico con todo listo del lado de Producto.
+
+**Bloqueados por infraestructura (01-sep):** crear el Google Doc E2E en la carpeta Drive de Ecom
+scanner — el contenido ya está listo en el repo, el conector de Drive expiró a mitad de sesión —
+y leer Confluence 798687237 / 922845188 para completar la sección de roles y flujos de la síntesis
+(conector Atlassian caído con 404). Ambos anotados en `planning/todos.md`.
 
 ---
 

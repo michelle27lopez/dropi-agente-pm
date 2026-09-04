@@ -3,10 +3,10 @@ import HubFooter from "@/components/HubFooter";
 import WeeklySelector from "../seguimiento/WeeklySelector";
 import RoadmapGantt from "../seguimiento/RoadmapGantt";
 
-// Estructura: Promp/Documento de Seguimiento.md (misma plantilla que Rearquitectura)
-// Insumo: Ordenes/Proyectos E2E - Rediseño modulo de Ordenes.md — documento
-// aún sin campos propios del proyecto llenos (solo la guía/plantilla base),
-// por eso varios campos quedan "Pendiente de definir".
+// Insumo: Resumen Weekly de Experience — semana del 31 de agosto al 4 de
+// septiembre de 2026. Proyecto nuevo, sin documento de kickoff propio aún;
+// varios campos quedan "Pendiente de definir" hasta que se defina el
+// alcance completo con el equipo.
 
 const badgeStyle = (color: string, bg: string): React.CSSProperties => ({
   display: "inline-flex",
@@ -91,24 +91,16 @@ function Field({ term, children }: { term: string; children: React.ReactNode }) 
   );
 }
 
-const metric: React.CSSProperties = {
-  background: "var(--bg)",
-  border: "1px solid var(--border)",
-  borderRadius: 10,
-  padding: "12px 14px",
-};
-
-export default function OrdenesPage() {
+export default function DropiTestersPage() {
   return (
     <div style={{ background: "#F8FAFC", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       <HubHeader
-        title="Órdenes · Rediseño del módulo de Órdenes"
+        title="Dropi Testers"
         subtitle="Célula Experience · PO: Diana Aldana"
-        currentSlug="ordenes"
+        currentSlug="dropi-testers"
       />
 
       <main style={{ maxWidth: 1100, width: "100%", margin: "0 auto", padding: "24px 20px", flex: 1 }}>
-        {/* Breadcrumb & title */}
         <div style={{ marginBottom: 20 }}>
           <a
             href="/celula/experience"
@@ -118,28 +110,34 @@ export default function OrdenesPage() {
           </a>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10, marginBottom: 6 }}>
             <span style={badgeStyle("#7C3AED", "#F3E8FF")}>🧬 Célula Experience</span>
-            <span style={badgeStyle("#1458A8", "#EFF6FF")}>🚚 Delivery · En definición</span>
-            <span style={badgeStyle("#EA580C", "#FFEDD5")}>EXP-002</span>
+            <span style={badgeStyle("#1458A8", "#EFF6FF")}>🚚 Delivery · En DEV</span>
+            <span style={badgeStyle("#B45309", "#FFFBEB")}>⏸️ Despriorizado</span>
+            <span style={badgeStyle("#EA580C", "#FFEDD5")}>EXP-006</span>
           </div>
           <h1 style={{ fontSize: 26, fontWeight: 900, color: "#0F172A", margin: 0, letterSpacing: "-0.02em" }}>
-            Rediseño del módulo de Órdenes
+            Dropi Testers
           </h1>
+          <p style={{ fontSize: 14, color: "var(--muted)", marginTop: 6 }}>
+            MVP para capturar usuarios interesados en ser testers de Dropi
+          </p>
         </div>
 
         {/* 🎯 Objetivos Macro */}
         <Section icon="🎯" title="Objetivos Macro">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
-            <Field term="Target">Dropshippers activos que gestionan órdenes — ~6.000 usuarios activos diarios (Fase 1 · MVP).</Field>
+            <Field term="Target">Usuarios interesados en ser testers de Dropi, captados en el marco de ExpoWinner.</Field>
             <Field term="Adopción">{pending}</Field>
-            <Field term="Retención">50% de usuarios que reutilizan una nueva funcionalidad del MVP en 30 días (meta Fase 1).</Field>
-            <Field term="Satisfacción (NPS/CSAT)">&gt;80% de respuestas "Como esperaba" o mejor (meta Fase 1).</Field>
+            <Field term="Retención">{pending}</Field>
+            <Field term="Satisfacción (NPS/CSAT)">{pending}</Field>
           </div>
         </Section>
 
         {/* 📌 Definición del Proyecto */}
         <Section icon="📌" title="Definición del Proyecto">
           <Field term="Descripción">
-            Rediseño del módulo de órdenes.
+            Se lanzará una versión MVP para ExpoWinner enfocada únicamente en capturar usuarios interesados en ser
+            testers de Dropi — una primera pieza para construir, a futuro, una comunidad propia de testers para
+            validar funcionalidades antes de su lanzamiento general.
           </Field>
           <div style={{ marginBottom: 6 }}>
             <div style={label}>Enlaces clave</div>
@@ -147,12 +145,7 @@ export default function OrdenesPage() {
               <tbody>
                 <tr>
                   <td style={{ ...td, fontWeight: 700, width: 260 }}>📄 Documento de Lanzamiento (Kickoff)</td>
-                  <td style={td}>
-                    <a href="https://docs.google.com/document/d/1SZ72iVSs3uILPSm9XBGH2y96NNxLmNe979A8V_tMMYY/edit?tab=t.jgkvmdz5t5fg#heading=h.i2ccblcxh8ao" target="_blank" rel="noreferrer" style={{ color: "var(--dropi)", fontWeight: 700 }}>
-                      Documento de Kickoff
-                    </a>
-                    {" "}(Proyectos E2E - Rediseño modulo de Ordenes.md, carpeta Ordenes)
-                  </td>
+                  <td style={td}>{pending}</td>
                 </tr>
                 <tr>
                   <td style={{ ...td, fontWeight: 700 }}>📊 Archivos / Hojas de Cálculo (Excel)</td>
@@ -226,36 +219,19 @@ export default function OrdenesPage() {
         {/* 🗺️ Roadmap */}
         <Section icon="🗺️" title="Roadmap">
           <RoadmapGantt
-            axisStart="2026-06"
+            axisStart="2026-08"
             axisEnd="2026-12"
             fases={[
               {
-                nombre: "Fase 1 · MVP Órdenes 2.0",
+                nombre: "MVP captura de testers (ExpoWinner)",
                 estado: "bloqueada",
-                inicio: "2026-06",
+                inicio: "2026-08",
                 fin: "2026-09",
-                detalle: "Importación, exportación, etiquetas y optimización de creación manual de órdenes. Mapeada desde junio 2026, handoff a desarrollo el 2 de julio de 2026; piloto de seguimiento de 12 semanas bloqueado hasta contar con recurso de Tecnología.",
-                href: "/proyectos/ordenes/fase-1",
-                bloqueo: "Bloqueado hasta contar con recurso de Tecnología",
-              },
-              {
-                nombre: "Fase 2",
-                estado: "proxima",
-                inicio: "2026-10",
-                fin: "2026-11",
-                detalle: "Implementación de filtros, tabs de estados y rediseño de las tablas y cards donde se visualizan los pedidos. En definición: consolidando la matriz de hallazgos y oportunidades.",
-                href: "/proyectos/ordenes/fase-2",
-              },
-              {
-                nombre: "Fase 3 · Proveedores",
-                estado: "proxima",
-                inicio: "2026-11",
-                fin: "2026-12",
-                detalle: "Ajustes de órdenes de proveedores.",
-                href: "/proyectos/ordenes/fase-3",
+                detalle: "Versión MVP enfocada únicamente en capturar usuarios interesados en ser testers de Dropi. Bloqueado hasta contar con un desarrollador asignado.",
+                bloqueo: "Bloqueado — sin desarrollador asignado",
               },
             ]}
-            nota="Fechas estimadas a partir del estado reportado en el Weekly Status más reciente (semana del 25 de agosto de 2026). Se ajustan cuando el equipo confirme fechas exactas."
+            nota="Proyecto despriorizado frente a Rearquitectura, Órdenes y Dropi App. Fechas estimadas a partir del Weekly Status más reciente (semana del 31 de agosto al 4 de septiembre de 2026)."
           />
         </Section>
 
@@ -266,22 +242,23 @@ export default function OrdenesPage() {
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <Field term="Resumen de la semana">
-              Prioridad P1 · Delivery en DEV. Pendiente: pruebas del módulo de etiquetas. Se realizará un research con proveedores para validar las funcionalidades que quieren ver en el módulo de Órdenes.
+              Prioridad Despriorizado · Delivery en DEV. Estrategia MVP: se lanzará una versión enfocada únicamente
+              en capturar usuarios interesados en ser testers, de cara a ExpoWinner.
             </Field>
-            <Field term="Retos y Bloqueos">🚨 Bloqueado por falta de asignación de un desarrollador.</Field>
+            <Field term="Retos y Bloqueos">🚨 Bloqueado por falta de desarrollador asignado.</Field>
           </div>
         </Section>
 
         {/* 📊 Métricas de Seguimiento */}
         <Section icon="📊" title="Métricas de Seguimiento">
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 10, marginBottom: 12 }}>
-            <div style={metric}>
+            <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px" }}>
               <div style={{ fontSize: 11, color: "var(--muted)" }}>Métrica 1</div>
-              <div style={{ fontSize: 14, fontWeight: 700 }}>Pendiente de definir</div>
+              <div style={{ fontSize: 14, fontWeight: 700 }}>Línea base: pendiente → Meta: pendiente</div>
             </div>
-            <div style={metric}>
+            <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 10, padding: "12px 14px" }}>
               <div style={{ fontSize: 11, color: "var(--muted)" }}>Métrica 2</div>
-              <div style={{ fontSize: 14, fontWeight: 700 }}>Pendiente de definir</div>
+              <div style={{ fontSize: 14, fontWeight: 700 }}>Línea base: pendiente → Meta: pendiente</div>
             </div>
           </div>
           <Field term="Comentarios de rendimiento">{pending}</Field>
