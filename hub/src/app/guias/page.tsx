@@ -58,6 +58,13 @@ const guias = [
     description: "Roles (Supplier vs. Marca/Emprendedor), comportamiento algorítmico, las dos lentes de análisis y el modelo de Funnel, Palancas y Loops del ecosistema Dropi.",
     tag: "Referencia · Negocio",
   },
+  {
+    slug: "medicion-ces-csat-nps",
+    icon: "🎯",
+    title: "Métricas de CX en Dropshipping",
+    description: "Simulador interactivo del recorrido de un dropshipper: dónde se captura CES, CSAT y NPS, con captura en vivo de respuestas y el dashboard agregado.",
+    tag: "Referencia · Métricas",
+  },
 ];
 
 export default function GuiasIndexPage() {
