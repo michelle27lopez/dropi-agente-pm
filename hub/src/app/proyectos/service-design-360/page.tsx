@@ -80,7 +80,7 @@ export default function ServiceDesign360Page() {
         currentSlug="product-designers"
       />
 
-      <div style={{ maxWidth: 800, width: "100%", margin: "0 auto", padding: 32, boxSizing: "border-box" }}>
+      <div style={{ maxWidth: 900, width: "100%", margin: "0 auto", padding: 32, boxSizing: "border-box" }}>
 
         <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 24, marginBottom: 24 }}>
           <p style={{ fontSize: 14, color: "var(--fg)", lineHeight: 1.6, margin: 0 }}>
@@ -151,6 +151,81 @@ export default function ServiceDesign360Page() {
             ))}
           </div>
         )}
+
+        {/* Contexto + piloto (2026-09-03): el "por qué importa" y el
+            siguiente paso concreto del proyecto — arranca el service
+            blueprint global por SAC. No es parte de la matriz de % (eso
+            sigue siendo por-célula), es la bitácora del proyecto PRO-001
+            como un todo. */}
+        <div style={{ background: "#fff", border: "1px solid var(--border)", borderRadius: 14, padding: 24, marginTop: 32 }}>
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", margin: "0 0 14px" }}>Por qué importa el Service Design</h2>
+          <div style={{ background: "#FFFBEB", border: "1px solid #FDE68A", borderRadius: 10, padding: 14, fontSize: 12.5, color: "#92400E", lineHeight: 1.6 }}>
+            ⚠️ Falta el contexto que Diana Aldana documentó en célula Experience — lo busqué en Confluence y no encontré una página suya
+            sobre esto. Pégalo aquí (o dime el link) y lo dejo citado con la fuente real, en vez de parafrasearlo sin tenerlo.
+          </div>
+
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", margin: "24px 0 14px" }}>Avances</h2>
+          <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "var(--fg)", lineHeight: 1.8 }}>
+            <li>📅 Reunión <strong>"Procesos en Dropi"</strong> — punto de partida conceptual para conectar los procesos del servicio.</li>
+          </ul>
+
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", margin: "24px 0 14px" }}>Siguientes pasos: piloto SAC → Service Blueprint global</h2>
+          <p style={{ fontSize: 13.5, color: "var(--fg)", lineHeight: 1.7, margin: "0 0 14px" }}>
+            Vamos a levantar una prueba piloto para entender y conectar todos los procesos dentro del servicio que inciden con la
+            plataforma — empezando por <strong>SAC</strong>, con <strong>Laura Núñez</strong> y <strong>Juan Sebastián Maldonado</strong>.
+            Qué haremos: revisar la documentación existente, conectarla, y ponerla en un <strong>Service Blueprint global de Dropi</strong>.
+            Los procesos entran priorizados y con criterio — filtrando el nivel de detalle para que de verdad sea útil, no exhaustivo.
+          </p>
+
+          <div style={{ border: "1px solid var(--border)", borderRadius: 10, padding: 16, marginBottom: 20 }}>
+            <p style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.06em", margin: "0 0 10px" }}>
+              Borrador de invitación — kickoff del piloto
+            </p>
+            <p style={{ fontSize: 13, color: "var(--fg)", margin: "0 0 6px" }}><strong>Asunto:</strong> Kickoff piloto — Service Blueprint global de Dropi (SAC)</p>
+            <p style={{ fontSize: 13, color: "var(--fg)", margin: "0 0 6px" }}><strong>Invitados:</strong> Laura Núñez, Juan Sebastián Maldonado, Diana Aldana, Juan Camilo Rojas</p>
+            <p style={{ fontSize: 13, color: "var(--fg)", margin: "0 0 10px" }}>
+              <strong>Agenda:</strong> (1) contexto del proyecto Entendimiento 360 y por qué arrancamos por SAC · (2) qué documentación de
+              procesos de SAC ya existe y dónde vive · (3) acuerdo sobre procesos prioritarios y nivel de detalle del blueprint ·
+              (4) próximos pasos y dueños.
+            </p>
+            <p style={{ fontSize: 11.5, color: "var(--muted)", margin: 0 }}>
+              No tengo acceso para crear el evento directo en tu Calendar — copia esto al armar la invitación.
+            </p>
+          </div>
+
+          <p style={{ fontSize: 13, color: "var(--fg)", margin: "0 0 20px" }}>
+            🎫 Tarea creada en Jira: <a href="https://dropi-it.atlassian.net/browse/PROD-2539" target="_blank" rel="noreferrer" style={{ color: "var(--dropi)", fontWeight: 700 }}>PROD-2539</a>
+          </p>
+
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: "var(--fg)", margin: "0 0 6px" }}>Roadmap del piloto</h2>
+          <p style={{ fontSize: 11.5, color: "var(--muted)", margin: "0 0 16px" }}>
+            Secuencia propuesta, no fechas confirmadas — ajusta una vez se agende el kickoff.
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {[
+              { fase: "Kickoff con SAC + Experience", semanas: [1, 1] },
+              { fase: "Revisar documentación existente de SAC", semanas: [1, 2] },
+              { fase: "Conectar documentación al blueprint global", semanas: [2, 3] },
+              { fase: "Definir procesos prioritarios y criterios", semanas: [3, 4] },
+              { fase: "Service Blueprint global v0 (SAC)", semanas: [4, 5] },
+            ].map((row) => (
+              <div key={row.fase} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ fontSize: 12, color: "var(--fg)", width: 260, flex: "none" }}>{row.fase}</span>
+                <div style={{ flex: 1, height: 20, position: "relative", background: "var(--bg)", borderRadius: 6 }}>
+                  <div style={{
+                    position: "absolute", top: 0, bottom: 0,
+                    left: `${((row.semanas[0] - 1) / 5) * 100}%`,
+                    width: `${((row.semanas[1] - row.semanas[0] + 1) / 5) * 100}%`,
+                    background: "var(--dropi)", borderRadius: 6,
+                  }} />
+                </div>
+                <span style={{ fontSize: 11, color: "var(--muted)", width: 76, flex: "none", textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
+                  Sem {row.semanas[0]}–{row.semanas[1]}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </main>
   );
