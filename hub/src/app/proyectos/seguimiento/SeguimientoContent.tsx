@@ -188,6 +188,36 @@ const PROYECTOS: Proyecto[] = [
     weekly: { semana: PENDING, estado: PENDING, resumen: PENDING, retos: PENDING },
     metricas: { metrica1: PENDING, metrica2: PENDING, comentarios: PENDING },
   },
+  {
+    slug: "dropi-testers",
+    nombre: "Dropi Testers",
+    code: "EXP-006",
+    detailHref: "/proyectos/dropi-testers",
+    objetivosMacro: {
+      target: "Usuarios interesados en ser testers de Dropi, captados en el marco de ExpoWinner.",
+      adopcion: PENDING,
+      retencion: PENDING,
+      satisfaccion: PENDING,
+    },
+    definicion: {
+      descripcion: "MVP enfocado únicamente en capturar usuarios interesados en ser testers de Dropi, de cara a ExpoWinner.",
+      kickoff: PENDING,
+      excel: PENDING,
+      jira: PENDING,
+    },
+    equipo: { pm: "Diana Aldana", ux: PENDING, frontend: PENDING, growth: PENDING },
+    documentacion: { research: PENDING, blueprint: PENDING, personas: PENDING, flows: PENDING, figmaV1: PENDING, figmaV2: PENDING },
+    roadmap: {
+      fase1: PENDING,
+      fase2: PENDING,
+      proximos: "MVP captura de testers (ExpoWinner) — bloqueado por falta de desarrollador asignado.",
+    },
+    ganttFases: [
+      { nombre: "MVP captura de testers (ExpoWinner)", estado: "bloqueada", inicio: "2026-08", fin: "2026-09", detalle: "Versión MVP enfocada únicamente en capturar usuarios interesados en ser testers de Dropi. Bloqueado hasta contar con un desarrollador asignado.", href: "/proyectos/dropi-testers", bloqueo: "Bloqueado — sin desarrollador asignado" },
+    ],
+    weekly: { semana: PENDING, estado: PENDING, resumen: "Prioridad Despriorizado · Delivery en DEV. Estrategia MVP: se lanzará una versión enfocada únicamente en capturar usuarios interesados en ser testers, de cara a ExpoWinner.", retos: "🚨 Bloqueado por falta de desarrollador asignado." },
+    metricas: { metrica1: PENDING, metrica2: PENDING, comentarios: PENDING },
+  },
 ];
 
 // ── Sistema visual ──────────────────────────────────────────────────────────
