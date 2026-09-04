@@ -8,8 +8,9 @@
 | Owner / PM | Juan Diego Bautista (discovery PRM) |
 | Célula | Ecom (logística) |
 | Etapa cadena | Novedad / Devolución (recepción y gestión de devoluciones) |
-| Estado global | 🟢 dev finalizado · 🟡 beta con evidencia operativa contradictoria · ⚪ rollout global no demostrado |
-| Última actualización | 2026-08-02 |
+| Estado global | 🟢 dev jun finalizado · 🔴 **alcance vigente migró a `TECH-480` (12-ago), con 5 bloqueadores y fechas "por definir"** · 🔴 Coordinadora con fix interino y `TECH-641` Blocked · ⚪ rollout global no demostrado |
+| Última actualización | 2026-09-01 |
+| Estrategia de lanzamiento | [`lanzamiento-e2e.md`](lanzamiento-e2e.md) — formato E2E diligenciado + gate de graduación |
 
 ## 0 · Resumen
 Permitir **escanear y leer guías reemplazatorias en Ecom Scanner** (Recepción y Gestión de devoluciones).
@@ -98,6 +99,24 @@ La cronología completa está en [auditoria-lanzamiento-agosto-2026.md](auditori
 
 Por tanto, `DROP finalizada` + `PRM Versión Beta` **no equivale** a `lanzamiento global completo`.
 
+### 7.1 · Actualización 2026-09-01 — lo que pasó después del corte de agosto
+
+La auditoría de agosto cerró el 02-ago. Lo que ocurrió después **cambia el diagnóstico** y no estaba registrado en este repo:
+
+| Hallazgo | Evidencia (Jira, lectura 01-sep) |
+|---|---|
+| **El alcance migró de proyecto.** El trabajo vive hoy en la épica [TECH-480](https://dropi-it.atlassian.net/browse/TECH-480) *"Guias reemplazatorias - EcomScanner"* (creada 12-ago, Backlog), que **PROD-1045 no referencia**. Lista 5 condiciones antes de graduar el beta: consumo vía **BFF** en vez de acceso directo al servicio Go, resolución en **exportaciones masivas**, **persistencia desde Devolutions**, **migración versionada** de `guide_replacements` y **pruebas de volumen >500 guías**. *"FECHA PUESTA EN PRUEBAS: Por definir — FECHA PUESTA EN PRODUCCIÓN: Por definir"*. Cuelgan TECH-522, TECH-629, TECH-630, TECH-639, TECH-641, TECH-680, TECH-812, TECH-813, DROP-27024, DROP-27026 | TECH-480 |
+| **Coordinadora estuvo rota todo el beta.** [DROP-26971](https://dropi-it.atlassian.net/browse/DROP-26971) (18-ago → 28-ago): *"return-guide siempre devuelve 404 por mapeo incorrecto de la respuesta del tracking API"*. Coordinadora cambió su API; el `json.Unmarshal` decodificaba vacío en silencio. Cierre: *"al ser una conexión ilegítima y algo temporal solo nos queda adaptarnos"* → **fix interino**. [TECH-641](https://dropi-it.atlassian.net/browse/TECH-641) *"T7 · Coordinadora — resolución bidireccional"* está **Blocked** | DROP-26971 · TECH-641 |
+| **La queja operativa sigue viva.** [STID-6847](https://dropi-it.atlassian.net/browse/STID-6847) (28-jul): *"Las guías de Coordinadora con estatus 'A Recibir por coordinadora' no pueden ser recibidas en plataforma ECOM"* — abierto, sin avance desde el 27-ago | STID-6847 |
+| **El acuerdo del 27-jul nunca se escribió.** El único rastro es [PROD-1682](https://dropi-it.atlassian.net/browse/PROD-1682) *"[PRODUCTO] Guias reemplazatorias"*, marcada **"hecho"** y **vacía**: sin descripción, links, criterios ni subtareas. → El pendiente "localizar el hotfix del 27-jul" de la auditoría queda **cerrado con resultado negativo: no existe** | PROD-1682 |
+| **Deuda de QA sin saldar.** [DROP-25614](https://dropi-it.atlassian.net/browse/DROP-25614) salió con excepción de TL: *"la fase de testing se difirió por decisión de TL. `test-plans.md` (50 casos, objetivo 80%) queda como deuda a ejecutar antes del merge"*. Nunca se ejecutaron | DROP-25614 |
+| **PROD-1045 lleva 7 semanas quieta.** Entró a "En curso" el 03-jul y volvió a backlog; sin movimiento desde el 10-jul. El tablero PROD solo tiene 3 estados (`En Ruta (backlog)` → `En curso` → `hecho`): **no puede representar un lanzamiento por fases** | PROD-1045 |
+| **El dolor no está en soporte.** En todo el histórico de STID solo **2 tickets** mencionan "reemplazatoria". Los 298 tickets de guías (jun–ago) son de *generación/impresión de guías de salida*. **No se puede argumentar el lanzamiento diciendo que reduce esos tickets** | STID |
+
+**Diagnóstico al 01-sep:** no es "beta lista para desplegar". Es **una capacidad en beta cuyo alcance se rehízo en otro proyecto sin fecha, con una de las tres transportadoras sin verificar en producción y sin ninguna instrumentación que permita saber si se usa.** El gate completo está en [`lanzamiento-e2e.md` §5](lanzamiento-e2e.md).
+
+> ⚠️ **Restricción de esta iniciativa (Juan, 01-sep):** Jira se lee, **no se escribe**. Nada de lo anterior se comentó ni se vinculó en los tickets; queda registrado aquí.
+
 ## 8 · Comunicación, activación, hallazgos y checklist
 
 ### Comunicación
@@ -126,6 +145,7 @@ Por tanto, `DROP finalizada` + `PRM Versión Beta` **no equivale** a `lanzamient
 - [ ] Decisión final registrada: ampliar, mantener beta, corregir o revertir.
 
 ## 9 · Changelog
+- 2026-09-01 — §7.1: auditoría de Jira al 01-sep. Se descubre que el alcance migró a `TECH-480` (5 bloqueadores, sin fecha), que Coordinadora devolvió 404 hasta el 28-ago con fix interino y `TECH-641` Blocked, que `STID-6847` sigue abierto y que el hotfix del 27-jul **no existe** (`PROD-1682` vacía). Se crea [`lanzamiento-e2e.md`](lanzamiento-e2e.md) con el formato E2E diligenciado, el gate de graduación y la instrumentación de adopción que faltaba. Se reencuadran las cifras de gravedad (26,04% sobre movilizadas; el "50% no escaneable" queda como hipótesis sin fuente). Jira leído sin escribir por decisión de Juan para esta iniciativa.
 - 2026-08-02 — Auditoría multifuente: se corrige la afirmación “operativo/en lanzamiento” a “beta con evidencia operativa por reconciliar”; PROD-1045 sigue en backlog y el rollout global no está demostrado. No se modifica ningún artefacto de Laura ni se replican datos sensibles.
 - 2026-08-02 — PROD-1045 queda como historia de lanzamiento de Laura ligada a LOG-009; pendientes documentales: comunicación, activación, monitoreo de 3 semanas y decisión de despliegue. No se crea historia paralela.
 - 2026-06-24 (cierre) — Transportadora asignada (745 Interrap / 1380 Coord / 1381 TCC), conexión 1287 eliminada (solo 1288), nota obsoleta limpiada de descripciones. Handoff completo.

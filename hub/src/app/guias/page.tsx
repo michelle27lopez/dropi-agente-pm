@@ -24,6 +24,20 @@ const guias = [
     tag: "Onboarding · Nueva célula",
   },
   {
+    slug: "taller-pocs",
+    icon: "🛠️",
+    title: "Taller de POCs",
+    description: "Cómo crear un POC sin romper nada: dónde va, qué es un PR y un merge, cuándo necesitas una migración SQL, qué puedes tocar y qué no. Guion del taller de 2 horas.",
+    tag: "Onboarding · POCs",
+  },
+  {
+    slug: "directorio-pocs",
+    icon: "🧪",
+    title: "Directorio de POCs",
+    description: "Todos los POCs del equipo, de todas las células, en una sola vista — para saber qué se está probando antes de arrancar algo que quizá ya existe.",
+    tag: "Referencia · POCs",
+  },
+  {
     slug: "skills-disponibles",
     icon: "🧩",
     title: "Directorio de Skills",

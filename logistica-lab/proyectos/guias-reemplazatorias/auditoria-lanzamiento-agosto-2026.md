@@ -100,10 +100,16 @@ Registrar agregados con fuente, ventana y denominador; no copiar órdenes, guía
 
 ## 9 · Pendientes concretos
 
-- [ ] Localizar el ticket/hotfix asociado a la mesa del 27-jul y determinar si fue regresión, permiso o cobertura.
+- [x] ~~Localizar el ticket/hotfix asociado a la mesa del 27-jul~~ → **cerrado con resultado negativo el 01-sep: no existe.** El único rastro es `PROD-1682`, marcada "hecho" y vacía. El acuerdo nunca se escribió en Jira.
 - [ ] Recuperar bitácora del piloto y cierre de las tres semanas.
 - [ ] Identificar cohortes y flags por carrier/país sin publicar datos sensibles.
 - [ ] Enlazar evidencia de Tango/comunicación si Laura la publica; no editar su artefacto.
-- [ ] Definir dashboard o consulta agregada de adopción, lectura y errores.
-- [ ] Registrar decisión de rollout por carrier y gate de rollback.
+- [x] ~~Definir dashboard o consulta agregada de adopción, lectura y errores~~ → **definida el 01-sep** en [`lanzamiento-e2e.md`](lanzamiento-e2e.md) §2.1/2.4 y en [`../ecom-scanner/peticion-data-adopcion-ecom.md`](../ecom-scanner/peticion-data-adopcion-ecom.md). Falta enviarla a Data.
+- [ ] Registrar decisión de rollout por carrier y gate de rollback → gate ya escrito en [`lanzamiento-e2e.md`](lanzamiento-e2e.md) §5; falta ejecutarlo.
+
+## 10 · Actualización 01-sep-2026 — lo que cambió después de este corte
+
+Esta auditoría cerró el 02-ago y **quedó desactualizada**: entre agosto el alcance migró a la épica `TECH-480` (12-ago, 5 bloqueadores, fechas "por definir"), Coordinadora estuvo devolviendo 404 hasta el 28-ago (`DROP-26971`, fix declarado interino) con `TECH-641` **Blocked**, y `STID-6847` sigue abierto desde el 28-jul.
+
+**El detalle completo está en [`spec.md` §7.1](spec.md).** La conclusión de esta auditoría —*"beta con evidencia operativa por reconciliar; comunicación, activación e impacto no demostrados"*— **se sostiene y se agrava**: al alcance sin reconciliar se suma un alcance técnico nuevo sin fecha.
 
