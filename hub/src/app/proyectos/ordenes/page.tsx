@@ -265,8 +265,10 @@ export default function OrdenesPage() {
             <WeeklySelector />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <Field term="Resumen de la semana">Consolidación y estructuración de la matriz de hallazgos y oportunidades de mejora para las Fases 2 y 3.</Field>
-            <Field term="Retos y Bloqueos">Fase 1 (MVP Órdenes 2.0) bloqueada hasta contar con recurso de Tecnología asignado.</Field>
+            <Field term="Resumen de la semana">
+              Prioridad P1 · Delivery en DEV. Pendiente: pruebas del módulo de etiquetas.
+            </Field>
+            <Field term="Retos y Bloqueos">🚨 Bloqueado por falta de asignación de un desarrollador.</Field>
           </div>
         </Section>
 
