@@ -158,6 +158,22 @@ export default function Bac001ProjectPage() {
           </div>
         </div>
 
+        {/* ── Prototipo ── */}
+        <div style={{ background: "#fff", border: "1px solid #E2E8F0", borderRadius: 14, padding: "16px 20px", marginBottom: 28, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+          <div>
+            <strong style={{ fontSize: 13, display: "block", color: "#0F172A" }}>🧪 Prototipo — Flujo de validación (perfil Dropshipper)</strong>
+            <span style={{ fontSize: 12, color: "#64748B" }}>Demo interactiva Fase 5 en dropitesters.co, controlador con perfil dropshipper</span>
+          </div>
+          <a
+            href="https://www.dropitesters.co/new/fase5-demo/controlador?profile=dropshipper"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontSize: 12.5, fontWeight: 750, color: "#fff", background: "#6366F1", border: "none", borderRadius: 8, padding: "10px 18px", cursor: "pointer", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6, whiteSpace: "nowrap" }}
+          >
+            Ver Prototipo <span style={{ fontSize: 11 }}>➔</span>
+          </a>
+        </div>
+
         {/* ── KPI row ── */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16, marginBottom: 28 }}>
           {[

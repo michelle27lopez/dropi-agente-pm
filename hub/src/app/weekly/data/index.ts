@@ -12,6 +12,7 @@ import { snapshot as s_2026_07_30_brands } from "./2026-07-30-brands";
 import { snapshot as s_2026_07_31 } from "./2026-07-31";
 import { snapshot as s_2026_08_11_brands } from "./2026-08-11-brands";
 import { snapshot as s_2026_08_25_brands } from "./2026-08-25-brands";
+import { snapshot as s_2026_09_01_brands } from "./2026-09-01-brands";
 import type { WeeklySnapshot } from "./types";
 
 // ─── Registro de semanas ──────────────────────────────────────────────────────
@@ -21,6 +22,7 @@ import type { WeeklySnapshot } from "./types";
 // 3. Actualizar CURRENT a la nueva fecha
 
 export const REGISTRY: Record<string, WeeklySnapshot> = {
+  "2026-09-01-brands": s_2026_09_01_brands,
   "2026-08-25-brands": s_2026_08_25_brands,
   "2026-08-11-brands": s_2026_08_11_brands,
   "2026-07-31": s_2026_07_31,
@@ -40,6 +42,7 @@ export const REGISTRY: Record<string, WeeklySnapshot> = {
 // `celula`: slug de la célula dueña de esa semana (usado para el header/pie
 // dinámico de /weekly y para la tarjeta "Weekly" en /celula/[slug]).
 export const SEMANAS: { date: string; label: string; celula: string }[] = [
+  { date: "2026-09-01-brands", label: "Semana 26 ago–01 sep 2026 · Brands", celula: "brands" },
   { date: "2026-08-25-brands", label: "Semana 18–25 ago 2026 · Brands", celula: "brands" },
   { date: "2026-08-11-brands", label: "Semana 04–11 ago 2026 · Brands", celula: "brands" },
   { date: "2026-07-31", label: "Semana 28–31 jul 2026", celula: "suppliers" },

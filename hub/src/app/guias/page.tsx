@@ -24,6 +24,20 @@ const guias = [
     tag: "Onboarding · Nueva célula",
   },
   {
+    slug: "taller-pocs",
+    icon: "🛠️",
+    title: "Taller de POCs",
+    description: "Cómo crear un POC sin romper nada: dónde va, qué es un PR y un merge, cuándo necesitas una migración SQL, qué puedes tocar y qué no. Guion del taller de 2 horas.",
+    tag: "Onboarding · POCs",
+  },
+  {
+    slug: "directorio-pocs",
+    icon: "🧪",
+    title: "Directorio de POCs",
+    description: "Todos los POCs del equipo, de todas las células, en una sola vista — para saber qué se está probando antes de arrancar algo que quizá ya existe.",
+    tag: "Referencia · POCs",
+  },
+  {
     slug: "skills-disponibles",
     icon: "🧩",
     title: "Directorio de Skills",
@@ -52,18 +66,18 @@ const guias = [
     tag: "Onboarding · Nuevo vertical",
   },
   {
-    slug: "metricas",
-    icon: "📊",
-    title: "Métricas",
-    description: "Métricas clave del ecosistema, activación (TTFO/TTV), retención/churn mensual y clasificación de madurez operativa — con cifras y metas de referencia.",
-    tag: "Referencia · Métricas",
-  },
-  {
     slug: "entendimiento-negocio",
     icon: "🧠",
     title: "Entendimiento del Negocio",
     description: "Roles (Supplier vs. Marca/Emprendedor), comportamiento algorítmico, las dos lentes de análisis y el modelo de Funnel, Palancas y Loops del ecosistema Dropi.",
     tag: "Referencia · Negocio",
+  },
+  {
+    slug: "medicion-ces-csat-nps",
+    icon: "🎯",
+    title: "Métricas de CX en Dropshipping",
+    description: "Simulador interactivo del recorrido de un dropshipper: dónde se captura CES, CSAT y NPS, con captura en vivo de respuestas y el dashboard agregado.",
+    tag: "Referencia · Métricas",
   },
 ];
 

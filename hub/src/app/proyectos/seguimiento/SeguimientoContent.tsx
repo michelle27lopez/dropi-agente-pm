@@ -66,7 +66,7 @@ const PROYECTOS: Proyecto[] = [
       { nombre: "Fase 2 (Escala / Q2)", estado: "en-curso", inicio: "2026-08", fin: "2026-09", detalle: "Telemetría, pruebas de usabilidad, arquitectura C4 N2-4 y PERT. En curso: QA en integración con proveedores." },
       { nombre: "Próximos pasos inmediatos", estado: "bloqueada", inicio: "2026-09", fin: "2026-10", detalle: "Definir Estrategia de Comunicación con Marketing.", bloqueo: "Estrategia de Comunicación sin definir" },
     ],
-    weekly: { semana: PENDING, estado: PENDING, resumen: "Avance en la ejecución de pruebas de aseguramiento de calidad (QA) en integración con proveedores.", retos: "Estrategia de Comunicación sin definir." },
+    weekly: { semana: PENDING, estado: PENDING, resumen: "Prioridad P0 · Delivery en QA. Métricas de bugs — Frente 1: 66 corregidos / 9 pendientes (1 crítico); Frente 2: 64 corregidos / 7 pendientes (1 crítico); total consolidado: 130 corregidos / 16 pendientes (solo 2 críticos). Próximos pasos: la próxima semana se espera ejecutar la fase de pruebas.", retos: "2 bugs críticos pendientes (1 por frente) antes de poder cerrar QA. Estrategia de Comunicación sin definir." },
     metricas: {
       metrica1: "Time-on-task — línea base pendiente vs. meta: reducción",
       metrica2: "CSAT/SUS — línea base pendiente vs. meta: >80%",
@@ -102,7 +102,7 @@ const PROYECTOS: Proyecto[] = [
       { nombre: "Fase 2: Búsqueda Avanzada", estado: "proxima", inicio: "2026-10", fin: "2026-11", detalle: "Motor de búsqueda clásica, búsqueda por ID y búsqueda potenciada con IA." },
       { nombre: "Fase 3: Escalamiento y Feed", estado: "proxima", inicio: "2026-11", fin: "2026-12", detalle: "Arquitectura Multipaís y nuevo Feed de experiencia." },
     ],
-    weekly: { semana: PENDING, estado: PENDING, resumen: "Continuidad en la fase de pruebas de calidad (QA).", retos: PENDING },
+    weekly: { semana: PENDING, estado: PENDING, resumen: "Prioridad P2 · Delivery en QA. Pruebas activas por el equipo de Tecnología, pruebas en curso con Coordinadora (última fase para liberación) y pruebas internas habilitadas en TestFlight.", retos: PENDING },
     metricas: {
       metrica1: "Ratio DAU/Descargas — línea base ~3.6% vs. meta pendiente",
       metrica2: "DAU total — línea base ~3,443 vs. meta pendiente",
@@ -128,7 +128,7 @@ const PROYECTOS: Proyecto[] = [
       { nombre: "Fase 2", estado: "proxima", inicio: "2026-10", fin: "2026-11", detalle: "Filtros, tabs de estados y rediseño de tablas y cards de pedidos. En definición.", href: "/proyectos/ordenes/fase-2" },
       { nombre: "Fase 3 · Proveedores", estado: "proxima", inicio: "2026-11", fin: "2026-12", detalle: "Ajustes de órdenes de proveedores.", href: "/proyectos/ordenes/fase-3" },
     ],
-    weekly: { semana: PENDING, estado: PENDING, resumen: "Consolidación y estructuración de la matriz de hallazgos y oportunidades de mejora para las Fases 2 y 3.", retos: "Fase 1 (MVP Órdenes 2.0) bloqueada hasta contar con recurso de Tecnología asignado." },
+    weekly: { semana: PENDING, estado: PENDING, resumen: "Prioridad P1 · Delivery en DEV. Pendiente: pruebas del módulo de etiquetas. Se realizará un research con proveedores para validar las funcionalidades que quieren ver en el módulo de Órdenes.", retos: "🚨 Bloqueado por falta de asignación de un desarrollador." },
     metricas: { metrica1: PENDING, metrica2: PENDING, comentarios: PENDING },
   },
   {
@@ -186,6 +186,36 @@ const PROYECTOS: Proyecto[] = [
     documentacion: { research: PENDING, blueprint: PENDING, personas: PENDING, flows: PENDING, figmaV1: PENDING, figmaV2: PENDING },
     roadmap: { fase1: PENDING, fase2: PENDING, proximos: PENDING },
     weekly: { semana: PENDING, estado: PENDING, resumen: PENDING, retos: PENDING },
+    metricas: { metrica1: PENDING, metrica2: PENDING, comentarios: PENDING },
+  },
+  {
+    slug: "dropi-testers",
+    nombre: "Dropi Testers",
+    code: "EXP-006",
+    detailHref: "/proyectos/dropi-testers",
+    objetivosMacro: {
+      target: "Usuarios interesados en ser testers de Dropi, captados en el marco de ExpoWinner.",
+      adopcion: PENDING,
+      retencion: PENDING,
+      satisfaccion: PENDING,
+    },
+    definicion: {
+      descripcion: "MVP enfocado únicamente en capturar usuarios interesados en ser testers de Dropi, de cara a ExpoWinner.",
+      kickoff: PENDING,
+      excel: PENDING,
+      jira: PENDING,
+    },
+    equipo: { pm: "Diana Aldana", ux: PENDING, frontend: PENDING, growth: PENDING },
+    documentacion: { research: PENDING, blueprint: PENDING, personas: PENDING, flows: PENDING, figmaV1: PENDING, figmaV2: PENDING },
+    roadmap: {
+      fase1: PENDING,
+      fase2: PENDING,
+      proximos: "MVP captura de testers (ExpoWinner) — bloqueado por falta de desarrollador asignado.",
+    },
+    ganttFases: [
+      { nombre: "MVP captura de testers (ExpoWinner)", estado: "bloqueada", inicio: "2026-08", fin: "2026-09", detalle: "Versión MVP enfocada únicamente en capturar usuarios interesados en ser testers de Dropi. Bloqueado hasta contar con un desarrollador asignado.", href: "/proyectos/dropi-testers", bloqueo: "Bloqueado — sin desarrollador asignado" },
+    ],
+    weekly: { semana: PENDING, estado: PENDING, resumen: "Prioridad Despriorizado · Delivery en DEV. Estrategia MVP: se lanzará una versión enfocada únicamente en capturar usuarios interesados en ser testers, de cara a ExpoWinner.", retos: "🚨 Bloqueado por falta de desarrollador asignado." },
     metricas: { metrica1: PENDING, metrica2: PENDING, comentarios: PENDING },
   },
 ];
