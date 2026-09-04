@@ -1,0 +1,698 @@
+# Liderazgo, cultura y gestion del cambio - 2 de septiembre
+
+- **ID:** `not_ZgCYryW4DDIAie`
+- **Fecha:** 2026-09-03T00:02:12.095Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/df647244-3037-4d07-98a1-c0fdb0be5598)
+- **Asistentes:** Santiago Herrera Acosta
+
+---
+
+## Resumen de la Reunión
+# Perfil y Enfoque de la Profesora
+
+- Consultora organizacional con más de 18 años de experiencia
+- Certificada en gestión de cambio por Cornell University
+- Especialidad: cultura organizacional, subculturas y adopción tecnológica
+- Clientes recientes: sector farmacéutico, tecnología, alimentos, servicios públicos (Celsia), agroindustria (Incauca Providencia), Colgate
+
+# Por Qué Falla la Adopción Tecnológica
+
+- El problema no es la herramienta, es la resistencia cultural
+- Factores clave de resistencia:
+  - Procesos organizacionales disfuncionales o no percibidos como core
+  - Curvas de aprendizaje no reconocidas ni acompañadas
+  - Miedo a la exposición ante pares (“que vean que no sé”)
+  - Pérdida de poder o estatus (ejemplo: “Mónica” dueña de los datos)
+- La adopción de IA no es tecnológica: depende de procesos, flujos reales y personas
+- Instructivos no amigables generan resistencia, especialmente en menores de 35 años
+
+# Cultura Organizacional: Definición y Capas
+
+- Cultura = todo lo que una organización ha aprendido para adaptarse y sostenerse
+  - Incluye: formas de pensar, actuar, relacionarse, lenguaje no verbal, conductas éticas
+  - Permanece en el tiempo y se transmite de forma implícita a los nuevos
+- La capa más difícil de transformar: las **creencias compartidas** (no declaradas)
+  - Ejemplo: “la tecnología nos va a reemplazar” como creencia colectiva invisible
+- No hay culturas buenas ni malas, hay culturas funcionales o no para el momento de la organización
+- Caso real: medición en agroindustria con 2.300+ personas arrojó resultados homogéneos en toda la operación, señal de cultura sólida, no solo clima
+
+# Estrategia, Cultura y Gestión de Cambio: El Triángulo
+
+- Estrategia: define hacia dónde va la organización y dónde la tecnología genera valor
+- Cultura: habilita o limita las decisiones y prácticas cotidianas
+- Gestión de cambio: integra la tecnología en procesos y prácticas de forma intencional
+- La relación cultura-cambio es bidireccional: el cambio construye cultura y la cultura facilita el cambio
+
+# El Rol del Liderazgo en la Transformación
+
+- CEO como aliado: da legitimidad y dirección, pero no es suficiente por sí solo
+- La gerencia media es la bisagra real:
+  - Conecta la estrategia con la ejecución (“tropicaliza” la directriz)
+  - Conoce al equipo y decide si el cambio ocurre o no en la práctica
+- Líderes que bloquean con “aquí siempre lo hemos hecho así” matan la transformación
+- Para que el cambio sea no negociable, debe reflejarse en:
+  - Indicadores y evaluaciones de desempeño
+  - Políticas y contratos (sanciones explícitas si aplica)
+  - Narrativa consistente del líder de área
+
+# Cultura como Habilitador Tecnológico: Elementos Concretos
+
+- En procesos: integración de datos, estandarización, seguimiento en tiempo real
+- En gobernanza y políticas:
+  - Ownership claro de plataformas y permisos
+  - Política de uso de datos y confidencialidad
+  - Espacio seguro para reportar fallas (“levantar la mano”)
+- En personas y capacidades:
+  - Talento adecuado para cada rol tecnológico
+  - Fomento del aprendizaje y la experimentación
+  - Uso tecnológico incluido explícitamente en evaluaciones de desempeño
+- Caso CRM (Dynamics): resistencia por campos obligatorios sin sentido, falta de integración con sistemas base y percepción de control generaron datos falsos y baja adopción
+- Caso Tecnoquímica: cultura altamente consistente, sistema propio no reemplazado por SAP/Oracle, talento in-house, aprendizaje como valor central; resultado: líder del sector farma
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/1a08a1c1-755d-469e-b1c1-a2607d1fb288](https://notes.granola.ai/t/1a08a1c1-755d-469e-b1c1-a2607d1fb288)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[00:04] Participante:** Buenas noches.
+- **[00:04] Participante:** Buenas noches, Gus.
+- **[00:04] Participante:** ¿Cómo vamos bien?
+- **[00:04] Participante:** Muy bien, gracias a Dios. ¿Y tú cómo vas? Me alegra mucho. Bien, bien.
+- **[00:04] Participante:** Hola a todos, en 2 minutitos iniciamos.
+- **[00:04] Participante:** Okay.
+- **[00:04] Participante:** Listo, profe.
+- **[00:06] Participante:** Hola, buenas noches para todos. ¿Cómo van?
+- **[00:06] Participante:** Buenas noches.
+- **[00:06] Participante:** Hola, buenas noches. ¿Cómo están todos?
+- **[00:06] Participante:** Buenas noches, bien, gracias.
+- **[00:06] Participante:** Bueno, no, vamos a iniciar hoy esta, este segundo momento en esta clase de liderazgo, pero también cultura y gestión de cambio.
+- **[00:07] Participante:** Les voy a contar un poquito de mí primero como para que pues hagamos un zoom en por qué termino yo en esta parte del curso y sobre todo en este programa particularmente.
+- **[00:07] Participante:** Yo soy profe.
+- **[00:07] Participante:** De la Facultad de Negocios y Economía y tengo un perfil particular.
+- **[00:07] Participante:** Porque pues ustedes muy bien conocen la universidad. La universidad tiene unos profes que son muy orientados a la investigación, a la generación de conocimiento.
+- **[00:07] Participante:** Pero sobre todo en nuestra facultad, y también con la Facultad de Ingenierías, es muy común encontrar profesores que tienen un perfil de practitioners. Yo soy consultora organizacional hace más de 18 años. De hecho, Tengo más experiencia en consultoría que en esta última parte de mi vida en docencia.
+- **[00:07] Participante:** Y trabajo un tema que es, es un tema muy ligado a negocio.
+- **[00:08] Participante:** Y es cómo la estrategia organizacional logra su despliegue haciendo uso o apalancándose en prácticas que están pues como ¿Cómo consignadas en la cultura organizacional? Y eso, ¿cómo facilita los procesos de cambio? Yo soy certificada en cambio por Cornell University y soy consultora. Precisamente mi experticia, como les Digo, es cultura. O sea, yo trabajo todo lo que tiene que ver con cultura organizacional, cómo son, brilla, pero también subculturas. Entonces he trabajado subculturas como Todo lo que tiene que ver con excelencia operacional. Soy consultora, por ejemplo, en una organización.
+- **[00:08] Participante:** De más de 3000 colaboradores hace 2 años, en esa alineación para su excelencia operacional en un proceso productivo.
+- **[00:08] Participante:** Soy consultora en este momento de una organización papelera en su cultura de salud y seguridad, y también curiosamente trabajo en procesos de cambio para la adopción tecnológica. A la luz de qué, de la cultura, no, o sea, cómo las, la organización logra transformar su ejercicio para que la tecnología efectivamente cumpla el propósito propósito para el cual, para lo cual se diseña o se adquiere. Entonces eso es lo que he trabajado. En un ratito les voy a mostrar de pronto un poco como las compañías con las que he estado trabajando en el último año, sobre todo.
+- **[00:09] Participante:** Y esa es la razón por la cual tenemos esta última parte del curso que tiene que ver con cambio, ¿no? O sea, cómo yo habilito, trabajo, fortalezco procesos de cambio Haciendo esa integración entre lo que el negocio, la compañía, está declarando que necesita, que quiere, que sueña, y su adecuada ejecución.
+- **[00:10] Participante:** Listo.
+- **[00:10] Participante:** Ya en términos más desde lo académico, soy la profe del liderazgo del MBA nuestro.
+- **[00:10] Participante:** Precisamente porque nuestro liderazgo es un liderazgo muy desde cómo ese líder acompaña, desarrolla y logra resultados. Entonces esa es la razón por la cual yo también soy profe en nuestra maestría de liderazgo.
+- **[00:10] Participante:** Y también, como les digo, tengo ese acompañamiento trabajando con la Facultad de Ingenierías en los procesos de adopción tecnológica. De hecho, con el profe consultor de la Facultad de Ingenierías trabajamos juntos en ese, en esa de cómo activar en las compañías la adecuada adopción. Entonces pues nada, bienvenidos.
+- **[00:10] Participante:** Para empezar, yo sé que puede ser un poquito, un poquito tedioso a veces para los estudiantes, pero como así, si ya llevamos tanto en este curso y nos vamos a presentar, yo quiero Hola, Jocelyn, gracias. Ya lo pongo a grabar. Yo lo que quiero es primero conocerles y sobre todo escucharles de primera mano cuáles son esas expectativas.
+- **[00:11] Participante:** Que tienen a la luz de este punto del curso. ¿Por qué? Porque está esta parte del curso, es súper aplicada.
+- **[00:11] Participante:** Entonces yo quisiera como poder afinar muy bien mis procesos de acompañamiento como docente.
+- **[00:11] Participante:** A la luz de eso, ¿qué ustedes quisieran hacer de pronto como doble clic?
+- **[00:11] Participante:** frente al proceso de cambio a la luz de la transformación digital de un negocio. Entonces, para mí, este punto es muy importante.
+- **[00:11] Participante:** Porque una vez yo he mapeado las expectativas, me facilita a mí
+- **[00:38] Participante:** es muy aplicada. O sea, yo creo que el aprendizaje se despliega es cuando lo, cuando lo vivo y cuando lo hago. Entonces, uno de los casos, la primera parte de los entrevistas entregables, van a ver que es un caso de una compañía ficticia.
+- **[00:38] Participante:** Pero en un segundo momento ustedes van a trabajar sobre un caso particular de la organización donde están, que es muy interesante porque yo les doy feedback sobre ese caso particular, mira que estás haciendo esto, omitiendo esto, a la luz de la organización y el momento de la organización.
+- **[00:39] Participante:** Pues tenemos que entender qué necesitamos.
+- **[00:39] Participante:** Entonces ese punto hace que la habilitación de la tecnología tenga un propósito diferente.
+- **[00:39] Participante:** Entonces, eso es lo que vamos a conversar en estas clases conmigo.
+- **[00:39] Participante:** Cambio, vamos a hablar desde cambio en los equipos como cambio en la organización, como esa sombrilla general que tiene que construir la organización.
+- **[00:39] Participante:** Para poder ser mucho más consistente.
+- **[00:39] Participante:** En sus procesos de cambio y adicionalmente
+- **[00:39] Participante:** Vivir.
+- **[00:40] Participante:** Diseñar y conversar, conversar sobre, sobre esa transformación que necesita la organización. Un punto importante también es entender en qué momento está la organización, porque la tecnología entra a facilitar procesos.
+- **[00:40] Participante:** Que la misma organización, como en las cometas, te va pidiendo como cuerda, no, te va pidiendo necesitamos más esto, necesitamos más lo otro. Entonces, en la medida en que entendemos en qué momento está la organización, de una perspectiva mucho más estratégica, pues la tecnología tiene mayor probabilidad de tener ese fit.
+- **[00:40] Participante:** Con ese proceso que está viviendo y con ese momentum que tienen tanto los equipos como la organización en sí misma. Entonces, esas son las conversaciones que vamos a tener. Ese es el reto que vamos a, vamos a, en el que vamos a trabajar en estas sesiones que tienen que ver con cultura y cambio.
+- **[00:40] Participante:** Para poder tener herramientas y una visión también muy, muy estratégica.
+- **[00:41] Participante:** Frente a qué vale la pena movilizar para una transformación tecnológica y qué no.
+- **[00:41] Participante:** Porque esa también es una discusión válida. No todo lo que le sirve a Pepito en la otra compañía me va a servir a mí, porque el contexto organizacional es diferente. Entonces, esa es como Como el punto en el que trabajamos, y bajo esta perspectiva es que nosotros vamos a trabajar en estas semanas. Voy a pasar por aquí a dejarles abiertamente mi correo de la universidad.
+- **[00:41] Participante:** Para que me escriban por allí si necesitan.
+- **[00:41] Participante:** Yo sé que ustedes pueden escribir, hacer, hacer todo el correo por Canva, pero también me facilita mucho cuando me llega directamente al celular. Yo trato de ser relativamente rápida. rápida en contestar. También les voy a dejar mi número de WhatsApp para que si tienen alguna duda, algún elemento extra que quieran que de pronto les Les amplié por allí desde los entregables, las fechas y demás, pues siéntanse libres de contactarme y escribir. Entonces, pues habiendo dicho Dicho esto, voy a pasar entonces a presentarles un poco, como de una manera muy, muy breve, todo lo que tiene que ver con la parte de cultura.
+- **[00:42] Participante:** Estas son algunas de las compañías con las que he trabajado en el último año. He estado con compañías del sector farmacéutico. Si ustedes ven, tengo allí. He estado con compañías de tecnología. Lo chévere que he podido trabajar con las compañías de tecnología es esa alineación de estrategia y despliegue donde la tecnología pues es un aliado.
+- **[00:43] Participante:** He estado con alimentos.
+- **[00:43] Participante:** Con servicios públicos.
+- **[00:43] Participante:** Domiciliarios. En el caso de Celsia, he trabajado algunos, algunos procesos con ellos.
+- **[00:43] Participante:** Y también en agroindustria con Incauca Providencia. He estado como en el último año muy trabajando muy de la mano, al igual pues que compañías como Colgate y demás. Estas son como algunas de las que tengo aquí como, como más presentes.
+- **[00:43] Participante:** Y todos los procesos tienen que ver precisamente con eso, cultura. Y en cultura, cultura para adopción, cultura para transformación de prácticas a la luz de la salud y seguridad.
+- **[00:43] Participante:** Y todas aquellas variables que de pronto, como les decía, pueden tanto facilitar como hacer que esa organización pues tenga un ritmo, un ritmo diferente en esa manera de operar.
+- **[00:44] Participante:** Entonces, pues bueno, aquí hay algo importante y es, miren, en las transformaciones
+- **[00:44] Participante:** Lo que falla no es la herramienta, o sea, a veces, a veces nos centramos es que la herramienta falló, es que, es que de pronto no se para más o bien el CRM. Entonces eso es parte de, sí, eso es una parte de por qué la tecnología no cumple la función que se espera.
+- **[00:44] Participante:** Pero realmente lo que hace que esa herramienta o esa tecnología no logre el propósito por la cual se hace esa adquisición o ese desarrollo es la resistencia cultural.
+- **[00:44] Participante:** Es la modificación.
+- **[00:44] Participante:** De esa suma.
+- **[00:44] Participante:** De prácticas, creencias, conocimientos, etcétera, etcétera. Ahorita les voy a definir un poco más.
+- **[00:44] Participante:** La adopción, como ustedes han visto desde primer semestre, la adopción de inteligencia artificial o de tecnología no es tecnológica, o sea, es, está más amarrada a los procesos organizacionales.
+- **[00:45] Participante:** ¿Quién toma la decisión?
+- **[00:45] Participante:** ¿Cómo toma esa decisión? ¿Cuál es el flujo del trabajo real? ¿Cuál es el proceso, el procedimiento? ¿Qué es lo que se hace allí en el detalle?
+- **[00:45] Participante:** Y también llego al último punto, es las personas. Aquí cuando hablamos de las personas estamos hablando de variables que tienen muchísimos niveles de Por ejemplo, la autoconfianza, qué tan, qué tan fluido me siento yo para adoptar una nueva herramienta cuando, por ejemplo, estoy en una organización donde es el que todas las personas que están en esos roles sean altamente técnicos. Atentos a esto.
+- **[00:45] Participante:** Cuando yo use el elemento técnico, no me estoy refiriendo únicamente a la tecnología, sino al saber hacer, o sea, a la experticia.
+- **[00:46] Participante:** Del saber, eso.
+- **[00:46] Participante:** Hago la salvedad.
+- **[00:46] Participante:** ¿Por qué?
+- **[00:46] Participante:** Aquí no estamos hablando solo de, ay, es que usted maneja muy bien el software. No, usted tiene una experticia técnica.
+- **[00:46] Participante:** No, usted sabe hacer.
+- **[00:46] Participante:** Un medicamento, usted sabe operar una máquina, usted sabe resolver ese problema, usted tiene una experticia en el saber hacer. Entonces los La adopción de tecnología, no, que viene, sí, bien, tiene que venir acompañada de infraestructura, de unos muy buenos datos.
+- **[00:46] Participante:** De unas bases de datos impecables, una consistencia.
+- **[00:46] Participante:** Tiene que estar articulada a un proceso organizacional.
+- **[00:46] Participante:** Que sea altamente funcional.
+- **[00:46] Participante:** ¿No?
+- **[00:46] Participante:** Parte de la resistencia es que muchas veces arrancamos a la transformación de procesos que no necesariamente son percibidos como Altamente eficientes. Entonces yo, pero este proceso no es importante, esto, este procedimiento tiene 15 pasos, pero en la vida real uno hace 6 y resulta que ese seguimiento no se hace, entonces el flujo o la necesidad percibida frente al uso o a la transformación de ese proceso pues no llega al punto que se espera, porque pues no es un proceso core de negocio, ¿cierto?
+- **[00:47] Participante:** Y además viene, como les decía, las habilidades.
+- **[00:47] Participante:** Aquí hay que reconocer algo.
+- **[00:47] Participante:** Y hay que ser súper honestos con esto, y es que no todos somos buenos en lo mismo.
+- **[00:47] Participante:** Punto.
+- **[00:47] Participante:** No todos somos buenos en lo mismo. Entonces las curvas de aprendizaje tienen sus tiempos.
+- **[00:48] Participante:** Y si aparte de eso tengo una cultura que es ese sistema sombrilla donde históricamente no se ha premiado, no se ha hablado, no se ha alineado ese elemento, pues las personas dicen: yo no voy a demostrar que no tengo una habilidad.
+- **[00:48] Participante:** ¿Cierto?
+- **[00:48] Participante:** O que me cuesta trabajo, o me cuesta, no sé.
+- **[00:48] Participante:** Tener atención plena en un software o tener esa atención al detalle me cuesta, yo no voy a mostrar que es que no puedo.
+- **[00:48] Participante:** O que no me gusta, o que no soy tan hábil en eso.
+- **[00:48] Participante:** ¿Qué van a pensar mis compañeros si me ven operando un software o una tecnología y se dan cuenta que es que, perdón la expresión, a mí la tecnología me habla?
+- **[00:48] Participante:** Porque mi forma de trabajar fue otra. Entonces, ante esa posible exposición con pares, yo qué hago, yo aumento la resistencia.
+- **[00:48] Participante:** Bien.
+- **[00:49] Participante:** Entonces aquí viene la otra parte, y es que no todas las personas tienen la misma capacidad de integrar de manera rápida la tecnología a su quehacer cotidiano.
+- **[00:49] Participante:** Necesitan mayor acompañamiento, necesitan
+- **[00:49] Participante:** una adaptación en el cómo le enseñamos a la gente.
+- **[00:49] Participante:** Y aquí voy a hacer un zoom.
+- **[00:49] Participante:** Yo en pregrado solamente tengo un curso. Yo estoy, como les cuento, más en, tengo mucha consultoría.
+- **[00:49] Participante:** Y tengo clases de posgrado. En pregrado yo solamente dicto un curso, pero yo tengo muchas conversaciones con mis estudiantes que son de muchos programas, de medicina, de ingenierías, de derecho. Medicina veterinaria, bueno, todos los programas que ustedes saben que tenemos en ICES. Y el punto es que los jóvenes aprenden distinto.
+- **[00:49] Participante:** O sea, ellos aprenden diferente, ellos tienen los periodos atencionales son más cortos. Entonces, si yo me quedo enseñándoles y diciéndole a usted quiere saber hacer esto, vaya, le hace el procedimiento.
+- **[00:50] Participante:** Vaya, vaya, revise el manual de procesos. Vaya, es este libro, tenga y vaya, revise el manual de procesos. Los jóvenes y las personas que están en esa generación entre los 20 y los 35 5 años, ya esa no es su única forma de aprender.
+- **[00:50] Participante:** Entonces queremos que las personas adopten o se apropien de tecnologías.
+- **[00:50] Participante:** Y los instructivos no son claros.
+- **[00:50] Participante:** No.
+- **[00:50] Participante:** No son.
+- **[00:50] Participante:** Amigables.
+- **[00:50] Participante:** Por eso aquí hablamos también de experiencia. No tienen esa experiencia para el aprendizaje adecuada y queremos que las personas, pues no, fluyan, háganle. No, pero es que nosotros les mandamos el instructivo para que aprendan.
+- **[00:50] Participante:** Venga, y usted le hizo un piloto a ese instructivo, usted verificó.
+- **[00:50] Participante:** Con las personas que están en el área de operaciones, ¿cómo están entendiendo esto?
+- **[00:51] Participante:** No, pero es que es muy sencillo. Sencillo para quién, puede ser sencillo para usted, pero quien efectivamente lo va a usar puede que no sea sencillo. Entonces aquí es donde ¿Por ejemplo, la inteligencia artificial?
+- **[00:51] Participante:** El valor real de la inteligencia artificial es cuando esa inteligencia artificial o esa tecnología se integra adecuadamente a los procesos organizacionales críticos que se vuelven ese casi que no negociable, pues es que, ¿cómo vamos a ir en contra de esto? Pues que ese es el negocio mismo, y adicionalmente se integra adecuadamente con las prácticas humanas.
+- **[00:51] Participante:** Es decir, con el cómo trabajamos.
+- **[00:51] Participante:** Si me siguen, o sea, no es esto, no es una receta mágica.
+- **[00:51] Participante:** Para todas las organizaciones.
+- **[00:51] Participante:** Porque las organizaciones tienen formas de operar diferentes.
+- **[00:51] Participante:** No es lo mismo
+- **[00:52] Participante:** La fabricación, vuelvo con el ejemplo de la de farmacéutico, de la producción de un medicamento en Tecnoquímicas a una producción de medicamentos en Abbott o a una empresa también del sector salud como, no sé, tecnología.
+- **[00:52] Participante:** ¿Cómo lo hacen?
+- **[00:52] Participante:** Ese cómo lo hacen, entender ese cómo lo hacen.
+- **[00:52] Participante:** Cuando yo hago suma en eso, puedo integrar adecuadamente la tecnología.
+- **[00:52] Participante:** ¿Cómo nosotros creamos valor?
+- **[00:52] Participante:** ¿Cómo le facilito yo con esa tecnología?
+- **[00:52] Participante:** Esa transición a mi cliente interno, a mi cliente externo.
+- **[00:52] Participante:** Dándole un alto valor percibido sobre el uso de esa tecnología. ¿Qué proceso le voy a facilitar?
+- **[00:52] Participante:** Esas son preguntas que debemos hacer. Y por ende, ¿cuál es el miedo que tienen en la adopción?
+- **[00:52] Participante:** ¿Sí ven?
+- **[00:53] Participante:** ¿Qué temor tiene enfrente?
+- **[00:53] Participante:** A la tecnología en sí misma.
+- **[00:53] Participante:** Esas son preguntas.
+- **[00:53] Participante:** Que cuando empezamos a hablar de adopción de tecnología, de transformación digital de un negocio, hay que identificar.
+- **[00:53] Participante:** ¿Qué gana y qué pierden las personas cuando adoptan esa tecnología?
+- **[00:53] Participante:** Versus qué es importante para ellos.
+- **[00:53] Participante:** En su ejercicio laboral, voy a poner un ejemplo sencillo.
+- **[00:53] Participante:** De los retos que hay ahora.
+- **[00:53] Participante:** Para la adopción de tecnología, por ejemplo, en relación a los datos.
+- **[00:53] Participante:** Y la toma de decisiones basadas en datos es que hasta hace un tiempo había áreas al interior de las organizaciones que eran donde convergen toda la data robusta de las organizaciones, ¿no? Entonces había un dueño de esa información.
+- **[00:53] Participante:** Y resulta que cuando la organización estratégicamente dice nosotros tenemos que ser más rápidos, tenemos que leer mejor el mercado, tenemos que adaptarnos, tenemos que ganar, porque una Una cosa es lograr el objetivo como organización y otra cosa es lograr, es llegar primero. Esas son dos diferencias muy importantes en lo estratégico.
+- **[00:54] Participante:** Empiezan las organizaciones a decir nosotros necesitamos que toda nuestra gerencia pueda tomar decisiones basadas en datos.
+- **[00:54] Participante:** Y entonces esa persona, esa área que ha sido el dueño al que había que pedirle la información
+- **[00:54] Participante:** y custodiaba esa información, ya no es el único que tiene acceso a eso.
+- **[00:54] Participante:** Si es una persona que dentro de su motivación está ser el dueño
+- **[00:54] Participante:** No, aquí hablo, atentos a esto, estoy hablando de personas. Si tenemos un dueño de esa información que ha estado acostumbrado a que venga Mónica, ay, mándame, compárteme esto.
+- **[00:54] Participante:** Mónica, ¿cómo estás? Mónica. Y ha generado una estructura de poder a la luz de tener esa información en el momento en que nosotros le decimos, mira, Mónica, es que tú ya no vas a ser la única dueña responsable de los datos, porque vamos a transformar un poco la forma como tú cuidas nuestros datos, porque es que ya la idea es que toda la gerencia pueda tener acceso a ellos de manera rápida.
+- **[00:55] Participante:** Si a Mónica le interesa mantener el poder, mantener el estatus, ser reconocida, ser la que más, no, el hombro que tocan para tomar las decisiones importantes y eso es relevante para su proyección y su proyecto de vida. Y yo le digo, tú ya no vas a ser la única. ¿Qué creen que va a pasar?
+- **[00:55] Participante:** Que aumentó la resistencia.
+- **[00:55] Participante:** Así de simple.
+- **[00:55] Participante:** Aumento la resistencia, no por nada más, sino porque hay algo que empiezo a perder.
+- **[00:55] Participante:** Al entregar esa información.
+- **[00:56] Participante:** Que Mónica empieza a perder cuando entrega esa información. Entonces, por eso es necesario tener estas conversaciones cuando hablamos de cambio y cultura.
+- **[00:56] Participante:** Listo.
+- **[00:56] Participante:** Voy a compartir nuevamente.
+- **[00:56] Participante:** Entonces estábamos aquí.
+- **[00:56] Participante:** Y en este
+- **[00:56] Participante:** En este punto.
+- **[00:56] Participante:** Es como, por ejemplo, en la adopción de IA.
+- **[00:56] Participante:** Se tienen que dar unas, unas condiciones organizacionales. Lo primero es que la estrategia nos define dónde una inteligencia artificial o dónde una tecnología genera valor. Genera valor, ¿para qué? Para el negocio. Entonces lo primero que hay que tener claro es estratégicamente para dónde vamos y
+- **[00:56] Participante:** qué necesitamos, cuáles son nuestras, nuestras elecciones y nuestras decisiones a la luz del negocio en sí mismo, independientemente si la organización es con o sin ánimo de lucro. Eso es indiferente.
+- **[00:57] Participante:** Pero resulta que una vez la estrategia te dice hacia dónde vamos y dónde una tecnología o la inteligencia artificial puede generar valor, llega un segundo momento, y es que la la cultura organizacional habilita las decisiones.
+- **[00:57] Participante:** ¿En qué? Aquí les pongo el ejemplo, basadas en datos.
+- **[00:57] Participante:** Habilita las decisiones, es decir, genera un ecosistema o ha creado previamente un ecosistema para que esa inteligencia artificial o esa tecnología se integra adecuadamente.
+- **[00:57] Participante:** En las prácticas cotidianas.
+- **[00:57] Participante:** Y la gestión de cambio.
+- **[00:57] Participante:** Integra esta tecnología en procesos y prácticas. Resulta que la cultura es esa condición previa para una adecuada adopción.
+- **[00:58] Participante:** Pero el proceso de gestión de cambio, por eso está esta asignatura, el liderazgo, cultura y gestión de cambio.
+- **[00:58] Participante:** El proceso de cambio permite la integración en los procesos y prácticas. La gestión de cambio hace que esa estrategia, esa cultura que facilita se pueda transformar y se pueda coconstruir.
+- **[00:58] Participante:** A la luz de las necesidades organizacionales, ¿para qué?
+- **[00:58] Participante:** una adopción efectiva.
+- **[00:58] Participante:** Entonces yo tengo que tener que ir como chuleando.
+- **[00:58] Participante:** Estratégicamente, ¿dónde estamos? ¿Cuáles son nuestras elecciones? Bueno, y nuestra cultura, ¿cómo está para eso que estamos diciendo? Y bueno, vamos a integrarlo adecuadamente, bajémoslo, contextualicemos esa tecnología.
+- **[00:58] Participante:** A la luz de nuestro negocio, hagámoslo explícito a la luz de nuestro negocio para lograr que haya adopción.
+- **[00:58] Participante:** O que haya una apropiación en las prácticas y procesos.
+- **[00:59] Participante:** Cotidiano, desorganización.
+- **[00:59] Participante:** Preguntas hasta acá, grupo. De pronto, como conversemos un poquito, ¿cómo lo ven?
+- **[00:59] Participante:** Esta es la razón por la cual trabajo con el equipo consultor de ingenierías en adopción.
+- **[00:59] Participante:** Si ven, o sea, es yo declaro para dónde voy como negocio.
+- **[00:59] Participante:** La estrategia dice, oiga, si está esta inteligencia artificial, esta tecnología, esta transformación me va a generar valor para ese negocio, en un segundo momento, ven, Venga, usted sí está humanamente preparado para eso, su organización está preparada para eso, y si no lo está, ¿qué necesita para estar preparada? ¿Para qué? Para gestionar el cambio.
+- **[00:59] Participante:** ¿En qué? En los procesos y prácticas y lograr la adopción efectiva.
+- **[00:59] Participante:** Entonces, ¿cómo lo ven?
+- **[00:59] Participante:** Pero en últimas, también, Mónica, la lectura podría ser es los procesos de gestión de cambio son los que van creando, van construyendo esa cultura, también los hábitos, van Creando las formas de comportamiento para ir conformando esa cultura.
+- **[01:00] Participante:** Exactamente, porque es que lo interesante de la cultura con la transformación es que esa relación es bidireccional.
+- **[01:00] Participante:** O sea, lo que tú creas y lo que tú construyes en un proceso de cambio que es intencional, o sea, cuando hay un proceso de cambio tiene que haber una intencionalidad en la transformación.
+- **[01:00] Participante:** Una vez tú logras que eso se, las personas lo apropien y lo hagan, suena un poco contrario a lo que han visto también, pero inclusive en piloto automático lo No, ahí decimos no, hay que tener más conciencia, apaga el piloto automático. Pero cuando hablamos de cambio y tecnología es aún en piloto automático, las personas lo usen adecuadamente, tú devuelves y construyes cultura.
+- **[01:01] Participante:** Robustez es tu cultura. La cultura, acá lo voy a poner
+- **[01:01] Participante:** Perdón.
+- **[01:01] Participante:** Voy a borrar.
+- **[01:01] Participante:** La cultura hay que hacerle zoom.
+- **[01:01] Participante:** No, y saber qué es.
+- **[01:01] Participante:** Miren, básicamente es todo lo que una organización ha aprendido.
+- **[01:01] Participante:** A lo largo de su historia.
+- **[01:01] Participante:** ¿Para qué?
+- **[01:01] Participante:** Para adaptarse al entorno.
+- **[01:01] Participante:** Para mantenerse operando, independientemente si es con o sin ánimo de lucro.
+- **[01:01] Participante:** Entonces, ¿qué incluye? Ciertas formas de pensar.
+- **[01:01] Participante:** Actuar.
+- **[01:01] Participante:** Formas de relacionamiento.
+- **[01:01] Participante:** Lenguaje no verbal.
+- **[01:01] Participante:** Conductas éticas.
+- **[01:01] Participante:** ¿Cierto?
+- **[01:01] Participante:** Formas de solucionar problemas.
+- **[01:01] Participante:** Que adicionalmente tienen una diferencia, y es que la cultura permanece en el tiempo.
+- **[01:02] Participante:** Permanece en el tiempo.
+- **[01:02] Participante:** Tanto que las personas y los equipos la ven como algo natural.
+- **[01:02] Participante:** Y automática es.
+- **[01:02] Participante:** Lo que las personas, cuando llega alguien nuevo, le enseñan de manera implícita a ese que llega.
+- **[01:02] Participante:** Miren, hay una, este año, bueno, entre el año pasado y este, yo hice una medición.
+- **[01:02] Participante:** Casualmente me contrataron para hacer una medición de clima.
+- **[01:02] Participante:** Era medición de clima organizacional.
+- **[01:02] Participante:** En una agroindustria.
+- **[01:02] Participante:** Y el clima es una dimensión de la cultura. Entonces esa es la razón por la cual termino yo haciendo esa medición de clima.
+- **[01:02] Participante:** Y esta organización había tenido varios momentos difíciles.
+- **[01:02] Participante:** Temas operativos.
+- **[01:02] Participante:** Temas de precio.
+- **[01:02] Participante:** Compradores.
+- **[01:02] Participante:** Inclusive sucesión, o sea, personas que se iban.
+- **[01:03] Participante:** Habían sido tantos cambios en una compañía que tiene 100 años de operación.
+- **[01:03] Participante:** Que ellos decían, mira, yo quiero saber con todos estos cambios cómo están las personas, o sea, cuál es ese clima. El clima organizacional sí es muy subjetivo.
+- **[01:03] Participante:** Y es, y tiene un espacio de temporalidad.
+- **[01:03] Participante:** Resulta que en esa compañía medimos
+- **[01:03] Yo:** Hold on.
+- **[01:03] Participante:** El 92% de su planta.
+- **[01:03] Participante:** Que correspondía a más de 2300 personas.
+- **[01:03] Participante:** Y los resultados fueron muy homogéneos, o sea, fueron muy similares en toda la operación.
+- **[01:03] Yo:** Oh, okay.
+- **[01:03] Participante:** Entonces, ya hablando con el equipo directivo, yo les decía, ustedes aquí tuvieron un resultado no de clima, tuvieron un resultado de cultura.
+- **[01:03] Yo:** Oh, okay.
+- **[01:03] Participante:** Porque que en todas las áreas haya esa consistencia en los datos, que el operario de planta que está por allá a 50 kilómetros y el gerente que que está aquí diga, mi jefe, mi líder es una persona cálida, cercana y demás?
+- **[01:04] Participante:** Ahí estás hablando de tu cultura, no estás hablando de tu clima.
+- **[01:04] Participante:** Entonces, toda esa innovación, toda esa transformación, toda esa tecnología que llega a ser parte de una organización tiene que enfrentarse con una cultura, con una práctica, con un aprendizaje que puede facilitar o que puede delimitar esa puesta en marcha de esos proyectos.
+- **[01:04] Participante:** Y miren, acá hay otro punto que yo quiero hacer.
+- **[01:04] Participante:** Énfasis y lo voy a subrayar.
+- **[01:04] Participante:** Es que lo más complejo
+- **[01:04] Participante:** Es.
+- **[01:04] Participante:** Este nivel.
+- **[01:04] Participante:** las formas de pensar.
+- **[01:04] Participante:** Cuando hay creencias compartidas.
+- **[01:04] Participante:** Esa es la parte más retadora de transformar en una organización.
+- **[01:04] Yo:** Wow.
+- **[01:05] Participante:** Entonces, cuando decía, decían uno de ustedes ahora, es que nos va la tecnología, nos va a sacar.
+- **[01:05] Yo:** Oh, oh yeah.
+- **[01:05] Participante:** Y no es solamente Mónica la que lo piensa, sino que Mónica, Carlos, Pedro, Juan, el compañero que está en Bogotá, el otro que está en Chile, y todos estamos pensando lo mismo.
+- **[01:05] Participante:** Allí hay creencias.
+- **[01:05] Participante:** Creencias compartidas.
+- **[01:05] Participante:** Que no están declaradas. Es decir, usted va a la organización y usted no ve ninguna pared diciendo, aquí creemos que la tecnología nos va a reemplazar, ¿no?
+- **[01:05] Participante:** Pero la gente en ese nivel de interacción tienen en su conjunto esa creencia.
+- **[01:05] Participante:** Entonces, si yo pienso que la tecnología me puede reemplazar, pues tal vez yo ya no me voy a sentir tan cómodo de participar en proyectos que sean estratégicos para la transformación de tecnología.
+- **[01:05] Participante:** ¿Ves?
+- **[01:05] Participante:** Cuéntame.
+- **[01:05] Participante:** Hola, te quería consultar, Mónica.
+- **[01:06] Participante:** Y aquella, digamos, esa cultura, porque lo hay pues unas culturas que son un poco nocivas, incómodas, digamos, disfuncionales.
+- **[01:06] Participante:** Exactamente, digámoslo, digámoslo. Y en el sector pues donde estamos nosotros, en el público, es mucho. Entonces, cuando le dicen a uno la Contraloría, la Procuraduría, que es una O sea que el mundo ya sabe que es una cultura nociva.
+- **[01:06] Participante:** malintencionada, que como hablábamos por allá con Jimena, son los que llegan con dos patadas voladoras.
+- **[01:06] Participante:** Con los taches arriba. Sí, de acuerdo, de acuerdo. ¿Cómo analizas esa situación?
+- **[01:06] Participante:** Bueno, el punto aquí, Rodrigo, es que las organizaciones están inmersas en un contexto y tienen a su vez en ese contexto diferentes grupos de interés.
+- **[01:07] Participante:** Y construye relaciones con ese contexto. Y lo que he visto, y no hablo solamente desde un rol como la Procuraduría, la Contraloría, que yo me acuerdo que por allá les decían las asustadurías. No sé si todavía les dicen así, pero les decían las asustadurías.
+- **[01:07] Participante:** El rol que muchas veces tiene ese funcionario en su tema conductual.
+- **[01:07] Participante:** Inclusive lo he visto en patrones un poquito similares en las áreas de calidad.
+- **[01:07] Participante:** internas.
+- **[01:07] Participante:** Es como ser el fiscalizador y el decir qué estás haciendo mal, o sea, el de ir a buscarte el error en tu proceso.
+- **[01:07] Participante:** operacional.
+- **[01:07] Participante:** Entonces, conductualmente, el funcionario llega a la organización con los taches arriba.
+- **[01:07] Participante:** Y yo lo recibo con los taches arriba. Entonces, así ese funcionario de entrada llegue con una actitud diferente, mira, no, es que yo quiero ver cómo, cómo estás operando, qué necesitas, como a facilitar o a desbloquear.
+- **[01:08] Participante:** Mi creencia previa, porque además tengo bastante experiencia en esto, es decir, este funcionario me va a llegar es a fiscalizar y me va a buscar qué estoy haciendo mal.
+- **[01:08] Participante:** No.
+- **[01:08] Participante:** Entonces, toda esa creencia compartida hace que el relacionamiento de esta organización con este grupo de interés particular de entrada esté, sea altamente tensionante.
+- **[01:08] Participante:** Entonces, cualquier
+- **[01:08] Participante:** Inclusive.
+- **[01:08] Participante:** Devolución práctica, retroalimentación que haga esta entidad.
+- **[01:08] Participante:** Que puede en algunos casos tener razón, para mí ya es como organización puede ser tomada como es que me está buscando, qué estaba haciendo mal, es que Si me sigues, o sea, como que de entrada no tiene el valor de mira, te voy a ayudar a mejorar el proceso, porque primero muchas veces estos funcionarios no lo demuestran Desde su comportamiento y su acompañamiento a las organizaciones públicas de esa manera. Y adicionalmente, yo tengo experiencia previa en manejar esas, esas auditorías o esas revisiones de los entes reguladores. Entonces, el aprendizaje previo de entrada hace que esa relación se vea, se vea y se ejecute como tensionante.
+- **[01:09] Participante:** No sé si respondí tú. No, sí, de acuerdo. No, llamarte uno siente que también hay un ambiente de chantaje.
+- **[01:09] Participante:** Además.
+- **[01:09] Participante:** Que es otra práctica que ahí ya entra en la línea de lo ético, de lo que uno desearía que pasara y no pasara, ¿no? Entonces, como que definitivamente ese no debería ser el rol. El rol es ¿Cómo te ayudo a ti como organización a que hagas mejor tu proceso? Yo tengo el control, yo te puedo sancionar, yo te puedo mandar a un disciplinario. Y te amenaza fiscal, te amenaza, te lo dicen, es que si usted no hace eso lo mando a un disciplinario. No, bueno, digamos el tema del fiscal.
+- **[01:10] Participante:** Pero si yo aún hallazgo temas fiscales, es el más complicado de todos.
+- **[01:10] Participante:** Porque ese sí te pone, digamos, por toda parte. Además de buscar ahogado.
+- **[01:10] Participante:** Y tener lo que pagar, porque las responsabilidades son individuales. Sí.
+- **[01:10] Participante:** Ahí la organización queda inmediatamente solo en este tipo de sector público.
+- **[01:10] Participante:** Y uno también siente que pareciera que es como que le dieran puntos para ascensos y demás.
+- **[01:10] Participante:** Ajustos y más.
+- **[01:10] Participante:** Situacionales.
+- **[01:10] Participante:** Generen. Y si es un contratista, entonces no, yo necesito aquí generar todas las situaciones administrativas.
+- **[01:11] Participante:** Para que me corrijas.
+- **[01:11] Participante:** Sí.
+- **[01:11] Participante:** Sí, pero esa parte es muy compleja porque, porque yo quiero pasar para hacer un zoom en esto que estamos hablando. Quiero, perdón, voy a pasar este a este slide y luego me devuelvo.
+- **[01:11] Participante:** Eso que estamos hablando con el ejemplo que trae Rodrigo es esto.
+- **[01:11] Participante:** Miren.
+- **[01:11] Participante:** El contexto.
+- **[01:11] Participante:** Hay que entender muy bien cuál es el contexto, el contexto donde está la organización. No es lo mismo una organización de servicios públicos de tecnología que opera en Cali a una organización en el Guaviare. Tienen un marco regulatorio además que puede ser común, pero la manera como esa organización se construye internamente para adaptarse a ese contexto y sostenerse en el tiempo puede variar.
+- **[01:12] Participante:** Es más, ustedes pueden ver la diferencia entre qué es operar, qué es trabajar, por ejemplo, en una sede que en otras.
+- **[01:12] Participante:** ¿No?
+- **[01:12] Participante:** El contexto.
+- **[01:12] Participante:** Ay, pero es que usted de este barrio no puede salir después de tal hora. Contexto.
+- **[01:12] Participante:** Ah, pero usted es una entidad pública, entonces usted tiene una forma y unos mecanismos regulatorios diferentes. Ah, usted es una empresa de servicios públicos, sí tiene el contrato condiciones uniformes. No sé si todavía está allí o tiene esta normativa.
+- **[01:12] Participante:** Pero, ¿cómo usted internamente se organiza?
+- **[01:12] Participante:** Lo que dice normalmente en ese contexto, por ejemplo, en un caso como el contexto normativo, le dicen a las organizaciones: usted tiene que cumplir con esto, con esto, con esto, con esto, pero no No necesariamente te obliga exactamente milimétricamente como usted lo va a hacer al interior de su organización.
+- **[01:13] Participante:** Ahí es donde viene esta otra dimensión.
+- **[01:13] Participante:** En esta dimensión, que es la dimensión organizacional, aquí viene la cultura.
+- **[01:13] Participante:** La estrategia.
+- **[01:13] Participante:** estructura, es decir, el organigrama y la gobernanza.
+- **[01:13] Participante:** Usted como organización.
+- **[01:13] Participante:** Es libre hasta cierto punto de acomodarse internamente.
+- **[01:13] Participante:** Para garantizar su operación y generar valor.
+- **[01:13] Participante:** Y aquí viene otro punto.
+- **[01:13] Participante:** ¿Y son?
+- **[01:13] Participante:** Los equipos.
+- **[01:13] Participante:** Los equipos hacen parte de esa organización, pero también generan una identidad propia.
+- **[01:13] Participante:** Y eso se puede ver inclusive en las diferencias de las unidades de negocio.
+- **[01:13] Participante:** Unidades de negocio, procesos, oficinas comerciales. ¿En qué área estás? O sea, es que nosotros en esta área tenemos esto, esto y esto, y aquí trabajamos Trabajamos de esta manera, aquí siempre que llegamos, el que llega a la oficina, ay, da la vuelta y saluda a todas las personas. Los equipos crean un sistema también que garantiza su operación.
+- **[01:14] Participante:** A la luz de que es un mecanismo de colaboración, del refuerzo entre pares, cuando usted hace parte de equipo y ese equipo es cohesionado.
+- **[01:14] Participante:** Y usted de pronto tiene un comportamiento que no es, no sé, no es el esperado, no espera ni siquiera usted que su jefe le diga algo, sino que su propio compañero de trabajo que le dice, Mónica, mucho cuidado. Pilas, mira que hiciste esto. Ahí los equipos también se regulan.
+- **[01:14] Participante:** Bien.
+- **[01:14] Participante:** Y acá viene el otro punto y es las personas.
+- **[01:14] Participante:** Los Mónica, Pedro, Carlos, Juan.
+- **[01:14] Participante:** ¿Qué disposición tienen para aprender?
+- **[01:14] Participante:** ¿Cómo integran esa tecnología nueva en sus, en sus hábitos? ¿Cómo eso lo hacen un hábito?
+- **[01:15] Participante:** ¿Qué importancia le ven?
+- **[01:15] Participante:** ¿Qué tan rápido aprende?
+- **[01:15] Participante:** Entonces, cuando nosotros hablamos de un proceso de transformación organizacional a la luz de la tecnología, yo tengo que empezar a generar alineación en todo esto.
+- **[01:15] Participante:** Cuando yo empecé a trabajar cultura
+- **[01:15] Participante:** Inclusive en subculturas como la subcultura de la innovación.
+- **[01:15] Participante:** Lo que nos dábamos cuenta es que había equipos que tenían mejor desempeño.
+- **[01:15] Participante:** Mejor disposición para innovar.
+- **[01:15] Participante:** Que había personas que también, pero resulta que la organización todavía no había llegado a modificar este nivel.
+- **[01:15] Participante:** No lo estaba haciendo explícito.
+- **[01:15] Participante:** No estaba creando inclusive las sanciones necesarias para la persona que dice, ah, no, yo no quiero, de malas, yo no lo voy a hacer, hágalo usted, yo no quiero hacer eso, no.
+- **[01:16] Participante:** No generaba inclusive la compensación.
+- **[01:16] Participante:** No generaba las políticas.
+- **[01:16] Participante:** Ay, queremos ser incluyentes y tener una organización de perspectiva diversa, y ¿dónde está eso declarado?
+- **[01:16] Participante:** ¿Qué pasa si mi compañero tiene un comportamiento inadecuado frente a la diversidad? ¿Qué va a pasar? ¿Cuál es la sanción?
+- **[01:16] Participante:** Ah, no, es que no, aquí no hay sanción moral, aquí no pasa nada. Entonces ahí es donde la organización tiene que empezarse a cuestionar, venga, y usted, ¿qué está haciendo como organización para que esa transformación y esa adaptación del negocio se dé efectivamente. Jairo.
+- **[01:16] Participante:** Sí, Mónica, una pregunta, ya que estás hablando pues de los casos en que quizá la cultura pues debe transformarse para poder lograr esos cambios. Yo por ahí estuve leyendo un libro que se llama Yo leí una frase de un líder estoico y pues hablaba como el control que puede tener el CEO sobre cosas dentro de la organización. Y una de las cosas decía que la cultura depende directamente del CEO, ¿cierto? Yo quería preguntarte a vos, Mónica, en tu experiencia, si es tan así, si depende bien como de la visión que el CEO tiene de cultura y cómo has visto que funciona esta metodología para poder hacer cambios en la cultura.
+- **[01:17] Participante:** Te voy a decir algo importante a la luz de esto, Jairo, y es que
+- **[01:17] Participante:** La gerencia general.
+- **[01:17] Participante:** Es el mejor aliado que tú puedes tener para una transformación organizacional.
+- **[01:17] Participante:** Y de hecho, si en algún momento lo vemos importante y relevante, podemos hacer doble clic. No, no está muy explícito.
+- **[01:17] Participante:** En parte, así, en parte del curso, pero voy a ampliarlo un poco más.
+- **[01:17] Participante:** Y es el manejo de las redes de poder al interior de una organización.
+- **[01:18] Participante:** Entonces, el CEO o el gerente de un área tiene un poder legítimo.
+- **[01:18] Participante:** Es decir, es el reconocido y el que tiene el letrero aquí gigante.
+- **[01:18] Participante:** Que responde hacia los grupos de interés, en muchos casos, por toda esa operación de esa organización. Entonces, tener un CEO como aliado de una transformación organizacional Da un mensaje directo a todas y cada una de las personas que hacen parte de esa organización en sus diferentes grupos de interés.
+- **[01:18] Participante:** De qué es lo que empieza a importar para esa organización.
+- **[01:18] Participante:** Para eso el CEO lo hace explícito en sus reuniones.
+- **[01:18] Participante:** De hecho, en esa gobernanza o en ese hacerlo explícito en el cómo opera la organización, se empiezan a transformar formas de medir, o sea, los indicadores se empiezan a ajustar.
+- **[01:18] Participante:** ¿No?
+- **[01:18] Participante:** El CEO lo incluye.
+- **[01:19] Participante:** En compañía de su grupo directivo y les dice explícitamente, equipo, esto hay que hacerlo.
+- **[01:19] Participante:** Y lo tenemos que trabajar y lo tenemos que tener funcionando en 4 o 5 meses o en 3 meses o ya, cuando el CEO lo expresa de esa manera.
+- **[01:19] Participante:** De entrada facilita mucho la transformación organizacional porque es una directriz, es decir, en ese rol de poder es vertical.
+- **[01:19] Participante:** Ah, bueno, el gerente general lo dijo así, tenemos que empezarlo.
+- **[01:19] Participante:** A trabajar.
+- **[01:19] Participante:** Pero resulta que muchas veces eso, que ese CEO lo diga, en la gran mayoría de los casos no es suficiente.
+- **[01:19] Participante:** El reto de la transformación organizacional, realmente, ¿quiénes lo tienen? La gerencia media.
+- **[01:19] Participante:** La gerencia media.
+- **[01:19] Participante:** La gerencia media es el que decide.
+- **[01:20] Participante:** ¿Cómo transforma lo que ese CEO está diciendo y lo hace explícito en su operación?
+- **[01:20] Participante:** Perdón la expresión, cómo lo tropicaliza, cómo hace suyo ese proceso y esa directriz de la organización. Entonces, respondiendo a tu pregunta, para una transformación en este nivel
+- **[01:20] Participante:** El sí, el visto bueno del CEO es un mensaje directo de para dónde vamos estratégicamente y que no vamos a negociar, pero quiénes en empiezan a alinear y hacer que eso ocurra en la gerencia media.
+- **[01:20] Participante:** Y la gerencia media en su liderazgo se vuelve una bisagra.
+- **[01:20] Participante:** De hecho, yo hablo mucho, yo uso mucho esa analogía, y es: los líderes somos bisagras, los líderes conectamos la estrategia del negocio con su ejecución.
+- **[01:21] Participante:** Esa es nuestra función.
+- **[01:21] Participante:** Haciendo uso adecuado de recursos y capacidades.
+- **[01:21] Participante:** Recursos.
+- **[01:21] Participante:** Basados en la tecnología.
+- **[01:21] Participante:** En las personas.
+- **[01:21] Participante:** En la cultura.
+- **[01:21] Participante:** No.
+- **[01:21] Participante:** Nosotros somos los que capitalizamos eso y lo llevamos a la operación.
+- **[01:21] Participante:** Entonces no sé si contesté tu pregunta, pero sí, Mónica, muchas gracias. No es suficiente que el CEO lo diga, ayuda un montón, sí.
+- **[01:21] Participante:** Porque ahí tienes también, de pronto tienes una argumentación de venga, pero es que esto es una directriz de gerencia.
+- **[01:21] Participante:** Oh.
+- **[01:21] Participante:** Más todavía.
+- **[01:21] Participante:** Es que esto ya está aprobado por junta directiva.
+- **[01:21] Participante:** Eso es.
+- **[01:21] Participante:** Esa es otra cosa, o sea, eso ya, ya lo que yo empiezo es a generar mecanismos de alineación.
+- **[01:21] Participante:** Para garantizar que estos niveles empiecen a hablar el mismo idioma.
+- **[01:22] Participante:** Ah, bueno, ¿y qué vamos a hacer con las personas que efectivamente no lo hagan?
+- **[01:22] Participante:** Que incumplan con esa normativa o con esa práctica organizacional.
+- **[01:22] Participante:** ¿Qué es lo que vamos a hacer?
+- **[01:22] Participante:** Desde lo explícito, es decir, esto va a dar para descargos. Por ejemplo, yo he participado en procesos de transformación cultural en la cual hemos tenido que hacer otros contratos.
+- **[01:22] Participante:** Por ejemplo, dice, pero profe, ¿qué tiene que ver eso con cultura? Ah, usted quiere ser consistente y coherente, empiece a generar las sanciones correspondientes.
+- **[01:22] Participante:** Si definitivamente eso se va a volver un no negociable para usted como organización, hago, pongo aquí de ejemplo, no necesariamente el tema de tecnología, pero por ejemplo el tema cuando las organizaciones Organizaciones dicen nosotros somos una organización diversa donde la equidad y la inclusión está.
+- **[01:22] Participante:** Ok, usted quiere que eso se viva realmente, genere el ecosistema internamente.
+- **[01:23] Participante:** Acompaña a los líderes de las buenas herramientas, haga un proceso de cambio estructurado.
+- **[01:23] Participante:** Pero en algún momento usted lo tiene que hacer explícito en su contrato.
+- **[01:23] Participante:** Ah, es que a partir de tanto tiempo eso va a ser considerado una falta grave.
+- **[01:23] Participante:** Y ante una falta grave yo te puedo despedir sin justa causa.
+- **[01:23] Participante:** ¿Qué tiene que ver eso con la operación?
+- **[01:23] Participante:** Pues tiene todo que ver con la operación porque lo que yo empiezo es alinear este nivel.
+- **[01:23] Participante:** Para hacer que las cosas de manera consistente pasen.
+- **[01:23] Participante:** Si ven como por dónde va.
+- **[01:23] Participante:** El agua al molino con este punto de la cultura.
+- **[01:23] Participante:** Preguntas.
+- **[01:23] Participante:** Básicamente entonces la estrategia nos dice hacia dónde vamos.
+- **[01:23] Participante:** La cultura organizacional nos dice el cómo vamos a lograr eso que nos comprometimos y lo que queremos como organización.
+- **[01:24] Participante:** Y el líder es el que decide si eso va a pasar o no.
+- **[01:24] Participante:** Por eso invertir en liderazgo en las compañías siempre es necesario, porque el líder es el que garantiza si eso pasa o no pasa.
+- **[01:24] Participante:** Cómo lo tropicaliza en su proceso, cómo lo hace explícito en su proceso, porque quien conoce a su equipo es el líder.
+- **[01:24] Participante:** Usualmente se espera, hay líderes que no los conocen, pero es lo que más se espera. O sea, la probabilidad de que un líder conozca a su equipo es mayor a que sea la de recursos humanos cuando tiene más de 2000 personas en toda la organización.
+- **[01:24] Participante:** Usted es el que los ve, usted es el que trabaja con ellos, usted es el que lo acompaña, el que da las directrices.
+- **[01:24] Participante:** Bien.
+- **[01:24] Participante:** Ese es el punto.
+- **[01:24] Participante:** Entonces, cuando hablamos de cultura, hablamos del cómo opera la organización.
+- **[01:25] Participante:** Cómo se hace explícita en sus procesos. Yo ahora empiezo con una agroindustria también bastante grande.
+- **[01:25] Participante:** Como consultora en su proceso de alineación cultural.
+- **[01:25] Participante:** Y empezamos a decir cómo
+- **[01:25] Participante:** Y para entender ese cómo, para darles una idea, yo les pido a las organizaciones desde su mapa de procesos, core de negocios, cuáles son sus indicadores.
+- **[01:25] Participante:** Cuáles son las prácticas.
+- **[01:25] Participante:** Conocieras como inadecuadas, no negociables.
+- **[01:25] Participante:** Todas sus mediciones.
+- **[01:25] Participante:** Por ejemplo, de riesgo psicosocial en los últimos 5 años.
+- **[01:25] Participante:** ¿Cuáles son sus índices o sus indicadores de accidentalidad?
+- **[01:25] Participante:** ¿Cuáles son, por ejemplo, si son procesos productivos?
+- **[01:26] Participante:** ¿Cuáles son las métricas que tienen operativas?
+- **[01:26] Participante:** Si tienen patentes o desarrollos de nuevos productos o negocios, cada cuánto lo hacen. Entonces, si ustedes ven el modelo de liderazgo, el mapa de competencias, cuando yo he Entro a entender la cultura, yo la veo en todo eso.
+- **[01:26] Participante:** En todo, absolutamente todo. Entonces, la tecnología, ¿qué es lo que hace?
+- **[01:26] Participante:** Es facilitar el ritmo de la organización.
+- **[01:26] Participante:** Necesitamos ser más rápidos, necesitamos ser más competitivos.
+- **[01:26] Participante:** Y lo que les decía hace un ratito, hasta hace unos años lo que pasaba era que las compañías, cuando tenemos una trayectoria, nos dábamos el lujo de decir: no, es que yo soy esta empresa y a mí me buscan.
+- **[01:26] Participante:** Ahora no.
+- **[01:26] Participante:** Ahora es, es que yo tengo que ser primero.
+- **[01:26] Participante:** Porque es que en este momento mi cliente ya puede decidir.
+- **[01:27] Participante:** ¿A quién le compra? ¿Qué contratos hace? ¿Qué consume?
+- **[01:27] Participante:** Él ya puede decidir.
+- **[01:27] Participante:** Y cuando el cliente ya puede decidir, yo como organización tengo que tener mayor intención para traerlo, fidelizarlo, enamorarlo primero que mi competencia.
+- **[01:27] Participante:** Primero que mi competencia.
+- **[01:27] Participante:** Entonces ya el cliente no me toca la puerta, sino que tengo yo que esforzarme para garantizar la experiencia que ese cliente está buscando.
+- **[01:27] Participante:** Y sin esto
+- **[01:27] Participante:** No pasa.
+- **[01:27] Participante:** Y si la tecnología no se usa adecuadamente para habilitar ese ritmo, la organización pierde competitividad.
+- **[01:27] Participante:** Esa es la razón por la cual, para hablar de cambio, para hablar de transformación digital de negocio, hay que hacerle doble clic.
+- **[01:27] Participante:** A la cultura, la estrategia y el cómo opera esa organización.
+- **[01:28] Participante:** Que son diferentes.
+- **[01:28] Participante:** Preguntas hasta acá.
+- **[01:28] Participante:** De pronto quisiera escucharlos para ver reflexiones. Esta parte era muy teórica, lo siento, pero me gusta como hacer ese encuadre muy bien.
+- **[01:28] Participante:** Debe que podamos ver como el mapa completo.
+- **[01:28] Participante:** ¿De cuál es esa relación estrategia-cultura?
+- **[01:28] Participante:** Liderazgo.
+- **[01:28] Participante:** A la luz de un reto organizacional que es la transformación digital.
+- **[01:28] Participante:** Que tiene un propósito claro, es facilitar la operación.
+- **[01:28] Participante:** Independientemente de cuál sea, hacer que esa operación sea más rápida.
+- **[01:28] Participante:** Mejor.
+- **[01:28] Participante:** Y muchas veces con menos recursos.
+- **[01:28] Participante:** Bien.
+- **[01:28] Participante:** ¿Preguntas o comentarios, grupo?
+- **[01:28] Participante:** Yo quería hacerte un comentario.
+- **[01:28] Participante:** Yo trabajé en tecnoquímica 7 años.
+- **[01:29] Participante:** Francisco Barberi.
+- **[01:29] Participante:** Sí.
+- **[01:29] Participante:** Y me pareció pues también una cultura supremamente interesante. Yo creo que Tecnoquímica es de esas culturas bien, bien particulares donde hay un gran monarca que es Barberi, que es el pensador, es Casi que todos sus directivos piensan igual que él.
+- **[01:29] Participante:** que los forma.
+- **[01:29] Participante:** Sí, primero también tiene un ADN marcadísimo, total, marcadísimo. Incluso pues hay código de vestir.
+- **[01:29] Participante:** Soria.
+- **[01:29] Participante:** Creo que el 70-80% de su equipo directivo son mujeres.
+- **[01:29] Participante:** Son mujeres porque, porque él confía mucho en la mujer, sí, en el liderazgo.
+- **[01:29] Participante:** En el empuje y en la honestidad de la mujer.
+- **[01:29] Participante:** Sí, pero me llama la atención porque a pesar, él por ejemplo no usa prácticas que uno dice que son prácticas universales. Por ejemplo, su sistema de información, el sistema de información comercial de él, él lo construyó y no lo cambia.
+- **[01:30] Participante:** No vale Oracle, no vale SAP, no vale Dynamics, no vale nada.
+- **[01:30] Participante:** Es su sistema de información.
+- **[01:30] Participante:** Uno diría, bueno, va en contra de una práctica mundial que es adopte las buenas prácticas. O por ejemplo, su mesa de servicios es de él y es con gente de él.
+- **[01:30] Participante:** No es con gente externa, no es un outsourcing. Él confía plenamente en su gente. Entonces, fíjate que son temas que uno diría, y es una empresa exitosa. Es la número 1 en el sector farma en este momento. Total. Entonces llama la atención que a pesar de que van muy en contra de lo que de pronto el mercado puede estar, digamos, ofreciendo, pues el tipo es exitoso.
+- **[01:30] Participante:** Sí, mira, mira, Gustavo, que es consistente.
+- **[01:31] Participante:** Perdón, no, inclusión.
+- **[01:31] Participante:** Incluso ahora, y una disciplina tremenda. Yo llevo 7 años, yo creo que conocí la luz del día un 25, un 24 de diciembre, un 31, porque En un primero de enero te estaba llamando a decirte, dígame, ¿cómo está mi informe de ventas F30? Porque además lo tiene en la cabeza.
+- **[01:31] Participante:** Pues tiene toda la compañía en la cabeza. Sí, de pronto está muy de acuerdo a lo que mencionaba ahorita Jairo, es un CEO que tiene su empresa totalmente clara.
+- **[01:31] Participante:** Totalmente clara la tiene. Además que mira, yo he trabajado, yo he trabajado con Tecú mucho.
+- **[01:31] Participante:** Y a mí lo que me parece muy interesante es su consistencia.
+- **[01:31] Participante:** Entonces, por ejemplo, con el tema de tecnología, ellos sí tienen un hub interno.
+- **[01:32] Participante:** Tienen consultores o firmas aliadas, pero esas firmas aliadas las tienen operando in-house.
+- **[01:32] Participante:** ¿Por qué?
+- **[01:32] Participante:** Porque ellos dicen, usted no puede entender cómo operamos si está por fuera.
+- **[01:32] Participante:** Y adicionalmente, algo, algo que veía yo, porque yo les hice una medición no de cultura organizacional, sino de una subcultura.
+- **[01:32] Participante:** Es que la competitividad de esa compañía está precisamente en la manera como estructuró su sistema operativo.
+- **[01:32] Participante:** Que es consistente con prácticas.
+- **[01:32] Participante:** Es decir, es más, el perfil TQ es ampliamente conocido.
+- **[01:32] Participante:** El proceso de selección de TQ está estandarizado y en la planta de Salvador tienen el perfil TQ y lo buscan.
+- **[01:32] Participante:** Así, con esas capacidades, con esa habilidad cognitiva, con esa manera de relacionarse con otros, ellos están muy estructurados y son muy consistentes a la luz de eso. Como toda organización tiene sus retos, sin embargo, son altamente funcionales en sus prácticas.
+- **[01:33] Participante:** Ya.
+- **[01:33] Participante:** Vuelvo y digo, como toda organización tiene retos, tiene cosas que podría trabajar diferente, y lo interesante es que uno de sus valores es el aprendizaje. Ellos y el aprendizaje Quizás a la luz de que la educación, entonces son transversales, la gente te ocupa estudiar.
+- **[01:33] Participante:** Las familias de las personas de TQ pueden estudiar, el supervisor, el operario de planta puede tener un crecimiento interno en la organización.
+- **[01:33] Participante:** Entonces son consistentes con sus valores.
+- **[01:33] Participante:** Y esa consistencia les ha permitido ser altamente competitivos y funcionales. Entonces aquí el punto es que no hay culturas ni buenas ni malas, hay culturas funcionales para el momento de la organización, para el momento de la organización.
+- **[01:34] Participante:** Para cómo esa organización quiere generar valor.
+- **[01:34] Yo:** Longbow.
+- **[01:34] Participante:** Y la tecnología, que es lo que entra allí a hacer, es el mejor aliado.
+- **[01:34] Yo:** Wait one minute.
+- **[01:34] Participante:** De esa funcionalidad.
+- **[01:34] Yo:** Trump.
+- **[01:34] Participante:** Y no solamente pensando en el hoy.
+- **[01:34] Participante:** Sino pensando en el largo plazo. Cuando yo adopto tecnología, transformo un proceso con tecnología, yo no puedo pensar solo en el hoy, sino hacia dónde vamos como organización.
+- **[01:34] Yo:** Trumpy.
+- **[01:34] Participante:** Porque si no, eso me genera un reproceso, o en su defecto yo digo la fase 1 es esta, en la fase 2 vamos a hacer esto, en la fase 3 hago esto, y la organización va cogiendo la sinergia y el ritmo en ese proceso de apropiación tecnológica.
+- **[01:34] Participante:** Pero es esa la pregunta que hay que hacernos: ¿qué tan funcional es la cultura que tenemos hoy para lo que estamos declarando como negocio?
+- **[01:35] Participante:** Y lo que le sirve a una compañía no nos va a servir a todos.
+- **[01:35] Participante:** ¿No?
+- **[01:35] Participante:** No nos va a servir a todos, le sirve solo a esa compañía porque su contexto, su forma de operar, su proceso productivo de servicio es diferente.
+- **[01:35] Participante:** La experiencia que dan es diferente. Entonces, sí, yo puedo traer muy buenas prácticas, pero muchas veces esas muy buenas prácticas, si no les hago un proceso de adaptación interno, Va a ser muy difícil que esa buena práctica se pueda apropiar.
+- **[01:35] Participante:** Bien.
+- **[01:35] Participante:** Preguntas extra de esto: ¿cómo, cómo lo, cómo están viendo entonces esta relación?
+- **[01:35] Participante:** ¿Vamos bien?
+- **[01:36] Participante:** Ya para finalizar esta parte, miren, la cultura es un habilitador estructural de la tecnología.
+- **[01:36] Participante:** ¿En?
+- **[01:36] Participante:** 3 elementos concretos en los procesos, que es la transformación de punta a punta. En la siguiente sesión vamos a ver ya más cómo mapear habilidad tecnológica, cómo empezar Vamos entrando paulatinamente en el proceso de cambio.
+- **[01:36] Participante:** En los procesos, por ejemplo, viene la integración de datos, la estandarización, la verificación, por ejemplo, de una ejecución.
+- **[01:36] Participante:** En tiempo real, de una manera rápida. Venga, usted no va a tener que esperar un año para tener esa información, o a que se acabe el trimestre. Usted va a poder, puede tener un una comprensión mucho más rápida de su operación.
+- **[01:36] Participante:** Que le ayuda a mitigar cosas. Usted no va a esperar es a que se dañe o se queje el cliente. Usted lo va siguiendo, va haciendo seguimiento casi que de inmediato.
+- **[01:37] Participante:** ¿En dónde entra la cultura también? En las políticas y en la gobernanza. Bueno, ¿quién es el dueño de esto? El ownership.
+- **[01:37] Participante:** Esa parte es clave en tecnología. ¿Quiénes son las personas a quienes les vamos a dar los permisos, por ejemplo, para entrar a la plataforma? ¿Cómo es la arquitectura para tomar la las decisiones a la luz de este uso tecnológico, la política de usos y datos, la confidencialidad.
+- **[01:37] Participante:** ¿Cómo esta organización crea esa política propia?
+- **[01:37] Participante:** ¿Cómo los gestiona?
+- **[01:37] Participante:** ¿Cómo habilita o facilita la experimentación?
+- **[01:37] Participante:** A la luz de ese uso tecnológico, ¿quiénes son los que están encargados o quiénes pueden levantar la mano y decir venga esto no está funcionando y qué pasa si levantan la mano y dicen no está funcionando? No, entonces la cultura entra allí cuando la persona siente la confianza suficiente para levantar la mano y decir, Mónica, este, esta tecnología que estamos generando o que estás, estamos implementando, no está funcionando bien por esto, por esto, por esto.
+- **[01:38] Participante:** Prefiero decirlo a quedarme callada. Eso es un patrón cultural.
+- **[01:38] Participante:** Eso es algo que nosotros como organización hemos construido y por ende también
+- **[01:38] Participante:** A la luz de las personas y las capacidades, que eran lo que les decía, tener el talento adecuado.
+- **[01:38] Participante:** ¿A quién le estoy pidiendo que haga qué?
+- **[01:38] Participante:** Y si no estamos listos, entonces, ¿cómo los preparo para eso?
+- **[01:38] Participante:** ¿Cómo fomento el aprendizaje, la experimentación, la transformación de formas de trabajo? Y aquí viene un punto importante, grupo, y es el rol del líder.
+- **[01:38] Participante:** Si el líder que tenemos, su mejor respuesta es: no se estrese, no lo haga porque es que aquí siempre lo hemos hecho así, no se ponga creativo.
+- **[01:39] Participante:** Mata la transformación.
+- **[01:39] Participante:** No facilita la transformación porque ese líder ni siquiera le está dando su aval. Así como necesitamos que el CEO lo haga explícito, cuando un líder de área, un líder de proceso, nos genera una narrativa consistente y adecuada a la luz de esto, vengan, no hay cambio.
+- **[01:39] Participante:** que se dé.
+- **[01:39] Participante:** No.
+- **[01:39] Participante:** ¿Qué comportamientos a la luz de las personas y las capacidades vamos a tolerar y cuáles no? Ejemplo, con el CRM, ¿qué va a pasar si después de un año de estar trabajando todavía tenemos equipos comerciales que no diligencian a tiempo el CRM. ¿Cuál es el impacto de eso en una operación? Ah, pues resulta que si el comercial no lo hace con la suficiente periodicidad, yo no activo mi cadena de abastecimiento. Entonces me puedo quedar yo corta en el proceso productivo porque no tengo materia prima.
+- **[01:39] Participante:** Bien.
+- **[01:39] Participante:** Entonces, ¿y qué pasa si ese comercial no lo hace? Ay, pero qué pesar, Mónica es buenísima, solo que no llena el CRM. Venga, pero ¿cuánto le afecta a usted en ese proceso productivo que Mónica no llene el CRM? ¿Qué tanto más le vamos a tolerar?
+- **[01:40] Participante:** ¿Están al punto, grupo?
+- **[01:40] Participante:** Que ni siquiera en las evaluaciones de desempeño le incluimos el uso adecuado de las variables tecnológicas cuando es un sí o sí organizacional.
+- **[01:40] Participante:** A la gente no la medimos.
+- **[01:40] Participante:** Teniendo en cuenta esas variables, cuando esas variables ya están declaradas, por ejemplo, a nivel estratégico, no las medimos.
+- **[01:40] Participante:** Medimos es qué tanto cumplió.
+- **[01:40] Participante:** Pero, ¿cumplió en cuánto tiempo?
+- **[01:40] Participante:** ¿Lo hizo? ¿No lo hizo?
+- **[01:40] Participante:** No la medimos. Y si ustedes van y hacen, y aquí muchos son líderes, y hacen un doble clic en las evaluaciones de desempeño, en muchas evaluaciones de desempeño no está declarado eso.
+- **[01:40] Yo:** Yeah.
+- **[01:40] Participante:** El uso adecuado y consistente de las herramientas.
+- **[01:41] Participante:** ¿O me equivoco?
+- **[01:41] Participante:** ¿No está?
+- **[01:41] Participante:** Y mientras eso no esté allí, vamos a tener un proceso de adopción e integración tecnológica muy retador.
+- **[01:41] Participante:** Porque no estamos equiparando la tecnología, el uso tecnológico, con otros elementos críticos del proceso operacional.
+- **[01:41] Participante:** ¿Ven?
+- **[01:41] Participante:** Y esas son discusiones que hay que darlos a ese nivel de gobernanza, a ese nivel de políticas, a ese nivel de cultura.
+- **[01:41] Participante:** Hay que empezar a generar esa alineación. Puede que no lo logremos hoy, pero esa conversación en algún momento ustedes la tienen que tener.
+- **[01:41] Participante:** Respondiendo a la pregunta, ¿qué pasa?
+- **[01:41] Participante:** Si esta persona del área comercial o de operaciones no usa el CRM, llevamos un año en esto.
+- **[01:41] Participante:** Llevamos 2 años en esto.
+- **[01:42] Participante:** ¿Qué pasa si no lo hace?
+- **[01:42] Participante:** Ven.
+- **[01:42] Participante:** Preguntas.
+- **[01:42] Participante:** Yo creo, Mónica, que ese tema que estás tocando de, por ejemplo, herramientas como el CRM pasa mucho por el nivel cultural.
+- **[01:42] Participante:** De la apropiación de la herramienta.
+- **[01:42] Participante:** Una herramienta que depende cómo se interprete. O sea, la gente siente que lo están controlando.
+- **[01:42] Participante:** Lo están midiendo.
+- **[01:42] Participante:** Están viendo que está utilizando el tiempo, tiempo de forma correcta.
+- **[01:42] Participante:** Los espacios entre una operación.
+- **[01:42] Participante:** Y otra operación.
+- **[01:42] Participante:** A veces hay campos que uno dice, así es, no es exacto. Y te lo digo porque me pasó una vez en el tema, ahí teníamos un CRM que era un CRM nuevo, que es un CRM Pero el Dynamics de Microsoft, que es muy bueno.
+- **[01:43] Participante:** Pero nos encontrábamos ya con que empezó uno a mirar algunos datos y te lo digo, la gente te colocaba en un campo que llamaba campo el correo electrónico.
+- **[01:43] Participante:** Ahora también viene un tema, digamos, como de pensamiento. Y no creo que todo el mundo tiene correo electrónico, no, y realmente no todo el mundo tiene correo electrónico, gente que no lo ha visto utilizar, porque Pues porque no le gusta el tema de la tecnología, pero como se convertía en un campo obligatorio
+- **[01:43] Participante:** Era un campo obligatorio que no te ha pasado.
+- **[01:43] Participante:** Si el campo se quedaba sin registrar, entonces pues las personas muy hábilmente colocaban no tiene correo @hotmail.com y era una cuenta de correo. Me dice Patricia, entiende uno, ahora uno como a analizar, bueno, ¿qué hacemos?
+- **[01:44] Participante:** Y, o el teléfono te colocaba nuevo, teléfono fijo.
+- **[01:44] Participante:** Y bueno, bueno, bueno, bueno, bueno, bueno, y lo llenamos, llenamos, y uno ya quiere tramposar, lleno.
+- **[01:44] Participante:** Y al final no les he pensado.
+- **[01:44] Participante:** Y me he puesto a hacerlo otra vez.
+- **[01:44] Participante:** O al ser la gente no quería.
+- **[01:44] Participante:** Entiende, no todo el mundo quiere dar la información, y porque tengo que dar mis datos, que la cédula, bueno, acá el cuerpo, un poco de cosas, ¿no? Entonces esos son tipos de herramientas que
+- **[01:44] Participante:** que tiene, digamos, como ese nivel de que son sí muy importantes, pero tienen un cierto nivel de complejidad. No sé si otros compañeros tienen más experiencia en el CRM, yo te la cuento pues desde la que tenemos acá.
+- **[01:44] Participante:** Y al final, que la gente utilice la herramienta.
+- **[01:45] Participante:** Lo veían como beneficio y todo el mundo decía, no, pero es que no tenemos un CRM, no tenemos un CRM. Y cuando llegó el CRM, nadie se quería montar en el CRM porque tenían que hacer una curva de aprendizaje.
+- **[01:45] Participante:** Frente al cómo trabajar, o sea, la resistencia a la adopción de una tecnología se aumenta.
+- **[01:45] Participante:** ¿Por qué?
+- **[01:45] Participante:** ¿Qué tanto tengo que cambiar la manera como yo ejecuto mi trabajo?
+- **[01:45] Participante:** El solo hecho de pasar de una marca de CRM a otro
+- **[01:45] Participante:** Porque son interfaces distintas.
+- **[01:45] Participante:** Es que tanto, ay no, pero es que yo lo hago más rápido con mi Excel porque es que mi Excel yo ya lo hice, tiene todas las tablas dinámicas, todas las macros. Vas a poner a mí aquí a llenar un CRM con ese ¿Qué hago yo con el adulto mayor que no tiene correo electrónico?
+- **[01:45] Participante:** Por ejemplo, y era muy común, era uno que se veía que no, pero bueno, entonces llamaban al hijo, ve hijo, ¿cuál es que es tu correo electrónico? Venito a pasar aquí a la señorita para que le des el correo electrónico.
+- **[01:46] Participante:** Exactamente.
+- **[01:46] Participante:** Y otra cosa, que otra situación que también nos marcó ahí la diferencia, es que la gente decía, pero es que este, esa aplicación no está integrado.
+- **[01:46] Participante:** Con el sistema.
+- **[01:46] Participante:** Base de la organización, entonces me toca sacar información de un sitio.
+- **[01:46] Participante:** Y llevarlo a otro.
+- **[01:46] Participante:** De acuerdo.
+- **[01:46] Participante:** Porque nos hablaban, es decir, no había forma de integrar.
+- **[01:46] Participante:** Esas tablas.
+- **[01:46] Participante:** Entonces ahí sí había, en la forma de operar en la organización, había ruptura.
+- **[01:46] Participante:** Porque este mecanismo todavía no se hablaba con este.
+- **[01:46] Participante:** Entonces, de entrada, la experiencia para ese usuario de tecnología no era chévere.
+- **[01:47] Participante:** Y si no es, y si yo estoy expuesto a algo que es percibido como no tan chévere,
+- **[01:47] Participante:** ¿Cuál es el comportamiento natural? Evitarlo.
+- **[01:47] Participante:** Hacerlo por hacerlo y ya.
+- **[01:47] Participante:** Entonces ahí de entrada, o no hacerlo, ahí de entrada yo como organización también estoy haciendo una inversión cuando no he contestado preguntas del cómo.
+- **[01:47] Participante:** No, no, no, hágale, hágale, que eso lo hacemos en el proceso. Es mejor cambiarle la llanta al carro con el carro andando que esperar a tener todo listo. Esto es un MVP, ok, pero no esperes que la gente haga esa curva de aprendizaje relativamente rápido cuando algo que es un proceso crítico, y es cómo pongo a estos dos elementos a conversar, no lo tengo resuelto.
+- **[01:47] Participante:** Y eso que estamos hablando de un sistema, también voy a hablar de las llamas de domicilio, los que saben todo quién SAP, la dificultad que tiene implementar SAP, o un sistema como Salesforce, por ejemplo.
+- **[01:48] Participante:** ¿Cómo hacer una buena integración con Salesforce? Salesforce es maravilloso si usted llena los campos adecuadamente en el tiempo que es y te puede dar, mejor dicho, la hoja de vida de un cliente, desde cuándo fue la última vez que te compró, cuáles son las quejas, cuál, no, cuántos inmuebles tiene. O sea, te puede generar una cantidad de información maravillosa.
+- **[01:48] Participante:** Pero hay que diligenciarla adecuadamente en el tiempo que es.
+- **[01:48] Participante:** Y eso requiere un hábito, y cuando yo esté hablando de hábitos, puede que ese hábito no sea solo de Mónica, sino que sea de Mónica y su equipo.
+- **[01:48] Participante:** Porque es un hábito compartido, es decir, es cultural.
+- **[01:48] Participante:** Y también viene mucho el tema de la arquitectura de negocios. Un campo sencillo, ¿verdad? Y todos, quizás ya todos hicieron la primera comunión, todos saben lo que fue la catorce. Y cómo se podía escribir la 14. La 14 CA, la 14 limitada, cacharrería la 14, almacenes la 14, poco cosas. Y vaya busque todo lo que se llamaba la 14, eso no se hablaba por ningún lado.
+- **[01:49] Participante:** Exactamente.
+- **[01:49] Participante:** No se encontró.
+- **[01:49] Participante:** Porque no había una llave común.
+- **[01:49] Participante:** Que es un significado. Mira, ahí yo les quería contar, a la luz de esto que dice Rodrigo, y es que los mayores retos organizacionales es la alineación de significados. ¿Qué entiende usted por rápido?
+- **[01:49] Participante:** Rápido o su escalidad.
+- **[01:49] Participante:** ¿Qué entiende usted por rápido?
+- **[01:49] Participante:** Ah, es que si es rápido es de poca calidad.
+- **[01:49] Participante:** Yeah.
+- **[01:49] Participante:** O será ágil en esto, es ser
+- **[01:50] Participante:** Ir en contra de la calidad.
+- **[01:50] Participante:** Eso es una creencia, porque yo lo puedo, yo puedo pensar en eso. Hacer rápido quiere decir lo hice en piloto automático y salió, y no vi en qué calidad lo entregué.
+- **[01:50] Participante:** Pero resulta que en este momento hacerlo, hacerlo en menos tiempo no implica sacrificar la calidad.
+- **[01:50] Participante:** Entonces ahí en esos significados puede haber rupturas.
+- **[01:50] Participante:** Bien.
+- **[01:50] Participante:** Bueno, grupo.
+- **[01:50] Participante:** Entonces, ya para ir finalizando nuestro espacio,
+- **[01:50] Participante:** Vuelvo y les repito, este, esta parte de la clase tiene estos momentos: el momento de cultura, el momento ya de cómo empiezas a culturar, habilitar un proceso de adopción, cuáles son esos mecanismos y esos elementos. Y en las últimas 2 semanas ya vamos a hablar directamente de Herramientas y modelos de cambio. Eso es lo que, lo que vamos a hacer.
+- **[01:51] Participante:** Ese es como el ritmo que tiene, que tiene este curso.
+- **[01:51] Participante:** Esa es la manera como, como de una manera de pronto muy, muy lógica, en el sentido de yo entiendo cómo opera esta organización, cuáles son sus habilitadores, ¿Cuáles son esas, esas cosas que me pueden llevar a ese estadio no deseado o tener esa disfuncionalidad?
+- **[01:51] Participante:** Para poder entender cómo empiezo a hacer esa transformación.
+- **[01:51] Participante:** En este punto, tanto en esta semana como en la siguiente, hablamos de cultura, tanto diagnóstico de cultura como cultura, estrategia y transformación, cómo están esos 2 elementos. Para, a la luz de esto, poder adaptar y movilizar un proceso de cambio.
+- **[01:52] Participante:** Vale.
+- **[01:52] Participante:** Esa es la manera como vamos a trabajar. Vuelvo y les digo, si tienen dudas, si necesitan información extra, allí tienen mis contactos directos y siéntanse libres pues de escribirme y de preguntarme lo que necesiten. Yo estoy muy atenta.
+- **[01:52] Participante:** Pero sí les pido el favor que me digan, soy Pepita Pérez o Pepito Pérez de tal programa, porque a veces pues hay nombres que se repiten. Entonces hay homónimos, entonces prefiero como ubicarlos de acuerdo al programa porque entiendo muy bien en qué ritmo estamos.
+- **[01:52] Participante:** Entonces pues nada, muchísimas gracias a todos ustedes y quedo muy pendiente de cualquier duda y demás.
+- **[01:52] Participante:** Mil gracias.
+- **[01:52] Participante:** Muchas gracias a todos.
