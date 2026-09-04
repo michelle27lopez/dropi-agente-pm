@@ -5,7 +5,7 @@ import HubFooter from "@/components/HubFooter";
 import {
   MessageCircle, Package, Heart, Info, CheckCircle2, AlertTriangle, XCircle,
   ShoppingBag, CreditCard, ClipboardList, PackageCheck, Bell, Truck, Send,
-  BarChart3, PlayCircle, RotateCcw, Star, TrendingUp, ThumbsUp,
+  BarChart3, PlayCircle, RotateCcw, Star, TrendingUp, ThumbsUp, Sparkles,
 } from "lucide-react";
 
 // Réplica del prototipo Figma Site (https://pale-bet-02909846.figma.site),
@@ -234,6 +234,7 @@ export default function MedicionCesCsatNpsPage() {
                 </div>
               </div>
             </MetricSection>
+            <CalculadoraCES />
           </div>
 
           {/* ── CSAT ── */}
@@ -307,6 +308,7 @@ export default function MedicionCesCsatNpsPage() {
                 </div>
               </div>
             </MetricSection>
+            <CalculadoraCSAT />
           </div>
 
           {/* ── NPS ── */}
@@ -395,6 +397,7 @@ export default function MedicionCesCsatNpsPage() {
                 </div>
               </div>
             </MetricSection>
+            <CalculadoraNPS />
           </div>
 
           {/* ── Resumen ── */}
@@ -504,6 +507,312 @@ const STEPS: Step[] = [
   { n: 7, role: "Sistema", tag: "Día 30", icon: Send, titulo: "Campaña de retención (día 30)", detalle: "30 días después de la compra, tu sistema de email marketing envía la encuesta NPS a Diana junto con una oferta de accesorios relacionados (funda de volante, cargador USB).", encuesta: { metrica: "NPS", color: THEME.nps.accent, pregunta: "¿Qué probabilidad hay de que recomiendes nuestra tienda a un amigo?", nota: "Se envía a los 30 días post-compra mediante email marketing automatizado." } },
   { n: 8, role: "Dropshipper", tag: "Dashboard CX", icon: BarChart3, titulo: "Dropshipper revisa métricas CX", detalle: "Tú accedes al dashboard y ves: CES 6.2 (chat fluido ✓), CSAT 75% (proveedor aceptable), NPS +50 (Diana fue Promotora y recomendó tu tienda). Acción: optimizar proveedor para subir CSAT." },
 ];
+
+// ── Calculadora interactiva ──────────────────────────────────────────────
+type Banda = "good" | "ok" | "bad" | null;
+
+function bandaPor(valor: number | null, goodMin: number, okMin: number): Banda {
+  if (valor === null) return null;
+  if (valor >= goodMin) return "good";
+  if (valor >= okMin) return "ok";
+  return "bad";
+}
+
+const BANDA_LABEL: Record<"good" | "ok" | "bad", string> = { good: "Bueno", ok: "Regular", bad: "Malo" };
+
+const ACCION: Record<"ces" | "csat" | "nps", Record<"good" | "ok" | "bad", string>> = {
+  ces: {
+    good: "Proceso fluido — mantenlo así y seguí midiendo en cada interacción de soporte.",
+    ok: "Hay fricción moderada — revisa el chat o la página de producto para simplificar el proceso.",
+    bad: "Alto esfuerzo del cliente — rediseña el soporte y la navegación antes de que se traduzca en abandono de carrito.",
+  },
+  csat: {
+    good: "Proveedor confiable — es un buen candidato para escalar volumen.",
+    ok: "Hay oportunidades de mejora — evalúa tiempos de envío o calidad del empaque con tu proveedor.",
+    bad: "Calidad crítica — considera cambiar de proveedor o renegociar condiciones antes de perder más clientes.",
+  },
+  nps: {
+    good: "Base sólida de promotores — activa campañas de referidos y pide reseñas en Google.",
+    ok: "Más promotores que detractores, pero hay margen — refuerza la experiencia postventa.",
+    bad: "Riesgo alto de churn — contacta a los detractores de inmediato y ofrece una solución.",
+  },
+};
+
+function NumberField({ label, value, onChange }: { label: string; value: number; onChange: (v: number) => void }) {
+  return (
+    <div>
+      <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", marginBottom: 4 }}>{label}</div>
+      <input
+        type="number"
+        min={0}
+        value={value === 0 ? "" : value}
+        placeholder="0"
+        onChange={(e) => onChange(Math.max(0, Number(e.target.value) || 0))}
+        style={{
+          width: "100%", fontSize: 14, fontWeight: 600, padding: "8px 10px", borderRadius: 8,
+          border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)",
+        }}
+      />
+    </div>
+  );
+}
+
+function TextField({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string }) {
+  return (
+    <div>
+      <div style={{ fontSize: 11, fontWeight: 700, color: "var(--muted)", marginBottom: 4 }}>{label}</div>
+      <input
+        type="text"
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        style={{
+          width: "100%", fontSize: 13, padding: "8px 10px", borderRadius: 8,
+          border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)",
+        }}
+      />
+    </div>
+  );
+}
+
+function ContextoChip({ target, cantidad, extraLabel, extra }: { target: string; cantidad: number; extraLabel: string; extra: string }) {
+  if (!target && !cantidad && !extra) return null;
+  return (
+    <div style={{ fontSize: 11.5, color: "var(--muted)", marginBottom: 12, display: "flex", flexWrap: "wrap", gap: 4, alignItems: "center" }}>
+      <span>🎯</span>
+      {target && <span><strong style={{ color: "var(--fg)" }}>{target}</strong>{cantidad > 0 ? ` (n=${cantidad})` : ""}</span>}
+      {extra && <span>· {extraLabel}: {extra}</span>}
+    </div>
+  );
+}
+
+type NivelMuestra = "insuficiente" | "limitada" | "adecuada";
+
+function nivelMuestra(n: number): NivelMuestra | null {
+  if (n <= 0) return null;
+  if (n < 20) return "insuficiente";
+  if (n < 50) return "limitada";
+  return "adecuada";
+}
+
+const MUESTRA_META: Record<"insuficiente" | "limitada", { bg: string; border: string; text: string; icon: React.ElementType; label: string; umbral: string; riesgo: string }> = {
+  insuficiente: {
+    bg: QUALITY.bad.bg, border: QUALITY.bad.border, text: QUALITY.bad.text, icon: XCircle,
+    label: "Muestra insuficiente", umbral: "20",
+    riesgo: "no es representativo — evita tomar decisiones de negocio basadas solo en este dato",
+  },
+  limitada: {
+    bg: QUALITY.ok.bg, border: QUALITY.ok.border, text: QUALITY.ok.text, icon: AlertTriangle,
+    label: "Muestra limitada", umbral: "50",
+    riesgo: "es una señal direccional, no una conclusión definitiva",
+  },
+};
+
+function AlertaMuestra({ n, acciones }: { n: number; acciones: string[] }) {
+  const nivel = nivelMuestra(n);
+  if (!nivel || nivel === "adecuada") return null;
+  const m = MUESTRA_META[nivel];
+  const Icon = m.icon;
+  return (
+    <div style={{ background: m.bg, border: `1px solid ${m.border}`, borderRadius: 10, padding: 14, marginBottom: 16 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+        <Icon size={14} color={m.text} />
+        <strong style={{ fontSize: 12.5, color: m.text }}>{m.label} (n = {n})</strong>
+      </div>
+      <p style={{ fontSize: 11.5, color: "var(--fg)", margin: "0 0 8px", lineHeight: 1.5 }}>
+        Con menos de {m.umbral} respuestas, este resultado {m.riesgo}.
+      </p>
+      <div style={{ fontSize: 10.5, fontWeight: 700, color: m.text, marginBottom: 4 }}>ACCIONES RECOMENDADAS</div>
+      <ul style={{ margin: 0, paddingLeft: 16, fontSize: 11.5, color: "var(--fg)", lineHeight: 1.6 }}>
+        {acciones.map((a, i) => <li key={i}>{a}</li>)}
+      </ul>
+    </div>
+  );
+}
+
+function ResultadoBanda({ banda, valor, sufijo, accion }: { banda: Banda; valor: string; sufijo: string; accion?: string }) {
+  if (!banda) {
+    return (
+      <div style={{ background: "var(--bg)", border: "1px dashed var(--border)", borderRadius: 10, padding: 16, textAlign: "center" }}>
+        <span style={{ fontSize: 12, color: "var(--muted)" }}>Ingresa datos para ver el resultado</span>
+      </div>
+    );
+  }
+  const q = QUALITY[banda];
+  const Icon = q.icon;
+  return (
+    <div>
+      <div style={{ background: q.bg, border: `1px solid ${q.border}`, borderRadius: 10, padding: 16, textAlign: "center", marginBottom: 10 }}>
+        <div style={{ fontSize: 28, fontWeight: 800, color: q.text }}>{valor}<span style={{ fontSize: 14, fontWeight: 700 }}>{sufijo}</span></div>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 5, marginTop: 4 }}>
+          <Icon size={13} color={q.text} />
+          <span style={{ fontSize: 12, fontWeight: 700, color: q.text }}>{BANDA_LABEL[banda]}</span>
+        </div>
+      </div>
+      {accion && (
+        <div style={{ display: "flex", gap: 8, alignItems: "flex-start", background: "var(--bg)", borderRadius: 8, padding: "10px 12px" }}>
+          <Sparkles size={13} color={q.text} style={{ flexShrink: 0, marginTop: 2 }} />
+          <p style={{ fontSize: 11.5, color: "var(--fg)", lineHeight: 1.5, margin: 0 }}><strong>Acción recomendada:</strong> {accion}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CalculadoraHeader({ icon: Icon, theme, titulo, onEjemplo, onLimpiar }: {
+  icon: React.ElementType; theme: { accent: string; light: string }; titulo: string; onEjemplo: () => void; onLimpiar: () => void;
+}) {
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 18 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div style={{ width: 34, height: 34, borderRadius: 9, background: theme.light, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Icon size={17} color={theme.accent} />
+        </div>
+        <strong style={{ fontSize: 15, color: "var(--fg)" }}>{titulo}</strong>
+      </div>
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <button
+          onClick={onEjemplo}
+          style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 700, color: "#fff", background: theme.accent, border: "none", borderRadius: 8, padding: "7px 12px", cursor: "pointer" }}
+        >
+          <Sparkles size={12} /> Cargar ejemplo real
+        </button>
+        <button
+          onClick={onLimpiar}
+          style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "var(--fg)", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: "7px 12px", cursor: "pointer" }}
+        >
+          <RotateCcw size={12} /> Limpiar
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function CalculadoraCES() {
+  const [suma, setSuma] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [target, setTarget] = useState("");
+  const [cantidad, setCantidad] = useState(0);
+  const [tarea, setTarea] = useState("");
+  const score = total > 0 ? suma / total : null;
+  const banda = bandaPor(score, 5.5, 4.0);
+
+  return (
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.ces.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
+      <CalculadoraHeader
+        icon={MessageCircle}
+        theme={THEME.ces}
+        titulo="Calculadora CES"
+        onEjemplo={() => { setSuma(310); setTotal(50); setTarget("Dropshippers"); setCantidad(50); setTarea("Resolver duda de compatibilidad en el chat de pre-venta"); }}
+        onLimpiar={() => { setSuma(0); setTotal(0); setTarget(""); setCantidad(0); setTarea(""); }}
+      />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+        <TextField label="Target / Perfil" value={target} onChange={setTarget} placeholder="ej. Dropshippers" />
+        <NumberField label="Cantidad (tamaño del target)" value={cantidad} onChange={setCantidad} />
+      </div>
+      <div style={{ marginBottom: 16 }}>
+        <TextField label="Tarea específica que se está midiendo" value={tarea} onChange={setTarea} placeholder="ej. Resolver duda de compatibilidad en el chat de pre-venta" />
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+        <NumberField label="Suma total de puntos" value={suma} onChange={setSuma} />
+        <NumberField label="Total de respuestas" value={total} onChange={setTotal} />
+      </div>
+      <ContextoChip target={target} cantidad={cantidad} extraLabel="Tarea" extra={tarea} />
+      <AlertaMuestra n={total} acciones={[
+        "Activa la encuesta en más conversaciones del chat de soporte, no solo al cerrarlo.",
+        "Extiende el periodo de medición 2-4 semanas antes de sacar conclusiones.",
+        "Usa este resultado como hipótesis a validar, no como decisión cerrada.",
+      ]} />
+      <ResultadoBanda banda={banda} valor={score !== null ? score.toFixed(1) : "—"} sufijo=" / 7" accion={banda ? ACCION.ces[banda] : undefined} />
+    </div>
+  );
+}
+
+function CalculadoraCSAT() {
+  const [sat, setSat] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [target, setTarget] = useState("");
+  const [cantidad, setCantidad] = useState(0);
+  const [tarea, setTarea] = useState("");
+  const score = total > 0 ? (sat / total) * 100 : null;
+  const banda = bandaPor(score, 80, 60);
+
+  return (
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.csat.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
+      <CalculadoraHeader
+        icon={Package}
+        theme={THEME.csat}
+        titulo="Calculadora CSAT"
+        onEjemplo={() => { setSat(150); setTotal(200); setTarget("Dropshippers"); setCantidad(200); setTarea("Satisfacción con la entrega del pedido (Kit LED H4 6000K)"); }}
+        onLimpiar={() => { setSat(0); setTotal(0); setTarget(""); setCantidad(0); setTarea(""); }}
+      />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+        <TextField label="Target / Perfil" value={target} onChange={setTarget} placeholder="ej. Dropshippers" />
+        <NumberField label="Cantidad (tamaño del target)" value={cantidad} onChange={setCantidad} />
+      </div>
+      <div style={{ marginBottom: 16 }}>
+        <TextField label="Tarea específica que se está midiendo" value={tarea} onChange={setTarea} placeholder="ej. Satisfacción con la entrega del pedido" />
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+        <NumberField label="Respuestas 4 y 5 ★" value={sat} onChange={setSat} />
+        <NumberField label="Total de respuestas" value={total} onChange={setTotal} />
+      </div>
+      <ContextoChip target={target} cantidad={cantidad} extraLabel="Tarea" extra={tarea} />
+      <AlertaMuestra n={total} acciones={[
+        "Revisa la tasa de apertura del canal de encuesta (email/WhatsApp) — puede que muy pocos la estén respondiendo.",
+        "Envía un recordatorio 24-48h después si no hay respuesta.",
+        "Extiende el periodo de medición antes de decidir si cambiar de proveedor.",
+      ]} />
+      <ResultadoBanda banda={banda} valor={score !== null ? Math.round(score).toString() : "—"} sufijo="%" accion={banda ? ACCION.csat[banda] : undefined} />
+    </div>
+  );
+}
+
+function CalculadoraNPS() {
+  const [det, setDet] = useState(0);
+  const [pas, setPas] = useState(0);
+  const [prom, setProm] = useState(0);
+  const [target, setTarget] = useState("");
+  const [cantidad, setCantidad] = useState(0);
+  const [puntoContacto, setPuntoContacto] = useState("");
+  const total = det + pas + prom;
+  const score = total > 0 ? (prom / total) * 100 - (det / total) * 100 : null;
+  const banda = bandaPor(score, 50, 0);
+
+  return (
+    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.nps.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
+      <CalculadoraHeader
+        icon={Heart}
+        theme={THEME.nps}
+        titulo="Calculadora NPS"
+        onEjemplo={() => { setDet(15); setPas(20); setProm(65); setTarget("Dropshippers"); setCantidad(100); setPuntoContacto("Experiencia general"); }}
+        onLimpiar={() => { setDet(0); setPas(0); setProm(0); setTarget(""); setCantidad(0); setPuntoContacto(""); }}
+      />
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+        <TextField label="Target / Perfil" value={target} onChange={setTarget} placeholder="ej. Dropshippers" />
+        <NumberField label="Cantidad (tamaño del target)" value={cantidad} onChange={setCantidad} />
+      </div>
+      <div style={{ marginBottom: 6 }}>
+        <TextField label="Punto de contacto medido" value={puntoContacto} onChange={setPuntoContacto} placeholder="Experiencia general (recomendado) — o un touchpoint específico" />
+      </div>
+      <p style={{ fontSize: 10.5, color: "var(--muted)", lineHeight: 1.5, margin: "0 0 16px" }}>
+        A diferencia de CES y CSAT (que miden una tarea puntual), el NPS está pensado sobre todo para medir la <strong>experiencia general</strong> de la relación con tu marca — aunque también puede aplicarse a un touchpoint específico si lo necesitas.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 16 }}>
+        <NumberField label="Detractores (0-6)" value={det} onChange={setDet} />
+        <NumberField label="Pasivos (7-8)" value={pas} onChange={setPas} />
+        <NumberField label="Promotores (9-10)" value={prom} onChange={setProm} />
+      </div>
+      <ContextoChip target={target} cantidad={cantidad} extraLabel="Punto de contacto" extra={puntoContacto} />
+      <AlertaMuestra n={total} acciones={[
+        "Espera a acumular más respuestas del email de lealtad (día 30) antes de sacar conclusiones.",
+        "Agrupa varios meses/cohortes para tener una base más sólida.",
+        "Combina con CES/CSAT del mismo periodo para no depender de un solo dato.",
+      ]} />
+      <ResultadoBanda banda={banda} valor={score !== null ? (score > 0 ? `+${Math.round(score)}` : Math.round(score).toString()) : "—"} sufijo="" accion={banda ? ACCION.nps[banda] : undefined} />
+    </div>
+  );
+}
 
 function Simulator() {
   const [state, setState] = useState<"idle" | "running" | "done">("idle");
