@@ -41,14 +41,13 @@ function QualityRow({ tone, label, range, text }: { tone: "good" | "ok" | "bad";
   const q = QUALITY[tone];
   const Icon = q.icon;
   return (
-    <div style={{
-      display: "flex", alignItems: "center", gap: 12, background: q.bg,
-      border: `1px solid ${q.border}`, borderRadius: 8, padding: "10px 14px", marginBottom: 8,
-    }}>
-      <Icon size={16} color={q.text} style={{ flexShrink: 0 }} />
-      <strong style={{ fontSize: 12.5, color: q.text, width: 64, flexShrink: 0 }}>{label}</strong>
-      <code style={{ fontSize: 11.5, color: q.text, fontWeight: 700, width: 90, flexShrink: 0 }}>{range}</code>
-      <span style={{ fontSize: 12.5, color: "var(--fg)" }}>{text}</span>
+    <div style={{ background: q.bg, border: `1px solid ${q.border}`, borderRadius: 8, padding: "10px 14px", marginBottom: 8 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3, flexWrap: "wrap" }}>
+        <Icon size={15} color={q.text} style={{ flexShrink: 0 }} />
+        <strong style={{ fontSize: 12.5, color: q.text }}>{label}</strong>
+        <code style={{ fontSize: 11.5, color: q.text, fontWeight: 700 }}>{range}</code>
+      </div>
+      <span style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.5 }}>{text}</span>
     </div>
   );
 }
@@ -100,7 +99,7 @@ function MetricSection({
   footer: string;
 }) {
   return (
-    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${theme.accent}`, borderRadius: 14, padding: 28, marginBottom: 24 }}>
+    <div className="cx-card" style={{ boxShadow: "0 1px 3px rgba(15,23,42,0.04)", background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${theme.accent}`, borderRadius: 14, padding: 28, marginBottom: 24 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
         <div style={{ width: 40, height: 40, borderRadius: 10, background: theme.light, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
           <Icon size={20} color={theme.accent} />
@@ -124,7 +123,7 @@ function MetricSection({
       </div>
       {calidad.map((c) => <QualityRow key={c.label} {...c} />)}
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginTop: 20 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24, marginTop: 20 }}>
         {children}
       </div>
 
@@ -138,12 +137,30 @@ function MetricSection({
 export default function MedicionCesCsatNpsPage() {
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <style>{`
+        .cx-btn-primary:hover { filter: brightness(0.93); }
+        .cx-btn-primary:active { filter: brightness(0.85); }
+        .cx-btn-secondary:hover { background: var(--bg) !important; }
+        .cx-card { transition: box-shadow 160ms ease; }
+        .cx-card:hover { box-shadow: 0 6px 20px rgba(15,23,42,0.06); }
+        .cx-input { transition: border-color 120ms ease, box-shadow 120ms ease; }
+        .cx-input:focus { outline: none; border-color: var(--dropi) !important; box-shadow: 0 0 0 3px rgba(234,88,12,0.12); }
+        .cx-nps-box { transition: transform 120ms ease; cursor: default; }
+        .cx-nav-link { transition: background 120ms ease, color 120ms ease; }
+        .cx-nav-link:hover { background: var(--bg); }
+        .cx-step-btn:hover:not(:disabled) { filter: brightness(0.93); }
+        .cx-step-btn:disabled { cursor: default; }
+        #ces, #csat, #nps, #simulador { scroll-margin-top: 118px; }
+      `}</style>
+
       <div style={{ flex: 1 }}>
         {/* ── Hero ── */}
         <div style={{
           background: "linear-gradient(135deg, #C2410C, #EA580C)", padding: "48px 32px", textAlign: "center",
           position: "relative", overflow: "hidden",
         }}>
+          <div aria-hidden style={{ position: "absolute", top: -60, left: -40, width: 200, height: 200, borderRadius: "50%", background: "rgba(255,255,255,0.08)" }} />
+          <div aria-hidden style={{ position: "absolute", bottom: -80, right: -30, width: 260, height: 260, borderRadius: "50%", background: "rgba(255,255,255,0.06)" }} />
           <div style={{ position: "relative", zIndex: 1 }}>
             <span style={{
               display: "inline-block", fontSize: 11, fontWeight: 700, color: "#fff", letterSpacing: "0.06em",
@@ -151,7 +168,7 @@ export default function MedicionCesCsatNpsPage() {
             }}>
               📦 E-COMMERCE · DROPSHIPPING · CX INTELLIGENCE
             </span>
-            <h1 style={{ fontSize: 34, fontWeight: 800, color: "#fff", margin: "0 0 8px" }}>Métricas de CX en Dropshipping</h1>
+            <h1 style={{ fontSize: "clamp(24px, 5vw, 34px)", fontWeight: 800, color: "#fff", margin: "0 0 8px", letterSpacing: "-0.01em" }}>Métricas de CX en Dropshipping</h1>
             <p style={{ fontSize: 16, color: "rgba(255,255,255,0.92)", margin: "0 0 4px" }}>
               Cómo medir <strong>CES</strong>, <strong>CSAT</strong> y <strong>NPS</strong> al vender un producto
             </p>
@@ -164,6 +181,29 @@ export default function MedicionCesCsatNpsPage() {
               <a href="#nps" style={pillLink}><Heart size={13} /> Lealtad 30d</a>
             </div>
           </div>
+        </div>
+
+        {/* ── Nav de secciones (sticky) ── */}
+        {/* top:61 = alto del header global .gnav-topbar (sticky, z-index 30) — si ese
+            alto cambia algún día, este offset y el scroll-margin-top de arriba también. */}
+        <div style={{
+          position: "sticky", top: 61, zIndex: 20, background: "var(--card)", borderBottom: "1px solid var(--border)",
+          padding: "10px 24px", display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap",
+        }}>
+          {[
+            { href: "#ces", label: "CES", color: THEME.ces.accent },
+            { href: "#csat", label: "CSAT", color: THEME.csat.accent },
+            { href: "#nps", label: "NPS", color: THEME.nps.accent },
+            { href: "#simulador", label: "Simulador", color: THEME.nps.accent },
+          ].map((s) => (
+            <a key={s.href} href={s.href} className="cx-nav-link" style={{
+              fontSize: 12.5, fontWeight: 700, color: s.color, textDecoration: "none",
+              padding: "6px 12px", borderRadius: 8, display: "flex", alignItems: "center", gap: 5,
+            }}>
+              <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: s.color }} />
+              {s.label}
+            </a>
+          ))}
         </div>
 
         <div style={{ maxWidth: 980, margin: "0 auto", padding: "32px 24px" }}>
@@ -302,7 +342,7 @@ export default function MedicionCesCsatNpsPage() {
                 <Bar label="😐 Neutral" pct={13} color="#FDE68A" />
                 <Bar label="🙂 Satisfecho ✓" pct={38} color="#5EEAD4" />
                 <Bar label="😄 Muy satisfecho ✓" pct={37} color={THEME.csat.accent} />
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 16 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 10, marginTop: 16 }}>
                   <ResultBox value="75%" label="CSAT Score" sub="" color={THEME.csat.accent} />
                   <ResultBox value="150" label="Satisfechos / 200" sub="" color={THEME.csat.accent} />
                 </div>
@@ -390,7 +430,7 @@ export default function MedicionCesCsatNpsPage() {
                   <span style={{ color: "#CA8A04" }}>PASIVOS (7–8)</span>
                   <span style={{ color: "#15803D" }}>PROMOTORES (9–10)</span>
                 </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 8 }}>
                   <NpsCard icon="🙂" color="#15803D" bg="#F0FDF4" pct="65%" n="65 clientes" label="Promotores" rango="Puntuación 9–10" text="Clientes entusiasmados y totalmente satisfechos. Te volverán a comprar y recomendarán tu tienda por voz a voz de forma gratuita." accion="Activa campañas de referidos y reseñas en Google." />
                   <NpsCard icon="😐" color="#CA8A04" bg="#FFFBEB" pct="20%" n="20 clientes" label="Pasivos" rango="Puntuación 7–8" text="Clientes neutros. Quedaron satisfechos, pero sin lealtad hacia tu marca; si la competencia ofrece las mismas Luces LED más baratas, se irán." accion="Envía cupón de descuento exclusivo para fidelizarlos." />
                   <NpsCard icon="🙁" color="#DC2626" bg="#FEF2F2" pct="15%" n="10 clientes" label="Detractores" rango="Puntuación 0–6" text="Clientes insatisfechos (por retrasos en el envío o fallas en el producto). Pueden dañar tu reputación con malas reseñas en redes sociales." accion="Contacta inmediatamente · ofrece reemplazo o reembolso." />
@@ -401,7 +441,7 @@ export default function MedicionCesCsatNpsPage() {
           </div>
 
           {/* ── Resumen ── */}
-          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.nps.accent}`, borderRadius: 14, padding: 28, marginBottom: 32 }}>
+          <div className="cx-card" style={{ boxShadow: "0 1px 3px rgba(15,23,42,0.04)", background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.nps.accent}`, borderRadius: 14, padding: 28, marginBottom: 32 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18 }}>
               <Star size={16} color={THEME.nps.accent} />
               <strong style={{ fontSize: 13, letterSpacing: "0.04em", color: "var(--fg)", textTransform: "uppercase" }}>Resumen de utilidad para dropshippers</strong>
@@ -420,7 +460,9 @@ export default function MedicionCesCsatNpsPage() {
             › Practica el ciclo completo con el simulador interactivo
           </p>
 
-          <Simulator />
+          <div id="simulador">
+            <Simulator />
+          </div>
         </div>
       </div>
       <HubFooter />
@@ -548,6 +590,7 @@ function NumberField({ label, value, onChange }: { label: string; value: number;
         value={value === 0 ? "" : value}
         placeholder="0"
         onChange={(e) => onChange(Math.max(0, Number(e.target.value) || 0))}
+        className="cx-input"
         style={{
           width: "100%", fontSize: 14, fontWeight: 600, padding: "8px 10px", borderRadius: 8,
           border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)",
@@ -566,6 +609,7 @@ function TextField({ label, value, onChange, placeholder }: { label: string; val
         value={value}
         placeholder={placeholder}
         onChange={(e) => onChange(e.target.value)}
+        className="cx-input"
         style={{
           width: "100%", fontSize: 13, padding: "8px 10px", borderRadius: 8,
           border: "1px solid var(--border)", background: "var(--card)", color: "var(--fg)",
@@ -673,12 +717,14 @@ function CalculadoraHeader({ icon: Icon, theme, titulo, onEjemplo, onLimpiar }: 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         <button
           onClick={onEjemplo}
+          className="cx-btn-primary"
           style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 700, color: "#fff", background: theme.accent, border: "none", borderRadius: 8, padding: "7px 12px", cursor: "pointer" }}
         >
           <Sparkles size={12} /> Cargar ejemplo real
         </button>
         <button
           onClick={onLimpiar}
+          className="cx-btn-secondary"
           style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "var(--fg)", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: "7px 12px", cursor: "pointer" }}
         >
           <RotateCcw size={12} /> Limpiar
@@ -698,7 +744,7 @@ function CalculadoraCES() {
   const banda = bandaPor(score, 5.5, 4.0);
 
   return (
-    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.ces.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
+    <div className="cx-card" style={{ boxShadow: "0 1px 3px rgba(15,23,42,0.04)", background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.ces.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
       <CalculadoraHeader
         icon={MessageCircle}
         theme={THEME.ces}
@@ -706,14 +752,14 @@ function CalculadoraCES() {
         onEjemplo={() => { setSuma(310); setTotal(50); setTarget("Dropshippers"); setCantidad(50); setTarea("Resolver duda de compatibilidad en el chat de pre-venta"); }}
         onLimpiar={() => { setSuma(0); setTotal(0); setTarget(""); setCantidad(0); setTarea(""); }}
       />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 12 }}>
         <TextField label="Target / Perfil" value={target} onChange={setTarget} placeholder="ej. Dropshippers" />
         <NumberField label="Cantidad (tamaño del target)" value={cantidad} onChange={setCantidad} />
       </div>
       <div style={{ marginBottom: 16 }}>
         <TextField label="Tarea específica que se está midiendo" value={tarea} onChange={setTarea} placeholder="ej. Resolver duda de compatibilidad en el chat de pre-venta" />
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 16 }}>
         <NumberField label="Suma total de puntos" value={suma} onChange={setSuma} />
         <NumberField label="Total de respuestas" value={total} onChange={setTotal} />
       </div>
@@ -738,7 +784,7 @@ function CalculadoraCSAT() {
   const banda = bandaPor(score, 80, 60);
 
   return (
-    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.csat.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
+    <div className="cx-card" style={{ boxShadow: "0 1px 3px rgba(15,23,42,0.04)", background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.csat.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
       <CalculadoraHeader
         icon={Package}
         theme={THEME.csat}
@@ -746,14 +792,14 @@ function CalculadoraCSAT() {
         onEjemplo={() => { setSat(150); setTotal(200); setTarget("Dropshippers"); setCantidad(200); setTarea("Satisfacción con la entrega del pedido (Kit LED H4 6000K)"); }}
         onLimpiar={() => { setSat(0); setTotal(0); setTarget(""); setCantidad(0); setTarea(""); }}
       />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 12 }}>
         <TextField label="Target / Perfil" value={target} onChange={setTarget} placeholder="ej. Dropshippers" />
         <NumberField label="Cantidad (tamaño del target)" value={cantidad} onChange={setCantidad} />
       </div>
       <div style={{ marginBottom: 16 }}>
         <TextField label="Tarea específica que se está midiendo" value={tarea} onChange={setTarea} placeholder="ej. Satisfacción con la entrega del pedido" />
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 16 }}>
         <NumberField label="Respuestas 4 y 5 ★" value={sat} onChange={setSat} />
         <NumberField label="Total de respuestas" value={total} onChange={setTotal} />
       </div>
@@ -780,7 +826,7 @@ function CalculadoraNPS() {
   const banda = bandaPor(score, 50, 0);
 
   return (
-    <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.nps.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
+    <div className="cx-card" style={{ boxShadow: "0 1px 3px rgba(15,23,42,0.04)", background: "var(--card)", border: "1px solid var(--border)", borderLeft: `3px solid ${THEME.nps.accent}`, borderRadius: 14, padding: 24, marginBottom: 20 }}>
       <CalculadoraHeader
         icon={Heart}
         theme={THEME.nps}
@@ -788,7 +834,7 @@ function CalculadoraNPS() {
         onEjemplo={() => { setDet(15); setPas(20); setProm(65); setTarget("Dropshippers"); setCantidad(100); setPuntoContacto("Experiencia general"); }}
         onLimpiar={() => { setDet(0); setPas(0); setProm(0); setTarget(""); setCantidad(0); setPuntoContacto(""); }}
       />
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 12 }}>
         <TextField label="Target / Perfil" value={target} onChange={setTarget} placeholder="ej. Dropshippers" />
         <NumberField label="Cantidad (tamaño del target)" value={cantidad} onChange={setCantidad} />
       </div>
@@ -798,7 +844,7 @@ function CalculadoraNPS() {
       <p style={{ fontSize: 10.5, color: "var(--muted)", lineHeight: 1.5, margin: "0 0 16px" }}>
         A diferencia de CES y CSAT (que miden una tarea puntual), el NPS está pensado sobre todo para medir la <strong>experiencia general</strong> de la relación con tu marca — aunque también puede aplicarse a un touchpoint específico si lo necesitas.
       </p>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 16 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 12, marginBottom: 16 }}>
         <NumberField label="Detractores (0-6)" value={det} onChange={setDet} />
         <NumberField label="Pasivos (7-8)" value={pas} onChange={setPas} />
         <NumberField label="Promotores (9-10)" value={prom} onChange={setProm} />
@@ -825,7 +871,7 @@ function Simulator() {
   }
 
   return (
-    <div style={{ background: "var(--card)", border: `1px solid ${THEME.nps.accent}55`, borderTop: `3px solid ${THEME.nps.accent}`, borderRadius: 14, padding: 28 }}>
+    <div className="cx-card" style={{ boxShadow: "0 1px 3px rgba(15,23,42,0.04)", background: "var(--card)", border: `1px solid ${THEME.nps.accent}55`, borderTop: `3px solid ${THEME.nps.accent}`, borderRadius: 14, padding: 28 }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12, marginBottom: 18 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ width: 40, height: 40, borderRadius: 10, background: THEME.nps.light, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -853,7 +899,7 @@ function Simulator() {
         {state === "idle" ? "Presiona \"Siguiente paso\" para comenzar" : `Paso ${step} de 8`}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 24 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 24 }}>
         {/* step list */}
         <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
           {STEPS.map((s) => {
@@ -953,6 +999,7 @@ function Simulator() {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24, paddingTop: 18, borderTop: "1px solid var(--border)" }}>
         <button
           onClick={reset}
+          className="cx-btn-secondary"
           style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600, color: "var(--fg)", background: "var(--card)", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 14px", cursor: "pointer" }}
         >
           <RotateCcw size={14} /> Reiniciar
@@ -971,6 +1018,7 @@ function Simulator() {
                 if (step < 8) { setStep((s) => s + 1); return; }
                 setState("done");
               }}
+              className="cx-btn-primary"
               style={{ fontSize: 13, fontWeight: 700, color: "#fff", background: THEME.nps.accent, border: "none", borderRadius: 8, padding: "9px 18px", cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}
             >
               {step === 8 && state === "running" ? <>✓ Ver resultado final</> : <>Siguiente paso →</>}
