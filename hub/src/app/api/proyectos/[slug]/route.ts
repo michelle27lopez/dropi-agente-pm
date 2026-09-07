@@ -184,6 +184,14 @@ export async function GET(req: NextRequest, context: any) {
     ...c.data
   })) || [];
 
+  // Weekly de Producto propio de este proyecto (distinto del weekly a nivel
+  // célula en celula_updates) — ver 056_project_updates.sql.
+  const { data: updates } = await supabase
+    .from("project_updates")
+    .select("*")
+    .eq("project_id", project.id)
+    .order("week_date", { ascending: false });
+
   return NextResponse.json({
     project,
     parent,
@@ -195,6 +203,7 @@ export async function GET(req: NextRequest, context: any) {
     deliveryOptions,
     cycles: mappedCycles,
     decisions,
+    updates: updates ?? [],
   });
 }
 
