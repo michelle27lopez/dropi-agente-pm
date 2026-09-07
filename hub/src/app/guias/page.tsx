@@ -86,9 +86,17 @@ const guias: { slug: string; icon: string; title: string; description: string; t
     slug: "userpilot-mcp",
     icon: "🔌",
     title: "Documentar tu vertical con UserPilot + Claude Code",
-    description: "Cómo conectar UserPilot vía MCP con la cuenta compartida del equipo y el prompt para replicar la doc de /proveedores en tu propio vertical.",
+    description: "Cómo conectar UserPilot vía MCP con la cuenta compartida del equipo y el prompt para replicar la doc de /guias/proveedores en tu propio vertical.",
     tag: "Onboarding · Nuevo vertical",
     categoria: "herramientas",
+  },
+  {
+    slug: "proveedores",
+    icon: "🧭",
+    title: "El proveedor de Dropi",
+    description: "Quién es el proveedor, qué tan satisfecho está, qué puede hacer hoy, cómo entra a la plataforma y con qué herramientas convive. Cada cifra con su fuente y su fecha de corte.",
+    tag: "Vertical · Supplier Success",
+    categoria: "ecosistema",
   },
   {
     slug: "entendimiento-negocio",

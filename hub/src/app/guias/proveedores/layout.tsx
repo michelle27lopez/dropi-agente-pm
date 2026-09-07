@@ -4,19 +4,19 @@ import { usePathname } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumb";
 import { useIsEmbedded } from "@/lib/use-is-embedded";
 
-// Base de conocimiento del vertical Proveedores. Vive fuera de /proyectos
-// porque no es un proyecto: es la referencia del vertical, como /roadmap-s2-2026.
+// Base de conocimiento del vertical Proveedores. Vive dentro de /guias y no
+// en /proyectos porque no es un proyecto: es la referencia del vertical.
 // El índice lateral está en el layout y no en cada página porque los cinco
 // temas son rutas hermanas, no secciones de un mismo scroll.
 
 const NAV: { href: string; icon: string; label: string; sub: string }[] = [
-  { href: "/proveedores",                 icon: "🧭", label: "Resumen",          sub: "Estado de la evidencia" },
-  { href: "/proveedores/perfil",          icon: "👤", label: "Perfil y segmentos", sub: "Quién es el proveedor" },
-  { href: "/proveedores/satisfaccion",    icon: "📊", label: "Satisfacción",     sub: "NPS, CSAT y CES" },
-  { href: "/proveedores/funcionalidades", icon: "🧱", label: "Funcionalidades",  sub: "Producción y pipeline" },
-  { href: "/proveedores/onboarding",      icon: "🛬", label: "Onboarding",       sub: "Blueprint de servicio" },
-  { href: "/proveedores/blueprint",       icon: "🗺️", label: "Blueprint general", sub: "Uso completo de la plataforma" },
-  { href: "/proveedores/herramientas",    icon: "🧰", label: "Herramientas",     sub: "Ecosistema de software" },
+  { href: "/guias/proveedores",                 icon: "🧭", label: "Resumen",          sub: "Estado de la evidencia" },
+  { href: "/guias/proveedores/perfil",          icon: "👤", label: "Perfil y segmentos", sub: "Quién es el proveedor" },
+  { href: "/guias/proveedores/satisfaccion",    icon: "📊", label: "Satisfacción",     sub: "NPS, CSAT y CES" },
+  { href: "/guias/proveedores/funcionalidades", icon: "🧱", label: "Funcionalidades",  sub: "Producción y pipeline" },
+  { href: "/guias/proveedores/onboarding",      icon: "🛬", label: "Onboarding",       sub: "Blueprint de servicio" },
+  { href: "/guias/proveedores/blueprint",       icon: "🗺️", label: "Blueprint general", sub: "Uso completo de la plataforma" },
+  { href: "/guias/proveedores/herramientas",    icon: "🧰", label: "Herramientas",     sub: "Ecosistema de software" },
 ];
 
 export default function ProveedoresLayout({ children }: { children: React.ReactNode }) {
@@ -38,7 +38,8 @@ export default function ProveedoresLayout({ children }: { children: React.ReactN
           <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px" }}>
             <Breadcrumb
               items={[
-                { label: "Proveedores", href: "/proveedores" },
+                { label: "Guías", href: "/guias" },
+                { label: "Proveedores", href: "/guias/proveedores" },
                 { label: actual?.label ?? "Resumen" },
               ]}
             />

@@ -9,7 +9,7 @@ import HubFooter from "@/components/HubFooter";
 import { DeleteConfirmModal } from "@/components/DeleteConfirmModal";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
 import { type Item, matchesQuery } from "@/components/HomeSections";
-import { proyectoToItem } from "@/lib/curated-projects";
+import { proyectoToItem, esProyectoVisible } from "@/lib/curated-projects";
 import { ESTADOS_DISCOVERY, ESTADOS_POC, ESTADOS_DELIVERY, type Proyecto } from "@/components/ProjectCard";
 import { type Fase, faseDe, FASE_LABEL, FASE_COLOR } from "@/lib/fase";
 
@@ -259,6 +259,7 @@ export default function ProyectosPorCelulaPage() {
 
   function toRows(source: Proyecto[]) {
     return source
+      .filter(esProyectoVisible)
       .filter(porFase)
       .filter(pasaEtapa)
       .map((proyecto) => {
