@@ -25,6 +25,10 @@ const SellersMetricsPanel = dynamic(() => import("./_components/SellersMetricsPa
 type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
+// celula_id primario ≠ dónde puede editar: un perfil también puede tener
+// permiso adicional vía `celula_editores` (proyectos transversales, ver
+// 055_celula_editores_transversales.sql) sin que le cambie su célula "de
+// verdad". `/api/me` ya devuelve esa lista aparte.
 
 type CelulaHome = {
   id: string; nombre: string; slug: string; lead: string | null; area: string | null;
@@ -87,6 +91,7 @@ export default function CelulaHomePage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [celulasEditor, setCelulasEditor] = useState<string[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", summary: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -111,7 +116,10 @@ export default function CelulaHomePage() {
 
     fetch("/api/me")
       .then((res) => res.json())
-      .then((data) => setProfile(data?.profile ?? null))
+      .then((data) => {
+        setProfile(data?.profile ?? null);
+        setCelulasEditor(data?.celulasEditor ?? []);
+      })
       .catch(() => setProfile(null));
   }, [params.slug]);
 
@@ -144,7 +152,7 @@ export default function CelulaHomePage() {
   const visibles = celula.proyectos.filter(esProyectoVisible);
   const proyectos = visibles.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
   const poc = visibles.filter((p) => p.type === "POC").map(proyectoToItem);
-  const esCelulaPropia = !!profile && profile.celula_id === celula.id;
+  const esCelulaPropia = !!profile && (profile.celula_id === celula.id || celulasEditor.includes(celula.id));
   const canCreate = esCelulaPropia || modoEdicionForzado;
 
   const pocsByParent = new Map<string, Proyecto[]>();
