@@ -1292,7 +1292,253 @@ export type Weekly = {
 // Cada semana es una entrada. La primera del array es la más reciente (la que se
 // muestra por defecto). NO borrar semanas viejas: el switch de /updates las conserva.
 export const weeklies: Weekly[] = [
-  // ── Semana 24 – 28 ago 2026 (actual) ────────────────────────────────────────
+  // ── Semana 1 – 5 sep 2026 (actual) ─────────────────────────────────────────
+  // Aporte de Michel Pino: Servicios en Bodega completó Fase 1 al ~90% en un
+  // sprint de 3 semanas (19 ago → 5 sep). Además se construyó la herramienta
+  // "Prioriza tus transportadoras con IA" para Expowinners 2026 (12–13 sep),
+  // un wizard de 8 pantallas con tracking completo que valida demanda real de
+  // selección inteligente de transportadoras. Autoconfirmación × ChateaPro sin
+  // avance — el foco estuvo en construcción.
+  {
+    id: "2026-w36",
+    fecha: "Viernes 5 de septiembre de 2026",
+    semana: "Semana 1 – 5 sep",
+    foco:
+      "Dos entregas esta semana. Servicios en Bodega completó la Fase 1 al ~90% (10 rutas, auth con RLS, design system, máquina de estados, 66 archivos fuente en 3 semanas). Y para Expowinners 2026 (12–13 sep) se construyó 'Prioriza tus transportadoras con IA': wizard de 8 pantallas con tracking Supabase + PostHog que valida demanda real de selección inteligente de transportadoras y recoge taxonomía de novedades. PR enviado, pendiente merge.",
+
+    comparacionMensual: {
+      titulo: "Cierre agosto — en consolidación",
+      alcance:
+        "Consolidado de los 10 países del tablero, ponderado por volumen. Agosto aún no cierra; julio sigue siendo el último dato.",
+      lectura:
+        "Tres semanas de ejecución intensa en Servicios en Bodega: de especificación (w34) a plataforma funcional con 66 archivos fuente, 10 rutas activas y máquina de estados implementada. El foco fue construcción, no cifra de movilización.",
+      entregaNota:
+        "% entrega sigue sin ser comparable hasta tener el export por cohorte de Data.",
+      meses: ["Abril", "Mayo", "Junio", "Julio"],
+      filas: [
+        { metrica: "Movilización", valores: ["81,9%", "82,3%", "82,3%", "82,7%"], delta: "+0,4 pts", tono: "alerta" },
+        { metrica: "No movilizado", valores: ["700.281", "716.957", "737.865", "786.130"], delta: "+48.265", tono: "malo" },
+        { metrica: "Órdenes", valores: ["3,86M", "4,04M", "4,17M", "4,55M"], delta: "+9,0%", tono: "bueno" },
+      ],
+    },
+
+    avanceInvestigacion: {
+      titulo: "Servicios en Bodega — sprint de 3 semanas",
+      descripcion:
+        "De especificación a plataforma funcional en 3 semanas. Fase 1 (Almacenamiento + Recepción) al ~90%. Fase 2 (Tarifas) arrancó antes de lo planeado con UI de gestión ya construida.",
+      pasos: [
+        { nombre: "Fase 1 · Almacenamiento + Recepción", detalle: "UI, auth, import Excel, dashboard, proveedores — ~90% completado", estado: "listo" },
+        { nombre: "Fase 2 · Etiquetado + Kits + Tarifas", detalle: "Gestión de tarifas con UI ya existe; etiquetado y kits pendientes — ~20%", estado: "activo" },
+        { nombre: "Fase 3 · Deuda, contratos, P&L", detalle: "Sin iniciar", estado: "siguiente" },
+        { nombre: "Fase 4 · Multi-unidad + Integraciones", detalle: "Sin iniciar", estado: "siguiente" },
+      ],
+    },
+
+    focoSiguienteSemana: [
+      "Expowinners (12–13 sep): merge del PR #31 y validación final del wizard antes del evento. Recopilar datos de demanda y novedades en campo — Responsable: Michel Pino.",
+      "Servicios en Bodega: deploy a Vercel y configuración de dominio/acceso para la célula — Responsable: Michel Pino.",
+      "Servicios en Bodega: pruebas e2e con datos reales de bodega México (Excel mayo, 124 proveedores) — Responsable: Michel Pino / Logística.",
+      "Servicios en Bodega: completar el 10% restante de Fase 1 (edge cases de importación, validaciones finales) — Responsable: Michel Pino.",
+    ],
+
+    indicadores: [
+      // ── Indicadores de la célula (se repiten de w35, sin cierre nuevo) ──
+      {
+        nombre: "Movilización consolidada",
+        valor: "82,7%",
+        meta: "90%",
+        tono: "alerta",
+        estado: "sin cierre nuevo",
+        nota: "Julio sigue siendo el último mes cerrado. Solo Guatemala (90,3%) alcanza la meta de la CPO.",
+        serie: "Movilización",
+      },
+      {
+        nombre: "Recolección en bodegas lejanas",
+        valor: "2 días",
+        tono: "bueno",
+        estado: "antes 5 días",
+        trend: "down" as const,
+        nota: "Garzón, Cúcuta y Bucaramanga: ~10 mil órdenes/semana que tardaban 5 días en moverse ahora tardan 2. Declarado por la célula, pendiente de export.",
+      },
+      {
+        nombre: "Novedades de junio",
+        valor: "911.168",
+        tono: "malo",
+        estado: "17,0% se rescatan",
+        nota: "74,3% terminan devueltas. Techo conservador: +95.688 entregas/mes llevando cada motivo al P75 de su clúster.",
+      },
+      // ── Indicadores de proyecto Michel Pino ─────────────────────────────
+      {
+        nombre: "Fase 1 · Servicios en Bodega",
+        valor: "~90%",
+        tono: "bueno",
+        estado: "Falta deploy + e2e",
+        nota: "Plataforma funcional: 66 archivos fuente, 10 rutas activas, 5 migraciones SQL, auth con roles, design system propio y máquina de estados.",
+      },
+      {
+        nombre: "Revenue leakage bodega",
+        valor: "$2.9M–6.4M MXN/mes",
+        tono: "malo",
+        estado: "Plataforma construida",
+        nota: "La plataforma que cierra esta fuga ya tiene UI funcional. Falta deploy y pruebas con datos reales para empezar a capturar el valor.",
+      },
+      {
+        nombre: "Expowinners · Transportadoras IA",
+        valor: "PR listo",
+        tono: "bueno",
+        estado: "12–13 sep",
+        nota: "Wizard de 8 pantallas con tracking Supabase + PostHog. Valida demanda de selección inteligente de transportadoras y recoge taxonomía de novedades.",
+      },
+    ] as IndicadorHoy[],
+
+    brecha: {
+      actual: 73.8, actualLabel: "73,8% crudo CO",
+      meta: 70, metaLabel: "70%",
+      gap: "No comparable", metaQ3: "Pendiente cohorte",
+      paisFoco: "Colombia representa 71,9% del volumen de julio.",
+      lectura: "Agosto sigue madurando; no se usa esta cifra para evaluar el KR.",
+      perdidas: [],
+    },
+    tiempo: {
+      lectura:
+        "El foco de las últimas 3 semanas fue ejecución de Servicios en Bodega. No hubo trabajo directo sobre reducción de tiempos de tránsito esta semana.",
+      dropi: [
+        { fase: "Ruta Dropi hasta transportadora", horas: 44.9, metaHoras: 24, responsable: "Célula", palanca: "Sin palanca nueva esta semana — foco en Servicios en Bodega" },
+      ],
+      carrier: [
+        { fase: "Maduración de entrega", horas: 24, metaHoras: 24, palanca: "comparar cohortes cerradas" },
+      ],
+      proximosPasos: ["Deploy de Servicios en Bodega a Vercel y pruebas e2e con datos reales."],
+    },
+    hallazgos: [],
+
+    secciones: [
+      {
+        titulo: "Servicios en Bodega · progreso de ejecución",
+        nota: "Construcción de la plataforma de cobros — sprint de 3 semanas (19 ago → 5 sep).",
+        proyectos: [
+          {
+            nombre: "Fundación · modelo de datos",
+            ticket: "PRM-1446",
+            estado: "Completado · 19 ago",
+            estadoTono: "verde",
+            nota:
+              "7 tablas, motor de cálculo, validación Excel, conexión Supabase. Base sólida con triggers de auditoría y constraints de contrato.",
+          },
+          {
+            nombre: "Fase 1 · UI completa",
+            ticket: "PRM-1446",
+            estado: "Completado · 21 ago",
+            estadoTono: "verde",
+            nota:
+              "Login, dashboard, importar Excel, proveedores (lista + detalle), recepciones, cobros — todas las pantallas funcionales. 10 rutas activas.",
+          },
+          {
+            nombre: "Auth + Row Level Security",
+            ticket: "PRM-1446",
+            estado: "Completado · 28 ago",
+            estadoTono: "verde",
+            nota:
+              "Migración de RLS por rol, proxy de autenticación, UI de acceso restringido. Cada rol (Admin, Logística, Facturación, Comercial) ve solo lo que le corresponde.",
+          },
+          {
+            nombre: "Design System propio",
+            ticket: "PRM-1446",
+            estado: "Completado · 31 ago",
+            estadoTono: "verde",
+            nota:
+              "Tokens de diseño, tipografía Inter Variable, componentes StatusChip y CurrencyText, mejoras de accesibilidad. Dark mode incluido.",
+          },
+          {
+            nombre: "Máquina de estados · reconciliación",
+            ticket: "PRM-1446",
+            estado: "Completado · 2 sep",
+            estadoTono: "verde",
+            nota:
+              "Ciclo de facturación implementado (borrador → abierto → cerrado → facturado). UI de periodos y gestión de tarifas. Descuento por volumen eliminado tras confirmación con stakeholders.",
+          },
+          {
+            nombre: "Deploy a Vercel + pruebas e2e",
+            ticket: "PRM-1446",
+            estado: "Pendiente",
+            estadoTono: "ambar",
+            nota:
+              "Último 10% de Fase 1. Deploy a producción, pruebas con datos reales de bodega México y validación con usuarios de la célula.",
+          },
+        ],
+      },
+      {
+        titulo: "Quick wins logrados",
+        nota: "Métricas de ejecución de las 3 semanas de sprint.",
+        proyectos: [
+          {
+            nombre: "Masa crítica de código",
+            estado: "66 archivos TS/TSX",
+            estadoTono: "verde",
+            nota: "Plataforma con 66 archivos fuente — la base de código tiene el peso suficiente para sostener las fases siguientes sin reescrituras.",
+          },
+          {
+            nombre: "Schema robusto",
+            estado: "5 migraciones SQL",
+            estadoTono: "verde",
+            nota: "Triggers de auditoría, constraints de contrato, seed de datos. Cada migración es idempotente y reversible.",
+          },
+          {
+            nombre: "Simplificación de negocio",
+            estado: "Descuento volumen eliminado",
+            estadoTono: "verde",
+            nota: "Lógica de descuento por volumen eliminada tras confirmación con stakeholders — simplifica motor de cálculo y reduce superficie de error.",
+          },
+        ],
+      },
+      {
+        titulo: "Expowinners 2026 · Transportadoras con IA",
+        nota: "Herramienta de validación en campo para el evento del 12–13 sep en Centro Ágora, Bogotá.",
+        proyectos: [
+          {
+            nombre: "Wizard 'Prioriza tus transportadoras con IA'",
+            ticket: "PRM-1513",
+            estado: "PR enviado · pendiente merge",
+            estadoTono: "verde",
+            nota:
+              "Wizard interactivo de 8 pantallas integrado al ecosistema Expo (repo Gali-experiment, PR #31, ruta /expo/transportadoras). Recoge perfil logístico del vendedor, criterios de priorización, acciones ante novedades y genera ranking IA personalizado. Tracking completo: Supabase (expo_events) + PostHog, con nombre y teléfono del lead para cruce con Wrapped.",
+            impacto: "Valida demanda real de selección inteligente de transportadoras. Métrica clave: % con calificación 6-7 en '¿lo activarías en Dropi?' (escala 1-7).",
+          },
+          {
+            nombre: "Datos que se recopilan",
+            estado: "7 dimensiones · 9 eventos",
+            estadoTono: "verde",
+            nota:
+              "Tamaño de paquete típico, acciones ante novedades (taxonomía A01-A15), criterios de priorización (efectividad/costo/velocidad/cobertura/flexibilidad), ajustes al ranking IA, CES de facilidad de uso, demanda real 1-7, y compartir resultado. 9 eventos trackeados de carrier_tool_started a carrier_shared.",
+          },
+          {
+            nombre: "Visión de producto",
+            estado: "Doble validación",
+            estadoTono: "azul",
+            nota:
+              "Selección de transportadoras: prueba que un motor de scoring por perfil genera valor percibido — si la demanda se confirma, se integra al flujo de creación de guía. Normalización de novedades: la taxonomía A01-A15 alimenta el diseño de un sistema donde el vendedor elige qué hacer (no espera pasivamente).",
+          },
+        ],
+      },
+      {
+        titulo: "Otros frentes",
+        nota: "Estado de los demás proyectos del portafolio Michel Pino.",
+        proyectos: [
+          {
+            nombre: "POC Autoconfirmación × ChateaPro",
+            ticket: "PRM-1497",
+            estado: "Gate pendiente · sin avance",
+            estadoTono: "gris",
+            nota:
+              "Sin avance esta semana — el foco estuvo en Servicios en Bodega y Expowinners. El gate con ChateaPro (¿tolera un gate antes de su disparo?) sigue abierto.",
+            enlace: { label: "Ver POC Autoconfirmación × ChateaPro", href: "/proyectos/logistica/poc-autoconfirmacion-chateapro" },
+          },
+        ],
+      },
+    ] as SeccionProyectos[],
+  },
+
+  // ── Semana 24 – 28 ago 2026 ────────────────────────────────────────────────
   // Semana de operación y de research, no de cifra mensual: julio sigue
   // siendo el último mes cerrado, así que la comparación se repite SIN el
   // desglose por país (regla del tipo: no se republica como dato fresco).
