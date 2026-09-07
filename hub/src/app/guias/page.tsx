@@ -21,8 +21,8 @@ const guias: { slug: string; icon: string; title: string; description: string; t
   {
     slug: "entendimiento-360-ecosistema",
     icon: "🧭",
-    title: "Entendimiento 360 del ecosistema",
-    description: "Qué sabemos hoy de arquetipos/user personas y journeys de experiencia y servicio, célula por célula — por usuario y por proceso.",
+    title: "Service design: Entendimiento 360 del ecosistema",
+    description: "Fundamentos del negocio (Diana Aldana) + qué sabemos hoy de arquetipos/user personas y journeys de experiencia y servicio, célula por célula.",
     tag: "Service design · Proyecto PRO-001",
     categoria: "ecosistema",
   },
@@ -96,14 +96,6 @@ const guias: { slug: string; icon: string; title: string; description: string; t
     title: "El proveedor de Dropi",
     description: "Quién es el proveedor, qué tan satisfecho está, qué puede hacer hoy, cómo entra a la plataforma y con qué herramientas convive. Cada cifra con su fuente y su fecha de corte.",
     tag: "Vertical · Supplier Success",
-    categoria: "ecosistema",
-  },
-  {
-    slug: "entendimiento-negocio",
-    icon: "🧠",
-    title: "Entendimiento del Negocio",
-    description: "Roles (Supplier vs. Marca/Emprendedor), comportamiento algorítmico, las dos lentes de análisis y el modelo de Funnel, Palancas y Loops del ecosistema Dropi.",
-    tag: "Referencia · Negocio",
     categoria: "ecosistema",
   },
   {
