@@ -13,6 +13,7 @@ import { localCellBoards } from "@/app/celula/_cell-board";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
 import { previewUpdateContent } from "@/lib/update-preview";
+import { esProyectoVisible } from "@/lib/curated-projects";
 import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 
 // El weekly de logística arrastra el registro completo del tablero
@@ -148,8 +149,9 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
-  const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
+  const visibles = celula.proyectos.filter(esProyectoVisible);
+  const proyectos = visibles.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
+  const poc = visibles.filter((p) => p.type === "POC").map(proyectoToItem);
   const esCelulaPropia = !!profile && (profile.celula_id === celula.id || celulasEditor.includes(celula.id));
   const canCreate = esCelulaPropia || modoEdicionForzado;
 

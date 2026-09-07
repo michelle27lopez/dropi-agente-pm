@@ -74,7 +74,7 @@ export default function BlueprintPage() {
         </H1>
 
         <P>
-          El único blueprint detallado que existe hoy es el de <a href="/proveedores/onboarding" style={{ color: "var(--fg)", textDecoration: "none", borderBottom: "1px solid var(--border)" }}>Onboarding</a>,
+          El único blueprint detallado que existe hoy es el de <a href="/guias/proveedores/onboarding" style={{ color: "var(--fg)", textDecoration: "none", borderBottom: "1px solid var(--border)" }}>Onboarding</a>,
           en 10 pasos con evidencia real paso a paso. Este es el intento de extenderlo a todo el ciclo de
           vida, usando como columnas las 5 macro-etapas ya inventariadas en Funcionalidades. La mayoría de
           las filas nuevas que pediste — banderas rojas, canales, quién interviene — están marcadas como no
