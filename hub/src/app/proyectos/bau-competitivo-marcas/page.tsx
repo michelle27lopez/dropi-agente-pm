@@ -74,15 +74,50 @@ const FRENTES = [
   { icono: "⏳", nombre: "Data", desc: "Cuantificar frecuencia, impacto, volumen, retención, abandono, uso.", estado: "pending" },
 ] as const;
 
-// ─── Metodología ────────────────────────────────────────────────────────
-const FASES = [
-  { n: 1, name: "Consolidación de evidencia existente", desc: "CSAT, respuestas abiertas, entrevistas, tickets, backlog", active: true },
-  { n: 2, name: "Investigación cualitativa complementaria", desc: "Ampliar muestra: abandonadas, no convertidas, alto volumen, multi-sede", active: false },
-  { n: 3, name: "Validación cuantitativa", desc: "Magnitud de los problemas — con Data", active: false },
-  { n: 4, name: "Definición de capacidades BAU", desc: "Clasificar: indispensable / retención / competitiva / diferenciador", active: false },
-  { n: 5, name: "Benchmark competitivo", desc: "Solo sobre capacidades ya priorizadas — no comparación general", active: false },
-  { n: 6, name: "Priorización y recomendación", desc: "Backlog priorizado, roadmap, plan de medición", active: false },
-] as const;
+// ─── Metodología — estado real revisado 26-ago-2026 ─────────────────────
+// Antes cada fase era activa/inactiva en secuencia estricta. Kate señaló (26-ago-2026)
+// que en la práctica el equipo ya avanzó sustancia de varias fases fuera de orden
+// (research standalone de competencia, mapa de capacidades, cuantificación vía CSAT).
+// Este estado de 3 valores (hecho/parcial/pendiente) refleja eso — no es una relajación
+// del rigor: cada "parcial" trae la nota de qué falta exactamente para cerrarla.
+type FaseEstado = "hecho" | "parcial" | "pendiente";
+const FASES: { n: number; name: string; desc: string; estado: FaseEstado; nota: string }[] = [
+  {
+    n: 1, name: "Consolidación de evidencia existente", desc: "CSAT, respuestas abiertas, entrevistas, tickets, backlog",
+    estado: "hecho",
+    nota: "716 respuestas CSAT (16-jul) + 9 entrevistas cualitativas + 6 negocios perdidos de Comercial, todo ya integrado.",
+  },
+  {
+    n: 2, name: "Investigación cualitativa complementaria", desc: "Ampliar muestra: abandonadas, no convertidas, alto volumen, multi-sede",
+    estado: "parcial",
+    nota: "La investigación de 17 marcas-lead (25-ago) suma alto volumen y multi-sede, pero son prospectos externos — sigue faltando entrevistar marcas que evaluaron Dropi y no convirtieron, o que abandonaron.",
+  },
+  {
+    n: 3, name: "Validación cuantitativa", desc: "Magnitud de los problemas — con Data",
+    estado: "parcial",
+    nota: "Los % del CSAT ya cuantifican magnitud (soporte 14,0% de 716, sube a 42,7% en baja satisfacción) — pero los 4 frentes internos (CS, Soporte, Logística, Data) siguen sin cerrar formalmente.",
+  },
+  {
+    n: 4, name: "Definición de capacidades BAU", desc: "Clasificar: indispensable / retención / competitiva / diferenciador",
+    estado: "parcial",
+    nota: "Ya existe un mapa de capacidades con prioridad crítica/alta/media (sección de abajo) — falta traducirlo a esta taxonomía oficial de 4 categorías.",
+  },
+  {
+    n: 5, name: "Benchmark competitivo", desc: "Solo sobre capacidades ya priorizadas — no comparación general",
+    estado: "parcial",
+    nota: "Se hizo 3 veces (24-jul, 30-jul, 25-ago) — pero como comparación general de mercado, no filtrada a capacidades ya priorizadas como pedía la regla original. Se entregó el valor del benchmark, no se siguió la letra de esta fase.",
+  },
+  {
+    n: 6, name: "Priorización y recomendación", desc: "Backlog priorizado, roadmap, plan de medición",
+    estado: "parcial",
+    nota: "El cierre de investigación 25-ago ya trae un orden de prioridad y roadmap preliminar (documento aparte) — falta pasarlo por el filtro de experimentos antes de que sea recomendación formal.",
+  },
+];
+const FASE_ESTADO_STYLE: Record<FaseEstado, { color: string; bg: string; label: string }> = {
+  hecho: { color: GREEN, bg: GREEN_BG, label: "Hecho" },
+  parcial: { color: AMBER, bg: AMB_BG, label: "Parcial" },
+  pendiente: { color: "var(--muted)", bg: MUTED_BG, label: "Pendiente" },
+};
 
 // ─── Dos lentes — numeración cerrada 2026-07-17: Lente 2 = Ecosistema, Lente 1 = Comercial
 const ACTIVIDAD_MENSUAL = [
@@ -252,6 +287,85 @@ const HIPOTESIS: Hipotesis[] = [
   { texto: "Nativizar la mensajería automática al comprador (hoy dependiente de Chatea Pro como aliado externo) reduce devoluciones en contraentrega y carga de soporte, cerrando la brecha frente a 5 de 8 competidores que ya la ofrecen incluida.", fuente: "Informe Gerencial 30-jul-2026 + research externo 24-jul-2026 — dos fuentes convergentes, pendiente cuantificar impacto en devoluciones con Data" },
 ];
 
+// ─── JTBD-hipótesis — 26-ago-2026, apartado nuevo, no reemplaza nada de arriba ──
+// Fuente nueva: agente-delivery/Documentos/Diagnostico_Marcas_CSAT_16jul2026.xlsx
+// (716 respuestas — columnas dolor_reportado y sugerencia_mejora, no usadas antes a este nivel de detalle)
+type JtbdJob = { kind: string; color: string; bg: string; texto: string };
+const JTBD_JOBS: JtbdJob[] = [
+  { kind: "Job funcional", color: BLUE, bg: BLU_BG, texto: "Cuando despacho un pedido contraentrega, quiero tener certeza de que se va a resolver sin que yo tenga que perseguirlo, para poder dedicar mi tiempo a vender en vez de a apagar incendios operativos." },
+  { kind: "Job emocional", color: "#7C3AED", bg: "#F5F3FF", texto: "Quiero sentir que Dropi me acompaña activamente, no que estoy sola resolviendo con soporte que no responde — incluso llevando años en la plataforma." },
+  { kind: "Job social", color: AMBER, bg: AMB_BG, texto: "Quiero que mi cliente final me vea como una marca seria y confiable, no como alguien que no sabe qué pasó con su pedido — la comunicación automática protege mi reputación frente a mi propio comprador." },
+];
+
+const JTBD_CSAT = [
+  { categoria: "💬 Soporte y atención al cliente", total: "100", pctTotal: "14,0%", pctBaja: "42,7% (41/96)" },
+  { categoria: "🚨 Solución de novedades", total: "63", pctTotal: "8,8%", pctBaja: "21,9% (21/96)" },
+  { categoria: "💰 Costos, tarifas o políticas", total: "31", pctTotal: "4,3%", pctBaja: "14,6% (14/96)" },
+  { categoria: "📦 Devoluciones y garantías", total: "29", pctTotal: "4,1%", pctBaja: "10,4% (10/96)" },
+  { categoria: "🚚 Logística y transportadoras", total: "27", pctTotal: "3,8%", pctBaja: "9,4% (9/96)" },
+  { categoria: "📦 Estados y tracking de envíos", total: "21", pctTotal: "2,9%", pctBaja: "9,4% (9/96)" },
+] as const;
+
+const JTBD_MADUREZ = [
+  { nivel: "Iniciando", n: "214", soporte: "15,4% (33)", novedades: "10,3% (22)" },
+  { nivel: "Creciendo", n: "237", soporte: "14,8% (35)", novedades: "11,4% (27)" },
+  { nivel: "Consolidando", n: "96", soporte: "13,5% (13)", novedades: "6,2% (6)" },
+  { nivel: "Pre-Escalando", n: "41", soporte: "12,2% (5)", novedades: "7,3% (3)" },
+  { nivel: "Escalando", n: "116", soporte: "11,2% (13)", novedades: "3,4% (4)" },
+] as const;
+
+type Fuerza = { titulo: string; color: string; bg: string; items: string[] };
+const JTBD_FUERZAS: Fuerza[] = [
+  { titulo: "Push — empuja a buscar algo mejor", color: RED, bg: RED_BG, items: [
+    "Soporte que no responde: 100 de 716 respuestas CSAT (14,0%), sube a 42,7% entre baja satisfacción (1-2).",
+    "Solución de novedades sin resolver: 63 menciones (8,8%).",
+    "Bug de peso/guía le costó a Santiago Lubo -58% de órdenes propias en 4 meses (caso único, causalidad clara).",
+  ]},
+  { titulo: "Pull — atrae hacia la alternativa", color: AMBER, bg: AMB_BG, items: [
+    "5 de 8-11 competidores ya notifican automáticamente al comprador tras el despacho.",
+    "Aveonline: IA de ruteo + anticipo de recaudo; Skydropx: comparador de tarifas visible.",
+    "Ingrid Pinzón migró 100% a SkyDrop por automatización y transparencia de wallet (luego regresó).",
+  ]},
+  { titulo: "Anxiety — frena el cambio", color: "var(--muted)", bg: MUTED_BG, items: [
+    "Santiago Lubo no migra pese al bug porque depende de integraciones Shopify/Chatea Pro exclusivas de Dropi.",
+    "Reaprender un flujo operativo nuevo tiene costo — [HIPÓTESIS a validar], sin entrevista directa sobre esto todavía.",
+  ]},
+  { titulo: "Habit — ancla al status quo", color: GREEN, bg: GREEN_BG, items: [
+    "54,2% de la base tiene 2+ años de antigüedad en Dropi (ver tabla de Antigüedad arriba).",
+    "Soluciones caseras ya aprendidas: inflar inventario, revisar guías a las 9am, grabar video al recibir paquetes.",
+  ]},
+];
+
+// ─── Cómo experimentar — apartado nuevo 26-ago-2026, responde a "¿cómo experimento
+// según los hallazgos?" y "¿ya se puede concluir qué se requiere construir?" ──────
+type ExperimentoRAT = { oportunidad: string; supuestoRiesgoso: string; experimento: string; metrica: string };
+const EXPERIMENTOS_RAT: ExperimentoRAT[] = [
+  {
+    oportunidad: "Notificación automática al comprador",
+    supuestoRiesgoso: "Que la FALTA de notificación (y no otra causa) es lo que genera la carga de soporte y las novedades sin resolver — no solo correlación.",
+    experimento: "Piloto manual (sin construir nada): para un grupo pequeño de marcas Escalando, un agente envía WhatsApp de seguimiento post-despacho durante 2-3 semanas; comparar contra un grupo control sin ese envío.",
+    metrica: "Variación en tickets de soporte tipo \"¿dónde está mi pedido?\" y en tasa de devolución/rechazo, grupo tratamiento vs. control.",
+  },
+  {
+    oportunidad: "Integración ERP (Siigo/Alegra)",
+    supuestoRiesgoso: "Que reconciliar manualmente contabilidad/inventario cuesta suficientes horas/semana como para que una marca cambie de plataforma por eso — hoy solo hay 1 caso confirmado.",
+    experimento: "Encuesta corta a marcas Consolidando+ (sin construir la integración): ¿usan Siigo/Alegra?, ¿cuántas horas/semana dedican a reconciliar con Dropi?",
+    metrica: "% de marcas Consolidando+ que usan Siigo/Alegra y horas/semana perdidas — define si el negocio perdido de Benjamín de la Torre es patrón o excepción.",
+  },
+  {
+    oportunidad: "Portal de tracking",
+    supuestoRiesgoso: "Que dar tracking propio (vs. delegar a la transportadora) realmente cambia el comportamiento de consulta del cliente final, no solo la percepción de la marca.",
+    experimento: "Prototipo no funcional (mockup/página estática) con 5 marcas voluntarias durante 2 semanas — medir si reduce mensajes de soporte antes de invertir en desarrollo real.",
+    metrica: "Reducción de mensajes \"¿dónde está mi pedido?\" en el canal de soporte de esas 5 marcas.",
+  },
+  {
+    oportunidad: "Comparador de tarifas multi-transportadora",
+    supuestoRiesgoso: "Que la dependencia de una sola transportadora (hallada en 6/17 marcas-lead externas) también ocurre y pesa dentro de la base activa de Dropi — hoy es evidencia solo externa.",
+    experimento: "3-5 entrevistas de discovery con marcas activas de alto volumen para confirmar si dependen de una sola transportadora y qué les costaría eso.",
+    metrica: "N.º de marcas entrevistadas que confirman dependencia de transportadora única y costo estimado (fletes más caros, sin respaldo ante fallas).",
+  },
+];
+
 function Stat({ n, sub, ordenes, label }: { n: string; sub?: string; ordenes?: string; label: string }) {
   return (
     <div style={{ padding: "12px 14px", border: "1px solid var(--border)", borderRadius: 8 }}>
@@ -291,14 +405,14 @@ export default function BauCompetitivoMarcasPage() {
         {/* PANORAMA */}
         <div style={{ ...card, borderRadius: 0, borderTop: "none", marginTop: 0 }}>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 14 }}>
-            <span style={tagChip(AMBER, AMB_BG)}>En progreso — fase 1 de 6</span>
+            <span style={tagChip(AMBER, AMB_BG)}>1 fase hecha · 5 parciales — revisado 26-ago-2026</span>
             <span style={tagChip(BLUE, BLU_BG)}>No es conclusión definitiva</span>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10 }}>
             <Stat n={String(ENTREVISTAS.length)} label="Entrevistas analizadas" />
             <Stat n={String(HALLAZGOS.length)} label="Hallazgos preliminares" />
             <Stat n={String(HIPOTESIS.length)} label="Hipótesis activas" />
-            <Stat n="1/6" label="Fases completadas" />
+            <Stat n="1/6" sub="hecho" label="El resto: parcial (ver Metodología)" />
           </div>
         </div>
 
@@ -308,23 +422,32 @@ export default function BauCompetitivoMarcasPage() {
             🧭 Norte — próxima acción
           </div>
           <p style={{ fontSize: 14, fontWeight: 700, color: "var(--fg)", lineHeight: 1.5, margin: 0 }}>
-            Cerrar los 4 frentes internos que faltan (CS, Soporte/CAS, Logística, Data) con el mismo formato que ya usó Comercial. Solo entonces se pasa a Fase 3 (validación cuantitativa). Hoy: 1 de 5 frentes cerrado.
+            El equipo ya avanzó sustancia de casi todas las fases fuera de orden — lo que falta no es &quot;empezar&quot; las fases pendientes, es <b>cerrar el supuesto más riesgoso de cada hallazgo con un experimento barato</b> (ver sección &quot;Cómo experimentar&quot; abajo) antes de declarar cualquier capacidad lista para desarrollo. En paralelo, seguir cerrando los 4 frentes internos (CS, Soporte/CAS, Logística, Data) para que la Fase 3 deje de ser parcial.
           </p>
         </div>
 
         {/* METODOLOGIA */}
-        <div style={sectionLabel}>Metodología — 6 fases</div>
+        <div style={sectionLabel}>Metodología — 6 fases, estado real (no secuencia estricta)</div>
+        <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6, marginTop: -4, marginBottom: 12 }}>
+          Hasta el 25-ago-2026 esto se leía como semáforo lineal (solo Fase 1 activa, el resto bloqueado). Kate señaló el 26-ago-2026 que en la práctica ya se avanzó sustancia de varias fases sin seguir el orden — este cuadro lo refleja con honestidad: &quot;parcial&quot; siempre trae la nota de qué falta exactamente, no es dar por cerrado algo que no lo está.
+        </p>
         <div style={{ border: "1px solid var(--border)", borderRadius: 10, overflow: "hidden" }}>
-          {FASES.map((f, i) => (
-            <div key={f.n} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 16px", borderBottom: i < FASES.length - 1 ? "1px solid var(--border)" : "none" }}>
-              <div style={{ width: 22, height: 22, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, flexShrink: 0, background: f.active ? BLUE : "var(--border)", color: f.active ? "white" : "var(--muted)" }}>{f.n}</div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 600, color: "var(--fg)" }}>{f.name}</div>
-                <div style={{ fontSize: 12, color: "var(--muted)" }}>{f.desc}</div>
+          {FASES.map((f, i) => {
+            const e = FASE_ESTADO_STYLE[f.estado];
+            return (
+              <div key={f.n} style={{ display: "flex", alignItems: "flex-start", gap: 12, padding: "12px 16px", borderBottom: i < FASES.length - 1 ? "1px solid var(--border)" : "none" }}>
+                <div style={{ width: 22, height: 22, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, flexShrink: 0, marginTop: 1, background: e.color === "var(--muted)" ? "var(--border)" : e.color, color: e.color === "var(--muted)" ? "var(--muted)" : "white" }}>{f.n}</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                    <div style={{ fontSize: 13.5, fontWeight: 600, color: "var(--fg)" }}>{f.name}</div>
+                    <span style={tagChip(e.color, e.bg)}>{e.label}</span>
+                  </div>
+                  <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{f.desc}</div>
+                  <div style={{ fontSize: 11.5, color: "var(--text-secondary, var(--fg))", marginTop: 4, lineHeight: 1.5 }}>{f.nota}</div>
+                </div>
               </div>
-              {f.active && <span style={tagChip(AMBER, AMB_BG)}>En progreso</span>}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* 5 FRENTES */}
@@ -622,6 +745,105 @@ export default function BauCompetitivoMarcasPage() {
                 <span style={{ fontSize: 13, color: "var(--fg)" }}>{h.texto}</span>
               </div>
               {h.fuente && <span style={{ fontSize: 10.5, color: "var(--muted)", fontStyle: "italic", marginLeft: 34 }}>{h.fuente}</span>}
+            </div>
+          ))}
+        </div>
+
+        {/* JTBD — apartado nuevo 26-ago-2026, no reemplaza ninguna sección anterior */}
+        <div style={sectionLabel}>Jobs To Be Done (JTBD) — hipótesis, no validado · 26-ago-2026</div>
+        <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6, marginTop: -4, marginBottom: 14 }}>
+          Primera versión del job que las marcas contratan a Dropi para resolver, construida cruzando las 9 entrevistas, los 6 negocios perdidos y — por primera vez a este nivel de detalle — la encuesta de satisfacción (<code>Diagnostico_Marcas_CSAT_16jul2026.xlsx</code>, 716 respuestas). No reemplaza una entrevista de switch dedicada al método — es hipótesis, marcada como tal.
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 16 }}>
+          {JTBD_JOBS.map((j) => (
+            <div key={j.kind} style={{ ...card, borderLeft: `4px solid ${j.color}` }}>
+              <span style={{ ...tagChip(j.color, j.bg) }}>{j.kind}</span>
+              <p style={{ fontSize: 14, fontWeight: 600, color: "var(--fg)", lineHeight: 1.55, margin: "8px 0 0" }}>{j.texto}</p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ border: "1px solid " + RED, background: RED_BG, borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
+          <div style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.6 }}>
+            <b>Alerta de dato no documentado:</b> la columna <code>tipo_activo_churn_jun</code> del archivo CSAT trae los valores <b>&quot;Fiel&quot;</b> (624/716, 87,2%) y <b>&quot;Activo Viejo&quot;</b> (3/716) — ninguno está en la tabla oficial de <code>tipo_activo_churn</code> (Nuevo activado / Recurrente / Antiguo activado / Reactivado / En riesgo / Perdido). No se usan para segmentar nada en este apartado hasta aclarar su significado con Kate.
+          </div>
+        </div>
+
+        <div style={subLabel}>Evidencia CSAT — 716 respuestas, 16-jul-2026</div>
+        <div style={{ overflowX: "auto", marginBottom: 8 }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead><tr><th style={thStyle}>Categoría de dolor reportado</th><th style={thStyle}>Menciones</th><th style={thStyle}>% sobre 716</th><th style={thStyle}>% entre baja satisfacción (1-2, n=96)</th></tr></thead>
+            <tbody>
+              {JTBD_CSAT.map((c, i) => (
+                <tr key={c.categoria}>
+                  <td style={{ ...tdStyle, fontWeight: 700, borderBottom: i === JTBD_CSAT.length - 1 ? "none" : undefined }}>{c.categoria}</td>
+                  <td style={{ ...tdStyle, borderBottom: i === JTBD_CSAT.length - 1 ? "none" : undefined }}>{c.total}</td>
+                  <td style={{ ...tdStyle, borderBottom: i === JTBD_CSAT.length - 1 ? "none" : undefined }}>{c.pctTotal}</td>
+                  <td style={{ ...tdStyle, borderBottom: i === JTBD_CSAT.length - 1 ? "none" : undefined }}>{c.pctBaja}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6, marginBottom: 18 }}>
+          &quot;Soporte&quot; es la categoría #1 en ambos cortes — no es solo dolor de quien está insatisfecho: aparece también en 33 de 540 respuestas (6,1%) con satisfacción 4-5. Verbatim de alguien satisfecho (4-5): <i>&quot;Dropi debería tener, como otras plataformas, un seguimiento automático.&quot;</i>
+        </p>
+
+        <div style={subLabel}>El dolor de soporte es transversal — no de un solo nivel de madurez</div>
+        <div style={{ overflowX: "auto", marginBottom: 8 }}>
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead><tr><th style={thStyle}>Nivel</th><th style={thStyle}>n encuestas</th><th style={thStyle}>💬 Soporte</th><th style={thStyle}>🚨 Novedades</th></tr></thead>
+            <tbody>
+              {JTBD_MADUREZ.map((m, i) => (
+                <tr key={m.nivel}>
+                  <td style={{ ...tdStyle, fontWeight: 700, borderBottom: i === JTBD_MADUREZ.length - 1 ? "none" : undefined }}>{m.nivel}</td>
+                  <td style={{ ...tdStyle, borderBottom: i === JTBD_MADUREZ.length - 1 ? "none" : undefined }}>{m.n}</td>
+                  <td style={{ ...tdStyle, borderBottom: i === JTBD_MADUREZ.length - 1 ? "none" : undefined }}>{m.soporte}</td>
+                  <td style={{ ...tdStyle, borderBottom: i === JTBD_MADUREZ.length - 1 ? "none" : undefined }}>{m.novedades}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6, marginBottom: 18 }}>
+          Soporte se mantiene entre 11-15% en los 5 niveles — no colapsa en un solo segmento. Novedades sí baja con la madurez (10,3%→3,4%) — [HIPÓTESIS a validar]: las marcas de mayor volumen resuelven novedades con workarounds propios en vez de que Dropi lo resuelva, no porque el problema desaparezca.
+        </p>
+
+        <div style={subLabel}>Las 4 fuerzas del progreso</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+          {JTBD_FUERZAS.map((f) => (
+            <div key={f.titulo} style={{ border: "1px solid var(--border)", background: f.bg, borderRadius: 10, padding: "12px 14px" }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: f.color, textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 8 }}>{f.titulo}</div>
+              <ul style={{ margin: 0, paddingLeft: 16, fontSize: 12, color: "var(--fg)", lineHeight: 1.6 }}>
+                {f.items.map((it) => <li key={it} style={{ marginBottom: 5 }}>{it}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6, marginBottom: 4 }}>
+          Documento completo con verbatims adicionales: <a href="/jtbd-marcas-26ago2026.html" target="_blank" rel="noopener noreferrer" style={{ color: BLUE, fontWeight: 700 }}>ver JTBD-hipótesis →</a>. Qué falta para dejar de ser hipótesis: 3-4 switch-interviews estructuradas (Ingrid Pinzón, Santiago Lubo, negocios perdidos que acepten hablar) reconstruyendo la línea de tiempo del momento en que empezaron a buscar alternativa.
+        </p>
+
+        {/* CÓMO EXPERIMENTAR — apartado nuevo 26-ago-2026 */}
+        <div style={sectionLabel}>Cómo experimentar según los hallazgos — antes de concluir qué se requiere</div>
+        <div style={{ border: `1px solid ${RED}`, background: RED_BG, borderRadius: 10, padding: "14px 16px", marginBottom: 14 }}>
+          <p style={{ fontSize: 13, fontWeight: 700, color: "var(--fg)", margin: "0 0 6px" }}>¿Ya se puede concluir qué se requiere construir? No todavía.</p>
+          <p style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.6, margin: 0 }}>
+            Todo lo de arriba son hallazgos (evidencia descriptiva) e hipótesis (explicaciones sin confirmar) — ninguna pasó todavía por un <b>RAT</b> (el supuesto más riesgoso, probado barato). Concluir &quot;hay que construir X&quot; hoy sería saltar directo a Delivery sin el Pre-Flight Package de Discovery (Outcome + Intervention Brief conductual + RAT validado + insumos de UX/Data) — solo tenemos la primera pieza. Lo que sí se puede hacer ya: definir el experimento más barato para cada hallazgo top, correrlo, y recién ahí decidir si escala a requerimiento.
+          </p>
+        </div>
+        <p style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.6, marginTop: -4, marginBottom: 14 }}>
+          Método: por cada oportunidad, identificar el supuesto más riesgoso que la sostiene (lo que, si es falso, tumba toda la idea) y diseñar el experimento más barato que pueda desmentirlo — no construir la funcionalidad completa para probarla.
+        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {EXPERIMENTOS_RAT.map((e) => (
+            <div key={e.oportunidad} style={card}>
+              <div style={{ fontSize: 13.5, fontWeight: 700, color: NAVY, marginBottom: 8 }}>{e.oportunidad}</div>
+              <div style={{ fontSize: 12, color: RED, fontWeight: 600, lineHeight: 1.5, marginBottom: 6 }}>Supuesto más riesgoso: {e.supuestoRiesgoso}</div>
+              <div style={{ fontSize: 12.5, color: "var(--fg)", lineHeight: 1.6, marginBottom: 4 }}><b>Experimento:</b> {e.experimento}</div>
+              <div style={{ fontSize: 12, color: "var(--muted)", lineHeight: 1.5 }}><b>Cómo medirlo:</b> {e.metrica}</div>
             </div>
           ))}
         </div>

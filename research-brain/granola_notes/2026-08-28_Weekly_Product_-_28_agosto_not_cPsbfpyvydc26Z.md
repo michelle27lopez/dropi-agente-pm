@@ -1,0 +1,1687 @@
+# Weekly Product - 28 agosto
+
+- **ID:** `not_cPsbfpyvydc26Z`
+- **Fecha:** 2026-08-28T16:02:38.186Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/cbe46cf5-c6d9-4cdf-939e-a681d0badeb3)
+- **Asistentes:** Santiago Herrera Acosta, Juan Bautista, Diana Margarita Aldana Echeverry, Katerine Pencue, Laura Contreras, Paula Macias, Jaime Guevara, Laura Torres, Catherin Salazar, Jose Pineda
+
+---
+
+## Resumen de la Reunión
+# Dashboard de Lanzamientos
+
+- Migración del Excel a dashboard en Darwin (construido por Laura Torres)
+  - Visualización por sprint, mes, país y producto
+  - Incluye roadmap con timeline, recursos asociados y pipeline de estados
+  - Métricas de adopción por lanzamiento se agregarán en iteraciones futuras
+- Próximos lanzamientos prioritarios:
+  - Rearquitectura Dropi: fecha tentativa 12 de septiembre
+  - Comunicación de ciberseguridad: campaña para alertar que solo cambia la interfaz, no las URLs
+  - Perfil de marcas: fecha del 30 en revisión, solo saldrá en producción para un grupo pequeño (no activa lanzamiento según lineamiento de María)
+  - Page Pilot: bloqueante actual es el video de onboarding; desarrollo ya coordinado con José Giraldo (2 días de aviso suficientes)
+  - I-com Scanner: sin fecha de salida aún
+
+# Rearquitectura: Preparación y Riesgos
+
+- Lanzamiento sí o sí el 12 de septiembre, aunque sujeto a go/no-go del equipo de producto
+  - 14 bugs críticos identificados con Kevin; el resto (tipografía, espaciado) se ajustan en marcha
+  - Producto se para firme en su criterio de go: si no dan el go, la decisión escala
+- Riesgo de resistencia al cambio en usuarios operativos (bodega, logística)
+  - Juan propone identificar esos perfiles y mapear los módulos que más usan
+  - Jaime sugiere videos tutoriales desde sandbox y enviarlos por Intercom antes del lanzamiento
+  - Campaña expectativa ayuda a preparar usuarios externos; Diana lidera end-to-end de rearquitectura
+- Campaña expectativa: objetivo sacarla la próxima semana, condicionada a disponibilidad del equipo de marketing (enfocado en Expo Winners)
+  - Catherin consulta con Majo tiempos reales de producción de comunicación
+
+# Roadmap en Darwin: Migración a Delivery Projects
+
+- Objetivo: pasar estados del Excel a Darwin la próxima semana
+  - Laura Roax y Lucho darán fechas de entrega por proyecto; cualquier cambio quedará en log
+  - Foco inicial solo en delivery (discovery se crea en paralelo con Laura)
+- Documentación por proyecto: el end-to-end y el RPP van en el delivery project; POC y discovery quedan en su propio espacio
+- Vista es para comprometer a tecnología en fechas, no para exponer estrategia al C-level
+  - Si preguntan por discovery o POCs, se muestran solo lo necesario
+
+# Experimentos: Pulso y Campañas
+
+- Pulso (lanzado el 21 de agosto): negociaciones directas con proveedores premium del Pareto de Iván Caicedo
+  - 3 proveedores participaron; compromisos de 10, 100 y 50 unidades respectivamente
+  - \~60 productos priorizados; Tula Store muy enganchado, pidiendo más pulsos
+  - Hallazgo clave: requiere proceso manual intensivo con asistentes de dropshipper para funcionar
+  - Próximo paso: aplicativo web para que proveedores gestionen sus propios pulsos
+- Campañas: catálogos generados con IA (antes se hacían en Canva)
+  - Tracking de visualizaciones por producto disponible para suppliers (bisutería concentró la mayoría)
+  - Catálogo de “primera venta” se pasará a Santiago para Gali
+- Decisión sobre MCP: se descarta para el catálogo de primera venta
+  - Mejor usar 25 productos preconfigurados para evitar caídas y demoras de carga
+  - Se confirma con Lucho el miércoles
+
+# Gali y Activación de Dropshippers Huérfanos
+
+- Público objetivo: dropshippers huérfanos (40% del total), de los cuales 99% no se han activado y 90% no saben hacer ecommerce
+- Flujo en Expo Winners rediseñado: copiloto Gali guía al usuario a seleccionar su primer producto de un catálogo de 25
+  - Mini ecommerce dentro de Dropi: vitrina de productos sin necesidad de integración externa
+  - Notificación al dropshipper cuando se genera una venta para que monte la orden manualmente
+- Reunión con Roax el lunes: explorar créditos para pauta dentro del flujo
+- Funnel de activación (corte semana pasada):
+  - Primera orden creada: 9% de registros
+  - Primera orden entregada: 6.8%
+  - Primera orden con ganancia positiva: 6.4% (0.4% pierde por costos no contemplados)
+
+# Novedades: Análisis y Oportunidades
+
+- Junio: 919,000 novedades en Dropi; solo 17% pasó a entregadas
+- Potencial de rescate: \~95,000 entregas adicionales al mes resolviendo errores básicos
+- Causas principales identificadas:
+  - 30% de novedades son rechazos directos del cliente (no rescatables)
+  - Coordinación de entrega (fecha, dirección, contacto) es el mayor problema rescatable
+  - Dirección incompleta sin campo para corregirla: error crítico de UX a resolver como hotfix
+- Opciones que no existen hoy pero sí en otras plataformas: reprogramar fecha, elegir franja horaria, autorizar a tercero, cambiar método de pago, ofrecer descuento, retirar en punto
+- Contradicciones en flujo de resolución: novedad de “fecha posterior” solo ofrece devolución total; “pedido cancelado” muestra opciones irrelevantes
+- Jaime llevará ideas la próxima semana para priorizar con Lucho
+
+# Insights de Experiencia y Servicio al Cliente
+
+- 31,618 conversaciones en servicio al cliente (30 jun. al 18 ago.), 10 países
+- NPS de satisfacción: 3.29/5, estable sin mejora en los últimos 5 meses
+  - Un tercio de calificaciones bajas describe fallas de logística, pagos y proveedores que el agente no puede resolver
+  - Detractores reportan: no resuelven, no responden, piden acciones opuestas
+- Tema más frecuente: anulaciones de órdenes (ligado a direcciones incorrectas y duplicados)
+- Hipótesis (José): usuarios novatos califican alto; a mayor madurez, la satisfacción cae; líderes de comunidad son los peores calificadores
+- Diana en dos células: Design Ops (proyectos de plataforma) y Experience (insights para elevar NPS)
+  - Próximo paso: cruzar data de servicio al cliente con Sherlock (grupos de dropshippers) para contrastar hallazgos
+
+# Próximos Pasos
+
+- **Hacer push con Maho para entrega del video de onboarding de Page Pilot** (Catherin)
+
+  Es el único bloqueante para dar aviso a José Giraldo y activar el lanzamiento.
+- **Confirmar tiempos de marketing para comunicación de rearquitectura con Majo** (Catherin)
+
+  El equipo está enfocado en Expo Winners; necesario antes de comprometer fecha de campaña expectativa.
+- **Identificar perfiles de usuarios operativos y mapear módulos críticos** (Juan)
+
+  Base para preparar tutoriales y material de Intercom antes del lanzamiento de rearquitectura.
+- **Definir catálogo de 25 productos y diseños preconfigurados para primera venta** (Santiago, Jaime)
+
+  Descartar MCP; confirmar estrategia con Lucho el miércoles 2 de septiembre.
+- **Migrar proyectos en delivery al roadmap de Darwin con Laura Roax y Lucho**
+
+  Objetivo: tener compromisos de fechas de tecnología la próxima semana.
+- **Reportar como hotfix el campo de dirección faltante en flujo de novedades** (Juan)
+
+  Error crítico: la novedad de dirección incompleta no ofrece campo para corregirla.
+- **Integrar roadmap de Design Ops al roadmap general** (Laura Contreras, Diana)
+
+  Sesión ya agendada; tenerlo listo para el miércoles 2 de septiembre.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/9cd4fd10-fb76-45ef-b482-22cd80264e54](https://notes.granola.ai/t/9cd4fd10-fb76-45ef-b482-22cd80264e54)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[16:02] Catherin Salazar:** No, sí, total, así no teníamos que
+- **[16:02] Catherin Salazar:** tenía que, o sea, yo decía, pero fue, pucha, ¿cómo hago para qué...?
+- **[16:02] Catherin Salazar:** Todos nos quede muy interiorizado esto?
+- **[16:02] Catherin Salazar:** Entonces, bueno,
+- **[16:02] Jose Pineda Pitre:** ahí
+- **[16:02] Jose Pineda Pitre:** a mí, yo tengo las mismas preguntas de ellos, pero
+- **[16:02] Jose Pineda Pitre:** como he aprendido en dropping, no todas nos las van a
+- **[16:03] Jose Pineda Pitre:** en una sola
+- **[16:03] Catherin Salazar:** pregunta. No, no, no, no, ya ya creo que le tenemos claro.
+- **[16:03] Jose Pineda Pitre:** Sí, yo fui como, ay, no le voy a preguntar eso.
+- **[16:03] Jose Pineda Pitre:** Porque ya tampoco
+- **[16:03] Jose Pineda Pitre:** ¿Qué le dices a Antti?
+- **[16:03] Yo:** ¿Qué hace?
+- **[16:03] Jose Pineda Pitre:** Bueno,
+- **[16:03] Catherin Salazar:** Bueno, ya me comprometí con un premio de la hamburguesa.
+- **[16:03] Jose Pineda Pitre:** ¿Y y venid la hamburguesa quién se la ganó?
+- **[16:03] Catherin Salazar:** No, es que todos estuvimos como súper unidos al taller,
+- **[16:03] Jose Pineda Pitre:** la verdad. Entonces en, y vas a comprar la vas a comprar veinte hamburguesas?
+- **[16:03] Catherin Salazar:** No, me tocar comprar veinte hamburguesas, Jaime.
+- **[16:03] Catherin Salazar:** Ahí ahí, por ahí me tienen varias hamburguesa,
+- **[16:03] Jaime Guevara:** qué pasó... Ah,
+- **[16:03] Jaime Guevara:** yo no sé, yo no había autorizado nada.
+- **[16:03] Yo:** Ahí no cuenta a Laura, Laura Contreras,
+- **[16:03] Jaime Guevara:** Yo no autoricé nada, yo no estoy...
+- **[16:03] Jose Pineda Pitre:** O sea, más bien un pedacito de pizza acá.
+- **[16:03] Jaime Guevara:** Eso, una pizza alejada frontal.
+- **[16:03] Catherin Salazar:** Una pizza de esas de, que son horribles, la del de
+- **[16:04] Catherin Salazar:** Vale.
+- **[16:04] Jose Pineda Pitre:** Horrible.
+- **[16:04] Catherin Salazar:** Del y
+- **[16:04] Jose Pineda Pitre:** sabes
+- **[16:04] Catherin Salazar:** masa y horrible harina,
+- **[16:04] Yo:** Pero es que precio de ridículo mete bajo
+- **[16:04] Laura Catherine Torres Ciendua:** te la
+- **[16:04] Catherin Salazar:** tomo. Por eso, eso
+- **[16:04] Yo:** Ah,
+- **[16:04] Jose Pineda Pitre:** ¿Pevo en sí,
+- **[16:04] Jaime Guevara:** ya
+- **[16:04] Jose Pineda Pitre:** están? Se
+- **[16:04] Jose Pineda Pitre:** pizza de little seas, que se va.
+- **[16:04] Yo:** We
+- **[16:04] Jaime Guevara:** No, a
+- **[16:04] Catherin Salazar:** mí me encanta. Karina ahí.
+- **[16:04] Jose Pineda Pitre:** Yo nunca he comido.
+- **[16:04] Catherin Salazar:** Ni la coma. No te pierdes de mucho.
+- **[16:04] Yo:** No, todo el mundo se conoce cinco mil pesos de uno en tropic, qué gaste lo que quiere.
+- **[16:04] Jose Pineda Pitre:** Para que creen su primera landing de producto
+- **[16:04] Jose Pineda Pitre:** con Page Pilot.
+- **[16:04] Yo:** Cinco miliampaix para ele.
+- **[16:04] Jose Pineda Pitre:** Ok, la
+- **[16:04] Catherin Salazar:** Eso es el token, el, les talking
+- **[16:04] Jaime Guevara:** los tokens.
+- **[16:04] Jose Pineda Pitre:** Sí, sí, son como dos, eso es como un, hola, ¿cómo estás, Claudia?
+- **[16:04] Jaime Guevara:** Bueno, ¿cómo les fue?
+- **[16:05] Jaime Guevara:** Se están conectando todos. ¿Cómo les fue en la actividad, Katy? ¿Bien?
+- **[16:05] Catherin Salazar:** Muy chévere, creo. Todos participaron. O sea, que de ahí como
+- **[16:05] Catherin Salazar:** el bonus tiene que ser para todos.
+- **[16:05] Catherin Salazar:** No muy chévere, creo que nos quedó muy claro. Ahí salieron un par de dudas, James, que creo
+- **[16:05] Catherin Salazar:** te voy a citar un espacio para poder definirlas.
+- **[16:05] Catherin Salazar:** Porque creo que sí me parecen muy importantes
+- **[16:05] Catherin Salazar:** que los tocamos ahorita al final, entonces te voy a citar un espacio
+- **[16:05] Catherin Salazar:** para que lo hablemos y después ya compartamos la información con el equipo bajo tu lineamiento.
+- **[16:05] Catherin Salazar:** ¿Te parece?
+- **[16:05] Jaime Guevara:** De una, de una, sí, ahí ya lo lo escalamos a ver qué.
+- **[16:05] Jose Pineda Pitre:** Listo.
+- **[16:05] Catherin Salazar:** Ya ya mismo tecito, ya mismo
+- **[16:05] Jaime Guevara:** ahí paso.
+- **[16:05] Jaime Guevara:** You know we finally here, right? De una, sí, pues, por ahora Friday the lo lo lo revisamos y lo esperamos de Quiero ser muy claro que todos los lineamientos por ahorita son de de María.
+- **[16:05] Catherin Salazar:** Sí, sí, sí, sí, sí. Y ese es el lineamiento de María, pero, pues, bueno.
+- **[16:05] Catherin Salazar:** Como que para que lo volvamos a poner sobre la mesa con María.
+- **[16:06] Catherin Salazar:** ¿Listo?
+- **[16:06] Jaime Guevara:** De una.
+- **[16:06] Jaime Guevara:** De una, listo. Ah, José estaba viendo el video. Ah, muy bueno, ¿no?
+- **[16:06] Jaime Guevara:** El viernes.
+- **[16:06] Yo:** La sequía
+- **[16:06] Jaime Guevara:** Bueno, ¿quién nos falta?, Lau y Kate. Bueno,
+- **[16:06] Jaime Guevara:** Bueno, me, la María no se conecta.
+- **[16:06] Jaime Guevara:** Entonces vamos a ir avanzando.
+- **[16:06] Jaime Guevara:** Mientras entra Lau y mientras entra Kate.
+- **[16:06] Jaime Guevara:** La idea es que comencemos con el calendario.
+- **[16:06] Jaime Guevara:** Kate, entonces, si si quieres, vamos a arrancarnos con el calendario y
+- **[16:06] Jaime Guevara:** después ya hablamos un poco de las prioridades y ya arrancamos con la Pero ya he hablado dos
+- **[16:06] Catherin Salazar:** horas seguidas y
+- **[16:06] Catherin Salazar:** y otra vez Ana. Ahí la, Emily. Listo, listo, Dewina, vamos.
+- **[16:06] Catherin Salazar:** Vamos con todo. Bueno.
+- **[16:06] Catherin Salazar:** Trajimos el dashboard de lanzamientos, este lo construyo Lau,
+- **[16:06] Catherin Salazar:** Lau Torres,
+- **[16:06] Catherin Salazar:** con la matriz que teníamos en Excel. Digamos que
+- **[16:06] Catherin Salazar:** hay hay un tema ahí y es que
+- **[16:06] Catherin Salazar:** nosotros, antes en el equipo de marketing,
+- **[16:07] Catherin Salazar:** todos los lanzamientos y todo lo que ustedes le enviaban al auto rest,
+- **[16:07] Catherin Salazar:** se consolidaban en un Excel. Ese Excel lo compartíamos con el equipo de marketing
+- **[16:07] Catherin Salazar:** y el equipo de marketing, pues tenía como pendiente, o sea,
+- **[16:07] Catherin Salazar:** ahí podíamos ver como los lanzamientos que estaban pendientes, el estado y demás.
+- **[16:07] Catherin Salazar:** Pero digamos que ese Excel era muy robusto y la verdad es que la
+- **[16:07] Catherin Salazar:** no era no era muy chévere visualizar.
+- **[16:07] Catherin Salazar:** Entonces, por eso migramos a este dashboard donde me arroja
+- **[16:07] Catherin Salazar:** todos los lanzamientos, me los arroja por Sprint, Espérense,
+- **[16:07] Catherin Salazar:** Ay, creo que se va. Bueno, los sprints, ah, bueno, no, este no es el de el de el de lanzamiento.
+- **[16:07] Catherin Salazar:** También me me puede arrojar por sprints, pero la idea es que
+- **[16:07] Catherin Salazar:** todo el proceso de lanzamientos quede automatizado, es decir, no hayan ya
+- **[16:07] Catherin Salazar:** como documentos en Word ni nada. Entonces, acá podemos ver todos los años
+- **[16:07] Catherin Salazar:** desde el año dos mil veinticinco es que comenzamos con el proyecto de lanzamientos,
+- **[16:07] Catherin Salazar:** podemos ver los estados de lanzado, los podemos ver por meses, por países,
+- **[16:08] Catherin Salazar:** todos los productos que tenemos o los que, digamos que las funcionalidades
+- **[16:08] Catherin Salazar:** como tal que que tenemos, acá la uso como un mapita de los
+- **[16:08] Catherin Salazar:** países de y los lanzamientos que tenemos y las iniciativas que tenemos.
+- **[16:08] Catherin Salazar:** Acuérdense que eso es algo que tengo que hablar con Jaime, que los lanzamientos son cuando ya la funcionalidad ha sido
+- **[16:08] Catherin Salazar:** El pipeline de estados,
+- **[16:08] Catherin Salazar:** los lanzados, los próximos, digamos, James que ahorita
+- **[16:08] Catherin Salazar:** no hay muchos lanzamientos y los lanzamientos están muy pausados, a como venía trabajando Lau,
+- **[16:08] Catherin Salazar:** por muchos factores y por retrasos en tecnología.
+- **[16:08] Catherin Salazar:** Acá está el roadmap y el timeline por fecha,
+- **[16:08] Catherin Salazar:** de todos los proyectos que tenemos y todos los meses que tenemos,
+- **[16:08] Catherin Salazar:** acá también se puede eso, digamos que filtrar por mes y por fecha,
+- **[16:08] Catherin Salazar:** y por año,
+- **[16:08] Catherin Salazar:** nos ingresamos a este, podemos ver cuál fue
+- **[16:08] Catherin Salazar:** el, pues, digamos que el pm, la categoría, el tipo de
+- **[16:08] Catherin Salazar:** el público objetivo, la la historia que
+- **[16:09] Catherin Salazar:** acá la la podemos, digamos, que en algún momento poder
+- **[16:09] Catherin Salazar:** como Darwin se va
+- **[16:09] Catherin Salazar:** a a unir
+- **[16:09] Catherin Salazar:** a Jira, podemos traer la Epic y podemos traer la historia. ¿Listo? Los recursos asociados, que son como, por ejemplo, cuando ustedes nos envían el Figma, el Tango y todo para hacer las piezas gráficas de comunicación, ¿Qué...? Ah, bueno, importantísimo, acá también vamos a tener Lo que pasa es que no lo hemos lo no lo hemos colocado, pero la idea es alterar este dashboard, este como un primer borrador del dashboard, pero la idea es iterarlo podamos ver lo que hablamos ahorita de tigres. ¿Cómo vamos a clasificar ese lanzamiento? También lo vamos a ver así. Lanzamientos, acá podemos ver como una gráfica por fecha de lanzamiento,
+- **[16:09] Catherin Salazar:** Los próximos lanzamientos, que son los más importantes, James, que tenemos
+- **[16:09] Catherin Salazar:** rearquitectura dropping, que es el doce,
+- **[16:09] Catherin Salazar:** pues, por el momento tenemos fecha del doce, ya estamos trabajando con la
+- **[16:10] Catherin Salazar:** estratégica, comenzamos creo que el el martes o el miércoles ya comenzamos con mesas
+- **[16:10] Catherin Salazar:** estratégica de rearquitectura, el lunes continuamos
+- **[16:10] Catherin Salazar:** mesa estratégica, ya tenemos como varias ideas ahí que podemos hacer, tanto en campañas
+- **[16:10] Catherin Salazar:** como en campaña. La idea es que campaña expectativa
+- **[16:10] Catherin Salazar:** logremos sacarla la próxima semana, que le voy a decir a Majo, pues sí,
+- **[16:10] Catherin Salazar:** todo sale bien y si la arquitectura queda para el doce.
+- **[16:10] Catherin Salazar:** Tenemos comunicación de ciberseguridad con
+- **[16:10] Catherin Salazar:** porque igual es super importante tener una campaña de ciberseguridad
+- **[16:10] Catherin Salazar:** pues porque pueden clonar dropping en todo esta en todo esta cambio de interfaz,
+- **[16:10] Catherin Salazar:** Importantísimo decirle que los links y las URLs no van a cambiar,
+- **[16:10] Catherin Salazar:** que solo va a cambiar la interfaz, que haya como un blog donde podamos explicarle a los usuarios qué cambios vamos a tener y
+- **[16:10] Catherin Salazar:** cambios en el diseño vamos a tener y toda la interfaz.
+- **[16:10] Catherin Salazar:** Y para el treinta que tenemos perfil de marcas, pero es
+- **[16:10] Catherin Salazar:** esto es lo que quiero hablar contigo, porque Kate me dice que perfil de marcas no sale para todos los
+- **[16:11] Catherin Salazar:** usuarios el treinta.
+- **[16:11] Catherin Salazar:** Sino sale para por también como probar que ahí Kate estoy en lo correcto, ¿no es cierto? Yo pensé que para el veintinueve
+- **[16:11] Jaime Guevara:** No, no tengo
+- **[16:11] Jaime Guevara:** tengo mi estado y estado de permiso.
+- **[16:11] Catherin Salazar:** Ah, bueno, bueno, bueno. Sí, ahí ahí
+- **[16:11] Catherin Salazar:** ahí tenemos que revisarlo bien, porque Kate me
+- **[16:11] Catherin Salazar:** decía que solo va a salir en producción, pero para para un grupo pequeño
+- **[16:11] Jaime Guevara:** de espacio.
+- **[16:11] Catherin Salazar:** Ajá. Pues, eso es lo que eso es lo eso es lo que estábamos justamente ahorita
+- **[16:11] Catherin Salazar:** en el taller, James, que eso es lo que yo quiero hablar contigo.
+- **[16:11] Catherin Salazar:** Porque no sabemos si
+- **[16:11] Catherin Salazar:** claro, puede ser beta, pero también sale un usuario, entonces, no sabemos si ahí se
+- **[16:11] Catherin Salazar:** activa el lanzamiento o no. Según la línea de evento de María, no, se activas cuando ya
+- **[16:11] Catherin Salazar:** está testeada completamente la funcionalidad.
+- **[16:11] Catherin Salazar:** Para cuando vaya a salir para todos los usuarios.
+- **[16:11] Catherin Salazar:** Listo, entonces, si es así, esta fecha cambiaría.
+- **[16:11] Catherin Salazar:** Para perfil de marcas. Acá nos hace falta
+- **[16:11] Catherin Salazar:** por ejemplo, incluir I com scanner, que ya lo estamos, ya lo hemos venido hablando con Juan, y pero Juan,
+- **[16:11] Catherin Salazar:** tampoco tiene fecha de salida.
+- **[16:12] Catherin Salazar:** Page Pilot, que tampoco tenemos fecha de salida con Santi, porque también se
+- **[16:12] Catherin Salazar:** De PagePilot ya tenemos todo montada en la mesa estratégica, ya tenemos resultados de la mesa estratégica,
+- **[16:12] Catherin Salazar:** ya tenemos definiciones y ya sabemos qué vamos a qué vamos a hacer con PagePilot.
+- **[16:12] Catherin Salazar:** Ahí esto ya quedó alojado en Darwin, pero sí nos falta mirar con Santi cuándo sale en beta,
+- **[16:12] Catherin Salazar:** y cuando ya salga en beta, pues ahí sí ya poder hacer el lanzamiento de PagePilot con todo lo que
+- **[16:12] Catherin Salazar:** tenemos ya con el equipo.
+- **[16:12] Yo:** Sí, súper rápido.
+- **[16:12] Jaime Guevara:** De una Alexanti.
+- **[16:12] Yo:** Esta semana hablamos con con José Giraldo,
+- **[16:12] Catherin Salazar:** Mhmm.
+- **[16:12] Yo:** y quedamos del lado técnico al menos, dijo que con que le demos unos dos días de aviso de cuándo queremos salir, él ya lo configura, o sea, ya eso está pactado con él. Sin embargo, ahora hoy estamos esperando es la actualización del video. Apenas nos actualicen el video, la parte de Maho, Sí, pero eso te corre hacerlo. Ahí creo que Lau Torres mandó el mensaje.
+- **[16:12] Catherin Salazar:** ¿El del el del el del onboarding?
+- **[16:12] Catherin Salazar:** Ah, ok.
+- **[16:13] Catherin Salazar:** Listo.
+- **[16:13] Yo:** Apenas no se terminó ese video, y ese flujo que he confirmado
+- **[16:13] Yo:** le decimos entonces a a José, para que lo
+- **[16:13] Yo:** lo envíe. Es decir, el bloqueante ahora es el video.
+- **[16:13] Yo:** ¿Listo?
+- **[16:13] Catherin Salazar:** Ok, listo, listo, de una. Entonces, ¿sabes qué? Yo a hacerle mucha Maho.
+- **[16:13] Catherin Salazar:** Y le voy a preguntar, ¿listo? No lo
+- **[16:13] Yo:** Dale,
+- **[16:13] Laura Catherine Torres Ciendua:** han entregado, yo he estado
+- **[16:13] Laura Catherine Torres Ciendua:** toda la semana haciendo push y todavía no lo han entregado.
+- **[16:13] Laura Catherine Torres Ciendua:** Dijeron que el sábado no pasó, dijeron que el martes no pasó.
+- **[16:13] Laura Catherine Torres Ciendua:** Ayer pregunté y, pues, no me han dado respuesta. Sí no me han dado
+- **[16:13] Laura Catherine Torres Ciendua:** es porque... Ahí está.
+- **[16:13] Catherin Salazar:** Listo. Igual, también tenemos que entender que ellos también están muy enfocados ahorita en expo winners, ¿no?
+- **[16:13] Catherin Salazar:** Ellos también tienen mucho trabajo con expo winners y con todo el tema de la arquitectura también.
+- **[16:13] Catherin Salazar:** Entonces,
+- **[16:13] Catherin Salazar:** como
+- **[16:13] Yo:** Sí, no, ahí solo queda claro que ya el bloqueo no es de desarrollo, ahora es
+- **[16:13] Catherin Salazar:** listo,
+- **[16:13] Catherin Salazar:** Listo.
+- **[16:13] Catherin Salazar:** El marketing, listo de una de una. Igual yo lo hablo con ellos el lunes, Santi.
+- **[16:13] Yo:** el tema del video, ¿listo?
+- **[16:13] Yo:** Gracias.
+- **[16:13] Catherin Salazar:** Mesa estratégica, ¿listo?
+- **[16:13] Catherin Salazar:** Listo.
+- **[16:14] Catherin Salazar:** El listado de la de este por
+- **[16:14] Jaime Guevara:** allí, Wendy iba a decir algo.
+- **[16:14] Catherin Salazar:** Sí. Dale,
+- **[16:14] Juan Diego Bautista Vasquez:** Juan. Yo yo solo un temita como
+- **[16:14] Juan Diego Bautista Vasquez:** para no adelantarnos sobre lo de la rearquitectura,
+- **[16:14] Juan Diego Bautista Vasquez:** ¿Sabes qué estaba pensando? Yo creo que, pues, lo estábamos viendo con Diana esta semana,
+- **[16:14] Juan Diego Bautista Vasquez:** de de unas cositas de la parte logística. Yo creo que sí sería bueno ver, no sé,
+- **[16:14] Juan Diego Bautista Vasquez:** dónde, no sé,
+- **[16:14] Juan Diego Bautista Vasquez:** cómo,
+- **[16:14] Juan Diego Bautista Vasquez:** pero, de pronto, como con Intercom, alguna opción de
+- **[16:14] Juan Diego Bautista Vasquez:** acceso rápido, crear una nueva, porque yo sí siento que para los cargos muy operativos y en verdad algunas pruebas que que que yo he hecho, han tenido mucha resiliencia al cambio. O sea, le cambias un botón, le metes un botón nuevo y y lo y lo perdiste. Seguramente va a haber errores o o o solicitudes o muchas consultas en como en el caso de dónde bajo, dónde descargo los manifiestos, por ejemplo, dónde seguramente órdenes no, porque, pues, creo que sigue estando muy igual, pero en los otros sí siento que tal vez haya como un de resiliencia al cambio, porque son muy operativos, o sea, en verdad, son cargos de que le mueves un
+- **[16:15] Juan Diego Bautista Vasquez:** color y lo perdiste. Porque lo lo he hecho en algunas pruebas
+- **[16:15] Juan Diego Bautista Vasquez:** como que hemos hecho, entonces, de pronto pensar algo para eso, como para Inter como Ajá. Crear una nueva
+- **[16:15] Juan Diego Bautista Vasquez:** o algo para enviarle los manuales y que pregunte, no sé.
+- **[16:15] Catherin Salazar:** Tengo una pregunta,
+- **[16:15] Jaime Guevara:** Juandi,
+- **[16:15] Catherin Salazar:** o bueno,
+- **[16:15] Catherin Salazar:** para Diani. De pronto tenemos
+- **[16:15] Catherin Salazar:** una base o o podemos identificar esos usuarios
+- **[16:15] Catherin Salazar:** que son muy operativos de alguna forma,
+- **[16:15] Juan Diego Bautista Vasquez:** Yo creo que puedo buscar un par,
+- **[16:15] Juan Diego Bautista Vasquez:** como que de los que conozco que son roles muy operativos en algunos y
+- **[16:15] Juan Diego Bautista Vasquez:** y
+- **[16:15] Juan Diego Bautista Vasquez:** y con eso de pronto ver, no sé, el comportamiento de ese usuario,
+- **[16:15] Juan Diego Bautista Vasquez:** como cubrirnos de esos módulos que usan sus usuarios. Yo lo busco si quieres.
+- **[16:15] Juan Diego Bautista Vasquez:** De
+- **[16:15] Catherin Salazar:** uno, Juandi.
+- **[16:15] Catherin Salazar:** De una, me parece.
+- **[16:15] Jaime Guevara:** Igual.
+- **[16:15] Jaime Guevara:** Igual no sé si sea conveniente o no sé si lo habían pensado, pero
+- **[16:15] Jaime Guevara:** desde sandbox igual podemos hacer unos videos
+- **[16:16] Jaime Guevara:** de manejo de ciertas cosas, por ejemplo, estas que dices, Juandi,
+- **[16:16] Jaime Guevara:** son superimportantes, y podemos mandarlos igual a a
+- **[16:16] Jaime Guevara:** a la comunidad, ¿no?
+- **[16:16] Catherin Salazar:** Es que
+- **[16:16] Jaime Guevara:** igual comercial y prepararnos por
+- **[16:16] Jaime Guevara:** como esto no sale en beta, sino que sale de una producción
+- **[16:16] Juan Diego Bautista Vasquez:** Ajá.
+- **[16:16] Jaime Guevara:** Y
+- **[16:16] Juan Diego Bautista Vasquez:** esté
+- **[16:16] Jaime Guevara:** preparado, que cash,
+- **[16:16] Juan Diego Bautista Vasquez:** que todo eso esté preparado. Cash.
+- **[16:16] Juan Diego Bautista Vasquez:** Intercom, sea, dárselos a todo mundo antes, porque seguramente les va a llegar los
+- **[16:16] Juan Diego Bautista Vasquez:** veinte y que lo tengan a la mano, una carpeta de viejita, ta ta ta ta ta
+- **[16:16] Juan Diego Bautista Vasquez:** Yo creo que sí, por eso lo digo, como que preparemos muy bien eso para ya darle
+- **[16:16] Juan Diego Bautista Vasquez:** toda la documentación y ya contextualizarlos, unas reuniones con ellos,
+- **[16:16] Juan Diego Bautista Vasquez:** y que ellos ya sepan qué hacer. Ah, venga, no sé dónde está el módulo
+- **[16:16] Juan Diego Bautista Vasquez:** de logística y que, pues, ellos tampoco tengan que ponerse a buscarlo, sino tengan todo el material para
+- **[16:16] Juan Diego Bautista Vasquez:** sea solo enviarlo o algo así.
+- **[16:16] Catherin Salazar:** De una. De hecho, para eso también sirve la campaña expectativa que vamos a tener con
+- **[16:16] Catherin Salazar:** ¿no?
+- **[16:16] Catherin Salazar:** Para ir también preparando a los usuarios, o sea, claro, no solo a los
+- **[16:16] Catherin Salazar:** a a comercial y y, digamos, con nuestro equipo interno, sino también a los usuarios externos.
+- **[16:17] Catherin Salazar:** ¿Listo? Pero entonces sí, súper súper
+- **[16:17] Catherin Salazar:** súper acertado tu comentario, Juandi, gracias.
+- **[16:17] Catherin Salazar:** Lo voy, entonces, a pensar para saber cómo podemos arreglar los
+- **[16:17] Catherin Salazar:** Sí, pues, puede ser una reunión, decirles, explicarles,
+- **[16:17] Catherin Salazar:** unos tutoriales muy cortos, que son los tutoriales que también Academy tiene que hacer y cambiar,
+- **[16:17] Catherin Salazar:** Ajá.
+- **[16:17] Juan Diego Bautista Vasquez:** Igual igual lo digo también como pensando en lo que nos decías ahorita.
+- **[16:17] Juan Diego Bautista Vasquez:** Es cuál es tu cuál es tu público real
+- **[16:17] Juan Diego Bautista Vasquez:** de esas funcionalidades. Tienes un usuario de bodega
+- **[16:17] Juan Diego Bautista Vasquez:** que seguramente no lo van a conectar a una reunión porque está todo el día imprimiendo guías y despachando, ¿no? Y tienes más usuarios así como que tal vez es un poquito más difícil llegarles. Pues como para también pensarlo de lo de la reunión que tuvimos ahorita, que me pareció superchévere.
+- **[16:17] Catherin Salazar:** De una, de una, súper. Entonces, Diana, entonces, ¿qué comenzar a Robusta a hacer como
+- **[16:17] Catherin Salazar:** el end to end de rearquitectura un poco, y comenzar a a pensar mejor en él.
+- **[16:18] Catherin Salazar:** ¿Listo?
+- **[16:18] Jaime Guevara:** Y rearquitectura, entonces, como saben,
+- **[16:18] Jaime Guevara:** sí tiene que salir, sí o sí. El
+- **[16:18] Catherin Salazar:** doce.
+- **[16:18] Jaime Guevara:** Sí, aunque se supone que igual estamos
+- **[16:18] Jaime Guevara:** como en ese proceso para excluir.
+- **[16:18] Jaime Guevara:** Expo Winner, exacto.
+- **[16:18] Jaime Guevara:** Estamos, pues, como en ese proceso de hacer revisiones, ajustes, pruebas, entonces,
+- **[16:18] Jaime Guevara:** igual, si todavía hay errores o algo, igual toca mencionarlos y
+- **[16:18] Jaime Guevara:** y si no damos el go, pues no damos el go, a menos de que ellos quieran, pues,
+- **[16:18] Jaime Guevara:** pasar por encima y decir, sí,
+- **[16:18] Jaime Guevara:** Pero sí, nosotros somos como
+- **[16:18] Jaime Guevara:** Sí, igual igual
+- **[16:18] Diana Aldana:** ahí
+- **[16:18] Diana Aldana:** igual Jaime hay en el chat de rearquitectura como para
+- **[16:18] Diana Aldana:** que
+- **[16:18] Diana Aldana:** se pueda salir sin tantas complicaciones y sin tantos bugs report
+- **[16:18] Diana Aldana:** Lo que hicimos con Kevin fue identificar los books más críticos,
+- **[16:18] Diana Aldana:** los que sí o sí tienen que salir para el lanzamiento, porque
+- **[16:18] Diana Aldana:** la experiencia de usuario. Porque es que hay muchos bugs que son como
+- **[16:18] Diana Aldana:** espaciado, de tipografía, que son importantes, porque si saben,
+- **[16:19] Diana Aldana:** que la arquitectura, pues,
+- **[16:19] Jaime Guevara:** la
+- **[16:19] Diana Aldana:** importancia del UI, pues,
+- **[16:19] Diana Aldana:** sabemos que igual se pueden ir a, pues, ajustando en la marcha.
+- **[16:19] Jaime Guevara:** Después
+- **[16:19] Diana Aldana:** esperamos que esos catorce críticos los
+- **[16:19] Diana Aldana:** puedan resolver lo más pronto posible para hacer pruebas.
+- **[16:19] Jaime Guevara:** Ok, pero igual digamos que para ti como experiencia,
+- **[16:19] Jaime Guevara:** para todos como experiencia, la experiencia completa es
+- **[16:19] Jaime Guevara:** también de esa UI, que la UI esté bien,
+- **[16:19] Diana Aldana:** ¿no? Claro, lo que hablamos con Lau es que el UI,
+- **[16:19] Diana Aldana:** el protagonista de
+- **[16:19] Jaime Guevara:** rearquitectura, pero, pues, como hay tanta
+- **[16:19] Diana Aldana:** presión para
+- **[16:19] Jaime Guevara:** salir,
+- **[16:19] Jaime Guevara:** Igual no es to go, o sea, igual, o sea,
+- **[16:19] Jaime Guevara:** el al final
+- **[16:19] Jaime Guevara:** tú eres la, nosotros somos los dueños de productos de eso.
+- **[16:19] Jaime Guevara:** Y si no quieres dar el go por eso, pues nos lo das, nos lo vemos.
+- **[16:19] Jaime Guevara:** Si ya
+- **[16:19] Diana Aldana:** Ajá.
+- **[16:19] Jaime Guevara:** Digamos que es una decisión del CEO que
+- **[16:19] Jaime Guevara:** el tema del diseño y eso de espacio no es prioritario, pues que lo tomen ellos.
+- **[16:19] Jaime Guevara:** Nosotros sí ya tengamos, pues, como
+- **[16:19] Jaime Guevara:** como nuestra visión de de UX, de experiencia,
+- **[16:19] Jaime Guevara:** de todo, porque al final, pues, ese es nuestro
+- **[16:19] Jaime Guevara:** nuestro
+- **[16:20] Diana Aldana:** Ahí sabes
+- **[16:20] Catherin Salazar:** que me preocupa un poco, Jaime,
+- **[16:20] Catherin Salazar:** como es una comunicación tan grande y tan amplia,
+- **[16:20] Catherin Salazar:** por ejemplo, salir con campaña expectativa la próxima semana, no sé cómo esté el equipo
+- **[16:20] Catherin Salazar:** de marketing, porque como el el equipo de marketing está
+- **[16:20] Catherin Salazar:** alistando todo lo expo winners,
+- **[16:20] Catherin Salazar:** está como
+- **[16:20] Catherin Salazar:** bastante, con bastante trabajo en eso,
+- **[16:20] Catherin Salazar:** yo sí te tendría que decir, pues,
+- **[16:20] Catherin Salazar:** como
+- **[16:20] Catherin Salazar:** miremos a ver. Igual, ya está, como te dije, ya estamos en meses en mesa estratégica desde esta semana. El lunes seguimos. Pero, entonces, ahí yo le tengo que preguntarle a Majo muy bien,
+- **[16:20] Catherin Salazar:** cuánto tiempo cree que podemos ya tener toda la comunicación para rearquitectura.
+- **[16:20] Catherin Salazar:** ¿Sí?
+- **[16:20] Catherin Salazar:** Para que también tengas en cuenta como esos tiempos de marketing
+- **[16:20] Catherin Salazar:** James.
+- **[16:20] Jaime Guevara:** De una, de una. Bueno, no, pues toca toca revisarlos y tenerlos ahí.
+- **[16:20] Jaime Guevara:** Bueno, si quieres, pasemos porque ese no se
+- **[16:20] Catherin Salazar:** está Estoy listo en la chat.
+- **[16:20] Catherin Salazar:** Acá está listado de detalles de
+- **[16:20] Catherin Salazar:** la idea es que también podamos ver
+- **[16:21] Catherin Salazar:** cuando ya tengamos los lanzamientos hechos, métricas de adopción.
+- **[16:21] Catherin Salazar:** Del del equipo de nosotros.
+- **[16:21] Catherin Salazar:** James.
+- **[16:21] Catherin Salazar:** ¿Listo?
+- **[16:21] Catherin Salazar:** Ya.
+- **[16:21] Jaime Guevara:** De una.
+- **[16:21] Catherin Salazar:** Esto subirlo a Darwin, también va a quedar en Darwin, no sé
+- **[16:21] Catherin Salazar:** preocupen. Que así se queda ahí
+- **[16:21] Jaime Guevara:** De una.
+- **[16:21] Jaime Guevara:** Una, solo unas reflexiones ahí. Pues,
+- **[16:21] Jaime Guevara:** creo que
+- **[16:21] Jaime Guevara:** ahorita nos cambió un poquito el weekly,
+- **[16:21] Jaime Guevara:** también son un poco lineamientos de
+- **[16:21] Jaime Guevara:** de María, pero me pareció superchévere que empezáramos con el calendario, porque miren
+- **[16:21] Jaime Guevara:** que ahí salieron varias ideas con Juan y con todos y y nos ponemos a alinear superbién.
+- **[16:21] Jaime Guevara:** Excepción, pues, de de de que suelo mostrar, pues, ¿no?,
+- **[16:21] Catherin Salazar:** estas
+- **[16:21] Jaime Guevara:** métricas. Entonces, chévere, ahí creo que va a ser muy este este tema. Por otro lado, ¿cómo se sincroniza esto con TI?
+- **[16:21] Jaime Guevara:** ¿Cuál es nuestra posición frente a este tema? Y eso es lo que le decía, pues, a Diana.
+- **[16:21] Jaime Guevara:** Al final, nosotros tenemos que proteger nuestro nuestro
+- **[16:21] Jaime Guevara:** nuestro trabajo, ¿cierto? O sea, nosotros somos producto y por más que TI, pues, nos
+- **[16:21] Jaime Guevara:** nos corte como
+- **[16:22] Jaime Guevara:** funcionalidad, porque ya nos ha pasado, ¿no?, que
+- **[16:22] Jaime Guevara:** queremos lanzar una
+- **[16:22] Jaime Guevara:** una feature, queremos lanzar una una intención, pues una experiencia,
+- **[16:22] Jaime Guevara:** y y por decisión de ellos, o quieren
+- **[16:22] Jaime Guevara:** cortar la pitcher o quieren cortar algo, pero al final nosotros somos los dueños.
+- **[16:22] Jaime Guevara:** Entonces, si nosotros nos damos el go,
+- **[16:22] Jaime Guevara:** tenemos que ser muy fuertes en eso y respaldarlo a nosotros mismos,
+- **[16:22] Jaime Guevara:** si ya la decisión viene por otro lado, pues,
+- **[16:22] Jaime Guevara:** digamos que no hay nada que hacer, pero nosotros sí tenemos que pararnos un poco serios ahí con ese tema.
+- **[16:22] Jaime Guevara:** Me parece supervalioso el tema de seguridad, trate porque sí hay un tema de seguridad bien
+- **[16:22] Jaime Guevara:** complejo alrededor de la empresa.
+- **[16:22] Jaime Guevara:** Pues, obviamente son internos, pero también que eso ayude a dedicar a la gente, no sé de
+- **[16:22] Jaime Guevara:** ese ha sido un nuevo alineamiento, pero chévere que lo hiciste.
+- **[16:22] Catherin Salazar:** Eso el techo fue idea de Diani. Súper. Sí, sí, sí.
+- **[16:22] Jaime Guevara:** Buenísimo, porque sí, hay un tema alrededor.
+- **[16:22] Jaime Guevara:** Y ya, y por el otro lado, pues, José tiene algo de de de
+- **[16:23] Jaime Guevara:** de help center, de biblia, IA. Ajá. Entonces,
+- **[16:23] Jaime Guevara:** creo que ahí José también
+- **[16:23] Jaime Guevara:** si si ese proyecto sigue sigue estando de tu lado,
+- **[16:23] Jaime Guevara:** como decíamos, no sabíamos.
+- **[16:23] Jaime Guevara:** Este este tema del de del del calendario te puede ayudar o o puede ayudar
+- **[16:23] Jaime Guevara:** ver cómo se va alimentando esa habilidad ya, porque, pues, la idea es que
+- **[16:23] Jaime Guevara:** la biblia ya esté actualizada con con eso le guste, como es lo que dice
+- **[16:23] Jaime Guevara:** ya tener, porque si la gente va a consultar en la biblia día que sepan que
+- **[16:23] Jaime Guevara:** es lo que hay, qué es lo nuevo.
+- **[16:23] Jaime Guevara:** Entonces, ahí creo que nos, simplemente era como una reflexión de por qué esto calendario se
+- **[16:23] Jaime Guevara:** y, pues,
+- **[16:23] Jaime Guevara:** si alguien quiere dar una reflexión al respecto, pues chévere, sino
+- **[16:23] Jaime Guevara:** Avancemos con la priorización.
+- **[16:23] Jaime Guevara:** ¿Alguien tiene algo? ¿No? ¿Todo bien?
+- **[16:23] Jaime Guevara:** Listo. Entonces, rápidamente, algo que se relaciona a
+- **[16:23] Jaime Guevara:** de que pasemos ya a las
+- **[16:23] Jaime Guevara:** las a las células.
+- **[16:24] Jaime Guevara:** Lo que les comentaba por acá, la idea es que ya vayamos pasando
+- **[16:24] Jaime Guevara:** todo el tema de las de los estados
+- **[16:24] Jaime Guevara:** que tenemos en en el Excel,
+- **[16:24] Jaime Guevara:** pasarlos a Darwin, porque ya
+- **[16:24] Jaime Guevara:** la idea es que la próxima semana, junto con
+- **[16:24] Jaime Guevara:** Laura Roax y Lucho,
+- **[16:24] Participante:** tengan esta visual de los proyectos
+- **[16:24] Participante:** más que no, vamos a empezar con lo que está en delivery.
+- **[16:24] Participante:** Que tengamos un compromiso de parte de ellos y de tecnología de los
+- **[16:24] Participante:** tiempos, y ese road map.
+- **[16:24] Participante:** Ya es algo que se ha hecho en en en grown,
+- **[16:24] Participante:** que nos comentaron y y ha estado bacano.
+- **[16:24] Participante:** Darles esa posibilidad a ellos de que
+- **[16:24] Participante:** y Terence la todavía no estaba bien organizado.
+- **[16:24] Participante:** Pero de que iteren las fechas de entrega acá, o sea, fechas de entrega nos las van a dar ellos.
+- **[16:24] Participante:** Basados en la priorización, que
+- **[16:24] Participante:** Pero no se integran las fechas
+- **[16:24] Participante:** y si ellos las mueven, va a quedar un log
+- **[16:24] Jaime Guevara:** del movimiento.
+- **[16:24] Jaime Guevara:** Esto va a estar relacionado, obviamente, también al calendario,
+- **[16:25] Jaime Guevara:** de lanzamientos,
+- **[16:25] Jaime Guevara:** y esto nos va a ayudar, pues, tener como una mejor virtual de todo.
+- **[16:25] Jaime Guevara:** Aquí ustedes ya pueden crear desde acá los los los los
+- **[16:25] Jaime Guevara:** los delivery projects, y
+- **[16:25] Jaime Guevara:** pues, quería hacerles más bien es la pregunta, quería presentarles eso y hacerles la pregunta de
+- **[16:25] Jaime Guevara:** si tienen algún, antes lo han revisado o tienen algún problema con eso,
+- **[16:25] Jaime Guevara:** con el manejo de esto?, ¿dudas, preguntas, gestionamientos?
+- **[16:25] Yo:** Yo tengo preguntas.
+- **[16:25] Jaime Guevara:** O todo bien?
+- **[16:25] Jaime Guevara:** Dale.
+- **[16:25] Yo:** De
+- **[16:25] Yo:** Sí.
+- **[16:25] Yo:** Este proyecto,
+- **[16:25] Yo:** cada uno de los proyectos, ¿le da igual es que esté conectado directo?
+- **[16:25] Yo:** Ya.
+- **[16:25] Yo:** Que si quieren ver el detalle, los va a llevar, ¿cierto?
+- **[16:25] Yo:** No no no interactúa en ese en ese parte del flujo.
+- **[16:25] Jaime Guevara:** Sí.
+- **[16:25] Yo:** Pero está desconectado directamente a la prueba de concepto y a
+- **[16:25] Yo:** es como los flujos se manejan con
+- **[16:25] Yo:** con Lucho nuevamente, ¿no?, en la reunión, que quiere ver el detalle.
+- **[16:25] Yo:** Que esté directamente como al
+- **[16:25] Yo:** al HTML, lo que tengamos los
+- **[16:25] Yo:** nosotros prototipado, la idea sería esa.
+- **[16:25] Jaime Guevara:** Sí, me encargo.
+- **[16:26] Jaime Guevara:** ¿Me hiciste que Aren cuenta algo?
+- **[16:26] Jaime Guevara:** Y es que
+- **[16:26] Jaime Guevara:** claro, si lo creas de cero, seguramente toda la documentación
+- **[16:26] Jaime Guevara:** a estar en el POC, o en el discovery. Entonces, sí hay que, de pronto, en el proyecto, cuando creen el proyecto, si tienen algo puntual de ese proyecto, agregárselo ahí.
+- **[16:26] Yo:** Exacto.
+- **[16:26] Yo:** Sí, y te lo preguntara por eso, porque haciendo la migración,
+- **[16:26] Yo:** o más bien la estandarización,
+- **[16:26] Jaime Guevara:** Ajá.
+- **[16:26] Yo:** Encontré con que, como está en el proyecto, y a veces hay varios, por ejemplo, varios mock ups de lo mismo,
+- **[16:26] Jaime Guevara:** Ajá.
+- **[16:26] Yo:** o versionamientos.
+- **[16:26] Jaime Guevara:** ¿Y los de niña?
+- **[16:26] Yo:** Suele ya quedar muy
+- **[16:26] Yo:** muy disperso, pero pero sí, la idea es que sí sigue como ese flujo de
+- **[16:26] Yo:** que se haga como el
+- **[16:26] Yo:** el seguimiento y que, una vez se entra, empiece a
+- **[16:26] Yo:** lo lleve a la parte de discovery o a la que esté, pues,
+- **[16:26] Yo:** o no sé si dentro de esta lo lo seccionaríamos a
+- **[16:26] Yo:** si es un producto que está en delivery o que es el seguimiento
+- **[16:26] Yo:** vaya a tener algo como tipo
+- **[16:27] Yo:** un tipo... ¿Qué?
+- **[16:27] Yo:** Tipo Jira, no sé, de de
+- **[16:27] Yo:** de los avances, un timeline, en qué estado está.
+- **[16:27] Yo:** Sé cómo se tiene pensado esa parte, James.
+- **[16:27] Jaime Guevara:** Y aquí, digamos que combo.
+- **[16:27] Jaime Guevara:** Pero lo podemos iterar. Súper. Gracias, Ey, por eso. Que yo no lo había visto, pues, a casi, sí sé como que, hay algunas, ¿no?, porque hay otras virtuales que no están quedando así. Pero dice dónde vienen. Pero sí es como un camino muy largo. Creería yo que, pues, quitarémoslo, creería yo que sería interesante que cada uno meta aquí ya en el delivery project como lo final. ¿No? Porque el POC es diferente. Es que lo que pasa es que este, estamos hablando es de delivery, ¿no?, de lo que lo que entregas a tecnología. Pero esa documentación, por ejemplo, el end to end sí debería estar acá,
+- **[16:27] Jaime Guevara:** pero no el, no sé, el el RPP, por ejemplo, debería estar acá, porque este es el
+- **[16:27] Jaime Guevara:** que
+- **[16:28] Jaime Guevara:** el que se con el que se manda delivery,
+- **[16:28] Jaime Guevara:** en realidad es más como el estado. Ya todo lo que está en el POC y lo que generaste en el POC, pues
+- **[16:28] Jaime Guevara:** me imagino que queda acá dentro del POC. No sé si te hace sentido
+- **[16:28] Yo:** Sí, sí, no, ¿sabes qué? Le estaba asociándonos al
+- **[16:28] Yo:** justamente, al
+- **[16:28] Jaime Guevara:** Pero sí.
+- **[16:28] Yo:** estado, no, documento de Excel de estado de proyectos,
+- **[16:28] Jaime Guevara:** Ajá.
+- **[16:28] Yo:** que ahí teníamos categorías que estaba etapa delivery, pero también había etapa discovery.
+- **[16:28] Jaime Guevara:** Ajá. Ah, ya.
+- **[16:28] Yo:** Entonces,
+- **[16:28] Yo:** aquí descartaríamos discovery, solamente quedaría delivery y dependiente de
+- **[16:28] Yo:** de tecnología.
+- **[16:28] Jaime Guevara:** Sí, sí, lo de delivery y lo de discovery ya lo vamos a empezar a crear con Laura.
+- **[16:28] Jaime Guevara:** Pero por ahorita como la prioridad es delivery y que nos entreguen fechas, entonces
+- **[16:28] Yo:** Yeah, yeah.
+- **[16:28] Jaime Guevara:** era
+- **[16:28] Yo:** Gracias.
+- **[16:28] Jaime Guevara:** De guantes. ¿Alguien más tiene dudas, preguntas?
+- **[16:28] Jaime Guevara:** Cómo hacerlo?
+- **[16:28] Jaime Guevara:** No, ¿todo bien? Están muy callados.
+- **[16:28] Jaime Guevara:** Así el viernes.
+- **[16:28] Jaime Guevara:** Bueno.
+- **[16:28] Jaime Guevara:** Ni José habla, eso me
+- **[16:28] Yo:** Ya no, Gramela, porque ya está la suerte.
+- **[16:28] Jose Pineda Pitre:** preocupa.
+- **[16:29] Jaime Guevara:** Porque
+- **[16:29] Jose Pineda Pitre:** sabe por qué me quedé callado quince minutos.
+- **[16:29] Jaime Guevara:** Bueno.
+- **[16:29] Jaime Guevara:** Listo. No, chicos, de una, les agradezco eso.
+- **[16:29] Jaime Guevara:** Lo revisan, nos cuentan cuándo lo tengan, porque lo necesitamos llevar para
+- **[16:29] Jaime Guevara:** que nos confirmen fecha.
+- **[16:29] Jaime Guevara:** Solamente
+- **[16:29] Jose Pineda Pitre:** como para para
+- **[16:29] Jose Pineda Pitre:** recachar tu información, a ver si la compilé bien,
+- **[16:29] Jose Pineda Pitre:** Este va a ser el formato y el y el front que le vamos a pasar a el
+- **[16:29] Jose Pineda Pitre:** c level,
+- **[16:29] Jose Pineda Pitre:** para que ellos tengan el contexto de los proyectos que estamos trabajando en producto,
+- **[16:29] Jose Pineda Pitre:** cómo los estamos trabajando y cuáles son esas pruebas
+- **[16:29] Jaime Guevara:** de concepto,
+- **[16:29] Jose Pineda Pitre:** y todo
+- **[16:29] Jaime Guevara:** lo que
+- **[16:29] Jose Pineda Pitre:** nosotros
+- **[16:29] Jaime Guevara:** estamos No, no, no.
+- **[16:29] Jose Pineda Pitre:** De carga de estrategia.
+- **[16:29] Jaime Guevara:** No tanto. Entonces, vuelvo. El, creo que
+- **[16:29] Jaime Guevara:** creo que es la misma, es lo mismo que decía Santi. No, nos vamos a enfocar en delivery.
+- **[16:29] Jaime Guevara:** O sea
+- **[16:29] Jose Pineda Pitre:** Ok.
+- **[16:29] Jaime Guevara:** Es más, nosotros somos
+- **[16:29] Jaime Guevara:** un stakeholder que necesita que le entreguen el delivery. O sea, por ejemplo, nosotros
+- **[16:30] Jaime Guevara:** combos, descuentos y necesitamos que nos generen esas fechas
+- **[16:30] Jaime Guevara:** esos compromisos de parte de tecnología.
+- **[16:30] Jaime Guevara:** Y y también hacerle como el seguimiento, porque sabemos que
+- **[16:30] Jaime Guevara:** cambian y eso. Entonces, es como esa estrategia y esa herramienta
+- **[16:30] Jaime Guevara:** que vamos a utilizar nosotros para que se comprometan
+- **[16:30] Jaime Guevara:** en las entregas. El discovery, todo lo que son POCs y discoveries,
+- **[16:30] Jaime Guevara:** si nos lo preguntan,
+- **[16:30] Jaime Guevara:** y si es necesario que los llevemos,
+- **[16:30] Jaime Guevara:** se los mostramos.
+- **[16:30] Jose Pineda Pitre:** Ok.
+- **[16:30] Jaime Guevara:** So, no no es necesario que mostremos, pues, todas nuestras
+- **[16:30] Jaime Guevara:** nuestras cartas y nuestras estrategias, porque también puede haber
+- **[16:30] Jaime Guevara:** dudas o, bueno,
+- **[16:30] Jaime Guevara:** lo que puede pasar de que... Porque estamos en Discovery y todo nos puede cambiar en el
+- **[16:30] Jaime Guevara:** entonces, si ya llevamos cosas para allá, pues solo lo necesario.
+- **[16:30] Jaime Guevara:** ¿Sí?
+- **[16:30] Jose Pineda Pitre:** R, r capital, listo, listo. Pero entonces, lo que nosotros
+- **[16:30] Jose Pineda Pitre:** tenemos que hacer es garantizar que toda la información que esté ahí esté cien por ciento actualizada y bien bonita,
+- **[16:30] Jose Pineda Pitre:** que su merced, cualquiera que la consulte la pueda entender.
+- **[16:31] Jaime Guevara:** De una.
+- **[16:31] Jaime Guevara:** ¿Sí? Y ahorita más que todo delivery, por todo lo que sea delivery.
+- **[16:31] Jaime Guevara:** Listo, de una. Bueno, hágale, José.
+- **[16:31] Jaime Guevara:** Somos todos tuyos.
+- **[16:31] Catherin Salazar:** Para funcionar el nosotros para el lanzamiento, James.
+- **[16:31] Participante:** Dime
+- **[16:31] Participante:** Porque si eso eso también nos va a funcionar para nosotros, Ah,
+- **[16:31] Participante:** total, total, sí,
+- **[16:31] Participante:** porque
+- **[16:31] Participante:** obvio, nos corre el el si cambian la fecha seguramente te van a dar una la idea es que llegue una alerta de que te cambiaron la fecha de un proyecto y que ya
+- **[16:31] Participante:** el
+- **[16:31] Participante:** lanzamiento, pues se va a ver comprometido.
+- **[16:31] Participante:** Seguro. De una, listo.
+- **[16:31] Participante:** Y, José, ¿por qué no tiene eso en en Dragon todavía?
+- **[16:31] Participante:** Ah, no, es que lo había hecho ya aquí, pero la
+- **[16:31] Participante:** semana ya Merced Lo Va A Tener En Darwin, es que todavía no lo he
+- **[16:31] Participante:** puesto del todo bonito.
+- **[16:31] Jose Pineda Pitre:** Pero todo bien,
+- **[16:31] Jaime Guevara:** Ya
+- **[16:31] Jose Pineda Pitre:** voy para allá.
+- **[16:31] Jose Pineda Pitre:** Entonces, muchachos, de cara al delivery que estábamos haciendo nosotros,
+- **[16:31] Jose Pineda Pitre:** desde el equipo de growth, tenemos una actualización bastante
+- **[16:32] Jose Pineda Pitre:** importante. Nosotros habíamos estado empezando a trabajar esta semana
+- **[16:32] Jose Pineda Pitre:** en la definición funcional de
+- **[16:32] Jose Pineda Pitre:** la experiencia que iba a vivir el día de de comunidad desde el front
+- **[16:32] Jose Pineda Pitre:** de dropping, allí, digamos que este proyecto
+- **[16:32] Jose Pineda Pitre:** está vinculado también con CRM de líderes de comunidad. Estos son dos proyectos que son heredados y que ya están en una etapa de delivery, y también están puntuados dentro del propio score. ¿Qué sucedió? Básicamente, tenemos como una repriorización del frente desde C level, que nos dice que tenemos que hacer un análisis y detenernos un poco para agarrar
+- **[16:32] Participante:** que no nos estemos pisando los chorros con uno de los proyectos
+- **[16:32] Participante:** que tiene ya el equipo de
+- **[16:32] Participante:** de del C-Level, que se llama Weevy. Sin embargo, pues les voy a hacer la actualización
+- **[16:32] Jose Pineda Pitre:** lo que hicimos esta semana. Por el frente de líderes de comunidad y
+- **[16:32] Jose Pineda Pitre:** un levantamiento de necesidades con el equipo comercial con Gabriela y Daniel Lombo,
+- **[16:32] Jose Pineda Pitre:** esto buscando entender qué es lo que ellos piensan
+- **[16:33] Jose Pineda Pitre:** que le que tenemos que habilitarle al líder de comunidad dentro de su perfil,
+- **[16:33] Jose Pineda Pitre:** Con ellos establecimos como una estrategia de tres pasos
+- **[16:33] Jose Pineda Pitre:** para poder validar lo que nosotros vayamos a hacer, que es recopilar información,
+- **[16:33] Jose Pineda Pitre:** construir un prototipo de baja fidelidad, validar y priorizar
+- **[16:33] Jose Pineda Pitre:** directamente con el usuario antes de pasar a un prototipo de alt.
+- **[16:33] Jose Pineda Pitre:** El compromiso con el equipo comercial sobre el perfil de líderes de comunidad, que esto ya es algo que yo
+- **[16:33] Jose Pineda Pitre:** tienen bastante maduro, es el nueve de septiembre mostrarles la
+- **[16:33] Jose Pineda Pitre:** en fidelidad de media para que podamos establecer
+- **[16:33] Jose Pineda Pitre:** se lo vamos a mostrar a los usuarios, y si eso que estamos proponiendo nosotros está alineado
+- **[16:33] Jose Pineda Pitre:** con las necesidades que ellos ya han identificado.
+- **[16:33] Jose Pineda Pitre:** Como para no saltarnos el conocimiento que ellos ya han logrado como
+- **[16:33] Jose Pineda Pitre:** Del lado del CDM, este es el proyecto que más está pausado porque hay una
+- **[16:33] Jose Pineda Pitre:** un riesgo de duplicar esfuerzos con pero, pues, ahí nosotros estamos también tratando de
+- **[16:34] Jose Pineda Pitre:** alinearnos y poder establecer
+- **[16:34] Jose Pineda Pitre:** de pronto, una estrategia donde podamos lanzar en paralelo ambas pruebas de concepto,
+- **[16:34] Jose Pineda Pitre:** tanto CRM con high level como WIB, como ecosistema de gestión de comunidades,
+- **[16:34] Jose Pineda Pitre:** Esto lo estamos tratando de articular bastante bien entre Growth Ops, producto y Nicolás, que es el desarrollador de Wii.
+- **[16:34] Jose Pineda Pitre:** Y ahí, digamos que la propuesta que tenemos es
+- **[16:34] Jose Pineda Pitre:** que estas herramientas, el CRM y Webe, son dos herramientas que
+- **[16:34] Jose Pineda Pitre:** pueden vivir en dos etapas diferentes del servicio.
+- **[16:34] Jose Pineda Pitre:** Y ahí es, digamos, una pregunta que yo todavía tengo abierta y es,
+- **[16:34] Jose Pineda Pitre:** yo había agendado para el día de hoy, pero la cancelé una reunión de selfies grouping
+- **[16:34] Jose Pineda Pitre:** con Laura Contreras, Daniel y Gabriela, como para empezar a entender cuál es el servicio que le estamos
+- **[16:34] Jose Pineda Pitre:** prestando a los líderes de comunidad, pero, pues, ahí estoy pendiente todavía de que me
+- **[16:34] Jose Pineda Pitre:** digan si la podemos hacer o si no.
+- **[16:34] Jaime Guevara:** Sí, no, con con continúo nomás, todo bien, después ya ya hablamos de eso, pero sí.
+- **[16:34] Jaime Guevara:** Listo.
+- **[16:34] Jose Pineda Pitre:** Listo. Del frente de Discovery, aquí tenemos dos grandes iniciativas
+- **[16:35] Jose Pineda Pitre:** que una es leyendas dropping, donde ya, güey,
+- **[16:35] Jose Pineda Pitre:** Donde se descarta el frente uno, batch
+- **[16:35] Participante:** y cart en plataforma para expo winners por falta de capacidad técnica de backlog.
+- **[16:35] Participante:** Por falta de capacidad en el backlog de tecnología.
+- **[16:35] Participante:** El resumen tipo Graph, hasta ahora tenemos pensado que es
+- **[16:35] Participante:** se entrega vía CRM en vez de una pantalla
+- **[16:35] Participante:** seguridad de las consultas. Estamos analizando user pilot para
+- **[16:35] Participante:** saber si podemos mostrar el graphic por medio de user pilot.
+- **[16:35] Participante:** Hay un nuevo módulo dentro de la página de leyendas dropping
+- **[16:35] Participante:** se llama catálogo de productos, que aquí está pendiente alinearme
+- **[16:35] Participante:** con con James y con
+- **[16:35] Participante:** como para garantizar que ese catálogo esté bien hecho. Ay, se me cortó el tiempo.
+- **[16:35] Jose Pineda Pitre:** Y
+- **[16:35] Jose Pineda Pitre:** ¿Qué
+- **[16:35] Jaime Guevara:** va a decir algo, Lau?
+- **[16:35] Laura Contreras:** No, no, deja que te termine el dedo al final.
+- **[16:36] Jose Pineda Pitre:** Listo. Cambiamos el CTA de consultar a simula tu experiencia en dropping. Este simulador es un juego que ya había implementado Jaime, que queremos integrar al ecosistema desde
+- **[16:36] Jose Pineda Pitre:** leyendas dropping.
+- **[16:36] Jose Pineda Pitre:** Y lo que hicimos con Jaime es como tratar de alinearlo un poco al
+- **[16:36] Jose Pineda Pitre:** visual que tiene el programa de leyendas, y tenemos pendiente con
+- **[16:36] Jose Pineda Pitre:** legal y financiero establecer cuáles son
+- **[16:36] Jose Pineda Pitre:** las piezas visuales que todavía nos tienen que entregar,
+- **[16:36] Jose Pineda Pitre:** hacer un mapeo legal de toda la experiencia de leyendas dropping,
+- **[16:36] Jose Pineda Pitre:** construir un caso de negocio que nos permita validar, pues, los los premios.
+- **[16:36] Jose Pineda Pitre:** Y el frente de help center estamos trabajando
+- **[16:36] Participante:** en tres frentes,
+- **[16:36] Participante:** que todo trate de convertir en la misma plataforma de conocimiento, en la misma base de
+- **[16:36] Participante:** Tuvimos una sesión esta semana con Dianaldana para orientar el desarrollo desde las mejores
+- **[16:36] Participante:** de experiencia y tratar de estar alineados con las cosas que
+- **[16:36] Participante:** ella tiene y le está dando manejo desde experience. José Hurtado está ya empezando a recoger
+- **[16:37] Participante:** las diferentes bases de conocimientos, no solamente las de
+- **[16:37] Participante:** el equipo de servicio al cliente, sino el equipo de tecnología, el
+- **[16:37] Participante:** comercial, enfocado en los segmentos supplier, dropshippers, marcas,
+- **[16:37] Participante:** y también líderes de comunidad. Tenemos una reunión con Pipe con Kike pendiente para integrar la base de conocimiento desde la interfaz de Intercom, en el botón
+- **[16:37] Participante:** flotante y, pues, estamos teniendo en cuenta todas las buenas prácticas para el geo y el geo.
+- **[16:37] Participante:** Es eso.
+- **[16:37] Participante:** Qué pena email les extendió un poquito.
+- **[16:37] Participante:** Clavo.
+- **[16:37] Jaime Guevara:** Dale, Lau. Yo
+- **[16:37] Laura Contreras:** tenía la duda, José, sobre el primer
+- **[16:37] Laura Contreras:** punto de leyendas, y es si ya no vamos a tener la cart y el
+- **[16:37] Laura Contreras:** supongo que tampoco el chip o el tag, por capacidad de
+- **[16:37] Participante:** de tecnología para expo winners, pero, entonces,
+- **[16:37] Participante:** hicimos alguna negociación sobre cuándo lo vamos a tener. Me imagino, o bueno, creo que
+- **[16:37] Participante:** sabrás más tú que yo, de pronto el impacto de que
+- **[16:38] Participante:** fomentemos tanto la segmentación y cómo
+- **[16:38] Laura Contreras:** el tema de la gamificación en en la feria, y luego ellos no puedan tener ninguna
+- **[16:38] Laura Contreras:** acceso a a esa información o va a ser
+- **[16:38] Laura Contreras:** mediante el wrap, o por dónde les vamos a recordar a qué nivel
+- **[16:38] Laura Contreras:** pertenecen como para seguir incentivando ese ese movimiento de órdenes.
+- **[16:38] Jose Pineda Pitre:** Eso lo tenemos que alinear bastante con Laura Sánchez,
+- **[16:38] Participante:** como para garantizar que estemos cumpliendo como la expectativa que ellos
+- **[16:38] Participante:** tienen de cara a expo winners Lau,
+- **[16:38] Participante:** porque lo que me dijo José Giraldo es
+- **[16:38] Participante:** que una vez ellos salgan de
+- **[16:38] Participante:** nosotros ya podíamos entrar dentro del frente de desarrollo
+- **[16:38] Participante:** para garantizar que tuviéramos la insignia y
+- **[16:38] Participante:** el componente de drop y turbo.
+- **[16:38] Participante:** Que ya estaba diseñado y que lo estamos reutilizando para para este año.
+- **[16:38] Participante:** Pero no tengo una respuesta clara todavía para eso.
+- **[16:38] Participante:** Yo sé que ahorita en la tarde le voy a preguntar a Laura Santos cómo espera ella que hagamos el lanzamiento de esto, también teniendo en cuenta
+- **[16:39] Jose Pineda Pitre:** lo que acabamos de ver de Tardes. Leyendas dropee, si bien es una iniciativa bien estratégica de la organización para incentivar la y la maduración del ciclo de vida del dropshipper, pues, no deja de ser una iniciativa que todavía está en validación. Y creo que todavía no vamos a empezar una etapa de desarrollo en delivery hasta no culminar, por lo menos, una prueba de que sería, digamos, acotándonos a la metodología de trabajo que estamos teniendo. Entonces, ahí
+- **[16:39] Laura Contreras:** Ya. Súper. No, y entonces ahí en ese caso, si desarrollo no lo puede implementar bueno, creo que ya lo habrás revisado, ¿no?, como por medio de user pilot
+- **[16:39] Laura Contreras:** podamos poner al menos utilizar el chip en que me dijiste,
+- **[16:39] Laura Contreras:** que mencionaste de drop y turbo, como para justo hacer esa prueba que decimos de concept
+- **[16:39] Laura Contreras:** o cómo?
+- **[16:39] Jose Pineda Pitre:** Eso lo estamos analizando justo esta semana. La
+- **[16:39] Jose Pineda Pitre:** la nos dio acceso a mí, al equipo de growth,
+- **[16:40] Jose Pineda Pitre:** José, a Lucho y a John, para mirar a ver cuáles son las opciones.
+- **[16:40] Jose Pineda Pitre:** Que tenemos sobre user pilot, yo también estoy revisándolo y estamos
+- **[16:40] Jose Pineda Pitre:** hoy analizando si podemos
+- **[16:40] Jose Pineda Pitre:** llamar las órdenes a través de user pilot,
+- **[16:40] Jose Pineda Pitre:** para poderle pintar el nivel al usuario, por lo menos en un modal,
+- **[16:40] Jose Pineda Pitre:** o en un pop up o en algún chip.
+- **[16:40] Jose Pineda Pitre:** Pero digamos que eso lo estamos todavía analizando.
+- **[16:40] Laura Catherine Torres Ciendua:** Cuando dices que llamarla, órdenes en user pilot, ¿a qué te refieres?
+- **[16:40] Jose Pineda Pitre:** Para nosotros poder pintarle al usuario el nivel,
+- **[16:40] Jose Pineda Pitre:** saber
+- **[16:40] Jose Pineda Pitre:** cuántas órdenes entregadas tuvo un usuario el mes pasado.
+- **[16:40] Jose Pineda Pitre:** Entonces, lo que estamos analizando, viendo,
+- **[16:40] Jose Pineda Pitre:** todavía estamos
+- **[16:40] Jose Pineda Pitre:** analizándolo, si se puede utilizar user pilot para poner el
+- **[16:40] Jose Pineda Pitre:** pop up con el grab o con la insignia, por lo menos.
+- **[16:40] Jose Pineda Pitre:** El
+- **[16:40] Laura Catherine Torres Ciendua:** pop up, sí. Lo que no te voy a dar es el número de orden,
+- **[16:41] Laura Catherine Torres Ciendua:** el número de órdenes de los usuarios.
+- **[16:41] Laura Catherine Torres Ciendua:** Eso yo se lo solicité a José hace un par de semanas, semana y media,
+- **[16:41] Laura Catherine Torres Ciendua:** pero, pues requiere desarrollo, porque todo lo que tiene que ver con órdenes como tal,
+- **[16:41] Laura Catherine Torres Ciendua:** cualquier estado de la orden, viene directamente desde back
+- **[16:41] Laura Catherine Torres Ciendua:** y requiere desarrollo e integración entre entre user pilot y el BAC.
+- **[16:41] Laura Catherine Torres Ciendua:** Entonces, lo tenemos en el mapa, sí,
+- **[16:41] Laura Catherine Torres Ciendua:** pero, pues, José me dice que eso todavía no entra
+- **[16:41] Laura Catherine Torres Ciendua:** en ninguna fase como pronta,
+- **[16:41] Laura Catherine Torres Ciendua:** o más bien, si no entra en su dentro de su backlog pronto.
+- **[16:41] Jose Pineda Pitre:** Bueno, ahí vemos a ver qué se nos ocurre
+- **[16:41] Jose Pineda Pitre:** rimar en este río revuelto.
+- **[16:41] Jose Pineda Pitre:** ¿Tocaría
+- **[16:41] Laura Catherine Torres Ciendua:** tener la data de los usuarios?
+- **[16:41] Laura Catherine Torres Ciendua:** Los que tienen más de x cantidad de órdenes y ya, y lo seteamos así. Así hacemos con todo.
+- **[16:41] Jose Pineda Pitre:** Eso es lo que estábamos pensando, como mandarnos con una línea base
+- **[16:41] Jose Pineda Pitre:** y, por lo menos, hacer un primer lanzamiento con eso. De pronto, no tenerlo tan
+- **[16:42] Jose Pineda Pitre:** recurrente, pero, pues, luego revisamos la estrategia al lado. Muchísimas gracias.
+- **[16:42] Jose Pineda Pitre:** Va.
+- **[16:42] Jaime Guevara:** Listo. Bueno.
+- **[16:42] Jaime Guevara:** Seguimos por acá. Un momento, Camino, la
+- **[16:42] Jaime Guevara:** comparto pantalla.
+- **[16:42] Jaime Guevara:** Y y y y
+- **[16:42] Jaime Guevara:** y quién está poniendo el el cosito?
+- **[16:42] Jaime Guevara:** Pero no me entró.
+- **[16:42] Yo:** Ya lo coloco. Listo, Franco.
+- **[16:42] Jaime Guevara:** Listo, bueno, yo traigo
+- **[16:42] Jaime Guevara:** unos unos temitas, es como que desde otra perspectiva.
+- **[16:42] Jaime Guevara:** Quería hablarle de los experimentos.
+- **[16:42] Jaime Guevara:** En este momento, tenemos
+- **[16:42] Jaime Guevara:** pues, como experimentos andando, entre ellos
+- **[16:42] Jaime Guevara:** la tasa de activación,
+- **[16:42] Jaime Guevara:** que
+- **[16:42] Jaime Guevara:** Ay, perdón.
+- **[16:42] Jaime Guevara:** Listo. Los resultados que hemos tenido de esto es que
+- **[16:43] Jaime Guevara:** la activación neta
+- **[16:43] Jaime Guevara:** disminuyó un montón. Sin embargo, todavía estamos
+- **[16:43] Jaime Guevara:** bueno, la célula está en esa investigación de
+- **[16:43] Jaime Guevara:** todavía no se han pasado el número de quiénes son los los proveedores,
+- **[16:43] Jaime Guevara:** que se activaron en estos tiempos para poder hacer una investigación más a fondo.
+- **[16:43] Jaime Guevara:** En sí,
+- **[16:43] Jaime Guevara:** perdón, en sí, hubo una disminución un montón, pero bueno,
+- **[16:43] Jaime Guevara:** necesitamos investigar. Y como no tenemos el dato del del proveedor, todavía tenemos
+- **[16:43] Jaime Guevara:** pendientes cuántas cuántas órdenes se movilizaron, ese dato se los entregó
+- **[16:43] Jaime Guevara:** la próxima semana para que veamos.
+- **[16:43] Jaime Guevara:** Por el otro lado, tenemos dos resultados interesantes, aquí nos falta agregar, y es
+- **[16:43] Jaime Guevara:** esta semana lanzamos pulso, lanzamos los primeros pulsos, los primeros pulsos son como esas
+- **[16:43] Jaime Guevara:** primeras negociaciones, y quería mostrarles los resultados.
+- **[16:43] Jaime Guevara:** Y hacer una reflexión aquí al respecto. Entonces,
+- **[16:43] Jaime Guevara:** en cuanto a pulso,
+- **[16:43] Jaime Guevara:** Acá está.
+- **[16:43] Jaime Guevara:** La, acá está. La la reflexión al respecto es
+- **[16:44] Jaime Guevara:** necesitamos
+- **[16:44] Jaime Guevara:** y creo que Santi...
+- **[16:44] Jaime Guevara:** Tiene mucho de eso con Gali, de pronto te sirva esto que estamos haciendo acá.
+- **[16:44] Jaime Guevara:** Necesitamos validar, antes de llegar al tabs,
+- **[16:44] Jaime Guevara:** esto nos puede ayudar un montón a determinar qué es lo que vamos a medir y cómo lo vamos
+- **[16:44] Jaime Guevara:** medir y cómo
+- **[16:44] Jaime Guevara:** cómo mejorar los procesos. Porque nosotros como
+- **[16:44] Jaime Guevara:** desde desde esta iniciativa de pulso que se lanzó el veintiuno,
+- **[16:44] Jaime Guevara:** iteramos como unas cuatro o cinco veces
+- **[16:44] Jaime Guevara:** desde esa fecha, incluso más, iterando en
+- **[16:44] Jaime Guevara:** cómo cómo es el proceso, cómo es el manejo de, o sea, no es
+- **[16:44] Jaime Guevara:** idea inicial de lanzamos el pulso, entra por aquí,
+- **[16:44] Jaime Guevara:** por acá, etcétera, etcétera, nos cambió totalmente ya en la práctica.
+- **[16:44] Jaime Guevara:** ¿Qué quiere decir eso? Pues, o nosotros lo vemos, con Michelle lo vimos
+- **[16:44] Jaime Guevara:** como en un un, si lo hubiéramos lanzado directamente con nuestras ideas,
+- **[16:44] Jaime Guevara:** como tal,
+- **[16:44] Jaime Guevara:** seguramente se hubiera quedado estancado porque no hubiéramos podido, o lo hubieran sacado
+- **[16:45] Jaime Guevara:** y después no hubiéramos podido iterar y ahí hubiera quedado estancada la estrategia.
+- **[16:45] Jaime Guevara:** Mientras que acá pudimos iterar un montón de veces. Y encontramos muchos hallazgos.
+- **[16:45] Jaime Guevara:** Para que sepan,
+- **[16:45] Jaime Guevara:** de pulso se lanzaron y tuvimos
+- **[16:45] Jaime Guevara:** compromiso de varias unidades. En este caso, cien unidades
+- **[16:45] Jaime Guevara:** Esto no se habló con los dropshipper mucho, fue más que todo las malas, se les mandó, pero fueron convocados. Y varios aceptaron. Por ejemplo, este aceptó diez unidades, este aceptó mover cien unidades, este adoptado cinco cincuenta unidades, Sin embargo, de ahí se resultó un proceso manual. Y el proceso manual nos dijo que las asistentes de dropshipper tienen que llamarlos, contactarlos, y tuvimos que estar encima de ese proceso. Para que sea exitoso el experimento, nos tocó meterle la mano. Y estar ahí pendientes. Entonces, importante como si se lo llevan, que igual hay un proceso que tenemos que hacer para garantizar que esto funcione.
+- **[16:46] Jaime Guevara:** Importante revisarlo con Growth Ops, importante que hablen
+- **[16:46] Jaime Guevara:** hablemos y estemos como alineados mucho con el la persona de Growth Ops, porque esa, pues,
+- **[16:46] Jaime Guevara:** persona que nos va a ayudar, en teoría, a que la operación se cumpla, y nos ayuda a
+- **[16:46] Jaime Guevara:** bueno, tenemos bastantes resultados chéveres de
+- **[16:46] Jaime Guevara:** sí se privatizaron como sesenta productos y, pues, la idea es continuar con el experimento. Pero
+- **[16:46] Jaime Guevara:** por ahorita, podemos decir que en pruebas hubo una buena adopción.
+- **[16:46] Jaime Guevara:** El otro es la campaña, y en las campañas tenemos cosas
+- **[16:46] Jaime Guevara:** bastante interesantes también.
+- **[16:46] Catherin Salazar:** Pregunta para para Pulso.
+- **[16:46] Jaime Guevara:** Dime.
+- **[16:46] Jaime Guevara:** Es
+- **[16:46] Catherin Salazar:** decir, ¿tú a quiénes les activaste...? O sea, ¿cómo definiste los usuarios a quienes les
+- **[16:46] Catherin Salazar:** desactivaste pulso?
+- **[16:46] Jaime Guevara:** Fue una decisión con Lucho, y comercial, de
+- **[16:46] Catherin Salazar:** que se les
+- **[16:46] Jaime Guevara:** activara al Pareto de Iván Caiceo.
+- **[16:46] Catherin Salazar:** Ah, ok, solo Iván Caiceo, ok, ok.
+- **[16:46] Jaime Guevara:** Sí, por ejemplo, mira que aquí solo hay tres proveedores.
+- **[16:46] Jaime Guevara:** Que dijeron que querían hacer el pulso, entonces fueron estos tres.
+- **[16:47] Jaime Guevara:** No se ha hecho una comunicación oficial, solo ha sido muy pulsada.
+- **[16:47] Catherin Salazar:** Verificados
+- **[16:47] Jaime Guevara:** Premium.
+- **[16:47] Catherin Salazar:** ¿Premium? Ok.
+- **[16:47] Jaime Guevara:** Ajá.
+- **[16:47] Jaime Guevara:** Y, por ejemplo, Tula Store está superenganchado, que
+- **[16:47] Jaime Guevara:** lanzar más pulsos, antes lo hemos detenido, le hemos dicho que no, que todo bien.
+- **[16:47] Jaime Guevara:** Y resultado de esto, de pronto, es que vamos a sacar una aplicación para el
+- **[16:47] Jaime Guevara:** un aplicativo, pues, web, donde ellos mismos decidan, porque encontramos muchas cosas
+- **[16:47] Jaime Guevara:** detrás, muchas cosas
+- **[16:47] Catherin Salazar:** detrás del
+- **[16:47] Jaime Guevara:** manejo del catálogo, de muchas cosas, y ya Michelle en eso.
+- **[16:47] Jaime Guevara:** Pero ya tenemos una herramienta que le vamos a poder meter en el bolsillo a Adams, si
+- **[16:47] Jaime Guevara:** y eso nos va a bien.
+- **[16:47] Catherin Salazar:** Creo que esos hallazgos como que hayas tenido en beta,
+- **[16:47] Catherin Salazar:** o,
+- **[16:47] Jaime Guevara:** bueno, como
+- **[16:47] Catherin Salazar:** que estés en en experimentos,
+- **[16:47] Catherin Salazar:** me los puedas, de pronto, ir enviando, para también cuando ya
+- **[16:47] Catherin Salazar:** digamos, que haya un delivery como
+- **[16:47] Jaime Guevara:** tal del
+- **[16:47] Catherin Salazar:** proyecto,
+- **[16:47] Catherin Salazar:** podamos ir cuadrando con Lau y el equipo como
+- **[16:48] Jaime Guevara:** De una, de una. ¿Los los los dejamos acá en el proyecto o al
+- **[16:48] Jaime Guevara:** pues, puedes entrar y tirarlos Y
+- **[16:48] Catherin Salazar:** puedes... Ah, bueno, listo, listo, de bueno.
+- **[16:48] Jaime Guevara:** Pero sí, esa es la idea con mi
+- **[16:48] Catherin Salazar:** Y de ahí, tenemos acceso a todos los proyectos?
+- **[16:48] Jaime Guevara:** A
+- **[16:48] Catherin Salazar:** todos los a todos los perfiles,
+- **[16:48] Jaime Guevara:** Sí, sí.
+- **[16:48] Jaime Guevara:** Acá arribita dice, célula, y ahí cambias.
+- **[16:48] Catherin Salazar:** Ah, listo, ya.
+- **[16:48] Jaime Guevara:** Listo. Y de cyberdates, de las campañas,
+- **[16:48] Jaime Guevara:** también lo mismo, la misma la la misma
+- **[16:48] Jaime Guevara:** lo mismo que pasó, nos tocó iterar un montón de veces, pero quería mostrarles algo
+- **[16:48] Jaime Guevara:** muy bonito
+- **[16:48] Jaime Guevara:** y es algo que le que le que le dije a José ayer, sacamos este catálogo. Uno, comercial estaba haciendo unos catálogos con Canvas y se
+- **[16:48] Jaime Guevara:** un montón de tiempo. Esto ya lo hicimos con
+- **[16:48] Jaime Guevara:** con IA. Y lo más importante es que este catálogo lo podemos
+- **[16:48] Jaime Guevara:** Entonces, yo les muestro un tracking.
+- **[16:48] Jaime Guevara:** Y este tracking nos sirve para los suppliers, y les vamos a decir a los suppliers
+- **[16:48] Jaime Guevara:** cuántas personas han visto sus productos. Aquí sabemos que la mayoría, miren que,
+- **[16:49] Jaime Guevara:** ochenta de de los que vieron ese ese catálogo la mayoría se concentró en bisutería. Todos estos no. Entonces,
+- **[16:49] Jaime Guevara:** toda esta data es data que le podemos pasar al usuario.
+- **[16:49] Jaime Guevara:** Que se organicen. Incluso, la cantidad de clics en el producto.
+- **[16:49] Jaime Guevara:** Les podemos decir incluso a las personas, no mentiras, no les podemos decir,
+- **[16:49] Jaime Guevara:** porque no tenemos esa data. Pero
+- **[16:49] Jaime Guevara:** ya que no podemos iterar en dropping,
+- **[16:49] Jaime Guevara:** acá sí podemos iterar. Y de aquí salieron muchas más ideas,
+- **[16:49] Jaime Guevara:** un catálogo de mi primera venta, que se lo vamos a pasar a Santi,
+- **[16:49] Jaime Guevara:** que bajen bandera los los los los sellers.
+- **[16:49] Jaime Guevara:** Y, bueno, ahí
+- **[16:49] Jaime Guevara:** nos salimos un poco de tecnología y con nuestras propias herramientas.
+- **[16:49] Yo:** Con eso, el
+- **[16:49] Jaime Guevara:** Dale, Santi.
+- **[16:49] Yo:** Con eso del de del catálogo de primera venta, sería bueno, entonces, llegar a
+- **[16:49] Yo:** a una definición de fecha límite
+- **[16:49] Yo:** si es que se la vamos a dar de alguna forma, a
+- **[16:49] Yo:** a desarrollo para que nos garantice el
+- **[16:50] Yo:** menos, la estabilidad del MCP durante evento
+- **[16:50] Yo:** o si definitivamente vamos a descartar y dar MCP,
+- **[16:50] Yo:** y solo mostrar la la de los productos para para primera venta.
+- **[16:50] Yo:** Hablo para saber cómo
+- **[16:50] Jaime Guevara:** De una,
+- **[16:50] Yo:** manejar desde
+- **[16:50] Yo:** desde el backend que tiene que tiene Gali. Y sea, lo ideal yo creo que sería, de hecho, tener el catálogo de los veinticinco productos y ya está. No se hace un prototipo rápido, evitar caídas, confusiones, demoras en la carga, porque, pues, realmente el tema de rendimiento de esperando que uno, que se filtre por Apify, luego que se filtre por LMCP, sea, eso lo haría mucho más práctico y podríamos hacer lo que sabemos en esta semana de de pronto hacer unos los los diseños de uno forma preconfigurados, para cada producto. Y, entonces, eso también nos facilita un montón como que se vea el valor por lo menos en la Eso sí, cuando queramos salir, igual nos tocaba validar lo que dijimos, ¿no?, que para hacerlo realidad hay que a esos a esos nuevo dropshippers les compren, garantizar que esos productos tengan el stock necesario en los proveedores, ¿no? No sé si ese filtro eso es.
+- **[16:50] Jaime Guevara:** Sí.
+- **[16:50] Jaime Guevara:** De una...
+- **[16:51] Jaime Guevara:** Total.
+- **[16:51] Jaime Guevara:** Una, de una. Sí, no, de una, yo me encargo del catálogo, y yo creo que lo MCP sinceramente, creo que es mejor no utilizarlo.
+- **[16:51] Yo:** Sí, de acuerdo.
+- **[16:51] Jaime Guevara:** Pero, digo, el el miércoles, pues, lo hablamos con Lucho, que dice, pero
+- **[16:51] Jaime Guevara:** de nuestro lado, yo diría que mejor abandonemos.
+- **[16:51] Jaime Guevara:** Por posibles fallas. Pero bueno, listo. ¿Quién sigue?
+- **[16:51] Yo:** Ya.
+- **[16:51] Yo:** También comparto pantalla.
+- **[16:51] Yo:** Voy a arrancar por algo externo a Darwin, que lo pidió Mayla la reunión pasada.
+- **[16:51] Yo:** Quiere el tema del
+- **[16:51] Yo:** como el funnel que se tenía desde
+- **[16:51] Yo:** desde los dropshippers. Esta
+- **[16:51] Yo:** esta está a corte la semana pasada, pero ya Miguel me dijo que me iba a confirmar
+- **[16:51] Yo:** cuándo quedara para autorizado hoy.
+- **[16:51] Yo:** Sin embargo, pues, de una semana o tres, esto no nos va a cambiar mucho en un
+- **[16:52] Yo:** Realmente, es ese entender ya directamente sobre dropshipping,
+- **[16:52] Yo:** ¿saben qué? Les voy a presentar este primero que me lo compartió
+- **[16:52] Yo:** Kate,
+- **[16:52] Yo:** durante esta semana también, era esa distinción entre los dropshippers
+- **[16:52] Yo:** y lo y y marcas.
+- **[16:52] Yo:** ¿Listo?, como para diferenciar entre
+- **[16:52] Yo:** un poco la la proporción, ¿sí?, de cuántos usuarios activos habían en uno y en otro,
+- **[16:52] Yo:** Entonces, esto, pues, nos permite, digamos, también entender
+- **[16:52] Yo:** poco más la participación en el en el ecosistema.
+- **[16:52] Yo:** Tomando este dato,
+- **[16:52] Yo:** ¿sí?, el de los dropshippers realmente para a a nivel de de todos los países,
+- **[16:52] Yo:** es que ya empezamos a ver este otro que se está compartiendo.
+- **[16:52] Yo:** Y era, entonces, el funnel de las diferentes etapas que va pasando dropshipper
+- **[16:52] Yo:** desde
+- **[16:52] Yo:** el registro de
+- **[16:52] Yo:** el el registro completado
+- **[16:52] Yo:** registro entiéndase sin la validación de identidad y demás.
+- **[16:52] Yo:** Que hay. Solamente hablamos del onboarding para registrarse.
+- **[16:52] Yo:** Y la caída que tiene de esos, de ese cien por ciento, estamos hablando
+- **[16:52] Yo:** de
+- **[16:53] Yo:** para la TAM.
+- **[16:53] Yo:** De que todos esos, las la primera orden creada
+- **[16:53] Yo:** solamente la genere el
+- **[16:53] Yo:** nueve por ciento, de eso se empieza a estrechar,
+- **[16:53] Yo:** a
+- **[16:53] Yo:** la primera orden entregada pasa a ser el
+- **[16:53] Yo:** seis punto ocho, el seis punto ocho es de este principal volá claro,
+- **[16:53] Yo:** capaz que podamos ver lo mejor. Listo.
+- **[16:53] Yo:** Y la primera orden con ganas de positivo, pues,
+- **[16:53] Yo:** mismo, este, seis punto cuatro, este cien por ciento no, aquí entre
+- **[16:53] Yo:** Es decir, la gran mayoría generaba
+- **[16:53] Yo:** una ganancia, sin embargo, igual vemos que un cero.
+- **[16:53] Yo:** Punto cuatro por ciento, igual
+- **[16:53] Yo:** pierde, pierde plata porque no sabe
+- **[16:53] Yo:** justamente, hacer dropshipping y no tiene en cuenta
+- **[16:53] Yo:** otros costos asociados, ¿no?, o puede ser una devolución y volver a enviar,
+- **[16:53] Yo:** demás.
+- **[16:53] Yo:** Por acá.
+- **[16:53] Yo:** Hay unos que están actualizándose, por eso todavía aparece como que no está.
+- **[16:53] Yo:** Reconocidos.
+- **[16:53] Yo:** La gran mayoría de eso no es nuevo, pues está para integración, manual,
+- **[16:53] Yo:** otra parte lo hace de forma manual, que este dato es bastante relevante para nosotros ahí
+- **[16:54] Yo:** para para lo que estamos haciendo en Gali. Porque justamente
+- **[16:54] Yo:** un nivel importante, pues, son Dolphyshippers que no tienen integraciones
+- **[16:54] Yo:** mucho Pipa y Tienda Move, y aquí es donde aprovecharíamos, y ahí, Katy Salazar, por lo que hablamos
+- **[16:54] Yo:** hoy, en Darcy, de cuánto podría ser justamente al público al que le vamos a llegar,
+- **[16:54] Yo:** que creo que era órdenes manuales, ¿no?, en superación de área.
+- **[16:54] Yo:** ¿Listo?
+- **[16:54] Yo:** Este registro... Perdón, me bajo aquí un poquito más.
+- **[16:54] Yo:** Ya.
+- **[16:54] Yo:** Entonces, aquí ya está de una forma, pues, de forma tabla, no algo menos gráfico,
+- **[16:54] Yo:** pero finalmente tenemos, pues, toda la data que se acumuló por países
+- **[16:54] Yo:** y la calidad de lata realmente está bastante buena,
+- **[16:54] Yo:** Igual esto es Juan Miguel, lo que estamos haciendo es refinar un poco más
+- **[16:54] Yo:** el paso a paso, porque este este fue con un
+- **[16:54] Yo:** un protocolo de pasos que puede que no se no sean totalmente lineales, sino que se
+- **[16:54] Yo:** puedan dar en para el
+- **[16:54] Yo:** paralelo,
+- **[16:54] Yo:** están abiertos a que se hagan configuraciones posteriores, ¿listo? Entonces, arranco con eso como para tener
+- **[16:55] Yo:** claro como el punto de partida.
+- **[16:55] Yo:** Ahora,
+- **[16:55] Yo:** ya en lo que tiene que ver con métricas, yo, pues, me voy no me voy a tener mucho el indicador, pues, de los
+- **[16:55] Yo:** siete punto ocho views de organización.
+- **[16:55] Yo:** Nada por el estilo,
+- **[16:55] Yo:** un poco de hablar más de desde GAIN, es al que le que el instrumento que nos va a permitir realmente mover la activación, lo que estábamos hablando durante esta semana, es que nuestro nuestro objetivo todo lo que viene el semestre, al menos, haciendo los usuarios los nuevos dropshippers huérfanos, que ya son un cuarenta por ciento, y de esos hay un noventa y nueve por ciento que no se activado. Y de ese noventa y nueve por ciento que no se ha activado, aproximadamente el noventa por ciento no se va a hacer ecommerce ni dropshipping. ¿Listo? Entonces, como no hay una activación, hay un público totalmente
+- **[16:55] Yo:** ajeno al a cómo funciona el modelo de negocio, lo que estamos
+- **[16:55] Yo:** haciendo con con Aleja
+- **[16:55] Yo:** es que dentro de la página que es de expo winners, esta todavía no tiene
+- **[16:55] Yo:** pues, las modificaciones que ya estamos trabajando con Aleja.
+- **[16:56] Yo:** Lo que vamos a hacer en este flujo,
+- **[16:56] Yo:** realmente es que a hoy tiene el copiloto de AI, es es Gali, básicamente,
+- **[16:56] Yo:** el de escanear tu winner y un Lo que queremos hacer en este copiloto
+- **[16:56] Yo:** y esto, de pronto, es para que todos estemos alineados, porque esta semana, pues, alguno no puede estar en todas las reuniones.
+- **[16:56] Yo:** Es que ya
+- **[16:56] Yo:** vamos realmente a que el proceso
+- **[16:56] Yo:** inicial desde el objetivo de mi primer producto
+- **[16:56] Yo:** pero no solamente es encontrar el producto, es seleccionar cuál es el producto que se va a vender,
+- **[16:56] Yo:** porque entre esos
+- **[16:56] Yo:** pongamos van a ser los veinticinco, realmente vamos a dibujar una meta, y la meta es que se pueda
+- **[16:56] Yo:** crear
+- **[16:56] Yo:** un mini ecommerce dentro de Dropi, es decir,
+- **[16:56] Yo:** al usuario que no sabe hacer ecommerce no se le va a pedir que vaya a Chopo. Integración, sino que desde el mismo drop in va a exponer como su vitrina de productos para que pueda salir a vender. La intención está para el lunes, ya tenemos la reunión con Roax,
+- **[16:56] Yo:** es que, de pronto, nos den algunos créditos, algo ahí, para que también
+- **[16:56] Yo:** se le permita hacer pauta al dropshipper. Esto lo quería hacer es un paralelo de de ventas. ¿Listo? Y la idea es que si vende, o sea, esto realmente va quedar utilizable para un usuario, es que se se permita, entonces, generar la venta, y lo que le llegaría eso al al al nuevo dropshipper la notificación para que monte la la orden de forma manual.
+- **[16:57] Yo:** Ya.
+- **[16:57] Jaime Guevara:** Súper. ¿Preguntas?
+- **[16:57] Jaime Guevara:** Callaos.
+- **[16:57] Jaime Guevara:** Bueno, no, supersentí.
+- **[16:57] Jaime Guevara:** Chévere. Va a ser muy bacano cuando tengamos nuestra primera venta.
+- **[16:57] Jaime Guevara:** Fiesta.
+- **[16:57] Jaime Guevara:** Fiesta. Listo. ¿Quién sigue?
+- **[16:57] Juan Diego Bautista Vasquez:** Creo que Kate no está antes, voy
+- **[16:58] Juan Diego Bautista Vasquez:** Creo, no, no está, está el
+- **[16:58] Jaime Guevara:** Vale, vale. Sí,
+- **[16:58] Juan Diego Bautista Vasquez:** no, no, no. Dale.
+- **[16:58] Juan Diego Bautista Vasquez:** De una, en... Ah, espérame, coloco el
+- **[16:58] Juan Diego Bautista Vasquez:** tiempo.
+- **[16:58] Juan Diego Bautista Vasquez:** Ya?
+- **[16:58] Juan Diego Bautista Vasquez:** Quiero arrancar con una partecita
+- **[16:58] Yo:** Yep.
+- **[16:58] Juan Diego Bautista Vasquez:** un poco de los insight, del de algo que hemos estado trabajando dentro de la última
+- **[16:58] Juan Diego Bautista Vasquez:** digamos, qué alineación que que vimos sobre el tema de las novedades,
+- **[16:58] Juan Diego Bautista Vasquez:** encontramos varias cosas
+- **[16:58] Juan Diego Bautista Vasquez:** Entonces, primero, en Dropi, en junio del tuvimos novecientas diecinueve mil novedades. De las cuales únicamente el diecisiete por ciento pasó a entregadas, y todo el resto se devolvió. Eso, pues, ya nos deja como unas métricas de que, a nivel de novedades, pues, tenemos como mucho por lo cual trabajar. Hicimos la comparativa entre todos los países y hay cosas curiosas de que, por ejemplo, digamos que en teoría la misma novedad a nivel de coordinación de la entrega En un país y una transportadora funciona muy mal, pero exactamente una muy parecida a la pidió otra fecha en un país y una transportadora funciona muy bien. Entonces, creo que de lo de lo que veíamos es que eso nos dice que
+- **[16:59] Juan Diego Bautista Vasquez:** sí hay manera, o sea, si a una transportadora le funciona
+- **[16:59] Juan Diego Bautista Vasquez:** con el mismo usuario,
+- **[16:59] Juan Diego Bautista Vasquez:** porque si hay manera de rescatar esas entregas, porque es exactamente el mismo caso.
+- **[16:59] Juan Diego Bautista Vasquez:** Y también muchos cambios de dirección.
+- **[16:59] Juan Diego Bautista Vasquez:** Digamos que, a nivel general, ¿qué nos dejó?
+- **[16:59] Juan Diego Bautista Vasquez:** Que me parece importante y y creo que Kate es de la
+- **[16:59] Juan Diego Bautista Vasquez:** más preguntaba y justo no pudo estar, pero igual ya le envié la información.
+- **[16:59] Juan Diego Bautista Vasquez:** Que el total de las novedades que tenemos
+- **[16:59] Juan Diego Bautista Vasquez:** la gran mayoría, o sea, casi doscientas, bueno, no,
+- **[16:59] Juan Diego Bautista Vasquez:** la gran mayoría está en rechazo.
+- **[16:59] Juan Diego Bautista Vasquez:** Entonces, eso también nos deja como como un punto, y es que
+- **[16:59] Juan Diego Bautista Vasquez:** cuando hay una novedad es que el cliente en definitiva no
+- **[16:59] Juan Diego Bautista Vasquez:** el treinta por, una de cada tres novedades
+- **[16:59] Juan Diego Bautista Vasquez:** un cliente es porque no quiere la novedad, o sea, no quiere el video y ya lo rechazó.
+- **[16:59] Juan Diego Bautista Vasquez:** Entonces, también nos deja de que hay un treinta por ciento que no es rescatable.
+- **[16:59] Juan Diego Bautista Vasquez:** Pues, porque ya el cliente dijo que no le gustaba.
+- **[16:59] Juan Diego Bautista Vasquez:** Yo yo pensé y tenía la hipótesis
+- **[17:00] Juan Diego Bautista Vasquez:** tanto para hacer esto, de que uno de los mayores problemas iba a ser el tema del pago contra entrega.
+- **[17:00] Juan Diego Bautista Vasquez:** Pero de que lo dentro de lo que nos dimos cuenta es que
+- **[17:00] Juan Diego Bautista Vasquez:** realidad, lo del pago contra entrega, o sea, que el cliente diga, no tengo plata, no sé
+- **[17:00] Juan Diego Bautista Vasquez:** o algún problema de que se lo pago por Nike o algo así,
+- **[17:00] Juan Diego Bautista Vasquez:** es un porcentaje muy pequeño.
+- **[17:00] Juan Diego Bautista Vasquez:** Entonces, creo que eso también da
+- **[17:00] Juan Diego Bautista Vasquez:** como que da a entender mucho de la propuesta de valor de dropping, si sigue siendo, pues,
+- **[17:00] Juan Diego Bautista Vasquez:** todo el tema del pago contra entrega, pero en las novedades eso no nos refleja como un problema.
+- **[17:00] Juan Diego Bautista Vasquez:** Entonces, creo que es un dato ahí como un poco curioso eso,
+- **[17:00] Juan Diego Bautista Vasquez:** Dentro del otro
+- **[17:00] Juan Diego Bautista Vasquez:** la primera matriz grande, pues es la coordinación entre
+- **[17:00] Juan Diego Bautista Vasquez:** entre la persona, la dirección, la fecha y la hora,
+- **[17:00] Juan Diego Bautista Vasquez:** La la siguiente es a nivel del contacto,
+- **[17:00] Juan Diego Bautista Vasquez:** y es que
+- **[17:00] Juan Diego Bautista Vasquez:** hay algunas transportadoras que ellos mismos gestionan las novedades,
+- **[17:00] Juan Diego Bautista Vasquez:** y uno de los mayores problemas que tienen es contactarse con el usuario.
+- **[17:00] Juan Diego Bautista Vasquez:** Entonces, creo que eso también nos deja
+- **[17:00] Juan Diego Bautista Vasquez:** como como muchos muchos temas, y y dentro de lo que hicimos como
+- **[17:01] Juan Diego Bautista Vasquez:** que también estábamos mirando cómo lo hacían en otras plataformas, y veíamos que, por ejemplo, Mercado Libre te ofrece entregarlo en una en tu misma dirección, pero a quinientos metros.
+- **[17:01] Juan Diego Bautista Vasquez:** Entonces, como que va muy de la mano con esto de que ellos
+- **[17:01] Juan Diego Bautista Vasquez:** de alguna manera, ya saben qué sucede y logran resolver este
+- **[17:01] Juan Diego Bautista Vasquez:** problema de la coordinación con entregas cercanas.
+- **[17:01] Juan Diego Bautista Vasquez:** Que también es interesante. Y a nivel de la dirección, creo que, pues, ya lo habíamos en otros espacios,
+- **[17:01] Juan Diego Bautista Vasquez:** todos los problemas relacionados con tener la dirección exacta del cliente y llegar a
+- **[17:01] Juan Diego Bautista Vasquez:** ese punto, pues también es otro. Hay otro porcentaje
+- **[17:01] Juan Diego Bautista Vasquez:** pequeño, que es menos de un diez por ciento, que son temas más operativos,
+- **[17:01] Juan Diego Bautista Vasquez:** pues, que no encontraron, zona de difícil acceso,
+- **[17:01] Juan Diego Bautista Vasquez:** no permitida, dirección, o sea, como que
+- **[17:01] Juan Diego Bautista Vasquez:** no sé, algún creo que hubo como uno
+- **[17:01] Juan Diego Bautista Vasquez:** en la vía Cali, Medellín, entonces,
+- **[17:01] Juan Diego Bautista Vasquez:** como otras cosas, el rechazo que ya les decía,
+- **[17:01] Juan Diego Bautista Vasquez:** la coordinación de entrega.
+- **[17:01] Juan Diego Bautista Vasquez:** Después hicimos la revisión de todos los motivos,
+- **[17:01] Juan Diego Bautista Vasquez:** y encontramos cosas como supercontradictorias.
+- **[17:02] Juan Diego Bautista Vasquez:** Por un lado, creo que estaba por aquí abajo,
+- **[17:02] Juan Diego Bautista Vasquez:** hay algunas novedades que es como solicitar la entrega en una fecha posterior,
+- **[17:02] Juan Diego Bautista Vasquez:** y cuando la persona la va a resolver, la única opción que le sale es devolver al
+- **[17:02] Juan Diego Bautista Vasquez:** devolución total del despacho.
+- **[17:02] Juan Diego Bautista Vasquez:** Entonces,
+- **[17:02] Juan Diego Bautista Vasquez:** pues, si ya la novedad es solicitar una fecha posterior,
+- **[17:02] Juan Diego Bautista Vasquez:** no le podemos decir que que la respuesta sea de devolución.
+- **[17:02] Juan Diego Bautista Vasquez:** Y hay otras novedades que es como pedido cancelado por el cliente,
+- **[17:02] Juan Diego Bautista Vasquez:** y le ponemos muchos otros motivos como entregan un punto, nueva dirección,
+- **[17:02] Juan Diego Bautista Vasquez:** volver a ofrecer devolución total, cuando, pues, ya
+- **[17:02] Juan Diego Bautista Vasquez:** como que seguramente no se va a rescatar, y y es lo que normalmente pasa,
+- **[17:02] Juan Diego Bautista Vasquez:** así las las personas respondan, no se rescata.
+- **[17:02] Juan Diego Bautista Vasquez:** Creo que eso es un tema bien contradictorio, que ya lo reportamos a ver si se puede resolver pronto.
+- **[17:02] Juan Diego Bautista Vasquez:** Hay otras que es como dirección incompleta,
+- **[17:02] Juan Diego Bautista Vasquez:** pero no le ofrecemos el campo de para que coloque la dirección.
+- **[17:02] Juan Diego Bautista Vasquez:** Entonces, el usuario
+- **[17:02] Juan Diego Bautista Vasquez:** o sea, ya de por sí es
+- **[17:02] Juan Diego Bautista Vasquez:** pues es una negativa, porque no puede resolver correctamente la novedad.
+- **[17:03] Juan Diego Bautista Vasquez:** En cambio, hay otras que sí es como no se localiza la dirección, pero sí le ponemos el campo de dirección,
+- **[17:03] Juan Diego Bautista Vasquez:** la persona lo llene y lo complete.
+- **[17:03] Juan Diego Bautista Vasquez:** Bueno, y de pronto,
+- **[17:03] Juan Diego Bautista Vasquez:** ahí está como a nivel general. Digamos que en Colombia, pues, por ser el que más nuevos órdenes, naturalmente es el que más se puede rescatar más novedades y en el que en el que mejor gestionan, Ay, no, se me fue muy rápido. Cinco minutos más. Solo para decir algo rápido que me pareció interesante. Este
+- **[17:03] Jaime Guevara:** está superchévere.
+- **[17:03] Juan Diego Bautista Vasquez:** Sí. Y, o sea, como creo que esta era la duda como que también tenía
+- **[17:03] Juan Diego Bautista Vasquez:** como
+- **[17:03] Juan Diego Bautista Vasquez:** Creo que con Jaime lo hemos hablado mucho, ¿no?, y y con Mary también.
+- **[17:03] Juan Diego Bautista Vasquez:** Realmente, las opciones de resolver una novedad son muy pocas,
+- **[17:03] Juan Diego Bautista Vasquez:** Nosotros hoy en día no tenemos ni reprogramar fecha,
+- **[17:03] Juan Diego Bautista Vasquez:** ni elegir ninguna franja horaria,
+- **[17:03] Juan Diego Bautista Vasquez:** cambiar de dirección sí tenemos, cambiar de ubicación lo tenemos muy parcialmente,
+- **[17:03] Juan Diego Bautista Vasquez:** cambiar de teléfono sí lo tenemos,
+- **[17:03] Juan Diego Bautista Vasquez:** retirar en un punto, no tenemos absolutamente nada de eso, que hoy en día en todas las
+- **[17:04] Juan Diego Bautista Vasquez:** plataformas que hacen envíos lo tienen.
+- **[17:04] Juan Diego Bautista Vasquez:** Incluso, hay algunas que te lo entregan en una papelería y vas y lo recoges cuando puedas.
+- **[17:04] Juan Diego Bautista Vasquez:** Autorizar a un tercero, esto es superimportante porque estos
+- **[17:04] Juan Diego Bautista Vasquez:** sirve mucho con con delegar una venta, ¿no? Si
+- **[17:04] Juan Diego Bautista Vasquez:** Jaime ya no lo quiere, yo se lo puedo vender perfectamente a Santiago, que vive en la misma ciudad, si él
+- **[17:04] Juan Diego Bautista Vasquez:** también cae en el anuncio.
+- **[17:04] Juan Diego Bautista Vasquez:** Completar la dirección no está,
+- **[17:04] Juan Diego Bautista Vasquez:** Este me pareció de los más curiosos, porque
+- **[17:04] Juan Diego Bautista Vasquez:** muchas de las novedades tienen que ver con dirección y no tenemos nada de
+- **[17:04] Juan Diego Bautista Vasquez:** de de completar la dirección.
+- **[17:04] Juan Diego Bautista Vasquez:** Como de datos adicionales y demás.
+- **[17:04] Juan Diego Bautista Vasquez:** Cambiar el método de pago, que es, por ejemplo, eso es curioso porque nosotros pues tenemos como aliado a Confío, que es una pasarela de pagos
+- **[17:04] Juan Diego Bautista Vasquez:** que podemos crear un link y que la gente nos pague, y no tenemos ninguna manera de decirle a la transportadora, diga,
+- **[17:04] Juan Diego Bautista Vasquez:** ya me lo pagaron, se volvió anticipado.
+- **[17:04] Juan Diego Bautista Vasquez:** Entonces, pues eso también dice mucho. Ofrecer un descuento
+- **[17:04] Juan Diego Bautista Vasquez:** como
+- **[17:04] Juan Diego Bautista Vasquez:** oiga, no sé, ya se lo envié, no se lo dejo en cien mil, sino se lo dejo en ochenta
+- **[17:05] Juan Diego Bautista Vasquez:** mil, y igual, pues, tengo una ganancia o al menos una una
+- **[17:05] Juan Diego Bautista Vasquez:** igualar la pérdida, ¿no?, y no pagar el flete, que son como alternativas que
+- **[17:05] Juan Diego Bautista Vasquez:** habían planteado alguna vez por México.
+- **[17:05] Juan Diego Bautista Vasquez:** Autorizar la apertura, que este muchos de los clientes, pues, ven el paquete y no se
+- **[17:05] Juan Diego Bautista Vasquez:** tienten con la confianza,
+- **[17:05] Juan Diego Bautista Vasquez:** de como, pues, de una vez devolverlo.
+- **[17:05] Juan Diego Bautista Vasquez:** Devolver a remitente, pues es la que más está, y reintentar sin guardar.
+- **[17:05] Juan Diego Bautista Vasquez:** O sea, pues como vuelvan a intentar la entrega o hagan un tercer intento de entrega.
+- **[17:05] Juan Diego Bautista Vasquez:** Entonces, sí, igual les voy a compartir esto para que lo vean, hay muchas
+- **[17:05] Juan Diego Bautista Vasquez:** más cosas de de cada una de las entregas, como de insights que sacamos y de y de cantidad.
+- **[17:05] Juan Diego Bautista Vasquez:** Y creo que está superchévere, porque eso también nos da
+- **[17:05] Juan Diego Bautista Vasquez:** muchos de los motivos por los cuales las novedades no son tan efectivas, porque
+- **[17:05] Juan Diego Bautista Vasquez:** la forma de resolverlo es demasiado complejo, no tiene la información necesaria,
+- **[17:05] Juan Diego Bautista Vasquez:** y tampoco ofrecemos muchas opciones, y hay ciertos problemas de lógica, como la que les mostraba de
+- **[17:05] Juan Diego Bautista Vasquez:** dirección incorrecta, pero no le ponemos el campo para que ponga la dirección correcta.
+- **[17:06] Juan Diego Bautista Vasquez:** Entonces,
+- **[17:06] Juan Diego Bautista Vasquez:** dale, Diana.
+- **[17:06] Diana Aldana:** Listo. No, solo quería aclarar, ¿puedes hacer, scroll la cierre, un segundito?
+- **[17:06] Diana Aldana:** De lo que no tenemos y sí tenemos, tenía como una duda. Acá.
+- **[17:06] Juan Diego Bautista Vasquez:** Sí,
+- **[17:06] Diana Aldana:** es que acá, al resolver novedades, hay que identificar cuáles son esos procesos
+- **[17:06] Diana Aldana:** que nosotros controlamos y cuáles son esos procesos externos.
+- **[17:06] Diana Aldana:** Que ya dependen de terceros. Por ejemplo, lo de reprogramar una fecha puede ser de una entrega,
+- **[17:06] Diana Aldana:** eso normalmente, esa responsabilidad la hacen las
+- **[17:06] Diana Aldana:** transportadoras. Lo digo es por un caso personal, que pedí un pedido por drop in,
+- **[17:06] Participante:** veloces,
+- **[17:06] Diana Aldana:** me llegó, yo no tenía afección en ese momento, y con el mismo
+- **[17:06] Diana Aldana:** transportador, él él tenía una aplicación y él me reprogramó el envío,
+- **[17:06] Diana Aldana:** como dos días después. Por eso te digo, eso ya sería
+- **[17:06] Diana Aldana:** como una acción de un tercero de reprogramación,
+- **[17:06] Diana Aldana:** Y por otro lado, lo de cambiar el pago
+- **[17:06] Diana Aldana:** eso lo tenemos como contemplado
+- **[17:06] Diana Aldana:** en el nuevo módulo de órdenes, creo que eso lo vimos contigo.
+- **[17:06] Diana Aldana:** También es es por eso, diferenciar qué acciones tenemos el control en una novedad y qué
+- **[17:07] Diana Aldana:** son, el control lo tienen externos, o si queremos que ese control que tienen los externos, nosotros
+- **[17:07] Diana Aldana:** tenerlo.
+- **[17:07] Diana Aldana:** Ah,
+- **[17:07] Juan Diego Bautista Vasquez:** pero pero mira que este ese ese que lo vimos en el módulo de órdenes es al crear la orden o antes de despachar. Este es ya cuando está en camino. Ahí sí, pues, en el ya no se podría. Pero pero sí, de acuerdo, igual creo que Sí. Yo sí he visto que hay unas transportadoras que sí lo reciben,
+- **[17:07] Juan Diego Bautista Vasquez:** y eso de la fecha ayuda muchísimo, porque, pues también ayuda a que la gente se programe, esté listo,
+- **[17:07] Juan Diego Bautista Vasquez:** esté pendiente y todo.
+- **[17:07] Juan Diego Bautista Vasquez:** ¿Dale, Jaime?
+- **[17:07] Juan Diego Bautista Vasquez:** Ves, está brutal, brutal.
+- **[17:07] Jaime Guevara:** Hay hay un par de cosas que hice que hice anotación.
+- **[17:07] Jaime Guevara:** Sería, hay hay dos hay dos
+- **[17:07] Jaime Guevara:** yo creo que te encuentras en dos en dos
+- **[17:07] Jaime Guevara:** en dos temas que hemos venido hablando con con otras personas. Diana,
+- **[17:07] Jaime Guevara:** con el tema de
+- **[17:08] Jaime Guevara:** de experiencia, sobre todo de la experiencia de
+- **[17:08] Jaime Guevara:** de del usuario como tal con la marca, yo creo que este es un insight superchévere que
+- **[17:08] Jaime Guevara:** que puedes llevarte también a ver cómo Sí. Para para para la experiencia, pues, con la
+- **[17:08] Jaime Guevara:** con todo lo que es la la la gestión de la orden desde la persona, no no con la
+- **[17:08] Jaime Guevara:** interfaz, como lo habíamos hablado.
+- **[17:08] Jaime Guevara:** Sino ahí está superchequebre. Y José, tienes lo de la biblia ahí ya, que todavía no sé, te digo, pero ahí va.
+- **[17:08] Jaime Guevara:** Pillaque estas cosas,
+- **[17:08] Jaime Guevara:** La idea es como que todo ese conocimiento del manejo
+- **[17:08] Jaime Guevara:** lo puedas también, digamos que todo
+- **[17:08] Jaime Guevara:** seguramente se nos va a volver, no sé, m d's,
+- **[17:08] Jaime Guevara:** para mandarlos por la por ese cerebro que está con que va a construir José,
+- **[17:08] Jaime Guevara:** o los que encargados de la biblia ahí ya,
+- **[17:08] Jaime Guevara:** para que le pueda responder y ayudar al usuario
+- **[17:08] Jaime Guevara:** a gestionar de cierta manera.
+- **[17:08] Jaime Guevara:** Pero, sin embargo, pues, como hay estas resistencias, estas opciones de una
+- **[17:09] Jaime Guevara:** ahí que no tenemos,
+- **[17:09] Jaime Guevara:** te quería hacer la pregunta,
+- **[17:09] Jaime Guevara:** si lo han pensado, o bueno, cómo lo abordamos
+- **[17:09] Jaime Guevara:** en experimentos o algo
+- **[17:09] Jaime Guevara:** de pronto pensarlo sin qué tecnología, sin llevarlo tanto a tecnología, porque si no
+- **[17:09] Jaime Guevara:** nos va a demorar, o no sé cómo cómo ha sido ese proceso con tecnología para
+- **[17:09] Jaime Guevara:** por qué crees que podrían abordar esto.
+- **[17:09] Jaime Guevara:** ¿Cómo hacemos ese cambio en las personas para mejorar?
+- **[17:09] Juan Diego Bautista Vasquez:** Digamos que las cosas básicas que sí ya eran
+- **[17:09] Juan Diego Bautista Vasquez:** críticas de, pues, no le podemos poner al usuario un campo de
+- **[17:09] Juan Diego Bautista Vasquez:** de
+- **[17:09] Juan Diego Bautista Vasquez:** de responder novedad sin novedad,
+- **[17:09] Juan Diego Bautista Vasquez:** un ticket como hotfix, a ver si, pues, de pronto por ahí va, porque sí es
+- **[17:09] Juan Diego Bautista Vasquez:** como muy crítico de operación.
+- **[17:09] Juan Diego Bautista Vasquez:** Y el resto, digamos que sale a la tarea que
+- **[17:09] Juan Diego Bautista Vasquez:** que estábamos echándole cabeza con Pino, a ver cómo lo
+- **[17:09] Juan Diego Bautista Vasquez:** lo iterábamos un poquito más. Esto nos da
+- **[17:09] Juan Diego Bautista Vasquez:** mucha luz, como de las razones, pero sí estamos
+- **[17:10] Juan Diego Bautista Vasquez:** Creo que todavía no tenemos como como idea de de
+- **[17:10] Juan Diego Bautista Vasquez:** cómo hacerlo bien con tecnología, estábamos echándole cabeza como algunas cosas
+- **[17:10] Juan Diego Bautista Vasquez:** como un servicio externo para probar
+- **[17:10] Juan Diego Bautista Vasquez:** de validaciones con los dropshipers o algo así, o al menos que le filtre
+- **[17:10] Juan Diego Bautista Vasquez:** algo, pero pero todavía no lo tenemos bien. Es la idea es la idea ya después de esto como
+- **[17:10] Juan Diego Bautista Vasquez:** ver cómo lo aterrizamos más.
+- **[17:10] Juan Diego Bautista Vasquez:** De una. Y pregunta,
+- **[17:10] Jaime Guevara:** si más o menos le pegamos a un porcentaje, ¿qué cantidad de órdenes eso mejoraríamos?
+- **[17:10] Jaime Guevara:** O aumentaríamos. Ese,
+- **[17:10] Jaime Guevara:** ese sí lo
+- **[17:10] Juan Diego Bautista Vasquez:** tenemos. Mira que vimos la, eso es lo que llamamos acá rescatables,
+- **[17:10] Juan Diego Bautista Vasquez:** que es como esas de de la dirección, y el dato es noventa y
+- **[17:10] Juan Diego Bautista Vasquez:** cinco, acá está, mira.
+- **[17:10] Juan Diego Bautista Vasquez:** Entonces, hay algunas que son rediseñar, como... Ah, no, es este, es este,
+- **[17:10] Juan Diego Bautista Vasquez:** lo tengo como...
+- **[17:10] Juan Diego Bautista Vasquez:** Acá. Podemos subir noventa y cinco mil entregas al mes,
+- **[17:10] Juan Diego Bautista Vasquez:** No, pues, no hay nada que
+- **[17:10] Juan Diego Bautista Vasquez:** muchísimo, superbueno.
+- **[17:10] Juan Diego Bautista Vasquez:** Y
+- **[17:10] Juan Diego Bautista Vasquez:** y y cogimos ahí las rescatables, que son las, digamos que las
+- **[17:11] Juan Diego Bautista Vasquez:** sencillas en teoría,
+- **[17:11] Juan Diego Bautista Vasquez:** como resolviendo esos errores, tipo,
+- **[17:11] Juan Diego Bautista Vasquez:** poner dirección, pero no hay el campo dirección, pues la persona no puede hacer absolutamente nada.
+- **[17:11] Juan Diego Bautista Vasquez:** O sea, es realmente sencillo, es ponerle el el campo para que lo pueda gestionar bien.
+- **[17:11] Jaime Guevara:** De
+- **[17:11] Juan Diego Bautista Vasquez:** una,
+- **[17:11] Jaime Guevara:** sí sí, ¿qué te iba a decir? Si de pronto, bueno, lo lo, o
+- **[17:11] Jaime Guevara:** lo hablamos la próxima semana, pero tengo ahí como varias ideas que de pronto podemos
+- **[17:11] Jaime Guevara:** podemos abordar y para como validar
+- **[17:11] Jaime Guevara:** el potencial
+- **[17:11] Juan Diego Bautista Vasquez:** y y
+- **[17:11] Jaime Guevara:** mandarlo a Lucho de una vez para que él no lo priorice, porque si
+- **[17:11] Jaime Guevara:** eso mueve todo eso, pues, ahí
+- **[17:11] Jaime Guevara:** de una. De
+- **[17:11] Juan Diego Bautista Vasquez:** una, sí.
+- **[17:11] Jaime Guevara:** Listo. Y
+- **[17:11] Juan Diego Bautista Vasquez:** y
+- **[17:11] Juan Diego Bautista Vasquez:** también sacamos como lo crítico, por ejemplo, cliente no quiere o cancela o
+- **[17:11] Juan Diego Bautista Vasquez:** pues no hay nada que hacer, sacarlo y ya.
+- **[17:11] Jaime Guevara:** Total. O sea, es
+- **[17:11] Juan Diego Bautista Vasquez:** más difícil.
+- **[17:11] Jaime Guevara:** De una.
+- **[17:11] Jaime Guevara:** Listo. Gracias, Santi. Qué bacano. ¿Quién sigue?
+- **[17:11] Diana Aldana:** Listo, si quieren, yo sigo. A ver.
+- **[17:12] Diana Aldana:** Listo.
+- **[17:12] Diana Aldana:** Un segundito.
+- **[17:12] Diana Aldana:** Bueno, para esta semana tuve un reto de comenzar como a
+- **[17:12] Diana Aldana:** recolectar data con servicio al cliente. Ellos me
+- **[17:12] Diana Aldana:** pasaron como una data de cuáles eran como los dolores más
+- **[17:12] Diana Aldana:** frecuentes que ellos estaban recibiendo. Sin embargo, pues, al analizar
+- **[17:12] Diana Aldana:** esa data encontré varias cosas interesantes que todavía estoy como procesando.
+- **[17:12] Diana Aldana:** Actualmente, servicio al cliente
+- **[17:12] Diana Aldana:** desde el treinta de junio al dieciocho de agosto, ha tenido casi treinta y un mil seiscientos dieciocho conversaciones. Eso sumándolo en los diez países. Lo que me llama la atención, Lau, es que la data del CISAR,
+- **[17:12] Diana Aldana:** de la satisfacción de la respuesta que da servicio al cliente, es
+- **[17:12] Diana Aldana:** del tres punto veintinueve.
+- **[17:12] Diana Aldana:** Por, pues, sobre cinco. Entonces, esto sí
+- **[17:12] Diana Aldana:** nos da ya un insight de que, pues, la satisfacción de los
+- **[17:12] Diana Aldana:** de las, o sea, de las comunicaciones que tienen tus usuarios con el servicio al cliente,
+- **[17:13] Diana Aldana:** no son completamente satisfactorias realmente, a pesar
+- **[17:13] Diana Aldana:** de que hay veintinueve agentes y, pues, ellos tienen un promedio de respuesta.
+- **[17:13] Diana Aldana:** Bastante alto.
+- **[17:13] Diana Aldana:** Bueno, esta es una variación,
+- **[17:13] Diana Aldana:** A ver, hay una data que me parece aquí importante,
+- **[17:13] Diana Aldana:** Aquí podemos ver la data de
+- **[17:13] Diana Aldana:** de de la rapidez de la respuesta en el mismo día, las conversaciones que
+- **[17:13] Diana Aldana:** cada que tiene cada cada país con servicio al cliente,
+- **[17:13] Diana Aldana:** que Costa Rica es la más baja. Colombia, pues sigue predominando.
+- **[17:13] Diana Aldana:** Sin embargo, a nivel de de satisfacción, pues
+- **[17:13] Diana Aldana:** es muy intermedia, podríamos decir, si lo calculamos sobre cinco.
+- **[17:13] Diana Aldana:** En los temas de conversación con el equipo de de servicio al cliente,
+- **[17:13] Diana Aldana:** sigue predominando el tema de anulaciones, que en su pasado pusimos sobre la mesa el tema de cancelación,
+- **[17:13] Diana Aldana:** Esta es una data como muy general, la gente se
+- **[17:13] Diana Aldana:** comunica mucho para hacer una anulación de una orden,
+- **[17:13] Diana Aldana:** El pasado hablamos que muchas veces las órdenes se anulaban, porque se duplicaban,
+- **[17:14] Diana Aldana:** el usuario ya no quería, por qué la dirección no era correcta, trayendo a colación el tema de la
+- **[17:14] Diana Aldana:** dirección incorrecta que hablaba ahorita Juan Diego, entre otros temas que
+- **[17:14] Diana Aldana:** pues, hay que entrar a hacer un un doble Zoom acá, en el por qué se están generando estas
+- **[17:14] Diana Aldana:** anulaciones.
+- **[17:14] Diana Aldana:** La satisfacción del del cliente,
+- **[17:14] Diana Aldana:** está supervariable. Realmente,
+- **[17:14] Diana Aldana:** aquí, una estrella, o sea, hay un gran porcentaje de usuarios que
+- **[17:14] Diana Aldana:** que no nos tienen en un buen concepto.
+- **[17:14] Diana Aldana:** Sobre Jenny,
+- **[17:14] Jaime Guevara:** una una
+- **[17:14] Diana Aldana:** una
+- **[17:14] Jaime Guevara:** cosa. Esa
+- **[17:14] Jaime Guevara:** para aclarar, esa calificación
+- **[17:14] Jaime Guevara:** es
+- **[17:14] Jaime Guevara:** sobre el servicio
+- **[17:14] Jaime Guevara:** de
+- **[17:14] Jaime Guevara:** del servicio al cliente, ¿no?, o sea, sobre la atención sobre eso, mas no sobre
+- **[17:14] Jaime Guevara:** resolverle la necesidad.
+- **[17:14] Diana Aldana:** Pues es que va un poco ligado, porque es
+- **[17:14] Catherin Salazar:** la
+- **[17:14] Catherin Salazar:** que se le da servicio al cliente, si servicio
+- **[17:14] Diana Aldana:** al cliente le resolvió la necesidad,
+- **[17:14] Diana Aldana:** al usuario. Porque al final de toda conversación con servicio al cliente,
+- **[17:15] Diana Aldana:** servicio al cliente envía como esta encuesta de NPS,
+- **[17:15] Diana Aldana:** para preguntar si, qué tan satisfecho, pues,
+- **[17:15] Diana Aldana:** con la solución que le dio servicio al cliente. Y tenemos una calificación promedio del tres
+- **[17:15] Diana Aldana:** punto veintinueve.
+- **[17:15] Diana Aldana:** Entonces, mira que eso va muy ligado, pero ¿por qué se...? Pero
+- **[17:15] Diana Aldana:** ¿cuál fue el insight eso? O sea, el insight principal
+- **[17:15] Diana Aldana:** que pude identificar de eso es que muchas veces,
+- **[17:15] Diana Aldana:** el sistema de calificación es porque la gente
+- **[17:15] Diana Aldana:** no tiene el conocimiento completo para resolver, o sea, o no tiene el control de la
+- **[17:15] Diana Aldana:** situaciones que está reportando el usuario. So, aquí dice el sistema
+- **[17:15] Diana Aldana:** el sistema califica a mí en la experiencia global del drop shipper, no la calidad de la atención del agente.
+- **[17:15] Diana Aldana:** Por eso te digo, la experiencia global del dropshipper.
+- **[17:15] Diana Aldana:** El tercio de las calificaciones bajas describe las fallas de logística
+- **[17:15] Diana Aldana:** pagos y proveedores, que la gente no puede resolver desde el chat.
+- **[17:15] Diana Aldana:** O sea, que hay que entrar también a a profundizar a nivel operativo
+- **[17:16] Diana Aldana:** qué está sucediendo, por qué la gente no puede resolver,
+- **[17:16] Diana Aldana:** estas principales fallas. Hay que entrar a profundizar cuáles son esas principales
+- **[17:16] Diana Aldana:** fallas a nivel de logística, a nivel de pagos y a nivel de proveedores. Que la gente no tiene control de cómo resolverlo, o la gestión no está siendo como muy, muy eficiente. Esto es algo que hay que, pues, entrar realmente a a profundizar en ese tema. Realmente, esta métrica se ha mantenido por los últimos cinco meses,
+- **[17:16] Diana Aldana:** sin movimiento alguno.
+- **[17:16] Diana Aldana:** Abril a la fecha de hoy es bastante baja,
+- **[17:16] Diana Aldana:** Cuando hablamos de NPS, normalmente se dividen en diferentes perfiles de usuarios.
+- **[17:16] Diana Aldana:** Los detractores y los y los promotores, que son los que nos quieren.
+- **[17:16] Diana Aldana:** Los detractores son los que a cada rato se están quejando.
+- **[17:16] Diana Aldana:** Y los detractores, lo que más dicen en este momento es
+- **[17:16] Diana Aldana:** no estamos dando soluciones, que las respuestas no son ágiles,
+- **[17:16] Diana Aldana:** Estas son como palabras claves que que logra captar servicio al cliente, que hay que
+- **[17:17] Diana Aldana:** también entrar como a profundizar, porque, pues, no no me dan como mucho contexto.
+- **[17:17] Diana Aldana:** Pero esto es lo que los detractores
+- **[17:17] Diana Aldana:** más o menos, dicen pésimo servicio, en las devoluciones, en las guías.
+- **[17:17] Diana Aldana:** Dolores identificados, reclamo
+- **[17:17] Diana Aldana:** reclamos de fondo, logística por temas de dinero, no se resuelven los
+- **[17:17] Diana Aldana:** problemas, incumplimientos.
+- **[17:17] Diana Aldana:** Y principales insights, los que
+- **[17:17] Diana Aldana:** vez como trayendo a colación, no resuelven, no responden, piden acciones opuestas,
+- **[17:17] Diana Aldana:** Es un problema de capacidad, nadie
+- **[17:17] Catherin Salazar:** contestó,
+- **[17:17] Diana Aldana:** no resuelven, es un problema de
+- **[17:17] Diana Aldana:** atribuciones. El agente contestó, pero no tiene facultades para solucionarlo.
+- **[17:17] Diana Aldana:** Mira que acá
+- **[17:17] Diana Aldana:** esto es un tema también de procesos internos que hay que entrar como a profundizar
+- **[17:17] Diana Aldana:** una cosa es que la gente te dé como el direccionamiento de qué puedes hacer en la plataforma,
+- **[17:17] Diana Aldana:** pero cuando hay hay problemas que trascienden las acciones de
+- **[17:17] Diana Aldana:** plataforma o que se nos salen del control, que tan
+- **[17:17] Diana Aldana:** capacitados estamos como para
+- **[17:17] Diana Aldana:** pues, para
+- **[17:17] Catherin Salazar:** gestionarlo.
+- **[17:18] Diana Aldana:** Entonces, cuando medimos el NPS,
+- **[17:18] Diana Aldana:** hay un gran porcentaje de tractores
+- **[17:18] Diana Aldana:** por encima de de promotores. Aunque, bueno, eso no quiere decir que todo es malo, pues
+- **[17:18] Diana Aldana:** también hay cosas que sí sí logran como resolver.
+- **[17:18] Diana Aldana:** Diana, dime. Dos cositas.
+- **[17:18] Catherin Salazar:** Sería chévere que lo que hizo Jaime con Mitch, de
+- **[17:18] Catherin Salazar:** este bot que está en los grupos
+- **[17:18] Catherin Salazar:** que yo estoy como obsesionada con esos grupos porque todo el tiempo hablan,
+- **[17:18] Catherin Salazar:** Hay muchas cosas que dicen los dropshippers al respecto de dropping.
+- **[17:18] Catherin Salazar:** No sé si esto se puede incluir de pronto acá.
+- **[17:18] Catherin Salazar:** Sí,
+- **[17:18] Diana Aldana:** la idea que vamos a hacer como heredamos el proyecto de Sherlock,
+- **[17:18] Diana Aldana:** la idea de nutrir a Sherlock con todas estas fuentes de información.
+- **[17:18] Diana Aldana:** Sherlock ahorita está nutrido con la data de unos grupos, pero también la idea es como contrastar
+- **[17:18] Diana Aldana:** esa data de los grupos, qué tan sentido tiene con lo que
+- **[17:18] Diana Aldana:** acá nos dice servicio al cliente, cuáles son esas cosas que servicio al cliente no está pudiendo
+- **[17:18] Diana Aldana:** solucionar.
+- **[17:18] Diana Aldana:** Al parecer, pues, son varias, que todavía me todavía tengo un sesgo,
+- **[17:19] Diana Aldana:** tengo que profundizar en ese en ese research.
+- **[17:19] Diana Aldana:** Sí está muy general como como esta data.
+- **[17:19] Jose Pineda Pitre:** De uno.
+- **[17:19] Catherin Salazar:** Y hay
+- **[17:19] Diana Aldana:** otra cosa,
+- **[17:19] Catherin Salazar:** Diani también sería chévere acá, pues, no sé, esto es un panel como de soporte, pero
+- **[17:19] Catherin Salazar:** de pronto que también podamos tener un dashboard ya más a futuro,
+- **[17:19] Catherin Salazar:** sobre lo que hablamos de la satisfacción y esto de las funcionalidades.
+- **[17:19] Catherin Salazar:** Creo que convendría como incluirlos acá
+- **[17:19] Catherin Salazar:** con todo con todo lo que vimos de Tarz. Eso te doy la
+- **[17:19] Diana Aldana:** orientación sobre
+- **[17:19] Catherin Salazar:** conectarlo. Sí,
+- **[17:19] Diana Aldana:** exacto, tener un un solo cerebro
+- **[17:19] Diana Aldana:** para procesar toda la data.
+- **[17:19] Diana Aldana:** Sí, sí,
+- **[17:19] Catherin Salazar:** sí, de una, de una, de una.
+- **[17:19] Diana Aldana:** Listo.
+- **[17:19] Diana Aldana:** Vale, José.
+- **[17:19] Jaime Guevara:** Tenía idea. Yo
+- **[17:19] Jose Pineda Pitre:** yo ahí hay una IP,
+- **[17:19] Jose Pineda Pitre:** hipótesis que teníamos con
+- **[17:19] Jose Pineda Pitre:** Laura Sánchez y con José Hurtado,
+- **[17:19] Jose Pineda Pitre:** sobre la calificación y la satisfacción de los usuarios.
+- **[17:19] Jose Pineda Pitre:** Y es que
+- **[17:19] Jose Pineda Pitre:** cuando el usuario es novato,
+- **[17:19] Jose Pineda Pitre:** o digamos que apenas está
+- **[17:20] Jose Pineda Pitre:** intentando ingresar como al ecosistema de dropping, normalmente nos califica
+- **[17:20] Jose Pineda Pitre:** muy arriba.
+- **[17:20] Jose Pineda Pitre:** Y está muy contento como con la oportunidad
+- **[17:20] Jose Pineda Pitre:** Pero conforme el usuario va madurando dentro de la experiencia,
+- **[17:20] Jose Pineda Pitre:** esa satisfacción va cayendo, va cayendo, va cayendo, va cayendo.
+- **[17:20] Jose Pineda Pitre:** Al punto donde, por ejemplo, los líderes de comunidad son
+- **[17:20] Jose Pineda Pitre:** los que peor nos califican, o sea, nos quieren,
+- **[17:20] Jose Pineda Pitre:** al mismo tiempo nos dan mucho palo como por el servicio que les brindamos.
+- **[17:20] Jose Pineda Pitre:** Entonces, como que eso sería también interesante mapearlo
+- **[17:20] Jose Pineda Pitre:** cantidad de órdenes versus la la
+- **[17:20] Diana Aldana:** Claro. Claro, y si y si comparamos métricas, sabemos que tenemos un porcentaje
+- **[17:20] Diana Aldana:** pues, más bajo de usuarios activos que ya son maduros,
+- **[17:20] Jose Pineda Pitre:** Ajá.
+- **[17:20] Diana Aldana:** Versus los huérfanos que, pues, entra
+- **[17:20] Diana Aldana:** por poco tiempo y a la final no no convierten.
+- **[17:20] Diana Aldana:** Entonces, sí. Ajá. De acuerdo.
+- **[17:20] Jaime Guevara:** Diani, bueno, ahí ese
+- **[17:21] Jaime Guevara:** comentario de José está chévere, ¿ve?, José. Y pero esos
+- **[17:21] Jaime Guevara:** son los que saben hacer, o los que vienen de comunidad, ¿o qué?
+- **[17:21] Jaime Guevara:** Porque
+- **[17:21] Jose Pineda Pitre:** igual
+- **[17:21] Jaime Guevara:** uno
+- **[17:21] Jose Pineda Pitre:** pues ahí ahí no tengo idea. No tengo idea porque, pues, no tengo como el dato
+- **[17:21] Jose Pineda Pitre:** usado.
+- **[17:21] Jose Pineda Pitre:** Lo que me dice el equipo comercial es
+- **[17:21] Jose Pineda Pitre:** normalmente cuando el usuario ya tiene la formación
+- **[17:21] Jose Pineda Pitre:** con el líder de comunidad,
+- **[17:21] Jose Pineda Pitre:** es un usuario que entra muy exigente
+- **[17:21] Jose Pineda Pitre:** en el servicio de dropping.
+- **[17:21] Jose Pineda Pitre:** Entonces, el usuario que de pronto consume la información
+- **[17:21] Jose Pineda Pitre:** dentro de la capa freemium de el líder de comunidad
+- **[17:21] Jose Pineda Pitre:** sigue siendo, de pronto, un como comportándose como un huérfano,
+- **[17:21] Jose Pineda Pitre:** el que paga su curso, el curso del líder de comunidad,
+- **[17:21] Jose Pineda Pitre:** entra aquí con un nivel de expertise
+- **[17:21] Jose Pineda Pitre:** que hace que nos pueda estar calificando
+- **[17:21] Jose Pineda Pitre:** pues, mal.
+- **[17:21] Diana Aldana:** Sí, pero mira mira que la mayoría son anulaciones, esto
+- **[17:21] Diana Aldana:** ya nos dice que es un nivel ya de un usuario que ya sabe generar una orden.
+- **[17:21] Jaime Guevara:** Que
+- **[17:21] Diana Aldana:** está presentando varios problemas a nivel de logística en sus órdenes.
+- **[17:22] Diana Aldana:** Bueno, de gestión de logística.
+- **[17:22] Diana Aldana:** ¿Hay
+- **[17:22] Jaime Guevara:** hay, Diani, está superchévere, no no, yo creo que nos da unas una visión muy bacana creo que igual vas a seguir encontrando más datos, sea, ya
+- **[17:22] Diana Aldana:** me empiezo a imaginar
+- **[17:22] Jaime Guevara:** un montón de cosas y todavía no mezclado Sherlock, y también literal ahí lo que
+- **[17:22] Jaime Guevara:** mencionando, lo que acabaste de mencionar, me parece muy valioso, y es que
+- **[17:22] Jaime Guevara:** son usuarios que ya utilizan. ¿Y qué pasa con los que
+- **[17:22] Jaime Guevara:** todavía no utilizan?, ¿por qué no nos quieren?, ¿o por qué...?
+- **[17:22] Jaime Guevara:** Llegan y ni siquiera intentan contactarse.
+- **[17:22] Jaime Guevara:** ¿Cierto? Que es como ese rango de de que estamos apostándole con Santi,
+- **[17:22] Jaime Guevara:** que son los los los, pues, como lo
+- **[17:22] Jaime Guevara:** llamamos como huérfanos o iniciales.
+- **[17:22] Diana Aldana:** De pronto, ¿qué qué qué qué
+- **[17:22] Diana Aldana:** Frustración, ese Exacto. Sin dejar huella alguna.
+- **[17:22] Jaime Guevara:** Exactamente. Sí, o sea, aquí están los que
+- **[17:22] Jaime Guevara:** los que tienen la necesidad y escriben
+- **[17:23] Jaime Guevara:** porque tienen una necesidad o están escribiendo precisamente porque
+- **[17:23] Jaime Guevara:** porque no hay una manera más de resolverlo. Entonces, si de pronto hay
+- **[17:23] Jaime Guevara:** vas a
+- **[17:23] Diana Aldana:** tener
+- **[17:23] Jaime Guevara:** más data, mucha más data, yo yo, pues,
+- **[17:23] Jaime Guevara:** no sé si todos lo sepan, creo que no. Nos nos faltó eso, Lau, de pronto también, y es
+- **[17:23] Jaime Guevara:** que Diani va a estar en dos, como entre comillas dos células, una es ops,
+- **[17:23] Jaime Guevara:** design ops
+- **[17:23] Laura Contreras:** Ya le hemos dicho.
+- **[17:23] Jaime Guevara:** Y la otra es esta que se
+- **[17:23] Jaime Guevara:** experience, que se va a concentrar en la experiencia del usuario con la marca
+- **[17:23] Jaime Guevara:** con la marca en general, con el servicio en general.
+- **[17:23] Jaime Guevara:** No tiene nada que ver con el con el botón, con la UX, no, es como llegar a ver qué insights sacamos para que nos amen. Y puedes colocar el NPS ahí, porque creo que no lo vi el general, please.
+- **[17:23] Diana Aldana:** Me sacó aquí el de satisfacción, realmente me sacó el de satisfacción. Sí.
+- **[17:23] Jaime Guevara:** Pero bueno
+- **[17:23] Diana Aldana:** De satisfacción.
+- **[17:23] Jaime Guevara:** En los que en los ¿Cómo es que se llaman? En los en los, no los En
+- **[17:24] Diana Aldana:** los detractores. Ah, ok, ok.
+- **[17:24] Jaime Guevara:** Los
+- **[17:24] Diana Aldana:** detractores.
+- **[17:24] Jaime Guevara:** Sí, esos son los más importantes y ahí tenemos una posibilidad, pues, como de de de crecer. El caso es que ven a drop y, o sea, no no en nuestro NPS
+- **[17:24] Jaime Guevara:** es muy malo.
+- **[17:24] Diana Aldana:** Lo que
+- **[17:24] Jaime Guevara:** necesitamos es elevarlo. Y por eso, Diani,
+- **[17:24] Jaime Guevara:** se va a concentrar en
+- **[17:24] Jaime Guevara:** insights para ver cómo elevamos el NPS
+- **[17:24] Jaime Guevara:** no llamen, y insights, para ver cómo elevamos el
+- **[17:24] Jaime Guevara:** Y eso
+- **[17:24] Jaime Guevara:** a ser un apoyo para Juandi,
+- **[17:24] Jaime Guevara:** para Santi, para Jaime, para Mitch, para todos,
+- **[17:24] Jaime Guevara:** Entonces, toca pensarlo como bien y como desde ese lado también, cómo vamos pasando
+- **[17:24] Jaime Guevara:** como esa data y esa información, y vamos profundizando un poco más hasta que encontremos
+- **[17:24] Jaime Guevara:** esas funcionalidades que debemos mejorar o esos procesos que debemos mejorar y eso.
+- **[17:24] Jaime Guevara:** Y y atacarlos para que nos potencien el el el NFTs.
+- **[17:24] Jaime Guevara:** Listo, no sé, ahí
+- **[17:24] Diana Aldana:** Lau, que
+- **[17:24] Jaime Guevara:** querías decir algo de lo de ops, ¿no?
+- **[17:24] Jaime Guevara:** Bien.
+- **[17:25] Laura Contreras:** No, no, o sea, la diferenciación que ya acabas de
+- **[17:25] Laura Contreras:** que no habíamos avisado es, una cosa son los proyectos
+- **[17:25] Laura Contreras:** de
+- **[17:25] Laura Contreras:** ¿cómo decirlo?, como de diseño, herramienta,
+- **[17:25] Laura Contreras:** de diseño, plataforma, cross
+- **[17:25] Laura Contreras:** todos los módulos y segmentos, como órdenes, rearquitectura y demás,
+- **[17:25] Laura Contreras:** los dejamos en lo que se llama design ups. Y
+- **[17:25] Diana Aldana:** experience,
+- **[17:25] Laura Contreras:** como dijo James, es
+- **[17:25] Laura Contreras:** la data para los insights.
+- **[17:25] Laura Contreras:** Del
+- **[17:25] Diana Aldana:** producto Ok.
+- **[17:25] Laura Contreras:** Dale,
+- **[17:25] Diana Aldana:** Comencé con insight experience, porque, pues, de resumen de weekly experience, pues, creo que todos estamos como superenterados de todo lo que está pasando. Igual, acá pueden ver como los avances ahí en Darwin. Todos los proyectos prácticamente están congelados,
+- **[17:25] Diana Aldana:** todo está enfocado en rearquitectura.
+- **[17:25] Diana Aldana:** Siguen siguen las pruebas en novedades de dropia con cada
+- **[17:25] Diana Aldana:** transportadora? Órdenes sigue bloqueado, búsqueda semántica,
+- **[17:25] Diana Aldana:** Ah, bueno, para todos, búsqueda semántica...
+- **[17:25] Diana Aldana:** Pasa para suppliers.
+- **[17:25] Diana Aldana:** Pasa una segunda fase y nosotros heredamos sherlock. Y hoy tenemos seguimiento de ocho indicadores con José, ya que Marcos está de vacaciones.
+- **[17:26] Diana Aldana:** Y ya, como es update rápido. Pero acá, pues todavía no hay métricas que socializar.
+- **[17:26] Laura Contreras:** James,
+- **[17:26] Diana Aldana:** ahí
+- **[17:26] Laura Contreras:** ahí tenemos un
+- **[17:26] Laura Contreras:** algo que estamos organizando con Dianys, tenemos una la otra semana ya para
+- **[17:26] Laura Contreras:** ponerlo tal como roadmap, poder integrarlo al roadmap general del que estamos hablando, que principalmente los los proyectos
+- **[17:26] Diana Aldana:** de design ops
+- **[17:26] Laura Contreras:** es lo que va como en prioridad de delivery, ¿no? Delivery prints.
+- **[17:26] Diana Aldana:** Entonces,
+- **[17:26] Laura Contreras:** eso
+- **[17:26] Jaime Guevara:** lo tenemos que
+- **[17:26] Laura Contreras:** hacer la otra semana ya, para
+- **[17:26] Diana Aldana:** tenerlo para
+- **[17:26] Laura Contreras:** el miércoles.
+- **[17:26] Jaime Guevara:** Listo. Se nos acabó el tiempo que hacemos
+- **[17:26] Diana Aldana:** la los
+- **[17:26] Jaime Guevara:** Operamos.
+- **[17:26] Catherin Salazar:** Yo tengo hambre. También,
+- **[17:26] Jaime Guevara:** ¿Quién nos suelta? Nos suelta
+- **[17:26] Paula Macias:** demasiado rápido.
+- **[17:26] Jaime Guevara:** Dale, Pau,
+- **[17:27] Paula Macias:** Bueno, Pues Lo Voy A Hablar Porque En Realidad No Esta Semana Fue Como De Volver A Empalmar, Que Se Empleaba Entonces, Básicamente, Esta Semana Recibí La Solicitud De Activar El Caso En Paraguay. Estoy detrás de que
+- **[17:27] Paula Macias:** María me pueda hacer el favor de montarlas en el para yo poderla gestionar
+- **[17:27] Paula Macias:** con tecnología. Igual, ya esa gestión de épicas, de historias y
+- **[17:27] Paula Macias:** todo, hasta la data ya la hice por por un lado, ya muy bien la entregó para poder que la persona la
+- **[17:27] Paula Macias:** Torres.
+- **[17:27] Paula Macias:** Para el tema del lanzamiento de de gas,
+- **[17:27] Paula Macias:** Estuvimos trabajando la mano esta semana
+- **[17:27] Paula Macias:** en sunset con tecnología,
+- **[17:27] Diana Aldana:** Ya.
+- **[17:27] Paula Macias:** El
+- **[17:27] Diana Aldana:** el
+- **[17:27] Paula Macias:** bueno, entonces, estuvimos también en reuniones para sacar criterio
+- **[17:27] Paula Macias:** también estamos trabajando con Growthworks para tu
+- **[17:27] Paula Macias:** tema de los que ya nos entregó el Sonsum. En la entregó separándose, estamos
+- **[17:27] Paula Macias:** revisando
+- **[17:27] Paula Macias:** cómo es que se van a unir
+- **[17:27] Paula Macias:** porque estábamos esperando que nos lo dieran jueves.
+- **[17:27] Diana Aldana:** Mucho,
+- **[17:28] Paula Macias:** y no por separado. Pero bueno, ahí estamos en ese proceso.
+- **[17:28] Paula Macias:** Tenemos un tema acá de facturación
+- **[17:28] Paula Macias:** desde hace dos semanas eso está en en reporte de books.
+- **[17:28] Paula Macias:** La tecnología, hasta apenas esta semana, José, pues, como que
+- **[17:28] Paula Macias:** nos dijo que ya para la otra semana salía a todo el público,
+- **[17:28] Paula Macias:** porque
+- **[17:28] Diana Aldana:** seguíamos
+- **[17:28] Paula Macias:** en brevedad, esperando que nos corrigiera, pero, ya
+- **[17:28] Paula Macias:** según José, para el lunes ya está eso corregido y ya podemos entrar a hacer una revisión junto con ellos
+- **[17:28] Paula Macias:** administrativo de
+- **[17:28] Paula Macias:** pues, de LinkedIn.
+- **[17:28] Paula Macias:** Y tenemos un tema usando el equipo de seguro, el tema de conciliaciones,
+- **[17:28] Paula Macias:** con con y
+- **[17:28] Paula Macias:** en ese proceso está capta, y Juan Camilo está levantando todos los flujos
+- **[17:28] Paula Macias:** operativos que se hacen para el tema de concilios y dos concilios en compras por
+- **[17:28] Paula Macias:** conciliación con aplicativos,
+- **[17:28] Paula Macias:** etcétera.
+- **[17:28] Paula Macias:** Y ya, ese es mi update, Francisco.
+- **[17:29] Jaime Guevara:** De una, con con Paula creo que tenemos que ver una alineación también la uno de lo de
+- **[17:29] Jaime Guevara:** de los augustos. Yo ya le dije un poquito a Paula, pero
+- **[17:29] Diana Aldana:** no le
+- **[17:29] Jaime Guevara:** confirmé nada.
+- **[17:29] Jaime Guevara:** Porque todo yo no sé. Pero creo que ahorita
+- **[17:29] Jaime Guevara:** María nos nos da como unos lineamientos.
+- **[17:29] Jaime Guevara:** Listo. Bueno, ¿quién falta? Creo que hay nadie más.
+- **[17:29] Jaime Guevara:** ¿O bien?
+- **[17:29] Laura Contreras:** No, solo yo con mis anuncios parroquiales.
+- **[17:29] Laura Contreras:** Dale.
+- **[17:29] Laura Contreras:** Ya tú me adelantaste con uno, la división de las células,
+- **[17:29] Laura Contreras:** Vamos a estar hablando del CES, que, bueno, me me voy a empapar de que tuvimos en el
+- **[17:29] Laura Contreras:** del cese desde esa célula, o sea, el effort score
+- **[17:29] Laura Contreras:** vamos a cambiar o agregar como una un una métrica distinta a las que ya
+- **[17:29] Laura Contreras:** conocíamos, como CISA de MPS, supongo que ahorita Kate la mencionó, creería que sí, pero
+- **[17:29] Laura Contreras:** el el contenido que ya habíamos visto del del product lab de hoy.
+- **[17:29] Laura Contreras:** Entonces, vamos a empezar a hablar de eso.
+- **[17:30] Laura Contreras:** Y ver cómo lo incluimos dentro de cada una de las cosas que se diseñen desde DesignOps. Eso por un lado. Por otro lado, esta, bueno,
+- **[17:30] Laura Contreras:** Santi voy a hacer una alineación sobre el product link,
+- **[17:30] Laura Contreras:** lead,
+- **[17:30] Laura Contreras:** Ya les contaremos más adelante eso, y estamos en expo winners
+- **[17:30] Laura Contreras:** Ayer me tocó mover la review, pero ya hoy la tenemos en la tarde para ya
+- **[17:30] Laura Contreras:** terminar como de conectar con marketing. Importante,
+- **[17:30] Laura Contreras:** y listo, creo que no tenemos más. Estamos haciendo algunas modificaciones
+- **[17:30] Laura Contreras:** en Darwin y ya.
+- **[17:30] Laura Contreras:** La otra semana ya tenemos es sentarnos en
+- **[17:30] Laura Contreras:** ciertos espacios para, creo, empezar a alinear
+- **[17:30] Laura Contreras:** con lo que nos entregó María esta semana, que todavía no acabamos, apenas logística es en la tarde.
+- **[17:30] Laura Contreras:** Sobre como los focos o los ikigai
+- **[17:30] Laura Contreras:** cada célula, y listo.
+- **[17:30] Laura Contreras:** Muchas gracias.
+- **[17:30] Laura Contreras:** Feliz almuerzo.
+- **[17:30] Jose Pineda Pitre:** Yo tengo una pregunta.
+- **[17:30] Jaime Guevara:** Señor.
+- **[17:30] Jose Pineda Pitre:** Nosotros no, pues, que íbamos a tener un nuevo
+- **[17:31] Jose Pineda Pitre:** guide.
+- **[17:31] Jaime Guevara:** Sí, yo ahí les mencioné, yo
+- **[17:31] Jose Pineda Pitre:** Brian.
+- **[17:31] Jaime Guevara:** Yo todo, Brian, sí, claro.
+- **[17:31] Jose Pineda Pitre:** Es que
+- **[17:31] Jaime Guevara:** le pasen trabajo.
+- **[17:31] Jose Pineda Pitre:** Ah, es que como todavía no lo Él está aprendiendo, él está aprendiendo, pero
+- **[17:31] Jose Pineda Pitre:** ¿Dónde? Pero falta genio.
+- **[17:31] Jaime Guevara:** Sí, sí, no, lo que necesito, yo por eso les escribí, sea, necesiten todo lo que necesiten de data, todo todo
+- **[17:31] Jaime Guevara:** ya
+- **[17:31] Jaime Guevara:** él para que de una vez le tengamos backlog para que le empiece a ayudar a Miguel. Miguel igual lo está capacitando y todo, pero
+- **[17:31] Jaime Guevara:** Ok. Pero si necesitamos otro cruce parroquial,
+- **[17:31] Jaime Guevara:** de pronto,
+- **[17:31] Jaime Guevara:** todavía está en pruebas, pero aquí les muestro rapidito.
+- **[17:31] Jaime Guevara:** Ay.
+- **[17:31] Jaime Guevara:** Aquí les muestro rapidito. Lo hice en en pulso mientras tanto.
+- **[17:31] Jaime Guevara:** Como la prueba?
+- **[17:31] Jaime Guevara:** Pero aquí uno puede crear ya webhooks,
+- **[17:31] Jaime Guevara:** Integraciones, creamos un webhook.
+- **[17:31] Jaime Guevara:** Y, por ejemplo, este webhook es para un tema de
+- **[17:32] Jaime Guevara:** de cuidado de campañas, entonces ya
+- **[17:32] Jaime Guevara:** Miguel nos manda automáticamente una data.
+- **[17:32] Jaime Guevara:** La data sin tener que pedirle el CSV, sino que esto ya se nos se nos guarda.
+- **[17:32] Jaime Guevara:** Ahí ya le le está
+- **[17:32] Jaime Guevara:** trabajando en el del catálogo, ya le mandé el web, o sea, es simplemente crearlo y él no lo manda.
+- **[17:32] Jaime Guevara:** Y ya nosotros desde antigravity, pues, decidimos qué hacer con eso.
+- **[17:32] Jaime Guevara:** Aquí ya estoy como en la actualización del catálogo para Santi, creo que era, y para mí,
+- **[17:32] Jaime Guevara:** y no sé qué otro necesitamos. Ahí nos me me escriben para ver qué más necesitamos para automatizar.
+- **[17:32] Jaime Guevara:** Listo.
+- **[17:32] Yo:** Okay, gracias.
+- **[17:32] Yo:** Ahora te pregunto unas cosas de eso, pero no extender esta reunión todavía.
+- **[17:32] Jaime Guevara:** De una.
+- **[17:32] Jaime Guevara:** ¿Listo, Almortón o qué?
+- **[17:32] Yo:** Bueno,
+- **[17:32] Laura Contreras:** Gracias, que estés
+- **[17:32] Jaime Guevara:** muy bien. Estamos,

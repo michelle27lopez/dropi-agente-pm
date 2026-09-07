@@ -77,7 +77,6 @@ export default function EntendimientoNegocioPage() {
           <Callout tone="info">
             📌 <strong>Fuente:</strong> grounding técnico usado por el agente de Discovery de Marcas/Brands, consolidado aquí
             porque describe el ecosistema completo (Suppliers, Dropshippers, Marcas/Emprendedores) — no solo el portafolio de una célula.
-            Para cifras y metas de referencia ver la guía <a href="/guias/metricas" style={{ color: "var(--dropi)", fontWeight: 600 }}>Métricas</a>.
           </Callout>
 
           <SectionTitle>Deuda técnica: Marca vs. Supplier</SectionTitle>

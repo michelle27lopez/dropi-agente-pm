@@ -1,0 +1,1577 @@
+# Arquitectura de negocios e hiperautomatización de procesos
+
+- **ID:** `not_CuCN8iRXpupWuk`
+- **Fecha:** 2026-08-28T00:04:05.325Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/e7be8186-caf1-4a58-b9b8-5987a0883f4d)
+- **Asistentes:** Santiago Herrera Acosta
+
+---
+
+## Resumen de la Reunión
+# Presentación del Profesor y del Curso
+
+- Julio Gómez, ingeniero industrial con especialización en analítica y magíster en ciencia de datos
+- Profesor tiempo completo en el departamento de industrias sostenibles
+- Experiencia previa: lideró el centro de excelencia de automatización en Banco Unión (antes Giros y Finanzas), luego ACH, alianza fiduciaria
+- Actualmente consultor en ICECI: diseña gobiernos, centros de excelencia y soluciones digitales
+- Curso de seis semanas, enfocado en Microsoft y la suite Power Platform
+- Clase cinco: masterclass de una líder de automatización e IA proveniente de Nequi (en transición desde Bancolombia/Cibercorp)
+
+# Estructura del Curso y Entregables
+
+- Cuatro entregables incrementales a lo largo del curso
+- Proyecto parte de una necesidad o problema real identificado por cada estudiante
+- Grupos de máximo tres personas; pueden ser individuales o mixtos entre empresas
+- Contenido semanal en Canvas: guía interactiva + videos opcionales de herramientas Microsoft
+- Parte técnica (videos) es opcional, orientada a quienes quieran profundizar en operación
+
+# Transformación Digital: Fundamentos
+
+- Tres ejes del triángulo: personas, procesos y tecnología
+- Diego añade un cuarto elemento crítico: la estrategia, que debe articular los tres
+- Sin estrategia clara desde la alta dirección, cada área actúa en silo
+- Problema frecuente: comprar licencias (Copilot, ChatGPT, etc.) se confunde con transformación digital
+- Automatizar un error solo multiplica el error a mayor velocidad
+
+# Por Qué Fallan las Automatizaciones
+
+- Falta de apropiación: usuarios se quedan con métodos convencionales
+- Herramientas adoptadas por moda, sin procesos documentados ni claros
+- Soluciones construidas sin involucrar al usuario final desde el inicio
+- Falta de centralización de información y lenguaje común entre áreas
+- Automatizaciones desalineadas de la estrategia corporativa
+- Silos: cada área compra su propia herramienta sin coordinación central
+- El centro de excelencia existe precisamente para evitar esta “bola de nieve”
+
+# Arquitectura Empresarial vs. Arquitectura de Negocio
+
+- Marco de referencia principal: TOGAF
+  - Cuatro dominios: negocio, datos, aplicaciones y tecnología
+  - Permite ver interconexiones entre todos los elementos corporativos
+- Arquitectura empresarial: marco integral, controla el todo
+- Arquitectura de negocio: un dominio dentro de la empresarial, enfocado en capacidades, procesos y valor
+- Beneficios de una arquitectura de datos bien controlada:
+  - Confiabilidad y seguridad del dato
+  - Transparencia y trazabilidad
+  - Calidad del dato para tomar mejores decisiones
+
+# Automatización e Hiperautomatización
+
+- Ciclo estándar de automatización: análisis, diseño, construcción, validación, producción
+- Automatización inteligente: conecta valor con eficiencia, apoyada en IA y aprendizaje automático
+  - Distinción clave: inteligente no es sinónimo de IA; la inteligencia es humana, la IA es un apoyo
+- Hiperautomatización (término acuñado por Gartner, \~2008, con el auge del RPA):
+  - Orquestación de múltiples procesos automatizados de punta a punta
+  - Va más allá de automatizar tareas aisladas: conecta marketing, ventas, servicio al cliente, etc.
+  - Ejemplo: empresa en EE.UU. generó $1M con una sola persona orquestando agentes en Discord
+- RPA (Robotic Process Automation): robots de software que replican tareas operativas repetitivas
+  - Ejemplo banco: 8 personas en 2 horas procesando CDTs desmaterializados → robot en 10 minutos
+  - Las 8 personas no fueron eliminadas; se reasignaron a tareas de mayor valor
+
+# Gobierno y Centro de Excelencia
+
+- El gobierno define lineamientos, normas y modelo operativo
+- Centro de excelencia: puente entre áreas y tecnología, democratiza la información
+  - Experiencia en banco: equipo de 6 personas atendiendo 90 iniciativas mensuales
+  - Con gobierno y metodologías ágiles: pasaron de 3 soluciones/mes a casi 30
+- Comités de transformación con directores: clave para alinear estrategia y operación
+- Riesgo sin gobierno: gerentes impulsan iniciativas paralelas que duplican esfuerzos corporativos
+
+# Metodologías y Herramientas de Arquitectura
+
+- Herramientas vistas: Business Model Canvas, identificación de stakeholders, cadena de valor, Value Stream Mapping
+- SAFE (Scaled Agile Framework): metodología ágil con “trenes de lanzamiento”, ciclos trimestrales
+  - Usada en el banco; Jairo la aplica con su cliente actual
+- PMI / PMBOK: marco usado por Gustavo en su PMO, combinado con metodología propia
+- Conclusión: no hay metodología universalmente mejor
+  - La mejor es la que se adapta al contexto y agrega valor real
+  - Implementar TOGAF completo puede tomar años; hay que ser flexible y adaptable
+- Low code: ventaja en velocidad de entrega; pierde valor si tarda igual que un desarrollo pro code
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/852b194e-87ea-40e6-9b03-ec767042c7ed](https://notes.granola.ai/t/852b194e-87ea-40e6-9b03-ec767042c7ed)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[00:05] Participante:** Buenas noches a todos los que van llegando. Como les comentaba a algunos,
+- **[00:05] Participante:** vamos a dar unos minuticos mientras se terminan de conectar el resto de sus compañeros y ya iniciamos, ¿listo?
+- **[00:05] Participante:** Listo.
+- **[00:06] Participante:** Hola, buenas noches.
+- **[00:06] Participante:** Gustavo, buenas noches. ¿Cómo estás?
+- **[00:06] Participante:** Bien, ¿y tú?
+- **[00:06] Participante:** Muy bien, gracias a dios.
+- **[00:06] Participante:** ¿Cuánto somos ya? Somos quince. Bueno, todavía nos faltan bastanticos.
+- **[00:06] Participante:** Unos minuticos y y ya iniciamos, ¿listo?
+- **[00:06] Participante:** Listo.
+- **[00:07] Yo:** Este cachorrito paseamos mucho y no hizo poco.
+- **[00:07] Yo:** Ah, sí,
+- **[00:08] Yo:** Lo volteamos todo lo que Ay, mirá,
+- **[00:08] Yo:** ah, de verdad que esto es por un solo lado. Yo llegué a decir, ay, igual me la amarra.
+- **[00:08] Yo:** Sí.
+- **[00:08] Yo:** No.
+- **[00:08] Yo:** Lo que quieras,
+- **[00:08] Yo:** va?
+- **[00:08] Yo:** ¿Y ahí para hacer ahí para hacer sándwich?
+- **[00:08] Yo:** Abajo hay arepas también.
+- **[00:09] Yo:** No.
+- **[00:09] Yo:** Cero cero dos? No, no comia.
+- **[00:09] Participante:** Listo.
+- **[00:09] Participante:** Bueno, honrando el tiempo de ustedes,
+- **[00:09] Participante:** presentes y puntuales, vamos a darle inicio a esta sesión. Con el permiso de todos ustedes, voy a iniciar
+- **[00:09] Participante:** la grabación.
+- **[00:09] Participante:** This meeting is being recorded.
+- **[00:09] Participante:** Para que iniciemos ahorita así formalmente. Bueno.
+- **[00:09] Participante:** Bienvenidos a todos al a este curso de arquitectura de
+- **[00:09] Participante:** e hiperautomatización en procesos.
+- **[00:09] Participante:** Mi nombre es Julio Gómez, creo que veo algunas caras conocidas.
+- **[00:09] Participante:** Algunos los tuve anterior, el semestre pasado en introducción a Power BI.
+- **[00:09] Participante:** Algunos me acuerdo por ahí de sus nombres, a otros no tanto. Y
+- **[00:09] Participante:** es para mí un honor acompañarlos durante
+- **[00:09] Participante:** seis semanas, este curso específicamente en temas
+- **[00:09] Participante:** tan de tendencia como lo es la automatización.
+- **[00:09] Yo:** Ay.
+- **[00:09] Participante:** ¿Listo? De profesión, ingeniero industrial,
+- **[00:10] Participante:** Tengo una especialización en analítica, aplicada a los negocios.
+- **[00:10] Participante:** Tengo un magister en ciencia de datos,
+- **[00:10] Participante:** Actualmente soy profesor tiempo completo del departamento de industrias sostenibles,
+- **[00:10] Participante:** y mi foco es todo lo relacionado a procesos, automatización,
+- **[00:10] Participante:** y todo el tema de analítica sobre los procesos.
+- **[00:10] Participante:** Llevo más o menos siete años
+- **[00:10] Participante:** vengo del sector financiero, hace un año apenas estoy como profesor tiempo completo,
+- **[00:10] Participante:** Sí era profesor desde antes, pero vengo del sector financiero específicamente
+- **[00:10] Participante:** y mi rol era el de liderar el centro de excelencia
+- **[00:10] Participante:** de automatización del banco. Para contarle un poco,
+- **[00:10] Participante:** ¿qué hace un centro de excelencia? Y, bueno, mentiras, antes de contarle un poco,
+- **[00:10] Participante:** preguntarles, ¿han escuchado qué es un centro de excelencia?
+- **[00:10] Participante:** Automatización específicamente?
+- **[00:10] Participante:** No, señor.
+- **[00:10] Participante:** No. ¿Pagüero? No, señor. No, no, todavía no. Todavía no. Listo. Entonces, temas nuevos que vamos a estar escuchando, temas que, de ahora en adelante, creo que se van a volver un foco y van a ser una necesidad de todo lo que vamos a estar viendo dentro de las compañías de cada uno, ¿listo? Entonces, el centro de excelencia como tal, un puente para todos los desarrollos internos que ha el banco. Teníamos core muy complejos, muy pesados, nuestra función como tal era solventar todas esas necesidades latentes y esas necesidades que iban saliendo en el día a día de la empresa.
+- **[00:11] Participante:** ¿Listo? Entonces, eso es lo que hacía mi equipo en ese momento,
+- **[00:11] Participante:** Continué con Iceci, como les mencionaba, a nivel de consultorías, a nivel
+- **[00:11] Participante:** de educación, y dentro de las consultorías me dedico precisamente a esto.
+- **[00:11] Participante:** A diseñar gobiernos, a diseñar centros de excelencia,
+- **[00:11] Participante:** a construir sistemas y específicamente a generar soluciones digitales para los negocios.
+- **[00:11] Participante:** Entonces, superbienvenidos a este curso, superbienvenidos con todas sus ideas,
+- **[00:11] Participante:** La idea de este curso es que todos aportemos, que todos se lleven algo de este curso.
+- **[00:11] Participante:** Para darles
+- **[00:12] Participante:** una entrada
+- **[00:12] Participante:** como ustedes lo saben, y espero que lo sepan, la universidad
+- **[00:12] Participante:** a cada uno le asigna una licencia de Microsoft.
+- **[00:12] Participante:** ¿Listo?
+- **[00:12] Participante:** De aquí, ¿cuántos usan Microsoft, de pronto, en sus compañías?
+- **[00:12] Participante:** No, manito arriba, de pronto, les agradezco.
+- **[00:12] Participante:** Gustavo, Fabio, Layla,
+- **[00:12] Participante:** Alejandro, Natalia, Daniela,
+- **[00:12] Participante:** Gabriela,
+- **[00:12] Participante:** Roberto, Jairo,
+- **[00:12] Participante:** No, Rodrigo. Perdón.
+- **[00:12] Participante:** ¿Cómo me decías, Diego, perdón? Me preguntas quién no, más bien.
+- **[00:12] Yo:** Mañana
+- **[00:12] Participante:** La pregunta es quién no, y gracias por esa por esa respuesta.
+- **[00:12] Participante:** Contarle un poco,
+- **[00:12] Participante:** señor. Una consulta, entonces, un centro de excelencia de automatización
+- **[00:12] Participante:** para entender un poco más, es evitar que
+- **[00:12] Participante:** haya, digamos, esa
+- **[00:12] Participante:** en temas de que
+- **[00:12] Participante:** cada área quiere hacer su cosita y y no sé,
+- **[00:13] Participante:** conversa con otra, digamos, con un área central corporativa,
+- **[00:13] Participante:** que puede tener, digamos, la estrategia a nivel de TI,
+- **[00:13] Participante:** sino que cada uno quiere hacer desarrollos de formas personalizados, eso es
+- **[00:13] Participante:** más o menos? Más o menos es mitigar eso que tú me estás diciendo.
+- **[00:13] Participante:** Ya. Precisamente el centro de excelencia El trabajo. Eso.
+- **[00:13] Participante:** Es evitar que todo se me convierta en una bola de nieve que está creciendo.
+- **[00:13] Participante:** Ok.
+- **[00:13] Participante:** Que por el chat, ¿quién fue que me dijo que no? ¿Felipe?
+- **[00:13] Participante:** Felipe, consulta,
+- **[00:13] Participante:** Primero, ¿de qué organización vienes?
+- **[00:13] Participante:** Hola, profe, buenas noches.
+- **[00:13] Participante:** Yo trabajo para varias empresas en en Estados Unidos.
+- **[00:13] Yo:** Afortunadamente,
+- **[00:13] Participante:** Un grupo que se llama grupo convierte más, pero nosotros utilizamos, por ejemplo, Slack,
+- **[00:13] Yo:** mejor de
+- **[00:13] Participante:** digamos, para comunicación Slack, para
+- **[00:13] Participante:** temas de tarea clic app, automatización,
+- **[00:13] Participante:** Pero, como es una agencia, entonces trabajan muchas herramientas como Hazpat, bueno,
+- **[00:13] Participante:** Herramientas aisladas.
+- **[00:14] Participante:** Aisladas, así es, ajá. Listo, súper.
+- **[00:14] Participante:** Por acá también teníamos a Santiago,
+- **[00:14] Participante:** Santiago, consulta, ¿de qué organización vienes y qué usan?
+- **[00:14] Participante:** Hola, profe, buenas noches. Yo vengo de
+- **[00:14] Participante:** de Yagua. Yagua es como una entidad en alcaldía de Cali.
+- **[00:14] Participante:** Ajá. Nosotros nos manejamos, la verdad, por
+- **[00:14] Participante:** Google Drive y correos, o sea, como que no tenemos así
+- **[00:14] Participante:** una una plataforma
+- **[00:14] Participante:** para
+- **[00:14] Participante:** para para estos, pues, como para estos temas Para centralizar información.
+- **[00:14] Participante:** ¿Listo?
+- **[00:14] Participante:** Para que lo sepan, ustedes, luego de que se gradúen,
+- **[00:14] Participante:** generalmente, creo que pasa como con pregrado, las cuentas quedan habilitadas.
+- **[00:14] Participante:** ¿Listo? Entonces, van a poder seguir haciendo uso de todo lo que vamos a ir aprendiendo acá.
+- **[00:14] Participante:** Este curso va a estar enfocado en Microsoft. Microsoft, y, como le decía ahorita a Diego, está aproximadamente en el noventa por ciento de las compañías.
+- **[00:14] Participante:** Entonces, sí es un buen elemento, precisamente porque nos brinda una
+- **[00:15] Participante:** un ecosistema que parte de todas las herramientas conocidas que nosotros tenemos.
+- **[00:15] Participante:** Adicionalmente a eso, en este curso vamos a estar explorando otras herramientas.
+- **[00:15] Participante:** Otras herramientas conocidas como la suite de Power Platform.
+- **[00:15] Participante:** ¿Listo?
+- **[00:15] Participante:** ¿Alguno le ha sonado de pronto por ahí?
+- **[00:15] Participante:** ¿No? Mejor.
+- **[00:15] Participante:** No, tampoco. Temas nuevos, para que le saquemos
+- **[00:15] Participante:** provecho, vamos a estar trabajando muy de cerca con agentes, con copilotos que vamos a ir construyendo,
+- **[00:15] Participante:** La idea es que esta clase sea muy dinámica, la idea es que ustedes se lleven muchos elementos a su
+- **[00:15] Participante:** a este curso, y que precisamente puedan aplicarlos en cada una de sus organizaciones.
+- **[00:15] Participante:** Entonces, sí es importante, de hecho, que iniciemos con este curso,
+- **[00:15] Participante:** parto de que ustedes ya todos se conocen,
+- **[00:15] Participante:** qué pena con ustedes, yo sé que todos ustedes se conocen, ya está el tercer semestre, entonces,
+- **[00:15] Participante:** ya creo que están curtidos de las presentaciones. Yo iré conociéndolos
+- **[00:15] Participante:** a medida que vayamos pasando estas seis semanas, y sé que en el transcurso de este tiempo
+- **[00:15] Participante:** no solo van a ser estas dos horas sincrónicas cada semana,
+- **[00:16] Participante:** sino que lo más seguro es que ahorita que les dé mi contacto y empecemos a ver tantas cosas,
+- **[00:16] Participante:** les vayan a surgir dudas. Entonces, vamos a seguir conociéndonos,
+- **[00:16] Participante:** superchévere, mi contacto va a estar para ustedes, para lo que necesiten. Trabajo
+- **[00:16] Participante:** para la clase y trabajo fuera de la clase, superbienvenido para apoyarlos.
+- **[00:16] Participante:** Diego. Sí, profe, mencionaste que el sector financiero, pero no me
+- **[00:16] Participante:** qué entidad, en qué banco tenían este tema de descentralización.
+- **[00:16] Participante:** Anteriormente trabajaba para Banco Unión,
+- **[00:16] Participante:** lo que antiguamente era giros y finanzas.
+- **[00:16] Participante:** Posteriormente, cuando llego a la universidad, seguí con la línea
+- **[00:16] Participante:** bancaria trabajando para ACH en este momento, alianza fiduciaria,
+- **[00:16] Participante:** doble u.
+- **[00:16] Participante:** Ok.
+- **[00:16] Participante:** Sí me he movido bastante por el tema del sector banca, ha sido como el fuerte por el que
+- **[00:16] Participante:** he tocado temas de sistemas legados,
+- **[00:16] Yo:** asi.
+- **[00:16] Participante:** me han dolido mucho, y tema de muchos otros sistemas que han ido evolucionando.
+- **[00:16] Participante:** ¿Listo? Paréntesis, vamos a tener
+- **[00:16] Participante:** también del sector banca a una persona superimportante,
+- **[00:17] Participante:** una líder en temas de automatización e inteligencia artificial, en
+- **[00:17] Participante:** más adelante les diré, creo que la quinta clase viene directamente de Neki y nos va a estar
+- **[00:17] Participante:** les va a dar una masterclass sobre todas esas nuevas tendencias que hace una empresa tan rápida
+- **[00:17] Participante:** como Nike. ¿Listo? En este momento, que Neki se está despegando de
+- **[00:17] Participante:** lo que es Bancolombia, está en su paso todavía dentro de
+- **[00:17] Participante:** de ciber, que es el gran grupo que que los cobija, y nos va a estar contando un poco cómo la
+- **[00:17] Participante:** automatización está de frente y está transversal a todos estos procesos que estamos haciendo.
+- **[00:17] Participante:** También muchos temas relacionados sobre eso, ¿listo?
+- **[00:17] Participante:** Pregunta, ¿ya todos accedieron a Canvas?
+- **[00:17] Participante:** ¿Sí?
+- **[00:17] Participante:** Perfecto. Sí,
+- **[00:17] Participante:** Listo.
+- **[00:17] Participante:** ¿Cómo vamos a trabajar Canvas? A medida que vayamos
+- **[00:17] Participante:** pasando las semanas, les voy a ir habilitando cada una de las semanas, ¿listo?
+- **[00:17] Participante:** Dentro de cada semana van a encontrar generalmente o lo
+- **[00:17] Participante:** más seguro es información a través de una guía. Y algunos videos que les iré montando, ¿listo?
+- **[00:18] Participante:** La guía, en este momento, venga, les comparto un momento, para que lo tengan en cuenta,
+- **[00:18] Participante:** Listo, están viendo mi pantalla.
+- **[00:18] Participante:** La Guía de la semana uno la van a encontrar aquí directamente,
+- **[00:18] Participante:** ¿listo? Aquí la pueden descargar directamente.
+- **[00:18] Participante:** Que es
+- **[00:18] Participante:** el elemento que vamos a usar cada clase, precisamente para llevar un hilo conductor de todo lo que estamos haciendo.
+- **[00:18] Participante:** ¿Listo?
+- **[00:18] Participante:** ¿Cuánto llegamos ahorita? Diecisiete personas. Perfecto.
+- **[00:18] Participante:** Listo. Esa guía los llevará acá.
+- **[00:18] Participante:** Dentro del curso vamos a tener cuatro entregables. Los cuatro entregables son
+- **[00:18] Participante:** incrementales. La idea es que generemos, a partir de hoy, una idea
+- **[00:18] Participante:** o una necesidad que tengamos. Me imagino que ustedes ya vienen trabajando en varios grupos,
+- **[00:19] Participante:** creería yo. ¿Es así, no es así?
+- **[00:19] Participante:** Sí.
+- **[00:19] Participante:** Sí, no. Así es. Pero
+- **[00:19] Participante:** es decir, es toda la toda la matriz, entonces, ya para
+- **[00:19] Yo:** De atrás.
+- **[00:19] Participante:** retornar al trabajo en en grupo, es que veníamos de unas clases un poco más de
+- **[00:19] Yo:** Escondidas
+- **[00:19] Participante:** individuales, y los grupos ya, digamos, más
+- **[00:19] Yo:** agachate agachate.
+- **[00:19] Participante:** enfocados a los
+- **[00:19] Participante:** a los trabajos grados A los proyectos de grado.
+- **[00:19] Participante:** Listo.
+- **[00:19] Participante:** Es bienvenido, o sea, no tengo problema. Si quieren trabajar individuales y trabajar
+- **[00:19] Yo:** Oreo
+- **[00:19] Participante:** algo muy específico de su empresa, si trabajan con personas de su misma empresa, chévere, si trabajan con personas de diferentes empresas, bienvenido. Ahí sí les doy toda libertad para que ustedes escojan cuál va a ser ese proyecto que quieren trabajar. Igual ahorita hablaré un poco de qué es lo que es ese proyecto más adelante. Todavía no lo sé ¿depatos? ¿De cuatro personas? ¿De cuatro personas? Máximo tres, eso sí es lo único que les pido, máximo tres personas por grupo. Es lo único que les pido. ¿Listo? Igual, más adelante vamos a hablar un poco de de ese entregable. Una vez finalicemos esto. Como les decía, siempre vamos a estar guiados con este elemento visual, esta es nuestra guía de trabajo durante cada una de las
+- **[00:19] Yo:** Buenas, tú digas
+- **[00:20] Participante:** clases, y la guía va a contener muchos elementos desde la parte táctica estratégica.
+- **[00:20] Participante:** Para que lo tengan en cuenta. Adicionalmente a eso,
+- **[00:20] Yo:** Como que movemos
+- **[00:20] Participante:** cada semana, a medida que vayamos viendo algunas herramientas, le
+- **[00:20] Participante:** voy a dejar videos introductorios, videos opcionales de cómo utilizar
+- **[00:20] Yo:** Doctors Cascajal.
+- **[00:20] Participante:** herramientas dentro del ecosistema Microsoft.
+- **[00:20] Participante:** ¿Listo? Entonces, ya va a ser algo mucho más operativo para que le guste
+- **[00:20] Yo:** Son tres kilos
+- **[00:20] Participante:** cacharrear, el que le guste mapear, que le guste crear, que le guste generar,
+- **[00:20] Participante:** vamos a tener esas herramientas ahí, esos videítos que nos van
+- **[00:20] Participante:** a permitir solucionar algunos problemas específicos
+- **[00:20] Participante:** que vamos a ir desarrollando, y que finalmente ustedes van a poder extrapolar según la necesidad que tienen a su
+- **[00:20] Yo:** ¿Cómo...?
+- **[00:20] Yo:** Contra contra el trancón.
+- **[00:20] Participante:** empresas, ¿listo?, para que lo tengan en cuenta. Nuevamente, estos videos son
+- **[00:20] Participante:** esta parte técnica es totalmente opcional, al que le gusta,
+- **[00:20] Participante:** pero para que la aproveche al máximo con esta suite que vamos a tener, ya que los tiempos, pues no son
+- **[00:21] Participante:** tan prolongados en esta clase, ¿listo?
+- **[00:21] Yo:** ¿Estás consiguiendo
+- **[00:21] Yo:** No, es que hay unas bodegas.
+- **[00:21] Participante:** Bueno.
+- **[00:21] Participante:** Antes de entrar en materia, ¿ya todos tienen su guía descargada?
+- **[00:21] Yo:** Oficinas de tres bodegas.
+- **[00:21] Yo:** ¿Ya?
+- **[00:21] Participante:** Para que me sigan.
+- **[00:21] Yo:** Son once minutos.
+- **[00:21] Participante:** No, profe, discúlpeme, le hago una consulta. Estoy en semana uno,
+- **[00:21] Participante:** pero no encuentro dónde descargo la guía.
+- **[00:21] Yo:** Bueno, que vive acá,
+- **[00:21] Participante:** Claro que sí, Laila, ya te muestro. Ahí estás viendo mi pantalla, ¿cierto?
+- **[00:21] Participante:** Sí, señora.
+- **[00:21] Participante:** Aquí, en actividades vas a encontrar este
+- **[00:21] Participante:** loguito, el de descarga.
+- **[00:21] Participante:** Ese te debe generar este archivo HTML.
+- **[00:21] Yo:** Sí, en la
+- **[00:21] Participante:** Listo, gracias, profe.
+- **[00:21] Yo:** la mañana, viernes, son como once
+- **[00:21] Participante:** ¿Listo? Súper.
+- **[00:21] Yo:** a esta hora ya regresando.
+- **[00:21] Participante:** El día de hoy vamos a comenzar con todo el tema de arquitectura de negocio y fundamentos
+- **[00:21] Participante:** sobre la parte de automatización, ¿listo? Antes de iniciar,
+- **[00:21] Participante:** de lleno en materia, quiero pedirle un favor grandísimo.
+- **[00:21] Participante:** Esto va a ser un insumo
+- **[00:21] Participante:** gigante para todo lo que vamos a hacer de aquí en adelante estas seis semanas.
+- **[00:22] Participante:** Sí necesito
+- **[00:22] Participante:** en la parte de abajo van a encontrar esta encuesta de activación.
+- **[00:22] Participante:** Por favor, ingresen
+- **[00:22] Participante:** a esa encuesta. Son dos preguntas muy sencillas.
+- **[00:22] Yo:** ¿Ya regresa el
+- **[00:22] Participante:** Tómense dos minuticos para diligenciarlas, que esto va a ser un insumo, créanme,
+- **[00:22] Yo:** tres
+- **[00:22] Yo:** y el
+- **[00:22] Participante:** gigantesco para todo lo que vamos a tener de aquí en la era.
+- **[00:22] Yo:** No, trece es jueves.
+- **[00:22] Participante:** Mientras yo aquí estoy,
+- **[00:22] Yo:** Pues sí, está bueno.
+- **[00:22] Participante:** revisando,
+- **[00:22] Participante:** cuánto somos
+- **[00:22] Yo:** Largo? Si.
+- **[00:22] Participante:** Diecisiete
+- **[00:22] Participante:** Vamos revisando cómo van llegando las
+- **[00:22] Participante:** las respuestas, ¿listo? ¿Todos pudieron acceder?
+- **[00:22] Yo:** ¿Y la mamá iba a exponer o no?
+- **[00:22] Participante:** Un minutito, profe, un minutito, perfecto. Está cargando el Ford. Sí, ya.
+- **[00:22] Yo:** No,
+- **[00:22] Yo:** Verlo rapidito.
+- **[00:22] Participante:** Un minuto, profe, un minuto.
+- **[00:22] Participante:** Jairo, perdón, no te escuché. ¿Me dice que no te estaba cargando?
+- **[00:22] Participante:** Sí, el forks no me carga, también, no sé si era
+- **[00:22] Participante:** sé si explica, no no entraste en encuesta, ¿verdad?
+- **[00:22] Participante:** Sí, en encuesta de activación expectativa le das dos clic y no ¿Aquí?
+- **[00:22] Participante:** ¿Le dan clic? Jairo, dale dale abrir en nueva pestaña.
+- **[00:23] Participante:** Sea, le doble clic ahí. Una pestaña nueva, lo
+- **[00:23] Participante:** Y, si no, ya se las comparto en el chat, no hay problema.
+- **[00:23] Participante:** Ahí, con el link directo, debería dejarlos acceder.
+- **[00:23] Participante:** ¿Listo?
+- **[00:23] Participante:** Sí, ahí sí, gracias.
+- **[00:23] Yo:** Y varias por
+- **[00:23] Participante:** Perfecto.
+- **[00:23] Yo:** Gabnono fue, Ramón, sí fue, sí fue, no así fue.
+- **[00:23] Yo:** Orejona.
+- **[00:23] Yo:** Servicio,
+- **[00:24] Yo:** Y salió,
+- **[00:24] Yo:** Então, ah.
+- **[00:24] Yo:** Dijo galleta.
+- **[00:24] Yo:** Galleta, la
+- **[00:24] Yo:** Apenas la busca.
+- **[00:24] Participante:** Profesor, una pregunta.
+- **[00:24] Participante:** Con respecto a la pregunta dos, ¿está hablando de un caso de negocio que vamos a elegir hoy
+- **[00:24] Yo:** Bomba.
+- **[00:24] Participante:** Correcto.
+- **[00:25] Participante:** Pero, bueno, digamos que yo no he elegido ningún caso de negocio ahorita.
+- **[00:25] Participante:** ¿Cómo cómo cómo respondemos a esa pregunta? Es hoy,
+- **[00:25] Participante:** pero en el transcurso del tiempo. A medida que vayamos viendo, pues,
+- **[00:25] Participante:** ahí dice, pensando en un caso real,
+- **[00:25] Participante:** ¿cierto? Puede ser un caso que en este momento, porque algunos ya lo tienen,
+- **[00:25] Participante:** identificado, si tú no lo tienes identificado, no pasa nada,
+- **[00:25] Participante:** Puedes también generar algunos, no uno no más, pero algunos que
+- **[00:25] Yo:** Y la otra, pues, con las ocho, esta bien.
+- **[00:25] Participante:** sí te estén frustrando o que te preocupen.
+- **[00:25] Participante:** ¿Listo?
+- **[00:25] Yo:** Ocho y mes, ocho y mes, bien todavía. Si no, pues, el número no que cierra la nueva.
+- **[00:25] Yo:** Igual, la tiempita se me hizo cara, la otra vez compro algo ahí.
+- **[00:25] Yo:** ¿La tiempita?
+- **[00:25] Yo:** No, en la tienda, no, en el supermercado, papi, en el mercado. ¿Al mercado?
+- **[00:25] Yo:** O el club, no sé.
+- **[00:26] Yo:** Sí, cierra a las nueve.
+- **[00:26] Participante:** Profes, qué pena, por favor. ¿Me podemos
+- **[00:26] Participante:** Pena. Por favor, ¿me puede mostrar otra vez cómo llegar a la encuesta?
+- **[00:26] Participante:** Claro que sí.
+- **[00:26] Participante:** En nuestra guía, en el módulo de activación, vas a encontrar encuesta, de activación. Ahí le das clic, y te debería abrir directamente el Microsoft Forms.
+- **[00:26] Yo:** Hi.
+- **[00:26] Participante:** Gracias.
+- **[00:26] Yo:** Ah, sí, a me lo mandaron. A mí no me lo mandaron.
+- **[00:26] Participante:** Bueno, señor.
+- **[00:26] Participante:** Ahí ya tenemos ocho respuestas.
+- **[00:26] Yo:** Ah,
+- **[00:26] Participante:** Un un minutico más.
+- **[00:26] Participante:** Igual, pues, sigan dando ahí sus respuestas para continuar.
+- **[00:27] Yo:** El apartamento de nosotros,
+- **[00:27] Participante:** Listo.
+- **[00:27] Yo:** que no la pico acá,
+- **[00:27] Participante:** Ya tenemos una, diez respuestas. Igual, para los que falten, sigan llenándola ahí, me van escuchando mientras
+- **[00:27] Yo:** Que
+- **[00:27] Yo:** Bueno, que para
+- **[00:27] Participante:** pero la idea es que vayamos avanzando.
+- **[00:27] Participante:** Nosotros vamos a partir de una premisa principal, y es que
+- **[00:27] Yo:** usted.
+- **[00:27] Yo:** Ese desvío
+- **[00:27] Participante:** creo que para nadie es un secreto que al dos mil veintiséis, veintisiete de agosto,
+- **[00:27] Yo:** Las
+- **[00:27] Participante:** todo el mundo y todas las personas estamos hablando de algo que dicen transformación digital.
+- **[00:27] Yo:** Si yo salgo de lo directo para acá,
+- **[00:27] Participante:** ¿Cierto? So, ese es el elemento principal que estamos poniendo sobre las empresas,
+- **[00:27] Yo:** cincuenta minutos.
+- **[00:27] Participante:** vemos áreas definidas de transformación digital,
+- **[00:27] Participante:** ya vemos cargos definidos a la transformación digital,
+- **[00:27] Yo:** Ponle que voy a las seis,
+- **[00:27] Participante:** y dentro de la transformación digital hay un elemento que se conoce como la automatización,
+- **[00:27] Yo:** salgo por el río de Chapao, un día que estamos
+- **[00:27] Participante:** o hiperautomatización. Ya voy a hablar un poquito del concepto técnico y de dónde nace
+- **[00:28] Yo:** remoto.
+- **[00:28] Yo:** Y eso que, pues No, pues,
+- **[00:28] Participante:** el término de hiperautomatización. ¿Qué lo que va a buscar? Es precisamente lograr la
+- **[00:28] Yo:** número cuarenta,
+- **[00:28] Participante:** conexión o la orquestación de ciertos elementos automáticos, valga la redundancia,
+- **[00:28] Yo:** Yo me mudo cuarenta, le Si me queda
+- **[00:28] Yo:** autopista,
+- **[00:28] Participante:** faciliten las labores operativas dentro de una compañía.
+- **[00:28] Yo:** coge la quinta cien y ya.
+- **[00:28] Yo:** Y va derecho hasta aquí.
+- **[00:28] Yo:** La cuarenta y
+- **[00:28] Participante:** Enfocados en ese punto, vamos a tener claro, vamos a entender
+- **[00:28] Yo:** Pero desde allá, pues, porque como cogísimo en boluda,
+- **[00:28] Participante:** la transformación digital y que Perfecto.
+- **[00:28] Yo:** Yo gasto cuarenta minutos
+- **[00:28] Participante:** Creo que no estás grabando o no sé.
+- **[00:28] Yo:** de cogeste y cuarenta, acá, y de pronto es que lo atrasan.
+- **[00:28] Participante:** Díganme. Sí, a mí sí me aparece que está Ya estoy grabando.
+- **[00:28] Yo:** Te cuento. Ahí puedes ir para acá, pon diez.
+- **[00:28] Participante:** Listo.
+- **[00:28] Participante:** Gracias.
+- **[00:28] Participante:** Como les decía, la transformación digital va a partir
+- **[00:28] Yo:** De aquí, a ustedes, ahí, no, al menos, ahí.
+- **[00:28] Participante:** de tres elementos que se conocen como personas, procesos y tecnología.
+- **[00:28] Participante:** La conexión bien orquestada de esos tres elementos son las que van a generar
+- **[00:28] Participante:** esa correcta transformación.
+- **[00:28] Participante:** Entonces, nosotros vamos a partir de ciertos elementos que tenemos que entender a nivel organizacional
+- **[00:28] Participante:** y a nivel funcional de las compañías para poder empezar a entender cuál es
+- **[00:29] Participante:** ciclo de la automatización dentro de cada compañía.
+- **[00:29] Yo:** Es que cuando chebas a mí, esto es tráfico,
+- **[00:29] Participante:** ¿Listo? El ciclo de la automatización es un ciclo convencional
+- **[00:29] Yo:** ustedes llegan
+- **[00:29] Participante:** generalmente se divide en cinco etapas, cinco etapas a nivel operativo. Ya vamos a ver cómo van conectando dentro del quehacer de cada empresa. Pero cuando hablamos a nivel operativo, vamos a entender que yo siempre parto de un análisis prosigo con un diseño, continúo con una construcción,
+- **[00:29] Yo:** Le puedo decir, porque
+- **[00:29] Yo:** Sí, no se
+- **[00:29] Participante:** parto a un elemento de validación y finalizo con una puesta en producción.
+- **[00:29] Participante:** ¿Listo? Esas van a ser las cinco fases estándar con las cuales se trabajan
+- **[00:29] Participante:** todos estos elementos de automatización. Sin embargo,
+- **[00:29] Yo:** solo va a
+- **[00:29] Participante:** yo hago la pregunta,
+- **[00:29] Participante:** y creo que esto, pues, no es nuevo, creería yo que en todas las en la
+- **[00:29] Yo:** de las
+- **[00:29] Participante:** de ustedes generalmente se está hablando de automatización, pero por eso hago la siguiente pregunta.
+- **[00:29] Yo:** No lo he comprado, pero por eso te recuerdo, ¿se acuerda de la marca
+- **[00:29] Participante:** ¿Por qué muchas automatizaciones funcionan técnicamente
+- **[00:29] Participante:** pero fracasan en generar valor o terminar generando una deuda técnica?
+- **[00:29] Yo:** También los
+- **[00:29] Yo:** nosotros
+- **[00:29] Participante:** ¿Qué se les viene a la cabeza?
+- **[00:29] Yo:** somos parecidos, unos tecitos de
+- **[00:29] Participante:** No hay apropiación.
+- **[00:29] Participante:** De la solución.
+- **[00:29] Yo:** El tarro así de cuatro.
+- **[00:30] Participante:** Por ejemplo, Gustavo,
+- **[00:30] Yo:** Cincuenta gramos. No.
+- **[00:30] Participante:** Pues, normalmente, la gente no la adopta, se queda con su
+- **[00:30] Participante:** se queda con lo convencional, con lo con lo
+- **[00:30] Participante:** con las cosas como siempre las ha hecho.
+- **[00:30] Participante:** Entonces, no apropia esas nuevas tecnologías o esa nueva forma de hacer las cosas.
+- **[00:30] Participante:** Por eso no no crean valor.
+- **[00:30] Participante:** ¿Sí? Normalmente hay soluciones que traen buenas prácticas
+- **[00:30] Yo:** Hola, mi cuido, mi bujo.
+- **[00:30] Participante:** y
+- **[00:30] Participante:** que no las no las aceptamos, ¿no?
+- **[00:30] Participante:** Nos quedamos con, yo siempre lo he hecho en Excel,
+- **[00:30] Yo:** Bacano.
+- **[00:30] Yo:** Bueno, ¿ya han visto unos momentos?
+- **[00:30] Participante:** ¿cierto? No me quiten de aquí, que así lo he hecho toda la vida,
+- **[00:30] Participante:** y, entonces, de ahí partimos con varios elementos. Gracias, Gustavo. Felipe.
+- **[00:30] Participante:** Profesor Julio, yo considero que también, adicional a eso, a lo que
+- **[00:30] Participante:** comenta el compañero, es que las empresas o algunas algunas personas
+- **[00:30] Participante:** utilizan como que la, por la necesidad de utilizar herramientas.
+- **[00:30] Yo:** Se llenó uno, ¿verdad?
+- **[00:30] Participante:** Por la necesidad de utilizar herramientas, por creer que, al no usarlas, están
+- **[00:30] Yo:** Podrías sector, no creo,
+- **[00:30] Participante:** no están a la vanguardia. Y y creo que es un un tema, incluso,
+- **[00:31] Yo:** Entonces, lo vamos a hacer para
+- **[00:31] Participante:** primero, saber
+- **[00:31] Participante:** qué procesos tiene documentados. O sea, es como más más
+- **[00:31] Yo:** Quiere decir que
+- **[00:31] Participante:** todo eso, fracasan técnicamente, es porque ni siquiera lo tienen claro como
+- **[00:31] Yo:** una pura otra es pura.
+- **[00:31] Participante:** cómo lo hacían y ya lo quieren automatizar, y genera una una
+- **[00:31] Yo:** Pero aquí estaría más cerca de la la
+- **[00:31] Participante:** una deuda técnica. Considero que una de las de las cosas sería por eso.
+- **[00:31] Yo:** Clari más cerca, aparte,
+- **[00:31] Participante:** Muy bien. Y eso es preciso, y quiero que siempre se lleven esto.
+- **[00:31] Participante:** Cuando yo automatizo el error, lo único que hago es multiplicar el error.
+- **[00:31] Participante:** La automatización me da velocidad, y entonces esa es la velocidad con la que genero errores.
+- **[00:31] Participante:** Siempre hay que tener mucho cuidado con eso. Melissa,
+- **[00:31] Yo:** Porque su cachorro le da a mojarse.
+- **[00:31] Participante:** Ahora, Pues, de hecho, fue lo que puse en la
+- **[00:31] Yo:** Steve
+- **[00:31] Participante:** respuesta a la pregunta dos de la encuesta.
+- **[00:31] Participante:** Que como que qué te te frustra, y es que
+- **[00:31] Yo:** No, pero es que aquí no es
+- **[00:31] Participante:** se generan, pues, se han generado unas soluciones, pero no se construyeron
+- **[00:31] Yo:** o sea, manejar hasta el año.
+- **[00:31] Participante:** con el cliente final. Entonces, no se les está dando utilidad porque
+- **[00:31] Yo:** Afortunadamente, por como que
+- **[00:31] Participante:** el cliente final dice,
+- **[00:31] Participante:** ¿y esto qué? O sea,
+- **[00:32] Yo:** nuevo para cascar,
+- **[00:32] Participante:** no no me escuchaste de un principio sobre lo que yo necesitaba, lo
+- **[00:32] Yo:** ahí aguanta la casa en
+- **[00:32] Yo:** pues digo,
+- **[00:32] Participante:** que yo esperaba, que esa vaina me solucionara,
+- **[00:32] Yo:** Ahí
+- **[00:32] Participante:** sino que la fueran construyendo
+- **[00:32] Participante:** los duros de tecnología en el IA, pero yo que soy el cliente que la va a usar,
+- **[00:32] Yo:** No por ahí, hay
+- **[00:32] Participante:** no me tuviste en cuenta.
+- **[00:32] Participante:** Y eso es la barrera, la primer barrera que yo tengo.
+- **[00:32] Yo:** tocaría, no, no, o sea, ahí toca
+- **[00:32] Yo:** tapada escuditas.
+- **[00:32] Participante:** Entonces, ahí es donde me doy cuenta de que todo ese esa inversión, todo lo que gasté,
+- **[00:32] Yo:** Puede.
+- **[00:32] Yo:** Pero déjame ver cómo
+- **[00:32] Participante:** por allá me compré las licencias de Copilot, y eso me costó un poco de plata,
+- **[00:32] Participante:** y vine aquí y las puse, y eso
+- **[00:32] Participante:** se quedó ahí.
+- **[00:32] Yo:** La
+- **[00:32] Participante:** ¿Cierto? Y ahorita eso lo que le llaman transformación digital, comprar licencias de Copilot todo mundo
+- **[00:32] Participante:** estamos haciendo transformación digital. Mucho cuidado con eso.
+- **[00:32] Yo:** ella siempre la
+- **[00:32] Participante:** ¿Qué me falta? Que no veo.
+- **[00:32] Participante:** Me perdieron aquí.
+- **[00:32] Participante:** Roberto. Rodrigo. Rodrigo, es que me perdieron se me perdieron aquí.
+- **[00:32] Yo:** al principio, de hecho, el el
+- **[00:32] Yo:** se me se me hace
+- **[00:32] Yo:** el equipo principal, por el
+- **[00:32] Participante:** La la pantalla. Se acabó esa madre Street, y no no no no supe cómo
+- **[00:32] Participante:** cómo cambiar el nombre. No, yo te diría, yo pensaría que demandado eso.
+- **[00:33] Yo:** es lo que te decía.
+- **[00:33] Yo:** Son las
+- **[00:33] Participante:** Que es
+- **[00:33] Yo:** del papá. ¿Sí ves? Por eso por eso es que
+- **[00:33] Participante:** digamos, cuando no hay, bueno, ahoritica dijeron un tema muy
+- **[00:33] Yo:** esta generación no no hacía más
+- **[00:33] Participante:** el no involucramiento de los interesados para bien
+- **[00:33] Participante:** o para mal,
+- **[00:33] Participante:** desde el inicio de los proyectos.
+- **[00:33] Participante:** Pero también, cuando hay falta de comunicaciones inadituadas,
+- **[00:33] Yo:** Es posible agregaras una pestañita de la
+- **[00:33] Yo:** una extensión.
+- **[00:33] Participante:** el por qué se va a hacer, el para qué se va a hacer,
+- **[00:33] Yo:** Sí, pero lo que funciona es que este foto es más pequeño, le pedimos nosotros otro.
+- **[00:33] Participante:** cuáles son los beneficios que se van a tener. Obviamente,
+- **[00:33] Yo:** Pensado es
+- **[00:33] Yo:** el lado mío y aparte de que sea el lado papá.
+- **[00:33] Participante:** alguien se va, para bien o para más, se va poder impactado.
+- **[00:33] Yo:** Justamente para estar disfrutando, ¿no? Ahí solo es para
+- **[00:33] Participante:** Los de para mal van a querer hacer, de alguna forma,
+- **[00:33] Participante:** poco de de de meeting, de de de ruido,
+- **[00:33] Participante:** en el proyecto.
+- **[00:33] Participante:** O porque no se consideraron también diseños
+- **[00:33] Yo:** Es que quiere un poquito más
+- **[00:33] Participante:** desde el levantamiento de las
+- **[00:33] Yo:** hay que leer un poquito más.
+- **[00:33] Participante:** de las necesidades de los usuarios finales.
+- **[00:33] Yo:** Poquito más, porque estoy opinando así nomás. No, en la
+- **[00:33] Participante:** Y eso
+- **[00:33] Participante:** lo que nos dice Rodrigo, por lo menos, es crítico. Nosotros tenemos que aprender que eso va a ser uno en las
+- **[00:34] Participante:** posteriores, a poder identificar y medir ese valor.
+- **[00:34] Participante:** Si yo identifico y mido ese valor,
+- **[00:34] Yo:** El otro control viene de
+- **[00:34] Participante:** en los diferentes niveles a los cuales estoy impactando, tengo un elemento ya
+- **[00:34] Yo:** otro control PIN.
+- **[00:34] Participante:** hechos y datos, de cómo presentar
+- **[00:34] Participante:** una automatización en este caso, en el caso de esta materia. Recuerde que aquí vamos a hablar
+- **[00:34] Yo:** No, lo que hemos visto es que sí es bueno que sea la de papá para
+- **[00:34] Participante:** netamente de automatizaciones, pero creo que ustedes dentro de la
+- **[00:34] Yo:** de parte de ahí de donde está la
+- **[00:34] Participante:** han visto que hay muchos otros tipos de soluciones digitales.
+- **[00:34] Yo:** que sea la lactancia se la dé el papá.
+- **[00:34] Participante:** Entonces, recuerden, aquí vamos a estar enfocados dentro de este tema,
+- **[00:34] Yo:** Pues,
+- **[00:34] Participante:** precisamente para bajar un poco ese alcance.
+- **[00:34] Participante:** Jairo. Ah, sí, profesor. Quizás alguna de las razones que
+- **[00:34] Yo:** Pues, ya, de la
+- **[00:34] Participante:** un esgrimil para, pues, para
+- **[00:34] Participante:** el por qué alguna PC no funciona esa automatización es que quizás
+- **[00:34] Participante:** no van direccionadas con la estrategia, ¿no? Algunas veces, quizá
+- **[00:34] Participante:** la estrategia va por un lado y las automatizaciones por otro lado, o
+- **[00:34] Yo:** Sí, pero sí, el ese corto ya puedo escuchar, es pequeño.
+- **[00:34] Participante:** se hacen por sílos, es decir, empieza un área y
+- **[00:34] Participante:** compra una licencia de ChatGPT, y otra área compra licencias de cloud, lo hacen, digamos, por
+- **[00:34] Yo:** Pues,
+- **[00:35] Participante:** por distintos caminos y no están orientados a través de la estrategia
+- **[00:35] Participante:** de la compañía. Entonces, quizás ese mismatch entre
+- **[00:35] Participante:** entre los, o y la estrategia puede ser también una una causante de estas
+- **[00:35] Yo:** Usted no tiene un descansadero, ¿no?
+- **[00:35] Participante:** estos problemas.
+- **[00:35] Participante:** Y eso pasa, les voy a decir,
+- **[00:35] Participante:** ahorita que que estoy como consultor con ICECI, pasa en el noventa por ciento de las empresas.
+- **[00:35] Yo:** Ahí, yo yo acá hoy compré huevos y esos son huevos, y solo esos, huevos.
+- **[00:35] Participante:** Desde arriba no se define esa estrategia correctamente,
+- **[00:35] Participante:** y yo entiendo, o sea, yo no culpo porque muchas
+- **[00:35] Yo:** Hágame un
+- **[00:35] Participante:** oficinas, muchas personas, pues intentan solucionar sus problemas.
+- **[00:35] Participante:** Pero no tienen esa guía técnica que es
+- **[00:35] Yo:** Pero
+- **[00:35] Participante:** justamente lo que yo les cuento que hacía con el centro de excelencia,
+- **[00:35] Participante:** esa guía operativa, ese modelo de operación adecuado, precisamente para no caer en los errores comunes que uno ya sabe, ya conoce y ya a desarrollar. Entonces, sí es muy importante que bajemos esa información, que definamos esa estructura, y por eso ahorita más adelante vamos a conocer cómo se identifica una arquitectura correcta de negocio vamos a identificar otros elementos asociados a algunas metodologías y algunos marcos de trabajo que seguramente han escuchado y que aquí vamos a afianzar desde la la automatización. Diego. Sí, profe, me uno un poco a lo que mencionaba Jairo, el sentido de que, y lo lo las
+- **[00:36] Yo:** Y échele alguito. ¿Qué cosa es que le ocupo? ¿Qué cito?
+- **[00:36] Yo:** Y jamón.
+- **[00:36] Participante:** ahorita, hay como tres ítems en el tema de transformación, personas
+- **[00:36] Participante:** tecnología y y y procesos,
+- **[00:36] Participante:** siempre se habla como que de un triangulito con esos tres ítems, y es muy importante, pues, luego, que
+- **[00:36] Participante:** mucho en otras clases donde en la mitad se habla de un cuarto elemento, que es la estrategia.
+- **[00:36] Yo:** Il renewal
+- **[00:36] Participante:** Sí, o sea, están esos tres, pero tiene que haber una estrategia, y dentro de eso esa encuesta que que pusiste
+- **[00:36] Yo:** creo que está cubierto, no podía. Pelú,
+- **[00:36] Participante:** ahí, a mí lo que me frustra es el tema de que no se encuentre una centralización de la información.
+- **[00:36] Yo:** Mañana comprueba su morra.
+- **[00:36] Participante:** Donde hay información, pues, regada en toda la compañía,
+- **[00:36] Participante:** esa centralización, pues, no no no no permite que
+- **[00:36] Yo:** Sí Mañana mañana mañana no se fue el día.
+- **[00:36] Participante:** todos tengan un mismo lenguaje en la compañía, digamos que lo que
+- **[00:36] Yo:** No, es que yo no se le hace, ya estoy una visita, me
+- **[00:36] Participante:** es que no se me habla del mismo idioma y unos utilizan una herramienta porque le funciona
+- **[00:36] Participante:** bien al área de compras, pero hay otra que le funciona bien al área de
+- **[00:36] Yo:** Eso es que que ya uno teniéndolo pasando a todo el tiempo, ya tiene
+- **[00:36] Participante:** legal, entonces, pues no hay un realmente un único lenguaje y,
+- **[00:36] Yo:** paisaje,
+- **[00:37] Participante:** no hay centralización de los datos. Entonces, creo que esas son las cosas que al final
+- **[00:37] Participante:** se tienen que corregir desde el momento uno, y el
+- **[00:37] Yo:** es el último que también me coincide con que estoy pasando la chamba, si no llego ni cero tal palinequí ni,
+- **[00:37] Participante:** tema también de que tiene que ir de la alta dirección y al acompañamiento a una
+- **[00:37] Yo:** Entonces,
+- **[00:37] Participante:** tecnológica, esto no es del área de innovación, sino que tiene que ser un tema que tiene que montar a toda la compañía.
+- **[00:37] Yo:** Hay tampoco cuadro.
+- **[00:37] Participante:** Es un tema transversal,
+- **[00:37] Participante:** Gracias, Diego. Es un tema transversal, y eso es lo que tenemos
+- **[00:37] Yo:** ¿Crees que esta
+- **[00:37] Participante:** entender cuáles van a ser esos momentos específicos con los que vamos a lograr
+- **[00:37] Yo:** Esta tecla, ¿sabes qué? ¿Ya no tiene? Ya se está poniendo así lo
+- **[00:37] Participante:** esa transversalidad, ¿listo? Entonces, recuerden, nosotros vamos a
+- **[00:37] Participante:** estar, esta es nuestra guía, la guía es interactiva, en algunos momentos, algunos elementos vamos a ir haciéndolos para que lo tengan en cuenta, luego hay algunos quizzes, algunas preguntas de activación, algunos elementos. Más adelante veremos algunas calculadoras, simuladores y demás. Asociados a estos elementos. Entonces, nosotros vamos a tener cinco aspectos específicos. Tanto a nivel técnico frente al valor, entender que la parte técnica ¿cierto?, si no tiene un comparativo o no tiene un sustento de valor, pues sencillamente no tiene toda la el el core principal para poder defender, esa necesidad frente a la compañía. Entonces, es un elemento crítico que nosotros vamos a a
+- **[00:37] Yo:** Empujaba a colgarlo del techo.
+- **[00:37] Yo:** Ok, colgar del techo, apagarlo es una
+- **[00:37] Yo:** Como éticas, pero
+- **[00:37] Yo:** ?Me puede ir
+- **[00:37] Yo:** sí, por eso.
+- **[00:37] Yo:** No, no sé.
+- **[00:37] Yo:** Sí.
+- **[00:37] Yo:** Ahí, preciso de mi lugar.
+- **[00:37] Yo:** Que presentar-me lá.
+- **[00:38] Yo:** Tema de streaming.
+- **[00:38] Participante:** a trabajar. Primero, que una automatización funcione desde lo técnico,
+- **[00:38] Participante:** no significa o no implica realmente que esté agregando valor.
+- **[00:38] Participante:** ¿Listo? Entonces, eso es lo primero que nosotros tenemos que entender.
+- **[00:38] Participante:** Vamos a tener un propósito real. Alguien que me decía, experiencia de usuario, no me acuerdo,
+- **[00:38] Participante:** fue la persona que me dijo. Experiencia y operación también es un elemento adicional.
+- **[00:38] Participante:** Vamos a hablar cómo afectar esa experiencia de usuario
+- **[00:38] Participante:** y específicamente porque cuando creamos las soluciones,
+- **[00:38] Participante:** pues, quién es el que las recibe y quién es el que las necesita precisamente
+- **[00:38] Participante:** va a ser nuestro usuario funcional o va a ser esa persona que nos va a dar todos los insights necesarios
+- **[00:38] Participante:** para construir en pro de
+- **[00:38] Yo:** Que va dejar a calentar ese carro que es de que lleva Laura con la
+- **[00:38] Participante:** Deuda técnica, un elemento infaltante en todas las compañías.
+- **[00:38] Participante:** Aquí quisiera decir que somos perfecto y no tenemos deuda técnica, pero que es
+- **[00:38] Participante:** Siempre vamos a tener una deuda técnica. Es muy difícil controlar estos elementos.
+- **[00:38] Yo:** Quando lo prendi il salo?
+- **[00:38] Participante:** Gobernanza y alineación,
+- **[00:39] Participante:** para hacerles un adelanto, siempre vamos a tener
+- **[00:39] Participante:** faltante un marco que conecte todo. Y esto no es un modelo nuevo,
+- **[00:39] Yo:** El sábado... Ah, no, es que
+- **[00:39] Yo:** No, ella fue él.
+- **[00:39] Participante:** ya estos marcos son unos marcos que llevan años en el mercado
+- **[00:39] Yo:** Domingo, ya, a la
+- **[00:39] Yo:** Bueno, igual llama a la ¿Cómo se llama?
+- **[00:39] Participante:** y aun así todavía son difíciles de implementar. Porque la casuística,
+- **[00:39] Participante:** los elementos diferenciadores de cada compañía
+- **[00:39] Participante:** lo que van a hacer es generar esas variantes y esos elementos específicamente casi que en el tema de las personas y en la estrategia, lo que nos van a dificultar la transformación como nosotros la conocemos en nuestro día a día. De los tres ejes que ahorita nos mencionaba Diego en ese triángulo,
+- **[00:39] Yo:** ¿Qué es la
+- **[00:39] Yo:** ¿Perdón?
+- **[00:39] Yo:** ¿Qué es eso de farmeando aura?
+- **[00:39] Yo:** Yo también estoy muy bien para tenerlo.
+- **[00:39] Participante:** en el triangulito, el eje más complejo fue el creen que va a ser de atender
+- **[00:39] Yo:** Sea, sé qué es, pero no sé dónde salió.
+- **[00:39] Participante:** ¿Cuál va a ser esa arista crítica que que me va a costar más
+- **[00:39] Yo:** Es que es ahí, es como
+- **[00:39] Participante:** atender, que me va a costar más
+- **[00:39] Yo:** son pelos huevones.
+- **[00:39] Participante:** llegarle.
+- **[00:39] Yo:** Que empiezan como a a hacer gestos,
+- **[00:39] Participante:** Tema personal, profe, la la la la adaptación al cambio es cambio.
+- **[00:39] Yo:** Pero, o sea, es que ahora
+- **[00:39] Participante:** La adaptación al cambio, ¿cierto?
+- **[00:39] Yo:** ese punto se puede
+- **[00:39] Yo:** cuando alguien decía que tenía mucha aura, era
+- **[00:39] Participante:** Sí, sí, sí. Es lo más complejo que nosotros nos vamos a a enfrentar.
+- **[00:40] Yo:** vamos a explicar.
+- **[00:40] Participante:** Desde la parte de procesos y desde la parte técnica, sí vamos a tener ciertos elementos
+- **[00:40] Yo:** pero estaba
+- **[00:40] Participante:** que nos van a facilitar cómo orquestamos todos estos temas, ¿listo?
+- **[00:40] Yo:** sea, Pero no, es que es verdad que sí,
+- **[00:40] Participante:** También vengo por acá.
+- **[00:40] Participante:** Yo les compartí con sonido, no.
+- **[00:40] Participante:** ¿Realmente necesario un director de empresa para responder a esta?
+- **[00:40] Participante:** Sí, sí escucho. ¿Sí?
+- **[00:40] Participante:** Ok.
+- **[00:40] Yo:** Entonces,
+- **[00:40] Yo:** Es que ese es como
+- **[00:40] Participante:** ¿Realmente necesario un director de orquesta? Para responder a esta pregunta,
+- **[00:40] Participante:** ¿la orquesta sinfónica de la radio finlandesa realizó un experimento muy interesante. ¿Qué pasaría si alguien sin experiencia intentara dirigir una sinfonía? Para ello, invitaron a Ella Eroniemi, una estudiante de derecho,
+- **[00:40] Yo:** बाद दोबारा
+- **[00:40] Participante:** formación musical, a tomar la batuta y dirigir la cuarta sinfonía de Tchaikovsky.
+- **[00:40] Yo:** क्य clase था हम page, la primera.
+- **[00:40] Participante:** Sin recibir ninguna instrucción, se colocó frente a los
+- **[00:40] Yo:** ¿De qué
+- **[00:40] Participante:** Levantó los brazos y comenzó a mover las manos torpemente, sin saber exactamente qué hacer. La orquesta intentó seguirla, pero el caos no tardó en hacerse Entre risas, tanto los músicos como la improvisada directora se dieron cuenta de que algo
+- **[00:40] Yo:** Deje te lo he hecho otra vez, ¿no?
+- **[00:40] Yo:** Sí, Sí.
+- **[00:41] Participante:** no estaba funcionando. Este experimento demuestra por qué el director es una figura
+- **[00:41] Participante:** en una orquesta, aunque los músicos tienen sus
+- **[00:41] Participante:** el director no solo marca el tempo, sino que también guía la dinámica, la
+- **[00:41] Participante:** y la cuestión del conjunto. Su labor es interpretar la obra y transmitir su
+- **[00:41] Participante:** visión a los músicos para lograr una ejecución unificada y expresiva.
+- **[00:41] Participante:** Dirigir una orquesta no es solo mover las manos al ritmo de la
+- **[00:41] Participante:** requiere años de formación, sensibilidad musical,
+- **[00:41] Yo:** No, yo, como tal, no, pero, entonces, pues, la gente que salió, sigo
+- **[00:41] Participante:** una profunda comprensión de la obra. Después de ver este
+- **[00:41] Yo:** sí lo sintieron.
+- **[00:41] Participante:** experimento, ¿crees que podrías dirigir una orquesta?
+- **[00:41] Yo:** Yo te digo esta
+- **[00:41] Participante:** Y les pregunto eso. En este momento,
+- **[00:41] Yo:** al rato el comentario,
+- **[00:41] Participante:** y pregunta interna para ustedes,
+- **[00:41] Participante:** ¿Hay director?
+- **[00:41] Yo:** Pero así los
+- **[00:41] Participante:** Orquesta en estos temas de automatización, en estos temas de transformación donde ustedes están?
+- **[00:41] Participante:** ¿Lo tienen claro?
+- **[00:42] Yo:** A mí, a ver, yo fui que entré a una reunión y estaba hablando de eso.
+- **[00:42] Participante:** No problem.
+- **[00:42] Participante:** Alejandro. Digamos que, aprovechando el ejemplo,
+- **[00:42] Yo:** Pero es que eran dos personas que vivían en su piso
+- **[00:42] Yo:** dos personas que viven en un piso once,
+- **[00:42] Participante:** acabas de mencionar y lo que hemos conversado hasta ahora,
+- **[00:42] Yo:** ¿Usted cómo sentí?
+- **[00:42] Participante:** lo que les puedo compartir ahora es que ha funcionado mucho, es cuando se involucra
+- **[00:42] Yo:** Yo estaba pero no, tampoco sintió nada.
+- **[00:42] Participante:** se define un gobierno
+- **[00:42] Participante:** pero, pues, un gobierno de de personas que toman decisiones y que pueden
+- **[00:42] Participante:** quizás atajar unos rangos medios de
+- **[00:42] Participante:** de directores o gerentes.
+- **[00:42] Participante:** Porque las compañías, pues, siguen trabajando
+- **[00:42] Participante:** mientras se siguen transformando.
+- **[00:42] Participante:** Entonces, la la manera, de pronto, de ir
+- **[00:42] Participante:** haciendo a la par la transformación mientras
+- **[00:42] Participante:** tú sigues la operación, es que los directores, que son los que tienen, digamos, los
+- **[00:42] Participante:** poderes sobre los gerentes,
+- **[00:42] Participante:** pues tengan conocimiento de la estrategia de transformación, que hagan parte del comité de transformación, de que tengan el acceso a información casi que semanal o quincenal en esos comités, ejecutivos, y que en caso tal de que algo esté pasando, los rangos medios puedan comunicarle para que ellos puedan volver a alinear a sus gerentes, porque pasa mucho, digamos, por darles un ejemplo, que estamos desarrollando una automatización, pero al mismo tiempo él está como gerente de su unidad de negocio por cumplir sus objetivos, propulsando otra iniciativa que soluciona lo mismo que corporativamente se da creando un silo. Digamos que para nosotros ha sido muy valioso el tema de la y el tener conciencia colectiva sobre la estrategia de transformación.
+- **[00:43] Participante:** Y que se alinee un poco con lo que acaban de decir los compañeros, de ser conscientes también de eso, cómo
+- **[00:43] Participante:** queremos hacer vivir el el futuro de la estrategia corporativa.
+- **[00:43] Participante:** Muy bien. Y miren que ya estamos hablando de
+- **[00:43] Yo:** ¿Qué clase?
+- **[00:43] Participante:** un poquito más allá,
+- **[00:43] Participante:** Miren que Alejandro ya nos habla de un gobierno,
+- **[00:43] Yo:** De negocios e hipermota.
+- **[00:43] Participante:** ¿cierto?
+- **[00:43] Participante:** El gobierno es todo aquel que nos da esos lineamientos, nos da esas normas y nos da
+- **[00:43] Participante:** modelo operativo sobre cómo trabajamos y en el qué.
+- **[00:43] Participante:** Para yo contarles mi experiencia, cuando trabajaba en el banco, yo llegué a la a la
+- **[00:44] Participante:** tecnología con un objetivo, y mi objetivo no era ir a automatizar,
+- **[00:44] Participante:** sino definir los lineamientos y definir el modelo operativo y las automatizaciones dentro del banco.
+- **[00:44] Yo:** Sonor, pues, una excelente maestría.
+- **[00:44] Participante:** En ese momento me di cuenta que mi equipo
+- **[00:44] Participante:** éramos seis personas.
+- **[00:44] Yo:** No, no, no, es una excelente maestría.
+- **[00:44] Participante:** Para automatizar las noventa iniciativas que salían cada mes,
+- **[00:44] Yo:** Y a mí se me facilitó mucho en el primer pago de esas tanto que de ochocientas clases,
+- **[00:44] Participante:** del banco.
+- **[00:44] Yo:** es porque trabajo tan rápido.
+- **[00:44] Participante:** Pregunta, ¿será posible hacer eso?
+- **[00:44] Yo:** Dar esa clase.
+- **[00:44] Yo:** Y porque a mí sí a mí me interesa estar ahí de
+- **[00:44] Participante:** ¿O es todo es posible,
+- **[00:44] Yo:** interrumpiendo y diciendo y preguntando a las que yo estaba.
+- **[00:44] Participante:** ¿O es todo es posible, se organiza?
+- **[00:44] Yo:** Por eso no no interrumpa tanto.
+- **[00:44] Participante:** Noventa noventa iniciativas cada mes, ¿no?
+- **[00:44] Yo:** La verdad, no, pues yo no puedo
+- **[00:44] Participante:** Éramos seis.
+- **[00:44] Participante:** Humanamente posible. Profe.
+- **[00:44] Yo:** a componer el penso lo que son las clases.
+- **[00:44] Participante:** ¿Cómo, Layla? Tenía que priorizar. Priorizar. Teníamos que priorizar.
+- **[00:44] Yo:** En los talleres,
+- **[00:44] Yo:** o
+- **[00:44] Yo:** sea, es una
+- **[00:44] Participante:** Entonces, nosotros trabajamos, ¿cierto?, con metodologías y gracias por por esa intro, trabajamos con ciertas metodologías ágiles
+- **[00:44] Yo:** O sea, no no hay nada malo en la maestría.
+- **[00:44] Yo:** Lo único es que en algunas que voy relajado, pues,
+- **[00:44] Yo:** o sea, yo podría hacer constar demasiado.
+- **[00:44] Participante:** creamos nuestro gobierno y eso nos facilitó hacer algo.
+- **[00:44] Yo:** Por
+- **[00:44] Participante:** Nosotros democratizamos la información dentro de la compañía,
+- **[00:44] Yo:** Muy buenas, o sea, son muy interesantes los temas,
+- **[00:44] Participante:** con el fin de darle autonomía a las áreas, pero dándole también
+- **[00:45] Yo:** como eso que estamos hablando ahí, él literalmente tuve tres reuniones de eso ahí.
+- **[00:45] Participante:** todos los lineamientos y toda la información de cómo hacer correctamente una automatización.
+- **[00:45] Yo:** Entonces, vamos a escuchar a qué te
+- **[00:45] Participante:** Pasamos de atender
+- **[00:45] Yo:** podemos alinear esto.
+- **[00:45] Participante:** lo que anteriormente, cuando antes de yo llegar al equipo, la media
+- **[00:45] Yo:** Expectativas
+- **[00:45] Yo:** para
+- **[00:45] Yo:** valor.
+- **[00:45] Participante:** mensual de soluciones que se entregaban a la compañía
+- **[00:45] Participante:** eran de tres soluciones.
+- **[00:45] Yo:** Y que me lo quieran
+- **[00:45] Participante:** Pasamos de tres
+- **[00:45] Participante:** en un mes a casi treinta soluciones que se estaban generando en la compañía.
+- **[00:45] Yo:** Esa era la de de
+- **[00:45] Participante:** Que estaban solucionando el día a día de las personas,
+- **[00:45] Participante:** Llámese solución, un RPA, ¿cierto?,
+- **[00:45] Participante:** Llámese un aplicativo, llámese solución, un flujo automático,
+- **[00:45] Yo:** Oh, es que si,
+- **[00:45] Participante:** que les hacía x, y, z,
+- **[00:45] Participante:** Entonces, son todos esos elementos
+- **[00:45] Participante:** que dentro de la operatividad me están quitando tiempo, pero que humanamente
+- **[00:45] Yo:** Mira, esta como
+- **[00:45] Participante:** ni entiendo ni tengo la capacidad de atender. Entonces,
+- **[00:45] Yo:** Salta ahorita
+- **[00:45] Participante:** es ese gobierno y cuáles son los lineamientos que me permiten mejorar? Y eso es lo que hace un centro de
+- **[00:45] Yo:** But look.
+- **[00:45] Participante:** excelencia.
+- **[00:45] Participante:** Cómo forma, ¿cierto?, esas esos canales y esos medios precisos,
+- **[00:45] Yo:** Como llorar con el estilo escondiendo, ¿no?
+- **[00:46] Participante:** para nosotros entregar la información y recibir esa automatización
+- **[00:46] Participante:** de la manera más adecuada y rápida posible. Nosotros
+- **[00:46] Participante:** dentro de este curso vamos a trabajar todo lo que es low code,
+- **[00:46] Participante:** ¿listo?
+- **[00:46] Participante:** La gran ventaja de low code es que va a ser muy fácil de entender, que eso lo
+- **[00:46] Participante:** vamos a tener aquí como una bandera, pero también
+- **[00:46] Yo:** ¿Cuándo son las elecciones del captain, gobernador?
+- **[00:46] Participante:** tenemos que saber que LowCode tiene una finalidad, y es entregar valor rápido a
+- **[00:46] Yo:** El otro mañana, ¿o cuándo? ¿No es el otro año?
+- **[00:46] Participante:** negocio.
+- **[00:46] Participante:** Entonces, de nada me sirve que en el low code yo diga, o me demore lo mismo que
+- **[00:46] Participante:** una una automatización o un desarrollo
+- **[00:46] Participante:** ¿cierto?, pro code, es decir, con algún lenguaje de programación y que se demore exacto a lo mismo.
+- **[00:46] Yo:** Seleccione regional, veinte veintisiete,
+- **[00:46] Participante:** Exactamente lo mismo. Ahí es donde pierdo valor dentro de la automatización rápida,
+- **[00:46] Participante:** o dentro de estas herramientas de la suite de Microsoft, ¿listo? Para que también
+- **[00:46] Participante:** lo tengan en cuenta.
+- **[00:46] Participante:** Hablando nuevamente de la orquestación, nosotros lo primero que tenemos que entender es
+- **[00:46] Participante:** ese gobierno nos da la facilidad de orquestar cada uno de los componentes.
+- **[00:46] Participante:** Ahorita Alejandro nos hablaba que pasábamos la información de directores a gerentes gerentes a la parte operativa, y así conocíamos o así
+- **[00:47] Yo:** Octubre veintisiete. Sí. Pero arrancan el primero enero,
+- **[00:47] Participante:** trazábamos esa hoja de ruta de qué era lo que estábamos construyendo dentro de la organización.
+- **[00:47] Participante:** Ahora bien,
+- **[00:47] Yo:** A ver.
+- **[00:47] Participante:** nosotros siempre pensamos que dentro de la arquitectura de negocio tenemos que tener ese orquestador,
+- **[00:47] Yo:** Por eso es que anda por ellos que anda
+- **[00:47] Participante:** Alejandro, tú me confirmas, ¿ustedes tenían era como un comité que hacía ese proceso?
+- **[00:47] Yo:** y andan entregándome las cosas y
+- **[00:47] Participante:** Pues depende,
+- **[00:47] Yo:** y andan buscando, mariqueando.
+- **[00:47] Participante:** que también están los los centros de excelencia, depende,
+- **[00:47] Yo:** Yo descargué perlas esa perrita,
+- **[00:47] Participante:** comité de datos, hay comité de transformación, hay comité de experiencia.
+- **[00:47] Yo:** empezar a hacer política.
+- **[00:47] Participante:** Entonces, ahí es donde como cada uno, pues, se toma la definición de qué va a pasar con
+- **[00:47] Yo:** Después de que
+- **[00:47] Participante:** decisión, porque a la final, dependiendo del nivel de madurez, pues, afecta al otro.
+- **[00:47] Participante:** Ok, listo, entiendo. Pregunta, ¿en qué empresa trabajas?
+- **[00:47] Participante:** En confunding.
+- **[00:47] Participante:** En ComFunding. Ah, ok, listo, súper. Miren cómo nosotros ya empezamos a definir ciertos elementos dentro de dentro de nuestra arquitectura, ¿listo? Nosotros voy a saltarme esto un momento para que vayamos aquí a nuestra arquitectura, empresarial y acopla un poco a lo que ahorita nos decía Alejandro. Nosotros, el primer elemento que vamos a entender, que
+- **[00:48] Participante:** vamos a conocer, es esa arquitectura empresarial.
+- **[00:48] Participante:** Para encontrar esta arquitectura empresarial, me he enfocado en una meta
+- **[00:48] Participante:** ya lleva bastante tiempo, que es Togaf. No sé si alguno ha escuchado de Togaf,
+- **[00:48] Yo:** Dura mucho.
+- **[00:48] Participante:** demás que están certificados en TOGAF,
+- **[00:48] Participante:** Lo hemos escuchado, pero no certificado. Sí.
+- **[00:48] Participante:** Lo lo han escuchado, pero no certificado. ¿Cómo lo han escuchado?
+- **[00:48] Participante:** Escuchado? ¿Cuáles son esos dominios principales de tu GAF?
+- **[00:48] Participante:** O qué significan esos dominios dentro de 2GAF?
+- **[00:48] Participante:** Pues eso es como
+- **[00:48] Participante:** Pues eso es como un rompecabezas, ¿no?, donde dicen,
+- **[00:48] Participante:** manejan varias dimensiones de datos, de procesos, de tecnología.
+- **[00:48] Participante:** ¿Sí?
+- **[00:48] Participante:** La verdad, en este ombligo no lo tengo tan presente, pero
+- **[00:48] Participante:** pero digamos que creo que es la más más reconocida, ¿no?
+- **[00:48] Participante:** Dentro de dentro de esos frameworks.
+- **[00:49] Participante:** Es una de las más robustas, es muy conocida porque ha tenido mucha acogida,
+- **[00:49] Participante:** como le decía Gustavo, y es un rompecabezas que nos permite encontrar
+- **[00:49] Yo:** Medio litro de helado.
+- **[00:49] Participante:** cómo se conecta nuestro negocio, los datos asociados a nuestro negocio,
+- **[00:49] Participante:** nuestras aplicaciones y la tecnología alrededor de todo ese mundo, ¿listo?
+- **[00:49] Yo:** Treinta y cuatro,
+- **[00:49] Participante:** Entonces, vamos a entender cómo estos cuatro elementos
+- **[00:49] Participante:** podemos irlos abordando, y desde ese punto de partida
+- **[00:49] Participante:** cuál va ser la diferenciación que nosotros podemos darle a nuestra compañía, a nuestra área,
+- **[00:49] Participante:** con estos conocimientos desde el punto de vista de la automatización.
+- **[00:49] Yo:** Ya, ya, ya.
+- **[00:49] Participante:** ¿Listo? Cuando hablamos de arquitectura empresarial,
+- **[00:49] Yo:** Valor, ¿no?
+- **[00:49] Participante:** si yo lo comparto antes de bajar, ojalá no hayan bajado a revisar a la parte de aquí,
+- **[00:49] Participante:** es la diferencia entre lo que sería arquitectura empresarial y arquitectura de negocio para ustedes?
+- **[00:49] Yo:** ¿Quieren quieren llevarse esas arepas que están ahí?
+- **[00:49] Yo:** ¿Sí o sí? No, la casa ahí fue la
+- **[00:49] Participante:** Pues la arquitectura empresarial contiene todas las
+- **[00:49] Yo:** Yo siento que
+- **[00:49] Yo:** está dañando, porque
+- **[00:49] Yo:** digamos, hay
+- **[00:49] Participante:** en medida, ¿no? La de negocio, como tal, es una una una capa de esa arquitectura
+- **[00:50] Participante:** Correcto, eso es
+- **[00:50] Participante:** muy correcto, Jairo.
+- **[00:50] Yo:** Chao, bien.
+- **[00:50] Participante:** ¿Qué más?
+- **[00:50] Yo:** Del hecho.
+- **[00:50] Participante:** Digo, no.
+- **[00:50] Participante:** Que ya entrar como al core del negocio.
+- **[00:50] Participante:** ¿Qué tiene?, ¿qué procesos tiene?
+- **[00:50] Participante:** Qué actividades se hacen.
+- **[00:50] Participante:** Perdón, Juan Rodrigo. Arquitectura de negocio.
+- **[00:50] Participante:** De negocio, listo.
+- **[00:50] Participante:** Está correcto. Nosotros cuando hablamos de la arquitectura empresarial, ¿cierto?, es la forma en la que controlamos ese todo. ¿Listo? Es la forma en la que nosotros empezamos a interactuar o empezamos a cada uno de los elementos corporativos que estamos teniendo. Todos ustedes dentro de sus procesos tienen entradas, todos tienen salidas, y ahorita, ¿cómo desde un panorama mucho amplio, empiezo a ver esas interconexiones. Entonces, esa es la gran ventaja cuando yo tengo un elemento como AutoGAF incluido dentro de mi compañía. Es difícil incluirlo, no voy a mentirles, cuando yo incluyo estos elementos y tengo algo bien definido, por ejemplo, una arquitectura de datos, ¿cuál es la ganancia de tener una arquitectura de
+- **[00:51] Participante:** bien controlada?
+- **[00:51] Participante:** Tomar mejores decisiones, ¿cierto? Por correlación entre
+- **[00:51] Participante:** las bases de datos tal vez, o sea, es más fácil que una y la otra se entiendan, porque
+- **[00:51] Participante:** están en una misma estructura, por decirlo así.
+- **[00:51] Participante:** Correcto. Tengo una alineación entre conceptos,
+- **[00:51] Participante:** y
+- **[00:51] Participante:** tipologías dentro de mis bases de datos, ¿está muy bien?
+- **[00:51] Participante:** Mayor confiabilidad, ¿no?, en la información.
+- **[00:51] Participante:** Entonces, voy a empezar, y Gustavo lo dijo,
+- **[00:51] Participante:** a empezar a tener tres cosas identificables
+- **[00:51] Participante:** muy latentes dentro de lo que estoy haciendo. Lo primero, la confiabilidad y la seguridad sobre los
+- **[00:51] Participante:** Es decir, tengo el dato correcto en el momento adecuado.
+- **[00:51] Participante:** ¿Cierto? Transparencia de los datos. ¿A qué les suena transparencia de los datos?
+- **[00:52] Participante:** Existe
+- **[00:52] Participante:** Existe trazabilidad,
+- **[00:52] Participante:** Que es verídico, tengo trazabilidad,
+- **[00:52] Participante:** tengo conocimiento de dónde viene, tengo certificación de lo que
+- **[00:52] Participante:** y ahí se me conecta con el tercer elemento, que es la calidad del dato.
+- **[00:52] Participante:** Cuando hablo de la calidad del dato, empiezo a definir todos esos elementos importantes
+- **[00:52] Participante:** que para mí, lo, como lo decía ahorita Layla, me permiten
+- **[00:52] Participante:** conectar de una forma lógica, y de esa forma, finalmente, lo que me va a permitir es tomar
+- **[00:52] Participante:** decisiones. Cada uno de estos dominios tiene una finalidad de esos tipos.
+- **[00:52] Participante:** Dentro del negocio, dentro de la estrategia. Entonces,
+- **[00:52] Participante:** sí es importante que nosotros vayamos bajando esos conocimientos
+- **[00:52] Participante:** precisamente para ver la aplicación correcta de todo esto que estamos hablando, entender
+- **[00:52] Participante:** perdón,
+- **[00:52] Participante:** cómo controlamos los datos,
+- **[00:52] Participante:** ¿cierto?, y cómo ese control de los datos finalmente me genera un un control
+- **[00:52] Participante:** correcto sobre las aplicaciones.
+- **[00:52] Participante:** Si ese formulario que yo ahorita les mandé estuviera con
+- **[00:53] Participante:** preguntas erróneas, ¿cierto?, mi data estaría mal.
+- **[00:53] Participante:** Si mi data está mal, no puedo hacer el análisis correcto. Si mi análisis no es correcto, no puedo construir las clases de la manera más adecuada. Y eso es un dominio. Es un dominio de elementos que nosotros vamos a ir adquiriendo y que vamos a tener esa visión periférica o esa visión sistémica para poder entender cómo yo conecto cada uno
+- **[00:53] Participante:** estos elementos. Como les decía, cuando hablamos de arquitectura empresarial,
+- **[00:53] Participante:** hablamos de un marco integral de transformación, mientras
+- **[00:53] Participante:** que acá hablamos de un dominio enfocado al negocio.
+- **[00:53] Participante:** Lo que nos decía ahorita Jairo, por ejemplo.
+- **[00:53] Participante:** Aquí tenemos tecnología de datos, aplicaciones y negocio,
+- **[00:53] Participante:** aquí hablamos de capacidades y valor del negocio.
+- **[00:53] Participante:** Aquí hablamos de la orquesta para el cambio organizacional, y aquí
+- **[00:53] Participante:** el modelo de operación que tenemos dentro de nuestra organización.
+- **[00:53] Participante:** Esto es transversal y sistémico, esto es estratégico y un poco más conceptual.
+- **[00:53] Participante:** ¿Listo? Son diferencias, son pequeñas diferencias que nosotros tenemos,
+- **[00:54] Participante:** pero que vamos a ir bajando dentro de todo este curso, ¿listo?
+- **[00:54] Participante:** Dentro de la arquitectura de de negocio, vamos a tener ese operar.
+- **[00:54] Participante:** ¿Listo? Alguno de lo que tenga
+- **[00:54] Participante:** un proceso que le venga a la a la mente, que ustedes digan, esto es candidato,
+- **[00:54] Participante:** a automatizar.
+- **[00:54] Participante:** Cuestión de solicitud de cliente, las quejas.
+- **[00:54] Participante:** Pues, la
+- **[00:54] Participante:** Puede ser PQRS, podemos darle el nombre de PQRS o diferente.
+- **[00:54] Participante:** Sí, las PQRS.
+- **[00:54] Participante:** PQRs.
+- **[00:54] Participante:** Jamás, chat.
+- **[00:54] Participante:** TQR es eso.
+- **[00:54] Participante:** Colocarlo en un caso.
+- **[00:54] Participante:** Y caso que en estos días, dentro de uno de los
+- **[00:54] Participante:** que estábamos solucionando, me di cuenta.
+- **[00:54] Participante:** Una empresa, no decir cuál empresa, x y z, colocar empresa x y z,
+- **[00:54] Participante:** radicaba PQRS de la siguiente forma, el usuario se acercaba o
+- **[00:54] Participante:** al
+- **[00:54] Participante:** al punto de atención y hacía la solicitud.
+- **[00:55] Participante:** El cajero
+- **[00:55] Participante:** pues, primero, no tenía información para, podía hacer una pregunta muy sencilla, pero no tenía cómo responderle.
+- **[00:55] Participante:** Entonces, lo que hacía el cajero era ingresar a la página y y
+- **[00:55] Participante:** crear una PQRS a nombre del cliente.
+- **[00:55] Participante:** Esto tenía una persona posteriormente que revisaba todos los días
+- **[00:55] Participante:** todo el tiempo, si llegaba una PQRS, porque ustedes saben que eso es un tema legal,
+- **[00:55] Participante:** cómo atenderlo y unos ADNs asociados,
+- **[00:55] Participante:** para poder designarlo a qué área tenía que responder.
+- **[00:55] Participante:** Y, posteriormente, tocaba hacerle seguimiento al área que respondieran los tiempos adecuados.
+- **[00:55] Participante:** Pregunta,
+- **[00:55] Participante:** ¿eso será eficiente?
+- **[00:55] Participante:** La tarea es repetitiva, se puede automatizar y después eficientar
+- **[00:55] Participante:** Entonces,
+- **[00:55] Participante:** Alejandro ya, de paso, nos dijo, eso no es eficiente.
+- **[00:55] Participante:** ¿Los demás están de acuerdo?
+- **[00:55] Participante:** Cambiarían?
+- **[00:56] Participante:** ¿Cómo lo haría?
+- **[00:56] Participante:** El primer paso era la
+- **[00:56] Participante:** El primer paso era la clasificación.
+- **[00:56] Participante:** ¿Era una radicación?
+- **[00:56] Participante:** La radicación del cliente.
+- **[00:56] Participante:** Luego el la persona tenía que clasificar los casos para
+- **[00:56] Participante:** mandarlos a las
+- **[00:56] Participante:** ¿Sí?
+- **[00:56] Participante:** Correcto.
+- **[00:56] Participante:** Seguimiento.
+- **[00:56] Participante:** Pero al radicarlo el cliente, ¿lo radicaba digital o lo radicaba Manuel, lo tenía que transcribir?
+- **[00:56] Participante:** No lo radicaba el cliente, lo radicaba el cliente desde el punto,
+- **[00:56] Participante:** y era el la persona del punto de atención el que radicaba.
+- **[00:56] Participante:** Bueno, pues,
+- **[00:56] Participante:** tendría que arrancar por ahí.
+- **[00:56] Participante:** Tenía que encontrar la forma de digitalizar y facilitar la entrada.
+- **[00:56] Participante:** Luego esa cola,
+- **[00:56] Participante:** tendríamos que buscar la forma en que se autoclasificara.
+- **[00:56] Participante:** Después de la de autoclasificación, supongo a que
+- **[00:57] Participante:** va a venir un tema de que posibles devoluciones
+- **[00:57] Participante:** entonces va a ser mucho mejor revisar las devoluciones que leerse todas.
+- **[00:57] Participante:** Y va refinando el tema del algoritmo de la clasificación.
+- **[00:57] Participante:** Y el último,
+- **[00:57] Participante:** ya, pues, de pronto, la calificación del cliente, con la satisfacción de la respuesta, ahí ya vas
+- **[00:57] Participante:** podrías mejorar el tema
+- **[00:57] Participante:** ahí ya podrías empezar a entender si poder automatizar
+- **[00:57] Participante:** respuestas y
+- **[00:57] Participante:** y empezar a eliminar a personas
+- **[00:57] Participante:** que están respondiendo las quejas.
+- **[00:57] Participante:** Listo. Alejandro ya nos acaba de dar un paso a paso.
+- **[00:57] Participante:** Yo quitaría la palabra eliminar personas, pero pero sí,
+- **[00:57] Participante:** quitaría esa palabra, pero ya tenemos nuestro paso a paso.
+- **[00:57] Participante:** ¿Listo? Ese es el modelo operativo propuesto, ese es nuestro diagrama to be
+- **[00:57] Participante:** y hace parte de este negocio. Ahora pregunta para el resto.
+- **[00:57] Participante:** ¿Qué valor tiene ese cambio que nos está dando Alejandro?
+- **[00:57] Participante:** Esa propuesta de automatización que nos acaba de de vender Alejandro.
+- **[00:58] Participante:** ¿Qué valor ustedes le ven?
+- **[00:58] Participante:** Puede ser como la atención más rápida,
+- **[00:58] Participante:** Atención más rápida. Ok. ¿Qué más?
+- **[00:58] Participante:** Podría ser como un enfoque de recursos a
+- **[00:58] Participante:** temas críticos, que puedes clasificar muy rápido la información también.
+- **[00:58] Participante:** Una, cuando tú me dices recursos,
+- **[00:58] Participante:** críticos, y esa clasificación es referente a
+- **[00:58] Participante:** que a poder mejorar más rápido esos temas
+- **[00:58] Participante:** Exacto, se reciben y se clasifican, y cuando tú clasificas identificas
+- **[00:58] Participante:** exactamente qué proceso puede o qué elemento está fallando,
+- **[00:58] Participante:** puedes concentrar de mejor manera el recurso para solucionar eso.
+- **[00:58] Participante:** Puede ser que tengas personas dedicadas a solucionarlo,
+- **[00:58] Participante:** o ajustes a procesos que te puedan eliminar esas kelas.
+- **[00:58] Participante:** De acuerdo, muy, muy de acuerdo con eso. Finalmente, si la queja se me repite, pues
+- **[00:58] Participante:** no estoy haciendo nada, ¿cierto? La queda tengo que solucionarla. Si la soluciono de raíz,
+- **[00:58] Participante:** me quito esas quejas. Entonces, mírenlo desde ese punto cómo íbamos agregando valor.
+- **[00:59] Participante:** ¿Algo más?
+- **[00:59] Yo:** Hi,
+- **[00:59] Participante:** Daniela nos dice, mejor al
+- **[00:59] Yo:** ven,
+- **[00:59] Participante:** de experiencia del cliente.
+- **[00:59] Participante:** ¿Correcto? ¿Por qué creen que mejora la experiencia del cliente?
+- **[00:59] Participante:** No no tiene
+- **[00:59] Yo:** Хорошо.
+- **[00:59] Participante:** No no tiene que acercarse a un centro de atención.
+- **[00:59] Participante:** Puede ser desde cualquier
+- **[00:59] Participante:** medio virtual.
+- **[00:59] Participante:** Desde cualquier medio virtual, ¿cierto?
+- **[00:59] Participante:** No sé ustedes, pero yo También reportes, ¿no?, como la
+- **[00:59] Participante:** la la la seguridad de tener unos reportes ya controlados,
+- **[00:59] Participante:** como que... Bueno, beneficios la empresa, ¿no?, mucho,
+- **[00:59] Participante:** Y de cara al cliente, valor del cliente, lo que comentan los compañeros, como que
+- **[00:59] Participante:** tiene una unas respuestas más, digamos, oportunas,
+- **[00:59] Participante:** una una atención de lo de lo que es más recurrente, pues,
+- **[00:59] Participante:** a una solución rápida.
+- **[01:00] Participante:** ¿Sí? Y a la empresa, pues, yo creo que pensando
+- **[01:00] Participante:** como desde el punto de vista pensaría, no, pues ya ya lo puede, ya tengo
+- **[01:00] Participante:** unos resultados de efectividad, no sé si ya puedo, al fin puedo
+- **[01:00] Participante:** tener tangible esa mirada, que seguramente
+- **[01:00] Participante:** desde desde desde el uno a uno,
+- **[01:00] Participante:** era difícil de de de sacar.
+- **[01:00] Participante:** Muy bien, Felipe. Y dijiste
+- **[01:00] Participante:** analítica, bueno, dijiste muchos elementos dentro de eso, iniciaste con reportería, hablo de analítica, y cómo esa analítica conecta un poco también con lo del Aila de pensar en entender a futuro cómo puedo hacer esas mejoras.
+- **[01:00] Participante:** Entonces, miren que nosotros inmediatamente ya hemos identificado muchos elementos.
+- **[01:00] Participante:** Y esto pasó con un solo proceso, proceso de PQRS,
+- **[01:00] Participante:** ¿Cuántos procesos tiene una compañía?
+- **[01:00] Participante:** Y en todos tenemos oportunidad de ver valor
+- **[01:00] Participante:** desde lo que nosotros hacemos y desde lo que el cliente recibe.
+- **[01:00] Participante:** Entonces, ese es el truco de cuándo yo automatizo y cuándo no.
+- **[01:00] Participante:** Es empezar a entender qué está agregando valor, precisamente, para
+- **[01:01] Participante:** mejorar todos esos elementos de cara al usuario, de cara a generar valor.
+- **[01:01] Participante:** Gabriela nos decía, facilitar la toma de decisiones para la empresa. Excelente.
+- **[01:01] Yo:** ¿Qué pasó?
+- **[01:01] Yo:** ¿Qué pasó?
+- **[01:01] Participante:** Miren cómo nosotros
+- **[01:01] Yo:** Cuando esto?
+- **[01:01] Participante:** esa toma de decisiones adecuada nos va, se va a convertir más bien
+- **[01:01] Participante:** en lo que es una correcta automatización.
+- **[01:01] Participante:** ¿Listo? Nosotros, dentro de la arquitectura empresarial, lo que les digo,
+- **[01:01] Participante:** nos vamos a centrar en cada uno de estos elementos, los vamos a estar tocando de forma tangencial.
+- **[01:01] Yo:** Sube, arriba.
+- **[01:01] Participante:** Nuestro core principal para poder hacer todos los de aquí a futuro
+- **[01:01] Participante:** es decir, todos esos entregables asociados de aquí a futuro,
+- **[01:01] Participante:** van a estar muy acogidos dentro de cada uno de los
+- **[01:01] Participante:** ¿listo? Siempre piénsense desde tu GAF ustedes cómo están aportando lo que están haciendo.
+- **[01:01] Participante:** Cómo están creando o cómo están conectando.
+- **[01:01] Participante:** Que olvidar esa miopía que nosotros generalmente tenemos cuando estamos construyendo soluciones.
+- **[01:01] Participante:** Lo que me decían al principio es que no no contactaron con el cliente, no contactaron
+- **[01:01] Participante:** con el usuario, entonces fueron y le llevan la automatización y eso no lo usan.
+- **[01:02] Participante:** No me acuerdo quién era el que me decía esa parte.
+- **[01:02] Participante:** Entonces, miren como nosotros cerramos la miopeo por no empezar a ver todos estos temas.
+- **[01:02] Participante:** Por no ver de forma sistémica las conexiones que estamos teniendo, ¿listo?
+- **[01:02] Yo:** Bye bye.
+- **[01:02] Yo:** Bien, ocupa.
+- **[01:02] Participante:** Bueno.
+- **[01:02] Participante:** Esto es, básicamente, lo que nosotros entendemos por arquitectura de negocios en
+- **[01:02] Participante:** gardener. Entonces, nosotros tenemos una estrategia, propuesta de valor, que nos va a definir
+- **[01:02] Participante:** esa ruta específica
+- **[01:02] Participante:** Nosotros entendemos que tenemos unas capacidades de negocio
+- **[01:02] Participante:** y aquí las capacidades serán infinitas o finitas.
+- **[01:02] Participante:** Finitas, finitas.
+- **[01:02] Participante:** Finitas. Entonces, tenemos que priorizar.
+- **[01:02] Participante:** La mejor manera de priorizar es entendiendo cuál es el valor y cuál es el retorno que
+- **[01:02] Participante:** recibiendo. Ahora pregunta, ¿será que
+- **[01:02] Participante:** vista de valor será lo mismo para todas las empresas?
+- **[01:02] Participante:** No, por aquí.
+- **[01:02] Participante:** ¿Por qué, Diego?
+- **[01:03] Participante:** Porque al final, pues muchas
+- **[01:03] Participante:** tienen distintos valores o que que quieren llegar, o sea, unas quieren ser
+- **[01:03] Participante:** tener una línea de producción mucho más rápida, otras quieren hacer unas cosas mucho más simples.
+- **[01:03] Participante:** Al final, depende mucho de esa arquitectura de negocio, ¿no?
+- **[01:03] Participante:** Correcto. Y ahí también
+- **[01:03] Participante:** podemos analizarlo hasta desde los sectores,
+- **[01:03] Participante:** Una fundación, ¿cierto?,
+- **[01:03] Participante:** muy seguramente va a tener una propuesta de valor muy diferente,
+- **[01:03] Participante:** al de una compañía de el sector productivo.
+- **[01:03] Participante:** Todos esos elementos impactan en lo
+- **[01:03] Participante:** que es nuestro modelo operativo, que se compone, como lo habíamos dicho, de procesos, personas y
+- **[01:03] Participante:** Nos van a responder esas tres preguntas, cómo, con quiénes y con qué.
+- **[01:03] Participante:** Nuevamente, son ese esa tríada es
+- **[01:03] Participante:** que conecta con todos los elementos que nosotros estamos viendo.
+- **[01:03] Participante:** Y por debajo, vamos a tener nuestro modelo de indicadores que nos va a permitir medir
+- **[01:03] Participante:** retroalimentar y crear nuestros ciclos de inteligencia sobre todo lo que estamos haciendo.
+- **[01:04] Participante:** Al día de hoy, nosotros hablamos de un concepto que se llama automatización inteligente.
+- **[01:04] Participante:** ¿Listo? ¿Qué creen que cambia cuando yo hablo de automatización
+- **[01:04] Participante:** y hablo de automatización inteligente?
+- **[01:04] Participante:** El propósito quizás de la automatización.
+- **[01:04] Participante:** ¿Por qué, Jairo? ¿O cómo lo ves?
+- **[01:04] Participante:** De pronto, cuando hablas de automatización así, someramente, pues simplemente como
+- **[01:04] Participante:** aumentar, digamos, la rapidez de un proceso a través de
+- **[01:04] Participante:** ¿cierto?, mientras que la automasación inteligente ya
+- **[01:04] Participante:** ves qué qué es lo que causa valor, ¿cierto?, y tratas de maximizar ese valor.
+- **[01:04] Participante:** Correcto, trato de maximizar valor,
+- **[01:04] Participante:** ¿Qué más qué más creen que es la automatización inteligente?
+- **[01:04] Participante:** Cuando cuando puedo tener, o sea, tengo esa
+- **[01:04] Participante:** digamos, esa tecnología que me permite también aprender
+- **[01:05] Participante:** sobre lo que lo que estoy viviendo. ¿No? Sobre lo que
+- **[01:05] Participante:** sobre lo que se está presentando.
+- **[01:05] Participante:** ¿Sí?
+- **[01:05] Participante:** Entonces, es como esa automatización tradicional con tecnologías de
+- **[01:05] Participante:** artificial, aprendizaje automático.
+- **[01:05] Participante:** Muy bien, Gustavo. ¿Felipe?
+- **[01:05] Participante:** Yo yo, en esto,
+- **[01:05] Participante:** puedo cometer muchos errores, ¿no?, pero, bueno, así también Bienvenidos todos los
+- **[01:05] Participante:** de de lo que me imagino, incluso relacionándolo con con lo que hago,
+- **[01:05] Participante:** en en mi en mi, es en mi concepto,
+- **[01:05] Participante:** inteligente sería lo que realmente me está haciendo más
+- **[01:05] Participante:** o me hace hacer mejor las cosas.
+- **[01:05] Participante:** No simplemente por el uso de la herramienta, sino que puedo
+- **[01:05] Participante:** apoyarme casi al cien por cien de de de
+- **[01:05] Participante:** del resultado de esa de esa automatización, para seguir aumentando
+- **[01:05] Participante:** o hacerlo mucho mejor, ¿sí? Es es, yo yo lo tomo como por ese lado.
+- **[01:06] Participante:** ¿Sí? Más que la herramienta, porque hoy en día las las herramientas son inteligentes,
+- **[01:06] Participante:** por por la inteligencia artificial, pero lo categorizo como por ese lado.
+- **[01:06] Participante:** Ok, muy bien.
+- **[01:06] Participante:** Miren que todos esos elementos que ustedes me están diciendo apuntan
+- **[01:06] Participante:** y también quiero también ser muy cuidadoso con esto.
+- **[01:06] Participante:** Ahorita, creo que ahorita nos decía, adopción de la IA, ¿cierto?
+- **[01:06] Participante:** Y ahí me quedo, me quedo con esos elementos
+- **[01:06] Participante:** Mucho cuidado con decir que inteligente es igual a ella, ¿listo? Hay que tener esa diferenciación.
+- **[01:06] Participante:** Inteligentes somos los humanos.
+- **[01:06] Participante:** Inteligente es el humano. La IA es un apoyo que tiene mucho conocimiento, pero no tiene ese esa, por ahora,
+- **[01:06] Participante:** no tiene esa posibilidad de elección y de generar otros elementos diferentes.
+- **[01:06] Participante:** ¿Listo? Hay que ser cuidadosos con eso. Todos esos elementos, cuando hablamos de automatización de
+- **[01:06] Participante:** inteligente, es precisamente conectar ese valor que nosotros estamos creando
+- **[01:06] Participante:** y siempre centrados, como le decía ahorita Felipe, en esa eficiencia y efectividad
+- **[01:07] Participante:** que buscamos para completar nuestra estrategia.
+- **[01:07] Participante:** ¿Listo?
+- **[01:07] Participante:** Independientemente de cuál sea nuestra estrategia,
+- **[01:07] Participante:** si la inteligencia aplicada a las automatizaciones van en pro
+- **[01:07] Participante:** de todo lo que nosotros creamos dentro de nuestra arquitectura de negocio,
+- **[01:07] Participante:** lo más probable o lo más posible es que estemos apuntando uno de esos
+- **[01:07] Participante:** indicadores principales que engloban todo lo que yo estoy construyendo.
+- **[01:07] Participante:** Entonces, eso es crear automatizaciones de forma inteligente.
+- **[01:07] Yo:** ¿La a t o qué es?
+- **[01:07] Participante:** Precisamente entendiendo cuál va a ser ese
+- **[01:07] Participante:** foco final y cómo esas herramientas
+- **[01:07] Participante:** apoyan a todos esos procesos que apuntan a personas.
+- **[01:07] Participante:** Entonces, eso es lo que nosotros conocemos como automatización inteligente.
+- **[01:07] Participante:** Bueno, nosotros
+- **[01:07] Participante:** vamos a hablar de esos bloques específicos, también que lo tengan en cuenta,
+- **[01:07] Participante:** relacionados a lo que es arquitectura de negocio, capacidad de negocio,
+- **[01:07] Participante:** de valor, modelo operativo, flujo de procesos, estructura organizacional,
+- **[01:07] Participante:** y la estrategia y los resultados. Creo que,
+- **[01:08] Participante:** no son cosas nuevas para ustedes, no son cosas diferentes de
+- **[01:08] Participante:** lo que han escuchado. Ahorita la idea es
+- **[01:08] Participante:** nosotros empezamos a construir eso desde el punto de acá.
+- **[01:08] Participante:** ¿Listo? Y algo que tenía pendiente preguntarle, ya que hemos hablado un poquito
+- **[01:08] Participante:** ¿cuál creen que es la diferencia o si hay diferencia?
+- **[01:08] Participante:** O de dónde nace esa palabra hiperautomatización?
+- **[01:08] Participante:** Yo creo que va por el tema de que puedes llegar, o sea, llegas a un punto en que ya puedes personalizar
+- **[01:08] Participante:** uno a uno.
+- **[01:08] Participante:** ¿Cómo así, Felipe? Cuando tú me dices, personalizar uno a uno, es
+- **[01:08] Participante:** O sea, ya ya no
+- **[01:08] Participante:** iba a la pero creo que que nos cruzamos los dos. Está hablando Alejandro. Ah, perdón. En el tema de la no, Felipe.
+- **[01:08] Participante:** Creo que el tema de la hiperpersonalización es como por darte un ejemplo de lo que hace Rapi,
+- **[01:09] Participante:** sea, ya tiene un nivel de conocimiento de los datos, que es capaz de darle una
+- **[01:09] Participante:** oferta
+- **[01:09] Participante:** a una persona de manera más personalizada, o a la persona que le gusta
+- **[01:09] Participante:** hamburguesa, pues le da hamburguesa, y al que le gusta el perro, el perro,
+- **[01:09] Participante:** porque ya llegó a un nivel de súper
+- **[01:09] Participante:** automatización, pues, con los datos y, pues, con con su capacidad de
+- **[01:09] Participante:** mucho más avanzada.
+- **[01:09] Participante:** Versus que lo que están de pronto en el nivel más básico, pues,
+- **[01:09] Participante:** pues mandan mensajes a quizás una característica
+- **[01:09] Participante:** grupo de personas específico que tienen un grupo de características similar.
+- **[01:09] Participante:** Referente al tema de la hiper.
+- **[01:09] Participante:** Algo mucho como un flujo específico más
+- **[01:09] Participante:** ¿cierto?
+- **[01:09] Participante:** Ya le empiezo a meter otros elementos analíticos y otros
+- **[01:09] Participante:** que permiten, a través de IA, ir conectando, ¿cierto?
+- **[01:09] Participante:** Ya empezamos a tener orquestación entre muchos elementos.
+- **[01:09] Participante:** Ya no solamente es la automatización per se, la automatización sencilla,
+- **[01:09] Participante:** que tengo la interconexión dentro de muchos elementos. Entonces, sí, Felipe,
+- **[01:10] Participante:** Sí, profe, es, cuando es hiper,
+- **[01:10] Participante:** también supongo que podría ser que hay
+- **[01:10] Participante:** diferentes procesos automatizados y que
+- **[01:10] Participante:** puede uno organizar de tal forma que todos estos procesos automatizados, o
+- **[01:10] Participante:** hablándolo, pues, como que haciendo una referencia, bueno, ya tengo servicio al cliente,
+- **[01:10] Participante:** pero tengo otro proceso de ventas, pero también tengo otro proceso de marketing.
+- **[01:10] Participante:** ¿Cómo puedo unir desde principio a fin, desde el marketing hasta el servicio al cliente?
+- **[01:10] Participante:** Entonces eso es lo que yo me imagino como hiper automatización, que es capaz de conectar
+- **[01:10] Participante:** así esos procesos automatizados entre sí.
+- **[01:10] Participante:** ¿Ya escucharon
+- **[01:10] Participante:** la noticia?
+- **[01:10] Participante:** Me imagino yo que sí, de la primera empresa
+- **[01:10] Participante:** que generó un millón de dólares de una sola persona?
+- **[01:10] Participante:** No, no.
+- **[01:11] Participante:** No.
+- **[01:11] Participante:** Empresa en Estados Unidos,
+- **[01:11] Participante:** una sola persona, agentes,
+- **[01:11] Participante:** que hablaban entre ellos, hablaban a través de Discord, no sé si han escuchado de Discord, una plataforma
+- **[01:11] Participante:** o un aplicativo, precisamente, para textear entre equipos,
+- **[01:11] Participante:** los agentes hablaban, retroalimentaban entre ellos.
+- **[01:11] Participante:** Agente que capturaba insights,
+- **[01:11] Participante:** a gente que creaba funcionalidades, a gente que estaba en el back,
+- **[01:11] Participante:** a gente que estaba en el front, a gente que publicaba los resultados,
+- **[01:11] Participante:** y todo esto
+- **[01:11] Participante:** orquestado a través de una sola persona.
+- **[01:11] Participante:** Entonces, miren ya la potencia a lo que estamos llegando, y aquí
+- **[01:11] Participante:** es cuando empiezan esos conceptos de hiperautomatización.
+- **[01:11] Participante:** Entonces, es muy claro que ahorita la tecnología como tal
+- **[01:11] Participante:** no es
+- **[01:11] Participante:** un plus o no es un miedo el que tengamos que tenerle.
+- **[01:11] Participante:** Ya es mucho más sencillo, no es como antes, pues,
+- **[01:11] Participante:** que nos tocaba aprender de código para hacer
+- **[01:11] Participante:** ciertas soluciones. Ahorita, ¿qué es lo más importante?, saber dónde está el valor
+- **[01:11] Participante:** mi propuesta de valor, el valor de entrega de la organización y a quién se lo entrego.
+- **[01:12] Participante:** De ahí parte una buena necesidad, precisamente construir
+- **[01:12] Participante:** esas soluciones de la manera más adecuada posible. Diego, Sí, profe, creo que de alguna otra forma para para
+- **[01:12] Participante:** digamos que resumir o ya para lo que me decía Alejandro, el tema de Rapping, automatización va un poco en actividades independientes mientras que la hiperautomatización puede ir en tenerse como el proceso de punta a punta. Yo al final, y y obviamente, va a sumar cuánto es lo que están hablando, de que se utilizan otro tipo de otro tipo de herramientas dentro de todo ese proceso de hiperautomotización. Se ve mucho más allá de simplemente automatizar un chatbot donde depende de una pues tiene un una respuesta por parte del bot, sino que es todo el proceso de cómo le puedo ahí, el consumo, la atracción, la venta, todo lo que hay que hacer, porque es un proceso que se tiene que ver macro desde una punta del inicio hasta el final
+- **[01:12] Participante:** de todo el proceso.
+- **[01:12] Participante:** Muy bien, Diego. Y cómo tener esos agentes, ¿cierto? Esos agentes que
+- **[01:13] Participante:** van escalando
+- **[01:13] Participante:** cada una de esas solicitudes, cada uno de esos procesos. Entonces, sí,
+- **[01:13] Participante:** Y preautomatización, que lo tengan en cuenta, es un término acuñado
+- **[01:13] Participante:** por Gartner. Gartner es una empresa que se encarga de la consultoría sobre empresas de tecnología,
+- **[01:13] Participante:** aproximadamente comienza con esto
+- **[01:13] Participante:** más o menos, por allá en el dos mil ocho, cuando nace la tendencia del RPA,
+- **[01:13] Participante:** saben qué es RPA?
+- **[01:13] Participante:** No
+- **[01:13] Participante:** seño. ¿Ningor social commission?
+- **[01:13] Participante:** ¿Cómo Gustavo?
+- **[01:13] Participante:** No, no, ya me diste el robot, te las barré porque
+- **[01:13] Participante:** pensé en remote, pero no, es robot, sí, sí.
+- **[01:13] Participante:** Automation, algo así.
+- **[01:13] Participante:** Sí, robotic process automation, muy bien. No escuché lo primero, entonces, válido.
+- **[01:13] Participante:** Robotic process automation.
+- **[01:13] Participante:** Robotic process automation,
+- **[01:13] Participante:** nace con la necesidad de suplir
+- **[01:13] Participante:** lo que hacía una persona. Por lo menos, en el sector banco es muy importante
+- **[01:13] Participante:** los RPAs, porque, precisamente, las tareas operativas
+- **[01:13] Participante:** han migrado a lo que son robots. Cuando yo hablo de robots, es un elemento de software
+- **[01:14] Participante:** que tiene unas características muy específicas, es decir,
+- **[01:14] Participante:** tiene unas rutas muy bien definidas, su variabilidad está
+- **[01:14] Participante:** a lo mínimo,
+- **[01:14] Participante:** Los pasos son los mismos siempre, lo único que cambia son los datos de las personas.
+- **[01:14] Participante:** Por ejemplo, crear tarjetas de crédito.
+- **[01:14] Participante:** El sistema no cambia, los datos siempre son los mismos,
+- **[01:14] Participante:** el sistema no se mueve, siempre tengo que hacer ese proceso, lo hago todos los días.
+- **[01:14] Participante:** Para colocarles ejemplos. Aquí, bueno, un CDT creo que es una palabra común para todos. Voy a hablar muchos temas del sector banca, porque es mi día a día, es lo que sigo, a pesar de que ya leí el banco, sigo con mucho sector banca, entonces voy a hablarles muchos temas banca y creo que conocimientos que ustedes también tienen relacionados a esto. CDT desmaterializados, lo que es un CDT. Cuando uno crea un CDT, a uno, por allá, hay una compañía que respalda esos CDTs. Generando un título valor, por llamarlo de alguna forma, que precisamente respalda que ese dinero está correctamente guardado. ¿Listo? Cuando llegó al banco, era un proceso
+- **[01:15] Participante:** que le ocupaba porque tenía que enviarse todos los días de todos los CDTs que se abrían en
+- **[01:15] Participante:** inmediatamente anterior, y nosotros enviábamos, aproximadamente, mientras
+- **[01:15] Participante:** la carta y demás, a un aproximado de sesenta
+- **[01:15] Participante:** informes diarios.
+- **[01:15] Participante:** ¿Listo? Sesenta documentos,
+- **[01:15] Participante:** valor, asociados a un DCT desmaterializado de forma diaria.
+- **[01:15] Participante:** Eso tiene que enviarse antes de una hora específica
+- **[01:15] Participante:** teníamos casi que ocho personas las dos primeras horas del día,
+- **[01:15] Participante:** enviando, creando esos documentos y enviando cada uno de sus cosas.
+- **[01:15] Participante:** ¿Listo? ¿Cómo entender este proceso de algo tan operativo y algo que
+- **[01:15] Participante:** sucedía de la misma forma siempre? Pues usando estos robots
+- **[01:15] Participante:** que precisamente ingresan los sistemas y simulan lo que hace una persona.
+- **[01:15] Participante:** Pasar de lo que hacían ocho personas en dos horas,
+- **[01:15] Participante:** a pasar un robot que lo hacía en diez minutos, lo de las ocho personas.
+- **[01:15] Participante:** ¿Listo? Esas ocho personas no se fueron, esas ocho personas se dedicaron a
+- **[01:16] Participante:** cosas durante esas dos horas,
+- **[01:16] Participante:** y eso es una ventaja grandísima, porque ya esas personas seguramente no trasnochaban
+- **[01:16] Participante:** no se quedaban horas extra, y de ahí para allá todo el impacto que ustedes se puedan imaginar.
+- **[01:16] Participante:** Entonces, ¿cómo esto y cómo estos elementos
+- **[01:16] Participante:** bien pensados, bien organizados, entendiendo el valor que están agregando?
+- **[01:16] Participante:** Pueden apuntar a una Ahorita Diego por lo menos nos mencionaba
+- **[01:16] Participante:** que era trabajar end to end, ¿cierto?
+- **[01:16] Participante:** Un un proceso que va hasta el fin.
+- **[01:16] Participante:** ¿Cómo saber en qué punto me centro?, ¿cierto?
+- **[01:16] Participante:** En un elemento específico o en qué punto voy a trabajar un proceso transversal.
+- **[01:16] Participante:** Gustavo. Sí, Julio, ¿cómo cómo está
+- **[01:16] Participante:** ¿Qué rol está cumpliendo ahorita, entonces, los ERPs
+- **[01:16] Participante:** el SAAP, el
+- **[01:16] Participante:** el Oracle,
+- **[01:16] Participante:** el Microsoft Dynamics, digamos, ¿a dónde están yendo
+- **[01:16] Participante:** ¿Sí?
+- **[01:16] Participante:** Con estas nuevas tecnologías
+- **[01:17] Participante:** donde son sistemas monolíticos,
+- **[01:17] Participante:** si están transformando para llegar a algo
+- **[01:17] Participante:** diferente o o qué rol están cumpliendo ahorita?
+- **[01:17] Participante:** Yo les voy a contar un poco desde lo que es CDS app. Nosotros somos
+- **[01:17] Participante:** partner de Sap, entonces, generalmente, tenemos capacitaciones
+- **[01:17] Participante:** con con la alianza con SAP, y SAP lo menos, entiende, pues, ahorita las necesidades con IA y demás, y
+- **[01:17] Participante:** aquí alguno tiene SAP en la empresa?
+- **[01:17] Participante:** Ah, bueno.
+- **[01:17] Participante:** En Cali.
+- **[01:17] Participante:** En Cali.
+- **[01:17] Participante:** Ok. ¿Con Fundy?
+- **[01:17] Participante:** Sí, a Ana. ¿Ya se pasaron a Saphana?
+- **[01:17] Participante:** Sí, sí, tenemos a Pana.
+- **[01:17] Participante:** Y con Fanti también.
+- **[01:17] Participante:** Sí, lo tenemos en prémio, nos queremos pasar a
+- **[01:17] Participante:** estamos validando a ver si nos pasamos a nube, pero
+- **[01:17] Participante:** lo que pasa es que tenemos tres verticales ahí, eso está complicado.
+- **[01:17] Participante:** Pero ya le van a cortar, ¿no?
+- **[01:17] Participante:** Sí, sí, por eso estamos contra el tiempo. Ese es el proyecto de los más grandes que tenemos, y afecta
+- **[01:17] Participante:** toda la arquitectura.
+- **[01:18] Participante:** Exacto. Por lo menos, SAP ahorita es SAP HANA cuatro punto cero, creo que es, SAP, por lo menos, va a caer en SAP HANA.
+- **[01:18] Participante:** Es, en este momento, es un NP que está convirtiendo todos
+- **[01:18] Participante:** esos elementos y está generando más desde el punto de vista de valor, o sea,
+- **[01:18] Participante:** la información y agregar valor desde esa información mantenida.
+- **[01:18] Participante:** Entonces, por lo menos, el módulo de analítica de SAP ¿cierto? Es un módulo que lo que me permite es hacer predicciones sobre los elementos internos que yo tengo.
+- **[01:18] Participante:** Yo coloco el caso que es con el que he trabajado directamente de SAP,
+- **[01:18] Participante:** a nivel de proyectos, tanto de empresa como a nivel de proyectos externos,
+- **[01:18] Participante:** y es ver cómo esa IA y cómo esos elementos empiezan a formular, ¿cierto?,
+- **[01:18] Participante:** un camino directo a la generación de valor.
+- **[01:18] Participante:** Entonces, esa es la transformación que se está llegando. Yo no digo que los
+- **[01:18] Participante:** van a desaparecer, porque finalmente, como Gustavo lo decía, son elementos monolíticos
+- **[01:18] Participante:** pero yo lo que busco es esa transversalidad y esa eliminación de silos
+- **[01:18] Participante:** para poder entender que la conexión entre todos los procesos y llegar a
+- **[01:19] Participante:** por acá.
+- **[01:19] Participante:** A toda la conexión de estos dominios, ¿listo?
+- **[01:19] Participante:** Algo que es complejo cuando yo estoy hablando de estas nuevas herramientas.
+- **[01:19] Participante:** Lo que pasa ahorita con el bytecode, por ejemplo,
+- **[01:19] Participante:** yo me imagino que ustedes ya se han enfrentado al bytecoding
+- **[01:19] Participante:** han creado soluciones dentro de cloud,
+- **[01:19] Participante:** De pronto,
+- **[01:19] Participante:** Gustavo no,
+- **[01:19] Participante:** ¿Alguien ha creado soluciones dentro del cloud?
+- **[01:19] Participante:** ¿Felipe sí?
+- **[01:19] Participante:** Hey, pues.
+- **[01:19] Participante:** Jairo, sí.
+- **[01:19] Participante:** Rodrigo, también.
+- **[01:19] Participante:** Ah, no, Rodrigo, no.
+- **[01:19] Participante:** Listo. Ahorita, por lo menos, con el tema del web coding, pues,
+- **[01:19] Participante:** muchas personas
+- **[01:19] Participante:** han dado por crear sus propias soluciones, y eso está muy bien,
+- **[01:19] Participante:** pero cuando empieza a crecer la solución, ahí es donde empezamos a tener los problemas.
+- **[01:19] Participante:** Porque no tenemos estas capas y no tenemos una arquitectura
+- **[01:19] Participante:** correctamente creada específicamente en el dominio tres, que es la arquitectura de esas aplicaciones.
+- **[01:19] Participante:** Entonces, hasta ahí es donde superchévere, superfuncional,
+- **[01:20] Participante:** llegan donde el jefe, jefe, ya tengo la solución de todos los
+- **[01:20] Participante:** problemas,
+- **[01:20] Participante:** Véala, aquí está funcional totalmente. Ya la conecté a una
+- **[01:20] Participante:** base de datos por allá gratuita,
+- **[01:20] Participante:** ¿cierto?, en la nube. Y, bueno, vamos
+- **[01:20] Participante:** para adelante. Llega un nuevo servicio,
+- **[01:20] Participante:** y fracasa.
+- **[01:20] Participante:** Sí es entender cómo
+- **[01:20] Participante:** vamos conectando con estos elementos, pero eso se le
+- **[01:20] Participante:** finalmente son los que me permiten englobar estos dominios.
+- **[01:20] Participante:** Son los que me me permiten
+- **[01:20] Participante:** venga, vuelvo a campo, generar estas estructuras
+- **[01:20] Participante:** de forma controlada.
+- **[01:20] Participante:** Eso es lo que está promulgando en este momento SAP.
+- **[01:20] Participante:** Crear esto de forma controlada.
+- **[01:20] Participante:** ¿Listo? Ahí es donde yo les digo, ustedes se bajarían de ZAP,
+- **[01:20] Participante:** confiarían en ustedes a hacer sus propias soluciones y se bajarían de SAP,
+- **[01:20] Participante:** Muy difícil, difícil, no.
+- **[01:21] Participante:** Certo.
+- **[01:21] Participante:** ¿Cierto? Es difícil, es bien, bien difícil.
+- **[01:21] Participante:** Primero, por la inversión, segundo, por el el costo de implementación, segundo, por
+- **[01:21] Participante:** tercero, por absolutamente todos los procesos que me controlo.
+- **[01:21] Participante:** Ahí es donde yo empiezo a entender cuál es el valor de lo que me
+- **[01:21] Participante:** agregando el SAP. Me da el control, me da la lógica,
+- **[01:21] Participante:** me da la estructura y me da el esqueleto que engloba todo lo que yo estoy construyendo.
+- **[01:21] Participante:** ¿Listo? Lo mismo Microsoft. Todos los que están en Microsoft tengo creo que tres personas que no están en Microsoft, pero los que están en Microsoft,
+- **[01:21] Participante:** ¿Ustedes creen que es fácil bajarse del ecosistema de Microsoft?
+- **[01:21] Participante:** No.
+- **[01:21] Participante:** ¿Cierto?
+- **[01:21] Participante:** El tema, Julio, de SAP.
+- **[01:21] Participante:** Es la cumplibilidad que tiene, digamos, la dependencia, digamos, al
+- **[01:21] Participante:** de de los consultores especializados.
+- **[01:21] Participante:** Claro, y ahí está el negocio de ellos, ¿no?
+- **[01:21] Participante:** Ahí está el negocio de ellos.
+- **[01:21] Participante:** De la parametrización, ahí está el negocio de
+- **[01:22] Participante:** la capacitación y demás.
+- **[01:22] Participante:** De hecho, pues, por algo es empresa uno, número uno en ganancias
+- **[01:22] Participante:** por allá en Europa.
+- **[01:22] Participante:** Tiene su modelo muy, muy bien montado. Y eso pasa con los ecosistemas, que, de hecho, vamos a hablar más adelante un poco de lo que son esos ecosistemas. Empezar a entender esos ecosistemas nos dan todas las herramientas para trabajar de forma mancomunada, y eso es lo que vamos a hacer directamente con Microsoft.
+- **[01:22] Participante:** Ver cómo relacionamos esos datos, ver cómo controlamos esos datos y, finalmente,
+- **[01:22] Participante:** cómo agregamos valor desde esos datos, ¿listo?
+- **[01:22] Participante:** Esta es más
+- **[01:22] Participante:** Esta es más a nivel de pregunta. De los cinco
+- **[01:22] Participante:** de las cinco herramientas que ven ahí,
+- **[01:22] Participante:** ¿cuántas conocen?
+- **[01:22] Participante:** Hemos visto el business more canvas.
+- **[01:22] Participante:** Aquí en la
+- **[01:23] Participante:** en la maestría.
+- **[01:23] Participante:** Ok.
+- **[01:23] Participante:** La identificación de stakeholders, pues que es una idea práctica
+- **[01:23] Participante:** de PMI. Sí, señor, correcto.
+- **[01:23] Participante:** Bueno, cadena de valor, normalmente, cuando están certificados en
+- **[01:23] Participante:** en calidad, pues, es es es
+- **[01:23] Participante:** parte del lenguaje.
+- **[01:23] Participante:** Parte del lenguaje,
+- **[01:23] Participante:** Feliz espacio. ¿Señor?
+- **[01:23] Participante:** Comentar que el value stream mapping se habla mucho de metodologías de agilismo escalado.
+- **[01:23] Participante:** Como por ejemplo.
+- **[01:23] Participante:** Como safe, ok.
+- **[01:23] Participante:** Jairo, pregunta, ¿en tu empresa aplican SAFE?
+- **[01:23] Participante:** En el cliente donde estoy tenemos SAFE, sí.
+- **[01:23] Participante:** Ok. ¿Todos saben qué es la metodología safe?
+- **[01:23] Participante:** No, señor. No, no.
+- **[01:23] Participante:** No, ok.
+- **[01:23] Participante:** No.
+- **[01:23] Participante:** Así como lo escribí, eso.
+- **[01:24] Participante:** Me fue las mayúsculas.
+- **[01:24] Participante:** SAFE es una metodología ágil de proyectos, es
+- **[01:24] Participante:** algo así como un scrum con vitaminas.
+- **[01:24] Participante:** Por llamarlo de alguna forma. Esa es la gran metodología que nosotros trabajamos en el banco,
+- **[01:24] Participante:** Se caracteriza por tener algo que se conoce como los trenes, trenes de lanzamiento,
+- **[01:24] Participante:** y es precisamente tener esos grupos, células dedicadas de, por llamarlo de alguna forma, para que lo
+- **[01:24] Participante:** asociemos, que se encargan de generar estrategias
+- **[01:24] Participante:** precisamente para el desarrollo de los proyectos. Entonces,
+- **[01:24] Participante:** son metodologías ágiles, en realidad, pero que finalmente, pues tienen el mismo foco, Nosotros trabajábamos a tres meses, por ejemplo, cada tres meses teníamos
+- **[01:24] Participante:** por llamar de alguna forma, un kick off donde presentábamos esos elementos, presentábamos también
+- **[01:24] Participante:** cuál iba a ser la priorización del siguiente trimestre,
+- **[01:24] Participante:** y eso parte, pues, de unas condiciones específicas que me da SAFE. Lo que les digo, unos trenes, ¿cierto?, unos orquestadores,
+- **[01:24] Participante:** que finalmente son los que van a controlar esos esos vagones
+- **[01:25] Participante:** que van a ser cada uno de lo que nosotros conocemos, algo así como las células o las áreas, ¿listo?
+- **[01:25] Participante:** Son metodologías, y nosotros vamos a encontrar muchas
+- **[01:25] Participante:** en algunas vamos a ver alguna de estas, vamos a ver otras herramientas, vamos a escalar
+- **[01:25] Participante:** otros elementos. Entonces, estas son algunas de las que yo traigo
+- **[01:25] Participante:** Como les digo, hay muchísimas más por detrás,
+- **[01:25] Participante:** Cada metodología trae sus propias herramientas, trae sus propios artefactos.
+- **[01:25] Participante:** La pregunta que siempre nos va
+- **[01:25] Participante:** a rondar en la cabeza, entonces, ¿cuál es el mejor?
+- **[01:25] Participante:** En realidad, no hay uno mejor.
+- **[01:25] Participante:** ¿Cierto? El mejor es el que se adapte a lo que yo estoy haciendo
+- **[01:25] Participante:** y me agregue el valor adecuado frente a lo que yo estoy haciendo.
+- **[01:25] Participante:** Entonces, eso también es un elemento a tener claro.
+- **[01:25] Participante:** ¿Ustedes qué metodología están trabajando actualmente para lo que hagan en su día a día?
+- **[01:25] Participante:** Lo que pasa es que
+- **[01:25] Participante:** Que pasa es que, de alguna forma, uno
+- **[01:25] Participante:** uno, son complementarias, ¿no?
+- **[01:25] Participante:** Ajá. Y lo que tú decías, para
+- **[01:25] Participante:** digamos, para ciertas situaciones uno puede
+- **[01:26] Participante:** optar por cualquiera de ellas.
+- **[01:26] Participante:** Pero no hay una particular, pues, que que oprimen.
+- **[01:26] Participante:** Gustavo, consulta.
+- **[01:26] Participante:** ¿Tú en qué área estás?
+- **[01:26] Participante:** En en la PMO, oficina de proyectos.
+- **[01:26] Participante:** Ok, tema de proyectos. ¿Tienen alguna estructura metodológica
+- **[01:26] Participante:** asociada a todos los proyectos?
+- **[01:26] Participante:** Sí, obviamente utilizamos el marco de referencia de
+- **[01:26] Participante:** del PMI,
+- **[01:26] Participante:** al WebPrint two también,
+- **[01:26] Participante:** ¿sí?
+- **[01:26] Yo:** Ahí, un día, vi,
+- **[01:26] Participante:** Y creamos nuestra propia metodología, pero, pues teniendo esos marcos de referencia.
+- **[01:26] Yo:** Dios virgen.
+- **[01:26] Participante:** Entonces, ustedes tienen su propia metodología, y qué bueno que me dijiste eso, porque precisamente
+- **[01:26] Participante:** hacia allá voy. Por eso les decía, ninguno es mejor que otro, todo depende de qué
+- **[01:26] Participante:** en qué situación lo esté usando. Lo que Gustavo seguramente habrá hecho en su momento es
+- **[01:26] Participante:** seleccionar cada uno de los elementos que le estaban agregando valor, precisamente para guardar
+- **[01:26] Participante:** ese o salvaguardar ese valor dentro de esos artefactos.
+- **[01:26] Participante:** ¿Cierto? Entonces, es una unión.
+- **[01:27] Participante:** Hay gente purista, no, yo no soy tan purista, yo soy específicamente muy dado a que
+- **[01:27] Participante:** yo tengo que ver la estructura, tengo que ver el contexto al que me estoy enfrentando, y de ahí parte
+- **[01:27] Participante:** a construir sobre lo que tengo.
+- **[01:27] Participante:** Es muy difícil también llegar a ciertas empresas y decir,
+- **[01:27] Participante:** venga, es que usted tiene que implementar tu GAF,
+- **[01:27] Participante:** pero se demora, no sé, tanto tiempo. Certificados todo este tiempo.
+- **[01:27] Participante:** ¿Cuándo van a ver el valor?
+- **[01:27] Participante:** Mucho, muy lejos.
+- **[01:27] Participante:** Hay que ser muy cuidadosos con eso, hay que ser adaptables, hay que ser maleables, hay
+- **[01:27] Participante:** que ser flexibles frente a lo que nosotros nos enfrentamos en nuestro día a día.
+- **[01:27] Participante:** Felipe, qué pena. ¿Tenías la mano levantada y no te di la palabra?
+- **[01:27] Participante:** No, es que me me dio como ya cosita participar. Lo lo que pasa es que
+- **[01:27] Participante:** yo había dicho, la empresa es un grupo empresarial para la que yo trabajo,
+- **[01:27] Participante:** Son son, más o menos, ocho empresas.
+- **[01:27] Participante:** Yo, en ese momento, soy como decir,
+- **[01:27] Participante:** en español, como un consultor de negocios, y y estoy transversal a todas las ocho empresas.
+- **[01:28] Participante:** Entonces, por ejemplo, una de esas
+- **[01:28] Participante:** creado una una herramienta de inteligencia artificial llamada BuildMyAI, ¿no?, que
+- **[01:28] Participante:** es como una agencia de marketing
+- **[01:28] Participante:** para para para emprendedores. Entonces, por eso decía que
+- **[01:28] Participante:** para de diferentes empresas, se se aplican
+- **[01:28] Participante:** de estas metodologías de negocio,
+- **[01:28] Participante:** todas, sino que, ya en la práctica,
+- **[01:28] Participante:** alrededor del marketing, porque nosotros, además de asesorar, enseñamos
+- **[01:28] Participante:** capacitamos, certificamos, ¿no?, también, incluso, dentro de la
+- **[01:28] Participante:** empresas está una universidad ya con licencia, con licencia, digamos, que
+- **[01:28] Participante:** para para certificar o para crear
+- **[01:28] Participante:** perdón, certificar profesionales, ¿no?, de cinco años, especialistas, maestrías y todo eso, dentro de ese grupo de empresas.
+- **[01:28] Participante:** Entonces, ¿qué...? En la plática, ¿qué te digo? Que es que, en el marketing,
+- **[01:28] Participante:** particularmente, que es es el desafío, yo creo que
+- **[01:28] Participante:** todas las empresas, el área de marketing y venta, el desafío es que, constantemente,
+- **[01:28] Participante:** están en cambios, porque se basan en el comportamiento del consumidor.
+- **[01:29] Participante:** ¿Sí? Y el comportamiento del consumidor es constante. O sea, es cambiante con
+- **[01:29] Participante:** constantemente. Entonces, ya viéndolo en la práctica, digo,
+- **[01:29] Participante:** aunque estos modelos sirven muchísimo para no entrar en un caos,
+- **[01:29] Participante:** a a nivel de negocio, aún en
+- **[01:29] Participante:** necesidad de de de de estar a la vanguardia de de
+- **[01:29] Participante:** de poder responder de de una forma correcta, hay algunos nudos.
+- **[01:29] Participante:** Que que que que la teoría habla muy bonita,
+- **[01:29] Participante:** o sea, te, o yo lo digo desde desde lo que vivo, ¿sí me entendés?, con los ocho negocios.
+- **[01:29] Participante:** La teoría es muy chévere, muy bacana, y y seguramente un solo negocio
+- **[01:29] Participante:** puede funcionar muy bien.
+- **[01:29] Participante:** Cuando es así, ya que lo ponemos a la práctica,
+- **[01:29] Participante:** hay cositas. De hecho, hay dos
+- **[01:29] Participante:** management, ahí, en en las en las empresas, ¿sí? Porque, precisamente,
+- **[01:29] Participante:** hay tantas cosas y dentro del del ejercicio que
+- **[01:29] Participante:** pesar de que hay metodologías en la práctica,
+- **[01:30] Participante:** muchas veces

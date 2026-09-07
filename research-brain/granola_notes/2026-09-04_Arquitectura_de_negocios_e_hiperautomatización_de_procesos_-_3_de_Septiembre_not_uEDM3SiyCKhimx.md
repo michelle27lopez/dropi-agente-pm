@@ -1,0 +1,650 @@
+# Arquitectura de negocios e hiperautomatización de procesos - 3 de Septiembre
+
+- **ID:** `not_uEDM3SiyCKhimx`
+- **Fecha:** 2026-09-04T00:04:31.963Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/bdf07d46-6fc6-41f8-8ff6-81ca8b5e73d0)
+- **Asistentes:** Santiago Herrera Acosta
+
+---
+
+## Resumen de la Reunión
+# Recapitulación: Arquitectura Empresarial, de Negocios y de Procesos
+
+- Tres niveles de arquitectura revisados:
+  - Empresarial: visión sistémica y estrategia
+  - De negocios: agregación de valor entre nodos
+  - De procesos: el “cómo” operativo y detallado
+- Curso centrado en arquitectura de negocios e hiperautomatización como generadores de valor
+
+# Anuncio: Ampliación de Plazo de Entrega
+
+- Plazo extendido hasta el domingo a medianoche
+- Quienes ya entregaron pueden agregar o modificar su entrega
+- Modificación formal en Canvas se hará al terminar la clase
+
+# Principio Central: No Todo Proceso Merece Automatizarse
+
+- Error común: enamorarse de la solución antes de entender el problema
+- Digitalizar ≠ transformar: son dos vertientes distintas
+- Caso ilustrativo: checklist de vehículos con aprobación diaria
+  - Solo añadía carga laboral sin generar valor real
+  - La automatización mal aplicada multiplica errores, no los elimina
+- Riesgo actual: “transformación digital” reducida a instalar Copilot o comprar licencias
+
+# BPM: Gestión por Procesos vs. Gestión de Procesos
+
+- BPM (Business Process Management): ciclo integral de extremo a extremo
+  - Sin BPM: cada persona ejecuta a su manera, mejoras dependen de la memoria
+  - Con BPM: procesos documentados, replicables, escalables, medibles y mejorables
+- Dos niveles clave:
+  - Estratégico: gestión **por** procesos
+  - Operativo: gestión **de** procesos
+  - Táctico: bisagra entre ambos, traduce estrategia en operación
+- Procesos vistos como silos por área (contabilidad, operaciones) es el error histórico
+- El dueño real del proceso es un riesgo crítico: si se va, se va el conocimiento
+- Las 6 fases del ciclo BPM: identificación, descubrimiento, análisis, rediseño, implementación, monitoreo y control
+- KPIs de punta a punta mencionados: lead time, order fulfillment, NPS, disponibilidad del servicio, ciclo de facturación
+
+# Service Blueprint: Mapeo Real del Proceso
+
+- Herramienta para entender la experiencia del cliente y los procesos internos de forma transversal
+- 4 capas principales:
+  1. Acciones del cliente (disparadores: WhatsApp, llamada, mensaje push, promoción)
+  2. Front stage: lo visible para el cliente (agente de WhatsApp, confirmación, repartidor)
+  3. Backstage: lo invisible (validación de stock, alistamiento, asignación de ruta)
+  4. Procesos de soporte (WhatsApp Business, sistema de inventario, ruteo, pasarela de pago)
+- Quinta capa: evidencia física (comprobante, empaque, firma de entrega)
+- Ejemplo trabajado: droguería Vital con pedido por WhatsApp
+- Blueprint puede representar el estado actual (AS-IS) y el estado futuro (TO-BE)
+- Profundidad depende de tres técnicas: entrevistas, observación directa, documentación existente
+- Temporalidad del seguimiento: depende de la velocidad del proceso, no hay regla fija
+- Próximo paso: pasar el blueprint por un agente de IA para identificar oportunidades de optimización y rediseño
+
+# Modelos Disruptivos de Lógica para el Negocio
+
+- El modelo AS-IS ya no es el destino: es el baseline
+- Hoy se construyen modelos disruptivos que evolucionan el AS-IS hacia el TO-BE
+- El trigger no siempre viene del cliente: también puede originarse en el front stage interno
+- Herramienta demostrada: Power Apps + Copilot Studio (disponible en Colombia desde noviembre 2026)
+  - Generación de aplicativos empresariales desde un prompt en lenguaje natural
+  - Ejemplo: sistema de gestión de proyectos generado con un solo prompt
+  - Corre sobre Dataverse o listas de SharePoint (incluidas en cuentas Microsoft)
+  - Ventaja: testeo gratuito, iteración rápida, sin desarrollo tradicional
+
+# Hiperautomatización: IA + Automatización
+
+- Hiperautomatización = combinación de IA y automatización de procesos
+- RPA (Robotic Process Automation): surgió \~2015 con fuerza (UiPath como líder de mercado)
+  - Simula tareas repetitivas mediante robots de software, no hardware
+  - Modelo low-code: drag and drop, sin programación compleja
+- Triángulo de transformación: personas, tecnología y procesos deben estar alineados
+- Las estructuras organizacionales pueden bloquear procesos bien diseñados (punto de Gustavo)
+- BPM vs. herramienta BPMS: la metodología es independiente del sistema; el sistema es una ayuda, no un indispensable
+- CRM y BPMS pueden coexistir en el mismo ecosistema digital; la priorización depende del valor generado
+
+# Actividad Práctica: Tablero Miro
+
+- Apertura de salas de trabajo en grupos
+- Ingreso al tablero de Miro con correo electrónico
+- Construcción del service blueprint propio de cada equipo
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/602acf07-6206-42a5-aec2-c3b6f8a971db](https://notes.granola.ai/t/602acf07-6206-42a5-aec2-c3b6f8a971db)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[00:04] Participante:** clase pasada que no puede estar y pues poder hacer la tarea. Dale, no problema.
+- **[00:04] Participante:** Catarina, buenas noches, ¿cómo estás?
+- **[00:04] Participante:** Hola, buenas noches, ¿cómo están?
+- **[00:04] Participante:** Todo muy bien, gracias a Dios. ¿Y tú cómo vas?
+- **[00:04] Participante:** Todo muy bien también, gracias a Dios. Me alegra, me alegra.
+- **[00:04] Participante:** Listo, pero más que hoy terminen de conectar el resto.
+- **[00:04] Participante:** Que si con ese errorcito de la clave, yo creo que más de uno está todavía ahí.
+- **[00:05] Participante:** Batallando con él.
+- **[00:05] Participante:** Con el Zoom.
+- **[00:05] Participante:** Hasta pronto y buenas noches. ¿Cómo estás?
+- **[00:05] Participante:** Buenas noches, muy bien. ¿Y tú cómo vas?
+- **[00:05] Participante:** Bien, profe, gracias. Ah, bueno, me alegra. Daniela, Alejandro, no los había visto. Buenas noches, ¿cómo están?
+- **[00:05] Participante:** Hola, buenas noches.
+- **[00:05] Participante:** Gustavo, José, buenas noches, ¿cómo están?
+- **[00:05] Participante:** Yo sí ya estaba asustándome. Este no es el código, ¿qué pasó? Yo también me pasó exactamente lo mismo.
+- **[00:06] Participante:** Yo miércoles, ahorita, ¿qué pasó? Ya los cortaron la vez pasada y hoy, ¿qué fue?
+- **[00:06] Participante:** Claro, no, no, no.
+- **[00:06] Participante:** Se solucionó rápido, afortunadamente.
+- **[00:06] Participante:** Sí, sí, sí, menos mal.
+- **[00:06] Participante:** Rodrigo, buenas noches. Jessica, buenas noches. ¿Cómo están? Buenas noches, buenas noches.
+- **[00:06] Participante:** Listo, ahí ya vamos llegando.
+- **[00:06] Participante:** Varios, y creo que nos pasó, me incluyo, el tema del usuario. Entonces ahí deme unos minuticos mientras termine de conectar el resto.
+- **[00:06] Participante:** Y listo, e iniciamos.
+- **[00:06] Participante:** De quién.
+- **[00:06] Participante:** ¿Cuántos sabemos?
+- **[00:06] Participante:** 12.
+- **[00:07] Participante:** Un buen llegando.
+- **[00:08] Participante:** Listo.
+- **[00:08] Participante:** Vamos iniciando.
+- **[00:08] Participante:** Listo, que el tiempo apremia y hoy tenemos bastantes cositas por ver. Igual inicio de grabación para las personas que todavía no se han conectado.
+- **[00:08] Participante:** Iniciar. Listo, perfecto. Buenas noches para todos, espero que se encuentren muy bien. El día de hoy vamos a estar trabajando un segundo momento asociado a lo que ya hemos venido construyendo y que vamos a seguir construyendo. Vamos a ir viendo a lo largo de este curso. ¿Alguien se acuerda qué fue a grandes rasgos lo que hicimos la clase pasada?
+- **[00:08] Participante:** Hola, bueno, yo recuerdo que hablamos varios, o nos repasamos como varios modelos de metodología de proyectos.
+- **[00:09] Participante:** Nos hablaba de, sí, pues que utilizaban, creo que recuerdo que dice que utilizaban la metodología SAFe en varios de los procesos.
+- **[00:09] Participante:** Igual ese tema.
+- **[00:09] Participante:** Hola, buenas noches.
+- **[00:09] Participante:** Si hablamos de Scrum, pues digamos las metodologías clásicas de metodologías de cascada.
+- **[00:09] Participante:** Ok, ok, trabajamos tangencialmente temas, hablamos un poquito de temas de metodologías, nos centramos un poco más en lo que fue arquitecturas, ¿cierto? Alguien de pronto estuve viendo por ahí el foro, gracias.
+- **[00:09] Participante:** Hablábamos un poquito desde esa arquitectura, cierto, para ir retomando esas arquitecturas que nosotros nos conllevan a tener una buena estrategia, unos buenos elementos, un buen modelo operativo que finalmente Es nuestro cómo, nuestro cuándo, nuestro qué, nuestro cómo y nuestro porqué. Listo, entonces arquitectura, lo más grande, en la sombrilla macro, ¿quién se acuerda cómo se llama?
+- **[00:10] Participante:** La arquitectura empresarial, y ahí la bajamos a la de negocios. Y profe, empresarial, negocios, y por último arquitectura de procesos, ¿cierto? 3 elementos críticos, arquitectura de la empresarial enfocada mucho en la estrategia, enfocada mucho en esas interconexiones, en esa visión sistémica, qué es lo que estoy construyendo, qué es lo que estoy mostrando, cómo lo estoy mostrando y demás. Bajo un poco, arquitectura de negocios, cómo agrego valor, ¿cierto?
+- **[00:10] Participante:** Desde diferentes puntos, desde diferentes nodos, cómo interconectan esos nodos para generar valor para la compañía. Y arquitectura de procesos, donde englobamos ese cómo lo hacemos. Listo, esa forma ya mucho más minuciosa, esa estructura que nos va a permitir lograr esas metas que nos estamos colocando. Listo, entonces vamos bajando un poquito la información. Este curso, pues como el nombre lo indica, nos vamos a centrar un poco más en lo que es arquitectura de negocios, arquitectura empresarial. Esto da otros temas mucho más avanzados, muchos por fuera del alcance de este curso. Entonces vamos a quedar En lo que es arquitectura de negocios y cómo nosotros hemos construido alrededor de esa arquitectura de negocios, que es la agregación de valor, elementos que nos permitan desde la hiper automatización generar ese valor. Listo, lo que vamos a ir construyendo.
+- **[00:11] Participante:** Ah, bueno, ya me van conectando más personas. Perfecto. Anuncios parroquiales, todavía hay bastantes personas que me faltan por la entrega del día de hoy.
+- **[00:11] Participante:** Y sé que han estado súper ocupados esta semana, he recibido unos mensajitos por ahí referentes a temas de ocupación y demás. Entonces vamos a hacer una ampliación del plazo, listo. Vamos a dejar el plazo hasta Hasta el domingo y medianoche, obviamente medianoche del domingo para las personas que todavía están un poco colgadas y demás, no hay problema. Listo, igual todo el tema de plazos entregables y demás Me escriben, me avisan y demás, que podemos hacer algo. Es que no nos pasemos de una fecha límite que pongamos y que no se les acumule el trabajo como tal. Listo, pues para que estén tranquilos, todavía no hemos hecho la modificación dentro de la tarea, pero una vez terminemos la clase hago la modificación para dejarlo entonces para el domingo en la noche. Y los que ya entregaron, si quieren agregar algo, si quieren adicionar algo, si quieren implementar algo, pues bienvenido. Listo.
+- **[00:12] Participante:** Entonces, bueno.
+- **[00:12] Participante:** Venga, les comparto.
+- **[00:12] Participante:** Lo paso más bien para acá.
+- **[00:12] Participante:** Y me hizo zoom.
+- **[00:12] Participante:** Y pasemos.
+- **[00:12] Participante:** Compartamos pantalla acá.
+- **[00:12] Participante:** Listo, entonces nosotros, como lo indican nuestras tareas, recuerden, estábamos en esa clase pasada, en ese entregable pasado, identificando dónde está el problema. Por eso También pensaron a construir mapas de oportunidades para saber cuáles eran esas características críticas que ustedes ya identifican dentro de su organización, dentro de su empresa, finalmente para poder construir algo muy acorde a lo que son los procesos El día de hoy vamos a estar viendo cómo funciona y cómo debería funcionar, que es el segundo paso. Vamos a crear esos modelos disruptivos para poder empezar a entender cuál es la son esas diferentes variantes que nosotros tenemos al momento de automatizar. Listo.
+- **[00:13] Participante:** Para las personas que no estuvieron la clase pasada.
+- **[00:13] Participante:** Yo siempre les dejo una guía.
+- **[00:13] Participante:** Por favor.
+- **[00:13] Participante:** No la abran desde aquí, desde el navegador de Canvas, porque no les va a dar interactividad, no les va a permitir moverse, sino que por favor descárguenla aquí en la flechita hacia abajo, la descargan para que pues tengan acceso a todos los elementos que vamos a ver.
+- **[00:13] Participante:** Entonces descarguen su guía, por favor.
+- **[00:14] Participante:** Que es donde vamos a tener el orden de nuestra clase.
+- **[00:14] Participante:** Y este día comenzamos con algo que es crítico.
+- **[00:14] Participante:** Algo que es crítico y quiero llevar al debate, y es: no todo proceso merece ser automatizado tal como existe hoy.
+- **[00:14] Participante:** ¿Opinan lo mismo que yo?
+- **[00:14] Participante:** ¿O estamos pensando diferente?
+- **[00:14] Participante:** Estamos totalmente de acuerdo.
+- **[00:14] Participante:** Totalmente de acuerdo, Gabriela, Alejandro, Gustavo.
+- **[00:14] Participante:** Cierto, nosotros nos enfrentamos todos los días a eso. Todos los días tengo 1, 2, 3, 4 empresas que me están buscando diciéndome: profe, queremos automatizar XYZ. Y solo Solamente haciéndoles preguntas muy básicas me doy cuenta de que de verdad eso no es lo que necesitan.
+- **[00:14] Participante:** Entonces es un elemento muy crítico. Estamos en una época donde queremos automatizar todo sin saber de verdad qué es lo que estamos automatizando. Entonces hay que ser cautelosos. Nosotros aquí desarrollamos ese pensamiento Entonces, eso también nos ayuda a nosotros a tener un pensamiento crítico frente a lo que es la automatización, para no decir a todos les queremos meter IA, a todos les queremos meter automatización. Y ahorita la transformación digital para muchas personas se ha vuelto comprar licencias de Copilot para que todo el mundo Entonces trabaje, instale Copilot y le pregunte todo a Copilot. Y eso se ha vuelto la transformación digital.
+- **[00:15] Participante:** Nosotros tenemos que ser muy conscientes de cómo esos criterios finalmente nos aportan a entender cuál es la forma correcta de implementar IA, de implementar elementos de automatización, y que eso aporte a lo que nosotros vemos en esta materia, que es generar valor dentro de nuestra arquitectura de negocio. Listo.
+- **[00:15] Participante:** Entonces eso es lo que vamos a empezar a ver hoy, identificar con algunas de las, con algunas herramientas cómo nosotros podemos construir elementos alrededor de esa arquitectura para que sí estén agregando el valor agregado adecuado. Adicionalmente, para hacer una pequeña priorización, algo que nos había quedado pendiente de nuestra clase pasada y que hoy lo vamos a ver mucho más a detalle, por eso no inicio de la clase 1 sino que inicio desde esta, hacer esa correcta priorización con unos parámetros que vamos a tener. Listo.
+- **[00:16] Participante:** Pregunta abierta.
+- **[00:16] Participante:** ¿Alguna vez viste un proceso que se veía perfecto dibujado en un diagrama pero que en la práctica fallaba una y otra vez?
+- **[00:16] Participante:** ¿Por qué creen que pasa eso?
+- **[00:16] Participante:** Yo creo que porque se enamoraba como de la solución, no del problema como tal.
+- **[00:16] Participante:** Gabriela se enamora de la solución, Manuel problema.
+- **[00:16] Participante:** Diagramamos sobre lo que creemos que es correcto, pero no nos paramos, no nos detenemos a entender bien cuál es nuestro problema.
+- **[00:16] Participante:** Entonces ahí es donde entran esas automatizaciones que funcionaron una, dos veces, y de ahí para allá llegó volumen y fallaron, ¿cierto?
+- **[00:16] Participante:** ¿Qué más?
+- **[00:16] Participante:** Oiga, nos ocurrió una vez, pues, hay momentos donde la persona que documenta no está lo suficientemente cerca del negocio, entonces documenta, digamos, el Procesó más en modo Disney, pues.
+- **[00:17] Participante:** Y a Manuel no.
+- **[00:17] Participante:** No, el modo normal, pues, que como los pasos completos que hace una persona, fue una opción.
+- **[00:17] Participante:** Otra opción que nos pasaba era que no apropian el nuevo proceso.
+- **[00:17] Participante:** Estaban como esos dos casos que me acuerdaba.
+- **[00:17] Participante:** Cuando, Alejandro, cuando tú me dices no apropian el nuevo proceso, ¿haces referencia a quién no lo está apropiando?
+- **[00:17] Participante:** El mismo negocio.
+- **[00:17] Participante:** OK, ya.
+- **[00:17] Participante:** Las dos que tenemos ya, pues que lo construyas con él, lo documentes, pero a la final él se enfrenta.
+- **[00:17] Participante:** Al cliente y pues puede saltárselo a solucionarle.
+- **[00:17] Participante:** Sí.
+- **[00:17] Participante:** O puede retrasarlo.
+- **[00:17] Participante:** Puede inventar otro paso.
+- **[00:17] Participante:** La verdad, esta es cuando él atiende al usuario.
+- **[00:17] Participante:** Y muchas gracias.
+- **[00:17] Participante:** Y quiero colocar ese paréntesis, esa pausa, ese stopper.
+- **[00:17] Participante:** Porque nosotros estamos acostumbrados hoy en día, por la misma moda, a decir que estamos automatizando, cuando en realidad estamos, lo que estamos haciendo es digitalizar procesos.
+- **[00:18] Participante:** Y es muy diferente digitalizar que transformar procesos.
+- **[00:18] Participante:** Les voy a colocar un caso que me llegó hoy, un formato para que hicieran el registro de personas internas de la compañía con el fin de tomar vehículos propios de la compañía. La persona, el conductor tenía que tomar el vehículo, hacer un checklist, y ese checklist pasaba por una aprobación. Todos los días tenían que hacer eso, todos los días tenía que haber una aprobación. Y yo les decía, esto de verdad está colaborando Y entonces, ¿qué pasa? Que nosotros estamos transformando la persona que aprueba, que todos los días tiene que estar pendiente, y el día que no está pendiente entonces no pueden hacer la vuelta, no pueden hacer lo que tienen que hacer programado, porque entonces no tenemos una aprobación. Lo único que estábamos haciendo era colocarle más carga laboral a la persona que está Transformar es transformar de manera que va a involucrar tanto a la persona que estaba haciendo el servicio como a la persona que estaba probando el servicio. Entonces pasamos de intentar implementar controles para complicar los procesos que ya tenemos existentes Ahí es donde yo digo multiplicamos, que eso lo vamos a ver más adelante, cómo la automatización, entre comillas, lo que hace es multiplicar errores.
+- **[00:19] Participante:** Entonces, eso es lo que nosotros tenemos que cuidar, eso es lo que tenemos que controlar y tenemos que visualizar de verdad cuál es esa transformación amarrada a la arquitectura de negocio o amarrada a esa generación de valor. No solamente es digitalizar procesos. Digitalizar sirve en algunos casos, no voy a decir que no, pero hay procesos en los que creemos que la digitalización sirve y en realidad lo que está haciendo es aumentar el volumen de fallas. Entonces tenemos que entender cuándo digitalizamos y cuándo transformamos, que son las dos vertientes que vamos a ir tocando a lo largo de este curso. Listo.
+- **[00:19] Participante:** ¿Alguna otra?
+- **[00:19] Participante:** Y a que se les venga algún otro proceso que ustedes ya tengan en mente, de pronto.
+- **[00:19] Participante:** En sus empresas todo lo que es diagrama es perfecto, también es válido.
+- **[00:19] Participante:** Silencio, que apruebo.
+- **[00:19] Participante:** Dejemos ahí entonces mejor.
+- **[00:19] Participante:** Listo.
+- **[00:19] Participante:** Entonces, uno de los elementos críticos que nosotros vamos a tener que entender es esa conexión que tenemos entre la arquitectura de negocio y la arquitectura de procesos. Son dos mundos que tienen que Convivir son dos mundos que tienen que ir de la mano, son dos mundos que tienen que entenderse y hablarse para que esto funcione adecuadamente.
+- **[00:20] Participante:** Pregunta antes de, ¿alguien sabe qué significa BPM de pronto?
+- **[00:20] Participante:** Creo que se lo pregunté la clase pasada, no sé si no estoy mal, no me acuerdo. Business Process Management. Perfecto, Rodrigo, listo. Y ahorita, Rodrigo, ¿qué significa Business Process Management? Bueno, pues la BPM también era como, como que incluía, tenía entendido que es una técnica que recoge una serie de procesos, procedimientos, actividades, como tratándolo, digamos, de formalizar.
+- **[00:20] Participante:** Pero eso de una forma integral.
+- **[00:20] Participante:** Porque a veces tienden a ser muy individuales los procesos y no se ve el proceso como de inicio a fin.
+- **[00:20] Participante:** Sino que muy desde el enfoque de la, cómo la persona lo hace, cómo lo ha hecho siempre, cómo han sido las costumbres, y a veces eso no es un integrador de valor.
+- **[00:21] Participante:** No es un integrador de valor. Entonces vamos a entender un ciclo, vamos a entender un ciclo. El BPM es simplemente hablar de un ciclo.
+- **[00:21] Participante:** Un ciclo que aborda todos los elementos de precisamente lo que nosotros estamos construyendo. Ese ciclo lo que nos va a permitir es entender cómo integramos todos los elementos, tanto de arquitectura tanto de datos como de ese modelo operativo que finalmente nos permiten funcionar dentro de una organización de forma correcta. Error de los 1900, 2000, y que todavía pasa, es que los procesos siempre se han visto como áreas o como silos.
+- **[00:21] Participante:** Entonces no entendemos que un proceso, ahorita como nos decía Rodrigo, precisamente tiene, es un end-to-end, es desde que inicia, desde que comienza la solicitud, cuál es mi disparador, cuál es mi trigger, y hasta que ese cliente final puede ser un cliente interno, puede ser un cliente externo, es indiferente, pero que está recibiendo ese beneficio o ese valor agregado de ese proceso de transformación total. Entonces Nosotros estábamos muy acostumbrados a ver una oficina como un proceso.
+- **[00:22] Participante:** La oficina, y por eso comienzan los nombres: oficina de contabilidad, oficina de operaciones, oficina de riesgos, y vemos el proceso alojado ahí cuando en realidad es una mezcla transversal de muchos elementos. Entonces esas son las conexiones que si nosotros desde el BPM empezamos a identificar, pues va a ser mucho más fácil generar esa interconexión dentro de cada un elemento de los que nosotros estamos construyendo.
+- **[00:22] Participante:** Ahí les llega la pregunta: ¿quién es hoy el dueño real, dueño entre comillas real, de uno de los procesos críticos de su organización? Y ¿qué pasaría el día que esa persona se vaya?
+- **[00:22] Participante:** ¿Qué proceso es crítico?
+- **[00:22] Participante:** Por ejemplo, en, en Cali, en Confandi.
+- **[00:22] Participante:** En el único.
+- **[00:23] Participante:** En Tecnoquímicas.
+- **[00:23] Participante:** Pues para nosotros los procesos corren.
+- **[00:23] Participante:** La misión de la empresa, que es, digamos, entregar subsidios, son, digamos, procesos críticos.
+- **[00:23] Participante:** Para nosotros, el pago, la liquidación de esos subsidios, a quién se le entrega, luego la disposición de ellos en los canales para que la persona lo consuma, como que el proceso end-to-end de entrega de subsidios Los subsidios para nosotros, tanto monetarios como en especie, son críticos. Y dependiendo, digamos, la parte del proceso en el modelo de experiencia, si es cuando nos están descubriendo, en el utilizo, en el contrato.
+- **[00:23] Participante:** O en el evalúo, hay diferentes momentos críticos, momentos de verdad pues para el cliente.
+- **[00:23] Participante:** Alejandro, y te pregunto, ¿hay algún dueño?
+- **[00:23] Participante:** ¿Qué?
+- **[00:23] Participante:** Entre comillas.
+- **[00:23] Participante:** Si falta, ¿puede hacernos un hueco?
+- **[00:23] Participante:** ¿Un dueño como líder del tema? Alguien que se apropie, entre comillas, del proceso.
+- **[00:24] Participante:** Y tenga bajo su mando todo ese proceso que finalmente, si llega a faltar, nos pueda generar un problema.
+- **[00:24] Participante:** Suse.
+- **[00:24] Participante:** Pues no, la verdad es una suma de varios temas, pero digamos que el equipo que lidera de principio a fin el tema y que regula, digamos, Entonces, digamos, un proceso de principio a final, equipo de experiencia que lo ve transversal.
+- **[00:24] Participante:** Ok, es el visor completo de todo ese proceso para entender que esos subsidios están llegando de la forma adecuada y que le hace el blueprint o el journey.
+- **[00:24] Participante:** De principio a fin. Y entonces monitorea qué está pasando en cada uno de los momentos, en caso de que falle algo. Porque como lo dijo ahora, lo hiciste tú, lo dice Rodrigo, pues para que eso pase es la colaboración de varias partes de la compañía internamente.
+- **[00:24] Participante:** Exacto.
+- **[00:24] Participante:** ¿Te doy a entender qué?
+- **[00:24] Participante:** Y bueno, es un buen caso. Alejandro nos da el caso en el que no sucede este tipo de cosas, pero créanme que en el 80% de las empresas sí están sucediendo estos vacíos. Son vacíos que finalmente nos obligan Entonces, a tener esos planes de contingencia en caso de que esa persona que conoce todo el proceso, la persona que sabe cómo pagar la nómina, y si no está la señora que pagó la nómina, pues entonces, mejor dicho, el acabose.
+- **[00:25] Yo:** 素敵ね、うどんな。
+- **[00:25] Yo:** It doesn't taste.
+- **[00:25] Yo:** What?
+- **[00:25] Yo:** And then add some.
+- **[00:25] Yo:** And that's good.
+- **[00:25] Yo:** Yeah, call us.
+- **[00:25] Yo:** Depende, porque cuando, como lo recogí, él salió doble porque yo lo recogí a las 2 y media.
+- **[00:25] Participante:** Entonces, ese tipo de cosas sí suceden mucho.
+- **[00:25] Participante:** Y eso es cuando no tenemos estas metodologías interiorizadas y no tenemos esa interconexión entre lo que es el negocio y lo que es ese proceso. Listo, entonces alrededor de todo esto en Entonces, empezamos a jugar con muchos elementos que van a aportarle tanto de forma positiva como de forma negativa a todo lo que nosotros construimos en ese día a día. De hecho, cuando nosotros llegamos a los procesos de automatización, para mí es un crítico entender cuál es el valor que yo estoy agregando.
+- **[00:25] Yo:** Y ahí hizo.
+- **[00:25] Yo:** Y entonces dices, ok.
+- **[00:25] Participante:** Ahorita lo que les digo, hay muchas áreas dedicadas a la automatización entre comillas, y lo que se dedican es a tapar huecos, a digitalizar huecos, a cambiar muchos elementos, pero Sin tener un fundamento visionario hacia dónde está yendo la compañía. Entonces ahí es donde nosotros tenemos, como les decía ahorita, muy de ser muy críticos al momento de nosotros perfilar ese tipo de proyectos. Y ahorita vamos a ver una forma de poder hacer esa priorización. Sin embargo, para hacer la priorización pues tenemos que tener conocimiento de a qué nos estamos enfrentando. Yo primero identifico a qué me estoy enfrentando y Y posteriormente tengo todas las evidencias para poder hacer esa correcta priorización. Listo.
+- **[00:25] Yo:** Sí, José.
+- **[00:26] Yo:** No.
+- **[00:26] Participante:** De aquí nace este mapa, este mapita, y si se dan cuenta hay dos elementos críticos.
+- **[00:26] Participante:** A nivel estratégico estamos hablando de gestión por procesos y a nivel operativo hablamos de gestión de procesos.
+- **[00:26] Participante:** Esa es la gran diferencia entre la parte estratégica y la parte operativa. Pregunta: ¿será que la parte táctica está en alguna parte de aquí?
+- **[00:27] Yo:** Y necesito
+- **[00:27] Participante:** Pues es como la bisagra entre lo estratégico y operativo.
+- **[00:27] Participante:** Es la bisagra en que sentí Gustavo. Si lo puedes ampliar un poquito, te agradezco.
+- **[00:27] Participante:** Básicamente el que ayuda a que esa parte estratégica se cumpla en la parte operativa.
+- **[00:27] Yo:** O Vito, Vito.
+- **[00:27] Participante:** Entonces me da, por decirlo de alguna forma, lineamientos. Sí, exacto. Sí, sí, sí.
+- **[00:27] Participante:** Me da un cómo.
+- **[00:27] Participante:** Conectar.
+- **[00:27] Participante:** Y ese cómo finalmente lo puedo bajar a la minucia, lo puedo bajar al detalle.
+- **[00:27] Participante:** Y ese detalle comprendido en 3 elementos críticos que nos van a generar esas fases del BPM. Listo.
+- **[00:27] Participante:** Entonces miren que nosotros en nuestra parte superior contamos con lo que es arquitectura empresarial y la integración con sistemas, sistemas como lo dice ahí, de calidad, de riesgo, de seguridad, etcétera, etcétera, etcétera. Todos los días se Y en el medio aparece esa alineación estratégica entre procesos y plan estratégico. Ahí es donde Gustavo dice la bisagra se encuentra ahí, en la alineación. La alineación es Entonces esa parte táctica que finalmente nos permite comprender cómo podemos operar todas esas ideas y todas esas estrategias que nosotros estamos implementando para lograr esas funciones, objetivos. De cada uno de los elementos que nos proponemos a nivel compañía. Entonces, la táctica es uno de los elementos críticos que nosotros tenemos en esa transversalidad de todo lo que nosotros construimos en nuestro día a día. Ya cuando bajamos Entonces, si nosotros nos vamos a la gestión de esos procesos, sí vamos a encontrar estos 3 elementos: modelización y diseño, digitalización, toda la parte también relacionada a automatización o transformación,
+- **[00:28] Participante:** y el monitoreo. Listo.
+- **[00:28] Participante:** Todo eso.
+- **[00:28] Participante:** nos va a permitir generar ese ciclo aquí en este nivel operativo donde vamos a ver el ciclo del BPM. Listo.
+- **[00:29] Participante:** Entonces.
+- **[00:29] Participante:** Todo lo que nosotros estamos viendo en ese momento es asociado a, como les digo, ir interconectando todos esos conocimientos que van desde el cómo y llegan a ese qué. Listo.
+- **[00:29] Participante:** Entonces, lo que sucede con BPM y lo que sucede sin BPM. Sin BPM, cada persona ejecuta las cosas a su manera, ¿cierto? Cada persona dice yo lo hago así porque Porque así me capacitaron el primer día que llegué. O peor aún, la persona que llega al puesto y no tiene quien lo capacite.
+- **[00:29] Participante:** ¿Cierto?
+- **[00:29] Participante:** Y busca la forma y revienta como sea con tal de poder capacitar, perdón, con tal de hacer las cosas como tiene para responder a su necesidad.
+- **[00:29] Participante:** Con BPM los elementos documentados son replicables, son escalables en el tiempo, son mejorables, son fácilmente trazables. Entonces ya tenemos una gran diferencia.
+- **[00:29] Participante:** Nadie sabe con certeza dónde se atrasan los pedidos. Acá tenemos indicadores que nos muestran los problemas reales. Tenemos, y esto es un elemento que nosotros, bueno, antes de salir, uno de los proyectos que yo manejaba era la torre de control.
+- **[00:30] Participante:** La torre de control era donde estábamos depositando todos los indicadores en los 3 niveles.
+- **[00:30] Participante:** La parte estratégica, la parte táctica y la parte operativa de todos los procesos que nosotros desarrollamos a nivel banca.
+- **[00:30] Participante:** Cómo entender nosotros o cada una de las partes dentro de la compañía, dependiendo de su necesidad, empezar a ver la bifurcación de cada elemento, de cada KPI, cómo era el impacto a lo largo de la cadena de valor que nosotros habíamos planteado.
+- **[00:30] Participante:** Entonces, esa torre de control finalmente nos da una vista completa, un paneo general de todo lo que nosotros teníamos a nivel compañía.
+- **[00:30] Participante:** Eso.
+- **[00:30] Participante:** Pues es difícil de lograr precisamente porque nosotros no tenemos conocimiento, primero, de qué es lo que hacemos adecuadamente, y segundo, si no sabemos qué es lo que hacemos, pues mucho menos sabemos cómo medirlo.
+- **[00:31] Participante:** Entonces son elementos que nosotros vamos a ir construyendo y vamos a ir gestionando a lo largo de todos estos procesos de arquitectura.
+- **[00:31] Participante:** Sin BPM, mejorar depende de la memoria, quien lleva más tiempo.
+- **[00:31] Participante:** ¿Cierto?
+- **[00:31] Participante:** Con BPM la mejora es continua, no un evento aislado. Listo.
+- **[00:31] Participante:** Por ejemplo,
+- **[00:31] Yo:** No sirves.
+- **[00:31] Participante:** Pregunta, creo, Gustavo, ¿cuánto tiempo llevan en Cali?
+- **[00:31] Participante:** 17 años.
+- **[00:31] Participante:** 17 años.
+- **[00:31] Participante:** Pregunta.
+- **[00:31] Participante:** General.
+- **[00:31] Participante:** La mejora depende.
+- **[00:31] Participante:** De alguien con mucho conocimiento como vos.
+- **[00:31] Participante:** O hay procesos de mejora ya implícitos dentro de las diferentes áreas.
+- **[00:31] Participante:** No, claro, el proceso es de mejora.
+- **[00:31] Participante:** Dentro de las diferentes áreas, cierto, puedes conocer a un nivel general y de alguna manera pues percibir esas oportunidades de mejora, pero, pero definitivamente Tener los especialistas en cada una de las áreas, sí, en cada uno de los procesos.
+- **[00:32] Participante:** Ujum.
+- **[00:32] Participante:** Listo, 17 años fue que me dijiste.
+- **[00:32] Participante:** ¿Alguien tiene más de 17 años en la compañía donde se encuentra?
+- **[00:32] Participante:** Sí.
+- **[00:32] Participante:** Vos, estos muchachos nacieron apenas de 10, de 15 años. Aquí están, están estos pelados.
+- **[00:32] Participante:** Están empacados. Ah, pero es muy difícil. De ahí 7 es muy alta.
+- **[00:32] Participante:** Yo creo que 23. 23 años, Rodrigo. Mis respetos a ustedes dos.
+- **[00:32] Participante:** No, o sea, yo creo que ustedes dos han visto mucho la evolución de lo que fue en Cali hace más de 20 años, cerca de los 20 años, ¿cierto? Entonces yo creo que aquí se ve cómo ¿Cómo ha sido esa transformación? Seguramente cuando ustedes iniciaron, pues muchas cosas eran muy diferentes a lo que hacían hoy. ¿Es así o no es así? Entonces miren cómo esa evolución finalmente conlleva Pues a que nosotros también adquiramos otras, otras competencias, otras habilidades, otros recursos para nosotros poder formalizar. La automatización llega fuertemente a partir más o menos Los RPA estoy hablando 2015, coge fuerza y iPad.
+- **[00:33] Participante:** Más o menos creo que por esos momentos UiPath empieza a tener fuerza, se lanza al mercado de hecho y empieza a generar rendimientos. UiPath se conoce a nivel mundial y ahí empezamos a ver la robotización. No tanto la automatización, sino la robotización como un elemento crítico de todo lo que estamos haciendo. Listo. Bueno, pregunta, yo estoy hablando de UiPath. ¿Alguien no sabe qué es UiPath?
+- **[00:33] Participante:** Gustavo, no. Listo. Yo tampoco, profe. Buenas noches. No, profe, yo tampoco. Señor, no. No lo hemos escuchado. Listo.
+- **[00:33] Participante:** No lo hemos escuchado. Perfecto. Entonces, cuando no sepan un término, me levantan la mano, me dicen no sé qué está hablando, y con mucho gusto. UiPath es la herramienta número 1 en el mercado de todos los El tema de RPA. El RPA hace referencia a Robotic Process Automation, es decir, automatización robótica de procesos. Es básicamente el RPA simular de una forma muy sencilla las tareas muy repetitivas que hace una persona. Entonces construye un robot, no hablo de robot hardware, robot físico, sino que estoy hablando de un robot de software, es decir, una forma en la que yo estructuro a través de pestañas a través de elementos. En este caso, UiPath coge la fuerza más grande, es gracias al tema low-code.
+- **[00:34] Participante:** Es decir, a través del drag and drop. Es decir, coloco las cajitas, programo, ejecuto, y esa es la gran ganancia o la fuerza que cogió iPad. Entonces estos procesos de RPA Hablo más o menos del 2015, empiezan a coger esa fuerza. Para atrás ya teníamos muchos elementos de digitalización. De hecho, desde el 2000, cuando empezamos el tema web, empezamos a ver la potencia potencia de la digitalización. Y dentro de la digitalización, unas, unos breves pinos sobre lo que es la transformación. Listo, entonces todo este BPM va muy de la mano de eso, de la mejora Como nosotros pasamos, no sé, hace, estamos en 2026 y más o menos hace 20 años las páginas web de hace 20 años, cómo han ido evolucionando a la fecha de hoy, todas las posibilidades. Listo, entonces cada uno de esos elementos hace parte de cómo nosotros estructuramos un ciclo completo que se llama el ciclo BPM, que es el que nosotros nos permite implementar muchos elementos.
+- **[00:35] Yo:** Yeah, that's him.
+- **[00:35] Participante:** ¿Con qué objetivo?
+- **[00:35] Participante:** Primero, visibilidad de punta a punta, entender cómo esos procesos interconectan desde que tengo un disparador de mi proceso hasta que finalizo, cierro ese proceso entendiendo todas las necesidades que tengo respecto a mi cliente o a mi usuario.
+- **[00:35] Participante:** Segundo, consistencia y calidad, siempre buscando esa estabilidad dentro del proceso, siempre entendiéndolo, siempre cerrando esa brecha entre lo que crece, entre lo que disminuye, sin yo tener control sobre él.
+- **[00:36] Participante:** Agilidad para adaptarse, la posibilidad de ser flexible, de cambiar rápidamente dependiendo de las necesidades que tengo, y por último, generando una base sólida para poder automatizar. Listo. Cuando yo cumplo estos diferentes elementos, ya tengo lo que les decía, esa base para yo poder automatizar.
+- **[00:36] Participante:** Entonces nosotros, siempre que hablemos de procesos, finalmente de punta a punta, end to end, cierto, ahí lo que vamos a identificar es un responsable de proceso que responde por todo el recorrido, las áreas colaboran alrededor Alrededor de un objetivo común. El cliente es nuestro objetivo común. Los problemas se resuelven donde se originan, no donde se notan. Y el desempeño se mide con KPIs de punta a punta. Listo. ¿Alguien tiene algún KPI de punta a punta que pueda identificar?
+- **[00:37] Participante:** Pues por ahora que tenga aquí presente, dependiendo del proceso, pero la mayoría comparten esfuerzo.
+- **[00:37] Yo:** Yeah.
+- **[00:37] Yo:** Yeah.
+- **[00:37] Participante:** Satisfacción, NPS, el lead time también.
+- **[00:37] Participante:** ¿Quién me habla? Perdón, que no vi. Airo.
+- **[00:37] Participante:** ¿Cuál me dice? Perdón, el lead time.
+- **[00:37] Participante:** El lead time sí es un proceso porque finalmente me permite medir también tiempos de entrega relacionado al tiempo de ciclo. Voy a quedarme más con ese tiempo de ciclo, cierto, tiempo de ciclo completo. El lead time es el tiempo completo desde que ingresa la materia hasta que finaliza. Entonces, sí, el lead time es un ejemplo.
+- **[00:37] Yo:** Yeah.
+- **[00:37] Participante:** Otro ejemplo muy crítico.
+- **[00:37] Participante:** No sé si han visto de pronto este indicador.
+- **[00:37] Participante:** Order fulfillment.
+- **[00:37] Participante:** Por acá.
+- **[00:37] Participante:** El order fulfillment es un indicador, por ejemplo, muy de la parte de producto, de bienes, donde yo identifico desde el momento en que recibo mi materia prima y cuál es ese comportamiento. Order fulfillment. Específico una parte del proceso, sino que son indicadores que me miden toda la cadena.
+- **[00:38] Participante:** Ahorita también me decían el NPS, cierto, la satisfacción como tal de mi usuario, y la satisfacción dependiendo de ciertos elementos no son solamente ese último paso.
+- **[00:38] Participante:** Sino que es el recorrido completo.
+- **[00:38] Participante:** Si yo los evalúo, un ejemplo, por la última materia que tengan, pues seguramente no va a ser el reflejo de toda la maestría.
+- **[00:38] Participante:** Pero si yo tengo conocimiento completo de la estructura final que ustedes van a tener, pues es mucho más fácil entender cuáles son esos puntos bajos y esos puntos altos que me permiten mantener la maestría como top a nivel nacional.
+- **[00:39] Participante:** ¿Es así o no es así?
+- **[00:39] Participante:** De acuerdo, te iba a preguntar, por ejemplo, la disponibilidad del servicio.
+- **[00:39] Participante:** En nuestro caso, en Utilities, el tema de TICs.
+- **[00:39] Participante:** Es un indicador clave, es un KPI clave.
+- **[00:39] Participante:** Que, del cual pues depende toda la cadena de valor.
+- **[00:39] Participante:** Sí.
+- **[00:39] Participante:** En el caso nuestro, por ejemplo, un servicio, el servicio de energía, pues depende de un buen mantenimiento.
+- **[00:39] Participante:** Depende de un buen mantenimiento de los equipos, depende de, digamos, de los proyectos de inversión para también darle sostenibilidad a eso.
+- **[00:39] Participante:** Entonces uno podría pensar que la disponibilidad del servicio en nuestro caso podría ser un indicador end-to-end.
+- **[00:39] Participante:** Es un end-to-end, de hecho.
+- **[00:39] Participante:** Entonces, porque es un indicador muy crítico y depende, y esta es la pregunta para nosotros salir de la duda, depende de 1, 2, 3, muchas áreas poder generar ese indicador.
+- **[00:39] Participante:** Entonces, lo más probable con esa respuesta es que sí, que vaya de principio a fin, de punta a punta.
+- **[00:40] Participante:** Esa es la gran ventaja de nosotros poder ver esa transversalidad de todo lo que nosotros estamos haciendo.
+- **[00:40] Participante:** Si nosotros entendemos esa transversalidad, es mucho más fácil saber entonces cuál eslabón de mi cadena va a ser el más flojo, y precisamente por el eslabón más débil es que vamos a romperlo. Entonces nos permite entender cada uno de esos elementos, y para entender esos elementos es donde yo bajo a lo que se conoce como el ciclo de BPM. El ciclo de BPM son 6 fases muy sencillas, son 6 fases que se Y esas 5 áreas se aplican en todos los momentos: identificación, descubrimiento, análisis, rediseño, implementación, monitoreo y control.
+- **[00:40] Participante:** Son 6 cosas que la mayoría de nosotros ya la estamos haciendo en nuestro día a día. Algunos somos más fuertes en unas que otras. Identificación, delimitar de dónde a dónde estamos haciendo las cosas, descubrimiento, ¿Cuál es la forma en la que se están haciendo? Análisis diagnóstico sobre lo que ya estoy haciendo. Rediseño, mejora, optimización y rediseño de todo lo que ya existe. Implementación, la forma en la que llevo a cabo esas ideas que están saliendo de mi rediseño. Y por último, el monitoreo y control.
+- **[00:41] Participante:** Pues miren que el BPM es algo que ya nosotros hacemos.
+- **[00:41] Participante:** Claro que si yo identifico la cadena, si yo identifico el ciclo, pues ya mucho más fácil sé cómo aplicarlo.
+- **[00:41] Participante:** Entonces eso es lo que nosotros vamos a ir conociendo a lo largo de cada elemento que nosotros tenemos.
+- **[00:41] Participante:** Un comentario escuchando lo que estás diciendo, pero realmente seguramente eso es el nombre, digamos, el nombre ahora, el nombre de PNL, obviamente suena mucho más, mucho más moderno y mucho Pero eso es lo que los ingenieros industriales llamamos organizaciones y métodos, o métodos y procedimientos.
+- **[00:41] Participante:** Donde se hacía exactamente en la misma cadena de identificación, descubrimiento, entrevistas, análisis.
+- **[00:41] Participante:** Y después venía la parte de rediseño.
+- **[00:42] Participante:** Y implementación, y bueno.
+- **[00:42] Participante:** Y progreso, pues.
+- **[00:42] Participante:** Y eso lo conocemos hace 1923, ¿cierto? Desde la época de todos los padres de la administración moderna, de Adam Smith, y más atrás, y más atrás, y más atrás.
+- **[00:42] Participante:** Rodrigo, y entonces pregunta, si es algo tan viejo y tan conocido, ¿dónde fallamos nosotros?
+- **[00:42] Participante:** Yo creo que fallamos en los ajustes, digamos.
+- **[00:42] Yo:** Oh.
+- **[00:42] Participante:** Que a veces es difícil adaptarse a los cambios.
+- **[00:42] Participante:** Y que, digamos, la modernidad, los requerimientos van cambiando, las necesidades del mercado van cambiando, y uno se ha quedado exactamente por los mismos procedimientos. Viejos que nadie los revisa, que ellos por allá un libro, sí, es allá el libro, el cuaderno pues de yo no sé qué, y eso no se actualiza, no se ajusta, y vienen los Los cambios generacionales y la persona se lleva la información.
+- **[00:43] Participante:** No la comparten y vienen los procesos de dificultades para volver, digamos, a preparar a los equipos o a las personas. Yo creo que esa Es como por ahí, yo creo que para mí pues, y aquí lo hemos vivido pues en esta empresa, que las personas se van y se van por la situación que sea, porque se retiran, porque cambian de empresa, porque se mueren. Entonces, mil cosas.
+- **[00:43] Participante:** Y se lleva mucha información valiosa.
+- **[00:43] Participante:** Y no puede, digamos, documentar o puede documentar. Ahora diga que está hablando un KPI de punta a punta.
+- **[00:43] Participante:** Digamos, en este tipo de organizaciones, yo recuerdo uno porque pues me tocó, digamos, en el tiempo vivirlo y se mide de punta a punta.
+- **[00:44] Participante:** Es lo que se llama el ciclo de la facturación.
+- **[00:44] Participante:** Desde cuando leo, desde cuando inicio, voy al sitio, a la casa.
+- **[00:44] Participante:** El señor acomoda la lectura del medidor.
+- **[00:44] Participante:** Hasta cuando se factura.
+- **[00:44] Participante:** Un ciclo que normalmente tiene que estar durando, durando entre 12 y 15 días.
+- **[00:44] Participante:** En todos los procesos, entonces pasa por acá y después pasa, esas lecturas se cargan a un servidor y pasan unos procesos de revisión. De análisis, de lo que se llaman las derivaciones, y después las liquidaciones, y después las últimas verificaciones, después dan reparto.
+- **[00:44] Participante:** Hasta la fecha de vencimiento. Ahí sí miremos. ¿Y claro, se llama?
+- **[00:44] Participante:** Ciclo, tiempo de ciclo de facturación. Tiempo de ciclo de facturación. Ok, completo. Listo. ¿Algo más? No, no.
+- **[00:45] Participante:** Listo.
+- **[00:45] Participante:** Alejandro.
+- **[00:45] Participante:** Y profe, tengo una duda porque justo estábamos en esta discusión acá internamente en la arquitectura organizacional.
+- **[00:45] Participante:** Nosotros tenemos BPM para un negocio que se llama crédito, que soporta la mesa de crédito en sus pasos de le doy, no le doy crédito.
+- **[00:45] Participante:** A un afiliado.
+- **[00:45] Participante:** Pero es el único negocio que tiene BPM. Por otro lado, estamos en el proyecto de CRM evaluando, pues porque los CRM también tienen una capacidad de flow. De crear cadena de trabajo y uno puede controlar colas y controlar pues quién tiene el caso, cuánto tiempo se demora.
+- **[00:45] Participante:** Cuando es un tema que da experiencia al cliente.
+- **[00:45] Participante:** Pero el otro también lo da, pues porque es la colocación de crédito. Y de hecho, ahora que tenemos que implementar crédito en el CRM, pues entonces está chocando.
+- **[00:45] Participante:** Bueno, el CRM reemplaza el BPM o tienen que trabajar juntos. En la industria, ¿es un depende tener un BPM o todas tienen que tener BPM? No, no todas tienen que tener BPM. De hecho, como lo decía Rodrigo, yo me imagino que cuando tú me dices tener un BPM es un BPM S, ¿cierto? Es el sistema.
+- **[00:46] Yo:** And this is why.
+- **[00:46] Participante:** De control.
+- **[00:46] Participante:** Entonces, como les dije, señor.
+- **[00:46] Participante:** Como un video en Goldsilan escuchaba de la plataforma de modelamiento de procesos por ahí.
+- **[00:46] Participante:** Ok, no lo ha escuchado, pero básicamente todos tienen la misma función. Y como les decía Rodrigo, esto viene hace mucho tiempo, no teníamos ni siquiera sistemas y ya hacíamos BPM. Entonces no es que yo necesite un BPM ese.
+- **[00:46] Participante:** Como tal, para hacer un buen control de mis procesos tengo que ser muy juicioso, y la herramienta es una ayuda para eso. La herramienta es una ayuda para visualizar, para controlar, para gestionar y para cumplir este ciclo como tal.
+- **[00:46] Participante:** Pero yo no necesito la herramienta, yo tengo que priorizar y jugar con ese trade-off de yo qué me impacta más dentro de mi negocio y qué me está agregando más valor. Lo que decía Rodrigo ahorita es súper importante. Yo creo que esas fallas Entonces, cuando yo llego a esas fallas que ahorita hemos mencionado, es cuando se rompe el ciclo, cuando ya la cadena pierde esa conexión entre mi fase 6 y vuelve otra vez a reiniciar en la fase 1. Entonces, no necesariamente yo necesito un BPM. Yo conozco muchas empresas que trabajan sin BPM y trabajan muy bien.
+- **[00:47] Participante:** Y ya el CRM puede existir, puede convivir dentro del mismo ecosistema. Eso es lo que conocemos nosotros como ecosistemas digitales, y son elementos que pueden convivir entre ellos. ¿De qué dependerá esa convivencia? De la parametrización y arquitectura y volumetría que yo le pueda dar respecto al valor que me esté generando.
+- **[00:47] Participante:** Entonces ahí es donde yo empiezo a generar esas interconexiones dependiendo de lo que se necesite, y en algún momento va a tocar priorizar cuál es la que de verdad está generando el valor a la compañía.
+- **[00:47] Participante:** Y ahí es donde permea una a la otra.
+- **[00:47] Participante:** Entonces, si la pregunta es esa, si necesito, pues no es que lo necesite, es una ayuda grande, sí es una ayuda grande, pero no, no, no es un indispensable. Lo he visto por experiencia propia, no es un indispensable para esto.
+- **[00:48] Participante:** Yo creo que mi pregunta está, me respondiste sin, porque yo estaba confundiendo la tecnología con la metodología, por lo que estoy viendo, que la metodología es esta y después le colocas la tecnología que tú quieres.
+- **[00:48] Participante:** Correcto.
+- **[00:48] Participante:** Así es.
+- **[00:48] Participante:** Entonces, esta es la metodología. Como le dice Rodrigo, esto es ingeniería industrial.
+- **[00:48] Participante:** Entonces, ¿siempre estaremos haciendo lo mismo? Sí, es correcto. El caso es mantener la lógica, mantener esta estructura dentro del Todo lo que nosotros vamos haciendo. Julio, perdón, pero yo creo que además hay una realidad, y es que las estructuras organizacionales definitivamente derrotan el proceso.
+- **[00:48] Participante:** Sí, correcto. Aunque el proceso esté muy bien diseñado, la forma como está organizada la empresa termina imponiendo sus reglas, los poderes, sí, y bloquea la eficiencia.
+- **[00:49] Participante:** Entonces, por eso lo que te he entendido es esa arquitectura.
+- **[00:49] Participante:** O sea, involucra obviamente el proceso, pero involucra la estructura organizacional, involucra otros aspectos que, pues, que deben de estar integrados.
+- **[00:49] Participante:** Y correcto, Gustavo. Y se acuerdan, y esto vuelvo y lo repito, así como la clase pasada, nosotros cuando hablamos de la transformación hablamos de ese triángulo con las 3 aristas. Primera arista, las personas. Segunda arista, la tecnología. Tercera arista, los procesos. Y lo que dice Gustavo es muy cierto: desde las personas vamos a poder generar ya sea eficiencias o ineficiencias, cualquiera de las dos pueden suceder.
+- **[00:49] Participante:** ¿De qué Apple dirá?
+- **[00:49] Participante:** Bueno, muchos factores ya de las personas precisamente que están alrededor de todos los procesos que yo, que yo llevo dentro de mí, dentro de mi arcot. Entonces sí dependerá mucho de eso.
+- **[00:50] Participante:** Puntos buenos, puntos malos, encontramos de todo. Entonces a eso nos vamos a enfrentar.
+- **[00:50] Participante:** Ahorita creo que Alejandro nos mencionaba el journey, el costo customer journey map, y habló creo que del blueprint, si no estoy mal, ¿cierto?
+- **[00:50] Participante:** Sí, pero ven.
+- **[00:50] Participante:** Pregunta Alejandro.
+- **[00:50] Participante:** ¿Qué es el service blueprint? Ya que me lo mencionaste.
+- **[00:50] Participante:** Es una metodología que combina el journey con procesos. Es como, es otro
+- **[00:50] Participante:** Es otro artefacto que te permite ver cómo el journey hacia abajo influye en los procesos. Cuando una compañía quizás quiere ver el proceso de principio a fin para el cliente, la experiencia Entonces, porque antes tú partías los pedacitos en los procesos, entre el proceso de pago, el proceso de atención al cliente, el proceso, no sé, de escucha al cliente, mientras que ahora que el blueprint te permite ver de principio a fin y los procesos son verticales.
+- **[00:51] Participante:** Y también puedes ver ahí cómo la tecnología influye, qué es lo que el cliente percibe, muchas otras cosas que enriquecen, digamos, la discusión en la mesa.
+- **[00:51] Participante:** Y generalmente entonces es una forma de unir experiencia, procesos, tecnología y otro tipo de actores dependiendo del proceso que esté interviniendo. En cambio, pues el journey es muy metodología, experiencia, que es más bien Te permite ver como el viaje del cliente, qué dolores tiene, qué sentimiento, y no sé.
+- **[00:51] Yo:** What do you want?
+- **[00:51] Yo:** No.
+- **[00:51] Participante:** Más como eme.
+- **[00:51] Participante:** Incluso, incluso lo que dice Alejandro, en SAP la manera como se levanta el proceso, se levanta la necesidad, se llama business blueprint.
+- **[00:51] Participante:** Es tal cual la descripción que está diciendo Alejandro, cómo es su proceso y dónde están sus dolores y cómo lo vamos a resolver.
+- **[00:51] Participante:** ¿Cuál es ese front y cuál es ese back? Listo, pregunta general para todo el curso, por favor, en el chat.
+- **[00:52] Yo:** You want to go back?
+- **[00:52] Participante:** Me marcan un 1 si han construido o entienden qué es un service blueprint, me marcan un 2 si nunca han construido y si no han escuchado lo que es un service blueprint.
+- **[00:52] Yo:** Yeah.
+- **[00:52] Yo:** I hate this planet.
+- **[00:52] Participante:** Listo, está Felipe. Voy en todos en 2. Profe, tal vez no manejo el concepto, pero seguramente en la empresa que es un poco de desarrollo tecnológico, pues Lo aplicarán, pero no es como mi campo. Seguramente conoceré que en cómo funciona, pero no, no he escuchado como el término como tal, como tal no. Y les voy a decir una cosa, muy seguramente la gran mayoría de Aquí ya ha tenido casi que a la mano lo que es un service blueprint. Tal vez no en el formato, tal vez no como el artefacto, tal vez no como la herramienta, pero generalmente todos ustedes Son partícipes de lo que es un service blueprint. Listo, entonces nosotros cuando hablamos de mejoramiento de procesos, épocas antiguas también, siempre hablamos de las herramientas tradicionales: un SIPOC, Cierto, suppliers, inputs, process, output y customer.
+- **[00:53] Participante:** Si hablamos de otras herramientas de identificación de procesos, los diagramas de flujo que no nos van a faltar nunca en la vida, todo eso es lo que nosotros generalmente hablamos. Pero cuando hablamos del El service blueprint es una herramienta, es un artefacto, como lo decía Alejandro, que nos permite entender cuál es la interacción tanto del cliente, y lo podemos bajar a todos los temas de arquitectura interna que nosotros tenemos como compañía. Entonces nos da la posibilidad de entender bajo las capacidades que nosotros tenemos cómo podemos responder a unas necesidades muy específicas o a unos procesos definidos de punta a punta para nuestro cliente. Listo.
+- **[00:53] Participante:** Aquí nosotros vamos a identificar diferentes elementos, elementos que ve el usuario, elementos que vemos nosotros internamente, y elementos que funcionan como punto de interrelación dentro de todo lo que nosotros hacemos.
+- **[00:54] Participante:** Entonces nosotros finalmente vamos, para hacer todo este service blueprint, utilizar diferentes técnicas como entrevistas, observación directa, documentación existente. A mí me toca entender el proceso, yo tengo que Entonces yo tengo que saber por qué suceden las cosas, yo tengo que entender cómo funcionan las cosas. Y finalmente lo que yo voy a hacer, vengan, voy a bajar un poquito por acá, es identificar 4 capas principales según la literatura. En la literatura uno puede hablar de 4 o 5 capas. Yo me voy a quedar con 4 capas para hacer esto un poco más, más eficiente, pero finalmente estas son las 4 principales, 4 capas principales con las que yo voy a amarrar todo lo que construya alrededor de mi proceso.
+- **[00:54] Participante:** ¿Cuáles van a ser esas capas? Primero, las acciones que realiza mi cliente. Ese cliente va a tener algo muy claro que van a ser esos disparadores, listo. Entonces de ahí va a iniciar todo el proceso de activación de los diferentes procesos internos de cara al cliente o internos que no están de cara al cliente.
+- **[00:55] Participante:** La parte visible, ese front stage.
+- **[00:55] Participante:** Es lo que ve mi cliente, es la interacción que ve como cliente. Por ejemplo, cuando uno se acerca a la oficina del banco a solicitar algún producto o algún certificado, si es que todavía lo hacemos presencial, listo. Si no lo hacemos presencial, asimismo, cuando entramos a la plataforma, a nuestra página web del banco, ingresamos con nuestro usuario y contraseña y navegamos dentro de nuestro portal para buscar ese elemento.
+- **[00:55] Participante:** El backstage, la parte invisible, cómo se genera eso por detrás. Y finalmente, los procesos que están soportando cada uno de esos elementos que yo estoy construyendo. Listo, vamos a bajar un ejemplo, un Un ejemplo muy sencillo: droguerías Vital, un pedido de WhatsApp, cierto. Cuando ustedes piden por WhatsApp un acetaminofén y quieren que les llegue por domicilio, listo. Entonces, como les decía, nosotros vamos a mapear dentro de un service blueprint las diferentes etapas o las fases por las cuales va a pasar mi cliente dentro de cada proceso, dentro de todo el proceso de punta a punta. En este caso, yo he identificado estas 5 etapas.
+- **[00:56] Participante:** El pedido, la confirmación, el alistamiento, el despacho y la entrega. Listo.
+- **[00:56] Participante:** Algo muy sencillo, algo que sucede si pedimos también a un restaurante, algo que sucede si pedimos por Rappi, algo que sucede si pedimos por una llamada telefónica. Entonces miren que estamos en 5 fases muy genéricas, muy generales, pero que finalmente muestran el flujo total desde que mi cliente ingresa a mi cola hasta que sale de la cola.
+- **[00:56] Participante:** Listo.
+- **[00:56] Participante:** Las acciones, o mi primera capa, las acciones que realiza el cliente. Si se dan cuenta, escribe el pedido por WhatsApp, es decir, es mi disparador.
+- **[00:56] Participante:** Entonces, ¿qué otros disparadores creen que podrían haber?
+- **[00:56] Participante:** pensando en este, en este tema.
+- **[00:56] Yo:** That's it.
+- **[00:57] Participante:** ¿Han pedido domicilios en los últimos días?
+- **[00:57] Participante:** Una llamada telefónica, puede ser una llamada telefónica. Muy bien.
+- **[00:57] Yo:** Yes.
+- **[00:57] Participante:** Estás preguntando, brother, un acto y orden, ¿en cuál etapa?
+- **[00:57] Participante:** De la primera etapa del pedido, posibilidades de activación de mi pedido.
+- **[00:57] Yo:** Do it.
+- **[00:57] Participante:** Ya tenemos llamada telefónica, ya tenemos mensajes por WhatsApp.
+- **[00:57] Participante:** Mensaje push desde una app.
+- **[00:57] Participante:** Un mensaje push desde una app, ¿cierto?
+- **[00:57] Participante:** Pregunta.
+- **[00:57] Participante:** ¿Será qué?
+- **[00:57] Participante:** Bueno, no sé si ustedes están inscritos, que llegue ese mensaje aprovecha la promoción y demás, ¿será que hace parte de ese inicio de pedido?
+- **[00:57] Participante:** ¿Será que está más bien en las acciones del cliente o estaría en otra parte?
+- **[00:58] Participante:** Mensaje promocional les llega ahorita a las 8, a las 7, a las 8 y media.
+- **[00:58] Participante:** Cuando ya tienen hambre.
+- **[00:58] Participante:** Cuando ya están cansados.
+- **[00:58] Participante:** Diciendo.
+- **[00:58] Participante:** Hamburguesa con el 20% de descuento.
+- **[00:58] Participante:** ¿Será que esta es una acción de también te enviará un mensaje?
+- **[00:58] Participante:** Sería un activador también porque motiva la acción del cliente, ¿no? Motiva la acción del cliente, y muy bien, es un activador. Pero ahí es donde tenemos que ver en qué capa se encuentra. Entonces, si se dan cuenta, ese es Ese activador no necesariamente, y ahí es donde quería llegar, depende solamente del cliente.
+- **[00:58] Participante:** Yo también internamente, mi front stage, es decir, mi elemento, mi capa visible, también puede generar una activación dentro del proceso.
+- **[00:58] Participante:** Entonces dependerá de la forma en la que yo trate mis procesos. Por ejemplo, si ustedes les llega, se graduaron ahorita, no sé, el otro año en febrero se están graduando, porque eso se Entonces, si ustedes están en tercer semestre, más o menos en febrero se están graduando, y por allá en junio les están diciendo, les llega un mensaje push, 50% de descuento para que termine otra especialización, ¿cierto? ¿Alguno se motivará?
+- **[00:59] Participante:** ¿Alguno se motivará?
+- **[00:59] Participante:** Ya.
+- **[00:59] Participante:** Le picará y volverá a entrar, ¿cierto?
+- **[00:59] Participante:** Posiblemente vuelvan a encontrar acá unos cuantos, pero finalmente es un front stage, es decir, es desde la universidad que generamos ese disparador.
+- **[00:59] Participante:** Entonces miren que esto es donde yo quiero llegar. Nosotros no necesariamente mis acciones del cliente tienen que iniciar, porque el trigger es un elemento crítico cuando nosotros hablamos de modelos disruptivos de lógica para el negocio. Entonces es Esa es como la nueva forma en la que se está conociendo ese modelo ASIS, y es modelos disruptivos de lógica para nuestro negocio. Y dentro de eso ya empezamos a entender que hay otras posibilidades adicionales donde yo puedo construir cada uno de estos alimentos.
+- **[00:59] Participante:** Luego, dentro de la confirmación, pues recibe con la confirmación y paga alistamiento. Él no hace nada, está esperando únicamente su producto en el despacho. Si es una buena empresa, le manda Le mando una notificación que ya está en camino y finalmente recibe su producto y firma.
+- **[01:00] Participante:** recibido. Pues miren que son acciones que yo identifico que hace mi cliente con mi producto. Así lo mismo será, por ejemplo, para el único. El cliente, lo más probable es que el único le llegue porque yo estoy inscrito el único. Voy a colocar el ejemplo y a mí me llega entonces promociones de ta ta ta dentro de esta tienda.
+- **[01:00] Participante:** Entonces me incita o me genera ese disparador para yo ir al único.
+- **[01:00] Participante:** Ya una vez esté en el único, mi acción, mi primera acción es llegar al único.
+- **[01:00] Participante:** ¿Será fácil llegar? Pues seguramente yo, porque conozco Cali, sí se me hace fácil. Pero si le llega a otra persona que de pronto no conozco Cali, también tengo que empezar a ver esos puntos de interacción. Y ahí es donde conecta con ese Customer Journey Map que finalmente me genera la experiencia frente al cliente. Mi front station, la parte visible para el cliente, en este caso un agente de WhatsApp le responde. Dentro de la confirmación le confirma disponibilidad Y le envía el link de pago. En alistamiento no está haciendo nada. En despacho, el repartidor sale con el pedido.
+- **[01:01] Participante:** Y en entrega, el repartidor le entrega por en su puerto. Listo. Entonces miren cuál es la interconexión. Tenemos parte digital, tenemos parte física, y lo que estamos viendo es el completo. Recuerden, estamos viendo desde que nace la solicitud hasta que finaliza esa solicitud. El backstage, lo invisible para esa persona, pues cuando hace el pedido no está sucediendo nada. Cuando hace la confirmación, valida el stock en nuestro Nuestro sistema de inventarios, alistamiento del personal, empaca.
+- **[01:01] Participante:** Alista.
+- **[01:01] Participante:** Y en despacho se asigna el repartidor a la ruta. Ya la entrega no hace parte nadie interno de la compañía.
+- **[01:01] Participante:** Procesos de soporte.
+- **[01:01] Participante:** En este caso WhatsApp Business, que es mi elemento o es mi chatbot con el que voy a interactuar para poder generar el pedido, mi sistema de inventario, que es el que me controla cuántas unidades voy a tener alrededor De todo lo que estoy haciendo, el sistema de ruteo o el Google Maps para que el repartidor no se pierda y que me entregue todos los pedidos en una ruta. No enviarlo solo con un pedido, sino que me permite enviar varios pedidos dentro de la misma Y la pasarela de pago para conciliar finalmente ese pago que me hizo la persona por PSE, por transferencia, por Mercado Pago, por lo que sea, finalmente dentro de mis arcas. Entonces miren cómo nos nosotros empezamos a construir. Está la quinta capa. En esta no voy a hacer mucho énfasis precisamente porque la quinta capa pues generalmente es un resultado de todo lo que nos Entonces no voy a hacer tanto énfasis, pero finalmente esa quinta capa es la evidencia física de lo que yo estoy entregando a mi cliente: mensaje de texto del pedido en la fase de pedido, comprobante
+- **[01:02] Yo:** Okay, sorry.
+- **[01:02] Participante:** de pago, en la confirmación, en despacho el empaque y la factura, y en entrega la firma o foto de la entrega, tal cual como funcionaría un sistema, un pedido con Rappi, tal cual como funciona un pedido por Temu, tal cual como funciona un pedido de ropa por Shein. Todos estamos bajo los mismos esquemas. Aquí yo también podría colocar tranquilamente el proceso de lo que es un estudiante, por ejemplo.
+- **[01:03] Yo:** Do that.
+- **[01:03] Yo:** Okay.
+- **[01:03] Yo:** Hey, babe.
+- **[01:03] Participante:** Miren cómo esto me va formalizando cada uno de los elementos.
+- **[01:03] Participante:** Como les decía anteriormente, nosotros hoy 2026 ya el modelo asis no es algo que nosotros hablemos como el todos debemos llegar a eso.
+- **[01:03] Participante:** El modelo asis es una base, es nuestro baseline, pero el día de hoy hay elementos tan sencillos y tan fáciles de construir para probar que finalmente el modelo asis debe evolucionar en el tiempo.
+- **[01:03] Participante:** Por eso les decía, nosotros hablamos ahorita más de modelos disruptivos lógicos para nuestro negocio.
+- **[01:03] Participante:** Entonces, justamente para explicarles un poquito de esto, estaba viendo uno de los proyectos de las entregas que me hicieron y me nació una duda.
+- **[01:04] Participante:** Listo, le voy a mostrar.
+- **[01:04] Participante:** Lo que anteriormente era una formalización, ya abro una cuenta por acá.
+- **[01:04] Participante:** Lo que anteriormente era una formalización de yo cómo crear elementos, cómo fabricar MVPs, cómo testear finalmente esas necesidades que estaba teniendo, pues era algo que tomaba Hoy nosotros tenemos la flexibilidad y por eso esas disrupciones, cuando hablamos de tecnología, cuando hablamos de transformación, no debería darnos miedo.
+- **[01:04] Participante:** Deberíamos lanzarnos y probarlas. ¿Se acuerdan que yo les pregunté
+- **[01:04] Participante:** Si tenían, uy.
+- **[01:04] Participante:** Si tenían suite de Microsoft.
+- **[01:04] Participante:** De entre las compañías.
+- **[01:04] Participante:** Noviembre de este año se espera que esto que les voy a mostrar salga.
+- **[01:05] Participante:** Para Colombia.
+- **[01:05] Participante:** Es decir, la evolución de lo que es la generación de, o la creación más bien, de plataformas empresariales desde la suite de Microsoft. Lo que anteriormente era crear plataformas, pues ahorita se va a convertir en algo de este tipo. Ya les voy a mostrar.
+- **[01:05] Yo:** Nope.
+- **[01:05] Participante:** Yo he chismoso viendo los trabajos.
+- **[01:05] Participante:** Cierto, pero me vuelvo a la semana 2. Ah, perdón, están semana 2. Yo he hecho el mío subiendo los trabajos.
+- **[01:05] Participante:** Encontré uno que me servía como un ejemplo y se los he dejado acá, ejemplo Bike Power Apps.
+- **[01:05] Participante:** Esto es un prompt.
+- **[01:05] Participante:** Para la generación
+- **[01:05] Participante:** ¿Qué se me hizo?
+- **[01:05] Participante:** La generación de un sistema de gestión de proyectos.
+- **[01:05] Yo:** Give me a little fade out when you pop it.
+- **[01:05] Participante:** Listo.
+- **[01:05] Participante:** Entonces está pues directamente asociado a lo que es
+- **[01:06] Participante:** Power Apps.
+- **[01:06] Participante:** Y vamos a ver, de hecho lo voy a dejar trabajando mientras.
+- **[01:06] Participante:** Nosotros lo vemos acá.
+- **[01:06] Participante:** Un prompt.
+- **[01:06] Participante:** Listo.
+- **[01:06] Participante:** Ahí lo voy a dejar trabajando.
+- **[01:06] Yo:** Hey, GA.
+- **[01:06] Participante:** ¿Qué está haciendo él en este momento? Está configurando un plan. Lo que les digo, es una herramienta empresarial, se encuentra dentro del entorno, está en este momento habilitada para lo que es Australia, Estados Unidos y Europa, pero la idea es que ahorita en noviembre se nos habilite aquí en Colombia. Entonces, lo que anteriormente era generación de aplicativos y demás, quien me hace algunas preguntas, vale, siguiente ciclo estándar.
+- **[01:06] Participante:** Por pertenencia.
+- **[01:06] Participante:** Me hace algunas preguntas para verificar y asimismo él me va a generar diferentes patrones de construcción dependiendo de las necesidades que yo tengo. Listo, ahí él está revisando. Ese prompt que le mandé, ahí ustedes lo tienen. Si alguien quiere probar Vipo Graphs, me avisa. Si de pronto no lo tiene habilitado, yo tengo algunas cuentas para que hagan pruebas. Entonces me escribe por interno, yo le paso algún usuario. Y que puedan probar este tipo de tecnologías, que es donde ya nosotros no creamos como tal ese aplicativo desde cero, un canvas, un lienzo en blanco, sino que ya tenemos otros elementos de automatización asociados a lo que es inteligencia artificial. Listo.
+- **[01:07] Participante:** 87, lo voy a dejar ahí trabajando más o menos unos 5 minuticos. Y, pero perdón, Julio, explícame un poquitico más en qué consiste el prompt, cuál es el propósito. Muy bien.
+- **[01:07] Participante:** Entonces.
+- **[01:07] Participante:** El prompt es para la generación, como te decía, de un sistema de gestión de proyectos, cierto. Bajo el esquema de sistema de proyectos, yo le estoy dando información que esto lo vamos a ver más adelante también, cómo creamos arquitecturas. de forma automática o de forma asociada con nuestros elementos. Y le estoy hablando de cómo debería comportarse los datos, mi modelo, bajo el esquema de mi proyecto.
+- **[01:08] Participante:** Les estoy hablando de qué pantallas, es decir, qué necesidades yo tengo frente al negocio, cómo yo veo el proyecto, que hablo mucho desde la experticia del que maneja proyectos, cuáles son esas reglas de negocio con las cuales voy a trabajar. Hablo de la salud, experiencia de usuario y automatización del proyecto.
+- **[01:08] Yo:** Yeah.
+- **[01:08] Participante:** Hablo cada una de las condiciones que yo conozco de la forma en la que trabajo. Esta es mi asis bajo un modelo disruptivo.
+- **[01:08] Participante:** Listo, es lo que yo quiero que sea bajo las condiciones que tengo, pero sin tener miedo o perder ese esquema de miedo frente a lo que es las tecnologías. Listo.
+- **[01:08] Participante:** ¿Dudas hasta ahí?
+- **[01:08] Yo:** Cool.
+- **[01:08] Participante:** Vamos bien.
+- **[01:08] Participante:** No, perfecto.
+- **[01:08] Participante:** Él me genera un plan.
+- **[01:08] Participante:** Me hace un esquema, seguridad, alcance, etcétera.
+- **[01:08] Participante:** No lo voy a revisar en este momento y él se va a quedar ahí trabajando unos minuticos. Ahorita vamos a ver el resultado de esto. Entonces nosotros en este momento estamos en una época donde antes para crear yo un aplicativo pues necesitaba a desplegar un montón de cosas, un montón de opciones, y ver ahorita cómo es esto de fácil de poder generar.
+- **[01:09] Participante:** implementación de planes y la implementación de tareas a través de herramientas que ya son empresariales y que ya tenemos a la mano.
+- **[01:09] Participante:** Entonces esto es una ventaja grandísima, cierto, y vamos a ver que ya dependerá más de la experticia de la persona que maneja los proyectos que finalmente de lo que nosotros conocemos como El programador, el desarrollador y demás. Aquí ya las reglas de negocio son las que nos van a marcar cuál es ese alcance como tal del proyecto y esa facilidad de implementación de este tipo de proyectos. Listo.
+- **[01:09] Yo:** Remain with us.
+- **[01:09] Yo:** Santiago.
+- **[01:09] Participante:** Lo voy a dejar ahí trabajando. Ahorita vemos el resultado.
+- **[01:09] Participante:** Ahí estás trabajando paralelamente con Power Apps, dices. Sí señor, esto es Power Apps. Ok, sí, claro que hace parte de la misma suite.
+- **[01:09] Participante:** De Microsoft.
+- **[01:09] Participante:** Correcto.
+- **[01:09] Participante:** Más adelante vamos a ver cómo crear los planes, cómo crear arquitecturas también con Power Apps, pero ahí les voy dando algunos pinitos de cosas que vamos trabajando.
+- **[01:10] Participante:** Listo.
+- **[01:10] Participante:** Entonces, volviendo a nuestro servicio Blueprint,
+- **[01:10] Participante:** Antes de pasar, antes de seguir avanzando, ¿dudas, inquietudes que tengan hasta aquí?
+- **[01:10] Yo:** Mm-hmm.
+- **[01:10] Participante:** Claro, ¿cómo está, Olga? Yo perfecto.
+- **[01:10] Participante:** De pronto, ¿hasta qué punto un blueprint puede como comprender la experiencia real del cliente y que no solamente sea como representar cómo la organización cree que funciona? servicio, pues porque allí pues obviamente en el mapa se ve genial.
+- **[01:10] Participante:** Pero como de verdad, cómo mapear eso ya al llevarlo como al campo real.
+- **[01:10] Participante:** Y mira, Gabriela, que eso es lo más difícil, es la experticia que uno va cogiendo, el criterio que va cogiendo para lo que nos decían ahorita. Creo que también Alejandro nos decía ese happy journey, ese camino Y entonces nos centramos solo, o creo que Rodrigo era el que me decía, ese camino feliz.
+- **[01:11] Participante:** Pues finalmente nosotros tenemos que empezar a ver más allá de eso. Esta herramienta o este artefacto me permite conocer la experiencia real. ¿Qué tan profundo quiero ir yo? Pues dependerá totalmente, vamos a ver por acá del nivel de profundidad que yo le dé a estos 3 parámetros.
+- **[01:11] Participante:** A lo que se llama entrevistas, observación directa y la documentación existente. Entonces van a ser esas 3 técnicas que yo voy a poder mezclar, y dentro de esa mezcla me va a dar todos los parámetros necesarios para yo poder decir este es un blueprint real. Listo.
+- **[01:11] Participante:** Yo puedo tener, y respondiéndote también, yo puedo tener un blueprint de cómo estoy hoy, ¿cierto?
+- **[01:11] Participante:** Yo puedo tener los mil errores, los mil problemas, el vaya y venga.
+- **[01:11] Yo:** That's good.
+- **[01:11] Participante:** Pero también puedo tener un blueprint de cómo será mañana.
+- **[01:11] Participante:** Listo, ese es mi modelo disruptivo, ese es mi to be, ese es mi parte del to be, cómo yo voy a llegar a ser. Y ahí es donde yo puedo trabajar muchos elementos, muchas oportunidades, ya sea De lo que vamos a ver más adelante, que te adelantas un poquito, de optimización y rediseño para finalmente hacer ese refinamiento de esos service blueprint. Listo.
+- **[01:12] Participante:** Profe, otra pregunta: ¿hay de pronto algún nivel de temporalidad como para esos seguimientos? No se puede que sea un tema anual cuando ya se jodió todo.
+- **[01:12] Participante:** O obviamente tiene que ser algo, algo, algo continuo, pero digamos que hay algunas reglas del juego como en términos de temporalidad de seguimiento.
+- **[01:12] Participante:** La respuesta es no.
+- **[01:12] Participante:** Porque todo depende de la velocidad del proceso.
+- **[01:12] Participante:** No es lo mismo yo tener un proceso que me genere salidas por minuto, proceso tipo industrial, cierto, a un proceso que me genere salidas con mucho más lapsus de tiempo.
+- **[01:12] Participante:** O un proceso como Rappi donde tengo muchos pedidos al tiempo, que es un proceso rápido que no puede durar más de una hora, a un proceso por lo menos educativo que tiene que durar en un caso pregrado 5 años, por lo menos en el mejor de los casos, 4 años o 4 años y medio.
+- **[01:13] Participante:** Entonces dependerá mucho esa temporalidad del tipo del proceso.
+- **[01:13] Participante:** ese, de ese final, ese parámetro que me permite entender de dónde a dónde estoy yendo, cuánto tiempo demora mi cliente dentro de la cadena que yo estoy proponiendo y que le está agregando valor a ese cliente. Entonces de ahí partirá yo cómo construyo ese blueprint y cuáles son todas las vertientes o cuáles son todas esas variantes que yo identifico dentro de esa estructura.
+- **[01:13] Yo:** Okay, good job.
+- **[01:13] Yo:** Stay on top of the ball.
+- **[01:13] Yo:** Acosta, ¿vieron nuestra dirección?
+- **[01:13] Participante:** Listo, súper.
+- **[01:13] Participante:** Entonces, más dudas de pronto del service.
+- **[01:13] Yo:** Plan de choque.
+- **[01:13] Yo:** Yeah.
+- **[01:13] Participante:** Ya vamos a trabajar un poquito.
+- **[01:13] Yo:** Get it.
+- **[01:13] Participante:** Vamos a ver aquí cómo vamos. Todavía seguimos trabajando.
+- **[01:13] Participante:** Mientras esto trabaja, voy a aprovechar.
+- **[01:13] Yo:** Para hacer esa auditoría a eso.
+- **[01:13] Participante:** Pero una pregunta, ¿qué se espera que sea la salida? ¿De qué cosa? ¿Del service o de, sí, del procesamiento que estás haciendo?
+- **[01:13] Yo:** Hay espacio.
+- **[01:13] Participante:** Listo, de este service, este finalmente se va a convertir en mi modelo ACIS y puede ser también mi modelo To B. De aquí yo me puedo identificar oportunidades de optimización y oportunidades de rediseño. Por ejemplo, si me doy cuenta que dentro de los procesos de alistamiento y de confirmación estoy teniendo demoras y retrasos, pues va a ser mucho más fácil identificarlo frente a mi cliente y ver ese impacto que está teniendo Entonces, al yo tener el proceso completo, lo que me va a ayudar es a saber dónde pongo el ojo, dónde pongo la automatización, dónde pongo la transformación, para finalmente aportar de verdad ese valor esperado al final a mi cliente.
+- **[01:14] Participante:** ¿Y contra qué lo miras? ¿Contra qué lo comparas? Yo comparo el que tengo, es decir, cómo estoy hoy, mi ACIS, cierto, mi blueprint de cómo estoy el día de hoy, frente a ese modelo disruptivo de cómo yo quiero ser.
+- **[01:14] Yo:** Y el auditor.
+- **[01:14] Participante:** Ahorita vamos a ver.
+- **[01:14] Participante:** Con un agente vamos a crear nuestro blueprint y eso lo vamos a poder pasar por un agente precisamente para que nos encuentre oportunidades de optimización y oportunidades de rediseño frente a lo que estamos haciendo.
+- **[01:15] Participante:** Entonces ahí mucho más fácil nos va a decir, venga, usted, ¿por qué no hace este proceso diferente? Usted, ¿por qué aquí no le coloca un agente? Usted, ¿por qué aquí no le coloca un proceso automático que le notifique? No tiene allá al Chinomatico mandando mensajes como loco por WhatsApp, sino que tiene un contestador automático. Ese tipo de cosas son las que yo veo dentro del túnel, son las que mejoran la experiencia, porque aquí yo me doy cuenta que la confirmación se le está demorando al cliente.
+- **[01:15] Participante:** Y si la confirmación del pago se demora, pues, ¿qué pasa? No le puedo despachar. Y si no le despacho ya el medicamento que necesita urgente, ¿qué va a pasar?
+- **[01:15] Participante:** Lo va a buscar en otra parte.
+- **[01:15] Yo:** Una tabla.
+- **[01:15] Participante:** ¿Cierto?
+- **[01:15] Yo:** Observación.
+- **[01:15] Participante:** Entonces, ¿cuáles son los posibles errores que se pueden generar en el ingreso de los datos de entrada? Que se me olvidó incluir algo, alguna variable.
+- **[01:16] Participante:** Una, una raíz decimal.
+- **[01:16] Participante:** Pero lo que haya sido, y que el resultado pues dé algo como, sí, como inconsistente.
+- **[01:16] Yo:** Dices que quitar eso con el otro.
+- **[01:16] Participante:** Pues posibles errores siempre vamos a tener. Lo que te digo, es un proceso, Rodrigo, iterativo. No dependerá generalmente qué hace la gente.
+- **[01:16] Yo:** Sí.
+- **[01:16] Participante:** Parte de aquí.
+- **[01:16] Participante:** Parte de la documentación existente porque es lo más fácil.
+- **[01:16] Participante:** ¿Listo?
+- **[01:16] Participante:** De ahí parten.
+- **[01:16] Participante:** Pero hasta que yo no me voy y veo qué es lo que está pasando, hasta que no me siento con la persona de conciliación de pagos a ver qué tiene que descargar 8 archivos de Excel, cruzar todos esos archivos, mezclar filas, mezclar columnas, Hasta que darme cuenta de que por eso es que se demora el pago 2 horas en entrar.
+- **[01:16] Participante:** Hasta ahí es que yo no me doy cuenta de todo ese tipo de cosas.
+- **[01:16] Participante:** Entonces, más que el posible error que uno pueda ver dentro del artefacto de mi service blueprint, los errores voy a encontrar aquí en mis técnicas. Cuando yo me siento a ver el dolor de la persona que Porque yo no me doy cuenta de todo eso hasta que me queda por allá viernes hasta las 8 de la noche porque no ha terminado de enviar los contratos.
+- **[01:17] Participante:** Y me doy cuenta que no pueden ver los contratos porque le faltaron los datos que estaban, el dato sencillo que era el NIT de la empresa a la cual le tenía que hacer el contrato, porque no era un campo obligatorio dentro del sistema.
+- **[01:17] Participante:** de referencia.
+- **[01:17] Participante:** Detallitos. Sería chéverísimo para un proceso de nómina, ¿no? O sea, ese es un proceso de nómina tan complicado, tan complejo.
+- **[01:17] Participante:** Tienen tantas variables.
+- **[01:17] Participante:** Todo ese tema de seguridad social, de cosas, de un tema complicadísimo, y que las vacaciones, que los ausentismos, que bueno, otra cosa.
+- **[01:17] Participante:** Correcto.
+- **[01:17] Participante:** Bueno, sí, sí.
+- **[01:17] Participante:** Y no solo en nómina, para todos los procesos. El Service Blueprint creo que la herramienta, una de las herramientas más completas para yo entender lo que siente mi cliente, cómo están mis procesos frente a ese cliente y cuál es la percepción que estamos teniendo de forma transversal dentro de la compañía. Listo. Algo que olvidamos siempre, siempre olvidamos, los procesos de soporte.
+- **[01:18] Participante:** Y entonces me olvido que la persona que le da, que hace la actualización de inventarios, no me trabaja los sábados en la mañana y no tengo el inventario actualizado.
+- **[01:18] Yo:** O hace un.
+- **[01:18] Participante:** Y eso es una oportunidad.
+- **[01:18] Participante:** Seguramente.
+- **[01:18] Participante:** Entonces, hasta esos puntos es lo que vamos a encontrar con ese Service Blueprint. Listo.
+- **[01:18] Participante:** Listo.
+- **[01:18] Participante:** Esto es lo que les decía, por lo menos.
+- **[01:18] Participante:** Muy bien.
+- **[01:18] Participante:** Perdón, aquí empecé a hacer más grande.
+- **[01:18] Participante:** A esto vamos a llegar.
+- **[01:18] Participante:** A tener sistemas totalmente integrados, cierto. Aquí están mis indicadores, avances promedio de cumplimiento, completados en ejecución. Esto es un proyecto, un sistema ya totalmente funcional.
+- **[01:18] Participante:** ¿Dónde puedo?
+- **[01:18] Participante:** Ah, bueno, me falta configurar, terminar de configurar obviamente, pero me va a permitir entender cómo es la funcionalidad de cada uno de los elementos que yo ya tengo. Ya es un proceso que un experto en proyectos podrá decir Esto ya es posiblemente desplegable, listo. Entonces también me va a dar toda la información, seguimiento, reportes, etcétera, todo construido en Power Apps. Entonces finalmente Hacíamos esa conversión. Y lo que les digo, ya la disrupción tecnológica es una cosa que anteriormente era una locura. Anteriormente yo ponerme a hacer esta plataforma pues tenía que gastarme no sé cuántas horas de diseño, desarrollo, de de análisis para poder llegar a esto. Ahorita los procesos son mucho más rápidos, y esta rapidez pues también me permite equivocarme rápido y mejorar mucho más rápido todavía. Listo.
+- **[01:19] Yo:** Cuesta.
+- **[01:19] Participante:** No sé si ya la conocían.
+- **[01:19] Yo:** Es cuando hay observaciones por parte del auditor.
+- **[01:19] Participante:** No, no, no, no.
+- **[01:19] Participante:** No, brother.
+- **[01:19] Participante:** Pues obviamente conozco que existe el Power Apps, pero nunca lo he visto aplicado.
+- **[01:19] Participante:** ¿Interesante o no interesante?
+- **[01:20] Participante:** Claro, por supuesto.
+- **[01:20] Participante:** Entonces, elementos que nosotros podemos ir ya generando. Lo que les digo, el que quiera practicar, quiera, yo siempre lo digo, jugar un poquito con esto.
+- **[01:20] Participante:** Me escribe por interno y le paso una cuenta para que, para que se vaya fogueando en todos estos temas. Listo, entonces ya tenemos que no sea una cuenta de cobro.
+- **[01:20] Participante:** No, no, no, pues es una cuenta mía, no hay problema. Por eso no hay problema, una cuenta educativa mía.
+- **[01:20] Participante:** Entonces aquí ya es tan sencillo como decir el proyecto me gustó, ya lo afiné, o no lo he terminado de afinar, puedo seguir configurando, personalizando, ta ta ta, añadiendo permisos, Etcétera. Decirle que los colores no son estos, sino que son aquellos.
+- **[01:20] Participante:** Público.
+- **[01:20] Participante:** Doy acceso.
+- **[01:20] Participante:** Y ya.
+- **[01:20] Participante:** Todas las personas pueden ingresar a hacer sus testeos.
+- **[01:20] Participante:** Funcionó, está dentro de una plataforma robusta como el Dataverse, una base de datos supremamente robusta. No tengo para pagar Dataverse, tengo listas de SharePoint que viene incluida ya en las cuentas que ustedes tienen. Tan sencillo como eso.
+- **[01:21] Participante:** Listo.
+- **[01:21] Participante:** Entonces, a eso es lo que nos estamos— esto es hiper automatización, que es la mezcla de lo que es inteligencia artificial y los elementos de automatización. Listo, procesos que van mucho más rápido a lo que nosotros anteriormente conocíamos.
+- **[01:21] Participante:** Crear un sistema de proyectos.
+- **[01:21] Participante:** ¿Qué cuánto nos cuesta un sistema de proyectos si lo van a comprar en el mercado?
+- **[01:21] Participante:** Y yo lo compro y no sé si me funcionó.
+- **[01:21] Participante:** Lo compro y me doy cuenta que ni siquiera se adapta a las necesidades que yo tengo.
+- **[01:21] Participante:** Aquí por lo menos me salió gratis el testeo y ya si de verdad necesito escalarlo, necesito, y este no me está dando la funcionalidad necesaria, por lo menos ya sé qué son las necesidades, los requerimientos y las historias de usuarios que yo tengo que responder.
+- **[01:21] Yo:** No me las puse, no me proviene que yo hago el puto, la verdad me quedaron.
+- **[01:21] Yo:** Y ya no me mandará las mismas.
+- **[01:21] Yo:** Y no, solo fue tema de
+- **[01:21] Participante:** Listo, entonces son ese tipo de cosas las que nos permiten hacer esas activaciones de forma tan inmediata.
+- **[01:21] Yo:** Tiene el pibe grande. Ah, usted tiene el pibe grande, bien.
+- **[01:21] Participante:** Listo.
+- **[01:21] Participante:** ¿Van todos conmigo hasta ahí?
+- **[01:22] Participante:** Sí.
+- **[01:22] Yo:** Camilo es hora ya.
+- **[01:22] Participante:** Perfecto.
+- **[01:22] Participante:** Bueno.
+- **[01:22] Participante:** Como ustedes, la mayoría ya están en grupos, otros están solitos, no pasa nada.
+- **[01:22] Participante:** Vamos a abrir salas para que trabajemos este tablero de Miro. ¿Qué les va a pedir para que vayan ingresando al tablero de Miro? Correo electrónico.
+- **[01:22] Yo:** Que me acabo. Esperate que me estoy dando de baja esta clase chimba.
+- **[01:22] Yo:** Te quiere

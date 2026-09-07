@@ -223,6 +223,12 @@ export async function PATCH(req: NextRequest, context: any) {
   const body = await req.json();
   const update: Record<string, unknown> = {};
 
+  if (body.summary !== undefined) {
+    const summary = typeof body.summary === "string" ? body.summary.trim() : "";
+    if (!summary) return NextResponse.json({ error: "La descripción no puede quedar vacía" }, { status: 400 });
+    update.summary = summary;
+  }
+
   if (body.estado_interno !== undefined) {
     const estadosValidos = estadosValidosPara(project.type);
     if (!estadosValidos.includes(body.estado_interno)) {
@@ -377,6 +383,7 @@ export async function PATCH(req: NextRequest, context: any) {
     "fecha_salida_produccion",
     "estado_interno",
     "prioridad",
+    "summary",
   ] as const;
   const nota = typeof body.nota === "string" && body.nota.trim() ? body.nota.trim() : null;
   const filasLog = CAMPOS_LOG.filter((campo) => campo in update && (project as any)[campo] !== (data as any)[campo]).map(

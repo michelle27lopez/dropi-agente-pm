@@ -9,9 +9,11 @@ import HubFooter from "@/components/HubFooter";
 import HubHeader from "@/components/HubHeader";
 import { type Item, Section } from "@/components/HomeSections";
 import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
+import { localCellBoards } from "@/app/celula/_cell-board";
 import { ProjectCard, type Proyecto } from "@/components/ProjectCard";
 import { ModoLecturaBanner } from "@/components/ModoLecturaBanner";
 import { previewUpdateContent } from "@/lib/update-preview";
+import { esProyectoVisible } from "@/lib/curated-projects";
 import MiDiaShell from "@/app/proyectos/mi-dia/MiDiaShell";
 
 // El weekly de logística arrastra el registro completo del tablero
@@ -23,6 +25,10 @@ const SellersMetricsPanel = dynamic(() => import("./_components/SellersMetricsPa
 type Update = { id: string; week_date: string; title: string; content: string; url: string | null };
 
 type Profile = { celula_id: string | null; is_super_admin: boolean; email: string | null };
+// celula_id primario ≠ dónde puede editar: un perfil también puede tener
+// permiso adicional vía `celula_editores` (proyectos transversales, ver
+// 055_celula_editores_transversales.sql) sin que le cambie su célula "de
+// verdad". `/api/me` ya devuelve esa lista aparte.
 
 type CelulaHome = {
   id: string; nombre: string; slug: string; lead: string | null; area: string | null;
@@ -85,6 +91,7 @@ export default function CelulaHomePage() {
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [celulasEditor, setCelulasEditor] = useState<string[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: "", summary: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -109,7 +116,10 @@ export default function CelulaHomePage() {
 
     fetch("/api/me")
       .then((res) => res.json())
-      .then((data) => setProfile(data?.profile ?? null))
+      .then((data) => {
+        setProfile(data?.profile ?? null);
+        setCelulasEditor(data?.celulasEditor ?? []);
+      })
       .catch(() => setProfile(null));
   }, [params.slug]);
 
@@ -139,9 +149,10 @@ export default function CelulaHomePage() {
   if (loading) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Cargando…</p></main>;
   if (notFound || !celula) return <main style={{ padding: 48 }}><p style={{ fontSize: 13, color: "var(--muted)" }}>Célula no encontrada.</p></main>;
 
-  const proyectos = celula.proyectos.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
-  const poc = celula.proyectos.filter((p) => p.type === "POC").map(proyectoToItem);
-  const esCelulaPropia = !!profile && profile.celula_id === celula.id;
+  const visibles = celula.proyectos.filter(esProyectoVisible);
+  const proyectos = visibles.filter((p) => p.type !== "POC" && p.type !== "Delivery Proyecto" && p.type !== "Following").map(proyectoToItem);
+  const poc = visibles.filter((p) => p.type === "POC").map(proyectoToItem);
+  const esCelulaPropia = !!profile && (profile.celula_id === celula.id || celulasEditor.includes(celula.id));
   const canCreate = esCelulaPropia || modoEdicionForzado;
 
   const pocsByParent = new Map<string, Proyecto[]>();
@@ -245,12 +256,23 @@ export default function CelulaHomePage() {
   // Weekly PM de esta célula (si tiene alguno) — mismo look de tarjeta,
   // ordenado por fecha descendente.
   const semanasCelula = SEMANAS.filter((s) => s.celula === celula.slug && REGISTRY[s.date]);
+  // Cell Board servido desde el repo (hub/src/app/celula/_cell-board) — mismo
+  // flujo que el Weekly PM. Si una fecha ya viene como fila de la base, gana
+  // el archivo del repo.
+  const localCB = localCellBoards(celula.slug);
+  const localCBDates = new Set(localCB.map((u) => u.week_date));
   const updateEntries = [
-    ...celula.updates.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
+    ...celula.updates
+      .filter((u) => !localCBDates.has(u.week_date))
+      .map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
+    ...localCB.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
     ...semanasCelula.map((s) => ({ item: weeklyToItem(s), sortKey: s.date.slice(0, 10) })),
   ].sort((a, b) => b.sortKey.localeCompare(a.sortKey));
   const updates = updateEntries.map((e) => e.item);
-  const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
+  const updatesById = new Map<string, Update>([
+    ...celula.updates.map((u) => [u.id, u] as const),
+    ...localCB.map((u) => [u.id, u] as const),
+  ]);
 
   const isSellers = params.slug === "sellers";
   // El grid de tarjetas, el filtro de etapa y "sin ficha Darwin" de logística

@@ -116,7 +116,7 @@ function Callout({ tone, icon, children }: { tone: "danger" | "warn" | "good"; i
 
 const PROMPT = `Voy a documentar el vertical {VERTICAL} dentro de Darwin (repo dropi-agente-pm,
 carpeta hub/), siguiendo el mismo patrón que ya existe en
-hub/src/app/proveedores/ (revísalo primero como referencia de estructura y
+hub/src/app/guias/proveedores/ (revísalo primero como referencia de estructura y
 componentes).
 
 Antes de traer cualquier dato, llama a list_workspaces del MCP de UserPilot y
@@ -129,7 +129,7 @@ Reglas:
   exacto y fecha de corte.
 - Si algo no tiene evidencia, no lo fuerces: repórtalo con el componente
   <Vacio pregunta="..." dueno="..." />.
-- Reutiliza los componentes de hub/src/app/proveedores/_components/ui.tsx (o
+- Reutiliza los componentes de hub/src/app/guias/proveedores/_components/ui.tsx (o
   crea un _components/ui.tsx análogo dentro de mi carpeta de vertical si no
   existe uno compartido) — no inventes estilos nuevos.
 - Antes de escribir cualquier interpretación (como "esto es CSAT pero mide otra
@@ -162,14 +162,14 @@ export default function GuiaUserpilotMcpPage() {
               Documentar tu vertical con UserPilot + Claude Code
             </h1>
             <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>
-              <a href="/guias" style={{ color: "var(--muted)" }}>Guías</a> · Cómo replicar la doc de un vertical (como <a href="/proveedores" style={{ color: "var(--muted)" }}>/proveedores</a>) para el tuyo
+              <a href="/guias" style={{ color: "var(--muted)" }}>Guías</a> · Cómo replicar la doc de un vertical (como <a href="/guias/proveedores" style={{ color: "var(--muted)" }}>/guias/proveedores</a>) para el tuyo
             </p>
           </div>
         </header>
 
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: 32 }}>
           <p style={{ fontSize: 15, color: "var(--muted)", lineHeight: 1.6, marginBottom: 8 }}>
-            El vertical Proveedores ya tiene una base de conocimiento completa en Darwin (<code>/proveedores</code>),
+            El vertical Proveedores ya tiene una base de conocimiento completa en Darwin (<code>/guias/proveedores</code>),
             construida cruzando datos reales de UserPilot con Claude Code. Esta guía es el mismo camino para
             que cualquier otro vertical (Marcas, Seller, el que sea) arme la suya, con su propio UserPilot.
           </p>
@@ -210,8 +210,8 @@ export default function GuiaUserpilotMcpPage() {
 
           <Phase label="Fase 2 · Generar tu documentación" />
 
-          <Step n={4} who="Lo haces tú" title="Revisa /proveedores como referencia">
-            Antes de pedirle nada al agente, entra a <a href="/proveedores">/proveedores</a> en Darwin y mira
+          <Step n={4} who="Lo haces tú" title="Revisa /guias/proveedores como referencia">
+            Antes de pedirle nada al agente, entra a <a href="/guias/proveedores">/guias/proveedores</a> en Darwin y mira
             cómo está armado: Resumen + una página por tema, todo citando su fuente y su fecha de corte, y los
             vacíos marcados como tal en vez de rellenados.
           </Step>

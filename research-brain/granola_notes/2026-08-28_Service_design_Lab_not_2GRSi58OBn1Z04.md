@@ -1,0 +1,722 @@
+# Service design Lab
+
+- **ID:** `not_2GRSi58OBn1Z04`
+- **Fecha:** 2026-08-28T21:01:53.248Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/8ba0b503-9e9b-43bd-a234-6a6947d846c2)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo, Diana Margarita Aldana Echeverry, Michel Pino, Michelle Lopez, Kevin Paternina, Catalina Giraldo, Laura Contreras, Nicolas Vargas, Mate Visual, Francisco Velandia, Catherin Salazar, Jaime Guevara, Juan Bautista, Katerine Pencue, Paula Macias
+
+---
+
+## Resumen de la Reunión
+# Service Design: Marco Teórico
+
+- Disciplina que diseña la experiencia de un servicio de punta a punta: personas, procesos, y puntos de contacto digitales y humanos
+- Cinco principios clave:
+  - Centrado en el usuario: necesidades reales, no supuestos internos
+  - Cocreativo: todos los actores participan en el diseño
+  - Secuencial: el servicio se revela como pasos interrelacionados
+  - Evidencia tangible: servicios intangibles visibles a través de señales físicas o digitales
+  - Holístico: entorno completo, no un punto de contacto aislado
+- Metáfora del teatro: frontage (lo que el cliente ve) vs. backstage (procesos invisibles que sostienen la experiencia)
+- Cada punto de contacto construye o rompe la experiencia; la sumatoria de microexperiencias define el NPS
+
+# Aplicación en Dropi: Blueprint y Experiencia del Usuario
+
+- Ejemplo de usuario: Camila, 27 años, primera vez emprendiendo online, quiere validar antes de invertir
+  - Llegó por Instagram, sin conocimiento previo, miedo a elegir mal el producto
+  - Disponibilidad: sesiones cortas de 5 a 10 minutos
+- Blueprint de Dropi: ocho puntos de contacto desde descubrimiento hasta recepción de ganancias
+  - Punto 1: descubrimiento vía redes sociales (marketing, creadores de contenido)
+  - Puntos 2-6: registro, selección de producto, integración con tienda, lanzamiento de campaña, recepción de pedido
+  - Puntos 7-8: logística, entrega, cobro de ganancias
+- Riesgo clave: una mala experiencia en los últimos puntos borra todo lo anterior
+  - Usuario puede migrar a la competencia aunque haya recibido su primera venta si la plataforma genera demasiado esfuerzo
+- Oportunidades identificadas por etapa:
+  - Descubrimiento: landing con expectativas claras
+  - Registro: reducir campos, verificación más ágil (Pau y Cata)
+  - Selección de producto: colección curada con demanda estimada, margen y calificación del proveedor (Gali)
+  - Integración: asistente guiado paso a paso con Shopify y WooCommerce
+  - Primer anuncio: “kit de primeros auxilios” para la primera campaña
+  - Primera venta: celebrar el hito y dejar claro qué sigue
+
+# Documentación en Darwin con Michelle
+
+- Michelle documentó el service design de la célula de suppliers usando información ya almacenada en Darwin, sin entrevistas adicionales
+- Estructura generada: perfil y segmentos de usuario, NPS y CES, funcionalidades, blueprint de onboarding, blueprint general, inventario de herramientas
+- Hay vacíos en la documentación: la instrucción fue no inventar información, por lo que quedan campos en blanco para completar
+- Proceso replicable para otras células:
+  - Usar el prompt disponible en la sección de guías de Darwin (paso 5)
+  - Pegarlo en Antigravity para generar la misma estructura con la información de cada célula
+- NPS de proveedores en Colombia más bajo que en Ecuador y México: oportunidad de investigar causas por país
+- NPS es métrica general de experiencia; métricas por proyecto usarán SUS y CSAT (a profundizar en otra sesión con Lau)
+- NPS actual de Dropi: alrededor de 4-5, cuando el objetivo es 7 o más (Jaime)
+
+# MCP de UserPilot y Antigravity
+
+- MCP de UserPilot se puede conectar desde Claude Desktop (chat normal) o desde Antigravity según el caso de uso:
+  - Claude Desktop: consultas puntuales, reportes, artefactos visuales
+  - Antigravity: cuando se quiere usar data de UserPilot dentro de un repositorio
+- Limitación identificada: para grandes volúmenes de data o filtros complejos, el MCP puede colapsar
+  - Alternativa: pedirle que exporte el reporte como CSV, que llega al correo de diseño-producto, y cargarlo manualmente
+
+# Próximos Pasos
+
+- **Replicar estructura de documentación de Darwin en cada célula**
+
+  Usar el prompt de la guía en Antigravity para generar el mismo formato que hizo Michelle para suppliers.
+- **Completar vacíos de información en el blueprint de suppliers** (Michelle)
+
+  Hay campos sin datos porque la instrucción fue no inventar; requieren levantamiento adicional.
+- **Sesión de usuarios dinámicos y segmentación** (Diana)
+
+  Próxima semana: profundizar en categorización de usuarios como base para diseñar experiencias.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/e5b6a7cf-f7f0-4378-a058-96d76cea2352](https://notes.granola.ai/t/e5b6a7cf-f7f0-4378-a058-96d76cea2352)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[21:02] Yo:** Hola, ¿a Constán?
+- **[21:02] Michelle Lopez Obregon:** Hola.
+- **[21:02] Yo:** Voy a apagar mi cámara, esta.
+- **[21:02] Diana Aldana:** Dale, Ali.
+- **[21:02] Diana Aldana:** Bueno, los invité a Santi, a Katy, de último momento,
+- **[21:02] Diana Aldana:** porque, pues, hoy vamos a hacer, pues, les voy a exponer un tema de service design.
+- **[21:02] Diana Aldana:** Me parece que ustedes, pues, es superimportante que también tengan como interiorizado esos conceptos
+- **[21:02] Diana Aldana:** Entonces, ven a ver, vemos quién más se conecta.
+- **[21:02] Diana Aldana:** Juan también.
+- **[21:02] Diana Aldana:** Intentemos que sea
+- **[21:02] Diana Aldana:** claramente, superdidáctica esta sesión. Obviamente, Kate dejó la
+- **[21:02] Diana Aldana:** la vara superalta.
+- **[21:02] Diana Aldana:** Bueno.
+- **[21:02] Diana Aldana:** Lo importante es el conocimiento.
+- **[21:02] Diana Aldana:** Hola, ya estamos estamos conectados.
+- **[21:02] Diana Aldana:** Todos estamos conectados.
+- **[21:02] Diana Aldana:** Demos...
+- **[21:03] Diana Aldana:** Buenas tardes.
+- **[21:03] Diana Aldana:** Bueno, arrancamos a las cuatro y cinco. Le damos chance de que se conecte el resto de personas.
+- **[21:03] Yo:** Listo.
+- **[21:03] Yo:** Listo.
+- **[21:03] katerine Pencue:** Hola, buenas, ¿cómo están?
+- **[21:03] Diana Aldana:** Hola, Kate.
+- **[21:03] Diana Aldana:** Ya arrancamos, arrancamos a las cuatro y cinco,
+- **[21:05] Diana Aldana:** equipo. Bueno,
+- **[21:05] Diana Aldana:** arrancamos de una. Gracias a todos por asistir a este espacios.
+- **[21:05] Diana Aldana:** El espacio de hoy está enfocado a dar un contexto
+- **[21:05] Diana Aldana:** teórico de lo que es service design. Yo voy a dar
+- **[21:05] Diana Aldana:** la parte teórica.
+- **[21:05] Diana Aldana:** Lo que es service design, y a la final, Michelle López, les
+- **[21:05] Diana Aldana:** a socializar
+- **[21:05] Diana Aldana:** en Darwin, ella cómo ha estado documentando,
+- **[21:05] Diana Aldana:** todos los service designing en su célula de suppliers.
+- **[21:05] Diana Aldana:** ¿Por qué vamos a comenzar a ver service design? Porque ya
+- **[21:05] Diana Aldana:** estamos en un momento de la compañía en donde ya no solamente
+- **[21:05] Diana Aldana:** pensamos en diseñar interfaces, sino que ahora tenemos
+- **[21:05] Diana Aldana:** pensar en diseñar experiencias.
+- **[21:05] Diana Aldana:** Esto nos ayuda a hacer una compañía, una marca de mayor
+- **[21:05] Diana Aldana:** y, pues, que
+- **[21:05] Diana Aldana:** muchos usuarios, pues, nos nos recomienden con otras comunidades y, pues,
+- **[21:06] Diana Aldana:** así poder crecer cada día más como compañía.
+- **[21:06] Diana Aldana:** Voy a hacer un recorrido muy teórico para que todos estemos como en la misma página, intentaré
+- **[21:06] Diana Aldana:** como dar ejemplos muy puntuales, pues, para que no sea solo
+- **[21:06] Diana Aldana:** sino, pues, que sea como superinteractivo.
+- **[21:06] Diana Aldana:** Listo. Esta presentación, pues, está dividido en tres
+- **[21:06] Diana Aldana:** el marco de lo que es service design, cómo lo aplicamos en Dropi,
+- **[21:06] Diana Aldana:** y, a la final, pues, más allá
+- **[21:06] Diana Aldana:** de de simplemente aplicar al onboarding, cómo logramos que un usuario, pues,
+- **[21:06] Diana Aldana:** sea recurrente.
+- **[21:06] Diana Aldana:** Listo. En el marco que es service design,
+- **[21:06] Diana Aldana:** voy a comenzar con una parte superteórica. El service design es la disciplina que dice
+- **[21:06] Diana Aldana:** la experiencia de un servicio de punta a punta,
+- **[21:06] Diana Aldana:** las personas que lo viven, los procesos que lo sostienen por dentro, y
+- **[21:06] Diana Aldana:** todos los puntos de contacto digitales y humanos, entre ambos,
+- **[21:06] Diana Aldana:** No optimiza una pantalla SLADA, diseña el viaje completo desde el primer contacto
+- **[21:06] Diana Aldana:** hasta que el valor prometido efectivamente ocurre.
+- **[21:07] Diana Aldana:** Los cinco principios del service design son los siguientes. Son como reglas para poder guiar y diseñar una experiencia. Primer principio centrado en el usuario. Se diseña a partir de necesidades y reales, no de supuestos internos Cocreativo, todos los actores del servicio, incluidos los usuarios,
+- **[21:07] Diana Aldana:** participan activamente en su diseño.
+- **[21:07] Diana Aldana:** Secuencial,
+- **[21:07] Diana Aldana:** o secuenciación, el servicio se revela como una
+- **[21:07] Diana Aldana:** secuencia de acciones, de pasos que se que, interrelacionados, generan una
+- **[21:07] Diana Aldana:** y es una evidencia tangible.
+- **[21:07] Diana Aldana:** Si, pues, de por sí, los servicios son intangibles, se vuelven
+- **[21:07] Diana Aldana:** visibles a través de señales físicas o digitales, en nuestro caso, pues, la
+- **[21:07] Diana Aldana:** de dropping. Y, finalmente, el enfoque holístico. Se considera el entorno completo de servicio personas, procesos y sistemas, no un punto de contacto aislado. Para entender un poco más este concepto y entenderlo un poco más, se utiliza mucho como la metáfora del teatro, como esas acciones de frontage y backstage. Entonces, entendamos, por ejemplo, normalmente ustedes van al teatro, el primer punto de contacto para ustedes ir al teatro, pues, puede que haya sido que en redes sociales, en una página, ustedes se enteraron, que hay una función, una obra de teatro. Ahí, ese es como ese primer punto que tenemos como pues, con el con el producto y con el servicio,
+- **[21:08] Diana Aldana:** pero ya posterior a eso, cuando ya accedemos a acceder a ese servicio,
+- **[21:08] Diana Aldana:** pues vamos interactuando
+- **[21:08] Diana Aldana:** varias capas. Aquí vemos la analogía de la persona que llega al teatro,
+- **[21:08] Diana Aldana:** tiene que hacer una fila, después se ubica en la silla, vive toda la
+- **[21:08] Diana Aldana:** de teatro. Normalmente, el usuario se queda en esta primera capa,
+- **[21:08] Diana Aldana:** pero cada punto de contacto es una experiencia.
+- **[21:08] Diana Aldana:** Que la sumatoria a estas microexperiencias es la que nos dice
+- **[21:08] Diana Aldana:** si hubo una buena experiencia o no hacia el usuario.
+- **[21:08] Diana Aldana:** Normalmente, nos quedamos en esta primera capa, pero sabemos que, para que toda esta
+- **[21:09] Diana Aldana:** experiencia sea una buena experiencia, hay otros actores
+- **[21:09] Diana Aldana:** aparentemente, son invisibles. Aquí podemos ver todo lo que pasa tras bambalinas.
+- **[21:09] Diana Aldana:** Toda la gente que gestiona, que todo eso
+- **[21:09] Diana Aldana:** funcione correctamente. Están aquí, podemos ver, no sé, los
+- **[21:09] Diana Aldana:** empleados de vestuario, de escenografía, pero no se queda ahí.
+- **[21:09] Diana Aldana:** También está esos procesos alternos que ayudan a que este backstage
+- **[21:09] Diana Aldana:** pues, se pueda gestionar de forma efectiva.
+- **[21:09] Diana Aldana:** Aquí, un ejemplo, vemos es toda la gente de transportadoras que trajo la utilería,
+- **[21:09] Diana Aldana:** que trajo el catering, para que también esta gente, pues, pudiese como
+- **[21:09] Diana Aldana:** operar de forma efectiva. Porque, gracias a lo que pasa de BAC,
+- **[21:09] Diana Aldana:** es que podemos ver toda esta magia en esta parte del escenario.
+- **[21:09] Diana Aldana:** ¿Vale? Entonces, para que comencemos a a tener ese chip,
+- **[21:09] Diana Aldana:** de que una experiencia es tres sesenta, no nos podemos quedar solamente acá.
+- **[21:09] Diana Aldana:** Porque si algo de acá falla, pues vamos a ver que este
+- **[21:09] Diana Aldana:** experiencia va a estar un poco interrumpida.
+- **[21:10] Diana Aldana:** Para complementar esta explicación,
+- **[21:10] Diana Aldana:** traje un video que me parece como superclaro, me confirman
+- **[21:10] Diana Aldana:** si lo pueden ver, si lo
+- **[21:10] Diana Aldana:** También para que podamos interiorizar bien este concepto.
+- **[21:10] Diana Aldana:** ¿Sí escuchan el audio que acabo de poner?
+- **[21:10] katerine Pencue:** No, te escucho a ti, yo te escucho a ti nomás.
+- **[21:10] Yo:** No.
+- **[21:10] Yo:** No se escuchó.
+- **[21:10] Diana Aldana:** Ay, ¿cómo...? ¿Saben cómo puedo lograr que se hoy
+- **[21:10] Diana Aldana:** el anuncio? Presentar.
+- **[21:10] Catherin Salazar:** Presenta.
+- **[21:10] Diana Aldana:** ¿Cómo así?
+- **[21:10] Yo:** Deja de presentar y vuelvo a iniciar presentación.
+- **[21:10] Catherin Salazar:** Cada un amigo es
+- **[21:10] Catherin Salazar:** Está y le pones como compartir con audio.
+- **[21:10] Catherin Salazar:** Le pones compartir
+- **[21:10] Diana Aldana:** con audio, Diani.
+- **[21:10] Catherin Salazar:** Perfecto,
+- **[21:10] Diana Aldana:** ya.
+- **[21:10] Diana Aldana:** Ya miro, entonces, pongo de tener presentación.
+- **[21:10] Diana Aldana:** Y pongo
+- **[21:10] Diana Aldana:** ok,
+- **[21:10] Diana Aldana:** compartir con audio.
+- **[21:10] Diana Aldana:** Listo.
+- **[21:10] Diana Aldana:** Creo que
+- **[21:10] Participante:** And I recently
+- **[21:11] Participante:** ¿Ahí ya sonó?
+- **[21:11] Michelle Lopez Obregon:** Sí, ahí sonó.
+- **[21:11] Michelle Lopez Obregon:** Listo,
+- **[21:11] Diana Aldana:** perfecto. Vamos a ver este video complementario.
+- **[21:11] Diana Aldana:** Listo.
+- **[21:11] Participante:** What is service design? I've been thinking about this for a while.
+- **[21:11] Participante:** And I recently discovered a brilliant quote by Mark Futain that I think sums it up
+- **[21:11] Participante:** perfectly. When you have two coffee shops, right next to each
+- **[21:11] Participante:** other, each selling the exact same coffee for the exact same price
+- **[21:11] Participante:** service design is the reason you go into one coffee shop and not the other.
+- **[21:11] Participante:** So let's play that out in a little scenario. Coffee shop a decide they want a mobile app.
+- **[21:11] Participante:** So they put a team full of people together to work on it for a couple of months for
+- **[21:11] Participante:** before delivering it to their customers. The customers download the app
+- **[21:11] Participante:** only to find it's got nothing that they need. Now let's
+- **[21:11] Participante:** the coffee shop beep. Coffee shop beep at the customer
+- **[21:11] Participante:** at the heart of the experience. They taught to them.
+- **[21:12] Participante:** They do some immersive research and really get to know what the customer is doing before
+- **[21:12] Participante:** during and after their coffee. They can map this out on a
+- **[21:12] Participante:** journey where they identify the highs and lows of the experience.
+- **[21:12] Participante:** And uncover some service opportunities and then start to explore solutions.
+- **[21:12] Participante:** The team then starts to speak to
+- **[21:12] Participante:** other people from around the business. They speak to the colleagues in store
+- **[21:12] Participante:** and understand what their day looks like. They speak to the founder,
+- **[21:12] Participante:** to look back at the original vision for the coffee shop, as well as the marketing team and the
+- **[21:12] Participante:** suppliers too. Once they have all of these people together, they can run a
+- **[21:12] Participante:** workshop or a series of workshops where they can identify the real business objective
+- **[21:12] Participante:** and exactly what they wanted to achieve. They can start to design some concepts
+- **[21:12] Participante:** They can do a tech analysis and plot everything on a blueprint.
+- **[21:12] Participante:** That documents all of the support systems necessary to bring these concepts
+- **[21:12] Participante:** life. With all this, they can create their No Star
+- **[21:13] Participante:** all resulting in a mobile app full of features the customers love.
+- **[21:13] Participante:** But it doesn't stop there. They've also identified the colleagues needed to
+- **[21:13] Participante:** application to help them deal with the extra flow of traffic in store.
+- **[21:13] Participante:** And the payment system needs updating so all three can work in harmony.
+- **[21:13] Participante:** They might design a colleague training and engagement program
+- **[21:13] Participante:** and redesign their stall to optimise the physical experience
+- **[21:13] Participante:** too, whilst also looking at how they talk about themselves socially, possibly even introducing
+- **[21:13] Participante:** new product lines. These are what we call the front stage
+- **[21:13] Participante:** But in order for it to all come together, we must look at the back stage too.
+- **[21:13] Participante:** Here you will find the back end systems that drive all the digital proposition
+- **[21:13] Participante:** Key metrics that we measure ourselves by, learn from,
+- **[21:13] Participante:** and iterate upon the services, as well as
+- **[21:13] Participante:** CRM system and some delivery partners.
+- **[21:13] Participante:** So service design is about three things. One,
+- **[21:13] Participante:** customer centric. It's about putting the customer at the heart of everything you do.
+- **[21:14] Participante:** And only then will you create services people love.
+- **[21:14] Participante:** Two, co creation. It's about exploring and designing these concepts
+- **[21:14] Participante:** together. As a result, you will ensure services are both
+- **[21:14] Participante:** technically feasible and business viable. Three, per listing.
+- **[21:14] Participante:** About building interdependent, interrelated experiences that all connect
+- **[21:14] Participante:** people on an emotional level. That way, you'll create services that
+- **[21:14] Participante:** scale beyond the original idea. To
+- **[21:14] Participante:** round it all off, let's revisit Mark's quote.
+- **[21:14] Participante:** Service design is not just what makes you walk into one coffee shop and not the other.
+- **[21:14] Participante:** It's the reason you keep coming back and tell all your friends about it.
+- **[21:14] Diana Aldana:** Listo.
+- **[21:14] Diana Aldana:** Listo, ya.
+- **[21:14] Diana Aldana:** Continuamos. Espero y comparto acá pantalla.
+- **[21:14] Diana Aldana:** Listo. Bueno, eso ya nos da un mayor contacto,
+- **[21:15] Diana Aldana:** contexto, perdón, de lo que es service design y esa visión estratégica.
+- **[21:15] Diana Aldana:** Bueno, algunas frases importantes a tener en cuenta, service design,
+- **[21:15] Diana Aldana:** El servicio es lo que se hace que elijas una marca
+- **[21:15] Diana Aldana:** sobre otra, aunque el producto sea idéntico. Pueden haber muchos
+- **[21:15] Diana Aldana:** muchos otros competidores que quieran clonar nuestra plataforma, como ya lo hemos visto,
+- **[21:15] Diana Aldana:** pero si generamos una experiencia de principio a fin, la gente nos va a elegir.
+- **[21:15] Diana Aldana:** No se diseña una pantalla, se diseña el viaje completo de principio a fin.
+- **[21:15] Diana Aldana:** Las necesidades del cliente van antes que las necesidades internas de una marca.
+- **[21:15] Diana Aldana:** Cuatro, el frontage es lo que el cliente ve, el ¿Vianas?
+- **[21:15] Diana Aldana:** Lo que
+- **[21:15] Juan Diego Bautista Vasquez:** lo
+- **[21:15] Diana Aldana:** sigues compartiendo?
+- **[21:15] Juan Diego Bautista Vasquez:** ¿Sigues compartiendo? Yo no
+- **[21:15] Jaime Guevara:** veo
+- **[21:15] Juan Diego Bautista Vasquez:** nada. Ay
+- **[21:15] Diana Aldana:** No vemos la pantalla.
+- **[21:15] Juan Diego Bautista Vasquez:** Ay, qué
+- **[21:15] Diana Aldana:** hola, ya voy.
+- **[21:15] Diana Aldana:** Pantalla completa. Listo.
+- **[21:15] Diana Aldana:** Ahora sí, bien.
+- **[21:15] Diana Aldana:** Sí,
+- **[21:15] Jaime Guevara:** Listo.
+- **[21:15] Diana Aldana:** Listo. No, estaba como dándoles como algunas frases que
+- **[21:15] Diana Aldana:** nos hacen entender un poco más la esencia de lo que es service design.
+- **[21:16] Diana Aldana:** Cada punto de contacto, visible o invisible, construya
+- **[21:16] Diana Aldana:** o rompe una experiencia. Entonces, ahí ya vamos construyendo una
+- **[21:16] Diana Aldana:** más tres sesenta, más transversal y más holística.
+- **[21:16] Diana Aldana:** Listo. Ahora ya esto trayéndolo un poco más aterrizado,
+- **[21:16] Diana Aldana:** a Dropi.
+- **[21:16] Diana Aldana:** Por eso es que a veces somos muy insistentes un poco con el tema del blueprint, porque nos ayudan
+- **[21:16] Diana Aldana:** lo que es la esencia del service design, ya que en el service design
+- **[21:16] Diana Aldana:** como vimos en los ejemplos anteriores, vemos los diferentes canales, los diferentes
+- **[21:16] Diana Aldana:** lo que pasa en Chrome, lo que pasa en Bach, y cómo cada uno
+- **[21:16] Diana Aldana:** superimportante para construir una experiencia.
+- **[21:16] Diana Aldana:** Vamos a traer un ejemplo. Ejemplo, llega Camila, vamos a
+- **[21:16] Diana Aldana:** a ver a Camila.
+- **[21:16] Diana Aldana:** A crear como la experiencia de Camila. Ella tiene veintisiete años,
+- **[21:16] Diana Aldana:** es la primera vez que ella está emprendiendo online.
+- **[21:16] Diana Aldana:** Ella, algo que la caracteriza mucho a ella es que quiere saber
+- **[21:16] Diana Aldana:** que esto funciona antes de invertir más tiempo. ¿Cómo llegó?
+- **[21:17] Diana Aldana:** Vio en Instagram alguien vendiendo sin manejar
+- **[21:17] Diana Aldana:** propio, conocimiento previo, nunca vendió online y manejaba un
+- **[21:17] Diana Aldana:** catálogo de proveedores. ¿Por dónde vio esta información? ¿Por su celular?
+- **[21:17] Diana Aldana:** En su trabajo, en su casa? Estuvo y vio esto.
+- **[21:17] Diana Aldana:** ¿Qué la motiva a generar un ingreso extra sin arriesgar su capital comprando?
+- **[21:17] Diana Aldana:** Miedo principal, elegir mal el producto y perder tiempo.
+- **[21:17] Diana Aldana:** O quedar mal con su primer cliente.
+- **[21:17] Diana Aldana:** Y, finalmente, pues, tiempo disponible, secciones cortas de cinco a diez minutos.
+- **[21:17] Diana Aldana:** Entonces, listo. Por eso es tan importante, eso es una sesión que también vamos a tener la otra semana,
+- **[21:17] Diana Aldana:** de entender y categorizar muy bien a nuestros usuarios, porque
+- **[21:17] Diana Aldana:** partir del entendimiento de nuestros usuarios,
+- **[21:17] Diana Aldana:** es que podemos crear experiencias que enamoran.
+- **[21:17] Diana Aldana:** Si no conocemos a nuestros usuarios y lo que ellos quieren, pues vamos
+- **[21:17] Diana Aldana:** a diseñar a ciegas, a a diseñar a partir de supuestos,
+- **[21:17] Diana Aldana:** y nunca vamos a lograr conectar realmente con con las personas.
+- **[21:17] Diana Aldana:** Y, pues, diseñar experiencias memorables.
+- **[21:18] Diana Aldana:** Trayendo un ejemplo como de blueprint un poco más gráfico,
+- **[21:18] Diana Aldana:** como para que se entienda las diferentes capas de
+- **[21:18] Diana Aldana:** lo que hacemos en en Droppy, caje la experiencia de lo que hace
+- **[21:18] Diana Aldana:** Camila, o sea, ya ya entendimos lo que hace Camila, ahora la idea es como diseñarle
+- **[21:18] Diana Aldana:** esa experiencia soñada, donde le estamos vendiendo esa promesa de valor
+- **[21:18] Diana Aldana:** que es tener ingresos adicionales, sin stock propio, desde
+- **[21:18] Diana Aldana:** tu dispositivos de o o desde tu computador.
+- **[21:18] Diana Aldana:** Básicamente, es una experiencia que le estamos vendiendo.
+- **[21:18] Diana Aldana:** Normalmente, lo que hablamos ahorita, pues Camila Camila se enteró de Dropi a través de redes sociales, Instagram, Facebook. ¿Cuáles son los actores ahí que se involucraron? Camila,
+- **[21:18] Diana Aldana:** la creadora de contenido, la nuestra creadora de contenido,
+- **[21:18] Diana Aldana:** ¿Qué vio ella de parte de fronts? Vio un anuncio, parte de back de dropping todavía no hay nada.
+- **[21:18] Diana Aldana:** ¿Cuáles son posibles fricciones? Estas son hipótesis. Las fricciones normalmente
+- **[21:19] Diana Aldana:** son hipótesis que tenemos si no tenemos data ni certeza.
+- **[21:19] Diana Aldana:** Podemos crear este este blueprint, pues, con hipótesis, pero a medida que
+- **[21:19] Diana Aldana:** conocemos a profundidad al usuario, pues vamos volviendo, este,
+- **[21:19] Diana Aldana:** hipótesis en más certezas. ¿Qué puede pasar en ese primer punto de contacto?
+- **[21:19] Diana Aldana:** Ella puede creer que la información es engañosa,
+- **[21:19] Diana Aldana:** o es irreal, eso tan bueno, deje le dar ingreso
+- **[21:19] Diana Aldana:** desde mi celular, desde mi casa, eso sí sí será real. Ahí es una estrategia
+- **[21:19] Diana Aldana:** bastante importante que hace el área de marketing para atraer a los
+- **[21:19] Diana Aldana:** Es como ese primer punto, ese anzuelo, ese posicionamiento de marca,
+- **[21:19] Diana Aldana:** porque porque hay mil creadores de contenido, porque hay mil líderes de
+- **[21:19] Diana Aldana:** de, pues, de
+- **[21:19] Diana Aldana:** generadores, pues, de líderes de comunidad que, pues,
+- **[21:19] Diana Aldana:** cada uno tiene su estrategia para capturar audiencia y, pues,
+- **[21:19] Diana Aldana:** atraerlos a este mundo del dropshipping.
+- **[21:19] Diana Aldana:** El segundo punto de contacto, ahí aquí ya es cuando nosotros como
+- **[21:19] Diana Aldana:** equipo realmente estamos más involucrados, que es todo el proceso de crear y
+- **[21:20] Diana Aldana:** Bueno, igual esto ya lo pueden ver en detalle, que esto ya lo sabemos acá.
+- **[21:20] Diana Aldana:** Se involucra mucho todo el tema que se está haciendo de back office,
+- **[21:20] Diana Aldana:** Aquí, este punto de contacto es seleccionar el producto de catálogo,
+- **[21:20] Diana Aldana:** la parte de conectar tu tienda y todas las integraciones, el momento de lanzar
+- **[21:20] Diana Aldana:** campaña, recibir el pedido
+- **[21:20] Diana Aldana:** Bueno, aquí ya es como el tema de crear órdenes,
+- **[21:20] Diana Aldana:** Entonces, acá vemos que el primer punto de contacto es por marketing. Aquí ya vemos que es una
+- **[21:20] Diana Aldana:** experiencia dentro de la plataforma, y ya hay un
+- **[21:20] Diana Aldana:** hay otro punto de contacto, que ya ahí ya comienza a involucrar actores que es la parte de todo el tema de logística, el despacho y logística del proveedor,
+- **[21:20] Diana Aldana:** la entrega del paquete, hasta recibir sus ganancias.
+- **[21:20] Diana Aldana:** Cada uno de estos puntos, la sumatoria de estos puntos es que
+- **[21:20] Diana Aldana:** pues, a la final nos da como una buena métrica de NPS,
+- **[21:20] Diana Aldana:** a la final, si el usuario realmente tiene una buena percepción de marca.
+- **[21:20] Diana Aldana:** O sea, de nada sirve que esto sea perfecto,
+- **[21:21] Diana Aldana:** si, por ejemplo, en el punto siete y ocho el usuario tiene una mala experiencia. Porque se va a quedar prácticamente con esto último. Como no, o sea, todo ese eso que hice, me llegó el producto en mal estado o a la final no era lo que yo esperaba, la se demoró mucho más tiempo de lo que me prometieron en su momento, pues, a y, bueno, y otros factores que podemos identificarlo, digo, como como ejemplo. O también puede llegar a pasar que, bueno, esta experiencia se cumplió digamos que acá, a nivel de experiencia de usuario, el el nivel de esfuerzo fue supercomplejo, casi no lo logro. Después de mil vueltas es que lo logré
+- **[21:21] Diana Aldana:** hacer, pues aquí estoy generando una sensación de frustración y seguramente
+- **[21:21] Diana Aldana:** me iré a la competencia. Pues puede que yo haya recibido el dinero, ahí yo digo, ah, bueno,
+- **[21:21] Diana Aldana:** sé que por este, sé que con este modelo de negocio puedo
+- **[21:21] Diana Aldana:** obtener plata, pero definitivamente esta plataforma
+- **[21:21] Diana Aldana:** me genera mucho esfuerzo, es muy frustrante, me puedo ir a otra competencia.
+- **[21:22] Diana Aldana:** Entonces, ahí, pues, estamos perdiendo un cliente. Entonces, por eso es que cada punto de contacto
+- **[21:22] Diana Aldana:** es superimportante para diseñar
+- **[21:22] Diana Aldana:** una experiencia.
+- **[21:22] Diana Aldana:** Es muy importante que conozcamos muy bien qué sucede en cada uno de esos
+- **[21:22] Diana Aldana:** puntos, cuáles son los canales, los actores que involucra, y así
+- **[21:22] Diana Aldana:** poder identificar esas fricciones, identificando esas
+- **[21:22] Diana Aldana:** es que podemos lograr soluciones. Muchas veces las soluciones
+- **[21:22] Diana Aldana:** pueden ser a nivel un poco más análogas, a nivel más de gestión, que
+- **[21:22] Diana Aldana:** estás teniendo en cada uno de esos procesos, cómo lo puedes hacer de forma manual.
+- **[21:22] Diana Aldana:** Pero también hay procesos que, pues sí, ya toca cien por ciento digital.
+- **[21:22] Diana Aldana:** Entonces, ahí, pues ver, sabemos que estos actores muchas veces, pues,
+- **[21:22] Diana Aldana:** los actores involucrados no están cien por ciento en la plataforma, sino que son actores pues, que están involucrados de otras
+- **[21:22] Diana Aldana:** de otras formas y de otros procesos y otras plataformas.
+- **[21:22] Diana Aldana:** Listo.
+- **[21:22] Diana Aldana:** Bueno, esto es como la esencia
+- **[21:23] Diana Aldana:** Obviamente, cuando están en el proceso de seleccionar que
+- **[21:23] Diana Aldana:** experimento, qué proceso, pues lo ideal y lo recomendado
+- **[21:23] Diana Aldana:** es también como sacar ese identificar en qué momento se nos está
+- **[21:23] Diana Aldana:** cayendo mal los usuarios para comenzar a priorizar esos
+- **[21:23] Diana Aldana:** puntos de experiencia, en donde tenemos que ser más estratégicos y lograr ideas y nuevos
+- **[21:23] Diana Aldana:** proyectos, sin obviar que todo es importante,
+- **[21:23] Diana Aldana:** pero si vemos que hay una fuga en la experiencia, ahí es donde, pues,
+- **[21:23] Diana Aldana:** tenemos que entrar como a reaccionar de forma más más eficiente.
+- **[21:23] Diana Aldana:** Bueno, acá dando como un ejemplo,
+- **[21:23] Diana Aldana:** como un ejemplo de todos estos puntos de contacto, acá hay un punto de contacto donde el
+- **[21:23] Diana Aldana:** donde el usuario es el que está seleccionando el producto.
+- **[21:23] Diana Aldana:** Pueden surgir muchas cosas y muchas cosas que pueden generar incertidumbre.
+- **[21:23] Diana Aldana:** Como desconocer el margen, no saber la demanda, se está vendiendo
+- **[21:23] Diana Aldana:** este producto ahora o es una apuesta a ciegas, este proveedor cumple los tiempos
+- **[21:24] Diana Aldana:** la calidad que promete, a qué zonas puedo despachar,
+- **[21:24] Diana Aldana:** tengo con qué mostrar este producto de forma atractiva. También es es pensar
+- **[21:24] Diana Aldana:** y ser empáticos
+- **[21:24] Diana Aldana:** a nivel emocional, a nivel operativo, con qué luz
+- **[21:24] Diana Aldana:** se puede estar enfrentando en cada una de estas etapas.
+- **[21:24] Diana Aldana:** Y nosotros cómo le vamos a ayudar a poder pasar a la siguiente etapa,
+- **[21:24] Diana Aldana:** de la forma más satisfactoria, con la mejor
+- **[21:24] Diana Aldana:** experiencia y minimizando, pues, las fricciones que se tengan.
+- **[21:24] Diana Aldana:** Bueno, este es un ejemplo
+- **[21:24] Diana Aldana:** no es data cien por ciento real, pero sí sí es importante
+- **[21:24] Diana Aldana:** que podamos identificar en qué momentos se se está creando el usuario y, pues, eso
+- **[21:24] Diana Aldana:** qué consecuencia nos nos puede estar trayendo
+- **[21:24] Diana Aldana:** a a la experiencia en general del usuario.
+- **[21:24] Diana Aldana:** Como vimos al principio, de lo
+- **[21:24] Diana Aldana:** cinco principios generales del service design, cuando ya identificamos
+- **[21:24] Diana Aldana:** nuestro usuario, cuando ya identificamos cuál es la experiencia que queremos diseñar,
+- **[21:25] Diana Aldana:** podemos comenzar a aplicar estos principios. Entonces, la experiencia aquí es del vendedor novato. Sabemos que es centrado en el usuario, aquí estamos diseñando para quien nunca ha vendido online, no para quien ya domina el catálogo. Por eso es muy importante saber que
+- **[21:25] Diana Aldana:** experiencia y hacia qué público estamos dirigidos.
+- **[21:25] Diana Aldana:** Sabemos que esta experiencia no es solamente este usuario, también
+- **[21:25] Diana Aldana:** se involucra soporte, los proveedores, las
+- **[21:25] Diana Aldana:** entonces también es ver ellos cómo interactúan entre sí para que
+- **[21:25] Diana Aldana:** pues, esa experiencia sea positiva. Ya entendimos que es una experiencia
+- **[21:25] Diana Aldana:** secuencial, por eso es importante vivir el camino en pasos claros con una sola
+- **[21:25] Diana Aldana:** acción evidente en cada momento. Mostrar señales de que es
+- **[21:25] Diana Aldana:** sí funciona antes de que exista una primera venta, enfoque holístico, pues, bueno, diseñar la app, el contenido educativo, el soporte humano como un no como piezas sueltas, comenzar a ver todo como un sistema. A partir de entender estos principios, a partir de entender el onboarding del usuario y entender las principales fix fricciones, es que podemos comenzar a identificar las oportunidades por cada una de las Sabemos que, pues, hay etapas que seguramente están generando más dolor, y ahí es donde tenemos que ser estratégicos, y priorizar si esa etapa, pues, pues vamos a abarcar. Ejemplo, en la etapa uno de descubrimiento, un landing que sea muy transparente, con expectativas claras de lo que tú necesitas,
+- **[21:26] Diana Aldana:** En la parte de registro, que queremos, esto es muy a nivel, ejemplo, queremos reducir los
+- **[21:26] Diana Aldana:** campos esenciales y mover la verificación completa a un paso más ágil.
+- **[21:26] Diana Aldana:** Selección de productos, una colección de productos para tu primera venta,
+- **[21:26] Diana Aldana:** con una demanda estimada al margen y calificación del proveedor, que es lo que
+- **[21:26] Diana Aldana:** haciendo con Gali. Mira que le está apuntando a esta
+- **[21:26] Diana Aldana:** punto de la experiencia. Lo que estamos haciendo con Pau y
+- **[21:26] Diana Aldana:** y Cata le está
+- **[21:26] Diana Aldana:** momento de la experiencia, que es el registro y la verificación, y, pues, todo lo que hace marketing,
+- **[21:27] Diana Aldana:** para traer como anzuelos. Está el momento de integración guiada paso
+- **[21:27] Diana Aldana:** a paso, un asistente dentro de Dopi que guíe la
+- **[21:27] Diana Aldana:** con Shopify y con WooCommerce, bueno, con otras herramientas, porque sabemos que
+- **[21:27] Diana Aldana:** para que esta operación sea eficiente, es muy importante también como esas integraciones
+- **[21:27] Diana Aldana:** con terceros. Y también, pues, en cosas que hemos percibido y en
+- **[21:27] Diana Aldana:** pues vemos que, al ser las integraciones, son muy tediosas de ejecutar y eso puede como
+- **[21:27] Diana Aldana:** ralentizar la adopción que se tiene de de esta experiencia.
+- **[21:27] Diana Aldana:** Un poco ligado a lo que también se está haciendo, es como
+- **[21:27] Diana Aldana:** en el momento de lanzar un producto, porque no solamente escoger un producto
+- **[21:27] Diana Aldana:** integrarlo a nuestra página, sino como
+- **[21:27] Diana Aldana:** cómo el usuario es estratégico, cómo le creamos como ese kit
+- **[21:27] Diana Aldana:** del primer anuncio, como ese kit de primeros auxilios, ese kit del primer
+- **[21:27] Diana Aldana:** de ese, pues, de ese primer de esa primer campaña.
+- **[21:27] Diana Aldana:** Para que posterior a ese, pues podamos
+- **[21:27] Diana Aldana:** pues, no que podamos, el usuario ya pueda celebrar de por qué hizo, pues,
+- **[21:28] Diana Aldana:** su primera venta. Al recibir su primer pedido, celebrar el ito, y, no
+- **[21:28] Diana Aldana:** con claridad qué sigue. Después de una primera venta,
+- **[21:28] Diana Aldana:** ¿qué hace el usuario?, ¿cómo seguimos nutriendo esa experiencia?
+- **[21:28] Diana Aldana:** Tiene que replicar el mismo modelo o, a medida que va vendiendo, pues sabemos que va a ir
+- **[21:28] Diana Aldana:** escalando en el modelo de de ecommerce.
+- **[21:28] Diana Aldana:** ¿Vale? Bueno, son las cuatro y veintiocho,
+- **[21:28] Diana Aldana:** Ya tenemos como un contexto, ya
+- **[21:28] Diana Aldana:** teórico. En otra sesión, pues, me voy enfocar más en la parte de
+- **[21:28] Diana Aldana:** usuarios dinámicos. Sin embargo, creo que hasta este punto ya tenemos como
+- **[21:28] Diana Aldana:** como un contexto teórico de lo que es service design,
+- **[21:28] Diana Aldana:** en cómo nos debemos enfocar. Ahora le voy a dar paso a Mitch, López para que nos muestre un poco cómo ha estado organizando y documentando
+- **[21:28] Diana Aldana:** toda esta información clave para entender cada vez más al usuario,
+- **[21:28] Diana Aldana:** entender esos momentos importantes en la experiencia.
+- **[21:28] Diana Aldana:** Hola,
+- **[21:28] Diana Aldana:** Hola, ya les comparto. Dale.
+- **[21:29] Michelle Lopez Obregon:** Primero quiero preguntarles como a modo general,
+- **[21:29] Michelle Lopez Obregon:** ¿qué tanto han podido usar Darwin?
+- **[21:29] Michelle Lopez Obregon:** Los
+- **[21:29] Michelle Lopez Obregon:** project designers, porque creo que los managers ya están
+- **[21:29] Michelle Lopez Obregon:** todos solo usándolos, ¿cierto?
+- **[21:29] Yo:** Sí.
+- **[21:29] Yo:** Deme la hospita.
+- **[21:29] Yo:** Sin problema.
+- **[21:29] Michelle Lopez Obregon:** Les pregunto porque, pues una de las
+- **[21:29] Michelle Lopez Obregon:** como de los beneficios, por así decirlo, de utilizar Darwin pues era que pudiésemos tener como toda la información en un mismo lugar y no tener
+- **[21:29] Michelle Lopez Obregon:** que estar como buscando
+- **[21:29] Michelle Lopez Obregon:** en un lado u otro. Entonces,
+- **[21:29] Michelle Lopez Obregon:** este
+- **[21:29] Michelle Lopez Obregon:** esta documentación que hicimos
+- **[21:29] Michelle Lopez Obregon:** la hicimos, pues, con toda la información
+- **[21:29] Michelle Lopez Obregon:** que ya teníamos en Darwin, sin tener que
+- **[21:29] Michelle Lopez Obregon:** o, bueno, hasta el momento, sin tener que ir a hacer entrevistas, sin tener que ir a
+- **[21:29] Michelle Lopez Obregon:** como información en otros lugares. Claramente,
+- **[21:29] Michelle Lopez Obregon:** se podría hacer y deberíamos hacerlo, pero como en esta primera estructura,
+- **[21:30] Michelle Lopez Obregon:** la hicimos así como con la información que ya estaba en Darwin. Aquí hay información que todavía tiene como vacíos, que literalmente es como una de las reglas que le dije para que no se inventara nada. Entonces, por ejemplo, les muestro dónde hay vacíos. Para que, pues, revisemos el el y completemos como esta información que todavía no la tenemos. Pero bueno, entonces, lo dividimos esta información en un resumen, es el perfil y los segmentos de nuestro tipo de usuario, la satisfacción que está ahí en NPS y y CES,
+- **[21:30] Michelle Lopez Obregon:** las funcionalidades. Este es un onboard, el como un blueprint del onboarding que
+- **[21:30] Michelle Lopez Obregon:** tiene el usuario, este ya sería un blueprint general.
+- **[21:30] Michelle Lopez Obregon:** Y este sería como las herramientas o un inventario de herramientas
+- **[21:30] Michelle Lopez Obregon:** que usaría el usuario.
+- **[21:30] Michelle Lopez Obregon:** Todo esto, pues, como les digo,
+- **[21:31] Michelle Lopez Obregon:** fue prácticamente como un prompt, que se los voy a pasar,
+- **[21:31] Michelle Lopez Obregon:** que todo lo podamos hacer de manera muy rápida.
+- **[21:31] Michelle Lopez Obregon:** Entonces, aquí dentro de
+- **[21:31] Michelle Lopez Obregon:** la sección de guías,
+- **[21:31] Michelle Lopez Obregon:** hay como una guía muy breve de cómo
+- **[21:31] Michelle Lopez Obregon:** podemos hacer esto y
+- **[21:31] Michelle Lopez Obregon:** lo importante es como este
+- **[21:31] Michelle Lopez Obregon:** prompt, que es el paso cinco, sería como copiar y pegar eso en antigravity para que les
+- **[21:31] Michelle Lopez Obregon:** cree como una copia de la estructura que se hizo para suppliers.
+- **[21:31] Michelle Lopez Obregon:** Y, pues, con la información que ustedes hasta ahora hayan
+- **[21:31] Michelle Lopez Obregon:** almacenado como dentro de Darwin.
+- **[21:31] Michelle Lopez Obregon:** Algo importante es
+- **[21:31] Michelle Lopez Obregon:** la conexión con user pilot. No sé si ustedes ya
+- **[21:31] Michelle Lopez Obregon:** se han conectado con el MCP de UserPilot.
+- **[21:31] Michelle Lopez Obregon:** Porque es
+- **[21:31] Michelle Lopez Obregon:** ayuda resto a
+- **[21:31] Michelle Lopez Obregon:** que, pues traer información de encuestas que ya se han hecho, de los proyectos y demás,
+- **[21:31] Michelle Lopez Obregon:** Yo me conecté, la verdad no me acuerdo muy bien cómo lo hice.
+- **[21:32] Michelle Lopez Obregon:** Pero sé que aquí en donde dice MCP hay una parte
+- **[21:32] Michelle Lopez Obregon:** donde tú te conectas,
+- **[21:32] Michelle Lopez Obregon:** Bueno, si si si no sabemos cómo, pues le podemos preguntar antigravity, si no,
+- **[21:32] Michelle Lopez Obregon:** cualquiera de de mis compañeros aquí que tienen más habilidades técnicas, seguramente
+- **[21:32] Michelle Lopez Obregon:** nos pueden ayudar a hacer esa conexión.
+- **[21:32] Michelle Lopez Obregon:** ¿Qué más les digo?
+- **[21:32] Michelle Lopez Obregon:** Dime, Santi.
+- **[21:32] Yo:** Perdón, hay como para para aportarles, porque
+- **[21:32] Yo:** he usado el MCP, pero para algunos datos en particular,
+- **[21:32] Yo:** a veces lo mejor igual es pedirle que genere el reporte,
+- **[21:32] Yo:** lo exporte, creo que me lo manda a
+- **[21:32] Yo:** a diseño producto, el correo que me mostrás ahí,
+- **[21:32] Yo:** y ya el CSV. A veces, no son todos los casos, pero para que lo tengan presente.
+- **[21:32] Yo:** Que ese es el MCP como que colapsa, no sé si es por la cantidad de data o por
+- **[21:32] Yo:** tiene muchos filtros o capacidades user pilot.
+- **[21:32] Participante:** Okay.
+- **[21:32] Yo:** Para que lo tengan en cuenta.
+- **[21:32] Michelle Lopez Obregon:** Buenísimo.
+- **[21:33] Michelle Lopez Obregon:** Santi,
+- **[21:33] katerine Pencue:** solamente por preguntar, o
+- **[21:33] katerine Pencue:** cuando conectan conectan desde antigravity o
+- **[21:33] katerine Pencue:** o por qué está ahí el tema de cloud?
+- **[21:33] Michelle Lopez Obregon:** Desde Oh, ¿por
+- **[21:33] katerine Pencue:** qué vi mal?
+- **[21:33] katerine Pencue:** Porque se dieron
+- **[21:33] Michel David Pino Aguilar:** LMCP,
+- **[21:33] Michel David Pino Aguilar:** se conecta directamente a la vía,
+- **[21:33] Michel David Pino Aguilar:** Como es es lo que es el el el contexto, el modelo de contexto de protocolo
+- **[21:33] Michel David Pino Aguilar:** de
+- **[21:33] Michel David Pino Aguilar:** como tal de user pilot, él él tiene ciertas capacidades, uno es que él
+- **[21:33] Michel David Pino Aguilar:** puntuales que que le permite por medio de cloud cómo ejecutar cosas.
+- **[21:33] Michel David Pino Aguilar:** Y ya que yo, justamente, antier, creo que fue como una
+- **[21:33] Michel David Pino Aguilar:** charla de esas
+- **[21:33] Michelle Lopez Obregon:** que me llegó
+- **[21:33] Michel David Pino Aguilar:** al correo,
+- **[21:33] Michel David Pino Aguilar:** y ellos tienen como unos unos skills, pues le mando ese pantallazo
+- **[21:33] Michel David Pino Aguilar:** por aquí.
+- **[21:33] Yo:** Pero entiendo que que los dice
+- **[21:33] Michel David Pino Aguilar:** Que sirven
+- **[21:33] Yo:** Sí, es que Claude es, como tal, el el ellem,
+- **[21:33] Yo:** utiliza para como el skill, igual antigravity suele decir el ID
+- **[21:33] Yo:** igual no es el modelo que está utilizando para hacer la lectura. O sea, el el MCP expone
+- **[21:33] Yo:** por clut.
+- **[21:33] Yo:** Pero se consume a través de antigravity.
+- **[21:34] Michel David Pino Aguilar:** Es que depende qué lo quieras.
+- **[21:34] Yo:** Ay, ay,
+- **[21:34] Michel David Pino Aguilar:** O sea, vos puedes conectarte al MCP desde el chat normal de cloud en desktop.
+- **[21:34] Michel David Pino Aguilar:** Y si querés hacer cosas, digamos, dentro de un repositorio, los sets del IDE,
+- **[21:34] Michel David Pino Aguilar:** o sea, depende de lo que quieras. Si querés hacer, digamos, por ejemplo, como
+- **[21:34] Michel David Pino Aguilar:** de algo, de un reporte, de un dashboard que se haya generado,
+- **[21:34] Michel David Pino Aguilar:** lo puede hacer desde el chat normal de Cloud Desktop y vas a ver como un resultado, un artefacto. Aparte
+- **[21:34] Michel David Pino Aguilar:** Pero ya si querés usar
+- **[21:34] Michel David Pino Aguilar:** data de User Pilot para usar en un repositorio como este, sí lo hacés desde
+- **[21:34] Yo:** Yes.
+- **[21:34] Michel David Pino Aguilar:** Unieve como antigravit.
+- **[21:34] katerine Pencue:** Y nosotros como
+- **[21:34] katerine Pencue:** ¿Ya te nos cuenta?
+- **[21:34] Michel David Pino Aguilar:** Yo no le escucho a Katherine, ¿sí la escucharon?
+- **[21:34] Jaime Guevara:** No, no
+- **[21:34] Michelle Lopez Obregon:** se deja de pronto hablar a ella ahí.
+- **[21:34] Yo:** Ay, dios.
+- **[21:34] Jaime Guevara:** No se le escucha. Bueno,
+- **[21:35] Jaime Guevara:** igual,
+- **[21:35] Jaime Guevara:** es es diferente un poco lo del MCP a a traer data y tabularla, ¿no?
+- **[21:35] Jaime Guevara:** O sea,
+- **[21:35] Jaime Guevara:** traerla toda la data sí es más complejo, como main up to MCP ayudas como a
+- **[21:35] Jaime Guevara:** atrapes con prompts, traer ciertas cosas.
+- **[21:35] Yo:** Es que, sí, ya ya son
+- **[21:35] Jaime Guevara:** Que él pueda procesar.
+- **[21:35] Yo:** me refería un poco más, cuando ya uno quiere es, no sé,
+- **[21:35] Yo:** pasarla para que guarde, que se guarde en su país,
+- **[21:35] Yo:** a veces no es fácil
+- **[21:35] Yo:** pedirle que descargue el reporte
+- **[21:35] Yo:** nos manda el correo y eso luego uno lo carga como usted desee.
+- **[21:35] Yo:** Ahí es más fácil por la cantidad de filtros que hay. Y ya, si uno quiere hacer una consulta muy puntual,
+- **[21:35] Yo:** ahí es donde más más más valor saca el
+- **[21:35] Michel David Pino Aguilar:** Sí.
+- **[21:35] Yo:** Pues es como lo usaba, no sé.
+- **[21:35] Jaime Guevara:** Le le yo tenía otra pregunta. Mitch, primero, porque
+- **[21:35] Jaime Guevara:** no
+- **[21:35] Jaime Guevara:** todo esto. Me sorprende.
+- **[21:35] Jaime Guevara:** Ve, Mitch, ese resumen es
+- **[21:35] Jaime Guevara:** solo de suppliers o o es de todo lo
+- **[21:35] Jaime Guevara:** los proyectos? No,
+- **[21:36] Michelle Lopez Obregon:** o sea, solo suppliers.
+- **[21:36] Michelle Lopez Obregon:** Todo lo que tenga que ver ¿el quién?
+- **[21:36] Michelle Lopez Obregon:** Sí.
+- **[21:36] Diana Aldana:** La idea es que todas las células, pues, comencemos como a
+- **[21:36] Diana Aldana:** recolectar bien esta información durante las últimas semanas, como que
+- **[21:36] Diana Aldana:** hablando con cada una de las células, como para identificar qué información tenemos,
+- **[21:36] Diana Aldana:** nos falta levantar, para, pues, hacerle
+- **[21:36] Diana Aldana:** el acompañamiento y y, pues, tener así el formato como lo tiene Michelle.
+- **[21:36] Jaime Guevara:** Chévere. Seguro
+- **[21:36] Jaime Guevara:** no sé esto dónde queda, Mitch.
+- **[21:36] Jaime Guevara:** Está
+- **[21:36] Michelle Lopez Obregon:** dentro ver.
+- **[21:36] Jaime Guevara:** Ahorita
+- **[21:36] Michelle Lopez Obregon:** está.
+- **[21:36] Michelle Lopez Obregon:** Dime.
+- **[21:36] Michelle Lopez Obregon:** Me
+- **[21:36] Jaime Guevara:** refiero es donde queda de, sí, toda esta data que
+- **[21:36] Jaime Guevara:** si se sube
+- **[21:36] Jaime Guevara:** al repo,
+- **[21:36] Jaime Guevara:** o queda en use en en en su pub base,
+- **[21:36] Jaime Guevara:** o queda en tu local,
+- **[21:36] Michelle Lopez Obregon:** No, yo ya tengo una desplegada
+- **[21:36] Michelle Lopez Obregon:** y está dentro de proyectos, en este que se llama documentación.
+- **[21:37] Jaime Guevara:** Creo que sí
+- **[21:37] Michelle Lopez Obregon:** podríamos colocarlo en otra parte, pero, pues, por ahora está bien.
+- **[21:37] Jaime Guevara:** Ok, ok, ok.
+- **[21:37] Jaime Guevara:** Entiendo.
+- **[21:37] Jaime Guevara:** ¿Será que eso está quemado? Bueno, igual,
+- **[21:37] Jaime Guevara:** Lo digo es como para que, o sea, si no está en
+- **[21:37] Jaime Guevara:** para ver cómo lo consultan otras células de pronto.
+- **[21:37] Michelle Lopez Obregon:** Pero sí está aquí, mirando.
+- **[21:37] Michelle Lopez Obregon:** Aquí entre proyectos.
+- **[21:37] Michelle Lopez Obregon:** Lo que, no sé, es si las otras células
+- **[21:37] Michelle Lopez Obregon:** pueden entrar a ver los filtros de espera ahí.
+- **[21:37] Jaime Guevara:** Sí, todos Entonces,
+- **[21:37] Michelle Lopez Obregon:** sí podría entrar ahí. ¿Puede entrar, nos dicen?
+- **[21:37] Jaime Guevara:** ¿Y alguien no tiene el botoncito arriba de para navegar entre células? Nos dice.
+- **[21:37] Jaime Guevara:** Listo. Dale, Mitch, gracias.
+- **[21:37] Michel David Pino Aguilar:** Yo tengo una pregunta, entonces,
+- **[21:37] Michel David Pino Aguilar:** esta estructura nosotros tenemos que hacerla
+- **[21:37] Michel David Pino Aguilar:** con la guía que tenés ahí o esto se sube como un cambio global para
+- **[21:37] Michel David Pino Aguilar:** todas las células.
+- **[21:37] Michelle Lopez Obregon:** O sea, esto se sube
+- **[21:37] Michelle Lopez Obregon:** solamente, o sea, todo lo van a poder ver, pero es solamente de la célula de
+- **[21:38] Michelle Lopez Obregon:** Ya cada persona de la célula tiene que entrar a hacer esto mismo que yo hice,
+- **[21:38] Michelle Lopez Obregon:** pues, ayudándose con el
+- **[21:38] Michelle Lopez Obregon:** con el prompt que les puse por
+- **[21:38] Michelle Lopez Obregon:** Con la
+- **[21:38] Jaime Guevara:** guía esa, claro. Claro, porque estaría tomando lo que tienes
+- **[21:38] Jaime Guevara:** del
+- **[21:38] Jaime Guevara:** las memorias y todo lo que tienes en local.
+- **[21:38] Jaime Guevara:** Ajá.
+- **[21:38] Jaime Guevara:** Ok.
+- **[21:38] Michelle Lopez Obregon:** Ok. Y ya preguntas
+- **[21:38] Michelle Lopez Obregon:** tienen.
+- **[21:38] Jaime Guevara:** Una pregunta, aquí, Diani, entiendo que
+- **[21:38] Jaime Guevara:** lo estabas haciendo conmigo, o sea, estaban los dos dándola esto, ¿cierto?
+- **[21:38] Jaime Guevara:** Él, pues esto
+- **[21:38] Diana Aldana:** lo montó Mitch.
+- **[21:38] Jaime Guevara:** Es que Mitch Mitch es un peligro con inteligencia artificial. Sí, sí, sí.
+- **[21:38] Jaime Guevara:** Diani, esta la idea es
+- **[21:38] Jaime Guevara:** es de este de que todas las celdas tengan esto, es para lo del
+- **[21:38] Jaime Guevara:** experience o...? Bueno, no sé cuál el
+- **[21:39] Jaime Guevara:** por dónde lo estoy perfilando.
+- **[21:39] Jaime Guevara:** Sí, pues sí,
+- **[21:39] Diana Aldana:** claramente tú sabes que tengo un reto de la métrica de NPS,
+- **[21:39] Diana Aldana:** Ok.
+- **[21:39] Diana Aldana:** el tema de percepción de marca, que la gente ame dropping,
+- **[21:39] Diana Aldana:** pero les quería dar ese contexto, pues que para que la gente
+- **[21:39] Diana Aldana:** ame dropping, tiene que haber una buena experiencia de usuario.
+- **[21:39] Diana Aldana:** Para ser como más conscientes de la importancia de cada
+- **[21:39] Diana Aldana:** paso que tiene el usuario, de cada punto de contacto para
+- **[21:39] Diana Aldana:** generar una experiencia, pues, que sea memorable. Entonces, para que
+- **[21:39] Diana Aldana:** comencemos a enfocarnos más en diseñar experiencias y no tanto en diseñar interfaces.
+- **[21:39] Diana Aldana:** Que ese sea como nuestro nuevo eslogan.
+- **[21:39] Jaime Guevara:** Buenísimo, buenísimo. Y además esto
+- **[21:39] Diana Aldana:** también nos ayuda
+- **[21:39] Diana Aldana:** a tener un mayor entendimiento del usuario, pues también
+- **[21:39] Diana Aldana:** ayuda a identificar posibles proyectos,
+- **[21:39] Diana Aldana:** dónde no tenemos que priorizar. Todo el tema del blueprint ayuda mucho a identificar como ese
+- **[21:39] Diana Aldana:** esos puntos más críticos, donde ahí pueden surgir miles de proyectos
+- **[21:40] Diana Aldana:** Sí,
+- **[21:40] Michelle Lopez Obregon:** por ejemplo, yo estaba viendo como los datos que
+- **[21:40] Michelle Lopez Obregon:** recogimos y en cuanto al NPS de proveedores,
+- **[21:40] Michelle Lopez Obregon:** en Colombia está más bajito que en Colombia.
+- **[21:40] Michelle Lopez Obregon:** Que en Ecuador y México.
+- **[21:40] Michelle Lopez Obregon:** Entonces,
+- **[21:40] Michelle Lopez Obregon:** como entender por qué podría pasar
+- **[21:40] Michelle Lopez Obregon:** eso, cuáles son las diferencias entre los países.
+- **[21:40] Michelle Lopez Obregon:** Exacto,
+- **[21:40] Diana Aldana:** un
+- **[21:40] Michel David Pino Aguilar:** un en este caso,
+- **[21:40] Michel David Pino Aguilar:** Ok, dale, dale.
+- **[21:40] Michel David Pino Aguilar:** No, no, que
+- **[21:40] Diana Aldana:** un un un NPS bajo tiene su razón.
+- **[21:40] Diana Aldana:** Y hay hay que identificar cuál es la causa de ese bajo,
+- **[21:40] Diana Aldana:** hay que identificar cuál es ese punto de la experiencia que está generando
+- **[21:40] Diana Aldana:** ese NPS bajo.
+- **[21:40] Diana Aldana:** Puede ser la sumatoria de varias experiencias o puede ser un punto específico en la experiencia
+- **[21:40] Diana Aldana:** que está generando.
+- **[21:40] Diana Aldana:** Y ya, como para dar contexto. Dale, continúa.
+- **[21:40] Diana Aldana:** Es es
+- **[21:40] Michel David Pino Aguilar:** métricas que están ahí satisfacción y demás, es una métrica global de todos
+- **[21:41] Michel David Pino Aguilar:** proyectos que como que estén relacionados a eso Buena
+- **[21:41] Michelle Lopez Obregon:** pregunta. Que no
+- **[21:41] Michelle Lopez Obregon:** Nosotros
+- **[21:41] Michelle Lopez Obregon:** tenemos también un módulo que se llama following, ¿cierto?, este que
+- **[21:41] Michelle Lopez Obregon:** aquí, que son todos los proyectos relacionados a tu célula, y que ahí también
+- **[21:41] Michelle Lopez Obregon:** vamos a medir como esta satisfacción, pero específicamente por el proyecto.
+- **[21:41] Michelle Lopez Obregon:** La idea, para no repetir tampoco la información, es que en este que ya es como
+- **[21:41] Michelle Lopez Obregon:** el análisis a nivel general del usuario,
+- **[21:41] Michelle Lopez Obregon:** sí sean unas métricas generales.
+- **[21:41] Michelle Lopez Obregon:** Aquí él me trajo mucha información de proyectos en específico,
+- **[21:41] Michelle Lopez Obregon:** pero la idea es que sea más general,
+- **[21:41] Michelle Lopez Obregon:** y que, de pronto, desde aquí podríamos ir a tener un acceso a los proyectos en específico.
+- **[21:41] Michelle Lopez Obregon:** Pero la idea es que sea a modo general.
+- **[21:41] Diana Aldana:** Sí, normalmente el NNPC sí es a modo general, igual
+- **[21:41] Diana Aldana:** es un tema que
+- **[21:41] Diana Aldana:** estamos trabajando con Lau En otra sesión ya le ya nos enfocamos más en esta
+- **[21:41] Diana Aldana:** parte de satisfacción, pero sí el NPS es más la la generalista sería el NPS de de la experiencia de proveedores.
+- **[21:42] Diana Aldana:** Ya de las funcionalidades, ya utilizaríamos las métricas de SAS y de CISARS.
+- **[21:42] Michelle Lopez Obregon:** Que eso ya
+- **[21:42] Diana Aldana:** es la parte de design ups que lo vamos a ver con la
+- **[21:42] Diana Aldana:** si quieres esto, Mitch, en otra en otro espacio ya lo profundizamos,
+- **[21:42] Diana Aldana:** cuando lo tengamos más más aterrizado. Es como un abrebocas. Ajá.
+- **[21:42] Jaime Guevara:** De una, Diani. Igual,
+- **[21:42] Jaime Guevara:** importante equipo
+- **[21:42] Jaime Guevara:** pues, yo lo digo por mí,
+- **[21:42] Jaime Guevara:** y espero venderles la idea.
+- **[21:42] Jaime Guevara:** Pero tenemos un NPS muy bajo. No sé si alguien ha tenido relacionamientos
+- **[21:42] Jaime Guevara:** con los NPS
+- **[21:42] Jaime Guevara:** pero se supone que nosotros deberíamos estar en
+- **[21:42] Jaime Guevara:** de siete para arriba,
+- **[21:42] Jaime Guevara:** estamos como en cuatro o cinco
+- **[21:42] Jaime Guevara:** Entonces,
+- **[21:42] Jaime Guevara:** para mí,
+- **[21:42] Jaime Guevara:** desde producto y como desarrollador de productos,
+- **[21:42] Jaime Guevara:** lo que yo
+- **[21:42] Jaime Guevara:** busco mi mi mi
+- **[21:43] Jaime Guevara:** como mi sueño es tener un producto que las personas amen y este
+- **[21:43] Jaime Guevara:** indicador que nos va
+- **[21:44] Jaime Guevara:** Airbnb, han tenido un apartamento en Airbnb,
+- **[21:44] Jaime Guevara:** pues uno gana plata.
+- **[21:44] Jaime Guevara:** No mucha, porque ya hay una competencia brutal. Pero
+- **[21:44] Yo:** No, muchas gracias.
+- **[21:44] Yo:** Que estén

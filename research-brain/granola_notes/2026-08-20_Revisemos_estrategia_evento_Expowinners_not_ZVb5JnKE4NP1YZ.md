@@ -1,0 +1,765 @@
+# Revisemos estrategia evento Expowinners 
+
+- **ID:** `not_ZVb5JnKE4NP1YZ`
+- **Fecha:** 2026-08-20T21:59:24.567Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/1388b81a-34f2-421f-b821-75788e8616dd)
+- **Asistentes:** Santiago Herrera Acosta, Diana Margarita Aldana Echeverry, Jaime Guevara, Laura Contreras, Catherin Salazar, Jose Pineda, Laura Torres, Dropinews
+
+---
+
+## Resumen de la Reunión
+# Stand de Leyendas Dropping (Día 1)
+
+- José lidera el stand: entrega manillas según nivel de leyenda (bienvenido, aprendiz, explorador, master, sabio)
+- Flujo del usuario aún por confirmar con Jenny/comercial
+  - Opción 1: usuario consulta su nivel en el stand con su grab, José pone la manilla
+  - Opción 2: José hace la segmentación directamente
+  - Dianys señaló riesgo de fila larga: propone notificar nivel por correo la noche anterior
+- Pendiente confirmar dónde se almacena la data de segmentación (Firebase según Pipe) y cómo evitar pedirla dos veces
+- José se encarga de confirmar dónde se guarda la info para coordinar el envío de invitaciones al workshop
+
+# Selección de Participantes para el Workshop (Día 2)
+
+- Workshop incluye tres experimentos: Gali, DropiPulso, Selección de Transportadoras
+- Segmentos objetivo preliminares:
+  - Gali: usuarios con órdenes pero volumen bajo (bienvenidos, 1-100 órdenes), aún por confirmar con James
+  - Pulso: rango intermedio (exploradores, 101-1.000 órdenes)
+  - Selección de transportadoras: perfil más experto, aunque puede abrirse a varios niveles; Juan debe confirmar
+- Propuesta de inscripción: no filtrar previamente, llenar cupos por orden de llegada y categorizar perfiles dentro del workshop
+  - Mantener lista de espera para garantizar variedad de perfiles si los cupos se agotan con un solo tipo
+- Confirmación de asistencia: enviar invitación por WhatsApp/CDM pidiendo confirmación previa
+- Invitación debe generar misterio: “ven a conocer el futuro de Dropi”; premios o beneficios por definir con comercial
+
+# Web App / Ruta Winner (Investigación Guerrilla)
+
+- App accesible vía QR o ícono dentro de la app de ExpoWinners (pegada a Firebase de registro)
+- Herramientas disponibles dentro de la app:
+  - **Gali** (sin ese nombre en el evento, por lineamiento de Lucho): flujo de selección de producto
+  - **Escanea tu Winner**: escanea producto y entrega score; mínimo \~60%, sube con acciones (landing, chatbot, viral, influencer)
+    - Riesgo de experiencia negativa frente a proveedores: parametrizar mensajes como “oportunidades de mejora”
+    - Alinear con comercial antes del evento
+  - **DropiPulso**: registro de intención; avisa cuando proveedor saca oferta con buen margen en categorías elegidas
+  - **Casa Productos**: primer paso hacia sandbox con suppliers
+- Panel interno para medir interacción con cada herramienta (usuarios que completaron flujo, etc.)
+- Objetivo: validar interés real y recoger insights; si funciona, escalar como producto permanente
+
+# Próximos Pasos
+
+- **Confirmar disposición de stands y orden de la ruta winner** (Jaime)
+
+  Escribir o llamar a Jenny esta semana para obtener el mapa final.
+- **Confirmar dónde se almacena la data de segmentación de leyendas** (José)
+
+  Necesario para definir cómo enviar invitaciones al workshop sin duplicar la captura de datos.
+- **Definir segmento ideal de Gali para el workshop** (Santiago)
+
+  Revisar con James mañana en la entrega de Gali y compartir resultado en la tarde.
+- **Invitar a Juan a la siguiente sesión para alinear selección de transportadoras**
+
+  No estuvo en esta reunión; debe confirmar perfil de usuario ideal para su experimento.
+- **Revisar y validar objetivos del evento antes de presentar a comercial** (Santiago)
+
+  Link con objetivos adjunto; confirmar alineación para sustentar presupuesto ante comercial.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/387763b2-aa83-4bed-8756-80f1ed0140a4](https://notes.granola.ai/t/387763b2-aa83-4bed-8756-80f1ed0140a4)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[22:01] Yo:** Bien, bien.
+- **[22:01] Participante:** Bien, bien, ¿y vos?
+- **[22:01] Participante:** Buenísimo.
+- **[22:01] Yo:** Que me encalambre igual.
+- **[22:01] Participante:** Paso.
+- **[22:01] Yo:** ¿Cómo llenar la edad, Pues ya los veintisiete
+- **[22:01] Participante:** Sí, Jazz.
+- **[22:01] Yo:** Alright.
+- **[22:01] Participante:** Hola. Hola.
+- **[22:01] Yo:** La
+- **[22:01] Participante:** Hello? Hello?
+- **[22:01] Yo:** Hello?
+- **[22:01] Participante:** ¿Qué dice muchachos?
+- **[22:01] Participante:** No,
+- **[22:01] Participante:** Don José.
+- **[22:01] Participante:** Bien, bien. ¿Qué se dice, muchachos? ¿Cómo está el equipo?
+- **[22:02] Participante:** ¿Con calor? Ay, que esta ciudad está.
+- **[22:02] Participante:** José José me va a hacer mañana regañar.
+- **[22:02] Participante:** Ay.
+- **[22:02] Participante:** Por la risa, pero no, yo que lo ando haciendo a la galleta.
+- **[22:02] Participante:** Mañana o mañana me van a pedir una letra y
+- **[22:02] Participante:** O ya le van a decir a Jaime, ese muchacho está haciendo lo que se le da la gana.
+- **[22:02] Participante:** Sí. Y yo y yo solamente le mandé
+- **[22:02] Participante:** un HTML, eso ni siquiera está conectado a ningún lugar y el muchacho se sustó todo.
+- **[22:02] Participante:** Dios santo, sí,
+- **[22:02] Participante:** Santiago fue el que me me abandonó con el grape,
+- **[22:02] Yo:** Really all.
+- **[22:02] Participante:** es Santi?
+- **[22:02] Participante:** Y que la u
+- **[22:02] Participante:** ¿Cómo estás, Lau?
+- **[22:02] Participante:** Muy bien. ¿Y ustedes? Con mucha energía.
+- **[22:03] Participante:** Veo. No, yo no he tomado café hoy.
+- **[22:03] Participante:** Incafém.
+- **[22:03] Participante:** Bueno, ¿empezamos?
+- **[22:03] Participante:** ¿Ya llegó Kate?
+- **[22:03] Participante:** Que nos rinda la media hora. No, Kate está con No alcanzo esperarla.
+- **[22:03] Participante:** No puede entrar, sí.
+- **[22:03] Participante:** Tiene una
+- **[22:03] Participante:** una aquí.
+- **[22:03] Participante:** Una contingencia.
+- **[22:03] Participante:** Yes.
+- **[22:03] Participante:** ¿Qué orden le vamos a dar a esto?
+- **[22:03] Participante:** En general,
+- **[22:03] Participante:** ¿cómo quieren?
+- **[22:03] Participante:** Hola, Majo, ¿cómo estás?
+- **[22:03] Participante:** Uy, hace rato no veía a Majo.
+- **[22:03] Participante:** Y sigue sin Hola, buenas.
+- **[22:03] Participante:** Sin verlo.
+- **[22:03] Participante:** Pues sí, porque a lo mejor nunca pone la cámara.
+- **[22:04] Participante:** Bueno, entonces,
+- **[22:04] Participante:** ¿Por qué, Majo? Si tú tienes tanto estilo.
+- **[22:04] Participante:** No, no, no, nada.
+- **[22:04] Participante:** Voy. Trabajar tranquila, dijo. Llama.
+- **[22:04] Participante:** Sin bañarme hasta esta hora, viendo feo. Listo, empecemos.
+- **[22:04] Participante:** Entonces,
+- **[22:04] Participante:** de todas las ideas,
+- **[22:04] Participante:** empezar así para que vayamos hablando como por stand y eso. Que recapitara.
+- **[22:04] Participante:** De todas las ideas, espacios y
+- **[22:04] Participante:** puntos que podíamos como intervenir desde producto,
+- **[22:04] Participante:** digamos que los expuestos o los alineados fueron los siguientes.
+- **[22:04] Participante:** Bueno, es esto que es de Jaime, de Jaime. Tenemos dos días, ¿cierto?, como sabemos,
+- **[22:04] Participante:** De la landing queríamos traer los datos de registro
+- **[22:04] Participante:** eso todavía lo tenemos que alinear James con
+- **[22:04] Participante:** con con marketing, ¿sí?
+- **[22:05] Participante:** ¿Como dónde van a tener esos datos?
+- **[22:05] Participante:** Yes.
+- **[22:05] Participante:** ¿Cómo es que se llama el pelado este que nos dijo que estaba como liderando eso?
+- **[22:05] Participante:** Piper. Eso, Piper,
+- **[22:05] Participante:** ¿será que ponemos los comentarios de qué nos falta en alguna parte?
+- **[22:05] Participante:** De una. Pues, grabemos acá.
+- **[22:05] Participante:** Ah, bueno, grabemos. Ustedes me gusta escribir.
+- **[22:05] Participante:** Entonces, en la primera actividad, que es la landing de registro, los drop
+- **[22:05] Participante:** van a estar dejando como su número de teléfono. Majo, si tú también tienes alguna información de que esto haya cambiado de alguna manera, nos avisas. Y de esta, era traer esos datos, simplemente como captarlos. Para tener una manera de, o o bueno, los canales conectados. Luego teníamos el stand de leyendas dropping, y aquí entra José con todo lo que está haciendo,
+- **[22:05] Participante:** Te voy a como que José para ahí para que ahí nos muestres qué
+- **[22:05] Participante:** todo lo que estás haciendo, que entiendo que ya también te alineaste con James,
+- **[22:06] Participante:** Y de aquí vamos a segmentar a quienes íbamos a traer al workshop
+- **[22:06] Participante:** el segundo día.
+- **[22:06] Participante:** En esta horita que tenemos acá el día domingo.
+- **[22:06] Participante:** Entonces, no sé de este, José, la idea era simplemente
+- **[22:06] Participante:** el en el plan estaba seleccionar
+- **[22:06] Participante:** las personas
+- **[22:06] Participante:** de las cuales vamos a llamar al workshop, como invitar al workshop,
+- **[22:06] Participante:** pero entiendo que también ahora hay el juego, ¿no?
+- **[22:06] Participante:** Ajá. Es que, bueno, hay que integrarlo a la
+- **[22:06] Participante:** experiencia, pues, que ya yo le mostré a James,
+- **[22:06] Participante:** Pero entonces yo tengo una pregunta, entonces,
+- **[22:06] Participante:** ¿los usuarios llegan al llegan, se registran o la hacen la
+- **[22:06] Participante:** fila, ta ta ta, y ahí el primer stand es leyendas.
+- **[22:06] Participante:** Y ahí me imagino que ellos van a volver a poner su correo
+- **[22:06] Participante:** se les pasa el número, pues el el la insignia,
+- **[22:06] Participante:** tú eres tú eres bienvenido, experto, así,
+- **[22:06] Participante:** y yo les voy contando ahí como
+- **[22:06] Participante:** sí, esto es esto, sirve para esto, y ya luego ellos siguen
+- **[22:07] Participante:** ¿cierto? Como que las personas, es un flujo constante de personas, ¿no?
+- **[22:07] Participante:** Sí, esa era la idea, eso fue lo que nos comentó Jenny.
+- **[22:07] Participante:** Pero quien levantó la mano, por favor, que interesada. Yo, Maho,
+- **[22:07] Participante:** es que tenía una pregunta, o sea, la idea es que
+- **[22:07] Participante:** la primera el primer stand de la ruta winner sea
+- **[22:07] Participante:** leyendas entonces.
+- **[22:07] Participante:** Eso hay que esa parte.
+- **[22:07] Participante:** Eso hay que alinearlo con Jenny o pedirle al lado
+- **[22:07] Participante:** José creería el mapa final, porque entiendo que Jenny había viajado a Bogotá para
+- **[22:07] Participante:** confirmar que la disposición de los stands iban a ser así.
+- **[22:07] Participante:** No sé, Majo, si si de pronto a ti, que vas, que
+- **[22:07] Participante:** estás construyendo la ruta winner con tu equipo, ya te lo pasaron.
+- **[22:07] Participante:** Como la nueva No, por ahora nada.
+- **[22:07] Participante:** O sea, no no sabemos muy bien cómo se va a visualizar,
+- **[22:07] Participante:** Yo me acuerdo que hace como por ahí unas
+- **[22:07] Participante:** dos semanas y media se le mostró a las
+- **[22:08] Participante:** pues, cómo iba a ser como una mini propuesta de la ruta winner,
+- **[22:08] Participante:** pero realmente los planos así ya finales para nosotros saber como
+- **[22:08] Participante:** cuál va ser el orden, no lo sabemos. Sabíamos que
+- **[22:08] Participante:** varias verticales dijeron que como por estrategia
+- **[22:08] Participante:** algunas querían estar, pues, seguidas de las otras, pero no tengo más información.
+- **[22:08] Participante:** Listo.
+- **[22:08] Participante:** Listo, entonces creo que ese ese punto para definir dinámica de ley ese punto habría que pedirlo para todos, si de pronto lo tienes tú primero, Yo le he estado escribiendo a Jenny, pero la idea es escribirle un correo
+- **[22:08] Participante:** o de pronto ya llamarla el día, mañana.
+- **[22:08] Participante:** Pero creo que ya está ocupada con, debe estar ocupado, hasta la semana pasada estábamos más
+- **[22:08] Participante:** como dispersos en en la contingencia.
+- **[22:08] Participante:** Entonces, bueno, esta semana estaremos retomando, supongo.
+- **[22:08] Participante:** Aquí, José, esa era como la idea,
+- **[22:08] Participante:** llamar a la gente, que se registrara, y aquí una pregunta que teníamos, James, para poder seleccionar
+- **[22:09] Participante:** o segmentar a las personas era,
+- **[22:09] Participante:** dónde iban a alojar también la información de leyendas, ¿sí?
+- **[22:09] Participante:** Es
+- **[22:09] Participante:** la información de, o sea, la data.
+- **[22:09] Participante:** Segmentación de leyendas.
+- **[22:09] Participante:** Para poder escoger a los usuarios del workshop.
+- **[22:09] Participante:** No te
+- **[22:09] Participante:** la pregunta. O sea, la data, la data, como decir,
+- **[22:09] Participante:** estas personas son
+- **[22:09] Participante:** ¿Cómo
+- **[22:09] Participante:** ¿Cómo cómo pensábamos cuando Pipe nos mostró lo de
+- **[22:09] Participante:** o bueno, cuando Jenny nos contó lo de leyendas, cómo pensábamos seleccionar a los usuarios
+- **[22:09] Participante:** que necesitamos en el workshop? Yo sé que la segmentación todavía no la hemos hecho,
+- **[22:09] Participante:** pero digo con qué dato o qué fuente de datos necesitábamos.
+- **[22:09] Participante:** Sí, Santiago, tomando esquema de té.
+- **[22:09] Participante:** ¿En Argentina o qué?
+- **[22:09] Yo:** Es que se me acabó el café.
+- **[22:10] Participante:** Oiga, ¿quiere café? La lleva a domicilio.
+- **[22:10] Participante:** Pillamo. Yo lo que había entendido es
+- **[22:10] Participante:** se acercan al stand y les ponen la manillita, ¿no?
+- **[22:10] Participante:** Nosotros, con base en esa manilla,
+- **[22:10] Participante:** Me tienes que pedir el correo.
+- **[22:10] Participante:** Con el correo sabes qué nivel tiene o algo así.
+- **[22:10] Participante:** Ajá, pero eso no lo hace el stand, o sea, como esa segmentación.
+- **[22:10] Participante:** Cuando
+- **[22:10] Participante:** Sí. Pero ¿te acuerdas que nosotros de esa segmentación
+- **[22:10] Participante:** íbamos a sacar unos poquitos.
+- **[22:10] Yo:** Pero te te entiendo
+- **[22:10] Participante:** Ya. Entonces tienes ese papel ahí, hija.
+- **[22:10] Yo:** son los criterios de selección para saber quiénes van al workshop.
+- **[22:10] Participante:** Sí, señor.
+- **[22:10] Yo:** ¿Eso es lo que estoy preguntando?
+- **[22:10] Participante:** Ciertamente. Ahí
+- **[22:10] Participante:** de ahí nosotros nos íbamos a pegar a la base de datos de
+- **[22:10] Participante:** bueno, no sé cómo lo van a hacer,
+- **[22:10] Participante:** cómo van a determinar en el stand que son leyendas o no. Al fin va a ser un Excel o algo, no
+- **[22:10] Participante:** sé si alguien sepa.
+- **[22:10] Participante:** O sí van a ser algo automatizado en tecnología. ¿Cómo van a...?
+- **[22:11] Participante:** Santiago, ¿va a decir algo?
+- **[22:11] Yo:** Sí. No, pero, dale, dale,
+- **[22:11] Participante:** El usuario se da cuenta que
+- **[22:11] Participante:** una leyenda cuando llega, no, el usuario se da cuenta
+- **[22:11] Participante:** Cuando él llega, le ponen una de las seis manillas.
+- **[22:11] Participante:** Luego, el usuario ya sabe que es
+- **[22:11] Participante:** que está clusterizado en uno de esos seis grupos,
+- **[22:11] Participante:** bienvenido, explorador, master, sabio,
+- **[22:11] Participante:** Luego ellos llegan al stand de leyendas,
+- **[22:11] Participante:** y lo que hacen es, pueden entrar a consultar
+- **[22:11] Participante:** en el en el en el stand,
+- **[22:11] Participante:** como información más detallada del por qué los
+- **[22:11] Participante:** de esa manera.
+- **[22:11] Participante:** Por eso, pero ¿cómo cómo la persona que le lo segmenta le le dice que
+- **[22:11] Participante:** Ah, bueno,
+- **[22:11] Participante:** o sea, en la página va a salir
+- **[22:11] Participante:** No, en el en el ingreso, supongo.
+- **[22:11] Participante:** Espérese que yo estoy compilando.
+- **[22:12] Participante:** Pues nosotros ahí
+- **[22:12] Participante:** ¿Será?
+- **[22:12] Participante:** Dale, dale.
+- **[22:12] Participante:** O sea, es que estoy confundido porque entonces tendríamos que
+- **[22:12] Participante:** entregarle a los
+- **[22:12] Participante:** a los del equipo comercial,
+- **[22:12] Participante:** la segmentación de lo que es una ley de lo
+- **[22:12] Participante:** es un bienvenido, un explorador y un máster.
+- **[22:12] Participante:** Y ya cuando ellos lleguen al stand de leyendas, ellos ya van a saber.
+- **[22:12] Participante:** Por eso Ok.
+- **[22:12] Participante:** Pero pero, o sea, pregunta, te vuelvo, no sé si no estoy entendiendo.
+- **[22:12] Participante:** Pero listo, llega el mancito,
+- **[22:12] Participante:** y vos decís que ya hay una segmentación. Esta segmentación lo ves en la página, en el en
+- **[22:12] Participante:** el perfil o qué?
+- **[22:12] Participante:** No, él tiene que ser en este momento de registro cuando les ponen la manilla.
+- **[22:12] Participante:** O sea, cuando se registra en la aplicación,
+- **[22:12] Yo:** Pero
+- **[22:12] Participante:** en esa esas personas que lo hacen el registro, ¿le dicen qué es leyenda?
+- **[22:12] Participante:** O es...? ¿O lo de la manilla es en el stand?
+- **[22:12] Participante:** Esperen, esperen, antes de que hagamos más
+- **[22:13] Participante:** Ahí toca confirmarlo y no sé si es José quien tiene que llevarse esa pregunta, ya que
+- **[22:13] Participante:** creo que la idea es que él sea la persona del stand. José, Y es y es Yeri nos había contado a nosotros, José, que la segmentación solo se hacía desde el stand, no desde el
+- **[22:13] Participante:** Y no sé si marketing Maho tú tendrás información que desde el registro
+- **[22:13] Participante:** sí se haga o se entregue la segmentación.
+- **[22:13] Participante:** Leyendas. Se tenía pensado que fuera un instante aparte.
+- **[22:13] Participante:** Que fuera una experiencia, es decir, que digamos que también fuera como una
+- **[22:13] Participante:** uno de los anzuelos para que ellos empezaran a a participar por todo el tema de
+- **[22:13] Participante:** porque digamos que puede ser muy llamativo
+- **[22:13] Participante:** decirle como que, hey, mira, es que yo tengo mi manilla y yo ya soy de tal
+- **[22:13] Participante:** categoría de leyendas. ¿Qué?, ¿cómo así?, ¿dónde la conseguiste? Ah, no, pues,
+- **[22:13] Participante:** tienes que ir a la a la ruta winner, como
+- **[22:13] Participante:** aparte de los beneficios que vamos a dar por cada una de las verticales,
+- **[22:13] Participante:** ese también sea uno de los anfuelos clave para que ellos
+- **[22:13] Participante:** vayan y conozcan bien cada una de las, pues, de de las verticales.
+- **[22:14] Participante:** O sea, que yo soy el que entrega la manilla.
+- **[22:14] Participante:** Exacto. Ah. Tú. Carayo, cara.
+- **[22:14] Yo:** ¿Me lo
+- **[22:14] Participante:** ¿Y quién más? Hace poco haciéndome cola.
+- **[22:14] Yo:** Me nomás le avisaron.
+- **[22:14] Participante:** Dásme, no sí creo que no está confirmado tocar tocar
+- **[22:14] Participante:** organizar, oigan. Tocaba Pero siendo así, siendo así,
+- **[22:14] Participante:** pues tiene mucho más sentido que ellos lleguen, me imagino que
+- **[22:14] Participante:** hacen un registro general en el ágora y ya en el primer stand
+- **[22:14] Participante:** ponemos un letrero grandote que diga, ¿sabes cuál es
+- **[22:14] Participante:** tu nivel en dropping?
+- **[22:14] Participante:** Acércate a donde nuestro chico dropping
+- **[22:14] Participante:** y él te entregará insignia. O ellos con el grab
+- **[22:14] Participante:** se pueden acercar, me lo muestran y yo le pongo la manillita.
+- **[22:14] Participante:** Sí, buenísimo. Y tengo una pregunta,
+- **[22:14] Participante:** entonces, ¿no es como que la persona se acerca
+- **[22:14] Participante:** diligencia a sus datos de cuántas órdenes genera,
+- **[22:15] Participante:** y ya se le pasa la manilla, sino que eso lo vas a hacer
+- **[22:15] Participante:** tú directamente.
+- **[22:15] Participante:** Podemos hacerlo de las dos formas, o sea, la experiencia la podemos pensar directamente
+- **[22:15] Participante:** con el usuario haciendo la consulta y que él tenga
+- **[22:15] Participante:** su grab, y yo simplemente miro el grab y pongo la manilla,
+- **[22:15] Participante:** o
+- **[22:15] Participante:** la puedo hacer yo toda automáticamente yo.
+- **[22:15] Participante:** Ahí hay que alinear con comercial, porque ellos ya tenían pensada una manera de
+- **[22:15] Participante:** De entregar esa manera. Esa segmentación lista. ¿No? Entonces,
+- **[22:15] Participante:** importante eso saber de dónde viene esa data, porque
+- **[22:15] Participante:** pues, para no estar pidiendo la data dos veces.
+- **[22:15] Participante:** Sí, exacto. Santi,
+- **[22:15] Yo:** Perdón, pero
+- **[22:15] Yo:** que había entendido que la pregunta inicial a donde partimos fue
+- **[22:15] Yo:** de cómo íbamos a escoger a los del workshop.
+- **[22:15] Yo:** Y
+- **[22:15] Yo:** y, volviendo a eso,
+- **[22:15] Yo:** no sé, se me ocurre es que
+- **[22:15] Yo:** realmente
+- **[22:15] Yo:** no hay que hacer una identificación, por ejemplo, de quién es la leyenda, sino que gente no se no no
+- **[22:15] Yo:** sirve realmente a nosotros el workshop, sea, cuál es el grupo que nosotros queremos.
+- **[22:16] Yo:** Por ejemplo, para acá, clientes de allá, que son
+- **[22:16] Participante:** Mhmm.
+- **[22:16] Yo:** usuarios que justamente no son leyendas, usuarios que tienen
+- **[22:16] Participante:** Como el
+- **[22:16] Yo:** un volumen más bajo de órdenes,
+- **[22:16] Yo:** de pronto, de toda la categoría de bienvenido, gente, eso es una de ellas, ¿cierto?
+- **[22:16] Yo:** Que están
+- **[22:16] Yo:** que queremos ver es
+- **[22:16] Yo:** que son los que mayor fricción pueden estar generando
+- **[22:16] Yo:** o presentando al momento de escoger un producto hasta el momento donde lo lanzan, que se
+- **[22:16] Yo:** ahí hay una parte que que ya toca acotar y saber cuál va a ser el alcance, que creo que hablamos
+- **[22:16] Yo:** esta semana. Pero aparte también está lo de pulso, entonces, ¿qué tipo de usuario necesita pulso?
+- **[22:16] Yo:** Y lo otro que ves
+- **[22:16] Participante:** Selección de transportadoras también está Santi. ¿Quieres
+- **[22:16] Yo:** Sí, exacto, y entonces,
+- **[22:16] Yo:** cada uno que que sepa que
+- **[22:16] Yo:** que que que clasifique qué tipo de usuarios necesita, y más bien eso con
+- **[22:16] Yo:** contra los que ya se registraron el día anterior, que igual no garantiza
+- **[22:16] Yo:** que esos usuarios vayan un segundo día. Probablemente sí, ¿no?
+- **[22:16] Yo:** Pero no sé qué qué qué se va a hacer para
+- **[22:16] Yo:** no sé si, de pronto, cruzar la base, si va haber un doble registro el segundo día, volver a activar
+- **[22:17] Yo:** para que vuelvan a registrar y saber con quiénes contamos en ese momento.
+- **[22:17] Yo:** O si va a hacerse un call to action o algo similar, o una llamada, un
+- **[22:17] Participante:** Podría.
+- **[22:17] Participante:** Podríamos hacer una invitación
+- **[22:17] Participante:** como enviarla y que nos confirmen,
+- **[22:17] Participante:** Podría ser así, como
+- **[22:17] Yo:** Sí, decía, perdón, como con WhatsApp,
+- **[22:17] Yo:** pidiendo confirmación por el CDM.
+- **[22:17] Yo:** Cuáles son los usuarios. Supongamos que son Laura, Jaime, Santiago, José, María José,
+- **[22:17] Yo:** van a ser los que necesitamos para para DropiPulse.
+- **[22:17] Yo:** Entonces
+- **[22:17] Yo:** les enviamos que nos confirmen si a la hora del workshop van a asistir
+- **[22:17] Yo:** y según eso, entonces, ya sabemos que contamos con diez, quince, veinte personas.
+- **[22:17] Participante:** Listo.
+- **[22:17] Yo:** Y así por cada
+- **[22:17] Participante:** Entonces, para ti como dueño de Gali, ¿cuál cuáles serían tu segmento ideal?
+- **[22:17] Participante:** Para de una vez ir desenredando eso sin saber de dónde va venir la data, ¿no? Pero
+- **[22:17] Yo:** Yo yo mañana tengo una
+- **[22:17] Yo:** con James, justamente para ya terminar de hacer la entrega de Gali, y te puedo dar la la
+- **[22:17] Yo:** mañana en la tarde, pero
+- **[22:17] Yo:** de forma preliminar, te diría que
+- **[22:18] Yo:** usuarios que ya tienen órdenes, es decir, que ya conocen cómo montar una orden en drop y de forma
+- **[22:18] Yo:** manual,
+- **[22:18] Yo:** pero que todavía
+- **[22:18] Yo:** no tienen un volumen alto. ¿Qué es alto?
+- **[22:18] Yo:** Se entiende por alto?, tendría que ver la data y un poco el flujo de de gallo.
+- **[22:18] Yo:** Pero, primeramente, son usuarios inexpertos o apenas en
+- **[22:18] Yo:** en en el inicio del journey de un dropshipper.
+- **[22:18] Participante:** Listo.
+- **[22:18] Participante:** Para pulso, James,
+- **[22:18] Participante:** Para Pulso.
+- **[22:18] Participante:** Ahora la palabra aquí.
+- **[22:18] Participante:** Pulso sí sería el rango intermedio.
+- **[22:18] Participante:** ¿Pulso? No, y y leyenda, porque leyenda ya
+- **[22:18] Participante:** se la saben todas, pues.
+- **[22:18] Participante:** Intermedio, ¿cuál sería? ¿O sí? No recuerdo acá, Peyo, Leo, nos
+- **[22:18] Participante:** ¿Master explorador?
+- **[22:18] Participante:** Es después de mil.
+- **[22:18] Participante:** Perdón, después de cien.
+- **[22:18] Participante:** Ciento uno a mil,
+- **[22:19] Participante:** ¿Podría ser ese?
+- **[22:19] Participante:** Ciento uno a mi órdenes. Exacto. Me imagino que el de Gali cuando no es un volumen grande, son los de bienvenidos, que son de uno a cien órdenes,
+- **[22:19] Participante:** luego están los exploradores, que son de cien Y aprendiz
+- **[22:19] Yo:** Ahora, ahí ahí ahí, como entiendo, aquí es
+- **[22:19] Participante:** pero hay aprendiz, ¿no?
+- **[22:19] Participante:** El aprendiz,
+- **[22:19] Yo:** un solo espacio, perdóname, perdona, José. Como es un solo espacio, deberíamos entonces encontrar
+- **[22:19] Yo:** cuál cuál es, o sea, en qué puntos están
+- **[22:19] Yo:** encontrando, o sea, tener coincidencias entre usuarios, porque
+- **[22:19] Yo:** si no, sería tener tres tipos de dropshippers en un solo espacio, y luego
+- **[22:19] Yo:** tratar de llevarles uno
+- **[22:19] Participante:** ¿Y no sería bueno?
+- **[22:19] Yo:** en tres diferentes.
+- **[22:19] Participante:** Y no Pero podríamos ¿podrían ser los tres grupos?
+- **[22:19] Yo:** Tratar de coincidencia.
+- **[22:19] Participante:** ¿No? O
+- **[22:19] Participante:** o pregunta, pregunta, ¿no sería bueno de pronto tenerlos
+- **[22:19] Participante:** tres tipos de perfiles y ver cómo cada uno se comporta
+- **[22:19] Participante:** con la con la herramienta que creamos, por ejemplo, cómo se comportan los
+- **[22:19] Participante:** todas las herramientas, sí. Y cómo se comporta el otro nivel de conciencia.
+- **[22:19] Yo:** Got it?
+- **[22:19] Participante:** Ya, perdón.
+- **[22:20] Yo:** De acuerdo.
+- **[22:20] Participante:** De acuerdo, porque eso no se adelanta, por ejemplo, cómo Gali puede evolucionar para los expertos.
+- **[22:20] Participante:** También llenar como o
+- **[22:20] Participante:** sí, como como agregar valor a los
+- **[22:20] Participante:** expertos sin necesidad de quedarse en nuevos, a pesar de que el experimento que vamos a llevar es en
+- **[22:20] Participante:** en bienvenidos, para bienvenidos. Listo, y selección de transportadoras, ¿cuál es?
+- **[22:20] Participante:** Juan está aquí? ¿Lo invitaron?
+- **[22:20] Yo:** Oopsie.
+- **[22:20] Yo:** No lo veo.
+- **[22:20] Participante:** No?
+- **[22:20] Participante:** Este creo que es super experto, o sea, o o
+- **[22:20] Participante:** que ya tenga montada como una estrategia
+- **[22:20] Participante:** de con quién quiere transportar y si le sirve,
+- **[22:20] Participante:** pero puede ser con los tres, ¿no?, pero el ideal de este sería como, mentira, no, o uno no,
+- **[22:20] Participante:** novato que necesite las sugerencias de transportadoras. Bueno,
+- **[22:20] Participante:** este lo podemos yo creo que a partir del del del máster ya cualquiera
+- **[22:20] Participante:** puede entender bastante el tema de la exploración.
+- **[22:20] Participante:** De transportadores.
+- **[22:20] Participante:** Sí, de acuerdo.
+- **[22:20] Participante:** Bueno, igual ahí lo llevo para confirmar con Juan que no
+- **[22:21] Participante:** no sé por qué nos lo invitamos. Listo. Entonces,
+- **[22:21] Participante:** eso es lo que decidimos o los invitados los sacamos del stand
+- **[22:21] Participante:** de leyendas.
+- **[22:21] Participante:** No sé, José, si te podemos encargar ahí como dentro de toda tu alineación, como
+- **[22:21] Participante:** la confirmación de dónde se guarda la información para ver cómo enviamos las
+- **[22:21] Participante:** Ok, yo me hago cargo.
+- **[22:21] Participante:** ¿Me hago? Listo. Denis, qué pena, tienes la mano levantada.
+- **[22:21] Participante:** Voy a ser muy breve. Con respecto al primer punto de José de la
+- **[22:21] Participante:** que la gente se registra y le van entregando la las manillas, piensa en una experiencia de que vaya
+- **[22:21] Participante:** mucha gente. Entonces, tampoco vas a ser
+- **[22:21] Participante:** tú solo y una fila de cincuenta personas esperando
+- **[22:21] Participante:** para buscar en qué categoría está, o sea, van a, de de primera impresión, va a ser una mala
+- **[22:21] Participante:** experiencia tener que hacer fila y esperar. Entonces, sí me parece una buena estrategia que es de
+- **[22:21] Participante:** de que lleguen ya sepan en qué nivel están, y así puedan.
+- **[22:21] Participante:** O sea, como llevar llegar, mandarles un correo la noche
+- **[22:22] Participante:** antes de del evento. Tú eres un bienvenido, tú eres
+- **[22:22] Participante:** tú eres esto, tú eres esto.
+- **[22:22] Participante:** Eso toca alinearlo con el plan comercial de nuevo
+- **[22:22] Participante:** y con y con marketing por todo esto de la estrategia que ellos ya tenían planteada del evento.
+- **[22:22] Participante:** Es comercial.
+- **[22:22] Participante:** Ella ya tenía una idea, entonces creo que de ahí con lo que dice Dianys,
+- **[22:22] Participante:** como considerando la fila, creo que era si habían ahí varias personas,
+- **[22:22] Participante:** o si podíamos adelantar algo de información, pero sí, o sea, es alinear
+- **[22:22] Participante:** primero qué se busca y luego ya si
+- **[22:22] Participante:** poder proponer Y no, y y el segundo punto, su
+- **[22:22] Participante:** superalineado con con Jaime, o sea, probar el workshop con cualquier
+- **[22:22] Participante:** perfil, o sea, no nos deberíamos complicar con el tema de la inscripción al workshop,
+- **[22:22] Participante:** que la gente que vaya llegando y que vaya haciendo la pila, y cuando se
+- **[22:22] Participante:** complete el cupo del workshop, hasta ahí llega.
+- **[22:22] Participante:** Como para evitarnos como ese ese enredo logístico de la
+- **[22:22] Participante:** de la persona,
+- **[22:22] Participante:** ahí vamos identificando cuáles son las personas que llegan al workshop.
+- **[22:22] Participante:** Y las categorizamos en el mismo workshop, quién es principiante, quién es intermedio. Bueno,
+- **[22:23] Participante:** los niveles que que definimos. Ahí.
+- **[22:23] Participante:** ¿Qué pasa si llegan todos principiantes y se acaban los cupos?
+- **[22:23] Participante:** Si llegan dos principiantes Perderíamos la oportunidad de invitar a
+- **[22:23] Participante:** que esté en otros niveles, ¿no?
+- **[22:23] Participante:** O sea, estoy pensando en todos se quedaron por debajo de mí.
+- **[22:23] Participante:** Como variado, sí, o sea Sí, sí, para
+- **[22:23] Participante:** que sea variado.
+- **[22:23] Participante:** Para validar los requisitos, pero también una fila de no inscritos.
+- **[22:23] Participante:** O sea, como siempre hay como esos dos, porque a veces los inscritos no llegan al workshop y se
+- **[22:23] Participante:** y se queda ese cupo por esperar al inscrito. Que se pueda
+- **[22:23] Participante:** meter a alguien que está en una fila enferma.
+- **[22:23] Yo:** Ahí, pero ahí podríamos es al al
+- **[22:23] Yo:** no sé si lo va a hacer José también, pero si vemos que no hay, no está llegando g
+- **[22:23] Yo:** gente
+- **[22:23] Yo:** ya cerrar, completar, ¿sí? O sea,
+- **[22:23] Participante:** Me entiendes?
+- **[22:23] Yo:** lo mismo, se puede anunciar el nuevo evento y
+- **[22:23] Yo:** Sí, también, José.
+- **[22:23] Participante:** Y lo va a hacer José. Y vamos a dar unos premios para asistir a ese workshop.
+- **[22:23] Participante:** Para que la gente se anime a ir.
+- **[22:24] Participante:** ¿Algún beneficio por el workshop? Denise, vamos vamos primero a definirlo y luego.
+- **[22:24] Yo:** ¿O se lleva regalos?
+- **[22:24] Participante:** Ya buscás, mejor. Ya, soltáme.
+- **[22:24] Participante:** Uno dice. No, no, no, hola.
+- **[22:24] Participante:** Vamos primero, o sea, la invitación tiene que ser algo así como ven a conocer el
+- **[22:24] Participante:** futuro de Dropi, como que cause full misterio, y luego ya vemos si tenemos dinero para premios o si comercial nos auspicia. Ok. Listo. Entonces, ya queda el tema de la segmentación. De pronto, luego vemos lo de la cantidad con un poco más de detalle. Siguiente punto. Eso tenemos en el stand de leyendas dropping, ¿qué hora debes? Pucha, seis minutos. Luego íbamos a interceder un poco o agregar
+- **[22:24] Participante:** un apartado que nos permita hacer cosas dentro de la app de la ruta winner.
+- **[22:24] Participante:** Majo, yo creo que está aquí, ¿te interesa por la propuesta que trae James?
+- **[22:24] Participante:** James, te doy.
+- **[22:24] Participante:** Te doy pantalla.
+- **[22:25] Participante:** Esa, hablé la doctora Winner.
+- **[22:25] Participante:** ¿Cuándo la podríamos probar?
+- **[22:25] Participante:** Por lo menos diez días antes del evento estarla Dos mil veintiocho, Obiana, en dos mil veintiocho.
+- **[22:25] Participante:** Ok. Ya, entonces, acuérdate que esto es algo rápido,
+- **[22:25] Participante:** necesitamos eso.
+- **[22:25] Participante:** Bueno, No, yo lo digo porque esa no la está haciendo desarrollo al fin, sí, ¿no?
+- **[22:25] Participante:** Bueno, no sé.
+- **[22:25] Participante:** La de la ruta winner, sí.
+- **[22:25] Participante:** Entonces, pues no sé Jaime.
+- **[22:25] Participante:** Bueno, entonces esta se supone se supone
+- **[22:25] Participante:** se supone
+- **[22:25] Participante:** que, por eso preguntaba un poco de la data, mi querido José, Porque dependiendo, porque yo sé que nosotros sabemos y Pipe nos dijo,
+- **[22:25] Participante:** que ellos
+- **[22:25] Participante:** el registro lo van a hacer con una data subida a Firebase.
+- **[22:25] Participante:** Sea, como una data que ellos van a tener y ahí van a tener
+- **[22:25] Participante:** las personas que se registraron
+- **[22:26] Participante:** y a esas personas la aplicación, pues, les va a dar como el
+- **[22:26] Participante:** el acceso
+- **[22:26] Participante:** y les va a dar como su su QR, pues, de de ingreso, ¿no?
+- **[22:26] Participante:** Nosotros nos podemos pegar a esa base de datos, sí,
+- **[22:26] Participante:** y que la gente, no sé si, pues eso tenemos para hablarlo con Pipe, pero en teoría
+- **[22:26] Participante:** podemos tener un ícono dentro de la aplicación de ellos
+- **[22:26] Participante:** que diga como que conoce el futuro de dropping.
+- **[22:26] Participante:** O nuevas herramientas de Dropi, no sé, toca ver qué qué nombre le ponemos, ahorita
+- **[22:26] Participante:** puse bienvenido a disco Pero llevaría a este espacio,
+- **[22:26] Participante:** que es una web app, pues, donde
+- **[22:26] Participante:** si ya está, podemos loguearlo directamente con la
+- **[22:26] Participante:** con con el acceso, o sea, que ellos toquen
+- **[22:26] Participante:** en el botón de la aplicación de ellos, de de ExpoWinners, que hicieron que hizo marketing,
+- **[22:26] Participante:** y nos lleva acá, o simplemente tenemos QRs por ahí y les decimos a la gente que lo
+- **[22:26] Participante:** que lo escanee para qué conoce tal cosa. Y, pues, se
+- **[22:27] Participante:** Y aquí adentro, pues ya les vamos a tener
+- **[22:27] Participante:** varios temas. Entonces, por ejemplo, el wrapping,
+- **[22:27] Participante:** Sería chévere tenerlo,
+- **[22:27] Participante:** acá,
+- **[22:27] Participante:** pero lo mismo, hay que ver, por ejemplo, el tema de la de
+- **[22:27] Participante:** de de la data, porque aquí algo que sí nos hicieron la advertencia de seguridad es
+- **[22:27] Participante:** venga, no pongan data.
+- **[22:27] Participante:** Entonces, lo que podríamos hacer aquí es simplemente decirle a la
+- **[22:27] Participante:** ustedes
+- **[22:27] Participante:** leyenda, ustedes más,
+- **[22:27] Participante:** pero no colocarle como ha movido tantas órdenes o
+- **[22:27] Participante:** sé.
+- **[22:27] Participante:** Se supone. O decirle sí, master y, bueno,
+- **[22:27] Participante:** es que no creo que podamos poner como tan tan, no sé si nos permitan tener tanta
+- **[22:27] Participante:** Entonces, eso toca toca toca validar.
+- **[22:27] Participante:** El jueguito, se supone que el jueguito se habilita solo a los que
+- **[22:27] Participante:** son
+- **[22:27] Participante:** base,
+- **[22:27] Participante:** básicos, pues, como que aprendiz o bienvenido,
+- **[22:28] Participante:** Y a los otros, a los que ya son más pro, simplemente es como un
+- **[22:28] Participante:** un botoncito de ir a jugar.
+- **[22:28] Participante:** Y acá ya tenemos como las herramientas de trabajo, entonces tenemos
+- **[22:28] Participante:** el que es Gali, La idea es que
+- **[22:28] Participante:** se no se llame Gali, o sea, Gali era el nombre clave,
+- **[22:28] Participante:** pero la idea es que no se llame Gali porque le quitaría como un poco de de
+- **[22:28] Participante:** de, ¿cómo es que era?, le le quitaría como
+- **[22:28] Participante:** a drop y el... ¿Cómo se dice? No, porque al final eso va ser una herramienta de drop, entonces, si le ponemos otro
+- **[22:28] Participante:** nombre, pues entonces, Gali, drop y,
+- **[22:28] Participante:** y Lucho dijo, pues, que todo lo que sea con ella no no le pongamos como otro nombre.
+- **[22:28] Participante:** Igual le podemos poner en señal y ya Laura me está haciendo cargo.
+- **[22:28] Participante:** Ella la veo y yo la veo.
+- **[22:28] Participante:** No, disculpa.
+- **[22:28] Participante:** Pero bueno, entonces aquí va a ser. Y aquí entra y hace, pues, todo el proceso.
+- **[22:28] Participante:** Bueno, esto esto estaba esto no es así, todo fallo.
+- **[22:28] Participante:** Ahí debería entrar, pues, a a a eso. También tenemos
+- **[22:29] Participante:** escanea tu winner, que ya lo vimos y se lo vamos a mostrar a
+- **[22:29] Participante:** a Lau, y a Majo y a Diana,
+- **[22:29] Participante:** Entonces, en escanea tu winner,
+- **[22:29] Yo:** Acá, sí, sí,
+- **[22:29] Participante:** Dale, Santi.
+- **[22:29] Participante:** Entonces, yo tomo una foto.
+- **[22:29] Yo:** Si de pronto me va decir,
+- **[22:29] Yo:** si me si se desvía la conversación por esto, podemos hablarlo después, pero
+- **[22:29] Yo:** que no entiendo en qué momento esto se está uniendo,
+- **[22:29] Yo:** con lo que está haciendo José. Con la landing.
+- **[22:29] Participante:** No sé.
+- **[22:29] Yo:** Con la landing que también tiene en vendida
+- **[22:29] Participante:** No, este juego es para el workshop, ¿correcto?
+- **[22:29] Yo:** el el wrap.
+- **[22:29] Participante:** Ese es el juego del workshop.
+- **[22:29] Participante:** No, este es este es como el punto en el que vamos
+- **[22:29] Yo:** It
+- **[22:29] Participante:** a
+- **[22:29] Participante:** en los dos días. ¿Sí? Entonces, acuérdese que una cosa es
+- **[22:29] Participante:** que vamos a hacer desde el stand de José, no todo tiene que ser en el stand de José,
+- **[22:29] Participante:** Otra es la hora de workshop que tenemos, que ahí van los tres experimentos.
+- **[22:29] Yo:** Sí.
+- **[22:29] Participante:** Y otra es como la la el research
+- **[22:29] Participante:** o la investigación guerrilla que podemos hacer, Santi, por medio de esta app.
+- **[22:29] Yo:** Ok.
+- **[22:29] Participante:** Y por medio de como research o
+- **[22:30] Participante:** flotante por ahí. Entonces, es como
+- **[22:30] Yo:** Listo.
+- **[22:30] Participante:** acceso a más información de los drops.
+- **[22:30] Yo:** Listo, ok, vale, gracias.
+- **[22:30] Participante:** Ya, ya, ya, ya te entendí la pregunta. Sí, detrás de esto hay un panel.
+- **[22:30] Participante:** Hay un panel para nosotros donde dice cuánta gente interactúo, por ejemplo, con Gali, cuánta gente y llegó hasta el final, cuánta gente interactuó con ScaneatWinner, cuánta gente
+- **[22:30] Participante:** interactuó con con cada una de esas, para
+- **[22:30] Participante:** para ver si funcionan. Y, pues, ojalá tener
+- **[22:30] Participante:** no sé, sí tener más herramientas, no sé, pero
+- **[22:30] Participante:** O sea, la idea es tener muchas fuentes de insights. Esa es como
+- **[22:30] Participante:** que que aprovechemos
+- **[22:30] Participante:** lo máximo al al máximo el evento.
+- **[22:30] Participante:** Pero, por ejemplo, este este
+- **[22:30] Participante:** escanea tu winner y el jueguito y Gali, pues, por ejemplo,
+- **[22:30] Participante:** es que tú nos digas, sí, está totalmente alineado como a
+- **[22:30] Participante:** lo que yo necesito experimentar, mover, medir.
+- **[22:30] Participante:** Y demás.
+- **[22:30] Yo:** Ok, listo.
+- **[22:30] Participante:** Bueno,
+- **[22:31] Participante:** creo que no está funcionando ChatGPT. Bueno, después se lo muestro. Tengo que meterle tokens.
+- **[22:31] Participante:** Tengo una preguntica, cuando uno escanea el producto,
+- **[22:31] Participante:** ¿siempre la respuesta es positiva? O sea, ¿el porcentaje es más hacia lo
+- **[22:31] Participante:** Es que me imagino, por ejemplo, un proveedor con su
+- **[22:31] Participante:** producto emocionado de venderlo y que llegue el
+- **[22:31] Participante:** dropshipper y escanee delante de él y que le diga que
+- **[22:31] Participante:** que el porcentaje es muy bajito, sería como muy
+- **[22:31] Participante:** Una rechafa, literal.
+- **[22:31] Participante:** Sería triste, ¿sí o qué?
+- **[22:31] Participante:** Sería muy mala estrategia para el equipo comercial.
+- **[22:31] Participante:** No, pues ahí lo parametrizamos y le decimos al usuario que no hay cosas malas,
+- **[22:31] Participante:** solamente oportunidades de mejora.
+- **[22:31] Participante:** No, pero pero, Majo, sí, tienes toda la razón.
+- **[22:31] Participante:** Pero está cubierto. Espérame, es que
+- **[22:31] Participante:** necesito
+- **[22:31] Participante:** no sé, me falló justo ahorita
+- **[22:31] Participante:** Mau, igual esto todo se lo tenemos que mostrar a comercial, ¿no? Entonces, ya ellos también nos van a decir como
+- **[22:32] Participante:** por favor, no hagan eso, hay este riesgo, también.
+- **[22:32] Participante:** Ajá. Entonces, eso lo vamos a entrar. Eso está
+- **[22:32] Participante:** está calculado. Normalmente no bajan del sesenta por ciento, o
+- **[22:32] Participante:** tiene que ser muy malo el producto que baje el sesenta por ciento.
+- **[22:32] Participante:** Pero
+- **[22:32] Participante:** él puede subir, ¿y cómo sube? Con trabajo,
+- **[22:32] Participante:** Porque con, que yo creo que, no sé si tenga ya un
+- **[22:32] Participante:** escaneo, no creo que no tenga un escaneo. Con trabajo, entonces.
+- **[22:32] Participante:** Si yo hago una buena campaña, si hago un buen bueno un
+- **[22:32] Participante:** una buena landing, entonces me sube puntos.
+- **[22:32] Participante:** Si yo hago una buena y uno lo va marcando, ¿no? Entonces, ah,
+- **[22:32] Participante:** yo hago una buena landing, claro, me sube de sesenta a sesenta y cinco.
+- **[22:32] Participante:** Si yo hago, si si implemento un chatbot que
+- **[22:32] Participante:** conteste las veinticuatro horas como chatea pro, ah, entonces me sube a setenta.
+- **[22:32] Participante:** Si hago una alianza con un
+- **[22:32] Participante:** generador de contenido y se nos vuelve viral este producto, pues, obviamente, sube a ochenta.
+- **[22:32] Participante:** Entonces, digamos que ahí le estamos diciendo al usuario como que venga,
+- **[22:33] Participante:** o sea, todos los productos pueden ser winners, prácticamente si usted le le le camella.
+- **[22:33] Participante:** Y aplica a a mesas. Más difícil que sean winner, otros van a ser
+- **[22:33] Participante:** más fáciles, porque ya en sí el producto es como más fácil de vender.
+- **[22:33] Participante:** Pero sí, siempre va a ser como algo positivo, entre comillas, si lo trabajas.
+- **[22:33] Participante:** Entonces, llevarlo un poco a ese punto.
+- **[22:33] Participante:** Creo que no, definitivamente no tengo autocream.
+- **[22:33] Participante:** No sé qué pasó.
+- **[22:33] Participante:** Triste. Que sigamos para que no se nos acabe el tiempo.
+- **[22:33] Participante:** Se nos acabó.
+- **[22:33] Participante:** Y el otro, que este es este es de pulso, pero también es de casa productos,
+- **[22:33] Participante:** o sea, este es este es mío.
+- **[22:33] Participante:** Y es
+- **[22:33] Participante:** este
+- **[22:33] Participante:** no va a funcionar ahí mismo, este es más como para
+- **[22:33] Participante:** para ver si tenemos intención.
+- **[22:33] Participante:** Y la intención es que es validar que la gente
+- **[22:34] Participante:** le interese esto.
+- **[22:34] Participante:** Registrarse en pulso. Entonces, yo como me registro en pulso, bueno, voy a cerrar sesión acá,
+- **[22:34] Participante:** Estémonos con este.
+- **[22:34] Participante:** Únete a... No, ahorita.
+- **[22:34] Participante:** A ver, otro.
+- **[22:34] Participante:** Como un
+- **[22:34] Participante:** Listo, un ultra pulso,
+- **[22:34] Participante:** listo, me dice únete a pulso. Pulso te avisa cuando un proveedor saca una oferta
+- **[22:34] Participante:** con buen margen en las categorías que manejas. Vos decidís
+- **[22:34] Participante:** está muy caleño, ¿no? Vos decidís, ¿ve?
+- **[22:34] Participante:** Si arrancás la negociación, elige qué categorías te interesan.
+- **[22:34] Participante:** Entonces, yo digo, bueno, mí me interesan esto, esto, esto, listo, me sumo a pulso.
+- **[22:34] Participante:** Algo está pasando, tengo que revisar.
+- **[22:34] Participante:** Entonces, ahí me sumo a pulso,
+- **[22:34] Participante:** Ah, ya sé que es
+- **[22:34] Participante:** ya sé qué es. Deme un minutico, please, please, please.
+- **[22:34] Participante:** James, yo creo que nos toca hacer otro espacio que la gente no se nos duerma. Ah, es que se
+- **[22:35] Participante:** un ratico. Y
+- **[22:35] Participante:** pero yo estaba pensando, ¿esto solo va a ser, entonces, para dropshippers? Porque la aplicación no
+- **[22:35] Participante:** también pueden estar registrados proveedores, ¿no?
+- **[22:35] Participante:** Majo, ¿tú sabes? Prácticamente está desenfocado en dropshippers.
+- **[22:35] Participante:** Es solo en dropshippers, la convocatoria es para dropshippers.
+- **[22:35] Participante:** Hippers porque la asistencia de proveedores está organizada
+- **[22:35] Participante:** desde el área comercial tú a tú.
+- **[22:35] Participante:** Ya, pero no podemos tener un proveedor
+- **[22:35] Participante:** registrado, sí, no, es solo dropshipper. No,
+- **[22:35] Participante:** solo dropshipper, sí.
+- **[22:35] Participante:** José. ¿Tenías la manito?
+- **[22:35] Participante:** Sí, señora. Yo tengo una pregunta, es un
+- **[22:35] Participante:** más de forma y es, ¿nosotros vamos a llegar unos días
+- **[22:35] Participante:** antes como para practicar un poquito o vamos a llegar sobre el doce?
+- **[22:35] Participante:** Nosotros antes de que pensemos en eso, tenemos que pensar en
+- **[22:35] Participante:** estratégicamente qué vamos a llevar para poder defender nuestro puesto en la feria. Qué raro. Aquí te lo pongo. No tenemos ni idea cuándo vamos a o si vamos a llegar. Ok, sí Mentira, no, la idea es que planeemos y nos alineemos también, que que, por ejemplo, Lau ya está allá, Diana ya está allá, Wendy ya
+- **[22:36] Participante:** allá, entonces, pues ya vamos a tener personas allá. La idea es soportar que los que tengamos
+- **[22:36] Participante:** que ir de aquí, pues,
+- **[22:36] Participante:** por qué, cuál es la estrategia y en dónde necesitamos manos.
+- **[22:36] Participante:** Ajá. Listo.
+- **[22:36] Participante:** Miren, entonces, aquí ya me conecté.
+- **[22:36] Participante:** El vasito de perro.
+- **[22:36] Participante:** ¿Cierto? La tica de perro.
+- **[22:36] Participante:** Entonces, miren que el platico de perro definitivamente
+- **[22:36] Participante:** no es un winner.
+- **[22:36] Participante:** O sea, ese plato así tal cual del Dollar City no es un winner.
+- **[22:36] Participante:** Tiene un score muy baja.
+- **[22:36] Participante:** Y, pues sí, obviamente, o sea, no no va a ser un winner.
+- **[22:36] Participante:** Pero
+- **[22:36] Participante:** pero igual,
+- **[22:36] Participante:** buen anuncio, buena página de ventas,
+- **[22:36] Participante:** atención rápida por WhatsApp, buen manejo logístico. Consistencia en el testeo, un video se vuelve viral, un influencer reconocido lo recomienda,
+- **[22:37] Participante:** el producto entra en tendencia
+- **[22:37] Participante:** en TikTok,
+- **[22:37] Participante:** un voz a voz fuerte por clientes satisfechos, entonces me sube a noventa y seis.
+- **[22:37] Participante:** Pero claro, tengo que camelarle un montón.
+- **[22:37] Participante:** Mientras que el vasito
+- **[22:37] Participante:** térmico ya está en setenta y uno.
+- **[22:37] Participante:** Entonces, digamos que si si solo con esto, pues ya lo puedo llevar al ochenta y cinco.
+- **[22:37] Participante:** Y el otro ya sería un plus.
+- **[22:37] Participante:** Entonces, ellos tienen aquí sus
+- **[22:37] Participante:** los que vayan escaneando.
+- **[22:37] Participante:** Entonces, si logramos esto,
+- **[22:37] Participante:** también podemos
+- **[22:37] Participante:** verificar con los proveedores después, o con comercial y decirle, venga, comercial,
+- **[22:37] Participante:** tenemos
+- **[22:37] Participante:** estos usuarios que les gustaron y escanearon estos productos.
+- **[22:37] Participante:** Entonces, no sé si usted los quiere contactar o los contactamos. ¿Para qué? Para
+- **[22:37] Participante:** ayudar a hacer negociaciones, no sé.
+- **[22:37] Participante:** Puede ser.
+- **[22:37] Participante:** Y lo de pulso, entonces, listo, aquí, por ejemplo, ya me enviaron un
+- **[22:37] Participante:** tengo un pulso. Entonces, ya me registré,
+- **[22:38] Participante:** y y esto es cómo funcionaría.
+- **[22:38] Participante:** Y el casa productos es, pues, digamos que yo tengo la intención de un producto y la
+- **[22:38] Participante:** lo de que ya sabemos de casa producto, pues, prácticamente.
+- **[22:38] Participante:** ¿Cuál es la intención de esto un poco, Santi? Y es que
+- **[22:38] Participante:** nosotros necesitamos como un sandbox, este es
+- **[22:38] Participante:** como el primer paso al sandbox o a la caja de arena,
+- **[22:38] Participante:** que podamos hacer con suppliers.
+- **[22:38] Participante:** Y es
+- **[22:38] Participante:** un espacio que vos tengas
+- **[22:38] Participante:** para poder jugar con con cierta cantidad de
+- **[22:38] Participante:** por ejemplo, para subir las herramientas, obviamente todo controlado, ¿no?
+- **[22:38] Participante:** Pero entonces, por ejemplo, mira que aquí ya tenemos varias herramientas.
+- **[22:38] Participante:** Tenemos Gali, tenemos pulso, y tenemos el escanear winner.
+- **[22:38] Participante:** La idea es que esto de pronto se nos vuelva ya algo que puedan utilizar todo el tiempo.
+- **[22:38] Participante:** Entonces, esta es como la primera parte.
+- **[22:38] Participante:** Pues, lo vamos a testear es en
+- **[22:38] Participante:** en en expo winner, y si a la gente le gusta utilizar esto y nos da un buen feedback, pues ya tiene su
+- **[22:39] Participante:** tu feedback superclaro de, venga, a la gente de verdad
+- **[22:39] Participante:** esto nos mueve porque los ayuda
+- **[22:39] Participante:** hacer su primera venta, los ayuda a escoger un producto ganador,
+- **[22:39] Participante:** etcétera, etcétera, etcétera.
+- **[22:39] Participante:** También tiene como esa intención detrás,
+- **[22:39] Participante:** Bueno, nos pasamos
+- **[22:39] Yo:** Listo.
+- **[22:39] Participante:** Bueno, nos pasamos un poquito, ya agendamos la siguiente media hora, pero
+- **[22:39] Participante:** este es el primer día, ¿no? Entonces, el primer día está
+- **[22:39] Participante:** están leyendas droppy y ruta winner.
+- **[22:39] Participante:** Que casi todas las herramientas, bueno, menos menos pulso,
+- **[22:39] Participante:** bueno, no, casi todas van a ser de Santi, porque los usuarios
+- **[22:39] Participante:** pues, core del evento son sellers. Entonces, para que tú puedas revisarlo,
+- **[22:39] Participante:** en este link adjuntamos como unos objetivos
+- **[22:39] Participante:** pero la idea es esa, como poder respaldar el por qué vamos a llevar esta actividad
+- **[22:39] Participante:** ¿cierto?, y llevarlo totalmente argumentado, Santi, a
+- **[22:39] Participante:** a comercial, para que también
+- **[22:39] Participante:** veamos de dónde salen presupuestos.
+- **[22:40] Participante:** ¿Listo?
+- **[22:40] Participante:** Entonces, sí, no sé si tengas tiempo para revisarlo, tú nos confirmas
+- **[22:40] Participante:** lo llevamos así, todo de acuerdo.
+- **[22:40] Yo:** No, primero reviso cuál cuál todo sí.
+- **[22:40] Participante:** Está bien. Listo. Y el segundo día, pues ya es
+- **[22:40] Participante:** lo de workshop que ya habíamos mencionado con los mismos, ¿no? Entonces,
+- **[22:40] Participante:** Gali, TropiPulso, pero pero ya en sitio, o sea, como una escucha un poco más
+- **[22:40] Participante:** personalizada, y selección de
+- **[22:40] Participante:** que para eso voy a invitar a Juan de a la siguiente, para que él también nos diga cómo cómo el plan
+- **[22:40] Participante:** ¿Listo?
+- **[22:40] Participante:** Bueno. Cuando termine el día, nos emborrachamos.
+- **[22:40] Participante:** Todos.
+- **[22:40] Participante:** Chesizo. Nos vamos de fiesta.
+- **[22:40] Participante:** Que estén muy bien. Hasta luego. Bueno, bueno,
+- **[22:40] Participante:** Nos vemos en la fiesta. Chao. Chao. Gracias,

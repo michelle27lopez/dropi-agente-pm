@@ -1,0 +1,672 @@
+# Diseño, ejecución y análisis de experimentos / Modulos 5 al 9
+
+- **ID:** `not_jTiVqXqIilXcyJ`
+- **Fecha:** 2026-09-04T02:05:17.078Z
+- **Owner:** Santiago Herrera Acosta
+- **URL:** https://notes.granola.ai/d/8df61d90-ff0b-4ec0-af56-0cbae0d540d3
+
+---
+
+## Resumen
+
+# ANOVA Unidireccional (One-Way ANOVA)
+
+- Aplica cuando hay 3+ niveles de un factor (con 2 niveles se usa t-test o Mann-Whitney)
+- Factor único con 3 niveles en el ejemplo: Visual Studio, Eclipse, PyCharm
+- Prueba ómnibus (F-test) primero: indica si hay alguna diferencia entre niveles
+  - Si es significativa, se justifican comparaciones post hoc por pares
+  - Si no es significativa, no se pueden hacer comparaciones post hoc
+- Reporte del resultado: F(dfn, dfd) = valor, p < .001
+  - dfn = número de niveles − 1; dfd = grados de libertad residuales
+- Equivalente no paramétrico: prueba de Kruskal-Wallis
+  - Post hoc: Mann-Whitney U con corrección por comparaciones múltiples (Holm)
+
+# Verificación de Supuestos y Transformaciones
+
+- Normalidad: prueba Shapiro-Wilk sobre residuos del modelo (no sobre datos crudos)
+- Homocedasticidad: prueba de Levene (versión Brown-Forsythe)
+- Si hay violación de normalidad, probar log-normalidad con prueba KS
+  - Si los datos son log-normales, crear columna log-time y trabajar con ella
+  - ANOVA es robusto a desviaciones leves (p \~0.08 es aceptable)
+- Resultado IDE3: F(2,57) = 8.796, p < .001
+  - Visual Studio vs. Eclipse: significativo
+  - PyCharm vs. Eclipse: significativo
+  - Visual Studio vs. PyCharm: p = 0.67, no significativo
+
+# Factores Intra-Sujeto y Medidas Repetidas
+
+- Intra-sujeto (within-subjects): cada sujeto recibe todos los niveles del factor
+  - También llamados “medidas repetidas”; los términos son intercambiables
+- Ventajas frente a entre-sujetos:
+  - Menos sujetos necesarios (20 vs. 60 para 3 condiciones)
+  - Menor varianza: cada sujeto es más parecido a sí mismo que a otros
+- Riesgo principal: efectos de arrastre (carryover effects)
+  - Fatiga, práctica, aburrimiento, transferencia de habilidades
+  - Solución: contrabalanceo del orden de presentación
+
+# Esquemas de Contrabalanceo
+
+- Contrabalanceo completo: todas las permutaciones posibles de condiciones
+  - 2 condiciones → 2 secuencias; 3 → 6; 4 → 24; 5 → 120 (inviable)
+  - Requiere múltiplos de n! sujetos
+- Cuadrado latino: n secuencias para n condiciones
+  - Cada condición ocupa cada posición exactamente una vez
+  - Limitación: no todas las condiciones se siguen entre sí el mismo número de veces
+- Cuadrado latino balanceado: resuelve la limitación anterior
+  - Fórmula fila inicial: 1, 2, n, 3, n−1, 4, n−2…
+  - Cada fila siguiente suma 1 a cada valor (con wrap-around)
+  - Para número impar de condiciones: duplicar la tabla invirtiendo las filas
+  - Requiere múltiplos de n (par) o 2n (impar) sujetos
+
+# Formatos de Tabla: Long vs. Wide
+
+- Long format: una medida por fila por sujeto
+  - Columnas: subject, técnica, order, medida(s)
+  - Requerido por la mayoría de análisis en R
+- Wide format: todas las medidas de un sujeto en una fila
+  - Las condiciones se codifican como nombres de columna
+  - Necesario para t-test pareado y algunos análisis intra-sujeto en R
+  - Se convierte con dcast del paquete reshape
+
+# Análisis Intra-Sujeto en R: Pruebas y Resultados
+
+- **2 niveles (search vs. scroll):**
+  - Paramétrico: t-test pareado (paired = TRUE) en tabla wide
+    - Tiempo: p = 0.001, search significativamente más rápido que scroll
+  - No paramétrico: Wilcoxon signed-rank test (para errores y esfuerzo)
+    - Errores: p < .05, scroll menos propenso a errores que search
+    - Esfuerzo (Likert 1-7): p = 0.08, diferencia no detectable
+  - Efecto de orden verificado: p = 0.19, sin efecto de orden
+- **3 niveles (search, scroll, voice):**
+  - Paramétrico: ANOVA de medidas repetidas unidireccional (paquete ez)
+    - Verificar esfericidad con prueba de Mauchly antes de interpretar
+    - Si hay violación: usar corrección Greenhouse-Geisser (ajusta grados de libertad)
+    - Resultado tiempo: F significativo, post hoc con t-test pareados (todos p < .05)
+  - No paramétrico: prueba de Friedman (para errores y esfuerzo ordinal)
+    - Errores: p < .05, todos los pares significativamente diferentes
+    - Esfuerzo: p no significativo → comparaciones post hoc no justificadas
+  - Hallazgo clave: trade-off velocidad-precisión
+    - Voice fue el más rápido pero el más propenso a errores
+    - Scroll fue el más lento pero el menos propenso a errores
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/0355dcaf-15c3-432b-8290-d3bb1b18ccac](https://notes.granola.ai/t/0355dcaf-15c3-432b-8290-d3bb1b18ccac)
+
+---
+
+## Transcripción Completa
+
+- **[02:05] Participante:** So we've just compared 2 programming languages and environments, C# in Visual Studio and Java in Eclipse, for the total task time it's taken 20 students using each of those tools to write a series of small programs. as part of an intro to programming class. We found that Visual Studio was significantly faster according to the statistical test that we did. What happens now if we add a 3rd programming environment? We no longer can use an independent samples t-test or the Mann-Whitney u-test when we have 3 levels together. Let's say that 3rd level is the Python programming language and the PyCharm programming environment. This will bring us to a very powerful and widely used test, the F-test, and in this case it arises in the context context of what's called a one-way ANOVA. And again, ANOVA stands for analysis of variance. One-way refers to a single factor in that analysis, and that factor is IDE and has 3 levels: Visual Studio, Eclipse, and PyCharm.
+- **[02:06] Participante:** Let's go to our R code and carry out this analysis.
+- **[02:06] Participante:** So here we are in RStudio having just completed the Mann-Whitney U test on 2 levels of IDE, Visual Studio and Eclipse, and now we're moving to 3 levels which will require that we use a one-way ANOVA. So let's read in our new data file, IDE3, because it has 3 levels, and let's view that as we normally do. And we can see the first 20 subjects used Visual Studio, the next 20 used Eclipse, and the final 20 now used PyCharm. All with times in minutes for how long it took them to write these programs in the various languages. As is our practice, we'll turn subject into a nominal factor, and we can summarize over each of those columns here. We can see the mean time is 300 minutes. 53 minutes for writing these programs. We can also look by the 3 levels of IDE now with our ddply command as we've done in the past. We can see means and standard deviations and other information there. Remember, we're back on the time measure here, not log time. As we transformed our data last time. So for now, looking at time, we can also look through our histograms and we can see Visual Studio and Eclipse haven't changed. The histogram for PyCharm is new, and there it is. We can see there were
+- **[02:07] Participante:** quite a few students who took between 200 and 300 minutes for these programs. And a box plot compares now all 3. Looks like PyCharm might have a little edge on Visual Studio, and both look like they were faster to do than Eclipse. As we did before, we'll test for normality on the result of the— this time of the new level of PyCharm, and the p-value is significant, so we have a departure from normality in the response, but we should test it on the residuals as is more proper, and so we fit our model and test the residuals again seeing a departure, and we can see that again with our QQ plot. Quite a departure obviously here on the end from normality. We can test log-normality as we did before of the PyCharm level. We already did it previously on Visual Studio and Eclipse. And the log-normality test with the KS test shows that we're not statistically significant in our, in a departure from log-normality. So again, as before, that gives us an indication that the PyCharm times may be log-normally distributed. So let's create the log time column and we'll go ahead and view that having been created just as before. The only difference from before is that we have PyCharm now as well with a log time result, and we can do the normality test on log
+- **[02:08] Participante:** time as the response and see that in fact we are now no longer significantly different from a normal distribution according to the Shapiro-Wilk test. And we can also do the same test on the residuals now for log time. We can see that the departure, while still present, is not as severe, and we have a 0.08 result with the Shapiro-Wilk test, so it's nearly a departure from normality but not technically and not quite, so we'll proceed with some confidence there since ANOVA is somewhat robust to mild departures anyway. We'll also do our homoscedasticity test with Levene's test, the Brown-Forsythe version, and we see that we're not significantly different there. So that means that we don't have a violation with our log time result. Our variances are similar enough. And so now we're going to fit the actual one-way ANOVA. So we fit the model and then we use the ANOVA command to calculate and report the ANOVA. And so again, we see the F-value, this This column here is the column of particular interest, and it shows an F-statistic of 8.796, and of course the p-value is much less than 0.05. What that means is the overall ANOVA, or the omnibus test as it's called, shows that there
+- **[02:09] Participante:** is some difference among— I'll go back to here— among these levels of IDE. It does not tell us exactly what the difference is, nor does it tell us where exactly the difference lies in terms of comparisons between each of these each of these IDEs, so we have to look further. But that first test being significant, that omnibus test, gives us permission to do what are called post hoc tests, meaning follow-up tests that are pairwise comparisons that will tell us where those differences lie. So now we can go back to an independent samples t-test, between subjects t-test, between the levels of Eclipse, PyCharm, and Visual Studio to see which 2 are different. And just looking at the graph, we might ask, is PyCharm different from Visual Studio? Studio, because those are the ones that obviously look close together. The eclipse level being so different is reason enough for the overall F-test to be significant. We'll load in the multcomp library for multiple comparisons and run this line here. I'll explain a little bit here. The glht command is doing the test for us, and mcp is a command for multiple comparisons. We say which factor we're testing over. Of course, we have one, IDE, with 3
+- **[02:10] Participante:** levels. And when we say 2-key here, it's a shorthand for all the pairwise comparisons. And as we've done before, we're adjusting for multiple tests because they all by chance have a 1 in 20 chance of being significant. And so we adjust with Holm sequential Bonferroni procedure, which accounts for the fact we're making multiple comparisons so we don't get an inflated chance of seeing significance where there isn't any. Okay, so let's go ahead and run that, and we can see here are our pairwise values. values and the t-statistic and the p-value in the right column here. So PyCharm versus Eclipse is significantly different. We can see PyCharm is faster. Visual Studio versus Eclipse, we found from before, and that hasn't changed. And then Visual Studio versus PyCharm is a p-value of 0.67. So these are not detectably different according to this test. Just as a matter of completeness in R, I show another way that we can use the glht command, this time with the LSM command, which allows us to specify that we want pairwise comparisons. This is another way of executing exactly the same results, and you may find a value. You can do a question mark MCP and a question mark LSM and read more about how exactly these are formulated. But for completeness,
+- **[02:11] Participante:** I run the same analysis and you can see the result there. We've just completed our analysis of IDE 2 and IDE 3, and we just saw our first F-test on IDE 3. Recall IDE had 3 levels: Visual Studio, Eclipse, and PyCharm. We found that both Visual Studio and PyCharm were significantly shorter in programming time needed than Eclipse, but not significantly different from each other, Visual Studio and PyCharm. So in the process, we conducted the overall or omnibus us F-test, I wanted to show you how that's written up. Here we have F indicating that that's the test, and now we have 2 different degrees of freedom. The first is called the numerator degrees of freedom, sometimes written dfn. The second is the denominator degrees of freedom, sometimes written dfd. These parameterize the F distribution that's being used here. Often the numerator can be thought of as being related to the number of levels here, We have 3, and so we have the number of levels minus 1 as the numerator degrees of freedom. For simple analysis like this, that will hold. This is also— the 57 is also called the residual degrees of freedom, and that's
+- **[02:12] Participante:** where you'd read it in the table in your R output. Then we have the F statistic, the value produced in this particular analysis, and a p-level that is less than 0.001. You'll recall the range of acceptable p-values values that you can report. So that's how we report a significant overall or omnibus ANOVA result for a one-way ANOVA.
+- **[02:13] Participante:** Wallace test. We'll load it from the coin library, And in much the same way, we specify our model here, with our data table and you can't do an exact test, it turns out, with CrestQL Wallace, if you have three levels.
+- **[02:13] Participante:** We, make explicit asymptotic here.
+- **[02:13] Participante:** So when we run the test, we see
+- **[02:13] Participante:** the overall test comparing all of this at once is a p value point
+- **[02:13] Participante:** zero zero two. So we have significance there. Notice if we do it on log time,
+- **[02:13] Participante:** we get the same result because it's a rank based test, as we explained previously. These are reported as chi tests.
+- **[02:13] Participante:** You can get the n, which goes into how you report a chi squared, you recall from our
+- **[02:13] Participante:** discussion previously, with the n row command.
+- **[02:13] Participante:** So we're entitled to follow-up with post hoc pairwise comparisons.
+- **[02:13] Participante:** And, we can, like we've seen before, use a man whitney u test.
+- **[02:13] Participante:** And so for that, we do
+- **[02:13] Participante:** our tests here, and we we encode them in results visual studio versus eclipse, visual studio versus
+- **[02:13] Participante:** PyCharm, and Eclipse versus PyCharm, and then we adjust them for multiple comparisons. I'll run all of that together.
+- **[02:13] Participante:** And we can see
+- **[02:13] Participante:** the three values put out here at the bottom correspond
+- **[02:13] Participante:** to the order that those tests are
+- **[02:14] Participante:** to the order that those tests are listed in the in the p adjust line above. So
+- **[02:14] Participante:** So we have significant difference for visual studio versus eclipse as we'd expect.
+- **[02:14] Participante:** And I'll jump to the third one for Eclipse versus PyCharm.
+- **[02:14] Participante:** There. But as we saw with the parametric test,
+- **[02:14] Participante:** no significant difference between Visual Studio and And so our conclusion with the nonparametric test is the same.
+- **[02:14] Participante:** For completeness, I include another way of doing nonparametric pairwise comparisons,
+- **[02:14] Participante:** from the PMCMR library. You can look into that if you want more background. It produces a small
+- **[02:14] Participante:** oops. I've to load the library first. There we go. It produces a small
+- **[02:26] Participante:** So far we've considered analyses of variance and nonparametric tests for between-subjects factors only, where each subject only gets one level or one treatment of all the, all the possible levels of a factor. Now let's consider within-subjects factors. And here's the scenario we'll work from. Let's say 20 subjects interact with a smartphone contacts manager to find a set of contacts that they're assigned to look up. And they do this initially in 2 different ways. These 20 subjects each use 2 techniques. One is searching, typing text and looking through the contacts manager that way. And the other technique they use is scrolling, just scrolling the list and visually looking for contacts in the list. Later, we'll add a third technique they'll use, which would be voice search, speaking the name of contacts and trying to look them up that way. Of course, again, as with all our datasets, this is just fictitious data for our use in this course. The things we measure will be total time, And the number of selection errors. So we're measuring both time to find a contact and the number of errors made where someone selects the wrong contact, perhaps moving quickly and tapping the wrong name or other kinds of errors that may come up. Subjects will also rate their effort.
+- **[02:27] Participante:** On a 1 to 7 scale, what's called a Likert scale. So we get some subjective feedback about how much effort they think each technique takes. So to put this down, we have 20 subjects, we have 3 tests Initially 2, then 3, and they are search, scroll, and voice search.
+- **[02:27] Participante:** Later voice.
+- **[02:27] Participante:** And we have the measures that we want are the time to find the contacts.
+- **[02:27] Participante:** The number of errors made.
+- **[02:27] Participante:** And the effort.
+- **[02:27] Participante:** On a 1 to 7, what's called a Likert type.
+- **[02:27] Participante:** Scale.
+- **[02:27] Participante:** Things are getting a little bit more interesting than we've looked at before, but we're able to take on more complicated analyses because we have more sophisticated analyses at our disposal. Okay, so we can ask ourselves with this one factor, Called technique, with 3 levels or 2 levels initially. It's a nominal factor or categorical as we've seen before. We have time, which is a dependent variable or response, and time is a numeric result.
+- **[02:28] Participante:** We have errors, also numeric.
+- **[02:28] Participante:** And effort, this would be called an ordinal measure because a 1 to 7 scale, while it's a number, is an ordered scale, and the gap conceptually for a person between, say, 2 and 3 may not be how they perceive the gap between, say, 7 and 8, or I should say 6 and 7. And 7, or 5 and 6. Those gaps may be bigger or smaller. They're more of a subjective concept. So that's called an ordinal variable where you know there's an order, but you don't know the distance between each step in that order. Between subjects variable? Well, we said each of the 20 subjects does all 3 techniques, so therefore it would be a within subjects variable, a within subjects factor. These are also called repeated measures.
+- **[02:28] Participante:** And you'll see those terms used interchangeably. It's important to understand they're the same thing. Now let's ask ourselves, when should we use within subjects variables versus between subjects variables? What would be the considerations there? Well, the short answer is you should You should use a within subjects variable whenever you can. Why is that? Well, for one thing, it takes many fewer subjects to get the same amount of data. We would need 60 subjects if each subject only did one of the techniques, but we need 20 if they each do all 3. So we have more data from fewer subjects we have to recruit. It's also preferable because we want to remember that experiments are designed to detect differences. Well, what are the differences that we're looking for here between the 3 different techniques? We want to know if those, in our measures, if those 3 techniques perform differently. And when we're trying to detect differences, we're doing that against a backdrop of natural variation, measurement error, and general noise. So anything that reduces the variance In our measurements is a good thing, leaving to stand out hopefully the variance or differences in the things we care about. And so when we have within-subject studies, the variance is less than if we have between-subject studies because you are more like you than you are like anyone else.
+- **[02:29] Participante:** Everyone else. Every subject is more like themselves than they are anyone else, and so that reduces individual differences and the variance that arises as a result. But there's one very important challenge with within-subjects factors, and that is the potential for carryover effects.
+- **[02:30] Participante:** Because each subject, because each subject, so really look out for that, because each subject does all 3, we have to be careful that the order that they do them in is not causing them to perform differently They could respond differently than they would if they only did one each and we had a between-subjects study. We have to be careful that we're not introducing a form of confounds. We've talked about confounds before. Now carryover effects are a major source of confounds in within-subjects studies. Because the order we present things in can confound the result. So what are the kinds of carryover effects that arise in within-subject studies? Examples are fatigue, practice effects, boredom, or skill transfer Where being, say, if being in search made you better at scrolling, or being in scrolling made you better at voice, and we presented them in a certain order, then we might be in fact differentially affecting future conditions based on prior ones. Those are skill transfer effects. And what are carryover effects?
+- **[02:30] Participante:** Presentation order of.
+- **[02:30] Participante:** conditions. So we have technique as a variable, but we'd also add to our set the variable order, or maybe technique order, and we'd encode that with just, say, 1, 2, or in the case of voice being added, 3, for which order was The measure taken in, which order was the technique shown in. And then we simply do a test like we would on technique to know the difference between the techniques. We do a test on order, 1, 2, or 3, to see if there's a difference in the results just based on the order that things were shown in. And I obviously hope there is not such a difference. That would mean we don't have an order effect. So we want to think ahead to make sure we log that as part of our data. That still leaves open the question though, how are these orders assigned? How are orders 1, 2, and 3 actually put together? For that, we want to go to our counterbalancing schemes. We'll discuss that next.
+- **[02:31] Participante:** So we've just been discussing the schemes for how we would assign the presentation order of techniques in our study to avoid carryover effects that introduce confounds to our results. The study we're considering again is a within-subjects subjects design, where subjects use 3 different techniques to find contacts in a smartphone contacts manager, and we measure the time it takes, the errors they make, and the effort rating that they give each of those techniques. So let's talk about how we assign order of presentation more generally, and how that helps helps us avoid confounds due to carryover effects. There are 3 strategies that we'll consider. I'll write them down here.
+- **[02:32] Participante:** We're going to look at full counterbalancing. We're gonna look at Latin squares.
+- **[02:32] Participante:** And we're going to look at something called the balanced.
+- **[02:32] Participante:** Latin square.
+- **[02:32] Participante:** Let's start with full counterbalancing.
+- **[02:32] Participante:** Full counterbalancing is where every condition, every possible ordering of conditions is expressed in your study, and it is, when you can do it, the best way to counterbalance the presentation order of your factors. So with full counterbalancing, we have every Let's say we have 2 levels of a within-subjects factor, so 2 conditions. Let's call them A and B. Full counterbalancing would present A and then B, and then B and then A to subjects. Because we have 2 sequences, We could say half the subjects or every other subject coming in first would see A, then would see B, the other half would see B and then A. So with 2 sequences, I'm sorry, with 2 levels, we need 2 factorial sequences or just 2 sequences. You can see with a square, With full counterbalancing, we have 3 conditions. We need a study that had subjects that are multiples of 6 in number, so 6 subjects or 12 or 18 or 24 subjects to make sure we have a balanced sample.
+- **[02:33] Participante:** We have a balanced expression across all 6 sequences. With 4 conditions, I won't even draw them, but we'd need 24 sequences. With 5, we'd need 120, and with 6, it gets obviously very unwieldy. That's full counterbalancing, expressing every order of conditions that can happen, and we need a lot of subjects to make sure we cover all of those orders. So if you can do full counterbalancing, that's the best thing to do. Let's consider something called Latin squares. Latin squares just needs n sequences for n conditions and therefore multiples of n subjects. So that sounds nice, and it has the property where each condition occupies each position in the order exactly the same number of times. We'll go with 5 conditions and we'll call them A, B, C, D, and E. And what you do is you start off with your top sequence and then you kind of rotate them around. So B, C, D, E, and A. C, D, E, A, B, D, E, A, B, C, and E, A, B, C, D. You can see with this Latin square of 5 conditions, every condition occupies each position
+- **[02:34] Participante:** in the sequence the same number of times. For example, they're all first once, they're all second once, they're all third once, and so on. There's still a challenge here though, which is that not all conditions follow the other conditions in exactly the same number of times. For example, C follows A here and not here, not here, but here and here. That wouldn't be the case for, for E following A, for example, where things are different. So we still could have carryover effects, and we'll look into solving that with the balanced Latin square. So we're discussing counterbalancing strategies for within-subjects variables, and we talked about full counterbalancing, a Latin square. Now I want to discuss a balanced Latin square. The way it works is this. Let's first assume we have an even number of conditions. conditions. Let's say we'll do an example with 6 that I've drawn up here, but let me point out how this is structured. The way it works is the top row starts with a formula, and instead of using letters like we did before, to make it easier to see how this works, we're using numbers, but they're really the same thing. So you have condition 1, then 2, then n. So if you have a 6-level factor, it'd be 6, then 3, then n minus 1, 4, n minus 2, and so on. And so you kind of see 1, 2, and then you're counting up.
+- **[02:35] Participante:** 3, 4, eventually 5, and so on. And then you're counting down: n, n minus 1, n minus 2, and every other. So for a 6-level factor, the balanced Latin square looks like this in the first row: 1, 2, 6, 3, 5, and 4. Then after that, Each row is added 1 to the number above it.
+- **[02:36] Participante:** So 1 becomes 2, 2 becomes 3, 6 wraps around to 1, 3 becomes 4, 5 to 6, and 4 to 5, and so on throughout the rest of the table. A property that a balanced Latin square has is that every condition So every condition follows every other exactly the same number of times, which is a very nice property for counterbalancing. Now, this is if you have an even number of conditions. If you have an odd number, it's not too much more complicated. You simply build the same initial table. And then you double the size of that table by reversing all of the rows that you just established, and that gets you your property. So if we had 5 conditions, we'd have 1, 2, 5, 3, and 4, and then We would reverse that in the, in the beginning of the second half of the table. Now this is an even number of conditions table, so we wouldn't do it here, but let me show you what that reversal looks like. It just looks like adding rows like this, so 4, 5, 3, 6, 4, 2 and 1, and so on, reversing each row: 5, 6, 4, 1, 3, 2, and so on. Again, we wouldn't do that for an even number of tape— even number of conditions.
+- **[02:47] Participante:** subjects with 5 conditions, we need multiples of not 5 but 10 because we double our table with this sort of second half reversed. And that's how we create a balanced Latin square.
+- **[02:47] Participante:** There's one other consideration I wanted to talk to you about when it comes to having within-subjects or repeated measures factors in your studies. We're currently talking about the study with 3 techniques to find contacts in a smartphone contacts manager. And we have the consideration of the format that the data tables take. Turns out something as seemingly simple as data table format affects the kinds of analyses that most statistical packages can actually do, so you should know the difference. long format and wide format data tables like you see in this example slide here. A long format table means that every row only contains one measure for the subject for a given dependent variable. So we have in the So in the long format table on the left, we have subject as a column, we have the independent variable, might be in our case technique here, but more generally it's say X, then we have the order variable which gives us the presentation order so we can test for order effects, and then we have our measure Y. We could have other measures as well, but the point is that we only have— for a given Y, we only have one measure per row in a long format table. So that means that subject has to be replicated across different lines. You can see here subject is entered 3 times for each subject according to each of the 3
+- **[02:48] Participante:** levels of the technique or X factor in this table. So that's a long format table, and most R analyses require a long format table. They're nice because they're easy to write in log files after each trial in an experiment. So a subject finds a contact, or does a text entry phrase or performs some other kind of task, and you write out that line in a table. But some analyses require wide format tables, and older statistical packages and older analyses within them often require wide format tables. tables. A wide format table is where each row in the table contains all of the measures for a given subject. That way the table knows that one row came from one subject, so the subject column actually technically is not needed, but I always like to use it. Just for clarity, you can see here that the tables are equivalent in terms of the data they hold, but now the X factor, or the, the technique factor in our particular example, scroll, search, and voice, is encoded as column names, as is the order variable 1, 2, and 3. So we have to tell our analysis software at some point that those 3 columns make up a single factor. And you can see that all the measures for a given subject are in one row. Not many analyses in R rely on tables of this format, but a few do, including what
+- **[02:49] Participante:** when we do some within-subjects analyses. So it's important to be aware of these differences. Let's go now and look at our R code where we will see how wide format and long format tables are used.
+- **[02:49] Participante:** Here we are in RStudio, and we're analyzing our study of performance— human performance in a smartphone contacts manager where people are finding contacts with search and scrolling initially, and then we'll consider voice later too. So this is our first within-subjects analysis, and that's going to be a paired samples t-test. Recall before when we did t-tests, they were independent samples t-tests, so you can think of this as a within-subjects t-test. We're going to load the data file search_scroll, and we'll view that as is our usual custom. We can see that we have columns for subject, the technique, which is search and scroll. We have 20 subjects, an order column, orders 1 and 2 based on which one was shown first and second. So we can test for an order effect of technique and make sure our counterbalancing worked. Incidentally, in this study, we fully counterbalanced things because it's only an order variable of only 2 levels. We have measures of time in seconds to find a contact, errors, and effort as a rating on a Likert-type scale, a 1 to 7 rating. So we'll be able to cover how those are done. We will turn subject into a nominal factor and order also, and then we can summarize over our table here. And as is our usual practice, we can view descriptive statistics by the variable of interest, by the factor of technique. We can see some quartiles and mean and
+- **[02:50] Participante:** medians there and the mean and standard deviation there. So we can see already that search seems to be 23 seconds on average— I'm sorry, 96 seconds on average to find a contact, and scroll 137. It would seem there's a difference, but we can't just compare means, of course. So we look at the standard deviations around those means, and we see 35 and 23. So are they sufficiently different or not will be what we answer with our statistical tests. So let's explore the time response with histograms. Sometimes, as we know, longer task times measured in minutes minutes or days for long tasks can be log-normal. That looks relatively normal. That looks a little off, but similar too. The box plots help us see, actually looks like now quite a significant difference probably between the 2, the means of the 2 techniques. Let's do the Shapiro test for normality on the search data. That seems to not deviate from a normal distribution. And let's do the same— we have a 0.09 for the technique of scroll, so it's close, but also seems reasonably normal. Of course, we want to fit them model to the residuals for the testing of the normality assumption as well. And here it warrants a little note about how R syntax works. So we're fitting an analysis of variance model as we've done before, and we have the technique factor, which is our one within-subjects factor.
+- **[02:51] Participante:** But we have to tell R that there are repeated measures on the same subject, and we do that with a function called error that you add in as a factor to the equation, to the model. And we put our within-subjects factor subject here, and we, we say which within- I'm sorry, we put our within-subjects factor technique here and we say subject is what correlates across those rows in the table that were within subjects with respect to technique. I put the general comment here. Generally, if you have a the error function with S and then A interacting with B and C, it would mean S was exposed to every level of A, B, C, and S is the column encoding the subject IDs. So you can see how R is interpreting that there. Okay, so then we get residuals for subject, and we We can check those and we can see that they look normally, pretty normal around the QQ plot. We also get residuals for the subject technique term because of it being a within-subjects factor. There's a little departure in the corner, but for the most part those look reasonable too. And both Shapiro-Wilk tests tell us that our residuals seem normal. Okay, we can also check with Levene's test the homoscedasticity, and we can see that we should be able to compare these conditions.
+- **[02:52] Participante:** Because we don't have a significant result. Now let's look and see if there's an order effect to make sure that our counterbalancing worked. And for that, we're going to have to use a wide format table. And you'll remember a wide format table encodes all the measures for a subject subject in a given row. We can do that with the reshape library. Our counterbalancing for 2 techniques was fully counterbalanced because with 2 techniques there's just 2 sequences, so that's easy to cover. I have a note here explaining a wide format table, but you know what that is now. And let's Let's make a new table called search scroll wide and order so we know it's the order effect. We can use the dcast command to split the table, and we want to do that using subject to group each row and give us the order variable encoded in new columns. So we'll go ahead and execute that, and we can view that table to verify that it looks right. So we have subject, and then we have order 1 and 2, which looks correct. So each subject experienced both orders, and so that's why That makes sense there. Then we can do a t-test comparing order 1 to order 2, and notice here for the first time we say paired equals true. It's a paired t-test. That's what makes it a paired samples t-test unlike before.
+- **[02:53] Participante:** Go ahead and run that t-test, and we see that the p-value is 0.19, which is good. It suggests that we don't have an order effect where order itself is causing difference in performance. You know how to report a t-test, and so you could, you could report that if someone wanted to write that down. So then we can do the paired samples t-test itself on technique, which is what we actually care about. We have to make a wide table for that as well. So we'll make one searchscroll.wide.tech for technique. So we make our new table. We view that table just like we did, and we can see the columns. The column names are now subject, scroll, and search, which is the comparison we care about. And then on the next line, we do a paired t-test between search and scroll in that new table, that new little wide table. And here we see a p-value of 0.001. So it does look less than 0.05. We have our t-statistic here and our degrees of freedom. And so we have a significant difference, and we can kind of visually confirm that for convenience by looking again at the box plot between scroll and search. So it seems that You can see that scroll, the time scroll took is in seconds a fair bit longer than the time search took to find contacts on a smartphone. And maybe we would expect that because scrolling can be a little bit more tedious as far as a human action goes.
+- **[02:54] Participante:** before, we can consider a nonparametric equivalent of this test. The nonparametric equivalent of a t-test is the Wilcoxon signed-rank test. We're going to do that not on time— we could do it on time, but we've gotten our result for time and the assumptions looked met, so we're going to comfortable with that, let's do it on errors. Errors are a count response, and often errors don't satisfy the assumptions of normality for ANOVAs. Errors can be kind of randomly distributed. They often can be Poisson distributed. They're clipped at 0. You don't get nice Gaussian curves usually when you're measuring errors. So let's explore the errors data that we've got in a different column in the original table, and we'll look at some histograms. This is the errors for search. Just to kind of get a feel for their spread. And the errors for scroll, clearly not normally distributed there, and we can do a box plot of errors as well. So scrolling was more— was slower than search, but it also looks like scrolling produced fewer errors than search. That might make sense, especially depending how we counted errors. If we count text entry errors as part of our error concept, not just selection errors, then maybe search could have more errors. Even if we don't, we might search and get a similar name but not quite the right one or something like that. Scrolling might show
+- **[02:55] Participante:** us more context around the contacts. So that makes some sense. Here I say we might once again test for the ANOVA assumptions of normality and homoscedasticity, but we've covered that and we know how to do that, so I'm going to omit those from now on until we have something new to be learned from that process. Let's try though to fit a Poisson distribution because we know this is count data, and with count data we often have that kind of distribution. Poisson distributions are discrete, not continuous, and so the fitting technique will use a library that allows for that. So we'll first fit to errors the Poisson distribution— that's what the POIS string means— and then we do this goodness of fit test function, which tells us in the chi-squared form a p-value that says we're not significantly departing from a Poisson distribution. We can do the same for the scroll data and see again the chi-square p-value is not significantly departing from a Poisson distribution. So we may in fact in the future use that information to do an analysis specific to a Poisson distribution. We'll return to that later. For now, we'll just do the Wilcoxon signed-rank test on errors. It's the equivalent of the paired samples t-test. So we load the coin library and we use this wilcoxon_test function.
+- **[02:56] Participante:** One thing to note about it, and I make a note here for you, is that we are measuring errors by technique, but we include subject behind this vertical bar, which tells this particular function that it's the blocking factor to correlate across rows in our table. We're not using a wide format table here. Notice we're using the original search scroll table. For 2 levels, we can do an exact test to get an exact p-value, and we can see that it's much less than 0.05. We're given a z-statistic result as, as the output. Now, that tells us based on the box plot that scrolling in fact was significantly less error-prone than searching. We can also examine effort using a nonparametric statistic because effort's on a Likert scale, it's an ordinal response. And Likert scale responses almost never satisfy the conditions for ANOVA either. They're bound from 1 to 7, they're ordinal, so the difference between 1 to 2, while numerically might be 1, maybe conceptually or perceptually is not the same as the difference between 4 and 5. 5 or 5 and 6, for example. So ordinal variables really should not be analyzed with parametric analyses. We'll talk later about how to analyze parametric or ordinal variables, ordinal outcomes, later on in the course, but for now we're perfectly happy to use
+- **[02:57] Participante:** a nonparametric Wilcoxon signed-rank test. So let's go ahead and first explore briefly the data in the effort Likert response, and we can see here that scrolling had a mean of about 4.4 and search was was 3.6. That's where presumably higher on the scale is more effort. Perhaps lower on the scale is less effort. We can also look at histograms for the 1 to 7 scale, which is on the x-axis here. That's for search, and here is for scroll. You can see maybe some people thought that was more effort. usual box plot where we can see the means look pretty similar, but there's more, more difference of opinion around the scrolling amount of effort. And we run a Wilcoxon signed-rank test again with the syntax we used before, but now looking at effort. We can see the p-value is 0.08, so it's So it's not significant at the 0.05 level, meaning that although there may be some differences here, we could not detect them. There are no detectable differences between the effort required for scrolling and searching. Okay, so now let's go to our analysis table. and take a look at where this has brought us. So we've just finished analyzing our searching and scrolling data for finding contacts in a smartphone contacts manager, and we had a within-subjects variable for the first time, which was the technique we were using to find contacts. So we had one factor,
+- **[02:58] Participante:** technique with 2 levels, search and scroll. It was a within-subjects factor, and we can see in red that the parametric test we did was a t-test. That was our form of analysis of variance, and it was a paired samples t-test. The nonparametric test was a Wilcoxon signed-rank test. which avoids those assumptions of the parametric approach but is somewhat less powerful to detect differences. What happens if we have a 3rd level of our within-subjects factor? Well, we can't use a paired samples t-test or Wilcoxon Wilcoxon signed-rank test anymore. That brings us to the next row in the table, the one-way repeated measures ANOVA and the Friedman test. Let's go back to our R terminal and look at how we carry out those analyses.
+- **[02:59] Participante:** So we're back at RStudio in our R code here working our way through our analyses. We have the box plot of effort scrolling and searching in a context manager, and we just carried out that analysis with a paired, a paired Wilcoxon signed-rank test. But now we want to consider if we have 3 levels of our, our factor, and for that we'll use a one-way repeated measures ANOVA. This is a parametric ANOVA, and we've done a one-way ANOVA, you'll remember, before. but now it's a one-way repeated measures ANOVA, which indicates a within-subjects factor. So we'll read in search_scroll_voice as our data table, that 3rd level of our technique factor. Let's view that as we commonly do. So we still have only 20 subjects, and we have technique, search scroll, and voice. We have order as before, 1 and 2, where voice is always 3. Now that would be a real challenge if we ran a study this way where we brought people in to do voice always as the 3rd technique because we might be introducing some confound there by having it always last. But perhaps in an exploratory aspect of the experiment, we might tack on a condition like voice, maybe to test a prototype at the end of the study. We have the time that each of these takes.
+- **[03:00] Participante:** the errors made, and the effort ratings as before. So really we've just added voice into the mix. We'll code our column subject and order as nominal, and we can do a summary over our table. You can see below, and as we often like to do, we want to see a few more statistics about each of the levels in terms of their mean and median. So we can see here, for example, that scrolling seems to be the longer the slower. So voice is the slower of the techniques, searching, and then voice is a little bit faster than searching. Is it fast enough to be different? That's the question. And we can do— looking at the standard deviations in the next output helps us judge that a little bit. We have our histograms as well. These haven't changed for search and scroll, but for voice as the new one, we can see a lot of clustering between 80 and 90 there, and the box plot helps us see their relative position in terms of the time it takes to find a contact in the contacts manager. that scroll seems again the slowest, with voice perhaps being faster than search. So a repeated measures ANOVA will test over all of these levels together, and if that test should be significant, then we can look into pairwise ANOVAs.
+- **[03:01] Participante:** If the overall or omnibus test is not significant, we're not justified in looking further for pairwise comparisons. We're going to use the easy library, and I've got some comments here in the code that help explain how this is working. So the easy library allows us to build this model M with specifying the dependent variable time, the within subjects variable technique, and the within subjects ID as subject, and also the data table here. So we have a 1-factor, 3-level within subjects variable called technique, and we've, we build our model. And then the comment says we have to check our model for violations of something called sphericity. Sphericity is the situation where the variances of the differences between all the combinations of levels of a within-subjects factor are equal or very near equal. It always holds for within-subjects factors that have just 2 levels, so we don't have to worry about it, but with 3 or more levels, sphericity has to be tested and examined with Mochley's test of sphericity. These are some of the complications and complexities that within-subjects variables introduce. We'll see later when we use mixed effects models that we can actually model covariance explicitly and we don't have to use sphericity to test for it. So we first check in our model here the Mocley output.
+- **[03:02] Participante:** If it's significant, it indicates a violation and we have to use a corrected form of our ANOVA. Here we do have a p-value of less than 0.05, and that star means that that's the case. So we have a violation of sphericity and we'll use a corrected corrected output, which I'll show you in a moment. If there's no violation, we can just use the regular ANOVA. If there is a violation, we use the sphericity output and use within that the greenhouse geyser correction. So first let's look at the ANOVA table without correction. We can see an F-test, recall it has 2 degrees of freedom, degrees of freedom in the numerator are 2 and the denominator are 38. Here is our F-statistic and the p-value is obviously quite a bit less than 0.05, and GES is a a value that tells us the effect size. It's called the generalized effect size. We won't go into that in this class, but effect size has to do with the strength of the effect. You don't want to interpret a p-value as effect strength, and so the, the generalized The generalized effect size is a way of getting that. Actually, the GES stands for generalized eta squared, and it compares to eta squared or partial eta squared, which are other effect sizes. But because ES also matches effect size,
+- **[03:03] Participante:** that an easier way to remember what it means. Okay, we're actually going to do some calculations here to compute the degrees of freedom for the corrected results, so we'll just do those and add that to this sphericity table that's output from this EasyANOVA function call. So here's our table, and again we have technique as our effect. We know there's a sphericity violation, so we're going to use— there are 2 outputs here, the greenhouse geyser correction and the Hunfeld correction, the HFE. We'll use the greenhouse geyser correction. This is the greenhouse geyser statistic and the p-value that goes with it, obviously less than 0.05, so Technic is still statistically significant for the F-test. Because there was a sphericity violation, if this wasn't less than 0.05, we wouldn't have a significant significant result. We'll ignore the Hunfeld results, we only need one set, and then here are the greenhouse geyser degrees of freedom in the numerator and denominator, and we can round those to the nearest, say, tenth, and that's what we computed up above here. So we have the full data we need to report the result. So it's reported just like an F-test result, but with these adjusted degrees of freedom and the adjusted degrees of freedom and the F-value from the original effect table.
+- **[03:04] Participante:** Incidentally, the same uncorrected results in R can be given by fitting this model here, which you should be able to understand now, and then summarizing over that. I'll just do that briefly, but that wouldn't give us the sphericity test, the Mocley sphericity test, and so that's why we don't use that generic form here. Now because the overall test was statistically significant, we can reach in and do post-hoc comparisons, and for that we will use the paired samples t-test, but we need a wide format table for that, so we'll use dcomp. We'll recast as we've done before to make a wide format table based on technique, and we'll view that. So we have subject in the left column and then scroll, search, and voice across the top. We verified that, and then in the next 3 rows we store up the individual paired samples samples t-tests, and then we adjust for multiple corrections and display the results. And we can see that all 3 results are statistically significantly different, indicate statistical significance in differences among scroll search and voice, just like a box plot might suggest visually. So what's the nonparametric equivalent of a one-way repeated measures ANOVA? Well, let's look at errors now for the 3 techniques. As we've said, errors often aren't
+- **[03:05] Participante:** conformant to the assumptions of ANOVA. So we'll do some looking at errors for the 3 techniques here. We can see the means and medians there and standard deviation there as well in that next output. And some histograms will give us a sense of the distribution of errors. Those first 2 by search and scroll haven't changed from before. Here are the voice errors. Those certainly don't look normally distributed. And we can look at the box plots for errors, and we can see that in fact scroll still seems the least And voice, although it seemed fast, it was maybe more error-prone. If we go back to a couple graphs back, we can see this was the time things took. Voice was the fastest, and we know that was a significant difference, but when we go forward here, and see errors, voice seems the most error-prone. What we have in our hands here is a speed-accuracy trade-off in human performance. That's very, very common. When people are faster, they tend to make more mistakes. That's not universally true when we're comparing When comparing techniques, it may not always hold, but more often than not, that may be the case. So keep that in mind as you measure both speed and errors or accuracy. We can ask again, as we did before, are those errors Poisson distributed in this new voice condition?
+- **[03:06] Participante:** So we've done a fit, and examining that, we see in fact that there is definitely no significant departure from a Poisson distribution. That will be interesting to us later when we return to this data and analyze it using a Poisson distribution directly. But for now, we'll do a Friedman test on errors. And we have the same syntax as we did for the Wilcoxon signed-rank test, where we have errors by technique and subject as our blocking factor across rows here. And so the Friedman test shows a p-value that certainly is much lower than 0.05. And we might expect that in looking at the graph. That means the overall test of errors is significant, so we can reach in and look at the pairwise comparisons using the Wilcoxon signed-rank test as our pairwise test. We correct for multiple comparisons, And we see that all of the results are less than 0.05, even when corrected. So with confidence, we can say all of the pairwise comparisons, the 2-way comparisons here between search and scrolling, scrolling and voice, and search and voice are all significantly different in terms of errors. As a completeness item, I include another way to do this analysis with the PMCMR library, and we reach the same conclusion there. Lastly, we can look at the Likert scale ratings. Ordinal ratings, 1 to 7, also don't
+- **[03:07] Participante:** generally comply with the assumptions of ANOVA. Let's explore that data. Here we can see means and medians again for how people rated effort, how hard or effortful was it to use these techniques to find contacts. And we can see that the standard deviation look similar, so the spreads around them probably about the same. Looking at some histograms, we see the effort on a 7-point scale for search, for scroll, and for voice, they all look like they were more towards 7. Let's do a plot and see here. where we see efforts about similar for scroll and search, but maybe a little more effort for voice. Perhaps it was— we know there were more errors, so perhaps it was making voice recognition mistakes. Let's do the Friedman test on the overall effort ratings, and here we see an interesting outcome. value is not significant, meaning there's not a detectable difference in the effort ratings on 1 to 7 scale that people gave for these 3 different techniques. I have a note here for what that means. Since the omnibus test is not significant, the post hoc comparisons, the pairwise comparisons, are not justified. If we would do them, we'd carry them out like we did for errors just above. So we know how to do that, but we are not justified in doing that in this case. That's an important principle of these analyses to remember. So now let's go to our analysis table and take a look at where
+- **[03:08] Participante:** this has brought us. So we've just completed our analysis of the performance of subjects looking for contacts in a smartphone contacts manager using 3 techniques: searching, scrolling, and their voice. So we had one factor, it had more than 2 levels, it had 3 levels. as we just said. It was a within-subjects factor. All subjects did all 3 of those techniques to find a set of contacts in a contact manager. We used a one-way repeated measures ANOVA for a parametric test, and we used the Friedman the Friedman test for the nonparametric test across all those 3 levels of the technique. We followed up the one-way repeated measures ANOVA with paired samples t-tests for post hoc contrast testing. And for the Friedman test, when it was significant, we followed it up with the Wilcoxon signed-rank test.
+- **[03:09] Participante:** Now what happens if we go beyond not just 2 or 3 levels?
+- **[03:09] Participante:** factor.
+- **[03:09] Participante:** But if we go into having multiple factors themselves.
+- **[03:09] Participante:** This will bring us to the factorial ANOVA and the aligned rank transform.
+- **[03:09] Participante:** It'll take us towards linear models and eventually generalized linear models, which will be next.
+- **[03:23] Participante:** Or walking
+- **[03:23] Participante:** We're going to measure
+- **[03:23] Participante:** text entry speed in terms of words per minute,
+- **[03:23] Participante:** And
+- **[03:23] Participante:** text
+- **[03:23] Participante:** text
+- **[03:23] Participante:** entry error rate
+- **[03:23] Participante:** which is
+- **[03:23] Participante:** which is a percentage for each phrase entered. They'll enter a total of
+- **[03:23] Participante:** 20 phrases
+- **[03:23] Participante:** that we select from a larger corpus of text entry phrases
+- **[03:23] Participante:** and they'll do those 20 phrases in each of the sitting, standing, and walking postures.
+- **[03:23] Participante:** We're interested in how the keyboards compare,
+- **[03:23] Participante:** and also how the postures compare
+- **[03:23] Participante:** and also how performance with the keyboards might be affected differentially
+- **[03:23] Participante:** by the different postures.
+- **[03:23] Participante:** And this is called an interaction.
+- **[03:24] Participante:** We'll come back to that concept of interaction shortly and discuss it further.
+- **[03:24] Participante:** For our first analysis on this data,
+- **[03:24] Participante:** we'll assume that we're averaging over those 20 phrases for an average words per minute and an average error rate
+- **[03:24] Participante:** for each of the keyboards in sitting, standing, and walking postures.
+- **[03:24] Participante:** So what kind of study is this in terms of its formal experiment design?
+- **[03:24] Participante:** Well, we would call this study
+- **[03:24] Participante:** a two by three mixed
+- **[03:24] Participante:** factorial
+- **[03:24] Participante:** design.
+- **[03:24] Participante:** Two by three. What does that mean? We have two separate numbers
+- **[03:24] Participante:** in this notation.
+- **[03:24] Participante:** The two and the three.
+- **[03:24] Participante:** And those correspond to factors.
+- **[03:24] Participante:** And the numbers themselves indicate how many levels each of those factors has.
+- **[03:24] Participante:** So the the factor with two levels is keyboard.
+- **[03:24] Participante:** And it has two levels
+- **[03:24] Participante:** And it has two levels, Apple iPhone and Samsung Galaxy.
+- **[03:24] Participante:** And the factor with three levels, we might call posture.
+- **[03:24] Participante:** Sitting, standing, and walking.
+- **[03:25] Participante:** It's a mixed factorial design because keyboard
+- **[03:25] Participante:** is a between subjects factor.
+- **[03:25] Participante:** And posture is a within.
+- **[03:25] Participante:** Subjects factor or repeated measures factor.
+- **[03:25] Participante:** And so it's a mixed factorial design. We could have designs that are purely between subjects across all their
+- **[03:25] Participante:** factors or purely within subjects across all their factors. But a mixed factorial design has between and within subjects
+- **[03:25] Participante:** factors.
+- **[03:25] Participante:** So that's how we get our notation.
+- **[03:25] Participante:** The experiment. Of course, our responses are two, our y values, you will,
+- **[03:25] Participante:** The words per minute is a text entry speed measure, and the error rate percent is a second response.
+- **[03:25] Participante:** And as I mentioned, we'll be averaging over 20 phrases in each of these conditions.
+- **[03:25] Participante:** Now in an in an experiment of this kind, of course, we would record the results of every trial.
+- **[03:25] Participante:** A trial would be every phrase entered.
+- **[03:25] Participante:** Why don't we analyze all 20 phrases separately for each of these conditions?
+- **[03:25] Participante:** Well, we will. We'll come back to that when we have a little bit more statistical machinery under our belt.
+- **[03:25] Participante:** But for now, we'll just say we're averaging over the 20 phrases.
+- **[03:25] Participante:** So what's the total data that we're gathering?
+- **[03:25] Participante:** Well, we have 24 subjects, as we said,
+- **[03:25] Participante:** we'll divide by two because they're in two separate conditions with respect to the keyboard.
+- **[03:26] Participante:** We can fully counterbalance our posture effect
+- **[03:26] Participante:** because with three levels of posture, full counterbalancing would take
+- **[03:26] Participante:** six.
+- **[03:26] Participante:** Different sequences. We have 24 subjects, and so we see a nice clean multiple of six there.
+- **[03:26] Participante:** Where we can represent all of those sequences the same number of times.
+- **[03:26] Participante:** Now before we go to our analysis,
+- **[03:26] Participante:** I wanna talk to you about this notion of interactions.
+- **[03:26] Participante:** Two factors in this case, and some studies can have more than two. You would just have a longer
+- **[03:26] Participante:** longer phrase here, two by three by perhaps other other numbers after that.
+- **[03:27] Participante:** You don't want to get too many. The studies get pretty hard to analyze and complicated to report if you have too many factors.
+- **[03:27] Participante:** But I wanna talk to you about interactions because that's where some really interesting results can
+- **[03:27] Participante:** Give me a moment to sketch up a few things, and we'll come back and discuss how interactions look when they're graphed.
+- **[03:27] Participante:** Let's discuss the con
+- **[03:27] Participante:** except
+- **[03:27] Participante:** Aber
+- **[03:27] Participante:** interaction.
+- **[03:28] Participante:** In effect,
+- **[03:28] Participante:** In a factorial study.
+- **[03:28] Participante:** Here, I've
+- **[03:28] Participante:** Here, I've drawn a few graphs that's gonna that are gonna help us understand what interactions are and how they work.
+- **[03:28] Participante:** On each graph, we see
+- **[03:28] Participante:** on the x axis, the word stand and sit.
+- **[03:28] Participante:** We talked about our study where we're going to have actually three postures standing
+- **[03:28] Participante:** sitting, and walking. But for now, we'll just consider
+- **[03:28] Participante:** two.
+- **[03:28] Participante:** On the y axis, we have words per minute.
+- **[03:28] Participante:** But really, it could be any of our measures. And then
+- **[03:28] Participante:** as
+- **[03:28] Participante:** As traces in the graph, we have the two keyboard
+- **[03:29] Participante:** we're considering the Apple iPhone and the Samsung Galaxy. Of course, this is just made up data.
+- **[03:29] Participante:** The
+- **[03:29] Participante:** The question becomes, is there
+- **[03:29] Participante:** a main effect
+- **[03:29] Participante:** A
+- **[03:29] Participante:** keyboard or posture?
+- **[03:29] Participante:** And a main effect would mean overall.
+- **[03:29] Participante:** Just for keyboard. Just for posture.
+- **[03:29] Participante:** So we can ask that question.
+- **[03:29] Participante:** And then we'd also ask, is there an interaction?
+- **[03:29] Participante:** Between
+- **[03:29] Participante:** Keyboard and
+- **[03:29] Participante:** keyboard and posture. That means with
+- **[03:30] Participante:** say, differentially,
+- **[03:30] Participante:** say differentially affect the performance of keyboard. Well, let's take a look.
+- **[03:30] Participante:** In this first graph, we can see that in both standing and sitting,
+- **[03:30] Participante:** the keyboards stay roughly the same.
+- **[03:30] Participante:** But there is a gap between the lines of the two keyboards.
+- **[03:30] Participante:** So we can ask, do we have a main effect of keyboard?
+- **[03:30] Participante:** The answer is yes. Assuming there are
+- **[03:30] Participante:** small variances around these data points, we can assume that for these graphs.
+- **[03:30] Participante:** Then there's some separation between the iPhone's performance and the Galaxy's performance.
+- **[03:30] Participante:** That would mean we have a main effective keyboard.
+- **[03:30] Participante:** Is there an interaction? Actually, before that, let's consider, is there a main effect of posture? Well,
+- **[03:30] Participante:** from standing to sitting, performance doesn't really seem to change. So there would not be a main effect of posture.
+- **[03:30] Participante:** And then is there an interaction? Is there a differential effect?
+- **[03:30] Participante:** Well,
+- **[03:30] Participante:** doesn't seem to be.
+- **[03:30] Participante:** Short way of seeing that is the lines are parallel. But what that means is that
+- **[03:31] Participante:** in both standing and sitting, there's no real differential effect on the keyboards themselves.
+- **[03:31] Participante:** Okay. Let's consider the next graph.
+- **[03:31] Participante:** Here we see that the lines are sloped and still parallel.
+- **[03:31] Participante:** Does that mean? Is there a main effective keyboard?
+- **[03:31] Participante:** Well, again, in both conditions we see, the iPhone seems to be faster than the galaxy.
+- **[03:31] Participante:** We'd say, there's a main effective keyboard.
+- **[03:31] Participante:** Is there a main effect of posture? Well, from standing to sitting now, we see
+- **[03:31] Participante:** that there's a change. It seems that when people are sitting, they're faster with both keyboards.
+- **[03:31] Participante:** So yes, say there's a main effect of posture.
+- **[03:31] Participante:** And then we'd ask, is there an interaction?
+- **[03:31] Participante:** And here we see parallel lines. We see that from standing to sitting, while things improve in terms of speed,
+- **[03:31] Participante:** they improve the same for each keyboard. So there's not an interaction.
+- **[03:31] Participante:** Let's consider this third graph.
+- **[03:31] Participante:** Here we see, what are sometimes called alligator jaws.
+- **[03:31] Participante:** In standing, both of the conditions both of the keyboards are basically the same.
+- **[03:31] Participante:** Very close in performance. But in sitting, the iPhone has now become differentially
+- **[03:31] Participante:** better than Galaxy, which actually hasn't improved.
+- **[03:31] Participante:** So let's go through our three questions. Is there a main effective keyboard? Well, overall,
+- **[03:31] Participante:** can take the midpoint of the iPhone line and the midpoint of the galaxy line, there is separation.
+- **[03:31] Participante:** We'd say, yes, there's a main effect of keyboard.
+- **[03:32] Participante:** Is there a main effect of posture? Well, can imagine a line
+- **[03:32] Participante:** up through the center here. And is that line sloped?
+- **[03:32] Participante:** Answer in this case is somewhat. Perhaps there is a still a small but main effect of posture.
+- **[03:32] Participante:** But the interesting thing is there's an interaction because the lines are not parallel and the iPhone seems
+- **[03:32] Participante:** to get much better when you sit down and enter text on its keyboard. But the gal
+- **[03:32] Participante:** galaxy kinda stays the same. So posture is differentially affecting the keyboard's performance.
+- **[03:32] Participante:** And this last graph also clearly shows an interaction.
+- **[03:32] Participante:** Let's do our three questions.
+- **[03:32] Participante:** There a main effective keyboard? Well,
+- **[03:32] Participante:** maybe if we take the center of each keyboard, there may be a slight separation.
+- **[03:32] Participante:** So perhaps the iPhone still is performing better, but maybe maybe it's too close to call.
+- **[03:32] Participante:** Is there a main effect of posture? Well, actually,
+- **[03:32] Participante:** if we draw a line between our lines here, we can see that overall,
+- **[03:32] Participante:** there's not maybe that much change in posture.
+- **[03:32] Participante:** And then is there interaction? Clearly, is. Because amazingly, when you're standing up,
+- **[03:32] Participante:** you're much faster with the galaxy keyboard than the iPhone keyboard. As soon as you sit down, voila,
+- **[03:32] Participante:** you are faster with the iPhone keyboard than the galaxy keyboard. Anytime you see the lines crossing, that's a classic
+- **[03:32] Participante:** of an interaction effect.
+- **[03:32] Participante:** Let's go now to our R code.
+- **[03:32] Participante:** Do the analyses that will allow us to detect whether there really are interaction effects and main effects in our data.
+- **[03:33] Participante:** Okay. So here we are in our R studio.
+- **[03:33] Participante:** And we are going to analyze
+- **[03:33] Participante:** experiment of 24 subjects entering text using the iPhone
+- **[03:33] Participante:** keyboard or the Samsung galaxy keyboard in different postures. That is while sitting, standing, walking.
+- **[03:33] Participante:** This is a factorial
+- **[03:33] Participante:** a nova, meaning there are multiple factors. In this case, two, as we discussed.
+- **[03:33] Participante:** And there's a between subjects factor for keyboard and a within subjects factor for posture.
+- **[03:33] Participante:** Which is also known as a measures factor.
+- **[03:33] Participante:** We'll be doing a repeated measures ANOVA because if you have any within subjects
+- **[03:33] Participante:** factors, then, ultimately, you're you're doing a repeated measures even though we're a mixed
+- **[03:33] Participante:** factorial design here. We'll be looking as well at interaction effects.
+- **[03:33] Participante:** And ultimately, a nonparametric version of these.
+- **[03:33] Participante:** Analyses as well. I have a note here that
+- **[03:34] Participante:** mixed is a term that's used in multiple ways in the analysis of experiment data like this.
+- **[03:34] Participante:** And we're talking about a mixed factorial design. But that's not the same thing and not to be confused with mixed effects.
+- **[03:34] Participante:** Or linear mixed models, which we will be getting to later in the course.
+- **[03:34] Participante:** So read this note and just make sure that you're clear on mixed designs mean we're combining between and within subjects
+- **[03:34] Participante:** factors.
+- **[03:34] Participante:** So let's progress through our, analysis as we've done in the past.
+- **[03:34] Participante:** And we'll see familiar patterns of exploring the data before analyzing it.
+- **[03:34] Participante:** So we'll read in the mobile text, data file.
+- **[03:34] Participante:** And let's take a quick view on that. I know it's small in the video, so I'll tell you that the column names are subject.
+- **[03:34] Participante:** Keyboard, posture, posture order,
+- **[03:34] Participante:** because that's a within subjects effect, we wanna make sure that
+- **[03:34] Participante:** we have no order effects, that our full counterbalancing worked. We have
+- **[03:34] Participante:** words per minute as one measure and error rate as another measure, which is between zero and one. It's effectively a percentage.
+- **[03:34] Participante:** Alright. So let's recode as we always have done
+- **[03:34] Participante:** subject as a nominal factor and posture order as well because those are both numbers and by default
+- **[03:34] Participante:** R thinks that they're numeric values, but they're really categories.
+- **[03:34] Participante:** And then let's move through our usual analysis of the words per minute data in this case.
+- **[03:35] Participante:** So we can see by galaxy and by iPhone here,
+- **[03:35] Participante:** and by posture. So we see in our output
+- **[03:35] Participante:** galaxy and posture galaxy and sit in the first row.
+- **[03:35] Participante:** And we can see various values for that.
+- **[03:35] Participante:** And we can do the same if we wanna look more closely at the memes and the standard deviations.
+- **[03:35] Participante:** So when you have two factors like this, you end up with a table, that shows you
+- **[03:35] Participante:** kind of the mixture of each of the levels of the factors. We can also walk through our histograms now looking at two factors at one time and just get a sense of the shape of the data. We can see so far, at least for the iPhone,
+- **[03:35] Participante:** words per minute look, you know, at least somewhat normal. We can look at the the the galaxy
+- **[03:35] Participante:** sitting
+- **[03:35] Participante:** while standing, and while walking as well.
+- **[03:35] Participante:** And we can use the box plot command to actually graph all of these at once. So on our x axis, we have
+- **[03:35] Participante:** keyboard by posture combinations and words permitted on the y axis.
+- **[03:35] Participante:** Can spend some time with this graph and study where you think differences may lie. But nothing beats an interaction
+- **[03:35] Participante:** which we'll do next, to show us
+- **[03:35] Participante:** what might be going on in terms of these three levels
+- **[03:35] Participante:** and the keyboards.
+- **[03:35] Participante:** So here we can see there is clearly some visual gap between the sitting condition
+- **[03:36] Participante:** also between standing, and also between walking. It seems that walking certainly slows people's text entry speed down.
+- **[03:36] Participante:** Standing and sitting seem to be roughly about maybe the same.
+- **[03:36] Participante:** But different for each keyboard. So
+- **[03:36] Participante:** based on our discussion previously, it's pretty clear we certainly have at least some kind of interaction.
+- **[03:36] Participante:** Another way to put that is the lines are not all just parallel, so we know something differential is happening.
+- **[03:36] Participante:** Let's go ahead and use our easy inova command. So we'll load in the easy library, and
+- **[03:36] Participante:** recall with this,
+- **[03:36] Participante:** that because we're doing, within subjects factor here for
+- **[03:36] Participante:** posture, and first we'll do posture order as well, that we
+- **[03:36] Participante:** wanna make sure
+- **[03:36] Participante:** that
+- **[03:36] Participante:** we're not violating this ferricity
+- **[03:36] Participante:** requirement that we explored previously in the class.
+- **[03:36] Participante:** So we'll do that with Machli's test of ferricity. So first, let's look at a potential order effect
+- **[03:36] Participante:** So we'll look at posture order
+- **[03:36] Participante:** as our within subjects term.
+- **[03:36] Participante:** Keyboard is our between subjects term.
+- **[03:36] Participante:** Our dependent variable, that is our measures words per minute.
+- **[03:36] Participante:** Are within subjects ID is subject, so that's what
+- **[03:36] Participante:** codes across rows of our table saying that the same subject was measured repeatedly.
+- **[03:36] Participante:** And then our data table.
+- **[03:36] Participante:** So let's go ahead and we'll store that in our model m.
+- **[03:37] Participante:** And then our first look is at the Machlis test for cerosity. And we see that we are not statistically significant for
+- **[03:37] Participante:** within subjects effects.
+- **[03:37] Participante:** And that means that we don't have a violation of cervicity, so we can just use our regular ANOVA table.
+- **[03:37] Participante:** So when we examine that, we see
+- **[03:37] Participante:** that we have a main effect of keyboard,
+- **[03:37] Participante:** but the the key part here is posture order and its interaction with keyboard. We don't want to be
+- **[03:37] Participante:** significant, and we can see, in fact, that they're they're not. Take note that this is
+- **[03:37] Participante:** using scientific notation, but it's a non significant result. There's no star in the column. That's another quick way to see it.
+- **[03:37] Participante:** So that's good. That means our counterbalancing worked.
+- **[03:37] Participante:** And we can go forward with an analysis with confidence that we're not confounding results
+- **[03:37] Participante:** by the presentation order of the different postures. Because remember, again, each subject did all of the three postures.
+- **[03:37] Participante:** In the assigned orders we gave them.
+- **[03:37] Participante:** So let's do the ANOVA now on posture. So we've we're doing the same thing, we've changed the within subjects factor to
+- **[03:37] Participante:** posture, not posture order.
+- **[03:37] Participante:** Otherwise, it's the same test. So we'll do that, and then we'll check our
+- **[03:37] Participante:** criteria. We see now that it is significant. So we have a violation of sphercity, which means we'll use
+- **[03:37] Participante:** the degrees of freedom provided by, and the significance results for our within subjects factors provided by the greenhouse
+- **[03:38] Participante:** correction.
+- **[03:38] Participante:** So we'll first look at a NOVA table because, we we do wanna look at the keyboard between subjects factor here.
+- **[03:38] Participante:** And we can see that is statistically significant. And we can tell that from the graph that there's clearly a difference in the
+- **[03:38] Participante:** While in sitting, the iPhone keyboard's not as good, not as fast, I should say,
+- **[03:38] Participante:** the galaxy keyboard. For both standing and walking, it's it's a fair bit better, especially with walking. And so
+- **[03:38] Participante:** we're not surprised to see there is a difference in keyboards.
+- **[03:38] Participante:** We'll go ahead and
+- **[03:38] Participante:** load up the results for the within subject
+- **[03:38] Participante:** factors in this ferricity output here. So here,
+- **[03:38] Participante:** we're getting our
+- **[03:38] Participante:** our effect significance from the corrected results. So we have posture,
+- **[03:38] Participante:** and the keyboard by posture interaction here. And, you know, we see that our p values are, in fact,
+- **[03:38] Participante:** significant under the greenhouse geyser correction.
+- **[03:38] Participante:** And we get our stars in that column. We'll ignore the Huntvelt correction here. It's just an alternative correction.
+- **[03:38] Participante:** And then we get our degrees of freedom in the remaining output. So our numerator degrees of freedom for the f test
+- **[03:38] Participante:** is is here, and we might round that to the nearest tenth or hundredth when we report it. Our denominator is here.
+- **[03:38] Participante:** Notice those are corrected from the uncorrected values up here. And so that's why we get the fractional results.
+- **[03:38] Participante:** And so that's those are the terms we'd use to report.
+- **[03:38] Participante:** Those outcomes. So the bottom line is we have three significant results. We have a main effective keyboard,
+- **[03:39] Participante:** a main effect of posture, which is no surprise. Clearly walking overall is slower than the other two, for example.
+- **[03:39] Participante:** And we have a main effect, an interaction effect that's significant, where we have differential
+- **[03:39] Participante:** things. We can see that in the crossing of the lines there, and they're not exactly parallel elsewhere as well.
+- **[03:39] Participante:** So all three are
+- **[03:39] Participante:** significant. That makes for an interesting set of findings.
+- **[03:39] Participante:** For completeness, we can we can do the analysis with the AOV
+- **[03:39] Participante:** fit, but that wouldn't give us the the Monkly's test of cerosity. So I won't run that, but I
+- **[03:39] Participante:** included it for completeness so you can see how the usual model specification is done. The easy inova
+- **[03:39] Participante:** function makes a lot of that a little more straightforward, is why we used it.
+- **[03:39] Participante:** So now we can do comparisons in light of the significant interaction. We wanna see, well,
+- **[03:39] Participante:** okay, the overall or omnibus f test was significant.
+- **[03:39] Participante:** But let's do some looking between levels. For example, how do the the two keyboards compare when sitting?
+- **[03:39] Participante:** How do the two keyboards compare just when standing and just when walking? Those are some of things interactions can answer for us.
+- **[03:39] Participante:** So we have to make a wide format table, we'll use the pre shaped
+- **[03:39] Participante:** and, code our table to be split with Dcast and made wide.
+- **[03:39] Participante:** We wanna keep subject and keyboard as between subjects columns on the left side and posture
+- **[03:40] Participante:** becomes the the new column names for the wide table.
+- **[03:40] Participante:** So you'll remember we we we went through that previously. So we'll we'll make our wide table.
+- **[03:40] Participante:** And then we'll view it just to make sure that it looks correct, and we have
+- **[03:40] Participante:** for subject keyboard and now sit, stand, and walk. So the posture factor is encoded as column names.
+- **[03:40] Participante:** What a wide format table would give us. Now the subject variable is just one time in each row. Each each subject's
+- **[03:40] Participante:** listed just once per row.
+- **[03:40] Participante:** Now we'll load up the tests
+- **[03:40] Participante:** the different postures in the different levels
+- **[03:40] Participante:** within sorry. Load load up the test for comparing the keyboards in each of the three different
+- **[03:40] Participante:** postures. So we're comparing these two data points, these two data points, and these two data points to see where do the differences really lie.
+- **[03:40] Participante:** And then we'll adjust those, using the home sequential Bonferroni procedure, as we've done before. So we'll run all those together. And here we see that in fact all three are statistically significant at the point zero five level.
+- **[03:40] Participante:** And so all of these differences
+- **[03:40] Participante:** are big enough in light of their variance that we can say that whichever one's on top, so to speak, this graph
+- **[03:40] Participante:** really is faster.
+- **[03:40] Participante:** We also might be curious to say, well, what about within the iPhone?
+- **[03:40] Participante:** How might we compare, the iPhone in terms of sitting to,
+- **[03:41] Participante:** to walking?
+- **[03:41] Participante:** So we can see the iPhone sitting here. We go over the iPhone's walking is a little bit slower, but they're not too far apart.
+- **[03:41] Participante:** What might we see there? So let's go ahead and just do that custom test as well. And
+- **[03:41] Participante:** show you the entire line here. So we're comparing the iPhone sitting to the rows with the iPhone
+- **[03:41] Participante:** walking, and it's a paired test.
+- **[03:41] Participante:** And and this is back this is still using our our wide format table.
+- **[03:41] Participante:** So we run that, and we can see that, in fact, there is a significant difference
+- **[03:41] Participante:** And in looking at the box plot for
+- **[03:41] Participante:** just those levels, we can see that in fact,
+- **[03:41] Participante:** the sitting is, fact, faster.
+- **[03:41] Participante:** Light of the variance than than the walking.
+- **[03:41] Participante:** Condition. So that's a way we've explored our interaction effects and our main effects
+- **[03:41] Participante:** between these keyboards for these different postures. Obviously, findings
+- **[03:41] Participante:** findings like this would be a fascinating thing to look into further as to why the results are the way they are.
+- **[03:41] Participante:** Now we'll go next we'll go into looking at a nonparametric approach for this. And so
+- **[03:41] Participante:** we resume, we'll start there.
+- **[03:41] Participante:** Okay. So we're looking at our study.
+- **[03:42] Participante:** Of people using two different keyboards. They use one or the other.
+- **[03:42] Participante:** The iPhone keyboard or the Galaxy keyboard in three different postures, and they do all three postures.
+- **[03:42] Participante:** Sitting, standing, walking, which we fully counterbalanced. We had the parametric analysis was a a factorial anova, a mixed factorial anova because we have a between and within subject factor.
+- **[03:42] Participante:** And
+- **[03:42] Participante:** we saw this this interaction plot here, and we found that we have differences in each of the the two compare the the
+- **[03:42] Participante:** keyboards in each the postures were different.
+- **[03:42] Participante:** Do we do this with a nonparametric procedure? Well, let's look at the error rate data.
+- **[03:42] Participante:** Almost invariably do not conform to the assumptions that we discussed for a Nova
+- **[03:42] Participante:** They they they are cut off at zero. They can't sort of be less than zero, obviously.
+- **[03:42] Participante:** They often are kind of random in their distribution. Just tend to not
+- **[03:42] Participante:** sort of allow themselves to be analyzed easily with parametric procedures. So
+- **[03:42] Participante:** we can use a non parametric procedure on our error rate column. And we'll do that with an approach called the aligned rank
+- **[03:42] Participante:** transform procedure.
+- **[03:42] Participante:** It's important to note that with nonparametric analyses,
+- **[03:42] Participante:** interaction effects are not usually available in the common analyses. Freedman tests that we've looked at will Coxon sign rank test
+- **[03:42] Participante:** Kruskal Wallis test, Mann Whitney test, they're all one way tests.
+- **[03:42] Participante:** They're just single factor tests. So if we want the possibility of analyzing interactions,
+- **[03:42] Participante:** and handling those the right way, one of the options available to us is called the aligned rank transform.
+- **[03:43] Participante:** I won't go into great depth about how this works, but it does operate on ranks.
+- **[03:43] Participante:** Just like the other nonparametric tests we've seen.
+- **[03:43] Participante:** But it operates on something called aligned ranks where the data is aligned before being ranked.
+- **[03:43] Participante:** And what aligned means is that
+- **[03:43] Participante:** only the effect of interest is left in the data
+- **[03:43] Participante:** because we subtract out values from it.
+- **[03:43] Participante:** That remove the possibility of other effects. So for example, if we're
+- **[03:43] Participante:** just looking at a main effective keyboard, we
+- **[03:43] Participante:** align the data to that by subtracting out possible
+- **[03:43] Participante:** estimated effects of posture. If we wanna look just at the interaction between keyboard and posture,
+- **[03:43] Participante:** we subtract out estimated values from each data point that would to the main effects
+- **[03:43] Participante:** of keyboard and posture. So we just leave one effect behind, and that's called the alignment process. You're welcome to look that up more
+- **[03:43] Participante:** online.
+- **[03:43] Participante:** So we'll do our usual approach of exploring the data first.
+- **[03:43] Participante:** Here we have
+- **[03:43] Participante:** the different means and medians for the error rates of the in the different conditions.
+- **[03:43] Participante:** And here we have our summary that gives us means and standard deviations.
+- **[03:43] Participante:** Of the same. Obviously, these are
+- **[03:43] Participante:** somewhat easier to interpret with a box plot, so we'll we'll work our way there. Let's get a sense first of the shape of the data.
+- **[03:43] Participante:** And we can see that with the iPhone sitting condition,
+- **[03:44] Participante:** standing condition,
+- **[03:44] Participante:** walking condition,
+- **[03:44] Participante:** and then with the galaxy sitting,
+- **[03:44] Participante:** standing,
+- **[03:44] Participante:** and walking. Very different shapes of of the data, obviously.
+- **[03:44] Participante:** A box pod helps us see that it looks, at first glance, that while sitting, the airs, these two plots are are lower. The error rate's lower. That makes sense. And then when we stand up, the error rate goes up a bit with
+- **[03:44] Participante:** both keyboards. And then when we're walking, error rate goes up even more, but seemingly differentially.
+- **[03:44] Participante:** Between the two keyboards where these stay more the same.
+- **[03:44] Participante:** That might suggest we have an interaction effect.
+- **[03:44] Participante:** And the best way to check that is an interaction plot.
+- **[03:44] Participante:** And here we have an obviously very interesting result. It looks like when walking the galaxy,
+- **[03:44] Participante:** keyboard for whatever reason is more error prone than the iPhone keyboard, which is
+- **[03:44] Participante:** which obviously would be a very interesting finding. And it's completely fictitious to this example.
+- **[03:44] Participante:** So let's go ahead and look at the error rate results. So we load a library called the
+- **[03:44] Participante:** r tool library.
+- **[03:44] Participante:** That gives us the aligned rank transform.
+- **[03:44] Participante:** And we build a model as we've done before using the art command.
+- **[03:44] Participante:** We formulate our model like we've we've seen where we have our y on the left.
+- **[03:44] Participante:** Keyboard by posture is our study. And we add this term
+- **[03:44] Participante:** in in parenthesis one with a vertical bar in subject.
+- **[03:45] Participante:** Is because the aligned ring transform, the ART procedure under the hood here is using a linear mixed model.
+- **[03:45] Participante:** We're not gonna discuss that right now. That will be a topic later in the course. But that's what that means and that's what's going on under the hood.
+- **[03:45] Participante:** This notation is part of what tells it that subject is a random effect.
+- **[03:45] Participante:** Again, we'll discuss that later. But also helps it know that subject is what to use to correlate data across rows in our table.
+- **[03:45] Participante:** So let's go ahead and build that, and then we'll report the ANOVA result. Now remember, even though this is an
+- **[03:45] Participante:** it is a nonparametric result because the procedure used the aligned rank transform
+- **[03:45] Participante:** on all of the data to build that model. So that's what allows us
+- **[03:45] Participante:** to see interactions in an f test is how we report this just like you've seen before.
+- **[03:45] Participante:** But but it's really a nonparametric result.
+- **[03:45] Participante:** Okay. So with this we see
+- **[03:45] Participante:** that we have our f statistics for keyboard, posture, the interaction.
+- **[03:45] Participante:** The degrees of freedom,
+- **[03:45] Participante:** the numerator, as you've seen before, and then the residual or denominator degrees of freedom.
+- **[03:45] Participante:** And we see that all three results
+- **[03:45] Participante:** are statistically significant.
+- **[03:45] Participante:** What that means is for all three main effects and the two main effects in the interaction,
+- **[03:45] Participante:** we have statistically significant results. It seems there's a main effect of keyboard, a main effect of posture,
+- **[03:45] Participante:** and we can tell from just looking at the graph,
+- **[03:46] Participante:** obviously, a a significant interaction.
+- **[03:46] Participante:** We can, just for for fun here, test, the normality of the residuals that the model provides.
+- **[03:46] Participante:** Remember that one of the ANOVA assumptions is normality, and so
+- **[03:46] Participante:** specifically the normality of the the residuals, which are the difference in the observations from the model predictions.
+- **[03:46] Participante:** So we'll use our Shapiro Wilk test. And even though this is a nonparametric test, we're ultimately still doing
+- **[03:46] Participante:** an ANOVA. And so it would be nice to see that the residuals comply.
+- **[03:46] Participante:** With normality. The Shapiro wilt test is non significant, telling
+- **[03:46] Participante:** us that we don't have a significant departure from normality. So that's nice to see. And we can graph
+- **[03:46] Participante:** residuals on a q q plot as we've done in the past and see that the data points do seem to fall roughly equal to
+- **[03:46] Participante:** random around the the normal line, which is the the the normal distribution line.
+- **[03:46] Participante:** So that's good. So it seems that we're conforming to the assumptions there of Innova, can make us proceed with confidence.
+- **[03:46] Participante:** So given the overall significant interaction effects and main effects here,
+- **[03:46] Participante:** we can look a little bit further into
+- **[03:46] Participante:** comparisons. Where do the differences lie? One thing we might notice is in the sitting situation
+- **[03:46] Participante:** and the standing situation, things between the keywords seem to be all that different.
+- **[03:46] Participante:** But in the walking situation, we see that they are quite different. So that's going to be interesting for us to see.
+- **[03:47] Participante:** So we'll have our interaction plot there for us, and we can conduct
+- **[03:47] Participante:** pairwise tests among levels, first of keyboard.
+- **[03:47] Participante:** And so the l s means with the art l m command will give us that for keyboard.
+- **[03:47] Participante:** And we can see that the results here
+- **[03:47] Participante:** are in contrast where we see
+- **[03:47] Participante:** galaxy and the iPhone comparison.
+- **[03:47] Participante:** So it's it's
+- **[03:47] Participante:** comparison there.
+- **[03:47] Participante:** And
+- **[03:47] Participante:** we can see that it's a t test.
+- **[03:47] Participante:** Between those.
+- **[03:47] Participante:** We can also check
+- **[03:47] Participante:** the pairwise. So so we should say with the the keyboard, is equivalent to the main effect because there are only two levels
+- **[03:47] Participante:** of keyboard. So we just included that kind of for completeness. If we wanna do the the pairwise comparisons among the levels of posture,
+- **[03:47] Participante:** we can, do that. And in the contrast table, we see sitting versus standing.
+- **[03:47] Participante:** Sitting versus walking, and standing versus walking. And they're all significant.
+- **[03:47] Participante:** So imagine a line drawn between these lines for that posture effect. So it would be kind of moving from
+- **[03:47] Participante:** sitting to standing and then going up between them in the middle for walking. Since they're not horizontal, there's there's clearly effects here
+- **[03:47] Participante:** here of ostia overall.
+- **[03:47] Participante:** Now,
+- **[03:47] Participante:** that approach to contrast testing that we've just done can't be used for the interaction.
+- **[03:47] Participante:** I have a commented outline here saying, don't do this, where we'd specify the interaction directly and do
+- **[03:48] Participante:** a pairwise comparison across factors. The reason we can't do this with the ART approach
+- **[03:48] Participante:** the alignment transform approach, is that we we we can't compare pairwise values across factors directly. And that gets to some very deep statistical research that we've done looking into that, and you're welcome to to look that up. You look up the which is an R command for bringing up more information beyond just the help page, Look up the vignette for art contrast. You'll be able to read further. The good news is there's another way to do contrast that results in something called interaction contrast. And it's looking at the difference of differences. And that is usable with the art approach. And we get that from the Thea library, we'll load that.
+- **[03:48] Participante:** There's some notes here explaining how to interpret these things. So I'll go ahead and run test interactions
+- **[03:48] Participante:** with the keyboard by posture interaction.
+- **[03:48] Participante:** And we'll adjust these pairwise comparisons as usual, and then we'll interpret this output together.
+- **[03:48] Participante:** So what we see in this table is not just
+- **[03:48] Participante:** the usual comparison of levels. We see
+- **[03:48] Participante:** iPhone on the left and then a colon and then sit, stand, sit, walk, and stand, walk.
+- **[03:48] Participante:** On the right. Well, what does that mean? So let's look at our comment here. In the output,
+- **[03:49] Participante:** b colon c d is interpreted as a difference of differences.
+- **[03:49] Participante:** In other words, the difference
+- **[03:49] Participante:** between
+- **[03:49] Participante:** a and b given c
+- **[03:49] Participante:** and
+- **[03:49] Participante:** the difference of a and b given d.
+- **[03:49] Participante:** So in other words, it's the difference between a and b significantly different in condition c from condition d.
+- **[03:49] Participante:** That'd kind of the general interpretation. So let's apply that here.
+- **[03:49] Participante:** So we're saying
+- **[03:49] Participante:** that
+- **[03:49] Participante:** is the galaxy versus the iPhone
+- **[03:49] Participante:** given the sitting
+- **[03:49] Participante:** posture, so given the sitting posture, the galaxy versus the iPhone, is that difference significantly different
+- **[03:49] Participante:** from the galaxy versus the iPhone in the standing situation. So their difference here.
+- **[03:49] Participante:** And that is not statistically significant with a chi squared test.
+- **[03:49] Participante:** And so that's that's saying that the difference we see here, which is obviously very minimal between the keyboards, the difference we
+- **[03:49] Participante:** here, which is only slightly bigger, those differences are are really not significantly different.
+- **[03:49] Participante:** But when we compare the sitting situation of keyboards to walking, we can see this is significantly different
+- **[03:49] Participante:** different as as a difference from this difference, and the same when we compare the difference here in standing to the difference in walking.
+- **[03:49] Participante:** So that's how we have to interpret contrast tests in the aligned rank transform situation.
+- **[03:50] Participante:** So now we've analyzed this data in two different ways.
+- **[03:50] Participante:** Let's go ahead and take a look
+- **[03:50] Participante:** at
+- **[03:50] Participante:** our analysis table and see where this has brought us.
+- **[03:50] Participante:** Okay. So we've just completed our analysis.
+- **[03:50] Participante:** Of our mobile text entry data.
+- **[03:50] Participante:** With smartphone keyboards, the iPhone keyboard and the Samsung galaxy keyboard.
+- **[03:50] Participante:** And also in three different postures, sitting, standing, and walking. So we looked at a factorial innova.
+- **[03:50] Participante:** In our case, a mixed design with a between and within subjects factor. So let's see the red text in our table here.
+- **[03:50] Participante:** Notice that it's the first time we've had more than one factor, and we see that in our left We had also we had
+- **[03:50] Participante:** factors with more than two levels. So we had a posture within subjects, repeated measures factor,
+- **[03:50] Participante:** that had three levels sitting, standing.
+- **[03:50] Participante:** And walking.
+- **[03:50] Participante:** We had it between
+- **[03:50] Participante:** We had a between subjects factor, and we also had a within subjects factor. So we have some
+- **[03:50] Participante:** highlighted analyses in two different rows. We could have a purely between subjects factorial Lenovo with all between
+- **[03:50] Participante:** subjects factors. We could also have a purely within subjects ANOVA with all within subjects factors.
+- **[03:50] Participante:** And the analysis is very much like what we've just carried out. We did a mixed design analysis so we could see how to handle
+- **[03:50] Participante:** both between and within subject factors.
+- **[03:51] Participante:** So for a parametric test, we've covered factorial anovas, and because we had a within subjects factor, we've actually covered
+- **[03:51] Participante:** factorial repeated measures anovas as well.
+- **[03:51] Participante:** These are all linear models, and in fact, everything in the
+- **[03:51] Participante:** parametric test column that we've covered so far is a linear model, sometimes abbreviated LM.
+- **[03:51] Participante:** The linear model actually
+- **[03:51] Participante:** generalizes, and we can see over in the nonparametric column
+- **[03:51] Participante:** generalized linear model. We'll get to that next.
+- **[03:51] Participante:** In the nonparametric test column,
+- **[03:51] Participante:** we've done the aligned rank transform, and that also handled both between and within subjects factors.
+- **[03:51] Participante:** And their interactions.
+- **[03:51] Participante:** And so that's why we've we've highlighted those analyses there.
+- **[03:51] Participante:** Let's take a look at what it means to generalize the linear model.
+- **[03:51] Participante:** And so we'll move now to generalized linear models,
+- **[03:51] Participante:** after which we'll look at mixed models and talk about what that means.
+- **[03:51] Participante:** With linear mixed models and then their generalization,
+- **[03:51] Participante:** to generalize linear mixed models. But first, let's look at generalized linear models. We'll do that next.

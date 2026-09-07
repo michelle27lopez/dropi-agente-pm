@@ -1,0 +1,664 @@
+# Notificaciones WhatsApp & email - Dropshippers
+
+- **ID:** `not_Yqwid7lZJLnlky`
+- **Fecha:** 2026-08-27T16:01:15.053Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/d350f70c-bd3d-4396-afbe-972a34a0a8c0)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo, Jose Hurtado, Enrique Lopez, Jhonj Ceron, Luisc Dominguez, Maria Calderon
+
+---
+
+## Resumen de la Reunión
+# Contexto y Objetivo de la Reunión
+
+- Reunión para alinear las iniciativas de notificaciones (WhatsApp y email) entre Producto, Growth y CRM
+- Objetivo común: activar y retener dropshippers usando notificaciones segmentadas por canal
+- Todas las comunicaciones deberían salir a través del CRM (canal preferido: WhatsApp, mayor tasa de apertura que email)
+
+# Iniciativas en Curso
+
+- Producto (Santiago) trabaja en conceptualizar tipos de notificaciones mientras se desarrolla el módulo nativo en Dropi
+  - Foco inicial: usuarios con tendencia a churn (caída en pedidos), no los top vendedores
+  - Base de usuarios provista por Lady
+  - Sin API disponible aún: notificaciones serán generales por ahora (ej. “Revisa pedidos pendientes de confirmación”)
+  - Meta real: capturar data de comportamiento para alimentar el módulo permanente de notificaciones en plataforma
+- Growth/CRM (Enrique, Jhonj, Jose) tienen proyecto “Dropshipper 360” con tres fases:
+  1. Caracterización de dropshippers inactivos (llamadas automatizadas con IA a \~13.000 personas)
+  2. Cuidado de campañas para el Pareto comercial (top vendedores, alertas de stock)
+  3. Seguimiento automatizado a confirmaciones de pedidos (hoy se hace manualmente a diario en todos los países)
+- Hitos estadísticos clave identificados por Jhonj:
+  - 10 órdenes en el primer mes → reduce deserción
+  - 100 órdenes → baja el churn significativamente
+  - 300 órdenes → el dropshipper adopta el modelo como fuente de trabajo estable
+
+# Bloqueantes y Decisiones
+
+- API de órdenes, dropshippers y catálogo: pendiente de entrega por Desarrollo
+  - Sin esta API, no es posible personalizar notificaciones con datos granulares
+  - Mientras tanto: notificaciones genéricas tipo product marketing
+- Notificaciones de confirmación de pedidos: ya se gestionan manualmente desde el CRM
+  - No duplicar este flujo con la iniciativa de Producto para evitar colisiones
+- Segmentación por sub-perfiles de tienda: no aplica en esta fase
+  - Foco en tiendas con un solo usuario (dropshippers nuevos o en riesgo)
+- Data de evolución de órdenes: la tiene Clara/Marlon y el equipo de Dropi Ops, no Producto
+
+# Próximos Pasos
+
+- **Compartir el spreadsheet de mensajes/notificaciones con el equipo** (Alejandra)
+
+  Todos revisan el contenido, dejan comentarios y validan alineación con voz y tono de Dropi antes de enviar.
+- **Contactar a Marlon para solicitar data de órdenes** (Enrique)
+
+  Necesaria para revisar el estado actual y definir métricas de seguimiento de efectividad.
+- **Revisar copies del spreadsheet y validar tono de comunicaciones** (Maria)
+
+  Confirmar que los mensajes estén alineados con imagen e identidad corporativa de Dropi.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/e4040e42-0f83-49a6-8c0d-5b2b1d359241](https://notes.granola.ai/t/e4040e42-0f83-49a6-8c0d-5b2b1d359241)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[16:01] Maria Jose Calderon:** No, yo siento que ya estoy muerta.
+- **[16:01] Maria Jose Calderon:** O sea, como que después del temblor,
+- **[16:01] Maria Jose Calderon:** grande, ya no volví a sentir absolutamente nada.
+- **[16:01] Alejandra Melo:** No, yo todo
+- **[16:01] Maria Jose Calderon:** lo contrario,
+- **[16:01] Alejandra Melo:** yo
+- **[16:01] Maria Jose Calderon:** siento...
+- **[16:01] Alejandra Melo:** Oh.
+- **[16:01] Maria Jose Calderon:** Ay, caramba. ¿Y lo sentiste fuerte? Porque
+- **[16:01] Maria Jose Calderon:** tengo amigas que las evacuaron, pues, de de donde estaban trabajando.
+- **[16:01] Alejandra Melo:** Pero mira que solamente fue como que se me movió así como de un lado a otro y ya.
+- **[16:02] Alejandra Melo:** Paró, o sea, fue superrápido.
+- **[16:02] Alejandra Melo:** Pero sí se sintió. Ya después de eso, quedé temblando.
+- **[16:02] Maria Jose Calderon:** Sentiste recuerdos.
+- **[16:02] Alejandra Melo:** Claro, yo dije, va a salirte, vas va a temblar más duro.
+- **[16:02] Maria Jose Calderon:** No.
+- **[16:02] Maria Jose Calderon:** ¿Y alguien más por acá sintió el temblor?
+- **[16:02] Jose Hurtado:** ¿Temblor?
+- **[16:02] Yo:** Hola.
+- **[16:02] Maria Jose Calderon:** Sí, tembló
+- **[16:02] Yo:** No, nada.
+- **[16:02] Alejandra Melo:** ahorita.
+- **[16:02] Jose Hurtado:** ¿Ahorita?
+- **[16:02] Enrique Manuel López Sánchez:** Otro.
+- **[16:02] Enrique Manuel López Sánchez:** No,
+- **[16:02] Jose Hurtado:** no, yo no
+- **[16:02] Enrique Manuel López Sánchez:** sentía nada.
+- **[16:02] Enrique Manuel López Sánchez:** Como
+- **[16:02] Maria Jose Calderon:** a las diez y veinte me dicen.
+- **[16:02] Enrique Manuel López Sánchez:** Búsquense a dios.
+- **[16:02] Enrique Manuel López Sánchez:** Por
+- **[16:02] Maria Jose Calderon:** favor.
+- **[16:02] Enrique Manuel López Sánchez:** José, tú tienes cara de ateo, busca a dios.
+- **[16:02] Jose Hurtado:** Ay, dios.
+- **[16:02] Alejandra Melo:** No, yo acá en ese piso once sí siento todo, entonces,
+- **[16:02] Alejandra Melo:** sí sí sentí el
+- **[16:02] Jose Hurtado:** temblor. ¿Sesto piso?
+- **[16:02] Alejandra Melo:** Once, once, once.
+- **[16:02] Alejandra Melo:** Sí.
+- **[16:02] Alejandra Melo:** Ustedes están en tierra, entonces no, no
+- **[16:02] Yo:** No, pero yo estoy en optado de piso y no se siente nada.
+- **[16:02] Alejandra Melo:** lo sintieron.
+- **[16:03] Alejandra Melo:** Ay, no, yo sí sentí.
+- **[16:03] Enrique Manuel López Sánchez:** Yo no.
+- **[16:03] Alejandra Melo:** Pero eso
+- **[16:03] Enrique Manuel López Sánchez:** eso fue en Cali solamente.
+- **[16:03] Alejandra Melo:** El epicentro fue en Choco, pero es en
+- **[16:03] Alejandra Melo:** esta vez. Otra vez. El otro de el otro que fue como de
+- **[16:03] Alejandra Melo:** punto algo, ese sí no lo sentí.
+- **[16:03] Jose Hurtado:** ¿Tú estás dónde? ¿Santi? ¿En qué
+- **[16:03] Enrique Manuel López Sánchez:** piso?
+- **[16:03] Yo:** Yo en octavo, en un top piso.
+- **[16:03] Enrique Manuel López Sánchez:** Qué pasa con Choco, hombre?
+- **[16:03] Alejandra Melo:** Comprar mis réplicas.
+- **[16:03] Yo:** Sí.
+- **[16:03] Enrique Manuel López Sánchez:** ¿Qué pasó con Choco, Vigente?
+- **[16:03] Alejandra Melo:** Bueno, listo.
+- **[16:03] Alejandra Melo:** Para pasar el susto, por lo menos de mi parte,
+- **[16:03] Alejandra Melo:** comencemos. Entonces, estábamos, esas reuniones
+- **[16:03] Alejandra Melo:** para mirar la parte de notificaciones de WhatsApp e email,
+- **[16:03] Alejandra Melo:** habíamos dicho que ya hay unas
+- **[16:03] Alejandra Melo:** que que se están enviando,
+- **[16:03] Alejandra Melo:** Entonces, por parte de marketing,
+- **[16:03] Alejandra Melo:** entonces, quisiera saber cuáles tienen, o sea, qué
+- **[16:03] Alejandra Melo:** son las que tienen como para irlas apuntando por acá.
+- **[16:03] Alejandra Melo:** Majo, no sé si
+- **[16:04] Alejandra Melo:** Majo, no sé si tú sepas cuáles o, Enrique, cuáles son las notificaciones que ya se
+- **[16:04] Alejandra Melo:** se se han estado enviando.
+- **[16:04] Maria Jose Calderon:** No, la la verdad, no tengo mucho
+- **[16:04] Maria Jose Calderon:** noción de esto. Quiero que en algún momento se habló,
+- **[16:04] Maria Jose Calderon:** pero pero no se dio mucho detalle al respecto.
+- **[16:04] Alejandra Melo:** Listo, ¿y Enrique?
+- **[16:04] Enrique Manuel López Sánchez:** O sea O
+- **[16:04] Maria Jose Calderon:** sea
+- **[16:04] Alejandra Melo:** muchas.
+- **[16:04] Alejandra Melo:** O
+- **[16:04] Enrique Manuel López Sánchez:** sea,
+- **[16:04] Enrique Manuel López Sánchez:** Dale, Mao, qué pena.
+- **[16:04] Maria Jose Calderon:** Qué qué pena, es que
+- **[16:04] Maria Jose Calderon:** sé que hay unos que son dos correos transaccionales,
+- **[16:04] Maria Jose Calderon:** que son como todas las notificaciones de que si inició sesión, si abres
+- **[16:04] Maria Jose Calderon:** si hay movimientos como en DropiCart, transferencias entre wallets, y es
+- **[16:04] Maria Jose Calderon:** No sé si tiene que ver con eso o es otra cosa.
+- **[16:04] Alejandra Melo:** Sí, esas.
+- **[16:04] Alejandra Melo:** De pronto, ¿quién las tiene de aquí? No la puedo compartir.
+- **[16:04] Maria Jose Calderon:** O tengo
+- **[16:04] Maria Jose Calderon:** yo tengo la propuesta que se hizo desde marketing,
+- **[16:04] Maria Jose Calderon:** pero no tengo como el final. Espérate, busco el Figma y ya y ya y ya se los comparto por acá.
+- **[16:04] Maria Jose Calderon:** Pero solamente es mailing, no es WhatsApp.
+- **[16:05] Alejandra Melo:** Eso sí, porque, por ejemplo, yo estaba haciendo como unas
+- **[16:05] Alejandra Melo:** no tengo las transaccionales, solamente tengo como pensado las de activación,
+- **[16:05] Alejandra Melo:** tengo aquí como unos
+- **[16:05] Alejandra Melo:** copies de correo, de hecho, ya por ahí hice uno, luego se los
+- **[16:05] Alejandra Melo:** comparto, de cómo se verían.
+- **[16:05] Alejandra Melo:** Pero está la la notificación de WhatsApp y la notificación de correo, pero sí quiero como alinear
+- **[16:05] Alejandra Melo:** todo eso para marcar cuáles ya están, para no
+- **[16:05] Alejandra Melo:** no duplicar, más bien concentrarnos si ya está en mailing, pues entonces
+- **[16:05] Alejandra Melo:** mirar cuáles serían las que faltan por WhatsApp.
+- **[16:05] Enrique Manuel López Sánchez:** Te hago una pregunta.
+- **[16:05] Enrique Manuel López Sánchez:** Creo que
+- **[16:05] Enrique Manuel López Sánchez:** la el espacio se creó para eso.
+- **[16:05] Enrique Manuel López Sánchez:** Ajá.
+- **[16:05] Enrique Manuel López Sánchez:** Yo mencioné
+- **[16:05] Enrique Manuel López Sánchez:** la semana pasada creo que fue,
+- **[16:05] Enrique Manuel López Sánchez:** en la célula, que
+- **[16:05] Enrique Manuel López Sánchez:** se iba a trabajar, pues está trabajando, es más, y aquí está José y John,
+- **[16:05] Enrique Manuel López Sánchez:** en un proyecto para extraer la data transaccional del otro cheaper,
+- **[16:06] Enrique Manuel López Sánchez:** generar
+- **[16:06] Enrique Manuel López Sánchez:** un embudo comunicacional
+- **[16:06] Enrique Manuel López Sánchez:** que inclusive
+- **[16:06] Enrique Manuel López Sánchez:** estamos haciendo un tema de academy, onboarding en en en los países,
+- **[16:06] Enrique Manuel López Sánchez:** de hacerlo a través del CRM,
+- **[16:06] Enrique Manuel López Sánchez:** para notificar ciertos eventos
+- **[16:06] Enrique Manuel López Sánchez:** dentro del proceso de activación y y retención del usuario.
+- **[16:06] Enrique Manuel López Sánchez:** Entonces, por ejemplo, nosotros vamos a tener acceso a data como la siguiente,
+- **[16:06] Enrique Manuel López Sánchez:** además del registro y de la fecha de primera orden,
+- **[16:06] Enrique Manuel López Sánchez:** la cantidad de órdenes generadas por días, ¿sí?, órdenes entregadas, órdenes en devolución, órdenes en tránsito, ¿sí? Órdenes pendientes por confirmar y todo ese tipo de cosas,
+- **[16:06] Enrique Manuel López Sánchez:** para que las notificaciones se puedan generar y que haya un
+- **[16:06] Enrique Manuel López Sánchez:** seguimiento comercial
+- **[16:06] Enrique Manuel López Sánchez:** de ese proceso. Entonces, ¿a dónde voy? La primera pregunta, estas comunicaciones
+- **[16:06] Enrique Manuel López Sánchez:** de dónde proviene,
+- **[16:06] Enrique Manuel López Sánchez:** ¿Sí? O sea, ¿de dónde dónde se gestiona?
+- **[16:06] Enrique Manuel López Sánchez:** Obviamente a través de WhatsApp, pero ¿ese WhatsApp dónde está? ¿Dónde está en cloud? Supongo que
+- **[16:07] Enrique Manuel López Sánchez:** es un WhatsApp directo de dropping.
+- **[16:07] Enrique Manuel López Sánchez:** Pero entonces, ¿cómo empalmamos lo que estamos haciendo acá?, ¿sí?,
+- **[16:07] Enrique Manuel López Sánchez:** el proceso que queremos hacer a nivel de de todo el proceso de onboarding de los
+- **[16:07] Enrique Manuel López Sánchez:** de los nuevos registros y todo eso para mejorar la retención y la activación,
+- **[16:07] Enrique Manuel López Sánchez:** a través del proceso comercial que se lleven en CRM. Creo Que Por Eso Fue Que Se Creó El Espacio, Si No Estoy Mal.
+- **[16:07] Alejandra Melo:** Sí, Porque, Pues, La Idea Es Que Todas Las Comunicaciones Lleguen Por Medio Del CRM. ¿Cierto? Porque, Pues, De Lo Que Tú Dijiste En La Célula, Te Dijimos, Pues Hagamos Esta Reunión Para Mirar, Entonces, Qué Es Lo Que Ustedes Tienen. Para Luego Poderlo
+- **[16:07] Enrique Manuel López Sánchez:** Allá. Con Lo
+- **[16:07] Alejandra Melo:** Que Estás Haciendo.
+- **[16:07] Enrique Manuel López Sánchez:** No Tenemos Nada, Tenemos Es Como La Disponibilidad De La Data, Porque Inclusive Vamos A Ser Un Piloto En Argentina,
+- **[16:07] Enrique Manuel López Sánchez:** entonces es como
+- **[16:07] Enrique Manuel López Sánchez:** cómo cómo traernos de pronto cosas que ya ustedes tienen,
+- **[16:07] Enrique Manuel López Sánchez:** para complementar lo que queremos hacer en en en
+- **[16:08] Enrique Manuel López Sánchez:** Argentina, por ejemplo, o sea, y el piloto va a ser
+- **[16:08] Enrique Manuel López Sánchez:** sencillo,
+- **[16:08] Enrique Manuel López Sánchez:** la persona llega, se registra, más que todo para los los leads nuevos, ¿no?, que
+- **[16:08] Enrique Manuel López Sánchez:** probarlos a través de ahí. La persona llega, se registra,
+- **[16:08] Enrique Manuel López Sánchez:** y ya nosotros vamos a tener acceso a la información de cuántas órdenes genera,
+- **[16:08] Enrique Manuel López Sánchez:** por fechas,
+- **[16:08] Enrique Manuel López Sánchez:** órdenes que que que están en devolución, y esa cantidad de información no
+- **[16:08] Enrique Manuel López Sánchez:** va a permitir lo va a permitir nos va a permitir, perdón,
+- **[16:08] Enrique Manuel López Sánchez:** trabajar en un embudo de de fidelización
+- **[16:08] Enrique Manuel López Sánchez:** activación, reactivación,
+- **[16:08] Enrique Manuel López Sánchez:** sí, esos tres embudo que son importantes para el tema del shipper.
+- **[16:08] Enrique Manuel López Sánchez:** Pero obviamente yo creo que este tipo de cosas ya son temas un poco más
+- **[16:08] Enrique Manuel López Sánchez:** ¿cómo decirlo?, notificaciones
+- **[16:08] Enrique Manuel López Sánchez:** por parte de eventos específicos de la gestión de la cuenta,
+- **[16:08] Enrique Manuel López Sánchez:** entonces no sé cómo eso
+- **[16:08] Enrique Manuel López Sánchez:** de pronto no no no choca con lo lo, o sea, lo que queremos hacer no choca con lo que están
+- **[16:08] Enrique Manuel López Sánchez:** haciendo ustedes.
+- **[16:08] Enrique Manuel López Sánchez:** Es que
+- **[16:08] Alejandra Melo:** es prácticamente lo mismo, ¿cierto, Santi? O sea, es
+- **[16:08] Alejandra Melo:** lo mismo, solamente que ustedes lo quieren hacer es para Argentina.
+- **[16:09] Yo:** Sí, o sea, nosotros, Juan, nosotros o sea, más allá de quererlo hacer para una campaña en específico o activar puntualmente un país, lo que queremos realmente es lograr conceptualizar los tipos de notificaciones, porque como en paralelo, se está trabajando en el módulo que va a estar dentro de Deropi, con las alertas, recordatorios y demás,
+- **[16:09] Yo:** Lo que estamos aprovechando ahora es, mientras eso logra que
+- **[16:09] Yo:** se viabilice y se se
+- **[16:09] Yo:** lo empiece a trabajar,
+- **[16:09] Yo:** se le entreguen los diseños,
+- **[16:09] Yo:** es poder aprovechar la información que tengamos a la mano
+- **[16:09] Yo:** de transacciones y demás,
+- **[16:09] Yo:** para, pues, aprovechar canales como WhatsApp e email,
+- **[16:09] Yo:** ¿sí?
+- **[16:09] Yo:** Ya, al final, pues,
+- **[16:09] Yo:** termina siendo que de de ambas partes queremos llegar a lo mismo, que es
+- **[16:09] Yo:** activar usuarios,
+- **[16:09] Yo:** nosotros
+- **[16:09] Yo:** más allá que pensarlo por un país
+- **[16:09] Yo:** solo Colombia, pues, inicialmente, lo haríamos para Colombia, pensando en que tenemos la mayor cantidad de
+- **[16:10] Yo:** de usuarios acá,
+- **[16:10] Yo:** Es más es más por
+- **[16:10] Yo:** poder empezar a a entender, por ejemplo, qué tipos de notificaciones llaman más la atención,
+- **[16:10] Yo:** generan más tráfico,
+- **[16:10] Yo:** y hacer un seguimiento mucho más detallado, ¿sí?
+- **[16:10] Yo:** Es es como eso.
+- **[16:10] Yo:** Y si, y como necesitamos, de igual, salida,
+- **[16:10] Yo:** por un WhatsApp, porque, de hecho, la la duda que tiene es Enrique o
+- **[16:10] Yo:** sí, el planteamiento de, bueno, por dónde van a salir,
+- **[16:10] Yo:** justamente, eso es lo que estamos explorando, porque nosotros, desde producto como tal,
+- **[16:10] Yo:** no tenemos un número de WhatsApp, pero sabemos que ya
+- **[16:10] Yo:** No sé si es a través, ahí, José, me ayudas, pero no sé si es a través de John o través de de dónde, ya hay un número de WhatsApp, si es por el CRM, por dónde.
+- **[16:10] Yo:** Y es por ahí por donde queremos enviar las notificaciones.
+- **[16:10] Yo:** Igual por email, o sea, no sabemos cuál es el buzón habilitado para poder
+- **[16:10] Yo:** tener contacto de que lo que estamos haciendo es justamente
+- **[16:10] Yo:** viabilizando como la iniciativa, de cuál sería el buzón
+- **[16:11] Yo:** si el mensaje por eso sigue
+- **[16:11] Yo:** es importante que estuviera aquí, Maho, si los mensajes que se van a compartir
+- **[16:11] Yo:** están alineados con el lenguaje, con el tono
+- **[16:11] Yo:** maneja Dropi o si necesitamos ajustes?
+- **[16:11] Yo:** Y y poder empezar a enviarlos, ¿sí? Por ejemplo,
+- **[16:11] Yo:** el reto actual está en activación,
+- **[16:11] Yo:** pero
+- **[16:11] Yo:** como sabemos que si le enviamos un un un mensaje, por ejemplo, un
+- **[16:11] Yo:** WhatsApp o un email a un usuario que no ha hecho su primera orden, que no sabe manejar drop y
+- **[16:11] Yo:** solo entró a explorar, pero no encontró
+- **[16:11] Yo:** mayor valor, pues, difícilmente, con un mensaje de WhatsApp se va a activar.
+- **[16:11] Yo:** Vamos a trabajar, es más, sobre una base que nos
+- **[16:11] Yo:** comparte Lady sobre usuarios que están presentando
+- **[16:11] Yo:** tendencias a
+- **[16:11] Yo:** de churn, tendencias a a dejar de enviar, que están cayendo en sus pedidos.
+- **[16:11] Yo:** Para generar, por lo menos, como un un un
+- **[16:11] Yo:** soporte
+- **[16:11] Yo:** ahí, y ver si se logran reactivar algunas ventas.
+- **[16:11] Yo:** Es como la la iniciativa que tenemos nosotros. No sé ahí, Enrique, los demás, qué tan
+- **[16:12] Yo:** lejos o cerca creen que está de lo que ustedes también tienen en mente.
+- **[16:12] Enrique Manuel López Sánchez:** Hello?
+- **[16:12] Enrique Manuel López Sánchez:** Lo que pasa es que creo que
+- **[16:12] Enrique Manuel López Sánchez:** lo que está, o sea, o sea, estos son
+- **[16:12] Enrique Manuel López Sánchez:** lo de nosotros es eminentemente comercial, lo de ustedes
+- **[16:12] Enrique Manuel López Sánchez:** plataforma, ¿sí?
+- **[16:12] Enrique Manuel López Sánchez:** Creo yo que que que base a eso.
+- **[16:12] Yo:** Sí, en en últimas, claro,
+- **[16:12] Yo:** de alguna forma, nosotros, con envío de notificaciones,
+- **[16:12] Yo:** vamos a
+- **[16:12] Yo:** a pretender qué usuarios que están
+- **[16:12] Yo:** vendiendo cada vez menos
+- **[16:12] Yo:** se reactiven, digámoslo así, vuelvan a a sus niveles
+- **[16:12] Yo:** No sé, estaban enviando cien órdenes por mes y vemos
+- **[16:12] Yo:** están enviando cuarenta, entonces, que vuelvan a las cien.
+- **[16:12] Yo:** Que se den cuenta, de pronto, de de de de cosas que no usaban en la plataforma,
+- **[16:12] Yo:** como no,
+- **[16:12] Yo:** dependiendo qué tan detallada, qué tan qué qué tan granular sea la data,
+- **[16:12] Yo:** si vemos que podemos detectar
+- **[16:12] Yo:** si tiene diez órdenes por confirmar, ejemplo, yendo a algo muy particular,
+- **[16:13] Yo:** o si tiene un mensaje pendiente, de pronto,
+- **[16:13] Yo:** de soporte o lo que sea, pues podremos llegar a notificar eso. Si no,
+- **[16:13] Yo:** pues van a ser notificaciones un poco más generales, como recuerda revisar
+- **[16:13] Yo:** pedidos por confirmar para no retrasarte tus entregas,
+- **[16:13] Yo:** serán, y el call to action con el link para que vaya a Dropi y y gestione. Dependerá de eso. Pero pero, claro, nosotros lo que estamos haciendo ahora es entender el copy, cómo cómo cómo se reacciona ante el copy, horas de de en que deberíamos enviarlo, frecuencias de envío, o sea, realmente también es un poco de experimento para que al momento de ya montar el modelo de notificaciones, en plataforma, de otra plataforma, pues ya lo hagamos de una forma mucho más precisa. ¿Sí? Es decir, que le pegamos a los dos lados, pero nuestro foco real está en capturar data y tratar igual de mover el indicador.
+- **[16:13] John Ceron Arboleda:** De pronto, para completarlo,
+- **[16:14] John Ceron Arboleda:** que dice Santiago, y desde, digamos, desde la la parte
+- **[16:14] John Ceron Arboleda:** de growth, nosotros, para la estadística, generamos para colaborar en el proyecto de leyendas de dropping, nosotros encontramos unos puntos digamos, estadísticos importantes, que nosotros también quisiéramos empezar a mover por medio de este tipo de de de notificaciones y por medio de este canal y es el hecho de, primero, lograr hacer una activación, pero no solo quedarnos en una activación, sino que las estadísticas nos muestran que si nosotros logramos que esa persona en el primer mes haga diez órdenes, nosotros podemos disminuir el índice de deserción de de la plataforma. Si nosotros logramos que esas personas, además de las diez órdenes, puedan llegar a cien órdenes en el primer mes,
+- **[16:15] John Ceron Arboleda:** estadísticamente hablando, vamos a lograr que
+- **[16:15] John Ceron Arboleda:** que el churn baje si estadísticamente llegamos a trescientos. Estos son datos
+- **[16:15] John Ceron Arboleda:** reales de las estadísticas de drop y los que les estoy dando.
+- **[16:15] John Ceron Arboleda:** Si llegamos a trescientos, logramos que esa persona
+- **[16:15] John Ceron Arboleda:** además, se quede seis meses, pero además de de, con trescientas órdenes, ya
+- **[16:15] John Ceron Arboleda:** se considera una persona que está, digamos,
+- **[16:15] John Ceron Arboleda:** manejando dropi o el dropshipping,
+- **[16:15] John Ceron Arboleda:** el dropshipping como un método de de de de trabajo, de empleo. Entonces, es importante que nosotros podamos, así como lo dice Santiago,
+- **[16:15] John Ceron Arboleda:** para mover los indicadores, tener en cuenta estas
+- **[16:15] John Ceron Arboleda:** estadísticas y, sobre todo, estos momentos de la operación. Entonces,
+- **[16:15] John Ceron Arboleda:** puede ser activación, es decir, pasa tu primera orden. De hecho,
+- **[16:15] John Ceron Arboleda:** hemos considerado un proyecto de rifas,
+- **[16:15] John Ceron Arboleda:** que impliquen el hecho de que una persona que no ha hecho orden
+- **[16:15] John Ceron Arboleda:** haga su primera orden y cuyo objetivo es que conozca
+- **[16:16] John Ceron Arboleda:** el ecosistema, que pase una orden, que se identifique con cada uno de los elementos de la
+- **[16:16] John Ceron Arboleda:** de dropping con esa primera orden y participe en unas rifas.
+- **[16:16] John Ceron Arboleda:** Pero posterior a eso,
+- **[16:16] John Ceron Arboleda:** todos los mensajes o notificaciones o todo el proceso en
+- **[16:16] John Ceron Arboleda:** o en cualquier otra parte, debe llevarlo a diez órdenes, debe llevarlo a
+- **[16:16] John Ceron Arboleda:** cien órdenes y debe llevarlo a trescientas órdenes,
+- **[16:16] John Ceron Arboleda:** ¿sí?, en un tiempo más o menos de seis meses.
+- **[16:16] John Ceron Arboleda:** Entonces, es muy importante y quería comentar
+- **[16:16] John Ceron Arboleda:** esto, porque es otra parte de la célula grow
+- **[16:16] John Ceron Arboleda:** en donde buscamos mover los indicadores de de crecimiento, con estos hitos o estos momentos de de trabajo del dropship.
+- **[16:16] Jose Hurtado:** Adicional a eso, bueno, creo que
+- **[16:16] Jose Hurtado:** debemos ir como como empalmando, y creo que coincidimos
+- **[16:16] Jose Hurtado:** seguramente Santiago, Enrique, John,
+- **[16:16] Jose Hurtado:** Alejandra, María, todos,
+- **[16:17] Jose Hurtado:** De verdad, el proceso de ese que ustedes están considerando,
+- **[16:17] Jose Hurtado:** podemos empalmarlo con lo que nosotros ya venimos haciendo, como dice Enrique.
+- **[16:17] Jose Hurtado:** ¿Cuál sería la ruta?
+- **[16:17] Jose Hurtado:** No sé hasta qué punto Santi sea
+- **[16:17] Jose Hurtado:** se pueda como segmentar o automatizar los mensajes dependiendo
+- **[16:17] Jose Hurtado:** el momento o la situación del dropshipping, ¿verdad?, ¿a qué me refiero? Lo que decía es que
+- **[16:17] Jose Hurtado:** tiene diez órdenes y demás. Creo que en principio seguramente va a ser un tema como muy genérico. Aquí la aquí lo que debemos buscar o articular es qué, pienso yo, Nosotros desde el área de group ya, como menciona John, ya digamos que tenemos
+- **[16:17] Jose Hurtado:** cierta información
+- **[16:17] Jose Hurtado:** relacionada a Órdenes, Específicamente Órdenes Y Demás, Y Nivel Hasta Nivel Del Del Del Dropshipper. En Argentina estamos haciendo ese proceso de onboarding
+- **[16:17] Jose Hurtado:** que se hace a través del CRM. Entonces, la ruta es con el tema de los de las métricas, con Enrique del CRM,
+- **[16:18] Jose Hurtado:** validar y disparar desde el CRM estas
+- **[16:18] Jose Hurtado:** que deben hacerse seguramente de desde desde el CRM.
+- **[16:18] Jose Hurtado:** Y como sugerencia,
+- **[16:18] Jose Hurtado:** ver en la medida de enviarlos por WhatsApp. ¿Esto por qué?
+- **[16:18] Jose Hurtado:** Por simplemente por el tema de los indicadores de de
+- **[16:18] Jose Hurtado:** apertura, un correo se abre muchísimo menos que que
+- **[16:18] Jose Hurtado:** que que un WhatsApp. Entonces,
+- **[16:18] Jose Hurtado:** creo que debemos
+- **[16:18] Jose Hurtado:** empalmar, articularnos para revisar
+- **[16:18] Jose Hurtado:** este este ejercicio de cómo lo lo lo vamos enviando, por qué.
+- **[16:18] Jose Hurtado:** Porque a mí, la verdad, el poder enviar las notificaciones
+- **[16:18] Jose Hurtado:** me parece importante, me gusta mucho. Es más,
+- **[16:18] Jose Hurtado:** eso lo vimos en la célula pasada y y por eso
+- **[16:18] Jose Hurtado:** abrimos este espacio para que nos empecemos como a articular todos
+- **[16:18] Jose Hurtado:** en cómo empezamos a hacer estas acciones.
+- **[16:18] Jose Hurtado:** ¿Listo? Entonces, la ruta,
+- **[16:19] Jose Hurtado:** debe ser WhatsApp, creería yo, a través del
+- **[16:19] Jose Hurtado:** a través del CRM con Enrique, y con la data
+- **[16:19] Jose Hurtado:** que nosotros ya desde Growth estamos logrando como
+- **[16:19] Jose Hurtado:** extraer o tener para cada uno de los usuarios.
+- **[16:19] Jose Hurtado:** Ahora, el cómo y cómo cómo lo vamos a hacer
+- **[16:19] Jose Hurtado:** obviamente, hay un tema de de de de revisión de copies y demás,
+- **[16:19] Jose Hurtado:** pero
+- **[16:19] Jose Hurtado:** sí empecemos como a definir como prioridades, y aquí ya entra
+- **[16:19] Jose Hurtado:** pues, como una parte comercial fuerte de qué
+- **[16:19] Jose Hurtado:** consideramos debemos enviarle
+- **[16:19] Jose Hurtado:** en principio, para que mueva o tenga el impacto en la activación.
+- **[16:19] Jose Hurtado:** ¿Listo?
+- **[16:19] Jose Hurtado:** María.
+- **[16:19] Maria Jose Calderon:** Bueno, por una parte, ya encontré el tema de los correos
+- **[16:19] Maria Jose Calderon:** Esto, pues, no no se ha actualizado hace dos meses, entonces, pues,
+- **[16:19] Maria Jose Calderon:** no sabría en qué estado se, pues, se encuentra.
+- **[16:19] Maria Jose Calderon:** Esto lo estaba llevando a cabo Paola.
+- **[16:20] Maria Jose Calderon:** Entonces, pues igual yo se las voy a compartir.
+- **[16:20] Maria Jose Calderon:** Claro, tienen toda mi disposición para hacer la revisión de los copies, para que revisemos, pues entonces,
+- **[16:20] Maria Jose Calderon:** la voz y tono que se está llevando a cabo, para que esté acorde, pues, todo el tema de
+- **[16:20] Maria Jose Calderon:** imagen e identidad corporativa, pues, que llevamos es de comunicaciones,
+- **[16:20] Maria Jose Calderon:** Asimismo, pues, yo tenía una duda y quería preguntarles
+- **[16:20] Maria Jose Calderon:** aquí cuando estamos, digamos, en el segmento de dropshippers,
+- **[16:20] Maria Jose Calderon:** se está teniendo en cuenta los sub perfiles que se puede tener de la cuenta de la
+- **[16:20] Maria Jose Calderon:** tienda del dropshipper, o todo iría a ese ese perfil inicial?
+- **[16:20] Maria Jose Calderon:** O también le estaría llegando a a los perfiles de alguna manera.
+- **[16:20] Maria Jose Calderon:** No sé.
+- **[16:20] Alejandra Melo:** Nosotros Bien.
+- **[16:20] Yo:** Dale, dale.
+- **[16:20] Jose Hurtado:** Dale, Santos.
+- **[16:20] Yo:** Nosotros desde desde por
+- **[16:20] Yo:** el tipo de usuarios que estaríamos atendiendo,
+- **[16:20] Yo:** en donde
+- **[16:20] Yo:** como lo estamos viendo, no no no serían los que más venden, es decir, no serían, no sé, los
+- **[16:20] Yo:** leyendas, por ejemplo,
+- **[16:20] Yo:** no entraríamos
+- **[16:21] Yo:** a a detallar el rol que tenga, es decir, cuando se creen más roles sobre una cuenta, sobre una
+- **[16:21] Yo:** tienda,
+- **[16:21] Yo:** diferenciar la notificación,
+- **[16:21] Yo:** justamente como son
+- **[16:21] Yo:** dropshippers que apenas están iniciando en sus en sus órdenes y que son los que más nos interesa
+- **[16:21] Yo:** retener
+- **[16:21] Yo:** para que pasen, por lo menos, esa
+- **[16:21] Yo:** esa esa barrera, ¿sí?,
+- **[16:21] Yo:** que va a evitar que luego se puedan retirar de plataforma
+- **[16:21] Yo:** Lo haríamos con con usuarios o con tiendas que no tengan más, pues, de un usuario, realmente.
+- **[16:21] Yo:** Por ahora, no hemos... Pero pero estaría dentro de lo que de lo que les comentaba ahora.
+- **[16:21] Yo:** Empezar a entender cuando una notificación funciona más que otra,
+- **[16:21] Yo:** y si no está funcionando, qué puede ser, y puede que ahí entren
+- **[16:21] Yo:** tal cual eso, más o de que
+- **[16:21] Yo:** sé, es que le estamos igual hablando de forma muy general,
+- **[16:21] Yo:** como si fuera un único usuario, de pronto, sí necesitamos, entonces, es
+- **[16:21] Yo:** segmentarlos y que, por tipo de usuario dentro de una sola tienda, se se
+- **[16:21] Yo:** se llega una notificación diferenciada. Pero eso ya lo haríamos
+- **[16:22] Yo:** más sobre plataforma,
+- **[16:22] Yo:** y ahí, y por eso lo importante es de capturar la data ahora, que es sobre WhatsApp.
+- **[16:22] Yo:** Esos son los hallazgos que hemos, o sea, WhatsApp termina siendo el producto,
+- **[16:22] Yo:** siendo el instrumento, que
+- **[16:22] Yo:** en el camino vamos a lograr mover el indicador, ojalá,
+- **[16:22] Yo:** ¿sí?, pero nuestro propósito y intención final es realmente poder capturar la data,
+- **[16:22] Yo:** para que el módulo de notificaciones, que sí va ser el permanente dentro aplicación,
+- **[16:22] Yo:** y que seguramente va a también tomarse desde
+- **[16:22] Yo:** el app de Dropi,
+- **[16:22] Yo:** y cualquier otra vertical,
+- **[16:22] Yo:** pues ya está alineado con los hallazgos, es como lo más importante para nosotros.
+- **[16:22] Enrique Manuel López Sánchez:** Santi, equipo, yo estoy, bueno, revisando la
+- **[16:22] Enrique Manuel López Sánchez:** ese documento lo pueden compartir,
+- **[16:22] Enrique Manuel López Sánchez:** porque me parece interesante lo siguiente,
+- **[16:22] Enrique Manuel López Sánchez:** Dentro de del del catálogo de de eventos que que que veo acá, hay unos que que se pueden implementar rápidamente dentro del CRM, por ejemplo. Nosotros dentro del CRM, sé si ustedes lo saben, pero todos los países hacen una gestión que es masivos para acelerar el proceso de confirmación de órdenes después de que un cierto tiempo el dropshiper no las ha confirmado. Sino que ellos, ¿cómo lo hacen actualmente? Lo hacen de forma muy manual, descargan un BI ¿sí?, hacen una macro, extraen una base de datos, la pegan en un Excel que nosotros te hemos comentado con el CRM, y ahí disparan
+- **[16:23] Enrique Manuel López Sánchez:** un mensaje de notificación diciéndoles al al y acá tú tienes
+- **[16:23] Enrique Manuel López Sánchez:** ordenes pendiente de confirmación.
+- **[16:23] Enrique Manuel López Sánchez:** Ese proceso se ha mantenido
+- **[16:23] Enrique Manuel López Sánchez:** porque se demostró que desde cuando iniciamos
+- **[16:23] Enrique Manuel López Sánchez:** la tasa de movilización aumentó
+- **[16:23] Enrique Manuel López Sánchez:** no sé cuántos puntos, o sea, la tiene directamente Growthbox,
+- **[16:23] Enrique Manuel López Sánchez:** precisamente por el por por la presión que se le hace al dropshipper después de ese de eso
+- **[16:23] Enrique Manuel López Sánchez:** de esa mensajería.
+- **[16:23] Enrique Manuel López Sánchez:** Por ejemplo, yo veo que ahí la tienes,
+- **[16:23] Enrique Manuel López Sánchez:** ahí tienes uno que dice orden pendiente confirmación.
+- **[16:23] Enrique Manuel López Sánchez:** Entonces, ¿qué problema tenemos para escalar esa esa solución? Que no tenemos data automática.
+- **[16:24] Enrique Manuel López Sánchez:** Será posible que, por ejemplo, en este caso,
+- **[16:24] Enrique Manuel López Sánchez:** ustedes tienen planteado este tema de las órdenes pendientes de confirmación
+- **[16:24] Enrique Manuel López Sánchez:** lo podemos colectar al proceso que tenemos actualmente para evitar que el comercial
+- **[16:24] Enrique Manuel López Sánchez:** le toque descargar esa data de Score BI,
+- **[16:24] Enrique Manuel López Sánchez:** así
+- **[16:24] Enrique Manuel López Sánchez:** reducir un poco la fricción de comunicación para que la comunicación sea lo más
+- **[16:24] Enrique Manuel López Sánchez:** en tiempo real posible,
+- **[16:24] Alejandra Melo:** Santi, ¿tú sabes si eso se puede hacer?
+- **[16:24] Yo:** Este,
+- **[16:24] Yo:** estoy pensándolo.
+- **[16:24] Jose Hurtado:** Y eso es
+- **[16:24] Jose Hurtado:** fundamental en el proceso, el la confirmación.
+- **[16:24] Jose Hurtado:** Y más porque porque entre las estadísticas, por ejemplo, que mencionaba yo, muchachos,
+- **[16:24] Jose Hurtado:** todos sabemos el tema de activación, pero dentro de ese proceso de activación,
+- **[16:24] Jose Hurtado:** hay un número muy importante de dropshipper, que se activan y si y su orden no son no son entregadas. Y de seguro, el el la razón de que sus órdenes sean no sean entregadas es que no no hacen un proceso de confirmación correcto.
+- **[16:25] Yo:** O sea, yo yo sé
+- **[16:25] Yo:** como recapitulando conversaciones que tuve hace poco,
+- **[16:25] Yo:** Hay hay mucha información,
+- **[16:25] Yo:** que nosotros vamos a poder recibir una vez
+- **[16:25] Yo:** y no sé si es lo que preguntabas, Enrique, pero una vez de
+- **[16:25] Yo:** desarrollo nos entregue unas APIs. Esa API está el API de órdenes, de dropshippers,
+- **[16:25] Yo:** de catálogo.
+- **[16:25] Yo:** Esa API está pendiente por entrega,
+- **[16:25] Yo:** Por eso es que desde el principio, como que hemos hablado, mientras no esté esa información ya tan granular,
+- **[16:25] Yo:** pues nos toca hacer notificaciones generales para poder ser mucho más
+- **[16:25] Yo:** eficientes en la comunicación, y que yo le diga,
+- **[16:25] Yo:** oiga, Enrique, tiene cinco cinco órdenes pendientes por confirmar, entre y gestionenlas, ¿sí?, el link que entre. Mientras no tengamos eso, nos toca hacer más product marketing, ¿cierto?, de Recuerda que en el módulo vas a poder gestionar la cita, Y en y lo mismo, con tu Pero no te estoy dando un dato específico ni te estoy diciendo no estoy diciendo, no te estoy afirmando que tienes un una falla, un error, una novedad, te estoy recordando que debes gestionarlas para evitar inconvenientes y sacarle valor a la plata Pero, por ahora, como lo tenemos nosotros, no tenemos de dónde mapearlo. No sé si eso es lo que está
+- **[16:26] Alejandra Melo:** No hay manual.
+- **[16:26] Yo:** preguntando.
+- **[16:26] Enrique Manuel López Sánchez:** Más que preguntarlo, porque sé sé sé cómo está ese tema, porque dentro de
+- **[16:26] Enrique Manuel López Sánchez:** de otro proyecto que estamos trabajando con Growth Ops,
+- **[16:26] Enrique Manuel López Sánchez:** que se llama dropshipper tres sesenta,
+- **[16:26] Enrique Manuel López Sánchez:** vamos a trabajar tres
+- **[16:26] Enrique Manuel López Sánchez:** tres puntos o tres fases fundamentales
+- **[16:26] Enrique Manuel López Sánchez:** en el proceso de de de mantenimiento y y reactivación de de del chip.
+- **[16:26] Enrique Manuel López Sánchez:** Uno,
+- **[16:26] Enrique Manuel López Sánchez:** es
+- **[16:26] Enrique Manuel López Sánchez:** la caracterización de una base de datos gigantesca que tenemos
+- **[16:26] Enrique Manuel López Sánchez:** que desconocemos quiénes son y por qué nunca han vendido en dropping,
+- **[16:26] Enrique Manuel López Sánchez:** hay un proyecto
+- **[16:27] Enrique Manuel López Sánchez:** engloba estas tres fases que le voy a mencionar. Uno,
+- **[16:27] Enrique Manuel López Sánchez:** es la caracterización de dropshipper,
+- **[16:27] Enrique Manuel López Sánchez:** para eso hay un hay hay hay un proyecto en el que se van a disparar mensajes
+- **[16:27] Enrique Manuel López Sánchez:** llamadas automatizadas, porque
+- **[16:27] Enrique Manuel López Sánchez:** quién, qué asesor se va a se va a poner a llamar trece mil personas.
+- **[16:27] Enrique Manuel López Sánchez:** Ninguno, ¿sí? Entonces vamos a utilizar un tema de llamadas con IA para poder contactar y caracterizar la mayor cantidad de gente posible, para poder entender qué está pasando con esos de los shippers que se registraron en un en un cierto
+- **[16:27] Enrique Manuel López Sánchez:** periodo de tiempo y nunca hicieron una orden, o por lo menos hicieron una orden o unas pocas órdenes
+- **[16:27] Enrique Manuel López Sánchez:** y desactivaron o o dejaron de hacerlo desde endropi.
+- **[16:27] Enrique Manuel López Sánchez:** Segundo,
+- **[16:27] Enrique Manuel López Sánchez:** el tema del cuidado de campañas.
+- **[16:27] Enrique Manuel López Sánchez:** Entonces, sabemos que
+- **[16:27] Enrique Manuel López Sánchez:** un otro shipper que manejan
+- **[16:27] Enrique Manuel López Sánchez:** un porcentaje alto de de de de órdenes, lo que llaman el Pareto comercial,
+- **[16:27] Enrique Manuel López Sánchez:** ¿sí?
+- **[16:27] Enrique Manuel López Sánchez:** Para poder hacerle el cuidado de campañas de forma automatizada, es decir,
+- **[16:27] Enrique Manuel López Sánchez:** sabemos que hay mucha gente
+- **[16:27] Enrique Manuel López Sánchez:** que vende el mismo producto y el mismo producto lo provee un mismo proveedor y
+- **[16:27] Enrique Manuel López Sánchez:** entonces, para evitar que un dropshipper se quede sin stock y que
+- **[16:28] Enrique Manuel López Sánchez:** proveedor también se quede sin stop y no afectemos el número de órdenes que generan esa
+- **[16:28] Enrique Manuel López Sánchez:** ese pareto
+- **[16:28] Enrique Manuel López Sánchez:** genera
+- **[16:28] Enrique Manuel López Sánchez:** el mayor porcentaje de órdenes dentro de drop.
+- **[16:28] Enrique Manuel López Sánchez:** ¿Sí?
+- **[16:28] Enrique Manuel López Sánchez:** Tercero, el tema de el seguimiento a las confirmaciones de los pedidos.
+- **[16:28] Enrique Manuel López Sánchez:** Que es hoy en día se está haciendo, como te dije, manual, en todos los países se da
+- **[16:28] Enrique Manuel López Sánchez:** todos los días, es es más, eso es el proceso mínimo, si tiene que ser tres veces a la semana,
+- **[16:28] Enrique Manuel López Sánchez:** pero en todos los países se hace diario, en Colombia, Argentina, México,
+- **[16:28] Enrique Manuel López Sánchez:** Paraguay, bueno,
+- **[16:28] Enrique Manuel López Sánchez:** la lista ya la conoce.
+- **[16:28] Enrique Manuel López Sánchez:** Entonces, es cómo evitar que eso se haga manual y que se eso se dispare directamente en
+- **[16:28] Enrique Manuel López Sánchez:** Entonces, cada cada día se hace el paneo de las órdenes que dejaron de confirmar de
+- **[16:28] Enrique Manuel López Sánchez:** lo menos, veinticuatro horas antes,
+- **[16:28] Enrique Manuel López Sánchez:** para acelerar el proceso y evitar
+- **[16:28] Enrique Manuel López Sánchez:** que eso se siga haciendo manual como hoy en día está sucediendo.
+- **[16:28] Enrique Manuel López Sánchez:** Entonces, esas esas tres cosas que te acabo de mencionar hacen parte del proyecto que
+- **[16:28] Enrique Manuel López Sánchez:** denominó
+- **[16:28] Enrique Manuel López Sánchez:** dropshipper tres sesenta, ¿sí?
+- **[16:28] Participante:** Para trabajar. Entonces,
+- **[16:28] Participante:** creo que eso
+- **[16:29] Participante:** colinda mucho con lo que, bueno, algunos eventos que tú
+- **[16:29] Participante:** tienes ahí ahí dentro y, obviamente, con la
+- **[16:29] Participante:** con el stopper que hoy en día tenemos nosotros, que también lo tienen ustedes,
+- **[16:29] Participante:** es la API para consultar esa información.
+- **[16:29] Participante:** Es más que todo para que tengamos un poco de conocimiento
+- **[16:29] Participante:** general de lo que se está trabajando en esa área a nivel de dropshipper.
+- **[16:29] Yo:** Le
+- **[16:29] Yo:** Listo, una
+- **[16:29] Yo:** me me queda superclaro, y gracias por toda esa información, porque definitivamente no no la teníamos.
+- **[16:29] Participante:** No.
+- **[16:29] Yo:** Y que nos sirvió un montón.
+- **[16:29] Yo:** ¿Les parece si definimos como ya pasos puntuales a seguir?
+- **[16:29] Yo:** Que, o sea,
+- **[16:29] Participante:** ¿Cuál sería esa fase número uno?
+- **[16:29] Yo:** Exacto.
+- **[16:29] Participante:** En cuenta que, pues, no tenemos todavía las APIs.
+- **[16:29] Participante:** Entonces, me imagino que esto sería algo como muy manual, ¿no?
+- **[16:29] Participante:** ¿No?
+- **[16:29] Participante:** Eso
+- **[16:29] Participante:** te decía, porque es que sin API esto se vuelve un
+- **[16:29] Yo:** Yo creo
+- **[16:29] Participante:** un poco complicado porque son muchos eventos.
+- **[16:29] Participante:** Yo
+- **[16:29] Yo:** Yo creo que termina siendo lo lo lo viable y
+- **[16:29] Yo:** ustedes, ¿qué me dicen? Es
+- **[16:30] Yo:** generemos... Ay, alejada, nosotros ya teníamos los los mensajes más
+- **[16:30] Yo:** los mensajes generales, ¿no?, los mensajes como más de
+- **[16:30] Yo:** alerta, no pasa nada, pero verifique por si acaso.
+- **[16:30] Yo:** Que que lleven al al
+- **[16:30] Yo:** al usuario a validar si tiene novedades,
+- **[16:30] Yo:** a qué revise transportadores.
+- **[16:30] Yo:** Hay una variedad ya ahí importante.
+- **[16:30] Yo:** Tenemos las listas de usuarios que sabemos que están presentando
+- **[16:30] Yo:** no están vendiendo suficiente, están cayendo en ventas, podrían vender más, bueno.
+- **[16:30] Participante:** I guess
+- **[16:30] Yo:** Hay una identificación, es de usuario, ¿cierto?
+- **[16:30] Participante:** Ay, dios, perdón.
+- **[16:30] Yo:** ¿Hay hay hay una identificación identificación de usuarios
+- **[16:30] Yo:** Podríamos, tomemos esa lista. Si es de forma manual, claro,
+- **[16:30] Yo:** es, venga, son un bloque, supongamos, igual de trescientos usuarios,
+- **[16:30] Yo:** disparemos estas notificaciones a estos trescientos usuarios. Igual, de nuestra
+- **[16:30] Yo:** lado, también está en monitorear el cómo responden,
+- **[16:30] Yo:** para luego tomar decisiones sobre sobre también el diseño que estamos haciendo
+- **[16:30] Yo:** en dropping, ¿no? Por ahora, llámanos con eso.
+- **[16:31] Yo:** ¿Les parecería? O sea, es manual, pero, pues, igual nos sirve para empezar a a
+- **[16:31] Yo:** acercarnos un poco más a la realidad de cómo activa o no una notificación.
+- **[16:31] Yo:** Y hay diferentes plantillas ya.
+- **[16:31] Enrique Manuel López Sánchez:** Yo yo yo me sumo a eso
+- **[16:31] Yo:** Okay.
+- **[16:31] Enrique Manuel López Sánchez:** pero yo le quitaría lo de la orden, porque eso ya se está haciendo.
+- **[16:31] Enrique Manuel López Sánchez:** Eso chocaría un poco con con el proceso que ya está establecido en todos los países.
+- **[16:31] Yo:** Okay. Okay.
+- **[16:31] Participante:** Ese no lo haría porque
+- **[16:31] Participante:** lo más probable es que esos trescientos usuarios que tú mencionas están dentro de la base de datos
+- **[16:31] Yo:** Ah, vale, listo.
+- **[16:31] Participante:** porque ellos descargan la base de datos completa.
+- **[16:31] Participante:** En Colombia, no, una una base de datos
+- **[16:31] Participante:** en Colombia puede puede estar alrededor de
+- **[16:31] Participante:** las diez mil órdenes
+- **[16:31] Participante:** diarias,
+- **[16:31] Participante:** que se reparten entre x cantidad de usuarios. Entonces,
+- **[16:31] Participante:** por poner, perdón, ahí
+- **[16:31] Participante:** bueno, si dijo un número loco,
+- **[16:31] Participante:** no me no me presten mucho atención porque obviamente, pues no me pongo a revisar bases de datos por
+- **[16:31] Participante:** base de datos, ¿no?, pero sí son muchas.
+- **[16:31] Participante:** Muchas. Entonces, posiblemente dentro de esa base de datos que descargan en Colombia,
+- **[16:32] Participante:** están los trescientos que tú mencionas.
+- **[16:32] Participante:** Las demás
+- **[16:32] Participante:** se podría revisar, el tema es
+- **[16:32] Participante:** cuál sería el disparador, porque aquí veo que hay variables de cantidad,
+- **[16:32] Participante:** ejemplo, estamos en la orden tal,
+- **[16:32] Participante:** podría corresponder a una compra duplicada.
+- **[16:32] Participante:** Entonces, me imagino, bueno, como tú lo mencionas, me imagino que tú descargaras esa data y
+- **[16:32] Participante:** y
+- **[16:32] Participante:** listo, y se les envía, pues.
+- **[16:32] Participante:** Totalmente posible. Es más, es un este mismo proceso
+- **[16:32] Participante:** lo puede, o sea, podemos duplicar el que tenemos
+- **[16:32] Participante:** y ustedes con una base de datos cargada
+- **[16:32] Participante:** se pueden disparar estos mensajes en el momento en que el comercial lo haga.
+- **[16:32] Participante:** Podemos delegar a que el área comercial haga esta esta esta esta gestión
+- **[16:32] Participante:** y mirar una línea base
+- **[16:32] Participante:** de esos trescientos, a ver cómo estos estos mensajes, por ejemplo, ayudaron a
+- **[16:32] Participante:** disminuir la
+- **[16:32] Participante:** la tasa de anulación. No sé, hay que mirar como cuál es el objetivo de cada mensaje para que tengamos una
+- **[16:32] Participante:** métrica de de seguimiento
+- **[16:32] Participante:** hacia hacia hacia qué tan efectivo está haciendo el mensaje, ¿no?
+- **[16:32] Yo:** Entonces, ¿les parecería así
+- **[16:33] Yo:** más acoto? O sea, un paso intermedio ahí es
+- **[16:33] Yo:** que creo es lo que viste ahí, Enrique, les compartimos el Excel,
+- **[16:33] Participante:** Sí, va decir.
+- **[16:33] Yo:** todos revisamos el contenido,
+- **[16:33] Yo:** llegamos a comentarios, y
+- **[16:33] Yo:** tenemos el consenso de
+- **[16:33] Yo:** mensaje por mensaje
+- **[16:33] Yo:** que estemos apuntando bien,
+- **[16:33] Yo:** que estemos expresándolo bien, que esté alineado con comunicaciones, o sea, podemos ponerse como pasen
+- **[16:33] Yo:** un un una fase intermedia.
+- **[16:33] Participante:** Sí, de acuerdo, de acuerdo.
+- **[16:33] Yo:** ¿Les parece?
+- **[16:33] Yo:** Listo.
+- **[16:33] Participante:** Yo
+- **[16:33] Participante:** iba a preguntar si ya, por ejemplo, lo de órdenes está siendo ya hay data sobre eso.
+- **[16:33] Participante:** Que puedan compartir? Sí, si hay data, pero esa data no la tengo en mis manos, o no no no la manejo yo. Eso eso esa data la tiene Clara Marlon y el y el equipo de Drogox.
+- **[16:33] Participante:** Ah,
+- **[16:33] Participante:** ok.
+- **[16:33] Participante:** Solicitarla, para ver cómo va.
+- **[16:33] Participante:** Listo, yo les comparto, entonces dentro de
+- **[16:33] Participante:** Qué pena, Alex, de Ticker.
+- **[16:34] Participante:** Dale, dale.
+- **[16:34] Participante:** Es
+- **[16:34] Participante:** más, una de las cosas que vamos a
+- **[16:34] Participante:** dentro del proyecto este de de tres sesenta, que está incluido el tema de las órdenes, es mirar
+- **[16:34] Participante:** cómo
+- **[16:34] Participante:** el dropshipper, ¿sí?, es evaluar.
+- **[16:34] Participante:** A nivel de tiempo
+- **[16:34] Participante:** cómo el dropshipper
+- **[16:34] Participante:** ¿sí?, a nivel específico,
+- **[16:34] Participante:** logra disminuir la cantidad de de órdenes mediante confirmación
+- **[16:34] Participante:** en un lapso de de tiempo determinado con el con después de que se envíe
+- **[16:34] Participante:** su mensaje. Y a nivel general,
+- **[16:34] Participante:** ¿sí?,
+- **[16:34] Participante:** ¿cómo va la evolución
+- **[16:34] Participante:** de todos los otros shippers que empezamos a medir a partir de cierta fecha?
+- **[16:34] Participante:** Con cierta cantidad de órdenes ha disminuido
+- **[16:34] Participante:** en órdenes pendiente de confirmación, porque de esa manera es que podemos podemos medir el impacto
+- **[16:34] Participante:** Pero eso también lo vas a meter en otros. Ahorita es complicado porque
+- **[16:34] Participante:** como se hacen con base de datos manuales,
+- **[16:34] Participante:** llevar el tracking de eso
+- **[16:34] Participante:** vuelve un poco complejo, pero
+- **[16:34] Participante:** ya con el nuevo sistema la idea es tenerlo directamente desde la API de dropping,
+- **[16:34] Participante:** es medir eso, si
+- **[16:34] Participante:** cómo hemos disminuido
+- **[16:35] Participante:** la cantidad de reportes de órdenes mediante confirmación después de cierto tiempo que se activó el sistema,
+- **[16:35] Participante:** y así medimos la tasa de efectividad
+- **[16:35] Participante:** en cuanto al tema de la movilización y todo eso.
+- **[16:35] Yo:** Listo.
+- **[16:35] Yo:** Por mi parte, no es más, creo que igual
+- **[16:35] Yo:** me queda claro a bastantes puntos a los que llegamos acá.
+- **[16:35] Yo:** No se aleja algo que tengamos pendiente como por resolver.
+- **[16:35] Yo:** Desde producto.
+- **[16:35] Participante:** No.
+- **[16:35] Participante:** No, no. ¿Saben? Voy, más bien, como compartirles, entonces, esta URL. Este spreadsheets, como para que lo revisemos. Y ahí vamos viendo. ¿Les parece? De
+- **[16:35] Participante:** una equipo. Listo.
+- **[16:35] Participante:** Alejandra, ¿tú me puedes
+- **[16:35] Participante:** mandar este documento? Yo yo lo voy revisando.
+- **[16:35] Participante:** Sí, claro, lo voy a enviar.
+- **[16:36] Participante:** Vale, muchas gracias.
+- **[16:36] Participante:** De una.
+- **[16:36] Participante:** Vale, que estés muy bien, equipo. Voy a, entonces, quedo pendiente con lo de Marlon, voy a escribirle.
+- **[16:36] Participante:** Para ver si nos puede compartir esa data.
+- **[16:36] Participante:** Que estén muy bien. Chao,
+- **[16:36] Yo:** Yeah.
+- **[16:36] Participante:** que
+- **[16:36] Participante:** estén
+- **[16:36] Participante:** bien.
+- **[16:36] Participante:** Hasta luego.
+- **[16:36] Participante:** Feliz día.

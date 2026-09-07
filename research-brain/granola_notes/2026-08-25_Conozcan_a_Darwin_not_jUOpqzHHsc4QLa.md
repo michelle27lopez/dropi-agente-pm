@@ -1,0 +1,774 @@
+# Conozcan a Darwin
+
+- **ID:** `not_jUOpqzHHsc4QLa`
+- **Fecha:** 2026-08-25T21:00:00.531Z
+- **Owner:** Santiago Herrera Acosta (santiago.herrera@dropi.co)
+- **URL Granola:** [Ver en Granola](https://notes.granola.ai/d/e8c71afe-cc46-4dda-b124-34cbd7c27d8a)
+- **Asistentes:** Santiago Herrera Acosta, Alejandra Melo, Jaime Guevara, Jose Hurtado, Juan Rojas, Johnj Ceron, Luisc Dominguez
+
+---
+
+## Resumen de la Reunión
+# Darwin: Herramienta Back Office de Producto
+
+- Plataforma centralizada para el equipo de producto: métricas, iniciativas, proyectos y conocimiento en un solo lugar
+- Acceso por célula (sellers, back office, brands, growth, marketing, suppliers), cada una con su propio tablero
+- Autenticación única; datos cargados manualmente vía CSV de Miguel, con webhooks en proceso (Jaime)
+- Repositorio local sincronizado hacia la web; actualización diaria automática para no quedar desactualizado
+- Integrado con Jira y Confluence: creación de tickets, historias de usuario, comentarios y documentación desde los agentes
+- Granola integrado para captura automática de reuniones y actualización de tareas en Jira con aprobación humana previa
+  - Integración construida desde cero por Santiago (la versión de Mitch requería permisos adicionales y se volvía un Frankenstein)
+  - Por ahora corre sobre la licencia de Santiago: cubre reuniones de producto, weekly con María, product labs
+
+# Agentes e Infraestructura
+
+- Múltiples agentes especializados: Discovery, Delivery, Sprint Checklist
+  - Agente de Discovery: árboles de decisión, reconocimiento de problemas, comportamiento de usuarios, frameworks como Jira Discovery Handbook
+  - Agente de Delivery: formatos end-to-end, esquemas de diseño, documentos handoff con criterios de aceptación y flujos
+  - Sprint Checklist: valida avances por sprint e interacción con actores del equipo
+- Los agentes se operan vía Antigravity, Claude Code, GPT/Codex, no desde la interfaz de Darwin (evita costos de tokens)
+- La interfaz de Darwin refleja el output: estado de proyectos, pruebas de concepto, seguimiento por célula
+
+# RPP y Figma
+
+- RPP (Rapid Prototyping Platform): repo separado, conectado a Darwin, manejado por Michelle
+  - Contiene todos los componentes reales de Dropi (front/UI)
+  - Objetivo a futuro: reemplazar Figma por completo; prototipar y entregar directo desde RPP
+- IA para generación automática de prototipos desde tareas de Jira: se ha iterado pero aún no da el resultado esperado
+  - Con más contexto acumulado en los agentes, se espera mayor precisión con el tiempo
+
+# Dropiverse y Próximos Pasos
+
+- Dropiverse: megaproyecto liderado por Marlon, orientado a gerencia (Lucho, Yani)
+  - Módulos: inbox de bloqueos, planificador de OKRs, Kanban de sprints, métricas, organigrama, flujos (reemplaza Lucidchart/Miro/Visio)
+  - Licencia de Visio reemplazada internamente: ahorro de \~$200K/año
+  - Construido en Go (mismo lenguaje que Dropi), facilita integración futura
+  - Workspaces por país y vertical; visual gerencial consolidada para toda la operación
+- Pulso: ya lanzado, primeros envíos manuales realizados hoy; primera posible negociación en curso
+- Alineación pendiente con Marlon para explorar integración entre Darwin y Dropiverse
+
+# Próximos Pasos
+
+- **Coordinar sesión con Marlon para integrar Darwin y Dropiverse**
+
+  Explorar cómo unir o complementar ambas iniciativas, especialmente en APIs y seguimiento de proyectos.
+- **Apoyar el mapeo operativo de Pulso** (Jaime)
+
+  Juan Camilo pidió ayuda para documentar cómo ha evolucionado el flujo operativo desde el lanzamiento.
+
+---
+
+Chat with meeting transcript: [https://notes.granola.ai/t/5d87b889-bb56-40e7-95b7-cb8e75c5465c](https://notes.granola.ai/t/5d87b889-bb56-40e7-95b7-cb8e75c5465c)
+
+## Transcripción Completa (Palabra por Palabra)
+- **[21:02] Juan Camilo Rojas:** One
+- **[21:02] Yo:** Bien, ¿y vos?
+- **[21:02] Juan Camilo Rojas:** bien, todo bien.
+- **[21:02] Juan Camilo Rojas:** Super.
+- **[21:02] Yo:** Bueno, unos unos magnéticos que se una
+- **[21:02] Yo:** los demás, ¿les parece?
+- **[21:02] Juan Camilo Rojas:** Dale.
+- **[21:06] Yo:** Hola, Luis. Hola, John. ¿Cómo van?
+- **[21:07] Yo:** Bueno, mientras ingresa ya José, que creo que es el único que nos falta,
+- **[21:07] Yo:** le estoy compartiendo pantalla. ¿Listo? ¿Cómo van?
+- **[21:08] Yo:** Ok, listo, me confirman cuando esté enviando, por
+- **[21:08] Yo:** Listo, ahí está. De una, gracias.
+- **[21:08] Participante:** Listo, ahí ya.
+- **[21:08] Luis Dominguez:** Ahí ya.
+- **[21:08] Yo:** Bueno,
+- **[21:08] Yo:** esta esta este espacio
+- **[21:08] Yo:** fue más por, creo que fue Juan el que lo el que lo había pedido,
+- **[21:08] Yo:** en un momento en en la sesión, creo que fue la cédula
+- **[21:08] Yo:** en donde se mencionó
+- **[21:08] Yo:** donde se mencionó a Darby, o la usan?
+- **[21:08] Jose Hurtado:** Hola.
+- **[21:08] Yo:** Entonces, se se mencionó a Darwin un poco más dentro de de
+- **[21:08] Yo:** de una de las conversaciones y su su lado un poco de qué era Darwin, es que
+- **[21:08] Yo:** Darwin es el nombre
+- **[21:08] Yo:** yo creo el que se lo puso fue fue
+- **[21:08] Yo:** Jaime.
+- **[21:08] Yo:** Es una herramienta realmente de back office de producto,
+- **[21:08] Yo:** ¿sí?
+- **[21:08] Yo:** Es un producto para el equipo de productos.
+- **[21:08] Yo:** Lo que nosotros hicimos, a través del aporte de varias personas del equipo,
+- **[21:09] Yo:** Fue realmente
+- **[21:09] Yo:** tratar de unificar en un solo, en una sola plataforma,
+- **[21:09] Yo:** todo el conocimiento, iniciativas, métricas y demás que que pudiéramos tener.
+- **[21:09] Yo:** Jaime lo inició con la, tuvo esta iniciativa, yo llegué
+- **[21:09] Yo:** los dos meses de que yo entrara, yo empecé a hacer algunas cosas también de como prototipos
+- **[21:09] Yo:** bajo la línea, pues, del bifecoding,
+- **[21:09] Yo:** y, digamos, que ahí todo empezó a a
+- **[21:09] Yo:** alinearse para que
+- **[21:09] Yo:** en un solo lugar, a través de una sola autenticación,
+- **[21:09] Yo:** Ahí están viendo el el ambiente local, porque estoy haciendo algunas modificaciones, pero
+- **[21:09] Yo:** esto ya está sobre una URL
+- **[21:09] Yo:** donde tenemos acceso, pues, las personas de equipo al producto, product designers y product managers,
+- **[21:09] Yo:** Están todas las células del equipo
+- **[21:09] Yo:** entonces, desde
+- **[21:09] Yo:** sellers, back office, brands, está growth,
+- **[21:10] Yo:** of marketing, suppliers,
+- **[21:10] Yo:** cada una, y dependiendo, pues, el usuario, el correo,
+- **[21:10] Yo:** se
+- **[21:10] Yo:** direcciona a un a una a un tablero,
+- **[21:10] Yo:** cada célula tiene su propio tablero. Esto inició en una forma muy
+- **[21:10] Yo:** una forma como, empezó siendo muy heterogéneo cada célula como que trata de manejar su propio como como más convenía, Sin embargo, ya hemos tratado de estandarizarnos en que la información sea
+- **[21:10] Yo:** en cuanto a cómo se dispone, muy similar.
+- **[21:10] Yo:** Esto no es solamente
+- **[21:10] Yo:** en tema, pues, aquí lo que están viendo claramente son temas métricas, a esta información no.
+- **[21:10] Yo:** Por ahora se ha estado
+- **[21:10] Yo:** cargando manualmente a través de ese
+- **[21:10] Yo:** SV
+- **[21:10] Yo:** que nos entrega Miguel, sin embargo, ya
+- **[21:10] Yo:** Jaime está en el proceso de probar unos webhooks,
+- **[21:10] Yo:** para que esto ya esté sincronizado.
+- **[21:10] Yo:** ¿Listo? El propósito de Darwin, ¿cuál es?
+- **[21:10] Yo:** Además de que sea la herramienta back office del equipo de producto,
+- **[21:10] Yo:** en donde en donde tengamos una única fuente de
+- **[21:11] Yo:** información, esto lo utilizamos también para nuestras reuniones de seguimiento con con María, Aquí también es donde tratamos de disparar diferentes
+- **[21:11] Yo:** flujos de trabajo.
+- **[21:11] Yo:** Esto todavía sigue en construcción a medida que vamos a
+- **[21:11] Yo:** con los diferentes equipos, con ventas, con growth,
+- **[21:11] Yo:** con roof ops, pues vamos incluyendo cosas.
+- **[21:11] Yo:** En principio, tiene tres grandes ejes,
+- **[21:11] Yo:** uno es
+- **[21:11] Yo:** de los tipos de producto convencionales, desde desde el discovery
+- **[21:11] Yo:** hasta el delivery,
+- **[21:11] Yo:** de un producto.
+- **[21:11] Yo:** Está el de RPP, que no está dentro de Darwin, pero está alineado en
+- **[21:11] Yo:** RPs para
+- **[21:11] Yo:** es un proyecto
+- **[21:11] Yo:** aparte que tenemos que lo lo maneja
+- **[21:11] Yo:** Michel Pino,
+- **[21:11] Yo:** para
+- **[21:11] Yo:** para prototipado rápido, que es un
+- **[21:11] Yo:** un clon de drop y que nos sirve a nosotros para prototipar mucho más rápidamente,
+- **[21:11] Yo:** otro es la parte de discovery.
+- **[21:11] Yo:** Realmente,
+- **[21:12] Yo:** aunque hay una interfaz
+- **[21:12] Yo:** como la que están viendo en este momento, donde hay
+- **[21:12] Yo:** métricas, donde están los proyectos abiertos, aquí
+- **[21:12] Yo:** dentro de este, ya algunos lo habrán visto
+- **[21:12] Yo:** no sé si aquí me ahorra dirigir bien o no.
+- **[21:12] Yo:** Está el tablero de la célula,
+- **[21:12] Yo:** el que hemos llevado en otras ocasiones dentro del dentro del weekly,
+- **[21:12] Yo:** con toda la información de en qué están los proyectos y más. Todo eso siempre ha estado dentro de Darwin,
+- **[21:12] Yo:** ¿sí?
+- **[21:12] Yo:** Intención, realmente, ha estado en que nosotros podamos, en una sola interfaz, entonces, poder ubicar todo,
+- **[21:12] Yo:** tener que estarnos moviendo entre Jira, Confluence,
+- **[21:12] Yo:** algún tablero de data de, no sé, de BI,
+- **[21:12] Yo:** todo lo tengamos en un solo lugar.
+- **[21:12] Yo:** Y podamos, entonces, tener todos sus prototipos, ideas, diseños,
+- **[21:12] Yo:** en un solo sitio. Por ejemplo, está el wrap de sellers,
+- **[21:12] Yo:** que ya lo hemos
+- **[21:12] Yo:** visto como en otros espacios, está, entonces, se define en qué etapa están,
+- **[21:12] Yo:** un cuadro de control, ¿sí?, entonces, como la la herramienta de nosotros.
+- **[21:13] Yo:** Y, aparte de eso, está el discovery,
+- **[21:13] Yo:** esto apenas estamos revisando, porque esto es una nueva integración que tenemos.
+- **[21:13] Yo:** Que hace
+- **[21:13] Yo:** que hace sentido más sacial que nosotros podamos estar rápidamente en
+- **[21:13] Yo:** señales del mercado,
+- **[21:13] Yo:** Esto estábamos apenas revisando, apenas oíste y contarte esta esta herramienta sobre la
+- **[21:13] Yo:** Sin embargo, el mayor
+- **[21:13] Yo:** el mayor uso se le hace a través de
+- **[21:13] Yo:** antigravity,
+- **[21:13] Yo:** Todos estamos alineados en que usamos antigravity.
+- **[21:13] Yo:** Sin embargo, pues,
+- **[21:13] Yo:** al final esto está en un repositorio
+- **[21:13] Yo:** que todos los del equipo de producto tenemos
+- **[21:13] Yo:** Pero lo que realmente hace que se mueva todo lo
+- **[21:13] Yo:** que hay detrás de de de esta interfaz, que solamente es para que se pueda
+- **[21:13] Yo:** presentar a servicio como lo estoy haciendo en ese momento, son los agentes y la lógica que
+- **[21:13] Yo:** está debajo de la plataforma. Entonces,
+- **[21:13] Yo:** tenemos múltiples agentes, está el agente de Discovery, entonces, sobre el
+- **[21:13] Yo:** agente de hay unos lineamientos sobre cómo debe actuar el agente,
+- **[21:14] Yo:** Hay unas metodologías aplicadas,
+- **[21:14] Yo:** entonces, está desde árboles de decisión, de reconocimiento de
+- **[21:14] Yo:** problemas,
+- **[21:14] Yo:** Están otras metodologías sobre identificación
+- **[21:14] Yo:** comportamiento de usuarios,
+- **[21:14] Yo:** son agentes de inteligencia que nos, inteligencia artificial que nos ayudan
+- **[21:14] Yo:** poco a agilizar el proceso y y
+- **[21:14] Yo:** todo el todo el flujo de discovery bajo bajo unos frameworks como el de
+- **[21:14] Yo:** Jira Discovery Handbook,
+- **[21:14] Yo:** están todos estos protocolos, ¿sí?
+- **[21:14] Yo:** Protocolos o, digamos, llamémosle ceremonias un poco internas,
+- **[21:14] Yo:** que se hacen desde producto,
+- **[21:14] Yo:** luego ya pasa internamente, nosotros tenemos unas unos lineamientos con
+- **[21:14] Yo:** con el equipo de desarrollo
+- **[21:14] Yo:** en donde trabajamos a través de de unos documentos handoff,
+- **[21:14] Yo:** que son justamente esa entrega que le hace el equipo de producto al de desarrollo
+- **[21:14] Yo:** con todos los con todas las pautas, los criterios de aceptación,
+- **[21:15] Yo:** los flujos y demás que debe tener el desarrollo que se espera, nos entreguen.
+- **[21:15] Yo:** Y todo eso se hace a través de los agentes.
+- **[21:15] Yo:** Como
+- **[21:15] Yo:** a través de lo que ustedes están viendo en este momento, no se disparan los agentes aquí no se empiezan a dar indicaciones como si fuera una un software as a service, donde yo
+- **[21:15] Yo:** a través de este, puedo empezar a a
+- **[21:15] Yo:** a gestionar eso. ¿Por qué?
+- **[21:15] Yo:** Porque eso requeriría, pues, ya unos temas de tokens, unos costos,
+- **[21:15] Yo:** nosotros lo hacemos a través directamente de los agentes por
+- **[21:15] Yo:** un ID, por antigravity,
+- **[21:15] Yo:** podría funcionar por un Cloud Code, por GPT, bueno, por Codex,
+- **[21:15] Yo:** Entonces, nosotros lo que hacemos es, aquí solamente tratamos de reflejar
+- **[21:15] Yo:** como el el el output, ¿sí?, qué está en proceso, qué
+- **[21:15] Yo:** detenido,
+- **[21:15] Yo:** el estado interno,
+- **[21:15] Yo:** si hay una prueba de concepto relacionada, esto más hacia poder hacer el seguimiento.
+- **[21:15] Yo:** Algunas ventanas de updates,
+- **[21:15] Yo:** el seguimiento a las diferentes células, que ya se hace por parte
+- **[21:15] Yo:** de de Jaime o de Laura Contreras.
+- **[21:16] Yo:** Y ya hay unos nuevos módulos que se están explorando, todavía no no hemos llegado a
+- **[21:16] Yo:** socializarlo realmente.
+- **[21:16] Yo:** Porque se está justamente construyendo una una interfaz única para todos.
+- **[21:16] Yo:** En donde ya seguramente en las próximas semanas llegaremos a a
+- **[21:16] Yo:** a explorar un poco más qué vamos a encontrar integraciones en
+- **[21:16] Yo:** en el calendario,
+- **[21:16] Yo:** para que sean, pues, pues, yo cada vez más unificado,
+- **[21:16] Yo:** y eso y eso realmente es, ¿sí?
+- **[21:16] Yo:** Déjeme, les comparto
+- **[21:16] Yo:** para que vean un poco cómo el
+- **[21:16] Yo:** de
+- **[21:16] Yo:** la estructura del red de de de del código que está debajo de esto.
+- **[21:16] Yo:** Porque finalmente es un es un repositorio que está en en en nuestros
+- **[21:16] Yo:** computadores, en local, que vamos es actualizando
+- **[21:16] Yo:** hacia hacia la web.
+- **[21:16] Yo:** Ya con, pues, Jaime se reunió claramente con
+- **[21:16] Yo:** como líder del proyecto, con todos los
+- **[21:16] Yo:** con todas las áreas, sobre todo seguridad, para garantizar que no tengamos ningún tipo de ahí con
+- **[21:17] Yo:** con...
+- **[21:17] Yo:** Como está concebido. Entonces, les voy a compartir esta
+- **[21:17] Yo:** parte, un poco para que se entienda qué hay detrás
+- **[21:17] Yo:** por ejemplo, tenemos un agente de de delivery,
+- **[21:17] Yo:** que tiene diferentes
+- **[21:17] Yo:** formas de de de
+- **[21:17] Yo:** actuar, ¿no? Entonces, por ejemplo, está
+- **[21:17] Yo:** el end to end, formato end to end,
+- **[21:17] Yo:** los formatos de diseño, los esquemas de cómo debe verse esto,
+- **[21:17] Yo:** Voy a volver aquí un poquito para que se vea
+- **[21:17] Yo:** sobre todo, que se vea el de
+- **[21:17] Yo:** para que sea, por ejemplo,
+- **[21:17] Yo:** algunas
+- **[21:17] Yo:** Entonces, aquí, no sé, tenemos
+- **[21:17] Yo:** springs checklist, que lo que hace es, entonces, ver
+- **[21:17] Yo:** cómo debería el agente, cada vez que nosotros estamos trabajando sobre un sprint,
+- **[21:17] Yo:** ir reforzando conocimiento
+- **[21:18] Yo:** ir haciendo las diferentes validaciones con los diferentes actores que hay dentro
+- **[21:18] Yo:** del sprint, y cómo interactúa con el equipo,
+- **[21:18] Yo:** Esta herramienta ya
+- **[21:18] Yo:** muchos la tenemos integrada directamente a
+- **[21:18] Yo:** Confluence, entonces, lo que tenemos es claramente una sincronización entre diferentes herramientas.
+- **[21:18] Yo:** Lo que les decía ahora.
+- **[21:18] Yo:** Al final, sí se usan las herramientas sobre que solo que no sobre su
+- **[21:18] Yo:** misma interfaz,
+- **[21:18] Yo:** entonces, nosotros desde acá podemos hacer el envío de
+- **[21:18] Yo:** digamos, las los los comandos para que en Jira igual se cree un ticket, se una historia de usuario, se creen comentarios, se documente, y estamos como en proceso constante de evolución. De hecho, hoy se integró una herramienta, justamente, de de de de seguimiento de reuniones que va documentando cada uno de los avances para en automático ir actualizando las tareas en Jira. Entonces, nosotros así es como estamos automatizando como los procesos de forma interna. ¿Listo? Y, claro, mucho de eso ya también se ha ido propagando los diferentes grupos de trabajo. Entonces, de aquí algunas cosas sé que Jaime que es el que ha estado más más atento a a toda la integración con CRM y demás, Hay muchas cosas que ya están adelantadas justamente con con el CRM, hay bases de
+- **[21:19] Yo:** de datos que va recopilando toda la información,
+- **[21:19] Yo:** y un poco la proyección que se le da a esto
+- **[21:19] Yo:** de una forma muy simplificada,
+- **[21:19] Yo:** es
+- **[21:19] Yo:** lograr que todas esas herramientas, de pronto, ya están
+- **[21:19] Yo:** que ya existen en otros
+- **[21:19] Yo:** en otros dominios, ¿sí?, de de dropping,
+- **[21:19] Yo:** Sí,
+- **[21:19] Yo:** es de es de es de relevancia realmente para el producto, poderlas accionar, pues,
+- **[21:19] Yo:** se puede hacer a través de
+- **[21:19] Yo:** de esta interfaz. Puede que, de pronto, no no haya
+- **[21:19] Yo:** una herramienta, no sé, supongamos, CRM, sea de la gobernanza producto,
+- **[21:19] Yo:** claramente nosotros no no deberíamos poder accionar, disparar un mensaje o
+- **[21:19] Yo:** o generar un correo electrónico,
+- **[21:19] Yo:** pero si si llega hasta, por ejemplo, el, no sé, el
+- **[21:19] Yo:** radicar la solicitud o generar el email
+- **[21:20] Yo:** o enviar el formato más bien.
+- **[21:20] Yo:** Si sí resulta algo mucho más complejo,
+- **[21:20] Yo:** que se pueda generar desde acá mismo, ¿ya?
+- **[21:20] Yo:** Porque ya todo esto empieza a ser un cerebro. Al final, el concepto termina siendo el de cerebro de producto.
+- **[21:20] Yo:** Toda la información
+- **[21:20] Yo:** de los documentos que están en confluence,
+- **[21:20] Yo:** de los tickets en Jira, del histórico,
+- **[21:20] Yo:** del estado de los proyectos, de los avances,
+- **[21:20] Yo:** todo está en un único lugar.
+- **[21:20] Yo:** Y eso elimina también la fricción de
+- **[21:20] Yo:** pues, de la dependencia claramente de de de
+- **[21:20] Yo:** de que, no sé, si alguna persona
+- **[21:20] Yo:** no sé, escojamos en el evento del doce trece,
+- **[21:20] Yo:** bueno, cada fin de semana, pero se necesitara en ese momento alguna información de algún proyecto,
+- **[21:20] Yo:** pues, si la persona no está, no se puede ubicar si está en vacaciones en cualquier licencia,
+- **[21:20] Yo:** pues,
+- **[21:20] Yo:** está existiendo en un único lugar.
+- **[21:20] Yo:** ¿Listo?
+- **[21:20] Yo:** Ese es como
+- **[21:20] Yo:** realmente la la gran
+- **[21:20] Yo:** foto de cómo se ve a a hoy
+- **[21:20] Yo:** Darwin,
+- **[21:20] Yo:** Y esas skills, pues, tienen muchas otras, está las reuniones de
+- **[21:20] Yo:** el diario, justamente para
+- **[21:21] Yo:** por ejemplo, aquí lo que hace es
+- **[21:21] Yo:** hay un árbol de trabajo, también hay una
+- **[21:21] Yo:** de de sincronización, en donde todos los días lo que hace el
+- **[21:21] Yo:** repositorio es estarse actualizando para no irse a quedar
+- **[21:21] Yo:** atrás versus las versiones en en en en, que están colgadas en web.
+- **[21:21] Yo:** ¿Listo?
+- **[21:21] Yo:** Hay diferentes diferentes
+- **[21:21] Yo:** carpetas, digamos, aquí empieza a hacerse una ramificación, pero, por ejemplo, mucho de lo que ustedes
+- **[21:21] Yo:** trabajan, por ejemplo, con José Pineda es, por ejemplo, el rol de leyendas está acá.
+- **[21:21] Yo:** Aquí tiene todo el contexto, el agente, para que cada vez que va a trabajar,
+- **[21:21] Yo:** sobre un prototipo
+- **[21:21] Yo:** supongamos, de leyenda de drop y tiene toda la información cargada.
+- **[21:21] Yo:** ¿Listo?
+- **[21:21] Yo:** Sin tener que estarle dando permanente contexto,
+- **[21:21] Yo:** sobre sobre cada una de las diferentes, no sé, diferentes
+- **[21:21] Yo:** escenarios o variantes que se quieran hacer.
+- **[21:21] Yo:** Aquí está todo, desde algunos recursos gráficos,
+- **[21:22] Yo:** Por ejemplo, déjame ver si aquí encuentro alguno de ellos.
+- **[21:22] Yo:** Entonces, dentro de productos, vamos a ver si aquí hay algunos.
+- **[21:22] Yo:** Creo que este es el de
+- **[21:22] Yo:** por ejemplo, aquí se puede estar encontrando el el el, no sé si lo tiene
+- **[21:22] Yo:** sobre esta ruta.
+- **[21:22] Yo:** Cuál otra.
+- **[21:22] Yo:** No sé, la los logos del el leyendas drople.
+- **[21:22] Yo:** Cada vez que se actualice o haya algún tipo de novedad,
+- **[21:22] Yo:** lo que va a estar haciendo el repositor es
+- **[21:22] Yo:** haciendo la notificación de un cambio de estado,
+- **[21:22] Yo:** y sumado a lo que les digo, herramientas como las de
+- **[21:22] Yo:** las reuniones,
+- **[21:22] Yo:** pues, mandando estados en automático, sin tener que estar dependiendo, entonces, de
+- **[21:22] Yo:** de que todo lo se haga de forma manual. Eso también a nosotros nos ahorra un montón de tiempo,
+- **[21:22] Yo:** y, pues, nos hace ser más eficientes en en muchas tareas, y también, pues,
+- **[21:22] Yo:** evita que pasemos por alto alguna decisión.
+- **[21:22] Yo:** Eso también, claramente, por tema de fiabilidad de cada una de las cosas que hacemos, pues, es
+- **[21:23] Yo:** es excelente, porque
+- **[21:23] Yo:** pronto, en algún
+- **[21:23] Yo:** mal día uno puede, de pronto, omitir alguna
+- **[21:23] Yo:** decisión o comentario que se haya hecho respecto a alguna tarea,
+- **[21:23] Yo:** Y aquí, pues, lo deja lo deja muy bien reflejado sobre
+- **[21:23] Yo:** una
+- **[21:23] Yo:** algún documento en Confluence, ¿sí?
+- **[21:23] Yo:** No sé si es de eso que les les estoy diciendo y, de pronto,
+- **[21:23] Yo:** de pronto dudas o algo que quieran saber, de pronto, más específico.
+- **[21:23] Yo:** Por perdón, el verdad, me comparto antes de que alguien vaya
+- **[21:23] Yo:** a participar.
+- **[21:23] Yo:** Por ejemplo, esto es un Jira,
+- **[21:23] Yo:** y esto directamente se hizo desde el agente de Darwin.
+- **[21:23] Yo:** Lo que hace es, Granola es la herramienta
+- **[21:23] Yo:** que está activamente participando
+- **[21:23] Yo:** en
+- **[21:23] Yo:** recopilar como toda la información de las reuniones,
+- **[21:23] Yo:** Entonces, inclusive sin que
+- **[21:23] Yo:** sin que
+- **[21:23] Yo:** tengamos que estar entrando actividad por actividad,
+- **[21:24] Yo:** ya como hay una sincronización por Jira, hay una sincronización de las reuniones,
+- **[21:24] Yo:** logra hacer los las actualizaciones, claramente todo con aprobación previa humana.
+- **[21:24] Yo:** De cada una de las tareas.
+- **[21:24] Yo:** Con los diferentes responsables y demás.
+- **[21:24] Yo:** Entonces, pues eso también nos ayuda
+- **[21:24] Yo:** a que en la trazabilidad de las tareas, de responsables, pues quede todo muy bien
+- **[21:24] Yo:** bien diligenciado en las diferentes
+- **[21:24] Yo:** plataformas que el resto de Airbnb utiliza.
+- **[21:24] Yo:** ¿Qué dudas tienen de pronto?
+- **[21:24] Yo:** O de pronto, si me quiere complementar algo ahí, Jaime,
+- **[21:24] Yo:** Ah, Jaime, que no había visto esto.
+- **[21:24] Yo:** Esto es de lo que dice ahora Jaime contra Granola.
+- **[21:24] Participante:** Pues me acabo de enterar.
+- **[21:24] Jaime Guevara:** Eso, ¿tomaste lo que había hecho Mitch o lo hiciste hacer porque Mitch había hecho algo
+- **[21:24] Yo:** Lo hice de cero porque la integración
+- **[21:24] Jaime Guevara:** similar.
+- **[21:24] Jaime Guevara:** Pero está
+- **[21:24] Yo:** necesitaba unos permisos aparte,
+- **[21:24] Jaime Guevara:** Ok.
+- **[21:24] Yo:** terminaba, luego haciéndose un Frankenstein, sí, me pegaba a Y esto está, perdón. Esto solamente está como, esto está sobre la licencia mía, entonces, haces, básicamente, solo se puede actualizar sobre las reuniones que yo tengo. Incluido y y haya Entonces, por ahora, igual para todo lo que sea dropshippers, sellers,
+- **[21:24] Jaime Guevara:** Ok, ok. Ah, buenísimo. No, no,
+- **[21:25] Jaime Guevara:** Vale.
+- **[21:25] Jaime Guevara:** Ah, ok.
+- **[21:25] Yo:** o de alineación entre el equipo de producto, por ejemplo, la weekly con María, cuando tenemos product labs,
+- **[21:25] Yo:** pues queda
+- **[21:25] Yo:** registrado.
+- **[21:25] Participante:** Ok. No, no, no, está súper.
+- **[21:25] Participante:** Pues ahí, yo creo que, Juan Camilo, yo te había contado ayer un poquito,
+- **[21:25] Jaime Guevara:** pues aquí ya lo ves un poquito más profundo.
+- **[21:25] Jaime Guevara:** No, no, no, no, no tengo más comentarios, pues, al respecto. Lo único es que
+- **[21:25] Jaime Guevara:** si nuestra intención de pronto es no repetir ciertas cosas, así que
+- **[21:25] Jaime Guevara:** si de pronto en lo que están haciendo ustedes nos
+- **[21:25] Jaime Guevara:** integrar con ustedes o algo, pues
+- **[21:25] Jaime Guevara:** nos cuentas, nos cuentan para ver qué cómo nos
+- **[21:25] Jaime Guevara:** cómo trabajamos en conjunto.
+- **[21:26] Jaime Guevara:** Sí.
+- **[21:26] Jaime Guevara:** Mucho la atención esto que que que desarrollaste, lo de Granola, porque yo
+- **[21:26] Jaime Guevara:** nosotros tenemos,
+- **[21:26] Juan Camilo Rojas:** no sé si ya conocen o Creta, o ya Marlon les mostró el dropiverso,
+- **[21:26] Juan Camilo Rojas:** No.
+- **[21:26] Juan Camilo Rojas:** ¿No? Creo que ninguno acá, pues, o yo no.
+- **[21:26] Juan Camilo Rojas:** Vale, déjeme, te voy a robar pantalla, Santi.
+- **[21:26] Juan Camilo Rojas:** Cinco minuticos.
+- **[21:26] Juan Camilo Rojas:** Aquí resulta que nosotros estamos
+- **[21:26] Participante:** en este proyecto o megaproyecto, por así decirlo, que se llama el dropiverse,
+- **[21:26] Juan Camilo Rojas:** pues, como para hacerles un barrido general, y aunque yo no tengo
+- **[21:26] Juan Camilo Rojas:** pues,
+- **[21:26] Juan Camilo Rojas:** accesos de de administrador todavía,
+- **[21:26] Juan Camilo Rojas:** Creta va a ser como la herramienta de gestión gerencial, por así decirlo,
+- **[21:26] Juan Camilo Rojas:** que va liderado en cabeza de Marlon y, básicamente, sus usuarios
+- **[21:26] Juan Camilo Rojas:** son la gerencia,
+- **[21:26] Juan Camilo Rojas:** y la tripulación
+- **[21:27] Juan Camilo Rojas:** la llamamos, o sea, aquí aquí hubo todo un tema de de un storytelling con la
+- **[21:27] Juan Camilo Rojas:** con las naves, las misiones, qué universos, qué
+- **[21:27] Juan Camilo Rojas:** galaxias vamos a ir a a conquistar según los horizontes.
+- **[21:27] Juan Camilo Rojas:** Entonces, básicamente, es como el lenguaje que que estamos
+- **[21:27] Juan Camilo Rojas:** prácticamente, implementando.
+- **[21:27] Juan Camilo Rojas:** Esto tiene, esto va a tener una bandeja, un inbox solamente para tratar los
+- **[21:27] Juan Camilo Rojas:** temas puntuales de esas conversaciones que, no, se
+- **[21:27] Juan Camilo Rojas:** o sea, estoy bloqueado en cierto tema, entonces, se abre un hilo con todos los responsables,
+- **[21:27] Juan Camilo Rojas:** se les pregunta qué está sucediendo, cuál es el estatus o
+- **[21:27] Juan Camilo Rojas:** cómo lo podemos desbloquear, que es, básicamente, la función que
+- **[21:27] Juan Camilo Rojas:** hoy hacemos, pero más aterrizada
+- **[21:27] Juan Camilo Rojas:** a asuntos puntuales, ¿no?, pues, un chat center, un Google Chat,
+- **[21:27] Juan Camilo Rojas:** para temas generales.
+- **[21:27] Juan Camilo Rojas:** La planeación, el planificador, pues, digamos,
+- **[21:27] Juan Camilo Rojas:** a nivel de cus,
+- **[21:27] Juan Camilo Rojas:** esto
+- **[21:27] Juan Camilo Rojas:** y a nivel de OCR es más que todo por q,
+- **[21:28] Juan Camilo Rojas:** Todavía Marlon, pues, no no ha terminado de integrar también todos los OKRs.
+- **[21:28] Participante:** Habrá un tema de presupuesto, que es más que todo como
+- **[21:28] Participante:** planeación estratégica, vamos a entrar a apoyar.
+- **[21:28] Juan Camilo Rojas:** Está la parte de ejecución, de la agenda, ahí
+- **[21:28] Juan Camilo Rojas:** sí les decía, de los Q, como de todas las tareas, proyectos y misiones que
+- **[21:28] Juan Camilo Rojas:** o sea, los proyectos ya los llamamos misiones,
+- **[21:28] Juan Camilo Rojas:** y va a estar aquí todo como
+- **[21:28] Juan Camilo Rojas:** enlistado de lo que vamos a hacer por trimestre. Va a haber un gran
+- **[21:28] Juan Camilo Rojas:** para ver, pues, la ejecución de los de los proyectos, un Kanban
+- **[21:28] Juan Camilo Rojas:** para ver también el tema de los sprints, más organización de nosotros.
+- **[21:28] Juan Camilo Rojas:** Y todo el tema de las misiones, los experimentos,
+- **[21:28] Juan Camilo Rojas:** algo muy similar a lo que ustedes hacen en producto.
+- **[21:28] Juan Camilo Rojas:** Pero, pues, ya teniendo experiencia y ya conociendo como
+- **[21:28] Juan Camilo Rojas:** el universo completo, pues vamos a ir haciendo experimentos. Obviamente, eso está en etapa de
+- **[21:28] Juan Camilo Rojas:** de alineación, de
+- **[21:28] Juan Camilo Rojas:** de auto, pues, digamos, como de
+- **[21:29] Juan Camilo Rojas:** sí, de alinear el tema de las áreas, de saber en qué estamos, de no trabajar en silos.
+- **[21:29] Juan Camilo Rojas:** Está todo el tema de
+- **[21:29] Juan Camilo Rojas:** métricas, analíticas. Esto, pues, va a tener esto va a ser solamente como algunos para gerencia, otros sí van a ser generales.
+- **[21:29] Juan Camilo Rojas:** Persona, bueno, esto, aquí va tener un organigrama. A ver,
+- **[21:29] Juan Camilo Rojas:** ¿por qué se pensó esto? Realmente, esto une
+- **[21:29] Juan Camilo Rojas:** nosotros integramos un
+- **[21:29] Juan Camilo Rojas:** todo el tema de flujos. Nosotros podemos crear flujos, se se replicó como todo el tema de lucir chart, Visalli,
+- **[21:29] Juan Camilo Rojas:** miro,
+- **[21:29] Juan Camilo Rojas:** y entre otros, y
+- **[21:29] Juan Camilo Rojas:** todos los que existan, digamos, de diagramación en temas de procesos,
+- **[21:29] Juan Camilo Rojas:** o bien saben, pues nosotros manejamos toda la parte
+- **[21:29] Juan Camilo Rojas:** operacional y y de y de de procedimientos, entonces, pues, quedamos mapeando y esto ya es cien por
+- **[21:29] Juan Camilo Rojas:** funcional.
+- **[21:29] Juan Camilo Rojas:** Se puede
+- **[21:29] Juan Camilo Rojas:** de cierta manera,
+- **[21:30] Juan Camilo Rojas:** trabajar en tiempo real,
+- **[21:30] Juan Camilo Rojas:** ¿sí? Ahí pueden haber dos personas editando al mismo tiempo.
+- **[21:30] Juan Camilo Rojas:** Bueno, y ciertas mejoras que que les hacemos.
+- **[21:30] Juan Camilo Rojas:** Esta parte de automatizaciones, este, se está explorando, pero es básicamente
+- **[21:30] Juan Camilo Rojas:** como envío de correos automáticos,
+- **[21:30] Juan Camilo Rojas:** notificaciones de tareas dependientes, de etcétera.
+- **[21:30] Juan Camilo Rojas:** Y
+- **[21:30] Juan Camilo Rojas:** pasamos a la parte de las misiones.
+- **[21:30] Juan Camilo Rojas:** Las misiones son
+- **[21:30] Juan Camilo Rojas:** en sí, proyectos, pero es la agrupación de muchas iniciativas
+- **[21:30] Juan Camilo Rojas:** donde entramos directamente con las áreas, y esto
+- **[21:30] Juan Camilo Rojas:** va más para el h uno, que es una deuda técnica.
+- **[21:30] Juan Camilo Rojas:** Sí, aquí, pues, son proyectos que se vienen trabajando hace tres, cuatro, cinco, nueve meses, y en nuestros hallazgos, por así decirlo, cuando entramos a las áreas, hacemos todo el evento Kaizen y detectamos todas las oportunidades de mejora.
+- **[21:30] Juan Camilo Rojas:** Venimos y las consolidamos en un listado que
+- **[21:30] Juan Camilo Rojas:** pues,
+- **[21:30] Juan Camilo Rojas:** inicialmente, se trabajó así,
+- **[21:30] Juan Camilo Rojas:** un momento.
+- **[21:31] Juan Camilo Rojas:** Inicialmente, se se trabajó así,
+- **[21:31] Participante:** y aquí incluimos
+- **[21:31] Juan Camilo Rojas:** el levantamiento que se realizó del lado de de producto,
+- **[21:31] Juan Camilo Rojas:** Bueno, aquí está mezclado varios, porque lo organicé, pero
+- **[21:31] Juan Camilo Rojas:** aquí, cuando ustedes hicieron también el levantamiento
+- **[21:31] Juan Camilo Rojas:** ¿ahí
+- **[21:31] Juan Camilo Rojas:** están todos los los proyectos de ustedes que que alcanzaron a levantar.
+- **[21:31] Juan Camilo Rojas:** Bueno, esto lo tengo ahí, sí, responsable.
+- **[21:31] Juan Camilo Rojas:** En Dropify, Dropify dos punto cero, usuarios
+- **[21:31] Juan Camilo Rojas:** negociaciones, supplier, comunidad, bueno,
+- **[21:31] Participante:** aquí, incluso, se habla de
+- **[21:31] Juan Camilo Rojas:** yo vi los proyectos de ustedes, Darwin, y
+- **[21:32] Juan Camilo Rojas:** Tropipulso, que, pues, básicamente, por eso fue que me pues, calcé la mano Santi, te dije, ve, por mirar.
+- **[21:32] Juan Camilo Rojas:** Buzón de feedbacks Darwin. Todo esto, pues, digamos que tratamos como de integrarlo
+- **[21:32] Juan Camilo Rojas:** pero la priorización se dio, como le decía,
+- **[21:32] Juan Camilo Rojas:** en el h uno, que es toda la parte deuda técnica,
+- **[21:32] Juan Camilo Rojas:** con TI, lo que se logró fue
+- **[21:32] Juan Camilo Rojas:** esa alineación para no seguir trabajando en en silos.
+- **[21:32] Juan Camilo Rojas:** ¿Por qué? Porque ellos
+- **[21:32] Juan Camilo Rojas:** de cierta manera, iban, consultaban y hacían, básicamente, pues, el mismo
+- **[21:32] Juan Camilo Rojas:** que nosotros hacíamos.
+- **[21:32] Juan Camilo Rojas:** Todo esto
+- **[21:32] Juan Camilo Rojas:** bueno, aquí está.
+- **[21:32] Juan Camilo Rojas:** La parte de lo que les decía de las galaxias. Esto parece casi que
+- **[21:32] Juan Camilo Rojas:** un juego.
+- **[21:32] Juan Camilo Rojas:** Queremos contarlo así, un tema de de una gamificación, donde, de todos modos, es una misión
+- **[21:32] Juan Camilo Rojas:** y y tenemos que ir a a recuperar un planeta, porque los los
+- **[21:32] Juan Camilo Rojas:** digamos, en las galaxias existen las los planetas
+- **[21:32] Juan Camilo Rojas:** y cada planeta tiene, de cierta forma, misiones.
+- **[21:33] Juan Camilo Rojas:** La misión de ser m líder de comunidad, perfil de líder de comunidad en el planeta
+- **[21:33] Juan Camilo Rojas:** Y está el tema de expansión, que es
+- **[21:33] Juan Camilo Rojas:** sí es algo que estoy manejando yo directamente con Marlon y con los
+- **[21:33] Juan Camilo Rojas:** country para el tema de expansión.
+- **[21:33] Juan Camilo Rojas:** Que es, básicamente, ver todo el setup
+- **[21:33] Juan Camilo Rojas:** operativo
+- **[21:33] Juan Camilo Rojas:** Perdón, aquí, tema de investigación de mercados, toda la parte
+- **[21:33] Juan Camilo Rojas:** pues, la
+- **[21:33] Juan Camilo Rojas:** la parte
+- **[21:33] Juan Camilo Rojas:** factible legal y regulatoria, la parte financiera, presupuestos, OpEx, CapEx.
+- **[21:33] Juan Camilo Rojas:** Factibilidad, logística, si, pues, tenemos
+- **[21:33] Juan Camilo Rojas:** proveedores logísticos en el país, los
+- **[21:33] Juan Camilo Rojas:** de proveedores, está la fase dos, que es el tema setup legal. Bueno, digamos, lo que ven
+- **[21:33] Juan Camilo Rojas:** como los títulos,
+- **[21:33] Juan Camilo Rojas:** setup legal, estructura organizacional, plataforma y tecnología, setup logístico, setup
+- **[21:33] Juan Camilo Rojas:** comercial. Con esto doy
+- **[21:33] Juan Camilo Rojas:** mapeando con Andrea.
+- **[21:33] Juan Camilo Rojas:** Cada uno de los puntos que ella necesita, y voy teniendo una conversación en la parte de Venezuela,
+- **[21:33] Juan Camilo Rojas:** Y con Brasil me reúno con Delia y con Gabriel,
+- **[21:34] Juan Camilo Rojas:** y así sucesivamente en todo lo que vayamos a a expandir.
+- **[21:34] Juan Camilo Rojas:** Incluyendo los países de Europa.
+- **[21:34] Juan Camilo Rojas:** Y, como te decía,
+- **[21:34] Juan Camilo Rojas:** ya para finalizar la parte, digamos, del diligenciamiento de las misiones,
+- **[21:34] Juan Camilo Rojas:** aquí, pues, ponemos toda la justificación del del
+- **[21:34] Juan Camilo Rojas:** de esa misión que agrupa bastantes iniciativas,
+- **[21:34] Juan Camilo Rojas:** alcance son las iniciativas como tal, y aquí ya empezamos a marcar los hitos
+- **[21:34] Juan Camilo Rojas:** principales y esta este punto que te estoy mostrando acá.
+- **[21:34] Juan Camilo Rojas:** Que lo traía a colación de lo que me estás mostrando, porque
+- **[21:34] Juan Camilo Rojas:** cuando yo hago esa alineación con con TI, TI es el
+- **[21:34] Juan Camilo Rojas:** que está detrás
+- **[21:34] Juan Camilo Rojas:** Esto ya ni no lo va a ver, ya ni no va a decir,
+- **[21:34] Juan Camilo Rojas:** vengan, yo veo en que está el desarrollador tal, no.
+- **[21:34] Juan Camilo Rojas:** Va a ver en qué etapa del proyecto se encuentra
+- **[21:34] Juan Camilo Rojas:** me gustaría poder saber, o no sé si se puede conectar
+- **[21:34] Juan Camilo Rojas:** Todas esas observaciones que se hacen en Jira, y traer un resumen gerencial en la parte descripción, o sea, en qué consiste esa tarea que pusieron en Jira o ese comentario que pusieron en Jira, y traerlo acá como, bueno,
+- **[21:35] Juan Camilo Rojas:** ¿cuál es la descripción?
+- **[21:35] Juan Camilo Rojas:** ¿Qué se está entregando y qué bloqueos tiene?, según la alineación que yo haga con tecnología.
+- **[21:35] Juan Camilo Rojas:** Eso
+- **[21:35] Juan Camilo Rojas:** más como para un tema de seguimiento, y sé que
+- **[21:35] Juan Camilo Rojas:** no voy a estar constantemente con ellos hablando, sino simplemente, weeklies,
+- **[21:35] Juan Camilo Rojas:** para cerrar como
+- **[21:35] Juan Camilo Rojas:** ni siquiera Sprint. Es simplemente que Paola nos cuente en qué proceso va
+- **[21:35] Juan Camilo Rojas:** para que Yani, de una manera muy resumida de todos los proyectos que
+- **[21:35] Juan Camilo Rojas:** existen, ya Maron está trabajando en un dashboard
+- **[21:35] Juan Camilo Rojas:** donde va se va a mostrar, pues, como la priorización de todos los
+- **[21:35] Juan Camilo Rojas:** todas las misiones y demás.
+- **[21:35] Juan Camilo Rojas:** Que va ir aquí como en la parte del resumen.
+- **[21:35] Juan Camilo Rojas:** Poder, Yani, decir como, venga, están bloqueados en esto,
+- **[21:35] Juan Camilo Rojas:** voy
+- **[21:35] Juan Camilo Rojas:** directamente ahí,
+- **[21:35] Juan Camilo Rojas:** y desbloqueo.
+- **[21:35] Juan Camilo Rojas:** Eso es
+- **[21:35] Juan Camilo Rojas:** a grosso modo, porque sé que tiene mucho más potencial esta herramienta,
+- **[21:35] Juan Camilo Rojas:** lo que es el dropiverso,
+- **[21:36] Juan Camilo Rojas:** Y
+- **[21:36] Juan Camilo Rojas:** bueno saber que están también trabajando en iniciativas
+- **[21:36] Participante:** pues, similares, para ver cómo nos podemos complementar. Básicamente,
+- **[21:36] Participante:** lo
+- **[21:36] Participante:** lo llevo al tema del seguimiento, ahora que B2B
+- **[21:36] Participante:** el tema de
+- **[21:36] Participante:** de la mejora que hiciste, ya se me olvidó el nombre.
+- **[21:36] Participante:** De la automatización.
+- **[21:36] Yo:** Comentarios de Granola.
+- **[21:36] Participante:** Eso es.
+- **[21:36] Participante:** De Granola, correcto.
+- **[21:36] Yo:** Sí, realmente, igual, Granola es más una herramienta, los demás
+- **[21:36] Yo:** externa, que
+- **[21:36] Yo:** que expone una API, es que arrastramos la info.
+- **[21:36] Yo:** Más que hacer el desarrollo interno.
+- **[21:36] Yo:** Pero está está muy chévere.
+- **[21:36] Yo:** Está mucho roto lo que están... Y yo creo que ahí Jaime,
+- **[21:36] Yo:** pues sí, o sea, definitivamente, todo lo que tenemos
+- **[21:36] Yo:** vamos a exponer APIs o consumir APIs. Yo creo que esa es la parte
+- **[21:36] Yo:** pues, que más le agrega valor, ¿no?
+- **[21:36] Yo:** Inclusive más que nos consuman a nosotros que nosotros al
+- **[21:36] Yo:** los demás, aunque nos serviría un montón también
+- **[21:36] Yo:** para que, desde el producto, sepamos que están manejando los diferentes
+- **[21:37] Yo:** las diferentes áreas. No sé cómo lo ves, año.
+- **[21:37] Yo:** Bueno, ya lo has visto, no tengo ni idea.
+- **[21:37] Participante:** Sì,
+- **[21:37] Yo:** Yo yo sí me estoy enterando de esta, pero es muy bacán.
+- **[21:37] Participante:** Sí, a mí me gustaría contar con Marlon,
+- **[21:37] Participante:** digamos, queremos ir más profundo, en drop y verso.
+- **[21:37] Participante:** Para ver de qué manera podemos unir ese mismo
+- **[21:37] Participante:** que ustedes están haciendo de la de nosotros, porque todo lo que ensamble Marlon, créame que está
+- **[21:37] Juan Camilo Rojas:** bien interesante, bien chévere, lo está haciendo en cloud,
+- **[21:37] Juan Camilo Rojas:** y él montó todo un tema
+- **[21:37] Juan Camilo Rojas:** de agentes
+- **[21:37] Juan Camilo Rojas:** en su forma de operar, entonces él le consulta a sus agentes qué paso seguir y cómo debe implementar, y tiene ciberseguridad y tiene
+- **[21:37] Participante:** POP,
+- **[21:37] Participante:** NPL, tiene toda una estructura, de verdad, bien bien montada para
+- **[21:37] Participante:** lograr decir, voy a poner un botón al lado de, no lo voy a borrar.
+- **[21:37] Participante:** Él le pregunta a todos sus agentes cómo debe construir y qué instancias se
+- **[21:37] Participante:** conectan o se cruzan para poder yo borrar un botón.
+- **[21:38] Participante:** Hace como
+- **[21:38] Participante:** todo el el back
+- **[21:38] Participante:** y el front
+- **[21:38] Participante:** con sus equipo de producto y con sus desarrolladores.
+- **[21:38] Participante:** Está muy bacano
+- **[21:38] Participante:** la forma como como se está
+- **[21:38] Participante:** Y, bueno, ¿no?, miremos qué qué podemos sacar de eso.
+- **[21:38] Yo:** De una, listo.
+- **[21:38] Yo:** No sé si quieran que que igual
+- **[21:38] Participante:** Bueno.
+- **[21:38] Yo:** dale listo.
+- **[21:38] Participante:** Hola, hola, Santi, hola, Juan Carlos.
+- **[21:38] Participante:** Me alegro mucho de que le digan los bien, bacanas las dos las dos cosas que están realizando.
+- **[21:38] Participante:** Quería hacer unas preguntas de Jambus. Santi, lo que ustedes están desarrollando
+- **[21:38] Participante:** ¿tienen planeado también hacer una conexión hacia Fitma y que poder facturar y, a través también de IA,
+- **[21:38] Participante:** poder generar ciertas
+- **[21:38] Participante:** ciertos desarrollos o ciertos modelos visuales
+- **[21:38] Participante:** dentro del ciclo.
+- **[21:38] Juan Camilo Rojas:** Ahí yo te respondo, pues, si quieres, Santi.
+- **[21:39] Juan Camilo Rojas:** Que venía hablando un poco de ese tema.
+- **[21:39] Juan Camilo Rojas:** Y ya, para ese tema de Figma, tenemos otro proyecto, que se llama RPP.
+- **[21:39] Jaime Guevara:** Ese, no sé si lo si lo has escuchado hablar o si de pronto lo has visto con con Michelle.
+- **[21:39] Jaime Guevara:** Con Michelle, algo lo he escuchado a Michelle, pero, pues no, virtualmente no lo he escuchado.
+- **[21:39] Jaime Guevara:** Ok. Sí, este proyecto es otro repo,
+- **[21:39] Jaime Guevara:** está conectado a Darwin, pero lo dejamos por separado porque tiene
+- **[21:39] Jaime Guevara:** su propia lógica y sus complejidades, y ese está
+- **[21:39] Luis Dominguez:** conectado a
+- **[21:39] Luis Dominguez:** toda la la
+- **[21:39] Luis Dominguez:** la
+- **[21:39] Jaime Guevara:** UI, todo el tema de del front, de de dropping.
+- **[21:39] Jaime Guevara:** Que no me acuerdo, eso tiene un nombre técnico, pero no me acuerdo.
+- **[21:39] Jaime Guevara:** Entonces, todo lo que vamos a prototipar
+- **[21:39] Jaime Guevara:** ya que que que va a pasar a delivery, lo
+- **[21:39] Jaime Guevara:** prototipamos, lo van a prototipar, es en el RPP,
+- **[21:39] Jaime Guevara:** y ese RPP ya tiene todos los componentes directos
+- **[21:39] Jaime Guevara:** de drop in, ¿cierto? Entonces, ya la idea es
+- **[21:39] Jaime Guevara:** en algún momento dejar de usar Figma, no conectarnos a Figma,
+- **[21:40] Jaime Guevara:** sino hacerlos todos desde ese prototipo, y el delivery se hace
+- **[21:40] Jaime Guevara:** desde ese prototipo, el developer entra, mira,
+- **[21:40] Jaime Guevara:** ya tiene los componentes, todo organizado, para que sea un poco más fácil y rápido el
+- **[21:40] Jaime Guevara:** el tema de de de montar esa nueva solución.
+- **[21:40] Jaime Guevara:** Pero la intención en un futuro es dejar de utilizar Figma.
+- **[21:40] Jaime Guevara:** Ya, ok. Me imagino que, pues, ellos también
+- **[21:40] Jaime Guevara:** meterle IA para cuando uno definá
+- **[21:40] Jaime Guevara:** la tarea muy específica en Jira, poder que se, la misma IA genere ese en en en esa en esa herramienta. Se me ocurre, pues, no sé. Total, total. En algún momento ojalá eso pase, nosotros hemos iterado, sinceramente, producto, yo he iterado, yo creo que hasta Santiago ha iterado, todo el mundo ha iterado.
+- **[21:40] Jaime Guevara:** Pero
+- **[21:40] Jaime Guevara:** todavía no lo logras.
+- **[21:40] Luis Dominguez:** Ahí está. No no
+- **[21:40] Jaime Guevara:** no no da el resultado como esperado,
+- **[21:40] Jaime Guevara:** pasado como que le pase la tarea y igual toca iterar un montón de veces hasta llegar, porque, pues, nosotros hacemos
+- **[21:40] Jaime Guevara:** otros procesos de discovery y de investigación. Entonces, no
+- **[21:41] Yo:** बस आ रहा है समझ सकता है कि
+- **[21:41] Yo:** por ahora, igual con con la información que tiene
+- **[21:41] Yo:** ya ya está mucho más avanzado, ya tiene mucho contexto y cada vez eran mejores
+- **[21:41] Yo:** o sea, será más fácil pasar directo a una tarea de un prototipo,
+- **[21:41] Yo:** y más porque están los agentes ahí inmersos
+- **[21:41] Yo:** que van a poder
+- **[21:41] Yo:** tener
+- **[21:41] Yo:** menor
+- **[21:41] Yo:** se genera una menor incertidumbre
+- **[21:41] Yo:** entonces, van a poder ser más precisos, pero
+- **[21:41] Yo:** tenemos el proceso de delivery, estar haciendo
+- **[21:41] Yo:** un discovery continuo o entrevista,
+- **[21:41] Yo:** Hay muchas cosas que igual se
+- **[21:41] Yo:** están entre que se monte una historia
+- **[21:41] Yo:** hasta que ya se genere un delivery, pues,
+- **[21:41] Yo:** puede ayudar un poco a a a generar un visual muy rápido,
+- **[21:41] Yo:** un mock up ahí muy rapidito, pero
+- **[21:41] Yo:** pero sí, pues, de ahí a que ya eso se le pasa directo a desarrollo, pues, todavía no.
+- **[21:41] Yo:** Allá, en ese punto, Jaime,
+- **[21:41] Yo:** y yo estaremos desempleados.
+- **[21:41] Participante:** Bueno, de muchos de nosotros.
+- **[21:42] Participante:** No estaremos, es que toca comprar ese
+- **[21:42] Yo:** En ese punto, yo creo que vamos a frenar todo,
+- **[21:42] Yo:** y no decir que todo se cayó.
+- **[21:42] Luis Dominguez:** no, no, viste ahí de esa rama o alguna cosa, no sé qué
+- **[21:42] Luis Dominguez:** Bueno,
+- **[21:42] Jaime Guevara:** ¿no no han visto el hardware que hizo ChatGPT para desarrolladores?
+- **[21:42] Jaime Guevara:** Que es como un un teclado que es como para avanzar,
+- **[21:42] Jaime Guevara:** retroceder, avanzar, retroceder, avanzar, retroceder, para decirle al IE así
+- **[21:42] Luis Dominguez:** va bien o va mal.
+- **[21:42] Luis Dominguez:** Así nos va a tocar así solo darle clic,
+- **[21:42] Jaime Guevara:** clic, clic, clic,
+- **[21:42] Jaime Guevara:** acepto, acepto y ya.
+- **[21:42] Jaime Guevara:** Sí.
+- **[21:42] Jaime Guevara:** Sí. Juan, en lo que ustedes están,
+- **[21:42] Jaime Guevara:** el drop inverso, también
+- **[21:42] Jaime Guevara:** ahí ya metieron o empiezan a meter el tema de de iniciativas, porque
+- **[21:42] Jaime Guevara:** fuera de López a habló estrellas
+- **[21:42] Luis Dominguez:** o
+- **[21:42] Jaime Guevara:** a
+- **[21:42] Jaime Guevara:** no sé, app, como todo lo otro que
+- **[21:42] Luis Dominguez:** que que está dentro del ecosistema de Ropeel, Sí, la herramienta está pensada para hacer agencia. Va a tener varios workspaces, dependiendo el país, dependiendo la vertical. Y eso también va ir interconectado a una visual general, que es la que nosotros llevamos de
+- **[21:43] Juan Camilo Rojas:** toda la operación, porque nosotros somos holding y somos drop in. Ok. Y lo que ahorita que que comentabas es el tema de las tareas y el requerimiento que venían allí, se me pensaba
+- **[21:43] Luis Dominguez:** yo
+- **[21:43] Juan Camilo Rojas:** si eso viene conectado o se quiere conectar a lo de drop y esto para generarle esas tareas o requerimientos
+- **[21:43] Luis Dominguez:** directamente a ti. En esencia, no está pensado para
+- **[21:43] Luis Dominguez:** para que sea el puente de comunicación con TI, por lo que te decía que es más de tipo gerencia.
+- **[21:43] Luis Dominguez:** Y
+- **[21:43] Luis Dominguez:** por ahora se va a seguir implementando el Jira,
+- **[21:43] Juan Camilo Rojas:** nosotros vamos a ir a hacer seguimiento.
+- **[21:43] Juan Camilo Rojas:** Algún punto, la idea es recrear un Jira, así como
+- **[21:43] Juan Camilo Rojas:** el equipo de producto piensa recrear un Figma,
+- **[21:43] Juan Camilo Rojas:** nosotros recreamos un Visage que nos
+- **[21:43] Juan Camilo Rojas:** la licencia doscientos mil dólares el año,
+- **[21:44] Juan Camilo Rojas:** y lo logramos conectar aquí, y para nosotros eso fue
+- **[21:44] Juan Camilo Rojas:** pues,
+- **[21:44] Juan Camilo Rojas:** prácticamente un un un hit, porque ya todo lo podemos centralizar aquí y trabajarlo
+- **[21:44] Juan Camilo Rojas:** la idea es poder centralizar todo lo que hacemos como operación en uno solo.
+- **[21:44] Juan Camilo Rojas:** Y va tener unas visuales gerenciales que van a ir conectadas a esas tareas que nosotros vamos
+- **[21:44] Juan Camilo Rojas:** colocando, pero más de seguimiento de la operación.
+- **[21:44] Juan Camilo Rojas:** Somos más el soporte de de de gerencia, por así decirlo, para eso se creó el Dropiverse.
+- **[21:44] Juan Camilo Rojas:** Para ellos poder visualizar en qué estado está realmente
+- **[21:44] Juan Camilo Rojas:** la parte técnica, en qué proyectos estamos avanzando, porque ellos
+- **[21:44] Juan Camilo Rojas:** un Lucho y un Yani no van a entrar
+- **[21:44] Jaime Guevara:** a un Jira
+- **[21:44] Juan Camilo Rojas:** y van a ver
+- **[21:44] Juan Camilo Rojas:** conexiones, historias de usuario,
+- **[21:44] Juan Camilo Rojas:** épicas, ellos no van a entrar a eso.
+- **[21:44] Juan Camilo Rojas:** Ah, ok, listo.
+- **[21:44] Juan Camilo Rojas:** Ah, no, felicitaciones, está muy bacanas en mi sentido ahí. Muy bacanas,
+- **[21:44] Juan Camilo Rojas:** Sí, sí, no, hay muchas cosas que se pueden hacer,
+- **[21:45] Juan Camilo Rojas:** dependemos también mucho de tecnología en la parte de la data,
+- **[21:45] Luis Dominguez:** porque hay
+- **[21:45] Luis Dominguez:** muchas vainas que podríamos hacer no code, pero, pues, al final también
+- **[21:45] Juan Camilo Rojas:** Tate nos nos advierte y nos dice, venga, venga,
+- **[21:45] Juan Camilo Rojas:** bien el tema
+- **[21:45] Juan Camilo Rojas:** de no code, de byte COVID también, pero
+- **[21:45] Juan Camilo Rojas:** cosas que nosotros podamos controlar. ¿Qué ventaja tenemos nosotros que tenemos nuestro
+- **[21:45] Juan Camilo Rojas:** desarrollador que nos está haciendo el backend y y ciberseguridad?
+- **[21:45] Juan Camilo Rojas:** Entonces, no
+- **[21:45] Juan Camilo Rojas:** en algún punto... Ah, bueno, y todo se llevó al lenguaje donde está drop, y que es go.
+- **[21:45] Juan Camilo Rojas:** Eso también en algún punto facilita que, cuando Droppy quiera conectar
+- **[21:45] Juan Camilo Rojas:** cuando quieran
+- **[21:45] Juan Camilo Rojas:** digamos, ya integrarlo directamente para hacer consultas y demás, que no creo,
+- **[21:45] Juan Camilo Rojas:** ese no no no creo que ese sea la finalidad
+- **[21:45] Juan Camilo Rojas:** de este prototipo,
+- **[21:45] Juan Camilo Rojas:** pues se pueda llevar mucho más fácil.
+- **[21:45] Juan Camilo Rojas:** Buen.
+- **[21:46] Juan Camilo Rojas:** Sí,
+- **[21:46] Yo:** Bueno, yo creo que nos es más, entonces.
+- **[21:46] Juan Camilo Rojas:** Sí, brutal. No, logremos una con
+- **[21:46] Juan Camilo Rojas:** Marlon y y miremos todos esos proyectos que ustedes tienen, cómo los podemos
+- **[21:46] Participante:** unir o, por lo menos, complementar en lo que
+- **[21:46] Jaime Guevara:** en lo que nosotros también estamos explorando.
+- **[21:46] Juan Camilo Rojas:** Juanca, ¿ahí sí te puedes
+- **[21:46] Juan Camilo Rojas:** Quería comentarte lo de de pulso. De uno.
+- **[21:46] Juan Camilo Rojas:** Y Santi también, si te puedes quedar lejos.
+- **[21:46] Juan Camilo Rojas:** Sé, los otros no los conozco, entonces no sé si se quedan
+- **[21:46] Juan Camilo Rojas:** No sé quién es,
+- **[21:46] Yo:** Es que no sé qué es, no.
+- **[21:46] Participante:** ver. Que son vecinos. No lo conozco, ¿sí la conozco?
+- **[21:46] Participante:** Bueno.
+- **[21:46] Yo:** Al lado de todo todo ese tiempo, es que no.
+- **[21:46] Participante:** Ah, Luis, hago obvio, Lucho, hombre, ¿cómo
+- **[21:46] Yo:** Le dijo.
+- **[21:46] Participante:** hace?
+- **[21:46] Participante:** Yo no, es que yo por los nombres no hago por la carita.
+- **[21:46] Participante:** Incluso, Jaime. Esos días nos codeábamos ahí en
+- **[21:47] Participante:** el puesto.
+- **[21:47] Participante:** No, es que ya los desconozco.
+- **[21:47] Participante:** Tiempos bien, vas. Bueno. Nada.
+- **[21:47] Participante:** Te bueno, esto creo que es importante para Google también.
+- **[21:47] Participante:** Pero
+- **[21:47] Juan Camilo Rojas:** Juan Carlos, el el, te lo das lo que te conté, pulso,
+- **[21:47] Juan Camilo Rojas:** yo ahí le dije a Juanse,
+- **[21:47] Juan Camilo Rojas:** para que nos ayudara a mapear, de pronto ahí te encargo que nos ayudes.
+- **[21:47] Juan Camilo Rojas:** ¿Por qué? Porque nosotros ya lo lanzamos.
+- **[21:47] Juan Camilo Rojas:** Ya lanzamos como los primeros pulsos, ha sido muy manual,
+- **[21:47] Yo:** So
+- **[21:47] Juan Camilo Rojas:** La idea que teníamos de cómo iba a funcionar
+- **[21:47] Jaime Guevara:** operacionalmente
+- **[21:47] Jaime Guevara:** ha venido cambiando
+- **[21:47] Jaime Guevara:** ya dentro de la operación. Por ejemplo, no, ya sabemos que no lo podemos hacer de esta manera, nos toca.
+- **[21:47] Jaime Guevara:** Venido pasando todo eso justo hoy,
+- **[21:47] Jaime Guevara:** hoy lo enviamos y hoy funcionó, ya tenemos una
+- **[21:47] Jaime Guevara:** posible primera negociación.

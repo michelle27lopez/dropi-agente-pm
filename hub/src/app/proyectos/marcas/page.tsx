@@ -316,6 +316,12 @@ export default function MarcasPage() {
           >
             🎙️ Ver entrevistas →
           </a>
+          <a
+            href="/proyectos/marcas/voto-priorizacion"
+            style={{ display: "inline-block", marginTop: 10, marginLeft: 16, fontSize: 12, fontWeight: 700, color: "white", textDecoration: "none", opacity: 0.85 }}
+          >
+            🗳️ Votar priorización →
+          </a>
         </div>
       </div>
 

@@ -260,7 +260,9 @@ export default function DropiAppPage() {
             <WeeklySelector />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <Field term="Resumen de la semana">Continuidad en la fase de pruebas de calidad (QA).</Field>
+            <Field term="Resumen de la semana">
+              Prioridad P2 · Delivery en QA. Pruebas activas por el equipo de Tecnología, pruebas en curso con Coordinadora (última fase para liberación) y pruebas internas habilitadas en TestFlight.
+            </Field>
             <Field term="Retos y Bloqueos">{pending}</Field>
           </div>
         </Section>

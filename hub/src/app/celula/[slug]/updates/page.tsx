@@ -6,6 +6,7 @@ import { useParams } from "next/navigation";
 import HubFooter from "@/components/HubFooter";
 import { type Item, Section } from "@/components/HomeSections";
 import { SEMANAS, REGISTRY } from "@/app/weekly/data/index";
+import { localCellBoards } from "@/app/celula/_cell-board";
 import { previewUpdateContent } from "@/lib/update-preview";
 
 // Updates por célula (2026-08-17, Jaime) — antes vivía embebido en la home de
@@ -82,7 +83,17 @@ export default function UpdatesPorCelulaPage() {
   // viejos desaparecen de las dos secciones. Undefined cae en cell_board,
   // igual que el DEFAULT que trae la columna en la migración.
   const weeklyUpdates = celula.updates.filter((u) => u.tipo === "weekly");
-  const cellBoardUpdates = celula.updates.filter((u) => u.tipo !== "weekly");
+
+  // Cell Board servido desde el repo (hub/src/app/celula/_cell-board) — mismo
+  // flujo que el Weekly PM, sin correr SQL. Si una fecha existe en el repo y
+  // también como fila en `celula_updates`, gana el archivo del repo (para
+  // poder dejar de mantener la fila de la base sin que desaparezca del hub).
+  const localCB = localCellBoards(celula.slug);
+  const localCBDates = new Set(localCB.map((u) => u.week_date));
+  const cellBoardUpdates = [
+    ...celula.updates.filter((u) => u.tipo !== "weekly" && !localCBDates.has(u.week_date)),
+    ...localCB,
+  ];
 
   const weeklyEntries = [
     ...weeklyUpdates.map((u) => ({ item: updateToItem(u), sortKey: u.week_date })),
@@ -96,7 +107,10 @@ export default function UpdatesPorCelulaPage() {
     .map((u) => updateToItem(u));
 
   const updates = [...weeklyItems, ...cellBoardItems];
-  const updatesById = new Map(celula.updates.map((u) => [u.id, u]));
+  const updatesById = new Map<string, Update>([
+    ...celula.updates.map((u) => [u.id, u] as const),
+    ...localCB.map((u) => [u.id, u] as const),
+  ]);
 
   return (
     <main style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>

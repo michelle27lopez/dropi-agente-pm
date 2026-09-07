@@ -255,8 +255,10 @@ export default function RearquitecturaPage() {
             <WeeklySelector />
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            <Field term="Resumen de la semana">Avance en la ejecución de pruebas de aseguramiento de calidad (QA) en integración con proveedores.</Field>
-            <Field term="Retos y Bloqueos">Estrategia de Comunicación (Marketing) sin definir.</Field>
+            <Field term="Resumen de la semana">
+              Prioridad P0 · Delivery en QA. Métricas de bugs — Frente 1: 66 corregidos / 9 pendientes (1 crítico); Frente 2: 64 corregidos / 7 pendientes (1 crítico); total consolidado: 130 corregidos / 16 pendientes (solo 2 críticos). Próximos pasos: 🧪 la próxima semana se espera ejecutar la fase de pruebas.
+            </Field>
+            <Field term="Retos y Bloqueos">2 bugs críticos pendientes (1 por frente) antes de poder cerrar QA. Estrategia de Comunicación (Marketing) sin definir.</Field>
           </div>
         </Section>
 
