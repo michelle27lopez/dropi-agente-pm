@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automatización de recepción de devoluciones vía webhook · Sesión Envía · Dropi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FBFAF8;
+    --surface:#FFFFFF;
+    --surface-2:#F4F1EC;
+    --ink:#14110E;
+    --ink-muted:#5A544C;
+    --ink-dim:#8A8378;
+    --line:#E4DFD7;
+    --line-strong:#CFC7BB;
+    --accent:#FF8500;
+    --accent-ink:#B85C00;
+    --accent-soft:#FFF3E4;
+    --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --mono:'JetBrains Mono',ui-monospace,'Cascadia Code',Consolas,monospace;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  html,body{height:100%}
+  body{
+    background:var(--bg);color:var(--ink);font-family:var(--font);
+    overflow:hidden;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;
+  }
+
+  header{
+    flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    padding:.7rem 1.6rem;background:var(--surface);border-bottom:1px solid var(--line);position:relative;
+  }
+  .brand{display:flex;align-items:center;gap:.7rem;min-width:0}
+  .brand-mark{width:26px;height:26px;border-radius:7px;background:var(--accent);flex:0 0 auto}
+  .brand-text{font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand-text span{color:var(--ink-dim);font-weight:400}
+  .slide-indicator{font-size:.72rem;font-weight:500;color:var(--ink-dim);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .progress-track{position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--line)}
+  .progress-bar{height:100%;width:0;background:var(--accent);transition:width .3s ease}
+
+  main{flex:1 1 auto;overflow:hidden;position:relative}
+  .slide-container{display:flex;height:100%;transition:transform .35s cubic-bezier(.4,0,.2,1)}
+  .slide{flex:0 0 100%;width:100%;height:100%;overflow-y:auto;padding:2rem 2.6rem 3.4rem;display:flex;flex-direction:column}
+  .slide-inner{width:100%;max-width:1200px;margin:0 auto}
+
+  .eyebrow{
+    display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+    color:var(--accent-ink);background:var(--accent-soft);padding:.32rem .6rem;border-radius:5px;margin-bottom:.85rem;
+  }
+  h1{font-size:2.6rem;line-height:1.08;font-weight:800;letter-spacing:-.025em;margin-bottom:.7rem}
+  h2{font-size:1.8rem;line-height:1.15;font-weight:700;letter-spacing:-.02em;margin-bottom:.45rem}
+  .deck{font-size:.98rem;line-height:1.5;color:var(--ink-muted);max-width:78ch;margin-bottom:1.2rem}
+  .deck strong{color:var(--ink);font-weight:600}
+  h3{font-size:.93rem;font-weight:700;margin-bottom:.32rem;letter-spacing:-.01em}
+  p{font-size:.88rem;line-height:1.52;color:var(--ink-muted)}
+  code,.mono{font-family:var(--mono);font-size:.82em;background:var(--surface-2);padding:.1em .35em;border-radius:4px;color:var(--ink)}
+
+  .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+  .grid-32{display:grid;grid-template-columns:1.15fr 1fr;gap:1.2rem}
+  .stack{display:flex;flex-direction:column;gap:.75rem}
+  .spacer{flex:1 1 auto;min-height:.6rem}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:.95rem 1.05rem}
+  .card-accent{border-color:var(--accent);background:var(--accent-soft)}
+  .card-quiet{background:var(--surface-2);border-color:transparent}
+  .card .num{font-family:var(--mono);font-size:.68rem;font-weight:500;color:var(--accent-ink);display:block;margin-bottom:.35rem;letter-spacing:.06em}
+  .card-sm{padding:.8rem .9rem}
+  .card-sm h3{font-size:.86rem}
+  .card-sm p{font-size:.82rem;line-height:1.45}
+
+  .opt{position:relative}
+  .opt .tag{
+    position:absolute;top:-9px;right:12px;font-size:.6rem;font-weight:700;letter-spacing:.09em;
+    text-transform:uppercase;background:var(--accent);color:#fff;padding:.16rem .45rem;border-radius:4px;
+  }
+
+  .ask{border:1px solid var(--accent);background:var(--accent-soft);border-radius:11px;padding:1.05rem 1.2rem}
+  .ask .label{font-size:.66rem;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--accent-ink);margin-bottom:.4rem}
+  .ask .text{font-size:1.05rem;line-height:1.42;font-weight:600;color:var(--ink)}
+  .ask .text-sm{font-size:.92rem;line-height:1.45;font-weight:500;color:var(--ink)}
+
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:.45rem}
+  ul.clean li{font-size:.86rem;line-height:1.45;color:var(--ink-muted);padding-left:1rem;position:relative}
+  ul.clean li::before{content:'';position:absolute;left:0;top:.55em;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+  ul.clean li strong{color:var(--ink);font-weight:600}
+  ul.plain{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+  ul.plain li{font-size:.83rem;line-height:1.45;color:var(--ink-muted);padding-left:1rem;position:relative}
+  ul.plain li::before{content:'–';position:absolute;left:0;color:var(--ink-dim)}
+ol.temas{list-style:none;counter-reset:t;display:flex;flex-direction:column;gap:.75rem;margin-top:.2rem}  ol.temas li{counter-increment:t;font-size:.98rem;line-height:1.4;color:var(--ink);font-weight:500;padding-left:2.2rem;position:relative;min-height:1.5rem;display:flex;align-items:center}  ol.temas li::before{content:counter(t);position:absolute;left:0;top:.05rem;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--surface-2);color:var(--ink-dim);font-family:var(--mono);font-size:.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}  ol.temas[start='6']{counter-reset:t 5}
+
+  table{width:100%;border-collapse:collapse;font-size:.83rem}
+  th{text-align:left;font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);padding:.45rem .65rem;border-bottom:1px solid var(--line-strong)}
+  td{padding:.55rem .65rem;border-bottom:1px solid var(--line);color:var(--ink-muted);line-height:1.4;vertical-align:top}
+  td strong{color:var(--ink);font-weight:600}
+  tr:last-child td{border-bottom:none}
+  .step-n{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--accent);color:#fff;font-size:.68rem;font-weight:700;font-family:var(--mono)}
+  .fill{height:1.3rem;border-bottom:1px dashed var(--line-strong);min-width:80px}
+
+  .pill{display:inline-block;font-size:.64rem;font-weight:600;padding:.18rem .48rem;border-radius:20px;background:var(--surface-2);color:var(--ink-muted);border:1px solid var(--line);white-space:nowrap}
+  .pill-accent{background:var(--accent-soft);color:var(--accent-ink);border-color:var(--accent)}
+
+  .note{font-size:.78rem;line-height:1.5;color:var(--ink-dim);border-left:2px solid var(--line-strong);padding-left:.75rem}
+  .note strong{color:var(--ink-muted)}
+
+  figure{margin:0}
+  figure svg{width:100%;height:auto;display:block}
+
+  .n-box{fill:var(--surface);stroke:var(--line-strong);stroke-width:1.5}
+  .n-box-accent{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.8}
+  .n-label{font-family:var(--font);font-size:13px;font-weight:600;fill:var(--ink)}
+  .n-sub{font-family:var(--font);font-size:10.5px;font-weight:400;fill:var(--ink-dim)}
+  .n-edge-accent{stroke:var(--accent);stroke-width:2.2;fill:none}
+  .n-edge-dash{stroke:var(--line-strong);stroke-width:1.6;fill:none;stroke-dasharray:5 4}
+  .n-tag{font-family:var(--font);font-size:10px;font-weight:600;fill:var(--ink-muted);letter-spacing:.05em}
+  .n-tag-accent{font-family:var(--font);font-size:10.5px;font-weight:700;fill:var(--accent-ink)}
+  .n-num{font-family:var(--mono);font-size:11px;font-weight:700;fill:#fff}
+  .n-numbg{fill:var(--accent)}
+  .n-leg{font-family:var(--font);font-size:10px;font-weight:500;fill:var(--ink-dim)}
+
+  .nav{position:fixed;right:1.5rem;bottom:1.1rem;display:flex;gap:.5rem;z-index:20}
+  .nav button{
+    width:38px;height:38px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);
+    color:var(--ink);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:background .15s,border-color .15s;box-shadow:0 1px 3px rgba(20,17,14,.07);
+  }
+  .nav button:hover:not(:disabled){border-color:var(--accent);background:var(--accent-soft)}
+  .nav button:disabled{opacity:.32;cursor:default}
+  .hint{position:fixed;left:1.7rem;bottom:1.5rem;font-size:.68rem;color:var(--ink-dim);z-index:20}
+
+  @media print{
+    @page{size:landscape;margin:12mm}
+    body{overflow:visible;height:auto;background:#fff}
+    header,.nav,.hint{display:none!important}
+    main{overflow:visible}
+    .slide-container{display:block!important;transform:none!important;transition:none}
+    .slide{display:block;height:auto;overflow:visible;page-break-after:always;break-after:page;padding:0 0 1rem}
+    .slide:last-child{page-break-after:auto}
+    .card,.ask,figure{break-inside:avoid}
+  }
+
+  @media (max-height:780px){
+    h1{font-size:2.1rem}
+    h2{font-size:1.5rem}
+    .slide{padding:1.4rem 2rem 3rem}
+    .deck{font-size:.9rem;margin-bottom:.9rem}
+    table{font-size:.79rem}
+    td{padding:.45rem .6rem}
+  }
+  @media (max-width:900px){
+    .grid-3{grid-template-columns:repeat(2,1fr)}
+    .grid-2,.grid-32{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div class="brand-text">Automatización de recepción de devoluciones <span>· Dropi · Logistic Success</span></div>
+  </div>
+  <div class="slide-indicator" id="slide-indicator">Diapositiva 1 de 7</div>
+  <div class="progress-track"><div class="progress-bar" id="progress-bar"></div></div>
+</header>
+
+<main>
+<div class="slide-container" id="slide-container">
+
+  <!-- ============ 1 · PORTADA + ASK ============ -->
+  <section class="slide">
+    <div class="slide-inner" style="display:flex;flex-direction:column;height:100%">
+      <div class="eyebrow">Sesión de trabajo · Septiembre 2026</div>
+      <h1>Automatización de la recepción<br>de devoluciones vía webhook</h1>
+      <p class="deck">
+        Reemplazar el envío de planillas por correo por una <strong>integración directa</strong> entre
+        transportadora y Dropi, con escaneo en Ecom Scanner y confirmación automática de vuelta.
+        Hoy vamos directo al flujo, a las consideraciones abiertas y al plan de trabajo.
+      </p>
+
+      <div class="ask">
+        <div class="label">Qué necesitamos al cerrar esta sesión</div>
+        <div class="text">
+          Un responsable técnico de Envía para la integración, y una fecha acordada
+          para la mesa de contrato de datos.
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="grid-2">
+        <div class="card card-quiet">
+          <h3>Recorrido</h3>
+          <ul class="plain" style="margin-top:.4rem">
+            <li>Cómo queda el flujo</li>
+            <li>Qué viaja en cada salto</li>
+            <li>Consideraciones a resolver</li>
+            <li>Casos de conciliación</li>
+            <li>Plan de trabajo y compromisos</li>
+          </ul>
+        </div>
+        <div class="card card-quiet">
+          <h3>En la sala</h3>
+          <p><strong>Envía</strong> · Alexander Barbosa y equipo de integraciones.</p>
+          <p style="margin-top:.35rem"><strong>Dropi · Logistic Success</strong> · Francisco Ramírez (Integraciones),
+             William Morales (Operaciones), Joan Sebastián Palacio (Desarrollo),
+             Carlos Andrés Peralta (Proceso), Laura Sánchez (Bodegas).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2 · EL FLUJO ============ -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">El flujo</div>
+      <h2>Cómo queda la recepción de una devolución</h2>
+
+      <figure>
+        <svg viewBox="0 0 1120 350" role="img" aria-label="Flujo propuesto de recepción de devoluciones">
+          <defs>
+            <marker id="arrow-acc" markerWidth="9" markerHeight="9" refX="7.5" refY="4.5" orient="auto">
+              <path d="M0,1 L8,4.5 L0,8 Z" fill="#FF8500"/>
+            </marker>
+            <marker id="arrow-neu" markerWidth="9" markerHeight="9" refX="7.5" refY="4.5" orient="auto">
+              <path d="M0,1 L8,4.5 L0,8 Z" fill="#CFC7BB"/>
+            </marker>
+          </defs>
+
+          <!-- Leyenda -->
+          <line x1="676" y1="18" x2="706" y2="18" class="n-edge-accent"/>
+          <text x="712" y="22" class="n-leg">información</text>
+          <line x1="792" y1="18" x2="822" y2="18" class="n-edge-dash"/>
+          <text x="828" y="22" class="n-leg">movimiento físico</text>
+
+          <text x="14" y="36" class="n-tag">ENVÍA</text>
+          <text x="14" y="142" class="n-tag">DROPI</text>
+          <text x="14" y="256" class="n-tag">BODEGA / PROVEEDOR</text>
+          <line x1="0" y1="46" x2="1120" y2="46" stroke="#E4DFD7" stroke-width="1"/>
+          <line x1="0" y1="152" x2="1120" y2="152" stroke="#E4DFD7" stroke-width="1"/>
+          <line x1="0" y1="266" x2="1120" y2="266" stroke="#E4DFD7" stroke-width="1"/>
+
+          <rect class="n-box" x="120" y="62" width="196" height="64" rx="9"/>
+          <circle class="n-numbg" cx="120" cy="62" r="11"/><text x="120" y="66" class="n-num" text-anchor="middle">1</text>
+          <text x="218" y="90" class="n-label" text-anchor="middle">Prepara la planilla</text>
+          <text x="218" y="109" class="n-sub" text-anchor="middle">guías a devolver de una bodega</text>
+
+          <path class="n-edge-accent" d="M218,126 L218,168" marker-end="url(#arrow-acc)"/>
+          <text x="228" y="150" class="n-tag-accent">webhook</text>
+
+          <rect class="n-box-accent" x="120" y="174" width="196" height="64" rx="9"/>
+          <circle class="n-numbg" cx="120" cy="174" r="11"/><text x="120" y="178" class="n-num" text-anchor="middle">2</text>
+          <text x="218" y="202" class="n-label" text-anchor="middle">Recibe y persiste</text>
+          <text x="218" y="221" class="n-sub" text-anchor="middle">manifiesto por ID de bodega</text>
+
+          <path class="n-edge-accent" d="M316,206 L376,206" marker-end="url(#arrow-acc)"/>
+
+          <rect class="n-box-accent" x="386" y="174" width="196" height="64" rx="9"/>
+          <circle class="n-numbg" cx="386" cy="174" r="11"/><text x="386" y="178" class="n-num" text-anchor="middle">3</text>
+          <text x="484" y="202" class="n-label" text-anchor="middle">Precarga en Ecom Scanner</text>
+          <text x="484" y="221" class="n-sub" text-anchor="middle">planilla visible antes del camión</text>
+
+          <path class="n-edge-dash" d="M218,238 L218,288" marker-end="url(#arrow-neu)"/>
+          <text x="52" y="268" class="n-tag">DESPACHO FÍSICO</text>
+
+          <rect class="n-box" x="386" y="282" width="196" height="64" rx="9"/>
+          <circle class="n-numbg" cx="386" cy="282" r="11"/><text x="386" y="286" class="n-num" text-anchor="middle">4</text>
+          <text x="484" y="310" class="n-label" text-anchor="middle">Escanea guía por guía</text>
+          <text x="484" y="329" class="n-sub" text-anchor="middle">el escaneo es el recibo</text>
+          <path class="n-edge-dash" d="M218,314 L376,314" marker-end="url(#arrow-neu)"/>
+          <path class="n-edge-accent" d="M484,238 L484,276" marker-end="url(#arrow-acc)"/>
+
+          <path class="n-edge-accent" d="M582,314 L642,314" marker-end="url(#arrow-acc)"/>
+          <rect class="n-box-accent" x="652" y="282" width="216" height="64" rx="9"/>
+          <circle class="n-numbg" cx="652" cy="282" r="11"/><text x="652" y="286" class="n-num" text-anchor="middle">5</text>
+          <text x="760" y="310" class="n-label" text-anchor="middle">Conciliación automática</text>
+          <text x="760" y="329" class="n-sub" text-anchor="middle">reportadas vs. escaneadas</text>
+
+          <path class="n-edge-accent" d="M868,314 L960,314 L960,206" marker-end="url(#arrow-acc)"/>
+          <rect class="n-box-accent" x="880" y="174" width="216" height="64" rx="9"/>
+          <circle class="n-numbg" cx="880" cy="174" r="11"/><text x="880" y="178" class="n-num" text-anchor="middle">6</text>
+          <text x="988" y="202" class="n-label" text-anchor="middle">Confirma de vuelta</text>
+          <text x="988" y="221" class="n-sub" text-anchor="middle">confirmadas · faltantes · novedades</text>
+
+          <path class="n-edge-accent" d="M988,174 L988,132" marker-end="url(#arrow-acc)"/>
+          <text x="998" y="156" class="n-tag-accent">webhook</text>
+
+          <rect class="n-box" x="880" y="62" width="216" height="64" rx="9"/>
+          <circle class="n-numbg" cx="880" cy="62" r="11"/><text x="880" y="66" class="n-num" text-anchor="middle">7</text>
+          <text x="988" y="90" class="n-label" text-anchor="middle">Actualiza el estado</text>
+          <text x="988" y="109" class="n-sub" text-anchor="middle">“devuelto al remitente”</text>
+        </svg>
+      </figure>
+
+      <div class="grid-3" style="margin-top:1rem">
+        <div class="card">
+          <h3>Evidencia por guía, no por correo</h3>
+          <p>La recepción queda registrada contra el ID de bodega. Deja de depender de que el correo
+             del proveedor esté actualizado.</p>
+        </div>
+        <div class="card">
+          <h3>El manifiesto cierra con el escaneo</h3>
+          <p>No hay que marcar la planilla por separado ni perseguir al proveedor para que confirme.</p>
+        </div>
+        <div class="card">
+          <h3>Estado actualizado sin gestión manual</h3>
+          <p>La confirmación de recibo llega por webhook. Hoy ese aviso no llega por ningún canal de sistema.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3 · QUÉ VIAJA EN CADA SALTO ============ -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">El detalle · propuesta a validar</div>
+      <h2>Qué viaja en cada salto y en qué estado queda la guía</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:5%"></th><th style="width:19%">Paso</th><th style="width:11%">Quién</th>
+            <th style="width:40%">Qué viaja</th><th style="width:25%">Estado resultante</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="step-n">1</span></td>
+            <td><strong>Genera la planilla</strong></td><td>Envía</td>
+            <td><code>warehouse_id</code> · <code>planilla_id</code> · <code>guias[]</code> ·
+                <code>cantidad_total</code> · <code>fecha_despacho</code></td>
+            <td>Devolución por entregar</td>
+          </tr>
+          <tr>
+            <td><span class="step-n">2</span></td>
+            <td><strong>Recibe y persiste</strong></td><td>Dropi</td>
+            <td>Respuesta de recibido con el <code>planilla_id</code>. Si el payload viene incompleto,
+                se rechaza indicando el motivo.</td>
+            <td>Manifiesto creado</td>
+          </tr>
+          <tr>
+            <td><span class="step-n">3</span></td>
+            <td><strong>Precarga</strong></td><td>Dropi</td>
+            <td>La planilla aparece en el Ecom Scanner de esa bodega con el contador de guías esperadas.</td>
+            <td>Pendiente de escaneo</td>
+          </tr>
+          <tr>
+            <td><span class="step-n">4</span></td>
+            <td><strong>Escanea</strong></td><td>Proveedor</td>
+            <td>Número de guía, una a una. La app valida contra la planilla precargada.</td>
+            <td><strong>Devolución confirmada</strong></td>
+          </tr>
+          <tr>
+            <td><span class="step-n">5</span></td>
+            <td><strong>Cierra el lote</strong></td><td>Dropi</td>
+            <td>Compara reportadas contra escaneadas y arma el manifiesto con la diferencia.</td>
+            <td>Manifiesto conciliado</td>
+          </tr>
+          <tr>
+            <td><span class="step-n">6</span></td>
+            <td><strong>Confirma de vuelta</strong></td><td>Dropi</td>
+            <td><code>planilla_id</code> · <code>confirmadas[]</code> · <code>no_recibidas[]</code> ·
+                <code>fuera_de_planilla[]</code> · <code>novedades[]</code></td>
+            <td>Envía actualiza a “devuelto al remitente”</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid-32" style="margin-top:1.05rem">
+        <div class="card card-accent">
+          <h3>Por qué la clave es el ID de bodega y no el proveedor</h3>
+          <p>Una misma bodega física puede alojar la operación de <strong>varios proveedores</strong>.
+             Si la planilla se agrupa por proveedor, quien recibe en esa dirección tiene que procesar
+             un manifiesto distinto por cada uno aunque el camión sea el mismo.
+             <strong>Del lado de Envía basta con agrupar por bodega</strong>; el reparto interno por
+             proveedor lo resuelve Dropi.</p>
+        </div>
+        <div class="card">
+          <h3>Lo que falta acordar del contrato</h3>
+          <ul class="plain" style="margin-top:.4rem">
+            <li><strong>Autenticación:</strong> propuesta de token de servicio sobre HTTPS, ajustable a lo que Envía ya tenga.</li>
+            <li><strong>Anticipación mínima</strong> entre el envío de la planilla y el despacho físico.</li>
+            <li><strong>Formato de la confirmación</strong> de vuelta y frecuencia de reintento si falla.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4 · TEMAS A REVISAR ============ -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Antes de construir</div>
+      <h2>Temas a revisar</h2>
+      <p class="deck">
+        Ninguno está decidido. Acordamos cuáles se cierran hoy y cuáles van a la mesa técnica.
+      </p>
+
+      <div class="grid-2" style="gap:.7rem 3rem">
+        <ol class="temas">
+          <li>Espera del conductor mientras se escanea la planilla</li>
+          <li>Qué pasa si un producto llega incompleto</li>
+          <li>Entregar por bodega para poder escanear por bodega, cuando hay varias cuentas de Dropi</li>
+          <li>Anticipación de la planilla frente a la llegada del camión</li>
+        </ol>
+        <ol class="temas" start="5">
+          <li>Demoras según el lugar por conectividad</li>
+          <li>Tiempo de espera y escalamiento a servicio Dropi si no atienden</li>
+          <li>Tamaño máximo de la planilla</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 6 · CASOS DE CONCILIACIÓN ============ -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Casos de conciliación</div>
+      <h2>Cuando lo reportado y lo recibido no coinciden</h2>
+
+      <table>
+        <thead>
+          <tr><th style="width:19%">Caso</th><th style="width:25%">Situación</th>
+              <th style="width:30%">Manejo propuesto</th><th style="width:26%">Decisión requerida</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Faltantes</strong></td>
+            <td>La planilla reporta 100 guías y se escanean 98.</td>
+            <td>El manifiesto cierra con 98 confirmadas. Las 2 viajan en <code>no_recibidas[]</code>
+                como novedad abierta.</td>
+            <td>Responsable y plazo para cerrar la novedad.</td>
+          </tr>
+          <tr>
+            <td><strong>Sobrantes</strong></td>
+            <td>Llegan guías que no venían en la planilla.</td>
+            <td>Se escanean igual y viajan en <code>fuera_de_planilla[]</code> para que Envía las asocie.</td>
+            <td>Si el conductor puede dejarlas o debe retornarlas al centro.</td>
+          </tr>
+          <tr>
+            <td><strong>No se escanea</strong></td>
+            <td>El proveedor se niega, o no hay dispositivo o señal.</td>
+            <td>Sin escaneo no hay confirmación. Las guías quedan en <code>no_recibidas[]</code> y el
+                manifiesto cierra incompleto.</td>
+            <td>¿Cuál debería ser el proceso en ese momento?</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 7 · PLAN DE TRABAJO ============ -->
+  <section class="slide">
+    <div class="slide-inner">
+      <div class="eyebrow">Plan de trabajo</div>
+      <h2>Cinco tramos, cada uno con condición de salida</h2>
+      <p class="deck">
+        Un tramo arranca cuando el anterior cumple su condición. Las fechas se definen cuando
+        Envía estime su lado del desarrollo.
+      </p>
+
+      <table>
+        <thead>
+          <tr><th style="width:16%">Tramo</th><th style="width:34%">Qué se hace</th>
+              <th style="width:24%">Quién</th><th style="width:26%">Condición de salida</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>0 · Contrato</strong><br><span class="pill pill-accent">esta sesión</span></td>
+            <td>Definir si el conductor espera. Cerrar campos, autenticación, anticipación y formato de
+                confirmación. Acordar los casos de conciliación.</td>
+            <td>Envía (técnico) · Francisco Ramírez</td>
+            <td>Contrato escrito y aceptado por ambas partes, con el modelo de espera definido.</td>
+          </tr>
+          <tr>
+            <td><strong>1 · Construcción</strong></td>
+            <td>Envía expone el webhook. Dropi consume, persiste el manifiesto y lo precarga en
+                Ecom Scanner. Pruebas con planillas reales.</td>
+            <td>Envía · Joan Sebastián Palacio</td>
+            <td>Una planilla enviada por Envía aparece completa en el Ecom Scanner de la bodega correcta.</td>
+          </tr>
+          <tr>
+            <td><strong>2 · Piloto</strong></td>
+            <td>Operar 4 a 6 semanas en un grupo acotado de bodegas, incluyendo al menos una con varias
+                cuentas de Dropi en la misma dirección.</td>
+            <td>Carlos A. Peralta · Laura Sánchez · operación Envía</td>
+            <td>Las cuatro métricas con valor de entrada y de cierre sobre ese grupo.</td>
+          </tr>
+          <tr>
+            <td><strong>3 · Conciliación</strong></td>
+            <td>Activar la comparación automática, el registro de novedades y la confirmación que
+                actualiza “devuelto al remitente”.</td>
+            <td>Joan S. Palacio · Envía</td>
+            <td>Los casos de conciliación se resuelven sin gestión manual.</td>
+          </tr>
+          <tr>
+            <td><strong>4 · Estándar</strong></td>
+            <td>Publicar el contrato como requisito de integración y extenderlo al resto de
+                transportadoras aliadas, primero en Colombia.</td>
+            <td>William Morales</td>
+            <td>Se define al cerrar el tramo 3.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="grid-3" style="margin-top:1.05rem">
+        <div class="card">
+          <h3>Qué medimos</h3>
+          <ul class="plain" style="margin-top:.4rem">
+            <li><strong>Tiempo de recepción en bodega:</strong> desde que llega el camión hasta que cierra el lote.</li>
+            <li>Exactitud de conciliación: guías escaneadas sobre reportadas.</li>
+            <li>Reclamaciones de recibo por mes.</li>
+            <li>Tiempo entre despacho físico y estado actualizado en sistema.</li>
+          </ul>
+          <p style="margin-top:.5rem;font-size:.78rem;color:var(--ink-dim)">
+            El valor inicial se levanta en el tramo 2. Hoy ninguna de las cuatro está medida.
+          </p>
+        </div>
+        <div class="card card-quiet">
+          <h3>Alcance del piloto</h3>
+          <p>Grupo acotado de bodegas, con criterio de éxito y fecha de corte definidos antes de arrancar.
+             El escaneo se vuelve requisito general solo después de ese resultado.</p>
+        </div>
+        <div class="card card-quiet">
+          <h3>Fuera de alcance</h3>
+          <p>Este proyecto no reduce la tasa de devoluciones. Actúa después de que la devolución ocurrió:
+             reduce disputas de recibo, reprocesos y tiempo de conciliación.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8 · COMPROMISOS ============ -->
+  <section class="slide">
+    <div class="slide-inner" style="display:flex;flex-direction:column;height:100%">
+      <div class="eyebrow">Cierre</div>
+      <h2>Compromisos de esta sesión</h2>
+
+      <div class="ask" style="margin-bottom:1.1rem">
+        <div class="label">El acuerdo que buscamos</div>
+        <div class="text">
+          Un responsable técnico de Envía para la integración, y una fecha acordada
+          para la mesa de contrato de datos.
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr><th style="width:24%">Quién</th><th style="width:52%">Qué</th><th style="width:24%">Para cuándo</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Envía</strong></td>
+            <td>Nombrar la contraparte técnica para la integración del webhook de devoluciones.</td>
+            <td><div class="fill"></div></td>
+          </tr>
+          <tr>
+            <td><strong>Envía · Dropi</strong></td>
+            <td>Mesa de contrato de datos: campos, autenticación, anticipación y formato de confirmación.</td>
+            <td><div class="fill"></div></td>
+          </tr>
+          <tr>
+            <td><strong>Envía · Dropi</strong></td>
+            <td>Definir el modelo de espera del conductor y quién responde por faltantes detectados después.</td>
+            <td><div class="fill"></div></td>
+          </tr>
+          <tr>
+            <td><strong>Dropi</strong></td>
+            <td>Proponer las bodegas candidatas al piloto, con al menos una de varias cuentas.</td>
+            <td><div class="fill"></div></td>
+          </tr>
+          <tr>
+            <td><div class="fill"></div></td><td><div class="fill"></div></td><td><div class="fill"></div></td>
+          </tr>
+          <tr>
+            <td><div class="fill"></div></td><td><div class="fill"></div></td><td><div class="fill"></div></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="spacer"></div>
+
+      <div class="note">
+        <strong>Dropi · Logistic Success</strong> · Automatización de recepción de devoluciones vía webhook ·
+        Septiembre 2026. Documento de trabajo para la sesión; no constituye un acuerdo comercial.
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<div class="nav">
+  <button id="prev-btn" aria-label="Diapositiva anterior">←</button>
+  <button id="next-btn" aria-label="Diapositiva siguiente">→</button>
+</div>
+<div class="hint">← → para navegar</div>
+
+<script>
+  const slideContainer = document.getElementById('slide-container');
+  const slides = document.querySelectorAll('.slide');
+  const totalSlides = slides.length;
+  const slideIndicator = document.getElementById('slide-indicator');
+  const progressBar = document.getElementById('progress-bar');
+  const prevBtn = document.getElementById('prev-btn');
+  const nextBtn = document.getElementById('next-btn');
+  let currentSlide = 0;
+
+  function updateSlides() {
+    slideContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+    slideIndicator.textContent = `Diapositiva ${currentSlide + 1} de ${totalSlides}`;
+    progressBar.style.width = `${((currentSlide + 1) / totalSlides) * 100}%`;
+    prevBtn.disabled = currentSlide === 0;
+    nextBtn.disabled = currentSlide === totalSlides - 1;
+    slides[currentSlide].scrollTop = 0;
+  }
+
+  function changeSlide(direction) {
+    currentSlide = Math.min(Math.max(currentSlide + direction, 0), totalSlides - 1);
+    updateSlides();
+  }
+
+  prevBtn.addEventListener('click', () => changeSlide(-1));
+  nextBtn.addEventListener('click', () => changeSlide(1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      e.preventDefault(); changeSlide(1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+      e.preventDefault(); changeSlide(-1);
+    } else if (e.key === 'Home') { currentSlide = 0; updateSlides(); }
+    else if (e.key === 'End') { currentSlide = totalSlides - 1; updateSlides(); }
+  });
+
+  updateSlides();
+</script>
+
+</body>
+</html>
